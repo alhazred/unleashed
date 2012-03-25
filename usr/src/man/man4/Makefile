@@ -11,6 +11,7 @@
 
 #
 # Copyright 2011, Richard Lowe
+# Copyright 2012 OmniTI Computer Consulting, Inc.  All rights reserved.
 # Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
 # Copyright 2015, Joyent, Inc.
 #
@@ -112,7 +113,6 @@ _MANFILES=	Intro.4				\
 		mech.4				\
 		meddb.4				\
 		mnttab.4			\
-		mod_ipp.4			\
 		mpapi.conf.4			\
 		nca.if.4			\
 		ncad_addr.4			\
