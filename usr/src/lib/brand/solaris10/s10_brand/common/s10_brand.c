@@ -21,6 +21,7 @@
 
 /*
  * Copyright 2016 Toomas Soome <tsoome@me.com>
+ * Copyright 2014 Garrett D'Amore <garrett@damore.org>
  * Copyright (c) 2013, OmniTI Computer Consulting, Inc. All rights reserved.
  * Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
  */
@@ -121,6 +122,7 @@ pid_t zone_init_pid;
 
 brand_sysent_table_t brand_sysent_table[];
 
+#define	S10_UTS_SYSNAME	"SunOS"
 #define	S10_UTS_RELEASE	"5.10"
 #define	S10_UTS_VERSION	"Generic_Virtual"
 
@@ -1443,6 +1445,8 @@ s10_uname(sysret_t *rv, uintptr_t p1)
 	(void) strlcpy(un.release, S10_UTS_RELEASE, _SYS_NMLN);
 	bzero(un.version, _SYS_NMLN);
 	(void) strlcpy(un.version, S10_UTS_VERSION, _SYS_NMLN);
+	bzero(un.sysname, _SYS_NMLN);
+	(void) strlcpy(un.sysname, S10_UTS_SYSNAME, _SYS_NMLN);
 
 	/* copy out the modified uname info */
 	return (brand_uucopy(&un, unp, sizeof (un)));
@@ -1486,8 +1490,8 @@ s10_sysinfo(sysret_t *rv, int command, char *buf, long count)
 	int len;
 
 	/*
-	 * We must interpose on the sysinfo(2) commands SI_RELEASE and
-	 * SI_VERSION; all others get passed to the native sysinfo(2)
+	 * We must interpose on the sysinfo(2) commands SI_RELEASE, SI_VERSION,
+	 * and SI_SYSNAME; all others get passed to the native sysinfo(2)
 	 * command.
 	 */
 	switch (command) {
@@ -1497,6 +1501,10 @@ s10_sysinfo(sysret_t *rv, int command, char *buf, long count)
 
 		case SI_VERSION:
 			value = S10_UTS_VERSION;
+			break;
+
+		case SI_SYSNAME:
+			value = S10_UTS_SYSNAME;
 			break;
 
 		default:

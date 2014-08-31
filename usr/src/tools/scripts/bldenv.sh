@@ -227,8 +227,13 @@ if [ -z "$RELEASE_DATE" ]; then
 fi
 BUILD_DATE=$(LC_ALL=C date +%Y-%b-%d)
 BASEWSDIR=$(basename -- "${CODEMGR_WS}")
-DEV_CM="\"@(#)SunOS Internal Development: $LOGNAME $BUILD_DATE [$BASEWSDIR]\""
+DEV_CM="\"@(#)illumos Development: $LOGNAME $BUILD_DATE [$BASEWSDIR]\""
 export DEV_CM RELEASE_DATE POUND_SIGN
+
+# illumos was announced August 3, 2010.  We use that as the starting
+# point.
+RELEASE_MICRO=$(( ($(date +%Y) * 12 + $(date +%m) - 1) - (2010 * 12 + 8 - 1) ))
+export RELEASE_MICRO
 
 print 'Build type   is  \c'
 if ${flags.d} ; then

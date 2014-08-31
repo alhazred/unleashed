@@ -62,6 +62,11 @@ const char *compilers[] = {
 	NULL
 };
 
+const char *puname[] = {
+	"",
+	"/usr/bin/puname -S "
+};
+
 char *compiler = NULL;
 const char *c89flags = NULL;
 const char *c99flags = NULL;
@@ -781,13 +786,13 @@ find_compiler(void)
 	(void) fprintf(cf, "#endif\n}\n");
 	(void) fclose(cf);
 
-	for (i = 0; compilers[i] != NULL; i++) {
+	for (i = 0; compilers[i/2] != NULL; i++) {
 		char cmd[256];
 		int rv;
 
 		(void) snprintf(cmd, sizeof (cmd),
-		    "%s %s %s -o %s >/dev/null 2>&1",
-		    compilers[i], MFLAG, cfile, efile);
+		    "%s%s %s %s -o %s >/dev/null 2>&1",
+		    puname[i%2], compilers[i/2], MFLAG, cfile, efile);
 		test_debugf(t, "trying %s", cmd);
 		rv = system(cmd);
 
@@ -835,7 +840,7 @@ find_compiler(void)
 		default:
 			continue;
 		}
-		myasprintf(&compiler, "%s", compilers[i]);
+		myasprintf(&compiler, "%s%s", puname[i%2], compilers[i/2]);
 		test_debugf(t, "compiler: %s", compiler);
 		return;
 	}
