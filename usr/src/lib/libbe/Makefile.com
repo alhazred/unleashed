@@ -24,6 +24,7 @@
 #
 # Copyright 2012 OmniTI Computer Consulting, Inc.  All rights reserved.
 # Copyright 2015 Nexenta Systems, Inc. All rights reserved.
+# Copyright 2016 Toomas Soome <tsoome@me.com>
 #
 
 
@@ -46,11 +47,11 @@ LIBS=		$(DYNLIB) $(LINTLIB)
 
 SRCDIR= 	../common
 
-INCS += -I$(SRCDIR) -I$(SRC)/cmd/boot/common
+INCS += -I$(SRCDIR) -I$(SRC)/cmd/boot/common -I$(SRC)/common/ficl
 
 C99MODE= 	$(C99_ENABLE)
 
-LDLIBS +=	-lzfs -linstzones -luuid -lnvpair -lc -lgen -ldevinfo -lefi
+LDLIBS +=	-lficl-sys -lzfs -linstzones -luuid -lnvpair -lc -lgen -ldevinfo -lefi
 CPPFLAGS +=	$(INCS)
 CERRWARN +=	-_gcc=-Wno-unused-label
 CERRWARN +=	-_gcc=-Wno-uninitialized
