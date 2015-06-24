@@ -23,22 +23,6 @@
 # Use is subject to license terms.
 #
 
-SUBDIRS =	$(MACH)
+# Common epilogue
 
-all	:=	TARGET= all
-install	:=	TARGET= install
-clean	:=	TARGET= clean
-clobber	:=	TARGET= clobber
-_msg	:=	TARGET= _msg
-lint	:=	TARGET= lint
-
-.KEEP_STATE:
-
-install: $(SUBDIRS)
-
-all clobber clean lint _msg: $(SUBDIRS)
-
-FRC:
-
-$(SUBDIRS):	FRC
-	@cd $@; pwd; $(MAKE) $(TARGET)
+include $(SRC)/cmd/boot/Makefile.targ
