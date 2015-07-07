@@ -25,6 +25,7 @@
 
 /*
  * Copyright 2015 Nexenta Systems, Inc. All rights reserved.
+ * Copyright 2016 Toomas Soome <tsoome@me.com>
  */
 
 #include <assert.h>
@@ -945,9 +946,15 @@ be_do_installboot_helper(zpool_handle_t *zphp, nvlist_t *child, char *stage1,
 				flag = "-m -f";
 		}
 
-		(void) snprintf(install_cmd, sizeof (install_cmd),
-		    "%s %s %s %s %s", BE_INSTALL_GRUB, flag,
-		    stage1, stage2, diskname);
+		if (be_has_grub()) {
+			(void) snprintf(install_cmd, sizeof (install_cmd),
+			    "%s %s %s %s %s", BE_INSTALL_GRUB, flag,
+			    stage1, stage2, diskname);
+		} else {
+			(void) snprintf(install_cmd, sizeof (install_cmd),
+			    "%s %s %s %s %s", BE_INSTALL_BOOT, flag,
+			    stage1, stage2, diskname);
+		}
 	} else if (be_is_isa("sparc")) {
 		if ((flags & BE_INSTALLBOOT_FLAG_FORCE) ==
 		    BE_INSTALLBOOT_FLAG_FORCE)
@@ -1247,27 +1254,37 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 	}
 	ZFS_CLOSE(zhp);
 
-	if (be_has_grub()) {
-		(void) snprintf(stage1, sizeof (stage1), "%s%s",
-		    tmp_mntpt, BE_GRUB_STAGE_1);
-		(void) snprintf(stage2, sizeof (stage2), "%s%s",
-		    tmp_mntpt, BE_GRUB_STAGE_2);
-	} else {
+	if (be_is_isa("i386")) {
+		if (be_has_grub()) {
+			(void) snprintf(stage1, sizeof (stage1), "%s%s",
+			    tmp_mntpt, BE_GRUB_STAGE_1);
+			(void) snprintf(stage2, sizeof (stage2), "%s%s",
+			    tmp_mntpt, BE_GRUB_STAGE_2);
+		} else {
+			(void) snprintf(stage1, sizeof (stage1), "%s%s",
+			    tmp_mntpt, BE_LOADER_STAGE_1);
+			(void) snprintf(stage2, sizeof (stage2), "%s%s",
+			    tmp_mntpt, BE_LOADER_STAGE_2);
+		}
+	} else if (be_is_isa("sparc")) {
 		char *platform = be_get_platform();
 
 		if (platform == NULL) {
-			be_print_err(gettext("be_do_installboot: failed to "
-			    "detect system platform name\n"));
+			be_print_err(gettext("be_do_installboot: "
+			    "failed to detect system platform name\n"));
 			if (be_mounted)
 				(void) _be_unmount(bt->obe_name, 0);
 			free(tmp_mntpt);
 			return (BE_ERR_BOOTFILE_INST);
 		}
-
 		stage1[0] = '\0';	/* sparc has no stage1 */
 		(void) snprintf(stage2, sizeof (stage2),
 		    "%s/usr/platform/%s%s", tmp_mntpt,
 		    platform, BE_SPARC_BOOTBLK);
+	} else {
+		be_print_err(gettext("be_do_installboot: unsupported "
+		    "architecture.\n"));
+		return (BE_ERR_BOOTFILE_INST);
 	}
 
 	if ((zphp = zpool_open(g_zfs, bt->obe_zpool)) == NULL) {
@@ -1318,7 +1335,9 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 			ret = zfs_err_to_be_err(g_zfs);
 			goto done;
 		}
-		if (strcmp(vname, "mirror") == 0 || vname[0] != 'c') {
+		if (strcmp(vname, "mirror") == 0 ||
+		    strcmp(vname, "raidz") == 0 ||
+		    vname[0] != 'c') {
 			free(vname);
 
 			if (nvlist_lookup_nvlist_array(child[c],
