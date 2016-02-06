@@ -85,26 +85,17 @@ static void __kgss_reset_mech(gss_mechanism *, gss_OID);
 #define	DEFAULT_MINOR_STAT	((OM_uint32) ~0)
 
 OM_uint32
-kgss_acquire_cred_wrapped(minor_status,
-			desired_name,
-			time_req,
-			desired_mechs,
-			cred_usage,
-			output_cred_handle,
-			actual_mechs,
-			time_rec,
-			uid,
-			gssd_cred_verifier)
-	OM_uint32 *minor_status;
-	const gss_name_t desired_name;
-	OM_uint32 time_req;
-	const gss_OID_set desired_mechs;
-	int cred_usage;
-	gssd_cred_id_t *output_cred_handle;
-	gss_OID_set *actual_mechs;
-	OM_uint32 *time_rec;
-	uid_t uid;
-	OM_uint32 *gssd_cred_verifier;
+kgss_acquire_cred_wrapped(
+	OM_uint32 *minor_status,
+	const gss_name_t desired_name,
+	OM_uint32 time_req,
+	const gss_OID_set desired_mechs,
+	int cred_usage,
+	gssd_cred_id_t *output_cred_handle,
+	gss_OID_set *actual_mechs,
+	OM_uint32 *time_rec,
+	uid_t uid,
+	OM_uint32 *gssd_cred_verifier)
 {
 	CLIENT *clnt;
 
@@ -121,14 +112,14 @@ kgss_acquire_cred_wrapped(minor_status,
 
 	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1, "kgss_acquire_cred: can't connect to server on %s\n",
-			server);
+		    server);
 		return (GSS_S_FAILURE);
 	}
 
 	/* convert the desired name from internal to external format */
 
 	if (gss_display_name(&minor_status_temp, desired_name, &external_name,
-				&name_type) != GSS_S_COMPLETE) {
+	    &name_type) != GSS_S_COMPLETE) {
 
 		*minor_status = (OM_uint32) minor_status_temp;
 		killgssd_handle(clnt);
@@ -145,30 +136,29 @@ kgss_acquire_cred_wrapped(minor_status,
 	arg.desired_name.GSS_BUFFER_T_val = (char *)external_name.value;
 
 	arg.name_type.GSS_OID_len =
-		name_type == GSS_C_NULL_OID ?
-			0 : (uint_t)name_type->length;
+	    name_type == GSS_C_NULL_OID ? 0 : (uint_t)name_type->length;
 
 	arg.name_type.GSS_OID_val =
-		name_type == GSS_C_NULL_OID ?
-			(char *)NULL : (char *)name_type->elements;
+	    name_type == GSS_C_NULL_OID ?
+	    (char *)NULL : (char *)name_type->elements;
 
 	arg.time_req = time_req;
 
 	if (desired_mechs != GSS_C_NULL_OID_SET) {
 		arg.desired_mechs.GSS_OID_SET_len =
-			(uint_t)desired_mechs->count;
+		    (uint_t)desired_mechs->count;
 		arg.desired_mechs.GSS_OID_SET_val = (GSS_OID *)
-			MALLOC(sizeof (GSS_OID) * desired_mechs->count);
+		    MALLOC(sizeof (GSS_OID) * desired_mechs->count);
 
 		for (i = 0; i < desired_mechs->count; i++) {
-		    arg.desired_mechs.GSS_OID_SET_val[i].GSS_OID_len =
-			(uint_t)desired_mechs->elements[i].length;
-		    arg.desired_mechs.GSS_OID_SET_val[i].GSS_OID_val =
-			(char *)MALLOC(desired_mechs->elements[i].length);
-		    (void) memcpy(
-			arg.desired_mechs.GSS_OID_SET_val[i].GSS_OID_val,
-			desired_mechs->elements[i].elements,
-			desired_mechs->elements[i].length);
+			arg.desired_mechs.GSS_OID_SET_val[i].GSS_OID_len =
+			    (uint_t)desired_mechs->elements[i].length;
+			arg.desired_mechs.GSS_OID_SET_val[i].GSS_OID_val =
+			    (char *)MALLOC(desired_mechs->elements[i].length);
+			(void) memcpy(
+			    arg.desired_mechs.GSS_OID_SET_val[i].GSS_OID_val,
+			    desired_mechs->elements[i].elements,
+			    desired_mechs->elements[i].length);
 		}
 	} else
 		arg.desired_mechs.GSS_OID_SET_len = 0;
@@ -200,7 +190,7 @@ kgss_acquire_cred_wrapped(minor_status,
 		if (minor_status != NULL)
 			*minor_status = DEFAULT_MINOR_STAT;
 		if (output_cred_handle != NULL)
-			*output_cred_handle = NULL;
+			*output_cred_handle = 0;
 		if (actual_mechs != NULL)
 			*actual_mechs = NULL;
 		if (time_rec != NULL)
@@ -216,34 +206,34 @@ kgss_acquire_cred_wrapped(minor_status,
 	if (minor_status != NULL)
 		*minor_status = res.minor_status;
 
-	if (output_cred_handle != NULL &&
-		(res.status == GSS_S_COMPLETE)) {
-	    *output_cred_handle =
-		*((gssd_cred_id_t *)res.output_cred_handle.GSS_CRED_ID_T_val);
-	    *gssd_cred_verifier = res.gssd_cred_verifier;
+	if (output_cred_handle != NULL && (res.status == GSS_S_COMPLETE)) {
+		*output_cred_handle =
+		    *((gssd_cred_id_t *)res.output_cred_handle
+		    .GSS_CRED_ID_T_val);
+		*gssd_cred_verifier = res.gssd_cred_verifier;
 	}
 
 	if (res.status == GSS_S_COMPLETE &&
-		res.actual_mechs.GSS_OID_SET_len != 0 &&
-		actual_mechs != NULL) {
+	    res.actual_mechs.GSS_OID_SET_len != 0 &&
+	    actual_mechs != NULL) {
 		*actual_mechs = (gss_OID_set) MALLOC(sizeof (gss_OID_set_desc));
 		(*actual_mechs)->count =
-					(int)res.actual_mechs.GSS_OID_SET_len;
+		    (int)res.actual_mechs.GSS_OID_SET_len;
 		(*actual_mechs)->elements = (gss_OID)
-			MALLOC(sizeof (gss_OID_desc) * (*actual_mechs)->count);
+		    MALLOC(sizeof (gss_OID_desc) * (*actual_mechs)->count);
 
 		for (i = 0; i < (*actual_mechs)->count; i++) {
-		    (*actual_mechs)->elements[i].length = (OM_uint32)
-			res.actual_mechs.GSS_OID_SET_val[i].GSS_OID_len;
-		    (*actual_mechs)->elements[i].elements =
-			(void *) MALLOC((*actual_mechs)->elements[i].length);
-		    (void) memcpy((*actual_mechs)->elements[i].elements,
-			res.actual_mechs.GSS_OID_SET_val[i].GSS_OID_val,
-			(*actual_mechs)->elements[i].length);
+			(*actual_mechs)->elements[i].length = (OM_uint32)
+			    res.actual_mechs.GSS_OID_SET_val[i].GSS_OID_len;
+			(*actual_mechs)->elements[i].elements =
+			    (void *) MALLOC((*actual_mechs)->elements[i]
+			    .length);
+			(void) memcpy((*actual_mechs)->elements[i].elements,
+			    res.actual_mechs.GSS_OID_SET_val[i].GSS_OID_val,
+			    (*actual_mechs)->elements[i].length);
 		}
 	} else {
-		if (res.status == GSS_S_COMPLETE &&
-			actual_mechs != NULL)
+		if (res.status == GSS_S_COMPLETE && actual_mechs != NULL)
 			(*actual_mechs) = NULL;
 	}
 
@@ -262,24 +252,16 @@ kgss_acquire_cred_wrapped(minor_status,
 }
 
 OM_uint32
-kgss_acquire_cred(minor_status,
-		desired_name,
-		time_req,
-		desired_mechs,
-		cred_usage,
-		output_cred_handle,
-		actual_mechs,
-		time_rec,
-		uid)
-	OM_uint32 *minor_status;
-	const gss_name_t desired_name;
-	OM_uint32 time_req;
-	const gss_OID_set desired_mechs;
-	int cred_usage;
-	gss_cred_id_t *output_cred_handle;
-	gss_OID_set *actual_mechs;
-	OM_uint32 *time_rec;
-	uid_t uid;
+kgss_acquire_cred(
+	OM_uint32 *minor_status,
+	const gss_name_t desired_name,
+	OM_uint32 time_req,
+	const gss_OID_set desired_mechs,
+	int cred_usage,
+	gss_cred_id_t *output_cred_handle,
+	gss_OID_set *actual_mechs,
+	OM_uint32 *time_rec,
+	uid_t uid)
 {
 
 	OM_uint32	err;
@@ -288,8 +270,8 @@ kgss_acquire_cred(minor_status,
 	kcred = KGSS_CRED_ALLOC();
 	*output_cred_handle = (gss_cred_id_t)kcred;
 	err = kgss_acquire_cred_wrapped(minor_status, desired_name, time_req,
-		desired_mechs, cred_usage, &kcred->gssd_cred, actual_mechs,
-		time_rec, uid, &kcred->gssd_cred_verifier);
+	    desired_mechs, cred_usage, &kcred->gssd_cred, actual_mechs,
+	    time_rec, uid, &kcred->gssd_cred_verifier);
 	if (GSS_ERROR(err)) {
 		KGSS_CRED_FREE(kcred);
 		*output_cred_handle = GSS_C_NO_CREDENTIAL;
@@ -298,30 +280,19 @@ kgss_acquire_cred(minor_status,
 }
 
 OM_uint32
-kgss_add_cred_wrapped(minor_status,
-			input_cred_handle,
-			gssd_cred_verifier,
-			desired_name,
-			desired_mech_type,
-			cred_usage,
-			initiator_time_req,
-			acceptor_time_req,
-			actual_mechs,
-			initiator_time_rec,
-			acceptor_time_rec,
-			uid)
-	OM_uint32 *minor_status;
-	gssd_cred_id_t input_cred_handle;
-	OM_uint32 gssd_cred_verifier;
-	gss_name_t desired_name;
-	gss_OID desired_mech_type;
-	int cred_usage;
-	int initiator_time_req;
-	int acceptor_time_req;
-	gss_OID_set *actual_mechs;
-	OM_uint32 *initiator_time_rec;
-	OM_uint32 *acceptor_time_rec;
-	uid_t uid;
+kgss_add_cred_wrapped(
+	OM_uint32 *minor_status,
+	gssd_cred_id_t input_cred_handle,
+	OM_uint32 gssd_cred_verifier,
+	gss_name_t desired_name,
+	gss_OID desired_mech_type,
+	int cred_usage,
+	int initiator_time_req,
+	int acceptor_time_req,
+	gss_OID_set *actual_mechs,
+	OM_uint32 *initiator_time_rec,
+	OM_uint32 *acceptor_time_rec,
+	uid_t uid)
 {
 	CLIENT *clnt;
 
@@ -353,7 +324,7 @@ kgss_add_cred_wrapped(minor_status,
 
 	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1, "kgss_add_cred: can't connect to server on %s\n",
-			server);
+		    server);
 		return (GSS_S_FAILURE);
 	}
 
@@ -361,7 +332,7 @@ kgss_add_cred_wrapped(minor_status,
 	/* convert the desired name from internal to external format */
 
 	if (gss_display_name(&minor_status_temp, desired_name, &external_name,
-				&name_type) != GSS_S_COMPLETE) {
+	    &name_type) != GSS_S_COMPLETE) {
 
 		*minor_status = (OM_uint32) minor_status_temp;
 		killgssd_handle(clnt);
@@ -374,25 +345,25 @@ kgss_add_cred_wrapped(minor_status,
 
 	arg.uid = (OM_uint32)uid;
 	arg.input_cred_handle.GSS_CRED_ID_T_len =
-			input_cred_handle == GSSD_NO_CREDENTIAL ?
-			0 : (uint_t)sizeof (gssd_cred_id_t);
+	    input_cred_handle == GSSD_NO_CREDENTIAL ?
+	    0 : (uint_t)sizeof (gssd_cred_id_t);
 	arg.input_cred_handle.GSS_CRED_ID_T_val = (char *)&input_cred_handle;
 	arg.gssd_cred_verifier = gssd_cred_verifier;
 	arg.desired_name.GSS_BUFFER_T_len = (uint_t)external_name.length;
 	arg.desired_name.GSS_BUFFER_T_val = (char *)external_name.value;
 	arg.name_type.GSS_OID_len =
-		name_type == GSS_C_NULL_OID ?
-			0 : (uint_t)name_type->length;
+	    name_type == GSS_C_NULL_OID ?
+	    0 : (uint_t)name_type->length;
 	arg.name_type.GSS_OID_val =
-		name_type == GSS_C_NULL_OID ?
-			(char *)NULL : (char *)name_type->elements;
+	    name_type == GSS_C_NULL_OID ?
+	    (char *)NULL : (char *)name_type->elements;
 
 	arg.desired_mech_type.GSS_OID_len =
-		(uint_t)(desired_mech_type != GSS_C_NULL_OID ?
-		desired_mech_type->length : 0);
+	    (uint_t)(desired_mech_type != GSS_C_NULL_OID ?
+	    desired_mech_type->length : 0);
 	arg.desired_mech_type.GSS_OID_val =
-		(char *)(desired_mech_type != GSS_C_NULL_OID ?
-		desired_mech_type->elements : 0);
+	    (char *)(desired_mech_type != GSS_C_NULL_OID ?
+	    desired_mech_type->elements : 0);
 	arg.cred_usage = cred_usage;
 	arg.initiator_time_req = initiator_time_req;
 	arg.acceptor_time_req = acceptor_time_req;
@@ -424,22 +395,22 @@ kgss_add_cred_wrapped(minor_status,
 		*minor_status = res.minor_status;
 
 	if (res.status == GSS_S_COMPLETE &&
-		res.actual_mechs.GSS_OID_SET_len != 0 &&
-		actual_mechs != NULL) {
+	    res.actual_mechs.GSS_OID_SET_len != 0 &&
+	    actual_mechs != NULL) {
 		*actual_mechs = (gss_OID_set) MALLOC(sizeof (gss_OID_set_desc));
-		(*actual_mechs)->count =
-					(int)res.actual_mechs.GSS_OID_SET_len;
+		(*actual_mechs)->count = (int)res.actual_mechs.GSS_OID_SET_len;
 		(*actual_mechs)->elements = (gss_OID)
-			MALLOC(sizeof (gss_OID_desc) * (*actual_mechs)->count);
+		    MALLOC(sizeof (gss_OID_desc) * (*actual_mechs)->count);
 
 		for (i = 0; i < (*actual_mechs)->count; i++) {
-		    (*actual_mechs)->elements[i].length = (OM_uint32)
-			res.actual_mechs.GSS_OID_SET_val[i].GSS_OID_len;
-		    (*actual_mechs)->elements[i].elements =
-			(void *) MALLOC((*actual_mechs)->elements[i].length);
-		    (void) memcpy((*actual_mechs)->elements[i].elements,
-			res.actual_mechs.GSS_OID_SET_val[i].GSS_OID_val,
-			(*actual_mechs)->elements[i].length);
+			(*actual_mechs)->elements[i].length = (OM_uint32)
+			    res.actual_mechs.GSS_OID_SET_val[i].GSS_OID_len;
+			(*actual_mechs)->elements[i].elements =
+			    (void *) MALLOC((*actual_mechs)->
+			    elements[i].length);
+			(void) memcpy((*actual_mechs)->elements[i].elements,
+			    res.actual_mechs.GSS_OID_SET_val[i].GSS_OID_val,
+			    (*actual_mechs)->elements[i].length);
 		}
 	} else {
 		if (res.status == GSS_S_COMPLETE && actual_mechs != NULL)
@@ -462,28 +433,18 @@ kgss_add_cred_wrapped(minor_status,
 }
 
 OM_uint32
-kgss_add_cred(minor_status,
-			input_cred_handle,
-			desired_name,
-			desired_mech_type,
-			cred_usage,
-			initiator_time_req,
-			acceptor_time_req,
-			actual_mechs,
-			initiator_time_rec,
-			acceptor_time_rec,
-			uid)
-	OM_uint32 *minor_status;
-	gss_cred_id_t input_cred_handle;
-	gss_name_t desired_name;
-	gss_OID desired_mech_type;
-	int cred_usage;
-	int initiator_time_req;
-	int acceptor_time_req;
-	gss_OID_set *actual_mechs;
-	OM_uint32 *initiator_time_rec;
-	OM_uint32 *acceptor_time_rec;
-	uid_t uid;
+kgss_add_cred(
+	OM_uint32 *minor_status,
+	gss_cred_id_t input_cred_handle,
+	gss_name_t desired_name,
+	gss_OID desired_mech_type,
+	int cred_usage,
+	int initiator_time_req,
+	int acceptor_time_req,
+	gss_OID_set *actual_mechs,
+	OM_uint32 *initiator_time_rec,
+	OM_uint32 *acceptor_time_rec,
+	uid_t uid)
 {
 
 	OM_uint32	err;
@@ -498,23 +459,20 @@ kgss_add_cred(minor_status,
 	}
 
 	err = kgss_add_cred_wrapped(minor_status, gssd_input_cred_handle,
-			gssd_cred_verifier, desired_name, desired_mech_type,
-			cred_usage, initiator_time_req, acceptor_time_req,
-			actual_mechs, initiator_time_rec,
-			acceptor_time_rec, uid);
+	    gssd_cred_verifier, desired_name, desired_mech_type,
+	    cred_usage, initiator_time_req, acceptor_time_req,
+	    actual_mechs, initiator_time_rec,
+	    acceptor_time_rec, uid);
 	return (err);
 }
 
 
 OM_uint32
-kgss_release_cred_wrapped(minor_status,
-			cred_handle,
-			uid,
-			gssd_cred_verifier)
-    OM_uint32 *minor_status;
-    gssd_cred_id_t *cred_handle;
-    uid_t uid;
-    OM_uint32  gssd_cred_verifier;
+kgss_release_cred_wrapped(
+    OM_uint32 *minor_status,
+    gssd_cred_id_t *cred_handle,
+    uid_t uid,
+    OM_uint32  gssd_cred_verifier)
 {
 	CLIENT *clnt;
 
@@ -526,7 +484,7 @@ kgss_release_cred_wrapped(minor_status,
 
 	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1, "kgss_release_cred: can't connect to server on %s\n",
-			server);
+		    server);
 		return (GSS_S_FAILURE);
 	}
 
@@ -537,7 +495,7 @@ kgss_release_cred_wrapped(minor_status,
 
 	if (cred_handle != NULL) {
 		arg.cred_handle.GSS_CRED_ID_T_len =
-					(uint_t)sizeof (gssd_cred_id_t);
+		    (uint_t)sizeof (gssd_cred_id_t);
 		arg.cred_handle.GSS_CRED_ID_T_val = (char *)cred_handle;
 	} else
 		arg.cred_handle.GSS_CRED_ID_T_len = 0;
@@ -555,7 +513,7 @@ kgss_release_cred_wrapped(minor_status,
 		if (minor_status != NULL)
 			*minor_status = DEFAULT_MINOR_STAT;
 		if (cred_handle != NULL)
-			*cred_handle = NULL;
+			*cred_handle = 0;
 
 		killgssd_handle(clnt);
 		GSSLOG0(1, "kgss_release_cred: RPC call times out\n");
@@ -565,7 +523,7 @@ kgss_release_cred_wrapped(minor_status,
 	/* if the release succeeded, null out the cred_handle */
 
 	if (res.status == GSS_S_COMPLETE && cred_handle != NULL)
-		*cred_handle = NULL;
+		*cred_handle = 0;
 
 	/* copy the rpc results into the return arguments */
 
@@ -581,13 +539,10 @@ kgss_release_cred_wrapped(minor_status,
 }
 
 OM_uint32
-kgss_release_cred(minor_status,
-			cred_handle,
-			uid)
-    OM_uint32 *minor_status;
-    gss_cred_id_t *cred_handle;
-    uid_t uid;
-
+kgss_release_cred(
+    OM_uint32 *minor_status,
+    gss_cred_id_t *cred_handle,
+    uid_t uid)
 {
 
 	OM_uint32	err;
@@ -599,7 +554,7 @@ kgss_release_cred(minor_status,
 		kcred = KCRED_TO_KGSS_CRED(*cred_handle);
 
 	err = kgss_release_cred_wrapped(minor_status, &kcred->gssd_cred,
-		uid, kcred->gssd_cred_verifier);
+	    uid, kcred->gssd_cred_verifier);
 	KGSS_CRED_FREE(kcred);
 	*cred_handle = GSS_C_NO_CREDENTIAL;
 	return (err);
@@ -1092,7 +1047,8 @@ kgss_accept_sec_context_wrapped(
 				kcred = KGSS_CRED_ALLOC();
 				kcred->gssd_cred =
 				    *((gssd_cred_id_t *)
-				    res.delegated_cred_handle.GSS_CRED_ID_T_val);
+				    res.delegated_cred_handle
+				    .GSS_CRED_ID_T_val);
 				kcred->gssd_cred_verifier =
 				    res.gssd_context_verifier;
 				*delegated_cred_handle = (gss_cred_id_t)kcred;
@@ -1183,14 +1139,11 @@ kgss_accept_sec_context(
 }
 
 OM_uint32
-kgss_process_context_token(minor_status,
-				context_handle,
-				token_buffer,
-				uid)
-	OM_uint32 *minor_status;
-	const gss_ctx_id_t context_handle;
-	gss_buffer_t token_buffer;
-	uid_t uid;
+kgss_process_context_token(
+	OM_uint32 *minor_status,
+	const gss_ctx_id_t context_handle,
+	gss_buffer_t token_buffer,
+	uid_t uid)
 {
 	CLIENT *clnt;
 	OM_uint32 gssd_context_verifier;
@@ -1205,8 +1158,9 @@ kgss_process_context_token(minor_status,
 
 	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1,
-		"kgss_process_context_token: can't connect to server on %s\n",
-		server);
+		    "kgss_process_context_token: "
+		    "can't connect to server on %s\n",
+		    server);
 		return (GSS_S_FAILURE);
 	}
 
@@ -1253,12 +1207,10 @@ kgss_process_context_token(minor_status,
 /*ARGSUSED*/
 static OM_uint32
 kgss_delete_sec_context_wrapped(void *private,
-			OM_uint32 *minor_status,
-			gssd_ctx_id_t *context_handle,
-			gss_buffer_t output_token,
-			OM_uint32 gssd_context_verifier)
-
-
+    OM_uint32 *minor_status,
+    gssd_ctx_id_t *context_handle,
+    gss_buffer_t output_token,
+    OM_uint32 gssd_context_verifier)
 {
 	CLIENT *clnt;
 
@@ -1270,16 +1222,16 @@ kgss_delete_sec_context_wrapped(void *private,
 
 	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1,
-		"kgss_delete_sec_context: can't connect to server on %s\n",
-		server);
+		    "kgss_delete_sec_context: can't connect to server on %s\n",
+		    server);
 		return (GSS_S_FAILURE);
 	}
 
 	/* copy the procedure arguments into the rpc arg parameter */
 
 	arg.context_handle.GSS_CTX_ID_T_len =
-		*context_handle == GSSD_NO_CONTEXT ?
-			0 : (uint_t)sizeof (gssd_ctx_id_t);
+	    *context_handle == GSSD_NO_CONTEXT ?
+	    0 : (uint_t)sizeof (gssd_ctx_id_t);
 	arg.context_handle.GSS_CTX_ID_T_val =  (char *)context_handle;
 
 	arg.gssd_context_verifier = gssd_context_verifier;
@@ -1297,7 +1249,7 @@ kgss_delete_sec_context_wrapped(void *private,
 		if (minor_status != NULL)
 			*minor_status = DEFAULT_MINOR_STAT;
 		if (context_handle != NULL)
-			*context_handle = NULL;
+			*context_handle = 0;
 		if (output_token != NULL)
 			output_token->length = 0;
 
@@ -1312,7 +1264,7 @@ kgss_delete_sec_context_wrapped(void *private,
 		*minor_status = res.minor_status;
 
 	if (res.context_handle.GSS_CTX_ID_T_len == 0)
-		*context_handle = NULL;
+		*context_handle = 0;
 	else
 		*context_handle =
 		    *((gssd_ctx_id_t *)res.context_handle.GSS_CTX_ID_T_val);
@@ -1379,14 +1331,11 @@ kgss_delete_sec_context(
 
 
 OM_uint32
-kgss_export_sec_context_wrapped(minor_status,
-				context_handle,
-				output_token,
-				gssd_context_verifier)
-	OM_uint32 *minor_status;
-	gssd_ctx_id_t *context_handle;
-	gss_buffer_t output_token;
-	OM_uint32 gssd_context_verifier;
+kgss_export_sec_context_wrapped(
+	OM_uint32 *minor_status,
+	gssd_ctx_id_t *context_handle,
+	gss_buffer_t output_token,
+	OM_uint32 gssd_context_verifier)
 {
 	CLIENT *clnt;
 	gss_export_sec_context_arg arg;
@@ -1397,7 +1346,7 @@ kgss_export_sec_context_wrapped(minor_status,
 
 	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1, "kgss_export_sec_context_wrapped :"
-			" can't connect to server on %s\n", server);
+		    " can't connect to server on %s\n", server);
 		return (GSS_S_FAILURE);
 	}
 
@@ -1421,7 +1370,7 @@ kgss_export_sec_context_wrapped(minor_status,
 		if (minor_status != NULL)
 			*minor_status = DEFAULT_MINOR_STAT;
 		if (context_handle != NULL)
-			*context_handle = NULL;
+			*context_handle = 0;
 		if (output_token != NULL)
 			output_token->length = 0;
 		killgssd_handle(clnt);
@@ -1436,7 +1385,7 @@ kgss_export_sec_context_wrapped(minor_status,
 		*minor_status = res.minor_status;
 
 	if (res.context_handle.GSS_CTX_ID_T_len == 0)
-		*context_handle = NULL;
+		*context_handle = 0;
 	else
 		*context_handle =
 		    *((gssd_ctx_id_t *)res.context_handle.GSS_CTX_ID_T_val);
@@ -1444,10 +1393,10 @@ kgss_export_sec_context_wrapped(minor_status,
 	if (output_token != NULL) {
 		output_token->length = res.output_token.GSS_BUFFER_T_len;
 		output_token->value =
-			(void *)  MALLOC(output_token->length);
+		    (void *)  MALLOC(output_token->length);
 		(void) memcpy(output_token->value,
-			res.output_token.GSS_BUFFER_T_val,
-			output_token->length);
+		    res.output_token.GSS_BUFFER_T_val,
+		    output_token->length);
 	}
 
 	/*
@@ -1462,12 +1411,10 @@ kgss_export_sec_context_wrapped(minor_status,
 }
 
 OM_uint32
-kgss_export_sec_context(minor_status,
-			context_handle,
-			output_token)
-	OM_uint32 *minor_status;
-	gss_ctx_id_t context_handle;
-	gss_buffer_t output_token;
+kgss_export_sec_context(
+	OM_uint32 *minor_status,
+	gss_ctx_id_t context_handle,
+	gss_buffer_t output_token)
 {
 	struct kgss_ctx	*kctx;
 
@@ -1489,9 +1436,9 @@ kgss_export_sec_context(minor_status,
 	if (kctx->mech->gss_import_sec_context) {
 		GSSLOG0(8, "kgss_export_sec_context: Kernel mod available \n");
 		return (kgss_export_sec_context_wrapped(minor_status,
-						&kctx->gssd_ctx,
-						output_token,
-						kctx->gssd_ctx_verifier));
+		    &kctx->gssd_ctx,
+		    output_token,
+		    kctx->gssd_ctx_verifier));
 
 	} else {
 
@@ -1502,21 +1449,17 @@ kgss_export_sec_context(minor_status,
 		 */
 
 		GSSLOG0(8, "kgss_export_sec_context: Kernel mod "
-			"unavailable \n");
+		    "unavailable \n");
 		return (GSS_S_NAME_NOT_MN);
 	}
 
 }
 
 OM_uint32
-kgss_import_sec_context(minor_status,
-			interprocess_token,
-			context_handle)
-
-OM_uint32 *		minor_status;
-const gss_buffer_t	interprocess_token;
-gss_ctx_id_t 		context_handle;
-
+kgss_import_sec_context(
+	OM_uint32 *		minor_status,
+	const gss_buffer_t	interprocess_token,
+	gss_ctx_id_t 		context_handle)
 {
 OM_uint32 status;
 struct kgss_ctx	*kctx;
@@ -1566,7 +1509,7 @@ gss_ctx_id_t	internal_ctx_id;
 	 */
 
 	status = KGSS_IMPORT_SEC_CONTEXT(minor_status, &token, kctx,
-				&internal_ctx_id);
+	    &internal_ctx_id);
 
 	if (status == GSS_S_COMPLETE) {
 		KCTX_TO_I_CTX(kctx) = internal_ctx_id;
@@ -1578,21 +1521,19 @@ gss_ctx_id_t	internal_ctx_id;
 
 /*ARGSUSED*/
 OM_uint32
-kgss_context_time(minor_status,
-		context_handle,
-		time_rec,
-		uid)
-	OM_uint32 *minor_status;
-	const gss_ctx_id_t context_handle;
-	OM_uint32 *time_rec;
-	uid_t uid;
+kgss_context_time(
+	OM_uint32 *minor_status,
+	const gss_ctx_id_t context_handle,
+	OM_uint32 *time_rec,
+	uid_t uid)
 {
 	return (GSS_S_FAILURE);
 }
 
 /*ARGSUSED*/
 static OM_uint32
-kgss_sign_wrapped(void *private,
+kgss_sign_wrapped(
+	void *private,
 	OM_uint32 *minor_status,
 	const gss_ctx_id_t ctx_handle,
 	int qop_req,
@@ -1686,7 +1627,8 @@ kgss_sign(
 
 /*ARGSUSED*/
 static OM_uint32
-kgss_verify_wrapped(void *private,
+kgss_verify_wrapped(
+	void *private,
 	OM_uint32 *minor_status,
 	const gss_ctx_id_t ctx_handle,
 	const gss_buffer_t message_buffer,
@@ -1761,11 +1703,12 @@ kgss_verify_wrapped(void *private,
 }
 
 OM_uint32
-kgss_verify(OM_uint32 *minor_status,
-		const gss_ctx_id_t context_handle,
-		const gss_buffer_t message_buffer,
-		const gss_buffer_t token_buffer,
-		int *qop_state)
+kgss_verify(
+	OM_uint32 *minor_status,
+	const gss_ctx_id_t context_handle,
+	const gss_buffer_t message_buffer,
+	const gss_buffer_t token_buffer,
+	int *qop_state)
 {
 	if (context_handle == GSS_C_NO_CONTEXT)
 		return (GSS_S_FAILURE);
@@ -1775,7 +1718,8 @@ kgss_verify(OM_uint32 *minor_status,
 
 /*ARGSUSED*/
 static OM_uint32
-kgss_seal_wrapped(void *private,
+kgss_seal_wrapped(
+	void *private,
 	OM_uint32 *minor_status,
 	const gss_ctx_id_t ctx_handle,
 	int conf_req_flag,
@@ -1872,26 +1816,27 @@ kgss_seal_wrapped(void *private,
 
 /*ARGSUSED*/
 OM_uint32
-kgss_seal(OM_uint32 *minor_status,
+kgss_seal(
+	OM_uint32 *minor_status,
 	const gss_ctx_id_t context_handle,
 	int conf_req_flag,
 	int qop_req,
 	const gss_buffer_t input_message_buffer,
 	int *conf_state,
 	gss_buffer_t output_message_buffer)
-
 {
 	if (context_handle == GSS_C_NO_CONTEXT)
 		return (GSS_S_FAILURE);
 	return (KGSS_SEAL(minor_status, context_handle,
-		conf_req_flag, qop_req,
-		input_message_buffer, conf_state,
-		output_message_buffer));
+	    conf_req_flag, qop_req,
+	    input_message_buffer, conf_state,
+	    output_message_buffer));
 }
 
 /*ARGSUSED*/
 static OM_uint32
-kgss_unseal_wrapped(void *private,
+kgss_unseal_wrapped(
+	void *private,
 	OM_uint32 *minor_status,
 	const gss_ctx_id_t ctx_handle,
 	const gss_buffer_t input_message_buffer,
@@ -1988,7 +1933,8 @@ kgss_unseal_wrapped(void *private,
 }
 
 OM_uint32
-kgss_unseal(OM_uint32 *minor_status,
+kgss_unseal(
+	OM_uint32 *minor_status,
 	const gss_ctx_id_t context_handle,
 	const gss_buffer_t input_message_buffer,
 	const gss_buffer_t output_message_buffer,
@@ -2004,20 +1950,14 @@ kgss_unseal(OM_uint32 *minor_status,
 }
 
 OM_uint32
-kgss_display_status(minor_status,
-		status_value,
-		status_type,
-		mech_type,
-		message_context,
-		status_string,
-		uid)
-	OM_uint32 *minor_status;
-	OM_uint32 status_value;
-	int status_type;
-	const gss_OID mech_type;
-	int *message_context;
-	gss_buffer_t status_string;
-	uid_t uid;
+kgss_display_status(
+	OM_uint32 *minor_status,
+	OM_uint32 status_value,
+	int status_type,
+	const gss_OID mech_type,
+	int *message_context,
+	gss_buffer_t status_string,
+	uid_t uid)
 {
 	CLIENT *clnt;
 
@@ -2028,7 +1968,7 @@ kgss_display_status(minor_status,
 
 	if ((clnt = getgssd_handle()) == NULL) {
 	GSSLOG(1, "kgss_display_status: can't connect to server on %s\n",
-			server);
+	    server);
 		return (GSS_S_FAILURE);
 	}
 
@@ -2040,9 +1980,9 @@ kgss_display_status(minor_status,
 	arg.status_type = status_type;
 
 	arg.mech_type.GSS_OID_len = (uint_t)(mech_type != GSS_C_NULL_OID ?
-						mech_type->length : 0);
+	    mech_type->length : 0);
 	arg.mech_type.GSS_OID_val = (char *)(mech_type != GSS_C_NULL_OID ?
-						mech_type->elements : 0);
+	    mech_type->elements : 0);
 
 	arg.message_context = *message_context;
 
@@ -2081,12 +2021,12 @@ kgss_display_status(minor_status,
 			*message_context = res.message_context;
 		if (status_string != NULL) {
 			status_string->length =
-				(size_t)res.status_string.GSS_BUFFER_T_len;
+			    (size_t)res.status_string.GSS_BUFFER_T_len;
 			status_string->value =
-				(void *) MALLOC(status_string->length);
+			    (void *) MALLOC(status_string->length);
 			(void) memcpy(status_string->value,
-				res.status_string.GSS_BUFFER_T_val,
-				status_string->length);
+			    res.status_string.GSS_BUFFER_T_val,
+			    status_string->length);
 		}
 	}
 
@@ -2097,12 +2037,10 @@ kgss_display_status(minor_status,
 
 /*ARGSUSED*/
 OM_uint32
-kgss_indicate_mechs(minor_status,
-			mech_set,
-			uid)
-	OM_uint32 *minor_status;
-	gss_OID_set *mech_set;
-	uid_t uid;
+kgss_indicate_mechs(
+	OM_uint32 *minor_status,
+	gss_OID_set *mech_set,
+	uid_t uid)
 {
 	CLIENT *clnt;
 	void *arg;
@@ -2113,7 +2051,7 @@ kgss_indicate_mechs(minor_status,
 
 	if ((clnt = getgssd_handle()) == NULL) {
 	GSSLOG(1, "kgss_indicate_mechs: can't connect to server on %s\n",
-			server);
+	    server);
 		return (GSS_S_FAILURE);
 	}
 
@@ -2144,15 +2082,15 @@ kgss_indicate_mechs(minor_status,
 		*mech_set = (gss_OID_set) MALLOC(sizeof (gss_OID_set_desc));
 		(*mech_set)->count = res.mech_set.GSS_OID_SET_len;
 		(*mech_set)->elements = (void *)
-			MALLOC ((*mech_set)->count * sizeof (gss_OID_desc));
+		    MALLOC ((*mech_set)->count * sizeof (gss_OID_desc));
 		for (i = 0; i < (*mech_set)->count; i++) {
 			(*mech_set)->elements[i].length =
-				res.mech_set.GSS_OID_SET_val[i].GSS_OID_len;
+			    res.mech_set.GSS_OID_SET_val[i].GSS_OID_len;
 			(*mech_set)->elements[i].elements = (void *)
-				MALLOC ((*mech_set)->elements[i].length);
+			    MALLOC ((*mech_set)->elements[i].length);
 			(void) memcpy((*mech_set)->elements[i].elements,
-				res.mech_set.GSS_OID_SET_val[i].GSS_OID_val,
-				(*mech_set)->elements[i].length);
+			    res.mech_set.GSS_OID_SET_val[i].GSS_OID_val,
+			    (*mech_set)->elements[i].length);
 		}
 	}
 
@@ -2168,22 +2106,15 @@ kgss_indicate_mechs(minor_status,
 
 
 OM_uint32
-kgss_inquire_cred_wrapped(minor_status,
-		cred_handle,
-		gssd_cred_verifier,
-		name,
-		lifetime,
-		cred_usage,
-		mechanisms,
-		uid)
-	OM_uint32 *minor_status;
-	const gssd_cred_id_t cred_handle;
-	OM_uint32 gssd_cred_verifier;
-	gss_name_t *name;
-	OM_uint32 *lifetime;
-	int *cred_usage;
-	gss_OID_set *mechanisms;
-	uid_t uid;
+kgss_inquire_cred_wrapped(
+	OM_uint32 *minor_status,
+	const gssd_cred_id_t cred_handle,
+	OM_uint32 gssd_cred_verifier,
+	gss_name_t *name,
+	OM_uint32 *lifetime,
+	int *cred_usage,
+	gss_OID_set *mechanisms,
+	uid_t uid)
 {
 	CLIENT *clnt;
 
@@ -2216,7 +2147,7 @@ kgss_inquire_cred_wrapped(minor_status,
 
 	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1, "kgss_inquire_cred: can't connect to server on %s\n",
-			server);
+		    server);
 		return (GSS_S_FAILURE);
 	}
 
@@ -2268,11 +2199,11 @@ kgss_inquire_cred_wrapped(minor_status,
 		name_type.elements = (void *)res.name_type.GSS_OID_val;
 
 		if (gss_import_name(&minor_status_temp, &external_name,
-			&name_type, name) != GSS_S_COMPLETE) {
+		    &name_type, name) != GSS_S_COMPLETE) {
 
 			*minor_status = (OM_uint32) minor_status_temp;
 			clnt_freeres(clnt, xdr_gss_inquire_cred_res,
-							(caddr_t)&res);
+			    (caddr_t)&res);
 			killgssd_handle(clnt);
 			GSSLOG0(1, "kgss_inquire_cred: import name fails\n");
 			return ((OM_uint32) GSS_S_FAILURE);
@@ -2286,26 +2217,25 @@ kgss_inquire_cred_wrapped(minor_status,
 		*cred_usage = res.cred_usage;
 
 	if (res.status == GSS_S_COMPLETE &&
-		res.mechanisms.GSS_OID_SET_len != 0 &&
-		mechanisms != NULL) {
+	    res.mechanisms.GSS_OID_SET_len != 0 &&
+	    mechanisms != NULL) {
 		*mechanisms = (gss_OID_set) MALLOC(sizeof (gss_OID_set_desc));
 		(*mechanisms)->count =
-			(int)res.mechanisms.GSS_OID_SET_len;
+		    (int)res.mechanisms.GSS_OID_SET_len;
 		(*mechanisms)->elements = (gss_OID)
-			MALLOC(sizeof (gss_OID_desc) * (*mechanisms)->count);
+		    MALLOC(sizeof (gss_OID_desc) * (*mechanisms)->count);
 
 		for (i = 0; i < (*mechanisms)->count; i++) {
-		    (*mechanisms)->elements[i].length = (OM_uint32)
-			res.mechanisms.GSS_OID_SET_val[i].GSS_OID_len;
-		    (*mechanisms)->elements[i].elements =
-			(void *) MALLOC((*mechanisms)->elements[i].length);
-		    (void) memcpy((*mechanisms)->elements[i].elements,
-			res.mechanisms.GSS_OID_SET_val[i].GSS_OID_val,
-			(*mechanisms)->elements[i].length);
+			(*mechanisms)->elements[i].length = (OM_uint32)
+			    res.mechanisms.GSS_OID_SET_val[i].GSS_OID_len;
+			(*mechanisms)->elements[i].elements =
+			    (void *) MALLOC((*mechanisms)->elements[i].length);
+			(void) memcpy((*mechanisms)->elements[i].elements,
+			    res.mechanisms.GSS_OID_SET_val[i].GSS_OID_val,
+			    (*mechanisms)->elements[i].length);
 		}
 	} else {
-		if (res.status == GSS_S_COMPLETE &&
-			mechanisms != NULL)
+		if (res.status == GSS_S_COMPLETE && mechanisms != NULL)
 			(*mechanisms) = NULL;
 	}
 	/*
@@ -2320,20 +2250,14 @@ kgss_inquire_cred_wrapped(minor_status,
 }
 
 OM_uint32
-kgss_inquire_cred(minor_status,
-			cred_handle,
-			name,
-			lifetime,
-			cred_usage,
-			mechanisms,
-			uid)
-	OM_uint32 *minor_status;
-	const gss_cred_id_t cred_handle;
-	gss_name_t *name;
-	OM_uint32 *lifetime;
-	int *cred_usage;
-	gss_OID_set * mechanisms;
-	uid_t uid;
+kgss_inquire_cred(
+	OM_uint32 *minor_status,
+	const gss_cred_id_t cred_handle,
+	gss_name_t *name,
+	OM_uint32 *lifetime,
+	int *cred_usage,
+	gss_OID_set * mechanisms,
+	uid_t uid)
 {
 
 	OM_uint32 gssd_cred_verifier;
@@ -2343,21 +2267,17 @@ kgss_inquire_cred(minor_status,
 	gssd_cred_handle = KCRED_TO_CRED(cred_handle);
 
 	return (kgss_inquire_cred_wrapped(minor_status,
-			gssd_cred_handle, gssd_cred_verifier,
-			name, lifetime, cred_usage, mechanisms, uid));
+	    gssd_cred_handle, gssd_cred_verifier,
+	    name, lifetime, cred_usage, mechanisms, uid));
 }
 
 OM_uint32
-kgss_inquire_cred_by_mech_wrapped(minor_status,
-		cred_handle,
-		gssd_cred_verifier,
-		mech_type,
-		uid)
-	OM_uint32 *minor_status;
-	gssd_cred_id_t cred_handle;
-	OM_uint32 gssd_cred_verifier;
-	gss_OID mech_type;
-	uid_t uid;
+kgss_inquire_cred_by_mech_wrapped(
+	OM_uint32 *minor_status,
+	gssd_cred_id_t cred_handle,
+	OM_uint32 gssd_cred_verifier,
+	gss_OID mech_type,
+	uid_t uid)
 {
 	CLIENT *clnt;
 
@@ -2368,7 +2288,7 @@ kgss_inquire_cred_by_mech_wrapped(minor_status,
 
 	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1, "kgss_inquire_cred: can't connect to server on %s\n",
-			server);
+		    server);
 		return (GSS_S_FAILURE);
 	}
 
@@ -2384,11 +2304,11 @@ kgss_inquire_cred_by_mech_wrapped(minor_status,
 	arg.gssd_cred_verifier = gssd_cred_verifier;
 
 	arg.mech_type.GSS_OID_len =
-		(uint_t)(mech_type != GSS_C_NULL_OID ?
-		mech_type->length : 0);
+	    (uint_t)(mech_type != GSS_C_NULL_OID ?
+	    mech_type->length : 0);
 	arg.mech_type.GSS_OID_val =
-		(char *)(mech_type != GSS_C_NULL_OID ?
-		mech_type->elements : 0);
+	    (char *)(mech_type != GSS_C_NULL_OID ?
+	    mech_type->elements : 0);
 	/* call the remote procedure */
 
 	bzero((caddr_t)&res, sizeof (res));
@@ -2418,14 +2338,11 @@ kgss_inquire_cred_by_mech_wrapped(minor_status,
 }
 
 OM_uint32
-kgss_inquire_cred_by_mech(minor_status,
-			cred_handle,
-			mech_type,
-			uid)
-	OM_uint32 *minor_status;
-	gss_cred_id_t cred_handle;
-	gss_OID mech_type;
-	uid_t uid;
+kgss_inquire_cred_by_mech(
+	OM_uint32 *minor_status,
+	gss_cred_id_t cred_handle,
+	gss_OID mech_type,
+	uid_t uid)
 {
 
 	OM_uint32 gssd_cred_verifier;
@@ -2435,18 +2352,18 @@ kgss_inquire_cred_by_mech(minor_status,
 	gssd_cred_handle = KCRED_TO_CRED(cred_handle);
 
 	return (kgss_inquire_cred_by_mech_wrapped(minor_status,
-			gssd_cred_handle, gssd_cred_verifier,
-			mech_type, uid));
+	    gssd_cred_handle, gssd_cred_verifier,
+	    mech_type, uid));
 }
 
 OM_uint32
-kgsscred_expname_to_unix_cred(expName, uidOut, gidOut, gids, gidsLen, uid)
-	const gss_buffer_t expName;
-	uid_t *uidOut;
-	gid_t *gidOut;
-	gid_t *gids[];
-	int *gidsLen;
-	uid_t uid;
+kgsscred_expname_to_unix_cred(
+	const gss_buffer_t expName,
+	uid_t *uidOut,
+	gid_t *gidOut,
+	gid_t *gids[],
+	int *gidsLen,
+	uid_t uid)
 {
 	CLIENT *clnt;
 	gsscred_expname_to_unix_cred_arg args;
@@ -2468,10 +2385,9 @@ kgsscred_expname_to_unix_cred(expName, uidOut, gidOut, gids, gidsLen, uid)
 		*gids = NULL;
 
 	/* get the client handle to gssd */
-	if ((clnt = getgssd_handle()) == NULL)
-	{
+	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1, "kgsscred_expname_to_unix_cred:"
-			" can't connect to server on %s\n", server);
+		    " can't connect to server on %s\n", server);
 		return (GSS_S_FAILURE);
 	}
 
@@ -2483,22 +2399,19 @@ kgsscred_expname_to_unix_cred(expName, uidOut, gidOut, gids, gidsLen, uid)
 	/* null out the return buffer and call the remote proc */
 	bzero(&res, sizeof (res));
 
-	if (gsscred_expname_to_unix_cred_1(&args, &res, clnt) != RPC_SUCCESS)
-	{
+	if (gsscred_expname_to_unix_cred_1(&args, &res, clnt) != RPC_SUCCESS) {
 		killgssd_handle(clnt);
 		GSSLOG0(1,
-			"kgsscred_expname_to_unix_cred: RPC call times out\n");
+		    "kgsscred_expname_to_unix_cred: RPC call times out\n");
 		return (GSS_S_FAILURE);
 	}
 
 	/* copy the results into the result parameters */
-	if (res.major == GSS_S_COMPLETE)
-	{
+	if (res.major == GSS_S_COMPLETE) {
 		*uidOut = res.uid;
 		if (gidOut)
 			*gidOut = res.gid;
-		if (gids && gidsLen)
-		{
+		if (gids && gidsLen) {
 			*gids = res.gids.GSSCRED_GIDS_val;
 			*gidsLen = res.gids.GSSCRED_GIDS_len;
 			res.gids.GSSCRED_GIDS_val = NULL;
@@ -2514,15 +2427,14 @@ kgsscred_expname_to_unix_cred(expName, uidOut, gidOut, gids, gidsLen, uid)
 } /* kgsscred_expname_to_unix_cred */
 
 OM_uint32
-kgsscred_name_to_unix_cred(intName, mechType, uidOut, gidOut, gids,
-				gidsLen, uid)
-	const gss_name_t intName;
-	const gss_OID mechType;
-	uid_t *uidOut;
-	gid_t *gidOut;
-	gid_t *gids[];
-	int *gidsLen;
-	uid_t uid;
+kgsscred_name_to_unix_cred(
+	const gss_name_t intName,
+	const gss_OID mechType,
+	uid_t *uidOut,
+	gid_t *gidOut,
+	gid_t *gids[],
+	int *gidsLen,
+	uid_t uid)
 {
 	CLIENT *clnt;
 	gsscred_name_to_unix_cred_arg args;
@@ -2547,18 +2459,16 @@ kgsscred_name_to_unix_cred(intName, mechType, uidOut, gidOut, gids,
 		*gidsLen = 0;
 
 	/* get the client handle to gssd */
-	if ((clnt = getgssd_handle()) == NULL)
-	{
+	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1,
 		"kgsscred_name_to_unix_cred: can't connect to server %s\n",
-				server);
+		    server);
 		return (GSS_S_FAILURE);
 	}
 
 	/* convert the name to flat representation */
 	if ((major = gss_display_name(&minor, intName, &flatName, &nameOid))
-			!= GSS_S_COMPLETE)
-	{
+	    != GSS_S_COMPLETE) {
 		killgssd_handle(clnt);
 		GSSLOG0(1, "kgsscred_name_to_unix_cred: display name failed\n");
 		return (major);
@@ -2607,12 +2517,12 @@ kgsscred_name_to_unix_cred(intName, mechType, uidOut, gidOut, gids,
 } /* kgsscred_name_to_unix_cred */
 
 OM_uint32
-kgss_get_group_info(puid, gidOut, gids, gidsLen, uid)
-	const uid_t puid;
-	gid_t *gidOut;
-	gid_t *gids[];
-	int *gidsLen;
-	uid_t uid;
+kgss_get_group_info(
+	const uid_t puid,
+	gid_t *gidOut,
+	gid_t *gids[],
+	int *gidsLen,
+	uid_t uid)
 {
 	CLIENT *clnt;
 	gss_get_group_info_arg args;
@@ -2626,8 +2536,8 @@ kgss_get_group_info(puid, gidOut, gids, gidsLen, uid)
 	/* get the client GSSD handle */
 	if ((clnt = getgssd_handle()) == NULL) {
 		GSSLOG(1,
-			"kgss_get_group_info: can't connect to server on %s\n",
-			server);
+		    "kgss_get_group_info: can't connect to server on %s\n",
+		    server);
 		return (GSS_S_FAILURE);
 	}
 

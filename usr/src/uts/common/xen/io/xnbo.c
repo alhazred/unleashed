@@ -99,7 +99,7 @@ xnbo_to_mac(xnb_t *xnbp, mblk_t *mp)
 	}
 
 	if (mac_tx(xnbop->o_mch, mp, 0,
-	    MAC_DROP_ON_NO_DESC, NULL) != NULL) {
+	    MAC_DROP_ON_NO_DESC, NULL) != 0) {
 		xnbp->xnb_stat_mac_full++;
 	}
 

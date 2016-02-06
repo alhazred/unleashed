@@ -860,7 +860,7 @@ aui_fchownat(au_event_t e)
 		long	flags;
 	} *uap = (struct a *)clwp->lwp_ap;
 
-	if (uap->fname == NULL)
+	if (uap->fname == 0)
 		e = AUE_FCHOWN;
 	else if (uap->flags & AT_SYMLINK_NOFOLLOW)
 		e = AUE_LCHOWN;
@@ -963,7 +963,7 @@ aui_fchmodat(au_event_t e)
 		long	flag;
 	} *uap = (struct a *)clwp->lwp_ap;
 
-	if (uap->fname == NULL)
+	if (uap->fname == 0)
 		e = AUE_FCHMOD;
 	else
 		e = AUE_CHMOD;
@@ -994,7 +994,7 @@ aus_fchmodat(struct t_audit_data *tad)
 
 	au_uwrite(au_to_arg32(2, "new file mode", fmode&07777));
 
-	if (fd == AT_FDCWD || uap->fname != NULL)	/* same as chmod() */
+	if (fd == AT_FDCWD || uap->fname != 0)	/* same as chmod() */
 		return;
 
 	/*
@@ -1194,7 +1194,7 @@ aui_fstatat(au_event_t e)
 		long	flags;
 	} *uap = (struct a *)clwp->lwp_ap;
 
-	if (uap->fnamep == NULL)
+	if (uap->fnamep == 0)
 		e = AUE_FSTAT;
 	else if (uap->flags & AT_SYMLINK_NOFOLLOW)
 		e = AUE_LSTAT;
@@ -1705,7 +1705,8 @@ auf_mknodat(struct t_audit_data *tad, int error, rval_t *rval)
 /*ARGSUSED*/
 static void
 aus_mount(struct t_audit_data *tad)
-{	/* AUS_START */
+{
+	/* AUS_START */
 	klwp_t *clwp = ttolwp(curthread);
 	uint32_t flags;
 	uintptr_t u_fstype, dataptr;
@@ -1739,20 +1740,20 @@ aus_mount(struct t_audit_data *tad)
 		bzero(STRUCT_BUF(nfsargs), STRUCT_SIZE(nfsargs));
 
 		if (copyin((caddr_t)dataptr,
-				STRUCT_BUF(nfsargs),
-				MIN(uap->datalen, STRUCT_SIZE(nfsargs)))) {
+		    STRUCT_BUF(nfsargs),
+		    MIN(uap->datalen, STRUCT_SIZE(nfsargs)))) {
 			/* DEBUG debug_enter((char *)NULL); */
 			goto mount_free_fstype;
 		}
 		hostname = kmem_alloc(MAXNAMELEN, KM_SLEEP);
 		if (copyinstr(STRUCT_FGETP(nfsargs, hostname),
-				(caddr_t)hostname,
-				MAXNAMELEN, &len)) {
+		    (caddr_t)hostname,
+		    MAXNAMELEN, &len)) {
 			goto mount_free_hostname;
 		}
 		au_uwrite(au_to_text(hostname));
 		au_uwrite(au_to_arg32(3, "internal flags",
-			(uint_t)STRUCT_FGET(nfsargs, flags)));
+		    (uint_t)STRUCT_FGET(nfsargs, flags)));
 
 mount_free_hostname:
 		kmem_free(hostname, MAXNAMELEN);
@@ -3575,7 +3576,7 @@ auf_connect(struct t_audit_data *tad, int error, rval_t *rval)
 		(void) socket_getsockname(so, (struct sockaddr *)so_laddr,
 		    &len, CRED());
 		if (error) {
-			if (uap->addr == NULL)
+			if (uap->addr == 0)
 				break;
 			if (uap->len <= 0)
 				break;
@@ -3825,8 +3826,7 @@ auf_setsockopt(struct t_audit_data *tad, int error, rval_t *rval)
 
 /*ARGSUSED*/
 static void
-aus_sockconfig(tad)
-	struct t_audit_data *tad;
+aus_sockconfig(struct t_audit_data *tad)
 {
 	struct a {
 		long	cmd;
@@ -4169,7 +4169,7 @@ auf_recvfrom(
 			bzero((void *)so_faddr, sizeof (so_faddr));
 
 			/* sanity check */
-			if (uap->from == NULL)
+			if (uap->from == 0)
 				break;
 
 			/* sanity checks */
@@ -4557,7 +4557,7 @@ auf_sendto(struct t_audit_data *tad, int error, rval_t *rval)
 			/* get peer address */
 
 			/* sanity check */
-			if (uap->to == NULL)
+			if (uap->to == 0)
 				break;
 
 			/* sanity checks */
@@ -5254,10 +5254,10 @@ aus_facl(struct t_audit_data *tad)
 
 /*ARGSUSED*/
 static void
-auf_read(tad, error, rval)
-	struct t_audit_data *tad;
-	int error;
-	rval_t *rval;
+auf_read(
+	struct t_audit_data *tad,
+	int error,
+	rval_t *rval)
 {
 	struct file *fp;
 	struct f_audit_data *fad;
@@ -5311,10 +5311,10 @@ auf_read(tad, error, rval)
 
 /*ARGSUSED*/
 static void
-auf_write(tad, error, rval)
-	struct t_audit_data *tad;
-	int error;
-	rval_t *rval;
+auf_write(
+	struct t_audit_data *tad,
+	int error,
+	rval_t *rval)
 {
 	struct file *fp;
 	struct f_audit_data *fad;
@@ -5368,10 +5368,10 @@ auf_write(tad, error, rval)
 
 /*ARGSUSED*/
 static void
-auf_recv(tad, error, rval)
-	struct t_audit_data *tad;
-	int error;
-	rval_t *rval;
+auf_recv(
+	struct t_audit_data *tad,
+	int error,
+	rval_t *rval)
 {
 	struct sonode *so;
 	char so_laddr[sizeof (struct sockaddr_in6)];
@@ -5502,10 +5502,10 @@ auf_recv(tad, error, rval)
 
 /*ARGSUSED*/
 static void
-auf_send(tad, error, rval)
-	struct t_audit_data *tad;
-	int error;
-	rval_t *rval;
+auf_send(
+	struct t_audit_data *tad,
+	int error,
+	rval_t *rval)
 {
 	struct sonode *so;
 	char so_laddr[sizeof (struct sockaddr_in6)];

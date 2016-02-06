@@ -245,7 +245,7 @@ static crypto_provider_info_t des_prov_info = {
 	des_mech_info_tab
 };
 
-static crypto_kcf_provider_handle_t des_prov_handle = NULL;
+static crypto_kcf_provider_handle_t des_prov_handle = 0;
 
 int
 _init(void)

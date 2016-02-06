@@ -1768,7 +1768,7 @@ dprov_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	softc = ddi_get_soft_state(statep, instance);
 	mutex_init(&softc->ds_lock, NULL, MUTEX_DRIVER, NULL);
 	softc->ds_dip = dip;
-	softc->ds_prov_handle = NULL;
+	softc->ds_prov_handle = 0;
 
 	/* create minor node */
 	(void) sprintf(devname, "dprov%d", instance);
@@ -1865,7 +1865,7 @@ dprov_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 		return (DDI_FAILURE);
 
 	/* unregister from the crypto framework */
-	if (softc->ds_prov_handle != NULL)
+	if (softc->ds_prov_handle != 0)
 		if ((ret = crypto_unregister_provider(
 		    softc->ds_prov_handle)) != CRYPTO_SUCCESS) {
 			cmn_err(CE_WARN, "dprov_detach: "
@@ -9498,7 +9498,7 @@ dprov_object_is_token(dprov_object_t *object)
  */
 static int
 dprov_get_object_attr_scalar_common(dprov_object_t *object, uint64_t attr_type,
-				    void *value, size_t value_len)
+    void *value, size_t value_len)
 {
 	int attr_idx;
 	size_t oa_value_len;

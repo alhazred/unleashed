@@ -224,7 +224,7 @@ mapexec_brand(vnode_t *vp, uarg_t *args, Ehdr *ehdr, Addr *uphdr_vaddr,
 	intptr_t	minaddr;
 
 	if (lddatap != NULL)
-		*lddatap = NULL;
+		*lddatap = (uintptr_t)NULL;
 
 	if (error = execpermissions(vp, &vat, args)) {
 		uprintf("%s: Cannot execute %s\n", exec_file, args->pathname);
@@ -1905,7 +1905,7 @@ top:
 	 */
 	nshdrs = 0;
 	if (content & (CC_CONTENT_CTF | CC_CONTENT_SYMTAB)) {
-		(void) process_scns(content, p, credp, NULL, NULL, NULL, 0,
+		(void) process_scns(content, p, credp, NULL, NULL, 0, 0,
 		    NULL, &nshdrs);
 	}
 	AS_LOCK_EXIT(as);

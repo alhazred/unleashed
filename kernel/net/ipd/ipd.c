@@ -880,7 +880,7 @@ ipd_ioctl_list(intptr_t arg, cred_t *cr)
 	nzones = MIN(cur, rzones);
 	if (nzones > 0) {
 		if (ddi_copyout(configs, STRUCT_FGETP(h, ipil_info),
-		    nzones * sizeof (ipd_ioc_info_t), NULL) != 0)
+		    nzones * sizeof (ipd_ioc_info_t), 0) != 0)
 			rval = EFAULT;
 	}
 
