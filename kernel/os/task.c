@@ -187,7 +187,8 @@ task_lwps_test(rctl_t *r, proc_t *p, rctl_entity_p_t *e, rctl_val_t *rcntl,
 
 /*ARGSUSED*/
 static int
-task_lwps_set(rctl_t *rctl, struct proc *p, rctl_entity_p_t *e, rctl_qty_t nv) {
+task_lwps_set(rctl_t *rctl, struct proc *p, rctl_entity_p_t *e, rctl_qty_t nv)
+{
 
 	ASSERT(MUTEX_HELD(&p->p_lock));
 	ASSERT(e->rcep_t == RCENTITY_TASK);
@@ -239,7 +240,8 @@ task_nprocs_test(rctl_t *r, proc_t *p, rctl_entity_p_t *e, rctl_val_t *rcntl,
 /*ARGSUSED*/
 static int
 task_nprocs_set(rctl_t *rctl, struct proc *p, rctl_entity_p_t *e,
-    rctl_qty_t nv) {
+    rctl_qty_t nv)
+{
 
 	ASSERT(MUTEX_HELD(&p->p_lock));
 	ASSERT(e->rcep_t == RCENTITY_TASK);
@@ -455,7 +457,7 @@ task_rele(task_t *tk)
 	 * the task fails.
 	 */
 	if (taskq_dispatch(exacct_queue, exacct_commit_task, tk,
-	    TQ_NOSLEEP | TQ_NOQUEUE) == NULL) {
+	    TQ_NOSLEEP | TQ_NOQUEUE) == (uintptr_t)NULL) {
 		mutex_enter(&task_commit_lock);
 		if (task_commit_head == NULL) {
 			task_commit_head = task_commit_tail = tk;

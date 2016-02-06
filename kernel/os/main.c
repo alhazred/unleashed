@@ -257,7 +257,7 @@ exec_init(const char *initpath, const char *args)
 	lwp->lwp_ap = lwp->lwp_arg;
 	lwp->lwp_arg[0] = (uintptr_t)exec_fnamep;
 	lwp->lwp_arg[1] = (uintptr_t)uap;
-	lwp->lwp_arg[2] = NULL;
+	lwp->lwp_arg[2] = (uintptr_t)NULL;
 	curthread->t_post_sys = 1;
 	curthread->t_sysnum = SYS_execve;
 

@@ -926,7 +926,7 @@ ipc_keylookup(ipc_service_t *service, key_t key, int flag, kipc_perm_t **permp)
 			return (EEXIST);
 		if ((flag & 0777) & ~perm->ipc_mode) {
 			if (AU_AUDITING())
-				audit_ipcget(NULL, (void *)perm);
+				audit_ipcget(0, (void *)perm);
 			return (EACCES);
 		}
 		*permp = perm;

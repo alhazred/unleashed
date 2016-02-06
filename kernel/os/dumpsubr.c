@@ -489,8 +489,8 @@ dumpinit(vnode_t *vp, char *name, int justchecking)
 				if (IS_SWAPVP(common_specvp(cvp)))
 					error = EBUSY;
 				else if ((error = VOP_IOCTL(cdev_vp,
-				    DKIOCDUMPINIT, NULL, FKIOCTL, kcred,
-				    NULL, NULL)) != 0)
+				    DKIOCDUMPINIT, (intptr_t)NULL, FKIOCTL,
+				    kcred, NULL, NULL)) != 0)
 					dumpfini();
 			}
 
@@ -534,8 +534,8 @@ dumpfini(void)
 	if (is_zfs &&
 	    (cdev_vp = makespecvp(VTOS(dumpvp)->s_dev, VCHR)) != NULL) {
 		if (VOP_OPEN(&cdev_vp, FREAD | FWRITE, kcred, NULL) == 0) {
-			(void) VOP_IOCTL(cdev_vp, DKIOCDUMPFINI, NULL, FKIOCTL,
-			    kcred, NULL, NULL);
+			(void) VOP_IOCTL(cdev_vp, DKIOCDUMPFINI, (intptr_t)NULL,
+			    FKIOCTL, kcred, NULL, NULL);
 			(void) VOP_CLOSE(cdev_vp, FREAD | FWRITE, 1, 0,
 			    kcred, NULL);
 		}

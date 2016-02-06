@@ -357,7 +357,7 @@ static pci_cap_entry_t pci_cap_table[] = {
 	 * {PCI_CAP_ID_AGP_8X, 0, NULL},
 	 * {PCI_CAP_ID_SECURE_DEV, 0, NULL},
 	 */
-	{PCI_CAP_NEXT_PTR_NULL, 0, NULL}
+	{PCI_CAP_NEXT_PTR_NULL, 0, 0}
 };
 
 
@@ -926,7 +926,7 @@ restoreconfig_err:
 /*ARGSUSED*/
 static int
 pci_lookup_pmcap(dev_info_t *dip, ddi_acc_handle_t conf_hdl,
-	uint16_t *pmcap_offsetp)
+    uint16_t *pmcap_offsetp)
 {
 	uint8_t cap_ptr;
 	uint8_t cap_id;

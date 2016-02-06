@@ -1234,7 +1234,7 @@ modctl_get_devid(dev_t dev, uint_t len, ddi_devid_t udevid)
 /*ARGSUSED*/
 static int
 modctl_devid2paths(ddi_devid_t udevid, char *uminor_name, uint_t flag,
-	size_t *ulensp, char *upaths)
+    size_t *ulensp, char *upaths)
 {
 	ddi_devid_t	devid = NULL;
 	int		devid_len;
@@ -2300,17 +2300,17 @@ modctl_hp(int subcmd, const char *path, char *cn_name, uintptr_t arg,
 	switch (subcmd) {
 	case MODHPOPS_CHANGE_STATE:
 		error = ddihp_modctl(DDI_HPOP_CN_CHANGE_STATE, devpath,
-		    cn_name_str, arg, NULL);
+		    cn_name_str, arg, (uintptr_t)NULL);
 		break;
 	case MODHPOPS_CREATE_PORT:
 		/* Create an empty PORT */
 		error = ddihp_modctl(DDI_HPOP_CN_CREATE_PORT, devpath,
-		    cn_name_str, NULL, NULL);
+		    cn_name_str, (uintptr_t)NULL, (uintptr_t)NULL);
 		break;
 	case MODHPOPS_REMOVE_PORT:
 		/* Remove an empty PORT */
 		error = ddihp_modctl(DDI_HPOP_CN_REMOVE_PORT, devpath,
-		    cn_name_str, NULL, NULL);
+		    cn_name_str, (uintptr_t)NULL, (uintptr_t)NULL);
 		break;
 	case MODHPOPS_BUS_GET:
 		error = ddihp_modctl(DDI_HPOP_CN_GET_PROPERTY, devpath,
