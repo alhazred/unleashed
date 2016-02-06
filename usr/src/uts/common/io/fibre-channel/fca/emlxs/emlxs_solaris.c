@@ -3024,7 +3024,7 @@ emlxs_fca_ub_alloc(opaque_t fca_port_handle, uint64_t tokens[], uint32_t size,
 fail:
 
 	/* Clean the pool */
-	for (i = 0; tokens[i] != NULL; i++) {
+	for (i = 0; tokens[i] != 0; i++) {
 		/* Get the buffer object */
 		ubp = (fc_unsol_buf_t *)((unsigned long)tokens[i]);
 		ub_priv = (emlxs_ub_priv_t *)ubp->ub_fca_private;
@@ -12165,7 +12165,7 @@ emlxs_fm_service_impact(emlxs_hba_t *hba, int impact)
 		return;
 	}
 
-	if (impact == NULL) {
+	if (impact == 0) {
 		return;
 	}
 

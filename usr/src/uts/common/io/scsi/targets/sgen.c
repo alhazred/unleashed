@@ -632,7 +632,7 @@ sgen_do_attach(dev_info_t *dip)
 	 * For simplicity, the minor number == the instance number
 	 */
 	if (ddi_create_minor_node(dip, sgen_typename(devtype), S_IFCHR,
-	    instance, DDI_NT_SGEN, NULL) == DDI_FAILURE) {
+	    instance, DDI_NT_SGEN, 0) == DDI_FAILURE) {
 		scsi_unprobe(scsidevp);
 		ddi_prop_remove_all(dip);
 		sgen_log(sg_state, SGEN_DIAG1,

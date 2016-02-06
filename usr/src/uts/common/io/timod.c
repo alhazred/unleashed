@@ -927,7 +927,7 @@ timodrproc(queue_t *q, mblk_t *mp)
 						return (1);
 					}
 					ASSERT(tp->tim_mymaxlen >= 0);
-					if (tp->tim_mymaxlen != NULL) {
+					if (tp->tim_mymaxlen != 0) {
 						kmem_free(tp->tim_myname,
 						    tp->tim_mymaxlen);
 					}
@@ -966,94 +966,99 @@ timodrproc(queue_t *q, mblk_t *mp)
 				    WAIT_IOCINFOACK | TI_CAP_RECVD |
 				    CAP_WANTS_INFO);
 			}
-		break;
+			break;
 
 		case T_INFO_ACK: {
-		struct T_info_ack *tia = (struct T_info_ack *)pptr;
+			struct T_info_ack *tia = (struct T_info_ack *)pptr;
 
-		/* Restore db_type - recover() might have changed it */
-		mp->b_datap->db_type = M_PCPROTO;
+			/* Restore db_type - recover() might have changed it */
+			mp->b_datap->db_type = M_PCPROTO;
 
-		if (blen < sizeof (*tia)) {
-			putnext(q, mp);
-			break;
-		}
+			if (blen < sizeof (*tia)) {
+				putnext(q, mp);
+				break;
+			}
 
-		tilog("timodrproc: Got T_INFO_ACK, flags = %x\n",
-		    tp->tim_flags);
+			tilog("timodrproc: Got T_INFO_ACK, flags = %x\n",
+			    tp->tim_flags);
 
-		timodprocessinfo(q, tp, tia);
+			timodprocessinfo(q, tp, tia);
 
-		TILOG("timodrproc: flags = %x\n", tp->tim_flags);
-		if ((tp->tim_flags & WAITIOCACK) != 0) {
-			size_t	expected_ack_size;
-			ssize_t	deficit;
-			int	ioc_cmd;
-			struct T_capability_ack *tcap;
+			TILOG("timodrproc: flags = %x\n", tp->tim_flags);
+			if ((tp->tim_flags & WAITIOCACK) != 0) {
+				size_t	expected_ack_size;
+				ssize_t	deficit;
+				int	ioc_cmd;
+				struct T_capability_ack *tcap;
 
 			/*
 			 * The only case when T_INFO_ACK may be received back
 			 * when we are waiting for ioctl to complete is when
 			 * this ioctl sent T_INFO_REQ down.
 			 */
-			if (!(tp->tim_flags & WAIT_IOCINFOACK)) {
-				putnext(q, mp);
-				break;
-			}
-			ASSERT(tp->tim_iocsave != NULL);
+				if (!(tp->tim_flags & WAIT_IOCINFOACK)) {
+					putnext(q, mp);
+					break;
+				}
+				ASSERT(tp->tim_iocsave != NULL);
 
-			iocbp = (struct iocblk *)tp->tim_iocsave->b_rptr;
-			ioc_cmd = iocbp->ioc_cmd;
+				iocbp = (struct iocblk *)
+				    tp->tim_iocsave->b_rptr;
+				ioc_cmd = iocbp->ioc_cmd;
 
 			/*
 			 * Was it sent from TI_CAPABILITY emulation?
 			 */
-			if (ioc_cmd == TI_CAPABILITY) {
-				struct T_info_ack	saved_info;
+				if (ioc_cmd == TI_CAPABILITY) {
+					struct T_info_ack	saved_info;
 
 				/*
 				 * Perform sanity checks. The only case when we
 				 * send T_INFO_REQ from TI_CAPABILITY is when
-				 * timod emulates T_CAPABILITY_REQ and CAP_bits1
-				 * has TC1_INFO set.
+				 * timod emulates T_CAPABILITY_REQ and
+				 * CAP_bits1 has TC1_INFO set.
 				 */
-				if ((tp->tim_flags &
-				    (TI_CAP_RECVD | CAP_WANTS_INFO)) !=
-				    (TI_CAP_RECVD | CAP_WANTS_INFO)) {
-					putnext(q, mp);
-					break;
-				}
+					if ((tp->tim_flags &
+					    (TI_CAP_RECVD | CAP_WANTS_INFO)) !=
+					    (TI_CAP_RECVD | CAP_WANTS_INFO)) {
+						putnext(q, mp);
+						break;
+					}
 
-				TILOG("timodrproc: emulating TI_CAPABILITY/"
-				    "info\n", 0);
+					TILOG("timodrproc:"
+					    " emulating TI_CAPABILITY/"
+					    "info\n", 0);
 
 				/* Save info & reuse mp for T_CAPABILITY_ACK */
-				saved_info = *tia;
+					saved_info = *tia;
 
-				mp = tpi_ack_alloc(mp,
-				    sizeof (struct T_capability_ack),
-				    M_PCPROTO, T_CAPABILITY_ACK);
+					mp = tpi_ack_alloc(mp,
+					    sizeof (struct T_capability_ack),
+					    M_PCPROTO, T_CAPABILITY_ACK);
 
-				if (mp == NULL) {
-					tilog("timodrproc: realloc failed, "
-					    "no recovery attempted\n", 0);
-					return (1);
-				}
+					if (mp == NULL) {
+						tilog("timodrproc:"
+						    " realloc failed, no "
+						    "recovery attempted\n", 0);
+						return (1);
+					}
 
 				/*
 				 * Copy T_INFO information into T_CAPABILITY_ACK
 				 */
-				tcap = (struct T_capability_ack *)mp->b_rptr;
-				tcap->CAP_bits1 = TC1_INFO;
-				tcap->INFO_ack = saved_info;
-				tp->tim_flags &= ~(WAITIOCACK |
-				    WAIT_IOCINFOACK | TI_CAP_RECVD |
-				    CAP_WANTS_INFO);
-				tim_ioctl_send_reply(q, tp->tim_iocsave, mp);
-				tp->tim_iocsave = NULL;
-				tp->tim_saved_prim = -1;
-				break;
-			}
+					tcap = (struct T_capability_ack *)
+					    mp->b_rptr;
+					tcap->CAP_bits1 = TC1_INFO;
+					tcap->INFO_ack = saved_info;
+					tp->tim_flags &= ~(WAITIOCACK |
+					    WAIT_IOCINFOACK | TI_CAP_RECVD |
+					    CAP_WANTS_INFO);
+					tim_ioctl_send_reply(q,
+					    tp->tim_iocsave, mp);
+					tp->tim_iocsave = NULL;
+					tp->tim_saved_prim = -1;
+					break;
+				}
 
 			/*
 			 * The code for TI_SYNC/TI_GETINFO is left here only for
@@ -1071,51 +1076,55 @@ timodrproc(queue_t *q, mblk_t *mp)
 			 * For TI_SYNC, expected ack size is
 			 *	sizeof (struct ti_sync_ack);
 			 */
-			if (ioc_cmd != TI_GETINFO && ioc_cmd != TI_SYNC) {
-				putnext(q, mp);
-				break;
-			}
+				if (ioc_cmd != TI_GETINFO &&
+				    ioc_cmd != TI_SYNC) {
+					putnext(q, mp);
+					break;
+				}
 
-			expected_ack_size =
-			    sizeof (struct T_info_ack); /* TI_GETINFO */
-			if (iocbp->ioc_cmd == TI_SYNC) {
-				expected_ack_size = 2 * sizeof (uint32_t) +
-				    sizeof (struct ti_sync_ack);
-			}
-			deficit = expected_ack_size - blen;
+				expected_ack_size =
+				    sizeof (struct T_info_ack); /* TI_GETINFO */
+				if (iocbp->ioc_cmd == TI_SYNC) {
+					expected_ack_size = 2 *
+					    sizeof (uint32_t) +
+					    sizeof (struct ti_sync_ack);
+				}
+				deficit = expected_ack_size - blen;
 
-			if (deficit != 0) {
-				if (mp->b_datap->db_lim - mp->b_wptr <
-				    deficit) {
-					mblk_t *tmp = allocb(expected_ack_size,
-					    BPRI_HI);
-					if (tmp == NULL) {
-						ASSERT(MBLKSIZE(mp) >=
-						    sizeof (struct T_error_ack));
+				if (deficit != 0) {
+					if (mp->b_datap->db_lim - mp->b_wptr <
+					    deficit) { /* BEGIN CSTYLED */
+						mblk_t *tmp = allocb(expected_ack_size,
+						    BPRI_HI);
+						if (tmp == NULL) {
+							ASSERT(MBLKSIZE(mp) >=
+							    sizeof (struct T_error_ack));
 
-						tilog("timodrproc: allocb failed no "
-						    "recovery attempt\n", 0);
+							tilog("timodrproc: allocb failed no "
+							    "recovery attempt\n", 0);
 
-						mp->b_rptr = mp->b_datap->db_base;
-						pptr = (union T_primitives *)
-						    mp->b_rptr;
-						pptr->error_ack.ERROR_prim = T_INFO_REQ;
-						pptr->error_ack.TLI_error = TSYSERR;
-						pptr->error_ack.UNIX_error = EAGAIN;
-						pptr->error_ack.PRIM_type = T_ERROR_ACK;
-						mp->b_datap->db_type = M_PCPROTO;
-						tim_send_ioc_error_ack(q, tp, mp);
-						break;
-					} else {
-						bcopy(mp->b_rptr, tmp->b_rptr, blen);
-						tmp->b_wptr += blen;
-						pptr = (union T_primitives *)
-						    tmp->b_rptr;
-						freemsg(mp);
-						mp = tmp;
+							mp->b_rptr = mp->b_datap->db_base;
+							pptr = (union T_primitives *)
+							    mp->b_rptr;
+							pptr->error_ack.ERROR_prim = T_INFO_REQ;
+							pptr->error_ack.TLI_error = TSYSERR;
+							pptr->error_ack.UNIX_error = EAGAIN;
+							pptr->error_ack.PRIM_type = T_ERROR_ACK;
+							mp->b_datap->db_type = M_PCPROTO;
+							tim_send_ioc_error_ack(q, tp, mp);
+							break;
+						} else {
+							bcopy(mp->b_rptr, tmp->b_rptr,
+							    blen);
+							tmp->b_wptr += blen;
+							pptr = (union T_primitives *)
+							    tmp->b_rptr;
+							freemsg(mp);
+							mp = tmp;
+						} /* END CSTYLED */
+
 					}
 				}
-			}
 			/*
 			 * We now have "mp" which has enough space for an
 			 * appropriate ack and contains struct T_info_ack
@@ -1123,14 +1132,14 @@ timodrproc(queue_t *q, mblk_t *mp)
 			 * stuff it with more stuff to fullfill
 			 * TI_SYNC ioctl needs, as necessary
 			 */
-			if (iocbp->ioc_cmd == TI_SYNC) {
+				if (iocbp->ioc_cmd == TI_SYNC) {
 				/*
 				 * Assumes struct T_info_ack is first embedded
 				 * type in struct ti_sync_ack so it is
 				 * automatically there.
 				 */
-				struct ti_sync_ack *tsap =
-				    (struct ti_sync_ack *)mp->b_rptr;
+					struct ti_sync_ack *tsap =
+					    (struct ti_sync_ack *)mp->b_rptr;
 
 				/*
 				 * tsap->tsa_qlen needs to be set only if
@@ -1140,43 +1149,45 @@ timodrproc(queue_t *q, mblk_t *mp)
 				 * flag since old XTI library expected it to be
 				 * set.
 				 */
-				tsap->tsa_qlen = tp->tim_backlog;
-				tsap->tsa_flags = 0x0; /* intialize clear */
-				if (tp->tim_flags & PEEK_RDQ_EXPIND) {
+					tsap->tsa_qlen = tp->tim_backlog;
+					/* intialize clear */
+					tsap->tsa_flags = 0x0;
+					if (tp->tim_flags & PEEK_RDQ_EXPIND) {
 					/*
 					 * Request to peek for EXPIND in
 					 * rcvbuf.
 					 */
-					if (ti_expind_on_rdqueues(q)) {
+						if (ti_expind_on_rdqueues(q)) {
 						/*
 						 * Expedited data is
 						 * queued on the stream
 						 * read side
 						 */
-						tsap->tsa_flags |=
-						    TSAF_EXP_QUEUED;
+							tsap->tsa_flags |=
+							    TSAF_EXP_QUEUED;
+						}
+						tp->tim_flags &=
+						    ~PEEK_RDQ_EXPIND;
 					}
-					tp->tim_flags &=
-					    ~PEEK_RDQ_EXPIND;
+					mp->b_wptr += 2*sizeof (uint32_t);
 				}
-				mp->b_wptr += 2*sizeof (uint32_t);
+				tim_ioctl_send_reply(q, tp->tim_iocsave, mp);
+				tp->tim_iocsave = NULL;
+				tp->tim_saved_prim = -1;
+				tp->tim_flags &=
+				    ~(WAITIOCACK | WAIT_IOCINFOACK |
+				    TI_CAP_RECVD | CAP_WANTS_INFO);
+				break;
 			}
-			tim_ioctl_send_reply(q, tp->tim_iocsave, mp);
-			tp->tim_iocsave = NULL;
-			tp->tim_saved_prim = -1;
-			tp->tim_flags &= ~(WAITIOCACK | WAIT_IOCINFOACK |
-			    TI_CAP_RECVD | CAP_WANTS_INFO);
-			break;
 		}
-	    }
 
-	    putnext(q, mp);
-	    break;
-
-	    case T_ADDR_ACK:
-		tilog("timodrproc: Got T_ADDR_ACK\n", 0);
-		tim_send_reply(q, mp, tp, T_ADDR_REQ);
+		putnext(q, mp);
 		break;
+
+		case T_ADDR_ACK:
+			tilog("timodrproc: Got T_ADDR_ACK\n", 0);
+			tim_send_reply(q, mp, tp, T_ADDR_REQ);
+			break;
 
 		case T_CONN_IND: {
 			struct T_conn_ind *tcip =
@@ -1202,86 +1213,87 @@ timodrproc(queue_t *q, mblk_t *mp)
 			break;
 		}
 
-	    case T_CONN_CON:
-		mutex_enter(&tp->tim_mutex);
-		if (tp->tim_peercred != NULL)
-			crfree(tp->tim_peercred);
-		tp->tim_peercred = msg_getcred(mp, &tp->tim_cpid);
-		if (tp->tim_peercred != NULL)
-			crhold(tp->tim_peercred);
-		mutex_exit(&tp->tim_mutex);
+		case T_CONN_CON:
+			mutex_enter(&tp->tim_mutex);
+			if (tp->tim_peercred != NULL)
+				crfree(tp->tim_peercred);
+			tp->tim_peercred = msg_getcred(mp, &tp->tim_cpid);
+			if (tp->tim_peercred != NULL)
+				crhold(tp->tim_peercred);
+			mutex_exit(&tp->tim_mutex);
 
-		tilog("timodrproc: Got T_CONN_CON\n", 0);
+			tilog("timodrproc: Got T_CONN_CON\n", 0);
 
-		tp->tim_flags &= ~CONNWAIT;
-		putnext(q, mp);
-		break;
+			tp->tim_flags &= ~CONNWAIT;
+			putnext(q, mp);
+			break;
 
-	    case T_DISCON_IND: {
-		struct T_discon_ind *disp;
-		struct T_conn_ind *conp;
-		mblk_t *pbp = NULL;
+		case T_DISCON_IND: {
+			struct T_discon_ind *disp;
+			struct T_conn_ind *conp;
+			mblk_t *pbp = NULL;
 
-		if (q->q_first != 0)
-			tilog("timodrput: T_DISCON_IND - flow control\n", 0);
+			if (q->q_first != 0)
+				tilog("timodrput: T_DISCON_IND -"
+				    " flow control\n", 0);
 
-		if (blen < sizeof (*disp)) {
+			if (blen < sizeof (*disp)) {
+				putnext(q, mp);
+				break;
+			}
+
+			disp = (struct T_discon_ind *)mp->b_rptr;
+
+			tilog("timodrproc: Got T_DISCON_IND Reason: %d\n",
+			    disp->DISCON_reason);
+
+			tp->tim_flags &= ~(CONNWAIT|LOCORDREL|REMORDREL);
+			tim_clear_peer(tp);
+			for (nbp = tp->tim_consave; nbp; nbp = nbp->b_next) {
+				conp = (struct T_conn_ind *)nbp->b_rptr;
+				if (conp->SEQ_number == disp->SEQ_number)
+					break;
+				pbp = nbp;
+			}
+			if (nbp) {
+				if (pbp)
+					pbp->b_next = nbp->b_next;
+				else
+				tp->tim_consave = nbp->b_next;
+				nbp->b_next = NULL;
+				freemsg(nbp);
+			}
 			putnext(q, mp);
 			break;
 		}
 
-		disp = (struct T_discon_ind *)mp->b_rptr;
+		case T_ORDREL_IND:
 
-		tilog("timodrproc: Got T_DISCON_IND Reason: %d\n",
-		    disp->DISCON_reason);
+			tilog("timodrproc: Got T_ORDREL_IND\n", 0);
 
-		tp->tim_flags &= ~(CONNWAIT|LOCORDREL|REMORDREL);
-		tim_clear_peer(tp);
-		for (nbp = tp->tim_consave; nbp; nbp = nbp->b_next) {
-			conp = (struct T_conn_ind *)nbp->b_rptr;
-			if (conp->SEQ_number == disp->SEQ_number)
-				break;
-			pbp = nbp;
-		}
-		if (nbp) {
-			if (pbp)
-				pbp->b_next = nbp->b_next;
-			else
-				tp->tim_consave = nbp->b_next;
-			nbp->b_next = NULL;
-			freemsg(nbp);
-		}
-		putnext(q, mp);
-		break;
-	    }
+			if (tp->tim_flags & LOCORDREL) {
+				tp->tim_flags &= ~(LOCORDREL|REMORDREL);
+				tim_clear_peer(tp);
+			} else {
+				tp->tim_flags |= REMORDREL;
+			}
+			putnext(q, mp);
+			break;
 
-	    case T_ORDREL_IND:
+		case T_EXDATA_IND:
+		case T_DATA_IND:
+		case T_UNITDATA_IND:
+			if (pptr->type == T_EXDATA_IND)
+				tilog("timodrproc: Got T_EXDATA_IND\n", 0);
 
-		    tilog("timodrproc: Got T_ORDREL_IND\n", 0);
+			if (!bcanputnext(q, mp->b_band)) {
+				(void) putbq(q, mp);
+				return (1);
+			}
+			putnext(q, mp);
+			break;
 
-		    if (tp->tim_flags & LOCORDREL) {
-			    tp->tim_flags &= ~(LOCORDREL|REMORDREL);
-			    tim_clear_peer(tp);
-		    } else {
-			    tp->tim_flags |= REMORDREL;
-		    }
-		    putnext(q, mp);
-		    break;
-
-	    case T_EXDATA_IND:
-	    case T_DATA_IND:
-	    case T_UNITDATA_IND:
-		if (pptr->type == T_EXDATA_IND)
-			tilog("timodrproc: Got T_EXDATA_IND\n", 0);
-
-		if (!bcanputnext(q, mp->b_band)) {
-			(void) putbq(q, mp);
-			return (1);
-		}
-		putnext(q, mp);
-		break;
-
-	    case T_CAPABILITY_ACK: {
+		case T_CAPABILITY_ACK: {
 			struct T_capability_ack	*tca;
 
 			if (blen < sizeof (*tca)) {
@@ -1311,8 +1323,8 @@ timodrproc(queue_t *q, mblk_t *mp)
 			tim_send_reply(q, mp, tp, T_CAPABILITY_REQ);
 		}
 		break;
-	    }
-	    break;
+	}
+	break;
 
 	case M_FLUSH:
 
@@ -1328,78 +1340,79 @@ timodrproc(queue_t *q, mblk_t *mp)
 		break;
 
 	case M_IOCACK:
-	    iocbp = (struct iocblk *)mp->b_rptr;
+		iocbp = (struct iocblk *)mp->b_rptr;
 
-	    tilog("timodrproc: Got M_IOCACK\n", 0);
+		tilog("timodrproc: Got M_IOCACK\n", 0);
 
-	    if (iocbp->ioc_cmd == TI_GETMYNAME) {
-
-		/*
-		 * Transport provider supports this ioctl,
-		 * so I don't have to.
-		 */
-		if ((tp->tim_flags & DO_MYNAME) != 0) {
-			tp->tim_flags &= ~DO_MYNAME;
-			PI_PROVLOCK(tp->tim_provinfo);
-			tp->tim_provinfo->tpi_myname = PI_YES;
-			PI_PROVUNLOCK(tp->tim_provinfo);
-		}
-
-		ASSERT(tp->tim_mymaxlen >= 0);
-		if (tp->tim_mymaxlen != 0) {
-			kmem_free(tp->tim_myname, (size_t)tp->tim_mymaxlen);
-			tp->tim_myname = NULL;
-			tp->tim_mymaxlen = 0;
-		}
-		/* tim_iocsave may already be overwritten. */
-		if (tp->tim_saved_prim == -1) {
-			freemsg(tp->tim_iocsave);
-			tp->tim_iocsave = NULL;
-		}
-	    } else if (iocbp->ioc_cmd == TI_GETPEERNAME) {
-		boolean_t clearit;
+		if (iocbp->ioc_cmd == TI_GETMYNAME) {
 
 		/*
 		 * Transport provider supports this ioctl,
 		 * so I don't have to.
 		 */
-		if ((tp->tim_flags & DO_PEERNAME) != 0) {
-			tp->tim_flags &= ~DO_PEERNAME;
-			PI_PROVLOCK(tp->tim_provinfo);
-			tp->tim_provinfo->tpi_peername = PI_YES;
-			PI_PROVUNLOCK(tp->tim_provinfo);
-		}
-
-		mutex_enter(&tp->tim_mutex);
-		ASSERT(tp->tim_peermaxlen >= 0);
-		clearit = tp->tim_peermaxlen != 0;
-		if (clearit) {
-			kmem_free(tp->tim_peername, tp->tim_peermaxlen);
-			tp->tim_peername = NULL;
-			tp->tim_peermaxlen = 0;
-			tp->tim_peerlen = 0;
-		}
-		mutex_exit(&tp->tim_mutex);
-		if (clearit) {
-			mblk_t *bp;
-
-			bp = tp->tim_consave;
-			while (bp != NULL) {
-				nbp = bp->b_next;
-				bp->b_next = NULL;
-				freemsg(bp);
-				bp = nbp;
+			if ((tp->tim_flags & DO_MYNAME) != 0) {
+				tp->tim_flags &= ~DO_MYNAME;
+				PI_PROVLOCK(tp->tim_provinfo);
+				tp->tim_provinfo->tpi_myname = PI_YES;
+				PI_PROVUNLOCK(tp->tim_provinfo);
 			}
-			tp->tim_consave = NULL;
+
+			ASSERT(tp->tim_mymaxlen >= 0);
+			if (tp->tim_mymaxlen != 0) {
+				kmem_free(tp->tim_myname,
+				    (size_t)tp->tim_mymaxlen);
+				tp->tim_myname = NULL;
+				tp->tim_mymaxlen = 0;
+			}
+			/* tim_iocsave may already be overwritten. */
+			if (tp->tim_saved_prim == -1) {
+				freemsg(tp->tim_iocsave);
+				tp->tim_iocsave = NULL;
+			}
+		} else if (iocbp->ioc_cmd == TI_GETPEERNAME) {
+			boolean_t clearit;
+
+			/*
+			 * Transport provider supports this ioctl,
+			 * so I don't have to.
+			 */
+			if ((tp->tim_flags & DO_PEERNAME) != 0) {
+				tp->tim_flags &= ~DO_PEERNAME;
+				PI_PROVLOCK(tp->tim_provinfo);
+				tp->tim_provinfo->tpi_peername = PI_YES;
+				PI_PROVUNLOCK(tp->tim_provinfo);
+			}
+
+			mutex_enter(&tp->tim_mutex);
+			ASSERT(tp->tim_peermaxlen >= 0);
+			clearit = tp->tim_peermaxlen != 0;
+			if (clearit) {
+				kmem_free(tp->tim_peername, tp->tim_peermaxlen);
+				tp->tim_peername = NULL;
+				tp->tim_peermaxlen = 0;
+				tp->tim_peerlen = 0;
+			}
+			mutex_exit(&tp->tim_mutex);
+			if (clearit) {
+				mblk_t *bp;
+
+				bp = tp->tim_consave;
+				while (bp != NULL) {
+					nbp = bp->b_next;
+					bp->b_next = NULL;
+					freemsg(bp);
+					bp = nbp;
+				}
+				tp->tim_consave = NULL;
+			}
+			/* tim_iocsave may already be overwritten. */
+			if (tp->tim_saved_prim == -1) {
+				freemsg(tp->tim_iocsave);
+				tp->tim_iocsave = NULL;
+			}
 		}
-		/* tim_iocsave may already be overwritten. */
-		if (tp->tim_saved_prim == -1) {
-			freemsg(tp->tim_iocsave);
-			tp->tim_iocsave = NULL;
-		}
-	    }
-	    putnext(q, mp);
-	    break;
+		putnext(q, mp);
+		break;
 
 	case M_IOCNAK:
 
@@ -1414,7 +1427,8 @@ timodrproc(queue_t *q, mblk_t *mp)
 				if (tp->tim_provinfo->tpi_myname == PI_DONTKNOW)
 					tp->tim_provinfo->tpi_myname = PI_NO;
 			} else if (iocbp->ioc_cmd == TI_GETPEERNAME) {
-				if (tp->tim_provinfo->tpi_peername == PI_DONTKNOW)
+				if (tp->tim_provinfo->tpi_peername ==
+				    PI_DONTKNOW)
 					tp->tim_provinfo->tpi_peername = PI_NO;
 			}
 			PI_PROVUNLOCK(tp->tim_provinfo);
@@ -2928,7 +2942,7 @@ tim_answer_ti_sync(queue_t *q, mblk_t *mp, struct tim_tim *tp,
  */
 static void
 tim_send_ioctl_tpi_msg(queue_t *q, mblk_t *mp, struct tim_tim *tp,
-	struct iocblk *iocb)
+    struct iocblk *iocb)
 {
 	mblk_t *tmp;
 	int ioc_cmd = iocb->ioc_cmd;

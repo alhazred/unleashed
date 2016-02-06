@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * hci1394_ixl_comp.c
  *    Isochronous IXL Compiler.
@@ -170,7 +168,7 @@ hci1394_compile_ixl_init(hci1394_comp_ixl_vars_t *wvp,
 	wvp->ctxtp = ctxtp;
 
 	/* init/clear ctxtp values */
-	ctxtp->dma_mem_execp = NULL;
+	ctxtp->dma_mem_execp = (uintptr_t)NULL;
 	ctxtp->dma_firstp = NULL;
 	ctxtp->dma_last_time = 0;
 	ctxtp->xcs_firstp = NULL;
@@ -336,9 +334,9 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 
 		/* error if xmit/recv mode not appropriate for current cmd */
 		if ((((wvp->ixl_io_mode & HCI1394_ISO_CTXT_RECV) != 0) &&
-			((ixlopcode & IXL1394_OPF_ONRECV) == 0)) ||
+		    ((ixlopcode & IXL1394_OPF_ONRECV) == 0)) ||
 		    (((wvp->ixl_io_mode & HCI1394_ISO_CTXT_RECV) == 0) &&
-			((ixlopcode & IXL1394_OPF_ONXMIT) == 0))) {
+		    ((ixlopcode & IXL1394_OPF_ONXMIT) == 0))) {
 
 			/* check if command op failed because it was invalid */
 			if (hci1394_is_opcode_valid(ixlopcode) != B_TRUE) {
@@ -735,13 +733,13 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 			    ixlcurp;
 
 			if ((wvp->ixl_setskipmode_cmdp->skipmode !=
-				IXL1394_SKIP_TO_NEXT) &&
+			    IXL1394_SKIP_TO_NEXT) &&
 			    (wvp->ixl_setskipmode_cmdp->skipmode !=
-				IXL1394_SKIP_TO_SELF) &&
+			    IXL1394_SKIP_TO_SELF) &&
 			    (wvp->ixl_setskipmode_cmdp->skipmode !=
-				IXL1394_SKIP_TO_STOP) &&
+			    IXL1394_SKIP_TO_STOP) &&
 			    (wvp->ixl_setskipmode_cmdp->skipmode !=
-				IXL1394_SKIP_TO_LABEL)) {
+			    IXL1394_SKIP_TO_LABEL)) {
 
 				wvp->dma_bld_error = IXL1394_EBAD_SKIPMODE;
 				continue;
@@ -752,10 +750,10 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 			 * references an IXL1394_OP_LABEL
 			 */
 			if ((wvp->ixl_setskipmode_cmdp->skipmode ==
-				IXL1394_SKIP_TO_LABEL) &&
+			    IXL1394_SKIP_TO_LABEL) &&
 			    ((wvp->ixl_setskipmode_cmdp->label == NULL) ||
 			    (wvp->ixl_setskipmode_cmdp->label->ixl_opcode !=
-				IXL1394_OP_LABEL))) {
+			    IXL1394_OP_LABEL))) {
 
 				wvp->dma_bld_error = IXL1394_EJUMP_NOT_TO_LABEL;
 				continue;
@@ -1182,8 +1180,8 @@ hci1394_finalize_cur_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 	if (wvp->xfer_hci_flush != 0) {
 		if (((wvp->ixl_cur_xfer_stp->ixl_opcode &
 		    IXL1394_OPTY_XFER_PKT_ST) != 0) || ((wvp->xfer_hci_flush &
-			(UPDATEABLE_XFER | UPDATEABLE_SET | INITIATING_LBL)) !=
-			0)) {
+		    (UPDATEABLE_XFER | UPDATEABLE_SET | INITIATING_LBL)) !=
+		    0)) {
 
 			if (hci1394_flush_hci_cache(wvp) != DDI_SUCCESS) {
 				/* wvp->dma_bld_error is set by above call */
@@ -2028,7 +2026,7 @@ hci1394_set_next_xfer_buf(hci1394_comp_ixl_vars_t *wvp, uint32_t bufp,
     uint16_t size)
 {
 	/* error if buffer pointer is null (size may be 0) */
-	if (bufp == NULL) {
+	if (bufp == (uintptr_t)NULL) {
 
 		wvp->dma_bld_error = IXL1394_ENULL_BUFFER_ADDR;
 
@@ -2073,7 +2071,7 @@ hci1394_flush_end_desc_check(hci1394_comp_ixl_vars_t *wvp, uint32_t count)
 {
 	if ((count != 0) ||
 	    ((wvp->xfer_hci_flush & (UPDATEABLE_XFER | UPDATEABLE_SET |
-		INITIATING_LBL)) == 0)) {
+	    INITIATING_LBL)) == 0)) {
 
 		if (wvp->xfer_hci_flush & UPDATEABLE_JUMP) {
 			if (hci1394_flush_hci_cache(wvp) != DDI_SUCCESS) {
@@ -2179,7 +2177,7 @@ hci1394_alloc_storevalue_dma_mem(hci1394_comp_ixl_vars_t *wvp)
 
 		wvp->dma_bld_error = IXL1394_EMEM_ALLOC_FAIL;
 
-		return (NULL);
+		return ((uintptr_t)NULL);
 	}
 
 	/* return bound address of allocated memory */
@@ -2257,7 +2255,7 @@ hci1394_alloc_dma_mem(hci1394_comp_ixl_vars_t *wvp, uint32_t size,
 	 */
 	if ((wvp->dma_currentp == NULL) ||
 	    (size > (wvp->dma_currentp->mem.bi_cookie.dmac_size -
-		wvp->dma_currentp->used))) {
+	    wvp->dma_currentp->used))) {
 #ifdef _KERNEL
 		/* kernel-mode memory allocation for driver */
 
@@ -2328,13 +2326,13 @@ hci1394_alloc_dma_mem(hci1394_comp_ixl_vars_t *wvp, uint32_t size,
 		/* user-mode memory allocation for user mode compiler tests */
 		/* allocate another dma_desc_mem struct */
 		if ((dma_new = (hci1394_idma_desc_mem_t *)
-			calloc(1, sizeof (hci1394_idma_desc_mem_t))) == NULL) {
+		    calloc(1, sizeof (hci1394_idma_desc_mem_t))) == NULL) {
 			return (NULL);
 		}
 		dma_new->mem.bi_dma_handle = NULL;
 		dma_new->mem.bi_handle = NULL;
 		if ((dma_new->mem.bi_kaddr = (caddr_t)calloc(1,
-			    HCI1394_IXL_PAGESIZE)) == NULL) {
+		    HCI1394_IXL_PAGESIZE)) == NULL) {
 			return (NULL);
 		}
 		dma_new->mem.bi_cookie.dmac_address =

@@ -3038,7 +3038,7 @@ tavor_intr_disable(tavor_state_t *state)
 
 		if ((PCI_CAP_LOCATE(pci_cfg_hdl, PCI_CAP_ID_MSI,
 		    &caps_ctrl) == DDI_SUCCESS)) {
-			if ((msi_ctrl = PCI_CAP_GET16(pci_cfg_hdl, NULL,
+			if ((msi_ctrl = PCI_CAP_GET16(pci_cfg_hdl, 0,
 			    caps_ctrl, PCI_MSI_CTRL)) == PCI_CAP_EINVAL16)
 				return (DDI_FAILURE);
 		}
@@ -3052,13 +3052,13 @@ tavor_intr_disable(tavor_state_t *state)
 			    PCI_MSI_64BIT_MASKBITS : PCI_MSI_32BIT_MASK;
 
 			/* Clear all inums in MSI */
-			PCI_CAP_PUT32(pci_cfg_hdl, NULL, caps_ctrl,
+			PCI_CAP_PUT32(pci_cfg_hdl, 0, caps_ctrl,
 			    offset, 0x0);
 		}
 
 		/* Disable MSI interrupts */
 		msi_ctrl &= ~PCI_MSI_ENABLE_BIT;
-		PCI_CAP_PUT16(pci_cfg_hdl, NULL, caps_ctrl, PCI_MSI_CTRL,
+		PCI_CAP_PUT16(pci_cfg_hdl, 0, caps_ctrl, PCI_MSI_CTRL,
 		    msi_ctrl);
 
 	} else {

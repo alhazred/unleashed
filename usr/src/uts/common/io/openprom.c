@@ -223,7 +223,7 @@ opattach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		opdip = dip;
 
 		if (ddi_create_minor_node(dip, "openprom", S_IFCHR,
-		    0, DDI_PSEUDO, NULL) == DDI_FAILURE) {
+		    0, DDI_PSEUDO, 0) == DDI_FAILURE) {
 			return (DDI_FAILURE);
 		}
 
@@ -1022,7 +1022,7 @@ opromioctl_cb(void *avp, int has_changed)
 /*ARGSUSED*/
 static int
 opromioctl(dev_t dev, int cmd, intptr_t arg, int mode,
-	cred_t *credp, int *rvalp)
+    cred_t *credp, int *rvalp)
 {
 	struct oprom_state *st;
 	struct opromioctl_args arg_block;

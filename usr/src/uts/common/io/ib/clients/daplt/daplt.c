@@ -973,7 +973,7 @@ daplka_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	 * Create the filesystem device node.
 	 */
 	if (ddi_create_minor_node(dip, DAPLKA_MINOR_NAME, S_IFCHR,
-	    0, DDI_PSEUDO, NULL) != DDI_SUCCESS) {
+	    0, DDI_PSEUDO, 0) != DDI_SUCCESS) {
 		DERR("attach: bad create_minor_node\n");
 		retval = DDI_FAILURE;
 		goto error;
@@ -1129,7 +1129,7 @@ daplka_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 /* ARGSUSED */
 static int
 daplka_ep_create(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_ep_resource_t		*ep_rp;
 	daplka_pd_resource_t		*pd_rp;
@@ -1602,7 +1602,7 @@ daplka_ep_transition_is_valid(uint32_t old_state, uint32_t new_state)
  */
 static void
 daplka_ep_set_state(daplka_ep_resource_t *ep_rp, uint32_t old_state,
-	uint32_t new_state)
+    uint32_t new_state)
 {
 	boolean_t	valid;
 
@@ -1639,7 +1639,7 @@ daplka_ep_set_state(daplka_ep_resource_t *ep_rp, uint32_t old_state,
 /* ARGSUSED */
 static int
 daplka_ep_modify(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_ep_resource_t		*ep_rp = NULL;
 	ibt_cep_modify_flags_t		good_flags;
@@ -1726,7 +1726,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_ep_free(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_ep_resource_t	*ep_rp = NULL;
 	dapl_ep_free_t		args;
@@ -2062,7 +2062,7 @@ daplka_hellomsg_cksum(DAPL_PRIVATE *dp)
 /* ARGSUSED */
 static int
 daplka_ep_connect(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_ep_resource_t	*ep_rp = NULL;
 	dapl_ep_connect_t	args;
@@ -2319,7 +2319,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_ep_disconnect(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_ep_resource_t	*ep_rp = NULL;
 	dapl_ep_disconnect_t	args;
@@ -2413,7 +2413,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_ep_reinit(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_ep_resource_t		*ep_rp = NULL;
 	dapl_ep_reinit_t		args;
@@ -2581,7 +2581,7 @@ daplka_hash_ep_free(void *obj)
 /* ARGSUSED */
 static int
 daplka_evd_create(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_evd_resource_t		*evd_rp = NULL;
 	daplka_async_evd_hkey_t		*async_evd;
@@ -2745,7 +2745,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_cq_resize(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_evd_resource_t		*evd_rp = NULL;
 	ibt_hca_attr_t			*hca_attrp;
@@ -2910,7 +2910,7 @@ daplka_event_poll_copyout(dapl_event_poll_t *inarg, intptr_t outarg, int mode)
 /* ARGSUSED */
 static void
 daplka_crevent_privdata_post(daplka_ia_resource_t *ia_rp,
-	dapl_ib_event_t *evd_rp, daplka_evd_event_t *cr_ev)
+    dapl_ib_event_t *evd_rp, daplka_evd_event_t *cr_ev)
 {
 	DAPL_PRIVATE	*dp;
 	ib_gid_t	*lgid;
@@ -3019,7 +3019,7 @@ daplka_crevent_privdata_post(daplka_ia_resource_t *ia_rp,
 /* ARGSUSED */
 static int
 daplka_event_poll(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_evd_resource_t	*evd_rp = NULL;
 	dapl_event_poll_t	args;
@@ -3322,7 +3322,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_event_wakeup(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	dapl_event_wakeup_t	args;
 	daplka_evd_resource_t	*evd_rp;
@@ -3354,7 +3354,7 @@ daplka_event_wakeup(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
 /* ARGSUSED */
 static int
 daplka_evd_modify_cno(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	dapl_evd_modify_cno_t	args;
 	daplka_evd_resource_t	*evd_rp;
@@ -3423,7 +3423,7 @@ cleanup:
 /* ARGSUSED */
 static int
 daplka_evd_free(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_evd_resource_t	*evd_rp = NULL;
 	daplka_async_evd_hkey_t	*curr;
@@ -3595,7 +3595,7 @@ daplka_cq_handler(ibt_cq_hdl_t ibt_cq, void *arg)
  */
 static void
 daplka_evd_wakeup(daplka_evd_resource_t *evd_rp, daplka_evd_event_list_t *evtq,
-	daplka_evd_event_t *evt)
+    daplka_evd_event_t *evt)
 {
 	uint32_t waiters = 0;
 
@@ -3700,7 +3700,7 @@ daplka_evd_event_dequeue(daplka_evd_event_list_t *evlist)
 /* ARGSUSED */
 static int
 daplka_cno_alloc(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	dapl_cno_alloc_t	args;
 	daplka_cno_resource_t	*cno_rp = NULL;
@@ -3804,7 +3804,7 @@ daplka_hash_cno_free(void *obj)
 /* ARGSUSED */
 static int
 daplka_cno_free(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_cno_resource_t	*cno_rp = NULL;
 	dapl_cno_free_t		args;
@@ -3835,7 +3835,7 @@ daplka_cno_free(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
 /* ARGSUSED */
 static int
 daplka_cno_wait(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_cno_resource_t	*cno_rp = NULL;
 	dapl_cno_wait_t		args;
@@ -3926,7 +3926,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_cr_accept(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_ep_resource_t		*ep_rp = NULL;
 	daplka_sp_resource_t		*sp_rp = NULL;
@@ -4084,7 +4084,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_cr_reject(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	dapl_cr_reject_t	args;
 	daplka_sp_resource_t	*sp_rp = NULL;
@@ -4224,7 +4224,7 @@ daplka_sp_match(void *objp, void *arg)
 /* ARGSUSED */
 static int
 daplka_cr_handoff(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	dapl_cr_handoff_t		args;
 	daplka_sp_resource_t		*sp_rp = NULL, *new_sp_rp = NULL;
@@ -4386,7 +4386,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_ia_query(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	dapl_ia_query_t		args;
 	int			retval;
@@ -4569,7 +4569,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_mr_register(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	boolean_t			inserted = B_FALSE;
 	daplka_mr_resource_t		*mr_rp;
@@ -4714,7 +4714,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_mr_register_shared(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	dapl_mr_register_shared_t	args;
 	daplka_shared_mr_t		*smrp = NULL;
@@ -5046,7 +5046,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_mr_register_lmr(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	boolean_t 			inserted = B_FALSE;
 	dapl_mr_register_lmr_t		args;
@@ -5263,7 +5263,7 @@ daplka_shared_mr_free(daplka_mr_resource_t *mr_rp)
 /* ARGSUSED */
 static int
 daplka_mr_deregister(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_mr_resource_t	*mr_rp;
 	dapl_mr_deregister_t	args;
@@ -5294,7 +5294,7 @@ daplka_mr_deregister(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
 /* ARGSUSED */
 static int
 daplka_mr_sync(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	dapl_mr_sync_t	args;
 	daplka_mr_resource_t *mr_rp[DAPL_MR_PER_SYNC];
@@ -5386,7 +5386,7 @@ daplka_mr_destroy(daplka_resource_t *gen_rp)
 		mr_rp->mr_hdl = NULL;
 		D3("mr_destroy: mr deregistered\n");
 	}
-	mr_rp->mr_attr.mr_vaddr = NULL;
+	mr_rp->mr_attr.mr_vaddr = 0;
 
 	/*
 	 * release reference on PD
@@ -5445,7 +5445,7 @@ daplka_shared_mr_cmp(const void *smr1, const void *smr2)
 /* ARGSUSED */
 static int
 daplka_pd_alloc(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	dapl_pd_alloc_t		args;
 	daplka_pd_resource_t	*pd_rp;
@@ -5561,7 +5561,7 @@ daplka_hash_pd_free(void *obj)
 /* ARGSUSED */
 static int
 daplka_pd_free(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_pd_resource_t *pd_rp;
 	dapl_pd_free_t args;
@@ -5592,7 +5592,7 @@ daplka_pd_free(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
 /* ARGSUSED */
 static int
 daplka_mw_alloc(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_pd_resource_t	*pd_rp;
 	daplka_mw_resource_t	*mw_rp;
@@ -5756,7 +5756,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_mw_free(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_mw_resource_t	*mw_rp = NULL;
 	dapl_mw_free_t		args;
@@ -6177,7 +6177,7 @@ daplka_hash_srq_free(void *obj)
 /* ARGSUSED */
 static int
 daplka_service_register(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_evd_resource_t	*evd_rp = NULL;
 	daplka_sp_resource_t	*sp_rp = NULL;
@@ -6379,7 +6379,7 @@ cleanup:;
 /* ARGSUSED */
 static int
 daplka_service_deregister(daplka_ia_resource_t *ia_rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	dapl_service_deregister_t	args;
 	daplka_sp_resource_t		*sp_rp = NULL, *g_sp_rp = NULL;
@@ -6982,7 +6982,7 @@ daplka_cm_service_event_failure(daplka_sp_resource_t *sp_rp,
  */
 static ibt_cm_status_t
 daplka_cm_service_handler(void *cm_private, ibt_cm_event_t *event,
-ibt_cm_return_args_t *ret_args, void *priv_data, ibt_priv_data_len_t len)
+    ibt_cm_return_args_t *ret_args, void *priv_data, ibt_priv_data_len_t len)
 {
 	daplka_sp_resource_t	*sp_rp = (daplka_sp_resource_t *)cm_private;
 
@@ -7473,7 +7473,7 @@ daplka_cm_rc_handler(void *cm_private, ibt_cm_event_t *event,
 /* ARGSUSED */
 static int
 daplka_ia_create(minor_t rnum, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	daplka_ia_resource_t	*ia_rp, *tmp_rp;
 	boolean_t		inserted = B_FALSE;
@@ -8022,7 +8022,7 @@ daplka_async_handler(void *clnt_private, ibt_hca_hdl_t hca_hdl,
 /*ARGSUSED*/
 static void
 daplka_sm_notice_handler(void *arg, ib_gid_t gid, ibt_subnet_event_code_t code,
-	ibt_subnet_event_t *event)
+    ibt_subnet_event_t *event)
 {
 	ib_gid_t *sgid = &gid;
 	ib_gid_t *dgid;
@@ -8630,7 +8630,7 @@ daplka_ibt_free_srq(daplka_srq_resource_t *srq_rp, ibt_srq_hdl_t srq_hdl)
 
 static int
 daplka_common_ioctl(int cmd, minor_t rnum, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	int error;
 
@@ -8650,7 +8650,7 @@ daplka_common_ioctl(int cmd, minor_t rnum, intptr_t arg, int mode,
 
 static int
 daplka_evd_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	int error;
 
@@ -8688,7 +8688,7 @@ daplka_evd_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
 
 static int
 daplka_ep_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	int error;
 
@@ -8726,7 +8726,7 @@ daplka_ep_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
 
 static int
 daplka_mr_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	int error;
 
@@ -8760,7 +8760,7 @@ daplka_mr_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
 
 static int
 daplka_mw_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	int error;
 
@@ -8782,7 +8782,7 @@ daplka_mw_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
 
 static int
 daplka_cno_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	int error;
 
@@ -8808,7 +8808,7 @@ daplka_cno_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
 
 static int
 daplka_pd_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	int error;
 
@@ -8830,7 +8830,7 @@ daplka_pd_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
 
 static int
 daplka_sp_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	int error;
 
@@ -8852,7 +8852,7 @@ daplka_sp_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
 
 static int
 daplka_srq_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	int error;
 
@@ -8879,7 +8879,7 @@ daplka_srq_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
 
 static int
 daplka_misc_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
-	cred_t *cred, int *rvalp)
+    cred_t *cred, int *rvalp)
 {
 	int error;
 
@@ -8910,7 +8910,7 @@ daplka_misc_ioctl(int cmd, daplka_ia_resource_t *rp, intptr_t arg, int mode,
 /*ARGSUSED*/
 static int
 daplka_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *cred,
-	int *rvalp)
+    int *rvalp)
 {
 	daplka_ia_resource_t	*ia_rp;
 	minor_t			rnum;
@@ -9421,7 +9421,7 @@ daplka_resource_lookup(minor_t rnum)
  */
 static int
 daplka_hash_create(daplka_hash_table_t *htblp, uint_t nbuckets,
-	void (*free_func)(void *), void (*lookup_func)(void *))
+    void (*free_func)(void *), void (*lookup_func)(void *))
 {
 	int i;
 
@@ -9640,7 +9640,7 @@ daplka_hash_remove(daplka_hash_table_t *htblp, uint64_t hkey, void **objpp)
  */
 static void
 daplka_hash_walk(daplka_hash_table_t *htblp, int (*func)(void *, void *),
-	void *farg, krw_t lockmode)
+    void *farg, krw_t lockmode)
 {
 	daplka_hash_entry_t *curr_hep;
 	daplka_hash_bucket_t *hbp;
@@ -9885,7 +9885,7 @@ daplka_dbglog(char *str)
 	if (length > remlen) {
 		if (remlen)
 			bcopy(str, daplka_dbgbuf + daplka_dbgnext, remlen);
-		daplka_dbgbuf[sizeof (daplka_dbgbuf) - 1] = (char)NULL;
+		daplka_dbgbuf[sizeof (daplka_dbgbuf) - 1] = (char)0;
 		str += remlen;
 		length -= remlen;
 		daplka_dbgnext = 0;

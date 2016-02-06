@@ -2319,7 +2319,7 @@ ixgbe_setup_rx_ring(ixgbe_rx_ring_t *rx_ring)
 		rbd = &rx_data->rbd_ring[i];
 
 		rbd->read.pkt_addr = rcb->rx_buf.dma_address;
-		rbd->read.hdr_addr = NULL;
+		rbd->read.hdr_addr = (uintptr_t)NULL;
 	}
 
 	/*
@@ -3058,7 +3058,7 @@ ixgbe_init_unicst(ixgbe_t *ixgbe)
 		for (slot = 0; slot < ixgbe->unicst_total; slot++) {
 			mac_addr = ixgbe->unicst_addr[slot].mac.addr;
 			bzero(mac_addr, ETHERADDRL);
-			(void) ixgbe_set_rar(hw, slot, mac_addr, NULL, NULL);
+			(void) ixgbe_set_rar(hw, slot, mac_addr, 0, 0);
 			ixgbe->unicst_addr[slot].mac.set = 0;
 		}
 		ixgbe->unicst_init = B_TRUE;
@@ -3073,7 +3073,7 @@ ixgbe_init_unicst(ixgbe_t *ixgbe)
 			} else {
 				bzero(mac_addr, ETHERADDRL);
 				(void) ixgbe_set_rar(hw, slot, mac_addr,
-				    NULL, NULL);
+				    0, 0);
 			}
 		}
 	}

@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <npi_zcp.h>
 
 static int zcp_mem_read(npi_handle_t, uint16_t, uint8_t,
@@ -207,7 +205,7 @@ npi_zcp_set_dma_thresh(npi_handle_t handle, uint16_t dma_thres)
 
 npi_status_t
 npi_zcp_set_bam_region(npi_handle_t handle, zcp_buf_region_t region,
-			zcp_bam_region_reg_t *region_attr)
+    zcp_bam_region_reg_t *region_attr)
 {
 
 	ASSERT(IS_VALID_BAM_REGION(region));
@@ -239,7 +237,7 @@ npi_zcp_set_bam_region(npi_handle_t handle, zcp_buf_region_t region,
 
 npi_status_t
 npi_zcp_set_dst_region(npi_handle_t handle, zcp_buf_region_t region,
-				uint16_t row_idx)
+    uint16_t row_idx)
 {
 	uint64_t val = 0;
 
@@ -281,7 +279,7 @@ npi_zcp_set_dst_region(npi_handle_t handle, zcp_buf_region_t region,
 
 npi_status_t
 npi_zcp_tt_static_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
-			tte_sflow_attr_mask_t mask, tte_sflow_attr_t *sflow)
+    tte_sflow_attr_mask_t mask, tte_sflow_attr_t *sflow)
 {
 	uint32_t		byte_en = 0;
 	tte_sflow_attr_t	val;
@@ -310,7 +308,7 @@ npi_zcp_tt_static_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
 		return (NPI_FAILURE | NPI_ZCP_FLOW_ID_INVALID);
 	}
 
-	if (zcp_mem_read(handle, flow_id, ZCP_RAM_SEL_TT_STATIC, NULL,
+	if (zcp_mem_read(handle, flow_id, ZCP_RAM_SEL_TT_STATIC, 0,
 	    (zcp_ram_unit_t *)&val) != 0) {
 		NPI_ERROR_MSG((handle.function, NPI_ERR_CTL,
 		    " npi_zcp_tt_static_entry"
@@ -385,7 +383,7 @@ npi_zcp_tt_static_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
 		}
 
 		if (zcp_mem_write(handle, flow_id, ZCP_RAM_SEL_TT_STATIC,
-		    byte_en, NULL,
+		    byte_en, 0,
 		    (zcp_ram_unit_t *)&val) != 0) {
 			NPI_ERROR_MSG((handle.function, NPI_ERR_CTL,
 			    " npi_zcp_tt_static_entry"
@@ -406,7 +404,7 @@ npi_zcp_tt_static_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
 
 npi_status_t
 npi_zcp_tt_dynamic_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
-			tte_dflow_attr_mask_t mask, tte_dflow_attr_t *dflow)
+    tte_dflow_attr_mask_t mask, tte_dflow_attr_t *dflow)
 {
 	uint32_t		byte_en = 0;
 	tte_dflow_attr_t	val;
@@ -434,7 +432,7 @@ npi_zcp_tt_dynamic_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
 		return (NPI_FAILURE | NPI_ZCP_FLOW_ID_INVALID);
 	}
 
-	if (zcp_mem_read(handle, flow_id, ZCP_RAM_SEL_TT_DYNAMIC, NULL,
+	if (zcp_mem_read(handle, flow_id, ZCP_RAM_SEL_TT_DYNAMIC, 0,
 	    (zcp_ram_unit_t *)&val) != 0) {
 		NPI_ERROR_MSG((handle.function, NPI_ERR_CTL,
 		    " npi_zcp_tt_dynamic_entry"
@@ -501,7 +499,7 @@ npi_zcp_tt_dynamic_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
 		}
 
 		if (zcp_mem_write(handle, flow_id, ZCP_RAM_SEL_TT_DYNAMIC,
-		    byte_en, NULL,
+		    byte_en, 0,
 		    (zcp_ram_unit_t *)&val) != 0) {
 			NPI_ERROR_MSG((handle.function, NPI_ERR_CTL,
 			    " npi_zcp_tt_dynamic_entry"
@@ -522,7 +520,7 @@ npi_zcp_tt_dynamic_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
 
 npi_status_t
 npi_zcp_tt_bam_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
-			uint8_t bankn, uint8_t word_en, zcp_ram_unit_t *data)
+    uint8_t bankn, uint8_t word_en, zcp_ram_unit_t *data)
 {
 	zcp_ram_unit_t val;
 
@@ -557,7 +555,7 @@ npi_zcp_tt_bam_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
 		return (NPI_FAILURE | NPI_ZCP_BAM_WORD_EN_INVALID);
 	}
 
-	if (zcp_mem_read(handle, flow_id, ZCP_RAM_SEL_BAM0 + bankn, NULL,
+	if (zcp_mem_read(handle, flow_id, ZCP_RAM_SEL_BAM0 + bankn, 0,
 	    (zcp_ram_unit_t *)&val) != 0) {
 		NPI_ERROR_MSG((handle.function, NPI_ERR_CTL,
 		    " npi_zcp_tt_bam_entry"
@@ -568,7 +566,7 @@ npi_zcp_tt_bam_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
 
 	if (op == OP_SET) {
 		if (zcp_mem_write(handle, flow_id, ZCP_RAM_SEL_BAM0 + bankn,
-		    word_en, NULL,
+		    word_en, 0,
 		    (zcp_ram_unit_t *)&val) != 0) {
 			NPI_ERROR_MSG((handle.function, NPI_ERR_CTL,
 			    " npi_zcp_tt_bam_entry"
@@ -588,7 +586,7 @@ npi_zcp_tt_bam_entry(npi_handle_t handle, io_op_t op, uint16_t flow_id,
 
 npi_status_t
 npi_zcp_tt_cfifo_entry(npi_handle_t handle, io_op_t op, uint8_t portn,
-			uint16_t entryn, zcp_ram_unit_t *data)
+    uint16_t entryn, zcp_ram_unit_t *data)
 {
 	if ((op != OP_SET) && (op != OP_GET)) {
 		NPI_ERROR_MSG((handle.function, NPI_ERR_CTL,
@@ -605,7 +603,7 @@ npi_zcp_tt_cfifo_entry(npi_handle_t handle, io_op_t op, uint8_t portn,
 	}
 
 	if (op == OP_SET) {
-		if (zcp_mem_write(handle, NULL, ZCP_RAM_SEL_CFIFO0 + portn,
+		if (zcp_mem_write(handle, 0, ZCP_RAM_SEL_CFIFO0 + portn,
 		    0x1ffff, entryn, data) != 0) {
 			NPI_ERROR_MSG((handle.function, NPI_ERR_CTL,
 			    " npi_zcp_tt_cfifo_entry"
@@ -614,7 +612,7 @@ npi_zcp_tt_cfifo_entry(npi_handle_t handle, io_op_t op, uint8_t portn,
 			return (NPI_FAILURE | NPI_ZCP_MEM_WRITE_FAILED);
 		}
 	} else {
-		if (zcp_mem_read(handle, NULL, ZCP_RAM_SEL_CFIFO0 + portn,
+		if (zcp_mem_read(handle, 0, ZCP_RAM_SEL_CFIFO0 + portn,
 		    entryn, data) != 0) {
 			NPI_ERROR_MSG((handle.function, NPI_ERR_CTL,
 			    " npi_zcp_tt_cfifo_entry"
@@ -683,7 +681,7 @@ npi_zcp_rest_cfifo_all(npi_handle_t handle)
 
 static int
 zcp_mem_read(npi_handle_t handle, uint16_t flow_id, uint8_t ram_sel,
-		uint16_t cfifo_entryn, zcp_ram_unit_t *val)
+    uint16_t cfifo_entryn, zcp_ram_unit_t *val)
 {
 	zcp_ram_access_t ram_ctl;
 
@@ -723,7 +721,7 @@ zcp_mem_read(npi_handle_t handle, uint16_t flow_id, uint8_t ram_sel,
 
 static int
 zcp_mem_write(npi_handle_t handle, uint16_t flow_id, uint8_t ram_sel,
-		uint32_t byte_en, uint16_t cfifo_entryn, zcp_ram_unit_t *val)
+    uint32_t byte_en, uint16_t cfifo_entryn, zcp_ram_unit_t *val)
 {
 	zcp_ram_access_t	ram_ctl;
 	zcp_ram_benable_t	ram_en;

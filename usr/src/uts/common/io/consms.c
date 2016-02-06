@@ -274,7 +274,7 @@ consms_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 	}
 
 	if (ddi_create_minor_node(devi, "mouse", S_IFCHR,
-	    0, DDI_PSEUDO, NULL) == DDI_FAILURE) {
+	    0, DDI_PSEUDO, 0) == DDI_FAILURE) {
 		ddi_remove_minor_node(devi, NULL);
 		return (-1);
 	}
@@ -323,8 +323,7 @@ consms_detach(dev_info_t *devi, ddi_detach_cmd_t cmd)
 
 /*ARGSUSED*/
 static int
-consms_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg,
-	void **result)
+consms_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 {
 	register int error;
 
@@ -350,11 +349,7 @@ consms_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg,
 
 /*ARGSUSED*/
 static int
-consmsopen(q, devp, flag, sflag, crp)
-	queue_t *q;
-	dev_t	*devp;
-	int	flag, sflag;
-	cred_t	*crp;
+consmsopen(queue_t *q, dev_t *devp, int flag, int sflag, cred_t *crp)
 {
 	upperqueue = q;
 	qprocson(q);
@@ -363,10 +358,7 @@ consmsopen(q, devp, flag, sflag, crp)
 
 /*ARGSUSED*/
 static int
-consmsclose(q, flag, crp)
-	queue_t *q;
-	int	flag;
-	cred_t	*crp;
+consmsclose(queue_t *q, int flag, cred_t *crp)
 {
 	qprocsoff(q);
 	upperqueue = NULL;
@@ -377,9 +369,7 @@ consmsclose(q, flag, crp)
  * Put procedure for upper write queue.
  */
 static void
-consmsuwput(q, mp)
-	register queue_t *q;
-	register mblk_t *mp;
+consmsuwput(register queue_t *q, register mblk_t *mp)
 {
 	struct iocblk		*iocbp = (struct iocblk *)mp->b_rptr;
 	consms_msg_t		*msg;
@@ -448,9 +438,7 @@ consmsuwput(q, mp)
 }
 
 static void
-consmsioctl(q, mp)
-	register queue_t *q;
-	register mblk_t *mp;
+consmsioctl(register queue_t *q, register mblk_t *mp)
 {
 	register struct iocblk *iocp;
 	int		error;
@@ -521,8 +509,7 @@ consmsioctl(q, mp)
  * Puts things on the queue below us, if it lets us.
  */
 static void
-consmslwserv(q)
-	register queue_t *q;
+consmslwserv(register queue_t *q)
 {
 	register mblk_t *mp;
 
@@ -534,9 +521,7 @@ consmslwserv(q)
  * Put procedure for lower read queue.
  */
 static void
-consmslrput(q, mp)
-	register queue_t *q;
-	register mblk_t *mp;
+consmslrput(register queue_t *q, register mblk_t *mp)
 {
 	struct iocblk		*iocbp = (struct iocblk *)mp->b_rptr;
 	struct copyreq		*copyreq = (struct copyreq *)mp->b_rptr;
@@ -973,7 +958,7 @@ consms_new_firm_event(ushort_t id, int value)
 		fep = (Firm_event *)tmp->b_wptr;
 		fep->id = id;
 		fep->pair_type = FE_PAIR_NONE;
-		fep->pair = NULL;
+		fep->pair = 0;
 		fep->value = value;
 		tmp->b_wptr += sizeof (Firm_event);
 	}

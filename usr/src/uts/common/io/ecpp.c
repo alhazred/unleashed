@@ -691,7 +691,7 @@ ecpp_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	(void) sprintf(name, "ecpp%d", instance);
 
 	if (ddi_create_minor_node(dip, name, S_IFCHR, instance,
-	    DDI_NT_PRINTER, NULL) == DDI_FAILURE) {
+	    DDI_NT_PRINTER, 0) == DDI_FAILURE) {
 		ecpp_error(dip, "ecpp_attach: create_minor_node failed\n");
 		goto fail_minor;
 	}
@@ -5931,7 +5931,7 @@ dma8237_dma_start(struct ecppunit *pp)
 
 	ASSERT(chn <= DMAE_CH3 &&
 	    pp->dma_cookie.dmac_size != 0 &&
-	    pp->dma_cookie.dmac_address != NULL);
+	    pp->dma_cookie.dmac_address != (uintptr_t)NULL);
 
 	/* At this point Southbridge has not yet asserted DREQ */
 
@@ -6004,7 +6004,7 @@ x86_dma_start(struct ecppunit *pp)
 	chn = pp->uh.x86.chn;
 	ASSERT(chn <= DMAE_CH3 &&
 	    pp->dma_cookie.dmac_size != 0 &&
-	    pp->dma_cookie.dmac_address != NULL);
+	    pp->dma_cookie.dmac_address != (uintptr_t)NULL);
 	bzero(&dmaereq, sizeof (struct ddi_dmae_req));
 	dmaereq.der_command =
 	    (pp->dma_dir & DDI_DMA_READ) ? DMAE_CMD_READ : DMAE_CMD_WRITE;
@@ -6191,7 +6191,7 @@ dma8237_read_count(struct ecppunit *pp)
 		break;
 
 	default:
-		return (NULL);
+		return (0);
 	}
 
 	p = (uint16_t *)&pp->uh.m1553.isa_space->isa_reg[c_wcnt];

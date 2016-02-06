@@ -266,7 +266,7 @@ hidparser_free_report_descriptor_handle(hidparser_handle_t parse_handle)
  */
 int
 hidparser_get_country_code(hidparser_handle_t parser_handle,
-			uint16_t *country_code)
+    uint16_t *country_code)
 {
 	if ((parser_handle == NULL) ||
 	    (parser_handle->hidparser_handle_hid_descr == NULL)) {
@@ -288,9 +288,9 @@ hidparser_get_country_code(hidparser_handle_t parser_handle,
  */
 int
 hidparser_get_packet_size(hidparser_handle_t parser_handle,
-			uint_t report_id,
-			uint_t main_item_type,
-			uint_t *size)
+    uint_t report_id,
+    uint_t main_item_type,
+    uint_t *size)
 {
 	if ((parser_handle == NULL) || (parser_handle->
 	    hidparser_handle_parse_tree == NULL)) {
@@ -313,9 +313,9 @@ hidparser_get_packet_size(hidparser_handle_t parser_handle,
  */
 int
 hidparser_get_packet_size_report_des(entity_item_t *parser_handle,
-			uint32_t report_id,
-			uint32_t main_item_type,
-			uint32_t *size)
+    uint32_t report_id,
+    uint32_t main_item_type,
+    uint32_t *size)
 {
 	entity_item_t	*current = parser_handle;
 	entity_attribute_t *attribute;
@@ -399,12 +399,12 @@ hidparser_get_packet_size_report_des(entity_item_t *parser_handle,
  */
 int
 hidparser_get_usage_attribute(hidparser_handle_t parser_handle,
-			uint_t report_id,
-			uint_t main_item_type,
-			uint_t usage_page,
-			uint_t usage_id,
-			uint_t usage_attribute,
-			int *usage_attribute_value)
+    uint_t report_id,
+    uint_t main_item_type,
+    uint_t usage_page,
+    uint_t usage_id,
+    uint_t usage_attribute,
+    int *usage_attribute_value)
 {
 
 	return (hidparser_get_usage_attribute_report_des(
@@ -420,13 +420,12 @@ hidparser_get_usage_attribute(hidparser_handle_t parser_handle,
  */
 static int
 hidparser_get_usage_attribute_report_des(entity_item_t *parser_handle,
-			uint_t report_id,
-			uint_t main_item_type,
-			uint_t usage_page,
-			uint_t usage_id,
-			uint_t usage_attribute,
-			int *usage_attribute_value)
-
+    uint_t report_id,
+    uint_t main_item_type,
+    uint_t usage_page,
+    uint_t usage_id,
+    uint_t usage_attribute,
+    int *usage_attribute_value)
 {
 	entity_item_t *current = parser_handle;
 	entity_attribute_t *attribute;
@@ -520,8 +519,8 @@ hidparser_get_usage_attribute_report_des(entity_item_t *parser_handle,
 				    usage_attribute) {
 					/* Match attribute */
 					found_ret_value = 1;
-					*usage_attribute_value =
-					attribute->entity_attribute_value[0];
+					*usage_attribute_value = attribute->
+					    entity_attribute_value[0];
 					if (attribute->
 					    entity_attribute_length == 2) {
 						attvalue =
@@ -584,11 +583,11 @@ hidparser_get_usage_attribute_report_des(entity_item_t *parser_handle,
  */
 int
 hidparser_get_main_item_data_descr(hidparser_handle_t parser_handle,
-			uint_t report_id,
-			uint_t main_item_type,
-			uint_t usage_page,
-			uint_t usage_id,
-			uint_t *main_item_descr_value)
+    uint_t report_id,
+    uint_t main_item_type,
+    uint_t usage_page,
+    uint_t usage_id,
+    uint_t *main_item_descr_value)
 {
 
 	return hidparser_get_main_item_data_descr_main(
@@ -604,11 +603,11 @@ hidparser_get_main_item_data_descr(hidparser_handle_t parser_handle,
  */
 static int
 hidparser_get_main_item_data_descr_main(entity_item_t *parser_handle,
-			uint_t report_id,
-			uint_t main_item_type,
-			uint_t usage_page,
-			uint_t usage_id,
-			uint_t *main_item_descr_value)
+    uint_t report_id,
+    uint_t main_item_type,
+    uint_t usage_page,
+    uint_t usage_id,
+    uint_t *main_item_descr_value)
 {
 	entity_item_t *current = parser_handle;
 	entity_attribute_t *attribute;
@@ -728,7 +727,7 @@ hidparser_get_main_item_data_descr_main(entity_item_t *parser_handle,
 		}
 	}
 
-	*main_item_descr_value = (uint_t)NULL;
+	*main_item_descr_value = 0;
 
 	return (HIDPARSER_NOT_FOUND);
 }
@@ -739,8 +738,8 @@ hidparser_get_main_item_data_descr_main(entity_item_t *parser_handle,
  */
 int
 hidparser_lookup_usage_collection(hidparser_handle_t parse_handle,
-			uint_t lusage_page,
-			uint_t lusage_id)
+    uint_t lusage_page,
+    uint_t lusage_id)
 {
 	entity_item_t *current;
 	entity_attribute_t *attribute;
@@ -809,8 +808,8 @@ check_usage:
  */
 int
 hidparser_get_top_level_collection_usage(hidparser_handle_t parse_handle,
-			uint_t *usage_page,
-			uint_t *usage_id)
+    uint_t *usage_page,
+    uint_t *usage_id)
 {
 	entity_item_t *current;
 	entity_attribute_t *attribute;
@@ -884,9 +883,9 @@ hidparser_get_top_level_collection_usage(hidparser_handle_t parse_handle,
  */
 int
 hidparser_get_usage_list_in_order(hidparser_handle_t parser_handle,
-			uint_t report_id,
-			uint_t main_item_type,
-			hidparser_rpt_t *rpt)
+    uint_t report_id,
+    uint_t main_item_type,
+    hidparser_rpt_t *rpt)
 {
 
 	if ((parser_handle == NULL) ||
@@ -905,10 +904,10 @@ hidparser_get_usage_list_in_order(hidparser_handle_t parser_handle,
 
 static int
 hidparser_get_usage_list_in_order_internal(entity_item_t *parser_handle,
-			uint_t collection_usage,
-			uint_t report_id,
-			uint_t main_item_type,
-			hidparser_rpt_t *rpt)
+    uint_t collection_usage,
+    uint_t report_id,
+    uint_t main_item_type,
+    hidparser_rpt_t *rpt)
 {
 
 	/* setup wrapper function */
@@ -1163,7 +1162,7 @@ hidparser_get_usage_list_in_order_internal(entity_item_t *parser_handle,
  */
 static void
 hidparser_fill_usage_info(hidparser_usage_info_t *ui,
-			entity_attribute_t *attribute)
+    entity_attribute_t *attribute)
 {
 	bzero(ui, sizeof (*ui));
 
@@ -1216,8 +1215,8 @@ hidparser_fill_usage_info(hidparser_usage_info_t *ui,
  */
 int
 hidparser_get_report_id_list(hidparser_handle_t parser_handle,
-			uint_t main_item_type,
-			hidparser_report_id_list_t *report_id_list)
+    uint_t main_item_type,
+    hidparser_report_id_list_t *report_id_list)
 {
 
 	if ((parser_handle == NULL) ||
@@ -1240,9 +1239,9 @@ hidparser_get_report_id_list(hidparser_handle_t parser_handle,
  */
 int
 hidparser_get_report_id_list_internal(
-			entity_item_t *parser_handle,
-			uint_t main_item_type,
-			hidparser_report_id_list_t *id_lst)
+    entity_item_t *parser_handle,
+    uint_t main_item_type,
+    hidparser_report_id_list_t *id_lst)
 {
 	/* setup wrapper function */
 	entity_item_t *current = parser_handle;
@@ -1322,7 +1321,7 @@ hidparser_get_report_id_list_internal(
  */
 static int
 hidparser_print_report_descr_handle(entity_item_t *handle,
-			int indent_level)
+    int indent_level)
 {
 	entity_item_t *current = handle;
 
@@ -1381,7 +1380,7 @@ hidparser_print_entity(entity_item_t *entity, int indent_level)
  */
 static void
 hidparser_print_this_attribute(entity_attribute_t *attribute,
-			char *ident_space)
+    char *ident_space)
 {
 	if (ident_space == NULL) {
 
@@ -1456,7 +1455,7 @@ hidparser_print_this_attribute(entity_attribute_t *attribute,
  */
 static int
 hidparser_lookup_first(int func_index,
-			int token)
+    int token)
 {
 	int	*itemp;
 
@@ -1483,8 +1482,8 @@ hidparser_lookup_first(int func_index,
  */
 static int
 hidparser_main(unsigned char *descriptor,
-			size_t size,
-			entity_item_t **item_ptr)
+    size_t size,
+    entity_item_t **item_ptr)
 {
 	hidparser_tok_t	*scan_ifp;
 	int retval;
@@ -1527,7 +1526,7 @@ hidparser_main(unsigned char *descriptor,
  */
 static int
 hidparser_ReportDescriptorDash(entity_item_t ** item_ptr,
-			hidparser_tok_t *scan_ifp)
+    hidparser_tok_t *scan_ifp)
 {
 
 	if ((hidparser_ReportDescriptor(item_ptr, scan_ifp) ==
@@ -1558,7 +1557,7 @@ hidparser_ReportDescriptorDash(entity_item_t ** item_ptr,
  */
 static int
 hidparser_ReportDescriptor(entity_item_t ** item_ptr,
-			hidparser_tok_t	*scan_ifp)
+    hidparser_tok_t	*scan_ifp)
 {
 	hidparser_scan(scan_ifp);
 
@@ -1739,7 +1738,7 @@ hidparser_ItemList(entity_item_t ** item_ptr, hidparser_tok_t *scan_ifp)
  */
 static int
 hidparser_MainItem(entity_item_t ** item_ptr,
-			hidparser_tok_t *scan_ifp)
+    hidparser_tok_t *scan_ifp)
 {
 	switch (scan_ifp->hidparser_tok_token) {
 		case R_ITEM_INPUT:
@@ -2504,10 +2503,10 @@ next_item:
  */
 static void
 hidparser_report_err(int err_level,
-			int err_type,
-			int tag,
-			int subcode,
-			char *msg)
+    int err_type,
+    int tag,
+    int subcode,
+    char *msg)
 {
 	unsigned int	BmParserErrorCode = 0;
 
@@ -2773,12 +2772,12 @@ hidparser_find_signed_val(entity_attribute_t *attr)
  */
 static void
 hidparser_check_correspondence(entity_item_t *mainitem,
-			int item_tag1,
-			int item_tag2,
-			int val1,
-			int val2,
-			char *str1,
-			char *str2)
+    int item_tag1,
+    int item_tag2,
+    int val1,
+    int val2,
+    char *str1,
+    char *str2)
 {
 	entity_attribute_t *temp1, *temp2;
 
@@ -2810,10 +2809,10 @@ hidparser_check_correspondence(entity_item_t *mainitem,
  */
 static void
 hidparser_check_minmax_val(entity_item_t *mainitem,
-			int item_tag1,
-			int item_tag2,
-			int val1,
-			int val2)
+    int item_tag1,
+    int item_tag2,
+    int val1,
+    int val2)
 {
 	entity_attribute_t *temp1, *temp2;
 
@@ -2869,10 +2868,10 @@ hidparser_check_minmax_val(entity_item_t *mainitem,
  */
 static void
 hidparser_check_minmax_val_signed(entity_item_t *mainitem,
-			int item_tag1,
-			int item_tag2,
-			int val1,
-			int val2)
+    int item_tag1,
+    int item_tag2,
+    int val1,
+    int val2)
 {
 	entity_attribute_t *temp1, *temp2;
 

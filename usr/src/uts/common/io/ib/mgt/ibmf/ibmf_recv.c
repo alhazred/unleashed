@@ -1453,7 +1453,7 @@ ibmf_send_busy(ibmf_mod_load_args_t *modlargsp)
 
 	/* use send wqe pointer as the WR ID */
 	swrp->wr_id		= (ibt_wrid_t)(uintptr_t)send_wqep;
-	ASSERT(swrp->wr_id != NULL);
+	ASSERT(swrp->wr_id != 0);
 	swrp->wr_flags		= IBT_WR_NO_FLAGS;
 	swrp->wr_opcode		= IBT_WRC_SEND;
 	swrp->wr_trans		= IBT_UD_SRV;

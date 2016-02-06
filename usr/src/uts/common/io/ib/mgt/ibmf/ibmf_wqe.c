@@ -87,10 +87,10 @@ ibmf_send_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	send_wqe->send_sg_mem =
 	    (ib_vaddr_t)(uintptr_t)vmem_alloc(cip->ci_wqe_ib_vmem,
 	    IBMF_MEM_PER_WQE, kmflags == KM_SLEEP ? VM_SLEEP : VM_NOSLEEP);
-	if (send_wqe->send_sg_mem == NULL) {
+	if (send_wqe->send_sg_mem == (uintptr_t)NULL) {
 		IBMF_TRACE_1(DPRINT_L1,
-			     "ibmf_send_wqe_cache_constructor(): %s\n",
-			     "Failed vmem allocation in send WQE cache constructor");
+		    "ibmf_send_wqe_cache_constructor(): %s\n",
+		    "Failed vmem allocation in send WQE cache constructor");
 		return (-1);
 	}
 
@@ -183,10 +183,10 @@ ibmf_recv_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	recv_wqe->recv_sg_mem =
 	    (ib_vaddr_t)(uintptr_t)vmem_alloc(cip->ci_wqe_ib_vmem,
 	    IBMF_MEM_PER_WQE, kmflags == KM_SLEEP ? VM_SLEEP : VM_NOSLEEP);
-	if (recv_wqe->recv_sg_mem == NULL) {
+	if (recv_wqe->recv_sg_mem == (uintptr_t)NULL) {
 		IBMF_TRACE_1(DPRINT_L1,
-			     "ibmf_recv_wqe_cache_constructor(): %s\n",
-			     "Failed vmem allocation in receive WQE cache constructor");
+		    "ibmf_recv_wqe_cache_constructor(): %s\n",
+		    "Failed vmem allocation in receive WQE cache constructor");
 		return (-1);
 	}
 
@@ -280,10 +280,10 @@ ibmf_altqp_send_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	send_wqe->send_sg_mem = (ib_vaddr_t)(uintptr_t)vmem_alloc(
 	    qp_ctx->isq_wqe_ib_vmem, IBMF_MEM_PER_WQE,
 	    kmflags == KM_SLEEP ? VM_SLEEP : VM_NOSLEEP);
-	if (send_wqe->send_sg_mem == NULL) {
+	if (send_wqe->send_sg_mem == (uintptr_t)NULL) {
 		IBMF_TRACE_1(DPRINT_L1,
-			     "ibmf_altqp_send_wqe_cache_constructor(): %s\n",
-			     "Failed vmem allocation in ""alternate QP send WQE cache constructor");
+		    "ibmf_altqp_send_wqe_cache_constructor(): %s\n",
+		    "Failed vmem allocation in ""alternate QP send WQE cache constructor");
 		return (-1);
 	}
 
@@ -375,10 +375,10 @@ ibmf_altqp_recv_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	recv_wqe->recv_sg_mem = (ib_vaddr_t)(uintptr_t)vmem_alloc(
 	    qp_ctx->isq_wqe_ib_vmem, IBMF_MEM_PER_WQE,
 	    kmflags == KM_SLEEP ? VM_SLEEP : VM_NOSLEEP);
-	if (recv_wqe->recv_sg_mem == NULL) {
+	if (recv_wqe->recv_sg_mem == (uintptr_t)NULL) {
 		IBMF_TRACE_1(DPRINT_L1,
-			     "ibmf_altqp_recv_wqe_cache_constructor(): %s\n",
-			     "Failed vmem allocation in recv WQE cache constructor");
+		    "ibmf_altqp_recv_wqe_cache_constructor(): %s\n",
+		    "Failed vmem allocation in recv WQE cache constructor");
 		return (-1);
 	}
 
@@ -779,7 +779,7 @@ ibmf_i_init_send_wqe(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	swrp = &wqep->send_wr;
 	/* use send wqe pointer as the WR ID */
 	IBMF_ADDR_TO_SEND_WR_ID(wqep, swrp->wr_id);
-	ASSERT(swrp->wr_id != NULL);
+	ASSERT(swrp->wr_id != (uintptr_t)NULL);
 	swrp->wr_flags = IBT_WR_NO_FLAGS;
 	swrp->wr_opcode = IBT_WRC_SEND;
 	swrp->wr_trans = IBT_UD_SRV;

@@ -3597,7 +3597,7 @@ mrsas_tbolt_config_pd(struct mrsas_instance *instance, uint16_t tgt,
 		}
 		if (instance->mr_tbolt_pd_list[tgt].flag != MRDRV_TGT_VALID) {
 			rval = mrsas_service_evt(instance, tgt, 1,
-			    MRSAS_EVT_UNCONFIG_TGT, NULL);
+			    MRSAS_EVT_UNCONFIG_TGT, (uintptr_t)NULL);
 			con_log(CL_ANN1, (CE_WARN,
 			    "mr_sas:DELETING STALE ENTRY  rval = %d "
 			    "tgt id = %d", rval, tgt));

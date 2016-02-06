@@ -190,7 +190,7 @@ static uint8_t bscv_read_env_name(bscv_soft_state_t *, uint8_t,
 static void bscv_setup_events(bscv_soft_state_t *);
 
 static void bscv_trace(bscv_soft_state_t *, char, const char *,
-    const char *, ...);
+    const char *, ...) __GNU_UNUSED;
 
 #ifdef __sparc
 static void bscv_idi_init();
@@ -6383,7 +6383,7 @@ bscv_watchdog_cyclic_remove(bscv_soft_state_t *ssp)
 
 static void
 bscv_trace(bscv_soft_state_t *ssp, char code, const char *caller,
-	const char *fmt, ...)
+    const char *fmt, ...)
 {
 	char buf[256];
 	char *p;
@@ -6410,7 +6410,7 @@ bscv_trace(bscv_soft_state_t *ssp, char code, const char *caller,
 _NOTE(ARGSUSED(0))
 static void
 bscv_trace(bscv_soft_state_t *ssp, char code, const char *caller,
-	const char *fmt, ...)
+    const char *fmt, ...)
 {
 }
 

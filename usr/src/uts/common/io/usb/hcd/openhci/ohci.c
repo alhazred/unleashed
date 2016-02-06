@@ -611,7 +611,7 @@ _fini(void)
  */
 static int
 ohci_attach(dev_info_t		*dip,
-	ddi_attach_cmd_t	cmd)
+    ddi_attach_cmd_t	cmd)
 {
 	int			instance;
 	ohci_state_t		*ohcip = NULL;
@@ -787,7 +787,7 @@ ohci_attach(dev_info_t		*dip,
  */
 int
 ohci_detach(dev_info_t		*dip,
-	ddi_detach_cmd_t	cmd)
+    ddi_detach_cmd_t	cmd)
 {
 	ohci_state_t		*ohcip = ohci_obtain_state(dip);
 
@@ -814,9 +814,9 @@ ohci_detach(dev_info_t		*dip,
 /* ARGSUSED */
 static int
 ohci_info(dev_info_t		*dip,
-	ddi_info_cmd_t		infocmd,
-	void			*arg,
-	void			**result)
+    ddi_info_cmd_t		infocmd,
+    void			*arg,
+    void			**result)
 {
 	dev_t			dev;
 	ohci_state_t		*ohcip;
@@ -873,9 +873,9 @@ ohci_get_dip(dev_t	dev)
 
 static int
 ohci_open(dev_t		*devp,
-	int		flags,
-	int		otyp,
-	cred_t		*credp)
+    int		flags,
+    int		otyp,
+    cred_t		*credp)
 {
 	dev_info_t	*dip = ohci_get_dip(*devp);
 
@@ -885,9 +885,9 @@ ohci_open(dev_t		*devp,
 
 static int
 ohci_close(dev_t	dev,
-	int		flag,
-	int		otyp,
-	cred_t		*credp)
+    int		flag,
+    int		otyp,
+    cred_t		*credp)
 {
 	dev_info_t	*dip = ohci_get_dip(dev);
 
@@ -897,11 +897,11 @@ ohci_close(dev_t	dev,
 
 static int
 ohci_ioctl(dev_t	dev,
-	int		cmd,
-	intptr_t	arg,
-	int		mode,
-	cred_t		*credp,
-	int		*rvalp)
+    int		cmd,
+    intptr_t	arg,
+    int		mode,
+    cred_t		*credp,
+    int		*rvalp)
 {
 	dev_info_t	*dip = ohci_get_dip(dev);
 
@@ -1350,7 +1350,7 @@ skip_intr:
  */
 static int
 ohci_add_intrs(ohci_state_t	*ohcip,
-		int		intr_type)
+    int		intr_type)
 {
 	int	actual, avail, intr_size, count = 0;
 	int	i, flag, ret;
@@ -3816,8 +3816,8 @@ ohci_alloc_hc_ed(
 				return (NULL);
 			}
 
-			Set_ED(hc_ed->hced_prev, NULL);
-			Set_ED(hc_ed->hced_next, NULL);
+			Set_ED(hc_ed->hced_prev, 0);
+			Set_ED(hc_ed->hced_next, 0);
 
 			/* Change ED's state Active */
 			Set_ED(hc_ed->hced_state, HC_EPT_ACTIVE);
@@ -4069,7 +4069,7 @@ ohci_insert_intr_ed(
 		    ohci_ed_cpu_to_iommu(ohcip, ept));
 
 		/* The previous pointer is NULL */
-		Set_ED(ept->hced_prev, NULL);
+		Set_ED(ept->hced_prev, 0);
 
 		/* Update the previous pointer of ept->hced_next */
 		if (Get_ED(next_lattice_ept->hced_state) != HC_EPT_STATIC) {
@@ -4167,7 +4167,7 @@ ohci_insert_isoc_ed(
 	}
 
 	/* The next pointer is NULL */
-	Set_ED(ept->hced_next, NULL);
+	Set_ED(ept->hced_next, 0);
 
 	/* Update the previous pointer */
 	Set_ED(ept->hced_prev, ohci_ed_cpu_to_iommu(ohcip, lattice_ept));
@@ -4495,7 +4495,7 @@ ohci_detach_ed_from_list(
 				    Get_ED(ept->hced_next));
 
 				/* Clear prev ptr of  next endpoint */
-				Set_ED(next_ept->hced_prev,  NULL);
+				Set_ED(next_ept->hced_prev,  0);
 				break;
 			case USB_EP_ATTR_BULK:
 				/* Set the head of list to next ept */
@@ -4503,7 +4503,7 @@ ohci_detach_ed_from_list(
 				    Get_ED(ept->hced_next));
 
 				/* Clear prev ptr of  next endpoint */
-				Set_ED(next_ept->hced_prev, NULL);
+				Set_ED(next_ept->hced_prev, 0);
 				break;
 			case USB_EP_ATTR_INTR:
 				/*
@@ -4531,7 +4531,7 @@ ohci_detach_ed_from_list(
 				if (Get_ED(next_ept->hced_state) !=
 				    HC_EPT_STATIC) {
 
-					Set_ED(next_ept->hced_prev, NULL);
+					Set_ED(next_ept->hced_prev, 0);
 				}
 
 				break;
@@ -4548,11 +4548,11 @@ ohci_detach_ed_from_list(
 			switch (ept_type) {
 			case USB_EP_ATTR_CONTROL:
 				/* Set the head to NULL */
-				Set_OpReg(hcr_ctrl_head, NULL);
+				Set_OpReg(hcr_ctrl_head, 0);
 				break;
 			case USB_EP_ATTR_BULK:
 				/* Set the head to NULL */
-				Set_OpReg(hcr_bulk_head, NULL);
+				Set_OpReg(hcr_bulk_head, 0);
 				break;
 			case USB_EP_ATTR_INTR:
 			case USB_EP_ATTR_ISOCH:
@@ -4621,7 +4621,7 @@ ohci_insert_ed_on_reclaim_list(
 		ohcip->ohci_reclaim_list = ept;
 	}
 
-	ASSERT(Get_ED(ept->hced_reclaim_next) == NULL);
+	ASSERT(Get_ED(ept->hced_reclaim_next) == 0);
 
 	/* Enable the SOF interrupt */
 	Set_OpReg(hcr_intr_enable, HCR_INTR_SOF);
@@ -4700,7 +4700,7 @@ ohci_ed_iommu_to_cpu(
 {
 	ohci_ed_t	*ed;
 
-	if (addr == NULL) {
+	if (addr == (uintptr_t)NULL) {
 
 		return (NULL);
 	}
@@ -6056,7 +6056,7 @@ ohci_fill_in_td(
 
 	/* Set the transfer wrapper */
 	ASSERT(tw != NULL);
-	ASSERT(tw->tw_id != NULL);
+	ASSERT(tw->tw_id != 0);
 
 	Set_TD(td->hctd_trans_wrapper, (uint32_t)tw->tw_id);
 	Set_TD(td->hctd_tw_next_td, NULL);
@@ -6422,7 +6422,7 @@ ohci_insert_td_on_tw(
 
 		tw->tw_hctd_tail = td;
 
-		ASSERT(Get_TD(td->hctd_tw_next_td) == NULL);
+		ASSERT(Get_TD(td->hctd_tw_next_td) == 0);
 	}
 }
 
@@ -6730,7 +6730,7 @@ ohci_td_iommu_to_cpu(
 {
 	ohci_td_t	*td;
 
-	if (addr == NULL) {
+	if (addr == (uintptr_t)NULL) {
 
 		return (NULL);
 	}
@@ -6991,7 +6991,7 @@ dmadone:
 	/* Get and Store 32bit ID */
 	tw->tw_id = OHCI_GET_ID((void *)tw);
 
-	ASSERT(tw->tw_id != NULL);
+	ASSERT(tw->tw_id != 0);
 
 	USB_DPRINTF_L4(PRINT_MASK_ALLOC, ohcip->ohci_log_hdl,
 	    "ohci_create_transfer_wrapper: tw = 0x%p, ncookies = %u",
@@ -7225,7 +7225,7 @@ ohci_create_isoc_transfer_wrapper(
 	/* Get and Store 32bit ID */
 	tw->tw_id = OHCI_GET_ID((void *)tw);
 
-	ASSERT(tw->tw_id != NULL);
+	ASSERT(tw->tw_id != 0);
 
 	USB_DPRINTF_L4(PRINT_MASK_ALLOC, ohcip->ohci_log_hdl,
 	    "ohci_create_isoc_transfer_wrapper: tw = 0x%p", (void *)tw);
@@ -7639,7 +7639,7 @@ ohci_free_tw(
 	    "ohci_free_tw: tw = 0x%p", (void *)tw);
 
 	ASSERT(tw != NULL);
-	ASSERT(tw->tw_id != NULL);
+	ASSERT(tw->tw_id != 0);
 
 	/* Free 32bit ID */
 	OHCI_FREE_ID((uint32_t)tw->tw_id);
@@ -7875,7 +7875,7 @@ ohci_intr(caddr_t arg1, caddr_t arg2)
 		    HCCA_DONE_HEAD_MASK)) {
 
 			/* Reset the done head to NULL */
-			Set_HCCA(ohcip->ohci_hccap->HccaDoneHead, NULL);
+			Set_HCCA(ohcip->ohci_hccap->HccaDoneHead, 0);
 		} else {
 			intr &= ~HCR_INTR_WDH;
 		}
@@ -8390,7 +8390,7 @@ ohci_reverse_done_list(
 	    ohci_td_iommu_to_cpu(ohcip, (uintptr_t)head_done_list);
 
 	/* See if the list has only one element */
-	if (Get_TD(cpu_new_head->hctd_next_td) == NULL) {
+	if (Get_TD(cpu_new_head->hctd_next_td) == 0) {
 
 		return (cpu_new_head);
 	}
@@ -9818,7 +9818,7 @@ ohci_do_soft_reset(ohci_state_t	*ohcip)
 
 	if (ohci_check_done_head(ohcip, done_head) == USB_SUCCESS) {
 		/* Reset the done head to NULL */
-		Set_HCCA(ohcip->ohci_hccap->HccaDoneHead, NULL);
+		Set_HCCA(ohcip->ohci_hccap->HccaDoneHead, 0);
 
 		ohci_traverse_done_list(ohcip, done_head);
 	}

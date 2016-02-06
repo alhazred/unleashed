@@ -626,7 +626,7 @@ dls_devnet_prop_task(void *arg)
 
 	mutex_enter(&ddp->dd_mutex);
 	ddp->dd_prop_loaded = B_TRUE;
-	ddp->dd_prop_taskid = NULL;
+	ddp->dd_prop_taskid = (uintptr_t)NULL;
 	cv_broadcast(&ddp->dd_cv);
 	mutex_exit(&ddp->dd_mutex);
 }
@@ -638,7 +638,7 @@ void
 dls_devnet_prop_task_wait(dls_dl_handle_t ddp)
 {
 	mutex_enter(&ddp->dd_mutex);
-	while (ddp->dd_prop_taskid != NULL)
+	while (ddp->dd_prop_taskid != (uintptr_t)NULL)
 		cv_wait(&ddp->dd_cv, &ddp->dd_mutex);
 	mutex_exit(&ddp->dd_mutex);
 }
@@ -860,7 +860,8 @@ dls_devnet_set(const char *macname, datalink_id_t linkid, zoneid_t zoneid,
 		devnet_need_rebuild = B_TRUE;
 		stat_create = B_TRUE;
 		mutex_enter(&ddp->dd_mutex);
-		if (!ddp->dd_prop_loaded && (ddp->dd_prop_taskid == NULL)) {
+		if (!ddp->dd_prop_loaded && (ddp->dd_prop_taskid
+		    == (uintptr_t)NULL)) {
 			ddp->dd_prop_taskid = taskq_dispatch(system_taskq,
 			    dls_devnet_prop_task, ddp, TQ_SLEEP);
 		}
@@ -923,7 +924,7 @@ dls_devnet_unset(const char *macname, datalink_id_t *id, boolean_t wait)
 	 */
 	ASSERT(ddp->dd_ref != 0);
 	if ((ddp->dd_ref != 1) || (!wait &&
-	    (ddp->dd_tref != 0 || ddp->dd_prop_taskid != NULL))) {
+	    (ddp->dd_tref != 0 || ddp->dd_prop_taskid != (uintptr_t)NULL))) {
 		mutex_exit(&ddp->dd_mutex);
 		rw_exit(&i_dls_devnet_lock);
 		return (EBUSY);
@@ -954,10 +955,12 @@ dls_devnet_unset(const char *macname, datalink_id_t *id, boolean_t wait)
 		/*
 		 * Wait until all temporary references are released.
 		 */
-		while ((ddp->dd_tref != 0) || (ddp->dd_prop_taskid != NULL))
+		while ((ddp->dd_tref != 0) ||
+		    (ddp->dd_prop_taskid != (uintptr_t)NULL))
 			cv_wait(&ddp->dd_cv, &ddp->dd_mutex);
 	} else {
-		ASSERT(ddp->dd_tref == 0 && ddp->dd_prop_taskid == NULL);
+		ASSERT(ddp->dd_tref == 0 &&
+		    ddp->dd_prop_taskid == (uintptr_t)NULL);
 	}
 
 	if (ddp->dd_linkid != DATALINK_INVALID_LINKID)

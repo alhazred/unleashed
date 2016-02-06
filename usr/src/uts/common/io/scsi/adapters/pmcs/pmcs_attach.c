@@ -767,7 +767,7 @@ pmcs_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		}
 	}
 
-	if (pwp->flash_chunk_addr == NULL) {
+	if (pwp->flash_chunk_addr == (uintptr_t)NULL) {
 		pwp->regdump_dma_attr.dma_attr_align = PMCS_FLASH_CHUNK_SIZE;
 		if (pmcs_dma_setup(pwp, &pwp->regdump_dma_attr,
 		    &pwp->regdump_acchdl,

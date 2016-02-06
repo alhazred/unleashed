@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * s1394_hotplug.c
  *    1394 Services Layer Hotplug Routines
@@ -395,7 +393,8 @@ s1394_devi_find(dev_info_t *pdip, char *name, char *caddr)
 		 * GGGGGGGGGGGGGGGG[,AAAAAAAAAAAA], where GGGGGGGGGGGGGGGG is
 		 * the address and AAAAAAAAAAAA is the optional unit address)
 		 */
-		if (regptr[2] != NULL || regptr[3] != NULL) {
+		if (regptr[2] != (uintptr_t)NULL ||
+		    regptr[3] != (uintptr_t)NULL) {
 			(void) sprintf(addr, "%08x%08x,%04x%08x", regptr[0],
 			    regptr[1], regptr[2], regptr[3]);
 		} else {

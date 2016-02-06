@@ -319,7 +319,7 @@ av1394_async_write(av1394_inst_t *avp, struct uio *uiop)
 /*ARGSUSED*/
 int
 av1394_async_ioctl(av1394_inst_t *avp, int cmd, intptr_t arg, int mode,
-		int *rvalp)
+    int *rvalp)
 {
 	int	ret = EINVAL;
 
@@ -349,7 +349,7 @@ av1394_async_ioctl(av1394_inst_t *avp, int cmd, intptr_t arg, int mode,
 /*ARGSUSED*/
 int
 av1394_async_poll(av1394_inst_t *avp, short events, int anyyet, short *reventsp,
-		struct pollhead **phpp)
+    struct pollhead **phpp)
 {
 	av1394_async_t	*ap = &avp->av_a;
 	av1394_queue_t	*rq = &ap->a_rq;
@@ -436,7 +436,7 @@ av1394_async_create_minor_node(av1394_inst_t *avp)
 
 	ret = ddi_create_minor_node(avp->av_dip, "async",
 	    S_IFCHR, AV1394_ASYNC_INST2MINOR(avp->av_instance),
-	    DDI_NT_AV_ASYNC, NULL);
+	    DDI_NT_AV_ASYNC, 0);
 	if (ret != DDI_SUCCESS) {
 	}
 	return (ret);

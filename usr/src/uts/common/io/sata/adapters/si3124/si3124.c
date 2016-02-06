@@ -1007,8 +1007,8 @@ si_power(dev_info_t *dip, int component, int level)
  */
 static int
 si_getinfo(dev_info_t *dip, ddi_info_cmd_t infocmd,
-		void *arg,
-		void **result)
+    void *arg,
+    void **result)
 {
 #ifndef __lock_lint
 	_NOTE(ARGUNUSED(dip))
@@ -1365,14 +1365,13 @@ si_tran_start(dev_info_t *dip, sata_pkt_t *spkt)
  */
 static void
 si_mop_commands(si_ctl_state_t *si_ctlp,
-		si_port_state_t *si_portp,
-		uint8_t	port,
-
-		uint32_t slot_status,
-		uint32_t failed_tags,
-		uint32_t timedout_tags,
-		uint32_t aborting_tags,
-		uint32_t reset_tags)
+    si_port_state_t *si_portp,
+    uint8_t	port,
+    uint32_t slot_status,
+    uint32_t failed_tags,
+    uint32_t timedout_tags,
+    uint32_t aborting_tags,
+    uint32_t reset_tags)
 {
 	uint32_t finished_tags, unfinished_tags;
 	int tmpslot;
@@ -2035,7 +2034,7 @@ si_alloc_sgbpool(si_ctl_state_t *si_ctlp, int port)
 	    NULL,
 	    (caddr_t *)&si_portp->siport_sgbpool,
 	    &ret_len,
-	    &si_portp->siport_sgbpool_acc_handle) != NULL) {
+	    &si_portp->siport_sgbpool_acc_handle) != 0) {
 
 		/*  error.. free the dma handle. */
 		ddi_dma_free_handle(&si_portp->siport_sgbpool_dma_handle);
@@ -2114,7 +2113,7 @@ si_alloc_prbpool(si_ctl_state_t *si_ctlp, int port)
 	    NULL,
 	    (caddr_t *)&si_portp->siport_prbpool,
 	    &ret_len,
-	    &si_portp->siport_prbpool_acc_handle) != NULL) {
+	    &si_portp->siport_prbpool_acc_handle) != 0) {
 
 		/* error.. free the dma handle. */
 		ddi_dma_free_handle(&si_portp->siport_prbpool_dma_handle);
@@ -5911,7 +5910,7 @@ si_log(si_ctl_state_t *si_ctlp, si_port_state_t *si_portp, char *fmt, ...)
 
 static void
 si_copy_out_regs(sata_cmd_t *scmd, si_ctl_state_t *si_ctlp, uint8_t port,
-	uint8_t slot)
+    uint8_t slot)
 {
 	uint32_t *fis_word_ptr;
 	si_prb_t *prb;

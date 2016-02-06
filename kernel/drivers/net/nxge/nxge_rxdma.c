@@ -487,7 +487,7 @@ nxge_rxdma_cfg_port_default_rdc(p_nxge_t nxgep, uint8_t port, uint8_t rdc)
 
 nxge_status_t
 nxge_rxdma_cfg_rcr_threshold(p_nxge_t nxgep, uint8_t channel,
-				    uint16_t pkts)
+    uint16_t pkts)
 {
 	npi_status_t	rs = NPI_SUCCESS;
 	npi_handle_t	handle;
@@ -506,7 +506,7 @@ nxge_rxdma_cfg_rcr_threshold(p_nxge_t nxgep, uint8_t channel,
 
 nxge_status_t
 nxge_rxdma_cfg_rcr_timeout(p_nxge_t nxgep, uint8_t channel,
-			    uint16_t tout, uint8_t enable)
+    uint16_t tout, uint8_t enable)
 {
 	npi_status_t	rs = NPI_SUCCESS;
 	npi_handle_t	handle;
@@ -697,8 +697,8 @@ nxge_rxdma_channel_rcrflush(p_nxge_t nxgep, uint8_t channel)
 /*ARGSUSED*/
 nxge_status_t
 nxge_rxbuf_pp_to_vp(p_nxge_t nxgep, p_rx_rbr_ring_t rbr_p,
-	uint8_t pktbufsz_type, uint64_t *pkt_buf_addr_pp,
-	uint64_t **pkt_buf_addr_p, uint32_t *bufoffset, uint32_t *msg_index)
+    uint8_t pktbufsz_type, uint64_t *pkt_buf_addr_pp,
+    uint64_t **pkt_buf_addr_p, uint32_t *bufoffset, uint32_t *msg_index)
 {
 	int			bufsize;
 	uint64_t		pktbuf_pp;
@@ -1230,7 +1230,7 @@ nxge_rxdma_hw_mode(p_nxge_t nxgep, boolean_t enable)
 	if (set->owned.map == 0) {
 		NXGE_DEBUG_MSG((nxgep, RX_CTL,
 		    "nxge_rxdma_regs_dump_channels: no channels"));
-		return (NULL);
+		return (0);
 	}
 
 	for (rdc = 0; rdc < NXGE_MAX_RDCS; rdc++) {
@@ -2482,7 +2482,7 @@ nxge_receive_packet(p_nxge_t nxgep,
 				" 0x%llx", channel, rcr_entry));
 			}
 #endif
-			NXGE_FM_REPORT_ERROR(nxgep, nxgep->mac.portnum, NULL,
+			NXGE_FM_REPORT_ERROR(nxgep, nxgep->mac.portnum, 0,
 			    NXGE_FM_EREPORT_RDMC_DCF_ERR);
 		} else if (pkt_too_long_err) {
 			rdc_stats->pkt_too_long_err++;
@@ -4214,7 +4214,6 @@ nxge_rxdma_hw_stop(p_nxge_t nxgep, int channel)
 static nxge_status_t
 nxge_rxdma_start_channel(p_nxge_t nxgep, uint16_t channel,
     p_rx_rbr_ring_t rbr_p, p_rx_rcr_ring_t rcr_p, p_rx_mbox_t mbox_p)
-
 {
 	npi_handle_t		handle;
 	npi_status_t		rs = NPI_SUCCESS;
@@ -4227,8 +4226,8 @@ nxge_rxdma_start_channel(p_nxge_t nxgep, uint16_t channel,
 	handle = NXGE_DEV_NPI_HANDLE(nxgep);
 
 	NXGE_DEBUG_MSG((nxgep, MEM2_CTL, "nxge_rxdma_start_channel: "
-		"npi handle addr $%p acc $%p",
-		nxgep->npi_handle.regp, nxgep->npi_handle.regh));
+	    "npi handle addr $%p acc $%p",
+	    nxgep->npi_handle.regp, nxgep->npi_handle.regh));
 
 	/* Reset RXDMA channel, but not if you're a guest. */
 	if (!isLDOMguest(nxgep)) {
@@ -4260,14 +4259,14 @@ nxge_rxdma_start_channel(p_nxge_t nxgep, uint16_t channel,
 		status = nxge_init_fzc_rxdma_channel(nxgep, channel);
 		if (status != NXGE_OK) {
 			NXGE_ERROR_MSG((nxgep, NXGE_ERR_CTL,
-				"==> nxge_rxdma_start_channel: "
-				"init fzc rxdma failed (0x%08x channel %d)",
-				status, channel));
+			    "==> nxge_rxdma_start_channel: "
+			    "init fzc rxdma failed (0x%08x channel %d)",
+			    status, channel));
 			return (status);
 		}
 
 		NXGE_DEBUG_MSG((nxgep, MEM2_CTL,
-			"==> nxge_rxdma_start_channel: fzc done"));
+		    "==> nxge_rxdma_start_channel: fzc done"));
 	}
 
 	/* Set up the interrupt event masks. */
@@ -4277,17 +4276,17 @@ nxge_rxdma_start_channel(p_nxge_t nxgep, uint16_t channel,
 	    &ent_mask);
 	if (rs != NPI_SUCCESS) {
 		NXGE_ERROR_MSG((nxgep, NXGE_ERR_CTL,
-			"==> nxge_rxdma_start_channel: "
-			"init rxdma event masks failed "
-			"(0x%08x channel %d)",
-			status, channel));
+		    "==> nxge_rxdma_start_channel: "
+		    "init rxdma event masks failed "
+		    "(0x%08x channel %d)",
+		    status, channel));
 		return (NXGE_ERROR | rs);
 	}
 
 	NXGE_DEBUG_MSG((nxgep, MEM2_CTL,
-		"==> nxge_rxdma_start_channel: "
-		"event done: channel %d (mask 0x%016llx)",
-		channel, ent_mask.value));
+	    "==> nxge_rxdma_start_channel: "
+	    "event done: channel %d (mask 0x%016llx)",
+	    channel, ent_mask.value));
 
 	/* Initialize the receive DMA control and status register */
 	cs.value = 0;
@@ -4297,17 +4296,17 @@ nxge_rxdma_start_channel(p_nxge_t nxgep, uint16_t channel,
 	cs.bits.hdw.rbr_empty = 1;
 	status = nxge_init_rxdma_channel_cntl_stat(nxgep, channel, &cs);
 	NXGE_DEBUG_MSG((nxgep, MEM2_CTL, "==> nxge_rxdma_start_channel: "
-		"channel %d rx_dma_cntl_stat 0x%0016llx", channel, cs.value));
+	    "channel %d rx_dma_cntl_stat 0x%0016llx", channel, cs.value));
 	if (status != NXGE_OK) {
 		NXGE_ERROR_MSG((nxgep, NXGE_ERR_CTL,
-			"==> nxge_rxdma_start_channel: "
-			"init rxdma control register failed (0x%08x channel %d",
-			status, channel));
+		    "==> nxge_rxdma_start_channel: "
+		    "init rxdma control register failed (0x%08x channel %d",
+		    status, channel));
 		return (status);
 	}
 
 	NXGE_DEBUG_MSG((nxgep, MEM2_CTL, "==> nxge_rxdma_start_channel: "
-		"control done - channel %d cs 0x%016llx", channel, cs.value));
+	    "control done - channel %d cs 0x%016llx", channel, cs.value));
 
 	/*
 	 * Load RXDMA descriptors, buffers, mailbox,
@@ -4342,19 +4341,18 @@ nxge_rxdma_start_channel(p_nxge_t nxgep, uint16_t channel,
 
 	ent_mask.value = 0;
 	ent_mask.value |= (RX_DMA_ENT_MSK_WRED_DROP_MASK |
-				RX_DMA_ENT_MSK_PTDROP_PKT_MASK);
-	rs = npi_rxdma_event_mask(handle, OP_SET, channel,
-			&ent_mask);
+	    RX_DMA_ENT_MSK_PTDROP_PKT_MASK);
+	rs = npi_rxdma_event_mask(handle, OP_SET, channel, &ent_mask);
 	if (rs != NPI_SUCCESS) {
 		NXGE_DEBUG_MSG((nxgep, MEM2_CTL,
-			"==> nxge_rxdma_start_channel: "
-			"init rxdma event masks failed (0x%08x channel %d)",
-			status, channel));
+		    "==> nxge_rxdma_start_channel: "
+		    "init rxdma event masks failed (0x%08x channel %d)",
+		    status, channel));
 		return (NXGE_ERROR | rs);
 	}
 
 	NXGE_DEBUG_MSG((nxgep, MEM2_CTL, "==> nxge_rxdma_start_channel: "
-		"control done - channel %d cs 0x%016llx", channel, cs.value));
+	    "control done - channel %d cs 0x%016llx", channel, cs.value));
 
 	NXGE_DEBUG_MSG((nxgep, MEM2_CTL, "<== nxge_rxdma_start_channel"));
 
@@ -4493,7 +4491,7 @@ nxge_rxdma_handle_sys_errors(p_nxge_t nxgep)
 
 	if (stat.bits.ldw.id_mismatch) {
 		statsp->id_mismatch++;
-		NXGE_FM_REPORT_ERROR(nxgep, nxgep->mac.portnum, NULL,
+		NXGE_FM_REPORT_ERROR(nxgep, nxgep->mac.portnum, 0,
 		    NXGE_FM_EREPORT_RDMC_ID_MISMATCH);
 		/* Global fatal error encountered */
 	}
@@ -4549,7 +4547,7 @@ nxge_rxdma_handle_sys_errors(p_nxge_t nxgep)
 
 static nxge_status_t
 nxge_rxdma_handle_port_errors(p_nxge_t nxgep, uint32_t ipp_status,
-							uint32_t zcp_status)
+    uint32_t zcp_status)
 {
 	boolean_t		rxport_fatal = B_FALSE;
 	p_nxge_rdc_sys_stats_t	statsp;
@@ -4561,14 +4559,14 @@ nxge_rxdma_handle_port_errors(p_nxge_t nxgep, uint32_t ipp_status,
 
 	if (ipp_status & (0x1 << portn)) {
 		statsp->ipp_eop_err++;
-		NXGE_FM_REPORT_ERROR(nxgep, portn, NULL,
+		NXGE_FM_REPORT_ERROR(nxgep, portn, 0,
 		    NXGE_FM_EREPORT_RDMC_IPP_EOP_ERR);
 		rxport_fatal = B_TRUE;
 	}
 
 	if (zcp_status & (0x1 << portn)) {
 		statsp->zcp_eop_err++;
-		NXGE_FM_REPORT_ERROR(nxgep, portn, NULL,
+		NXGE_FM_REPORT_ERROR(nxgep, portn, 0,
 		    NXGE_FM_EREPORT_RDMC_ZCP_EOP_ERR);
 		rxport_fatal = B_TRUE;
 	}
@@ -4949,9 +4947,9 @@ nxge_rxdma_databuf_free(p_rx_rbr_ring_t rbr_p)
 		    "==> nxge_rxdma_databuf_free: free chunk %d "
 		    "kaddrp $%p chunk size %d",
 		    index, kaddr, chunk_size));
-		if (kaddr == NULL) continue;
+		if (kaddr == (uintptr_t)NULL) continue;
 		nxge_free_buf(rbr_p->rbr_alloc_type, kaddr, chunk_size);
-		ring_info->buffer[index].kaddr = NULL;
+		ring_info->buffer[index].kaddr = (uintptr_t)NULL;
 	}
 
 	NXGE_DEBUG_MSG((NULL, DMA_CTL, "<== nxge_rxdma_databuf_free"));
@@ -4966,7 +4964,7 @@ nxge_free_buf(buf_alloc_type_t alloc_type, uint64_t kaddr, uint32_t buf_size)
 {
 	NXGE_DEBUG_MSG((NULL, DMA_CTL, "==> nxge_free_buf"));
 
-	if (kaddr == NULL || !buf_size) {
+	if (kaddr == (uintptr_t)NULL || !buf_size) {
 		NXGE_ERROR_MSG((NULL, NXGE_ERR_CTL,
 		    "==> nxge_free_buf: invalid kaddr $%p size to free %d",
 		    kaddr, buf_size));

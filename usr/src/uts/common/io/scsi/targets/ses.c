@@ -442,7 +442,7 @@ ses_doattach(dev_info_t *dip)
 	devp->sd_private = (opaque_t)ssc;
 	ssc->ses_devp = devp;
 	err = ddi_create_minor_node(dip, "0", S_IFCHR, inst,
-	    DDI_NT_SCSI_ENCLOSURE, NULL);
+	    DDI_NT_SCSI_ENCLOSURE, 0);
 	if (err == DDI_FAILURE) {
 		ddi_remove_minor_node(dip, NULL);
 		SES_LOG(ssc, CE_NOTE, "minor node creation failed");

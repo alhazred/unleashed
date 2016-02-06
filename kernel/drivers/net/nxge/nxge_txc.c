@@ -23,16 +23,13 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/nxge/nxge_impl.h>
 #include <sys/nxge/nxge_txc.h>
 
 static nxge_status_t
 nxge_txc_handle_port_errors(p_nxge_t, uint32_t);
 static void
-nxge_txc_inject_port_err(uint8_t, txc_int_stat_dbg_t *,
-			uint8_t istats);
+nxge_txc_inject_port_err(uint8_t, txc_int_stat_dbg_t *, uint8_t istats);
 extern nxge_status_t nxge_tx_port_fatal_err_recover(p_nxge_t);
 
 nxge_status_t
@@ -412,7 +409,7 @@ nxge_txc_handle_port_errors(p_nxge_t nxgep, uint32_t err_status)
 
 		if (err_status & TXC_INT_STAT_RO_CORR_ERR) {
 			statsp->ro_correct_err++;
-			NXGE_FM_REPORT_ERROR(nxgep, portn, NULL,
+			NXGE_FM_REPORT_ERROR(nxgep, portn, 0,
 			    NXGE_FM_EREPORT_TXC_RO_CORRECT_ERR);
 			NXGE_ERROR_MSG((nxgep, NXGE_ERR_CTL,
 			    "nxge_txc_err_evnts: "
@@ -420,7 +417,7 @@ nxge_txc_handle_port_errors(p_nxge_t nxgep, uint32_t err_status)
 		}
 		if (err_status & TXC_INT_STAT_RO_UNCORR_ERR) {
 			statsp->ro_uncorrect_err++;
-			NXGE_FM_REPORT_ERROR(nxgep, portn, NULL,
+			NXGE_FM_REPORT_ERROR(nxgep, portn, 0,
 			    NXGE_FM_EREPORT_TXC_RO_UNCORRECT_ERR);
 			NXGE_ERROR_MSG((nxgep, NXGE_ERR_CTL,
 			    "nxge_txc_err_evnts: "
@@ -428,7 +425,7 @@ nxge_txc_handle_port_errors(p_nxge_t nxgep, uint32_t err_status)
 		}
 		if (err_status & TXC_INT_STAT_REORDER_ERR) {
 			statsp->reorder_err++;
-			NXGE_FM_REPORT_ERROR(nxgep, portn, NULL,
+			NXGE_FM_REPORT_ERROR(nxgep, portn, 0,
 			    NXGE_FM_EREPORT_TXC_REORDER_ERR);
 			NXGE_ERROR_MSG((nxgep, NXGE_ERR_CTL,
 			    "nxge_txc_err_evnts: "
@@ -460,7 +457,7 @@ nxge_txc_handle_port_errors(p_nxge_t nxgep, uint32_t err_status)
 		}
 		if (err_status & TXC_INT_STAT_SF_CORR_ERR) {
 			statsp->sf_correct_err++;
-			NXGE_FM_REPORT_ERROR(nxgep, portn, NULL,
+			NXGE_FM_REPORT_ERROR(nxgep, portn, 0,
 			    NXGE_FM_EREPORT_TXC_SF_CORRECT_ERR);
 			NXGE_ERROR_MSG((nxgep, NXGE_ERR_CTL,
 			    "nxge_txc_err_evnts: "
@@ -468,7 +465,7 @@ nxge_txc_handle_port_errors(p_nxge_t nxgep, uint32_t err_status)
 		}
 		if (err_status & TXC_INT_STAT_SF_UNCORR_ERR) {
 			statsp->sf_uncorrect_err++;
-			NXGE_FM_REPORT_ERROR(nxgep, portn, NULL,
+			NXGE_FM_REPORT_ERROR(nxgep, portn, 0,
 			    NXGE_FM_EREPORT_TXC_SF_UNCORRECT_ERR);
 			NXGE_ERROR_MSG((nxgep, NXGE_ERR_CTL,
 			    "nxge_txc_err_evnts: "
@@ -589,7 +586,7 @@ nxge_txc_inject_err(p_nxge_t nxgep, uint32_t err_id)
 
 static void
 nxge_txc_inject_port_err(uint8_t portn, txc_int_stat_dbg_t *txcs,
-				uint8_t istats)
+    uint8_t istats)
 {
 	switch (portn) {
 	case 0:

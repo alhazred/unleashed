@@ -280,7 +280,7 @@ mptsas_start_config_page_access(mptsas_t *mpt, mptsas_cmd_t *cmd)
 	    DDI_DMA_SYNC_FORDEV);
 	request_desc = (cmd->cmd_slot << 16) +
 	    MPI2_REQ_DESCRIPT_FLAGS_DEFAULT_TYPE;
-	cmd->cmd_rfm = NULL;
+	cmd->cmd_rfm = 0;
 	MPTSAS_START_CMD(mpt, request_desc);
 	if ((mptsas_check_dma_handle(mpt->m_dma_req_frame_hdl) !=
 	    DDI_SUCCESS) ||
@@ -612,8 +612,8 @@ page_done:
 
 int
 mptsas_send_config_request_msg(mptsas_t *mpt, uint8_t action, uint8_t pagetype,
-	uint32_t pageaddress, uint8_t pagenumber, uint8_t pageversion,
-	uint8_t pagelength, uint32_t SGEflagslength, uint64_t SGEaddress)
+    uint32_t pageaddress, uint8_t pagenumber, uint8_t pageversion,
+    uint8_t pagelength, uint32_t SGEflagslength, uint64_t SGEaddress)
 {
 	pMpi2ConfigRequest_t	config;
 	int			send_numbytes;
@@ -648,9 +648,9 @@ mptsas_send_config_request_msg(mptsas_t *mpt, uint8_t action, uint8_t pagetype,
 
 int
 mptsas_send_extended_config_request_msg(mptsas_t *mpt, uint8_t action,
-	uint8_t extpagetype, uint32_t pageaddress, uint8_t pagenumber,
-	uint8_t pageversion, uint16_t extpagelength,
-	uint32_t SGEflagslength, uint64_t SGEaddress)
+    uint8_t extpagetype, uint32_t pageaddress, uint8_t pagenumber,
+    uint8_t pageversion, uint16_t extpagelength,
+    uint32_t SGEflagslength, uint64_t SGEaddress)
 {
 	pMpi2ConfigRequest_t	config;
 	int			send_numbytes;
@@ -717,7 +717,7 @@ mptsas_ioc_wait_for_doorbell(mptsas_t *mpt)
 
 int
 mptsas_send_handshake_msg(mptsas_t *mpt, caddr_t memp, int numbytes,
-	ddi_acc_handle_t accessp)
+    ddi_acc_handle_t accessp)
 {
 	int	i;
 
@@ -769,7 +769,7 @@ mptsas_send_handshake_msg(mptsas_t *mpt, caddr_t memp, int numbytes,
 
 int
 mptsas_get_handshake_msg(mptsas_t *mpt, caddr_t memp, int numbytes,
-	ddi_acc_handle_t accessp)
+    ddi_acc_handle_t accessp)
 {
 	int		i, totalbytes, bytesleft;
 	uint16_t	val;
@@ -1086,7 +1086,7 @@ mptsas_return_to_pool(mptsas_t *mpt, mptsas_cmd_t *cmd)
  */
 int
 mptsas_ioc_task_management(mptsas_t *mpt, int task_type, uint16_t dev_handle,
-	int lun, uint8_t *reply, uint32_t reply_size, int mode)
+    int lun, uint8_t *reply, uint32_t reply_size, int mode)
 {
 	/*
 	 * In order to avoid allocating variables on the stack,
@@ -1398,7 +1398,7 @@ mptsas_update_flash(mptsas_t *mpt, caddr_t ptrbuffer, uint32_t size,
 	    DDI_DMA_SYNC_FORDEV);
 	request_desc = (cmd->cmd_slot << 16) +
 	    MPI2_REQ_DESCRIPT_FLAGS_DEFAULT_TYPE;
-	cmd->cmd_rfm = NULL;
+	cmd->cmd_rfm = 0;
 	MPTSAS_START_CMD(mpt, request_desc);
 
 	rvalue = 0;

@@ -3169,7 +3169,8 @@ iscsi_process_rsp_status(iscsi_sess_t *isp, iscsi_conn_t *icp,
 }
 
 static void
-iscsi_drop_conn_cleanup(iscsi_conn_t *icp) {
+iscsi_drop_conn_cleanup(iscsi_conn_t *icp)
+{
 	mutex_enter(&icp->conn_state_mutex);
 	idm_ini_conn_disconnect(icp->conn_ic);
 	mutex_exit(&icp->conn_state_mutex);
@@ -3394,7 +3395,7 @@ iscsi_wd_thread(iscsi_thread_t *thread, void *arg)
 
 	ASSERT(isp != NULL);
 
-	while (rc != NULL) {
+	while (rc != 0) {
 
 		iscsi_timeout_checks(isp);
 		iscsi_nop_checks(isp);

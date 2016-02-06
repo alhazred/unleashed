@@ -171,7 +171,7 @@ drm_supp_register(dev_info_t *dip, drm_device_t *dp)
 	/* create a minor node for common graphics ops */
 	(void) sprintf(buf, "%s%d", GFX_NAME, instance);
 	error = ddi_create_minor_node(dip, buf, S_IFCHR,
-	    INST2NODE0(instance), DDI_NT_DISPLAY, NULL);
+	    INST2NODE0(instance), DDI_NT_DISPLAY, 0);
 	if (error != DDI_SUCCESS) {
 		DRM_ERROR("drm_supp_regiter: "
 		    "failed to create minor node for gfx");
@@ -995,7 +995,7 @@ drm_supp_device_capability(void *handle, int capid)
 	/* has capabilities list ? */
 	if ((pci_config_get16(mstate->mis_cfg_hdl, PCI_CONF_STAT) &
 	    PCI_CONF_CAP_MASK) == 0)
-		return (NULL);
+		return (0);
 
 	caps_ptr = pci_config_get8(mstate->mis_cfg_hdl, PCI_CONF_CAP_PTR);
 	while (caps_ptr != PCI_CAP_NEXT_PTR_NULL) {

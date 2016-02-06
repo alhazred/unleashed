@@ -1968,7 +1968,7 @@ pcishpc_set_slot_name(pcie_hp_ctrl_t *ctrl_p, int slot)
 			 * before ours.
 			 */
 			while (slots_before) {
-				while (*s != NULL)
+				while (*s != 0)
 					s++;
 				s++;
 				slots_before--;

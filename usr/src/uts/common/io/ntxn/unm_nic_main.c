@@ -119,8 +119,8 @@ static boolean_t ntxn_m_getcapab(void *arg, mac_capab_t cap, void *cap_data);
  */
 int
 unm_pci_alloc_consistent(unm_adapter *adapter,
-		int size, caddr_t *address, ddi_dma_cookie_t *cookie,
-		ddi_dma_handle_t *dma_handle, ddi_acc_handle_t *handlep)
+    int size, caddr_t *address, ddi_dma_cookie_t *cookie,
+    ddi_dma_handle_t *dma_handle, ddi_acc_handle_t *handlep)
 {
 	int			err;
 	uint32_t		ncookies;
@@ -326,7 +326,7 @@ unm_free_hw_resources(unm_adapter *adapter)
 	if (adapter->ahw.cmdDescHead != NULL) {
 		unm_pci_free_consistent(&adapter->ahw.cmd_desc_dma_handle,
 		    &adapter->ahw.cmd_desc_acc_handle);
-		adapter->ahw.cmdDesc_physAddr = NULL;
+		adapter->ahw.cmdDesc_physAddr = (uintptr_t)NULL;
 		adapter->ahw.cmdDescHead = NULL;
 	}
 
@@ -340,7 +340,7 @@ unm_free_hw_resources(unm_adapter *adapter)
 				    &rcv_desc->rx_desc_dma_handle,
 				    &rcv_desc->rx_desc_acc_handle);
 				rcv_desc->desc_head = NULL;
-				rcv_desc->phys_addr = NULL;
+				rcv_desc->phys_addr = (uintptr_t)NULL;
 			}
 		}
 
@@ -348,7 +348,7 @@ unm_free_hw_resources(unm_adapter *adapter)
 			unm_pci_free_consistent(
 			    &recv_ctx->status_desc_dma_handle,
 			    &recv_ctx->status_desc_acc_handle);
-			recv_ctx->rcvStatusDesc_physAddr = NULL;
+			recv_ctx->rcvStatusDesc_physAddr = (uintptr_t)NULL;
 			recv_ctx->rcvStatusDescHead = NULL;
 		}
 	}
@@ -1602,7 +1602,7 @@ unm_post_rx_buffers_nodb(struct unm_adapter_s *adapter,
 
 int
 unm_nic_fill_statistics_128M(struct unm_adapter_s *adapter,
-			    struct unm_statistics *unm_stats)
+    struct unm_statistics *unm_stats)
 {
 	void *addr;
 	if (adapter->ahw.board_type == UNM_NIC_XGBE) {
@@ -2104,7 +2104,7 @@ unm_kstat_update(kstat_t *ksp, int flag)
 
 static kstat_t *
 unm_setup_named_kstat(unm_adapter *adapter, int instance, char *name,
-	const unm_ksindex_t *ksip, size_t size, int (*update)(kstat_t *, int))
+    const unm_ksindex_t *ksip, size_t size, int (*update)(kstat_t *, int))
 {
 	kstat_t *ksp;
 	kstat_named_t *knp;

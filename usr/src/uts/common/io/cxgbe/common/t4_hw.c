@@ -5058,7 +5058,7 @@ get_pci_mode(struct adapter *adapter, struct pci_params *p)
 	u32 pcie_cap;
 
 	pcie_cap = t4_os_find_pci_capability(adapter, PCI_CAP_ID_EXP);
-	if (pcie_cap != NULL) {
+	if (pcie_cap != 0) {
 		t4_os_pci_read_cfg2(adapter, pcie_cap + PCI_EXP_LNKSTA, &val);
 		p->speed = val & PCI_EXP_LNKSTA_CLS;
 		p->width = (val & PCI_EXP_LNKSTA_NLW) >> 4;

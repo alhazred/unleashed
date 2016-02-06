@@ -229,7 +229,7 @@ av1394_isoch_write(av1394_inst_t *avp, struct uio *uiop)
 /*ARGSUSED*/
 int
 av1394_isoch_ioctl(av1394_inst_t *avp, int cmd, intptr_t arg, int mode,
-		int *rvalp)
+    int *rvalp)
 {
 	int		ret = EINVAL;
 
@@ -272,7 +272,7 @@ av1394_isoch_ioctl(av1394_inst_t *avp, int cmd, intptr_t arg, int mode,
 /*ARGSUSED*/
 int
 av1394_isoch_devmap(av1394_inst_t *avp, devmap_cookie_t dhp, offset_t off,
-	size_t len, size_t *maplen, uint_t model)
+    size_t len, size_t *maplen, uint_t model)
 {
 	av1394_isoch_seg_t *isp;
 
@@ -314,7 +314,7 @@ av1394_isoch_create_minor_node(av1394_inst_t *avp)
 
 	ret = ddi_create_minor_node(avp->av_dip, "isoch",
 	    S_IFCHR, AV1394_ISOCH_INST2MINOR(avp->av_instance),
-	    DDI_NT_AV_ISOCH, NULL);
+	    DDI_NT_AV_ISOCH, 0);
 	if (ret != DDI_SUCCESS) {
 	}
 	return (ret);
@@ -443,7 +443,7 @@ av1394_isoch_autorecv_init(av1394_inst_t *avp, av1394_ic_t **icpp)
  */
 static int
 av1394_isoch_autoxmit_init(av1394_inst_t *avp, av1394_ic_t **icpp,
-		struct uio *uiop)
+    struct uio *uiop)
 {
 	av1394_isoch_autoxmit_t *axp = &avp->av_i.i_autoxmit;
 	iec61883_isoch_init_t ii;

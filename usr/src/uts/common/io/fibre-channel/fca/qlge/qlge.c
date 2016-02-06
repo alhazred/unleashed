@@ -1155,9 +1155,9 @@ ql_refill_sbuf_free_list(struct bq_desc *sbq_desc, boolean_t alloc_memory)
 	/*
 	 * If we are freeing the buffers as a result of adapter unload, get out
 	 */
-	if ((sbq_desc->free_buf != NULL) ||
+	if ((sbq_desc->free_buf != 0) ||
 	    (qlge->mac_flags == QL_MAC_DETACH)) {
-		if (sbq_desc->free_buf == NULL)
+		if (sbq_desc->free_buf == 0)
 			atomic_dec_32(&rx_ring->rx_indicate);
 		mutex_exit(&rx_ring->sbq_lock);
 		return;
@@ -1268,9 +1268,9 @@ ql_refill_lbuf_free_list(struct bq_desc *lbq_desc, boolean_t alloc_memory)
 	/*
 	 * If we are freeing the buffers as a result of adapter unload, get out
 	 */
-	if ((lbq_desc->free_buf != NULL) ||
+	if ((lbq_desc->free_buf != 0) ||
 	    (qlge->mac_flags == QL_MAC_DETACH)) {
-		if (lbq_desc->free_buf == NULL)
+		if (lbq_desc->free_buf == 0)
 			atomic_dec_32(&rx_ring->rx_indicate);
 		mutex_exit(&rx_ring->lbq_lock);
 		return;
@@ -5018,10 +5018,10 @@ typedef	uint8_t		ub1;
 }
 
 ub4
-hash(k, length, initval)
-register ub1 *k;	/* the key */
-register ub4 length;	/* the length of the key */
-register ub4 initval;	/* the previous hash, or an arbitrary value */
+hash(
+    register ub1 *k,	/* the key */
+    register ub4 length,	/* the length of the key */
+    register ub4 initval)	/* the previous hash, or an arbitrary value */
 {
 	register ub4 a, b, c, len;
 
@@ -5349,7 +5349,7 @@ ql_send_common(struct tx_ring *tx_ring, mblk_t *mp)
 		cmn_err(CE_NOTE, "%s: quit, packet oversize %d\n",
 		    __func__, (int)total_len);
 #endif
-		return (NULL);
+		return (0);
 	}
 
 	bp = (caddr_t)mp->b_rptr;
