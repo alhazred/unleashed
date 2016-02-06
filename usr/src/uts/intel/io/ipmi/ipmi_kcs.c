@@ -474,7 +474,7 @@ kcs_startup(struct ipmi_softc *sc)
 	    curzone->zone_zsched, TASKQ_PREPOPULATE);
 
 	if (taskq_dispatch(sc->ipmi_kthread, kcs_loop, (void *) sc,
-	    TQ_SLEEP) == NULL) {
+	    TQ_SLEEP) == (uintptr_t)NULL) {
 		taskq_destroy(sc->ipmi_kthread);
 		return (1);
 	}

@@ -3111,7 +3111,7 @@ get_system_configuration(void)
 	if (BOP_GETPROPLEN(bootops, "kernelbase") > sizeof (prop) ||
 	    BOP_GETPROP(bootops, "kernelbase", prop) < 0 ||
 	    kobj_getvalue(prop, &lvalue) == -1)
-		eprom_kernelbase = NULL;
+		eprom_kernelbase = (uintptr_t)NULL;
 	else
 		eprom_kernelbase = (uintptr_t)lvalue;
 

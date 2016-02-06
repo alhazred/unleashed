@@ -574,7 +574,7 @@ vgatext_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 
 	(void) sprintf(buf, "text-%d", unit);
 	error = ddi_create_minor_node(devi, buf, S_IFCHR,
-	    INST2NODE1(unit), DDI_NT_DISPLAY, NULL);
+	    INST2NODE1(unit), DDI_NT_DISPLAY, 0);
 	if (error != DDI_SUCCESS)
 		goto fail;
 

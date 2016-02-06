@@ -876,11 +876,11 @@ xen_parse_props(char *s, char *prop_map[], int n_prop)
 
 	do {
 		scp = cp;
-		while ((*cp != NULL) && (*cp != ':'))
+		while ((*cp != '\0') && (*cp != ':'))
 			cp++;
 
 		if ((scp != cp) && (*prop_name != NULL)) {
-			*cp = NULL;
+			*cp = '\0';
 			bsetprops(*prop_name, scp);
 		}
 
@@ -1141,7 +1141,7 @@ save_boot_info(struct xboot_info *xbi)
 		}
 	} else {
 		saved_mbi.drives_length = 0;
-		saved_mbi.drives_addr = NULL;
+		saved_mbi.drives_addr = (uintptr_t)NULL;
 	}
 
 	/*

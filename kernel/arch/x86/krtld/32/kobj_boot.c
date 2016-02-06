@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Bootstrap the linker/loader.
  */
@@ -61,7 +59,7 @@ _kobj_boot(
 	int i;
 
 	for (i = 0; i < BA_NUM; i++)
-		bootaux[i].ba_val = NULL;
+		bootaux[i].ba_val = (uintptr_t)NULL;
 
 	bootaux[BA_ENTRY].ba_ptr = (void *)_locore_start;
 	bootaux[BA_PAGESZ].ba_val = MMU_PAGESIZE;

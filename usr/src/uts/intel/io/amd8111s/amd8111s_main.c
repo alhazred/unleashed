@@ -1,6 +1,7 @@
 /*
  * Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ * Copyright 2016 PALO, Richard.
  */
 
 /*
@@ -705,7 +706,7 @@ amd8111s_odlInit(struct LayerPointers *pLayerPointers)
 			pmem_set_array++;
 			*(pmem_set_array) = (unsigned long) kmem_zalloc(
 			    *(pmem_req_array), KM_NOSLEEP);
-			if (*pmem_set_array == NULL)
+			if (*pmem_set_array == 0)
 				goto odl_init_failure;
 			break;
 		}
@@ -720,7 +721,7 @@ amd8111s_odlInit(struct LayerPointers *pLayerPointers)
 
 	/* Allocate Rx/Tx descriptors */
 	if (amd8111s_allocate_descriptors(pLayerPointers) != B_TRUE) {
-		*pmem_set_array = NULL;
+		*pmem_set_array = 0;
 		goto odl_init_failure;
 	}
 
@@ -730,7 +731,7 @@ amd8111s_odlInit(struct LayerPointers *pLayerPointers)
 	 */
 	if (amd8111s_allocate_buffers(pLayerPointers) == B_FALSE) {
 		amd8111s_free_descriptors(pLayerPointers);
-		*pmem_set_array = NULL;
+		*pmem_set_array = 0;
 		goto odl_init_failure;
 	}
 	milInitGlbds(pLayerPointers);
@@ -920,8 +921,7 @@ amd8111s_free_descriptors(struct LayerPointers *pLayerPointers)
  */
 static boolean_t
 amd8111s_alloc_dma_ringbuf(struct LayerPointers *pLayerPointers,
-			struct amd8111s_dma_ringbuf *pRing,
-			uint32_t ring_size, uint32_t msg_size)
+    struct amd8111s_dma_ringbuf *pRing, uint32_t ring_size, uint32_t msg_size)
 {
 	uint32_t idx, msg_idx = 0, msg_acc;
 	dev_info_t *devinfo = pLayerPointers->pOdl->devinfo;
