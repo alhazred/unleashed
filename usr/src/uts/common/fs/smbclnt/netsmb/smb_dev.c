@@ -283,7 +283,7 @@ nsmb_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		return (DDI_FAILURE);
 
 	if (ddi_create_minor_node(dip, "nsmb", S_IFCHR, 0, DDI_PSEUDO,
-	    NULL) == DDI_FAILURE) {
+	    0) == DDI_FAILURE) {
 		cmn_err(CE_WARN, "nsmb_attach: create minor");
 		return (DDI_FAILURE);
 	}
@@ -318,7 +318,7 @@ nsmb_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 /*ARGSUSED*/
 static int
 nsmb_ioctl(dev_t dev, int cmd, intptr_t arg, int flags,	/* model.h */
-	cred_t *cr, int *rvalp)
+    cred_t *cr, int *rvalp)
 {
 	smb_dev_t *sdp;
 	int err;

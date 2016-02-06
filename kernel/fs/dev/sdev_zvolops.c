@@ -462,7 +462,7 @@ devzvol_create_pool_dirs(struct vnode *dvp)
 		kmem_free((void *)(uintptr_t)devzvol_zclist,
 		    devzvol_zclist_size);
 		devzvol_gen = 0;
-		devzvol_zclist = NULL;
+		devzvol_zclist = (uintptr_t)NULL;
 		devzvol_zclist_size = 0;
 		goto out;
 	}

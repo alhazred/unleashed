@@ -61,8 +61,8 @@
 static int prinit();
 
 static mntopts_t proc_mntopts = {
-	NULL,
-	0
+	0,
+	NULL
 };
 
 static vfsdef_t vfw = {
@@ -189,7 +189,7 @@ prinit(int fstype, char *name)
 /* ARGSUSED */
 static int
 prmount(struct vfs *vfsp, struct vnode *mvp,
-	struct mounta *uap, struct cred *cr)
+    struct mounta *uap, struct cred *cr)
 {
 	prnode_t *pnp;
 	zone_t *zone = curproc->p_zone;

@@ -2033,11 +2033,11 @@ e_bad:
  */
 int
 sotpi_connect(struct sonode *so,
-	struct sockaddr *name,
-	socklen_t namelen,
-	int fflag,
-	int flags,
-	struct cred *cr)
+    struct sockaddr *name,
+    socklen_t namelen,
+    int fflag,
+    int flags,
+    struct cred *cr)
 {
 	struct T_conn_req	conn_req;
 	int			error = 0;
@@ -4827,7 +4827,7 @@ done:
 /* ARGSUSED */
 int
 sotpi_getsockopt(struct sonode *so, int level, int option_name,
-		void *optval, socklen_t *optlenp, int flags, struct cred *cr)
+    void *optval, socklen_t *optlenp, int flags, struct cred *cr)
 {
 	struct T_optmgmt_req	optmgmt_req;
 	struct T_optmgmt_ack	*optmgmt_ack;
@@ -5171,7 +5171,7 @@ done2:
 /* ARGSUSED */
 int
 sotpi_setsockopt(struct sonode *so, int level, int option_name,
-	const void *optval, t_uscalar_t optlen, struct cred *cr)
+    const void *optval, t_uscalar_t optlen, struct cred *cr)
 {
 	struct T_optmgmt_req	optmgmt_req;
 	struct opthdr		oh;
@@ -5789,7 +5789,7 @@ socktpi_plumbioctl(struct vnode *vp, int cmd, intptr_t arg, int mode,
 		STRUCT_DECL(str_list, ustrlist);
 		STRUCT_INIT(ustrlist, mode);
 
-		if (arg == NULL) {
+		if (arg == (intptr_t)NULL) {
 			error = strioctl(vp, cmd, arg, mode, U_TO_K, cr, rvalp);
 			if (error == 0)
 				(*rvalp)++;	/* Add one for sockmod */

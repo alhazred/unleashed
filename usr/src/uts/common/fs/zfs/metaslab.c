@@ -1993,7 +1993,7 @@ metaslab_group_preload(metaslab_group_t *mg)
 		}
 
 		VERIFY(taskq_dispatch(mg->mg_taskq, metaslab_preload,
-		    msp, TQ_SLEEP) != NULL);
+		    msp, TQ_SLEEP) != (uintptr_t)NULL);
 	}
 	mutex_exit(&mg->mg_lock);
 }

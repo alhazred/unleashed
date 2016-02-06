@@ -3190,7 +3190,7 @@ top:
 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_MODE(zfsvfs), NULL,
 		    &new_mode, sizeof (new_mode));
 		zp->z_mode = new_mode;
-		ASSERT3U((uintptr_t)aclp, !=, NULL);
+		ASSERT3U((uintptr_t)aclp, !=, (uintptr_t)NULL);
 		err = zfs_aclset_common(zp, aclp, cr, tx);
 		ASSERT0(err);
 		if (zp->z_acl_cached)

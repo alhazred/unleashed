@@ -157,7 +157,7 @@ specvp(
 		sp->s_commonvp	= NULL;
 		sp->s_dev	= dev;
 		sp->s_dip	= NULL;
-		sp->s_nextr	= NULL;
+		sp->s_nextr	= 0;
 		sp->s_list	= NULL;
 		sp->s_plcy	= NULL;
 		sp->s_size	= 0;
@@ -235,7 +235,7 @@ makespecvp(dev_t dev, vtype_t type)
 	sp->s_commonvp	= cvp;
 	sp->s_dev	= dev;
 	sp->s_dip	= NULL;
-	sp->s_nextr	= NULL;
+	sp->s_nextr	= 0;
 	sp->s_list	= NULL;
 	sp->s_plcy	= NULL;
 	sp->s_size	= 0;
@@ -547,7 +547,7 @@ get_cvp(
 		sp->s_commonvp	= svp;		/* points to itself */
 		sp->s_dev	= dev;
 		sp->s_dip	= NULL;
-		sp->s_nextr	= NULL;
+		sp->s_nextr	= 0;
 		sp->s_list	= NULL;
 		sp->s_plcy	= NULL;
 		sp->s_size	= UNKNOWN_SIZE;
@@ -593,7 +593,7 @@ commonvp(dev_t dev, vtype_t type)
 		sp->s_commonvp	= svp;		/* points to itself */
 		sp->s_dev	= dev;
 		sp->s_dip	= NULL;
-		sp->s_nextr	= NULL;
+		sp->s_nextr	= 0;
 		sp->s_list	= NULL;
 		sp->s_plcy	= NULL;
 		sp->s_size	= UNKNOWN_SIZE;

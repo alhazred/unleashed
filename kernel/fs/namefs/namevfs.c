@@ -722,8 +722,8 @@ nameinit(int fstype, char *name)
 }
 
 static mntopts_t nm_mntopts = {
-	NULL,
-	0
+	0,
+	NULL
 };
 
 static vfsdef_t vfw = {

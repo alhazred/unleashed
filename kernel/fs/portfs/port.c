@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/types.h>
 #include <sys/systm.h>
 #include <sys/cred.h>
@@ -601,7 +599,7 @@ portfs(int opcode, uintptr_t a0, uintptr_t a1, uintptr_t a2, uintptr_t a3,
 		port_timer.pgt_flags = PORTGET_ONE;
 		port_timer.pgt_loop = 0;
 		port_timer.pgt_rqtp = NULL;
-		if (a4 != NULL) {
+		if (a4 != (uintptr_t)NULL) {
 			port_timer.pgt_timeout = &timeout;
 			timeout.tv_sec = (time_t)a2;
 			timeout.tv_nsec = (long)a3;

@@ -205,14 +205,13 @@ rrip_file_time(sig_args_t *sig_args_p)
  */
 static void
 name_parse(
-	int		rrip_flags,	/* component/name flag */
-	uchar_t		*SUA_string,	/* string from SUA */
-	size_t		SUA_string_len, /* length of SUA string */
-	uchar_t		*dst,		/* string to copy to */
-	int		*dst_lenp,	/* ptr to cur. str len */
-	ulong_t		*name_flags_p,	/* internal name flags */
-	int		dst_size)	/* limit dest string to */
-						/* this value */
+    int		rrip_flags,	/* component/name flag */
+    uchar_t	*SUA_string,	/* string from SUA */
+    size_t	SUA_string_len, /* length of SUA string */
+    uchar_t	*dst,		/* string to copy to */
+    int		*dst_lenp,	/* ptr to cur. str len */
+    ulong_t	*name_flags_p,	/* internal name flags */
+    int		dst_size)	/* limit dest string to this value */
 {
 	size_t	off;
 	size_t	len;
@@ -239,7 +238,7 @@ name_parse(
 	if (IS_NAME_BIT_SET(rrip_flags, RRIP_NAME_VOLROOT) ||
 	    IS_NAME_BIT_SET(rrip_flags, RRIP_NAME_HOST)) {
 		cmn_err(CE_NOTE,
-			"VOLUME ROOT and NAME_HOST currently unsupported\n");
+		    "VOLUME ROOT and NAME_HOST currently unsupported\n");
 		return;
 	}
 
@@ -438,14 +437,13 @@ end:
  */
 int
 rrip_namecopy(
-	char 	*from,			/* name to copy */
-	char 	*to,			/* string to copy "from" to */
-	char  	*tmp_name,		/* temp storage for original name */
-	uchar_t	*dirp,			/* directory entry pointer */
-	uint_t	last_offset,		/* last index into current dir block */
-	struct 	hsfs *fsp,		/* filesystem pointer */
-	struct 	hs_direntry *hdp)	/* directory entry pointer to put */
-					/* all that good info in */
+    char 		*from,		/* name to copy */
+    char 		*to,		/* string to copy "from" to */
+    char  		*tmp_name,	/* temp storage for original name */
+    uchar_t		*dirp,		/* directory entry pointer */
+    uint_t		last_offset,	/* last index into current dir block */
+    struct hsfs		*fsp,		/* filesystem pointer */
+    struct hs_direntry	*hdp)		/* destination directory entry ptr */
 {
 	int	size = 0;
 	int	change_flag = 0;
@@ -471,8 +469,7 @@ rrip_namecopy(
 
 
 	ret_val = parse_sua((uchar_t *)to, &size, &change_flag,
-			dirp, last_offset,
-			hdp, fsp, (uchar_t *)NULL, NULL);
+	    dirp, last_offset, hdp, fsp, (uchar_t *)NULL, 0);
 
 	if (IS_NAME_BIT_SET(change_flag, RRIP_NAME_CHANGE) && !ret_val)
 		return (size);

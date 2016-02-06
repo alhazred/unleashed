@@ -132,28 +132,28 @@ prctioctl(prnode_t *pnp, int cmd, intptr_t arg, int flag, cred_t *cr)
 /*
  * Control operations (lots).
  */
-/*ARGSUSED*/
+/* ARGSUSED */ /* BEGIN CSTYLED */
 #ifdef _SYSCALL32_IMPL
 static int
 prioctl64(
-	struct vnode *vp,
-	int cmd,
-	intptr_t arg,
-	int flag,
-	cred_t *cr,
-	int *rvalp,
-	caller_context_t *ct)
+    struct vnode *vp,
+    int cmd,
+    intptr_t arg,
+    int flag,
+    cred_t *cr,
+    int *rvalp,
+    caller_context_t *ct)
 #else
 int
 prioctl(
-	struct vnode *vp,
-	int cmd,
-	intptr_t arg,
-	int flag,
-	cred_t *cr,
-	int *rvalp,
-	caller_context_t *ct)
-#endif	/* _SYSCALL32_IMPL */
+    struct vnode *vp,
+    int cmd,
+    intptr_t arg,
+    int flag,
+    cred_t *cr,
+    int *rvalp,
+    caller_context_t *ct)
+#endif	/* _SYSCALL32_IMPL */ /* END CSTYLED */
 {
 	int nsig = PROC_IS_BRANDED(curproc)? BROP(curproc)->b_nsig : NSIG;
 	caddr_t cmaddr = (caddr_t)arg;
@@ -1863,7 +1863,7 @@ prioctl32(
 
 	case PIOCOPENM:		/* open mapped object for reading */
 		if (cmaddr == NULL)
-			un32.va = NULL;
+			un32.va = (uintptr_t)NULL;
 		else if (copyin(cmaddr, &un32.va, sizeof (un32.va)))
 			error = EFAULT;
 		break;

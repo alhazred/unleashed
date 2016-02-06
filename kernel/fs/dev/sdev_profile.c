@@ -897,7 +897,7 @@ copyin_nvlist(char *packed_usr, size_t packed_sz, nvlist_t **nvlp)
 
 	/* simple sanity check */
 	if (packed_usr == NULL || packed_sz == 0)
-		return (NULL);
+		return (0);
 
 	/* copyin packed profile nvlist */
 	packed = kmem_alloc(packed_sz, KM_NOSLEEP);

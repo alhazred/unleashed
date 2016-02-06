@@ -1383,7 +1383,8 @@ zil_clean(zilog_t *zilog, uint64_t synced_txg)
 	 * created a bad performance problem.
 	 */
 	if (taskq_dispatch(zilog->zl_clean_taskq,
-	    (void (*)(void *))zil_itxg_clean, clean_me, TQ_NOSLEEP) == NULL)
+	    (void (*)(void *))zil_itxg_clean, clean_me, TQ_NOSLEEP)
+	    == (uintptr_t)NULL)
 		zil_itxg_clean(clean_me);
 }
 

@@ -354,7 +354,7 @@ devvt_cleandir(struct vnode *dvp, struct cred *cred)
 	cnt = VC_INSTANCES_COUNT;
 	mutex_exit(&vc_lock);
 
-	if (rw_tryupgrade(&sdvp->sdev_contents) == NULL) {
+	if (rw_tryupgrade(&sdvp->sdev_contents) == 0) {
 		rw_exit(&sdvp->sdev_contents);
 		rw_enter(&sdvp->sdev_contents, RW_WRITER);
 	}
@@ -395,9 +395,9 @@ devvt_cleandir(struct vnode *dvp, struct cred *cred)
 		/* validate only ready nodes */
 		if (dv->sdev_state != SDEV_READY)
 			continue;
-		if ((strcmp(dv->sdev_name, DEVVT_ACTIVE_NAME) == NULL))
+		if ((strcmp(dv->sdev_name, DEVVT_ACTIVE_NAME) == 0))
 			found |= 0x01;
-		if ((strcmp(dv->sdev_name, DEVVT_CONSUSER_NAME) == NULL))
+		if ((strcmp(dv->sdev_name, DEVVT_CONSUSER_NAME) == 0))
 			found |= 0x02;
 
 		if ((found & 0x01) && (found & 0x02))
@@ -408,11 +408,7 @@ devvt_cleandir(struct vnode *dvp, struct cred *cred)
 	if (!(found & 0x02))
 		devvt_create_snode(sdvp, DEVVT_CONSUSER_NAME, cred, SDEV_VLINK);
 
-#ifndef	__lock_lint
 	rw_downgrade(&sdvp->sdev_contents);
-#else
-	rw_exit(&sdvp->sdev_contents);
-#endif
 }
 
 /*ARGSUSED4*/

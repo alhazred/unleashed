@@ -297,7 +297,7 @@ history_str_get(zfs_cmd_t *zc)
 {
 	char *buf;
 
-	if (zc->zc_history == NULL)
+	if (zc->zc_history == (uintptr_t)NULL)
 		return (NULL);
 
 	buf = kmem_alloc(HIS_MAX_RECORD_LEN, KM_SLEEP);
@@ -2070,7 +2070,7 @@ zfs_ioc_objset_zplprops(zfs_cmd_t *zc)
 	 * which we aren't supposed to do with a DS_MODE_USER
 	 * hold, because it could be inconsistent.
 	 */
-	if (zc->zc_nvlist_dst != NULL &&
+	if (zc->zc_nvlist_dst != (uintptr_t)NULL &&
 	    !zc->zc_objset_stats.dds_inconsistent &&
 	    dmu_objset_type(os) == DMU_OST_ZFS) {
 		nvlist_t *nv;
@@ -2627,7 +2627,7 @@ zfs_ioc_set_prop(zfs_cmd_t *zc)
 	if (error == 0)
 		error = zfs_set_prop_nvlist(zc->zc_name, source, nvl, errors);
 
-	if (zc->zc_nvlist_dst != NULL && errors != NULL) {
+	if (zc->zc_nvlist_dst != (uintptr_t)NULL && errors != NULL) {
 		(void) put_nvlist(zc, errors);
 	}
 
@@ -2778,7 +2778,7 @@ zfs_ioc_pool_get_props(zfs_cmd_t *zc)
 		spa_close(spa, FTAG);
 	}
 
-	if (error == 0 && zc->zc_nvlist_dst != NULL)
+	if (error == 0 && zc->zc_nvlist_dst != (uintptr_t)NULL)
 		error = put_nvlist(zc, nvp);
 	else
 		error = SET_ERROR(EFAULT);
@@ -4087,7 +4087,7 @@ zfs_ioc_recv(zfs_cmd_t *zc)
 	tosnap = strchr(tofs, '@');
 	*tosnap++ = '\0';
 
-	if (zc->zc_nvlist_src != NULL &&
+	if (zc->zc_nvlist_src != (uintptr_t)NULL &&
 	    (error = get_nvlist(zc->zc_nvlist_src, zc->zc_nvlist_src_size,
 	    zc->zc_iflags, &props)) != 0)
 		return (error);
@@ -4511,7 +4511,7 @@ zfs_ioc_clear(zfs_cmd_t *zc)
 		nvlist_t *policy;
 		nvlist_t *config = NULL;
 
-		if (zc->zc_nvlist_src == NULL)
+		if (zc->zc_nvlist_src == (uintptr_t)NULL)
 			return (SET_ERROR(EINVAL));
 
 		if ((error = get_nvlist(zc->zc_nvlist_src,
