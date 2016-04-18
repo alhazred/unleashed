@@ -106,7 +106,6 @@ _MANFILES=	Intro.4				\
 		logadm.conf.4			\
 		logindevperm.4			\
 		loginlog.4			\
-		magic.4				\
 		mailer.conf.4			\
 		md.tab.4			\
 		mddb.cf.4			\

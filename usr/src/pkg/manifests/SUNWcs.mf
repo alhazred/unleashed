@@ -379,7 +379,6 @@ file path=etc/ioctl.syscon group=sys preserve=true
 file path=etc/ksh.kshrc group=sys preserve=renameold
 file path=etc/logadm.conf group=sys preserve=true timestamp=19700101T000000Z
 file path=etc/logindevperm group=sys preserve=true
-file path=etc/magic mode=0444
 file path=etc/mail/mailx.rc preserve=true
 file path=etc/mailcap preserve=true
 file path=etc/mime.types preserve=true
@@ -744,7 +743,6 @@ file path=usr/bin/false mode=0555
 file path=usr/bin/fdetach mode=0555
 file path=usr/bin/fdformat mode=4555
 file path=usr/bin/fgrep mode=0555
-file path=usr/bin/file mode=0555
 file path=usr/bin/find mode=0555
 file path=usr/bin/fmt mode=0555
 file path=usr/bin/fmtmsg mode=0555

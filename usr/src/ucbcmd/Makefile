@@ -42,7 +42,6 @@ COMMON_SUBDIRS=		\
 	expr		\
 	fastboot	\
 	fasthalt	\
-	file		\
 	from		\
 	groups		\
 	install.d	\

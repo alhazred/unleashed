@@ -158,7 +158,6 @@ COMMON_SUBDIRS=		\
 	ficl		\
 	filesync	\
 	fgrep		\
-	file		\
 	find		\
 	flowadm		\
 	flowstat	\
@@ -570,7 +569,6 @@ MSGSUBDIRS=		\
 	expr		\
 	fcinfo		\
 	fgrep		\
-	file		\
 	filesync	\
 	find		\
 	flowadm		\

@@ -52,7 +52,6 @@ file path=usr/share/man/man1b/echo.1b
 file path=usr/share/man/man1b/exportfs.1b
 file path=usr/share/man/man1b/expr.1b
 file path=usr/share/man/man1b/fastboot.1b
-file path=usr/share/man/man1b/file.1b
 file path=usr/share/man/man1b/from.1b
 file path=usr/share/man/man1b/groups.1b
 file path=usr/share/man/man1b/grpck.1b
@@ -83,7 +82,6 @@ file path=usr/ucb/echo mode=0755
 file path=usr/ucb/expr mode=0755
 file path=usr/ucb/fastboot mode=0555
 file path=usr/ucb/fasthalt mode=0555
-file path=usr/ucb/file mode=0555
 file path=usr/ucb/from mode=0755
 file path=usr/ucb/groups mode=0755
 file path=usr/ucb/install mode=0755

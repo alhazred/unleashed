@@ -310,7 +310,6 @@ file path=usr/lib/locale/C/LC_MESSAGES/libcmd group=sys
 file path=usr/lib/locale/C/LC_MESSAGES/libdll group=sys
 file path=usr/lib/locale/C/LC_MESSAGES/libshell group=sys
 file path=usr/lib/locale/C/LC_MESSAGES/libsum group=sys
-file path=usr/lib/locale/C/LC_MESSAGES/magic group=sys
 file path=usr/lib/locale/C/LC_MESSAGES/mailx.help group=sys
 file path=usr/lib/locale/C/LC_MESSAGES/more.help group=sys
 file path=usr/lib/locale/C/LC_MESSAGES/priv_names group=sys
