@@ -31,6 +31,7 @@
 #include <net/if.h>
 #ifdef _KERNEL
 #include <sys/netstack.h>
+#include <sys/cred.h>
 #endif
 
 #ifdef	__cplusplus

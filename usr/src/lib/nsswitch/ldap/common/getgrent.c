@@ -23,6 +23,7 @@
  * Use is subject to license terms.
  */
 
+#include <sys/param.h>
 #include <grp.h>
 #include "ldap_common.h"
 #include <string.h>

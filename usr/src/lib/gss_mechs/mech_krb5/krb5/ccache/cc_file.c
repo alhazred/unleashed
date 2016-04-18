@@ -83,6 +83,7 @@ etc.
 #include <syslog.h>	/* Solaris Kerberos */
 #include <ctype.h>
 #include <locale.h>
+#include <poll.h>
 
 #include <stdio.h>
 #include <errno.h>

@@ -25,6 +25,7 @@
  * files/getpwnam.c -- "files" backend for nsswitch "passwd" database
  */
 
+#include <sys/param.h>
 #include <pwd.h>
 #include <shadow.h>
 #include <unistd.h>		/* for PF_PATH */

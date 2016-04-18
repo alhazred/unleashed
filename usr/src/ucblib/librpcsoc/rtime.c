@@ -57,6 +57,7 @@
 #include <errno.h>
 #include <netinet/in.h>
 #include <malloc.h>
+#include <limits.h>
 
 #define	NYEARS	(1970 - 1900)
 #define	TOFFSET ((uint_t)60*60*24*(365*NYEARS + (NYEARS/4)))

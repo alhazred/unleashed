@@ -38,6 +38,7 @@ extern "C" {
 #include <netinet/in.h>
 #include <sys/scsi/impl/uscsi.h>
 #include <sys/iscsi_protocol.h>
+#include <sys/param.h>
 
 /*
  * Each of the top level structures have a version field as

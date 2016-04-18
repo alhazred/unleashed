@@ -39,6 +39,7 @@
 #endif
 #include <sys/ddipropdefs.h>
 #include <sys/hwconf.h>
+#include <sys/ksynch.h>
 
 #ifdef	__cplusplus
 extern "C" {

@@ -45,6 +45,7 @@
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <sys/stat.h>
+#include <sys/param.h>
 
 #include <signal.h>
 #include <stdio.h>

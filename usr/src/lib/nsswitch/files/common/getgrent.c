@@ -25,6 +25,7 @@
  * files/getgrent.c -- "files" backend for nsswitch "group" database
  */
 
+#include <sys/param.h>
 #include <grp.h>
 #include <unistd.h>		/* for GF_PATH */
 #include <stdlib.h>		/* for GF_PATH */

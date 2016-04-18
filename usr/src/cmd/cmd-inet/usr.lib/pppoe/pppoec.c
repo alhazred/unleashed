@@ -40,6 +40,7 @@
 #include <net/if.h>
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
+#include <poll.h>
 
 #include <net/sppptun.h>
 #include <net/pppoe.h>

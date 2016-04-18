@@ -39,6 +39,7 @@ extern "C" {
 #include <sys/types.h>
 #include <netinet/in.h>		/* for IPPROTO_* constants */
 #include <sys/ethernet.h>
+#include <sys/param.h>
 
 #define	MAX_RINGS_PER_GROUP	128
 
