@@ -1757,7 +1757,7 @@ idmap_get_u2w_mapping(
 	    TIMEOUT);
 
 	if (retcode != IDMAP_SUCCESS)
-		return (retcode);
+		goto out;
 
 	retcode = result.retcode;
 
