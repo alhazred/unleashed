@@ -1,4 +1,4 @@
-/*-
+/*
  * Copyright (c) 2013 The FreeBSD Foundation
  * All rights reserved.
  *
@@ -27,7 +27,6 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD$");
 
 #include <bootstrap.h>
 #include <sys/endian.h>
@@ -37,13 +36,18 @@ __FBSDID("$FreeBSD$");
 #include <efilib.h>
 #include <efiuga.h>
 #include <efipciio.h>
+#include <Protocol/EdidActive.h>
+#include <Protocol/EdidDiscovered.h>
 #include <machine/metadata.h>
 
+#include "gfx_fb.h"
 #include "framebuffer.h"
 
 static EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
 static EFI_GUID pciio_guid = EFI_PCI_IO_PROTOCOL_GUID;
 static EFI_GUID uga_guid = EFI_UGA_DRAW_PROTOCOL_GUID;
+static EFI_GUID active_edid_guid = EFI_EDID_ACTIVE_PROTOCOL_GUID;
+static EFI_GUID discovered_edid_guid = EFI_EDID_DISCOVERED_PROTOCOL_GUID;
 
 static u_int
 efifb_color_depth(struct efi_fb *efifb)
@@ -425,6 +429,68 @@ efifb_from_uga(struct efi_fb *efifb, EFI_UGA_DRAW_PROTOCOL *uga)
 	return (0);
 }
 
+static int
+video_gop_get_edid(EFI_HANDLE gop, struct vesa_edid_info *edid_info)
+{
+	EFI_EDID_ACTIVE_PROTOCOL *edid;
+	EFI_GUID *guid;
+	EFI_STATUS status;
+	size_t size;
+
+	memset (edid_info, 0, sizeof (*edid_info));
+	guid = &active_edid_guid;
+	status = BS->OpenProtocol(gop, guid, (VOID **)&edid, IH, NULL,
+	    EFI_OPEN_PROTOCOL_GET_PROTOCOL);
+	if (status != EFI_SUCCESS) {
+		guid = &discovered_edid_guid;
+		status = BS->OpenProtocol(gop, guid, (VOID **)&edid, IH, NULL,
+		    EFI_OPEN_PROTOCOL_GET_PROTOCOL);
+	}
+	if (status != EFI_SUCCESS) {
+		sprintf(command_errbuf, "EDID Protocol is not "
+		    "present (error=%lu)", EFI_ERROR_CODE(status));
+		return (1);
+	}
+
+	size = edid->SizeOfEdid;
+	if (size > sizeof (*edid_info))
+		size = sizeof (*edid_info);
+
+	memcpy(edid_info, edid->Edid, size);
+	status = BS->CloseProtocol(gop, guid, IH, NULL);
+	return (0);
+}
+
+static void
+find_edid(void)
+{
+	EFI_HANDLE *handles;
+	UINTN bufsz = 0;
+	EFI_STATUS status;
+	int rc, i;
+
+	status = BS->LocateHandle(ByProtocol, &gop_guid, NULL, &bufsz, NULL);
+	if (status != EFI_BUFFER_TOO_SMALL)
+		return;
+
+	if ((handles = malloc(bufsz)) == NULL)
+		return;
+
+	status = BS->LocateHandle(ByProtocol, &gop_guid, NULL, &bufsz, handles);
+	if (EFI_ERROR(status)) {
+		free(handles);
+		return;
+	}
+
+	for (i = 0; i < (bufsz / sizeof (EFI_HANDLE)); i++) {
+		rc = video_gop_get_edid (handles[i], &edid_info);
+		if (rc == 0)
+			break;
+	}
+
+	free(handles);
+}
+
 int
 efi_find_framebuffer(struct efi_fb *efifb)
 {
@@ -433,8 +499,10 @@ efi_find_framebuffer(struct efi_fb *efifb)
 	EFI_STATUS status;
 
 	status = BS->LocateProtocol(&gop_guid, NULL, (VOID **)&gop);
-	if (status == EFI_SUCCESS)
+	if (status == EFI_SUCCESS) {
+		find_edid();
 		return (efifb_from_gop(efifb, gop->Mode, gop->Mode->Info));
+	}
 
 	status = BS->LocateProtocol(&uga_guid, NULL, (VOID **)&uga);
 	if (status == EFI_SUCCESS)
@@ -460,6 +528,30 @@ print_efifb(int mode, struct efi_fb *efifb, int verbose)
 		    efifb->fb_mask_red, efifb->fb_mask_green,
 		    efifb->fb_mask_blue);
 	}
+}
+
+COMMAND_SET(edid, "edid", "show edid mode", command_edid);
+
+static int
+command_edid(int argc, char *argv[])
+{
+
+	/* TODO validate edid checksum */
+	printf("edid version: %d.%d\n", edid_info.header.version,
+	    edid_info.header.revision);
+	if (edid_info.header.version == 1 &&
+	    (edid_info.display.supported_features
+	    & EDID_FEATURE_PREFERRED_TIMING_MODE) &&
+	    edid_info.detailed_timings[0].pixel_clock) {
+		printf("width: %d height: %d\n",
+		    edid_info.detailed_timings[0].horizontal_active_lo |
+		    (((unsigned int)
+		    (edid_info.detailed_timings[0].horizontal_hi & 0xf0)) << 4),
+		    edid_info.detailed_timings[0].vertical_active_lo |
+		    (((unsigned int)
+		    (edid_info.detailed_timings[0].vertical_hi & 0xf0)) << 4));
+	}
+	return (CMD_OK);
 }
 
 COMMAND_SET(gop, "gop", "graphics output protocol", command_gop);

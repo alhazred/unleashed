@@ -25,12 +25,14 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD$");
 
 #include <efi.h>
 #include <efilib.h>
+#include <gfx_fb.h>
 
 #include "bootstrap.h"
+
+struct vesa_edid_info	edid_info;
 
 static SIMPLE_TEXT_OUTPUT_INTERFACE	*conout;
 static SIMPLE_INPUT_INTERFACE		*conin;
