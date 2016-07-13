@@ -26,8 +26,6 @@
 #ifndef	_SYS_1394_TARGETS_SCSA1394_CMD_H
 #define	_SYS_1394_TARGETS_SCSA1394_CMD_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * scsa1394 command
  */
@@ -39,14 +37,6 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
-
-/* preferred pkt_private length in 64-bit quantities */
-#ifdef  _LP64
-#define	SCSA1394_CMD_PRIV_SIZE	2
-#else /* _ILP32 */
-#define	SCSA1394_CMD_PRIV_SIZE	1
-#endif
-#define	SCSA1394_CMD_PRIV_LEN   (SCSA1394_CMD_PRIV_SIZE * sizeof (uint64_t))
 
 /* entry describing a page table segment */
 typedef struct scsa1394_cmd_seg {
@@ -64,14 +54,7 @@ typedef struct scsa1394_cmd {
 	int			sc_flags;	/* command flags */
 	struct buf		*sc_bp;		/* data buffer */
 	struct scsi_pkt		*sc_pkt;	/* corresponding scsi pkt */
-	size_t			sc_cdb_len;
-	size_t			sc_cdb_actual_len;
-	size_t			sc_scb_len;
-	size_t			sc_priv_len;
-	uchar_t			sc_cdb[SCSI_CDB_SIZE];
-	uchar_t			sc_pkt_cdb[SCSI_CDB_SIZE];
-	struct scsi_arq_status	sc_scb;
-	uint64_t		sc_priv[SCSA1394_CMD_PRIV_SIZE];
+	size_t			sc_orig_cdblen;
 	clock_t			sc_start_time;
 	int			sc_timeout;
 
@@ -109,19 +92,13 @@ typedef struct scsa1394_cmd {
 	int			sc_blk_size;	/* xfer block size */
 	size_t			sc_total_blks;	/* total xfer blocks */
 	size_t			sc_resid_blks;	/* blocks left */
-
-	struct scsi_pkt		sc_scsi_pkt;	/* must be last */
-						/* embedded SCSI packet */
-						/* ... scsi_pkt_size() */
 } scsa1394_cmd_t;
-#define	SCSA1394_CMD_SIZE	(sizeof (struct scsa1394_cmd) - \
-				sizeof (struct scsi_pkt) + scsi_pkt_size())
 
 _NOTE(SCHEME_PROTECTS_DATA("unique per task", { scsa1394_cmd scsa1394_cmd_seg
     scsi_pkt scsi_inquiry scsi_extended_sense scsi_cdb scsi_arq_status }))
 
 #define	PKT2CMD(pktp)	((scsa1394_cmd_t *)((pktp)->pkt_ha_private))
-#define	CMD2PKT(cmdp)	((struct scsi_pkt *)((cmdp)->sc_pkt))
+#define	CMD2PKT(cmdp)	((cmdp)->sc_pkt)
 #define	TASK2CMD(task)	((scsa1394_cmd_t *)(task)->ts_drv_priv)
 #define	CMD2TASK(cmdp)	((sbp2_task_t *)&(cmdp)->sc_task)
 
@@ -134,13 +111,6 @@ enum {
 
 /* flags */
 enum {
-	SCSA1394_CMD_CDB_EXT		= 0x0001,
-	SCSA1394_CMD_PRIV_EXT		= 0x0002,
-	SCSA1394_CMD_SCB_EXT		= 0x0004,
-	SCSA1394_CMD_EXT		= (SCSA1394_CMD_CDB_EXT |
-					    SCSA1394_CMD_PRIV_EXT |
-					    SCSA1394_CMD_SCB_EXT),
-
 	SCSA1394_CMD_DMA_CDB_VALID	= 0x0008,
 	SCSA1394_CMD_DMA_BUF_BIND_VALID	= 0x0010,
 	SCSA1394_CMD_DMA_BUF_PT_VALID	= 0x0020,

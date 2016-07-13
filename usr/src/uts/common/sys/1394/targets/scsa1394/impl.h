@@ -26,8 +26,6 @@
 #ifndef	_SYS_1394_TARGETS_SCSA1394_IMPL_H
 #define	_SYS_1394_TARGETS_SCSA1394_IMPL_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * scsa1394 definitions
  */
@@ -187,7 +185,6 @@ typedef struct scsa1394_state {
 	sbp2_cfgrom_t		*s_cfgrom;	/* Config ROM */
 	int			s_nluns;	/* # of logical units */
 	scsa1394_lun_t		*s_lun;		/* logical units */
-	kmem_cache_t		*s_cmd_cache;	/* command kmem cache */
 	ddi_taskq_t		*s_taskq;	/* common taskq for all luns */
 	boolean_t		s_symbios;	/* need Symbios workaround? */
 	boolean_t		s_disconnect_warned; /* disconnect warning */

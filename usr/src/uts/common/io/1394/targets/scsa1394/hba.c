@@ -56,8 +56,6 @@ static int	scsa1394_attach_threads(scsa1394_state_t *);
 static void	scsa1394_detach_threads(scsa1394_state_t *);
 static int	scsa1394_attach_scsa(scsa1394_state_t *);
 static void	scsa1394_detach_scsa(scsa1394_state_t *);
-static int	scsa1394_create_cmd_cache(scsa1394_state_t *);
-static void	scsa1394_destroy_cmd_cache(scsa1394_state_t *);
 static int	scsa1394_add_events(scsa1394_state_t *);
 static void	scsa1394_remove_events(scsa1394_state_t *);
 
@@ -98,11 +96,6 @@ static void	scsa1394_scsi_sync_pkt(struct scsi_address *,
 		struct scsi_pkt *);
 
 /* pkt resource allocation routines */
-static int	scsa1394_cmd_cache_constructor(void *, void *, int);
-static void	scsa1394_cmd_cache_destructor(void *, void *);
-static int	scsa1394_cmd_ext_alloc(scsa1394_state_t *, scsa1394_cmd_t *,
-		int);
-static void	scsa1394_cmd_ext_free(scsa1394_state_t *, scsa1394_cmd_t *);
 static int	scsa1394_cmd_cdb_dma_alloc(scsa1394_state_t *, scsa1394_cmd_t *,
 		int, int (*)(), caddr_t);
 static void	scsa1394_cmd_cdb_dma_free(scsa1394_state_t *, scsa1394_cmd_t *);
@@ -306,13 +299,8 @@ scsa1394_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		return (DDI_FAILURE);
 	}
 
-	if (scsa1394_create_cmd_cache(sp) != DDI_SUCCESS) {
-		scsa1394_cleanup(sp, 5);
-		return (DDI_FAILURE);
-	}
-
 	if (scsa1394_add_events(sp) != DDI_SUCCESS) {
-		scsa1394_cleanup(sp, 6);
+		scsa1394_cleanup(sp, 5);
 		return (DDI_FAILURE);
 	}
 
@@ -459,11 +447,8 @@ scsa1394_cleanup(scsa1394_state_t *sp, int level)
 	default:
 		scsa1394_remove_events(sp);
 		/* FALLTHRU */
-	case 6:
-		scsa1394_detach_scsa(sp);
-		/* FALLTHRU */
 	case 5:
-		scsa1394_destroy_cmd_cache(sp);
+		scsa1394_detach_scsa(sp);
 		/* FALLTHRU */
 	case 4:
 		scsa1394_detach_threads(sp);
@@ -594,26 +579,6 @@ scsa1394_detach_scsa(scsa1394_state_t *sp)
 	ASSERT(ret == DDI_SUCCESS);
 
 	scsi_hba_tran_free(sp->s_tran);
-}
-
-static int
-scsa1394_create_cmd_cache(scsa1394_state_t *sp)
-{
-	char	name[64];
-
-	(void) sprintf(name, "scsa1394%d_cache", sp->s_instance);
-	sp->s_cmd_cache = kmem_cache_create(name,
-	    SCSA1394_CMD_SIZE, sizeof (void *),
-	    scsa1394_cmd_cache_constructor, scsa1394_cmd_cache_destructor,
-	    NULL, (void *)sp, NULL, 0);
-
-	return ((sp->s_cmd_cache == NULL) ? DDI_FAILURE : DDI_SUCCESS);
-}
-
-static void
-scsa1394_destroy_cmd_cache(scsa1394_state_t *sp)
-{
-	kmem_cache_destroy(sp->s_cmd_cache);
 }
 
 static int
@@ -1283,7 +1248,6 @@ scsa1394_scsi_init_pkt(struct scsi_address *ap, struct scsi_pkt *pkt,
 	scsa1394_lun_t	*lp;
 	scsa1394_cmd_t	*cmd;
 	boolean_t	is_new;	/* new cmd is being allocated */
-	int		kf = (callback == SLEEP_FUNC) ? KM_SLEEP : KM_NOSLEEP;
 
 	if (ap->a_lun >= sp->s_nluns) {
 		return (NULL);
@@ -1295,36 +1259,17 @@ scsa1394_scsi_init_pkt(struct scsi_address *ap, struct scsi_pkt *pkt,
 	 */
 	if (pkt == NULL) {
 		is_new = B_TRUE;
-		if ((cmd = kmem_cache_alloc(sp->s_cmd_cache, kf)) == NULL) {
+		pkt = scsi_hba_pkt_alloc(NULL, ap, max(SCSI_CDB_SIZE, cmdlen),
+		    statuslen, tgtlen, sizeof (scsa1394_cmd_t), callback, arg);
+		if (!pkt)
 			return (NULL);
-		}
 
 		/* initialize cmd */
-		pkt = &cmd->sc_scsi_pkt;
-		pkt->pkt_ha_private	= cmd;
-		pkt->pkt_address	= *ap;
-		pkt->pkt_private	= cmd->sc_priv;
-		pkt->pkt_scbp		= (uchar_t *)&cmd->sc_scb;
-		pkt->pkt_cdbp		= (uchar_t *)&cmd->sc_pkt_cdb;
-		pkt->pkt_resid		= 0;
-
-		cmd->sc_lun		= lp;
-		cmd->sc_pkt		= pkt;
-		cmd->sc_cdb_len		= cmdlen;
-		cmd->sc_scb_len		= statuslen;
-		cmd->sc_priv_len	= tgtlen;
-
-		/* need external space? */
-		if ((cmdlen > sizeof (cmd->sc_pkt_cdb)) ||
-		    (statuslen > sizeof (cmd->sc_scb)) ||
-		    (tgtlen > sizeof (cmd->sc_priv))) {
-			if (scsa1394_cmd_ext_alloc(sp, cmd, kf) !=
-			    DDI_SUCCESS) {
-				kmem_cache_free(sp->s_cmd_cache, cmd);
-				lp->l_stat.stat_err_pkt_kmem_alloc++;
-				return (NULL);
-			}
-		}
+		cmd = pkt->pkt_ha_private;
+		cmd->sc_lun = lp;
+		cmd->sc_pkt = pkt;
+		cmd->sc_orig_cdblen = cmdlen;
+		cmd->sc_task.ts_drv_priv = cmd;
 
 		/* allocate DMA resources for CDB */
 		if (scsa1394_cmd_cdb_dma_alloc(sp, cmd, flags, callback, arg) !=
@@ -1389,11 +1334,8 @@ scsa1394_scsi_destroy_pkt(struct scsi_address *ap, struct scsi_pkt *pkt)
 		bp_mapout(cmd->sc_bp);
 		cmd->sc_flags &= ~SCSA1394_CMD_DMA_BUF_MAPIN;
 	}
-	if (cmd->sc_flags & SCSA1394_CMD_EXT) {
-		scsa1394_cmd_ext_free(sp, cmd);
-	}
 
-	kmem_cache_free(sp->s_cmd_cache, cmd);
+	scsi_hba_pkt_free(ap, pkt);
 }
 
 static void
@@ -1409,81 +1351,6 @@ scsa1394_scsi_dmafree(struct scsi_address *ap, struct scsi_pkt *pkt)
 		bp_mapout(cmd->sc_bp);
 		cmd->sc_flags &= ~SCSA1394_CMD_DMA_BUF_MAPIN;
 	}
-}
-
-/*ARGSUSED*/
-static int
-scsa1394_cmd_cache_constructor(void *buf, void *cdrarg, int kf)
-{
-	scsa1394_cmd_t	*cmd = buf;
-
-	bzero(buf, SCSA1394_CMD_SIZE);
-	cmd->sc_task.ts_drv_priv = cmd;
-
-	return (0);
-}
-
-/*ARGSUSED*/
-static void
-scsa1394_cmd_cache_destructor(void *buf, void *cdrarg)
-{
-}
-
-/*
- * allocate and deallocate external cmd space (ie. not part of scsa1394_cmd_t)
- * for non-standard length cdb, pkt_private, status areas
- */
-static int
-scsa1394_cmd_ext_alloc(scsa1394_state_t *sp, scsa1394_cmd_t *cmd, int kf)
-{
-	struct scsi_pkt	*pkt = cmd->sc_pkt;
-	void		*buf;
-
-	if (cmd->sc_cdb_len > sizeof (cmd->sc_pkt_cdb)) {
-		if ((buf = kmem_zalloc(cmd->sc_cdb_len, kf)) == NULL) {
-			return (DDI_FAILURE);
-		}
-		pkt->pkt_cdbp = buf;
-		cmd->sc_flags |= SCSA1394_CMD_CDB_EXT;
-	}
-
-	if (cmd->sc_scb_len > sizeof (cmd->sc_scb)) {
-		if ((buf = kmem_zalloc(cmd->sc_scb_len, kf)) == NULL) {
-			scsa1394_cmd_ext_free(sp, cmd);
-			return (DDI_FAILURE);
-		}
-		pkt->pkt_scbp = buf;
-		cmd->sc_flags |= SCSA1394_CMD_SCB_EXT;
-	}
-
-	if (cmd->sc_priv_len > sizeof (cmd->sc_priv)) {
-		if ((buf = kmem_zalloc(cmd->sc_priv_len, kf)) == NULL) {
-			scsa1394_cmd_ext_free(sp, cmd);
-			return (DDI_FAILURE);
-		}
-		pkt->pkt_private = buf;
-		cmd->sc_flags |= SCSA1394_CMD_PRIV_EXT;
-	}
-
-	return (DDI_SUCCESS);
-}
-
-/*ARGSUSED*/
-static void
-scsa1394_cmd_ext_free(scsa1394_state_t *sp, scsa1394_cmd_t *cmd)
-{
-	struct scsi_pkt	*pkt = cmd->sc_pkt;
-
-	if (cmd->sc_flags & SCSA1394_CMD_CDB_EXT) {
-		kmem_free(pkt->pkt_cdbp, cmd->sc_cdb_len);
-	}
-	if (cmd->sc_flags & SCSA1394_CMD_SCB_EXT) {
-		kmem_free(pkt->pkt_scbp, cmd->sc_scb_len);
-	}
-	if (cmd->sc_flags & SCSA1394_CMD_PRIV_EXT) {
-		kmem_free(pkt->pkt_private, cmd->sc_priv_len);
-	}
-	cmd->sc_flags &= ~SCSA1394_CMD_EXT;
 }
 
 /*ARGSUSED*/
@@ -2041,8 +1908,6 @@ scsa1394_prepare_pkt(scsa1394_state_t *sp, struct scsi_pkt *pkt)
 static void
 scsa1394_cmd_fill_cdb(scsa1394_lun_t *lp, scsa1394_cmd_t *cmd)
 {
-	cmd->sc_cdb_actual_len = cmd->sc_cdb_len;
-
 	mutex_enter(&lp->l_mutex);
 
 	switch (lp->l_dtype_orig) {
@@ -2080,13 +1945,13 @@ scsa1394_cmd_fill_cdb_rbc(scsa1394_lun_t *lp, scsa1394_cmd_t *cmd)
 		lba = SCSA1394_LBA_6BYTE(pkt);
 		len = SCSA1394_LEN_6BYTE(pkt);
 		opcode = SCMD_READ_G1;
-		cmd->sc_cdb_actual_len = CDB_GROUP1;
+		cmd->sc_orig_cdblen = CDB_GROUP1;
 		break;
 	case SCMD_WRITE:
 		lba = SCSA1394_LBA_6BYTE(pkt);
 		len = SCSA1394_LEN_6BYTE(pkt);
 		opcode = SCMD_WRITE_G1;
-		cmd->sc_cdb_actual_len = CDB_GROUP1;
+		cmd->sc_orig_cdblen = CDB_GROUP1;
 		break;
 	case SCMD_READ_G1:
 	case SCMD_READ_LONG:
@@ -2145,18 +2010,13 @@ scsa1394_cmd_fill_cdb_rbc(scsa1394_lun_t *lp, scsa1394_cmd_t *cmd)
 		 * Build new cdb from scatch.
 		 * The lba and length fields is updated below.
 		 */
-		bzero(cmd->sc_cdb, cmd->sc_cdb_actual_len);
+		bzero(pkt->pkt_cdbp, cmd->sc_orig_cdblen);
 		break;
 	default:
-		/*
-		 * Copy the non lba/len fields.
-		 * The lba and length fields is updated below.
-		 */
-		bcopy(pkt->pkt_cdbp, cmd->sc_cdb, cmd->sc_cdb_actual_len);
 		break;
 	}
 
-	cmd->sc_cdb[0] = (uchar_t)opcode;
+	pkt->pkt_cdbp[0] = (uchar_t)opcode;
 	scsa1394_cmd_fill_cdb_lba(cmd, lba);
 	switch (opcode) {
 	case SCMD_READ_CD:
@@ -2176,14 +2036,10 @@ scsa1394_cmd_fill_cdb_rbc(scsa1394_lun_t *lp, scsa1394_cmd_t *cmd)
 static void
 scsa1394_cmd_fill_cdb_other(scsa1394_lun_t *lp, scsa1394_cmd_t *cmd)
 {
-	struct scsi_pkt	*pkt = CMD2PKT(cmd);
-
 	cmd->sc_xfer_bytes = cmd->sc_win_len;
 	cmd->sc_xfer_blks = cmd->sc_xfer_bytes / lp->l_lba_size;
 	cmd->sc_total_blks = cmd->sc_xfer_blks;
 	cmd->sc_lba = 0;
-
-	bcopy(pkt->pkt_cdbp, cmd->sc_cdb, cmd->sc_cdb_len);
 }
 
 /*
@@ -2192,35 +2048,43 @@ scsa1394_cmd_fill_cdb_other(scsa1394_lun_t *lp, scsa1394_cmd_t *cmd)
 static void
 scsa1394_cmd_fill_cdb_len(scsa1394_cmd_t *cmd, int len)
 {
-	cmd->sc_cdb[7] = len >> 8;
-	cmd->sc_cdb[8] = (uchar_t)len;
+	struct scsi_pkt	*pkt = CMD2PKT(cmd);
+
+	pkt->pkt_cdbp[7] = len >> 8;
+	pkt->pkt_cdbp[8] = (uchar_t)len;
 }
 
 static void
 scsa1394_cmd_fill_cdb_lba(scsa1394_cmd_t *cmd, int lba)
 {
-	cmd->sc_cdb[2] = lba >> 24;
-	cmd->sc_cdb[3] = lba >> 16;
-	cmd->sc_cdb[4] = lba >> 8;
-	cmd->sc_cdb[5] = (uchar_t)lba;
+	struct scsi_pkt	*pkt = CMD2PKT(cmd);
+
+	pkt->pkt_cdbp[2] = lba >> 24;
+	pkt->pkt_cdbp[3] = lba >> 16;
+	pkt->pkt_cdbp[4] = lba >> 8;
+	pkt->pkt_cdbp[5] = (uchar_t)lba;
 	cmd->sc_lba = lba;
 }
 
 static void
 scsa1394_cmd_fill_12byte_cdb_len(scsa1394_cmd_t *cmd, int len)
 {
-	cmd->sc_cdb[6] = len >> 24;
-	cmd->sc_cdb[7] = len >> 16;
-	cmd->sc_cdb[8] = len >> 8;
-	cmd->sc_cdb[9] = (uchar_t)len;
+	struct scsi_pkt	*pkt = CMD2PKT(cmd);
+
+	pkt->pkt_cdbp[6] = len >> 24;
+	pkt->pkt_cdbp[7] = len >> 16;
+	pkt->pkt_cdbp[8] = len >> 8;
+	pkt->pkt_cdbp[9] = (uchar_t)len;
 }
 
 static void
 scsa1394_cmd_fill_read_cd_cdb_len(scsa1394_cmd_t *cmd, int len)
 {
-	cmd->sc_cdb[6] = len >> 16;
-	cmd->sc_cdb[7] = len >> 8;
-	cmd->sc_cdb[8] = (uchar_t)len;
+	struct scsi_pkt	*pkt = CMD2PKT(cmd);
+
+	pkt->pkt_cdbp[6] = len >> 16;
+	pkt->pkt_cdbp[7] = len >> 8;
+	pkt->pkt_cdbp[8] = (uchar_t)len;
 }
 
 /*
@@ -2448,7 +2312,7 @@ scsa1394_cmd_adjust_cdb(scsa1394_lun_t *lp, scsa1394_cmd_t *cmd)
 		len = scsa1394_symbios_size_max / cmd->sc_blk_size;
 	}
 
-	switch (cmd->sc_cdb[0]) {
+	switch (cmd->sc_pkt->pkt_cdbp[0]) {
 	case SCMD_READ_CD:
 		scsa1394_cmd_fill_read_cd_cdb_len(cmd, len);
 		break;

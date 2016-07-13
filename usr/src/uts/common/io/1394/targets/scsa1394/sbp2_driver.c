@@ -557,7 +557,7 @@ scsa1394_sbp2_cmd2orb(scsa1394_lun_t *lp, scsa1394_cmd_t *cmd)
 	bzero(orb->co_cdb, sizeof (orb->co_cdb));
 
 	/* CDB */
-	bcopy(cmd->sc_cdb, orb->co_cdb, cmd->sc_cdb_actual_len);
+	bcopy(cmd->sc_pkt->pkt_cdbp, orb->co_cdb, cmd->sc_orig_cdblen);
 
 	/*
 	 * ORB parameters
@@ -825,7 +825,7 @@ scsa1394_sbp2_status_proc(scsa1394_lun_t *lp, scsa1394_cmd_t *cmd,
 		/* save the command */
 		p = &lp->l_stat.stat_cmd_last_fail[
 		    lp->l_stat.stat_cmd_last_fail_idx][0];
-		bcopy(&pkt->pkt_cdbp[0], p, min(cmd->sc_cdb_len, 16));
+		bcopy(&pkt->pkt_cdbp[0], p, min(cmd->sc_pkt->pkt_cdblen, 16));
 		*(clock_t *)&p[2] = ddi_get_lbolt();
 		lp->l_stat.stat_cmd_last_fail_idx =
 		    (lp->l_stat.stat_cmd_last_fail_idx + 1) %
