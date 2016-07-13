@@ -277,66 +277,72 @@ cpudrv_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 			return (DDI_FAILURE);
 		}
 
-		mutex_init(&cpudsp->lock, NULL, MUTEX_DRIVER, NULL);
-		if (cpudrv_is_enabled(cpudsp)) {
-			if (cpudrv_init(cpudsp) != DDI_SUCCESS) {
-				cpudrv_enabled = B_FALSE;
-				cpudrv_free(cpudsp);
-				ddi_soft_state_free(cpudrv_state, instance);
-				return (DDI_FAILURE);
-			}
-			if (cpudrv_comp_create(cpudsp) != DDI_SUCCESS) {
-				cpudrv_enabled = B_FALSE;
-				cpudrv_free(cpudsp);
-				ddi_soft_state_free(cpudrv_state, instance);
-				return (DDI_FAILURE);
-			}
-			if (ddi_prop_update_string(DDI_DEV_T_NONE,
-			    dip, "pm-class", "CPU") != DDI_PROP_SUCCESS) {
-				cpudrv_enabled = B_FALSE;
-				cpudrv_free(cpudsp);
-				ddi_soft_state_free(cpudrv_state, instance);
-				return (DDI_FAILURE);
-			}
-
-			/*
-			 * Taskq is used to dispatch routine to monitor CPU
-			 * activities.
-			 */
-			cpudsp->cpudrv_pm.tq = ddi_taskq_create(dip,
-			    "cpudrv_monitor", CPUDRV_TASKQ_THREADS,
-			    TASKQ_DEFAULTPRI, 0);
-
-			mutex_init(&cpudsp->cpudrv_pm.timeout_lock, NULL,
-			    MUTEX_DRIVER, NULL);
-			cv_init(&cpudsp->cpudrv_pm.timeout_cv, NULL,
-			    CV_DEFAULT, NULL);
-
-			/*
-			 * Driver needs to assume that CPU is running at
-			 * unknown speed at DDI_ATTACH and switch it to the
-			 * needed speed. We assume that initial needed speed
-			 * is full speed for us.
-			 */
-			/*
-			 * We need to take the lock because cpudrv_monitor()
-			 * will start running in parallel with attach().
-			 */
-			mutex_enter(&cpudsp->lock);
-			cpudsp->cpudrv_pm.cur_spd = NULL;
-			cpudsp->cpudrv_pm.pm_started = B_FALSE;
-			/*
-			 * We don't call pm_raise_power() directly from attach
-			 * because driver attach for a slave CPU node can
-			 * happen before the CPU is even initialized. We just
-			 * start the monitoring system which understands
-			 * unknown speed and moves CPU to top speed when it
-			 * has been initialized.
-			 */
-			CPUDRV_MONITOR_INIT(cpudsp);
-			mutex_exit(&cpudsp->lock);
-
+		if (!cpudrv_is_enabled(cpudsp)) {
+			cmn_err(CE_WARN, "cpudrv_attach: instance %d: "
+			    "not supported or it got disabled on us",
+			    instance);
+			cpudrv_enabled = B_FALSE;
+			ddi_soft_state_free(cpudrv_state, instance);
+			return (DDI_FAILURE);
 		}
+
+		mutex_init(&cpudsp->lock, NULL, MUTEX_DRIVER, NULL);
+		if (cpudrv_init(cpudsp) != DDI_SUCCESS) {
+			cpudrv_enabled = B_FALSE;
+			cpudrv_free(cpudsp);
+			ddi_soft_state_free(cpudrv_state, instance);
+			return (DDI_FAILURE);
+		}
+		if (cpudrv_comp_create(cpudsp) != DDI_SUCCESS) {
+			cpudrv_enabled = B_FALSE;
+			cpudrv_free(cpudsp);
+			ddi_soft_state_free(cpudrv_state, instance);
+			return (DDI_FAILURE);
+		}
+		if (ddi_prop_update_string(DDI_DEV_T_NONE,
+		    dip, "pm-class", "CPU") != DDI_PROP_SUCCESS) {
+			cpudrv_enabled = B_FALSE;
+			cpudrv_free(cpudsp);
+			ddi_soft_state_free(cpudrv_state, instance);
+			return (DDI_FAILURE);
+		}
+
+		/*
+		 * Taskq is used to dispatch routine to monitor CPU
+		 * activities.
+		 */
+		cpudsp->cpudrv_pm.tq = ddi_taskq_create(dip,
+		    "cpudrv_monitor", CPUDRV_TASKQ_THREADS,
+		    TASKQ_DEFAULTPRI, 0);
+
+		mutex_init(&cpudsp->cpudrv_pm.timeout_lock, NULL,
+		    MUTEX_DRIVER, NULL);
+		cv_init(&cpudsp->cpudrv_pm.timeout_cv, NULL,
+		    CV_DEFAULT, NULL);
+
+		/*
+		 * Driver needs to assume that CPU is running at
+		 * unknown speed at DDI_ATTACH and switch it to the
+		 * needed speed. We assume that initial needed speed
+		 * is full speed for us.
+		 */
+		/*
+		 * We need to take the lock because cpudrv_monitor()
+		 * will start running in parallel with attach().
+		 */
+		mutex_enter(&cpudsp->lock);
+		cpudsp->cpudrv_pm.cur_spd = NULL;
+		cpudsp->cpudrv_pm.pm_started = B_FALSE;
+		/*
+		 * We don't call pm_raise_power() directly from attach
+		 * because driver attach for a slave CPU node can
+		 * happen before the CPU is even initialized. We just
+		 * start the monitoring system which understands
+		 * unknown speed and moves CPU to top speed when it
+		 * has been initialized.
+		 */
+		CPUDRV_MONITOR_INIT(cpudsp);
+		mutex_exit(&cpudsp->lock);
 
 		if (!cpudrv_mach_init(cpudsp)) {
 			cmn_err(CE_WARN, "cpudrv_attach: instance %d: "
