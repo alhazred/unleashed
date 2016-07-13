@@ -340,6 +340,21 @@ __ATOMIC_OPXX(atomic_and_ulong_nv,  atomic_cas_ulong,  &, ulong_t)
 
 #undef __ATOMIC_OPXX
 
+#define	__ATOMIC_OPXX(fxn, inst)					\
+extern __GNU_INLINE void						\
+fxn(void)								\
+{									\
+	__asm__ __volatile__(inst);					\
+}
+
+__ATOMIC_OP64(membar_enter,    "mfence")
+__ATOMIC_OP64(membar_exit,     "mfence")
+__ATOMIC_OP64(membar_sync,     "mfence")
+__ATOMIC_OP64(membar_producer, "sfence")
+__ATOMIC_OP64(membar_consumer, "lfence")
+
+#undef __ATOMIC_OPXX
+
 #else
 #error	"port me"
 #endif
