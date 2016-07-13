@@ -176,8 +176,6 @@ typedef struct {
 	uint64_t	size;			/* Size of range */
 } rd_existing_t;
 
-#define	RD_WINDOW_NOT_MAPPED	1	/* Valid window is on page boundary */
-
 struct rd_ops;
 
 /*
@@ -203,14 +201,13 @@ typedef struct rd_devstate {
 	rd_existing_t	*rd_existing;
 	pgcnt_t		rd_npages;		/* # physical pages */
 	page_t		**rd_ppa;
+
 	/*
-	 * Fields describing a virtual window onto the physical ramdisk,
-	 * giving the offset within the ramdisk of the window, its size,
-	 * and its virtual address (in the kernel heap).
+	 * The virtual address passed in when the ramdisk was created.  This
+	 * is only used by virtual OBP-created ramdisks.
 	 */
-	offset_t	rd_window_base;
-	uint64_t	rd_window_size;
-	caddr_t		rd_window_virt;
+	caddr_t		rd_obp_virt;
+
 	/*
 	 * Fields to count opens/closes of the ramdisk.
 	 */

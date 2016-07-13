@@ -95,12 +95,19 @@
 #include <sys/ramdisk.h>
 #include <vm/seg_kmem.h>
 
+struct rd_map {
+	caddr_t vaddr;		/* window base address */
+	size_t size;		/* size of the virtual window */
+	offset_t base;		/* device offset */
+	pfn_t pfn;		/* physical "address" */
+	boolean_t mapped;	/* is the rest of this struct valid? */
+};
+
 struct rd_ops {
 	int (*alloc)(rd_devstate_t *);
 	void (*dealloc)(rd_devstate_t *);
-	void (*map)(rd_devstate_t *, off_t);
-	void (*unmap)(rd_devstate_t *);
-	boolean_t alloc_window;
+	void (*map)(rd_devstate_t *, off_t, struct rd_map *);
+	void (*unmap)(rd_devstate_t *, struct rd_map *);
 };
 
 /*
@@ -415,42 +422,55 @@ rd_phys_free(page_t **ppa, pgcnt_t npages)
  * Remove a window mapping (if present).
  */
 static void
-rdop_unmap_physical(rd_devstate_t *rsp)
+rdop_unmap_physical(rd_devstate_t *rsp, struct rd_map *map)
 {
-	hat_unload(kas.a_hat, rsp->rd_window_virt, rsp->rd_window_size,
-	    HAT_UNLOAD_UNLOCK);
+	hat_unload(kas.a_hat, map->vaddr, map->size, HAT_UNLOAD_UNLOCK);
+	vmem_free(heap_arena, map->vaddr, map->size);
 }
 
 static void
-rdop_unmap_pseudo(rd_devstate_t *rsp)
+rdop_unmap_pseudo(rd_devstate_t *rsp, struct rd_map *map)
 {
-	hat_unload(kas.a_hat, rsp->rd_window_virt, rsp->rd_window_size,
-	    HAT_UNLOAD_UNLOCK);
+	hat_unload(kas.a_hat, map->vaddr, map->size, HAT_UNLOAD_UNLOCK);
+	vmem_free(heap_arena, map->vaddr, map->size);
 }
 
 static void
-rdop_unmap(rd_devstate_t *rsp)
+rdop_unmap(rd_devstate_t *rsp, struct rd_map *map)
 {
-	if (rsp->rd_window_base == RD_WINDOW_NOT_MAPPED)
+	if (!map->mapped)
 		return;
 
 	if (rsp->rd_ops->unmap)
-		rsp->rd_ops->unmap(rsp);
+		rsp->rd_ops->unmap(rsp, map);
+
+	map->mapped = B_FALSE;
 }
 
 /*
  * Map a portion of the ramdisk into the virtual window.
  */
 static void
-rdop_map_virtual(rd_devstate_t *rsp, off_t offset)
+rdop_map_virtual(rd_devstate_t *rsp, off_t offset, struct rd_map *map)
 {
+	/*
+	 * The whole range is already mapped.
+	 */
+	map->base   = 0;
+	map->size   = rsp->rd_size;
+	map->vaddr  = rsp->rd_obp_virt;
+	map->mapped = B_TRUE;
 }
 
 static void
-rdop_map_physical(rd_devstate_t *rsp, off_t offset)
+rdop_map_physical(rd_devstate_t *rsp, off_t offset, struct rd_map *map)
 {
-	uint_t	i;
-	pfn_t	pfn;
+	pgcnt_t offpgs = btop(offset);
+	caddr_t vaddr;
+	uint_t i;
+
+	map->base = ptob(offpgs);
+	map->size = PAGESIZE;
 
 	/*
 	 * Physical ramdisk: locate the physical range which contains this
@@ -464,69 +484,63 @@ rdop_map_physical(rd_devstate_t *rsp, off_t offset)
 	}
 	ASSERT3U(i, <, rsp->rd_nexisting);
 
+	map->pfn = btop(rsp->rd_existing[i].phys + offset);
+
 	/*
 	 * Load the mapping.
 	 */
-	pfn = btop(rsp->rd_existing[i].phys + offset);
-	hat_devload(kas.a_hat, rsp->rd_window_virt, rsp->rd_window_size,
-	    pfn, (PROT_READ | PROT_WRITE),
+	vaddr = vmem_alloc(heap_arena, map->size, VM_SLEEP);
+
+	/* XXX: support more than 1 page map */
+	hat_devload(kas.a_hat, vaddr, map->size, map->pfn,
+	    PROT_READ | PROT_WRITE,
 	    HAT_LOAD_NOCONSIST | HAT_LOAD_LOCK);
+
+	map->vaddr = vaddr;
+	map->mapped = B_TRUE;
 }
 
 static void
-rdop_map_pseudo(rd_devstate_t *rsp, off_t offset)
+rdop_map_pseudo(rd_devstate_t *rsp, off_t offset, struct rd_map *map)
 {
 	pgcnt_t	offpgs = btop(offset);
-	pgcnt_t	pi, lastpi;
 	caddr_t	vaddr;
 
-	/*
-	 * Find the range of pages which should be mapped.
-	 */
-	pi = offpgs;
-	lastpi = pi + btopr(rsp->rd_window_size);
-	if (lastpi > rsp->rd_npages)
-		lastpi = rsp->rd_npages;
+	map->base = ptob(offpgs);
+	map->size = PAGESIZE;
 
 	/*
 	 * Load the mapping.
 	 */
-	vaddr = rsp->rd_window_virt;
-	for (; pi < lastpi; ++pi) {
-		hat_memload(kas.a_hat, vaddr, rsp->rd_ppa[pi],
-		    (PROT_READ | PROT_WRITE) | HAT_NOSYNC,
-		    HAT_LOAD_LOCK);
-		vaddr += ptob(1);
-	}
+	vaddr = vmem_alloc(heap_arena, map->size, VM_SLEEP);
+
+	/* XXX: support more than 1 page map */
+	hat_memload(kas.a_hat, vaddr, rsp->rd_ppa[offpgs],
+	    PROT_READ | PROT_WRITE | HAT_NOSYNC, HAT_LOAD_LOCK);
+
+	map->vaddr = vaddr;
+	map->mapped = B_TRUE;
 }
 
 static void
-rdop_map(rd_devstate_t *rsp, off_t offset)
+rdop_map(rd_devstate_t *rsp, off_t offset, struct rd_map *map)
 {
-	pgcnt_t	offpgs = btop(offset);
-
-	/*
-	 * Virtual ramdisks are already entirely mapped in so this function
-	 * turns into a one big no-op.
-	 */
-
-	if (rsp->rd_window_base != RD_WINDOW_NOT_MAPPED) {
+	if (map->mapped) {
 		/*
 		 * Already mapped; is offset within our window?
 		 */
-		if (offset >= rsp->rd_window_base &&
-		    offset < rsp->rd_window_base + rsp->rd_window_size) {
+		if (offset >= map->base && offset < map->base + map->size)
 			return;
-		}
 
 		/*
 		 * No, we need to re-map; toss the old mapping.
 		 */
-		rdop_unmap(rsp);
+		rdop_unmap(rsp, map);
 	}
-	rsp->rd_window_base = ptob(offpgs);
 
-	rsp->rd_ops->map(rsp, offset);
+	ASSERT3U(map->mapped, ==, B_FALSE);
+
+	rsp->rd_ops->map(rsp, offset, map);
 }
 
 static int
@@ -615,7 +629,6 @@ static const struct rd_ops rd_virtual_ops = {
 };
 
 static const struct rd_ops rd_physical_ops = {
-	.alloc_window	= B_TRUE,
 	.alloc		= rdop_alloc_obp,
 	.dealloc	= rdop_dealloc_obp,
 	.map		= rdop_map_physical,
@@ -623,7 +636,6 @@ static const struct rd_ops rd_physical_ops = {
 };
 
 static const struct rd_ops rd_pseudo_ops = {
-	.alloc_window	= B_TRUE,
 	.alloc		= rdop_alloc_pseudo,
 	.dealloc	= rdop_dealloc_pseudo,
 	.map		= rdop_map_pseudo,
@@ -731,11 +743,6 @@ rd_dealloc_resources(rd_devstate_t *rsp)
 
 	mutex_destroy(&rsp->rd_device_lock);
 
-	if (rsp->rd_ops != &rd_virtual_ops && rsp->rd_window_virt != NULL) {
-		rdop_unmap(rsp);
-		vmem_free(heap_arena, rsp->rd_window_virt, rsp->rd_window_size);
-	}
-
 	if (rsp->rd_existing)
 		ddi_prop_free(rsp->rd_existing);
 
@@ -787,25 +794,9 @@ rd_alloc_resources(char *name, const struct rd_ops *ops, uint_t addr,
 	rsp->rd_minor = minor;
 	rsp->rd_size = size;
 	rsp->rd_ops = ops;
+	rsp->rd_obp_virt = (caddr_t)(ulong_t)addr;
 
 	mutex_init(&rsp->rd_device_lock, NULL, MUTEX_DRIVER, NULL);
-
-	/*
-	 * Allocate virtual window onto ramdisk.
-	 */
-	if (ops->alloc_window) {
-		rsp->rd_window_base = RD_WINDOW_NOT_MAPPED;
-		rsp->rd_window_size = PAGESIZE;
-		rsp->rd_window_virt = vmem_alloc(heap_arena,
-		    rsp->rd_window_size, VM_SLEEP);
-		if (rsp->rd_window_virt == NULL)
-			goto create_failed;
-	} else {
-		ASSERT3U(addr, !=, 0);
-		rsp->rd_window_base = 0;
-		rsp->rd_window_size = size;
-		rsp->rd_window_virt = (caddr_t)((ulong_t)addr);
-	}
 
 	/*
 	 * Allocate physical memory for non-OBP ramdisks.
@@ -1153,8 +1144,11 @@ rd_minphys(struct buf *bp)
 static void
 rd_rw(rd_devstate_t *rsp, struct buf *bp, offset_t offset, size_t nbytes)
 {
-	int	reading = bp->b_flags & B_READ;
+	const int reading = bp->b_flags & B_READ;
+	struct rd_map map;
 	caddr_t	buf_addr;
+
+	map.mapped = B_FALSE;
 
 	bp_mapin(bp);
 	buf_addr = bp->b_un.b_addr;
@@ -1164,15 +1158,15 @@ rd_rw(rd_devstate_t *rsp, struct buf *bp, offset_t offset, size_t nbytes)
 		size_t		rem_in_window, copy_bytes;
 		caddr_t		raddr;
 
-		mutex_enter(&rsp->rd_device_lock);
-		rdop_map(rsp, offset);
+		rdop_map(rsp, offset, &map);
 
-		off_in_window = offset - rsp->rd_window_base;
-		rem_in_window = rsp->rd_window_size - off_in_window;
+		off_in_window = offset - map.base;
+		rem_in_window = map.size - off_in_window;
 
-		raddr = rsp->rd_window_virt + off_in_window;
+		raddr = map.vaddr + off_in_window;
 		copy_bytes = MIN(nbytes, rem_in_window);
 
+		mutex_enter(&rsp->rd_device_lock);
 		if (reading) {
 			(void) bcopy(raddr, buf_addr, copy_bytes);
 		} else {
@@ -1184,6 +1178,8 @@ rd_rw(rd_devstate_t *rsp, struct buf *bp, offset_t offset, size_t nbytes)
 		buf_addr += copy_bytes;
 		nbytes   -= copy_bytes;
 	}
+
+	rdop_unmap(rsp, &map);
 }
 
 /*
