@@ -21,12 +21,11 @@
 /*
  * Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ * Copyright 2015 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  */
 
 #ifndef	_SYS_RAMDISK_H
 #define	_SYS_RAMDISK_H
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <sys/types.h>
 #include <sys/time.h>
@@ -159,9 +158,12 @@ struct rd_ioctl {
 #define	RD_DEFAULT_MAXPHYS	(63 * 1024)	/* '126b' */
 
 /*
- * A real OBP-created ramdisk consists of one or more physical address
+ * A physical OBP-created ramdisk consists of one or more physical address
  * ranges; these are described by the 'existing' property, whose value
  * is a (corresponding) number of {phys,size} pairs.
+ *
+ * A virtual OBP-created ramdisk consists of exactly one virtual address
+ * range; this is described by the 'address' and 'size' properties.
  */
 #define	OBP_EXISTING_PROP_NAME	"existing"
 #define	OBP_ADDRESS_PROP_NAME	"address"
@@ -174,8 +176,9 @@ typedef struct {
 	uint64_t	size;			/* Size of range */
 } rd_existing_t;
 
-
 #define	RD_WINDOW_NOT_MAPPED	1	/* Valid window is on page boundary */
+
+struct rd_ops;
 
 /*
  * The entire state of each ramdisk device.  The rd_dip field will reference
@@ -188,9 +191,12 @@ typedef struct rd_devstate {
 	dev_info_t	*rd_dip;		/* My devinfo handle */
 	minor_t		rd_minor;		/* Full minor number */
 	size_t		rd_size;		/* Size in bytes */
+
+	const struct rd_ops	*rd_ops;
+
 	/*
 	 * {rd_nexisting, rd_existing} and {rd_npages, rd_ppa} are
-	 * mutually exclusive; the former describe an OBP-created
+	 * mutually exclusive; the former describe an physical OBP-created
 	 * ramdisk, the latter a 'pseudo' ramdisk.
 	 */
 	uint_t		rd_nexisting;		/* # 'existing' structs */
@@ -202,7 +208,6 @@ typedef struct rd_devstate {
 	 * giving the offset within the ramdisk of the window, its size,
 	 * and its virtual address (in the kernel heap).
 	 */
-	uint_t		rd_window_obp;		/* using OBP's vaddr */
 	offset_t	rd_window_base;
 	uint64_t	rd_window_size;
 	caddr_t		rd_window_virt;

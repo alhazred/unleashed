@@ -21,26 +21,37 @@
 /*
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ * Copyright 2015 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  */
 
 
 /*
  * Ramdisk device driver.
  *
- * There are two types of ramdisk: 'real' OBP-created ramdisks, and 'pseudo'
- * ramdisks created at runtime with no corresponding OBP device node.  The
- * ramdisk(7D) driver is capable of dealing with both, and with the creation
- * and deletion of 'pseudo' ramdisks.
+ * There are three types of ramdisk:
+ *
+ * (1) 'virtual' OBP-created ramdisks created with "address" and "size"
+ *     properties describing the virtual address range used by the ramdisk
+ *     (used on SPARC during boot),
+ * (2) 'physical' OBP-created ramdisks created with an "existing" property
+ *     describing a scather-gather list physical address ranges used by the
+ *     ramdisk (used on x86 for ramdisk-based root),
+ * (3) 'pseudo' ramdisks created at runtime backed by an explicit list of
+ *     pages.
+ *
+ * Unlike virtual and physical ramdisks, pseudo ramdisks have no
+ * corresponding OBP device node.  The ramdisk(7D) driver is capable of
+ * dealing with all three, including with the creation and deletion of
+ * 'pseudo' ramdisks.
  *
  * Every ramdisk has a single 'state' structure which maintains data for
  * that ramdisk, and is assigned a single minor number.  The bottom 10-bits
  * of the minor number index the state structures; the top 8-bits give a
- * 'real OBP disk' number, i.e. they are zero for 'pseudo' ramdisks.  Thus
- * it is possible to distinguish 'real' from 'pseudo' ramdisks using the
- * top 8-bits of the minor number.
+ * OBP-disk number, i.e. they are zero for 'pseudo' ramdisks.
  *
- * Each OBP-created ramdisk has its own node in the device tree with an
- * "existing" property which describes the one-or-more physical address ranges
+ * Each OBP-created ramdisk (i.e., virtual or physical) has its own node in
+ * the device tree with an "address" and "size" (for virtual ramdisks) or
+ * "existing" (for physical ramdisks) properties which describe the memory
  * assigned to the ramdisk.  All 'pseudo' ramdisks share a common devinfo
  * structure.
  *
@@ -83,6 +94,14 @@
 #include <sys/sunddi.h>
 #include <sys/ramdisk.h>
 #include <vm/seg_kmem.h>
+
+struct rd_ops {
+	int (*alloc)(rd_devstate_t *);
+	void (*dealloc)(rd_devstate_t *);
+	void (*map)(rd_devstate_t *, off_t);
+	void (*unmap)(rd_devstate_t *);
+	boolean_t alloc_window;
+};
 
 /*
  * Flag to disable the use of real ramdisks (in the OBP - on Sparc) when
@@ -181,8 +200,8 @@ rd_find_named_disk(char *name)
 }
 
 /*
- * Locate the rd_devstate for the real OBP-created ramdisk whose devinfo
- * is referenced by 'dip'; returns NULL if not found (shouldn't happen).
+ * Locate the rd_devstate for the OBP-created ramdisk whose devinfo is
+ * referenced by 'dip'; returns NULL if not found (shouldn't happen).
  */
 static rd_devstate_t *
 rd_find_dip_state(dev_info_t *dip)
@@ -305,7 +324,7 @@ rd_init_tuneables(void)
  * array of page_t * pointers that can later be mapped in or out via
  * rd_{un}map_window() but is otherwise opaque, or NULL on failure.
  */
-page_t **
+static page_t **
 rd_phys_alloc(pgcnt_t npages)
 {
 	page_t		*pp, **ppa;
@@ -396,22 +415,100 @@ rd_phys_free(page_t **ppa, pgcnt_t npages)
  * Remove a window mapping (if present).
  */
 static void
-rd_unmap_window(rd_devstate_t *rsp)
+rdop_unmap_physical(rd_devstate_t *rsp)
 {
-	ASSERT(rsp->rd_window_obp == 0);
-	if (rsp->rd_window_base != RD_WINDOW_NOT_MAPPED) {
-		hat_unload(kas.a_hat, rsp->rd_window_virt, rsp->rd_window_size,
-		    HAT_UNLOAD_UNLOCK);
-	}
+	hat_unload(kas.a_hat, rsp->rd_window_virt, rsp->rd_window_size,
+	    HAT_UNLOAD_UNLOCK);
+}
+
+static void
+rdop_unmap_pseudo(rd_devstate_t *rsp)
+{
+	hat_unload(kas.a_hat, rsp->rd_window_virt, rsp->rd_window_size,
+	    HAT_UNLOAD_UNLOCK);
+}
+
+static void
+rdop_unmap(rd_devstate_t *rsp)
+{
+	if (rsp->rd_window_base == RD_WINDOW_NOT_MAPPED)
+		return;
+
+	if (rsp->rd_ops->unmap)
+		rsp->rd_ops->unmap(rsp);
 }
 
 /*
  * Map a portion of the ramdisk into the virtual window.
  */
 static void
-rd_map_window(rd_devstate_t *rsp, off_t offset)
+rdop_map_virtual(rd_devstate_t *rsp, off_t offset)
+{
+}
+
+static void
+rdop_map_physical(rd_devstate_t *rsp, off_t offset)
+{
+	uint_t	i;
+	pfn_t	pfn;
+
+	/*
+	 * Physical ramdisk: locate the physical range which contains this
+	 * offset.
+	 */
+	for (i = 0; i < rsp->rd_nexisting; ++i) {
+		if (offset < rsp->rd_existing[i].size)
+			break;
+
+		offset -= rsp->rd_existing[i].size;
+	}
+	ASSERT3U(i, <, rsp->rd_nexisting);
+
+	/*
+	 * Load the mapping.
+	 */
+	pfn = btop(rsp->rd_existing[i].phys + offset);
+	hat_devload(kas.a_hat, rsp->rd_window_virt, rsp->rd_window_size,
+	    pfn, (PROT_READ | PROT_WRITE),
+	    HAT_LOAD_NOCONSIST | HAT_LOAD_LOCK);
+}
+
+static void
+rdop_map_pseudo(rd_devstate_t *rsp, off_t offset)
 {
 	pgcnt_t	offpgs = btop(offset);
+	pgcnt_t	pi, lastpi;
+	caddr_t	vaddr;
+
+	/*
+	 * Find the range of pages which should be mapped.
+	 */
+	pi = offpgs;
+	lastpi = pi + btopr(rsp->rd_window_size);
+	if (lastpi > rsp->rd_npages)
+		lastpi = rsp->rd_npages;
+
+	/*
+	 * Load the mapping.
+	 */
+	vaddr = rsp->rd_window_virt;
+	for (; pi < lastpi; ++pi) {
+		hat_memload(kas.a_hat, vaddr, rsp->rd_ppa[pi],
+		    (PROT_READ | PROT_WRITE) | HAT_NOSYNC,
+		    HAT_LOAD_LOCK);
+		vaddr += ptob(1);
+	}
+}
+
+static void
+rdop_map(rd_devstate_t *rsp, off_t offset)
+{
+	pgcnt_t	offpgs = btop(offset);
+
+	/*
+	 * Virtual ramdisks are already entirely mapped in so this function
+	 * turns into a one big no-op.
+	 */
 
 	if (rsp->rd_window_base != RD_WINDOW_NOT_MAPPED) {
 		/*
@@ -425,62 +522,113 @@ rd_map_window(rd_devstate_t *rsp, off_t offset)
 		/*
 		 * No, we need to re-map; toss the old mapping.
 		 */
-		rd_unmap_window(rsp);
+		rdop_unmap(rsp);
 	}
 	rsp->rd_window_base = ptob(offpgs);
 
-	/*
-	 * Different algorithms depending on whether this is a real
-	 * OBP-created ramdisk, or a pseudo ramdisk.
-	 */
-	if (rsp->rd_dip == rd_dip) {
-		pgcnt_t	pi, lastpi;
-		caddr_t	vaddr;
-
-		/*
-		 * Find the range of pages which should be mapped.
-		 */
-		pi = offpgs;
-		lastpi = pi + btopr(rsp->rd_window_size);
-		if (lastpi > rsp->rd_npages) {
-			lastpi = rsp->rd_npages;
-		}
-
-		/*
-		 * Load the mapping.
-		 */
-		vaddr = rsp->rd_window_virt;
-		for (; pi < lastpi; ++pi) {
-			hat_memload(kas.a_hat, vaddr, rsp->rd_ppa[pi],
-			    (PROT_READ | PROT_WRITE) | HAT_NOSYNC,
-			    HAT_LOAD_LOCK);
-			vaddr += ptob(1);
-		}
-	} else {
-		uint_t	i;
-		pfn_t	pfn;
-
-		/*
-		 * Real OBP-created ramdisk: locate the physical range which
-		 * contains this offset.
-		 */
-		for (i = 0; i < rsp->rd_nexisting; ++i) {
-			if (offset < rsp->rd_existing[i].size) {
-				break;
-			}
-			offset -= rsp->rd_existing[i].size;
-		}
-		ASSERT(i < rsp->rd_nexisting);
-
-		/*
-		 * Load the mapping.
-		 */
-		pfn = btop(rsp->rd_existing[i].phys + offset);
-		hat_devload(kas.a_hat, rsp->rd_window_virt, rsp->rd_window_size,
-		    pfn, (PROT_READ | PROT_WRITE),
-		    HAT_LOAD_NOCONSIST | HAT_LOAD_LOCK);
-	}
+	rsp->rd_ops->map(rsp, offset);
 }
+
+static int
+rdop_alloc_obp(rd_devstate_t *rsp)
+{
+	/*
+	 * For OBP-created ramdisks the device nodes are:
+	 *
+	 *	/devices/ramdisk-<diskname>:a
+	 *	/devices/ramdisk-<diskname>:a,raw
+	 */
+	if (ddi_create_minor_node(rsp->rd_dip, "a", S_IFBLK, rsp->rd_minor,
+	    DDI_PSEUDO, 0) == DDI_FAILURE)
+		return (1);
+
+	if (ddi_create_minor_node(rsp->rd_dip, "a,raw", S_IFCHR, rsp->rd_minor,
+	    DDI_PSEUDO, 0) == DDI_FAILURE)
+		return (1);
+
+	return (0);
+}
+
+static int
+rdop_alloc_pseudo(rd_devstate_t *rsp)
+{
+	char namebuf[RD_NAME_LEN + 5];
+
+	rsp->rd_npages = btopr(rsp->rd_size);
+	rsp->rd_ppa = rd_phys_alloc(rsp->rd_npages);
+	if (rsp->rd_ppa == NULL)
+		return (1);
+
+	/*
+	 * For non-OBP ramdisks the device nodes are:
+	 *
+	 *	/devices/pseudo/ramdisk@0:<diskname>
+	 *	/devices/pseudo/ramdisk@0:<diskname>,raw
+	 */
+	(void) snprintf(namebuf, sizeof (namebuf), "%s", rsp->rd_name);
+	if (ddi_create_minor_node(rsp->rd_dip, namebuf, S_IFBLK, rsp->rd_minor,
+	    DDI_PSEUDO, 0) == DDI_FAILURE)
+		return (1);
+
+	(void) snprintf(namebuf, sizeof (namebuf), "%s,raw", rsp->rd_name);
+	if (ddi_create_minor_node(rsp->rd_dip, namebuf, S_IFCHR, rsp->rd_minor,
+	    DDI_PSEUDO, 0) == DDI_FAILURE)
+		return (1);
+
+	return (0);
+}
+
+static int
+rdop_alloc(rd_devstate_t *rsp)
+{
+	return (rsp->rd_ops->alloc(rsp));
+}
+
+static void
+rdop_dealloc_obp(rd_devstate_t *rsp)
+{
+	ddi_remove_minor_node(rsp->rd_dip, "a");
+	ddi_remove_minor_node(rsp->rd_dip, "a,raw");
+}
+
+static void
+rdop_dealloc_pseudo(rd_devstate_t *rsp)
+{
+	char namebuf[RD_NAME_LEN + 5];
+
+	(void) snprintf(namebuf, sizeof (namebuf), "%s", rsp->rd_name);
+	ddi_remove_minor_node(rsp->rd_dip, namebuf);
+	(void) snprintf(namebuf, sizeof (namebuf), "%s,raw", rsp->rd_name);
+	ddi_remove_minor_node(rsp->rd_dip, namebuf);
+}
+
+static void
+rdop_dealloc(rd_devstate_t *rsp)
+{
+	rsp->rd_ops->dealloc(rsp);
+}
+
+static const struct rd_ops rd_virtual_ops = {
+	.alloc		= rdop_alloc_obp,
+	.dealloc	= rdop_dealloc_obp,
+	.map		= rdop_map_virtual,
+};
+
+static const struct rd_ops rd_physical_ops = {
+	.alloc_window	= B_TRUE,
+	.alloc		= rdop_alloc_obp,
+	.dealloc	= rdop_dealloc_obp,
+	.map		= rdop_map_physical,
+	.unmap		= rdop_unmap_physical,
+};
+
+static const struct rd_ops rd_pseudo_ops = {
+	.alloc_window	= B_TRUE,
+	.alloc		= rdop_alloc_pseudo,
+	.dealloc	= rdop_dealloc_pseudo,
+	.map		= rdop_map_pseudo,
+	.unmap		= rdop_unmap_pseudo,
+};
 
 /*
  * Fakes up a disk geometry, and one big partition, based on the size
@@ -579,38 +727,25 @@ static void
 rd_dealloc_resources(rd_devstate_t *rsp)
 {
 	dev_info_t	*dip = rsp->rd_dip;
-	char		namebuf[RD_NAME_LEN + 5];
 	dev_t		fulldev;
 
-	if (rsp->rd_window_obp == 0 && rsp->rd_window_virt != NULL) {
-		if (rsp->rd_window_base != RD_WINDOW_NOT_MAPPED) {
-			rd_unmap_window(rsp);
-		}
-		vmem_free(heap_arena, rsp->rd_window_virt, rsp->rd_window_size);
-	}
 	mutex_destroy(&rsp->rd_device_lock);
 
-	if (rsp->rd_existing) {
+	if (rsp->rd_ops != &rd_virtual_ops && rsp->rd_window_virt != NULL) {
+		rdop_unmap(rsp);
+		vmem_free(heap_arena, rsp->rd_window_virt, rsp->rd_window_size);
+	}
+
+	if (rsp->rd_existing)
 		ddi_prop_free(rsp->rd_existing);
-	}
-	if (rsp->rd_ppa != NULL) {
+
+	if (rsp->rd_ppa != NULL)
 		rd_phys_free(rsp->rd_ppa, rsp->rd_npages);
-	}
 
 	/*
 	 * Remove the block and raw device nodes.
 	 */
-	if (dip == rd_dip) {
-		(void) snprintf(namebuf, sizeof (namebuf), "%s",
-		    rsp->rd_name);
-		ddi_remove_minor_node(dip, namebuf);
-		(void) snprintf(namebuf, sizeof (namebuf), "%s,raw",
-		    rsp->rd_name);
-		ddi_remove_minor_node(dip, namebuf);
-	} else {
-		ddi_remove_minor_node(dip, "a");
-		ddi_remove_minor_node(dip, "a,raw");
-	}
+	rdop_dealloc(rsp);
 
 	/*
 	 * Remove the "Size" and "Nblocks" properties.
@@ -628,15 +763,15 @@ rd_dealloc_resources(rd_devstate_t *rsp)
 }
 
 /*
- * Allocate resources (virtual and physical, device nodes, structures)
- * to a ramdisk.
+ * Allocate resources (virtual and physical memory, device nodes, structures)
+ * for a ramdisk.
  */
 static rd_devstate_t *
-rd_alloc_resources(char *name, uint_t addr, size_t size, dev_info_t *dip)
+rd_alloc_resources(char *name, const struct rd_ops *ops, uint_t addr,
+    size_t size, dev_info_t *dip)
 {
 	minor_t		minor;
 	rd_devstate_t	*rsp;
-	char		namebuf[RD_NAME_LEN + 5];
 	dev_t		fulldev;
 	int64_t		Nblocks_prop_val;
 	int64_t		Size_prop_val;
@@ -651,22 +786,22 @@ rd_alloc_resources(char *name, uint_t addr, size_t size, dev_info_t *dip)
 	rsp->rd_dip = dip;
 	rsp->rd_minor = minor;
 	rsp->rd_size = size;
+	rsp->rd_ops = ops;
+
+	mutex_init(&rsp->rd_device_lock, NULL, MUTEX_DRIVER, NULL);
 
 	/*
 	 * Allocate virtual window onto ramdisk.
 	 */
-	mutex_init(&rsp->rd_device_lock, NULL, MUTEX_DRIVER, NULL);
-	if (addr == 0) {
-		rsp->rd_window_obp = 0;
+	if (ops->alloc_window) {
 		rsp->rd_window_base = RD_WINDOW_NOT_MAPPED;
 		rsp->rd_window_size = PAGESIZE;
 		rsp->rd_window_virt = vmem_alloc(heap_arena,
 		    rsp->rd_window_size, VM_SLEEP);
-		if (rsp->rd_window_virt == NULL) {
+		if (rsp->rd_window_virt == NULL)
 			goto create_failed;
-		}
 	} else {
-		rsp->rd_window_obp = 1;
+		ASSERT3U(addr, !=, 0);
 		rsp->rd_window_base = 0;
 		rsp->rd_window_size = size;
 		rsp->rd_window_virt = (caddr_t)((ulong_t)addr);
@@ -676,47 +811,8 @@ rd_alloc_resources(char *name, uint_t addr, size_t size, dev_info_t *dip)
 	 * Allocate physical memory for non-OBP ramdisks.
 	 * Create pseudo block and raw device nodes.
 	 */
-	if (dip == rd_dip) {
-		rsp->rd_npages = btopr(size);
-		rsp->rd_ppa = rd_phys_alloc(rsp->rd_npages);
-		if (rsp->rd_ppa == NULL) {
-			goto create_failed;
-		}
-
-		/*
-		 * For non-OBP ramdisks the device nodes are:
-		 *
-		 *	/devices/pseudo/ramdisk@0:<diskname>
-		 *	/devices/pseudo/ramdisk@0:<diskname>,raw
-		 */
-		(void) snprintf(namebuf, sizeof (namebuf), "%s",
-		    rsp->rd_name);
-		if (ddi_create_minor_node(dip, namebuf, S_IFBLK, minor,
-		    DDI_PSEUDO, 0) == DDI_FAILURE) {
-			goto create_failed;
-		}
-		(void) snprintf(namebuf, sizeof (namebuf), "%s,raw",
-		    rsp->rd_name);
-		if (ddi_create_minor_node(dip, namebuf, S_IFCHR, minor,
-		    DDI_PSEUDO, 0) == DDI_FAILURE) {
-			goto create_failed;
-		}
-	} else {
-		/*
-		 * For OBP-created ramdisks the device nodes are:
-		 *
-		 *	/devices/ramdisk-<diskname>:a
-		 *	/devices/ramdisk-<diskname>:a,raw
-		 */
-		if (ddi_create_minor_node(dip, "a", S_IFBLK, minor,
-		    DDI_PSEUDO, 0) == DDI_FAILURE) {
-			goto create_failed;
-		}
-		if (ddi_create_minor_node(dip, "a,raw", S_IFCHR, minor,
-		    DDI_PSEUDO, 0) == DDI_FAILURE) {
-			goto create_failed;
-		}
-	}
+	if (rdop_alloc(rsp))
+		goto create_failed;
 
 	/*
 	 * Create the "Size" and "Nblocks" properties.
@@ -777,14 +873,14 @@ rd_common_detach(dev_info_t *dip)
 		rd_dip = NULL;
 	} else {
 		/*
-		 * A 'real' ramdisk; find the state and free resources.
+		 * A non-pseudo ramdisk; find the state and free resources.
 		 */
 		rd_devstate_t	*rsp;
 
-		if ((rsp = rd_find_dip_state(dip)) != NULL) {
+		if ((rsp = rd_find_dip_state(dip)) != NULL)
 			rd_dealloc_resources(rsp);
-		}
 	}
+
 	ddi_remove_minor_node(dip, NULL);
 
 	return (DDI_SUCCESS);
@@ -828,6 +924,8 @@ rd_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 				goto attach_failed;
 			}
 		} else {
+			const struct rd_ops *ops;
+
 #ifdef __sparc
 			if (bootops_obp_ramdisk_disabled)
 				goto attach_failed;
@@ -860,15 +958,18 @@ rd_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 				/*
 				 * Calculate the size of the ramdisk.
 				 */
-				for (i = 0; i < nep; ++i) {
+				for (i = 0; i < nep; ++i)
 					size += ep[i].size;
-				}
+
+				ops = &rd_physical_ops;
 			} else if ((obpaddr = ddi_prop_get_int(DDI_DEV_T_ANY,
 			    dip, DDI_PROP_DONTPASS, OBP_ADDRESS_PROP_NAME,
 			    0)) != 0)  {
 
 				size = ddi_prop_get_int(DDI_DEV_T_ANY, dip,
 				    DDI_PROP_DONTPASS, OBP_SIZE_PROP_NAME, 0);
+
+				ops = &rd_virtual_ops;
 			} else {
 				cmn_err(CE_CONT, "%s: missing OBP properties\n",
 				    name);
@@ -878,10 +979,9 @@ rd_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 			/*
 			 * Allocate driver resources for the ramdisk.
 			 */
-			if ((rsp = rd_alloc_resources(name, obpaddr, size,
-			    dip)) == NULL) {
+			if ((rsp = rd_alloc_resources(name, ops, obpaddr, size,
+			    dip)) == NULL)
 				goto attach_failed;
-			}
 
 			rsp->rd_existing = ep;
 			rsp->rd_nexisting = nep;
@@ -1065,7 +1165,7 @@ rd_rw(rd_devstate_t *rsp, struct buf *bp, offset_t offset, size_t nbytes)
 		caddr_t		raddr;
 
 		mutex_enter(&rsp->rd_device_lock);
-		rd_map_window(rsp, offset);
+		rdop_map(rsp, offset);
 
 		off_in_window = offset - rsp->rd_window_base;
 		rem_in_window = rsp->rd_window_size - off_in_window;
@@ -1205,7 +1305,7 @@ rd_create_disk(dev_t dev, struct rd_ioctl *urip, int mode, int *rvalp)
 		return (EEXIST);
 	}
 
-	rsp = rd_alloc_resources(kri.ri_name, 0, size, rd_dip);
+	rsp = rd_alloc_resources(kri.ri_name, &rd_pseudo_ops, 0, size, rd_dip);
 	if (rsp == NULL) {
 		mutex_exit(&rd_lock);
 		return (EAGAIN);
