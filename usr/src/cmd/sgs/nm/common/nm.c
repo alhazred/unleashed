@@ -356,12 +356,10 @@ main(int argc, char *argv[], char *envp[])
 
 	/*
 	 * If no explicit format style was specified, set the default
-	 * here. In general, the default is for value and size items
-	 * to be displayed in decimal format. The exception is that
-	 * the default for -P is hexidecimal.
+	 * here.
 	 */
 	if (fmt_flag == FMT_T_NONE)
-		fmt_flag = P_flag ? FMT_T_HEX : FMT_T_DEC;
+		fmt_flag = FMT_T_HEX;
 
 
 	while (optind < argc) {
