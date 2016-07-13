@@ -46,6 +46,12 @@
 #include <stdlib.h>
 #include <paths.h>
 
+/*
+ * Passing INHERIT_ENV (which is an invalid pointer) to execvpe causes the
+ * environment to be inherited.  This is *only* an implementation detail.
+ */
+#define	INHERIT_ENV	((char *const *)~0UL)
+
 static const char *execat(const char *, const char *, char *);
 
 extern  int __xpg4;	/* defined in xpg4.c; 0 if not xpg4-compiled program */
@@ -104,7 +110,7 @@ execlp(const char *name, const char *arg0, ...)
 }
 
 int
-execvp(const char *name, char *const *argv)
+execvpe(const char *name, char *const *argv, char *const *envp)
 {
 	const char	*pathstr;
 	char	fname[PATH_MAX+2];
@@ -164,7 +170,10 @@ execvp(const char *name, char *const *argv)
 			fname[0] = '.';
 			fname[1] = '/';
 		}
-		(void) execv(fname, argv);
+		if (envp == INHERIT_ENV)
+			(void) execv(fname, argv);
+		else
+			(void) execve(fname, argv, envp);
 		switch (errno) {
 		case ENOEXEC:
 			newargs[0] = "sh";
@@ -175,7 +184,10 @@ execvp(const char *name, char *const *argv)
 					return (-1);
 				}
 			}
-			(void) execv(_PATH_BSHELL, newargs);
+			if (envp == INHERIT_ENV)
+				(void) execv(_PATH_BSHELL, newargs);
+			else
+				(void) execve(_PATH_BSHELL, newargs, envp);
 			return (-1);
 		case ETXTBSY:
 			if (++etxtbsy > 5)
@@ -194,6 +206,12 @@ execvp(const char *name, char *const *argv)
 	if (eacces)
 		errno = EACCES;
 	return (-1);
+}
+
+int
+execvp(const char *name, char *const *argv)
+{
+	return execvpe(name, argv, INHERIT_ENV);
 }
 
 static const char *

@@ -2942,6 +2942,7 @@ $endif
 	_doscan;
 	_errfp;
 	_errxfp;
+	execvpe;
 	exportfs;
 	_F_cplx_div;
 	_F_cplx_div_ix;
