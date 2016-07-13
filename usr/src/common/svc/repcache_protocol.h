@@ -761,7 +761,7 @@ struct rep_protocol_transaction_cmd {
 #define	REP_PROTOCOL_TRANSACTION_CMD_MIN_SIZE \
 	    REP_PROTOCOL_TRANSACTION_CMD_SIZE(0)
 
-#define	TX_SIZE(x)	P2ROUNDUP((x), sizeof (uint32_t))
+#define	TX_SIZE(x)	P2ROUNDUP_TYPED((x), sizeof(uint32_t), uint32_t)
 
 struct rep_protocol_transaction_request {
 	enum rep_protocol_requestid rpr_request; /* SETUP, ABORT or TEARDOWN */
