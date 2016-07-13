@@ -49,7 +49,7 @@ vasprintf(char **str, const char *format, va_list ap)
 		len = ret + 1;
 		if ((newstr = malloc(len)) == NULL)
 			return (-1);	/* retain errno from malloc() */
-		(void) strlcpy(newstr, string, len);
+		(void) memcpy(newstr, string, len);
 		*str = newstr;
 		return (ret);
 	}
