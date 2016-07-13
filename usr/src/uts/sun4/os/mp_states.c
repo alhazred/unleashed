@@ -72,7 +72,7 @@ cpu_idle_self(void)
 
 	kern_idle[CPU->cpu_id] = 1;
 	while (kern_idle[CPU->cpu_id])
-		dumpsys_helper_nw();
+		/* SPIN */;
 
 	CPU->cpu_m.in_prom = 0;
 	membar_stld();

@@ -2982,8 +2982,7 @@ try_again:
 			 * page of each large page.
 			 */
 			first_pp = pp;
-			while (IS_DUMP_PAGE(pp) || !page_trylock_cons(pp,
-			    SE_EXCL)) {
+			while (!page_trylock_cons(pp, SE_EXCL)) {
 				if (szc == 0) {
 					pp = pp->p_next;
 				} else {
@@ -4025,7 +4024,7 @@ try_again:
 			ASSERT(PP_ISAGED(pp) == 0);
 			ASSERT(pp->p_szc == 0);
 			ASSERT(PFN_2_MEM_NODE(pp->p_pagenum) == mnode);
-			while (IS_DUMP_PAGE(pp) || !page_trylock(pp, SE_EXCL)) {
+			while (!page_trylock(pp, SE_EXCL)) {
 				pp = pp->p_next;
 				ASSERT(pp->p_szc == 0);
 				if (pp == first_pp) {
