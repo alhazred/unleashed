@@ -314,6 +314,12 @@ cpudrv_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		cpudsp->cpudrv_pm.tq = ddi_taskq_create(dip,
 		    "cpudrv_monitor", CPUDRV_TASKQ_THREADS,
 		    TASKQ_DEFAULTPRI, 0);
+		if (cpudsp->cpudrv_pm.tq == NULL) {
+			cpudrv_enabled = B_FALSE;
+			cpudrv_free(cpudsp);
+			ddi_soft_state_free(cpudrv_state, instance);
+			return (DDI_FAILURE);
+		}
 
 		mutex_init(&cpudsp->cpudrv_pm.timeout_lock, NULL,
 		    MUTEX_DRIVER, NULL);
@@ -348,6 +354,7 @@ cpudrv_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 			cmn_err(CE_WARN, "cpudrv_attach: instance %d: "
 			    "cpudrv_mach_init failed", instance);
 			cpudrv_enabled = B_FALSE;
+			ddi_taskq_destroy(cpudsp->cpudrv_pm.tq);
 			cpudrv_free(cpudsp);
 			ddi_soft_state_free(cpudrv_state, instance);
 			return (DDI_FAILURE);
