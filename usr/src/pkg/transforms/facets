@@ -10,7 +10,16 @@
 #
 
 # Copyright 2011, Richard Lowe
+# Copyright 2015, Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
 
 # Manual pages are documentation, and more specifically 'man' documentation
 <transform dir file link path=usr/share/man/.* -> default facet.doc.man true>
 <transform dir file link path=usr/has/man/.* -> default facet.doc.man true>
+
+# Tag locale files with the corresponding locale facet
+<transform dir file link path=usr/lib/locale/([^/.]+)(\.[^/]+)? -> \
+	default facet.locale.%<\1> true>
+
+# C and POSIX locales should always be installed
+<transform dir file link facet.locale.C=.+ -> delete facet.locale.C .+>
+<transform dir file link facet.locale.POSIX=.+ -> delete facet.locale.POSIX .+>
