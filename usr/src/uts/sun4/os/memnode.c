@@ -68,7 +68,6 @@ void
 mem_node_add_slice(pfn_t start, pfn_t end)
 {
 	int mnode;
-	mnodeset_t newmask, oldmask;
 
 	/*
 	 * DR will pass us the first pfn that is allocatable.
@@ -95,11 +94,7 @@ mem_node_add_slice(pfn_t start, pfn_t end)
 		mem_node_config[mnode].physbase = start;
 		mem_node_config[mnode].physmax = end;
 		atomic_inc_16(&num_memnodes);
-		do {
-			oldmask = memnodes_mask;
-			newmask = memnodes_mask | (1ull << mnode);
-		} while (atomic_cas_64(&memnodes_mask, oldmask, newmask) !=
-			 oldmask);
+		atomic_or_64(&memnodes_mask, 1ull << mnode);
 	}
 	/*
 	 * Let the common lgrp framework know about the new memory
@@ -119,7 +114,6 @@ mem_node_del_slice(pfn_t start, pfn_t end)
 {
 	int mnode;
 	pgcnt_t delta_pgcnt, node_size;
-	mnodeset_t omask, nmask;
 
 	if (mem_node_physalign) {
 		start &= ~(btop(mem_node_physalign) - 1);
@@ -156,10 +150,7 @@ mem_node_del_slice(pfn_t start, pfn_t end)
 		 * Delete the whole node.
 		 */
 		ASSERT(MNODE_PGCNT(mnode) == 0);
-		do {
-			omask = memnodes_mask;
-			nmask = omask & ~(1ull << mnode);
-		} while (atomic_cas_64(&memnodes_mask, omask, nmask) != omask);
+		atomic_and_64(&memnodes_mask, ~(1ull << mnode));
 		atomic_dec_16(&num_memnodes);
 		mem_node_config[mnode].exists = 0;
 	}
@@ -214,7 +205,6 @@ int
 mem_node_alloc()
 {
 	int mnode;
-	mnodeset_t newmask, oldmask;
 
 	/*
 	 * Find an unused memnode.  Update it atomically to prevent
@@ -231,10 +221,7 @@ mem_node_alloc()
 	mem_node_config[mnode].physbase = (uint64_t)-1;
 	mem_node_config[mnode].physmax = 0;
 	atomic_inc_16(&num_memnodes);
-	do {
-		oldmask = memnodes_mask;
-		newmask = memnodes_mask | (1ull << mnode);
-	} while (atomic_cas_64(&memnodes_mask, oldmask, newmask) != oldmask);
+	atomic_or_64(&memnodes_mask, 1ull << mnode);
 
 	return (mnode);
 }

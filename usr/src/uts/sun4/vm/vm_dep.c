@@ -888,19 +888,13 @@ int color_start_random = 0;
 uint_t
 get_color_start(struct as *as)
 {
-	uint32_t old, new;
-
 	if (consistent_coloring == 2 || color_start_random) {
 		return ((uint_t)(((gettick()) << (vac_shift - MMU_PAGESHIFT)) &
 		    (hw_page_array[0].hp_colors - 1)));
 	}
 
-	do {
-		old = color_start_current;
-		new = old + (color_start_stride << (vac_shift - MMU_PAGESHIFT));
-	} while (atomic_cas_32(&color_start_current, old, new) != old);
-
-	return ((uint_t)(new));
+	return ((uint_t)atomic_add_32_nv(&color_start_current,
+	    color_start_stride << (vac_shift - MMU_PAGESHIFT)));
 }
 
 /*

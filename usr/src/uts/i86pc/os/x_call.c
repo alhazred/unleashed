@@ -64,7 +64,7 @@
  * with every message that finishes all processing.
  *
  * The code needs no mfence or other membar_*() calls. The uses of
- * atomic_cas_ptr(), atomic_cas_32() and atomic_dec_32() for the message
+ * atomic_cas_ptr(), atomic_inc_32_nv() and atomic_dec_32() for the message
  * passing are implemented with LOCK prefix instructions which are
  * equivalent to mfence.
  *
@@ -142,11 +142,7 @@ xc_decrement(struct machcpu *mcpu)
 static int
 xc_increment(struct machcpu *mcpu)
 {
-	int old;
-	do {
-		old = mcpu->xc_work_cnt;
-	} while (atomic_cas_32(&mcpu->xc_work_cnt, old, old + 1) != old);
-	return (old);
+	return (atomic_inc_32_nv(&mcpu->xc_work_cnt) - 1);
 }
 
 /*
