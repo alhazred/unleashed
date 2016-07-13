@@ -94,6 +94,7 @@
 #include <sys/sunddi.h>
 #include <sys/ramdisk.h>
 #include <vm/seg_kmem.h>
+#include <vm/seg_kpm.h>
 
 struct rd_map {
 	caddr_t vaddr;		/* window base address */
@@ -101,6 +102,7 @@ struct rd_map {
 	offset_t base;		/* device offset */
 	pfn_t pfn;		/* physical "address" */
 	boolean_t mapped;	/* is the rest of this struct valid? */
+	boolean_t kpm;		/* mapped using kpm */
 };
 
 struct rd_ops {
@@ -424,15 +426,25 @@ rd_phys_free(page_t **ppa, pgcnt_t npages)
 static void
 rdop_unmap_physical(rd_devstate_t *rsp, struct rd_map *map)
 {
-	hat_unload(kas.a_hat, map->vaddr, map->size, HAT_UNLOAD_UNLOCK);
-	vmem_free(heap_arena, map->vaddr, map->size);
+	if (map->kpm) {
+		hat_kpm_mapout_pfn(map->pfn);
+	} else {
+		hat_unload(kas.a_hat, map->vaddr, map->size, HAT_UNLOAD_UNLOCK);
+		vmem_free(heap_arena, map->vaddr, map->size);
+	}
 }
 
 static void
 rdop_unmap_pseudo(rd_devstate_t *rsp, struct rd_map *map)
 {
-	hat_unload(kas.a_hat, map->vaddr, map->size, HAT_UNLOAD_UNLOCK);
-	vmem_free(heap_arena, map->vaddr, map->size);
+	if (map->kpm) {
+		pgcnt_t offpgs = btop(map->base);
+
+		hat_kpm_mapout(rsp->rd_ppa[offpgs], NULL, map->vaddr);
+	} else {
+		hat_unload(kas.a_hat, map->vaddr, map->size, HAT_UNLOAD_UNLOCK);
+		vmem_free(heap_arena, map->vaddr, map->size);
+	}
 }
 
 static void
@@ -465,8 +477,9 @@ rdop_map_virtual(rd_devstate_t *rsp, off_t offset, struct rd_map *map)
 static void
 rdop_map_physical(rd_devstate_t *rsp, off_t offset, struct rd_map *map)
 {
+	boolean_t used_kpm = B_TRUE;
 	pgcnt_t offpgs = btop(offset);
-	caddr_t vaddr;
+	caddr_t vaddr = NULL;
 	uint_t i;
 
 	map->base = ptob(offpgs);
@@ -489,22 +502,30 @@ rdop_map_physical(rd_devstate_t *rsp, off_t offset, struct rd_map *map)
 	/*
 	 * Load the mapping.
 	 */
-	vaddr = vmem_alloc(heap_arena, map->size, VM_SLEEP);
+	if (kpm_enable)
+		vaddr = hat_kpm_mapin_pfn(map->pfn);
 
-	/* XXX: support more than 1 page map */
-	hat_devload(kas.a_hat, vaddr, map->size, map->pfn,
-	    PROT_READ | PROT_WRITE,
-	    HAT_LOAD_NOCONSIST | HAT_LOAD_LOCK);
+	if (!vaddr) {
+		used_kpm = B_FALSE;
+		vaddr = vmem_alloc(heap_arena, map->size, VM_SLEEP);
+
+		/* XXX: support more than 1 page map */
+		hat_devload(kas.a_hat, vaddr, map->size, map->pfn,
+		    PROT_READ | PROT_WRITE,
+		    HAT_LOAD_NOCONSIST | HAT_LOAD_LOCK);
+	}
 
 	map->vaddr = vaddr;
+	map->kpm = used_kpm;
 	map->mapped = B_TRUE;
 }
 
 static void
 rdop_map_pseudo(rd_devstate_t *rsp, off_t offset, struct rd_map *map)
 {
+	boolean_t used_kpm = B_TRUE;
 	pgcnt_t	offpgs = btop(offset);
-	caddr_t	vaddr;
+	caddr_t	vaddr = NULL;
 
 	map->base = ptob(offpgs);
 	map->size = PAGESIZE;
@@ -512,13 +533,20 @@ rdop_map_pseudo(rd_devstate_t *rsp, off_t offset, struct rd_map *map)
 	/*
 	 * Load the mapping.
 	 */
-	vaddr = vmem_alloc(heap_arena, map->size, VM_SLEEP);
+	if (kpm_enable)
+		vaddr = hat_kpm_mapin(rsp->rd_ppa[offpgs], NULL);
 
-	/* XXX: support more than 1 page map */
-	hat_memload(kas.a_hat, vaddr, rsp->rd_ppa[offpgs],
-	    PROT_READ | PROT_WRITE | HAT_NOSYNC, HAT_LOAD_LOCK);
+	if (!vaddr) {
+		used_kpm = B_FALSE;
+		vaddr = vmem_alloc(heap_arena, map->size, VM_SLEEP);
+
+		/* XXX: support more than 1 page map */
+		hat_memload(kas.a_hat, vaddr, rsp->rd_ppa[offpgs],
+		    PROT_READ | PROT_WRITE | HAT_NOSYNC, HAT_LOAD_LOCK);
+	}
 
 	map->vaddr = vaddr;
+	map->kpm = used_kpm;
 	map->mapped = B_TRUE;
 }
 
