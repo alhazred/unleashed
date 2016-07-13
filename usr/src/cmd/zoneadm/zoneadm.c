@@ -23,6 +23,7 @@
  * Copyright (c) 2003, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2014 Nexenta Systems, Inc. All rights reserved.
  * Copyright (c) 2015 by Delphix. All rights reserved.
+ * Copyright (c) 2015 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  */
 
 /*
@@ -192,6 +193,7 @@ static struct cmd cmdtab[] = {
 	    uninstall_func },
 	/* mount and unmount are private commands for admin/install */
 	{ CMD_MOUNT,		"mount",	NULL,		mount_func },
+	{ CMD_UNMOUNT,		"umount",	NULL,		unmount_func },
 	{ CMD_UNMOUNT,		"unmount",	NULL,		unmount_func },
 	{ CMD_CLONE,		"clone",	SHELP_CLONE,	clone_func },
 	{ CMD_MOVE,		"move",		SHELP_MOVE,	move_func },
