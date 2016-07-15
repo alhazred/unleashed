@@ -482,13 +482,6 @@ segmf_pagelock(struct seg *seg, caddr_t addr, size_t len,
 	return (ENOTSUP);
 }
 
-/*ARGSUSED*/
-static int
-segmf_setpagesize(struct seg *seg, caddr_t addr, size_t len, uint_t szc)
-{
-	return (ENOTSUP);
-}
-
 static int
 segmf_getmemid(struct seg *seg, caddr_t addr, memid_t *memid)
 {
@@ -762,6 +755,5 @@ static struct seg_ops segmf_ops = {
 	.advise		= segmf_advise,
 	.dump		= segmf_dump,
 	.pagelock	= segmf_pagelock,
-	.setpagesize	= segmf_setpagesize,
 	.getmemid	= segmf_getmemid,
 };

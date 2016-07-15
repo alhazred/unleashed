@@ -181,7 +181,6 @@ static int	segdev_advise(struct seg *, caddr_t, size_t, uint_t);
 static void	segdev_dump(struct seg *);
 static int	segdev_pagelock(struct seg *, caddr_t, size_t,
 		    struct page ***, enum lock_type, enum seg_rw);
-static int	segdev_setpagesize(struct seg *, caddr_t, size_t, uint_t);
 static int	segdev_getmemid(struct seg *, caddr_t, memid_t *);
 
 /*
@@ -208,7 +207,6 @@ struct seg_ops segdev_ops = {
 	.advise		= segdev_advise,
 	.dump		= segdev_dump,
 	.pagelock	= segdev_pagelock,
-	.setpagesize	= segdev_setpagesize,
 	.getmemid	= segdev_getmemid,
 };
 
@@ -2471,14 +2469,6 @@ segdev_pagelock(struct seg *seg, caddr_t addr, size_t len,
 {
 	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_PAGELOCK,
 	    "segdev_pagelock:start");
-	return (ENOTSUP);
-}
-
-/*ARGSUSED*/
-static int
-segdev_setpagesize(struct seg *seg, caddr_t addr, size_t len,
-    uint_t szc)
-{
 	return (ENOTSUP);
 }
 

@@ -1977,6 +1977,9 @@ segop_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***page,
 int
 segop_setpagesize(struct seg *seg, caddr_t addr, size_t len, uint_t szc)
 {
+	if (seg->s_ops->setpagesize == NULL)
+		return (ENOTSUP);
+
 	return (seg->s_ops->setpagesize(seg, addr, len, szc));
 }
 

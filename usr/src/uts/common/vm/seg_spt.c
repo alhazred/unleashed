@@ -140,7 +140,6 @@ static int segspt_shmadvise(struct seg *seg, caddr_t addr, size_t len,
 static void segspt_shmdump(struct seg *seg);
 static int segspt_shmpagelock(struct seg *, caddr_t, size_t,
 			struct page ***, enum lock_type, enum seg_rw);
-static int segspt_shmsetpgsz(struct seg *, caddr_t, size_t, uint_t);
 static int segspt_shmgetmemid(struct seg *, caddr_t, memid_t *);
 static lgrp_mem_policy_info_t *segspt_shmgetpolicy(struct seg *, caddr_t);
 
@@ -164,7 +163,6 @@ struct seg_ops segspt_shmops = {
 	.advise		= segspt_shmadvise,
 	.dump		= segspt_shmdump,
 	.pagelock	= segspt_shmpagelock,
-	.setpagesize	= segspt_shmsetpgsz,
 	.getmemid	= segspt_shmgetmemid,
 	.getpolicy	= segspt_shmgetpolicy,
 };
@@ -2994,13 +2992,6 @@ void
 segspt_shmdump(struct seg *seg)
 {
 	/* no-op for ISM segment */
-}
-
-/*ARGSUSED*/
-static faultcode_t
-segspt_shmsetpgsz(struct seg *seg, caddr_t addr, size_t len, uint_t szc)
-{
-	return (ENOTSUP);
 }
 
 /*
