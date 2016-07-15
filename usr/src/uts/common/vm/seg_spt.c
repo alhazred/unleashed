@@ -86,7 +86,7 @@ segspt_badop()
 
 #define	SEGSPT_BADOP(t)	(t(*)())segspt_badop
 
-const struct seg_ops segspt_ops = {
+static const struct seg_ops segspt_ops = {
 	.dup		= SEGSPT_BADOP(int),
 	.unmap		= segspt_unmap,
 	.free		= segspt_free,
