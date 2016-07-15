@@ -1624,13 +1624,6 @@ RSAPROV_OBJS += rsa.o rsa_impl.o pkcs1.o
 SWRANDPROV_OBJS += swrand.o
 
 #
-#			kernel SSL
-#
-KSSL_OBJS +=	kssl.o ksslioctl.o
-
-KSSL_SOCKFIL_MOD_OBJS += ksslfilter.o ksslapi.o ksslrec.o
-
-#
 #			misc. modules
 #
 
