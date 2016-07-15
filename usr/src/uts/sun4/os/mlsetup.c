@@ -148,7 +148,7 @@ mlsetup(struct regs *rp, kfpu_t *fp)
 	/* Can't use va_to_pa here - wait until prom_ initialized */
 	t0.t_stkbase = t0stack;
 	t0.t_pri = maxclsyspri - 3;
-	t0.t_schedflag = TS_LOAD | TS_DONT_SWAP;
+	t0.t_schedflag = 0;
 	t0.t_procp = &p0;
 	t0.t_plockp = &p0lock.pl_lock;
 	t0.t_lwp = &lwp0;

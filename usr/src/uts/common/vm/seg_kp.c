@@ -154,7 +154,6 @@ static struct	seg_ops segkp_ops = {
 	SEGKP_BADOP(int),		/* setprot */
 	segkp_checkprot,
 	segkp_kluster,
-	SEGKP_BADOP(size_t),		/* swapout */
 	SEGKP_BADOP(int),		/* sync */
 	SEGKP_BADOP(size_t),		/* incore */
 	SEGKP_BADOP(int),		/* lockop */
@@ -760,15 +759,11 @@ segkp_release_internal(struct seg *seg, struct segkp_data *kpd, size_t len)
  * stack base.  If the amount of stack remaining is questionable
  * (less than red_minavail), then segkp_map_red() will map in the redzone
  * and return 1.  Otherwise, it will return 0.  segkp_map_red() can
- * _only_ be called when:
- *
- *   - it is safe to sleep on page_create_va().
- *   - the caller is non-swappable.
+ * _only_ be called when it is safe to sleep on page_create_va().
  *
  * It is up to the caller to remember whether segkp_map_red() successfully
  * mapped the redzone, and, if so, to call segkp_unmap_red() at a later
- * time.  Note that the caller must _remain_ non-swappable until after
- * calling segkp_unmap_red().
+ * time.
  *
  * Currently, this routine is only called from pagefault() (which necessarily
  * satisfies the above conditions).
@@ -781,8 +776,6 @@ segkp_map_red(void)
 #ifndef _LP64
 	caddr_t stkbase;
 #endif
-
-	ASSERT(curthread->t_schedflag & TS_DONT_SWAP);
 
 	/*
 	 * Optimize for the common case where we simply return.
@@ -884,7 +877,6 @@ segkp_unmap_red(void)
 	    (uintptr_t)PAGEMASK) - PAGESIZE);
 
 	ASSERT(curthread->t_red_pp != NULL);
-	ASSERT(curthread->t_schedflag & TS_DONT_SWAP);
 
 	/*
 	 * Because we locked the mapping down, we can't simply rely
@@ -1344,20 +1336,6 @@ segkp_find(struct seg *seg, caddr_t vaddr)
 	} while (i != stop);
 	mutex_exit(&segkp_lock);
 	return (NULL);		/* Not found */
-}
-
-/*
- * returns size of swappable area.
- */
-size_t
-swapsize(caddr_t v)
-{
-	struct segkp_data *kpd;
-
-	if ((kpd = segkp_find(segkp, v)) != NULL)
-		return (SEGKP_MAPLEN(kpd->kp_len, kpd->kp_flags));
-	else
-		return (NULL);
 }
 
 /*

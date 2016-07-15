@@ -2050,61 +2050,6 @@ as_memory(struct as *as, caddr_t *basep, size_t *lenp)
 }
 
 /*
- * Swap the pages associated with the address space as out to
- * secondary storage, returning the number of bytes actually
- * swapped.
- *
- * The value returned is intended to correlate well with the process's
- * memory requirements.  Its usefulness for this purpose depends on
- * how well the segment-level routines do at returning accurate
- * information.
- */
-size_t
-as_swapout(struct as *as)
-{
-	struct seg *seg;
-	size_t swpcnt = 0;
-
-	/*
-	 * Kernel-only processes have given up their address
-	 * spaces.  Of course, we shouldn't be attempting to
-	 * swap out such processes in the first place...
-	 */
-	if (as == NULL)
-		return (0);
-
-	AS_LOCK_ENTER(as, RW_READER);
-
-	/*
-	 * Free all mapping resources associated with the address
-	 * space.  The segment-level swapout routines capitalize
-	 * on this unmapping by scavanging pages that have become
-	 * unmapped here.
-	 */
-	hat_swapout(as->a_hat);
-
-	/*
-	 * Call the swapout routines of all segments in the address
-	 * space to do the actual work, accumulating the amount of
-	 * space reclaimed.
-	 */
-	for (seg = AS_SEGFIRST(as); seg != NULL; seg = AS_SEGNEXT(as, seg)) {
-		struct seg_ops *ov = seg->s_ops;
-
-		/*
-		 * We have to check to see if the seg has
-		 * an ops vector because the seg may have
-		 * been in the middle of being set up when
-		 * the process was picked for swapout.
-		 */
-		if ((ov != NULL) && (ov->swapout != NULL))
-			swpcnt += SEGOP_SWAPOUT(seg);
-	}
-	AS_LOCK_EXIT(as);
-	return (swpcnt);
-}
-
-/*
  * Determine whether data from the mappings in interval [addr, addr + size)
  * are in the primary memory (core) cache.
  */

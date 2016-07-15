@@ -202,8 +202,6 @@ static void	ts_parmsget(kthread_t *, void *);
 static void	ts_preempt(kthread_t *);
 static void	ts_setrun(kthread_t *);
 static void	ts_sleep(kthread_t *);
-static pri_t	ts_swapin(kthread_t *, int);
-static pri_t	ts_swapout(kthread_t *, int);
 static void	ts_tick(kthread_t *);
 static void	ts_trapret(kthread_t *);
 static void	ts_update(void *);
@@ -261,8 +259,6 @@ static struct classfuncs ts_classfuncs = {
 	ts_exit,
 	ts_nullsys,	/* active */
 	ts_nullsys,	/* inactive */
-	ts_swapin,
-	ts_swapout,
 	ts_trapret,
 	ts_preempt,
 	ts_setrun,
@@ -306,8 +302,6 @@ static struct classfuncs ia_classfuncs = {
 	ts_exit,
 	ts_nullsys,	/* active */
 	ts_nullsys,	/* inactive */
-	ts_swapin,
-	ts_swapout,
 	ts_trapret,
 	ts_preempt,
 	ts_setrun,
@@ -1404,14 +1398,6 @@ ts_preempt(kthread_t *t)
 	}
 
 	/*
-	 * If thread got preempted in the user-land then we know
-	 * it isn't holding any locks.  Mark it as swappable.
-	 */
-	ASSERT(t->t_schedflag & TS_DONT_SWAP);
-	if (lwp != NULL && lwp->lwp_state == LWP_USER)
-		t->t_schedflag &= ~TS_DONT_SWAP;
-
-	/*
 	 * Check to see if we're doing "preemption control" here.  If
 	 * we are, and if the user has requested that this thread not
 	 * be preempted, and if preemptions haven't been put off for
@@ -1435,7 +1421,6 @@ ts_preempt(kthread_t *t)
 					tspp->ts_flags |= TSRESTORE;
 				}
 				THREAD_CHANGE_PRI(t, ts_maxumdpri);
-				t->t_schedflag |= TS_DONT_SWAP;
 			}
 			schedctl_set_yield(t, 1);
 			setfrontdq(t);
@@ -1562,136 +1547,8 @@ ts_sleep(kthread_t *t)
 		if (DISP_MUST_SURRENDER(curthread))
 			cpu_surrender(curthread);
 	}
-	t->t_stime = ddi_get_lbolt();		/* time stamp for the swapper */
 	TRACE_2(TR_FAC_DISP, TR_SLEEP,
 	    "sleep:tid %p old pri %d", t, old_pri);
-}
-
-
-/*
- * Return Values:
- *
- *	-1 if the thread is loaded or is not eligible to be swapped in.
- *
- *	effective priority of the specified thread based on swapout time
- *		and size of process (epri >= 0 , epri <= SHRT_MAX).
- */
-/* ARGSUSED */
-static pri_t
-ts_swapin(kthread_t *t, int flags)
-{
-	tsproc_t	*tspp = (tsproc_t *)(t->t_cldata);
-	long		epri = -1;
-	proc_t		*pp = ttoproc(t);
-
-	ASSERT(THREAD_LOCK_HELD(t));
-
-	/*
-	 * We know that pri_t is a short.
-	 * Be sure not to overrun its range.
-	 */
-	if (t->t_state == TS_RUN && (t->t_schedflag & TS_LOAD) == 0) {
-		time_t swapout_time;
-
-		swapout_time = (ddi_get_lbolt() - t->t_stime) / hz;
-		if (INHERITED(t) || (tspp->ts_flags & (TSKPRI | TSIASET)))
-			epri = (long)DISP_PRIO(t) + swapout_time;
-		else {
-			/*
-			 * Threads which have been out for a long time,
-			 * have high user mode priority and are associated
-			 * with a small address space are more deserving
-			 */
-			epri = ts_dptbl[tspp->ts_umdpri].ts_globpri;
-			ASSERT(epri >= 0 && epri <= ts_maxumdpri);
-			epri += swapout_time - pp->p_swrss / nz(maxpgio)/2;
-		}
-		/*
-		 * Scale epri so SHRT_MAX/2 represents zero priority.
-		 */
-		epri += SHRT_MAX/2;
-		if (epri < 0)
-			epri = 0;
-		else if (epri > SHRT_MAX)
-			epri = SHRT_MAX;
-	}
-	return ((pri_t)epri);
-}
-
-/*
- * Return Values
- *	-1 if the thread isn't loaded or is not eligible to be swapped out.
- *
- *	effective priority of the specified thread based on if the swapper
- *		is in softswap or hardswap mode.
- *
- *		Softswap:  Return a low effective priority for threads
- *			   sleeping for more than maxslp secs.
- *
- *		Hardswap:  Return an effective priority such that threads
- *			   which have been in memory for a while and are
- *			   associated with a small address space are swapped
- *			   in before others.
- *
- *		(epri >= 0 , epri <= SHRT_MAX).
- */
-time_t	ts_minrun = 2;		/* XXX - t_pri becomes 59 within 2 secs */
-time_t	ts_minslp = 2;		/* min time on sleep queue for hardswap */
-
-static pri_t
-ts_swapout(kthread_t *t, int flags)
-{
-	tsproc_t	*tspp = (tsproc_t *)(t->t_cldata);
-	long		epri = -1;
-	proc_t		*pp = ttoproc(t);
-	time_t		swapin_time;
-
-	ASSERT(THREAD_LOCK_HELD(t));
-
-	if (INHERITED(t) || (tspp->ts_flags & (TSKPRI | TSIASET)) ||
-	    (t->t_proc_flag & TP_LWPEXIT) ||
-	    (t->t_state & (TS_ZOMB | TS_FREE | TS_STOPPED |
-	    TS_ONPROC | TS_WAIT)) ||
-	    !(t->t_schedflag & TS_LOAD) || !SWAP_OK(t))
-		return (-1);
-
-	ASSERT(t->t_state & (TS_SLEEP | TS_RUN));
-
-	/*
-	 * We know that pri_t is a short.
-	 * Be sure not to overrun its range.
-	 */
-	swapin_time = (ddi_get_lbolt() - t->t_stime) / hz;
-	if (flags == SOFTSWAP) {
-		if (t->t_state == TS_SLEEP && swapin_time > maxslp) {
-			epri = 0;
-		} else {
-			return ((pri_t)epri);
-		}
-	} else {
-		pri_t pri;
-
-		if ((t->t_state == TS_SLEEP && swapin_time > ts_minslp) ||
-		    (t->t_state == TS_RUN && swapin_time > ts_minrun)) {
-			pri = ts_dptbl[tspp->ts_umdpri].ts_globpri;
-			ASSERT(pri >= 0 && pri <= ts_maxumdpri);
-			epri = swapin_time -
-			    (rm_asrss(pp->p_as) / nz(maxpgio)/2) - (long)pri;
-		} else {
-			return ((pri_t)epri);
-		}
-	}
-
-	/*
-	 * Scale epri so SHRT_MAX/2 represents zero priority.
-	 */
-	epri += SHRT_MAX/2;
-	if (epri < 0)
-		epri = 0;
-	else if (epri > SHRT_MAX)
-		epri = SHRT_MAX;
-
-	return ((pri_t)epri);
 }
 
 /*
@@ -1703,7 +1560,6 @@ static void
 ts_tick(kthread_t *t)
 {
 	tsproc_t *tspp = (tsproc_t *)(t->t_cldata);
-	klwp_t *lwp;
 	boolean_t call_cpu_surrender = B_FALSE;
 	pri_t	oldpri = t->t_pri;
 
@@ -1758,10 +1614,6 @@ ts_tick(kthread_t *t)
 			 * this.
 			 */
 			if (thread_change_pri(t, new_pri, 0)) {
-				if ((t->t_schedflag & TS_LOAD) &&
-				    (lwp = t->t_lwp) &&
-				    lwp->lwp_state == LWP_USER)
-					t->t_schedflag &= ~TS_DONT_SWAP;
 				tspp->ts_timeleft =
 				    ts_dptbl[tspp->ts_cpupri].ts_quantum;
 			} else {
@@ -1833,16 +1685,6 @@ ts_trapret(kthread_t *t)
 
 		if (DISP_MUST_SURRENDER(t))
 			cpu_surrender(t);
-	}
-
-	/*
-	 * Swapout lwp if the swapper is waiting for this thread to
-	 * reach a safe point.
-	 */
-	if ((t->t_schedflag & TS_SWAPENQ) && !(tspp->ts_flags & TSIASET)) {
-		thread_unlock(t);
-		swapout_lwp(ttolwp(t));
-		thread_lock(t);
 	}
 
 	TRACE_2(TR_FAC_DISP, TR_TRAPRET,
@@ -1981,8 +1823,6 @@ ts_wakeup(kthread_t *t)
 	tsproc_t	*tspp = (tsproc_t *)(t->t_cldata);
 
 	ASSERT(THREAD_LOCK_HELD(t));
-
-	t->t_stime = ddi_get_lbolt();		/* time stamp for the swapper */
 
 	if (tspp->ts_flags & TSKPRI) {
 		tspp->ts_flags &= ~TSBACKQ;

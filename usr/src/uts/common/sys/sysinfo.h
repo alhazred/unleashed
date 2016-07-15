@@ -149,10 +149,10 @@ typedef struct cpu_vminfo {
 	uint_t	pgpgin;		/* pages paged in			*/
 	uint_t	pgout;		/* pageouts				*/
 	uint_t	pgpgout;	/* pages paged out			*/
-	uint_t	swapin;		/* swapins				*/
-	uint_t	pgswapin;	/* pages swapped in			*/
-	uint_t	swapout;	/* swapouts				*/
-	uint_t	pgswapout;	/* pages swapped out			*/
+	uint_t	swapin;		/* XXX: UNUSED				*/
+	uint_t	pgswapin;	/* XXX: UNUSED				*/
+	uint_t	swapout;	/* XXX: UNUSED				*/
+	uint_t	pgswapout;	/* XXX: UNUSED				*/
 	uint_t	zfod;		/* pages zero filled on demand		*/
 	uint_t	dfree;		/* pages freed by daemon or auto	*/
 	uint_t	scan;		/* pages examined by pageout daemon	*/
@@ -252,10 +252,10 @@ typedef struct cpu_vm_stats {
 	uint64_t pgpgin;		/* pages paged in */
 	uint64_t pgout;			/* pageouts */
 	uint64_t pgpgout;		/* pages paged out */
-	uint64_t swapin;		/* swapins */
-	uint64_t pgswapin;		/* pages swapped in */
-	uint64_t swapout;		/* swapouts */
-	uint64_t pgswapout;		/* pages swapped out */
+	uint64_t swapin;		/* XXX: UNUSED */
+	uint64_t pgswapin;		/* XXX: UNUSED */
+	uint64_t swapout;		/* XXX: UNUSED */
+	uint64_t pgswapout;		/* XXX: UNUSED */
 	uint64_t zfod;			/* pages zero filled on demand */
 	uint64_t dfree;			/* pages freed by daemon or auto */
 	uint64_t scan;			/* pages examined by pageout daemon */

@@ -200,7 +200,6 @@ struct seg_ops segdev_ops = {
 	segdev_setprot,
 	segdev_checkprot,
 	(int (*)())segdev_badop,	/* kluster */
-	(size_t (*)(struct seg *))NULL,	/* swapout */
 	segdev_sync,			/* sync */
 	segdev_incore,
 	segdev_lockop,			/* lockop */

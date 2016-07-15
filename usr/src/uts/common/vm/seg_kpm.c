@@ -119,7 +119,6 @@ static struct seg_ops segkpm_ops = {
 	SEGKPM_BADOP(int),	/* setprot */
 	SEGKPM_BADOP(int),	/* checkprot */
 	SEGKPM_BADOP(int),	/* kluster */
-	SEGKPM_BADOP(size_t),	/* swapout */
 	SEGKPM_BADOP(int),	/* sync */
 	SEGKPM_BADOP(size_t),	/* incore */
 	SEGKPM_BADOP(int),	/* lockop */

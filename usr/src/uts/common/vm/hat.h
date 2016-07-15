@@ -106,12 +106,6 @@ void	hat_dump(void);
  *	informs hat layer as is being destroyed.  hat layer cannot use as
  *	pointer after this call.
  *
- * void hat_swapin(hat)
- *	allocate any hat resources required for process being swapped in.
- *
- * void hat_swapout(hat)
- *	deallocate hat resources for process being swapped out.
- *
  * size_t hat_get_mapped_size(hat)
  *	returns number of bytes that have valid mappings in hat.
  *
@@ -133,8 +127,6 @@ struct hat *hat_alloc(struct as *);
 void	hat_free_start(struct hat *);
 void	hat_free_end(struct hat *);
 int	hat_dup(struct hat *, struct hat *, caddr_t, size_t, uint_t);
-void	hat_swapin(struct hat *);
-void	hat_swapout(struct hat *);
 size_t	hat_get_mapped_size(struct hat *);
 int	hat_stats_enable(struct hat *);
 void	hat_stats_disable(struct hat *);

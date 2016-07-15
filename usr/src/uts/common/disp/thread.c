@@ -429,8 +429,7 @@ thread_create(
 	t->t_clfuncs = &sys_classfuncs.thread;
 	t->t_cid = syscid;
 	t->t_pri = pri;
-	t->t_stime = ddi_get_lbolt();
-	t->t_schedflag = TS_LOAD | TS_DONT_SWAP;
+	t->t_schedflag = 0;
 	t->t_bind_cpu = PBIND_NONE;
 	t->t_bindflag = (uchar_t)default_binding_mode;
 	t->t_bind_pset = PS_NONE;

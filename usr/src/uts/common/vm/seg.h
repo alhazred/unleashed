@@ -124,7 +124,6 @@ struct	seg_ops {
 	int	(*setprot)(struct seg *, caddr_t, size_t, uint_t);
 	int	(*checkprot)(struct seg *, caddr_t, size_t, uint_t);
 	int	(*kluster)(struct seg *, caddr_t, ssize_t);
-	size_t	(*swapout)(struct seg *);
 	int	(*sync)(struct seg *, caddr_t, size_t, int, uint_t);
 	size_t	(*incore)(struct seg *, caddr_t, size_t, char *);
 	int	(*lockop)(struct seg *, caddr_t, size_t, int, int, ulong_t *,
@@ -219,7 +218,6 @@ extern	segadvstat_t	segadvstat;
 #define	SEGOP_SETPROT(s, a, l, p)   (*(s)->s_ops->setprot)((s), (a), (l), (p))
 #define	SEGOP_CHECKPROT(s, a, l, p) (*(s)->s_ops->checkprot)((s), (a), (l), (p))
 #define	SEGOP_KLUSTER(s, a, d)	    (*(s)->s_ops->kluster)((s), (a), (d))
-#define	SEGOP_SWAPOUT(s)	    (*(s)->s_ops->swapout)((s))
 #define	SEGOP_SYNC(s, a, l, atr, f) \
 		(*(s)->s_ops->sync)((s), (a), (l), (atr), (f))
 #define	SEGOP_INCORE(s, a, l, v)    (*(s)->s_ops->incore)((s), (a), (l), (v))

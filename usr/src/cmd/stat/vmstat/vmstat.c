@@ -320,11 +320,9 @@ dovmstats(struct snapshot *old, struct snapshot *new)
 	    / vm_updates)));
 	adjprintf(" %*u", 5, pgtok((int)(DELTA(s_sys.ss_vminfo.freemem)
 	    / vm_updates)));
-	adjprintf(" %*.0f", 3, swflag?
-	    kstat_delta(oldvm, newvm, "swapin") / etime :
+	adjprintf(" %*.0f", 3, swflag? 0 :
 	    kstat_delta(oldvm, newvm, "pgrec") / etime);
-	adjprintf(" %*.0f", 3, swflag?
-	    kstat_delta(oldvm, newvm, "swapout") / etime :
+	adjprintf(" %*.0f", 3, swflag? 0 :
 	    (kstat_delta(oldvm, newvm, "hat_fault")
 	    + kstat_delta(oldvm, newvm, "as_fault"))
 	    / etime);
@@ -416,6 +414,12 @@ sum_out(char const *pretty, kstat_t *ks, char *name)
 }
 
 static void
+zero_out(char const *pretty)
+{
+	(void) printf("%9llu %s\n", 0, pretty);
+}
+
+static void
 dosum(struct sys_snapshot *ss)
 {
 	uint64_t total_faults;
@@ -423,10 +427,10 @@ dosum(struct sys_snapshot *ss)
 	long double nchtotal;
 	uint64_t nchhits;
 
-	sum_out("swap ins", &ss->ss_agg_vm, "swapin");
-	sum_out("swap outs", &ss->ss_agg_vm, "swapout");
-	sum_out("pages swapped in", &ss->ss_agg_vm, "pgswapin");
-	sum_out("pages swapped out", &ss->ss_agg_vm, "pgswapout");
+	zero_out("swap ins");
+	zero_out("swap outs");
+	zero_out("pages swapped in");
+	zero_out("pages swapped out");
 
 	ksn = kstat_data_lookup(&ss->ss_agg_vm, "hat_fault");
 	if (ksn == NULL) {

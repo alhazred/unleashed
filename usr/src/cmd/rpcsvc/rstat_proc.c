@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * rstat service:  built with rstat.x
  */
@@ -369,10 +367,10 @@ extern int _rpcsvcdirty;	 /* Still serving ? */
 	stats_s4.v_pgpgout = CPU_STAT(&cpu_stats_all.vm, "pgpgout");
 	stats_s2.v_pswpin =
 	stats_s3.v_pswpin =
-	stats_s4.v_pswpin = CPU_STAT(&cpu_stats_all.vm, "pgswapin");
+	stats_s4.v_pswpin = 0;
 	stats_s2.v_pswpout =
 	stats_s3.v_pswpout =
-	stats_s4.v_pswpout = CPU_STAT(&cpu_stats_all.vm, "pgswapout");
+	stats_s4.v_pswpout = 0;
 	stats_s3.v_intr = CPU_STAT(&cpu_stats_all.sys, "intr");
 	stats_s3.v_intr -= hz*(stats_s3.curtime.tv_sec - btm.tv_sec) +
 		hz*(stats_s3.curtime.tv_usec - btm.tv_usec)/1000000;

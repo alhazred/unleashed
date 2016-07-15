@@ -146,8 +146,6 @@ extern void		swtch(void);
 extern void		swtch_to(kthread_t *);
 extern void		swtch_from_zombie(void)
 				__NORETURN;
-extern void		dq_sruninc(kthread_t *);
-extern void		dq_srundec(kthread_t *);
 extern void		cpu_rechoose(kthread_t *);
 extern void		cpu_surrender(kthread_t *);
 extern void		kpreempt(int);

@@ -181,8 +181,6 @@ static void	fx_parmsget(kthread_t *, void *);
 static int	fx_parmsset(kthread_t *, void *, id_t, cred_t *);
 static void	fx_stop(kthread_t *, int, int);
 static void	fx_exit(kthread_t *);
-static pri_t	fx_swapin(kthread_t *, int);
-static pri_t	fx_swapout(kthread_t *, int);
 static void	fx_trapret(kthread_t *);
 static void	fx_preempt(kthread_t *);
 static void	fx_setrun(kthread_t *);
@@ -226,8 +224,6 @@ static struct classfuncs fx_classfuncs = {
 	fx_exit,
 	fx_nullsys,	/* active */
 	fx_nullsys,	/* inactive */
-	fx_swapin,
-	fx_swapout,
 	fx_trapret,
 	fx_preempt,
 	fx_setrun,
@@ -1224,49 +1220,6 @@ fx_sleep(kthread_t *t)
 	if (FX_HAS_CB(fxpp)) {
 		FX_CB_SLEEP(FX_CALLB(fxpp), fxpp->fx_cookie);
 	}
-	t->t_stime = ddi_get_lbolt();		/* time stamp for the swapper */
-}
-
-
-/*
- * Return Values:
- *
- *	-1 if the thread is loaded or is not eligible to be swapped in.
- *
- * FX and RT threads are designed so that they don't swapout; however,
- * it is possible that while the thread is swapped out and in another class, it
- * can be changed to FX or RT.  Since these threads should be swapped in
- * as soon as they're runnable, rt_swapin returns SHRT_MAX, and fx_swapin
- * returns SHRT_MAX - 1, so that it gives deference to any swapped out
- * RT threads.
- */
-/* ARGSUSED */
-static pri_t
-fx_swapin(kthread_t *t, int flags)
-{
-	pri_t	tpri = -1;
-
-	ASSERT(THREAD_LOCK_HELD(t));
-
-	if (t->t_state == TS_RUN && (t->t_schedflag & TS_LOAD) == 0) {
-		tpri = (pri_t)SHRT_MAX - 1;
-	}
-
-	return (tpri);
-}
-
-/*
- * Return Values
- *	-1 if the thread isn't loaded or is not eligible to be swapped out.
- */
-/* ARGSUSED */
-static pri_t
-fx_swapout(kthread_t *t, int flags)
-{
-	ASSERT(THREAD_LOCK_HELD(t));
-
-	return (-1);
-
 }
 
 /* ARGSUSED */
@@ -1396,7 +1349,6 @@ fx_wakeup(kthread_t *t)
 
 	ASSERT(THREAD_LOCK_HELD(t));
 
-	t->t_stime = ddi_get_lbolt();		/* time stamp for the swapper */
 	if (FX_HAS_CB(fxpp)) {
 		clock_t new_quantum =  (clock_t)fxpp->fx_pquantum;
 		pri_t	newpri = fxpp->fx_pri;

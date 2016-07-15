@@ -95,7 +95,6 @@ struct seg_ops segspt_ops = {
 	SEGSPT_BADOP(int),		/* setprot */
 	SEGSPT_BADOP(int),		/* checkprot */
 	SEGSPT_BADOP(int),		/* kluster */
-	SEGSPT_BADOP(size_t),		/* swapout */
 	SEGSPT_BADOP(int),		/* sync */
 	SEGSPT_BADOP(size_t),		/* incore */
 	SEGSPT_BADOP(int),		/* lockop */
@@ -124,7 +123,6 @@ static int segspt_shmsetprot(register struct seg *seg, register caddr_t addr,
 static int segspt_shmcheckprot(struct seg *seg, caddr_t addr, size_t size,
 			uint_t prot);
 static int	segspt_shmkluster(struct seg *seg, caddr_t addr, ssize_t delta);
-static size_t	segspt_shmswapout(struct seg *seg);
 static size_t segspt_shmincore(struct seg *seg, caddr_t addr, size_t len,
 			register char *vec);
 static int segspt_shmsync(struct seg *seg, register caddr_t addr, size_t len,
@@ -155,7 +153,6 @@ struct seg_ops segspt_shmops = {
 	segspt_shmsetprot,
 	segspt_shmcheckprot,
 	segspt_shmkluster,
-	segspt_shmswapout,
 	segspt_shmsync,
 	segspt_shmincore,
 	segspt_shmlockop,
@@ -2240,13 +2237,6 @@ segspt_shmfaulta(struct seg *seg, caddr_t addr)
 /*ARGSUSED*/
 static int
 segspt_shmkluster(struct seg *seg, caddr_t addr, ssize_t delta)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-static size_t
-segspt_shmswapout(struct seg *seg)
 {
 	return (0);
 }

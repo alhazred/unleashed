@@ -782,7 +782,6 @@ static struct seg_ops segkmem_ops = {
 	segkmem_setprot,
 	segkmem_checkprot,
 	segkmem_kluster,
-	SEGKMEM_BADOP(size_t),		/* swapout */
 	SEGKMEM_BADOP(int),		/* sync */
 	SEGKMEM_BADOP(size_t),		/* incore */
 	SEGKMEM_BADOP(int),		/* lockop */

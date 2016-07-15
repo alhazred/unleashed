@@ -95,7 +95,6 @@ struct seg_ops segnf_ops = {
 	segnf_setprot,
 	segnf_checkprot,
 	(int (*)())segnf_badop,		/* kluster */
-	(size_t (*)(struct seg *))NULL,	/* swapout */
 	(int (*)(struct seg *, caddr_t, size_t, int, uint_t))
 		segnf_nop,		/* sync */
 	(size_t (*)(struct seg *, caddr_t, size_t, char *))

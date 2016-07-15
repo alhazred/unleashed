@@ -766,7 +766,6 @@ static struct seg_ops segmf_ops = {
 	segmf_setprot,
 	segmf_checkprot,
 	(int (*)())segmf_kluster,
-	(size_t (*)(struct seg *))NULL,	/* swapout */
 	segmf_sync,
 	segmf_incore,
 	segmf_lockop,

@@ -111,7 +111,6 @@ static int	segvn_setprot(struct seg *seg, caddr_t addr,
 static int	segvn_checkprot(struct seg *seg, caddr_t addr,
 		    size_t len, uint_t prot);
 static int	segvn_kluster(struct seg *seg, caddr_t addr, ssize_t delta);
-static size_t	segvn_swapout(struct seg *seg);
 static int	segvn_sync(struct seg *seg, caddr_t addr, size_t len,
 		    int attr, uint_t flags);
 static size_t	segvn_incore(struct seg *seg, caddr_t addr, size_t len,
@@ -146,7 +145,6 @@ struct	seg_ops segvn_ops = {
 	segvn_setprot,
 	segvn_checkprot,
 	segvn_kluster,
-	segvn_swapout,
 	segvn_sync,
 	segvn_incore,
 	segvn_lockop,
@@ -7048,189 +7046,6 @@ segvn_kluster(struct seg *seg, caddr_t addr, ssize_t delta)
 	if (!VOP_CMP(vp1, vp2, NULL) || off1 - off2 != delta)
 		return (-1);
 	return (0);
-}
-
-/*
- * Swap the pages of seg out to secondary storage, returning the
- * number of bytes of storage freed.
- *
- * The basic idea is first to unload all translations and then to call
- * VOP_PUTPAGE() for all newly-unmapped pages, to push them out to the
- * swap device.  Pages to which other segments have mappings will remain
- * mapped and won't be swapped.  Our caller (as_swapout) has already
- * performed the unloading step.
- *
- * The value returned is intended to correlate well with the process's
- * memory requirements.  However, there are some caveats:
- * 1)	When given a shared segment as argument, this routine will
- *	only succeed in swapping out pages for the last sharer of the
- *	segment.  (Previous callers will only have decremented mapping
- *	reference counts.)
- * 2)	We assume that the hat layer maintains a large enough translation
- *	cache to capture process reference patterns.
- */
-static size_t
-segvn_swapout(struct seg *seg)
-{
-	struct segvn_data *svd = (struct segvn_data *)seg->s_data;
-	struct anon_map *amp;
-	pgcnt_t pgcnt = 0;
-	pgcnt_t npages;
-	pgcnt_t page;
-	ulong_t anon_index;
-
-	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
-
-	SEGVN_LOCK_ENTER(seg->s_as, &svd->lock, RW_READER);
-	/*
-	 * Find pages unmapped by our caller and force them
-	 * out to the virtual swap device.
-	 */
-	if ((amp = svd->amp) != NULL)
-		anon_index = svd->anon_index;
-	npages = seg->s_size >> PAGESHIFT;
-	for (page = 0; page < npages; page++) {
-		page_t *pp;
-		struct anon *ap;
-		struct vnode *vp;
-		u_offset_t off;
-		anon_sync_obj_t cookie;
-
-		/*
-		 * Obtain <vp, off> pair for the page, then look it up.
-		 *
-		 * Note that this code is willing to consider regular
-		 * pages as well as anon pages.  Is this appropriate here?
-		 */
-		ap = NULL;
-		if (amp != NULL) {
-			ANON_LOCK_ENTER(&amp->a_rwlock, RW_READER);
-			if (anon_array_try_enter(amp, anon_index + page,
-			    &cookie)) {
-				ANON_LOCK_EXIT(&amp->a_rwlock);
-				continue;
-			}
-			ap = anon_get_ptr(amp->ahp, anon_index + page);
-			if (ap != NULL) {
-				swap_xlate(ap, &vp, &off);
-			} else {
-				vp = svd->vp;
-				off = svd->offset + ptob(page);
-			}
-			anon_array_exit(&cookie);
-			ANON_LOCK_EXIT(&amp->a_rwlock);
-		} else {
-			vp = svd->vp;
-			off = svd->offset + ptob(page);
-		}
-		if (vp == NULL) {		/* untouched zfod page */
-			ASSERT(ap == NULL);
-			continue;
-		}
-
-		pp = page_lookup_nowait(vp, off, SE_SHARED);
-		if (pp == NULL)
-			continue;
-
-
-		/*
-		 * Examine the page to see whether it can be tossed out,
-		 * keeping track of how many we've found.
-		 */
-		if (!page_tryupgrade(pp)) {
-			/*
-			 * If the page has an i/o lock and no mappings,
-			 * it's very likely that the page is being
-			 * written out as a result of klustering.
-			 * Assume this is so and take credit for it here.
-			 */
-			if (!page_io_trylock(pp)) {
-				if (!hat_page_is_mapped(pp))
-					pgcnt++;
-			} else {
-				page_io_unlock(pp);
-			}
-			page_unlock(pp);
-			continue;
-		}
-		ASSERT(!page_iolock_assert(pp));
-
-
-		/*
-		 * Skip if page is locked or has mappings.
-		 * We don't need the page_struct_lock to look at lckcnt
-		 * and cowcnt because the page is exclusive locked.
-		 */
-		if (pp->p_lckcnt != 0 || pp->p_cowcnt != 0 ||
-		    hat_page_is_mapped(pp)) {
-			page_unlock(pp);
-			continue;
-		}
-
-		/*
-		 * dispose skips large pages so try to demote first.
-		 */
-		if (pp->p_szc != 0 && !page_try_demote_pages(pp)) {
-			page_unlock(pp);
-			/*
-			 * XXX should skip the remaining page_t's of this
-			 * large page.
-			 */
-			continue;
-		}
-
-		ASSERT(pp->p_szc == 0);
-
-		/*
-		 * No longer mapped -- we can toss it out.  How
-		 * we do so depends on whether or not it's dirty.
-		 */
-		if (hat_ismod(pp) && pp->p_vnode) {
-			/*
-			 * We must clean the page before it can be
-			 * freed.  Setting B_FREE will cause pvn_done
-			 * to free the page when the i/o completes.
-			 * XXX:	This also causes it to be accounted
-			 *	as a pageout instead of a swap: need
-			 *	B_SWAPOUT bit to use instead of B_FREE.
-			 *
-			 * Hold the vnode before releasing the page lock
-			 * to prevent it from being freed and re-used by
-			 * some other thread.
-			 */
-			VN_HOLD(vp);
-			page_unlock(pp);
-
-			/*
-			 * Queue all i/o requests for the pageout thread
-			 * to avoid saturating the pageout devices.
-			 */
-			if (!queue_io_request(vp, off))
-				VN_RELE(vp);
-		} else {
-			/*
-			 * The page was clean, free it.
-			 *
-			 * XXX:	Can we ever encounter modified pages
-			 *	with no associated vnode here?
-			 */
-			ASSERT(pp->p_vnode != NULL);
-			/*LINTED: constant in conditional context*/
-			VN_DISPOSE(pp, B_FREE, 0, kcred);
-		}
-
-		/*
-		 * Credit now even if i/o is in progress.
-		 */
-		pgcnt++;
-	}
-	SEGVN_LOCK_EXIT(seg->s_as, &svd->lock);
-
-	/*
-	 * Wakeup pageout to initiate i/o on all queued requests.
-	 */
-	cv_signal_pageout();
-	return (ptob(pgcnt));
 }
 
 /*

@@ -109,7 +109,6 @@ static struct seg_ops segmap_ops = {
 	SEGMAP_BADOP(int),	/* setprot */
 	segmap_checkprot,
 	segmap_kluster,
-	SEGMAP_BADOP(size_t),	/* swapout */
 	SEGMAP_BADOP(int),	/* sync */
 	SEGMAP_BADOP(size_t),	/* incore */
 	SEGMAP_BADOP(int),	/* lockop */

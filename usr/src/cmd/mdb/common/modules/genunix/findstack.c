@@ -874,9 +874,6 @@ stacks(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 		if (sep->se_failed != 0) {
 			char *reason;
 			switch (sep->se_failed) {
-			case FSI_FAIL_NOTINMEMORY:
-				reason = "thread not in memory";
-				break;
 			case FSI_FAIL_THREADCORRUPT:
 				reason = "thread structure stack info corrupt";
 				break;

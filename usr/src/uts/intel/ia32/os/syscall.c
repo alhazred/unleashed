@@ -149,7 +149,7 @@ syscall_entry(kthread_t *t, long *argp)
 	int error = 0;
 	uint_t nargs;
 
-	ASSERT(t == curthread && curthread->t_schedflag & TS_DONT_SWAP);
+	ASSERT(t == curthread);
 
 	lwp->lwp_ru.sysc++;
 	lwp->lwp_eosys = NORMALRETURN;	/* assume this will be normal */
@@ -242,8 +242,6 @@ pre_syscall()
 	int	repost;
 
 	t->t_pre_sys = repost = 0;	/* clear pre-syscall processing flag */
-
-	ASSERT(t->t_schedflag & TS_DONT_SWAP);
 
 #if defined(DEBUG)
 	/*

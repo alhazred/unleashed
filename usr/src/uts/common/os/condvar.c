@@ -193,7 +193,6 @@ cv_wait(kcondvar_t *cvp, kmutex_t *mp)
 		return;
 	ASSERT(!quiesce_active);
 
-	ASSERT(curthread->t_schedflag & TS_DONT_SWAP);
 	thread_lock(curthread);			/* lock the thread */
 	cv_block((condvar_impl_t *)cvp);
 	thread_unlock_nopreempt(curthread);	/* unlock the waiters field */
@@ -326,7 +325,6 @@ cv_wait_sig(kcondvar_t *cvp, kmutex_t *mp)
 	}
 	ASSERT(t->t_intr == NULL);
 
-	ASSERT(curthread->t_schedflag & TS_DONT_SWAP);
 	cancel_pending = schedctl_cancel_pending();
 	lwp->lwp_asleep = 1;
 	lwp->lwp_sysabort = 0;
@@ -554,8 +552,6 @@ cv_wait_sig_swap_core(kcondvar_t *cvp, kmutex_t *mp, int *sigret)
 	thread_lock(t);
 	t->t_kpri_req = 0;	/* don't need kernel priority */
 	cv_block_sig(t, (condvar_impl_t *)cvp);
-	/* I can be swapped now */
-	curthread->t_schedflag &= ~TS_DONT_SWAP;
 	thread_unlock_nopreempt(t);
 	mutex_exit(mp);
 	if (ISSIG(t, JUSTLOOKING) || MUSTRETURN(p, t) || cancel_pending)
@@ -564,8 +560,6 @@ cv_wait_sig_swap_core(kcondvar_t *cvp, kmutex_t *mp, int *sigret)
 	swtch();
 	signalled = (t->t_schedflag & TS_SIGNALLED);
 	t->t_flag &= ~T_WAKEABLE;
-	/* TS_DONT_SWAP set by disp() */
-	ASSERT(curthread->t_schedflag & TS_DONT_SWAP);
 	mutex_enter(mp);
 	if (ISSIG_PENDING(t, lwp, p)) {
 		mutex_exit(mp);

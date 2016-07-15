@@ -1215,8 +1215,6 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	nrp->ro = ro;
 	nrp->thread = curthread;
 
-	ASSERT(curthread->t_schedflag & TS_DONT_SWAP);
-
 	/*
 	 * Look to see if there is already a cluster started
 	 * for this file.

@@ -47,9 +47,8 @@ typedef struct findstack_info {
 } findstack_info_t;
 
 #define	FSI_FAIL_BADTHREAD	1
-#define	FSI_FAIL_NOTINMEMORY	2
-#define	FSI_FAIL_THREADCORRUPT	3
-#define	FSI_FAIL_STACKNOTFOUND	4
+#define	FSI_FAIL_THREADCORRUPT	2
+#define	FSI_FAIL_STACKNOTFOUND	3
 
 typedef struct stacks_module {
 	char		sm_name[MAXPATHLEN]; /* name of module */

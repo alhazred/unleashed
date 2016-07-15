@@ -1110,14 +1110,6 @@ sysdc_globpri(kthread_t *t)
 	return (t->t_epri);
 }
 
-/*ARGSUSED*/
-static pri_t
-sysdc_no_swap(kthread_t *t, int flags)
-{
-	/* SDC threads cannot be swapped. */
-	return (-1);
-}
-
 /*
  * Get maximum and minimum priorities enjoyed by SDC threads.
  */
@@ -1202,8 +1194,6 @@ static struct classfuncs sysdc_classfuncs = {
 		sysdc_exit,
 		sysdc_nullsys,	/* active */
 		sysdc_nullsys,	/* inactive */
-		sysdc_no_swap,	/* swapin */
-		sysdc_no_swap,	/* swapout */
 		sysdc_nullsys,	/* trapret */
 		sysdc_preempt,
 		sysdc_setrun,

@@ -860,15 +860,6 @@ setregs(uarg_t *args)
 	fpp->fpu_fprs = 0;
 }
 
-void
-lwp_swapin(kthread_t *tp)
-{
-	struct machpcb *mpcb = lwptompcb(ttolwp(tp));
-
-	mpcb->mpcb_pa = va_to_pa(mpcb);
-	mpcb->mpcb_wbuf_pa = va_to_pa(mpcb->mpcb_wbuf);
-}
-
 /*
  * Construct the execution environment for the user's signal
  * handler and arrange for control to be given to it on return
