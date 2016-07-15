@@ -245,12 +245,10 @@ log_init(void)
 	log_update(&log_backlog, log_backlogq, SL_CONSOLE, log_console);
 
 	/*
-	 * Now that logging is enabled, emit the SunOS banner.
+	 * Now that logging is enabled, emit the boot banner.
 	 */
-	printf("\rSunOS Release %s Version %s %u-bit\n",
-	    utsname.release, utsname.version, NBBY * (uint_t)sizeof (void *));
-	printf("Copyright (c) 1983, 2010, Oracle and/or its affiliates. "
-	    "All rights reserved.\n");
+	printf("\rillumos-unleashed version %s %u-bit\n",
+	    utsname.version, NBBY * (uint_t)sizeof (void *));
 #ifdef DEBUG
 	printf("DEBUG enabled\n");
 #endif
