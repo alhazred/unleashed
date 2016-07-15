@@ -3569,13 +3569,6 @@ as_getmemid(struct as *as, caddr_t addr, memid_t *memidp)
 		AS_LOCK_EXIT(as);
 		return (EFAULT);
 	}
-	/*
-	 * catch old drivers which may not support getmemid
-	 */
-	if (seg->s_ops->getmemid == NULL) {
-		AS_LOCK_EXIT(as);
-		return (ENODEV);
-	}
 
 	sts = segop_getmemid(seg, addr, memidp);
 

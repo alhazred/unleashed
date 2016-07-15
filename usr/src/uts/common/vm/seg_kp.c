@@ -94,7 +94,6 @@ static int	segkp_unlock(struct hat *hat, struct seg *seg, caddr_t vaddr,
 static int	segkp_load(struct hat *hat, struct seg *seg, caddr_t vaddr,
 			size_t len, struct segkp_data *kpd, uint_t flags);
 static struct	segkp_data *segkp_find(struct seg *seg, caddr_t vaddr);
-static int	segkp_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp);
 
 /*
  * Lock used to protect the hash table(s) and caches.
@@ -163,7 +162,6 @@ static struct	seg_ops segkp_ops = {
 	.dump		= segkp_dump,
 	.pagelock	= segkp_pagelock,
 	.setpagesize	= SEGKP_BADOP(int),
-	.getmemid	= segkp_getmemid,
 };
 
 
@@ -1391,13 +1389,6 @@ segkp_pagelock(struct seg *seg, caddr_t addr, size_t len,
     struct page ***ppp, enum lock_type type, enum seg_rw rw)
 {
 	return (ENOTSUP);
-}
-
-/*ARGSUSED*/
-static int
-segkp_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp)
-{
-	return (ENODEV);
 }
 
 #include <sys/mem_config.h>

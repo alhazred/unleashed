@@ -1983,6 +1983,9 @@ segop_setpagesize(struct seg *seg, caddr_t addr, size_t len, uint_t szc)
 int
 segop_getmemid(struct seg *seg, caddr_t addr, memid_t *mp)
 {
+	if (seg->s_ops->getmemid == NULL)
+		return (ENODEV);
+
 	return (seg->s_ops->getmemid(seg, addr, mp));
 }
 
