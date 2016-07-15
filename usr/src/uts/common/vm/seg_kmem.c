@@ -758,13 +758,6 @@ segkmem_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp)
 }
 
 /*ARGSUSED*/
-static lgrp_mem_policy_info_t *
-segkmem_getpolicy(struct seg *seg, caddr_t addr)
-{
-	return (NULL);
-}
-
-/*ARGSUSED*/
 static int
 segkmem_capable(struct seg *seg, segcapability_t capability)
 {
@@ -795,7 +788,6 @@ static struct seg_ops segkmem_ops = {
 	.pagelock	= segkmem_pagelock,
 	.setpagesize	= SEGKMEM_BADOP(int),
 	.getmemid	= segkmem_getmemid,
-	.getpolicy	= segkmem_getpolicy,
 	.capable	= segkmem_capable,
 };
 

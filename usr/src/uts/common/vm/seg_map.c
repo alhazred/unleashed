@@ -89,8 +89,6 @@ static int	segmap_pagelock(struct seg *seg, caddr_t addr, size_t len,
 			enum seg_rw rw);
 static void	segmap_badop(void);
 static int	segmap_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp);
-static lgrp_mem_policy_info_t	*segmap_getpolicy(struct seg *seg,
-    caddr_t addr);
 static int	segmap_capable(struct seg *seg, segcapability_t capability);
 
 /* segkpm support */
@@ -122,7 +120,6 @@ static struct seg_ops segmap_ops = {
 	.pagelock	= segmap_pagelock,
 	.setpagesize	= SEGMAP_BADOP(int),
 	.getmemid	= segmap_getmemid,
-	.getpolicy	= segmap_getpolicy,
 	.capable	= segmap_capable,
 };
 
@@ -2188,13 +2185,6 @@ segmap_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp)
 	memidp->val[0] = (uintptr_t)smd->smd_sm->sm_vp;
 	memidp->val[1] = smd->smd_sm->sm_off + (uintptr_t)(addr - seg->s_base);
 	return (0);
-}
-
-/*ARGSUSED*/
-static lgrp_mem_policy_info_t *
-segmap_getpolicy(struct seg *seg, caddr_t addr)
-{
-	return (NULL);
 }
 
 /*ARGSUSED*/

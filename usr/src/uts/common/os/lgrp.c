@@ -3501,7 +3501,6 @@ lgrp_mem_policy_default(size_t size, int type)
 lgrp_mem_policy_info_t *
 lgrp_mem_policy_get(struct seg *seg, caddr_t vaddr)
 {
-	lgrp_mem_policy_info_t	*policy_info;
 	extern struct seg_ops	segspt_ops;
 	extern struct seg_ops	segspt_shmops;
 
@@ -3514,11 +3513,7 @@ lgrp_mem_policy_get(struct seg *seg, caddr_t vaddr)
 	    seg->s_ops != &segspt_shmops)
 		return (NULL);
 
-	policy_info = NULL;
-	if (seg->s_ops->getpolicy != NULL)
-		policy_info = segop_getpolicy(seg, vaddr);
-
-	return (policy_info);
+	return (segop_getpolicy(seg, vaddr));
 }
 
 /*

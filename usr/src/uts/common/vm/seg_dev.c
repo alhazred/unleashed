@@ -183,7 +183,6 @@ static int	segdev_pagelock(struct seg *, caddr_t, size_t,
 		    struct page ***, enum lock_type, enum seg_rw);
 static int	segdev_setpagesize(struct seg *, caddr_t, size_t, uint_t);
 static int	segdev_getmemid(struct seg *, caddr_t, memid_t *);
-static lgrp_mem_policy_info_t	*segdev_getpolicy(struct seg *, caddr_t);
 static int	segdev_capable(struct seg *, segcapability_t);
 
 /*
@@ -212,7 +211,6 @@ struct seg_ops segdev_ops = {
 	.pagelock	= segdev_pagelock,
 	.setpagesize	= segdev_setpagesize,
 	.getmemid	= segdev_getmemid,
-	.getpolicy	= segdev_getpolicy,
 	.capable	= segdev_capable,
 };
 
@@ -4028,13 +4026,6 @@ segdev_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp)
 	memidp->val[0] = (uintptr_t)VTOCVP(sdp->vp);
 	memidp->val[1] = sdp->offset + (uintptr_t)(addr - seg->s_base);
 	return (0);
-}
-
-/*ARGSUSED*/
-static lgrp_mem_policy_info_t *
-segdev_getpolicy(struct seg *seg, caddr_t addr)
-{
-	return (NULL);
 }
 
 /*ARGSUSED*/

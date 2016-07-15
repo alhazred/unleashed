@@ -500,13 +500,6 @@ segmf_getmemid(struct seg *seg, caddr_t addr, memid_t *memid)
 }
 
 /*ARGSUSED*/
-static lgrp_mem_policy_info_t *
-segmf_getpolicy(struct seg *seg, caddr_t addr)
-{
-	return (NULL);
-}
-
-/*ARGSUSED*/
 static int
 segmf_capable(struct seg *seg, segcapability_t capability)
 {
@@ -778,6 +771,5 @@ static struct seg_ops segmf_ops = {
 	.pagelock	= segmf_pagelock,
 	.setpagesize	= segmf_setpagesize,
 	.getmemid	= segmf_getmemid,
-	.getpolicy	= segmf_getpolicy,
 	.capable	= segmf_capable,
 };

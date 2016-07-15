@@ -79,8 +79,6 @@ static int	segnf_pagelock(struct seg *seg, caddr_t addr, size_t len,
 static int	segnf_setpagesize(struct seg *seg, caddr_t addr, size_t len,
 		    uint_t szc);
 static int	segnf_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp);
-static lgrp_mem_policy_info_t	*segnf_getpolicy(struct seg *seg,
-    caddr_t addr);
 
 
 struct seg_ops segnf_ops = {
@@ -109,7 +107,6 @@ struct seg_ops segnf_ops = {
 	.pagelock	= segnf_pagelock,
 	.setpagesize	= segnf_setpagesize,
 	.getmemid	= segnf_getmemid,
-	.getpolicy	= segnf_getpolicy,
 };
 
 /*
@@ -483,11 +480,4 @@ static int
 segnf_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp)
 {
 	return (ENODEV);
-}
-
-/*ARGSUSED*/
-static lgrp_mem_policy_info_t *
-segnf_getpolicy(struct seg *seg, caddr_t addr)
-{
-	return (NULL);
 }
