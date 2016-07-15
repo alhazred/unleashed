@@ -361,8 +361,6 @@ panic_idle(void)
 	CPU->cpu_m.in_prom = 1;
 	membar_stld();
 
-	dumpsys_helper();
-
 	for (;;)
 		;
 }

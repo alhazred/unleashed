@@ -899,8 +899,6 @@ panic_idle(void)
 	splx(ipltospl(CLOCK_LEVEL));
 	(void) setjmp(&curthread->t_pcb);
 
-	dumpsys_helper();
-
 #ifndef __xpv
 	for (;;)
 		i86_halt();

@@ -187,8 +187,6 @@ extern void dump_resize(void);
 extern void dump_page(pfn_t);
 extern void dump_addpage(struct as *, void *, pfn_t);
 extern void dumpsys(void);
-extern void dumpsys_helper(void);
-extern void dumpsys_helper_nw(void);
 extern void dump_messages(void);
 extern void dump_ereports(void);
 extern void dumpvp_write(const void *, size_t);
@@ -217,15 +215,6 @@ extern uint_t dump_plat_mincpu_default;
  * dump is produced.
  */
 extern uint_t dump_plat_mincpu;
-
-/*
- * Pages may be stolen at dump time. Prevent the pages from ever being
- * allocated while dump is running.
- */
-#define	IS_DUMP_PAGE(pp) (dump_check_used && dump_test_used((pp)->p_pagenum))
-
-extern int dump_test_used(pfn_t);
-extern int dump_check_used;
 
 #endif /* _KERNEL */
 

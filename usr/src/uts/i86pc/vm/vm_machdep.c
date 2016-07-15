@@ -1010,8 +1010,7 @@ is_contigpage_free(
 	do {
 retry:
 		pp = page_numtopp_nolock(pfn + i);
-		if ((pp == NULL) || IS_DUMP_PAGE(pp) ||
-		    (page_trylock(pp, SE_EXCL) == 0)) {
+		if ((pp == NULL) || (page_trylock(pp, SE_EXCL) == 0)) {
 			(*pfnp)++;
 			break;
 		}
@@ -3113,8 +3112,7 @@ page_get_mnode_anylist(ulong_t origbin, uchar_t szc, uint_t flags,
 			pp = PAGE_FREELISTS(mnode, szc, bin, mtype);
 			first_pp = pp;
 			while (pp != NULL) {
-				if (IS_DUMP_PAGE(pp) || page_trylock(pp,
-				    SE_EXCL) == 0) {
+				if (page_trylock(pp, SE_EXCL) == 0) {
 					pp = pp->p_next;
 					if (pp == first_pp) {
 						pp = NULL;
@@ -3208,8 +3206,7 @@ nextfreebin:
 			pp = PAGE_CACHELISTS(mnode, bin, mtype);
 			first_pp = pp;
 			while (pp != NULL) {
-				if (IS_DUMP_PAGE(pp) || page_trylock(pp,
-				    SE_EXCL) == 0) {
+				if (page_trylock(pp, SE_EXCL) == 0) {
 					pp = pp->p_next;
 					if (pp == first_pp)
 						pp = NULL;
