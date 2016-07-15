@@ -140,7 +140,6 @@ CPPFLAGS +=	$(INCS) -DBUILD_TIME='"Wed Sep 24 12:00:00 2008"'
 LDLIBS			+= -ldevinfo
 LDLIBS			+= -lsysevent
 LDLIBS			+= -lnvpair
-$(__SUNC)CCNEEDED	= $(CCEXTNEEDED)
 LDLIBS			+= $(CCNEEDED)
 LDLIBS			+= -lc
 

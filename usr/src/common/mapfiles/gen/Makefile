@@ -28,11 +28,9 @@
 include		$(SRC)/Makefile.master
 
 FILES=	\
-		$(MACH)_cc_map.noexeglobs \
 		$(MACH)_gcc_map.noexeglobs
 
 $(BUILD64)FILES += \
-		$(MACH64)_cc_map.noexeglobs \
 		$(MACH64)_gcc_map.noexeglobs
 
 SYMS1=		syms.1
@@ -70,9 +68,6 @@ clobber:	clean
 # the MAPFILE.NGB macro defined in Makefile.master.  These dynamically created
 # mapfiles are not delivered into the $ROOT area, and therefore are not
 # delivered as packaged components of the OSNet.
-
-$(MACH)_cc_map.noexeglobs :=	LINK =	$(LINK.c)
-$(MACH64)_cc_map.noexeglobs :=	LINK =	$(LINK64.c)
 
 $(MACH)_gcc_map.noexeglobs :=	CC =	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
 $(MACH)_gcc_map.noexeglobs :=	LINK =	$(LINK.c)

@@ -307,31 +307,24 @@
 #include <sys/stat.h>
 
 #define	CW_F_CXX	0x01
-#define	CW_F_SHADOW	0x02
 #define	CW_F_EXEC	0x04
 #define	CW_F_ECHO	0x08
 #define	CW_F_XLATE	0x10
 #define	CW_F_PROG	0x20
 
 typedef enum cw_compiler {
-	CW_C_CC = 0,
-	CW_C_GCC
+	CW_C_GCC = 0,
 } cw_compiler_t;
 
 static const char *cmds[] = {
-	"cc", "CC",
 	"gcc", "g++"
 };
 
 static char default_dir[2][MAXPATHLEN] = {
-	DEFAULT_CC_DIR,
 	DEFAULT_GCC_DIR,
 };
 
-#define	CC(ctx) \
-	(((ctx)->i_flags & CW_F_SHADOW) ? \
-	    ((ctx)->i_compiler == CW_C_CC ? CW_C_GCC : CW_C_CC) : \
-	    (ctx)->i_compiler)
+#define	CC(ctx) (ctx)->i_compiler
 
 #define	CIDX(compiler, flags)	\
 	((int)(compiler) << 1) + ((flags) & CW_F_CXX ? 1 : 0)
@@ -358,7 +351,6 @@ typedef struct cw_ictx {
 	int		i_oldargc;
 	char		**i_oldargv;
 	pid_t		i_pid;
-	char		i_discard[MAXPATHLEN];
 	char		*i_stderr;
 } cw_ictx_t;
 
@@ -705,14 +697,9 @@ do_gcc(cw_ictx_t *ctx)
 
 			/*
 			 * Otherwise, filenames and partial arguments
-			 * are passed through for gcc to chew on.  However,
-			 * output is always discarded for the secondary
-			 * compiler.
+			 * are passed through for gcc to chew on.
 			 */
-			if ((ctx->i_flags & CW_F_SHADOW) && in_output)
-				newae(ctx->i_ae, ctx->i_discard);
-			else
-				newae(ctx->i_ae, arg);
+			newae(ctx->i_ae, arg);
 			in_output = 0;
 			continue;
 		}
@@ -836,9 +823,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (arglen == 1) {
 				in_output = 1;
 				newae(ctx->i_ae, arg);
-			} else if (ctx->i_flags & CW_F_SHADOW) {
-				newae(ctx->i_ae, "-o");
-				newae(ctx->i_ae, ctx->i_discard);
 			} else {
 				newae(ctx->i_ae, arg);
 			}
@@ -1423,13 +1407,6 @@ do_gcc(cw_ictx_t *ctx)
 		}
 	}
 
-	if (c_files > 1 && (ctx->i_flags & CW_F_SHADOW) &&
-	    op != CW_O_PREPROCESS) {
-		(void) fprintf(stderr, "%s: error: multiple source files are "
-		    "allowed only with -E or -P\n", progname);
-		exit(2);
-	}
-
 	/*
 	 * Make sure that we do not have any unintended interactions between
 	 * the xarch options passed in and the version of the Studio compiler
@@ -1493,97 +1470,11 @@ do_gcc(cw_ictx_t *ctx)
 		    "Incompatible -xarch= and/or -m32/-m64 options used.\n");
 		exit(2);
 	}
-	if (op == CW_O_LINK && (ctx->i_flags & CW_F_SHADOW))
-		exit(0);
 
 	if (model && !pic)
 		newae(ctx->i_ae, model);
 	if (!nolibc)
 		newae(ctx->i_ae, "-lc");
-	if (!seen_o && (ctx->i_flags & CW_F_SHADOW)) {
-		newae(ctx->i_ae, "-o");
-		newae(ctx->i_ae, ctx->i_discard);
-	}
-}
-
-static void
-do_cc(cw_ictx_t *ctx)
-{
-	int in_output = 0, seen_o = 0;
-	cw_op_t op = CW_O_LINK;
-
-	if (ctx->i_flags & CW_F_PROG) {
-		newae(ctx->i_ae, "-V");
-		return;
-	}
-
-	while (--ctx->i_oldargc > 0) {
-		char *arg = *++ctx->i_oldargv;
-
-		if (*arg != '-') {
-			if (in_output == 0 || !(ctx->i_flags & CW_F_SHADOW)) {
-				newae(ctx->i_ae, arg);
-			} else {
-				in_output = 0;
-				newae(ctx->i_ae, ctx->i_discard);
-			}
-			continue;
-		}
-		switch (*(arg + 1)) {
-		case '_':
-			if (strcmp(arg, "-_noecho") == 0) {
-				ctx->i_flags &= ~CW_F_ECHO;
-			} else if (strncmp(arg, "-_cc=", 5) == 0 ||
-			    strncmp(arg, "-_CC=", 5) == 0) {
-				newae(ctx->i_ae, arg + 5);
-			} else if (strncmp(arg, "-_gcc=", 6) != 0 &&
-			    strncmp(arg, "-_g++=", 6) != 0) {
-				(void) fprintf(stderr,
-				    "%s: invalid argument '%s'\n", progname,
-				    arg);
-				exit(2);
-			}
-			break;
-		case 'V':
-			ctx->i_flags &= ~CW_F_ECHO;
-			newae(ctx->i_ae, arg);
-			break;
-		case 'o':
-			seen_o = 1;
-			if (strlen(arg) == 2) {
-				in_output = 1;
-				newae(ctx->i_ae, arg);
-			} else if (ctx->i_flags & CW_F_SHADOW) {
-				newae(ctx->i_ae, "-o");
-				newae(ctx->i_ae, ctx->i_discard);
-			} else {
-				newae(ctx->i_ae, arg);
-			}
-			break;
-		case 'c':
-		case 'S':
-			if (strlen(arg) == 2)
-				op = CW_O_COMPILE;
-			newae(ctx->i_ae, arg);
-			break;
-		case 'E':
-		case 'P':
-			if (strlen(arg) == 2)
-				op = CW_O_PREPROCESS;
-		/*FALLTHROUGH*/
-		default:
-			newae(ctx->i_ae, arg);
-		}
-	}
-
-	if ((op == CW_O_LINK || op == CW_O_PREPROCESS) &&
-	    (ctx->i_flags & CW_F_SHADOW))
-		exit(0);
-
-	if (!seen_o && (ctx->i_flags & CW_F_SHADOW)) {
-		newae(ctx->i_ae, "-o");
-		newae(ctx->i_ae, ctx->i_discard);
-	}
 }
 
 static void
@@ -1594,14 +1485,6 @@ prepctx(cw_ictx_t *ctx)
 	size_t len;
 
 	switch (CIDX(CC(ctx), ctx->i_flags)) {
-		case CIDX(CW_C_CC, 0):
-			program = getenv("CW_CC");
-			dir = getenv("CW_CC_DIR");
-			break;
-		case CIDX(CW_C_CC, CW_F_CXX):
-			program = getenv("CW_CPLUSPLUS");
-			dir = getenv("CW_CPLUSPLUS_DIR");
-			break;
 		case CIDX(CW_C_GCC, 0):
 			program = getenv("CW_GCC");
 			dir = getenv("CW_GCC_DIR");
@@ -1625,8 +1508,7 @@ prepctx(cw_ictx_t *ctx)
 	newae(ctx->i_ae, program);
 
 	if (ctx->i_flags & CW_F_PROG) {
-		(void) printf("%s: %s\n", (ctx->i_flags & CW_F_SHADOW) ?
-		    "shadow" : "primary", program);
+		(void) printf("compiler: %s\n", program);
 		(void) fflush(stdout);
 	}
 
@@ -1634,9 +1516,6 @@ prepctx(cw_ictx_t *ctx)
 		return;
 
 	switch (CC(ctx)) {
-	case CW_C_CC:
-		do_cc(ctx);
-		break;
 	case CW_C_GCC:
 		do_gcc(ctx);
 		break;
@@ -1673,18 +1552,6 @@ invoke(cw_ictx_t *ctx)
 	if (!(ctx->i_flags & CW_F_EXEC))
 		return (0);
 
-	/*
-	 * We must fix up the environment here so that the
-	 * dependency files are not trampled by the shadow compiler.
-	 */
-	if ((ctx->i_flags & CW_F_SHADOW) &&
-	    (unsetenv("SUNPRO_DEPENDENCIES") != 0 ||
-	    unsetenv("DEPENDENCIES_OUTPUT") != 0)) {
-		(void) fprintf(stderr, "error: environment setup failed: %s\n",
-		    strerror(errno));
-		return (-1);
-	}
-
 	(void) execv(newargv[0], newargv);
 	cw_perror("couldn't run %s", newargv[0]);
 
@@ -1719,8 +1586,6 @@ reap(cw_ictx_t *ctx)
 			}
 		}
 	} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-
-	(void) unlink(ctx->i_discard);
 
 	if (stat(ctx->i_stderr, &s) < 0) {
 		cw_perror("stat failed on child cleanup");
@@ -1761,8 +1626,6 @@ exec_ctx(cw_ictx_t *ctx, int block)
 		nomem();
 		return (-1);
 	}
-	(void) strlcpy(ctx->i_discard, file, MAXPATHLEN);
-	(void) strlcat(ctx->i_discard, ".o", MAXPATHLEN);
 	free(file);
 
 	if ((ctx->i_stderr = tempnam(NULL, ".cw")) == NULL) {
@@ -1810,7 +1673,7 @@ main(int argc, char **argv)
 	cw_ictx_t *ctx = newictx();
 	cw_ictx_t *ctx_shadow = newictx();
 	const char *dir;
-	int do_serial, do_shadow;
+	int do_reap = 0;
 	int ret = 0;
 
 	if ((progname = strrchr(argv[0], '/')) == NULL)
@@ -1827,42 +1690,23 @@ main(int argc, char **argv)
 	 * Figure out where to get our tools from.  This depends on
 	 * the environment variables set at run time.
 	 */
-	if ((dir = getenv("SPRO_VROOT")) != NULL) {
-		(void) snprintf(default_dir[CW_C_CC], MAXPATHLEN,
-		    "%s/bin", dir);
-	} else if ((dir = getenv("SPRO_ROOT")) != NULL) {
-		(void) snprintf(default_dir[CW_C_CC], MAXPATHLEN,
-		    "%s/SS12/bin", dir);
-	} else if ((dir = getenv("BUILD_TOOLS")) != NULL) {
-		(void) snprintf(default_dir[CW_C_CC], MAXPATHLEN,
-		    "%s/SUNWspro/SS12/bin", dir);
-	}
-
 	if ((dir = getenv("GCC_ROOT")) != NULL) {
 		(void) snprintf(default_dir[CW_C_GCC], MAXPATHLEN,
 		    "%s/bin", dir);
 	}
 
-	do_shadow = (getenv("CW_NO_SHADOW") ? 0 : 1);
-	do_serial = (getenv("CW_SHADOW_SERIAL") ? 1 : 0);
-
 	if (getenv("CW_NO_EXEC") == NULL)
 		ctx->i_flags |= CW_F_EXEC;
 
 	/*
-	 * The first argument must be one of "-_cc", "-_gcc", "-_CC", or "-_g++"
+	 * The first argument must be one of "-_gcc", or "-_g++"
 	 */
 	if (argc == 1)
 		usage();
 	argc--;
 	argv++;
-	if (strcmp(argv[0], "-_cc") == 0) {
-		ctx->i_compiler = CW_C_CC;
-	} else if (strcmp(argv[0], "-_gcc") == 0) {
+	if (strcmp(argv[0], "-_gcc") == 0) {
 		ctx->i_compiler = CW_C_GCC;
-	} else if (strcmp(argv[0], "-_CC") == 0) {
-		ctx->i_compiler = CW_C_CC;
-		ctx->i_flags |= CW_F_CXX;
 	} else if (strcmp(argv[0], "-_g++") == 0) {
 		ctx->i_compiler = CW_C_GCC;
 		ctx->i_flags |= CW_F_CXX;
@@ -1889,29 +1733,21 @@ main(int argc, char **argv)
 	 */
 	if (argc > 1 && strcmp(argv[1], "-_versions") == 0) {
 		(void) printf("cw version %s", CW_VERSION);
-		if (!do_shadow)
-			(void) printf(" (SHADOW MODE DISABLED)");
 		(void) printf("\n");
 		(void) fflush(stdout);
 		ctx->i_flags &= ~CW_F_ECHO;
 		ctx->i_flags |= CW_F_PROG|CW_F_EXEC;
 		argc--;
 		argv++;
-		do_serial = 1;
+		do_reap = 1;
 	}
 
 	ctx->i_oldargc = argc;
 	ctx->i_oldargv = argv;
 
-	ret |= exec_ctx(ctx, do_serial);
+	ret |= exec_ctx(ctx, do_reap);
 
-	if (do_shadow) {
-		(void) memcpy(ctx_shadow, ctx, sizeof (cw_ictx_t));
-		ctx_shadow->i_flags |= CW_F_SHADOW;
-		ret |= exec_ctx(ctx_shadow, 1);
-	}
-
-	if (!do_serial)
+	if (!do_reap)
 		ret |= reap(ctx);
 
 	return (ret);

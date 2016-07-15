@@ -27,4 +27,3 @@
 #ident	"%Z%%M%	%I%	%E% SMI"
 
 echo_file usr/src/common/crypto/md5/md5.c
-echo_file usr/src/common/crypto/md5/sparc/sun4u/byteswap.il

@@ -120,8 +120,3 @@ INC_PATH	+= -I$(UTSBASE)/sparc/krtld
 # since only C headers are included when #defined(lint) is true.
 #
 ASSYM_DEPS +=	sparc_ddi.o
-
-#
-# Inlined assembler routines.
-#
-INLINES		+= $(UTSBASE)/sparc/ml/sparc.il

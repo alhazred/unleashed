@@ -63,9 +63,6 @@ AS=		$($(MACH64)_AS)
 LD=		$($(MACH64)_LD)
 LINT=		$($(MACH64)_LINT)
 
-REAL_CC=	$(CW_CC_CMD:sh)
-REAL_CCC=	$(CW_CCC_CMD:sh)
-
 BUILD.SO=	$(CC) $(CFLAGS) -o $@ $(GSHARED) $(DYNFLAGS) \
 		$(PICS) $(EXTPICS) -L $(ROOTLIBDIR64) $(LDLIBS)
 
@@ -74,9 +71,8 @@ BUILD.SO=	$(CC) $(CFLAGS) -o $@ $(GSHARED) $(DYNFLAGS) \
 #
 MAPFILECLASS=	-64
 
-CCNEEDED =		-lCrun
-$(__GNUC64)CCNEEDED =	-L$(GCCLIBDIR) -lstdc++
-$(__GNUC64)CCNEEDED +=	-lgcc_s
+CCNEEDED =	-L$(GCCLIBDIR) -lstdc++
+CCNEEDED +=	-lgcc_s
 
 BUILDCCC.SO=    $(CCC) $(CCFLAGS) -o $@ $(GSHARED) $(DYNFLAGS) \
 		$(PICS) $(EXTPICS) $(LDLIBS) $(CCNEEDED)
