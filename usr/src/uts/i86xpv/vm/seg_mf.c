@@ -499,13 +499,6 @@ segmf_getmemid(struct seg *seg, caddr_t addr, memid_t *memid)
 	return (0);
 }
 
-/*ARGSUSED*/
-static int
-segmf_capable(struct seg *seg, segcapability_t capability)
-{
-	return (0);
-}
-
 /*
  * Add a set of contiguous foreign MFNs to the segment. soft-locking them.  The
  * pre-faulting is necessary due to live migration; in particular we must
@@ -771,5 +764,4 @@ static struct seg_ops segmf_ops = {
 	.pagelock	= segmf_pagelock,
 	.setpagesize	= segmf_setpagesize,
 	.getmemid	= segmf_getmemid,
-	.capable	= segmf_capable,
 };

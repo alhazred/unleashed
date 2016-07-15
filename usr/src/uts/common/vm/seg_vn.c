@@ -134,7 +134,6 @@ static int	segvn_setpagesize(struct seg *seg, caddr_t addr, size_t len,
 static int	segvn_getmemid(struct seg *seg, caddr_t addr,
 		    memid_t *memidp);
 static lgrp_mem_policy_info_t	*segvn_getpolicy(struct seg *, caddr_t);
-static int	segvn_capable(struct seg *seg, segcapability_t capable);
 static int	segvn_inherit(struct seg *, caddr_t, size_t, uint_t);
 
 struct	seg_ops segvn_ops = {
@@ -160,7 +159,6 @@ struct	seg_ops segvn_ops = {
 	.setpagesize	= segvn_setpagesize,
 	.getmemid	= segvn_getmemid,
 	.getpolicy	= segvn_getpolicy,
-	.capable	= segvn_capable,
 	.inherit	= segvn_inherit,
 };
 
@@ -9708,13 +9706,6 @@ segvn_getpolicy(struct seg *seg, caddr_t addr)
 	}
 
 	return (policy_info);
-}
-
-/*ARGSUSED*/
-static int
-segvn_capable(struct seg *seg, segcapability_t capability)
-{
-	return (0);
 }
 
 /*

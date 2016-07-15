@@ -1998,6 +1998,9 @@ segop_getpolicy(struct seg *seg, caddr_t addr)
 int
 segop_capable(struct seg *seg, segcapability_t cap)
 {
+	if (seg->s_ops->capable == NULL)
+		return (0);
+
 	return (seg->s_ops->capable(seg, cap));
 }
 

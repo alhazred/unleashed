@@ -105,7 +105,6 @@ faultcode_t segkpm_fault(struct hat *hat, struct seg *seg, caddr_t addr,
 static void	segkpm_dump(struct seg *);
 static void	segkpm_badop(void);
 static int	segkpm_notsup(void);
-static int	segkpm_capable(struct seg *, segcapability_t);
 
 #define	SEGKPM_BADOP(t)	(t(*)())segkpm_badop
 #define	SEGKPM_NOTSUP	(int(*)())segkpm_notsup
@@ -133,7 +132,6 @@ static struct seg_ops segkpm_ops = {
 	.setpagesize	= SEGKPM_BADOP(int),
 	.getmemid	= SEGKPM_BADOP(int),
 	.getpolicy	= SEGKPM_BADOP(lgrp_mem_policy_info_t *),
-	.capable	= segkpm_capable,
 };
 
 /*
@@ -328,13 +326,3 @@ segkpm_notsup()
 static void
 segkpm_dump(struct seg *seg)
 {}
-
-/*
- * We claim to have no special capabilities.
- */
-/*ARGSUSED*/
-static int
-segkpm_capable(struct seg *seg, segcapability_t capability)
-{
-	return (0);
-}
