@@ -140,7 +140,7 @@ pvn_read_kluster(
 	vp_end = vp_off + vp_len;
 	ASSERT(off >= vp_off && off < vp_end);
 
-	if (isra && SEGOP_KLUSTER(seg, addr, 0))
+	if (isra && segop_kluster(seg, addr, 0))
 		return ((page_t *)NULL);	/* segment driver says no */
 
 	if ((plist = page_create_va(vp, off,
@@ -162,7 +162,7 @@ pvn_read_kluster(
 			 * Call back to the segment driver to verify that
 			 * the klustering/read ahead operation makes sense.
 			 */
-			if (SEGOP_KLUSTER(seg, addr, -deltab))
+			if (segop_kluster(seg, addr, -deltab))
 				break;		/* page not eligible */
 			if ((pp = page_create_va(vp, off - deltab,
 			    PAGESIZE, PG_EXCL, seg, addr - deltab))
@@ -182,7 +182,7 @@ pvn_read_kluster(
 			 * Call back to the segment driver to verify that
 			 * the klustering/read ahead operation makes sense.
 			 */
-			if (SEGOP_KLUSTER(seg, addr, deltaf))
+			if (segop_kluster(seg, addr, deltaf))
 				break;		/* page not file extension */
 			if ((pp = page_create_va(vp, off + deltaf,
 			    PAGESIZE, PG_EXCL, seg, addr + deltaf))

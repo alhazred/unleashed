@@ -431,7 +431,7 @@ segdev_create(struct seg *seg, void *argsp)
 		 * Mappings of /dev/null don't count towards the VSZ of a
 		 * process.  Mappings of /dev/null have no mapping type.
 		 */
-		if ((SEGOP_GETTYPE(seg, (seg)->s_base) & (MAP_SHARED |
+		if ((segop_gettype(seg, seg->s_base) & (MAP_SHARED |
 		    MAP_PRIVATE)) == 0) {
 			seg->s_as->a_resvsize -= seg->s_size;
 		}

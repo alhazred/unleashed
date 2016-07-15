@@ -1498,7 +1498,7 @@ process_scns(core_content_t content, proc_t *p, cred_t *credp, vnode_t *vp,
 		 * something fishy going on so we ignore this segment.
 		 */
 		if (seg->s_ops != &segvn_ops ||
-		    SEGOP_GETVP(seg, seg->s_base, &mvp) != 0 ||
+		    segop_getvp(seg, seg->s_base, &mvp) != 0 ||
 		    mvp == lastvp || mvp == NULL || mvp->v_type != VREG ||
 		    (segsize = pr_getsegsize(seg, 1)) == 0)
 			continue;
@@ -1929,7 +1929,7 @@ top:
 			/*
 			 * Figure out which mappings to include in the core.
 			 */
-			type = SEGOP_GETTYPE(seg, saddr);
+			type = segop_gettype(seg, saddr);
 
 			if (saddr == stkbase && size == stksize) {
 				if (!(content & CC_CONTENT_STACK))
@@ -1956,7 +1956,7 @@ top:
 					if (!(content & CC_CONTENT_SHM))
 						goto exclude;
 
-				} else if (SEGOP_GETVP(seg, seg->s_base,
+				} else if (segop_getvp(seg, seg->s_base,
 				    &mvp) != 0 || mvp == NULL ||
 				    mvp->v_type != VREG) {
 					if (!(content & CC_CONTENT_SHANON))
@@ -1967,7 +1967,7 @@ top:
 						goto exclude;
 				}
 
-			} else if (SEGOP_GETVP(seg, seg->s_base, &mvp) != 0 ||
+			} else if (segop_getvp(seg, seg->s_base, &mvp) != 0 ||
 			    mvp == NULL || mvp->v_type != VREG) {
 				if (!(content & CC_CONTENT_ANON))
 					goto exclude;

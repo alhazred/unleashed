@@ -118,7 +118,8 @@ struct devmap_pmem_cookie {
 
 #define	SEG_IS_DEVNULL_MAPPING(seg)	\
 	((seg)->s_ops == &segdev_ops &&	\
-	((SEGOP_GETTYPE(seg, (seg)->s_base) & (MAP_SHARED | MAP_PRIVATE)) == 0))
+	((segop_gettype((seg), (seg)->s_base) & \
+	    (MAP_SHARED | MAP_PRIVATE)) == 0))
 
 extern void segdev_init(void);
 

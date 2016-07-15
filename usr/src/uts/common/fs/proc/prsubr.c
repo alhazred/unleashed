@@ -1483,7 +1483,7 @@ break_seg(proc_t *p)
 		addr += p->p_brksize - 1;
 	seg = as_segat(p->p_as, addr);
 	if (seg != NULL && seg->s_ops == &segvn_ops &&
-	    (SEGOP_GETVP(seg, seg->s_base, &vp) != 0 || vp == NULL))
+	    (segop_getvp(seg, seg->s_base, &vp) != 0 || vp == NULL))
 		return (seg);
 	return (NULL);
 }
@@ -1648,7 +1648,7 @@ prgetmap(proc_t *p, int reserved, list_t *iolhead)
 
 			mp->pr_vaddr = (uintptr_t)saddr;
 			mp->pr_size = naddr - saddr;
-			mp->pr_offset = SEGOP_GETOFFSET(seg, saddr);
+			mp->pr_offset = segop_getoffset(seg, saddr);
 			mp->pr_mflags = 0;
 			if (prot & PROT_READ)
 				mp->pr_mflags |= MA_READ;
@@ -1656,13 +1656,13 @@ prgetmap(proc_t *p, int reserved, list_t *iolhead)
 				mp->pr_mflags |= MA_WRITE;
 			if (prot & PROT_EXEC)
 				mp->pr_mflags |= MA_EXEC;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_SHARED)
+			if (segop_gettype(seg, saddr) & MAP_SHARED)
 				mp->pr_mflags |= MA_SHARED;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_NORESERVE)
+			if (segop_gettype(seg, saddr) & MAP_NORESERVE)
 				mp->pr_mflags |= MA_NORESERVE;
 			if (seg->s_ops == &segspt_shmops ||
 			    (seg->s_ops == &segvn_ops &&
-			    (SEGOP_GETVP(seg, saddr, &vp) != 0 || vp == NULL)))
+			    (segop_getvp(seg, saddr, &vp) != 0 || vp == NULL)))
 				mp->pr_mflags |= MA_ANON;
 			if (seg == brkseg)
 				mp->pr_mflags |= MA_BREAK;
@@ -1688,7 +1688,7 @@ prgetmap(proc_t *p, int reserved, list_t *iolhead)
 			 */
 			vattr.va_mask = AT_FSID|AT_NODEID;
 			if (seg->s_ops == &segvn_ops &&
-			    SEGOP_GETVP(seg, saddr, &vp) == 0 &&
+			    segop_getvp(seg, saddr, &vp) == 0 &&
 			    vp != NULL && vp->v_type == VREG &&
 			    VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) == 0) {
 				if (vp == p->p_exec)
@@ -1759,7 +1759,7 @@ prgetmap32(proc_t *p, int reserved, list_t *iolhead)
 
 			mp->pr_vaddr = (caddr32_t)(uintptr_t)saddr;
 			mp->pr_size = (size32_t)(naddr - saddr);
-			mp->pr_offset = SEGOP_GETOFFSET(seg, saddr);
+			mp->pr_offset = segop_getoffset(seg, saddr);
 			mp->pr_mflags = 0;
 			if (prot & PROT_READ)
 				mp->pr_mflags |= MA_READ;
@@ -1767,13 +1767,13 @@ prgetmap32(proc_t *p, int reserved, list_t *iolhead)
 				mp->pr_mflags |= MA_WRITE;
 			if (prot & PROT_EXEC)
 				mp->pr_mflags |= MA_EXEC;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_SHARED)
+			if (segop_gettype(seg, saddr) & MAP_SHARED)
 				mp->pr_mflags |= MA_SHARED;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_NORESERVE)
+			if (segop_gettype(seg, saddr) & MAP_NORESERVE)
 				mp->pr_mflags |= MA_NORESERVE;
 			if (seg->s_ops == &segspt_shmops ||
 			    (seg->s_ops == &segvn_ops &&
-			    (SEGOP_GETVP(seg, saddr, &vp) != 0 || vp == NULL)))
+			    (segop_getvp(seg, saddr, &vp) != 0 || vp == NULL)))
 				mp->pr_mflags |= MA_ANON;
 			if (seg == brkseg)
 				mp->pr_mflags |= MA_BREAK;
@@ -1800,7 +1800,7 @@ prgetmap32(proc_t *p, int reserved, list_t *iolhead)
 			 */
 			vattr.va_mask = AT_FSID|AT_NODEID;
 			if (seg->s_ops == &segvn_ops &&
-			    SEGOP_GETVP(seg, saddr, &vp) == 0 &&
+			    segop_getvp(seg, saddr, &vp) == 0 &&
 			    vp != NULL && vp->v_type == VREG &&
 			    VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) == 0) {
 				if (vp == p->p_exec)
@@ -1953,7 +1953,7 @@ again:
 			 * the presence of asychronously flushed pages or
 			 * mapped files whose sizes are changing.
 			 * page_exists() may be called indirectly from
-			 * pr_getprot() by a SEGOP_INCORE() routine.
+			 * pr_getprot() by a segop_incore() routine.
 			 * If this happens we need to make sure we don't
 			 * overrun the buffer whose size we computed based
 			 * on the initial iteration through the segments.
@@ -1979,7 +1979,7 @@ again:
 			php->pr_npage += npage;
 			pmp->pr_vaddr = (uintptr_t)saddr;
 			pmp->pr_npage = npage;
-			pmp->pr_offset = SEGOP_GETOFFSET(seg, saddr);
+			pmp->pr_offset = segop_getoffset(seg, saddr);
 			pmp->pr_mflags = 0;
 			if (prot & PROT_READ)
 				pmp->pr_mflags |= MA_READ;
@@ -1987,13 +1987,13 @@ again:
 				pmp->pr_mflags |= MA_WRITE;
 			if (prot & PROT_EXEC)
 				pmp->pr_mflags |= MA_EXEC;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_SHARED)
+			if (segop_gettype(seg, saddr) & MAP_SHARED)
 				pmp->pr_mflags |= MA_SHARED;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_NORESERVE)
+			if (segop_gettype(seg, saddr) & MAP_NORESERVE)
 				pmp->pr_mflags |= MA_NORESERVE;
 			if (seg->s_ops == &segspt_shmops ||
 			    (seg->s_ops == &segvn_ops &&
-			    (SEGOP_GETVP(seg, saddr, &vp) != 0 || vp == NULL)))
+			    (segop_getvp(seg, saddr, &vp) != 0 || vp == NULL)))
 				pmp->pr_mflags |= MA_ANON;
 			if (seg->s_ops == &segspt_shmops)
 				pmp->pr_mflags |= MA_ISM | MA_SHM;
@@ -2003,7 +2003,7 @@ again:
 			 */
 			vattr.va_mask = AT_FSID|AT_NODEID;
 			if (seg->s_ops == &segvn_ops &&
-			    SEGOP_GETVP(seg, saddr, &vp) == 0 &&
+			    segop_getvp(seg, saddr, &vp) == 0 &&
 			    vp != NULL && vp->v_type == VREG &&
 			    VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) == 0) {
 				if (vp == p->p_exec)
@@ -2100,7 +2100,7 @@ again:
 			 * the presence of asychronously flushed pages or
 			 * mapped files whose sizes are changing.
 			 * page_exists() may be called indirectly from
-			 * pr_getprot() by a SEGOP_INCORE() routine.
+			 * pr_getprot() by a segop_incore() routine.
 			 * If this happens we need to make sure we don't
 			 * overrun the buffer whose size we computed based
 			 * on the initial iteration through the segments.
@@ -2126,7 +2126,7 @@ again:
 			php->pr_npage += npage;
 			pmp->pr_vaddr = (caddr32_t)(uintptr_t)saddr;
 			pmp->pr_npage = (size32_t)npage;
-			pmp->pr_offset = SEGOP_GETOFFSET(seg, saddr);
+			pmp->pr_offset = segop_getoffset(seg, saddr);
 			pmp->pr_mflags = 0;
 			if (prot & PROT_READ)
 				pmp->pr_mflags |= MA_READ;
@@ -2134,13 +2134,13 @@ again:
 				pmp->pr_mflags |= MA_WRITE;
 			if (prot & PROT_EXEC)
 				pmp->pr_mflags |= MA_EXEC;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_SHARED)
+			if (segop_gettype(seg, saddr) & MAP_SHARED)
 				pmp->pr_mflags |= MA_SHARED;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_NORESERVE)
+			if (segop_gettype(seg, saddr) & MAP_NORESERVE)
 				pmp->pr_mflags |= MA_NORESERVE;
 			if (seg->s_ops == &segspt_shmops ||
 			    (seg->s_ops == &segvn_ops &&
-			    (SEGOP_GETVP(seg, saddr, &vp) != 0 || vp == NULL)))
+			    (segop_getvp(seg, saddr, &vp) != 0 || vp == NULL)))
 				pmp->pr_mflags |= MA_ANON;
 			if (seg->s_ops == &segspt_shmops)
 				pmp->pr_mflags |= MA_ISM | MA_SHM;
@@ -2150,7 +2150,7 @@ again:
 			 */
 			vattr.va_mask = AT_FSID|AT_NODEID;
 			if (seg->s_ops == &segvn_ops &&
-			    SEGOP_GETVP(seg, saddr, &vp) == 0 &&
+			    segop_getvp(seg, saddr, &vp) == 0 &&
 			    vp != NULL && vp->v_type == VREG &&
 			    VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) == 0) {
 				if (vp == p->p_exec)
@@ -3328,7 +3328,7 @@ pr_free_watched_pages(proc_t *p)
 			if ((pwp->wp_prot != prot ||
 			    (pwp->wp_flags & WP_NOWATCH)) &&
 			    (seg = as_segat(as, addr)) != NULL) {
-				err = SEGOP_SETPROT(seg, addr, PAGESIZE, prot);
+				err = segop_setprot(seg, addr, PAGESIZE, prot);
 				if (err == IE_RETRY) {
 					ASSERT(retrycnt == 0);
 					retrycnt++;
@@ -3434,7 +3434,7 @@ again:
 		vaddr = pwp->wp_vaddr;
 		if (pwp->wp_oprot == 0 &&
 		    (seg = as_segat(as, vaddr)) != NULL) {
-			SEGOP_GETPROT(seg, vaddr, 0, &prot);
+			(void) segop_getprot(seg, vaddr, 0, &prot);
 			pwp->wp_oprot = (uchar_t)prot;
 			pwp->wp_prot = (uchar_t)prot;
 		}
@@ -3640,7 +3640,7 @@ refill:
 		 * INCORE cleverly has different semantics than GETPROT:
 		 * it returns info on pages up to but NOT including addr + len.
 		 */
-		SEGOP_INCORE(seg, addr, len, pagev->pg_incore);
+		(void) segop_incore(seg, addr, len, pagev->pg_incore);
 		pn = pagev->pg_pnbase;
 
 		do {
@@ -3668,7 +3668,7 @@ refill:
 	 * first byte of the page just past the end of what we want.
 	 */
 out:
-	SEGOP_GETPROT(seg, saddr, len - 1, pagev->pg_protv);
+	(void) segop_getprot(seg, saddr, len - 1, pagev->pg_protv);
 	return (addr);
 }
 
@@ -3789,12 +3789,12 @@ pr_getsegsize(struct seg *seg, int reserved)
 
 		vattr.va_mask = AT_SIZE;
 
-		if (SEGOP_GETVP(seg, seg->s_base, &vp) == 0 &&
+		if (segop_getvp(seg, seg->s_base, &vp) == 0 &&
 		    vp != NULL && vp->v_type == VREG &&
 		    VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) == 0) {
 
 			u_offset_t fsize = vattr.va_size;
-			u_offset_t offset = SEGOP_GETOFFSET(seg, seg->s_base);
+			u_offset_t offset = segop_getoffset(seg, seg->s_base);
 
 			if (fsize < offset)
 				fsize = 0;
@@ -3824,7 +3824,7 @@ pr_getsegsize(struct seg *seg, int reserved)
 	 * MAP_SHARED nor MAP_PRIVATE.
 	 */
 	if (seg->s_ops == &segdev_ops &&
-	    ((SEGOP_GETTYPE(seg, seg->s_base) &
+	    ((segop_gettype(seg, seg->s_base) &
 	    (MAP_SHARED | MAP_PRIVATE)) == 0))
 		return (0);
 
@@ -4055,7 +4055,7 @@ prgetxmap(proc_t *p, list_t *iolhead)
 
 				mp->pr_vaddr = (uintptr_t)saddr;
 				mp->pr_size = naddr - saddr;
-				mp->pr_offset = SEGOP_GETOFFSET(seg, saddr);
+				mp->pr_offset = segop_getoffset(seg, saddr);
 				mp->pr_mflags = 0;
 				if (prot & PROT_READ)
 					mp->pr_mflags |= MA_READ;
@@ -4063,13 +4063,13 @@ prgetxmap(proc_t *p, list_t *iolhead)
 					mp->pr_mflags |= MA_WRITE;
 				if (prot & PROT_EXEC)
 					mp->pr_mflags |= MA_EXEC;
-				if (SEGOP_GETTYPE(seg, saddr) & MAP_SHARED)
+				if (segop_gettype(seg, saddr) & MAP_SHARED)
 					mp->pr_mflags |= MA_SHARED;
-				if (SEGOP_GETTYPE(seg, saddr) & MAP_NORESERVE)
+				if (segop_gettype(seg, saddr) & MAP_NORESERVE)
 					mp->pr_mflags |= MA_NORESERVE;
 				if (seg->s_ops == &segspt_shmops ||
 				    (seg->s_ops == &segvn_ops &&
-				    (SEGOP_GETVP(seg, saddr, &vp) != 0 ||
+				    (segop_getvp(seg, saddr, &vp) != 0 ||
 				    vp == NULL)))
 					mp->pr_mflags |= MA_ANON;
 				if (seg == brkseg)
@@ -4092,7 +4092,7 @@ prgetxmap(proc_t *p, list_t *iolhead)
 				mp->pr_dev = PRNODEV;
 				vattr.va_mask = AT_FSID|AT_NODEID;
 				if (seg->s_ops == &segvn_ops &&
-				    SEGOP_GETVP(seg, saddr, &vp) == 0 &&
+				    segop_getvp(seg, saddr, &vp) == 0 &&
 				    vp != NULL && vp->v_type == VREG &&
 				    VOP_GETATTR(vp, &vattr, 0, CRED(),
 				    NULL) == 0) {
@@ -4124,7 +4124,8 @@ prgetxmap(proc_t *p, list_t *iolhead)
 				    PAGESHIFT;
 				parr = kmem_zalloc(npages, KM_SLEEP);
 
-				SEGOP_INCORE(seg, saddr, naddr - saddr, parr);
+				(void) segop_incore(seg, saddr, naddr - saddr,
+				    parr);
 
 				for (pagenum = 0; pagenum < npages; pagenum++) {
 					if (parr[pagenum] & SEG_PAGE_INCORE)
@@ -4239,7 +4240,7 @@ prgetxmap32(proc_t *p, list_t *iolhead)
 
 				mp->pr_vaddr = (caddr32_t)(uintptr_t)saddr;
 				mp->pr_size = (size32_t)(naddr - saddr);
-				mp->pr_offset = SEGOP_GETOFFSET(seg, saddr);
+				mp->pr_offset = segop_getoffset(seg, saddr);
 				mp->pr_mflags = 0;
 				if (prot & PROT_READ)
 					mp->pr_mflags |= MA_READ;
@@ -4247,13 +4248,13 @@ prgetxmap32(proc_t *p, list_t *iolhead)
 					mp->pr_mflags |= MA_WRITE;
 				if (prot & PROT_EXEC)
 					mp->pr_mflags |= MA_EXEC;
-				if (SEGOP_GETTYPE(seg, saddr) & MAP_SHARED)
+				if (segop_gettype(seg, saddr) & MAP_SHARED)
 					mp->pr_mflags |= MA_SHARED;
-				if (SEGOP_GETTYPE(seg, saddr) & MAP_NORESERVE)
+				if (segop_gettype(seg, saddr) & MAP_NORESERVE)
 					mp->pr_mflags |= MA_NORESERVE;
 				if (seg->s_ops == &segspt_shmops ||
 				    (seg->s_ops == &segvn_ops &&
-				    (SEGOP_GETVP(seg, saddr, &vp) != 0 ||
+				    (segop_getvp(seg, saddr, &vp) != 0 ||
 				    vp == NULL)))
 					mp->pr_mflags |= MA_ANON;
 				if (seg == brkseg)
@@ -4276,7 +4277,7 @@ prgetxmap32(proc_t *p, list_t *iolhead)
 				mp->pr_dev = PRNODEV32;
 				vattr.va_mask = AT_FSID|AT_NODEID;
 				if (seg->s_ops == &segvn_ops &&
-				    SEGOP_GETVP(seg, saddr, &vp) == 0 &&
+				    segop_getvp(seg, saddr, &vp) == 0 &&
 				    vp != NULL && vp->v_type == VREG &&
 				    VOP_GETATTR(vp, &vattr, 0, CRED(),
 				    NULL) == 0) {
@@ -4309,7 +4310,8 @@ prgetxmap32(proc_t *p, list_t *iolhead)
 				    PAGESHIFT;
 				parr = kmem_zalloc(npages, KM_SLEEP);
 
-				SEGOP_INCORE(seg, saddr, naddr - saddr, parr);
+				(void) segop_incore(seg, saddr, naddr - saddr,
+				    parr);
 
 				for (pagenum = 0; pagenum < npages; pagenum++) {
 					if (parr[pagenum] & SEG_PAGE_INCORE)

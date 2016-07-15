@@ -1488,7 +1488,7 @@ check_exec_addrs(int loadable, mmapobj_result_t *mrp, caddr_t start_addr)
 			seg = as_findseg(as, myaddr, 0);
 			MOBJ_STAT_ADD(exec_addr_mapped);
 			if (seg && seg->s_ops == &segdev_ops &&
-			    ((SEGOP_GETTYPE(seg, myaddr) &
+			    ((segop_gettype(seg, myaddr) &
 			    (MAP_SHARED | MAP_PRIVATE)) == 0) &&
 			    myaddr >= seg->s_base &&
 			    myaddr + mylen <=

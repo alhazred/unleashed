@@ -297,9 +297,9 @@ startover:
 		retry:
 			seg = as_segat(as, addr);
 			ASSERT(seg != NULL);
-			SEGOP_GETPROT(seg, addr, 0, &oprot);
+			(void) segop_getprot(seg, addr, 0, &oprot);
 			if (prot != oprot) {
-				err = SEGOP_SETPROT(seg, addr, PAGESIZE, prot);
+				err = segop_setprot(seg, addr, PAGESIZE, prot);
 				if (err == IE_RETRY) {
 					ASSERT(retrycnt == 0);
 					retrycnt++;
@@ -388,7 +388,7 @@ setallwatch(void)
 		if ((seg = as_segat(as, vaddr)) != NULL &&
 		    !(pwp->wp_flags & WP_NOWATCH)) {
 			prot = pwp->wp_prot;
-			err = SEGOP_SETPROT(seg, vaddr, PAGESIZE, prot);
+			err = segop_setprot(seg, vaddr, PAGESIZE, prot);
 			if (err == IE_RETRY) {
 				ASSERT(retrycnt == 0);
 				retrycnt++;

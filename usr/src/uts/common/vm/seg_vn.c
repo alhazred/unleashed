@@ -6063,7 +6063,7 @@ segvn_setprot(struct seg *seg, caddr_t addr, size_t len, uint_t prot)
 }
 
 /*
- * segvn_setpagesize is called via SEGOP_SETPAGESIZE from as_setpagesize,
+ * segvn_setpagesize is called via segop_setpagesize from as_setpagesize,
  * to determine if the seg is capable of mapping the requested szc.
  */
 static int

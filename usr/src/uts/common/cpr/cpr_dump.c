@@ -662,7 +662,7 @@ cpr_sparse_seg_check(struct seg *seg)
  * Count pages within each kernel segment; call cpr_sparse_seg_check()
  * to find out whether a sparsely filled segment needs special
  * treatment (e.g. kvseg).
- * Todo: A "SEGOP_CPR" like SEGOP_DUMP should be introduced, the cpr
+ * Todo: A "segop_cpr" like segop_dump should be introduced, the cpr
  *       module shouldn't need to know segment details like if it is
  *       sparsely filled or not (makes kseg_table obsolete).
  */

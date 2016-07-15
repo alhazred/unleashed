@@ -22,6 +22,7 @@
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  * Copyright (c) 2015, Joyent, Inc.
+ * Copyright 2015, Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  */
 
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
@@ -1636,7 +1637,7 @@ seg_attach(struct as *as, caddr_t base, size_t size, struct seg *seg)
 /*
  * Unmap a segment and free it from its associated address space.
  * This should be called by anybody who's finished with a whole segment's
- * mapping.  Just calls SEGOP_UNMAP() on the whole mapping .  It is the
+ * mapping.  Just calls segop_unmap() on the whole mapping .  It is the
  * responsibility of the segment driver to unlink the the segment
  * from the address space, and to free public and private data structures
  * associated with the segment.  (This is typically done by a call to
@@ -1656,10 +1657,10 @@ seg_unmap(struct seg *seg)
 
 	/* Unmap the whole mapping */
 #ifdef DEBUG
-	ret = SEGOP_UNMAP(seg, seg->s_base, seg->s_size);
+	ret = segop_unmap(seg, seg->s_base, seg->s_size);
 	ASSERT(ret == 0);
 #else
-	SEGOP_UNMAP(seg, seg->s_base, seg->s_size);
+	(void) segop_unmap(seg, seg->s_base, seg->s_size);
 #endif /* DEBUG */
 }
 
@@ -1685,7 +1686,7 @@ seg_free(struct seg *seg)
 	 * then segment driver is not attached yet.
 	 */
 	if (seg->s_data != NULL)
-		SEGOP_FREE(seg);
+		segop_free(seg);
 
 	mutex_destroy(&seg->s_pmtx);
 	ASSERT(seg->s_phead.p_lnext == &seg->s_phead);
@@ -1854,11 +1855,167 @@ seg_swresv(struct seg *seg)
 }
 
 /*
- * General not supported function for SEGOP_INHERIT
+ * General not supported function for segop_inherit
  */
 /* ARGSUSED */
 int
 seg_inherit_notsup(struct seg *seg, caddr_t addr, size_t len, uint_t op)
 {
 	return (ENOTSUP);
+}
+
+/*
+ * segop wrappers
+ */
+int
+segop_dup(struct seg *seg, struct seg *new)
+{
+	return (seg->s_ops->dup(seg, new));
+}
+
+int
+segop_unmap(struct seg *seg, caddr_t addr, size_t len)
+{
+	return (seg->s_ops->unmap(seg, addr, len));
+}
+
+void
+segop_free(struct seg *seg)
+{
+	seg->s_ops->free(seg);
+}
+
+faultcode_t
+segop_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t len,
+    enum fault_type type, enum seg_rw rw)
+{
+	return (seg->s_ops->fault(hat, seg, addr, len, type, rw));
+}
+
+faultcode_t
+segop_faulta(struct seg *seg, caddr_t addr)
+{
+	return (seg->s_ops->faulta(seg, addr));
+}
+
+int
+segop_setprot(struct seg *seg, caddr_t addr, size_t len, uint_t prot)
+{
+	return (seg->s_ops->setprot(seg, addr, len, prot));
+}
+
+int
+segop_checkprot(struct seg *seg, caddr_t addr, size_t len, uint_t prot)
+{
+	return (seg->s_ops->checkprot(seg, addr, len, prot));
+}
+
+int
+segop_kluster(struct seg *seg, caddr_t addr, ssize_t d)
+{
+	return (seg->s_ops->kluster(seg, addr, d));
+}
+
+size_t
+segop_swapout(struct seg *seg)
+{
+	return (seg->s_ops->swapout(seg));
+}
+
+int
+segop_sync(struct seg *seg, caddr_t addr, size_t len, int atr, uint_t f)
+{
+	return (seg->s_ops->sync(seg, addr, len, atr, f));
+}
+
+size_t
+segop_incore(struct seg *seg, caddr_t addr, size_t len, char *v)
+{
+	return (seg->s_ops->incore(seg, addr, len, v));
+}
+
+int
+segop_lockop(struct seg *seg, caddr_t addr, size_t len, int atr, int op,
+    ulong_t *b, size_t p)
+{
+	return (seg->s_ops->lockop(seg, addr, len, atr, op, b, p));
+}
+
+int
+segop_getprot(struct seg *seg, caddr_t addr, size_t len, uint_t *p)
+{
+	return (seg->s_ops->getprot(seg, addr, len, p));
+}
+
+u_offset_t
+segop_getoffset(struct seg *seg, caddr_t addr)
+{
+	return (seg->s_ops->getoffset(seg, addr));
+}
+
+int
+segop_gettype(struct seg *seg, caddr_t addr)
+{
+	return (seg->s_ops->gettype(seg, addr));
+}
+
+int
+segop_getvp(struct seg *seg, caddr_t addr, struct vnode **vpp)
+{
+	return (seg->s_ops->getvp(seg, addr, vpp));
+}
+
+int
+segop_advise(struct seg *seg, caddr_t addr, size_t len, uint_t b)
+{
+	return (seg->s_ops->advise(seg, addr, len, b));
+}
+
+void
+segop_dump(struct seg *seg)
+{
+	seg->s_ops->dump(seg);
+}
+
+int
+segop_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***page,
+    enum lock_type type, enum seg_rw rw)
+{
+	return (seg->s_ops->pagelock(seg, addr, len, page, type, rw));
+}
+
+int
+segop_setpagesize(struct seg *seg, caddr_t addr, size_t len, uint_t szc)
+{
+	return (seg->s_ops->setpagesize(seg, addr, len, szc));
+}
+
+int
+segop_getmemid(struct seg *seg, caddr_t addr, memid_t *mp)
+{
+	return (seg->s_ops->getmemid(seg, addr, mp));
+}
+
+struct lgrp_mem_policy_info *
+segop_getpolicy(struct seg *seg, caddr_t addr)
+{
+	if (seg->s_ops->getpolicy == NULL)
+		return (NULL);
+
+	return (seg->s_ops->getpolicy(seg, addr));
+}
+
+int
+segop_capable(struct seg *seg, segcapability_t cap)
+{
+	return (seg->s_ops->capable(seg, cap));
+}
+
+int
+segop_inherit(struct seg *seg, caddr_t addr, size_t len, uint_t op)
+{
+	if (seg->s_ops->inherit == NULL)
+		return (ENOTSUP);
+
+	return (seg->s_ops->inherit(seg, addr, len, op));
 }

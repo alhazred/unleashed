@@ -378,7 +378,7 @@ cow_mapin(struct as *as, caddr_t uaddr, caddr_t kaddr, struct page **cached_ppp,
 		if (seg->s_ops != &segvn_ops) {
 			AS_LOCK_EXIT(as);
 			return (ENOTSUP);
-		} else if ((SEGOP_GETTYPE(seg, uaddr) & MAP_PRIVATE) == 0) {
+		} else if ((segop_gettype(seg, uaddr) & MAP_PRIVATE) == 0) {
 			AS_LOCK_EXIT(as);
 			return (ENOTSUP);
 		}

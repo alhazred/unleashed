@@ -540,7 +540,7 @@ dofusers(vnode_t *fvp, int flags)
 				 * segment then skip it
 				 */
 				vp = NULL;
-				if ((SEGOP_GETVP(seg, seg->s_base, &vp)) ||
+				if ((segop_getvp(seg, seg->s_base, &vp)) ||
 				    (vp == NULL))
 					continue;
 

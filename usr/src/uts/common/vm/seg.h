@@ -210,36 +210,6 @@ extern	segadvstat_t	segadvstat;
 #define	SEG_PAGE_ANON		0x20	/* VA has an anonymous page */
 #define	SEG_PAGE_VNODE		0x40	/* VA has a vnode page backing it */
 
-#define	SEGOP_DUP(s, n)		    (*(s)->s_ops->dup)((s), (n))
-#define	SEGOP_UNMAP(s, a, l)	    (*(s)->s_ops->unmap)((s), (a), (l))
-#define	SEGOP_FREE(s)		    (*(s)->s_ops->free)((s))
-#define	SEGOP_FAULT(h, s, a, l, t, rw) \
-		(*(s)->s_ops->fault)((h), (s), (a), (l), (t), (rw))
-#define	SEGOP_FAULTA(s, a)	    (*(s)->s_ops->faulta)((s), (a))
-#define	SEGOP_SETPROT(s, a, l, p)   (*(s)->s_ops->setprot)((s), (a), (l), (p))
-#define	SEGOP_CHECKPROT(s, a, l, p) (*(s)->s_ops->checkprot)((s), (a), (l), (p))
-#define	SEGOP_KLUSTER(s, a, d)	    (*(s)->s_ops->kluster)((s), (a), (d))
-#define	SEGOP_SWAPOUT(s)	    (*(s)->s_ops->swapout)((s))
-#define	SEGOP_SYNC(s, a, l, atr, f) \
-		(*(s)->s_ops->sync)((s), (a), (l), (atr), (f))
-#define	SEGOP_INCORE(s, a, l, v)    (*(s)->s_ops->incore)((s), (a), (l), (v))
-#define	SEGOP_LOCKOP(s, a, l, atr, op, b, p) \
-		(*(s)->s_ops->lockop)((s), (a), (l), (atr), (op), (b), (p))
-#define	SEGOP_GETPROT(s, a, l, p)   (*(s)->s_ops->getprot)((s), (a), (l), (p))
-#define	SEGOP_GETOFFSET(s, a)	    (*(s)->s_ops->getoffset)((s), (a))
-#define	SEGOP_GETTYPE(s, a)	    (*(s)->s_ops->gettype)((s), (a))
-#define	SEGOP_GETVP(s, a, vpp)	    (*(s)->s_ops->getvp)((s), (a), (vpp))
-#define	SEGOP_ADVISE(s, a, l, b)    (*(s)->s_ops->advise)((s), (a), (l), (b))
-#define	SEGOP_DUMP(s)		    (*(s)->s_ops->dump)((s))
-#define	SEGOP_PAGELOCK(s, a, l, p, t, rw) \
-		(*(s)->s_ops->pagelock)((s), (a), (l), (p), (t), (rw))
-#define	SEGOP_SETPAGESIZE(s, a, l, szc) \
-		(*(s)->s_ops->setpagesize)((s), (a), (l), (szc))
-#define	SEGOP_GETMEMID(s, a, mp)    (*(s)->s_ops->getmemid)((s), (a), (mp))
-#define	SEGOP_GETPOLICY(s, a)	    (*(s)->s_ops->getpolicy)((s), (a))
-#define	SEGOP_CAPABLE(s, c)	    (*(s)->s_ops->capable)((s), (c))
-#define	SEGOP_INHERIT(s, a, l, b)   (*(s)->s_ops->inherit)((s), (a), (l), (b))
-
 #define	seg_page(seg, addr) \
 	(((uintptr_t)((addr) - (seg)->s_base)) >> PAGESHIFT)
 
@@ -250,7 +220,7 @@ extern	segadvstat_t	segadvstat;
 #define	IE_RETRY	-2	/* internal to seg layer */
 #define	IE_REATTACH	-3	/* internal to seg layer */
 
-/* Values for SEGOP_INHERIT */
+/* Values for segop_inherit */
 #define	SEGP_INH_ZERO	0x01
 
 int seg_inherit_notsup(struct seg *, caddr_t, size_t, uint_t);
@@ -277,6 +247,35 @@ uint_t	seg_pages(struct seg *);
 
 boolean_t	seg_can_change_zones(struct seg *);
 size_t		seg_swresv(struct seg *);
+
+/* segop wrappers */
+extern int segop_dup(struct seg *, struct seg *);
+extern int segop_unmap(struct seg *, caddr_t, size_t);
+extern void segop_free(struct seg *);
+extern faultcode_t segop_fault(struct hat *, struct seg *, caddr_t, size_t,
+    enum fault_type, enum seg_rw);
+extern faultcode_t segop_faulta(struct seg *, caddr_t);
+extern int segop_setprot(struct seg *, caddr_t, size_t, uint_t);
+extern int segop_checkprot(struct seg *, caddr_t, size_t, uint_t);
+extern int segop_kluster(struct seg *, caddr_t, ssize_t);
+extern size_t segop_swapout(struct seg *);
+extern int segop_sync(struct seg *, caddr_t, size_t, int, uint_t);
+extern size_t segop_incore(struct seg *, caddr_t, size_t, char *);
+extern int segop_lockop(struct seg *, caddr_t, size_t, int, int, ulong_t *,
+    size_t);
+extern int segop_getprot(struct seg *, caddr_t, size_t, uint_t *);
+extern u_offset_t segop_getoffset(struct seg *, caddr_t);
+extern int segop_gettype(struct seg *, caddr_t);
+extern int segop_getvp(struct seg *, caddr_t, struct vnode **);
+extern int segop_advise(struct seg *, caddr_t, size_t, uint_t);
+extern void segop_dump(struct seg *);
+extern int segop_pagelock(struct seg *, caddr_t, size_t, struct page ***,
+    enum lock_type, enum seg_rw);
+extern int segop_setpagesize(struct seg *, caddr_t, size_t, uint_t);
+extern int segop_getmemid(struct seg *, caddr_t, memid_t *);
+extern struct lgrp_mem_policy_info *segop_getpolicy(struct seg *, caddr_t);
+extern int segop_capable(struct seg *, segcapability_t);
+extern int segop_inherit(struct seg *, caddr_t, size_t, uint_t);
 
 #endif	/* _KERNEL */
 

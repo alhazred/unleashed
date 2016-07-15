@@ -4672,8 +4672,8 @@ nfs_delmap(vnode_t *vp, offset_t off, struct as *as, caddr_t addr,
 	/*
 	 * The way that the address space of this process deletes its mapping
 	 * of this file is via the following call chains:
-	 * - as_free()->SEGOP_UNMAP()/segvn_unmap()->VOP_DELMAP()/nfs_delmap()
-	 * - as_unmap()->SEGOP_UNMAP()/segvn_unmap()->VOP_DELMAP()/nfs_delmap()
+	 * - as_free()->segop_unmap()/segvn_unmap()->VOP_DELMAP()/nfs_delmap()
+	 * - as_unmap()->segop_unmap()/segvn_unmap()->VOP_DELMAP()/nfs_delmap()
 	 *
 	 * With the use of address space callbacks we are allowed to drop the
 	 * address space lock, a_lock, while executing the NFS operations that

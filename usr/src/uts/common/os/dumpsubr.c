@@ -661,7 +661,7 @@ dump_page(pfn_t pfn)
 
 /*
  * Dump the <as, va, pfn> information for a given address space.
- * SEGOP_DUMP() will call dump_addpage() for each page in the segment.
+ * segop_dump() will call dump_addpage() for each page in the segment.
  */
 static void
 dump_as(struct as *as)
@@ -674,7 +674,7 @@ dump_as(struct as *as)
 			break;
 		if (seg->s_ops == NULL)
 			continue;
-		SEGOP_DUMP(seg);
+		segop_dump(seg);
 	}
 	AS_LOCK_EXIT(as);
 

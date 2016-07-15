@@ -27,8 +27,6 @@
 #ifndef _SYS_WATCHPOINT_H
 #define	_SYS_WATCHPOINT_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/types.h>
 #include <vm/seg_enum.h>
 #include <sys/copyops.h>
@@ -74,7 +72,7 @@ typedef struct watched_page {
 
 /* wp_flags */
 #define	WP_NOWATCH	0x01	/* protections temporarily restored */
-#define	WP_SETPROT	0x02	/* SEGOP_SETPROT() needed on this page */
+#define	WP_SETPROT	0x02	/* segop_setprot() needed on this page */
 
 #ifdef	_KERNEL
 

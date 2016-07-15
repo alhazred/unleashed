@@ -8378,9 +8378,9 @@ umem_lockmemory(caddr_t addr, size_t len, int flags, ddi_umem_cookie_t *cookie,
 				continue;
 			if (((seg->s_ops != &segvn_ops) &&
 			    (seg->s_ops != &segspt_shmops)) ||
-			    ((SEGOP_GETVP(seg, addr, &vp) == 0 &&
+			    ((segop_getvp(seg, addr, &vp) == 0 &&
 			    vp != NULL && vp->v_type == VREG) &&
-			    (SEGOP_GETTYPE(seg, addr) & MAP_SHARED))) {
+			    (segop_gettype(seg, addr) & MAP_SHARED))) {
 				as_pageunlock(as, p->pparray,
 				    addr, len, p->s_flags);
 				AS_LOCK_EXIT(as);

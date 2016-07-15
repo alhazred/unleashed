@@ -3508,7 +3508,7 @@ lgrp_mem_policy_get(struct seg *seg, caddr_t vaddr)
 	/*
 	 * This is for binary compatibility to protect against third party
 	 * segment drivers which haven't recompiled to allow for
-	 * SEGOP_GETPOLICY()
+	 * segop_getpolicy()
 	 */
 	if (seg->s_ops != &segvn_ops && seg->s_ops != &segspt_ops &&
 	    seg->s_ops != &segspt_shmops)
@@ -3516,7 +3516,7 @@ lgrp_mem_policy_get(struct seg *seg, caddr_t vaddr)
 
 	policy_info = NULL;
 	if (seg->s_ops->getpolicy != NULL)
-		policy_info = SEGOP_GETPOLICY(seg, vaddr);
+		policy_info = segop_getpolicy(seg, vaddr);
 
 	return (policy_info);
 }

@@ -3146,7 +3146,7 @@ propenm(prnode_t *pnp, caddr_t cmaddr, caddr_t va, int *rvalp, cred_t *cr)
 		seg = as_segat(as, va);
 		if (seg != NULL &&
 		    seg->s_ops == &segvn_ops &&
-		    SEGOP_GETVP(seg, va, &xvp) == 0 &&
+		    segop_getvp(seg, va, &xvp) == 0 &&
 		    xvp != NULL &&
 		    xvp->v_type == VREG) {
 			VN_HOLD(xvp);
@@ -3551,7 +3551,7 @@ oprgetmap(proc_t *p, list_t *iolhead)
 
 			mp->pr_vaddr = saddr;
 			mp->pr_size = naddr - saddr;
-			mp->pr_off = SEGOP_GETOFFSET(seg, saddr);
+			mp->pr_off = segop_getoffset(seg, saddr);
 			mp->pr_mflags = 0;
 			if (prot & PROT_READ)
 				mp->pr_mflags |= MA_READ;
@@ -3559,7 +3559,7 @@ oprgetmap(proc_t *p, list_t *iolhead)
 				mp->pr_mflags |= MA_WRITE;
 			if (prot & PROT_EXEC)
 				mp->pr_mflags |= MA_EXEC;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_SHARED)
+			if (segop_gettype(seg, saddr) & MAP_SHARED)
 				mp->pr_mflags |= MA_SHARED;
 			if (seg == brkseg)
 				mp->pr_mflags |= MA_BREAK;
@@ -3611,7 +3611,7 @@ oprgetmap32(proc_t *p, list_t *iolhead)
 
 			mp->pr_vaddr = (caddr32_t)(uintptr_t)saddr;
 			mp->pr_size = (size32_t)(naddr - saddr);
-			mp->pr_off = (off32_t)SEGOP_GETOFFSET(seg, saddr);
+			mp->pr_off = (off32_t)segop_getoffset(seg, saddr);
 			mp->pr_mflags = 0;
 			if (prot & PROT_READ)
 				mp->pr_mflags |= MA_READ;
@@ -3619,7 +3619,7 @@ oprgetmap32(proc_t *p, list_t *iolhead)
 				mp->pr_mflags |= MA_WRITE;
 			if (prot & PROT_EXEC)
 				mp->pr_mflags |= MA_EXEC;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_SHARED)
+			if (segop_gettype(seg, saddr) & MAP_SHARED)
 				mp->pr_mflags |= MA_SHARED;
 			if (seg == brkseg)
 				mp->pr_mflags |= MA_BREAK;
@@ -3753,7 +3753,7 @@ again:
 			 * the presence of asychronously flushed pages or
 			 * mapped files whose sizes are changing.
 			 * page_exists() may be called indirectly from
-			 * pr_getprot() by a SEGOP_INCORE() routine.
+			 * pr_getprot() by a segop_incore() routine.
 			 * If this happens we need to make sure we don't
 			 * overrun the buffer whose size we computed based
 			 * on the initial iteration through the segments.
@@ -3779,7 +3779,7 @@ again:
 			php->pr_npage += npage;
 			pmp->pr_vaddr = saddr;
 			pmp->pr_npage = npage;
-			pmp->pr_off = SEGOP_GETOFFSET(seg, saddr);
+			pmp->pr_off = segop_getoffset(seg, saddr);
 			pmp->pr_mflags = 0;
 			if (prot & PROT_READ)
 				pmp->pr_mflags |= MA_READ;
@@ -3787,7 +3787,7 @@ again:
 				pmp->pr_mflags |= MA_WRITE;
 			if (prot & PROT_EXEC)
 				pmp->pr_mflags |= MA_EXEC;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_SHARED)
+			if (segop_gettype(seg, saddr) & MAP_SHARED)
 				pmp->pr_mflags |= MA_SHARED;
 			pmp->pr_pagesize = PAGESIZE;
 			hat_getstat(as, saddr, len, hatid,
@@ -3860,7 +3860,7 @@ again:
 			 * the presence of asychronously flushed pages or
 			 * mapped files whose sizes are changing.
 			 * page_exists() may be called indirectly from
-			 * pr_getprot() by a SEGOP_INCORE() routine.
+			 * pr_getprot() by a segop_incore() routine.
 			 * If this happens we need to make sure we don't
 			 * overrun the buffer whose size we computed based
 			 * on the initial iteration through the segments.
@@ -3886,7 +3886,7 @@ again:
 			php->pr_npage += npage;
 			pmp->pr_vaddr = (uint32_t)(uintptr_t)saddr;
 			pmp->pr_npage = (uint32_t)npage;
-			pmp->pr_off = (int32_t)SEGOP_GETOFFSET(seg, saddr);
+			pmp->pr_off = (int32_t)segop_getoffset(seg, saddr);
 			pmp->pr_mflags = 0;
 			if (prot & PROT_READ)
 				pmp->pr_mflags |= MA_READ;
@@ -3894,7 +3894,7 @@ again:
 				pmp->pr_mflags |= MA_WRITE;
 			if (prot & PROT_EXEC)
 				pmp->pr_mflags |= MA_EXEC;
-			if (SEGOP_GETTYPE(seg, saddr) & MAP_SHARED)
+			if (segop_gettype(seg, saddr) & MAP_SHARED)
 				pmp->pr_mflags |= MA_SHARED;
 			pmp->pr_pagesize = PAGESIZE;
 			hat_getstat(as, saddr, len, hatid,

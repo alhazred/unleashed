@@ -457,7 +457,7 @@ segkmem_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t size,
 	 */
 	if (segkp_bitmap && seg == &kvseg &&
 	    BT_TEST(segkp_bitmap, btop((uintptr_t)(addr - seg->s_base))))
-		return (SEGOP_FAULT(hat, segkp, addr, size, type, rw));
+		return (segop_fault(hat, segkp, addr, size, type, rw));
 
 	if (rw != S_READ && rw != S_WRITE && rw != S_OTHER)
 		return (FC_NOSUPPORT);
@@ -519,7 +519,7 @@ segkmem_setprot(struct seg *seg, caddr_t addr, size_t size, uint_t prot)
 	 */
 	if (segkp_bitmap && seg == &kvseg &&
 	    BT_TEST(segkp_bitmap, btop((uintptr_t)(addr - seg->s_base))))
-		return (SEGOP_SETPROT(segkp, addr, size, prot));
+		return (segop_setprot(segkp, addr, size, prot));
 
 	if (prot == 0)
 		hat_unload(kas.a_hat, addr, size, HAT_UNLOAD);
@@ -546,7 +546,7 @@ segkmem_checkprot(struct seg *seg, caddr_t addr, size_t size, uint_t prot)
 	 */
 	if (segkp_bitmap && seg == &kvseg &&
 	    BT_TEST(segkp_bitmap, btop((uintptr_t)(addr - seg->s_base))))
-		return (SEGOP_CHECKPROT(segkp, addr, size, prot));
+		return (segop_checkprot(segkp, addr, size, prot));
 
 	segkmem_badop();
 	return (0);
@@ -570,7 +570,7 @@ segkmem_kluster(struct seg *seg, caddr_t addr, ssize_t delta)
 	 */
 	if (segkp_bitmap && seg == &kvseg &&
 	    BT_TEST(segkp_bitmap, btop((uintptr_t)(addr - seg->s_base))))
-		return (SEGOP_KLUSTER(segkp, addr, delta));
+		return (segop_kluster(segkp, addr, delta));
 
 	segkmem_badop();
 	return (0);
@@ -691,7 +691,7 @@ segkmem_pagelock(struct seg *seg, caddr_t addr, size_t len,
 	 */
 	if (segkp_bitmap && seg == &kvseg &&
 	    BT_TEST(segkp_bitmap, btop((uintptr_t)(addr - seg->s_base))))
-		return (SEGOP_PAGELOCK(segkp, addr, len, ppp, type, rw));
+		return (segop_pagelock(segkp, addr, len, ppp, type, rw));
 
 	npages = btopr(len);
 	nb = sizeof (page_t *) * npages;
@@ -751,7 +751,7 @@ segkmem_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp)
 	 */
 	if (segkp_bitmap && seg == &kvseg &&
 	    BT_TEST(segkp_bitmap, btop((uintptr_t)(addr - seg->s_base))))
-		return (SEGOP_GETMEMID(segkp, addr, memidp));
+		return (segop_getmemid(segkp, addr, memidp));
 
 	segkmem_badop();
 	return (0);

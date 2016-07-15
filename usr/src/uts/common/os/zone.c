@@ -5724,7 +5724,7 @@ as_can_change_zones(void)
 		 * it.
 		 */
 		vp = NULL;
-		if (SEGOP_GETVP(seg, seg->s_base, &vp) != 0 || vp == NULL)
+		if (segop_getvp(seg, seg->s_base, &vp) != 0 || vp == NULL)
 			continue;
 		if (!vn_can_change_zones(vp)) { /* bail on first match */
 			allow = 0;

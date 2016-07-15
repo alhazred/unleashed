@@ -708,7 +708,7 @@ top:
 
 		next = AS_SEGNEXT(as, seg);
 retry:
-		err = SEGOP_UNMAP(seg, seg->s_base, seg->s_size);
+		err = segop_unmap(seg, seg->s_base, seg->s_size);
 		if (err == EAGAIN) {
 			mutex_enter(&as->a_contents);
 			if (as->a_callbacks) {
@@ -801,7 +801,7 @@ as_dup(struct as *as, struct proc *forkedproc)
 			as_free(newas);
 			return (-1);
 		}
-		if ((error = SEGOP_DUP(seg, newseg)) != 0) {
+		if ((error = segop_dup(seg, newseg)) != 0) {
 			/*
 			 * We call seg_free() on the new seg
 			 * because the segment is not set up
@@ -939,7 +939,7 @@ retry:
 		else
 			ssize = rsize;
 
-		res = SEGOP_FAULT(hat, seg, raddr, ssize, type, rw);
+		res = segop_fault(hat, seg, raddr, ssize, type, rw);
 		if (res != 0)
 			break;
 	}
@@ -964,7 +964,7 @@ retry:
 				ssize = seg->s_base + seg->s_size - addrsav;
 			else
 				ssize = raddr - addrsav;
-			(void) SEGOP_FAULT(hat, seg, addrsav, ssize,
+			(void) segop_fault(hat, seg, addrsav, ssize,
 			    F_SOFTUNLOCK, S_OTHER);
 		}
 	}
@@ -1034,7 +1034,7 @@ retry:
 				break;
 			}
 		}
-		res = SEGOP_FAULTA(seg, raddr);
+		res = segop_faulta(seg, raddr);
 		if (res != 0)
 			break;
 	}
@@ -1124,7 +1124,7 @@ setprot_top:
 		else
 			ssize = rsize;
 retry:
-		error = SEGOP_SETPROT(seg, raddr, ssize, prot);
+		error = segop_setprot(seg, raddr, ssize, prot);
 
 		if (error == IE_NOMEM) {
 			error = EAGAIN;
@@ -1275,7 +1275,7 @@ as_checkprot(struct as *as, caddr_t addr, size_t size, uint_t prot)
 		else
 			ssize = rsize;
 
-		error = SEGOP_CHECKPROT(seg, raddr, ssize, prot);
+		error = segop_checkprot(seg, raddr, ssize, prot);
 		if (error != 0)
 			break;
 	}
@@ -1341,7 +1341,7 @@ top:
 			rsize = ssize;
 
 retry:
-		err = SEGOP_UNMAP(seg, raddr, ssize);
+		err = segop_unmap(seg, raddr, ssize);
 		if (err == EAGAIN) {
 			/*
 			 * Memory is currently locked.  It must be unlocked
@@ -1779,7 +1779,7 @@ as_purge(struct as *as)
 	while (seg != NULL) {
 		next_seg = AS_SEGNEXT(as, seg);
 		if (seg->s_flags & S_PURGE)
-			SEGOP_UNMAP(seg, seg->s_base, seg->s_size);
+			(void) segop_unmap(seg, seg->s_base, seg->s_size);
 		seg = next_seg;
 	}
 	AS_LOCK_EXIT(as);
@@ -2098,7 +2098,7 @@ as_swapout(struct as *as)
 		 * the process was picked for swapout.
 		 */
 		if ((ov != NULL) && (ov->swapout != NULL))
-			swpcnt += SEGOP_SWAPOUT(seg);
+			swpcnt += segop_swapout(seg);
 	}
 	AS_LOCK_EXIT(as);
 	return (swpcnt);
@@ -2146,7 +2146,7 @@ as_incore(struct as *as, caddr_t addr,
 			ssize = seg->s_base + seg->s_size - raddr;
 		else
 			ssize = rsize;
-		*sizep += isize = SEGOP_INCORE(seg, raddr, ssize, vec);
+		*sizep += isize = segop_incore(seg, raddr, ssize, vec);
 		if (isize != ssize) {
 			error = -1;
 			break;
@@ -2172,7 +2172,7 @@ as_segunlock(struct seg *seg, caddr_t addr, int attr,
 		range_start = (caddr_t)((uintptr_t)addr +
 		    ptob(pos1 - position));
 
-		(void) SEGOP_LOCKOP(seg, range_start, size, attr, MC_UNLOCK,
+		(void) segop_lockop(seg, range_start, size, attr, MC_UNLOCK,
 		    (ulong_t *)NULL, (size_t)NULL);
 		pos1 = pos2;
 	}
@@ -2268,7 +2268,7 @@ retry:
 		}
 
 		for (seg = AS_SEGFIRST(as); seg; seg = AS_SEGNEXT(as, seg)) {
-			error = SEGOP_LOCKOP(seg, seg->s_base,
+			error = segop_lockop(seg, seg->s_base,
 			    seg->s_size, attr, MC_LOCK, mlock_map, pos);
 			if (error != 0)
 				break;
@@ -2297,7 +2297,7 @@ retry:
 		mutex_exit(&as->a_contents);
 
 		for (seg = AS_SEGFIRST(as); seg; seg = AS_SEGNEXT(as, seg)) {
-			error = SEGOP_LOCKOP(seg, seg->s_base,
+			error = segop_lockop(seg, seg->s_base,
 			    seg->s_size, attr, MC_UNLOCK, NULL, 0);
 			if (error != 0)
 				break;
@@ -2375,7 +2375,7 @@ retry:
 		 * objects.
 		 */
 		case MC_SYNC:
-			if (error = SEGOP_SYNC(seg, raddr, ssize,
+			if (error = segop_sync(seg, raddr, ssize,
 			    attr, (uint_t)arg)) {
 				AS_LOCK_EXIT(as);
 				return (error);
@@ -2386,7 +2386,7 @@ retry:
 		 * Lock pages in memory.
 		 */
 		case MC_LOCK:
-			if (error = SEGOP_LOCKOP(seg, raddr, ssize,
+			if (error = segop_lockop(seg, raddr, ssize,
 			    attr, func, mlock_map, pos)) {
 				as_unlockerr(as, attr, mlock_map, initraddr,
 				    initrsize - rsize + ssize);
@@ -2401,7 +2401,7 @@ retry:
 		 * Unlock mapped pages.
 		 */
 		case MC_UNLOCK:
-			(void) SEGOP_LOCKOP(seg, raddr, ssize, attr, func,
+			(void) segop_lockop(seg, raddr, ssize, attr, func,
 			    (ulong_t *)NULL, (size_t)NULL);
 			break;
 
@@ -2409,7 +2409,7 @@ retry:
 		 * Store VM advise for mapped pages in segment layer.
 		 */
 		case MC_ADVISE:
-			error = SEGOP_ADVISE(seg, raddr, ssize, (uint_t)arg);
+			error = segop_advise(seg, raddr, ssize, (uint_t)arg);
 
 			/*
 			 * Check for regular errors and special retry error
@@ -2448,7 +2448,7 @@ retry:
 			if (seg->s_ops->inherit == NULL) {
 				error = ENOTSUP;
 			} else {
-				error = SEGOP_INHERIT(seg, raddr, ssize,
+				error = segop_inherit(seg, raddr, ssize,
 				    SEGP_INH_ZERO);
 			}
 			if (error != 0) {
@@ -2563,7 +2563,7 @@ as_pagelock_segs(struct as *as, struct seg *seg, struct page ***ppp,
 			if (seg->s_ops == &segvn_ops) {
 				vnode_t *vp;
 
-				if (SEGOP_GETVP(seg, addr, &vp) != 0 ||
+				if (segop_getvp(seg, addr, &vp) != 0 ||
 				    vp != NULL) {
 					AS_LOCK_EXIT(as);
 					goto slow;
@@ -2601,7 +2601,7 @@ as_pagelock_segs(struct as *as, struct seg *seg, struct page ***ppp,
 			ssize = size;
 		}
 		pl = &plist[npages + cnt];
-		error = SEGOP_PAGELOCK(seg, addr, ssize, (page_t ***)pl,
+		error = segop_pagelock(seg, addr, ssize, (page_t ***)pl,
 		    L_PAGELOCK, rw);
 		if (error) {
 			break;
@@ -2644,7 +2644,7 @@ as_pagelock_segs(struct as *as, struct seg *seg, struct page ***ppp,
 		}
 		pl = &plist[npages + cnt];
 		ASSERT(*pl != NULL);
-		(void) SEGOP_PAGELOCK(seg, addr, ssize, (page_t ***)pl,
+		(void) segop_pagelock(seg, addr, ssize, (page_t ***)pl,
 		    L_PAGEUNLOCK, rw);
 	}
 
@@ -2719,7 +2719,7 @@ as_pagelock(struct as *as, struct page ***ppp, caddr_t addr,
 	/*
 	 * try to lock pages and pass back shadow list
 	 */
-	err = SEGOP_PAGELOCK(seg, raddr, rsize, ppp, L_PAGELOCK, rw);
+	err = segop_pagelock(seg, raddr, rsize, ppp, L_PAGELOCK, rw);
 
 	TRACE_0(TR_FAC_PHYSIO, TR_PHYSIO_SEG_LOCK_END, "seg_lock_1_end");
 
@@ -2782,7 +2782,7 @@ as_pageunlock_segs(struct as *as, struct seg *seg, caddr_t addr, size_t size,
 		}
 		pl = &plist[npages + cnt];
 		ASSERT(*pl != NULL);
-		(void) SEGOP_PAGELOCK(seg, addr, ssize, (page_t ***)pl,
+		(void) segop_pagelock(seg, addr, ssize, (page_t ***)pl,
 		    L_PAGEUNLOCK, rw);
 	}
 	ASSERT(cnt > 0);
@@ -2828,7 +2828,7 @@ as_pageunlock(struct as *as, struct page **pp, caddr_t addr, size_t size,
 
 	ASSERT(raddr >= seg->s_base && raddr < seg->s_base + seg->s_size);
 	if (raddr + rsize <= seg->s_base + seg->s_size) {
-		SEGOP_PAGELOCK(seg, raddr, rsize, &pp, L_PAGEUNLOCK, rw);
+		(void) segop_pagelock(seg, raddr, rsize, &pp, L_PAGEUNLOCK, rw);
 	} else {
 		as_pageunlock_segs(as, seg, raddr, rsize, pp, rw);
 		return;
@@ -2883,7 +2883,7 @@ setpgsz_top:
 		}
 
 retry:
-		error = SEGOP_SETPAGESIZE(seg, raddr, ssize, szc);
+		error = segop_setpagesize(seg, raddr, ssize, szc);
 
 		if (error == IE_NOMEM) {
 			error = EAGAIN;
@@ -2962,7 +2962,7 @@ retry:
 }
 
 /*
- * as_iset3_default_lpsize() just calls SEGOP_SETPAGESIZE() on all segments
+ * as_iset3_default_lpsize() just calls segop_setpagesize() on all segments
  * in its chunk where s_szc is less than the szc we want to set.
  */
 static int
@@ -2994,12 +2994,12 @@ as_iset3_default_lpsize(struct as *as, caddr_t raddr, size_t rsize, uint_t szc,
 		}
 
 		if (szc > seg->s_szc) {
-			error = SEGOP_SETPAGESIZE(seg, raddr, ssize, szc);
+			error = segop_setpagesize(seg, raddr, ssize, szc);
 			/* Only retry on EINVAL segments that have no vnode. */
 			if (error == EINVAL) {
 				vnode_t *vp = NULL;
-				if ((SEGOP_GETTYPE(seg, raddr) & MAP_SHARED) &&
-				    (SEGOP_GETVP(seg, raddr, &vp) != 0 ||
+				if ((segop_gettype(seg, raddr) & MAP_SHARED) &&
+				    (segop_getvp(seg, raddr, &vp) != 0 ||
 				    vp == NULL)) {
 					*retry = 1;
 				} else {
@@ -3242,7 +3242,7 @@ again:
 		return (ENOMEM);
 	}
 	if (seg->s_ops == &segvn_ops) {
-		rtype = SEGOP_GETTYPE(seg, addr);
+		rtype = segop_gettype(seg, addr);
 		rflags = rtype & (MAP_TEXT | MAP_INITDATA);
 		rtype = rtype & (MAP_SHARED | MAP_PRIVATE);
 		segvn = 1;
@@ -3260,7 +3260,7 @@ again:
 				break;
 			}
 			if (seg->s_ops == &segvn_ops) {
-				stype = SEGOP_GETTYPE(seg, raddr);
+				stype = segop_gettype(seg, raddr);
 				sflags = stype & (MAP_TEXT | MAP_INITDATA);
 				stype &= (MAP_SHARED | MAP_PRIVATE);
 				if (segvn && (rflags != sflags ||
@@ -3374,7 +3374,7 @@ as_setwatch(struct as *as)
 		vaddr = pwp->wp_vaddr;
 		if (pwp->wp_oprot != 0 ||	/* already set up */
 		    (seg = as_segat(as, vaddr)) == NULL ||
-		    SEGOP_GETPROT(seg, vaddr, 0, &prot) != 0)
+		    segop_getprot(seg, vaddr, 0, &prot) != 0)
 			continue;
 
 		pwp->wp_oprot = prot;
@@ -3385,7 +3385,7 @@ as_setwatch(struct as *as)
 		if (pwp->wp_exec)
 			prot &= ~(PROT_READ|PROT_WRITE|PROT_EXEC);
 		if (!(pwp->wp_flags & WP_NOWATCH) && prot != pwp->wp_oprot) {
-			err = SEGOP_SETPROT(seg, vaddr, PAGESIZE, prot);
+			err = segop_setprot(seg, vaddr, PAGESIZE, prot);
 			if (err == IE_RETRY) {
 				pwp->wp_oprot = 0;
 				ASSERT(retrycnt == 0);
@@ -3424,7 +3424,7 @@ as_clearwatch(struct as *as)
 			continue;
 
 		if ((prot = pwp->wp_oprot) != pwp->wp_prot) {
-			err = SEGOP_SETPROT(seg, vaddr, PAGESIZE, prot);
+			err = segop_setprot(seg, vaddr, PAGESIZE, prot);
 			if (err == IE_RETRY) {
 				ASSERT(retrycnt == 0);
 				retrycnt++;
@@ -3478,7 +3478,7 @@ as_setwatchprot(struct as *as, caddr_t addr, size_t size, uint_t prot)
 				panic("as_setwatchprot: no seg");
 				/*NOTREACHED*/
 			}
-			err = SEGOP_SETPROT(seg, vaddr, PAGESIZE, wprot);
+			err = segop_setprot(seg, vaddr, PAGESIZE, wprot);
 			if (err == IE_RETRY) {
 				ASSERT(retrycnt == 0);
 				retrycnt++;
@@ -3525,7 +3525,7 @@ as_clearwatchprot(struct as *as, caddr_t addr, size_t size)
 				seg = as_segat(as, pwp->wp_vaddr);
 				if (seg == NULL)
 					continue;
-				err = SEGOP_SETPROT(seg, pwp->wp_vaddr,
+				err = segop_setprot(seg, pwp->wp_vaddr,
 				    PAGESIZE, prot);
 				if (err == IE_RETRY) {
 					ASSERT(retrycnt == 0);
@@ -3582,7 +3582,7 @@ as_getmemid(struct as *as, caddr_t addr, memid_t *memidp)
 		return (ENODEV);
 	}
 
-	sts = SEGOP_GETMEMID(seg, addr, memidp);
+	sts = segop_getmemid(seg, addr, memidp);
 
 	AS_LOCK_EXIT(as);
 	return (sts);

@@ -70,11 +70,11 @@ page_valid(struct seg *seg, caddr_t addr)
 	 */
 	vattr.va_mask = AT_SIZE;
 	if (seg->s_ops == &segvn_ops &&
-	    SEGOP_GETVP(seg, addr, &vp) == 0 &&
+	    segop_getvp(seg, addr, &vp) == 0 &&
 	    vp != NULL && vp->v_type == VREG &&
 	    VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) == 0) {
 		u_offset_t size = roundup(vattr.va_size, (u_offset_t)PAGESIZE);
-		u_offset_t offset = SEGOP_GETOFFSET(seg, addr);
+		u_offset_t offset = segop_getoffset(seg, addr);
 
 		if (offset >= size)
 			return (0);
@@ -94,7 +94,7 @@ page_valid(struct seg *seg, caddr_t addr)
 	 * type is neither MAP_SHARED nor MAP_PRIVATE.
 	 */
 	if (seg->s_ops == &segdev_ops &&
-	    ((SEGOP_GETTYPE(seg, addr) & (MAP_SHARED | MAP_PRIVATE)) == 0))
+	    ((segop_gettype(seg, addr) & (MAP_SHARED | MAP_PRIVATE)) == 0))
 		return (0);
 
 	/*
@@ -115,7 +115,7 @@ page_valid(struct seg *seg, caddr_t addr)
 		 * then there is backing store for the page.
 		 */
 		char incore = 0;
-		(void) SEGOP_INCORE(seg, addr, PAGESIZE, &incore);
+		(void) segop_incore(seg, addr, PAGESIZE, &incore);
 		if (incore == 0)
 			return (0);
 	}
@@ -206,12 +206,12 @@ retry:
 		AS_LOCK_EXIT(as);
 		return (ENXIO);
 	}
-	SEGOP_GETPROT(seg, page, 0, &prot);
+	(void) segop_getprot(seg, page, 0, &prot);
 
 	protchanged = 0;
 	if ((prot & prot_rw) == 0) {
 		protchanged = 1;
-		err = SEGOP_SETPROT(seg, page, PAGESIZE, prot | prot_rw);
+		err = segop_setprot(seg, page, PAGESIZE, prot | prot_rw);
 
 		if (err == IE_RETRY) {
 			protchanged = 0;
@@ -241,9 +241,9 @@ retry:
 	else
 		rw = S_READ;
 
-	if (SEGOP_FAULT(as->a_hat, seg, page, PAGESIZE, F_SOFTLOCK, rw)) {
+	if (segop_fault(as->a_hat, seg, page, PAGESIZE, F_SOFTLOCK, rw)) {
 		if (protchanged)
-			(void) SEGOP_SETPROT(seg, page, PAGESIZE, prot);
+			(void) segop_setprot(seg, page, PAGESIZE, prot);
 		AS_LOCK_EXIT(as);
 		return (ENXIO);
 	}
@@ -300,10 +300,10 @@ retry:
 	if (rw == S_READ_NOCOW)
 		rw = S_READ;
 
-	(void) SEGOP_FAULT(as->a_hat, seg, page, PAGESIZE, F_SOFTUNLOCK, rw);
+	(void) segop_fault(as->a_hat, seg, page, PAGESIZE, F_SOFTUNLOCK, rw);
 
 	if (protchanged)
-		(void) SEGOP_SETPROT(seg, page, PAGESIZE, prot);
+		(void) segop_setprot(seg, page, PAGESIZE, prot);
 
 	AS_LOCK_EXIT(as);
 

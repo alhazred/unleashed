@@ -3708,7 +3708,7 @@ pr_lookup_objectdir(vnode_t *dp, char *comp)
 		 */
 		vattr.va_mask = AT_FSID|AT_NODEID;
 		if (seg->s_ops == &segvn_ops &&
-		    SEGOP_GETVP(seg, seg->s_base, &vp) == 0 &&
+		    segop_getvp(seg, seg->s_base, &vp) == 0 &&
 		    vp != NULL && vp->v_type == VREG &&
 		    VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) == 0) {
 			char name[64];
@@ -4159,7 +4159,7 @@ pr_lookup_pathdir(vnode_t *dp, char *comp)
 					 */
 					vattr.va_mask = AT_FSID|AT_NODEID;
 					if (seg->s_ops == &segvn_ops &&
-					    SEGOP_GETVP(seg, seg->s_base, &vp)
+					    segop_getvp(seg, seg->s_base, &vp)
 					    == 0 &&
 					    vp != NULL && vp->v_type == VREG &&
 					    VOP_GETATTR(vp, &vattr, 0, CRED(),
@@ -4860,7 +4860,7 @@ rebuild_objdir(struct as *as)
 	do {
 		vattr.va_mask = AT_FSID|AT_NODEID;
 		if (seg->s_ops == &segvn_ops &&
-		    SEGOP_GETVP(seg, seg->s_base, &vp) == 0 &&
+		    segop_getvp(seg, seg->s_base, &vp) == 0 &&
 		    vp != NULL && vp->v_type == VREG &&
 		    VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) == 0) {
 			for (i = 0; i < nentries; i++)

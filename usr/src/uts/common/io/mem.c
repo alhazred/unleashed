@@ -337,7 +337,7 @@ mmpagelock(struct as *as, caddr_t va)
 
 	AS_LOCK_ENTER(as, RW_READER);
 	seg = as_segat(as, va);
-	i = (seg != NULL)? SEGOP_CAPABLE(seg, S_CAPABILITY_NOMINFLT) : 0;
+	i = (seg != NULL)? segop_capable(seg, S_CAPABILITY_NOMINFLT) : 0;
 	AS_LOCK_EXIT(as);
 
 	return (i);
