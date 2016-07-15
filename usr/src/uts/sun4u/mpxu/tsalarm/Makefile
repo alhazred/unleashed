@@ -59,9 +59,6 @@ ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-# Turn this on once compiler understands v9 in it's backend
-#INLINES		+= $(UTSBASE)/sun4u/io/pci.il
-
 #
 # lint pass one enforcement
 #

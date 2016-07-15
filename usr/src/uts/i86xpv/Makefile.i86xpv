@@ -97,15 +97,6 @@ DEF_BUILDS		= $(DEF_BUILDS64) $(DEF_BUILDS32)
 ALL_BUILDS		= $(ALL_BUILDS64) $(ALL_BUILDS32)
 
 #
-#	x86 or amd64 inline templates
-#
-INLINES_32		= $(UTSBASE)/intel/ia32/ml/ia32.il \
-			  $(UTSBASE)/$(PLATFORM)/ml/ia32.il
-INLINES_64		= $(UTSBASE)/intel/amd64/ml/amd64.il \
-			  $(UTSBASE)/$(PLATFORM)/ml/amd64.il
-INLINES			+= $(INLINES_$(CLASS))
-
-#
 #	kernel-specific optimizations; override default in Makefile.master
 #
 
@@ -119,7 +110,7 @@ COPTIMIZE		= $(COPTFLAG_$(CLASS))
 
 CFLAGS			= $(CFLAGS_XARCH)
 CFLAGS			+= $(COPTIMIZE)
-CFLAGS			+= $(INLINES) -D_ASM_INLINES
+CFLAGS			+= -D_ASM_INLINES
 CFLAGS			+= $(CCMODE)
 CFLAGS			+= $(SPACEFLAG)
 CFLAGS			+= $(CCUNBOUND)

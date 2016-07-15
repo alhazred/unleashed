@@ -66,11 +66,6 @@ CFLAGS += $(CCVERBOSE)
 LDFLAGS		+= -dy -Nmisc/kcf
 
 #
-# need extra inline file for here.
-#
-INLINES += $(SRC)/common/crypto/md5/sparc/sun4u/byteswap.il
-
-#
 #	Default build targets.
 #
 .KEEP_STATE:

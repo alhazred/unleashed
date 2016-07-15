@@ -55,9 +55,6 @@ ALL_TARGET	= $(BINARY)
 LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-# Turn this on once compiler understands v9 in it's backend
-#INLINES		+= $(UTSBASE)/sun4u/io/gptwocfg.il
-
 #
 # lint pass one enforcement
 #

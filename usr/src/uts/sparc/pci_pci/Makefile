@@ -52,9 +52,6 @@ ALL_TARGET	= $(BINARY)
 LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-# Turn this on once compiler understands v9 in it's backend
-#INLINES		+= $(UTSBASE)/sun4u/io/pci.il
-
 #
 #	Include sun4u and sun4 specific headers files
 #

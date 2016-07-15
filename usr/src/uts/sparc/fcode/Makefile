@@ -61,9 +61,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 INC_PATH	+= -I$(UTSBASE)/sun4
 
-# Turn this on once compiler understands v9 in it's backend
-#INLINES		+= $(UTSBASE)/sun4/io/fcode.il
-
 #
 # lint pass one enforcement
 #
