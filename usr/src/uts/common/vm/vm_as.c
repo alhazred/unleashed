@@ -2445,12 +2445,7 @@ retry:
 			break;
 
 		case MC_INHERIT_ZERO:
-			if (seg->s_ops->inherit == NULL) {
-				error = ENOTSUP;
-			} else {
-				error = segop_inherit(seg, raddr, ssize,
-				    SEGP_INH_ZERO);
-			}
+			error = segop_inherit(seg, raddr, ssize, SEGP_INH_ZERO);
 			if (error != 0) {
 				AS_LOCK_EXIT(as);
 				return (error);

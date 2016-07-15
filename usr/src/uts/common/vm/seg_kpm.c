@@ -134,7 +134,6 @@ static struct seg_ops segkpm_ops = {
 	.getmemid	= SEGKPM_BADOP(int),
 	.getpolicy	= SEGKPM_BADOP(lgrp_mem_policy_info_t *),
 	.capable	= segkpm_capable,
-	.inherit	= seg_inherit_notsup,
 };
 
 /*

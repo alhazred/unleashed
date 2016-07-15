@@ -223,8 +223,6 @@ extern	segadvstat_t	segadvstat;
 /* Values for segop_inherit */
 #define	SEGP_INH_ZERO	0x01
 
-int seg_inherit_notsup(struct seg *, caddr_t, size_t, uint_t);
-
 /* Delay/retry factors for seg_p_mem_config_pre_del */
 #define	SEGP_PREDEL_DELAY_FACTOR	4
 /*

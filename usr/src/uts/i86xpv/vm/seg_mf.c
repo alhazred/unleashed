@@ -780,5 +780,4 @@ static struct seg_ops segmf_ops = {
 	.getmemid	= segmf_getmemid,
 	.getpolicy	= segmf_getpolicy,
 	.capable	= segmf_capable,
-	.inherit	= seg_inherit_notsup,
 };

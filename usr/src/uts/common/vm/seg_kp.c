@@ -169,7 +169,6 @@ static struct	seg_ops segkp_ops = {
 	.getmemid	= segkp_getmemid,
 	.getpolicy	= segkp_getpolicy,
 	.capable	= segkp_capable,
-	.inherit	= seg_inherit_notsup,
 };
 
 

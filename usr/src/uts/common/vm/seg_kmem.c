@@ -797,7 +797,6 @@ static struct seg_ops segkmem_ops = {
 	.getmemid	= segkmem_getmemid,
 	.getpolicy	= segkmem_getpolicy,
 	.capable	= segkmem_capable,
-	.inherit	= seg_inherit_notsup,
 };
 
 int
