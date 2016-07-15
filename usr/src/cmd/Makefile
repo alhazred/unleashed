@@ -286,7 +286,6 @@ COMMON_SUBDIRS=		\
 	nsadmin		\
 	nscd		\
 	oamuser		\
-	oawk		\
 	od		\
 	pack		\
 	pagesize	\
@@ -631,7 +630,6 @@ MSGSUBDIRS=		\
 	newtask		\
 	nice		\
 	nohup		\
-	oawk		\
 	pack		\
 	passwd		\
 	passmgmt	\
