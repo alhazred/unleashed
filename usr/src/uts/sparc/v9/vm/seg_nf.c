@@ -73,7 +73,6 @@ static int	segnf_getprot(struct seg *seg, caddr_t addr,
 static u_offset_t segnf_getoffset(struct seg *seg, caddr_t addr);
 static int	segnf_gettype(struct seg *seg, caddr_t addr);
 static int	segnf_getvp(struct seg *seg, caddr_t addr, struct vnode **vpp);
-static void	segnf_dump(struct seg *seg);
 static int	segnf_pagelock(struct seg *seg, caddr_t addr, size_t len,
 		    struct page ***ppp, enum lock_type type, enum seg_rw rw);
 
@@ -100,7 +99,6 @@ struct seg_ops segnf_ops = {
 	.getvp		= segnf_getvp,
 	.advise		= (int (*)(struct seg *, caddr_t, size_t, uint_t))
 		segnf_nop,
-	.dump		= segnf_dump,
 	.pagelock	= segnf_pagelock,
 };
 
@@ -445,14 +443,6 @@ segnf_getvp(struct seg *seg, caddr_t addr, struct vnode **vpp)
 	*vpp = &nfvp;
 	return (0);
 }
-
-/*
- * segnf pages are not dumped, so we just return
- */
-/* ARGSUSED */
-static void
-segnf_dump(struct seg *seg)
-{}
 
 /*ARGSUSED*/
 static int

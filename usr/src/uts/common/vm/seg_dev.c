@@ -178,7 +178,6 @@ static u_offset_t	segdev_getoffset(struct seg *, caddr_t);
 static int	segdev_gettype(struct seg *, caddr_t);
 static int	segdev_getvp(struct seg *, caddr_t, struct vnode **);
 static int	segdev_advise(struct seg *, caddr_t, size_t, uint_t);
-static void	segdev_dump(struct seg *);
 static int	segdev_pagelock(struct seg *, caddr_t, size_t,
 		    struct page ***, enum lock_type, enum seg_rw);
 static int	segdev_getmemid(struct seg *, caddr_t, memid_t *);
@@ -205,7 +204,6 @@ struct seg_ops segdev_ops = {
 	.gettype	= segdev_gettype,
 	.getvp		= segdev_getvp,
 	.advise		= segdev_advise,
-	.dump		= segdev_dump,
 	.pagelock	= segdev_pagelock,
 	.getmemid	= segdev_getmemid,
 };
@@ -2371,14 +2369,6 @@ segdev_advise(struct seg *seg, caddr_t addr, size_t len, uint_t behav)
 
 	return (0);
 }
-
-/*
- * segdev pages are not dumped, so we just return
- */
-/*ARGSUSED*/
-static void
-segdev_dump(struct seg *seg)
-{}
 
 /*
  * ddi_segmap_setup:	Used by drivers who wish specify mapping attributes

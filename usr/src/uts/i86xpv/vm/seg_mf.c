@@ -470,11 +470,6 @@ segmf_advise(struct seg *seg, caddr_t addr, size_t len, uint_t behav)
 }
 
 /*ARGSUSED*/
-static void
-segmf_dump(struct seg *seg)
-{}
-
-/*ARGSUSED*/
 static int
 segmf_pagelock(struct seg *seg, caddr_t addr, size_t len,
     struct page ***ppp, enum lock_type type, enum seg_rw rw)
@@ -753,7 +748,6 @@ static struct seg_ops segmf_ops = {
 	.gettype	= segmf_gettype,
 	.getvp		= segmf_getvp,
 	.advise		= segmf_advise,
-	.dump		= segmf_dump,
 	.pagelock	= segmf_pagelock,
 	.getmemid	= segmf_getmemid,
 };

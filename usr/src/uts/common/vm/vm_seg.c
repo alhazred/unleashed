@@ -1964,6 +1964,9 @@ segop_advise(struct seg *seg, caddr_t addr, size_t len, uint_t b)
 void
 segop_dump(struct seg *seg)
 {
+	if (seg->s_ops->dump == NULL)
+		return;
+
 	seg->s_ops->dump(seg);
 }
 

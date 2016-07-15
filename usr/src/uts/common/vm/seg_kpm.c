@@ -102,7 +102,6 @@ int segmap_kpm = 1;
  */
 faultcode_t segkpm_fault(struct hat *hat, struct seg *seg, caddr_t addr,
 			size_t len, enum fault_type type, enum seg_rw rw);
-static void	segkpm_dump(struct seg *);
 static void	segkpm_badop(void);
 static int	segkpm_notsup(void);
 
@@ -127,7 +126,6 @@ static struct seg_ops segkpm_ops = {
 	.gettype	= SEGKPM_BADOP(int),
 	.getvp		= SEGKPM_BADOP(int),
 	.advise		= SEGKPM_BADOP(int),
-	.dump		= segkpm_dump,
 	.pagelock	= SEGKPM_NOTSUP,
 	.setpagesize	= SEGKPM_BADOP(int),
 	.getmemid	= SEGKPM_BADOP(int),
@@ -318,11 +316,3 @@ segkpm_notsup()
 {
 	return (ENOTSUP);
 }
-
-/*
- * segkpm pages are not dumped, so we just return
- */
-/*ARGSUSED*/
-static void
-segkpm_dump(struct seg *seg)
-{}

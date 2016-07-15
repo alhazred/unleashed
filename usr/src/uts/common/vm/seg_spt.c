@@ -137,7 +137,6 @@ static int segspt_shmgettype(struct seg *seg, caddr_t addr);
 static int segspt_shmgetvp(struct seg *seg, caddr_t addr, struct vnode **vpp);
 static int segspt_shmadvise(struct seg *seg, caddr_t addr, size_t len,
 			uint_t behav);
-static void segspt_shmdump(struct seg *seg);
 static int segspt_shmpagelock(struct seg *, caddr_t, size_t,
 			struct page ***, enum lock_type, enum seg_rw);
 static int segspt_shmgetmemid(struct seg *, caddr_t, memid_t *);
@@ -161,7 +160,6 @@ struct seg_ops segspt_shmops = {
 	.gettype	= segspt_shmgettype,
 	.getvp		= segspt_shmgetvp,
 	.advise		= segspt_shmadvise,
-	.dump		= segspt_shmdump,
 	.pagelock	= segspt_shmpagelock,
 	.getmemid	= segspt_shmgetmemid,
 	.getpolicy	= segspt_shmgetpolicy,
@@ -2985,13 +2983,6 @@ segspt_shmadvise(struct seg *seg, caddr_t addr, size_t len, uint_t behav)
 	}
 
 	return (0);
-}
-
-/*ARGSUSED*/
-void
-segspt_shmdump(struct seg *seg)
-{
-	/* no-op for ISM segment */
 }
 
 /*
