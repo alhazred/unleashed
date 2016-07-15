@@ -48,9 +48,6 @@ NATIVE_ADJUNCT=	/usr
 # RELEASE_BUILD should be cleared for final release builds.
 # NOT_RELEASE_BUILD is exactly what the name implies.
 #
-# __GNUC toggles the building of ON components using gcc and related tools.
-# Normally set to `#', set it to `' to do gcc build.
-#
 # The declaration POUND_SIGN is always '#'. This is needed to get around the
 # make feature that '#' is always a comment delimiter, even when escaped or
 # quoted. We use this macro expansion method to get POUND_SIGN rather than
@@ -77,26 +74,6 @@ SPARC_BLD_1=    $(MACH:i386=$(POUND_SIGN))
 SPARC_BLD=      $(SPARC_BLD_1:sparc=)
 INTEL_BLD_1=    $(MACH:sparc=$(POUND_SIGN))
 INTEL_BLD=      $(INTEL_BLD_1:i386=)
-
-# The variables below control the compilers used during the build.
-# There are a number of permutations.
-#
-# __GNUC and __SUNC control (and indicate) the primary compiler.  Whichever
-# one is not POUND_SIGN is the primary, with the other as the shadow.  They
-# may also be used to control entirely compiler-specific Makefile assignments.
-# __GNUC and GCC are the default.
-#
-# __GNUC64 indicates that the 64bit build should use the GNU C compiler.
-# There is no Sun C analogue.
-#
-# The following version-specific options are operative regardless of which
-# compiler is primary, and control the versions of the given compilers to be
-# used.  They also allow compiler-version specific Makefile fragments.
-#
-
-__SUNC=			$(POUND_SIGN)
-$(__SUNC)__GNUC=	$(POUND_SIGN)
-__GNUC64=		$(__GNUC)
 
 # Allow build-time "configuration" to enable or disable some things.
 # The default is POUND_SIGN, meaning "not enabled". If the environment
@@ -459,8 +436,7 @@ CTF_FLAGS_i386	= -g $(C99MODE) $(CNOGLOBAL) $(CDWARFSTR)
 CTF_FLAGS_sparcv9	= $(CTF_FLAGS_sparc)
 CTF_FLAGS_amd64		= $(CTF_FLAGS_i386)
 
-# Sun Studio produces broken userland code when saving arguments.
-$(__GNUC)CTF_FLAGS_amd64 += $(SAVEARGS)
+CTF_FLAGS_amd64 += $(SAVEARGS)
 
 CTF_FLAGS_32	= $(CTF_FLAGS_$(MACH)) $(DEBUGFORMAT)
 CTF_FLAGS_64	= $(CTF_FLAGS_$(MACH64)) $(DEBUGFORMAT)
@@ -642,18 +618,10 @@ MAPFILE.LEX =		$(SRC)/common/mapfiles/common/map.lex.yy
 # Generated mapfiles that are compiler specific, and used throughout the
 # build.  These mapfiles are not delivered in /usr/lib/ld.
 #
-MAPFILE.NGB_sparc=	$(SRC)/common/mapfiles/gen/sparc_cc_map.noexeglobs
-$(__GNUC64)MAPFILE.NGB_sparc= \
-			$(SRC)/common/mapfiles/gen/sparc_gcc_map.noexeglobs
-MAPFILE.NGB_sparcv9=	$(SRC)/common/mapfiles/gen/sparcv9_cc_map.noexeglobs
-$(__GNUC64)MAPFILE.NGB_sparcv9= \
-			$(SRC)/common/mapfiles/gen/sparcv9_gcc_map.noexeglobs
-MAPFILE.NGB_i386=	$(SRC)/common/mapfiles/gen/i386_cc_map.noexeglobs
-$(__GNUC64)MAPFILE.NGB_i386= \
-			$(SRC)/common/mapfiles/gen/i386_gcc_map.noexeglobs
-MAPFILE.NGB_amd64=	$(SRC)/common/mapfiles/gen/amd64_cc_map.noexeglobs
-$(__GNUC64)MAPFILE.NGB_amd64= \
-			$(SRC)/common/mapfiles/gen/amd64_gcc_map.noexeglobs
+MAPFILE.NGB_sparc=	$(SRC)/common/mapfiles/gen/sparc_gcc_map.noexeglobs
+MAPFILE.NGB_sparcv9=	$(SRC)/common/mapfiles/gen/sparcv9_gcc_map.noexeglobs
+MAPFILE.NGB_i386=	$(SRC)/common/mapfiles/gen/i386_gcc_map.noexeglobs
+MAPFILE.NGB_amd64=	$(SRC)/common/mapfiles/gen/amd64_gcc_map.noexeglobs
 MAPFILE.NGB =		$(MAPFILE.NGB_$(MACH))
 
 #
@@ -701,10 +669,8 @@ COMPILE.java=	$(JAVAC) $(JAVAFLAGS) -classpath $(CLASSPATH)
 #
 # Link time macros
 #
-CCNEEDED		= -lC
-CCEXTNEEDED		= -lCrun -lCstd
-$(__GNUC)CCNEEDED	= -L$(GCCLIBDIR) -lstdc++ -lgcc_s
-$(__GNUC)CCEXTNEEDED	= $(CCNEEDED)
+CCNEEDED	= -L$(GCCLIBDIR) -lstdc++ -lgcc_s
+CCEXTNEEDED	= $(CCNEEDED)
 
 LINK.c=		$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
 LINK64.c=	$(CC) $(CFLAGS64) $(CPPFLAGS) $(LDFLAGS)
@@ -776,38 +742,29 @@ GNU_ROOT=		/usr
 # Specify platform compiler versions for languages
 # that we use (currently only c and c++).
 #
-sparc_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_cc
-$(__GNUC)sparc_CC=	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
-sparc_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_CC
-$(__GNUC)sparc_CCC=	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
+sparc_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
+sparc_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
 sparc_CPP=		/usr/ccs/lib/cpp
 sparc_AS=		/usr/ccs/bin/as -xregsym=no
 sparc_LD=		/usr/ccs/bin/ld
 sparc_LINT=		$(SPRO_ROOT)/sunstudio12.1/bin/lint
 
-sparcv9_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_cc
-$(__GNUC64)sparcv9_CC=	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
-sparcv9_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_CC
-$(__GNUC64)sparcv9_CCC=	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
+sparcv9_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
+sparcv9_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
 sparcv9_CPP=		/usr/ccs/lib/cpp
 sparcv9_AS=		/usr/ccs/bin/as -xregsym=no
 sparcv9_LD=		/usr/ccs/bin/ld
 sparcv9_LINT=		$(SPRO_ROOT)/sunstudio12.1/bin/lint
 
-i386_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_cc
-$(__GNUC)i386_CC=	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
-i386_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_CC
-$(__GNUC)i386_CCC=	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
+i386_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
+i386_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
 i386_CPP=		/usr/ccs/lib/cpp
-i386_AS=		/usr/ccs/bin/as
-$(__GNUC)i386_AS=	$(ONBLD_TOOLS)/bin/$(MACH)/aw
+i386_AS=		$(ONBLD_TOOLS)/bin/$(MACH)/aw
 i386_LD=		/usr/ccs/bin/ld
 i386_LINT=		$(SPRO_ROOT)/sunstudio12.1/bin/lint
 
-amd64_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_cc
-$(__GNUC64)amd64_CC=	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
-amd64_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_CC
-$(__GNUC64)amd64_CCC=	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
+amd64_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
+amd64_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
 amd64_CPP=		/usr/ccs/lib/cpp
 amd64_AS=		$(ONBLD_TOOLS)/bin/$(MACH)/aw
 amd64_LD=		/usr/ccs/bin/ld
@@ -829,12 +786,6 @@ CPP=			$(NATIVECPP)
 AS=			$(NATIVEAS)
 LD=			$(NATIVELD)
 LINT=			$(NATIVELINT)
-
-# The real compilers used for this build
-CW_CC_CMD=		$(CC) -_compiler
-CW_CCC_CMD=		$(CCC) -_compiler
-REAL_CC=		$(CW_CC_CMD:sh)
-REAL_CCC=		$(CW_CCC_CMD:sh)
 
 # Pass -Y flag to cpp (method of which is release-dependent)
 CCYFLAG=		-Y I,

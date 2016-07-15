@@ -50,7 +50,6 @@ TOOLS_DIR=tools
 CPPFLAGS=	-DBSD_COMP -D_REMOTE_SUPPORT \
 		-I. -I$(SYNCLIB_HDRDIR) -I$(HECI_DIR) -I$(TOOLS_DIR)
 CCFLAGS +=	-compat=5 -features=zla
-$(__SUNC)CCNEEDED=	$(CCEXTNEEDED)
 LDFLAGS += $(ZIGNORE) -norunpath
 LDLIBS += -lsocket -lnsl
 

@@ -157,41 +157,10 @@ Arguments which begin with \fI-_gcc=\fP or \fI-_g++=\fP will be
 discarded.
 .SH ENVIRONMENT
 .TP 4
-.B CW_NO_SHADOW
-If this variable is set in the environment, invoke only the
-primary compiler.
-.TP 4
-.B CW_SHADOW_SERIAL
-If this variable is set in the environment, invoke the primary compiler,
-wait for it to complete, then invoke the shadow compiler.  Normally
-the two compilers are invoked in parallel.  If CW_NO_SHADOW is set,
-this has no effect.
-.TP 4
 .B CW_NO_EXEC
 If this variable is set in the environment, write the usual output to
 standard error but do not actually invoke any compiler.  This is
 useful for debugging the translation engine.
-.TP 4
-.B CW_CC, CW_CPLUSPLUS
-If these variables are set in the environment, they specify the full
-pathname for the Studio C and C++ compilers, respectively.
-.TP 4
-.B CW_CC_DIR, CW_CPLUSPLUS_DIR, SPRO_VROOT, SPRO_ROOT, BUILD_TOOLS
-If CW_CC or CW_CPLUSPLUS are not set,
-these variables define the search path for Studio compilers as
-follows:
-.B
-If CW_CC_DIR is set, the Studio C compiler in \fI$CW_CC_DIR\fP
-will be used.  Likewise, if CW_CPLUSPLUS_DIR is set, the Studio C++
-compiler in \fI$CW_CPLUSPLUS_DIR\fP will be used.
-Otherwise, if SPRO_VROOT is set, the Studio C and C++ compilers
-in \fI$SPRO_VROOT/bin\fP will be used.
-Otherwise, if SPRO_ROOT is set, the Studio C and C++ compilers
-in \fI$SPRO_ROOT/SS12/bin\fP will be used.
-Otherwise, if BUILD_TOOLS is set, the Studio C and C++ compilers
-in \fI$BUILD_TOOLS/SUNWspro/SS12/bin\fP will be used.
-Otherwise, the Studio compilers in a predefined default location
-will be used.
 .TP 4
 .B CW_GCC, CW_GPLUSPLUS
 If these variables are set in the environment, they specify the full

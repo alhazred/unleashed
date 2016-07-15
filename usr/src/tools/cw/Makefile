@@ -30,26 +30,20 @@ MAN1ONBLDFILES=	cw.1onbld
 include ../Makefile.tools
 
 # Bootstrap problem -- we have to build cw before we can use it
-i386_CC=		$(SPRO_VROOT)/bin/cc
-sparc_CC=		$(SPRO_VROOT)/bin/cc
-$(__GNUC)i386_CC=	$(GCC_ROOT)/bin/gcc
-$(__GNUC)sparc_CC=	$(GCC_ROOT)/bin/gcc
+i386_CC=	$(GCC_ROOT)/bin/gcc
+sparc_CC=	$(GCC_ROOT)/bin/gcc
 
 CFLAGS += $(CCVERBOSE)
 
 # Override CFLAGS.  This is needed only for bootstrap of cw.
-$(__GNUC)CFLAGS=	-O -D__sun -Wall -Wno-unknown-pragmas -Werror \
-			-std=gnu89 -nodefaultlibs
-$(__SUNC)CFLAGS=	-xspace -Xa  -xildoff -errtags=yes -errwarn=%all \
-			-xc99=%none    -W0,-xglobalstatic -v
+CFLAGS=	-O -D__sun -Wall -Wno-unknown-pragmas -Werror \
+	-std=gnu89 -nodefaultlibs
 
 
-$(__GNUC)LDLIBS +=	-lc
-$(__GNUC)LDFLAGS= 	$(MAPFILE.NES:%=-Wl,-M%)
+LDLIBS +=	-lc
+LDFLAGS= 	$(MAPFILE.NES:%=-Wl,-M%)
 
-CPPFLAGS += -DDEFAULT_CC_DIR='"$(SPRO_VROOT)/bin"'
 CPPFLAGS += -DDEFAULT_GCC_DIR='"$(GCC_ROOT)/bin"'
-CPPFLAGS += -DDEFAULT_CPLUSPLUS_DIR='"$(SPRO_VROOT)/bin"'
 CPPFLAGS += -DDEFAULT_GPLUSPLUS_DIR='"$(GCC_ROOT)/bin"'
 
 $(ROOTONBLDMAN1ONBLDFILES) := FILEMODE=      644
