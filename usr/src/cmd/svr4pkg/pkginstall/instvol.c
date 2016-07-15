@@ -20,6 +20,10 @@
  */
 
 /*
+ * Copyright (c) 2015 Peter Tribble.
+ */
+
+/*
  * Copyright (c) 1989, 2010, Oracle and/or its affiliates. All rights reserved.
  */
 
@@ -56,7 +60,6 @@
  */
 
 #include <pkglib.h>
-#include <pkgweb.h>
 
 /*
  * local pkg command library includes
