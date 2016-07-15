@@ -345,7 +345,7 @@ static iommulib_nexops_t iommulib_nexops = {
 /*
  *  extern hacks
  */
-extern struct seg_ops segdev_ops;
+extern const struct seg_ops segdev_ops;
 extern int ignore_hardware_nodes;	/* force flag from ddi_impl.c */
 #ifdef	DDI_MAP_DEBUG
 extern int ddi_map_debug_flag;

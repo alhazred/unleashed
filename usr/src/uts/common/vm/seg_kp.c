@@ -141,7 +141,7 @@ uint32_t	red_ndoubles;
 pgcnt_t anon_segkp_pages_locked;	/* See vm/anon.h */
 pgcnt_t anon_segkp_pages_resv;		/* anon reserved by seg_kp */
 
-static struct	seg_ops segkp_ops = {
+static const struct seg_ops segkp_ops = {
 	.dup		= SEGKP_BADOP(int),
 	.unmap		= SEGKP_BADOP(int),
 	.free		= SEGKP_BADOP(void),

@@ -136,7 +136,7 @@ static int	segvn_getmemid(struct seg *seg, caddr_t addr,
 static lgrp_mem_policy_info_t	*segvn_getpolicy(struct seg *, caddr_t);
 static int	segvn_inherit(struct seg *, caddr_t, size_t, uint_t);
 
-struct	seg_ops segvn_ops = {
+const struct seg_ops segvn_ops = {
 	.dup		= segvn_dup,
 	.unmap		= segvn_unmap,
 	.free		= segvn_free,

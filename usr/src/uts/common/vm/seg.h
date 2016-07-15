@@ -106,7 +106,7 @@ typedef struct seg {
 	uint_t	s_flags;		/* flags for segment, see below */
 	struct	as *s_as;		/* containing address space */
 	avl_node_t s_tree;		/* AVL tree links to segs in this as */
-	struct	seg_ops *s_ops;		/* ops vector: see below */
+	const struct seg_ops *s_ops;	/* ops vector: see below */
 	void *s_data;			/* private data for instance */
 	kmutex_t s_pmtx;		/* protects seg's pcache list */
 	pcache_link_t s_phead;		/* head of seg's pcache list */

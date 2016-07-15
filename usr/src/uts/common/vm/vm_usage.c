@@ -297,8 +297,8 @@ typedef struct vmu_data {
 extern struct as kas;
 extern proc_t *practive;
 extern zone_t *global_zone;
-extern struct seg_ops segvn_ops;
-extern struct seg_ops segspt_shmops;
+extern const struct seg_ops segvn_ops;
+extern const struct seg_ops segspt_shmops;
 
 static vmu_data_t vmu_data;
 static kmem_cache_t *vmu_bound_cache;

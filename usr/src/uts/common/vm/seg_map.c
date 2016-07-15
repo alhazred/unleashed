@@ -97,7 +97,7 @@ struct smap	*get_smap_kpm(caddr_t, page_t **);
 
 #define	SEGMAP_BADOP(t)	(t(*)())segmap_badop
 
-static struct seg_ops segmap_ops = {
+static const struct seg_ops segmap_ops = {
 	.dup		= SEGMAP_BADOP(int),
 	.unmap		= SEGMAP_BADOP(int),
 	.free		= segmap_free,

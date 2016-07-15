@@ -106,7 +106,7 @@ static void	segkpm_badop(void);
 
 #define	SEGKPM_BADOP(t)	(t(*)())segkpm_badop
 
-static struct seg_ops segkpm_ops = {
+static const struct seg_ops segkpm_ops = {
 	.dup		= SEGKPM_BADOP(int),
 	.unmap		= SEGKPM_BADOP(int),
 	.free		= SEGKPM_BADOP(void),

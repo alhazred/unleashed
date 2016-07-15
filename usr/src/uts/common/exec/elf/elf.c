@@ -1900,7 +1900,7 @@ top:
 		caddr_t eaddr = seg->s_base + pr_getsegsize(seg, 0);
 		caddr_t saddr, naddr;
 		void *tmp = NULL;
-		extern struct seg_ops segspt_shmops;
+		extern const struct seg_ops segspt_shmops;
 
 		for (saddr = seg->s_base; saddr < eaddr; saddr = naddr) {
 			uint_t prot;

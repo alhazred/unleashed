@@ -127,7 +127,7 @@ extern int segdev_create(struct seg *, void *);
 
 extern int segdev_copyto(struct seg *, caddr_t, const void *, void *, size_t);
 extern int segdev_copyfrom(struct seg *, caddr_t, const void *, void *, size_t);
-extern struct seg_ops segdev_ops;
+extern const struct seg_ops segdev_ops;
 
 #endif	/* _KERNEL */
 

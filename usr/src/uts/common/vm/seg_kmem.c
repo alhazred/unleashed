@@ -766,7 +766,7 @@ segkmem_capable(struct seg *seg, segcapability_t capability)
 	return (0);
 }
 
-static struct seg_ops segkmem_ops = {
+static const struct seg_ops segkmem_ops = {
 	.dup		= SEGKMEM_BADOP(int),
 	.unmap		= SEGKMEM_BADOP(int),
 	.free		= SEGKMEM_BADOP(void),

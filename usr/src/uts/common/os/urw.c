@@ -54,8 +54,8 @@
 #include <vm/seg_spt.h>
 #include <vm/seg_kmem.h>
 
-extern struct seg_ops segdev_ops;	/* needs a header file */
-extern struct seg_ops segspt_shmops;	/* needs a header file */
+extern const struct seg_ops segdev_ops;	/* needs a header file */
+extern const struct seg_ops segspt_shmops;	/* needs a header file */
 
 static int
 page_valid(struct seg *seg, caddr_t addr)

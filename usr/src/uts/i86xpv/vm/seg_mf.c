@@ -99,7 +99,7 @@ struct segmf_data {
 	segmf_map_t	*map;
 };
 
-static struct seg_ops segmf_ops;
+static const struct seg_ops segmf_ops;
 
 static int segmf_fault_gref_range(struct seg *seg, caddr_t addr, size_t len);
 
@@ -731,7 +731,7 @@ segmf_fault_gref_range(struct seg *seg, caddr_t addr, size_t cnt)
 	return (0);
 }
 
-static struct seg_ops segmf_ops = {
+static const struct seg_ops segmf_ops = {
 	.dup		= segmf_dup,
 	.unmap		= segmf_unmap,
 	.free		= segmf_free,

@@ -86,7 +86,7 @@ segspt_badop()
 
 #define	SEGSPT_BADOP(t)	(t(*)())segspt_badop
 
-struct seg_ops segspt_ops = {
+const struct seg_ops segspt_ops = {
 	.dup		= SEGSPT_BADOP(int),
 	.unmap		= segspt_unmap,
 	.free		= segspt_free,
@@ -142,7 +142,7 @@ static int segspt_shmpagelock(struct seg *, caddr_t, size_t,
 static int segspt_shmgetmemid(struct seg *, caddr_t, memid_t *);
 static lgrp_mem_policy_info_t *segspt_shmgetpolicy(struct seg *, caddr_t);
 
-struct seg_ops segspt_shmops = {
+const struct seg_ops segspt_shmops = {
 	.dup		= segspt_shmdup,
 	.unmap		= segspt_shmunmap,
 	.free		= segspt_shmfree,

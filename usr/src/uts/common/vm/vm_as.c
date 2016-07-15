@@ -473,7 +473,7 @@ again:
 		if (base + seg->s_size > addr) {
 			if (addr >= base || eaddr > base) {
 #ifdef __sparc
-				extern struct seg_ops segnf_ops;
+				extern const struct seg_ops segnf_ops;
 
 				/*
 				 * no-fault segs must disappear if overlaid.
@@ -1997,7 +1997,7 @@ as_gap(struct as *as, size_t minlen, caddr_t *basep, size_t *lenp, uint_t flags,
 int
 as_memory(struct as *as, caddr_t *basep, size_t *lenp)
 {
-	extern struct seg_ops segspt_shmops;	/* needs a header file */
+	extern const struct seg_ops segspt_shmops; /* needs a header file */
 	struct seg *seg;
 	caddr_t addr, eaddr;
 	caddr_t segend;
@@ -2089,7 +2089,7 @@ as_swapout(struct as *as)
 	 * space reclaimed.
 	 */
 	for (seg = AS_SEGFIRST(as); seg != NULL; seg = AS_SEGNEXT(as, seg)) {
-		struct seg_ops *ov = seg->s_ops;
+		const struct seg_ops *ov = seg->s_ops;
 
 		/*
 		 * We have to check to see if the seg has
@@ -2529,7 +2529,7 @@ as_pagelock_segs(struct as *as, struct seg *seg, struct page ***ppp,
 	caddr_t eaddr;
 	faultcode_t fault_err = 0;
 	pgcnt_t pl_off;
-	extern struct seg_ops segspt_shmops;
+	extern const struct seg_ops segspt_shmops;
 
 	ASSERT(AS_LOCK_HELD(as));
 	ASSERT(seg != NULL);

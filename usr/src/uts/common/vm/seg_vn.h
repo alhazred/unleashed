@@ -230,7 +230,7 @@ typedef struct svntr_stats {
 extern void	segvn_init(void);
 extern int	segvn_create(struct seg *, void *);
 
-extern	struct seg_ops segvn_ops;
+extern const struct seg_ops segvn_ops;
 
 /*
  * Provided as shorthand for creating user zfod segments.

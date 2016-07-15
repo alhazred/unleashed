@@ -206,8 +206,8 @@ static struct p_ctrl3 {
 
 kthread_t *seg_pasync_thr;
 
-extern struct seg_ops segvn_ops;
-extern struct seg_ops segspt_shmops;
+extern const struct seg_ops segvn_ops;
+extern const struct seg_ops segspt_shmops;
 
 #define	IS_PFLAGS_WIRED(flags) ((flags) & SEGP_FORCE_WIRED)
 #define	IS_PCP_WIRED(pcp) IS_PFLAGS_WIRED((pcp)->p_flags)

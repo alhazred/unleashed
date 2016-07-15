@@ -719,7 +719,7 @@ rootnex_map_fault(dev_info_t *dip, dev_info_t *rdip,
     struct hat *hat, struct seg *seg, caddr_t addr,
     struct devpage *dp, pfn_t pfn, uint_t prot, uint_t lock)
 {
-	extern struct seg_ops segdev_ops;
+	extern const struct seg_ops segdev_ops;
 
 	DPRINTF(ROOTNEX_MAP_DEBUG, ("rootnex_map_fault: address <%p> "
 	    "pfn <%lx>", (void *)addr, pfn));

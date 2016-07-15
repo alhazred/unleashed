@@ -187,7 +187,7 @@ static int	segdev_getmemid(struct seg *, caddr_t, memid_t *);
  *	the segment it has been passed. So if you make it
  *	"static" you'll need to fix rootnex_map_fault.
  */
-struct seg_ops segdev_ops = {
+const struct seg_ops segdev_ops = {
 	.dup		= segdev_dup,
 	.unmap		= segdev_unmap,
 	.free		= segdev_free,

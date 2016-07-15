@@ -8368,8 +8368,8 @@ umem_lockmemory(caddr_t addr, size_t len, int flags, ddi_umem_cookie_t *cookie,
 	 * locked) to be allowed for LONGTERM.
 	 */
 	if (flags & DDI_UMEMLOCK_LONGTERM) {
-		extern  struct seg_ops segspt_shmops;
-		extern	struct seg_ops segdev_ops;
+		extern const struct seg_ops segspt_shmops;
+		extern const struct seg_ops segdev_ops;
 		AS_LOCK_ENTER(as, RW_READER);
 		for (seg = as_segat(as, addr); ; seg = AS_SEGNEXT(as, seg)) {
 			if (seg == NULL || seg->s_base > addr + len)

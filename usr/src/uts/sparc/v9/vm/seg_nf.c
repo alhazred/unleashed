@@ -77,7 +77,7 @@ static int	segnf_pagelock(struct seg *seg, caddr_t addr, size_t len,
 		    struct page ***ppp, enum lock_type type, enum seg_rw rw);
 
 
-struct seg_ops segnf_ops = {
+const struct seg_ops segnf_ops = {
 	.dup		= segnf_dup,
 	.unmap		= segnf_unmap,
 	.free		= segnf_free,

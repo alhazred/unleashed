@@ -97,8 +97,8 @@ typedef struct prpagev {
 
 size_t pagev_lim = 256 * 1024;	/* limit on number of pages in prpagev_t */
 
-extern struct seg_ops segdev_ops;	/* needs a header file */
-extern struct seg_ops segspt_shmops;	/* needs a header file */
+extern const struct seg_ops segdev_ops;	/* needs a header file */
+extern const struct seg_ops segspt_shmops;	/* needs a header file */
 
 static	int	set_watched_page(proc_t *, caddr_t, caddr_t, ulong_t, ulong_t);
 static	void	clear_watched_page(proc_t *, caddr_t, caddr_t, ulong_t);
