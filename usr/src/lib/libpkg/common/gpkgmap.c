@@ -389,7 +389,6 @@ end:
 		return (-1);
 	}
 
-done:
 	return (1);
 }
 
@@ -930,7 +929,6 @@ end:
 		return (-1);
 	}
 
-done:
 	return (1);
 }
 
