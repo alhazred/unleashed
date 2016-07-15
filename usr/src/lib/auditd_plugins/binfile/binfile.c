@@ -349,8 +349,7 @@ loadauditlist(char *dirstr, char *minfreestr)
 	}
 
 	/* Get the minfree value. */
-	if (minfreestr != NULL)
-		temp_minfree = atoi(minfreestr);
+	temp_minfree = atoi(minfreestr);
 
 	if ((temp_minfree < 0) || (temp_minfree > 100))
 		temp_minfree = 0;

@@ -825,15 +825,13 @@ it_tpg_to_nv(it_tpg_t *tpg, nvlist_t **nvl)
 			ptr = ptr->portal_next;
 			i++;
 		}
-	}
 
-	if ((ret == 0) && portalArray) {
-		ret = nvlist_add_string_array(*nvl, "portalList",
-		    portalArray, i);
-	}
+		if (ret == 0) {
+			ret = nvlist_add_string_array(*nvl, "portalList",
+			    portalArray, i);
+		}
 
 
-	if (portalArray) {
 		while (--i >= 0) {
 			if (portalArray[i]) {
 				iscsit_free(portalArray[i],

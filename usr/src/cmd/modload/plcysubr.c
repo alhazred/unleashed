@@ -27,8 +27,6 @@
  * drvsubr.c because of static linking requirements.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -337,11 +335,9 @@ delete_one_entry(const char *filename, const char *entry)
 		tc = *tail;
 		*tail = '\0';
 
-		if (delall || delrange) {
-			min = strchr(tok, ':');
-			if (min)
-				*min++ = '\0';
-		}
+		min = strchr(tok, ':');
+		if (min && (delall || delrange))
+			*min++ = '\0';
 
 		len = strlen(tok);
 		if (delrange) {

@@ -463,13 +463,12 @@ hp_path(hp_node_t node, char *path, char *connection)
 		(void) strlcpy(connection, node->hp_name, MAXPATHLEN);
 
 	/* Trace back to the root node, accumulating components */
-	for (parent = node; parent != NULL; parent = parent->hp_parent) {
+	for (parent = node, root = parent; parent != NULL;
+	    root = parent, parent = parent->hp_parent) {
 		if (parent->hp_type == HP_NODE_DEVICE) {
 			(void) strlcat(components, "/", MAXPATHLEN);
 			(void) strlcat(components, parent->hp_name, MAXPATHLEN);
 		}
-		if (parent->hp_parent == NULL)
-			root = parent;
 	}
 
 	/* Ensure the snapshot actually contains a base path */
