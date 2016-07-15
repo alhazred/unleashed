@@ -192,30 +192,29 @@ static int	segdev_capable(struct seg *, segcapability_t);
  *	"static" you'll need to fix rootnex_map_fault.
  */
 struct seg_ops segdev_ops = {
-	segdev_dup,
-	segdev_unmap,
-	segdev_free,
-	segdev_fault,
-	segdev_faulta,
-	segdev_setprot,
-	segdev_checkprot,
-	(int (*)())segdev_badop,	/* kluster */
-	(size_t (*)(struct seg *))NULL,	/* swapout */
-	segdev_sync,			/* sync */
-	segdev_incore,
-	segdev_lockop,			/* lockop */
-	segdev_getprot,
-	segdev_getoffset,
-	segdev_gettype,
-	segdev_getvp,
-	segdev_advise,
-	segdev_dump,
-	segdev_pagelock,
-	segdev_setpagesize,
-	segdev_getmemid,
-	segdev_getpolicy,
-	segdev_capable,
-	seg_inherit_notsup
+	.dup		= segdev_dup,
+	.unmap		= segdev_unmap,
+	.free		= segdev_free,
+	.fault		= segdev_fault,
+	.faulta		= segdev_faulta,
+	.setprot	= segdev_setprot,
+	.checkprot	= segdev_checkprot,
+	.kluster	= (int (*)())segdev_badop,
+	.sync		= segdev_sync,
+	.incore		= segdev_incore,
+	.lockop		= segdev_lockop,
+	.getprot	= segdev_getprot,
+	.getoffset	= segdev_getoffset,
+	.gettype	= segdev_gettype,
+	.getvp		= segdev_getvp,
+	.advise		= segdev_advise,
+	.dump		= segdev_dump,
+	.pagelock	= segdev_pagelock,
+	.setpagesize	= segdev_setpagesize,
+	.getmemid	= segdev_getmemid,
+	.getpolicy	= segdev_getpolicy,
+	.capable	= segdev_capable,
+	.inherit	= seg_inherit_notsup,
 };
 
 /*

@@ -146,30 +146,30 @@ pgcnt_t anon_segkp_pages_locked;	/* See vm/anon.h */
 pgcnt_t anon_segkp_pages_resv;		/* anon reserved by seg_kp */
 
 static struct	seg_ops segkp_ops = {
-	SEGKP_BADOP(int),		/* dup */
-	SEGKP_BADOP(int),		/* unmap */
-	SEGKP_BADOP(void),		/* free */
-	segkp_fault,
-	SEGKP_BADOP(faultcode_t),	/* faulta */
-	SEGKP_BADOP(int),		/* setprot */
-	segkp_checkprot,
-	segkp_kluster,
-	SEGKP_BADOP(size_t),		/* swapout */
-	SEGKP_BADOP(int),		/* sync */
-	SEGKP_BADOP(size_t),		/* incore */
-	SEGKP_BADOP(int),		/* lockop */
-	SEGKP_BADOP(int),		/* getprot */
-	SEGKP_BADOP(u_offset_t),		/* getoffset */
-	SEGKP_BADOP(int),		/* gettype */
-	SEGKP_BADOP(int),		/* getvp */
-	SEGKP_BADOP(int),		/* advise */
-	segkp_dump,			/* dump */
-	segkp_pagelock,			/* pagelock */
-	SEGKP_BADOP(int),		/* setpgsz */
-	segkp_getmemid,			/* getmemid */
-	segkp_getpolicy,		/* getpolicy */
-	segkp_capable,			/* capable */
-	seg_inherit_notsup		/* inherit */
+	.dup		= SEGKP_BADOP(int),
+	.unmap		= SEGKP_BADOP(int),
+	.free		= SEGKP_BADOP(void),
+	.fault		= segkp_fault,
+	.faulta		= SEGKP_BADOP(faultcode_t),
+	.setprot	= SEGKP_BADOP(int),
+	.checkprot	= segkp_checkprot,
+	.kluster	= segkp_kluster,
+	.swapout	= SEGKP_BADOP(size_t),
+	.sync		= SEGKP_BADOP(int),
+	.incore		= SEGKP_BADOP(size_t),
+	.lockop		= SEGKP_BADOP(int),
+	.getprot	= SEGKP_BADOP(int),
+	.getoffset	= SEGKP_BADOP(u_offset_t),
+	.gettype	= SEGKP_BADOP(int),
+	.getvp		= SEGKP_BADOP(int),
+	.advise		= SEGKP_BADOP(int),
+	.dump		= segkp_dump,
+	.pagelock	= segkp_pagelock,
+	.setpagesize	= SEGKP_BADOP(int),
+	.getmemid	= segkp_getmemid,
+	.getpolicy	= segkp_getpolicy,
+	.capable	= segkp_capable,
+	.inherit	= seg_inherit_notsup,
 };
 
 

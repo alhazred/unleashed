@@ -111,30 +111,30 @@ static int	segkpm_capable(struct seg *, segcapability_t);
 #define	SEGKPM_NOTSUP	(int(*)())segkpm_notsup
 
 static struct seg_ops segkpm_ops = {
-	SEGKPM_BADOP(int),	/* dup */
-	SEGKPM_BADOP(int),	/* unmap */
-	SEGKPM_BADOP(void),	/* free */
-	segkpm_fault,
-	SEGKPM_BADOP(int),	/* faulta */
-	SEGKPM_BADOP(int),	/* setprot */
-	SEGKPM_BADOP(int),	/* checkprot */
-	SEGKPM_BADOP(int),	/* kluster */
-	SEGKPM_BADOP(size_t),	/* swapout */
-	SEGKPM_BADOP(int),	/* sync */
-	SEGKPM_BADOP(size_t),	/* incore */
-	SEGKPM_BADOP(int),	/* lockop */
-	SEGKPM_BADOP(int),	/* getprot */
-	SEGKPM_BADOP(u_offset_t), /* getoffset */
-	SEGKPM_BADOP(int),	/* gettype */
-	SEGKPM_BADOP(int),	/* getvp */
-	SEGKPM_BADOP(int),	/* advise */
-	segkpm_dump,		/* dump */
-	SEGKPM_NOTSUP,		/* pagelock */
-	SEGKPM_BADOP(int),	/* setpgsz */
-	SEGKPM_BADOP(int),	/* getmemid */
-	SEGKPM_BADOP(lgrp_mem_policy_info_t *),	/* getpolicy */
-	segkpm_capable,		/* capable */
-	seg_inherit_notsup	/* inherit */
+	.dup		= SEGKPM_BADOP(int),
+	.unmap		= SEGKPM_BADOP(int),
+	.free		= SEGKPM_BADOP(void),
+	.fault		= segkpm_fault,
+	.faulta		= SEGKPM_BADOP(int),
+	.setprot	= SEGKPM_BADOP(int),
+	.checkprot	= SEGKPM_BADOP(int),
+	.kluster	= SEGKPM_BADOP(int),
+	.swapout	= SEGKPM_BADOP(size_t),
+	.sync		= SEGKPM_BADOP(int),
+	.incore		= SEGKPM_BADOP(size_t),
+	.lockop		= SEGKPM_BADOP(int),
+	.getprot	= SEGKPM_BADOP(int),
+	.getoffset	= SEGKPM_BADOP(u_offset_t),
+	.gettype	= SEGKPM_BADOP(int),
+	.getvp		= SEGKPM_BADOP(int),
+	.advise		= SEGKPM_BADOP(int),
+	.dump		= segkpm_dump,
+	.pagelock	= SEGKPM_NOTSUP,
+	.setpagesize	= SEGKPM_BADOP(int),
+	.getmemid	= SEGKPM_BADOP(int),
+	.getpolicy	= SEGKPM_BADOP(lgrp_mem_policy_info_t *),
+	.capable	= segkpm_capable,
+	.inherit	= seg_inherit_notsup,
 };
 
 /*

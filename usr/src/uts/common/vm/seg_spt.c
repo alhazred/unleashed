@@ -87,30 +87,30 @@ segspt_badop()
 #define	SEGSPT_BADOP(t)	(t(*)())segspt_badop
 
 struct seg_ops segspt_ops = {
-	SEGSPT_BADOP(int),		/* dup */
-	segspt_unmap,
-	segspt_free,
-	SEGSPT_BADOP(int),		/* fault */
-	SEGSPT_BADOP(faultcode_t),	/* faulta */
-	SEGSPT_BADOP(int),		/* setprot */
-	SEGSPT_BADOP(int),		/* checkprot */
-	SEGSPT_BADOP(int),		/* kluster */
-	SEGSPT_BADOP(size_t),		/* swapout */
-	SEGSPT_BADOP(int),		/* sync */
-	SEGSPT_BADOP(size_t),		/* incore */
-	SEGSPT_BADOP(int),		/* lockop */
-	SEGSPT_BADOP(int),		/* getprot */
-	SEGSPT_BADOP(u_offset_t), 	/* getoffset */
-	SEGSPT_BADOP(int),		/* gettype */
-	SEGSPT_BADOP(int),		/* getvp */
-	SEGSPT_BADOP(int),		/* advise */
-	SEGSPT_BADOP(void),		/* dump */
-	SEGSPT_BADOP(int),		/* pagelock */
-	SEGSPT_BADOP(int),		/* setpgsz */
-	SEGSPT_BADOP(int),		/* getmemid */
-	segspt_getpolicy,		/* getpolicy */
-	SEGSPT_BADOP(int),		/* capable */
-	seg_inherit_notsup		/* inherit */
+	.dup		= SEGSPT_BADOP(int),
+	.unmap		= segspt_unmap,
+	.free		= segspt_free,
+	.fault		= SEGSPT_BADOP(int),
+	.faulta		= SEGSPT_BADOP(faultcode_t),
+	.setprot	= SEGSPT_BADOP(int),
+	.checkprot	= SEGSPT_BADOP(int),
+	.kluster	= SEGSPT_BADOP(int),
+	.swapout	= SEGSPT_BADOP(size_t),
+	.sync		= SEGSPT_BADOP(int),
+	.incore		= SEGSPT_BADOP(size_t),
+	.lockop		= SEGSPT_BADOP(int),
+	.getprot	= SEGSPT_BADOP(int),
+	.getoffset	= SEGSPT_BADOP(u_offset_t),
+	.gettype	= SEGSPT_BADOP(int),
+	.getvp		= SEGSPT_BADOP(int),
+	.advise		= SEGSPT_BADOP(int),
+	.dump		= SEGSPT_BADOP(void),
+	.pagelock	= SEGSPT_BADOP(int),
+	.setpagesize	= SEGSPT_BADOP(int),
+	.getmemid	= SEGSPT_BADOP(int),
+	.getpolicy	= segspt_getpolicy,
+	.capable	= SEGSPT_BADOP(int),
+	.inherit	= seg_inherit_notsup,
 };
 
 static int segspt_shmdup(struct seg *seg, struct seg *newseg);
@@ -147,30 +147,30 @@ static lgrp_mem_policy_info_t *segspt_shmgetpolicy(struct seg *, caddr_t);
 static int segspt_shmcapable(struct seg *, segcapability_t);
 
 struct seg_ops segspt_shmops = {
-	segspt_shmdup,
-	segspt_shmunmap,
-	segspt_shmfree,
-	segspt_shmfault,
-	segspt_shmfaulta,
-	segspt_shmsetprot,
-	segspt_shmcheckprot,
-	segspt_shmkluster,
-	segspt_shmswapout,
-	segspt_shmsync,
-	segspt_shmincore,
-	segspt_shmlockop,
-	segspt_shmgetprot,
-	segspt_shmgetoffset,
-	segspt_shmgettype,
-	segspt_shmgetvp,
-	segspt_shmadvise,	/* advise */
-	segspt_shmdump,
-	segspt_shmpagelock,
-	segspt_shmsetpgsz,
-	segspt_shmgetmemid,
-	segspt_shmgetpolicy,
-	segspt_shmcapable,
-	seg_inherit_notsup
+	.dup		= segspt_shmdup,
+	.unmap		= segspt_shmunmap,
+	.free		= segspt_shmfree,
+	.fault		= segspt_shmfault,
+	.faulta		= segspt_shmfaulta,
+	.setprot	= segspt_shmsetprot,
+	.checkprot	= segspt_shmcheckprot,
+	.kluster	= segspt_shmkluster,
+	.swapout	= segspt_shmswapout,
+	.sync		= segspt_shmsync,
+	.incore		= segspt_shmincore,
+	.lockop		= segspt_shmlockop,
+	.getprot	= segspt_shmgetprot,
+	.getoffset	= segspt_shmgetoffset,
+	.gettype	= segspt_shmgettype,
+	.getvp		= segspt_shmgetvp,
+	.advise		= segspt_shmadvise,
+	.dump		= segspt_shmdump,
+	.pagelock	= segspt_shmpagelock,
+	.setpagesize	= segspt_shmsetpgsz,
+	.getmemid	= segspt_shmgetmemid,
+	.getpolicy	= segspt_shmgetpolicy,
+	.capable	= segspt_shmcapable,
+	.inherit	= seg_inherit_notsup,
 };
 
 static void segspt_purge(struct seg *seg);

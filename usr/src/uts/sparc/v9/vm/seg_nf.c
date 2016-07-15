@@ -84,35 +84,32 @@ static lgrp_mem_policy_info_t	*segnf_getpolicy(struct seg *seg,
 
 
 struct seg_ops segnf_ops = {
-	segnf_dup,
-	segnf_unmap,
-	segnf_free,
-	(faultcode_t (*)(struct hat *, struct seg *, caddr_t, size_t,
-	    enum fault_type, enum seg_rw))
-		segnf_nomap,		/* fault */
-	(faultcode_t (*)(struct seg *, caddr_t))
-		segnf_nomap,		/* faulta */
-	segnf_setprot,
-	segnf_checkprot,
-	(int (*)())segnf_badop,		/* kluster */
-	(size_t (*)(struct seg *))NULL,	/* swapout */
-	(int (*)(struct seg *, caddr_t, size_t, int, uint_t))
-		segnf_nop,		/* sync */
-	(size_t (*)(struct seg *, caddr_t, size_t, char *))
-		segnf_nop,		/* incore */
-	(int (*)(struct seg *, caddr_t, size_t, int, int, ulong_t *, size_t))
-		segnf_nop,		/* lockop */
-	segnf_getprot,
-	segnf_getoffset,
-	segnf_gettype,
-	segnf_getvp,
-	(int (*)(struct seg *, caddr_t, size_t, uint_t))
-		segnf_nop,		/* advise */
-	segnf_dump,
-	segnf_pagelock,
-	segnf_setpagesize,
-	segnf_getmemid,
-	segnf_getpolicy,
+	.dup		= segnf_dup,
+	.unmap		= segnf_unmap,
+	.free		= segnf_free,
+	.fault		= (faultcode_t (*)(struct hat *, struct seg *, caddr_t,
+	    size_t, enum fault_type, enum seg_rw))segnf_nomap,
+	.faulta		= (faultcode_t (*)(struct seg *, caddr_t)) segnf_nomap,
+	.setprot	= segnf_setprot,
+	.checkprot	= segnf_checkprot,
+	.kluster	= (int (*)())segnf_badop,
+	.sync		= (int (*)(struct seg *, caddr_t, size_t, int, uint_t))
+		segnf_nop,
+	.incore		= (size_t (*)(struct seg *, caddr_t, size_t, char *))
+		segnf_nop,
+	.lockop		= (int (*)(struct seg *, caddr_t, size_t, int, int,
+	    ulong_t *, size_t))segnf_nop,
+	.getprot	= segnf_getprot,
+	.getoffset	= segnf_getoffset,
+	.gettype	= segnf_gettype,
+	.getvp		= segnf_getvp,
+	.advise		= (int (*)(struct seg *, caddr_t, size_t, uint_t))
+		segnf_nop,
+	.dump		= segnf_dump,
+	.pagelock	= segnf_pagelock,
+	.setpagesize	= segnf_setpagesize,
+	.getmemid	= segnf_getmemid,
+	.getpolicy	= segnf_getpolicy,
 };
 
 /*

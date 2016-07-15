@@ -774,30 +774,30 @@ segkmem_capable(struct seg *seg, segcapability_t capability)
 }
 
 static struct seg_ops segkmem_ops = {
-	SEGKMEM_BADOP(int),		/* dup */
-	SEGKMEM_BADOP(int),		/* unmap */
-	SEGKMEM_BADOP(void),		/* free */
-	segkmem_fault,
-	SEGKMEM_BADOP(faultcode_t),	/* faulta */
-	segkmem_setprot,
-	segkmem_checkprot,
-	segkmem_kluster,
-	SEGKMEM_BADOP(size_t),		/* swapout */
-	SEGKMEM_BADOP(int),		/* sync */
-	SEGKMEM_BADOP(size_t),		/* incore */
-	SEGKMEM_BADOP(int),		/* lockop */
-	SEGKMEM_BADOP(int),		/* getprot */
-	SEGKMEM_BADOP(u_offset_t),	/* getoffset */
-	SEGKMEM_BADOP(int),		/* gettype */
-	SEGKMEM_BADOP(int),		/* getvp */
-	SEGKMEM_BADOP(int),		/* advise */
-	segkmem_dump,
-	segkmem_pagelock,
-	SEGKMEM_BADOP(int),		/* setpgsz */
-	segkmem_getmemid,
-	segkmem_getpolicy,		/* getpolicy */
-	segkmem_capable,		/* capable */
-	seg_inherit_notsup		/* inherit */
+	.dup		= SEGKMEM_BADOP(int),
+	.unmap		= SEGKMEM_BADOP(int),
+	.free		= SEGKMEM_BADOP(void),
+	.fault		= segkmem_fault,
+	.faulta		= SEGKMEM_BADOP(faultcode_t),
+	.setprot	= segkmem_setprot,
+	.checkprot	= segkmem_checkprot,
+	.kluster	= segkmem_kluster,
+	.swapout	= SEGKMEM_BADOP(size_t),
+	.sync		= SEGKMEM_BADOP(int),
+	.incore		= SEGKMEM_BADOP(size_t),
+	.lockop		= SEGKMEM_BADOP(int),
+	.getprot	= SEGKMEM_BADOP(int),
+	.getoffset	= SEGKMEM_BADOP(u_offset_t),
+	.gettype	= SEGKMEM_BADOP(int),
+	.getvp		= SEGKMEM_BADOP(int),
+	.advise		= SEGKMEM_BADOP(int),
+	.dump		= segkmem_dump,
+	.pagelock	= segkmem_pagelock,
+	.setpagesize	= SEGKMEM_BADOP(int),
+	.getmemid	= segkmem_getmemid,
+	.getpolicy	= segkmem_getpolicy,
+	.capable	= segkmem_capable,
+	.inherit	= seg_inherit_notsup,
 };
 
 int

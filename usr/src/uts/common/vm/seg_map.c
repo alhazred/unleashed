@@ -101,30 +101,30 @@ struct smap	*get_smap_kpm(caddr_t, page_t **);
 #define	SEGMAP_BADOP(t)	(t(*)())segmap_badop
 
 static struct seg_ops segmap_ops = {
-	SEGMAP_BADOP(int),	/* dup */
-	SEGMAP_BADOP(int),	/* unmap */
-	segmap_free,
-	segmap_fault,
-	segmap_faulta,
-	SEGMAP_BADOP(int),	/* setprot */
-	segmap_checkprot,
-	segmap_kluster,
-	SEGMAP_BADOP(size_t),	/* swapout */
-	SEGMAP_BADOP(int),	/* sync */
-	SEGMAP_BADOP(size_t),	/* incore */
-	SEGMAP_BADOP(int),	/* lockop */
-	segmap_getprot,
-	segmap_getoffset,
-	segmap_gettype,
-	segmap_getvp,
-	SEGMAP_BADOP(int),	/* advise */
-	segmap_dump,
-	segmap_pagelock,	/* pagelock */
-	SEGMAP_BADOP(int),	/* setpgsz */
-	segmap_getmemid,	/* getmemid */
-	segmap_getpolicy,	/* getpolicy */
-	segmap_capable,		/* capable */
-	seg_inherit_notsup	/* inherit */
+	.dup		= SEGMAP_BADOP(int),
+	.unmap		= SEGMAP_BADOP(int),
+	.free		= segmap_free,
+	.fault		= segmap_fault,
+	.faulta		= segmap_faulta,
+	.setprot	= SEGMAP_BADOP(int),
+	.checkprot	= segmap_checkprot,
+	.kluster	= segmap_kluster,
+	.swapout	= SEGMAP_BADOP(size_t),
+	.sync		= SEGMAP_BADOP(int),
+	.incore		= SEGMAP_BADOP(size_t),
+	.lockop		= SEGMAP_BADOP(int),
+	.getprot	= segmap_getprot,
+	.getoffset	= segmap_getoffset,
+	.gettype	= segmap_gettype,
+	.getvp		= segmap_getvp,
+	.advise		= SEGMAP_BADOP(int),
+	.dump		= segmap_dump,
+	.pagelock	= segmap_pagelock,
+	.setpagesize	= SEGMAP_BADOP(int),
+	.getmemid	= segmap_getmemid,
+	.getpolicy	= segmap_getpolicy,
+	.capable	= segmap_capable,
+	.inherit	= seg_inherit_notsup,
 };
 
 /*
