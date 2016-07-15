@@ -491,7 +491,6 @@ trap(struct regs *rp, caddr_t addr, processorid_t cpuid)
 
 	type = rp->r_trapno;
 	CPU_STATS_ADDQ(CPU, sys, trap, 1);
-	ASSERT(ct->t_schedflag & TS_DONT_SWAP);
 
 	if (type == T_PGFLT) {
 

@@ -775,7 +775,6 @@ static const struct seg_ops segkmem_ops = {
 	.setprot	= segkmem_setprot,
 	.checkprot	= segkmem_checkprot,
 	.kluster	= segkmem_kluster,
-	.swapout	= SEGKMEM_BADOP(size_t),
 	.sync		= SEGKMEM_BADOP(int),
 	.incore		= SEGKMEM_BADOP(size_t),
 	.lockop		= SEGKMEM_BADOP(int),

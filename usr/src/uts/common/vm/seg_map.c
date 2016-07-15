@@ -106,7 +106,6 @@ static const struct seg_ops segmap_ops = {
 	.setprot	= SEGMAP_BADOP(int),
 	.checkprot	= segmap_checkprot,
 	.kluster	= segmap_kluster,
-	.swapout	= SEGMAP_BADOP(size_t),
 	.sync		= SEGMAP_BADOP(int),
 	.incore		= SEGMAP_BADOP(size_t),
 	.lockop		= SEGMAP_BADOP(int),

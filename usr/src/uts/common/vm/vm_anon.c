@@ -68,8 +68,8 @@
  * we don't require backing store all anonymous pages in the system.
  * This is important for consideration for large memory systems.
  * We can also use this technique to delay binding physical locations
- * to anonymous pages until pageout/swapout time where we can make
- * smarter allocation decisions to improve anonymous klustering.
+ * to anonymous pages until pageout time where we can make smarter
+ * allocation decisions to improve anonymous klustering.
  *
  * Many of the routines defined here take a (struct anon **) argument,
  * which allows the code at this level to manage anon pages directly,
@@ -3626,43 +3626,6 @@ anon_array_enter(struct anon_map *amp, ulong_t an_idx, anon_sync_obj_t *sobj)
 	ANON_SETBUSY(ap_slot);
 	sobj->sync_data = ap_slot;
 	mutex_exit(mtx);
-}
-
-int
-anon_array_try_enter(struct anon_map *amp, ulong_t an_idx,
-			anon_sync_obj_t *sobj)
-{
-	ulong_t		*ap_slot;
-	kmutex_t	*mtx;
-	int		hash;
-
-	/*
-	 * Try to lock a range of anon slots.
-	 * Use szc to determine anon slot(s) to appear atomic.
-	 * If szc = 0, then lock the anon slot and mark it busy.
-	 * If szc > 0, then lock the range of slots by getting the
-	 * anon_array_lock for the first anon slot, and mark only the
-	 * first anon slot busy to represent whole range being busy.
-	 * Fail if the mutex or the anon_array are busy.
-	 */
-
-	ASSERT(RW_READ_HELD(&amp->a_rwlock));
-	an_idx = P2ALIGN(an_idx, page_get_pagecnt(amp->a_szc));
-	hash = ANON_ARRAY_HASH(amp, an_idx);
-	sobj->sync_mutex = mtx = &anon_array_lock[hash].pad_mutex;
-	sobj->sync_cv = &anon_array_cv[hash];
-	if (!mutex_tryenter(mtx)) {
-		return (EWOULDBLOCK);
-	}
-	ap_slot = anon_get_slot(amp->ahp, an_idx);
-	if (ANON_ISBUSY(ap_slot)) {
-		mutex_exit(mtx);
-		return (EWOULDBLOCK);
-	}
-	ANON_SETBUSY(ap_slot);
-	sobj->sync_data = ap_slot;
-	mutex_exit(mtx);
-	return (0);
 }
 
 void

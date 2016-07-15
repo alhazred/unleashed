@@ -121,10 +121,8 @@ struct as;
 struct page;
 struct anon;
 
-extern int maxslp;
 extern ulong_t pginrate;
 extern ulong_t pgoutrate;
-extern void swapout_lwp(klwp_t *);
 
 extern	int valid_va_range(caddr_t *basep, size_t *lenp, size_t minlen,
 		int dir);

@@ -163,13 +163,6 @@ stacks_findstack(uintptr_t addr, findstack_info_t *fsip, uint_t print_warnings)
 	fsip->fsi_tstate = thr.t_state;
 	fsip->fsi_panic = !!(thr.t_flag & T_PANIC);
 
-	if ((thr.t_schedflag & TS_LOAD) == 0) {
-		if (print_warnings)
-			mdb_warn("thread %p isn't in memory\n", addr);
-		fsip->fsi_failed = FSI_FAIL_NOTINMEMORY;
-		return (DCMD_ERR);
-	}
-
 	if (thr.t_stk < thr.t_stkbase) {
 		if (print_warnings)
 			mdb_warn(

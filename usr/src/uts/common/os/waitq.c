@@ -223,11 +223,6 @@ waitq_enqueue(waitq_t *wq, kthread_t *t)
 	 */
 	t->t_waitrq = gethrtime_unscaled();
 
-	/*
-	 * Mark thread as not swappable.  If necessary, it will get
-	 * swapped out when it returns to the userland.
-	 */
-	t->t_schedflag |= TS_DONT_SWAP;
 	DTRACE_SCHED1(cpucaps__sleep, kthread_t *, t);
 	waitq_link(wq, t);
 

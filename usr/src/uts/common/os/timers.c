@@ -654,13 +654,6 @@ realprofexpire(void *arg)
 		thread_lock(t);
 		switch (t->t_state) {
 		case TS_SLEEP:
-			/*
-			 * Don't touch the lwp is it is swapped out.
-			 */
-			if (!(t->t_schedflag & TS_LOAD)) {
-				mstate = LMS_SLEEP;
-				break;
-			}
 			switch (mstate = ttolwp(t)->lwp_mstate.ms_prev) {
 			case LMS_TFAULT:
 			case LMS_DFAULT:

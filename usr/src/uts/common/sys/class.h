@@ -83,8 +83,6 @@ typedef struct thread_ops {
 	void	(*cl_exit)(kthread_t *);
 	void	(*cl_active)(kthread_t *);
 	void	(*cl_inactive)(kthread_t *);
-	pri_t	(*cl_swapin)(kthread_t *, int);
-	pri_t 	(*cl_swapout)(kthread_t *, int);
 	void 	(*cl_trapret)(kthread_t *);
 	void	(*cl_preempt)(kthread_t *);
 	void	(*cl_setrun)(kthread_t *);
@@ -197,10 +195,6 @@ extern int	vaparmsout(char *, pcparms_t *, pc_vaparms_t *, uio_seg_t);
 #define	CL_ACTIVE(t)		(*(t)->t_clfuncs->cl_active)(t)
 
 #define	CL_INACTIVE(t)		(*(t)->t_clfuncs->cl_inactive)(t)
-
-#define	CL_SWAPIN(t, flags)	(*(t)->t_clfuncs->cl_swapin)(t, flags)
-
-#define	CL_SWAPOUT(t, flags)	(*(t)->t_clfuncs->cl_swapout)(t, flags)
 
 #define	CL_TICK(t)		(*(t)->t_clfuncs->cl_tick)(t)
 

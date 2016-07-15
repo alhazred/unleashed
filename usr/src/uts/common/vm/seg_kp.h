@@ -27,8 +27,6 @@
 #ifndef	_VM_SEG_KP_H
 #define	_VM_SEG_KP_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * segkp (as in kernel pageable) is a segment driver that supports allocation
  * of page-aligned variable size of vm resources.
@@ -143,7 +141,6 @@ void	segkp_cache_free();
 caddr_t segkp_cache_get(void *cookie);
 int	segkp_map_red(void);
 void	segkp_unmap_red(void);
-size_t	swapsize(caddr_t v);
 
 /* Special currently only used by schedctl. */
 struct anon_map;	/* Make the compiler happy about the next line. */

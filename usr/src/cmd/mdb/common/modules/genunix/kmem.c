@@ -4322,14 +4322,6 @@ whatthread_walk_thread(uintptr_t addr, const kthread_t *t, whatthread_t *w)
 		return (WALK_NEXT);
 
 	/*
-	 * Warn about swapped out threads, but drive on anyway
-	 */
-	if (!(t->t_schedflag & TS_LOAD)) {
-		mdb_warn("thread %p's stack swapped out\n", addr);
-		return (WALK_NEXT);
-	}
-
-	/*
 	 * Search the thread's stack for the given pointer.  Note that it would
 	 * be more efficient to follow ::kgrep's lead and read in page-sized
 	 * chunks, but this routine is already fast and simple.

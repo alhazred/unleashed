@@ -64,11 +64,6 @@ extern struct vnode *rootdir;	/* pointer to vnode of root directory */
 extern struct vnode *devicesdir;	/* pointer to /devices vnode */
 extern int interrupts_unleashed;	/* set after the spl0() in main() */
 
-extern char runin;		/* scheduling flag */
-extern char runout;		/* scheduling flag */
-extern char wake_sched;		/* causes clock to wake swapper on next tick */
-extern char wake_sched_sec;	/* causes clock to wake swapper after a sec */
-
 extern pgcnt_t	maxmem;		/* max available memory (pages) */
 extern pgcnt_t	physmem;	/* physical memory (pages) on this CPU */
 extern pfn_t	physmax;	/* highest numbered physical page present */

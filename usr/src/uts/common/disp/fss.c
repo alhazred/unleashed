@@ -349,8 +349,6 @@ static kmutex_t fsspsets_lock;	/* protects fsspsets */
 
 static id_t	fss_cid;
 
-static time_t	fss_minrun = 2;	/* t_pri becomes 59 within 2 secs */
-static time_t	fss_minslp = 2;	/* min time on sleep queue for hardswap */
 static int	fss_quantum = 11;
 
 static void	fss_newpri(fssproc_t *, boolean_t);
@@ -379,8 +377,6 @@ static void	fss_stop(kthread_t *, int, int);
 static void	fss_exit(kthread_t *);
 static void	fss_active(kthread_t *);
 static void	fss_inactive(kthread_t *);
-static pri_t	fss_swapin(kthread_t *, int);
-static pri_t	fss_swapout(kthread_t *, int);
 static void	fss_trapret(kthread_t *);
 static void	fss_preempt(kthread_t *);
 static void	fss_setrun(kthread_t *);
@@ -417,8 +413,6 @@ static struct classfuncs fss_classfuncs = {
 	fss_exit,
 	fss_active,
 	fss_inactive,
-	fss_swapin,
-	fss_swapout,
 	fss_trapret,
 	fss_preempt,
 	fss_setrun,
@@ -2140,107 +2134,6 @@ fss_nullsys()
 }
 
 /*
- * fss_swapin() returns -1 if the thread is loaded or is not eligible to be
- * swapped in. Otherwise, it returns the thread's effective priority based
- * on swapout time and size of process (0 <= epri <= 0 SHRT_MAX).
- */
-/*ARGSUSED*/
-static pri_t
-fss_swapin(kthread_t *t, int flags)
-{
-	fssproc_t *fssproc = FSSPROC(t);
-	long epri = -1;
-	proc_t *pp = ttoproc(t);
-
-	ASSERT(THREAD_LOCK_HELD(t));
-
-	if (t->t_state == TS_RUN && (t->t_schedflag & TS_LOAD) == 0) {
-		time_t swapout_time;
-
-		swapout_time = (ddi_get_lbolt() - t->t_stime) / hz;
-		if (INHERITED(t) || (fssproc->fss_flags & FSSKPRI)) {
-			epri = (long)DISP_PRIO(t) + swapout_time;
-		} else {
-			/*
-			 * Threads which have been out for a long time,
-			 * have high user mode priority and are associated
-			 * with a small address space are more deserving.
-			 */
-			epri = fssproc->fss_umdpri;
-			ASSERT(epri >= 0 && epri <= fss_maxumdpri);
-			epri += swapout_time - pp->p_swrss / nz(maxpgio)/2;
-		}
-		/*
-		 * Scale epri so that SHRT_MAX / 2 represents zero priority.
-		 */
-		epri += SHRT_MAX / 2;
-		if (epri < 0)
-			epri = 0;
-		else if (epri > SHRT_MAX)
-			epri = SHRT_MAX;
-	}
-	return ((pri_t)epri);
-}
-
-/*
- * fss_swapout() returns -1 if the thread isn't loaded or is not eligible to
- * be swapped out. Otherwise, it returns the thread's effective priority
- * based on if the swapper is in softswap or hardswap mode.
- */
-static pri_t
-fss_swapout(kthread_t *t, int flags)
-{
-	fssproc_t *fssproc = FSSPROC(t);
-	long epri = -1;
-	proc_t *pp = ttoproc(t);
-	time_t swapin_time;
-
-	ASSERT(THREAD_LOCK_HELD(t));
-
-	if (INHERITED(t) ||
-	    (fssproc->fss_flags & FSSKPRI) ||
-	    (t->t_proc_flag & TP_LWPEXIT) ||
-	    (t->t_state & (TS_ZOMB|TS_FREE|TS_STOPPED|TS_ONPROC|TS_WAIT)) ||
-	    !(t->t_schedflag & TS_LOAD) ||
-	    !(SWAP_OK(t)))
-		return (-1);
-
-	ASSERT(t->t_state & (TS_SLEEP | TS_RUN));
-
-	swapin_time = (ddi_get_lbolt() - t->t_stime) / hz;
-
-	if (flags == SOFTSWAP) {
-		if (t->t_state == TS_SLEEP && swapin_time > maxslp) {
-			epri = 0;
-		} else {
-			return ((pri_t)epri);
-		}
-	} else {
-		pri_t pri;
-
-		if ((t->t_state == TS_SLEEP && swapin_time > fss_minslp) ||
-		    (t->t_state == TS_RUN && swapin_time > fss_minrun)) {
-			pri = fss_maxumdpri;
-			epri = swapin_time -
-			    (rm_asrss(pp->p_as) / nz(maxpgio)/2) - (long)pri;
-		} else {
-			return ((pri_t)epri);
-		}
-	}
-
-	/*
-	 * Scale epri so that SHRT_MAX / 2 represents zero priority.
-	 */
-	epri += SHRT_MAX / 2;
-	if (epri < 0)
-		epri = 0;
-	else if (epri > SHRT_MAX)
-		epri = SHRT_MAX;
-
-	return ((pri_t)epri);
-}
-
-/*
  * If thread is currently at a kernel mode priority (has slept) and is
  * returning to the userland we assign it the appropriate user mode priority
  * and time quantum here.  If we're lowering the thread's priority below that
@@ -2270,16 +2163,6 @@ fss_trapret(kthread_t *t)
 
 		if (DISP_MUST_SURRENDER(t))
 			cpu_surrender(t);
-	}
-
-	/*
-	 * Swapout lwp if the swapper is waiting for this thread to reach
-	 * a safe point.
-	 */
-	if (t->t_schedflag & TS_SWAPENQ) {
-		thread_unlock(t);
-		swapout_lwp(ttolwp(t));
-		thread_lock(t);
 	}
 }
 
@@ -2325,14 +2208,6 @@ fss_preempt(kthread_t *t)
 	}
 
 	/*
-	 * If preempted in user-land mark the thread as swappable because it
-	 * cannot be holding any kernel locks.
-	 */
-	ASSERT(t->t_schedflag & TS_DONT_SWAP);
-	if (lwp != NULL && lwp->lwp_state == LWP_USER)
-		t->t_schedflag &= ~TS_DONT_SWAP;
-
-	/*
 	 * Check to see if we're doing "preemption control" here.  If
 	 * we are, and if the user has requested that this thread not
 	 * be preempted, and if preemptions haven't been put off for
@@ -2356,7 +2231,6 @@ fss_preempt(kthread_t *t)
 					fssproc->fss_flags |= FSSRESTORE;
 				}
 				THREAD_CHANGE_PRI(t, fss_maxumdpri);
-				t->t_schedflag |= TS_DONT_SWAP;
 			}
 			schedctl_set_yield(t, 1);
 			setfrontdq(t);
@@ -2462,20 +2336,17 @@ fss_sleep(kthread_t *t)
 		if (DISP_MUST_SURRENDER(curthread))
 			cpu_surrender(t);
 	}
-	t->t_stime = ddi_get_lbolt();	/* time stamp for the swapper */
 }
 
 /*
  * A tick interrupt has ocurrend on a running thread. Check to see if our
- * time slice has expired.  We must also clear the TS_DONT_SWAP flag in
- * t_schedflag if the thread is eligible to be swapped out.
+ * time slice has expired.
  */
 static void
 fss_tick(kthread_t *t)
 {
 	fssproc_t *fssproc;
 	fssproj_t *fssproj;
-	klwp_t *lwp;
 	boolean_t call_cpu_surrender = B_FALSE;
 	boolean_t cpucaps_enforce = B_FALSE;
 
@@ -2547,10 +2418,6 @@ fss_tick(kthread_t *t)
 			 * accomplishes this.
 			 */
 			if (thread_change_pri(t, new_pri, 0)) {
-				if ((t->t_schedflag & TS_LOAD) &&
-				    (lwp = t->t_lwp) &&
-				    lwp->lwp_state == LWP_USER)
-					t->t_schedflag &= ~TS_DONT_SWAP;
 				fssproc->fss_timeleft = fss_quantum;
 			} else {
 				call_cpu_surrender = B_TRUE;
@@ -2614,7 +2481,6 @@ fss_wakeup(kthread_t *t)
 
 	fss_active(t);
 
-	t->t_stime = ddi_get_lbolt();		/* time stamp for the swapper */
 	fssproc = FSSPROC(t);
 	fssproc->fss_flags &= ~FSSBACKQ;
 

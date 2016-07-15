@@ -131,8 +131,6 @@ static void	rt_preempt(kthread_t *);
 static void	rt_setrun(kthread_t *);
 static void	rt_tick(kthread_t *);
 static void	rt_wakeup(kthread_t *);
-static pri_t	rt_swapin(kthread_t *, int);
-static pri_t	rt_swapout(kthread_t *, int);
 static pri_t	rt_globpri(kthread_t *);
 static void	rt_yield(kthread_t *);
 static int	rt_alloc(void **, int);
@@ -170,8 +168,6 @@ static struct classfuncs rt_classfuncs = {
 	rt_nullsys,	/* exit */
 	rt_nullsys,	/* active */
 	rt_nullsys,	/* inactive */
-	rt_swapin,
-	rt_swapout,
 	rt_nullsys,	/* trapret */
 	rt_preempt,
 	rt_setrun,
@@ -902,16 +898,9 @@ static void
 rt_preempt(kthread_t *t)
 {
 	rtproc_t *rtpp = (rtproc_t *)(t->t_cldata);
-	klwp_t *lwp;
 
 	ASSERT(THREAD_LOCK_HELD(t));
 
-	/*
-	 * If the state is user I allow swapping because I know I won't
-	 * be holding any locks.
-	 */
-	if ((lwp = curthread->t_lwp) != NULL && lwp->lwp_state == LWP_USER)
-		t->t_schedflag &= ~TS_DONT_SWAP;
 	if ((rtpp->rt_flags & RTBACKQ) != 0) {
 		rtpp->rt_timeleft = rtpp->rt_pquantum;
 		rtpp->rt_flags &= ~RTBACKQ;
@@ -941,44 +930,6 @@ rt_setrun(kthread_t *t)
 	rtpp->rt_timeleft = rtpp->rt_pquantum;
 	rtpp->rt_flags &= ~RTBACKQ;
 	setbackdq(t);
-}
-
-/*
- * Returns the priority of the thread, -1 if the thread is loaded or ineligible
- * for swapin.
- *
- * FX and RT threads are designed so that they don't swapout; however, it
- * is possible that while the thread is swapped out and in another class, it
- * can be changed to FX or RT.  Since these threads should be swapped in as
- * soon as they're runnable, rt_swapin returns SHRT_MAX, and fx_swapin
- * returns SHRT_MAX - 1, so that it gives deference to any swapped out RT
- * threads.
- */
-/* ARGSUSED */
-static pri_t
-rt_swapin(kthread_t *t, int flags)
-{
-	pri_t	tpri = -1;
-
-	ASSERT(THREAD_LOCK_HELD(t));
-
-	if (t->t_state == TS_RUN && (t->t_schedflag & TS_LOAD) == 0) {
-		tpri = (pri_t)SHRT_MAX;
-	}
-
-	return (tpri);
-}
-
-/*
- * Return an effective priority for swapout.
- */
-/* ARGSUSED */
-static pri_t
-rt_swapout(kthread_t *t, int flags)
-{
-	ASSERT(THREAD_LOCK_HELD(t));
-
-	return (-1);
 }
 
 /*

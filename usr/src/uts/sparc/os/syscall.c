@@ -359,8 +359,6 @@ pre_syscall(int arg0)
 
 	t->t_pre_sys = repost = 0;	/* clear pre-syscall processing flag */
 
-	ASSERT(t->t_schedflag & TS_DONT_SWAP);
-
 	syscall_mstate(LMS_USER, LMS_SYSTEM);
 
 	/*

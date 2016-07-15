@@ -124,7 +124,6 @@ struct	seg_ops {
 	int	(*setprot)(struct seg *, caddr_t, size_t, uint_t);
 	int	(*checkprot)(struct seg *, caddr_t, size_t, uint_t);
 	int	(*kluster)(struct seg *, caddr_t, ssize_t);
-	size_t	(*swapout)(struct seg *);
 	int	(*sync)(struct seg *, caddr_t, size_t, int, uint_t);
 	size_t	(*incore)(struct seg *, caddr_t, size_t, char *);
 	int	(*lockop)(struct seg *, caddr_t, size_t, int, int, ulong_t *,
@@ -256,7 +255,6 @@ extern faultcode_t segop_faulta(struct seg *, caddr_t);
 extern int segop_setprot(struct seg *, caddr_t, size_t, uint_t);
 extern int segop_checkprot(struct seg *, caddr_t, size_t, uint_t);
 extern int segop_kluster(struct seg *, caddr_t, ssize_t);
-extern size_t segop_swapout(struct seg *);
 extern int segop_sync(struct seg *, caddr_t, size_t, int, uint_t);
 extern size_t segop_incore(struct seg *, caddr_t, size_t, char *);
 extern int segop_lockop(struct seg *, caddr_t, size_t, int, int, ulong_t *,

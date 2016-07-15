@@ -301,10 +301,6 @@ static struct cpu_vm_stats_ks_data {
 	kstat_named_t pgpgin;
 	kstat_named_t pgout;
 	kstat_named_t pgpgout;
-	kstat_named_t swapin;
-	kstat_named_t pgswapin;
-	kstat_named_t swapout;
-	kstat_named_t pgswapout;
 	kstat_named_t zfod;
 	kstat_named_t dfree;
 	kstat_named_t scan;
@@ -333,10 +329,6 @@ static struct cpu_vm_stats_ks_data {
 	{ "pgpgin",		KSTAT_DATA_UINT64 },
 	{ "pgout",		KSTAT_DATA_UINT64 },
 	{ "pgpgout",		KSTAT_DATA_UINT64 },
-	{ "swapin",		KSTAT_DATA_UINT64 },
-	{ "pgswapin",		KSTAT_DATA_UINT64 },
-	{ "swapout",		KSTAT_DATA_UINT64 },
-	{ "pgswapout",		KSTAT_DATA_UINT64 },
 	{ "zfod",		KSTAT_DATA_UINT64 },
 	{ "dfree",		KSTAT_DATA_UINT64 },
 	{ "scan",		KSTAT_DATA_UINT64 },
@@ -2682,13 +2674,10 @@ cpu_bind_thread(kthread_id_t tp, processorid_t bind, processorid_t *obind,
 				(void) dispdeq(tp);
 				setbackdq(tp);
 				/*
-				 * Either on the bound CPU's disp queue now,
-				 * or swapped out or on the swap queue.
+				 * On the bound CPU's disp queue now.
 				 */
 				ASSERT(tp->t_disp_queue == cp->cpu_disp ||
-				    tp->t_weakbound_cpu == ocp ||
-				    (tp->t_schedflag & (TS_LOAD | TS_ON_SWAPQ))
-				    != TS_LOAD);
+				    tp->t_weakbound_cpu == ocp);
 			}
 		}
 	}
@@ -3291,10 +3280,6 @@ cpu_vm_stats_ks_update(kstat_t *ksp, int rw)
 	cvskd->pgpgin.value.ui64 = cvs->pgpgin;
 	cvskd->pgout.value.ui64 = cvs->pgout;
 	cvskd->pgpgout.value.ui64 = cvs->pgpgout;
-	cvskd->swapin.value.ui64 = cvs->swapin;
-	cvskd->pgswapin.value.ui64 = cvs->pgswapin;
-	cvskd->swapout.value.ui64 = cvs->swapout;
-	cvskd->pgswapout.value.ui64 = cvs->pgswapout;
 	cvskd->zfod.value.ui64 = cvs->zfod;
 	cvskd->dfree.value.ui64 = cvs->dfree;
 	cvskd->scan.value.ui64 = cvs->scan;
@@ -3421,10 +3406,6 @@ cpu_stat_ks_update(kstat_t *ksp, int rw)
 	cso->cpu_vminfo.pgpgin		= CPU_STATS(cp, vm.pgpgin);
 	cso->cpu_vminfo.pgout		= CPU_STATS(cp, vm.pgout);
 	cso->cpu_vminfo.pgpgout		= CPU_STATS(cp, vm.pgpgout);
-	cso->cpu_vminfo.swapin		= CPU_STATS(cp, vm.swapin);
-	cso->cpu_vminfo.pgswapin	= CPU_STATS(cp, vm.pgswapin);
-	cso->cpu_vminfo.swapout		= CPU_STATS(cp, vm.swapout);
-	cso->cpu_vminfo.pgswapout	= CPU_STATS(cp, vm.pgswapout);
 	cso->cpu_vminfo.zfod		= CPU_STATS(cp, vm.zfod);
 	cso->cpu_vminfo.dfree		= CPU_STATS(cp, vm.dfree);
 	cso->cpu_vminfo.scan		= CPU_STATS(cp, vm.scan);

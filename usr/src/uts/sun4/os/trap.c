@@ -168,13 +168,6 @@ trap(struct regs *rp, caddr_t addr, uint32_t type, uint32_t mmu_fsr)
 
 	CPU_STATS_ADDQ(CPU, sys, trap, 1);
 
-#ifdef SF_ERRATA_23 /* call causes illegal-insn */
-	ASSERT((curthread->t_schedflag & TS_DONT_SWAP) ||
-	    (type == T_UNIMP_INSTR));
-#else
-	ASSERT(curthread->t_schedflag & TS_DONT_SWAP);
-#endif /* SF_ERRATA_23 */
-
 	if (USERMODE(rp->r_tstate) || (type & T_USER)) {
 		/*
 		 * Set lwp_state before trying to acquire any
@@ -1371,8 +1364,6 @@ fpu_trap(struct regs *rp, caddr_t addr, uint32_t type, uint32_t code)
 	utrap_handler_t *utrapp;
 
 	CPU_STATS_ADDQ(CPU, sys, trap, 1);
-
-	ASSERT(curthread->t_schedflag & TS_DONT_SWAP);
 
 	if (USERMODE(rp->r_tstate)) {
 		/*

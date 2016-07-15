@@ -96,9 +96,7 @@ pri_t	intr_pri;		/* interrupt thread priority base level */
 #define	KPQPRI	-1 		/* pri where cpu affinity is dropped for kpq */
 pri_t	kpqpri = KPQPRI; 	/* can be set in /etc/system */
 disp_t	cpu0_disp;		/* boot CPU's dispatch queue */
-disp_lock_t	swapped_lock;	/* lock swapped threads and swap queue */
 int	nswapped;		/* total number of swapped threads */
-void	disp_swapped_enq(kthread_t *tp);
 static void	disp_swapped_setrun(kthread_t *tp);
 static void	cpu_resched(cpu_t *cp, pri_t tpri);
 
@@ -776,7 +774,6 @@ reschedule:
 	tp = dq->dq_first;
 
 	ASSERT(tp != NULL);
-	ASSERT(tp->t_schedflag & TS_LOAD);	/* thread must be swapped in */
 
 	DTRACE_SCHED2(dequeue, kthread_t *, tp, disp_t *, dp);
 
@@ -815,12 +812,6 @@ reschedule:
 		tp->t_link = NULL;
 	}
 
-	/*
-	 * Set TS_DONT_SWAP flag to prevent another processor from swapping
-	 * out this thread before we have a chance to run it.
-	 * While running, it is protected against swapping by t_lock.
-	 */
-	tp->t_schedflag |= TS_DONT_SWAP;
 	cpup->cpu_dispthread = tp;		/* protected by spl only */
 	cpup->cpu_dispatch_pri = pri;
 	ASSERT(pri == DISP_PRIO(tp));
@@ -1191,15 +1182,6 @@ setbackdq(kthread_t *tp)
 	ASSERT((tp->t_schedflag & TS_ALLSTART) == 0);
 	ASSERT(!thread_on_queue(tp));	/* make sure tp isn't on a runq */
 
-	/*
-	 * If thread is "swapped" or on the swap queue don't
-	 * queue it, but wake sched.
-	 */
-	if ((tp->t_schedflag & (TS_LOAD | TS_ON_SWAPQ)) != TS_LOAD) {
-		disp_swapped_setrun(tp);
-		return;
-	}
-
 	self = (tp == curthread);
 
 	if (tp->t_bound_cpu || tp->t_weakbound_cpu)
@@ -1379,15 +1361,6 @@ setfrontdq(kthread_t *tp)
 	ASSERT(THREAD_LOCK_HELD(tp));
 	ASSERT((tp->t_schedflag & TS_ALLSTART) == 0);
 	ASSERT(!thread_on_queue(tp));	/* make sure tp isn't on a runq */
-
-	/*
-	 * If thread is "swapped" or on the swap queue don't
-	 * queue it, but wake sched.
-	 */
-	if ((tp->t_schedflag & (TS_LOAD | TS_ON_SWAPQ)) != TS_LOAD) {
-		disp_swapped_setrun(tp);
-		return;
-	}
 
 	if (tp->t_bound_cpu || tp->t_weakbound_cpu)
 		bound = 1;
@@ -1617,13 +1590,6 @@ dispdeq(kthread_t *tp)
 	if (tp->t_state != TS_RUN)
 		return (0);
 
-	/*
-	 * The thread is "swapped" or is on the swap queue and
-	 * hence no longer on the run queue, so return true.
-	 */
-	if ((tp->t_schedflag & (TS_LOAD | TS_ON_SWAPQ)) != TS_LOAD)
-		return (1);
-
 	tpri = DISP_PRIO(tp);
 	dp = tp->t_disp_queue;
 	ASSERT(tpri < dp->disp_npri);
@@ -1675,110 +1641,6 @@ dispdeq(kthread_t *tp)
 	tp->t_link = NULL;
 	THREAD_TRANSITION(tp);		/* put in intermediate state */
 	return (1);
-}
-
-
-/*
- * dq_sruninc and dq_srundec are public functions for
- * incrementing/decrementing the sruncnts when a thread on
- * a dispatcher queue is made schedulable/unschedulable by
- * resetting the TS_LOAD flag.
- *
- * The caller MUST have the thread lock and therefore the dispatcher
- * queue lock so that the operation which changes
- * the flag, the operation that checks the status of the thread to
- * determine if it's on a disp queue AND the call to this function
- * are one atomic operation with respect to interrupts.
- */
-
-/*
- * Called by sched AFTER TS_LOAD flag is set on a swapped, runnable thread.
- */
-void
-dq_sruninc(kthread_t *t)
-{
-	ASSERT(t->t_state == TS_RUN);
-	ASSERT(t->t_schedflag & TS_LOAD);
-
-	THREAD_TRANSITION(t);
-	setfrontdq(t);
-}
-
-/*
- * See comment on calling conventions above.
- * Called by sched BEFORE TS_LOAD flag is cleared on a runnable thread.
- */
-void
-dq_srundec(kthread_t *t)
-{
-	ASSERT(t->t_schedflag & TS_LOAD);
-
-	(void) dispdeq(t);
-	disp_swapped_enq(t);
-}
-
-/*
- * Change the dispatcher lock of thread to the "swapped_lock"
- * and return with thread lock still held.
- *
- * Called with thread_lock held, in transition state, and at high spl.
- */
-void
-disp_swapped_enq(kthread_t *tp)
-{
-	ASSERT(THREAD_LOCK_HELD(tp));
-	ASSERT(tp->t_schedflag & TS_LOAD);
-
-	switch (tp->t_state) {
-	case TS_RUN:
-		disp_lock_enter_high(&swapped_lock);
-		THREAD_SWAP(tp, &swapped_lock);	/* set TS_RUN state and lock */
-		break;
-	case TS_ONPROC:
-		disp_lock_enter_high(&swapped_lock);
-		THREAD_TRANSITION(tp);
-		wake_sched_sec = 1;		/* tell clock to wake sched */
-		THREAD_SWAP(tp, &swapped_lock);	/* set TS_RUN state and lock */
-		break;
-	default:
-		panic("disp_swapped: tp: %p bad t_state", (void *)tp);
-	}
-}
-
-/*
- * This routine is called by setbackdq/setfrontdq if the thread is
- * not loaded or loaded and on the swap queue.
- *
- * Thread state TS_SLEEP implies that a swapped thread
- * has been woken up and needs to be swapped in by the swapper.
- *
- * Thread state TS_RUN, it implies that the priority of a swapped
- * thread is being increased by scheduling class (e.g. ts_update).
- */
-static void
-disp_swapped_setrun(kthread_t *tp)
-{
-	ASSERT(THREAD_LOCK_HELD(tp));
-	ASSERT((tp->t_schedflag & (TS_LOAD | TS_ON_SWAPQ)) != TS_LOAD);
-
-	switch (tp->t_state) {
-	case TS_SLEEP:
-		disp_lock_enter_high(&swapped_lock);
-		/*
-		 * Wakeup sched immediately (i.e., next tick) if the
-		 * thread priority is above maxclsyspri.
-		 */
-		if (DISP_PRIO(tp) > maxclsyspri)
-			wake_sched = 1;
-		else
-			wake_sched_sec = 1;
-		THREAD_RUN(tp, &swapped_lock); /* set TS_RUN state and lock */
-		break;
-	case TS_RUN:				/* called from ts_update */
-		break;
-	default:
-		panic("disp_swapped_setrun: tp: %p bad t_state", (void *)tp);
-	}
 }
 
 /*
@@ -2154,11 +2016,10 @@ disp_adjust_unbound_pri(kthread_t *tp)
 
 	/*
 	 * Don't do anything if the thread is not bound, or
-	 * currently not runnable or swapped out.
+	 * currently not runnable.
 	 */
 	if (tp->t_bound_cpu == NULL ||
-	    tp->t_state != TS_RUN ||
-	    tp->t_schedflag & TS_ON_SWAPQ)
+	    tp->t_state != TS_RUN)
 		return;
 
 	tpri = DISP_PRIO(tp);
@@ -2352,8 +2213,6 @@ disp_getbest(disp_t *dp)
 	 * value across the queue is.
 	 */
 	dp->disp_steal = 0;
-
-	tp->t_schedflag |= TS_DONT_SWAP;
 
 	/*
 	 * Setup thread to run on the current CPU.

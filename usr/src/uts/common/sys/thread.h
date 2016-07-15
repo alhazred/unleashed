@@ -155,9 +155,6 @@ typedef struct _kthread {
 	struct _kcpc_ctx *t_cpc_ctx;	/* performance counter context */
 	struct _kcpc_set *t_cpc_set;	/* set this thread has bound */
 
-	/*
-	 * non swappable part of the lwp state.
-	 */
 	id_t		t_tid;		/* lwp's id */
 	id_t		t_waitfor;	/* target lwp id in lwp_wait() */
 	struct sigqueue	*t_sigqueue;	/* queue of siginfo structs */
@@ -268,7 +265,6 @@ typedef struct _kthread {
 		void		  **ts_value;	/* array of value/key */
 	} *t_tsd;
 
-	clock_t		t_stime;	/* time stamp used by the swapper */
 	struct door_data *t_door;	/* door invocation data */
 	kmutex_t	*t_plockp;	/* pointer to process's p_lock */
 
@@ -400,10 +396,6 @@ typedef struct _kthread {
  * Thread scheduler flag (t_schedflag) definitions.
  *	The thread must be locked via thread_lock() or equiv. to change these.
  */
-#define	TS_LOAD		0x0001	/* thread is in memory */
-#define	TS_DONT_SWAP	0x0002	/* thread/lwp should not be swapped */
-#define	TS_SWAPENQ	0x0004	/* swap thread when it reaches a safe point */
-#define	TS_ON_SWAPQ	0x0008	/* thread is on the swap queue */
 #define	TS_SIGNALLED	0x0010	/* thread was awakened by cv_signal() */
 #define	TS_PROJWAITQ	0x0020	/* thread is on its project's waitq */
 #define	TS_ZONEWAITQ	0x0040	/* thread is on its zone's waitq */
@@ -479,12 +471,6 @@ typedef struct _kthread {
 
 /* The assigned priority of a thread */
 #define	ASSIGNED_PRIO(t)	((t)->t_pri)
-
-/*
- * Macros to determine whether a thread can be swapped.
- * If t_lock is held, the thread is either on a processor or being swapped.
- */
-#define	SWAP_OK(t)	(!LOCK_HELD(&(t)->t_lock))
 
 /*
  * proctot(x)
@@ -652,12 +638,6 @@ extern int default_binding_mode;
  * lock pointer provided.  This lock should be held.
  */
 #define	THREAD_WAIT(tp, lp)	THREAD_SET_STATE(tp, TS_WAIT, lp)
-
-/*
- * Put thread in run state, and set the lock pointer to the dispatcher queue
- * lock pointer provided (i.e., the "swapped_lock").  This lock should be held.
- */
-#define	THREAD_SWAP(tp, lp)	THREAD_SET_STATE(tp, TS_RUN, lp)
 
 /*
  * Put the thread in zombie state and set the lock pointer to NULL.

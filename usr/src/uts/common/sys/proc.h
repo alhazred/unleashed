@@ -130,10 +130,8 @@ struct corectl_path;
 struct corectl_content;
 
 /*
- * One structure allocated per active process.  It contains all
- * data needed about the process while the process may be swapped
- * out.  Other per-process data (user.h) is also inside the proc structure.
- * Lightweight-process data (lwp.h) and the kernel stack may be swapped out.
+ * One structure allocated per active process.  Per-process data (user.h) is
+ * also inside the proc structure.
  */
 typedef struct	proc {
 	/*
@@ -147,7 +145,6 @@ typedef struct	proc {
 	/*
 	 * Fields protected by pidlock
 	 */
-	int	p_swapcnt;		/* number of swapped out lwps */
 	char	p_stat;			/* status of process */
 	char	p_wcode;		/* current wait code */
 	ushort_t p_pidflag;		/* flags protected only by pidlock */

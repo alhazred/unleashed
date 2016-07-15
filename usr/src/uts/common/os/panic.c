@@ -223,7 +223,6 @@ panicsys(const char *format, va_list alist, struct regs *rp, int on_panic_stack)
 	(void) setjmp(&t->t_pcb);
 	t->t_flag |= T_PANIC;
 
-	t->t_schedflag |= TS_DONT_SWAP;
 	t->t_bound_cpu = cp;
 	t->t_preempt++;
 

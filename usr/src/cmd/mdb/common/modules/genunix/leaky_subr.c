@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <mdb/mdb_param.h>
 #include <mdb/mdb_modapi.h>
 
@@ -278,21 +276,12 @@ leaky_modctl(uintptr_t addr, const struct modctl *m, int *ignored)
 	return (WALK_NEXT);
 }
 
+/*ARGSUSED*/
 static int
 leaky_thread(uintptr_t addr, const kthread_t *t, unsigned long *pagesize)
 {
 	uintptr_t size, base = (uintptr_t)t->t_stkbase;
 	uintptr_t stk = (uintptr_t)t->t_stk;
-
-	/*
-	 * If this thread isn't in memory, we can't look at its stack.  This
-	 * may result in false positives, so we print a warning.
-	 */
-	if (!(t->t_schedflag & TS_LOAD)) {
-		mdb_printf("findleaks: thread %p's stack swapped out; "
-		    "false positives possible\n", addr);
-		return (WALK_NEXT);
-	}
 
 	if (t->t_state != TS_FREE)
 		leaky_grep(base, stk - base);

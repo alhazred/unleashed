@@ -902,44 +902,6 @@ clock(void)
 			calcloadavg(genloadavg(&cpupart->cp_loadavg),
 			    cpupart->cp_hp_avenrun);
 		} while ((cpupart = cpupart->cp_next) != cp_list_head);
-
-		/*
-		 * Wake up the swapper thread if necessary.
-		 */
-		if (runin ||
-		    (runout && (avefree < desfree || wake_sched_sec))) {
-			t = &t0;
-			thread_lock(t);
-			if (t->t_state == TS_STOPPED) {
-				runin = runout = 0;
-				wake_sched_sec = 0;
-				t->t_whystop = 0;
-				t->t_whatstop = 0;
-				t->t_schedflag &= ~TS_ALLSTART;
-				THREAD_TRANSITION(t);
-				setfrontdq(t);
-			}
-			thread_unlock(t);
-		}
-	}
-
-	/*
-	 * Wake up the swapper if any high priority swapped-out threads
-	 * became runable during the last tick.
-	 */
-	if (wake_sched) {
-		t = &t0;
-		thread_lock(t);
-		if (t->t_state == TS_STOPPED) {
-			runin = runout = 0;
-			wake_sched = 0;
-			t->t_whystop = 0;
-			t->t_whatstop = 0;
-			t->t_schedflag &= ~TS_ALLSTART;
-			THREAD_TRANSITION(t);
-			setfrontdq(t);
-		}
-		thread_unlock(t);
 	}
 }
 

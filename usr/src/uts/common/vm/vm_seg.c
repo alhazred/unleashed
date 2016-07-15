@@ -1906,12 +1906,6 @@ segop_kluster(struct seg *seg, caddr_t addr, ssize_t d)
 	return (seg->s_ops->kluster(seg, addr, d));
 }
 
-size_t
-segop_swapout(struct seg *seg)
-{
-	return (seg->s_ops->swapout(seg));
-}
-
 int
 segop_sync(struct seg *seg, caddr_t addr, size_t len, int atr, uint_t f)
 {
