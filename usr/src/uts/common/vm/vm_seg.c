@@ -1974,6 +1974,9 @@ int
 segop_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***page,
     enum lock_type type, enum seg_rw rw)
 {
+	if (seg->s_ops->pagelock == NULL)
+		return (ENOTSUP);
+
 	return (seg->s_ops->pagelock(seg, addr, len, page, type, rw));
 }
 

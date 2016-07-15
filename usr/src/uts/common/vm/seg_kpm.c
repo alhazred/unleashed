@@ -103,10 +103,8 @@ int segmap_kpm = 1;
 faultcode_t segkpm_fault(struct hat *hat, struct seg *seg, caddr_t addr,
 			size_t len, enum fault_type type, enum seg_rw rw);
 static void	segkpm_badop(void);
-static int	segkpm_notsup(void);
 
 #define	SEGKPM_BADOP(t)	(t(*)())segkpm_badop
-#define	SEGKPM_NOTSUP	(int(*)())segkpm_notsup
 
 static struct seg_ops segkpm_ops = {
 	.dup		= SEGKPM_BADOP(int),
@@ -126,7 +124,6 @@ static struct seg_ops segkpm_ops = {
 	.gettype	= SEGKPM_BADOP(int),
 	.getvp		= SEGKPM_BADOP(int),
 	.advise		= SEGKPM_BADOP(int),
-	.pagelock	= SEGKPM_NOTSUP,
 	.setpagesize	= SEGKPM_BADOP(int),
 	.getmemid	= SEGKPM_BADOP(int),
 	.getpolicy	= SEGKPM_BADOP(lgrp_mem_policy_info_t *),
@@ -310,9 +307,3 @@ static void
 segkpm_badop() {}
 
 #endif	/* SEGKPM_SUPPORT */
-
-static int
-segkpm_notsup()
-{
-	return (ENOTSUP);
-}
