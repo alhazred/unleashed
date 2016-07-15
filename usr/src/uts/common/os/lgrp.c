@@ -3501,18 +3501,6 @@ lgrp_mem_policy_default(size_t size, int type)
 lgrp_mem_policy_info_t *
 lgrp_mem_policy_get(struct seg *seg, caddr_t vaddr)
 {
-	extern struct seg_ops	segspt_ops;
-	extern struct seg_ops	segspt_shmops;
-
-	/*
-	 * This is for binary compatibility to protect against third party
-	 * segment drivers which haven't recompiled to allow for
-	 * segop_getpolicy()
-	 */
-	if (seg->s_ops != &segvn_ops && seg->s_ops != &segspt_ops &&
-	    seg->s_ops != &segspt_shmops)
-		return (NULL);
-
 	return (segop_getpolicy(seg, vaddr));
 }
 
