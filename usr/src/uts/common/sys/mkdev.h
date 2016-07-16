@@ -77,13 +77,6 @@ extern "C" {
 
 #if !defined(_KERNEL)
 
-/*
- * Undefine sysmacros.h device macros.
- */
-#undef makedev
-#undef major
-#undef minor
-
 extern dev_t makedev(const major_t, const minor_t);
 extern major_t major(const dev_t);
 extern minor_t minor(const dev_t);

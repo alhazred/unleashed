@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
 /*	  All Rights Reserved  	*/
 
@@ -44,10 +42,10 @@
 #include <sys/mnttab.h>
 #include <sys/modctl.h>
 #include <sys/stat.h>
-#include <sys/sysmacros.h>
 #include <sys/types.h>
 #include <sys/utssys.h>
 #include <sys/var.h>
+#include <sys/mkdev.h>
 
 /*
  * Command line options for fuser command. Mutually exclusive.

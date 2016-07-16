@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <regex.h>
 #include <devfsadm.h>
 #include <stdio.h>
@@ -33,6 +31,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <sys/fssnap_if.h>
+#include <sys/mkdev.h>
 
 
 static int fssnap(di_minor_t minor, di_node_t node);

@@ -51,7 +51,8 @@ static char sccsid[] = "@(#)fsdb.c	5.8 (Berkeley) 6/1/90";
 #include <sys/signal.h>
 #include <sys/file.h>
 #include <inttypes.h>
-#include <sys/sysmacros.h>
+#include <sys/sysmacros.h> /* for MIN */
+#include <sys/mkdev.h>
 
 #ifdef sun
 #include <unistd.h>

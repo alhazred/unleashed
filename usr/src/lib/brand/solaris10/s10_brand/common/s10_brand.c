@@ -59,6 +59,7 @@
 #include <sys/mnttab.h>
 #include <sys/attr.h>
 #include <sys/lofi.h>
+#include <sys/mkdev.h>
 #include <atomic.h>
 #include <sys/acl.h>
 #include <sys/socket.h>

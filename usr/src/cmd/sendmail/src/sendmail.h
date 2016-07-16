@@ -2187,6 +2187,17 @@ extern unsigned char	tTdvect[100];	/* trace vector */
 #define XS_AUTH		2
 
 /*
+ * NOTE:  These are extremely old definitions.  Unfortunately, they appear
+ * to be used to generate queue file names, and so we can't just rip them
+ * out.  Next time we resync sendmail with upstream, we should figure out
+ * how to deal with these - hopefully, by working with sendmail upstream to
+ * address this once and for all.
+ */
+#include <sys/sysmacros.h>
+#define	major(x)	(major_t)((((unsigned)(x)) >> O_BITSMINOR) & O_MAXMAJ)
+#define	minor(x)	(minor_t)((x) & O_MAXMIN)
+
+/*
 **  Global variables.
 */
 
