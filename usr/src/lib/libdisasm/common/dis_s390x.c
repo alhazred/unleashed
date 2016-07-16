@@ -2613,6 +2613,17 @@ dis_s390_disassemble(dis_handle_t *dhp, uint64_t addr, char *buf,
 	return (0);
 }
 
+static int
+dis_s390_instrlen(dis_handle_t *dhp, uint64_t pc)
+{
+	uint8_t byte;
+
+	if (dhp->dh_read(dhp->dh_data, pc, &byte, 1) != 1)
+		return (-1);
+
+	return (ILC2LEN(byte >> 6));
+}
+
 /* ARGSUSED */
 static int
 dis_s390_min_instrlen(dis_handle_t *dhp)
@@ -2632,4 +2643,5 @@ dis_arch_t dis_arch_s390 = {
 	.da_disassemble		= dis_s390_disassemble,
 	.da_min_instrlen	= dis_s390_min_instrlen,
 	.da_max_instrlen	= dis_s390_max_instrlen,
+	.da_instrlen		= dis_s390_instrlen,
 };
