@@ -22,7 +22,7 @@
 /*
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
- * Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
+ * Copyright 2016 Nexenta Systems, Inc.  All rights reserved.
  */
 
 /*
@@ -1215,6 +1215,8 @@ again:
 		if (!calcdone) {
 			extension += hp->hs_ra_bytes;
 
+			len = (extension != 0) ? extension : PAGESIZE;
+
 			/*
 			 * Some cd writers don't write sectors that aren't
 			 * used. Also, there's no point in reading sectors
@@ -1225,16 +1227,12 @@ again:
 			 * Additionally, this behaviour is required by section
 			 * 6.4.5 of ISO 9660:1988(E).
 			 */
-			len = MIN(extension ? extension : PAGESIZE,
-			    filsiz - off);
-
-			/* A little paranoia. */
-			ASSERT(len > 0);
+			if (off < filsiz && off + len > filsiz)
+				len = filsiz - off;
 
 			/*
 			 * After all that, make sure we're asking for things
-			 * in units that bdev_strategy() will understand
-			 * (see bug 4202551).
+			 * in units that bdev_strategy() will understand.
 			 */
 			len = roundup(len, DEV_BSIZE);
 			calcdone = 1;
