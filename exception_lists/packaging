@@ -319,9 +319,6 @@ usr/lib/mdb/proc/sparcv9/mdb_test.so	sparc
 #
 # SNCA project exception list
 #
-usr/include/inet/kssl/kssl.h
-usr/include/inet/kssl/ksslimpl.h
-usr/include/inet/kssl/ksslproto.h
 usr/include/inet/nca
 #
 # these are "removed" from the source product build because the only
