@@ -435,7 +435,6 @@ file path=etc/security/prof_attr group=sys preserve=true \
     timestamp=19700101T000000Z
 file path=etc/security/prof_attr.d/SUNWcs group=sys
 file path=etc/shadow group=sys mode=0400 preserve=true
-file path=etc/skel/.bashrc group=other preserve=true
 file path=etc/skel/.kshrc group=other preserve=true
 file path=etc/skel/.profile group=other preserve=true
 file path=etc/svc/profile/generic_limited_net.xml group=sys mode=0444
@@ -620,7 +619,6 @@ file path=lib/svc/share/mfsthistory mode=0444
 file path=lib/svc/share/net_include.sh mode=0444
 file path=lib/svc/share/routing_include.sh mode=0444
 file path=lib/svc/share/smf_include.sh mode=0444
-file path=root/.bashrc group=root preserve=true
 file path=root/.profile group=root preserve=true
 file path=sbin/autopush mode=0555
 $(i386_ONLY)file path=sbin/biosdev mode=0555

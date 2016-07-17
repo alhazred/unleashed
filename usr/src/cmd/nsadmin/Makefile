@@ -24,8 +24,8 @@
 #
 
 PROG= profile .login ksh.kshrc system
-PROGSKEL= .profile .bashrc .kshrc
-PROGROOT= .profile .bashrc
+PROGSKEL= .profile .kshrc
+PROGROOT= .profile
 
 include ../Makefile.cmd
 
@@ -35,7 +35,7 @@ ROOTETCSKELPROG= $(PROGSKEL:%=$(ROOTETCSKEL)/%)
 ROOTROOTPROG= $(PROGROOT:%=$(ROOTROOT)/%)
 FILEMODE= 0644
 
-CLOBBERFILES = profile .bashrc .profile .login .kshrc
+CLOBBERFILES = profile .profile .login .kshrc
 
 .login: login.csh
 	$(RM) .login
@@ -52,10 +52,6 @@ profile: etc-profile.sh
 .kshrc: dot-kshrc.sh
 	$(RM) .kshrc
 	$(CP) dot-kshrc.sh $@
-
-.bashrc: bashrc.sh
-	$(RM) .bashrc
-	$(CP) bashrc.sh $@
 
 .KEEP_STATE:
 
