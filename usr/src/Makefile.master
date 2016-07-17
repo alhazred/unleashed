@@ -81,6 +81,7 @@ INTEL_BLD=      $(INTEL_BLD_1:i386=)
 # uncomment things in the lower Makefiles to enable the feature.
 ENABLE_IPP_PRINTING=	$(POUND_SIGN)
 ENABLE_SMB_PRINTING=	$(POUND_SIGN)
+ENABLE_PERL64=		$(POUND_SIGN)
 
 # CLOSED is the root of the tree that contains source which isn't released
 # as open source
@@ -150,8 +151,10 @@ FIND=		/usr/bin/find
 PERL=		/usr/bin/perl
 PERL_VERSION=	5.10.0
 PERL_PKGVERS=	-510
-PERL_ARCH =		i86pc-solaris-64int
-$(SPARC_BLD)PERL_ARCH =	sun4-solaris-64int
+PERL_ARCH=		i86pc-solaris-64int
+$(ENABLE_PERL64)PERL_ARCH64=	i86pc-solaris-64int
+$(SPARC_BLD)PERL_ARCH=		sun4-solaris-64int
+$(ENABLE_PERL64)$(SPARC_BLD)PERL_ARCH64=	sun4-solaris-64int
 PYTHON_26=	/usr/bin/python2.6
 PYTHON=		$(PYTHON_26)
 SORT=		/usr/bin/sort
