@@ -57,10 +57,8 @@ dir path=var group=sys
 dir path=var/krb5 group=sys
 dir path=var/krb5/rcache group=sys mode=1777
 dir path=var/krb5/rcache/root group=sys mode=0700
-file path=etc/krb5/krb5.conf group=sys \
-    original_name=SUNWkrb:etc/krb5/krb5.conf preserve=true
-file path=etc/krb5/warn.conf group=sys \
-    original_name=SUNWkrb:etc/krb5/warn.conf preserve=true
+file path=etc/krb5/krb5.conf group=sys preserve=true
+file path=etc/krb5/warn.conf group=sys preserve=true
 file path=lib/svc/manifest/network/security/kadmin.xml group=sys mode=0444
 file path=lib/svc/manifest/network/security/krb5kdc.xml group=sys mode=0444
 file path=lib/svc/manifest/network/security/ktkt_warn.xml group=sys mode=0444

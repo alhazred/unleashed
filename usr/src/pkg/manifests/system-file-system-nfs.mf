@@ -61,11 +61,9 @@ dir path=var group=sys
 dir path=var/nfs
 dir path=var/nfs/v4_oldstate group=daemon owner=daemon
 dir path=var/nfs/v4_state group=daemon owner=daemon
-file path=etc/default/nfs group=sys original_name=SUNWnfsc:etc/default/nfs \
-    preserve=renameold
+file path=etc/default/nfs group=sys preserve=renameold
 file path=etc/fs/nfs/mount mode=0555
-file path=etc/nfssec.conf group=sys original_name=SUNWnfsc:etc/nfssec.conf \
-    preserve=true
+file path=etc/nfssec.conf group=sys preserve=true
 file path=kernel/fs/$(ARCH64)/nfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/nfs group=sys mode=0755
 file path=kernel/misc/$(ARCH64)/klmmod group=sys mode=0755

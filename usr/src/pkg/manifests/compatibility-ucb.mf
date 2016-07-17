@@ -42,8 +42,7 @@ $(i386_ONLY)dir path=usr/ucb/$(ARCH32)
 dir path=usr/ucb/$(ARCH64)
 dir path=usr/ucblib
 dir path=usr/ucblib/$(ARCH64)
-file path=etc/mail/Mail.rc original_name=SUNWscp:etc/mail/Mail.rc \
-    preserve=true
+file path=etc/mail/Mail.rc preserve=true
 file path=usr/share/man/man1b/basename.1b
 file path=usr/share/man/man1b/biff.1b
 file path=usr/share/man/man1b/chown.1b

@@ -45,8 +45,7 @@ driver name=ssd perms="* 0640 root sys" \
     alias=scsa,00.bfcp \
     alias=scsa,00.bvhci
 file path=kernel/drv/$(ARCH64)/ssd group=sys
-file path=kernel/drv/ssd.conf group=sys \
-    original_name=SUNWssad:kernel/drv/ssd.conf preserve=true
+file path=kernel/drv/ssd.conf group=sys preserve=true
 file path=usr/share/man/man7d/ssd.7d
 legacy pkg=SUNWssad desc="ssd kernel device driver" \
     name="SPARCstorage Array Drivers"

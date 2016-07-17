@@ -45,29 +45,20 @@ dir path=etc/nwam/loc/NoNet group=netadm owner=netadm
 dir path=sbin group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man1m
-file path=etc/default/dhcpagent group=sys \
-    original_name=SUNWcnetr:etc/default/dhcpagent preserve=true
-file path=etc/default/inetinit group=sys \
-    original_name=SUNWcnetr:etc/default/inetinit preserve=true
-file path=etc/default/ipsec group=sys \
-    original_name=SUNWcnetr:etc/default/ipsec preserve=true
-file path=etc/default/mpathd group=sys \
-    original_name=SUNWcnetr:etc/default/mpathd preserve=true
-file path=etc/dladm/datalink.conf group=netadm \
-    original_name=SUNWcnetr:etc/dladm/datalink.conf owner=dladm preserve=true
-file path=etc/dladm/flowadm.conf group=netadm \
-    original_name=SUNWcnetr:etc/dladm/flowadm.conf owner=dladm preserve=true
-file path=etc/dladm/flowprop.conf group=netadm \
-    original_name=SUNWcnetr:etc/dladm/flowprop.conf owner=dladm preserve=true
-file path=etc/dladm/secobj.conf group=netadm mode=0660 \
-    original_name=SUNWcnetr:etc/dladm/secobj.conf owner=dladm preserve=true
+file path=etc/default/dhcpagent group=sys preserve=true
+file path=etc/default/inetinit group=sys preserve=true
+file path=etc/default/ipsec group=sys preserve=true
+file path=etc/default/mpathd group=sys preserve=true
+file path=etc/dladm/datalink.conf group=netadm owner=dladm preserve=true
+file path=etc/dladm/flowadm.conf group=netadm owner=dladm preserve=true
+file path=etc/dladm/flowprop.conf group=netadm owner=dladm preserve=true
+file path=etc/dladm/secobj.conf group=netadm mode=0660 owner=dladm \
+    preserve=true
 file path=etc/inet/datemsk.ndpd group=sys mode=0444
 file path=etc/inet/ike/config.sample group=sys mode=0444
-file path=etc/inet/ipsecalgs group=sys \
-    original_name=SUNWcnetr:etc/inet/ipsecalgs preserve=true
+file path=etc/inet/ipsecalgs group=sys preserve=true
 file path=etc/inet/ipsecinit.sample group=sys mode=0444
-file path=etc/inet/secret/ike.preshared group=sys mode=0600 \
-    original_name=SUNWcnetr:etc/inet/secret/ike.preshared preserve=true
+file path=etc/inet/secret/ike.preshared group=sys mode=0600 preserve=true
 file path=etc/inet/secret/ipseckeys.sample group=sys mode=0600
 file path=etc/ipadm/ipadm.conf group=netadm owner=netadm preserve=true
 file path=etc/nwam/loc/NoNet/ipf.conf.dfl group=netadm owner=netadm \

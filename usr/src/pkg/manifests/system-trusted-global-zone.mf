@@ -55,24 +55,18 @@ dir path=var/tsol/doors group=sys
 file path=etc/security/lib/disk_clean group=sys mode=0555
 file path=etc/security/lib/wdwmsg group=sys mode=0555
 file path=etc/security/lib/wdwwrapper group=sys mode=0555
-file path=etc/security/tsol/devalloc_defaults group=sys \
-    original_name=SUNWtsg:etc/security/tsol/devalloc_defaults preserve=true
+file path=etc/security/tsol/devalloc_defaults group=sys preserve=true
 file path=etc/security/tsol/label_encodings group=sys mode=0400 \
-    original_name=SUNWtsg:etc/security/tsol/label_encodings \
     preserve=renamenew
 file path=etc/security/tsol/label_encodings.example group=sys mode=0444
 file path=etc/security/tsol/label_encodings.gfi.multi group=sys mode=0444
 file path=etc/security/tsol/label_encodings.gfi.single group=sys mode=0444
 file path=etc/security/tsol/label_encodings.multi group=sys mode=0444
 file path=etc/security/tsol/label_encodings.single group=sys mode=0444
-file path=etc/security/tsol/relabel group=sys mode=0755 \
-    original_name=SUNWtsg:etc/security/tsol/relabel preserve=renamenew
-file path=etc/security/tsol/tnrhdb group=sys \
-    original_name=SUNWtsg:etc/security/tsol/tnrhdb preserve=renamenew
-file path=etc/security/tsol/tnrhtp group=sys \
-    original_name=SUNWtsg:etc/security/tsol/tnrhtp preserve=renamenew
-file path=etc/security/tsol/tnzonecfg group=sys \
-    original_name=SUNWtsg:etc/security/tsol/tnzonecfg preserve=renamenew
+file path=etc/security/tsol/relabel group=sys mode=0755 preserve=renamenew
+file path=etc/security/tsol/tnrhdb group=sys preserve=renamenew
+file path=etc/security/tsol/tnrhtp group=sys preserve=renamenew
+file path=etc/security/tsol/tnzonecfg group=sys preserve=renamenew
 file path=etc/zones/SUNWtsoldef.xml mode=0444
 file path=lib/svc/manifest/network/tnctl.xml group=sys mode=0444
 file path=lib/svc/manifest/network/tnd.xml group=sys mode=0444

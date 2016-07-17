@@ -52,8 +52,7 @@ driver name=pmcs alias=pciex11f8,8001 class=scsi-self-identifying \
     perms="* 0600 root sys"
 file path=kernel/drv/$(ARCH64)/pmcs group=sys
 $(i386_ONLY)file path=kernel/drv/pmcs group=sys
-file path=kernel/drv/pmcs.conf group=sys \
-    original_name=SUNWpmcs:kernel/drv/pmcs.conf preserve=true
+file path=kernel/drv/pmcs.conf group=sys preserve=true
 file path=kernel/kmdb/$(ARCH64)/pmcs group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/pmcs group=sys mode=0555
 file path=kernel/misc/pmcs/$(ARCH64)/pmcs8001fw group=sys mode=0755

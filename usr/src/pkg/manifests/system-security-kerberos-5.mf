@@ -53,12 +53,9 @@ dir path=usr/share/man/man4
 dir path=usr/share/man/man5
 dir path=var group=sys
 dir path=var/krb5 group=sys
-file path=etc/krb5/kadm5.acl group=sys \
-    original_name=SUNWkdc:etc/krb5/kadm5.acl preserve=true
-file path=etc/krb5/kdc.conf group=sys original_name=SUNWkdc:etc/krb5/kdc.conf \
-    preserve=true
-file path=etc/krb5/kpropd.acl group=sys \
-    original_name=SUNWkdc:etc/krb5/kpropd.acl preserve=true
+file path=etc/krb5/kadm5.acl group=sys preserve=true
+file path=etc/krb5/kdc.conf group=sys preserve=true
+file path=etc/krb5/kpropd.acl group=sys preserve=true
 file path=lib/svc/manifest/network/security/krb5_prop.xml group=sys mode=0444
 file path=usr/lib/krb5/README.db2 mode=0444
 file path=usr/lib/krb5/db2.so.1

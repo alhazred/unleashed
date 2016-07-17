@@ -46,16 +46,14 @@ dir path=usr/share/man
 dir path=usr/share/man/man5
 $(i386_ONLY)file path=boot/grub/bin/grub group=sys mode=0555
 $(i386_ONLY)file path=boot/grub/capability group=sys mode=0444
-$(i386_ONLY)file path=boot/grub/default group=sys mode=0444 \
-    original_name=SUNWgrub:boot/grub/default preserve=true
+$(i386_ONLY)file path=boot/grub/default group=sys mode=0444 preserve=true
 $(i386_ONLY)file path=boot/grub/e2fs_stage1_5 group=sys
 $(i386_ONLY)file path=boot/grub/fat_stage1_5 group=sys
 $(i386_ONLY)file path=boot/grub/ffs_stage1_5 group=sys
 $(i386_ONLY)file path=boot/grub/install_menu group=sys
 $(i386_ONLY)file path=boot/grub/iso9660_stage1_5 group=sys
 $(i386_ONLY)file path=boot/grub/jfs_stage1_5 group=sys
-$(i386_ONLY)file path=boot/grub/menu.lst group=sys \
-    original_name=SUNWgrub:boot/grub/menu.lst preserve=true
+$(i386_ONLY)file path=boot/grub/menu.lst group=sys preserve=true
 $(i386_ONLY)file path=boot/grub/minix_stage1_5 group=sys
 $(i386_ONLY)file path=boot/grub/nbgrub group=sys
 $(i386_ONLY)file path=boot/grub/pxegrub group=sys

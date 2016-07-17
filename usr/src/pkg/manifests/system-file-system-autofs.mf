@@ -48,10 +48,9 @@ dir path=usr/sbin
 dir path=usr/share/man
 dir path=usr/share/man/man1m
 dir path=usr/share/man/man4
-file path=etc/auto_home original_name=SUNWatfs:etc/auto_home preserve=true
-file path=etc/auto_master original_name=SUNWatfs:etc/auto_master preserve=true
-file path=etc/default/autofs group=sys \
-    original_name=SUNWatfs:etc/default/autofs preserve=renameold
+file path=etc/auto_home preserve=true
+file path=etc/auto_master preserve=true
+file path=etc/default/autofs group=sys preserve=renameold
 file path=lib/svc/manifest/system/filesystem/autofs.xml group=sys mode=0444
 file path=lib/svc/method/svc-autofs mode=0555
 file path=usr/lib/autofs/automountd mode=0555

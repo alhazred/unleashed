@@ -109,7 +109,6 @@ file path=usr/lib/lp/model/tsol_standard group=lp mode=0555
 file path=usr/lib/lp/model/tsol_standard_foomatic group=lp mode=0555
 file path=usr/lib/lp/postscript/tsol_banner.ps group=lp mode=0555
 file path=usr/lib/lp/postscript/tsol_separator.ps group=lp mode=0555 \
-    original_name=SUNWts:usr/lib/lp/postscript/tsol_separator.ps \
     preserve=renamenew
 file path=usr/lib/lp/postscript/tsol_trailer.ps group=lp mode=0555
 file path=usr/lib/lslabels group=sys mode=0555

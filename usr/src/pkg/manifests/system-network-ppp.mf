@@ -52,15 +52,12 @@ dir path=usr/share/man/man1m
 dir path=usr/share/man/man7m
 driver name=sppp
 driver name=sppptun
-file path=etc/init.d/pppd group=sys mode=0744 \
-    original_name=SUNWpppd:etc/init.d/pppd preserve=true
-file path=etc/ppp/chap-secrets group=sys mode=0600 \
-    original_name=SUNWpppd:etc/ppp/chap-secrets preserve=true
+file path=etc/init.d/pppd group=sys mode=0744 preserve=true
+file path=etc/ppp/chap-secrets group=sys mode=0600 preserve=true
 file path=etc/ppp/myisp-chat.tmpl group=sys
 file path=etc/ppp/options.tmpl group=sys
 file path=etc/ppp/options.ttya.tmpl group=sys
-file path=etc/ppp/pap-secrets group=sys mode=0600 \
-    original_name=SUNWpppd:etc/ppp/pap-secrets preserve=true
+file path=etc/ppp/pap-secrets group=sys mode=0600 preserve=true
 file path=etc/ppp/peers/myisp.tmpl group=sys
 file path=usr/bin/chat mode=0555
 file path=usr/bin/pppd mode=4555

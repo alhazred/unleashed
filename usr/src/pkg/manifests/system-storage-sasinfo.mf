@@ -47,8 +47,7 @@ dir path=usr/share/man
 dir path=usr/share/man/man1m
 dir path=usr/share/man/man3lib
 dir path=usr/share/man/man4
-file path=etc/smhba.conf group=sys original_name=SUNWsmhba:etc/smhba.conf \
-    preserve=true
+file path=etc/smhba.conf group=sys preserve=true
 file path=usr/include/smhbaapi.h
 file path=usr/lib/$(ARCH64)/libSMHBAAPI.so.1
 file path=usr/lib/$(ARCH64)/libsun_sas.so.1

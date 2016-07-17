@@ -56,7 +56,7 @@ dir path=var/ldap group=sys
 dir path=var/yp
 dir path=var/yp/binding
 file path=etc/nsswitch.nis group=sys
-file path=etc/publickey original_name=SUNWnis:etc/publickey preserve=true
+file path=etc/publickey preserve=true
 file path=lib/svc/manifest/network/nis/client.xml group=sys mode=0444
 file path=lib/svc/manifest/network/rpc/rex.xml group=sys mode=0444
 file path=usr/bin/chkey group=sys mode=4555
@@ -99,10 +99,8 @@ file path=usr/share/man/man1m/ypstart.1m
 file path=usr/share/man/man1m/ypxfr.1m
 file path=usr/share/man/man4/defaultdomain.4
 file path=usr/share/man/man4/publickey.4
-file path=var/yp/aliases mode=0555 original_name=SUNWnis:var/yp/aliases \
-    preserve=true
-file path=var/yp/nicknames original_name=SUNWnis:var/yp/nicknames \
-    preserve=true
+file path=var/yp/aliases mode=0555 preserve=true
+file path=var/yp/nicknames preserve=true
 legacy pkg=SUNWnisr \
     desc="configuration files and directories for the Network Information System (NIS)" \
     name="Network Information System, (Root)"

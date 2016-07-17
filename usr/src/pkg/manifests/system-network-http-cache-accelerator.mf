@@ -59,18 +59,12 @@ dir path=usr/share/man/man1
 dir path=usr/share/man/man1m
 dir path=usr/share/man/man4
 driver name=nca
-file path=etc/init.d/ncakmod group=sys mode=0744 \
-    original_name=SUNWnca:etc/init.d/ncakmod preserve=true
-file path=etc/init.d/ncalogd group=sys mode=0744 \
-    original_name=SUNWnca:etc/init.d/ncalogd preserve=true
-file path=etc/nca/nca.if group=sys original_name=SUNWnca:etc/nca/nca.if \
-    preserve=true
-file path=etc/nca/ncakmod.conf group=sys \
-    original_name=SUNWnca:etc/nca/ncakmod.conf preserve=true
-file path=etc/nca/ncalogd.conf group=sys \
-    original_name=SUNWnca:etc/nca/ncalogd.conf preserve=true
-file path=etc/nca/ncaport.conf group=sys \
-    original_name=SUNWnca:etc/nca/ncaport.conf preserve=true
+file path=etc/init.d/ncakmod group=sys mode=0744 preserve=true
+file path=etc/init.d/ncalogd group=sys mode=0744 preserve=true
+file path=etc/nca/nca.if group=sys preserve=true
+file path=etc/nca/ncakmod.conf group=sys preserve=true
+file path=etc/nca/ncalogd.conf group=sys preserve=true
+file path=etc/nca/ncaport.conf group=sys preserve=true
 file path=etc/sock2path.d/system%2Fnetwork%2Fhttp%2Fcache%2Faccelerator \
     group=sys
 file path=kernel/drv/$(ARCH64)/nca group=sys

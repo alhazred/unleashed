@@ -85,8 +85,7 @@ file path=usr/kernel/drv/$(ARCH64)/rdc group=sys
 file path=usr/kernel/drv/$(ARCH64)/rdcsrv group=sys
 file path=usr/kernel/drv/$(ARCH64)/rdcstub group=sys
 $(i386_ONLY)file path=usr/kernel/drv/rdc group=sys
-file path=usr/kernel/drv/rdc.conf group=sys \
-    original_name=SUNWrdc:usr/kernel/drv/rdc.conf preserve=true
+file path=usr/kernel/drv/rdc.conf group=sys preserve=true
 $(i386_ONLY)file path=usr/kernel/drv/rdcsrv group=sys
 $(i386_ONLY)file path=usr/kernel/drv/rdcstub group=sys
 file path=usr/lib/librdc.so.1

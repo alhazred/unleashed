@@ -62,30 +62,18 @@ dir path=var/uucp/.Log/uuxqt group=uucp owner=uucp
 dir path=var/uucp/.Old group=uucp owner=uucp
 dir path=var/uucp/.Sequence group=uucp owner=uucp
 dir path=var/uucp/.Status group=uucp owner=uucp
-file path=etc/init.d/uucp group=sys mode=0744 \
-    original_name=SUNWbnu:etc/init.d/uucp preserve=true
-file path=etc/uucp/Config group=uucp original_name=SUNWbnu:etc/uucp/Config \
-    owner=uucp preserve=true
-file path=etc/uucp/Devconfig group=uucp \
-    original_name=SUNWbnu:etc/uucp/Devconfig owner=uucp preserve=true
-file path=etc/uucp/Devices group=uucp original_name=SUNWbnu:etc/uucp/Devices \
-    owner=uucp preserve=true
-file path=etc/uucp/Dialcodes group=uucp \
-    original_name=SUNWbnu:etc/uucp/Dialcodes owner=uucp preserve=true
-file path=etc/uucp/Dialers group=uucp original_name=SUNWbnu:etc/uucp/Dialers \
-    owner=uucp preserve=true
-file path=etc/uucp/Grades group=uucp original_name=SUNWbnu:etc/uucp/Grades \
-    owner=uucp preserve=true
-file path=etc/uucp/Limits group=uucp original_name=SUNWbnu:etc/uucp/Limits \
-    owner=uucp preserve=true
-file path=etc/uucp/Permissions group=uucp mode=0600 \
-    original_name=SUNWbnu:etc/uucp/Permissions owner=uucp preserve=true
-file path=etc/uucp/Poll group=uucp original_name=SUNWbnu:etc/uucp/Poll \
-    owner=uucp preserve=true
-file path=etc/uucp/Sysfiles group=uucp original_name=SUNWbnu:etc/uucp/Sysfiles \
-    owner=uucp preserve=true
-file path=etc/uucp/Systems group=uucp mode=0600 \
-    original_name=SUNWbnu:etc/uucp/Systems owner=uucp preserve=true
+file path=etc/init.d/uucp group=sys mode=0744 preserve=true
+file path=etc/uucp/Config group=uucp owner=uucp preserve=true
+file path=etc/uucp/Devconfig group=uucp owner=uucp preserve=true
+file path=etc/uucp/Devices group=uucp owner=uucp preserve=true
+file path=etc/uucp/Dialcodes group=uucp owner=uucp preserve=true
+file path=etc/uucp/Dialers group=uucp owner=uucp preserve=true
+file path=etc/uucp/Grades group=uucp owner=uucp preserve=true
+file path=etc/uucp/Limits group=uucp owner=uucp preserve=true
+file path=etc/uucp/Permissions group=uucp mode=0600 owner=uucp preserve=true
+file path=etc/uucp/Poll group=uucp owner=uucp preserve=true
+file path=etc/uucp/Sysfiles group=uucp owner=uucp preserve=true
+file path=etc/uucp/Systems group=uucp mode=0600 owner=uucp preserve=true
 file path=lib/svc/manifest/network/uucp.xml group=sys mode=0444
 file path=usr/bin/ct group=uucp mode=4511
 file path=usr/bin/cu group=uucp mode=4511 owner=uucp

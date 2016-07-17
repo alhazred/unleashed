@@ -296,14 +296,11 @@ $(i386_ONLY)file path=boot/solaris/bin/symdef group=sys mode=0555
 $(i386_ONLY)file path=boot/solaris/bin/update_grub group=sys mode=0555
 file path=boot/solaris/filelist.ramdisk group=sys
 file path=boot/solaris/filelist.safe group=sys
-file path=etc/crypto/kcf.conf group=sys \
-    original_name=SUNWckr:etc/crypto/kcf.conf preserve=true
-$(i386_ONLY)file path=etc/mach group=sys original_name=SUNWos86r:etc/mach \
-    preserve=true
-file path=etc/name_to_sysnum group=sys \
-    original_name=SUNWckr:etc/name_to_sysnum preserve=renameold
+file path=etc/crypto/kcf.conf group=sys preserve=true
+$(i386_ONLY)file path=etc/mach group=sys preserve=true
+file path=etc/name_to_sysnum group=sys preserve=renameold
 file path=etc/sock2path.d/system%2Fkernel group=sys
-file path=etc/system group=sys original_name=SUNWckr:etc/system preserve=true
+file path=etc/system group=sys preserve=true
 $(i386_ONLY)file path=kernel/$(ARCH64)/genunix group=sys mode=0755
 file path=kernel/crypto/$(ARCH64)/aes group=sys mode=0755
 file path=kernel/crypto/$(ARCH64)/arcfour group=sys mode=0755
@@ -492,16 +489,14 @@ file path=kernel/drv/llc1.conf group=sys
 $(i386_ONLY)file path=kernel/drv/lofi group=sys
 file path=kernel/drv/lofi.conf group=sys
 $(i386_ONLY)file path=kernel/drv/log group=sys
-file path=kernel/drv/log.conf group=sys \
-    original_name=SUNWckr:kernel/drv/log.conf preserve=true
+file path=kernel/drv/log.conf group=sys preserve=true
 $(i386_ONLY)file path=kernel/drv/mc-amd group=sys
 $(i386_ONLY)file path=kernel/drv/mc-amd.conf group=sys
 $(i386_ONLY)file path=kernel/drv/mm group=sys
 file path=kernel/drv/mm.conf group=sys
 $(i386_ONLY)file path=kernel/drv/mouse8042 group=sys
 $(i386_ONLY)file path=kernel/drv/mpt group=sys
-$(i386_ONLY)file path=kernel/drv/mpt.conf group=sys \
-    original_name=SUNWckr:kernel/drv/mpt.conf preserve=true
+$(i386_ONLY)file path=kernel/drv/mpt.conf group=sys preserve=true
 $(i386_ONLY)file path=kernel/drv/nulldriver group=sys
 $(i386_ONLY)file path=kernel/drv/openeepr group=sys
 file path=kernel/drv/openeepr.conf group=sys
@@ -531,16 +526,11 @@ file path=kernel/drv/rts.conf group=sys
 $(i386_ONLY)file path=kernel/drv/sad group=sys
 file path=kernel/drv/sad.conf group=sys
 $(i386_ONLY)file path=kernel/drv/scsi_vhci group=sys
-file path=kernel/drv/scsi_vhci.conf group=sys \
-    original_name=SUNWckr:kernel/drv/scsi_vhci.conf preserve=true
+file path=kernel/drv/scsi_vhci.conf group=sys preserve=true
 $(i386_ONLY)file path=kernel/drv/sd group=sys
-$(sparc_ONLY)file path=kernel/drv/sd.conf group=sys \
-    original_name=SUNWckr:kernel/drv/sd.conf preserve=true
-$(i386_ONLY)file path=kernel/drv/sd.conf group=sys \
-    original_name=SUNWos86r:kernel/drv/sd.conf preserve=true
+file path=kernel/drv/sd.conf group=sys preserve=true
 $(i386_ONLY)file path=kernel/drv/sgen group=sys
-file path=kernel/drv/sgen.conf group=sys \
-    original_name=SUNWckr:kernel/drv/sgen.conf preserve=true
+file path=kernel/drv/sgen.conf group=sys preserve=true
 $(i386_ONLY)file path=kernel/drv/simnet group=sys
 file path=kernel/drv/simnet.conf group=sys
 $(i386_ONLY)file path=kernel/drv/smbios group=sys
@@ -550,8 +540,7 @@ file path=kernel/drv/softmac.conf group=sys
 $(i386_ONLY)file path=kernel/drv/spdsock group=sys
 file path=kernel/drv/spdsock.conf group=sys
 $(i386_ONLY)file path=kernel/drv/st group=sys
-file path=kernel/drv/st.conf group=sys \
-    original_name=SUNWckr:kernel/drv/st.conf preserve=true
+file path=kernel/drv/st.conf group=sys preserve=true
 $(i386_ONLY)file path=kernel/drv/sy group=sys
 file path=kernel/drv/sy.conf group=sys
 $(i386_ONLY)file path=kernel/drv/sysevent group=sys
@@ -566,8 +555,7 @@ $(i386_ONLY)file path=kernel/drv/tl group=sys
 file path=kernel/drv/tl.conf group=sys
 $(i386_ONLY)file path=kernel/drv/tzmon group=sys
 $(i386_ONLY)file path=kernel/drv/tzmon.conf group=sys
-$(sparc_ONLY)file path=kernel/drv/uata.conf group=sys \
-    original_name=SUNWckr:kernel/drv/uata.conf preserve=true
+$(sparc_ONLY)file path=kernel/drv/uata.conf group=sys preserve=true
 $(i386_ONLY)file path=kernel/drv/ucode group=sys
 $(i386_ONLY)file path=kernel/drv/ucode.conf group=sys
 $(i386_ONLY)file path=kernel/drv/udp group=sys

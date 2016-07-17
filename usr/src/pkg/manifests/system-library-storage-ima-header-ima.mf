@@ -35,7 +35,7 @@ dir path=usr group=sys
 dir path=usr/include
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
-file path=etc/ima.conf original_name=SUNWimac:etc/ima.conf preserve=true
+file path=etc/ima.conf preserve=true
 file path=usr/include/ima.h
 file path=usr/include/libsun_ima.h
 file path=usr/lib/$(ARCH64)/libima.so.1

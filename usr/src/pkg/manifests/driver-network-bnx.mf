@@ -51,8 +51,7 @@ driver name=bnx perms="* 0644 root sys" \
     alias=pci14e4,16ac
 file path=kernel/drv/$(ARCH64)/bnx group=sys
 file path=kernel/drv/bnx group=sys
-file path=kernel/drv/bnx.conf group=sys \
-    original_name=BRCMbnx:kernel/drv/bnx.conf preserve=renamenew
+file path=kernel/drv/bnx.conf group=sys preserve=renamenew
 legacy pkg=BRCMbnx \
     desc="Broadcom NetXtreme II Gigabit Ethernet PCI-X/PCIE Adapter Driver" \
     name="Broadcom NetXtreme II Gigabit Ethernet Adapter Driver" \

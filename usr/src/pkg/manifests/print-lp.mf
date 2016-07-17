@@ -79,8 +79,7 @@ file path=etc/lp/fd/postpages.fd group=lp
 file path=etc/lp/fd/postprint.fd group=lp
 file path=etc/lp/fd/postreverse.fd group=lp
 file path=etc/lp/fd/pr.fd group=lp
-file path=etc/printers.conf group=sys original_name=SUNWpc:etc/printers.conf \
-    preserve=true
+file path=etc/printers.conf group=sys preserve=true
 file path=lib/svc/manifest/application/print/rfc1179.xml group=sys mode=0444
 file path=lib/svc/manifest/application/print/server.xml group=sys mode=0444
 file path=lib/svc/method/print-svc mode=0555
@@ -139,8 +138,7 @@ file path=usr/share/man/man1m/lpsystem.1m
 file path=usr/share/man/man1m/lpusers.1m
 file path=usr/share/man/man4/printers.4
 file path=usr/share/man/man4/printers.conf.4
-file path=var/spool/cron/crontabs/lp group=root mode=0400 \
-    original_name=SUNWps:var/spool/cron/crontabs/lp preserve=true
+file path=var/spool/cron/crontabs/lp group=root mode=0400 preserve=true
 legacy pkg=SUNWpsr \
     desc="configuration and start-up files for the print service" \
     name="Solaris Print - LP Server, (root)" version=13.1,REV=2009.11.11

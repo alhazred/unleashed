@@ -49,7 +49,6 @@ driver name=ngdr perms="* 0600 root sys"
 file path=platform/SUNW,Ultra-Enterprise-10000/kernel/drv/$(ARCH64)/ngdr \
     group=sys
 file path=platform/SUNW,Ultra-Enterprise-10000/kernel/drv/ngdr.conf group=sys \
-    original_name=SUNWdrr:platform/SUNW,Ultra-Enterprise-10000/kernel/drv/ngdr.conf \
     preserve=true
 file path=platform/SUNW,Ultra-Enterprise-10000/kernel/misc/$(ARCH64)/ngdrmach \
     group=sys mode=0755

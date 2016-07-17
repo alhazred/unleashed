@@ -49,8 +49,7 @@ driver name=aac class=scsi \
     alias=pciex9005,286
 file path=kernel/drv/$(ARCH64)/aac group=sys
 $(i386_ONLY)file path=kernel/drv/aac group=sys
-file path=kernel/drv/aac.conf group=sys \
-    original_name=SUNWaac:kernel/drv/aac.conf preserve=true
+file path=kernel/drv/aac.conf group=sys preserve=true
 file path=usr/share/man/man7d/aac.7d
 legacy pkg=SUNWaac desc="Adaptec AdvanceRaid Controller SCSI HBA Driver" \
     name="Adaptec AdvanceRaid Controller SCSI HBA Driver"

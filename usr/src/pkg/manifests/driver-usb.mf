@@ -72,8 +72,7 @@ driver name=usb_as alias=usbif,class1.2 perms="* 0600 root sys"
 driver name=usb_ia alias=usb,ia
 driver name=usb_mid alias=usb,device
 driver name=usbprn alias=usbif,class7.1 perms="* 0666 root sys"
-file path=etc/usb/config_map.conf group=sys \
-    original_name=SUNWusb:etc/usb/config_map.conf preserve=true
+file path=etc/usb/config_map.conf group=sys preserve=true
 file path=kernel/drv/$(ARCH64)/ehci group=sys
 file path=kernel/drv/$(ARCH64)/hid group=sys
 file path=kernel/drv/$(ARCH64)/hubd group=sys
@@ -92,8 +91,7 @@ $(i386_ONLY)file path=kernel/drv/hubd group=sys
 $(i386_ONLY)file path=kernel/drv/ohci group=sys
 file path=kernel/drv/ohci.conf group=sys
 $(i386_ONLY)file path=kernel/drv/scsa2usb group=sys
-file path=kernel/drv/scsa2usb.conf group=sys \
-    original_name=SUNWusb:kernel/drv/scsa2usb.conf preserve=true
+file path=kernel/drv/scsa2usb.conf group=sys preserve=true
 $(i386_ONLY)file path=kernel/drv/uhci group=sys
 file path=kernel/drv/uhci.conf group=sys
 $(i386_ONLY)file path=kernel/drv/usb_ac group=sys

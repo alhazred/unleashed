@@ -53,8 +53,7 @@ driver name=ata alias=ide class=dada class=scsi
 driver name=pci-ide
 file path=kernel/drv/$(ARCH64)/ata group=sys
 file path=kernel/drv/ata group=sys
-file path=kernel/drv/ata.conf group=sys \
-    original_name=SUNWpsdir:kernel/drv/ata.conf preserve=true
+file path=kernel/drv/ata.conf group=sys preserve=true
 file path=platform/i86pc/kernel/drv/$(ARCH64)/pci-ide group=sys
 file path=platform/i86pc/kernel/drv/pci-ide group=sys
 file path=platform/i86pc/kernel/drv/pci-ide.conf group=sys

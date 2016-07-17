@@ -51,11 +51,8 @@ dir path=usr/lib/$(ARCH64)
 dir path=usr/lib/brand
 dir path=usr/lib/brand/solaris10 group=sys
 dir path=usr/lib/brand/solaris10/$(ARCH64)
-file path=etc/brand/solaris10/pkgrm.conf group=sys \
-    original_name=SUNWs10brand:etc/brand/solaris10/pkgrm.conf preserve=true
-file path=etc/brand/solaris10/smf_disable.conf group=sys \
-    original_name=SUNWs10brand:etc/brand/solaris10/smf_disable.conf \
-    preserve=true
+file path=etc/brand/solaris10/pkgrm.conf group=sys preserve=true
+file path=etc/brand/solaris10/smf_disable.conf group=sys preserve=true
 file path=etc/zones/SUNWsolaris10.xml mode=0444
 $(sparc_ONLY)file path=platform/sun4u/kernel/brand/$(ARCH64)/s10_brand \
     group=sys mode=0755

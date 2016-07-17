@@ -68,8 +68,7 @@ dir path=var/adm/sm.bin group=sys
 dir path=var/spool
 dir path=var/spool/clientmqueue group=smmsp mode=0770 owner=smmsp
 dir path=var/spool/mqueue mode=0750
-file path=etc/mail/aliases original_name=SUNWsndm:etc/mail/aliases \
-    preserve=true
+file path=etc/mail/aliases preserve=true
 file path=etc/mail/cf/README group=mail mode=0444
 file path=etc/mail/cf/cf/Makefile group=mail mode=0444
 file path=etc/mail/cf/cf/sendmail.cf group=mail mode=0444
@@ -152,14 +151,10 @@ file path=etc/mail/cf/ostype/solaris2.pre5.m4 group=mail mode=0444
 file path=etc/mail/cf/ostype/solaris8.m4 group=mail mode=0444
 file path=etc/mail/cf/sh/makeinfo.sh group=mail mode=0444
 file path=etc/mail/helpfile
-file path=etc/mail/local-host-names \
-    original_name=SUNWsndm:etc/mail/local-host-names preserve=true
-file path=etc/mail/sendmail.cf mode=0444 \
-    original_name=SUNWsndm:etc/mail/sendmail.cf preserve=renameold
-file path=etc/mail/submit.cf mode=0444 \
-    original_name=SUNWsndm:etc/mail/submit.cf preserve=renameold
-file path=etc/mail/trusted-users original_name=SUNWsndm:etc/mail/trusted-users \
-    preserve=true
+file path=etc/mail/local-host-names preserve=true
+file path=etc/mail/sendmail.cf mode=0444 preserve=renameold
+file path=etc/mail/submit.cf mode=0444 preserve=renameold
+file path=etc/mail/trusted-users preserve=true
 file path=lib/svc/manifest/network/sendmail-client.xml group=sys mode=0444
 file path=lib/svc/manifest/network/smtp-sendmail.xml group=sys mode=0444
 file path=lib/svc/method/sendmail-client mode=0555

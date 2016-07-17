@@ -881,11 +881,9 @@ $(i386_ONLY)file path=platform/i86pc/kernel/unix group=sys mode=0755
 $(i386_ONLY)file path=platform/i86pc/multiboot group=sys mode=0755 \
     reboot-needed=true
 $(i386_ONLY)file path=platform/i86pc/ucode/amd-ucode.bin group=sys mode=0444 \
-    original_name=SUNWcakr:platform/i86pc/ucode/amd-ucode.bin preserve=true \
-    reboot-needed=true
+    preserve=true reboot-needed=true
 $(i386_ONLY)file path=platform/i86pc/ucode/intel-ucode.txt group=sys mode=0444 \
-    original_name=SUNWcakr:platform/i86pc/ucode/intel-ucode.txt preserve=true \
-    reboot-needed=true
+    preserve=true reboot-needed=true
 $(i386_ONLY)file path=platform/i86xpv/kernel/$(ARCH64)/unix group=sys \
     mode=0755
 $(i386_ONLY)file path=platform/i86xpv/kernel/cpu/$(ARCH64)/cpu.generic \
