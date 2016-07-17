@@ -250,7 +250,7 @@ main(int argc, char *argv[])
 
 	/* Process the args.  */
 
-	while ((cc = getopt(argc, argv, "?acd:f:F:gmno:pqrvVO")) != -1)
+	while ((cc = getopt(argc, argv, "?acd:f:F:gmno:pqrt:vVO")) != -1)
 		switch (cc) {
 			case 'a':
 				aflg++;
@@ -270,6 +270,7 @@ main(int argc, char *argv[])
 				farg = optarg;
 				break;
 			case 'F':
+			case 't':
 				Fflg++;
 				Farg = optarg;
 				break;
