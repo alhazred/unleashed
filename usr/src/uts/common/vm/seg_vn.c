@@ -3805,16 +3805,8 @@ int segvn_anypgsz = 0;
 			}						\
 		}
 
-#ifdef  VM_STATS
-
 #define	SEGVN_VMSTAT_FLTVNPAGES(idx)					\
 		VM_STAT_ADD(segvnvmstats.fltvnpages[(idx)]);
-
-#else /* VM_STATS */
-
-#define	SEGVN_VMSTAT_FLTVNPAGES(idx)
-
-#endif
 
 static faultcode_t
 segvn_fault_vnodepages(struct hat *hat, struct seg *seg, caddr_t lpgaddr,
