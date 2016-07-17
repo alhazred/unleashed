@@ -556,13 +556,6 @@ pvn_write_done(page_t *plist, int flags)
 	CPU_STATS_ADDQ(cpup, vm, execpgout, execpgout);
 	CPU_STATS_ADDQ(cpup, vm, execfree, execfree);
 	CPU_STATS_EXIT_K();
-
-	/* Kernel probe */
-	TNF_PROBE_4(pageout, "vm pageio io", /* CSTYLED */,
-	    tnf_opaque,	vnode,			vp,
-	    tnf_ulong,	pages_pageout,		pgpgout,
-	    tnf_ulong,	pages_freed,		dfree,
-	    tnf_ulong,	pages_reclaimed,	pgrec);
 }
 
 /*

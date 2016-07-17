@@ -3497,11 +3497,6 @@ page_hashout(page_t *pp, kmutex_t *phm)
 
 	vp = pp->p_vnode;
 
-	/* Kernel probe */
-	TNF_PROBE_2(page_unmap, "vm pagefault", /* CSTYLED */,
-	    tnf_opaque, vnode, vp,
-	    tnf_offset, offset, pp->p_offset);
-
 	/*
 	 *
 	 */

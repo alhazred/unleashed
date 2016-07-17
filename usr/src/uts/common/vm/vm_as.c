@@ -888,12 +888,6 @@ retry:
 		break;
 	}
 
-	/* Kernel probe */
-	TNF_PROBE_3(address_fault, "vm pagefault", /* CSTYLED */,
-	    tnf_opaque,	address,	addr,
-	    tnf_fault_type,	fault_type,	type,
-	    tnf_seg_access,	access,		rw);
-
 	raddr = (caddr_t)((uintptr_t)addr & (uintptr_t)PAGEMASK);
 	rsize = (((size_t)(addr + size) + PAGEOFFSET) & PAGEMASK) -
 	    (size_t)raddr;
