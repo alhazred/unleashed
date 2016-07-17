@@ -34,6 +34,7 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <dhcpmsg.h>
+#include <poll.h>
 
 #include "agent.h"
 #include "script_handler.h"

@@ -60,6 +60,7 @@
 #include <sys/mount.h>
 #include <sys/mntent.h>
 #include <sys/mnttab.h>
+#include <sys/param.h>
 
 #include <sys/fs/smbfs_mount.h>
 

@@ -55,6 +55,7 @@
 #include <string.h>
 #include <slp-internal.h>
 #include <slp_net_utils.h>
+#include <poll.h>
 
 /*
  * TCP thread particulars

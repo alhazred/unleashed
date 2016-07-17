@@ -49,6 +49,7 @@
  *	confusing.
  */
 
+#include <sys/param.h>
 #include <pwd.h>
 #include <shadow.h>		/* For PASSWD (pathname to passwd file) */
 #include <stdlib.h>

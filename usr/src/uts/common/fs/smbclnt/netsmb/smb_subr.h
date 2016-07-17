@@ -43,6 +43,7 @@
 #include <sys/cmn_err.h>
 #include <sys/lock.h>
 #include <sys/note.h>
+#include <sys/stream.h>
 #include <netsmb/smb_conn.h>
 
 /* Helper function for SMBERROR */

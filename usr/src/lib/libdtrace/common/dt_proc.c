@@ -86,6 +86,7 @@
 #include <signal.h>
 #include <assert.h>
 #include <errno.h>
+#include <poll.h>
 
 #include <dt_proc.h>
 #include <dt_pid.h>

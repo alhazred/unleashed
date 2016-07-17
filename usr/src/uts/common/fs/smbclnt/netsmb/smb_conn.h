@@ -45,6 +45,7 @@
 #include <sys/t_lock.h>
 #include <sys/queue.h> /* for SLIST below */
 #include <sys/uio.h>
+#include <sys/cred.h>
 #include <netsmb/smb_dev.h>
 
 /*

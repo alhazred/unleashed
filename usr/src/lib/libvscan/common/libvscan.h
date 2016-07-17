@@ -28,6 +28,7 @@
 #ifndef __LIBVS_H__
 #define	__LIBVS_H__
 
+#include <sys/param.h>
 #include <netdb.h>
 #include <netinet/in.h>
 
