@@ -63,13 +63,10 @@ file path=usr/bin/dns-sd mode=0555
 file path=usr/include/dns_sd.h
 file path=usr/lib/$(ARCH64)/libdns_sd.so.1
 file path=usr/lib/$(ARCH64)/libjdns_sd.so.1
-file path=usr/lib/$(ARCH64)/llib-ldns_sd.ln
 file path=usr/lib/$(ARCH64)/nss_mdns.so.1
 file path=usr/lib/inet/mdnsd mode=0555
 file path=usr/lib/libdns_sd.so.1
 file path=usr/lib/libjdns_sd.so.1
-file path=usr/lib/llib-ldns_sd
-file path=usr/lib/llib-ldns_sd.ln
 file path=usr/lib/nss_mdns.so.1
 file path=usr/share/lib/java/dnssd.jar group=sys
 file path=usr/share/lib/java/javadoc/dnssd/api/allclasses-frame.html \

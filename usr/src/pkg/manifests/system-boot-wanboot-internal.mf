@@ -41,12 +41,6 @@ file path=usr/include/p12aux.h
 file path=usr/include/p12err.h
 file path=usr/include/parseURL.h
 file path=usr/include/wanboot_conf.h
-file path=usr/lib/$(ARCH64)/llib-lwanboot.ln
-file path=usr/lib/$(ARCH64)/llib-lwanbootutil.ln
-file path=usr/lib/llib-lwanboot
-file path=usr/lib/llib-lwanboot.ln
-file path=usr/lib/llib-lwanbootutil
-file path=usr/lib/llib-lwanbootutil.ln
 legacy pkg=SUNWwbint desc="Solaris WAN boot internal" name="WAN boot internal"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

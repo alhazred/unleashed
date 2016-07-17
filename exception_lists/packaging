@@ -51,15 +51,7 @@ usr/include/scsi/plugins/ses/vendor/sun_impl.h
 # Private/Internal libraries of the Cryptographic Framework.
 #
 lib/libkcfd.so
-lib/llib-lelfsign
-lib/llib-lelfsign.ln
-lib/llib-lkcfd
-lib/llib-lkcfd.ln
 usr/include/libelfsign.h
-usr/lib/llib-lsoftcrypto
-usr/lib/llib-lsoftcrypto.ln
-usr/lib/amd64/llib-lsoftcrypto.ln	i386
-usr/lib/sparcv9/llib-lsoftcrypto.ln	sparc
 
 #
 # The following files are used by the DHCP service, the
@@ -110,8 +102,6 @@ usr/include/sys/vnic_impl.h
 usr/include/ipadm_ipmgmt.h
 usr/include/ipadm_ndpd.h
 usr/include/libipadm.h
-lib/llib-lipadm
-lib/llib-lipadm.ln
 lib/libipadm.so
 #
 # Private libsocket header file
@@ -131,14 +121,6 @@ usr/lib/sparcv9/libike.so		sparc
 usr/lib/libipsecutil.so
 usr/lib/amd64/libipsecutil.so		i386
 usr/lib/sparcv9/libipsecutil.so		sparc
-usr/lib/llib-like
-usr/lib/llib-like.ln
-usr/lib/amd64/llib-like.ln		i386
-usr/lib/sparcv9/llib-like.ln		sparc
-usr/lib/llib-lipsecutil
-usr/lib/llib-lipsecutil.ln
-usr/lib/amd64/llib-lipsecutil.ln	i386
-usr/lib/sparcv9/llib-lipsecutil.ln	sparc
 #
 usr/include/inet/ip_impl.h
 usr/include/inet/ip_ndp.h
@@ -182,10 +164,6 @@ usr/include/sys/synch32.h
 # Private interfaces for libdisasm
 #
 usr/include/libdisasm.h
-usr/lib/llib-ldisasm
-usr/lib/llib-ldisasm.ln
-usr/lib/amd64/llib-ldisasm.ln		i386
-usr/lib/sparcv9/llib-ldisasm.ln		sparc
 #
 # Private interfaces for libraidcfg
 #
@@ -194,10 +172,6 @@ usr/include/raidcfg.h
 usr/lib/libraidcfg.so
 usr/lib/amd64/libraidcfg.so		i386
 usr/lib/sparcv9/libraidcfg.so		sparc
-usr/lib/llib-lraidcfg
-usr/lib/llib-lraidcfg.ln
-usr/lib/amd64/llib-lraidcfg.ln		i386
-usr/lib/sparcv9/llib-lraidcfg.ln	sparc
 #
 # This file is used for private communication between mdb, drv/kmdb, and
 # misc/kmdb.  The interfaces described herein are not intended for customer
@@ -214,12 +188,6 @@ lib/libdhcpagent.so
 lib/libdhcputil.so
 lib/amd64/libdhcputil.so		i386
 lib/sparcv9/libdhcputil.so		sparc
-lib/llib-ldhcpagent
-lib/llib-ldhcpagent.ln
-lib/llib-ldhcputil
-lib/llib-ldhcputil.ln
-lib/amd64/llib-ldhcputil.ln		i386
-lib/sparcv9/llib-ldhcputil.ln		sparc
 usr/include/dhcp_hostconf.h
 usr/include/dhcp_impl.h
 usr/include/dhcp_inittab.h
@@ -232,22 +200,6 @@ usr/lib/libdhcpagent.so
 usr/lib/libdhcputil.so
 usr/lib/amd64/libdhcputil.so		i386
 usr/lib/sparcv9/libdhcputil.so		sparc
-usr/lib/llib-ldhcpagent
-usr/lib/llib-ldhcpagent.ln
-usr/lib/llib-ldhcputil
-usr/lib/llib-ldhcputil.ln
-usr/lib/amd64/llib-ldhcputil.ln		i386
-usr/lib/sparcv9/llib-ldhcputil.ln	sparc
-#
-# These files are installed in the proto area by the build of libinstzones
-# and libpkg
-#
-usr/lib/llib-linstzones
-usr/lib/llib-linstzones.ln
-usr/lib/amd64/llib-linstzones.ln	i386
-usr/lib/sparcv9/llib-linstzones.ln	sparc
-usr/lib/llib-lpkg
-usr/lib/llib-lpkg.ln
 #
 # Don't ship header files private to libipmp and in.mpathd
 #
@@ -259,8 +211,6 @@ usr/include/ipmp_query_impl.h
 #
 usr/include/inetsvc.h
 usr/lib/libinetsvc.so
-usr/lib/llib-linetsvc
-usr/lib/llib-linetsvc.ln
 #
 # These files are installed in the proto area by the build of libinetutil,
 # a general purpose library for the benefit of internet utilities. Only
@@ -269,20 +219,12 @@ usr/lib/llib-linetsvc.ln
 lib/libinetutil.so
 lib/amd64/libinetutil.so		i386
 lib/sparcv9/libinetutil.so		sparc
-lib/llib-linetutil
-lib/llib-linetutil.ln
-lib/amd64/llib-linetutil.ln		i386
-lib/sparcv9/llib-linetutil.ln		sparc
 usr/include/libinetutil.h
 usr/include/netinet/inetutil.h
 usr/include/ofmt.h
 usr/lib/libinetutil.so
 usr/lib/amd64/libinetutil.so		i386
 usr/lib/sparcv9/libinetutil.so		sparc
-usr/lib/llib-linetutil
-usr/lib/llib-linetutil.ln
-usr/lib/amd64/llib-linetutil.ln		i386
-usr/lib/sparcv9/llib-linetutil.ln	sparc
 #
 # Miscellaneous kernel interfaces or kernel<->user interfaces that are
 # consolidation private and we do not want to export at this time.
@@ -296,11 +238,7 @@ usr/include/sys/vlan.h
 # These files are installed in the proto area so lvm can use
 # them during the build process.
 #
-lib/llib-lmeta
-lib/llib-lmeta.ln
 usr/include/sdssc.h
-usr/lib/llib-lmeta
-usr/lib/llib-lmeta.ln
 #
 # non-public pci header
 #
@@ -380,10 +318,6 @@ usr/include/sys/ucred.h
 # Private and/or platform-specific smf(5) files
 #
 lib/librestart.so
-lib/llib-lrestart
-lib/llib-lrestart.ln
-lib/amd64/llib-lrestart.ln					i386
-lib/sparcv9/llib-lrestart.ln					sparc
 usr/include/libcontract_priv.h
 usr/include/librestart_priv.h
 usr/include/librestart.h
@@ -407,9 +341,6 @@ etc/svc/profile/platform_SUNW,UltraSPARC-IIi-Netract.xml	i386
 # Private libuutil files
 #
 lib/libuutil.so
-lib/llib-luutil
-lib/llib-luutil.ln
-lib/sparcv9/llib-luutil.ln		sparc
 usr/include/libuutil_impl.h
 usr/lib/libuutil.so
 usr/lib/sparcv9/libuutil.so		sparc
@@ -447,18 +378,10 @@ usr/include/sys/crypto/sched_impl.h
 lib/libcmdutils.so
 lib/amd64/libcmdutils.so		i386
 lib/sparcv9/libcmdutils.so		sparc
-lib/llib-lcmdutils
-lib/llib-lcmdutils.ln
-lib/amd64/llib-lcmdutils.ln		i386
-lib/sparcv9/llib-lcmdutils.ln		sparc
 usr/include/libcmdutils.h
 usr/lib/libcmdutils.so
 usr/lib/amd64/libcmdutils.so		i386
 usr/lib/sparcv9/libcmdutils.so		sparc
-usr/lib/llib-lcmdutils
-usr/lib/llib-lcmdutils.ln
-usr/lib/amd64/llib-lcmdutils.ln		i386
-usr/lib/sparcv9/llib-lcmdutils.ln	sparc
 #
 # Private interfaces in libsec
 #
@@ -477,47 +400,12 @@ kernel/drv/usbskel.conf
 usr/include/sys/libdevid.h
 #
 # The following files are installed in the proto area by the build of
-# libprtdiag.  libprtdiag contains interfaces which are all private.
-# Only the shared object is shipped.
-#
-usr/platform/sun4u/lib/llib-lprtdiag				sparc
-usr/platform/sun4u/lib/llib-lprtdiag.ln				sparc
-usr/platform/sun4v/lib/llib-lprtdiag.ln				sparc
-#
-# The following files are installed in the proto area by the build of
 # mdesc driver in sun4v. These header files are used on in the build
 # and do not need to be shipped to customers.
 #
 usr/include/sys/mdesc.h					sparc
 usr/include/sys/mdesc_impl.h				sparc
 usr/platform/sun4v/include/sys/mach_descrip.h		sparc
-#
-# The following files are installed in the proto area by the build of
-# libpcp.  libpcp contains interfaces which are all private.
-# Only the shared object is shipped.
-#
-usr/platform/sun4v/lib/llib-lpcp.ln				sparc
-usr/platform/SUNW,Netra-CP3060/lib/llib-lpcp.ln			sparc
-usr/platform/SUNW,Netra-CP3260/lib/llib-lpcp.ln			sparc
-usr/platform/SUNW,Netra-T5220/lib/llib-lpcp.ln			sparc
-usr/platform/SUNW,Netra-T5440/lib/llib-lpcp.ln			sparc
-usr/platform/SUNW,SPARC-Enterprise-T5120/lib/llib-lpcp.ln	sparc
-usr/platform/SUNW,Sun-Blade-T6300/lib/llib-lpcp.ln		sparc
-usr/platform/SUNW,Sun-Blade-T6320/lib/llib-lpcp.ln		sparc
-usr/platform/SUNW,Sun-Fire-T200/lib/llib-lpcp.ln		sparc
-usr/platform/SUNW,T5140/lib/llib-lpcp.ln			sparc
-usr/platform/SUNW,USBRDT-5240/lib/llib-lpcp.ln			sparc
-#
-# ZFS internal tools and lint libraries
-#
-usr/lib/llib-lzfs_jni
-usr/lib/llib-lzfs_jni.ln
-usr/lib/amd64/llib-lzfs_jni.ln		i386
-usr/lib/sparcv9/llib-lzfs_jni.ln	sparc
-usr/lib/llib-lzpool
-usr/lib/llib-lzpool.ln			i386
-usr/lib/amd64/llib-lzpool.ln		i386
-usr/lib/sparcv9/llib-lzpool.ln		sparc
 #
 # ZFS JNI headers
 #
@@ -546,8 +434,6 @@ usr/lib/sparcv9/libstanddisasm.so	sparc
 # TSol: tsol doesn't ship lint source, and tsnet isn't for customers at all.
 #
 lib/libtsnet.so
-usr/lib/llib-ltsnet
-usr/lib/llib-ltsol
 #
 # nss interfaces shared between libnsl and other ON libraries.
 #
@@ -559,44 +445,21 @@ usr/include/nss.h
 usr/lib/libast.so
 usr/lib/amd64/libast.so			i386
 usr/lib/sparcv9/libast.so		sparc
-usr/lib/llib-last
-usr/lib/llib-last.ln
-usr/lib/amd64/llib-last.ln		i386
-usr/lib/sparcv9/llib-last.ln		sparc
-# libcmd
-usr/lib/llib-lcmd
-usr/lib/llib-lcmd.ln
-usr/lib/amd64/llib-lcmd.ln		i386
-usr/lib/sparcv9/llib-lcmd.ln		sparc
 # libdll
 usr/lib/libdll.so
 usr/lib/amd64/libdll.so			i386
 usr/lib/sparcv9/libdll.so		sparc
-usr/lib/llib-ldll
-usr/lib/llib-ldll.ln
-usr/lib/amd64/llib-ldll.ln		i386
-usr/lib/sparcv9/llib-ldll.ln		sparc
 # libpp (a helper library needed by AST's msgcc)
 usr/lib/libpp.so
-usr/lib/llib-lpp
-usr/lib/llib-lpp.ln
 usr/lib/locale/C/LC_MESSAGES/libpp
 # libshell
 usr/lib/libshell.so
 usr/lib/amd64/libshell.so		i386
 usr/lib/sparcv9/libshell.so		sparc
-usr/lib/llib-lshell
-usr/lib/llib-lshell.ln
-usr/lib/amd64/llib-lshell.ln		i386
-usr/lib/sparcv9/llib-lshell.ln		sparc
 # libsum
 usr/lib/libsum.so
 usr/lib/amd64/libsum.so			i386
 usr/lib/sparcv9/libsum.so		sparc
-usr/lib/llib-lsum
-usr/lib/llib-lsum.ln
-usr/lib/amd64/llib-lsum.ln		i386
-usr/lib/sparcv9/llib-lsum.ln		sparc
 #
 # This file is used in ON to build DSCP clients.  It is not for customers.
 #
@@ -644,10 +507,7 @@ usr/include/scfutil.h
 # files (the symlink and the lint library) are excluded from packaging.
 #
 usr/lib/libpri.so		sparc
-usr/lib/llib-lpri		sparc
-usr/lib/llib-lpri.ln		sparc
 usr/lib/sparcv9/libpri.so	sparc
-usr/lib/sparcv9/llib-lpri.ln	sparc
 #
 # These files are installed in the proto area by the build of libds for
 # the benefit of the builds of sun4v IO FMA and/or other libds
@@ -657,11 +517,7 @@ usr/lib/sparcv9/llib-lpri.ln	sparc
 #
 usr/lib/libds.so			sparc
 usr/lib/sparcv9/libds.so		sparc
-usr/lib/llib-lds			sparc
-usr/lib/llib-lds.ln			sparc
-usr/lib/sparcv9/llib-lds.ln		sparc
 usr/lib/libdscfg.so
-usr/lib/llib-ldscfg.ln
 usr/platform/sun4v/include/sys/libds.h	sparc
 usr/platform/sun4v/include/sys/vlds.h	sparc
 #
@@ -674,8 +530,6 @@ usr/include/sys/u8_textprep_data.h
 usr/include/sqlite-sys
 lib/libsqlite-native.o
 lib/libsqlite-sys.so
-lib/llib-lsqlite-sys
-lib/llib-lsqlite-sys.ln
 #
 # Private/Internal kiconv header files. Do not ship.
 #
@@ -725,10 +579,6 @@ usr/include/smbsrv
 usr/include/libfakekernel
 usr/lib/libfakekernel.so
 usr/lib/libfakekernel.so.1
-usr/lib/llib-lfakekernel
-usr/lib/llib-lfakekernel.ln
-usr/lib/amd64/llib-lfakekernel.ln		i386
-usr/lib/sparcv9/llib-lfakekernel.ln		sparc
 usr/lib/amd64/libfakekernel.so			i386
 usr/lib/amd64/libfakekernel.so.1		i386
 usr/lib/sparcv9/libfakekernel.so		sparc
@@ -739,22 +589,10 @@ usr/lib/sparcv9/libfakekernel.so.1		sparc
 usr/lib/mdb/proc/libfksmbsrv.so
 usr/lib/mdb/proc/amd64/libfksmbsrv.so		i386
 usr/lib/mdb/proc/sparcv9/libfksmbsrv.so		sparc
-usr/lib/reparse/llib-lreparse_smb
-usr/lib/reparse/llib-lreparse_smb.ln
 usr/lib/smbsrv/bind-helper
 usr/lib/smbsrv/fksmbd
 usr/lib/smbsrv/libfksmbsrv.so
 usr/lib/smbsrv/libfksmbsrv.so.1
-usr/lib/smbsrv/llib-lfksmbsrv
-usr/lib/smbsrv/llib-lfksmbsrv.ln
-usr/lib/smbsrv/llib-lmlrpc
-usr/lib/smbsrv/llib-lmlrpc.ln
-usr/lib/smbsrv/llib-lmlsvc
-usr/lib/smbsrv/llib-lmlsvc.ln
-usr/lib/smbsrv/llib-lsmb
-usr/lib/smbsrv/llib-lsmb.ln
-usr/lib/smbsrv/llib-lsmbns
-usr/lib/smbsrv/llib-lsmbns.ln
 #
 #
 # Private/Internal 64-bit libraries of smbsrv. Do not ship.
@@ -764,10 +602,8 @@ usr/lib/smbsrv/sparcv9				sparc
 
 usr/lib/reparse/amd64/libreparse_smb.so		i386
 usr/lib/reparse/amd64/libreparse_smb.so.1	i386
-usr/lib/reparse/amd64/llib-lreparse_smb.ln	i386
 usr/lib/reparse/sparcv9/libreparse_smb.so	sparc
 usr/lib/reparse/sparcv9/libreparse_smb.so.1	sparc
-usr/lib/reparse/sparcv9/llib-lreparse_smb.ln	sparc
 #
 # Private dirent, extended to include flags, for use by SMB server
 #
@@ -777,11 +613,6 @@ usr/include/sys/extdirent.h
 #
 usr/include/libvscan.h
 usr/include/sys/vscan.h
-#
-# libvscan is private
-#
-usr/lib/vscan/llib-lvscan
-usr/lib/vscan/llib-lvscan.ln
 #
 # i86hvm is not a full platform.  It is just a home for paravirtualized
 # drivers.  There is no usr/ component to this sub-platform, but the
@@ -799,10 +630,6 @@ usr/include/netsmb
 usr/lib/libsmbfs.so
 usr/lib/amd64/libsmbfs.so		i386
 usr/lib/sparcv9/libsmbfs.so		sparc
-usr/lib/llib-lsmbfs
-usr/lib/llib-lsmbfs.ln
-usr/lib/amd64/llib-lsmbfs.ln		i386
-usr/lib/sparcv9/llib-lsmbfs.ln		sparc
 #
 # demo & test program for smbfs (private) ACL support
 #
@@ -823,12 +650,6 @@ kernel/kmdb/sparcv9/fctl	sparc
 kernel/kmdb/qlc			i386
 kernel/kmdb/amd64/qlc		i386
 kernel/kmdb/sparcv9/qlc		sparc
-lib/llib-la5k			sparc
-lib/llib-la5k.ln		sparc
-lib/sparcv9/llib-la5k.ln	sparc
-lib/llib-lg_fc			sparc
-lib/llib-lg_fc.ln		sparc
-lib/sparcv9/llib-lg_fc.ln	sparc
 usr/include/a_state.h		sparc
 usr/include/a5k.h		sparc
 usr/include/exec.h		sparc
@@ -840,10 +661,6 @@ usr/include/l_error.h		sparc
 usr/include/rom.h		sparc
 usr/include/stgcom.h		sparc
 usr/include/sys/fibre-channel
-usr/lib/llib-lHBAAPI
-usr/lib/llib-lHBAAPI.ln
-usr/lib/amd64/llib-lHBAAPI.ln	i386
-usr/lib/sparcv9/llib-lHBAAPI.ln	sparc
 #
 usr/bin/dscfgcli
 usr/bin/sd_diag
@@ -858,9 +675,6 @@ usr/include/sys/unistat
 usr/lib/libnsctl.so
 usr/lib/librdc.so
 usr/lib/libunistat.so
-usr/lib/llib-lnsctl.ln
-usr/lib/llib-lrdc.ln
-usr/lib/llib-lunistat.ln
 #
 # These files are used by the iSCSI initiator only.
 # No reason to ship them.
@@ -876,13 +690,6 @@ usr/include/sys/stmf_sbd_ioctl.h
 #
 usr/include/sys/pppt_ic_if.h
 usr/include/sys/pppt_ioctl.h
-#
-# proxy daemon lint library
-#
-usr/lib/llib-lstmfproxy
-usr/lib/llib-lstmfproxy.ln
-usr/lib/amd64/llib-lstmfproxy.ln	i386
-usr/lib/sparcv9/llib-lstmfproxy.ln	sparc
 #
 # portable object file and dictionary used by libfmd_msg test
 #
@@ -905,8 +712,6 @@ usr/include/stp_bpdu.h
 usr/include/stp_in.h
 usr/include/stp_vectors.h
 usr/lib/librstp.so
-usr/lib/llib-lrstp
-usr/lib/llib-lrstp.ln
 #
 # Private nvfru API
 #
@@ -918,10 +723,6 @@ usr/include/libvrrpadm.h
 usr/lib/libvrrpadm.so
 usr/lib/amd64/libvrrpadm.so		i386
 usr/lib/sparcv9/libvrrpadm.so		sparc
-usr/lib/llib-lvrrpadm
-usr/lib/llib-lvrrpadm.ln
-usr/lib/amd64/llib-lvrrpadm.ln		i386
-usr/lib/sparcv9/llib-lvrrpadm.ln	sparc
 #
 # This is only used during the -t tools build
 #
@@ -963,21 +764,619 @@ usr/include/sys/ipmi.h	sparc
 usr/include/saveargs.h            	i386
 usr/lib/amd64/libsaveargs.so      	i386
 usr/lib/amd64/libstandsaveargs.so	i386
-usr/lib/amd64/llib-lsaveargs.ln   	i386
 
 #
 # libpcidb is private
 #
 usr/include/pcidb.h
 usr/lib/amd64/libpcidb.so		i386
-usr/lib/amd64/llib-lpcidb.ln		i386
 usr/lib/sparcv9/libpcidb.so		sparc
-usr/lib/sparcv9/llib-lpcidb.ln		sparc
 usr/lib/libpcidb.so
-usr/lib/llib-lpcidb
-usr/lib/llib-lpcidb.ln
 
 #
 # debugging program for libadutils
 #
 usr/bin/test-getdc
+
+#
+# Lint garbage - to be removed when we stop building lint libs
+#
+# Pre-existing entries:
+lib/llib-lelfsign
+lib/llib-lelfsign.ln
+lib/llib-lkcfd
+lib/llib-lkcfd.ln
+usr/lib/llib-lsoftcrypto
+usr/lib/llib-lsoftcrypto.ln
+usr/lib/amd64/llib-lsoftcrypto.ln	i386
+usr/lib/sparcv9/llib-lsoftcrypto.ln	sparc
+lib/llib-lipadm
+lib/llib-lipadm.ln
+usr/lib/llib-like
+usr/lib/llib-like.ln
+usr/lib/amd64/llib-like.ln		i386
+usr/lib/sparcv9/llib-like.ln		sparc
+usr/lib/llib-lipsecutil
+usr/lib/llib-lipsecutil.ln
+usr/lib/amd64/llib-lipsecutil.ln	i386
+usr/lib/sparcv9/llib-lipsecutil.ln	sparc
+usr/lib/llib-ldisasm
+usr/lib/llib-ldisasm.ln
+usr/lib/amd64/llib-ldisasm.ln		i386
+usr/lib/sparcv9/llib-ldisasm.ln		sparc
+usr/lib/llib-lraidcfg
+usr/lib/llib-lraidcfg.ln
+usr/lib/amd64/llib-lraidcfg.ln		i386
+usr/lib/sparcv9/llib-lraidcfg.ln	sparc
+lib/llib-ldhcpagent
+lib/llib-ldhcpagent.ln
+lib/llib-ldhcputil
+lib/llib-ldhcputil.ln
+lib/amd64/llib-ldhcputil.ln		i386
+lib/sparcv9/llib-ldhcputil.ln		sparc
+usr/lib/llib-linstzones
+usr/lib/llib-linstzones.ln
+usr/lib/amd64/llib-linstzones.ln	i386
+usr/lib/sparcv9/llib-linstzones.ln	sparc
+usr/lib/llib-lpkg
+usr/lib/llib-lpkg.ln
+usr/lib/llib-linetsvc
+usr/lib/llib-linetsvc.ln
+lib/llib-linetutil
+lib/llib-linetutil.ln
+lib/amd64/llib-linetutil.ln		i386
+lib/sparcv9/llib-linetutil.ln		sparc
+lib/llib-lmeta
+lib/llib-lmeta.ln
+lib/llib-lrestart
+lib/llib-lrestart.ln
+lib/amd64/llib-lrestart.ln					i386
+lib/sparcv9/llib-lrestart.ln					sparc
+lib/llib-luutil
+lib/llib-luutil.ln
+lib/sparcv9/llib-luutil.ln		sparc
+lib/llib-lcmdutils
+lib/llib-lcmdutils.ln
+lib/amd64/llib-lcmdutils.ln		i386
+lib/sparcv9/llib-lcmdutils.ln		sparc
+usr/platform/sun4u/lib/llib-lprtdiag				sparc
+usr/platform/sun4u/lib/llib-lprtdiag.ln				sparc
+usr/platform/sun4v/lib/llib-lprtdiag.ln				sparc
+usr/platform/sun4v/lib/llib-lpcp.ln				sparc
+usr/platform/SUNW,Netra-CP3060/lib/llib-lpcp.ln			sparc
+usr/platform/SUNW,Netra-CP3260/lib/llib-lpcp.ln			sparc
+usr/platform/SUNW,Netra-T5220/lib/llib-lpcp.ln			sparc
+usr/platform/SUNW,Netra-T5440/lib/llib-lpcp.ln			sparc
+usr/platform/SUNW,SPARC-Enterprise-T5120/lib/llib-lpcp.ln	sparc
+usr/platform/SUNW,Sun-Blade-T6300/lib/llib-lpcp.ln		sparc
+usr/platform/SUNW,Sun-Blade-T6320/lib/llib-lpcp.ln		sparc
+usr/platform/SUNW,Sun-Fire-T200/lib/llib-lpcp.ln		sparc
+usr/platform/SUNW,T5140/lib/llib-lpcp.ln			sparc
+usr/platform/SUNW,USBRDT-5240/lib/llib-lpcp.ln			sparc
+usr/lib/llib-lzfs_jni
+usr/lib/llib-lzfs_jni.ln
+usr/lib/amd64/llib-lzfs_jni.ln		i386
+usr/lib/sparcv9/llib-lzfs_jni.ln	sparc
+usr/lib/llib-lzpool
+usr/lib/llib-lzpool.ln			i386
+usr/lib/amd64/llib-lzpool.ln		i386
+usr/lib/sparcv9/llib-lzpool.ln		sparc
+usr/lib/llib-last
+usr/lib/llib-last.ln
+usr/lib/amd64/llib-last.ln		i386
+usr/lib/sparcv9/llib-last.ln		sparc
+usr/lib/llib-lcmd
+usr/lib/llib-lcmd.ln
+usr/lib/amd64/llib-lcmd.ln		i386
+usr/lib/sparcv9/llib-lcmd.ln		sparc
+usr/lib/llib-ldll
+usr/lib/llib-ldll.ln
+usr/lib/amd64/llib-ldll.ln		i386
+usr/lib/sparcv9/llib-ldll.ln		sparc
+usr/lib/llib-lpp
+usr/lib/llib-lpp.ln
+usr/lib/llib-lshell
+usr/lib/llib-lshell.ln
+usr/lib/amd64/llib-lshell.ln		i386
+usr/lib/sparcv9/llib-lshell.ln		sparc
+usr/lib/llib-lsum
+usr/lib/llib-lsum.ln
+usr/lib/amd64/llib-lsum.ln		i386
+usr/lib/sparcv9/llib-lsum.ln		sparc
+usr/lib/llib-lpri		sparc
+usr/lib/llib-lpri.ln		sparc
+usr/lib/sparcv9/llib-lpri.ln	sparc
+usr/lib/llib-lds			sparc
+usr/lib/llib-lds.ln			sparc
+usr/lib/sparcv9/llib-lds.ln		sparc
+usr/lib/llib-ldscfg.ln
+lib/llib-lsqlite-sys
+lib/llib-lsqlite-sys.ln
+usr/lib/llib-lfakekernel
+usr/lib/llib-lfakekernel.ln
+usr/lib/amd64/llib-lfakekernel.ln		i386
+usr/lib/sparcv9/llib-lfakekernel.ln		sparc
+usr/lib/reparse/llib-lreparse_smb
+usr/lib/reparse/llib-lreparse_smb.ln
+usr/lib/smbsrv/llib-lfksmbsrv
+usr/lib/smbsrv/llib-lfksmbsrv.ln
+usr/lib/smbsrv/llib-lmlrpc
+usr/lib/smbsrv/llib-lmlrpc.ln
+usr/lib/smbsrv/llib-lmlsvc
+usr/lib/smbsrv/llib-lmlsvc.ln
+usr/lib/smbsrv/llib-lsmb
+usr/lib/smbsrv/llib-lsmb.ln
+usr/lib/smbsrv/llib-lsmbns
+usr/lib/smbsrv/llib-lsmbns.ln
+usr/lib/reparse/amd64/llib-lreparse_smb.ln	i386
+usr/lib/reparse/sparcv9/llib-lreparse_smb.ln	sparc
+usr/lib/vscan/llib-lvscan
+usr/lib/vscan/llib-lvscan.ln
+usr/lib/llib-lsmbfs
+usr/lib/llib-lsmbfs.ln
+usr/lib/amd64/llib-lsmbfs.ln		i386
+usr/lib/sparcv9/llib-lsmbfs.ln		sparc
+lib/llib-la5k			sparc
+lib/llib-la5k.ln		sparc
+lib/sparcv9/llib-la5k.ln	sparc
+lib/llib-lg_fc			sparc
+lib/llib-lg_fc.ln		sparc
+lib/sparcv9/llib-lg_fc.ln	sparc
+usr/lib/llib-lHBAAPI
+usr/lib/llib-lHBAAPI.ln
+usr/lib/amd64/llib-lHBAAPI.ln	i386
+usr/lib/sparcv9/llib-lHBAAPI.ln	sparc
+usr/lib/llib-lnsctl.ln
+usr/lib/llib-lrdc.ln
+usr/lib/llib-lunistat.ln
+usr/lib/llib-lstmfproxy
+usr/lib/llib-lstmfproxy.ln
+usr/lib/amd64/llib-lstmfproxy.ln	i386
+usr/lib/sparcv9/llib-lstmfproxy.ln	sparc
+usr/lib/llib-lrstp
+usr/lib/llib-lrstp.ln
+usr/lib/llib-lvrrpadm
+usr/lib/llib-lvrrpadm.ln
+usr/lib/amd64/llib-lvrrpadm.ln		i386
+usr/lib/sparcv9/llib-lvrrpadm.ln	sparc
+usr/lib/amd64/llib-lsaveargs.ln   	i386
+usr/lib/amd64/llib-lpcidb.ln		i386
+usr/lib/sparcv9/llib-lpcidb.ln		sparc
+usr/lib/llib-lpcidb
+usr/lib/llib-lpcidb.ln
+# files created during the build
+lib/amd64/llib-lMPAPI.ln
+lib/amd64/llib-ladm.ln
+lib/amd64/llib-laio.ln
+lib/amd64/llib-lavl.ln
+lib/amd64/llib-lbsm.ln
+lib/amd64/llib-lc.ln
+lib/amd64/llib-lc_db.ln
+lib/amd64/llib-lcontract.ln
+lib/amd64/llib-lcryptoutil.ln
+lib/amd64/llib-lctf.ln
+lib/amd64/llib-lcurses.ln
+lib/amd64/llib-ldevice.ln
+lib/amd64/llib-ldevid.ln
+lib/amd64/llib-ldevinfo.ln
+lib/amd64/llib-ldl.ln
+lib/amd64/llib-ldladm.ln
+lib/amd64/llib-ldlpi.ln
+lib/amd64/llib-ldoor.ln
+lib/amd64/llib-lefi.ln
+lib/amd64/llib-lelf.ln
+lib/amd64/llib-lfdisk.ln
+lib/amd64/llib-lgen.ln
+lib/amd64/llib-lintl.ln
+lib/amd64/llib-lkmf.ln
+lib/amd64/llib-lkmfberder.ln
+lib/amd64/llib-lkstat.ln
+lib/amd64/llib-lm.ln
+lib/amd64/llib-lmd.ln
+lib/amd64/llib-lmd5.ln
+lib/amd64/llib-lnsl.ln
+lib/amd64/llib-lnvpair.ln
+lib/amd64/llib-lpam.ln
+lib/amd64/llib-lproc.ln
+lib/amd64/llib-lpthread.ln
+lib/amd64/llib-lrcm.ln
+lib/amd64/llib-lresolv.ln
+lib/amd64/llib-lrpcsvc.ln
+lib/amd64/llib-lrt.ln
+lib/amd64/llib-lrtld_db.ln
+lib/amd64/llib-lscf.ln
+lib/amd64/llib-lsec.ln
+lib/amd64/llib-lsecdb.ln
+lib/amd64/llib-lsendfile.ln
+lib/amd64/llib-lsocket.ln
+lib/amd64/llib-lsysevent.ln
+lib/amd64/llib-ltermcap.ln
+lib/amd64/llib-ltermlib.ln
+lib/amd64/llib-lthread.ln
+lib/amd64/llib-ltsnet.ln
+lib/amd64/llib-ltsol.ln
+lib/amd64/llib-lumem.ln
+lib/amd64/llib-luuid.ln
+lib/amd64/llib-luutil.ln
+lib/amd64/llib-lxnet.ln
+lib/amd64/llib-lzfs.ln
+lib/amd64/llib-lzfs_core.ln
+lib/fm/amd64/llib-lfmevent.ln
+lib/fm/llib-lfmevent
+lib/fm/llib-lfmevent.ln
+lib/llib-lMPAPI
+lib/llib-lMPAPI.ln
+lib/llib-ladm
+lib/llib-ladm.ln
+lib/llib-laio
+lib/llib-laio.ln
+lib/llib-lavl
+lib/llib-lavl.ln
+lib/llib-lbsm
+lib/llib-lbsm.ln
+lib/llib-lc
+lib/llib-lc.ln
+lib/llib-lc_db
+lib/llib-lc_db.ln
+lib/llib-lcontract
+lib/llib-lcontract.ln
+lib/llib-lcryptoutil
+lib/llib-lcryptoutil.ln
+lib/llib-lctf
+lib/llib-lctf.ln
+lib/llib-lcurses
+lib/llib-lcurses.ln
+lib/llib-ldevice
+lib/llib-ldevice.ln
+lib/llib-ldevid
+lib/llib-ldevid.ln
+lib/llib-ldevinfo
+lib/llib-ldevinfo.ln
+lib/llib-ldl
+lib/llib-ldl.ln
+lib/llib-ldladm
+lib/llib-ldladm.ln
+lib/llib-ldlpi
+lib/llib-ldlpi.ln
+lib/llib-ldoor
+lib/llib-ldoor.ln
+lib/llib-lefi
+lib/llib-lefi.ln
+lib/llib-lelf
+lib/llib-lelf.ln
+lib/llib-lfdisk
+lib/llib-lfdisk.ln
+lib/llib-lgen
+lib/llib-lgen.ln
+lib/llib-lgrubmgmt
+lib/llib-lgrubmgmt.ln
+lib/llib-lintl
+lib/llib-lintl.ln
+lib/llib-lipmp
+lib/llib-lipmp.ln
+lib/llib-lkmf.ln
+lib/llib-lkmfberder.ln
+lib/llib-lkstat
+lib/llib-lkstat.ln
+lib/llib-lm
+lib/llib-lm.ln
+lib/llib-lmd
+lib/llib-lmd.ln
+lib/llib-lmd5
+lib/llib-lmd5.ln
+lib/llib-lnsl
+lib/llib-lnsl.ln
+lib/llib-lnvpair
+lib/llib-lnvpair.ln
+lib/llib-lnwam
+lib/llib-lnwam.ln
+lib/llib-lpam
+lib/llib-lpam.ln
+lib/llib-lproc
+lib/llib-lproc.ln
+lib/llib-lpthread
+lib/llib-lpthread.ln
+lib/llib-lrcm
+lib/llib-lrcm.ln
+lib/llib-lresolv
+lib/llib-lresolv.ln
+lib/llib-lrpcsvc
+lib/llib-lrpcsvc.ln
+lib/llib-lrt
+lib/llib-lrt.ln
+lib/llib-lrtld_db
+lib/llib-lrtld_db.ln
+lib/llib-lscf
+lib/llib-lscf.ln
+lib/llib-lsec
+lib/llib-lsec.ln
+lib/llib-lsecdb
+lib/llib-lsecdb.ln
+lib/llib-lsendfile
+lib/llib-lsendfile.ln
+lib/llib-lsocket
+lib/llib-lsocket.ln
+lib/llib-lsysevent
+lib/llib-lsysevent.ln
+lib/llib-ltermcap
+lib/llib-ltermcap.ln
+lib/llib-ltermlib
+lib/llib-ltermlib.ln
+lib/llib-lthread
+lib/llib-lthread.ln
+lib/llib-ltsnet
+lib/llib-ltsnet.ln
+lib/llib-ltsol
+lib/llib-ltsol.ln
+lib/llib-lumem
+lib/llib-lumem.ln
+lib/llib-luuid
+lib/llib-luuid.ln
+lib/llib-lxnet
+lib/llib-lxnet.ln
+lib/llib-lzfs
+lib/llib-lzfs.ln
+lib/llib-lzfs_core
+lib/llib-lzfs_core.ln
+usr/lib/amd64/llib-lSMHBAAPI.ln
+usr/lib/amd64/llib-lads.ln
+usr/lib/amd64/llib-ladt_jni.ln
+usr/lib/amd64/llib-ladutils.ln
+usr/lib/amd64/llib-lbe.ln
+usr/lib/amd64/llib-lbrand.ln
+usr/lib/amd64/llib-lbsdmalloc.ln
+usr/lib/amd64/llib-lcfgadm.ln
+usr/lib/amd64/llib-lcommputil.ln
+usr/lib/amd64/llib-lcpc.ln
+usr/lib/amd64/llib-lcrypt.ln
+usr/lib/amd64/llib-ldat.ln
+usr/lib/amd64/llib-ldiskmgt.ln
+usr/lib/amd64/llib-ldns_sd.ln
+usr/lib/amd64/llib-ldtrace.ln
+usr/lib/amd64/llib-lexacct.ln
+usr/lib/amd64/llib-lfcoe.ln
+usr/lib/amd64/llib-lform.ln
+usr/lib/amd64/llib-lfstyp.ln
+usr/lib/amd64/llib-lgss.ln
+usr/lib/amd64/llib-lhal-storage.ln
+usr/lib/amd64/llib-lhal.ln
+usr/lib/amd64/llib-lhotplug.ln
+usr/lib/amd64/llib-lidmap.ln
+usr/lib/amd64/llib-lilb.ln
+usr/lib/amd64/llib-lima.ln
+usr/lib/amd64/llib-lipd.ln
+usr/lib/amd64/llib-lipmi.ln
+usr/lib/amd64/llib-lipp.ln
+usr/lib/amd64/llib-liscsit.ln
+usr/lib/amd64/llib-lkvm.ln
+usr/lib/amd64/llib-ll.ln
+usr/lib/amd64/llib-lldap.ln
+usr/lib/amd64/llib-llgrp.ln
+usr/lib/amd64/llib-lmail.ln
+usr/lib/amd64/llib-lmalloc.ln
+usr/lib/amd64/llib-lmapmalloc.ln
+usr/lib/amd64/llib-lmenu.ln
+usr/lib/amd64/llib-lmtmalloc.ln
+usr/lib/amd64/llib-lndmp.ln
+usr/lib/amd64/llib-lnls.ln
+usr/lib/amd64/llib-lpanel.ln
+usr/lib/amd64/llib-lpasswdutil.ln
+usr/lib/amd64/llib-lpctx.ln
+usr/lib/amd64/llib-lpicl.ln
+usr/lib/amd64/llib-lpkcs11.ln
+usr/lib/amd64/llib-lpool.ln
+usr/lib/amd64/llib-lproject.ln
+usr/lib/amd64/llib-lreparse.ln
+usr/lib/amd64/llib-lsasl.ln
+usr/lib/amd64/llib-lsched.ln
+usr/lib/amd64/llib-lsctp.ln
+usr/lib/amd64/llib-lshare.ln
+usr/lib/amd64/llib-lsip.ln
+usr/lib/amd64/llib-lsldap.ln
+usr/lib/amd64/llib-lslp.ln
+usr/lib/amd64/llib-lsmbios.ln
+usr/lib/amd64/llib-lsmedia.ln
+usr/lib/amd64/llib-lsrpt.ln
+usr/lib/amd64/llib-lstmf.ln
+usr/lib/amd64/llib-lsun_ima.ln
+usr/lib/amd64/llib-ltecla.ln
+usr/lib/amd64/llib-lvolmgt.ln
+usr/lib/amd64/llib-lwanboot.ln
+usr/lib/amd64/llib-lwanbootutil.ln
+usr/lib/amd64/llib-lwrap.ln
+usr/lib/amd64/llib-ly.ln
+usr/lib/amd64/llib-lzonecfg.ln
+usr/lib/amd64/llib-lzoneinfo.ln
+usr/lib/amd64/llib-lzonestat.ln
+usr/lib/fm/amd64/llib-ldiagcode.ln
+usr/lib/fm/amd64/llib-ldiskstatus.ln
+usr/lib/fm/amd64/llib-lfmd_adm.ln
+usr/lib/fm/amd64/llib-lfmd_agent.ln
+usr/lib/fm/amd64/llib-lfmd_log.ln
+usr/lib/fm/amd64/llib-lfmd_msg.ln
+usr/lib/fm/amd64/llib-lfmd_snmp.ln
+usr/lib/fm/amd64/llib-lfmnotify.ln
+usr/lib/fm/amd64/llib-lseslog.ln
+usr/lib/fm/amd64/llib-ltopo.ln
+usr/lib/fm/llib-ldiagcode
+usr/lib/fm/llib-ldiagcode.ln
+usr/lib/fm/llib-ldiskstatus
+usr/lib/fm/llib-ldiskstatus.ln
+usr/lib/fm/llib-lfmd_adm
+usr/lib/fm/llib-lfmd_adm.ln
+usr/lib/fm/llib-lfmd_agent
+usr/lib/fm/llib-lfmd_agent.ln
+usr/lib/fm/llib-lfmd_log
+usr/lib/fm/llib-lfmd_log.ln
+usr/lib/fm/llib-lfmd_msg
+usr/lib/fm/llib-lfmd_msg.ln
+usr/lib/fm/llib-lfmd_snmp
+usr/lib/fm/llib-lfmd_snmp.ln
+usr/lib/fm/llib-lfmnotify
+usr/lib/fm/llib-lfmnotify.ln
+usr/lib/fm/llib-lseslog
+usr/lib/fm/llib-lseslog.ln
+usr/lib/fm/llib-ltopo
+usr/lib/fm/llib-ltopo.ln
+usr/lib/llib-lSMHBAAPI
+usr/lib/llib-lSMHBAAPI.ln
+usr/lib/llib-lads
+usr/lib/llib-lads.ln
+usr/lib/llib-ladt_jni.ln
+usr/lib/llib-ladutils
+usr/lib/llib-ladutils.ln
+usr/lib/llib-lbe
+usr/lib/llib-lbe.ln
+usr/lib/llib-lbrand
+usr/lib/llib-lbrand.ln
+usr/lib/llib-lbsdmalloc
+usr/lib/llib-lbsdmalloc.ln
+usr/lib/llib-lcfgadm
+usr/lib/llib-lcfgadm.ln
+usr/lib/llib-lcommputil
+usr/lib/llib-lcommputil.ln
+usr/lib/llib-lcpc
+usr/lib/llib-lcpc.ln
+usr/lib/llib-lcrypt
+usr/lib/llib-lcrypt.ln
+usr/lib/llib-ldat
+usr/lib/llib-ldat.ln
+usr/lib/llib-ldiskmgt
+usr/lib/llib-ldiskmgt.ln
+usr/lib/llib-ldns_sd
+usr/lib/llib-ldns_sd.ln
+usr/lib/llib-ldtrace
+usr/lib/llib-ldtrace.ln
+usr/lib/llib-lexacct
+usr/lib/llib-lexacct.ln
+usr/lib/llib-lfcoe
+usr/lib/llib-lfcoe.ln
+usr/lib/llib-lform
+usr/lib/llib-lform.ln
+usr/lib/llib-lfsmgt
+usr/lib/llib-lfsmgt.ln
+usr/lib/llib-lfstyp
+usr/lib/llib-lfstyp.ln
+usr/lib/llib-lgss
+usr/lib/llib-lgss.ln
+usr/lib/llib-lhal
+usr/lib/llib-lhal-storage
+usr/lib/llib-lhal-storage.ln
+usr/lib/llib-lhal.ln
+usr/lib/llib-lhotplug
+usr/lib/llib-lhotplug.ln
+usr/lib/llib-lidmap
+usr/lib/llib-lidmap.ln
+usr/lib/llib-lilb
+usr/lib/llib-lilb.ln
+usr/lib/llib-lima
+usr/lib/llib-lima.ln
+usr/lib/llib-lipd
+usr/lib/llib-lipd.ln
+usr/lib/llib-lipmi
+usr/lib/llib-lipmi.ln
+usr/lib/llib-lipp
+usr/lib/llib-lipp.ln
+usr/lib/llib-liscsit
+usr/lib/llib-liscsit.ln
+usr/lib/llib-lkvm
+usr/lib/llib-lkvm.ln
+usr/lib/llib-ll
+usr/lib/llib-ll.ln
+usr/lib/llib-lldap
+usr/lib/llib-lldap.ln
+usr/lib/llib-llgrp
+usr/lib/llib-llgrp.ln
+usr/lib/llib-lmail
+usr/lib/llib-lmail.ln
+usr/lib/llib-lmalloc
+usr/lib/llib-lmalloc.ln
+usr/lib/llib-lmapmalloc
+usr/lib/llib-lmapmalloc.ln
+usr/lib/llib-lmenu
+usr/lib/llib-lmenu.ln
+usr/lib/llib-lmilter
+usr/lib/llib-lmilter.ln
+usr/lib/llib-lmtmalloc.ln
+usr/lib/llib-lndmp
+usr/lib/llib-lndmp.ln
+usr/lib/llib-lnls
+usr/lib/llib-lnls.ln
+usr/lib/llib-lpanel
+usr/lib/llib-lpanel.ln
+usr/lib/llib-lpasswdutil
+usr/lib/llib-lpasswdutil.ln
+usr/lib/llib-lpctx
+usr/lib/llib-lpctx.ln
+usr/lib/llib-lpicl
+usr/lib/llib-lpicl.ln
+usr/lib/llib-lpicld_pluginutil
+usr/lib/llib-lpicld_pluginutil.ln
+usr/lib/llib-lpicltree
+usr/lib/llib-lpicltree.ln
+usr/lib/llib-lpkcs11
+usr/lib/llib-lpkcs11.ln
+usr/lib/llib-lpolkit
+usr/lib/llib-lpolkit.ln
+usr/lib/llib-lpool
+usr/lib/llib-lpool.ln
+usr/lib/llib-lproject
+usr/lib/llib-lproject.ln
+usr/lib/llib-lreparse
+usr/lib/llib-lreparse.ln
+usr/lib/llib-lsasl
+usr/lib/llib-lsasl.ln
+usr/lib/llib-lsched
+usr/lib/llib-lsched.ln
+usr/lib/llib-lsctp
+usr/lib/llib-lsctp.ln
+usr/lib/llib-lshare
+usr/lib/llib-lshare.ln
+usr/lib/llib-lsip
+usr/lib/llib-lsip.ln
+usr/lib/llib-lsldap
+usr/lib/llib-lsldap.ln
+usr/lib/llib-lslp
+usr/lib/llib-lslp.ln
+usr/lib/llib-lsmbios
+usr/lib/llib-lsmbios.ln
+usr/lib/llib-lsmedia
+usr/lib/llib-lsmedia.ln
+usr/lib/llib-lsrpt
+usr/lib/llib-lsrpt.ln
+usr/lib/llib-lstmf
+usr/lib/llib-lstmf.ln
+usr/lib/llib-lsun_ima
+usr/lib/llib-lsun_ima.ln
+usr/lib/llib-ltecla
+usr/lib/llib-ltecla.ln
+usr/lib/llib-lvolmgt
+usr/lib/llib-lvolmgt.ln
+usr/lib/llib-lwanboot
+usr/lib/llib-lwanboot.ln
+usr/lib/llib-lwanbootutil
+usr/lib/llib-lwanbootutil.ln
+usr/lib/llib-lwrap
+usr/lib/llib-lwrap.ln
+usr/lib/llib-ly
+usr/lib/llib-ly.ln
+usr/lib/llib-lzonecfg
+usr/lib/llib-lzonecfg.ln
+usr/lib/llib-lzoneinfo
+usr/lib/llib-lzoneinfo.ln
+usr/lib/llib-lzonestat
+usr/lib/llib-lzonestat.ln
+usr/lib/nfs/llib-lmapid
+usr/lib/nfs/llib-lmapid.ln
+usr/lib/scsi/amd64/llib-lscsi.ln
+usr/lib/scsi/amd64/llib-lses.ln
+usr/lib/scsi/amd64/llib-lsmp.ln
+usr/lib/scsi/llib-lscsi
+usr/lib/scsi/llib-lscsi.ln
+usr/lib/scsi/llib-lses
+usr/lib/scsi/llib-lses.ln
+usr/lib/scsi/llib-lsmp
+usr/lib/scsi/llib-lsmp.ln
+usr/xpg4/lib/amd64/llib-lcurses.ln
+usr/xpg4/lib/llib-lcurses
+usr/xpg4/lib/llib-lcurses.ln
