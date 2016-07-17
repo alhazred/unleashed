@@ -230,4 +230,6 @@ export CW_NO_SHADOW='1'
 export PERL_VERSION=5.16.1
 export PERL_ARCH=i86pc-solaris-thread-multi-64int
 export PERL_PKGVERS=
+export ENABLE_PERL64=
+export PERL_ARCH64=i86pc-solaris-thread-multi-64
 export ONNV_BUILDNUM=151019
