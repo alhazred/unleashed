@@ -1940,10 +1940,6 @@ anon_getpage(
 	 * Simply treat it as a vnode fault on the anon vp.
 	 */
 
-	TRACE_3(TR_FAC_VM, TR_ANON_GETPAGE,
-	    "anon_getpage:seg %x addr %x vp %x",
-	    seg, addr, vp);
-
 	err = VOP_GETPAGE(vp, (u_offset_t)off, PAGESIZE, protp, pl, plsz,
 	    seg, addr, rw, cred, NULL);
 
@@ -2429,9 +2425,6 @@ anon_private(
 	if (oppflags & STEAL_PAGE) {
 		page_rename(opp, vp, (u_offset_t)off);
 		pp = opp;
-		TRACE_5(TR_FAC_VM, TR_ANON_PRIVATE,
-		    "anon_private:seg %p addr %x pp %p vp %p off %lx",
-		    seg, addr, pp, vp, off);
 		hat_setmod(pp);
 
 		/* bug 4026339 */

@@ -202,8 +202,6 @@ found:
 		if ((silast = sip->si_next) == NULL)
 			silast = swapinfo;
 	}
-	TRACE_2(TR_FAC_VM, TR_SWAP_ALLOC,
-	    "swap_alloc:sip %p offset %lx", sip, soff);
 	mutex_exit(&swapinfo_lock);
 	return (1);
 }

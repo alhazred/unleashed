@@ -444,10 +444,6 @@ segkp_get_internal(
 		anon_idx = 0;
 		kpd->kp_anon_idx = anon_idx;
 		kpd->kp_anon = amp->ahp;
-
-		TRACE_5(TR_FAC_VM, TR_ANON_SEGKP, "anon segkp:%p %p %lu %u %u",
-		    kpd, vbase, len, flags, 1);
-
 	} else if ((flags & KPD_NO_ANON) == 0) {
 		if (anon_resv_zone(SEGKP_MAPLEN(len, flags), NULL) == 0) {
 			if (flags & KPD_LOCKED) {
@@ -464,9 +460,6 @@ segkp_get_internal(
 		anon_idx = ((uintptr_t)(vbase - s_base)) >> PAGESHIFT;
 		kpd->kp_anon_idx = anon_idx;
 		kpd->kp_anon = kpsd->kpsd_anon;
-
-		TRACE_5(TR_FAC_VM, TR_ANON_SEGKP, "anon segkp:%p %p %lu %u %u",
-		    kpd, vbase, len, flags, 1);
 	} else {
 		kpd->kp_anon = NULL;
 		kpd->kp_anon_idx = 0;
@@ -708,9 +701,6 @@ segkp_release_internal(struct seg *seg, struct segkp_data *kpd, size_t len)
 				anon_unresv_zone(PAGESIZE, NULL);
 				atomic_dec_ulong(&anon_segkp_pages_resv);
 			}
-			TRACE_5(TR_FAC_VM,
-			    TR_ANON_SEGKP, "anon segkp:%p %p %lu %u %u",
-			    kpd, va, PAGESIZE, 0, 0);
 		} else {
 			if (kpd->kp_flags & KPD_LOCKED) {
 				pp = page_find(&kvp, (u_offset_t)(uintptr_t)va);

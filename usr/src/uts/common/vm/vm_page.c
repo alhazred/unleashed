@@ -562,9 +562,6 @@ add_physmem(
 	pgcnt_t	large = page_get_pagecnt(szc);
 	pgcnt_t	cnt = 0;
 
-	TRACE_2(TR_FAC_VM, TR_PAGE_INIT,
-	    "add_physmem:pp %p num %lu", pp, num);
-
 	/*
 	 * Arbitrarily limit the max page_get request
 	 * to 1/2 of the page structs we have.
@@ -1573,17 +1570,11 @@ checkagain:
 	if ((flags & PG_WAIT) == 0) {
 		pcf_release_all();
 
-		TRACE_2(TR_FAC_VM, TR_PAGE_CREATE_NOMEM,
-		"page_create_nomem:npages %ld freemem %ld", npages, freemem);
 		return (0);
 	}
 
 	ASSERT(proc_pageout != NULL);
 	cv_signal(&proc_pageout->p_cv);
-
-	TRACE_2(TR_FAC_VM, TR_PAGE_CREATE_SLEEP_START,
-	    "page_create_sleep_start: freemem %ld needfree %ld",
-	    freemem, needfree);
 
 	/*
 	 * We are going to wait.
@@ -1609,10 +1600,6 @@ checkagain:
 	needfree -= npages;
 
 	mutex_exit(&new_freemem_lock);
-
-	TRACE_2(TR_FAC_VM, TR_PAGE_CREATE_SLEEP_END,
-	    "page_create_sleep_end: freemem %ld needfree %ld",
-	    freemem, needfree);
 
 	VM_STAT_ADD(page_create_not_enough_again);
 	goto checkagain;
@@ -2224,8 +2211,6 @@ page_create_va_large(vnode_t *vp, u_offset_t off, size_t bytes, uint_t flags,
 	 * nothing to do.
 	 */
 	if (nscan < desscan && freemem < minfree) {
-		TRACE_1(TR_FAC_VM, TR_PAGEOUT_CV_SIGNAL,
-		    "pageout_cv_signal:freemem %ld", freemem);
 		cv_signal(&proc_pageout->p_cv);
 	}
 
@@ -2260,10 +2245,6 @@ page_create_va(vnode_t *vp, u_offset_t off, size_t bytes, uint_t flags,
 	struct pcf	*p;
 	lgrp_t		*lgrp;
 
-	TRACE_4(TR_FAC_VM, TR_PAGE_CREATE_START,
-	    "page_create_start:vp %p off %llx bytes %lu flags %x",
-	    vp, off, bytes, flags);
-
 	ASSERT(bytes != 0 && vp != NULL);
 
 	if ((flags & PG_EXCL) == 0 && (flags & PG_WAIT) == 0) {
@@ -2282,10 +2263,6 @@ page_create_va(vnode_t *vp, u_offset_t off, size_t bytes, uint_t flags,
 	 */
 	if (npages >= max_page_get) {
 		if ((flags & PG_WAIT) == 0) {
-			TRACE_4(TR_FAC_VM, TR_PAGE_CREATE_TOOBIG,
-			    "page_create_toobig:vp %p off %llx npages "
-			    "%lu max_page_get %lu",
-			    vp, off, npages, max_page_get);
 			return (NULL);
 		} else {
 			cmn_err(CE_WARN,
@@ -2342,9 +2319,6 @@ page_create_va(vnode_t *vp, u_offset_t off, size_t bytes, uint_t flags,
 		}
 	}
 
-	TRACE_2(TR_FAC_VM, TR_PAGE_CREATE_SUCCESS,
-	    "page_create_success:vp %p off %llx", vp, off);
-
 	/*
 	 * If satisfying this request has left us with too little
 	 * memory, start the wheels turning to get some back.  The
@@ -2353,8 +2327,6 @@ page_create_va(vnode_t *vp, u_offset_t off, size_t bytes, uint_t flags,
 	 * nothing to do.
 	 */
 	if (nscan < desscan && freemem < minfree) {
-		TRACE_1(TR_FAC_VM, TR_PAGEOUT_CV_SIGNAL,
-		    "pageout_cv_signal:freemem %ld", freemem);
 		cv_signal(&proc_pageout->p_cv);
 	}
 
@@ -2673,8 +2645,6 @@ page_free(page_t *pp, int dontneed)
 		pp->p_offset = (u_offset_t)-1;
 		page_list_add(pp, PG_FREE_LIST | PG_LIST_TAIL);
 		VM_STAT_ADD(pagecnt.pc_free_free);
-		TRACE_1(TR_FAC_VM, TR_PAGE_FREE_FREE,
-		    "page_free_free:pp %p", pp);
 	} else {
 		PP_CLRAGED(pp);
 
@@ -2683,14 +2653,10 @@ page_free(page_t *pp, int dontneed)
 			page_list_add(pp, PG_CACHE_LIST | PG_LIST_TAIL);
 
 			VM_STAT_ADD(pagecnt.pc_free_cache);
-			TRACE_1(TR_FAC_VM, TR_PAGE_FREE_CACHE_TAIL,
-			    "page_free_cache_tail:pp %p", pp);
 		} else {
 			page_list_add(pp, PG_CACHE_LIST | PG_LIST_HEAD);
 
 			VM_STAT_ADD(pagecnt.pc_free_dontneed);
-			TRACE_1(TR_FAC_VM, TR_PAGE_FREE_CACHE_HEAD,
-			    "page_free_cache_head:pp %p", pp);
 		}
 	}
 	page_unlock(pp);
@@ -2770,8 +2736,6 @@ page_free_pages(page_t *pp)
 	uint_t	szc = pp->p_szc;
 
 	VM_STAT_ADD(pagecnt.pc_free_pages);
-	TRACE_1(TR_FAC_VM, TR_PAGE_FREE_FREE,
-	    "page_free_free:pp %p", pp);
 
 	ASSERT(pp->p_szc != 0 && pp->p_szc < page_num_pagesizes());
 	if ((page_pptonum(pp) & (pgcnt - 1)) != 0) {
@@ -3016,12 +2980,8 @@ page_reclaim_nomem:
 	 */
 	if (PP_ISAGED(pp)) {
 		page_list_sub(pp, PG_FREE_LIST);
-		TRACE_1(TR_FAC_VM, TR_PAGE_UNFREE_FREE,
-		    "page_reclaim_free:pp %p", pp);
 	} else {
 		page_list_sub(pp, PG_CACHE_LIST);
-		TRACE_1(TR_FAC_VM, TR_PAGE_UNFREE_CACHE,
-		    "page_reclaim_cache:pp %p", pp);
 	}
 
 	/*
@@ -3066,8 +3026,6 @@ page_destroy(page_t *pp, int dontfree)
 		page_demote_vp_pages(pp);
 		ASSERT(pp->p_szc == 0);
 	}
-
-	TRACE_1(TR_FAC_VM, TR_PAGE_DESTROY, "page_destroy:pp %p", pp);
 
 	/*
 	 * Unload translations, if any, then hash out the
@@ -3116,8 +3074,6 @@ page_destroy_pages(page_t *pp)
 	ASSERT(pp->p_szc != 0 && pp->p_szc < page_num_pagesizes());
 
 	VM_STAT_ADD(pagecnt.pc_destroy_pages);
-
-	TRACE_1(TR_FAC_VM, TR_PAGE_DESTROY, "page_destroy_pages:pp %p", pp);
 
 	if ((page_pptonum(pp) & (pgcnt - 1)) != 0) {
 		panic("page_destroy_pages: not root page %p", (void *)pp);
@@ -3226,9 +3182,6 @@ page_rename(page_t *opp, vnode_t *vp, u_offset_t off)
 	ASSERT(PP_ISFREE(opp) == 0);
 
 	VM_STAT_ADD(page_rename_count);
-
-	TRACE_3(TR_FAC_VM, TR_PAGE_RENAME,
-	    "page rename:pp %p vp %p off %llx", opp, vp, off);
 
 	/*
 	 * CacheFS may call page_rename for a large NFS page
@@ -3456,10 +3409,6 @@ page_hashin(page_t *pp, vnode_t *vp, u_offset_t offset, kmutex_t *hold)
 	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
 	ASSERT(pp->p_fsdata == 0 || panicstr);
 
-	TRACE_3(TR_FAC_VM, TR_PAGE_HASHIN,
-	    "page_hashin:pp %p vp %p offset %llx",
-	    pp, vp, offset);
-
 	VM_STAT_ADD(hashin_count);
 
 	if (hold != NULL)
@@ -3547,9 +3496,6 @@ page_hashout(page_t *pp, kmutex_t *phm)
 	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(pp->p_vnode)));
 
 	vp = pp->p_vnode;
-
-	TRACE_2(TR_FAC_VM, TR_PAGE_HASHOUT,
-	    "page_hashout:pp %p vp %p", pp, vp);
 
 	/* Kernel probe */
 	TNF_PROBE_2(page_unmap, "vm pagefault", /* CSTYLED */,

@@ -535,8 +535,6 @@ segmap_unlock(
 		if (rw == S_WRITE) {
 			hat_setrefmod(pp);
 		} else if (rw != S_OTHER) {
-			TRACE_3(TR_FAC_VM, TR_SEGMAP_FAULT,
-			"segmap_fault:pp %p vp %p offset %llx", pp, vp, off);
 			hat_setref(pp);
 		}
 
@@ -658,9 +656,6 @@ segmap_fault(
 		if (rw == S_WRITE) {
 			hat_setrefmod(pp);
 		} else {
-			TRACE_3(TR_FAC_VM, TR_SEGMAP_FAULT,
-			    "segmap_fault:pp %p vp %p offset %llx",
-			    pp, vp, off);
 			hat_setref(pp);
 		}
 
@@ -693,8 +688,6 @@ segmap_fault(
 		return (0);
 	}
 
-	TRACE_3(TR_FAC_VM, TR_SEGMAP_GETPAGE,
-	    "segmap_getpage:seg %p addr %p vp %p", seg, addr, vp);
 	err = VOP_GETPAGE(vp, (offset_t)off, len, &prot, pl, MAXBSIZE,
 	    seg, addr, rw, CRED(), NULL);
 
@@ -734,9 +727,6 @@ segmap_fault(
 		adr = addr + (poff - off);
 		if (adr >= addr && adr < addr + len) {
 			hat_setref(pp);
-			TRACE_3(TR_FAC_VM, TR_SEGMAP_FAULT,
-			    "segmap_fault:pp %p vp %p offset %llx",
-			    pp, vp, poff);
 			if (type == F_SOFTLOCK)
 				hat_flag = HAT_LOAD_LOCK;
 		}
@@ -812,9 +802,6 @@ segmap_faulta(struct seg *seg, caddr_t addr)
 		cmn_err(CE_WARN, "segmap_faulta - no vp");
 		return (FC_MAKE_ERR(EIO));
 	}
-
-	TRACE_3(TR_FAC_VM, TR_SEGMAP_GETPAGE,
-	    "segmap_getpage:seg %p addr %p vp %p", seg, addr, vp);
 
 	err = VOP_GETPAGE(vp, (offset_t)(off + ((offset_t)((uintptr_t)addr
 	    & MAXBOFFSET))), PAGESIZE, (uint_t *)NULL, (page_t **)NULL, 0,
@@ -1473,10 +1460,6 @@ segmap_pagecreate(struct seg *seg, caddr_t addr, size_t len, int softlock)
 
 		if (hat_flag != HAT_LOAD_LOCK)
 			page_unlock(pp);
-
-		TRACE_5(TR_FAC_VM, TR_SEGMAP_PAGECREATE,
-		    "segmap_pagecreate:seg %p addr %p pp %p vp %p offset %llx",
-		    seg, addr, pp, vp, off);
 	}
 
 	return (newpage);
@@ -1947,9 +1930,6 @@ vrfy_smp:
 
 use_segmap_range:
 	baseaddr = seg->s_base + ((smp - smd_smap) * MAXBSIZE);
-	TRACE_4(TR_FAC_VM, TR_SEGMAP_GETMAP,
-	    "segmap_getmap:seg %p addr %p vp %p offset %llx",
-	    seg, baseaddr, vp, baseoff);
 
 	/*
 	 * Prefault the translations
@@ -1994,10 +1974,6 @@ segmap_release(struct seg *seg, caddr_t addr, uint_t flags)
 			/*NOTREACHED*/
 		}
 
-		TRACE_3(TR_FAC_VM, TR_SEGMAP_RELMAP,
-		    "segmap_relmap:seg %p addr %p smp %p",
-		    seg, addr, smp);
-
 		smtx = SMAPMTX(smp);
 
 		/*
@@ -2020,10 +1996,6 @@ segmap_release(struct seg *seg, caddr_t addr, uint_t flags)
 			/*NOTREACHED*/
 		}
 		smp = GET_SMAP(seg, addr);
-
-		TRACE_3(TR_FAC_VM, TR_SEGMAP_RELMAP,
-		    "segmap_relmap:seg %p addr %p smp %p",
-		    seg, addr, smp);
 
 		smtx = SMAPMTX(smp);
 		mutex_enter(smtx);

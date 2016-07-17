@@ -215,9 +215,6 @@ pvn_read_kluster(
 			*lenp = vp_end - off;
 		}
 	}
-	TRACE_3(TR_FAC_VM, TR_PVN_READ_KLUSTER,
-	    "pvn_read_kluster:seg %p addr %x isra %x",
-	    seg, addr, isra);
 	return (plist);
 }
 
@@ -458,8 +455,6 @@ pvn_write_done(page_t *plist, int flags)
 			page_io_unlock(pp);
 			pgout = 1;
 			pgpgout++;
-			TRACE_1(TR_FAC_VM, TR_PAGE_WS_OUT,
-			    "page_ws_out:pp %p", pp);
 
 			/*
 			 * The page_struct_lock need not be acquired to
@@ -529,8 +524,6 @@ pvn_write_done(page_t *plist, int flags)
 				} else {
 					page_unlock(pp);
 					pgrec++;
-					TRACE_1(TR_FAC_VM, TR_PAGE_WS_FREE,
-					    "page_ws_free:pp %p", pp);
 				}
 			} else {
 				/*
@@ -684,9 +677,6 @@ pvn_getdirty(page_t *pp, int flags)
 	 */
 	if (flags & B_FREE)
 		page_downgrade(pp);
-
-
-	TRACE_1(TR_FAC_VM, TR_PVN_GETDIRTY, "pvn_getdirty:pp %p", pp);
 
 	return (1);
 }
