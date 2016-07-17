@@ -1,9 +1,11 @@
 
 SRCS +=	multiboot_tramp.S \
-	start.S
+	start.S \
+	bootinfo64.c
 
 OBJS +=	multiboot_tramp.o \
-	start.o
+	start.o \
+	bootinfo64.o
 
 SRCS +=	nullconsole.c \
 	spinconsole.c \
