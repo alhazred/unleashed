@@ -42,10 +42,7 @@ ROOTPERLEXT = $(ROOTPERLEXTDIR)/$(MODULE).so
 ROOTPERLMOD64 = $(ROOTPERLMODDIR64)/$(MODULE).pm
 ROOTPERLEXT64 = $(ROOTPERLEXTDIR64)/$(MODULE).so
 
-XSUBPP = $(PERLDIR)/bin/$(MACH)/perl $(PERLDIR)/lib/ExtUtils/xsubpp \
-	-typemap $(PERLDIR)/lib/ExtUtils/typemap
-
-XSUBPP64 = $(PERLDIR)/bin/$(MACH64)/perl $(PERLDIR)/lib/ExtUtils/xsubpp \
+XSUBPP = $(PERL) $(PERLDIR)/lib/ExtUtils/xsubpp \
 	-typemap $(PERLDIR)/lib/ExtUtils/typemap
 
 C99MODE = $(C99_ENABLE)
