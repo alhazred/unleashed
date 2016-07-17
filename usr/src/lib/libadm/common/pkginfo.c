@@ -166,18 +166,12 @@ initpkg(struct pkginfo *info)
 	/* free previously allocated space */
 	if (info->pkginst) {
 		free(info->pkginst);
-		if (info->arch)
-			free(info->arch);
-		if (info->version)
-			free(info->version);
-		if (info->basedir)
-			free(info->basedir);
-		if (info->name)
-			free(info->name);
-		if (info->vendor)
-			free(info->vendor);
-		if (info->catg)
-			free(info->catg);
+		free(info->arch);
+		free(info->version);
+		free(info->basedir);
+		free(info->name);
+		free(info->vendor);
+		free(info->catg);
 	}
 
 	info->pkginst = NULL;
@@ -464,10 +458,8 @@ ckinfo(char *inst, char *arch, char *vers)
 	if (ckinst(inst, myarch, myvers, arch, vers))
 		errflg++;
 
-	if (myarch)
-		free(myarch);
-	if (myvers)
-		free(myvers);
+	free(myarch);
+	free(myvers);
 
 	return (errflg);
 }

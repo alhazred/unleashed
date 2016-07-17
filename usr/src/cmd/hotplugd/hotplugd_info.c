@@ -99,8 +99,7 @@ getinfo(const char *path, const char *connection, uint_t flags, hp_node_t *retp)
 	/* Special case: exclude root nexus from snapshot */
 	if (strcmp(basepath, "/") == 0) {
 		child = root->hp_child;
-		if (root->hp_name != NULL)
-			free(root->hp_name);
+		free(root->hp_name);
 		free(root);
 		root = child;
 		for (child = root; child; child = child->hp_sibling)

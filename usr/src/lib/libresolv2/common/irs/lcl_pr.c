@@ -142,8 +142,7 @@ pr_close(struct irs_pr *this) {
 
 	if (pvt->fp)
 		(void) fclose(pvt->fp);
-	if (pvt->dbuf)
-		free(pvt->dbuf);
+	free(pvt->dbuf);
 	memput(pvt, sizeof *pvt);
 	memput(this, sizeof *this);
 }
@@ -214,8 +213,7 @@ pr_next(struct irs_pr *this) {
 	offset = 0;
  again:
 	if ((p = fgets(bufp + offset, bufsiz - offset, pvt->fp)) == NULL) {
-		if (dbuf)
-			free(dbuf);
+		free(dbuf);
 		return (NULL);
 	}
 	if (!strchr(p, '\n') && !feof(pvt->fp)) {

@@ -238,8 +238,7 @@ register_method(instance_t *ins, pid_t pid, ctid_t cid, instance_method_t mthd,
 			if (ins->timer_id == -1) {
 				error_msg(gettext(
 				    "Failed to schedule method timeout"));
-				if (me->proto_name != NULL)
-					free(me->proto_name);
+				free(me->proto_name);
 				free(me);
 				(void) close(fd);
 				return (-1);
@@ -253,8 +252,7 @@ register_method(instance_t *ins, pid_t pid, ctid_t cid, instance_method_t mthd,
 	 */
 	if (set_pollfd(fd, 0) == -1) {
 		cancel_inst_timer(ins);
-		if (me->proto_name != NULL)
-			free(me->proto_name);
+		free(me->proto_name);
 		free(me);
 		(void) close(fd);
 		return (-1);
@@ -284,8 +282,7 @@ unregister_method(method_el_t *me)
 	/* remove method record from list */
 	uu_list_remove(method_list, me);
 
-	if (me->proto_name != NULL)
-		free(me->proto_name);
+	free(me->proto_name);
 	free(me);
 }
 

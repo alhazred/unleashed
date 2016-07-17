@@ -1253,7 +1253,7 @@ safe_strtoi(char const *val, char *errmsg)
 static void
 safe_zalloc(void **ptr, int size, int free_first)
 {
-	if (free_first && *ptr != NULL)
+	if (free_first)
 		free(*ptr);
 	if ((*ptr = malloc(size)) == NULL)
 		fail(1, "malloc failed");

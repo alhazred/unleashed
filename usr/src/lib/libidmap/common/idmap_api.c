@@ -300,11 +300,11 @@ idmap_namerule2parts(idmap_namerule *rule,
 	return (IDMAP_SUCCESS);
 
 errout:
-	if (windomain && *windomain)
+	if (windomain)
 		free(*windomain);
-	if (winname && *winname)
+	if (winname)
 		free(*winname);
-	if (unixname && *unixname)
+	if (unixname)
 		free(*unixname);
 
 	idmap_namerule_parts_clear(windomain, winname,
@@ -602,8 +602,7 @@ errout:
 		xdr_free(xdr_idmap_list_namerules_1_argument, (char *)arg);
 		free(arg);
 	}
-	if (tmpiter)
-		free(tmpiter);
+	free(tmpiter);
 
 	return (retcode);
 }
@@ -709,11 +708,11 @@ idmap_iter_next_namerule(idmap_iter_t *iter, char **windomain,
 		return (IDMAP_NEXT);
 
 errout:
-	if (windomain && *windomain)
+	if (windomain)
 		free(*windomain);
-	if (winname && *winname)
+	if (winname)
 		free(*winname);
-	if (unixname && *unixname)
+	if (unixname)
 		free(*unixname);
 	return (retcode);
 }
@@ -878,13 +877,13 @@ idmap_iter_next_mapping(idmap_iter_t *iter, char **sidprefix,
 		return (IDMAP_NEXT);
 
 errout:
-	if (sidprefix && *sidprefix)
+	if (sidprefix)
 		free(*sidprefix);
-	if (winname && *winname)
+	if (winname)
 		free(*winname);
-	if (windomain && *windomain)
+	if (windomain)
 		free(*windomain);
-	if (unixname && *unixname)
+	if (unixname)
 		free(*unixname);
 	return (retcode);
 }
@@ -1584,8 +1583,7 @@ idmap_get_destroy(idmap_get_handle_t *gh)
 	if (gh == NULL)
 		return;
 	(void) xdr_free(xdr_idmap_mapping_batch, (caddr_t)&gh->batch);
-	if (gh->retlist)
-		free(gh->retlist);
+	free(gh->retlist);
 	free(gh);
 }
 
@@ -1693,10 +1691,8 @@ idmap_get_w2u_mapping(
 		retcode = rc;
 
 out:
-	if (request.id1name != NULL)
-		free(request.id1name);
-	if (request.id1domain != NULL)
-		free(request.id1domain);
+	free(request.id1name);
+	free(request.id1domain);
 	xdr_free(xdr_idmap_mappings_res, (caddr_t)&result);
 	if (retcode != IDMAP_SUCCESS)
 		errno = idmap_stat2errno(retcode);

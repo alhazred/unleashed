@@ -464,8 +464,8 @@ rsa_hash_pkcs_sign(SESSION		* sess,
 	    ber_data_len, signature, sig_len);
 
 error:
-	if (octet_str) free(octet_str);
-	if (ber_data)  free(ber_data);
+	free(octet_str);
+	free(ber_data);
 	(void) digest_mgr_cleanup(&digest_ctx);
 	(void) sign_mgr_cleanup(&sign_ctx);
 	return (rc);
@@ -592,8 +592,8 @@ rsa_hash_pkcs_verify(SESSION		* sess,
 	rc = verify_mgr_verify(sess, &verify_ctx, ber_data,
 	    ber_data_len, signature, sig_len);
 done:
-	if (octet_str) free(octet_str);
-	if (ber_data)  free(ber_data);
+	free(octet_str);
+	free(ber_data);
 
 	(void) digest_mgr_cleanup(&digest_ctx);
 	(void) sign_mgr_cleanup(&verify_ctx);
@@ -716,8 +716,8 @@ rsa_hash_pkcs_sign_final(SESSION		* sess,
 	}
 
 done:
-	if (octet_str) free(octet_str);
-	if (ber_data)  free(ber_data);
+	free(octet_str);
+	free(ber_data);
 
 	(void) digest_mgr_cleanup(&context->hash_context);
 	(void) sign_mgr_cleanup(&sign_ctx);
@@ -790,8 +790,8 @@ rsa_hash_pkcs_verify_final(SESSION		* sess,
 	rc = verify_mgr_verify(sess, &verify_ctx, ber_data,
 	    ber_data_len, signature, sig_len);
 done:
-	if (octet_str) free(octet_str);
-	if (ber_data)  free(ber_data);
+	free(octet_str);
+	free(ber_data);
 	(void) digest_mgr_cleanup(&context->hash_context);
 	(void) verify_mgr_cleanup(&verify_ctx);
 	return (rc);

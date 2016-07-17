@@ -1206,8 +1206,7 @@ const char *sasl_errstring(int saslerr,
   }
 
   tsd = pthread_getspecific(errstring_key);
-  if (tsd != NULL)
-    free(tsd);
+  free(tsd);
   pthread_setspecific(errstring_key, s_utf8);
 
   if (outlang) *outlang="*";

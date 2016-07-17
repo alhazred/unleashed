@@ -325,8 +325,7 @@ zonecfg_fini_handle(zone_dochandle_t handle)
 {
 	if (zonecfg_check_handle(handle) == Z_OK)
 		xmlFreeDoc(handle->zone_dh_doc);
-	if (handle != NULL)
-		free(handle);
+	free(handle);
 }
 
 static int

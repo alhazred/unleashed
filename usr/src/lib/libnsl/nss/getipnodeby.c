@@ -1288,7 +1288,6 @@ __IPv6_cleanup(nss_XbyY_buf_t *bufp)
 {
 	if (bufp == NULL)
 		return;
-	if (bufp->result != NULL)
-		free(bufp->result);
+	free(bufp->result);
 	free(bufp);
 }

@@ -1411,7 +1411,7 @@ safe_zalloc(void **ptr, uint_t size, int free_first)
 {
 	if (ptr == NULL)
 		fail(1, "invalid pointer");
-	if (free_first && *ptr != NULL)
+	if (free_first)
 		free(*ptr);
 	if ((*ptr = (void *)malloc(size)) == NULL)
 		fail(1, "malloc failed");

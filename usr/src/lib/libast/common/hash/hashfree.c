@@ -131,8 +131,7 @@ hashfree(register Hash_table_t* tab)
 		}
 		if (!(tab->root->references))
 		{
-			if (tab->root->local)
-				free(tab->root->local);
+			free(tab->root->local);
 			if (region) (*region)(handle, tab->root, 0, 0);
 			else free(tab->root);
 		}

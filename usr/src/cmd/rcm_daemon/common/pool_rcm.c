@@ -335,8 +335,7 @@ pset_validate_remove(nvlist_t *nvl, char **errorp)
 		}
 	free(res);
 out:
-	if (removed_list)
-		free(removed_list);
+	free(removed_list);
 	if (conf) {
 		(void) pool_conf_close(conf);
 		pool_conf_free(conf);

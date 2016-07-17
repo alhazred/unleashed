@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -238,10 +236,8 @@ _nss_ldap_hosts2str_int(int af, ldap_backend_ptr be, nss_XbyY_args_t *argp)
 		be->buflen = strlen(be->buffer);
 
 result_host2str:
-	if (first_host)
-		free(first_host);
-	if (other_hosts)
-		free(other_hosts);
+	free(first_host);
+	free(other_hosts);
 	if (be->toglue) {
 		free(be->toglue);
 		be->toglue = NULL;

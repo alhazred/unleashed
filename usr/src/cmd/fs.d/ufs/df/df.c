@@ -304,8 +304,7 @@ main(int argc, char *argv[])
 			 */
 			cp = getfullblkname(argv[i]);
 			if (cp == NULL || *cp == '\0') {
-				if (cp != NULL)
-					free(cp);
+				free(cp);
 				cp = strdup(argv[i]);
 
 				if (cp == NULL) {

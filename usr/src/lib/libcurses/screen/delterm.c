@@ -37,8 +37,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*LINTLIBRARY*/
 
 #include <stdlib.h>
@@ -62,16 +60,12 @@ delterm(TERMINAL *terminal)
 	if (terminal->_check_fd >= 0)
 		(void) close(terminal->_check_fd);
 
-	if (terminal->_pairs_tbl)
-		free(terminal->_pairs_tbl);
-	if (terminal->_color_tbl)
-		free(terminal->_color_tbl);
+	free(terminal->_pairs_tbl);
+	free(terminal->_color_tbl);
 #ifdef	_VR3_COMPAT_CODE
-	if (terminal->_acs32map)
-		free(terminal->_acs32map);
+	free(terminal->_acs32map);
 #else	/* _VR3_COMPAT_CODE */
-	if (terminal->_acsmap)
-		free(terminal->_acsmap);
+	free(terminal->_acsmap);
 #endif	/* _VR3_COMPAT_CODE */
 
 	if (terminal == &_first_term) {

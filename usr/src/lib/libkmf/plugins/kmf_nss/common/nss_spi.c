@@ -995,8 +995,7 @@ cleanup:
 		pubkey->keyp = NULL;
 	}
 
-	if (keylabel)
-		free(keylabel);
+	free(keylabel);
 
 	if (pqgParams != NULL)
 		PK11_PQG_DestroyParams(pqgParams);

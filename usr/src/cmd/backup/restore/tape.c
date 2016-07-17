@@ -164,8 +164,7 @@ newtapebuf(size_t size)
 	ntrec = size;
 	if (nsize <= tbfsize)
 		return;
-	if (tbf != NULL)
-		free(tbf);
+	free(tbf);
 	tbf = (char *)malloc(nsize);
 	if (tbf == NULL) {
 		(void) fprintf(stderr,
@@ -1254,8 +1253,7 @@ fsd_acl(name, aclp, size)
 	int saverr, j;
 
 	if (aclp == NULL) {
-		if (aclent != NULL)
-			free(aclent);
+		free(aclent);
 		aclent = NULL;
 		n = 0;
 		return;

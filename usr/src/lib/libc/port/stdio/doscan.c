@@ -27,8 +27,6 @@
 /*	Copyright (c) 1988 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "lint.h"
 #include <sys/types.h>
 #include "mtlib.h"
@@ -587,8 +585,7 @@ charswitch:	/* target of a goto 8-( */
 		}
 		continue;
 	}
-	if (bracket_str)
-		free(bracket_str);
+	free(bracket_str);
 	return (nmatch != 0 ? nmatch : EOF); /* end of input */
 }
 

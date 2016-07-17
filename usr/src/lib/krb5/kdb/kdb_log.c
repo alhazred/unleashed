@@ -3,8 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -357,8 +355,7 @@ ulog_replay(krb5_context context, kdb_incr_result_t *incr_ret)
 				goto cleanup;
 			}
 
-			if (dbprincstr)
-				free(dbprincstr);
+			free(dbprincstr);
 
 			retval = krb5_db_delete_principal(context,
 			    dbprinc, &nentry);
@@ -510,8 +507,7 @@ error:
 	if (upd)
 		ulog_free_entries(upd, 1);
 
-	if (incr_ret)
-		free(incr_ret);
+	free(incr_ret);
 
 	ulog_sync_header(ulog);
 

@@ -366,10 +366,8 @@ cleanup:
 	else if (tmpalloc)
 		wordfree(&wptmp);
 
-	if (env)
-		free(env);
-	if (wd)
-		free(wd);
+	free(env);
+	free(wd);
 	/*
 	 * Map ksh93 errors to |wordexp()| errors
 	 */

@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "libuutil_common.h"
 
 #include <errno.h>
@@ -115,8 +113,7 @@ uu_dprintf(uu_dprintf_t *D, uu_dprintf_severity_t severity,
 void
 uu_dprintf_destroy(uu_dprintf_t *D)
 {
-	if (D->uud_name)
-		free(D->uud_name);
+	free(D->uud_name);
 
 	uu_free(D);
 }

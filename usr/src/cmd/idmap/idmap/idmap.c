@@ -3455,12 +3455,9 @@ do_get_namemap(flag_t *f, int argc, char **argv, cmd_pos_t *pos)
 cleanup:
 	fini_nm_command();
 	name_mapping_fini(nm);
-	if (winname != NULL)
-		free(winname);
-	if (unixuser != NULL)
-		free(unixuser);
-	if (unixgroup != NULL)
-		free(unixgroup);
+	free(winname);
+	free(unixuser);
+	free(unixgroup);
 	return (stat == IDMAP_SUCCESS ? 0 : -1);
 }
 

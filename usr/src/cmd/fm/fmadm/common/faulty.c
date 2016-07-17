@@ -435,8 +435,7 @@ merge_name_list(name_list_t **list, name_list_t *new, int add_pct)
 				lp->pct = np->pct;
 			}
 			max_pct = np->max_pct;
-			if (np->label)
-				free(np->label);
+			free(np->label);
 			free(np->name);
 			free(np);
 			np = NULL;

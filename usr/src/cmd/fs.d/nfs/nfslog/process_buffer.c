@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <strings.h>
 #include <string.h>
 #include <syslog.h>
@@ -331,10 +329,8 @@ process_buffer(
 			}
 		}
 
-skip:		if (path1 != NULL)
-			free(path1);
-		if (path2 != NULL)
-			free(path2);
+skip:		free(path1);
+		free(path2);
 
 		path1 = path2 = NULL;
 		nfslog_free_logrecord(lrp, TRUE);
@@ -438,10 +434,8 @@ badtag_notify(char *tag)
 		}
 	}
 
-	if (lp->l_name != NULL)
-		free(lp->l_name);
-	if (lp)
-		free(lp);
+	free(lp->l_name);
+	free(lp);
 	error = errno;
 	syslog(LOG_ERR, gettext(
 	    "Cannot add \"%s\" to bad tag list: %s"), tag, strerror(error));

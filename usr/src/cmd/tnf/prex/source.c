@@ -23,8 +23,6 @@
  * Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Includes
  */
@@ -182,8 +180,7 @@ source_input(void)
 				quit(B_TRUE, B_TRUE);
 		}
 		/* we've exhausted the current stream, pop it, delete it ... */
-		if (top->path)
-			free(top->path);
+		free(top->path);
 		(void) fclose(top->instream);
 		(void) queue_remove(&top->qn);
 		free(top);

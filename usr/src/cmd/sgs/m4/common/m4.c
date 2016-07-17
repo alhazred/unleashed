@@ -591,8 +591,7 @@ expand(wchar_t **a1, int c)
 void
 setfname(char *s)
 {
-	if (fname[ifx])
-		free(fname[ifx]);
+	free(fname[ifx]);
 	if ((fname[ifx] = strdup(s)) == NULL)
 		error(gettext("out of storage"));
 	fline[ifx] = 1;

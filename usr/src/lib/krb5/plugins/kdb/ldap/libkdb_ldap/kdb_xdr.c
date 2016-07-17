@@ -1,5 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * lib/kdb/kdb_ldap/kdb_xdr.c
  *
@@ -72,8 +70,7 @@ krb5_dbe_update_tl_data(context, entry, new_tl_data)
 
     /* fill in the record */
 
-    if (tl_data->tl_data_contents)
-	free(tl_data->tl_data_contents);
+    free(tl_data->tl_data_contents);
 
     tl_data->tl_data_type = new_tl_data->tl_data_type;
     tl_data->tl_data_length = new_tl_data->tl_data_length;

@@ -600,8 +600,7 @@ dm_process_sysevent(sysevent_t *dupev)
 	    subclass,
 	    ((pub = sysevent_get_pub_name(dupev)) != NULL) ? pub : "UNKNOWN");
 
-	if (pub)
-		free(pub);
+	free(pub);
 
 	if (strcmp(class_name, EC_PLATFORM) == 0 &&
 	    strcmp(subclass, ESC_PLATFORM_SP_RESET) == 0) {

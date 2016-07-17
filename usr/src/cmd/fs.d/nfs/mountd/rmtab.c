@@ -206,8 +206,7 @@ mntlist_delete_all(char *host)
 
 	(void) rw_unlock(&rmtab_lock);
 
-	if (iterator != NULL)
-		free(iterator);
+	free(iterator);
 }
 
 /*
@@ -226,8 +225,7 @@ xdr_mntlistencode(XDR *xdrs, HASHSET *mntlist)
 		bool_t more_data = (m != NULL);
 
 		if (!xdr_bool(xdrs, &more_data)) {
-			if (iterator != NULL)
-				free(iterator);
+			free(iterator);
 			return (FALSE);
 		}
 
@@ -236,15 +234,13 @@ xdr_mntlistencode(XDR *xdrs, HASHSET *mntlist)
 
 		if ((!xdr_name(xdrs, &m->m_host)) ||
 		    (!xdr_dirpath(xdrs, &m->m_path))) {
-			if (iterator != NULL)
-				free(iterator);
+			free(iterator);
 			return (FALSE);
 		}
 
 	}
 
-	if (iterator != NULL)
-		free(iterator);
+	free(iterator);
 
 	return (TRUE);
 }
@@ -337,8 +333,7 @@ rmtab_rewrite()
 
 		while ((m = (struct mntentry *)h_next(iterator)) != NULL)
 			m->m_pos = rmtab_insert(m->m_host, m->m_path);
-		if (iterator != NULL)
-			free(iterator);
+		free(iterator);
 	}
 }
 

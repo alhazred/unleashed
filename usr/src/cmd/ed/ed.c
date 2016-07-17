@@ -2181,8 +2181,7 @@ comple(wchar_t seof)
 	 */
 
 	if (genbuf[0] != '\0') {
-		if (expbuf)
-			free(expbuf);
+		free(expbuf);
 		expbuf = compile(genbuf, (char *)0, (char *)0);
 	}
 	if (regerrno)

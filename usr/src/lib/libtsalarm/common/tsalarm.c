@@ -122,12 +122,10 @@ tsalarm_get(uint32_t alarm_type, uint32_t *alarm_state)
 	*alarm_state = resp_ptr->alarm_state;
 
 cleanup:
-	if (req_ptr != NULL)
-		free(req_ptr);
+	free(req_ptr);
 
 	/* free recv_msg.msg_data through pointer to make sure it is valid */
-	if (resp_ptr != NULL)
-		free(resp_ptr);
+	free(resp_ptr);
 
 	/* close virtual channel fd */
 	(void) pcp_close(chnl_fd);
@@ -226,12 +224,10 @@ tsalarm_set(uint32_t alarm_type, uint32_t alarm_state)
 	}
 
 cleanup:
-	if (req_ptr != NULL)
-		free(req_ptr);
+	free(req_ptr);
 
 	/* free recv_msg.msg_data through pointer to make sure it is valid */
-	if (resp_ptr != NULL)
-		free(resp_ptr);
+	free(resp_ptr);
 
 	/* close virtual channel fd */
 	(void) pcp_close(chnl_fd);

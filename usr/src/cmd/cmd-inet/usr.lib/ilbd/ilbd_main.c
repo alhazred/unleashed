@@ -134,8 +134,7 @@ ilbd_free_cli(ilbd_client_t *cli)
 		ilbd_show_nat_cleanup();
 	if (cli->cli_cmd == ILBD_SHOW_PERSIST)
 		ilbd_show_sticky_cleanup();
-	if (cli->cli_saved_reply != NULL)
-		free(cli->cli_saved_reply);
+	free(cli->cli_saved_reply);
 	if (cli->cli_peer_ucredp != NULL)
 		ucred_free(cli->cli_peer_ucredp);
 	free(cli->cli_pw_buf);

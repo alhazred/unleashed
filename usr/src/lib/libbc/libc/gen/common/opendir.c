@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI" 
-
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -59,8 +57,7 @@ opendir(name)
 	}
 	if (((dirp = (DIR *)malloc(sizeof(DIR))) == NULL) ||
 	    ((dirp->dd_buf = malloc(sb.st_blksize)) == NULL)) {
-		if (dirp)
-			free(dirp);
+		free(dirp);
 		(void) close(fd);
 		return (NULL);
 	}

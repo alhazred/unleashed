@@ -538,10 +538,8 @@ runve(int mode, const char* path, char* const* argv, char* const* envv)
 #endif
 		pid = _execve(path, argv, envv);
 	}
-	if (m1)
-		free(m1);
-	if (m2)
-		free(m2);
+	free(m1);
+	free(m2);
 	return pid;
 }
 

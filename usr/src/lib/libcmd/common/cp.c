@@ -942,8 +942,7 @@ b_cp(int argc, register char** argv, void* context)
 		error(ERROR_SYSTEM|2, "%s: cannot link to %s", *argv, state->path);
 	if (cleanup && !sh)
 	{
-		if (state->path)
-			free(state->path);
+		free(state->path);
 		free(state);
 	}
 	return error_info.errors != 0;

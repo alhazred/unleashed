@@ -317,8 +317,7 @@ free_proto(struct protoent *pr) {
 	if (pr == NULL)
 		return;
 
-	if (pr->p_name != NULL)
-		free(pr->p_name);
+	free(pr->p_name);
 
 	for (p = pr->p_aliases ; p != NULL && *p != NULL ; p++)
 		free(*p);

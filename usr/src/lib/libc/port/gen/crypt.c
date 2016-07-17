@@ -193,8 +193,7 @@ crypt(const char *plaintext, const char *salt)
 
 cleanup:
 	free_crypt_alg(alg);
-	if (algname != NULL)
-		free(algname);
+	free(algname);
 
 	return (ciphertext);
 }
@@ -259,10 +258,9 @@ crypt_gensalt(const char *oldsalt, const struct passwd *userinfo)
 cleanup:
 	free_crypt_policy(policy);
 	free_crypt_alg(alg);
-	if (newsalt == NULL && gsbuffer != NULL)
+	if (newsalt == NULL)
 		free(gsbuffer);
-	if (algname != NULL)
-		free(algname);
+	free(algname);
 
 	return (newsalt);
 }

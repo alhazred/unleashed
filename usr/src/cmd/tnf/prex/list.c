@@ -23,8 +23,6 @@
  * Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Includes
  */
@@ -198,7 +196,7 @@ list_values(spec_t * speclist_p)
 #endif
 			(void) tdelete((void *) *vptr, &(*aptr)->valsroot_p,
 				valscompare);
-			if (vnameptr) free(vnameptr);
+			free(vnameptr);
 		}
 
 		anameptr = (*aptr)->name;
@@ -206,7 +204,7 @@ list_values(spec_t * speclist_p)
 		(void) fprintf(stderr, "freeing attr \"%s\"\n", anameptr);
 #endif
 		(void) tdelete((void *) *aptr, &args.attrroot_p, attrcompare);
-		if (anameptr) free(anameptr);
+		free(anameptr);
 	}
 
 }				/* end list_values */
@@ -314,8 +312,7 @@ probescan(tnfctl_handle_t *hndl, tnfctl_probe_t *ref_p, void *calldata_p)
 		spec_attrtrav(spec_p, attrs, attrscan, calldata_p);
 	}
 
-	if (attrs)
-		free(attrs);
+	free(attrs);
 
 	return (TNFCTL_ERR_NONE);
 }
@@ -358,8 +355,7 @@ attrscan(spec_t * spec_p,
 #ifdef LEAKCHK
 		(void) fprintf(stderr, "attr already there \"%s\"\n", attr);
 #endif
-		if (an_p->name)
-			free(an_p->name);
+		free(an_p->name);
 		free(an_p);
 
 		an_p = *ret_pp;
@@ -400,8 +396,7 @@ valadd(spec_t * spec_p,
 #ifdef LEAKCHK
 		(void) fprintf(stderr, "value already there \"%s\"\n", val);
 #endif
-		if (vn_p->name)
-			free(vn_p->name);
+		free(vn_p->name);
 		free(vn_p);
 	} else {
 		(void) tsearch((void *) vn_p, &an_p->valsroot_p, valscompare);
@@ -548,8 +543,7 @@ listprobe(tnfctl_handle_t *hndl, tnfctl_probe_t *ref_p, void *calldata_p)
 		}
 		(void) printf("\n");
 	}
-	if (attrs)
-		free(attrs);
+	free(attrs);
 
 	return (TNFCTL_ERR_NONE);
 }

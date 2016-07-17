@@ -173,8 +173,7 @@ get_wlans_cb(nwam_known_wlan_handle_t kwh, void *data)
 	    sizeof (struct nwam_wlan_info *) * ++num_wlans)) == NULL ||
 	    (newlist[num_wlans - 1] = calloc(1,
 	    sizeof (struct nwam_wlan_info))) == NULL) {
-		if (newlist != NULL)
-			free(newlist);
+		free(newlist);
 		return (NWAM_NO_MEMORY);
 	}
 

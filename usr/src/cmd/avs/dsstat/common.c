@@ -169,8 +169,7 @@ void
 kstat_free(kstat_t *ksp)
 {
 	if (ksp != NULL) {
-		if (ksp->ks_data != NULL)
-			free(ksp->ks_data);
+		free(ksp->ks_data);
 		free(ksp);
 	}
 }

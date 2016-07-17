@@ -810,14 +810,10 @@ pkinit_fini_pkcs11(pkinit_identity_crypto_context ctx)
 	pkinit_C_UnloadModule(ctx->p11_module);
 	ctx->p11_module = NULL;
     }
-    if (ctx->p11_module_name != NULL)
-	free(ctx->p11_module_name);
-    if (ctx->token_label != NULL)
-	free(ctx->token_label);
-    if (ctx->cert_id != NULL)
-	free(ctx->cert_id);
-    if (ctx->cert_label != NULL)
-	free(ctx->cert_label);
+    free(ctx->p11_module_name);
+    free(ctx->token_label);
+    free(ctx->cert_id);
+    free(ctx->cert_label);
     if (ctx->PIN != NULL) {
 	(void) memset(ctx->PIN, 0, strlen(ctx->PIN));
 	free(ctx->PIN);
@@ -1798,10 +1794,8 @@ cms_envelopeddata_verify(krb5_context context,
 	PKCS7_free(p7);
     if (out != NULL)
 	BIO_free(out);
-    if (tmp_buf != NULL)
-	free(tmp_buf);
-    if (tmp_buf2 != NULL)
-	free(tmp_buf2);
+    free(tmp_buf);
+    free(tmp_buf2);
 
     return retval;
 }
@@ -2138,8 +2132,7 @@ pkinit_octetstring2key(krb5_context context,
     retval = krb5_c_random_to_key(context, etype, &random_data, key_block);
 
   cleanup:
-    if (buf != NULL)
-	free(buf);
+    free(buf);
     if (retval && key_block->contents != NULL && key_block->length != 0) {
 	(void) memset(key_block->contents, 0, key_block->length);
 	key_block->length = 0;
@@ -2257,11 +2250,9 @@ client_create_dh(krb5_context context,
     if (cryptoctx->dh != NULL)
 	DH_free(cryptoctx->dh);
     cryptoctx->dh = NULL;
-    if (*dh_params != NULL)
-	free(*dh_params);
+    free(*dh_params);
     *dh_params = NULL;
-    if (*dh_pubkey != NULL)
-	free(*dh_pubkey);
+    free(*dh_pubkey);
     *dh_pubkey = NULL;
     if (pub_key != NULL)
 	ASN1_INTEGER_free(pub_key);
@@ -2322,19 +2313,16 @@ client_process_dh(krb5_context context,
 	BN_free(server_pub_key);
     if (pub_key != NULL)
 	ASN1_INTEGER_free(pub_key);
-    if (data != NULL)
-	free (data);
+    free(data);
 
     return retval;
 
   cleanup:
-    if (*client_key != NULL)
-	free(*client_key);
+    free(*client_key);
     *client_key = NULL;
     if (pub_key != NULL)
 	ASN1_INTEGER_free(pub_key);
-    if (data != NULL)
-	free (data);
+    free(data);
 
     return retval;
 }
@@ -2481,10 +2469,8 @@ server_process_dh(krb5_context context,
   cleanup:
     if (dh_server != NULL)
 	DH_free(dh_server);
-    if (*dh_pubkey != NULL)
-	free(*dh_pubkey);
-    if (*server_key != NULL)
-	free(*server_key);
+    free(*dh_pubkey);
+    free(*server_key);
 
     return retval;
 }
@@ -2700,13 +2686,11 @@ cleanup:
 	free_krb5_external_principal_identifier(&krb5_trusted_certifiers);
 
     if (data != NULL) {
-	if (data->data != NULL)
-	    free(data->data);
+	free(data->data);
 	free(data);
     }
 
-    if (td_certifiers != NULL)
-	free(td_certifiers);
+    free(td_certifiers);
 
     if (typed_data != NULL)
 	free_krb5_typed_data(&typed_data);
@@ -2912,26 +2896,20 @@ pkinit_create_td_dh_parameters(krb5_context context,
     retval = 0;
 cleanup:
 
-    if (buf1 != NULL)
-	free(buf1);
-    if (buf2 != NULL)
-	free(buf2);
-    if (buf3 != NULL)
-	free(buf3);
+    free(buf1);
+    free(buf2);
+    free(buf3);
     if (data != NULL) {
-	if (data->data != NULL)
-	    free(data->data);
+	free(data->data);
 	free(data);
     }
     if (typed_data != NULL)
 	free_krb5_typed_data(&typed_data);
-    if (encoded_algId != NULL)
-	free(encoded_algId);
+    free(encoded_algId);
 
     if (algId != NULL) {
 	while(algId[i] != NULL) {
-	    if (algId[i]->parameters.data != NULL)
-		free(algId[i]->parameters.data);
+	    free(algId[i]->parameters.data);
 	    free(algId[i]);
 	    i++;
 	}
@@ -3896,11 +3874,9 @@ out:
                                      id_cryptoctx);
     }
 
-    if (cert)
-        free(cert);
+    free(cert);
 
-    if (cert_id)
-        free(cert_id);
+    free(cert_id);
     
     return (r);
 }
@@ -4063,8 +4039,7 @@ tryagain:
 	}
     }
 
-    if (slotlist != NULL)
-	free(slotlist);
+    free(slotlist);
  
     slotlist = malloc(count * sizeof (CK_SLOT_ID));
     if (slotlist == NULL) {
@@ -4314,11 +4289,9 @@ tryagain:
     }
 
 out:
-    if (slotlist != NULL)
-	free(slotlist);
+    free(slotlist);
 
-    if (tmpslotlist != NULL)
-	free(tmpslotlist);
+    free(tmpslotlist);
 
     if (token_choices.token_array != NULL) {
 	if (r != 0) {
@@ -5285,8 +5258,7 @@ free_cred_info(krb5_context context,
 	if (cred->key != NULL)
 	    EVP_PKEY_free(cred->key);
 #ifndef WITHOUT_PKCS11
-	if (cred->cert_id != NULL)
-	    free(cred->cert_id);
+	free(cred->cert_id);
 #endif
 	free(cred);
     }
@@ -5699,10 +5671,8 @@ crypto_cert_free_matching_data(krb5_context context,
 
     if (md == NULL)
 	return EINVAL;
-    if (md->subject_dn)
-	free(md->subject_dn);
-    if (md->issuer_dn)
-	free(md->issuer_dn);
+    free(md->subject_dn);
+    free(md->issuer_dn);
     if (md->sans) {
 	for (i = 0, p = md->sans[i]; p != NULL; p = md->sans[++i])
 	    krb5_free_principal(context, p);

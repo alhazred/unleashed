@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/syscall.h>
 
 #include <project.h>
@@ -57,8 +55,7 @@ project_walk(int (*callback)(projid_t, void *), void *init_data)
 			 */
 			if (errno == EAGAIN)
 				errno = ENOMEM;
-			if (curr_projid != NULL)
-				free(curr_projid);
+			free(curr_projid);
 			return (-1);
 		}
 	}

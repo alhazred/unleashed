@@ -400,8 +400,7 @@ get_soa(res_state statp, const char *dname, ns_class class, int opts,
 	DPRINTF(("get_soa: out of labels"));
 	errno = EDESTADDRREQ;
  cleanup:
-	if (resp != NULL)
-		free(resp);
+	free(resp);
 	return (-1);
 }
 

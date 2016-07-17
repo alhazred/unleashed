@@ -350,10 +350,8 @@ nsmaddrproc1_reg(reg1args *regargs, reg1res *regresp)
 				name_addr = name_addr->next;
 				free(entry->name);
 				free(entry);
-				if (tmp_n_bytes)
-					free(tmp_n_bytes);
-				if (addr)
-					free(addr);
+				free(tmp_n_bytes);
+				free(addr);
 				status = nsm_addr_fail;
 				goto done;
 			}

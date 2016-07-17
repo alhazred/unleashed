@@ -35,7 +35,6 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 #define RCSID	"$Id: auth.c,v 1.65 2000/04/15 01:27:10 masputra Exp $"
 
 /* Pull in crypt() definition. */
@@ -1689,8 +1688,7 @@ set_allowed_addrs(unit, addrs, opts)
     u_int32_t suggested_ip = 0;
     int err_num;
 
-    if (addresses[unit] != NULL)
-	free(addresses[unit]);
+    free(addresses[unit]);
     addresses[unit] = NULL;
     if (extra_options != NULL)
 	free_wordlist(extra_options);

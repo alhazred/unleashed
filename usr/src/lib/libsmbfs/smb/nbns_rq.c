@@ -165,12 +165,9 @@ nbns_getaddrinfo(const char *name, struct nb_ctx *nbc, struct addrinfo **res)
 nomem:
 	err = EAI_MEMORY;
 out:
-	if (nai != NULL)
-		free(nai);
-	if (sap)
-		free(sap);
-	if (ucname)
-		free(ucname);
+	free(nai);
+	free(sap);
+	free(ucname);
 	*res = NULL;
 
 	return (err);
@@ -398,8 +395,7 @@ nbns_rq_done(struct nbns_rq *rqp)
 		close(rqp->nr_fd);
 	mb_done(&rqp->nr_rq);
 	mb_done(&rqp->nr_rp);
-	if (rqp->nr_if)
-		free(rqp->nr_if);
+	free(rqp->nr_if);
 	free(rqp);
 }
 

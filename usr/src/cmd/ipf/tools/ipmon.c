@@ -427,10 +427,8 @@ static void init_tabs()
 				protocols[p->p_proto] = strdup(p->p_name);
 		endprotoent();
 #if defined(_AIX51)
-		if (protocols[0])
-			free(protocols[0]);
-		if (protocols[252])
-			free(protocols[252]);
+		free(protocols[0]);
+		free(protocols[252]);
 		protocols[0] = "ip";
 		protocols[252] = NULL;
 #endif
@@ -968,8 +966,7 @@ int	logtype, blen;
 		blen -= psize;
 		buf += psize;
 	}
-	if (bp)
-		free(bp);
+	free(bp);
 	return;
 }
 

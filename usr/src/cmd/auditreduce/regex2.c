@@ -59,8 +59,7 @@ re_comp2(s)
 	compile = 1;
 	if (p_exp != NULL) {
 		for (i = 0; i < nexp; i++)
-			if (p_exp[i].comp != NULL)
-				free(p_exp[i].comp);
+			free(p_exp[i].comp);
 		free(p_exp);
 	}
 	if (fexp != NULL) {

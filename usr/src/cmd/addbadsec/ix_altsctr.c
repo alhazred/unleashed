@@ -464,10 +464,8 @@ gen_alts_ent(void)
 	entp=(struct alts_ent *) malloc (ap->ap_ent_secsiz);
 	ent_used = ent_merge(entp, ap->ap_entp, ap->ap_tblp->alts_ent_used,
 			     ap->ap_gbadp, ap->ap_gbadcnt);
-	if (ap->ap_entp)
-	    free(ap->ap_entp);
-	if (ap->ap_gbadp)
-	    free(ap->ap_gbadp);
+	free(ap->ap_entp);
+	free(ap->ap_gbadp);
 	ap->ap_entp = entp;
 	ap->ap_ent_secsiz = byte_to_secsiz(ent_used*ALTS_ENT_SIZE, NBPSCTR);
 	ap->ap_tblp->alts_ent_used = ent_used;

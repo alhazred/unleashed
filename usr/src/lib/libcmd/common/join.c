@@ -170,14 +170,10 @@ done(register Join_t* jp)
 		sfclose(jp->file[0].iop);
 	if (jp->file[1].iop && jp->file[1].iop != sfstdin)
 		sfclose(jp->file[1].iop);
-	if (jp->outlist)
-		free(jp->outlist);
-	if (jp->file[0].fields)
-		free(jp->file[0].fields);
-	if (jp->file[1].fields)
-		free(jp->file[1].fields);
-	if (jp->same)
-		free(jp->same);
+	free(jp->outlist);
+	free(jp->file[0].fields);
+	free(jp->file[1].fields);
+	free(jp->same);
 	free(jp);
 }
 

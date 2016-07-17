@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/types.h>
 #include <errno.h>
 #include <malloc.h>
@@ -64,8 +62,7 @@ pri_bufinit(md_t *mdp)
 
 	if (mdp)
 		md_fini(mdp);
-	if (md_bufp)
-		free(md_bufp);
+	free(md_bufp);
 	md_bufp = new_md_bufp;
 
 	pri_debug(LOG_NOTICE, "pri_bufinit: done reading PRI\n");
@@ -97,8 +94,7 @@ pri_bufinit(md_t *mdp)
 static void
 pri_free(void *bufp, size_t size)
 {
-	if (bufp)
-		free(bufp);
+	free(bufp);
 }
 
 void
@@ -107,7 +103,6 @@ pri_devfini(md_t *mdp)
 	if (mdp)
 		(void) md_fini(mdp);
 
-	if (md_bufp)
-		free(md_bufp);
+	free(md_bufp);
 	md_bufp = NULL;
 }

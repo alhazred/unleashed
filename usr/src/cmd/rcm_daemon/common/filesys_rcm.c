@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This module adds support to the RCM framework for mounted filesystems.
  *
@@ -821,10 +819,8 @@ free_entry(hashentry_t **entryp)
 {
 	if (entryp) {
 		if (*entryp) {
-			if ((*entryp)->special)
-				free((*entryp)->special);
-			if ((*entryp)->fstype)
-				free((*entryp)->fstype);
+			free((*entryp)->special);
+			free((*entryp)->fstype);
 			free_list((*entryp)->mountps);
 			free(*entryp);
 		}

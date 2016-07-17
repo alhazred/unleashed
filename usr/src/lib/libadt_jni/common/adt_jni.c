@@ -25,9 +25,7 @@
  *
  * Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
- *
  */
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <bsm/adt.h>
 #include "adt_jni.h"
@@ -175,8 +173,7 @@ Java_com_sun_audit_AuditSession_startSession(JNIEnv *env, jobject cls,
 	}
 	rc = adt_start_session(&state, (adt_export_data_t *)import, flags);
 
-	if (import != NULL)
-		free(import);
+	free(import);
 
 	if (rc) {
 		local_throw(env, "java/lang/Error", errno_to_i18n(errno));

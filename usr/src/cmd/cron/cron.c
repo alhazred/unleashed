@@ -2147,8 +2147,7 @@ rm_ctevents(struct usr *u)
 		free(e2->of.ct.daymon);
 		free(e2->of.ct.month);
 		free(e2->of.ct.dayweek);
-		if (e2->of.ct.input != NULL)
-			free(e2->of.ct.input);
+		free(e2->of.ct.input);
 		e3 = e2->link;
 		free(e2);
 		e2 = e3;

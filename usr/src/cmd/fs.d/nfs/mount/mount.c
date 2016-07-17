@@ -643,10 +643,8 @@ mount_nfs(struct mnttab *mntp, int ro, err_ret_t *retry_error)
 				if (r != RET_OK) {
 
 					if (replicated) {
-						if (argp->fh)
-							free(argp->fh);
-						if (argp->pathconf)
-							free(argp->pathconf);
+						free(argp->fh);
+						free(argp->pathconf);
 						free(argp);
 						goto cont;
 					}
@@ -797,14 +795,10 @@ cont:
 	}
 
 out:
-	if (saveopts != NULL)
-		free(saveopts);
-	if (special != NULL)
-		free(special);
-	if (oldpath != NULL)
-		free(oldpath);
-	if (newpath != NULL)
-		free(newpath);
+	free(saveopts);
+	free(special);
+	free(oldpath);
+	free(newpath);
 
 	free_replica(list, n);
 
@@ -820,12 +814,9 @@ out:
 	}
 	argp = args;
 	while (argp != NULL) {
-		if (argp->fh)
-			free(argp->fh);
-		if (argp->pathconf)
-			free(argp->pathconf);
-		if (argp->knconf)
-			free(argp->knconf);
+		free(argp->fh);
+		free(argp->pathconf);
+		free(argp->knconf);
 		if (argp->addr) {
 			free(argp->addr->buf);
 			free(argp->addr);
@@ -835,8 +826,7 @@ out:
 			free(argp->syncaddr->buf);
 			free(argp->syncaddr);
 		}
-		if (argp->netname)
-			free(argp->netname);
+		free(argp->netname);
 		prev_argp = argp;
 		argp = argp->nfs_ext_u.nfs_extB.next;
 		free(prev_argp);
@@ -992,10 +982,8 @@ set_args(int *mntflags, struct nfs_args *args, char *fshost, struct mnttab *mnt)
 	newopts = malloc(optlen);
 	if (opts == NULL || newopts == NULL) {
 		pr_err(gettext("no memory"));
-		if (opts)
-			free(opts);
-		if (newopts)
-			free(newopts);
+		free(opts);
+		free(newopts);
 		return (RET_ERR);
 	}
 	newopts[0] = '\0';

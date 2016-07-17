@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /* LINTLIBRARY */
 
 /*
@@ -386,24 +384,17 @@ del_curterm(TERMINAL *tp)
 	if (tp != NULL) {
 		if (cur_term == tp)
 			cur_term = NULL;
-		if (tp->_str_table != NULL)
-			free(tp->_str_table);
-		if (tp->_names != NULL)
-			free(tp->_names);
-		if (tp->_term != NULL)
-			free(tp->_term);
+		free(tp->_str_table);
+		free(tp->_names);
+		free(tp->_term);
 		if (tp->_pair != (short (*)[2]) 0)
 			free(tp->_pair);
 		if (tp->_color != (short (*)[3]) 0)
 			free(tp->_color);
-		if (tp->_shell)
-			free(tp->_shell);
-		if (tp->_prog)
-			free(tp->_prog);
-		if (tp->_save)
-			free(tp->_save);
-		if (tp->_actual)
-			free(tp->_actual);
+		free(tp->_shell);
+		free(tp->_prog);
+		free(tp->_save);
+		free(tp->_actual);
 		free(tp);
 	}
 
@@ -539,8 +530,7 @@ restartterm(char *tm, int fd, int *err_return)
 
 	__m_mvcur_cost();
 error:
-	if (filename != NULL)
-		free(filename);
+	free(filename);
 
 	if (terminfo != def_terminfo)
 		free((void *) terminfo);
@@ -562,12 +552,9 @@ error:
 	}
 
 	if (err_code == OK) {
-		if (old_names != NULL)
-			free(old_names);
-		if (old_strings != NULL)
-			free(old_strings);
-		if (old_term != NULL)
-			free(old_term);
+		free(old_names);
+		free(old_strings);
+		free(old_term);
 	}
 
 	return (err_code);

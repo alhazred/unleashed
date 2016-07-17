@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * RCM module supporting multiplexed I/O controllers (MPxIO).
  */
@@ -294,8 +292,7 @@ mpxio_getinfo(rcm_handle_t *hdl, char *rsrc, id_t id, uint_t flags,
 		*infostr = strdup(MPXIO_MSG_USAGEUNKNOWN);
 		*errstr = strdup(gettext("Cannot construct usage string."));
 		(void) mutex_unlock(&mpxio_lock);
-		if (buf)
-			free(buf);
+		free(buf);
 		return (RCM_FAILURE);
 	}
 	*infostr = buf;
@@ -928,8 +925,7 @@ free_clients(int nclients, char **clients)
 	if (clients != NULL) {
 		if (nclients > 0) {
 			for (i = 0; i < nclients; i++)
-				if (clients[i])
-					free(clients[i]);
+				free(clients[i]);
 		}
 		free(clients);
 	}
@@ -945,8 +941,7 @@ free_phcis(int nphcis, phci_t *phcis)
 
 	if ((phcis != NULL) && (nphcis > 0)) {
 		for (i = 0; i < nphcis; i++)
-			if (phcis[i].path)
-				free(phcis[i].path);
+			free(phcis[i].path);
 		free(phcis);
 	}
 }

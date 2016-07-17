@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "lint.h"
 #include "mtlib.h"
 #include <ctype.h>
@@ -272,8 +270,7 @@ parse_header(const char *header, Msg_g_node *gmnp)
 			return (0);
 		} else {
 			/* fatal error */
-			if (charset)
-				free(charset);
+			free(charset);
 			gmnp->src_encoding = (char *)nullstr;
 			gmnp->nplurals = 2;
 			gmnp->plural = NULL;

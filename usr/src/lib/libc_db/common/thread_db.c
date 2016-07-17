@@ -860,8 +860,7 @@ __td_ta_tsd_iter(td_thragent_t *ta_p, td_key_iter_f *cb, void *cbdata_p)
 #endif	/* _SYSCALL32 */
 	}
 
-	if (destructors)
-		free(destructors);
+	free(destructors);
 	(void) ps_pcontinue(ph_p);
 	ph_unlock(ta_p);
 	return (return_val);

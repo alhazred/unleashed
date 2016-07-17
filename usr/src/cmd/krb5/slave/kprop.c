@@ -339,8 +339,7 @@ void get_tickets(context)
 	retval = krb5_get_init_creds_keytab(context, &creds, creds.client,
 				keytab,  0, svcname, &opt);
 
-	if (svcname)
-		free(svcname);
+	free(svcname);
 
 	if (retval) {
 		com_err(progname, retval, gettext("while getting initial ticket\n"));

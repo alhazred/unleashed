@@ -277,8 +277,7 @@ ipp_add_printer_uri(service_t *svc, char *name, papi_attribute_t ***op)
 
 	/* save the printer-uri's path to be used by http POST request */
 	if ((uri_from_string(uri, &tmp) == 0) && (tmp != NULL)) {
-		if (svc->post != NULL)
-			free(svc->post);
+		free(svc->post);
 		svc->post = strdup(tmp->path);
 		uri_free(tmp);
 	}

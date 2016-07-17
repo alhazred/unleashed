@@ -227,13 +227,10 @@ notfound:
 err:
 	if (ptsize)
 		free(pt);
-	if (up)
-		free(up);
+	free(up);
 	if (dir)
 		(void)closedir(dir);
 	return (NULL);
 }
 
 #endif /* !defined(HAVE_GETCWD) */
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"

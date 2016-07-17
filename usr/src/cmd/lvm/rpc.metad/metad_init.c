@@ -123,8 +123,7 @@ check_host(
 
 	/* cleanup, return success */
 out:
-	if (inplace)
-		free(inplace);
+	free(inplace);
 	if (hservlistp != NULL)
 		netdir_free(hservlistp, ND_HOSTSERVLIST);
 	if (nconfp != NULL)

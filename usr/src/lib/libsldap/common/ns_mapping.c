@@ -300,10 +300,8 @@ __ns_ldap_freeASearchDesc(ns_ldap_search_desc_t *ptr)
 {
 	if (ptr == NULL)
 		return;
-	if (ptr->basedn)
-		free(ptr->basedn);
-	if (ptr->filter)
-		free(ptr->filter);
+	free(ptr->basedn);
+	free(ptr->filter);
 	free(ptr);
 }
 
@@ -585,8 +583,7 @@ __s_api_parseASearchDesc(const char *service,
 	}
 
 	if (empty || strlen(ptr->basedn) == 0) {
-		if (ptr->basedn)
-			free(ptr->basedn);
+		free(ptr->basedn);
 		/* get default base */
 		rc = __s_api_getDNs(&dns, service, &error);
 		if (rc != NS_LDAP_SUCCESS) {

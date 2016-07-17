@@ -520,8 +520,7 @@ open_dfstab(char *file)
 		(void) fchmod(fileno(dfstab), 0644);
 		(void) fchown(fileno(dfstab), 0,
 		    grp != NULL ? grp->gr_gid : 3);
-		if (buff != NULL)
-			free(buff);
+		free(buff);
 		rewind(dfstab);
 	}
 	return (dfstab);
@@ -1065,20 +1064,13 @@ dfs_free_list(xfs_sharelist_t *list)
 {
 	xfs_sharelist_t *entry;
 	for (entry = list; entry != NULL; entry = list) {
-		if (entry->path != NULL)
-			free(entry->path);
-		if (entry->resource != NULL)
-			free(entry->resource);
-		if (entry->fstype != NULL)
-			free(entry->fstype);
-		if (entry->options != NULL)
-			free(entry->options);
-		if (entry->description != NULL)
-			free(entry->description);
-		if (entry->origline != NULL)
-			free(entry->origline);
-		if (entry->group != NULL)
-			free(entry->group);
+		free(entry->path);
+		free(entry->resource);
+		free(entry->fstype);
+		free(entry->options);
+		free(entry->description);
+		free(entry->origline);
+		free(entry->group);
 		list = list->next;
 			free(entry);
 	}
@@ -1592,8 +1584,7 @@ gettransients(sa_handle_impl_t ihandle, xmlNodePtr *root)
 			for (i = 0; i < numproto; i++)
 				legacy |= sa_proto_get_transients(
 				    (sa_handle_t)ihandle, protocols[i]);
-			if (protocols != NULL)
-				free(protocols);
+			free(protocols);
 		}
 	}
 	return (legacy);
@@ -2062,20 +2053,15 @@ sa_fillshare(sa_share_t share, char *proto, struct share *sh)
 void
 sa_emptyshare(struct share *sh)
 {
-	if (sh->sh_path != NULL)
-		free(sh->sh_path);
+	free(sh->sh_path);
 	sh->sh_path = NULL;
-	if (sh->sh_res != NULL)
-		free(sh->sh_res);
+	free(sh->sh_res);
 	sh->sh_res = NULL;
-	if (sh->sh_fstype != NULL)
-		free(sh->sh_fstype);
+	free(sh->sh_fstype);
 	sh->sh_fstype = NULL;
-	if (sh->sh_opts != NULL)
-		free(sh->sh_opts);
+	free(sh->sh_opts);
 	sh->sh_opts = NULL;
-	if (sh->sh_descr != NULL)
-		free(sh->sh_descr);
+	free(sh->sh_descr);
 	sh->sh_descr = NULL;
 }
 

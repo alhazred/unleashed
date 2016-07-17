@@ -547,8 +547,7 @@ eprefs_done:
 	if (ret != 0) {
 		if (ep->ep_recips)
 			nd_free_strarray(ep->ep_recips, ep->ep_num_recips);
-		if (ep->ep_reply_to)
-			free(ep->ep_reply_to);
+		free(ep->ep_reply_to);
 		free(ep);
 	}
 	if (tn1)
@@ -585,8 +584,7 @@ irpt_cbfunc(fmev_t ev, const char *class, nvlist_t *nvl, void *arg)
 	 * of this function which will contruct the message body from one of the
 	 * default templates.
 	 */
-	if (eprefs->ep_template != NULL)
-		free(eprefs->ep_template);
+	free(eprefs->ep_template);
 
 	if (eprefs->ep_template_path != NULL &&
 	    process_template(ev_info, eprefs) == 0) {
@@ -661,8 +659,7 @@ irpt_done:
 		nd_free_event_info(ev_info);
 	if (eprefs->ep_recips)
 		nd_free_strarray(eprefs->ep_recips, eprefs->ep_num_recips);
-	if (eprefs->ep_reply_to)
-		free(eprefs->ep_reply_to);
+	free(eprefs->ep_reply_to);
 	free(eprefs);
 }
 
@@ -725,8 +722,7 @@ listev_cb(fmev_t ev, const char *class, nvlist_t *nvl, void *arg)
 	 * of this function which will contruct the message body from one of the
 	 * default templates.
 	 */
-	if (eprefs->ep_template != NULL)
-		free(eprefs->ep_template);
+	free(eprefs->ep_template);
 
 	if (eprefs->ep_template_path != NULL &&
 	    process_template(ev_info, eprefs) == 0) {
@@ -766,8 +762,7 @@ listcb_done:
 		nd_free_event_info(ev_info);
 	if (eprefs->ep_recips)
 		nd_free_strarray(eprefs->ep_recips, eprefs->ep_num_recips);
-	if (eprefs->ep_reply_to)
-		free(eprefs->ep_reply_to);
+	free(eprefs->ep_reply_to);
 	free(eprefs);
 }
 

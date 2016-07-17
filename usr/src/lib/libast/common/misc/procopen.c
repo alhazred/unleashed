@@ -721,8 +721,7 @@ sfsync(sfstderr);
 			goto bad;
 		}
 #if _use_spawnveg
-		if (v)
-			free(v);
+		free(v);
 		if (p = oenviron)
 		{
 			environ = 0;

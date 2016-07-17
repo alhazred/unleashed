@@ -319,12 +319,9 @@ pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **argv)
 		}
 	}
 out:
-	if (rep_passwd)
-		free(rep_passwd);
-	if (repository_name)
-		free(repository_name);
-	if (homedir)
-		free(homedir);
+	free(rep_passwd);
+	free(repository_name);
+	free(homedir);
 	return (result);
 }
 

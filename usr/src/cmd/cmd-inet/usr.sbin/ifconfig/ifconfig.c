@@ -2940,8 +2940,7 @@ ifstatus(const char *ifname)
 			}
 		}
 
-		if (lifs.lifs_buf != NULL)
-			free(lifs.lifs_buf);
+		free(lifs.lifs_buf);
 	}
 
 	/* Find the interface whose source address this interface uses */

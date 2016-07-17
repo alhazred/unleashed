@@ -47,8 +47,6 @@
  *	needed to deal with TCP connections.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "mt.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -631,8 +629,7 @@ error:
 			*uaddr = strdup(useua);
 			if (! *uaddr) {
 				msg("__rpc_get_time_offset: strdup failed.");
-				if (*netid)
-					free(*netid);
+				free(*netid);
 				if (needfree)
 					free_eps(teps, tsrv.ep.ep_len);
 				return (0);

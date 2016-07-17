@@ -1159,11 +1159,9 @@ end:
 		display_error(kmfhandle, rv,
 		    gettext("Error importing objects"));
 
-	if (tokencred.cred != NULL)
-		free(tokencred.cred);
+	free(tokencred.cred);
 
-	if (pk12cred.cred != NULL)
-		free(pk12cred.cred);
+	free(pk12cred.cred);
 
 	(void) kmf_finalize(kmfhandle);
 

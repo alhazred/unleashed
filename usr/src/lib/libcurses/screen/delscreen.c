@@ -37,8 +37,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*LINTLIBRARY*/
 
 #include	<stdio.h>
@@ -71,8 +69,7 @@ delscreen(SCREEN *screen)
 		free(screen->slk);
 	}
 	if (screen->_mks) {
-		if (*screen->_mks)
-			free(*screen->_mks);
+		free(*screen->_mks);
 		free((char *)screen->_mks);
 	}
 	if (screen->cur_hash)

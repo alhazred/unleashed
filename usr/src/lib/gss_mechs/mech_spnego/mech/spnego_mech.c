@@ -1510,8 +1510,7 @@ acc_ctx_new(OM_uint32 *minor_status,
 							"SPNEGO failed to negotiate a mechanism: client requested mech set '%s'"),
 				mechTypesStr ? mechTypesStr : "<null>");
 		}
-		if (mechTypesStr)
-			free(mechTypesStr);
+		free(mechTypesStr);
 
 		/*
 		 * We save error here cuz the tmp ctx goes away (very) soon.
@@ -1718,8 +1717,7 @@ acc_ctx_vfy_oid(OM_uint32 *minor_status,
 				mech_set_str ? mech_set_str : "<null>");
 			if (!maj)
 			        (void) gss_release_buffer(&min, &oidstr);
-			if (mech_set_str)
-				free(mech_set_str);
+			free(mech_set_str);
 		}
 		map_errcode(minor_status);
 		*negState = REJECT;
@@ -3518,8 +3516,7 @@ make_spnego_tokenInit_msg(spnego_gss_ctx_id_t spnego_ctx,
 
 errout:
 	if (ret != 0) {
-		if (t)
-			free(t);
+		free(t);
 		t = NULL;
 		tlen = 0;
 	}
@@ -3715,8 +3712,7 @@ make_spnego_tokenTarg_msg(OM_uint32 status, gss_OID mech_wanted,
 	ret = GSS_S_COMPLETE;
 errout:
 	if (ret != GSS_S_COMPLETE) {
-		if (t)
-			free(t);
+		free(t);
 	} else {
 		outbuf->length = ptr - t;
 		outbuf->value = (void *) t;

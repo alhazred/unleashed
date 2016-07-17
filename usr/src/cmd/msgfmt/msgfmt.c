@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "sun_msgfmt.h"
 
 static void	read_psffm(char *);
@@ -521,8 +519,7 @@ warning(gettext(WARN_MISSING_QUOTE_AT_EOL), linenum);
 		sortit(gmsgid, gmsgstr);
 	}
 
-	if (linebufhead)
-		free(linebufhead);
+	free(linebufhead);
 	if (munmap(addr, statbuf.st_size) == -1) {
 		error(gettext(ERR_MUNMAP_FAILED), filename);
 		/* NOTREACHED */

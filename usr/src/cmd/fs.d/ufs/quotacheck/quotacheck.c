@@ -36,8 +36,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Fix up / report on disc quotas & usage
  */
@@ -297,8 +295,7 @@ preen(int listcnt, char **listp)
 			serially = 1;
 		}
 
-		if (rdev != NULL)
-			free(rdev);
+		free(rdev);
 
 		if (serially) {
 			rewind(mtab);
@@ -322,8 +319,7 @@ preen(int listcnt, char **listp)
 			if (bdev == NULL || *bdev == '\0') {
 				fprintf(stderr, "can't get blkname for `%s'\n",
 				    name);
-				if (bdev)
-					free(bdev);
+				free(bdev);
 				continue;
 			}
 			rewind(mtab);

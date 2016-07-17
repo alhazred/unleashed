@@ -529,8 +529,7 @@ read_resume_cfg()
 
 	while (i < n_structs)
 		free(entry[i++]);
-	if (entry)
-		free(entry);
+	free(entry);
 
 	cfg_close(cfg);
 	return (valid_sets);

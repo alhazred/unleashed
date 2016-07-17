@@ -1,6 +1,3 @@
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
 ** 2001 September 15
 **
@@ -200,7 +197,7 @@ void sqlite_free_table(
     azResult--;
     if( azResult==0 ) return;
     n = (int)(long)azResult[0];
-    for(i=1; i<n; i++){ if( azResult[i] ) free(azResult[i]); }
+    for(i=1; i<n; i++){ free(azResult[i]); }
     free(azResult);
   }
 }

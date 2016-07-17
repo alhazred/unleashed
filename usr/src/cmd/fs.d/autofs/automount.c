@@ -457,10 +457,8 @@ compare_opts(opts, mntopts)
 	}
 
 done:
-	if (opttbl1 != NULL)
-		free(opttbl1);
-	if (opttbl2 != NULL)
-		free(opttbl2);
+	free(opttbl1);
+	free(opttbl2);
 	return (notsame);
 }
 

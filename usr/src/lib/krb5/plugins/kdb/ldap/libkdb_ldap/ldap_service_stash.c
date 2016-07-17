@@ -3,8 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * lib/kdb/kdb_ldap/ldap_service_stash.c
  *
@@ -183,8 +181,7 @@ got_password:
 
 rp_exit:
     if (st) {
-	if (*password)
-	    free (*password);
+	free(*password);
 	*password = NULL;
     }
     return st;

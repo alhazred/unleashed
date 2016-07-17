@@ -1204,8 +1204,7 @@ gather_map(void *ignored, const prmap_t *map, const char *objname)
 
 	data = nextmap();
 	data->md_map = *map;
-	if (data->md_objname != NULL)
-		free(data->md_objname);
+	free(data->md_objname);
 	data->md_objname = objname ? strdup(objname) : NULL;
 
 	return (0);
@@ -1225,8 +1224,7 @@ gather_xmap(void *ignored, const prxmap_t *xmap, const char *objname,
 
 	data = nextmap();
 	data->md_xmap = *xmap;
-	if (data->md_objname != NULL)
-		free(data->md_objname);
+	free(data->md_objname);
 	data->md_objname = objname ? strdup(objname) : NULL;
 	data->md_last = last;
 	data->md_doswap = doswap;

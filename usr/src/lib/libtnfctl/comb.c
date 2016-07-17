@@ -23,8 +23,6 @@
  * Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Functions that know how to create and decode combinations that are
  * used for connecting probe functions.
@@ -308,10 +306,8 @@ decode(tnfctl_handle_t *hndl, uintptr_t addr, char ***func_names,
 
 Error:
 	if (new_p) {
-		if (new_p->name_ptrs)
-			free(new_p->name_ptrs);
-		if (new_p->func_addrs)
-			free(new_p->func_addrs);
+		free(new_p->name_ptrs);
+		free(new_p->func_addrs);
 		free(new_p);
 	}
 	return (prexstat);
@@ -415,8 +411,7 @@ iscomb(tnfctl_handle_t *hndl,
 
 NextComb:
 		/* free allocated memory */
-		if (targ_p)
-			free(targ_p);
+		free(targ_p);
 
 		if (matched) {
 			*down_p = downaddr;
@@ -652,7 +647,6 @@ build(tnfctl_handle_t *hndl, comb_op_t op, uintptr_t down, uintptr_t next,
 	prexstat = add(hndl, op, down, next, addr);
 
 Error:
-	if (buffer_p)
-		free(buffer_p);
+	free(buffer_p);
 	return (prexstat);
 }

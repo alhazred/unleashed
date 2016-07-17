@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Just in case we're not in a build environment, make sure that
  * TEXT_DOMAIN gets set to something.
@@ -114,8 +112,7 @@ meta_get_hsp_names(
 	return (gn.size);
 
 out:
-	if (minors != NULL)
-		free(minors);
+	free(minors);
 	metafreehspnamelist(*hspnlpp);
 	*hspnlpp = NULL;
 	return (-1);

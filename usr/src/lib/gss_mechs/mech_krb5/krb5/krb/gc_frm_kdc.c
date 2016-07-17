@@ -815,8 +815,7 @@ cleanup:
 	krb5_free_realm_tree(ctx, ts->kdc_list);
     if (ts->ntgts == 0) {
 	*out_kdc_tgts = NULL;
-	if (ts->kdc_tgts != NULL)
-	    free(ts->kdc_tgts);
+	free(ts->kdc_tgts);
     } else
 	*out_kdc_tgts = ts->kdc_tgts;
     return retval;

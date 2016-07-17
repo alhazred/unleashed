@@ -337,8 +337,7 @@ audit_cron_session(
 		audit_cron_session_failure(name,
 		    at_jobname == NULL,
 		    err_str);
-		if (anc_file != NULL)
-			free(anc_file);
+		free(anc_file);
 		return (r);
 	}
 

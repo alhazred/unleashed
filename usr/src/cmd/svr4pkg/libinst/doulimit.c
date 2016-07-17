@@ -72,11 +72,9 @@ int
 clr_ulimit()
 {
 	if (limit_is_set) {
-		if (script_name)
-			free(script_name);
+		free(script_name);
 		script_name = NULL;
-		if (scr_error)
-			free(scr_error);
+		free(scr_error);
 		scr_error = NULL;
 		fail_return = 99;
 
@@ -98,11 +96,9 @@ set_ulimit(char *script, char *err_msg)
 
 	if (limit_is_set) {
 		(void) signal(SIGXFSZ, ulimit_quit);
-		if (script_name)
-			free(script_name);
+		free(script_name);
 		script_name = strdup(script);
-		if (scr_error)
-			free(scr_error);
+		free(scr_error);
 		scr_error = strdup(err_msg);
 		fail_return = 99;
 

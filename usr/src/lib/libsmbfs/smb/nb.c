@@ -123,10 +123,8 @@ nb_ctx_done(struct nb_ctx *ctx)
 {
 	if (ctx == NULL)
 		return;
-	if (ctx->nb_scope)
-		free(ctx->nb_scope);
-	if (ctx)
-		free(ctx);
+	free(ctx->nb_scope);
+	free(ctx);
 }
 
 void
@@ -208,8 +206,7 @@ nb_ctx_setscope(struct nb_ctx *ctx, const char *scope)
 		    "scope '%s' is too long"), 0, scope);
 		return (ENAMETOOLONG);
 	}
-	if (ctx->nb_scope)
-		free(ctx->nb_scope);
+	free(ctx->nb_scope);
 	ctx->nb_scope = malloc(slen + 1);
 	if (ctx->nb_scope == NULL)
 		return (ENOMEM);

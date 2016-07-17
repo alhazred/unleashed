@@ -772,8 +772,7 @@ smbd_dop_vss_get_snapshots(smbd_arg_t *arg)
 
 	for (i = 0, gmtp = reply.gtr_gmttokens.gtr_gmttokens_val;
 	    (i < request.gtq_count); i++) {
-		if (*gmtp)
-			free(*gmtp);
+		free(*gmtp);
 		gmtp++;
 	}
 

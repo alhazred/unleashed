@@ -999,7 +999,7 @@ xdr_krb5_principal(XDR *xdrs, krb5_principal *objp)
 	}
 	if(!xdr_nullstring(xdrs, &p))
 	    return FALSE;
-	if (p) free(p);
+	free(p);
 	break;
     case XDR_DECODE:
 	if(!xdr_nullstring(xdrs, &p))

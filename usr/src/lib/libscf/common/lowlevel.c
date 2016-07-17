@@ -6954,10 +6954,8 @@ error:
 
 				next = key->sk_next;
 
-				if (key->sk_fmri != NULL)
-					free(key->sk_fmri);
-				if (key->sk_legacy != NULL)
-					free(key->sk_legacy);
+				free(key->sk_fmri);
+				free(key->sk_legacy);
 				free(key);
 			}
 		}
@@ -6967,8 +6965,7 @@ error:
 		for (i = 0; i < argc; i++) {
 			scf_match_t *match, *next;
 
-			if (pattern[i].sp_arg != NULL)
-				free(pattern[i].sp_arg);
+			free(pattern[i].sp_arg);
 
 			for (match = pattern[i].sp_matches; match != NULL;
 			    match = next) {

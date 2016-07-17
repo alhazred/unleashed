@@ -81,8 +81,7 @@ nwam_event_alloc(nwam_event_t *eventp)
 void
 nwam_event_free(nwam_event_t event)
 {
-	if (event != NULL)
-		free(event);
+	free(event);
 }
 
 /*

@@ -2097,8 +2097,7 @@ _nscd_cfg_get(
 	error_exit:
 
 	_nscd_cfg_unlock(lock);
-	if (ptr != NULL)
-		free(ptr);
+	free(ptr);
 
 	return (rc);
 }

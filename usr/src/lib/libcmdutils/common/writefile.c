@@ -164,10 +164,8 @@ writefile(int fi, int fo, char *infile, char *outfile, char *asfile,
 				(void) munmap(cp, munmapsize);
 				if (S_ISREG(s2p->st_mode))
 					(void) unlink(targbuf);
-				if (srcbuf != NULL)
-					free(srcbuf);
-				if (targbuf != NULL)
-					free(targbuf);
+				free(srcbuf);
+				free(targbuf);
 				return (1);
 			}
 			filesize -= nbytes;
@@ -184,10 +182,8 @@ writefile(int fi, int fo, char *infile, char *outfile, char *asfile,
 				(void) munmap(cp, munmapsize);
 				if (S_ISREG(s2p->st_mode))
 					(void) unlink(targbuf);
-				if (srcbuf != NULL)
-					free(srcbuf);
-				if (targbuf != NULL)
-					free(targbuf);
+				free(srcbuf);
+				free(targbuf);
 				return (1);
 			}
 		}
@@ -203,27 +199,21 @@ writefile(int fi, int fo, char *infile, char *outfile, char *asfile,
 				(void) close(fo);
 				if (S_ISREG(s2p->st_mode))
 					(void) unlink(targbuf);
-				if (srcbuf != NULL)
-					free(srcbuf);
-				if (targbuf != NULL)
-					free(targbuf);
+				free(srcbuf);
+				free(targbuf);
 				return (1);
 			} else if (write(fo, buf, n) != n) {
 				(void) close(fi);
 				(void) close(fo);
 				if (S_ISREG(s2p->st_mode))
 					(void) unlink(targbuf);
-				if (srcbuf != NULL)
-					free(srcbuf);
-				if (targbuf != NULL)
-					free(targbuf);
+				free(srcbuf);
+				free(targbuf);
 				return (1);
 			}
 		}
 	}
-	if (srcbuf != NULL)
-		free(srcbuf);
-	if (targbuf != NULL)
-		free(targbuf);
+	free(srcbuf);
+	free(targbuf);
 	return (0);
 }

@@ -1774,8 +1774,7 @@ cfg_lock(CFGFILE *cfg, CFGLOCK mode)
 				cfp->cf_head->h_sizes2 = NULL;
 			}
 
-			if (cfp->cf_head)
-				free(cfp->cf_head);
+			free(cfp->cf_head);
 			cfp->cf_head = NULL;
 		}
 
@@ -2843,8 +2842,7 @@ cfg_close(CFGFILE *cfg)
 			}
 
 		}
-		if (cfp->cf_head)
-			free(cfp->cf_head);
+		free(cfp->cf_head);
 	}
 
 	free(cfg);
@@ -3224,8 +3222,7 @@ cfg_get_tags(CFGFILE *cfg, char ***taglist)
 		list[i] = strdup(chead[i].tag.l_word);
 		if (list[i] == NULL) {
 			for (/* CSTYLE */; i >= 0; i--) {
-				if (list[i])
-					free(list[i]);
+				free(list[i]);
 			}
 			free(list);
 			errno = ENOMEM;

@@ -32,8 +32,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "mt.h"
 #include "rpc_mt.h"
 #include <stdio.h>
@@ -475,10 +473,8 @@ clnt_create_service_timed(const char *host, const char *service,
 		(void) t_free((char *)tbind, T_BIND);
 
 done:
-	if (hostname)
-		free(hostname);
-	if (serv)
-		free(serv);
+	free(hostname);
+	free(serv);
 
 	return (clnt);
 }
@@ -549,8 +545,7 @@ clnt_tp_create_timed(const char *hostname, const rpcprog_t prog,
 				cl->cl_tp = strdup(nconf->nc_device);
 				if (cl->cl_tp == NULL) {
 					netdir_free((char *)svcaddr, ND_ADDR);
-					if (cl->cl_netid)
-						free(cl->cl_netid);
+					free(cl->cl_netid);
 					rpc_createerr.cf_stat = RPC_SYSTEMERROR;
 					syslog(LOG_ERR,
 						"clnt_tp_create_timed: "
@@ -688,8 +683,7 @@ _clnt_tli_create_timed(int fd, const struct netconfig *nconf,
 		}
 		cl->cl_tp = strdup(nconf->nc_device);
 		if (cl->cl_tp == NULL) {
-			if (cl->cl_netid)
-				free(cl->cl_netid);
+			free(cl->cl_netid);
 			rpc_createerr.cf_stat = RPC_SYSTEMERROR;
 			rpc_createerr.cf_error.re_errno = errno;
 			rpc_createerr.cf_error.re_terrno = 0;
@@ -716,8 +710,7 @@ _clnt_tli_create_timed(int fd, const struct netconfig *nconf,
 			if (nc->nc_device) {
 				cl->cl_tp = strdup(nc->nc_device);
 				if (cl->cl_tp == NULL) {
-					if (cl->cl_netid)
-						free(cl->cl_netid);
+					free(cl->cl_netid);
 					rpc_createerr.cf_stat = RPC_SYSTEMERROR;
 					rpc_createerr.cf_error.re_errno = errno;
 					rpc_createerr.cf_error.re_terrno = 0;

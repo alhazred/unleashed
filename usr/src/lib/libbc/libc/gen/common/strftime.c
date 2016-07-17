@@ -28,8 +28,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #if !defined(lint) && defined(SCCSIDS)
 static char *sccsid = "%Z%%M% %I% %E% SMI"; /* from S5R3.1 cftime.c 1.9 */
 #endif
@@ -498,8 +496,7 @@ initial:
 	/*
 	 * set info.
 	 */
-	if (dtconv_str != NULL)
-		free(dtconv_str);
+	free(dtconv_str);
 
 	dtconv_str = str;
 

@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*LINTLIBRARY*/
 
 #include <stdlib.h>
@@ -85,8 +83,7 @@ papiServiceDestroy(papi_service_t handle)
 	if (svc != NULL) {
 		if (svc->md != NULL)
 			mdisconnect(svc->md);
-		if (svc->msgbuf != NULL)
-			free(svc->msgbuf);
+		free(svc->msgbuf);
 		papiAttributeListFree(svc->attributes);
 		free(svc);
 	}

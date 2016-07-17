@@ -701,10 +701,8 @@ init_device(ig_device_t *device, char *path)
 static void
 cleanup_device(ig_device_t *device)
 {
-	if (device->path)
-		free(device->path);
-	if (device->path_p0)
-		free(device->path_p0);
+	free(device->path);
+	free(device->path_p0);
 
 	if (device->part_fd != -1)
 		(void) close(device->part_fd);
@@ -719,8 +717,7 @@ cleanup_device(ig_device_t *device)
 static void
 cleanup_stage2(ig_stage2_t *stage2)
 {
-	if (stage2->buf)
-		free(stage2->buf);
+	free(stage2->buf);
 	bzero(stage2, sizeof (ig_stage2_t));
 }
 

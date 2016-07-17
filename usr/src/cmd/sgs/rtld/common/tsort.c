@@ -295,8 +295,7 @@ visit(Lm_list *lml, Rt_map *lmp, Sort *sort, int flag)
 		if (tracing && (aplist_append(&sort->s_scc, alp,
 		    AL_CNT_SCC) == NULL))
 			return (0);
-	} else if (alp)
-		free(alp);
+	} else free(alp);
 
 	return (1);
 }

@@ -461,8 +461,7 @@ showxdr_string(int len, /* XDR length */
 	len++;
 
 	if ((len > buff_len) || (buff_len == 0)) {
-		if (buff)
-			free(buff);
+		free(buff);
 		if ((buff = (char *)malloc(len)) == NULL)
 			pr_err("showxdr_string: no mem");
 		buff_len = len;

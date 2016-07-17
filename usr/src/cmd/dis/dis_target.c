@@ -590,8 +590,7 @@ dis_tgt_destroy(dis_tgt_t *tgt)
 		next = current->dt_next;
 		if (current->dt_elf)
 			(void) elf_end(current->dt_elf);
-		if (current->dt_symtab)
-			free(current->dt_symtab);
+		free(current->dt_symtab);
 		free(current);
 		current = next;
 	}
@@ -601,8 +600,7 @@ dis_tgt_destroy(dis_tgt_t *tgt)
 	if (tgt->dt_elf_root)
 		(void) elf_end(tgt->dt_elf_root);
 
-	if (tgt->dt_symtab)
-		free(tgt->dt_symtab);
+	free(tgt->dt_symtab);
 
 	free(tgt);
 }

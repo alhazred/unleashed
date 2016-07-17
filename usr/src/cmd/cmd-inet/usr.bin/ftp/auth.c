@@ -3,8 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Copyright (c) 1985, 1989 Regents of the University of California.
  * All rights reserved.
@@ -267,8 +265,7 @@ outer_loop:
 	    } /* end for loop */
 
 	    verbose = oldverbose;
-	    if (out_buf != NULL)
-		free(out_buf);
+	    free(out_buf);
 
 	    if (maj_stat == GSS_S_COMPLETE) {
 		(void) printf("GSSAPI authentication succeeded\n");

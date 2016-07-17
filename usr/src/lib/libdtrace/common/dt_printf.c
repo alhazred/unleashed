@@ -1572,8 +1572,7 @@ dtrace_sprintf(dtrace_hdl_t *dtp, FILE *fp, void *fmtdata,
 	assert(rval == 0);
 	assert(dtp->dt_sprintf_buflen == 0);
 
-	if (dtp->dt_sprintf_buf != NULL)
-		free(dtp->dt_sprintf_buf);
+	free(dtp->dt_sprintf_buf);
 
 	if ((dtp->dt_sprintf_buf = malloc(size)) == NULL)
 		return (dt_set_errno(dtp, EDT_NOMEM));

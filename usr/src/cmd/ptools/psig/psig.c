@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdio_ext.h>
 #include <stdlib.h>
@@ -346,10 +344,8 @@ look(char *arg)
 look_error:
 	if (fd >= 0)
 		(void) close(fd);
-	if (aharr)
-		free(aharr);
-	if (action)
-		free(action);
+	free(aharr);
+	free(action);
 	if (Pr)
 		Prelease(Pr, 0);
 	return (error);

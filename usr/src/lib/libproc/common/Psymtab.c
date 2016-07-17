@@ -248,38 +248,29 @@ file_info_free(struct ps_prochandle *P, file_info_t *fptr)
 			(void) elf_end(fptr->file_symtab.sym_elf);
 			free(fptr->file_symtab.sym_elfmem);
 		}
-		if (fptr->file_symtab.sym_byname)
-			free(fptr->file_symtab.sym_byname);
-		if (fptr->file_symtab.sym_byaddr)
-			free(fptr->file_symtab.sym_byaddr);
+		free(fptr->file_symtab.sym_byname);
+		free(fptr->file_symtab.sym_byaddr);
 
 		if (fptr->file_dynsym.sym_elf) {
 			(void) elf_end(fptr->file_dynsym.sym_elf);
 			free(fptr->file_dynsym.sym_elfmem);
 		}
-		if (fptr->file_dynsym.sym_byname)
-			free(fptr->file_dynsym.sym_byname);
-		if (fptr->file_dynsym.sym_byaddr)
-			free(fptr->file_dynsym.sym_byaddr);
+		free(fptr->file_dynsym.sym_byname);
+		free(fptr->file_dynsym.sym_byaddr);
 
-		if (fptr->file_lo)
-			free(fptr->file_lo);
-		if (fptr->file_lname)
-			free(fptr->file_lname);
-		if (fptr->file_rname)
-			free(fptr->file_rname);
+		free(fptr->file_lo);
+		free(fptr->file_lname);
+		free(fptr->file_rname);
 		if (fptr->file_elf)
 			(void) elf_end(fptr->file_elf);
-		if (fptr->file_elfmem != NULL)
-			free(fptr->file_elfmem);
+		free(fptr->file_elfmem);
 		if (fptr->file_fd >= 0)
 			(void) close(fptr->file_fd);
 		if (fptr->file_ctfp) {
 			ctf_close(fptr->file_ctfp);
 			free(fptr->file_ctf_buf);
 		}
-		if (fptr->file_saddrs)
-			free(fptr->file_saddrs);
+		free(fptr->file_saddrs);
 		free(fptr);
 		P->num_files--;
 	}
@@ -546,8 +537,7 @@ Pupdate_maps(struct ps_prochandle *P)
 	}
 
 	free(Pmap);
-	if (P->mappings != NULL)
-		free(P->mappings);
+	free(P->mappings);
 	P->mappings = newmap;
 	P->map_count = P->map_alloc = nmap;
 	P->info_valid = 1;
@@ -1933,8 +1923,7 @@ done:
 	return;
 
 bad:
-	if (cache != NULL)
-		free(cache);
+	free(cache);
 
 	(void) elf_end(elf);
 	fptr->file_elf = NULL;

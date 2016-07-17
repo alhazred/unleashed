@@ -347,7 +347,7 @@ get_passwd_defaults(pam_handle_t *pamh, char *user, struct pwdefaults *p)
 void
 free_passwd_defaults(struct pwdefaults *p)
 {
-	if (p && p->dicts)
+	if (p)
 		free(p->dicts);
 }
 

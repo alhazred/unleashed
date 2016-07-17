@@ -550,8 +550,7 @@ second_parser_pass(__nis_table_mapping_t **table_mapping)
 						    " ", &lasts);
 					}
 
-					if (tobj)
-						free(tobj);
+					free(tobj);
 
 					if (alias ||
 					    (objName = s_strdup(t->objName))
@@ -570,10 +569,8 @@ second_parser_pass(__nis_table_mapping_t **table_mapping)
 					    "%s: Cannot allocate memory",
 							    myself);
 						}
-						if (dupalias)
-							free(dupalias);
-						if (t->objName)
-							free(t->objName);
+						free(dupalias);
+						free(t->objName);
 						return (2);
 
 					}
@@ -589,8 +586,7 @@ second_parser_pass(__nis_table_mapping_t **table_mapping)
 	    "Error merging information from the %s to the %s mapping structure",
 				    tg->dbId, t->dbId);
 				objs = NULL;
-				if (objName)
-					free(objName);
+				free(objName);
 				return (1);
 			}
 		}
@@ -610,8 +606,7 @@ second_parser_pass(__nis_table_mapping_t **table_mapping)
 	    "Error merging information from the %s to the %s mapping structure",
 					    t->dbId, t2->dbId);
 					objs = NULL;
-					if (objName)
-						free(objName);
+					free(objName);
 					return (1);
 				}
 				t->isMaster = 1;
@@ -630,8 +625,7 @@ second_parser_pass(__nis_table_mapping_t **table_mapping)
 				    "Error creating a new mapping structure %s",
 					    objs);
 					objs = NULL;
-					if (objName)
-						free(objName);
+					free(objName);
 					return (1);
 				}
 			}
@@ -645,8 +639,7 @@ second_parser_pass(__nis_table_mapping_t **table_mapping)
 	    "Error merging information from the %s to the %s mapping structure",
 						    t->dbId, t2->dbId);
 						objs = NULL;
-						if (objName)
-							free(objName);
+						free(objName);
 						return (1);
 					}
 					t->isMaster = 1;
@@ -669,8 +662,7 @@ second_parser_pass(__nis_table_mapping_t **table_mapping)
 				    "Error creating a new mapping structure %s",
 						    objs);
 						objs = NULL;
-						if (objName)
-							free(objName);
+						free(objName);
 						return (1);
 					}
 				}
@@ -1153,8 +1145,7 @@ check_domain_specific_order(const char *sd,
 			dbId = NULL;
 		} /* end of t loop */
 	} /* end of i loop */
-	if (dbId)
-		free(dbId);
+	free(dbId);
 	dbId = NULL;
 	return (0);
 }
@@ -1292,8 +1283,7 @@ char   *DomainLabel, char *Domain)
 		}
 		append_dot(&tmp_map->dbId);
 	}
-	if (tmp_dbId)
-		free(tmp_dbId);
+	free(tmp_dbId);
 	tmp_dbId = NULL;
 
 	if (getfullmapname(&tmp_map->objName, DomainLabel))

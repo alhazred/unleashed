@@ -97,8 +97,7 @@ ng_close(struct irs_ng *this) {
 	struct pvt *pvt = (struct pvt *)this->private;
 	
 	ng_minimize(this);
-	if (pvt->curgroup)
-		free(pvt->curgroup);
+	free(pvt->curgroup);
 	memput(pvt, sizeof *pvt);
 	memput(this, sizeof *this);
 }
@@ -151,8 +150,7 @@ ng_rewind(struct irs_ng *this, const char *group) {
 	
 	pvt->rule = pvt->rules;
 	if (pvt->rule) {
-		if (pvt->curgroup)
-			free(pvt->curgroup);
+		free(pvt->curgroup);
 		pvt->curgroup = strdup(group);
 		ng = pvt->rule->inst->ng;
 		(*ng->rewind)(ng, pvt->curgroup);

@@ -2166,8 +2166,7 @@ out:
 	(void) pthread_mutex_unlock(&base_key->object_mutex);
 	if (attrs != NULL) {
 		for (i = 0; i < count; i++) {
-			if (attrs[i].oa_value != NULL)
-				free(attrs[i].oa_value);
+			free(attrs[i].oa_value);
 		}
 		free(attrs);
 	}
@@ -2308,10 +2307,8 @@ derive_key_by_value(CK_MECHANISM_PTR pMechanism, CK_ATTRIBUTE_PTR pTemplate,
 	return (CKR_OK);
 
 failed_exit:
-	if (key_buf != NULL)
-		free(key_buf);
-	if (newTemplate != NULL)
-		free(newTemplate);
+	free(key_buf);
+	free(newTemplate);
 	free_attributes(obj_ndk.ndk_in_attributes, &obj_ndk.ndk_in_count);
 	free_attributes(obj_ndk.ndk_out_attributes, &obj_ndk.ndk_out_count);
 	free_attributes((caddr_t)obj_ndk.ndk_base_key.ck_attrs,

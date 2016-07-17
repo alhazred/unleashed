@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /* LINTLIBRARY */
 
 /*
@@ -417,14 +415,11 @@ delscreen(SCREEN *sp)
 
 		__m_decode_free((t_decode **) &sp->_decode);
 
-		if (sp->_hash != NULL)
-			free(sp->_hash);
+		free(sp->_hash);
 
-		if (sp->_unget._stack != NULL)
-			free(sp->_unget._stack);
+		free(sp->_unget._stack);
 
-		if (sp->_in != NULL)
-			free(sp->_in);
+		free(sp->_in);
 
 		free(sp);
 	}

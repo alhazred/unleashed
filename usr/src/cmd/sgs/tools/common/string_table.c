@@ -314,23 +314,19 @@ st_destroy(Str_tbl *stp)
 	 */
 	for (mstr = stp->st_mstrlist, pmstr = 0; mstr;
 	    mstr = mstr->sm_next) {
-		if (pmstr)
-			free(pmstr);
+		free(pmstr);
 		pmstr = mstr;
 	}
-	if (pmstr)
-		free(pmstr);
+	free(pmstr);
 
 	if (stp->st_hashbcks) {
 		for (i = 0; i < stp->st_hbckcnt; i++) {
 			for (sthash = stp->st_hashbcks[i], psthash = 0;
 			    sthash; sthash = sthash->hi_next) {
-				if (psthash)
-					free(psthash);
+				free(psthash);
 				psthash = sthash;
 			}
-			if (psthash)
-				free(psthash);
+			free(psthash);
 		}
 		free(stp->st_hashbcks);
 	}

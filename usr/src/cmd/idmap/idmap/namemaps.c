@@ -311,26 +311,19 @@ idmap_fini_namemaps(idmap_nm_handle_t *p)
 	if (p == NULL)
 		return;
 
-	if (p->ad_unixgroup_attr != NULL)
-		free(p->ad_unixgroup_attr);
+	free(p->ad_unixgroup_attr);
 
-	if (p->ad_unixuser_attr != NULL)
-		free(p->ad_unixuser_attr);
+	free(p->ad_unixuser_attr);
 
-	if (p->nldap_winname_attr)
-		free(p->nldap_winname_attr);
+	free(p->nldap_winname_attr);
 
-	if (p->windomain != NULL)
-		free(p->windomain);
+	free(p->windomain);
 
-	if (p->default_domain != NULL)
-		free(p->default_domain);
+	free(p->default_domain);
 
-	if (p->saslmech != NULL)
-		free(p->saslmech);
+	free(p->saslmech);
 
-	if (p->ad_host != NULL)
-		free(p->ad_host);
+	free(p->ad_host);
 
 	if (p->nsc.cred.unix_cred.userID != NULL) {
 		free(p->nsc.cred.unix_cred.userID);
@@ -931,14 +924,11 @@ idmap_set_namemap(idmap_nm_handle_t *p, char *winname, char *unixname,
 	}
 
 cleanup:
-	if (dn != NULL)
-		free(dn);
+	free(dn);
 
-	if (oldwindomain != NULL)
-		free(oldwindomain);
+	free(oldwindomain);
 
-	if (oldwinname != NULL)
-		free(oldwinname);
+	free(oldwinname);
 
 	return (rc);
 
@@ -992,12 +982,9 @@ idmap_unset_namemap(idmap_nm_handle_t *p, char *winname, char *unixname,
 	}
 
 cleanup:
-	if (oldwindomain != NULL)
-		free(oldwindomain);
-	if (oldwinname != NULL)
-		free(oldwinname);
-	if (dn != NULL)
-		free(dn);
+	free(oldwindomain);
+	free(oldwinname);
+	free(dn);
 	return (rc);
 }
 

@@ -234,8 +234,7 @@ out:
 	if (outdata.data)
 		krb5_free_data_contents(kctx, &outdata);
 
-	if (indata.data)
-		free(indata.data);
+	free(indata.data);
 
 	/* Free kctx in krb5ssp_destroy */
 	return (kerr);
@@ -272,10 +271,8 @@ krb5ssp_put_request(struct ssp_ctx *sp, struct mbdata *out_mb)
 		ctx->ct_hflags2 |= SMB_FLAGS2_SECURITY_SIGNATURE;
 
 out:
-	if (gtok)
-		free(gtok);
-	if (tkt)
-		free(tkt);
+	free(gtok);
+	free(tkt);
 
 	return (err);
 }

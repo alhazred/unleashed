@@ -597,8 +597,7 @@ invalid_security(char *options)
 			}
 		}
 	}
-	if (copy != NULL)
-		free(copy);
+	free(copy);
 	return (ret);
 }
 
@@ -1394,8 +1393,7 @@ nfs_sprint_option(char **rbuff, size_t *rbuffsize, size_t incr,
 			buff = realloc(buff, buffsize);
 			if (buff == NULL) {
 				/* realloc failed so free everything */
-				if (*rbuff != NULL)
-					free(*rbuff);
+				free(*rbuff);
 			}
 			*rbuff = buff;
 			*rbuffsize = buffsize;
@@ -2023,8 +2021,7 @@ nfs_enable_share(sa_share_t share)
 	}
 
 out:
-	if (path != NULL)
-		free(path);
+	free(path);
 
 	cleanup_export(&export);
 	if (opt != NULL)

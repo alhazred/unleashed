@@ -1184,8 +1184,7 @@ sa_get_group(sa_handle_t handle, char *groupname)
 	}
 	if (node != NULL && (char *)group != NULL)
 		(void) sa_get_instance(impl_handle->scfhandle, (char *)group);
-	if (group != NULL)
-		free(group);
+	free(group);
 	return ((sa_group_t)(node));
 }
 

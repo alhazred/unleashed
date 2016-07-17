@@ -222,8 +222,7 @@ txml_print_prop(topo_hdl_t *thp, FILE *fp, tnode_t *node, const char *pgname,
 	if (fmri != NULL)
 		topo_hdl_strfree(thp, fmri);
 
-	if (aval != NULL)
-		free(aval);
+	free(aval);
 }
 
 static void

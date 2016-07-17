@@ -791,11 +791,9 @@ kmf_sign_data(KMF_HANDLE_T handle, int numattr,
 	}
 
 cleanup:
-	if (new_attrlist != NULL)
-		free(new_attrlist);
+	free(new_attrlist);
 
-	if (signature.Data)
-		free(signature.Data);
+	free(signature.Data);
 
 	if (signer_cert != NULL && sign_key_ptr != NULL)
 		kmf_free_kmf_key(handle, sign_key_ptr);
@@ -947,8 +945,7 @@ kmf_verify_data(KMF_HANDLE_T handle,
 			ret = PKCS_VerifyData(handle, sigAlg, &spki,
 			    indata, insig);
 
-		if (derkey.Data != NULL)
-			free(derkey.Data);
+		free(derkey.Data);
 
 		kmf_free_algoid(&spki.algorithm);
 		kmf_free_data(&spki.subjectPublicKey);
@@ -1043,8 +1040,7 @@ kmf_verify_cert(KMF_HANDLE_T handle, int numattr, KMF_ATTRIBUTE *attrlist)
 			ret = verify_cert_with_key(handle, &derkey,
 			    CertToBeVerified);
 
-			if (derkey.Data != NULL)
-				free(derkey.Data);
+			free(derkey.Data);
 		}
 	}
 
@@ -1269,8 +1265,7 @@ kmf_decrypt(KMF_HANDLE_T handle, int numattr, KMF_ATTRIBUTE *attrlist)
 	}
 
 cleanup:
-	if (new_attrlist != NULL)
-		free(new_attrlist);
+	free(new_attrlist);
 
 	kmf_free_kmf_key(handle, &prikey);
 	kmf_free_signed_cert(x509cert);
@@ -1721,11 +1716,9 @@ checkcrl:
 cleanup:
 	(void) unlink(user_certfile);
 
-	if (crlfilename != NULL)
-		free(crlfilename);
+	free(crlfilename);
 
-	if (uri != NULL)
-		free(uri);
+	free(uri);
 
 	return (ret);
 }
@@ -1955,8 +1948,7 @@ out:
 		free(signer_cert);
 	}
 
-	if (sernum.val != NULL)
-		free(sernum.val);
+	free(sernum.val);
 
 	return (ret);
 }
@@ -2378,11 +2370,9 @@ out:
 	if ((ret != KMF_OK))
 		kmf_free_data(ta_cert);
 
-	if (ta_subject != NULL)
-		free(ta_subject);
+	free(ta_subject);
 
-	if (serial.val != NULL)
-		free(serial.val);
+	free(serial.val);
 
 	return (ret);
 }
@@ -2621,8 +2611,7 @@ out:
 		free(user_issuer);
 	}
 
-	if (user_subject)
-		free(user_subject);
+	free(user_subject);
 
 	/*
 	 * If we did not copy ta_cert to issuer_cert, free it.
@@ -3217,11 +3206,9 @@ verify_cert_with_key(KMF_HANDLE_T handle,
 	    &data_to_verify, &signature);
 
 cleanup:
-	if (data_to_verify.Data != NULL)
-		free(data_to_verify.Data);
+	free(data_to_verify.Data);
 
-	if (signed_data.Data != NULL)
-		free(signed_data.Data);
+	free(signed_data.Data);
 
 	if (signed_cert) {
 		kmf_free_signed_cert(signed_cert);

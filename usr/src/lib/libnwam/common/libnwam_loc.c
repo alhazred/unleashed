@@ -266,8 +266,7 @@ nwam_loc_create(const char *name, nwam_loc_handle_t *lochp)
 	    NWAM_LOC_PROP_NAMESERVICES_CONFIG_FILE, val);
 
 finish:
-	if (nsswitch != NULL)
-		free(nsswitch);
+	free(nsswitch);
 	if (val != NULL)
 		nwam_value_free(val);
 	if (err != NWAM_SUCCESS) {
@@ -530,8 +529,7 @@ valid_loc_condition(nwam_value_t value)
 			free(object_name);
 			return (NWAM_ENTITY_INVALID_VALUE);
 		}
-		if (object_name != NULL)
-			free(object_name);
+		free(object_name);
 	}
 	return (NWAM_SUCCESS);
 }

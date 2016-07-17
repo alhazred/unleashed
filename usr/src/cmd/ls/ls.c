@@ -3178,15 +3178,13 @@ free_sysattr(struct lbuf *p)
 
 	if (p->exttr != NULL) {
 		for (i = 0; i < sacnt; i++) {
-			if (p->exttr[i].name != NULL)
-				free(p->exttr[i].name);
+			free(p->exttr[i].name);
 		}
 		free(p->exttr);
 	}
 	if (p->extm != NULL) {
 		for (i = 0; i < sacnt; i++) {
-			if (p->extm[i].name != NULL)
-				free(p->extm[i].name);
+			free(p->extm[i].name);
 		}
 		free(p->extm);
 	}

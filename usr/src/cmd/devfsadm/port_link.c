@@ -1151,8 +1151,7 @@ pma_free(void)
 	 * free any strings we had allocated
 	 */
 	for (i = 0; i <= maxports; i++) {
-		if (pma[i].pm_tag != NULL)
-			free(pma[i].pm_tag);
+		free(pma[i].pm_tag);
 	}
 
 	free(pma);

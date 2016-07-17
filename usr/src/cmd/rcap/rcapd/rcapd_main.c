@@ -830,10 +830,8 @@ lprocess_free(lprocess_t *lpc)
 		    lpc ? lpc->lpc_next : NULL);
 	lpc->lpc_next = lpc->lpc_prev = NULL;
 
-	if (lpc->lpc_prpageheader != NULL)
-		free(lpc->lpc_prpageheader);
-	if (lpc->lpc_xmap != NULL)
-		free(lpc->lpc_xmap);
+	free(lpc->lpc_prpageheader);
+	free(lpc->lpc_xmap);
 	if (lpc->lpc_psinfo_fd >= 0) {
 		if (rfd_close(lpc->lpc_psinfo_fd) != 0)
 			debug("could not close %d lpc_psinfo_fd %d",

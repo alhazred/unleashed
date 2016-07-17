@@ -631,15 +631,13 @@ localtime_r(const time_t *timep, struct tm *p_tm)
 	unused = ltzset_u(*timep);
 	if (lclzonep == NULL) {
 		lmutex_unlock(&_time_lock);
-		if (unused != NULL)
-			free(unused);
+		free(unused);
 		return (offtime_u(*timep, 0L, p_tm));
 	}
 	my_is_in_dst = is_in_dst;
 	offset = (my_is_in_dst) ? -altzone : -timezone;
 	lmutex_unlock(&_time_lock);
-	if (unused != NULL)
-		free(unused);
+	free(unused);
 	rt = offtime_u(*timep, offset, p_tm);
 	p_tm->tm_isdst = my_is_in_dst;
 	return (rt);
@@ -823,8 +821,7 @@ mktime1(struct tm *tmptr, int usetz)
 	}
 
 	lmutex_unlock(&_time_lock);
-	if (unused != NULL)
-		free(unused);
+	free(unused);
 
 	errno = mketimerrno;
 	return ((time_t)t);
@@ -856,8 +853,7 @@ tzset(void)
 	lmutex_lock(&_time_lock);
 	unused = ltzset_u(time(NULL));
 	lmutex_unlock(&_time_lock);
-	if (unused != NULL)
-		free(unused);
+	free(unused);
 }
 
 void
@@ -868,8 +864,7 @@ _ltzset(time_t tim)
 	lmutex_lock(&_time_lock);
 	unused = ltzset_u(tim);
 	lmutex_unlock(&_time_lock);
-	if (unused != NULL)
-		free(unused);
+	free(unused);
 }
 
 /*

@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -84,8 +82,7 @@ nfs_free_mntinfo_list(nfs_mntlist_t *list)
 		free(list->nml_mntopts);
 		free(list->nml_time);
 		for (i = 0; i < list->nml_failovercount; i++) {
-			if (list->nml_failoverlist[i] != NULL)
-				free(list->nml_failoverlist[i]);
+			free(list->nml_failoverlist[i]);
 		}
 		free(list->nml_failoverlist);
 		free(list->nml_securitymode);

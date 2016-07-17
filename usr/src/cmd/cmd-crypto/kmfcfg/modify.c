@@ -65,8 +65,7 @@ static int err; /* To store errno which may be overwritten by gettext() */
 #define	UPDATE_IF_DIFFERENT(old, new) \
 	if ((old != NULL && new != NULL && strcmp(old, new) != 0) || \
 	    (old == NULL && new != NULL)) { \
-		if (old != NULL) \
-			free(old); \
+		free(old); \
 		old = new; \
 	}
 
@@ -239,8 +238,7 @@ kc_modify_policy(int argc, char *argv[])
 						rv = KC_ERR_USAGE;
 						break;
 					}
-					if (bytes != NULL)
-						free(bytes);
+					free(bytes);
 					flags |= KC_TA_SERIAL;
 				}
 				break;
@@ -358,8 +356,7 @@ kc_modify_policy(int argc, char *argv[])
 						rv = KC_ERR_USAGE;
 						break;
 					}
-					if (bytes != NULL)
-						free(bytes);
+					free(bytes);
 					flags |= KC_OCSP_RESP_CERT_SERIAL;
 					ocsp_set_attr++;
 				}
@@ -603,20 +600,17 @@ kc_modify_policy(int argc, char *argv[])
 		oplc.ignore_trust_anchor = plc.ignore_trust_anchor;
 
 	if (flags & KC_VALIDITY_ADJUSTTIME) {
-		if (oplc.validity_adjusttime)
-			free(oplc.validity_adjusttime);
+		free(oplc.validity_adjusttime);
 		oplc.validity_adjusttime =
 		    plc.validity_adjusttime;
 	}
 
 	if (flags & KC_TA_NAME) {
-		if (oplc.ta_name)
-			free(oplc.ta_name);
+		free(oplc.ta_name);
 		oplc.ta_name = plc.ta_name;
 	}
 	if (flags & KC_TA_SERIAL) {
-		if (oplc.ta_serial)
-			free(oplc.ta_serial);
+		free(oplc.ta_serial);
 		oplc.ta_serial = plc.ta_serial;
 	}
 
@@ -640,13 +634,10 @@ kc_modify_policy(int argc, char *argv[])
 	    mapper_pathname == NULL && oplc.mapper.pathname == NULL))) {
 		(void) fprintf(stderr,
 		    gettext("Error in mapper input options\n"));
-		if (mapper_name != NULL)
-			free(mapper_name);
-		if (mapper_pathname != NULL)
-			free(mapper_pathname);
-		if (mapper_dir != NULL)
-			free(mapper_dir);
-		if (flags & KC_MAPPER_OPTIONS && plc.mapper.options != NULL)
+		free(mapper_name);
+		free(mapper_pathname);
+		free(mapper_dir);
+		if (flags & KC_MAPPER_OPTIONS)
 			free(plc.mapper.options);
 		rv = KC_ERR_USAGE;
 		goto out;
@@ -664,8 +655,7 @@ kc_modify_policy(int argc, char *argv[])
 	UPDATE_IF_DIFFERENT(oplc.mapper.dir, plc.mapper.dir);
 
 	if (flags & KC_MAPPER_OPTIONS) {
-		if (oplc.mapper.options != NULL)
-			free(oplc.mapper.options);
+		free(oplc.mapper.options);
 		oplc.mapper.options = plc.mapper.options;
 	}
 
@@ -723,15 +713,13 @@ kc_modify_policy(int argc, char *argv[])
 		 */
 		if (ocsp_set_attr > 0) {
 			if (flags & KC_OCSP_RESPONDER_URI) {
-				if (oplc.VAL_OCSP_RESPONDER_URI)
-					free(oplc.VAL_OCSP_RESPONDER_URI);
+				free(oplc.VAL_OCSP_RESPONDER_URI);
 				oplc.VAL_OCSP_RESPONDER_URI =
 				    plc.VAL_OCSP_RESPONDER_URI;
 			}
 
 			if (flags & KC_OCSP_PROXY) {
-				if (oplc.VAL_OCSP_PROXY)
-					free(oplc.VAL_OCSP_PROXY);
+				free(oplc.VAL_OCSP_PROXY);
 				oplc.VAL_OCSP_PROXY = plc.VAL_OCSP_PROXY;
 			}
 
@@ -740,8 +728,7 @@ kc_modify_policy(int argc, char *argv[])
 				    plc.VAL_OCSP_URI_FROM_CERT;
 
 			if (flags & KC_OCSP_RESP_LIFETIME) {
-				if (oplc.VAL_OCSP_RESP_LIFETIME)
-					free(oplc.VAL_OCSP_RESP_LIFETIME);
+				free(oplc.VAL_OCSP_RESP_LIFETIME);
 				oplc.VAL_OCSP_RESP_LIFETIME =
 				    plc.VAL_OCSP_RESP_LIFETIME;
 			}
@@ -751,15 +738,13 @@ kc_modify_policy(int argc, char *argv[])
 				    plc.VAL_OCSP_IGNORE_RESP_SIGN;
 
 			if (flags & KC_OCSP_RESP_CERT_NAME) {
-				if (oplc.VAL_OCSP_RESP_CERT_NAME)
-					free(oplc.VAL_OCSP_RESP_CERT_NAME);
+				free(oplc.VAL_OCSP_RESP_CERT_NAME);
 				oplc.VAL_OCSP_RESP_CERT_NAME =
 				    plc.VAL_OCSP_RESP_CERT_NAME;
 			}
 
 			if (flags & KC_OCSP_RESP_CERT_SERIAL) {
-				if (oplc.VAL_OCSP_RESP_CERT_SERIAL)
-					free(oplc.VAL_OCSP_RESP_CERT_SERIAL);
+				free(oplc.VAL_OCSP_RESP_CERT_SERIAL);
 				oplc.VAL_OCSP_RESP_CERT_SERIAL =
 				    plc.VAL_OCSP_RESP_CERT_SERIAL;
 			}
@@ -818,15 +803,13 @@ kc_modify_policy(int argc, char *argv[])
 		 */
 		if (crl_set_attr > 0) {
 			if (flags & KC_CRL_BASEFILENAME) {
-				if (oplc.VAL_CRL_BASEFILENAME)
-					free(oplc.VAL_CRL_BASEFILENAME);
+				free(oplc.VAL_CRL_BASEFILENAME);
 				oplc.VAL_CRL_BASEFILENAME =
 				    plc.VAL_CRL_BASEFILENAME;
 			}
 
 			if (flags & KC_CRL_DIRECTORY) {
-				if (oplc.VAL_CRL_DIRECTORY)
-					free(oplc.VAL_CRL_DIRECTORY);
+				free(oplc.VAL_CRL_DIRECTORY);
 				oplc.VAL_CRL_DIRECTORY = plc.VAL_CRL_DIRECTORY;
 			}
 
@@ -835,8 +818,7 @@ kc_modify_policy(int argc, char *argv[])
 			}
 
 			if (flags & KC_CRL_PROXY) {
-				if (oplc.VAL_CRL_PROXY)
-					free(oplc.VAL_CRL_PROXY);
+				free(oplc.VAL_CRL_PROXY);
 				oplc.VAL_CRL_PROXY = plc.VAL_CRL_PROXY;
 			}
 
@@ -933,8 +915,7 @@ kc_modify_policy(int argc, char *argv[])
 	}
 
 out:
-	if (filename != NULL)
-		free(filename);
+	free(filename);
 
 	kmf_free_policy_record(&oplc);
 

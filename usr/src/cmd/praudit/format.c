@@ -3242,8 +3242,7 @@ pa_ace_access_mask(pr_context_t *context, ace_t *ace, int status, int flag)
 	}
 	returnstat = pa_print(context, &uval, flag);
 
-	if (permstr != NULL)
-		free(permstr);
+	free(permstr);
 	if (returnstat != 0)
 		return (returnstat);
 	return (close_tag(context, TAG_ACEMASK));

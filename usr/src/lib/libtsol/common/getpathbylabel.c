@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 
 /*
  *	Name:		getpathbylabel.c
@@ -103,14 +101,10 @@ subpath(char *full, char *sub)
 static void
 tsol_mnt_free(struct mnttab *mnt)
 {
-	if (mnt->mnt_special)
-		free(mnt->mnt_special);
-	if (mnt->mnt_mountp)
-		free(mnt->mnt_mountp);
-	if (mnt->mnt_fstype)
-		free(mnt->mnt_fstype);
-	if (mnt->mnt_mntopts)
-		free(mnt->mnt_mntopts);
+	free(mnt->mnt_special);
+	free(mnt->mnt_mountp);
+	free(mnt->mnt_fstype);
+	free(mnt->mnt_mntopts);
 	free(mnt);
 }
 

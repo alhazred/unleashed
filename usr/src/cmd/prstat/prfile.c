@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -59,8 +57,7 @@ fd_init(int n)
 void
 fd_exit()
 {
-	if (fd_tbl)
-		free(fd_tbl);
+	free(fd_tbl);
 }
 
 void

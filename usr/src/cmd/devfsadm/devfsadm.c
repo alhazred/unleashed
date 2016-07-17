@@ -8328,8 +8328,7 @@ build_event_attributes(char *class, char *subclass, char *node_path,
 out:
 	nvlist_free(nvl);
 
-	if (dev_name)
-		free(dev_name);
+	free(dev_name);
 
 	if (dev_name_lookup_err) {
 		/*
@@ -8395,10 +8394,8 @@ process_syseventq()
 
 		log_event(tmp->class, tmp->subclass, tmp->nvl);
 
-		if (tmp->class != NULL)
-			free(tmp->class);
-		if (tmp->subclass != NULL)
-			free(tmp->subclass);
+		free(tmp->class);
+		free(tmp->subclass);
 		nvlist_free(tmp->nvl);
 		syseventq_back = syseventq_back->next;
 		if (syseventq_back == NULL)

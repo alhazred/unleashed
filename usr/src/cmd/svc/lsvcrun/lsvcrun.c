@@ -548,8 +548,7 @@ prepare_contract(const char *script, const char *action)
 	}
 
 cleanup:
-	if (svc_strbuf != NULL)
-		free(svc_strbuf);
+	free(svc_strbuf);
 	(void) close(fd);
 
 	return (err);

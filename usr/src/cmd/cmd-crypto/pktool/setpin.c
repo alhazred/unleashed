@@ -81,8 +81,7 @@ setpin_nss(KMF_HANDLE_T handle,
 		else
 			cryptoerror(LOG_STDERR, gettext(
 			    "Unable to get and confirm new passphrase."));
-		if (old_pin != NULL)
-			free(old_pin);
+		free(old_pin);
 		return (PK_ERR_NSS);
 	}
 
@@ -101,10 +100,8 @@ setpin_nss(KMF_HANDLE_T handle,
 
 	rv = kmf_set_token_pin(handle, numattrs, setpinattrs);
 
-	if (new_pin)
-		free(new_pin);
-	if (old_pin)
-		free(old_pin);
+	free(new_pin);
+	free(old_pin);
 
 	return (rv);
 }

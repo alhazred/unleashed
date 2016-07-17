@@ -115,8 +115,7 @@ nss_getpwnam(char *name, attrlist *items, pwu_repository_t *rep, void **buf)
 				    malloc(sizeof (struct passwd));
 			if (pwbuf->pwd == NULL) {
 				errno = ENOMEM;
-				if (pwbuf->spwd)
-					free(pwbuf->spwd);
+				free(pwbuf->spwd);
 				return (PWU_NOMEM);
 			}
 			break;
@@ -137,8 +136,7 @@ nss_getpwnam(char *name, attrlist *items, pwu_repository_t *rep, void **buf)
 				    malloc(sizeof (struct spwd));
 			if (pwbuf->spwd == NULL) {
 				errno = ENOMEM;
-				if (pwbuf->pwd)
-					free(pwbuf->pwd);
+				free(pwbuf->pwd);
 				return (PWU_NOMEM);
 			}
 			break;
@@ -199,10 +197,10 @@ nss_getpwnam(char *name, attrlist *items, pwu_repository_t *rep, void **buf)
 
 	return (PWU_SUCCESS);
 error:
-	if (pwbuf->pwd) free(pwbuf->pwd);
-	if (pwbuf->pwd_scratch) free(pwbuf->pwd_scratch);
-	if (pwbuf->spwd) free(pwbuf->spwd);
-	if (pwbuf->spwd_scratch) free(pwbuf->spwd_scratch);
+	free(pwbuf->pwd);
+	free(pwbuf->pwd_scratch);
+	free(pwbuf->spwd);
+	free(pwbuf->spwd_scratch);
 	free(pwbuf);
 	*buf = NULL;
 
@@ -307,10 +305,10 @@ nss_getattr(char *name, attrlist *items, pwu_repository_t *rep)
 		}
 	}
 
-	if (pwbuf->pwd) free(pwbuf->pwd);
-	if (pwbuf->pwd_scratch) free(pwbuf->pwd_scratch);
-	if (pwbuf->spwd) free(pwbuf->spwd);
-	if (pwbuf->spwd_scratch) free(pwbuf->spwd_scratch);
+	free(pwbuf->pwd);
+	free(pwbuf->pwd_scratch);
+	free(pwbuf->spwd);
+	free(pwbuf->spwd_scratch);
 	free(pwbuf);
 
 	return (res);

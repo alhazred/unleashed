@@ -43,8 +43,7 @@ kadm5_free_principal_ent(void *server_handle,
 	    krb5_free_principal(handle->context, val->principal);
 	if(val->mod_name)
 	    krb5_free_principal(handle->context, val->mod_name);
-	if(val->policy)
-	    free(val->policy);
+	free(val->policy);
 
 	/* XXX free key_data and tl_data */
 

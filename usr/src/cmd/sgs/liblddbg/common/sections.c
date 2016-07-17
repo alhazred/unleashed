@@ -181,8 +181,7 @@ Dbg_sec_unsup_strmerge(Lm_list *lml, Is_desc *isp)
 		    dbg_fmt_isec_name(isp, buf, &alloc_mem), str,
 		    EC_XWORD(isp->is_shdr->sh_addralign),
 		    EC_XWORD(isp->is_shdr->sh_entsize));
-		if (alloc_mem != NULL)
-			free(alloc_mem);
+		free(alloc_mem);
 	}
 }
 
@@ -223,8 +222,7 @@ Dbg_sec_in(Lm_list *lml, Is_desc *isp)
 		dbg_print(lml, MSG_INTL(MSG_SEC_INPUT),
 		    dbg_fmt_isec_name(isp, buf, &alloc_mem),
 		    isp->is_file->ifl_name);
-		if (alloc_mem != NULL)
-			free(alloc_mem);
+		free(alloc_mem);
 	}
 }
 
@@ -266,8 +264,7 @@ Dbg_sec_discarded(Lm_list *lml, Is_desc *isp, Is_desc *disp)
 		dbg_print(lml, MSG_INTL(MSG_SEC_STRMERGE_DISCARDED),
 		    dbg_fmt_isec_name(isp, buf, &alloc_mem),
 		    isp->is_file->ifl_name);
-		if (alloc_mem != NULL)
-			free(alloc_mem);
+		free(alloc_mem);
 	} else {
 		/* Generic section discard */
 		dbg_isec_name_buf_t	buf1, buf2;
@@ -278,10 +275,8 @@ Dbg_sec_discarded(Lm_list *lml, Is_desc *isp, Is_desc *disp)
 		    isp->is_file->ifl_name,
 		    dbg_fmt_isec_name(disp, buf2, &alloc_mem2),
 		    disp->is_file->ifl_name);
-		if (alloc_mem1 != NULL)
-			free(alloc_mem1);
-		if (alloc_mem2 != NULL)
-			free(alloc_mem2);
+		free(alloc_mem1);
+		free(alloc_mem2);
 	}
 }
 
@@ -316,8 +311,7 @@ Dbg_sec_group(Lm_list *lml, Is_desc *isp, Group_desc *gdp)
 		    gdp->gd_oisc->is_file->ifl_name);
 	}
 
-	if (alloc_mem != NULL)
-		free(alloc_mem);
+	free(alloc_mem);
 }
 
 void
@@ -434,8 +428,7 @@ Dbg_sec_order_error(Lm_list *lml, Ifl_desc *ifl, Word ndx, int error)
 	dbg_print(lml, MSG_INTL(MSG_ORD_ERR_TITLE),
 	    dbg_fmt_isec_name(ifl->ifl_isdesc[ndx], buf, &alloc_mem),
 	    ifl->ifl_name);
-	if (alloc_mem != NULL)
-		free(alloc_mem);
+	free(alloc_mem);
 
 	if (error)
 		dbg_print(lml, MSG_INTL(order_errors[error - 1]));
@@ -452,8 +445,7 @@ Dbg_sec_redirected(Lm_list *lml, Is_desc *isp, const char *nname)
 
 	dbg_print(lml, MSG_INTL(MSG_SEC_REDIRECTED),
 	    dbg_fmt_isec_name(isp, buf, &alloc_mem), nname);
-	if (alloc_mem != NULL)
-		free(alloc_mem);
+	free(alloc_mem);
 }
 
 void
@@ -474,6 +466,5 @@ Dbg_sec_gnu_comdat(Lm_list *lml, Is_desc *isp, Boolean comdat, Boolean relax)
 		fmt = MSG_INTL(MSG_SEC_GNU_COMDAT_3);
 
 	dbg_print(lml, fmt, dbg_fmt_isec_name(isp, buf, &alloc_mem));
-	if (alloc_mem != NULL)
-		free(alloc_mem);
+	free(alloc_mem);
 }

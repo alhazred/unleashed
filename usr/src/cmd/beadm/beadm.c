@@ -1328,8 +1328,7 @@ be_do_mount(int argc, char **argv)
 	}
 
 out:
-	if (tmp_mp != NULL)
-		free(tmp_mp);
+	free(tmp_mp);
 	nvlist_free(be_attrs);
 	return (err);
 }

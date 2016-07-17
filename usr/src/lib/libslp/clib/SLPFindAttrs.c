@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdlib.h>
 #include <syslog.h>
 #include <slp-internal.h>
@@ -582,7 +580,7 @@ static void collect_attrs(void *node, VISIT order, int level, void *cookie) {
 
 		slp_add2list(attr, answer, SLP_FALSE);
 		free(attr);
-		free(n->tag); if (n->val) free(n->val); free(n);
+		free(n->tag); free(n->val); free(n);
 		free(node);
 	}
 }

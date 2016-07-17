@@ -122,16 +122,11 @@ setup_server_realm(krb5_principal sprinc)
 static void
 finish_realm(kdc_realm_t *rdp)
 {
-    if (rdp->realm_dbname)
-	free(rdp->realm_dbname);
-    if (rdp->realm_mpname)
-	free(rdp->realm_mpname);
-    if (rdp->realm_stash)
-	free(rdp->realm_stash);
-    if (rdp->realm_ports)
-	free(rdp->realm_ports);
-    if (rdp->realm_tcp_ports)
-	free(rdp->realm_tcp_ports);
+    free(rdp->realm_dbname);
+    free(rdp->realm_mpname);
+    free(rdp->realm_stash);
+    free(rdp->realm_ports);
+    free(rdp->realm_tcp_ports);
     if (rdp->realm_keytab)
 	krb5_kt_close(rdp->realm_context, rdp->realm_keytab);
     if (rdp->realm_context) {
@@ -595,19 +590,16 @@ initialize_realms(krb5_context kcontext, int argc, char **argv)
 	    rcname = optarg;
 	    break;
 	case 'p':
-	    if (default_udp_ports)
-		free(default_udp_ports);
+	    free(default_udp_ports);
 	    default_udp_ports = strdup(optarg);
 
-	    if (default_tcp_ports)
-		free(default_tcp_ports);
+	    free(default_tcp_ports);
 	    default_tcp_ports = strdup(optarg);
 
 	    break;
 	case '4':
 #ifdef KRB5_KRB4_COMPAT
-	    if (v4mode)
-		free(v4mode);
+	    free(v4mode);
 	    v4mode = strdup(optarg);
 #endif
 	    break;
@@ -657,8 +649,7 @@ initialize_realms(krb5_context kcontext, int argc, char **argv)
 	    kdc_realmlist[0] = rdatap;
 	    kdc_numrealms++;
 	} else {
-    	    if (lrealm)
-		free(lrealm);
+    	    free(lrealm);
 	}
     }
 
@@ -676,14 +667,10 @@ initialize_realms(krb5_context kcontext, int argc, char **argv)
     /* Ensure that this is set for our first request. */
     kdc_active_realm = kdc_realmlist[0];
 
-    if (default_udp_ports)
-	free(default_udp_ports);
-    if (default_tcp_ports)
-	free(default_tcp_ports);
-    if (db_args)
-	free(db_args);
-    if (db_name)
-	free(db_name);
+    free(default_udp_ports);
+    free(default_tcp_ports);
+    free(db_args);
+    free(db_name);
 
     return;
 }
@@ -844,8 +831,7 @@ int main(int argc, char **argv)
     unload_preauth_plugins(kcontext);
     krb5_klog_close(kdc_context);
     finish_realms(argv[0]);
-    if (kdc_realmlist) 
-      free(kdc_realmlist);
+    free(kdc_realmlist);
 #ifdef USE_RCACHE
     (void) krb5_rc_close(kcontext, kdc_rcache);
 #endif

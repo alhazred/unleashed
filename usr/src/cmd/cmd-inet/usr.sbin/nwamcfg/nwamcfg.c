@@ -2961,8 +2961,7 @@ listprop(nwam_object_type_t object_type, void *handle, const char *name,
 done:
 	free(lname);
 	free(realname);
-	if (props != NULL)
-		free(props);
+	free(props);
 	if (lhandle) {
 		switch (object_type) {
 		case NWAM_OBJECT_TYPE_NCP:

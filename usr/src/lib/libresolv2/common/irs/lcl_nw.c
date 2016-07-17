@@ -308,8 +308,7 @@ nw_next(struct irs_nw *this) {
 	ret = &pvt->net;
 
  cleanup:
-	if (dbuf)
-		free(dbuf);
+	free(dbuf);
 
 	return (ret);
 }

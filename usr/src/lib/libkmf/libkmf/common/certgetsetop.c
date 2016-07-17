@@ -890,8 +890,7 @@ kmf_get_cert_auth_info_access(const KMF_DATA *certdata,
 
 end:
 	kmf_free_extn(&extn);
-	if (access_info != NULL)
-		free(access_info);
+	free(access_info);
 	if (asn1 != NULL)
 		kmfber_free(asn1, 1);
 	return (ret);
@@ -1015,8 +1014,7 @@ out:
 
 	if (ret == KMF_OK && fullname->number == 0) {
 		ret = KMF_ERR_EXTENSION_NOT_FOUND;
-		if (url != NULL)
-			free(url);
+		free(url);
 	}
 
 	return (ret);
@@ -2157,11 +2155,9 @@ kmf_add_cert_eku(KMF_X509_CERTIFICATE *CertData, KMF_OID *ekuOID,
 
 out:
 	kmf_free_eku(&ekudata);
-	if (extdata != NULL)
-		free(extdata);
+	free(extdata);
 
-	if (olddata != NULL)
-		free(olddata);
+	free(olddata);
 
 	if (asn1 != NULL)
 		kmfber_free(asn1, 1);

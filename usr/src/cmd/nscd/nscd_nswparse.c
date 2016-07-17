@@ -95,8 +95,7 @@ static void
 freeconf_v1(struct __nsw_switchconfig_v1 *cfp)
 {
 	if (cfp) {
-		if (cfp->dbase)
-			free(cfp->dbase);
+		free(cfp->dbase);
 		if (cfp->lookups) {
 			struct __nsw_lookup_v1 *nex, *cur;
 			for (cur = cfp->lookups; cur; cur = nex) {

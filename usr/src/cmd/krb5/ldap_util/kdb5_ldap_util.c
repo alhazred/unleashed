@@ -643,14 +643,10 @@ cleanup:
 	krb5_free_context(util_context);
     }
 
-    if (cmd_argv)
-	free(cmd_argv);
-    if (prompt)
-	free(prompt);
-    if (conf_section)
-	free(conf_section);
-    if (dal_handle)
-	free(dal_handle);
+    free(cmd_argv);
+    free(prompt);
+    free(conf_section);
+    free(dal_handle);
 
     if (usage_print) {
 	usage();

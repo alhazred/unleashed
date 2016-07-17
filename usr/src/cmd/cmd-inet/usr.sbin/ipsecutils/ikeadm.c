@@ -656,10 +656,8 @@ free_he(struct hostent *hep)
 
 	assert(p != NULL);
 
-	if (p->addtl[0])
-		free(p->addtl[0]);
-	if (p->addtl[1])
-		free(p->addtl[1]);
+	free(p->addtl[0]);
+	free(p->addtl[1]);
 
 	free(p);
 }
@@ -1218,10 +1216,8 @@ bail:
 		FREE_HE(loche);
 	if (remhe != NULL)
 		FREE_HE(remhe);
-	if (keyp != NULL)
-		free(keyp);
-	if (psp != NULL)
-		free(psp);
+	free(keyp);
+	free(psp);
 
 	*presharedpp = NULL;
 

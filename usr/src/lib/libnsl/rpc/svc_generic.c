@@ -535,17 +535,14 @@ svc_tli_create_common(const int ofd, const struct netconfig *nconf,
 	if (nconf) {
 		xprt->xp_netid = strdup(nconf->nc_netid);
 		if (xprt->xp_netid == NULL) {
-			if (xprt->xp_rtaddr.buf)
-				free(xprt->xp_rtaddr.buf);
+			free(xprt->xp_rtaddr.buf);
 			syslog(LOG_ERR, "svc_tli_create: strdup failed!");
 			goto freedata;
 		}
 		xprt->xp_tp = strdup(nconf->nc_device);
 		if (xprt->xp_tp == NULL) {
-			if (xprt->xp_rtaddr.buf)
-				free(xprt->xp_rtaddr.buf);
-			if (xprt->xp_netid)
-				free(xprt->xp_netid);
+			free(xprt->xp_rtaddr.buf);
+			free(xprt->xp_netid);
 			syslog(LOG_ERR, "svc_tli_create: strdup failed!");
 			goto freedata;
 		}

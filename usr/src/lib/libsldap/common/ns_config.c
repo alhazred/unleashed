@@ -835,8 +835,7 @@ destroy_config(ns_config_t *ptr)
 	if (ptr != NULL) {
 		if (ptr == current_config)
 			current_config = NULL;
-		if (ptr->domainName != NULL)
-			free(ptr->domainName);
+		free(ptr->domainName);
 			ptr->domainName = NULL;
 		for (i = 0; i <= LAST_VALUE; i++) {
 			destroy_param(ptr, i);
@@ -1701,8 +1700,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 				    def->index);
 				MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
 				    strdup(errstr), NULL);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_CONFIG);
 			}
 			conf.ns_i = i;
@@ -1723,8 +1721,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 				    def->index);
 				MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
 				    strdup(errstr), NULL);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_CONFIG);
 			}
 			i = atoi(cp);
@@ -1738,8 +1735,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 	case CHARPTR:
 		conf.ns_pc = (char *)strdup(cp);
 		if (conf.ns_pc == NULL) {
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_MEMORY);
 		}
 		break;
@@ -1752,24 +1748,21 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			    cp);
 			MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
 			    strdup(errstr), NULL);
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_CONFIG);
 		}
 		/* Appends an entry to the existing list */
 		if (ptr->paramList[type].ns_ptype != SAMLIST) {
 			conf.ns_ppc = (char **)calloc(2, sizeof (char *));
 			if (conf.ns_ppc == NULL) {
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			conf.ns_acnt = 1;
 			conf.ns_ppc[0] = (char *)strdup(cp);
 			if (conf.ns_ppc[0] == NULL) {
 				free(conf.ns_ppc);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 		} else {
@@ -1781,8 +1774,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			len = dpend - cp;
 			dp = (char *)malloc(len+1);
 			if (dp == NULL) {
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			(void) strlcpy(dp, cp, len+1);
@@ -1808,8 +1800,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 						free(dp);
 						__s_api_free2dArray
 						    (conf.ns_ppc);
-						if (tcp != NULL)
-							free(tcp);
+						free(tcp);
 						return (NS_LDAP_MEMORY);
 					}
 					fnd = 1;
@@ -1826,8 +1817,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			if (len > 1) {
 				p = (char **)dupParam(&ptr->paramList[type]);
 				if (p == NULL) {
-					if (tcp != NULL)
-						free(tcp);
+					free(tcp);
 					return (NS_LDAP_MEMORY);
 				}
 			} else
@@ -1836,16 +1826,14 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			    (char **)realloc(p, (len+1) * sizeof (char *));
 			if (conf.ns_ppc == NULL) {
 				__s_api_free2dArray(p);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			conf.ns_acnt = len;
 			conf.ns_ppc[len-1] = (char *)strdup(cp);
 			if (conf.ns_ppc[len-1] == NULL) {
 				__s_api_free2dArray(conf.ns_ppc);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			conf.ns_ppc[len] = NULL;
@@ -1860,24 +1848,21 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			    cp);
 			MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
 			    strdup(errstr), NULL);
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_CONFIG);
 		}
 		/* Appends an entry to the existing list */
 		if (ptr->paramList[type].ns_ptype != SCLLIST) {
 			conf.ns_ppc = (char **)calloc(2, sizeof (char *));
 			if (conf.ns_ppc == NULL) {
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			conf.ns_acnt = 1;
 			conf.ns_ppc[0] = (char *)strdup(cp);
 			if (conf.ns_ppc[0] == NULL) {
 				free(conf.ns_ppc);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 		} else {
@@ -1889,8 +1874,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			len = dpend - cp;
 			dp = (char *)malloc(len+1);
 			if (dp == NULL) {
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			(void) strlcpy(dp, cp, len+1);
@@ -1916,8 +1900,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 						free(dp);
 						__s_api_free2dArray
 						    (conf.ns_ppc);
-						if (tcp != NULL)
-							free(tcp);
+						free(tcp);
 						return (NS_LDAP_MEMORY);
 					}
 					fnd = 1;
@@ -1934,8 +1917,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			if (len > 1) {
 				p = (char **)dupParam(&ptr->paramList[type]);
 				if (p == NULL) {
-					if (tcp != NULL)
-						free(tcp);
+					free(tcp);
 					return (NS_LDAP_MEMORY);
 				}
 			} else
@@ -1944,16 +1926,14 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			    (char **)realloc(p, (len+1) * sizeof (char *));
 			if (conf.ns_ppc == NULL) {
 				__s_api_free2dArray(p);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			conf.ns_acnt = len;
 			conf.ns_ppc[len-1] = (char *)strdup(cp);
 			if (conf.ns_ppc[len-1] == NULL) {
 				__s_api_free2dArray(conf.ns_ppc);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			conf.ns_ppc[len] = NULL;
@@ -1972,24 +1952,21 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			    cp);
 			MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
 			    strdup(errstr), NULL);
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_CONFIG);
 		}
 		/* Appends an entry to the existing list */
 		if (ptr->paramList[type].ns_ptype != SSDLIST) {
 			conf.ns_ppc = (char **)calloc(2, sizeof (char *));
 			if (conf.ns_ppc == NULL) {
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			conf.ns_acnt = 1;
 			conf.ns_ppc[0] = (char *)strdup(cp);
 			if (conf.ns_ppc[0] == NULL) {
 				free(conf.ns_ppc);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 		} else {
@@ -2001,8 +1978,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			len = dpend - cp;
 			dp = (char *)malloc(len+1);
 			if (dp == NULL) {
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			(void) strlcpy(dp, cp, len+1);
@@ -2028,8 +2004,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 						free(dp);
 						__s_api_free2dArray
 						    (conf.ns_ppc);
-						if (tcp != NULL)
-							free(tcp);
+						free(tcp);
 						return (NS_LDAP_MEMORY);
 					}
 					fnd = 1;
@@ -2046,8 +2021,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			if (len > 1) {
 				p = (char **)dupParam(&ptr->paramList[type]);
 				if (p == NULL) {
-					if (tcp != NULL)
-						free(tcp);
+					free(tcp);
 					return (NS_LDAP_MEMORY);
 				}
 			} else
@@ -2056,16 +2030,14 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			    (char **)realloc(p, (len+1) * sizeof (char *));
 			if (conf.ns_ppc == NULL) {
 				__s_api_free2dArray(p);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			conf.ns_acnt = len;
 			conf.ns_ppc[len-1] = (char *)strdup(cp);
 			if (conf.ns_ppc[len-1] == NULL) {
 				__s_api_free2dArray(conf.ns_ppc);
-				if (tcp != NULL)
-					free(tcp);
+				free(tcp);
 				return (NS_LDAP_MEMORY);
 			}
 			conf.ns_ppc[len] = NULL;
@@ -2086,8 +2058,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		}
 		conf.ns_ppc = (char **)calloc(len + 1, sizeof (char *));
 		if (conf.ns_ppc == NULL) {
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_MEMORY);
 		}
 		conf.ns_acnt = len;
@@ -2098,8 +2069,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 				conf.ns_ppc[i] = (char *)malloc(j + 1);
 				if (conf.ns_ppc[i] == NULL) {
 					__s_api_free2dArray(conf.ns_ppc);
-					if (tcp != NULL)
-						free(tcp);
+					free(tcp);
 					return (NS_LDAP_MEMORY);
 				}
 				(void) strlcpy(conf.ns_ppc[i], cp, j);
@@ -2114,8 +2084,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		conf.ns_ppc[i] = (char *)malloc(j + 1);
 		if (conf.ns_ppc[i] == NULL) {
 			__s_api_free2dArray(conf.ns_ppc);
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_MEMORY);
 		}
 		(void) strlcpy(conf.ns_ppc[i], cp, j);
@@ -2139,8 +2108,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		}
 		conf.ns_ppc = (char **)calloc(len + 1, sizeof (char *));
 		if (conf.ns_ppc == NULL) {
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_MEMORY);
 		}
 		conf.ns_acnt = len;
@@ -2151,8 +2119,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 				conf.ns_ppc[i] = (char *)malloc(j + 1);
 				if (conf.ns_ppc[i] == NULL) {
 					__s_api_free2dArray(conf.ns_ppc);
-					if (tcp != NULL)
-						free(tcp);
+					free(tcp);
 					return (NS_LDAP_MEMORY);
 				}
 				(void) strlcpy(conf.ns_ppc[i], cp, j);
@@ -2167,8 +2134,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		conf.ns_ppc[i] = (char *)malloc(j + 1);
 		if (conf.ns_ppc[i] == NULL) {
 			__s_api_free2dArray(conf.ns_ppc);
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_MEMORY);
 		}
 		(void) strlcpy(conf.ns_ppc[i], cp, j);
@@ -2188,8 +2154,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		}
 		conf.ns_pi = (int *)calloc(len + 1, sizeof (int));
 		if (conf.ns_pi == NULL) {
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_MEMORY);
 		}
 		conf.ns_acnt = len;
@@ -2216,8 +2181,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 					    NS_CONFIG_SYNTAX,
 					    strdup(errstr), NULL);
 					free(conf.ns_pi);
-					if (tcp != NULL)
-						free(tcp);
+					free(tcp);
 					return (NS_LDAP_CONFIG);
 				}
 				conf.ns_pi[i] = j;
@@ -2240,8 +2204,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			    "invalid authenticationMethod (%s)"), ptbuf);
 			MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
 			    strdup(errstr), NULL);
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_CONFIG);
 		}
 		conf.ns_pi[i] = j;
@@ -2261,8 +2224,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		}
 		conf.ns_pi = (int *)calloc(len + 1, sizeof (int));
 		if (conf.ns_pi == NULL) {
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_MEMORY);
 		}
 		conf.ns_acnt = len;
@@ -2288,8 +2250,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 					    NS_CONFIG_SYNTAX,
 					    strdup(errstr), NULL);
 					free(conf.ns_pi);
-					if (tcp != NULL)
-						free(tcp);
+					free(tcp);
 					return (NS_LDAP_CONFIG);
 				}
 				conf.ns_pi[i] = j;
@@ -2312,8 +2273,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			    "invalid credentialLevel (%s)"), ptbuf);
 			MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
 			    strdup(errstr), NULL);
-			if (tcp != NULL)
-				free(tcp);
+			free(tcp);
 			return (NS_LDAP_CONFIG);
 		}
 		conf.ns_pi[i] = j;
@@ -2332,8 +2292,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 				MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
 				    strdup(errstr), NULL);
 			}
-			if (tcp)
-				free(tcp);
+			free(tcp);
 			return (exitrc);
 		}
 
@@ -2416,19 +2375,15 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			}
 
 			if (free_memory) {
-				if (tcp)
-					free(tcp);
+				free(tcp);
 				free(sid);
 				free(origA);
 				__s_api_free2dArray(mapA);
 				if (rmap) {
-					if (rmap->service)
-						free(rmap->service);
-					if (rmap->orig)
-						free(rmap->orig);
+					free(rmap->service);
+					free(rmap->orig);
 					if (rmap->map) {
-						if ((rmap->map)[0])
-							free((rmap->map)[0]);
+						free((rmap->map)[0]);
 						free(rmap->map);
 					}
 					free(rmap);
@@ -2508,13 +2463,10 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 				}
 				free_memory = 1;
 			} else if (i == NS_HASH_RC_EXISTED) {
-				if (map->service)
-					free(map->service);
-				if (map->orig)
-					free(map->orig);
+				free(map->service);
+				free(map->orig);
 				if (map->map) {
-					if ((map->map)[0])
-						free((map->map)[0]);
+					free((map->map)[0]);
 					free(map->map);
 				}
 				free(map);
@@ -2523,19 +2475,15 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		}
 
 		if (free_memory) {
-			if (tcp)
-				free(tcp);
+			free(tcp);
 			free(sid);
 			free(origA);
 			__s_api_free2dArray(mapA);
 			if (map) {
-				if (map->service)
-					free(map->service);
-				if (map->orig)
-					free(map->orig);
+				free(map->service);
+				free(map->orig);
 				if (map->map) {
-					if ((map->map)[0])
-						free((map->map)[0]);
+					free((map->map)[0]);
 					free(map->map);
 				}
 				free(map);
@@ -2604,13 +2552,11 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		}
 
 		if (free_memory) {
-			if (tcp)
-				free(tcp);
+			free(tcp);
 			free(sid);
 			free(origA);
 			__s_api_free2dArray(mapA);
-			if (map)
-				free(map);
+			free(map);
 			return (exitrc);
 		}
 
@@ -2622,13 +2568,11 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		    "type (%d)"), def->data_type);
 		MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX, strdup(errstr),
 		    NULL);
-		if (tcp != NULL)
-			free(tcp);
+		free(tcp);
 		return (NS_LDAP_CONFIG);
 	}
 	conf.ns_ptype = def->data_type;
-	if (tcp != NULL)
-		free(tcp);
+	free(tcp);
 
 	/* Individually written verify routines here can replace */
 	/* verify_value.  Verify conf (data) as appropriate here */

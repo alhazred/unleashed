@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -621,8 +619,7 @@ free_led_dtls(led_dtls_t *dtls)
 		free((void *)dtls->picl_retry);
 	if (dtls->disk_port != NULL) {
 		for (i = 0; i < dtls->n_disks; i++) {
-			if (dtls->disk_port[i] != NULL)
-				free(dtls->disk_port[i]);
+			free(dtls->disk_port[i]);
 		}
 		free(dtls->disk_port);
 	}

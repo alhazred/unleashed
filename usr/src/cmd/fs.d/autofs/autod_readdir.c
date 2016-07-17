@@ -27,8 +27,6 @@
  *	autod_readdir.c
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -454,8 +452,7 @@ autofs_rddir_cache_entry_free(struct autofs_rddir_cache *p)
 {
 	assert(RW_LOCK_HELD(&autofs_rddir_cache_lock));
 	assert(!p->in_use);
-	if (p->map)
-		free(p->map);
+	free(p->map);
 	if (p->offtp)
 		free_offset_tbl(p->offtp);
 	if (p->entp)

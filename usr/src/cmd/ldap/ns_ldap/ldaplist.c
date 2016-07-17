@@ -573,10 +573,8 @@ main(int argc, char **argv)
 
 	__ns_ldap_cancelStandalone();
 
-	if (ldapfilter)
-		free(ldapfilter);
-	if (udata)
-		free(udata);
+	free(ldapfilter);
+	free(udata);
 	exit(switch_err(rc));
 	return (0); /* Never reached */
 }

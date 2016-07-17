@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Public utilities and convenience calls (from the API spec):
  *	SLPFindScopes (queries for all known scopes)
@@ -423,8 +421,7 @@ static void collect_scopes(void *node, VISIT order, int level, void *cookie) {
 }
 
 void SLPFree(void *pvMem) {
-	if (pvMem)
-		free(pvMem);
+	free(pvMem);
 }
 
 /*

@@ -408,8 +408,7 @@ get_spki(BerElement *asn1, KMF_X509_SPKI *spki)
 	}
 cleanup:
 	if (ret != KMF_OK) {
-		if (bitstr != NULL)
-			free(bitstr);
+		free(bitstr);
 		spki->subjectPublicKey.Data = NULL;
 		spki->subjectPublicKey.Length = 0;
 
@@ -579,13 +578,13 @@ DerDecodeDSASignature(KMF_DATA *encoded, KMF_DATA *signature)
 
 	ret = convert_signed_to_fixed(S, &fixedS);
 cleanup:
-	if (R && R->bv_val)
+	if (R)
 		free(R->bv_val);
-	if (S && S->bv_val)
+	if (S)
 		free(S->bv_val);
 
-	if (S) free(S);
-	if (R) free(R);
+	free(S);
+	free(R);
 
 	if (asn1) kmfber_free(asn1, 1);
 
@@ -1601,8 +1600,7 @@ DerEncodeName(KMF_X509_NAME *name, KMF_DATA *encodedname)
 	encodedname->Length = bv->bv_len;
 
 cleanup:
-	if (bv)
-		free(bv);
+	free(bv);
 
 	if (asn1)
 		kmfber_free(asn1, 1);
@@ -1726,8 +1724,7 @@ cleanup:
 	if (asn1 != NULL)
 		kmfber_free(asn1, 1);
 
-	if (tbsdata)
-		free(tbsdata);
+	free(tbsdata);
 
 	return (ret);
 }
@@ -1796,8 +1793,7 @@ cleanup:
 	if (ret != KMF_OK)
 		free_data(encodedcert);
 
-	if (tbsdata)
-		free(tbsdata);
+	free(tbsdata);
 
 	if (asn1)
 		kmfber_free(asn1, 1);
@@ -2078,11 +2074,9 @@ cleanup:
 	if (ret != KMF_OK) {
 		free_tbscsr(&csrptr->csr);
 		free_algoid(&csrptr->signature.algorithmIdentifier);
-		if (csrptr->signature.encrypted.Data)
-			free(csrptr->signature.encrypted.Data);
+		free(csrptr->signature.encrypted.Data);
 
-		if (csrptr)
-			free(csrptr);
+		free(csrptr);
 
 		*signed_csr_ptr_ptr = NULL;
 	}
@@ -2183,8 +2177,7 @@ cleanup:
 	 * encoding routines.
 	 */
 	if (extnvalue) {
-		if (extnvalue->bv_val)
-			free(extnvalue->bv_val);
+		free(extnvalue->bv_val);
 		free(extnvalue);
 	}
 
@@ -2382,8 +2375,7 @@ cleanup:
 	if (asn1 != NULL)
 		kmfber_free(asn1, 1);
 
-	if (tbsdata)
-		free(tbsdata);
+	free(tbsdata);
 
 	return (ret);
 }
@@ -2447,8 +2439,7 @@ cleanup:
 		free_data(encodedcsr);
 	}
 
-	if (tbsdata)
-		free(tbsdata);
+	free(tbsdata);
 
 	if (asn1)
 		kmfber_free(asn1, 1);

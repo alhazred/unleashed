@@ -98,8 +98,7 @@ __ns_ldap_freeError(ns_ldap_error_t **errorp)
 		return (NS_LDAP_SUCCESS);
 
 	err = *errorp;
-	if (err->message)
-		free(err->message);
+	free(err->message);
 
 	free(err);
 	*errorp = NULL;

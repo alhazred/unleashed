@@ -291,8 +291,7 @@ _clean_ldap_backend(ldap_backend_ptr be)
 	(void) fprintf(stdout, "\n[ldap_common.c: _clean_ldap_backend]\n");
 #endif	/* DEBUG */
 
-	if (be->tablename != NULL)
-		free(be->tablename);
+	free(be->tablename);
 	if (be->result != NULL)
 		(void) __ns_ldap_freeResult(&be->result);
 	if (be->enumcookie != NULL)

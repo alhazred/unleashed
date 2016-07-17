@@ -114,8 +114,7 @@ int	b_trap(int argc,char *argv[],void *extra)
 						sfputr(sfstdout,sh_fmtq(arg),'\n');
 					continue;
 				}
-				if(shp->st.trap[sig])
-					free(shp->st.trap[sig]);
+				free(shp->st.trap[sig]);
 				shp->st.trap[sig] = 0;
 				if(!clear && *action)
 					shp->st.trap[sig] = strdup(action);

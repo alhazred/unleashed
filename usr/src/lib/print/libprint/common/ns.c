@@ -87,8 +87,7 @@ ns_printer_destroy(ns_printer_t *printer)
 		if (printer->aliases != NULL) {		/* aliases */
 			free(printer->aliases);
 		}
-		if (printer->name != NULL)		/* primary name */
-			free(printer->name);
+		free(printer->name);
 		free(printer);
 	}
 }

@@ -28,7 +28,6 @@
  * All rights reserved.
  */
 
-#pragma	ident	"%Z%%M%	%I%	%E% SMI"	/* SVr4.0 1.2 */
 /*LINTLIBRARY*/
 
 #include <sys/types.h>
@@ -158,14 +157,14 @@ ckuid(char *uid, short disp, char *defstr, char *error, char *help,
 start:
 	putprmpt(stderr, prompt, NULL, defstr);
 	if (getinput(input)) {
-		if (disp && defmesg)
+		if (disp)
 			free(defmesg);
 		return (1);
 	}
 
 	if (!strlen(input)) {
 		if (defstr) {
-			if (disp && defmesg)
+			if (disp)
 				free(defmesg);
 			(void) strcpy(uid, defstr);
 			return (0);
@@ -180,7 +179,7 @@ start:
 		puthelp(stderr, defmesg, help);
 		goto start;
 	} else if (ckquit && (strcmp(input, "q") == 0)) {
-		if (disp && defmesg)
+		if (disp)
 			free(defmesg);
 		return (3);
 	} else if (ckuid_val(input)) {
@@ -190,7 +189,7 @@ start:
 		goto start;
 	}
 	(void) strcpy(uid, input);
-	if (disp && defmesg)
+	if (disp)
 		free(defmesg);
 	return (0);
 }

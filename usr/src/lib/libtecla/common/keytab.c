@@ -29,8 +29,6 @@
  * of the copyright holder.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -148,8 +146,7 @@ KeyTab *_new_KeyTab(void)
 KeyTab *_del_KeyTab(KeyTab *kt)
 {
   if(kt) {
-    if(kt->table)
-      free(kt->table);
+    free(kt->table);
     kt->actions = _del_HashTable(kt->actions);
     kt->smem = _del_StringMem(kt->smem, 1);
     kt->err = _del_ErrMsg(kt->err);

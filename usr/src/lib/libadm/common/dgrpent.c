@@ -28,7 +28,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"	/* SVr4.0 1.1 */
 /*LINTLIBRARY*/
 
 /*
@@ -597,16 +596,16 @@ _freedgrptabent(struct dgrptabent *ent)	/* Structure to free */
 	    if ((q = ent->membership) != NULL) do {
 		p = q;
 		q = p->next;
-		if (p->name) free(p->name);
+		free(p->name);
 		free(p);
 	    } while (q);
 
 	    /* Free the device group name */
-	    if (ent->name) free(ent->name);
+	    free(ent->name);
 	}
 
 	/* Free the membership string */
-	if (ent->dataspace) free(ent->dataspace);
+	free(ent->dataspace);
 }
 
 /*

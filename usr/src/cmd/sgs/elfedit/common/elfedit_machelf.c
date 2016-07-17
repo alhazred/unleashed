@@ -443,8 +443,7 @@ libelf_failure:
 	 *	- dynamic memory is released if necessary
 	 *	- The error issued
 	 */
-	if (obj_state != NULL)
-		free(obj_state);
+	free(obj_state);
 	(void) close(tstate.os_fd);
 	elfedit_elferr(tstate.os_file, libelf_fail_name);
 #undef INITIAL_SYMTABNDX_ALLOC

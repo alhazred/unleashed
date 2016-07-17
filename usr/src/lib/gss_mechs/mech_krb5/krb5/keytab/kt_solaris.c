@@ -255,8 +255,7 @@ cleanup:
 		krb5_free_principal(ctx, f_princ);
 	if (salt != NULL)
 		krb5_free_principal(ctx, salt);
-	if (t_host != NULL)
-		free(t_host);
+	free(t_host);
 	if (kt != NULL)
 		(void) krb5_kt_close(ctx, kt);
 	if (enctypes != NULL)

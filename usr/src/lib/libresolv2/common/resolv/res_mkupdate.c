@@ -939,8 +939,7 @@ res_mkupdrec(int section, const char *dname,
 void
 res_freeupdrec(ns_updrec *rrecp) {
 	/* Note: freeing r_dp is the caller's responsibility. */
-	if (rrecp->r_dname != NULL)
-		free(rrecp->r_dname);
+	free(rrecp->r_dname);
 	free(rrecp);
 }
 
@@ -970,8 +969,8 @@ res_buildservicelist() {
 		slp->name = strdup(sp->s_name);
 		slp->proto = strdup(sp->s_proto);
 		if ((slp->name == NULL) || (slp->proto == NULL)) {
-			if (slp->name) free(slp->name);
-			if (slp->proto) free(slp->proto);
+			free(slp->name);
+			free(slp->proto);
 			free(slp);
 			break;
 		}

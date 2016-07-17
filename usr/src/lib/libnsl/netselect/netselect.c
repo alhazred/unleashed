@@ -32,8 +32,6 @@
  * under license from the Regents of the University of California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "mt.h"
 #include "../rpc/rpc_mt.h"		/* for MT declarations only */
 #include <rpc/types.h>
@@ -950,6 +948,5 @@ netconfig_dup(struct netconfig *netconfigp)
 static void
 free_entry(void *foo)
 {
-	if (foo)
-		free(foo);
+	free(foo);
 }

@@ -3,8 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Miscellaneous routines needed by the telnet client for authentication
  * and / or encryption.
@@ -88,8 +86,7 @@ auth_encrypt_init(char *local, char *remote, char *name)
 void
 auth_encrypt_user(char *name)
 {
-	if (UserNameRequested)
-		free(UserNameRequested);
+	free(UserNameRequested);
 	UserNameRequested = name ? strdup(name) : NULL;
 }
 

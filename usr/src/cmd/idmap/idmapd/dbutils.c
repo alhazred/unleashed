@@ -1632,8 +1632,7 @@ out:
 			res->direction = IDMAP_DIRECTION_W2U;
 
 		if (values[3] != NULL) {
-			if (req->id2name != NULL)
-				free(req->id2name);
+			free(req->id2name);
 			req->id2name = strdup(values[3]);
 			if (req->id2name == NULL) {
 				idmapdlog(LOG_ERR, "Out of memory");

@@ -222,8 +222,7 @@ krb5_cc_resolve (krb5_context context, const char *name, krb5_ccache *cache)
     *cache = (krb5_ccache) 0;
 
     err = krb5int_cc_getops(context, pfx, &ops);
-    if (pfx != NULL)
-	free(pfx);
+    free(pfx);
     if (err)
 	return err;
 

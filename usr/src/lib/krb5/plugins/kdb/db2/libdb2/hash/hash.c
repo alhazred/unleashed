@@ -530,14 +530,11 @@ hdestroy(hashp)
 		save_errno = errno;
 
 	/* Free the split page */
-	if (hashp->split_buf)
-		free(hashp->split_buf);
+	free(hashp->split_buf);
 
 	/* Free the big key and big data returns */
-	if (hashp->bigkey_buf)
-		free(hashp->bigkey_buf);
-	if (hashp->bigdata_buf)
-		free(hashp->bigdata_buf);
+	free(hashp->bigkey_buf);
+	free(hashp->bigdata_buf);
  
 	/* XXX This should really iterate over the cursor queue, but
 	   it's not clear how to do that, and the only cursor a hash

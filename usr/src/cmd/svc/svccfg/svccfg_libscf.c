@@ -11424,8 +11424,7 @@ lscf_validate_fmri(const char *fmri)
 			}
 			(void) fprintf(stderr, "%s\n", msg);
 		}
-		if (msg != NULL)
-			free(msg);
+		free(msg);
 	}
 	if (errs != NULL)
 		scf_tmpl_errors_destroy(errs);
@@ -15685,8 +15684,7 @@ lscf_describe(uu_list_t *args, int hasargs)
 
 	ret = 0;
 out:
-	if (argv != NULL)
-		free(argv);
+	free(argv);
 	return (ret);
 usage:
 	ret = -2;
@@ -17312,12 +17310,9 @@ out_free:
 				mpntov = NULL;
 			free(fmpntov);
 		}
-		if (mpnbuf)
-			free(mpnbuf);
-		if (mpvbuf)
-			free(mpvbuf);
-		if (mpntov)
-			free(mpntov);
+		free(mpnbuf);
+		free(mpvbuf);
+		free(mpntov);
 
 		free(mpvarry);
 	}

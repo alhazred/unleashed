@@ -1491,8 +1491,7 @@ load_module_err(MODLIST_T *moddef, void *dl_hdl, const char *dl_path,
 		(void) strlcpy(s4_buf, s4, sizeof (s4_buf));
 
 
-	if (moddef != NULL)
-		free(moddef);
+	free(moddef);
 
 	if ((dl_hdl != NULL) && (dlclose(dl_hdl) != 0))
 		elfedit_msg(ELFEDIT_MSG_ERR, MSG_INTL(MSG_ERR_CNTDLCLOSE),

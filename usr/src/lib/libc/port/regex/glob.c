@@ -994,10 +994,9 @@ globextend(const wcat_t *path, glob_t *pglob, struct glob_lim *limitp,
 		nospace:
 			for (i = pglob->gl_offs; i < (ssize_t)(newn - 2);
 			    i++) {
-				if (pglob->gl_pathv && pglob->gl_pathv[i])
+				if (pglob->gl_pathv)
 					free(pglob->gl_pathv[i]);
-				if ((pglob->gl_flags & GLOB_KEEPSTAT) != 0 &&
-				    pglob->gl_statv && pglob->gl_statv[i])
+				if ((pglob->gl_flags & GLOB_KEEPSTAT) != 0 && pglob->gl_statv)
 					free(pglob->gl_statv[i]);
 			}
 			if (pglob->gl_pathv) {
@@ -1186,16 +1185,14 @@ _globfree_ext(glob_t *pglob)
 	if (pglob->gl_pathv != NULL) {
 		pp = pglob->gl_pathv + pglob->gl_offs;
 		for (i = pglob->gl_pathc; i--; ++pp)
-			if (*pp)
-				free(*pp);
+			free(*pp);
 		free(pglob->gl_pathv);
 		pglob->gl_pathv = NULL;
 	}
 	if ((pglob->gl_flags & GLOB_KEEPSTAT) != 0 &&
 	    pglob->gl_statv != NULL) {
 		for (i = 0; i < pglob->gl_pathc; i++) {
-			if (pglob->gl_statv[i] != NULL)
-				free(pglob->gl_statv[i]);
+			free(pglob->gl_statv[i]);
 		}
 		free(pglob->gl_statv);
 		pglob->gl_statv = NULL;

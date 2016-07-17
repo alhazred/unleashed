@@ -65,8 +65,7 @@ meta_operation_init_defer(CK_FLAGS optype, meta_session_t *session,
 		    (pMechanism->pParameter != NULL)) {
 			if (pMechanism->ulParameterLen !=
 			    session->init.pMech->ulParameterLen) {
-				if (session->init.pMech->pParameter != NULL)
-					free(session->init.pMech->pParameter);
+				free(session->init.pMech->pParameter);
 				session->init.pMech->pParameter =
 				    malloc(pMechanism->ulParameterLen);
 				if (session->init.pMech->pParameter == NULL) {

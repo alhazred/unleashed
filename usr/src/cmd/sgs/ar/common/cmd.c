@@ -158,8 +158,7 @@ rcmd(Cmd_info *cmd_info)
 				 */
 				fileptr->ar_contents = NULL;
 
-				if (fileptr->ar_pathname != NULL)
-					free(fileptr->ar_pathname);
+				free(fileptr->ar_pathname);
 				if ((fileptr->ar_pathname =
 				    malloc(strlen(gfile) + 1)) == NULL) {
 					int err = errno;
@@ -715,8 +714,7 @@ create_extract(ARFILE *a, int rawname, int f_len, Cmd_info *cmd_info)
 		if (cmd_info->opt_flgs & C_FLAG) {
 			(void) fprintf(stderr, MSG_INTL(MSG_OVERRIDE_WARN),
 			    f_name);
-			if (dup != NULL)
-				free(dup);
+			free(dup);
 			return (-1);
 		}
 
@@ -734,8 +732,7 @@ create_extract(ARFILE *a, int rawname, int f_len, Cmd_info *cmd_info)
 
 				(void) fprintf(stderr,
 				    MSG_INTL(MSG_OVERRIDE_WARN), f_name);
-				if (dup != NULL)
-					free(dup);
+				free(dup);
 				return (-1);
 			}
 		}
@@ -754,8 +751,7 @@ create_extract(ARFILE *a, int rawname, int f_len, Cmd_info *cmd_info)
 		 */
 		mesg('c', f_name, cmd_info);
 	}
-	if (dup)
-		free(dup);
+	free(dup);
 	return (f);
 }
 

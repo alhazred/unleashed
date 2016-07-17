@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * synchronous svcadm logic
  */
@@ -581,8 +579,7 @@ out:
 	scf_pg_destroy(pg);
 	if (snap != NULL)
 		scf_snapshot_destroy(snap);
-	if (grouping != NULL)
-		free(grouping);
+	free(grouping);
 	scf_iter_destroy(iter);
 	return (result);
 }

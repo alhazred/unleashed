@@ -1407,8 +1407,7 @@ i_dladm_init_one_prop(dladm_handle_t handle, datalink_id_t linkid,
 		dla->dla_status = status;
 
 done:
-	if (buf != NULL)
-		free(buf);
+	free(buf);
 
 	return (DLADM_WALK_CONTINUE);
 }
@@ -4791,8 +4790,7 @@ dladm_linkprop_is_set(dladm_handle_t handle, datalink_id_t linkid,
 	}
 
 done:
-	if (buf != NULL)
-		free(buf);
+	free(buf);
 	return (status);
 }
 

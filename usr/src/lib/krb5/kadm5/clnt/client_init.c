@@ -421,8 +421,7 @@ _kadm5_initialize_rpcsec_gss_handle(kadm5_server_handle_t handle,
 		handle->clnt = clnt_tli_create(fd, nconf, NULL,
 				    KADM, KADMVERS, 0, 0);
 
-	if (iprop_svc)
-		free(iprop_svc);
+	free(iprop_svc);
 
 	if (handle->clnt == NULL) {
 		syslog(LOG_ERR, dgettext(TEXT_DOMAIN,
@@ -961,8 +960,7 @@ error:
       * error" before the block of code at the top of the function
       * that allocates and initializes "handle".
       */
-     if (handle->cache_name)
-	 free(handle->cache_name);
+     free(handle->cache_name);
      if (handle->destroy_cache && ccache)
 	 krb5_cc_destroy(handle->context, ccache);
      if(handle->clnt && handle->clnt->cl_auth)
@@ -972,8 +970,7 @@ error:
 	(void) kadm5_free_config_params(handle->context, &handle->params);
 
 cleanup:
-	if (server)
-		free(server);
+	free(server);
 
 	/*
 	 * cred's server and client pointers could have been overwritten
@@ -1027,8 +1024,7 @@ kadm5_destroy(void *server_handle)
 	     code = krb5_cc_destroy (handle->context, ccache);
      }
 #endif
-     if (handle->cache_name)
-	 free(handle->cache_name);
+     free(handle->cache_name);
      if (handle->clnt && handle->clnt->cl_auth) {
 		/*
 		 * Since kadm5 doesn't use the default credentials we
@@ -1040,8 +1036,7 @@ kadm5_destroy(void *server_handle)
 	}
      if (handle->clnt)
 	  clnt_destroy(handle->clnt);
-     if (handle->lhandle)
-          free (handle->lhandle);
+     free(handle->lhandle);
 
      kadm5_free_config_params(handle->context, &handle->params);
      krb5_free_context(handle->context);

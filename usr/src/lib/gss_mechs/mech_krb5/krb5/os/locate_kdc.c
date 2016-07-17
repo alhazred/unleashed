@@ -1042,8 +1042,7 @@ krb5int_locate_server (krb5_context context, const krb5_data *realm,
 					"Cannot resolve network address for KDCs '%s' specified in krb5.conf(4) for realm %.*s"),
 				hostlist_str ? hostlist_str : "unknown",
 				realm->length, realm->data);
-	    if (hostlist_str)
-		free(hostlist_str);
+	    free(hostlist_str);
 	} else if (dns_list_head) {
 	    dnslist_str = dnslist2str(dns_list_head);
 	    krb5_set_error_message(context, KRB5_REALM_CANT_RESOLVE,
@@ -1051,8 +1050,7 @@ krb5int_locate_server (krb5_context context, const krb5_data *realm,
 					"Cannot resolve network address for KDCs '%s' discovered via DNS Service Location records for realm '%.*s'"),
 				dnslist_str ? dnslist_str : "unknown",
 				realm->length, realm->data);
-	    if (dnslist_str)
-		    free(dnslist_str);
+	    free(dnslist_str);
 	}
 
 	if (hostlist)

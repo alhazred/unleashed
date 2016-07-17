@@ -55,8 +55,7 @@ papiAttributeValueFree(papi_attribute_value_type_t type,
 	if (value != NULL) {
 		switch (type) {
 		case PAPI_STRING:
-			if (value->string != NULL)
-				free(value->string);
+			free(value->string);
 			break;
 		case PAPI_COLLECTION:
 			if (value->collection != NULL) {
@@ -94,8 +93,7 @@ static void
 papiAttributeFree(papi_attribute_t *attribute)
 {
 	if (attribute != NULL) {
-		if (attribute->name != NULL)
-			free(attribute->name);
+		free(attribute->name);
 		if (attribute->values != NULL)
 			papiAttributeValuesFree(attribute->type,
 						attribute->values);

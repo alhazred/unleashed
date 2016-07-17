@@ -1948,8 +1948,7 @@ unconfigure_shared_network_interfaces(zlog_t *zlogp, zoneid_t zone_id)
 bad:
 	if (s > 0)
 		(void) close(s);
-	if (buf)
-		free(buf);
+	free(buf);
 	return (ret_code);
 }
 
@@ -3478,11 +3477,10 @@ get_rctls(zlog_t *zlogp, char **bufp, size_t *bufsizep)
 out:
 	free(rctlblk);
 	zonecfg_free_rctl_value_list(rctltab.zone_rctl_valptr);
-	if (error && nvl_packed != NULL)
+	if (error)
 		free(nvl_packed);
 	nvlist_free(nvl);
-	if (nvlv != NULL)
-		free(nvlv);
+	free(nvlv);
 	if (handle != NULL)
 		zonecfg_fini_handle(handle);
 	return (error);
@@ -3583,12 +3581,11 @@ get_datasets(zlog_t *zlogp, char **bufp, size_t *bufsizep)
 	*bufsizep = total;
 
 out:
-	if (error != 0 && str != NULL)
+	if (error != 0)
 		free(str);
 	if (handle != NULL)
 		zonecfg_fini_handle(handle);
-	if (implicit_datasets != NULL)
-		free(implicit_datasets);
+	free(implicit_datasets);
 
 	return (error);
 }
@@ -4901,8 +4898,7 @@ error:
 		(void) zone_shutdown(zoneid);
 		(void) zone_destroy(zoneid);
 	}
-	if (rctlbuf != NULL)
-		free(rctlbuf);
+	free(rctlbuf);
 	priv_freeset(privs);
 	if (fp != NULL)
 		zonecfg_close_scratch(fp);

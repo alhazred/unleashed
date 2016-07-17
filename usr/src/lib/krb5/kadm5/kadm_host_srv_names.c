@@ -61,8 +61,7 @@ kadm5_get_master(krb5_context context, const char *realm, char **master)
 		if (dns_ret == 0)
 			*master = strdup(dns_host);
 
-		if (dns_realm.data)
-			free(dns_realm.data);
+		free(dns_realm.data);
 	}
 #endif /* KRB5_DNS_LOOKUP */
 
@@ -112,8 +111,7 @@ kadm5_get_kpasswd(krb5_context context, const char *realm, char **kpasswd)
 		 */
 		dns_realm.data = strdup(realm ? realm : def_realm);
 		if (dns_realm.data == NULL) {
-			if (def_realm != NULL)
-				free(def_realm);
+			free(def_realm);
 			return (ENOMEM);
 		}
 		dns_realm.length = strlen(realm ? realm : def_realm);
@@ -127,8 +125,7 @@ kadm5_get_kpasswd(krb5_context context, const char *realm, char **kpasswd)
 
 			if (*kpasswd == NULL) {
 				free(dns_realm.data);
-				if (def_realm != NULL)
-					free(def_realm);
+				free(def_realm);
 				return (ENOMEM);
 			}
 		}
@@ -137,8 +134,7 @@ kadm5_get_kpasswd(krb5_context context, const char *realm, char **kpasswd)
 	}
 #endif /* KRB5_DNS_LOOKUP */
 
-	if (def_realm != NULL)
-		free(def_realm);
+	free(def_realm);
 	return (*kpasswd ? KADM5_OK : KADM5_NO_SRV);
 }
 

@@ -1517,8 +1517,7 @@ setrpath(vfsent_t *vp)
 	else
 		vp->flag &= ~VRPFAILED;
 
-	if (vp->rpath)
-		free(vp->rpath);
+	free(vp->rpath);
 	if ((vp->rpath = strdup(realdir)) == NULL)
 		nomem();
 	vp->mlevel = fsgetmlevel(vp->rpath);

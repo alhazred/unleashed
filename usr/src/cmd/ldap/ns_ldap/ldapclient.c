@@ -3136,8 +3136,7 @@ multival_free(multival_t *list)
 	if (list == NULL)
 		return;
 
-	if (list->optlist != NULL)
-		free(list->optlist);
+	free(list->optlist);
 	free(list);
 }
 

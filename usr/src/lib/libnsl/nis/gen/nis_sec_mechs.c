@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This module contains the interfaces for the NIS+ security mechanisms.
  */
@@ -260,12 +258,9 @@ static void
 sf_free_mech_ent(mechanism_t *mp)
 {
 	if (mp) {
-		if (mp->mechname)
-			free(mp->mechname);
-		if (mp->alias)
-			free(mp->alias);
-		if (mp->qop)
-			free(mp->qop);
+		free(mp->mechname);
+		free(mp->alias);
+		free(mp->qop);
 		free(mp);
 	}
 }
@@ -569,8 +564,7 @@ __nis_get_mechanisms(bool_t qop_secserv)
 		if (mechs) {
 			/* free old master lists */
 			__nis_release_mechanisms(mechs);
-			if (mechs_no_dups)
-				free(mechs_no_dups);
+			free(mechs_no_dups);
 		}
 		mechs = mechs_no_dups = NULL;
 
@@ -971,12 +965,9 @@ static void
 mf_free_ent(mfent_t *mp)
 {
 	if (mp) {
-		if (mp->mechname)
-			free(mp->mechname);
-		if (mp->oid)
-			free(mp->oid);
-		if (mp->libname)
-			free(mp->libname);
+		free(mp->mechname);
+		free(mp->oid);
+		free(mp->libname);
 		free(mp);
 	}
 }

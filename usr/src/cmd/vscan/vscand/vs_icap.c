@@ -1767,11 +1767,9 @@ vs_icap_compare_se(int idx, char *host, int port)
 static void
 vs_icap_free_options(vs_options_t *options)
 {
-	if (options->vso_xfer_preview)
-		free(options->vso_xfer_preview);
+	free(options->vso_xfer_preview);
 
-	if (options->vso_xfer_complete)
-		free(options->vso_xfer_complete);
+	free(options->vso_xfer_complete);
 
 	(void) memset(options, 0, sizeof (vs_options_t));
 }

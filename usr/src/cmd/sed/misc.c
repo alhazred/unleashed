@@ -56,8 +56,7 @@ strregerror(int errcode, regex_t *preg)
 	static char *oe;
 	size_t s;
 
-	if (oe != NULL)
-		free(oe);
+	free(oe);
 	s = regerror(errcode, preg, NULL, 0);
 	if ((oe = malloc(s)) == NULL)
 		err(1, "malloc");

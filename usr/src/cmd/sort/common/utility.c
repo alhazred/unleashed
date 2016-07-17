@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "utility.h"
 
 #include "initialize.h"
@@ -413,8 +411,7 @@ safe_realloc(void *ptr, size_t sz)
 void
 safe_free(void *ptr)
 {
-	if (ptr)
-		free(ptr);
+	free(ptr);
 }
 
 void *

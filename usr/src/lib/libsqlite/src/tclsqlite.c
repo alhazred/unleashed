@@ -1,6 +1,3 @@
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
 ** 2001 September 15
 **
@@ -814,7 +811,7 @@ static int DbObjCmd(void *cd, Tcl_Interp *interp, int objc,Tcl_Obj *const*objv){
     }
     pDb->rc = rc;
     if( rc==SQLITE_ABORT ){
-      if( zErrMsg ) free(zErrMsg);
+      free(zErrMsg);
       rc = cbData.tcl_rc;
     }else if( zErrMsg ){
       Tcl_SetResult(interp, zErrMsg, TCL_VOLATILE);
@@ -830,7 +827,7 @@ static int DbObjCmd(void *cd, Tcl_Interp *interp, int objc,Tcl_Obj *const*objv){
     Tcl_DStringFree(&dSql);
     if( objc==5 && cbData.azColName ){
       for(i=0; i<cbData.nColName; i++){
-        if( cbData.azColName[i] ) free(cbData.azColName[i]);
+        free(cbData.azColName[i]);
       }
       free(cbData.azColName);
       cbData.azColName = 0;

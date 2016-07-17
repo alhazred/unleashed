@@ -166,15 +166,11 @@ svc_vc_xprtfree(SVCXPRT *xprt)
 	if (!xprt)
 		return;
 
-	if (xprt->xp_tp)
-		free(xprt->xp_tp);
-	if (xprt->xp_netid)
-		free(xprt->xp_netid);
+	free(xprt->xp_tp);
+	free(xprt->xp_netid);
 	if (xt && (xt->parent == NULL)) {
-		if (xprt->xp_ltaddr.buf)
-			free(xprt->xp_ltaddr.buf);
-		if (xprt->xp_rtaddr.buf)
-			free(xprt->xp_rtaddr.buf);
+		free(xprt->xp_ltaddr.buf);
+		free(xprt->xp_rtaddr.buf);
 	}
 	if (r) {
 		if (r->t_call)
@@ -325,8 +321,7 @@ svc_vc_xprtcopy(SVCXPRT *parent)
 		xprt->xp_netid = (char *)strdup(parent->xp_netid);
 		if (xprt->xp_netid == NULL) {
 			syslog(LOG_ERR, "svc_vc_xprtcopy: strdup failed");
-			if (xprt->xp_tp)
-				free(xprt->xp_tp);
+			free(xprt->xp_tp);
 			svc_vc_xprtfree(xprt);
 			return (NULL);
 		}
@@ -454,15 +449,11 @@ svc_fd_xprtfree(SVCXPRT *xprt)
 	if (!xprt)
 		return;
 
-	if (xprt->xp_tp)
-		free(xprt->xp_tp);
-	if (xprt->xp_netid)
-		free(xprt->xp_netid);
+	free(xprt->xp_tp);
+	free(xprt->xp_netid);
 	if (xt && (xt->parent == NULL)) {
-		if (xprt->xp_ltaddr.buf)
-			free(xprt->xp_ltaddr.buf);
-		if (xprt->xp_rtaddr.buf)
-			free(xprt->xp_rtaddr.buf);
+		free(xprt->xp_ltaddr.buf);
+		free(xprt->xp_rtaddr.buf);
 	}
 	if (cd) {
 		XDR_DESTROY(&(cd->xdrs));
@@ -609,8 +600,7 @@ svc_fd_xprtcopy(SVCXPRT *parent)
 		xprt->xp_netid = (char *)strdup(parent->xp_netid);
 		if (xprt->xp_netid == NULL) {
 			syslog(LOG_ERR, "svc_fd_xprtcopy: strdup failed");
-			if (xprt->xp_tp)
-				free(xprt->xp_tp);
+			free(xprt->xp_tp);
 			svc_fd_xprtfree(xprt);
 			return (NULL);
 		}

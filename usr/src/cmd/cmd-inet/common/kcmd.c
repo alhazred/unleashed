@@ -431,8 +431,7 @@ bad:
 		krb5_free_creds(bsd_context, get_cred);
 	if (ret_cred)
 		krb5_free_creds(bsd_context, ret_cred);
-	if (host_save)
-		free(host_save);
+	free(host_save);
 	(void) sigprocmask(SIG_SETMASK, &oldmask, (sigset_t *)0);
 	return (status);
 }

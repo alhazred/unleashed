@@ -111,8 +111,7 @@ int	b_hist(int argc,char *argv[], void *extra)
 				sfputr(sfstdout, replace, '\n');
 			else
 				pflag = 1;
-			if(replace)
-				free(replace);
+			free(replace);
 			argv++;
 		}
 		return pflag;

@@ -4,8 +4,6 @@
  * specifies the terms and conditions for redistribution.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/param.h>
 #include <sys/file.h>
 #include <sys/stat.h>
@@ -49,8 +47,7 @@ endusershell(void)
 	if (shells != NULL)
 		free((char *)shells);
 	shells = NULL;
-	if (strings != NULL)
-		free(strings);
+	free(strings);
 	strings = NULL;
 	curshell = NULL;
 }
@@ -72,8 +69,7 @@ initshells(void)
 	if (shells != NULL)
 		free((char *)shells);
 	shells = NULL;
-	if (strings != NULL)
-		free(strings);
+	free(strings);
 	strings = NULL;
 	if ((fp = fopen(SHELLS, "r")) == (FILE *)0)
 		return (okshells);

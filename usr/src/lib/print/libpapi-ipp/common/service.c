@@ -27,8 +27,6 @@
 
 /* $Id: service.c 171 2006-05-20 06:00:32Z njacobs $ */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*LINTLIBRARY*/
 
 #include <stdlib.h>
@@ -171,16 +169,12 @@ papiServiceDestroy(papi_service_t handle)
 
 		if (svc->attributes != NULL)
 			papiAttributeListFree(svc->attributes);
-		if (svc->name != NULL)
-			free(svc->name);
-		if (svc->user != NULL)
-			free(svc->user);
-		if (svc->password != NULL)
-			free(svc->password);
+		free(svc->name);
+		free(svc->user);
+		free(svc->password);
 		if (svc->uri != NULL)
 			uri_free(svc->uri);
-		if (svc->post != NULL)
-			free(svc->post);
+		free(svc->post);
 		if (svc->connection != NULL)
 			httpClose(svc->connection);
 
@@ -196,8 +190,7 @@ papiServiceSetUserName(papi_service_t handle, char *user_name)
 	if (handle != NULL) {
 		service_t *svc = handle;
 
-		if (svc->user != NULL)
-			free(svc->user);
+		free(svc->user);
 		svc->user = NULL;
 		if (user_name != NULL)
 			svc->user = strdup(user_name);
@@ -215,8 +208,7 @@ papiServiceSetPassword(papi_service_t handle, char *password)
 	if (handle != NULL) {
 		service_t *svc = handle;
 
-		if (svc->password != NULL)
-			free(svc->password);
+		free(svc->password);
 		svc->password = NULL;
 		if (password != NULL)
 			svc->password = strdup(password);

@@ -116,8 +116,7 @@ Pread_maps_live(struct ps_prochandle *P, prmap_t **Pmapp, ssize_t *nmapp,
 	    (Pmap = malloc(statb.st_size)) == NULL ||
 	    (nmap = pread(mapfd, Pmap, statb.st_size, 0L)) <= 0 ||
 	    (nmap /= sizeof (prmap_t)) == 0) {
-		if (Pmap != NULL)
-			free(Pmap);
+		free(Pmap);
 		if (mapfd >= 0)
 			(void) close(mapfd);
 		Preset_maps(P); /* utter failure; destroy tables */
@@ -2976,10 +2975,8 @@ Plwp_iter_all(struct ps_prochandle *P, proc_lwp_all_f *func, void *cd)
 	int rv;
 
 retry:
-	if (Lhp != NULL)
-		free(Lhp);
-	if (Lphp != NULL)
-		free(Lphp);
+	free(Lhp);
+	free(Lphp);
 	if (P->state == PS_RUN)
 		(void) Pstopstatus(P, PCNULL, 0);
 	(void) Ppsinfo(P);

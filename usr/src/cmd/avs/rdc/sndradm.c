@@ -1532,8 +1532,7 @@ redo:
 		rdc_err(NULL, gettext("commit failed on disk queue operation"));
 
 	cfg_close(cfg);
-	if (ctag)
-		free(ctag);
+	free(ctag);
 }
 void
 spcslog_sync(rdcconfig_t *sets, int start, int type)

@@ -374,11 +374,9 @@ int main(argc, argv)
 
     (*cmd->func)(cmd_argc, cmd_argv);
 
-    if( db_name_tmp )
-	free( db_name_tmp );
+    free(db_name_tmp);
 
-    if( db5util_db_args )
-	free(db5util_db_args);
+    free(db5util_db_args);
 
     kadm5_free_config_params(util_context, &global_params);
     krb5_free_context(util_context);

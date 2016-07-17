@@ -925,8 +925,7 @@ soft_ssl_key_and_mac_derive(soft_session_t *sp, CK_MECHANISM_PTR mech,
 	if (new_tmpl_allocated)
 		free(new_tmpl);
 
-	if (export_keys != NULL)
-		free(export_keys);
+	free(export_keys);
 
 	return (rv);
 
@@ -955,8 +954,7 @@ out_err:
 	if (new_tmpl_allocated)
 		free(new_tmpl);
 
-	if (export_keys != NULL)
-		free(export_keys);
+	free(export_keys);
 
 	return (rv);
 }

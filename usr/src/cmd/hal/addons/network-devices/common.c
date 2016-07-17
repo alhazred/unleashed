@@ -239,18 +239,12 @@ out:
 		NP(manufacturer), NP(model), NP(description), NP(serial),
 		NP(uri)));
 
-	if (tmp_udi != NULL)
-		free(tmp_udi);
-	if (manufacturer != NULL)
-		free(manufacturer);
-	if (model != NULL)
-		free(model);
-	if (description != NULL)
-		free(description);
-	if (uri != NULL)
-		free(uri);
-	if (sn != NULL)
-		free(sn);
+	free(tmp_udi);
+	free(manufacturer);
+	free(model);
+	free(description);
+	free(uri);
+	free(sn);
 
 	if (dbus_error_is_set(&error)) {
 		HAL_WARNING(("%s: %s", error.name, error.message));

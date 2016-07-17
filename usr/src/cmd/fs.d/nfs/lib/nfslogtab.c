@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Manipulates the nfslogtab
  */
@@ -388,12 +386,9 @@ logtab_deactivate_after_boot(FILE *fd)
 void
 logtab_ent_free(struct logtab_ent *lep)
 {
-	if (lep->le_buffer)
-		free(lep->le_buffer);
-	if (lep->le_path)
-		free(lep->le_path);
-	if (lep->le_tag)
-		free(lep->le_tag);
+	free(lep->le_buffer);
+	free(lep->le_path);
+	free(lep->le_tag);
 	free(lep);
 }
 

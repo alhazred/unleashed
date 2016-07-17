@@ -360,8 +360,7 @@ static void
 autofs_readdir_1_free_r(struct autofs_rddirres *res)
 {
 	if (res->rd_status == AUTOFS_OK) {
-		if (res->rd_rddir.rddir_entries)
-			free(res->rd_rddir.rddir_entries);
+		free(res->rd_rddir.rddir_entries);
 	}
 }
 
@@ -602,29 +601,20 @@ free_action_list(action_list *alp)
 static void
 autofs_lookup_1_free_args(autofs_lookupargs *args)
 {
-	if (args->map)
-		free(args->map);
-	if (args->path)
-		free(args->path);
-	if (args->name)
-		free(args->name);
-	if (args->subdir)
-		free(args->subdir);
-	if (args->opts)
-		free(args->opts);
+	free(args->map);
+	free(args->path);
+	free(args->name);
+	free(args->subdir);
+	free(args->opts);
 }
 
 static void
 autofs_unmount_1_free_args(umntrequest *args)
 {
-	if (args->mntresource)
-		free(args->mntresource);
-	if (args->mntpnt)
-		free(args->mntpnt);
-	if (args->fstype)
-		free(args->fstype);
-	if (args->mntopts)
-		free(args->mntopts);
+	free(args->mntresource);
+	free(args->mntpnt);
+	free(args->fstype);
+	free(args->mntopts);
 	if (args->next)
 		autofs_unmount_1_free_args(args->next);
 }

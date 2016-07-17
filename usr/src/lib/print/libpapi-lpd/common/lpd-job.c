@@ -328,8 +328,7 @@ unused_attributes(papi_attribute_t **list, papi_attribute_t **used)
 
 			do {
 				size += 1024;
-				if (result != NULL)
-					free(result);
+				free(result);
 				result = calloc(1, size);
 			} while (papiAttributeListToString(unused, " ",
 			    result, size) != PAPI_OK);

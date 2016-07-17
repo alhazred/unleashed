@@ -164,10 +164,8 @@ static boolean_t _read_nsw_file(void);
 static int
 inetdir_free(int ret, struct in_addr *inaddrs, char **baddrlist)
 {
-	if (inaddrs)
-		free(inaddrs);
-	if (baddrlist)
-		free(baddrlist);
+	free(inaddrs);
+	free(baddrlist);
 	_nderror = ret;
 	return (ret);
 }
@@ -713,10 +711,8 @@ _get_hostserv_inetnetdir_byname(struct netconfig *nconf,
 
 	} else {
 		/* haddrlist is no longer used, so clean up */
-		if (inaddrs)
-			free(inaddrs);
-		if (baddrlist)
-			free(baddrlist);
+		free(inaddrs);
+		free(baddrlist);
 	}
 
 	/*
@@ -1711,8 +1707,7 @@ order_haddrlist_inet(char **haddrlist, size_t addrcount)
 		 * re-check the timeout.
 		 */
 		if (localinfo == NULL || ((now - then) > IFINFOTIMEOUT)) {
-			if (localinfo != NULL)
-				free(localinfo);
+			free(localinfo);
 			if ((localinfo = get_local_info()) == NULL) {
 				(void) rw_unlock(&localinfo_lock);
 				free(sortbuf);

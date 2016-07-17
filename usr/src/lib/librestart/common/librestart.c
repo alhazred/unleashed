@@ -520,16 +520,11 @@ free_restarter_event_handle(struct restarter_event_handle *h)
 	 * restart.
 	 */
 
-	if (h->reh_restarter_name != NULL)
-		free(h->reh_restarter_name);
-	if (h->reh_delegate_channel_name != NULL)
-		free(h->reh_delegate_channel_name);
-	if (h->reh_delegate_subscriber_id != NULL)
-		free(h->reh_delegate_subscriber_id);
-	if (h->reh_master_channel_name != NULL)
-		free(h->reh_master_channel_name);
-	if (h->reh_master_subscriber_id != NULL)
-		free(h->reh_master_subscriber_id);
+	free(h->reh_restarter_name);
+	free(h->reh_delegate_channel_name);
+	free(h->reh_delegate_subscriber_id);
+	free(h->reh_master_channel_name);
+	free(h->reh_master_subscriber_id);
 
 	free(h);
 }

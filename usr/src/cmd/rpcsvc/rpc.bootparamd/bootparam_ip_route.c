@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -212,8 +210,7 @@ free_itemlist(mib_item_t *item_list)
 	while (item_list) {
 		item = item_list;
 		item_list = item->next_item;
-		if (item->valp)
-			free(item->valp);
+		free(item->valp);
 		free(item);
 	}
 }

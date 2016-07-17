@@ -9141,8 +9141,7 @@ rebuild_lk_comp_path(char *str, char **namep)
 					(void) strncat(buf, zonename,
 					    MAXPATHLEN);
 				}
-				if (from_label != NULL)
-					free(from_label);
+				free(from_label);
 				(void) strncat(buf, tempbuf, MAXPATHLEN);
 				break;
 			}

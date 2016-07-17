@@ -1,5 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*-
  * Copyright (c) 1990, 1993, 1994
  *	The Regents of the University of California.  All rights reserved.
@@ -386,8 +384,7 @@ collect_key(hashp, pagep, len, last_page)
 	/* If this is the last page with key. */
 	if (BIGDATALEN(pagep)) {
 		totlen = len + BIGKEYLEN(pagep);
-		if (hashp->bigkey_buf)
-			free(hashp->bigkey_buf);
+		free(hashp->bigkey_buf);
 		hashp->bigkey_buf = (u_int8_t *)malloc(totlen);
 		if (!hashp->bigkey_buf)
 			return (-1);
@@ -400,8 +397,7 @@ collect_key(hashp, pagep, len, last_page)
 
 	/* Key filled up all of last key page, so we've gone 1 too far. */
 	if (BIGKEYLEN(pagep) == 0) {
-		if (hashp->bigkey_buf)
-			free(hashp->bigkey_buf);
+		free(hashp->bigkey_buf);
 		hashp->bigkey_buf = (u_int8_t *)malloc(len);
 		return (hashp->bigkey_buf ? len : -1);
 	}
@@ -452,8 +448,7 @@ collect_data(hashp, pagep, len)
 
 	/* If there is no next page. */
 	if (NEXT_PGNO(pagep) == INVALID_PGNO) {
-		if (hashp->bigdata_buf)
-			free(hashp->bigdata_buf);
+		free(hashp->bigdata_buf);
 		totlen = len + BIGDATALEN(pagep);
 		hashp->bigdata_buf = (u_int8_t *)malloc(totlen);
 		if (!hashp->bigdata_buf)

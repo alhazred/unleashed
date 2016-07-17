@@ -386,9 +386,9 @@ cert_x509_set_default_attributes(TEMPLATE *tmpl, CK_ULONG mode)
 	serial_attr = (CK_ATTRIBUTE *)malloc(sizeof (CK_ATTRIBUTE));
 
 	if (! id_attr || ! issuer_attr || ! serial_attr) {
-		if (id_attr) free(id_attr);
-		if (issuer_attr) free(issuer_attr);
-		if (serial_attr) free(serial_attr);
+		free(id_attr);
+		free(issuer_attr);
+		free(serial_attr);
 
 		return (CKR_HOST_MEMORY);
 	}

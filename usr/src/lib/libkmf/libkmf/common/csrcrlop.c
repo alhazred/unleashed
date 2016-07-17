@@ -342,11 +342,9 @@ kmf_add_csr_eku(KMF_CSR_DATA *CSRData, KMF_OID *ekuOID,
 
 out:
 	kmf_free_eku(&ekudata);
-	if (extdata != NULL)
-		free(extdata);
+	free(extdata);
 
-	if (olddata != NULL)
-		free(olddata);
+	free(olddata);
 
 	if (asn1 != NULL)
 		kmfber_free(asn1, 1);

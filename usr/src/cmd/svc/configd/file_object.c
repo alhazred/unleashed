@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * file_object.c - enter objects into and load them from the backend
  *
@@ -2080,8 +2078,7 @@ object_copy_string(void *data_arg, int columns, char **vals, char **names)
 
 	assert(columns == 1);
 
-	if (*data != NULL)
-		free(*data);
+	free(*data);
 	*data = NULL;
 
 	if (vals[0] != NULL) {

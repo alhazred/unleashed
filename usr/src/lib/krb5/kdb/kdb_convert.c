@@ -573,8 +573,7 @@ ulog_conv_2logentry(krb5_context context, krb5_db_entry *entries,
 
 		}
 
-		if (attr_types)
-			free(attr_types);
+		free(attr_types);
 
 		/*
 		 * Update len field in kdb_update
@@ -955,14 +954,14 @@ ulog_free_entries(kdb_incr_update_t *updates, int no_of_updates)
 				/*
 				 * Free av_mod_where
 				 */
-				if ((ULOG_ENTRY_TYPE(upd, i).av_type == AT_MOD_WHERE) && ULOG_ENTRY(upd, i).av_mod_where.utf8str_t_val)
-					free(ULOG_ENTRY(upd, i).av_mod_where.utf8str_t_val);
+				if ((ULOG_ENTRY_TYPE(upd, i).av_type == AT_MOD_WHERE))
+				free(ULOG_ENTRY(upd, i).av_mod_where.utf8str_t_val);
 
 				/*
 				 * Free av_pw_policy
 				 */
-				if ((ULOG_ENTRY_TYPE(upd, i).av_type == AT_PW_POLICY) && ULOG_ENTRY(upd, i).av_pw_policy.utf8str_t_val)
-					free(ULOG_ENTRY(upd, i).av_pw_policy.utf8str_t_val);
+				if ((ULOG_ENTRY_TYPE(upd, i).av_type == AT_PW_POLICY))
+				free(ULOG_ENTRY(upd, i).av_pw_policy.utf8str_t_val);
 
 				/* 
 				 * XXX: Free av_pw_hist
@@ -972,8 +971,8 @@ ulog_free_entries(kdb_incr_update_t *updates, int no_of_updates)
 				 * populating this union member in
 				 * the conv api function(s) anyways.
 				 */
-				if ((ULOG_ENTRY_TYPE(upd, i).av_type == AT_PW_HIST) && ULOG_ENTRY(upd, i).av_pw_hist.av_pw_hist_val)
-					free(ULOG_ENTRY(upd, i).av_pw_hist.av_pw_hist_val);
+				if ((ULOG_ENTRY_TYPE(upd, i).av_type == AT_PW_HIST))
+				free(ULOG_ENTRY(upd, i).av_pw_hist.av_pw_hist_val);
 
 			 }
 

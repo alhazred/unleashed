@@ -310,6 +310,5 @@ err_ret:
 void
 tsol_freetpent(tsol_tpent_t *tp)
 {
-	if (tp != NULL)
-		free(tp);
+	free(tp);
 }

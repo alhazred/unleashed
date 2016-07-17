@@ -819,7 +819,7 @@ kmf_free_eku_policy(KMF_EKU_POLICY *ekus)
 	}
 }
 
-#define	FREE_POLICY_STR(s) if (s != NULL) free(s);
+#define	FREE_POLICY_STR(s) free(s);
 
 void
 kmf_free_policy_record(KMF_POLICY_RECORD *policy)

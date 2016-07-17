@@ -189,12 +189,9 @@ soft_verify_pin(CK_UTF8CHAR_PTR pPin, CK_ULONG ulPinLen)
 	}
 
 cleanup:
-	if (salt)
-		free(salt);
-	if (tmp_pin)
-		free(tmp_pin);
-	if (ks_cryptpin)
-		free(ks_cryptpin);
+	free(salt);
+	free(tmp_pin);
+	free(ks_cryptpin);
 
 	return (rv);
 }
@@ -290,14 +287,10 @@ soft_setpin(CK_UTF8CHAR_PTR pOldPin, CK_ULONG ulOldPinLen,
 	}
 
 cleanup:
-	if (salt)
-		free(salt);
-	if (ks_cryptpin)
-		free(ks_cryptpin);
-	if (tmp_old_pin)
-		free(tmp_old_pin);
-	if (tmp_new_pin)
-		free(tmp_new_pin);
+	free(salt);
+	free(ks_cryptpin);
+	free(tmp_old_pin);
+	free(tmp_new_pin);
 
 	return (rv);
 }
@@ -1942,8 +1935,7 @@ soft_get_token_objects_from_keystore(ks_search_type_t type)
 
 		/* Free the ks_obj list */
 		ks_obj_next = ks_obj->next;
-		if (ks_obj->buf)
-			free(ks_obj->buf);
+		free(ks_obj->buf);
 		free(ks_obj);
 		ks_obj = ks_obj_next;
 	}

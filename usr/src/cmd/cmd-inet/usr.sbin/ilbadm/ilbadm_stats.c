@@ -963,8 +963,7 @@ out:
 	if ((rc != ILBADM_OK) && (rc != ILBADM_LIBERR))
 		ilbadm_err(ilbadm_errstr(rc));
 
-	if (sta->ilbst_rlist != NULL)
-		free(sta->ilbst_rlist);
+	free(sta->ilbst_rlist);
 
 	return (rc);
 }

@@ -157,8 +157,7 @@ regcmp(const char* pattern, ...)
 	{
 		if ((n += INC) > TOT || !(re = newof(re, Regex_t, 0, n)))
 		{
-			if (re)
-				free(re);
+			free(re);
 			sfstrclose(sp);
 			return 0;
 		}

@@ -191,8 +191,7 @@ getaddrinfo(const char* node, const char* service, const struct addrinfo* hint, 
 static void
 freeaddrinfo(struct addrinfo* ap)
 {
-	if (ap)
-		free(ap);
+	free(ap);
 }
 
 #endif

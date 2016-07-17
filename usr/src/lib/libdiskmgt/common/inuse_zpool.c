@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Attempt to dynamically link in the ZFS libzfs.so.1 so that we can
  * see if there are any ZFS zpools on any of the slices.
@@ -117,8 +115,7 @@ inuse_zpool_common(char *slice, nvlist_t *attrs, int *errp, char *type)
 				    name, errp);
 			}
 		}
-		if (name)
-			free(name);
+		free(name);
 		(void) close(fd);
 	}
 	(void) rw_unlock(&zpool_lock);

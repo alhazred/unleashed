@@ -381,11 +381,11 @@ irp_unmarshall_pw(struct passwd *pw, char *buffer) {
  error:
 	errno = myerrno;
 
-	if (name != NULL) free(name);
-	if (pass != NULL) free(pass);
-	if (gecos != NULL) free(gecos);
-	if (dir != NULL) free(dir);
-	if (shell != NULL) free(shell);
+	free(name);
+	free(pass);
+	free(gecos);
+	free(dir);
+	free(shell);
 
 	return (-1);
 }
@@ -548,8 +548,8 @@ irp_unmarshall_gr(struct group *gr, char *buffer) {
  error:
 	errno = myerrno;
 
-	if (name != NULL) free(name);
-	if (pass != NULL) free(pass);
+	free(name);
+	free(pass);
 
 	return (-1);
 }
@@ -710,8 +710,8 @@ irp_unmarshall_sv(struct servent *sv, char *buffer) {
  error:
 	errno = myerrno;
 
-	if (name != NULL) free(name);
-	if (proto != NULL) free(proto);
+	free(name);
+	free(proto);
 	free_array(aliases, 0);
 
 	return (-1);
@@ -856,7 +856,7 @@ int irp_unmarshall_pr(struct protoent *pr, char *buffer) {
  error:
 	errno = myerrno;
 
-	if (name != NULL) free(name);
+	free(name);
 	free_array(aliases, 0);
 
 	return (-1);
@@ -1116,7 +1116,7 @@ irp_unmarshall_ho(struct hostent *ho, char *buffer) {
  error:
 	errno = myerrno;
 
-	if (name != NULL) free(name);
+	free(name);
 	free_array(hohaddrlist, 0);
 	free_array(aliases, 0);
 
@@ -1284,8 +1284,8 @@ irp_unmarshall_ng(const char **hostp, const char **userp, const char **domainp,
  error:
 	errno = myerrno;
 
-	if (host != NULL) free(host);
-	if (user != NULL) free(user);
+	free(host);
+	free(user);
 
 	return (-1);
 }
@@ -1459,7 +1459,7 @@ irp_unmarshall_nw(struct nwent *ne, char *buffer) {
  error:
 	errno = myerrno;
 
-	if (name != NULL) free(name);
+	free(name);
 	free_array(aliases, 0);
 
 	return (-1);
@@ -1625,7 +1625,7 @@ irp_unmarshall_ne(struct netent *ne, char *buffer) {
  error:
 	errno = myerrno;
 
-	if (name != NULL) free(name);
+	free(name);
 	free_array(aliases, 0);
 
 	return (-1);
@@ -1922,8 +1922,7 @@ free_array(char **argv, size_t entries) {
 		return;
 
 	while ((useEntries && entries > 0U) || *p) {
-		if (*p)
-			free(*p);
+		free(*p);
 		p++;
 		if (useEntries)
 			entries--;

@@ -191,8 +191,7 @@ success:
 	if(*dir != '/')
 		return(0);
 	nv_putval(opwdnod,oldpwd,NV_RDONLY);
-	if(oldpwd)
-		free(oldpwd);
+	free(oldpwd);
 	flag = strlen(dir);
 	/* delete trailing '/' */
 	while(--flag>0 && dir[flag]=='/')

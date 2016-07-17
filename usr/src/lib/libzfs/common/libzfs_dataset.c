@@ -663,8 +663,7 @@ zfs_open(libzfs_handle_t *hdl, const char *path, int types)
 void
 zfs_close(zfs_handle_t *zhp)
 {
-	if (zhp->zfs_mntopts)
-		free(zhp->zfs_mntopts);
+	free(zhp->zfs_mntopts);
 	nvlist_free(zhp->zfs_props);
 	nvlist_free(zhp->zfs_user_props);
 	nvlist_free(zhp->zfs_recvd_props);
@@ -1092,8 +1091,7 @@ zfs_valid_proplist(libzfs_handle_t *hdl, zfs_type_t type, nvlist_t *nvl,
 			/* Now translate to hex internal label string */
 			if (label_to_str(new_sl, &hex, M_INTERNAL,
 			    DEF_NAMES) != 0) {
-				if (hex)
-					free(hex);
+				free(hex);
 				goto badlabel;
 			}
 			m_label_free(new_sl);
@@ -2486,8 +2484,7 @@ zfs_prop_get(zfs_handle_t *zhp, zfs_prop_t prop, char *propbuf, size_t proplen,
 
 			if (label_to_str(new_sl, &ascii, M_LABEL,
 			    DEF_NAMES) != 0) {
-				if (ascii)
-					free(ascii);
+				free(ascii);
 				m_label_free(new_sl);
 				break;
 			}

@@ -23,8 +23,6 @@
  *	Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma	ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "libtnf.h"
 
 #define	TAG_INDEX(x)	(TNF_TAG16_ABS16(x) / sizeof (tnf_ref32_t))
@@ -88,8 +86,7 @@ _tnf_fini_tags(TNF *tnf)
 			/* remember link */
 			link = info->link;
 			/* free slot information */
-			if (info->slotinfo)
-				free(info->slotinfo);
+			free(info->slotinfo);
 			/* free taginfo */
 			free(info);
 			/* next in hash chain */

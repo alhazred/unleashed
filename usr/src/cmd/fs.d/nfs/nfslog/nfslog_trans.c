@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <errno.h>
 #include <malloc.h>
@@ -252,10 +250,10 @@ remove_te(struct transentry *pte)
 	if (pte->next)
 		remque(pte);
 
-	if (pte->principal_name) free(pte->principal_name);
-	if (pte->pathname) free(pte->pathname);
+	free(pte->principal_name);
+	free(pte->pathname);
 	if (pte->pnb) freenetbuf(pte->pnb);
-	if (pte->netid) free(pte->netid);
+	free(pte->netid);
 
 	free(pte);
 }
@@ -409,14 +407,10 @@ nfslog_open_trans_file(
 		transrec->te_list_v3_write == NULL ||
 		transrec->te_list_v2_read == NULL ||
 		transrec->te_list_v2_write == NULL) {
-		if (transrec->te_list_v3_read)
-			free(transrec->te_list_v3_read);
-		if (transrec->te_list_v3_write)
-			free(transrec->te_list_v3_write);
-		if (transrec->te_list_v2_read)
-			free(transrec->te_list_v2_read);
-		if (transrec->te_list_v2_write)
-			free(transrec->te_list_v2_write);
+		free(transrec->te_list_v3_read);
+		free(transrec->te_list_v3_write);
+		free(transrec->te_list_v2_read);
+		free(transrec->te_list_v2_write);
 		nfslog_close_trans_file(transrec);
 		return (NULL);
 	}
@@ -1174,8 +1168,7 @@ trans_symlink(
 		strlen(args->sla_tnm) + 3);
 	(void) sprintf(newte->pathname, "%s->%s", path1, args->sla_tnm);
 
-	if (tpath1)
-		free(tpath1);
+	free(tpath1);
 
 	return (newte);
 }

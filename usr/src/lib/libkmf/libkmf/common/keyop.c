@@ -131,8 +131,7 @@ kmf_delete_key_from_keystore(KMF_HANDLE_T handle,
 		key = kmf_get_attr_ptr(KMF_KEY_HANDLE_ATTR, attrlist, num_args);
 		if (key == NULL)
 			return (KMF_ERR_BAD_PARAMETER);
-		if (key->keylabel != NULL)
-			free(key->keylabel);
+		free(key->keylabel);
 
 		if (key->israw && key->keyp != NULL) {
 			if (key->keyclass ==  KMF_ASYM_PUB ||

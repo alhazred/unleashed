@@ -1289,8 +1289,7 @@ krb5_gss_accept_sec_context(minor_status, context_handle,
 
 cleanup:
    /* Solaris Kerberos */
-   if (krb_error_data.e_data.data != NULL)
-        free(krb_error_data.e_data.data);
+   free(krb_error_data.e_data.data);
 	
    if (!verifier_cred_handle && cred_handle) {
 	krb5_gss_release_cred(&t_minor_status, &cred_handle);

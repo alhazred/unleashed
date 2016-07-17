@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Pstack.c
  *
@@ -272,7 +270,7 @@ init_uclist(uclist_t *ucl, struct ps_prochandle *P)
 void
 free_uclist(uclist_t *ucl)
 {
-	if (!ucl->uc_cached && ucl->uc_addrs != NULL)
+	if (!ucl->uc_cached)
 		free(ucl->uc_addrs);
 }
 

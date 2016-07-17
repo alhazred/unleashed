@@ -1007,8 +1007,7 @@ nwam_condition_string_to_condition(const char *string,
 
 	if ((condition_string = strtok_r(NULL, " \t", &lasts)) == NULL) {
 		free(copy);
-		if (*object_namep != NULL)
-			free(*object_namep);
+		free(*object_namep);
 		return (NWAM_INVALID_ARG);
 	}
 	if (strcmp(condition_string, NWAM_CONDITION_IS_STRING) == 0)
@@ -1028,8 +1027,7 @@ nwam_condition_string_to_condition(const char *string,
 		*conditionp = NWAM_CONDITION_IS_NOT_IN_RANGE;
 	else {
 		free(copy);
-		if (*object_namep != NULL)
-			free(*object_namep);
+		free(*object_namep);
 		return (NWAM_INVALID_ARG);
 	}
 

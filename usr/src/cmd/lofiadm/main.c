@@ -811,10 +811,8 @@ kernel_cipher_check(mech_alias_t *cipher)
 	return (ciph_ok && iv_ok);
 
 kcc_out:
-	if (kinfo != NULL)
-		free(kinfo);
-	if (kciphers != NULL)
-		free(kciphers);
+	free(kinfo);
+	free(kciphers);
 	if (fd != -1)
 		(void) close(fd);
 	return (B_FALSE);
@@ -1763,12 +1761,9 @@ cleanup:
 			die(gettext("error compressing file %s"), filename);
 		}
 	}
-	if (compressed_seg != NULL)
-		free(compressed_seg);
-	if (uncompressed_seg != NULL)
-		free(uncompressed_seg);
-	if (index != NULL)
-		free(index);
+	free(compressed_seg);
+	free(uncompressed_seg);
+	free(index);
 	if (compfd != -1)
 		(void) close(compfd);
 	if (uncompfd != -1)

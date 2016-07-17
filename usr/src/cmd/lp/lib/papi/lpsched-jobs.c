@@ -214,8 +214,7 @@ job_attributes_to_lpsched_request(papi_service_t svc, REQUEST *r,
 		    (job_name && class ? "\\n#####\\n#####\\t\\t " : ""),
 		    (class ? class : ""));
 		if (buf[0] != '\0') {
-			if (r->title != NULL)
-				free(r->title);
+			free(r->title);
 			r->title = strdup(buf);
 		}
 	} else if ((s != NULL) && (strcasecmp(s, "none") == 0)) {
@@ -284,8 +283,7 @@ job_attributes_to_lpsched_request(papi_service_t svc, REQUEST *r,
 	}
 
 	if (options != NULL) {
-		if (r->options != NULL)
-			free(r->options);
+		free(r->options);
 		r->options = sprintlist(options);
 		freelist(options);
 	}

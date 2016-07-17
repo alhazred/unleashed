@@ -1163,8 +1163,7 @@ SC_FindObjectsFinal(ST_SESSION_HANDLE  sSession)
 		goto done;
 	}
 
-	if (sess->find_list)
-		free(sess->find_list);
+	free(sess->find_list);
 
 	sess->find_list   = NULL;
 	sess->find_len    = 0;

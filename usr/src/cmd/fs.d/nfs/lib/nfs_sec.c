@@ -822,10 +822,8 @@ nfs_free_secdata(sec_data_t *secdata)
 			/* LINTED pointer alignment */
 			dkdata = (dh_k4_clntdata_t *)secdata->data;
 			if (dkdata) {
-				if (dkdata->netname)
-					free(dkdata->netname);
-				if (dkdata->syncaddr.buf)
-					free(dkdata->syncaddr.buf);
+				free(dkdata->netname);
+				free(dkdata->syncaddr.buf);
 				free(dkdata);
 			}
 			break;
@@ -834,8 +832,7 @@ nfs_free_secdata(sec_data_t *secdata)
 			/* LINTED pointer alignment */
 			gdata = (gss_clntdata_t *)secdata->data;
 			if (gdata) {
-				if (gdata->mechanism.elements)
-					free(gdata->mechanism.elements);
+				free(gdata->mechanism.elements);
 				free(gdata);
 			}
 			break;

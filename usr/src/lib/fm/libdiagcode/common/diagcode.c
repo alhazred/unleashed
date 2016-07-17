@@ -35,8 +35,6 @@
  * note that this environment variable is only examined in fm_dc_opendict().
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -195,8 +193,7 @@ fm_dc_opendict(int version, const char *dirpath, const char *dictname)
 	 */
 	if ((dhp = malloc(sizeof (*dhp))) == NULL ||
 	    (dhp->dictname = strdup(dictname)) == NULL) {
-		if (dhp)
-			free(dhp);
+		free(dhp);
 		if (debug)
 			(void) fprintf(stderr, "%sENOMEM\n", debugstr);
 		errno = ENOMEM;

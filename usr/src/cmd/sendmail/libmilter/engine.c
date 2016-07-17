@@ -1507,10 +1507,8 @@ st_macros(g)
 		free(argv);
 		return _SMFIS_FAIL;
 	}
-	if (g->a_ctx->ctx_mac_ptr[i] != NULL)
-		free(g->a_ctx->ctx_mac_ptr[i]);
-	if (g->a_ctx->ctx_mac_buf[i] != NULL)
-		free(g->a_ctx->ctx_mac_buf[i]);
+	free(g->a_ctx->ctx_mac_ptr[i]);
+	free(g->a_ctx->ctx_mac_buf[i]);
 	g->a_ctx->ctx_mac_ptr[i] = argv;
 	g->a_ctx->ctx_mac_buf[i] = g->a_buf;
 	return _SMFIS_KEEP;

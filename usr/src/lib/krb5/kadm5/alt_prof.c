@@ -976,16 +976,14 @@ krb5_error_code kadm5_get_config_params(context, use_kdc_config,
 		params.mask |= KADM5_CONFIG_POLL_TIME;
 
 	if (params_in->mask & KADM5_CONFIG_POLL_TIME) {
-		if (params.iprop_polltime)
-			free(params.iprop_polltime);
+		free(params.iprop_polltime);
 		params.iprop_polltime = strdup(params_in->iprop_polltime);
 		if (params.iprop_polltime)
 			params.mask |= KADM5_CONFIG_POLL_TIME;
 	} else {
 		if (aprofile && !krb5_aprof_get_string(aprofile, hierarchy,
 		    TRUE, &svalue)) {
-			if (params.iprop_polltime)
-				free(params.iprop_polltime);
+			free(params.iprop_polltime);
 			params.iprop_polltime = strdup(svalue);
 			params.mask |= KADM5_CONFIG_POLL_TIME;
 			krb5_xfree(svalue);
@@ -1002,8 +1000,7 @@ cleanup:
 	 params_out->mask = 0;
     }
 #ifdef KRB5_DNS_LOOKUP
-	if (dns_realm.data)
-		free(dns_realm.data);
+	free(dns_realm.data);
 #endif /* KRB5_DNS_LOOKUP */
 
     return(kret);
@@ -1314,8 +1311,7 @@ krb5_read_realm_params(kcontext, realm, rparamp)
 cleanup:
     if (aprofile)
 	krb5_aprof_finish(aprofile);
-    if (lrealm)
-	free(lrealm);
+    free(lrealm);
     if (kret) {
 	if (rparams)
 	    krb5_free_realm_params(kcontext, rparams);

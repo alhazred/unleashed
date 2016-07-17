@@ -1514,8 +1514,7 @@ load_root_cred_using_keytab(
 
 	(void) krb5_kt_close(context, keytab);
 
-	if (svcname != NULL)
-		free(svcname);
+	free(svcname);
 	if (code) {
 		*minor_status = code;
 		krb5_free_cred_contents(context, &my_creds);

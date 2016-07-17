@@ -634,15 +634,12 @@ free_table(info_table_t *table, size_t table_len)
 
 	if (table != NULL) {
 		for (index = 0; index < table_len; index++) {
-			if (table[index].path != NULL)
-				free(table[index].path);
+			free(table[index].path);
 			while (table[index].entries != NULL) {
 				entry = table[index].entries;
 				table[index].entries = entry->next;
-				if (entry->rsrc != NULL)
-					free(entry->rsrc);
-				if (entry->usage != NULL)
-					free(entry->usage);
+				free(entry->rsrc);
+				free(entry->usage);
 				free(entry);
 			}
 		}

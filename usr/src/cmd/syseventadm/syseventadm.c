@@ -982,8 +982,7 @@ sc_strdup(char *cp)
 static void
 sc_strfree(char *s)
 {
-	if (s)
-		free(s);
+	free(s);
 }
 
 

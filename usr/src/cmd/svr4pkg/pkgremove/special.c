@@ -330,8 +330,7 @@ free_special_contents(char ***pppcSC, int max)
 		if (ppc[i] == NULL)
 			free(ppc[i]);
 
-	if (ppc != NULL)
-		free(ppc);
+	free(ppc);
 
 	*pppcSC = NULL;
 }

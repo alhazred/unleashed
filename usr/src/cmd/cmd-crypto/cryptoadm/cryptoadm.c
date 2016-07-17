@@ -704,8 +704,7 @@ do_list(int argc, char **argv)
 	}
 
 out:
-	if (prov != NULL)
-		free(prov);
+	free(prov);
 
 	if (mecharglist != NULL)
 		free_mechlist(mecharglist);

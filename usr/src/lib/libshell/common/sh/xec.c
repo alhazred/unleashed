@@ -2211,7 +2211,7 @@ int sh_exec(register const Shnode_t *t, int flags)
 			static char	lastarg[32];
 			if(sh_isstate(SH_FORKED))
 				sh_done(shp,0);
-			if(shp->lastarg!= lastarg && shp->lastarg)
+			if (shp->lastarg != lastarg)
 				free(shp->lastarg);
 			if(strlen(comn) < sizeof(lastarg))
 			{

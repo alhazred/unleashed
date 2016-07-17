@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * nfs log - read buffer file and return structs in usable form
  */
@@ -347,8 +345,7 @@ nfslog_free_buf(struct nfslog_buf *lbp, int close_quick)
 		(void) close(lbp->fd);
 		lbp->fd = -1;
 	}
-	if (lbp->bufpath != NULL)
-		free(lbp->bufpath);
+	free(lbp->bufpath);
 }
 
 /*
@@ -874,14 +871,12 @@ nfslog_free_logrecord(struct nfslog_lr *lrp, bool_t processing_complete)
 	if (lrp->xdrargs != NULL && reqrec->re_rpc_arg)
 		(*lrp->xdrargs)(&lrp->xdrs, reqrec->re_rpc_arg);
 
-	if (reqrec->re_rpc_arg)
-		free(reqrec->re_rpc_arg);
+	free(reqrec->re_rpc_arg);
 
 	if (lrp->xdrres != NULL && reqrec->re_rpc_res)
 		(*lrp->xdrres)(&lrp->xdrs, reqrec->re_rpc_res);
 
-	if (reqrec->re_rpc_res)
-		free(reqrec->re_rpc_res);
+	free(reqrec->re_rpc_res);
 
 	free_lrp(lrp);
 }
@@ -889,8 +884,7 @@ nfslog_free_logrecord(struct nfslog_lr *lrp, bool_t processing_complete)
 static void
 free_lrp(struct nfslog_lr *lrp)
 {
-	if (lrp->buffer != NULL)
-		free(lrp->buffer);
+	free(lrp->buffer);
 	free(lrp);
 }
 

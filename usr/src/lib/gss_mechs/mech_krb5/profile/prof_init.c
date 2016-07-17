@@ -403,8 +403,7 @@ errcode_t profile_ser_internalize(const char *unused, profile_t *profilep,
 cleanup:
 	if (flist) {
 		for (i=0; i<fcount; i++) {
-			if (flist[i])
-				free(flist[i]);
+			free(flist[i]);
 		}
 		free(flist);
 	}

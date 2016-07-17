@@ -1,5 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * lib/kdb/kdb_ldap/ldap_service_rights.c
  *
@@ -609,11 +607,9 @@ krb5_ldap_add_service_rights(context, servicetype, serviceobjdn, realmname, subt
 
 cleanup:
 
-    if (realmdn)
-	free(realmdn);
+    free(realmdn);
 
-    if (subtree)
-	free(subtree);
+    free(subtree);
 
     krb5_ldap_put_handle_to_pool(ldap_context, ldap_server_handle);
     return st;
@@ -892,11 +888,9 @@ krb5_ldap_delete_service_rights(context, servicetype, serviceobjdn, realmname, s
 
 cleanup:
 
-    if (realmdn)
-	free(realmdn);
+    free(realmdn);
 
-    if (subtree)
-	free(subtree);
+    free(subtree);
 
     krb5_ldap_put_handle_to_pool(ldap_context, ldap_server_handle);
     return st;

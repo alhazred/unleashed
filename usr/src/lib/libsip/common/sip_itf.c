@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <string.h>
 #include <strings.h>
 #include <stdlib.h>
@@ -447,8 +445,7 @@ next_msg:
 	}
 	sip_msg = (_sip_msg_t *)sip_new_msg();
 	if (sip_msg == NULL) {
-		if (msgbuf != NULL)
-			free(msgbuf);
+		free(msgbuf);
 		sip_refrele_conn(conn_object);
 		return;
 	}

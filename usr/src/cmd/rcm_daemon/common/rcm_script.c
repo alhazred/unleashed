@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * rcm scripting module:
  *
@@ -454,8 +452,7 @@ script_fini(module_t *module)
 
 	remove_drreq_all(rsi);
 
-	if (rsi->func_info_buf)
-		free(rsi->func_info_buf);
+	free(rsi->func_info_buf);
 
 	free(rsi->script_full_name);
 	free(rsi);
@@ -1546,11 +1543,10 @@ do_script_info(script_info_t *rsi)
 	} else if (errmsg)
 		(void) free(errmsg);
 
-	if (status != RCM_SUCCESS && rsi->func_info_buf != NULL)
+	if (status != RCM_SUCCESS)
 		free(rsi->func_info_buf);
 
-	if (rsi->failure_reason_buf)
-		free(rsi->failure_reason_buf);
+	free(rsi->failure_reason_buf);
 
 	return (status);
 }
@@ -1592,8 +1588,7 @@ do_dr(script_info_t *rsi, char *argv[], char *envp[], char **info)
 				rsi->script_name);
 	}
 
-	if (rsi->failure_reason_buf)
-		free(rsi->failure_reason_buf);
+	free(rsi->failure_reason_buf);
 
 	return (status);
 }
@@ -1661,11 +1656,9 @@ script_get_info(rcm_handle_t *hdl,
 				rsi->script_name);
 	}
 
-	if (rsi->resource_usage_info_buf)
-		free(rsi->resource_usage_info_buf);
+	free(rsi->resource_usage_info_buf);
 
-	if (rsi->failure_reason_buf)
-		free(rsi->failure_reason_buf);
+	free(rsi->failure_reason_buf);
 
 	(void) mutex_unlock(&rsi->channel_lock);
 
@@ -1796,8 +1789,7 @@ script_register_interest(rcm_handle_t *hdl)
 
 	complete_unregister(rsi);
 
-	if (rsi->failure_reason_buf)
-		free(rsi->failure_reason_buf);
+	free(rsi->failure_reason_buf);
 
 	(void) mutex_unlock(&rsi->channel_lock);
 
@@ -2048,8 +2040,7 @@ script_request_suspend(rcm_handle_t *hdl,
 	status = do_dr(rsi, argv, envp, info);
 
 	(void) mutex_unlock(&rsi->channel_lock);
-	if (buf)
-		free(buf);
+	free(buf);
 	return (status);
 }
 

@@ -102,8 +102,7 @@ devtype(char *alias, struct pkgdev *devp)
 	name = devattr(alias, "pathname");
 	if (!name || !name[0]) {
 		/* Assume a regular file */
-		if (name)
-			free(name);
+		free(name);
 		devp->pathname = alias;
 		return (0);
 	}

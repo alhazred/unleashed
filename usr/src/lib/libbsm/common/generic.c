@@ -328,8 +328,7 @@ aug_save_sorf(int sorf)
 void
 aug_save_text(char *s)
 {
-	if (aug_text != NULL)
-		free(aug_text);
+	free(aug_text);
 	if (s == NULL)
 		aug_text = NULL;
 	else
@@ -339,8 +338,7 @@ aug_save_text(char *s)
 void
 aug_save_text1(char *s)
 {
-	if (aug_text1 != NULL)
-		free(aug_text1);
+	free(aug_text1);
 	if (s == NULL)
 		aug_text1 = NULL;
 	else
@@ -350,8 +348,7 @@ aug_save_text1(char *s)
 void
 aug_save_text2(char *s)
 {
-	if (aug_text2 != NULL)
-		free(aug_text2);
+	free(aug_text2);
 	if (s == NULL)
 		aug_text2 = NULL;
 	else
@@ -367,8 +364,7 @@ aug_save_na(int flag)
 void
 aug_save_path(char *s)
 {
-	if (aug_path != NULL)
-		free(aug_path);
+	free(aug_path);
 	if (s == NULL)
 		aug_path = NULL;
 	aug_path = strdup(s);

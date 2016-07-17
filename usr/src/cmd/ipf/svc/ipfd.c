@@ -304,8 +304,7 @@ is_correct_event(const char *fmri, const scf_propertygroup_t *pg,
 	}
 
 out:
-	if (state)
-		free(state);
+	free(state);
 
 	return (ret);
 }

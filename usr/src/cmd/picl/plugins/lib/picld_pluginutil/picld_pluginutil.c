@@ -941,8 +941,7 @@ process_refprop(cmdbuf_t *cmds, command_t *command, picl_nodehdl_t nodeh)
 static void
 free_table(command_t *command)
 {
-	if (command->tablecmd_tname)
-		free(command->tablecmd_tname);
+	free(command->tablecmd_tname);
 }
 
 /*
@@ -1612,8 +1611,7 @@ clean_up(cmdbuf_t *cmds)
 			break;
 		}
 	}
-	if (cmds->commands)
-		free(cmds->commands);
+	free(cmds->commands);
 }
 
 /*

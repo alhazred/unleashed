@@ -1,5 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * lib/kdb/kdb_ldap/ldap_principal2.c
  *
@@ -177,21 +175,18 @@ cleanup:
     if (*nentries == 0 || st != 0)
 	krb5_dbe_free_contents(context, entries);
 
-    if (filter)
-	free (filter);
+    free(filter);
 
     if (subtree) {
 	for (; ntrees; --ntrees)
-	    if (subtree[ntrees-1])
-		free (subtree[ntrees-1]);
+	    free(subtree[ntrees - 1]);
 	free (subtree);
     }
 
     if (ldap_server_handle)
 	krb5_ldap_put_handle_to_pool(ldap_context, ldap_server_handle);
 
-    if (user)
-	free(user);
+    free(user);
 
     return st;
 }
@@ -216,14 +211,10 @@ static void
 free_xargs(xargs)
     xargs_t xargs;
 {
-    if (xargs.dn)
-	free (xargs.dn);
-    if (xargs.linkdn)
-	free(xargs.linkdn);
-    if (xargs.containerdn)
-	free (xargs.containerdn);
-    if (xargs.tktpolicydn)
-	free (xargs.tktpolicydn);
+    free(xargs.dn);
+    free(xargs.linkdn);
+    free(xargs.containerdn);
+    free(xargs.tktpolicydn);
 }
 
 static krb5_error_code
@@ -419,8 +410,7 @@ cleanup:
     if (err != 0) {
 	if (ret != NULL) {
 	    for (i = 0; i <= num_versions; i++)
-		if (ret[i] != NULL)
-		    free (ret[i]);
+		free(ret[i]);
 	    free (ret);
 	    ret = NULL;
 	}
@@ -1150,16 +1140,13 @@ krb5_ldap_put_principal(context, entries, nentries, db_args)
     }
 
 cleanup:
-    if (user)
-	free(user);
+    free(user);
 
     free_xargs(xargs);
 
-    if (standalone_principal_dn)
-	free(standalone_principal_dn);
+    free(standalone_principal_dn);
 
-    if (principal_dn)
-	free (principal_dn);
+    free(principal_dn);
 
     /* Solaris Kerberos: fix memleak */
     if (ber_tl_data) {
@@ -1172,16 +1159,13 @@ cleanup:
 	free(ber_tl_data);
     }
 
-    if (polname != NULL)
-	free(polname);
+    free(polname);
 
-    if (subtree)
-	free (subtree);
+    free(subtree);
 
     if (bersecretkey) {
 	for (l=0; bersecretkey[l]; ++l) {
-	    if (bersecretkey[l]->bv_val)
-		free (bersecretkey[l]->bv_val);
+	    free(bersecretkey[l]->bv_val);
 	    free (bersecretkey[l]);
 	}
 	free (bersecretkey);

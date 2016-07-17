@@ -626,8 +626,7 @@ get_parts(disk_t *disk, struct ipart *iparts, char *opath, int opath_len)
 
 		len = strlen(disk->aliases->alias) + 1;
 		if ((device = malloc(len)) == NULL) {
-			if (device)
-				free(device);
+			free(device);
 			continue;
 		}
 

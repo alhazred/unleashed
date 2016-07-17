@@ -1255,8 +1255,7 @@ retry:
 	}
 
 out:
-	if (nvl_packed)
-		free(nvl_packed);
+	free(nvl_packed);
 	nvlist_free(ret);
 	dprintf((stderr, "daemon call is done. error = %d, errno = %s\n", error,
 	    strerror(errno)));
@@ -1436,19 +1435,16 @@ rcm_generate_nvlist(int cmd, rcm_handle_t *hd, char **rsrcnames, uint_t flag,
 	}
 
 	/* If an argument was packed intermediately, free the buffer */
-	if (buf)
-		free(buf);
+	free(buf);
 
 	/* Free the unpacked version of the nvlist and return the packed list */
 	nvlist_free(nvl);
 	return (0);
 
 fail:
-	if (buf)
-		free(buf);
+	free(buf);
 	nvlist_free(nvl);
-	if (*nvl_packed)
-		free(*nvl_packed);
+	free(*nvl_packed);
 	*nvl_packed = NULL;
 	*nvl_size = 0;
 	return (-1);

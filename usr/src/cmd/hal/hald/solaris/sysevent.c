@@ -653,8 +653,6 @@ sysevent_process_dr(gchar *ap_id, gchar *hint_val)
 	}
 
 out:
-	if (cfg_stat)
-		free (cfg_stat);
-	if (errstr)
-		free (errstr);
+	free(cfg_stat);
+	free(errstr);
 }

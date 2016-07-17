@@ -1267,8 +1267,7 @@ read_volprop(ptree_rarg_t *parg, void *buf)
 			    vol_props[ndx].row, &pstr, &snmp_syserr);
 			if (snmp_syserr == ECANCELED) {
 				(void) rw_unlock(&stale_tree_rwlp);
-				if (pstr)
-					free(pstr);
+				free(pstr);
 				return (PICL_FAILURE);
 			}
 			if (ret < 0 || pstr == NULL) {
@@ -1281,16 +1280,14 @@ read_volprop(ptree_rarg_t *parg, void *buf)
 			} else {
 				(void) strlcpy(buf, pstr, MAX_TRUTHVAL_LEN);
 			}
-			if (pstr)
-				free(pstr);
+			free(pstr);
 		} else if (propval == ST_FALSE) {
 			ret = snmp_get_str(hdl,
 			    OID_sunPlatBinarySensorInterpretFalse,
 			    vol_props[ndx].row, &pstr, &snmp_syserr);
 			if (snmp_syserr == ECANCELED) {
 				(void) rw_unlock(&stale_tree_rwlp);
-				if (pstr)
-					free(pstr);
+				free(pstr);
 				return (PICL_FAILURE);
 			}
 			if (ret < 0 || pstr == NULL) {
@@ -1303,8 +1300,7 @@ read_volprop(ptree_rarg_t *parg, void *buf)
 			} else {
 				(void) strlcpy(buf, pstr, MAX_TRUTHVAL_LEN);
 			}
-			if (pstr)
-				free(pstr);
+			free(pstr);
 		} else {
 			(void) rw_unlock(&stale_tree_rwlp);
 			log_msg(LOG_ERR, SNMPP_INV_PLAT_BINSNSR_CURRENT,
@@ -1433,8 +1429,7 @@ add_thresholds(picl_nodehdl_t node, int row, int *snmp_syserr_p)
 	 * takes several seconds to time out.
 	 */
 	if (ret < 0 || bitstr == NULL || nbytes == 0 || 2 < nbytes) {
-		if (bitstr)
-			free(bitstr);
+		free(bitstr);
 		return;
 	} else if (nbytes == 1) {
 		/*

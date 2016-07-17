@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <syslog.h>
@@ -320,7 +318,7 @@ static SLPError get_all_interfaces(slp_handle_ifinfo_t *info) {
 
 cleanup:
 	if (s) (void) close(s);
-	if (buf) free(buf);
+	free(buf);
 
 	return (err);
 }

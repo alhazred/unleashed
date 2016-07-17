@@ -1244,8 +1244,7 @@ create_argv(ilbd_hc_srv_t *srv, char *argv[])
 
 cleanup:
 	for (i = 0; i < HC_PROBE_ARGC; i++) {
-		if (argv[i] != NULL)
-			free(argv[i]);
+		free(argv[i]);
 	}
 	return (B_FALSE);
 }
@@ -1391,8 +1390,7 @@ cleanup:
 		(void) posix_spawnattr_destroy(&attr);
 	(void) close(fds[0]);
 	(void) close(fds[1]);
-	if (probe_ev != NULL)
-		free(probe_ev);
+	free(probe_ev);
 	return (B_FALSE);
 }
 

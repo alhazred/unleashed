@@ -12,8 +12,6 @@
  * specifies the terms and conditions for redistribution.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <setjmp.h>
 #include <euc.h>
 #include <widec.h>
@@ -921,8 +919,7 @@ initpagercmd()
 	if (cp != NULL)
 		pager_catenated = strdup(cp);
 	if ((pager_catenated == NULL) || (*pager_catenated == '\0')) {
-		if (pager_catenated != NULL)
-			free(pager_catenated);
+		free(pager_catenated);
 		pager_catenated = strdup(DEF_PAGER);
 	}
 	if (pager_catenated == NULL) {

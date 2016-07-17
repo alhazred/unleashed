@@ -79,8 +79,7 @@ __fex_sym_init()
 	int			i;
 
 	/* clear out the previous prmap_t list */
-	if (pm != NULL)
-		free(pm);
+	free(pm);
 	pm = lpm = NULL;
 	npm = 0;
 
@@ -128,8 +127,7 @@ __fex_read_syms(int fd)
 	size = h.e_phnum * h.e_phentsize;
 	if (size > phsize)
 	{
-		if (ph)
-			free(ph);
+		free(ph);
 		phsize = nph = 0;
 		if ((ph = (Elf_Phdr*)malloc(size)) == NULL)
 			return -1;
@@ -176,8 +174,7 @@ __fex_read_syms(int fd)
 	size = (int) (sh[i].sh_size + sh[sh[i].sh_link].sh_size);
 	if (size > stbufsize)
 	{
-		if (stbuf)
-			free(stbuf);
+		free(stbuf);
 		stbufsize = nsyms = 0;
 		if ((stbuf = (char*)malloc(size)) == NULL)
 		{

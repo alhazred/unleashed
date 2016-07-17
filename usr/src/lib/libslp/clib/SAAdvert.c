@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * SAAdverts are used internally by libslp to discover scopes in the
  * absence of configured scopes and scopes found by active and
@@ -93,9 +91,9 @@ SLPError slp_unpackSAAdvert(char *reply, char **surl,
 	return (SLP_OK);
 
 fail:
-	if (*surl) free(*surl);
-	if (*scopes) free(*scopes);
-	if (*attrs) free(*attrs);
+	free(*surl);
+	free(*scopes);
+	free(*attrs);
 
 	return (err);
 }

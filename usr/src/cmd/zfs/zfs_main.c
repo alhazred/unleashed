@@ -1079,8 +1079,7 @@ destroy_print_cb(zfs_handle_t *zhp, void *arg)
 	if (nvlist_exists(cb->cb_nvl, name)) {
 		if (cb->cb_firstsnap == NULL)
 			cb->cb_firstsnap = strdup(name);
-		if (cb->cb_prevsnap != NULL)
-			free(cb->cb_prevsnap);
+		free(cb->cb_prevsnap);
 		/* this snap continues the current range */
 		cb->cb_prevsnap = strdup(name);
 		if (cb->cb_firstsnap == NULL || cb->cb_prevsnap == NULL)

@@ -3,8 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <k5-int.h>
 #include <rsa-md4.h>
 #include <arcfour.h>
@@ -74,8 +72,7 @@ krb5int_arcfour_string_to_key(krb5_context context,
   memset (copystr, 0, len);
   memset(&md4_context, 0, sizeof(md4_context));
 
-  if (copystr)
-	free(copystr);
+  free(copystr);
 
   return 0;
 }

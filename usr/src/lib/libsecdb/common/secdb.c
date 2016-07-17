@@ -241,8 +241,7 @@ _insert2kva(kva_t *kva, char *key, char *value)
 	data = kva->data;
 	for (i = 0; i < kva->length; i++) {
 		if (strcmp(data[i].key, key) == 0) {
-			if (data[i].value != NULL)
-				free(data[i].value);
+			free(data[i].value);
 			data[i].value = _strdup_null(value);
 			return (0);
 		}

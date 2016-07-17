@@ -148,12 +148,9 @@ hp_fini(hp_node_t root)
 		sibling = node->hp_sibling;
 		if (node->hp_child)
 			hp_fini(node->hp_child);
-		if (node->hp_name)
-			free(node->hp_name);
-		if (node->hp_usage)
-			free(node->hp_usage);
-		if (node->hp_description)
-			free(node->hp_description);
+		free(node->hp_name);
+		free(node->hp_usage);
+		free(node->hp_description);
 		free(node);
 		node = sibling;
 	}
@@ -828,8 +825,7 @@ hp_unpack(char *packed_buf, size_t packed_len, hp_node_t *retp)
 		}
 
 		if (rv != 0) {
-			if (basepath)
-				free(basepath);
+			free(basepath);
 			nvlist_free(nvl);
 			hp_fini(root_list);
 			*retp = NULL;

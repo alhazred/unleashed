@@ -1,6 +1,3 @@
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
 ** This file contains all sources (including headers) to the LEMON
 ** LALR(1) parser generator.  The sources have been combined into a
@@ -2522,7 +2519,7 @@ char *mode;
 {
   FILE *fp;
 
-  if( lemp->outname ) free(lemp->outname);
+  free(lemp->outname);
   lemp->outname = file_makename(lemp, suffix);
   fp = fopen(lemp->outname,mode);
   if( fp==0 && *mode=='w' ){

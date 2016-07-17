@@ -316,8 +316,7 @@ int add_principal(void *lhandle, char *keytab_str, krb5_keytab keytab,
 		}
 		free(ktypes);
 	} else {
-		if (ktypes)
-			free(ktypes);
+		free(ktypes);
 		goto cleanup;
 	}
      } else {

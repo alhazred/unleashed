@@ -122,8 +122,7 @@ filesig_insert_dso(struct filesignatures *fssp,
 	/*
 	 * for now, always insert a single-signature signature block
 	 */
-	if (fssp != NULL)
-		free(fssp);
+	free(fssp);
 	fssp  = (struct filesignatures *)
 	    malloc(filesig_ALIGN(sizeof (struct filesignatures) +
 	    dn_len + sig_len + oid_len));
@@ -1077,8 +1076,7 @@ elfsign_verify_signature(ELFsign_t ess, struct ELFsign_sig_info **esipp)
 		/* return signer DN if requested */
 		if (esipp != NULL) {
 			esip->esi_format = fsx.fsx_format;
-			if (esip->esi_signer != NULL)
-				free(esip->esi_signer);
+			free(esip->esi_signer);
 			esip->esi_signer = strdup(fsx.fsx_signer_DN);
 			esip->esi_time = fsx.fsx_time;
 		}

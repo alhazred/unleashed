@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <syslog.h>
 #include <slp-internal.h>
 
@@ -229,7 +227,7 @@ static char *collate_types(char *types, void **collator,
 			*p++ = 0;
 		if (!(s = strdup(s))) {
 		    free(types);
-		    if (utypes) free(utypes);
+		    free(utypes);
 		    slp_err(LOG_CRIT, 0, "collate_types", "out of memory");
 		    return (NULL);
 		}

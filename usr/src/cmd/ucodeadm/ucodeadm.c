@@ -714,8 +714,7 @@ main(int argc, char *argv[])
 			ucode_perror(gettext("get microcode version"), rc);
 		}
 
-		if (revp)
-			free(revp);
+		free(revp);
 	}
 
 	if (action & UCODE_OPT_UPDATE) {

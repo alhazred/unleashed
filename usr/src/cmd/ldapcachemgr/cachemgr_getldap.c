@@ -231,10 +231,8 @@ getldap_free_hash(cache_hash_t *p)
 	cache_hash_t	*next;
 
 	p->type = CACHE_MAP_UNKNOWN;
-	if (p->from)
-		free(p->from);
-	if (p->to)
-		free(p->to);
+	free(p->from);
+	free(p->to);
 	next = p->next;
 	p->next = NULL;
 	free(p);
@@ -471,20 +469,16 @@ sync_current_with_update_copy(server_info_t *info)
 
 
 	/* free memory in current copy first */
-	if (info->sinfo[0].addr)
-		free(info->sinfo[0].addr);
+	free(info->sinfo[0].addr);
 	info->sinfo[0].addr = NULL;
 
-	if (info->sinfo[0].hostname)
-		free(info->sinfo[0].hostname);
+	free(info->sinfo[0].hostname);
 	info->sinfo[0].hostname = NULL;
 
-	if (info->sinfo[0].rootDSE_data)
-		free(info->sinfo[0].rootDSE_data);
+	free(info->sinfo[0].rootDSE_data);
 	info->sinfo[0].rootDSE_data = NULL;
 
-	if (info->sinfo[0].errormsg)
-		free(info->sinfo[0].errormsg);
+	free(info->sinfo[0].errormsg);
 	info->sinfo[0].errormsg = NULL;
 
 	/*
@@ -552,11 +546,9 @@ getldap_get_rootDSE(void *arg)
 
 	serverInfo->sinfo[1].server_status =
 	    INFO_SERVER_UNKNOWN;
-	if (serverInfo->sinfo[1].rootDSE_data)
-		free(serverInfo->sinfo[1].rootDSE_data);
+	free(serverInfo->sinfo[1].rootDSE_data);
 	serverInfo->sinfo[1].rootDSE_data	= NULL;
-	if (serverInfo->sinfo[1].errormsg)
-		free(serverInfo->sinfo[1].errormsg);
+	free(serverInfo->sinfo[1].errormsg);
 	serverInfo->sinfo[1].errormsg 		= NULL;
 	(void) mutex_unlock(&serverInfo->mutex[1]);
 
@@ -749,22 +741,14 @@ getldap_destroy_serverInfo(server_info_t *head)
 	}
 
 	for (info = head; info; info = next) {
-		if (info->sinfo[0].addr)
-			free(info->sinfo[0].addr);
-		if (info->sinfo[1].addr)
-			free(info->sinfo[1].addr);
-		if (info->sinfo[0].hostname)
-			free(info->sinfo[0].hostname);
-		if (info->sinfo[1].hostname)
-			free(info->sinfo[1].hostname);
-		if (info->sinfo[0].rootDSE_data)
-			free(info->sinfo[0].rootDSE_data);
-		if (info->sinfo[1].rootDSE_data)
-			free(info->sinfo[1].rootDSE_data);
-		if (info->sinfo[0].errormsg)
-			free(info->sinfo[0].errormsg);
-		if (info->sinfo[1].errormsg)
-			free(info->sinfo[1].errormsg);
+		free(info->sinfo[0].addr);
+		free(info->sinfo[1].addr);
+		free(info->sinfo[0].hostname);
+		free(info->sinfo[1].hostname);
+		free(info->sinfo[0].rootDSE_data);
+		free(info->sinfo[1].rootDSE_data);
+		free(info->sinfo[0].errormsg);
+		free(info->sinfo[1].errormsg);
 		next = info->next;
 		free(info);
 	}
@@ -2869,8 +2853,7 @@ contact_server(char *addr)
 	} else
 		rc = 1;
 
-	if (rootDSE)
-		free(rootDSE);
+	free(rootDSE);
 	if (error)
 		(void) __ns_ldap_freeError(&error);
 

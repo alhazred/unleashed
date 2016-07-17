@@ -26,8 +26,6 @@
 /* Copyright (c) 1988 AT&T */
 /* All Rights Reserved */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "dextern.h"
 #include "sgs.h"
 #include <stdio.h>
@@ -1859,8 +1857,7 @@ lrprnt()	/* print out the left and right hand sides */
 			rhs = m_rhs;
 	}
 	(void) fprintf(fdebug, WSFMT("\t\"%ws :%ws\",\n"), lhstext, rhs);
-	if (m_rhs)
-		free(m_rhs);
+	free(m_rhs);
 }
 
 

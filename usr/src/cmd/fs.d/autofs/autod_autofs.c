@@ -25,8 +25,6 @@
  *	Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -242,18 +240,12 @@ free_autofs_args(autofs_args *p)
 {
 	if (p == NULL)
 		return;
-	if (p->addr.buf)
-		free(p->addr.buf);
-	if (p->path)
-		free(p->path);
-	if (p->opts)
-		free(p->opts);
-	if (p->map)
-		free(p->map);
-	if (p->subdir)
-		free(p->subdir);
-	if (p->key)
-		free(p->key);
+	free(p->addr.buf);
+	free(p->path);
+	free(p->opts);
+	free(p->map);
+	free(p->subdir);
+	free(p->key);
 	free(p);
 }
 
@@ -266,14 +258,10 @@ free_mounta(struct mounta *m)
 {
 	if (m == NULL)
 		return;
-	if (m->spec)
-		free(m->spec);
-	if (m->dir)
-		free(m->dir);
-	if (m->fstype)
-		free(m->fstype);
-	if (m->optptr)
-		free(m->optptr);
+	free(m->spec);
+	free(m->dir);
+	free(m->fstype);
+	free(m->optptr);
 	assert(m->dataptr == NULL);
 	assert(m->datalen == 0);
 	/*

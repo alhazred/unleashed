@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -322,8 +320,7 @@ finddev_close(finddevhdl_t arg)
 	int i;
 
 	for (i = 0; i < handle->npaths; i++) {
-		if (handle->paths[i])
-			free(handle->paths[i]);
+		free(handle->paths[i]);
 	}
 	free(handle->paths);
 	free(handle);

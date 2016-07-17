@@ -228,8 +228,7 @@ nsc_check_release(const char *build_rel, nsc_release_t *map, char **reqd)
 		}
 	}
 
-	if (tofree)
-		free(tofree);
+	free(tofree);
 
 	return (rc);
 }

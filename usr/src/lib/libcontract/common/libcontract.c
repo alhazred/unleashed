@@ -255,8 +255,7 @@ ct_status_read(int fd, int detail, ct_stathdl_t *stathdl)
 			if (info->status.ctst_nbytes <= status_nbytes)
 				break;
 
-			if (status_buffer)
-				free(status_buffer);
+			free(status_buffer);
 			status_nbytes = info->status.ctst_nbytes;
 			status_buffer = malloc(status_nbytes);
 			if (status_buffer == NULL)
@@ -281,10 +280,8 @@ ct_status_read(int fd, int detail, ct_stathdl_t *stathdl)
 
 errout:
 	error = errno;
-	if (status_buffer)
-		free(status_buffer);
-	if (info)
-		free(info);
+	free(status_buffer);
+	free(info);
 	return (error);
 }
 
@@ -436,8 +433,7 @@ ct_event_read_internal(int fd, int cmd, ct_evthdl_t *evt)
 		if (event->ctev_nbytes <= event_nbytes)
 			break;
 
-		if (event_buffer)
-			free(event_buffer);
+		free(event_buffer);
 		event_nbytes = event->ctev_nbytes;
 		event_buffer = malloc(event_nbytes);
 		if (event_buffer == NULL) {
@@ -462,8 +458,7 @@ ct_event_read_internal(int fd, int cmd, ct_evthdl_t *evt)
 	return (0);
 
 errout:
-	if (event_buffer)
-		free(event_buffer);
+	free(event_buffer);
 	if (info) {
 		nvlist_free(info->nvl);
 		free(info);

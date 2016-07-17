@@ -1,5 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /* ... copyright ... */
 
 /* Novell key-format scheme:
@@ -208,8 +206,7 @@ last:
     asn1buf_destroy (&buf);
 
     if (ret != 0 && *code != NULL) {
-        if ((*code)->data != NULL)
-            free ((*code)->data);
+        free((*code)->data);
         free (*code);
     }
 
@@ -303,8 +300,8 @@ decode_tagged_octetstring (asn1buf *buf, asn1_tagnum expectedtag,
     *buf = tmp;
 
 last:
-    if (ret != 0 && *val != NULL)
-	free (*val);
+    if (ret != 0)
+        free(*val);
     return ret;
 }
 
@@ -468,10 +465,8 @@ last:
     if (ret != 0) {
 	int i;
 	for (i = 0; i < *n_key_data; i++) {
-	    if ((*out)[i].key_data_contents[0] != NULL)
-		free ((*out)[i].key_data_contents[0]);
-	    if ((*out)[i].key_data_contents[1] != NULL)
-		free ((*out)[i].key_data_contents[1]);
+	    free((*out)[i].key_data_contents[0]);
+	    free((*out)[i].key_data_contents[1]);
 	}
 	free (*out);
 	*out = NULL;

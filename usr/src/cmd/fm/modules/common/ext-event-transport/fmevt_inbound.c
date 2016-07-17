@@ -550,8 +550,7 @@ done:
 
 	(void) pthread_mutex_unlock(&fmevt_lock);
 
-	if (ruleset)
-		free(ruleset);
+	free(ruleset);
 
 	nvlist_free(rawattr);
 

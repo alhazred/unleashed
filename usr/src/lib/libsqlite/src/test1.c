@@ -1,6 +1,3 @@
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
 ** 2001 September 15
 **
@@ -162,7 +159,7 @@ static int test_exec_printf(
   Tcl_AppendElement(interp, zBuf);
   Tcl_AppendElement(interp, rc==SQLITE_OK ? Tcl_DStringValue(&str) : zErr);
   Tcl_DStringFree(&str);
-  if( zErr ) free(zErr);
+  free(zErr);
   return TCL_OK;
 }
 
@@ -234,7 +231,7 @@ static int test_get_table_printf(
     Tcl_AppendElement(interp, zErr);
   }
   sqlite_free_table(aResult);
-  if( zErr ) free(zErr);
+  free(zErr);
   return TCL_OK;
 }
 

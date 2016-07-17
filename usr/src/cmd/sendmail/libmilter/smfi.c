@@ -8,8 +8,6 @@
  *
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sm/gen.h>
 SM_RCSID("@(#)$Id: smfi.c,v 8.83 2007/04/23 16:44:39 ca Exp $")
 #include <sm/varargs.h>
@@ -614,8 +612,7 @@ smfi_setreply(ctx, rcode, xcode, message)
 			(void) sm_strlcat(buf, " ", len);
 		(void) sm_strlcat(buf, message, len);
 	}
-	if (ctx->ctx_reply != NULL)
-		free(ctx->ctx_reply);
+	free(ctx->ctx_reply);
 	ctx->ctx_reply = buf;
 	return MI_SUCCESS;
 }
@@ -725,8 +722,7 @@ smfi_setmlreply(ctx, rcode, xcode, va_alist)
 			(void) sm_strlcat(buf, txt, len);
 		}
 	}
-	if (ctx->ctx_reply != NULL)
-		free(ctx->ctx_reply);
+	free(ctx->ctx_reply);
 	ctx->ctx_reply = buf;
 	SM_VA_END(ap);
 	return MI_SUCCESS;

@@ -243,7 +243,6 @@ res_freeupdrec(ns_updrec *rrecp) {
 	if (rrecp == 0)
 		return;
 	/* Note: freeing r_dp is the caller's responsibility. */
-	if (rrecp->r_dname != NULL)
-		free(rrecp->r_dname);
+	free(rrecp->r_dname);
 	free(rrecp);
 }

@@ -581,11 +581,9 @@ error:
 	if (renewed_cred != NULL)
 		krb5_free_creds(kmd->kcontext, renewed_cred);
 
-	if (client_name != NULL)
-		free(client_name);
+	free(client_name);
 
-	if (username)
-		free(username);
+	free(username);
 
 	krb5_free_cred_contents(kmd->kcontext, &creds);
 

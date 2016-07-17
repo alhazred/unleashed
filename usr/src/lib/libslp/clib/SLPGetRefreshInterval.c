@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Implements SLPGetRefreshInterval. This call is an AttrRqst with
  * the special service type service:directory-agent.sun, sent
@@ -83,8 +81,8 @@ unsigned short SLPGetRefreshInterval() {
 				    &max, &collator, &mr);
 
 done:
-	if (msg) free(msg);
-	if (reply) free(reply);
+	free(msg);
+	free(reply);
 
 	SLPClose(hp);
 

@@ -194,10 +194,8 @@ delete_all_breakpoints(struct ps_prochandle *ph)
 
 	for (prev = NULL, cur = ph->pp_breakpoints;
 	    cur; prev = cur, cur = cur->bl_next)
-		if (prev)
-			free(prev);
-	if (prev)
 		free(prev);
+	free(prev);
 
 	ph->pp_breakpoints = NULL;
 	return (RET_OK);

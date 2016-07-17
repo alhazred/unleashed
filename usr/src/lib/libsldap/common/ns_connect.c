@@ -659,8 +659,7 @@ __s_api_freeConnection(Connection *con)
 {
 	if (con == NULL)
 		return;
-	if (con->serverAddr)
-		free(con->serverAddr);
+	free(con->serverAddr);
 	if (con->auth)
 		(void) __ns_ldap_freeCred(&(con->auth));
 	if (con->saslMechanisms) {
@@ -825,12 +824,10 @@ makeConnection(Connection **conp, const char *serverAddr,
 			}
 
 			__s_api_free_server_info(&sinfo);
-			if (host)
-				free(host);
+			free(host);
 			return (NS_LDAP_OP_FAILED);
 		}
-		if (host)
-			free(host);
+		free(host);
 		host = strdup(sinfo.server);
 		if (host == NULL) {
 			__s_api_free_server_info(&sinfo);
@@ -945,8 +942,7 @@ makeConnection(Connection **conp, const char *serverAddr,
 
 create_con:
 	/* we have created ld, setup con structure */
-	if (host)
-		free(host);
+	free(host);
 	if ((con = calloc(1, sizeof (Connection))) == NULL) {
 		__s_api_free_server_info(&sinfo);
 		/*
@@ -1650,8 +1646,7 @@ __s_api_getDefaultAuth(
 		if (modparamVal == NULL || (strlen((char *)modparamVal) == 0)) {
 			(void) __ns_ldap_freeCred(authp);
 			(void) __ns_ldap_freeUnixCred(&AdminCred);
-			if (modparamVal != NULL)
-				free(modparamVal);
+			free(modparamVal);
 			return (NS_LDAP_INVALID_PARAM);
 		}
 
@@ -2078,8 +2073,7 @@ createTLSSession(const ns_cred_t *auth, const char *serverAddr,
 		    strdup(errstr), NS_LDAP_MEMORY);
 		return (NS_LDAP_INTERNAL);
 	}
-	if (alloc_hcp)
-		free(alloc_hcp);
+	free(alloc_hcp);
 
 	*ldp = ldapssl_init(serverAddr, port, 1);
 

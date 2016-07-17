@@ -130,8 +130,7 @@ krb5_gss_register_acceptor_identity(const char *keytab)
     old = krb5_gss_keytab;
     krb5_gss_keytab = new;
     k5_mutex_unlock(&gssint_krb5_keytab_lock);
-    if (old != NULL)
-	free(old);
+    free(old);
     return GSS_S_COMPLETE;
 }
 

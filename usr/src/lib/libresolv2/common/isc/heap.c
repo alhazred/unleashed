@@ -80,8 +80,7 @@ heap_free(heap_context ctx) {
 		return (-1);
 	}
 
-	if (ctx->heap != NULL)
-		free(ctx->heap);
+	free(ctx->heap);
 	free(ctx);
 
 	return (0);

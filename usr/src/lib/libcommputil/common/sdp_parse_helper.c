@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Helper functions to skip white spaces, find tokens, find separators and free
  * memory.
@@ -46,14 +44,10 @@ void
 sdp_free_origin(sdp_origin_t *origin)
 {
 	if (origin != NULL) {
-		if (origin->o_username != NULL)
-			free(origin->o_username);
-		if (origin->o_nettype != NULL)
-			free(origin->o_nettype);
-		if (origin->o_addrtype != NULL)
-			free(origin->o_addrtype);
-		if (origin->o_address != NULL)
-			free(origin->o_address);
+		free(origin->o_username);
+		free(origin->o_nettype);
+		free(origin->o_addrtype);
+		free(origin->o_address);
 		free(origin);
 	}
 }
@@ -62,10 +56,8 @@ void
 sdp_free_key(sdp_key_t *key)
 {
 	if (key != NULL) {
-		if (key->k_method != NULL)
-			free(key->k_method);
-		if (key->k_enckey != NULL)
-			free(key->k_enckey);
+		free(key->k_method);
+		free(key->k_enckey);
 		free(key);
 	}
 }
@@ -77,8 +69,7 @@ sdp_free_zone(sdp_zone_t *zone)
 
 	while (zone != NULL) {
 		next_zone = zone->z_next;
-		if (zone->z_offset != NULL)
-			free(zone->z_offset);
+		free(zone->z_offset);
 		free(zone);
 		zone = next_zone;
 	}
@@ -91,8 +82,7 @@ sdp_free_list(sdp_list_t *list)
 
 	while (list != NULL) {
 		next_list = list->next;
-		if (list->value != NULL)
-			free(list->value);
+		free(list->value);
 		free(list);
 		list = next_list;
 	}
@@ -105,14 +95,11 @@ sdp_free_media(sdp_media_t *media)
 
 	while (media != NULL) {
 		next_media = media->m_next;
-		if (media->m_name != NULL)
-			free(media->m_name);
-		if (media->m_proto != NULL)
-			free(media->m_proto);
+		free(media->m_name);
+		free(media->m_proto);
 		if (media->m_format != NULL)
 			sdp_free_list(media->m_format);
-		if (media->m_info != NULL)
-			free(media->m_info);
+		free(media->m_info);
 		if (media->m_conn != NULL)
 			sdp_free_connection(media->m_conn);
 		if (media->m_bw != NULL)
@@ -133,10 +120,8 @@ sdp_free_attribute(sdp_attr_t *attr)
 
 	while (attr != NULL) {
 		next_attr = attr->a_next;
-		if (attr->a_name != NULL)
-			free(attr->a_name);
-		if (attr->a_value != NULL)
-			free(attr->a_value);
+		free(attr->a_name);
+		free(attr->a_value);
 		free(attr);
 		attr = next_attr;
 	}
@@ -149,12 +134,9 @@ sdp_free_connection(sdp_conn_t *conn)
 
 	while (conn != NULL) {
 		next_conn = conn->c_next;
-		if (conn->c_nettype != NULL)
-			free(conn->c_nettype);
-		if (conn->c_addrtype != NULL)
-			free(conn->c_addrtype);
-		if (conn->c_address != NULL)
-			free(conn->c_address);
+		free(conn->c_nettype);
+		free(conn->c_addrtype);
+		free(conn->c_address);
 		free(conn);
 		conn = next_conn;
 	}
@@ -167,8 +149,7 @@ sdp_free_bandwidth(sdp_bandwidth_t *bw)
 
 	while (bw != NULL) {
 		next_bw = bw->b_next;
-		if (bw->b_type != NULL)
-			free(bw->b_type);
+		free(bw->b_type);
 		free(bw);
 		bw = next_bw;
 	}
@@ -207,12 +188,9 @@ sdp_free_session(sdp_session_t *session)
 		return;
 	if (session->s_origin != NULL)
 		sdp_free_origin(session->s_origin);
-	if (session->s_name != NULL)
-		free(session->s_name);
-	if (session->s_info != NULL)
-		free(session->s_info);
-	if (session->s_uri != NULL)
-		free(session->s_uri);
+	free(session->s_name);
+	free(session->s_info);
+	free(session->s_uri);
 	if (session->s_email != NULL)
 		sdp_free_list(session->s_email);
 	if (session->s_phone != NULL)

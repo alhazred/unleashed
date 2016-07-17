@@ -571,38 +571,27 @@ session_mgr_close_session(SESSION *sess)
 
 	(void) object_mgr_purge_session_objects(sess, ALL);
 
-	if (sess->find_list)
-		free(sess->find_list);
+	free(sess->find_list);
 
-	if (sess->encr_ctx.context)
-		free(sess->encr_ctx.context);
+	free(sess->encr_ctx.context);
 
-	if (sess->encr_ctx.mech.pParameter)
-		free(sess->encr_ctx.mech.pParameter);
+	free(sess->encr_ctx.mech.pParameter);
 
-	if (sess->decr_ctx.context)
-		free(sess->decr_ctx.context);
+	free(sess->decr_ctx.context);
 
-	if (sess->decr_ctx.mech.pParameter)
-		free(sess->decr_ctx.mech.pParameter);
+	free(sess->decr_ctx.mech.pParameter);
 
-	if (sess->digest_ctx.context.ref)
-		free(sess->digest_ctx.context.ref);
+	free(sess->digest_ctx.context.ref);
 
-	if (sess->digest_ctx.mech.pParameter)
-		free(sess->digest_ctx.mech.pParameter);
+	free(sess->digest_ctx.mech.pParameter);
 
-	if (sess->sign_ctx.context)
-		free(sess->sign_ctx.context);
+	free(sess->sign_ctx.context);
 
-	if (sess->sign_ctx.mech.pParameter)
-		free(sess->sign_ctx.mech.pParameter);
+	free(sess->sign_ctx.mech.pParameter);
 
-	if (sess->verify_ctx.context)
-		free(sess->verify_ctx.context);
+	free(sess->verify_ctx.context);
 
-	if (sess->verify_ctx.mech.pParameter)
-		free(sess->verify_ctx.mech.pParameter);
+	free(sess->verify_ctx.mech.pParameter);
 
 	if (sess->hContext)
 		(void) Tspi_Context_Close(sess->hContext);
@@ -648,38 +637,27 @@ session_mgr_close_all_sessions(void)
 
 		(void) object_mgr_purge_session_objects(sess, ALL);
 
-		if (sess->find_list)
-			free(sess->find_list);
+		free(sess->find_list);
 
-		if (sess->encr_ctx.context)
-			free(sess->encr_ctx.context);
+		free(sess->encr_ctx.context);
 
-		if (sess->encr_ctx.mech.pParameter)
-			free(sess->encr_ctx.mech.pParameter);
+		free(sess->encr_ctx.mech.pParameter);
 
-		if (sess->decr_ctx.context)
-			free(sess->decr_ctx.context);
+		free(sess->decr_ctx.context);
 
-		if (sess->decr_ctx.mech.pParameter)
-			free(sess->decr_ctx.mech.pParameter);
+		free(sess->decr_ctx.mech.pParameter);
 
-		if (sess->digest_ctx.context.ref)
-			free(sess->digest_ctx.context.ref);
+		free(sess->digest_ctx.context.ref);
 
-		if (sess->digest_ctx.mech.pParameter)
-			free(sess->digest_ctx.mech.pParameter);
+		free(sess->digest_ctx.mech.pParameter);
 
-		if (sess->sign_ctx.context)
-			free(sess->sign_ctx.context);
+		free(sess->sign_ctx.context);
 
-		if (sess->sign_ctx.mech.pParameter)
-			free(sess->sign_ctx.mech.pParameter);
+		free(sess->sign_ctx.mech.pParameter);
 
-		if (sess->verify_ctx.context)
-			free(sess->verify_ctx.context);
+		free(sess->verify_ctx.context);
 
-		if (sess->verify_ctx.mech.pParameter)
-			free(sess->verify_ctx.mech.pParameter);
+		free(sess->verify_ctx.mech.pParameter);
 
 		if (sess->hContext)
 			(void) Tspi_Context_Close(sess->hContext);
@@ -1041,8 +1019,7 @@ session_mgr_set_op_state(
 				mech_param = (CK_BYTE *)malloc(
 				    ctx->mech.ulParameterLen);
 				if (! mech_param) {
-					if (context)
-						free(context);
+					free(context);
 					return (CKR_HOST_MEMORY);
 				}
 				(void) memcpy(mech_param, ptr3,
@@ -1084,8 +1061,7 @@ session_mgr_set_op_state(
 				mech_param = (CK_BYTE *)malloc(
 				    ctx->mech.ulParameterLen);
 				if (! mech_param) {
-					if (context)
-						free(context);
+					free(context);
 					return (CKR_HOST_MEMORY);
 				}
 				(void) memcpy(mech_param, ptr3,
@@ -1126,8 +1102,7 @@ session_mgr_set_op_state(
 				mech_param = (CK_BYTE *)malloc(
 				    ctx->mech.ulParameterLen);
 				if (! mech_param) {
-					if (context)
-						free(context);
+					free(context);
 					return (CKR_HOST_MEMORY);
 				}
 				(void) memcpy(mech_param, ptr3,

@@ -23,8 +23,6 @@
  * Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Load object and probe discovery in target process.  This file is
  * not exercised for kernel probes.
@@ -294,16 +292,13 @@ free_obj_fields(objlist_t *obj)
 
 	for (i = 0; i < obj->probecnt; i++) {
 		probe_p = &(obj->probes[i]);
-		if (probe_p->attr_string)
-			free(probe_p->attr_string);
+		free(probe_p->attr_string);
 		if (probe_p->probe_handle)
 			probe_p->probe_handle->valid = B_FALSE;
 	}
-	if (obj->probes)
-		free(obj->probes);
+	free(obj->probes);
 	obj->probecnt = 0;
-	if (obj->objname)
-		free(obj->objname);
+	free(obj->objname);
 	if (obj->objfd != -1)
 		close(obj->objfd);
 }

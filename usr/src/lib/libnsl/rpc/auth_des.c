@@ -32,8 +32,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * auth_des.c, client-side implementation of DES authentication
  *
@@ -206,19 +204,13 @@ authdes_pk_seccreate(const char *servername, netobj *pkey, uint_t window,
 	return (auth);
 
 failed:
-	if (auth)
-		free(auth);
+	free(auth);
 	if (ad) {
-		if (ad->ad_fullname)
-			free(ad->ad_fullname);
-		if (ad->ad_servername)
-			free(ad->ad_servername);
-		if (ad->ad_timehost)
-			free(ad->ad_timehost);
-		if (ad->ad_netid)
-			free(ad->ad_netid);
-		if (ad->ad_uaddr)
-			free(ad->ad_uaddr);
+		free(ad->ad_fullname);
+		free(ad->ad_servername);
+		free(ad->ad_timehost);
+		free(ad->ad_netid);
+		free(ad->ad_uaddr);
 		free(ad);
 	}
 	return (NULL);
@@ -444,12 +436,9 @@ authdes_destroy(AUTH *auth)
 
 	free(ad->ad_fullname);
 	free(ad->ad_servername);
-	if (ad->ad_timehost)
-		free(ad->ad_timehost);
-	if (ad->ad_netid)
-		free(ad->ad_netid);
-	if (ad->ad_uaddr)
-		free(ad->ad_uaddr);
+	free(ad->ad_timehost);
+	free(ad->ad_netid);
+	free(ad->ad_uaddr);
 	free(ad);
 	free(auth);
 }

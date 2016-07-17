@@ -31,8 +31,6 @@
 #ifndef	_UTILITY_H
 #define	_UTILITY_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"	/* SVr4.0 1.8	*/
-
 #include <form.h>
 #include <memory.h>
 #include <string.h>
@@ -74,7 +72,7 @@ typedef	int		BOOLEAN;
 #define	Alloc(x, t)		((x = (t *) malloc(sizeof (t))) != (t *)0)
 #define	arrayAlloc(x, n, t)	((x = (t *) malloc((n) * sizeof (t))) != \
 				(t *)0)
-#define	Free(x)			{ if (x) free(x); }
+#define	Free(x)			{ free(x); }
 /* field type macros */
 #define	MakeArg(f, p, err)	(_makearg((f) -> type, p, err))
 #define	CopyArg(f, err)		(_copyarg((f) -> type, (f) -> arg, err))

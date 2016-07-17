@@ -29,8 +29,6 @@
  * of the copyright holder.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -393,8 +391,7 @@ static FreeListBlock *_del_FreeListBlock(FreeListBlock *fl)
 {
   if(fl) {
     fl->next = NULL;
-    if(fl->nodes)
-      free(fl->nodes);
+    free(fl->nodes);
     fl->nodes = NULL;
     free(fl);
   };

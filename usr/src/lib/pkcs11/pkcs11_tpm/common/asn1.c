@@ -1044,8 +1044,8 @@ ber_encode_RSAPrivateKey(CK_BBOOL    length_only,
 	    ber_AlgIdRSAEncryption, ber_AlgIdRSAEncryptionLen,
 	    buf2, len);
 error:
-	if (buf2) free(buf2);
-	if (buf)  free(buf);
+	free(buf2);
+	free(buf);
 	return (rc);
 }
 
@@ -1256,14 +1256,14 @@ ber_decode_RSAPrivateKey(CK_BYTE    * data,
 	return (CKR_OK);
 
 cleanup:
-	if (n_attr) free(n_attr);
-	if (e_attr) free(e_attr);
-	if (d_attr) free(d_attr);
-	if (p_attr) free(p_attr);
-	if (q_attr) free(q_attr);
-	if (e1_attr) free(e1_attr);
-	if (e2_attr) free(e2_attr);
-	if (coeff_attr) free(coeff_attr);
+	free(n_attr);
+	free(e_attr);
+	free(d_attr);
+	free(p_attr);
+	free(q_attr);
+	free(e1_attr);
+	free(e2_attr);
+	free(coeff_attr);
 
 	return (rc);
 }

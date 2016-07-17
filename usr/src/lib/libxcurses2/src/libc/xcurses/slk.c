@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /* LINTLIBRARY */
 
 /*
@@ -394,8 +392,7 @@ slk_wset(int index, const wchar_t *label, int justify)
 	/* Remember the new label. */
 	__m_screen->_slk._justify[index] = (short) justify;
 
-	if (__m_screen->_slk._labels[index] != NULL)
-		free(__m_screen->_slk._labels[index]);
+	free(__m_screen->_slk._labels[index]);
 	if ((__m_screen->_slk._labels[index] = strdup(tmbs)) == NULL)
 		goto error1;
 

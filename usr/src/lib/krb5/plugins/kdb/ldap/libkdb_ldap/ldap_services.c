@@ -1,5 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * lib/kdb/kdb_ldap/ldap_services.c
  *
@@ -540,8 +538,7 @@ krb5_ldap_free_service(context, service)
     if (service == NULL)
 	return 0;
 
-    if (service->servicedn)
-	free (service->servicedn);
+    free(service->servicedn);
 
     if (service->krbrealmreferences) {
 	for (i=0; service->krbrealmreferences[i]; ++i)
@@ -556,8 +553,7 @@ krb5_ldap_free_service(context, service)
     }
 
     if (service->tl_data) {
-	if (service->tl_data->tl_data_contents)
-	    free (service->tl_data->tl_data_contents);
+	free(service->tl_data->tl_data_contents);
 	free (service->tl_data);
     }
 

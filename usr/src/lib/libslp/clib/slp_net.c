@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Module for all network transactions. SLP messages can be multicast,
  * unicast over UDP, or unicast over TCP; this module provides routines
@@ -305,7 +303,7 @@ void slp_uc_udp_send(slp_handle_impl_t *hp, slp_target_t *target,
 	(void) close(sockfd);
 	if (!ctarg || hp->cancel) {
 		/* failed all attempts or canceled by consumer */
-		if (reply) free(reply);
+		free(reply);
 		return;
 	}
 	/* success or tcp handoff */
@@ -393,7 +391,7 @@ void slp_mc_send(slp_handle_impl_t *hp, const char *scopes) {
 	free_pfds(pfd, nfds);
 
 	/* free broadcast addrs, if used */
-	if (bcifs.sin) free(bcifs.sin);
+	free(bcifs.sin);
 }
 
 /*

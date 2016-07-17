@@ -184,8 +184,7 @@ cfgadm_cmd_wrapper(int cmd, int apid_num, char **apids,
 		break;
 	}
 
-	if (plat_opts != NULL)
-		free(plat_opts);
+	free(plat_opts);
 
 	return (ret == CFGA_OK ? 0 : -1);
 }

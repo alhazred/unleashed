@@ -3,7 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 /*
  * Copyright 2006 by the Massachusetts Institute of Technology.
  * All Rights Reserved.
@@ -648,8 +647,7 @@ krb5_db_open(krb5_context kcontext, char **db_args, int mode)
 	kdb_free_lib_handle(kcontext);
 
   clean_n_exit:
-    if (section)
-	free(section);
+    free(section);
     return status;
 }
 
@@ -696,8 +694,7 @@ krb5_db_create(krb5_context kcontext, char **db_args)
     kdb_unlock_lib_lock(dal_handle->lib_handle, FALSE);
 
   clean_n_exit:
-    if (section)
-	free(section);
+    free(section);
     return status;
 }
 
@@ -768,8 +765,7 @@ krb5_db_destroy(krb5_context kcontext, char **db_args)
     kdb_unlock_lib_lock(dal_handle->lib_handle, FALSE);
 
   clean_n_exit:
-    if (section)
-	free(section);
+    free(section);
     return status;
 }
 
@@ -1068,8 +1064,7 @@ krb5_db_put_principal(krb5_context kcontext,
 	db_args_size--;
     }
 
-    if (db_args)
-	free(db_args);
+    free(db_args);
 
     return status;
 }
@@ -2009,8 +2004,7 @@ krb5_db_promote(krb5_context kcontext, char **db_args)
     kdb_unlock_lib_lock(dal_handle->lib_handle, FALSE);
 
   clean_n_exit:
-    if (section)
-	free(section);
+    free(section);
     return status;
 }
 

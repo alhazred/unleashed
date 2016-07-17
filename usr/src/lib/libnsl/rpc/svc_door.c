@@ -300,12 +300,9 @@ svc_door_xprtfree(SVCXPRT *xprt)
 
 	if (xprt == NULL)
 		return;
-	if (xprt->xp_netid)
-		free(xprt->xp_netid);
-	if (xprt->xp_tp)
-		free(xprt->xp_tp);
-	if (su != NULL)
-		free(su);
+	free(xprt->xp_netid);
+	free(xprt->xp_tp);
+	free(su);
 	svc_xprt_free(xprt);
 }
 
@@ -466,8 +463,7 @@ svc_door_xprtcopy(SVCXPRT *parent)
 		xprt->xp_netid = (char *)strdup(parent->xp_netid);
 		if (xprt->xp_netid == NULL) {
 			syslog(LOG_ERR, "svc_door_xprtcopy: strdup failed");
-			if (parent->xp_tp)
-				free(parent->xp_tp);
+			free(parent->xp_tp);
 			svc_door_xprtfree(xprt);
 			return (NULL);
 		}

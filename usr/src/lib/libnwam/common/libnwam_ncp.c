@@ -1137,8 +1137,7 @@ nwam_ncu_get_ncp(nwam_ncu_handle_t ncuh, nwam_ncp_handle_t *ncphp)
 	    != NWAM_SUCCESS ||
 	    (err = nwam_handle_create(NWAM_OBJECT_TYPE_NCP, parentname, ncphp))
 	    != NWAM_SUCCESS) {
-		if (parentname != NULL)
-			free(parentname);
+		free(parentname);
 		return (err);
 	}
 	free(parentname);

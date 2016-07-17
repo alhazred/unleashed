@@ -3,8 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * usr/src/cmd/cmd-inet/usr.bin/telnet/kerberos5.c
  *
@@ -118,8 +116,7 @@ set_krb5_realm(char *name)
 		return;
 	}
 
-	if (telnet_krb5_realm)
-		free(telnet_krb5_realm);
+	free(telnet_krb5_realm);
 
 	telnet_krb5_realm = (char *)strdup(name);
 
@@ -687,8 +684,7 @@ cleanup:
 		krb5_free_principal(telnet_context, client);
 	if (server)
 		krb5_free_principal(telnet_context, server);
-	if (forw_creds.data)
-		free(forw_creds.data);
+	free(forw_creds.data);
 	/* LINTED */
 	krb5_cc_close(telnet_context, ccache);
 }

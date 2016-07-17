@@ -37,8 +37,7 @@ kadm5_free_policy_ent(void *server_handle, kadm5_policy_ent_t val)
     _KADM5_CHECK_HANDLE(server_handle);
 
     if(val) {
-	if (val->policy)
-	    free(val->policy);
+	free(val->policy);
 	if (handle->api_version == KADM5_API_VERSION_1)
 	     free(val);
     }
@@ -105,8 +104,7 @@ kadm5_free_principal_ent(void *server_handle,
 	    krb5_free_principal(handle->context, val->principal);
 	if(val->mod_name)
 	    krb5_free_principal(handle->context, val->mod_name);
-	if(val->policy)
-	    free(val->policy);
+	free(val->policy);
 	if (handle->api_version > KADM5_API_VERSION_1) {
 	     if (val->n_key_data) {
 		  for (i = 0; i < val->n_key_data; i++)

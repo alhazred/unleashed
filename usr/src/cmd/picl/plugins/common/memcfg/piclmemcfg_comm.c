@@ -878,8 +878,7 @@ piclmemcfg_fini(void)
 	 * Release all the allocated memory for global structures
 	 */
 	free_allocated_mem();
-	if (msegh_info)
-		free(msegh_info);
+	free(msegh_info);
 }
 
 /*

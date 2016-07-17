@@ -1610,8 +1610,7 @@ passwd_conv(int num_msg, struct pam_message **msg,
 					/* free responses */
 					r = *response;
 					for (i = 0; i < num_msg; i++, r++) {
-						if (r->resp)
-							free(r->resp);
+						free(r->resp);
 					}
 					free(*response);
 					*response = NULL;
@@ -1632,8 +1631,7 @@ passwd_conv(int num_msg, struct pam_message **msg,
 				/* free responses */
 				r = *response;
 				for (i = 0; i < num_msg; i++, r++) {
-					if (r->resp)
-						free(r->resp);
+					free(r->resp);
 				}
 				free(*response);
 				*response = NULL;

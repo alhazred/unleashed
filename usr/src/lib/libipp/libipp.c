@@ -902,8 +902,7 @@ command_failed:
 	return (-1);
 
 data_failed:
-	if (dbuf != NULL)
-		free(dbuf);
+	free(dbuf);
 	(void) close(fd);
 	return (-1);
 }

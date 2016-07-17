@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This file consists of routines to manage objects in the
  * "Platform Environment Services Framework". The classes
@@ -3108,8 +3106,7 @@ i_psvc_destructor(EHdl_t *hdlp, char *name, void *objp)
 			if (strcmp(hdlp->tbl_arry[array].obj_tbl[i].name,
 				name) == 0) {
 				hdlp->tbl_arry[array].obj_tbl[i].name[0] = '\0';
-				if (objp != NULL)
-					free(objp);
+				free(objp);
 				return (PSVC_SUCCESS);
 			}
 		}

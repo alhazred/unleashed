@@ -246,8 +246,7 @@ end:
 		    gettext("Warning: failed to check the validity.\n"));
 	}
 
-	if (fullpath)
-		free(fullpath);
+	free(fullpath);
 
 	kmf_free_data(&cert);
 	kmf_free_data(&cert_der);

@@ -2086,8 +2086,7 @@ __ns_ldap_initStandalone(const ns_standalone_conf_t *sa_conf,
 				break;
 			}
 
-			if (authMethods != NULL)
-				free(authMethods);
+			free(authMethods);
 
 			if (__ns_ldap_setParamValue(cfg,
 						NS_LDAP_BINDDN_P,

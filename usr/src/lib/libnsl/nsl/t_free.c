@@ -28,8 +28,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"	/* SVr4.0 1.2 */
-
 #include "mt.h"
 #include <xti.h>
 #include <errno.h>
@@ -60,53 +58,42 @@ _tx_free(char *ptr, int struct_type, int api_semantics)
 	case T_BIND:
 		/* LINTED pointer cast */
 		p.bind = (struct t_bind *)ptr;
-		if (p.bind->addr.buf != NULL)
-			free(p.bind->addr.buf);
+		free(p.bind->addr.buf);
 		break;
 
 	case T_CALL:
 		/* LINTED pointer cast */
 		p.call = (struct t_call *)ptr;
-		if (p.call->addr.buf != NULL)
-			free(p.call->addr.buf);
-		if (p.call->opt.buf != NULL)
-			free(p.call->opt.buf);
-		if (p.call->udata.buf != NULL)
-			free(p.call->udata.buf);
+		free(p.call->addr.buf);
+		free(p.call->opt.buf);
+		free(p.call->udata.buf);
 		break;
 
 	case T_OPTMGMT:
 		/* LINTED pointer cast */
 		p.opt = (struct t_optmgmt *)ptr;
-		if (p.opt->opt.buf != NULL)
-			free(p.opt->opt.buf);
+		free(p.opt->opt.buf);
 		break;
 
 	case T_DIS:
 		/* LINTED pointer cast */
 		p.dis = (struct t_discon *)ptr;
-		if (p.dis->udata.buf != NULL)
-			free(p.dis->udata.buf);
+		free(p.dis->udata.buf);
 		break;
 
 	case T_UNITDATA:
 		/* LINTED pointer cast */
 		p.udata = (struct t_unitdata *)ptr;
-		if (p.udata->addr.buf != NULL)
-			free(p.udata->addr.buf);
-		if (p.udata->opt.buf != NULL)
-			free(p.udata->opt.buf);
-		if (p.udata->udata.buf != NULL)
-			free(p.udata->udata.buf);
+		free(p.udata->addr.buf);
+		free(p.udata->opt.buf);
+		free(p.udata->udata.buf);
 		break;
 
 	case T_UDERROR:
 		/* LINTED pointer cast */
 		p.uderr = (struct t_uderr *)ptr;
-		if (p.uderr->addr.buf != NULL)
-			free(p.uderr->addr.buf);
-		if (p.uderr->opt.buf != NULL)
-			free(p.uderr->opt.buf);
+		free(p.uderr->addr.buf);
+		free(p.uderr->opt.buf);
 		break;
 
 	case T_INFO:

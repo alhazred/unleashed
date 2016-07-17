@@ -188,8 +188,7 @@ free_device(device_t *d)
 		*dpp = d->nextp;
 	}
 	for (i = 0; i < d->cmax; i++) {
-		if (d->controls[i].enump != NULL)
-			free(d->controls[i].enump);
+		free(d->controls[i].enump);
 	}
 
 	if (d->mfd >= 0)

@@ -975,14 +975,10 @@ devfs_free_minor_perm(struct mperm *mplist)
 	for (mp = mplist; mp != NULL; mp = next) {
 		next = mp->mp_next;
 
-		if (mp->mp_drvname)
-			free(mp->mp_drvname);
-		if (mp->mp_minorname)
-			free(mp->mp_minorname);
-		if (mp->mp_owner)
-			free(mp->mp_owner);
-		if (mp->mp_group)
-			free(mp->mp_group);
+		free(mp->mp_drvname);
+		free(mp->mp_minorname);
+		free(mp->mp_owner);
+		free(mp->mp_group);
 		free(mp);
 	}
 }

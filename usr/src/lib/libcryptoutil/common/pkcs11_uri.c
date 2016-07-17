@@ -280,18 +280,11 @@ value_overflow:
 void
 pkcs11_free_uri(pkcs11_uri_t *uri)
 {
-	if (uri->object != NULL)
-		free(uri->object);
-	if (uri->token != NULL)
-		free(uri->token);
-	if (uri->manuf != NULL)
-		free(uri->manuf);
-	if (uri->serial != NULL)
-		free(uri->serial);
-	if (uri->model != NULL)
-		free(uri->model);
-	if (uri->id != NULL)
-		free(uri->id);
-	if (uri->pinfile != NULL)
-		free(uri->pinfile);
+	free(uri->object);
+	free(uri->token);
+	free(uri->manuf);
+	free(uri->serial);
+	free(uri->model);
+	free(uri->id);
+	free(uri->pinfile);
 }

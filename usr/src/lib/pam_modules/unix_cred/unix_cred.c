@@ -401,8 +401,7 @@ adt_setuser:
 		    "pam_unix_cred: audit already set for %d", auid);
 	}
 adt_done:
-	if (termid != NULL)
-		free(termid);
+	free(termid);
 	if (adt_end_session(ah) != 0) {
 		syslog(LOG_AUTH | LOG_ERR,
 		    "pam_unix_cred: unable to end audit session");
@@ -439,8 +438,7 @@ adt_done:
 		    PROJECT_BUFSZ);
 	}
 	/* projname points into kvs, so this is the first opportunity to free */
-	if (kvs != NULL)
-		free(kvs);
+	free(kvs);
 	if (pproj == NULL) {
 		syslog(LOG_AUTH | LOG_ERR,
 		    "pam_unix_cred: no default project for user %s", user);

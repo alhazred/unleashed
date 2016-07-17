@@ -189,8 +189,7 @@ delete_cache(struct netbuf *addr)
 			free(cptr->ac_netid);
 			free(cptr->ac_taddr->buf);
 			free(cptr->ac_taddr);
-			if (cptr->ac_uaddr)
-				free(cptr->ac_uaddr);
+			free(cptr->ac_uaddr);
 			if (prevptr)
 				prevptr->ac_next = cptr->ac_next;
 			else
@@ -250,8 +249,7 @@ add_cache(char *host, char *netid, struct netbuf *taddr, char *uaddr)
 		free(cptr->ac_netid);
 		free(cptr->ac_taddr->buf);
 		free(cptr->ac_taddr);
-		if (cptr->ac_uaddr)
-			free(cptr->ac_uaddr);
+		free(cptr->ac_uaddr);
 
 		if (prevptr) {
 			prevptr->ac_next = NULL;
@@ -266,14 +264,10 @@ add_cache(char *host, char *netid, struct netbuf *taddr, char *uaddr)
 	(void) rw_unlock(&rpcbaddr_cache_lock);
 	return;
 memerr1:
-	if (ad_cache->ac_host)
-		free(ad_cache->ac_host);
-	if (ad_cache->ac_netid)
-		free(ad_cache->ac_netid);
-	if (ad_cache->ac_uaddr)
-		free(ad_cache->ac_uaddr);
-	if (ad_cache->ac_taddr)
-		free(ad_cache->ac_taddr);
+	free(ad_cache->ac_host);
+	free(ad_cache->ac_netid);
+	free(ad_cache->ac_uaddr);
+	free(ad_cache->ac_taddr);
 	free(ad_cache);
 memerr:
 	syslog(LOG_ERR, "add_cache : out of memory.");
@@ -587,8 +581,7 @@ __rpcbind_is_up(void)
 	addr = uaddr2taddr(netconf, "localhost.rpc");
 	freenetconfigent(netconf);
 	if (addr == NULL || addr->buf == NULL) {
-		if (addr)
-			free(addr);
+		free(addr);
 		(void) t_free((char *)sndcall, T_CALL);
 		(void) t_close(fd);
 		return (FALSE);

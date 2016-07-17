@@ -32,8 +32,6 @@
  * under license from the Regents of the University of California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * netdir.c
  *
@@ -574,8 +572,7 @@ netdir_free(void *ptr, int type)
 	switch (type) {
 	case ND_ADDR :
 		na = (struct netbuf *)ptr;
-		if (na->buf)
-			free(na->buf);
+		free(na->buf);
 		free(na);
 		break;
 
@@ -590,28 +587,23 @@ netdir_free(void *ptr, int type)
 		 * implementation -- from a third party -- has a different
 		 * allocation scheme.
 		 */
-		if (nas->n_addrs->buf)
-			free(nas->n_addrs->buf);
+		free(nas->n_addrs->buf);
 		free(nas->n_addrs);
 		free(nas);
 		break;
 
 	case ND_HOSTSERV :
 		hs = (struct nd_hostserv *)ptr;
-		if (hs->h_host)
-			free(hs->h_host);
-		if (hs->h_serv)
-			free(hs->h_serv);
+		free(hs->h_host);
+		free(hs->h_serv);
 		free(hs);
 		break;
 
 	case ND_HOSTSERVLIST :
 		hss = (struct nd_hostservlist *)ptr;
 		for (hs = hss->h_hostservs, i = 0; i < hss->h_cnt; i++, hs++) {
-			if (hs->h_host)
-				free(hs->h_host);
-			if (hs->h_serv)
-				free(hs->h_serv);
+			free(hs->h_host);
+			free(hs->h_serv);
 		}
 		free(hss->h_hostservs);
 		free(hss);

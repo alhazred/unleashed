@@ -372,14 +372,10 @@ pp_cleanup:
 
 	if (dp)
 		(void) closedir(dp);
-	if (dep)
-		free(dep);
-	if (linkpath)
-		free(linkpath);
-	if (buf)
-		free(buf);
-	if (real_path)
-		free(real_path);
+	free(dep);
+	free(linkpath);
+	free(buf);
+	free(real_path);
 	if (*logpp) {
 		free(*logpp);
 		*logpp = NULL;
@@ -1398,10 +1394,8 @@ sata_make_dyncomp(const char *ap_id, char **dyncomp, const char *type)
 bailout:
 	if (dp)
 		(void) closedir(dp);
-	if (devpath)
-		free(devpath);
-	if (dep)
-		free(dep);
+	free(devpath);
+	free(dep);
 	return (CFGA_SATA_DYNAMIC_AP);
 }
 

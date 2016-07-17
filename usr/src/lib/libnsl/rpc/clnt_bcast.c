@@ -32,8 +32,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Client interface to broadcast service.
  *
@@ -607,13 +605,10 @@ sent for %s\n", nconf->nc_netid);
 	}			/* The giant for loop */
 
 done_broad:
-	if (inbuf)
-		free(inbuf);
-	if (outbuf)
-		free(outbuf);
+	free(inbuf);
+	free(outbuf);
 #ifdef PORTMAP
-	if (outbuf_pmap)
-		free(outbuf_pmap);
+	free(outbuf_pmap);
 #endif
 	for (i = 0; i < fdlistno; i++) {
 		(void) t_close(fdlist[i].fd);

@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * SNMP PDU and packet transport related routines
  */
@@ -677,8 +675,7 @@ snmp_free_null_vars(pdu_varlist_t *varblock_p)
 	for (vp = varblock_p; vp; vp = nxt) {
 		nxt = vp->nextvar;
 
-		if (vp->name)
-			free(vp->name);
+		free(vp->name);
 		free(vp);
 	}
 }

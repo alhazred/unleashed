@@ -403,9 +403,9 @@ object_create(CK_ATTRIBUTE  * pTemplate,
 
 	return (CKR_OK);
 error:
-	if (sensitive)    free(sensitive);
-	if (extractable)  free(extractable);
-	if (local)	free(local);
+	free(sensitive);
+	free(extractable);
+	free(local);
 
 	(void) object_free(o);
 	return (rc);
@@ -880,7 +880,7 @@ object_create_skel(CK_ATTRIBUTE  * pTemplate,
 
 	return (CKR_OK);
 	done:
-	if (o)	free(o);
+	free(o);
 	if (tmpl)
 		(void) template_free(tmpl);
 	if (tmpl2)

@@ -29,8 +29,6 @@
  * Based on MKS awk(1) ported to be /usr/xpg4/bin/awk with POSIX/XCU4 changes
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "awk.h"
 #include "y.tab.h"
 
@@ -891,8 +889,7 @@ exprstring(NODE *np)
 			(void) wsprintf(numbuf,
 		(const char *) (tmp = wcstombsdup(exprstring(varCONVFMT))),
 				(double)np->n_real);
-			if (tmp != NULL)
-				free(tmp);
+			free(tmp);
 		}
 		return ((STRING)numbuf);
 

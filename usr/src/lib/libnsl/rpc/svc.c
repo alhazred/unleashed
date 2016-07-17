@@ -881,8 +881,7 @@ svc_reg(const SVCXPRT *xprt, const rpcprog_t prog, const rpcvers_t vers,
 
 	(void) rw_wrlock(&svc_lock);
 	if ((s = svc_find(prog, vers, &prev, netid)) != NULL_SVC) {
-		if (netid)
-			free(netid);
+		free(netid);
 		if (s->sc_dispatch == dispatch)
 			goto rpcb_it; /* he is registering another xptr */
 		(void) rw_unlock(&svc_lock);
@@ -890,8 +889,7 @@ svc_reg(const SVCXPRT *xprt, const rpcprog_t prog, const rpcvers_t vers,
 	}
 	s = malloc(sizeof (struct svc_callout));
 	if (s == NULL) {
-		if (netid)
-			free(netid);
+		free(netid);
 		(void) rw_unlock(&svc_lock);
 		return (FALSE);
 	}
@@ -950,8 +948,7 @@ svc_unreg(const rpcprog_t prog, const rpcvers_t vers)
 			prev->sc_next = s->sc_next;
 		}
 		s->sc_next = NULL_SVC;
-		if (s->sc_netid)
-			free(s->sc_netid);
+		free(s->sc_netid);
 		free(s);
 	}
 	(void) rw_unlock(&svc_lock);
@@ -990,8 +987,7 @@ svc_register(SVCXPRT *xprt, rpcprog_t prog, rpcvers_t vers,
 
 	(void) rw_wrlock(&svc_lock);
 	if ((s = svc_find(prog, vers, &prev, netid)) != NULL_SVC) {
-		if (netid)
-			free(netid);
+		free(netid);
 		if (s->sc_dispatch == dispatch)
 			goto pmap_it;  /* he is registering another xptr */
 		(void) rw_unlock(&svc_lock);
@@ -999,8 +995,7 @@ svc_register(SVCXPRT *xprt, rpcprog_t prog, rpcvers_t vers,
 	}
 	s = malloc(sizeof (struct svc_callout));
 	if (s == (struct svc_callout *)0) {
-		if (netid)
-			free(netid);
+		free(netid);
 		(void) rw_unlock(&svc_lock);
 		return (FALSE);
 	}
@@ -1047,8 +1042,7 @@ svc_unregister(rpcprog_t prog, rpcvers_t vers)
 			prev->sc_next = s->sc_next;
 		}
 		s->sc_next = NULL_SVC;
-		if (s->sc_netid)
-			free(s->sc_netid);
+		free(s->sc_netid);
 		free(s);
 		/* unregister the information with the local binder service */
 		(void) pmap_unset(prog, vers);
@@ -1539,18 +1533,12 @@ svc_xprt_free(SVCXPRT *xprt)
 	struct svc_req	*req = xt ? xt->req : NULL;
 	char		*cred_area = xt ? xt->cred_area : NULL;
 
-	if (xprt)
-		free(xprt);
-	if (xt)
-		free(xt);
-	if (my_xlist)
-		free(my_xlist);
-	if (msg)
-		free(msg);
-	if (req)
-		free(req);
-	if (cred_area)
-		free(cred_area);
+	free(xprt);
+	free(xt);
+	free(my_xlist);
+	free(msg);
+	free(req);
+	free(cred_area);
 }
 
 

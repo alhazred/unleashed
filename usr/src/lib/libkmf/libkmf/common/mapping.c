@@ -236,8 +236,7 @@ kmf_cert_to_name_mapping_initialize(KMF_HANDLE_T handle, int numattr,
 		}
 
 		/* Free old options if applicable. */
-		if (old_curoptions != NULL)
-			free(old_curoptions);
+		free(old_curoptions);
 	} else {
 		/*
 		 * This is a new mapper path, clean up the old data and open the
@@ -285,8 +284,7 @@ err_mem:
 	 * recommended nor officially supported. The app should initialize the
 	 * old mapping again.
 	 */
-	if (tmppath != NULL)
-		free(tmppath);
+	free(tmppath);
 	map->curoptions = old_curoptions;
 	map->curpathname = old_curpathname;
 	return (KMF_ERR_MEMORY);

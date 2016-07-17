@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdlib.h>
 #include <assert.h>
 #include <ctype.h>
@@ -156,8 +154,7 @@ sip_get_tcp_msg(sip_conn_object_t obj, char *msg, size_t *msglen)
 		if (value == *msglen) {
 			return (msg);
 		} else {
-			if (msgbuf != NULL)
-				free(msgbuf);
+			free(msgbuf);
 			return (NULL);
 		}
 	}
@@ -195,8 +192,7 @@ sip_get_tcp_msg(sip_conn_object_t obj, char *msg, size_t *msglen)
 		if (newmsg == NULL) {
 			(void) pthread_mutex_unlock(
 			    &pvt_data->sip_conn_obj_reass_lock);
-			if (msgbuf != NULL)
-				free(msgbuf);
+			free(msgbuf);
 			return (NULL);
 		}
 		(void) strncpy(newmsg, reass->sip_reass_msg,
@@ -228,10 +224,8 @@ tryone:
 	msg = (char *)malloc(value + 1);
 	splitbuf = (char *)malloc(splitlen + 1);
 	if (msg == NULL || splitbuf == NULL) {
-		if (msg != NULL)
-			free(msg);
-		if (splitbuf != NULL)
-			free(splitbuf);
+		free(msg);
+		free(splitbuf);
 		(void) pthread_mutex_unlock(&pvt_data->sip_conn_obj_reass_lock);
 		return (NULL);
 	}

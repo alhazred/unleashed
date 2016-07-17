@@ -407,8 +407,7 @@ dt_pragma_line(const char *prname, dt_node_t *dnp)
 	 * dn_string into pcb_filetag as the new filename for error messages.
 	 */
 	if (fnp != NULL) {
-		if (yypcb->pcb_filetag != NULL)
-			free(yypcb->pcb_filetag);
+		free(yypcb->pcb_filetag);
 
 		/*
 		 * This is not pretty, but is a necessary evil until we either

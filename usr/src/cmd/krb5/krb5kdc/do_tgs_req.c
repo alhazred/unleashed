@@ -745,10 +745,8 @@ cleanup:
 	krb5_free_ticket(kdc_context, header_ticket);
     if (request)
 	krb5_free_kdc_req(kdc_context, request);
-    if (cname)
-	free(cname);
-    if (sname)
-	free(sname);
+    free(cname);
+    free(sname);
     if (nprincs)
 	krb5_db_free_principal(kdc_context, &server, 1);
     if (session_key.contents)

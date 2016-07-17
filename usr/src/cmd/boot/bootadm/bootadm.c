@@ -1414,8 +1414,7 @@ bam_menu(char *subcmd, char *opt, int largc, char *largv[])
 
 	if ((menu = menu_read(menu_path)) == NULL) {
 		bam_error(CANNOT_LOCATE_GRUB_MENU_FILE, menu_path);
-		if (special != NULL)
-			free(special);
+		free(special);
 
 		return (BAM_ERROR);
 	}
@@ -8268,8 +8267,7 @@ update_boot_entry(menu_t *mp, char *title, char *findroot, char *root,
 		lp = s_calloc(1, sizeof (line_t));
 		bam_add_line(mp, ent, tlp, lp);
 	} else {
-		if (lp->cmd != NULL)
-			free(lp->cmd);
+		free(lp->cmd);
 
 		free(lp->sep);
 		free(lp->arg);
@@ -8300,8 +8298,7 @@ update_boot_entry(menu_t *mp, char *title, char *findroot, char *root,
 			    menu_cmds[KERNEL_DOLLAR_CMD], menu_cmds[SEP_CMD],
 			    kernel);
 
-		if (lp->cmd != NULL)
-			free(lp->cmd);
+		free(lp->cmd);
 
 		free(lp->arg);
 		free(lp->line);
@@ -9600,14 +9597,10 @@ line_free(line_t *lp)
 	if (lp == NULL)
 		return;
 
-	if (lp->cmd != NULL)
-		free(lp->cmd);
-	if (lp->sep)
-		free(lp->sep);
-	if (lp->arg)
-		free(lp->arg);
-	if (lp->line)
-		free(lp->line);
+	free(lp->cmd);
+	free(lp->sep);
+	free(lp->arg);
+	free(lp->line);
 	free(lp);
 }
 

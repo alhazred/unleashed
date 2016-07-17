@@ -77,8 +77,7 @@ krb5int_mk_chpw_req(
     memcpy(ptr, cipherpw.data, cipherpw.length);
 
 cleanup:
-    if(cipherpw.data != NULL)  /* allocated by krb5_mk_priv */
-      free(cipherpw.data);
+    free(cipherpw.data);
       
     return(ret);
 }

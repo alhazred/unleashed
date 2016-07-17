@@ -3,8 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
@@ -600,9 +598,8 @@ Pem2Der(unsigned char *in, int inlen,
 	*outlen = bl;
 
 err:
-	if (nameB != NULL)
-		free(nameB);
-	if (kmf_rv != KMF_OK && dataB != NULL)
+	free(nameB);
+	if (kmf_rv != KMF_OK)
 		free(dataB);
 
 	return (kmf_rv);

@@ -282,11 +282,11 @@ static SLPBoolean aggregate_attrs(SLPHandle h, const char *attrs_in,
 
 	    cfg->aggregate(cfg->cache_cfg, unesc_tag, unesc_val);
 
-	    if (unesc_tag) free(unesc_tag);
-	    if (unesc_val) free(unesc_val);
+	    free(unesc_tag);
+	    free(unesc_val);
 	}
 
-	if (attrs) free(attrs);
+	free(attrs);
 
 	return (SLP_TRUE);
 }
@@ -343,7 +343,7 @@ static SLPBoolean foreach_server(SLPHandle hin, const char *u,
 	cfg->aggregate(cfg->cache_cfg, "_,_xservers_,_", surl->s_pcHost);
 
 cleanup:
-	if (url) free(url);
+	free(url);
 	if (surl) SLPFree(surl);
 
 	return (SLP_TRUE);
@@ -423,8 +423,8 @@ static void update_config(const char *context, struct config_cookie *cookie) {
 cleanup:
 	if (h) SLPClose(h);
 	if (persrv_h) SLPClose(persrv_h);
-	if (search) free(search);
-	if (unesc_domain) free(unesc_domain);
+	free(search);
+	free(unesc_domain);
 }
 
 /*
@@ -531,7 +531,7 @@ static void find_all_contexts(const char *type,
 
 done:
 	if (h) SLPClose(h);
-	if (fulltype) free(fulltype);
+	free(fulltype);
 }
 
 /*

@@ -707,8 +707,7 @@ add_tilink(int s)
 				 * here and re-allocate a new ones
 				 * later on.
 				 */
-				if (curptr->ti_rcvbuf != NULL)
-					free(curptr->ti_rcvbuf);
+				free(curptr->ti_rcvbuf);
 				free(curptr->ti_ctlbuf);
 				_t_free_lookbufs(curptr);
 				_t_reinit_tiptr(curptr);
@@ -817,8 +816,7 @@ _t_delete_tilink(int s)
 			/*
 			 * free resource associated with the curptr
 			 */
-			if (curptr->ti_rcvbuf != NULL)
-				free(curptr->ti_rcvbuf);
+			free(curptr->ti_rcvbuf);
 			free(curptr->ti_ctlbuf);
 			_t_free_lookbufs(curptr);
 			(void) mutex_destroy(&curptr->ti_lock);
@@ -1256,8 +1254,7 @@ _t_free_lookbufs(struct _ti_user *tiptr)
 	head_tlbs->tl_next = NULL;
 
 	while (tlbs != NULL) {
-		if (tlbs->tl_lookdbuf != NULL)
-			free(tlbs->tl_lookdbuf);
+		free(tlbs->tl_lookdbuf);
 		free(tlbs->tl_lookcbuf);
 		prev_tlbs = tlbs;
 		tlbs = tlbs->tl_next;
@@ -1283,8 +1280,7 @@ _t_free_looklist_head(struct _ti_user *tiptr)
 		/*
 		 * Free the control and data buffers
 		 */
-		if (tlbs->tl_lookdbuf != NULL)
-			free(tlbs->tl_lookdbuf);
+		free(tlbs->tl_lookdbuf);
 		free(tlbs->tl_lookcbuf);
 		/*
 		 * Replace with next lookbuf event contents
@@ -1333,8 +1329,7 @@ _t_flush_lookevents(struct _ti_user *tiptr)
 	tlbs = tiptr->ti_lookbufs.tl_next;
 	tiptr->ti_lookbufs.tl_next = NULL;
 	while (tlbs != NULL) {
-		if (tlbs->tl_lookdbuf != NULL)
-			free(tlbs->tl_lookdbuf);
+		free(tlbs->tl_lookdbuf);
 		free(tlbs->tl_lookcbuf);
 		prev_tlbs = tlbs;
 		tlbs = tlbs->tl_next;

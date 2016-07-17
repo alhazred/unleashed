@@ -1356,8 +1356,7 @@ exotic(const char *in_str)
 	}
 
 	if (sym_len > buf_size) {
-		if (buff)
-			free(buff);
+		free(buff);
 		buff = malloc(sym_len);
 		buf_size = sym_len;
 	}

@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <string.h>
 #include <errno.h>
 #include <syslog.h>
@@ -2449,10 +2447,8 @@ get_server_change(void *arg)
 
 	while (loop) {
 
-		if (chg.servers != NULL)
-			free(chg.servers);
-		if (chg.changes != NULL)
-			free(chg.changes);
+		free(chg.servers);
+		free(chg.changes);
 		if (sptr != &space.s_d)
 			(void) munmap((char *)sptr, sizeof (space));
 

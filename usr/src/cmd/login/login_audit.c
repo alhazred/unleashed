@@ -235,12 +235,10 @@ audit_failure(uint_t event_id, int failure_code, struct passwd *pwd,
 
 	if (adt_set_user(ah, uid, gid, uid, gid, p_tid, ADT_NEW)) {
 		(void) adt_end_session(ah);
-		if (p_tid != NULL)
-			free(p_tid);
+		free(p_tid);
 		return;
 	}
-	if (p_tid != NULL)
-		free(p_tid);
+	free(p_tid);
 
 	event = adt_alloc_event(ah, event_id);
 	if (event == NULL) {

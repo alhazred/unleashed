@@ -133,12 +133,10 @@ endnetgrent_r(void)
 
 	endnetgrent();
 #if NGR_R_PRIVATE == 1
-	if (*buf != NULL)
-		free(*buf);
+	free(*buf);
 	*buf = NULL;
 #elif NGR_R_PRIVATE == 2
-	if (p->buf != NULL)
-		free(p->buf);
+	free(p->buf);
 	free(p);
 #endif
 	NGR_R_END_RESULT(NGR_R_OK);
@@ -165,15 +163,13 @@ copy_protoent(NGR_R_CONST char **machinep, NGR_R_CONST char **userp,
 	if (dp != NULL) len += strlen(dp) + 1;
 
 #if NGR_R_PRIVATE == 1
-	if (*buf != NULL)
-		free(*buf);
+	free(*buf);
 	*buf = malloc(len);
 	if (*buf == NULL)
 		return(NGR_R_BAD);
 	cp = *buf;
 #elif NGR_R_PRIVATE == 2
-	if (p->buf)
-		free(p->buf);
+	free(p->buf);
 	p->buf = malloc(len);
 	if (p->buf == NULL)
 		return(NGR_R_BAD);

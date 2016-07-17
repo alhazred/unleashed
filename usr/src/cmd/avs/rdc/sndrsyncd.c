@@ -605,10 +605,8 @@ done:
 		UNLOCKCFG();
 	}
 	spcs_s_ufree(&ustatus);
-	if (sync_done)
-		free(sync_done);
-	if (rdc_set)
-		free(rdc_set);
+	free(sync_done);
+	free(rdc_set);
 	if (death) { /* bye bye */
 		/*
 		 * if perhaps we lost some race, lets remove this entry from
@@ -1661,8 +1659,7 @@ group_start(char *group)
 		    "for %s"), program, group);
 
 done:
-	if (ctag)
-		free(ctag);
+	free(ctag);
 
 	if (cfg) {
 		cfg_close(cfg);
@@ -1671,24 +1668,21 @@ done:
 
 	if (masters) {
 		for (i = 0; i < sndr_sets; i++) {
-			if (masters[i])
-				free(masters[i]);
+			free(masters[i]);
 		}
 		free(masters);
 	}
 
 	if (shadows) {
 		for (i = 0; i < update_needed; i++) {
-			if (shadows[i])
-				free(shadows[i]);
+			free(shadows[i]);
 		}
 		free(shadows);
 	}
 
 	if (bitmaps) {
 		for (i = 0; i < update_needed; i++) {
-			if (bitmaps[i])
-				free(bitmaps[i]);
+			free(bitmaps[i]);
 		}
 		free(bitmaps);
 	}

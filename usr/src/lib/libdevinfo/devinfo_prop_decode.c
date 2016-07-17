@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This file contains kernel property decode routines adopted from
  * sunddi.c and ddi_impl.c. The following changes have been applied.
@@ -938,8 +936,7 @@ di_slot_names_free(int count, di_slot_name_t *slot_names)
 		return;
 
 	while (--count >= 0) {
-		if (slot_names[count].name != NULL)
-			free(slot_names[count].name);
+		free(slot_names[count].name);
 	}
 	free(slot_names);
 }

@@ -456,8 +456,7 @@ client_data_proc(krb5_context kcontext,
 	ret = *retdata;
 	if (ret == NULL)
 	    return 0;
-	if (ret->data)
-	    free(ret->data);
+	free(ret->data);
 	free(ret);
 	return 0;
 	break;

@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -589,8 +587,7 @@ close_all(char *closepath, int count, int *fd_array)
 			    "close of backing-store (%s)"), bspath);
 		}
 	}
-	if (bspath != NULL)
-		free(bspath);
+	free(bspath);
 }
 
 /*
@@ -668,8 +665,7 @@ open_multi_backfile(char *backpath, int count, int **fd_array,
 		}
 		(*fd_array)[i] = fd;
 	}
-	if (wpath != NULL)
-		free(wpath);
+	free(wpath);
 	return (0);
 }
 

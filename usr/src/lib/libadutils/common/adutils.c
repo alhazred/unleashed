@@ -568,8 +568,7 @@ adutils_ad_free(adutils_ad_t **ad)
 	(void) pthread_mutex_unlock(&(*ad)->lock);
 	(void) pthread_mutex_destroy(&(*ad)->lock);
 
-	if ((*ad)->known_domains)
-		free((*ad)->known_domains);
+	free((*ad)->known_domains);
 	free((*ad)->basedn);
 	free(*ad);
 
@@ -861,8 +860,7 @@ delete_ds(adutils_ad_t *ad, const char *host, int port)
 
 		if (q->ld)
 			(void) ldap_unbind(q->ld);
-		if (q->host)
-			free(q->host);
+		free(q->host);
 		free(q);
 		break;
 	}

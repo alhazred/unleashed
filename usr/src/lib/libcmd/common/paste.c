@@ -272,7 +272,6 @@ b_paste(int argc,register char *argv[], void* context)
 			if((fp=streams[n]) && fp!=sfstdin)
 				sfclose(fp);
 	}
-	if (mp)
-		free(mp);
+	free(mp);
 	return(error_info.errors);
 }

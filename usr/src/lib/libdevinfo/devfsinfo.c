@@ -383,13 +383,11 @@ devfs_free_all_prom_names(struct devfs_prom_path *paths)
 
 	devfs_free_all_prom_names(paths->next);
 
-	if (paths->obp_path != NULL)
-		free(paths->obp_path);
+	free(paths->obp_path);
 
 	if (paths->alias_list != NULL) {
 		for (i = 0; paths->alias_list[i] != NULL; i++)
-			if (paths->alias_list[i] != NULL)
-				free(paths->alias_list[i]);
+			free(paths->alias_list[i]);
 
 		free(paths->alias_list);
 	}
@@ -480,8 +478,7 @@ devfs_bootdev_set_list(const char *dev_name, const uint_t options)
 					(void) snprintf(ptr, len, "%s ",
 					    prom_list[i]);
 				}
-				if (alias_list != NULL)
-					free(alias_list);
+				free(alias_list);
 			} else {
 				(void) snprintf(ptr, len, "%s ", prom_list[i]);
 			}

@@ -404,8 +404,7 @@ cleanup:
 		mkey_password = NULL;
 	free(pw_str);
     }
-    if (master_salt.data)
-	free(master_salt.data);
+    free(master_salt.data);
     krb5_free_keyblock(util_context, rblock.key);
     krb5_free_keyblock_contents(util_context, &mkey);
     (void) krb5_db_fini(util_context);

@@ -263,8 +263,7 @@ reg Sfio_t*	f;	/* stream to close */
 		return -1;
 	f->proc = NIL(Sfproc_t*);
 
-	if(p->rdata)
-		free(p->rdata);
+	free(p->rdata);
 
 	if(p->pid < 0)
 		status = 0;

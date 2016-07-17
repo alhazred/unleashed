@@ -626,8 +626,7 @@ log_init()
 	 * information correctly, if the locale directories aren't yet
 	 * available.
 	 */
-	if (st->st_locale != NULL)
-		free(st->st_locale);
+	free(st->st_locale);
 
 	if ((st->st_locale = getenv("LC_ALL")) == NULL)
 		if ((st->st_locale = getenv("LC_MESSAGES")) == NULL)

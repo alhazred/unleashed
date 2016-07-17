@@ -58,8 +58,7 @@ void krb5int_rc_terminate(void)
     k5_mutex_destroy(&grcache.lock);
 
     if (tgr != NULL) {
-    	if (tgr->name)
-		free(tgr->name);
+    	free(tgr->name);
     	for (i = 0; i < tgr->hsize; i++)
 		for (q = tgr->h[i]; q; q = qt) {
 			qt = q->nh;
@@ -67,8 +66,7 @@ void krb5int_rc_terminate(void)
 			free(q->rep.client);
 			free(q);
 		}
-    	if (tgr->h)
-		free(tgr->h);
+    	free(tgr->h);
     	free(tgr);
     }
 

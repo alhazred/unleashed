@@ -203,10 +203,8 @@ mntfs_free_mntentbuf(void *arg)
 
 	if (embufp == NULL)
 		return;
-	if (embufp->mbuf_emp)
-		free(embufp->mbuf_emp);
-	if (embufp->mbuf_buf)
-		free(embufp->mbuf_buf);
+	free(embufp->mbuf_emp);
+	free(embufp->mbuf_buf);
 	bzero(embufp, sizeof (struct mntentbuf));
 	free(embufp);
 }
@@ -256,8 +254,7 @@ mntfs_get_mntentbuf(size_t size)
 
 	/* Return the buffer, resizing it if necessary. */
 	if (size > embufp->mbuf_bufsize) {
-		if (embufp->mbuf_buf)
-			free(embufp->mbuf_buf);
+		free(embufp->mbuf_buf);
 		if ((embufp->mbuf_buf = malloc(size)) == NULL) {
 			embufp->mbuf_bufsize = 0;
 			return (NULL);

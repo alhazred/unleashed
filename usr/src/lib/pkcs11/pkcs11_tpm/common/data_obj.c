@@ -324,9 +324,9 @@ data_object_set_default_attributes(TEMPLATE *tmpl, CK_ULONG mode)
 	value_attr = (CK_ATTRIBUTE *)malloc(sizeof (CK_ATTRIBUTE));
 
 	if (! class_attr || ! app_attr || ! value_attr) {
-		if (class_attr) free(class_attr);
-		if (app_attr)   free(app_attr);
-		if (value_attr) free(value_attr);
+		free(class_attr);
+		free(app_attr);
+		free(value_attr);
 		return (CKR_HOST_MEMORY);
 	}
 

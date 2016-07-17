@@ -316,10 +316,8 @@ out:
 		scf_iter_destroy(iter);
 	if (prop != NULL)
 		scf_property_destroy(prop);
-	if (name != NULL)
-		free(name);
-	if (valuestr != NULL)
-		free(valuestr);
+	free(name);
+	free(valuestr);
 
 	return (ret);
 }
@@ -375,8 +373,7 @@ sa_extract_attrs(xmlNodePtr root, scfutilhandle_t *handle,
 		}
 	}
 out:
-	if (valuestr != NULL)
-		free(valuestr);
+	free(valuestr);
 	if (value != NULL)
 		scf_value_destroy(value);
 	if (prop != NULL)
@@ -612,10 +609,8 @@ out:
 		xmlUnlinkNode(node);
 		xmlFreeNode(node);
 	}
-	if (name != NULL)
-		free(name);
-	if (valuestr != NULL)
-		free(valuestr);
+	free(name);
+	free(valuestr);
 	if (value != NULL)
 		scf_value_destroy(value);
 	if (iter != NULL)
@@ -853,10 +848,8 @@ out:
 		scf_value_destroy(value);
 	if (prop != NULL)
 		scf_property_destroy(prop);
-	if (name != NULL)
-		free(name);
-	if (valuestr != NULL)
-		free(valuestr);
+	free(name);
+	free(valuestr);
 	return (ret);
 }
 
@@ -1040,8 +1033,7 @@ sa_extract_group(xmlNodePtr root, scfutilhandle_t *handle,
 out:
 	if (iter != NULL)
 		scf_iter_destroy(iter);
-	if (buff != NULL)
-		free(buff);
+	free(buff);
 	return (ret);
 }
 
@@ -1088,8 +1080,7 @@ sa_extract_defaults(xmlNodePtr root, scfutilhandle_t *handle,
 		}
 	}
 out:
-	if (valuestr != NULL)
-		free(valuestr);
+	free(valuestr);
 	if (value != NULL)
 		scf_value_destroy(value);
 	if (prop != NULL)
@@ -1798,8 +1789,7 @@ sa_commit_share(scfutilhandle_t *handle, sa_group_t group, sa_share_t share)
 		if (err == SCF_ERROR_PERMISSION_DENIED)
 			ret = SA_NO_PERMISSION;
 	}
-	if (propstring != NULL)
-		free(propstring);
+	free(propstring);
 	if (groupname != NULL)
 		sa_free_attr_string(groupname);
 
@@ -1932,8 +1922,7 @@ out:
 		sa_free_attr_string(groupname);
 	if (shareid != NULL)
 		sa_free_attr_string(shareid);
-	if (propstring != NULL)
-		free(propstring);
+	free(propstring);
 
 	return (ret);
 }

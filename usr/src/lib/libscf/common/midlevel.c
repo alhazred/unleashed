@@ -2539,12 +2539,10 @@ scf_clean_propvec(scf_propvec_t *propvec)
 		if (prop->pv_type == SCF_TYPE_OPAQUE) {
 			scf_opaque_t *o = prop->pv_ptr;
 
-			if (o->so_addr != NULL)
-				free(o->so_addr);
+			free(o->so_addr);
 		} else if (scf_true_base_type(prop->pv_type) ==
 		    SCF_TYPE_ASTRING) {
-			if (*(char **)prop->pv_ptr != NULL)
-				free(*(char **)prop->pv_ptr);
+			free(*(char **)prop->pv_ptr);
 		}
 	}
 

@@ -261,8 +261,7 @@ update_item(ad_item_t *item, void *value, enum ad_item_state state,
 	} else if (item->value != value)
 		item->version++;
 
-	if (item->value != NULL)
-		free(item->value);
+	free(item->value);
 
 	item->value = value;
 	item->state = state;
@@ -954,42 +953,30 @@ ad_disc_fini(ad_disc_t ctx)
 	if (ctx->res_ninitted)
 		res_ndestroy(&ctx->res_state);
 
-	if (ctx->subnets != NULL)
-		free(ctx->subnets);
+	free(ctx->subnets);
 
-	if (ctx->domain_name.value != NULL)
-		free(ctx->domain_name.value);
+	free(ctx->domain_name.value);
 
-	if (ctx->domain_guid.value != NULL)
-		free(ctx->domain_guid.value);
+	free(ctx->domain_guid.value);
 
-	if (ctx->domain_controller.value != NULL)
-		free(ctx->domain_controller.value);
+	free(ctx->domain_controller.value);
 
-	if (ctx->preferred_dc.value != NULL)
-		free(ctx->preferred_dc.value);
+	free(ctx->preferred_dc.value);
 
-	if (ctx->site_name.value != NULL)
-		free(ctx->site_name.value);
+	free(ctx->site_name.value);
 
-	if (ctx->forest_name.value != NULL)
-		free(ctx->forest_name.value);
+	free(ctx->forest_name.value);
 
-	if (ctx->global_catalog.value != NULL)
-		free(ctx->global_catalog.value);
+	free(ctx->global_catalog.value);
 
-	if (ctx->domains_in_forest.value != NULL)
-		free(ctx->domains_in_forest.value);
+	free(ctx->domains_in_forest.value);
 
-	if (ctx->trusted_domains.value != NULL)
-		free(ctx->trusted_domains.value);
+	free(ctx->trusted_domains.value);
 
 	/* Site specific versions */
-	if (ctx->site_domain_controller.value != NULL)
-		free(ctx->site_domain_controller.value);
+	free(ctx->site_domain_controller.value);
 
-	if (ctx->site_global_catalog.value != NULL)
-		free(ctx->site_global_catalog.value);
+	free(ctx->site_global_catalog.value);
 
 	free(ctx);
 }

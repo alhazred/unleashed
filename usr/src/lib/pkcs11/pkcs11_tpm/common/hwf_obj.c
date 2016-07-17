@@ -431,9 +431,9 @@ counter_set_default_attributes(TEMPLATE *tmpl)
 	    sizeof (CK_BBOOL));
 
 	if (! value_attr || ! hasreset_attr || ! resetoninit_attr) {
-		if (value_attr) free(value_attr);
-		if (hasreset_attr) free(hasreset_attr);
-		if (resetoninit_attr) free(resetoninit_attr);
+		free(value_attr);
+		free(hasreset_attr);
+		free(resetoninit_attr);
 		return (CKR_HOST_MEMORY);
 	}
 

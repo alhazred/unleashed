@@ -1082,8 +1082,7 @@ calculate_lifc_len:
 	 */
 	needed = (lifn.lifn_count + 4) * sizeof (struct lifreq);
 	if (needed > lastneeded || needed < lastneeded/2) {
-		if (lastbuf != NULL)
-			free(lastbuf);
+		free(lastbuf);
 		if ((buf = malloc(needed)) == NULL) {
 			lastbuf = NULL;
 			msglog("ifscan: malloc: %s", rip_strerror(errno));

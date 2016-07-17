@@ -1549,8 +1549,7 @@ krb5_os_localaddr (krb5_context context, krb5_address ***addr) {
             for (i = 0; i < count; i++)
             {
                 if (paddr[i]) {
-                    if (paddr[i]->contents)
-                        free(paddr[i]->contents);
+                    free(paddr[i]->contents);
                     free(paddr[i]);
                 }
             }

@@ -32,8 +32,6 @@
  * under license from the Regents of the University of California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "defs.h"
 
 #define	IF_SEPARATOR	':'
@@ -75,8 +73,7 @@ initifs(void)
 	bufsize = numifs * sizeof (struct lifreq);
 
 	if (buf == NULL || bufsize > maxbufsize) {
-		if (buf != NULL)
-			free(buf);
+		free(buf);
 		maxbufsize = bufsize;
 		buf = (char *)malloc(maxbufsize);
 		if (buf == NULL) {

@@ -1162,10 +1162,8 @@ filediff(char *tsname, char *sname)
 	/* compare content */
 	ret = bcmp(tbuf, buf, tsz);
 out:
-	if (tbuf)
-		free(tbuf);
-	if (buf)
-		free(buf);
+	free(tbuf);
+	free(buf);
 	return (ret);
 }
 

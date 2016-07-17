@@ -1325,8 +1325,7 @@ search(char buf[], FILE *file, register off_t n)
     static char lastbuf[80];
 
     if (buf != NULL) {
-	if (s != NULL)
-		free(s);
+	free(s);
 	if (*buf != '\0') {
 		if ((s = regcmp(buf, (char *) NULL)) == NULL)
 			error(gettext("Regular expression botch"));

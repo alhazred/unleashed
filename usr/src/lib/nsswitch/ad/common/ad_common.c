@@ -110,8 +110,7 @@ update_dirs(ad_disc_ds_t **value, ad_disc_ds_t **new)
 		return (0);
 	}
 
-	if (*value)
-		free(*value);
+	free(*value);
 	*value = *new;
 	*new = NULL;
 	return (1);
@@ -466,8 +465,7 @@ static
 void
 _clean_ad_backend(ad_backend_ptr be)
 {
-	if (be->tablename != NULL)
-		free(be->tablename);
+	free(be->tablename);
 	if (be->buffer != NULL) {
 		free(be->buffer);
 		be->buffer = NULL;

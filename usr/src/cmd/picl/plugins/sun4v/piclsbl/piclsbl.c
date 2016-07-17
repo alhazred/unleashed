@@ -370,8 +370,7 @@ sbl_return:
 	(*pcp_close_ptr)(channel_fd);
 	if (req_ptr != NULL)
 		umem_free(req_ptr, sizeof (pcp_sbl_req_t));
-	if (resp_ptr != NULL)
-		free(resp_ptr);
+	free(resp_ptr);
 	nvlist_free(nvlp);
 }
 

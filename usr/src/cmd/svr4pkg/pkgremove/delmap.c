@@ -72,8 +72,7 @@ delmap(int flag, char *pkginst, PKGserver *pkgserver, VFP_T **tmpfp)
 	/* re-use any memory used to store pathnames */
 	(void) pathdup(NULL);
 
-	if (eptlist != NULL)
-		free(eptlist);
+	free(eptlist);
 	eptlist = (struct cfent **)calloc(EPTMALLOC,
 					sizeof (struct cfent *));
 	if (eptlist == NULL) {

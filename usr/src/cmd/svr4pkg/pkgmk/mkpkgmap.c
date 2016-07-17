@@ -568,10 +568,8 @@ doattrib(void)
 	}
 
 	/* free any previous memory from qstrdup */
-	if (d_own[nfp])
-		free(d_own[nfp]);
-	if (d_grp[nfp])
-		free(d_grp[nfp]);
+	free(d_own[nfp]);
+	free(d_grp[nfp]);
 
 	d_mod[nfp] = mode;
 	d_own[nfp] = qstrdup(owner);
@@ -745,18 +743,14 @@ popenv(void)
 
 	(void) fclose(fp);
 	if (nfp) {
-		if (proto[nfp])
-			free(proto[nfp]);
-		if (dname[nfp])
-			free(dname[nfp]);
+		free(proto[nfp]);
+		free(dname[nfp]);
 		for (i = 0; srchp[nfp][i]; i++)
 			free(srchp[nfp][i]);
 		for (i = 0; rootp[nfp][i]; i++)
 			free(rootp[nfp][i]);
-		if (d_own[nfp])
-			free(d_own[nfp]);
-		if (d_grp[nfp])
-			free(d_grp[nfp]);
+		free(d_own[nfp]);
+		free(d_grp[nfp]);
 
 		fp = sfp[--nfp];
 

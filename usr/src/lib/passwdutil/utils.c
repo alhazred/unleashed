@@ -60,19 +60,19 @@ repops_t *rops[REP_LAST+1] = {
 void
 free_pwd(struct passwd *pw)
 {
-	if (pw->pw_name) free(pw->pw_name);
-	if (pw->pw_passwd) free(pw->pw_passwd);
-	if (pw->pw_gecos) free(pw->pw_gecos);
-	if (pw->pw_dir) free(pw->pw_dir);
-	if (pw->pw_shell) free(pw->pw_shell);
+	free(pw->pw_name);
+	free(pw->pw_passwd);
+	free(pw->pw_gecos);
+	free(pw->pw_dir);
+	free(pw->pw_shell);
 	free(pw);
 }
 
 void
 free_spwd(struct spwd *spw)
 {
-	if (spw->sp_namp) free(spw->sp_namp);
-	if (spw->sp_pwdp) free(spw->sp_pwdp);
+	free(spw->sp_namp);
+	free(spw->sp_pwdp);
 	free(spw);
 }
 

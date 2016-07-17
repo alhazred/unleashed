@@ -262,8 +262,7 @@ _tx_sndv(int fd, const struct t_iovec *tiov, unsigned int tiovcount,
 					t_errno = TFLOW;
 				else
 					t_errno = TSYSERR;
-				if (dataptr)
-					free(dataptr);
+				free(dataptr);
 				return (-1); /* return error */
 			}
 			/*
@@ -281,8 +280,7 @@ _tx_sndv(int fd, const struct t_iovec *tiov, unsigned int tiovcount,
 		bytes_remaining = bytes_remaining - bytes_sent;
 	} while (bytes_remaining != 0);
 
-	if (dataptr != NULL)
-		free(dataptr);
+	free(dataptr);
 	_T_TX_NEXTSTATE(T_SND, tiptr, "t_snd: invalid state event T_SND");
 	return (nbytes - bytes_remaining);
 }

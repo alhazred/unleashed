@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * nfs log - read buffer file and print structs in user-readable form
  */
@@ -1536,10 +1534,8 @@ nfsl_log_file_free(struct nfsl_log_file *elfrec)
 {
 	if (elfrec == NULL)
 		return;
-	if (elfrec->path != NULL)
-		free(elfrec->path);
-	if (elfrec->buf != NULL)
-		free(elfrec->buf);
+	free(elfrec->path);
+	free(elfrec->buf);
 	free(elfrec);
 }
 

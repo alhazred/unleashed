@@ -81,7 +81,7 @@ astcopy(int rfd, int wfd, off_t n)
 	}
 	if (n > bufsiz)
 	{
-		if (buf) free(buf);
+		free(buf);
 		bufsiz = roundof(n, BUFSIZ);
 		if (!(buf = newof(0, char, bufsiz, 0))) return(-1);
 	}

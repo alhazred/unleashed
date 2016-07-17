@@ -672,8 +672,7 @@ cleanup:
     /* Clean-up structure */
     krb5_ldap_free_policy (util_context, policyparams);
 
-    if (policy)
-        free (policy);
+    free(policy);
 
     if (print_usage)
 	db_usage(MODIFY_POLICY);
@@ -737,8 +736,7 @@ err_usage:
 cleanup:
     krb5_ldap_free_policy (util_context, policyparams);
 
-    if (policy)
-	free (policy);
+    free(policy);
 
     if (print_usage) {
 	db_usage(VIEW_POLICY);
@@ -857,8 +855,7 @@ cleanup:
 	free (list);
     }
 
-    if (basedn)
-	free (basedn);
+    free(basedn);
 
     if (print_usage) {
 	db_usage(LIST_POLICY);

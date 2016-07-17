@@ -329,13 +329,11 @@ err:
 	if (nconf)
 		freenetconfigent(nconf);
 	if (svcaddr) {
-		if (svcaddr->buf)
-			free(svcaddr->buf);
+		free(svcaddr->buf);
 		free(svcaddr);
 	}
 	if (binding) {
-		if (binding->ypbind_servername)
-			free(binding->ypbind_servername);
+		free(binding->ypbind_servername);
 		free(binding);
 	}
 	return (0);
@@ -909,8 +907,7 @@ usingypmap(char **ddn, char *map)
 	/* does the map exist ? */
 	in = (char)0xff;
 	stat = yp_match(domain, map, &in, 1, &outval, &outvallen);
-	if (outval != NULL)
-		free(outval);
+	free(outval);
 	switch (stat) {
 
 	case 0:  /* it actually succeeded! */

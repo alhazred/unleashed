@@ -1034,10 +1034,8 @@ krb5_error_code decode_krb5_reply_key_pack(const krb5_data *code, krb5_reply_key
   cleanup_manual();
 error_out:
   if (rep && *rep) {
-    if ((*rep)->replyKey.contents)
-	free((*rep)->replyKey.contents);
-    if ((*rep)->asChecksum.contents)
-      free((*rep)->asChecksum.contents);
+    free((*rep)->replyKey.contents);
+    free((*rep)->asChecksum.contents);
     free(*rep);
     *rep = NULL;
   }

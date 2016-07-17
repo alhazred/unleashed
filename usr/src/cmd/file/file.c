@@ -421,8 +421,7 @@ main(int argc, char **argv)
 		if (type(p))
 			tret = 1;
 	}
-	if (ap != NULL)
-		free(ap);
+	free(ap);
 	if (tret != 0)
 		exit(tret);
 

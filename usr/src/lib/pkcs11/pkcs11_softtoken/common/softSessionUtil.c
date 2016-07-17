@@ -349,8 +349,7 @@ soft_delete_session(soft_session_t *session_p,
 	(void) pthread_cond_destroy(&session_p->ses_free_cond);
 
 	/* In case application did not call Final */
-	if (session_p->digest.context != NULL)
-		free(session_p->digest.context);
+	free(session_p->digest.context);
 
 	if (session_p->encrypt.context != NULL)
 		/*
@@ -366,11 +365,9 @@ soft_delete_session(soft_session_t *session_p,
 		 */
 		soft_crypt_cleanup(session_p, B_FALSE, B_TRUE);
 
-	if (session_p->sign.context != NULL)
-		free(session_p->sign.context);
+	free(session_p->sign.context);
 
-	if (session_p->verify.context != NULL)
-		free(session_p->verify.context);
+	free(session_p->verify.context);
 
 	if (session_p->find_objects.context != NULL) {
 		find_context_t *fcontext;
@@ -689,8 +686,7 @@ soft_set_operationstate(soft_session_t *session_p, CK_BYTE_PTR pOperationState,
 unlock_session:
 	(void) pthread_mutex_unlock(&session_p->session_mutex);
 
-	if (free_it != NULL)
-		free(free_it);
+	free(free_it);
 
 	return (rv);
 }

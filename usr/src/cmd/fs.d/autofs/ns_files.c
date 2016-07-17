@@ -25,8 +25,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <syslog.h>
@@ -577,8 +575,7 @@ read_execout(char *key, char **lp, char *fname, char *line, int linesz)
 	/* setup args for execv */
 	if (((args[0] = strdup(fname)) == NULL) ||
 		((args[1] = strdup(key)) == NULL)) {
-		if (args[0] != NULL)
-			free(args[0]);
+		free(args[0]);
 		syslog(LOG_ERR, "read_execout: Memory allocation failed");
 		return (-1);
 	}

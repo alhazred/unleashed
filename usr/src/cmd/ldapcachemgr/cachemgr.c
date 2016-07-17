@@ -1668,8 +1668,7 @@ admin_modify(LineBuf *config_info, ldap_call_t *in)
 	rc = __ns_ldap_getServiceAuthMethods("passwd-cmd", &authpp,
 	    &error);
 	if (rc != NS_LDAP_SUCCESS) {
-		if (credp->hostcertpath != NULL)
-			free(credp->hostcertpath);
+		free(credp->hostcertpath);
 		goto out;
 	}
 

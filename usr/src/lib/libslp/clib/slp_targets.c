@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Target Lists
  * ============
@@ -364,10 +362,8 @@ void slp_destroy_target_list(slp_target_list_t *h) {
 	free(tl->scopes);
 
 	/* free any char * lists in use */
-	if (tl->uc_scopes)
-		free(tl->uc_scopes);
-	if (tl->mc_scopes)
-		free(tl->mc_scopes);
+	free(tl->uc_scopes);
+	free(tl->mc_scopes);
 	free(tl->all_scopes);
 
 	/* free the target list struct */
@@ -543,7 +539,7 @@ static SLPBoolean collect_DAs(SLPHandle h, const char *u,
 
 cleanup:
 	free(url);
-	if (surl) free(surl);
+	free(surl);
 
 	return (SLP_TRUE);
 }

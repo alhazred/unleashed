@@ -14,8 +14,6 @@
  * specifies the terms and conditions for redistribution.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * ls
  *
@@ -247,10 +245,9 @@ formatd(char *name, int title)
 			dp->sd_next = subdirs; subdirs = dp;
 		}
 	for (fp = dfp0; fp < dfplast; fp++) {
-		if ((fp->fflags&ISARG) == 0 && fp->fname)
+		if ((fp->fflags & ISARG) == 0)
 			free(fp->fname);
-		if (fp->flinkto)
-			free(fp->flinkto);
+		free(fp->flinkto);
 	}
 	free(dfp0);
 }

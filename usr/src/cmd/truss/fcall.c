@@ -123,8 +123,7 @@ delete_breakpoints(uintptr_t base, size_t size)
 				continue;
 			}
 			*Bpp = Bp->next;
-			if (Bp->sym_name)
-				free(Bp->sym_name);
+			free(Bp->sym_name);
 			free(Bp);
 		}
 	}
@@ -241,8 +240,7 @@ establish_stacks(void)
 	    (Pmap = my_malloc(statb.st_size, NULL)) == NULL ||
 	    (nmap = pread(mapfd, Pmap, statb.st_size, 0L)) <= 0 ||
 	    (nmap /= sizeof (prmap_t)) == 0) {
-		if (Pmap != NULL)
-			free(Pmap);
+		free(Pmap);
 		Pmap = NULL;
 		nmap = 0;
 	}
@@ -255,8 +253,7 @@ establish_stacks(void)
 	ph_map.pmap = Pmap;
 	ph_map.nmap = nmap;
 	(void) Plwp_iter(Proc, lwp_stack_traps, &ph_map);
-	if (Pmap != NULL)
-		free(Pmap);
+	free(Pmap);
 
 	if (Thr_agent == NULL)
 		return;
@@ -775,8 +772,7 @@ find_lwp_stack(uintptr_t sp)
 	    (Pmap = my_malloc(statb.st_size, NULL)) == NULL ||
 	    (nmap = pread(mapfd, Pmap, statb.st_size, 0L)) <= 0 ||
 	    (nmap /= sizeof (prmap_t)) == 0) {
-		if (Pmap != NULL)
-			free(Pmap);
+		free(Pmap);
 		if (mapfd >= 0)
 			(void) close(mapfd);
 		return (NULL);
@@ -1085,8 +1081,7 @@ reset_breakpoints(void)
 		for (i = 0; i < HASHSZ; i++) {
 			while ((Bp = bpt_hashtable[i]) != NULL) {
 				bpt_hashtable[i] = Bp->next;
-				if (Bp->sym_name)
-					free(Bp->sym_name);
+				free(Bp->sym_name);
 				free(Bp);
 			}
 		}

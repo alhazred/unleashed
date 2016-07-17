@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This file contains all functions pertaining to registrations:
  *	SLPReg
@@ -315,7 +313,7 @@ static SLPError packSrvReg(slp_handle_impl_t *hp, const char *url,
 
 	return (SLP_OK);
 error:
-	if (m) free(m);
+	free(m);
 	if (*msg) {
 		if ((*msg)->msgiov) free_msgiov((*msg)->msgiov, 4);
 		free(*msg);
@@ -492,7 +490,7 @@ static SLPError packSrvDereg(slp_handle_impl_t *hp, const char *url,
 
 	return (SLP_OK);
 error:
-	if (m) free(m);
+	free(m);
 	if (*msg) {
 		if ((*msg)->msgiov) free_msgiov((*msg)->msgiov, 3);
 		free(*msg);
@@ -770,8 +768,7 @@ static SLPBoolean check_reregs() {
 
 		    (void) slp_send2slpd_iov(
 				p->msg->msgiov, p->msg->msgiov_len, &reply);
-		    if (reply)
-			    free(reply);
+		    free(reply);
 
 		    p->wake_time = now + p->lifetime;
 		}

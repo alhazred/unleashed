@@ -479,8 +479,7 @@ list_mechlist_for_lib(char *libname, mechlist_t *mlist,
 			}
 			(void) printf("\n");
 		}
-		if (pmech_list)
-			free(pmech_list);
+		free(pmech_list);
 		if (rc == FAILURE) {
 			break;
 		}

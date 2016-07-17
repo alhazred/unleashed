@@ -2511,12 +2511,9 @@ zs_usage_set_alloc()
 	return (set);
 
 err:
-	if (set->zsus_total != NULL)
-		free(set->zsus_total);
-	if (set->zsus_avg != NULL)
-		free(set->zsus_avg);
-	if (set->zsus_high != NULL)
-		free(set->zsus_high);
+	free(set->zsus_total);
+	free(set->zsus_avg);
+	free(set->zsus_high);
 
 	return (NULL);
 }

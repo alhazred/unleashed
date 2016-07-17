@@ -457,8 +457,7 @@ open_au_read_stream(char *fname)
 au_open_failed:
 	sav = errno;
 	(void) close(fd);
-	if (au != NULL)
-		free(au);
+	free(au);
 	errno = sav;
 	return (NULL);
 }
@@ -526,8 +525,7 @@ open_wav_read_stream(char *fname)
 wav_open_failed:
 	sav = errno;
 	(void) close(fd);
-	if (wav != NULL)
-		free(wav);
+	free(wav);
 	errno = sav;
 	return (NULL);
 }

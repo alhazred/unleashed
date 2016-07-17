@@ -360,8 +360,7 @@ main(int argc, char **argv)
 		}
 	}
 
-	if (cmd_info.elfobj != NULL)
-		free(cmd_info.elfobj);
+	free(cmd_info.elfobj);
 
 	return (ret);
 }
@@ -752,8 +751,7 @@ create_csr(char *dn)
 		cryptoerror(LOG_STDERR,
 		    gettext("Error initializing KMF: %s\n"),
 		    (err ? err : "unknown error"));
-		if (err)
-			free(err);
+		free(err);
 		return (kmfrv);
 	}
 	(void) memset(&csr, 0, sizeof (csr));

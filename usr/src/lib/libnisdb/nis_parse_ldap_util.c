@@ -168,14 +168,12 @@ free_mapping_rule(__nis_mapping_rule_t	*rule)
 		r = &rule->lhs;
 		for (i = 0; i < r->numElements; i++)
 			free_mapping_element(&r->element[i]);
-		if (r->element != NULL)
-			free(r->element);
+		free(r->element);
 
 		r = &rule->rhs;
 		for (i = 0; i < r->numElements; i++)
 			free_mapping_element(&r->element[i]);
-		if (r->element != NULL)
-			free(r->element);
+		free(r->element);
 
 		free(rule);
 	}
@@ -209,8 +207,7 @@ free_mapping_element(__nis_mapping_element_t *e)
 			free_mapping_sub_element(
 				&e->element.print.subElement[i]);
 		e->element.print.numSubElements = 0;
-		if (e->element.print.subElement != NULL)
-			free(e->element.print.subElement);
+		free(e->element.print.subElement);
 		e->element.print.subElement = NULL;
 		break;
 	    case me_split:
@@ -223,8 +220,7 @@ free_mapping_element(__nis_mapping_element_t *e)
 		for (i = 0; i < e->element.match.numItems; i++)
 			free_mapping_item(&e->element.match.item[i]);
 		e->element.match.numItems = 0;
-		if (e->element.match.item != NULL)
-		    free(e->element.match.item);
+		free(e->element.match.item);
 		e->element.match.item = NULL;
 		break;
 	    case me_extract:
@@ -258,12 +254,10 @@ free_table_mapping(__nis_table_mapping_t *mapping)
 	if (mapping == NULL)
 		return;
 
-	if (mapping->dbId != NULL)
-		free(mapping->dbId);
+	free(mapping->dbId);
 	mapping->dbId = NULL;
 
-	if (mapping->objName != NULL)
-		free(mapping->objName);
+	free(mapping->objName);
 	mapping->objName = NULL;
 
 	for (i = 0; i < mapping->index.numIndexes; i++) {
@@ -271,12 +265,10 @@ free_table_mapping(__nis_table_mapping_t *mapping)
 		free_mapping_format(mapping->index.value[i]);
 	}
 
-	if (mapping->index.name != NULL)
-		free(mapping->index.name);
+	free(mapping->index.name);
 	mapping->index.name = NULL;
 
-	if (mapping->index.value != NULL)
-		free(mapping->index.value);
+	free(mapping->index.value);
 	mapping->index.value = NULL;
 
 	mapping->index.numIndexes = 0;
@@ -306,8 +298,7 @@ free_table_mapping(__nis_table_mapping_t *mapping)
 	}
 	mapping->numRulesFromLDAP = 0;
 
-	if (mapping->ruleFromLDAP != NULL)
-		free(mapping->ruleFromLDAP);
+	free(mapping->ruleFromLDAP);
 	mapping->ruleFromLDAP = NULL;
 
 	for (i = 0; i < mapping->numRulesToLDAP; i++) {
@@ -325,8 +316,7 @@ free_table_mapping(__nis_table_mapping_t *mapping)
 	}
 	mapping->numRulesToLDAP = 0;
 
-	if (mapping->ruleToLDAP != NULL)
-		free(mapping->ruleToLDAP);
+	free(mapping->ruleToLDAP);
 	mapping->ruleToLDAP = NULL;
 
 	if (mapping->e != NULL) {
@@ -354,24 +344,19 @@ free_table_mapping(__nis_table_mapping_t *mapping)
 void
 free_config_info(__nis_config_info_t *config_info)
 {
-	if (config_info->config_dn != NULL)
-		free(config_info->config_dn);
+	free(config_info->config_dn);
 	config_info->config_dn = NULL;
 
-	if (config_info->default_servers != NULL)
-		free(config_info->default_servers);
+	free(config_info->default_servers);
 	config_info->default_servers = NULL;
 
-	if (config_info->proxy_dn != NULL)
-		free(config_info->proxy_dn);
+	free(config_info->proxy_dn);
 	config_info->proxy_dn = NULL;
 
-	if (config_info->proxy_passwd != NULL)
-		free(config_info->proxy_passwd);
+	free(config_info->proxy_passwd);
 	config_info->proxy_passwd = NULL;
 
-	if (config_info->tls_cert_db != NULL)
-		free(config_info->tls_cert_db);
+	free(config_info->tls_cert_db);
 	config_info->tls_cert_db = NULL;
 }
 
@@ -386,28 +371,22 @@ free_config_info(__nis_config_info_t *config_info)
 void
 free_proxy_info(__nis_ldap_proxy_info *proxy_info)
 {
-	if (proxy_info->tls_cert_db != NULL)
-		free(proxy_info->tls_cert_db);
+	free(proxy_info->tls_cert_db);
 	proxy_info->tls_cert_db = NULL;
 
-	if (proxy_info->default_servers != NULL)
-		free(proxy_info->default_servers);
+	free(proxy_info->default_servers);
 	proxy_info->default_servers = NULL;
 
-	if (proxy_info->default_search_base != NULL)
-		free(proxy_info->default_search_base);
+	free(proxy_info->default_search_base);
 	proxy_info->default_search_base = NULL;
 
-	if (proxy_info->proxy_dn != NULL)
-		free(proxy_info->proxy_dn);
+	free(proxy_info->proxy_dn);
 	proxy_info->proxy_dn = NULL;
 
-	if (proxy_info->proxy_passwd != NULL)
-		free(proxy_info->proxy_passwd);
+	free(proxy_info->proxy_passwd);
 	proxy_info->proxy_passwd = NULL;
 
-	if (proxy_info->default_nis_domain != NULL)
-		free(proxy_info->default_nis_domain);
+	free(proxy_info->default_nis_domain);
 	proxy_info->default_nis_domain = NULL;
 }
 
@@ -426,27 +405,21 @@ free_object_dn(__nis_object_dn_t *obj_dn)
 	int			i;
 
 	while (obj_dn != NULL) {
-		if (obj_dn->read.base != NULL)
-			free(obj_dn->read.base);
+		free(obj_dn->read.base);
 		obj_dn->read.base = NULL;
-		if (obj_dn->read.attrs != NULL)
-			free(obj_dn->read.attrs);
+		free(obj_dn->read.attrs);
 		obj_dn->read.attrs = NULL;
-		if (obj_dn->write.base != NULL)
-			free(obj_dn->write.base);
+		free(obj_dn->write.base);
 		obj_dn->write.base = NULL;
-		if (obj_dn->write.attrs != NULL)
-			free(obj_dn->write.attrs);
+		free(obj_dn->write.attrs);
 		obj_dn->write.attrs = NULL;
-		if (obj_dn->dbIdName != NULL)
-			free(obj_dn->dbIdName);
+		free(obj_dn->dbIdName);
 		obj_dn->dbIdName = NULL;
 		for (i = 0; i < obj_dn->numDbIds; i++)
 			free_mapping_rule(obj_dn->dbId[i]);
 		obj_dn->numDbIds = 0;
 
-		if (obj_dn->dbId != NULL)
-			free(obj_dn->dbId);
+		free(obj_dn->dbId);
 		obj_dn->dbId = NULL;
 
 		t = obj_dn;
@@ -472,11 +445,9 @@ free_index(__nis_index_t *index)
 		free_mapping_format(index->value[i]);
 	}
 	index->numIndexes = 0;
-	if (index->name != NULL)
-		free(index->name);
+	free(index->name);
 	index->name = NULL;
-	if (index->value != NULL)
-		free(index->value);
+	free(index->value);
 	index->value = NULL;
 }
 
@@ -494,20 +465,16 @@ free_mapping_item(__nis_mapping_item_t	*item)
 	if (item == NULL)
 		return;
 
-	if (item->name != NULL)
-		free(item->name);
+	free(item->name);
 	item->name = NULL;
 	if (item->type == mit_nisplus) {
 		free_index(&item->searchSpec.obj.index);
-		if (item->searchSpec.obj.name != NULL)
-			free(item->searchSpec.obj.name);
+		free(item->searchSpec.obj.name);
 		item->searchSpec.obj.name = NULL;
 	} else if (item->type == mit_ldap) {
-		if (item->searchSpec.triple.base != NULL)
-			free(item->searchSpec.triple.base);
+		free(item->searchSpec.triple.base);
 		item->searchSpec.triple.base = NULL;
-		if (item->searchSpec.triple.attrs != NULL)
-			free(item->searchSpec.triple.attrs);
+		free(item->searchSpec.triple.attrs);
 		item->searchSpec.triple.attrs = NULL;
 		if (item->searchSpec.triple.element != NULL) {
 			free_mapping_element(
@@ -541,16 +508,13 @@ free_mapping_format(__nis_mapping_format_t *fmt)
 		    case mmt_item:
 			break;
 		    case mmt_string:
-			if (fmt->match.string != NULL)
-				free(fmt->match.string);
+			free(fmt->match.string);
 			fmt->match.string = NULL;
 			break;
 		    case mmt_single:
-			if (fmt->match.single.lo != NULL)
-				free(fmt->match.single.lo);
+			free(fmt->match.single.lo);
 			fmt->match.single.lo = NULL;
-			if (fmt->match.single.hi != NULL)
-				free(fmt->match.single.hi);
+			free(fmt->match.single.hi);
 			fmt->match.single.hi = NULL;
 			break;
 		    case mmt_limit:
@@ -559,8 +523,7 @@ free_mapping_format(__nis_mapping_format_t *fmt)
 			break;
 		    case mmt_berstring:
 		    case mmt_berstring_null:
-			if (fmt->match.berString != NULL)
-				free(fmt->match.berString);
+			free(fmt->match.berString);
 			fmt->match.berString = NULL;
 			break;
 		    case mmt_begin:
@@ -597,8 +560,7 @@ free_mapping_sub_element(__nis_mapping_sub_element_t *sub)
 		for (i = 0; i < sub->element.print.numItems; i++)
 			free_mapping_item(&sub->element.print.item[i]);
 		sub->element.print.numItems = 0;
-		if (sub->element.print.item != NULL)
-			free(sub->element.print.item);
+		free(sub->element.print.item);
 		sub->element.print.item = NULL;
 		break;
 	    case me_split:
@@ -1299,8 +1261,7 @@ dup_index(__nis_index_t *in, __nis_index_t *out)
 	}
 	if (i < in->numIndexes) {
 		for (j = 0; j <= i; j++) {
-			if (out->name[j] != NULL)
-				free(out->name[j]);
+			free(out->name[j]);
 			if (out->value[j] != NULL)
 				free_mapping_format(out->value[j]);
 		}
@@ -1734,8 +1695,7 @@ add_element(
 		e1 = m->element;
 		for (i = 0; i < n; i++)
 			free_mapping_element(e1++);
-		if (m->element != NULL)
-			free(m->element);
+		free(m->element);
 		m->element = NULL;
 		m->numElements = 0;
 	} else {
@@ -2166,10 +2126,8 @@ get_next_extract_format_item(
 		if (p_error == no_parse_error)
 			return (s);
 	}
-	if (lo != NULL)
-		free(lo);
-	if (hi != NULL)
-		free(hi);
+	free(lo);
+	free(hi);
 	return (NULL);
 }
 

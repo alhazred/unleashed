@@ -74,8 +74,7 @@ kdc_initialize_rcache(krb5_context kcontext, char *rcache_name)
 	    if (!(retval = krb5_rc_expunge(kcontext, kdc_rcache))) {
 		sname = kdc_current_rcname;
 		kdc_current_rcname = strdup(rcname);
-		if (sname)
-		    free(sname);
+		free(sname);
 	    }
 	}
 	if (retval)
@@ -605,7 +604,7 @@ add_to_transited(krb5_data *tgt_trans, krb5_data *new_trans,
     goto fail;
   }
 
-  if (new_trans->data)  free(new_trans->data);
+  free(new_trans->data);
   new_trans->data = trans;
   new_trans->length = 0;
 

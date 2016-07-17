@@ -303,11 +303,9 @@ kernel_delete_session(CK_SLOT_ID slotID, kernel_session_t *session_p,
 		free(bufp);
 	}
 
-	if (session_p->encrypt.context != NULL)
-		free(session_p->encrypt.context);
+	free(session_p->encrypt.context);
 
-	if (session_p->decrypt.context != NULL)
-		free(session_p->decrypt.context);
+	free(session_p->decrypt.context);
 
 	if (session_p->sign.context != NULL) {
 		digest_buf_t *bufp = session_p->sign.context;

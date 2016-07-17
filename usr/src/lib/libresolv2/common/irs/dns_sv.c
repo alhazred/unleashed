@@ -123,10 +123,8 @@ static void
 sv_close(struct irs_sv *this) {
 	struct pvt *pvt = (struct pvt *)this->private;
 
-	if (pvt->serv.s_aliases)
-		free(pvt->serv.s_aliases);
-	if (pvt->svbuf)
-		free(pvt->svbuf);
+	free(pvt->serv.s_aliases);
+	free(pvt->svbuf);
 
 	if (pvt->res && pvt->free_res)
 		(*pvt->free_res)(pvt->res);
@@ -210,8 +208,7 @@ parse_hes_list(struct irs_sv *this, char **hes_list, const char *proto) {
 			  continue;
 		}
 		/* OK, we've got a live one.  Let's parse it for real. */
-		if (pvt->svbuf)
-			free(pvt->svbuf);
+		free(pvt->svbuf);
 		pvt->svbuf = strdup(cp);
 
 		p = pvt->svbuf;

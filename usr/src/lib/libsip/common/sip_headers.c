@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
@@ -205,8 +203,7 @@ sip_free_cftr_header(sip_parsed_header_t *header)
 	while (value != NULL) {
 		next_value = value->sip_next_value;
 		sip_free_params(value->sip_param_list);
-		if (value->cftr_name != NULL)
-			free(value->cftr_name);
+		free(value->cftr_name);
 		if (value->sip_value_parsed_uri != NULL) {
 			sip_free_parsed_uri(value->sip_value_parsed_uri);
 			value->sip_value_parsed_uri = NULL;

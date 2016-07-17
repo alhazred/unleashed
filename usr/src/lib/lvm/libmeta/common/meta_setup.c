@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Just in case we're not in a build environment, make sure that
  * TEXT_DOMAIN gets set to something.
@@ -183,15 +181,13 @@ meta_lock_open(
 
 	/* return success */
 success:
-	if (lockname != NULL)
-		free(lockname);
+	free(lockname);
 	META_LOCK_FD(sp) = lockfd;
 	return (0);
 
 	/* flag failure */
 failure:
-	if (lockname != NULL)
-		free(lockname);
+	free(lockname);
 	if (lockfd >= 0)
 		(void) close(lockfd);
 	return (-1);
@@ -209,8 +205,7 @@ meta_lock_close(
 		if (ep != NULL) {
 			char	*lockname = META_LOCK_NAME(sp);
 			(void) mdsyserror(ep, errno, lockname);
-			if (lockname != NULL)
-				free(lockname);
+			free(lockname);
 		}
 
 		retval = -1;
@@ -289,14 +284,12 @@ meta_lock(
 
 	/* return success */
 success:
-	if (lockname != NULL)
-		free(lockname);
+	free(lockname);
 	return (0);
 
 	/* flag failure */
 failure:
-	if (lockname != NULL)
-		free(lockname);
+	free(lockname);
 	if (lockfd >= 0)
 		(void) meta_lock_close(sp, ep);
 	return (-1);
@@ -336,14 +329,12 @@ meta_lock_nowait(
 
 	/* return success */
 success:
-	if (lockname != NULL)
-		free(lockname);
+	free(lockname);
 	return (0);
 
 	/* flag failure */
 failure:
-	if (lockname != NULL)
-		free(lockname);
+	free(lockname);
 	if (lockfd >= 0)
 		(void) meta_lock_close(sp, ep);
 	return (-1);
@@ -376,8 +367,7 @@ meta_lock_status(
 	if (lockf(lockfd, F_TEST, 0) != 0) {
 		char *lockname = META_LOCK_NAME(sp);
 		(void) mdsyserror(ep, errno, lockname);
-		if (lockname != NULL)
-			free(lockname);
+		free(lockname);
 		return (-1);
 	}
 

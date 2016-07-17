@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * fsck_pcfs -- routines for manipulating clusters.
  */
@@ -517,8 +515,7 @@ markFree(int32_t clusterNum)
 		return;
 
 	if (InUse[clusterNum - FIRST_CLUSTER]) {
-		if (InUse[clusterNum - FIRST_CLUSTER]->saved)
-			free(InUse[clusterNum - FIRST_CLUSTER]->saved);
+		free(InUse[clusterNum - FIRST_CLUSTER]->saved);
 		freeClusterInfo(InUse[clusterNum - FIRST_CLUSTER]);
 		InUse[clusterNum - FIRST_CLUSTER] = NULL;
 	}
@@ -1068,8 +1065,7 @@ freeOrphan(int32_t c)
 	 * Free the directory entry we explicitly created for
 	 * the orphaned clusters.
 	 */
-	if (InUse[c - FIRST_CLUSTER]->dirent != NULL)
-		free(InUse[c - FIRST_CLUSTER]->dirent);
+	free(InUse[c - FIRST_CLUSTER]->dirent);
 	/*
 	 * Then mark the clusters themselves as available.
 	 */

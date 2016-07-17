@@ -568,8 +568,7 @@ meta_get_names(
 	return (gn.size);
 
 out:
-	if (minors != NULL)
-		free(minors);
+	free(minors);
 	metafreenamelist(*nlpp);
 	*nlpp = NULL;
 	return (-1);

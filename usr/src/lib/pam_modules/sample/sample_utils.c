@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma	ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <security/pam_appl.h>
 #include <string.h>
 #include <stdlib.h>
@@ -55,8 +53,7 @@ __free_msg(num_msg, msg)
 	if (msg) {
 		m = msg;
 		for (i = 0; i < num_msg; i++, m++) {
-			if (m->msg)
-				free(m->msg);
+			free(m->msg);
 		}
 		free(msg);
 	}
@@ -78,8 +75,7 @@ __free_resp(num_msg, resp)
 	if (resp) {
 		r = resp;
 		for (i = 0; i < num_msg; i++, r++) {
-			if (r->resp)
-				free(r->resp);
+			free(r->resp);
 		}
 		free(resp);
 	}

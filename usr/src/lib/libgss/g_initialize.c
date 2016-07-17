@@ -875,8 +875,7 @@ const char *fileName;
 			}
 
 			if ((tmpStr = strdup(sharedPath)) != NULL) {
-				if (aMech->uLibName)
-					free(aMech->uLibName);
+				free(aMech->uLibName);
 				aMech->uLibName = tmpStr;
 			}
 
@@ -906,10 +905,8 @@ const char *fileName;
 
 		/* check if any memory allocations failed - bad news */
 		if (aMech->uLibName == NULL || aMech->mechNameStr == NULL) {
-			if (aMech->uLibName)
-				free(aMech->uLibName);
-			if (aMech->mechNameStr)
-				free(aMech->mechNameStr);
+			free(aMech->uLibName);
+			free(aMech->mechNameStr);
 			free(mechOid->elements);
 			free(mechOid);
 			free(aMech);

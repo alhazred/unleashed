@@ -1153,14 +1153,12 @@ expand_paths(Rt_map *clmp, const char *list, Alist **alpp, Aliste alni,
 		 * release any previous old listing.
 		 */
 		if (elist && (elist != nlist)) {
-			if (olist)
-				free(olist);
+			free(olist);
 			nlist = olist = elist;
 		}
 	}
 
-	if (olist)
-		free(olist);
+	free(olist);
 
 	/*
 	 * If no paths could be determined (perhaps because of security), then

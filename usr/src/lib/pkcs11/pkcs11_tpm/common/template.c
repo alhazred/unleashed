@@ -832,8 +832,7 @@ template_free(TEMPLATE *tmpl) {
 	while (tmpl->attribute_list) {
 		CK_ATTRIBUTE *attr = (CK_ATTRIBUTE *)tmpl->attribute_list->data;
 
-		if (attr)
-			free(attr);
+		free(attr);
 
 		tmpl->attribute_list = dlist_remove_node(tmpl->attribute_list,
 		tmpl->attribute_list);
@@ -1037,10 +1036,10 @@ template_set_default_common_attributes(TEMPLATE *tmpl)
 	label_attr = (CK_ATTRIBUTE *)malloc(sizeof (CK_ATTRIBUTE) + 0);
 
 	if (! token_attr || ! priv_attr || ! mod_attr || ! label_attr) {
-		if (token_attr) free(token_attr);
-		if (priv_attr)  free(priv_attr);
-		if (mod_attr)   free(mod_attr);
-		if (label_attr) free(label_attr);
+		free(token_attr);
+		free(priv_attr);
+		free(mod_attr);
+		free(label_attr);
 
 		return (CKR_HOST_MEMORY);
 	}

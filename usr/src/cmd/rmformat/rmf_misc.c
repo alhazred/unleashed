@@ -1524,8 +1524,7 @@ fini_device(device_t *dev)
 	free(dev->d_inq);
 	free(dev->d_node);
 	(void) close(dev->d_fd);
-	if (dev->d_name)
-		free(dev->d_name);
+	free(dev->d_name);
 	free(dev);
 }
 

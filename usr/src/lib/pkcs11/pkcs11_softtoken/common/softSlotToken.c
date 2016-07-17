@@ -331,8 +331,7 @@ C_GetTokenInfo(CK_SLOT_ID slotID, CK_TOKEN_INFO_PTR pInfo)
 			pInfo->flags |= CKF_USER_PIN_TO_BE_CHANGED;
 	}
 
-	if (ks_cryptpin)
-		free(ks_cryptpin);
+	free(ks_cryptpin);
 
 	/* Provide information about a token in the provided buffer */
 	(void) strncpy((char *)pInfo->label, SOFT_TOKEN_LABEL, 32);

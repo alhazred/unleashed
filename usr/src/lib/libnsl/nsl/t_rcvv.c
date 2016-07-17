@@ -25,8 +25,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * t_rcv.c and t_rcvv.c are very similar and contain common code.
  * Any changes to either of them should be reviewed to see whether they
@@ -262,8 +260,7 @@ _tx_rcvv(int fd, struct t_iovec *tiov, unsigned int tiovcount,  int *flags,
 			else
 				tiptr->ti_ctlbuf = ctlbuf.buf;
 			_t_scatter(&databuf, tiov, tiovcount);
-			if (dataptr != NULL)
-				free(dataptr);
+			free(dataptr);
 			sig_mutex_unlock(&tiptr->ti_lock);
 			return (databuf.len);
 
@@ -389,8 +386,7 @@ _tx_rcvv(int fd, struct t_iovec *tiov, unsigned int tiovcount,  int *flags,
 		else
 			tiptr->ti_ctlbuf = ctlbuf.buf;
 		_t_scatter(&databuf, tiov, tiovcount);
-		if (dataptr != NULL)
-			free(dataptr);
+		free(dataptr);
 		sig_mutex_unlock(&tiptr->ti_lock);
 		return (databuf.len);
 	}
@@ -402,8 +398,7 @@ err_out:
 		free(ctlbuf.buf);
 	else
 		tiptr->ti_ctlbuf = ctlbuf.buf;
-	if (dataptr != NULL)
-		free(dataptr);
+	free(dataptr);
 	sig_mutex_unlock(&tiptr->ti_lock);
 
 	errno = sv_errno;

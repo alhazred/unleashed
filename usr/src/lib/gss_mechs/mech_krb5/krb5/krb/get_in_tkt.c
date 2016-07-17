@@ -227,8 +227,7 @@ send_again:
 cleanup:
     if (packet)
 	krb5_free_data(context, packet);
-    if (reply.data)
-	free(reply.data);
+    free(reply.data);
     return retval;
 }
 
@@ -735,8 +734,7 @@ krb5_get_in_tkt(krb5_context context,
 	goto cleanup;
 
 cleanup:
-    if (request.ktype)
-	free(request.ktype);
+    free(request.ktype);
     if (!addrs && request.addresses)
 	krb5_free_addresses(context, request.addresses);
     if (request.padata)
@@ -753,8 +751,7 @@ cleanup:
 	else
 	    krb5_free_kdc_rep(context, as_reply);
     }
-    if (hostname_used)
-        free(hostname_used);
+    free(hostname_used);
 
     return (retval);
 }
@@ -1564,7 +1561,6 @@ cleanup:
 	*as_reply = local_as_reply;
     else if (local_as_reply)
 	krb5_free_kdc_rep(context, local_as_reply);
-    if (hostname_used)
-        free(hostname_used);
+    free(hostname_used);
     return(ret);
 }

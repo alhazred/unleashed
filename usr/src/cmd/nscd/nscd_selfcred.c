@@ -1198,8 +1198,7 @@ _nscd_is_self_cred_on(int recheck, char **dblist)
 		return (is_on);
 	}
 
-	if (selfcred_dbs != NULL)
-		free(selfcred_dbs);
+	free(selfcred_dbs);
 	selfcred_dbs = _nscd_srcs_in_db_nsw_policy(1, &srcs);
 
 	if (selfcred_dbs == NULL) {

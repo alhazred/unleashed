@@ -811,10 +811,8 @@ fake_freeaddrinfo (struct addrinfo *ai)
     struct addrinfo *next;
     while (ai) {
 	next = ai->ai_next;
-	if (ai->ai_canonname)
-	  free (ai->ai_canonname);
-	if (ai->ai_addr)
-	  free (ai->ai_addr);
+	free(ai->ai_canonname);
+	free(ai->ai_addr);
 	free (ai);
 	ai = next;
     }

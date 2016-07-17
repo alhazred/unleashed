@@ -1,5 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Copyright (c) 1988, 1990, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -1915,10 +1913,8 @@ env_define(var, value)
 	}
 
 	if (ep = env_find(var)) {
-		if (ep->var)
-			free(ep->var);
-		if (ep->value)
-			free(ep->value);
+		free(ep->var);
+		free(ep->value);
 	} else {
 		ep = malloc(sizeof (struct env_lst));
 		if (ep == NULL) {
@@ -1952,10 +1948,8 @@ env_undefine(var)
 		ep->prev->next = ep->next;
 		if (ep->next)
 			ep->next->prev = ep->prev;
-		if (ep->var)
-			free(ep->var);
-		if (ep->value)
-			free(ep->value);
+		free(ep->var);
+		free(ep->value);
 		free(ep);
 	}
 }

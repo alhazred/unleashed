@@ -185,8 +185,7 @@ libhal_get_string_array_from_iter (DBusMessageIter *iter, int *num_elements)
 	return buffer;
 
 oom:
-	if (buffer != NULL)
-		free (buffer);
+	free(buffer);
 	fprintf (stderr, "%s %d : error allocating memory\n", __FILE__, __LINE__);
 	return NULL;
 

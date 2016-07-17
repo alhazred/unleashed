@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <strings.h>
 #include <ctype.h>
@@ -155,14 +153,11 @@ kc_import(int argc, char *argv[])
 	}
 
 out:
-	if (filename != NULL)
-		free(filename);
+	free(filename);
 
-	if (policyname != NULL)
-		free(policyname);
+	free(policyname);
 
-	if (infile != NULL)
-		free(infile);
+	free(infile);
 
 	free_policy_list(plclist);
 

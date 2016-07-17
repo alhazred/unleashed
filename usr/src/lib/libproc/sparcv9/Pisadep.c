@@ -418,8 +418,7 @@ Pstack_iter(struct ps_prochandle *P, const prgregset_t regs,
 			break;	/* No gwindows match either */
 	}
 
-	if (prevfp)
-		free(prevfp);
+	free(prevfp);
 
 	free_uclist(&ucl);
 	return (rv);

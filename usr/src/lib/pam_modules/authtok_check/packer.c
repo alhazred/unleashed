@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "packer.h"
 
 /*
@@ -273,10 +271,8 @@ sort_file(char *fname)
 error:
 	(void) close(fd);
 
-	if (buf != NULL)
-		free(buf);
-	if (offsets != NULL)
-		free(offsets);
+	free(buf);
+	free(offsets);
 	offsets = NULL;
 	off_size = 0;
 	off_idx = 0;

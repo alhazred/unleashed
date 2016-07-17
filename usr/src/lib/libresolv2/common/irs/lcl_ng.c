@@ -255,12 +255,9 @@ freelists(struct irs_ng *this) {
 	while (gp) {
 		ogp = gp;
 		gp = gp->ng_next;
-		if (ogp->ng_str[NG_HOST])
-			free(ogp->ng_str[NG_HOST]);
-		if (ogp->ng_str[NG_USER])
-			free(ogp->ng_str[NG_USER]);
-		if (ogp->ng_str[NG_DOM])
-			free(ogp->ng_str[NG_DOM]);
+		free(ogp->ng_str[NG_HOST]);
+		free(ogp->ng_str[NG_USER]);
+		free(ogp->ng_str[NG_DOM]);
 		free((char *)ogp);
 	}
 	pvt->grouphead.gr = NULL;

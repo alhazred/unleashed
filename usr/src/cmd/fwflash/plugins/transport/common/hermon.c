@@ -1107,22 +1107,17 @@ cnx_close(struct devicelist *flashdev)
 	}
 
 	if (handle != NULL) {
-		if (handle->info.mlx_id != NULL)
-			free(handle->info.mlx_id);
+		free(handle->info.mlx_id);
 
-		if (handle->info.mlx_psid != NULL)
-			free(handle->info.mlx_psid);
+		free(handle->info.mlx_psid);
 
-		if (handle->fw != NULL)
-			free(handle->fw);
+		free(handle->fw);
 		free(handle);
 	}
 
-	if (flashdev->ident->vid != NULL)
-		free(flashdev->ident->vid);
+	free(flashdev->ident->vid);
 
-	if (flashdev->ident->revid != NULL)
-		free(flashdev->ident->revid);
+	free(flashdev->ident->revid);
 
 	return (FWFLASH_SUCCESS);
 }

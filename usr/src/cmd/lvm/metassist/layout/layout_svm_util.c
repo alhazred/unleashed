@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <assert.h>
 #include <errno.h>
 #include <string.h>
@@ -435,10 +433,8 @@ release_svm_names()
 	dlist_free_items(_disksets, free);
 	_disksets = NULL;
 
-	if (hsps_by_number != NULL)
-	    free(hsps_by_number);
-	if (devs_by_number != NULL)
-	    free(devs_by_number);
+	free(hsps_by_number);
+	free(devs_by_number);
 
 	hsps_by_number = (boolean_t *)NULL;
 	devs_by_number = (boolean_t *)NULL;

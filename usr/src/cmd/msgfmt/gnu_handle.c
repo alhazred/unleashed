@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "gnu_msgfmt.h"
 
 static int	next_entry_is_fuzzy = 0;
@@ -360,11 +358,9 @@ handle_message(struct entry *id, struct entry *str)
 				    id->num, cur_po);
 			}
 			free(id->str);
-			if (id->pos)
-				free(id->pos);
+			free(id->pos);
 			free(str->str);
-			if (str->pos)
-				free(str->pos);
+			free(str->pos);
 			return;
 		}
 		/* duplicate msgid */
@@ -376,11 +372,9 @@ handle_message(struct entry *id, struct entry *str)
 		}
 		/* ignore this etnry */
 		free(id->str);
-		if (id->pos)
-			free(id->pos);
+		free(id->pos);
 		free(str->str);
-		if (str->pos)
-			free(str->pos);
+		free(str->pos);
 		return;
 	}
 
@@ -390,11 +384,9 @@ handle_message(struct entry *id, struct entry *str)
 		if (!fuzzy_flag) {
 			/* ignore this entry */
 			free(id->str);
-			if (id->pos)
-				free(id->pos);
+			free(id->pos);
 			free(str->str);
-			if (str->pos)
-				free(str->pos);
+			free(str->pos);
 			return;
 		}
 	}
@@ -403,11 +395,9 @@ handle_message(struct entry *id, struct entry *str)
 		/* this entry is not translated */
 		cur_catalog->unum++;
 		free(id->str);
-		if (id->pos)
-			free(id->pos);
+		free(id->pos);
 		free(str->str);
-		if (str->pos)
-			free(str->pos);
+		free(str->pos);
 		return;
 	}
 
@@ -462,10 +452,8 @@ handle_message(struct entry *id, struct entry *str)
 	if (verbose_flag)
 		check_format(id, str, next_entry_is_c_format);
 
-	if (id->pos)
-		free(id->pos);
-	if (str->pos)
-		free(str->pos);
+	free(id->pos);
+	free(str->pos);
 
 	msg = cur_catalog->msg;
 	nmsg = cur_catalog->nmsg;

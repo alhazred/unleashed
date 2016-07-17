@@ -1435,8 +1435,7 @@ egress:
 	}
     }
 
-    if (callback_data) 
-	free(callback_data);
+    free(callback_data);
 
     free(conns);
     if (reply->data != udpbuf)

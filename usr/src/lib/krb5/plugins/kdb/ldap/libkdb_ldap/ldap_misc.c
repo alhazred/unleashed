@@ -619,8 +619,7 @@ store_tl_data(tl_data, tl_type, value)
 	tl_data->tl_data_contents = realloc(tl_data->tl_data_contents,
 					    tl_data->tl_data_length);
 	if (tl_data->tl_data_contents == NULL) {
-	    if (reallocptr)
-		free (reallocptr);
+	    free(reallocptr);
 	    return ENOMEM;
 	}
 	curr = (tl_data->tl_data_contents + currlen);
@@ -650,8 +649,7 @@ store_tl_data(tl_data, tl_type, value)
 	tl_data->tl_data_contents = realloc(tl_data->tl_data_contents,
 					    tl_data->tl_data_length);
 	if (tl_data->tl_data_contents == NULL) {
-	    if (reallocptr)
-		free (reallocptr);
+	    free(reallocptr);
 	    return ENOMEM;
 	}
 	curr = (tl_data->tl_data_contents + currlen);
@@ -1378,8 +1376,7 @@ cleanup:
     if (st != 0) {
 	if (*retarr != NULL) {
 	    for (i=0; i< count; ++i)
-		if ((*retarr)[i] != NULL)
-		    free ((*retarr)[i]);
+		free((*retarr)[i]);
 	    free (*retarr);
 	}
     }
@@ -1733,8 +1730,7 @@ krb5_ldap_get_reference_count (krb5_context context, char *dn, char *refattr,
     }
 
 cleanup:
-    if (filter != NULL)
-	free (filter);
+    free(filter);
 
     if (result != NULL)
 	ldap_msgfree (result);
@@ -1745,8 +1741,7 @@ cleanup:
 	free (subtree);
     }
 
-    if (ptr != NULL)
-	free (ptr);
+    free(ptr);
 
     if (gothandle == 1)
 	krb5_ldap_put_handle_to_pool(ldap_context, ldap_server_handle);
@@ -1886,8 +1881,7 @@ krb5_error_code krb5_ldap_name_to_policydn (context, name, policy_dn)
     sprintf (*policy_dn, "cn=%s,%s", ptr, ldap_context->lrparams->realmdn);
 
 cleanup:
-    if (ptr != NULL)
-	free (ptr);
+    free(ptr);
     return st;
 }
 
@@ -2158,8 +2152,7 @@ populate_krb5_db_entry (krb5_context context,
 		    break;
 		/* Solaris kerberos: fix memory leak */
 		if (ptr) {
-		    if (ptr->tl_data_contents)
-			free(ptr->tl_data_contents);
+		    free(ptr->tl_data_contents);
 		    free(ptr);
 		    ptr = NULL;
 		}
@@ -2245,24 +2238,18 @@ cleanup:
     if (DN != NULL)
 	ldap_memfree(DN);
 
-    if (userinfo_tl_data.tl_data_contents != NULL)
-	free(userinfo_tl_data.tl_data_contents);
+    free(userinfo_tl_data.tl_data_contents);
 
     /* Solaris Kerberos: added this to fix memleak */
-    if (kadm_tl_data.tl_data_contents != NULL)
-	free(kadm_tl_data.tl_data_contents);
+    free(kadm_tl_data.tl_data_contents);
 
-    if (pwdpolicydn != NULL)
-	free(pwdpolicydn);
+    free(pwdpolicydn);
 
-    if (polname != NULL)
-	free(polname);
+    free(polname);
 
-    if (tktpolname != NULL)
-	free (tktpolname);
+    free(tktpolname);
 
-    if (policydn != NULL)
-	free(policydn);
+    free(policydn);
 
     if (link_references) {
         int i;

@@ -171,8 +171,7 @@ int	verbose_level;
 static void
 free_handler(evt_handler_t *evhp)
 {
-	if (evhp->ename)
-		free(evhp->ename);
+	free(evhp->ename);
 	(void) pthread_cond_broadcast(&evhp->cv);
 	(void) pthread_cond_destroy(&evhp->cv);
 	free(evhp);
@@ -1362,8 +1361,7 @@ destroy_table(picl_obj_t *pobj)
 			freep = colp;
 			colp = colp->next_row;
 			(void) hash_remove(&ptreetbl, freep->ptree_hdl);
-			if (freep->prop_val)
-				free(freep->prop_val);
+			free(freep->prop_val);
 			free(freep);
 		}
 	}
@@ -1384,8 +1382,7 @@ destroy_propobj(picl_obj_t *propp)
 		destroy_table(propp);
 
 	(void) hash_remove(&ptreetbl, propp->ptree_hdl);
-	if (propp->prop_val)
-		free(propp->prop_val);
+	free(propp->prop_val);
 	free(propp);
 }
 

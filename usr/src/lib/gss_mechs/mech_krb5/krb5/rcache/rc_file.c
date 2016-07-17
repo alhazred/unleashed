@@ -247,11 +247,9 @@ krb5_rc_free_entry(krb5_context context, krb5_donot_replay **rep)
     *rep = NULL;
     if (rp)
     {
-	if (rp->client)
-	    free(rp->client);
+	free(rp->client);
 
-	if (rp->server)
-	    free(rp->server);
+	free(rp->server);
 	rp->client = NULL;
 	rp->server = NULL;
 	free(rp);

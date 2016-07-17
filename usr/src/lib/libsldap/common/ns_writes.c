@@ -234,8 +234,7 @@ freeModList(LDAPMod **mods)
 		 * code, and the attribute is single valued.
 		 */
 		if (mods[i]->mod_op & LDAP_MOD_BVALUES) {
-			if (mods[i]->mod_bvalues[0])
-				free(mods[i]->mod_bvalues[0]);
+			free(mods[i]->mod_bvalues[0]);
 		} else {
 			if (name_is_oc) {
 				/*
@@ -1218,8 +1217,7 @@ get_admin_passwd(ns_cred_t *cred, ns_ldap_error_t **errorp)
 	(void) memset(*paramVal, 0, strlen((char *)*paramVal));
 	(void) __ns_ldap_freeParam(&paramVal);
 	if (modparamVal == NULL || *((char *)modparamVal) == '\0') {
-		if (modparamVal != NULL)
-			free(modparamVal);
+		free(modparamVal);
 		rc = NS_LDAP_CONFIG;
 		*errorp = __s_api_make_error(NS_CONFIG_SYNTAX,
 		    gettext("bind password not valid"));
@@ -1391,8 +1389,7 @@ __ns_ldap_addEntry(
 	rc = write_state_machine(LDAP_REQ_ADD,
 	    new_dn ? new_dn : (char *)dn, mods, cred, flags, errorp);
 
-	if (new_dn)
-		free(new_dn);
+	free(new_dn);
 	freeModList(mods);
 	return (rc);
 }
@@ -3959,8 +3956,7 @@ int  __ns_ldap_addTypedEntry(
 	}
 
 	/* Free up entry created by conversion routine */
-	if (fulldn != NULL)
-		free(fulldn);
+	free(fulldn);
 	__s_cvt_freeEntryRdn(&entry, &rdn);
 	return (rc);
 }

@@ -1445,8 +1445,7 @@ sink(int argc, char *argv[])
 	for (first = 1; ; first = 0) {
 		cp = buf;
 		if (desrcpread(rem, cp, 1) <= 0) {
-			if (namebuf != NULL)
-				free(namebuf);
+			free(namebuf);
 			return;
 		}
 
@@ -1470,8 +1469,7 @@ sink(int argc, char *argv[])
 		}
 		if (buf[0] == 'E') {
 			(void) desrcpwrite(rem, "", 1);
-			if (namebuf != NULL)
-				free(namebuf);
+			free(namebuf);
 			return;
 		}
 

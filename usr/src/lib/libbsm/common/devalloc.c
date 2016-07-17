@@ -2109,10 +2109,8 @@ da_rm_list_entry(devlist_t *dlist, char *link, int type, char *devname)
 	if (retval == 0)
 		return (0);
 	free(current->devinfo.devname);
-	if (current->devinfo.devlist != NULL)
-		free(current->devinfo.devlist);
-	if (current->devinfo.devopts != NULL)
-		free(current->devinfo.devopts);
+	free(current->devinfo.devlist);
+	free(current->devinfo.devopts);
 
 	if (prev == NULL)
 		*dentry = current->next;

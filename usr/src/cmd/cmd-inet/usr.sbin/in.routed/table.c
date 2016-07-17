@@ -2485,8 +2485,7 @@ rtdelete(struct rt_entry *rt)
 	    rhead)))) {
 		msglog("rnh_deladdr(%s) failed; found rt 0x%lx",
 		    rtname(rt->rt_dst, rt->rt_mask, gate), deleted_rt);
-		if (deleted_rt != NULL)
-			free(deleted_rt);
+		free(deleted_rt);
 	}
 	total_routes--;
 	free(rt->rt_spares);

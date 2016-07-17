@@ -25,8 +25,6 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <strings.h>
 #include <malloc.h>
@@ -246,8 +244,7 @@ getallocext(struct file_entry *fp, uint32_t loc, uint32_t len)
 	if (debug)
 		(void) printf(" allocext loc %x len %x\n", loc, len);
 	nb = roundup(len, secsize);
-	if (extbuf)
-		free(extbuf);
+	free(extbuf);
 	extbuf = (uint8_t *)malloc(nb);
 	if (extbuf == NULL)
 		errexit(gettext("Can't allocate directory extent buffer\n"));

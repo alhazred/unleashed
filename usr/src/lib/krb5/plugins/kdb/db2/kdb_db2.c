@@ -185,8 +185,7 @@ k5db2_clear_context(krb5_db2_context *dbctx)
      * Free any dynamically allocated memory.  File descriptors and locks
      * are the caller's problem.
      */
-    if (dbctx->db_lf_name)
-	free(dbctx->db_lf_name);
+    free(dbctx->db_lf_name);
     if (dbctx->db_name && (dbctx->db_name != default_db_name))
 	free(dbctx->db_name);
     /*
@@ -1465,7 +1464,7 @@ krb5_db2_open(krb5_context kcontext,
 
 	krb5_db2_get_db_opt(*t_ptr, &opt, &val);
 	if (opt && !strcmp(opt, "dbname")) {
-	    if (dbname) free(dbname);
+	    free(dbname);
 	    dbname = strdup(val);
 	}
 	else if (!opt && !strcmp(val, "temporary") ) {
@@ -1641,8 +1640,7 @@ krb5_db2_create(krb5_context kcontext, char *conf_section, char **db_args)
     status = krb5_db2_open(kcontext, conf_section, db_args, KRB5_KDB_OPEN_RW);
 
   clean_n_exit:
-    if (db_name)
-	free(db_name);
+    free(db_name);
     return status;
 }
 
@@ -1715,8 +1713,7 @@ krb5_db2_destroy(krb5_context kcontext, char *conf_section, char **db_args)
     status = krb5_db2_db_destroy(kcontext, db_name);
 
   clean_n_exit:
-    if (db_name)
-	free(db_name);
+    free(db_name);
     return status;
 }
 
@@ -1874,10 +1871,8 @@ krb5_db2_promote_db(krb5_context kcontext, char *conf_section, char **db_args)
     status = krb5_db2_db_rename (kcontext, temp_db_name, db_name);
 
 clean_n_exit:
-    if (db_name)
-	free(db_name);
-    if (temp_db_name)
-	free(temp_db_name);
+    free(db_name);
+    free(temp_db_name);
     return status;
 }
 

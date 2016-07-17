@@ -335,8 +335,7 @@ doappend(char *a_string, section_info_table *info)
 			 * But now, the user wants to add data to this
 			 * section.
 			 */
-			if (data->d_buf)
-				free(data->d_buf);
+			free(data->d_buf);
 			data->d_buf = calloc(1, len + 2);
 			if (data->d_buf == NULL) {
 				error_message(MALLOC_ERROR, PLAIN_ERROR, NULL,

@@ -1239,8 +1239,7 @@ audit_info_cleanup(Rt_map *clmp)
 	if (aip == NULL)
 		return;
 
-	if (aip->ai_dynplts)
-		free(aip->ai_dynplts);
+	free(aip->ai_dynplts);
 
 	if (aud_preinit)
 		remove_auditor(aud_preinit, clmp);
@@ -1365,8 +1364,7 @@ audit_disable(char *name, Rt_map *clmp, Grp_hdl *ghp, Audit_list *alp)
 	eprintf(LIST(clmp), ERR_FATAL, MSG_INTL(MSG_AUD_DISABLED), name);
 	if (ghp)
 		(void) dlclose_intn(ghp, clmp);
-	if (alp)
-		free(alp);
+	free(alp);
 
 	return (0);
 }

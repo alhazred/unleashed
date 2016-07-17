@@ -178,10 +178,8 @@ wcscoll_l(const wchar_t *ws1, const wchar_t *ws2, locale_t loc)
 	ret = 0;
 
 end:
-	if (tr1)
-		free(tr1);
-	if (tr2)
-		free(tr2);
+	free(tr1);
+	free(tr2);
 
 	return (ret);
 

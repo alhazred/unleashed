@@ -437,8 +437,7 @@ ace_type_txt(dynaclstr_t *dynstr, ace_t *acep, int flags)
 		break;
 	}
 
-	if (sidp)
-		free(sidp);
+	free(sidp);
 	return (error);
 }
 
@@ -769,8 +768,7 @@ aclent_acltotext(aclent_t  *aclp, int aclcnt, int flags)
 				break;
 	}
 	if (error) {
-		if (dstr->d_aclexport)
-			free(dstr->d_aclexport);
+		free(dstr->d_aclexport);
 	} else {
 		aclexport = dstr->d_aclexport;
 	}
@@ -953,11 +951,9 @@ ace_acltotext(acl_t *aceaclp, int flags)
 		}
 	}
 
-	if (rawsidp)
-		free(rawsidp);
+	free(rawsidp);
 	if (error) {
-		if (dstr->d_aclexport)
-			free(dstr->d_aclexport);
+		free(dstr->d_aclexport);
 	} else {
 		aclexport = dstr->d_aclexport;
 	}
@@ -1064,8 +1060,7 @@ ace_compact_printacl(acl_t *aclp)
 		    &dstr->d_aclexport[len]);
 	}
 
-	if (dstr->d_aclexport)
-		free(dstr->d_aclexport);
+	free(dstr->d_aclexport);
 	free(dstr);
 }
 

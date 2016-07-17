@@ -3734,8 +3734,7 @@ zfs_receive(libzfs_handle_t *hdl, const char *tosnap, nvlist_t *props,
 		if (zhp == NULL || clp == NULL || err)
 			err = -1;
 	}
-	if (top_zfs)
-		free(top_zfs);
+	free(top_zfs);
 
 	return (err);
 }

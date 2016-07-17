@@ -27,8 +27,6 @@
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #ifndef UUCHECK
 #include "uucp.h"
 #endif
@@ -269,8 +267,7 @@ fillFlds()
 	}
 
 	if (_Flds[U_PUBDIR] != NULL) {
-		if (_Pubdir != NULL)
-		    free(_Pubdir);	/* get rid of previous one */
+		free(_Pubdir);	/* get rid of previous one */
 		_Pubdir = strdup(_Flds[U_PUBDIR]);
 #ifndef UUCHECK
 		ASSERT(_Pubdir != NULL, Ct_ALLOCATE, _Flds[U_PUBDIR], 0);
@@ -284,8 +281,7 @@ fillFlds()
 	}
 
 	if (_Flds[U_PATH] != NULL) {
-		if (_Path != NULL)
-		    free(_Path);	/* get rid of previous one */
+		free(_Path);	/* get rid of previous one */
 		_Path = strdup(_Flds[U_PATH]);
 #ifndef UUCHECK
 		ASSERT(_Path != NULL, Ct_ALLOCATE, _Flds[U_PATH], 0);

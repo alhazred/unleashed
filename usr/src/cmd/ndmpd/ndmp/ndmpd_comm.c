@@ -1280,13 +1280,11 @@ ndmp_process_messages(ndmp_connection_t *connection, boolean_t reply_expected)
 	NDMP_LOG(LOG_DEBUG, "no more messages in stream buffer");
 
 	if (connection->conn_eof == TRUE) {
-		if (reply_msginfo.mi_body)
-			free(reply_msginfo.mi_body);
+		free(reply_msginfo.mi_body);
 		return (NDMP_PROC_ERR);
 	}
 	if (reply_error) {
-		if (reply_msginfo.mi_body)
-			free(reply_msginfo.mi_body);
+		free(reply_msginfo.mi_body);
 		return (NDMP_PROC_REP_ERR);
 	}
 	if (reply_read) {

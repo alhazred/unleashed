@@ -176,8 +176,7 @@ kc_create(int argc, char *argv[])
 						    "ffeeddee)\n"));
 						rv = KC_ERR_USAGE;
 					}
-					if (bytes != NULL)
-						free(bytes);
+					free(bytes);
 				}
 				break;
 			case 'o':
@@ -288,8 +287,7 @@ kc_create(int argc, char *argv[])
 						rv = KC_ERR_USAGE;
 						break;
 					}
-					if (bytes != NULL)
-						free(bytes);
+					free(bytes);
 					ocsp_set_attr++;
 				}
 				break;
@@ -541,8 +539,7 @@ kc_create(int argc, char *argv[])
 	}
 
 out:
-	if (filename != NULL)
-		free(filename);
+	free(filename);
 
 	kmf_free_policy_record(&plc);
 

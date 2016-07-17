@@ -133,8 +133,7 @@ void	sh_fault(register int sig)
 				pp->mode = SH_JMPEXIT;
 			if(sig==SIGABRT || (abortsig(sig) && (ptr = malloc(1))))
 			{
-				if(ptr)
-					free(ptr);
+				free(ptr);
 				if(!shp->subshell)
 					sh_done(shp,sig);
 				sh_exit(SH_EXITSIG);

@@ -791,8 +791,7 @@ start_stream(int fd, int dir)
 	if (ioctl(fd, I_STR, &crioc))
 		syslog(LOG_ERR, "Error sending CRYPTIOCSTART ioctl: %m");
 
-	if (data != NULL)
-		free(data);
+	free(data);
 }
 
 static int

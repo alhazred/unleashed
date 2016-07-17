@@ -89,14 +89,11 @@ free_nscd_nsw_config(
 	if (nsw_cfg == NULL)
 		return;
 
-	if (nsw_cfg->db_name != NULL)
-		free(nsw_cfg->db_name);
-	if (nsw_cfg->nsw_cfg_str != NULL)
-		free(nsw_cfg->nsw_cfg_str);
+	free(nsw_cfg->db_name);
+	free(nsw_cfg->nsw_cfg_str);
 	if (nsw_cfg->nsw_config != NULL)
 		(void) __nsw_freeconfig_v1(nsw_cfg->nsw_config);
-	if (nsw_cfg->src_idx != NULL)
-		free(nsw_cfg->src_idx);
+	free(nsw_cfg->src_idx);
 
 	free(nsw_cfg);
 }
@@ -512,15 +509,11 @@ _nscd_create_sw_struct(
 
 		if (swcfgv1 == NULL && swcfg != NULL)
 			(void) __nsw_freeconfig_v1(swcfg);
-		if (src_idx_a != NULL)
-			free(src_idx_a);
-		if (nsw_cfg_p)
-			free(nsw_cfg_p);
+		free(src_idx_a);
+		free(nsw_cfg_p);
 		if (nsw_cfg != NULL) {
-			if (nsw_cfg->db_name != NULL)
-				free(nsw_cfg->db_name);
-			if (nsw_cfg->nsw_cfg_str != NULL)
-				free(nsw_cfg->nsw_cfg_str);
+			free(nsw_cfg->db_name);
+			free(nsw_cfg->nsw_cfg_str);
 			free(nsw_cfg);
 		}
 

@@ -602,8 +602,7 @@ OM_uint32 gssint_convert_name_to_union_name(minor_status, mech,
 allocation_failure:
     if (union_name) {
 	if (union_name->external_name) {
-	    if (union_name->external_name->value)
-		free(union_name->external_name->value);
+	    free(union_name->external_name->value);
 	    free(union_name->external_name);
 	}
 	if (union_name->name_type)

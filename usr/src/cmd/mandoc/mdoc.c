@@ -515,8 +515,7 @@ mdoc_node_free(struct mdoc_node *p)
 
 	if (MDOC_BLOCK == p->type || MDOC_ELEM == p->type)
 		free(p->norm);
-	if (p->string)
-		free(p->string);
+	free(p->string);
 	if (p->args)
 		mdoc_argv_free(p->args);
 	free(p);

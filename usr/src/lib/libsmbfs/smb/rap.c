@@ -235,19 +235,13 @@ smb_rap_create(int fn, const char *param, const char *data,
 void
 smb_rap_done(struct smb_rap *rap)
 {
-	if (rap->r_sparam)
-		free(rap->r_sparam);
-	if (rap->r_sdata)
-		free(rap->r_sdata);
-	if (rap->r_pbuf)
-		free(rap->r_pbuf);
+	free(rap->r_sparam);
+	free(rap->r_sdata);
+	free(rap->r_pbuf);
 #ifdef NOTYETDEFINED
-	if (rap->r_npbuf)
-		free(rap->r_npbuf);
-	if (rap->r_dbuf)
-		free(rap->r_dbuf);
-	if (rap->r_rcvbuf)
-		free(rap->r_rcvbuf);
+	free(rap->r_npbuf);
+	free(rap->r_dbuf);
+	free(rap->r_rcvbuf);
 #endif
 	free(rap);
 }

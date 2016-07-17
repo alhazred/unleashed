@@ -23,8 +23,6 @@
  * Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Interfaces for searching for elf specific information
  */
@@ -133,8 +131,7 @@ _tnfctl_elf_dbgent(tnfctl_handle_t *hndl, uintptr_t * entaddr_p)
 
 Cleanup:
 	close(objfd);
-	if (dynam_tab)
-		free(dynam_tab);
+	free(dynam_tab);
 	return (prexstat);
 
 }

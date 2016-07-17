@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * SIP Client/Server Invite/Non-Invite Transaction State machine.
  */
@@ -401,8 +399,7 @@ sip_srv_xaction_inv_res(sip_conn_object_t conn_obj, sip_xaction_t *sip_trans,
 				    NULL, sip_trans->sip_xaction_TH,
 				    SIP_XACTION_TIMER_H);
 				if (timer_obj_H == NULL) {
-					if (timer_obj_G != NULL)
-						free(timer_obj_G);
+					free(timer_obj_G);
 					(void) pthread_mutex_unlock(
 					    &sip_trans->sip_xaction_mutex);
 					return (ENOMEM);

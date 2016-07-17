@@ -405,8 +405,7 @@ populate_opts(char *optstring)
 	for (i = 0; *optstring != '\0'; i++) {
 		if ((temp = (av_opts *)((i == 0) ? malloc(sizeof (av_opts)) :
 		    realloc(opts_av, (i+1) * sizeof (av_opts)))) == NULL) {
-			if (opts_av != NULL)
-				free(opts_av);
+			free(opts_av);
 			opts_av = NULL;
 			return (0);
 		} else {
@@ -460,8 +459,7 @@ getopt_av(int argc, char * const *argv, const char *optstring)
 
 	/* First time or when optstring changes from previous one */
 	if (_save_optstr != optstring) {
-		if (opts_av != NULL)
-			free(opts_av);
+		free(opts_av);
 		opts_av = NULL;
 		_save_optstr = optstring;
 		_save_numopts = populate_opts((char *)optstring);
@@ -989,20 +987,13 @@ get_subname(char **result)
 	}
 
 out:
-	if (country)
-		free(country);
-	if (state)
-		free(state);
-	if (locality)
-		free(locality);
-	if (org)
-		free(org);
-	if (unit)
-		free(unit);
-	if (name)
-		free(name);
-	if (email)
-		free(email);
+	free(country);
+	free(state);
+	free(locality);
+	free(org);
+	free(unit);
+	free(name);
+	free(email);
 
 	if (subname == NULL)
 		return (-1);

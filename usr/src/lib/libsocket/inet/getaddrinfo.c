@@ -355,8 +355,7 @@ _getaddrinfo(const char *hostname, const char *servname,
 			port = htons(atoi(servname));
 			if (aip->ai_socktype == ANY) {
 				do {
-					if (buf != NULL)
-						free(buf);
+					free(buf);
 					bufsize *= 2;
 					buf = malloc(bufsize);
 					if (buf == NULL) {
@@ -380,8 +379,7 @@ _getaddrinfo(const char *hostname, const char *servname,
 			}
 		} else {
 			do {
-				if (buf != NULL)
-					free(buf);
+				free(buf);
 				bufsize *= 2;
 				buf = malloc(bufsize);
 				if (buf == NULL) {
@@ -427,8 +425,7 @@ _getaddrinfo(const char *hostname, const char *servname,
 				aip->ai_socktype = SOCK_STREAM;
 				aip->ai_protocol = IPPROTO_SCTP;
 			} else {
-				if (buf != NULL)
-					free(buf);
+				free(buf);
 
 				*res = NULL;
 				errno = EPROTONOSUPPORT;
@@ -436,8 +433,7 @@ _getaddrinfo(const char *hostname, const char *servname,
 			}
 		}
 
-		if (buf != NULL)
-			free(buf);
+		free(buf);
 	}
 
 	/*
@@ -801,10 +797,8 @@ freeaddrinfo(struct addrinfo *ai)
 
 	do {
 		next = ai->ai_next;
-		if (ai->ai_canonname)
-			free(ai->ai_canonname);
-		if (ai->ai_addr)
-			free(ai->ai_addr);
+		free(ai->ai_canonname);
+		free(ai->ai_addr);
 		free(ai);
 		ai = next;
 	} while (ai != NULL);

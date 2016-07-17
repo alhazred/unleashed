@@ -357,8 +357,7 @@ bsd_free(state)
 {
     struct bsd_db *db = (struct bsd_db *) state;
 
-    if (db->lens)
-	free(db->lens);
+    free(db->lens);
     free(db);
 }
 

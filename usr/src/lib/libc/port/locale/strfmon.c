@@ -264,8 +264,7 @@ strfmon_impl(char *_RESTRICT_KYWD s, size_t maxsize, locale_t loc,
 				pad_size = 0;
 		}
 
-		if (asciivalue != NULL)
-			free(asciivalue);
+		free(asciivalue);
 		asciivalue = format_grouped_double(lmon, lnum, value, &flags,
 		    left_prec, right_prec, pad_char);
 		if (asciivalue == NULL)
@@ -397,8 +396,7 @@ format_error:
 
 end_error:
 	sverrno = errno;
-	if (asciivalue != NULL)
-		free(asciivalue);
+	free(asciivalue);
 	errno = sverrno;
 	return (-1);
 }

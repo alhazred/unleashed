@@ -23,8 +23,6 @@
  * Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Utility functions to initialize tnfctl handle, find functions that
  * can be plugged into probes, find trace file information, and create
@@ -412,8 +410,7 @@ _tnfctl_create_tracefile(tnfctl_handle_t *hndl, const char *trace_file_name,
 	preexisting = NULL;
 	prexstat = _tnfctl_readstr_targ(hndl, name_addr, &preexisting);
 	if (prexstat) {
-		if (preexisting)
-			free(preexisting);
+		free(preexisting);
 		return (prexstat);
 	}
 
@@ -425,8 +422,7 @@ _tnfctl_create_tracefile(tnfctl_handle_t *hndl, const char *trace_file_name,
 		return (TNFCTL_ERR_BUFEXISTS);
 
 	/* free memory in preexisting string */
-	if (preexisting)
-		free(preexisting);
+	free(preexisting);
 
 	if (trace_file_size < hndl->trace_min_size) {
 		return (TNFCTL_ERR_SIZETOOSMALL);
@@ -551,8 +547,7 @@ find_trace_file_info(tnfctl_handle_t *hndl)
 	preexisting = NULL;
 	prexstat = _tnfctl_readstr_targ(hndl, name_addr, &preexisting);
 	if (prexstat) {
-		if (preexisting)
-			free(preexisting);
+		free(preexisting);
 		return (prexstat);
 	}
 

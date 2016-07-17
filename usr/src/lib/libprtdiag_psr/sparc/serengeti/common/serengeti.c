@@ -26,8 +26,6 @@
  *
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -753,10 +751,8 @@ serengeti_display_board_info(int state)
 			    "to this Domain\n"), 0);
 		}
 	}
-	if (board_cfg)
-		free(board_cfg);
-	if (err_string)
-		free(err_string);
+	free(board_cfg);
+	free(err_string);
 }
 
 /*
@@ -982,10 +978,8 @@ cpu_node_configured(char *const node)
 	} else {
 		rv = FALSE;
 	}
-	if (statlist)
-		free(statlist);
-	if (err_string)
-		free(err_string);
+	free(statlist);
+	free(err_string);
 	return (rv);
 }
 

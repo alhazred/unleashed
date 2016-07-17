@@ -23,7 +23,6 @@
  * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -340,8 +339,7 @@ out:
 		nlh = nl->nl_next;
 		free(nl);
 	}
-	if (paths)
-		free(paths);
+	free(paths);
 	if (dlh) {
 		if ((ret == 0) &&
 		    (devid_deviceid_to_nmlist_flg & DEVICEID_NMLIST_SLINK))
@@ -349,7 +347,7 @@ out:
 		else
 			(void) di_devlink_fini(&dlh);
 	}
-	if (ret && *retlist)
+	if (ret)
 		free(*retlist);
 	if (ret && err != 0)
 		errno = err;

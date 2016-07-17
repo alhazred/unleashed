@@ -876,21 +876,21 @@ _moddevtabrec(
 
 		/* If the "cdevice" field is specified, change it */
 		if (chg->cdevice) {
-		    if (ent->cdevice) free(ent->cdevice);
+		    free(ent->cdevice);
 		    ent->cdevice = chg->cdevice;
 		    chg->cdevice = NULL;
 		}
 
 		/* If the "bdevice" field is specified, change it */
 		if (chg->bdevice) {
-		    if (ent->bdevice) free(ent->bdevice);
+		    free(ent->bdevice);
 		    ent->bdevice = chg->bdevice;
 		    chg->bdevice = NULL;
 		}
 
 		/* If the "pathname" field is specified, change it */
 		if (chg->pathname) {
-		    if (ent->pathname) free(ent->pathname);
+		    free(ent->pathname);
 		    ent->pathname = chg->pathname;
 		    chg->pathname = NULL;
 		}

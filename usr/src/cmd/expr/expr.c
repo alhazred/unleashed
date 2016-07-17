@@ -412,8 +412,7 @@ ematch(char *s, char *p)
 		if (regerrno != 41 || expbuf == NULL)
 			errxx();
 	} else {
-		if (expbuf)
-			free(expbuf);
+		free(expbuf);
 		expbuf = nexpbuf;
 	}
 	if (advance(s, expbuf)) {
@@ -443,12 +442,10 @@ ematch(char *s, char *p)
 		*(tmptr + nmatch) = '\0';
 		if ((nmbchars = mbstowcs(NULL, tmptr, NULL)) == -1) {
 			yyerror("invalid multibyte character encountered");
-			if (tmptr1 != NULL)
-				free(tmptr1);
+			free(tmptr1);
 			return (0);
 		}
-		if (tmptr1 != NULL)
-			free(tmptr1);
+		free(tmptr1);
 		return (nmbchars);
 #else
 		return (loc2-s);

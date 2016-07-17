@@ -886,14 +886,12 @@ zfs_unshare_proto(zfs_handle_t *zhp, const char *mountpoint,
 			if (is_shared(hdl, mntpt, *curr_proto) &&
 			    unshare_one(hdl, zhp->zfs_name,
 			    mntpt, *curr_proto) != 0) {
-				if (mntpt != NULL)
-					free(mntpt);
+				free(mntpt);
 				return (-1);
 			}
 		}
 	}
-	if (mntpt != NULL)
-		free(mntpt);
+	free(mntpt);
 
 	return (0);
 }

@@ -23,8 +23,6 @@
  * Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Includes
  */
@@ -105,8 +103,7 @@ fcn(char *name_p, char *entry_name_p)
 	return;
 
 Error:
-	if (new_p)
-		free(new_p);
+	free(new_p);
 	return;
 
 }				/* end fcn */
@@ -126,10 +123,8 @@ fcn_destroy(fcn_t * fcn_p)
 	if (!queue_isempty(&fcn_p->qn))
 		(void) queue_remove(&fcn_p->qn);
 
-	if (fcn_p->name_p)
-		free(fcn_p->name_p);
-	if (fcn_p->entry_name_p)
-		free(fcn_p->entry_name_p);
+	free(fcn_p->name_p);
+	free(fcn_p->entry_name_p);
 
 	free(fcn_p);
 

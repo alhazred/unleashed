@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -682,8 +680,7 @@ destroy_config(config_file_t *p_config_file)
 		if (p_list != NULL) {
 			pae = p_list->ael_head;
 			while (pae != NULL) {
-				if (pae->ae_arg != NULL)
-					free(pae->ae_arg);
+				free(pae->ae_arg);
 				pae->ae_arg = NULL;
 				pae = pae->ae_next;
 				free(p_list->ael_head);
@@ -692,8 +689,7 @@ destroy_config(config_file_t *p_config_file)
 			free(p_list);
 			p_list = NULL;
 		}
-		if (p_section->section_id != NULL)
-			free(p_section->section_id);
+		free(p_section->section_id);
 		p_section->section_id = NULL;
 		p_section = p_section->section_next;
 		free(p_config_file->section_head);

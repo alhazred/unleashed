@@ -960,10 +960,8 @@ sa_zfs_set_sharenfs(sa_group_t group, char *path, int on)
 					ret = SA_SYSTEM_ERR;
 			}
 		}
-		if (opts != NULL)
-			free(opts);
-		if (dataset != NULL)
-			free(dataset);
+		free(opts);
+		free(dataset);
 		free(command);
 	}
 	return (ret);
@@ -1077,10 +1075,8 @@ sa_zfs_set_sharesmb(sa_group_t group, char *path, int on)
 					ret = SA_SYSTEM_ERR;
 			}
 		}
-		if (opts != NULL)
-			free(opts);
-		if (dataset != NULL)
-			free(dataset);
+		free(opts);
+		free(dataset);
 		free(command);
 	}
 	return (ret);
@@ -1183,15 +1179,12 @@ sa_zfs_update(sa_group_t group)
 						break;
 					}
 				}
-				if (optstring != NULL)
-					free(optstring);
-				if (zfsopts != NULL)
-					free(zfsopts);
+				free(optstring);
+				free(zfsopts);
 			}
 			if (proto != NULL)
 				sa_free_attr_string(proto);
-			if (dataset != NULL)
-				free(dataset);
+			free(dataset);
 		}
 		free(command);
 	}

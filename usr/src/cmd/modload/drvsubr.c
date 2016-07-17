@@ -508,8 +508,7 @@ delete_entry(
 
 	(void) fclose(fp);
 	free(copy);
-	if (match2)
-		free(match2);
+	free(match2);
 
 	/* Make sure that the file is on disk */
 	if (fflush(newfp) != 0 || fsync(fileno(newfp)) != 0)

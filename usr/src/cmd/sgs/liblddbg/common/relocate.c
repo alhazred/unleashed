@@ -264,8 +264,7 @@ Dbg_reloc_discard(Lm_list *lml, Half mach, Rel_desc *rsp)
 	    dbg_fmt_isec_name(isp, buf, &alloc_mem), isp->is_file->ifl_name,
 	    conv_reloc_type(mach, rsp->rel_rtype, 0, &inv_buf),
 	    EC_OFF(rsp->rel_roffset));
-	if (alloc_mem != NULL)
-		free(alloc_mem);
+	free(alloc_mem);
 }
 
 void
@@ -286,8 +285,7 @@ Dbg_reloc_transition(Lm_list *lml, Half mach, Word rtype, Rel_desc *rsp,
 	    dbg_fmt_isec_name(isp, buf, &alloc_mem), isp->is_file->ifl_name,
 	    EC_OFF(rsp->rel_roffset), (*rel_desc_sname_func)(rsp),
 	    conv_reloc_type(mach, rtype, 0, &inv_buf2));
-	if (alloc_mem != NULL)
-		free(alloc_mem);
+	free(alloc_mem);
 }
 
 void
@@ -320,8 +318,7 @@ Dbg_reloc_in(Lm_list *lml, int caller, Half mach, Word type, void *reloc,
 	    dbg_fmt_isec_name2(secname, secndx, buf, &alloc_mem), symname,
 	    MSG_ORIG(MSG_STR_EMPTY));
 
-	if (alloc_mem != NULL)
-		free(alloc_mem);
+	free(alloc_mem);
 }
 
 /*
@@ -348,8 +345,7 @@ Dbg_reloc_sloppycomdat(Lm_list *lml, Sym_desc *sdp)
 
 	dbg_print(lml, MSG_INTL(MSG_REL_SLOPPYCOMDAT),
 	    dbg_fmt_isec_name(sdp->sd_isc, buf, &alloc_mem), nfname);
-	if (alloc_mem != NULL)
-		free(alloc_mem);
+	free(alloc_mem);
 }
 
 /*

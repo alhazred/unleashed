@@ -412,14 +412,10 @@ digit:
 static void
 free_confent(struct conf_entry *confent)
 {
-	if (confent->name)
-		free(confent->name);
-	if (confent->parent)
-		free(confent->parent);
-	if (confent->class)
-		free(confent->class);
-	if (confent->unit_address)
-		free(confent->unit_address);
+	free(confent->name);
+	free(confent->parent);
+	free(confent->class);
+	free(confent->unit_address);
 	free(confent);
 }
 
@@ -610,10 +606,8 @@ parse_conf_entry(struct conf_file *filep, char *tokbuf, size_t linesize)
 	failed = 0;
 
 bad:
-	if (prop_name)
-		free(prop_name);
-	if (string)
-		free(string);
+	free(prop_name);
+	free(string);
 	if (failed == 1) {
 		free_confent(confent);
 		return (NULL);
@@ -923,8 +917,7 @@ done:
 		*(node_name - 1) = '/';
 	if (node_addr != NULL)
 		*(node_addr - 1) = '@';
-	if (par_driver_class != NULL)
-		free(par_driver_class);
+	free(par_driver_class);
 	if (confent_list != NULL)
 		free_confent_list(confent_list);
 	if (par_node != DI_NODE_NIL)
@@ -2025,8 +2018,7 @@ devfs_walk_children_minors(const char *device_path, struct stat *st,
 err:
 	if (need_close)
 		(void) closedir(dir);
-	if (minor_path)
-		free(minor_path);
+	free(minor_path);
 	return (rv);
 }
 
@@ -2105,12 +2097,9 @@ err:
 		(void) closedir(dir);
 	if (need_regfree)
 		regfree(&regex);
-	if (devpath)
-		free(devpath);
-	if (minor_path)
-		free(minor_path);
-	if (expr)
-		free(expr);
+	free(devpath);
+	free(minor_path);
+	free(expr);
 	return (rv);
 }
 

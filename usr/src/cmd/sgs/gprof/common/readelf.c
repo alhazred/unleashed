@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include	"gprof.h"
 #include	<stdlib.h>
 #include	<sys/file.h>
@@ -258,8 +256,7 @@ get_textseg(Elf *elf, int fd)
 			 * We could have multiple loadable text segments;
 			 * keep the largest we find.
 			 */
-			if (textspace)
-				free(textspace);
+			free(textspace);
 
 			/*
 			 * gprof is a 32-bit program;  if this text segment

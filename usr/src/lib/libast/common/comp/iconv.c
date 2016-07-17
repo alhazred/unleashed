@@ -1215,8 +1215,7 @@ _ast_iconv_close(_ast_iconv_t cd)
 				if (oc->cvt != (iconv_t)(-1))
 					r = iconv_close(oc->cvt);
 #endif
-				if (oc->buf)
-					free(oc->buf);
+				free(oc->buf);
 				free(oc);
 			}
 			break;

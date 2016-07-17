@@ -2,8 +2,6 @@
  * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 
 #include <k5-int.h>
 #include <des_int.h>
@@ -105,9 +103,8 @@ k5_ef_mac(krb5_context context,
 			output->length = 8;
 		}
 	}
-	if (inlen != input->length && inbuf != NULL)
+	if (inlen != input->length)
 		free(inbuf);
-	if (outbuf != NULL)
-		free(outbuf);
+	free(outbuf);
 	return (retval);
 }

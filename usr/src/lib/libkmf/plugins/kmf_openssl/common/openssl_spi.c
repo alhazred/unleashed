@@ -450,8 +450,7 @@ ssl_cert2KMFDATA(KMF_HANDLE *kmfh, X509 *x509cert, KMF_DATA *cert)
 
 cleanup:
 	if (rv != KMF_OK) {
-		if (buf)
-			free(buf);
+		free(buf);
 		cert->Data = NULL;
 		cert->Length = 0;
 	}
@@ -910,24 +909,19 @@ out:
 	if (OID.bv_val) {
 		free(OID.bv_val);
 	}
-	if (PriExp)
-		free(PriExp);
+	free(PriExp);
 
-	if (Mod)
-		free(Mod);
+	free(Mod);
 
-	if (PubExp)
-		free(PubExp);
+	free(PubExp);
 
 	if (Coef) {
 		(void) memset(Coef->bv_val, 0, Coef->bv_len);
 		free(Coef->bv_val);
 		free(Coef);
 	}
-	if (Prime1)
-		free(Prime1);
-	if (Prime2)
-		free(Prime2);
+	free(Prime1);
+	free(Prime2);
 
 	if (ctx != NULL)
 		BN_CTX_free(ctx);
@@ -1185,8 +1179,7 @@ exit:
 				kmf_free_data(&certlist[i]);
 			n = loaded_certs;
 		}
-		if (certlist != NULL)
-			free(certlist);
+		free(certlist);
 		*num_certs = n;
 	}
 
@@ -1204,8 +1197,7 @@ OpenSSL_FreeKMFCert(KMF_HANDLE_T handle,
 		if (kmf_cert->certificate.Data != NULL) {
 			kmf_free_data(&kmf_cert->certificate);
 		}
-		if (kmf_cert->kmf_private.label)
-			free(kmf_cert->kmf_private.label);
+		free(kmf_cert->kmf_private.label);
 	}
 }
 
@@ -1252,8 +1244,7 @@ OpenSSL_StoreCert(KMF_HANDLE_T handle, int numattr, KMF_ATTRIBUTE *attrlist)
 	ret = kmf_create_cert_file(cert, format, fullpath);
 
 out:
-	if (fullpath != NULL)
-		free(fullpath);
+	free(fullpath);
 
 	return (ret);
 }
@@ -1354,8 +1345,7 @@ OpenSSL_DeleteCert(KMF_HANDLE_T handle, int numattr, KMF_ATTRIBUTE *attrlist)
 	}
 
 out:
-	if (fullpath != NULL)
-		free(fullpath);
+	free(fullpath);
 
 	kmf_free_data(&certdata);
 
@@ -1397,8 +1387,7 @@ OpenSSL_EncodePubKeyData(KMF_HANDLE_T handle, KMF_KEY_HANDLE *key,
 
 cleanup:
 	if (rv != KMF_OK) {
-		if (keydata->Data)
-			free(keydata->Data);
+		free(keydata->Data);
 		keydata->Data = NULL;
 		keydata->Length = 0;
 	}
@@ -3581,8 +3570,7 @@ OpenSSL_ExportPK12(KMF_HANDLE_T handle, int numattr, KMF_ATTRIBUTE *attrlist)
 	    1, &key, filename);
 
 end:
-	if (fullpath)
-		free(fullpath);
+	free(fullpath);
 
 	if (gotcert)
 		kmf_free_kmf_cert(handle, &certdata);
@@ -4568,16 +4556,13 @@ create_des3key(unsigned char **des3key)
 	*des3key = newkey;
 
 out:
-	if (deskey1 != NULL)
-		free(deskey1);
+	free(deskey1);
 
-	if (deskey2 != NULL)
-		free(deskey2);
+	free(deskey2);
 
-	if (deskey3 != NULL)
-		free(deskey3);
+	free(deskey3);
 
-	if (ret != KMF_OK && newkey != NULL)
+	if (ret != KMF_OK)
 		free(newkey);
 
 	return (ret);
@@ -5149,8 +5134,7 @@ end:
 	if (out != NULL)
 		(void) BIO_free(out);
 
-	if (outcrlfile != NULL)
-		free(outcrlfile);
+	free(outcrlfile);
 
 	return (ret);
 }
@@ -5254,8 +5238,7 @@ end:
 	if (x != NULL)
 		X509_CRL_free(x);
 
-	if (crlfile != NULL)
-		free(crlfile);
+	free(crlfile);
 
 	if (in != NULL)
 		(void) BIO_free(in);
@@ -5311,8 +5294,7 @@ OpenSSL_DeleteCRL(KMF_HANDLE_T handle, int numattr, KMF_ATTRIBUTE *attrlist)
 end:
 	if (in != NULL)
 		(void) BIO_free(in);
-	if (crlfile != NULL)
-		free(crlfile);
+	free(crlfile);
 
 	return (ret);
 }

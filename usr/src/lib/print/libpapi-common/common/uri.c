@@ -209,31 +209,19 @@ void
 uri_free(uri_t *uri)
 {
 	if (uri != NULL) {
-		if (uri->scheme != NULL)
-			free(uri->scheme);
-		if (uri->scheme_part != NULL)
-			free(uri->scheme_part);
-		if (uri->user != NULL)
-			free(uri->user);
-		if (uri->password != NULL)
-			free(uri->password);
-		if (uri->host != NULL)
-			free(uri->host);
-		if (uri->port != NULL)
-			free(uri->port);
-		if (uri->path != NULL)
-			free(uri->path);
-		if (uri->fragment != NULL)
-			free(uri->fragment);
-		if (uri->query != NULL)
-			free(uri->query);
+		free(uri->scheme);
+		free(uri->scheme_part);
+		free(uri->user);
+		free(uri->password);
+		free(uri->host);
+		free(uri->port);
+		free(uri->path);
+		free(uri->fragment);
+		free(uri->query);
 		/* help me debug */
-		if (uri->user_part != NULL)
-			free(uri->user_part);
-		if (uri->host_part != NULL)
-			free(uri->host_part);
-		if (uri->path_part != NULL)
-			free(uri->path_part);
+		free(uri->user_part);
+		free(uri->host_part);
+		free(uri->path_part);
 		free(uri);
 	}
 }

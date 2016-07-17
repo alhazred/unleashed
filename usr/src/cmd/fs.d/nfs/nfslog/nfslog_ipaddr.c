@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <ctype.h>
 #include <sys/types.h>
@@ -237,8 +235,7 @@ addhost(family, ipaddr, name)
 
 alloc_failed:
 	(void) fprintf(stderr, "addhost: no mem\n");
-	if (n != NULL)
-		free(n);
+	free(n);
 	return (NULL);
 }
 

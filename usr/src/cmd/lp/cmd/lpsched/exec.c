@@ -801,8 +801,7 @@ exec(int type, ...)
 				 */
 				setid = 1;
 
-			if (temp != NULL)
-				free(temp);
+			free(temp);
 
 		} else
 			/*
@@ -860,11 +859,9 @@ exec(int type, ...)
 				av[ac++] = arg_string(TRUSTED, "%s",
 				    request->secure->req_id);
 
-			if (tmp != NULL)
-				free(tmp);
+			free(tmp);
 
-			if (ridno != NULL)
-				free(ridno);
+			free(ridno);
 		}
 
 		av[ac++] = arg_string(UNTRUSTED, "%s", request->request->user);

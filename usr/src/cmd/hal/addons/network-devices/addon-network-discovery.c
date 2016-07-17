@@ -79,9 +79,9 @@ nds_snmp_scan_cb(gpointer data)
 	nds_snmp_cbdata_t *args = data;
 
 	if (args->enabled == FALSE) {
-		if (args->parent) free(args->parent);
-		if (args->community) free(args->community);
-		if (args->network) free(args->network);
+		free(args->parent);
+		free(args->community);
+		free(args->network);
 		free(args);
 		return (FALSE);
 	}

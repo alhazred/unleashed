@@ -327,11 +327,9 @@ authsys_destroy(AUTH *auth)
 	struct audata *au = AUTH_PRIVATE(auth);
 
 	free(au->au_origcred.oa_base);
-	if (au->au_shcred.oa_base != NULL)
-		free(au->au_shcred.oa_base);
+	free(au->au_shcred.oa_base);
 	free(auth->ah_private);
-	if (auth->ah_verf.oa_base != NULL)
-		free(auth->ah_verf.oa_base);
+	free(auth->ah_verf.oa_base);
 	free(auth);
 }
 

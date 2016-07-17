@@ -874,8 +874,7 @@ net_poll(void *ap)
 					    " received empty packet"
 					    " from %s\n", mythreadno,
 					    uap ? uap : "<unknown>");
-					if (uap)
-						free(uap);
+					free(uap);
 				}
 				continue;	/* No data */
 			}

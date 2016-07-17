@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -138,8 +136,7 @@ setpwaent(void)
 		pwfadj = fopen(PASSWDADJ, "r");
 	else
 		rewind(pwfadj);
-	if (yp)
-		free(yp);
+	free(yp);
 	yp = NULL;
 	freeminuslist();
 }
@@ -157,8 +154,7 @@ endpwaent(void)
 		(void) fclose(pwfadj);
 		pwfadj = NULL;
 	}
-	if (yp)
-		free(yp);
+	free(yp);
 	yp = NULL;
 	freeminuslist();
 	endnetgrent();
@@ -341,8 +337,7 @@ fprintf(stderr, "reason yp_next failed is %d\n", reason);
 #endif
 		yp = NULL;
 	}
-	if (oldyp)
-		free(oldyp);
+	free(oldyp);
 	oldyp = key;
 	oldyplen = keylen;
 }
@@ -364,8 +359,7 @@ fprintf(stderr, "reason yp_first failed is %d\n", reason);
 #endif
 		yp = NULL;
 	}
-	if (oldyp)
-		free(oldyp);
+	free(oldyp);
 	oldyp = key;
 	oldyplen = keylen;
 }

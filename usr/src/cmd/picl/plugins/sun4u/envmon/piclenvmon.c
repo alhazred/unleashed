@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This plugin creates PICL nodes and properties for objects handled through
  * the enhanced LOMV system-processor interface.
@@ -1357,8 +1355,7 @@ fixstate(uint8_t state, const char *string, int *max_len)
 	for (i = 0; i < (sizeof (ledstate_lkup) / sizeof (ledstate_lkup[0]));
 	    i++) {
 		if (ledstate_lkup[i].state == state) {
-			if (ledstate_lkup[i].str_ledstate != NULL)
-				free(ledstate_lkup[i].str_ledstate);
+			free(ledstate_lkup[i].str_ledstate);
 			ledstate_lkup[i].str_ledstate = strdup(string);
 			len = strlen(string);
 			if (len >= *max_len)
@@ -1377,8 +1374,7 @@ fixkeyposn(envmon_keysw_pos_t keyposn, const char *string, int *max_len)
 	for (i = 0; i < (sizeof (keyposn_lkup) / sizeof (keyposn_lkup[0]));
 	    i++) {
 		if (keyposn_lkup[i].pos == keyposn) {
-			if (keyposn_lkup[i].str_keyposn != NULL)
-				free(keyposn_lkup[i].str_keyposn);
+			free(keyposn_lkup[i].str_keyposn);
 			keyposn_lkup[i].str_keyposn = strdup(string);
 			len = strlen(string);
 			if (len >= *max_len)
@@ -1399,8 +1395,7 @@ setup_strings()
 	 * initialise led colours lookup
 	 */
 	for (i = 0; i < lim; i++) {
-		if (colour_lkup[i].str_colour != NULL)
-			free(colour_lkup[i].str_colour);
+		free(colour_lkup[i].str_colour);
 	}
 
 	colour_lkup[ENVMON_LED_CLR_ANY].str_colour = strdup(gettext("any"));

@@ -422,10 +422,8 @@ ap_err(apd_t *a, ...)
 		break;
 	}
 
-	if (serr)
-		free(serr);
-	if (srsrc)
-		free(srsrc);
+	free(serr);
+	free(srsrc);
 }
 
 /*

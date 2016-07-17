@@ -593,8 +593,7 @@ kadm5_modify_principal(void *server_handle,
 
 	 /* set us up to use the new policy */
 	 adb.aux_attributes |= KADM5_POLICY;
-	 if (adb.policy)
-	      free(adb.policy);
+	 free(adb.policy);
 	 adb.policy = strdup(entry->policy);
 
 	 /* set pw_max_life based on new policy */
@@ -621,8 +620,7 @@ kadm5_modify_principal(void *server_handle,
 	      break;
 	 case KADM5_OK:
 	      have_opol = 1;
-	      if (adb.policy)
-		   free(adb.policy);
+	      free(adb.policy);
 	      adb.policy = NULL;
 	      adb.aux_attributes &= ~KADM5_POLICY;
 	      kdb.pw_expiration = 0;
@@ -1490,8 +1488,7 @@ kadm5_chpass_principal_3(void *server_handle,
             ret = kadm5_launch_task (handle->context, path, argv, pwbuf);
         }
         
-        if (pstring != NULL)
-            free (pstring);
+        free(pstring);
         
         if (ret)
             goto done;

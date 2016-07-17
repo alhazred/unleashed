@@ -325,10 +325,8 @@ PK11Cert2KMFCert(KMF_HANDLE *kmfh, CK_OBJECT_HANDLE hObj,
 
 errout:
 	if (rv != KMF_OK) {
-		if (subject)
-			free(subject);
-		if (value)
-			free(value);
+		free(subject);
+		free(value);
 
 		if (kmfcert) {
 			kmfcert->certificate.Data = NULL;
@@ -1211,8 +1209,7 @@ CreateCertObject(KMF_HANDLE_T handle, char *label, KMF_DATA *pcert)
 	free(issuer);
 
 cleanup:
-	if (Id.Data != NULL)
-		free(Id.Data);
+	free(Id.Data);
 
 	if (signed_cert_ptr) {
 		kmf_free_signed_cert(signed_cert_ptr);
@@ -1931,10 +1928,8 @@ cleanup:
 		if (priKey != CK_INVALID_HANDLE)
 			(void) C_DestroyObject(hSession, priKey);
 
-		if (privkey->keylabel)
-			free(privkey->keylabel);
-		if (pubkey->keylabel)
-			free(pubkey->keylabel);
+		free(privkey->keylabel);
+		free(pubkey->keylabel);
 	}
 	return (rv);
 }
@@ -2304,8 +2299,7 @@ KMFPK11_FindPrikeyByCert(KMF_HANDLE_T handle, int numattr,
 	}
 
 errout:
-	if (Id.Data != NULL)
-		free(Id.Data);
+	free(Id.Data);
 
 	if (SignerCert != NULL) {
 		kmf_free_signed_cert(SignerCert);
@@ -2521,21 +2515,14 @@ get_raw_rsa(KMF_HANDLE *kmfh, CK_OBJECT_HANDLE obj, KMF_RAW_RSA_KEY *rawrsa)
 end:
 	if (rv != KMF_OK) {
 		for (i = 0; i < count; i++) {
-			if (rsa_pri_attrs[i].pValue != NULL)
-				free(rsa_pri_attrs[i].pValue);
+			free(rsa_pri_attrs[i].pValue);
 		}
-		if (rawrsa->priexp.val)
-			free(rawrsa->priexp.val);
-		if (rawrsa->prime1.val)
-			free(rawrsa->prime1.val);
-		if (rawrsa->prime2.val)
-			free(rawrsa->prime2.val);
-		if (rawrsa->exp1.val)
-			free(rawrsa->exp1.val);
-		if (rawrsa->exp2.val)
-			free(rawrsa->exp2.val);
-		if (rawrsa->coef.val)
-			free(rawrsa->coef.val);
+		free(rawrsa->priexp.val);
+		free(rawrsa->prime1.val);
+		free(rawrsa->prime2.val);
+		free(rawrsa->exp1.val);
+		free(rawrsa->exp2.val);
+		free(rawrsa->coef.val);
 		(void) memset(rawrsa, 0, sizeof (KMF_RAW_RSA_KEY));
 	}
 	return (rv);
@@ -2658,8 +2645,7 @@ get_raw_ec(KMF_HANDLE *kmfh, CK_OBJECT_HANDLE obj, KMF_RAW_EC_KEY *rawec)
 end:
 	if (rv != KMF_OK) {
 		for (i = 0; i < count; i++) {
-			if (ec_attrs[i].pValue != NULL)
-				free(ec_attrs[i].pValue);
+			free(ec_attrs[i].pValue);
 		}
 		(void) memset(rawec, 0, sizeof (KMF_RAW_EC_KEY));
 	}
@@ -2726,8 +2712,7 @@ get_raw_dsa(KMF_HANDLE *kmfh, CK_OBJECT_HANDLE obj, KMF_RAW_DSA_KEY *rawdsa)
 end:
 	if (rv != KMF_OK) {
 		for (i = 0; i < count; i++) {
-			if (dsa_pri_attrs[i].pValue != NULL)
-				free(dsa_pri_attrs[i].pValue);
+			free(dsa_pri_attrs[i].pValue);
 		}
 		(void) memset(rawdsa, 0, sizeof (KMF_RAW_DSA_KEY));
 	}
@@ -3441,10 +3426,8 @@ store_raw_key(KMF_HANDLE_T handle,
 			rv = KMF_ERR_INTERNAL;
 	}
 cleanup:
-	if (start != NULL)
-		free(start);
-	if (end != NULL)
-		free(end);
+	free(start);
+	free(end);
 	kmf_free_data(&id);
 	kmf_free_data(&subject);
 	kmf_free_signed_cert(x509);

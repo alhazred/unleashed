@@ -413,10 +413,8 @@ ntlm_v2_hash(uchar_t *v2hash, const uchar_t *v1hash,
 	    (uchar_t *)ucs2data, ucs2len);
 	err = 0;
 out:
-	if (ucs2data)
-		free(ucs2data);
-	if (utf8data)
-		free(utf8data);
+	free(ucs2data);
+	free(utf8data);
 	return (err);
 }
 
@@ -582,8 +580,7 @@ smb_put_blob_name(struct mbdata *mbp, char *name, int type)
 	mb_put_uint16le(mbp, nlen);
 	mb_put_mem(mbp, (char *)ucs, nlen, MB_MSYSTEM);
 
-	if (ucs)
-		free(ucs);
+	free(ucs);
 }
 
 /*

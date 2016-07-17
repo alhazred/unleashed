@@ -597,10 +597,8 @@ auto_label_init(struct dk_label *label)
 
 
 auto_label_init_out:
-	if (data)
-		free(data);
-	if (databack)
-		free(databack);
+	free(data);
+	free(databack);
 
 	return (rval);
 }

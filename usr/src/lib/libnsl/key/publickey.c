@@ -172,13 +172,11 @@ getkeys_nis(int *errp, char *netname, char *pkey, char *skey, char *passwd)
 
 	switch (err) {
 	case YPERR_KEY :
-		if (keyval)
-			free(keyval);
+		free(keyval);
 		*errp = __NSW_NOTFOUND;
 		return (0);
 	default :
-		if (keyval)
-			free(keyval);
+		free(keyval);
 		*errp = __NSW_UNAVAIL;
 		return (0);
 	case 0:
@@ -358,8 +356,7 @@ extract_secret_g(
 			!VALID_KEYALG(keylen, algtype)) {
 		if (private)
 			*private = NUL;
-		if (buf)
-			free(buf);
+		free(buf);
 		return (0);
 	}
 

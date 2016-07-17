@@ -528,8 +528,7 @@ cvt_metal_kernel(char *kernstr, char **path)
 
 	/* if the path was the last item on the line, that's OK. */
 	if ((parsestr = get_token(&token, parsestr, " \t,")) == NULL) {
-		if (token != NULL)
-			free(token);
+		free(token);
 		return (0);
 	}
 
@@ -621,8 +620,7 @@ cvt_hyper_module(char *modstr, char **path)
 	/* if the path was the last item on the line, that's OK. */
 	if ((parsestr == NULL) ||
 	    ((parsestr = get_token(&token, parsestr, " \t,")) == NULL)) {
-		if (token != NULL)
-			free(token);
+		free(token);
 		return;
 	}
 
@@ -682,8 +680,7 @@ parse_bootenvrc(char *osroot)
 
 		/* eat initial "setprop" */
 		if ((parsestr = get_token(&token, line, " \t")) == NULL) {
-			if (token != NULL)
-				free(token);
+			free(token);
 
 			continue;
 		}
@@ -697,8 +694,7 @@ parse_bootenvrc(char *osroot)
 
 		/* get property name */
 		if ((parsestr = get_token(&token, parsestr, " \t")) == NULL) {
-			if (token != NULL)
-				free(token);
+			free(token);
 
 			continue;
 		}
@@ -711,8 +707,7 @@ parse_bootenvrc(char *osroot)
 			if (token == NULL)
 				continue;
 
-			if (bootenv_rc_console != NULL)
-				free(bootenv_rc_console);
+			free(bootenv_rc_console);
 
 			bootenv_rc_console = s_strdup(token);
 			continue;
@@ -737,8 +732,7 @@ parse_bootenvrc(char *osroot)
 		if (token == NULL)
 			continue;
 
-		if (bootenv_rc_serial[port] != NULL)
-			free(bootenv_rc_serial[port]);
+		free(bootenv_rc_serial[port]);
 
 		bootenv_rc_serial[port] = s_strdup(token);
 		free(token);

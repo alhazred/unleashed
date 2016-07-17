@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * MKS interface to XPG message internationalization routines.
  * Copyright 1989, 1992 by Mortice Kern Systems Inc.  All rights reserved.
@@ -67,8 +65,7 @@ xlate(char *s)
 	if (new == NULL)
 		return s;
 	/* Free previour string */
-	if (lastmsg != NULL)
-		free(lastmsg);
+	free(lastmsg);
 	lastmsg = new;
 
 	/* Do *not* translate the leading ! which indicates perror */

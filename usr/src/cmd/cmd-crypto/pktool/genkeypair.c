@@ -207,8 +207,7 @@ genkeypair_file(KMF_HANDLE_T kmfhandle,
 	}
 
 cleanup:
-	if (fullkeypath != NULL)
-		free(fullkeypath);
+	free(fullkeypath);
 
 	if (kmfrv == KMF_OK) {
 		if (outPriKey != NULL)
@@ -515,8 +514,7 @@ pk_genkeypair(int argc, char *argv[])
 		display_error(kmfhandle, rv,
 		    gettext("Error creating and keypair"));
 end:
-	if (tokencred.cred != NULL)
-		free(tokencred.cred);
+	free(tokencred.cred);
 
 	(void) kmf_finalize(kmfhandle);
 	return (rv);

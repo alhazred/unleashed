@@ -244,8 +244,7 @@ genkey_pkcs11(KMF_HANDLE_T kmfhandle, char *token,
 out:
 	kmf_free_raw_sym_key(rkey);
 
-	if (hexstr != NULL)
-		free(hexstr);
+	free(hexstr);
 
 	return (kmfrv);
 }
@@ -348,8 +347,7 @@ genkey_file(KMF_HANDLE_T kmfhandle, KMF_KEY_ALG keyAlg, int keylen, char *dir,
 out:
 	kmf_free_raw_sym_key(rkey);
 
-	if (hexstr != NULL)
-		free(hexstr);
+	free(hexstr);
 
 	return (kmfrv);
 }
@@ -549,8 +547,7 @@ end:
 		display_error(kmfhandle, rv,
 		    gettext("Error generating key"));
 
-	if (tokencred.cred != NULL)
-		free(tokencred.cred);
+	free(tokencred.cred);
 
 	(void) kmf_finalize(kmfhandle);
 	if (rv != KMF_OK)

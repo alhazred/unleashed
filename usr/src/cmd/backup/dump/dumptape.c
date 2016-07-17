@@ -2226,8 +2226,7 @@ dowrite(int cmd)
 		end = begin + (ntrec-1);
 	}
 
-	if (rbuf != NULL)
-		free(rbuf);
+	free(rbuf);
 }
 
 /*

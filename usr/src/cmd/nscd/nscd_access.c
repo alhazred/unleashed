@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -575,12 +573,9 @@ _nscd_free(
 	/* remove the address from the internal address database */
 	_nscd_del_int_addr(access->data, access->seq_num);
 
-	if (access->data_mutex)
-		free(access->data_mutex);
-	if (access->data_rwlock)
-		free(access->data_rwlock);
-	if (access->data_cond)
-		free(access->data_cond);
+	free(access->data_mutex);
+	free(access->data_rwlock);
+	free(access->data_cond);
 
 	(void) memset(access, 0, sizeof (*access));
 

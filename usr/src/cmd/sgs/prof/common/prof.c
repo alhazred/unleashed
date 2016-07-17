@@ -28,8 +28,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  *	Program profiling report generator.
  *
@@ -1322,8 +1320,7 @@ demangled_name(char *s)
 	if (strcmp(name, s) == 0)
 		return (s);
 
-	if (format_buf != NULL)
-		free(format_buf);
+	free(format_buf);
 
 	len = strlen(name) + strlen(FORMAT_BUF) + strlen(s) + 1;
 	format_buf = malloc(len);

@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*LINTLIBRARY*/
 
 #include <stdio.h>
@@ -70,10 +68,8 @@ void
 ns_kvp_destroy(ns_kvp_t *kvp)
 {
 	if (kvp != NULL) {
-		if (kvp->key != NULL)
-			free(kvp->key);
-		if (kvp->value != NULL)
-			free(kvp->value);
+		free(kvp->key);
+		free(kvp->value);
 		free(kvp);
 	}
 }

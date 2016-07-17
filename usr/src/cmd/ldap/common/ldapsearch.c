@@ -291,8 +291,7 @@ main( int argc, char **argv )
 
 	conv = ldaptool_local2UTF8( base );
 	rc = dosearch( ld, conv, scope, attrs, attrsonly, filtpattern, "" );
-	if( conv != NULL )
-            free( conv );
+	free(conv);
     } else {
 	int done = 0;
 

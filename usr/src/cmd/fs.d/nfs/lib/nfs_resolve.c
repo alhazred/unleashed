@@ -63,10 +63,8 @@ free_knconf(struct knetconfig *k)
 {
 	if (k == NULL)
 		return;
-	if (k->knc_protofmly)
-		free(k->knc_protofmly);
-	if (k->knc_proto)
-		free(k->knc_proto);
+	free(k->knc_protofmly);
+	free(k->knc_proto);
 	free(k);
 }
 

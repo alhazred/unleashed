@@ -273,10 +273,8 @@ krb5_mk_ncred(krb5_context context, krb5_auth_context auth_context, krb5_creds *
     retval = encode_krb5_cred(pcred, ppdata);
 
 error:
-    if (local_fulladdr.contents)
-	free(local_fulladdr.contents);
-    if (remote_fulladdr.contents)
-	free(remote_fulladdr.contents);
+    free(local_fulladdr.contents);
+    free(remote_fulladdr.contents);
     krb5_free_cred(context, pcred);
 
     if (retval) {

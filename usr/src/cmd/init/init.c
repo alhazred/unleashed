@@ -3967,8 +3967,7 @@ new_state:
 	else
 		(void) unlink(init_state_file);
 
-	if (g_state != NULL)
-		free(g_state);
+	free(g_state);
 
 	/* Something went wrong, so allocate new state. */
 	g_state_sz = sizeof (struct init_state) +

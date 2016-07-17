@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
@@ -79,11 +77,9 @@ sip_destroy_msg(_sip_msg_t *_sip_msg)
 	assert(_sip_msg->sip_msg_ref_cnt == 0);
 	sip_delete_all_headers((sip_msg_t)_sip_msg);
 	sip_free_content(_sip_msg);
-	if (_sip_msg->sip_msg_buf != NULL)
-		free(_sip_msg->sip_msg_buf);
+	free(_sip_msg->sip_msg_buf);
 
-	if (_sip_msg->sip_msg_old_buf != NULL)
-		free(_sip_msg->sip_msg_old_buf);
+	free(_sip_msg->sip_msg_old_buf);
 
 	while (_sip_msg->sip_msg_req_res != NULL) {
 		sip_message_type_t	*sip_msg_type_ptr;

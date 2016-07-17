@@ -2059,17 +2059,14 @@ empty_table(lookup_table_t *table)
 
 	if (table) {
 		for (i = 0; i < table->n_entries; i++) {
-			if (table->table[i].name)
-				free(table->table[i].name);
+			free(table->table[i].name);
 			/*
 			 * Note: the strings pointed to from within
 			 * usage were freed already by rcm_free_info
 			 */
-			if (table->table[i].usage)
-				free(table->table[i].usage);
+			free(table->table[i].usage);
 		}
-		if (table->table)
-			free(table->table);
+		free(table->table);
 		table->table = NULL;
 		table->n_entries = 0;
 		table->n_slots = 0;

@@ -227,8 +227,7 @@ krb5int_dns_fini(struct krb5int_dns_state *ds)
 {
     if (ds == NULL)
 	return;
-    if (ds->ansp != NULL)
-	free(ds->ansp);
+    free(ds->ansp);
     free(ds);
 }
 

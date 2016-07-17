@@ -286,8 +286,7 @@ do_section(const res_state statp,
 		rrnum++;
 	}
  cleanup:
-	if (buf != NULL)
-		free(buf);
+	free(buf);
 }
 
 /*%

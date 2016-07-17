@@ -34,8 +34,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -376,8 +374,7 @@ GlHistory *_del_GlHistory(GlHistory *glh)
 /*
  * Delete the lookup buffer.
  */
-    if(glh->lbuf)
-      free(glh->lbuf);
+    free(glh->lbuf);
 /*
  * Delete the container.
  */

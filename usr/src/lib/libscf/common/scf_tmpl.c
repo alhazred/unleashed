@@ -646,8 +646,7 @@ _append_astrings_values(scf_propertygroup_t *pg, const char *prop_name,
 
 append_single_astring_from_pg_fail:
 	for (i = 0; i <= count; ++i) {
-		if (vals->values.v_astring[i] != NULL)
-			free(vals->values.v_astring[i]);
+		free(vals->values.v_astring[i]);
 		vals->values.v_astring[i] = NULL;
 	}
 	free(vals->values.v_astring);
@@ -1628,8 +1627,7 @@ _find_template_pg_match(scf_service_t *svc, scf_instance_t *inst,
 	(void) scf_set_error(SCF_ERROR_NOT_FOUND);
 fail:
 	scf_pg_destroy(pg);
-	if (*tmpl_pg_name != NULL)
-		free(*tmpl_pg_name);
+	free(*tmpl_pg_name);
 	*tmpl_pg_name = NULL;
 	pg = NULL;
 done:

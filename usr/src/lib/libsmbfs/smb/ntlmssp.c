@@ -381,8 +381,7 @@ ntlmssp_get_type2(struct ssp_ctx *sp, struct mbdata *in_mb)
 	}
 
 out:
-	if (buf != NULL)
-		free(buf);
+	free(buf);
 
 	return (err);
 }

@@ -28,8 +28,6 @@
  *      All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"	/* SVr4.0 1.4	*/
-
 /*LINTLIBRARY*/
 
 #include	<sys/types.h>
@@ -55,8 +53,7 @@ delkeymap(TERMINAL *terminal)
 
 	if (terminal->_keys != NULL) {
 		free(terminal->_keys);
-		if (terminal->internal_keys != NULL)
-			free(terminal->internal_keys);
+		free(terminal->internal_keys);
 	}
 	_blast_keys(terminal);
 }

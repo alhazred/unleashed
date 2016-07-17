@@ -1437,8 +1437,7 @@ fail:
     
     for (i = 0; i < krb5_princ_size(context, ret_entry->principal); i++) {
 	    princ = krb5_princ_component(context, ret_entry->principal, i);
-	    if (princ->data)
-		    free(princ->data);
+	    free(princ->data);
     }
     free(ret_entry->principal->data);
     ret_entry->principal->data = 0;

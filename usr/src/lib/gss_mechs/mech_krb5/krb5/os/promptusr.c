@@ -1,4 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 /*
  * promptusr.c --- prompt user for input/output
  */
@@ -135,8 +134,7 @@ krb5_free_uio(krb5_context context, krb5_uio uio)
 	next = p->next;
 	if (p->prompt && (p->flags & KRB5_UIO_FREE_PROMPT))
 	    free(p->prompt);
-	if (p->response)
-	    free(p->response);
+	free(p->response);
 	free(p);
     }
 }

@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Includes
  */
@@ -440,8 +438,7 @@ percmd(expr_t *expr_p, cmd_kind_t kind, fcn_t *fcn_p, boolean_t isnew,
 #endif
 
 	}
-	if (attrs)
-		free(attrs);
+	free(attrs);
 
 	return (err);
 
@@ -840,7 +837,7 @@ get_executable(char *name) {
 		}
 		dir = strtok(NULL, ":");
 	    }
-	    if (dirlist != NULL) free(dirlist);
+	    free(dirlist);
 	}
 	if (fstat(fd, &file_att) || !S_ISREG(file_att.st_mode)) {
 	    if (fd >= 0)

@@ -709,7 +709,7 @@ kmfber_scanf(BerElement *ber, const char *fmt, ...)
 
 		case 'o':	/* octet string in a supplied berval */
 			bval = va_arg(ap, struct berval *);
-			if (bval->bv_val) free(bval->bv_val);
+			free(bval->bv_val);
 			(void) memset(bval, 0, sizeof (struct berval));
 			break;
 

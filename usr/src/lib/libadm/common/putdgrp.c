@@ -841,7 +841,7 @@ _rmdgrpmems(
 			    /* Found.  Remove from linked list */
 			    if (prev) prev->next = pm->next;
 			    else ent->membership = pm->next;
-			    if (pm->name) free(pm->name);
+			    free(pm->name);
 			    free(pm);
 			    found = TRUE;
 

@@ -470,8 +470,7 @@ create_keystore()
 	(void) lock_file(fd, B_FALSE, B_FALSE);
 
 	(void) close(fd);
-	if (hashed_pin_salt)
-		free(hashed_pin_salt);
+	free(hashed_pin_salt);
 	return (0);
 
 cleanup:

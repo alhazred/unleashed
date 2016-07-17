@@ -2326,8 +2326,7 @@ pool_build_xpath_buf(pool_xml_connection_t *prov, const pool_elem_t *src,
 				if (class == PEC_RES_COMP ||
 				    class == PEC_RES_AGG ||
 				    class == PEC_COMP) {
-					if (type_prefix != NULL)
-						free(type_prefix);
+					free(type_prefix);
 					type_prefix = strdup(prefix);
 				}
 			}

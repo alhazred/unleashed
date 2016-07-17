@@ -103,8 +103,7 @@ hardlink_q_cleanup(struct hardlink_q *hl_q)
 			}
 		}
 
-		if (hl->path)
-			free(hl->path);
+		free(hl->path);
 		free(hl);
 	}
 

@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * UTF-8 encoded Unicode parsing routines. For efficiency, we convert
  * to wide chars only when absolutely needed. The following interfaces
@@ -168,9 +166,9 @@ int slp_strcasecmp(const char *s1, const char *s2) {
 	diff = wscasecmp(wcs1, wcs2);
 
 cleanup:
-	if (p1) free(p1);
-	if (p2) free(p2);
-	if (wcs1) free(wcs1);
-	if (wcs2) free(wcs2);
+	free(p1);
+	free(p2);
+	free(wcs1);
+	free(wcs2);
 	return (diff);
 }

@@ -163,8 +163,7 @@ generic_gss_add_oid_set_member(minor_status, member_oid, oid_set)
 
 	    /* Update count */
 	    (*oid_set)->count++;
-	    if (elist)
-		free(elist);
+	    free(elist);
 	    *minor_status = 0;
 	    return(GSS_S_COMPLETE);
 	}

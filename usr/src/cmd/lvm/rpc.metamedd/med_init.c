@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "med_local.h"
 #include <sdssc.h>
 
@@ -244,8 +242,7 @@ check_host(
 
 	/* cleanup, return success */
 out:
-	if (inplace)
-		free(inplace);
+	free(inplace);
 	if (hservlistp != NULL)
 		netdir_free(hservlistp, ND_HOSTSERVLIST);
 	if (nconfp != NULL)

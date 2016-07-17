@@ -232,8 +232,7 @@ hcreate(size_t size)	/* Create a hash table no smaller than size */
 	length = local_length;
 	m = local_m;
 	lmutex_unlock(&table_lock);
-	if (old_table != NULL)
-		free(old_table);
+	free(old_table);
 	return (local_table != NULL);
 }
 

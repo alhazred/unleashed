@@ -99,21 +99,16 @@ svc_dg_xprtfree(SVCXPRT *xprt)
 
 	if (xprt == NULL)
 		return;
-	if (xprt->xp_netid)
-		free(xprt->xp_netid);
-	if (xprt->xp_tp)
-		free(xprt->xp_tp);
+	free(xprt->xp_netid);
+	free(xprt->xp_tp);
 	if (xt->parent == NULL)
-		if (xprt->xp_ltaddr.buf)
-			free(xprt->xp_ltaddr.buf);
-	if (xprt->xp_rtaddr.buf)
-		free(xprt->xp_rtaddr.buf);
+		free(xprt->xp_ltaddr.buf);
+	free(xprt->xp_rtaddr.buf);
 	if (su != NULL) {
 		XDR_DESTROY(&(su->su_xdrs));
 		free(su);
 	}
-	if (rpc_buffer(xprt))
-		free(rpc_buffer(xprt));
+	free(rpc_buffer(xprt));
 	svc_xprt_free(xprt);
 }
 
@@ -223,8 +218,7 @@ svc_dg_xprtcopy(SVCXPRT *parent)
 		xprt->xp_netid = (char *)strdup(parent->xp_netid);
 		if (xprt->xp_netid == NULL) {
 			syslog(LOG_ERR, "svc_dg_xprtcopy: strdup failed");
-			if (parent->xp_tp)
-				free(parent->xp_tp);
+			free(parent->xp_tp);
 			svc_dg_xprtfree(xprt);
 			return (NULL);
 		}

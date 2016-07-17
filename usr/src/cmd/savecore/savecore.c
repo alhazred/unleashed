@@ -1318,14 +1318,10 @@ decompress_pages(int corefd)
 	if (tracef != NULL)
 		(void) fclose(tracef);
 	(void) fclose(dumpf);
-	if (inbuf)
-		free(inbuf);
-	if (cpage)
-		free(cpage);
-	if (dpage)
-		free(dpage);
-	if (streams)
-		free(streams);
+	free(inbuf);
+	free(cpage);
+	free(dpage);
+	free(streams);
 }
 
 static void

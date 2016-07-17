@@ -676,8 +676,7 @@ smb_ctx_setfullserver(struct smb_ctx *ctx, const char *name)
 
 	if (p == NULL)
 		return (ENOMEM);
-	if (ctx->ct_fullserver)
-		free(ctx->ct_fullserver);
+	free(ctx->ct_fullserver);
 	ctx->ct_fullserver = p;
 	return (0);
 }
@@ -830,8 +829,7 @@ smb_ctx_setshare(struct smb_ctx *ctx, const char *share, int stype)
 		    "share name '%s' too long"), 0, share);
 		return (ENAMETOOLONG);
 	}
-	if (ctx->ct_origshare)
-		free(ctx->ct_origshare);
+	free(ctx->ct_origshare);
 	if ((ctx->ct_origshare = strdup(share)) == NULL)
 		return (ENOMEM);
 
@@ -845,8 +843,7 @@ smb_ctx_setsrvaddr(struct smb_ctx *ctx, const char *addr)
 {
 	if (addr == NULL || addr[0] == 0)
 		return (EINVAL);
-	if (ctx->ct_srvaddr_s)
-		free(ctx->ct_srvaddr_s);
+	free(ctx->ct_srvaddr_s);
 	if ((ctx->ct_srvaddr_s = strdup(addr)) == NULL)
 		return (ENOMEM);
 	return (0);
@@ -1294,8 +1291,7 @@ smb_ctx_get_tree(struct smb_ctx *ctx)
 	}
 
 out:
-	if (tcon != NULL)
-		free(tcon);
+	free(tcon);
 
 	return (err);
 }
@@ -1577,8 +1573,7 @@ smb_ctx_readrc(struct smb_ctx *ctx)
 	smb_ctx_readrcsection(ctx, sname, 3);
 
 done:
-	if (sname)
-		free(sname);
+	free(sname);
 	smb_close_rcfile();
 	if (smb_debug)
 		dump_ctx("after smb_ctx_readrc", ctx);

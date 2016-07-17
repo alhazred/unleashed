@@ -33,8 +33,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Generic XDR routines implementation.
  *
@@ -589,8 +587,7 @@ xdr_string(XDR *xdrs, char **cpp, const uint_t maxsize)
 			 */
 			newsp = realloc(sp, bytesread + block + 1);
 			if (newsp == NULL) {
-				if (sp != NULL)
-					free(sp);
+				free(sp);
 				return (FALSE);
 			}
 			sp = newsp;

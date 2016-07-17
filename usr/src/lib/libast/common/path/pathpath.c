@@ -48,8 +48,7 @@ pathpath(register char* path, const char* p, const char* a, int mode)
 		path = buf;
 	if (!p)
 	{
-		if (cmd)
-			free(cmd);
+		free(cmd);
 		cmd = a ? strdup(a) : (char*)0;
 		return 0;
 	}

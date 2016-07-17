@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /* LINTLIBRARY */
 
 /*
@@ -136,23 +134,20 @@ __m_doupdate_init(void)
 	new = malloc((lines + 1) * (lines + 1) * sizeof (*lc));
 	if (new == NULL)
 		return (-1);
-	if (lc != NULL)
-		free(lc);
+	free(lc);
 	lc = (lcost *) new;
 
 	new = malloc((lines + lines) * sizeof (*del));
 	if (new == NULL)
 		return (-1);
-	if (del != NULL)
-		free(del);
+	free(del);
 	del = (t_action *) new;
 	ins_rep = del + lines;
 
 	new = malloc(lines * sizeof (*nhash));
 	if (new == NULL)
 		return (-1);
-	if (nhash != NULL)
-		free(nhash);
+	free(nhash);
 #if defined(_LP64)
 	nhash = (unsigned int *) new;
 #else

@@ -189,13 +189,10 @@ cache_free(struct cache_entry *entry)
 	int i;
 
 	for (ce = entry; ce; ce = next) {
-		if (ce->cache_host)
-			free(ce->cache_host);
+		free(ce->cache_host);
 		for (i = 0; i < ce->cache_grc; i++)
-			if (ce->cache_grl[i])
-				free(ce->cache_grl[i]);
-		if (ce->cache_grl)
-			free(ce->cache_grl);
+			free(ce->cache_grl[i]);
+		free(ce->cache_grl);
 		next = ce->cache_next;
 		free(ce);
 	}

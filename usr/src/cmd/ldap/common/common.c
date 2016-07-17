@@ -1288,8 +1288,7 @@ ldaptool_bind( LDAP *ld )
 	ldap_set_option( ld, LDAP_OPT_PROTOCOL_VERSION, &ldversion );
 	if (( rc = ldaptool_simple_bind_s( ld, conv, passwd,
 		bindctrls, NULL, "ldap_simple_bind" )) == LDAP_SUCCESS ) {
-            if( conv != NULL )
-                free( conv );
+            free(conv);
 	    return;		/* a qualified success */
 	}
     }

@@ -1418,8 +1418,7 @@ smb_enable_dependencies(const char *fmri)
 	}
 
 done:
-	if (dependency != NULL)
-		free(dependency);
+	free(dependency);
 	if (value != NULL)
 		scf_value_destroy(value);
 	if (prop != NULL)
@@ -1975,8 +1974,7 @@ smb_sprint_option(char **rbuff, size_t *rbuffsize, size_t incr,
 			*rbuffsize = buffsize;
 			if (buff == NULL) {
 				/* realloc failed so free everything */
-				if (*rbuff != NULL)
-					free(*rbuff);
+				free(*rbuff);
 				goto err;
 			}
 		}

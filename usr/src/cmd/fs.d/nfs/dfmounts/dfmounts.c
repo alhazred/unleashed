@@ -37,8 +37,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * nfs dfmounts
  */
@@ -219,10 +217,8 @@ freemntlist(ml)
 	register struct mountbody *old;
 
 	while (ml) {
-		if (ml->ml_hostname)
-			free(ml->ml_hostname);
-		if (ml->ml_directory)
-			free(ml->ml_directory);
+		free(ml->ml_hostname);
+		free(ml->ml_directory);
 		old = ml;
 		ml = ml->ml_next;
 		free(old);

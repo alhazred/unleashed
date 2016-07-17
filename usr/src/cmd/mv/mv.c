@@ -463,12 +463,10 @@ lnkfil(char *source, char *target)
 			    gettext("%s: cannot create %s: "),
 			    cmd, target);
 			perror("");
-			if (buf != NULL)
-				free(buf);
+			free(buf);
 			return (1);
 		}
-		if (buf != NULL)
-			free(buf);
+		free(buf);
 		return (0);
 	}
 
@@ -504,12 +502,10 @@ lnkfil(char *source, char *target)
 			    cmd, target);
 			perror("");
 		}
-		if (buf != NULL)
-			free(buf);
+		free(buf);
 		return (1);
 	} else {
-		if (buf != NULL)
-			free(buf);
+		free(buf);
 		return (0);
 	}
 }
@@ -1082,8 +1078,7 @@ chkfiles(char *source, char **to)
 					    gettext(
 					    "%s: %s and %s are identical\n"),
 					    cmd, source, target);
-					if (buf != NULL)
-						free(buf);
+					free(buf);
 					return (1);
 				}
 			}
@@ -1095,8 +1090,7 @@ chkfiles(char *source, char **to)
 				 * to same absolute pathname).
 				 */
 				if (!chk_different(source, target)) {
-					if (buf != NULL)
-						free(buf);
+					free(buf);
 					return (1);
 				}
 			}
@@ -1104,8 +1098,7 @@ chkfiles(char *source, char **to)
 				(void) fprintf(stderr,
 				    gettext("%s: %s: File exists\n"),
 				    cmd, target);
-				if (buf != NULL)
-					free(buf);
+				free(buf);
 				return (1);
 			}
 
@@ -1145,8 +1138,7 @@ chkfiles(char *source, char **to)
 				    "protection %o (%s/%s)? "), cmd, target,
 				    FMODE(s2) & MODEBITS, yesstr, nostr);
 				if (yes() == 0) {
-					if (buf != NULL)
-						free(buf);
+					free(buf);
 					return (2);
 				}
 			} else if (overwrite && ISREG(s2)) {
@@ -1154,8 +1146,7 @@ chkfiles(char *source, char **to)
 				    gettext("%s: overwrite %s (%s/%s)? "),
 				    cmd, target, yesstr, nostr);
 				if (yes() == 0) {
-					if (buf != NULL)
-						free(buf);
+					free(buf);
 					return (2);
 				}
 			} else if (override) {
@@ -1167,8 +1158,7 @@ chkfiles(char *source, char **to)
 				    cmd, target, FMODE(s2) & MODEBITS,
 				    yesstr, nostr);
 				if (yes() == 0) {
-					if (buf != NULL)
-						free(buf);
+					free(buf);
 					return (2);
 				}
 			}

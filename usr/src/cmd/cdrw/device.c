@@ -293,8 +293,7 @@ fini_device(cd_device *dev)
 	free(dev->d_inq);
 	free(dev->d_node);
 	(void) close(dev->d_fd);
-	if (dev->d_name)
-		free(dev->d_name);
+	free(dev->d_name);
 	free(dev);
 }
 
@@ -620,8 +619,7 @@ scan_for_cd_device(int mode, cd_device **found)
 			    &t_dev->d_inq[16], &t_dev->d_inq[32],
 			    gettext("CD Reader"),
 			    is_writer ? gettext("/Writer") : "");
-			if (sn)
-				free(sn);
+			free(sn);
 		}
 		if ((found != NULL) && ((*found) != t_dev))
 			fini_device(t_dev);

@@ -996,8 +996,7 @@ out:
 		    gettext("Error deleting objects"));
 	}
 
-	if (serial.val != NULL)
-		free(serial.val);
+	free(serial.val);
 	(void) kmf_finalize(kmfhandle);
 	return (kmfrv);
 }

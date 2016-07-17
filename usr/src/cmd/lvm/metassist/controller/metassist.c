@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Front end CLI to metassist.  Parses command line, reads in data
  * files, provides main() entry point into metassist.  Here's the
@@ -163,10 +161,10 @@ clean_up()
 	}
 
 	/* Free allocated argument strings */
-	if (commandfile != NULL) free(commandfile);
-	if (arg_diskset != NULL) free(arg_diskset);
-	if (arg_name != NULL) free(arg_name);
-	if (arg_inputfile != NULL) free(arg_inputfile);
+	free(commandfile);
+	free(arg_diskset);
+	free(arg_name);
+	free(arg_inputfile);
 
 	/* Free available dlist and strings within */
 	dlist_free_items(available, free);

@@ -1168,8 +1168,7 @@ set_all_protocols(sa_group_t group)
 		}
 	}
 
-	if (protolist != NULL)
-		free(protolist);
+	free(protolist);
 
 	return (ret);
 }
@@ -1661,8 +1660,7 @@ strndupr(char *buff, char *str, int *buffsize)
 		(void) strcat(buff, str);
 	} else {
 		/* if it fails, fail it hard */
-		if (orig_buff != NULL)
-			free(orig_buff);
+		free(orig_buff);
 	}
 	return (buff);
 }

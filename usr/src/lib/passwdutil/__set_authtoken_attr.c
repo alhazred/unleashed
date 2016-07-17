@@ -108,8 +108,7 @@ __set_authtoken_attr(char *name, char *oldpw, pwu_repository_t *rep,
 		}
 	}
 
-	if (buf)
-		free(buf);
+	free(buf);
 
 	if (updated_reps)
 		*updated_reps = (updated != REP_NOREP) ? updated : i;

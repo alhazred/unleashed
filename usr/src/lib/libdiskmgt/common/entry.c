@@ -1053,8 +1053,7 @@ dm_inuse(char *dev_name, char **msg, dm_who_type_t who, int *errp)
 		}
 	}
 out:
-	if (dname != NULL)
-		free(dname);
+	free(dname);
 	nvlist_free(dev_stats);
 
 	return (found);

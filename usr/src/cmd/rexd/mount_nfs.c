@@ -30,8 +30,6 @@
  *  mount_nfs.c - procedural interface to the NFS mount operation
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #define	NFSCLIENT
 #include <sys/types.h>
 #include <memory.h>
@@ -525,16 +523,11 @@ static void
 freemnttab(struct mnttab *mnt)
 {
 	if (mnt) {
-		if (mnt->mnt_special)
-			free(mnt->mnt_special);
-		if (mnt->mnt_mountp)
-			free(mnt->mnt_mountp);
-		if (mnt->mnt_fstype)
-			free(mnt->mnt_fstype);
-		if (mnt->mnt_mntopts)
-			free(mnt->mnt_mntopts);
-		if (mnt->mnt_time)
-			free(mnt->mnt_time);
+		free(mnt->mnt_special);
+		free(mnt->mnt_mountp);
+		free(mnt->mnt_fstype);
+		free(mnt->mnt_mntopts);
+		free(mnt->mnt_time);
 		free(mnt);
 	}
 }
@@ -775,10 +768,8 @@ free_knconf(struct knetconfig *k)
 {
 	if (k == NULL)
 		return;
-	if (k->knc_protofmly)
-		free(k->knc_protofmly);
-	if (k->knc_proto)
-		free(k->knc_proto);
+	free(k->knc_protofmly);
+	free(k->knc_proto);
 	free(k);
 }
 
@@ -787,8 +778,7 @@ netbuf_free(struct netbuf *nb)
 {
 	if (nb == NULL)
 		return;
-	if (nb->buf)
-		free(nb->buf);
+	free(nb->buf);
 	free(nb);
 }
 

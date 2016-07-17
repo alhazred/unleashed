@@ -28,8 +28,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/fcntl.h>
 #include <locale.h>
 #include <stdlib.h>
@@ -707,8 +705,7 @@ openlocale(char *category, int cat_id, char *locale, char *newlocale)
 		 */
 		 strcpy(_code_set_info.code_name, code_header.code_name);
 		 _code_set_info.code_id = code_header.code_id;
-		 if (_code_set_info.code_info != NULL)
-			free (_code_set_info.code_info);
+		 free(_code_set_info.code_info);
 		 if (code_header.code_info_size > 0)  {
 			my_info = malloc(code_header.code_info_size);
 			if (read (fd2, (char *)my_info, 
@@ -810,8 +807,7 @@ set_default(void)
 
 	strcpy(_code_set_info.code_name, Default);
 	_code_set_info.code_id = CODESET_NONE;
-	if (_code_set_info.code_info != NULL)
-		free (_code_set_info.code_info);
+	free(_code_set_info.code_info);
 	_code_set_info.code_info = NULL;
 	_code_set_info.open_flag = 0;
 }

@@ -3,8 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * lib/krb5/os/ccdefname.c
  *
@@ -115,8 +113,7 @@ krb5_cc_set_default_name(
 		return ENOMEM;
 	strcpy(new_name, name);
 
-	if (os_ctx->default_ccname)
-		free(os_ctx->default_ccname);
+	free(os_ctx->default_ccname);
 
 	os_ctx->default_ccname = new_name;
 	return 0;

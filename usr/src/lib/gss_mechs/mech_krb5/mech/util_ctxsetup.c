@@ -1,5 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Copyright (C) 1998 by the FundsXpress, INC.
  * 
@@ -160,8 +158,7 @@ kg2_parse_token(minor_status, ptr, token_length, flags, nctypes, ctypes,
     return(GSS_S_COMPLETE);
 
 defective:
-    if (*ctypes)
-	free(*ctypes);
+    free(*ctypes);
 
     *minor_status = 0;
     return(GSS_S_DEFECTIVE_TOKEN);

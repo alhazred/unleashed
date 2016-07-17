@@ -245,10 +245,8 @@ gencsr_file(KMF_HANDLE_T kmfhandle,
 	}
 
 cleanup:
-	if (fullkeypath)
-		free(fullkeypath);
-	if (fullcsrpath)
-		free(fullcsrpath);
+	free(fullkeypath);
+	free(fullcsrpath);
 
 	kmf_free_data(&signedCsr);
 	kmf_free_kmf_key(kmfhandle, &prik);
@@ -749,11 +747,9 @@ end:
 	if (ekulist != NULL)
 		free_eku_list(ekulist);
 
-	if (subname)
-		free(subname);
+	free(subname);
 
-	if (tokencred.cred != NULL)
-		free(tokencred.cred);
+	free(tokencred.cred);
 
 	(void) kmf_finalize(kmfhandle);
 	if (rv != KMF_OK)

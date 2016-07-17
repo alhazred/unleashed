@@ -150,8 +150,7 @@ _exec_files_XY_all(files_backend_ptr_t be,
 			return (NSS_UNAVAIL);
 		}
 		exec_fd = fileno(be->f);
-		if (f_buf != NULL)
-			free(f_buf);
+		free(f_buf);
 		if ((f_buf = malloc(f_size)) == NULL) {
 			(void) _nss_files_endent(be, 0);
 			(void) rw_unlock(&exec_lock);
@@ -307,8 +306,7 @@ get_wild(files_backend_ptr_t be, nss_XbyY_args_t *argp, int getby_flag)
 			break;
 	}
 	_priv_exec->id = orig_id;
-	if (old_id)
-		free(old_id);
+	free(old_id);
 
 	return (res);
 }

@@ -72,8 +72,7 @@ Dbg_shdr_modified(Lm_list *lml, const char *obj, uchar_t osabi, Half mach,
 	Dbg_util_nl(lml, DBG_NL_STD);
 	dbg_print(lml, MSG_INTL(MSG_SHD_MODIFIED),
 	    dbg_fmt_isec_name2(name, ndx, buf, &alloc_mem), obj);
-	if (alloc_mem != NULL)
-		free(alloc_mem);
+	free(alloc_mem);
 
 	dbg_print(lml, MSG_INTL(MSG_SHD_ORIG));
 	Elf_shdr(lml, osabi, mach, oshdr);

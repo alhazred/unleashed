@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*LINTLIBRARY*/
 
 #include <stdio.h>
@@ -72,8 +70,7 @@ papiAttributeListGetLPString(papi_attribute_t **attributes, char *key,
 
 	papiAttributeListGetString(attributes, NULL, key,  &value);
 	if (value != NULL) {
-		if (*string != NULL)
-			free(*string);
+		free(*string);
 		*string = strdup(value);
 	}
 }

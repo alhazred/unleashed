@@ -32,8 +32,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * clnt_raw.c
  *
@@ -97,8 +95,7 @@ clnt_raw_create(const rpcprog_t prog, const rpcvers_t vers)
 			if (_rawcombuf == NULL) {
 				syslog(LOG_ERR, "clnt_raw_create: "
 					"out of memory.");
-				if (clp)
-					free(clp);
+				free(clp);
 				(void) mutex_unlock(&clntraw_lock);
 				return (NULL);
 			}

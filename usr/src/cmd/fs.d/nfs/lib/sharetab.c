@@ -146,16 +146,11 @@ alloc_failed:
 void
 sharefree(share_t *sh)
 {
-	if (sh->sh_path != NULL)
-		free(sh->sh_path);
-	if (sh->sh_res != NULL)
-		free(sh->sh_res);
-	if (sh->sh_fstype != NULL)
-		free(sh->sh_fstype);
-	if (sh->sh_opts != NULL)
-		free(sh->sh_opts);
-	if (sh->sh_descr != NULL)
-		free(sh->sh_descr);
+	free(sh->sh_path);
+	free(sh->sh_res);
+	free(sh->sh_fstype);
+	free(sh->sh_opts);
+	free(sh->sh_descr);
 	free(sh);
 }
 

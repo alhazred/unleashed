@@ -375,10 +375,8 @@ rep_retry:
 		scf_snapshot_destroy(snap);
 	if (inst->ri_logstem != NULL)
 		startd_free(inst->ri_logstem, PATH_MAX);
-	if (inst->ri_common_name != NULL)
-		free(inst->ri_common_name);
-	if (inst->ri_C_common_name != NULL)
-		free(inst->ri_C_common_name);
+	free(inst->ri_common_name);
+	free(inst->ri_C_common_name);
 	snap = NULL;
 	inst->ri_logstem = NULL;
 	inst->ri_common_name = NULL;
@@ -697,10 +695,8 @@ deleted:
 	uu_list_destroy(inst->ri_queue);
 	if (inst->ri_logstem != NULL)
 		startd_free(inst->ri_logstem, PATH_MAX);
-	if (inst->ri_common_name != NULL)
-		free(inst->ri_common_name);
-	if (inst->ri_C_common_name != NULL)
-		free(inst->ri_C_common_name);
+	free(inst->ri_common_name);
+	free(inst->ri_C_common_name);
 	startd_free(inst->ri_utmpx_prefix, max_scf_value_size);
 	startd_free(inst, sizeof (restarter_inst_t));
 	return (ENOENT);
@@ -759,10 +755,8 @@ restarter_delete_inst(restarter_inst_t *ri)
 
 	startd_free((void *)ri->ri_i.i_fmri, strlen(ri->ri_i.i_fmri) + 1);
 	startd_free(ri->ri_logstem, PATH_MAX);
-	if (ri->ri_common_name != NULL)
-		free(ri->ri_common_name);
-	if (ri->ri_C_common_name != NULL)
-		free(ri->ri_C_common_name);
+	free(ri->ri_common_name);
+	free(ri->ri_C_common_name);
 	startd_free(ri->ri_utmpx_prefix, max_scf_value_size);
 	(void) pthread_mutex_destroy(&ri->ri_lock);
 	(void) pthread_mutex_destroy(&ri->ri_queue_lock);

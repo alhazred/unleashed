@@ -417,8 +417,7 @@ _collate_wxfrm(const struct lc_collate *lcc, const wchar_t *src, wchar_t *xf,
 
 		if (direc & DIRECTIVE_BACKWARD) {
 			wchar_t *bp, *fp, c;
-			if (tr)
-				free(tr);
+			free(tr);
 			if ((tr = wcsdup(t)) == NULL) {
 				errno = ENOMEM;
 				goto fail;
@@ -475,13 +474,11 @@ _collate_wxfrm(const struct lc_collate *lcc, const wchar_t *src, wchar_t *xf,
 	}
 
 end:
-	if (tr)
-		free(tr);
+	free(tr);
 	return (need);
 
 fail:
-	if (tr)
-		free(tr);
+	free(tr);
 	return ((size_t)(-1));
 }
 
@@ -569,8 +566,7 @@ _collate_sxfrm(const wchar_t *src, char *xf, size_t room, locale_t loc)
 
 		if (direc & DIRECTIVE_BACKWARD) {
 			wchar_t *bp, *fp, c;
-			if (tr)
-				free(tr);
+			free(tr);
 			if ((tr = wcsdup(t)) == NULL) {
 				errno = ENOMEM;
 				goto fail;
@@ -643,12 +639,10 @@ _collate_sxfrm(const wchar_t *src, char *xf, size_t room, locale_t loc)
 	}
 
 end:
-	if (tr)
-		free(tr);
+	free(tr);
 	return (need);
 
 fail:
-	if (tr)
-		free(tr);
+	free(tr);
 	return ((size_t)(-1));
 }

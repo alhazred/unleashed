@@ -380,8 +380,7 @@ smbclnt_config_load()
 			(void) xmlSetProp(sect, (xmlChar *)"type",
 			    (xmlChar *)SMBFS_PROTOCOL_NAME);
 			(void) sa_add_protocol_property(protoset, sect);
-			if (lastpgname)
-				free(lastpgname);
+			free(lastpgname);
 			lastpgname = strdup(pgname);
 		}
 		name = scf_simple_prop_name(prop);
@@ -406,8 +405,7 @@ smbclnt_config_load()
 	}
 	scf_simple_app_props_free(props);
 
-	if (lastpgname)
-		free(lastpgname);
+	free(lastpgname);
 	return (0);
 }
 

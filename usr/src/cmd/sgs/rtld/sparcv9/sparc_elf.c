@@ -1374,8 +1374,7 @@ elf_reloc(Rt_map *lmp, uint_t plt, int *in_nfavl, APlist **textrel)
 	/*
 	 * Free up any items on the pltpadlist if it was allocated
 	 */
-	if (pltpadlist)
-		free(pltpadlist);
+	free(pltpadlist);
 
 	return (relocate_finish(lmp, bound, ret));
 }

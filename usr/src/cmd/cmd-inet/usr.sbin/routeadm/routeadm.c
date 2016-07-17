@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -2024,8 +2022,7 @@ error:
 	}
 	for (i = 0; i < numvalues_retrieved; i++)
 		free((*values)[i]);
-	if (*values != NULL)
-		free(*values);
+	free(*values);
 
 	ret = -1;
 out:
@@ -2212,8 +2209,7 @@ out:
 		scf_pg_destroy(cpg);
 	if (instpg != NULL)
 		scf_pg_destroy(instpg);
-	if (pgtype != NULL)
-		free(pgtype);
+	free(pgtype);
 	return (ret);
 }
 
@@ -2584,11 +2580,9 @@ ra_resetvars(const char *proto)
 		if (proto != NULL &&
 		    !VAR_PROTO_MATCH(ra_vars[i].var_name, proto))
 			continue;
-		if (ra_vars[i].var_value != NULL)
-			free(ra_vars[i].var_value);
+		free(ra_vars[i].var_value);
 		ra_vars[i].var_value = NULL;
-		if (ra_vars[i].var_default_value != NULL)
-			free(ra_vars[i].var_default_value);
+		free(ra_vars[i].var_default_value);
 		ra_vars[i].var_default_value = NULL;
 	}
 }

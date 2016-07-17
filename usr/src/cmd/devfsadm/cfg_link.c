@@ -1176,10 +1176,8 @@ pci_cfg_creat_cb(di_minor_t pci_minor, di_node_t pci_node)
 OUT:
 	if (fd >= 0)
 		di_dli_close(fd);
-	if (fullpath != NULL)
-		free(fullpath);
-	if (pathinfo != NULL)
-		free(pathinfo);
+	free(fullpath);
+	free(pathinfo);
 	if (ph != DI_PROM_HANDLE_NIL)
 		di_prom_fini(ph);
 	if (root_node != DI_NODE_NIL)

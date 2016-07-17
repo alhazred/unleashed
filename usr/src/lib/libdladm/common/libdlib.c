@@ -325,7 +325,7 @@ bail:
 void
 dladm_free_ib_info(dladm_ib_attr_t *attr)
 {
-	if (attr && attr->dia_port_pkeys)
+	if (attr)
 		free(attr->dia_port_pkeys);
 }
 

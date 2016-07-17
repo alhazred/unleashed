@@ -86,11 +86,9 @@ _nscd_free_nsw_state(
 		free(s->be);
 	}
 
-	if (s->be_constr != NULL)
-		free(s->be_constr);
+	free(s->be_constr);
 
-	if (s->be_version_p != NULL)
-		free(s->be_version_p);
+	free(s->be_version_p);
 
 	/* remove reference to the nsw state base */
 	if (s->base != NULL) {

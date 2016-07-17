@@ -311,8 +311,7 @@ undefine(void* p)
 
 	if (mac)
 	{
-		if (mac->formals)
-			free(mac->formals);
+		free(mac->formals);
 		free(mac->value);
 		free(mac);
 	}
@@ -484,8 +483,7 @@ ppop(int op, ...)
 	case PP_DEFAULT:
 		if (p = va_arg(ap, char*))
 			p = strdup(p);
-		if (pp.ppdefault)
-			free(pp.ppdefault);
+		free(pp.ppdefault);
 		pp.ppdefault = p;
 		break;
 	case PP_DONE:

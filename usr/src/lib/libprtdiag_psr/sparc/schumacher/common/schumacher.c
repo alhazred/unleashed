@@ -1791,10 +1791,8 @@ add_io_leaves(picl_nodehdl_t nodeh, char *parentname, uint32_t board,
 
 		add_io_card(board, bus_id, slot, label, freq, name,
 		    model, status, devfs_path);
-		if (label != NULL)
-			free(label);
-		if (devfs_path != NULL)
-			free(devfs_path);
+		free(label);
+		free(devfs_path);
 		return (PICL_SUCCESS);
 	}
 
@@ -1926,11 +1924,9 @@ pci_callback(picl_nodehdl_t pcih, void *args)
 		err = add_io_leaves(nodeh, NULL, boardnum, bus_id, slot,
 		    freq, model, status);
 
-		if (model != NULL)
-			free(model);
+		free(model);
 
-		if (status != NULL)
-			free(status);
+		free(status);
 
 		if (err != PICL_SUCCESS)
 			return (err);

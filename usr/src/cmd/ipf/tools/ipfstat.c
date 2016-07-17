@@ -961,8 +961,7 @@ char *group, *comment;
 			if (fb.fr_data != NULL && fb.fr_dsize > 0)
 				binprint(fb.fr_data, fb.fr_dsize);
 		}
-		if (data != NULL)
-			free(data);
+		free(data);
 		if (fb.fr_grhead[0] != '\0') {
 			g = calloc(1, sizeof(*g));
 

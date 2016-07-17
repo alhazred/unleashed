@@ -862,10 +862,8 @@ fail_out:
 	free_entrylist(tmp_pdev);
 	free_entrylist(tmp_psoft);
 
-	if (pdevlist_kernel != NULL)
-		free(pdevlist_kernel);
-	if (psoftlist_kernel != NULL)
-		free(psoftlist_kernel);
+	free(pdevlist_kernel);
+	free(psoftlist_kernel);
 
 	return (FAILURE);
 }

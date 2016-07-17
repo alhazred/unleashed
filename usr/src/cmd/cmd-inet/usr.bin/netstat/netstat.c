@@ -882,8 +882,7 @@ mibfree(mib_item_t *firstitem)
 	while (firstitem != NULL) {
 		lastitem = firstitem;
 		firstitem = firstitem->next_item;
-		if (lastitem->valp != NULL)
-			free(lastitem->valp);
+		free(lastitem->valp);
 		free(lastitem);
 	}
 }
@@ -1516,8 +1515,7 @@ mib_item_destroy(mib_item_t **itemp) {
 		return;		/* cannot destroy! */
 
 	for (c = nitems - 1; c >= 0; c--) {
-		if ((itemp[0][c]).valp != NULL)
-			free((itemp[0][c]).valp);
+		free((itemp[0][c]).valp);
 	}
 	free(*itemp);
 
@@ -4162,12 +4160,9 @@ ire_report(const mib_item_t *item)
 	} /* 'for' loop 1 ends */
 	(void) fflush(stdout);
 ire_report_done:
-	if (v4_attrs != NULL)
-		free(v4_attrs);
-	if (v6_attrs != NULL)
-		free(v6_attrs);
-	if (all_attrs != NULL)
-		free(all_attrs);
+	free(v4_attrs);
+	free(v6_attrs);
+	free(all_attrs);
 }
 
 /*
@@ -4836,10 +4831,8 @@ tcp_report(const mib_item_t *item)
 	} /* 'for' loop 1 ends */
 	(void) fflush(stdout);
 
-	if (v4_attrs != NULL)
-		free(v4_attrs);
-	if (v6_attrs != NULL)
-		free(v6_attrs);
+	free(v4_attrs);
+	free(v6_attrs);
 }
 
 static boolean_t
@@ -5060,10 +5053,8 @@ udp_report(const mib_item_t *item)
 	} /* 'for' loop 1 ends */
 	(void) fflush(stdout);
 
-	if (v4_attrs != NULL)
-		free(v4_attrs);
-	if (v6_attrs != NULL)
-		free(v6_attrs);
+	free(v4_attrs);
+	free(v6_attrs);
 }
 
 static boolean_t
@@ -5427,8 +5418,7 @@ sctp_report(const mib_item_t *item)
 			}
 		}
 	}
-	if (attrs != NULL)
-		free(attrs);
+	free(attrs);
 }
 
 static char *

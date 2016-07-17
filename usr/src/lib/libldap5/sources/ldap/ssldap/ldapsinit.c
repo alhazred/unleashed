@@ -25,8 +25,6 @@
  * Contributor(s):
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * ldapsinit.c
  */
@@ -1297,12 +1295,10 @@ ldapssl_install_gethostbyaddr(LDAP *ld, const char *skip)
 		 * to install our private address resolution function
 		 */
 		(void) mutex_unlock(&db_root_hosts.lock);
-		if (name_list != NULL)
-			free(name_list);
+		free(name_list);
 		return (0);
 	}
-	if (host_service != NULL)
-		free(host_service);
+	free(host_service);
 	host_service = name_list;
 	(void) mutex_unlock(&db_root_hosts.lock);
 

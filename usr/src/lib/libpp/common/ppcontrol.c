@@ -1211,13 +1211,13 @@ ppcontrol(void)
 #if MACKEYARGS
 				if (pp.option & KEYARGS)
 				{
-					if (mac->formkeys) free(mac->formkeys);
+					free(mac->formkeys);
 					mac->formkeys = old.formkeys;
 				}
 				else
 #endif
 				{
-					if (mac->formals) free(mac->formals);
+					free(mac->formals);
 					mac->formals = old.formals;
 				}
 				free(mac->value);
@@ -1227,13 +1227,13 @@ ppcontrol(void)
 				if (!(pp.mode & HOSTED) || !(i0 & SYM_INITIAL))
 					error(1, "%s redefined", sym->name);
 #if MACKEYARGS
-				if ((pp.option & KEYARGS) && mac->formkeys)
-					free(mac->formkeys);
+				if ((pp.option & KEYARGS))
+	free(mac->formkeys);
 #endif
 #if MACKEYARGS
 				if (!(pp.option & KEYARGS))
 #endif
-				if (old.formals) free(old.formals);
+				free(old.formals);
 				free(old.value);
 			}
 			else if (!pp.truncate) ppfsm(FSM_MACRO, sym->name);
@@ -1439,7 +1439,7 @@ ppcontrol(void)
 			else c = sfsprintf(pp.tmpbuf, MAXTOKEN, "%ld", n1);
 			if (n < ++c)
 			{
-				if (mac->value) free(mac->value);
+				free(mac->value);
 				mac->value = oldof(0, char, 0, c);
 			}
 			strcpy(mac->value, pp.tmpbuf);
@@ -1772,7 +1772,7 @@ ppcontrol(void)
 			{
 				if ((mac = sym->macro) && !(sym->flags & (SYM_ACTIVE|SYM_READONLY)))
 				{
-					if (mac->formals) free(mac->formals);
+					free(mac->formals);
 					free(mac->value);
 					free(mac);
 					sym->macro = 0;
@@ -2152,7 +2152,7 @@ ppcontrol(void)
 				}
 				if (!(pp.mode & HOSTED) || !(var.symbol->flags & SYM_INITIAL))
 					error(1, "%s redefined", var.symbol->name);
-				if (mac->formals) free(mac->formals);
+				free(mac->formals);
 				free(mac->value);
 				free(mac);
 			}
@@ -2178,7 +2178,7 @@ ppcontrol(void)
 							error(2, "%s: macro is %s", sym->name, (sym->flags & SYM_READONLY) ? "readonly" : "active");
 						goto eatdirective;
 					}
-					if (mac->formals) free(mac->formals);
+					free(mac->formals);
 					free(mac->value);
 					free(mac);
 					mac = sym->macro = 0;

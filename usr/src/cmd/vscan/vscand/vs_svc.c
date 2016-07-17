@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Implementation of the "scan file" interface
  */
@@ -106,8 +104,7 @@ vs_svc_init(uint32_t max_req)
 void
 vs_svc_fini()
 {
-	if (vs_svc_nodes)
-		free(vs_svc_nodes);
+	free(vs_svc_nodes);
 }
 
 

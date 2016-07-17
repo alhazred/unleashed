@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <kvm.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -147,8 +145,7 @@ kvm_getcmd32(kvm_t *kd,
 
 	esize = eptrcount * sizeof (uintptr_t) + RoundUp(strpoolsz, uintptr_t);
 	if (env && (envp = calloc(1, esize + sizeof (uintptr_t))) == NULL) {
-		if (argv)
-			free(argv);
+		free(argv);
 		free(stack32);
 		return (-1);
 	}
@@ -313,8 +310,7 @@ kvm_getcmd(kvm_t *kd,
 	if (env) {
 		esize = (size_t)proc->p_usrstack - (size_t)u->u_envp;
 		if ((envp = malloc(esize + sizeof (uintptr_t))) == NULL) {
-			if (argv)
-				free(argv);
+			free(argv);
 			return (-1);
 		}
 		envp_null = (char *)envp + esize;
@@ -328,8 +324,7 @@ kvm_getcmd(kvm_t *kd,
 		if (kvm_uread(kd,
 		    (uintptr_t)u->u_argv, argv, asize) != asize) {
 			free(argv);
-			if (envp)
-				free(envp);
+			free(envp);
 			return (-1);
 		}
 		argv[argc] = 0;

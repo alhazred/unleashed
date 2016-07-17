@@ -337,11 +337,9 @@ kc_list(int argc, char *argv[])
 
 out:
 
-	if (filename != NULL)
-		free(filename);
+	free(filename);
 
-	if (policyname != NULL)
-		free(policyname);
+	free(policyname);
 
 	return (rv);
 }

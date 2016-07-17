@@ -25,8 +25,6 @@
  * File: CLIENT.C
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -720,8 +718,7 @@ kmf_download_crl(KMF_HANDLE_T handle, char *uri, char *proxy, int proxy_port,
 	}
 
 out:
-	if (filename != NULL)
-		free(filename);
+	free(filename);
 
 	if (ret != KMF_OK && temp_created == B_TRUE)
 		(void) unlink(tempfn);
@@ -795,8 +792,7 @@ kmf_download_cert(KMF_HANDLE_T handle, char *uri, char *proxy, int proxy_port,
 	}
 
 out:
-	if (filename != NULL)
-		free(filename);
+	free(filename);
 
 	if (ret != KMF_OK && temp_created == B_TRUE)
 		(void) unlink(tempfn);

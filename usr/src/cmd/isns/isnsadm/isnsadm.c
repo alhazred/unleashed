@@ -219,7 +219,7 @@ check_door_error(int door_err, int err)
 	    ret = door_err;
 	}
 
-	if (state) free(state);
+	free(state);
 
 	return (ret);
 }

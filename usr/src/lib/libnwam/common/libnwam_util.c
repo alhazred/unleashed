@@ -562,8 +562,7 @@ nwam_valid_condition(nwam_value_t value)
 		if (nwam_condition_string_to_condition(conditions[i],
 		    &object_type, &condition, &object_name) != NWAM_SUCCESS)
 			return (NWAM_ENTITY_INVALID_VALUE);
-		if (object_name != NULL)
-			free(object_name);
+		free(object_name);
 	}
 	return (NWAM_SUCCESS);
 }

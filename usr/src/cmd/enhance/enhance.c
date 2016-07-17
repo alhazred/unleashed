@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -483,8 +481,7 @@ static int pty_stop_parent(int waserr, int cntrl, GetLine *gl, char *rbuff)
 /*
  * Delete the read buffer.
  */
-  if(rbuff)
-    free(rbuff);
+  free(rbuff);
 /*
  * Wait for the user's program to end.
  */

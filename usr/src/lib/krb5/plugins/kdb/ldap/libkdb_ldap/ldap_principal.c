@@ -92,14 +92,12 @@ krb5_dbe_free_contents(context, entry)
     krb5_tl_data 	*tl_data=NULL;
     int i, j;
 
-    if (entry->e_data)
-	free(entry->e_data);
+    free(entry->e_data);
     if (entry->princ)
 	krb5_free_principal(context, entry->princ);
     for (tl_data = entry->tl_data; tl_data; tl_data = tl_data_next) {
 	tl_data_next = tl_data->tl_data_next;
-	if (tl_data->tl_data_contents)
-	    free(tl_data->tl_data_contents);
+	free(tl_data->tl_data_contents);
 	free(tl_data);
     }
     if (entry->key_data) {
@@ -219,13 +217,11 @@ krb5_ldap_iterate(context, match_expr, func, func_arg, db_args)
 			(*func)(func_arg, &entry);
 			krb5_dbe_free_contents(context, &entry);
 			(void) krb5_free_principal(context, principal);
-			if (princ_name)
-			    free(princ_name);
+			free(princ_name);
 			break;
 		    }
 		    (void) krb5_free_principal(context, principal);
-		    if (princ_name)
-			free(princ_name);
+		    free(princ_name);
 		}
 		ldap_value_free(values);
 	    }
@@ -234,12 +230,10 @@ krb5_ldap_iterate(context, match_expr, func, func_arg, db_args)
     } /* end of for (tree= ... */
 
 cleanup:
-    if (filter)
-	free (filter);
+    free(filter);
 
     for (;ntree; --ntree)
-	if (subtree[ntree-1])
-	    free (subtree[ntree-1]);
+	free(subtree[ntree - 1]);
 
     /* Solaris Kerberos: fix memory leak */
     if (subtree != NULL) {
@@ -367,11 +361,9 @@ krb5_ldap_delete_principal(context, searchfor, nentries)
     }
 
 cleanup:
-    if (user)
-	free (user);
+    free(user);
 
-    if (DN)
-	free (DN);
+    free(DN);
 
     if (secretkey != NULL) {
 	int i=0;

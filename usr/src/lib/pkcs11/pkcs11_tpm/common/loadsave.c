@@ -730,8 +730,7 @@ save_public_token_object(OBJECT *obj)
 error:
 	if (fp)
 		(void) fclose(fp);
-	if (cleartxt)
-		free(cleartxt);
+	free(cleartxt);
 	return (rc);
 }
 
@@ -848,12 +847,9 @@ save_private_token_object(TSS_HCONTEXT hContext, OBJECT *obj)
 error:
 	if (fp)
 		(void) fclose(fp);
-	if (obj_data)
-		free(obj_data);
-	if (cleartxt)
-		free(cleartxt);
-	if (ciphertxt)
-		free(ciphertxt);
+	free(obj_data);
+	free(cleartxt);
+	free(ciphertxt);
 
 	return (rc);
 }
@@ -1017,8 +1013,7 @@ load_private_token_objects(TSS_HCONTEXT hContext)
 	return (CKR_OK);
 
 error:
-	if (buf)
-		free(buf);
+	free(buf);
 	if (fp1) {
 		(void) lockfile(fileno(fp1), F_UNLCK);
 		(void) fclose(fp1);
@@ -1094,8 +1089,7 @@ restore_private_token_object(
 	(void) object_mgr_restore_obj(obj_data, pObj);
 	rc = CKR_OK;
 done:
-	if (cleartxt)
-		free(cleartxt);
+	free(cleartxt);
 
 	return (rc);
 }
@@ -1157,8 +1151,7 @@ done:
 		(void) lockfile(fileno(fp), F_UNLCK);
 		(void) fclose(fp);
 	}
-	if (buf)
-		free(buf);
+	free(buf);
 	return (rc);
 }
 

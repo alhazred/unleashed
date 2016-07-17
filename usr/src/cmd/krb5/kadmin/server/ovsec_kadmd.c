@@ -564,8 +564,7 @@ int main(int argc, char *argv[])
 	  fprintf(stderr,
      	    gettext("%s: %s while initializing, aborting\n"),
 		  whoami, (emsg ? emsg : error_message(ret)));
-	  if (emsg)
-		free(emsg);
+	  free(emsg);
 	  krb5_klog_close(context);
 	  exit(1);
      }

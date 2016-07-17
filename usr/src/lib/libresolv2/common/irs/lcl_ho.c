@@ -342,8 +342,7 @@ ho_next(struct irs_ho *this) {
  again:
 	if (!(p = fgets(bufp + offset, bufsiz - offset, pvt->fp))) {
 		RES_SET_H_ERRNO(pvt->res, HOST_NOT_FOUND);
-		if (dbuf)
-			free(dbuf);
+		free(dbuf);
 		return (NULL);
 	}
 	if (!strchr(p, '\n') && !feof(pvt->fp)) {
@@ -418,8 +417,7 @@ ho_next(struct irs_ho *this) {
 			*cp++ = '\0';
 	}
 	*q = NULL;
-	if (dbuf)
-		free(dbuf);
+	free(dbuf);
 	RES_SET_H_ERRNO(pvt->res, NETDB_SUCCESS);
 	return (&pvt->host);
 }

@@ -310,8 +310,7 @@ smbfs_default_dom_usr(const char *home, const char *server,
 	}
 
 	if (home && *home) {
-		if (ctx->ct_home)
-			free(ctx->ct_home);
+		free(ctx->ct_home);
 		ctx->ct_home = strdup(home);
 	}
 

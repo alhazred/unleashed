@@ -87,8 +87,7 @@ krb5_gss_release_cred(minor_status, cred_handle)
    if (cred->princ)
       krb5_free_principal(context, cred->princ);
 
-   if (cred->req_enctypes)
-       free(cred->req_enctypes);
+   free(cred->req_enctypes);
 
    xfree(cred);
 

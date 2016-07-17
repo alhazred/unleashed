@@ -600,8 +600,7 @@ set_mapent_opts(struct mapent *me, char *opts, char *defaultopts,
 	get_opts(opts,	entryopts, fstype, &fstype_opt);
 
 	/* replace any existing opts */
-	if (me->map_mntopts != NULL)
-		free(me->map_mntopts);
+	free(me->map_mntopts);
 	if ((me->map_mntopts = strdup(entryopts)) == NULL)
 		return (ENOMEM);
 	strcpy(mounter,	fstype);
@@ -621,8 +620,7 @@ set_mapent_opts(struct mapent *me, char *opts, char *defaultopts,
 done:
 	if (((me->map_fstype = strdup(fstype)) == NULL) ||
 	    ((me->map_mounter = strdup(mounter)) == NULL)) {
-		if (me->map_fstype != NULL)
-			free(me->map_fstype);
+		free(me->map_fstype);
 		syslog(LOG_ERR, "set_mapent_opts: No memory");
 		return (ENOMEM);
 	}
@@ -1120,33 +1118,27 @@ convert_mapent_to_automount(struct mapent *me, char *mapname,
 	}
 	while (me->map_fs->mfs_next != NULL) {
 		mfs = me->map_fs->mfs_next;
-		if (mfs->mfs_host)
-			free(mfs->mfs_host);
-		if (mfs->mfs_dir)
-			free(mfs->mfs_dir);
+		free(mfs->mfs_host);
+		free(mfs->mfs_dir);
 		me->map_fs->mfs_next = mfs->mfs_next;	/* nulls eventually */
 		free((void*)mfs);
 	}
 
 	/* replace relevant entries */
-	if (me->map_fstype)
-		free(me->map_fstype);
+	free(me->map_fstype);
 	if ((me->map_fstype = strdup(MNTTYPE_AUTOFS)) == NULL)
 		goto alloc_failed;
 
-	if (me->map_mounter)
-		free(me->map_mounter);
+	free(me->map_mounter);
 	if ((me->map_mounter = strdup(me->map_fstype)) == NULL)
 		goto alloc_failed;
 
-	if (me->map_fs->mfs_dir)
-		free(me->map_fs->mfs_dir);
+	free(me->map_fs->mfs_dir);
 	if ((me->map_fs->mfs_dir = strdup(mapname)) == NULL)
 		goto alloc_failed;
 
 	/* set options */
-	if (me->map_mntopts)
-		free(me->map_mntopts);
+	free(me->map_mntopts);
 	if ((rc = automount_opts(&me->map_mntopts, mapopts)) != PARSE_OK)
 		return (rc);
 
@@ -1658,32 +1650,22 @@ free_mapent(me)
 	while (me) {
 		while (me->map_fs) {
 			mfs = me->map_fs;
-			if (mfs->mfs_host)
-				free(mfs->mfs_host);
-			if (mfs->mfs_dir)
-				free(mfs->mfs_dir);
-			if (mfs->mfs_args)
-				free(mfs->mfs_args);
+			free(mfs->mfs_host);
+			free(mfs->mfs_dir);
+			free(mfs->mfs_args);
 			if (mfs->mfs_nconf)
 				freenetconfigent(mfs->mfs_nconf);
 			me->map_fs = mfs->mfs_next;
 			free((char *)mfs);
 		}
 
-		if (me->map_root)
-			free(me->map_root);
-		if (me->map_mntpnt)
-			free(me->map_mntpnt);
-		if (me->map_mntopts)
-			free(me->map_mntopts);
-		if (me->map_fstype)
-			free(me->map_fstype);
-		if (me->map_mounter)
-			free(me->map_mounter);
-		if (me->map_fsw)
-			free(me->map_fsw);
-		if (me->map_fswq)
-			free(me->map_fswq);
+		free(me->map_root);
+		free(me->map_mntpnt);
+		free(me->map_mntopts);
+		free(me->map_fstype);
+		free(me->map_mounter);
+		free(me->map_fsw);
+		free(me->map_fswq);
 
 		m = me;
 		me = me->map_next;

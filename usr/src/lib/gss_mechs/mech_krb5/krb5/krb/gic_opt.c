@@ -278,10 +278,8 @@ free_gic_opt_ext_preauth_data(krb5_context context,
 	return;
 
     for (i = 0; i < opte->opt_private->num_preauth_data; i++) {
-	if (opte->opt_private->preauth_data[i].attr != NULL)
-	    free(opte->opt_private->preauth_data[i].attr);
-	if (opte->opt_private->preauth_data[i].value != NULL)
-	    free(opte->opt_private->preauth_data[i].value);
+	free(opte->opt_private->preauth_data[i].attr);
+	free(opte->opt_private->preauth_data[i].value);
     }
     free(opte->opt_private->preauth_data);
     opte->opt_private->preauth_data = NULL;
@@ -414,10 +412,8 @@ krb5_get_init_creds_opt_get_pa(krb5_context context,
     return 0;
 cleanup:
     for (i = 0; i < opte->opt_private->num_preauth_data; i++) {
-	if (p[i].attr != NULL)
-	    free(p[i].attr);
-	if (p[i].value != NULL)
-	    free(p[i].value);
+	free(p[i].attr);
+	free(p[i].value);
     }
     free(p);
     return ENOMEM;
@@ -438,10 +434,8 @@ krb5_get_init_creds_opt_free_pa(krb5_context context,
 	return;
 
     for (i = 0; i < num_preauth_data; i++) {
-	if (preauth_data[i].attr != NULL)
-	    free(preauth_data[i].attr);
-	if (preauth_data[i].value != NULL)
-	    free(preauth_data[i].value);
+	free(preauth_data[i].attr);
+	free(preauth_data[i].value);
     }
     free(preauth_data);
 }

@@ -362,8 +362,7 @@ cldap_parse(ad_disc_t ctx, ad_disc_cds_t *cds, BerElement *ber)
 out:
 	if (base)
 		free(base);
-	else if (cp)
-		free(cp);
+	else free(cp);
 	return (rc);
 }
 

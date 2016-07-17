@@ -269,8 +269,7 @@ Pstack_iter(struct ps_prochandle *P, const prgregset_t regs,
 		}
 	}
 
-	if (prevfp)
-		free(prevfp);
+	free(prevfp);
 
 	free_uclist(&ucl);
 	return (rv);

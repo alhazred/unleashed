@@ -5016,8 +5016,7 @@ read_enum_nvs(char *line, char *module_name)
 	return (enum_vals);
 fail:
 	free_str_val_entrys(enum_vals);
-	if (name != NULL)
-		free(name);
+	free(name);
 
 	/* if a parse error */
 
@@ -6123,10 +6122,8 @@ char *module_name)
 		free_str_val_entrys(enum_nvs);
 	return (IPQOS_CONF_SUCCESS);
 fail:
-	if (name != NULL)
-		free(name);
-	if (valst != NULL)
-		free(valst);
+	free(name);
+	free(valst);
 	if (enum_nvs != NULL)
 		free_str_val_entrys(enum_nvs);
 	return (IPQOS_CONF_ERR);
@@ -6441,10 +6438,8 @@ free_filter(ipqos_conf_filter_t *flt)
 	if (flt == NULL)
 		return;
 
-	if (flt->src_nd_name)
-		free(flt->src_nd_name);
-	if (flt->dst_nd_name)
-		free(flt->dst_nd_name);
+	free(flt->src_nd_name);
+	free(flt->dst_nd_name);
 	if (flt->nvlist) {
 		nvlist_free(flt->nvlist);
 	}
@@ -6663,8 +6658,7 @@ ipqos_conf_action_t *actions)
 
 		/* free action nvlist */
 
-		if (act->nvlist != NULL)
-			free(act->nvlist);
+		free(act->nvlist);
 
 		/* free filters */
 
@@ -7650,8 +7644,7 @@ fail:
 		free_filter(*filter);
 	if (hp)
 		freehostent(hp);
-	if (sl)
-		free(sl);
+	free(sl);
 
 	return (IPQOS_CONF_ERR);
 }
@@ -8439,8 +8432,7 @@ char *version_tag)
 fail:
 	ipqos_msg(MT_ERROR,
 	    gettext("Missing/Invalid config file %s.\n"), version_tag);
-	if (sp != NULL)
-		free(sp);
+	free(sp);
 	return (-1);
 }
 

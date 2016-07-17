@@ -1703,8 +1703,7 @@ out:
 	if (pg != NULL)
 		scf_pg_destroy(pg);
 
-	if (command != NULL)
-		free(command);
+	free(command);
 
 	return (status);
 }
@@ -1956,8 +1955,7 @@ wpa_instance_create(dladm_handle_t handle, datalink_id_t linkid, void *key)
 	}
 
 out:
-	if (command != NULL)
-		free(command);
+	free(command);
 
 	return (status);
 }

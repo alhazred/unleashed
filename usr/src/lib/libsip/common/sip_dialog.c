@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -149,8 +147,7 @@ sip_release_dialog_res(_sip_dialog_t *dialog)
 		msg_chain = dialog->sip_dlg_log[count].sip_msgs;
 		while (msg_chain != NULL) {
 			nmsg_chain = msg_chain->next;
-			if (msg_chain->sip_msg != NULL)
-				free(msg_chain->sip_msg);
+			free(msg_chain->sip_msg);
 			free(msg_chain);
 			msg_chain = nmsg_chain;
 		}
@@ -792,8 +789,7 @@ dia_err:
 	sip_release_dialog_res(dialog);
 	if (SIP_IS_TIMER_RUNNING(dialog->sip_dlg_timer))
 		SIP_CANCEL_TIMER(dialog->sip_dlg_timer);
-	if (tim_obj != NULL)
-		free(tim_obj);
+	free(tim_obj);
 	return (NULL);
 }
 
@@ -1608,8 +1604,7 @@ sip_copy_partial_dialog(_sip_dialog_t *dialog)
 		new_dlg->sip_dlg_rset.sip_str_ptr =
 		    malloc(dialog->sip_dlg_rset.sip_str_len + 1);
 		if (new_dlg->sip_dlg_rset.sip_str_ptr == NULL) {
-			if (new_dlg->sip_dlg_req_uri.sip_str_ptr != NULL)
-				free(new_dlg->sip_dlg_req_uri.sip_str_ptr);
+			free(new_dlg->sip_dlg_req_uri.sip_str_ptr);
 			free(new_dlg);
 			return (NULL);
 		}
@@ -1625,8 +1620,7 @@ sip_copy_partial_dialog(_sip_dialog_t *dialog)
 		    sip_dup_header(dialog->sip_dlg_route_set);
 		if (new_dlg->sip_dlg_route_set == NULL) {
 			free(new_dlg->sip_dlg_rset.sip_str_ptr);
-			if (new_dlg->sip_dlg_req_uri.sip_str_ptr != NULL)
-				free(new_dlg->sip_dlg_req_uri.sip_str_ptr);
+			free(new_dlg->sip_dlg_req_uri.sip_str_ptr);
 			free(new_dlg);
 			return (NULL);
 		}

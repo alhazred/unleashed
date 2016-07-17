@@ -164,7 +164,7 @@ int gssint_mecherrmap_init(void)
    element storage when destroying the collection.  */
 static int free_one(OM_uint32 i, struct mecherror value, void *p)
 {
-    if (value.mech.length && value.mech.elements)
+    if (value.mech.length)
         free(value.mech.elements);
     return 0;
 }

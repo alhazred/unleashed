@@ -30,7 +30,6 @@
  */
 
 /*LINTLIBRARY*/
-#pragma	ident	"%Z%%M%	%I%	%E% SMI"	/* SVr4.0 1.1 */
 
 #include <stdio.h>
 #include <string.h>
@@ -70,6 +69,5 @@ puthelp(FILE *fp, char *defmesg, char *help)
 	}
 	(void) puttext(fp, help, ckindent, ckwidth);
 	(void) fputc('\n', fp);
-	if (tmp)
-		free(tmp);
+	free(tmp);
 }

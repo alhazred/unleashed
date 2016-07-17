@@ -803,11 +803,9 @@ end:
 		    gettext("Error listing objects"));
 	}
 
-	if (serial.val != NULL)
-		free(serial.val);
+	free(serial.val);
 
-	if (tokencred.cred != NULL)
-		free(tokencred.cred);
+	free(tokencred.cred);
 
 	free_eku_list(ekulist);
 

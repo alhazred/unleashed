@@ -154,6 +154,5 @@ cryptodebug_init(const char *prefix)
 static void
 _cryptodebug_fini(void)
 {
-	if (_cryptodebug_prefix != NULL)
-		free(_cryptodebug_prefix);
+	free(_cryptodebug_prefix);
 }

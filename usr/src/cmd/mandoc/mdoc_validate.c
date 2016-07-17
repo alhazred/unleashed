@@ -2118,8 +2118,7 @@ post_dd(POST_ARGS)
 	struct mdoc_node *n;
 	char		 *datestr;
 
-	if (mdoc->meta.date)
-		free(mdoc->meta.date);
+	free(mdoc->meta.date);
 
 	n = mdoc->last;
 	if (NULL == n->child || '\0' == n->child->string[0]) {

@@ -1423,7 +1423,7 @@ smb_shr_cache_delent(char *sharename)
 static void
 smb_shr_cache_freent(HT_ITEM *item)
 {
-	if (item && item->hi_data)
+	if (item)
 		free(item->hi_data);
 }
 

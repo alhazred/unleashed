@@ -1341,8 +1341,7 @@ get_lhs_match(
 			free_mapping_item(&item[n]);
 		free(item);
 	}
-	if (fmt_string != NULL)
-		free(fmt_string);
+	free(fmt_string);
 	if (base != NULL)
 		free_mapping_format(base);
 
@@ -1409,8 +1408,7 @@ get_lhs_paren_item(
 	}
 	for (i = 0; i < n; i++)
 		free_mapping_element(&e[i]);
-	if (e != NULL)
-		free(e);
+	free(e);
 	return (NULL);
 }
 
@@ -1559,8 +1557,7 @@ get_rhs(
 		if (p_error == no_parse_error)
 			return (s);
 	}
-	if (str)
-		free(str);
+	free(str);
 	if (fmt != NULL)
 		free_mapping_format(fmt);
 	if (e != NULL)
@@ -2414,10 +2411,8 @@ get_search_triple(
 		search_base = NULL;
 	}
 
-	if (search_base != NULL)
-		free(search_base);
-	if (filter != NULL)
-		free(filter);
+	free(search_base);
+	free(filter);
 	if (element != NULL) {
 		free_mapping_element(element);
 		free(element);
@@ -2658,12 +2653,10 @@ parse_index(const char *s, const char *end_s, __nis_index_t *index)
 		}
 	}
 	if (p_error != no_parse_error) {
-		if (name_str != NULL)
-			free(name_str);
+		free(name_str);
 		if (v != NULL)
 			free_mapping_format(v);
-		if (fmt_string != NULL)
-			free(fmt_string);
+		free(fmt_string);
 		if (index != NULL)
 			free_index(index);
 	}

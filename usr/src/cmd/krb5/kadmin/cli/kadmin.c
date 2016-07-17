@@ -581,8 +581,7 @@ char *kadmin_startup(argc, argv)
     }
 
     /* Solaris kerberos: fix memory leak */
-    if (svcname)
-	free(svcname);
+    free(svcname);
 
     return query;
 }
@@ -792,9 +791,8 @@ void kadmin_cpw(argc, argv)
     if (retval) {
 	com_err("change_password", retval, 
 		gettext("while parsing principal name"));
-	if (ks_tuple != NULL)
-	    free(ks_tuple);
-	if (db_args) free(db_args);
+	free(ks_tuple);
+	free(db_args);
 	goto usage;
     }
     retval = krb5_unparse_name(context, princ, &canon);
@@ -802,17 +800,15 @@ void kadmin_cpw(argc, argv)
 		com_err("change_password", retval,
 			gettext("while canonicalizing principal"));
 	krb5_free_principal(context, princ);
-	if (ks_tuple != NULL)
-	    free(ks_tuple);
-	if (db_args) free(db_args);
+	free(ks_tuple);
+	free(db_args);
 	return;
     }
     if (pwarg != NULL) {
 	if (keepold || ks_tuple != NULL) {
 	    retval = kadm5_chpass_principal_3(handle, princ, keepold,
 					      n_ks_tuple, ks_tuple, pwarg);
-	    if (ks_tuple != NULL)
-		free(ks_tuple);
+	    free(ks_tuple);
 	} else {
 	    retval = kadm5_chpass_principal(handle, princ, pwarg);
 	}
@@ -822,20 +818,19 @@ void kadmin_cpw(argc, argv)
 				gettext("while changing password for \"%s\"."),
 				canon);
 	    free(canon);
-	    if (db_args) free(db_args);
+	    free(db_args);
 	    return;
 	}
 		printf(gettext("Password for \"%s\" changed.\n"), canon);
 	free(canon);
-	if (db_args) free(db_args);
+	free(db_args);
 	return;
     } else if (randkey) {
 	if (keepold || ks_tuple != NULL || local_kadmin) {
 	    retval = kadm5_randkey_principal_3(handle, princ, keepold,
 					       n_ks_tuple, ks_tuple,
 					       NULL, NULL);
-	    if (ks_tuple != NULL)
-		free(ks_tuple);
+	    free(ks_tuple);
 	} else {
 	    retval = kadm5_randkey_principal(handle, princ, NULL, NULL);
 	}
@@ -845,12 +840,12 @@ void kadmin_cpw(argc, argv)
 				gettext("while randomizing key for \"%s\"."),
 				canon);
 	    free(canon);
-	    if (db_args) free(db_args);
+	    free(db_args);
 	    return;
 	}
 	printf(gettext("Key for \"%s\" randomized.\n"), canon);
 	free(canon);
-	if (db_args) free(db_args);
+	free(db_args);
 	return;
     } else if (argc == 1) {
 	unsigned int i = sizeof (newpw) - 1;
@@ -868,18 +863,16 @@ void kadmin_cpw(argc, argv)
 				gettext("while reading password for \"%s\"."),
 				canon);
 	    free(canon);
-	    if (ks_tuple != NULL)
-		free(ks_tuple);
+	    free(ks_tuple);
 	    krb5_free_principal(context, princ);
-	    if (db_args) free(db_args);
+	    free(db_args);
 	    return;
 	}
 	if (keepold || ks_tuple != NULL) {
 	    retval = kadm5_chpass_principal_3(handle, princ, keepold,
 					      n_ks_tuple, ks_tuple,
 					      newpw);
-	    if (ks_tuple != NULL)
-		free(ks_tuple);
+	    free(ks_tuple);
 	} else {
 	    retval = kadm5_chpass_principal(handle, princ, newpw);
 	}
@@ -890,19 +883,18 @@ void kadmin_cpw(argc, argv)
 				gettext("while changing password for \"%s\"."),
 				canon);
 	    free(canon);
-	    if (db_args) free(db_args);
+	    free(db_args);
 	    return;
 	}
 		printf(gettext("Password for \"%s\" changed.\n"), canon);
 	free(canon);
-	if (db_args) free(db_args);
+	free(db_args);
 	return;
     } else {
 	free(canon);
 	krb5_free_principal(context, princ);
     usage:
-	if (ks_tuple != NULL)
-	    free(ks_tuple);
+	free(ks_tuple);
 		fprintf(stderr, "%s: change_password [-randkey] [-keepold] "
 			"[-e keysaltlist] [-pw password] %s\n",
 			gettext("usage"), gettext("principal"));
@@ -922,8 +914,7 @@ kadmin_free_tl_data(kadm5_principal_ent_t princ)
 
     for (i = 0; tl_data && (i < n_tl_data); i++) {
 	krb5_tl_data *next = tl_data->tl_data_next;
-	if (tl_data->tl_data_contents)
-	    free(tl_data->tl_data_contents);
+	free(tl_data->tl_data_contents);
 	free(tl_data);
 	tl_data = next;
     }
@@ -1237,8 +1228,7 @@ void kadmin_addprinc(argc, argv)
 	com_err("add_principal",
 		retval, gettext("while canonicalizing principal"));
 	krb5_free_principal(context, princ.principal);
-	if (ks_tuple != NULL)
-	    free(ks_tuple);
+	free(ks_tuple);
 	kadmin_free_tl_data(&princ);
 	return;
     }
@@ -1316,8 +1306,7 @@ void kadmin_addprinc(argc, argv)
 		gettext("while creating \"%s\"."), canon);
 	krb5_free_principal(context, princ.principal);
 	free(canon);
-	if (ks_tuple != NULL)
-	    free(ks_tuple);
+	free(ks_tuple);
 	kadmin_free_tl_data(&princ);
 	return;
     }
@@ -1336,8 +1325,7 @@ void kadmin_addprinc(argc, argv)
 		gettext("while randomizing key for \"%s\"."), canon);
 	    krb5_free_principal(context, princ.principal);
 	    free(canon);
-	    if (ks_tuple != NULL)
-		free(ks_tuple);
+	    free(ks_tuple);
 	    kadmin_free_tl_data(&princ);
 	    return;
 	}
@@ -1383,16 +1371,14 @@ void kadmin_addprinc(argc, argv)
 			"settings for \"%s\"."), canon);
 	    krb5_free_principal(context, princ.principal);
 	    free(canon);
-	    if (ks_tuple != NULL)
-		free(ks_tuple);
+	    free(ks_tuple);
 	    kadmin_free_tl_data(&princ);
 	    return;
 	}
     }
     krb5_free_principal(context, princ.principal);
 	printf(gettext("Principal \"%s\" created.\n"), canon);
-    if (ks_tuple != NULL)
-	free(ks_tuple);
+    free(ks_tuple);
     free(canon);
     kadmin_free_tl_data(&princ);
 

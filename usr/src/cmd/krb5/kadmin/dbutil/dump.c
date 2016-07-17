@@ -2073,10 +2073,8 @@ process_k5beta_record(fname, kcontext, filep, verbose, linenop)
 	}
 
 	krb5_db_free_principal(kcontext, &dbent, 1);
-	if (mod_name)
-	    free(mod_name);
-	if (name)
-	    free(name);
+	free(mod_name);
+	free(name);
     }
     else {
 	if (nmatched != EOF)
@@ -2086,10 +2084,8 @@ process_k5beta_record(fname, kcontext, filep, verbose, linenop)
 	    retval = -1;
     }
 
-    if (shortcopy1)
-	free(shortcopy1);
-    if (shortcopy2)
-	free(shortcopy2);
+    free(shortcopy1);
+    free(shortcopy2);
 
     return(retval);
 }
@@ -2379,12 +2375,9 @@ process_k5beta6_record(fname, kcontext, filep, verbose, linenop)
 				gettext(rhead_err_fmt), fname, *linenop);
 	}
 
-	if (op)
-	    free(op);
-	if (kp)
-	    free(kp);
-	if (name)
-	    free(name);
+	free(op);
+	free(kp);
+	free(name);
 	krb5_db_free_principal(kcontext, &dbentry, 1);
     }
     else {
@@ -2961,7 +2954,6 @@ error:
 	 fclose(f);
     }
 
-    if (dbname_tmp)
-	 free(dbname_tmp);
+    free(dbname_tmp);
     krb5_free_context(kcontext);
 }

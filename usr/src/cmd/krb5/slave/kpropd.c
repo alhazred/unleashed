@@ -1126,19 +1126,15 @@ error:
 	syslog(LOG_ERR, gettext("kpropd: ERROR returned by master KDC,"
 			" bailing.\n"));
 done:
-	if (poll_time)
-		free(poll_time);
-	if(iprop_svc_princstr)
-		free(iprop_svc_princstr);
-	if (master_svc_princstr)
-		free(master_svc_princstr);
+	free(poll_time);
+	free(iprop_svc_princstr);
+	free(master_svc_princstr);
 	if (retval = krb5_cc_close(kpropd_context, cc)) {
 		com_err(progname, retval,
 			gettext("while closing default ccache"));
 		exit(1);
 	}
-	if (def_realm)
-		free(def_realm);
+	free(def_realm);
 	if (server_handle)
 		kadm5_destroy((void *)server_handle);
 	if (kpropd_context)
@@ -1194,8 +1190,7 @@ int convert_polltime(char *pollstr) {
 		polltime = atoi(tokenptr) * 3600;
 	}
 
-	if (tokenptr != NULL)
-		free(tokenptr);
+	free(tokenptr);
 	/*
 	 * If we have a bogus pollstr value, set polltime to the
 	 * default of 2 mts (120 seconds).

@@ -730,8 +730,7 @@ kerberos5_is(AuthInfo *ap, uchar_t *data, int cnt)
 		}
 		auth_finished(ap, AUTH_USER);
 
-		if (name != NULL)
-			free(name);
+		free(name);
 		(void) krb5_auth_con_getremotesubkey(telnet_context,
 		    auth_context, &newkey);
 		if (session_key != NULL) {
@@ -830,11 +829,9 @@ kerberos5_is(AuthInfo *ap, uchar_t *data, int cnt)
 		} else
 			reply_to_client(ap, KRB_FORWARD_ACCEPT, (void *) 0, 0);
 
-		if (rsaddr.contents != NULL)
-			free(rsaddr.contents);
+		free(rsaddr.contents);
 
-		if (rsport.contents != NULL)
-			free(rsport.contents);
+		free(rsport.contents);
 
 		if (auth_debug)
 			(void) fprintf(stderr, "\tForwarded "
@@ -2813,15 +2810,13 @@ doit(int f, struct sockaddr_storage *who)
 		(void) memcpy(portbuf, (const void *)&sin->sin_port,
 			    sizeof (sin->sin_port));
 
-		if (rsaddr.contents != NULL)
-			free(rsaddr.contents);
+		free(rsaddr.contents);
 
 		rsaddr.contents = (krb5_octet *)addrbuf;
 		rsaddr.length = wholen;
 		rsaddr.addrtype = ADDRTYPE_INET;
 
-		if (rsport.contents != NULL)
-			free(rsport.contents);
+		free(rsport.contents);
 
 		rsport.contents = (krb5_octet *)portbuf;
 		rsport.length = sizeof (sin->sin_port);
@@ -2854,8 +2849,7 @@ doit(int f, struct sockaddr_storage *who)
 		 * If we already used rsaddr.contents, free the previous
 		 * buffer.
 		 */
-		if (rsaddr.contents != NULL)
-			free(rsaddr.contents);
+		free(rsaddr.contents);
 
 		rsaddr.contents = (krb5_octet *)addrbuf;
 		rsaddr.length = sizeof (ipv4_addr);
@@ -2864,8 +2858,7 @@ doit(int f, struct sockaddr_storage *who)
 		(void) memcpy((void *) portbuf, (const void *)&sin6->sin6_port,
 			    sizeof (sin6->sin6_port));
 
-		if (rsport.contents != NULL)
-			free(rsport.contents);
+		free(rsport.contents);
 
 		rsport.contents = (krb5_octet *)portbuf;
 		rsport.length = sizeof (sin6->sin6_port);

@@ -482,10 +482,8 @@ static errcode_t write_data_to_file(prf_data_t data, const char *outfile,
 	retval = 0;
 
 errout:
-	if (new_file)
-		free(new_file);
-	if (old_file)
-		free(old_file);
+	free(new_file);
+	free(old_file);
 	return retval;
 }
 
@@ -595,8 +593,7 @@ static void profile_free_file_data(prf_data_t data)
     }
     if (data->root)
 	profile_free_node(data->root);
-    if (data->comment)
-	free(data->comment);
+    free(data->comment);
     data->magic = 0;
     k5_mutex_destroy(&data->lock);
     free(data);

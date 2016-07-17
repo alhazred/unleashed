@@ -2195,8 +2195,7 @@ reap_kids(waitfor)
 	    }
 	    if ((chp != NULL) && (chp->done != NULL))
 		(*chp->done)(chp->arg, status);
-	    if (chp != NULL)
-		free(chp);
+	    free(chp);
 	}
     }
     return (0);

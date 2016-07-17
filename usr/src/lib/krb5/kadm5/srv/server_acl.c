@@ -256,15 +256,13 @@ kadm5int_acl_parse_line(lp)
 			    acle->ae_name, acle->ae_op_allowed));
 		}
 		else {
-		    if (acle->ae_target)
-			free(acle->ae_target);
+		    free(acle->ae_target);
 		    free(acle);
 		    acle = (aent_t *) NULL;
 		}
 	    }
 	    else {
-		if (acle->ae_target)
-		    free(acle->ae_target);
+		free(acle->ae_target);
 		free(acle);
 		acle = (aent_t *) NULL;
 	    }
@@ -378,11 +376,9 @@ kadm5int_acl_parse_restrictions(s, rpp)
 	    }
 	}
     }
-    if (sp)
-	free(sp);
+    free(sp);
     if (*rpp && code) {
-	if ((*rpp)->policy)
-	    free((*rpp)->policy);
+	free((*rpp)->policy);
 	free(*rpp);
 	*rpp = (restriction_t *) NULL;
     }
@@ -477,19 +473,15 @@ kadm5int_acl_free_entries()
 
     DPRINT(DEBUG_CALLS, acl_debug_level, ("* kadm5int_acl_free_entries()\n"));
     for (ap=acl_list_head; ap; ap = np) {
-	if (ap->ae_name)
-	    free(ap->ae_name);
+	free(ap->ae_name);
 	if (ap->ae_principal)
 	    krb5_free_principal((krb5_context) NULL, ap->ae_principal);
-	if (ap->ae_target)
-	    free(ap->ae_target);
+	free(ap->ae_target);
 	if (ap->ae_target_princ)
 	    krb5_free_principal((krb5_context) NULL, ap->ae_target_princ);
-	if (ap->ae_restriction_string)
-	    free(ap->ae_restriction_string);
+	free(ap->ae_restriction_string);
 	if (ap->ae_restrictions) {
-	    if (ap->ae_restrictions->policy)
-		free(ap->ae_restrictions->policy);
+	    free(ap->ae_restrictions->policy);
 	    free(ap->ae_restrictions);
 	}
 	np = ap->ae_next;

@@ -379,12 +379,10 @@ int verify_pam_pw(char *userdata, char *pwd) {
 	if (err != PAM_SUCCESS) {
 		syslog(LOG_ERR, "verify_pam_pw: pam_start() failed, %s\n",
 				pam_strerror(pamh, err));
-		if (user)
-			free(user);
+		free(user);
 		return (0);
 	}
-	if (user)
-		free(user);
+	free(user);
 
 	err = pam_set_item(pamh, PAM_AUTHTOK, (void *)pwd);
 	if (err != PAM_SUCCESS) {
@@ -595,12 +593,9 @@ error:
     if (name)
     	gss_release_name(&minor_stat, &name);
     free_server_handle(handle);
-    if (prime_arg)
-    	free(prime_arg);
-    if (client_name)
-    	free(client_name);
-    if (service_name)
-    	free(service_name);
+    free(prime_arg);
+    free(client_name);
+    free(service_name);
     return (&ret);
 }
 
@@ -696,12 +691,9 @@ error:
     if (name)
     	gss_release_name(&minor_stat, &name);
     free_server_handle(handle);
-    if (client_name)
-    	free(client_name);
-    if (service_name)
-    	free(service_name);
-    if (prime_arg)
-    	free(prime_arg);
+    free(client_name);
+    free(service_name);
+    free(prime_arg);
     return &ret;
 }
 
@@ -771,13 +763,10 @@ delete_principal_2_svc(dprinc_arg *arg, struct svc_req *rqstp)
 error:
     if (name)
     	gss_release_name(&min_stat, &name);
-    if (prime_arg)
-    	free(prime_arg);
+    free(prime_arg);
     free_server_handle(handle);
-    if (client_name)
-    	free(client_name);
-    if (service_name)
-    	free(service_name);
+    free(client_name);
+    free(service_name);
     return &ret;
 }
 
@@ -847,12 +836,9 @@ error:
     if (name)
     	gss_release_name(&min_stat, &name);
     free_server_handle(handle);
-    if (prime_arg)
-    	free(prime_arg);
-    if (client_name)
-    	free(client_name);
-    if (service_name)
-    	free(service_name);
+    free(prime_arg);
+    free(client_name);
+    free(service_name);
     return &ret;
 }
 
@@ -963,14 +949,10 @@ error:
     if (name)
     	gss_release_name(&min_stat, &name);
     free_server_handle(handle);
-    if (prime_arg1)
-    	free(prime_arg1);
-    if (prime_arg2)
-    	free(prime_arg2);
-    if (client_name)
-    	free(client_name);
-    if (service_name)
-    	free(service_name);
+    free(prime_arg1);
+    free(prime_arg2);
+    free(client_name);
+    free(service_name);
     return &ret;
 }
 
@@ -1056,12 +1038,9 @@ error:
 	if (name)
     	gss_release_name(&min_stat, &name);
     free_server_handle(handle);
-    if (prime_arg)
-    	free(prime_arg);
-    if (client_name)
-    	free(client_name);
-    if (service_name)
-    	free(service_name);
+    free(prime_arg);
+    free(client_name);
+    free(service_name);
     return &ret;
 }
 
@@ -1133,10 +1112,8 @@ error:
 	if (name)
 		gss_release_name(&min_stat, &name);
 	free_server_handle(handle);
-	if (client_name)
-		free(client_name);
-	if (service_name)
-		free(service_name);
+	free(client_name);
+	free(service_name);
 	return (&ret);
 }
 
@@ -1210,12 +1187,9 @@ error:
 	if (name)
 		gss_release_name(&min_stat, &name);
 	free_server_handle(handle);
-	if (prime_arg)
-		free(prime_arg);
-	if (client_name)
-		free(client_name);
-	if (service_name)
-		free(service_name);
+	free(prime_arg);
+	free(client_name);
+	free(service_name);
 	return (&ret);
 }
 
@@ -1290,12 +1264,9 @@ error:
     if (name)
     	gss_release_name(&min_stat, &name);
     free_server_handle(handle);
-    if (client_name)
-    	free(client_name);
-    if (service_name)
-    	free(service_name);
-    if (prime_arg)
-    	free(prime_arg);
+    free(client_name);
+    free(service_name);
+    free(prime_arg);
     return (&ret);
 }
 
@@ -1362,12 +1333,9 @@ error:
     if (name)
 	gss_release_name(&min_stat, &name);
     free_server_handle(handle);
-    if (client_name)
-	free(client_name);
-    if (service_name)
-	free(service_name);
-    if (prime_arg)
-	free(prime_arg);
+    free(client_name);
+    free(service_name);
+    free(prime_arg);
     return (&ret);
 }
 #endif
@@ -1433,12 +1401,9 @@ error:
     if (name)
 	gss_release_name(&min_stat, &name);
     free_server_handle(handle);
-    if (client_name)
-    	free(client_name);
-    if (service_name)
-    	free(service_name);
-    if (prime_arg)
-    	free(prime_arg);
+    free(client_name);
+    free(service_name);
+    free(prime_arg);
     return (&ret);
 }
 
@@ -1507,12 +1472,9 @@ error:
     if (name)
 	gss_release_name(&min_stat, &name);
     free_server_handle(handle);
-    if (client_name)
-	free(client_name);
-    if (service_name)
-    	free(service_name);
-    if (prime_arg)
-    	free(prime_arg);
+    free(client_name);
+    free(service_name);
+    free(prime_arg);
     return &ret;
 }
 
@@ -1599,12 +1561,9 @@ error:
 	if (name)
 		gss_release_name(&min_stat, &name);
 	free_server_handle(handle);
-	if (prime_arg)
-    	free(prime_arg);
-    if (client_name)
-    	free(client_name);
-    if (service_name)
-    	free(service_name);
+	free(prime_arg);
+    free(client_name);
+    free(service_name);
     return &ret;
 }
 
@@ -1693,12 +1652,9 @@ error:
     if (name)
 	gss_release_name(&min_stat, &name);
     free_server_handle(handle);
-    if (client_name)
-	free(client_name);
-    if (service_name)
-	free(service_name);
-    if (prime_arg)
-	free(prime_arg);
+    free(client_name);
+    free(service_name);
+    free(prime_arg);
     return (&ret);
 }
 
@@ -1768,10 +1724,8 @@ error:
 	if (name)
 		gss_release_name(&min_stat, &name);
     free_server_handle(handle);
-    if (client_name)
-    	free(client_name);
-    if (service_name)
-    	free(service_name);
+    free(client_name);
+    free(service_name);
     return &ret;
 }
 
@@ -1838,9 +1792,7 @@ error:
 	if (name)
 		gss_release_name(&min_stat, &name);
     free_server_handle(handle);
-    if (client_name)
     free(client_name);
-    if (service_name)
     free(service_name);
     return &ret;
 }
@@ -1909,10 +1861,8 @@ error:
 	if (name)
 		gss_release_name(&min_stat, &name);
 	free_server_handle(handle);
-	if (client_name)
-		free(client_name);
-	if (service_name)
-		free(service_name);
+	free(client_name);
+	free(service_name);
 	return (&ret);
 }
 
@@ -2013,10 +1963,8 @@ error:
 	if (name)
 		gss_release_name(&min_stat, &name);
 	free_server_handle(handle);
-	if (client_name)
-		free(client_name);
-	if (service_name)
-		free(service_name);
+	free(client_name);
+	free(service_name);
 	return (&ret);
 
 }
@@ -2088,10 +2036,8 @@ error:
 	if (name)
 		gss_release_name(&min_stat, &name);
 	free_server_handle(handle);
-	if (client_name)
-		free(client_name);
-	if (service_name)
-		free(service_name);
+	free(client_name);
+	free(service_name);
 	return (&ret);
 }
 
@@ -2142,10 +2088,8 @@ error:
 	if (name)
 		gss_release_name(&min_stat, &name);
 	free_server_handle(handle);
-	if (client_name)
-		free(client_name);
-	if (service_name)
-		free(service_name);
+	free(client_name);
+	free(service_name);
 	return (&ret);
 }
 

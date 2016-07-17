@@ -328,14 +328,7 @@ kernel_cleanup_extra_attr(kernel_object_t *object_p)
 	extra_attr = object_p->extra_attrlistp;
 	while (extra_attr) {
 		tmp = extra_attr->next;
-		if (extra_attr->attr.pValue)
-			/*
-			 * All extra attributes in the extra attribute
-			 * list have pValue points to the value of the
-			 * attribute (with simple byte array type).
-			 * Free the storage for the value of the attribute.
-			 */
-			free(extra_attr->attr.pValue);
+		free(extra_attr->attr.pValue);
 
 		/* Free the storage for the attribute_info struct. */
 		free(extra_attr);
@@ -538,9 +531,7 @@ set_extra_attr_to_object(kernel_object_t *object_p, CK_ATTRIBUTE_TYPE type,
 	    (template->ulValueLen > 0)) {
 		if (template->ulValueLen > extra_attr->attr.ulValueLen) {
 			/* The old buffer is too small to hold the new value. */
-			if (extra_attr->attr.pValue != NULL)
-				/* Free storage for the old attribute value. */
-				free(extra_attr->attr.pValue);
+			free(extra_attr->attr.pValue);
 
 			/* Allocate storage for the new attribute value. */
 			extra_attr->attr.pValue = malloc(template->ulValueLen);

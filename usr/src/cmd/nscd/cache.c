@@ -787,10 +787,8 @@ make_cache(enum db_type dbtype, int dbop, char *name,
 	return (nscdb);
 
 out:
-	if (nscdb->htable)
-		free(nscdb->htable);
-	if (nscdb)
-		free(nscdb);
+	free(nscdb->htable);
+	free(nscdb);
 	return (NULL);
 }
 
@@ -1964,8 +1962,7 @@ do_update(nsc_lookup_args_t *in) {
 	phdr->data_len = phdr->pbufsiz - phdr->data_off;
 
 	(void) lookup_int(in, UPDATEBIT);
-	if (in->buffer)
-		free(in->buffer);
+	free(in->buffer);
 	free(in);
 }
 

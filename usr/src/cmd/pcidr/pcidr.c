@@ -647,7 +647,6 @@ main(int argc, char **argv)
 	if (rv != 0) {
 		dprint(DWARN, "plugin %s failed\n", plugin_path);
 	}
-	if (plugin_path != NULL)
-		free(plugin_path);
+	free(plugin_path);
 	return (rv);
 }

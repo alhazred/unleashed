@@ -163,8 +163,7 @@ free_rule_component(krb5_context context,
 	return 0;
 
     if (rc->kwval_type == kwvaltype_regexp) {
-	if (rc->regsrc)
-	    free(rc->regsrc);
+	free(rc->regsrc);
 	regfree(&rc->regexp);
     }
     free(rc);
@@ -376,8 +375,7 @@ parse_rule_component(krb5_context context,
     *ret_rule = rc;
     retval = 0;
 out:
-    if (value != NULL)
-	free(value);
+    free(value);
     if (retval && rc != NULL)
 	(void) free_rule_component(context, rc);
     pkiDebug("%s: returning %d\n", __FUNCTION__, retval);

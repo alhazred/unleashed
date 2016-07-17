@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/types.h>
 #include <sys/sysmacros.h>
 #include <strings.h>
@@ -111,10 +109,8 @@ dt_strtab_destroy(dt_strtab_t *sp)
 	for (i = 0; i < sp->str_nbufs; i++)
 		free(sp->str_bufs[i]);
 
-	if (sp->str_hash != NULL)
-		free(sp->str_hash);
-	if (sp->str_bufs != NULL)
-		free(sp->str_bufs);
+	free(sp->str_hash);
+	free(sp->str_bufs);
 
 	free(sp);
 }

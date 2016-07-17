@@ -688,8 +688,7 @@ check_for_restarter(scf_instance_t *inst, const char *restarter)
 
 out:
 	free(fmri_buf);
-	if (fmri_buf_canonified)
-		free(fmri_buf_canonified);
+	free(fmri_buf_canonified);
 	return (ret);
 }
 
@@ -1039,8 +1038,7 @@ sprint_ctid(char **buf, scf_walkinfo_t *wip)
 	else
 		(void) snprintf(newbuf, newsize, "%s%*s ",
 		    *buf ? *buf : "", CTID_COLUMN_WIDTH, "-");
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1127,8 +1125,7 @@ sprint_desc(char **buf, scf_walkinfo_t *wip)
 	newbuf = safe_malloc(newsize);
 	(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 	    DESC_COLUMN_WIDTH, common_name_buf);
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1244,8 +1241,7 @@ sprint_state(char **buf, scf_walkinfo_t *wip)
 	(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 	    MAX_SCF_STATE_STRING_SZ + 1, state_name);
 
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1283,8 +1279,7 @@ sprint_nstate(char **buf, scf_walkinfo_t *wip)
 	newbuf = safe_malloc(newsize);
 	(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 	    MAX_SCF_STATE_STRING_SZ - 1, next_state_name);
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1318,8 +1313,7 @@ sprint_s(char **buf, scf_walkinfo_t *wip)
 	tmp[2] = ' ';
 	(void) snprintf(newbuf, newsize, "%s%-*s", *buf ? *buf : "",
 	    3, tmp);
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1344,8 +1338,7 @@ sprint_n(char **buf, scf_walkinfo_t *wip)
 
 	(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 	    2, tmp);
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1377,8 +1370,7 @@ sprint_sn(char **buf, scf_walkinfo_t *wip)
 	tmp[2] = ' ';
 	(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 	    3, tmp);
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1431,8 +1423,7 @@ sprint_sta(char **buf, scf_walkinfo_t *wip)
 		(void) strcat(sta, "*");
 
 	(void) snprintf(newbuf, newsize, "%s%-4s ", *buf ? *buf : "", sta);
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1455,8 +1446,7 @@ sprint_nsta(char **buf, scf_walkinfo_t *wip)
 	else
 		(void) snprintf(newbuf, newsize, "%s%-4s ", *buf ? *buf : "",
 		    state_abbrev(state_name));
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1491,8 +1481,7 @@ sprint_fmri(char **buf, scf_walkinfo_t *wip)
 	(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 	    FMRI_COLUMN_WIDTH, fmri_buf);
 	free(fmri_buf);
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1524,8 +1513,7 @@ sprint_scope(char **buf, scf_walkinfo_t *wip)
 
 	(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 	    COMPONENT_COLUMN_WIDTH, scope_buf);
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 	free(scope_buf);
 }
@@ -1569,8 +1557,7 @@ sprint_service(char **buf, scf_walkinfo_t *wip)
 	(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 	    COMPONENT_COLUMN_WIDTH, svc_buf);
 	free(svc_buf);
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1605,8 +1592,7 @@ sprint_instance(char **buf, scf_walkinfo_t *wip)
 
 	(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 	    COMPONENT_COLUMN_WIDTH, tmp);
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 	free(tmp);
 }
@@ -1683,8 +1669,7 @@ sprint_stime(char **buf, scf_walkinfo_t *wip)
 		(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 		    STIME_COLUMN_WIDTH + 1, st_buf);
 	}
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 
@@ -1751,8 +1736,7 @@ sprint_zone(char **buf, scf_walkinfo_t *wip)
 	(void) snprintf(newbuf, newsize, "%s%-*s ", *buf ? *buf : "",
 	    ZONE_COLUMN_WIDTH, zonename);
 
-	if (*buf)
-		free(*buf);
+	free(*buf);
 	*buf = newbuf;
 }
 

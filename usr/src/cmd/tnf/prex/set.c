@@ -23,8 +23,6 @@
  * Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Includes
  */
@@ -97,8 +95,7 @@ set_destroy(set_t * set_p)
 	if (!queue_isempty(&set_p->qn))
 		(void) queue_remove(&set_p->qn);
 
-	if (set_p->setname_p)
-		free(set_p->setname_p);
+	free(set_p->setname_p);
 
 	/* destroy the exprlist */
 	expr_destroy(set_p->exprlist_p);

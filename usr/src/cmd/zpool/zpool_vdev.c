@@ -656,8 +656,7 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 				 */
 				if (!dontreport && type != NULL &&
 				    strcmp(type, childtype) != 0) {
-					if (ret != NULL)
-						free(ret);
+					free(ret);
 					ret = NULL;
 					if (fatal)
 						vdev_error(gettext(
@@ -709,8 +708,7 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 				    (vdev_size != -1ULL &&
 				    (labs(size - vdev_size) >
 				    ZPOOL_FUZZ))) {
-					if (ret != NULL)
-						free(ret);
+					free(ret);
 					ret = NULL;
 					if (fatal)
 						vdev_error(gettext(
@@ -734,8 +732,7 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 		 */
 		if (lastrep.zprl_type != NULL) {
 			if (strcmp(lastrep.zprl_type, rep.zprl_type) != 0) {
-				if (ret != NULL)
-					free(ret);
+				free(ret);
 				ret = NULL;
 				if (fatal)
 					vdev_error(gettext(
@@ -746,8 +743,7 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 				else
 					return (NULL);
 			} else if (lastrep.zprl_parity != rep.zprl_parity) {
-				if (ret)
-					free(ret);
+				free(ret);
 				ret = NULL;
 				if (fatal)
 					vdev_error(gettext(
@@ -760,8 +756,7 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 				else
 					return (NULL);
 			} else if (lastrep.zprl_children != rep.zprl_children) {
-				if (ret)
-					free(ret);
+				free(ret);
 				ret = NULL;
 				if (fatal)
 					vdev_error(gettext(
@@ -866,8 +861,7 @@ check_replication(nvlist_t *config, nvlist_t *newroot)
 	}
 
 	free(new);
-	if (current != NULL)
-		free(current);
+	free(current);
 
 	return (ret);
 }
@@ -1352,10 +1346,8 @@ construct_spec(int argc, char **argv)
 		nvlist_free(spares[t]);
 	for (t = 0; t < nl2cache; t++)
 		nvlist_free(l2cache[t]);
-	if (spares)
-		free(spares);
-	if (l2cache)
-		free(l2cache);
+	free(spares);
+	free(l2cache);
 	free(top);
 
 	return (nvroot);

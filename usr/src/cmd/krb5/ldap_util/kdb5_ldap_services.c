@@ -1022,8 +1022,7 @@ cleanup:
     /* Clean-up structure */
     krb5_ldap_free_service(util_context, srvparams);
 
-    if (servicedn)
-	free(servicedn);
+    free(servicedn);
 
     if (list) {
 	free(list);
@@ -1147,8 +1146,7 @@ rem_service_entry_from_file(argc, argv, file_name, service_object)
 
 cleanup:
 
-    if (tmp_file)
-	free(tmp_file);
+    free(tmp_file);
 
     return st;
 }
@@ -1337,8 +1335,7 @@ cleanup:
 	krb5_ldap_free_service(util_context, lserparams);
     }
 
-    if (servicedn)
-	free(servicedn);
+    free(servicedn);
 
     if (print_usage) {
 	db_usage(VIEW_SERVICE);
@@ -1406,8 +1403,7 @@ cleanup:
 	free (list);
     }
 
-    if (basedn)
-	free (basedn);
+    free(basedn);
 
     if (print_usage) {
 	db_usage(LIST_SERVICE);
@@ -1883,14 +1879,11 @@ cleanup:
     if (db_init_local)
 	krb5_ldap_close(util_context);
 
-    if (service_object)
-	free(service_object);
+    free(service_object);
 
-    if (file_name)
-	free(file_name);
+    free(file_name);
 
-    if (passwd)
-	free(passwd);
+    free(passwd);
 
     if (encrypted_passwd.value) {
 	memset(encrypted_passwd.value, 0, encrypted_passwd.len);
@@ -1900,8 +1893,7 @@ cleanup:
     if (pfile)
 	fclose(pfile);
 
-    if (tmp_file)
-	free(tmp_file);
+    free(tmp_file);
 
     if (print_usage)
 	db_usage(SET_SRV_PW);
@@ -2194,14 +2186,11 @@ cleanup:
 	free(hexpasswd.data);
     }
 
-    if (service_object)
-	free(service_object);
+    free(service_object);
 
-    if (file_name)
-	free(file_name);
+    free(file_name);
 
-    if (tmp_file)
-	free(tmp_file);
+    free(tmp_file);
 
     if (print_usage)
 	usage();

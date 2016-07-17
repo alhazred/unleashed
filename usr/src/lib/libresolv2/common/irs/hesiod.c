@@ -108,8 +108,7 @@ hesiod_init(void **context) {
 	 */
 	if ((cp = getenv("HES_DOMAIN")) != NULL) {
 		size_t RHSlen = strlen(cp) + 2;
-		if (ctx->RHS)
-			free(ctx->RHS);
+		free(ctx->RHS);
 		ctx->RHS = malloc(RHSlen);
 		if (!ctx->RHS) {
 			errno = ENOMEM;
@@ -155,10 +154,8 @@ hesiod_end(void *context) {
 
 	if (ctx->res)
 		res_nclose(ctx->res);
-	if (ctx->RHS)
-		free(ctx->RHS);
-	if (ctx->LHS)
-		free(ctx->LHS);
+	free(ctx->RHS);
+	free(ctx->LHS);
 	if (ctx->res && ctx->free_res)
 		(*ctx->free_res)(ctx->res);
 	free(ctx);
@@ -278,10 +275,8 @@ parse_config_file(struct hesiod_p *ctx, const char *filename) {
 	 * Clear the existing configuration variable, just in case
 	 * they're set.
 	 */
-	if (ctx->RHS)
-		free(ctx->RHS);
-	if (ctx->LHS)
-		free(ctx->LHS);
+	free(ctx->RHS);
+	free(ctx->LHS);
 	ctx->RHS = ctx->LHS = 0;
 
 	/*
@@ -327,10 +322,8 @@ parse_config_file(struct hesiod_p *ctx, const char *filename) {
 	
  cleanup:
 	fclose(fp);
-	if (ctx->RHS)
-		free(ctx->RHS);
-	if (ctx->LHS)
-		free(ctx->LHS);
+	free(ctx->RHS);
+	free(ctx->LHS);
 	ctx->RHS = ctx->LHS = 0;
 	return (-1);
 }

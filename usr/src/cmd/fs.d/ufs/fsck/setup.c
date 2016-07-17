@@ -25,8 +25,6 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #define	DKTYPENAMES
 #include <stdio.h>
 #include <stdlib.h>
@@ -1027,20 +1025,13 @@ uncreate_maps(void)
 	 * No ordering dependency amongst these, so they are here in
 	 * the same order they were calculated.
 	 */
-	if (blockmap != NULL)
-		free(blockmap);
-	if (statemap != NULL)
-		free(statemap);
-	if (lncntp != NULL)
-		free(lncntp);
-	if (inpsort != NULL)
-		free(inpsort);
-	if (inphead != NULL)
-		free(inphead);
-	if (aclpsort != NULL)
-		free(aclpsort);
-	if (aclphead != NULL)
-		free(aclphead);
+	free(blockmap);
+	free(statemap);
+	free(lncntp);
+	free(inpsort);
+	free(inphead);
+	free(aclpsort);
+	free(aclphead);
 }
 
 /*
@@ -1411,16 +1402,14 @@ calcsb(calcsb_t style, caddr_t dev, int devfd, struct fs *fs)
 
 	if (pipe(child_pipe) < 0) {
 		pfatal("calcsb: could not create pipe: %s\n", strerror(errno));
-		if (sizestr != NULL)
-			free(sizestr);
+		free(sizestr);
 		return (0);
 	}
 
 	switch (fork()) {
 	case -1:
 		pfatal("calcsb: fork failed: %s\n", strerror(errno));
-		if (sizestr != NULL)
-			free(sizestr);
+		free(sizestr);
 		return (0);
 	case 0:
 		if (dup2(child_pipe[TO_FSCK], fileno(stdout)) < 0) {
@@ -1452,8 +1441,7 @@ calcsb(calcsb_t style, caddr_t dev, int devfd, struct fs *fs)
 	}
 
 	(void) close(child_pipe[TO_FSCK]);
-	if (sizestr != NULL)
-		free(sizestr);
+	free(sizestr);
 
 	pending = sizeof (struct fs);
 	target = (caddr_t)fs;

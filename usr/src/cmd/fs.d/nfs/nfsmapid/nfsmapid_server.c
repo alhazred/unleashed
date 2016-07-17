@@ -315,8 +315,7 @@ gen_result:
 	/* LINTED format argument to sprintf */
 	(void) sprintf(resp->str, "%s%s%s", pw_str, at_str, dom_str);
 	resp->u_res.len = uid_str_len;
-	if (pwd_buf)
-		free(pwd_buf);
+	free(pwd_buf);
 	if (idmap_buf)
 		idmap_free(idmap_buf);
 	resp->status = NFSMAPID_OK;
@@ -567,8 +566,7 @@ gen_result:
 	/* LINTED format argument to sprintf */
 	(void) sprintf(resp->str, "%s%s%s", gr_str, at_str, dom_str);
 	resp->u_res.len = gid_str_len;
-	if (grp_buf)
-		free(grp_buf);
+	free(grp_buf);
 	if (idmap_buf)
 		idmap_free(idmap_buf);
 	resp->status = NFSMAPID_OK;

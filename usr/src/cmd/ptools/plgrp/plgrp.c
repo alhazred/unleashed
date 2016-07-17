@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * The plgrp utility allows a user to display and modify the home lgroup and
  * lgroup affinities of the specified threads
@@ -1009,10 +1007,8 @@ do_op(plgrp_args_t *plgrp_args, id_t pid, id_t lwpid,
 			(void) fprintf(stderr, gettext("%s: out of memory\n"),
 			    progname);
 			Prelease(Ph, PRELEASE_RETAIN);
-			if (init_affs != NULL)
-				free(init_affs);
-			if (cur_affs != NULL)
-				free(cur_affs);
+			free(init_affs);
+			free(cur_affs);
 			nerrors++;
 			return (EXIT_NONFATAL);
 		}

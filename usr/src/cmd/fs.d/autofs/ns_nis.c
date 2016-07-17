@@ -122,8 +122,7 @@ getmapent_nis(key, map, ml, stack, stkptr, iswildcard, isrestricted)
 			nserr = 1;
 		}
 	}
-	if (my_map != NULL)
-		free(my_map);
+	free(my_map);
 
 	nserr = nis_err(nserr);
 	if (nserr)
@@ -228,8 +227,7 @@ loadmaster_nis(mapname, defopts, stack, stkptr)
 					my_mapname, yperr_string(err));
 			break;
 		}
-		if (key)
-			free(key);
+		free(key);
 		key = nkey;
 		kl = nkl;
 
@@ -284,8 +282,7 @@ pr_msg("Warning: invalid entry for %s in NIS map %s ignored.\n", dir, mapname);
 		}
 
 	}
-	if (my_mapname)
-		free(my_mapname);
+	free(my_mapname);
 
 	/*
 	 * In the context of a master map, if no entry is
@@ -362,8 +359,7 @@ loaddirect_nis(nismap, localmap, opts, stack, stkptr)
 					my_nismap, yperr_string(err));
 			break;
 		}
-		if (key)
-			free(key);
+		free(key);
 		key = nkey;
 		kl = nkl;
 
@@ -379,8 +375,7 @@ loaddirect_nis(nismap, localmap, opts, stack, stkptr)
 		free(val);
 	}
 
-	if (my_nismap)
-		free(my_nismap);
+	free(my_nismap);
 
 	if (count > 0 && err == YPERR_NOMORE)
 			return (__NSW_SUCCESS);
@@ -476,10 +471,8 @@ getmapkeys_nis(nsmap, list, error, cache_time, stack, stkptr)
 			return (nis_err(nserr));
 		}
 	}
-	if (key)
-		free(key);
-	if (val)
-		free(val);
+	free(key);
+	free(val);
 
 	readdir_cbdata.list = list;
 	readdir_cbdata.last = NULL;

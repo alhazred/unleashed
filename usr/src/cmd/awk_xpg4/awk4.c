@@ -30,8 +30,6 @@
  * Based on MKS awk(1) ported to be /usr/xpg4/bin/awk with POSIX/XCU4 changes
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "awk.h"
 #include "y.tab.h"
 #include <time.h>
@@ -242,8 +240,7 @@ dosub(NODE *np, int glob)
 		n = glob;
 		break;
 	case REG_ESPACE:
-		if (buf != NULL)
-			free(buf);
+		free(buf);
 		awkerr(nomem);
 	default:
 		awkerr(gettext("regular expression error"));
@@ -448,8 +445,7 @@ f_split(NODE *np)
 				stringnode(savesep, FSTATIC, seplen));
 		}
 	}
-	if (saved)
-		free(saved);
+	free(saved);
 	return (intnode((INT)fcount));
 }
 

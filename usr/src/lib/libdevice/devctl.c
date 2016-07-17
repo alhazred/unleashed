@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/stat.h>
@@ -87,14 +85,11 @@ devctl_release(devctl_hdl_t hdl)
 	if (DCP(hdl)->fd != -1)
 		(void) close(DCP(hdl)->fd);
 
-	if (DCP(hdl)->opath != NULL)
-		free(DCP(hdl)->opath);
+	free(DCP(hdl)->opath);
 
-	if (DCP(hdl)->nodename != NULL)
-		free(DCP(hdl)->nodename);
+	free(DCP(hdl)->nodename);
 
-	if (DCP(hdl)->unitaddr != NULL)
-		free(DCP(hdl)->unitaddr);
+	free(DCP(hdl)->unitaddr);
 
 	free(hdl);
 }
@@ -1373,8 +1368,7 @@ dc_cmd(uint_t cmd, uint_t flags, struct devctl_hdl *dcp, nvlist_t *ulp,
 	}
 
 exit:
-	if (iocdata.nvl_user != NULL)
-		free(iocdata.nvl_user);
+	free(iocdata.nvl_user);
 
 	return (rv);
 }

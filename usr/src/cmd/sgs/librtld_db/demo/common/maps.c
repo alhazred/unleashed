@@ -422,8 +422,7 @@ free_linkmaps(struct ps_prochandle *ph)
 			(void) elf_end(prev->mi_elf);
 			(void) close(prev->mi_mapfd);
 			free(prev->mi_name);
-			if (prev->mi_refname)
-				free(prev->mi_refname);
+			free(prev->mi_refname);
 			free(prev);
 		}
 	}
@@ -431,8 +430,7 @@ free_linkmaps(struct ps_prochandle *ph)
 		(void) elf_end(prev->mi_elf);
 		(void) close(prev->mi_mapfd);
 		free(prev->mi_name);
-		if (prev->mi_refname)
-			free(prev->mi_refname);
+		free(prev->mi_refname);
 		free(prev);
 	}
 	ph->pp_lmaplist.ml_head = ph->pp_lmaplist.ml_tail = NULL;

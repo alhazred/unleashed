@@ -1,5 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * lib/gssapi/krb5/set_allowable_enctypes.c
  *
@@ -100,8 +98,7 @@ gss_krb5int_set_allowable_enctypes(OM_uint32 *minor_status,
 	kerr = k5_mutex_lock(&cred->lock);
 	if (kerr)
 	    goto error_out;
-	if (cred->req_enctypes)
-	    free(cred->req_enctypes);
+	free(cred->req_enctypes);
 	cred->req_enctypes = NULL;
 	k5_mutex_unlock(&cred->lock);
 	return GSS_S_COMPLETE;
@@ -121,8 +118,7 @@ gss_krb5int_set_allowable_enctypes(OM_uint32 *minor_status,
 	free(new_ktypes);
 	goto error_out;
     }
-    if (cred->req_enctypes)
-	free(cred->req_enctypes);
+    free(cred->req_enctypes);
     cred->req_enctypes = new_ktypes;
     k5_mutex_unlock(&cred->lock);
 

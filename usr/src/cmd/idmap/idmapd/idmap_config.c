@@ -582,8 +582,7 @@ destruction:
 	scf_property_destroy(scf_prop);
 
 	if (rc < 0) {
-		if (*val)
-			free(*val);
+		free(*val);
 		*val = NULL;
 	}
 

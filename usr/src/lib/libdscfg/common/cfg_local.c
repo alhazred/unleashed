@@ -140,8 +140,7 @@ get_block_buf(int size)
 void
 free_block_buf(char *buf)
 {
-	if (buf)
-		free(buf);
+	free(buf);
 }
 
 void

@@ -1451,8 +1451,7 @@ bra(Cenv_t* env)
 			}
 			else
 			{
-				if (cc)
-					free(cc);
+				free(cc);
 				drop(env->disc, e);
 				return 0;
 			}

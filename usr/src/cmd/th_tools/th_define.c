@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/time_impl.h>
 #include <sys/wait.h>
 #include <stdio.h>
@@ -1588,7 +1586,7 @@ get_hinfo(int fd, char *name, struct handle_info **hip, size_t *nhdls,
 			    hp->len, hp->offset, hp->addr_cookie);
 		}
 	}
-	if (*nhdls == 0 && *hip)
+	if (*nhdls == 0)
 		free(*hip);
 
 	msg(4, "get_info: %s got %d handles\n", name, *nhdls);

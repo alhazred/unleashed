@@ -3566,13 +3566,11 @@ obj_array_delete(raid_obj_tab_t *raid_tab, raid_obj_id_t array_obj_id,
 	ret = raid_lib->array_delete(controller_attr->controller_id,
 	    array_attr->array_id, plugin_err_str);
 	if (ret < SUCCESS) {
-		if (disk_ids)
-			free(disk_ids);
+		free(disk_ids);
 		return (ret);
 	}
 
-	if (disk_ids)
-		free(disk_ids);
+	free(disk_ids);
 	return (ret);
 }
 
@@ -4353,8 +4351,7 @@ raid_obj_tab_destroy(raid_obj_tab_t *tab)
 		raid_list_destroy(&tab->table[i]);
 	}
 
-	if (tab->table)
-		free(tab->table);
+	free(tab->table);
 
 	tab->table = NULL;
 	tab->slots = 0;

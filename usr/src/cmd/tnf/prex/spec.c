@@ -23,8 +23,6 @@
  * Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Includes
  */
@@ -114,17 +112,13 @@ spec_destroy(spec_t * list_p)
 	while ((spec_p = (spec_t *) queue_next(&list_p->qn, &list_p->qn))) {
 		(void) queue_remove(&spec_p->qn);
 
-		if (spec_p->str)
-			free(spec_p->str);
-		if (spec_p->regexp_p)
-			free(spec_p->regexp_p);
+		free(spec_p->str);
+		free(spec_p->regexp_p);
 		free(spec_p);
 	}
 
-	if (list_p->str)
-		free(list_p->str);
-	if (list_p->regexp_p)
-		free(list_p->regexp_p);
+	free(list_p->str);
+	free(list_p->regexp_p);
 	free(list_p);
 
 }				/* end spec_destroy */
@@ -281,10 +275,8 @@ spec_attrtrav(spec_t * spec_p,
 	}
 
 alldone:
-	if (refptr)
-		free(refptr);
-	if (escptr)
-		free(escptr);
+	free(refptr);
+	free(escptr);
 
 }				/* end spec_attrtrav */
 

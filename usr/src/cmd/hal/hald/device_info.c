@@ -1453,14 +1453,12 @@ process_fdi_file (const char *dir, const char *filename,
 	}
 
 out:
-	if (filebuf != NULL)
-		free (filebuf);
+	free(filebuf);
 	if (file != NULL)
 		fclose (file);
 	if (parser != NULL)
 		XML_ParserFree (parser);
-	if (parsing_context != NULL)
-		free (parsing_context);
+	free(parsing_context);
 
 	return device_matched;
 }

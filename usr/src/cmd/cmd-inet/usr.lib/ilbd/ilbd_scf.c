@@ -1327,8 +1327,7 @@ ilbd_scf_pg_walk_props(scf_propertygroup_t *pg,
 			break;
 	}
 out:
-	if (prop_name != NULL)
-		free(prop_name);
+	free(prop_name);
 	if (scf_ret == -1)
 		ret = ilbd_scf_err_to_ilb_err();
 	if (prop != NULL)
@@ -1495,8 +1494,7 @@ ilbd_scf_instance_walk_pg(scf_instance_t *inst,
 	}
 
 out:
-	if (pg_name != NULL)
-		free(pg_name);
+	free(pg_name);
 	if (scf_ret < 0)
 		ret = ilbd_scf_err_to_ilb_err();
 	scf_pg_destroy(newpg);

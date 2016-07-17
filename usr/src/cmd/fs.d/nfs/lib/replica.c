@@ -46,8 +46,6 @@
  * a parse error.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
@@ -62,10 +60,8 @@ free_replica(struct replica *list, int count)
 	int i;
 
 	for (i = 0; i < count; i++) {
-		if (list[i].host)
-			free(list[i].host);
-		if (list[i].path)
-			free(list[i].path);
+		free(list[i].host);
+		free(list[i].path);
 	}
 	free(list);
 }

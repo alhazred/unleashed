@@ -145,16 +145,14 @@ print_referral_summary(fs_locations4 *fsl)
 			if (j > 0)
 				printf(",");
 			printf("%s", s ? s : "");
-			if (s)
-				free(s);
+			free(s);
 		}
 		printf(":");
 		for (j = 0; j < fs->rootpath.pathname4_len; j++) {
 			s = utf8_to_str(&fs->rootpath.pathname4_val[j],
 			    &l, NULL);
 			printf("/%s", s ? s : "");
-			if (s)
-				free(s);
+			free(s);
 		}
 		if (fs->rootpath.pathname4_len == 0)
 			printf("/");

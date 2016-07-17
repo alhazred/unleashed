@@ -160,8 +160,7 @@ each_file(char *cur_file, Cmd_Info *cmd_info)
 				return (FAILURE);
 			}
 
-			if (cur_filenm != NULL)
-				free(cur_filenm);
+			free(cur_filenm);
 
 			len = (strlen(cur_file) + 3 +
 			    strlen(mem_header->ar_name));
@@ -292,16 +291,11 @@ process_file(Elf *elf, char *cur_file, Cmd_Info *cmd_info)
 	}
 
 	/* Release any dynamicaly allocated buffers */
-	if (state.b_e_seg_table != NULL)
-		free(state.b_e_seg_table);
-	if (state.sec_table != NULL)
-		free(state.sec_table);
-	if (state.off_table != NULL)
-		free(state.off_table);
-	if (state.nobits_table != NULL)
-		free(state.nobits_table);
-	if (state.new_sec_string != NULL)
-		free(state.new_sec_string);
+	free(state.b_e_seg_table);
+	free(state.sec_table);
+	free(state.off_table);
+	free(state.nobits_table);
+	free(state.new_sec_string);
 
 	if (x == DONT_BUILD)
 		return (DONT_BUILD);

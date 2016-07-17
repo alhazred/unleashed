@@ -250,12 +250,9 @@ enter:
 
 alloc_failed:
 	if (dir != NULL) {
-		if (dir->dir_opts)
-			free(dir->dir_opts);
-		if (dir->dir_map)
-			free(dir->dir_map);
-		if (dir->dir_name)
-			free(dir->dir_name);
+		free(dir->dir_opts);
+		free(dir->dir_map);
+		free(dir->dir_name);
 		free(dir);
 	}
 	pr_msg("dirinit: memory allocation failed");

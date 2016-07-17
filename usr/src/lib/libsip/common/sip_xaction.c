@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdlib.h>
 #include <assert.h>
 #include <errno.h>
@@ -462,16 +460,14 @@ sip_xaction_get(sip_conn_object_t obj, sip_msg_t msg, boolean_t create,
 		    RFC_3261_BRANCH, strlen(RFC_3261_BRANCH) != 0))) {
 			if (error != NULL)
 				*error = EINVAL;
-			if (branchid != NULL)
-				free(branchid);
+			free(branchid);
 			return (NULL);
 		}
 		sip_trans = sip_xaction_create(obj, _msg, branchid, error);
 		if (sip_trans != NULL)
 			SIP_XACTION_REFCNT_INCR(sip_trans);
 	}
-	if (branchid != NULL)
-		free(branchid);
+	free(branchid);
 	return (sip_trans);
 }
 
@@ -532,8 +528,7 @@ sip_xaction_remove(void *obj, void *hindex, int *found)
 			msg_chain = tmp->sip_xaction_log[count].sip_msgs;
 			while (msg_chain != NULL) {
 				nmsg_chain = msg_chain->next;
-				if (msg_chain->sip_msg != NULL)
-					free(msg_chain->sip_msg);
+				free(msg_chain->sip_msg);
 				free(msg_chain);
 				msg_chain = nmsg_chain;
 			}

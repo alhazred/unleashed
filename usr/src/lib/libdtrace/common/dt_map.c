@@ -441,8 +441,7 @@ dt_aggid_destroy(dtrace_hdl_t *dtp)
 		return;
 
 	for (i = 0; i < dtp->dt_maxagg; i++) {
-		if (dtp->dt_aggdesc[i] != NULL)
-			free(dtp->dt_aggdesc[i]);
+		free(dtp->dt_aggdesc[i]);
 	}
 
 	free(dtp->dt_aggdesc);

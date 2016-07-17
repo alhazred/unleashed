@@ -660,8 +660,7 @@ void kdb5_ldap_create(argc, argv)
 	retval = krb5_c_string_to_key(util_context, rparams->mkey.enctype,
 				      &pwd, &master_salt, &master_keyblock);
 
-	if (master_salt.data)
-	    free(master_salt.data);
+	free(master_salt.data);
 
 	if (retval) {
 	    /* Solaris Kerberos */

@@ -211,8 +211,7 @@ papiJobStreamClose(papi_service_t handle, papi_stream_t stream, papi_job_t *job)
 	} else
 		status = PAPI_OK;
 
-	if (s->metadata != NULL)
-		free(s->metadata);
+	free(s->metadata);
 
 	*job = s->job;
 

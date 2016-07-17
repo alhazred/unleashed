@@ -248,15 +248,12 @@ pa_pkinit_gen_req(krb5_context context,
     if (der_req != NULL)
 	krb5_free_data(context, der_req);
 
-    if (out_data != NULL)
-	free(out_data);
+    free(out_data);
 
     if (retval) {
 	if (return_pa_data) {
-	    if (return_pa_data[0] != NULL)
-		free(return_pa_data[0]);
-	    if (return_pa_data[1] != NULL)
-		free(return_pa_data[1]);
+	    free(return_pa_data[0]);
+	    free(return_pa_data[1]);
 	    free(return_pa_data);
 	}
 	if (out_data) {
@@ -906,23 +903,19 @@ pkinit_as_rep_parse(krb5_context context,
     retval = 0;
 
 cleanup:
-    if (dh_data.data != NULL)
-	free(dh_data.data);
-    if (client_key != NULL)
-	free(client_key);
+    free(dh_data.data);
+    free(client_key);
     free_krb5_kdc_dh_key_info(&kdc_dh);
     free_krb5_pa_pk_as_rep(&kdc_reply);
 
     if (key_pack != NULL) {
 	free_krb5_reply_key_pack(&key_pack);
-	if (cksum.contents != NULL)
-	    free(cksum.contents);
+	free(cksum.contents);
     } 
     if (key_pack9 != NULL)
 	free_krb5_reply_key_pack_draft9(&key_pack9);
 
-    if (kdc_hostname != NULL)
-	free(kdc_hostname);
+    free(kdc_hostname);
 
     pkiDebug("pkinit_as_rep_parse returning %d (%s)\n",
 	     retval, error_message(retval));

@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This file contains all authentication-related functionality for
  * SLP. Two interfaces are exported:
@@ -203,7 +201,7 @@ SLPError slp_sign(struct iovec *authiov, int authiov_len, time_t ts,
 	}
 
 done:
-	if (sign_as) free(sign_as);
+	free(sign_as);
 
 	if (err != SLP_OK) {
 	    return (err);
@@ -323,7 +321,7 @@ SLPError slp_verify(struct iovec *authiov, int authiov_len,
 	}
 
 done:
-	if (inbytes) free(inbytes);
+	free(inbytes);
 	*total = off;
 
 	return (err);
@@ -688,10 +686,10 @@ done:
 	if (amih) {
 	    dld_ami_end(amih);
 	}
-	if (dn) free(dn);
+	free(dn);
 
-	if (sig_in) free(sig_in);
-	if (sig_out) free(sig_out);
+	free(sig_in);
+	free(sig_out);
 
 	if (err == SLP_MEMORY_ALLOC_FAILED) {
 	    /* critical error; abort */
@@ -788,7 +786,7 @@ done:
 	    dld_ami_end(amih);
 	}
 
-	if (spi) free(spi);
+	free(spi);
 
 	return (err);
 }
@@ -909,7 +907,7 @@ done:
 	    dld_ami_free_cert_list(&chain, ccnt);
 	}
 
-	if (prop_spi) free(prop_spi);
+	free(prop_spi);
 
 	return (err);
 }
@@ -969,8 +967,8 @@ done:
 	    dld_ami_free_dn(&dn2);
 	}
 
-	if (dnstr1) free(dnstr1);
-	if (dnstr2) free(dnstr2);
+	free(dnstr1);
+	free(dnstr2);
 
 	return (answer);
 }

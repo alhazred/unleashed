@@ -198,33 +198,23 @@ Pfini_core(struct ps_prochandle *P, void *data)
 		for (i = 0; i < core->core_nlwp; i++, lwp = nlwp) {
 			nlwp = list_next(lwp);
 #ifdef __sparc
-			if (lwp->lwp_gwins != NULL)
-				free(lwp->lwp_gwins);
-			if (lwp->lwp_xregs != NULL)
-				free(lwp->lwp_xregs);
-			if (lwp->lwp_asrs != NULL)
-				free(lwp->lwp_asrs);
+			free(lwp->lwp_gwins);
+			free(lwp->lwp_xregs);
+			free(lwp->lwp_asrs);
 #endif
 			free(lwp);
 		}
 
-		if (core->core_platform != NULL)
-			free(core->core_platform);
-		if (core->core_uts != NULL)
-			free(core->core_uts);
-		if (core->core_cred != NULL)
-			free(core->core_cred);
-		if (core->core_priv != NULL)
-			free(core->core_priv);
+		free(core->core_platform);
+		free(core->core_uts);
+		free(core->core_cred);
+		free(core->core_priv);
 		if (core->core_privinfo != NULL)
 			__priv_free_info(core->core_privinfo);
-		if (core->core_ppii != NULL)
-			free(core->core_ppii);
-		if (core->core_zonename != NULL)
-			free(core->core_zonename);
+		free(core->core_ppii);
+		free(core->core_zonename);
 #ifdef __x86
-		if (core->core_ldt != NULL)
-			free(core->core_ldt);
+		free(core->core_ldt);
 #endif
 
 		free(core);

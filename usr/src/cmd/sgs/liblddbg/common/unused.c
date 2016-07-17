@@ -68,8 +68,7 @@ Dbg_unused_sec(Lm_list *lml, Is_desc *isp)
 	dbg_print(lml, MSG_INTL(MSG_USD_SEC),
 	    dbg_fmt_isec_name(isp, buf, &alloc_mem),
 	    EC_XWORD(isp->is_shdr->sh_size), isp->is_file->ifl_name, str);
-	if (alloc_mem != NULL)
-		free(alloc_mem);
+	free(alloc_mem);
 }
 
 void

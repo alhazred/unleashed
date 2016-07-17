@@ -403,8 +403,7 @@ nd_merge_strarray(nd_hdl_t *nhdl, char **arr1, uint_t n1, char **arr2,
 	if ((*buf = calloc(uniq, sizeof (char *))) == NULL) {
 		nd_error(nhdl, "Error allocating memory (%s)", strerror(errno));
 		for (int j = 0; j < uniq; j++) {
-			if (tmparr[j])
-				free(tmparr[j]);
+			free(tmparr[j]);
 		}
 		return (-1);
 	}
@@ -595,8 +594,7 @@ nd_get_event_info(nd_hdl_t *nhdl, const char *class, fmev_t ev,
 static void
 condfree(void *buf)
 {
-	if (buf != NULL)
-		free(buf);
+	free(buf);
 }
 
 void

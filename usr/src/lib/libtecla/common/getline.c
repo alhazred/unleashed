@@ -34,8 +34,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Standard headers.
  */
@@ -2061,31 +2059,22 @@ GetLine *del_GetLine(GetLine *gl)
     gl->cq = _del_GlCharQueue(gl->cq);
     if(gl->file_fp)
       fclose(gl->file_fp);
-    if(gl->term)
-      free(gl->term);
-    if(gl->line)
-      free(gl->line);
-    if(gl->cutbuf)
-      free(gl->cutbuf);
-    if(gl->prompt)
-      free(gl->prompt);
+    free(gl->term);
+    free(gl->line);
+    free(gl->cutbuf);
+    free(gl->prompt);
     gl->cpl_mem = _del_FreeList(gl->cpl_mem, 1);
     gl->ext_act_mem = _del_FreeList(gl->ext_act_mem, 1);
     gl->sig_mem = _del_FreeList(gl->sig_mem, 1);
     gl->sigs = NULL;       /* Already freed by freeing sig_mem */
     gl->bindings = _del_KeyTab(gl->bindings);
-    if(gl->vi.undo.line)
-      free(gl->vi.undo.line);
+    free(gl->vi.undo.line);
 #ifdef USE_TERMCAP
-    if(gl->tgetent_buf)
-      free(gl->tgetent_buf);
-    if(gl->tgetstr_buf)
-      free(gl->tgetstr_buf);
+    free(gl->tgetent_buf);
+    free(gl->tgetstr_buf);
 #endif
-    if(gl->app_file)
-      free(gl->app_file);
-    if(gl->user_file)
-      free(gl->user_file);
+    free(gl->app_file);
+    free(gl->user_file);
 #ifdef HAVE_SELECT
     gl->fd_node_mem = _del_FreeList(gl->fd_node_mem, 1);
     gl->fd_nodes = NULL;  /* Already freed by freeing gl->fd_node_mem */

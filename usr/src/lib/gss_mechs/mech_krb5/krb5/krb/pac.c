@@ -271,8 +271,7 @@ krb5_pac_free(krb5_context context,
 	    memset(pac->data.data, 0, pac->data.length);
 	    free(pac->data.data);
 	}
-	if (pac->pac != NULL)
-	    free(pac->pac);
+	free(pac->pac);
 	memset(pac, 0, sizeof(*pac));
 	free(pac);
     }
@@ -880,10 +879,8 @@ k5_insert_client_info(krb5_context context,
     memcpy(p, princ_name_ucs2, princ_name_ucs2_len);
  
 cleanup:
-    if (princ_name_utf8 != NULL)
-	free(princ_name_utf8);
-    if (princ_name_ucs2 != NULL)
-	free(princ_name_ucs2);
+    free(princ_name_utf8);
+    free(princ_name_ucs2);
 
     return ret;
 }

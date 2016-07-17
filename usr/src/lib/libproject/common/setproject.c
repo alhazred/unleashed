@@ -653,8 +653,7 @@ setproject_proc(const char *project_name, const char *user_name, int flags,
 		 */
 		old_pool_name = pool_get_binding(pid);
 		if (bind_to_pool(pool_name, pid, 0) != 0) {
-			if (old_pool_name)
-				free(old_pool_name);
+			free(old_pool_name);
 			_kva_free(kv_array);
 			return (SETPROJ_ERR_POOL);
 		}
@@ -665,8 +664,7 @@ setproject_proc(const char *project_name, const char *user_name, int flags,
 			 * Undo pool binding.
 			 */
 			(void) bind_to_pool(old_pool_name, pid, 1);
-			if (old_pool_name)
-				free(old_pool_name);
+			free(old_pool_name);
 			_kva_free(kv_array);
 			/*
 			 * Restore errno
@@ -674,8 +672,7 @@ setproject_proc(const char *project_name, const char *user_name, int flags,
 			errno = saved_errno;
 			return (SETPROJ_ERR_TASK);
 		}
-		if (old_pool_name)
-			free(old_pool_name);
+		free(old_pool_name);
 	} else {
 		/*
 		 * Pools are not configured, so simply create new task.

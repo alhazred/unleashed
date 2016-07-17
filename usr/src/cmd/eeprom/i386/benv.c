@@ -429,8 +429,7 @@ print_bootadm_value(char *name, const int quiet)
 		(void) printf("%s: data not available.\n", name);
 	}
 
-	if (value != NULL)
-		free(value);
+	free(value);
 	return (rv);
 }
 

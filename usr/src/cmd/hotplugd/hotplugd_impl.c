@@ -428,8 +428,7 @@ static void
 free_properties(ddi_hp_property_t *prop)
 {
 	if (prop) {
-		if (prop->nvlist_buf)
-			free(prop->nvlist_buf);
+		free(prop->nvlist_buf);
 		(void) memset(prop, 0, sizeof (ddi_hp_property_t));
 	}
 }

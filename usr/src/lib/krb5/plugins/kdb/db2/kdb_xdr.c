@@ -1,5 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * lib/kdb/kdb_xdr.c
  *
@@ -462,14 +460,12 @@ krb5_dbe_free_contents(context, entry)
     krb5_tl_data 	* tl_data;
     int i, j;
 
-    if (entry->e_data)
-	free(entry->e_data);
+    free(entry->e_data);
     if (entry->princ)
 	krb5_free_principal(context, entry->princ);
     for (tl_data = entry->tl_data; tl_data; tl_data = tl_data_next) {
 	tl_data_next = tl_data->tl_data_next;
-	if (tl_data->tl_data_contents)
-	    free(tl_data->tl_data_contents);
+	free(tl_data->tl_data_contents);
 	free(tl_data);
     }
     if (entry->key_data) {

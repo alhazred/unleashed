@@ -446,8 +446,7 @@ pam_set_item(pam_handle_t *pamh, int item_type, const void *item)
 		}
 		break;
 	case PAM_CONV:
-		if (pip->pi_addr != NULL)
-			free(pip->pi_addr);
+		free(pip->pi_addr);
 		size = sizeof (struct pam_conv);
 		if ((pip->pi_addr = calloc(1, size)) == NULL)
 			return (PAM_BUF_ERR);
@@ -462,10 +461,8 @@ pam_set_item(pam_handle_t *pamh, int item_type, const void *item)
 			pam_repository_t *auth_rep;
 
 			auth_rep = (pam_repository_t *)pip->pi_addr;
-			if (auth_rep->type != NULL)
-				free(auth_rep->type);
-			if (auth_rep->scope != NULL)
-				free(auth_rep->scope);
+			free(auth_rep->type);
+			free(auth_rep->scope);
 			free(auth_rep);
 		}
 		if (item != NULL) {
@@ -761,8 +758,7 @@ pam_get_user(pam_handle_t *pamh, char **user, const char *prompt_override)
 	status = parse_user_name(ret_resp->resp, &real_username);
 
 	if (status != PAM_SUCCESS) {
-		if (real_username != NULL)
-			free(real_username);
+		free(real_username);
 		free_resp(1, ret_resp);
 		return (status);
 	}
@@ -1455,17 +1451,13 @@ pam_putenv(pam_handle_t *pamh, const char *name_value)
 out:
 	if (error != PAM_SUCCESS) {
 		if (traverse) {
-			if (traverse->name)
-				free(traverse->name);
-			if (traverse->value)
-				free(traverse->value);
+			free(traverse->name);
+			free(traverse->value);
 			free(traverse);
 		}
 	}
-	if (name)
-		free(name);
-	if (value)
-		free(value);
+	free(name);
+	free(value);
 	return (error);
 }
 
@@ -2320,8 +2312,7 @@ getpath:
 	(*pam)->pam_err = err;	/* was the line truncated */
 
 out:
-	if (current_line)
-		free(current_line);
+	free(current_line);
 	if (error != PAM_SUCCESS) {
 		/* on error free this */
 		if (*pam)
@@ -2510,10 +2501,8 @@ clean_up(pam_handle_t *pamh)
 		/* Cleanup PAM_REPOSITORY structure */
 		auth_rep = pamh->ps_item[PAM_REPOSITORY].pi_addr;
 		if (auth_rep != NULL) {
-			if (auth_rep->type != NULL)
-				free(auth_rep->type);
-			if (auth_rep->scope != NULL)
-				free(auth_rep->scope);
+			free(auth_rep->type);
+			free(auth_rep->scope);
 		}
 
 		for (i = 0; i < PAM_MAX_ITEMS; i++) {
@@ -2539,18 +2528,14 @@ free_pamconf(pamtab_t *cp)
 	int i;
 
 	if (cp) {
-		if (cp->pam_service)
-			free(cp->pam_service);
-		if (cp->module_path)
-			free(cp->module_path);
+		free(cp->pam_service);
+		free(cp->module_path);
 		for (i = 0; i < cp->module_argc; i++) {
-			if (cp->module_argv[i])
-				free(cp->module_argv[i]);
+			free(cp->module_argv[i]);
 		}
 		if (cp->module_argc > 0)
 			free(cp->module_argv);
-		if (cp->function_ptr)
-			free(cp->function_ptr);
+		free(cp->function_ptr);
 
 		free(cp);
 	}
@@ -2589,10 +2574,8 @@ static void
 free_env(env_list *pam_env)
 {
 	if (pam_env) {
-		if (pam_env->name)
-			free(pam_env->name);
-		if (pam_env->value)
-			free(pam_env->value);
+		free(pam_env->name);
+		free(pam_env->value);
 		free(pam_env);
 	}
 }
@@ -2739,8 +2722,7 @@ do_conv(pam_handle_t *pamh, int msg_style, int num_msg,
 		}
 	}
 
-	if (msg)
-		free(msg);
+	free(msg);
 	return (retcode);
 }
 

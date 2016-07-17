@@ -207,8 +207,7 @@ self_check(char *hostname)
 	retval = 0;
 
 out:
-	if (ifc->ifc_buf != NULL)
-		free(ifc->ifc_buf);
+	free(ifc->ifc_buf);
 	free(ifc);
 	return (retval);
 }

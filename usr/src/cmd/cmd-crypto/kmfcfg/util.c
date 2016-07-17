@@ -430,8 +430,7 @@ getopt_av(int argc, char * const *argv, const char *optstring)
 
 	/* First time or when optstring changes from previous one */
 	if (_save_optstr != optstring) {
-		if (opts_av != NULL)
-			free(opts_av);
+		free(opts_av);
 		opts_av = NULL;
 		_save_optstr = optstring;
 		_save_numopts = populate_opts((char *)optstring);

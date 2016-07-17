@@ -34,8 +34,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -135,8 +133,7 @@ StringGroup *_del_StringGroup(StringGroup *sg)
  * Delete the character arrays.
  */
     for(node=sg->head; node; node=node->next) {
-      if(node->block)
-	free(node->block);
+      free(node->block);
       node->block = NULL;
     };
 /*

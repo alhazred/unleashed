@@ -193,10 +193,8 @@ iprop_get_updates_1(kdb_last_t *arg, struct svc_req *rqstp)
 out:
 	if (nofork)
 		debprret(whoami, ret.ret, ret.lastentry.last_sno);
-	if (client_name)
-		free(client_name);
-	if (service_name)
-		free(service_name);
+	free(client_name);
+	free(service_name);
 	if (name)
 		gss_release_name(&min_stat, &name);
 	return (&ret);
@@ -400,10 +398,8 @@ iprop_full_resync_1(
 out:
 	if (nofork)
 		debprret(whoami, ret.ret, 0);
-	if (client_name)
-		free(client_name);
-	if (service_name)
-		free(service_name);
+	free(client_name);
+	free(service_name);
 	if (name)
 		gss_release_name(&min_stat, &name);
 	return (&ret);

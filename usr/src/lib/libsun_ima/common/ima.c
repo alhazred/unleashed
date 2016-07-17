@@ -478,8 +478,7 @@ IMA_API IMA_STATUS IMA_FreeMemory(
 	void *pMemory
 )
 {
-	if (pMemory != NULL)
-		free(pMemory);
+	free(pMemory);
 	return (IMA_STATUS_SUCCESS);
 }
 

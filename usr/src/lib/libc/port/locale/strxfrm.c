@@ -69,8 +69,7 @@ strxfrm_l(char *_RESTRICT_KYWD xf, const char *_RESTRICT_KYWD src,
 	if ((xlen = _collate_sxfrm(wcs, xf, dlen, loc)) == (size_t)-1)
 		goto error;
 
-	if (wcs)
-		free(wcs);
+	free(wcs);
 
 	if (dlen > xlen) {
 		xf[xlen] = 0;
@@ -82,8 +81,7 @@ strxfrm_l(char *_RESTRICT_KYWD xf, const char *_RESTRICT_KYWD src,
 
 error:
 	/* errno should be set to ENOMEM if malloc failed */
-	if (wcs)
-		free(wcs);
+	free(wcs);
 	(void) strlcpy(xf, src, dlen);
 
 	return (slen);

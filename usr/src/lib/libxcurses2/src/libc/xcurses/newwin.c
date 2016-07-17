@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /* LINTLIBRARY */
 
 /*
@@ -248,14 +246,12 @@ delwin(WINDOW *w)
 
 
 	if (w->_line != NULL) {
-		if (w->_base != NULL)
-			free(w->_base);
+		free(w->_base);
 
 		free(w->_line);
 	}
 
-	if (w->_first != NULL)
-		free(w->_first);
+	free(w->_first);
 
 	free(w);
 

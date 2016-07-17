@@ -1853,10 +1853,8 @@ zsd_get_pool_pset(zsd_ctl_t *ctl, psetid_t psetid, char *psetname,
 	free(cpus);
 	return (0);
 err:
-	if (res_list != NULL)
-		free(res_list);
-	if (cpus != NULL)
-		free(cpus);
+	free(res_list);
+	free(cpus);
 
 	/*
 	 * The pools operations should succeed since the conf is a consistent
@@ -2025,8 +2023,7 @@ psets_changed:
 		}
 	}
 err:
-	if (res_list != NULL)
-		free(res_list);
+	free(res_list);
 	if (pv_save != NULL)
 		vals[1] = pv_save;
 }
@@ -2130,10 +2127,8 @@ lookup_done:
 	if (pv_save != NULL)
 		vals[1] = pv_save;
 
-	if (res_list)
-		free(res_list);
-	if (pools)
-		free(pools);
+	free(res_list);
+	free(pools);
 
 	(void) strlcpy(pool, poolname, poollen);
 	(void) strlcpy(pset, psetname, psetlen);
@@ -3269,8 +3264,7 @@ disk_swap_again:
 		swt_size = sizeof (int) +
 		    (num_swap_devices * sizeof (struct swapent)) +
 		    (num_swap_devices * MAXPATHLEN);
-		if (ctl->zsctl_swap_cache != NULL)
-			free(ctl->zsctl_swap_cache);
+		free(ctl->zsctl_swap_cache);
 
 		swt = (struct swaptable *)malloc(swt_size);
 		if (swt == NULL) {
@@ -3405,8 +3399,7 @@ vmusage_again:
 
 		size_t size = sizeof (zsd_vmusage64_t) * num_vmusage;
 
-		if (ctl->zsctl_vmusage_cache != NULL)
-			free(ctl->zsctl_vmusage_cache);
+		free(ctl->zsctl_vmusage_cache);
 		vmusage = (zsd_vmusage64_t *)malloc(size);
 		if (vmusage == NULL) {
 			zsd_warn(gettext("Unable to alloc to determine "

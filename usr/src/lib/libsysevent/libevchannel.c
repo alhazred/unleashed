@@ -848,8 +848,7 @@ sysevent_evc_setpropnvl(evchan_t *scp, nvlist_t *nvl)
 
 	rc = ioctl(EV_FD(scp), SEV_SETPROPNVL, (intptr_t)&uargs);
 
-	if (buf)
-		free(buf);
+	free(buf);
 
 	return (rc);
 }
@@ -886,8 +885,7 @@ again:
 	 */
 	if (rc == EOVERFLOW &&
 	    (buf2 == NULL || uargs.generation != expgen)) {
-		if (buf2 != NULL)
-			free(buf2);
+		free(buf2);
 
 		if ((sz = uargs.packednvl.len) > 1024 * 1024)
 			return (E2BIG);
@@ -910,8 +908,7 @@ again:
 	    nvlist_unpack(bufp, uargs.packednvl.len, nvlp, 0) != 0)
 		rc = EINVAL;
 
-	if (buf2 != NULL)
-		free(buf2);
+	free(buf2);
 
 	return (rc ? errno = rc : 0);
 }

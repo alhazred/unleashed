@@ -341,8 +341,7 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags,
 		 * otherwise we couldn't succeed here, unless that princ
 		 * got deleted.
 		 */
-		if (olduserdata != NULL)
-			free(olduserdata);
+		free(olduserdata);
 	}
 	if (pam_set_data(pamh, KRB5_AUTOMIGRATE_DATA, userdata,
 	    krb5_migrate_cleanup) != PAM_SUCCESS) {
@@ -350,16 +349,11 @@ int pam_sm_authenticate(pam_handle_t *pamh, int flags,
 	}
 
 cleanup:
-	if (service)
-		free(service);
-	if (kadmin_princ)
-		free(kadmin_princ);
-	if (svcprincstr)
-		free(svcprincstr);
-	if (userprincstr)
-		free(userprincstr);
-	if (def_realm)
-		free(def_realm);
+	free(service);
+	free(kadmin_princ);
+	free(svcprincstr);
+	free(userprincstr);
+	free(def_realm);
 	(void) kadm5_free_principal_ent(handle, &kadm5_userprinc);
 	(void) kadm5_destroy((void *)handle);
 	if (context != NULL)

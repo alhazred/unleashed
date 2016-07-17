@@ -102,8 +102,7 @@ krb5_ldap_create_policy(context, policy, mask)
     }
 
 cleanup:
-    if (policy_dn != NULL)
-	free(policy_dn);
+    free(policy_dn);
 
     ldap_mods_free(mods, 1);
     krb5_ldap_put_handle_to_pool(ldap_context, ldap_server_handle);
@@ -179,8 +178,7 @@ krb5_ldap_modify_policy(context, policy, mask)
     }
 
 cleanup:
-    if (policy_dn != NULL)
-        free(policy_dn);
+    free(policy_dn);
 
     ldap_mods_free(mods, 1);
     krb5_ldap_put_handle_to_pool(ldap_context, ldap_server_handle);
@@ -334,8 +332,7 @@ krb5_ldap_delete_policy(context, policyname)
     }
 
 cleanup:
-    if (policy_dn != NULL)
-        free (policy_dn);
+    free(policy_dn);
     krb5_ldap_put_handle_to_pool(ldap_context, ldap_server_handle);
     return st;
 }
@@ -404,12 +401,10 @@ krb5_ldap_free_policy(context, policy)
     if (policy == NULL)
 	return st;
 
-    if (policy->policy)
-	free (policy->policy);
+    free(policy->policy);
 
     if (policy->tl_data) {
-	if (policy->tl_data->tl_data_contents)
-	    free (policy->tl_data->tl_data_contents);
+	free(policy->tl_data->tl_data_contents);
 	free (policy->tl_data);
     }
     free (policy);
@@ -485,8 +480,7 @@ krb5_ldap_list(context, list, objectclass, containerdn)
     ldap_msgfree(result);
 
 cleanup:
-    if (filter)
-	free (filter);
+    free(filter);
 
     /* some error, free up all the memory */
     if (st != 0) {

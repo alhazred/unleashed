@@ -752,9 +752,8 @@ cleanup:
 		free(verifier->filename);
 		free(verifier->vendor);
 
-		if (!(fwflash_arg_list & FWFLASH_READ_FLAG) &&
-		    verifier->fwimage)
-			free(verifier->fwimage);
+		if (!(fwflash_arg_list & FWFLASH_READ_FLAG))
+		free(verifier->fwimage);
 
 		verifier->filename = NULL;
 		verifier->vendor = NULL;
@@ -1132,8 +1131,7 @@ fwflash_intr(int sig)
 				free(thisdev->access_devname);
 				free(thisdev->drvname);
 				free(thisdev->classname);
-				if (thisdev->ident != NULL)
-					free(thisdev->ident);
+				free(thisdev->ident);
 				/* We don't free address[] for old plugins */
 				thisdev->ident = NULL;
 				thisdev->plugin = NULL;

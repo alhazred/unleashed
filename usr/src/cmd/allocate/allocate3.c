@@ -199,8 +199,7 @@ _is_dev_authorized(devalloc_t *da, uid_t uid)
 	} else
 		auth_list = dcp + 1;
 	ares = _is_authorized(auth_list, uid);
-	if (subauth != NULL)
-		free(subauth);
+	free(subauth);
 
 	return (ares);
 }
@@ -1862,8 +1861,7 @@ update_device(char **devnames, char *zonename, int flag)
 
 	rc = da_update_device(&dargs);
 
-	if (optstr)
-		free(optstr);
+	free(optstr);
 
 	return (rc);
 }

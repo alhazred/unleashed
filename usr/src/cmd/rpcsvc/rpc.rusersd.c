@@ -34,8 +34,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <signal.h>
 #include <sys/stat.h>
@@ -386,12 +384,9 @@ free_ua_entry(rusers_utmp *uap)
 {
 	if (uap == NULL)
 		return;
-	if (uap->ut_user)
-		free(uap->ut_user);
-	if (uap->ut_line)
-		free(uap->ut_line);
-	if (uap->ut_host)
-		free(uap->ut_host);
+	free(uap->ut_user);
+	free(uap->ut_line);
+	free(uap->ut_host);
 }
 
 

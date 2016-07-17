@@ -169,21 +169,16 @@ void
 remove_lml(Lm_list *lml)
 {
 	if (lml && (lml->lm_head == NULL)) {
-		if (lml->lm_lmidstr)
-			free(lml->lm_lmidstr);
-		if (lml->lm_alp)
-			free(lml->lm_alp);
-		if (lml->lm_lists)
-			free(lml->lm_lists);
-		if (lml->lm_aud_cookies)
-			free(lml->lm_aud_cookies);
+		free(lml->lm_lmidstr);
+		free(lml->lm_alp);
+		free(lml->lm_lists);
+		free(lml->lm_aud_cookies);
 
 		/*
 		 * Cleanup any pending RTLDINFO in the case where it was
 		 * allocated but not called (see _relocate_lmc()).
 		 */
-		if (lml->lm_rti)
-			free(lml->lm_rti);
+		free(lml->lm_rti);
 		if (lml->lm_fpavl) {
 			/*
 			 * As we are freeing the link-map list, all nodes must
@@ -788,10 +783,8 @@ remove_rescan(APlist *lmalp, APlist *ghalp, int *delcnt)
 static void
 remove_collect(APlist *ghalp, APlist *lmalp)
 {
-	if (ghalp)
-		free(ghalp);
-	if (lmalp)
-		free(lmalp);
+	free(ghalp);
+	free(lmalp);
 }
 
 /*

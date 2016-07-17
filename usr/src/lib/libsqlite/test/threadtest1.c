@@ -1,6 +1,3 @@
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
 ** 2002 January 15
 **
@@ -116,7 +113,7 @@ char **db_query(sqlite *db, const char *zFile, const char *zFormat, ...){
   if( verbose ) printf("QUERY %s: %s\n", zFile, zSql);
   rc = sqlite_exec(db, zSql, db_query_callback, &sResult, &zErrMsg);
   if( rc==SQLITE_SCHEMA ){
-    if( zErrMsg ) free(zErrMsg);
+    free(zErrMsg);
     rc = sqlite_exec(db, zSql, db_query_callback, &sResult, &zErrMsg);
   }
   if( verbose ) printf("DONE %s %s\n", zFile, zSql);
@@ -148,7 +145,7 @@ void db_execute(sqlite *db, const char *zFile, const char *zFormat, ...){
   if( verbose ) printf("EXEC %s: %s\n", zFile, zSql);
   rc = sqlite_exec(db, zSql, 0, 0, &zErrMsg);
   while( rc==SQLITE_SCHEMA ){
-    if( zErrMsg ) free(zErrMsg);
+    free(zErrMsg);
     rc = sqlite_exec(db, zSql, 0, 0, &zErrMsg);
   }
   if( verbose ) printf("DONE %s: %s\n", zFile, zSql);

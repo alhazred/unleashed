@@ -477,8 +477,7 @@ set_string(struct service_list *slp, const char *str)
 		assert(0);
 		return (-1);
 	}
-	if (*cpp != NULL)
-		free(*cpp);
+	free(*cpp);
 	*cpp = strsave(str);
 	return (0);
 }
@@ -895,8 +894,7 @@ dispatch_keyword(struct parse_state *psp, const char *keybuf)
 			}
 		}
 		logdbg("setenv \"%s\"", cp);
-		if (*evlist != NULL)
-			free(*evlist);
+		free(*evlist);
 		*evlist = cp;
 		return (0);
 	}
@@ -1468,20 +1466,15 @@ free_service(struct service_list *slp)
 			fep = fen;
 		}
 	}
-	if (!(slp->sl_entry.se_flags & SEF_CPPPD) &&
-	    slp->sl_entry.se_pppd != NULL)
+	if (!(slp->sl_entry.se_flags & SEF_CPPPD))
 		free(slp->sl_entry.se_pppd);
-	if (!(slp->sl_entry.se_flags & SEF_CSERVER) &&
-	    slp->sl_entry.se_server != NULL)
+	if (!(slp->sl_entry.se_flags & SEF_CSERVER))
 		free(slp->sl_entry.se_server);
-	if (!(slp->sl_entry.se_flags & SEF_CPATH) &&
-	    slp->sl_entry.se_path != NULL)
+	if (!(slp->sl_entry.se_flags & SEF_CPATH))
 		free(slp->sl_entry.se_path);
-	if (!(slp->sl_entry.se_flags & SEF_CEXTRA) &&
-	    slp->sl_entry.se_extra != NULL)
+	if (!(slp->sl_entry.se_flags & SEF_CEXTRA))
 		free(slp->sl_entry.se_extra);
-	if (!(slp->sl_entry.se_flags & SEF_CLOG) &&
-	    slp->sl_entry.se_log != NULL)
+	if (!(slp->sl_entry.se_flags & SEF_CLOG))
 		free(slp->sl_entry.se_log);
 }
 

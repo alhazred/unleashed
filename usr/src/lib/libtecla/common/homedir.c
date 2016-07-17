@@ -34,8 +34,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * If file-system access is to be excluded, this module has no function,
  * so all of its code should be excluded.
@@ -176,8 +174,7 @@ HomeDir *_del_HomeDir(HomeDir *home)
 {
   if(home) {
     home->err = _del_ErrMsg(home->err);
-    if(home->buffer)
-      free(home->buffer);
+    free(home->buffer);
     free(home);
   };
   return NULL;

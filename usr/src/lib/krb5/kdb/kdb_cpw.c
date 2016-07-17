@@ -473,8 +473,7 @@ add_key_pwd(context, master_key, ks_tuple, ks_tuple_count, passwd,
 	/* AFS string to key will happen here */
 	if ((retval = krb5_c_string_to_key(context, ks_tuple[i].ks_enctype,
 					   &pwd, &key_salt.data, &key))) {
-	     if (key_salt.data.data)
-		  free(key_salt.data.data);
+	     free(key_salt.data.data);
 	     return(retval);
 	}
 
@@ -487,8 +486,7 @@ add_key_pwd(context, master_key, ks_tuple, ks_tuple_count, passwd,
 	retval = krb5_dbekd_encrypt_key_data(context, master_key, &key,
 					     (const krb5_keysalt *)&key_salt,
 					     kvno, &tmp_key_data);
-	if (key_salt.data.data)
-	    free(key_salt.data.data);
+	free(key_salt.data.data);
 
 	/* Solaris Kerberos */
 	krb5_free_keyblock_contents(context, &key);

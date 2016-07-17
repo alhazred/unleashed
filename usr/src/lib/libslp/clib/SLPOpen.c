@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <thread.h>
@@ -97,8 +95,8 @@ SLPError SLPOpen(const char *pcLang, SLPBoolean isAsync, SLPHandle *phSLP) {
 
 void slp_cleanup_handle(slp_handle_impl_t *hp) {
 	/* free the handle */
-	if (hp->tcp_lock) free(hp->tcp_lock);
-	if (hp->tcp_wait) free(hp->tcp_wait);
+	free(hp->tcp_lock);
+	free(hp->tcp_wait);
 	if (hp->ifinfo) {
 		slp_free_ifinfo(hp->ifinfo);
 		free(hp->ifinfo);

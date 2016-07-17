@@ -318,8 +318,7 @@ sinfo_free(SINFO *sinfo, size_t n)
 {
 	for (; n-- > 0; sinfo++) {
 		if (sinfo->data != NULL) {
-			if (sinfo->data->d_buf != NULL)
-				free(sinfo->data->d_buf);
+			free(sinfo->data->d_buf);
 			free(sinfo->data);
 			sinfo->data = NULL;
 		}
@@ -1547,12 +1546,10 @@ fake_shdr_cache_free(Cache *cache, size_t shnum)
 
 	for (_cache = cache; shnum--; _cache++) {
 		if (_cache->c_data != NULL) {
-			if (_cache->c_data->d_buf != NULL)
-				free(_cache->c_data->d_buf);
+			free(_cache->c_data->d_buf);
 			free(_cache->c_data);
 		}
-		if (_cache->c_shdr)
-			free(_cache->c_shdr);
+		free(_cache->c_shdr);
 	}
 
 	free(cache);

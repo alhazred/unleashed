@@ -214,8 +214,7 @@ pkcs11_slottable_delete() {
 				 * Each provider maintains one disabled
 				 * mechanism list for each of its slots to use.
 				 */
-				if (cur_slot->sl_pol_mechs != NULL)
-					free(cur_slot->sl_pol_mechs);
+				free(cur_slot->sl_pol_mechs);
 			}
 
 			if (cur_slot->sl_wfse_args != NULL) {

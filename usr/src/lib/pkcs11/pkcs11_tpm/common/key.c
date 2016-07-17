@@ -332,11 +332,11 @@ key_object_set_default_attributes(TEMPLATE *tmpl, CK_ULONG mode)
 
 	if (! id_attr || ! sdate_attr || ! edate_attr ||
 	    ! derive_attr || ! local_attr) {
-		if (id_attr)	free(id_attr);
-		if (sdate_attr)   free(sdate_attr);
-		if (edate_attr)   free(edate_attr);
-		if (derive_attr)  free(derive_attr);
-		if (local_attr)   free(local_attr);
+		free(id_attr);
+		free(sdate_attr);
+		free(edate_attr);
+		free(derive_attr);
+		free(local_attr);
 		return (CKR_HOST_MEMORY);
 	}
 
@@ -438,12 +438,12 @@ publ_key_set_default_attributes(TEMPLATE *tmpl, CK_ULONG mode)
 
 	if (! class || ! subject_attr || ! encrypt_attr ||
 	    ! verify_attr || ! verify_recover_attr || ! wrap_attr) {
-		if (class_attr)	  free(class_attr);
-		if (subject_attr)	free(subject_attr);
-		if (encrypt_attr)	free(encrypt_attr);
-		if (verify_attr)	 free(verify_attr);
-		if (verify_recover_attr) free(verify_recover_attr);
-		if (wrap_attr)	   free(wrap_attr);
+		free(class_attr);
+		free(subject_attr);
+		free(encrypt_attr);
+		free(verify_attr);
+		free(verify_recover_attr);
+		free(wrap_attr);
 
 		return (CKR_HOST_MEMORY);
 	}
@@ -564,16 +564,16 @@ priv_key_set_default_attributes(TEMPLATE *tmpl, CK_ULONG mode)
 	    ! decrypt_attr || ! sign_attr || ! sign_recover_attr ||
 	    ! unwrap_attr || ! extractable_attr ||
 	    ! never_extr_attr || ! always_sens_attr) {
-		if (class_attr)	free(class_attr);
-		if (subject_attr)	free(subject_attr);
-		if (sensitive_attr)    free(sensitive_attr);
-		if (decrypt_attr)	free(decrypt_attr);
-		if (sign_attr)	 free(sign_attr);
-		if (sign_recover_attr) free(sign_recover_attr);
-		if (unwrap_attr)	free(unwrap_attr);
-		if (extractable_attr)  free(extractable_attr);
-		if (always_sens_attr)  free(always_sens_attr);
-		if (never_extr_attr)   free(never_extr_attr);
+		free(class_attr);
+		free(subject_attr);
+		free(sensitive_attr);
+		free(decrypt_attr);
+		free(sign_attr);
+		free(sign_recover_attr);
+		free(unwrap_attr);
+		free(extractable_attr);
+		free(always_sens_attr);
+		free(never_extr_attr);
 
 		return (CKR_HOST_MEMORY);
 	}
@@ -714,10 +714,10 @@ priv_key_unwrap(TEMPLATE *tmpl,
 
 	cleanup:
 
-	if (local)	 free(local);
-	if (always_sens)   free(always_sens);
-	if (extractable)   free(extractable);
-	if (never_extract) free(never_extract);
+	free(local);
+	free(always_sens);
+	free(extractable);
+	free(never_extract);
 
 	return (rc);
 }
@@ -848,17 +848,17 @@ secret_key_set_default_attributes(TEMPLATE *tmpl, CK_ULONG mode)
 	    ! decrypt_attr || ! sign_attr || ! verify_attr ||
 	    ! wrap_attr	|| ! unwrap_attr || ! extractable_attr ||
 	    ! never_extr_attr || ! always_sens_attr) {
-		if (class_attr)	free(class_attr);
-		if (sensitive_attr)   free(sensitive_attr);
-		if (encrypt_attr)	free(encrypt_attr);
-		if (decrypt_attr)	free(decrypt_attr);
-		if (sign_attr)	free(sign_attr);
-		if (verify_attr)	free(verify_attr);
-		if (wrap_attr)	free(wrap_attr);
-		if (unwrap_attr)	free(unwrap_attr);
-		if (extractable_attr) free(extractable_attr);
-		if (never_extr_attr)  free(never_extr_attr);
-		if (always_sens_attr) free(always_sens_attr);
+		free(class_attr);
+		free(sensitive_attr);
+		free(encrypt_attr);
+		free(decrypt_attr);
+		free(sign_attr);
+		free(verify_attr);
+		free(wrap_attr);
+		free(unwrap_attr);
+		free(extractable_attr);
+		free(never_extr_attr);
+		free(always_sens_attr);
 
 		return (CKR_HOST_MEMORY);
 	}
@@ -1008,10 +1008,10 @@ secret_key_unwrap(TEMPLATE *tmpl,
 
 	cleanup:
 
-	if (local)	 free(local);
-	if (extractable)   free(extractable);
-	if (always_sens)   free(always_sens);
-	if (never_extract) free(never_extract);
+	free(local);
+	free(extractable);
+	free(always_sens);
+	free(never_extract);
 
 	return (rc);
 }
@@ -1147,10 +1147,10 @@ rsa_publ_set_default_attributes(TEMPLATE *tmpl, CK_ULONG mode)
 
 	if (! type_attr || ! modulus_attr ||
 	    ! modulus_bits_attr || ! public_exp_attr) {
-		if (type_attr)	 free(type_attr);
-		if (modulus_attr)	free(modulus_attr);
-		if (modulus_bits_attr) free(modulus_bits_attr);
-		if (public_exp_attr)   free(public_exp_attr);
+		free(type_attr);
+		free(modulus_attr);
+		free(modulus_bits_attr);
+		free(public_exp_attr);
 
 		return (CKR_HOST_MEMORY);
 	}
@@ -1323,10 +1323,10 @@ rsa_priv_set_default_attributes(TEMPLATE *tmpl, CK_ULONG mode)
 
 	if (! type_attr || ! modulus_attr || ! public_exp_attr ||
 	    ! private_exp_attr) {
-		if (type_attr)	free(type_attr);
-		if (modulus_attr)	free(modulus_attr);
-		if (public_exp_attr)  free(public_exp_attr);
-		if (private_exp_attr) free(private_exp_attr);
+		free(type_attr);
+		free(modulus_attr);
+		free(public_exp_attr);
+		free(private_exp_attr);
 
 		return (CKR_HOST_MEMORY);
 	}
@@ -1566,9 +1566,9 @@ generic_secret_set_default_attributes(TEMPLATE *tmpl, CK_ULONG mode)
 	    sizeof (CK_ULONG));
 
 	if (! type_attr || ! value_attr || ! value_len_attr) {
-		if (type_attr)	free(type_attr);
-		if (value_attr)	free(value_attr);
-		if (value_len_attr) free(value_len_attr);
+		free(type_attr);
+		free(value_attr);
+		free(value_len_attr);
 
 		return (CKR_HOST_MEMORY);
 	}
@@ -1717,8 +1717,8 @@ generic_secret_unwrap(TEMPLATE *tmpl,
 	return (CKR_OK);
 
 error:
-	if (value_attr)	free(value_attr);
-	if (value_len_attr) free(value_len_attr);
+	free(value_attr);
+	free(value_len_attr);
 
 	return (rc);
 }

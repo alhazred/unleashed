@@ -220,8 +220,7 @@ vs_props_get_all(vs_props_all_t *va)
 
 	/* free engids allocated in vs_props_get_engines */
 	for (i = 0; i < VS_SE_MAX; i++)	{
-		if (engids[i] != NULL)
-			free(engids[i]);
+		free(engids[i]);
 	}
 
 	return (rc);

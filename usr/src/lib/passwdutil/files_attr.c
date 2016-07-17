@@ -307,10 +307,10 @@ files_getpwnam(char *name, attrlist *items, pwu_repository_t *rep, void **buf)
 
 	return (PWU_SUCCESS);
 error:
-	if (pwbuf->pwd) free(pwbuf->pwd);
-	if (pwbuf->pwd_scratch) free(pwbuf->pwd_scratch);
-	if (pwbuf->spwd) free(pwbuf->spwd);
-	if (pwbuf->spwd_scratch) free(pwbuf->spwd_scratch);
+	free(pwbuf->pwd);
+	free(pwbuf->pwd_scratch);
+	free(pwbuf->spwd);
+	free(pwbuf->spwd_scratch);
 	free(pwbuf);
 	*buf = NULL;
 
@@ -357,10 +357,10 @@ files_user_to_authenticate(char *user, pwu_repository_t *rep,
 		}
 	}
 
-	if (pwbuf->pwd) free(pwbuf->pwd);
-	if (pwbuf->pwd_scratch) free(pwbuf->pwd_scratch);
-	if (pwbuf->spwd) free(pwbuf->spwd);
-	if (pwbuf->spwd_scratch) free(pwbuf->spwd_scratch);
+	free(pwbuf->pwd);
+	free(pwbuf->pwd_scratch);
+	free(pwbuf->spwd);
+	free(pwbuf->spwd_scratch);
 	free(pwbuf);
 
 	return (res);
@@ -457,8 +457,7 @@ files_checkhistory(char *user, char *passwd, pwu_repository_t *rep)
 		    res);
 	}
 out:
-	if (attr.data.val_s != NULL)
-		free(attr.data.val_s);
+	free(attr.data.val_s);
 
 	return (res);
 }
@@ -601,10 +600,10 @@ files_getattr(char *name, attrlist *items, pwu_repository_t *rep)
 	}
 
 getattr_exit:
-	if (pwbuf->pwd) free(pwbuf->pwd);
-	if (pwbuf->pwd_scratch) free(pwbuf->pwd_scratch);
-	if (pwbuf->spwd) free(pwbuf->spwd);
-	if (pwbuf->spwd_scratch) free(pwbuf->spwd_scratch);
+	free(pwbuf->pwd);
+	free(pwbuf->pwd_scratch);
+	free(pwbuf->spwd);
+	free(pwbuf->spwd_scratch);
 	free(pwbuf);
 
 	return (res);
@@ -724,8 +723,7 @@ files_update(attrlist *items, pwu_repository_t *rep, void *buf)
 					return (PWU_NOMEM);
 				}
 
-				if (pwbuf->new_sp_pwdp)
-					free(pwbuf->new_sp_pwdp);
+				free(pwbuf->new_sp_pwdp);
 				pwbuf->new_sp_pwdp = pword;
 				spw->sp_pwdp = pword;
 				aging_needed = 1;
@@ -749,8 +747,7 @@ files_update(attrlist *items, pwu_repository_t *rep, void *buf)
 				}
 				(void) strlcpy(pword, LOCKSTRING, len);
 				(void) strlcat(pword, spw->sp_pwdp, len);
-				if (pwbuf->new_sp_pwdp)
-					free(pwbuf->new_sp_pwdp);
+				free(pwbuf->new_sp_pwdp);
 				pwbuf->new_sp_pwdp = pword;
 				spw->sp_pwdp = pword;
 			}

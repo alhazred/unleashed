@@ -602,8 +602,7 @@ set_up_connection(int fd, struct netbuf *svcaddr, struct ct_data *ct,
 		}
 
 		/* Free old area if allocated */
-		if (ct->ct_addr.buf)
-			free(ct->ct_addr.buf);
+		free(ct->ct_addr.buf);
 		ct->ct_addr = rcvcall->addr;	/* To get the new address */
 		/* So that address buf does not get freed */
 		rcvcall->addr.buf = NULL;
@@ -1136,8 +1135,7 @@ clnt_vc_destroy(CLIENT *cl)
 	if (ct->ct_closeit)
 		(void) t_close(ct_fd);
 	XDR_DESTROY(&(ct->ct_xdrs));
-	if (ct->ct_addr.buf)
-		free(ct->ct_addr.buf);
+	free(ct->ct_addr.buf);
 	free(ct);
 	if (cl->cl_netid && cl->cl_netid[0])
 		free(cl->cl_netid);

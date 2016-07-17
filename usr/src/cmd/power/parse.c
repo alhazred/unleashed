@@ -451,8 +451,7 @@ parse_conf_file(char *name, vact_t action, boolean_t first_parse)
 			}
 		}
 
-		if (cline)
-			free(cline);
+		free(cline);
 		line = lend + 1;
 		lineno += linc;
 	}

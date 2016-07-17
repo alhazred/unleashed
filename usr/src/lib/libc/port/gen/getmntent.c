@@ -93,8 +93,7 @@ getmntbuf(size_t size)
 		return (NULL);
 	if (thread_data->buf == NULL ||
 	    thread_data->buflen < size) {
-		if (thread_data->buf != NULL)
-			free(thread_data->buf);
+		free(thread_data->buf);
 		thread_data->buflen = 0;
 		if ((thread_data->buf = malloc(size)) == NULL)
 			return (NULL);

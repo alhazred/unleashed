@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  *  glue routine for gss_acquire_cred
  */
@@ -413,10 +411,8 @@ gss_add_cred_with_password(minor_status, input_cred_handle,
 	return (GSS_S_COMPLETE);
 
 errout:
-	if (new_mechs_array)
-		free(new_mechs_array);
-	if (new_cred_array)
-		free(new_cred_array);
+	free(new_mechs_array);
+	free(new_cred_array);
 
 	if (cred != NULL && mech->gss_release_cred)
 		mech->gss_release_cred(mech->context,
@@ -428,8 +424,7 @@ errout:
 					&allocated_name);
 
 	if (input_cred_handle == GSS_C_NO_CREDENTIAL && union_cred) {
-		if (union_cred->auxinfo.name.value)
-			free(union_cred->auxinfo.name.value);
+		free(union_cred->auxinfo.name.value);
 		free(union_cred);
 	}
 

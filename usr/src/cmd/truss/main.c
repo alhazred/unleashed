@@ -130,14 +130,10 @@ free_private(void *value)
 {
 	private_t *pri = value;
 
-	if (pri->sys_path)
-		free(pri->sys_path);
-	if (pri->sys_string)
-		free(pri->sys_string);
-	if (pri->exec_string)
-		free(pri->exec_string);
-	if (pri->str_buffer)
-		free(pri->str_buffer);
+	free(pri->sys_path);
+	free(pri->sys_string);
+	free(pri->exec_string);
+	free(pri->str_buffer);
 	free(pri);
 }
 
@@ -1835,10 +1831,8 @@ file_to_parent()
 			abend("Error stat-ing tempfile", NULL);
 		filesz = fsi.st_size;
 	}
-	if (s != NULL)
-		free(s);
-	if (t != NULL)
-		free(t);
+	free(s);
+	free(t);
 }
 
 void
@@ -2373,8 +2367,7 @@ show_cred(private_t *pri, int new, int loadonly)
 		}
 	}
 
-	if (privdata != NULL)
-		proc_free_priv(privdata);
+	proc_free_priv(privdata);
 	credentials = cred;
 	privdata = privs;
 }

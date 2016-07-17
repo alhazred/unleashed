@@ -308,8 +308,7 @@ ap_rcm_init(apd_t *a)
 		if ((err = dlerror()) != NULL)
 			err = strdup(err);
 		ap_err(a, ERR_LIB_OPEN, rcmlib, err);
-		if (err != NULL)
-			free(err);
+		free(err);
 		return (rc);
 	}
 

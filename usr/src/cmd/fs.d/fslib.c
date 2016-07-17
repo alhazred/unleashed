@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include	<stdio.h>
 #include	<stdarg.h>
 #include	<stdlib.h>
@@ -131,16 +129,11 @@ fsfreemnttab(struct extmnttab *mnt)
 {
 
 	if (mnt) {
-		if (mnt->mnt_special)
-			free(mnt->mnt_special);
-		if (mnt->mnt_mountp)
-			free(mnt->mnt_mountp);
-		if (mnt->mnt_fstype)
-			free(mnt->mnt_fstype);
-		if (mnt->mnt_mntopts)
-			free(mnt->mnt_mntopts);
-		if (mnt->mnt_time)
-			free(mnt->mnt_time);
+		free(mnt->mnt_special);
+		free(mnt->mnt_mountp);
+		free(mnt->mnt_fstype);
+		free(mnt->mnt_mntopts);
+		free(mnt->mnt_time);
 		free(mnt);
 	}
 }
@@ -436,14 +429,12 @@ fs_get_zone_summaries(void)
 	for (;;) {
 		if (zone_list(ids, &numzones) < 0) {
 			perror("unable to retrieve list of zones");
-			if (ids != NULL)
-				free(ids);
+			free(ids);
 			return (NULL);
 		}
 		if (numzones <= oldnumzones)
 			break;
-		if (ids != NULL)
-			free(ids);
+		free(ids);
 		ids = malloc(numzones * sizeof (*ids));
 		if (ids == NULL) {
 			perror("malloc failed");

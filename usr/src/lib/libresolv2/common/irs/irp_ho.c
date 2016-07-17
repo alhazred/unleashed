@@ -376,8 +376,7 @@ free_host(struct hostent *ho) {
 		return;
 	}
 
-	if (ho->h_name != NULL)
-		free(ho->h_name);
+	free(ho->h_name);
 
 	if (ho->h_aliases != NULL) {
 		for (p = ho->h_aliases ; *p != NULL ; p++)

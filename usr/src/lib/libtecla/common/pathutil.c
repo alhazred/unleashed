@@ -29,8 +29,6 @@
  * of the copyright holder.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * If file-system access is to be excluded, this module has no function,
  * so all of its code should be excluded.
@@ -102,8 +100,7 @@ PathName *_new_PathName(void)
 PathName *_del_PathName(PathName *path)
 {
   if(path) {
-    if(path->name)
-      free(path->name);
+    free(path->name);
     free(path);
   };
   return NULL;

@@ -489,8 +489,7 @@ lsa_list_accounts(mlsvc_handle_t *domain_handle)
 			free(accounts.info[i].sid);
 		}
 
-		if (accounts.info)
-			free(accounts.info);
+		free(accounts.info);
 	} while (status == 0 && accounts.entries_read != 0);
 
 	return (0);

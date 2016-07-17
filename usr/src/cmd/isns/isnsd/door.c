@@ -1197,14 +1197,14 @@ cleanup_request(request_t req)
 		    if (req.req_data.data[i])
 			xmlFree(req.req_data.data[i]);
 		}
-		if (req.req_data.data) free(req.req_data.data);
+		free(req.req_data.data);
 		break;
 	    case (getAssociated_op):
 		for (i = 0; i < req.count; i++) {
 		    if (req.req_data.data[i])
 			xmlFree(req.req_data.data[i]);
 		}
-		if (req.req_data.data) free(req.req_data.data);
+		free(req.req_data.data);
 		break;
 	    case (enumerate_op):
 		break;
@@ -1216,16 +1216,15 @@ cleanup_request(request_t req)
 			    xmlFree(req.req_data.pair[i]->container);
 			if (req.req_data.pair[i]->member)
 			    xmlFree(req.req_data.pair[i]->member);
-			if (req.req_data.pair[i])
-			    free(req.req_data.pair[i]);
+			free(req.req_data.pair[i]);
 		    }
-		    if (req.req_data.pair) free(req.req_data.pair);
+		    free(req.req_data.pair);
 		} else {
 		    for (i = 0; i < req.count; i++) {
 			if (req.req_data.data[i])
 			    xmlFree(req.req_data.data[i]);
 		    }
-		    if (req.req_data.data) free(req.req_data.data);
+		    free(req.req_data.data);
 		}
 		break;
 	    case (createModify_op):
@@ -1236,23 +1235,19 @@ cleanup_request(request_t req)
 			    xmlFree(req.req_data.pair[i]->container);
 			if (req.req_data.pair[i]->member)
 			    xmlFree(req.req_data.pair[i]->member);
-			if (req.req_data.pair[i])
-			    free(req.req_data.pair[i]);
+			free(req.req_data.pair[i]);
 		    }
-		    if (req.req_data.pair) free(req.req_data.pair);
+		    free(req.req_data.pair);
 		} else if ((req.op_info.obj == DiscoveryDomain) ||
 		    (req.op_info.obj == DiscoveryDomainSet)) {
 		    for (i = 0; i < req.count; i++) {
 			if (req.req_data.attrlist[i]->name)
 			    xmlFree(req.req_data.attrlist[i]->name);
-			if (req.req_data.attrlist[i]->id)
-			    free(req.req_data.attrlist[i]->id);
-			if (req.req_data.attrlist[i]->enabled)
-			    free(req.req_data.attrlist[i]->enabled);
-			if (req.req_data.pair[i])
-			    free(req.req_data.pair[i]);
+			free(req.req_data.attrlist[i]->id);
+			free(req.req_data.attrlist[i]->enabled);
+			free(req.req_data.pair[i]);
 		    }
-		    if (req.req_data.attrlist) free(req.req_data.attrlist);
+		    free(req.req_data.attrlist);
 		}
 		break;
 	}

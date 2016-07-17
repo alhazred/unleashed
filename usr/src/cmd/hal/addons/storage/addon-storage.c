@@ -188,8 +188,7 @@ force_unmount (LibHalContext *ctx, const char *udi)
 
 out:
 	dbus_error_free (&error);
-	if (options != NULL)
-		free (options);
+	free(options);
 	if (msg != NULL)
 		dbus_message_unref (msg);
 	if (reply != NULL)

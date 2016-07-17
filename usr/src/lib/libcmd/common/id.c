@@ -165,7 +165,7 @@ getfsids(Sfio_t* sp, const char* name, int flags, register int lastchar)
 							}
 					}
 				}
-				if (x) free(x);
+				free(x);
 			}
 			break;
 		}

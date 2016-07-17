@@ -19,7 +19,6 @@
  *
  * CDDL HEADER END
  */
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
  * Copyright 2005 Sun Microsystems, Inc.  All rights reserved.
@@ -190,8 +189,7 @@ main(int argc, char **argv)
 				continue;
 			}
 			if (bufsz != st.st_blksize) {
-				if (buf)
-					free(buf);
+				free(buf);
 				bufsz = (size_t)st.st_blksize;
 				buf = calloc(bufsz, 1);
 				if (buf == NULL) {

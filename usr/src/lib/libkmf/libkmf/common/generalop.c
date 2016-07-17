@@ -395,8 +395,7 @@ static void
 DestroyPlugin(KMF_PLUGIN *plugin)
 {
 	if (plugin) {
-		if (plugin->path)
-			free(plugin->path);
+		free(plugin->path);
 		free(plugin);
 	}
 }
@@ -1248,8 +1247,7 @@ kmf_free_signed_cert(KMF_X509_CERTIFICATE *certptr)
 void
 kmf_free_str(char *pstr)
 {
-	if (pstr != NULL)
-		free(pstr);
+	free(pstr);
 }
 
 void
@@ -1307,8 +1305,7 @@ kmf_free_kmf_key(KMF_HANDLE_T handle, KMF_KEY_HANDLE *key)
 		(void) plugin->funclist->DeleteKey(handle, i, attlist);
 	}
 
-	if (key->keylabel)
-		free(key->keylabel);
+	free(key->keylabel);
 
 	if (key->israw) {
 		kmf_free_raw_key(key->keyp);
@@ -2123,8 +2120,7 @@ out:
 	if (ret != KMF_OK) {
 		*contents = NULL;
 		*outlen = 0;
-		if (olddata != NULL)
-			free(olddata);
+		free(olddata);
 	} else {
 		*contents = olddata;
 		*outlen = oldsize;
@@ -2258,8 +2254,7 @@ kmf_set_altname(KMF_X509_EXTENSIONS *extensions,
 
 	free(extdata);
 out:
-	if (olddata != NULL)
-		free(olddata);
+	free(olddata);
 
 	kmf_free_data(&dername);
 	if (ret != KMF_OK)

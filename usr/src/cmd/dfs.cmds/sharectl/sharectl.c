@@ -324,8 +324,7 @@ sc_set(sa_handle_t handle, int flags, int argc, char *argv[])
 		/* fetch and change the specified option(s) */
 		for (opt = optlist; opt != NULL; opt = opt->next) {
 			if (strncmp("section", opt->optname, 7) == 0) {
-				if (section != NULL)
-					free(section);
+				free(section);
 				section = strdup(opt->optvalue);
 				continue;
 			}
@@ -389,8 +388,7 @@ show_status(char *proto)
 	status = sa_get_protocol_status(proto);
 	features = sa_proto_get_featureset(proto);
 	(void) printf("%s\t%s", proto, status ? gettext(status) : "-");
-	if (status != NULL)
-		free(status);
+	free(status);
 	/*
 	 * Need to flag a client only protocol so test suites can
 	 * remove it from consideration.
@@ -455,8 +453,7 @@ sc_status(sa_handle_t handle, int flags, int argc, char *argv[])
 			}
 		}
 	}
-	if (protos != NULL)
-		free(protos);
+	free(protos);
 	return (ret);
 }
 

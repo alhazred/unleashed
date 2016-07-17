@@ -93,18 +93,14 @@ strcoll_l(const char *s1, const char *s2, locale_t loc)
 		goto error;
 
 	ret = wcscoll_l(w1, w2, loc);
-	if (t1)
-		free(t1);
-	if (t2)
-		free(t2);
+	free(t1);
+	free(t2);
 
 	return (ret);
 
 error:
-	if (t1)
-		free(t1);
-	if (t2)
-		free(t2);
+	free(t1);
+	free(t2);
 	return (strcmp(s1, s2));
 }
 

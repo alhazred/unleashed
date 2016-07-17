@@ -331,8 +331,7 @@ free_nw(struct nwent *nw) {
 	if (nw == NULL)
 		return;
 
-	if (nw->n_name != NULL)
-		free(nw->n_name);
+	free(nw->n_name);
 
 	if (nw->n_aliases != NULL) {
 		for (p = nw->n_aliases ; *p != NULL ; p++) {
@@ -341,8 +340,7 @@ free_nw(struct nwent *nw) {
 		free(nw->n_aliases);
 	}
 
-	if (nw->n_addr != NULL)
-		free(nw->n_addr);
+	free(nw->n_addr);
 }
 
 /*! \file */

@@ -313,12 +313,9 @@ out:
 		(void) memset(rep_passwd, 0, strlen(rep_passwd));
 		free(rep_passwd);
 	}
-	if (pwu_rep)
-		free(pwu_rep);
-	if (auth_user)
-		free(auth_user);
-	if (repository_name)
-		free(repository_name);
+	free(pwu_rep);
+	free(auth_user);
+	free(repository_name);
 
 	return (retval);
 }

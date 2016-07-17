@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -1909,12 +1907,9 @@ create_deventry(char *devname, svm_type_t devtype, md_dev64_t devkey,
 	return (newdeventry);
 
 errout:
-	if (devicesname != NULL)
-		free(devicesname);
-	if (newdevname != NULL)
-		free(newdevname);
-	if (newdeventry != NULL)
-		free(newdeventry);
+	free(devicesname);
+	free(newdevname);
+	free(newdeventry);
 	return (NULL);
 }
 
@@ -2160,8 +2155,7 @@ cache_sync(rcm_handle_t *hd, cache_t **cachep)
 		deventry = *(register_list + i);
 		svm_register_device(hd, deventry->devname);
 	}
-	if (register_list)
-		free(register_list);
+	free(register_list);
 
 	/* Swap pointers */
 	*cachep = new_cache;
@@ -2319,8 +2313,7 @@ free_deventry(deventry_t **deventry)
 					free(oldhspentry);
 				}
 			}
-			if ((*deventry)->devicesname)
-				free((*deventry)->devicesname);
+			free((*deventry)->devicesname);
 			free((*deventry)->devname);
 			free (*deventry);
 			*deventry = olddeventry;

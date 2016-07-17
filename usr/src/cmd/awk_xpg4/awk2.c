@@ -27,8 +27,6 @@
  * Copyright 1986, 1994 by Mortice Kern Systems Inc.  All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * awk -- process input files, field extraction, output
  *
@@ -858,8 +856,7 @@ xprintf(NODE *np, FILE *fp, wchar_t **cp)
 		}
 		goto nextc;
 	}
-	if (fmtsave != NULL)
-		free(fmtsave);
+	free(fmtsave);
 	/*
 	 * If printing to a character buffer then make sure it is
 	 * null-terminated and only uses as much space as required.

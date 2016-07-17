@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -96,8 +94,7 @@ mdesc_devinit(void)
 void
 mdesc_free(void *bufp, size_t size)
 {
-	if (bufp)
-		free(bufp);
+	free(bufp);
 }
 
 void
@@ -106,7 +103,6 @@ mdesc_devfini(md_t *mdp)
 	if (mdp)
 		(void) md_fini(mdp);
 
-	if (md_bufp)
-		free(md_bufp);
+	free(md_bufp);
 	md_bufp = NULL;
 }

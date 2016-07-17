@@ -339,8 +339,7 @@ _update_dev(deventry_t *dentry, int action, const char *devtype, char *devname,
 		 */
 		status = da_update_device(&dargs);
 		if (event_driven)
-			if (newentry.devinfo.devlist != NULL)
-				free(newentry.devinfo.devlist);
+			free(newentry.devinfo.devlist);
 		if (status == 0)
 			return (dargs.devinfo->devname);
 		else free(dargs.devinfo->devname);

@@ -1249,8 +1249,7 @@ cleanup_asn2rsapri:
 	if (p8obj_asn != NULLBER)
 		ber_free(p8obj_asn, 1);
 
-	if (key_octs.bv_val != NULL)
-		free(key_octs.bv_val);
+	free(key_octs.bv_val);
 
 	if (key_asn != NULLBER)
 		ber_free(key_asn, 1);
@@ -1457,8 +1456,7 @@ cleanup_asn2dsapri:
 	if (p8obj_asn != NULLBER)
 		ber_free(p8obj_asn, 1);
 
-	if (key_octs.bv_val != NULL)
-		free(key_octs.bv_val);
+	free(key_octs.bv_val);
 
 	if (key_asn != NULLBER)
 		ber_free(key_asn, 1);
@@ -1641,8 +1639,7 @@ cleanup_asn2dhpri:
 	if (p8obj_asn != NULLBER)
 		ber_free(p8obj_asn, 1);
 
-	if (key_octs.bv_val != NULL)
-		free(key_octs.bv_val);
+	free(key_octs.bv_val);
 
 	if (key_asn != NULLBER)
 		ber_free(key_asn, 1);
@@ -1849,8 +1846,7 @@ cleanup_asn2x942dhpri:
 	if (p8obj_asn != NULLBER)
 		ber_free(p8obj_asn, 1);
 
-	if (key_octs.bv_val != NULL)
-		free(key_octs.bv_val);
+	free(key_octs.bv_val);
 
 	if (key_asn != NULLBER)
 		ber_free(key_asn, 1);

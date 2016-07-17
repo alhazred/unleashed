@@ -109,10 +109,8 @@ static void
 pr_close(struct irs_pr *this) {
 	struct pvt *pvt = (struct pvt *)this->private;
 
-	if (pvt->proto.p_aliases)
-		free(pvt->proto.p_aliases);
-	if (pvt->prbuf)
-		free(pvt->prbuf);
+	free(pvt->proto.p_aliases);
+	free(pvt->prbuf);
 
 	memput(pvt, sizeof *pvt);
 	memput(this, sizeof *this);
@@ -210,8 +208,7 @@ parse_hes_list(struct irs_pr *this, char **hes_list) {
 			continue;
 
 		/* OK, we've got a live one.  Let's parse it for real. */
-		if (pvt->prbuf)
-			free(pvt->prbuf);
+		free(pvt->prbuf);
 		pvt->prbuf = strdup(cp);
 
 		p = pvt->prbuf;

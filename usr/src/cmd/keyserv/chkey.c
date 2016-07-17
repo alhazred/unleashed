@@ -297,8 +297,7 @@ makenewkeys()
 			char		*public, *secret;
 			size_t		hexkeylen;
 
-			if (slist[mcount])
-				free(slist[mcount]);
+			free(slist[mcount]);
 
 			hexkeylen = ((CURMECH->keylen / 8) * 2) + 1;
 
@@ -331,8 +330,7 @@ makenewkeys()
 		}
 	} else {
 		char		*public, *secret;
-		if (slist[0])
-			free(slist[0]);
+		free(slist[0]);
 
 		if (!(public = malloc(HEXKEYBYTES + 1))) {
 			fprintf(stderr, "%s: Malloc failure.\n", program_name);

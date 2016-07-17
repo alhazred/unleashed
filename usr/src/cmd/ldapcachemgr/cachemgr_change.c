@@ -474,10 +474,8 @@ chg_test_config_change(ns_config_t *new, int *change_status)
 			}
 		}
 	}
-	if (cur_cfg.str)
-		free(cur_cfg.str);
-	if (new_cfg.str)
-		free(new_cfg.str);
+	free(cur_cfg.str);
+	free(new_cfg.str);
 
 	if (changed) {
 
@@ -553,8 +551,7 @@ chg_cleanup_waiting_threads(void *arg)
 			break;
 	}
 
-	if (op)
-		free(op);
+	free(op);
 
 	thr_exit(NULL);
 	return (NULL);

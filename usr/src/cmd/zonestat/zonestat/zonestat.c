@@ -1353,8 +1353,7 @@ zonestat_print_summary(int report_fmt, zs_usage_t *u)
 again:
 	num = zs_zone_list(u, g_zone_list, g_zone_num);
 	if (num > g_zone_num) {
-		if (g_zone_list != NULL)
-			free(g_zone_list);
+		free(g_zone_list);
 		g_zone_list = (zs_zone_t **) malloc(sizeof (zs_zone_t *) * num);
 		g_zone_num = num;
 		goto again;
@@ -1472,8 +1471,7 @@ zonestat_print_res(int report_fmt, char *header, char *sizename, char *resname,
 again:
 	num = zs_zone_list(u, g_zone_list, g_zone_num);
 	if (num > g_zone_num) {
-		if (g_zone_list != NULL)
-			free(g_zone_list);
+		free(g_zone_list);
 		g_zone_list = (zs_zone_t **) malloc(sizeof (zs_zone_t *) * num);
 		g_zone_num = num;
 		goto again;
@@ -1793,8 +1791,7 @@ zonestat_print_pset(int report_fmt, zs_pset_t *pset, char *cputype)
 again:
 	num = zs_pset_zone_list(pset, g_pz_list, g_pz_num);
 	if (num > g_pz_num) {
-		if (g_pz_list != NULL)
-			free(g_pz_list);
+		free(g_pz_list);
 		g_pz_list = (zs_pset_zone_t **)malloc(
 		    sizeof (zs_pset_zone_t *) * num);
 		g_pz_num = num;
@@ -2000,8 +1997,7 @@ zonestat_print_psets(int report_fmt, zs_usage_t *u)
 again:
 	num = zs_pset_list(u, g_pset_list, g_pset_num);
 	if (num > g_pset_num) {
-		if (g_pset_list != NULL)
-			free(g_pset_list);
+		free(g_pset_list);
 		g_pset_list = (zs_pset_t **)malloc(
 		    sizeof (zs_pset_t *) * num);
 		g_pset_num = num;

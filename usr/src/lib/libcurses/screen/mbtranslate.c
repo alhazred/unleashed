@@ -28,8 +28,6 @@
  *      All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include	<stdlib.h>
 #include	<sys/types.h>
 #include	"curses_inc.h"
@@ -75,8 +73,7 @@ char
 
 	/* get space to store the translated string */
 	if (!byte && (n*CSMAX+1) > bufsize) {
-		if (buf)
-			free(buf);
+		free(buf);
 		bufsize = n * CSMAX + 1;
 		if ((buf = malloc(bufsize * sizeof (char))) == NULL)
 			bufsize = 0;

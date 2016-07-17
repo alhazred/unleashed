@@ -246,8 +246,7 @@ pam_sm_authenticate(
 		}
 	}
 
-	if (kmd->user != NULL)
-		free(kmd->user);
+	free(kmd->user);
 	if ((kmd->user = strdup(user)) == NULL) {
 		result = PAM_BUF_ERR;
 		goto out;
@@ -1018,11 +1017,9 @@ krb5_cleanup(pam_handle_t *pamh, void *data, int pam_status)
 		free(kmd->password);
 	}
 
-	if (kmd->user)
-		free(kmd->user);
+	free(kmd->user);
 
-	if (kmd->env)
-		free(kmd->env);
+	free(kmd->env);
 
 	krb5_free_cred_contents(kmd->kcontext, &kmd->initcreds);
 	(void) memset((char *)&kmd->initcreds, 0, sizeof (krb5_creds));

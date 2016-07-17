@@ -1201,18 +1201,12 @@ _pkginfoInit(struct pkginfo *a_info)
 
 	if (a_info->pkginst) {
 		free(a_info->pkginst);
-		if (a_info->arch)
-			free(a_info->arch);
-		if (a_info->version)
-			free(a_info->version);
-		if (a_info->basedir)
-			free(a_info->basedir);
-		if (a_info->name)
-			free(a_info->name);
-		if (a_info->vendor)
-			free(a_info->vendor);
-		if (a_info->catg)
-			free(a_info->catg);
+		free(a_info->arch);
+		free(a_info->version);
+		free(a_info->basedir);
+		free(a_info->name);
+		free(a_info->vendor);
+		free(a_info->catg);
 	}
 
 	a_info->pkginst = NULL;

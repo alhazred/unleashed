@@ -263,8 +263,7 @@ find_secobj_matching_prefix(dladm_handle_t dh, void *arg,
 		    "found secobj with prefix %s : %s\n",
 		    nsa->nsa_essid_prefix, secobjname);
 		/* Free last key found (if any) */
-		if (nsa->nsa_key != NULL)
-			free(nsa->nsa_key);
+		free(nsa->nsa_key);
 		/* Retrive key so we can get security mode */
 		nsa->nsa_key = nwamd_wlan_get_key_named(secobjname, 0);
 		(void) strlcpy(nsa->nsa_keyname, secobjname,

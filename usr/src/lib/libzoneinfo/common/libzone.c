@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -646,10 +644,8 @@ free_tz_continents(struct tz_continent *cont)
 
 	cptr = cont;
 	while (cptr != NULL) {
-		if (cptr->ctnt_id_desc != NULL)
-			free(cptr->ctnt_id_desc);
-		if (cptr->ctnt_display_desc != NULL)
-			free(cptr->ctnt_display_desc);
+		free(cptr->ctnt_id_desc);
+		free(cptr->ctnt_display_desc);
 		cprev = cptr;
 		cptr = cptr->ctnt_next;
 		free(cprev);
@@ -664,10 +660,8 @@ free_tz_countries(struct tz_country *country)
 
 	cptr = country;
 	while (cptr != NULL) {
-		if (cptr->ctry_id_desc != NULL)
-			free(cptr->ctry_id_desc);
-		if (cptr->ctry_display_desc != NULL)
-			free(cptr->ctry_display_desc);
+		free(cptr->ctry_id_desc);
+		free(cptr->ctry_display_desc);
 		cprev = cptr;
 		cptr = cptr->ctry_next;
 		free(cprev);
@@ -682,10 +676,8 @@ free_timezones(struct tz_timezone *timezone)
 
 	tzptr = timezone;
 	while (tzptr != NULL) {
-		if (tzptr->tz_id_desc != NULL)
-			free(tzptr->tz_id_desc);
-		if (tzptr->tz_display_desc != NULL)
-			free(tzptr->tz_display_desc);
+		free(tzptr->tz_id_desc);
+		free(tzptr->tz_display_desc);
 		tzprev = tzptr;
 		tzptr = tzptr->tz_next;
 		free(tzprev);

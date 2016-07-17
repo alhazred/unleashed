@@ -1068,8 +1068,7 @@ fixstate(uint8_t state, const char *string, int *max_len)
 	for (i = 0; i < (sizeof (ledstate_lkup) / sizeof (ledstate_lkup[0]));
 	    i++) {
 		if (ledstate_lkup[i].state == state) {
-			if (ledstate_lkup[i].str_ledstate != NULL)
-				free(ledstate_lkup[i].str_ledstate);
+			free(ledstate_lkup[i].str_ledstate);
 			ledstate_lkup[i].str_ledstate = strdup(string);
 			len = strlen(string);
 			if (len >= *max_len)
@@ -1119,10 +1118,8 @@ add_led_nodes(int lom_fd, picl_nodehdl_t lominfh)
 	led_labels = calloc(led_data.index + 1, sizeof (char *));
 
 	if ((led_labels == NULL) || (led_handles == NULL)) {
-		if (led_labels != NULL)
-			free(led_labels);
-		if (led_handles != NULL)
-			free(led_handles);
+		free(led_labels);
+		free(led_handles);
 		led_labels = NULL;
 		led_handles = NULL;
 		syslog(LOG_ERR, EM_NO_LED_MEM);
@@ -1280,8 +1277,7 @@ setup_strings()
 	int lim = sizeof (colour_lkup) / sizeof (colour_lkup[0]);
 
 	for (i = 0; i < lim; i++) {
-		if (colour_lkup[i].str_colour != NULL)
-			free(colour_lkup[i].str_colour);
+		free(colour_lkup[i].str_colour);
 	}
 
 	colour_lkup[LOM_LED_COLOUR_ANY].str_colour = strdup(gettext("any"));

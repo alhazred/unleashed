@@ -729,9 +729,7 @@ badplt:
 	return (elf);
 
 bad:
-	if (dp != NULL)
-		free(dp);
-	if (elfdata != NULL)
-		free(elfdata);
+	free(dp);
+	free(elfdata);
 	return (NULL);
 }

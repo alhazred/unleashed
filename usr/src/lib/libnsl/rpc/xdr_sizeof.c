@@ -25,8 +25,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * General purpose routine to see how much space something will use
  * when serialized using XDR.
@@ -91,8 +89,7 @@ x_inline(XDR *xdrs, int len)
 		return ((rpc_inline_t *)xdrs->x_private);
 	}
 	/* Free the earlier space and allocate new area */
-	if (xdrs->x_private)
-		free(xdrs->x_private);
+	free(xdrs->x_private);
 	if ((xdrs->x_private = malloc(len)) == NULL) {
 		xdrs->x_base = 0;
 		return (NULL);
@@ -154,7 +151,6 @@ xdr_sizeof(xdrproc_t func, void *data)
 	x.x_base = NULL;
 
 	stat = func(&x, data);
-	if (x.x_private)
-		free(x.x_private);
+	free(x.x_private);
 	return (stat == TRUE ? (uint_t)x.x_handy : 0);
 }

@@ -496,12 +496,12 @@ key_mgr_unwrap_key(SESSION	   * sess,
 	if (rc != CKR_OK) {
 		goto error;
 	}
-	if (data) free(data);
+	free(data);
 	return (rc);
 
 error:
 	if (key_obj) (void) object_free(key_obj);
-	if (data)    free(data);
+	free(data);
 
 	return (rc);
 }

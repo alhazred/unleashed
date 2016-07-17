@@ -50,8 +50,8 @@ ppcontext(void* context, int flags)
 		if (op->filtab) hashfree(op->filtab);
 		if (op->prdtab) hashfree(op->prdtab);
 		if (op->symtab) hashfree(op->symtab);
-		if (op->date) free(op->date);
-		if (op->time) free(op->time);
+		free(op->date);
+		free(op->time);
 		if (np)
 		{
 			free(np);

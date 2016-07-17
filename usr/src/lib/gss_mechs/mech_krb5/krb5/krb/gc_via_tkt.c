@@ -231,8 +231,7 @@ krb5_get_cred_via_tkt (krb5_context context, krb5_creds *tkt,
 			   (kdcoptions & KDC_OPT_ENC_TKT_IN_SKEY) ? 
 			   &in_cred->second_ticket : NULL,
 			    tkt, &tgsrep, &hostname_used);
-    if (enctypes)
-	free(enctypes);
+    free(enctypes);
     if (retval) {
 #ifdef DEBUG_REFERRALS
         printf("krb5_get_cred_via_tkt ending early after send_tgs with: %s\n",
@@ -443,8 +442,7 @@ error_3:;
     krb5_free_kdc_rep(context, dec_rep);
 
 error_4:;
-    if (hostname_used)
-        free(hostname_used);
+    free(hostname_used);
     free(tgsrep.response.data);
 #ifdef DEBUG_REFERRALS
     printf("krb5_get_cred_via_tkt ending; %s\n", retval?error_message(retval):"no error");

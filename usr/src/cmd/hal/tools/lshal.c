@@ -725,8 +725,7 @@ main (int argc, char *argv[])
 
 	dbus_connection_unref (conn);
 
-	if (show_device)
-		free(show_device);
+	free(show_device);
 
 	return 0;
 }

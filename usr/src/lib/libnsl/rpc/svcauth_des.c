@@ -440,8 +440,7 @@ again:
 	if (cred->adc_namekind == ADN_FULLNAME) {
 		cred->adc_fullname.window = window;
 		cred->adc_nickname = sid;	/* save nickname */
-		if (entry->rname != NULL)
-			free(entry->rname);
+		free(entry->rname);
 		entry->rname = malloc(strlen(cred->adc_fullname.name) + 1);
 		if (entry->rname != NULL) {
 			(void) strcpy(entry->rname, cred->adc_fullname.name);

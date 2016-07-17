@@ -977,10 +977,8 @@ done_parse:
 			}
 out:
 			release_process(p.pr);
-			if (rctlblkA)
-				free(rctlblkA);
-			if (rctlblkB)
-				free(rctlblkB);
+			free(rctlblkA);
+			free(rctlblkB);
 
 			/* Print any errors that occurred */
 			if (errflg && *global_error != '\0') {
@@ -1134,8 +1132,7 @@ store_rctls(const char *rctlname, void *walk_data)
 
 	if (((rblk1 = calloc(1, rctlblk_size())) == NULL) ||
 	    ((rblk2 = calloc(1, rctlblk_size())) == NULL)) {
-		if (rblk1 != NULL)
-			free(rblk1);
+		free(rblk1);
 		preserve_error(gettext("malloc failed: %s"),
 		    strerror(errno));
 		return (1);
@@ -1271,10 +1268,8 @@ store_value_entry(rctlblk_t *rblk, prctl_list_t *list)
 	if (e == NULL || store_blk == NULL) {
 		preserve_error(gettext("malloc failed %s"),
 		    strerror(errno));
-		if (e != NULL)
-			free(e);
-		if (store_blk != NULL)
-			free(store_blk);
+		free(e);
+		free(store_blk);
 		return (NULL);
 	}
 	if (iter == NULL)
@@ -1900,8 +1895,7 @@ bail:
 			    "for pid %d. The process was killed."),
 			    Pstatus(Pr)->pr_pid);
 	}
-	if (new_prpriv != NULL)
-		proc_free_priv(new_prpriv);
+	proc_free_priv(new_prpriv);
 
 	return (ret);
 }

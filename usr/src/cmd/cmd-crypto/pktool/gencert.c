@@ -393,10 +393,8 @@ gencert_file(KMF_HANDLE_T kmfhandle,
 	kmfrv = kmf_store_cert(kmfhandle, numattr, attrlist);
 
 cleanup:
-	if (fullkeypath != NULL)
-		free(fullkeypath);
-	if (fullcertpath != NULL)
-		free(fullcertpath);
+	free(fullkeypath);
+	free(fullcertpath);
 
 	kmf_free_data(&x509DER);
 	kmf_free_dn(&certSubject);
@@ -950,13 +948,10 @@ pk_gencert(int argc, char *argv[])
 end:
 	if (ekulist != NULL)
 		free_eku_list(ekulist);
-	if (subname)
-		free(subname);
-	if (tokencred.cred != NULL)
-		free(tokencred.cred);
+	free(subname);
+	free(tokencred.cred);
 
-	if (serial.val != NULL)
-		free(serial.val);
+	free(serial.val);
 
 	(void) kmf_finalize(kmfhandle);
 	return (rv);

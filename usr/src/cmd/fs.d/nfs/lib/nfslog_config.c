@@ -606,18 +606,12 @@ free_config(nfsl_config_t *config)
 {
 	if (config == NULL)
 		return;
-	if (config->nc_name)
-		free(config->nc_name);
-	if (config->nc_defaultdir)
-		free(config->nc_defaultdir);
-	if (config->nc_bufferpath)
-		free(config->nc_bufferpath);
-	if (config->nc_rpclogpath)
-		free(config->nc_rpclogpath);
-	if (config->nc_fhpath)
-		free(config->nc_fhpath);
-	if (config->nc_logpath)
-		free(config->nc_logpath);
+	free(config->nc_name);
+	free(config->nc_defaultdir);
+	free(config->nc_bufferpath);
+	free(config->nc_rpclogpath);
+	free(config->nc_fhpath);
+	free(config->nc_logpath);
 	if (config == global)
 		global = NULL;
 	if (config == global_raw)

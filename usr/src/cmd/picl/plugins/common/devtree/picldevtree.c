@@ -2371,16 +2371,11 @@ free_asr_conf_entries(asr_conf_entries_t *list) {
 	while (el != NULL) {
 		del = el;
 		el = el->next;
-		if (del->name)
-			free(del->name);
-		if (del->address)
-			free(del->address);
-		if (del->status)
-			free(del->status);
-		if (del->piclclass)
-			free(del->piclclass);
-		if (del->props)
-			free(del->props);
+		free(del->name);
+		free(del->address);
+		free(del->status);
+		free(del->piclclass);
+		free(del->props);
 		free(del);
 	}
 }
@@ -2446,16 +2441,11 @@ read_asr_conf_file(char *fname, asr_conf_entries_t *list)
 			el->props = NULL;
 		if ((el->name == NULL) || (el->piclclass == NULL) ||
 		    (el->address == NULL) || (el->status == NULL)) {
-			if (el->name)
-				free(el->name);
-			if (el->address)
-				free(el->address);
-			if (el->status)
-				free(el->status);
-			if (el->piclclass)
-				free(el->piclclass);
-			if (el->props)
-				free(el->props);
+			free(el->name);
+			free(el->address);
+			free(el->status);
+			free(el->piclclass);
+			free(el->props);
 			free(el);
 			break;
 		}
@@ -2713,8 +2703,7 @@ create_asr_node(char *parent, char *child, char *unitaddr, char *class,
 			break;
 		}
 	}
-	if (props_copy)
-		free(props_copy);
+	free(props_copy);
 	if (found) {
 		/*
 		 * does the pre-existing node have a status property?

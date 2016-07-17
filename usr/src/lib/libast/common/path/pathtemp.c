@@ -132,8 +132,7 @@ pathtemp(char* buf, size_t len, const char* dir, const char* pfx, int* fdp)
 		}
 		else if (streq(pfx, "prefix"))
 		{
-			if (tmp.pfx)
-				free(tmp.pfx);
+			free(tmp.pfx);
 			tmp.pfx = dir ? strdup(dir) : (char*)0;
 			return (char*)pfx;
 		}
@@ -159,8 +158,7 @@ pathtemp(char* buf, size_t len, const char* dir, const char* pfx, int* fdp)
 				free(tmp.vec);
 				tmp.vec = 0;
 			}
-			if (tmp.tmpdir)
-				free(tmp.tmpdir);
+			free(tmp.tmpdir);
 			tmp.tmpdir = dir ? strdup(dir) : (char*)0;
 			return (char*)pfx;
 		}
@@ -171,8 +169,7 @@ pathtemp(char* buf, size_t len, const char* dir, const char* pfx, int* fdp)
 				free(tmp.vec);
 				tmp.vec = 0;
 			}
-			if (tmp.tmppath)
-				free(tmp.tmppath);
+			free(tmp.tmppath);
 			tmp.tmppath = dir ? strdup(dir) : (char*)0;
 			return (char*)pfx;
 		}

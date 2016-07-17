@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -277,8 +275,7 @@ free_buffer_ent(struct buffer_ent *bep)
 	assert(bep != NULL);
 	if (debug)
 		(void) printf("freeing %s\n", bep->be_name);
-	if (bep->be_name != NULL)
-		free(bep->be_name);
+	free(bep->be_name);
 	if (bep->be_sharepnt != NULL)
 		free_sharepnt_list(bep->be_sharepnt);
 	free(bep);
@@ -323,8 +320,7 @@ free_sharepnt_ent(struct sharepnt_ent *sep)
 	assert(sep != NULL);
 	if (debug)
 		(void) printf("freeing %s\n", sep->se_name);
-	if (sep->se_name != NULL)
-		free(sep->se_name);
+	free(sep->se_name);
 	free(sep);
 }
 

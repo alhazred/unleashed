@@ -905,8 +905,7 @@ __s_api_getServers(
 				    prefServers, B_TRUE, version,
 				    &err);
 			if (sortServers) {
-				if (*servers)
-					free(*servers);
+				free(*servers);
 				*servers = NULL;
 				free(prefServers);
 				prefServers = NULL;
@@ -1488,8 +1487,7 @@ __s_api_addRefInfo(ns_referral_info_t **head, char *url,
 	if (ref->refFilter == NULL) {
 		ldap_free_urldesc(ludp);
 		free(ref->refHost);
-		if (ref->refDN)
-			free(ref->refDN);
+		free(ref->refDN);
 		free(ref);
 		return (NS_LDAP_MEMORY);
 	}
@@ -1542,12 +1540,9 @@ __s_api_deleteRefInfo(ns_referral_info_t *head)
 #endif
 
 	for (ref = head; ref; ) {
-		if (ref->refHost)
-			free(ref->refHost);
-		if (ref->refDN)
-			free(ref->refDN);
-		if (ref->refFilter)
-			free(ref->refFilter);
+		free(ref->refHost);
+		free(ref->refDN);
+		free(ref->refFilter);
 		tmp = ref->next;
 		free(ref);
 		ref = tmp;

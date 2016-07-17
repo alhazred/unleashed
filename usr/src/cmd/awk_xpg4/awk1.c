@@ -27,8 +27,6 @@
  * Copyright 1986, 1994 by Mortice Kern Systems Inc.  All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * awk -- mainline, yylex, etc.
  *
@@ -195,8 +193,7 @@ main(int argc, char *argv[])
 			}
 			break;
 		}
-		if (save_ptr)
-			free(save_ptr);
+		free(save_ptr);
 	}
 	if (progfilep == &progfiles[0]) {
 		if (argc < 2)
@@ -1608,8 +1605,7 @@ int_regwexec(REGEXP r,		/* compiled RE */
 	}
 
 	free(mbs);
-	if (mbsub)
-		free(mbsub);
+	free(mbsub);
 	return (i);
 }
 

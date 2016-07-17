@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -300,8 +298,7 @@ do_device_id(fcode_env_t *env)
 	}
 
 	/* Free the duplicated buf */
-	if (buf != NULL)
-		free(buf);
+	free(buf);
 }
 
 static void

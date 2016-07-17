@@ -664,14 +664,10 @@ __nss_files_XY_hostbyname(be, args, filter, type)
 	if (!args->stayopen)
 		(void) _nss_files_endent(be, 0);
 
-	if (taddr)
-		free(taddr);
-	if (taddr6)
-		free(taddr6);
-	if (h_name)
-		free(h_name);
-	if (abuf_start)
-		free(abuf_start);
+	free(taddr);
+	free(taddr6);
+	free(h_name);
+	free(abuf_start);
 
 	return (res);
 }

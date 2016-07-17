@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Code to maintain the runtime and on-disk filehandle mapping table for
  * nfslog.
@@ -573,8 +571,7 @@ fh_remove_mc_link(char *fhpath, fhandle_t *dfh, char *name, char **pathp)
 		str1 = NULL;
 	}
 	error = db_delete_link(fhpath, &public_fh, str);
-	if (str1 != NULL)
-		free(str1);
+	free(str1);
 	return (error);
 }
 
@@ -1050,8 +1047,7 @@ nfslog_LOOKUP_calc(fhandle_t *dfh, char *name, fhandle_t *fh,
 	}
 	if (fh_lookup_link(fhpath, dfh, fh, name, &fhrec, &error) != NULL) {
 		/* link already in table */
-		if (name1 != NULL)
-			free(name1);
+		free(name1);
 		return;
 	}
 	/* A new link so add it */
@@ -1060,8 +1056,7 @@ nfslog_LOOKUP_calc(fhandle_t *dfh, char *name, fhandle_t *fh,
 			"%s: Add fh for '%s' failed: %s\n"), str,
 			    name, ((error >= 0) ? strerror(error) : "Unknown"));
 	}
-	if (name1 != NULL)
-		free(name1);
+	free(name1);
 }
 
 /*

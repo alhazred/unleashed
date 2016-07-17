@@ -189,8 +189,7 @@ pk_show_keys(void *handle, KMF_KEY_HANDLE *keys, int numkeys)
 					    KMF_OK)
 						(void) fprintf(stdout,
 						    " (error: %s)", err);
-					if (err != NULL)
-						free(err);
+					free(err);
 				}
 			}
 		}
@@ -1084,11 +1083,9 @@ pk_list(int argc, char *argv[])
 		    gettext("Error listing objects"));
 	}
 
-	if (serial.val != NULL)
-		free(serial.val);
+	free(serial.val);
 
-	if (tokencred.cred != NULL)
-		free(tokencred.cred);
+	free(tokencred.cred);
 
 	(void) kmf_finalize(kmfhandle);
 	return (rv);

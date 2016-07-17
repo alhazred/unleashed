@@ -137,8 +137,7 @@ kmf_create_pk11_session(CK_SESSION_HANDLE *sessionp,
 	}
 
 out:
-	if (pSlotList != NULL)
-		free(pSlotList);
+	free(pSlotList);
 	return (kmf_rv);
 
 }
@@ -740,8 +739,7 @@ GetIDFromSPKI(KMF_X509_SPKI *spki, KMF_DATA *ID)
 	}
 
 	for (i = 0; i < uNumKeyParts; i++) {
-		if (KeyParts[i].Data != NULL)
-			free(KeyParts[i].Data);
+		free(KeyParts[i].Data);
 	}
 
 	if (rv != KMF_OK && ID->Data != NULL) {

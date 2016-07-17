@@ -892,8 +892,7 @@ kill_tcp_connection(struct connection *conn)
 {
     if (conn->u.tcp.response)
 	krb5_free_data(kdc_context, conn->u.tcp.response);
-    if (conn->u.tcp.buffer)
-	free(conn->u.tcp.buffer);
+    free(conn->u.tcp.buffer);
     FD_CLR(conn->fd, &sstate.rfds);
     FD_CLR(conn->fd, &sstate.wfds);
     if (sstate.max == conn->fd + 1)

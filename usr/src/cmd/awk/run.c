@@ -393,8 +393,7 @@ getaline(Node **a, int n)
 				donerec = 1; donefld = 0;
 			}
 		}
-		if (buf != NULL)
-			free(buf);
+		free(buf);
 	} else {			/* bare getline; use current input */
 		if (a[0] == NULL)	/* getline */
 			n = getrec(&record, &record_size);

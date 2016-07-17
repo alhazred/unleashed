@@ -533,11 +533,9 @@ idmap_cleanup_batch(idmap_query_state_t *batch)
 	int i;
 
 	for (i = 0; i < batch->qcount; i++) {
-		if (batch->queries[i].ecanonname != NULL)
-			free(batch->queries[i].ecanonname);
+		free(batch->queries[i].ecanonname);
 		batch->queries[i].ecanonname = NULL;
-		if (batch->queries[i].edomain != NULL)
-			free(batch->queries[i].edomain);
+		free(batch->queries[i].edomain);
 		batch->queries[i].edomain = NULL;
 	}
 }

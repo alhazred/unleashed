@@ -28,7 +28,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 /*LINTLIBRARY*/
 
 /*
@@ -835,7 +834,7 @@ unreserv(int key, char *device)
 	}
 
 	/* Free the alias string (if any), we don't need it anymore */
-	if (alias) free(alias);
+	free(alias);
 
 	/* If the device is locked ... */
 	if (locked) {

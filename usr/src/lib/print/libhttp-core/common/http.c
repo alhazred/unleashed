@@ -72,8 +72,6 @@
  *   CDSAReadFunc()       - Read function for CDSA decryption code.
  *   CDSAWriteFunc()      - Write function for CDSA encryption code.
  */
- 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
  * Include necessary headers...
@@ -327,11 +325,9 @@ httpClose(http_t *http)		/* I - Connection to close */
   if (!http)
     return;
 
-  if (http->input_set)
-    free(http->input_set);
+  free(http->input_set);
 
-  if (http->cookie)
-    free(http->cookie);
+  free(http->cookie);
 
 #ifdef HAVE_SSL
   if (http->tls)
@@ -1112,8 +1108,7 @@ httpSetCookie(http_t     *http,		/* I - Connection */
   if (!http)
     return;
 
-  if (http->cookie)
-    free(http->cookie);
+  free(http->cookie);
 
   if (cookie)
     http->cookie = strdup(cookie);

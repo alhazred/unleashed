@@ -518,10 +518,8 @@ errout:
     if (reply.padata)
 	krb5_free_pa_data(kdc_context, reply.padata);
 
-    if (cname)
-	    free(cname);
-    if (sname)
-	    free(sname);
+    free(cname);
+    free(sname);
     if (c_nprincs) {
 #ifdef	KRBCONF_KDC_MODIFIES_KDB
 	if (update_client) {

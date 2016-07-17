@@ -296,16 +296,11 @@ free_all(Nlstmp *nlstmp, Nls_node *nnp, char *pathname,
 		free(tp);
 		tp = tq;
 	}
-	if (nnp->locale)
-		free(nnp->locale);
-	if (nnp->domain)
-		free(nnp->domain);
-	if (pathname)
-		free(pathname);
-	if (ppaths)
-		free(ppaths);
-	if (lang)
-		free(lang);
+	free(nnp->locale);
+	free(nnp->domain);
+	free(pathname);
+	free(ppaths);
+	free(lang);
 	free(nnp);
 }
 

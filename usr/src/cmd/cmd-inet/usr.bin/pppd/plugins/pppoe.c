@@ -372,8 +372,7 @@ handle_pppoe_input(const ppptun_atype *pma, struct strbuf *ctrl,
 			    argv[0]);
 		else if (rpid != (pid_t)-1)
 			dbglog("PPPoE %s: started PID %d", mname, rpid);
-		if (str != NULL)
-			free(str);
+		free(str);
 		/* Free storage allocated by handle_{motm_hurl,ip_route_add} */
 		idx = 0;
 		for (argp = argv + 4; *argp != NULL; ) {

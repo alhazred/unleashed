@@ -141,8 +141,7 @@ get_peer_label(int fd, char **slabel)
 		if (pslabel != NULL) {
 			syslog(LOG_DEBUG, "get_peer_label(%d, %s): becomes %s",
 			    fd, (*slabel ? *slabel : "NULL"), pslabel);
-			if (*slabel != NULL)
-				free(*slabel);
+			free(*slabel);
 			*slabel = strdup(pslabel);
 		}
 	}

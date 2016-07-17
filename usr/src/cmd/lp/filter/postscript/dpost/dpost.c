@@ -28,8 +28,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  *
  * dpost - troff post-processor for PostScript printers.
@@ -1429,8 +1427,7 @@ loadfont(int n, char *s, char *s1)
 	    error(FATAL, "can't open font table %s", temp);
     }	/* End if */
 
-    if ( fontbase[n] != NULL )		/* something's already there */
-	free(fontbase[n]);		/* so release the memory first */
+    free(fontbase[n]);		/* so release the memory first */
 
     fontbase[n] = (struct Font *) malloc(fsize);
     if ( fontbase[n] == NULL )

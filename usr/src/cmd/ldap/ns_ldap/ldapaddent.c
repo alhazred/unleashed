@@ -356,8 +356,7 @@ ldap_freeEntry(ns_ldap_entry_t *ep)
 	for (j = 0; j < ep->attr_count; j++) {
 		if (ep->attr_pair[j] == NULL)
 			continue;
-		if (ep->attr_pair[j]->attrname)
-			free(ep->attr_pair[j]->attrname);
+		free(ep->attr_pair[j]->attrname);
 		if (ep->attr_pair[j]->attrvalue) {
 			for (k = 0; (k < ep->attr_pair[j]->value_count) &&
 			    (ep->attr_pair[j]->attrvalue[k]); k++) {

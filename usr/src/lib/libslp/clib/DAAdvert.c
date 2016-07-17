@@ -24,8 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * DAAdvert functionality. For all normal UA calls, libslp queries
  * slpd for available DAs. This file contains functionality to handle
@@ -120,10 +118,10 @@ SLPError slp_unpackDAAdvert(char *reply, char **surl, char **scopes,
 	return (SLP_OK);
 
 fail:
-	if (*surl) free (*surl);
-	if (*scopes) free (*scopes);
-	if (*attrs) free (*attrs);
-	if (*spis) free (*spis);
+	free(*surl);
+	free(*scopes);
+	free(*attrs);
+	free(*spis);
 
 	return (err);
 }

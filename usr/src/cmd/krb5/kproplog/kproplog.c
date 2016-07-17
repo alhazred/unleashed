@@ -3,8 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This module will parse the update logs on the master or slave servers.
  */
@@ -181,8 +179,7 @@ print_update(kdb_hlog_t *ulog, uint32_t entry, bool_t verbose)
 				    upd.kdb_update.kdbe_t_val[j].av_type);
 
 		xdr_free(xdr_kdb_incr_update_t, (char *)&upd);
-		if (dbprinc)
-			free(dbprinc);
+		free(dbprinc);
 	} /* for */
 }
 

@@ -231,8 +231,7 @@ ps_close(struct ps_prochandle *ph)
 {
 	(void) delete_all_breakpoints(ph);
 
-	if (ph->pp_auxvp)
-		free(ph->pp_auxvp);
+	free(ph->pp_auxvp);
 	free_linkmaps(ph);
 	return (RET_OK);
 }

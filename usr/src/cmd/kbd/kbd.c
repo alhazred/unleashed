@@ -786,10 +786,8 @@ kbd_defaults(int kbd)
 		    BAD_DEFAULT_LLINT, KBD_PROP_CONSFREQ, val_console_beeper);
 
 out:
-	if (val_layout != NULL)
-		free(val_layout);
-	if (val_abort != NULL)
-		free(val_abort);
+	free(val_layout);
+	free(val_abort);
 	if (snap != NULL)
 		scf_snapshot_destroy(snap);
 	scf_value_destroy(val);

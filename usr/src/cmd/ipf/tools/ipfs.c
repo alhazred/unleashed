@@ -726,8 +726,7 @@ char *file;
 		if (ioctl(fd, SIOCSTGSZ, &ng)) {
 			perror("nat:SIOCSTGSZ");
 			close(nfd);
-			if (ipnp != NULL)
-				free(ipnp);
+			free(ipnp);
 			return 1;
 		}
 
@@ -772,8 +771,7 @@ char *file;
 		}
 		next = ipnp->ipn_next;
 	} while (ipnp && next);
-	if (ipnp != NULL)
-		free(ipnp);
+	free(ipnp);
 	close(nfd);
 
 	return 0;

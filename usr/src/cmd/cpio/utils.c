@@ -300,8 +300,7 @@ free_holesdata(holes_info_t *hi)
 	}
 	hi->holes_list = NULL;
 
-	if (hi->holesdata != NULL)
-		free(hi->holesdata);
+	free(hi->holesdata);
 	hi->holesdata = NULL;
 }
 

@@ -23,8 +23,6 @@
  * Copyright (c) 1994, by Sun Microsytems, Inc.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Interfaces to control kernel tracing and kernel probes
  */
@@ -517,8 +515,7 @@ alloc_probe_space(tnfctl_handle_t *hndl, int maxprobe)
 		probe_p->probe_id = i;
 		probe_p->probe_handle = calloc(1, sizeof (tnfctl_probe_t));
 		if (probe_p->probe_handle == NULL) {
-			if (nobj_p->probes)
-				free(nobj_p->probes);
+			free(nobj_p->probes);
 			free(nobj_p);
 			return (TNFCTL_ERR_ALLOCFAIL);
 		}

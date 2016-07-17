@@ -965,10 +965,8 @@ cleanup:
 	}
 
 	/* free allocated memory */
-	if (pSlotList != NULL)
-		free(pSlotList);
-	if (pivbuf != NULL)
-		free(pivbuf);
+	free(pSlotList);
+	free(pivbuf);
 
 	/* close all the files */
 	if (iflag && (infd != -1))

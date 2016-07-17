@@ -181,8 +181,7 @@ set_keys(char **key, char *attrtype)
 		len = keyfilter ? strlen(keyfilter) : 0;
 
 		if (!(tmpptr = (char *)realloc(keyfilter, totlen))) {
-			if (keyfilter)
-				free(keyfilter);
+			free(keyfilter);
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			exit(2);
 		}
@@ -252,8 +251,7 @@ set_keys_publickey(char **key, char *attrtype, int type, char **ret)
 		len = pre_filter ? strlen(pre_filter) : 0;
 
 		if (!(tmpptr = (char *)realloc(pre_filter, totlen))) {
-			if (pre_filter)
-				free(pre_filter);
+			free(pre_filter);
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			exit(2);
 		}
@@ -363,8 +361,7 @@ set_filter_publickey(char **key, char *database, int type, char **udata)
 	(void) fprintf(stdout, "set_filter: filter=\"%s\"\n", filter);
 	(void) fprintf(stdout, "set_filter: userdata=\"%s\"\n", userdata);
 #endif /* DEBUG */
-	if (keyfilter)
-		free(keyfilter);
+	free(keyfilter);
 	if (nomem)
 		exit(2);
 	*udata = userdata;
@@ -631,8 +628,7 @@ done:
 	(void) fprintf(stdout, "set_filter: filter=\"%s\"\n", filter);
 	(void) fprintf(stdout, "set_filter: userdata=\"%s\"\n", userdata);
 #endif /* DEBUG */
-	if (keyfilter)
-		free(keyfilter);
+	free(keyfilter);
 	if (nomem)
 		exit(2);
 	*udata = userdata;

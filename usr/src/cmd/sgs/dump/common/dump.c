@@ -491,8 +491,7 @@ demangled_name(char *s)
 	/*
 	 * Demangled. Format it
 	 */
-	if (buf != NULL)
-		free(buf);
+	free(buf);
 
 	len = strlen(dn) + strlen(s) + 4;
 	if ((buf = malloc(len)) == NULL)

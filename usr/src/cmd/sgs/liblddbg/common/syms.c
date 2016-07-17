@@ -204,8 +204,7 @@ Dbg_syms_discarded(Lm_list *lml, Sym_desc *sdp)
 		dbg_print(lml, MSG_INTL(MSG_SYM_DISCARD_SEC),
 		    Dbg_demangle_name(sdp->sd_name),
 		    dbg_fmt_isec_name(sdp->sd_isc, buf, &alloc_mem), file);
-		if (alloc_mem != NULL)
-			free(alloc_mem);
+		free(alloc_mem);
 	} else
 		dbg_print(lml, MSG_INTL(MSG_SYM_DISCARD_FILE),
 		    Dbg_demangle_name(sdp->sd_name), file);

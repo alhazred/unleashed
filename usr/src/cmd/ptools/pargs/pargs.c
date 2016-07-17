@@ -1123,8 +1123,7 @@ free_data(pargs_data_t *datap)
 
 	if (datap->pd_argv) {
 		for (i = 0; i < datap->pd_argc; i++) {
-			if (datap->pd_argv_strs[i] != NULL)
-				free(datap->pd_argv_strs[i]);
+			free(datap->pd_argv_strs[i]);
 		}
 		free(datap->pd_argv);
 		free(datap->pd_argv_strs);
@@ -1132,8 +1131,7 @@ free_data(pargs_data_t *datap)
 
 	if (datap->pd_envp) {
 		for (i = 0; i < datap->pd_envc; i++) {
-			if (datap->pd_envp_strs[i] != NULL)
-				free(datap->pd_envp_strs[i]);
+			free(datap->pd_envp_strs[i]);
 		}
 		free(datap->pd_envp);
 		free(datap->pd_envp_strs);
@@ -1141,8 +1139,7 @@ free_data(pargs_data_t *datap)
 
 	if (datap->pd_auxv) {
 		for (i = 0; i < datap->pd_auxc; i++) {
-			if (datap->pd_auxv_strs[i] != NULL)
-				free(datap->pd_auxv_strs[i]);
+			free(datap->pd_auxv_strs[i]);
 		}
 		free(datap->pd_auxv);
 		free(datap->pd_auxv_strs);

@@ -610,12 +610,10 @@ parse_ldap_config_file(
 		if (rc < 0) {
 			report_error(attr_val == NULL ?
 			    "<no attribute>" : attr_val, _key_val);
-			if (attr_val)
-				free(attr_val);
+			free(attr_val);
 			break;
 		}
-		if (attr_val)
-			free(attr_val);
+		free(attr_val);
 	}
 
 	(void) close(fd);
@@ -694,8 +692,7 @@ yp_parse_ldap_config_file(
 		if (rc < 0) {
 			report_error(attr_val == NULL ?
 			    "<no attribute>" : attr_val, _key_val);
-			if (attr_val)
-				free(attr_val);
+			free(attr_val);
 			break;
 		}
 		if (attr_val) {

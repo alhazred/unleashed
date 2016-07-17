@@ -715,8 +715,7 @@ free_complex(complex_property_ptr_t complex)
 	if (complex == NULL)
 		return;
 	free_complex(complex->cp_next);
-	if (complex->cp_value != NULL)
-		free(complex->cp_value);
+	free(complex->cp_value);
 	free(complex);
 }
 
@@ -731,8 +730,7 @@ free_list(list_property_ptr_t list)
 {
 	if (list == NULL)
 		return;
-	if (list->lp_simple != NULL)
-		free(list->lp_simple);
+	free(list->lp_simple);
 	free_complex(list->lp_complex);
 	free_list(list->lp_next);
 	free(list);

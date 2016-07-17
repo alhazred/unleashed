@@ -158,8 +158,7 @@ void
 free_alert(ALERT *ap)
 {
 	if (ap != NULL) {
-		if (ap->msgfile != NULL)
-			free(ap->msgfile);
+		free(ap->msgfile);
 		if (ap->exec != NULL)
 			free_exec(ap->exec);
 		free(ap);
@@ -194,12 +193,9 @@ free_pstatus(PSTATUS *psp)
 			free_exec(psp->fault_exec);
 		if (psp->printer != NULL)
 			freeprinter(psp->printer);
-		if (psp->pwheel_name != NULL)
-			free(psp->pwheel_name);
-		if (psp->dis_reason != NULL)
-			free(psp->dis_reason);
-		if (psp->rej_reason != NULL)
-			free(psp->rej_reason);
+		free(psp->pwheel_name);
+		free(psp->dis_reason);
+		free(psp->rej_reason);
 		if (psp->users_allowed != NULL)
 			unload_list(&psp->users_allowed);
 		if (psp->users_denied != NULL)
@@ -208,16 +204,11 @@ free_pstatus(PSTATUS *psp)
 			unload_list(&psp->forms_allowed);
 		if (psp->forms_denied != NULL)
 			unload_list(&psp->forms_denied);
-		if (psp->cpi != NULL)
-			free(psp->cpi);
-		if (psp->lpi != NULL)
-			free(psp->lpi);
-		if (psp->plen != NULL)
-			free(psp->plen);
-		if (psp->pwid != NULL)
-			free(psp->pwid);
-		if (psp->fault_reason != NULL)
-			free(psp->fault_reason);
+		free(psp->cpi);
+		free(psp->lpi);
+		free(psp->plen);
+		free(psp->pwid);
+		free(psp->fault_reason);
 		if (psp->paper_allowed != NULL)
 			unload_list(&psp->paper_allowed);
 		free(psp);
@@ -272,8 +263,7 @@ void
 free_cstatus(CLSTATUS *csp)
 {
 	if (csp != NULL) {
-		if (csp->rej_reason != NULL)
-			free(csp->rej_reason);
+		free(csp->rej_reason);
 		if (csp->class != NULL)
 			freeclass(csp->class);
 		free(csp);
@@ -309,14 +299,10 @@ free_fstatus(FSTATUS *fsp)
 			unload_list(&fsp->users_allowed);
 		if (fsp->users_denied != NULL)
 			unload_list(&fsp->users_denied);
-		if (fsp->cpi != NULL)
-			free(fsp->cpi);
-		if (fsp->lpi != NULL)
-			free(fsp->lpi);
-		if (fsp->plen != NULL)
-			free(fsp->plen);
-		if (fsp->pwid != NULL)
-			free(fsp->pwid);
+		free(fsp->cpi);
+		free(fsp->lpi);
+		free(fsp->plen);
+		free(fsp->pwid);
 		free(fsp);
 	}
 }

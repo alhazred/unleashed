@@ -580,8 +580,7 @@ set_one_limit(struct ps_prochandle *Pr, int which, rlim64_t cur, rlim64_t max)
 		proc_free_priv(old_prpriv);
 	}
 
-	if (new_prpriv != NULL)
-		proc_free_priv(new_prpriv);
+	proc_free_priv(new_prpriv);
 
 	return (ret);
 }

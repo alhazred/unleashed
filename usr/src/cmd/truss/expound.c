@@ -4514,8 +4514,7 @@ show_zone_create_args(private_t *pri, long offset)
 
 			(void) printf("%s\t         label: %s\n",
 			    pri->pname, label_str != NULL ? label_str : "<?>");
-			if (label_str)
-				free(label_str);
+			free(label_str);
 		}
 
 		if (args.zfsbufsz > 0)
@@ -4598,8 +4597,7 @@ show_zone_create_args32(private_t *pri, long offset)
 			}
 			(void) printf("%s\t         label: %s\n",
 			    pri->pname, label_str != NULL ? label_str : "<?>");
-			if (label_str)
-				free(label_str);
+			free(label_str);
 		}
 
 		if (args.zfsbufsz > 0)

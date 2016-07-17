@@ -904,8 +904,7 @@ add_authorization_data(krb5_enc_tkt_part *enc_tkt_part, krb5_authdata **ad)
     newad[oldones+i] = NULL;
 
     /* Free any existing list */
-    if (enc_tkt_part->authorization_data != NULL)
-	free(enc_tkt_part->authorization_data);
+    free(enc_tkt_part->authorization_data);
 
     /* Install our new list */
     enc_tkt_part->authorization_data = newad;
@@ -1311,8 +1310,7 @@ cleanup:
 	free(enc_data);
     }
     krb5_free_data_contents(context, &enc_ts_data);
-    if (pa_enc)
-	free(pa_enc);
+    free(pa_enc);
     /*
      * If we get NO_MATCHING_KEY and decryption previously failed, and
      * we failed to find any other keys of the correct enctype after
@@ -1378,12 +1376,10 @@ _make_etype_info_entry(krb5_context context,
 
 fail:
     if (tmp_entry) {
-	if (tmp_entry->s2kparams.data)
-	    free(tmp_entry->s2kparams.data);
+	free(tmp_entry->s2kparams.data);
 	free(tmp_entry);
     }
-    if (salt.data)
-	free(salt.data);
+    free(salt.data);
     return retval;
 }
 /*
@@ -1575,8 +1571,7 @@ etype_info_as_rep_helper(krb5_context context, krb5_pa_data * padata,
     if (entry)
 	krb5_free_etype_info(context, entry);
     if (retval) {
-	if (tmp_padata)
-	    free(tmp_padata);
+	free(tmp_padata);
     }
     if (scratch)
 	    krb5_free_data(context, scratch);
@@ -2375,12 +2370,12 @@ verify_sam_response(krb5_context context, krb5_db_entry *client,
     if (retval) com_err(gettext("krb5kdc"), 
 			retval,
 			gettext("sam verify failure"));
-    if (scratch.data) free(scratch.data);
-    if (sr) free(sr);
-    if (psr) free(psr);
-    if (esre) free(esre);
-    if (princ_psr) free(princ_psr);
-    if (princ_req) free(princ_req);
+    free(scratch.data);
+    free(sr);
+    free(psr);
+    free(esre);
+    free(princ_psr);
+    free(princ_req);
 
     return retval;
 }

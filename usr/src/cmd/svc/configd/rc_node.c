@@ -2884,8 +2884,7 @@ rc_node_ptr_check_and_lock(rc_node_ptr_t *npp, int *res)
 	int rc__res;							\
 	if (((np) = rc_node_ptr_check_and_lock(npp, &rc__res)) == 	\
 	    NULL) {							\
-		if ((mem) != NULL)					\
-			free((mem));					\
+		free((mem));					\
 		return (rc__res);					\
 	}								\
 }
@@ -2916,8 +2915,7 @@ rc_node_ptr_check_and_lock(rc_node_ptr_t *npp, int *res)
 		(void) pthread_mutex_unlock(&(np)->rn_lock);		\
 		assert((np) == (npp)->rnp_node);			\
 		rc_node_clear(npp, 1);					\
-		if ((mem) != NULL)					\
-			free((mem));					\
+		free((mem));					\
 		return (REP_PROTOCOL_FAIL_DELETED);			\
 	}								\
 }
@@ -4111,8 +4109,7 @@ rc_node_create_child_pg(rc_node_ptr_t *npp, uint32_t type, const char *name,
 			smf_audit_event(event_id, ADT_FAILURE,
 			    ADT_FAIL_VALUE_AUTH, &audit_data);
 		}
-		if (audit_data.ed_auth != NULL)
-			free(audit_data.ed_auth);
+		free(audit_data.ed_auth);
 		return (rc);
 	}
 
@@ -4136,8 +4133,7 @@ rc_node_create_child_pg(rc_node_ptr_t *npp, uint32_t type, const char *name,
 		smf_audit_event(event_id, ADT_SUCCESS, ADT_SUCCESS,
 		    &audit_data);
 	}
-	if (audit_data.ed_auth != NULL)
-		free(audit_data.ed_auth);
+	free(audit_data.ed_auth);
 
 	return (rc);
 }
@@ -5499,8 +5495,7 @@ rc_snapshot_take_new(rc_node_ptr_t *npp, const char *svcname,
 		smf_audit_event(ADT_smf_create_snap, ADT_SUCCESS, ADT_SUCCESS,
 		    &audit_data);
 	}
-	if (audit_data.ed_auth != NULL)
-		free(audit_data.ed_auth);
+	free(audit_data.ed_auth);
 	return (rc);
 }
 
@@ -6625,8 +6620,7 @@ rc_iter_destroy(rc_node_iter_t **nipp)
 
 	np = nip->rni_parent;
 
-	if (nip->rni_filter_arg != NULL)
-		free(nip->rni_filter_arg);
+	free(nip->rni_filter_arg);
 	nip->rni_filter_arg = NULL;
 
 	if (nip->rni_type == REP_PROTOCOL_ENTITY_VALUE ||
@@ -6812,8 +6806,7 @@ skip_checks:
 	}
 
 	rc_node_rele(np);
-	if (auth_string != NULL)
-		free(auth_string);
+	free(auth_string);
 	return (REP_PROTOCOL_SUCCESS);
 }
 

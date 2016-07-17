@@ -23,7 +23,6 @@
  * Copyright 2003 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -213,13 +212,11 @@ exit_diff:
 	(void) seteuid(euid);
 	switch (r) {
 	case AUDIT_GET_DIFFS_ERR:
-		if (buf != NULL)
-			free(buf);
+		free(buf);
 		*bufptr = err_buf;
 		break;
 	case AUDIT_GET_DIFFS_NO_DIFFS:
-		if (buf != NULL)
-			free(buf);
+		free(buf);
 		*bufptr = NULL;
 		break;
 	case AUDIT_GET_DIFFS_CRONTAB:

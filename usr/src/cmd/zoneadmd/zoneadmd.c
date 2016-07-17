@@ -424,8 +424,7 @@ filter_bootargs(zlog_t *zlogp, const char *inargs, char *outargs,
 
 done:
 	for (i = 0; i < argc_save; i++) {
-		if (argv_save[i] != NULL)
-			free(argv_save[i]);
+		free(argv_save[i]);
 	}
 	free(argv_save);
 	return (err);

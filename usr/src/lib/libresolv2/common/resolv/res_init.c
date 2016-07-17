@@ -838,8 +838,7 @@ res_nclose(res_state statp) {
 void
 res_ndestroy(res_state statp) {
 	res_nclose(statp);
-	if (statp->_u._ext.ext != NULL)
-		free(statp->_u._ext.ext);
+	free(statp->_u._ext.ext);
 	statp->options &= ~RES_INIT;
 	statp->_u._ext.ext = NULL;
 }

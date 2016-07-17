@@ -37,8 +37,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*LINTLIBRARY*/
 
 #include	<stdlib.h>
@@ -98,8 +96,7 @@ bad :
 		keys[(*first)++] = key_info;
 		cur_term->_lastmacro_ordered++;
 	}
-	if (prev_keys != NULL)
-		free(prev_keys);
+	free(prev_keys);
 	cur_term->_keys = keys;
 
 	(*numkeys)++;

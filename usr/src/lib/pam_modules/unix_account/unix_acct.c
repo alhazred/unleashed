@@ -536,8 +536,7 @@ out:
 			    pam_strerror(pamh, error));
 		}
 
-		if (repository_name)
-			free(repository_name);
+		free(repository_name);
 		if (pwu_rep != PWU_DEFAULT_REP)
 			free(pwu_rep);
 		if (shpwd.sp_pwdp) {

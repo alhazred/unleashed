@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Code to maintain the runtime and on-disk filehandle mapping table for
  * nfslog.
@@ -375,10 +373,8 @@ db_get_all_databases(char *fhpath, bool_t getall)
 	}
 	(void) closedir(dirp);
 exit:
-	if (fhpathname != NULL)
-		free(fhpathname);
-	if (fhdir != NULL)
-		free(fhdir);
+	free(fhpathname);
+	free(fhdir);
 	return (ret_dbp);
 }
 
@@ -1216,8 +1212,7 @@ update_linked_list(struct db_list *dbp, char *nextkey, int nextsize,
 					((*errorp >= 0) ? strerror(*errorp) :
 					"Unknown"));
 			}
-			if (nextlinkp != NULL)
-				free(nextlinkp);
+			free(nextlinkp);
 			nextlinkp = NULL;
 		}
 	}
@@ -1532,8 +1527,7 @@ delete_link_by_key(struct db_list *dbp, char *linkkey, int *linksizep,
 	*linksizep = nextsize;
 	if (nextsize > 0)
 		(void) memcpy(linkkey, nextkey, nextsize);
-	if (nextlinkp != NULL)
-		free(nextlinkp);
+	free(nextlinkp);
 	free(dellinkp);
 	return (0);
 }

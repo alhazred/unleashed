@@ -152,8 +152,7 @@ clnt_door_create(const rpcprog_t program, const rpcvers_t version,
 	cl->cl_netid = strdup("door");
 	if (cl->cl_netid == NULL) {
 		syslog(LOG_ERR, "clnt_door_create: strdup failed");
-		if (cl->cl_tp)
-			free(cl->cl_tp);
+		free(cl->cl_tp);
 		rpc_createerr.cf_stat = RPC_SYSTEMERROR;
 		rpc_createerr.cf_error.re_errno = errno;
 		goto err;
@@ -163,8 +162,7 @@ err:
 	rpc_createerr.cf_error.re_terrno = 0;
 	if (cl) {
 		free(cl);
-		if (cu)
-			free(cu);
+		free(cu);
 	}
 	(void) close(did);
 	return (NULL);

@@ -2,7 +2,6 @@
  * Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /* dlopen.c--Unix dlopen() dynamic loader interface
  * Rob Siemborski
@@ -129,7 +128,7 @@ int
 dlclose(dll_handle h)
 {
     shl_t hp = *((shl_t *)h);
-    if (hp != NULL) free(hp);
+    free(hp);
     return shl_unload(h);
 }
 

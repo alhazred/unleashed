@@ -173,15 +173,13 @@ free_netgroup_table(netgroup_table_t *tab)
 		return;
 
 	for (ng = tab->to_do; ng != NULL; ng = next) {
-		if (ng->name != NULL)
-			free(ng->name);
+		free(ng->name);
 		next = ng->next;
 		free(ng);
 	}
 
 	for (ng = tab->done; ng != NULL; ng = next) {
-		if (ng->name != NULL)
-			free(ng->name);
+		free(ng->name);
 		next = ng->next;
 		free(ng);
 	}

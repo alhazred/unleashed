@@ -1,4 +1,3 @@
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 /*
  * lib/kdb/kdb_ldap/ldap_realm.c
  *
@@ -364,8 +363,7 @@ krb5_ldap_delete_realm (context, lrealm)
 cleanup:
     if (subtrees) {
 	for (l=0; l < ntree; ++l) {
-	if (subtrees[l])
-	    free (subtrees[l]);
+	free(subtrees[l]);
         }
 	free (subtrees);
     }
@@ -1177,8 +1175,7 @@ krb5_ldap_create_realm(context, rparams, mask)
 
 cleanup:
 
-    if (dn)
-	free(dn);
+    free(dn);
 
     ldap_mods_free(mods, 1);
     krb5_ldap_put_handle_to_pool(ldap_context, ldap_server_handle);
@@ -1439,8 +1436,7 @@ krb5_ldap_free_realm_params(rparams)
     int i=0;
 
     if (rparams) {
-	if (rparams->realmdn)
-	    free(rparams->realmdn);
+	free(rparams->realmdn);
 
 	if (rparams->realm_name)
 	    krb5_xfree(rparams->realm_name);

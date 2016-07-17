@@ -169,12 +169,9 @@ nis_user_to_authenticate(char *user, pwu_repository_t *rep,
 	 * See man page yp_get_default_domain(3NSL)
 	 * for details.
 	 */
-	if (buf->master)
-		free(buf->master);
-	if (buf->scratch)
-		free(buf->scratch);
-	if (buf->c2scratch)
-		free(buf->c2scratch);
+	free(buf->master);
+	free(buf->scratch);
+	free(buf->c2scratch);
 	free(buf->pwd);
 	free(buf);
 
@@ -262,12 +259,9 @@ nis_getattr(char *name, attrlist *items, pwu_repository_t *rep)
 	 * See man page yp_get_default_domain(3NSL)
 	 * for details.
 	 */
-	if (nisbuf->master)
-		free(nisbuf->master);
-	if (nisbuf->scratch)
-		free(nisbuf->scratch);
-	if (nisbuf->c2scratch)
-		free(nisbuf->c2scratch);
+	free(nisbuf->master);
+	free(nisbuf->scratch);
+	free(nisbuf->c2scratch);
 	free(nisbuf->pwd);
 	free(nisbuf);
 
@@ -314,8 +308,7 @@ nis_getpwnam(char *name, attrlist *items, pwu_repository_t *rep,
 	if (yp_master(nisbuf->domain, "passwd.byname", &nisbuf->master) != 0) {
 		syslog(LOG_ERR,
 		    "passwdutil.so: can't get master for passwd map");
-		if (nisbuf->master)
-			free(nisbuf->master);
+		free(nisbuf->master);
 		free(nisbuf->pwd);
 		free(nisbuf);
 		return (PWU_SERVER_ERROR);

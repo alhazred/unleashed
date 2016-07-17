@@ -376,8 +376,7 @@ get_wild(nis_backend_ptr_t be, nss_XbyY_args_t *argp, int getby_flag)
 			break;
 	}
 	_priv_exec->id = orig_id;
-	if (old_id)
-		free(old_id);
+	free(old_id);
 
 	return (res);
 }

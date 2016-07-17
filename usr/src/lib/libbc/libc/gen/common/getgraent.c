@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <grp.h>
 #include <grpadj.h>
@@ -121,8 +119,7 @@ setgraent(void)
 		g->grfa = fopen(GROUPADJ, "r");
 	else
 		rewind(g->grfa);
-	if (g->yp)
-		free(g->yp);
+	free(g->yp);
 	g->yp = NULL;
 	freeminuslist();
 }
@@ -138,8 +135,7 @@ endgraent(void)
 		(void) fclose(g->grfa);
 		g->grfa = NULL;
 	}
-	if (g->yp)
-		free(g->yp);
+	free(g->yp);
 	g->yp = NULL;
 	freeminuslist();
 }
@@ -319,8 +315,7 @@ fprintf(stderr, "reason yp_next failed is %d\n", reason);
 #endif
 		g->yp = NULL;
 	}
-	if (g->oldyp)
-		free(g->oldyp);
+	free(g->oldyp);
 	g->oldyp = key;
 	g->oldyplen = keylen;
 }
@@ -342,8 +337,7 @@ fprintf(stderr, "reason yp_first failed is %d\n", reason);
 #endif
 		g->yp = NULL;
 	}
-	if (g->oldyp)
-		free(g->oldyp);
+	free(g->oldyp);
 	g->oldyp = key;
 	g->oldyplen = keylen;
 }

@@ -760,8 +760,7 @@ krb5_mcc_ptcursor_free(
 {
     if (*cursor == NULL)
 	return 0;
-    if ((*cursor)->data != NULL)
-	free((*cursor)->data);
+    free((*cursor)->data);
     free(*cursor);
     *cursor = NULL;
     return 0;

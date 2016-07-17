@@ -1370,8 +1370,7 @@ pop_fmt:
 	}
 
 done:
-	if(fp)
-		free(fp);
+	free(fp);
 	while((fm = fmstk) )
 	{	if(fm->eventf)
 			(*fm->eventf)(f,SF_FINAL,NIL(Void_t*),fm->ft);

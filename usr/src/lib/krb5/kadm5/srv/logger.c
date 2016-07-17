@@ -883,8 +883,7 @@ krb5_klog_init(krb5_context kcontext, char *ename, char *whoami, krb5_boolean do
      * the system log.
      */
     if (ngood == 0) {
-	if (log_control.log_entries)
-	    free(log_control.log_entries);
+	free(log_control.log_entries);
 	log_control.log_entries = &def_log_entry;
 	log_control.log_entries->log_type = K_LOG_SYSLOG;
 	log_control.log_entries->log_2free = (krb5_pointer) NULL;
@@ -949,18 +948,15 @@ krb5_klog_close(krb5_context kcontext)
 	default:
 	    break;
 	}
-	if (log_control.log_entries[lindex].log_2free)
-	    free(log_control.log_entries[lindex].log_2free);
+	free(log_control.log_entries[lindex].log_2free);
     }
     if (log_control.log_entries != &def_log_entry)
 	free(log_control.log_entries);
     log_control.log_entries = (struct log_entry *) NULL;
     log_control.log_nentries = 0;
-    if (log_control.log_whoami)
-	free(log_control.log_whoami);
+    free(log_control.log_whoami);
     log_control.log_whoami = (char *) NULL;
-    if (log_control.log_hostname)
-	free(log_control.log_hostname);
+    free(log_control.log_hostname);
     log_control.log_hostname = (char *) NULL;
 #ifdef	HAVE_CLOSELOG
     if (log_control.log_opened)
@@ -1370,8 +1366,7 @@ void krb5_klog_remove_stderr() {
 			else
 				log_control.log_entries = tmp_log_entries;
 		} else {
-			if (log_control.log_entries != NULL)
-				free(log_control.log_entries);
+			free(log_control.log_entries);
 		}
 	}
 }

@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * 4.2BSD, 2.9BSD, or ATTSVR4 TCP/IP server for uucico
  * uucico's TCP channel causes this server to be run at the remote end.
@@ -553,8 +551,7 @@ uucp_conv(num_msg, msg, response, appdata_ptr)
 					/* free responses */
 					r = *response;
 					for (i = 0; i < num_msg; i++, r++) {
-						if (r->resp)
-							free(r->resp);
+						free(r->resp);
 					}
 					free(*response);
 					*response = NULL;
@@ -576,8 +573,7 @@ uucp_conv(num_msg, msg, response, appdata_ptr)
 				/* free the response */
 				r = *response;
 				for (i = 0; i < num_msg; i++, r++) {
-					if (r->resp)
-						free(r->resp);
+					free(r->resp);
 				}
 				free(*response);
 				*response = NULL;

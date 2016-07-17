@@ -27,7 +27,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma	ident	"%Z%%M%	%I%	%E% SMI"	/* SVr4.0 1.2 */
 /*LINTLIBRARY*/
 
 /*
@@ -739,8 +738,7 @@ _getdevtabent(void)
 
 		    /* Extract the character-device name */
 		    if ((p = getfld(NULL, ":")) == NULL) {
-			if (ent->alias)
-			    free(ent->alias);
+			free(ent->alias);
 		    } else {
 			if (*p) {
 			    if (ent->cdevice = malloc(strlen(p)+1)) {
@@ -754,8 +752,8 @@ _getdevtabent(void)
 
 			/* Extract the block-device name */
 			if (!(p = getfld(NULL, ":"))) {
-			    if (ent->alias) free(ent->alias);
-			    if (ent->cdevice) free(ent->cdevice);
+			    free(ent->alias);
+			    free(ent->cdevice);
 			} else {
 			    if (*p) {
 				if (ent->bdevice = malloc(strlen(p)+1)) {
@@ -770,9 +768,9 @@ _getdevtabent(void)
 
 			    /* Extract the pathname */
 			    if ((p = getfld(NULL, ":\n")) == NULL) {
-				if (ent->alias) free(ent->alias);
-				if (ent->cdevice) free(ent->cdevice);
-				if (ent->bdevice) free(ent->bdevice);
+				free(ent->alias);
+				free(ent->cdevice);
+				free(ent->bdevice);
 			    } else {
 				if (*p) {
 				    if (ent->pathname = malloc(strlen(p)+1)) {
@@ -859,19 +857,19 @@ _freedevtabent(struct devtabent *ent)
 		    p = q;
 		    q = p->next;
 		    free(p->attr);
-		    if (p->val) free(p->val);
+		    free(p->val);
 		    free(p);
 		} while (q);
 
 	    /* Free the standard fields (alias, cdevice, bdevice, pathname) */
-	    if (ent->alias) free(ent->alias);
-	    if (ent->cdevice) free(ent->cdevice);
-	    if (ent->bdevice) free(ent->bdevice);
-	    if (ent->pathname) free(ent->pathname);
+	    free(ent->alias);
+	    free(ent->cdevice);
+	    free(ent->bdevice);
+	    free(ent->pathname);
 	}
 
 	/* Free the attribute string */
-	if (ent->attrstr) free(ent->attrstr);
+	free(ent->attrstr);
 
 	/* Free the space allocated to the structure */
 	free(ent);

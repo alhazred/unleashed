@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "ldap_headers.h"
 #include <malloc.h>
 
@@ -259,8 +257,7 @@ authenticate(ns_cred_t **credpp, char *usrname, char *pwd,
 	result = PAM_PERM_DENIED;
 
 out:
-	if (binddn)
-		free(binddn);
+	free(binddn);
 
 	if (credp && (result == PAM_SUCCESS ||
 		result == PAM_NEW_AUTHTOK_REQD))
