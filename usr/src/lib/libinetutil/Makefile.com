@@ -33,7 +33,7 @@ include ../../Makefile.lib
 # install this library in the root filesystem
 include ../../Makefile.rootfs
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 
 SRCDIR =	../common
 COMDIR =	$(SRC)/common/net/dhcp
@@ -42,7 +42,6 @@ SRCS = 		$(COMDIR)/octet.c $(SRCDIR)/inetutil.c \
 		$(SRCDIR)/ifaddrlist.c $(SRCDIR)/ifaddrlistx.c \
 		$(SRCDIR)/ofmt.c
 
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 LDLIBS +=	-lsocket -lc
 
 CFLAGS +=	$(CCVERBOSE)
@@ -54,8 +53,6 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 pics/%.o: $(COMDIR)/%.c
 	$(COMPILE.c) -o $@ $<
