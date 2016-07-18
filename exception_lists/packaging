@@ -797,8 +797,6 @@ lib/llib-lmeta.ln
 usr/platform/sun4u/lib/llib-lprtdiag				sparc
 usr/platform/sun4u/lib/llib-lprtdiag.ln				sparc
 usr/platform/sun4v/lib/llib-lprtdiag.ln				sparc
-usr/lib/llib-lpp
-usr/lib/llib-lpp.ln
 usr/lib/llib-lshell
 usr/lib/llib-lshell.ln
 usr/lib/amd64/llib-lshell.ln		i386
