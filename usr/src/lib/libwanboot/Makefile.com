@@ -58,7 +58,6 @@ OBJECTS =	$(LOC_OBJS) $(COM_OBJS) $(DHCP_OBJS)
 
 include ../../Makefile.lib
 
-LIBS +=		$(LINTLIB)
 LDLIBS +=	-lnvpair -lresolv -lnsl -lsocket -ldevinfo -ldhcputil \
 		-linetutil -lc -lcrypto -lssl
 CPPFLAGS =	-I$(SRC)/common/net/wanboot/crypt $(CPPFLAGS.master)
@@ -71,13 +70,7 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 # multiple source directories.
 SRCS =		$(LOC_SRCS) $(COM_SRCS) $(DHCP_SRCS)
 
-# Must define location of lint library source.
 SRCDIR =	$(LOC_DIR)
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
-
-# OpenSSL (incl. varying versions) requires us to turn these off
-LINTFLAGS   +=    -erroff=E_BAD_PTR_CAST_ALIGN,E_SUPPRESSION_DIRECTIVE_UNUSED
-LINTFLAGS64 +=    -erroff=E_BAD_PTR_CAST_ALIGN,E_SUPPRESSION_DIRECTIVE_UNUSED
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(LOC_DIR) -I$(COM_DIR) -I$(DHCP_DIR)
@@ -85,8 +78,6 @@ CPPFLAGS +=	-I$(LOC_DIR) -I$(COM_DIR) -I$(DHCP_DIR)
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 pics/%.o: $(COM_DIR)/%.c
 	$(COMPILE.c) -o $@ $<
