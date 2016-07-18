@@ -68,7 +68,7 @@ include ../../../../Makefile.lib
 include ../../../Makefile.lib
 
 SRCS = $(BUILTINSRCS:%.c=../common/%.c) $(LIBSRCS:%.c=../common/%.c)
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 
 SRCDIR =	../common
 

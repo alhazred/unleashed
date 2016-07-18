@@ -33,7 +33,7 @@ include ../../../Makefile.lib
 include ../../Makefile.lib
 
 SRCS = ../common/fmd_agent.c ../$(MACH)/fmd_agent_$(MACH).c
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 
 SRCDIR =	../common
 

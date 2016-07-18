@@ -35,7 +35,7 @@ LIBPCSRC =	polkit.pc
 
 include ../../Makefile.com
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	$(POLICYKIT_GLIB_LDLIBS)
 LDLIBS +=	-lc -lsecdb
 $(LINTLIB) := 	SRCS = $(SRCDIR)/$(LINTSRC)

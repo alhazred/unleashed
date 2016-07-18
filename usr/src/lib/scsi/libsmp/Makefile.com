@@ -47,7 +47,7 @@ CERRWARN += -_gcc=-Wno-uninitialized
 LDLIBS += \
 	-lumem \
 	-lc
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 ROOTLIBDIR =	$(ROOTSCSILIBDIR)
 ROOTLIBDIR64 =	$(ROOTSCSILIBDIR)/$(MACH64)
 

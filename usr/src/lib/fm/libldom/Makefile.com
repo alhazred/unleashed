@@ -35,7 +35,7 @@ include ../../Makefile.lib
 SRCS = $(LIBSRCS:%.c=../sparc/%.c)
 SRCDIR = ../sparc
 
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 
 CPPFLAGS += -I. -I$(SRC)/uts/sun4v -I$(ROOT)/usr/platform/sun4v/include \
 	-I$(ADJUNCT_PROTO)/usr/include/libxml2

@@ -34,7 +34,7 @@ LIBPCSRC =	hal-storage.pc
 
 include ../../Makefile.com
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -ldbus-1 -lhal
 $(LINTLIB) := 	SRCS = $(SRCDIR)/$(LINTSRC)
 

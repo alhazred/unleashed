@@ -53,7 +53,7 @@ SRCS =		$(AES_SRC) $(ARCFOUR_SRC) $(BIGNUM_SRC) $(BLOWFISH_SRC) \
 
 SRCDIR =	$(SRC)/lib/pkcs11/libsoftcrypto/common
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 MAPFILEDIR =	../common
 
 CFLAGS +=	-xO4 -xcrossfile

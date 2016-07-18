@@ -66,7 +66,7 @@ include ../../../Makefile.lib
 SRCDIR=		../common
 INCDIR=		../../include
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 $(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 LDLIBS +=	-lcryptoutil -lc
 

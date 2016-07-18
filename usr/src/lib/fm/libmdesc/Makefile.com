@@ -45,7 +45,7 @@ include ../../Makefile.lib
 
 SRCS = $(LIBSRCS:%.c=$(SRC)/common/mdesc/%.c)
 
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 
 SRCDIR =	../common
 

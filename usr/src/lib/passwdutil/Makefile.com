@@ -48,7 +48,7 @@ include	../../Makefile.lib
 #
 LIBNAME=	passwdutil
 
-LIBS=		$(DYNLIB) $(LINTLIB)
+LIBS=		$(DYNLIB)
 $(LINTLIB) :=	SRCS= $(SRCDIR)/$(LINTSRC)
 LDLIBS		+= -lsldap -lnsl -lc
 

@@ -792,127 +792,61 @@ usr/lib/libficl-sys.so
 #
 # Pre-existing entries:
 lib/llib-lkcfd
-lib/llib-lkcfd.ln
 usr/lib/llib-lsoftcrypto
-usr/lib/llib-lsoftcrypto.ln
-usr/lib/amd64/llib-lsoftcrypto.ln	i386
-usr/lib/sparcv9/llib-lsoftcrypto.ln	sparc
 usr/lib/llib-like
 usr/lib/llib-like.ln
 usr/lib/amd64/llib-like.ln		i386
 usr/lib/sparcv9/llib-like.ln		sparc
 lib/llib-lmeta
-lib/llib-lmeta.ln
 usr/lib/reparse/llib-lreparse_smb
-usr/lib/reparse/llib-lreparse_smb.ln
 usr/lib/smbsrv/llib-lfksmbsrv
-usr/lib/smbsrv/llib-lfksmbsrv.ln
 usr/lib/smbsrv/llib-lmlrpc
-usr/lib/smbsrv/llib-lmlrpc.ln
 usr/lib/smbsrv/llib-lmlsvc
-usr/lib/smbsrv/llib-lmlsvc.ln
 usr/lib/smbsrv/llib-lsmb
-usr/lib/smbsrv/llib-lsmb.ln
 usr/lib/smbsrv/llib-lsmbns
-usr/lib/smbsrv/llib-lsmbns.ln
-usr/lib/reparse/amd64/llib-lreparse_smb.ln	i386
-usr/lib/reparse/sparcv9/llib-lreparse_smb.ln	sparc
 lib/llib-la5k			sparc
-lib/llib-la5k.ln		sparc
-lib/sparcv9/llib-la5k.ln	sparc
 lib/llib-lg_fc			sparc
-lib/llib-lg_fc.ln		sparc
-lib/sparcv9/llib-lg_fc.ln	sparc
 usr/lib/llib-lHBAAPI
-usr/lib/llib-lHBAAPI.ln
-usr/lib/amd64/llib-lHBAAPI.ln	i386
-usr/lib/sparcv9/llib-lHBAAPI.ln	sparc
 # files created during the build
-lib/amd64/llib-lMPAPI.ln
 lib/amd64/llib-ldl.ln
 lib/amd64/llib-lelf.ln
 lib/amd64/llib-lrtld_db.ln
-lib/fm/amd64/llib-lfmevent.ln
 lib/fm/llib-lfmevent
-lib/fm/llib-lfmevent.ln
 lib/llib-lMPAPI
-lib/llib-lMPAPI.ln
 lib/llib-ldl
 lib/llib-ldl.ln
 lib/llib-lelf
 lib/llib-lelf.ln
 lib/llib-lrtld_db
 lib/llib-lrtld_db.ln
-usr/lib/amd64/llib-lSMHBAAPI.ln
-usr/lib/amd64/llib-lbe.ln
-usr/lib/amd64/llib-ldat.ln
-usr/lib/amd64/llib-lhal-storage.ln
-usr/lib/amd64/llib-lhal.ln
 usr/lib/amd64/llib-ll.ln
-usr/lib/amd64/llib-lpasswdutil.ln
-usr/lib/amd64/llib-lpicl.ln
-usr/lib/amd64/llib-lpkcs11.ln
 usr/lib/amd64/llib-ly.ln
-usr/lib/fm/amd64/llib-ldiagcode.ln
-usr/lib/fm/amd64/llib-ldiskstatus.ln
-usr/lib/fm/amd64/llib-lfmd_adm.ln
-usr/lib/fm/amd64/llib-lfmd_agent.ln
-usr/lib/fm/amd64/llib-lfmd_log.ln
-usr/lib/fm/amd64/llib-lfmd_msg.ln
-usr/lib/fm/amd64/llib-lfmd_snmp.ln
-usr/lib/fm/amd64/llib-lfmnotify.ln
-usr/lib/fm/amd64/llib-lseslog.ln
-usr/lib/fm/amd64/llib-ltopo.ln
 usr/lib/fm/llib-ldiagcode
-usr/lib/fm/llib-ldiagcode.ln
 usr/lib/fm/llib-ldiskstatus
-usr/lib/fm/llib-ldiskstatus.ln
 usr/lib/fm/llib-lfmd_adm
-usr/lib/fm/llib-lfmd_adm.ln
 usr/lib/fm/llib-lfmd_agent
-usr/lib/fm/llib-lfmd_agent.ln
 usr/lib/fm/llib-lfmd_log
-usr/lib/fm/llib-lfmd_log.ln
 usr/lib/fm/llib-lfmd_msg
-usr/lib/fm/llib-lfmd_msg.ln
 usr/lib/fm/llib-lfmd_snmp
-usr/lib/fm/llib-lfmd_snmp.ln
 usr/lib/fm/llib-lfmnotify
-usr/lib/fm/llib-lfmnotify.ln
 usr/lib/fm/llib-lseslog
-usr/lib/fm/llib-lseslog.ln
 usr/lib/fm/llib-ltopo
-usr/lib/fm/llib-ltopo.ln
 usr/lib/llib-lSMHBAAPI
-usr/lib/llib-lSMHBAAPI.ln
 usr/lib/llib-lbe
-usr/lib/llib-lbe.ln
 usr/lib/llib-ldat
-usr/lib/llib-ldat.ln
 usr/lib/llib-lhal
 usr/lib/llib-lhal-storage
-usr/lib/llib-lhal-storage.ln
-usr/lib/llib-lhal.ln
 usr/lib/llib-ll
 usr/lib/llib-ll.ln
 usr/lib/llib-lmilter
 usr/lib/llib-lmilter.ln
 usr/lib/llib-lpasswdutil
-usr/lib/llib-lpasswdutil.ln
 usr/lib/llib-lpicld_pluginutil
 usr/lib/llib-lpicld_pluginutil.ln
 usr/lib/llib-lpkcs11
-usr/lib/llib-lpkcs11.ln
 usr/lib/llib-lpolkit
-usr/lib/llib-lpolkit.ln
 usr/lib/llib-ly
 usr/lib/llib-ly.ln
-usr/lib/scsi/amd64/llib-lscsi.ln
-usr/lib/scsi/amd64/llib-lses.ln
-usr/lib/scsi/amd64/llib-lsmp.ln
 usr/lib/scsi/llib-lscsi
-usr/lib/scsi/llib-lscsi.ln
 usr/lib/scsi/llib-lses
-usr/lib/scsi/llib-lses.ln
 usr/lib/scsi/llib-lsmp
-usr/lib/scsi/llib-lsmp.ln

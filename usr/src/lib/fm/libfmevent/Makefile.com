@@ -47,7 +47,7 @@ ROOTLIBDIR=     $(ROOTFS_LIBDIR)/fm
 ROOTLIBDIR64=   $(ROOTFS_LIBDIR)/fm/$(MACH64)
 
 SRCS = $(LIBSRCS:%.c=../common/%.c)
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 
 SRCDIR =	../common
 

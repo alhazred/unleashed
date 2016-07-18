@@ -32,7 +32,7 @@ OBJECTS =	diag.o \
 include ../../../Makefile.lib
 include ../../../Makefile.rootfs
 
-LIBS =	$(DYNLIB) $(LINTLIB)
+LIBS =	$(DYNLIB)
 
 SRCDIR	= ../common
 

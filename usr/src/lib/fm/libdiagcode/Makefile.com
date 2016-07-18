@@ -31,7 +31,7 @@ TSTOBJECTS =    diagcode_test.o
 include ../../../Makefile.lib
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 
 CLOBBERFILES += test $(TSTOBJECTS)

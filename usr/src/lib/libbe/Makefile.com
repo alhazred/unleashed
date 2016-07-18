@@ -43,7 +43,7 @@ OBJECTS= 	\
 
 include ../../Makefile.lib
 
-LIBS=		$(DYNLIB) $(LINTLIB)
+LIBS=		$(DYNLIB)
 
 SRCDIR= 	../common
 

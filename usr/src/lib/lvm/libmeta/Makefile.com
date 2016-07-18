@@ -133,7 +133,7 @@ CLOBBERFILES += $(POFILE) $(DCFILE)
 # install this library in the root filesystem
 include ../../../Makefile.rootfs
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 SRCS =		$(CMN_SRCS) $(LOCAL_SRCS) $(DERIVED_SRCS)
 $(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 lint :=		SRCS = $(CMN_SRCS) $(LOCAL_SRCS) $(SPC_SRCS)

@@ -48,7 +48,7 @@ LDLIBS += \
 	-lumem \
 	-lc
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 
 CLEANFILES += \
 	../common/ses_errno.c
