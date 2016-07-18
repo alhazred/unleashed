@@ -21,7 +21,7 @@ OBJECTS =	libipd.o
 
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 CPPFLAGS +=	-I../common
 
@@ -30,7 +30,5 @@ SRCDIR =	../common
 .KEEP_STATE:
 
 all:	$(LIBS)
-
-lint:	lintcheck
 
 include ../../Makefile.targ

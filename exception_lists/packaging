@@ -934,7 +934,6 @@ usr/lib/amd64/llib-lbe.ln
 usr/lib/amd64/llib-ldat.ln
 usr/lib/amd64/llib-lhal-storage.ln
 usr/lib/amd64/llib-lhal.ln
-usr/lib/amd64/llib-lipd.ln
 usr/lib/amd64/llib-lipmi.ln
 usr/lib/amd64/llib-lipp.ln
 usr/lib/amd64/llib-liscsit.ln
@@ -1004,8 +1003,6 @@ usr/lib/llib-lhal
 usr/lib/llib-lhal-storage
 usr/lib/llib-lhal-storage.ln
 usr/lib/llib-lhal.ln
-usr/lib/llib-lipd
-usr/lib/llib-lipd.ln
 usr/lib/llib-lipmi
 usr/lib/llib-lipmi.ln
 usr/lib/llib-lipp
