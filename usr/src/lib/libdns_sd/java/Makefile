@@ -35,11 +35,10 @@ all	:=	TARGET= all
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
 install :=	TARGET= install
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
-all install clean clobber lint: com/apple .WAIT $(SUBDIRS)
+all install clean clobber: com/apple .WAIT $(SUBDIRS)
 
 com/apple $(SUBDIRS):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

@@ -42,13 +42,7 @@ CPPFLAGS +=	-DMDNS_VERSIONSTR_NODTS
 
 LDLIBS +=	-lc -lsocket -ldns_sd
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
-LINTLIB =	
-
 .KEEP_STATE:
-
-lint:		lintcheck
 
 include		$(SRC)/lib/Makefile.targ
 

@@ -33,7 +33,6 @@ all := 		TARGET = all
 clean :=	TARGET = clean
 clobber :=	TARGET = clobber
 install	:=	TARGET = install
-lint	:= 	TARGET = lint
 
 .KEEP_STATE:
 
@@ -47,8 +46,6 @@ ROOTHDRS=	$(HDR:%=$(ROOTHDRDIR)/%)
 install_h:	$(ROOTHDRS)
 
 check:
-
-lint: $(SUBDIRS)
 
 $(SUBDIRS) java: FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

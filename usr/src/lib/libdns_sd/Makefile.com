@@ -29,8 +29,7 @@ OBJECTS =	dnssd_clientlib.o dnssd_clientstub.o dnssd_ipc.o
 
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
-$(LINTLIB):=    SRCS = $(SRCDIR)/$(LINTSRC)
+LIBS =		$(DYNLIB)
 
 SRCDIR =	../common
 
@@ -42,8 +41,6 @@ CPPFLAGS +=	-DMDNS_VERSIONSTR_NODTS
 
 .PARALLEL =     $(OBJECTS)
 .KEEP_STATE:
-
-lint: lintcheck
 
 all: $(LIBS)
 
