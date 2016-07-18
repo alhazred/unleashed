@@ -111,7 +111,7 @@ CLOBBERFILES_standalone = $(LINKTEST_OBJ)
 CLOBBERFILES += $(CLOBBERFILES_$(CURTYPE))
 
 LIBS_standalone = $(STANDLIBRARY)
-LIBS_library = $(DYNLIB) $(LINTLIB)
+LIBS_library = $(DYNLIB)
 LIBS =	$(LIBS_$(CURTYPE))
 
 MAPFILE_SUPPLEMENTAL_standalone = ../common/stand_mapfile
@@ -129,8 +129,6 @@ ASFLAGS += -P $(ASFLAGS_$(CURTYPE)) -D_ASM
 
 CERRWARN += -_gcc=-Wno-switch
 CERRWARN += -_gcc=-Wno-uninitialized
-
-$(LINTLIB) := SRCS = ../common/$(LINTSRC)
 
 # We want the thread-specific errno in the library, but we don't want it in
 # the standalone.  $(DTS_ERRNO) is designed to add -D_TS_ERRNO to $(CPPFLAGS),
@@ -159,13 +157,7 @@ CFLAGS += $(CFLAGS_$(CURTYPE)) $(CFLAGS_common)
 CFLAGS64_standalone = $(STAND_FLAGS_64)
 CFLAGS64 += $(CCVERBOSE) $(CFLAGS64_$(CURTYPE)) $(CFLAGS64_common)
 
-INSTALL_DEPS_library =		$(ROOTLINKS) $(ROOTLINT) $(ROOTLIBS)
-
-#
-# turn off ptr-cast warnings, since we do them all the time
-#
-LINTFLAGS +=	-erroff=E_BAD_PTR_CAST_ALIGN
-LINTFLAGS64 +=	-erroff=E_BAD_PTR_CAST_ALIGN
+INSTALL_DEPS_library =		$(ROOTLINKS) $(ROOTLIBS)
 
 DYNFLAGS +=     $(ZINTERPOSE)
 
