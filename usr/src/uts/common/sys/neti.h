@@ -31,6 +31,7 @@
 #include <sys/queue.h>
 #include <sys/hook_impl.h>
 #include <sys/netstack.h>
+#include <sys/stream.h>
 
 #ifdef	__cplusplus
 extern "C" {

@@ -617,8 +617,6 @@ segvn_create(struct seg *seg, void *argsp)
 		    seg->s_as->a_proc->p_zone) == 0)
 			return (EAGAIN);
 		swresv = seg->s_size;
-		TRACE_3(TR_FAC_VM, TR_ANON_PROC, "anon proc:%p %lu %u",
-		    seg, swresv, 1);
 	}
 
 	/*
@@ -647,8 +645,6 @@ segvn_create(struct seg *seg, void *argsp)
 			if (swresv != 0) {
 				anon_unresv_zone(swresv,
 				    seg->s_as->a_proc->p_zone);
-				TRACE_3(TR_FAC_VM, TR_ANON_PROC,
-				    "anon proc:%p %lu %u", seg, swresv, 0);
 			}
 			crfree(cred);
 			if (!use_rgn) {
@@ -1585,9 +1581,6 @@ segvn_dup(struct seg *seg, struct seg *newseg)
 	if ((len = svd->swresv) != 0) {
 		if (anon_resv(svd->swresv) == 0)
 			return (ENOMEM);
-
-		TRACE_3(TR_FAC_VM, TR_ANON_PROC, "anon proc:%p %lu %u",
-		    seg, len, 0);
 	}
 
 	newsvd = kmem_cache_alloc(segvn_cache, KM_SLEEP);
@@ -2113,8 +2106,6 @@ retry:
 				anon_unresv_zone(unlen,
 				    seg->s_as->a_proc->p_zone);
 			}
-			TRACE_3(TR_FAC_VM, TR_ANON_PROC, "anon proc:%p %lu %u",
-			    seg, len, 0);
 		}
 
 		return (0);
@@ -2217,8 +2208,6 @@ retry:
 				anon_unresv_zone(unlen,
 				    seg->s_as->a_proc->p_zone);
 			}
-			TRACE_3(TR_FAC_VM, TR_ANON_PROC,
-			    "anon proc:%p %lu %u", seg, len, 0);
 		}
 
 		return (0);
@@ -2399,8 +2388,6 @@ retry:
 			anon_unresv_zone(unlen,
 			    seg->s_as->a_proc->p_zone);
 		}
-		TRACE_3(TR_FAC_VM, TR_ANON_PROC, "anon proc:%p %lu %u",
-		    seg, len, 0);
 	}
 
 	return (0);			/* I'm glad that's all over with! */
@@ -2483,8 +2470,6 @@ segvn_free(struct seg *seg)
 				if ((len = amp->swresv) != 0) {
 					anon_unresv_zone(len,
 					    seg->s_as->a_proc->p_zone);
-					TRACE_3(TR_FAC_VM, TR_ANON_PROC,
-					    "anon proc:%p %lu %u", seg, len, 0);
 				}
 			}
 			svd->amp = NULL;
@@ -2515,8 +2500,6 @@ segvn_free(struct seg *seg)
 	if ((len = svd->swresv) != 0) {
 		anon_unresv_zone(svd->swresv,
 		    seg->s_as->a_proc->p_zone);
-		TRACE_3(TR_FAC_VM, TR_ANON_PROC, "anon proc:%p %lu %u",
-		    seg, len, 0);
 		if (SEG_IS_PARTIAL_RESV(seg))
 			seg->s_as->a_resvsize -= svd->swresv;
 		svd->swresv = 0;
@@ -2620,8 +2603,6 @@ segvn_softunlock(struct seg *seg, caddr_t addr, size_t len, enum seg_rw rw)
 			if (seg->s_as->a_vbits)
 				hat_setstat(seg->s_as, adr, PAGESIZE, P_REF);
 		}
-		TRACE_3(TR_FAC_VM, TR_SEGVN_FAULT,
-		    "segvn_fault:pp %p vp %p offset %llx", pp, vp, offset);
 		page_unlock(pp);
 	}
 	ASSERT(svd->softlockcnt >= btop(len));
@@ -2934,9 +2915,6 @@ segvn_faultpage(
 	}
 
 	ASSERT(PAGE_LOCKED(opp));
-
-	TRACE_3(TR_FAC_VM, TR_SEGVN_FAULT,
-	    "segvn_fault:pp %p vp %p offset %llx", opp, NULL, 0);
 
 	/*
 	 * The fault is treated as a copy-on-write fault if a
@@ -3805,16 +3783,8 @@ int segvn_anypgsz = 0;
 			}						\
 		}
 
-#ifdef  VM_STATS
-
 #define	SEGVN_VMSTAT_FLTVNPAGES(idx)					\
 		VM_STAT_ADD(segvnvmstats.fltvnpages[(idx)]);
-
-#else /* VM_STATS */
-
-#define	SEGVN_VMSTAT_FLTVNPAGES(idx)
-
-#endif
 
 static faultcode_t
 segvn_fault_vnodepages(struct hat *hat, struct seg *seg, caddr_t lpgaddr,
@@ -5416,9 +5386,6 @@ slow:
 				arw = rw;
 			}
 			vp = svd->vp;
-			TRACE_3(TR_FAC_VM, TR_SEGVN_GETPAGE,
-			    "segvn_getpage:seg %p addr %p vp %p",
-			    seg, addr, vp);
 			err = VOP_GETPAGE(vp, (offset_t)vp_off, vp_len,
 			    &vpprot, plp, plsz, seg, addr + (vp_off - off), arw,
 			    svd->cred, NULL);
@@ -5648,8 +5615,6 @@ segvn_faulta(struct seg *seg, caddr_t addr)
 	}
 
 	vp = svd->vp;
-	TRACE_3(TR_FAC_VM, TR_SEGVN_GETPAGE,
-	    "segvn_getpage:seg %p addr %p vp %p", seg, addr, vp);
 	err = VOP_GETPAGE(vp,
 	    (offset_t)(svd->offset + (uintptr_t)(addr - seg->s_base)),
 	    PAGESIZE, NULL, NULL, 0, seg, addr,
@@ -5875,8 +5840,6 @@ segvn_setprot(struct seg *seg, caddr_t addr, size_t len, uint_t prot)
 				anon_unresv_zone(svd->swresv,
 				    seg->s_as->a_proc->p_zone);
 				svd->swresv = 0;
-				TRACE_3(TR_FAC_VM, TR_ANON_PROC,
-				    "anon proc:%p %lu %u", seg, 0, 0);
 			}
 		}
 	}
@@ -8656,9 +8619,6 @@ segvn_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***ppp,
 	}
 #endif
 
-	TRACE_2(TR_FAC_PHYSIO, TR_PHYSIO_SEGVN_START,
-	    "segvn_pagelock: start seg %p addr %p", seg, addr);
-
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 	ASSERT(type == L_PAGELOCK || type == L_PAGEUNLOCK);
 
@@ -8947,8 +8907,6 @@ segvn_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***ppp,
 			}
 		}
 		SEGVN_LOCK_EXIT(seg->s_as, &svd->lock);
-		TRACE_2(TR_FAC_PHYSIO, TR_PHYSIO_SEGVN_UNLOCK_END,
-		    "segvn_pagelock: unlock seg %p addr %p", seg, addr);
 		return (0);
 	}
 
@@ -9014,8 +8972,6 @@ segvn_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***ppp,
 		}
 		SEGVN_LOCK_EXIT(seg->s_as, &svd->lock);
 		*ppp = pplist + adjustpages;
-		TRACE_2(TR_FAC_PHYSIO, TR_PHYSIO_SEGVN_HIT_END,
-		    "segvn_pagelock: cache hit seg %p addr %p", seg, addr);
 		return (0);
 	}
 
@@ -9210,8 +9166,6 @@ segvn_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***ppp,
 			    rw, pflags, preclaim_callback);
 		}
 		SEGVN_LOCK_EXIT(seg->s_as, &svd->lock);
-		TRACE_2(TR_FAC_PHYSIO, TR_PHYSIO_SEGVN_FILL_END,
-		    "segvn_pagelock: cache fill seg %p addr %p", seg, addr);
 		return (0);
 	}
 
@@ -9227,8 +9181,6 @@ segvn_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***ppp,
 out:
 	SEGVN_LOCK_EXIT(seg->s_as, &svd->lock);
 	*ppp = NULL;
-	TRACE_2(TR_FAC_PHYSIO, TR_PHYSIO_SEGVN_MISS_END,
-	    "segvn_pagelock: cache miss seg %p addr %p", seg, addr);
 	return (error);
 }
 

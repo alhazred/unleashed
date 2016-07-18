@@ -24,6 +24,7 @@
 # Copyright (c) 2013 Gary Mills
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2015 Nexenta Systems, Inc. All rights reserved.
+# Copyright 2016 Toomas Soome <tsoome@me.com>
 #
 
 <include SUNWcs.man1.inc>
@@ -435,7 +436,6 @@ file path=etc/security/prof_attr group=sys preserve=true \
     timestamp=19700101T000000Z
 file path=etc/security/prof_attr.d/SUNWcs group=sys
 file path=etc/shadow group=sys mode=0400 preserve=true
-file path=etc/skel/.bashrc group=other preserve=true
 file path=etc/skel/.kshrc group=other preserve=true
 file path=etc/skel/.profile group=other preserve=true
 file path=etc/svc/profile/generic_limited_net.xml group=sys mode=0444
@@ -620,7 +620,6 @@ file path=lib/svc/share/mfsthistory mode=0444
 file path=lib/svc/share/net_include.sh mode=0444
 file path=lib/svc/share/routing_include.sh mode=0444
 file path=lib/svc/share/smf_include.sh mode=0444
-file path=root/.bashrc group=root preserve=true
 file path=root/.profile group=root preserve=true
 file path=sbin/autopush mode=0555
 $(i386_ONLY)file path=sbin/biosdev mode=0555
@@ -1834,6 +1833,10 @@ depend fmri=runtime/perl$(PERL_PKGVERS) type=require
 # intrd uses sun-solaris Perl modules
 #
 depend fmri=runtime/perl$(PERL_PKGVERS)/module/sun-solaris type=require
+#
+# The boot loader package
+#
+depend fmri=system/boot/loader type=require
 #
 # The loadkeys binary needs the keytables.
 #

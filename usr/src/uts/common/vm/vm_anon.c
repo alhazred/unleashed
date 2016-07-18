@@ -1940,10 +1940,6 @@ anon_getpage(
 	 * Simply treat it as a vnode fault on the anon vp.
 	 */
 
-	TRACE_3(TR_FAC_VM, TR_ANON_GETPAGE,
-	    "anon_getpage:seg %x addr %x vp %x",
-	    seg, addr, vp);
-
 	err = VOP_GETPAGE(vp, (u_offset_t)off, PAGESIZE, protp, pl, plsz,
 	    seg, addr, rw, cred, NULL);
 
@@ -2419,19 +2415,12 @@ anon_private(
 
 	CPU_STATS_ADD_K(vm, cow_fault, 1);
 
-	/* Kernel probe */
-	TNF_PROBE_1(anon_private, "vm pagefault", /* CSTYLED */,
-		tnf_opaque,	address,	addr);
-
 	*app = new = anon_alloc(NULL, 0);
 	swap_xlate(new, &vp, &off);
 
 	if (oppflags & STEAL_PAGE) {
 		page_rename(opp, vp, (u_offset_t)off);
 		pp = opp;
-		TRACE_5(TR_FAC_VM, TR_ANON_PRIVATE,
-		    "anon_private:seg %p addr %x pp %p vp %p off %lx",
-		    seg, addr, pp, vp, off);
 		hat_setmod(pp);
 
 		/* bug 4026339 */
@@ -2801,10 +2790,6 @@ anon_zero(struct seg *seg, caddr_t addr, struct anon **app, struct cred *cred)
 	anoff_t off;
 	page_t *anon_pl[1 + 1];
 	int err;
-
-	/* Kernel probe */
-	TNF_PROBE_1(anon_zero, "vm pagefault", /* CSTYLED */,
-		tnf_opaque,	address,	addr);
 
 	*app = ap = anon_alloc(NULL, 0);
 	swap_xlate(ap, &vp, &off);

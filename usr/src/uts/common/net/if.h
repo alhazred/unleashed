@@ -17,6 +17,7 @@
 
 #if !defined(_XOPEN_SOURCE) || defined(__EXTENSIONS__)
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <netinet/in.h>
 #if defined(_LP64)
 #include <sys/types32.h>

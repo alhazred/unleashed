@@ -29,6 +29,7 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
+#include <sys/stream.h>
 
 /* Opaque kernel socket type */
 typedef struct __ksocket *ksocket_t;

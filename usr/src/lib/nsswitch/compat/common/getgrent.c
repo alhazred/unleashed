@@ -43,6 +43,7 @@
  *    -	People who recursively specify "compat" deserve what they get.
  */
 
+#include <sys/param.h>
 #include <grp.h>
 #include <stdlib.h>
 #include <unistd.h>		/* for GF_PATH */

@@ -38,6 +38,7 @@
 #include <sys/sysmacros.h>
 #include <sys/sockio.h>
 #include <inet/ip6_asp.h>
+#include <poll.h>
 
 #include "states.h"
 #include "interface.h"

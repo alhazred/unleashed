@@ -40,6 +40,7 @@
 #include <sys/time.h>
 #include <stdio.h>		/* snprintf */
 #include <arpa/inet.h>		/* ntohl, ntohs, etc */
+#include <poll.h>
 
 #include "dhcpagent_ipc.h"
 #include "dhcpagent_util.h"

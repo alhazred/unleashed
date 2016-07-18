@@ -26,6 +26,7 @@
 # Copyright 2015, OmniTI Computer Consulting, Inc. All rights reserved.
 # Copyright 2015 Gary Mills
 # Copyright 2015 Igor Kozhukhov <ikozhukhov@gmail.com>
+# Copyright 2016 Toomas Soome <tsoome@me.com>
 #
 
 #
@@ -81,6 +82,7 @@ INTEL_BLD=      $(INTEL_BLD_1:i386=)
 # uncomment things in the lower Makefiles to enable the feature.
 ENABLE_IPP_PRINTING=	$(POUND_SIGN)
 ENABLE_SMB_PRINTING=	$(POUND_SIGN)
+ENABLE_PERL64=		$(POUND_SIGN)
 
 # CLOSED is the root of the tree that contains source which isn't released
 # as open source
@@ -107,6 +109,7 @@ RPCGEN=		/usr/bin/rpcgen
 STABS=		$(ONBLD_TOOLS)/bin/$(MACH)/stabs
 ELFEXTRACT=	$(ONBLD_TOOLS)/bin/$(MACH)/elfextract
 MBH_PATCH=	$(ONBLD_TOOLS)/bin/$(MACH)/mbh_patch
+BTXLD=		$(ONBLD_TOOLS)/bin/$(MACH)/btxld
 ECHO=		echo
 INS=		install
 TRUE=		true
@@ -150,8 +153,10 @@ FIND=		/usr/bin/find
 PERL=		/usr/bin/perl
 PERL_VERSION=	5.10.0
 PERL_PKGVERS=	-510
-PERL_ARCH =		i86pc-solaris-64int
-$(SPARC_BLD)PERL_ARCH =	sun4-solaris-64int
+PERL_ARCH=		i86pc-solaris-64int
+PERL_ARCH64=	i86pc-solaris-64
+$(SPARC_BLD)PERL_ARCH=		sun4-solaris-64int
+$(SPARC_BLD)PERL_ARCH64=	sun4-solaris-64
 PYTHON_26=	/usr/bin/python2.6
 PYTHON=		$(PYTHON_26)
 SORT=		/usr/bin/sort
@@ -955,7 +960,6 @@ PKGARCHIVE=$(SRC)/../../packages/$(MACH)/nightly$(PKGARCHIVESUFFIX)
 # publisher name provided to "pkg set-publisher."
 #
 PKGPUBLISHER_REDIST=	on-nightly
-PKGPUBLISHER_NONREDIST=	on-extra
 
 #	Default build rules which perform comment section post-processing.
 #

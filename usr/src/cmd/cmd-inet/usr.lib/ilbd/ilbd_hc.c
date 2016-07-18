@@ -47,6 +47,7 @@
 #include <spawn.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <poll.h>
 #include "libilb_impl.h"
 #include "ilbd.h"
 

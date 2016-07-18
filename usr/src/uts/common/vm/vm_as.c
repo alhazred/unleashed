@@ -888,12 +888,6 @@ retry:
 		break;
 	}
 
-	/* Kernel probe */
-	TNF_PROBE_3(address_fault, "vm pagefault", /* CSTYLED */,
-	    tnf_opaque,	address,	addr,
-	    tnf_fault_type,	fault_type,	type,
-	    tnf_seg_access,	access,		rw);
-
 	raddr = (caddr_t)((uintptr_t)addr & (uintptr_t)PAGEMASK);
 	rsize = (((size_t)(addr + size) + PAGEOFFSET) & PAGEMASK) -
 	    (size_t)raddr;
@@ -2626,9 +2620,6 @@ as_pagelock(struct as *as, struct page ***ppp, caddr_t addr,
 	struct seg *seg;
 	int err;
 
-	TRACE_2(TR_FAC_PHYSIO, TR_PHYSIO_AS_LOCK_START,
-	    "as_pagelock_start: addr %p size %ld", addr, size);
-
 	raddr = (caddr_t)((uintptr_t)addr & (uintptr_t)PAGEMASK);
 	rsize = (((size_t)(addr + size) + PAGEOFFSET) & PAGEMASK) -
 	    (size_t)raddr;
@@ -2653,15 +2644,10 @@ as_pagelock(struct as *as, struct page ***ppp, caddr_t addr,
 		return (EFAULT);
 	}
 
-	TRACE_2(TR_FAC_PHYSIO, TR_PHYSIO_SEG_LOCK_START,
-	    "seg_lock_1_start: raddr %p rsize %ld", raddr, rsize);
-
 	/*
 	 * try to lock pages and pass back shadow list
 	 */
 	err = segop_pagelock(seg, raddr, rsize, ppp, L_PAGELOCK, rw);
-
-	TRACE_0(TR_FAC_PHYSIO, TR_PHYSIO_SEG_LOCK_END, "seg_lock_1_end");
 
 	AS_LOCK_EXIT(as);
 
@@ -2682,7 +2668,6 @@ as_pagelock(struct as *as, struct page ***ppp, caddr_t addr,
 	}
 	*ppp = NULL;
 
-	TRACE_0(TR_FAC_PHYSIO, TR_PHYSIO_AS_LOCK_END, "as_pagelock_end");
 	return (0);
 }
 
@@ -2743,9 +2728,6 @@ as_pageunlock(struct as *as, struct page **pp, caddr_t addr, size_t size,
 	size_t rsize;
 	caddr_t raddr;
 
-	TRACE_2(TR_FAC_PHYSIO, TR_PHYSIO_AS_UNLOCK_START,
-	    "as_pageunlock_start: addr %p size %ld", addr, size);
-
 	/*
 	 * if the shadow list is NULL, as_pagelock was
 	 * falling back to as_fault
@@ -2763,9 +2745,6 @@ as_pageunlock(struct as *as, struct page **pp, caddr_t addr, size_t size,
 	seg = as_segat(as, raddr);
 	ASSERT(seg != NULL);
 
-	TRACE_2(TR_FAC_PHYSIO, TR_PHYSIO_SEG_UNLOCK_START,
-	    "seg_unlock_start: raddr %p rsize %ld", raddr, rsize);
-
 	ASSERT(raddr >= seg->s_base && raddr < seg->s_base + seg->s_size);
 	if (raddr + rsize <= seg->s_base + seg->s_size) {
 		(void) segop_pagelock(seg, raddr, rsize, &pp, L_PAGEUNLOCK, rw);
@@ -2774,7 +2753,6 @@ as_pageunlock(struct as *as, struct page **pp, caddr_t addr, size_t size,
 		return;
 	}
 	AS_LOCK_EXIT(as);
-	TRACE_0(TR_FAC_PHYSIO, TR_PHYSIO_AS_UNLOCK_END, "as_pageunlock_end");
 }
 
 int

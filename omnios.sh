@@ -45,7 +45,7 @@
 # - This script is only interpreted by ksh93 and explicitly allows the
 #   use of ksh93 language extensions.
 #
-export NIGHTLY_OPTIONS='-FnCDAmprt'
+export NIGHTLY_OPTIONS='-nCAmprt'
 
 # CODEMGR_WS - where is your workspace at
 #export CODEMGR_WS="$HOME/ws/illumos-gate"
@@ -230,4 +230,6 @@ export CW_NO_SHADOW='1'
 export PERL_VERSION=5.16.1
 export PERL_ARCH=i86pc-solaris-thread-multi-64int
 export PERL_PKGVERS=
+export ENABLE_PERL64=
+export PERL_ARCH64=i86pc-solaris-thread-multi-64
 export ONNV_BUILDNUM=151019

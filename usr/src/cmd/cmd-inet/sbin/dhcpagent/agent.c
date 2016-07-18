@@ -43,6 +43,7 @@
 #include <stropts.h>
 #include <fcntl.h>
 #include <sys/scsi/adapters/iscsi_if.h>
+#include <poll.h>
 
 #include "async.h"
 #include "agent.h"

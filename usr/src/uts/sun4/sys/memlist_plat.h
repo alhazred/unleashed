@@ -50,13 +50,10 @@ typedef struct prom_memlist {
 
 extern int check_boot_version(int);
 extern void copy_memlist(prom_memlist_t *, size_t, struct memlist **);
-extern void size_physavail(prom_memlist_t *physavail, size_t size,
-    pgcnt_t *npages, int *memblocks);
 extern pgcnt_t size_virtalloc(prom_memlist_t *avail, size_t size);
 extern void installed_top_size_memlist_array(prom_memlist_t *, size_t, pfn_t *,
     pgcnt_t *);
 extern void installed_top_size(struct memlist *, pfn_t *, pgcnt_t *);
-extern void fix_prom_pages(struct memlist *, struct memlist *);
 extern void init_boot_memlists(void);
 extern void copy_boot_memlists(
     prom_memlist_t **physinstalled, size_t *physinstalled_len,

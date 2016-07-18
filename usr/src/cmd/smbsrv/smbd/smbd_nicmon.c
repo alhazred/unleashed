@@ -43,6 +43,7 @@
 #include <pthread.h>
 #include <syslog.h>
 #include <smbsrv/libsmb.h>
+#include <poll.h>
 #include "smbd.h"
 
 #define	SMBD_NICMON_ENABLE	"nicmon_enable"

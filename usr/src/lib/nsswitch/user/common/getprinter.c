@@ -31,6 +31,7 @@
 
 #pragma weak _nss_user__printers_constr = _nss_user_printers_constr
 
+#include <sys/param.h>
 #include <nss_dbdefs.h>
 #include "user_common.h"
 #include <string.h>

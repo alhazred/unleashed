@@ -206,9 +206,7 @@ size_pse_array(pgcnt_t npg, int ncpu)
 uint_t	vph_kvp_count;
 uint_t	vph_swapfsvp_count;
 uint_t	vph_other;
-#endif /* VM_STATS */
 
-#ifdef VM_STATS
 uint_t	page_lock_count;
 uint_t	page_lock_miss;
 uint_t	page_lock_miss_lock;
@@ -393,12 +391,9 @@ page_lock_es(page_t *pp, se_t se, kmutex_t *lock, reclaim_t reclaim, int es)
 			return (retval);
 		}
 
-#ifdef VM_STATS
 		VM_STAT_ADD(page_lock_miss);
-		if (upgraded) {
-			VM_STAT_ADD(page_lock_upgrade_failed);
-		}
-#endif
+		VM_STAT_COND_ADD(upgraded, page_lock_upgrade_failed);
+
 		if (lock) {
 			VM_STAT_ADD(page_lock_miss_lock);
 			mutex_exit(lock);

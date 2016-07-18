@@ -330,8 +330,6 @@ devmap_ctxto(void *data)
 {
 	struct devmap_ctx *devctx = data;
 
-	TRACE_1(TR_FAC_DEVMAP, TR_DEVMAP_CTXTO,
-	    "devmap_ctxto:timeout expired, devctx=%p", (void *)devctx);
 	mutex_enter(&devctx->lock);
 	/*
 	 * Set oncpu = 0 so the next mapping trying to get the device context
@@ -454,9 +452,6 @@ segdev_dup(struct seg *seg, struct seg *newseg)
 	size_t npages;
 	int ret;
 
-	TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_DUP,
-	    "segdev_dup:start dhp=%p, seg=%p", (void *)dhp, (void *)seg);
-
 	DEBUGF(3, (CE_CONT, "segdev_dup: dhp %p seg %p\n",
 	    (void *)dhp, (void *)seg));
 
@@ -504,9 +499,6 @@ segdev_dup(struct seg *seg, struct seg *newseg)
 		ret = devmap_handle_dup(dhp,
 		    (devmap_handle_t **)&newsdp->devmap_data, newseg);
 		if (ret != 0) {
-			TRACE_3(TR_FAC_DEVMAP, TR_DEVMAP_DUP_CK1,
-			    "segdev_dup:ret1 ret=%x, dhp=%p seg=%p",
-			    ret, (void *)dhp, (void *)seg);
 			DEBUGF(1, (CE_CONT,
 			    "segdev_dup: ret %x dhp %p seg %p\n",
 			    ret, (void *)dhp, (void *)seg));
@@ -625,10 +617,6 @@ segdev_unmap(struct seg *seg, caddr_t addr, size_t len)
 	ulong_t nsize;
 	size_t mlen, sz;
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_UNMAP,
-	    "segdev_unmap:start dhp=%p, seg=%p addr=%p len=%lx",
-	    (void *)dhp, (void *)seg, (void *)addr, len);
-
 	DEBUGF(3, (CE_CONT, "segdev_unmap: dhp %p seg %p addr %p len %lx\n",
 	    (void *)dhp, (void *)seg, (void *)addr, len));
 
@@ -643,8 +631,6 @@ segdev_unmap(struct seg *seg, caddr_t addr, size_t len)
 		 * Fail the unmap if pages are SOFTLOCKed through this mapping.
 		 * softlockcnt is protected from change by the as write lock.
 		 */
-		TRACE_1(TR_FAC_DEVMAP, TR_DEVMAP_UNMAP_CK1,
-		    "segdev_unmap:error softlockcnt = %ld", sz);
 		DEBUGF(1, (CE_CONT, "segdev_unmap: softlockcnt %ld\n", sz));
 		return (EAGAIN);
 	}
@@ -789,8 +775,6 @@ segdev_unmap(struct seg *seg, caddr_t addr, size_t len)
 	if (nseg == NULL)
 		panic("segdev_unmap seg_alloc");
 
-	TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_UNMAP_CK2,
-	    "segdev_unmap: seg=%p nseg=%p", (void *)seg, (void *)nseg);
 	DEBUGF(3, (CE_CONT, "segdev_unmap: segdev_dup seg %p nseg %p\n",
 	    (void *)seg, (void *)nseg));
 	nsdp = sdp_alloc();
@@ -847,8 +831,6 @@ segdev_unmap(struct seg *seg, caddr_t addr, size_t len)
 	}
 	while (dhp != NULL) {
 		callbackops = &dhp->dh_callbackops;
-		TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_UNMAP_CK3,
-		    "segdev_unmap: dhp=%p addr=%p", dhp, addr);
 		DEBUGF(3, (CE_CONT, "unmap: dhp %p addr %p uvaddr %p len %lx\n",
 		    (void *)dhp, (void *)addr,
 		    (void *)dhp->dh_uvaddr, dhp->dh_len));
@@ -1116,8 +1098,6 @@ segdev_free(struct seg *seg)
 	register struct segdev_data *sdp = (struct segdev_data *)seg->s_data;
 	devmap_handle_t *dhp = (devmap_handle_t *)sdp->devmap_data;
 
-	TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_FREE,
-	    "segdev_free: dhp=%p seg=%p", (void *)dhp, (void *)seg);
 	DEBUGF(3, (CE_CONT, "segdev_free: dhp %p seg %p\n",
 	    (void *)dhp, (void *)seg));
 
@@ -1318,9 +1298,6 @@ segdev_softunlock(
 	struct segdev_data *sdp = (struct segdev_data *)seg->s_data;
 	devmap_handle_t *dhp_head = (devmap_handle_t *)sdp->devmap_data;
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_SOFTUNLOCK,
-	    "segdev_softunlock:dhp_head=%p sdp=%p addr=%p len=%lx",
-	    dhp_head, sdp, addr, len);
 	DEBUGF(3, (CE_CONT, "segdev_softunlock: dhp %p lockcnt %lx "
 	    "addr %p len %lx\n",
 	    (void *)dhp_head, sdp->softlockcnt, (void *)addr, len));
@@ -1410,8 +1387,6 @@ segdev_faultpage(
 	uint_t hat_flags;
 	dev_info_t *dip;
 
-	TRACE_3(TR_FAC_DEVMAP, TR_DEVMAP_FAULTPAGE,
-	    "segdev_faultpage: dhp=%p seg=%p addr=%p", dhp, seg, addr);
 	DEBUGF(8, (CE_CONT, "segdev_faultpage: dhp %p seg %p addr %p \n",
 	    (void *)dhp, (void *)seg, (void *)addr));
 
@@ -1539,9 +1514,6 @@ segdev_faultpage(
 	}
 	/* prot should already be OR'ed in with hat_attributes if needed */
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_FAULTPAGE_CK1,
-	    "segdev_faultpage: pfnum=%lx memory=%x prot=%x flags=%x",
-	    pfnum, pf_is_memory(pfnum), prot, hat_flags);
 	DEBUGF(9, (CE_CONT, "segdev_faultpage: pfnum %lx memory %x "
 	    "prot %x flags %x\n", pfnum, pf_is_memory(pfnum), prot, hat_flags));
 
@@ -1600,9 +1572,6 @@ segdev_fault(
 	int err;
 	int err_is_faultcode = 0;
 
-	TRACE_5(TR_FAC_DEVMAP, TR_DEVMAP_FAULT,
-	    "segdev_fault: dhp_head=%p seg=%p addr=%p len=%lx type=%x",
-	    (void *)dhp_head, (void *)seg, (void *)addr, len, type);
 	DEBUGF(7, (CE_CONT, "segdev_fault: dhp_head %p seg %p "
 	    "addr %p len %lx type %x\n",
 	    (void *)dhp_head, (void *)seg, (void *)addr, len, type));
@@ -1902,9 +1871,6 @@ segdev_faultpages(
 	struct ddi_umem_cookie *kpmem_cookie = NULL;
 	int err;
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_FAULTPAGES,
-	    "segdev_faultpages: dhp=%p seg=%p addr=%p len=%lx",
-	    (void *)dhp, (void *)seg, (void *)addr, len);
 	DEBUGF(5, (CE_CONT, "segdev_faultpages: "
 	    "dhp %p seg %p addr %p len %lx\n",
 	    (void *)dhp, (void *)seg, (void *)addr, len));
@@ -2045,8 +2011,6 @@ segdev_faultpages(
 static faultcode_t
 segdev_faulta(struct seg *seg, caddr_t addr)
 {
-	TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_FAULTA,
-	    "segdev_faulta: seg=%p addr=%p", (void *)seg, (void *)addr);
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
 	return (0);
@@ -2062,9 +2026,6 @@ segdev_setprot(struct seg *seg, caddr_t addr, size_t len, uint_t prot)
 	ulong_t off;
 	size_t mlen, sz;
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_SETPROT,
-	    "segdev_setprot:start seg=%p addr=%p len=%lx prot=%x",
-	    (void *)seg, (void *)addr, len, prot);
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
 	if ((sz = sdp->softlockcnt) > 0 && dhp_head != NULL) {
@@ -2073,8 +2034,6 @@ segdev_setprot(struct seg *seg, caddr_t addr, size_t len, uint_t prot)
 		 * mapping.
 		 * Softlockcnt is protected from change by the as read lock.
 		 */
-		TRACE_1(TR_FAC_DEVMAP, TR_DEVMAP_SETPROT_CK1,
-		    "segdev_setprot:error softlockcnt=%lx", sz);
 		DEBUGF(1, (CE_CONT, "segdev_setprot: softlockcnt %ld\n", sz));
 		return (EAGAIN);
 	}
@@ -2185,9 +2144,6 @@ segdev_checkprot(struct seg *seg, caddr_t addr, size_t len, uint_t prot)
 	struct segdev_data *sdp = (struct segdev_data *)seg->s_data;
 	struct vpage *vp, *evp;
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_CHECKPROT,
-	    "segdev_checkprot:start seg=%p addr=%p len=%lx prot=%x",
-	    (void *)seg, (void *)addr, len, prot);
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
 	/*
@@ -2222,9 +2178,6 @@ segdev_getprot(struct seg *seg, caddr_t addr, size_t len, uint_t *protv)
 	struct segdev_data *sdp = (struct segdev_data *)seg->s_data;
 	size_t pgno;
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_GETPROT,
-	    "segdev_getprot:start seg=%p addr=%p len=%lx protv=%p",
-	    (void *)seg, (void *)addr, len, (void *)protv);
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
 	pgno = seg_page(seg, addr + len) - seg_page(seg, addr) + 1;
@@ -2253,9 +2206,6 @@ segdev_getoffset(register struct seg *seg, caddr_t addr)
 {
 	register struct segdev_data *sdp = (struct segdev_data *)seg->s_data;
 
-	TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_GETOFFSET,
-	    "segdev_getoffset:start seg=%p addr=%p", (void *)seg, (void *)addr);
-
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
 	return ((u_offset_t)sdp->offset + (addr - seg->s_base));
@@ -2266,9 +2216,6 @@ static int
 segdev_gettype(register struct seg *seg, caddr_t addr)
 {
 	register struct segdev_data *sdp = (struct segdev_data *)seg->s_data;
-
-	TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_GETTYPE,
-	    "segdev_gettype:start seg=%p addr=%p", (void *)seg, (void *)addr);
 
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
@@ -2281,9 +2228,6 @@ static int
 segdev_getvp(register struct seg *seg, caddr_t addr, struct vnode **vpp)
 {
 	register struct segdev_data *sdp = (struct segdev_data *)seg->s_data;
-
-	TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_GETVP,
-	    "segdev_getvp:start seg=%p addr=%p", (void *)seg, (void *)addr);
 
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
@@ -2299,8 +2243,6 @@ segdev_getvp(register struct seg *seg, caddr_t addr, struct vnode **vpp)
 static void
 segdev_badop(void)
 {
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_SEGDEV_BADOP,
-	    "segdev_badop:start");
 	panic("segdev_badop");
 	/*NOTREACHED*/
 }
@@ -2313,8 +2255,6 @@ segdev_badop(void)
 static int
 segdev_sync(struct seg *seg, caddr_t addr, size_t len, int attr, uint_t flags)
 {
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_SYNC, "segdev_sync:start");
-
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
 	return (0);
@@ -2328,8 +2268,6 @@ static size_t
 segdev_incore(struct seg *seg, caddr_t addr, size_t len, char *vec)
 {
 	size_t v = 0;
-
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_INCORE, "segdev_incore:start");
 
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
@@ -2348,8 +2286,6 @@ static int
 segdev_lockop(struct seg *seg, caddr_t addr,
     size_t len, int attr, int op, ulong_t *lockmap, size_t pos)
 {
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_LOCKOP, "segdev_lockop:start");
-
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
 	return (0);
@@ -2363,8 +2299,6 @@ segdev_lockop(struct seg *seg, caddr_t addr,
 static int
 segdev_advise(struct seg *seg, caddr_t addr, size_t len, uint_t behav)
 {
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_ADVISE, "segdev_advise:start");
-
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
 	return (0);
@@ -2386,9 +2320,6 @@ ddi_segmap_setup(dev_t dev, off_t offset, struct as *as, caddr_t *addrp,
 	uint_t hat_attr;
 	pfn_t pfn;
 	int	error, i;
-
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_SEGMAP_SETUP,
-	    "ddi_segmap_setup:start");
 
 	if ((mapfunc = devopsp[getmajor(dev)]->devo_cb_ops->cb_mmap) == nodev)
 		return (ENODEV);
@@ -2457,8 +2388,6 @@ static int
 segdev_pagelock(struct seg *seg, caddr_t addr, size_t len,
     struct page ***ppp, enum lock_type type, enum seg_rw rw)
 {
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_PAGELOCK,
-	    "segdev_pagelock:start");
 	return (ENOTSUP);
 }
 
@@ -2478,10 +2407,6 @@ devmap_device(devmap_handle_t *dhp, struct as *as, caddr_t *addr,
 	offset_t offset = 0;
 	pfn_t pfn;
 	struct devmap_pmem_cookie *pcp;
-
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_DEVICE,
-	    "devmap_device:start dhp=%p addr=%p off=%llx, len=%lx",
-	    (void *)dhp, (void *)addr, off, len);
 
 	DEBUGF(2, (CE_CONT, "devmap_device: dhp %p addr %p off %llx len %lx\n",
 	    (void *)dhp, (void *)addr, off, len));
@@ -2573,9 +2498,6 @@ devmap_do_ctxmgt(devmap_cookie_t dhc, void *pvtp, offset_t off, size_t len,
 	pvtp = pvtp;
 #endif
 
-	TRACE_3(TR_FAC_DEVMAP, TR_DEVMAP_DO_CTXMGT,
-	    "devmap_do_ctxmgt:start dhp=%p off=%llx, len=%lx",
-	    (void *)dhp, off, len);
 	DEBUGF(7, (CE_CONT, "devmap_do_ctxmgt: dhp %p off %llx len %lx\n",
 	    (void *)dhp, off, len));
 
@@ -2596,9 +2518,6 @@ devmap_do_ctxmgt(devmap_cookie_t dhc, void *pvtp, offset_t off, size_t len,
 	 * will die with a SEGV.
 	 */
 	if ((dhp->dh_timeout_length > 0) && (ncpus > 1)) {
-		TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_DO_CTXMGT_CK1,
-		    "devmap_do_ctxmgt:doing hysteresis, devctl %p dhp %p",
-		    devctx, dhp);
 		do_timeout = 1;
 		mutex_enter(&devctx->lock);
 		while (devctx->oncpu)
@@ -2621,9 +2540,6 @@ devmap_do_ctxmgt(devmap_cookie_t dhc, void *pvtp, offset_t off, size_t len,
 	 * or devmap_load().
 	 */
 	if (ret) {
-		TRACE_3(TR_FAC_DEVMAP, TR_DEVMAP_DO_CTXMGT_CK2,
-		    "devmap_do_ctxmgt: ret=%x dhp=%p devctx=%p",
-		    ret, dhp, devctx);
 		DEBUGF(1, (CE_CONT, "devmap_do_ctxmgt: ret %x dhp %p\n",
 		    ret, (void *)dhp));
 		if (devctx->oncpu) {
@@ -2641,8 +2557,6 @@ devmap_do_ctxmgt(devmap_cookie_t dhc, void *pvtp, offset_t off, size_t len,
 	if (do_timeout) {
 		mutex_enter(&devctx->lock);
 		if (dhp->dh_timeout_length > 0) {
-			TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_DO_CTXMGT_CK3,
-			    "devmap_do_ctxmgt:timeout set");
 			devctx->timeout = timeout(devmap_ctxto,
 			    devctx, dhp->dh_timeout_length);
 		} else {
@@ -2650,8 +2564,6 @@ devmap_do_ctxmgt(devmap_cookie_t dhc, void *pvtp, offset_t off, size_t len,
 			 * We don't want to wait so set oncpu to
 			 * 0 and wake up anyone waiting.
 			 */
-			TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_DO_CTXMGT_CK4,
-			    "devmap_do_ctxmgt:timeout not set");
 			devctx->oncpu = 0;
 			cv_signal(&devctx->cv);
 		}
@@ -2685,9 +2597,6 @@ devmap_roundup(devmap_handle_t *dhp, ulong_t offset, size_t len,
 	caddr_t uvaddr;
 	long rlen;
 
-	TRACE_3(TR_FAC_DEVMAP, TR_DEVMAP_ROUNDUP,
-	    "devmap_roundup:start dhp=%p off=%lx len=%lx",
-	    (void *)dhp, offset, len);
 	DEBUGF(2, (CE_CONT, "devmap_roundup: dhp %p off %lx len %lx\n",
 	    (void *)dhp, offset, len));
 
@@ -2710,9 +2619,6 @@ devmap_roundup(devmap_handle_t *dhp, ulong_t offset, size_t len,
 			break;
 	}
 
-	TRACE_3(TR_FAC_DEVMAP, TR_DEVMAP_ROUNDUP_CK1,
-	    "devmap_roundup: base=%lx poff=%lx dhp=%p",
-	    base, poff, dhp);
 	DEBUGF(2, (CE_CONT, "devmap_roundup: base %lx poff %lx pfn %lx\n",
 	    base, poff, dhp->dh_pfn));
 
@@ -2726,9 +2632,6 @@ devmap_roundup(devmap_handle_t *dhp, ulong_t offset, size_t len,
 
 	ASSERT(rlen < (long)len);
 
-	TRACE_5(TR_FAC_DEVMAP, TR_DEVMAP_ROUNDUP_CK2,
-	    "devmap_roundup:ret dhp=%p level=%x rlen=%lx psiz=%p opfn=%p",
-	    (void *)dhp, level, rlen, pagesize, opfn);
 	DEBUGF(1, (CE_CONT, "devmap_roundup: dhp %p "
 	    "level %x rlen %lx psize %lx opfn %lx\n",
 	    (void *)dhp, level, rlen, *pagesize, *opfn));
@@ -2743,9 +2646,6 @@ static devmap_handle_t *
 devmap_find_handle(devmap_handle_t *dhp_head, caddr_t addr)
 {
 	devmap_handle_t *dhp;
-
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_FIND_HANDLE,
-	    "devmap_find_handle:start");
 
 	dhp = dhp_head;
 	while (dhp) {
@@ -2772,9 +2672,6 @@ devmap_unload(devmap_cookie_t dhc, offset_t offset, size_t len)
 	ulong_t	size;
 	ssize_t	soff;
 
-	TRACE_3(TR_FAC_DEVMAP, TR_DEVMAP_UNLOAD,
-	    "devmap_unload:start dhp=%p offset=%llx len=%lx",
-	    (void *)dhp, offset, len);
 	DEBUGF(7, (CE_CONT, "devmap_unload: dhp %p offset %llx len %lx\n",
 	    (void *)dhp, offset, len));
 
@@ -2836,9 +2733,6 @@ devmap_get_large_pgsize(devmap_handle_t *dhp, size_t len, caddr_t addr,
 	ulong_t pgsize;
 	uint_t first = 1;
 
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_GET_LARGE_PGSIZE,
-	    "devmap_get_large_pgsize:start");
-
 	/*
 	 * RFE - Code only supports large page mappings for devmem
 	 * This code could be changed in future if we want to support
@@ -2879,9 +2773,6 @@ devmap_softlock_init(dev_t dev, ulong_t id)
 	struct devmap_softlock *slock;
 	struct devmap_softlock *tmp;
 
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_SOFTLOCK_INIT,
-	    "devmap_softlock_init:start");
-
 	tmp = kmem_zalloc(sizeof (struct devmap_softlock), KM_SLEEP);
 	mutex_enter(&devmap_slock);
 
@@ -2918,9 +2809,6 @@ devmap_softlock_rele(devmap_handle_t *dhp)
 	struct devmap_softlock *slock = dhp->dh_softlock;
 	struct devmap_softlock *tmp;
 	struct devmap_softlock *parent;
-
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_SOFTLOCK_RELE,
-	    "devmap_softlock_rele:start");
 
 	mutex_enter(&devmap_slock);
 	mutex_enter(&slock->lock);
@@ -2971,9 +2859,6 @@ devmap_ctx_rele(devmap_handle_t *dhp)
 	struct devmap_ctx *parent;
 	timeout_id_t tid;
 
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_CTX_RELE,
-	    "devmap_ctx_rele:start");
-
 	mutex_enter(&devmapctx_lock);
 	mutex_enter(&devctx->lock);
 
@@ -2990,9 +2875,6 @@ devmap_ctx_rele(devmap_handle_t *dhp)
 		 * to go away.
 		 */
 		if (devctx->timeout != 0) {
-			TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_CTX_RELE_CK1,
-			    "devmap_ctx_rele:untimeout ctx->timeout");
-
 			tid = devctx->timeout;
 			mutex_exit(&devctx->lock);
 			(void) untimeout(tid);
@@ -3041,10 +2923,6 @@ devmap_load(devmap_cookie_t dhc, offset_t offset, size_t len, uint_t type,
 	ulong_t	size;
 	ssize_t	soff;	/* offset from the beginning of the segment */
 	int rc;
-
-	TRACE_3(TR_FAC_DEVMAP, TR_DEVMAP_LOAD,
-	    "devmap_load:start dhp=%p offset=%llx len=%lx",
-	    (void *)dhp, offset, len);
 
 	DEBUGF(7, (CE_CONT, "devmap_load: dhp %p offset %llx len %lx\n",
 	    (void *)dhp, offset, len));
@@ -3120,8 +2998,6 @@ devmap_setup(dev_t dev, offset_t off, struct as *as, caddr_t *addrp,
 	cred = cred;
 #endif
 
-	TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_SETUP,
-	    "devmap_setup:start off=%llx len=%lx", off, len);
 	DEBUGF(3, (CE_CONT, "devmap_setup: off %llx len %lx\n",
 	    off, len));
 
@@ -3291,8 +3167,6 @@ int
 ddi_devmap_segmap(dev_t dev, off_t off, ddi_as_handle_t as, caddr_t *addrp,
     off_t len, uint_t prot, uint_t maxprot, uint_t flags, struct cred *cred)
 {
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_SEGMAP,
-	    "devmap_segmap:start");
 	return (devmap_setup(dev, (offset_t)off, (struct as *)as, addrp,
 	    (size_t)len, prot, maxprot, flags, cred));
 }
@@ -3356,9 +3230,6 @@ devmap_devmem_setup(devmap_cookie_t dhc, dev_info_t *dip,
 	ddi_acc_hdl_t *hp;
 	int err;
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_DEVMEM_SETUP,
-	    "devmap_devmem_setup:start dhp=%p offset=%llx rnum=%d len=%lx",
-	    (void *)dhp, roff, rnumber, (uint_t)len);
 	DEBUGF(2, (CE_CONT, "devmap_devmem_setup: dhp %p offset %llx "
 	    "rnum %d len %lx\n", (void *)dhp, roff, rnumber, len));
 
@@ -3464,9 +3335,6 @@ devmap_devmem_remap(devmap_cookie_t dhc, dev_info_t *dip,
 	uint_t	hat_flags;
 	int	err;
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_DEVMEM_REMAP,
-	    "devmap_devmem_setup:start dhp=%p offset=%llx rnum=%d len=%lx",
-	    (void *)dhp, roff, rnumber, (uint_t)len);
 	DEBUGF(2, (CE_CONT, "devmap_devmem_remap: dhp %p offset %llx "
 	    "rnum %d len %lx\n", (void *)dhp, roff, rnumber, len));
 
@@ -3577,9 +3445,6 @@ devmap_umem_setup(devmap_cookie_t dhc, dev_info_t *dip,
 	dip = dip;
 #endif
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_UMEM_SETUP,
-	    "devmap_umem_setup:start dhp=%p offset=%llx cookie=%p len=%lx",
-	    (void *)dhp, off, cookie, len);
 	DEBUGF(2, (CE_CONT, "devmap_umem_setup: dhp %p offset %llx "
 	    "cookie %p len %lx\n", (void *)dhp, off, (void *)cookie, len));
 
@@ -3673,9 +3538,6 @@ devmap_umem_remap(devmap_cookie_t dhc, dev_info_t *dip,
 	devmap_handle_t *dhp = (devmap_handle_t *)dhc;
 	struct ddi_umem_cookie *cp = (struct ddi_umem_cookie *)cookie;
 
-	TRACE_4(TR_FAC_DEVMAP, TR_DEVMAP_UMEM_REMAP,
-	    "devmap_umem_remap:start dhp=%p offset=%llx cookie=%p len=%lx",
-	    (void *)dhp, off, cookie, len);
 	DEBUGF(2, (CE_CONT, "devmap_umem_remap: dhp %p offset %llx "
 	    "cookie %p len %lx\n", (void *)dhp, off, (void *)cookie, len));
 
@@ -3741,9 +3603,6 @@ devmap_set_ctx_timeout(devmap_cookie_t dhc, clock_t ticks)
 {
 	devmap_handle_t *dhp = (devmap_handle_t *)dhc;
 
-	TRACE_2(TR_FAC_DEVMAP, TR_DEVMAP_SET_CTX_TIMEOUT,
-	    "devmap_set_ctx_timeout:start dhp=%p ticks=%x",
-	    (void *)dhp, ticks);
 	dhp->dh_timeout_length = ticks;
 }
 
@@ -3755,8 +3614,6 @@ devmap_default_access(devmap_cookie_t dhp, void *pvtp, offset_t off,
 	pvtp = pvtp;
 #endif
 
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_DEFAULT_ACCESS,
-	    "devmap_default_access:start");
 	return (devmap_load(dhp, off, len, type, rw));
 }
 
@@ -3870,8 +3727,6 @@ ddi_umem_alloc(size_t size, int flags, ddi_umem_cookie_t *cookie)
 
 	*cookie = NULL;
 
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_UMEM_ALLOC,
-	    "devmap_umem_alloc:start");
 	if (len == 0)
 		return ((void *)NULL);
 
@@ -3936,9 +3791,6 @@ ddi_umem_free(ddi_umem_cookie_t cookie)
 {
 	struct ddi_umem_cookie *cp;
 
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_UMEM_FREE,
-	    "devmap_umem_free:start");
-
 	/*
 	 * if cookie is NULL, no effects on the system
 	 */
@@ -3999,8 +3851,6 @@ segdev_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp)
 	/*
 	 * It looks as if it is always mapped shared
 	 */
-	TRACE_0(TR_FAC_DEVMAP, TR_DEVMAP_GETMEMID,
-	    "segdev_getmemid:start");
 	memidp->val[0] = (uintptr_t)VTOCVP(sdp->vp);
 	memidp->val[1] = sdp->offset + (uintptr_t)(addr - seg->s_base);
 	return (0);
