@@ -1207,7 +1207,6 @@ file path=usr/lib/intrd mode=0555
 file path=usr/lib/isaexec mode=0555
 $(sparc_ONLY)file path=usr/lib/ld.so
 file path=usr/lib/libshare.so.1
-file path=usr/lib/makekey mode=0555
 file path=usr/lib/more.help
 file path=usr/lib/newsyslog group=sys mode=0555
 file path=usr/lib/passmgmt group=sys mode=0555

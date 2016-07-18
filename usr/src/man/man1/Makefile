@@ -224,7 +224,6 @@ MANFILES=	acctcom.1			\
 	 	mailstats.1			\
 	 	mailx.1				\
 		make.1				\
-	 	makekey.1			\
 	 	man.1				\
 	 	mandoc.1			\
 	 	mconnect.1			\
