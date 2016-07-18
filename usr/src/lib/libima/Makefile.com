@@ -35,7 +35,7 @@ include ../../Makefile.lib
 IETCFILES=	$(CONFIGFILE:%=$(ROOTETC)/%)
 IETCFILES:=	FILEMODE= 644
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 
 CFLAGS +=	-mt
@@ -52,11 +52,7 @@ CFLAGS64 +=       -DSOLARIS
 
 CERRWARN +=	-_gcc=-Wno-unused-variable
 
-LINTFLAGS += -DSOLARIS
-LINTFLAGS64 += -DSOLARIS
-
 SRCDIR =	../common
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 
 $(ROOTETC)/%:	../common/%
 	$(INS.file)
@@ -64,8 +60,5 @@ $(ROOTETC)/%:	../common/%
 .KEEP_STATE:
 
 all:	$(LIBS) $(IETCFILES)
-
-lint:
-	@echo "This section is not required to be lint clean"
 
 include ../../Makefile.targ
