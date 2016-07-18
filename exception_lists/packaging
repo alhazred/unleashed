@@ -798,10 +798,6 @@ usr/lib/llib-lipsecutil
 usr/lib/llib-lipsecutil.ln
 usr/lib/amd64/llib-lipsecutil.ln	i386
 usr/lib/sparcv9/llib-lipsecutil.ln	sparc
-usr/lib/llib-linstzones
-usr/lib/llib-linstzones.ln
-usr/lib/amd64/llib-linstzones.ln	i386
-usr/lib/sparcv9/llib-linstzones.ln	sparc
 usr/lib/llib-lpkg
 usr/lib/llib-lpkg.ln
 lib/llib-lmeta

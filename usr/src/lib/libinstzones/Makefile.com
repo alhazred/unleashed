@@ -47,17 +47,11 @@ POFILE =	libinstzones.po
 MSGFILES =	$(OBJECTS:%.o=../common/%.i)
 CLEANFILES +=	$(MSGFILES)
 
-# openssl forces us to ignore dubious pointer casts, thanks to its clever
-# use of macros for stack management.
-LINTFLAGS=	-umx -errtags \
-		-erroff=E_BAD_PTR_CAST_ALIGN,E_BAD_PTR_CAST
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
-
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-clobbered
 CERRWARN +=	-_gcc=-Wno-address
 
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 
 DYNFLAGS += $(ZLAZYLOAD)
 
@@ -74,8 +68,6 @@ $(POFILE): $(MSGFILES)
 	$(BUILDPO.msgfiles)
 
 _msg: $(MSGDOMAINPOFILE)
-
-lint:	lintcheck
 
 # include library targets
 include $(SRC)/lib/Makefile.targ
