@@ -883,7 +883,6 @@ usr/lib/llib-lpcidb.ln
 lib/amd64/llib-lMPAPI.ln
 lib/amd64/llib-ldl.ln
 lib/amd64/llib-lelf.ln
-lib/amd64/llib-lfdisk.ln
 lib/amd64/llib-lintl.ln
 lib/amd64/llib-lm.ln
 lib/amd64/llib-lmd.ln
@@ -909,8 +908,6 @@ lib/llib-ldl
 lib/llib-ldl.ln
 lib/llib-lelf
 lib/llib-lelf.ln
-lib/llib-lfdisk
-lib/llib-lfdisk.ln
 lib/llib-lintl
 lib/llib-lintl.ln
 lib/llib-lipmp

@@ -37,7 +37,7 @@ include ../../Makefile.rootfs
 
 SRCDIR=	../common
 
-LIBS=	$(DYNLIB) $(LINTLIB)
+LIBS=	$(DYNLIB)
 
 C99MODE=	$(C99_DISABLE)
 
@@ -49,16 +49,11 @@ CFLAGS += -D_FILE_OFFSET_BITS=64
 CFLAGS64 += -D_LARGEFILE64_SOURCE
 CFLAGS64 += -D_FILE_OFFSET_BITS=64
 
-LINTFLAGS +=    -erroff=E_BAD_PTR_CAST_ALIGN
-LINTFLAGS64 +=    -erroff=E_BAD_PTR_CAST_ALIGN
-
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 pics/%.o: ../common/%.c
 	$(COMPILE.c) -o $@ $<
