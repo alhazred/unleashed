@@ -28,19 +28,16 @@ OBJECTS=	libzonestat.o
 
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB) 
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lcmdutils -lumem -lc
 
 SRCDIR =	../common
 CPPFLAGS +=	-I../common -mt -D_POSIX_PTHREAD_SEMANTICS
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
 .KEEP_STATE:
 
 all:	$(LIBS)
-
-lint:	lintcheck
 
 include ../../Makefile.targ
