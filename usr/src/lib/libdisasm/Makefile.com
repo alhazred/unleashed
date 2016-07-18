@@ -99,7 +99,7 @@ CLOBBERFILES_standalone = $(LINKTEST_OBJ)
 CLOBBERFILES += $(CLOBBERFILES_$(CURTYPE))
 
 LIBS_standalone	= $(STANDLIBRARY)
-LIBS_library = $(DYNLIB) $(LINTLIB)
+LIBS_library = $(DYNLIB)
 LIBS = $(LIBS_$(CURTYPE))
 
 MAPFILES =	$(COMDIR)/mapfile-vers
@@ -112,8 +112,6 @@ LDFLAGS = $(LDFLAGS_$(CURTYPE))
 ASFLAGS_standalone = -DDIS_STANDALONE
 ASFLAGS_library =
 ASFLAGS += -P $(ASFLAGS_$(CURTYPE)) -D_ASM
-
-$(LINTLIB) := SRCS = $(COMDIR)/$(LINTSRC)
 
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
