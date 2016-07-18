@@ -31,7 +31,7 @@ include ../../Makefile.lib.64
 
 .KEEP_STATE:
 
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 
 all: $(LIBS)
 

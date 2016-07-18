@@ -41,7 +41,7 @@ OBJECTS = \
 include ../../Makefile.lib
 include ../../Makefile.rootfs
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 
 $(NOT_NATIVE)NATIVE_BUILD = $(POUND_SIGN)
 $(NATIVE_BUILD)VERS =
@@ -59,19 +59,13 @@ SRCS =	\
 	../common/uu_pname.c \
 	../common/uu_strtoint.c
 
-LINTS =		$(OBJECTS:%.o=%.ln)
-CLOBBERFILES += $(LINTS)
-
 SRCDIR =	../common
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 LDLIBS +=	-lc
 
 AVLDIR =	../../../common/avl
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR) -I../../common/inc
-LINTFLAGS +=	-erroff=E_GLOBAL_COULD_BE_STATIC2
-LINTFLAGS64 +=	-erroff=E_GLOBAL_COULD_BE_STATIC2
 
 MY_NATIVE_CPPFLAGS = -DNATIVE_BUILD -I$(SRCDIR)
 MY_NATIVE_LDLIBS = -lc
@@ -81,17 +75,6 @@ $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 .KEEP_STATE:
 
 all: $(LIBS) $(NOT_NATIVE)
-
-lint: $(LINTLIB) globallint
-
-globallint: $(LINTS)
-	$(LINT.c) $(LINTS) $(LDLIBS)
-
-%.ln: $(SRCDIR)/%.c
-	$(LINT.c) -c $<
-
-%.ln: $(AVLDIR)/%.c
-	$(LINT.c) -c $<
 
 pics/%.o:	$(AVLDIR)/%.c
 	$(COMPILE.c) -o $@ $<

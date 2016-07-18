@@ -832,9 +832,6 @@ lib/llib-lrestart
 lib/llib-lrestart.ln
 lib/amd64/llib-lrestart.ln					i386
 lib/sparcv9/llib-lrestart.ln					sparc
-lib/llib-luutil
-lib/llib-luutil.ln
-lib/sparcv9/llib-luutil.ln		sparc
 lib/llib-lcmdutils
 lib/llib-lcmdutils.ln
 lib/amd64/llib-lcmdutils.ln		i386

@@ -25,7 +25,6 @@
 
 #
 # We build a native version of libuutil.so.1 in the "native" subdirectory.
-# Note that we don't bother to lint it.
 #
 
 include ../Makefile.lib
@@ -43,7 +42,6 @@ all := 		TARGET = all
 clean :=	TARGET = clean
 clobber :=	TARGET = clobber
 install	:=	TARGET = install
-lint :=		TARGET = lint
 
 MSGFILES = \
 	common/uu_dprintf.c \
@@ -54,8 +52,6 @@ POFILE =	libuutil.po
 .KEEP_STATE:
 
 all clean clobber install: native $(SUBDIRS)
-
-lint:		$(SUBDIRS)
 
 $(POFILE):	pofile_MSGFILES
 
