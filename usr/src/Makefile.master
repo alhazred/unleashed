@@ -958,7 +958,6 @@ PKGARCHIVE=$(SRC)/../../packages/$(MACH)/nightly$(PKGARCHIVESUFFIX)
 # publisher name provided to "pkg set-publisher."
 #
 PKGPUBLISHER_REDIST=	on-nightly
-PKGPUBLISHER_NONREDIST=	on-extra
 
 #	Default build rules which perform comment section post-processing.
 #
