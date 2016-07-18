@@ -469,7 +469,6 @@ COMMON_SUBDIRS = \
 	lib/watchmalloc \
 	psm \
 	test \
-	ucbcmd/basename \
 	ucbcmd/biff \
 	ucbcmd/echo \
 	ucbcmd/groups \
