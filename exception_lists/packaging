@@ -826,10 +826,6 @@ usr/platform/SUNW,Sun-Blade-T6320/lib/llib-lpcp.ln		sparc
 usr/platform/SUNW,Sun-Fire-T200/lib/llib-lpcp.ln		sparc
 usr/platform/SUNW,T5140/lib/llib-lpcp.ln			sparc
 usr/platform/SUNW,USBRDT-5240/lib/llib-lpcp.ln			sparc
-usr/lib/llib-ldll
-usr/lib/llib-ldll.ln
-usr/lib/amd64/llib-ldll.ln		i386
-usr/lib/sparcv9/llib-ldll.ln		sparc
 usr/lib/llib-lpp
 usr/lib/llib-lpp.ln
 usr/lib/llib-lshell
