@@ -42,7 +42,6 @@ OBJECTS=	$(OBJECTS.c) $(UFSOBJS) $(OBJECTS.s)
 
 include ../../Makefile.lib
 
-# We omit $(OBJECTS.s:%.o=%.s) in the next line, because lint no like
 SRCS= $(OBJECTS.c:%.o=../%.c) $(UFSOBJS:%.o=$(UFSDIR)/%.c)
 
 LIBS=		$(DYNLIB)
@@ -60,8 +59,6 @@ CHECKHDRS =	$(HDRS:%.h=%.check)
 #	pick up tnf_types.h
 CPPFLAGS +=	-I.. -I$(UFSDIR) -D_REENTRANT -D_TNF_LIBRARY
 
-LINTFLAGS +=	-y
-
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
@@ -75,9 +72,6 @@ LDLIBS += -lc
 all: $(LIBS)
 
 install_h: $(ROOTHDRDIR) $(ROOTHDRS)
-
-lint:
-	$(LINT.c) $(SRCS)
 
 check: $(CHECKHDRS)
 
