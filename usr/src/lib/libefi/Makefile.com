@@ -36,17 +36,12 @@ include ../../Makefile.rootfs
 
 SRCDIR =	../common
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-luuid -lc
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 CFLAGS +=	$(CCVERBOSE)
-
-LINTFLAGS64 +=	-errchk=longptr64
 
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ

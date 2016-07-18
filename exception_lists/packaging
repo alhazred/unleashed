@@ -929,7 +929,6 @@ lib/amd64/llib-ldl.ln
 lib/amd64/llib-ldladm.ln
 lib/amd64/llib-ldlpi.ln
 lib/amd64/llib-ldoor.ln
-lib/amd64/llib-lefi.ln
 lib/amd64/llib-lelf.ln
 lib/amd64/llib-lfdisk.ln
 lib/amd64/llib-lgen.ln
@@ -979,8 +978,6 @@ lib/llib-ldlpi
 lib/llib-ldlpi.ln
 lib/llib-ldoor
 lib/llib-ldoor.ln
-lib/llib-lefi
-lib/llib-lefi.ln
 lib/llib-lelf
 lib/llib-lelf.ln
 lib/llib-lfdisk
