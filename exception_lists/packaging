@@ -885,8 +885,6 @@ lib/llib-ldl
 lib/llib-ldl.ln
 lib/llib-lelf
 lib/llib-lelf.ln
-lib/llib-lnwam
-lib/llib-lnwam.ln
 lib/llib-lpam
 lib/llib-lpam.ln
 lib/llib-lproc

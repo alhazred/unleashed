@@ -42,11 +42,10 @@ OBJECTS=	libnwam_audit.o \
 include ../../Makefile.lib
 include ../../Makefile.rootfs
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lbsm -lc -ldladm -lnsl -lnvpair -lscf -lsecdb -lsocket
 
 SRCDIR =	../common
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=       $(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
@@ -57,7 +56,5 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 .KEEP_STATE:
 
 all:	$(LIBS)
-
-lint:	lintcheck
 
 include  $(SRC)/lib/Makefile.targ
