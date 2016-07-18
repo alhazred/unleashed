@@ -31,4 +31,4 @@ include ../../Makefile.lib.64
 
 .KEEP_STATE:
 
-install: all $(ROOTLIBS64) $(ROOTLINKS64) $(ROOTLINT64)
+install: all $(ROOTLIBS64) $(ROOTLINKS64)
