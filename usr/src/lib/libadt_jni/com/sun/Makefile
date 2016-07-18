@@ -44,8 +44,6 @@ all clean install clobber: ${SUBDIRS}
 ${SUBDIRS}: FRC
 	cd $@; pwd; $(MAKE) $(TARGET)
 
-lint:
-
 .WAIT:
 
 FRC:
