@@ -33,12 +33,11 @@ OBJECTS = 	$(LIB_OBJS)
 include ../../Makefile.lib
 
 LIB_SRCS=	$(LIB_OBJS:%.o=$(SRCDIR)/%.c)
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 INCS +=		-I../common -I$(SRC)/uts/common
 LDLIBS +=	-lc
 
 SRCDIR =	../common
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 C99MODE =	$(C99_ENABLE)
 
@@ -49,8 +48,5 @@ LDLIBS +=	-lsocket
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: $(LIB_SRCS)
-	$(LINT.c) $(LINTCHECKFLAGS) $(LIB_SRCS) $(LDLIBS)
 
 include ../../Makefile.targ
