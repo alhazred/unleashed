@@ -47,7 +47,6 @@ all :=		TARGET= all
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 LIBRARY= 	libresolv.a
@@ -61,7 +60,7 @@ GREP=	grep
 
 .KEEP_STATE:
 
-all clean clobber lint: $(SUBDIRS)
+all clean clobber: $(SUBDIRS)
 
 install: $(SUBDIRS) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 

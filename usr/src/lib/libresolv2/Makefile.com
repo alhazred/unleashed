@@ -95,9 +95,7 @@ SRCS=		$(BSDOBJS:%.o=../common/bsd/%.c) \
 		$(RESOLVOBJS:%.o=../common/resolv/%.c) \
 		$(SUNWOBJS:%.o=../common/sunw/%.c)
 
-LIBS =		$(DYNLIB) $(LINTLIB)
-
-$(LINTLIB):= 	SRCS = ../common/llib-lresolv
+LIBS =		$(DYNLIB)
 
 # Local Libresolv definitions
 
@@ -119,8 +117,6 @@ LDLIBS +=	-lsocket -lnsl -lc -lmd
 .KEEP_STATE:
 
 all:	$(LIBS)
-
-lint:	lintcheck
 
 # include library targets
 include ../../Makefile.targ
@@ -156,7 +152,3 @@ pics/%.o: ../common/resolv/%.c
 pics/%.o: ../common/sunw/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
-
-# install rule for lint library target
-$(ROOTLINTDIR)/%:	../common/%
-	$(INS.file)

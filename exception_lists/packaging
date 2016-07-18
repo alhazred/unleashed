@@ -927,7 +927,6 @@ lib/amd64/llib-lnvpair.ln
 lib/amd64/llib-lpam.ln
 lib/amd64/llib-lproc.ln
 lib/amd64/llib-lpthread.ln
-lib/amd64/llib-lresolv.ln
 lib/amd64/llib-lrpcsvc.ln
 lib/amd64/llib-lrt.ln
 lib/amd64/llib-lrtld_db.ln
@@ -982,8 +981,6 @@ lib/llib-lproc
 lib/llib-lproc.ln
 lib/llib-lpthread
 lib/llib-lpthread.ln
-lib/llib-lresolv
-lib/llib-lresolv.ln
 lib/llib-lrpcsvc
 lib/llib-lrpcsvc.ln
 lib/llib-lrt
