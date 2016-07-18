@@ -937,7 +937,6 @@ usr/lib/llib-lpcidb.ln
 lib/amd64/llib-lMPAPI.ln
 lib/amd64/llib-ladm.ln
 lib/amd64/llib-laio.ln
-lib/amd64/llib-lavl.ln
 lib/amd64/llib-lbsm.ln
 lib/amd64/llib-lc.ln
 lib/amd64/llib-lc_db.ln
@@ -991,8 +990,6 @@ lib/llib-ladm
 lib/llib-ladm.ln
 lib/llib-laio
 lib/llib-laio.ln
-lib/llib-lavl
-lib/llib-lavl.ln
 lib/llib-lbsm
 lib/llib-lbsm.ln
 lib/llib-lc
