@@ -32,12 +32,10 @@ OBJECTS =	edge.o migrate.o p2p.o pcost.o port.o portinfo.o rolesel.o \
 
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 
 SRCDIR =	../common
 SRCS =		$(OBJECTS:%.o=$(SRCDIR)/%.c)
-
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 LDLIBS +=	-lc
 
@@ -47,7 +45,5 @@ CPPFLAGS +=	-I$(SRCDIR) -D__SUN__ -D__STP_INTERNAL__
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ

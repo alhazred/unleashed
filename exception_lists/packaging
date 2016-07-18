@@ -896,8 +896,6 @@ usr/lib/llib-lstmfproxy
 usr/lib/llib-lstmfproxy.ln
 usr/lib/amd64/llib-lstmfproxy.ln	i386
 usr/lib/sparcv9/llib-lstmfproxy.ln	sparc
-usr/lib/llib-lrstp
-usr/lib/llib-lrstp.ln
 usr/lib/amd64/llib-lsaveargs.ln   	i386
 usr/lib/amd64/llib-lpcidb.ln		i386
 usr/lib/sparcv9/llib-lpcidb.ln		sparc
