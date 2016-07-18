@@ -833,7 +833,6 @@ lib/amd64/llib-lMPAPI.ln
 lib/amd64/llib-ldl.ln
 lib/amd64/llib-lelf.ln
 lib/amd64/llib-lrtld_db.ln
-lib/amd64/llib-lsocket.ln
 lib/amd64/llib-lsysevent.ln
 lib/fm/amd64/llib-lfmevent.ln
 lib/fm/llib-lfmevent
@@ -846,8 +845,6 @@ lib/llib-lelf
 lib/llib-lelf.ln
 lib/llib-lrtld_db
 lib/llib-lrtld_db.ln
-lib/llib-lsocket
-lib/llib-lsocket.ln
 lib/llib-lsysevent
 lib/llib-lsysevent.ln
 usr/lib/amd64/llib-lSMHBAAPI.ln
