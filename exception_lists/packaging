@@ -1046,7 +1046,6 @@ usr/lib/amd64/llib-ldat.ln
 usr/lib/amd64/llib-ldiskmgt.ln
 usr/lib/amd64/llib-ldns_sd.ln
 usr/lib/amd64/llib-ldtrace.ln
-usr/lib/amd64/llib-lexacct.ln
 usr/lib/amd64/llib-lfcoe.ln
 usr/lib/amd64/llib-lfstyp.ln
 usr/lib/amd64/llib-lgss.ln
@@ -1137,8 +1136,6 @@ usr/lib/llib-ldns_sd
 usr/lib/llib-ldns_sd.ln
 usr/lib/llib-ldtrace
 usr/lib/llib-ldtrace.ln
-usr/lib/llib-lexacct
-usr/lib/llib-lexacct.ln
 usr/lib/llib-lfcoe
 usr/lib/llib-lfcoe.ln
 usr/lib/llib-lfsmgt

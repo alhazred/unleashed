@@ -45,18 +45,17 @@ or Intel sources on SPARC or Intel platforms. exdump prints one line for
 each record it encounters in the exacct file.  
 
 The Makefile contained in this directory is set up to use the C compiler
-(cc) and lint  utility found in your  $PATH.  If you wish  to change the
-configuration, edit  the CC  and LINT macro  definitions in  Makefile to
-point to the appropriate pathnames.
+(cc) found in your  $PATH. If you wish to change the configuration, edit
+the  CC  macro  definition  in  Makefile  to  point  to  the appropriate
+pathnames.
 
 3. Targets
 
 The Makefile in this directory supports the following targets:
 
 	make all (default)	- build exdump executable
-	make lint		- run lint against exdump
 	make clean		- remove object files
-	make clobber		- remove objects, and lint files
+	make clobber		- remove objects
 
 To  build the  exdump,  execute  "make" in  this  directory.  This  will
 execute the default "make all" target.
