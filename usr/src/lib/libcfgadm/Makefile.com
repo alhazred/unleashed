@@ -29,11 +29,10 @@ OBJECTS =	config_admin.o
 
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-ldevinfo -lc
 
 SRCDIR =	../common
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-type-limits
@@ -42,7 +41,5 @@ CERRWARN +=	-_gcc=-Wno-unused-label
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ
