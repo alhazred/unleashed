@@ -11,6 +11,7 @@
 
 #
 # Copyright 2011, Richard Lowe
+# Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2015 Nexenta Systems, Inc. All rights reserved.
 # Copyright 2016 Toomas Soome <tsoome@me.com>
 #
@@ -34,7 +35,6 @@ file path=usr/share/man/man1m/busstat.1m
 file path=usr/share/man/man1m/captoinfo.1m
 file path=usr/share/man/man1m/cfgadm.1m
 file path=usr/share/man/man1m/cfgadm_ac.1m
-file path=usr/share/man/man1m/cfgadm_cardbus.1m
 file path=usr/share/man/man1m/cfgadm_fp.1m
 file path=usr/share/man/man1m/cfgadm_ib.1m
 file path=usr/share/man/man1m/cfgadm_pci.1m

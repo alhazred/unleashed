@@ -10,6 +10,7 @@
 #
 
 #
+# Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2011, Richard Lowe
 # Copyright 2012 OmniTI Computer Consulting, Inc.  All rights reserved.
 # Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
@@ -37,7 +38,6 @@ _MANFILES=	Intro.4				\
 		bart_manifest.4			\
 		bart_rules.4			\
 		bootparams.4			\
-		cardbus.4			\
 		compver.4			\
 		contents.4			\
 		contract.4			\
