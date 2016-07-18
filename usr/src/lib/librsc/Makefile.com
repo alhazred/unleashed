@@ -47,7 +47,7 @@ LINKED_LLIBLRSC_DIR 	= \
 MAPFILES =
 
 SRCDIR =	common
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lc
 PLATLIBS =	$(USR_PLAT_DIR)/$(PLATFORM)/lib/
@@ -58,10 +58,9 @@ INS.slink8=	$(RM) -r $@; $(SYMLINK) ../../$(PLATFORM)/lib/llib-lrsc.ln $@
 .KEEP_STATE:
 
 #
-# build/lint rules
+# build rules
 #
 all:	$(LIBS)
-lint:	lintcheck
 
 #
 # install rules
