@@ -1072,7 +1072,6 @@ usr/lib/amd64/llib-lsrpt.ln
 usr/lib/amd64/llib-lstmf.ln
 usr/lib/amd64/llib-lsun_ima.ln
 usr/lib/amd64/llib-ltecla.ln
-usr/lib/amd64/llib-lvolmgt.ln
 usr/lib/amd64/llib-lwanboot.ln
 usr/lib/amd64/llib-lwanbootutil.ln
 usr/lib/amd64/llib-lwrap.ln
@@ -1204,8 +1203,6 @@ usr/lib/llib-lsun_ima
 usr/lib/llib-lsun_ima.ln
 usr/lib/llib-ltecla
 usr/lib/llib-ltecla.ln
-usr/lib/llib-lvolmgt
-usr/lib/llib-lvolmgt.ln
 usr/lib/llib-lwanboot
 usr/lib/llib-lwanboot.ln
 usr/lib/llib-lwanbootutil
