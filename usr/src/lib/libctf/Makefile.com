@@ -47,7 +47,7 @@ include ../../Makefile.lib
 include ../../Makefile.rootfs
 
 SRCS = $(COMMON_OBJS:%.o=../../../common/ctf/%.c) $(LIB_OBJS:%.o=../common/%.c)
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 
 SRCDIR = ../common
 
@@ -58,13 +58,9 @@ CERRWARN += -_gcc=-Wno-uninitialized
 
 LDLIBS += -lc
 
-$(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
-
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ
 
