@@ -30,19 +30,15 @@ OBJECTS=	libbrand.o
 
 include ../../Makefile.lib
 
-LIBS=		$(DYNLIB) $(LINTLIB)
-LDLIBS +=	-lc
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
+LIBS=		$(DYNLIB)
+LDLIBS +=	-lc -lxml2
 CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(SRCDIR) -D_REENTRANT
-$(DYNLIB) :=	LDLIBS += -lxml2
 
 SRCDIR=		../common
 
 .KEEP_STATE:
 
 all:	$(LIBS)
-
-lint:	lintcheck
 
 install: all
 

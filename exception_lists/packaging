@@ -1074,7 +1074,6 @@ lib/llib-ltsol
 lib/llib-ltsol.ln
 usr/lib/amd64/llib-lSMHBAAPI.ln
 usr/lib/amd64/llib-lbe.ln
-usr/lib/amd64/llib-lbrand.ln
 usr/lib/amd64/llib-lbsdmalloc.ln
 usr/lib/amd64/llib-lcfgadm.ln
 usr/lib/amd64/llib-lcommputil.ln
@@ -1173,8 +1172,6 @@ usr/lib/llib-lSMHBAAPI
 usr/lib/llib-lSMHBAAPI.ln
 usr/lib/llib-lbe
 usr/lib/llib-lbe.ln
-usr/lib/llib-lbrand
-usr/lib/llib-lbrand.ln
 usr/lib/llib-lbsdmalloc
 usr/lib/llib-lbsdmalloc.ln
 usr/lib/llib-lcfgadm
