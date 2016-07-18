@@ -41,10 +41,8 @@ include ../../Makefile.lib
 
 SRCDIR=		../common
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 SRCS=   $(COBJS:%.o=$(SRCDIR)/%.c)
-
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 C99MODE =       -xc99=%all
 C99LMODE =      -Xc99=%all
@@ -60,16 +58,10 @@ CPPFLAGS += -D_FILE_OFFSET_BITS=64
 # this library is for debugging, let's always define DEBUG here.
 CPPFLAGS += -DDEBUG
 
-LINTCHECKFLAGS += -erroff=E_INCONS_ARG_DECL2
-LINTCHECKFLAGS += -erroff=E_INCONS_VAL_TYPE_DECL2
-LINTCHECKFLAGS += -erroff=E_INCONS_VAL_TYPE_USED2
-
 LDLIBS += -lumem -lcryptoutil -lsocket -lc
 
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ

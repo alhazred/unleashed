@@ -841,10 +841,6 @@ usr/lib/llib-lpri.ln		sparc
 usr/lib/sparcv9/llib-lpri.ln	sparc
 lib/llib-lsqlite-sys
 lib/llib-lsqlite-sys.ln
-usr/lib/llib-lfakekernel
-usr/lib/llib-lfakekernel.ln
-usr/lib/amd64/llib-lfakekernel.ln		i386
-usr/lib/sparcv9/llib-lfakekernel.ln		sparc
 usr/lib/reparse/llib-lreparse_smb
 usr/lib/reparse/llib-lreparse_smb.ln
 usr/lib/smbsrv/llib-lfksmbsrv
