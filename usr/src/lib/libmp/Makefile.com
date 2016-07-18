@@ -47,8 +47,6 @@ LDLIBS +=	-lc
 
 .KEEP_STATE:
 
-lint: lintcheck
-
 #
 # Include library targets
 #
