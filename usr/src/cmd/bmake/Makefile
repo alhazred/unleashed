@@ -102,7 +102,7 @@ OS!= uname -s
 isBSD44:=${BSD44_LIST:M${OS}}
 
 .if ${isBSD44} == ""
-MANTARGET= cat
+MANTARGET= man
 INSTALL?=${srcdir}/install-sh
 .if (${MACHINE} == "sun386")
 # even I don't have one of these anymore :-)
