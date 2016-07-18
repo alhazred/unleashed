@@ -65,11 +65,18 @@ int use_stk_lpg = 1;
 static int brk_lpg(caddr_t nva);
 static int grow_lpg(caddr_t sp);
 
-int
+intptr_t
 brk(caddr_t nva)
 {
 	int error;
 	proc_t *p = curproc;
+
+	/*
+	 * As a special case to aid the implementation of sbrk(3C), if given a
+	 * new brk of 0, return the current brk.  We'll hide this in brk(3C).
+	 */
+	if (nva == 0)
+		return ((intptr_t)(p->p_brkbase + p->p_brksize));
 
 	/*
 	 * Serialize brk operations on an address space.
@@ -490,10 +497,10 @@ grow_internal(caddr_t sp, uint_t growszc)
 }
 
 /*
- * Find address for user to map.
- * If MAP_FIXED is not specified, we can pick any address we want, but we will
- * first try the value in *addrp if it is non-NULL.  Thus this is implementing
- * a way to try and get a preferred address.
+ * Find address for user to map.  If MAP_FIXED is not specified, we can pick
+ * any address we want, but we will first try the value in *addrp if it is
+ * non-NULL and _MAP_RANDOMIZE is not set.  Thus this is implementing a way to
+ * try and get a preferred address.
  */
 int
 choose_addr(struct as *as, caddr_t *addrp, size_t len, offset_t off,
@@ -506,7 +513,8 @@ choose_addr(struct as *as, caddr_t *addrp, size_t len, offset_t off,
 	if (flags & MAP_FIXED) {
 		(void) as_unmap(as, *addrp, len);
 		return (0);
-	} else if (basep != NULL && ((flags & MAP_ALIGN) == 0) &&
+	} else if (basep != NULL &&
+	    ((flags & (MAP_ALIGN | _MAP_RANDOMIZE)) == 0) &&
 	    !as_gap(as, len, &basep, &lenp, 0, *addrp)) {
 		/* User supplied address was available */
 		*addrp = basep;
@@ -612,6 +620,19 @@ smmap_common(caddr_t *addrp, size_t len,
 		return (EINVAL);
 	}
 
+	if ((flags & (MAP_FIXED | _MAP_RANDOMIZE)) ==
+	    (MAP_FIXED | _MAP_RANDOMIZE)) {
+		return (EINVAL);
+	}
+
+	/*
+	 * If it's not a fixed allocation and mmap ASLR is enabled, randomize
+	 * it.
+	 */
+	if (((flags & MAP_FIXED) == 0) &&
+	    secflag_enabled(curproc, PROC_SEC_ASLR))
+		flags |= _MAP_RANDOMIZE;
+
 #if defined(__sparc)
 	/*
 	 * See if this is an "old mmap call".  If so, remember this
@@ -630,7 +651,6 @@ smmap_common(caddr_t *addrp, size_t len,
 
 
 	if (flags & MAP_ALIGN) {
-
 		if (flags & MAP_FIXED)
 			return (EINVAL);
 
