@@ -799,17 +799,6 @@ lib/llib-lmeta.ln
 usr/platform/sun4u/lib/llib-lprtdiag				sparc
 usr/platform/sun4u/lib/llib-lprtdiag.ln				sparc
 usr/platform/sun4v/lib/llib-lprtdiag.ln				sparc
-usr/platform/sun4v/lib/llib-lpcp.ln				sparc
-usr/platform/SUNW,Netra-CP3060/lib/llib-lpcp.ln			sparc
-usr/platform/SUNW,Netra-CP3260/lib/llib-lpcp.ln			sparc
-usr/platform/SUNW,Netra-T5220/lib/llib-lpcp.ln			sparc
-usr/platform/SUNW,Netra-T5440/lib/llib-lpcp.ln			sparc
-usr/platform/SUNW,SPARC-Enterprise-T5120/lib/llib-lpcp.ln	sparc
-usr/platform/SUNW,Sun-Blade-T6300/lib/llib-lpcp.ln		sparc
-usr/platform/SUNW,Sun-Blade-T6320/lib/llib-lpcp.ln		sparc
-usr/platform/SUNW,Sun-Fire-T200/lib/llib-lpcp.ln		sparc
-usr/platform/SUNW,T5140/lib/llib-lpcp.ln			sparc
-usr/platform/SUNW,USBRDT-5240/lib/llib-lpcp.ln			sparc
 usr/lib/llib-lpp
 usr/lib/llib-lpp.ln
 usr/lib/llib-lshell

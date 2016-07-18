@@ -45,7 +45,7 @@ LINKED_LIBPCP1_DIR	= \
 LINKED_LLIBLPCP_DIR 	= \
 	$(LINKED_PLATFORMS:%=$(USR_PLAT_DIR)/%/lib/llib-lpcp.ln)
 
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-uninitialized
 LDLIBS +=	-lc -lumem -ldevinfo
@@ -57,10 +57,8 @@ INS.slink8=	$(RM) -r $@; $(SYMLINK) ../../$(PLATFORM)/lib/llib-lpcp.ln $@
 .KEEP_STATE:
 
 #
-# build/lint rules
+# build rules
 #
 all:	$(LIBS)
-
-lint:	lintcheck
 
 include $(SRC)/lib/Makefile.targ
