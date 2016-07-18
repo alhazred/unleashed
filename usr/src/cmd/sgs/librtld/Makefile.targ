@@ -55,8 +55,9 @@ include		$(SRC)/cmd/sgs/Makefile.targ
 
 catalog:	$(BLTMESG)
 
-chkmsg:
-		sh $(CHKMSG) $(CHKMSGFLAGS)
+chkmsg:		$(MACHOBJS:%.o=%.c)  $(COMOBJS:%.o=../common/%.c) $(BLTDATA)
+		sh $(CHKMSG) $(CHKMSGFLAGS) \
+			$(MACHOBJS:%.o=%.c)  $(COMOBJS:%.o=../common/%.c) $(BLTDATA)
 
 $(BLTDEFS) + \
 $(BLTDATA) + \

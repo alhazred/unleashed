@@ -34,8 +34,9 @@ pics/%.o:	../common/%.c
 include		$(SRC)/lib/Makefile.targ
 include		$(SRC)/cmd/sgs/Makefile.targ
 
-chkmsg:
-		sh $(CHKMSG) $(CHKMSGFLAGS)
+chkmsg:		$(COMOBJS:%.o=../common/%.c) $(BLTDATA)
+		sh $(CHKMSG) $(CHKMSGFLAGS) \
+			$(COMOBJS:%.o=../common/%.c) $(BLTDATA)
 
 $(BLTDEFS) + \
 $(BLTDATA) + \
