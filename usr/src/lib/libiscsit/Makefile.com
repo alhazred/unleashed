@@ -33,7 +33,7 @@ OBJECTS= $(OBJS_COMMON) $(ISCSIT_OBJS_SHARED) $(ISCSI_OBJS_SHARED)
 
 include ../../Makefile.lib
 
-LIBS=	$(DYNLIB) $(LINTLIB)
+LIBS=	$(DYNLIB)
 
 SRCDIR =	../common
 
@@ -48,13 +48,10 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 SRCS=	$(OBJS_COMMON:%.o=$(SRCDIR)/%.c)			\
 	$(ISCSIT_OBJS_SHARED:%.o=$(SRC)/common/iscsit/%.c)	\
 	$(ISCSI_OBJS_SHARED:%.o=$(SRC)/common/iscsi/%.c)
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 pics/%.o: ../../../common/iscsit/%.c
 	$(COMPILE.c) -o $@ $<
