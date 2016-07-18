@@ -957,12 +957,8 @@ usr/lib/llib-lmilter
 usr/lib/llib-lmilter.ln
 usr/lib/llib-lpasswdutil
 usr/lib/llib-lpasswdutil.ln
-usr/lib/llib-lpicl
-usr/lib/llib-lpicl.ln
 usr/lib/llib-lpicld_pluginutil
 usr/lib/llib-lpicld_pluginutil.ln
-usr/lib/llib-lpicltree
-usr/lib/llib-lpicltree.ln
 usr/lib/llib-lpkcs11
 usr/lib/llib-lpkcs11.ln
 usr/lib/llib-lpolkit

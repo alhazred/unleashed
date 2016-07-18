@@ -35,7 +35,6 @@ all :=      	TARGET= all
 install :=      TARGET= install
 clean :=        TARGET= clean
 clobber :=      TARGET= clobber
-lint :=         TARGET= lint
 _msg :=         TARGET= _msg
 
 # definitions for install_h target
@@ -46,7 +45,7 @@ CHECKHDRS=      $(HDRS:%.h=%.check)
 
 .KEEP_STATE:
 
-all install clean clobber lint _msg: $(SUBDIRS)
+all install clean clobber _msg: $(SUBDIRS)
 
 # install rule for install_h target
 

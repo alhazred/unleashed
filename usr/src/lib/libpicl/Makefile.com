@@ -31,9 +31,8 @@ OBJECTS=	picl.o
 
 include $(SRC)/lib/Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CPPFLAGS +=	-I.. -D_REENTRANT
 CFLAGS +=	$(CCVERBOSE)
@@ -44,8 +43,6 @@ POFILE =	picl.po
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint:	lintcheck
 
 %.po:	../%.c
 	$(CP) $< $<.i
