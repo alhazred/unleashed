@@ -894,7 +894,6 @@ usr/lib/llib-lpcidb.ln
 # files created during the build
 lib/amd64/llib-lMPAPI.ln
 lib/amd64/llib-ldl.ln
-lib/amd64/llib-ldladm.ln
 lib/amd64/llib-ldlpi.ln
 lib/amd64/llib-ldoor.ln
 lib/amd64/llib-lelf.ln
@@ -922,8 +921,6 @@ lib/llib-lMPAPI
 lib/llib-lMPAPI.ln
 lib/llib-ldl
 lib/llib-ldl.ln
-lib/llib-ldladm
-lib/llib-ldladm.ln
 lib/llib-ldlpi
 lib/llib-ldlpi.ln
 lib/llib-ldoor
