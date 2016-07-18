@@ -135,7 +135,6 @@ LARGEPICS=	$(LARGESYMS:%=pics/%)
 $(LARGEPICS) :=	sparc_C_PICFLAGS = $(C_BIGPICFLAGS)
 $(LARGEPICS) :=	i386_C_PICFLAGS = $(C_BIGPICFLAGS)
 
-# More and stricter semantic checks and lint-like checks
 CFLAGS	+=	$(CCVERBOSE)
 
 CPPFLAGS +=	-D_REENTRANT
@@ -191,15 +190,12 @@ all :=		TARGET= all
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
-lint :=		TARGET= lint
 
 .KEEP_STATE:
 
 all:	$(DERIVED_FILES) $(LIBS)
 
 install: all $(ROOTLIBS) $(ROOTLINKS)
-
-lint: $(DERIVED_FILES) .WAIT lintcheck
 
 pics/%.o: %.c
 	$(COMPILE.c) -o $@ $<
