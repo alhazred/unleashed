@@ -34,11 +34,10 @@ OBJECTS =	$(LOCOBJS) $(COMOBJS)
 include ../../Makefile.lib
 
 SRCS =          ../common/ima.c $(SRC)/common/iscsi/utils.c
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 
 SRCDIR =	../common
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 LDLIBS +=	-lnsl
 LDLIBS +=	-ldevinfo
@@ -56,8 +55,6 @@ CPPFLAGS +=	-DSOLARIS
 .KEEP_STATE:
 
 all:	$(LIBS)
-
-lint:	lintcheck
 
 include ../../Makefile.targ
 
