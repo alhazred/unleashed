@@ -1043,7 +1043,6 @@ usr/lib/amd64/llib-ldns_sd.ln
 usr/lib/amd64/llib-ldtrace.ln
 usr/lib/amd64/llib-lfcoe.ln
 usr/lib/amd64/llib-lfstyp.ln
-usr/lib/amd64/llib-lgss.ln
 usr/lib/amd64/llib-lhal-storage.ln
 usr/lib/amd64/llib-lhal.ln
 usr/lib/amd64/llib-lhotplug.ln
@@ -1137,8 +1136,6 @@ usr/lib/llib-lfsmgt
 usr/lib/llib-lfsmgt.ln
 usr/lib/llib-lfstyp
 usr/lib/llib-lfstyp.ln
-usr/lib/llib-lgss
-usr/lib/llib-lgss.ln
 usr/lib/llib-lhal
 usr/lib/llib-lhal-storage
 usr/lib/llib-lhal-storage.ln

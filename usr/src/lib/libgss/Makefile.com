@@ -87,17 +87,13 @@ SRCS +=		$(GSSCREDOBJ:%.o=$(GSSCRED_DIR)/%.c) \
 		$(KRB5OBJ:%.o=$(KRB5DIR)/%.c) \
 		$(KRB5ETOBJ:%.o=$(KRB5ETDIR)/%.c) \
 		$(UTSGSSOBJ:%.o=$(UTSGSSDIR)/%.c)
-GSSLINTSRC =	$(GSSOBJECTS:%.o=$(SRCDIR)/%.c) \
-		$(GSSCREDOBJ:%.o=$(GSSCRED_DIR)/%.c) \
-		$(UTSGSSOBJ:%.o=$(UTSGSSDIR)/%.c)
 OBJECTS =	$(GSSOBJECTS) $(GSSCREDOBJ) $(KRB5OBJ) $(UTSGSSOBJ) $(KRB5ETOBJ)
 
 # include library definitions
 include ../../Makefile.lib
 
-LIBS =	$(DYNLIB) $(LINTLIB)
+LIBS =	$(DYNLIB)
 
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 LDLIBS += 	-lc
 
 CPPFLAGS += 	-I$(GSSCRED_DIR) -I$(SRC)/uts/common/gssapi/include \
@@ -114,10 +110,6 @@ CERRWARN +=	-_gcc=-Wno-empty-body
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lintcheck:=	SRCS= $(GSSLINTSRC)
-
-lint:  lintcheck
 
 $(GSSCREDOBJ:%.o=pics/%.o):
 	$(COMPILE.c) -o $@ $(@:pics/%.o=$(GSSCRED_DIR)/%.c)
