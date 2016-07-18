@@ -802,8 +802,6 @@ usr/lib/llib-ldisasm
 usr/lib/llib-ldisasm.ln
 usr/lib/amd64/llib-ldisasm.ln		i386
 usr/lib/sparcv9/llib-ldisasm.ln		sparc
-lib/llib-ldhcpagent
-lib/llib-ldhcpagent.ln
 lib/llib-ldhcputil
 lib/llib-ldhcputil.ln
 lib/amd64/llib-ldhcputil.ln		i386
