@@ -841,7 +841,6 @@ lib/amd64/llib-lMPAPI.ln
 lib/amd64/llib-ldl.ln
 lib/amd64/llib-lelf.ln
 lib/amd64/llib-lrtld_db.ln
-lib/amd64/llib-lsec.ln
 lib/amd64/llib-lsecdb.ln
 lib/amd64/llib-lsendfile.ln
 lib/amd64/llib-lsocket.ln
@@ -857,8 +856,6 @@ lib/llib-lelf
 lib/llib-lelf.ln
 lib/llib-lrtld_db
 lib/llib-lrtld_db.ln
-lib/llib-lsec
-lib/llib-lsec.ln
 lib/llib-lsecdb
 lib/llib-lsecdb.ln
 lib/llib-lsendfile
