@@ -33,7 +33,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 test :=		TARGET= test
 
 SCRFILES = screen/keycaps \
@@ -71,7 +70,7 @@ all: $(SCRFILES) .WAIT $(SUBDIRS)
 
 install: all .WAIT $(SUBDIRS)
 
-clean clobber lint test: $(SUBDIRS)
+clean clobber test: $(SUBDIRS)
 
 install_h: $(ROOTHDRS)
 

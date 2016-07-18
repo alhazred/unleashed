@@ -955,7 +955,6 @@ lib/amd64/llib-lc_db.ln
 lib/amd64/llib-lcontract.ln
 lib/amd64/llib-lcryptoutil.ln
 lib/amd64/llib-lctf.ln
-lib/amd64/llib-lcurses.ln
 lib/amd64/llib-ldevice.ln
 lib/amd64/llib-ldevid.ln
 lib/amd64/llib-ldevinfo.ln
@@ -991,7 +990,6 @@ lib/amd64/llib-lsendfile.ln
 lib/amd64/llib-lsocket.ln
 lib/amd64/llib-lsysevent.ln
 lib/amd64/llib-ltermcap.ln
-lib/amd64/llib-ltermlib.ln
 lib/amd64/llib-lthread.ln
 lib/amd64/llib-ltsnet.ln
 lib/amd64/llib-ltsol.ln
@@ -1024,8 +1022,6 @@ lib/llib-lcryptoutil
 lib/llib-lcryptoutil.ln
 lib/llib-lctf
 lib/llib-lctf.ln
-lib/llib-lcurses
-lib/llib-lcurses.ln
 lib/llib-ldevice
 lib/llib-ldevice.ln
 lib/llib-ldevid
@@ -1100,8 +1096,6 @@ lib/llib-lsysevent
 lib/llib-lsysevent.ln
 lib/llib-ltermcap
 lib/llib-ltermcap.ln
-lib/llib-ltermlib
-lib/llib-ltermlib.ln
 lib/llib-lthread
 lib/llib-lthread.ln
 lib/llib-ltsnet
@@ -1377,6 +1371,3 @@ usr/lib/scsi/llib-lses
 usr/lib/scsi/llib-lses.ln
 usr/lib/scsi/llib-lsmp
 usr/lib/scsi/llib-lsmp.ln
-usr/xpg4/lib/amd64/llib-lcurses.ln
-usr/xpg4/lib/llib-lcurses
-usr/xpg4/lib/llib-lcurses.ln

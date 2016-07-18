@@ -33,4 +33,4 @@ DYNFLAGS += $(DYNFLAGS32)
 
 all: $(LIBS) 
 
-install: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
+install: all $(ROOTLIBS) $(ROOTLINKS)

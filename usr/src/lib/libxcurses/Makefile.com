@@ -110,15 +110,10 @@ ROOTLIBDIR=	$(ROOT)/usr/xpg4/lib
 ROOTLIBDIR64=	$(ROOT)/usr/xpg4/lib/$(MACH64)
 ROOTLIBS=	$(LIBS:%=$(ROOTLIBDIR)/%)
 
-$(LINTLIB):= SRCS=../src/libc/llib-lcurses
-$(LINTLIB):= CPPFLAGS += -D_XOPEN_SOURCE_EXTENDED 
-
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-unused-label
 CERRWARN +=	-_gcc=-Wno-unused-function
-
-LINTSRC=	$(LINTLIB:%.ln=%)
 
 LDLIBS += -lc
 
@@ -133,8 +128,6 @@ CLOBBERFILES=	libcurses.so libcurses.so$(VERS)
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 #
 # Include library targets
