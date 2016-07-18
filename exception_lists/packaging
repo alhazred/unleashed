@@ -1045,7 +1045,6 @@ usr/lib/amd64/llib-lfcoe.ln
 usr/lib/amd64/llib-lfstyp.ln
 usr/lib/amd64/llib-lhal-storage.ln
 usr/lib/amd64/llib-lhal.ln
-usr/lib/amd64/llib-lhotplug.ln
 usr/lib/amd64/llib-lidmap.ln
 usr/lib/amd64/llib-lilb.ln
 usr/lib/amd64/llib-lima.ln
@@ -1140,8 +1139,6 @@ usr/lib/llib-lhal
 usr/lib/llib-lhal-storage
 usr/lib/llib-lhal-storage.ln
 usr/lib/llib-lhal.ln
-usr/lib/llib-lhotplug
-usr/lib/llib-lhotplug.ln
 usr/lib/llib-lidmap
 usr/lib/llib-lidmap.ln
 usr/lib/llib-lilb
