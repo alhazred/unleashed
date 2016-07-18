@@ -22,10 +22,10 @@
 #
 # Makefile for "ifparse" 
 #
+# Copyright 2014 Garrett D'Amore <garrett@damore.org>
+#
 # Copyright 2000-2003 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
-#
-# ident	"%Z%%M%	%I%	%E% SMI"
 #
 
 PROG =		ifparse
@@ -40,8 +40,8 @@ CPPFLAGS += -I$(CMDINETCOMMONDIR)
 LINTFLAGS +=	-m
 
 # these #defines are required to use UNIX 98 interfaces
-$(OBJS)		:= CPPFLAGS +=-D_POSIX_C_SOURCE	
-LINTFLAGS	+= -D_POSIX_C_SOURCE -I$(CMDINETCOMMONDIR)
+$(OBJS)		:= CPPFLAGS +=-D_POSIX_C_SOURCE=199506L
+LINTFLAGS	+= -D_POSIX_C_SOURCE=199506L -I$(CMDINETCOMMONDIR)
 
 .KEEP_STATE:
 
