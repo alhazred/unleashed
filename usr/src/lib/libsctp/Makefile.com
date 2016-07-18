@@ -32,8 +32,7 @@ OBJECTS = sctp.o
 include ../../Makefile.lib
 
 SRCDIR =	../common
-LIBS =		$(DYNLIB) $(LINTLIB)
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lsocket -lc
 
 CFLAGS +=	$(CCVERBOSE)
@@ -41,7 +40,5 @@ CFLAGS +=	$(CCVERBOSE)
 .KEEP_STATE:
 
 all:		$(LIBS)
-
-lint:		$(LINTLIB) lintcheck
 
 include ../../Makefile.targ
