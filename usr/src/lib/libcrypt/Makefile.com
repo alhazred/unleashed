@@ -38,9 +38,7 @@ include ../../Makefile.lib
 
 SRCDIR=		../common
 
-LIBS=		$(DYNLIB) $(LINTLIB)
-
-$(LINTLIB):=	SRCS=$(SRCDIR)/$(LINTSRC)
+LIBS=		$(DYNLIB)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -I../inc -I../../common/inc -I../../libgen/inc
@@ -52,8 +50,6 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ
 
