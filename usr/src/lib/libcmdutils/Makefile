@@ -34,7 +34,6 @@ all :=		TARGET= all
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
-lint :=		TARGET= lint
 
 # definitions for install_h target
 HDRS=		libcmdutils.h
@@ -44,7 +43,7 @@ CHECKHDRS=	$(HDRS:%.h=%.check)
 
 .KEEP_STATE:
 
-all clean clobber install lint: $(SUBDIRS)
+all clean clobber install: $(SUBDIRS)
 
 $(ROOTHDRDIR)/%: %
 	$(INS.file)

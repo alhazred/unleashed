@@ -832,10 +832,6 @@ lib/llib-lrestart
 lib/llib-lrestart.ln
 lib/amd64/llib-lrestart.ln					i386
 lib/sparcv9/llib-lrestart.ln					sparc
-lib/llib-lcmdutils
-lib/llib-lcmdutils.ln
-lib/amd64/llib-lcmdutils.ln		i386
-lib/sparcv9/llib-lcmdutils.ln		sparc
 usr/platform/sun4u/lib/llib-lprtdiag				sparc
 usr/platform/sun4u/lib/llib-lprtdiag.ln				sparc
 usr/platform/sun4v/lib/llib-lprtdiag.ln				sparc

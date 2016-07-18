@@ -33,7 +33,7 @@ OBJECTS=	$(CMD_OBJS) $(COM_OBJS)
 include ../../Makefile.lib
 include ../../Makefile.rootfs
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 
 LDLIBS +=	-lc -lavl -lnvpair
 
@@ -44,8 +44,6 @@ SRCS=	\
 	$(CMD_OBJS:%.o=$(SRCDIR)/%.c)   \
 	$(COM_OBJS:%.o=$(COMDIR)/%.c)
 
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
-
 CFLAGS +=	$(CCVERBOSE)
 
 # All commands using the common avltree interfaces must
@@ -55,8 +53,6 @@ CPPFLAGS +=	-I.. -I../../common/inc -D_REENTRANT -D_FILE_OFFSET_BITS=64
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 pics/%.o: $(COMDIR)/%.c
 	$(COMPILE.c) -o $@ $<
