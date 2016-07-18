@@ -28,10 +28,9 @@ OBJECTS =	libsrpt.o
 
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 
 SRCDIR =	../common
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 SRPTMODDIR =	../../../uts/common/io/comstar/port/srpt
 
@@ -45,7 +44,5 @@ CPPFLAGS +=	$(INCS) -D_REENTRANT
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ
