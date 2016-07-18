@@ -49,21 +49,13 @@ OBJECTS	=	$(LOC_OBJS) $(CRYPTO_OBJS)
 
 include $(SRC)/lib/Makefile.lib
 
-LIBS +=		$(LINTLIB)
 LDLIBS +=	-lc -lnsl -lmd
 
 # Must override SRCS from Makefile.lib since sources have
 # multiple source directories.
 SRCS =		$(LOC_SRCS) $(CRYPTO_SRCS)
 
-# Must define location of lint library source.
 SRCDIR =	$(LOC_DIR)
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
-
-# Library includes sources created via rpcgen. And rpcgen unfortunately
-# created unused function variables.
-LINTFLAGS   +=	-erroff=E_FUNC_VAR_UNUSED
-LINTFLAGS64 +=	-erroff=E_FUNC_VAR_UNUSED
 
 CPPFLAGS +=	-I$(CRYPTO_DIR)
 
@@ -74,9 +66,6 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 install:	all
 
 all:		$(LIBS)
-
-lint:		lintcheck
-
 
 # Define rule for local modules.
 objs/%.o pics/%.o:	$(LOC_DIR)/%.c

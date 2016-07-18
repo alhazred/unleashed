@@ -59,14 +59,11 @@ all := 		TARGET = all
 clean :=	TARGET = clean
 clobber :=	TARGET = clobber
 install	:=	TARGET = install
-lint :=		TARGET = lint
 
 .KEEP_STATE:
 .PARALLEL:      $(ROOTHDRS)
 
 all clean clobber install: $(RPCFILES) $(SUBDIRS)
-
-lint:		$(SUBDIRS)
 
 install_h:	$(ROOTHDRDIR) $(WBKUHDRDIR) .WAIT $(ROOTHDRS) $(WBKUHDRS)
 
