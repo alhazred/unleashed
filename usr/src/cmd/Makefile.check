@@ -130,7 +130,7 @@ MANIFEST_SUBDIRS=			\
 	rpcsvc/rpc.bootparamd		\
 	sendmail/lib			\
 	smbsrv/smbd			\
-	ssh/etc				\
+	ssh				\
 	svc/milestone			\
 	tsol/labeld			\
 	tsol/tnctl			\

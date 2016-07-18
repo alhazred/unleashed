@@ -18,74 +18,21 @@
 #
 # CDDL HEADER END
 #
-
-#
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
 
-include		../Makefile.cmd
+include ../Makefile.cmd
 
-# libopenbsd-compat and libssh are used by all SSH binaries, and sftp-server is
-# also used as an internal part of sshd.
-SUBDIRS= \
-	etc \
-	libopenbsd-compat \
-	libssh \
-	sftp-server \
-	.WAIT \
-	ssh \
-	sshd \
-	scp \
-	ssh-add \
-	ssh-agent \
-	ssh-keygen \
-	ssh-keysign \
-	ssh-keyscan \
-	sftp \
-	ssh-http-proxy-connect \
-	ssh-socks5-proxy-connect
+MANIFEST = ssh.xml
+SVCMETHOD = sshd
 
-MSGFILE=ssh.po
-POFILE=_messages.po
+ROOTMANIFESTDIR = $(ROOTSVCNETWORK)
 
-CLOBBERFILES += $(MSGFILE) THIRDPARTYLICENSE
+all lint clean clobber:
 
-.KEEP_STATE:
+install: all $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 
-all :=          TARGET= all
-clean :=        TARGET= clean
-clobber :=      TARGET= clobber
-delete :=       TARGET= delete
-install :=      TARGET= install
-lint :=         TARGET= lint
-catalog :=      TARGET= catalog
-package :=      TARGET= package
-_msg :=		TARGET= _msg
-$(POFILE) :=	TARGET= $(POFILE)
+check: $(CHKMANIFEST)
 
-all clean install lint $(POFILE): $(SUBDIRS)
-clobber: $(SUBDIRS) clobber_local
-clobber_local:
-	$(RM) $(CLOBBERFILES)
-
-all install: THIRDPARTYLICENSE
-
-check: $(CHECKHDRS)
-
-# See Makefile.msg.targ for $(MSGFILE) update instructions
-_msg:
-	$(RM) $(POFILE)
-	$(TOUCH) $(POFILE)
-	$(MAKE) $(POFILE) XGETTEXT=/usr/bin/gxgettext
-	$(CP) $(POFILE) $(MSGFILE)
-	$(CP) $(MSGFILE) $(MSGDOMAIN)
-
-$(SUBDIRS):     FRC
-	cd $@; pwd; $(MAKE) $(TARGET)
-
-# skip the summary; just include the actual license clauses.
-THIRDPARTYLICENSE: doc/LICENCE
-	$(SED) -n '/1)/,$$p' doc/LICENCE > $@
-
-FRC:
+include ../Makefile.targ
