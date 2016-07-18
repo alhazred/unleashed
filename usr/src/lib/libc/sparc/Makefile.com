@@ -1162,7 +1162,7 @@ CLEANFILES=			\
 
 CLOBBERFILES +=	$(LIB_PIC)
 
-# list of C source for lint
+# list of C source formerly for lint
 SRCS=							\
 	$(ATOMICOBJS:%.o=$(SRC)/common/atomic/%.c)	\
 	$(XATTROBJS:%.o=$(SRC)/common/xattr/%.c)	\
@@ -1253,18 +1253,6 @@ pics/getenv.o := sparc_COPTFLAG = -xO4
 .KEEP_STATE:
 
 all: $(LIBS) $(LIB_PIC)
-
-lint	:=	CPPFLAGS += -I$(LIBCDIR)/$(MACH)/fp
-lint	:=	CPPFLAGS += -D_MSE_INT_H -D_LCONV_C99
-lint	:=	LINTFLAGS += -mn
-
-lint:
-	@echo $(LINT.c) ... $(LDLIBS)
-	@$(LINT.c) $(SRCS) $(LDLIBS)
-
-$(LINTLIB):= SRCS=$(LIBCDIR)/port/llib-lc
-$(LINTLIB):= CPPFLAGS += -D_MSE_INT_H
-$(LINTLIB):= LINTFLAGS=-nvx
 
 # include common libc targets
 include $(LIBCDIR)/Makefile.targ

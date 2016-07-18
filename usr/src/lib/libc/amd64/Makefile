@@ -1071,7 +1071,7 @@ CLEANFILES=			\
 
 CLOBBERFILES +=	$(LIB_PIC)
 
-# list of C source for lint
+# list of C source formerly for lint
 SRCS=							\
 	$(ATOMICOBJS:%.o=$(SRC)/common/atomic/%.c)	\
 	$(XATTROBJS:%.o=$(SRC)/common/xattr/%.c)	\
@@ -1142,18 +1142,6 @@ pics/arc4random.o :=	CPPFLAGS += -I$(SRC)/common/crypto/chacha
 .KEEP_STATE:
 
 all: $(LIBS) $(LIB_PIC)
-
-lint	:=	CPPFLAGS += -I$(LIBCDIR)/$(MACH)/fp
-lint	:=	CPPFLAGS += -D_MSE_INT_H -D_LCONV_C99
-lint	:=	LINTFLAGS64 += -mn -erroff=E_SUPPRESSION_DIRECTIVE_UNUSED
-
-lint:
-	@echo $(LINT.c) ... $(LDLIBS)
-	@$(LINT.c) $(SRCS) $(LDLIBS)
-
-$(LINTLIB):= SRCS=$(LIBCDIR)/port/llib-lc
-$(LINTLIB):= CPPFLAGS += -D_MSE_INT_H
-$(LINTLIB):= LINTFLAGS64=-nvx -m64
 
 # include common libc targets
 include ../Makefile.targ
