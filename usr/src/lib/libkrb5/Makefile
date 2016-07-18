@@ -52,7 +52,7 @@ install :=	TARGET= install
 
 all clean clobber install: $(SUBDIRS)
 
-lint check:
+check:
 
 $(SUBDIRS):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
