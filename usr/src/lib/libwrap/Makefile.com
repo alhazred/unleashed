@@ -35,11 +35,10 @@ OBJECTS =	hosts_access.o options.o shell_cmd.o rfc931.o eval.o \
 
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 SONAME =	$(LIBRARY:.a=.so)$(MAJOR)
 ROOTLINKS +=	$(ROOTLIBDIR)/$(LIBLINKS)$(MAJOR)
 ROOTLINKS64 +=	$(ROOTLIBDIR64)/$(LIBLINKS)$(MAJOR)
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 MAPFILES =	../mapfile-vers
 
@@ -63,8 +62,6 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 $(ROOTLIBDIR)/$(LIBLINKS)$(MAJOR): $(ROOTLIBDIR)/$(LIBLINKS)$(VERS)
 	$(INS.liblink)
