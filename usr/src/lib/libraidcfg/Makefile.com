@@ -32,11 +32,10 @@ OBJECTS =	raidcfg.o
 
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-ldevinfo -lc
 
 SRCDIR =	../common
-$(LINTLIB):=	SRCS = $(LINTSRC:%=$(SRCDIR)/%)
 
 CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-type-limits
@@ -46,7 +45,5 @@ CERRWARN +=	-_gcc=-Wno-type-limits
 all: $(LIBS)
 
 SECLEVEL = standard
-
-lint: lintcheck
 
 include ../../Makefile.targ

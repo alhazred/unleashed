@@ -802,10 +802,6 @@ usr/lib/llib-ldisasm
 usr/lib/llib-ldisasm.ln
 usr/lib/amd64/llib-ldisasm.ln		i386
 usr/lib/sparcv9/llib-ldisasm.ln		sparc
-usr/lib/llib-lraidcfg
-usr/lib/llib-lraidcfg.ln
-usr/lib/amd64/llib-lraidcfg.ln		i386
-usr/lib/sparcv9/llib-lraidcfg.ln	sparc
 lib/llib-ldhcpagent
 lib/llib-ldhcpagent.ln
 lib/llib-ldhcputil
