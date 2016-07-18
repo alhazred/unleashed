@@ -18,5 +18,5 @@ BAR=bar is ${UT_FU}
 .MAKE.EXPORTED+= UT_ZOO UT_TEST
 
 all:
-	@env | grep '^UT_' | sort
+	@env | grep '^UT_' | grep -v '^UT_NO_USAGE_TRACKING' | sort
 
