@@ -31,7 +31,7 @@ OBJECTS= cache.o machdep.o hash.o
 # include library definitions
 include ../../Makefile.lib
 
-LIBS=		$(DYNLIB) $(LINTLIB)
+LIBS=		$(DYNLIB)
 
 SRCDIR=	../common
 
@@ -42,15 +42,9 @@ C99LMODE=	-Xc99=%all
 
 LDLIBS +=	-lc
 CPPFLAGS +=	$(INCS)
-LINTFLAGS += -erroff=E_FUNC_RET_MAYBE_IGNORED2
-LINTFLAGS += -erroff=E_FUNC_RET_ALWAYS_IGNOR2
-
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ
