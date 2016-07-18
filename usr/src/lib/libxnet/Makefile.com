@@ -28,6 +28,5 @@ VERS =		.1
 
 include		$(SRC)/lib/Makefile.rootfs
 
-LIBS +=		$(LINTLIB)
 DYNFLAGS +=     $(ZLOADFLTR)
 CPPFLAGS +=	-D__EXTENSIONS__

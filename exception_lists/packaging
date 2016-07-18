@@ -985,7 +985,6 @@ lib/amd64/llib-ltermcap.ln
 lib/amd64/llib-lthread.ln
 lib/amd64/llib-ltsnet.ln
 lib/amd64/llib-ltsol.ln
-lib/amd64/llib-lxnet.ln
 lib/fm/amd64/llib-lfmevent.ln
 lib/fm/llib-lfmevent
 lib/fm/llib-lfmevent.ln
@@ -1089,8 +1088,6 @@ lib/llib-ltsnet
 lib/llib-ltsnet.ln
 lib/llib-ltsol
 lib/llib-ltsol.ln
-lib/llib-lxnet
-lib/llib-lxnet.ln
 usr/lib/amd64/llib-lSMHBAAPI.ln
 usr/lib/amd64/llib-lads.ln
 usr/lib/amd64/llib-ladt_jni.ln
