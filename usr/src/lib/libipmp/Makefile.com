@@ -30,11 +30,10 @@ OBJECTS =	ipmp_admin.o ipmp_query.o ipmp_mpathd.o ipmp.o
 include ../../Makefile.lib
 include ../../Makefile.rootfs
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-linetutil -lsocket -lc
 
 SRCDIR =	../common
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR)
@@ -42,7 +41,5 @@ CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR)
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ

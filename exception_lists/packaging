@@ -895,8 +895,6 @@ lib/llib-ldl
 lib/llib-ldl.ln
 lib/llib-lelf
 lib/llib-lelf.ln
-lib/llib-lipmp
-lib/llib-lipmp.ln
 lib/llib-lm
 lib/llib-lm.ln
 lib/llib-lmd
