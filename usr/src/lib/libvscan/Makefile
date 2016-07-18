@@ -35,14 +35,13 @@ all :=		TARGET= all
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
-lint :=		TARGET= lint
 
 POFILE =	libvscan.po
 MSGFILES =	common/libvscan.c
 
 .KEEP_STATE:
 
-all clean clobber install lint _msg : $(SUBDIRS)
+all clean clobber install _msg : $(SUBDIRS)
 
 $(POFILE):	$(MSGFILES)
 	$(BUILDPO.msgfiles)

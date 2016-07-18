@@ -885,8 +885,6 @@ usr/lib/smbsrv/llib-lsmbns
 usr/lib/smbsrv/llib-lsmbns.ln
 usr/lib/reparse/amd64/llib-lreparse_smb.ln	i386
 usr/lib/reparse/sparcv9/llib-lreparse_smb.ln	sparc
-usr/lib/vscan/llib-lvscan
-usr/lib/vscan/llib-lvscan.ln
 usr/lib/llib-lsmbfs
 usr/lib/llib-lsmbfs.ln
 usr/lib/amd64/llib-lsmbfs.ln		i386
