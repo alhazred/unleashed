@@ -798,8 +798,6 @@ usr/lib/llib-lsum
 usr/lib/llib-lsum.ln
 usr/lib/amd64/llib-lsum.ln		i386
 usr/lib/sparcv9/llib-lsum.ln		sparc
-lib/llib-lsqlite-sys
-lib/llib-lsqlite-sys.ln
 usr/lib/reparse/llib-lreparse_smb
 usr/lib/reparse/llib-lreparse_smb.ln
 usr/lib/smbsrv/llib-lfksmbsrv

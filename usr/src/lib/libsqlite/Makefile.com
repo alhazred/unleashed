@@ -50,9 +50,7 @@ include $(SRC)/lib/Makefile.rootfs
 SRCDIR = ../src
 TOOLDIR = ../tool
 $(DYNLIB) := LDLIBS += -lc
-LIBS = $(DYNLIB) $(LINTLIB) $(NATIVERELOC)
-
-$(LINTLIB) :=	SRCS = ../$(LINTSRC)
+LIBS = $(DYNLIB) $(NATIVERELOC)
 
 # generated sources
 GENSRC = opcodes.c parse.c
@@ -193,21 +191,14 @@ ENCODING  = ISO8859
 all:		$(LIBS)
 install:	all \
 		$(ROOTLIBDIR)/$(DYNLIB) \
-		$(ROOTLIBDIR)/$(LINTLIB) \
 		$(ROOTLIBDIR)/$(NATIVERELOC)
-
-lint:
 
 all_h: $(GENHDR)
 
 $(ROOTLIBDIR)/$(NATIVERELOC)	:= FILEMODE= 644
-$(ROOTLINTDIR)/$(LINTLIB)	:= FILEMODE= 644
 
 $(ROOTLINK): $(ROOTLIBDIR) $(ROOTLIBDIR)/$(DYNLIB)
 	$(INS.liblink)
-
-$(ROOTLINTDIR)/%: ../%
-	$(INS.file)
 
 native: $(NATIVERELOC)
 
