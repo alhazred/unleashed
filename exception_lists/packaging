@@ -1045,7 +1045,6 @@ usr/lib/amd64/llib-lipd.ln
 usr/lib/amd64/llib-lipmi.ln
 usr/lib/amd64/llib-lipp.ln
 usr/lib/amd64/llib-liscsit.ln
-usr/lib/amd64/llib-lkvm.ln
 usr/lib/amd64/llib-ll.ln
 usr/lib/amd64/llib-lldap.ln
 usr/lib/amd64/llib-llgrp.ln
@@ -1146,8 +1145,6 @@ usr/lib/llib-lipp
 usr/lib/llib-lipp.ln
 usr/lib/llib-liscsit
 usr/lib/llib-liscsit.ln
-usr/lib/llib-lkvm
-usr/lib/llib-lkvm.ln
 usr/lib/llib-ll
 usr/lib/llib-ll.ln
 usr/lib/llib-lldap
