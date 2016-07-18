@@ -38,8 +38,6 @@ include		../Makefile.com
 
 all:		$(LIBS)
 
-install:	all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
-
-lint:		lintcheck
+install:	all $(ROOTLIBS) $(ROOTLINKS)
 
 include		../Makefile.targ

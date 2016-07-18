@@ -45,8 +45,6 @@ pics/edonr.o := CERRWARN +=	-_gcc=-Wno-uninitialized
 
 all:		$(LIBS)
 
-install:	all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
-
-lint:		lintcheck
+install:	all $(ROOTLIBS) $(ROOTLINKS)
 
 include		../Makefile.targ

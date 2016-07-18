@@ -42,8 +42,6 @@ EXTPICS = 	../capabilities/sun4u/sparcv9/pics/symcap.o \
 
 all:		$(LIBS)
 
-install:	all $(ROOTLIBS64) $(ROOTLINKS64) $(ROOTLINT64)
-
-lint:		lintcheck
+install:	all $(ROOTLIBS64) $(ROOTLINKS64)
 
 include		../Makefile.targ

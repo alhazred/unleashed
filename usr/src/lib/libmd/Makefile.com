@@ -24,7 +24,7 @@
 # Copyright 2013 Saso Kiselkov. All rights reserved.
 #
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 SRCS =		$(COMDIR)/edonr/edonr.c \
 		$(COMDIR)/md4/md4.c \
 		$(COMDIR)/md5/md5.c \
@@ -41,5 +41,3 @@ MAPFILEDIR =	$(SRCDIR)
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 LDLIBS +=	-lc
-
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
