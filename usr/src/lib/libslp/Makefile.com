@@ -35,9 +35,8 @@ OBJECTS =	SLPFindAttrs.o SLPFindSrvTypes.o SLPFindSrvs.o SLPOpen.o \
 
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lnsl -lsocket
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 SRCDIR =	../clib
 
@@ -51,7 +50,5 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 .KEEP_STATE:
 
 all:
-
-lint: lintcheck
 
 include ../../Makefile.targ

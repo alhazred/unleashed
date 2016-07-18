@@ -54,12 +54,11 @@ all :=		TARGET= all
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 .PARALLEL: $(SUBDIRS)
 
-all lint install: install_h .WAIT $(SUBDIRS)
+all install: install_h .WAIT $(SUBDIRS)
 
 clean clobber: $(SUBDIRS)
 

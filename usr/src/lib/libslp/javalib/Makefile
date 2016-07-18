@@ -93,7 +93,7 @@ install:	all message_files manifests $(JARDESTDIR) $(INSJARS)
 
 # empty targets for top-level building compatability
 
-install_h lint:
+install_h:
 
 # jstyle check -- more for developer's convenience since the checks are
 # not automated in the build.
