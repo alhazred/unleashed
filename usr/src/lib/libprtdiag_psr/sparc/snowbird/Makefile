@@ -43,7 +43,6 @@ include ../Makefile.com
 IFLAGS = -I$(USR_PLAT_DIR)/sun4u/include -I../../../libprtdiag/inc -I$(LIBBASE)/libdevinfo
 IFLAGS += -I$(SUN4U_INC_BASE) -I$(SB_INC_BASE) -I$(SRC)/cmd/picl/plugins/inc
 IFLAGS += -I$(LIBCTSMC)
-LINTFLAGS += $(IFLAGS)
 LDLIBS += -L$(LIBCTSMC)
 LDLIBS += -L$(LIBBASE)/libdevinfo -ldevinfo -L$(LIBBASE)/libcfgadm \
 		 -lcfgadm -lpicl -lctsmc

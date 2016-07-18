@@ -37,7 +37,6 @@ include $(SRC)/lib/libprtdiag_psr/sparc/Makefile.com
 SRCS=	$(OBJECTS:%.o=../common/%.c)
 
 IFLAGS += -I$(USR_PLAT_DIR)/sun4u/include -I ../../../../libprtdiag/inc
-LINTFLAGS += $(IFLAGS)
 
 #
 # desktop platform library should install into

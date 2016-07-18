@@ -39,8 +39,6 @@ IFLAGS +=  -I ../../../libprtdiag/inc
 IFLAGS += -I$(SRC)/cmd/picl/plugins/inc
 LDLIBS += -lpicl
 
-LINTFLAGS += $(IFLAGS)
-
 PLATFORM=SUNW,Netra-CP3260
 
 $(USR_PLAT_DIR)/$(PLATFORM)/lib/libprtdiag_psr.so.1 := FILEMODE= 0755

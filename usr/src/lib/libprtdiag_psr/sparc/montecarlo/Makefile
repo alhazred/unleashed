@@ -33,7 +33,6 @@ include ../Makefile.com
 IFLAGS = -I$(USR_PLAT_DIR)/sun4u/include -I../../../libprtdiag/inc -I$(LIBBASE)/libdevinfo
 IFLAGS += -I$(UTSBASE)/sun4u/sys
 IFLAGS += -I$(UTSBASE)/sun4u/montecarlo/sys
-LINTFLAGS += $(IFLAGS)
 LDLIBS += -L$(LIBBASE)/libdevinfo -ldevinfo -L$(LIBBASE)/libcfgadm -lcfgadm \
 	  -lkstat
 #
