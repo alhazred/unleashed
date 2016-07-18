@@ -75,6 +75,7 @@ COMMON_SUBDIRS=		\
 	bc		\
 	bdiff		\
 	beadm		\
+	bmake		\
 	bnu		\
 	boot		\
 	busstat		\
