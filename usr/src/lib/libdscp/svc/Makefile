@@ -48,7 +48,7 @@ $(ROOTOPTIONSDIR):
 $(ROOTOPTIONSDIR)/%: %
 	$(INS.file)
 
-all clean clobber lint:
+all clean clobber:
 
 install: $(ROOTMANIFEST) $(ROOTSVCMETHOD) $(ROOTOPTIONS)
 

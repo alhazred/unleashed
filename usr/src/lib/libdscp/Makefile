@@ -33,7 +33,6 @@ all	:= TARGET= all
 install	:= TARGET= install
 clean	:= TARGET= clean
 clobber	:= TARGET= clobber
-lint	:= TARGET= lint
 
 # definitions for install_h target
 HDRS=		libdscp.h
@@ -43,7 +42,7 @@ CHECKHDRS=	$(HDRS:%.h=%.check)
 
 .KEEP_STATE:
 
-all install clean clobber lint: $(SUBDIRS)
+all install clean clobber: $(SUBDIRS)
 
 # install rule for install_h target
 
