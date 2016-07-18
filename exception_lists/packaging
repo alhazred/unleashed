@@ -822,10 +822,6 @@ usr/lib/llib-lHBAAPI
 usr/lib/llib-lHBAAPI.ln
 usr/lib/amd64/llib-lHBAAPI.ln	i386
 usr/lib/sparcv9/llib-lHBAAPI.ln	sparc
-usr/lib/llib-lstmfproxy
-usr/lib/llib-lstmfproxy.ln
-usr/lib/amd64/llib-lstmfproxy.ln	i386
-usr/lib/sparcv9/llib-lstmfproxy.ln	sparc
 # files created during the build
 lib/amd64/llib-lMPAPI.ln
 lib/amd64/llib-ldl.ln
