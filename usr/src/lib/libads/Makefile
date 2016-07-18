@@ -49,7 +49,6 @@ all := 		TARGET = all
 clean :=	TARGET = clean
 clobber :=	TARGET = clobber
 install	:=	TARGET = install
-lint :=		TARGET = lint
 
 .KEEP_STATE:
 
@@ -59,7 +58,7 @@ install: all .WAIT $(SUBDIRS)
 
 install_h: $(DERIVED_FILES) $(ROOTHDRS)
 
-clean clobber lint: $(SUBDIRS)
+clean clobber: $(SUBDIRS)
 
 check:		$(CHECKHDRS)
 

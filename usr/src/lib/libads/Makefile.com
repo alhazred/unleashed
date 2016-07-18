@@ -27,18 +27,15 @@
 
 LIBRARY =	libads.a
 VERS =		.1
-LINT_OBJECTS =	dsgetdc.o poke.o
-OBJECTS =	$(LINT_OBJECTS) adspriv_xdr.o
+OBJECTS =	dsgetdc.o poke.o adspriv_xdr.o
 
 include ../../Makefile.lib
 
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lnsl -lc
 SRCDIR =	../common
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR) -I..
@@ -51,12 +48,5 @@ CERRWARN +=	-_gcc=-Wno-unused-variable
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint := OBJECTS = $(LINT_OBJECTS)
-
-lint: lintcheck
-
-#LINTFLAGS += -erroff=E_CONSTANT_CONDITION
-#LINTFLAGS64 += -erroff=E_CONSTANT_CONDITION
 
 include ../../Makefile.targ
