@@ -3714,7 +3714,6 @@ lgrp_mem_choose(struct seg *seg, caddr_t vaddr, size_t pgsz)
 				    LGRP_NUM_DEFAULT, 1);
 			break;
 		}
-		/* LINTED fallthrough on case statement */
 	case LGRP_MEM_POLICY_RANDOM:
 
 		/*
@@ -3767,7 +3766,7 @@ lgrp_mem_choose(struct seg *seg, caddr_t vaddr, size_t pgsz)
 		klgrpset_copy(lgrpset, curproc->p_lgrpset);
 		stat = LGRP_NUM_RANDOM_PROC;
 
-		/* LINTED fallthrough on case statement */
+		/* fallthrough */
 	case LGRP_MEM_POLICY_RANDOM_PSET:
 
 		if (!stat)

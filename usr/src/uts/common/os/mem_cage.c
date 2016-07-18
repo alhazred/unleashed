@@ -1648,7 +1648,6 @@ kcage_invalidate_page(page_t *pp, pgcnt_t *nfreedp)
 		return (EAGAIN);
 	}
 
-	/* LINTED: constant in conditional context */
 	VN_DISPOSE(pp, B_INVAL, 0, kcred);
 	KCAGE_STAT_INCR_SCAN(kip_destroy);
 	*nfreedp = 1;

@@ -272,11 +272,9 @@ getflabel_nfs(vfs_t *vfsp)
 
 	if (strcmp(knconf->knc_protofmly, NC_INET) == 0) {
 		addr_type = IPV4_VERSION;
-		/* LINTED: following cast to ipaddr is OK */
 		ipaddr = &((struct sockaddr_in *)addr->buf)->sin_addr;
 	} else if (strcmp(knconf->knc_protofmly, NC_INET6) == 0) {
 		addr_type = IPV6_VERSION;
-		/* LINTED: following cast to ipaddr is OK */
 		ipaddr = &((struct sockaddr_in6 *)addr->buf)->sin6_addr;
 	} else {
 		goto errout;
