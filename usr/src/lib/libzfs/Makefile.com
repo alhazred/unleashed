@@ -58,7 +58,7 @@ include ../../Makefile.lib
 # libzfs must be installed in the root filesystem for mount(1M)
 include ../../Makefile.rootfs
 
-LIBS=	$(DYNLIB) $(LINTLIB)
+LIBS=	$(DYNLIB)
 
 SRCDIR =	../common
 
@@ -68,23 +68,16 @@ INCS += -I../../../common/zfs
 INCS += -I../../libc/inc
 
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 LDLIBS +=	-lc -lm -ldevid -lgen -lnvpair -luutil -lavl -lefi \
-	-ladm -lidmap -ltsol -lmd -lumem -lzfs_core
+	-ladm -lidmap -ltsol -lmd -lumem -lzfs_core -lz
 CPPFLAGS +=	$(INCS) -D_LARGEFILE64_SOURCE=1 -D_REENTRANT
-
-# There's no lint library for zlib, so only include this when building
-$(DYNLIB) := LDLIBS +=	-lz
 
 SRCS=	$(OBJS_COMMON:%.o=$(SRCDIR)/%.c)	\
 	$(OBJS_SHARED:%.o=$(SRC)/common/zfs/%.c)
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 pics/%.o: ../../../common/zfs/%.c
 	$(COMPILE.c) -o $@ $<
