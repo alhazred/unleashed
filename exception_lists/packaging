@@ -854,7 +854,6 @@ usr/lib/amd64/llib-ll.ln
 usr/lib/amd64/llib-lpasswdutil.ln
 usr/lib/amd64/llib-lpicl.ln
 usr/lib/amd64/llib-lpkcs11.ln
-usr/lib/amd64/llib-lstmf.ln
 usr/lib/amd64/llib-lsun_ima.ln
 usr/lib/amd64/llib-ly.ln
 usr/lib/fm/amd64/llib-ldiagcode.ln
@@ -909,8 +908,6 @@ usr/lib/llib-lpkcs11
 usr/lib/llib-lpkcs11.ln
 usr/lib/llib-lpolkit
 usr/lib/llib-lpolkit.ln
-usr/lib/llib-lstmf
-usr/lib/llib-lstmf.ln
 usr/lib/llib-lsun_ima
 usr/lib/llib-lsun_ima.ln
 usr/lib/llib-ly
