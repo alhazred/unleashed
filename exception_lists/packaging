@@ -943,7 +943,6 @@ lib/amd64/llib-lsecdb.ln
 lib/amd64/llib-lsendfile.ln
 lib/amd64/llib-lsocket.ln
 lib/amd64/llib-lsysevent.ln
-lib/amd64/llib-ltermcap.ln
 lib/amd64/llib-lthread.ln
 lib/amd64/llib-ltsnet.ln
 lib/amd64/llib-ltsol.ln
@@ -1014,8 +1013,6 @@ lib/llib-lsocket
 lib/llib-lsocket.ln
 lib/llib-lsysevent
 lib/llib-lsysevent.ln
-lib/llib-ltermcap
-lib/llib-ltermcap.ln
 lib/llib-lthread
 lib/llib-lthread.ln
 lib/llib-ltsnet
