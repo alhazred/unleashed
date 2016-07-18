@@ -991,7 +991,6 @@ lib/amd64/llib-ltsnet.ln
 lib/amd64/llib-ltsol.ln
 lib/amd64/llib-lxnet.ln
 lib/amd64/llib-lzfs.ln
-lib/amd64/llib-lzfs_core.ln
 lib/fm/amd64/llib-lfmevent.ln
 lib/fm/llib-lfmevent
 lib/fm/llib-lfmevent.ln
@@ -1099,8 +1098,6 @@ lib/llib-lxnet
 lib/llib-lxnet.ln
 lib/llib-lzfs
 lib/llib-lzfs.ln
-lib/llib-lzfs_core
-lib/llib-lzfs_core.ln
 usr/lib/amd64/llib-lSMHBAAPI.ln
 usr/lib/amd64/llib-lads.ln
 usr/lib/amd64/llib-ladt_jni.ln
