@@ -947,7 +947,6 @@ lib/llib-lsysevent.ln
 usr/lib/amd64/llib-lSMHBAAPI.ln
 usr/lib/amd64/llib-lbe.ln
 usr/lib/amd64/llib-ldat.ln
-usr/lib/amd64/llib-lfstyp.ln
 usr/lib/amd64/llib-lhal-storage.ln
 usr/lib/amd64/llib-lhal.ln
 usr/lib/amd64/llib-lidmap.ln
@@ -1019,8 +1018,6 @@ usr/lib/llib-lbe
 usr/lib/llib-lbe.ln
 usr/lib/llib-ldat
 usr/lib/llib-ldat.ln
-usr/lib/llib-lfstyp
-usr/lib/llib-lfstyp.ln
 usr/lib/llib-lhal
 usr/lib/llib-lhal-storage
 usr/lib/llib-lhal-storage.ln
