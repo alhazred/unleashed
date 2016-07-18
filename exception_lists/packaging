@@ -913,7 +913,6 @@ usr/lib/amd64/llib-lHBAAPI.ln	i386
 usr/lib/sparcv9/llib-lHBAAPI.ln	sparc
 usr/lib/llib-lnsctl.ln
 usr/lib/llib-lrdc.ln
-usr/lib/llib-lunistat.ln
 usr/lib/llib-lstmfproxy
 usr/lib/llib-lstmfproxy.ln
 usr/lib/amd64/llib-lstmfproxy.ln	i386

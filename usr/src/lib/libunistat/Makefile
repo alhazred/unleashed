@@ -34,8 +34,6 @@ clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 delete :=	TARGET= delete
 install :=	TARGET= install
-lint :=		TARGET= lint
-lintinter :=		TARGET= lintinter
 _msg :=		TARGET= _msg
 package :=	TARGET= package
 
@@ -52,7 +50,7 @@ ROOTHDRS=	$(HDRS:%=$(ROOTHDRDIR)/%)
 
 .KEEP_STATE:
 
-all clean clobber delete lint package lintinter: $(SUBDIRS)
+all clean clobber delete package: $(SUBDIRS)
 
 install: $(SUBDIRS)
 install_h: $(ROOTHDRDIR) $(ROOTHDRS)
