@@ -32,8 +32,7 @@ include ../../Makefile.rootfs
 SRCS =		../deviceid.c $(SRC)/common/devid/devid.c \
 		$(SRC)/common/devid/devid_scsi.c \
 		$(SRC)/common/devid/devid_smp.c
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 #
 # Libraries added to the next line must be present in miniroot
 #
@@ -44,8 +43,6 @@ CFLAGS +=	$(CCVERBOSE)
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ
 
