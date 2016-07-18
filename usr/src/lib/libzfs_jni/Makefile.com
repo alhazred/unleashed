@@ -40,7 +40,7 @@ OBJECTS=	libzfs_jni_dataset.o \
 
 include ../../Makefile.lib
 
-LIBS=	$(DYNLIB) $(LINTLIB)
+LIBS=	$(DYNLIB)
 
 INCS += -I$(JAVA_ROOT)/include \
 	-I$(JAVA_ROOT)/include/solaris
@@ -51,12 +51,9 @@ $(NOT_RELEASE_BUILD) CPPFLAGS += -DDEBUG
 CERRWARN +=	-_gcc=-Wno-switch
 
 SRCDIR =	../common
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ
