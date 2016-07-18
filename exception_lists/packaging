@@ -844,7 +844,6 @@ usr/lib/amd64/llib-lsaveargs.ln   	i386
 lib/amd64/llib-lMPAPI.ln
 lib/amd64/llib-ldl.ln
 lib/amd64/llib-lelf.ln
-lib/amd64/llib-lproc.ln
 lib/amd64/llib-lpthread.ln
 lib/amd64/llib-lrtld_db.ln
 lib/amd64/llib-lscf.ln
@@ -862,8 +861,6 @@ lib/llib-ldl
 lib/llib-ldl.ln
 lib/llib-lelf
 lib/llib-lelf.ln
-lib/llib-lproc
-lib/llib-lproc.ln
 lib/llib-lpthread
 lib/llib-lpthread.ln
 lib/llib-lrtld_db

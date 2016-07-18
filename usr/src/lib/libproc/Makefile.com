@@ -83,13 +83,12 @@ include ../../Makefile.rootfs
 
 SRCS =		$(CMNOBJS:%.o=../common/%.c) $(ISAOBJS:%.o=%.c)
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lrtld_db -lelf -lctf -lc
 C99MODE =	$(C99_ENABLE)
 CPPFLAGS +=	$($(MACH64)_CPPFLAGS)
 
 SRCDIR =	../common
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
@@ -109,8 +108,6 @@ DYNFLAGS +=	$(BNODIRECT) $(ZDIRECT) $(ZLAZYLOAD)
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 # include library targets
 include ../../Makefile.targ
