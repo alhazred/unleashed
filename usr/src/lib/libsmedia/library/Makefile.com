@@ -35,16 +35,7 @@ include ../../../Makefile.lib
 
 SRCDIR =	../common
 
-# We can't lint the rpcgen-generated files.
-# (Well, we could, but we couldn't fix them.)
-lintcheck := SRCS = ../common/l_generic.c ../common/l_misc.c
-
-LIBS = $(DYNLIB) $(LINTLIB)
-
-# definitions for lint
-
-LINTSRC=        $(LINTLIB:%.ln=%)
-$(LINTLIB):= SRCS = ../common/$(LINTSRC)
+LIBS = $(DYNLIB)
 
 CLEANFILES +=	$(DERIVED_FILES:%=../common/%)
 
@@ -60,22 +51,12 @@ LDLIBS +=	-lnsl -lc
 
 all: $(LIBS)
 
-lint:	lintcheck
-
 # include library targets
 include ../../../Makefile.targ
 
 objs/%.o pics/%.o: ../common/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
-
-# install rule for lint library target
-
-$(ROOTLINTDIR64)/%: ../common/%
-	$(INS.file)
-
-$(ROOTLINTDIR)/%: ../common/%
-	$(INS.file)
 
 #
 # Derived files

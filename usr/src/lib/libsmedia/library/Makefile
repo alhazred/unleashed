@@ -34,7 +34,6 @@ clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 delete :=	TARGET= delete
 install :=	TARGET= install
-lint :=		TARGET= lint
 package :=	TARGET= package
 
 LIBRARY= 	libsmedia.a
@@ -48,7 +47,7 @@ GREP=	grep
 
 .KEEP_STATE:
 
-all clean delete install lint package: $(SUBDIRS)
+all clean delete install package: $(SUBDIRS)
 
 clobber : $(SUBDIRS)
 	$(RM) $(CLOBBERFILES)
