@@ -64,7 +64,6 @@ all :=		TARGET= all
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
-lint :=		TARGET= lint
 
 .KEEP_STATE:
 
@@ -76,7 +75,7 @@ install_h: $(DERIVED_FILES) $(ROOTHDRS)
 
 check: $(CHECKHDRS)
 
-clean clobber lint: $(SUBDIRS)
+clean clobber: $(SUBDIRS)
 
 #
 # Rules for building the derived files

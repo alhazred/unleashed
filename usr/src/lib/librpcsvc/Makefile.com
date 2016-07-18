@@ -45,7 +45,7 @@ pics/%.o: ../common/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
-LIBS = $(DYNLIB) $(LINTLIB)
+LIBS = $(DYNLIB)
 
 CPPFLAGS += -DYP
 
@@ -54,16 +54,12 @@ CERRWARN +=	-_gcc=-Wno-switch
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-parentheses
 
-$(LINTLIB):= SRCS = $(SRCDIR)/$(LINTSRC)
-
 LDLIBS += -lnsl -lc
 
 # Needed so header files with relative paths will work
 CPPFLAGS += -I..
 
 .KEEP_STATE:
-
-lint:	lintcheck
 
 # include library targets
 include ../../Makefile.targ
