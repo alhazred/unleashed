@@ -37,9 +37,7 @@ include $(SRC)/lib/Makefile.rootfs
 SRCDIR=	../common
 INCDIR=	../inc
 
-LIBS=	$(DYNLIB) $(LINTLIB)
-
-$(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
+LIBS=	$(DYNLIB)
 
 CFLAGS		+=	$(CCVERBOSE) -xCC
 CFLAGS64	+=	$(CCVERBOSE) -xCC
@@ -54,7 +52,5 @@ CERRWARN	+=	-_gcc=-Wno-unused-label
 .KEEP_STATE:
 
 all:    $(LIBS)
-
-lint:	lintcheck
 
 include $(SRC)/lib/Makefile.targ

@@ -930,8 +930,6 @@ lib/amd64/llib-ldoor.ln
 lib/amd64/llib-lelf.ln
 lib/amd64/llib-lfdisk.ln
 lib/amd64/llib-lintl.ln
-lib/amd64/llib-lkmf.ln
-lib/amd64/llib-lkmfberder.ln
 lib/amd64/llib-lkstat.ln
 lib/amd64/llib-lm.ln
 lib/amd64/llib-lmd.ln
@@ -983,8 +981,6 @@ lib/llib-lintl
 lib/llib-lintl.ln
 lib/llib-lipmp
 lib/llib-lipmp.ln
-lib/llib-lkmf.ln
-lib/llib-lkmfberder.ln
 lib/llib-lkstat
 lib/llib-lkstat.ln
 lib/llib-lm

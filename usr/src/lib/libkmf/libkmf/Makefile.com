@@ -52,16 +52,12 @@ include $(SRC)/lib/Makefile.rootfs
 SRCDIR=	../common
 INCDIR=	../../include
 
-LIBS=	$(DYNLIB) $(LINTLIB)
+LIBS=	$(DYNLIB)
 
-$(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
-
-LDLIBS	+=	$(BERDERLIB) $(CRYPTOUTILLIB) -lmd -lpkcs11 -lnsl -lsocket -lc 
-LDLIBS6	+=	$(BERDERLIB64) $(CRYPTOUTILLIB64) -lmd -lpkcs11 -lnsl -lsocket -lc 
-
-# DYNLIB libraries do not have lint libs and are not linted
-$(DYNLIB) :=    LDLIBS += -lxml2
-$(DYNLIB64) :=  LDLIBS64 += -lxml2
+LDLIBS   += $(BERDERLIB) $(CRYPTOUTILLIB) -lmd -lpkcs11 -lnsl -lsocket -lc \
+	-lxml2
+LDLIBS64 += $(BERDERLIB64) $(CRYPTOUTILLIB64) -lmd -lpkcs11 -lnsl -lsocket -lc \
+	-lxml2
 
 CPPFLAGS	+=	-I$(INCDIR) -I$(ADJUNCT_PROTO)/usr/include/libxml2 \
 			-I../../ber_der/inc -I$(SRCDIR)
@@ -74,7 +70,5 @@ CERRWARN	+=	-_gcc=-Wno-uninitialized
 .KEEP_STATE:
 
 all:    $(LIBS)
-
-lint:	lintcheck
 
 include $(SRC)/lib/Makefile.targ
