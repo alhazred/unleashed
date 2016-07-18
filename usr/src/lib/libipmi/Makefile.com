@@ -48,7 +48,7 @@ SRCS=		$(OBJECTS:%.o:$(SRCDIR)/%c.)
 
 include ../../Makefile.lib
 
-LIBS=		$(DYNLIB) $(LINTLIB)
+LIBS=		$(DYNLIB)
 
 SRCDIR=		../common
 
@@ -60,13 +60,9 @@ C99MODE = $(C99_ENABLE)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
-
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 $(SRCDIR)/ipmi_tables.c: $(SRCDIR)/mktables.sh $(SRCDIR)/libipmi.h
 	sh $(SRCDIR)/mktables.sh $(SRCDIR)/libipmi.h > $@
