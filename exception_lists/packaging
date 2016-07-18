@@ -1046,7 +1046,6 @@ usr/lib/amd64/llib-lipmi.ln
 usr/lib/amd64/llib-lipp.ln
 usr/lib/amd64/llib-liscsit.ln
 usr/lib/amd64/llib-ll.ln
-usr/lib/amd64/llib-llgrp.ln
 usr/lib/amd64/llib-lmail.ln
 usr/lib/amd64/llib-lmalloc.ln
 usr/lib/amd64/llib-lmapmalloc.ln
@@ -1146,8 +1145,6 @@ usr/lib/llib-liscsit
 usr/lib/llib-liscsit.ln
 usr/lib/llib-ll
 usr/lib/llib-ll.ln
-usr/lib/llib-llgrp
-usr/lib/llib-llgrp.ln
 usr/lib/llib-lmail
 usr/lib/llib-lmail.ln
 usr/lib/llib-lmalloc

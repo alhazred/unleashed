@@ -32,4 +32,4 @@ all: $(LIBS)
 
 .KEEP_STATE:
 
-install: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
+install: all $(ROOTLIBS) $(ROOTLINKS)

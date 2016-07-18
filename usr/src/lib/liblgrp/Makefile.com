@@ -35,20 +35,14 @@ include ../../Makefile.lib
 
 SRCDIR=		../common
 
-LIBS =		$(DYNLIB) $(LINTLIB)
-
-LINTSRC =       $(LINTLIB:%.ln=%)
+LIBS =		$(DYNLIB)
 
 CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lc
 
-$(LINTLIB) :=	SRCS = ../common/llib-llgrp
-
 .KEEP_STATE:
 
 all : $(LIBS)
-
-lint :	lintcheck
 
 # include library targets
 include ../../Makefile.targ
