@@ -1048,7 +1048,6 @@ usr/lib/amd64/llib-ldns_sd.ln
 usr/lib/amd64/llib-ldtrace.ln
 usr/lib/amd64/llib-lexacct.ln
 usr/lib/amd64/llib-lfcoe.ln
-usr/lib/amd64/llib-lform.ln
 usr/lib/amd64/llib-lfstyp.ln
 usr/lib/amd64/llib-lgss.ln
 usr/lib/amd64/llib-lhal-storage.ln
@@ -1068,11 +1067,9 @@ usr/lib/amd64/llib-llgrp.ln
 usr/lib/amd64/llib-lmail.ln
 usr/lib/amd64/llib-lmalloc.ln
 usr/lib/amd64/llib-lmapmalloc.ln
-usr/lib/amd64/llib-lmenu.ln
 usr/lib/amd64/llib-lmtmalloc.ln
 usr/lib/amd64/llib-lndmp.ln
 usr/lib/amd64/llib-lnls.ln
-usr/lib/amd64/llib-lpanel.ln
 usr/lib/amd64/llib-lpasswdutil.ln
 usr/lib/amd64/llib-lpctx.ln
 usr/lib/amd64/llib-lpicl.ln
@@ -1144,8 +1141,6 @@ usr/lib/llib-lexacct
 usr/lib/llib-lexacct.ln
 usr/lib/llib-lfcoe
 usr/lib/llib-lfcoe.ln
-usr/lib/llib-lform
-usr/lib/llib-lform.ln
 usr/lib/llib-lfsmgt
 usr/lib/llib-lfsmgt.ln
 usr/lib/llib-lfstyp
@@ -1186,8 +1181,6 @@ usr/lib/llib-lmalloc
 usr/lib/llib-lmalloc.ln
 usr/lib/llib-lmapmalloc
 usr/lib/llib-lmapmalloc.ln
-usr/lib/llib-lmenu
-usr/lib/llib-lmenu.ln
 usr/lib/llib-lmilter
 usr/lib/llib-lmilter.ln
 usr/lib/llib-lmtmalloc.ln
@@ -1195,8 +1188,6 @@ usr/lib/llib-lndmp
 usr/lib/llib-lndmp.ln
 usr/lib/llib-lnls
 usr/lib/llib-lnls.ln
-usr/lib/llib-lpanel
-usr/lib/llib-lpanel.ln
 usr/lib/llib-lpasswdutil
 usr/lib/llib-lpasswdutil.ln
 usr/lib/llib-lpctx

@@ -38,7 +38,6 @@ clobber:=	TARGET= clobber
 install:=	TARGET= install
 install_h:=	TARGET= install_h
 check:=		TARGET= check
-lint:=		TARGET= lint
 
 # definitions for install_h target
 HDRS=           eti.h
@@ -52,7 +51,7 @@ $(ROOTHDRDIR)/%: %
 
 .KEEP_STATE:
 
-all clean clobber install lint: $(SUBDIRS)
+all clean clobber install: $(SUBDIRS)
 
 install_h: $(ROOTHDRS) $(HDRSUBDIRS)
 
