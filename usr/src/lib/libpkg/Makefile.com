@@ -54,11 +54,7 @@ POFILE =	libpkg.po
 MSGFILES =	$(OBJECTS:%.o=../common/%.i)
 CLEANFILES +=   $(MSGFILES)
 
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
-
-
-LIBS = $(DYNLIB) $(LINTLIB)
-
+LIBS = $(DYNLIB)
 
 LDLIBS +=	-lc -lscf -ladm
 
@@ -77,8 +73,6 @@ $(POFILE): $(MSGFILES)
 	$(BUILDPO.msgfiles)
 
 _msg: $(MSGDOMAINPOFILE)
-
-lint: lintcheck
 
 # include library targets
 include $(SRC)/lib/Makefile.targ
