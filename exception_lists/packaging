@@ -788,8 +788,6 @@ usr/lib/llib-lsoftcrypto
 usr/lib/llib-lsoftcrypto.ln
 usr/lib/amd64/llib-lsoftcrypto.ln	i386
 usr/lib/sparcv9/llib-lsoftcrypto.ln	sparc
-lib/llib-lipadm
-lib/llib-lipadm.ln
 usr/lib/llib-like
 usr/lib/llib-like.ln
 usr/lib/amd64/llib-like.ln		i386
