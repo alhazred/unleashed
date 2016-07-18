@@ -150,7 +150,4 @@ package_dep_:	FRC
 		@ cd ../link_audit; pwd; $(MAKE) package
 		@ cd ../messages/$(MACH); pwd; $(MAKE) test
 
-lint: FRC
-	$(MAKE) -f Makefile.lint lint
-
 FRC:

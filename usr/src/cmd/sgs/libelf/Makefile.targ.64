@@ -44,13 +44,7 @@ pics/%.o:	../common/%.c
 
 all:		$(BLTSRCS) .WAIT $(LIBS) $(LIBLINKS)
 
-install:	all .WAIT $(ROOTFS_LIBS64) $(ROOTFS_LINKS64) \
-		$(ROOTFS_LINTLIB64)
-
-lint:		$(LINTLIB) $(LINTOUT32) $(LINTOUT64) $(SGSLINTOUT)
-
-.PARALLEL:	$(LINTOUT32) $(LINTOUT64)
-
+install:	all .WAIT $(ROOTFS_LIBS64) $(ROOTFS_LINKS64)
 
 delete:
 		$(RM) $(DYNLIB)

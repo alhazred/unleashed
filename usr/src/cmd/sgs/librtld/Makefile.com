@@ -50,9 +50,6 @@ CERRWARN +=	-_gcc=-Wno-unused-value
 CERRWARN +=	-_gcc=-Wno-type-limits
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-LINTFLAGS +=	-u -erroff=E_NAME_DECL_NOT_USED_DEF2
-LINTFLAGS64 +=	-u -erroff=E_NAME_DECL_NOT_USED_DEF2
-
 BLTDEFS=	msg.h
 BLTDATA=	msg.c
 BLTMESG=	$(SGSMSGDIR)/librtld
@@ -65,10 +62,8 @@ SGSMSGTARG=	$(SGSMSGCOM)
 SGSMSGFLAGS +=	-h $(BLTDEFS) -d $(BLTDATA) -m $(BLTMESG) -n librtld_msg
 
 SRCS=		../common/llib-lrtld
-LINTSRCS=	$(MACHOBJS:%.o=%.c)  $(COMOBJS:%.o=../common/%.c) \
-		$(BLTDATA)
 
-CLEANFILES +=	$(BLTFILES) $(LINTOUTS)
-CLOBBERFILES +=	$(DYNLIB) $(LINTLIB) $(LIBLINKS)
+CLEANFILES +=	$(BLTFILES)
+CLOBBERFILES +=	$(DYNLIB) $(LIBLINKS)
 
 ROOTFS_DYNLIB=	$(DYNLIB:%=$(ROOTFS_LIBDIR)/%)

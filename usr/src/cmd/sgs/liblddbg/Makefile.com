@@ -55,9 +55,6 @@ include		$(SRC)/cmd/sgs/Makefile.com
 
 SRCDIR =	../common
 
-LINTFLAGS +=	-u -D_REENTRANT
-LINTFLAGS64 +=	-u -D_REENTRANT
-
 CERRWARN +=	-_gcc=-Wno-unused-value
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-parentheses
@@ -85,11 +82,7 @@ SRCS =		../common/llib-llddbg
 LIBSRCS =	$(COMOBJS:%.o=../common/%.c) \
 		$(TOOLOBJ:%.o=$(SGSTOOLS)/common/%.c) $(BLTDATA)
 
-LINTSRCS =	$(LIBSRCS) ../common/lintsup.c
-LINTSRCS32 =	$(COMOBJS32:%32.o=../common/%.c)
-LINTSRCS64 =	$(COMOBJS64:%64.o=../common/%.c)
-
-CLEANFILES +=	$(LINTOUTS) $(BLTFILES)
-CLOBBERFILES +=	$(DYNLIB) $(LINTLIBS) $(LIBLINKS)
+CLEANFILES +=	$(BLTFILES)
+CLOBBERFILES +=	$(DYNLIB) $(LIBLINKS)
 
 ROOTFS_DYNLIB =	$(DYNLIB:%=$(ROOTFS_LIBDIR)/%)

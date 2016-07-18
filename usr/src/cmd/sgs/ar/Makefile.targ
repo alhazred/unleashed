@@ -39,10 +39,6 @@ delete:
 
 catalog:	$(BLTMESG)
 
-.PARALLEL:	$(LINTOUT32) $(LINTOUT64)
-
-lint:		$(LINTOUT32) $(SGSLINTOUT)
-
 $(PROG):	$(OBJS)
 		$(LINK.c) -o $@ $(LLDFLAGS) $(OBJS) $(LDLIBS)
 		$(POST_PROCESS)

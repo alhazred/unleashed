@@ -36,9 +36,6 @@ pics/%64.o:	../common/%.c
 		$(COMPILE.c) -D_ELF64 $(PICFLAGS) -o $@ $<
 		$(POST_PROCESS_O)
 
-$(ROOTFS_LIBDIR)/$(LINTLIBSRC): ../common/$(LINTLIBSRC)
-		$(INS.file) ../common/$(LINTLIBSRC)
-
 delete:
 		-$(RM) $(DYNLIB)
 
@@ -49,8 +46,8 @@ include		$(SRC)/cmd/sgs/Makefile.targ
 
 catalog:
 
-chkmsg:		$(LINTSRCS)
-		sh $(CHKMSG) $(CHKMSGFLAGS) $(LINTSRCS)
+chkmsg:
+		sh $(CHKMSG) $(CHKMSGFLAGS)
 
 $(BLTDEFS) + \
 $(BLTDATA):	$(SGSMSGTARG)

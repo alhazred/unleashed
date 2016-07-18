@@ -37,11 +37,10 @@ install:=	TARGET=	install
 package:=	TARGET=	package
 clean:=		TARGET=	clean
 clobber:=	TARGET=	clobber
-lint:=		TARGET=	lint
 
 .KEEP_STATE:
 
-package all chkmsg catalog clean clobber lint install: \
+package all chkmsg catalog clean clobber install: \
 	$(SUBDIRS)
 
 $(SUBDIRS):	FRC

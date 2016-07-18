@@ -35,6 +35,4 @@ all:		$(DYNLIB) $(LIBLINKS)
 install \
 package:	all $(ROOTDYNLIB)
 
-lint:		$(LINTOUT32) $(SGSLINTOUT)
-
 include		../Makefile.targ

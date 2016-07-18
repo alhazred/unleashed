@@ -45,8 +45,6 @@ LLDFLAGS =	'-R$$ORIGIN/../../lib'
 LLDFLAGS64 =	'-R$$ORIGIN/../../../lib/$(MACH64)'
 LDFLAGS +=	$(VERSREF) $(CC_USE_PROTO) $(MAPOPTS) $(LLDFLAGS)
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) -lelf $(DLLIB)
-LINTFLAGS +=	-x
-LINTFLAGS64 +=	-x
 
 BLTDEFS=        msg.h
 BLTDATA=        msg.c
@@ -61,6 +59,5 @@ SGSMSGFLAGS +=	-h $(BLTDEFS) -d $(BLTDATA) -m $(BLTMESG) -n ldd_msg
 
 SRCS=		$(COMOBJ:%.o=../common/%.c) $(BLTDATA) \
 		$(TOOLSOBJ:%.o=$(SGSTOOLS)/common/%.c)
-LINTSRCS=	$(SRCS) ../common/lintsup.c
 
-CLEANFILES +=	$(LINTOUTS) $(BLTFILES)
+CLEANFILES +=	$(BLTFILES)

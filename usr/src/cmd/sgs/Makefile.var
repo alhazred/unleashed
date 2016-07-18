@@ -49,8 +49,6 @@
 #
 # Common Macro definitions
 #
-VAR_LINTFLAGS64=	-m64
-
 VAR_PLAT_sparc=		sparc
 VAR_PLAT_i386=		intel/ia32
 VAR_PLAT_amd64=		intel/amd64

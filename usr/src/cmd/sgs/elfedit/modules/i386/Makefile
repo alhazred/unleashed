@@ -28,9 +28,6 @@
 
 include		../Makefile.com
 
-lint :=		CONV_LIB =	$(CONV_LIB32)
-lint :=		LDDBG_LIB =	$(LDDBG_LIB32)
-
 CFLAGS +=	$(C_PICFLAGS)
 
 .KEEP_STATE:

@@ -56,8 +56,7 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-unused-label
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-LINTFLAGS +=	$(LDLIBS)
-CLEANFILES +=	$(LINTOUT) $(BLTSRCS)
+CLEANFILES +=	$(BLTSRCS)
 
 m4objs.xpg4/%.o := CPPFLAGS += -DXPG4
 
@@ -87,17 +86,5 @@ install:	all $(VAR_SGSBINPROG) $(ROOTXPG4PROG) $(VAR_SGSCCSLINK)
 
 clean:
 		$(RM) $(ALLOBJS) $(CLEANFILES)
-
-lint:		$(LINTOUT)
-
-LINT_HDR=	perl ../../tools/lint_hdr.pl
-
-$(LINTOUT):	$(SRCS)
-	$(LINT_HDR) $(PROG)		 > $(LINTOUT)
-	$(LINT_HDR) -s m4		>> $(LINTOUT)
-	$(LINT.c) $(YSRCS)		2>&1 | tee -a $(LINTOUT)
-
-	$(LINT_HDR) -s "XPG m4"		>> $(LINTOUT)
-	$(LINT.c) $(XPG4SRCS)		2>&1 | tee -a $(LINTOUT)
 
 include		../../../Makefile.targ

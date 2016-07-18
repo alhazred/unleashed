@@ -48,9 +48,6 @@ CPPFLAGS=	$(INCLIST) $(DEFLIST) $(CPPFLAGS.master) -I$(ELFCAP)
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) $(ELFLIBDIR) -lelf
-LINTFLAGS +=	-x $(LDLIBS)
-LINTSRCS=	$(SRCS)
-CLEANFILES +=	$(LINTOUTS)
 objs.xpg4/%.o := CPPFLAGS += -DXPG4
 
 $(DEMOBJS):=	DEFLIST = -DELF_OBJ
@@ -83,8 +80,6 @@ install:	all $(VAR_SGSBINPROG) $(ROOTXPG4PROG) $(VAR_SGSCCSLINK)
 
 clean:
 		$(RM) $(OBJS) $(XPG4OBJS) $(CLEANFILES)
-
-lint:		 $(LINTOUT32) $(SGSLINTOUT)
 
 include		../../../Makefile.targ
 include		../../Makefile.targ

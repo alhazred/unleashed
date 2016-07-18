@@ -46,8 +46,6 @@ LLDFLAGS64 =	'-R$$ORIGIN/../../lib/$(MACH64)'
 LDFLAGS +=	$(VERSREF) $(CC_USE_PROTO) $(MAPOPT) \
 			$(LLDFLAGS) $(ZNOLAZYLOAD)
 LDLIBS +=	-lelf $(CONVLIBDIR) $(CONV_LIB) $(DLLIB)
-LINTFLAGS +=	-x
-LINTFLAGS64 +=	-x
 
 BLTDEFS=        msg.h
 BLTDATA=        msg.c
@@ -63,6 +61,5 @@ SGSMSGFLAGS +=	-h $(BLTDEFS) -d $(BLTDATA) -m $(BLTMESG) -n crle_msg
 
 SRCS=		$(COMOBJ:%.o=../common/%.c) $(BLTDATA) \
 		$(TOOLSOBJ:%.o=$(SGSTOOLS)/common/%.c)
-LINTSRCS=	$(SRCS) ../common/lintsup.c
 
-CLEANFILES +=	$(SGSLINTOUT) $(BLTFILES)
+CLEANFILES +=	$(BLTFILES)

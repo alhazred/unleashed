@@ -808,19 +808,8 @@ lib/llib-la5k			sparc
 lib/llib-lg_fc			sparc
 usr/lib/llib-lHBAAPI
 # files created during the build
-lib/amd64/llib-ldl.ln
-lib/amd64/llib-lelf.ln
-lib/amd64/llib-lrtld_db.ln
 lib/fm/llib-lfmevent
 lib/llib-lMPAPI
-lib/llib-ldl
-lib/llib-ldl.ln
-lib/llib-lelf
-lib/llib-lelf.ln
-lib/llib-lrtld_db
-lib/llib-lrtld_db.ln
-usr/lib/amd64/llib-ll.ln
-usr/lib/amd64/llib-ly.ln
 usr/lib/fm/llib-ldiagcode
 usr/lib/fm/llib-ldiskstatus
 usr/lib/fm/llib-lfmd_adm
@@ -836,8 +825,6 @@ usr/lib/llib-lbe
 usr/lib/llib-ldat
 usr/lib/llib-lhal
 usr/lib/llib-lhal-storage
-usr/lib/llib-ll
-usr/lib/llib-ll.ln
 usr/lib/llib-lmilter
 usr/lib/llib-lmilter.ln
 usr/lib/llib-lpasswdutil
@@ -845,8 +832,6 @@ usr/lib/llib-lpicld_pluginutil
 usr/lib/llib-lpicld_pluginutil.ln
 usr/lib/llib-lpkcs11
 usr/lib/llib-lpolkit
-usr/lib/llib-ly
-usr/lib/llib-ly.ln
 usr/lib/scsi/llib-lscsi
 usr/lib/scsi/llib-lses
 usr/lib/scsi/llib-lsmp

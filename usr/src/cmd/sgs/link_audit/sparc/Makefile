@@ -28,8 +28,6 @@
 
 include		../Makefile.com
 
-lint :=		CONV_LIB =	$(CONV_LIB32)
-
 $(ONLIBS) \
 $(CCSLIBS) :=	CFLAGS +=	$(C_PICFLAGS) $(NO_ASM_WARN)
 

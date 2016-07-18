@@ -44,11 +44,6 @@ LDLIBS +=	$(LDLIBDIR) $(LD_LIB) $(ELFLIBDIR) -lelf \
 CERRWARN +=	-_gcc=-Wno-switch
 CERRWARN +=	-_gcc=-Wno-parentheses
 
-LINTFLAGS +=	-x
-LINTFLAGS64 +=	-x $(VAR_LINTFLAGS64)
-
-CLEANFILES +=	$(LINTOUTS)
-
 native :=	LDFLAGS = -R$(SGSPROTO) $(ZNOVERSION)
 native :=	LDLIBS = -L$(SGSPROTO) $(LD_LIB) -lelf $(CONVLIBDIR) \
 		    $(CONV_LIB)
@@ -65,7 +60,6 @@ SGSMSGALL=	$(SGSMSGCOM)
 SGSMSGFLAGS +=	-h $(BLTDEFS) -d $(BLTDATA) -m $(BLTMESG) -n ld_msg
 
 SRCS=		$(MACHOBJS:%.o=%.c)  $(COMOBJS:%.o=../common/%.c)  $(BLTDATA)
-LINTSRCS=	$(SRCS) ../common/lintsup.c
 
 CLEANFILES +=	$(BLTFILES)
 

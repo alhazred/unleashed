@@ -34,12 +34,9 @@ ROOTDYNLIB64=	$(DYNLIB:%=$(ROOTLIBDIR)/%)
 CONVLIBDIR=	$(CONVLIBDIR64)
 ELFLIBDIR=	$(ELFLIBDIR64)
 
-LINTFLAGS64 += $(VAR_LINTFLAGS64)
-
 all:		$(DYNLIB)
 install \
 package:	all $(ROOTDYNLIB64)
-lint:		$(LINTOUT64)
 
 include	../Makefile.targ
 include	../../Makefile.sub.64

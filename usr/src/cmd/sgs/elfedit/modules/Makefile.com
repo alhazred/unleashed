@@ -99,14 +99,11 @@ DYNFLAGS +=	$(VERSREF)
 CERRWARN +=	-_gcc=-Wno-switch
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-LINTFLAGS +=	-uaxs $(LDLIBS)
-LINTFLAGS64 +=	-uaxs $(LDLIBS64)
-
 BLTDEFS =	$(ELFEDITLIBS:%.so=%_msg.h)
 BLTDATA =	$(ELFEDITLIBS:%.so=%_msg.c)
 BLTFILES =	$(BLTDEFS) $(BLTDATA)
 
-CLEANFILES +=	$(BLTFILES) $(LINTOUT) $(PICDIR)/*
+CLEANFILES +=	$(BLTFILES) $(PICDIR)/*
 CLOBBERFILES +=	$(ELFEDITLIBS)
 
 ROOTELFEDITDIR=		$(ROOT)/usr/lib/elfedit

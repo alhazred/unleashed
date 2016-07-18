@@ -93,9 +93,5 @@ clobber: clean FRC
 FRC:
 
 # DEMO DELETE START
-
-$(LINTOUT):	$(SRCS)
-		$(LINT.c) $(SRCS) > lint.out 2>&1
-
 include		$(SRC)/cmd/sgs/Makefile.targ
 # DEMO DELETE END

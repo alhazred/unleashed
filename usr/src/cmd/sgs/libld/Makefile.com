@@ -49,8 +49,7 @@ TOOLOBJS =	alist.o		assfail.o	findprime.o	string_table.o \
 		strhash.o
 AVLOBJ =	avl.o
 
-# Relocation engine objects. These are kept separate from the L_XXX_MACHOBJS
-# lists below in order to facilitate linting them.
+# Relocation engine objects.
 G_MACHOBJS32 =	doreloc_sparc_32.o doreloc_x86_32.o
 G_MACHOBJS64 =	doreloc_sparc_64.o doreloc_x86_64.o
 
@@ -107,9 +106,6 @@ CPPFLAGS +=	-DUSE_LIBLD_MALLOC -I$(SRCBASE)/lib/libc/inc \
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) $(LDDBGLIBDIR) $(LDDBG_LIB) \
 		    $(ELFLIBDIR) -lelf $(DLLIB) -lc
 
-LINTFLAGS +=	-u -D_REENTRANT
-LINTFLAGS64 +=	-u -D_REENTRANT
-
 DYNFLAGS +=	$(VERSREF) $(CC_USE_PROTO) '-R$$ORIGIN'
 
 native:=	DYNFLAGS	+= $(CONVLIBDIR)
@@ -148,26 +144,7 @@ LIBSRCS =	$(TOOLOBJS:%.o=$(SGSTOOLS)/common/%.c) \
 		$(AVLOBJS:%.o=$(VAR_AVLDIR)/%.c) \
 		$(BLTDATA)
 
-LINTSRCS =	$(LIBSRCS) ../common/lintsup.c
-LINTSRCS32 =	$(COMOBJS32:%32.o=../common/%.c) \
-		$(L_MACHOBJS32:%32.o=../common/%.c)
-LINTSRCS64 =	$(COMOBJS64:%64.o=../common/%.c) \
-		$(L_MACHOBJS64:%64.o=../common/%.c)
-
-# Add the shared relocation engine source files to the lint
-# sources and add the necessary command line options to lint them
-# correctly. Make can't derive the files since the source and object
-# names are not directly related
-$(LINTOUT32) :=	CPPFLAGS += -DDO_RELOC_LIBLD
-$(LINTOUT64) :=	CPPFLAGS += -DDO_RELOC_LIBLD -D_ELF64
-$(LINTLIB32) :=	CPPFLAGS += -DDO_RELOC_LIBLD
-$(LINTLIB64) :=	CPPFLAGS += -DDO_RELOC_LIBLD -D_ELF64
-LINTSRCS32 +=	$(KRTLD_I386)/doreloc.c	\
-		$(KRTLD_SPARC)/doreloc.c
-LINTSRCS64 +=	$(KRTLD_AMD64)/doreloc.c \
-		$(KRTLD_SPARC)/doreloc.c
-
-CLEANFILES +=	$(LINTOUTS) $(BLTFILES)
-CLOBBERFILES +=	$(DYNLIB) $(LINTLIBS) $(LIBLINKS)
+CLEANFILES +=	$(BLTFILES)
+CLOBBERFILES +=	$(DYNLIB) $(LIBLINKS)
 
 ROOTFS_DYNLIB =	$(DYNLIB:%=$(ROOTFS_LIBDIR)/%)

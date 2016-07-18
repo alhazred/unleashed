@@ -44,7 +44,3 @@ LDFLAGS +=	$(LLDFLAGS)
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) $(ELFLIBDIR) -lelf
-LINTFLAGS +=	-x
-LINTSRCS =	$(SRCS)
-
-CLEANFILES +=	$(LINTOUTS)

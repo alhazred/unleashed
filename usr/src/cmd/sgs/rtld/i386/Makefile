@@ -74,8 +74,6 @@ all:		$(RTLD)
 
 install:	all $(ROOTDYNLIB)
 
-lint:		$(LINTOUT32)
-
 adbmacros:	adb .WAIT $(ADBSCRIPTS)
 
 adbinstall:	adbmacros .WAIT $(ROOTADB)

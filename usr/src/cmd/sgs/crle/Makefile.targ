@@ -44,8 +44,6 @@ clean:
 delete:
 		$(RM) $(PROG)
 
-lint:		$(SGSLINTOUT)
-
 include		$(SRC)/cmd/Makefile.targ
 include		$(SRC)/cmd/sgs/Makefile.targ
 

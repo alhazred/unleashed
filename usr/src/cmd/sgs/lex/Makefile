@@ -39,11 +39,10 @@ install :=	TARGET= install
 install_lib :=	TARGET= install_lib
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 
 .KEEP_STATE:
 
-all clean clobber install install_lib lint:	$(SUBDIRS)
+all clean clobber install install_lib:	$(SUBDIRS)
 
 
 $(MACH) $(MACH64): FRC

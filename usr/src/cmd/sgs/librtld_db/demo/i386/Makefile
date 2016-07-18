@@ -33,8 +33,6 @@ test:		$(TESTS)
 
 # DEMO DELETE START
 install:	all $(ROOTONLDBINPROG)
-
-lint:		$(LINTOUT)
 # DEMO DELETE END
 
 include		../Makefile.targ

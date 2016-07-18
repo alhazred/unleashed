@@ -32,6 +32,5 @@ include ../Makefile.com
 
 all:		$(BLTDEFS) .WAIT $(DYNLIB)
 install package:	all $(ROOTDYNLIB)
-lint:		$(LINTOUT32)
 
 include ../Makefile.targ

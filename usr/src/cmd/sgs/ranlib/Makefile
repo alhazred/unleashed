@@ -38,6 +38,4 @@ install:	all $(ROOTPROG) $(ROOTCCSBINLINK)
 
 clean:
 
-lint:
-
 include		../../Makefile.targ

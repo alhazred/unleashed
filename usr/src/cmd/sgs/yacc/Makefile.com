@@ -47,26 +47,18 @@ COMSRCS=	$(COMOBJS:%.o=../common/%.c)
 LIBSRCS=	$(OBJECTS:%.o=../common/%.c)
 SRCS=		$(COMSRCS) $(LIBSRCS)
 
-LIBS =          $(DYNLIB) $(LINTLIB)
-
-# Append to LINTFLAGS and LINTFLAGS64 from lib/Makefile.lib
-LINTFLAGS +=	-erroff=E_NAME_MULTIPLY_DEF2
-LINTFLAGS64 +=	-erroff=E_NAME_MULTIPLY_DEF2
+LIBS =          $(DYNLIB)
 
 # Tune ZDEFS to ignore undefined symbols for building the yacc shared library
 # since these symbols (mainly yyparse) are to be resolved elsewhere.
 #
 $(DYNLIB):= ZDEFS = $(ZNODEFS)
 $(DYNLIBCCC):= ZDEFS = $(ZNODEFS)
-LINTSRCS=	../common/llib-l$(LIBNAME)
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 INCLIST=	-I../../include -I../../include/$(MACH)
 CPPFLAGS=	$(INCLIST) $(DEFLIST) $(CPPFLAGS.master)
 $(PROG):=	LDLIBS = $(LDLIBS.cmd)
 BUILD.AR=	$(AR) $(ARFLAGS) $@ `$(LORDER) $(OBJS) | $(TSORT)`
-
-LINTPOUT=	lint.out
 
 C99MODE= $(C99_ENABLE)
 CFLAGS += $(CCVERBOSE)
@@ -78,15 +70,9 @@ $(ROOTPROG):= FILEMODE = 0555
 
 ROOTYACCPAR=	$(YACCPAR:%=$(ROOTSHLIBCCS)/%)
 
-ROOTLINTDIR=	$(ROOTLIBDIR)
-ROOTLINT=	$(LINTSRCS:../common/%=$(ROOTLINTDIR)/%)
-
 DYNLINKLIBDIR=	$(ROOTLIBDIR)
 DYNLINKLIB=	$(LIBLINKS:%=$(DYNLINKLIBDIR)/%)
 
 LDLIBS += -lc
 
-CLEANFILES +=	$(LINTPOUT)
 CLOBBERFILES +=	$(LIBS) $(LIBRARY)
-
-lint: lintcheck

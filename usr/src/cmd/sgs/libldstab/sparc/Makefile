@@ -30,7 +30,6 @@ include ../Makefile.com
 
 all:		$(DYNLIB)
 install:	all $(ROOTDYNLIB)
-lint:		$(LINTOUT64)
 
 
 include ../Makefile.targ

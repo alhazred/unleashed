@@ -44,9 +44,6 @@ CPPFLAGS=	$(INCLIST) $(DEFLIST) $(CPPFLAGS.master) -I$(ELFCAP)
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
 LDLIBS +=	$(CONVLIBDIR64) $(CONV_LIB) $(ELFLIBDIR) -lelf
-LINTFLAGS64 +=	-x $(LDLIBS) -m64
-LINTSRCS=	$(SRCS)
-CLEANFILES +=	$(LINTOUTS)
 
 
 %.o:		../common/%.c
@@ -68,9 +65,6 @@ install:	all $(VAR_SGSBINPROG64) $(VAR_SGSCCSLINK64)
 
 clean:
 		$(RM) $(OBJS) $(CLEANFILES)
-
-lint:		$(LINTOUT64) $(SGSLINTOUT)
-
 
 include		../../Makefile.targ
 include		../../../Makefile.targ

@@ -30,6 +30,4 @@ include		../Makefile.com
 
 .KEEP_STATE:
 
-lint:		$(LINTOUT32) $(SGSLINTOUT)
-
 include		../Makefile.targ

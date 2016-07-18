@@ -38,11 +38,7 @@ include		$(SRC)/cmd/sgs/Makefile.com
 
 SRCDIR =	../common
 
-lint :=		ZRECORD =
 LDLIBS +=	$(ZRECORD) -lmapmalloc $(DLLIB) -lc
-
-LINTFLAGS +=	-u
-LINTFLAGS64 +=	-u
 
 CPPFLAGS +=	-I$(SRCBASE)/lib/libc/inc -I$(SRC)/common/sgsrtcid
 DYNFLAGS +=	$(VERSREF) $(CONVLIBDIR) -lconv $(CC_USE_PROTO)
@@ -60,9 +56,8 @@ SGSMSGTARG=	$(SGSMSGCOM)
 SGSMSGFLAGS +=	-h $(BLTDEFS) -d $(BLTDATA) -m $(BLTMESG) -n libcrle_msg
 
 LIBSRCS=	$(COMOBJS:%.o=../common/%.c)  $(BLTDATA)
-LINTSRCS=	$(LIBSRCS)
 
-CLEANFILES +=	$(LINTOUTS) $(BLTFILES)
-CLOBBERFILES +=	$(DYNLIB) $(LINTLIB) $(LIBLINKS)
+CLEANFILES +=	$(BLTFILES)
+CLOBBERFILES +=	$(DYNLIB) $(LIBLINKS)
 
 ROOTDYNLIB=	$(DYNLIB:%=$(ROOTLIBDIR)/%)

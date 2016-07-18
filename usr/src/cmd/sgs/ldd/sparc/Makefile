@@ -32,6 +32,4 @@ include		../Makefile.com
 install \
 package:	$(ROOTPROG)
 
-lint:		$(LINTOUT32) $(SGSLINTOUT)
-
 include		../Makefile.targ

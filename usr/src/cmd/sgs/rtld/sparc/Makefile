@@ -67,7 +67,6 @@ include		$(SRC)/cmd/sgs/rtld/Makefile.com
 CPPFLAGS +=	-I../../../../uts/sparc/krtld -DA_OUT
 CFLAGS +=	-xregs=no%appl
 ASFLAGS +=	-K pic
-LINTFLAGS +=	-DA_OUT
 ADBGENCFLAGS +=	-erroff=%all
 ADBGENFLAGS +=	-milp32
 ADBSUB=		$(ADBSUB32)
@@ -80,8 +79,6 @@ SGSMSGTARG +=	$(SGSMSGSPARC) $(SGSMSGSPARC32) $(SGSMSG32)
 all:		$(RTLD)
 
 install:	all $(ROOTDYNLIB)
-
-lint:		$(LINTOUT32)
 
 adbmacros:	adb .WAIT $(ADBSCRIPTS)
 

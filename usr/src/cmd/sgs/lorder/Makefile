@@ -42,6 +42,4 @@ install:	all $(VAR_SGSBINPROG) $(VAR_SGSCCSLINK)
 
 clean:
 
-lint:
-
 include		../../Makefile.targ

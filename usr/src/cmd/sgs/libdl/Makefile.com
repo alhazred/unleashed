@@ -26,5 +26,3 @@ LIBRARY =	libdl.a
 VERS =		.1
 
 include		$(SRC)/lib/Makefile.rootfs
-
-LIBS +=		$(LINTLIB)

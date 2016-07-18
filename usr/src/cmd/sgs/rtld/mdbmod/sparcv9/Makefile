@@ -38,7 +38,5 @@ all:		$(BLTDEFS) .WAIT $(DYNLIB)
 
 install:	all .WAIT $(ROOTMDBLIBS)
 
-lint:		$(LINTOUT64) $(SGSLINTOUT)
-
 include		../Makefile.targ
 include		../../../Makefile.sub.64

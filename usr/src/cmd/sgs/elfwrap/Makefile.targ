@@ -73,10 +73,6 @@ delete:
 install \
 package:	all $(ROOTPROG)
 
-.PARALLEL:	$(LINTOUT32) $(LINTOUT64)
-
-lint:		$(LINTOUT32) $(LINTOUT64) $(SGSLINTOUT)
-
 include		$(SRC)/cmd/Makefile.targ
 include		$(SRC)/cmd/sgs/Makefile.targ
 

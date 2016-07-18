@@ -33,6 +33,4 @@ all:		$(DYNLIB) $(LIBLINKS)
 
 install:	all $(ROOTFS_DYNLIB)
 
-lint:		$(LINTLIB) $(LINTOUT32) $(SGSLINTOUT)
-
 include		$(SRC)/cmd/sgs/librtld/Makefile.targ

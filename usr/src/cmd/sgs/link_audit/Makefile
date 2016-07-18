@@ -67,13 +67,12 @@ install:=	TARGET=	install
 package:=	TARGET=	package
 clean:=		TARGET=	clean
 clobber:=	TARGET=	clobber
-lint:=		TARGET=	lint
 
 .PARALLEL: $(ROOTDEMOFILES)
 
 .KEEP_STATE:
 
-all clean clobber lint : \
+all clean clobber: \
 	$(SUBDIRS)
 
 package install : \

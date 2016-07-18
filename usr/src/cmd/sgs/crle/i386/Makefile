@@ -28,6 +28,4 @@ include		../Makefile.com
 
 .KEEP_STATE:
 
-lint:		$(LINTOUT32)
-
 include		../Makefile.targ

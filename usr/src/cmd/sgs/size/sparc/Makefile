@@ -36,6 +36,4 @@ DEFLIST=	-DSPARC -DELF
 package \
 install:	all $(ROOTPROG) $(ROOTCCSBINLINK)
 
-lint:		$(LINTOUT32) $(SGSLINTOUT)
-
 include		../Makefile.targ

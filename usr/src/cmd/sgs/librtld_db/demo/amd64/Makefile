@@ -48,8 +48,6 @@ test:		$(TESTS)
 DEMOCFLAGS=
 
 install:	all $(ROOTONLDBINPROG64)
-
-lint:		$(LINTOUT)
 # DEMO DELETE END
 
 include		../Makefile.targ

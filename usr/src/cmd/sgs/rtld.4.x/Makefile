@@ -48,5 +48,3 @@ install: $(ROOTFILE)
 clean:
 
 clobber: clean
-
-lint:

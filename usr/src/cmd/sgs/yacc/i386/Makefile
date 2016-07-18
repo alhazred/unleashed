@@ -41,7 +41,7 @@ install:	all $(ROOTPROG) $(ROOTYACCPAR) $(ROOTCCSBINLINK)
 		$(RM) $(ROOTCCSBIN)/yaccpar
 		$(SYMLINK) ../../share/lib/ccs/yaccpar $(ROOTCCSBIN)/yaccpar
 
-install_lib:	all_lib $(ROOTLIBS) $(ROOTLINKS) $(DYNLINKLIB) $(ROOTLINT)
+install_lib:	all_lib $(ROOTLIBS) $(ROOTLINKS) $(DYNLINKLIB)
 
 include		../Makefile.targ
 include		../../../Makefile.targ

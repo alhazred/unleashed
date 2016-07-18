@@ -31,7 +31,6 @@ include		../Makefile.com
 CONVLIBDIR=	$(CONVLIBDIR64)
 ROOTDYNLIB64=	$(DYNLIB:%=$(ROOTLIBDIR64)/%)
 
-LINTFLAGS64 +=	$(VAR_LINTFLAGS64)
 CPPFLAGS +=	-D_ELF64
 
 .KEEP_STATE:
@@ -40,8 +39,6 @@ all:		$(DYNLIB) $(LIBLINKS)
 
 install \
 package:	all $(ROOTDYNLIB64)
-
-lint:		$(LINTOUT64) $(SGSLINTOUT)
 
 include		../Makefile.targ
 include		../../Makefile.sub.64

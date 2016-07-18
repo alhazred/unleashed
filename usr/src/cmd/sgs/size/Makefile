@@ -36,12 +36,11 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 package:=	TARGET= package
 
 .KEEP_STATE:
 
-all clean clobber install lint package:	$(SUBDIRS)
+all clean clobber install package:	$(SUBDIRS)
 
 $(MACH) $(MACH64): FRC
 		@cd $@; pwd; $(MAKE) $(TARGET)

@@ -40,7 +40,5 @@ ROOTPROG= $(ROOTPROG64)
 include		../Makefile.targ
 include		../../Makefile.sub.64
 
-lint:		$(LINTOUT64) $(SGSLINTOUT)
-
 install \
 package:	$(ROOTPROG64)

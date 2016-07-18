@@ -42,6 +42,4 @@ delete:
 
 install:	all
 
-lint:
-
 include		../../../Makefile.targ

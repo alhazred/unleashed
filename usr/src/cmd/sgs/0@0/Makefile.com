@@ -44,7 +44,7 @@ BUILD.s=	$(AS) $(ASFLAGS) $< -o $@
 
 SRCS=		$(OBJECTS:%.o=../common/%.c)
 
-CLEANFILES +=	$(LINTOUT) $(CRTS)
+CLEANFILES +=	$(CRTS)
 CLOBBERFILES +=	$(DYNLIB)
 
 ROOTDYNLIB=	$(DYNLIB:%=$(ROOTLIBDIR)/%)

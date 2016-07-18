@@ -42,8 +42,6 @@ delete:
 install \
 package:	all $(ROOTPROG)
 
-lint:		$(LINTOUT32) $(SGSLINTOUT)
-
 $(PROG):	$(OBJS)  $(MAPFILE)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 		$(POST_PROCESS)

@@ -41,7 +41,3 @@ include		$(SRC)/lib/Makefile.targ
 
 delete:
 		$(RM) $(DYNLIB)
-
-lint:
-		perl ../../tools/lint_hdr.pl 0@0.so.1	> $(LINTOUT)
-		$(LINT.c) $(SRCS)			2>&1 | tee -a $(LINTOUT)

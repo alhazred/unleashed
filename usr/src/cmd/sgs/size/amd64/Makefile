@@ -42,7 +42,5 @@ VAR_SGSCCSLINK=	$(VAR_SGSCCSLINK64)
 package \
 install:	all $(ROOTPROG64) $(ROOTCCSBINLINK64)
 
-lint:		$(LINTOUT64) $(SGSLINTOUT)
-
 include		../Makefile.targ
 include		../../Makefile.sub.64

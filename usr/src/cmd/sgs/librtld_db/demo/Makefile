@@ -90,7 +90,7 @@ CLEANFILES=	*.demo */*.demo
 .KEEP_STATE:
 .PARALLEL:	$(ROOTDEMOFILES)
 
-all catalog chkmsg lint:
+all catalog chkmsg:
 
 install:	$(ROOTDEMODIRS) .WAIT $(ROOTDEMOFILES)
 

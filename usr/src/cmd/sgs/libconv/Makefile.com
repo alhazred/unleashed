@@ -107,16 +107,7 @@ AS_CPPFLAGS=	-P -D_ASM $(CPPFLAGS)
 BLTDATA=	$(BLTOBJS:%.o=%.c) $(BLTOBJS:%.o=%.h) report_bufsize.h
 
 SRCS=		../common/llib-lconv
-LINTSRCS=	$(COMOBJS:%.o=../common/%.c) \
-		    $(COMOBJS_NOMSG:%.o=../common/%.c) \
-		    $(ELFCOM_OBJS:%.o=$(ELFCAP)/%.c) ../common/lintsup.c
-LINTSRCS32 =	$(COMOBJS32:%32.o=../common/%.c)
-LINTSRCS64 =	$(COMOBJS64:%64.o=../common/%.c)
 
 SGSMSGTARG=	$(BLTOBJS:%_msg.o=../common/%.msg)
 
-LINTFLAGS +=	-u
-LINTFLAGS64 +=	-u
-
-CLEANFILES +=	$(BLTDATA) $(LINTOUTS) bld_vernote vernote.s
-CLOBBERFILES +=	$(LINTLIBS)
+CLEANFILES +=	$(BLTDATA) bld_vernote vernote.s

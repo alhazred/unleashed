@@ -37,6 +37,4 @@ all:		$(PROG)
 
 install:	all $(ROOTPROG) $(ROOTCCSBINLINK)
 
-lint:           $(LINTOUT32) $(SGSLINTOUT)
-
 include		../Makefile.targ

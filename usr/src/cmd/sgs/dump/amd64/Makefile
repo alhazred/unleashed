@@ -40,7 +40,5 @@ VAR_SGSCCSLINK=	$(VAR_SGSCCSLINK64)
 include		../Makefile.targ
 include		../../Makefile.sub.64
 
-lint:		$(LINTOUT64) $(SGSLINTOUT)
-
 install \
 package:	$(VAR_SGSBINPROG64)

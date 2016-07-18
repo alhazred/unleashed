@@ -43,8 +43,6 @@ C99MODE=	$(C99_ENABLE)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized
 LDLIBS +=	-lelf $(CONVLIBDIR) $(CONV_LIB) -lsendfile
-LINTFLAGS=	-x
-LINTFLAGS64=	-x
 
 $(XPG4) :=	CPPFLAGS += -DXPG4
 
@@ -61,6 +59,5 @@ SGSMSGALL =	$(SGSMSGCOM)
 SGSMSGFLAGS +=	-h $(BLTDEFS) -d $(BLTDATA) -m $(BLTMESG) -n ar_msg
 
 SRCS=		$(COMOBJ:%.o=../common/%.c) $(BLTDATA:%.o=$(SGSTOOLS)/common/%.c)
-LINTSRCS=	$(SRCS) ../common/lintsup.c
 
-CLEANFILES +=	$(LINTOUTS) $(BLTFILES)
+CLEANFILES +=	$(BLTFILES)

@@ -55,9 +55,6 @@ LDFLAGS +=	$(VERSREF) $(CC_USE_PROTO) $(MAPOPT) $(LLDFLAGS)
 LDLIBS +=	$(ELFLIBDIR) -lelf $(LDDBGLIBDIR) $(LDDBG_LIB) \
 		    $(CONVLIBDIR) $(CONV_LIB)
 
-LINTFLAGS +=	-x
-LINTFLAGS64 +=	-x
-
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
 BLTDEFS =	msg.h
@@ -74,6 +71,5 @@ SGSMSGFLAGS +=	-h $(BLTDEFS) -d $(BLTDATA) -m $(BLTMESG) -n elfdump_msg
 SRCS =		$(COMOBJ:%.o=../common/%.c) \
 		$(COMOBJ32:%32.o=../common/%.c) \
 		$(TOOLOBJ:%.o=../../tools/common/%.c) $(BLTDATA)
-LINTSRCS =	$(SRCS) ../common/lintsup.c
 
-CLEANFILES +=	$(LINTOUTS) $(BLTFILES) gen_struct_layout
+CLEANFILES +=	$(BLTFILES) gen_struct_layout

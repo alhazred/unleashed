@@ -47,8 +47,7 @@ package:	all $(VAR_SGSBINPROG) $(VAR_SGSCCSLINK)
 clean:
 		$(RM) $(PROG)
 
-chkmsg \
-lint:
+chkmsg:
 
 catalog:	$(POFILE)
 

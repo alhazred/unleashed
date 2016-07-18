@@ -49,4 +49,4 @@ install:	all $(ROOTMANS)
 $(ROOTDIR)/man1l/%:	%
 		$(INS.file)
 
-clobber clean lint:
+clobber clean:

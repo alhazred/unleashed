@@ -31,23 +31,19 @@ include		../Makefile.com
 
 SGSMSGTARG +=	$(SGSMSGINTEL)
 
-LINTFLAGS64 +=	$(VAR_LINTFLAGS64)
 CPPFLAGS +=	-D_SYSCALL32
 CONVLIBDIR =	$(CONVLIBDIR64)
 
 .KEEP_STATE:
 
-all:		$(DYNLIB) $(LINTLIB)
+all:		$(DYNLIB)
 
-install:	all $(ROOTFS_DYNLIB64) $(ROOTFS_LINKS64) \
-		$(ROOTFS_LIBDIR64)/$(LINTLIB)
+install:	all $(ROOTFS_DYNLIB64) $(ROOTFS_LINKS64)
 
 pics/plt32_resolution.o: ../i386/plt32_resolution.c
 		$(COMPILE.c) -D_ELF32 $(PICFLAGS) -o $@ \
 		    ../i386/plt32_resolution.c
 		$(POST_PROCESS_O)
-
-lint:		$(LINTLIB) $(LINTOUT32) $(LINTOUT64) $(SGSLINTOUT)
 
 include		../Makefile.targ
 include		../../Makefile.sub.64

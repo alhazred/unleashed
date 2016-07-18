@@ -35,11 +35,8 @@ SGSMSGTARG +=	$(SGSMSGINTEL)
 
 .KEEP_STATE:
 
-all:		$(DYNLIB) $(LINTLIB)
+all:		$(DYNLIB)
 
-install:	all $(ROOTFS_DYNLIB) $(ROOTFS_LINKS) \
-		$(ROOTFS_LIBDIR)/$(LINTLIB) $(ROOTFS_LIBDIR)/$(LINTLIBSRC)
-
-lint:		$(LINTLIB) $(LINTOUT32) $(SGSLINTOUT)
+install:	all $(ROOTFS_DYNLIB) $(ROOTFS_LINKS)
 
 include		../Makefile.targ

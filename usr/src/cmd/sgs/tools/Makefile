@@ -57,7 +57,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 
 
 .KEEP_STATE:
@@ -70,8 +69,6 @@ clean clobber:	$(SUBDIRS)
 		$(RM) $(RMFLAGS) $(EXECS)
 
 delete:
-
-lint:		$(SUBDIRS)
 
 %:		%.ksh
 		$(RM) $@

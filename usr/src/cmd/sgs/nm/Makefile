@@ -38,7 +38,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 package :=	TARGET= package
 
 # for messaging catalog
@@ -47,7 +46,7 @@ POFILE= nm.po
 
 .KEEP_STATE:
 
-all clean clobber install lint package:	$(SUBDIRS)
+all clean clobber install package:	$(SUBDIRS)
 
 catalog:	$(POFILE)
 

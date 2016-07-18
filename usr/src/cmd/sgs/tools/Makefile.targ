@@ -65,9 +65,3 @@ clobber:	clean
 
 clean:
 		$(RM) $(OBJECTS) $(CLEANFILES)
-
-lint:
-		@ echo "piglatin.c:"			  >> $(LINTOUT)
-		$(LINT.c) ../common/piglatin.c -lc	  >> $(LINTOUT) 2>&1
-		@ echo "sgsmsg"				  >> $(LINTOUT)
-		$(LINT.c)  $(SGSMSG_SRCS) -lc		  >> $(LINTOUT) 2>&1

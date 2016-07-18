@@ -24,8 +24,6 @@
 
 include		$(SRC)/Makefile.master
 
-LINTLOG=	../lint.$(MACH).log
-
 PKGARCHIVE=	.
 DATAFILES=	copyright prototype_com prototype_$(MACH) postinstall \
 		preremove depend checkinstall
@@ -35,8 +33,8 @@ PACKAGE= 	SUNWonld
 ROOTONLD=	$(ROOT)/opt/SUNWonld
 ROOTREADME=	$(README:%=$(ROOTONLD)/%)
 
-CLEANFILES=	$(FILES) awk_pkginfo ../bld_awk_pkginfo $(LINTLOG)
-CLOBBERFILES=	$(PACKAGE) $(LINTLOG).bak
+CLEANFILES=	$(FILES) awk_pkginfo ../bld_awk_pkginfo
+CLOBBERFILES=	$(PACKAGE)
 
 ../%:		../common/%.ksh
 		$(RM) $@

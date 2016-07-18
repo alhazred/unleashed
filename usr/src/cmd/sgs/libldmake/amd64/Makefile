@@ -30,8 +30,6 @@ include ../Makefile.com
 
 .KEEP_STATE:
 
-LINTFLAGS64 +=	$(VAR_LINTFLAGS64)
-
 all:		$(DYNLIB)
 install:	all $(ROOTDYNLIB64)
 

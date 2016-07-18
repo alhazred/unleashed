@@ -47,20 +47,13 @@ SGSMSGTARG=	../common/rtld.msg
 SGSMSGALL=	../common/rtld.msg
 SGSMSGFLAGS +=	-h $(BLTDEFS) -d $(BLTDATA)
 
-LINTFLAGS +=	-u -erroff=E_NAME_DECL_NOT_USED_DEF2
-LINTFLAGS64 += 	-u -erroff=E_NAME_DECL_NOT_USED_DEF2
-
 CERRWARN +=	-_gcc=-Wno-uninitialized
-
-LINTSRCS=	$(COMOBJS:%.o=../common/%.c) $(BLTDATA)
 
 FILEMODE=	555
 
 DYNLIB=		ld.so
 
-LIBS =		$(DYNLIB) $(LINTLIB)
-
-# definitions for lint
+LIBS =		$(DYNLIB)
 
 CPPFLAGS +=	-I. -I../common -I../../common -I../../../include \
 		-I../../../include/$(MACH) \
@@ -76,4 +69,4 @@ ROOTMDBLIB=	$(ROOT)/usr/lib/mdb/proc
 ROOTMDBLIB64=	$(ROOTMDBLIB)/$(MACH64)
 ROOTMDBLIBS=	$(ROOTMDBLIB)/$(MTARG)$(DYNLIB)
 
-CLEANFILES +=	$(LINTOUTS) $(BLTFILES)
+CLEANFILES +=	$(BLTFILES)

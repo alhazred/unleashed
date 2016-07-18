@@ -38,8 +38,6 @@ all:		$(PROG)
 
 install:	all $(ROOTPROG) $(ROOTCCSBINLINK)
 
-clean \
-clobber \
-lint:
+clean clobber:
 
 include		../../Makefile.targ

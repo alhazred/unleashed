@@ -49,7 +49,6 @@ clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 delete :=	TARGET= delete
 install :=	TARGET= install
-lint :=		TARGET= lint
 catalog :=	TARGET= catalog
 package :=	TARGET= package
 chkmsg :=	TARGET= chkmsg
@@ -57,7 +56,7 @@ chkmsg :=	TARGET= chkmsg
 .KEEP_STATE:
 .KEEP_STATE_FILE: .make.state.$(MACH)
 
-all clean clobber delete install lint catalog package chkmsg: \
+all clean clobber delete install catalog package chkmsg: \
 		$(SUBDIRS)
 
 $(SUBDIRS):	FRC

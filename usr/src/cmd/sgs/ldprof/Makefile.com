@@ -49,11 +49,7 @@ CPPFLAGS=	-I. -I../common -I../../include \
 		$(CPPFLAGS.master) -I$(ELFCAP)
 CFLAGS +=	$(C_PICFLAGS)
 
-lint :=		ZRECORD =
 LDLIBS +=	$(ZRECORD) -lmapmalloc -lc $(DLLIB)
-
-LINTFLAGS +=	-u -erroff=E_NAME_DECL_NOT_USED_DEF2
-LINTFLAGS64 +=	-u -erroff=E_NAME_DECL_NOT_USED_DEF2
 
 BLTDEFS=	msg.h
 BLTDATA=	msg.c
@@ -67,9 +63,8 @@ SGSMSGALL=	$(SGSMSGCOM)
 SGSMSGFLAGS +=	-h $(BLTDEFS) -d $(BLTDATA) -m $(BLTMESG) -n ldprof_msg
 
 SRCS=		$(COMOBJS:%.o=../common/%.c) $(BLTDATA)
-LINTSRCS=	$(SRCS) ../common/lintsup.c
 
-CLEANFILES +=	$(LINTOUTS) $(BLTFILES)
-CLOBBERFILES +=	$(DYNLIB) $(LINTLIB)
+CLEANFILES +=	$(BLTFILES)
+CLOBBERFILES +=	$(DYNLIB)
 
 ROOTDYNLIB=	$(DYNLIB:%=$(ROOTLIBDIR)/%)

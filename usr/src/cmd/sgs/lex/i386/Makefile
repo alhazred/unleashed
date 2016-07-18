@@ -40,7 +40,7 @@ all_lib:	$(LIBS)
 
 install:	all $(ROOTPROG) $(ROOTFORMS) $(ROOTCCSBINLINK)
 
-install_lib:	all_lib $(ROOTLIBS) $(ROOTLINKS) $(DYNLINKLIB) $(ROOTLINT)
+install_lib:	all_lib $(ROOTLIBS) $(ROOTLINKS) $(DYNLINKLIB)
 
 include		../Makefile.targ
 include		../../../Makefile.targ
