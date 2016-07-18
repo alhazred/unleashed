@@ -814,10 +814,6 @@ usr/lib/smbsrv/llib-lsmbns
 usr/lib/smbsrv/llib-lsmbns.ln
 usr/lib/reparse/amd64/llib-lreparse_smb.ln	i386
 usr/lib/reparse/sparcv9/llib-lreparse_smb.ln	sparc
-usr/lib/llib-lsmbfs
-usr/lib/llib-lsmbfs.ln
-usr/lib/amd64/llib-lsmbfs.ln		i386
-usr/lib/sparcv9/llib-lsmbfs.ln		sparc
 lib/llib-la5k			sparc
 lib/llib-la5k.ln		sparc
 lib/sparcv9/llib-la5k.ln	sparc

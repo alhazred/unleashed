@@ -83,15 +83,13 @@ OBJECTS= $(OBJ_LIB) $(OBJ_CMN)
 
 include $(SRC)/lib/Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 
 SRCDIR=		../smb
 CMNDIR=		$(SRC)/common/smbclnt
 
 SRCS=		$(OBJ_LIB:%.o=$(SRCDIR)/%.c) \
 		$(OBJ_CMN:%.o=$(CMNDIR)/%.c)
-
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 C99MODE=	$(C99_ENABLE)
 
@@ -117,19 +115,9 @@ ${NOT_RELEASE_BUILD} CPPFLAGS += -DDEBUG
 #CTFCONVERT_O=
 #CTFMERGE_LIB=
 
-# Filter out the less important lint.
-# See lgrep.awk
-LGREP =	$(AWK) -f $(SRCDIR)/lgrep.awk
-LTAIL	+=	2>&1 | $(LGREP)
-
 all:	$(LIBS)
 
-lint:	lintcheck_t
-
 include ../../Makefile.targ
-
-lintcheck_t: $$(SRCS)
-	$(LINT.c) $(LINTCHECKFLAGS) $(SRCS) $(LDLIBS) $(LTAIL)
 
 objs/%.o pics/%.o: $(CMNDIR)/%.c
 	$(COMPILE.c) -o $@ $<
