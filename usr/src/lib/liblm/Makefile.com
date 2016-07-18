@@ -37,16 +37,12 @@ SRCDIR =	../common
 
 LIBS = $(DYNLIB)
 
-# definitions for lint
-
 CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lc
 
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint:	lintcheck
 
 # include library targets
 include ../../Makefile.targ
