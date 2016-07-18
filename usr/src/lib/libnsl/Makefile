@@ -73,7 +73,6 @@ clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 delete :=	TARGET= delete
 install :=	TARGET= install
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 package :=	TARGET= package
 
@@ -92,7 +91,7 @@ install_h:	$(ROOTHDRS)
 # nss.h isn't delivered; no reason to check
 check:
 
-clean clobber delete lint package:	$(SUBDIRS)
+clean clobber delete package:	$(SUBDIRS)
 
 $(PROTOCOL_DIR):
 	$(INS.dir)
