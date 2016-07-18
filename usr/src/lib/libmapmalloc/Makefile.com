@@ -38,21 +38,14 @@ include ../../Makefile.lib
 
 SRCDIR =	../common
 
-LIBS =		$(DYNLIB) $(LINTLIB)
-
-LINTSRC=	$(LINTLIB:%.ln=%)
+LIBS =		$(DYNLIB)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I../../common/inc -D_REENTRANT
 DYNFLAGS +=	$(ZINTERPOSE)
 LDLIBS +=	-lc
 
-$(LINTLIB) lint :=	LINTFLAGS += -erroff=E_BAD_PTR_CAST_ALIGN
-$(LINTLIB) lint :=	LINTFLAGS64 += -erroff=E_BAD_PTR_CAST_ALIGN
-
 .KEEP_STATE:
-
-lint: lintcheck
 
 # include library targets
 include ../../Makefile.targ
@@ -60,7 +53,3 @@ include ../../Makefile.targ
 pics/%.o: ../common/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
-
-# install rule for lint library target
-$(ROOTLINTDIR)/%:	../common/%
-	$(INS.file)
