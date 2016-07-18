@@ -33,7 +33,6 @@ all:=		TARGET= all
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
 install:=	TARGET= install
-lint:=		TARGET= lint
 _msg:=		TARGET= _msg
 
 .KEEP_STATE:
@@ -72,7 +71,7 @@ CLASS_SCR_DIR =		$(INSTALL_DIR)/scripts
 CLASS_SCR_FILES =	$(SCRIPTS:%=$(CLASS_SCR_DIR)/%)
 $(CLASS_SCR_FILES) :=	FILEMODE = 0555
 
-all clean clobber delete install lint package: $(SUBDIRS)
+all clean clobber delete install package: $(SUBDIRS)
 _msg: $(MSGSUBDIRS)
 
 install:	install_data
