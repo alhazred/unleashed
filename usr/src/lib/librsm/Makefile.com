@@ -57,8 +57,6 @@ LDLIBS += -lc
 
 all:  $(LIBS)
 
-lint: lintcheck
-
 # include library targets
 include ../../Makefile.targ
 
