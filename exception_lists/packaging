@@ -971,7 +971,6 @@ lib/llib-lsysevent.ln
 usr/lib/amd64/llib-lSMHBAAPI.ln
 usr/lib/amd64/llib-lbe.ln
 usr/lib/amd64/llib-ldat.ln
-usr/lib/amd64/llib-ldiskmgt.ln
 usr/lib/amd64/llib-ldns_sd.ln
 usr/lib/amd64/llib-ldtrace.ln
 usr/lib/amd64/llib-lfcoe.ln
@@ -1047,8 +1046,6 @@ usr/lib/llib-lbe
 usr/lib/llib-lbe.ln
 usr/lib/llib-ldat
 usr/lib/llib-ldat.ln
-usr/lib/llib-ldiskmgt
-usr/lib/llib-ldiskmgt.ln
 usr/lib/llib-ldns_sd
 usr/lib/llib-ldns_sd.ln
 usr/lib/llib-ldtrace

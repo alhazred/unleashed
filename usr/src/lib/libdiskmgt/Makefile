@@ -43,7 +43,6 @@ all :=		TARGET = all
 clean :=	TARGET = clean
 clobber	:=	TARGET = clobber
 install	:=	TARGET = install
-lint :=		TARGET = lint
 install_h:=	TARGET = install_h
 
 POFILE =        libdiskmgt.po
@@ -51,7 +50,7 @@ MSGFILES =      `$(GREP) -l gettext common/*.[ch]`
 
 .KEEP_STATE:
 
-all clean clobber install lint: $(SUBDIRS)
+all clean clobber install: $(SUBDIRS)
 
 $(POFILE):      pofile_MSGFILES
 
