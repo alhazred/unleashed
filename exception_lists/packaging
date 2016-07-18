@@ -880,7 +880,6 @@ usr/lib/amd64/llib-ll.ln
 usr/lib/amd64/llib-lpasswdutil.ln
 usr/lib/amd64/llib-lpicl.ln
 usr/lib/amd64/llib-lpkcs11.ln
-usr/lib/amd64/llib-lsasl.ln
 usr/lib/amd64/llib-lsched.ln
 usr/lib/amd64/llib-lsctp.ln
 usr/lib/amd64/llib-lshare.ln
@@ -945,8 +944,6 @@ usr/lib/llib-lpkcs11
 usr/lib/llib-lpkcs11.ln
 usr/lib/llib-lpolkit
 usr/lib/llib-lpolkit.ln
-usr/lib/llib-lsasl
-usr/lib/llib-lsasl.ln
 usr/lib/llib-lsched
 usr/lib/llib-lsched.ln
 usr/lib/llib-lsctp

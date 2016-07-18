@@ -38,12 +38,9 @@ OBJECTS=	$(SASLOBJS) $(COMMONOBJS)
 
 include ../../Makefile.lib
 
-LIBS=		$(DYNLIB) $(LINTLIB)
+LIBS=		$(DYNLIB)
 SRCS=		$(SASLOBJS:%.o=../lib/%.c) $(COMMONOBJS:%.o=$(PLUGDIR)/%.c)
-$(LINTLIB):= 	SRCS = $(SRCDIR)/$(LINTSRC)
 LDLIBS +=	-lsocket -lc -lmd
-LINTFLAGS +=	-DPIC
-LINTFLAGS64 +=	-DPIC
 
 SRCDIR=		../lib
 PLUGDIR=	../plugin
@@ -55,8 +52,6 @@ CPPFLAGS +=	-I../include -I$(PLUGDIR)
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 pics/%.o: $(PLUGDIR)/%.c
 	$(COMPILE.c) -o $@ $<
