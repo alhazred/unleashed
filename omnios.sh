@@ -45,7 +45,7 @@
 # - This script is only interpreted by ksh93 and explicitly allows the
 #   use of ksh93 language extensions.
 #
-export NIGHTLY_OPTIONS='-nCAmprt'
+export NIGHTLY_OPTIONS='-nCAmpt'
 
 # CODEMGR_WS - where is your workspace at
 #export CODEMGR_WS="$HOME/ws/illumos-gate"
@@ -127,7 +127,7 @@ export MACH="$(uname -p)"
 #  totally freed itself, we can remove this reference.
 #
 # Location of encumbered binaries.
-export ON_CLOSED_BINS="$CODEMGR_WS/closed"
+export ON_CLOSED_BINS="/opt/onbld/closed"
 
 # REF_PROTO_LIST - for comparing the list of stuff in your proto area
 # with. Generally this should be left alone, since you want to see differences
