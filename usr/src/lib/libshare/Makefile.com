@@ -33,12 +33,9 @@ include ../../Makefile.lib
 SRCDIR =	../common
 
 LIBSRCS =	$(LIBOBJS:%.o=$(SRCDIR)/%.c)
-# we don't want to lint the sharetab and nfs_sec files
-lintcheck := SRCS = $(LIBSRCS)
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lnsl -lscf -lzfs -luuid -lxml2 -lnvpair
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 #add nfs/lib directory as part of the include path
 CFLAGS +=	$(CCVERBOSE)
@@ -51,8 +48,6 @@ CPPFLAGS +=	-D_REENTRANT -I$(NFSLIB_DIR) \
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 pics/%.o:	$(NFSLIB_DIR)/%.c
 	$(COMPILE.c) -o $@ $<

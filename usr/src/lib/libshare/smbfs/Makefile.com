@@ -52,8 +52,6 @@ all: $(LIBS)
 
 install: $(ROOTLIBDIR) $(ROOTLIBDIR64) all
 
-lint: lintcheck
-
 $(ROOTLIBDIR):
 	$(INS.dir)
 

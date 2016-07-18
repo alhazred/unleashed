@@ -37,9 +37,6 @@ ROOTLIBDIR =	$(ROOT)/usr/lib/fs/nfs
 ROOTLIBDIR64 =	$(ROOT)/usr/lib/fs/nfs/$(MACH64)
 
 LIBSRCS = $(LIBOBJS:%.o=$(SRCDIR)/%.c)
-# we don't want to lint the sources for OTHOBJS since they are pre-existing files
-# that are not lint free.
-lintcheck := SRCS = $(LIBSRCS)
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lshare -lnsl -lscf -lumem -lc -lxml2
@@ -58,8 +55,6 @@ CPPFLAGS +=	-D_REENTRANT -I$(NFSLIB_DIR) \
 all: $(LIBS)
 
 install: all
-
-lint: lintcheck
 
 pics/%.o:  $(NFSLIB_DIR)/%.c
 	$(COMPILE.c) -o $@ $<
