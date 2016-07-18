@@ -33,8 +33,7 @@ OBJECTS =	libipp.o
 # include library definitions
 include ../../Makefile.lib
 
-LIBS =		$(DYNLIB) $(LINTLIB)
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lnvpair
 
 CFLAGS +=	$(CCVERBOSE)
@@ -43,7 +42,5 @@ CPPFLAGS +=	-D_REENTRANT
 .KEEP_STATE:
 
 all:	$(LIBS)
-
-lint:	lintcheck
 
 include ../../Makefile.targ
