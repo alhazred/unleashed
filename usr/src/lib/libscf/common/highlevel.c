@@ -37,6 +37,7 @@
 #include <sys/systeminfo.h>
 #include <sys/uadmin.h>
 #include <sys/utsname.h>
+#include <sys/secflags.h>
 
 #ifdef	__x86
 #include <smbios.h>
@@ -352,4 +353,91 @@ scf_is_fastboot_default(void)
 	scf_get_boot_config_ovr(&boot_config_ovr);
 
 	return (boot_config & boot_config_ovr & UA_FASTREBOOT_DEFAULT);
+}
+
+/*
+ * Read the default security-flags from system/process-security and return a
+ * secflagset_t suitable for psecflags(2)
+ *
+ * Unfortunately, this symbol must _exist_ in the native build, for the sake
+ * of the mapfile, even though we don't ever use it, and it will never work.
+ */
+struct group_desc {
+	secflagset_t *set;
+	char *fmri;
+};
+
+int
+scf_default_secflags(scf_handle_t *hndl, psecflags_t *flags)
+{
+#if !defined(NATIVE_BUILD)
+	scf_property_t *prop;
+	scf_value_t *val;
+	const char *flagname;
+	int flag;
+	struct group_desc *g;
+	struct group_desc groups[] = {
+		{NULL, "svc:/system/process-security/"
+		    ":properties/default"},
+		{NULL, "svc:/system/process-security/"
+		    ":properties/lower"},
+		{NULL, "svc:/system/process-security/"
+		    ":properties/upper"},
+		{NULL, NULL}
+	};
+
+	groups[0].set = &flags->psf_inherit;
+	groups[1].set = &flags->psf_lower;
+	groups[2].set = &flags->psf_upper;
+
+	/* Ensure sane defaults */
+	psecflags_default(flags);
+
+	for (g = groups; g->set != NULL; g++) {
+		for (flag = 0; (flagname = secflag_to_str(flag)) != NULL;
+		    flag++) {
+			char *pfmri;
+			uint8_t flagval = 0;
+
+			if ((val = scf_value_create(hndl)) == NULL)
+				return (-1);
+
+			if ((prop = scf_property_create(hndl)) == NULL) {
+				scf_value_destroy(val);
+				return (-1);
+			}
+
+			if ((pfmri = uu_msprintf("%s/%s", g->fmri,
+			    flagname)) == NULL)
+				uu_die("Allocation failure\n");
+
+			if (scf_handle_decode_fmri(hndl, pfmri,
+			    NULL, NULL, NULL, NULL, prop, NULL) != 0)
+				goto next;
+
+			if (scf_property_get_value(prop, val) != 0)
+				goto next;
+
+			(void) scf_value_get_boolean(val, &flagval);
+
+			if (flagval != 0)
+				secflag_set(g->set, flag);
+			else
+				secflag_clear(g->set, flag);
+
+next:
+			uu_free(pfmri);
+			scf_value_destroy(val);
+			scf_property_destroy(prop);
+		}
+	}
+
+	if (!psecflags_validate(flags))
+		return (-1);
+
+	return (0);
+#else
+	assert(0);
+	abort();
+#endif /* !NATIVE_BUILD */
 }
