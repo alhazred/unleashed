@@ -39,11 +39,7 @@ SRCDIR =	../common
 
 MAPFILES +=	$(MAPFILE32)
 
-LIBS =		$(DYNLIB) $(LINTLIB)
-
-$(LINTLIB):= SRCS = ../common/llib-lmail
-
-LINTSRC=	$(LINTLIB:%.ln=%)
+LIBS =		$(DYNLIB)
 
 CPPFLAGS =	-I../inc -I../../common/inc $(CPPFLAGS.master)
 CFLAGS +=	$(CCVERBOSE)
@@ -53,8 +49,6 @@ LDLIBS +=	-lc
 
 all: $(LIBS)
 
-lint: lintcheck
-
 include ../../Makefile.targ
 
 pics/%.o: ../common/%.c
@@ -62,11 +56,3 @@ pics/%.o: ../common/%.c
 	$(POST_PROCESS_O)
 
 pics/%.o: ../inc/%.h
-
-# install rule for lint library target
-$(ROOTLINTDIR)/%: ../common/%
-	$(INS.file)
-
-# install rule for 64 bit lint library target
-$(ROOTLINTDIR64)/%: ../common/%
-	$(INS.file)
