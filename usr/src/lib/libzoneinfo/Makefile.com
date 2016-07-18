@@ -36,16 +36,13 @@ include ../../Makefile.lib
 #
 TEXT_DOMAIN=	SUNW_OST_ZONEINFO
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 
 SRCDIR =	../common
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 
 .KEEP_STATE:
 
 all:	$(LIBS)
-
-lint:	lintcheck
 
 include ../../Makefile.targ

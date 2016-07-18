@@ -1132,7 +1132,6 @@ usr/lib/amd64/llib-lwanbootutil.ln
 usr/lib/amd64/llib-lwrap.ln
 usr/lib/amd64/llib-ly.ln
 usr/lib/amd64/llib-lzonecfg.ln
-usr/lib/amd64/llib-lzoneinfo.ln
 usr/lib/fm/amd64/llib-ldiagcode.ln
 usr/lib/fm/amd64/llib-ldiskstatus.ln
 usr/lib/fm/amd64/llib-lfmd_adm.ln
@@ -1298,8 +1297,6 @@ usr/lib/llib-ly
 usr/lib/llib-ly.ln
 usr/lib/llib-lzonecfg
 usr/lib/llib-lzonecfg.ln
-usr/lib/llib-lzoneinfo
-usr/lib/llib-lzoneinfo.ln
 usr/lib/nfs/llib-lmapid
 usr/lib/nfs/llib-lmapid.ln
 usr/lib/scsi/amd64/llib-lscsi.ln
