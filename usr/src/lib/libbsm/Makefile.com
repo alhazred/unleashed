@@ -73,14 +73,7 @@ include ../../Makefile.rootfs
 
 SRCDIR =	../common
 
-LIBS =	 	$(DYNLIB) $(LINTLIB)
-
-LINTSRC= $(LINTLIB:%.ln=%)
-$(LINTLIB) :=	SRCS = ../common/$(LINTSRC)
-ROOTLINTDIR=	$(ROOTLIBDIR)
-ROOTLINT=	$(LINTSRC:%=$(ROOTLINTDIR)/%)
-
-CLEANFILES +=	$(LINTOUT) $(LINTLIB)
+LIBS =	 	$(DYNLIB)
 
 CFLAGS	+=	$(CCVERBOSE)
 LDLIBS +=	-lsocket -lnsl -lmd -lc -lsecdb -ltsol -linetutil -lscf
@@ -103,8 +96,6 @@ TEXT_DOMAIN= SUNW_OST_OSLIB
 
 all: $(LIBS)
 
-lint: lintcheck
-
 # Include library targets
 #
 include ../../Makefile.targ
@@ -112,7 +103,3 @@ include ../../Makefile.targ
 pics/%.o: ../common/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
-
-# install rule for lint library target
-$(ROOTLINTDIR)/%: ../common/%
-	$(INS.file)

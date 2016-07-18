@@ -34,7 +34,6 @@ clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 delete :=	TARGET= delete
 install :=	TARGET= install
-lint :=		TARGET= lint
 package :=	TARGET= package
 
 .KEEP_STATE:
@@ -58,7 +57,7 @@ CHECKHDRS =	$(GENHDRS:%.h=%.check)
 $(ROOTHDRS) := 	FILEMODE = 0644
 $(ROOTCHDRS) :=	FILEMODE = 0644
 
-all install lint package: $(GENSRCS) $(SUBDIRS)
+all install package: $(GENSRCS) $(SUBDIRS)
 clean clobber delete: $(SUBDIRS)
 
 #
