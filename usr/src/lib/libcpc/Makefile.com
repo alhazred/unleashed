@@ -35,8 +35,7 @@ SRCS = 	$(ASOBJS:%.o=../$(MACH)/%.s)	\
 	$(V1_OBJS:%.o=../common/%.c)	\
 	$(COBJS:%.o=../common/%.c)
 
-LIBS =		$(DYNLIB) $(LINTLIB)
-$(LINTLIB) :=	SRCS = ../common/llib-lcpc
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lpctx -lnvpair -lc
 
 SRCDIR =	../common
@@ -51,8 +50,6 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ
 

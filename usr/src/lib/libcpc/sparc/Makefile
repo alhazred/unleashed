@@ -32,4 +32,4 @@ include ../Makefile.com
 
 LDLIBS	+= -ldevinfo
 
-install: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
+install: all $(ROOTLIBS) $(ROOTLINKS)

@@ -1053,7 +1053,6 @@ lib/llib-ltsol
 lib/llib-ltsol.ln
 usr/lib/amd64/llib-lSMHBAAPI.ln
 usr/lib/amd64/llib-lbe.ln
-usr/lib/amd64/llib-lcpc.ln
 usr/lib/amd64/llib-lcrypt.ln
 usr/lib/amd64/llib-ldat.ln
 usr/lib/amd64/llib-ldiskmgt.ln
@@ -1145,8 +1144,6 @@ usr/lib/llib-lSMHBAAPI
 usr/lib/llib-lSMHBAAPI.ln
 usr/lib/llib-lbe
 usr/lib/llib-lbe.ln
-usr/lib/llib-lcpc
-usr/lib/llib-lcpc.ln
 usr/lib/llib-lcrypt
 usr/lib/llib-lcrypt.ln
 usr/lib/llib-ldat
