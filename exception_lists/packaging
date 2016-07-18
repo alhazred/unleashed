@@ -920,7 +920,6 @@ usr/lib/amd64/llib-ldat.ln
 usr/lib/amd64/llib-lhal-storage.ln
 usr/lib/amd64/llib-lhal.ln
 usr/lib/amd64/llib-ll.ln
-usr/lib/amd64/llib-lndmp.ln
 usr/lib/amd64/llib-lnls.ln
 usr/lib/amd64/llib-lpasswdutil.ln
 usr/lib/amd64/llib-lpctx.ln
@@ -985,8 +984,6 @@ usr/lib/llib-ll
 usr/lib/llib-ll.ln
 usr/lib/llib-lmilter
 usr/lib/llib-lmilter.ln
-usr/lib/llib-lndmp
-usr/lib/llib-lndmp.ln
 usr/lib/llib-lnls
 usr/lib/llib-lnls.ln
 usr/lib/llib-lpasswdutil

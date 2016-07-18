@@ -48,7 +48,7 @@ INCS += -I$(SRC)/cmd/ndmpd/include
 
 C99MODE=	-xc99=%all
 C99LMODE=	-Xc99=%all
-LIBS=	$(DYNLIB) $(LINTLIB)
+LIBS=	$(DYNLIB)
 LDLIBS +=	-lc -lscf
 CPPFLAGS +=	$(INCS) -D_REENTRANT
 
@@ -56,12 +56,9 @@ CERRWARN +=	-_gcc=-Wno-char-subscripts
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
 SRCS=	$(OBJECTS:%.o=$(SRCDIR)/%.c)
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ
