@@ -863,7 +863,6 @@ usr/lib/amd64/llib-ll.ln
 usr/lib/amd64/llib-lpasswdutil.ln
 usr/lib/amd64/llib-lpicl.ln
 usr/lib/amd64/llib-lpkcs11.ln
-usr/lib/amd64/llib-lsldap.ln
 usr/lib/amd64/llib-lslp.ln
 usr/lib/amd64/llib-lsmbios.ln
 usr/lib/amd64/llib-lsmedia.ln
@@ -923,8 +922,6 @@ usr/lib/llib-lpkcs11
 usr/lib/llib-lpkcs11.ln
 usr/lib/llib-lpolkit
 usr/lib/llib-lpolkit.ln
-usr/lib/llib-lsldap
-usr/lib/llib-lsldap.ln
 usr/lib/llib-lslp
 usr/lib/llib-lslp.ln
 usr/lib/llib-lsmbios
