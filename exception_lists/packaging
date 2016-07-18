@@ -1044,8 +1044,6 @@ usr/lib/llib-lsun_ima
 usr/lib/llib-lsun_ima.ln
 usr/lib/llib-ly
 usr/lib/llib-ly.ln
-usr/lib/nfs/llib-lmapid
-usr/lib/nfs/llib-lmapid.ln
 usr/lib/scsi/amd64/llib-lscsi.ln
 usr/lib/scsi/amd64/llib-lses.ln
 usr/lib/scsi/amd64/llib-lsmp.ln
