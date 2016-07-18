@@ -894,7 +894,6 @@ usr/lib/amd64/llib-lhal-storage.ln
 usr/lib/amd64/llib-lhal.ln
 usr/lib/amd64/llib-ll.ln
 usr/lib/amd64/llib-lpasswdutil.ln
-usr/lib/amd64/llib-lpctx.ln
 usr/lib/amd64/llib-lpicl.ln
 usr/lib/amd64/llib-lpkcs11.ln
 usr/lib/amd64/llib-lpool.ln
@@ -958,8 +957,6 @@ usr/lib/llib-lmilter
 usr/lib/llib-lmilter.ln
 usr/lib/llib-lpasswdutil
 usr/lib/llib-lpasswdutil.ln
-usr/lib/llib-lpctx
-usr/lib/llib-lpctx.ln
 usr/lib/llib-lpicl
 usr/lib/llib-lpicl.ln
 usr/lib/llib-lpicld_pluginutil
