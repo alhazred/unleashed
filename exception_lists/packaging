@@ -1080,7 +1080,6 @@ lib/llib-ltsnet.ln
 lib/llib-ltsol
 lib/llib-ltsol.ln
 usr/lib/amd64/llib-lSMHBAAPI.ln
-usr/lib/amd64/llib-ladutils.ln
 usr/lib/amd64/llib-lbe.ln
 usr/lib/amd64/llib-lbrand.ln
 usr/lib/amd64/llib-lbsdmalloc.ln
@@ -1179,8 +1178,6 @@ usr/lib/fm/llib-ltopo
 usr/lib/fm/llib-ltopo.ln
 usr/lib/llib-lSMHBAAPI
 usr/lib/llib-lSMHBAAPI.ln
-usr/lib/llib-ladutils
-usr/lib/llib-ladutils.ln
 usr/lib/llib-lbe
 usr/lib/llib-lbe.ln
 usr/lib/llib-lbrand

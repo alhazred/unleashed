@@ -33,12 +33,10 @@ OBJECTS =	adutils.o addisc.o adutils_threadfuncs.o \
 include ../../Makefile.lib
 
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lldap -lresolv -lsocket -lnsl -lc
 SRCDIR =	../common
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR)
@@ -50,10 +48,5 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
-
-LINTFLAGS += -erroff=E_CONSTANT_CONDITION
-LINTFLAGS64 += -erroff=E_CONSTANT_CONDITION
 
 include ../../Makefile.targ
