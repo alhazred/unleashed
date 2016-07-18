@@ -26,7 +26,7 @@
 
 LIBRARY =	libidmap.a
 VERS =		.1
-LINT_OBJECTS =	\
+OBJECTS =	\
 	directory_client.o	\
 	directory_error.o	\
 	directory_helper.o		\
@@ -35,19 +35,16 @@ LINT_OBJECTS =	\
 	sized_array.o		\
 	idmap_api.o		\
 	idmap_cache.o		\
-	utils.o
-
-OBJECTS = $(LINT_OBJECTS)	\
+	utils.o			\
 	idmap_xdr.o
 
 include ../../Makefile.lib
 C99MODE = $(C99_ENABLE)
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lavl -lnsl -lnvpair -luutil
 
 SRCDIR =	../common
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 # Relative path to ensure path to idmap_prot.h is also relative
 IDMAP_PROT_X =		../../../uts/common/rpcsvc/idmap_prot.x
@@ -60,18 +57,11 @@ CERRWARN +=	-_gcc=-Wno-switch
 
 CLOBBERFILES +=	idmap_xdr.c
 
-lint := OBJECTS = $(LINT_OBJECTS)
-
 .KEEP_STATE:
 
 all: $(LIBS)
 
 idmap_xdr.c:	$(IDMAP_PROT_X)
 	$(RM) $@; $(RPCGEN) -CMNc -o $@ $(IDMAP_PROT_X)
-
-lint: lintcheck
-
-LINTFLAGS += -erroff=E_CONSTANT_CONDITION
-LINTFLAGS64 += -erroff=E_CONSTANT_CONDITION
 
 include ../../Makefile.targ
