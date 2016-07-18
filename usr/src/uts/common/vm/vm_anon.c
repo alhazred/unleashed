@@ -1086,7 +1086,6 @@ anon_decref(struct anon *ap)
 		 */
 		pp = page_lookup(vp, (u_offset_t)off, SE_EXCL);
 		if (pp != NULL) {
-			/*LINTED: constant in conditional context */
 			VN_DISPOSE(pp, B_INVAL, 0, kcred);
 		}
 		ANON_PRINT(A_ANON, ("anon_decref: free ap %p, vp %p\n",
@@ -1231,7 +1230,6 @@ anon_decref_pages(
 				}
 				if (pp != NULL) {
 					VM_STAT_ADD(anonvmstats.decrefpages[4]);
-					/*LINTED*/
 					VN_DISPOSE(pp, B_INVAL, 0, kcred);
 				}
 				kmem_cache_free(anon_cache, ap);
@@ -1306,7 +1304,6 @@ anon_decref_pages(
 					for (j = 0; j < curpgcnt; j++) {
 						ASSERT(!hat_page_is_mapped(
 						    ppa[j]));
-						/*LINTED*/
 						VN_DISPOSE(ppa[j], B_INVAL, 0,
 						    kcred);
 					}
@@ -1456,7 +1453,7 @@ anon_dup_fill_holes(
 
 				ahmpages = APH_MUTEX(ap->an_vp, ap->an_off);
 				mutex_enter(ahmpages);
-				/*LINTED*/
+
 				ASSERT(refcnt = ap->an_refcnt);
 
 				VM_STAT_COND_ADD(ap->an_refcnt > 1,
@@ -1800,7 +1797,7 @@ anon_disclaim(struct anon_map *amp, ulong_t index, size_t size,
 			 * and attempt to free the page.
 			 */
 			(void) hat_pageunload(pp, HAT_FORCE_PGUNLOAD);
-			/*LINTED: constant in conditional context */
+
 			VN_DISPOSE(pp,
 			    behav == MADV_FREE ? B_FREE : B_INVAL, 0, kcred);
 
@@ -1827,7 +1824,7 @@ anon_disclaim(struct anon_map *amp, ulong_t index, size_t size,
 				}
 				mutex_exit(ahm);
 				(void) hat_pageunload(pp, HAT_FORCE_PGUNLOAD);
-				/*LINTED*/
+
 				VN_DISPOSE(pp, B_FREE, 0, kcred);
 				segadvstat.MADV_FREE_hit.value.ul++;
 				anon_array_exit(&cookie);

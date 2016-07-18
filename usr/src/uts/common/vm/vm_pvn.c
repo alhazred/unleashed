@@ -327,7 +327,6 @@ pvn_read_done(page_t *plist, int flags)
 		page_sub(&plist, pp);
 		page_io_unlock(pp);
 		if (flags & B_ERROR) {
-			/*LINTED: constant in conditional context*/
 			VN_DISPOSE(pp, B_INVAL, 0, kcred);
 		} else {
 			(void) page_release(pp, 0);
@@ -422,7 +421,6 @@ pvn_write_done(page_t *plist, int flags)
 			 */
 			if ((flags & (B_INVAL|B_FORCE)) == (B_INVAL|B_FORCE)) {
 				page_io_unlock(pp);
-				/*LINTED: constant in conditional context*/
 				VN_DISPOSE(pp, B_INVAL, 0, kcred);
 			} else {
 				hat_setmod_only(pp);
@@ -435,7 +433,6 @@ pvn_write_done(page_t *plist, int flags)
 			 * not handled appropriately.
 			 */
 			page_io_unlock(pp);
-			/*LINTED: constant in conditional context*/
 			VN_DISPOSE(pp, B_INVAL, 0, kcred);
 		} else if (flags & B_FREE ||!hat_page_is_mapped(pp)) {
 			/*
@@ -517,7 +514,7 @@ pvn_write_done(page_t *plist, int flags)
 							}
 						}
 					}
-					/*LINTED: constant in conditional ctx*/
+
 					VN_DISPOSE(pp, B_FREE,
 					    (flags & B_DONTNEED), kcred);
 					dfree++;
@@ -633,10 +630,8 @@ pvn_getdirty(page_t *pp, int flags)
 		 */
 		page_io_unlock(pp);
 		if (flags & B_INVAL) {
-			/*LINTED: constant in conditional context*/
 			VN_DISPOSE(pp, B_INVAL, 0, kcred);
 		} else if (flags & B_FREE) {
-			/*LINTED: constant in conditional context*/
 			VN_DISPOSE(pp, B_FREE, (flags & B_DONTNEED), kcred);
 		} else {
 			/*

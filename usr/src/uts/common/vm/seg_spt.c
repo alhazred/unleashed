@@ -724,7 +724,7 @@ segspt_free_pages(struct seg *seg, caddr_t addr, size_t len)
 			 */
 			if (pp->p_lckcnt > 0)
 				unlocked_bytes += PAGESIZE;
-			/*LINTED: constant in conditional context */
+
 			VN_DISPOSE(pp, B_INVAL, 0, kcred);
 		}
 	}
