@@ -804,8 +804,6 @@ usr/lib/amd64/llib-linstzones.ln	i386
 usr/lib/sparcv9/llib-linstzones.ln	sparc
 usr/lib/llib-lpkg
 usr/lib/llib-lpkg.ln
-usr/lib/llib-linetsvc
-usr/lib/llib-linetsvc.ln
 lib/llib-linetutil
 lib/llib-linetutil.ln
 lib/amd64/llib-linetutil.ln		i386
