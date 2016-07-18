@@ -979,8 +979,6 @@ lib/llib-lelf
 lib/llib-lelf.ln
 lib/llib-lfdisk
 lib/llib-lfdisk.ln
-lib/llib-lgrubmgmt
-lib/llib-lgrubmgmt.ln
 lib/llib-lintl
 lib/llib-lintl.ln
 lib/llib-lipmp
