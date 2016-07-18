@@ -6,5 +6,7 @@
 
 all: build
 
+clobber: clean
+
 build clean install test:
 	./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=$@
