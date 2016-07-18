@@ -31,4 +31,4 @@ include ../Makefile.com
 
 all: $(LIBS)
 
-install: all $(ROOTLIBS) $(ROOTLINKS) $(DYNLINKLIB) $(ROOTLINT)
+install: all $(ROOTLIBS) $(ROOTLINKS) $(DYNLINKLIB)

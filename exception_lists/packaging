@@ -926,7 +926,6 @@ usr/lib/amd64/llib-ldat.ln
 usr/lib/amd64/llib-lhal-storage.ln
 usr/lib/amd64/llib-lhal.ln
 usr/lib/amd64/llib-ll.ln
-usr/lib/amd64/llib-lmalloc.ln
 usr/lib/amd64/llib-lmapmalloc.ln
 usr/lib/amd64/llib-lmtmalloc.ln
 usr/lib/amd64/llib-lndmp.ln
@@ -992,8 +991,6 @@ usr/lib/llib-lhal-storage.ln
 usr/lib/llib-lhal.ln
 usr/lib/llib-ll
 usr/lib/llib-ll.ln
-usr/lib/llib-lmalloc
-usr/lib/llib-lmalloc.ln
 usr/lib/llib-lmapmalloc
 usr/lib/llib-lmapmalloc.ln
 usr/lib/llib-lmilter
