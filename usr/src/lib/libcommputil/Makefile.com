@@ -31,8 +31,7 @@ OBJECTS = commp_util.o sdp_parse_helper.o sdp.o sdp_parse.o
 include ../../Makefile.lib
 
 SRCDIR =	../common
-LIBS =		$(DYNLIB) $(LINTLIB)
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 
 CFLAGS +=	$(CCVERBOSE)
@@ -41,7 +40,5 @@ CPPFLAGS +=	-DNDEBUG
 .KEEP_STATE:
 
 all:		$(LIBS)
-
-lint:		lintcheck
 
 include ../../Makefile.targ
