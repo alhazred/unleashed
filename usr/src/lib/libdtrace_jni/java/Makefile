@@ -237,7 +237,7 @@ install:	all $(JARDESTDIR) $(INSJARS) $(DOCDESTDIR) \
 
 # empty targets for top-level building compatability
 
-install_h lint:
+install_h:
 
 # create API javadoc
 

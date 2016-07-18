@@ -53,8 +53,6 @@ CERRWARN += -_gcc=-Wno-uninitialized
 
 LDLIBS += -lc -luutil -ldtrace -lproc
 
-LINTLIB =
-
 LFLAGS = -t -v
 
 ROOTDLIBDIR = $(ROOT)/usr/lib/dtrace_jni
@@ -65,8 +63,6 @@ ROOTDLIBS = $(DLIBSRCS:%=$(ROOTDLIBDIR)/%)
 .KEEP_STATE:
 
 all: $(DYNLIB)
-
-lint: lintcheck
 
 %.o: ../common/%.c
 	$(COMPILE.c) -o $@ $<
