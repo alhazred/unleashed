@@ -34,18 +34,15 @@ include ../../Makefile.lib
 # install this library in the root filesystem
 include ../../Makefile.rootfs
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS +=	-lsocket -lnsl -lc -ldlpi
 
 SRCDIR =	../common
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 
 .KEEP_STATE:
 
 all:
-
-lint: lintcheck
 
 include ../../Makefile.targ

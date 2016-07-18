@@ -993,8 +993,6 @@ lib/amd64/llib-ltermcap.ln
 lib/amd64/llib-lthread.ln
 lib/amd64/llib-ltsnet.ln
 lib/amd64/llib-ltsol.ln
-lib/amd64/llib-luuid.ln
-lib/amd64/llib-luutil.ln
 lib/amd64/llib-lxnet.ln
 lib/amd64/llib-lzfs.ln
 lib/amd64/llib-lzfs_core.ln
@@ -1101,8 +1099,6 @@ lib/llib-ltsnet
 lib/llib-ltsnet.ln
 lib/llib-ltsol
 lib/llib-ltsol.ln
-lib/llib-luuid
-lib/llib-luuid.ln
 lib/llib-lxnet
 lib/llib-lxnet.ln
 lib/llib-lzfs
