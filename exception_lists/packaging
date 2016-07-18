@@ -826,10 +826,8 @@ usr/lib/llib-ldat
 usr/lib/llib-lhal
 usr/lib/llib-lhal-storage
 usr/lib/llib-lmilter
-usr/lib/llib-lmilter.ln
 usr/lib/llib-lpasswdutil
 usr/lib/llib-lpicld_pluginutil
-usr/lib/llib-lpicld_pluginutil.ln
 usr/lib/llib-lpkcs11
 usr/lib/llib-lpolkit
 usr/lib/scsi/llib-lscsi

@@ -35,7 +35,7 @@ SRCS=		$(OBJECTS:%.o=../%.c)
 
 CLOBBERFILES +=	$(LIBLINKS)
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 
 LINTFLAGS =	-uxmn -I.. -I$(SRC)/lib/libpicl -I$(SRC)/lib/libpicltree
 LINTFLAGS +=	-D_REENTRANT

@@ -69,7 +69,7 @@ BUILD.AR =	$(RM) $@ ; $(AR) $(ARFLAGS) $@ $(AROBJS)
 SRCDIR =	../common
 SRCS =		$(OBJECTS:%.o=../common/%.c)
 
-LIBS =		$(LIBRARY) $(LINTLIB)
+LIBS =		$(LIBRARY)
 
 $(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 

@@ -50,7 +50,7 @@ CPPFLAGS=	$(INCPATH) $(ENVDEF) $(CPPFLAGS.sm)
 
 CERRWARN +=	-_gcc=-Wno-type-limits
 
-LIBS=		$(DYNLIB) $(LINTLIB)
+LIBS=		$(DYNLIB)
 LDLIBS +=	-lc -lsocket -lnsl
 $(LINTLIB) :=	SRCS=	$(SRCDIR)/$(LINTSRC)
 

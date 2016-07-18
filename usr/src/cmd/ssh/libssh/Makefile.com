@@ -89,7 +89,7 @@ BUILD.AR =       $(RM) $@ ; $(AR) $(ARFLAGS) $@ $(AROBJS)
 SRCDIR =	../common
 SRCS =		$(OBJECTS:%.o=../common/%.c)
 
-LIBS =		$(LIBRARY) $(LINTLIB)
+LIBS =		$(LIBRARY)
 
 # Define LDLIBS conditionally for lintcheck, rather than in general, since
 # we're building an archive library which itself links to nothing, we just
