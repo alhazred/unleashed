@@ -53,9 +53,7 @@ GREP=		grep
 
 all:		$(LIBS)
 
-install:	all $(USR_PSM_LIBS) $(USR_PSMLINT)
-
-lint:		lintcheck
+install:	all $(USR_PSM_LIBS)
 
 include		$(SRC)/lib/Makefile.targ
 

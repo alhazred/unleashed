@@ -794,9 +794,6 @@ usr/lib/amd64/llib-like.ln		i386
 usr/lib/sparcv9/llib-like.ln		sparc
 lib/llib-lmeta
 lib/llib-lmeta.ln
-usr/platform/sun4u/lib/llib-lprtdiag				sparc
-usr/platform/sun4u/lib/llib-lprtdiag.ln				sparc
-usr/platform/sun4v/lib/llib-lprtdiag.ln				sparc
 usr/lib/llib-lshell
 usr/lib/llib-lshell.ln
 usr/lib/amd64/llib-lshell.ln		i386
