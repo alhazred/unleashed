@@ -29,6 +29,3 @@ include ../Makefile.com
 all: $(LIBS)
 
 install: all $(ROOTLIBS) $(ROOTLINKS)
-lint:
-lintinter:
-

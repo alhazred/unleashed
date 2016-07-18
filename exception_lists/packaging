@@ -839,7 +839,6 @@ usr/lib/sparcv9/llib-lsum.ln		sparc
 usr/lib/llib-lpri		sparc
 usr/lib/llib-lpri.ln		sparc
 usr/lib/sparcv9/llib-lpri.ln	sparc
-usr/lib/llib-ldscfg.ln
 lib/llib-lsqlite-sys
 lib/llib-lsqlite-sys.ln
 usr/lib/llib-lfakekernel

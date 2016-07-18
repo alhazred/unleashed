@@ -40,18 +40,7 @@ include ../../Makefile.lib
 SRCDIR=	../common
 SRCS=		$(OBJECTS:%.o=../common/%.c)
 
-LIBS +=		$(DYNLIB) $(LINTLIB)
-
-# definitions for lint
-
-LINTFLAGS +=	-u
-LINTFLAGS += -erroff=E_FUNC_RET_ALWAYS_IGNOR2
-LINTFLAGS += -erroff=E_FUNC_RET_MAYBE_IGNORED2
-LINTFLAGS += -erroff=E_FUNC_SET_NOT_USED
-LINTFLAGS += -erroff=E_SEC_SCANF_UNBOUNDED_COPY
-LINTFLAGS += -erroff=E_BAD_FORMAT_ARG_TYPE2
-LINTOUT=	lint.out
-LINTOUT_INTER=	lintinter.out
+LIBS +=		$(DYNLIB)
 
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-unused-function
@@ -59,16 +48,9 @@ CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-address
 
-ROOTLINTDIR=	$(ROOTLIBDIR)
-ROOTLINT=	$(LINTSRC:%=$(ROOTLINTDIR)/%)
-
-CLEANFILES += 	$(LINTOUT) $(LINTOUT_INTER) $(LINT_INTER)
-
 LDLIBS +=	-lnsctl -lunistat -ladm -lsocket -lnsl -lc
 
 .KEEP_STATE:
-
-lint: lintcheck
 
 # include library targets
 include ../../Makefile.targ
