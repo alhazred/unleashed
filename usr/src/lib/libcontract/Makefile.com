@@ -40,10 +40,9 @@ OBJECTS = \
 include ../../Makefile.lib
 include ../../Makefile.rootfs
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 SRCDIR = 	../common
 
-$(LINTLIB) :=	SRCS = $(SRCDIR)/llib-lcontract
 LDLIBS +=	-lnvpair -lc
 
 CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
@@ -52,7 +51,5 @@ CFLAGS +=	$(CCVERBOSE)
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: $(LINTLIB) lintcheck
 
 include ../../Makefile.targ
