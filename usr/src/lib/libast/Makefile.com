@@ -672,14 +672,12 @@ include ../../../Makefile.ast
 # and $(TRANSMACH) (generated)
 SRCS=		$(OBJECTS:%.o=../%.c)
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 
 LDLIBS += \
 	-lsocket \
 	-lm \
 	-lc
-
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 SRCDIR =	../common
 
@@ -760,13 +758,5 @@ pics/common/tm/tmxduration.o 		:= CERRWARN += -erroff=E_NO_IMPLICIT_DECL_ALLOWED
 .KEEP_STATE:
 
 all: mkpicdirs .WAIT $(LIBS)
-
-#
-# libast is not lint-clean yet; fake up a target.  (You can use
-# "make lintcheck" to actually run lint; please send all lint fixes
-# upstream (to AT&T) so the next update will pull them into ON.)
-#
-lint:
-	@ print "usr/src/lib/libast is not lint-clean: skipping"
 
 include ../../Makefile.targ
