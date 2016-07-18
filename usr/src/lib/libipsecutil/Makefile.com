@@ -28,14 +28,12 @@ OBJECTS =	ipsec_util.o algs.o ipsec_libssl_setup.o
 
 include ../../Makefile.lib
 
-LIBS +=		$(DYNLIB) $(LINTLIB)
+LIBS +=		$(DYNLIB)
 
 SRCDIR =	../common
 
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 LDLIBS +=	-ltecla -lsocket -lnsl -lc
 LAZYLIBS = $(ZLAZYLOAD) -ltsol $(ZNOLAZYLOAD)
-lint := LAZYLIBS = -ltsol
 LDLIBS += $(LAZYLIBS)
 
 CFLAGS +=	$(CCVERBOSE)
@@ -47,7 +45,5 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ

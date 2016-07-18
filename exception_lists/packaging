@@ -792,10 +792,6 @@ usr/lib/llib-like
 usr/lib/llib-like.ln
 usr/lib/amd64/llib-like.ln		i386
 usr/lib/sparcv9/llib-like.ln		sparc
-usr/lib/llib-lipsecutil
-usr/lib/llib-lipsecutil.ln
-usr/lib/amd64/llib-lipsecutil.ln	i386
-usr/lib/sparcv9/llib-lipsecutil.ln	sparc
 usr/lib/llib-lpkg
 usr/lib/llib-lpkg.ln
 lib/llib-lmeta
