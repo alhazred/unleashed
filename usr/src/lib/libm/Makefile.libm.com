@@ -63,8 +63,6 @@ CFLAGS64	+= -_gcc=-fno-strict-overflow
 
 $(DYNLIB) 	:= LDLIBS += -lc
 
-$(LINTLIB) 	:= SRCS = $(LIBMSRC)/$(LINTSRC)
-
 CLEANFILES 	+= pics/*.s pics/*.S
 
 FPDEF_amd64	= -DARCH_amd64
