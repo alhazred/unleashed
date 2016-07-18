@@ -782,8 +782,6 @@ usr/bin/test-getdc
 # Lint garbage - to be removed when we stop building lint libs
 #
 # Pre-existing entries:
-lib/llib-lelfsign
-lib/llib-lelfsign.ln
 lib/llib-lkcfd
 lib/llib-lkcfd.ln
 usr/lib/llib-lsoftcrypto
