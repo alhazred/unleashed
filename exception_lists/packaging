@@ -794,10 +794,6 @@ usr/lib/amd64/llib-like.ln		i386
 usr/lib/sparcv9/llib-like.ln		sparc
 lib/llib-lmeta
 lib/llib-lmeta.ln
-usr/lib/llib-lsum
-usr/lib/llib-lsum.ln
-usr/lib/amd64/llib-lsum.ln		i386
-usr/lib/sparcv9/llib-lsum.ln		sparc
 usr/lib/reparse/llib-lreparse_smb
 usr/lib/reparse/llib-lreparse_smb.ln
 usr/lib/smbsrv/llib-lfksmbsrv
