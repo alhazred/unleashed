@@ -56,7 +56,6 @@ OBJECTS=	$(OBJECTS.c) $(OBJECTS.s)
 
 include ../../Makefile.lib
 
-# We omit $(OBJECTS.s:%.o=%.s) in the next line, because lint no like
 SRCS= $(OBJECTS.c:%.o=../%.c)
 
 LIBS=		$(DYNLIB)
@@ -74,8 +73,6 @@ LDLIBS +=	-lc -lelf
 # COPTFLAG =	-g -DDEBUG $(CCVERBOSE)
 CPPFLAGS +=	-I$(SRC)/lib/libtnfprobe -D_REENTRANT -I$(SRC)/cmd/sgs/include
 
-LINTFLAGS +=	-y
-
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-empty-body
 CERRWARN +=	-_gcc=-Wno-parentheses
@@ -89,9 +86,6 @@ $(ROOTHDRS) :=	FILEMODE = 644
 all: $(LIBS)
 
 install_h: $(ROOTHDRDIR) $(ROOTHDRS)
-
-lint:
-	$(LINT.c) $(SRCS)
 
 check: $(CHECKHDRS)
 
