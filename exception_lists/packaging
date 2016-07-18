@@ -836,7 +836,6 @@ usr/lib/llib-lstmfproxy
 usr/lib/llib-lstmfproxy.ln
 usr/lib/amd64/llib-lstmfproxy.ln	i386
 usr/lib/sparcv9/llib-lstmfproxy.ln	sparc
-usr/lib/amd64/llib-lsaveargs.ln   	i386
 # files created during the build
 lib/amd64/llib-lMPAPI.ln
 lib/amd64/llib-ldl.ln

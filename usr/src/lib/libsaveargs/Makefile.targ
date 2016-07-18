@@ -46,11 +46,6 @@ install.standalone.targ: all.standalone $(INSTALL_DEPS_standalone)
 all.library.targ: $(LIBS)
 all.standalone.targ: $(STANDLIBRARY)
 
-lint: $(TYPES:%=lint.%)
-
-$(TYPES:%=lint.%):
-	@CURTYPE=$(@:lint.%=%) $(MAKE) lintcheck
-
 $(STANDLIBRARY): $(OBJS) $(LINKTEST_OBJ)
 	$(LD) $(BREDUCE) $(ZDEFS) $(LDFLAGS) -o $@.linktest $(OBJS) $(LINKTEST_OBJ)
 	rm $@.linktest
@@ -73,8 +68,3 @@ $(OBJS): objs
 objs/%.o pics/%.o: $(COMDIR)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
-
-# install rule for lint library target
-$(ROOTLINTDIR)/%: $(COMDIR)/%
-	$(INS.file)
-

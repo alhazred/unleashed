@@ -33,7 +33,6 @@ clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 delete :=	TARGET= delete
 install :=	TARGET= install
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 package :=	TARGET= package
 
@@ -53,7 +52,7 @@ $(ROOTHDRDIR)/%: common/%
 
 .KEEP_STATE:
 
-all clean clobber delete install lint package: $(SUBDIRS)
+all clean clobber delete install package: $(SUBDIRS)
 
 install_h: $(ROOTHDRS)
 
