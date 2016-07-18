@@ -31,7 +31,6 @@ MANFILES=	biff.1b		\
 		groups.1b	\
 		grpck.1b	\
 		ln.1b		\
-		logger.1b	\
 		lpc.1b		\
 		lpq.1b		\
 		lpr.1b		\
