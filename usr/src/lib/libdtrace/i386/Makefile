@@ -35,8 +35,6 @@ include ../Makefile.com
 SRCS += $(SRC)/common/dis/i386/dis_tables.c
 CPPFLAGS += -I$(SRC)/common/dis/i386
 
-LINTFLAGS += -erroff=E_BAD_PTR_CAST_ALIGN
-
 CLEANFILES += regs.sed regs.d
 
 %.sed: %.sed.in
@@ -50,5 +48,4 @@ pics/%.o: $(SRC)/common/dis/i386/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
-install yydebug: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT) \
-	$(ROOTDLIBS) $(ROOTDOBJS)
+install yydebug: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTDLIBS) $(ROOTDOBJS)

@@ -27,7 +27,4 @@ ASFLAGS += -D_ASM -K PIC -P
 
 include ../Makefile.com
 
-LINTFLAGS += -erroff=E_BAD_PTR_CAST_ALIGN
-
-install yydebug: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT) \
-	$(ROOTDLIBS) $(ROOTDOBJS)
+install yydebug: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTDLIBS) $(ROOTDOBJS)
