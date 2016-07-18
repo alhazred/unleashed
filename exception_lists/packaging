@@ -1032,7 +1032,6 @@ usr/lib/amd64/llib-lpicl.ln
 usr/lib/amd64/llib-lpkcs11.ln
 usr/lib/amd64/llib-lpool.ln
 usr/lib/amd64/llib-lproject.ln
-usr/lib/amd64/llib-lreparse.ln
 usr/lib/amd64/llib-lsasl.ln
 usr/lib/amd64/llib-lsched.ln
 usr/lib/amd64/llib-lsctp.ln
@@ -1145,8 +1144,6 @@ usr/lib/llib-lpool
 usr/lib/llib-lpool.ln
 usr/lib/llib-lproject
 usr/lib/llib-lproject.ln
-usr/lib/llib-lreparse
-usr/lib/llib-lreparse.ln
 usr/lib/llib-lsasl
 usr/lib/llib-lsasl.ln
 usr/lib/llib-lsched

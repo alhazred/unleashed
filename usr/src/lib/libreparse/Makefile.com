@@ -36,19 +36,15 @@ include ../../Makefile.lib
 SRCDIR =	../common
 SRCS =		$(LOCOBJS:%.o=$(SRCDIR)/%.c) $(COMOBJS:%.o=$(COMDIR)/%.c)
 
-LIBS =		$(DYNLIB) $(LINTLIB)
+LIBS =		$(DYNLIB)
 LDLIBS += 	-lc -lnvpair
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(COMDIR) -D_FILE_OFFSET_BITS=64
 
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
-
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ
 
