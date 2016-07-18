@@ -857,10 +857,6 @@ usr/lib/llib-lzfs_jni
 usr/lib/llib-lzfs_jni.ln
 usr/lib/amd64/llib-lzfs_jni.ln		i386
 usr/lib/sparcv9/llib-lzfs_jni.ln	sparc
-usr/lib/llib-lzpool
-usr/lib/llib-lzpool.ln			i386
-usr/lib/amd64/llib-lzpool.ln		i386
-usr/lib/sparcv9/llib-lzpool.ln		sparc
 usr/lib/llib-last
 usr/lib/llib-last.ln
 usr/lib/amd64/llib-last.ln		i386

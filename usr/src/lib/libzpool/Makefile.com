@@ -46,8 +46,6 @@ SRCDIR=		../common
 # There should be a mapfile here
 MAPFILES =
 
-LIBS +=		$(LINTLIB)
-
 INCS += -I../common
 INCS += -I../../../uts/common/fs/zfs
 INCS += -I../../../common/zfs
@@ -56,11 +54,7 @@ INCS += -I../../../common
 CLEANFILES += ../common/zfs.h
 CLEANFILES += $(EXTPICS)
 
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
-$(LINTLIB): ../common/zfs.h
-
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 
 CFLAGS +=	-g $(CCVERBOSE) $(CNOGLOBAL)
 CFLAGS64 +=	-g $(CCVERBOSE)	$(CNOGLOBAL)
@@ -78,8 +72,6 @@ CERRWARN +=	-_gcc=-Wno-unused-label
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: $(LINTLIB)
 
 include ../../Makefile.targ
 
