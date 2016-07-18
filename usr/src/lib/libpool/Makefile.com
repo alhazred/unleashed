@@ -37,15 +37,10 @@ OBJECTS = \
 
 include ../../Makefile.lib
 
-# Adding -lxml2 to LDLIBS would cause lint to complain as there is no .ln file
-# for libxml2, so add it to DYNFLAGS
-DYNFLAGS +=	-lxml2
-
-LIBS =		$(DYNLIB) $(LINTLIB)
-LDLIBS +=	-lscf -lnvpair -lexacct -lc
+LIBS =		$(DYNLIB)
+LDLIBS +=	-lscf -lnvpair -lexacct -lc -lxml2
 
 SRCDIR =	../common
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -D_FILE_OFFSET_BITS=64 \
@@ -58,7 +53,5 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ

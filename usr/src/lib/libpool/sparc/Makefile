@@ -30,9 +30,4 @@
 
 include ../Makefile.com
 
-#
-# Turn off bad ptr-cast lint warnings, since we do them all the time
-#
-LINTFLAGS += -erroff=E_BAD_PTR_CAST_ALIGN
-
-install: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
+install: all $(ROOTLIBS) $(ROOTLINKS)
