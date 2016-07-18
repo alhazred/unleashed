@@ -37,15 +37,6 @@ LIBS =		$(DYNLIB)
 
 MAPFILES =
 
-LINTFLAGS =	-uxn
-LINTFLAGS64 =	$(LINTFLAGS) -m64
-LINTOUT=	lint.out
-LINTSRC =       $(LINTLIB:%.ln=%)
-ROOTLINTDIR =   $(ROOTLIBDIR)
-ROOTLINT =      $(LINTSRC:%=$(ROOTLINTDIR)/%)
-
-CLEANFILES=	$(LINTOUT)
-
 CPPFLAGS +=	-I.. \
 		-I$(SRC)/lib/libfru/include \
 		-I$(SRC)/lib/libfruutils
@@ -54,9 +45,6 @@ CFLAGS +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-$(LINTLIB) :=	LINTFLAGS = -nvx -I..
-$(LINTLIB) :=	LINTFLAGS64 = -nvx -m64 -I..
-
 XGETFLAGS += -a
 POFILE=	picl.po
 
@@ -64,8 +52,6 @@ POFILE=	picl.po
 
 all : $(LIBS)
 	chmod 755 $(DYNLIB)
-
-lint :	lintcheck
 
 %.po:	../%.c
 	$(CP) $< $<.i
@@ -81,6 +67,3 @@ include $(SRC)/lib/Makefile.targ
 pics/%.o:	../%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
-
-$(ROOTLINTDIR)/%: ../%
-	$(INS.file)
