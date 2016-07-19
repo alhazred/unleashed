@@ -9,8 +9,10 @@ include $(SRC)/Makefile.master
 all: build
 
 clobber: clean
+clean:
+	$(RM) -r obj
 
 CC= $(GCC_ROOT)/bin/gcc
 
-build clean install test:
+build install test:
 	CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=$@
