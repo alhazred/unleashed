@@ -16,11 +16,7 @@
 set name=pkg.fmri value=pkg:/developer/build/bmake@$(PKGVERS)
 set name=pkg.description value="NetBSD make(1)"
 set name=pkg.summary value="NetBSD make(1)"
-dir path=usr group=bin mode=0755 owner=root
-dir path=usr/bin group=bin mode=0755 owner=root
-dir path=usr/share group=sys mode=0755 owner=root
-dir path=usr/share/man group=bin mode=0755 owner=root
-dir path=usr/share/man/man1 group=bin mode=0755 owner=root
+dir path=usr/share/man/man1
 dir path=usr/share/mk group=bin mode=0755 owner=root
 dir path=usr/share/mk/sys group=bin mode=0755 owner=root
 file usr/bin/bmake path=usr/bin/bmake group=bin mode=0555 owner=root

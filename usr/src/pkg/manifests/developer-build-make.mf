@@ -35,3 +35,4 @@ link path=usr/share/man/man1/dmake.1 target=make.1
 link path=usr/share/man/man1s/dmake.1s target=../man1/make.1
 link path=usr/share/man/man1s/make.1s target=../man1/make.1
 link path=usr/xpg4/bin/make target=../../bin/make
+depend fmri=pkg:/developer/build/bmake type=require
