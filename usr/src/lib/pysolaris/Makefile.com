@@ -53,9 +53,7 @@ all: $(PYOBJS) $(LIBS)
 
 install: all $(ROOTPYSOLFILES)
 
-$(ROOTLIBDIR)/%: %
+$(ROOTLIBDIR)/%: $(SRCDIR)/%
 	$(INS.pyfile)
-
-lint: lintcheck
 
 include ../../Makefile.targ

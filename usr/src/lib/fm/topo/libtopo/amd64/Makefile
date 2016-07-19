@@ -30,4 +30,4 @@ include ../../../../Makefile.lib.64
 
 LDLIBS += -lzfs
 
-install: all $(ROOTLIBS64) $(ROOTLINKS64) $(ROOTLINT64)
+install: all $(ROOTLIBS64) $(ROOTLINKS64)

@@ -58,8 +58,6 @@ include		../../Makefile.com
 include ../../../Makefile.rootfs
 
 CPPFLAGS +=	-I../../../common/inc
-LINTFLAGS +=	-erroff=E_GLOBAL_COULD_BE_STATIC2
-LINTFLAGS64 +=	-erroff=E_GLOBAL_COULD_BE_STATIC2 
 
 LDLIBS +=	-lsocket -lnsl
 DYNLIB1 =	nss_files.so$(VERS)

@@ -81,7 +81,6 @@ $(ROOTLIBDIR):
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 # include library targets
 include $(SRC)/lib/krb5/Makefile.targ

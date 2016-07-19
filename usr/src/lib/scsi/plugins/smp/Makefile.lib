@@ -60,11 +60,7 @@ ROOTPROG64 = $(ROOTPLUGINDIR64)/$(PROG)
 ROOTALIASES = $(ALIASES:%=$(ROOTPLUGINDIR)/%.so)
 ROOTALIASES64 = $(ALIASES:%=$(ROOTPLUGINDIR64)/%.so)
 
-LINTFLAGS += -mu
-LINTFILES = $(SRCS:%.c=%.ln)
 
-DMODLINTTGT = $(DMOD:%=lint_dmod)
-DMODLINTFILES = $(DMOD_SRCS:%.c=%.ln)
 
 APIMAP = ../../../../libsmp/libsmp_api.map
 

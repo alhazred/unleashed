@@ -44,20 +44,11 @@ CERRWARN += -_gcc=-Wno-switch
 CERRWARN += -_gcc=-Wno-uninitialized
 LDLIBS += -lnvpair -lc
 
-LINTFLAGS = -msux
-LINTFLAGS64 = -msux -m64
-
 CLOBBERFILES += fmd_msg_test fmd_msg_test.core fmd_msg_test.out
-
-$(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
-$(LINTLIB) := LINTFLAGS = -nsvx
-$(LINTLIB) := LINTFLAGS64 = -nsvx -m64
 
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: $(LINTLIB) lintcheck
 
 include ../../../Makefile.targ
 include ../../Makefile.targ
@@ -93,6 +84,5 @@ test: install fmd_msg_test
 	@echo
 
 fmd_msg_test: $(SRCDIR)/fmd_msg_test.c
-	$(LINT.c) $(SRCDIR)/fmd_msg_test.c
 	$(LINK.c) -o fmd_msg_test $(SRCDIR)/fmd_msg_test.c \
 	    $(LDLIBS_$(TARGETMACH)) -lfmd_msg -lnvpair -lumem

@@ -59,12 +59,8 @@ CERRWARN +=	-_gcc=-Wno-address
 
 CLOBBERFILES += $(LIBRARY)
 
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
-
 .KEEP_STATE:
 
 all: $(LIBS) $(LIBRARY)
-
-lint: lintcheck
 
 include ../../Makefile.targ

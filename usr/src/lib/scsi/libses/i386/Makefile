@@ -31,6 +31,6 @@ include ../Makefile.defs
 
 DYNFLAGS += $(DYNFLAGS32)
 
-install: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
+install: all $(ROOTLIBS) $(ROOTLINKS)
 
 include ../Makefile.targ

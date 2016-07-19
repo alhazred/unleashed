@@ -39,4 +39,3 @@ pics/%.o:	$(SRC)/common/smbsrv/%.c
 
 all: $(LIBS)
 
-lint: lintcheck

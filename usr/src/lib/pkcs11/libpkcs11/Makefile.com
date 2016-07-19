@@ -67,13 +67,11 @@ SRCDIR=		../common
 INCDIR=		../../include
 
 LIBS =		$(DYNLIB)
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 LDLIBS +=	-lcryptoutil -lc
 
 CFLAGS	+=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(INCDIR) -I$(SRCDIR) -D_REENTRANT
 
-LINTFLAGS64 += -errchk=longptr64
 
 CERRWARN +=	-_gcc=-Wno-unused-label
 CERRWARN +=	-_gcc=-Wno-uninitialized
@@ -82,6 +80,5 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 
 all:	$(LIBS)
 
-lint: lintcheck
 
 include $(SRC)/lib/Makefile.targ

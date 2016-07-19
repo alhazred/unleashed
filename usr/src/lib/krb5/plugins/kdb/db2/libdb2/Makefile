@@ -35,7 +35,6 @@ all :=		TARGET= all
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 README=		README.db2
@@ -44,7 +43,7 @@ $(ROOTLIBDIR)/$(README) :=	FILEMODE= 444
 
 .KEEP_STATE:
 
-all clean clobber lint _msg: $(SUBDIRS)
+all clean clobber _msg: $(SUBDIRS)
 
 $(ROOTLIBDIR):
 	$(INS.dir)

@@ -29,4 +29,4 @@ include ../Makefile.com
 
 LDLIBS += -lzfs
 
-install: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
+install: all $(ROOTLIBS) $(ROOTLINKS)

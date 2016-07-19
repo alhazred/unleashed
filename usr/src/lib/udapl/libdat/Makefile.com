@@ -47,9 +47,6 @@ SRCDIR =	../common
 
 CPPFLAGS +=     -I../include 
 CFLAGS +=	$(CCVERBOSE)
-LINTFLAGS +=	-DDEBUG
-LINTFLAGS64 +=	-DDEBUG
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CERRWARN +=	-_gcc=-Wno-type-limits
 
@@ -63,6 +60,5 @@ all: $(LIBS)
 
 debug: all
 
-lint: lintcheck
 
 include ../../../Makefile.targ

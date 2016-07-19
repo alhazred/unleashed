@@ -31,6 +31,6 @@ include ../../../Makefile.lib.64
 include ../Makefile.defs
 include ../Makefile.defs.64
 
-install: all $(ROOTLIBS64) $(ROOTLINKS64) $(ROOTLINT64)
+install: all $(ROOTLIBS64) $(ROOTLINKS64)
 
 include ../Makefile.targ

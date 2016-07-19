@@ -39,4 +39,3 @@ debug	:=	DYNFLAGS += -g
 cstyle:
 	cstyle -pP $(SRCS)
 
-lint:	lintcheck

@@ -65,7 +65,6 @@ ASFLAGS =	-P $(ASFLAGS_$(CURTYPE)) -D_ASM -I. -I../sys
 #
 all: pics .WAIT $$(PICS)
 
-lint: lintcheck
 
 $(OBJECTS:%=pics/%): $(OFFSETS_H)
 

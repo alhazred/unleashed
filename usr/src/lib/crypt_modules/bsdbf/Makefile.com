@@ -40,6 +40,5 @@ CPPFLAGS	+= -I..
 
 all: $(LIBS)
 
-lint: lintcheck
 
 include $(SRC)/lib/Makefile.targ

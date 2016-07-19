@@ -32,4 +32,4 @@ LDLIBS += -L$(ROOTLIBDIR)
 
 LDLIBS += -lzfs
 
-install: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
+install: all $(ROOTLIBS) $(ROOTLINKS)

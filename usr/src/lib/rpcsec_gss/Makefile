@@ -47,7 +47,6 @@ all :=		TARGET= all
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
-lint :=		TARGET= lint
 _msg :=         TARGET= _msg
 
 LIBRARY= 	rpcsec.a
@@ -60,7 +59,6 @@ POFILES=	generic.po
 
 all: .WAIT $(SUBDIRS)
 
-lint:   .WAIT $(SUBDIRS)
 
 install: all .WAIT $(SUBDIRS)
 

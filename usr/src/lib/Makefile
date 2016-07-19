@@ -514,7 +514,6 @@ clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
 install_h :=	TARGET= install_h
-lint :=		TARGET= lint
 _dc :=		TARGET= _dc
 _msg :=		TARGET= _msg
 
@@ -523,13 +522,13 @@ _msg :=		TARGET= _msg
 #
 # For the all and install targets, we clearly must respect library
 # dependencies so that the libraries link correctly.  However, for
-# the remaining targets (check, clean, clobber, install_h, lint, _dc
-# and _msg), libraries do not have any dependencies on one another
-# and thus respecting dependencies just slows down the build.
-# As such, for these rules, we use pattern replacement to explicitly
-# avoid triggering the dependency information.  Note that for clean,
-# clobber and lint, we must use $(NOWAIT_SUBDIRS) rather than
-# $(SUBDIRS), to prevent `.WAIT' from expanding to `.WAIT-nodepend'.
+# the remaining targets (check, clean, clobber, install_h, _dc, and
+# _msg), libraries do not have any dependencies on one another and
+# thus respecting dependencies just slows down the build.  As such,
+# for these rules, we use pattern replacement to explicitly avoid
+# triggering the dependency information.  Note that for clean and
+# clobber, we must use $(NOWAIT_SUBDIRS) rather than $(SUBDIRS),
+# to prevent `.WAIT' from expanding to `.WAIT-nodepend'.
 #
 
 all:			$(SUBDIRS)
@@ -541,7 +540,7 @@ install_extra:
 	@cd ../cmd/sgs; pwd; $(MAKE) install_lib
 	@pwd
 
-clean clobber lint:	$(NOWAIT_SUBDIRS:%=%-nodepend)
+clean clobber:	$(NOWAIT_SUBDIRS:%=%-nodepend)
 
 install_h check:	$(HDRSUBDIRS:%=%-nodepend)
 

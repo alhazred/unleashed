@@ -75,16 +75,8 @@ SRCS=	$(CSRCS)
 ROOTLIBDIR = $(ROOT)/usr/lib/gss
 ROOTLIBDIR64 = $(ROOT)/usr/lib/$(MACH64)/gss
 
-#LINTFLAGS += -dirout=lint -errfmt=simple
-#LINTFLAGS64 += -dirout=lint -errfmt=simple -errchk all
-LINTOUT =	lint.out
-LINTSRC =	$(LINTLIB:%.ln=%)
-ROOTLINTDIR =	$(ROOTLIBDIR)
-#ROOTLINT = 	$(LINTSRC:%=$(ROOTLINTDIR)/%)
 
-CLEANFILES += $(LINTOUT) $(LINTLIB)
 
-lint: lintcheck
 
 $(ROOTLIBDIR):
 	$(INS.dir)

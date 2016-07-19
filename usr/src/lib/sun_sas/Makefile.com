@@ -91,12 +91,8 @@ LDLIBS		+= -lc
 LDLIBS		+= -lkstat
 LDLIBS		+= -ldevid
 
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
-
 .KEEP_STATE:
 
 all: $(LIBS)
-
-lint: lintcheck
 
 include ../../Makefile.targ

@@ -58,6 +58,5 @@ install: all $(ROOTPYBEFILES)
 $(ROOTLIBDIR)/%: %
 	$(INS.pyfile)
 
-lint: lintcheck
 
 include ../../Makefile.targ

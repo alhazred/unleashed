@@ -52,7 +52,6 @@ CERRWARN +=	-_gcc=-Wno-type-limits
 
 all: $(LIBS)
 
-lint: lintcheck
 
 # include library targets
 include ../../../Makefile.targ

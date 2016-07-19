@@ -63,7 +63,6 @@ ERRSRC=		$(ROOT)/usr/platform/$(PLATFORM)/include/sys/sbd_ioctl.h
 
 all: $(LIBS)
 
-lint:   lintcheck
 
 # Create target directories
 $(USR_PSM_DIR):

@@ -30,4 +30,4 @@
 
 include	../Makefile.com
 
-install:	all $(ROOTLIBS) $(ROOTLINT)
+install:	all $(ROOTLIBS)

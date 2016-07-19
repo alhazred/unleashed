@@ -82,20 +82,12 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-unused-label
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-LINTSRC= $(OBJECTS:%.o=$(SRCDIR)/%.c)
-
-$(LINTLIB):=	SRCS	=	$(SRCDIR)/$(LINTSRC)
-LINTSRC= $(SRCS)
-
 CLOBBERFILES += C.ln
 
 .KEEP_STATE:
 
 all: $(LIBS)
  
-lint: $$(LINTSRC)
-	$(LINT.c) $(LINTCHECKFLAGS) $(LINTSRC) $(LDLIBS)
-
 pics/%.o: $(SRCDIR)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)

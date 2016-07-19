@@ -33,7 +33,3 @@ $(POFILE): $(DERIVED_FILES) .WAIT $(POFILES)
 
 $(MSGDOMAIN):
 	$(INS.dir)
-
-# install rule for lint library target
-$(ROOTLINTDIR)/%: ./%
-	$(INS.file)

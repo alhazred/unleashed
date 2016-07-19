@@ -28,7 +28,6 @@
 include ../Makefile.com
 CFLAGS += -I../../common -I$(SRC)/uts/sun4u/opl
 
-LINTFLAGS += -I../../common -I$(SRC)/uts/sun4u/opl
 
 .KEEP_STATE:
 

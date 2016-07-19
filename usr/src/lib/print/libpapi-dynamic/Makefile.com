@@ -36,7 +36,6 @@ ROOTLIBDIR=	$(ROOT)/usr/lib
 
 LIBS =			$(DYNLIB)
 
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 MAPFILES =	$(SRCDIR)/mapfile
 
@@ -52,6 +51,5 @@ CERRWARN +=	-_gcc=-Wno-unused-variable
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 include ../../../Makefile.targ

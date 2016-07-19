@@ -38,6 +38,5 @@ LDLIBS +=       -lc -lpam -ltsol -ltsnet
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 include	$(SRC)/lib/Makefile.targ

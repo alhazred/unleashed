@@ -49,7 +49,6 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 
 CPPFLAGS +=	-I$(CRYPTODIR) -I$(UTSDIR) -D_POSIX_PTHREAD_SEMANTICS
 LDLIBS +=	-lcryptoutil -lc
-LINTFLAGS64 +=	$(EXTRA_LINT_FLAGS)
 
 # Symbol capabilities objects are added for sun4u and sun4v.
 EXTPICS =	../capabilities/sun4u/sparcv9/pics/symcap.o \
@@ -59,8 +58,7 @@ EXTPICS =	../capabilities/sun4u/sparcv9/pics/symcap.o \
 
 all:		$(LIBS)
 
-lint:		$(SRCS)
 
-install:	all $(ROOTLIBS64) $(ROOTLINKS64) $(ROOTLINT64)
+install:	all $(ROOTLIBS64) $(ROOTLINKS64)
 
 include		../Makefile.targ

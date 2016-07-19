@@ -46,9 +46,6 @@ CERRWARN += -_gcc=-Wno-unused-label
 
 all: $(LIBS)
 
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
-
 # include library targets
 include ../../Makefile.targ
 

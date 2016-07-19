@@ -48,19 +48,13 @@ $(DYNLIB) := LDLIBS += $(MACH_LDLIBS)
 $(DYNLIB) := LDLIBS += -lfmd_agent -lnvpair -lscf -lmdesc -lc -lxml2 -lsocket \
 	-lumem
 
-LINTFLAGS = -msux
-LINTFLAGS64 = -msux -m64
 
-$(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
-$(LINTLIB) := LINTFLAGS = -nsvx -I$(ROOT)/usr/platform/sun4v/include
-$(LINTLIB) := LINTFLAGS64 = -nsvx -m64 \
 	-I$(ROOT)/usr/platform/sun4v/include
 
 .KEEP_STATE:
 
 all: $(LIBS)
 
-lint: $(LINTLIB) lintcheck
 
 pics/%.o: ../$(MACH)/%.c
 	$(COMPILE.c) -o $@ $<

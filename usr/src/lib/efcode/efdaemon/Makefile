@@ -72,7 +72,6 @@ $(MFSTDIR_SUN4V)/%: %
 install: all .WAIT $(EFTARGETS)
 	-$(MV) $(MFSTDIR_SUN4V)/$(MANIFEST_SUN4V) $(MFSTDIR_SUN4V)/$(MANIFEST)
 
-lint:	lint_PROG
 
 .KEEP_STATE:
 

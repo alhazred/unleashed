@@ -44,18 +44,12 @@ CFLAGS64 += $(CCVERBOSE) $(C_BIGPICFLAGS)
 CERRWARN += -_gcc=-Wno-unused-variable
 LDLIBS += -lnvpair -lnsl -lc
 
-LINTFLAGS = -msux
-LINTFLAGS64 = -msux -m64
 
-$(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
-$(LINTLIB) := LINTFLAGS = -nsvx
-$(LINTLIB) := LINTFLAGS64 = -nsvx -m64
 
 .KEEP_STATE:
 
 all: $(LIBS)
 
-lint: $(LINTLIB) lintcheck
 
 fmd_rpc_adm.x: $(SRC)/cmd/fm/fmd/common/fmd_rpc_adm.x
 	$(RM) $@; $(CP) $? $@

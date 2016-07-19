@@ -38,6 +38,5 @@ LDLIBS +=	-lpam -lsocket -lc
 
 all: $(LIBS)
 
-lint: lintcheck
 
 include $(SRC)/lib/Makefile.targ

@@ -47,9 +47,6 @@ objs/%.o pics/%.o: ../common/%.c
 		$(COMPILE.c) -o $@ $<
 		$(POST_PROCESS_O)
 
-lint:
-		$(LINT.c) $(SRCS) $(LDLIBS) > $(LINTOUT) 2>&1
-
 # Leaf target makefiles establish exactly what they will install.  Use of
 # ROOTLIBS will install both the default archive library and DYNLIB1,
 # use of ROOT64DYNLIB creates DYNLIB1 only.

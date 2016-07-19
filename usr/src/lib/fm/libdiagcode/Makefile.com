@@ -40,9 +40,6 @@ SRCDIR =	../common
 
 CFLAGS +=	$(CCVERBOSE)
 
-$(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
-$(LINTLIB) := LINTFLAGS = -nsvx
-$(LINTLIB) := LINTFLAGS64 = -nsvx -m64
 
 .KEEP_STATE:
 
@@ -50,7 +47,6 @@ all:
 
 install:
 
-lint: lintcheck
 
 test: $(TSTOBJECTS) $(PICS)
 	$(LINK.c) -o $@ $(TSTOBJECTS) $(PICS) $(LDLIBS)

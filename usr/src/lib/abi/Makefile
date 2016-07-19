@@ -33,14 +33,13 @@ all := 		TARGET = all
 clean :=	TARGET = clean
 clobber :=	TARGET = clobber
 install	:=	TARGET = install
-lint :=		TARGET = lint
 _msg :=		TARGET = _msg
 
 .PARALLEL:
 
 .KEEP_STATE:
 
-all clean clobber install lint _msg: $(SUBDIRS)
+all clean clobber install _msg: $(SUBDIRS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

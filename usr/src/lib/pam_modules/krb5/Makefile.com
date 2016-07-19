@@ -28,7 +28,6 @@
 LIBRARY=	pam_krb5.a
 VERS=		.1
 
-
 PRIV_OBJ=	krb5_authenticate.o \
 		krb5_setcred.o \
 		krb5_acct_mgmt.o \
@@ -55,15 +54,8 @@ CERRWARN +=	-_gcc=-Wno-unused-function
 # called after dlclose()
 DYNFLAGS +=	$(ZNODELETE)
 
-CLOBBERFILES += $(LINTLIB) $(LINTOUT) $(POFILE)
-
-#
-# Don't lint derived files
-#
-lint    :=      SRCS= $(PRIV_OBJ:%.o=$(SRCDIR)/%.c)
+CLOBBERFILES += $(POFILE)
 
 all:	$(LIBS)
-
-lint:	lintcheck
 
 include	$(SRC)/lib/Makefile.targ

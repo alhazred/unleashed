@@ -61,7 +61,6 @@ DESDIR=		$(SRC)/common/crypto/des
 ECCDIR=		$(SRC)/common/crypto/ecc
 ST_DIR=		$(SRC)/lib/pkcs11/pkcs11_softtoken/common
 
-lint \
 pics/kernelAttributeUtil.o := \
 	CPPFLAGS += -I$(AESDIR) -I$(BLOWFISHDIR) -I$(ARCFOURDIR) -I$(DESDIR) \
 	-I$(ECCDIR)
@@ -93,16 +92,6 @@ ROOTLIBDIR64=   $(ROOT)/usr/lib/security/$(MACH64)
 .KEEP_STATE:
 
 all:    $(LIBS)
-
-# we don't need to lint ST_OBJECTS since they are linted elsewhere.
-lintcheck := SRCS = $(CORESRCS)
-lintother := OSRCS = ../common/kernelSoftCommon.c
-lintother := CPPFLAGS = -I$(ST_DIR) $(CPPFLAGS.master)
-
-lintother: $$(OSRCS)
-	$(LINT.c) $(LINTCHECKFLAGS) $(OSRCS) $(LDLIBS)
-
-lint: lintcheck lintother
 
 pics/%.o:	$(ST_DIR)/%.c
 	$(COMPILE.c) -o $@ $< -I$(ST_DIR)

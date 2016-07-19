@@ -36,7 +36,6 @@ CLOBBERFILES =	$(ROOTPROGS)
 
 all: $(PROGS)
 
-lint:
 
 install: all $(ROOTPROGS)
 

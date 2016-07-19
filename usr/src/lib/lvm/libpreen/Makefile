@@ -31,10 +31,9 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 debug :=	TARGET= debug
 
-all clean clobber debug install lint: $(SUBDIRS)
+all clean clobber debug install: $(SUBDIRS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

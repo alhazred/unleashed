@@ -36,7 +36,6 @@ SRCDIR =	../common
 
 LIBS =			$(DYNLIB)
 
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
@@ -51,6 +50,5 @@ LDLIBS +=	-lc -lsocket -lnsl
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 include ../../../Makefile.targ

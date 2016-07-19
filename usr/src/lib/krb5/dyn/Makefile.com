@@ -67,7 +67,6 @@ CERRWARN +=	-_gcc=-Wno-unused-variable
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 # include library targets
 include ../../Makefile.targ

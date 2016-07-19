@@ -38,4 +38,4 @@ sparcv9_CC_PICFLAGS =	-KPIC
 
 DYNFLAGS +=	-R/usr/lib/smbsrv/$(MACH64)
 
-install: all $(ROOTLIBS64) $(ROOTLINKS64) $(ROOTLINT64)
+install: all $(ROOTLIBS64) $(ROOTLINKS64)

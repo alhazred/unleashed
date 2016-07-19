@@ -53,4 +53,3 @@ LIBS =		$(DYNLIB)
 CLEANFILES += \
 	../common/ses_errno.c
 
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)

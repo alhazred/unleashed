@@ -58,7 +58,6 @@ all:	$(OBJECTS)
 clean clobber:
 	$(RM) $(OBJECTS)
 
-lint:
 
 %.o:	../common/%.c
 	$(COMPILE.c) -o $@ $<

@@ -35,11 +35,8 @@ include		../../Makefile.pam_modules
 LDLIBS		+= -lpam -lc -lsmbfs
 CFLAGS		+= -I../../../libsmbfs
 CFLAGS64	+= -I../../../libsmbfs
-LINTFLAGS	+= -I$(SRC)/lib/libsmbfs
-LINTFLAGS64	+= -I$(SRC)/lib/libsmbfs
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 include	$(SRC)/lib/Makefile.targ

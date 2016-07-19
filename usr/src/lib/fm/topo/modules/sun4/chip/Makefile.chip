@@ -38,6 +38,3 @@ CPPFLAGS += $(INCDIRS:%=-I%)
 %.o: $(SUN4DIR)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-%.ln: $(SUN4DIR)/%.c
-	$(LINT.c) -c $<

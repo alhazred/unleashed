@@ -46,9 +46,6 @@ DYNFLAGS +=	$(ZINTERPOSE)
 
 all: $(LIBS)
 
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
-
 $(DYNLIB):
 
 # include library targets

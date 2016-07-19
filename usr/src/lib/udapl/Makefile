@@ -35,12 +35,11 @@ clobber	:= TARGET = clobber
 check	:= TARGET = check
 install	:= TARGET = install
 install_h := TARGET = install_h
-lint	:= TARGET = lint
 debug := TARGET = debug
 
 .KEEP_STATE:
 
-all debug clean clobber lint: $(SUBDIRS)
+all debug clean clobber: $(SUBDIRS)
 
 install: $(ROOTDIRS) $(SUBDIRS)
 

@@ -26,10 +26,6 @@
 # for driving the creation of filters.  See Makefile.filter.com for usage.
 
 
-# Override lint sources from Makefile.lib.
-
-$(LINTLIB) :=  SRCS = $(SRCDIR)/$(LINTSRC)
-
 # Override shared object build rule from Makefile.lib.  This rule uses $(LD)
 # directly to avoid .init and .fini sections being added.
 
@@ -42,7 +38,5 @@ CTFMERGE_LIB =	:
 .KEEP_STATE:
 
 all:		$$(LIBS)
-
-lint:
 
 include		$(SRC)/lib/Makefile.targ

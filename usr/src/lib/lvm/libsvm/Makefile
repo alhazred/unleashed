@@ -36,12 +36,11 @@ install :=	TARGET= install
 check :=	TARGET= check
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 debug :=	TARGET= debug
 
 .KEEP_STATE:
 
-all clean clobber debug install lint: $(SUBDIRS)
+all clean clobber debug install: $(SUBDIRS)
 
 install_h: $(ROOTHDRS)
 

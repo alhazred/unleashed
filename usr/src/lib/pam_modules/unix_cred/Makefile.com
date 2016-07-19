@@ -35,6 +35,5 @@ CERRWARN	+= -_gcc=-Wno-uninitialized
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 include	$(SRC)/lib/Makefile.targ

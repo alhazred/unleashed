@@ -45,6 +45,5 @@ C99LMODE =      -Xc99=%all
 CPPFLAGS +=	-I$(SRCDIR) -I.
 LDLIBS32 +=	-L$(ROOT)/usr/lib/smbsrv
 LDLIBS64 +=	-L$(ROOT)/usr/lib/smbsrv/$(MACH64)
-$(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
 
 CLEANFILES += $(OBJECTS:%_ndr.o=%_ndr.c)

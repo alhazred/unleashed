@@ -72,12 +72,7 @@ $(DYNLIB) := LDLIBS += -lumem -lnvpair -luutil -lsysevent \
 $(BUILD64)$(DYNLIB) := LDLIBS64 += -lumem -lnvpair -luutil -lsysevent \
 	-L$(ROOT)/$(FMLIBDIR64) -ltopo -lc
 
-LINTFLAGS = -msux
-LINTFLAGS64 = -msux -m64
 
-$(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
-$(LINTLIB) := LINTFLAGS = -nsvx
-$(LINTLIB) := LINTFLAGS64 = -nsvx -m64
 
 CLEANFILES += ../common/fmev_errstring.c
 
@@ -85,7 +80,6 @@ CLEANFILES += ../common/fmev_errstring.c
 
 all: $(LIBS)
 
-lint: $(LINTLIB) lintcheck
 
 pics/%.o: ../$(MACH)/%.c
 	$(COMPILE.c) -o $@ $<

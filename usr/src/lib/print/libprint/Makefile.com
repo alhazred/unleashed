@@ -40,7 +40,6 @@ ROOTLIBDIR=	$(ROOT)/usr/lib
 
 LIBS =			$(DYNLIB)
 
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
@@ -53,6 +52,5 @@ LDLIBS +=	-lnsl -lsocket -lc -lldap
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 include ../../../Makefile.targ

@@ -42,25 +42,13 @@ CFLAGS += $(CCVERBOSE) $(C_BIGPICFLAGS)
 CFLAGS64 += $(CCVERBOSE) $(C_BIGPICFLAGS)
 LDLIBS += -lnvpair -lumem -lc
 
-LINTFLAGS = -msux
-LINTFLAGS64 = -msux -m64
-
-$(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
-$(LINTLIB) := LINTFLAGS = -nsvx
-$(LINTLIB) := LINTFLAGS64 = -nsvx -m64
-
 .KEEP_STATE:
 
 pics/%.o: ../$(MACH)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
-%.ln: ../$(MACH)/%.c
-	$(LINT.c) -o $@ $<
-
 all: $(LIBS)
-
-lint: $(LINTLIB) lintcheck
 
 include ../../../Makefile.targ
 include ../../Makefile.targ

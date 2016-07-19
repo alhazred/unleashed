@@ -102,7 +102,6 @@ $(LIBS): $(ISRCHDR)
 
 CLEANFILES +=	$(ISRCHDR)
 
-lint:	lintcheck
 
 # include library targets
 include ../../../Makefile.targ

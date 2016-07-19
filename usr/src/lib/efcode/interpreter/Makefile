@@ -49,7 +49,6 @@ clean:
 
 install: all .WAIT $(ROOTCMD)
 
-lint: lint_PROG
 
 .KEEP_STATE:
 

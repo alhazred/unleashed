@@ -30,7 +30,6 @@ SUBDIRS =	$(MACH)
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 test :=		TARGET= test
 debug :=	TARGET= debug
 _msg :=		TARGET= _msg
@@ -38,7 +37,7 @@ _dc :=		TARGET= _dc
 
 .KEEP_STATE:
 
-all debug install lint clean clobber _msg _dc: $(SUBDIRS)
+all debug install clean clobber _msg _dc: $(SUBDIRS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

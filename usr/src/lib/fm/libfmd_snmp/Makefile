@@ -44,11 +44,10 @@ all := TARGET = all
 clean := TARGET = clean
 clobber := TARGET = clobber
 install := TARGET = install
-lint := TARGET = lint
 
 .KEEP_STATE:
 
-all lint clean clobber: $(SUBDIRS)
+all clean clobber: $(SUBDIRS)
 
 install: install_h install_mibs .WAIT $(SUBDIRS)
 

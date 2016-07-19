@@ -50,14 +50,11 @@ SRCS=   $(OBJS_COMMON:%.o=$(SRCDIR)/%.c)	\
 
 LDLIBS +=	$(MACH_LDLIBS)
 LDLIBS +=	-lsmb -lads -lgss -lcmdutils -lldap \
-		-lsocket -lnsl -lc
+		-lsocket -lnsl -lc -lkrb5
 CPPFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	-Dsyslog=smb_syslog
 CERRWARN +=	-_gcc=-Wno-unused-function
 CERRWARN +=	-_gcc=-Wno-uninitialized
-
-# DYNLIB libraries do not have lint libs and are not linted
-$(DYNLIB) :=	LDLIBS += -lkrb5
 
 include ../../Makefile.targ
 include ../../../Makefile.targ

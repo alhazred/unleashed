@@ -37,7 +37,6 @@ SRCDIR = ../../sha256/
 
 all: $(LIBS)
 
-lint: lintcheck
 
 include $(SRC)/lib/Makefile.targ
 

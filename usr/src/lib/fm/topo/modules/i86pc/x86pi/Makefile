@@ -47,6 +47,3 @@ CPPFLAGS += -I$(UTILDIR) -I$(BRDIR)
 %.o: $(UTILDIR)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-%.ln: $(UTILDIR)/%.c
-	$(LINT.c) -c $<

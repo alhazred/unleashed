@@ -54,13 +54,11 @@ ROOTLIBDIR64 =	$(ROOTSCSILIBDIR)/$(MACH64)
 CLEANFILES += \
 	../common/smp_errno.c
 
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 .KEEP_STATE:
 
 all : $(LIBS)
 
-lint : lintcheck
 
 ../common/smp_errno.c: ../common/mkerrno.sh ../common/libsmp.h
 	sh ../common/mkerrno.sh < ../common/libsmp.h > $@

@@ -35,7 +35,6 @@ all :=		TARGET= all
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
-lint := 	TARGET= lint
 _msg :=		TARGET= _msg
 
 TEXT_DOMAIN= 	SUNW_OST_OSLIB
@@ -49,7 +48,7 @@ CP=	cp
 
 .KEEP_STATE:
 
-all lint clean delete install package: $(SUBDIRS)
+all clean delete install package: $(SUBDIRS)
 clobber: $(SUBDIRS)
 	$(RM) $(POFILE) $(POFILES)
 

@@ -49,7 +49,6 @@ LDLIBS +=	-lc -ldevice -ldevinfo -lrcm
 
 all:	$(LIBS)
 
-lint:   lintcheck
 
 # Install rules
 

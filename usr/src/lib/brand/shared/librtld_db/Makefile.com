@@ -67,7 +67,6 @@ DTEXTDOM =
 
 all: $(LIBS)
 
-lint: lintcheck
 
 pics/%64.o:	$(BRAND_SHARED)/librtld_db/common/%.c
 		$(COMPILE.c) -D_ELF64 $(PICFLAGS) -o $@ $<

@@ -40,7 +40,6 @@ check	:= TARGET = check
 debug	:= TARGET = debug
 install	:= TARGET = install
 install_h := TARGET = install_h
-lint	:= TARGET = lint
 _dc	:= TARGET = _dc
 _msg	:= TARGET = _msg
 
@@ -48,7 +47,7 @@ _msg	:= TARGET = _msg
 
 .PARALLEL: $(SUBDIRS)
 
-all clean clobber debug lint: $(SUBDIRS)
+all clean clobber debug: $(SUBDIRS)
 
 install: $(ROOTDIRS) $(SUBDIRS)
 

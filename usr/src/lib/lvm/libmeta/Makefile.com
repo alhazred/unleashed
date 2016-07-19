@@ -135,8 +135,6 @@ include ../../../Makefile.rootfs
 
 LIBS =		$(DYNLIB)
 SRCS =		$(CMN_SRCS) $(LOCAL_SRCS) $(DERIVED_SRCS)
-$(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
-lint :=		SRCS = $(CMN_SRCS) $(LOCAL_SRCS) $(SPC_SRCS)
 CPPFLAGS +=     -I$(SRC)/lib/lvm/libmeta/common/hdrs
 LDLIBS += 	-lnsl -lc -ladm -ldevid -lgen -lefi -ldevinfo -lscf
 CLEANFILES += 	$(DERIVED_SRCS) $(MSGFILES) $(DCFILES)
@@ -147,11 +145,10 @@ BIG_TARGETS = $(OBJECTS64:%=pics/%)
 
 $(BIG_TARGETS) := CPPFLAGS += -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64
 
-$(LINTLIB) := CPPFLAGS += -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64
 
 all: $(LIBS)
 
-install debug: all $(ROOTLIBS) $(ROOTLINT) $(ROOTLINKS)
+install debug: all $(ROOTLIBS) $(ROOTLINKS)
 
 objs/%.o profs/%.o pics/%.o: $(COMMON)/%.c
 	$(COMPILE.c) -o $@ $<

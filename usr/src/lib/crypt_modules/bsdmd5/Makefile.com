@@ -34,6 +34,5 @@ LDLIBS 		+= -lc -lmd
 
 all: $(LIBS)
 
-lint: lintcheck
 
 include $(SRC)/lib/Makefile.targ

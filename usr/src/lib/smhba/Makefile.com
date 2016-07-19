@@ -51,15 +51,11 @@ CERRWARN +=	-_gcc=-Wno-unused-function
 
 LDLIBS +=	-lc
 
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
-
 $(ROOTETC)/%:	../common/%
 	$(INS.file)
 
 .KEEP_STATE:
 
 all:	$(LIBS) $(HETCFILES)
-
-lint: lintcheck
 
 include ../../Makefile.targ

@@ -37,6 +37,5 @@ LDLIBS		+= -lpam -lsecdb -lc
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 include	$(SRC)/lib/Makefile.targ

@@ -42,7 +42,6 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 
 DYNFLAGS +=	$(ZIGNORE)
 
-LINTSRC=	$(LINTLIB:%.ln=%)
 
 LIBS  = $(DYNLIB)
 
@@ -50,7 +49,6 @@ LDLIBS += -lgss -lnsl -lc
 
 .KEEP_STATE:
 
-lint: lintcheck
 
 # include library targets
 include ../../Makefile.targ

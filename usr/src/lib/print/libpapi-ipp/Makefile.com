@@ -42,7 +42,6 @@ $(EXTRALINKS):	$(ROOTLINKS)
 
 LIBS =			$(DYNLIB)
 
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
@@ -63,7 +62,6 @@ LDLIBS +=	-lipp-core -lc
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 $(ROOTLIBDIR):
 	$(INS.dir)

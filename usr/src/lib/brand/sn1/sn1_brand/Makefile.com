@@ -75,6 +75,5 @@ $(LIBS):= PICS += $(SHAREDOBJS)
 
 all: $(LIBS)
 
-lint: lintcheck
 
 include $(SRC)/lib/Makefile.targ

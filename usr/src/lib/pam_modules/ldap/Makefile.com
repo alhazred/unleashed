@@ -44,6 +44,5 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 include $(SRC)/lib/Makefile.targ

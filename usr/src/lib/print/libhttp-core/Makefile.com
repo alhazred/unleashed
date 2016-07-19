@@ -41,7 +41,6 @@ ROOTLIBDIR64=	$(ROOT)/usr/lib/print/$(MACH)
 
 LIBS =			$(DYNLIB)
 
-$(LINTLIB):=	SRCS = $(SRCDIR)/$(LINTSRC)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
@@ -55,7 +54,6 @@ LDLIBS +=	-lsocket -lnsl -lc
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 $(ROOTLIBDIR):
 	$(INS.dir)

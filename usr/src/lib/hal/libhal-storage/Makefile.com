@@ -36,7 +36,6 @@ include ../../Makefile.com
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -ldbus-1 -lhal
-$(LINTLIB) := 	SRCS = $(SRCDIR)/$(LINTSRC)
 
 SRCDIR =	../common
 
@@ -53,8 +52,6 @@ ROOTMAJLINK64 =	$(ROOTLIBDIR64)/$(LIBRARY:.a=.so)$(VERS_MAJ)
 .KEEP_STATE:
 
 all:		$(LIBS)
-
-lint:		lintcheck
 
 $(ROOTMAJLINK):
 	-$(RM) $@; $(SYMLINK) $(DYNLIB) $@

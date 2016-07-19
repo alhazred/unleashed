@@ -108,6 +108,5 @@ install:	all $(IPPLIBDIR)/$(LIBLINKS) $(APACHECONFFILE) \
 
 install_h:
 
-lint:
 
 include ../../Makefile.targ

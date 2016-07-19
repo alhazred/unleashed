@@ -42,8 +42,6 @@ MAPFILES =	../../mapfile-vers
 ROOTLIBDIR=	$(ROOT)/usr/lib/sasl
 ROOTLIBDIR64=	$(ROOT)/usr/lib/sasl/$(MACH64)
 
-LINTFLAGS=	$(ENC_FLAGS)
-LINTFLAGS64=	-m64 $(ENC_FLAGS)
 
 CFLAGS +=	$(CCVERBOSE) $(XSTRCONST) $(ENC_FLAGS)
 CFLAGS64 +=	$(XSTRCONST) $(ENC_FLAGS)
@@ -52,7 +50,6 @@ CFLAGS64 +=	$(XSTRCONST) $(ENC_FLAGS)
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 pics/%.o: $(SRC)/lib/libsasl/plugin/%.c
 	$(COMPILE.c) -o $@ $<

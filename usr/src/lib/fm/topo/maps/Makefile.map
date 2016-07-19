@@ -79,8 +79,6 @@ check: $(CHECKHDRS)
 
 install_h _msg:
 
-lint: $(TOPOFILE:%=%.chk)
-
 %.xml.chk: %.xml
 	@echo xmllint $<
 	@xmllint --dropdtd $< | \

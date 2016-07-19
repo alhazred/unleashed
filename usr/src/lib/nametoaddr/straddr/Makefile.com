@@ -48,6 +48,5 @@ CPPFLAGS +=	-D_REENTRANT
 
 all: $(LIBS)
 
-lint: lintcheck
 
 include ../../../Makefile.targ

@@ -60,7 +60,6 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 
 all: $(LIBS)
 
-lint:   lintcheck
 
 # Create target directories
 $(USR_PSM_DIR):		$(LINKED_DIRS)

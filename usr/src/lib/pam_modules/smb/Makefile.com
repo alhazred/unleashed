@@ -37,6 +37,5 @@ LDLIBS		+= -L$(ROOT)/usr/lib/smbsrv -lsmb
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 include	$(SRC)/lib/Makefile.targ

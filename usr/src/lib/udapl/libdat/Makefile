@@ -54,7 +54,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 debug :=	TARGET= debug
 
 .KEEP_STATE:
@@ -63,7 +62,7 @@ all debug install: $(ROOTETCDATFILES) .WAIT $(SUBDIRS)
 
 $(ROOTETCDATFILES): $(ROOTETCDAT)
 
-clean clobber lint: $(SUBDIRS)
+clean clobber: $(SUBDIRS)
 
 install_h: $(ROOTHDRDIR) .WAIT $(ROOTHDRS)
 

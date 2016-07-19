@@ -69,6 +69,5 @@ CPPFLAGS +=	-DBUILD_TIME='"Wed Sep 24 12:00:00 2008"'
 
 all: $(LIBS)
 
-lint: lintcheck
 
 include ../../../Makefile.targ

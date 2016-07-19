@@ -62,15 +62,13 @@ ASFLAGS +=	$(AS_PICFLAGS) -P -D__STDC__ -D_ASM
 BIGNUM_FLAGS +=	-DPSR_MUL
 CLEANFILES +=	arcfour-x86_64.s
 LDLIBS +=	-lcryptoutil -lc
-LINTFLAGS64 +=	$(EXTRA_LINT_FLAGS)
 
 .KEEP_STATE:
 
 all:		$(LIBS)
 
-lint:		$(SRCS)
 
-install:	all $(ROOTLIBS64) $(ROOTLINKS64) $(ROOTLINT64)
+install:	all $(ROOTLIBS64) $(ROOTLINKS64)
 
 pics/%.o: $(AES_DIR)/$(MACH64)/%.c
 		$(COMPILE.c) $(AES_FLAGS) -o $@ $<

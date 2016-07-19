@@ -65,16 +65,8 @@ SRCS=	../dh192.c ../../dh_common/dh_common.c ../../dh_common/generic_key.c
 ROOTLIBDIR = $(ROOT)/usr/lib/gss
 ROOTLIBDIR64 = $(ROOT)/usr/lib/$(MACH64)/gss
 
-#LINTFLAGS += -errfmt=simple
-#LINTFLAGS64 += -errfmt=simple
-LINTOUT =	lint.out
-LINTSRC =	$(LINTLIB:%.ln=%)
-ROOTLINTDIR =	$(ROOTLIBDIR)
-#ROOTLINT = 	$(LINTSRC:%=$(ROOTLINTDIR)/%)
 
-CLEANFILES += $(LINTOUT) $(LINTLIB)
 
-lint: lintcheck
 
 $(ROOTLIBDIR):
 	$(INS.dir)

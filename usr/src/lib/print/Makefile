@@ -41,7 +41,6 @@ clean :=                TARGET = clean
 clobber :=              TARGET = clobber
 install :=              TARGET = install
 install_h :=              TARGET = install_h
-lint :=                 TARGET = lint
 
 TEXT_DOMAIN=	SUNW_OST_OSLIB
 POFILE= print-lib.po
@@ -68,7 +67,7 @@ _msg:	$(MSGDOMAIN)
 
 install: $(ROOTDIRS) $(ROOTSYMLINKDIRS) $(SUBDIRS)
 
-install_h clean strip lint: $(SUBDIRS)
+install_h clean strip: $(SUBDIRS)
 
 clobber: $(SUBDIRS) local_clobber
 

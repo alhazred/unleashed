@@ -789,45 +789,7 @@ usr/lib/libficl-sys.so
 # Lint garbage - to be removed when we stop building lint libs
 #
 # Pre-existing entries:
-lib/llib-lkcfd
-usr/lib/llib-lsoftcrypto
 usr/lib/llib-like
 usr/lib/llib-like.ln
 usr/lib/amd64/llib-like.ln		i386
 usr/lib/sparcv9/llib-like.ln		sparc
-lib/llib-lmeta
-usr/lib/reparse/llib-lreparse_smb
-usr/lib/smbsrv/llib-lfksmbsrv
-usr/lib/smbsrv/llib-lmlrpc
-usr/lib/smbsrv/llib-lmlsvc
-usr/lib/smbsrv/llib-lsmb
-usr/lib/smbsrv/llib-lsmbns
-lib/llib-la5k			sparc
-lib/llib-lg_fc			sparc
-usr/lib/llib-lHBAAPI
-# files created during the build
-lib/fm/llib-lfmevent
-lib/llib-lMPAPI
-usr/lib/fm/llib-ldiagcode
-usr/lib/fm/llib-ldiskstatus
-usr/lib/fm/llib-lfmd_adm
-usr/lib/fm/llib-lfmd_agent
-usr/lib/fm/llib-lfmd_log
-usr/lib/fm/llib-lfmd_msg
-usr/lib/fm/llib-lfmd_snmp
-usr/lib/fm/llib-lfmnotify
-usr/lib/fm/llib-lseslog
-usr/lib/fm/llib-ltopo
-usr/lib/llib-lSMHBAAPI
-usr/lib/llib-lbe
-usr/lib/llib-ldat
-usr/lib/llib-lhal
-usr/lib/llib-lhal-storage
-usr/lib/llib-lmilter
-usr/lib/llib-lpasswdutil
-usr/lib/llib-lpicld_pluginutil
-usr/lib/llib-lpkcs11
-usr/lib/llib-lpolkit
-usr/lib/scsi/llib-lscsi
-usr/lib/scsi/llib-lses
-usr/lib/scsi/llib-lsmp

@@ -40,6 +40,5 @@ CPPFLAGS	+= -D_FILE_OFFSET_BITS=64
 
 all:	$(LIBS)
 
-lint:	lintcheck
 
 include	$(SRC)/lib/Makefile.targ

@@ -28,7 +28,6 @@
 include ../Makefile.com
 include ../../../Makefile.lib.64
 CFLAGS += -D_POSIX_PTHREAD_SEMANTICS
-LINTFLAGS += -D_POSIX_PTHREAD_SEMANTICS
 
 .KEEP_STATE:
 

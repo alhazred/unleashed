@@ -29,7 +29,6 @@
 
 all : $(LIBS)
 
-lint : lintcheck
 
 ../common/ses_errno.c: ../common/mkerrno.sh ../common/libses.h
 	sh ../common/mkerrno.sh < $(ROOTSCSIHDRDIR)/libses.h > $@

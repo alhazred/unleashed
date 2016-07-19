@@ -30,8 +30,6 @@ SRCDIR =	../common
 ROOT32DYNLIB =	$(ROOTLIBDIR)/$(DYNLIB1)
 ROOT64DYNLIB =	$(ROOTLIBDIR64)/$(DYNLIB1)
 
-LINTFLAGS =	-ux
-LINTOUT =	lint.out
 
 CPPFLAGS +=	-D_REENTRANT
 
@@ -44,7 +42,6 @@ CERRWARN +=	-_gcc=-Wno-address
 LDLIBS +=	-lc
 HSONAME =
 
-CLEANFILES +=	$(LINTOUT)
 CLOBBERFILES +=	$(DYNLIB1)
 
 # Leaf target makefiles establish exactly what they will build by assigning to

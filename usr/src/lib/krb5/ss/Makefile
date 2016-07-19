@@ -31,7 +31,6 @@ all :=		TARGET= all
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 install :=	TARGET= install
-lint :=		TARGET= lint
 
 LIBRARY= 	libss.a
 
@@ -40,7 +39,7 @@ POFILES = generic.po
 
 .KEEP_STATE:
 
-all clean install lint: $(SUBDIRS)
+all clean install: $(SUBDIRS)
 clobber: $(SUBDIRS)
 	$(RM) $(CLOBBERFILES)
 

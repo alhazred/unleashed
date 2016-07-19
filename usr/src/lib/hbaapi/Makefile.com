@@ -47,7 +47,6 @@ CERRWARN +=	-_gcc=-Wno-unused-function
 
 LDLIBS +=	-lc
 
-$(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 
 $(ROOTETC)/%:	../common/%
 	$(INS.file)
@@ -55,9 +54,5 @@ $(ROOTETC)/%:	../common/%
 .KEEP_STATE:
 
 all:	$(LIBS) $(HETCFILES)
-
-lint:
-	@echo "This section is not required to be lint clean"
-	@echo "C++ code"
 
 include ../../Makefile.targ
