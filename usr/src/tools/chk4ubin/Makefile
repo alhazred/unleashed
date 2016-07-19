@@ -30,15 +30,12 @@ PROG	= chk4ubin
 
 LDLIBS += -lelf
 
-LINTFLAGS += -ux
 
 .KEEP_STATE:
 
 all: $(PROG)
 
 install: all .WAIT $(ROOTONBLDMACHPROG)
-
-lint:	lint_PROG
 
 clean:
 	$(RM) $(PROG)

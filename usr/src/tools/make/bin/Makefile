@@ -62,9 +62,6 @@ $(ROOTRULES) := FILEMODE = 0444
 $(ROOTONBLDSHARE)/%: $(CMDDIR)/%.file
 	$(INS.rename)
 
-
-lint:
-
 clean:
 	$(RM) $(OBJS)
 

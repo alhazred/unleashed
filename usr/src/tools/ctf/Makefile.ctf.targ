@@ -29,7 +29,4 @@
 %.o: ../../common/%.c
 	$(COMPILE.c) $<
 
-%.ln: ../../common/%.c
-	$(LINT.c) -c $<
-
 include ../../../Makefile.targ

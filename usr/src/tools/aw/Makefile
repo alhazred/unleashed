@@ -31,7 +31,6 @@ include ../Makefile.tools
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 
-LINTFLAGS += -ux -Xa -errchk=locfmtchk,parentheses
 
 CPPFLAGS +=	-DDEFAULT_AS_DIR='"$(GNU_ROOT)/bin"'
 CPPFLAGS +=	-DDEFAULT_AS64_DIR='"$(GNU_ROOT)/bin"'
@@ -44,8 +43,6 @@ CPPFLAGS +=	-DDEFAULT_CPP_DIR='"/usr/ccs/lib"'
 all:    $(PROG)
 
 install: all .WAIT $(ROOTONBLDMACHPROG)
-
-lint:	lint_PROG
 
 clean:
 

@@ -48,6 +48,4 @@ all: $(LIBS)
 
 install: all
 
-lint:
-
 include $(SRC)/lib/Makefile.targ

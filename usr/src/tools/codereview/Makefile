@@ -55,6 +55,4 @@ install: all .WAIT  $(ROOTONBLDMACHPROG) $(ROOTONBLDMAN1ONBLDFILES)
 clean:
 	$(RM) $(CLEANFILES)
 
-lint: lint_SRCS
-
 include ../Makefile.targ

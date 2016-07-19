@@ -28,9 +28,3 @@
 
 clobber: clean
 	-$(RM) $(PROG) $(CLOBBERFILES)
-
-lint_PROG:
-	$(LINT.c) $(PROG).c
-
-lint_SRCS:
-	$(LINT.c) $(SRCS)

@@ -34,7 +34,6 @@ STABS_SRCS	= $(STABS_SRC)/main.c $(STABS_SRC)/stabs.c \
 		  $(STABS_SRC)/forth.c $(STABS_SRC)/genassym.c \
 		  $(STABS_SRC)/squander.c
 STABS_OBJS	= $(STABS_SRCS:$(STABS_SRC)/%.c=%.o)
-LINTS		= $(STABS_OBJS:%.o=%.ln)
 
 SRCS		= $(STABS_SRCS)
 OBJECTS		= $(STABS_OBJS)
@@ -63,14 +62,8 @@ all: $(STABS_PROG)
 
 install: all .WAIT $(ROOTONBLDMACHPROG)
 
-lint:	$(SRCS)
-	@$(LINT) $(LINTFLAGS) $(SRCS)
-
 clean:
 	$(RM) $(CLEANFILES)
-
-clean.lint:
-	$(RM) $(LINTS)
 
 $(STABS_PROG): $(STABS_OBJS)
 	$(LINK.c) -o $@ $(STABS_OBJS) -lm

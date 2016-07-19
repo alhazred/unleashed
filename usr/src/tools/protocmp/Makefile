@@ -46,9 +46,6 @@ protocmp: $(CMP_OBJS)
 
 install: all .WAIT $(ROOTONBLDMACHPROG)
 
-lint:	FRC
-	$(LINT.c) $(CMP_SRCS)
-
 FRC:
 
 clean:

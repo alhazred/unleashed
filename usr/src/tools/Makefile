@@ -69,16 +69,6 @@ i386_SUBDIRS=		\
 	mbh_patch	\
 	btxld
 
-LINTSUBDIRS= \
-	codereview \
-	ctf \
-	cw \
-	findunref \
-	lintdump \
-	ndrgen \
-	protocmp \
-	protolist
-
 SUBDIRS= \
 	$($(MACH)_SUBDIRS) \
 	$(COMMON_SUBDIRS) \
@@ -112,7 +102,6 @@ all :=		TARGET= install
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 .KEEP_STATE:
@@ -131,8 +120,6 @@ clean: $(SUBDIRS)
 
 clobber: $(SUBDIRS)
 	$(RM) -rf $(TOOLS_PROTO)
-
-lint: $(LINTSUBDIRS)
 
 _msg: $(MSGSUBDIRS)
 

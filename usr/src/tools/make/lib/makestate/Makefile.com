@@ -29,8 +29,6 @@ FILEMODE= 755
 
 all: $(LIBS)
 
-lint:
-
 $(ROOTONBLDLIBMACH)/%: %
 	$(INS.file)
 

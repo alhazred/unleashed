@@ -49,8 +49,6 @@ all:	$(PROG) $(MAN1ONBLDFILES)
 
 install: all .WAIT $(ROOTONBLDMACHPROG) $(ROOTONBLDMAN1ONBLDFILES)
 
-lint:	lint_SRCS
-
 clean:
 	$(RM) $(CLEANFILES)
 

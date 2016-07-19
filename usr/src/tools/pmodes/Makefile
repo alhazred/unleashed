@@ -45,8 +45,6 @@ $(PROG): $(OBJS)
 
 install: all .WAIT $(ROOTONBLDMACHPROG)
 
-lint:	lint_SRCS
-
 clean:
 	$(RM) $(CLEANFILES)
 

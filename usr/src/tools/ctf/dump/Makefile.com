@@ -35,12 +35,11 @@ LDFLAGS += -L$(NATIVE_ADJUNCT)/lib
 LDLIBS += -lelf -lz
 
 OBJS = $(SRCS:%.c=%.o)
-LINTFILES = $(SRCS:%.c=%.ln)
 
 CERRWARN += -_gcc=-Wno-uninitialized
 
 .NO_PARALLEL:
-.PARALLEL: $(OBJS) $(LINTFILES)
+.PARALLEL: $(OBJS)
 
 all: $(PROG)
 
@@ -56,12 +55,6 @@ $(ROOTONBLDMACHPROG): $(PROG)
 install: $(ROOTONBLDMACHPROG)
 
 clean:
-	$(RM) $(OBJS) $(LINTFILES)
-
-%.ln: ../%.c
-	$(LINT.c) -c $<
-
-lint: $(LINTFILES)
-	$(LINT) $(LINTFLAGS) $(LINTFILES) $(LDLIBS)
+	$(RM) $(OBJS)
 
 include ../../Makefile.ctf.targ

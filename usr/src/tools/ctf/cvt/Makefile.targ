@@ -36,22 +36,13 @@ ctfmerge: $(MRGOBJS)
 %.o: ../%.c
 	$(COMPILE.c) $<
 
-%.ln: ../%.c
-	$(LINT.c) -c $<
-
 $(ROOTONBLDMACHPROG): $(SELFTEST)
 $(SELFTEST): $(PROG)
 
 install: $(PROG) $(SELFTEST) .WAIT $(ROOTONBLDMACHPROG)
 
-lint: $(LINTFILES)
-	$(LINT) $(LINTFLAGS) $(CVTLINTFILES)
-	$(LINT) $(LINTFLAGS) $(MRGLINTFILES)
-
 clean:
 	$(RM) $(OBJS)
-
-CLOBBERFILES=$(LINTFILES)
 
 #
 # After we've built ctfconvert and ctfmerge, let's use them on ourselves.  The

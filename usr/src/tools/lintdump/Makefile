@@ -38,8 +38,6 @@ all:    $(PROG)
 
 install: all .WAIT $(ROOTONBLDMACHPROG) $(ROOTONBLDMAN1ONBLDFILES)
 
-lint:	lint_PROG
-
 clean:
 
 include ../Makefile.targ

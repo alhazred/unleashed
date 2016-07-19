@@ -18,13 +18,12 @@ all	:=	TARGET = all
 install :=	TARGET = install
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 
 .KEEP_STATE:
 
 bin: lib
 
-all clean clobber lint install: $(SUBDIRS)
+all clean clobber install: $(SUBDIRS)
 
 $(SUBDIRS):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

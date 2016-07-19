@@ -56,16 +56,13 @@ CVTSRCS=$(GENSRCS) \
 	fixup_tdescs.c \
 	st_parse.c
 CVTOBJS=$(CVTSRCS:%.c=%.o)
-CVTLINTFILES = $(CVTSRCS:%.c=%.ln)
 
 MRGSRCS=$(GENSRCS) \
 	ctfmerge.c
 MRGOBJS=$(MRGSRCS:%.c=%.o)
-MRGLINTFILES = $(MRGSRCS:%.c=%.ln)
 
 SRCS=$(CVTSRCS) $(MRGSRCS) $(CMPSRCS)
 OBJS=$(SRCS:%.c=%.o)
-LINTFILES=$(SRCS:%.c=%.ln)
 
 DWARFLDFLAGS	= \
 	-L$(ROOTONBLDLIBMACH) \
@@ -77,7 +74,6 @@ LDFLAGS		+= -L$(NATIVE_ADJUNCT)/lib
 LDLIBS		+= -lz -lelf
 CPPFLAGS	+= -D_REENTRANT
 CFLAGS		+= $(CTF_FLAGS)
-LINTFLAGS	+= -mnux
 
 CERRWARN	+= -_gcc=-Wno-unused
 CERRWARN	+= -_gcc=-Wno-uninitialized
