@@ -195,7 +195,7 @@ do
 	fi
 	$newer $f $t || continue
 	$compare $f $t || continue
-	[ -f $t ] && { mv -f $t $t.old || exit 1; }
+	[ -f $t ] && { rm -f $t || exit 1; }
 	{ cp $CP_P $f $t && Setem $t; } || exit 1
 done
 exit 0

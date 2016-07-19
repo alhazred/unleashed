@@ -205,13 +205,13 @@ install: install-mk
 .endif
 
 beforeinstall:
-	test -d ${DESTDIR}${BINDIR} || ${INSTALL} -m 775 -d ${DESTDIR}${BINDIR}
-	test -d ${DESTDIR}${MANDEST} || ${INSTALL} -m 775 -d ${DESTDIR}${MANDEST}
+	test -d ${DESTDIR}${BINDIR} || ${INSTALL} -m 755 -d ${DESTDIR}${BINDIR}
+	test -d ${DESTDIR}${MANDEST} || ${INSTALL} -m 755 -d ${DESTDIR}${MANDEST}
 
 install-mk:
 .if exists(${MKSRC}/install-mk)
-	test -d ${DESTDIR}${SHARE_MK} || ${INSTALL} -m 775 -d ${DESTDIR}${SHARE_MK}
-	sh ${MKSRC}/install-mk -v -m 644 ${DESTDIR}${SHARE_MK}
+	test -d ${DESTDIR}${SHARE_MK} || ${INSTALL} -m 755 -d ${DESTDIR}${SHARE_MK}
+	sh ${MKSRC}/install-mk -v -m 444 ${DESTDIR}${SHARE_MK}
 .else
 	@echo need to unpack mk.tar.gz under ${srcdir} or set MKSRC; false
 .endif
