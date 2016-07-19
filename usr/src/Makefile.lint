@@ -34,16 +34,7 @@ include Makefile.master
 #
 COMMON_SUBDIRS = \
 	psm \
-	test \
-	ucbcmd/biff \
-	ucbcmd/echo \
-	ucbcmd/groups \
-	ucbcmd/mkstr \
-	ucbcmd/printenv \
-	ucbcmd/sum \
-	ucbcmd/test \
-	ucbcmd/users \
-	ucbcmd/whoami
+	test
 
 i386_SUBDIRS=
 

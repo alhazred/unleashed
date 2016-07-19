@@ -57,6 +57,4 @@ install: all $(ROOTPROG)
 
 clean:
 
-lint:	lint_PROG
-
 include ../Makefile.ucbtarg

@@ -47,6 +47,4 @@ install: all $(ROOTPROG)
 clean:
 	-$(RM) $(OBJS)
 
-lint:	lint_PROG
-
 include ../Makefile.ucbtarg

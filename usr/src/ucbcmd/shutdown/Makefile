@@ -56,6 +56,4 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(PROGOBJS)
 
-lint:	lint_PROG
-
 include ../Makefile.ucbtarg

@@ -37,6 +37,4 @@ install: all $(ROOTBIN) $(ROOTPROG)
 
 clean:
 
-lint:
-
 include ../Makefile.ucbtarg
