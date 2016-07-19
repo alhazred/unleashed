@@ -39,7 +39,6 @@ all :=		TARGET= all
 install :=      TARGET= install
 clean :=        TARGET= clean
 clobber :=      TARGET= clobber
-lint :=         TARGET= lint
 
 .KEEP_STATE:
 
@@ -49,7 +48,7 @@ install: all .WAIT $(SUBDIRS)
 
 install_h: $(ROOTHDRS)
 
-clean clobber lint: $(SUBDIRS)
+clean clobber: $(SUBDIRS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

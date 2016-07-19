@@ -47,7 +47,6 @@ CERRWARN += -_gcc=-Wno-uninitialized
 
 all: $(LIBS)
 
-lint: lintcheck
 
 #
 # Include library targets

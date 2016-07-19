@@ -49,7 +49,6 @@ CPPFLAGS = $(DEFS) -I$(SRC)/ucbhead $(CPPFLAGS.master)
 
 all: $(LIBS)
 
-lint: lintcheck
 
 #
 # Include library targets

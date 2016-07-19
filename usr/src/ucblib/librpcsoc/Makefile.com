@@ -26,9 +26,6 @@
 LIBRARY= librpcsoc.a
 VERS = .1
 
-CLOBBERFILES += lint.out
-
-
 OBJECTS= clnt_tcp.o clnt_udp.o getrpcport.o rtime.o svc_tcp.o svc_udp.o get_myaddress.o
 
 # include library definitions
@@ -53,9 +50,6 @@ CERRWARN += -_gcc=-Wno-uninitialized
 
 .KEEP_STATE:
 
-lint: lintcheck
-
 # include library targets
 include $(SRC)/lib/Makefile.targ
 include ../../Makefile.ucbtarg
-

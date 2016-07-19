@@ -110,7 +110,6 @@ BUILD.AR= $(RM) $@ ; \
 
 all: $(LIBS)
 
-lint: lintcheck
 
 pics/%.o: ../port/gen/%.c
 	$(COMPILE.c) -o $@ $<
