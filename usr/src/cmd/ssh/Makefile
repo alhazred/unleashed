@@ -26,12 +26,26 @@ include ../Makefile.cmd
 
 MANIFEST = ssh.xml
 SVCMETHOD = sshd
+ETCSSHDIR=	$(ROOTETC)/ssh
+DIRS=		$(ETCSSHDIR)
+
+FILES= sshd_config ssh_config
+
+ETCSSHFILES=	$(FILES:%=$(ETCSSHDIR)/%)
+
+$(ETCSSHFILES) := FILEMODE=	644
 
 ROOTMANIFESTDIR = $(ROOTSVCNETWORK)
 
+$(ETCSSHDIR)/% : %
+	$(INS.file)
+
+$(DIRS):
+	$(INS.dir)
+
 all lint clean clobber:
 
-install: all $(ROOTMANIFEST) $(ROOTSVCMETHOD)
+install: all $(DIRS) $(ETCSSHFILES) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 
 check: $(CHKMANIFEST)
 
