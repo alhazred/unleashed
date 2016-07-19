@@ -199,9 +199,6 @@ bldtools:
 rootdirs: $(ROOTDIRS)
 	$(INS) -d -m 775 $(ROOT)/var/mail/:saved
 
-lint: FRC
-	$(MAKE) -f Makefile.lint
-
 _msgdirs:       $(MSGDIRS)
 
 $(ROOTDIRS) $(MSGDIRS):
