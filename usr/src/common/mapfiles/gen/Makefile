@@ -43,8 +43,6 @@ TEMPLATE2=	map.noexeglobs.2.template
 
 all install:	$(FILES)
 
-lint:
-
 clean:
 		$(RM) $(SYMS1) $(SYMS2) $(MAIN1) $(MAIN2)
 
