@@ -25,7 +25,7 @@ TESTDIR = $(ROOTOPTPKG)/tests
 CMDS = $(PROG:%=$(TESTDIR)/%)
 $(CMDS) := FILEMODE = 0555
 
-all lint clean clobber:
+all clean clobber:
 
 install: all $(CMDS)
 

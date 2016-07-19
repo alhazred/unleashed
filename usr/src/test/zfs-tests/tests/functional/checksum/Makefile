@@ -27,7 +27,7 @@ SCRIPTS = run_edonr_test \
 CMDS = $(SCRIPTS:%=$(TESTDIR)/%)
 $(CMDS) := FILEMODE = 0555
 
-all lint clean clobber:
+all clean clobber:
 
 install: $(CMDS)
 

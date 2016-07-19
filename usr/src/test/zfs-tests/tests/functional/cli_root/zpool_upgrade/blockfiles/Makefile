@@ -74,7 +74,7 @@ FILES = zfs-broken-mirror1.dat.bz2 \
 CMDS = $(FILES:%=$(BLOCKFILESDIR)/%)
 $(CMDS) := FILEMODE = 0444
 
-all lint clean clobber:
+all clean clobber:
 
 install: $(CMDS)
 

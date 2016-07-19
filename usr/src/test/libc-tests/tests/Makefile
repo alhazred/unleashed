@@ -60,7 +60,6 @@ all     :=      TARGET = all
 install :=      TARGET = install
 clean   :=      TARGET = clean
 clobber :=      TARGET = clobber
-lint    :=      TARGET = lint
 
 .KEEP_STATE:
 
@@ -68,7 +67,7 @@ install: $(SUBDIRS) $(ROOTOPTPROGS)
 
 all: $(SUBDIRS) $(PROGS32) $(PROGS64)
 
-clean lint: $(SUBDIRS)
+clean: $(SUBDIRS)
 
 $(ROOTOPTPROGS): $(PROGS32) $(PROGS64) $(ROOTOPTDIR)
 

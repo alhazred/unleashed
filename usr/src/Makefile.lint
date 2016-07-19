@@ -33,8 +33,7 @@ include Makefile.master
 # can be used to keep them that way.
 #
 COMMON_SUBDIRS = \
-	psm \
-	test
+	psm
 
 i386_SUBDIRS=
 

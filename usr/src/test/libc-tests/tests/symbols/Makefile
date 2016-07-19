@@ -51,7 +51,7 @@ include ../Makefile.com
 
 #
 # Since we use libcmdutils which is LF64, we need to be LF64 even though we're
-# not using the LF64 related features at the moment, lint catches us otherwise.
+# not using the LF64 related features at the moment.
 #
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
 

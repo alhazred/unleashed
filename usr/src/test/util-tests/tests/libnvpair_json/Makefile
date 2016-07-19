@@ -43,7 +43,6 @@ $(CMDS) := FILEMODE = 0555
 
 LDLIBS += -lnvpair
 
-LINTFLAGS += -erroff=E_FUNC_ARG_UNUSED
 
 all: $(PROG)
 
@@ -52,8 +51,6 @@ $(PROG): $(OBJS)
 	$(POST_PROCESS)
 
 install: all $(CMDS)
-
-lint: lint_SRCS
 
 clobber: clean
 	-$(RM) $(PROG)

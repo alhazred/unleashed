@@ -20,7 +20,7 @@ include $(SRC)/Makefile.master
 ROOTOPTPKG = $(ROOT)/opt/zfs-tests
 TESTDIR = $(ROOTOPTPKG)/tests/functional/features/async_destroy
 
-all install lint clean clobber:
+all install clean clobber:
 
 SUBDIRS = async_destroy
 

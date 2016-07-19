@@ -45,7 +45,7 @@ ROOTFILES=	$(FILES:%=$(ROOTTESTDIR)/%)
 $(ROOTTESTS) :=	FILEMODE = 0555
 $(ROOTFILES) :=	FILEMODE = 0444
 
-all lint clean clobber:
+all clean clobber:
 
 install:	$(ROOTTESTS) $(ROOTFILES)
 

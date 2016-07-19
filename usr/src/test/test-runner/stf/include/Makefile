@@ -24,7 +24,7 @@ PROGS = stf.shlib
 CMDS = $(PROGS:%=$(INCLUDEDIR)/%)
 $(CMDS) := FILEMODE = 0555
 
-all lint clean clobber:
+all clean clobber:
 
 install: $(CMDS)
 

@@ -27,7 +27,7 @@ all: $(READMES)
 
 install: $(ROOTOPTPKG) $(FILES)
 
-clean lint clobber:
+clean clobber:
 
 $(ROOTOPTPKG):
 	$(INS.dir)

@@ -31,7 +31,7 @@ PROGS = bootfs_001_pos \
 CMDS = $(PROGS:%=$(TESTDIR)/%)
 $(CMDS) := FILEMODE = 0555
 
-all lint clean clobber:
+all clean clobber:
 
 install: $(CMDS)
 

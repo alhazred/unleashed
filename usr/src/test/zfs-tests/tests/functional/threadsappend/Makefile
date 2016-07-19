@@ -48,8 +48,6 @@ $(PROG): $(OBJS)
 
 install: all $(CMDS)
 
-lint: lint_SRCS
-
 clobber: clean
 	-$(RM) $(PROG)
 

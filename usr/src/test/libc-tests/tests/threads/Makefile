@@ -32,8 +32,6 @@ all: $(PROGS)
 
 install: all $(CMDS)
 
-lint:
-
 clobber: clean
 	-$(RM) $(PROGS)
 

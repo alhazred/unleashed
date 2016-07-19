@@ -33,7 +33,7 @@ all: $(SRCS)
 
 install: $(CMDS)
 
-clean lint clobber:
+clean clobber:
 
 $(CMDS): $(INCLUDEDIR) $(SRCS)
 

@@ -57,8 +57,6 @@ all: $(PROG)
 
 install: all $(CMDS)
 
-lint: 
-
 clobber: clean
 	-$(RM) $(PROG)
 

@@ -24,7 +24,7 @@ PROGS = ostest
 CMDS = $(PROGS:%=$(ROOTBIN)/%)
 $(CMDS) := FILEMODE = 0555
 
-all lint clean clobber:
+all clean clobber:
 
 install: $(CMDS)
 

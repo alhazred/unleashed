@@ -27,7 +27,7 @@ all: $(MANSRCS)
 
 install: $(FILES)
 
-clean lint clobber:
+clean clobber:
 
 $(FILES): $(MANDIR) $(MANSRCS)
 

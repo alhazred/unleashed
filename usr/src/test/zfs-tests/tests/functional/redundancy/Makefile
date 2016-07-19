@@ -31,7 +31,7 @@ FILES = redundancy.cfg \
 CMDS = $(PROGS:%=$(TESTDIR)/%) $(FILES:%=$(TESTDIR)/%)
 $(CMDS) := FILEMODE = 0555
 
-all lint clean clobber:
+all clean clobber:
 
 install: $(CMDS)
 

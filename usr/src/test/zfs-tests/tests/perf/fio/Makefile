@@ -28,7 +28,7 @@ FILES = mkfiles.fio \
 CMDS = $(FILES:%=$(TESTDIR)/%)
 $(CMDS) := FILEMODE = 0444
 
-all lint clean clobber:
+all clean clobber:
 
 install: $(CMDS)
 

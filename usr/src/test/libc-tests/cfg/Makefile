@@ -58,7 +58,7 @@ all: $(CFGS)
 
 install: $(ROOTOPTPKG) $(ROOTOPTPKGCFG) $(FILES)
 
-clean lint clobber:
+clean clobber:
 
 $(ROOTOPTPKGDIRS):
 	$(INS.dir)

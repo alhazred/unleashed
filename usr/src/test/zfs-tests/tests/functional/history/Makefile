@@ -46,7 +46,7 @@ $(CMDS) := FILEMODE = 0555
 DATA = $(DATAFILES:%=$(TESTDIR)/%)
 $(DATA) := FILEMODE = 0444
 
-all lint clean clobber:
+all clean clobber:
 
 install: $(CMDS) $(DATA)
 
