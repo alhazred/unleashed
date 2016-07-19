@@ -37,7 +37,6 @@ include $(TOPDIR)/psm/stand/lib/Makefile.lib
 PSMSYSHDRDIR =	$(TOPDIR)/psm/stand
 
 LIBBOOT =	libboot.a
-LINTLIBBOOT =	llib-lboot.ln
 
 # ARCHCMNDIR - common code for several machines of a given isa
 # OBJSDIR - where the .o's go
@@ -72,20 +71,14 @@ CFLAGS +=	$(CCVERBOSE)
 
 all install: $(LIBBOOT) .WAIT
 
-lint: $(LINTLIBBOOT)
-
 clean:
 	$(RM) $(OBJS) $(L_OBJS)
 
 clobber: clean
-	$(RM) $(LIBBOOT) $(LINTLIBBOOT)
+	$(RM) $(LIBBOOT)
 
 $(LIBBOOT): $(OBJSDIR) .WAIT $(OBJS)
 	$(BUILD.AR) $(OBJS)
-
-$(LINTLIBBOOT): $(OBJSDIR) .WAIT $(L_OBJS)
-	@$(ECHO) "\nlint library construction:" $@
-	@$(LINT.lib) -o boot $(L_SRCS)
 
 $(OBJSDIR):
 	-@[ -d $@ ] || mkdir $@
@@ -100,11 +93,3 @@ $(OBJSDIR)/%.o: $(ARCHCMNDIR)/%.c
 $(OBJSDIR)/%.o: $(ARCHCMNDIR)/%.s
 	$(COMPILE.s) -o $@ $<
 	$(POST_PROCESS_O)
-
-$(OBJSDIR)/%.ln: $(ARCHCMNDIR)/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-	@$(MV) $(@F) $@
-
-$(OBJSDIR)/%.ln: $(ARCHCMNDIR)/%.s
-	@($(LHEAD) $(LINT.s) $< $(LTAIL))
-	@$(MV) $(@F) $@

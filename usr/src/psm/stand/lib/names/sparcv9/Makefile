@@ -28,12 +28,11 @@ include ../../../../../Makefile.master
 
 SUBDIRS = sun4
 
-all install clean clobber lint: $(SUBDIRS)
+all install clean clobber: $(SUBDIRS)
 
 all	:=	TARGET = all
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 install	:=	TARGET = install
 
 $(SUBDIRS): FRC

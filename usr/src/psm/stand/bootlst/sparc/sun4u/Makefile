@@ -41,7 +41,6 @@ PLATLIB =	$(PLATLIBDIR)/libplat.a
 LDPLATLIBS =	-L$(PLATLIBDIR) -lplat
 SALIBS =	$(PLATLIB)
 MAPFILE =	$(SPARCDIR)/mapfile
-LINTPLATLIBS =	$(PLATLIBDIR)/llib-lplat.ln
 
 BOOTLSTOBJ = srt0.o
 
@@ -49,10 +48,6 @@ ALL = bootlst
 
 %.o: $(SPARCDIR)/%.s
 	$(COMPILE.s) -o $@ $<
-
-%.ln: $(SPARCDIR)/%.s
-	@$(LHEAD) $(LINT.s) $< $(LTAIL)
-
 
 include ../../common/Makefile.com
 include $(TOPDIR)/psm/Makefile.psm.64

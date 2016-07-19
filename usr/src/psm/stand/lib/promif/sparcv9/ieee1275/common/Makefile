@@ -41,7 +41,6 @@ PROMDIR =	$(TOPDIR)/psm/promif/ieee1275/common
 SYSDIR =	$(TOPDIR)/uts
 
 LIBPROM =	libprom.a
-LINTLIBPROM =	llib-lprom.ln
 
 PROM_CFILES =			\
 	prom_2path.c		\
@@ -107,20 +106,14 @@ CFLAGS +=	$(CCVERBOSE)
 
 all install: $(LIBPROM)
 
-lint: $(LINTLIBPROM)
-
 clean:
 	$(RM) $(OBJS) $(L_OBJS)
 
 clobber: clean
-	$(RM) $(LIBPROM) $(LINTLIBPROM)
+	$(RM) $(LIBPROM)
 
 $(LIBPROM): $(OBJSDIR) .WAIT $(OBJS)
 	$(BUILD.AR) $(OBJS)
-
-$(LINTLIBPROM): $(OBJSDIR) .WAIT $(L_OBJS)
-	@$(ECHO) "\nlint library construction:" $@
-	@$(LINT.lib) -o prom $(L_SRCS)
 
 $(OBJSDIR):
 	-@[ -d $@ ] || mkdir $@
@@ -135,11 +128,3 @@ $(OBJSDIR)/%.o: $(PROMDIR)/%.c
 $(OBJSDIR)/%.o: $(PROMDIR)/%.s
 	$(COMPILE.s) -o $@ $<
 	$(POST_PROCESS_O)
-
-$(OBJSDIR)/%.ln: $(PROMDIR)/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-	@$(MV) $(@F) $@
-
-$(OBJSDIR)/%.ln: $(PROMDIR)/%.s
-	@($(LHEAD) $(LINT.s) $< $(LTAIL))
-	@$(MV) $(@F) $@

@@ -45,9 +45,6 @@ SALIBS +=	$(PROMLIB)
 LDLIBS +=	-L$(PROMLIBDIR) -lprom
 LDFLAGS =	-dn -M mapfile $(MAP_FLAG)
 
-LINTLIBS +=	$(PROMLIBDIR)/llib-lprom.ln
-LINTFLAGS.lib =	-ysxmun
-
 CPRBOOTOBJ +=	support.o compress.o
 
 L_SRCS	=	$(COMDIR)/support.c $(OSDIR)/compress.c
@@ -73,10 +70,6 @@ AS_CPPFLAGS =	$(CPPINCS) $(CPPFLAGS.master)
 CPRFILES=	$(ALL:%=$(ROOT_PSM_DIR)/$(ARCH)/%)
 FILEMODE=	644
 
-# lint stuff
-LINTFLAGS += -Dlint
-LOPTS = -hbxn
-
 # install rule
 $(ROOT_PSM_DIR)/$(ARCH)/%: %
 	$(INS.file)
@@ -86,10 +79,6 @@ all:	$(ALL)
 
 install: all $(CPRFILES)
 
-
-LINT.c=	$(LINT) $(LINTFLAGS.c) $(LINT_DEFS) $(CPPFLAGS) -c
-LINT.s=	$(LINT) $(LINTFLAGS.s) $(LINT_DEFS) $(CPPFLAGS) -c
-
 # build rule
 
 compress.o: $(OSDIR)/compress.c
@@ -97,18 +86,6 @@ compress.o: $(OSDIR)/compress.c
 
 support.o: $(COMDIR)/support.c
 	$(COMPILE.c) $(COMDIR)/support.c
-
-compress.ln: $(OSDIR)/compress.c
-	@$(LHEAD) $(LINT.c) $(OSDIR)/compress.c $(LTAIL)
-
-support.ln: $(COMDIR)/support.c
-	@$(LHEAD) $(LINT.c) $(COMDIR)/support.c $(LTAIL)
-
-%.ln: %.c
-	@$(LHEAD) $(LINT.c) $< $(LTAIL)
-
-%.ln: %.s
-	@$(LHEAD) $(LINT.s) $< $(LTAIL)
 
 .KEEP_STATE:
 
@@ -122,18 +99,8 @@ cprboot: $(CPRBOOT_MAPFILE) $(CPRBOOTOBJ) $(SALIBS)
 $(SALIBS): FRC
 	@cd $(@D); $(MAKE) $(MFLAGS)
 
-$(LINTLIBS): FRC
-	@cd $(@D); $(MAKE) $(MFLAGS) $(@F)
-
 $(ROOTDIR):
 	$(INS.dir)
-
-lint: $(L_COBJ) $(LINTLIBS)
-	@$(ECHO) "\n$@: global crosschecks:"
-	@$(LINT.2) $(L_COBJ) $(LDLIBS)
-
-clean.lint:
-	$(RM) *.ln
 
 clean:
 	$(RM) *.o *.ln

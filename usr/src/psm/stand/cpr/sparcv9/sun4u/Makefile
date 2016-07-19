@@ -40,7 +40,6 @@ PLATLIBDIR =	$(PROMIFDIR)/$(TARG_MACH)/$(PROMTYPE)/$(TARGET_ARCH)
 PLATLIB =	$(PLATLIBDIR)/libplat.a
 LDLIBS =	-L$(PLATLIBDIR) -lplat
 SALIBS =	$(PLATLIB)
-LINTLIBS =	$(PLATLIBDIR)/llib-lplat.ln
 
 CPRBOOTOBJ = cb_srt0.o cprboot.o machdep.o pages.o bitmap.o util.o
 

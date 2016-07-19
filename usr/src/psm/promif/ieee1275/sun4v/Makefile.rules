@@ -43,15 +43,3 @@ $(OBJS_DIR)/%.o:		$(PSMBASE)/promif/ieee1275/sun4u/%.c
 $(OBJS_DIR)/%.o:		$(PSMBASE)/promif/ieee1275/sun4/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-#
-#	Lint `object' build rules
-#
-$(LINTS_DIR)/%.ln:		$(PSMBASE)/promif/ieee1275/sun4v/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(PSMBASE)/promif/ieee1275/sun4u/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(PSMBASE)/promif/ieee1275/sun4/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))

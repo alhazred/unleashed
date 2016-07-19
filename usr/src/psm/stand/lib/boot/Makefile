@@ -35,12 +35,11 @@ sparc_ARCHITECTURES = $(sparcv9_ARCHITECTURES) $(sparcv7_ARCHITECTURES)
 
 SUBDIRS = $($(MACH)_ARCHITECTURES)
 
-all install clean clobber lint: $(SUBDIRS)
+all install clean clobber: $(SUBDIRS)
 
 all	:=	TARGET = all
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 install	:=	TARGET = install
 
 $(SUBDIRS): FRC

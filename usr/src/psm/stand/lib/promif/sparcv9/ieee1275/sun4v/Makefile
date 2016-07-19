@@ -39,7 +39,6 @@ PLATSUN4DIR =	$(TOPDIR)/psm/promif/ieee1275/sun4
 SYSDIR =	$(TOPDIR)/uts
 
 LIBPLAT =	libplat.a
-LINTLIBPLAT =	llib-lplat.ln
 
 PLAT_PFILES =
 
@@ -88,20 +87,14 @@ CFLAGS +=	$(CCVERBOSE)
 
 all install: $(LIBPLAT)
 
-lint: $(LINTLIBPLAT)
-
 clean:
 	$(RM) $(OBJS) $(L_OBJS)
 
 clobber: clean
-	$(RM) $(LIBPLAT) $(LINTLIBPLAT)
+	$(RM) $(LIBPLAT)
 
 $(LIBPLAT): $(OBJSDIR) .WAIT $(OBJS)
 	$(BUILD.AR) $(OBJS)
-
-$(LINTLIBPLAT): $(OBJSDIR) .WAIT $(L_OBJS)
-	@$(ECHO) "\nlint library construction:" $@
-	@$(LINT.lib) -o plat $(L_SRCS)
 
 $(OBJSDIR):
 	-@[ -d $@ ] || mkdir $@
@@ -124,19 +117,3 @@ $(OBJSDIR)/%.o: $(PLATSUN4DIR)/%.c
 $(OBJSDIR)/%.o: $(PLATSUN4DIR)/%.s
 	$(COMPILE.s) -o $@ $<
 	$(POST_PROCESS_O)
-
-$(OBJSDIR)/%.ln: $(PLATDIR)/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-	@$(MV) $(@F) $@
-
-$(OBJSDIR)/%.ln: $(PLATDIR)/%.s
-	@($(LHEAD) $(LINT.s) $< $(LTAIL))
-	@$(MV) $(@F) $@
-
-$(OBJSDIR)/%.ln: $(PLATSUN4DIR)/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-	@$(MV) $(@F) $@
-
-$(OBJSDIR)/%.ln: $(PLATSUN4DIR)/%.s
-	@($(LHEAD) $(LINT.s) $< $(LTAIL))
-	@$(MV) $(@F) $@

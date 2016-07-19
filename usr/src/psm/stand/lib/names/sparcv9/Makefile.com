@@ -39,7 +39,6 @@ PSMSYSHDRDIR =	$(TOPDIR)/psm/stand
 STANDDIR =	$(TOPDIR)/stand
 
 LIBNAMES =	libnames.a
-LINTLIBNAMES =	llib-lnames.ln
 
 # ARCHCMNDIR - common code for several machines of a given isa
 # OBJSDIR - where the .o's go
@@ -77,20 +76,14 @@ CFLAGS +=	$(CCVERBOSE)
 
 all install: $(LIBNAMES) .WAIT
 
-lint: $(LINTLIBNAMES)
-
 clean:
 	$(RM) $(OBJS) $(L_OBJS)
 
 clobber: clean
-	$(RM) $(LIBNAMES) $(LINTLIBNAMES)
+	$(RM) $(LIBNAMES)
 
 $(LIBNAMES): $(OBJSDIR) .WAIT $(OBJS)
 	$(BUILD.AR) $(OBJS)
-
-$(LINTLIBNAMES): $(OBJSDIR) .WAIT $(L_OBJS)
-	@$(ECHO) "\nlint library construction:" $@
-	@$(LINT.lib) -o names $(L_SRCS)
 
 $(OBJSDIR):
 	-@[ -d $@ ] || mkdir $@
@@ -105,11 +98,3 @@ $(OBJSDIR)/%.o: $(ARCHCMNDIR)/%.c
 $(OBJSDIR)/%.o: $(ARCHCMNDIR)/%.s
 	$(COMPILE.s) -o $@ $<
 	$(POST_PROCESS_O)
-
-$(OBJSDIR)/%.ln: $(ARCHCMNDIR)/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-	@$(MV) $(@F) $@
-
-$(OBJSDIR)/%.ln: $(ARCHCMNDIR)/%.s
-	@($(LHEAD) $(LINT.s) $< $(LTAIL))
-	@$(MV) $(@F) $@

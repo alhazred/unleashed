@@ -43,11 +43,7 @@ SALIBS +=	$(SALIB) $(PROMLIB)
 LDLIBS =	-L$(SALIBDIR) -lsa -L$(PROMLIBDIR) -lprom $(LDPLATLIBS)
 LDFLAGS =	-dn -M $(MAPFILE) $(MAP_FLAG)
 
-LINTLIBS =	$(SALIBDIR)/llib-lsa.ln $(PROMLIBDIR)/llib-lprom.ln $(LINTPLATLIBS)
-LINTFLAGS.lib =	-ysxmun
-
 BOOTLSTOBJ +=	 bootlst.o sasubr.o
-BOOTLSTLINTS =	$(BOOTLSTOBJ:%.o=%.ln)
 
 CPPDEFS =	-D$(ARCH) -D__$(ARCH) -D$(TARG_MACH) -D__$(TARG_MACH)
 CPPDEFS +=	-D_KERNEL -D_MACHDEP -D__ELF
@@ -69,35 +65,22 @@ AS_CPPFLAGS =	$(CPPINCS) $(CPPFLAGS.master)
 LSTFILES=	$(ALL:%=$(ROOT_PSM_DIR)/$(ARCH)/%)
 FILEMODE=	644
 
-# lint stuff
-LINTFLAGS += -Dlint
-LOPTS = -hbxn
-
 # install rule
 $(ROOT_PSM_DIR)/$(ARCH)/%: %
 	$(INS.file)
 
-
 all:	$(ALL)
 
 install: all $(LSTFILES)
-
-
-LINT.c=	$(LINT) $(LINTFLAGS.c) $(LINT_DEFS) $(CPPFLAGS) -c
-LINT.s=	$(LINT) $(LINTFLAGS.s) $(LINT_DEFS) $(CPPFLAGS) -c
-LINT.2= $(LINT) $(LINTFLAGS.c) $(LINT_DEFS) $(CPPFLAGS)
 
 # build rules
 
 %.o: $(COMDIR)/%.c
 	$(COMPILE.c) -o $@ $<
 
-%.ln: $(COMDIR)/%.c
-	@$(LHEAD) $(LINT.c) $< $(LTAIL)
-
 .KEEP_STATE:
 
-.PARALLEL:	$(BOOTLSTOBJ) $(BOOTLSTLINTS)
+.PARALLEL:	$(BOOTLSTOBJ)
 
 bootlst: $(MAPFILE) $(BOOTLSTOBJ) $(SALIBS)
 	$(LD) $(LDFLAGS) -o $@ $(BOOTLSTOBJ) $(LDLIBS)
@@ -106,18 +89,8 @@ bootlst: $(MAPFILE) $(BOOTLSTOBJ) $(SALIBS)
 $(SALIBS): FRC
 	@cd $(@D); $(MAKE) $(MFLAGS)
 
-$(LINTLIBS): FRC
-	@cd $(@D); $(MAKE) $(MFLAGS) $(@F)
-
 $(ROOTDIR):
 	$(INS.dir)
-
-lint: $(BOOTLSTLINTS) $(LINTLIBS)
-	@$(ECHO) "\n$@: global crosschecks:"
-	$(LINT.2) $(BOOTLSTLINTS) $(LINTLIBS)
-
-clean.lint:
-	$(RM) *.ln
 
 clean:
 	$(RM) *.o *.ln

@@ -66,8 +66,6 @@ $(INSTALL_DIR)/%: $(INSTALL_DIR) %
 $(INSTALL_DIR):
 	$(INS.dir)
 
-lint:
-
 clean:
 	$(RM) *.exec *.o
 
