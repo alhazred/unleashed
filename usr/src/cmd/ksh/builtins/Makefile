@@ -146,4 +146,4 @@ $(PROG):	$(OBJECTS)
 clean clobber:
 	rm -f $(PROG) $(OBJECTS)
 
-lint _msg:
+_msg:

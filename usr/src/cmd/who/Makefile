@@ -57,7 +57,6 @@ $(SYMSETC):
 
 clean:
 
-lint:	lint_PROG
 
 $(DCFILE): $(PROG).c
 	$(RM) $(DCFILE)

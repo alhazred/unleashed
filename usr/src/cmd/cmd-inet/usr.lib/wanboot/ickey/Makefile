@@ -40,6 +40,5 @@ install:	all $(ROOTCMD)
 
 clean:
 
-lint:		lint_PROG
 
 include ../../../../Makefile.targ

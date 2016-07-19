@@ -37,7 +37,6 @@ LDLIBS +=	-lcontract -lscf -luutil
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-lint := LINTFLAGS = -ux
 
 .KEEP_STATE:
 
@@ -55,6 +54,5 @@ $(ROOTLIBSVCBIN)/%: %
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 include ../../Makefile.targ

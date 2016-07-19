@@ -67,7 +67,6 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 $(ROOTCFGDIR):
 	$(INS.dir)

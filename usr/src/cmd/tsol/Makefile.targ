@@ -32,12 +32,6 @@ $(ROOTSVCBIN) :=	FILEMODE= 544
 clobber: clean
 	-$(RM) $(PROG) $(CLOBBERFILES)
 
-lint_PROG:	$$(PROG).c
-	$(LINT.c) $(PROG).c $(LDLIBS)
-
-lint_SRCS:	$$(SRCS)
-	$(LINT.c) $(SRCS) $(LDLIBS)
-
 $(ROOTCMDDIR)/%: $(ROOTCMDDIR) %
 	$(INS.file)
 

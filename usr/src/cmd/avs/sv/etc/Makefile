@@ -60,7 +60,6 @@ $(CLUSTERLIBSTOPDIR):
 $(CLUSTERLIBSTARTDIR):
 	$(INS.dir)
 
-lint:
 
 clean:
 	$(RM) $(SHFILES)

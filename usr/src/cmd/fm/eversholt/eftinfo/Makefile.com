@@ -43,9 +43,6 @@ include $(SRC)/cmd/fm/eversholt/Makefile.esc.com
 
 install: all $(ROOTPROG)
 
-LINTSRCS += $(LOCALOBJS:%.o=../common/%.c)
-LINTFLAGS = -mnux
-
 $(PROG): $(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 	$(CTFMRG)

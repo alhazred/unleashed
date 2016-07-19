@@ -37,7 +37,6 @@ CERRWARN += -_gcc=-Wno-uninitialized
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
-LINTFLAGS += -erroff=E_NAME_DEF_NOT_USED2
 
 LDLIBS += -lsec -lnvpair -lcmdutils
 
@@ -61,6 +60,5 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

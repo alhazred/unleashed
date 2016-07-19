@@ -46,7 +46,6 @@ all	:=	TARGET = all
 install	:=	TARGET = install
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 
 .KEEP_STATE:
 
@@ -61,7 +60,7 @@ all install: THIRDPARTYLICENSE
 THIRDPARTYLICENSE: acpihpd.c
 	$(SED) -e '/sys\/param.h/,$$ d' acpihpd.c > $@
 
-clean clobber lint:	$(SUBDIRS)
+clean clobber:	$(SUBDIRS)
 
 check:	$(CHKMANIFEST)
 

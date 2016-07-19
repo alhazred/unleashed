@@ -41,7 +41,6 @@ CFLAGS		+= -R /usr/platform/$(PLATFORM)/lib
 
 LDLIBS		+= -L $(ROOT)/usr/platform/$(PLATFORM)/lib
 LDLIBS		+= -lprtdiag
-LINTFLAGS	+= -u
 
 .KEEP_STATE:
 

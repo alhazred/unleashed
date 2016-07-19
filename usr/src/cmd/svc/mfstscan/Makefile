@@ -47,7 +47,6 @@ CLOBBERFILES += $(POFILES)
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-unused-label
 
-lint := LINTFLAGS = -ux -erroff=E_GLOBAL_COULD_BE_STATIC2
 
 .KEEP_STATE:
 
@@ -68,7 +67,6 @@ $(ROOTLIBSVCBIN)/%: %
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 %.o: ../common/%.c
 	$(COMPILE.c) $(OUTPUT_OPTION) $< $(CTFCONVERT_HOOK)

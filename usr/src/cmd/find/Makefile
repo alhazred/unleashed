@@ -39,7 +39,6 @@ CERRWARN += -_gcc=-Wno-switch
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
 
-LINTFLAGS += -u
 LDLIBS += -lsec
 
 .KEEP_STATE:
@@ -71,6 +70,5 @@ xpg4_%.o:	$(SRC)/common/util/%.c
 clean:
 	$(RM) $(FINDOBJS) $(XPG4FINDOBJS)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

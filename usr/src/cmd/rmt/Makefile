@@ -46,6 +46,5 @@ $(ROOTSYMLINK):
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

@@ -28,6 +28,5 @@
 
 include ../Makefile.com
 CFLAGS += -I.. -I.
-LINTFLAGS += -I.. -I.
 
 install: all $(ROOTPROG32)

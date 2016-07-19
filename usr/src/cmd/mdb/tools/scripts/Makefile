@@ -36,7 +36,7 @@ ROOTPKGSCRIPTS = $(PKGSCRIPTS:%=$(ROOTOPTPKGBIN)/%)
 
 all install: $(BLDSCRIPTS) $(PKGSCRIPTS)
 
-clean.lint dmods install_h lint:
+dmods install_h:
 
 clobber: clean
 

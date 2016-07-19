@@ -57,10 +57,6 @@ CPPFLAGS +=	-I$(SRC)/cmd/svr4pkg/hdrs \
 # For stop-in-your-tracks debugging
 #CPPFLAGS +=	-DBUG_DEBUG
 
-# Lint flags 
-#
-LINTFLAGS += -un
-
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-implicit-function-declaration
 CERRWARN += -_gcc=-Wno-uninitialized

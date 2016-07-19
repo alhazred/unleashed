@@ -71,9 +71,6 @@ CERRWARN += -_gcc=-Wno-uninitialized
 	$(COMPILE.c) $<
 	$(CTFCONVERT_O)
 
-%.ln: $(MODSRCS_DIR)/%.c
-	$(LINT.c) -c $<
-
 #
 # This module is somewhat unusual in that it is a proc-style dmod.  proc dmods
 # are not normally built both for mdb and kmdb.  These overrides build it as a

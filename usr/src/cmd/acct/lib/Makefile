@@ -51,9 +51,6 @@ clean:
 clobber: clean
 	$(RM) $(LIBS)
 
-lint:
-	$(LINT.c) $(SRCS)
-
 install:
 
 .PRECIOUS: $(LIBS)

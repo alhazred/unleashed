@@ -37,7 +37,6 @@ $(ROOTSVCNETWORKISCSI)/iscsi-initiator.xml := FILEMODE = 0444
 
 .KEEP_STATE:
 
-LINTFLAGS +=	-erroff=E_BAD_PTR_CAST_ALIGN
 
 all:		$(PROG)
 
@@ -47,6 +46,5 @@ clean:
 
 install: 	all $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 
-lint:		lint_PROG
 
 include ../Makefile.targ

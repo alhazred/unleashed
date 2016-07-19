@@ -67,9 +67,6 @@ clobber :		$(SUBDIRS) clean
 strip:
 			$(STRIP) $(PROG)
 
-lint:
-			$(LINT.c) $(SRCS)
-
 include		../Makefile.msg
 
 $(NATIVEPROG) :		$(NATIVEDIR) $(SRCS)

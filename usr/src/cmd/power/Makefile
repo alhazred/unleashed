@@ -86,9 +86,6 @@ $(ROOTETCFILES) := FILEMODE= 644
 ROOTUSRSBINSYSIDPM= $(SYSIDPM:%=$(ROOTUSRSBIN)/%)
 $(ROOTUSRSBINSYSIDPM) := FILEMODE= 755
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 .PARALLEL: $(OBJS)
@@ -143,12 +140,6 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(OBJS) $(SYSIDPM) $(POWERCONF)
 	$(RM) $(POFILE) $(POFILES)
-
-lint := LINTFLAGS=-auxn
-lint:
-	$(LINT.c) $(DAEMON_SRCS)
-	$(LINT.c) $(PMCFG_SRCS)
-	$(LINT.c) $(SUSPEND_SRCS)
 
 cstyle:
 	$(CSTYLE) $(SRCS)

@@ -77,7 +77,6 @@ $(ROOTCMD): $(PROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 $(ROOTCFGDIR):
 	$(INS.dir)

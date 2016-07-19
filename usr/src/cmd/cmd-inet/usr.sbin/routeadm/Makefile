@@ -71,7 +71,6 @@ check: 	$(CHKMANIFEST)
 
 clean:
 
-lint: lint_PROG
 
 $(ROOTSVCMANIFESTS): $(ROOTSVCMANIFESTDIR)
 

@@ -40,15 +40,6 @@ all: $(PROG) kmdb_modlinktest.o
 	$(COMPILE.c) $<
 	$(CTFCONVERT_O)
 
-%.ln: ../../kmdb/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../mdb/%.c
-	$(LINT.c) -c $<
-
-%.ln: $(SRC)/common/dis/i386/%.c
-	$(LINT.c) -c $<
-
 ROOT_MISC_DIR		= $(ROOT)/kernel/misc
 ROOT_MISC_DIR_64	= $(ROOT_MISC_DIR)/$(SUBDIR64)
 
@@ -69,24 +60,6 @@ INCDIRS += $(SRC)/uts/i86pc $(SRC)/common/dis/i386
 CPPFLAGS += -DDIS_TEXT
 
 install: all $(ROOTMISC64)
-
-#
-# lint rules
-#
-
-.PARALLEL: lintkmdb lintprom lintkctl
-
-lint: lintkmdb lintprom lintkctl
-	$(LINT) $(ALLLINTFLAGS) $(KMDBOBJS:%.o=%.ln) $(PROMOBJS:%.o=%.ln)
-
-lintkmdb: $(KMDBOBJS:%.o=%.ln)
-	$(LINT) $(LINTFLAGS) $(KMDBOBJS:%.o=%.ln)
-
-lintprom: $(PROMOBJS:%.o=%.ln)
-	$(LINT) $(LINTFLAGS) $(PROMOBJS:%.o=%.ln)
-
-lintkctl: $(KCTLOBJS:%.o=%.ln)
-	$(LINT) $(ALLLINTFLAGS) $(KCTLOBJS:%.o=%.ln)
 
 kmdb_context_off.h: ../../kmdb/kmdb_context_off.in
 	$(OFFSETS_CREATE) <../../kmdb/kmdb_context_off.in >$@

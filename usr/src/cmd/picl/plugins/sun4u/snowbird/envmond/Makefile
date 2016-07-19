@@ -51,8 +51,6 @@ LIBS =		$(DYNLIB)
 
 ROOTLIBDIR =	$(ROOT_PLAT_PLUGINDIR)
 
-CLEANFILES =	$(LINTOUT) $(LINTLIB)
-
 LDLIBS +=	-L$(SRC)/lib/libptree/$(MACH)
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/sun4u/snowbird/lib/libctsmc
 LDLIBS +=	-L$(ROOT)/usr/lib/picl/plugins -lc -lpicltree \
@@ -73,7 +71,6 @@ all	:=	TARGET= all
 install :=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 _msg	:=	TARGET= _msg
 
 all: $(LIBS) $(LIBLINKS)
@@ -96,9 +93,6 @@ $(MSGDOMAIN):
 # include library targets
 include $(SRC)/lib/Makefile.targ
 include	$(SRC)/cmd/picl/plugins/Makefile.targ
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

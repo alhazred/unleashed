@@ -44,7 +44,7 @@ PODIRS=		dump restore
 .DONE:
 	@rm -f $(LIBDONE)
 
-all debug lint check: $(COMMONPRODSUBDIRS) $(UFSPRODSUBDIRS)
+all debug check: $(COMMONPRODSUBDIRS) $(UFSPRODSUBDIRS)
 
 _msg:	$(PODIRS)
 

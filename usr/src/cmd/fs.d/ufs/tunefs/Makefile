@@ -39,7 +39,6 @@ CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-lint:		lint_PROG
 
 $(ROOTUSRSBIN)/$(LIBPROG):	FRC
 		-$(RM) $@; $(SYMLINK) $(LINKVALUE) $@

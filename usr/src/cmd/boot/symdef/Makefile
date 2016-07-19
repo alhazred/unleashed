@@ -49,6 +49,5 @@ clean:
 
 _msg:
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

@@ -35,7 +35,6 @@ ROOTMANIFESTDIR = $(ROOTSVCNETWORK)
 LDLIBS    += 	-ldladm -ldlpi
 all install := LDLIBS += -lcrypto
 
-LINTFLAGS += 	-u
 
 .KEEP_STATE:
 
@@ -54,6 +53,5 @@ check:		$(CHKMANIFEST)
 clean:
 		$(RM) $(OBJS)
 
-lint:		lint_SRCS
 
 include ../../../Makefile.targ

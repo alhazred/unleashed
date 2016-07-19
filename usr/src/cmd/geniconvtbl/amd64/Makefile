@@ -37,7 +37,6 @@ include ../../Makefile.cmd.64
 #	$(RM) $(MSGDOMAIN64)/$(POFILE)
 #	$(CP) $(POFILE) $(MSGDOMAIN64)
 
-lint := SRCS = $(SRCI)
 
 all: $(ITM)
 

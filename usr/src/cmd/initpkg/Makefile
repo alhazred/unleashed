@@ -104,6 +104,6 @@ $(RCDIRS):	FRC
 
 FRC:
 
-clean lint:
+clean:
 
 include	../Makefile.targ

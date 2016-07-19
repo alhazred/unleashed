@@ -40,7 +40,6 @@ LDLIBS +=	-lpool
 XGETFLAGS =	-a
 CLOBBERFILES += $(POFILES) 
 
-lint := LINTFLAGS += -I$(POOLSCOMMONDIR)
 
 .KEEP_STATE:
 
@@ -59,6 +58,5 @@ install: all $(ROOTUSRSBINPROG)
 clean:
 	$(RM) $(OBJS) $(COMMON_OBJS) $(POFILES)
 
-lint: lint_SRCS
 
 include ../../Makefile.targ

@@ -80,7 +80,6 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(OBJS) $(DERIVED_OBJS) $(ISRC)
 
-lint: lint_SRCS
 
 include ../../../Makefile.targ
 

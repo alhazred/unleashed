@@ -49,8 +49,6 @@ LIBS=		$(DYNLIB)
 
 ROOTLIBDIR=	$(ROOT_PLAT_PLUGINDIR)
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
 CPPFLAGS	+= -I$(USR_PSM_INCL_DIR)
 CPPFLAGS	+= -I$(SRC)/cmd/picl/plugins/lib/picld_pluginutil
 CPPFLAGS	+= -I$(SRC)/lib/libfru/include
@@ -73,7 +71,6 @@ all	:=	TARGET= all
 install :=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 _msg	:=	TARGET= _msg
 
 all: $(LIBS) $(LIBLINKS)
@@ -96,9 +93,6 @@ $(MSGDOMAIN):
 # include library targets
 include $(SRC)/lib/Makefile.targ
 include	$(SRC)/cmd/picl/plugins/Makefile.targ
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

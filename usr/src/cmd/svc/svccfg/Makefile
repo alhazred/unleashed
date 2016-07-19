@@ -95,8 +95,6 @@ LIBUUTIL	= $(SRC)/lib/libuutil
 
 debug := COPTFLAG = -g
 
-lint := LINTFLAGS = -mux
-lint := SVCCFG_EXTRA_LIBS = -lscf -ll -luutil -lumem -lmd5 -lnvpair
 
 LDLIBS += $(SVCCFG_EXTRA_LIBS)
 
@@ -153,9 +151,6 @@ svccfg_grammar.h svccfg_grammar.c: svccfg.y
 clean: FRC
 	$(RM) $(MYOBJS) $(MYOBJS:%.o=%-native.o) $(LNTS)
 
-lint: $(LNTS)
-	$(LINT.c) $(LINTFLAGS) $(LNTS) $(LDLIBS)
-
 %-native.o: %.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
@@ -167,9 +162,6 @@ lint: $(LNTS)
 %.o: ../common/%.c
 	$(COMPILE.c) $(OUTPUT_OPTION) $<
 	$(POST_PROCESS_O)
-
-%.ln: ../common/%.c
-	$(LINT.c) $(OUTPUT_OPTION) -c $<
 
 include ../../Makefile.targ
 

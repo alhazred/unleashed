@@ -45,7 +45,6 @@ all:=           TARGET= all
 install:=       TARGET= install
 clean:=         TARGET= clean
 clobber:=       TARGET= clobber
-lint:=          TARGET= lint
 _msg:=		TARGET= _msg
 
 .KEEP_STATE:
@@ -63,7 +62,6 @@ install: 	$(CLUSTERDIR) \
 		.WAIT \
 		$(SUBDIRS)
 
-lint:		$(SUBDIRS)
 
 $(CLUSTERDIR) $(CLUSTERLIBDIR) $(CLUSTERSBINDIR) $(CLUSTERLIBDSCFGDIR) $(CLUSTERLIBDSCFGSTOPDIR) $(CLUSTERLIBDSCFGSTARTDIR):
 	$(INS.dir)

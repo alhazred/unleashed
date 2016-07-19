@@ -43,6 +43,5 @@ install: all $(ROOTUSRSBINPROG) $(ROOTSYMLINK)
 
 clean:
 
-lint:
 
 include ../Makefile.targ

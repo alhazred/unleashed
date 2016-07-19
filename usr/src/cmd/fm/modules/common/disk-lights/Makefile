@@ -19,6 +19,5 @@ SRCS = disk_lights.c
 
 include ../../Makefile.plugin
 
-LINTFLAGS += -L$(ROOT)/usr/lib/fm
 LDLIBS += -ltopo
 LDFLAGS += -L$(ROOT)/usr/lib/fm -R/usr/lib/fm

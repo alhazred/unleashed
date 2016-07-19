@@ -56,4 +56,3 @@ $(LIBPROG):	$(OBJS)
 clean:
 		$(RM) $(LIBPROG).o
 
-lint:		lint_SRCS

@@ -47,6 +47,4 @@ clean:
 strip :		$(PROG)
 		$(STRIP) $(PROG)
 
-lint :		lint_SRCS
-
 include		../Makefile.targ

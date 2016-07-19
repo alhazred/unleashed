@@ -42,7 +42,6 @@ LDLIBS	+= -lproc
 
 .KEEP_STATE:
 
-lint	:= LINTFLAGS = -x
 
 %.o:	../%.c
 	$(COMPILE.c) $<
@@ -57,8 +56,5 @@ install: all $(ROOTPROG32)
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
 
 include ../../Makefile.targ

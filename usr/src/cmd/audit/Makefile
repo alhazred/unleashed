@@ -55,7 +55,6 @@ catalog: $(POFILE)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_PROG
 
 include $(SRC)/cmd/Makefile.targ
 include $(SRC)/Makefile.msg.targ

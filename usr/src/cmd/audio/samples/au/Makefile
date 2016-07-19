@@ -85,6 +85,5 @@ $(ROOTAUDIOAU)/%.au: %.au
 
 clean clobber:
 
-lint:
 
 _msg:

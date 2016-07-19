@@ -29,7 +29,6 @@ all:=		TARGET= all
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
 install:=	TARGET= install
-lint:=		TARGET= lint
 _msg:=		TARGET= _msg
 
 MANIFEST= labeld.xml
@@ -47,7 +46,6 @@ check:	$(CHKMANIFEST)
 
 clean clobber:
 
-lint:
 
 _msg:
 

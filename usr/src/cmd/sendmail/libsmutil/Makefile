@@ -54,7 +54,6 @@ $(libsmutil): $(OBJS)
 clean:
 	$(RM) $(OBJS) $(libsmutil)
 
-lint:	lint_SRCS
 
 depend obj:
 

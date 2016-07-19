@@ -42,7 +42,6 @@ POFILES = $(LOCAL_OBJS:%.o=%.po)
  
 CPPFLAGS += -I. -I$(COMMONBASE)/cmdparse
 LDLIBS += -lstmf
-LINTFLAGS += -xerroff=E_BAD_PTR_CAST_ALIGN
 
 .KEEP_STATE:
 
@@ -68,6 +67,5 @@ cmdparse.o: $(COMMONBASE)/cmdparse/cmdparse.c
 clean:
 	$(RM) $(OBJS) $(POFILES) $(POFILE)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

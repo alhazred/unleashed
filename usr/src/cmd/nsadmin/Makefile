@@ -72,4 +72,3 @@ clean:
 clobber:
 	$(RM) $(CLOBBERFILES)
 
-lint:

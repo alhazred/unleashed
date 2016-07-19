@@ -52,15 +52,13 @@ CERRWARN +=	-_gcc=-Wno-type-limits
 
 LIBS=		$(DYNLIB)
 LDLIBS +=	-lc -lsocket -lnsl
-$(LINTLIB) :=	SRCS=	$(SRCDIR)/$(LINTSRC)
 
 .KEEP_STATE:
 
 all:		$(LIBS)
 
-install:	all .WAIT $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
+install:	all .WAIT $(ROOTLIBS) $(ROOTLINKS)
 
-lint:		lintcheck
 
 include $(SRC)/lib/Makefile.targ
 

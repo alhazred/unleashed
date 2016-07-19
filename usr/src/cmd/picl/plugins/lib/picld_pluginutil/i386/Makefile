@@ -37,4 +37,4 @@ $(LIBLINKS):
 $(ROOTLIBDIR):
 	$(INS.dir)
 
-install: all $(ROOTLIBS) $(ROOTLINKS) $(ROOTLINT)
+install: all $(ROOTLIBS) $(ROOTLINKS)

@@ -33,7 +33,6 @@ SRCS = ../$(PROG).c
 FILEMODE = 0555
 
 # libproc is added individually as pwait doesn't need it.
-# These are defined this way so lint can use them
 LDLIBS_pargs		= -lproc
 LDLIBS_pcred		= -lproc
 LDLIBS_pfiles		= -lproc -lnsl
@@ -127,6 +126,3 @@ install: all $(ROOTISAPROG)
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)

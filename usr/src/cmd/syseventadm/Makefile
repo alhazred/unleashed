@@ -40,7 +40,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 _msg:=		TARGET= _msg
 
 
@@ -54,7 +53,6 @@ install: all $(ROOTUSRSBINPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 FRC:
 

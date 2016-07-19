@@ -35,7 +35,6 @@ POFILES=$(OBJS:%.o=%.po)
 
 LDLIBS += -lMPAPI -ldevid
 
-LINTFLAGS += -xerroff=E_BAD_FORMAT_STR2
 
 .KEEP_STATE:
 
@@ -55,6 +54,5 @@ $(POFILE): $(POFILES)
 	$(RM) $@
 	$(CAT) $(POFILES) > $@
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

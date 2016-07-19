@@ -52,9 +52,6 @@ $(ROOTBIN):
 strip:
 	$(STRIP) $(PROG)
 
-lint:
-	$(LINT.c) $(PROG).c $(LDLIBS)
-
 cstyle:
 	cstyle $(SRCS)
 

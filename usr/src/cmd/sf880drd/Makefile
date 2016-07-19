@@ -58,7 +58,6 @@ check: $(CHKMANIFEST)
 
 clean:
 
-lint:	lint_PROG
 
 $(USR_PLAT_DIR):
 	-$(INS.dir)

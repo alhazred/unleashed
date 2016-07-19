@@ -47,7 +47,7 @@ all:= FILEMODE =	0444
 
 all: $(ROOT_EFT_ROOT) $(USR_PLAT_EFT_FILES) $(ROOT_COMMON_EFT_FILES)
 
-install_h lint _msg:
+install_h _msg:
 
 clean clobber:
 	$(RM) $(EFT_PLAT_FILES) $(EFT_COMMON_FILES) \

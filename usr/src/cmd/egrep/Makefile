@@ -50,6 +50,5 @@ $(PROG).c: $(PROG).y
 clean:
 	$(RM) $(PROG).c
 
-lint:	lint_PROG
 
 include ../Makefile.targ

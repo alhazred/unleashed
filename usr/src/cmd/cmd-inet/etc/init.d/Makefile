@@ -73,7 +73,6 @@ $(DIRS):
 
 clean:
 
-lint:
 
 include ../../../Makefile.targ
 

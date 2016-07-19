@@ -52,7 +52,6 @@ XGETFLAGS += -a -x awk.xcl
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 YFLAGS += -d
 LDLIBS += -lm
-LINTFLAGS += -u
 CLEANFILES= maketab proctab.c awk.g.c awk.lx.c y.tab.h
 ROOTLINK = $(ROOTBIN)/nawk
 
@@ -84,7 +83,6 @@ install: all $(ROOTPROG) $(ROOTLINK)
 clean:
 	$(RM) $(OBJS) $(CLEANFILES)
 
-lint: awk.g.c lint_SRCS
 
 awk.g.c + y.tab.h: awk.g.y
 

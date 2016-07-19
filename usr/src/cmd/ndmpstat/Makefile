@@ -64,6 +64,5 @@ $(POFILE): $(POFILES)
 clean:
 	$(RM) $(OBJS) $(POFILES)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

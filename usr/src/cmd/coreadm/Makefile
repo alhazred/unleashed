@@ -44,6 +44,5 @@ clean:
 
 check:	$(CHKMANIFEST)
 
-lint:	lint_PROG
 
 include ../Makefile.targ

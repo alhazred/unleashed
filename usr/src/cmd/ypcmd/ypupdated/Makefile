@@ -86,9 +86,6 @@ $(NETYP)/%: %
 clean:
 	$(RM) $(OBJS)
 
-lint:
-	${LINT.c} ${SRCS}
-
 check: $(CHKMANIFEST)
 
 cstyle:

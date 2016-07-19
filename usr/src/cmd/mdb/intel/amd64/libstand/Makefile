@@ -42,10 +42,3 @@ CPPFLAGS += -I.
 
 %.o: %.s
 	$(COMPILE.s) $<
-
-%.ln: %.c
-	$(LINT.c) $<
-
-%.ln: %.s
-	$(LINT.s) $<
-

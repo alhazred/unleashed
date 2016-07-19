@@ -31,7 +31,7 @@ DEFAULTFILES=	inetinit.dfl ipsec.dfl
 
 include ../../../Makefile.cmd
 
-all clean lint:
+all clean:
 
 install: all $(ROOTETCDEFAULTFILES)
 

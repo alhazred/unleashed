@@ -57,6 +57,5 @@ clean:
 clobber: clean
 	$(RM) $(ROOTBINPROGS) $(ROOTINITPROGS)
 
-lint:
 
 FRC:

@@ -61,4 +61,3 @@ clean:
 clobber: clean
 	$(RM) $(PROG) $(CLOBBERFILES)
 
-lint:

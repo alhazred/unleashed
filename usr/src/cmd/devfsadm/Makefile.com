@@ -79,8 +79,6 @@ LINK_OBJS =	$(LINK_OBJS_CMN) \
 LINK_SRCS =	$(LINK_OBJS_CMN:%.o=$(COMMON)/%.c) \
 		$(LINK_OBJS_$(MACH):%.o=%.c)
 
-LINT_MODULES = $(LINK_SRCS:%.c=%.ln)
-
 LINK_MODS =	$(LINK_OBJS:%.o=SUNW_%.so)
 
 DEVLINKTAB = devlink.tab
@@ -92,9 +90,6 @@ CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT \
 		-I$(COMMON) -I$(UTSBASE)/common -I$(MODLOADDIR)
 CFLAGS += $(CCVERBOSE) $(C_PICFLAGS)
 
-LINTFLAGS += -erroff=E_NAME_USED_NOT_DEF2
-LINTFLAGS += -erroff=E_NAME_DEF_NOT_USED2
-LINTFLAGS += -erroff=E_NAME_MULTIPLY_DEF2
 
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-char-subscripts
@@ -142,7 +137,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 
 
 .KEEP_STATE:
@@ -162,15 +156,6 @@ install: all				\
 
 clean:
 	$(RM) $(OBJS) 
-
-
-lint: $(DEVFSADM_MOD).ln $(LINT_MODULES)
-
-devfsadm.ln: $(DEVFSADM_SRC)
-	$(LINT.c) $(DEVFSADM_SRC) $(LDLIBS)
-
-%.ln: $(DEVFSADM_SRC) %.c
-	$(LINT.c) $(DEVFSADM_SRC) $(@:.ln=.c) $(LDLIBS)
 
 include ../../Makefile.targ
 

@@ -96,7 +96,7 @@ $(CHECK_OPEN) $(CHECK_LMTD): \
 	@$(COMM) -23 $@.enabled $@.all | $(TEE) $@.notcovered
 	@$(TEST) ! -s $@.notcovered && $(TOUCH) $@
 
-lint _msg:
+_msg:
 
 clobber clean:
 	$(RM) $(CHECK_OPEN)* $(CHECK_LMTD)*

@@ -47,7 +47,6 @@ ROOTSYMLINKS=	$(ROOTBIN)/mailq \
 
 CPPFLAGS =	-I. $(CPPFLAGS.master)
 
-LINTFLAGS	+= -erroff=E_FUNC_RET_ALWAYS_IGNOR2
 
 # conditional assignments
 #
@@ -55,7 +54,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 
 # install rules
 $(ROOTINC)/% : %
@@ -89,9 +87,6 @@ $(ROOTUSRSBIN)/sendmail:
 
 $(ROOTETCMAIL)/%:  %
 	$(INS.file)
-
-lint: 
-	$(LINT.c) $(SRCS)
 
 clean:
 	$(RM) $(OBJS) $(MWOBJS) mailwrapper

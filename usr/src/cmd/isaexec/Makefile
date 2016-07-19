@@ -40,7 +40,4 @@ install: all $(ROOTLIBPROG)
 
 clean:
 
-lint:
-	$(LINT.c) $(PROG).c $(LDLIBS)
-
 include ../Makefile.targ

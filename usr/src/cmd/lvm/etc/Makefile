@@ -42,7 +42,6 @@ all:=           TARGET= all
 install:=       TARGET= install
 clean:=         TARGET= clean
 clobber:=       TARGET= clobber
-lint:=          TARGET= lint
 
 ETCLVMD= $(ROOTETC)/lvm
 ETCFLASHD=	$(ROOTETC)/flash
@@ -74,7 +73,6 @@ install: all .WAIT $(DIRS) .WAIT $(ETCLVMINITPROG) \
 
 cstyle:
 
-lint:
 
 $(DIRS):
 	$(INS.dir)

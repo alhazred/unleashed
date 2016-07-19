@@ -67,7 +67,6 @@ LIBUSRGRP=	$(LIBDIR)/lib.a
 LIBADM=		-ladm
 LOCAL=		../inc
 HERE=		.
-LINTFLAGS=	-u
 
 ROOTSKEL=	$(ROOTETC)/skel
 INSSBINPROG=	$(SBINPROG:%=$(ROOTUSRSBIN)/%)
@@ -116,6 +115,5 @@ install:	all $(ROOTETCDEFAULTFILES) .WAIT \
 clean:
 	$(RM) $(OBJECTS)
 
-lint:	lint_SRCS
 
 include ../../Makefile.targ

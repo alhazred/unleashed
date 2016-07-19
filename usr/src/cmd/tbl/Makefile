@@ -58,7 +58,6 @@ install :	all $(ROOTPROG)
 clean : 
 		$(RM) $(OBJS)
 
-lint:		lint_SRCS
 
 strip :
 		$(STRIP) $(PROG)

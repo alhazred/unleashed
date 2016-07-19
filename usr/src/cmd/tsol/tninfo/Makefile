@@ -44,6 +44,5 @@ install:	all $(ROOTUSRSBINPROG)
 clean:
 	$(RM) $(OBJS) tags
 
-lint:	lint_PROG
 
 include	../Makefile.targ

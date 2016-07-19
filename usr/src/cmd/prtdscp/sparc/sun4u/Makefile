@@ -42,8 +42,6 @@ CFLAGS +=	$(CCVERBOSE)
 LDFLAGS	+=	-L$(USR_PSM_LIB_DIR)
 LDFLAGS	+=	-R\$$ORIGIN/../lib
 
-LINT_FLAGS=	-c -Nlevel=4 -Ncheck $($(CONCURR_MODE)_FLAGS)
-
 .KEEP_STATE:
 
 # Definitions for installation of the program
@@ -56,9 +54,6 @@ install: all .WAIT $(ROOTPSMPROG)
 
 clean:
 	$(RM) $(PROG) $(OBJS)
-
-lint:
-	$(LINT) $(LINT_FLAGS) $(CPPFLAGS) $(SRCS)
 
 include	../../../Makefile.targ
 include	../../../../Makefile.psm.targ

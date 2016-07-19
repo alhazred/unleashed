@@ -33,13 +33,12 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 cstyle :=	TARGET= cstyle
 check :=	TARGET= check
 
 .KEEP_STATE:
 
-all install cstyle lint : $(SUBDIRS)
+all install cstyle: $(SUBDIRS)
 
 check: stmfproxy
 

@@ -39,7 +39,6 @@ CONF_2300 = SUNW,Netra-CP2300.conf SUNW,Netra-CP2300.RTM.conf envmond.conf
 
 ROOTCONF_2300 =	$(CONF_2300:%=$(ROOTLIBDIR)/%)
 $(ROOTCONF_2300)	:= FILEMODE = 0644
-ROOTLINTDIR_2300 =	$(ROOTLIBDIR)
 
 .KEEP_STATE:
 
@@ -49,7 +48,6 @@ all	:=	TARGET= all
 install :=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 all:
 
@@ -62,11 +60,6 @@ $(CONF_2300): FRC
 # include library targets
 include $(SRC)/lib/Makefile.targ
 include	$(SRC)/cmd/picl/plugins/Makefile.targ
-
-$(ROOTLINTDIR_2300)/%: ../%
-	$(INS.file)
-
-lint:
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

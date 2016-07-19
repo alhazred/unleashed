@@ -39,15 +39,9 @@ include $(SRC)/cmd/picl/plugins/Makefile.com
 
 SRCS=		$(OBJECTS:%.o=%.c)
 
-LINT_SRC=	$(LINTLIB:%.ln=%)	
-
 $(OBJS_DIR)/%.o:		$(SRC)/sun4v/piclsbl/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-$(LINTS_DIR)/%.ln:              $(SRC)/sun4v/piclsbl/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
 
 LIBS =		$(DYNLIB)
 
@@ -56,8 +50,6 @@ DYNFLAGS_PLAT =		/usr/platform/\$$PLATFORM/lib/picl/plugins
 DYNFLAGS_SUN4V =	/usr/platform/sun4v/lib/picl/plugins
 DYNFLAGS_COM =		/usr/lib/picl/plugins
 ROOTLIBDIR =		$(ROOT_PLAT_PLUGINDIR)
-
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
 
 CPPFLAGS +=	-I$(SRC)/sun4v/piclsbl
 CPPFLAGS +=	-I$(SRC)/uts/common/sys
@@ -71,7 +63,6 @@ DYNFLAGS +=	-R$(DYNFLAGS_COM)
 
 LDLIBS +=	-lc -lpicltree -lumem -lnvpair
 
-LINTFLAGS +=	-erroff=E_BAD_PTR_CAST_ALIGN -v
 
 .KEEP_STATE:
 
@@ -88,8 +79,5 @@ $(LIBLINKS):	FRC
 # include library targets
 include $(SRC)/cmd/picl/plugins/Makefile.targ
 include $(SRC)/lib/Makefile.targ
-
-lint :
-	$(LINT.c) $(SRCS)
 
 FRC:

@@ -45,15 +45,11 @@ PLATFORM = sun4u
 
 USR_PLAT_PSVCOBJ = $(LIBS:%=$(USR_PSM_LIB_DIR)/%)
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
 CPPFLAGS +=	-I$(SRC)/uts/sun4u -I.
 
 CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-L$(SRC)/lib/libdevfsevent
 LDLIBS +=	-lc 
-
-LINTFLAGS +=
 
 # definitions for install_h target
 HDRS=		psvc_objects.h
@@ -70,7 +66,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 all: $(LIBS) $(LIBLINKS)
@@ -98,9 +93,6 @@ $(USR_PSM_LIB_DIR)/%: % $(USR_PSM_LIB_DIR)
 	$(INS.file) ;\
 	$(RM) -r $(USR_PSM_LIB_DIR)/libpsvcobj.so; \
 	$(SYMLINK) ./libpsvcobj.so$(VERS) $(USR_PSM_LIB_DIR)/libpsvcobj.so
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

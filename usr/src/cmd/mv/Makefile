@@ -44,11 +44,9 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-uninitialized
 $(XPG4) := CFLAGS += -DXPG4
-LINTFLAGS += -DXPG4 -u
 XGETFLAGS += -a -x mv.xcl
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -I $(SRC)/common/util
 
-lint :=	LDLIBS += -lcmdutils -lavl -lsec -lnvpair
 $(PROG) := LDLIBS += -lcmdutils -lavl -lsec -lnvpair
 $(XPG4) := LDLIBS += -lcmdutils -lavl -lsec -lnvpair
 
@@ -98,6 +96,5 @@ $(ROOTXPG4LINKS):	$(ROOTXPG4PROG)
 clean:
 	$(RM) $(OBJS) $(XPG4OBJS)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

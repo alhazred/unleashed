@@ -68,7 +68,7 @@ CERRWARN +=	-_gcc=-Wno-unused-variable
 
 all: $(EXES)
 
-clean lint:
+clean:
 
 clobber: FRC
 	-$(RM) $(CSRCS:%.c=%.exe) $(CSRCS:%.c=%.o)

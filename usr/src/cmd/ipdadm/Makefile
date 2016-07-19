@@ -34,7 +34,6 @@ $(PROG): $(OBJS)
 clean:
 	-$(RM) $(CLEANFILES)
 
-lint: lint_PROG
 
 %.o: ../%.c
 	$(COMPILE.c) $<

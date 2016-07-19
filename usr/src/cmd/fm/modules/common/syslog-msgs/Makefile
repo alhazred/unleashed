@@ -29,5 +29,4 @@ SRCS = syslog.c
 include ../../Makefile.plugin
 
 LDFLAGS += -L $(ROOT)/usr/lib/fm  -R/usr/lib/fm
-LINTFLAGS += -L$(ROOT)/usr/lib/fm
 LDLIBS += -lfmd_msg -lscf

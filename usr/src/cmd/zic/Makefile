@@ -92,7 +92,6 @@ $(NATIVE):
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 $(NOBJS): $$(@F:.o=.c)
 	$(NATIVECC) -O $(NATIVE_CFLAGS) $(NCPPFLAGS) -c -o $@ $(@F:.o=.c)
@@ -107,12 +106,6 @@ $(NATIVE)/tzfile.h: $(ROOT)/usr/include/tzfile.h
 #
 clobber: clean
 	-$(RM) $(PROG) $(CLOBBERFILES)
-
-lint_PROG:
-	$(LINT.c) $(PROG).c $(LDLIBS)
-
-lint_SRCS:
-	$(LINT.c) $(SRCS) $(LDLIBS)
 
 #
 # For message catalogue files

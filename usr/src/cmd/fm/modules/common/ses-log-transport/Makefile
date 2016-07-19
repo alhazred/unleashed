@@ -30,6 +30,5 @@ SRCS = ses_log_transport.c
 include ../../Makefile.plugin
 
 CFLAGS += $(INCS)
-LINTFLAGS += $(INCS)
 LDLIBS += -L$(ROOTLIB)/fm -ltopo -lseslog
 LDFLAGS += -R/usr/lib/fm

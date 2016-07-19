@@ -58,7 +58,6 @@ $(LIBPROG):	$(OBJS)
 	$(COMPILE.c) $<
 
 
-lint:	lint_SRCS
 
 clean:     
 	$(RM) $(FSSNAPOBJS) $(TOPOBJS)

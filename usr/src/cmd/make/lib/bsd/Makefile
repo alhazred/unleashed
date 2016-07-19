@@ -26,7 +26,6 @@ all: $(LIBS)
 
 install: all
 
-lint:
 
 _msg:
 

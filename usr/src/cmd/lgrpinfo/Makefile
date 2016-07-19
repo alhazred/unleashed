@@ -41,6 +41,5 @@ clean:
 $(ROOTBINPROG): $(PROG)
 	$(INS.file)
 
-lint:
 
 include ../Makefile.targ

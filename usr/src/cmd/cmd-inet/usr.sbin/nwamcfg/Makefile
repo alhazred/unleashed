@@ -68,10 +68,4 @@ check:  $(PROG).c $(PROG).h
 clean:
 	$(RM) $(OBJS) $(CLEANFILES)
 
-#
-# We don't do lint of lex- and yacc- generated source files
-#
-lint:
-	$(LINT.c) -c $(PROG).c $(LDLIBS)
-
 include ../../../Makefile.targ

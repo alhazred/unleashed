@@ -45,7 +45,6 @@ all:	$(ROOTFS_PROG)
 
 install:	$(ROOTLIBFSTYPEPROG)
 
-lint:	lint_SRCS
 
 clean:     
 	$(RM) $(OBJS)

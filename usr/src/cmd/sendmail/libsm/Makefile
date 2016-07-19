@@ -72,7 +72,6 @@ install: all
 
 LDLIBS += -lldap
 
-lint:	lint_SRCS
 
 test: $(TESTS)
 

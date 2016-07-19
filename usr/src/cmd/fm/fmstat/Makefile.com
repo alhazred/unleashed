@@ -29,7 +29,6 @@
 SRCS += fmstat.c
 
 OBJS = $(SRCS:%.c=%.o)
-LINTFILES = $(SRCS:%.c=%.ln)
 
 PROG = fmstat
 ROOTPROG = $(ROOTUSRSBIN)/$(PROG)
@@ -37,18 +36,15 @@ ROOTPROG = $(ROOTUSRSBIN)/$(PROG)
 STATCOMMONDIR = $(SRC)/cmd/stat/common
 
 STAT_COMMON_OBJS = timestamp.o
-STAT_LINTFILES = $(STAT_COMMON_OBJS:%.o=%.ln)
-LINTFILES += $(STAT_LINTFILES)
 
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 CPPFLAGS += -I. -I../common -I$(STATCOMMONDIR)
 CFLAGS += $(CTF_FLAGS) $(CCVERBOSE) $(XSTRCONST)
 LDLIBS += -L$(ROOT)/usr/lib/fm -lfmd_adm
 LDFLAGS += -R/usr/lib/fm
-LINTFLAGS += -mnu
 
 .NO_PARALLEL:
-.PARALLEL: $(OBJS) $(LINTFILES)
+.PARALLEL: $(OBJS)
 
 all: $(PROG)
 
@@ -70,22 +66,10 @@ $(PROG): $(OBJS) $(STAT_COMMON_OBJS)
 	$(CTFCONVERT_O)
 
 clean:
-	$(RM) $(OBJS) $(STAT_COMMON_OBJS) $(LINTFILES)
+	$(RM) $(OBJS) $(STAT_COMMON_OBJS)
 
 clobber: clean
 	$(RM) $(PROG)
-
-%.ln: $(STATCOMMONDIR)/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../common/%.c
-	$(LINT.c) -c $<
-
-%.ln: %.c
-	$(LINT.c) -c $<
-
-lint: $(LINTFILES)
-	$(LINT) $(LINTFLAGS) $(LINTFILES)
 
 install_h:
 

@@ -87,7 +87,6 @@ install:	all $(ROOTETCINITDPROG) \
 		$(ROOTETCRC2D)/README \
 		$(ROOTETCRC3D)/README
 
-lint:
 
 clean:
 

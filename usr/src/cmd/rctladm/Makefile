@@ -29,7 +29,6 @@ OBJS = rctladm.o utils.o
 SRCS = $(OBJS:.o=.c)
 POFILES = $(OBJS:.o=.po)
 
-lint := LINTFLAGS = -mx
 
 include ../Makefile.cmd
 
@@ -57,6 +56,5 @@ $(POFILE): $(POFILES)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

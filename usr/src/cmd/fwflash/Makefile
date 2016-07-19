@@ -39,12 +39,11 @@ clobber :=      TARGET= clobber
 check :=	TARGET= check
 install :=      TARGET= install
 install_h :=	TARGET= install_h
-lint :=         TARGET= lint
 _msg :=         TARGET= _msg
 msg :=         	TARGET= msg
 
 
-all clean clobber install lint msg _msg: $(SUBDIRS)
+all clean clobber install msg _msg: $(SUBDIRS)
 check install_h: $(COMMON_SUBDIRS)
 
 $(SUBDIRS): FRC

@@ -55,12 +55,6 @@ $(PROG): $(OBJS) $(COMMON_OBJS)
 	$(LINK.c) -o $(PROG) $(OBJS) $(COMMON_OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
-lint	:= LINTFLAGS += -u -DSOLARIS
-lint	:= LINTFLAGS64 += -u -DSOLARIS
-
-lint:	$$(SRCS)
-	$(LINT.c) $(SRCS) $(LDLIBS)
-
 $(POFILE): $(POFILES)
 	$(RM) $@
 	cat $(POFILES) > $@

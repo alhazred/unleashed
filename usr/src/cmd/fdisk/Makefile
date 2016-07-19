@@ -41,7 +41,6 @@ LDLIBS += -ladm -lefi $(LDLIBS_$(MACH))
 i386_CFLAGS += -D_LARGEFILE64_SOURCE
 i386_CFLAGS += -D_FILE_OFFSET_BITS=64
 
-LINTFLAGS += -erroff=E_BAD_PTR_CAST_ALIGN -erroff=E_NAME_DEF_NOT_USED2
 
 all:	$(ROOTFS_PROG)
 
@@ -54,6 +53,5 @@ FRC:
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

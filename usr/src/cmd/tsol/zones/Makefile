@@ -45,7 +45,6 @@ $(ROOTLIBZONES):
 $(ROOTETCZONESFILES)/% $(ROOTLIBZONES)/%: %
 	$(INS.file)
 
-lint:
 
 clean:
 

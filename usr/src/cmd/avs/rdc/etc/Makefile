@@ -68,4 +68,3 @@ clean:
 
 clobber: clean
 
-lint:

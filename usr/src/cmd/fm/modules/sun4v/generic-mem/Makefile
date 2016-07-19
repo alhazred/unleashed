@@ -58,6 +58,3 @@ CERRWARN += -_gcc=-Wno-parentheses
 %.o: $(GENERIC_MEM)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-%.ln: $(GENERIC_MEM)/%.c
-	$(LINT.c) -c $<

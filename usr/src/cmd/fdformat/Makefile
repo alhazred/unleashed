@@ -30,7 +30,6 @@ PROG= fdformat
 include ../Makefile.cmd
 
 LDLIBS +=	-lvolmgt
-LINTFLAGS +=    -um
 
 .KEEP_STATE:
 
@@ -49,6 +48,5 @@ install: all $(ROOTPROG)
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

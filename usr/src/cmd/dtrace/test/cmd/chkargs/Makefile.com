@@ -46,7 +46,7 @@ $(ROOTPROG64) := FILEMODE = 0555
 
 all: $(PROG)
 
-clean lint:
+clean:
 
 clobber:
 	$(RM) $(PROG) $(ROOTISAEXEC)

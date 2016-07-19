@@ -36,8 +36,6 @@ CFLAGS +=	$(CCVERBOSE) $(CTF_FLAGS)
 CFLAGS64 +=	$(CCVERBOSE) $(CTF_FLAGS)
 CPPFLAGS +=	-I$(SRC)/lib/libcpc/common
 
-LINTFLAGS +=	-u
-LINTFLAGS64 +=	-u
 
 .KEEP_STATE:
 
@@ -51,7 +49,6 @@ $(PROG): $(OBJS)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 strip:
 	$(STRIP) $(PROG)

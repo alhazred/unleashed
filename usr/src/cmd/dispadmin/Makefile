@@ -90,11 +90,6 @@ $(PROGS): $$(OBJ) subr.o
 	$(LINK.c) -o $@ $(OBJ) subr.o $(LDLIBS)
 	$(POST_PROCESS)
 
-llib-lsubr.ln:	subr.c
-	$(LINT.c) -y -o subr subr.c
-
-lint :=	LDLIBS += -L. -lsubr
-
 install: all $(ROOTPROG) $(ROOTRT) $(ROOTTS) $(ROOTIA) $(ROOTFSS) $(ROOTFX) \
 		$(ROOTSDC) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 
@@ -106,14 +101,5 @@ check: $(CHKMANIFEST)
 
 clean:
 	$(RM) $(OBJECTS) $(PROGS) llib-lsubr.ln
- 
-lint:	llib-lsubr.ln
-	$(LINT.c) dispadmin.c $(LDLIBS)
-	$(LINT.c) fssdispadmin.c $(LDLIBS)
-	$(LINT.c) fxdispadmin.c $(LDLIBS)
-	$(LINT.c) iadispadmin.c $(LDLIBS)
-	$(LINT.c) rtdispadmin.c $(LDLIBS)
-	$(LINT.c) sdcdispadmin.c $(LDLIBS)
-	$(LINT.c) tsdispadmin.c $(LDLIBS)
  
 include ../Makefile.targ

@@ -37,7 +37,7 @@ all: $(FILES)
 
 install: all $(ROOTETCFILES)
 
-clean clobber lint:
+clean clobber:
 
-# no PROG to lint or clobber, so don't include.
+# no PROG to clobber, so don't include.
 #include ../../Makefile.targ

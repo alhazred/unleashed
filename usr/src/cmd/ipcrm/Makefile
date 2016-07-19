@@ -32,7 +32,6 @@ include ../Makefile.cmd
 
 PROG=		ipcrm
 
-LINTFLAGS =	-x -erroff=E_NAME_USED_NOT_DEF2
 
 .KEEP_STATE:
 
@@ -42,6 +41,5 @@ install:	all $(ROOTPROG)
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

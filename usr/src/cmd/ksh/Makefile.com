@@ -116,12 +116,4 @@ INSTALL.ksh.64bit=@ \
 	done \
 	)
 
-#
-# ksh is not lint-clean yet; fake up a target.  (You can use
-# "make lintcheck" to actually run lint; please send all lint fixes
-# upstream (to AT&T) so the next update will pull them into ON.)
-#
-lint:
-	@ print "usr/src/cmd/ksh is not lint-clean: skipping"
-
 include ../Makefile.testshell

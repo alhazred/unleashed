@@ -71,7 +71,6 @@ adt_xlate.po: $(XLATEDIR)/adt_xlate.c
 
 _msg:	$(MSGDOMAINPOFILE)
 
-lint:	lint_SRCS
 
 clean:
 	$(RM) $(OBJS)

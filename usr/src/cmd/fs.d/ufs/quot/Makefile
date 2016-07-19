@@ -40,9 +40,7 @@ CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 CFLAGS	+=	$(CCVERBOSE)
 LDLIBS	+=	-ladm
 
-lint		:=	PROG= $(LIBPROG)
 
-lint:		lint_PROG
 
 $(ROOTUSRSBIN)/$(LIBPROG):
 		-$(RM) $@; $(SYMLINK) $(LINKVALUE) $@

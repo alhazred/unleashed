@@ -56,4 +56,4 @@ $(ETCINETPUBLICKEYDIR) $(ETCINETCRLDIR):
 
 FRC:
 
-clean clobber lint:
+clean clobber:

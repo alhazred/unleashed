@@ -63,7 +63,6 @@ all	:=	TARGET = all
 install	:=	TARGET = install
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 _msg	:=	TARGET = _msg
 
 
@@ -81,7 +80,7 @@ POFILE = ptools.po
 
 .PARALLEL: $(SUBDIRS)
 
-all install clean lint: $(SUBDIRS)
+all install clean: $(SUBDIRS)
 clobber: $(SUBDIRS) clobber_local
 clobber_local:
 	$(RM) $(CLOBBERFILES)

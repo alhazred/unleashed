@@ -174,7 +174,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 cstyle :=	TARGET= cstyle
 
 all: $(SHAREDOBJ) $(SUBDIRS) $(PROG) $(TXTS) 
@@ -269,32 +268,6 @@ $(ROOTDIRS):
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
-
-lint := CPPFLAGS += -I$(SRC)/lib/libnisdb/yptol
-
-lint:	$(SUBDIRS)
-	$(LINT.c) ypmatch.c nick.c -lnsl
-	$(LINT.c) ypwhich.c nick.c -lnsl
-	$(LINT.c) ypcat.c nick.c -lnsl
-	$(LINT.c) makedbm.c getlist.c yp_getalias.c
-	$(LINT.c) ypalias.c getlist.c yp_getalias.c
-	$(LINT.c) yp_b_svc.c yp_b_subr.c rpc_bootstrap.c getlist.c -lnsl
-	$(LINT.c) ypxfr.c ypxfrd_client.c ypxfrd_xdr.c getlist.c yp_getalias.c \
-		./shared/utils.c ./shared/lockmap.c ./shared/ancil.c -lnsl
-	$(LINT.c) yppush.c getlist.c yp_getalias.c -lnsl
-	$(LINT.c) udpublickey.c
-	$(LINT.c) mkalias.c -lnsl
-	$(LINT.c) stdethers.c -lsocket
-	$(LINT.c) stdhosts.c -lnsl
-	$(LINT.c) ypxfrd_svc.c ypxfrd_xdr.c ypxfrd_server.c \
-		ypserv_net_secure.c \
-		./shared/utils.c ./shared/lockmap.c ./shared/ancil.c \
-		-lnsl -lnisdb
-	$(LINT.c) ypserv.c ypserv_map.c ypserv_proc.c ypserv_ancil.c \
-		ypserv_resolv.c ypserv_resolv_common.c ypv1_xdr.c \
-		ypserv_net_secure.c getlist.c yp_getalias.c \
-		./shared/utils.c ./shared/lockmap.c ./shared/ancil.c \
-		-lnsl -lnisdb
 
 check: $(CHKMANIFEST)
 

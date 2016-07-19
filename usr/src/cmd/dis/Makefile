@@ -45,7 +45,6 @@ install: all $(ROOTPROG) $(ROOTCCSBINLINK)
 clean:
 	$(RM) $(OBJS) $(PROG)
 
-lint: lint_SRCS
 
 include ../Makefile.targ
 include ../Makefile.ctf

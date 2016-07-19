@@ -33,13 +33,12 @@ LLOBJS=		$(OBJS:%.o=%.ll)
 
 include ../../Makefile.cmd
 
-$(PROG) lint 	:= LDLIBS += -lscf -lnsl
+$(PROG)		:= LDLIBS += -lscf -lnsl
 CERRWARN	+= -_gcc=-Wno-uninitialized
 CPPFLAGS	+= -D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT
 CFLAGS		+= -DNDEBUG
 
 # there's some extra utility code defined but not used.
-LINTFLAGS	+= -erroff=E_NAME_DEF_NOT_USED2
 
 VARSYSLOG=	syslog
 VARAUTHLOG=	authlog
@@ -92,9 +91,5 @@ logfiles: $(ROOTVARSYSLOG) $(ROOTVARAUTHLOG)
 
 clean:
 	$(RM) $(OBJS) $(LLOBJS) $(VARSYSLOG) $(VARAUTHLOG)
-
-lint:	lint_SRCS
-
-lock_lint:	$(LLOBJS)
 
 include ../../Makefile.targ

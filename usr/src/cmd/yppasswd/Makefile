@@ -41,7 +41,6 @@ clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
 delete	:=	TARGET= delete
 install	:=	TARGET= install
-lint	:=	TARGET= lint
 catalog	:=	TARGET= catalog
 package	:=	TARGET= package
 _msg	:=	TARGET= msg
@@ -50,7 +49,6 @@ all: $(PROG)
 
 clean clobber _msg:
 
-lint: lint_PROG
 
 install: all $(ROOTPROG)
 

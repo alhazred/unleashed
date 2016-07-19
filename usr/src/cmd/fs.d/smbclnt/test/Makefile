@@ -45,23 +45,17 @@ CPPFLAGS += -I../../../../lib/libsmbfs
 
 LDLIBS += -R '$$ORIGIN/../../../usr/lib'
 LDLIBS += -lsmbfs
-LINTLIBS= -L$(ROOTLIB) -lsmbfs
 
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-unused-variable
 C99MODE= $(C99_ENABLE)
 
-LINTFLAGS += -erroff=E_FUNC_RET_ALWAYS_IGNOR2
 
 # CLOBBERFILES	+= $(LIBPROG)
 
 all:	$(PROG)
 
 install: all $(ROOTOPTPKG) $(TESTDIR) $(INST_CMDS)
-
-lint:
-	for f in $(SRCS); do ;\
-	$(LINT.c) $$f $(LINTLIBS) ; done
 
 clobber: clean
 	-$(RM) $(PROG)

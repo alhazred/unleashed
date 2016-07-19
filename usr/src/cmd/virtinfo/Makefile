@@ -38,8 +38,6 @@ all: $(PROG)
 install: all $(ROOTUSRSBINPROG)
 
 clean:
-	$(RM) $(PROG) $(LINT_FILES)
-
-lint:	lint_PROG
+	$(RM) $(PROG)
 
 include ../Makefile.targ

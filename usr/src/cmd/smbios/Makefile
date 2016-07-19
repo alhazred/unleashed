@@ -48,6 +48,5 @@ clean:
 
 install: $(ROOTUSRSBINPROG)
 
-lint: lint_SRCS
 
 include ../Makefile.targ

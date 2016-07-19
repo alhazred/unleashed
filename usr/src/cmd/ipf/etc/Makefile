@@ -58,6 +58,5 @@ clean:
 
 clobber:
 
-lint:
 
 .PARALLEL:

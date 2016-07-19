@@ -60,9 +60,6 @@ esclex.o: escparse.o
 	$(COMPILE.c) $<
 	$(CTFCONVERT_O)
 
-%.ln: $(EVERSRCDIR)/%.c
-	$(LINT.c) -c $<
-
 escparse.o: $(EVERSRCDIR)/escparse.y
 	$(YACC) -dt $(EVERSRCDIR)/escparse.y
 	$(COMPILE.c) -DYYDEBUG -c -o $@ y.tab.c

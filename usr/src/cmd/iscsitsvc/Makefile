@@ -65,6 +65,5 @@ cmdparse.o: $(COMMONBASE)/cmdparse/cmdparse.c
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

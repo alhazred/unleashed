@@ -31,7 +31,6 @@
 
 SRCS += fmtopo.c
 OBJS = $(SRCS:%.c=%.o)
-LINTFILES = $(SRCS:%.c=%.ln)
 
 PROG = fmtopo
 ROOTLIBFM = $(ROOT)/usr/lib/fm
@@ -43,10 +42,9 @@ CPPFLAGS += -I. -I../common
 CFLAGS += $(CTF_FLAGS) $(CCVERBOSE) $(XSTRCONST)
 LDLIBS += -L$(ROOT)/usr/lib/fm -ltopo -lnvpair
 LDFLAGS += -R/usr/lib/fm
-LINTFLAGS += -mnu
 
 .NO_PARALLEL:
-.PARALLEL: $(OBJS) $(LINTFILES)
+.PARALLEL: $(OBJS)
 
 all: $(PROG)
 
@@ -64,19 +62,10 @@ $(PROG): $(OBJS)
 	$(CTFCONVERT_O)
 
 clean:
-	$(RM) $(OBJS) $(LINTFILES)
+	$(RM) $(OBJS)
 
 clobber: clean
 	$(RM) $(PROG)
-
-%.ln: ../common/%.c
-	$(LINT.c) -c $<
-
-%.ln: %.c
-	$(LINT.c) -c $<
-
-lint: $(LINTFILES)
-	$(LINT) $(LINTFLAGS) $(LINTFILES)
 
 $(ROOTLIBFMD)/%: %
 	$(INS.file)

@@ -65,6 +65,5 @@ symcap.o:	$(OBJCAP)
 clean:
 		$(RM) $(OBJECTS)
 
-lint:
 
 include		$(SRC)/cmd/Makefile.targ

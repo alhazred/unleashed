@@ -111,7 +111,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 
 rpc.rstatd:=	LDLIBS += -lkstat
 rwall:=		CPPFLAGS += -D_REENTRANT
@@ -229,11 +228,6 @@ clean: $(SUBDIRS)
 	-$(RM) $(OBJS) $(DERIVED_FILES)
 
 clobber: $(SUBDIRS)
-
-lint:
-	$(LINT.c) $(WCLNTOBJS:%.o=%.c) -lnsl -lrpcsvc
-	$(LINT.c) $(WSVCOBJS:%.o=%.c) -lnsl -lrpcsvc
-	$(LINT.c) rusers.c -lnsl -lrpcsvc
 
 FRC:
 

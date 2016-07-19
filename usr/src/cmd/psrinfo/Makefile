@@ -49,6 +49,5 @@ clean:
 $(ROOTUSRSBINBINPROG): $(PROG)
 	$(INS.file)
 
-lint:	lint_PROG
 
 include ../Makefile.targ

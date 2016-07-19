@@ -44,6 +44,5 @@ install: all $(ROOTBINAUTHS)
 
 clean:
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

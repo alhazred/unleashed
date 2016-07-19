@@ -33,7 +33,6 @@ CPPFLAGS += -I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(KMFDIR)/include -I.
 CPPFLAGS += -I$(SRC)/uts/sun4v/io/px
 INCDIRS = $(SRC)/uts/common
 CFLAGS += -I$(INCDIRS)
-LINTFLAGS += -I$(INCDIRS)
 
 LDFLAGS += -L$(ROOT)/usr/lib/fm -R/usr/lib/fm
 LDLIBS += -luutil -lxml2 -L$(ROOTLIB)/fm -ltopo

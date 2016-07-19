@@ -31,7 +31,6 @@ include ../Makefile.cmd
 RELUSRSBIN=     ../usr/sbin
 ROOTSYMLINK=    $(ROOTETC)/$(PROG)
 LDLIBS +=	-ladm -lefi
-lint := LINTFLAGS = -u -erroff=E_BAD_FORMAT_ARG_TYPE2
 
 .KEEP_STATE:
 
@@ -44,7 +43,6 @@ $(ROOTSYMLINK):
 
 clean:
 
-lint:   lint_PROG
 
 include ../Makefile.targ
 

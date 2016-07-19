@@ -43,7 +43,7 @@ $(ETCSSHDIR)/% : %
 $(DIRS):
 	$(INS.dir)
 
-all lint clean clobber:
+all clean clobber:
 
 install: all $(DIRS) $(ETCSSHFILES) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 

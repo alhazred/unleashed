@@ -51,6 +51,5 @@ install: all $(ROOTPROG) $(ROOTLIBDATA)
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

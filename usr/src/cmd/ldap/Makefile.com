@@ -75,13 +75,11 @@ ROOTMOD=	$(ROOTBIN)/$(LDAPMOD)
 ALLPROG=	all $(ROOTADD)
 
 CLOBBERFILES += $(OBJS) $(PROG) $(LDAPCLIENTPROG) $(LDAPADDENTPROG) \
-		$(IDSCONFIGPROG) $(LINTOUT)
+		$(IDSCONFIGPROG)
 
 # creating /var/ldap directory
 ROOTVAR_LDAP=	$(ROOT)/var/ldap
 
-LINTFLAGS += -erroff=E_INCONS_ARG_DECL2
-LINTFLAGS += -erroff=E_INCONS_VAL_TYPE_DECL2
 
 CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
 CERRWARN +=	-_gcc=-Wno-parentheses
@@ -93,9 +91,8 @@ all:=           TARGET= all
 install:=       TARGET= install
 clean:=         TARGET= clean
 clobber:=       TARGET= clobber
-lint:=          TARGET= lint
 
-# C Pre-Processor flags used by C, CC & lint
+# C Pre-Processor flags used by C and CC
 CPPFLAGS +=	-DSUN -DSVR4 -DSOLARIS_LDAP_CMD \
 		-I $(SRC)/lib/libldap5/include/ldap \
 		-I $(SRC)/lib/libsldap/common \
@@ -116,7 +113,6 @@ ldaplist :=	C99MODE = $(C99_ENABLE)
 ldapaddent :=	C99MODE = $(C99_ENABLE)
 ldapclient :=	C99MODE = $(C99_ENABLE)
 
-lint :=		LDLIBS += -lldap
 
 .KEEP_STATE:
 
@@ -173,28 +169,5 @@ FRC:
 
 clean:
 	$(RM) $(OBJS)
-
-# Not linted Mozilla upstream commands
-lint: lintns_ldaplist lintns_ldapaddent lintns_ldapclient
-
-lintns_ldaplist := C99MODE = $(C99_ENABLE)
-
-lintns_ldaplist:
-	$(LINT.c) $(LDAPLISTSRCS:%=../ns_ldap/%) $(LDLIBS) -lsldap
-
-lintns_ldapaddent := C99MODE = $(C99_ENABLE)
-
-lintns_ldapaddent:
-	$(LINT.c) $(LDAPADDENTSRCS:%=../ns_ldap/%) $(LDLIBS) -lsldap -lnsl \
-		-lsecdb
-
-lintns_ldapclient := C99MODE = $(C99_ENABLE)
-
-lintns_ldapclient:
-	$(LINT.c) $(LDAPCLIENTSRCS:%=../ns_ldap/%) $(LDLIBS) -lsldap -lscf
-
-lintc_%:
-	$(LINT.c) $(@:lintc_%=../common/%.c) $(LDAPCOMMSRC:%=../common/%) \
-		 $(LDLIBS)
 
 include $(SRC)/cmd/Makefile.targ

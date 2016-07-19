@@ -47,4 +47,3 @@ clean:
 
 include ../../../Makefile.targ
 
-lint:	lint_PROG

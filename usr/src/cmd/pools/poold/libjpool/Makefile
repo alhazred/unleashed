@@ -33,7 +33,6 @@ all :=		TARGET = all
 clean :=	TARGET = clean
 clobber :=	TARGET = clobber
 install :=	TARGET = install
-lint :=		TARGET = lint
 
 JNI_CLASSES = \
 	com.sun.solaris.service.pools.PoolInternal \
@@ -46,7 +45,7 @@ JNI_GENERATED_HEADERS = \
 
 CLEANFILES += $(JNI_GENERATED_HEADERS)
 
-all install lint: $(JNI_GENERATED_HEADERS) .WAIT $(SUBDIRS)
+all install: $(JNI_GENERATED_HEADERS) .WAIT $(SUBDIRS)
 
 clean clobber:		$(SUBDIRS)
 

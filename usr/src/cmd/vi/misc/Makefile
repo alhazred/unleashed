@@ -63,6 +63,5 @@ install: all $(ROOTPROG) $(ROOTXPG4PROG)
 
 clean:
 
-lint:	lint_SRCS
 
 include ../../Makefile.targ

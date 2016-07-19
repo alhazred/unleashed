@@ -44,6 +44,3 @@ LDLIBS += $(LIBDIRS:%=-L%) $(XPORTLIBS)
 %.o: $(ETMDIR)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-%.ln: $(ETMDIR)/%.c
-	$(LINT.c) -c $<

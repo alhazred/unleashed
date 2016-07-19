@@ -48,7 +48,6 @@ CPPFLAGS  += -D_XOPEN_SOURCE=500 -D__EXTENSIONS__
 LDLIBS    += -lxnet -lnvpair -ldhcpagent -ldhcputil -linetutil -ldevinfo -ldlpi
 
 # Disable warnings that affect all XPG applications.
-LINTFLAGS += -erroff=E_INCONS_ARG_DECL2 -erroff=E_INCONS_VAL_TYPE_DECL2
 
 .KEEP_STATE:
 
@@ -66,6 +65,5 @@ $(POFILE):	$(POFILES)
 clean:
 		$(RM) $(OBJS)
 
-lint:		lint_SRCS
 
 include ../../../Makefile.targ

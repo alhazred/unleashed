@@ -62,9 +62,6 @@ install: all $(ROOTUSRSBINPROG)
 clean:	
 	$(RM) $(OBJS) $(POFILES)
 
-lint:	$(SRCS)
-	$(LINT.c) $(SRCS) $(LDLIBS)
-
 check:	$(SRCS) $(PROG).h
 	$(CSTYLE) -pP $(SRCS) $(PROG).h
 	$(HDRCHK) $(PROG).h

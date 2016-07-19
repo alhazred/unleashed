@@ -37,16 +37,6 @@ CLOBBERFILES +=	$(LIBLINKS)
 
 LIBS =		$(DYNLIB)
 
-LINTFLAGS =	-uxmn -I.. -I$(SRC)/lib/libpicl -I$(SRC)/lib/libpicltree
-LINTFLAGS +=	-D_REENTRANT
-LINTOUT=	lint.out
-
-LINTSRC =       $(LINTLIB:%.ln=%)
-ROOTLINTDIR =   $(ROOTLIBDIR)
-ROOTLINT =      $(LINTSRC:%=$(ROOTLINTDIR)/%)
-
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
 XGETFLAGS += -a
 POFILE=	picld_pluginutil.po
 
@@ -58,15 +48,9 @@ DYNFLAGS +=	$(ZNOLAZYLOAD)
 LDLIBS +=	-L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-lc -lpicltree
 
-$(LINTLIB) :=	SRCS = ../llib-lpicld_pluginutil
-$(LINTLIB) :=	LINTFLAGS = -nvx -I..
-
 .KEEP_STATE:
 
 all : $(LIBS)
-
-lint :
-	$(LINT.c) $(SRCS)
 
 %.po:	../%.c
 	$(CP) $< $<.i
@@ -85,6 +69,3 @@ include $(SRC)/lib/Makefile.targ
 pics/%.o:	../%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
-
-$(ROOTLINTDIR)/%: ../%
-	$(INS.file)

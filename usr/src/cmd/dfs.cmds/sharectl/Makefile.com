@@ -35,7 +35,6 @@ SHARECTL_SRC	= $(SHARECTL_MOD:%=$(COMMON)/%.c) shareutil.c
 
 SHARECTL_OBJ	= $(SHARECTL_MOD:%=%.o) shareutil.o
 
-
 MYCPPFLAGS = 	-I.. -I../../sharemgr
 CPPFLAGS += $(MYCPPFLAGS)
 LDLIBS += -lshare -lumem
@@ -55,7 +54,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg:=		TARGET= catalog
 
 .KEEP_STATE:
@@ -70,13 +68,8 @@ $(PROG): $(OBJS)
 
 install: all $(ROOTUSRSBINPROG)
 
-lint:	$(SHARECTL_MOD).ln $(SHARECTL_SRC:.c=.ln)
-
 clean:
 	$(RM) $(OBJS)
-
-%.ln: FRC
-	$(LINT.c) $(SHARECTL_SRC) $(LDLIBS)
 
 include ../../../Makefile.targ
 

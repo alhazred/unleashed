@@ -38,14 +38,6 @@ SRCS=	$(OBJS:%.o=%.c)
 POFILE=	$(OBJS:%.o=%.po)
 
 LDLIBS += -ldscfg
-LINTFLAGS += -D_SYSCALL32 -D__NCALL__
-LINTFLAGS += -erroff=E_NAME_DEF_NOT_USED2
-LINTFLAGS += -erroff=E_SEC_PRINTF_VAR_FMT
-LINTFLAGS += -erroff=E_FUNC_RET_MAYBE_IGNORED2
-LINTFLAGS += -erroff=E_NAME_USED_NOT_DEF2
-LINTFLAGS += -erroff=E_BAD_FORMAT_ARG_TYPE2
-LINTFLAGS += -erroff=E_FUNC_RET_ALWAYS_IGNOR2
-LINTDIR = $(KBASE)/lintdir
 CFLAGS += $(CCVERBOSE) -D_SYSCALL32 -D__NCALL__
 CERRWARN += -_gcc=-Wno-uninitialized
 ROOTLINK = $(ROOTLIB)/$(PROG)
@@ -54,7 +46,6 @@ all	:=	TARGET= all
 install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
@@ -64,7 +55,6 @@ all:	$(SUBDIRS)$(PROG) $(POFILE)
 
 install: $(SUBDIRS) all $(ROOTPROG) $(ROOTLINK)
 
-lint:	$(SUBDIRS) lint_SRCS
 
 clean:	$(SUBDIRS)
 	$(RM) *.o $(POFILE)

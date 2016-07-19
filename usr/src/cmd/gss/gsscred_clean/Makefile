@@ -72,6 +72,5 @@ clean:
 
 clobber:
 
-lint:
 
 include ../../Makefile.targ

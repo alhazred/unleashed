@@ -43,7 +43,6 @@ install: all $(ROOTPROG)
 
 clean:
 
-lint:	lint_PROG
 
 $(DCFILE): $(PROG).c
 	$(RM) $(DCFILE)

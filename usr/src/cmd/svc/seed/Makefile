@@ -202,7 +202,7 @@ install_miniroot: $(INSTALLSEED) miniroot.db
 $(INSTALLSEED):
 	$(INS.dir)
 
-clean lint:
+clean:
 	$(RM) common.db
 
 clobber:

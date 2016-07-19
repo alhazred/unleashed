@@ -43,7 +43,7 @@ FILEMODE = 0644
 
 .KEEP_STATE:
 
-all clean clobber lint:
+all clean clobber:
 
 install: $(CONF:%=$(CONFDIR)/%)
 

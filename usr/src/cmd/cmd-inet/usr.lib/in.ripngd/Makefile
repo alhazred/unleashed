@@ -44,7 +44,6 @@ _D_UNIX98_EXTN= -D_XOPEN_SOURCE=500 -D__EXTENSIONS__
 $(OBJS) :=	CFLAGS +=	$(CCVERBOSE)
 $(OBJS) :=	CPPFLAGS +=	$(_D_UNIX98_EXTN)
 
-LINTFLAGS +=	$(_D_UNIX98_EXTN)
 
 # in.ripngd uses the ancillary data feature which is available only through
 # UNIX 98 standards version of Socket interface. This interface is supposed to
@@ -72,6 +71,5 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include		../../../Makefile.targ

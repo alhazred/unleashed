@@ -121,7 +121,6 @@ install: all $(DIRS) $(IBINPROG) $(ISBINPROG) $(ROOTETCDEFAULTFILES) \
 clean:
 	$(RM) $(OBJS) $(OUTSIDE_UTIL_OBJS)
 
-lint: lint_SRCS
 
 check:	$(CHKMANIFEST)
 

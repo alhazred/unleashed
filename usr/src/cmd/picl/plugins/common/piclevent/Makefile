@@ -54,7 +54,6 @@ ROOTLIBDIR =	$(USR_LIB_PLUGINDIR)
 ROOTETC	=	$(ROOT)/etc
 ROOTLIB =	$(ROOT)/usr/lib
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB) $(MOD_OBJS)
 CLOBBERFILES += $(LIBLINKS)
 CLOBBERFILES += $(MODULES)
 
@@ -65,7 +64,6 @@ CPPFLAGS +=	-D_REENTRANT
 LDLIBS +=	-L$(SRC)/lib/libsysevent -L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-lc -lpicltree -lnvpair
 
-LINTFLAGS +=	-L$(SRC)/lib/libpicltree/$(MACH) -lpicltree
 
 .KEEP_STATE:
 
@@ -77,7 +75,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 all: $(LIBS) $(LIBLINKS) $(MODULES)
@@ -102,9 +99,6 @@ $(LIBLINKS):	FRC
 # include library targets
 include $(SRC)/cmd/picl/plugins/Makefile.targ
 include $(SRC)/lib/Makefile.targ
-
-lint :
-	$(LINT.c) $(SRCS)
 
 %.so: %.o
 	$(LINK.c) -o $@ $(GSHARED) -h $@ $< $(MOD_LDLIBS)

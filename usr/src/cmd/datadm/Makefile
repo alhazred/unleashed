@@ -47,6 +47,5 @@ clean:
 cstyle:
 	$(CSTYLE) $(SRCS)
 
-lint:	lint_PROG
 
 include ../Makefile.targ

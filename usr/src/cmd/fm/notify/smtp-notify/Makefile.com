@@ -28,7 +28,6 @@
 
 SRCS += smtp-notify.c
 OBJS = $(SRCS:%.c=%.o)
-LINTFILES = $(SRCS:%.c=%.ln)
 
 PROG = smtp-notify
 HELPER = process_msg_template.sh
@@ -50,12 +49,11 @@ CFLAGS += $(CTF_FLAGS) $(CCVERBOSE) $(XSTRCONST)
 LDLIBS += -L$(ROOT)/usr/lib/fm -lnvpair -lfmevent -lfmd_msg -lfmnotify \
 -lumem
 LDFLAGS += -R/usr/lib/fm
-LINTFLAGS += -mnu
 
 CERRWARN += -_gcc=-Wno-parentheses
 
 .NO_PARALLEL:
-.PARALLEL: $(OBJS) $(LINTFILES)
+.PARALLEL: $(OBJS)
 
 all: $(PROG) $(HELPER)
 
@@ -76,19 +74,10 @@ $(HELPER): ../common/$(HELPER)
 	$(CTFCONVERT_O)
 
 clean:
-	$(RM) $(OBJS) $(HELPER) $(LINTFILES)
+	$(RM) $(OBJS) $(HELPER)
 
 clobber: clean
 	$(RM) $(PROG)
-
-%.ln: ../common/%.c
-	$(LINT.c) -c $<
-
-%.ln: %.c
-	$(LINT.c) -c $<
-
-lint: $(LINTFILES)
-	$(LINT) $(LINTFLAGS) $(LINTFILES)
 
 $(ROOTLIBNOTIFY):
 	$(INS.dir)

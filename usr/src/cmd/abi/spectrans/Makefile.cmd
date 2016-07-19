@@ -38,10 +38,8 @@ U_LIB_A	=	$(U_DIR)/lib$(U_LIB).a
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(U_BASE) -I..
 LDFLAGS	+=	-L$(U_DIR)
-LINTFLAGS +=	-xsuF -errtags=yes
 
 LDLIBS	+=	-l$(U_LIB) -lgen
-LINTLIBS =	-L$(U_DIR) -l$(U_LIB)
 
 SRCS	=	$(OBJECTS:%.o=../%.c)
 
@@ -76,6 +74,3 @@ clean:
 
 clobber: clean
 	-$(RM) $(PROG) $(CLOBBERFILES)
-
-lint:
-	$(LINT.c) $(SRCS) $(LINTLIBS)

@@ -146,7 +146,6 @@ clean:
 
 clobber: 	clean
 
-lint:
 
 $(ROOTETCMAIL)/%.cf: %.cf
 	$(INS.file)

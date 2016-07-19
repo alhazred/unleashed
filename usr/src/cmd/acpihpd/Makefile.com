@@ -36,7 +36,6 @@ include ../../../Makefile.psm
 
 OBJS =	acpihpd.o notify.o
 SRCS =	$(OBJS:%.o=../%.c)
-LINTFILES = $(SRCS:%.c=%.ln)
 CLOBBERFILES = $(LIBS)
 
 CFLAGS += $(CCVERBOSE)

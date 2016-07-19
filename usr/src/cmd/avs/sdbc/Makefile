@@ -61,13 +61,6 @@ sdbc_dynmem	:= LDLIBS += -lkstat
 
 CFLAGS +=	$(CCVERBOSE) -D_SCM_ -D_SD_8K_BLKSIZE -D_SYSCALL32
 CPPFLAGS +=	-DNSC_MULTI_TERABYTE
-LINTFLAGS +=	-Xa -n -s -x -m -u -Dlint -errhdr=%user
-LINTFLAGS +=	-D_SCM_ -D_SD_8K_BLKSIZE -D_SYSCALL32
-LINTFLAGS +=	-erroff=E_SEC_PRINTF_VAR_FMT
-LINTFLAGS +=	-erroff=E_SEC_SPRINTF_UNBOUNDED_COPY
-LINTFLAGS +=	-erroff=E_SEC_SCANF_UNBOUNDED_COPY
-LINTFLAGS +=	-erroff=E_SEC_FORBIDDEN_WARN_ASCFTIME
-LINTFLAGS +=	-DDEBUG
 CERRWARN +=	-_gcc=-Wno-uninitialized
 ROOTLINK = $(ROOTUSRSBIN)/scmadm
 
@@ -75,7 +68,6 @@ all	:=	TARGET= all
 install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
@@ -85,7 +77,6 @@ all:	$(SUBDIRS) $(PROG) $(POFILE)
 
 install: $(SUBDIRS) all $(ROOTPROG) $(ROOTLINK)
 
-lint:	$(SUBDIRS) lint_SRCS
 
 clean:	$(SUBDIRS)
 	$(RM) *.o

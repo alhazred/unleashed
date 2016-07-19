@@ -49,22 +49,9 @@ OBJECTS=	\
 		mhd_synch.o \
 		mhd_time.o
 
-LINTOBJECTS=	\
-		mhd_drive.o \
-		mhd_error.o \
-		mhd_failfast.o \
-		mhd_freeresult.o \
-		mhd_init.o \
-		mhd_mem.o \
-		mhd_metamhd.o \
-		mhd_set.o \
-		mhd_synch.o \
-		mhd_time.o
-
 OBJECTS += $(DERIVED_FILES:.c=.o)
 
 SRCS = $(OBJECTS:%.o=../%.c)
-LINTSRCS = $(LINTOBJECTS:%.o=../%.c)
 
 include ../../../Makefile.cmd
 include ../../Makefile.lvm
@@ -84,7 +71,6 @@ CFLAGS += $(DEFINES)
 
 #
 #
-lint := LINTFLAGS += -m
 
 .KEEP_STATE:
 
@@ -105,9 +91,6 @@ catalog:
 
 cstyle:
 	${CSTYLE} ${SRCS}
-
-lint:
-	${LINT.c} $(LINTFLAGS) ${LINTSRCS}
 
 clean:
 	${RM} ${OBJECTS} ${DERIVED_FILES} *.o

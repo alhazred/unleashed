@@ -64,5 +64,5 @@ $(ROOTDIRS):
 
 FRC:
 
-clean clobber lint:
+clean clobber:
 

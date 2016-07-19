@@ -75,7 +75,6 @@ install:	$(ROOTLIBDIR) $(ROOTLIBS) $(ROOTLINKS)
 cstyle:
 		$(CSTYLE) $(SRCS)
 
-lint:	lintcheck
 
 include		../../../../lib/Makefile.targ
 include		../Makefile.msg

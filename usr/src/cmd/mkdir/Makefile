@@ -52,7 +52,6 @@ LDLIBS += -lgen
 POFILES= $(OBJS:%.o=%.po)
 POFILE= $(PROG)_cmd.po
 
-LINTFLAGS += -erroff=E_GLOBAL_COULD_BE_STATIC2
 
 .KEEP_STATE:
 
@@ -71,6 +70,5 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

@@ -787,7 +787,6 @@ all :=		TARGET = all
 install :=	TARGET = install
 clean :=	TARGET = clean
 clobber :=	TARGET = clobber
-lint :=		TARGET = lint
 _msg :=		TARGET = _msg
 _dc :=		TARGET = _dc
 
@@ -797,7 +796,7 @@ SUBDIRS = $(COMMON_SUBDIRS) $($(MACH)_SUBDIRS)
 
 .PARALLEL:	$(BWOSDIRS) $(SUBDIRS) $(MSGSUBDIRS) $(AUDITSUBDIRS)
 
-all install clean clobber lint: $(FIRST_SUBDIRS) .WAIT $(SUBDIRS) \
+all install clean clobber: $(FIRST_SUBDIRS) .WAIT $(SUBDIRS) \
 	$(AUDITSUBDIRS)
 
 #

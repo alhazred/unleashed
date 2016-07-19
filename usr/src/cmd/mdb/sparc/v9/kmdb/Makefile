@@ -34,7 +34,6 @@ include ../../../Makefile.kmdb
 STANDLIBS += $(ROOT)/usr/lib/sparcv9/libstanddisasm.so
 
 all:	kmdb_modlinktest.o
-lint:	FRC
 
 #
 # Uncomment the following line to enable trap accounting.  A DTLB translation

@@ -53,6 +53,5 @@ elfcap.o:	$(ELFCAP)/elfcap.c
 clean:
 		$(RM) $(OBJS)
 
-lint:		lint_SRCS
 
 include		../Makefile.targ

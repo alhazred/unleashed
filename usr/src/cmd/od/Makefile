@@ -26,7 +26,6 @@ CLOBBERFILES=	$(PROG)
 C99MODE=	-xc99=%all
 C99LMODE=	-Xc99=%all
 CPPFLAGS +=	-D__EXTENSIONS__ -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-LINTFLAGS +=	-D__EXTENSIONS__
 
 # install rules
 $(ROOTINC)/% : %
@@ -48,7 +47,6 @@ $(ROOTXPG4PROG):
 	-$(RM) $@
 	-$(LN) -s ../../bin/$(PROG) $@
 
-lint: 	lint_SRCS
 
 clean:
 	$(RM) $(OBJS)

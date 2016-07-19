@@ -50,6 +50,3 @@ C99LMODE=	-Xc99=%all
 dmod/%.o: $(GENUNIX_DIR)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-dmod/%.ln: $(GENUNIX_DIR)/%.c
-	$(LINT.c) -c $<

@@ -61,13 +61,6 @@ all install :	$(LIBS)
 include		../../../../lib/Makefile.targ
 
 CLEANFILES	+= llib-llpflt.ln
-LINTFLAGS = -nvx
 SRCS= $(OBJECTS:%.o=%.c)
-
-lint:	lintlib
-	$(LINT.c) $(LINTFLAGS) $(SRCS)
-
-lintlib:
-	$(LINT.c) $(LINTFLAGS) -o lpflt llib-llpflt
 
 include		../Makefile.msg

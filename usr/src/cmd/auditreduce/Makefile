@@ -62,7 +62,6 @@ $(POFILE): $(MSGFILES)
 
 _msg: $(MSGDOMAINPOFILE)
 
-lint: lint_SRCS
 
 clean:
 	$(RM) $(OBJS)

@@ -42,12 +42,9 @@ COMMD_OBJECTS =	mdmn_commd_server.o \
 
 MDDOORS_OBJECTS = mddoors.o
 
-LINTOBJECTS =	mdmn_commd_server.o  mdmn_commd_service.o mdmn_subr.o mddoors.o
-
 OBJECTS +=	$(DERIVED_FILES:.c=.o)
 
 SRCS = $(OBJECTS:%.o=../%.c)
-LINTSRCS =	$(LINTOBJECTS:%.o=../%.c)
 
 ROOTLIBLVM = $(ROOTLIB)/lvm
 
@@ -59,7 +56,6 @@ LDLIBS +=	-lmeta
 CFLAGS += $(DEFINES)
 #
 #
-lint := LINTFLAGS += -m
 
 %_svc.c := RPCGENFLAGS += -K -1
 
@@ -84,11 +80,6 @@ install: all $(ROOTLIBLVM) $(INSTPROGS)
 
 cstyle:
 	$(CSTYLE) $(SRCS)
-
-lint:
-	for f in $(LINTSRCS) ; do \
-		$(LINT.c) $(LINTFLAGS) $$f ; \
-	done
 
 clean:
 	$(RM) $(OBJECTS) $(DERIVED_FILES) *.o

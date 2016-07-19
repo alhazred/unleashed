@@ -50,6 +50,3 @@ LDLIBS += -L$(ROOTLIB)/fm -lldom -ltopo
 %.o: $(CPUMEM_RETIRE_COMMON)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-%.ln: $(CPUMEM_RETIRE_COMMON)/%.c
-	$(LINT.c) -c $<

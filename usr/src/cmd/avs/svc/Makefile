@@ -35,7 +35,6 @@ ROOTSVCSYSFILES = $(XML:%=$(ROOTSVCSYSTEM)/%)
 
 all:	$(SHFILES)
 
-lint:
 
 install: all $(ROOTSVCSYSFILES)
 

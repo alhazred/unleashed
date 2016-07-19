@@ -68,8 +68,6 @@ $(PROG): $(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
-LINTFLAGS += -erroff=E_FUNC_HAS_NO_RETURN_STMT
-LINTFLAGS += -erroff=E_BAD_PTR_CAST_ALIGN
 
 .PARALLEL: $(OBJS)
 
@@ -78,7 +76,6 @@ all:	$(PROG)
 clean:
 	$(RM) $(PROG) $(OBJS) $(LLOBJS)
 
-lint:	lint_SRCS
 
 #$(POFILE): $(POFILES)
 #	$(RM) $@

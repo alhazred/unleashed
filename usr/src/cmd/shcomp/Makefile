@@ -91,6 +91,5 @@ $(PROG):	$(OBJECTS)
 clean:
 	$(RM) $(OBJECTS)
 
-lint:
 
 include ../Makefile.targ

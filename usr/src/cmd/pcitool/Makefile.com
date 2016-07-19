@@ -35,7 +35,6 @@ CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-unused-variable
 
-LINTFLAGS += -I$(UTSBASE)/common
 
 .KEEP_STATE:
 
@@ -52,9 +51,6 @@ install: all $(PROG)
 
 clean:
 	$(RM) $(OBJS) $(PROG)
-
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
 
 %.o:	../%.c
 	$(COMPILE.c) -o $@ $<

@@ -32,8 +32,6 @@ include ../../Makefile.cmd
 
 LDLIBS +=	-lelf
 
-LINTFLAGS +=	-erroff=E_NAME_USED_NOT_DEF2
-LINTFLAGS64 +=	-erroff=E_NAME_USED_NOT_DEF2
 
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
@@ -47,7 +45,6 @@ $(PROG): $(OBJS)
 	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-lint:	lint_SRCS
 
 %.o:	../%.c
 	$(COMPILE.c) $<

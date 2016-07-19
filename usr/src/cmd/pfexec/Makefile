@@ -52,6 +52,5 @@ install: all $(ROOTBINPFEXEC)
 
 clean:
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

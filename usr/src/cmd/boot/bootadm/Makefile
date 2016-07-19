@@ -53,9 +53,6 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-unused-label
 
-LINTFLAGS += -erroff=E_INCONS_ARG_DECL2
-LINTFLAGS += -erroff=E_INCONS_VAL_TYPE_DECL2
-LINTFLAGS += -erroff=E_NAME_DEF_NOT_USED2
 
 all: $(PROG)
 
@@ -70,6 +67,5 @@ clean:
 
 _msg:
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

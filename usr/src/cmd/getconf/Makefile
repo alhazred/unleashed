@@ -118,6 +118,5 @@ clean:
 	-@rm -rf $(OBJS) $(XPG4EXOBJS) $(XPG6EXOBJS) $(X4) $(X6) \
 		$(PROG) $(XPG4) $(XPG6)
 
-lint:	lint_PROG
 
 include ../Makefile.targ

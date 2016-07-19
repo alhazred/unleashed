@@ -87,6 +87,5 @@ exprobjs.xpg6:
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_PROG
 
 include ../Makefile.targ

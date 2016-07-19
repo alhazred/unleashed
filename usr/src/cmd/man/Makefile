@@ -35,7 +35,6 @@ clean:
 
 install:	all $(ROOTPROG) $(ROOTLINKS)
 
-lint: 		lint_SRCS
 
 $(PROG):	$(OBJS)
 		$(LINK.c) $(OBJS) -o $@ $(LDLIBS)

@@ -67,6 +67,5 @@ $(EFILE):      $(XPG4PROG)
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

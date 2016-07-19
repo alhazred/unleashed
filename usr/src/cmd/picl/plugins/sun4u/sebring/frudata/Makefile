@@ -39,7 +39,6 @@ ROOTCONF=       $(CONF:%=$(ROOTLIBDIR)/%)
 $(ROOTCONF)	:= FILEMODE = 0644
 
 
-ROOTLINTDIR =   $(ROOTLIBDIR)
 
 .KEEP_STATE:
 
@@ -49,7 +48,6 @@ all	:=	TARGET= all
 install :=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 all: $(CONF)
 
@@ -59,7 +57,6 @@ install:	$(ROOTLIBDIR) $(ROOTCONF)
 include $(SRC)/lib/Makefile.targ
 include	$(SRC)/cmd/picl/plugins/Makefile.targ
 
-lint:
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

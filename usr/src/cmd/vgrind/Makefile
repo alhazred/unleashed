@@ -140,10 +140,4 @@ $(ROOTTMAC):
 clean:
 	$(RM) $(OBJS)
 
-#
-# Don't worry about linting retest.
-#
-lint:=	SRCS = $(VFONTEDPROBJS:%.o=%.c)
-lint: lint_SRCS
-
 include ../Makefile.targ

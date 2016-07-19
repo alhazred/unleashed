@@ -58,7 +58,6 @@ $(ROOTPROG) :=		FILEMODE =	4511
 $(ROOTETCREMOTE) :=	FILEMODE =	644
 $(ROOTACULOG) :=	FILEMODE =	600
 
-LINTFLAGS +=	-u
 CPPFLAGS +=	-DDEFBR=300 -DDEFFS=BUFSIZ -DACULOG -DUSG
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-clobbered
@@ -110,11 +109,6 @@ $(ACULOG):
 clean:	FRC
 	cd aculib; $(MAKE) clean
 	$(RM) $(OBJS)
-
-lint:
-	cd aculib; $(MAKE) lint
-	$(LINT.c) $(SRCS) $(LDLIBS.cmd)
-
 
 include ../Makefile.targ
 

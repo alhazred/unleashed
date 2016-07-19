@@ -43,6 +43,5 @@ install: all $(ROOTSBINPROG)
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

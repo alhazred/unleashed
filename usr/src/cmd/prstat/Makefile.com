@@ -34,8 +34,6 @@ include ../../Makefile.cmd
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 LDLIBS += -lcurses -lproject
-LINTFLAGS += -u
-LINTFLAGS64 += -u
 
 FILEMODE = 0555
 
@@ -55,8 +53,5 @@ $(PROG): $(OBJS)
 %.o:	../%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
-
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
 
 include ../../Makefile.targ

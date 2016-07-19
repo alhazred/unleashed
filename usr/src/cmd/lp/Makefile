@@ -104,7 +104,7 @@ $(POFILE):	$(MSGSUBDIRS) pofile_POFILES
 
 install: $(ROOTDIRS) $(ROOTSYMLINKDIRS) $(SUBDIRS)
 
-clean strip lint: $(SUBDIRS)
+clean strip: $(SUBDIRS)
 
 clobber: $(SUBDIRS) local_clobber
 

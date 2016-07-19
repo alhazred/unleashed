@@ -43,11 +43,6 @@ LIBS =		$(DYNLIB)
 
 ROOTLIBDIR	= $(ROOT_PLAT_PLUGINDIR)
 
-LINTSRC =       $(LINTLIB:%.ln=%)
-ROOTLINTDIR =   $(ROOTLIBDIR)
-ROOTLINT =      $(LINTSRC:%=$(ROOTLINTDIR)/%)
-
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
 
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/common/memcfg
 CFLAGS +=	$(CCVERBOSE)
@@ -80,7 +75,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 POFILE=	piclmemcfg.po
@@ -123,12 +117,6 @@ $(LINKED_PLUGINS_LIBLINKS): $(LINKED_PLUGIN_DIRS)
 # include library targets
 include	$(SRC)/cmd/picl/plugins/Makefile.targ
 include	$(SRC)/lib/Makefile.targ
-
-$(ROOTLINTDIR)/%: ../%
-	$(INS.file)
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

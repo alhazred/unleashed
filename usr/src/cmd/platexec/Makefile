@@ -38,6 +38,5 @@ install: all $(ROOTLIBPROG)
 
 clean:
 
-lint:
 
 include ../Makefile.targ

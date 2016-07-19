@@ -56,7 +56,6 @@ install: all .WAIT $(ROOTPSMPROG)
 clean:
 	$(RM) $(PROG) $(OBJS)
 
-lint: lint_PROG
 
 include ../../../../Makefile.targ
 include ../../../../../Makefile.psm.targ

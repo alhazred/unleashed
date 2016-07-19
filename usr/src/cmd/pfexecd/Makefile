@@ -28,7 +28,6 @@
 PROG=		pfexecd
 MANIFEST=	pfexecd.xml
 SRCS=		$(PROG:%=%.c)
-lint:	lint_SRCS
 
 include ../Makefile.cmd
 
@@ -57,6 +56,5 @@ check:	$(CHKMANIFEST)
 ${ROOTLIB}/%: %
 	${INS.file}
 
-lint: lint_SRCS
 
 include ../Makefile.targ

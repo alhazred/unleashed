@@ -36,7 +36,6 @@ LDLIBS +=	-lsmedia -lvolmgt -ladm -lefi
 
 CERRWARN += -_gcc=-Wno-uninitialized
 
-LINTFLAGS += -u
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 $(ROOTBIN)/rmformat := FILEMODE = 04555
@@ -54,7 +53,6 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 $(POFILE) : $(SRCS)
 	$(RM) $@

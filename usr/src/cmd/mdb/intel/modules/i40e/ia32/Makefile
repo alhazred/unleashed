@@ -30,4 +30,3 @@ CPPFLAGS += -D_I40E_MDB_DMOD
 #
 # i40e needs this due to the use of Intel provided headers.
 #
-LINTFLAGS += -erroff=E_STATIC_UNUSED

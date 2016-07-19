@@ -41,7 +41,6 @@ ROOTRCS_D=	$(ROOTETC)/rcS.d
 ROOTRC1_D=	$(ROOTETC)/rc1.d
 ROOTRC2_D=	$(ROOTETC)/rc2.d
 
-
 ROOTETCLP=	$(ROOTETC)/lp
 ROOTLIBLP=	$(ROOTLIB)/lp
 ROOTBINLP=	$(ROOTBIN)/lp
@@ -52,7 +51,6 @@ ROOTLIBPRINTBIN=	$(ROOTLIBPRINT)/bin
 
 ROOTUSRUCB=	$(ROOT)/usr/ucb
 
-
 #
 # $(EMODES): Modes for executables
 # $(SMODES): Modes for setuid executables
@@ -61,7 +59,6 @@ ROOTUSRUCB=	$(ROOT)/usr/ucb
 EMODES	=	0555
 SMODES	=	04555
 DMODES	=	0755
-
 
 INC	=	$(ROOT)/usr/include
 INCSYS  =       $(INC)/sys
@@ -72,18 +69,12 @@ NPRTINC	=	$(SRC)/lib/print/libprint/common
 LPLIB	=	$(SRC)/lib
 LDLIBS +=	-L$(LPLIB)
 
-
 LIBNPRT =       -L$(ROOT)/usr/lib -lprint
-
-# lint definitions
-
-LINTFLAGS	+=	-L $(SRC)/lib/print -lprint -lnsl -lsocket 
 
 all	:=TARGET= all
 install	:=TARGET= install
 clean	:=TARGET= clean
 clobber	:=TARGET= clobber
-lint	:=TARGET= lint
 strip	:=TARGET= strip
 _msg	:=TARGET= _msg
 

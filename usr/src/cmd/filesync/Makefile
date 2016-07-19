@@ -54,7 +54,6 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 #
 # we need our own rule for building a message catalog because our strings 

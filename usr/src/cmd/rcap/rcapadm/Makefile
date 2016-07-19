@@ -34,15 +34,10 @@ SRCS = 		rcapadm.c \
 		rcapd_stat.c \
 		utils.c
 
-LINTSRCS =	$(COMMON_DIR)/utils.c \
-		$(COMMON_DIR)/rcapd_stat.c \
-		rcapadm.c
-
 $(NOT_RELEASE_BUILD)CPPFLAGS 	+= -DDEBUG
 CPPFLAGS 			+= -I$(COMMON_DIR)
 LDLIBS 				+= -lumem -lscf -lzonecfg
 
-LINTFLAGS 			+= $(LDLIBS) -mnu
 
 PROG =		rcapadm
 OBJS =		$(SRCS:%.c=%.o) rcapd_conf.o
@@ -53,7 +48,7 @@ POFILE =	p$(PROG).po
 CLOBBERFILES +=	$(POFILES) $(POFILE)
 
 .NO_PARALLEL:
-.PARALLEL: $(OBJS) $(LINTFILES)
+.PARALLEL: $(OBJS)
 
 all: $(PROG)
 
@@ -70,12 +65,6 @@ $(POFILE): $(POFILES)
 clean:
 	$(RM) $(OBJS)
 	$(RM) rcapd_conf.c 
-
-%.ln: $(COMMON_DIR)/%.c
-	$(LINT.c) -c $<
-
-lint:
-	$(LINT.c) $(LINTSRCS)
 
 $(ROOTUSRSBIN):
 	$(MKDIR) -p $(ROOTUSRSBIN)

@@ -39,11 +39,10 @@ all	:=	TARGET = all
 install	:=	TARGET = install
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 
 .KEEP_STATE:
 
-all clean clobber lint:	$(SUBDIRS)
+all clean clobber:	$(SUBDIRS)
 
 install:	$(SUBDIRS)
 	-$(RM) $(ROOTPROG)

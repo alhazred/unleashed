@@ -54,6 +54,5 @@ check:	$(CHKMANIFEST)
 ${ROOTLIB}/%: %
 	${INS.file}
 
-lint:
 
 include ../Makefile.targ

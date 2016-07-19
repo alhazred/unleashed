@@ -250,7 +250,6 @@ ipftest:	$(IPFTEST_OBJS) $(LIBIPF) $(MAPFILE.NGB)
 clean:
 	-$(RM) $(CLEANFILES)
 
-lint: 	lint_SRCS
 
 #
 # NOTE: all rules must use relative paths otherwise absolute paths will be

@@ -47,7 +47,7 @@ all: $(SCRIPTS)
 clobber:
 	$(RM) $(SCRIPTS)
 
-clean install_h lint _msg:
+clean install_h _msg:
 
 install: all $(ROOTSCRIPTS)
 

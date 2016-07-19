@@ -76,10 +76,4 @@ $(ROOTSYMLINK):
 clean:
 	$(RM) $(OBJS) $(KCMDOBJS) $(YOBJS)
 
-lint:
-	$(YACC.y) $(YSRCS)
-	$(LINT.c) $(SRCS) y.tab.c $(LDLIBS)
-	$(RM) y.tab.c
-
-
 include ../../../Makefile.targ

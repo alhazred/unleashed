@@ -26,6 +26,5 @@
 include ../Makefile.com
 include ../../Makefile.cmd.64
 
-LINTFLAGS64 += -erroff=E_NAME_DEF_NOT_USED2
 
 install: all $(ROOTUSRSBINPROG64)

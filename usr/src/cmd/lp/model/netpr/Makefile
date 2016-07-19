@@ -106,8 +106,4 @@ strip:
 cstyle:
 		cstyle $(SRCS)
 
-LINTFLAGS	+= -lnsl -lsocket
-lint:
-		$(LINT.c) $(SRCS) $(LDLIBS)
-
 include		../Makefile.msg

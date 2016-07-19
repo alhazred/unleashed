@@ -41,7 +41,6 @@ all     :=      TARGET = all
 install :=      TARGET = install
 clean   :=      TARGET = clean
 clobber :=      TARGET = clobber
-lint    :=      TARGET = lint
 
 .KEEP_STATE:
 
@@ -53,7 +52,7 @@ $(POFILE): $(POFILES)
 	$(RM) $@
 	cat $(POFILES) > $(POFILE)
 
-clean clobber lint:	$(SUBDIRS)
+clean clobber:	$(SUBDIRS)
 
 install:        $(SUBDIRS) $(ROOTMANIFEST)
 

@@ -45,13 +45,12 @@ all	:=	TARGET = all
 install	:=	TARGET = install
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 
 .KEEP_STATE:
 
 all:	$(SUBDIRS) pofile $(PROG)
 
-clean clobber lint:	$(SUBDIRS)
+clean clobber:	$(SUBDIRS)
 
 install:	$(SUBDIRS) $(ROOTPROG)
 

@@ -43,7 +43,6 @@ all:		$(PROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:		lint_SRCS
 
 $(PROG):	$(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)

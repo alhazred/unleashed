@@ -65,7 +65,6 @@ catalog:	$(POFILE)
 
 install:	$(ROOTLIBFSTYPEPROG)
 
-lint:	lint_SRCS
 
 clean:     
 	$(RM) $(OBJS) $(POFILE)

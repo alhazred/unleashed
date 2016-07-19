@@ -29,6 +29,5 @@ install:	 all $(ROOTPROG)
 clean:
 		$(RM) $(OBJS)
 
-lint:
 
 include		../../../Makefile.targ

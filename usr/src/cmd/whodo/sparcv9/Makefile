@@ -37,7 +37,6 @@ include ../../Makefile.cmd.64
 CFLAGS64	+= $(CCVERBOSE)
 CERRWARN	+= -_gcc=-Wno-parentheses
 
-lint	:= LINTFLAGS64 = -x -m64
 
 FILEMODE= 04555
 
@@ -56,8 +55,5 @@ install: all $(ROOTUSRSBINPROG64)
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
 
 include ../../Makefile.targ

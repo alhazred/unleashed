@@ -93,9 +93,6 @@ clobber:		$(SUBDIRS) clean
 strip:
 			$(STRIP) $(PROG)
 
-lint:
-			$(LINT.c) $(SRCS) $(LDLIBS)
-
 $(SUBDIRS) :	FRC
 		@cd $@; pwd; $(MAKE) $(TARGET)
 

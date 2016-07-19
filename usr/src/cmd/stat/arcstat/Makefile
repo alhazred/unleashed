@@ -28,6 +28,5 @@ clean:
 $(ROOTBINPROG): $(PROG)
 	$(INS.file)
 
-lint:
 
 include $(SRC)/cmd/Makefile.targ

@@ -65,6 +65,5 @@ install: all $(ROOTSQLITE)
 clean:
 	$(RM) $(OBJS)
 
-lint:
 
 include ../Makefile.targ

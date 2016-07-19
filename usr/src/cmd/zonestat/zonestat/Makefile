@@ -29,7 +29,6 @@ OBJS =		$(SRCS:%.c=%.o)
 include ../../Makefile.cmd
 
 LDLIBS 		+= -lscf -lzonestat -lumem
-LINTFLAGS	+= -u
 
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
@@ -44,6 +43,5 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_PROG
 
 include ../../Makefile.targ

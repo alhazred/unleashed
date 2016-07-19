@@ -46,6 +46,5 @@ $(PROG): $(SRCS)
 
 clean:
 
-lint:	lint_SRCS
 
 include ../../Makefile.targ

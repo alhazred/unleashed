@@ -46,10 +46,6 @@ INCS += -I../../common/zfs -I$(STATCOMMONDIR)
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 -D_REENTRANT $(INCS)
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
-# lint complains about unused _umem_* functions
-LINTFLAGS += -xerroff=E_NAME_DEF_NOT_USED2
-LINTFLAGS64 += -xerroff=E_NAME_DEF_NOT_USED2
-
 ROOTUSRSBINLINKS = $(PROG:%=$(ROOTUSRSBIN)/%)
 
 .KEEP_STATE:
@@ -73,7 +69,6 @@ $(POFILE): $(POFILES)
 clean:
 	$(RM) $(OBJS) $(STAT_COMMON_OBJS)
 
-lint:	lint_SRCS
 
 # Links from /usr/sbin to /sbin
 $(ROOTUSRSBINLINKS):

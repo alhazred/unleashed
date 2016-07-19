@@ -37,7 +37,6 @@ CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-unused-variable
 CERRWARN += -_gcc=-Wno-parentheses
 
-LINTFLAGS += -m -v -u
 
 AR=     /usr/ccs/bin/ar
 RANLIB= /usr/ccs/bin/ranlib
@@ -97,8 +96,5 @@ clean:
 
 clobber: clean
 	$(RM) $(libaudio)
-
-lint:
-	$(LINT.c) $(LIBCSRCS) $(LDLIBS)
 
 _msg:

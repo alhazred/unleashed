@@ -58,7 +58,6 @@ $(PROG):	$(SRCS) $(OBJS)
 		$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 		$(POST_PROCESS)
 
-lint:		lint_SRCS
 
 $(POFILE): $(MSGFILES)
 		$(BUILDPO.msgfiles)

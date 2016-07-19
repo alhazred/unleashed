@@ -63,7 +63,6 @@ LDFLAGS += $(ZINTERPOSE)
 
 CPPFLAGS += $(DEFINES)
 
-lint := LINTFLAGS += -m
 
 metamed_svc.c := RPCGENFLAGS += -K -1
 
@@ -83,9 +82,6 @@ install: all $(ROOTUSRSBINPROG)
 
 cstyle:
 	$(CSTYLE) $(LOCAL_SRCS)
-
-lint:
-	$(LINT.c) $(LINTFLAGS) $(LOCAL_SRCS)
 
 clean:
 	$(RM) $(DERIVED_SRCS) $(DERIVED_OBJS) $(LOCAL_OBJS) $(RPC_OBJS)

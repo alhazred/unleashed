@@ -55,7 +55,6 @@ install: all $(ROOTETCFILES) $(ROOTETCFTPDFILES) $(ROOTUSRKVMFILES) $(ROOTVARSMB
 clean:
 	$(RM) $(ROOTETCFTPUSERSLINK)
 
-lint:
 
 clobber:
 
@@ -71,7 +70,6 @@ smbpasswd:
 
 clean:
 
-lint:
 
 clobber:
 	$(RM) motd smbpasswd

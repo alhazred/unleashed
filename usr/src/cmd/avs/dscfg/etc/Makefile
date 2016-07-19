@@ -39,6 +39,5 @@ clean:
 
 clobber: 
 
-lint:
 
 FRC:

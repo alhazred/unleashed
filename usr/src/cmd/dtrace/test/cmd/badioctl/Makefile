@@ -46,7 +46,7 @@ all: $(SRCS)
 
 install: $(CMDS)
 
-clean lint:
+clean:
 
 clobber:
 	$(RM) $(SRCS)

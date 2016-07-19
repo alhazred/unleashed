@@ -57,6 +57,6 @@ $(ROOTCHARLIB):
 $(ROOTCHARLIB)/% :	%
 			$(INS.file)
 
-clean clobber strip lint :
+clean clobber strip:
 
 FRC:

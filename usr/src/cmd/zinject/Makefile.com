@@ -53,7 +53,6 @@ $(PROG): $(OBJS)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 %.o: ../%.c
 	$(COMPILE.c) $<

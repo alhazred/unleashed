@@ -79,9 +79,4 @@ clean:
 $(POFILE):	$(POFILES)
 	$(RM) $@; cat $(POFILES) > $@
 
-#
-# We don't do lint of lex- and yacc- generated source files
-#
-lint:
-
 include ../../Makefile.targ

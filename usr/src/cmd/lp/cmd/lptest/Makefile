@@ -65,7 +65,4 @@ clobber:	clean
 strip:
 		$(STRIP) $(PROG)
 
-lint:
-		$(LINT.c) $(PROG).c $(LDLIBS)
-
 include		../Makefile.msg

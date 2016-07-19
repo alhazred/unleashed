@@ -34,9 +34,6 @@ SRCS =	kvm_v7dep.c \
 	$(COMPILE.c) $<
 	$(CTFCONVERT_O)
 
-%.ln: ../../mdb/%.c
-	$(LINT.c) -c $<
-
 include ../../../../Makefile.cmd
 include ../../Makefile.sparcv7
 include ../../../Makefile.mdb

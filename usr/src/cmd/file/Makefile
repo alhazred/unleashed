@@ -103,6 +103,5 @@ install: all $(ROOTPROG) $(ROOTXPG4PROG) $(ROOTETCMAGIC)
 clean:
 	$(RM) $(OBJS) $(XPG4OBJS)
 
-lint: lint_SRCS
 
 include ../Makefile.targ

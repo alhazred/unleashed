@@ -69,8 +69,4 @@ install: all $(ROOTBINDIFF) $(ROOTLIBDIFFH)
 
 clean:
 
-lint:
-	$(LINT.c) diff.c $(LDLIBS)
-	$(LINT.c) diffh.c $(LDLIBS)
-
 include ../Makefile.targ

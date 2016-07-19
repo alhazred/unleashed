@@ -30,7 +30,6 @@ LDLIBS += -lvolmgt -ladm
 
 CFLAGS += $(CCVERBOSE)
 
-LINTFLAGS += -um
 
 .KEEP_STATE:
 
@@ -41,6 +40,5 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_PROG
 
 include ../Makefile.targ

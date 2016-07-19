@@ -35,7 +35,6 @@ OBJS    = $(PROG).o
 include ../../../Makefile.cmd
 
 LDLIBS  += -ldhcpagent -ldhcputil
-LINTFLAGS += -u	# due to problems with libgen
 
 .KEEP_STATE:
 
@@ -50,6 +49,5 @@ install:	all $(ROOTSBINPROG)
 clean:
 	  	$(RM) $(OBJS)
 
-lint:		lint_PROG
 
 include ../../../Makefile.targ

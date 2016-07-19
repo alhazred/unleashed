@@ -44,7 +44,6 @@ LDLIBS += -lpicltree
 CFLAGS += $(CCVERBOSE)
 CPPFLAGS += -D_REENTRANT
 
-LINTFLAGS += -u
 
 .KEEP_STATE:
 
@@ -56,7 +55,6 @@ check:	$(CHKMANIFEST)
 
 clean:
 
-lint:	lint_PROG
 
 $(ROOTLIBPICLD):
 	$(INS.dir)

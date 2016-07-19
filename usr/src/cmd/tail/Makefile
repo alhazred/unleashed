@@ -27,7 +27,6 @@ CPPFLAGS +=        -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 
 C99MODE=	-xc99=%all
 C99LMODE=	-Xc99=%all
-LINTFLAGS +=	-I. -erroff=E_CONSTANT_CONDITION
 
 # install rules
 $(ROOTINC)/% : %
@@ -49,7 +48,6 @@ $(ROOTXPG4PROG):
 	-$(RM) $@
 	-$(LN) -s ../../bin/$(PROG) $@
 
-lint: 	lint_SRCS
 
 clean:
 	$(RM) $(OBJS)

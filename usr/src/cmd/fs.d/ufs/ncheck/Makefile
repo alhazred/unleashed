@@ -46,4 +46,3 @@ CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 clean:
 		$(RM) $(LIBPROG).o
 
-lint:		lint_SRCS

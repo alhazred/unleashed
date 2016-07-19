@@ -40,7 +40,6 @@ LDLIBS += -ldevinfo -lpkcs11 -lcryptoutil
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
 
-LINTFLAGS += -erroff=E_NAME_USED_NOT_DEF2
 
 .KEEP_STATE:
 
@@ -67,6 +66,5 @@ $(POFILE): $(POFILES)
 clean:
 	$(RM) $(PROG) $(OBJS) $(LZMAOBJS) $(POFILE) $(POFILES)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

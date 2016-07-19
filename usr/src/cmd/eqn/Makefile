@@ -40,7 +40,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 strip :=	TARGET= strip
 
 #
@@ -54,7 +53,7 @@ POFILES= $(SUBDIR2:%=%/%.po)
 
 all :		$(SUBDIRS)
 
-install clean clobber lint strip :	$(SUBDIRS)
+install clean clobber strip :	$(SUBDIRS)
 
 $(POFILE):   $(SUBDIR2)
 	$(RM)	$@

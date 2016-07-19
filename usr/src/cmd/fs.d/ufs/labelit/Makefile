@@ -35,6 +35,4 @@ include		../../Makefile.fstype
 
 CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 
-lint :=		PROG=$(LIBPROG)
 
-lint:		lint_PROG

@@ -58,4 +58,4 @@ $(ETCINETPRIVATEKEYDIR):
 
 FRC:
 
-clean clobber lint:
+clean clobber:

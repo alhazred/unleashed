@@ -74,9 +74,6 @@ depend obj:
 
 install: all
 	
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
-
 # DB files.
 db%.o: $(srcdir)/db/db%.c
 	$(COMPILE.c) $<

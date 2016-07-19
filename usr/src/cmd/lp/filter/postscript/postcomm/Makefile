@@ -54,7 +54,6 @@ clean:
 strip:
 		$(STRIP) $(PROG)
 
-lint:		lint_PROG
 
 include		../../../../Makefile.targ
 

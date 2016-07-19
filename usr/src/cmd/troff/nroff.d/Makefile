@@ -57,7 +57,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 strip :=	TARGET= strip
 
 # build rule for common source above
@@ -88,8 +87,6 @@ clean :		$(SUBDIRS)
 
 strip :
 		$(STRIP) $(PROG)
-
-lint :		lint_SRCS
 
 include		../../Makefile.targ
 

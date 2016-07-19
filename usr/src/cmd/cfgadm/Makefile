@@ -37,7 +37,6 @@ DCFILE= $(PROG).dc
 XGETFLAGS += -a -x cfgadm.xcl
 
 LDLIBS += -lcfgadm 
-LINTFLAGS += $(ENVLDFLAGS1) $(ENVLDFLAGS2) $(ENVLDFLAGS3) $(LDLIBS)
 
 .KEEP_STATE:
 
@@ -49,7 +48,6 @@ install: all $(ROOTUSRSBINPROG)
 
 clean:
 
-lint:	lint_PROG
 
 $(DCFILE): $(PROG).c
 	$(RM) $(DCFILE)

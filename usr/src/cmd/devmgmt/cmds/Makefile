@@ -48,17 +48,6 @@ clean:
 
 install: all $(ROOTPROG)
 
-lint: $(PROG:%=%.c)
-	$(LINT.c) devattr.c	$(LDLIBS)
-	$(LINT.c) devreserv.c	$(LDLIBS)
-	$(LINT.c) getvol.c	$(LDLIBS)
-	$(LINT.c) putdgrp.c	$(LDLIBS)
-	$(LINT.c) devfree.c	$(LDLIBS)
-	$(LINT.c) getdev.c	$(LDLIBS)
-	$(LINT.c) listdgrp.c	$(LDLIBS)
-	$(LINT.c) getdgrp.c	$(LDLIBS)
-	$(LINT.c) putdev.c	$(LDLIBS)
-
 FRC:
  
 include ../../Makefile.targ

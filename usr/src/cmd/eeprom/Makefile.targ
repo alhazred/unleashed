@@ -35,11 +35,7 @@ $(PROG): $(OBJS)
 
 clean:
 	-$(RM) $(OBJS)
-	-$(RM) $(LINT_OBJS)
 	-$(RM) $(PROG)
-
-lint: $(LINT_OBJS)
-	$(LINT.c) $(LINT_OBJS)
 
 check:
 

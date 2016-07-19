@@ -39,7 +39,6 @@ CPPFLAGS += -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 \
 	-DHAVE_SYS_SELECT_H=1 -DHAVE_SELECT=1 -DHAVE_SYSV_PTY=1 \
 	-D__EXTENSIONS__=1
 
-lint := LINTFLAGS += -ux
 
 .KEEP_STATE:
 
@@ -52,6 +51,5 @@ check:	$(PROG).c
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

@@ -39,8 +39,6 @@ LDLIBS +=	-lmalloc -ll -ladm
 LDFLAGS +=	$(MAPOPTS)
 YFLAGS =	"-d"
 
-LINTFLAGS +=	-erroff=E_STATIC_UNUSED
-LINTFLAGS64 +=	-erroff=E_STATIC_UNUSED
 
 CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
 CERRWARN +=	-_gcc=-Wno-unused-label
@@ -106,9 +104,6 @@ $(POFILE):      $(CATSRCS)
 	$(XGETTEXT) $(XGETFLAGS)        $(POFILE).i
 	$(SED) "/^domain/d" messages.po >  $@
 	$(RM) $(POFILE).i messages.po
-
-lint: y.tab.c lex.yy.c ud_lib.c ud_lib.h
-	$(LINT.c) -mu $(SRCS)
 
 putback :
 	-cstyle -p fsdb.c

@@ -46,6 +46,6 @@ all:		$(PROG)
 
 install :	all $(ROOTPROG)
 
-clean lint:
+clean:
 
 include		../Makefile.targ

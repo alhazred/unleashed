@@ -65,6 +65,5 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 include ../Makefile.targ

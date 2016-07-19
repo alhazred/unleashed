@@ -55,4 +55,4 @@ all:		$(TXTFILES) $(FILES)
 
 install:	all $(ROOTPOSTFILES)
 
-clean clobber strip lint catalog:
+clean clobber strip catalog:

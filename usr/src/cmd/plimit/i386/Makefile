@@ -37,7 +37,6 @@ CERRWARN += -_gcc=-Wno-uninitialized
 
 LDLIBS	+= -lproc
 
-lint	:= LINTFLAGS = -x
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1
 
@@ -56,8 +55,5 @@ install: all $(ROOTPROG32)
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
 
 include ../../Makefile.targ

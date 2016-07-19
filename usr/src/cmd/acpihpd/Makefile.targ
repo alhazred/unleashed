@@ -35,9 +35,6 @@ all: $(LIBS)
 clean:
 	$(RM) $(OBJS)
 
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
-
 $(LIBS): $(OBJS)
 	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)

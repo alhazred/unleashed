@@ -29,7 +29,6 @@ CLOBBERFILES=	$(PROG)
 C99MODE=	-xc99=%all
 C99LMODE=	-Xc99=%all
 CPPFLAGS +=	-D_ILLUMOS_PRIVATE -I.
-LINTFLAGS +=	-D_ILLUMOS_PRIVATE -I.
 
 # install rules
 $(ROOTINC)/% : %
@@ -51,7 +50,6 @@ $(ROOTXPG4PROG) $(ROOTXPG6PROG):
 	-$(RM) $@
 	-$(LN) -s ../../bin/$(PROG) $@
 
-lint: 	lint_SRCS
 
 clean:
 	$(RM) $(OBJS)

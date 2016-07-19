@@ -59,4 +59,4 @@ $(ROOTETCLPFD) :
 $(ROOTETCLPFD)/% :	%
 		$(INS.file)
 
-clean clobber strip lint catalog:
+clean clobber strip catalog:

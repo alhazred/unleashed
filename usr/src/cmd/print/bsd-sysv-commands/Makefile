@@ -105,6 +105,5 @@ clean:
 
 CLOBBERFILES += $(BINPROGS) $(SBINPROGS) $(LIBPRINTPROGS)
 
-lint:
 
 include ../../Makefile.targ

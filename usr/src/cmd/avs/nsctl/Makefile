@@ -41,10 +41,7 @@ CFLAGS += -v
 CPPFLAGS += -DBUILD_REV_STR='"5.11"'
 NSCADM_LDLIBS = -lnsctl
 NSKERND_LDLIBS = -lnsctl -ldscfg
-LINTFLAGS += -Xa -n -s -x -m -u -Dlint -errhdr=%user -DDEBUG
-LINTDIR = $(KBASE)/lintdir
 POFILE = nsctl_all.po
-LFILE = $(LINTDIR)/nsctl.ln
 ROOTLIBLINK = $(ROOTLIB)/nskernd
 ROOTSBINLINK = $(ROOTUSRSBIN)/nscadm
 
@@ -52,7 +49,6 @@ all	:=	TARGET= all
 install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 nscadm	:=	LDLIBS += $(NSCADM_LDLIBS)
 nskernd	:=	LDLIBS += $(NSKERND_LDLIBS)
@@ -65,7 +61,6 @@ all: $(PROG) $(POFILES)
 
 install: all $(ROOTPROG) $(ROOTBIN)/nskernd $(ROOTLIBLINK) $(ROOTSBINLINK)
 
-lint:	lint_SRCS
 
 clean:
 	$(RM) *.o $(POFILES)

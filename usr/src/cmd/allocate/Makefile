@@ -101,7 +101,6 @@ $(ROOTUSRSBIN)/allocate :=	FILEMODE = 4555
 $(ROOTSECDEV)/% :=	FILEMODE = 0400
 $(ROOTSECLIB)/% :=	FILEMODE = 0555
 
-lint :=			LDLIBS += -lbsm -lsec -lsecdb -ldevinfo -ltsol
 
 $(PROGalloc) :=		LDLIBS += -lbsm -lsec -lsecdb -ldevinfo -ltsol
 $(PROGmkdevalloc) :=	LDLIBS += -lbsm
@@ -181,8 +180,6 @@ $(ALLSCRIPTS):	$(SCRIPTS:%=%.sh)
 clean :
 		$(RM) $(PROG) $(RTLCKS) $(OBJS) \
 		$(SCRIPTS) $(ALLSCRIPTS) $(POFILE) $(POFILES)
-
-lint :		lint_SRCS
 
 strip :
 		$(STRIP) $(PROG)

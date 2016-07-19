@@ -60,7 +60,6 @@ OTHERINFOS	+= fru_usb-a-3_data.info fru_usb-a-4_data.info
 OTHERINFOS	+= fru_FT0_data.info fru_FT1_data.info fru_FT2_data.info
 OTHERINFOS	+= fru_FT3_data.info fru_FT4_data.info fru_FT5_data.info
 
-ROOTLINTDIR =	$(ROOTLIBDIR)
 
 .KEEP_STATE:
 
@@ -70,7 +69,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 
 all: $(LIBS) $(LIBLINKS) $(CONFS)
 
@@ -90,11 +88,6 @@ $(CONFS): $(MAININFO) $(OTHERINFOS)
 # include library targets
 include $(SRC)/lib/Makefile.targ
 include	$(SRC)/cmd/picl/plugins/Makefile.targ
-
-$(ROOTLINTDIR)/%: ../%
-	$(INS.file)
-
-lint:
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

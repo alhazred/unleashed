@@ -36,12 +36,6 @@ SRCS =	kvm_amd64dep.c \
 	$(COMPILE.c) $<
 	$(CTFCONVERT_O)
 
-%.ln: %.c
-	$(LINT.c) -c $<
-
-%.ln: ../../mdb/%.c
-	$(LINT.c) -c $<
-
 include ../../../../Makefile.cmd
 include ../../../../Makefile.cmd.64
 include ../../Makefile.amd64

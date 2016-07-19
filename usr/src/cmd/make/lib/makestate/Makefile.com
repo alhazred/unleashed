@@ -26,6 +26,5 @@ LDLIBS += -lc
 
 all: $(LIBS)
 
-lint:
 
 include $(SRC)/lib/Makefile.targ

@@ -77,6 +77,5 @@ install:	all $(ROOTBINBART) $(ROOTLIBDIFFH)
 
 clean:
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

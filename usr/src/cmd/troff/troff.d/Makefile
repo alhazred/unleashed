@@ -62,7 +62,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 strip :=	TARGET= strip
 
 troff:=		POBJS=	$(COMMONOBJS) $(TROFFOBJS)
@@ -100,8 +99,6 @@ $(POFILE):      $(POFILES)
 
 strip :
 		$(STRIP $(PROG)
-
-lint :		lint_SRCS
 
 include		../../Makefile.targ
 

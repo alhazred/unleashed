@@ -128,9 +128,6 @@ LDFLAGS.cmd = \
 
 LDFLAGS =	$(LDFLAGS.cmd)
 
-LINTFLAGS=	-axsm
-LINTFLAGS64=	-axsm -m64
-LINTOUT=	lint.out
 
 KRB5PROG=	$(PROG:%=$(KRB5BIN)/%)
 KRB5SBINPROG=	$(PROG:%=$(KRB5SBIN)/%)

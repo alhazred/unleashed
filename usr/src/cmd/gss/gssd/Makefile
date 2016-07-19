@@ -41,9 +41,6 @@ G_OBJS	= gssd_xdr.o
 GSSDOBJS = $(GSSD_BASEOBJS) $(GD_OBJS) $(G_OBJS)
 GSSCOBJS = $(GSSC_BASEOBJS) $(GC_OBJS) $(G_OBJS)
 
-GSSD_LINTS = $(GSSD_BASEOBJS:.o=.c)
-GSSC_LINTS = $(GSSC_BASEOBJS:.o=.c)
-
 ROBJS	= $(GD_OBJS) $(GC_OBJS) $(G_OBJS)
 OBJS	= $(GSSD_BASEOBJS) $(GD_OBJS) $(GSSC_BASEOBJS) $(GC_OBJS) $(G_OBJS)
 SRCS	= $(OBJS:.o=.c)
@@ -136,14 +133,6 @@ install_h:
 clean:
 	$(RM) $(OBJS) $(RSRC) gssd.x
 
-lint_gssd:
-	$(LINT.c) $(GSSD_LINTS)
-
-lint_gssc:
-	$(LINT.c) $(GSSC_LINTS)
-
-lint:	lint_gssd lint_gssc
-
 check:	$(CHKMANIFEST)
 
 include ../../Makefile.targ
@@ -159,4 +148,3 @@ generic.po: FRC
 	$(RM) messages.po
 
 FRC:
-

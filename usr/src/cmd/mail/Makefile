@@ -87,7 +87,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 
 # file modes, owners and groups for the install target
 #
@@ -116,9 +115,6 @@ install: all .WAIT $(ROOTBINPROG) $(ROOTSYMLINKS)
 #
 $(ROOTBIN)/rmail:
 	$(RM) $@; $(SYMLINK) mail $@
-
-lint: 
-	$(LINT.c) $(MAILSRC)
 
 clean:
 	$(RM) $(OBJS) $(MAILOBJS)

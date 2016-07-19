@@ -45,7 +45,6 @@ all	:=	TARGET= all
 install :=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 strip	:=	TARGET= strip
 _msg	:=      TARGET = _msg
 
@@ -88,7 +87,7 @@ _msg_test: scripts
 	$(MSGFMT) SUNW_OST_OSCMD.po
 	@$(RM) messages.po $(POFILE) SUNW_OST_OSCMD.po
 
-clean strip cstyle lint:	$(SUBDIRS)
+clean strip cstyle:	$(SUBDIRS)
 
 clobber: $(SUBDIRS)
 	$(RM) $(POFILE) $(CLOBBERFILES)

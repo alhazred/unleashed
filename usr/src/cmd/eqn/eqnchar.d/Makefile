@@ -23,7 +23,7 @@ all :			$(FILES)
 
 install :		$(ROOTSHPUB) $(ROOTSHPUBFILES)
 
-clean clobber strip lint:
+clean clobber strip:
 
 $(ROOTSHPUB) :
 			$(INS.dir)

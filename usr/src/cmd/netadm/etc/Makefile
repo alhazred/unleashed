@@ -50,7 +50,6 @@ install: all .WAIT $(DIRS) .WAIT $(ETCFLASHPOSTPROG)
 
 cstyle:
 
-lint:
 
 $(DIRS):
 	$(INS.dir)

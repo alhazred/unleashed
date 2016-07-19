@@ -47,7 +47,6 @@ clean: FRC
 
 clobber: FRC
 
-lint: FRC
 
 $(NETYP)/ypmap2src: ypmap2src
 	$(INS.file) ypmap2src

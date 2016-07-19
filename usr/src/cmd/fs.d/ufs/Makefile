@@ -45,7 +45,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 catalog:=       TARGET= catalog
 
 # for messaging catalog
@@ -65,7 +64,7 @@ $(POFILE):      $(SUBDIR2)
 	$(RM) 	$@
 	cat     $(POFILES)      > $@
 
-clean clobber lint: $(SUBDIRS)
+clean clobber: $(SUBDIRS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(MFLAGS) $(TARGET)

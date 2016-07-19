@@ -46,6 +46,5 @@ $(PROG): install.sh
 
 clean:
 
-lint:
 
 include ../Makefile.targ

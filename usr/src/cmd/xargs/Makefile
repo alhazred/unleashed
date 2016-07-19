@@ -34,7 +34,6 @@ SRCS=			$(OBJS1:%.o=%.c) $(SRC)/common/util/getresponse.c
 include ../Makefile.cmd
 
 CPPFLAGS += -I $(SRC)/common/util
-LINTFLAGS += -u
 
 CERRWARN += -_gcc=-Wno-parentheses
 
@@ -59,6 +58,5 @@ $(ROOTXPG6SYMLINK):	$(ROOTPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

@@ -55,7 +55,6 @@ install: all $(ROOTPROG) $(ROOTXPG4PROG)
 clean:
 	-@rm -rf $(EXOBJS) $(XD)
 
-lint:	lint_PROG
 
 $(XPG4EXOBJS):	$(XD)
 

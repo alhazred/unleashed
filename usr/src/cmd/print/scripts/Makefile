@@ -134,4 +134,4 @@ clean:
 
 clobber: clean
 
-strip lint:
+strip:

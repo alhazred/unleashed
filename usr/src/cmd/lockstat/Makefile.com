@@ -33,8 +33,6 @@ LDLIBS += -lelf -lkstat -ldtrace
 CFLAGS += $(CCVERBOSE)
 CFLAGS64 += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
-LINTFLAGS += -xerroff=E_SEC_SPRINTF_UNBOUNDED_COPY
-LINTFLAGS64 += -xerroff=E_SEC_SPRINTF_UNBOUNDED_COPY
 
 FILEMODE= 0555
 
@@ -51,7 +49,6 @@ $(PROG):	$(OBJS)
 clean:
 	-$(RM) $(CLEANFILES)
 
-lint:	lint_SRCS
 
 %.o:    ../%.c
 	$(COMPILE.c) $<

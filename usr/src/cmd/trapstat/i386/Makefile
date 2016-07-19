@@ -38,6 +38,6 @@ $(ROOTUSRSBINPROG):
 		$(RM) $(ROOTUSRSBINPROG)
 	        $(LN) $(PLATEXEC) $(ROOTUSRSBINPROG)
 
-clean lint:
+clean:
 
 include		$(SRC)/cmd/Makefile.targ

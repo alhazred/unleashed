@@ -42,13 +42,8 @@ SRCS=		$(OBJECTS:%.o=%.c)
 
 LIBS =		$(DYNLIB)
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
 ROOTLIBDIR	= $(ROOT_PLAT_LIBDIR)
 
-LINTSRC =	$(LINTLIB:%.ln=%)
-ROOTLINTDIR =	$(ROOTLIBDIR)
-ROOTLINT =	$(LINTSRC:%=$(ROOTLINTDIR)/%)
 
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -D_SNOWBIRD -I$(SRC)/uts/sun4u/sys
@@ -64,7 +59,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 all:$(LIBS) $(LIBLINKS)
@@ -78,12 +72,6 @@ _msg:
 # include library targets
 include $(SRC)/cmd/picl/plugins/Makefile.targ
 include $(SRC)/lib/Makefile.targ
-
-$(ROOTLINTDIR)/%: ../%
-	$(INS.file)
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

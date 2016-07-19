@@ -48,8 +48,6 @@ CONF = 		fru_container.conf
 ROOTCONF=       $(CONF:%=$(ROOTLIBDIR)/%)
 $(ROOTCONF)	:= FILEMODE = 0644
 
-
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
 CLOBBERFILES += $(LIBLINKS)
 CSTYLE    = cstyle -p -P
 HDRCHK    = hdrchk
@@ -65,9 +63,7 @@ LDLIBS +=	-ldevinfo
 LDLIBS +=	-Wl,-f/opt/SUNWSMS/lib/$(DYNLIBPSR)     #  SMS before platform
 LDLIBS +=	-Wl,-f/usr/platform/\$$PLATFORM/lib/$(DYNLIBPSR)
 
-
 .KEEP_STATE:
-
 
 SUBDIRS=
 
@@ -75,7 +71,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 LN = ln -s
@@ -109,9 +104,6 @@ check-style:
 # include library targets
 include $(SRC)/cmd/picl/plugins/Makefile.targ
 include $(SRC)/lib/Makefile.targ
-
-lint :
-	$(LINT.c) -m $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

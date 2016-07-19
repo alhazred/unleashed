@@ -68,7 +68,6 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-clobbered
-LINTFLAGS= 	-hb
 LDLIBS +=	-lmail -lcmdutils
 LDFLAGS +=	$(MAPFILE.NGB:%=-M%)
 
@@ -108,7 +107,6 @@ $(POFILE):      $(POFILES)
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 include ../Makefile.targ
 

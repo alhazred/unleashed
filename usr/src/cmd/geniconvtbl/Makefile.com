@@ -41,8 +41,6 @@ LEXYY   = lex.yy.c
 YOUT    = y.output
 MAPFILE	= ../mapfile
 
-
-
 SRCSH	= $(SRCSH1:%.h=../%.h)
 SRCCH	= $(SRCCH1:%.h=../%.h)
 SRCSC	= $(SRCSC1:%.c=../%.c)
@@ -56,13 +54,9 @@ SRCLC	= $(SRCL:%.l=%.c)
 SRCS    = $(SRCSC) $(YTABC) $(LEXYY)
 HDRS	= $(SRCCH1) $(ERNOSTRH)
 
-
-
 SED	= sed
 LEXSED	= ../lex.sed
 YACCSED	= ../yacc.sed
-
-
 
 # include ../../../lib/Makefile.lib
 include ../../Makefile.cmd
@@ -111,10 +105,6 @@ POFILES= $(SRCSC1:%.c=%.po) $(SRCI1:%.c=%.po) \
 
 POFILE= geniconvtbl_.po
 
-
-
-
-
 .KEEP_STATE:
 
 .PARALLEL: $(ITM) $(OBJS)
@@ -147,18 +137,6 @@ $(POFILES): $(SRCSC) $(SRCI) $(SRCY) $(SRCL)
 	$(COMPILE.cpp) $<  > $<.i
 	$(BUILD.po)
 
-
-lint : lint_SRCS1  lint_SRCS2
-
-
-lint_SRCS1: $(SRCS)
-	$(LINT.c) $(SRCS) $(LDLIBS)
-
-lint_SRCS2: $(SRCI)
-	$(LINT.c) $(SRCI) $(LDLIBS)
-
-
-
 hdrchk: $(HDRCHECKS)
 
 cstyle: $(SRCS)
@@ -176,8 +154,6 @@ debug:
 
 %.o:	../%.c
 	$(COMPILE.c) $<
-
-
 
 # install rule
 # 
@@ -197,4 +173,3 @@ $(ROOTLIB) $(ROOTBIN):
 	-$(INS.dir)
 
 include ../../Makefile.targ
-

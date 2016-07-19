@@ -46,7 +46,6 @@ LDLIBS += -lkmf -lpkcs11 -lcryptoutil
 
 all:	$(PROG)
 
-lint: lint_SRCS
 
 include ../../../Makefile.targ
 

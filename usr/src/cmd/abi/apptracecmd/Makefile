@@ -40,7 +40,6 @@ install:	all .WAIT $(ROOTPROG)
 
 clean:
 
-lint:		lint_PROG
 
 _msg:		
 

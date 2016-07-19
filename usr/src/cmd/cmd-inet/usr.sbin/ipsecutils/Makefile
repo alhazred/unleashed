@@ -49,7 +49,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 
 CLOBBERFILES +=	$(PROG) $(POFILES)
 CLEANFILES += $(PROG) $(POFILES)
@@ -63,7 +62,6 @@ CFLAGS += $(XSTRCONST)
 LDLIBS += -lipsecutil -lnsl
 
 LAZYLIBS = $(ZLAZYLOAD) -ltsol $(ZNOLAZYLOAD)
-lint := LAZYLIBS = -ltsol
 
 $(TSOLPROG)	:=	LDLIBS += $(LAZYLIBS)
 $(SOCKETPROG)	:=      LDLIBS += -lsocket
@@ -92,10 +90,6 @@ $(ROOTUSRSBINLINKS):
 
 install: $(PROG) $(ROOTFS_PROG) .WAIT $(ROOTUSRSBINPROG) \
 	 $(ROOTUSRSBINLINKS) $(ROOTETCDEFAULTFILES) $(ROOTMANIFEST)
-
-lint: 
-	$(LINT.c) -erroff=E_NAME_USED_NOT_DEF2 \
-	-erroff=E_NAME_MULTIPLY_DEF2 $(SRCS) $(LDLIBS)
 
 check:	$(CHKMANIFEST)
 

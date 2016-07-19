@@ -42,13 +42,6 @@ CFLAGS += $(CCVERBOSE) -D_SYSCALL32
 CERRWARN += -_gcc=-Wno-unused-variable
 CERRWARN += -_gcc=-Wno-address
 LDLIBS += -ldscfg -lunistat
-LINTFLAGS += -Xa -n -s -x -m -u -Dlint -errhdr=%user -D_SYSCALL32
-LINTFLAGS += -erroff=E_NOP_ELSE_STMT -erroff=E_FUNC_SET_NOT_USED
-LINTFLAGS += -erroff=E_BAD_FORMAT_ARG_TYPE2
-LINTFLAGS += -erroff=E_FUNC_RET_MAYBE_IGNORED2
-LINTFLAGS += -erroff=E_FUNC_RET_ALWAYS_IGNOR2
-LINTDIR = $(KBASE)/lintdir
-LFILE = $(LINTDIR)/dscfg.ln
 ROOTLINK = $(ROOTUSRSBIN)/$(PROG)
 ROOTSHLINK = $(ROOTUSRSBIN)/$(SHFILES)
 
@@ -56,13 +49,11 @@ all	:=	TARGET= all
 install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 all: $(SUBDIRS) $(PROG) $(SHFILES)
 
 install: $(SUBDIRS) all $(ROOTSHFILES) $(ROOTPROG) $(ROOTLINK) $(ROOTSHLINK)
 
-lint:	$(SUBDIRS) lint_PROG
 
 clean:	$(SUBDIRS)
 	$(RM) *.o

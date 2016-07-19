@@ -35,7 +35,6 @@ PLUGINS=	$(SES_LIB) $(TAVOR_LIB) $(HERMON_LIB) $(SD_LIB)
 OBJECTS= $(PLUGINS:%.so=%.o)
 DYNLIB=	$(PLUGINS:%=%)
 POFILES= $(PLUGINS:%.so=%.po)
-LINTFILE= $(PLUGINS:%.so=%.ln)
 
 SLINKS=		sgen.so
 POFILE=	fwflash_transport_identify_ses.po
@@ -43,7 +42,7 @@ SRCDIR= ../common
 
 include $(SRC)/cmd/fwflash/Makefile.com
 
-CLEANFILES=	$(PLUGINS) $(POFILES) $(POFILE) $(LINTFILE) $(SLINKS) 
+CLEANFILES=	$(PLUGINS) $(POFILES) $(POFILE) $(SLINKS) 
 
 LIBS= $(DYNLIB)
 CFLAGS += $(C_PICFLAGS) 
@@ -82,7 +81,6 @@ all: $(LIBS)
 install: all  $(ROOTLIBS) \
 	$(ROOTUSRLIBFWFLASHIDF)/$(SLINKS)
 
-lint: $(LINTFILE)
 
 _msg msg: $(POFILE)
 

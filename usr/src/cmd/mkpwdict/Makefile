@@ -29,8 +29,6 @@ PROG=	mkpwdict
 include ../Makefile.cmd
 
 CFLAGS += -I$(SRC)/lib/pam_modules/authtok_check
-LINTFLAGS += -erroff=E_NAME_DEF_NOT_USED2 -m 
-LINTFLAGS += -I$(SRC)/lib/pam_modules/authtok_check
 
 CERRWARN += -_gcc=-Wno-parentheses
 
@@ -58,6 +56,5 @@ mkpwdict: $(OBJS)
 clean:
 	$(RM) $(PROG) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

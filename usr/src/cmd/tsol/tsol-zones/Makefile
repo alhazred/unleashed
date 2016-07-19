@@ -45,7 +45,6 @@ $(ROOTMANIFESTDIR)/%: %
 
 all:
 
-lint:
 
 cstyle:
 

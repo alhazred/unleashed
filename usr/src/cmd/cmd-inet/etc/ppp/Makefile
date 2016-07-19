@@ -61,4 +61,4 @@ $(ETCPPPDIR) $(ETCPPPSUBDIRS):
 $(ETCPEERSDIR)/% : %
 		$(INS.file)
 
-clean clobber lint:
+clean clobber:

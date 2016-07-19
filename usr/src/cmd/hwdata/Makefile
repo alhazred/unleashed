@@ -46,7 +46,7 @@ install: $(ROOTHWDATA)
 $(HWDATADIR)/%: %
 	$(INS.file)
 
-lint check clean clobber:
+check clean clobber:
 
 # The "update" target family allows a simple pull-from-the-source update.
 # One can then use revision-control diffs to see what actually changed.

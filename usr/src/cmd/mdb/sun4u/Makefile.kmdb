@@ -102,12 +102,3 @@ MAPFILE_SOURCES = \
 %.o: ../../../../../psm/promif/ieee1275/sun4u/%.c
 	$(COMPILE.c) $<
 	$(CTFCONVERT_O)
-
-%.ln: ../../../../../psm/promif/ieee1275/common/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../../../../psm/promif/ieee1275/sun4/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../../../../psm/promif/ieee1275/sun4u/%.c
-	$(LINT.c) -c $<

@@ -50,7 +50,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 _msg:=          TARGET= _msg
 
 .KEEP_STATE:
@@ -58,7 +57,6 @@ _msg:=          TARGET= _msg
 
 all install:	$(SUBDIRS)
 
-lint:		$(SUBDIR_PGMS)
 
 clean:		$(SUBDIR_PGMS)
 

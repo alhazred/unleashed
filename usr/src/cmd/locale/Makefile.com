@@ -45,7 +45,6 @@ $(PROG): $(OBJS)
 	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-lint: lint_SRCS
 
 %.o:	../%.c
 	$(COMPILE.c) $<

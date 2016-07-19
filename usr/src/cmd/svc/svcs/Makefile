@@ -37,7 +37,6 @@ POFILE =	$(PROG)_all.po
 LDLIBS +=	-lcontract -lscf -luutil -lumem -lnvpair -lzonecfg
 CPPFLAGS += -I ../common
 
-lint := LINTFLAGS = -mux
 CERRWARN += -_gcc=-Wno-unused-label
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-parentheses
@@ -62,6 +61,5 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS) $(MYOBJS)
 
-lint: lint_SRCS
 
 include ../../Makefile.targ

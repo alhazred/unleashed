@@ -54,9 +54,6 @@ CFLAGS 		+=	$(CCVERBOSE)
 CPPFLAGS 	+= -I./ -I$(ADJUNCT_PROTO)/usr/include/libxml2
 CPPFLAGS	+= -DTARGET_DATA_STORE=$(DATA_STORE)
 CPPFLAGS	+= -D_POSIX_PTHREAD_SEMANTICS
-LINTFLAGS += -xerroff=E_BAD_PTR_CAST_ALIGN
-LINTFLAGS += -xerroff=E_NAME_USED_NOT_DEF2
-LINTFLAGS += -xerroff=E_CASE_FALLTHRU
 
 CERRWARN += -_gcc=-Wno-char-subscripts
 CERRWARN += -_gcc=-Wno-ignored-qualifiers
@@ -92,7 +89,6 @@ $(PROG): $(OBJS)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 $(POFILE): $(POFILES)
 	$(RM) $@

@@ -40,7 +40,6 @@ install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
 _msg	:=	TARGET= _msg
-lint	:=	TARGET= lint
 install_h :=	TARGET= install_h
 
 #definitions for install_h target
@@ -54,7 +53,7 @@ $(ROOTHDRS) := FILEMODE = 644
 
 install:	install_h $(SUBDIRS)
 
-all lint _msg:	install_h $(SUBDIRS)
+all _msg:	install_h $(SUBDIRS)
 clean clobber:	$(SUBDIRS)
 
 $(SUBDIRS):	FRC

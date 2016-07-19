@@ -66,7 +66,6 @@ clobber: clean
 	-$(RM) $(JDTRACE_JAR)
 	-$(RM) $(PROG)
 
-lint:
 
 install: all $(PROTO_JDTRACE_JAR) $(CMD) $(XLIST)
 

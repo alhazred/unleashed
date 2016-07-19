@@ -42,12 +42,9 @@ CERRWARN += -_gcc=-Wno-unused-label
 CERRWARN += -_gcc=-Wno-uninitialized
 
 # For headers from librstp.
-LINTFLAGS +=	-erroff=E_TRAILING_COMMA_IN_ENUM
 
 $(ROOTCFGDIR)/secobj.conf := FILEMODE= 660
 
-lint :=	ZLAZYLOAD=
-lint :=	ZNOLAZYLOAD=
 
 .KEEP_STATE:
 
@@ -59,7 +56,6 @@ install: all $(ROOTSBINPROG) $(ROOTCFGDIR) $(ROOTCFGFILES)
 
 clean:
 
-lint:	lint_PROG
 
 $(ROOTCFGDIR):
 	$(INS.dir)

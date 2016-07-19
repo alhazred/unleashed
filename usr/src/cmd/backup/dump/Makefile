@@ -73,7 +73,6 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-clobbered
 CERRWARN +=	-_gcc=-Wno-extra
 LIBDUMP=	../lib/libdump.a
-LINTLIBDUMP=	../lib/llib-ldump.ln -lkstat
 LDLIBS +=	$(BSTATIC) -L../lib -ldump $(BDYNAMIC) \
 		-lsocket -lnsl -ladm -lm -lkstat
 
@@ -111,15 +110,6 @@ dumpdates:
 #XXX Should actually note return value from close(2), particularly regarding
 #XXX tape descriptors.  Some drives don't actually force anything to media
 #XXX except when they are writing a file mark....
-
-# grep is looking for non-space/tab
-lint:	$(SRCS) $(ROLLSRCS) $$(LINTLIBDUMP)
-	$(LINT.c) $(SRCS) $(ROLLSRCS) $(LINTLIBDUMP) 2>&1 \
-	| sed -f lint.sed | grep '^[^ 	]'
-
-$(LINTLIBDUMP):	FRC
-	cd ../lib; pwd; $(MAKE) lint
-	pwd
 
 check:	FRC
 	$(CSTYLE) $(CSTYLEFLAGS) $(SRCS) $(ROLLSRCS) $(HEADERS)

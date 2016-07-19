@@ -72,7 +72,6 @@ clean:
 	$(RM) $(OBJS)
 	$(RM) $(PROG)
 
-lint: lint_SRCS
 
 include ../../Makefile.targ
 

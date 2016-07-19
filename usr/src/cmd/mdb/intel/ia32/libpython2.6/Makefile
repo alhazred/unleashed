@@ -41,6 +41,3 @@ dmod/$(MODULE) := LDLIBS += -lproc
 %.o: $(MODSRCS_DIR)/%.c
 	$(COMPILE.c) $<
 	$(CTFCONVERT_O)
-
-%.ln: $(MODSRCS_DIR)/%.c
-	$(LINT.c) -c $<

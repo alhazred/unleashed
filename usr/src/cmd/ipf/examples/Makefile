@@ -68,7 +68,6 @@ clean:
 install:	all $(SHAREIPF) $(SHAREIPFX)  \
 		$(IPFEXAMPLES) $(IPFEXSHPROG)
 
-lint:
 
 include ../../Makefile.targ
 

@@ -76,9 +76,6 @@ $(HDDEP): ../sh.tconst.h
 
 install: all $(ROOTBINPROG)  $(ROOTPROG)
 
-lint:	../sh.tconst.h
-	$(LINT.c) $(COMMONSRCS) signal.c $(LDLIBS)
-
 clean:
 	$(RM) $(LOCALOBJS) $(COMMONOBJS)
 

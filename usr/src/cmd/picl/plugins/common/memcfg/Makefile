@@ -41,8 +41,6 @@ LIBS =		$(DYNLIB)
 
 ROOTLIBDIR =	$(USR_LIB_PLUGINDIR)
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/sys -I$(SRC)/cmd/picl/plugins/common/memcfg
 CFLAGS +=	$(CCVERBOSE) $(C_PICFLAGS)
 
@@ -64,7 +62,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 POFILE=		piclmemcfg_comm.po
@@ -86,9 +83,6 @@ $(LIBLINKS):	FRC
 # include library targets
 include $(SRC)/cmd/picl/plugins/Makefile.targ
 include $(SRC)/lib/Makefile.targ
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

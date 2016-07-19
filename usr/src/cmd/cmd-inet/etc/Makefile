@@ -86,4 +86,3 @@ datemsk.ndpd: datemsk.template
 clean clobber:
 	$(RM) datemsk.ndpd
 
-lint:

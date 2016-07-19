@@ -43,4 +43,4 @@ install:		all $(ROOTCRONTABPROG)
 $(ROOTCRONTABS)/% :	%
 			$(INS.file)
 
-clobber clean strip lint:
+clobber clean strip:

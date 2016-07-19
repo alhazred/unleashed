@@ -38,7 +38,6 @@ include		../../Makefile.fstype
 
 CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 
-lint:		lint_PROG
 
 $(ROOTUSRSBIN)/$(LIBPROG):
 	$(RM) $@; $(SYMLINK) $(LINKVALUE) $@

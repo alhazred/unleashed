@@ -26,7 +26,6 @@
 PROG =	rpc.smserverd
 OBJS =	smediad.o smediad_err.o myaudit.o smed_svc.o smed_xdr.o
 SRCS =	$(OBJS:%.o=%.c)
-lint := SRCS = smediad.c smediad_err.c myaudit.c
 
 MANIFEST=	smserver.xml
 
@@ -47,7 +46,6 @@ CPPFLAGS += -D_REENTRANT
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-unused-variable
-LINTFLAGS += -u
 
 .KEEP_STATE:
 
@@ -64,7 +62,6 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(OBJS) $(DERIVED_FILES)
 
-lint:	smed.h lint_SRCS
 
 include ../Makefile.targ
 

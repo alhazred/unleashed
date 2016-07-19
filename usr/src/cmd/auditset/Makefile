@@ -62,7 +62,6 @@ _msg: $(MSGDOMAINPOFILE)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 check:          $(CHKMANIFEST)
 

@@ -33,7 +33,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 putback:=	TARGET= putback
 catalog:=       TARGET= catalog
 
@@ -54,7 +53,7 @@ $(POFILE):      $(SUBDIR2)
 	$(RM) 	$@
 	cat     $(POFILES)      > $@
 
-clean clobber lint putback : $(SUBDIRS)
+clean clobber putback : $(SUBDIRS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(MFLAGS) $(TARGET)

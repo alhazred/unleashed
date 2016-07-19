@@ -88,10 +88,6 @@ LDLIBS += -lmlsvc -lmlrpc -lsmbns -lsmb -lsmbfs -lgss
 LDLIBS += -lzfs -lbsm -lscf -lcmdutils -lsocket -lnsl -lumem
 $(PROG) := LDLIBS += -lkrb5
 
-LINTFLAGS += -xerroff=E_NAME_DEF_NOT_USED2
-LINTFLAGS += -xerroff=E_NAME_USED_NOT_DEF2
-LINTFLAGS += -xerroff=E_INCONS_ARG_DECL2
-LINTFLAGS += -xerroff=E_INCONS_VAL_TYPE_DECL2
 
 ROOTSMBDDIR = $(ROOTLIB)/smbsrv
 ROOTSMBDFILE = $(PROG:%=$(ROOTSMBDDIR)/%)
@@ -107,7 +103,6 @@ $(PROG): $(OBJS)
 clean:
 	-$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../../Makefile.targ
 

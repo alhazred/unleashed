@@ -73,9 +73,3 @@ clean:
 		$(RM) $(OBJS) $(LMSOBJS)
 
 include ../Makefile.targ
-
-#
-# we're not linting lms.  it's all C++.
-#
-
-lint:

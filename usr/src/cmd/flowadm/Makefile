@@ -63,7 +63,6 @@ install: all $(ROOTSBINPROG) $(ROOTCFGDIR) $(ROOTCFGFILES)
 
 clean:
 
-lint:	lint_PROG
 
 $(ROOTCFGDIR):
 	$(INS.dir)

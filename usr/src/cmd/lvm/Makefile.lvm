@@ -39,9 +39,4 @@ CERRWARN +=	-_gcc=-Wno-switch
 CERRWARN +=	-_gcc=-Wno-type-limits
 CERRWARN +=	-_gcc=-Wno-unused-value
 
-#
-# Lint flags we use for volume management.
-#
-LINTFLAGS += -un
-
 CSTYLE=cstyle

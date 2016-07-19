@@ -49,9 +49,6 @@ install: all $(ROOTUSRSBINPROG)
 clean: 
 	$(RM) $(OBJS)
 
-lint:
-	${LINT.c} ${SRCS}
-
 cstyle:
 	${CSTYLE} ${SRCS}
 

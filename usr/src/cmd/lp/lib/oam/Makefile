@@ -95,13 +95,6 @@ POFILE =		lp_lib_oam.po
 XGETFLAGS +=	-a -x lp_lib_oam.xcl
 
 CLEANFILES	+= llib-llpoam.ln
-LINTFLAGS = -nvx
 SRCS= $(OBJECTS:%.o=%.c)
-
-lint:	lintlib
-	$(LINT.c) $(LINTFLAGS) $(SRCS)
-
-lintlib:
-	$(LINT.c) $(LINTFLAGS) -o lpoam llib-llpoam
 
 include		../Makefile.msg

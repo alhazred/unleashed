@@ -36,7 +36,6 @@ all :=		TARGET = all
 install :=	TARGET = install
 clean :=	TARGET = clean
 clobber :=	TARGET = clobber
-lint :=		TARGET = lint
 strip :=	TARGET = strip
 _msg :=         TARGET = catalog
 
@@ -51,7 +50,7 @@ POFILE= troff.po
 
 all :		$(SUBDIRS)
 
-install clean lint strip :	$(SUBDIRS)
+install clean strip:	$(SUBDIRS)
 
 clobber: $(SUBDIRS) local_clobber
 

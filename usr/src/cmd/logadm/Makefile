@@ -90,7 +90,6 @@ $(POFILE): $(POFILES)
 clean:
 	$(RM) $(OBJS) $(TESTOBJS)
 
-lint: lint_SRCS
 
 include ../Makefile.targ
 

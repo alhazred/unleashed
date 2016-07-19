@@ -63,7 +63,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 
 
 LDLIBS +=	-lcmdutils -lsocket -lsecdb -lnsl -lilb -lscf -linetutil -lbsm
@@ -85,14 +84,11 @@ check:	$(CHKMANIFEST) $(CHECKHDRS)
 clean:
 	$(RM) $(OBJS)
 
-lint:
-	$(LINT.c) $(ILBD_SRCS) $(LDLIBS)
-
 $(POFILE):	$(POFILES)
 		$(RM) $@
 		$(CAT) $(POFILES) > $@
 
-all install clean clobber lint: $(ILBSUBDIRS)
+all install clean clobber: $(ILBSUBDIRS)
 
 include		../../../Makefile.targ
 

@@ -110,7 +110,4 @@ $(POFILE):      $(POFILES)
 clean:
 	$(RM) $(OBJS) $(CLEANFILES)
 
-lint: $(OBJS) 
-	$(LINT.c) $(SRCS)
-
 include	../../../Makefile.targ

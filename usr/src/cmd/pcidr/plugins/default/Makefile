@@ -43,11 +43,6 @@ include $(SRC)/cmd/pcidr/Makefile.com
 THISDIR = ../../plugins/default
 USR_SRC_BASE = ../../../..
 
-# SRCS is used by the lintcheck rule and is defined as
-# $(OBJECTS:%.o=$(SRCDIR)/%.c) where SRCDIR is this directory; set SRCS to a
-# list of source paths if it differ from the default
-#
-
 SRCDIR = .
 SRCS = $(TOPOBJECTS:%.o=$(USR_SRC_BASE)/cmd/pcidr/%.c) $(LOCOBJECTS:%.o=$(SRCDIR)/%.c) 
 
@@ -71,7 +66,6 @@ all: $(LIBS)
 install: $(ROOTLIBS)
 clean:
 clobber:
-lint: lintcheck
 
 $(ROOTLIBS): all
 

@@ -43,8 +43,6 @@ CFLAGS += $(CCVERBOSE)
 $(OBJS) :=	CPPFLAGS += $(INCS) -D_REENTRANT
 $(POFILE) :=	CPPFLAGS += $(INCS)
 
-lint_SRCS :=	CPPFLAGS += $(INCS)
-
 .KEEP_STATE:
 
 all: $(PROG)
@@ -61,7 +59,5 @@ install: all $(ROOTUSRSBINPROG)
 
 clean:
 	$(RM) $(OBJS)
-
-lint: lint_SRCS
 
 include ../../Makefile.targ

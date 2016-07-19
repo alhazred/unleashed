@@ -40,17 +40,6 @@ i386_SUBDIRS=		\
 
 sparc_SUBDIRS=
 
-COMMON_LINTSUBDIRS=	\
-	bootadm		\
-	installboot
-
-i386_LINTSUBDIRS=	\
-	fiocompress	\
-	installgrub	\
-	symdef
-
-sparc_LINTSUBDIRS=
-
 COMMON_MSGSUBDIRS=	\
 	bootadm		\
 	fiocompress	\
@@ -66,20 +55,16 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 _msg:=		TARGET= _msg
 
 .KEEP_STATE:
 
 SUBDIRS = $(COMMON_SUBDIRS) $($(MACH)_SUBDIRS)
-LINTSUBDIRS = $(COMMON_LINTSUBDIRS) $($(MACH)_LINTSUBDIRS)
 MSGSUBDIRS = $(COMMON_MSGSUBDIRS) $($(MACH)_MSGSUBDIRS)
 
 all clean clobber: $(SUBDIRS)
 
 install: $(SUBDIRS)
-
-lint: $(LINTSUBDIRS)
 
 _msg: $(MSGSUBDIRS)
 

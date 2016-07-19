@@ -32,10 +32,6 @@ COMMON_DIR=	../common	# for Makefile.com
 SRCS = 		rcapstat.c \
 		utils.c
 
-LINTSRCS =	$(COMMON_DIR)/utils.c \
-		rcapstat.c \
-		$(STAT_COMMON_SRCS)
-
 STATCOMMONDIR = $(SRC)/cmd/stat/common
 
 STAT_COMMON_OBJS = timestamp.o
@@ -46,7 +42,6 @@ CPPFLAGS 			+= -I$(COMMON_DIR) -I$(STATCOMMONDIR)
 LDLIBS 				+= -lumem -lzonecfg -lscf
 LDFLAGS				+= $(MAPFILE.NGB:%=-M%)
 
-LINTFLAGS			+= $(LDLIBS) -mnu
 
 PROG =				rcapstat
 OBJS =				$(SRCS:%.c=%.o) rcapd_conf.o
@@ -57,7 +52,7 @@ POFILE =			p$(PROG).po
 CLOBBERFILES += 		rcapd_conf.c $(POFILES) $(POFILE)
 
 .NO_PARALLEL:
-.PARALLEL: $(OBJS) $(LINTFILES)
+.PARALLEL: $(OBJS)
 
 all: $(PROG) $(MAPFILE.NGB)
 
@@ -77,9 +72,6 @@ $(POFILE): $(POFILES)
 
 clean:
 	$(RM) $(OBJS) $(STAT_COMMON_OBJS)
-
-lint:
-	$(LINT.c) $(LINTSRCS)
 
 $(ROOTBIN):
 	$(MKDIR) -p $(ROOTBIN)

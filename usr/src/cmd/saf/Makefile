@@ -54,7 +54,6 @@ ROOTADMF= $(ADMF:%=$(ROOTUSRSBIN)/%)
 
 LDLIBS += -lnsl
 LDFLAGS += $(MAPFILE.NGB:%=-M%)
-LINTFLAGS += -b -x
 
 CERRWARN += -_gcc=-Wno-implicit-function-declaration
 CERRWARN += -_gcc=-Wno-parentheses
@@ -105,10 +104,5 @@ check:	$(CHKMANIFEST)
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(SACSRCS)
-	$(LINT.c) $(SACADMSRCS)
-	$(LINT.c) $(PMADMSRCS)
 
 include ../Makefile.targ

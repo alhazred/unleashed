@@ -53,7 +53,7 @@ all:  		$(TXTS) $(SUBDIRS)
 
 install:	$(ROOTDIRS) .WAIT $(SUBDIRS)
 
-clean clobber strip lint catalog:	$(SUBDIRS)
+clean clobber strip catalog:	$(SUBDIRS)
 
 $(SUBDIRS):	FRC
 		@cd $@; pwd; $(MAKE) $(TARGET)

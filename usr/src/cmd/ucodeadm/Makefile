@@ -48,8 +48,6 @@ CPPFLAGS = -I../../common -I../../uts/common
 CFLAGS	+= $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-type-limits
-LINTFLAGS += -errtags -erroff=E_NAME_DEF_NOT_USED2
-LINTFLAGS += -erroff=E_INCONS_ARG_DECL2,E_INCONS_VAL_TYPE_DECL2
 LDLIBS = -lgen
 
 DIRMODE = 0755
@@ -88,7 +86,6 @@ $(ROOTUCODEPATH)/%: %
 clean:
 	-$(RM) $(CLEANFILES)
 
-lint:	lint_SRCS
 
 
 include	../Makefile.targ

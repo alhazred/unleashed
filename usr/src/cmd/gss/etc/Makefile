@@ -69,4 +69,4 @@ include ../../Makefile.targ
 
 CLOBBERFILES += dummy_mech_token.conf
 
-clean lint:
+clean:

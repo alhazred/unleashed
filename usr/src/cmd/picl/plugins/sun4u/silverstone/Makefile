@@ -42,9 +42,6 @@ _msg :=		TARGET= _msg
 
 all install clean clobber: $(SUBDIRS)
 
-lint:
-	@echo "nothing to lint"
-
 _msg:	$(MSGSUBDIRS)
 
 $(SUBDIRS): FRC

@@ -66,7 +66,6 @@ $(MSGDOMAIN):
 	$(SED) "/^domain/d" messages.po > $@
 	$(RM) messages.po
 
-lint:
 
 clean:
 	-$(RM) $(CLEANFILES)

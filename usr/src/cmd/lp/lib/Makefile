@@ -49,7 +49,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 strip :=	TARGET= strip
 catalog :=	TARGET= catalog
 
@@ -57,7 +56,7 @@ catalog :=	TARGET= catalog
 
 all install:	$(SUBDIRS)
 
-clean lint:	$(SUBDIRS)
+clean:	$(SUBDIRS)
 
 clobber: $(SUBDIRS) local_clobber
 

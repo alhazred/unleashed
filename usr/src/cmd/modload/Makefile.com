@@ -52,13 +52,6 @@ COMMONSRC = $(DRVCOMMONSRC) $(MODCOMMONSRC)
 
 CLOBBERFILES = $(PROG)
 
-# lint is complicated here by the fact that we
-# build multiple commands and with differing
-# common source, drvsubr vs modsubr/plcysubr
-#
-LINT_PROG= $(PROG:%=lint_%.c)
-LINTFLAGS += -erroff=E_NAME_DEF_NOT_USED2
-
 CERRWARN += -_gcc=-Wno-parentheses
 
 # install specifics
@@ -68,10 +61,6 @@ $(ROOTDRVPROG) := FILEMODE = 0555
 add_drv			:= LDLIBS += -ldevinfo -lelf
 rem_drv			:= LDLIBS += -ldevinfo
 update_drv		:= LDLIBS += -ldevinfo
-
-lint_add_drv.c		:= LDLIBS += -ldevinfo -lelf
-lint_rem_drv.c		:= LDLIBS += -ldevinfo
-lint_update_drv.c	:= LDLIBS += -ldevinfo
 
 .KEEP_STATE:
 
@@ -106,10 +95,5 @@ modinfo:	modinfo.o $(MODCOMMONOBJ)
 
 clean:
 	$(RM) $(OBJECTS)
-
-lint_%.c:
-	$(LINT.c) $(@:lint_%.c=../%.c) $(COMMONSRC) $(LDLIBS)
-
-lint:	$(LINT_PROG)
 
 include ../../Makefile.targ

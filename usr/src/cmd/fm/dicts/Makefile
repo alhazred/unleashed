@@ -103,12 +103,7 @@ $(ROOTLCDIR)/%: %
 %.mo: %.po
 	$(MSGFMT) -o $@ $<
 
-lint:
-	@for name in $(DCNAMES); do\
-		$(DICTCK) $(DICTCKFLAGS) $$name.dict $$name.po;\
-	done
-
-clean install_h lint:
+clean install_h:
 
 clobber:
 	$(RM) $(MOFILES)

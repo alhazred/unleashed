@@ -42,7 +42,7 @@ all: $(PROGS)
 
 install : all .WAIT $(USRSBINPROGS)
 
-clean lint:
+clean:
 
 _msg: $(MSGDOMAIN) $(POFILES)
 	$(CP) $(POFILES) $(MSGDOMAIN)

@@ -69,8 +69,4 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(OBJSFCOET) ${OBJSFCOEI}
 
-lint:
-	$(LINT.c) $(SRCSFCOET) $(LDLIBS)
-	$(LINT.c) $(SRCSFCOEI) ${LDLIBS}
-
 include ../Makefile.targ

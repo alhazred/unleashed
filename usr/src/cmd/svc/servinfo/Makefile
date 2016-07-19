@@ -33,7 +33,6 @@ include ../../Makefile.ctf
 
 LDLIBS +=	-lnsl -lsocket
 
-lint := LINTFLAGS = -ux
 
 .KEEP_STATE:
 
@@ -48,6 +47,5 @@ install: all $(ROOTLIBPROG)
 clean:
 	$(RM) $(OBJS) $(POFILES) $(PROG)
 
-lint: lint_SRCS
 
 include ../../Makefile.targ

@@ -48,12 +48,11 @@ all		:=	TARGET = all
 install		:=	TARGET = install
 clean		:=	TARGET = clean
 clobber 	:=	TARGET = clobber
-lint		:=	TARGET = lint
 testshell	:=	TARGET = testshell
 
 .KEEP_STATE:
 
-all clean clobber lint testshell: $(SUBDIRS)
+all clean clobber testshell: $(SUBDIRS)
 
 # dummy file since AST/ksh doesn't use *.po files
 # (and "ksh" is just a frontend which calls directly into libshell,

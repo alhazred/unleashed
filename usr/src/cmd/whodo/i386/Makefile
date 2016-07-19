@@ -35,7 +35,6 @@ include ../../Makefile.cmd
 CFLAGS	+= $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 
-lint	:= LINTFLAGS = -x
 
 FILEMODE= 04555
 
@@ -54,8 +53,5 @@ install: all $(ROOTUSRSBINPROG32)
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
 
 include ../../Makefile.targ

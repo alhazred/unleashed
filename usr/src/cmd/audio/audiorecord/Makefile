@@ -39,7 +39,6 @@ LDFLAGS += -L../utilities
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 
-LINTFLAGS += -m -v -u $(LDFLAGS)
 
 .KEEP_STATE:
 
@@ -49,6 +48,5 @@ install: all $(ROOTPROG)
 
 clean:
 
-lint:	lint_PROG
 
 include ../../Makefile.targ

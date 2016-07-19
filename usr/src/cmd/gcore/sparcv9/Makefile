@@ -38,7 +38,6 @@ CFLAGS64	+= $(CCVERBOSE)
 
 LDLIBS	+= -lproc
 
-lint	:= LINTFLAGS64 = -x -m64
 
 .KEEP_STATE:
 
@@ -55,8 +54,5 @@ install: all $(ROOTPROG64)
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
 
 include ../../Makefile.targ

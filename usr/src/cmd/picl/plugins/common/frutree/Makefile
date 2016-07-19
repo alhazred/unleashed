@@ -43,7 +43,6 @@ LIBS =		$(DYNLIB)
 
 ROOTLIBDIR =	$(USR_LIB_PLUGINDIR)
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
 CLOBBERFILES += $(LIBLINKS)
 
 CPPFLAGS +=	-I../devtree
@@ -68,7 +67,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 POFILE= piclfrutree.po
@@ -90,9 +88,6 @@ $(LIBLINKS):	FRC
 # include library targets
 include $(SRC)/cmd/picl/plugins/Makefile.targ
 include $(SRC)/lib/Makefile.targ
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

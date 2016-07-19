@@ -61,7 +61,7 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(BOOTPROG) $(METHODPROG) $(PROG)
 
-lint _msg:
+_msg:
 
 $(ROOTBOOTSOLARISUSRSBINLINKS):
 	$(RM) $@; $(SYMLINK) ../../../usr/sbin/$(@F) $@

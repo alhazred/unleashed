@@ -55,7 +55,6 @@ install: all $(ROOTPROG) $(ROOTMANIFEST)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 check:		$(CHKMANIFEST)
 

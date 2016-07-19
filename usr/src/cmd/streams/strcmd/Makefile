@@ -36,8 +36,4 @@ install: all $(ROOTPROG)
 
 clean:
 
-lint:
-	$(LINT.c) strchg.c $(LDLIBS)
-	$(LINT.c) strconf.c $(LDLIBS)
-
 include ../../Makefile.targ

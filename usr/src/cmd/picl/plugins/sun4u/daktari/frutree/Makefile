@@ -54,11 +54,7 @@ ROOTCONF=	$(CONF:%=$(ROOTLIBDIR)/%)
 $(ROOTCONF)	:= FILEMODE = 0644
 INFOS=		$(CONF:%.conf=%.info)
 
-LINTSRC =	$(LINTLIB:%.ln=%)
-ROOTLINTDIR =	$(ROOTLIBDIR)
-ROOTLINT =	$(LINTSRC:%=$(ROOTLINTDIR)/%)
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
 CLOBBERFILES += $(LIBLINKS)
 
 DEVTREE_SRC_DIR = $(SRC)/cmd/picl/plugins/common/devtree
@@ -79,7 +75,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 all: $(LIBS) $(LIBLINKS) $(CONF)
@@ -99,12 +94,6 @@ $(LIBLINKS):	FRC
 # include library targets
 include $(SRC)/lib/Makefile.targ
 include $(SRC)/cmd/picl/plugins/Makefile.targ
-
-$(ROOTLINTDIR)/%: ../%
-	$(INS.file)
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

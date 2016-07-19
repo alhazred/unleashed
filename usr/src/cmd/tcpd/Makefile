@@ -48,7 +48,6 @@ install:	all $(ROOTUSRSBINPROG)
 clean:
 		$(RM) *.o
 
-lint:		lint_PROG
 
 TCPDMATCH_OBJ=	tcpdmatch.o fakelog.o inetcf.o scaffold.o
 

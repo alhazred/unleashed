@@ -35,7 +35,6 @@ POFILE = $(PROG)_msg.po
 MSGFILES=$(SRCS:%.c=%.i)
 
 CPPFLAGS += -xCC
-LINTFLAGS += -XCC  -L$(ADJUNCT_PROTO)/usr/lib
 LDLIBS += -ltspi -luuid
 
 CLOBBERFILES = C.ln $(POFILE) $(POFILES)
@@ -55,7 +54,5 @@ install : all $(ROOTPROG)
 
 clean :
 	$(RM) $(OBJS)
-
-lint : lint_SRCS
 
 include ../../Makefile.targ

@@ -73,7 +73,6 @@ $(ROOTSYMLINK):
 $(ROOTLIBSYMLINK):
 		$(RM) $@; $(SYMLINK) $(RELROOTLIB)/tabset $@
 
-lint:
 
 clean:
 

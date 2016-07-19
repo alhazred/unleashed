@@ -76,7 +76,6 @@ $(ROOTLIBABIDIR):
 $(ROOTLIBABIDIR)/%: %
 	$(INS.file)
 
-lint:
 
 clobber:	clean
 	-$(RM) $(CLOBBERFILES)

@@ -55,13 +55,6 @@ all install :	$(LIBS)
 include		../../../../lib/Makefile.targ
 
 CLEANFILES	+= llib-llpacc.ln
-LINTFLAGS = -nvx
 SRCS= $(OBJECTS:%.o=%.c)
-
-lint:	lintlib
-	$(LINT.c) $(LINTFLAGS) $(SRCS) 
-
-lintlib:
-	$(LINT.c) $(LINTFLAGS) -o lpacc llib-llpacc 
 
 include		../Makefile.msg

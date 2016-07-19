@@ -43,6 +43,6 @@ $(ROOT)/lib/svc/share/%: %
 
 all:
 
-lint _msg:
+_msg:
 
 clobber clean:

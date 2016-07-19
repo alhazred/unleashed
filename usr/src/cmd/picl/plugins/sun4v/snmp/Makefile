@@ -45,8 +45,6 @@ LIBS =		$(DYNLIB)
 ROOT_PLATFORM =	$(USR_PLAT_DIR)/sun4v
 ROOTLIBDIR =	$(ROOT_PLAT_PLUGINDIR)
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
 CPPFLAGS +=	-I. -I../include -I$(SRC)/uts/common/sys
 CPPFLAGS +=	-D_REENTRANT
 
@@ -90,8 +88,5 @@ $(POFILE):	$(POFILES)
 # Include library targets
 include $(SRC)/cmd/picl/plugins/Makefile.targ
 include $(SRC)/lib/Makefile.targ
-
-lint :
-	$(LINT.c) $(SRCS)
 
 FRC:

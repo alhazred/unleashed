@@ -56,6 +56,5 @@ values-xpg4.o: ../../lib/common/common/values-xpg4.c
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_PROG
 
 include ../Makefile.targ

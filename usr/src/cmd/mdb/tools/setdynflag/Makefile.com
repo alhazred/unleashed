@@ -47,15 +47,11 @@ CERRWARN += -_gcc=-Wno-uninitialized
 LDFLAGS =
 LDLIBS	= -lelf
 
-LINTFILES = $(SRCS:%.c=%.ln)
 
 install all: $(PROG)
 
 clobber clean:
-	$(RM) $(OBJS) $(LINTFILES) $(PROG)
-
-lint: $(LINTFILES)
-	$(LINT) $(LINTFLAGS) $(LINTFILES) $(LDLIBS)
+	$(RM) $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
 	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
@@ -64,6 +60,3 @@ $(PROG): $(OBJS)
 %.o: ../common/%.c
 	$(COMPILE.c) $<
 	$(POST_PROCESS_O)
-
-%.ln: ../common/%.c
-	$(LINT.c) -c $<

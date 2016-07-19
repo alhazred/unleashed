@@ -103,7 +103,6 @@ metaset := LDFLAGS += -ldevid
 
 LDLIBS +=	-lmeta
 
-lint := LINTFLAGS += -m
 
 install		:= TARGET = install
 clean		:= TARGET = clean
@@ -134,16 +133,6 @@ $(ROOTUSRSBINLINKS):
 
 cstyle:
 	$(CSTYLE) $(SRCS)
-
-lint:
-	for f in $(SRCS) ; do \
-		if [ $$f = "../metainit.c" ]; then \
-		    $(LINT.c) $(LINTFLAGS) \
-			-I$(SRC)/lib/lvm/libmeta/common/hdrs $$f ; \
-		else \
-			$(LINT.c) $(LINTFLAGS) $$f ; \
-		fi \
-	done
 
 clean:
 	$(RM) $(OBJECTS) $(PROG)

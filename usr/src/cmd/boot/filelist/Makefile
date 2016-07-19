@@ -32,13 +32,12 @@ install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
 _msg	:=	TARGET= _msg
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
 install: $(SUBDIRS)
 
-all clobber clean lint _msg:
+all clobber clean _msg:
 
 FRC:
 

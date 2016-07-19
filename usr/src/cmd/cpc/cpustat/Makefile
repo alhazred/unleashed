@@ -54,7 +54,6 @@ install: all $(ROOTUSRSBINPROG)
 clean:
 	$(RM) $(OBJS) $(STAT_COMMON_OBJS)
 
-lint:	lint_SRCS
 
 strip: all
 	$(STRIP) $(PROG)

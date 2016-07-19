@@ -33,7 +33,6 @@ include ../../Makefile.ctf
 
 LDLIBS +=	-lscf -luutil
 
-lint := LINTFLAGS = -ux
 
 CERRWARN += -_gcc=-Wno-uninitialized
 
@@ -50,6 +49,5 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 include ../../Makefile.targ

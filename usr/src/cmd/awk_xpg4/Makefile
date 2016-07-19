@@ -76,7 +76,6 @@ values-xpg4.o: ../../lib/common/common/values-xpg4.c
 clean:
 	$(RM) $(OBJS) $(XPG4) $(CLEANFILES)
 
-lint: lint_SRCS
 
 awk.c + y.tab.h: awk.y
 

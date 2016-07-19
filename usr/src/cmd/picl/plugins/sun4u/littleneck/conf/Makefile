@@ -48,11 +48,7 @@ SRCS=
 
 LIBS =		$(DYNLIB)
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
 ZDEFS	=
-
-LINTFLAGS +=
 
 .KEEP_STATE:
 
@@ -62,7 +58,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 
 all:
 
@@ -77,8 +72,6 @@ include $(SRC)/lib/Makefile.targ
 
 $(USR_PSM_LIB_DIR)/%: % $(USR_PSM_LIB_DIR)
 	$(INS.file)
-
-lint :
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

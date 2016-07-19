@@ -32,7 +32,6 @@ OBJS=	errgen.o
 
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-switch
-LINTFLAGS += -erroff=E_SEC_SPRINTF_UNBOUNDED_COPY
 CLOBBERFILES += $(DYNPROG)
 
 .KEEP_STATE:
@@ -43,7 +42,6 @@ all: $(PROG)
 
 install: all
 
-lint:	lint_PROG
 
 clean:
 	$(RM) $(OBJS)

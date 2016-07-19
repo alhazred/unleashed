@@ -23,9 +23,6 @@
 # Use is subject to license terms.
 #
 
-# Suffixes for files that flag a particular check
-SUFFIX_LINT = .lint
-
 all       := TARGET = all
 install   := TARGET = install
 clean     := TARGET = clean
@@ -34,7 +31,6 @@ catalog   := TARGET = catalog
 check     := TARGET = check
 cstyle    := TARGET = cstyle
 hdrchk    := TARGET = hdrchk
-lint      := TARGET = lint
 
 .KEEP_STATE:
 
@@ -75,13 +71,6 @@ install: all .WAIT \
 	$(ROOTXMLDTDFILES) \
 	$(ROOTXMLSTYLEFILES)
 
-# Pattern-matching rule for lint
-%$(SUFFIX_LINT): %
-	${LINT.c} -I. ${INCLUDES} -y -c $< && touch $@
-
-# Run lint on all source files
-lint: ${SUBDIRS} $(SRCS:%=%$(SUFFIX_LINT))
-
 CSTYLE_FLAGS=	-Pp
 HDRCHK_FLAGS=	-a
 
@@ -94,7 +83,7 @@ check: cstyle hdrchk
 clobber: ${SUBDIRS}
 
 clean: ${SUBDIRS}
-	$(RM) *.o *.ln *.i *.lint $(CLEANFILES)
+	$(RM) *.o *.ln *.i $(CLEANFILES)
 
 catalog: $(POFILE)
 

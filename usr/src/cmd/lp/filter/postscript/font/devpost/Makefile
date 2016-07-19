@@ -85,7 +85,7 @@ $(FONTLNK2OUTS) :	HI.out
 $(ROOTDEVPOST)/% :	% $(ROOTDEVPOST)
 			$(INS.file)
 
-clean strip lint :	$(SUBDIRS)
+clean strip:	$(SUBDIRS)
 
 clobber:		$(SUBDIRS)
 			$(RM) $(FONTOUTS) $(FONTLNK1OUTS) $(FONTLNK2OUTS)

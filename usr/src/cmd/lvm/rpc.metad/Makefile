@@ -46,7 +46,6 @@ all     :=      TARGET = all
 install :=      TARGET = install
 clean   :=      TARGET = clean
 clobber :=      TARGET = clobber
-lint    :=      TARGET = lint
 
 .KEEP_STATE:
 
@@ -60,7 +59,7 @@ $(POFILE): $(POFILES)
 
 CLOBBERFILES += metad_svc.c
 
-clean clobber lint:	$(SUBDIRS)
+clean clobber:	$(SUBDIRS)
 
 install:        $(SUBDIRS) $(ROOTMANIFEST)
 

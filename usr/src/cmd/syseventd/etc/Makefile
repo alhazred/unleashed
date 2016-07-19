@@ -35,7 +35,7 @@ include ../Makefile.com
 
 .KEEP_STATE:
 
-all clean clobber lint _msg:
+all clean clobber _msg:
 
 install: all				\
 	$(ROOTETCSYSEVENTDIR)		\

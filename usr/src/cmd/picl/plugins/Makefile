@@ -45,12 +45,11 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 .KEEP_STATE:
 
-all clean clobber lint : $(SUBDIRS)
+all clean clobber : $(SUBDIRS)
 
 _msg:	$(MSGSUBDIRS)
 

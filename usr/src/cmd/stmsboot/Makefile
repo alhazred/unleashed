@@ -59,7 +59,6 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(POFILES)
 
-lint:	lint_SRCS
 
 $(STMSBOOT_UTIL): $(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $< $(LDLIBS)

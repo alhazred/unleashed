@@ -101,10 +101,6 @@ install_h:
 clean:
 	$(RM) $(CLIENTOBJS) $(SERVEROBJS) $(DERIVED_OBJS) $(COMMONOBJS) $(PROG) $(ISRC)
 
-lint:
-	$(LINT.c) $(CLIENTSRCS) $(COMMONSRCS) $(LDLIBS)
-	$(LINT.c) $(SERVERSRCS) $(DERIVED_SRCS) $(COMMONSRCS) $(LDLIBS)
-
 include ../../Makefile.targ
 
 $(POFILE): $(DERIVED_FILES) .WAIT $(POFILES)

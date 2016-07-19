@@ -22,7 +22,6 @@ clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 delete :=	TARGET= delete
 install :=	TARGET= install
-lint :=		TARGET= lint
 catalog :=	TARGET= catalog
 _msg :=		TARGET= _msg
 package :=	TARGET= package
@@ -36,7 +35,7 @@ $(NS_POFILES) := C99MODE = $(C99_ENABLE)
 
 .KEEP_STATE:
 
-all clobber delete install lint catalog package: $(SUBDIRS)
+all clobber delete install catalog package: $(SUBDIRS)
 
 clean:	$(SUBDIRS)
 	$(RM) $(POFILES) $(POFILE)

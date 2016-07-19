@@ -36,7 +36,6 @@ CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 
 vtdaemon := LDLIBS += -lpam -lbsm
-lint_vtdaemon := LDLIBS += -lpam -lbsm
 
 .KEEP_STATE:
 
@@ -53,13 +52,5 @@ vtinfo: $(VTINFO_SRC)
 install: all $(ROOTLIBPROG)
 
 clean:
-
-lint: lint_vtdaemon lint_vtinfo
-
-lint_vtdaemon:
-	$(LINT.c) $(VTDAEMON_SRC) $(LDLIBS)
-
-lint_vtinfo:
-	$(LINT.c) $(VTINFO_SRC) $(LDLIBS)
 
 include ../Makefile.targ

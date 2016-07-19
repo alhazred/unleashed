@@ -43,10 +43,3 @@ AS_CPPFLAGS += -I$(SRC)/uts/i86pc
 
 %.o: %.s
 	$(COMPILE.s) $<
-
-%.ln: %.c
-	$(LINT.c) $<
-
-%.ln: %.s
-	$(LINT.s) $<
-

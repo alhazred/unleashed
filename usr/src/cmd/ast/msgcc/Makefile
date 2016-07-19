@@ -73,6 +73,6 @@ all: $(PROG)
 
 install: all $(ROOTCMD)
 
-clean lint:
+clean:
 
 include ../../Makefile.targ

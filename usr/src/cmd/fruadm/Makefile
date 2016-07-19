@@ -35,10 +35,8 @@ FRULIBS    = -L$(SRC)/lib/libfru/$(MACH) -lfru
 CFLAGS    += $(CCVERBOSE)
 CERRWARN  += -_gcc=-Wno-switch
 CPPFLAGS  += -I$(SRC)/lib/libfru/include
-LINTFLAGS += -u
 LDLIBS    += $(FRULIBS) -lm
 
-lint      := FRULIBS =
 
 FILEMODE = 755
 
@@ -50,7 +48,6 @@ install: all $(USR_PSM_SBIN_DIR) $(USR_PSM_SBIN_PROG)
 
 clean:
 
-lint:	lint_PROG
 
 include $(SRC)/cmd/Makefile.targ
 include $(SRC)/Makefile.psm.targ

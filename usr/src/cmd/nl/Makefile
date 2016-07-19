@@ -80,7 +80,6 @@ nlobjs.xpg4:
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_PROG
 
 include ../Makefile.targ
 

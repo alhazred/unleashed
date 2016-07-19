@@ -44,7 +44,6 @@ install: all $(ROOTPROG)
 
 clean:
 
-lint:	lint_PROG
 
 $(DCFILE):
 	$(RM) messages.po

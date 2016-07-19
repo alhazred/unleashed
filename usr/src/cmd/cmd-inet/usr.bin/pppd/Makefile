@@ -20,7 +20,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 
 LDLIBS +=	-lpam -lmd -lsocket -lnsl -ldlpi
 
@@ -78,7 +77,6 @@ mschap_test:	mschap_test.o chap_ms.o
 	@echo "  xx xx xx xx xx xx xx xx"
 	@echo "  00"
 
-LINTFLAGS +=	-erroff=E_NAME_DEF_NOT_USED2
 
 SRCS=		$(OBJS:%.o=%.c)
 
@@ -106,18 +104,8 @@ $(SUBDIRS):	FRC
 
 FRC:
 
-LINTOBJS=$(OBJS:%.o=%.ln)
-CLOBBERFILES +=	$(LINTOBJS)
-
 clean:		$(SUBDIRS)
 	$(RM) $(OBJS) $(EXOBJS)
-
-sha1.ln:=	LINTFLAGS += -erroff=E_SUPPRESSION_DIRECTIVE_UNUSED
-
-# Not using the default lint target here so that we can disable
-# warnings per module as needed.
-lint:		$(SUBDIRS) $(LINTOBJS)
-	$(LINT.c) $(LINTOBJS) $(LDLIBS)
 
 clobber:	$(SUBDIRS)
 

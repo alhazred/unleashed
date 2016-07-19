@@ -75,6 +75,5 @@ cmdparse.o: $(COMMONBASE)/cmdparse/cmdparse.c
 	    $(COMPILE.c) -o $@ $(COMMONBASE)/cmdparse/cmdparse.c
 	    $(POST_PROCESS_O)
 
-lint:	lint_SRCS
 
 include ../../Makefile.targ

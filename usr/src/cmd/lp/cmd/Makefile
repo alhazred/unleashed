@@ -81,9 +81,6 @@ local_clobber:
 strip:		$(SUBDIRS)
 		$(STRIP) $(PROG)
 
-lint:
-		$(LINT.c) $(SRCS) $(LDLIBS)
-
 $(ROOTSYMLINKS):
 		$(RM) $@; $(SYMLINK) ../sbin/$(@F) $@
 

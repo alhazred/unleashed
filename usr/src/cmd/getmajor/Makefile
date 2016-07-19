@@ -42,6 +42,6 @@ install: $(ALL) $(ROOTUSRSBINF)
 
 FRC:
 
-clean lint:
+clean:
 
 include	../Makefile.targ

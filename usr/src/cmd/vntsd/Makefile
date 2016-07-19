@@ -63,7 +63,6 @@ $(POFILE): $(POFILES)
 
 check: $(CHKMANIFEST)
 
-lint: lint_SRCS
 
 clean:
 	$(RM) $(OBJS)

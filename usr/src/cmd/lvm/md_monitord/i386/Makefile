@@ -43,7 +43,6 @@ CFLAGS += ${DEFINES}
 
 #
 #
-lint := LINTFLAGS += -m
 
 .KEEP_STATE:
 
@@ -61,9 +60,6 @@ install: all $(ROOTUSRSBINPROG)
 
 cstyle:
 	${CSTYLE} ${SRCS}
-
-lint:
-	${LINT.c} $(LINTFLAGS) ${SRCS}
 
 clean:
 	${RM} ${OBJS} *.o

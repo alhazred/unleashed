@@ -44,7 +44,6 @@ all:=           TARGET= all
 install:=       TARGET= install
 clean:=         TARGET= clean
 clobber:=       TARGET= clobber
-lint:=          TARGET= lint
 
 $(USRLIBIPF):
 	$(INS.dir)
@@ -54,7 +53,7 @@ $(USRLIBIPF)/% : %
 
 .KEEP_STATE:
 
-all clean clobber lint: $(SUBDIRS)
+all clean clobber: $(SUBDIRS)
 
 install: all $(SUBDIRS) install_local
 

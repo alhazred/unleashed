@@ -43,7 +43,6 @@ include ../../Makefile.plugin
 
 CMA_VERSION = "1.1"
 
-
 LIBDIRS = $(ROOT)/usr/platform/$(PLATFORMS)/lib
 CPPFLAGS += $(INCDIRS:%=-I%) -DCMA_VERSION='$(CMA_VERSION)' -Dopl
 LDFLAGS += -R/usr/lib/fm
@@ -52,6 +51,3 @@ LDLIBS += -L$(ROOTLIB)/fm -lfmd_agent
 %.o: $(CPUMEM_RETIRE_COMMON)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-%.ln: $(CPUMEM_RETIRE_COMMON)/%.c
-	$(LINT.c) -c $<

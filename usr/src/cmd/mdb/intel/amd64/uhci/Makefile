@@ -39,4 +39,3 @@ CPPFLAGS += -I../../../../../uts/common
 
 # Needed because we're including uhciutil.h from uhci, but we obviously
 # don't use all of its functions.
-LINTFLAGS += -erroff=E_STATIC_UNUSED

@@ -54,9 +54,7 @@ LDFLAGS = $(ZNOVERSION) $(BREDUCE) -M $(MAPFILE) -dy -r
 
 LIB = libstandctf.so
 OBJS = $(CTF_COMMON_SRCS:%.c=%.o) $(CTF_STUB_SRCS:%.c=%.o)
-LINTFILES = $(OBJS:%.o=%.ln)
 
-LINTFLAGS += -n -errtags=yes
 
 CERRWARN += -_gcc=-Wno-uninitialized
 
@@ -69,10 +67,7 @@ $(LIB): $(OBJS) $(MAPFILE)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS)
 
 clobber clean:
-	$(RM) $(LIB) $(OBJS) $(LINTFILES)
-
-lint: $(LINTFILES)
-	$(LINT) $(LINTFLAGS) $(LINTFILES)
+	$(RM) $(LIB) $(OBJS)
 
 #
 # Dynamic rules for object construction
@@ -85,13 +80,3 @@ lint: $(LINTFILES)
 %.o: $(SRC)/common/ctf/%.c
 	$(COMPILE.c) $<
 	$(CTFCONVERT_O)
-
-#
-# Lint
-#
-
-%.ln: ../../../common/libstandctf/%.c
-	$(LINT.c) -c $<
-
-%.ln: $(SRC)/common/ctf/%.c
-	$(LINT.c) -c $<

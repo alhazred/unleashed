@@ -38,15 +38,12 @@ POFILE=	$(OBJS:%.o=%.po)
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 LDLIBS += -lunistat -ladm
-LINTFLAGS +=	-Xa -n -s -x -m -u -Dlint -errhdr=%user
-LINTFLAGS +=	-erroff=E_SEC_PRINTF_VAR_FMT
 ROOTLINK = $(ROOTUSRSBIN)/$(PROG)
 
 all	:=	TARGET= all
 install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
@@ -56,7 +53,6 @@ all:	$(PROG)
 
 install: all $(ROOTPROG) $(ROOTLINK)
 
-lint:	lint_SRCS
 
 clean:
 	$(RM) *.o $(POFILE)

@@ -30,7 +30,6 @@
 # Common sysevent module Makefile epilogue
 #
 
-lint:	lintcheck
 
 _msg: $(MSGDOMAINPOFILE)
 

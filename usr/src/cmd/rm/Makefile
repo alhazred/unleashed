@@ -36,7 +36,6 @@ CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 $(XPG4) := CFLAGS += -DXPG4
 CPPFLAGS += -D_FILE_OFFSET_BITS=64  -I $(SRC)/common/util
-LINTFLAGS += -u
 .KEEP_STATE:
 
 all: $(PROG) $(XPG4)
@@ -66,6 +65,5 @@ xpg4_%.o:	$(SRC)/common/util/%.c
 clean:
 	$(RM) $(RMOBJ) $(XPG4RMOBJ)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

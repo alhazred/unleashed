@@ -139,12 +139,10 @@ crontab :=	LDLIBS += -lsecdb -lpam -lzoneinfo
 crontab.xpg6 :=	LDLIBS += -lsecdb -lpam -lzoneinfo
 crontab.xpg4 :=	LDLIBS += -lsecdb -lpam -lzoneinfo
 
-lint :=		LDLIBS += -lproject -lsecdb -lcontract -lpam
 
 $(XPG4) := CFLAGS += -DXPG4
 $(XPG6) := CFLAGS += -DXPG6
 
-LINTFLAGS += -u
 
 $(ROOTSVCSYSTEM)/cron.xml := FILEMODE = 0444
 $(ROOTLIBSVCMETHOD)/svc-cron := FILEMODE = 0555
@@ -220,8 +218,6 @@ $(POFILE):	$(POFILES)
 
 clean :
 		$(RM) $(OBJS) att1.h att1.c att2.c
-
-lint :		lint_SRCS
 
 strip :
 		$(STRIP) $(PROG) $(XPG4) $(XPG6)

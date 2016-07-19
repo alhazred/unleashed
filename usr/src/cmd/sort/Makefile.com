@@ -82,7 +82,6 @@ SPACEFLAG64 =
 CFLAGS +=	$(CCVERBOSE) $(SORT_DEBUG)
 CFLAGS64 +=	$(CCVERBOSE) $(SORT_DEBUG)
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
-LINTFLAGS +=	-U_FILE_OFFSET_BITS
 
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
@@ -104,9 +103,6 @@ stats	:=	COPTFLAG64 =
 all : $(PROG) $(XPG4)
 
 debug : $(PROG) convert invoke
-
-lint : $(LNTS)
-	$(LINT.c) $(LINTFLAGS) $(LNTS) $(LDLIBS)
 
 clean :
 	$(RM) $(CLEANFILES)
@@ -143,6 +139,3 @@ xpg4_%.o : ../common/%.c
 %.o : ../common/%.h types.h
 
 xpg4_%.o : ../common/%.h types.h
-
-%.ln: ../common/%.c
-	$(LINT.c) $(LINTFLAGS) -c $<

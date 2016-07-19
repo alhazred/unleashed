@@ -36,13 +36,12 @@ CERRWARN	+= -_gcc=-Wno-parentheses
 FILEMODE	= 2755
 DIRMODE		= 755
 
-LINT_OBJS	= $(OBJS:%.o=%.ln)
 POFILE		= prtdiag.po
 POFILES		= $(OBJS:%.o=%.po)
 
 LIBPRTDIAG	= $(SRC)/lib/libprtdiag
 
-.PARALLEL: $(OBJS) $(LINT_OBJS)
+.PARALLEL: $(OBJS)
 
 %.o: %.c
 	$(COMPILE.c) -o $@ $<
@@ -59,9 +58,3 @@ LIBPRTDIAG	= $(SRC)/lib/libprtdiag
 %.po: $(SRCDIR)/%.c
 	$(COMPILE.cpp) $<  > $<.i
 	$(BUILD.po)
-
-%.ln: %.c
-	$(LINT.c) -c $<
-
-%.ln: $(SRCDIR)/%.c
-	$(LINT.c) -c $<

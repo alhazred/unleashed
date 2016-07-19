@@ -37,9 +37,6 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 
 LDLIBS +=	-lelf
 
-LINTFLAGS =	-nmxsuF -errtags=yes
-LINTLIBS +=	$(LDLIBS)
-
 CLEANFILES +=	$(PROG)
 CLOBBERFILES +=	$(PROG)
 

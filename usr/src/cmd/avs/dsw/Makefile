@@ -52,9 +52,6 @@ SRCS=	$(OBJS:%.o=%.c)
 POFILES= $(OBJS:%.o=%.po)
 
 CFLAGS +=	$(CCVERBOSE) -D_DSW_
-LINTFLAGS +=	-Xa -n -s -x -m -u -Dlint -errhdr=%user -D_DSW_ -DDEBUG
-LINTFLAGS +=	-erroff=E_SEC_SCANF_UNBOUNDED_COPY
-LINTFLAGS +=	-erroff=E_SEC_PRINTF_VAR_FMT
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
@@ -63,7 +60,6 @@ all	:=	TARGET= all
 install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
@@ -85,7 +81,6 @@ $(POFILE): $(POFILES)
 	$(RM) $@
 	$(CAT) $(POFILES) > $@
 
-lint:	$(SUBDIRS) lint_SRCS
 
 clean:	$(SUBDIRS)
 	$(RM) *.o $(POFILES)

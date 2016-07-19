@@ -70,6 +70,5 @@ $(PROG).po: $(PROG) $(ATTR) $(AGETTEXT)
 	./$(AGETTEXT) $(TEXT_DOMAIN) $(PROG).po; \
 	$(XGETTEXT) -d $(PROG) -j $(PROG)
 
-lint:
 
 include $(SRC)/cmd/Makefile.targ

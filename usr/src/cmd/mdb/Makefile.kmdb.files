@@ -119,7 +119,6 @@ MLSRCS += $(KMDBML)
 OBJS = $(SRCS:%.c=%.o) $(KMDBML:%.s=%.o)
 
 ALLOBJS = $(OBJS) $(KCTLOBJS)
-ALLLINTFILES = $(ALLOBJS:%.o=%.ln)
 
 # files that need KMDB_VERSION defined
 VERSFILES = \

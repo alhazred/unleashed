@@ -45,9 +45,6 @@ ROOTPROG = $(ROOT)/usr/lib/fm/fmd/schemes/$(PROG)
 ROOTPROG64 = $(ROOT)/usr/lib/fm/fmd/schemes/$(MACH64)/$(PROG)
 MAPFILE = ../../../fmd/common/fmd_fmri.map
 
-LINTFLAGS += -u
-LINTFLAGS64 += -u
-LINTFILES = $(SRCS:%.c=%.ln)
 
 CFLAGS += $(CTF_FLAGS) $(CCVERBOSE) $(XSTRCONST) $(CC_PICFLAGS)
 CFLAGS += -G $(XREGSFLAG)

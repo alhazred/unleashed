@@ -59,8 +59,6 @@ all     :=	TARGET = all
 install :=	TARGET = install
 clean   :=	TARGET = clean
 clobber :=	TARGET = clobber
-lint    :=	TARGET = lint
-lint	:=	LINTFLAGS = -u
 
 
 all: $(PROG) 
@@ -82,7 +80,6 @@ clean:
 
 clobber: $(SUBDIRS)
 
-lint:	lint_PROG
 
 check: $(CHKMANIFEST)
 

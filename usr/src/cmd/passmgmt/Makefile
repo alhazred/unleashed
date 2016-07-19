@@ -60,6 +60,5 @@ datemsk: datemsk.template
 clean:
 	$(RM) datemsk
 
-lint:	lint_PROG
 
 include ../Makefile.targ

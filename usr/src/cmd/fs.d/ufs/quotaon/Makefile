@@ -43,7 +43,6 @@ CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-unused-function
 
-lint:		lint_PROG
 
 $(ROOTLIBFSTYPE)/$(QUOTAOFF):	$(ROOTLIBFSTYPE)/$(LIBPROG) 
 		-$(RM) $@; $(LN) $(ROOTLIBFSTYPE)/$(LIBPROG) $@

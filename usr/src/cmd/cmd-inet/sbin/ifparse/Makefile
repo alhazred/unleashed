@@ -37,11 +37,9 @@ include ../../../Makefile.cmd
 include ../../Makefile.cmd-inet
 
 CPPFLAGS += -I$(CMDINETCOMMONDIR)
-LINTFLAGS +=	-m
 
 # these #defines are required to use UNIX 98 interfaces
 $(OBJS)		:= CPPFLAGS +=-D_POSIX_C_SOURCE=199506L
-LINTFLAGS	+= -D_POSIX_C_SOURCE=199506L -I$(CMDINETCOMMONDIR)
 
 .KEEP_STATE:
 
@@ -56,6 +54,5 @@ install:	all $(ROOTSBINPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../../../Makefile.targ

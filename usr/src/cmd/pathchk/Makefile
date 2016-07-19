@@ -40,7 +40,6 @@ install: all $(ROOTPROG)
 
 clean:
 
-lint:	lint_PROG
 
 XGETFLAGS += -a -x $(PROG).xcl
 

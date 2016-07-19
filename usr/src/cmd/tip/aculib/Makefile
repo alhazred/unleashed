@@ -25,7 +25,6 @@ OBJS=	biz22.o biz31.o df.o dn11.o hayes.o ventel.o v831.o v3451.o
 
 include ../../Makefile.cmd
 
-LINTFLAGS +=	-u
 CPPFLAGS=	-I../ -DUSG $(CPPFLAGS.master)
 CERRWARN +=	-_gcc=-Wno-clobbered
 CERRWARN +=	-_gcc=-Wno-parentheses
@@ -41,6 +40,3 @@ $(ACULIB): $(OBJS)
 
 clean:
 	$(RM) $(ACULIB) $(OBJS)
-
-lint:
-	$(LINT.c) $(OBJS:%.o=%.c) $(LDLIBS)

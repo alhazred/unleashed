@@ -35,7 +35,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 
 CROND= $(ROOT)/var/spool/cron
 CRONTABD= $(ROOT)/var/spool/cron/crontabs
@@ -82,4 +81,3 @@ FRC:
 
 clean clobber: $(SUBDIRS)
 
-lint:

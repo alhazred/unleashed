@@ -36,7 +36,6 @@ CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-clobbered
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -I $(SRC)/common/util
-LINTFLAGS += -u
 
 LDLIBS += -lcmdutils -lsec
 
@@ -58,6 +57,5 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

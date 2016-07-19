@@ -131,13 +131,4 @@ $(DIRS):
 clean:
 	$(RM) $(OBJS)
 
-lint:
-	$(LINT.c) $(PRIOCNTLSRC) $(LDLIBS)
-	$(LINT.c) rt$(PRIOCNTLSRC) $(LDLIBS)
-	$(LINT.c) sdc$(PRIOCNTLSRC) $(LDLIBS)
-	$(LINT.c) ts$(PRIOCNTLSRC) $(LDLIBS)
-	$(LINT.c) ia$(PRIOCNTLSRC) $(LDLIBS)
-	$(LINT.c) fss$(PRIOCNTLSRC) $(LDLIBS)
-	$(LINT.c) fx$(PRIOCNTLSRC) $(LDLIBS)
-
 include ../Makefile.targ

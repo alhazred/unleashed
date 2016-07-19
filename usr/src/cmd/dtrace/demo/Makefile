@@ -147,8 +147,6 @@ clean:
 clobber: clean
 	$(RM) $(CLOBBERFILES)
 
-clean.lint install_h lint:
-
 install: $(ROOTDEMOFILES)
 
 $(ROOTDEMODIR):

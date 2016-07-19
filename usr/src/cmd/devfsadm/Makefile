@@ -40,7 +40,6 @@ install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
 _msg	:=	TARGET= _msg
-lint	:=	TARGET= lint
 
 ROOTETCDEV=	$(ROOTETC)/dev
 ROOTETCDEVFILES=$(ETCDEVFILES:%=$(ROOTETCDEV)/%)
@@ -51,7 +50,7 @@ $(ROOTETCDEVFILES) :=	FILEMODE = 0644
 
 all:	$(SUBDIRS) $(ETCDEVFILES)
 
-clean lint _msg:	$(SUBDIRS)
+clean _msg:	$(SUBDIRS)
 
 clobber: $(SUBDIRS)
 	$(RM) $(ROOTETCDEVFILES)

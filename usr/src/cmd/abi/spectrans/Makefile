@@ -35,9 +35,8 @@ all		:=	TARGET= all
 install		:=	TARGET= install
 clean		:=	TARGET= clean
 clobber		:=	TARGET= clobber
-lint		:=	TARGET= lint
 
-all install clean clobber lint: $(SUBDIRS)
+all install clean clobber: $(SUBDIRS)
 
 _msg: # No messages for these tools
 

@@ -37,8 +37,6 @@ CPPFLAGS += -I$(SRC)/uts/common/sys/fibre-channel
 CPPFLAGS += -I$(SRC)/uts/common/sys/fibre-channel/fca/qlc
 CPPFLAGS += -I$(SRC)/uts/common/sys/fibre-channel/impl
 
-LINTFLAGS +=  -erroff=E_STATIC_UNUSED -erroff=E_FUNC_SET_NOT_USED
-LINTFLAGS +=  -erroff=E_STATIC_UNUSED -erroff=E_FUNC_ARG_UNUSED
 
 C99MODE=	-xc99=%all
 C99LMODE=	-Xc99=%all

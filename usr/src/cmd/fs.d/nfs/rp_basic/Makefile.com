@@ -31,8 +31,6 @@ OBJECTS =	$(LIBOBJS) $(COMMON)
 
 include $(SRC)/lib/Makefile.lib
 
-lintcheck := SRCS = ../libnfs_basic.c ../../lib/ref_subr.c
-
 ROOTLIBDIR =	$(ROOT)/usr/lib/reparse
 ROOTLIBDIR64 =	$(ROOT)/usr/lib/reparse/$(MACH64)
 
@@ -50,7 +48,6 @@ all: $(LIBS)
 
 install: $(ROOTLIBDIR) $(ROOTLIBDIR64) all
 
-lint: lintcheck
 
 pics/ref_subr.o:     ../../lib/ref_subr.c
 	$(COMPILE.c) -o pics/ref_subr.o ../../lib/ref_subr.c

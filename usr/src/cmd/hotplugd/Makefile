@@ -65,6 +65,5 @@ clean:
 check: $(CHKMANIFEST)
 	$(CSTYLE) -pP $(SRCS:%=%)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

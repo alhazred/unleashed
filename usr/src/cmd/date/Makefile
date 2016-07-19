@@ -45,7 +45,6 @@ $(PROG) $(XPG4): $$(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
-
 install: all $(ROOTPROG) $(ROOTXPG4PROG)
 
 values-xpg4.o: ../../lib/common/common/values-xpg4.c
@@ -53,8 +52,5 @@ values-xpg4.o: ../../lib/common/common/values-xpg4.c
 
 clean:
 	$(RM) $(OBJS)
-
-# do not lint date.xpg4
-lint:	lint_PROG
 
 include ../Makefile.targ

@@ -47,12 +47,10 @@ all	:=	TARGET = all
 install	:=	TARGET = install
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 
 all:		$(SUBDIRS)
 clean:		$(SUBDIRS)
 clobber:	$(SUBDIRS)
-lint:		$(SUBDIRS)
 
 $(POFILE): $(POFILES)
 	$(RM) $@

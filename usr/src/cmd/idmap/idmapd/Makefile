@@ -91,8 +91,6 @@ INCS += -I $(ROOT)/usr/include/kerberosv5
 $(OBJS) := CPPFLAGS += $(INCS) -D_REENTRANT
 $(POFILE) := CPPFLAGS += $(INCS)
 
-LINTFLAGS += -xerroff=E_NAME_DEF_NOT_USED2
-LINTFLAGS += -xerroff=E_NAME_USED_NOT_DEF2
 
 CFLAGS += $(CCVERBOSE)
 LDLIBS += \
@@ -122,8 +120,6 @@ $(PROG) := LDFLAGS += $(MAPFILES:%=-M%) \
 DIRMODE = 0755
 FILEMODE = 0555
 
-lint_SRCS := CPPFLAGS += $(INCS) -D_REENTRANT $(RPC_MSGOUT_OPT)
-
 .KEEP_STATE:
 
 .PARALLEL: $(OBJS)
@@ -144,10 +140,6 @@ check: $(CHKMANIFEST)
 
 clean:
 	$(RM) $(OBJS) $(GENSRCS)
-
-lint:   lint_SRCS
-
-lint_SRCS:
 
 RPCGENFLAGS = -CMN
 

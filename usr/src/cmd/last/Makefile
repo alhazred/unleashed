@@ -53,6 +53,5 @@ install: all $(ROOTPROG) $(SYMSETC) $(ROOTUTMPS)
 clean:
 	$(RM) $(UTMPS)
 
-lint:	lint_PROG
 
 include ../Makefile.targ

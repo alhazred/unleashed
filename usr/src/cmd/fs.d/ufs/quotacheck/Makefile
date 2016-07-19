@@ -42,7 +42,6 @@ SRCS=		$(OBJS:.o=.c)
 CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
 CERRWARN +=	-_gcc=-Wno-type-limits
 
-lint:		lint_PROG
 
 $(FSOBJS): $(FSSRCS)
 	$(COMPILE.c) -o $@ $(FSSRCS)

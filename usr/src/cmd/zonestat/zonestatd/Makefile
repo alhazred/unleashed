@@ -37,7 +37,6 @@ CPPFLAGS	+= -I$(ADJUNCT_PROTO)/usr/include/libxml2
 LDLIBS 		+= -lkstat -lpool -lexacct -lscf \
 		    -lcontract -lcmdutils -lumem
 
-LINTFLAGS	+= -u
 CERRWARN 	+= -_gcc=-Wno-parentheses
 CERRWARN 	+= -_gcc=-Wno-unused-label
 CERRWARN 	+= -_gcc=-Wno-uninitialized
@@ -57,6 +56,5 @@ check: $(CHKMANIFEST)
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_PROG
 
 include ../../Makefile.targ

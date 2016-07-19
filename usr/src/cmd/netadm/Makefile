@@ -67,7 +67,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clean
-lint :=		TARGET= lint
 
 .KEEP_STATE:
 
@@ -92,7 +91,6 @@ $(SUBDIRS): FRC
 
 clean: $(SUBDIRS)
 
-lint: $(SUBDIRS)
 
 FRC:
 

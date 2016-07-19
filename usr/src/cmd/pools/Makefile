@@ -41,14 +41,13 @@ all :=		TARGET = all
 install :=	TARGET = install
 clean :=	TARGET = clean
 clobber :=	TARGET = clobber
-lint :=		TARGET = lint
 _msg :=		TARGET = _msg
 
 $(ROOTMANIFEST):= 	FILEMODE= 444
 
 .KEEP_STATE:
 
-all lint clean clobber _msg: $(SUBDIRS)
+all clean clobber _msg: $(SUBDIRS)
 
 install: $(SUBDIRS) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 

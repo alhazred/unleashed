@@ -40,6 +40,5 @@ install: all $(ROOTUSRSBINPROG)
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

@@ -33,7 +33,6 @@ XPG4PROG=	$(PROG)
 
 include ../Makefile.cmd
 
-LINTFLAGS +=	-erroff=E_NAME_USED_NOT_DEF2
 CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lproject
 
@@ -49,6 +48,5 @@ $(ROOTXPG4PROG):	$(ROOTPROG)
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

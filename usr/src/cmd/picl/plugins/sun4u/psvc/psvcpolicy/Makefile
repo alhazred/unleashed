@@ -46,8 +46,6 @@ PLATFORM = sun4u
 
 USR_PLAT_PSVCPOL = $(LIBS:%=$(USR_PSM_LIB_DIR)/%)
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
 CPPFLAGS +=	-I$(SRC)/uts/sun4u
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/sun4u/psvc/psvcobj
 
@@ -62,8 +60,6 @@ LDLIBS +=	-lc -lpsvcobj -lpsvcplugin -lpicltree
 DYNFLAGS +=	-Wl,-f/usr/platform/\$$PLATFORM/lib/$(DYNLIBPSR)
 DYNFLAGS +=	-R/usr/platform/\$$PLATFORM/lib/picl/plugins:/usr/platform/sun4u/lib/picl/plugins:/usr/lib/picl/plugins:/usr/platform/sun4u/lib
 
-LINTFLAGS +=
-
 .KEEP_STATE:
 
 SUBDIRS=
@@ -74,7 +70,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 all: $(LIBS) $(LIBLINKS)
@@ -100,9 +95,6 @@ $(USR_PSM_LIB_DIR)/%: % $(USR_PSM_LIB_DIR)
 	$(INS.file) ;\
 	$(RM) -r $(USR_PSM_LIB_DIR)/libpsvcpolicy.so; \
 	$(SYMLINK) ./libpsvcpolicy.so$(VERS) $(USR_PSM_LIB_DIR)/libpsvcpolicy.so
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

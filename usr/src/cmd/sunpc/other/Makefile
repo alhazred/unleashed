@@ -43,6 +43,5 @@ clean:
 
 # the clobber target is in Makefile.targ and removes PROG
 
-lint:	lint_SRCS
 
 include ../../Makefile.targ

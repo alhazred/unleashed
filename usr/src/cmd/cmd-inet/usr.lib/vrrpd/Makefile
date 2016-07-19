@@ -45,7 +45,6 @@ C99MODE=		$(C99_ENABLE)
 #
 CPPFLAGS += -D_XOPEN_SOURCE=600 -D__EXTENSIONS__
 LDLIBS += -lvrrpadm -lsocket -lnsl -ldladm -linetutil -lipadm -lsysevent -lnvpair -lsecdb
-LINTFLAGS += -erroff=E_INCONS_ARG_DECL2  -erroff=E_INCONS_ARG_USED2
 
 CERRWARN += -_gcc=-Wno-uninitialized
 
@@ -78,6 +77,5 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../../../Makefile.targ

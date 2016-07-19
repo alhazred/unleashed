@@ -31,7 +31,7 @@ SVCMETHOD=	svc-boot-config
 
 ROOTMANIFESTDIR = $(ROOTSVCSYSTEM)
 
-all clean clobber lint:
+all clean clobber:
 
 install:	all $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 

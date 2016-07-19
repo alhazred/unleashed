@@ -50,15 +50,7 @@ i386_CFLAGS += -D_FILE_OFFSET_BITS=64
 
 LDLIBS += -lfdisk -lefi -lfstyp
 
-LINTFLAGS += \
-	-erroff=E_BAD_PTR_CAST_ALIGN \
-	-erroff=E_STATIC_UNUSED \
-	-erroff=E_FUNC_RET_MAYBE_IGNORED \
-	-erroff=E_FUNC_RET_MAYBE_IGNORED2 \
-	-xerroff=E_NAME_DEF_NOT_USED2
-
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 
 .KEEP_STATE:
 
@@ -67,7 +59,6 @@ all: $(PROG)
 $(PROG): $(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 	$(POST_PROCESS)
-
 
 # pick pcfs from usr/src/common/fs
 pcfs.o:	$(PCFS_SRC)
@@ -90,6 +81,5 @@ install: all $(ROOTSBINPROG) .WAIT $(ROOTUSRSBINLINKS)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

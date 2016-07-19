@@ -47,9 +47,6 @@ LDLIBS    += -lsocket -lnsl -lrestart -lscf -lcontract -linetutil \
 
 CLOBBERFILES += $(SVCMETHOD)
 
-# lint doesn't like the unused _umem_*_init()
-lint_SRCS := LINTFLAGS += -xerroff=E_NAME_DEF_NOT_USED2
-
 .PARALLEL:	$(OBJS)
 .WAIT:		$(PROG)
 .KEEP_STATE:
@@ -70,7 +67,5 @@ check:		$(CHKMANIFEST)
 
 clean:
 		$(RM) $(OBJS)
-
-lint:		lint_SRCS
 
 include ../../../Makefile.targ

@@ -49,6 +49,3 @@ CERRWARN 	+= -_gcc=-Wno-type-limits
 dmod/%.o: $(GENUNIX_DIR)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-dmod/%.ln: $(GENUNIX_DIR)/%.c
-	$(LINT.c) -c $<

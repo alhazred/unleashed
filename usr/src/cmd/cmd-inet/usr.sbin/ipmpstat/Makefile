@@ -41,7 +41,6 @@ install:	all $(ROOTSBINPROG) $(ROOTUSRSBINLINKS)
 
 clean:
 
-lint:		lint_PROG
 
 $(ROOTUSRSBINLINKS):
 	-$(RM) $@; $(SYMLINK) ../../sbin/$(@F) $@

@@ -52,7 +52,6 @@ install: all $(ROOTSBINPROG) $(ROOTUSRSBINLINKS)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 # Links from /usr/sbin to /sbin
 $(ROOTUSRSBINLINKS):

@@ -31,7 +31,6 @@ include ../Makefile.cmd
 i386_LDLIBS += -lscf
 LDLIBS += -lbsm
 LDLIBS += $($(MACH)_LDLIBS)
-LINTFLAGS = -ux
 
 .KEEP_STATE:
 
@@ -45,6 +44,5 @@ install: all $(ROOTSBINPROG)
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

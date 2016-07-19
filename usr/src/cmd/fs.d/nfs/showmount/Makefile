@@ -51,7 +51,6 @@ $(LIBPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 		$(POST_PROCESS)
 
-lint:	lint_SRCS
 
 $(ROOTUSRSBIN)/$(LIBPROG):
 		$(RM) $@; $(SYMLINK) $(LINKVALUE) $@

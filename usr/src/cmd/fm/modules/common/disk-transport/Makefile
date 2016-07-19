@@ -31,6 +31,5 @@ SRCS = disk_transport.c
 include ../../Makefile.plugin
 
 CFLAGS += $(INCS)
-LINTFLAGS += $(INCS)
 LDLIBS += -L$(ROOTLIB)/fm -ldiskstatus -ltopo
 LDFLAGS += -R/usr/lib/fm

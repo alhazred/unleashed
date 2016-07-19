@@ -68,11 +68,10 @@ all     :=      TARGET = all
 install :=      TARGET = install
 clean   :=      TARGET = clean
 clobber :=      TARGET = clobber
-lint    :=      TARGET = lint
 
 .KEEP_STATE:
 
-all clobber lint:    $(SUBDIRS)
+all clobber:    $(SUBDIRS)
 
 $(MDPO):	$(MSGFILES)
 	$(BUILDPO.msgfiles)

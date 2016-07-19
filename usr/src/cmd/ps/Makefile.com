@@ -47,6 +47,3 @@ $(PROG): $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)

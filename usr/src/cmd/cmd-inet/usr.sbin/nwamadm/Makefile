@@ -47,6 +47,5 @@ check:  $(PROG).c
 
 clean:
 
-lint:	lint_PROG
 
 include ../../../Makefile.targ

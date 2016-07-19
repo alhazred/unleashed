@@ -42,6 +42,5 @@ install: all $(ROOTPROG) $(LIBUNITTAB)
 
 clean:
 
-lint:	lint_PROG
 
 include ../Makefile.targ

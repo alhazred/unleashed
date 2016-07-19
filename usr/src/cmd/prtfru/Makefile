@@ -36,7 +36,6 @@ CERRWARN  += -_gcc=-Wno-switch
 CERRWARN  += -_gcc=-Wno-parentheses
 CPPFLAGS  += -I$(SRC)/lib/libfru/include \
              -I$(SRC)/lib/libfruutils
-LINTFLAGS += -u
 EXTRA_LDLIBS    = -lfru -lfrureg -lfruutils
 
 FILEMODE = 755
@@ -54,7 +53,6 @@ install: all $(ROOTUSRSBIN) $(ROOTUSRSBINPROG)
 $(ROOTUSRSBIN):
 	$(INS.dir)
 
-lint: lint_SRCS
 
 POFILE  = $(PROG)_msg.po
 POFILES = $(OBJS:%.o=%.po)

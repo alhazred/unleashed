@@ -36,11 +36,10 @@ install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
 _msg	:=	TARGET= _msg
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
-all clean lint _msg:	$(SUBDIRS)
+all clean _msg:	$(SUBDIRS)
 
 clobber: $(SUBDIRS)
 	$(RM) sharectl.po

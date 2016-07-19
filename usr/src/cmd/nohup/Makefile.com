@@ -55,9 +55,6 @@ TARGETS = $(PROG) $(XPG4)
 
 all: $(PROG) $(XPG4)
 
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS) $(EXTRALIBS)
-
 clean:
 	$(RM) $(CLEANFILES)
 

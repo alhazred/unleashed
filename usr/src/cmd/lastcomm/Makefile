@@ -31,7 +31,6 @@ OBJS=	lastcomm.o lc_pacct.o lc_exacct.o lc_utils.o
 EXPOBJ=	expand.o
 SRCS=	$(OBJS:%.o=%.c) $(EXPOBJ:%.o=../acct/lib/%.c)
 
-lint := LINTFLAGS = -ux
 
 include ../Makefile.cmd
 
@@ -53,7 +52,6 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS) $(EXPOBJ)
 
-lint:	lint_SRCS
 
 %.o:	../acct/lib/%.c
 	$(COMPILE.c) $<

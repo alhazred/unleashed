@@ -40,7 +40,6 @@ CPPFLAGS +=	-I$(CMDINETCOMMONDIR) -I$(SRC)/common/net/dhcp
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-parentheses
 LDLIBS +=       -ldhcpagent -ldlpi -linetutil -lipmp -ldladm -lipadm
-LINTFLAGS +=	-m
 
 ROOTUSRSBINLINKS = $(PROG:%=$(ROOTUSRSBIN)/%)
 
@@ -56,7 +55,6 @@ _D_UNIX98_EXTN= -D_XOPEN_SOURCE=500 -D__EXTENSIONS__
 
 $(OBJS)		:= CPPFLAGS +=	$(_D_UNIX98_EXTN)
 
-LINTFLAGS +=	$(_D_UNIX98_EXTN)
 
 .KEEP_STATE:
 
@@ -74,6 +72,5 @@ $(ROOTUSRSBINLINKS):
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../../../Makefile.targ

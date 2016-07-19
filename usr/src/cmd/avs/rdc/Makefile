@@ -56,12 +56,6 @@ sndrd		:= LDLIBS += -lrdc -lnsl
 sndrsyncd	:= LDLIBS += -lrdc -ldscfg -lunistat
 
 CFLAGS += $(CCVERBOSE) -D_RDC_ -D_SYSCALL32
-LINTFLAGS += -Xa -n -s -x -m -u -Dlint -errhdr=%user -D_RDC_ -D_SYSCALL32
-LINTFLAGS += -DDEBUG
-LINTFLAGS += -erroff=E_SEC_SPRINTF_UNBOUNDED_COPY
-LINTFLAGS += -erroff=E_SEC_SCANF_UNBOUNDED_COPY
-LINTFLAGS += -erroff=E_SEC_PRINTF_VAR_FMT
-LINTFLAGS += -erroff=E_FUNC_SET_NOT_USED
 CERRWARN += -_gcc=-Wno-unused-label
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
@@ -74,7 +68,6 @@ all	:=	TARGET= all
 install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
@@ -84,7 +77,6 @@ all: $(SUBDIRS) $(PROG) $(POFILES)
 
 install: $(SUBDIRS) all $(ROOTPROG) $(ROOTLIBLINKS) $(ROOTUSRSBINLINKS)
 
-lint:	$(SUBDIRS) lint_SRCS
 
 clean:	$(SUBDIRS)
 	$(RM) *.o $(POFILES)

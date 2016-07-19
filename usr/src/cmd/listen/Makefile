@@ -54,7 +54,6 @@ ROOTSAFPROG= $(PROG:%=$(LIBSAFD)/%)
 
 LDLIBS += -lnsl
 LDFLAGS += $(MAPFILE.NGB:%=-M%)
-LINTFLAGS = -b -x
 FILEMODE= 0755
 
 CERRWARN += -_gcc=-Wno-implicit-function-declaration
@@ -89,9 +88,5 @@ $(DIRS):
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(LSSRC)
-	$(LINT.c) $(NLPSSRC)
 
 include ../Makefile.targ

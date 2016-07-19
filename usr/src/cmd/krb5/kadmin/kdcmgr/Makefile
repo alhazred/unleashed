@@ -53,9 +53,6 @@ $(KLPROG):	$(OBJS)
 	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-lint:
-	$(LINT.c) $(CSRCS) $(LDLIBS)
-
 clean:
 	$(RM) $(OBJS)
 

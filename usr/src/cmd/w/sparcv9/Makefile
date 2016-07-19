@@ -36,7 +36,6 @@ include ../../Makefile.cmd.64
 CFLAGS64	+= $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 
-lint	:= LINTFLAGS64 = -x -m64
 
 ROOTLINK= $(ROOTBIN64)/uptime
 
@@ -61,8 +60,5 @@ $(ROOTLINK):	$(ROOTPROG64)
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
 
 include ../../Makefile.targ

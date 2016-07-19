@@ -42,18 +42,13 @@ dscfglockd	:= LDLIBS += -lunistat -ldscfg -lsocket -lnsl
 
 CFLAGS += $(CCVERBOSE) -D_RDC_ -D_SYSCALL32
 CERRWARN += -_gcc=-Wno-switch
-LINTFLAGS += -Xa -n -s -x -m -u -Dlint -errhdr=%user -D_RDC_ -D_SYSCALL32
-LINTFLAGS += -DDEBUG -erroff=E_SEC_SCANF_UNBOUNDED_COPY
-LINTDIR = $(KBASE)/lintdir
 POFILE = dscfglockd_all.po
-LFILE = $(LINTDIR)/rdc.ln
 ROOTLINK = $(ROOTLIB)/dscfglockd
 
 all	:=	TARGET= all
 install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
@@ -63,7 +58,6 @@ all: $(SUBDIRS) $(PROG) $(POFILES)
 
 install: $(SUBDIRS) all $(ROOTPROG) $(ROOTLINK)
 
-lint:	$(SUBDIRS) lint_SRCS
 
 clean:	$(SUBDIRS)
 	$(RM) *.o $(POFILES)

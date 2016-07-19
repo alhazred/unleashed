@@ -36,7 +36,6 @@ LDLIBS +=	-lscf -luutil -lcontract
 CERRWARN +=	-_gcc=-Wno-switch
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-lint := LINTFLAGS = -ux
 
 .KEEP_STATE:
 
@@ -54,6 +53,5 @@ install: all $(ROOTUSRSBINPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 include ../../Makefile.targ

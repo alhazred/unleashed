@@ -55,7 +55,6 @@ clobber: clean
 
 all: default
 
-lint:
 
 install: all $(PROTO_TEST_JAR)
 

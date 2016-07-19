@@ -130,7 +130,6 @@ clean:
 strip:
 		$(STRIP) $(PROG)
 
-lint:		lint_SRCS
 
 include		../Makefile.msg
 

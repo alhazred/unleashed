@@ -59,7 +59,6 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 POFILE=		ldap_cachemgr.po
 POFILES=	${OBJS:%.o=%.po}
 
-LINTOUT=        lint.out
 
 # TCOV_FLAG=	-ql
 # GPROF_FLAG=	-xpg
@@ -89,11 +88,6 @@ $(ROOTLDAPLIB):
 $(ROOTLDAPLIB)/%:	%
 	$(INS.file)
 
-lint :=	LINTFLAGS=-x -b -u -h
-
-lint:
-	$(LINT.c) ${SRCS}  > $(LINTOUT) 2>&1
-
 cstyle:
 	${CSTYLE} ${SRCS}
 
@@ -102,7 +96,7 @@ install: all $(ROOTLDAPLIB) $(ROOTLDAPPROG) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 check:	$(CHKMANIFEST)
 
 clean:
-	$(RM) $(OBJS) $(LINTOUT)
+	$(RM) $(OBJS)
 
 $(POFILE): $(POFILES)
 	$(RM) $@

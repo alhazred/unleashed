@@ -97,18 +97,4 @@ $(POFILE):	$(POFILES)
 
 clean:
 
-lint:
-	$(LINT.c) ckint.c   $(LDLIBS)
-	$(LINT.c) ckitem.c  $(LDLIBS)
-	$(LINT.c) ckpath.c  $(LDLIBS)
-	$(LINT.c) ckrange.c $(LDLIBS)
-	$(LINT.c) ckstr.c   $(LDLIBS)
-	$(LINT.c) ckyorn.c  $(LDLIBS)
-	$(LINT.c) ckkeywd.c $(LDLIBS)
-	$(LINT.c) ckdate.c  $(LDLIBS)
-	$(LINT.c) cktime.c  $(LDLIBS)
-	$(LINT.c) ckuid.c   $(LDLIBS)
-	$(LINT.c) ckgid.c   $(LDLIBS)
-	$(LINT.c) puttext.c $(LDLIBS)
- 
 include ../Makefile.targ

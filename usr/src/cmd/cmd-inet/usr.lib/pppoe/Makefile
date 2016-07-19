@@ -61,8 +61,4 @@ install:	all .WAIT $(PROG) $(ROOTLIBINETPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:
-	$(LINT.c) $(CLIENT_OBJS:%.o=%.c) $(LDLIBS)
-	$(LINT.c) $(DAEMON_OBJS:%.o=%.c) $(LDLIBS)
-
 include		../../../Makefile.targ

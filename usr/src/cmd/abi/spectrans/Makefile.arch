@@ -36,11 +36,10 @@ all		:=	TARGET= all
 install		:=	TARGET= install
 clean		:=	TARGET= clean
 clobber		:=	TARGET= clobber
-lint		:=	TARGET= lint
 
 .KEEP_STATE:
 
-all install clean clobber lint: $($(MACH)_ARCHITECTURES)
+all install clean clobber: $($(MACH)_ARCHITECTURES)
 
 $($(MACH)_ARCHITECTURES): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

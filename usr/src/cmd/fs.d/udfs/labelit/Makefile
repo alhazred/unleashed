@@ -33,8 +33,6 @@ include		../../Makefile.fstype
 LDLIBS += -ladm
 CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 
-LINTFLAGS += -xerroff=E_STATIC_UNUSED
-LINTFLAGS64 += -xerroff=E_STATIC_UNUSED
 
 CERRWARN += -_gcc=-Wno-unused-function
 CERRWARN += -_gcc=-Wno-uninitialized
@@ -73,12 +71,6 @@ $(POFILE):	$(SRCS)
 clean :
 	rm -f labelit.o ud_lib.o
 	rm -f ud_lib.c ud_lib.h
-
-lint:
-	rm -f ud_lib.h
-	cp ../fstyp/ud_lib.h ud_lib.h
-	cp ../fstyp/ud_lib.c ud_lib.c
-	$(LINT.c) -mu $(SRCS)
 
 putback:
 	-cstyle -p labelit.c

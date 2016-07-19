@@ -28,9 +28,6 @@
 
 include ../Makefile.com
 
-# don't need the LINTED directives to surpress E_BAD_PTR_CAST_ALIGN in queue.c
-LINTFLAGS += -erroff=E_SUPPRESSION_DIRECTIVE_UNUSED
-
 all: $(PROG) $(VARSYSLOG) $(VARAUTHLOG)
 
 install: all $(ROOTUSRSBINPROG) $(ROOTETCCONFIG) $(ROOTLIBROTATE) logfiles

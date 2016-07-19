@@ -53,6 +53,5 @@ check:	$(PROG).c
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 include	../Makefile.targ

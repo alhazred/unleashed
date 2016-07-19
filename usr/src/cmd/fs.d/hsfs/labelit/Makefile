@@ -33,6 +33,4 @@ CERRWARN += -_gcc=-Wno-switch
 CERRWARN += -_gcc=-Wno-implicit-function-declaration
 CERRWARN += -_gcc=-Wno-unused-variable
 
-lint := PROG = $(LIBPROG)
 
-lint:	lint_PROG

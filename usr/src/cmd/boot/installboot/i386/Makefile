@@ -18,11 +18,7 @@ SRCS += $(SRC)/common/util/getresponse.c
 CPPFLAGS += -I$(SRC)/common/util
 LDLIBS += -lfdisk -lefi -lfstyp -luuid
 
-LINTFLAGS += \
-	-xerroff=E_NAME_DEF_NOT_USED2
-
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 
 .KEEP_STATE:
 

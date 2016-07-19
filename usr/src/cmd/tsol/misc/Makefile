@@ -46,7 +46,6 @@ install: all $(ROOTUSRSBINSCRIPT) $(ROOTETCTSOLFILES)
 clean:
 	$(RM) $(SCRIPT) $(ETCTSOLFILES)
 
-lint:
 
 _msg:
 

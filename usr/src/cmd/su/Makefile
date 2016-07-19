@@ -50,13 +50,11 @@ $(ROOTFS_PROG) :=	LDLIBS += -lbsm -lpam -lsecdb
 $(PROG) :=	CPPFLAGS += -DDYNAMIC_SU
 $(PROG) :=	LDLIBS += -lbsm -lpam -lsecdb
 
-LINTFLAGS += -DDYNAMIC_SU
 
 CLOBBERFILES	+= $(ROOTFS_PROG) $(EMB_PROG)
 
 CERRWARN +=	-_gcc=-Wno-parentheses
 
-lint :=		LDLIBS += -lbsm -lpam -lsecdb
 
 .KEEP_STATE:
 
@@ -85,6 +83,5 @@ $(EMB_PROG):
 
 clean:
 
-lint:		lint_PROG
 
 include		../Makefile.targ

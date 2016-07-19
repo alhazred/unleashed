@@ -52,7 +52,6 @@ all :=		TARGET = all
 install :=	TARGET = install
 clean :=	TARGET = clean
 clobber :=	TARGET = clobber
-lint :=		TARGET = lint
 msg :=		TARGET = msg
 
 $(ROOTMANIFEST):=	FILEMODE= 444
@@ -76,8 +75,6 @@ INCS =		-I../common \
 LDLIBS +=	-lpool -L$(JAVA_ROOT)/jre/lib/$(MACH)/client -ljvm
 # runpath should point to runtime JAVA_HOME
 LDFLAGS +=	-R$(JAVA_HOME)/jre/lib/$(MACH)/client
-LINTFLAGS +=	-erroff=E_NAME_USED_NOT_DEF2
-LINTLIBS +=	-L$(ROOTLIB) -lpool
 
 CPPFLAGS +=	$(INCS)
 ROOTCMDDIR =	$(ROOT)/usr/lib/pool
@@ -109,7 +106,6 @@ clobber : $(JAVA_SUBDIRS) $(SUBDIRS) clobber_local
 clobber_local: clean_local
 	$(RM) $(CLOBBERFILES)
 
-lint: $(SUBDIRS)
 
 msg: $(POFILES)
 
@@ -146,8 +142,5 @@ $(ROOTUSRLIBDRP)/%: %
 	$(INS.file)
 
 FRC:
-
-lint:
-	$(LINT.c) $(PROG).c $(LINTLIBS)
 
 include $(SRC)/cmd/Makefile.targ

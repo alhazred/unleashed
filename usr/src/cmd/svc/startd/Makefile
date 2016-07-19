@@ -80,9 +80,6 @@ proc.o := CPPFLAGS += -D_REENTRANT
 	$(COMPILE.c) $(OUTPUT_OPTION) $<
 	$(POST_PROCESS_O)
 
-%.ln:	../common/%.c
-	$(LINT.c) $(OUTPUT_OPTION) -c $<
-
 LDLIBS += \
 	-lcontract \
 	-lkstat \
@@ -99,12 +96,6 @@ LDLIBS +=	$(LDLIBS_$(MACH)) -L $(ROOT)/lib/fm -lfmevent
 LDFLAGS +=	-R /lib/fm
 
 FILEMODE = 0555
-
-# lint doesn't like the unused _umem_*_init()
-# And lint thinks uadmin() is undefined.
-lint_SRCS := LINTFLAGS += -U_FILE_OFFSET_BITS -xerroff=E_NAME_DEF_NOT_USED2 -u
-lint_SRCS := CPPFLAGS += \
-	-I. -I../common -D_REENTRANT -D_FILE_OFFSET_BITS=64
 
 .KEEP_STATE:
 
@@ -124,6 +115,5 @@ install: all $(ROOTCMD)
 clean:
 	$(RM) $(ALLOBJS)
 
-lint:   lint_SRCS
 
 include ../../Makefile.targ

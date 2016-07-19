@@ -82,7 +82,6 @@ all	:=	TARGET = all
 install :=      TARGET = install
 clean   :=      TARGET = clean
 clobber :=      TARGET = clobber
-lint    :=      TARGET = lint
 
 .KEEP_STATE:
 
@@ -95,7 +94,6 @@ $(POFILE):	$(MSGFILES)
 
 GROWFSFILE=	$(GROWFSSCRIPT:%=$(ROOTUSRSBIN)/%)
 
-lint: $(SUBDIRS)
 
 check:	$(CHKMANIFEST)
 

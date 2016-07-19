@@ -34,10 +34,7 @@ $(PROG): $(OBJS)
 	$(POST_PROCESS)
 
 clean:
-	-$(RM) $(OBJS) $(LINT_OBJS) $(PROG)
-
-lint: $(LINT_OBJS)
-	$(LINT) $(LINT_OBJS) $(LDLIBS)
+	-$(RM) $(OBJS) $(PROG)
 
 $(POFILE):	$(POFILES)
 	$(RM)	$@

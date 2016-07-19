@@ -55,7 +55,6 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 
 acctcom := LDLIBS += lib/a.a
 acctcms acctcon acctcon1 acctmerg acctprc1 acctprc := LDLIBS += lib/a.a
@@ -150,6 +149,3 @@ clean: $(SUBDIRS)
 
 clobber: $(SUBDIRS)
 	$(RM) $(PROG) $(SHFILE1) holidays
-
-lint:	$(SUBDIRS)
-	$(LINT.c) $(SRCS)

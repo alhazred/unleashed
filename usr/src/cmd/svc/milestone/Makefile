@@ -161,4 +161,4 @@ $(ROOTSVCSYSTEM)/svc/%: %
 $(ROOT)/lib/svc/share/%: %.share
 	$(INS.rename)
 
-clean lint _msg:
+clean _msg:

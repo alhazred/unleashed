@@ -58,9 +58,6 @@ $(LIBPROG):	$(OBJS)
 %.o:	$(UDFSDIR)/%.c
 	$(COMPILE.c) $<
 
-lint:
-	$(LINT.c) -mu $(SRCS)
-
 clean:     
 	$(RM) $(OBJS)
 

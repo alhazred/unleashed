@@ -78,7 +78,6 @@ $(ROOTSHLIB)/make: FRC
 $(ROOTSHLIB)/make/%: %.file
 	$(INS.rename)
 
-lint:
 
 clean:
 	$(RM) $(OBJS)

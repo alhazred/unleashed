@@ -33,7 +33,6 @@ all	:=	TARGET = all
 install	:=	TARGET = install
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 
 RELUSRSBIN=     ../usr/sbin
 ROOTSYMLINK=    $(ROOTETC)/$(PROG)
@@ -47,7 +46,7 @@ all:	$(SUBDIRS)
 $(ROOTSYMLINK):
 	-$(RM) $@; $(SYMLINK) $(RELUSRSBIN)/$(PROG) $@
 
-clean clobber lint:	$(SUBDIRS)
+clean clobber:	$(SUBDIRS)
 
 install:	$(SUBDIRS) $(ROOTSYMLINK)
 	-$(RM) $(ROOTUSRSBINPROG)

@@ -26,7 +26,6 @@ clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 delete :=	TARGET= delete
 install :=	TARGET= install
-lint :=		TARGET= lint
 catalog :=	TARGET= catalog
 package :=	TARGET= package
 _msg :=		TARGET= _msg
@@ -35,7 +34,7 @@ _msg:	$(SUBDIRS)
 
 .KEEP_STATE:
 
-all clean clobber delete install lint catalog package: $(SUBDIRS)
+all clean clobber delete install catalog package: $(SUBDIRS)
 
 check: $(CHECKHDRS)
 

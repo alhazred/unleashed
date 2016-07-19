@@ -43,6 +43,6 @@ install: all $(ROOTUSRSBINPROG) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 
 check:	$(CHKMANIFEST)
 
-clean lint:
+clean:
 
 include		../../../Makefile.targ

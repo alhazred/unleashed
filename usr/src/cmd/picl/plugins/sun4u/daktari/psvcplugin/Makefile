@@ -45,8 +45,6 @@ DYNFLAGS_COM =		/usr/lib/picl/plugins
 
 ROOTLIBDIR =	$(ROOT_PLAT_PLUGINDIR)
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
 CPPFLAGS +=	-I$(SRC)/uts/sun4u
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/sun4u/psvc/psvcobj
 CPPFLAGS +=	-D_REENTRANT
@@ -59,8 +57,6 @@ DYNFLAGS +=	-R$(DYNFLAGS_PLAT):$(DYNFLAGS_SUN4U):$(DYNFLAGS_COM)
 
 LDLIBS +=	-lc -lpicltree -lpicl -lpsvcobj -lpsvcplugin
 
-LINTFLAGS +=
-
 .KEEP_STATE:
 
 SUBDIRS=
@@ -72,7 +68,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 all: $(LIBS) $(LIBLINKS)
@@ -92,9 +87,6 @@ $(LIBLINKS):	FRC
 # include library targets
 include $(SRC)/cmd/picl/plugins/Makefile.targ
 include $(SRC)/lib/Makefile.targ
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

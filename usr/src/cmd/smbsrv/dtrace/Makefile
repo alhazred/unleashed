@@ -45,7 +45,6 @@ all:
 
 clean:
 
-lint:
 
 include ../../Makefile.targ
 

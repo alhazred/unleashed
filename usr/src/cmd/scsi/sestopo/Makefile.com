@@ -57,7 +57,6 @@ $(PROG): $(OBJS)
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 $(ROOTLIBSCSI)/%: %
 	$(INS.file)

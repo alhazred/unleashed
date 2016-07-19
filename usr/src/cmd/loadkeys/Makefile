@@ -69,16 +69,12 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 _msg:=          TARGET= catalog
 
 clobber:	$(SUBDIRS)
 	$(RM) $(CLOBBERFILES)
 
 clean:	$(SUBDIRS)
-
-lint:
-	$(LINT.c) dumpkeys.c $(LDLIBS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

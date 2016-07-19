@@ -46,6 +46,5 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(PROG) $(OBJS)
 
-lint:   lint_SRCS
 
 include		../../../Makefile.targ

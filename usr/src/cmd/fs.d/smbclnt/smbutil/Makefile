@@ -55,10 +55,6 @@ ${NOT_RELEASE_BUILD} CPPFLAGS += -DDEBUG
 #CTFCONVERT_O=
 #CTFMERGE_LIB=
 
-# disable some of the less important lint
-LINTFLAGS	+= -erroff=E_FUNC_RET_ALWAYS_IGNOR2
-LINTFLAGS	+= -erroff=E_FUNC_RET_MAYBE_IGNORED2
-
 all:		$(PROG)
 
 $(PROG):	$(OBJS)
@@ -76,7 +72,6 @@ $(POFILE): $(POFILES)
 	$(RM) $@
 	$(CAT) $(POFILES) > $@
 
-lint:	lint_SRCS
 
 clean :
 	$(RM) $(OBJS)

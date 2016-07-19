@@ -69,7 +69,6 @@ ttymon := LDLIBS += -lnsl -lsec -ldevinfo
 $(STTYOBJ) := CPPFLAGS += -DEUC
 $(XPG4STTYOBJ) := CPPFLAGS += -DEUC
 
-LINTFLAGS = -b -x
 CFLAGS += $(CCVERBOSE)
 LDFLAGS += $(MAPFILE.NGB:%=-M%)
 
@@ -157,11 +156,5 @@ $(DIRS):
 
 clean:
 	$(RM) $(OBJS)
-
-lint:
-	$(LINT.c) $(STTYSRC)
-	$(LINT.c) $(TTYMONSRC)
-	$(LINT.c) $(TTYADMSRC)
-	$(LINT.c) $(STTYDEFSSRC)
 
 include ../Makefile.targ

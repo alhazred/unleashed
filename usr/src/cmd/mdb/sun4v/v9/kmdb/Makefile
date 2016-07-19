@@ -31,9 +31,6 @@ all: $(PROG)
 	$(COMPILE.c) $<
 	$(CTFCONVERT_O)
 
-%.ln: ../../../sparc/mdb/%.c
-	$(LINT.c) -c $<
-
 kaif.fth: ../../../sparc/v9/kmdb/kaif_regs.h
 
 ROOT_MISC_DIR		= $(ROOT)/platform/sun4v/kernel/misc
@@ -75,24 +72,6 @@ ASFLAGS += -I$(SRC)/cmd/mdb/sparc/v9 -I$(SRC)/cmd/mdb/sparc/v9/kmdb
 CERRWARN += -_gcc=-Wno-unused-function
 
 install: all $(ROOTMISC64) kaif.fth
-
-#
-# lint rules
-#
-
-.PARALLEL: lintkmdb lintprom lintkctl
-
-lint: lintkmdb lintprom lintkctl
-	$(LINT) $(ALLLINTFLAGS) $(KMDBOBJS:%.o=%.ln) $(PROMOBJS:%.o=%.ln)
-
-lintkmdb: $(KMDBOBJS:%.o=%.ln)
-	$(LINT) $(LINTFLAGS) $(KMDBOBJS:%.o=%.ln)
-
-lintprom: $(PROMOBJS:%.o=%.ln)
-	$(LINT) $(LINTFLAGS) $(PROMOBJS:%.o=%.ln)
-
-lintkctl: $(KCTLOBJS:%.o=%.ln)
-	$(LINT) $(ALLLINTFLAGS) $(KCTLOBJS:%.o=%.ln)
 
 kaif_off.h: ../../../sparc/kmdb/kaif_off.in
 	$(OFFSETS_CREATE) <../../../sparc/kmdb/kaif_off.in >$@
@@ -152,52 +131,6 @@ kmdb_context_off.h: ../../../sparc/kmdb/kmdb_context_off.in
 
 %.o: ../../../../../uts/sun4v/ml/%.s
 	$(COMPILE.s) -o $@ $<
-
-#
-# Lint
-#
-
-%.ln: ../../../common/kmdb/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../../common/kmdb/kctl/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../../common/kmdb/kctl/%.s
-	$(LINT.s) -c $<
-
-%.ln: ../../../common/mdb/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../../sparc/kmdb/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../../sparc/kmdb/%.s
-	$(LINT.s) -c $<
-
-%.ln: ../../../sparc/kmdb/kctl/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../../sparc/kmdb/kctl/%.s
-	$(LINT.s) -c $<
-
-%.ln: ../../../sparc/mdb/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../../sparc/v9/kmdb/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../../sparc/v9/kmdb/%.s
-	$(LINT.s) -c $<
-
-%.ln: ../../../sparc/v9/kmdb/kctl/%.s
-	$(LINT.s) -c $<
-
-%.ln: $(SRC)/common/net/util/%.c
-	$(LINT.c) -c $<
-
-%.ln: ../../../../../uts/sun4v/ml/%.s
-	$(LINT.s) -c $<
 
 #
 # Installation targets

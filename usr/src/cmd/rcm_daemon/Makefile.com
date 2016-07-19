@@ -114,8 +114,6 @@ SCRIPT_DIR = scripts
 
 CLOBBERFILES += $(COMMON_RCM_MODS) $($(MACH)_RCM_MODS) $(RCM_DAEMON)
 
-LINT_MODULES = $(COMMON_MOD_SRC:.c=.ln) $($(MACH)_MOD_SRC:.c=.ln)
-
 CPPFLAGS += -I..
 CPPFLAGS += -D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT
 CFLAGS += $(CCVERBOSE) $(C_PICFLAGS)
@@ -128,7 +126,6 @@ CERRWARN += -_gcc=-Wno-unused-function
 MAPFILES = ../common/mapfile-intf $(MAPFILE.NGB)
 rcm_daemon := LDFLAGS += $(MAPFILES:%=-M%)
 
-LINTFLAGS += -u -erroff=E_FUNC_ARG_UNUSED
 
 LDLIBS_MODULES = 
 SUNW_pool_rcm.so := LDLIBS_MODULES += -L$(ROOT)/usr/lib -lpool
@@ -169,7 +166,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 
 $(ROOTLIB_RCM_SCRIPTS) :=	FILEMODE = 555
 
@@ -189,14 +185,6 @@ install: all			\
 
 clean:
 	$(RM) $(RCM_OBJ) $(COMMON_MOD_OBJ) $($(MACH)_MOD_OBJ) $(POFILES)
-
-lint: $(RCM_DAEMON).ln $(LINT_MODULES)
-
-$(RCM_DAEMON).ln: FRC
-	$(LINT.c) $(RCM_SRC) $(LDLIBS)
-
-%.ln: FRC
-	$(LINT.c) $(RCM_SRC) $(@:.ln=.c) $(LDLIBS)
 
 FRC:
 

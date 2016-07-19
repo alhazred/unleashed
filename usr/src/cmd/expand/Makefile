@@ -45,10 +45,6 @@ install: all $(ROOTPROG)
 
 clean:
 
-lint:
-	$(LINT.c) expand.c $(LDLIBS)
-	$(LINT.c) unexpand.c $(LDLIBS)
-
 $(POFILE): $(POFILES)
 	$(RM) $@; cat $(POFILES) > $@
 

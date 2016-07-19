@@ -26,7 +26,6 @@ PROG = zlogin
 
 include ../Makefile.cmd
 
-LINTFLAGS += -u
 LDLIBS += -lsocket -lzonecfg -lcontract -lbrand -lsecdb
 CFLAGS += $(CCVERBOSE)
 FILEMODE = 0555
@@ -42,6 +41,5 @@ install: all $(ROOTUSRSBINPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_PROG
 
 include ../Makefile.targ

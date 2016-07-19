@@ -54,4 +54,4 @@ $(ROOTTMAC) :
 $(ROOTTMAC)/% :	%
 		$(INS.file)
 
-clean clobber lint strip :
+clean clobber strip :

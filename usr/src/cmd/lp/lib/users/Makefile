@@ -53,13 +53,6 @@ all install :	$(LIBS)
 include		../../../../lib/Makefile.targ
 
 CLEANFILES	+= llib-llpusr.ln
-LINTFLAGS = -nvx
 SRCS= $(OBJECTS:%.o=%.c)
-
-lint:	lintlib
-	$(LINT.c) $(LINTFLAGS) $(SRCS)
-
-lintlib:
-	$(LINT.c) $(LINTFLAGS) -o lpusr llib-llpusr
 
 include		../Makefile.msg

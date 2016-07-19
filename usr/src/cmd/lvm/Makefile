@@ -48,13 +48,12 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 cstyle :=	TARGET= cstyle
 _msg :=		TARGET= catalog
 
 .KEEP_STATE:
 
-all install clean cstyle lint: $(SUBDIRS)
+all install clean cstyle: $(SUBDIRS)
 
 clobber: $(SUBDIRS)
 	$(RM) $(CLOBBERFILES)

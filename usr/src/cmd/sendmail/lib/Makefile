@@ -55,7 +55,6 @@ clean:
 
 clobber:
 
-lint:
 
 $(ROOTETCMAIL)/%: %
 	$(INS.file)

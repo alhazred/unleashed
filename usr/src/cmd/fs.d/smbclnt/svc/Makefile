@@ -32,7 +32,7 @@ include $(SRC)/cmd/Makefile.cmd
 
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORKSMB)
 
-all lint:
+all:
 
 install:	$(ROOTMANIFEST) $(ROOTSVCMETHOD)
 

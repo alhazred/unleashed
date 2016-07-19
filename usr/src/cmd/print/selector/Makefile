@@ -48,7 +48,7 @@ $(ROOTUSRSBINLINKS):
 
 .KEEP_STATE:
 
-all check clean clobber lint:
+all check clean clobber:
 
 install:	$(ROOTUSRSBINPROG) $(ROOTUSRBINPROG) $(ROOTUSRBINLINKS) $(ROOTUSRSBINLINKS)
 

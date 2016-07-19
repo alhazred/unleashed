@@ -82,7 +82,6 @@ install: $(KRB5SBINPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 include $(SRC)/cmd/Makefile.targ
 

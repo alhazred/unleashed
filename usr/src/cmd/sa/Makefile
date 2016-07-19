@@ -131,6 +131,5 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(SADC_OBJECTS) $(PROGS) $(SHELLS) $(SADP)
 
-lint:	lint_SRCS
 
 include ../Makefile.targ

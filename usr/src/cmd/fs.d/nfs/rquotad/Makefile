@@ -42,7 +42,6 @@ $(TYPEPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(LDLIBS) $(OBJS)
 		$(POST_PROCESS)
 
-lint:		lint_SRCS
 
 clean:
 		$(RM) $(OBJS) rquota_xdr.c

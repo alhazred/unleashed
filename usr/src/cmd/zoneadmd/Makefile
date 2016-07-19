@@ -66,7 +66,6 @@ $(POFILE): $(POFILES)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 check:
 	$(CSTYLE) -p -P $(SRCS:%=%)

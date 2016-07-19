@@ -50,7 +50,6 @@ LDLIBS +=	-lsocket -lrpcsvc -lnsl
 $(TYPEPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 		$(POST_PROCESS)
-		$(LOCK_LINT)
 
 selfcheck.o:	../lib/selfcheck.c
 		$(COMPILE.c) ../lib/selfcheck.c
@@ -58,7 +57,6 @@ selfcheck.o:	../lib/selfcheck.c
 daemon.o:	../lib/daemon.c
 		$(COMPILE.c) ../lib/daemon.c
 
-lint:		lint_SRCS
 
 clean:
 		$(RM) $(OBJS) $(TYPEPROG)

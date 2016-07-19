@@ -31,6 +31,6 @@ include ../Makefile.com
 
 .KEEP_STATE:
 
-install: $(ALLPROG) $(ROOTPROG) $(ROOTLINKS) $(ROOTLINT)
+install: $(ALLPROG) $(ROOTPROG) $(ROOTLINKS)
 
 FRC:

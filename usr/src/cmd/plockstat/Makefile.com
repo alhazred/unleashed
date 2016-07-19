@@ -44,7 +44,6 @@ $(PROG): $(OBJS)
 clean:
 	-$(RM) $(CLEANFILES)
 
-lint: lint_SRCS
 
 %.o: ../%.c
 	$(COMPILE.c) $<

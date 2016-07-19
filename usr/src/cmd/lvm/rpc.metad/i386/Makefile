@@ -36,13 +36,7 @@ OBJECTS=	metad_freeresult.o \
 		metad_init.o \
 		metad_svc_subr.o
 
-LINTOBJECTS=	metad_freeresult.o \
-		metad_init.o \
-		metad_svc_subr.o
-
 OBJECTS +=		$(DERIVED_FILES:.c=.o)
-
-LINTSRCS =	$(LINTOBJECTS:%.o=../%.c)
 
 SRCS = $(OBJECTS:%.o=../%.c)
 
@@ -56,7 +50,6 @@ LDLIBS +=	-lmeta -lsocket -lnsl -ldevid
 CFLAGS += $(DEFINES)
 #
 #
-lint := LINTFLAGS += -m
 
 %_svc.c := RPCGENFLAGS += -K -1
 
@@ -79,9 +72,6 @@ catalog:
 
 cstyle:
 	${CSTYLE} ${SRCS}
-
-lint:
-	${LINT.c} $(LINTFLAGS) ${LINTSRCS}
 
 clean:
 	${RM} ${OBJS} ${DERIVED_FILES} *.o

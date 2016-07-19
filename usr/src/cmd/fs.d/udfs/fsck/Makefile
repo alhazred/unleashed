@@ -68,9 +68,6 @@ $(POFILE):      $(SRCS)
 	sed "/^domain/d" messages.po >  $@
 	$(RM) $(POFILE).i messages.po
 
-lint:
-	$(LINT.c) -mu $(SRCS)
-
 clean:     
 	$(RM) $(FSCKOBJS) $(UDFSOBJS)
 

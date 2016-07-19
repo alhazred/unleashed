@@ -293,9 +293,6 @@ $(OBJS) $(NOBJS):	parser.tab.h
 parser.tab.c parser.tab.h: parser.y $(HDRS)
 	$(YACC) $(YFLAGS) parser.y
 
-lint:	$(SRCS)
-	$(LINT.c) $(CPPFLAGS) $(SRCS)
-
 clean:	
 	$(RM) $(CLEANFILES)
 	$(RM) $(STAMPFILES)

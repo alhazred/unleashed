@@ -61,8 +61,5 @@ daemon.o:	../lib/daemon.c
 smfcfg.o:	../lib/smfcfg.c
 		$(COMPILE.c) ../lib/smfcfg.c
 
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
-
 clean:     
 	$(RM) $(OBJS) $(DOBJ)

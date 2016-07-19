@@ -28,7 +28,6 @@ include ../../Makefile.cmd
 include ../Makefile.com
 
 PROG = $(DYNPROG)
-LPROG = $(PROG:%=%.li)
 
 SUBDIRS= etc
 
@@ -44,9 +43,6 @@ svadm	:= LDLIBS += -lunistat -ldscfg
 svboot	:= LDLIBS += -lunistat -ldscfg
 
 CFLAGS += -v
-LINTFLAGS += -erroff=E_NAME_USED_NOT_DEF2
-LINTFLAGS += -erroff=E_SEC_SCANF_UNBOUNDED_COPY
-LINTFLAGS += -erroff=E_SEC_PRINTF_VAR_FMT
 ROOTLINK1 = $(ROOTUSRSBIN)/svadm
 ROOTLINK2 = $(ROOTUSRSBIN)/svboot
 
@@ -54,7 +50,6 @@ all	:=	TARGET= all
 install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
@@ -64,7 +59,6 @@ all:	$(SUBDIRS) $(PROG) $(POFILES)
 
 install: $(SUBDIRS) all $(ROOTPROG) $(ROOTLINK1) $(ROOTLINK2)
 
-lint:	$(SUBDIRS) $(LPROG)
 
 clean:	$(SUBDIRS)
 	$(RM) *.o $(POFILE)
@@ -79,9 +73,6 @@ $(POFILE): $(POFILES)
 
 $(SUBDIRS):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
-
-$(LPROG):
-	$(LINT.c) $(@:%.li=%.c) $(LDLIBS)
 
 $(ROOTLINK1):	$(ROOTUSRSBIN) $(ROOTPROG)
 	-$(RM) $@; $(LN) $(ROOTBIN)/svadm $@

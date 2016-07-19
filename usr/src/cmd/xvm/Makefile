@@ -30,7 +30,6 @@ all	:=	TARGET = all
 install	:=	TARGET = install
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 strip	:=	TARGET = strip
 _msg	:=	TARGET = _msg
 
@@ -38,7 +37,7 @@ _msg	:=	TARGET = _msg
 
 all:	$(SUBDIRS)
 
-install strip clean clobber lint _msg:	$(SUBDIRS)
+install strip clean clobber _msg:	$(SUBDIRS)
 
 $(SUBDIRS):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

@@ -31,7 +31,6 @@
 # Common epilogue for sysevent daemons
 #
 
-lint:	lint_SRCS
 
 clean:
 	$(RM) $(OBJS)

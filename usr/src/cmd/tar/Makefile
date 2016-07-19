@@ -33,7 +33,6 @@ include ../Makefile.cmd
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -I $(SRC)/common/util
 DCFILE= $(PROG).dc
 
-LINTFLAGS += -u
 LDLIBS += -lsec -lcmdutils -lnvpair -ltsol
 
 CFLAGS += $(CCVERBOSE)
@@ -67,7 +66,6 @@ $(PROG):	$(OBJS)
 clean:
 	$(RM) $(OBJS)   
 
-lint:	lint_SRCS
 
 $(DCFILE):
 	$(RM) messages.po

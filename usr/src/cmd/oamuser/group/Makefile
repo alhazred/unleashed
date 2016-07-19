@@ -47,7 +47,6 @@ LIBDIR=		../lib
 LIBUSRGRP=	$(LIBDIR)/lib.a
 LOCAL=		../inc
 HERE=		.
-LINTFLAGS=	-u
 
 INSSBINPROG=	$(SBINPROG:%=$(ROOTUSRSBIN)/%)
 
@@ -78,6 +77,5 @@ install:	all $(INSSBINPROG)
 clean:
 	$(RM) $(OBJECTS)
 
-lint:	lint_SRCS
 
 include ../../Makefile.targ

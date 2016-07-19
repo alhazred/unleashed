@@ -43,7 +43,6 @@ _EXTN=		-D_REENTRANT
 
 $(OBJS)		:= CPPFLAGS +=  $(_EXTN)
 
-LINTFLAGS +=	$(_EXTN)
 
 INC_PATH +=	../../../../uts/common/inet/nca -I.
 CFLAGS +=	$(CCVERBOSE)
@@ -78,6 +77,5 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 include ../../../Makefile.targ

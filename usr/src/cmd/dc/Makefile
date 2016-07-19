@@ -56,7 +56,6 @@ install: all $(ROOTPROG) $(ROOTXPG6PROG)
 clean:
 	-@rm -rf $(EXOBJS) $(XD) $(PROG) $(XPG6)
 
-lint:	lint_PROG
 
 $(XPG6EXOBJS): $(XD)
 

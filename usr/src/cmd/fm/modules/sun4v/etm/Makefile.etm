@@ -55,7 +55,6 @@ clean:
 
 clobber: clean
 
-lint:
 
 install_h:
 

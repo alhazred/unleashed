@@ -42,12 +42,11 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 .KEEP_STATE:
 
-all clean clobber lint _msg:	$(SUBDIRS)
+all clean clobber _msg:	$(SUBDIRS)
 
 install:	$(AUDIODIR) $(SUBDIRS)
 

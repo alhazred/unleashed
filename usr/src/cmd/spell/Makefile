@@ -128,7 +128,6 @@ install: all $(ROOTDIRS) $(ROOTBINF) $(ROOTSPELLF) $(ROOTVARADMF)
 $(ROOTDIRS):
 	$(INS.dir)
 
-lint:	lint_SRCS
 
 clean:
 	$(RM) $(OBJS)

@@ -31,7 +31,6 @@ all :=          TARGET = all
 install :=      TARGET = install
 clean :=        TARGET = clean
 clobber :=      TARGET = clobber
-lint :=         TARGET = lint
 
 POBJS = \
 sh.o sh.char.o \
@@ -46,7 +45,7 @@ CPPFLAGS +=	-I ../sh
 
 .KEEP_STATE:
 
-all install clean clobber lint:	$(MACH)
+all install clean clobber:	$(MACH)
 
 POFILES= $(POBJS:%.o=%.po)
 

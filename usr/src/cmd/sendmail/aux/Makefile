@@ -119,7 +119,6 @@ install: all $(ROOTPROG) $(ROOTLIB)/mail.local $(ROOTLIB)/smrsh \
 clean:
 	$(RM) $(OBJS) *.o
 
-lint:		lint_PROG
 
 
 include	../../Makefile.targ

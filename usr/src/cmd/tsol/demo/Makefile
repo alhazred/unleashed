@@ -44,7 +44,6 @@ install: all $(ROOTDEMOFILES)
 
 clean:
 
-lint: lint_PROG
 
 $(ROOTDEMODIR):
 	$(INS.dir)

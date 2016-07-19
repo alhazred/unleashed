@@ -46,7 +46,6 @@ SRCS = $(SWDE_SRCS) $(CMN_SRCS:%=../%) $(SUBDE_SRCS:%=../%)
 include ../../../Makefile.plugin
 
 CFLAGS += $(INCS)
-LINTFLAGS += $(INCS)
 LDLIBS += -L$(ROOTLIB)/fm -ltopo -luutil -luuid -lkstat
 LDFLAGS += -R/usr/lib/fm
 CERRWARN += -_gcc=-Wno-parentheses

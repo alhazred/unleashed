@@ -42,11 +42,10 @@ all	:=	TARGET = all
 install	:=	TARGET = install
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 
 all: $(SUBDIRS)
 
-clean clobber lint: $(SUBDIRS)
+clean clobber: $(SUBDIRS)
 
 install: $(SUBDIRS)
 	-$(RM) $(ROOTPROG)

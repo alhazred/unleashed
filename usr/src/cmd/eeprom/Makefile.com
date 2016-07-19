@@ -41,13 +41,9 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
 
-LINT_OBJS = $(OBJS:%.o=%.ln)
 SOURCES = $(OBJS:%.o=%.c)
 
 .PARALLEL: $(OBJS)
 
 %.o:	$(SRCDIR)/common/%.c
 	$(COMPILE.c) -o $@ $<
-
-%.ln:	../common/%.c
-	$(LINT.c) -c $@ $<

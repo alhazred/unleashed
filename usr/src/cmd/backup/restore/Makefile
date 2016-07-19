@@ -43,7 +43,6 @@ GLOBAL=		../../../head
 CPPFLAGS=	-I$(LOCAL) -I$(GENERAL) -I$(GLOBAL) \
 			$(CPPFLAGS.master) -D_LARGEFILE64_SOURCE=1
 LIBDUMP=	../lib/libdump.a
-LINTLIBDUMP=	../lib/llib-ldump.ln
 LDLIBS +=	$(BSTATIC) -L../lib -ldump $(BDYNAMIC) -lsocket -lnsl -lsec
 
 UFSROOTLINK=	$(UFSROOTUSRSBIN)/$(PROG)
@@ -65,14 +64,6 @@ $(LIBDUMP): FRC
 FRC:
 
 install:	all $(UFSROOTPKGUSRLIBFSTYPE) $(UFSROOTLINK)
-
-lint:	$(SRCS) $(LINTLIBDUMP)
-	$(LINT.c) $(SRCS) $(LINTLIBDUMP) 2>&1 \
-	| sed -f lint.sed | grep -v '^[ 	]'
-
-$(LINTLIBDUMP):	FRC
-	cd ../lib; pwd; $(MAKE) lint
-	pwd
 
 check:
 	$(CSTYLE) $(CSTYLEFLAGS) $(SRCS) $(HEADERS)

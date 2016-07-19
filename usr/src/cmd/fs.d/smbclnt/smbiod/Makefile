@@ -59,7 +59,6 @@ all:	$(TYPEPROG)
 
 catalog:	$(POFILE)
 
-lint:	lint_SRCS
 
 clean:
 	$(RM) $(OBJS) $(POFILE)

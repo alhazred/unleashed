@@ -53,12 +53,7 @@ install strip :
 clean :
 		$(RM) $(OBJS)
 
-lint :		lint_SRCS
-
 clobber: clean
 	$(RM) $(CLOBBERFILES)
-
-lint_SRCS:
-	$(LINT.c) $(SRCS)
 
 include ../Makefile.msg

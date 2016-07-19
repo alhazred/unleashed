@@ -30,7 +30,6 @@ SRCS =	disk_monitor.c diskmon_conf.c topo_gather.c \
 
 include ../../Makefile.plugin
 
-LINTFLAGS += -I. -I$(SRC)/lib/fm/topo/modules/common/disk -L$(ROOT)/usr/lib/fm
 CFLAGS += -I. -I$(SRC)/lib/fm/topo/modules/common/disk
 LDLIBS += -lsysevent -lnvpair -lsmbios -lcfgadm -ltopo -luutil -lipmi
 LDFLAGS += -L$(ROOT)/usr/lib/fm -R/usr/lib/fm

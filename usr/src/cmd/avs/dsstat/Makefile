@@ -45,19 +45,14 @@ CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-unused-label
 CERRWARN += -_gcc=-Wno-clobbered
 LDLIBS += -lkstat
-LINTFLAGS += -Xa -n -s -x -m -u -Dlint -errhdr=%user
-LINTFLAGS += -erroff=E_SEC_PRINTF_VAR_FMT -erroff=E_SEC_SPRINTF_UNBOUNDED_COPY
-LINTDIR = $(KBASE)/lintdir
 POFILE = dsstat_all.po
 POFILES = $(OBJS:%.o=%.po)
-LFILE = $(LINTDIR)/dsstat.ln
 ROOTLINK = $(ROOTUSRSBIN)/$(PROG)
 
 all	:=	TARGET= all
 install	:=	TARGET= install
 clean	:=	TARGET= clean
 clobber	:=	TARGET= clobber
-lint	:=	TARGET= lint
 
 .KEEP_STATE:
 
@@ -67,7 +62,6 @@ all: $(SUBDIRS) $(PROG)
 
 install: $(SUBDIRS) all $(ROOTPROG) $(ROOTLINK)
 
-lint:	$(SUBDIRS) lint_SRCS
 
 clean:	$(SUBDIRS)
 	$(RM) *.o

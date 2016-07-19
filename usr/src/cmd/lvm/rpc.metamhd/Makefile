@@ -45,7 +45,6 @@ all     :=      TARGET = all
 install :=      TARGET = install
 clean   :=      TARGET = clean
 clobber :=      TARGET = clobber
-lint    :=      TARGET = lint
 
 .KEEP_STATE:
 
@@ -54,7 +53,7 @@ all:    $(SUBDIRS)
 clean: $(SUBDIRS)
 	$(RM) metamhd_svc.c metamhd_xdr.c mhdx_xdr.c
 
-clobber lint:     $(SUBDIRS)
+clobber:     $(SUBDIRS)
 
 install:        $(SUBDIRS) $(ROOTMANIFEST)
 

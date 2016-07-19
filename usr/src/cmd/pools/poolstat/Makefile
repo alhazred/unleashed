@@ -44,7 +44,6 @@ LDLIBS +=	-lpool -lkstat
 XGETFLAGS =	-a
 CLOBBERFILES += $(POFILES) 
 
-lint := LINTFLAGS += -I$(POOLSCOMMONDIR) -I$(STATCOMMONDIR)
 
 .KEEP_STATE:
 
@@ -67,6 +66,5 @@ install: all $(ROOTPROG)
 clean:
 	$(RM) $(OBJS) $(COMMON_OBJS) $(STAT_COMMON_OBJS) $(POFILES)
 
-lint: lint_SRCS
 
 include ../../Makefile.targ

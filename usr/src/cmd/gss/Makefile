@@ -67,7 +67,6 @@ install_h :=	TARGET= install_h
 check :=	TARGET= check
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 _dc :=		TARGET= _dc
 
@@ -77,7 +76,7 @@ SUBDIRS = $(COMMON_SUBDIRS)  $($(MACH)_SUBDIRS)
 
 .PARALLEL:	$(BWOSDIRS) $(SUBDIRS) $(MSGSUBDIRS)  $(BSMSUBDIRS)
 
-all install clean clobber lint: $(SUBDIRS) $(BSMSUBDIRS)
+all install clean clobber: $(SUBDIRS) $(BSMSUBDIRS)
 
 # those commands which install headers possibly needed by other commands.
 install_h check:

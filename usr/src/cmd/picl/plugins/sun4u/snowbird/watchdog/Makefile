@@ -39,8 +39,6 @@ LIBS =		$(DYNLIB)
 
 ROOT_PLATFORM = $(USR_PLAT_DIR)/SUNW,Netra-CP2300
 
-CLEANFILES=	$(LINTOUT) $(LINTLIB)
-
 ROOTLIBDIR	= $(ROOT_PLAT_PLUGINDIR)
 
 CFLAGS +=	$(CCVERBOSE)
@@ -69,7 +67,6 @@ all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
-lint :=		TARGET= lint
 _msg :=		TARGET= _msg
 
 all: $(LIBS) $(LIBLINKS)
@@ -92,9 +89,6 @@ $(MSGDOMAIN):
 # include library targets
 include $(SRC)/cmd/picl/plugins/Makefile.targ
 include $(SRC)/lib/Makefile.targ
-
-lint :
-	$(LINT.c) $(SRCS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

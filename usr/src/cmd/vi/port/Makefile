@@ -84,7 +84,6 @@ ex :=		LDLIBS += -lmapmalloc -lcurses -lgen -lcrypt_i
 $(XPG4) :=	LDLIBS += -lmapmalloc -lcurses -lgen -lcrypt_i
 $(XPG6) :=	LDLIBS += -lmapmalloc -lcurses -lgen -lcrypt_i
 exrecover :=	LDLIBS += -lmapmalloc -lcrypt_i
-lint :=		LDLIBS += -lmapmalloc -lcurses -lgen -lcrypt
 
 ROOTLIBPROGS= $(LIBPROGS:%=$(ROOTLIB)/%)
 
@@ -168,6 +167,5 @@ $(ROOTXPG6LINKS): $(ROOTXPG6PROG)
 clean:
 	$(RM) $(OBJS)
 
-lint: lint_SRCS
 
 include ../../Makefile.targ

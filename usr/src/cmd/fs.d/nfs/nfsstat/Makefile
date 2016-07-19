@@ -62,9 +62,6 @@ nfs_sec.o:	../lib/nfs_sec.c
 
 install:	all $(ROOTPROG)
 
-lint:
-	$(LINT.c) $(SRCS) $(LDLIBS)
-
 clean:     
 	$(RM) $(OBJS)
 

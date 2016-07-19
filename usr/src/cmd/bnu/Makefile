@@ -167,7 +167,6 @@ check:		$(CHKMANIFEST)
 clean:
 		$(RM) $(CLEANFILES)
 
-lint:		lint_SRCS
 
 strip:
 		$(STRIP) $(PROG)

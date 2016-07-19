@@ -38,7 +38,6 @@ include ../../Makefile.psm
 
 SRCS = oplhpd.c scf_notify.c
 OBJS = $(SRCS:%.c=%.o)
-LINTFILES = $(SRCS:%.c=%.ln)
 
 ROOTMANIFESTDIR = $(ROOTSVCPLATFORMSUN4U)
 
@@ -66,7 +65,6 @@ check:	$(CHKMANIFEST)
 clean:
 	$(RM) $(OBJS)
 
-lint:	lint_SRCS
 
 $(USR_PLAT_DIR):
 	-$(INS.dir)

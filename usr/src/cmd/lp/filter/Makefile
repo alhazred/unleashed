@@ -48,7 +48,7 @@ install :		$(PROG) $(ROOTLIBLPBINPROG) $(SUBDIRS)
 $(ROOTLIBLPBIN)/% :	%
 			$(INS.file)
 
-clean clobber strip lint catalog:	$(SUBDIRS)
+clean clobber strip catalog:	$(SUBDIRS)
 
 $(SUBDIRS) :		FRC
 			@cd $@; pwd; $(MAKE) $(TARGET)

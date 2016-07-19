@@ -43,4 +43,3 @@ XGETFLAGS += 	-a  -x volcopy.xcl
 
 catalog:        $(POFILE)
 
-lint:		lint_PROG

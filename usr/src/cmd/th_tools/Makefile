@@ -29,7 +29,6 @@ SHFILES = th_script
 include ../Makefile.cmd
 
 CFLAGS += -I$(SRC)/uts/common
-LINTFLAGS += -I$(SRC)/uts/common
 C99MODE= $(C99_ENABLE)
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
@@ -59,9 +58,5 @@ install: all $(ROOTUSRSBINPROG) $(ROOTLIBSHFILES)
 
 clean:
 	$(RM) $(OBJECTS)
-
-lint:
-	$(LINT.c) th_define.c $(LDLIBS)
-	$(LINT.c) th_manage.c $(LDLIBS) -ldevice
 
 include ../Makefile.targ

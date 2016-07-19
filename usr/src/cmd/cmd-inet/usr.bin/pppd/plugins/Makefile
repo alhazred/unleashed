@@ -32,9 +32,6 @@ PPPOE =		pppoe.so
 LIBRARIES =	minconn.so passprompt.so pppoe.so
 OBJECTS =	minconn.o passprompt.o pppoe.o
 
-# The rest of the sources are GPL
-LINTSRCS =	pppoe.c
-
 include		$(SRC)/lib/Makefile.lib
 include		../Makefile.def
 
@@ -93,8 +90,5 @@ $(LIBPPPPLUGINDIR):
 
 $(LIBPPPPLUGINDIR)/%:	%
 	$(INS.file)
-
-lint:
-	$(LINT.c) $(LINTSRCS) $(LDLIBS)
 
 include $(SRC)/lib/Makefile.targ

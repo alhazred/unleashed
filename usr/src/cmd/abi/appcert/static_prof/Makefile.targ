@@ -38,11 +38,6 @@ clean:
 	-$(RM) $(PROG)
 
 #
-# lint - (apparently needs an explicit dependency on lint_PROG or lint_SRCS)
-#
-lint:	lint_SRCS
-
-#
 # Install targets
 #
 $(ROOTLIB_APPCERT)/%: %

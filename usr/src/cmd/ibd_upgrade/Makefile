@@ -52,7 +52,6 @@ check:	$(CHKMANIFEST)
 
 clean:
 
-lint:	lint_SRCS
 
 include ../Makefile.targ
 

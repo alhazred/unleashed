@@ -35,13 +35,12 @@ all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-lint:=		TARGET= lint
 
 .KEEP_STATE:
 
 .PARALLEL: $(SUBDIRS1) $(SUBDIRS2)
 
-all clean clobber lint: $(SUBDIRS1)
+all clean clobber: $(SUBDIRS1)
 
 install: $(SUBDIRS1) $(SUBDIRS2)
 

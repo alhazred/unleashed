@@ -50,6 +50,6 @@ $(ROOTFONTMAPS):
 $(ROOTFONTMAPS)/% :	% $(ROOTFONTMAPS)
 			$(INS.file)
 
-clean clobber strip lint :
+clean clobber strip:
 
 FRC:
