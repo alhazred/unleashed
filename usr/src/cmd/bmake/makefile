@@ -4,9 +4,13 @@
 # ./configure; make; make install
 #
 
+include $(SRC)/Makefile.master
+
 all: build
 
 clobber: clean
 
+CC= $(GCC_ROOT)/bin/gcc
+
 build clean install test:
-	./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=$@
+	CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=$@

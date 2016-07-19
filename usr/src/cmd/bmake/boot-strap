@@ -391,7 +391,7 @@ Bmake() {
 	    cd $Mydir &&
 	    MAKESYSPATH=$mksrc SRCTOP=$Mydir OBJTOP=$objdir \
 	    MAKEOBJDIR='${.CURDIR:S,${SRCTOP:tA},${OBJTOP:tA},}' \
-	    ${BMAKE:-$objdir/bmake} -f $Mydir/Makefile "$@"
+	    ${BMAKE:-$objdir/bmake} -f $Mydir/Makefile.bsd "$@"
     )
 }
 
@@ -451,7 +451,7 @@ op_all() {
 		op_install
 	else
 		op_test
-		MAKE_VERSION=`sed -n '/^_MAKE_VERSION/ { s,.*=  *,,;p; }' $srcdir/Makefile`
+		MAKE_VERSION=`sed -n '/^_MAKE_VERSION/ { s,.*=  *,,;p; }' $srcdir/Makefile.bsd`
 		echo You can install by running:
 		echo
 		echo $0 $cmd_args op=install
