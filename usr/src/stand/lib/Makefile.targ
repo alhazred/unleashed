@@ -35,18 +35,12 @@ clobber: clean
 
 install: all .WAIT $(ROOTLIBDIR) .WAIT $(ROOTLIBS)
 
-lint lintcheck: $$(SRCS)
-	$(LINT.c) $(SRCS) -L$(ROOTLIBDIR) $(LDLIBS)
-
 objs:
 	-@mkdir -p $@
 
 $(LIBRARY): objs .WAIT $$(OBJS)
 	$(BUILD.AR)
 	$(POST_PROCESS_A)
-
-$(LINTLIB): $$(SRCS)
-	$(LINT.c) -o $(LIBNAME) $(SRCS) 2>&1 
 
 objs/%.o: $(SRCDIR)/%.c
 	$(COMPILE.c) -o $@ $<

@@ -36,7 +36,4 @@ include ../Makefile.com
 CMNDIR	= $(TOPDIR)/uts/common/rpc
 SRCS	= $(LOCOBJS:%.o=$(SRCDIR)/%.c) $(CMNOBJS:%.o=$(CMNDIR)/%.c)
 
-# lint has problems with xdr.c use og #pragma weak
-LINTFLAGS += -erroff=E_NAME_USED_NOT_DEF2
-
 include Makefile.$(MACH).targ

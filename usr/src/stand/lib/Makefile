@@ -31,15 +31,6 @@ sparc_SUBDIRS =
 SUBDIRS = fakeboot fs/hsfs fs/nfs fs/ufs inet sa sock tcpstubs xdr \
 	tcp $($(MACH)_SUBDIRS)
 
-#
-# Don't lint fakeboot since it doesn't have any source files.
-#
-LINTSUBDIRS = $(SUBDIRS:fakeboot=)
-
-#
-# We can get away with this since we're only building .a's, and by the
-# time we run lint all of the lint libraries have already been built.
-#
 .PARALLEL: $(SUBDIRS)
 
 .KEEP_STATE:
@@ -48,11 +39,8 @@ all	:=	TARGET = all
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
 install	:=	TARGET = install
-lint	:=	TARGET = lint
 
 all clean clobber install: $(SUBDIRS)
-
-lint: $(LINTSUBDIRS)
 
 #
 # The reason this rule checks for the existence of the

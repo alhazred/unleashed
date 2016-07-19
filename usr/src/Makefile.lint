@@ -28,26 +28,9 @@
 # include global definitions
 include Makefile.master
 
-#
-# As pieces are made lint-clean, add them here so the nightly build
-# can be used to keep them that way.
-#
-COMMON_SUBDIRS =
+lint:		uts
 
-i386_SUBDIRS=
-
-sparc_SUBDIRS= \
-	stand
-
-LINTSUBDIRS= $(COMMON_SUBDIRS) $($(MACH)_SUBDIRS)
-
-.PARALLEL:	$(LINTSUBDIRS)
-
-lint:		uts .WAIT subdirs
-
-subdirs:	$(LINTSUBDIRS)
-
-uts $(LINTSUBDIRS):	FRC
+uts:	FRC
 	@cd $@; pwd; $(MAKE) lint
 
 FRC:

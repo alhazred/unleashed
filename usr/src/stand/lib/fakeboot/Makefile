@@ -32,6 +32,6 @@ LIBRARY = libfakeboot.a
 
 include ../Makefile.com
 
-LIBS	= $(LINTLIB)
+LIBS	=
 
 include ../Makefile.targ

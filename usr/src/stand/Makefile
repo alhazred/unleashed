@@ -30,15 +30,14 @@ include ../Makefile.master
 
 SUBDIRS = lib
 
-all install clean lint: $(SUBDIRS)
+all install clean: $(SUBDIRS)
 
 clobber: $(SUBDIRS)
-	$(RM) make.out lint.out
+	$(RM) make.out
 
 all	:=	TARGET = all
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
-lint	:=	TARGET = lint
 install	:=	TARGET = install
 
 $(SUBDIRS): FRC
