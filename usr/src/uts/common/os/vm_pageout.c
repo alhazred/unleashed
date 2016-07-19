@@ -1109,7 +1109,6 @@ recheck:
 	if ((ppattr & P_REF) || ((ppattr & P_MOD) && pp->p_vnode))
 		goto recheck;
 
-	/*LINTED: constant in conditional context*/
 	VN_DISPOSE(pp, B_FREE, 0, kcred);
 
 	CPU_STATS_ADD_K(vm, dfree, 1);

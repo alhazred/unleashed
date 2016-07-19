@@ -2462,7 +2462,7 @@ top:
 					page_io_unlock(pp);
 					/* large pages should not end up here */
 					ASSERT(pp->p_szc == 0);
-					/*LINTED: constant in conditional ctx*/
+
 					VN_DISPOSE(pp, B_INVAL, 0, kcred);
 				}
 				VM_STAT_ADD(page_create_found_one);
@@ -3315,7 +3315,6 @@ top:
 		 * Put the page on the "free" list after we drop
 		 * the lock.  The less work under the lock the better.
 		 */
-		/*LINTED: constant in conditional context*/
 		VN_DISPOSE(pp, B_FREE, 0, kcred);
 	}
 
@@ -4429,7 +4428,6 @@ top:
 			    kcred, NULL);
 			VN_RELE(vp);
 		} else {
-			/*LINTED: constant in conditional context*/
 			VN_DISPOSE(pp, B_INVAL, 0, kcred);
 		}
 	} while ((pp = page_next(pp)) != page0);
@@ -5052,7 +5050,6 @@ page_release(page_t *pp, int checkmod)
 			page_unlock(pp);
 			status = PGREL_MOD;
 		} else {
-			/*LINTED: constant in conditional context*/
 			VN_DISPOSE(pp, B_FREE, 0, kcred);
 			status = PGREL_CLEAN;
 		}

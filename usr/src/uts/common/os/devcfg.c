@@ -9188,8 +9188,5 @@ ddi_mem_update(uint64_t addr, uint64_t size)
 #if defined(__x86) && !defined(__xpv)
 	extern void immu_physmem_update(uint64_t addr, uint64_t size);
 	immu_physmem_update(addr, size);
-#else
-	/*LINTED*/
-	;
 #endif
 }

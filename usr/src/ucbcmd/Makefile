@@ -23,6 +23,8 @@
 # Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2014 Garett D'Amore <garrett@damore.org>
+#
 
 # ucbcmd/Makefile
 
@@ -32,7 +34,6 @@ include $(SRC)/Makefile.master
 include $(SRC)/ucbcmd/Makefile.ucbcmd
 
 COMMON_SUBDIRS=		\
-	basename	\
 	biff		\
 	chown		\
 	df		\
@@ -45,7 +46,6 @@ COMMON_SUBDIRS=		\
 	from		\
 	groups		\
 	install.d	\
-	ln		\
 	ls		\
 	mkstr		\
 	printenv	\
@@ -55,8 +55,6 @@ COMMON_SUBDIRS=		\
 	stty		\
 	sum		\
 	test		\
-	touch		\
-	tr		\
 	tset		\
 	users		\
 	vipw		\
@@ -95,6 +93,7 @@ LINKDEST=	../bin/$(@F)
 
 BINLINKS=		\
 	arch		\
+	basename	\
 	clear		\
 	e		\
 	edit		\
@@ -109,6 +108,7 @@ BINLINKS=		\
 	head		\
 	hostid		\
 	hostname	\
+	ln		\
 	logger		\
 	mach		\
 	more		\
@@ -129,6 +129,8 @@ BINLINKS=		\
 	tcopy		\
 	telnet		\
 	tftp		\
+	touch		\
+	tr		\
 	uptime		\
 	vacation	\
 	vmstat		\

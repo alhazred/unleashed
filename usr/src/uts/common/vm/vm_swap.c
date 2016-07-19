@@ -1589,7 +1589,6 @@ again:
 		if (error || pvp != sip->si_vp || poff < sip->si_soff ||
 		    poff >= sip->si_eoff) {
 			page_io_unlock(pp);
-			/*LINTED: constant in conditional context*/
 			VN_DISPOSE(pp, B_INVAL, 0, kcred);
 			return (0);
 		}
@@ -1600,7 +1599,7 @@ again:
 			page_io_unlock(pp);
 			if (error == EFAULT)
 				error = 0;
-			/*LINTED: constant in conditional context*/
+
 			VN_DISPOSE(pp, B_INVAL, 0, kcred);
 			return (error);
 		}
@@ -1620,7 +1619,6 @@ again:
 	if ((ap == NULL || ap->an_pvp == NULL) && alloc_pg) {
 		mutex_exit(ahm);
 		page_io_unlock(pp);
-		/*LINTED: constant in conditional context*/
 		VN_DISPOSE(pp, B_INVAL, 0, kcred);
 		return (0);
 	}

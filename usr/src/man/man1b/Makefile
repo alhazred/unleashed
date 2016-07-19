@@ -12,14 +12,14 @@
 #
 # Copyright 2011, Richard Lowe
 # Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
+# Copyright 2014 Garrett D'Amore <garrett@damore.org>
 #
 
 include		$(SRC)/Makefile.master
 
 MANSECT=	 1b
 
-MANFILES=	basename.1b	\
-		biff.1b		\
+MANFILES=	biff.1b		\
 		chown.1b	\
 		df.1b		\
 		du.1b		\
@@ -31,8 +31,6 @@ MANFILES=	basename.1b	\
 		from.1b		\
 		groups.1b	\
 		grpck.1b	\
-		ln.1b		\
-		logger.1b	\
 		lpc.1b		\
 		lpq.1b		\
 		lpr.1b		\
@@ -47,7 +45,6 @@ MANFILES=	basename.1b	\
 		stty.1b		\
 		sum.1b		\
 		test.1b		\
-		touch.1b	\
 		tset.1b		\
 		users.1b	\
 		vipw.1b		\

@@ -996,7 +996,6 @@ cu_cpc_trigger(uintptr_t arg1, uintptr_t arg2)
  * holding CPU lock.
  */
 static int
-/* LINTED E_FUNC_ARG_UNUSED */
 cu_cpu_callback(cpu_setup_t what, int id, void *arg)
 {
 	cpu_t	*cp;

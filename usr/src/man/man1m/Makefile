@@ -12,6 +12,7 @@
 #
 # Copyright 2011, Richard Lowe
 # Copyright (c) 2012, Joyent, Inc.  All rights reserved.
+# Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
 # Copyright 2016 Toomas Soome <tsoome@me.com>
 #
@@ -58,7 +59,6 @@ _MANFILES=	6to4relay.1m		\
 		catman.1m		\
 		cfgadm.1m		\
 		cfgadm_ac.1m		\
-		cfgadm_cardbus.1m	\
 		cfgadm_fp.1m		\
 		cfgadm_ib.1m		\
 		cfgadm_pci.1m		\
@@ -376,7 +376,6 @@ _MANFILES=	6to4relay.1m		\
 		ports.1m		\
 		powerd.1m		\
 		powertop.1m		\
-		ppdmgr.1m		\
 		pppd.1m			\
 		pppdump.1m		\
 		pppoec.1m		\
@@ -384,7 +383,6 @@ _MANFILES=	6to4relay.1m		\
 		pppstats.1m		\
 		praudit.1m		\
 		print-service.1m	\
-		printmgr.1m		\
 		projadd.1m		\
 		projdel.1m		\
 		projmod.1m		\

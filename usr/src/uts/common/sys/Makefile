@@ -24,6 +24,7 @@
 # Copyright 2014, Joyent, Inc. All rights reserved.
 # Copyright 2013 Garrett D'Amore <garrett@damore.org>
 # Copyright 2013 Saso Kiselkov. All rights reserved.
+# Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2015 Igor Kozhukhov <ikozhukhov@gmail.com>
 # Copyright 2016 Nexenta Systems, Inc.
 #
@@ -432,12 +433,10 @@ CHKHDRS=			\
 	queue.h			\
 	serializer.h		\
 	pbio.h			\
-	pccard.h		\
 	pci.h			\
 	pcie.h			\
 	pci_impl.h		\
 	pci_tools.h		\
-	pcmcia.h		\
 	pctypes.h		\
 	pfmod.h			\
 	pg.h			\
@@ -493,6 +492,7 @@ CHKHDRS=			\
 	sad.h			\
 	schedctl.h		\
 	sdt.h			\
+	secflags.h		\
 	select.h		\
 	sem.h			\
 	sem_impl.h		\
@@ -527,7 +527,6 @@ CHKHDRS=			\
 	squeue.h		\
 	squeue_impl.h		\
 	srn.h			\
-	sservice.h		\
 	stat.h			\
 	statfs.h		\
 	statvfs.h		\
@@ -1108,8 +1107,6 @@ PCHDRS=			\
 	avintr.h	\
 	dma_engine.h	\
 	i8272A.h	\
-	pcic_reg.h	\
-	pcic_var.h	\
 	pic.h		\
 	pit.h		\
 	rtc.h

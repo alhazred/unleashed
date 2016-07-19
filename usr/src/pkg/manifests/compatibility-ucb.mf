@@ -22,6 +22,7 @@
 #
 # Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
+# Copyright 2014 Garrett D'Amore <garrett@damore.org>
 #
 
 set name=pkg.fmri value=pkg:/compatibility/ucb@$(PKGVERS)
@@ -43,7 +44,6 @@ dir path=usr/ucb/$(ARCH64)
 dir path=usr/ucblib
 dir path=usr/ucblib/$(ARCH64)
 file path=etc/mail/Mail.rc preserve=true
-file path=usr/share/man/man1b/basename.1b
 file path=usr/share/man/man1b/biff.1b
 file path=usr/share/man/man1b/chown.1b
 file path=usr/share/man/man1b/df.1b
@@ -56,8 +56,6 @@ file path=usr/share/man/man1b/file.1b
 file path=usr/share/man/man1b/from.1b
 file path=usr/share/man/man1b/groups.1b
 file path=usr/share/man/man1b/grpck.1b
-file path=usr/share/man/man1b/ln.1b
-file path=usr/share/man/man1b/logger.1b
 file path=usr/share/man/man1b/lpc.1b
 file path=usr/share/man/man1b/lpq.1b
 file path=usr/share/man/man1b/lpr.1b
@@ -72,13 +70,11 @@ file path=usr/share/man/man1b/shutdown.1b
 file path=usr/share/man/man1b/stty.1b
 file path=usr/share/man/man1b/sum.1b
 file path=usr/share/man/man1b/test.1b
-file path=usr/share/man/man1b/touch.1b
 file path=usr/share/man/man1b/tset.1b
 file path=usr/share/man/man1b/users.1b
 file path=usr/share/man/man1b/vipw.1b
 file path=usr/share/man/man1b/whereis.1b
 file path=usr/share/man/man1b/whoami.1b
-file path=usr/ucb/basename mode=0755
 file path=usr/ucb/biff mode=0755
 file path=usr/ucb/chown mode=0755
 file path=usr/ucb/df mode=0755
@@ -91,7 +87,6 @@ file path=usr/ucb/file mode=0555
 file path=usr/ucb/from mode=0755
 file path=usr/ucb/groups mode=0755
 file path=usr/ucb/install mode=0755
-file path=usr/ucb/ln mode=0755
 file path=usr/ucb/ls mode=0755
 file path=usr/ucb/mkstr mode=0555
 file path=usr/ucb/printenv mode=0755
@@ -101,8 +96,6 @@ file path=usr/ucb/shutdown mode=0755
 file path=usr/ucb/stty mode=0755
 file path=usr/ucb/sum mode=0755
 file path=usr/ucb/test mode=0755
-file path=usr/ucb/touch mode=0755
-file path=usr/ucb/tr mode=0755
 file path=usr/ucb/tset mode=0755
 file path=usr/ucb/users mode=0755
 file path=usr/ucb/vipw mode=0555
@@ -129,16 +122,12 @@ legacy pkg=SUNWscpu \
     name="Source Compatibility, (Usr)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-license usr/src/ucbcmd/basename/THIRDPARTYLICENSE \
-    license=usr/src/ucbcmd/basename/THIRDPARTYLICENSE
 license usr/src/ucbcmd/echo/THIRDPARTYLICENSE \
     license=usr/src/ucbcmd/echo/THIRDPARTYLICENSE
 license usr/src/ucbcmd/from/THIRDPARTYLICENSE \
     license=usr/src/ucbcmd/from/THIRDPARTYLICENSE
 license usr/src/ucbcmd/groups/THIRDPARTYLICENSE \
     license=usr/src/ucbcmd/groups/THIRDPARTYLICENSE
-license usr/src/ucbcmd/ln/THIRDPARTYLICENSE \
-    license=usr/src/ucbcmd/ln/THIRDPARTYLICENSE
 license usr/src/ucbcmd/ls/THIRDPARTYLICENSE \
     license=usr/src/ucbcmd/ls/THIRDPARTYLICENSE
 license usr/src/ucbcmd/sum/THIRDPARTYLICENSE \
@@ -172,6 +161,7 @@ link path=usr/share/man/man1b/fasthalt.1b target=fastboot.1b
 link path=usr/share/man/man1b/reset.1b target=tset.1b
 link path=usr/ucb/Mail target=../bin/mailx
 link path=usr/ucb/arch target=../bin/arch
+link path=usr/ucb/basename target=../bin/basename
 link path=usr/ucb/clear target=../bin/clear
 link path=usr/ucb/e target=../bin/edit
 link path=usr/ucb/edit target=../bin/edit
@@ -183,6 +173,7 @@ link path=usr/ucb/ftp target=../bin/ftp
 link path=usr/ucb/head target=../bin/head
 link path=usr/ucb/hostid target=../bin/hostid
 link path=usr/ucb/hostname target=../bin/hostname
+link path=usr/ucb/ln target=../bin/ln
 link path=usr/ucb/logger target=../bin/logger
 link path=usr/ucb/mach target=../bin/mach
 link path=usr/ucb/mail target=../bin/mailx
@@ -206,6 +197,8 @@ link path=usr/ucb/talk target=../bin/talk
 link path=usr/ucb/tcopy target=../bin/tcopy
 link path=usr/ucb/telnet target=../bin/telnet
 link path=usr/ucb/tftp target=../bin/tftp
+link path=usr/ucb/touch target=../bin/touch
+link path=usr/ucb/tr target=../bin/tr
 link path=usr/ucb/uptime target=../bin/uptime
 link path=usr/ucb/vacation target=../bin/vacation
 link path=usr/ucb/vedit target=../bin/vedit

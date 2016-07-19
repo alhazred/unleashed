@@ -224,7 +224,6 @@ MANFILES=	acctcom.1			\
 	 	mailstats.1			\
 	 	mailx.1				\
 		make.1				\
-	 	makekey.1			\
 	 	man.1				\
 	 	mandoc.1			\
 	 	mconnect.1			\
@@ -300,6 +299,7 @@ MANFILES=	acctcom.1			\
 	 	profiles.1			\
 	 	projects.1			\
 	 	ps.1				\
+		psecflags.1			\
 	 	ptree.1				\
 	 	pvs.1				\
 	 	pwd.1				\

@@ -3316,7 +3316,6 @@ page_claim_contig_pages(page_t *pp, uchar_t szc, int flags)
 		}
 		ASSERT(pp == targpp);
 
-		/* LINTED */
 		ASSERT(hpp = pp); /* That's right, it's an assignment */
 
 		pp += npgs;
@@ -3425,7 +3424,6 @@ page_geti_contig_pages(int mnode, uint_t bin, uchar_t szc, int flags,
 	pfn_t	randpfn;
 	page_t *pp, *randpp, *endpp;
 	uint_t colors, ceq_mask;
-	/* LINTED : set but not used in function */
 	uint_t color_mask;
 	pfn_t hi, lo;
 	uint_t skip;
@@ -3645,7 +3643,6 @@ page_get_contig_pages(int mnode, uint_t bin, int mtype, uchar_t szc,
 	/* no allocations from cage */
 	flags |= PGI_NOCAGE;
 
-	/* LINTED */
 	MTYPE_START(mnode, mtype, flags);
 	if (mtype < 0) {	/* mnode does not have memory in mtype range */
 		VM_STAT_ADD(vmm_vmstats.pgcp_allocempty[szc]);
@@ -3768,7 +3765,6 @@ page_get_freelist(struct vnode *vp, u_offset_t off, struct seg *seg,
 		flags |= PGI_NOCAGE;
 	}
 
-	/* LINTED */
 	MTYPE_INIT(mtype, vp, vaddr, flags, size);
 
 	/*
@@ -3780,7 +3776,6 @@ page_get_freelist(struct vnode *vp, u_offset_t off, struct seg *seg,
 
 	VM_STAT_ADD(vmm_vmstats.pgf_alloc[szc]);
 
-	/* LINTED */
 	AS_2_BIN(as, seg, vp, vaddr, bin, szc);
 
 	ASSERT(bin < PAGE_GET_PAGECOLORS(szc));
@@ -3885,7 +3880,6 @@ page_get_cachelist(struct vnode *vp, u_offset_t off, struct seg *seg,
 	page_t		*pp;
 	struct as	*as = seg->s_as;
 	ulong_t		bin;
-	/*LINTED*/
 	int		mnode;
 	int		mtype;
 	lgrp_mnode_cookie_t	lgrp_cookie;
@@ -3914,12 +3908,10 @@ page_get_cachelist(struct vnode *vp, u_offset_t off, struct seg *seg,
 		return (NULL);
 	}
 
-	/* LINTED */
 	AS_2_BIN(as, seg, vp, vaddr, bin, 0);
 
 	ASSERT(bin < PAGE_GET_PAGECOLORS(0));
 
-	/* LINTED */
 	MTYPE_INIT(mtype, vp, vaddr, flags, MMU_PAGESIZE);
 
 	VM_STAT_ADD(vmm_vmstats.pgc_alloc);
@@ -3988,7 +3980,6 @@ page_get_mnode_cachelist(uint_t bin, uint_t flags, int mnode, int mtype)
 
 	VM_STAT_ADD(vmm_vmstats.pgmc_alloc);
 
-	/* LINTED */
 	MTYPE_START(mnode, mtype, flags);
 	if (mtype < 0) {	/* mnode does not have memory in mtype range */
 		VM_STAT_ADD(vmm_vmstats.pgmc_allocempty);
@@ -4178,7 +4169,6 @@ page_get_replacement_page(page_t *orig_like_pp, struct lgrp *lgrp_target,
 	if (PP_ISKAS(like_pp))
 		pgrflags |= PGR_SAMESZC;
 
-	/* LINTED */
 	MTYPE_PGR_INIT(mtype, flags, like_pp, page_mnode, npgs);
 
 	while (npgs) {

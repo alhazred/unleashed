@@ -122,8 +122,6 @@
 *_test.[ch]
 ./usr/src/cmd/ldap/common/*test.c
 ./usr/src/cmd/logadm/tester
-./usr/src/cmd/print/printmgr/com/sun/admin/pm/client/helptools/extract
-./usr/src/cmd/print/printmgr/com/sun/admin/pm/server/pmtest
 ./usr/src/cmd/sendmail/libsm/t-*.c
 ./usr/src/cmd/sort/common/convert.c
 ./usr/src/cmd/sort/common/invoke.c
@@ -206,15 +204,6 @@
 # assembly files. We keep it around for future reference.
 #
 ./usr/src/common/bignum/mont_mulf.c
-
-#
-# Ignore the sparc Makefiles for x86-only drivers;
-# they're used to build warlock only.
-#
-./usr/src/uts/sparc/sata/Makefile
-./usr/src/uts/sparc/si3124/Makefile
-./usr/src/uts/sparc/nv_sata/Makefile
-./usr/src/uts/sparc/ahci/Makefile
 
 #
 # Ignore uttrack.c.  It is provided as part of the standard

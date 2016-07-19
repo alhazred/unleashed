@@ -253,7 +253,6 @@ COMMON_SUBDIRS=		\
 	mailwrapper	\
 	mailx		\
 	make		\
-	makekey		\
 	man		\
 	mandoc		\
 	mdb		\

@@ -195,7 +195,6 @@ COMMON_SUBDIRS = \
 	cmd/luxadm \
 	cmd/lvm \
 	cmd/mailwrapper \
-	cmd/makekey \
 	cmd/mdb \
 	cmd/mesg \
 	cmd/mkdir \
@@ -469,7 +468,6 @@ COMMON_SUBDIRS = \
 	lib/watchmalloc \
 	psm \
 	test \
-	ucbcmd/basename \
 	ucbcmd/biff \
 	ucbcmd/echo \
 	ucbcmd/groups \

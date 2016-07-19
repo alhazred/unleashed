@@ -60,8 +60,6 @@ ROOTDEMODIRS=   $(ROOTDEMODIRBASE)
 
 include $(SRC)/cmd/sgs/Makefile.com
 
-WARLOCKFILES=	$(OBJECTS:%.o=wlocks/%.ll)
-
 MAPFILES =	../common/mapfile-vers
 
 DYNFLAGS +=	$(VERSREF)
@@ -102,6 +100,6 @@ $(ROOTFS_DYNLIB64) :=	FILEMODE= 755
 
 LIBS =		$(DYNLIB)
 
-CLEANFILES +=	$(BLTSRCS) $(BLTFILES) $(WARLOCKFILES)
+CLEANFILES +=	$(BLTSRCS) $(BLTFILES)
 
 .PARALLEL:	$(LIBS)

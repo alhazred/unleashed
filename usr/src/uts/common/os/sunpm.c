@@ -9241,7 +9241,6 @@ pm_desc_pwrchk_walk(dev_info_t *dip, void *arg)
 	pm_desc_pwrchk_t *pdpchk = (pm_desc_pwrchk_t *)arg;
 	pm_info_t *info = PM_GET_PM_INFO(dip);
 	int i;
-	/* LINTED */
 	int curpwr, ce_level;
 
 	if (!info)
@@ -9249,7 +9248,6 @@ pm_desc_pwrchk_walk(dev_info_t *dip, void *arg)
 
 	PMD(PMD_SET, ("%s: %s@%s(%s#%d)\n", pmf, PM_DEVICE(dip)))
 	for (i = 0; i < PM_NUMCMPTS(dip); i++) {
-		/* LINTED */
 		if ((curpwr = PM_CURPOWER(dip, i)) == 0)
 			continue;
 		/* E_FUNC_SET_NOT_USED */
@@ -9348,7 +9346,6 @@ pm_ppm_searchlist(pm_searchargs_t *sp)
 {
 	power_req_t power_req;
 	int result = 0;
-	/* LINTED */
 	int ret;
 
 	power_req.request_type = PMR_PPM_SEARCH_LIST;

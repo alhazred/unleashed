@@ -551,64 +551,6 @@ static const uint8_t sata_rqsense_cdb[SATA_ATAPI_RQSENSE_CDB_LEN] = {
 	0
 };
 
-
-/* Warlock directives */
-
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", scsi_hba_tran))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", scsi_device))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", dev_ops))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", scsi_extended_sense))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", scsi_arq_status))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", ddi_dma_attr))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", ddi_dma_cookie_t))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", devctl_ap_state))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", dev_info::devi_state))
-_NOTE(MUTEX_PROTECTS_DATA(sata_mutex, sata_hba_list))
-_NOTE(DATA_READABLE_WITHOUT_LOCK(sata_hba_list))
-_NOTE(MUTEX_PROTECTS_DATA(sata_mutex, sata_hba_inst::satahba_next))
-_NOTE(MUTEX_PROTECTS_DATA(sata_mutex, sata_hba_inst::satahba_prev))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", \
-    sata_hba_inst::satahba_scsi_tran))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", sata_hba_inst::satahba_tran))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", sata_hba_inst::satahba_dip))
-_NOTE(SCHEME_PROTECTS_DATA("Scheme", sata_hba_inst::satahba_attached))
-_NOTE(DATA_READABLE_WITHOUT_LOCK(sata_hba_inst::satahba_dev_port))
-_NOTE(MUTEX_PROTECTS_DATA(sata_hba_inst::satahba_mutex,
-    sata_hba_inst::satahba_event_flags))
-_NOTE(MUTEX_PROTECTS_DATA(sata_cport_info::cport_mutex, \
-    sata_cport_info::cport_devp))
-_NOTE(DATA_READABLE_WITHOUT_LOCK(sata_cport_info::cport_devp))
-_NOTE(SCHEME_PROTECTS_DATA("Scheme", sata_cport_info::cport_addr))
-_NOTE(MUTEX_PROTECTS_DATA(sata_cport_info::cport_mutex, \
-    sata_cport_info::cport_dev_type))
-_NOTE(DATA_READABLE_WITHOUT_LOCK(sata_cport_info::cport_dev_type))
-_NOTE(MUTEX_PROTECTS_DATA(sata_cport_info::cport_mutex, \
-    sata_cport_info::cport_state))
-_NOTE(DATA_READABLE_WITHOUT_LOCK(sata_cport_info::cport_state))
-_NOTE(MUTEX_PROTECTS_DATA(sata_pmport_info::pmport_mutex, \
-    sata_pmport_info::pmport_state))
-_NOTE(DATA_READABLE_WITHOUT_LOCK(sata_pmport_info::pmport_state))
-_NOTE(MUTEX_PROTECTS_DATA(sata_pmport_info::pmport_mutex, \
-    sata_pmport_info::pmport_dev_type))
-_NOTE(DATA_READABLE_WITHOUT_LOCK(sata_pmport_info::pmport_dev_type))
-_NOTE(MUTEX_PROTECTS_DATA(sata_pmport_info::pmport_mutex, \
-    sata_pmport_info::pmport_sata_drive))
-_NOTE(MUTEX_PROTECTS_DATA(sata_pmport_info::pmport_mutex, \
-    sata_pmport_info::pmport_tgtnode_clean))
-_NOTE(MUTEX_PROTECTS_DATA(sata_pmport_info::pmport_mutex, \
-    sata_pmport_info::pmport_event_flags))
-_NOTE(DATA_READABLE_WITHOUT_LOCK(sata_pmport_info::pmport_sata_drive))
-_NOTE(DATA_READABLE_WITHOUT_LOCK(sata_pmult_info::pmult_dev_port))
-_NOTE(DATA_READABLE_WITHOUT_LOCK(sata_pmult_info::pmult_num_dev_ports))
-#ifdef SATA_DEBUG
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", mbuf_count))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", mbuffail_count))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", sata_atapi_trace))
-_NOTE(SCHEME_PROTECTS_DATA("No Mutex Needed", sata_atapi_trace_index))
-#endif
-
-/* End of warlock directives */
-
 /* ************** loadable module configuration functions ************** */
 
 int
@@ -1182,9 +1124,8 @@ sata_hba_fini(struct modlinkage *modlp)
 static int
 sata_hba_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(credp))
-#endif
+
 	int rv = 0;
 	dev_info_t *dip;
 	scsi_hba_tran_t *scsi_hba_tran;
@@ -1238,10 +1179,9 @@ sata_hba_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 static int
 sata_hba_close(dev_t dev, int flag, int otyp, cred_t *credp)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(credp))
 	_NOTE(ARGUNUSED(flag))
-#endif
+
 	dev_info_t *dip;
 	scsi_hba_tran_t *scsi_hba_tran;
 	sata_hba_inst_t	*sata_hba_inst;
@@ -1303,10 +1243,9 @@ static int
 sata_hba_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp,
     int *rvalp)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(credp))
 	_NOTE(ARGUNUSED(rvalp))
-#endif
+
 	int rv = 0;
 	int32_t	comp_port = -1;
 	dev_info_t *dip;
@@ -2036,10 +1975,9 @@ static int
 sata_scsi_tgt_init(dev_info_t *hba_dip, dev_info_t *tgt_dip,
     scsi_hba_tran_t *hba_tran, struct scsi_device *sd)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(hba_dip))
 	_NOTE(ARGUNUSED(tgt_dip))
-#endif
+
 	sata_device_t		sata_device;
 	sata_drive_info_t	*sdinfo;
 	struct sata_id		*sid;
@@ -2168,9 +2106,8 @@ static void
 sata_scsi_tgt_free(dev_info_t *hba_dip, dev_info_t *tgt_dip,
     scsi_hba_tran_t *hba_tran, struct scsi_device *sd)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(hba_dip))
-#endif
+
 	sata_device_t		sata_device;
 	sata_drive_info_t	*sdinfo;
 	sata_hba_inst_t		*sata_hba_inst;
@@ -3101,9 +3038,8 @@ sata_scsi_destroy_pkt(struct scsi_address *ap, struct scsi_pkt *pkt)
 static void
 sata_scsi_dmafree(struct scsi_address *ap, struct scsi_pkt *pkt)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(ap))
-#endif
+
 	sata_pkt_txlate_t *spx;
 
 	ASSERT(pkt != NULL);
@@ -3123,9 +3059,8 @@ sata_scsi_dmafree(struct scsi_address *ap, struct scsi_pkt *pkt)
 static void
 sata_scsi_sync_pkt(struct scsi_address *ap, struct scsi_pkt *pkt)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(ap))
-#endif
+
 	int rval;
 	sata_pkt_txlate_t *spx = (sata_pkt_txlate_t *)pkt->pkt_ha_private;
 	struct buf *bp;
@@ -5058,7 +4993,6 @@ sata_txlt_mode_sense(sata_pkt_txlate_t *spx)
 			} else if (bdlen == 16) {
 				/* Long LBA Accepted */
 				/* build long lba block descriptor */
-#ifndef __lock_lint
 				buf[len++] =
 				    (sdinfo->satadrv_capacity >> 56) & 0xff;
 				buf[len++] =
@@ -5067,7 +5001,6 @@ sata_txlt_mode_sense(sata_pkt_txlate_t *spx)
 				    (sdinfo->satadrv_capacity >> 40) & 0xff;
 				buf[len++] =
 				    (sdinfo->satadrv_capacity >> 32) & 0xff;
-#endif
 				buf[len++] =
 				    (sdinfo->satadrv_capacity >> 24) & 0xff;
 				buf[len++] =
@@ -6205,11 +6138,10 @@ sata_txlt_read(sata_pkt_txlate_t *spx)
 		scmd->satacmd_addr_type = ATA_ADDR_LBA48;
 		scmd->satacmd_cmd_reg = SATAC_READ_DMA_EXT;
 		scmd->satacmd_sec_count_msb = sec_count >> 8;
-#ifndef __lock_lint
 		scmd->satacmd_lba_low_msb = (lba >> 24) & 0xff;
 		scmd->satacmd_lba_mid_msb = (lba >> 32) & 0xff;
 		scmd->satacmd_lba_high_msb = lba >> 40;
-#endif
+
 	} else if (sdinfo->satadrv_features_support & SATA_DEV_F_LBA28) {
 		scmd->satacmd_addr_type = ATA_ADDR_LBA28;
 		scmd->satacmd_device_reg = SATA_ADH_LBA | ((lba >> 24) & 0xf);
@@ -6475,10 +6407,9 @@ sata_txlt_write(sata_pkt_txlate_t *spx)
 		scmd->satacmd_cmd_reg = SATAC_WRITE_DMA_EXT;
 		scmd->satacmd_sec_count_msb = sec_count >> 8;
 		scmd->satacmd_lba_low_msb = (lba >> 24) & 0xff;
-#ifndef __lock_lint
 		scmd->satacmd_lba_mid_msb = (lba >> 32) & 0xff;
 		scmd->satacmd_lba_high_msb = lba >> 40;
-#endif
+
 	} else if (sdinfo->satadrv_features_support & SATA_DEV_F_LBA28) {
 		scmd->satacmd_addr_type = ATA_ADDR_LBA28;
 		scmd->satacmd_device_reg = SATA_ADH_LBA | ((lba >> 24) & 0xf);
@@ -7958,11 +7889,10 @@ sata_set_arq_data(sata_pkt_t *sata_pkt)
 static int
 sata_build_msense_page_1(sata_drive_info_t *sdinfo, int pcntrl, uint8_t *buf)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(sdinfo))
 	_NOTE(ARGUNUSED(pcntrl))
 	_NOTE(ARGUNUSED(buf))
-#endif
+
 	return (0);
 }
 
@@ -12355,7 +12285,6 @@ static dev_info_t *
 sata_devt_to_devinfo(dev_t dev)
 {
 	dev_info_t *dip;
-#ifndef __lock_lint
 	struct devnames *dnp;
 	major_t major = getmajor(dev);
 	int instance = SATA_MINOR2INSTANCE(getminor(dev));
@@ -12370,7 +12299,6 @@ sata_devt_to_devinfo(dev_t dev)
 		dip = ddi_get_next(dip);
 	}
 	UNLOCK_DEV_OPS(&(dnp->dn_lock));
-#endif
 
 	return (dip);
 }
@@ -17338,9 +17266,7 @@ fail:
 static int
 sata_ncq_err_ret_cmd_setup(sata_pkt_txlate_t *spx, sata_drive_info_t *sdinfo)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(sdinfo))
-#endif
 
 	sata_pkt_t *spkt = spx->txlt_sata_pkt;
 	sata_cmd_t *scmd;
@@ -17977,9 +17903,8 @@ event_info:
 static void
 sata_event_daemon(void *arg)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(arg))
-#endif
+
 	sata_hba_inst_t *sata_hba_inst;
 	clock_t delta;
 
@@ -21094,9 +21019,7 @@ static void
 sata_trace_log(sata_hba_inst_t *sata_hba_inst, uint_t level,
     const char *fmt, ...)
 {
-#ifndef __lock_lint
 	_NOTE(ARGUNUSED(level))
-#endif
 
 	dev_info_t *dip = NULL;
 	va_list ap;

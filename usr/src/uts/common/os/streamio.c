@@ -2805,7 +2805,6 @@ strwrite_common(struct vnode *vp, struct uio *uiop, cred_t *crp, int wflag)
 	 * unmodified.
 	 */
 
-	/* LINTED: constant in conditional context */
 	while (1) {	/* breaks when uio_resid reaches zero */
 		/*
 		 * Determine the size of the next message to be

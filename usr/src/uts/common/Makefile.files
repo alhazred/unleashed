@@ -23,6 +23,7 @@
 # Copyright (c) 1991, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright (c) 2011, 2014 by Delphix. All rights reserved.
 # Copyright (c) 2013 by Saso Kiselkov. All rights reserved.
+# Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
 # Copyright 2016 Garrett D'Amore <garrett@damore.org>
 # Copyright 2016 Joyent, Inc.
@@ -135,7 +136,6 @@ GENUNIX_OBJS +=	\
 		core.o		\
 		corectl.o	\
 		cred.o		\
-		cs_stubs.o	\
 		dacf.o		\
 		dacf_clnt.o	\
 		damap.o	\
@@ -272,6 +272,7 @@ GENUNIX_OBJS +=	\
 		priv.o		\
 		priv_const.o	\
 		proc.o		\
+		psecflags.o	\
 		procset.o	\
 		processor_bind.o	\
 		processor_info.o	\
@@ -297,6 +298,7 @@ GENUNIX_OBJS +=	\
 		sched.o		\
 		schedctl.o	\
 		sctp_crc32.o	\
+		secflags.o	\
 		seg_dev.o	\
 		seg_kp.o	\
 		seg_kpm.o	\
@@ -477,8 +479,6 @@ AUDIOTS_OBJS +=	audiots.o
 AC97_OBJS += ac97.o ac97_ad.o ac97_alc.o ac97_cmi.o
 
 BLKDEV_OBJS += blkdev.o
-
-CARDBUS_OBJS += cardbus.o cardbus_hp.o cardbus_cfg.o
 
 CONSKBD_OBJS += conskbd.o
 
@@ -1631,8 +1631,6 @@ C2AUDIT_OBJS +=	adr.o audit.o audit_event.o audit_io.o \
 		audit_path.o audit_start.o audit_syscalls.o audit_token.o \
 		audit_mem.o
 
-PCIC_OBJS +=	pcic.o
-
 RPCSEC_OBJS +=	secmod.o	sec_clnt.o	sec_svc.o	sec_gen.o \
 		auth_des.o	auth_kern.o	auth_none.o	auth_loopb.o\
 		authdesprt.o	authdesubr.o	authu_prot.o \
@@ -1757,11 +1755,7 @@ EXACCTSYS_OBJS += exacctsys.o
 
 KAIO_OBJS += aio.o
 
-PCMCIA_OBJS += pcmcia.o cs.o cis.o cis_callout.o cis_handlers.o cis_params.o
-
 BUSRA_OBJS += busra.o
-
-PCS_OBJS += pcs.o
 
 PSET_OBJS +=	pset.o
 
@@ -1974,7 +1968,7 @@ E1000API_OBJS += e1000_80003es2lan.o e1000_82540.o e1000_82541.o e1000_82542.o \
 E1000G_OBJS +=	e1000g_debug.o e1000g_main.o e1000g_alloc.o \
 		e1000g_tx.o e1000g_rx.o e1000g_stat.o \
 		e1000g_osdep.o e1000g_workarounds.o
-		
+
 
 #
 #	Intel 82575 1G NIC driver module
@@ -2131,7 +2125,7 @@ ISCSI_INITIATOR_OBJS =	chap.o iscsi_io.o iscsi_thread.o	\
 #	ntxn 10Gb/1Gb NIC driver module
 #
 NTXN_OBJS =	unm_nic_init.o unm_gem.o unm_nic_hw.o unm_ndd.o	\
-			unm_nic_main.o unm_nic_isr.o unm_nic_ctx.o niu.o
+		unm_nic_main.o unm_nic_isr.o unm_nic_ctx.o niu.o
 
 #
 #	Myricom 10Gb NIC driver module

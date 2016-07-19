@@ -3902,7 +3902,6 @@ kmem_cache_create(
 
 	avl_create(&cp->cache_partial_slabs, kmem_partial_slab_cmp,
 	    sizeof (kmem_slab_t), offsetof(kmem_slab_t, slab_link));
-	/* LINTED: E_TRUE_LOGICAL_EXPR */
 	ASSERT(sizeof (list_node_t) <= sizeof (avl_node_t));
 	/* reuse partial slab AVL linkage for complete slab list linkage */
 	list_create(&cp->cache_complete_slabs,
@@ -4040,7 +4039,6 @@ kmem_cache_set_move(kmem_cache_t *cp,
 			avl_create(&cp->cache_defrag->kmd_moves_pending,
 			    kmem_move_cmp, sizeof (kmem_move_t),
 			    offsetof(kmem_move_t, kmm_entry));
-			/* LINTED: E_TRUE_LOGICAL_EXPR */
 			ASSERT(sizeof (list_node_t) <= sizeof (avl_node_t));
 			/* reuse the slab's AVL linkage for deadlist linkage */
 			list_create(&cp->cache_defrag->kmd_deadlist,
@@ -4294,7 +4292,6 @@ kmem_init(void)
 	maxverify = minfirewall = ULONG_MAX;
 #endif
 
-	/* LINTED */
 	ASSERT(sizeof (kmem_cpu_cache_t) == KMEM_CPU_CACHE_SIZE);
 
 	list_create(&kmem_caches, sizeof (kmem_cache_t),

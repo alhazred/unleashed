@@ -714,7 +714,6 @@ page_retire_transient_ue(page_t *pp)
 
 			page_clrtoxic(pp, PR_UE | PR_MCE | PR_MSG);
 
-			/* LINTED: CONSTCOND */
 			VN_DISPOSE(pp, B_FREE, 1, kcred);
 			return (1);
 		}
