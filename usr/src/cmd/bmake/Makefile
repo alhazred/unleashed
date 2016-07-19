@@ -4,7 +4,7 @@
 # ./configure; make; make install
 #
 
-include $(SRC)/Makefile.master
+include ../Makefile.cmd
 
 all: build
 
@@ -13,6 +13,8 @@ clean:
 	$(RM) -r obj
 
 CC= $(GCC_ROOT)/bin/gcc
+# bmake uses ${CC} as its linker, so prefix all options with -Wl,
+LDFLAGS= $(LDFLAGS.cmd:%=-Wl,%)
 
 build install test:
-	CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=$@
+	LDFLAGS="$(LDFLAGS)" CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=$@
