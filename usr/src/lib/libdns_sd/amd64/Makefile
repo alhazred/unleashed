@@ -26,5 +26,4 @@
 include ../Makefile.com
 include ../../Makefile.lib.64
 
-CFLAGS64 +=       -erroff=E_ASSIGNMENT_TYPE_MISMATCH
 install: all $(ROOTLIBS64) $(ROOTLINKS64)

@@ -46,6 +46,3 @@ XSUBPP = $(PERL) $(PERLDIR)/lib/ExtUtils/xsubpp \
 	-typemap $(PERLDIR)/lib/ExtUtils/typemap
 
 C99MODE = $(C99_ENABLE)
-
-CERRWARN += -_cc=-erroff=E_ATTRIBUTE_UNKNOWN
-CERRWARN += -_cc=-erroff=E_ATTRIBUTE_PARAM_UNDEFINED

@@ -26,8 +26,6 @@
 include		../../../../lib/Makefile.lib
 include		../../Makefile.com
 
-NO_ASM_WARN=	-erroff=E_ASM_DISABLES_OPTIMIZATION
-
 SGSPROTO=	../../proto/$(MACH)
 
 TRUSSLIB=	truss.so.1

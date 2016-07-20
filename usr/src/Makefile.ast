@@ -28,10 +28,6 @@
 # AST tools (including ksh93).
 C99MODE= $(C99_ENABLE) -D_XOPEN_SOURCE=600 -D__EXTENSIONS__=1
 
-# silence common AST&co. warnings...
-# ... about |#pragma prototyped| ...
-CERRWARN += -erroff=E_UNRECOGNIZED_PRAGMA_IGNORED
-
 # common CPP flags for libshell consumers (ksh, shcomp etc.)
 LIBSHELLCPPFLAGS = \
 	-I$(LIBSHELLBASE)/$(LIBSHELLMACH)/src/cmd/ksh93 \

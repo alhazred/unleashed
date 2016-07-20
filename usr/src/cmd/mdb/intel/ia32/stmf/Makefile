@@ -33,5 +33,4 @@ include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.module
 
-CPPFLAGS += -erroff=E_NON_CONST_INIT
 CPPFLAGS += -I$(COMSTARBASE)/port/fct -I$(COMSTARBASE)/stmf

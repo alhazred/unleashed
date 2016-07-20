@@ -32,6 +32,5 @@ include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.module
 include ../../../common/modules/rdc/Makefile.com
-CPPFLAGS += -erroff=E_STATIC_UNUSED
 
 CERRWARN += -_gcc=-Wno-unused-function

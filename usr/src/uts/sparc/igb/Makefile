@@ -51,7 +51,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 
 CERRWARN	+= -_gcc=-Wno-switch
 CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_cc=-erroff=E_STATEMENT_NOT_REACHED
 
 #
 #	Define targets

@@ -86,7 +86,6 @@ MODSTUBS_DIR	= $(OBJS_DIR)
 $(MODSTUBS_O)	:= AS_CPPFLAGS += -DNSMB_MODULE
 CLEANFILES	+= $(MODSTUBS_O) $(IOC_CHECK_H)
 C99MODE		= $(C99_ENABLE)
-CERRWARN	+= -erroff=E_STATEMENT_NOT_REACHED
 INC_PATH	+= -I$(UTSBASE)/common/fs/smbclnt
 LDFLAGS         += -dy -Ncrypto/md4 -Ncrypto/md5 -Nmisc/tlimod
 
