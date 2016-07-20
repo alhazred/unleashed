@@ -39,7 +39,6 @@ INCS +=		-I$(SRC)/uts/common/sys/fcoe
 
 LDLIBS +=	-lc -ldladm -lscf
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 CPPFLAGS +=	$(INCS) -D_REENTRANT
 
 .KEEP_STATE:

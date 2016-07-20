@@ -39,4 +39,3 @@ include ../../../Makefile.module
 CPPFLAGS += -I$(UTSBASE)/common -I$(UTSBASE)/common/sys -I$(SRPTBASE)
 
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all

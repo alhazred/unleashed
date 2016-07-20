@@ -78,7 +78,6 @@ CPPFLAGS +=	-D_REENTRANT -U_ASM \
 CFLAGS +=	$(CCVERBOSE)
 # Needed to handle zfs include files
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 DYNFLAGS +=	$(DYNFLAGS_$(CLASS))
 DYNFLAGS +=	$(BLOCAL) $(ZNOVERSION) -Wl,-e_start
 LDLIBS +=	-lc -lmapmalloc

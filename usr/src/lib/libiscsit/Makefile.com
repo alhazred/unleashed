@@ -40,7 +40,6 @@ SRCDIR =	../common
 INCS += -I$(SRCDIR)
 
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 LDLIBS +=	-lc -lnvpair -lstmf -luuid -lnsl -lscf
 CPPFLAGS +=	$(INCS) -D_REENTRANT
 CERRWARN +=	-_gcc=-Wno-parentheses

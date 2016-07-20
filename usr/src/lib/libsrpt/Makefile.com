@@ -37,7 +37,6 @@ SRPTMODDIR =	../../../uts/common/io/comstar/port/srpt
 INCS +=		-I$(SRCDIR) -I$(SRPTMODDIR)
 
 C99MODE =	-xc99=%all
-C99LMODE =	-Xc99=%all
 LDLIBS +=	-lc -lnvpair -lstmf
 CPPFLAGS +=	$(INCS) -D_REENTRANT
 

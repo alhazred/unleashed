@@ -41,7 +41,6 @@ SRCDIR=		../common
 NDLDIR=		$(ROOT)/usr/include/smbsrv/ndl
 LIBS=		$(DYNLIB)
 C99MODE =       -xc99=%all
-C99LMODE =      -Xc99=%all
 CPPFLAGS +=	-I$(SRCDIR) -I.
 LDLIBS32 +=	-L$(ROOT)/usr/lib/smbsrv
 LDLIBS64 +=	-L$(ROOT)/usr/lib/smbsrv/$(MACH64)

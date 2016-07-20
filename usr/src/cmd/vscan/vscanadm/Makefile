@@ -36,7 +36,6 @@ LDFLAGS += -R/usr/lib/vscan
 CFLAGS += $(CCVERBOSE)
 
 C99MODE =       -xc99=%all
-C99LMODE =      -Xc99=%all
 
 .KEEP_STATE:
 

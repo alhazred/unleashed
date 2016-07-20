@@ -39,7 +39,6 @@ ROOTPYSOLFILES= $(PYFILES:%=$(ROOTLIBDIR)/%)
 PYTHON=		$(PYTHON_26)
 
 C99MODE=        -xc99=%all
-C99LMODE=       -Xc99=%all
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lsec -lidmap -lpython2.6

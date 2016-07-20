@@ -72,7 +72,6 @@ LDFLAGS		+= -dy -N misc/acpica
 #
 #	Overrides
 #
-C99LMODE=	-Xc99=%all
 
 #
 #	Default build targets.

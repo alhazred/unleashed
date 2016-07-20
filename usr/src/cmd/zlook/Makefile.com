@@ -29,7 +29,6 @@ SRCS= ../$(PROG).c
 include ../../Makefile.cmd
 
 C99MODE= -xc99=%all
-C99LMODE= -Xc99=%all
 CFLAGS += -g $(CCVERBOSE)
 CFLAGS64 += -g $(CCVERBOSE)
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 -D_REENTRANT $(INCS)

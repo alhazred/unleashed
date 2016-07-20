@@ -67,7 +67,6 @@ INCS +=	-I../../../common/smbsrv
 INCS += -I $(ROOT)/usr/include/kerberosv5
 
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 
 CFLAGS += $(CCVERBOSE)
 CFLAGS64 += $(CCVERBOSE)

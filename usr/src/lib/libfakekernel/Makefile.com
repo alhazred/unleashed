@@ -45,7 +45,6 @@ LIBS =		$(DYNLIB)
 SRCS=   $(COBJS:%.o=$(SRCDIR)/%.c)
 
 C99MODE =       -xc99=%all
-C99LMODE =      -Xc99=%all
 
 # Note: need our sys includes _before_ ENVCPPFLAGS, proto etc.
 CPPFLAGS.first += -I../common

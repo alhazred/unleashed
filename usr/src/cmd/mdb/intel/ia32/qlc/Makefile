@@ -39,6 +39,5 @@ CPPFLAGS += -I$(SRC)/uts/common/sys/fibre-channel/impl
 
 
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 
 CERRWARN +=	-_gcc=-Wno-address

@@ -59,7 +59,6 @@ MODSTUBS_DIR	 = $(OBJS_DIR)
 LDFLAGS		+= -dy -Ndrv/stmf
 
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

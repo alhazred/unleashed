@@ -27,7 +27,6 @@ CLOBBERFILES=	$(PROG)
 
 
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 CPPFLAGS +=	-D_ILLUMOS_PRIVATE -I.
 
 # install rules

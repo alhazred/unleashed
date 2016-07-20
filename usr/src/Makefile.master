@@ -382,7 +382,6 @@ CCERRWARN=		-xwe
 C99_ENABLE=	-xc99=%all
 C99_DISABLE=	-xc99=%none
 C99MODE=	$(C99_DISABLE)
-C99LMODE=	$(C99MODE:-xc99%=-Xc99%)
 
 # In most places, assignments to these macros should be appended with +=
 # (CPPFLAGS.first allows values to be prepended to CPPFLAGS).

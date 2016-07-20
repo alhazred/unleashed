@@ -42,7 +42,6 @@ PYFILES=	$(PYSRCS) $(PYSRCS:%.py=%.pyc)
 ROOTPYZFSFILES= $(PYFILES:%=$(ROOTLIBDIR)/%)
 
 C99MODE=        -xc99=%all
-C99LMODE=       -Xc99=%all
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lnvpair -lpython2.6 -lzfs

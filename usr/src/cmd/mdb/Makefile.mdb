@@ -96,7 +96,6 @@ $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 CPPFLAGS += -D_MDB -I. -I../.. -I../../../common
 
 C99MODE=	-xc99=%all
-C99LMODE=	-Xc99=%all
 
 LDLIBS += -lcurses -lkvm -lproc -lrtld_db -lctf -lumem -ldisasm -lscf
 
