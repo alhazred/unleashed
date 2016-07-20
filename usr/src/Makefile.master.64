@@ -36,7 +36,6 @@ COMPILE.d=	$(COMPILE64.d)
 COMPILE.b=	$(COMPILE64.b)
 LINK.c=		$(LINK64.c)
 LINK.cc=	$(LINK64.cc)
-LINT.c=		$(LINT64.c)
 
 CTF_FLAGS=	$(CTF_FLAGS_64)
 
@@ -54,14 +53,13 @@ LDLIBS.lib =	$(LDLIBS64)
 GCCLIBDIR=	$(GCCLIBDIR64)
 
 #
-# Override Makefile.master's settings of CC, CCC, AS and LINT
+# Override Makefile.master's settings of CC, CCC, and AS
 #
 CC=		$($(MACH64)_CC)
 CCC=		$($(MACH64)_CCC)
 CPP=		$($(MACH64)_CPP)
 AS=		$($(MACH64)_AS)
 LD=		$($(MACH64)_LD)
-LINT=		$($(MACH64)_LINT)
 
 BUILD.SO=	$(CC) $(CFLAGS) -o $@ $(GSHARED) $(DYNFLAGS) \
 		$(PICS) $(EXTPICS) -L $(ROOTLIBDIR64) $(LDLIBS)

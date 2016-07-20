@@ -684,40 +684,7 @@ LINK.cc=	$(CCC) $(CCFLAGS) $(CPPFLAGS) $(NORUNPATH) \
 LINK64.cc=	$(CCC) $(CCFLAGS64) $(CPPFLAGS) $(NORUNPATH) \
 		$(LDFLAGS) $(CCNEEDED)
 
-#
-# lint macros
-#
-# Note that the undefine of __PRAGMA_REDEFINE_EXTNAME can be removed once
-# ON is built with a version of lint that has the fix for 4484186.
-#
-ALWAYS_LINT_DEFS =	-errtags=yes -s
-ALWAYS_LINT_DEFS +=	-erroff=E_PTRDIFF_OVERFLOW
-ALWAYS_LINT_DEFS +=	-erroff=E_ASSIGN_NARROW_CONV
-ALWAYS_LINT_DEFS +=	-U__PRAGMA_REDEFINE_EXTNAME
-ALWAYS_LINT_DEFS +=	$(C99LMODE)
-ALWAYS_LINT_DEFS +=	-errsecurity=$(SECLEVEL)
-ALWAYS_LINT_DEFS +=	-erroff=E_SEC_CREAT_WITHOUT_EXCL
-ALWAYS_LINT_DEFS +=	-erroff=E_SEC_FORBIDDEN_WARN_CREAT
-# XX64 -- really only needed for amd64 lint
-ALWAYS_LINT_DEFS +=	-erroff=E_ASSIGN_INT_TO_SMALL_INT
-ALWAYS_LINT_DEFS +=	-erroff=E_CAST_INT_CONST_TO_SMALL_INT
-ALWAYS_LINT_DEFS +=	-erroff=E_CAST_INT_TO_SMALL_INT
-ALWAYS_LINT_DEFS +=	-erroff=E_CAST_TO_PTR_FROM_INT
-ALWAYS_LINT_DEFS +=	-erroff=E_COMP_INT_WITH_LARGE_INT
-ALWAYS_LINT_DEFS +=	-erroff=E_INTEGRAL_CONST_EXP_EXPECTED
-ALWAYS_LINT_DEFS +=	-erroff=E_PASS_INT_TO_SMALL_INT
-ALWAYS_LINT_DEFS +=	-erroff=E_PTR_CONV_LOSES_BITS
-
-# This forces lint to pick up note.h and sys/note.h from Devpro rather than
-# from the proto area.  The note.h that ON delivers would disable NOTE().
-ONLY_LINT_DEFS =	-I$(SPRO_VROOT)/prod/include/lint
-
 SECLEVEL=	core
-LINT.c=		$(LINT) $(ONLY_LINT_DEFS) $(LINTFLAGS) $(CPPFLAGS) \
-		$(ALWAYS_LINT_DEFS)
-LINT64.c=	$(LINT) $(ONLY_LINT_DEFS) $(LINTFLAGS64) $(CPPFLAGS) \
-		$(ALWAYS_LINT_DEFS)
-LINT.s=		$(LINT.c)
 
 # For some future builds, NATIVE_MACH and MACH might be different.
 # Therefore, NATIVE_MACH needs to be redefined in the
@@ -736,13 +703,6 @@ SPRO_ROOT=		$(BUILD_TOOLS)/SUNWspro
 SPRO_VROOT=		$(SPRO_ROOT)/SS12
 GNU_ROOT=		/usr
 
-# Till SS12u1 formally becomes the NV CBE, LINT is hard
-# coded to be picked up from the $SPRO_ROOT/sunstudio12.1/
-# location. Impacted variables are sparc_LINT, sparcv9_LINT,
-# i386_LINT, amd64_LINT.
-# Reset them when SS12u1 is rolled out.
-#
-
 # Specify platform compiler versions for languages
 # that we use (currently only c and c++).
 #
@@ -751,35 +711,30 @@ sparc_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
 sparc_CPP=		/usr/ccs/lib/cpp
 sparc_AS=		/usr/ccs/bin/as -xregsym=no
 sparc_LD=		/usr/ccs/bin/ld
-sparc_LINT=		$(SPRO_ROOT)/sunstudio12.1/bin/lint
 
 sparcv9_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
 sparcv9_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
 sparcv9_CPP=		/usr/ccs/lib/cpp
 sparcv9_AS=		/usr/ccs/bin/as -xregsym=no
 sparcv9_LD=		/usr/ccs/bin/ld
-sparcv9_LINT=		$(SPRO_ROOT)/sunstudio12.1/bin/lint
 
 i386_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
 i386_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
 i386_CPP=		/usr/ccs/lib/cpp
 i386_AS=		$(ONBLD_TOOLS)/bin/$(MACH)/aw
 i386_LD=		/usr/ccs/bin/ld
-i386_LINT=		$(SPRO_ROOT)/sunstudio12.1/bin/lint
 
 amd64_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
 amd64_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
 amd64_CPP=		/usr/ccs/lib/cpp
 amd64_AS=		$(ONBLD_TOOLS)/bin/$(MACH)/aw
 amd64_LD=		/usr/ccs/bin/ld
-amd64_LINT=		$(SPRO_ROOT)/sunstudio12.1/bin/lint
 
 NATIVECC=		$($(NATIVE_MACH)_CC)
 NATIVECCC=		$($(NATIVE_MACH)_CCC)
 NATIVECPP=		$($(NATIVE_MACH)_CPP)
 NATIVEAS=		$($(NATIVE_MACH)_AS)
 NATIVELD=		$($(NATIVE_MACH)_LD)
-NATIVELINT=		$($(NATIVE_MACH)_LINT)
 
 #
 # Makefile.master.64 overrides these settings
@@ -789,7 +744,6 @@ CCC=			$(NATIVECCC)
 CPP=			$(NATIVECPP)
 AS=			$(NATIVEAS)
 LD=			$(NATIVELD)
-LINT=			$(NATIVELINT)
 
 # Pass -Y flag to cpp (method of which is release-dependent)
 CCYFLAG=		-Y I,
