@@ -23,7 +23,7 @@ include ../Makefile.cmd
 CLOBBERFILES=	$(PROG)
 
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 CPPFLAGS +=	-D__EXTENSIONS__ -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 
 # install rules

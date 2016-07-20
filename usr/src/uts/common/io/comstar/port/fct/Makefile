@@ -58,7 +58,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 MODSTUBS_DIR	 = $(OBJS_DIR)
 LDFLAGS		+= -dy -Ndrv/stmf
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

@@ -59,7 +59,7 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 .KEEP_STATE:
 

@@ -54,7 +54,7 @@ INCS += -I../../../common
 CLEANFILES += ../common/zfs.h
 CLEANFILES += $(EXTPICS)
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 CFLAGS +=	-g $(CCVERBOSE) $(CNOGLOBAL)
 CFLAGS64 +=	-g $(CCVERBOSE)	$(CNOGLOBAL)

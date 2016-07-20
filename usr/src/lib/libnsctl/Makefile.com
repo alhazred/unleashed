@@ -37,7 +37,7 @@ SRCDIR=	../common
 
 INCS += -I$(SRCDIR)
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 LDLIBS +=	-lc
 CPPFLAGS +=	$(INCS)

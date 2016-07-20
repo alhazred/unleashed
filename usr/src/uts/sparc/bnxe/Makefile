@@ -47,7 +47,7 @@ include $(UTSBASE)/sparc/Makefile.sparc
 ALL_TARGET	= $(BINARY) $(CONFMOD)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-C99MODE=        -xc99=%all
+C99MODE=        $(C99_ENABLE)
 
 #
 # 	Driver-specific flags

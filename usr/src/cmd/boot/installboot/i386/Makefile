@@ -18,7 +18,7 @@ SRCS += $(SRC)/common/util/getresponse.c
 CPPFLAGS += -I$(SRC)/common/util
 LDLIBS += -lfdisk -lefi -lfstyp -luuid
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 .KEEP_STATE:
 

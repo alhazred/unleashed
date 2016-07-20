@@ -67,7 +67,7 @@ INCS += -I../../../uts/common/fs/zfs
 INCS += -I../../../common/zfs
 INCS += -I../../libc/inc
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 LDLIBS +=	-lc -lm -ldevid -lgen -lnvpair -luutil -lavl -lefi \
 	-ladm -lidmap -ltsol -lmd -lumem -lzfs_core -lz
 CPPFLAGS +=	$(INCS) -D_LARGEFILE64_SOURCE=1 -D_REENTRANT

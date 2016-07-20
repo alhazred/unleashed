@@ -50,7 +50,7 @@ i386_CFLAGS += -D_FILE_OFFSET_BITS=64
 
 LDLIBS += -lfdisk -lefi -lfstyp
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 .KEEP_STATE:
 

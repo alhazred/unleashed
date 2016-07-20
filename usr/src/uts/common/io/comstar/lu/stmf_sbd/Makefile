@@ -58,7 +58,7 @@ LDFLAGS		+= -dy -Ndrv/stmf -Nfs/zfs
 
 INC_PATH	+= -I$(UTSBASE)/common/fs/zfs
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

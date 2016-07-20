@@ -46,7 +46,7 @@ INSTALL_TARGET = $(BINARY) $(ROOTMODULE)
 CFLAGS += -g -I$(UTSBASE)/common/io/cxgbe -I$(UTSBASE)/common/io/cxgbe/common \
 	-I$(UTSBASE)/common/io/cxgbe/t4nex -I$(UTSBASE)/common/io/cxgbe/shared \
 	-I$(UTSBASE)/common/io/cxgbe/firmware
-CFLAGS += -xc99=%all
+CFLAGS += $(C99_ENABLE)
 
 #
 # Driver depends

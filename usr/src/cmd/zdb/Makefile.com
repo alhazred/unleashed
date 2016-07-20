@@ -38,7 +38,7 @@ INCS +=	-I../../../common/zfs
 
 LDLIBS += -lzpool -lumem -lnvpair -lzfs -lavl
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 CFLAGS += $(CCVERBOSE)
 CFLAGS64 += $(CCVERBOSE)

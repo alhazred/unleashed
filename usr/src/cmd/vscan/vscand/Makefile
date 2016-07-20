@@ -46,7 +46,7 @@ $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
 CERRWARN += -_gcc=-Wno-switch
 
-C99MODE =       -xc99=%all
+C99MODE =       $(C99_ENABLE)
 
 MANIFEST = vscan.xml
 ROOTMANIFESTDIR= $(ROOTSVCSYSTEM)/filesystem

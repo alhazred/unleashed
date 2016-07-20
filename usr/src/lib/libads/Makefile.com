@@ -31,7 +31,7 @@ OBJECTS =	dsgetdc.o poke.o adspriv_xdr.o
 
 include ../../Makefile.lib
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lnsl -lc

@@ -59,7 +59,7 @@ INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel/fca/qlge
 
 LDFLAGS		+= -dy -Nmisc/mac -Ndrv/ip
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 CERRWARN	+= -_gcc=-Wno-switch
 CERRWARN	+= -_gcc=-Wno-uninitialized

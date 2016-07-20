@@ -45,7 +45,7 @@ CPPFLAGS.first += -I../../../../../lib/libfakekernel/common
 
 CPPFLAGS += -I../../../../../uts/common
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 dmod/%.o: $(GENUNIX_DIR)/%.c
 	$(COMPILE.c) -o $@ $<

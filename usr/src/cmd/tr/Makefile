@@ -26,7 +26,7 @@ include ../Makefile.cmd
 CLOBBERFILES=	$(PROG)
 
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 CPPFLAGS +=	-D_ILLUMOS_PRIVATE -I.
 
 # install rules

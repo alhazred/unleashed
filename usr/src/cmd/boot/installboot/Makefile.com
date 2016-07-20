@@ -37,7 +37,7 @@ CPPFLAGS += -I$(SRC)/uts/common
 
 LDLIBS += -lmd5
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 CERRWARN += -_gcc=-Wno-uninitialized
 

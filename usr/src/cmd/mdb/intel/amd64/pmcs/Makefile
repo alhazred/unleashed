@@ -33,7 +33,7 @@ include $(SRC)/cmd/Makefile.cmd.64
 include $(SRC)/cmd/mdb/intel/Makefile.amd64
 include $(SRC)/cmd/mdb/Makefile.module
 
-C99MODE = -xc99=%all
+C99MODE = $(C99_ENABLE)
 
 CPPFLAGS += -I$(SRC)/uts/common
 

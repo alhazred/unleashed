@@ -38,7 +38,7 @@ INCS +=		-I$(SRCDIR)
 INCS +=		-I$(SRC)/uts/common/sys/fcoe
 
 LDLIBS +=	-lc -ldladm -lscf
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 CPPFLAGS +=	$(INCS) -D_REENTRANT
 
 .KEEP_STATE:

@@ -25,7 +25,7 @@ include ../Makefile.cmd
 CLOBBERFILES=	$(PROG)
 CPPFLAGS +=        -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 # install rules
 $(ROOTINC)/% : %

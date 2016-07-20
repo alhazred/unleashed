@@ -39,7 +39,7 @@ LDLIBS +=	-lpool -lproject -lsecdb -lnvpair -lsysevent -lscf -luutil -lc
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE) -Wp,-xc99=%all
+CFLAGS +=	$(CCVERBOSE) -Wp,$(C99_ENABLE)
 
 CPPFLAGS +=
 

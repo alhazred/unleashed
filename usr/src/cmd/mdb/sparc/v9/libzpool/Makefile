@@ -41,7 +41,7 @@ GENUNIX_DIR = ../../../common/modules/genunix
 CPPFLAGS += -I../../../../../lib/libzpool/common \
 	-I../../../../../uts/common/fs/zfs
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 CERRWARN 	+= -_gcc=-Wno-type-limits
 

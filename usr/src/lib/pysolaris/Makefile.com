@@ -38,7 +38,7 @@ PYFILES=	$(PYSRCS) $(PYSRCS:%.py=%.pyc)
 ROOTPYSOLFILES= $(PYFILES:%=$(ROOTLIBDIR)/%)
 PYTHON=		$(PYTHON_26)
 
-C99MODE=        -xc99=%all
+C99MODE=        $(C99_ENABLE)
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lsec -lidmap -lpython2.6

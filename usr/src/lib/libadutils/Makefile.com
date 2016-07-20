@@ -32,7 +32,7 @@ OBJECTS =	adutils.o addisc.o adutils_threadfuncs.o \
 
 include ../../Makefile.lib
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lldap -lresolv -lsocket -lnsl -lc

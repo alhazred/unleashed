@@ -34,7 +34,7 @@ include ../../../../../Makefile.cmd
 include ../../../../intel/Makefile.ia32
 include ../../../../Makefile.module
 
-C99MODE=	-xc99=%all
+C99MODE=	$(C99_ENABLE)
 
 CPPFLAGS += -DMP -D_MACHDEP -D_MDB -D__xpv
 CPPFLAGS += -U_KERNEL -D_KMEMUSER

@@ -18,6 +18,6 @@ PROG = mkfiles
 include $(SRC)/cmd/Makefile.cmd
 
 LDLIBS += -lc
-C99MODE = -xc99=%all
+C99MODE = $(C99_ENABLE)
 
 include ../Makefile.subdirs
