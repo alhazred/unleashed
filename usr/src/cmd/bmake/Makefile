@@ -6,7 +6,9 @@
 
 include ../Makefile.cmd
 
-all: build
+PROG= bmake
+
+all: obj/$(PROG)
 
 clobber: clean
 clean:
@@ -16,5 +18,9 @@ CC= $(GCC_ROOT)/bin/gcc
 # bmake uses ${CC} as its linker, so prefix all options with -Wl,
 LDFLAGS= $(LDFLAGS.cmd:%=-Wl,%)
 
-build install test:
+install test:
 	LDFLAGS="$(LDFLAGS)" CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=$@
+
+obj/$(PROG):
+	LDFLAGS="$(LDFLAGS)" CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=build
+	$(POST_PROCESS)
