@@ -23,7 +23,6 @@ UTSBASE		= ../..
 #
 MODULE		= vioif
 OBJECTS		= $(VIOIF_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(VIOIF_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 
 #
@@ -35,7 +34,6 @@ include $(UTSBASE)/intel/Makefile.intel
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -44,9 +42,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 INC_PATH += -I$(UTSBASE)/common/io/virtio
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 #
 # Driver depends on virtio and blkdev
@@ -65,12 +60,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

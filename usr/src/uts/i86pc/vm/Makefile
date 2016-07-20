@@ -73,6 +73,4 @@ CLEANFILES=
 
 CLOBBERFILES=
 
-CLEANLINTFILES=
-
 include ../../Makefile.targ

@@ -37,7 +37,7 @@
 #	  alphabetically by the remaining components.
 
 #
-#	Section 1a: C object build rules
+#	Section 1: C object build rules
 #
 
 $(OBJS_DIR)/%.o:	$(UTSBASE)/sun4v/ontario/os/%.c
@@ -47,13 +47,3 @@ $(OBJS_DIR)/%.o:	$(UTSBASE)/sun4v/ontario/os/%.c
 $(OBJS_DIR)/%.o:      $(UTSBASE)/sun4v/ontario/io/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-#
-#	Section 1b: Lint `object' build rules
-#
-
-$(LINTS_DIR)/%.ln:	$(UTSBASE)/sun4v/ontario/os/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:    $(UTSBASE)/sun4v/ontario/io/%.c
-	 @($(LHEAD) $(LINT.c) $< $(LTAIL))

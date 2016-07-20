@@ -51,7 +51,6 @@ include $(UTSBASE)/sun4u/opl/Makefile.opl
 #	Define targets
 #
 ALL_TARGET	= $(SRC_CONFILE)
-LINT_TARGET	= 
 INSTALL_TARGET	= $(ROOT_OPL_DRV_DIR) $(ROOT_CONFFILE)
 
 #
@@ -71,12 +70,6 @@ def:		$(DEF_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

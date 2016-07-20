@@ -39,7 +39,6 @@ UTSBASE	  = ../../..
 #
 MODULE		= envctrltwo
 OBJECTS		= $(ENVCTRLTWO_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(ENVCTRLTWO_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_JAVELIN_DRV_DIR)/$(MODULE)
 
 #
@@ -51,12 +50,8 @@ include $(UTSBASE)/sun4u/javelin/Makefile.javelin
 #       Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
@@ -81,15 +76,8 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
-
 install:  	$(INSTALL_DEPS)
 
-LINT_LIB_DIR	= $(JAVELIN_LINT_LIB_DIR)
 
 #
 #	Include common targets.

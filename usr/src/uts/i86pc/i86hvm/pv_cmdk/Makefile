@@ -39,7 +39,6 @@ UTSBASE	= ../../..
 #
 MODULE		= cmdk
 OBJECTS		= $(PV_CMDK_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(PV_CMDK_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_HVM_DRV_DIR)/$(MODULE)
 
 #
@@ -48,33 +47,15 @@ ROOTMODULE	= $(ROOT_HVM_DRV_DIR)/$(MODULE)
 include $(UTSBASE)/i86pc/i86hvm/Makefile.i86hvm
 
 #
-# When generating lint libraries, we want the name of the lint module
-# that will be generated to by pv_cmdk and not cmdk, so override the
-# default lint module name here.
-#
-LINT_MODULE	= pv_cmdk
-
-#
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(LINT_MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 LDFLAGS		+= -dy -Nmisc/strategy -Nmisc/cmlb -Ndrv/xpvd -Ndrv/xdf
 LDFLAGS		+= -Nmisc/hvm_cmdk
 
 CPPFLAGS	+= -D_EXTVTOC
-
-
-#
-# The Xen header files do not lint cleanly.  Since the troublesome
-# structures form part of the externally defined interface to the
-# hypervisor, we're stuck with the noise.
-#
-LINTTAGS	+= -erroff=E_BAD_PTR_CAST_ALIGN
-LINTTAGS	+= -erroff=E_SUPPRESSION_DIRECTIVE_UNUSED
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV
 
 CERRWARN	+= -_gcc=-Wno-uninitialized
 CERRWARN	+= -_gcc=-Wno-unused-variable
@@ -91,12 +72,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

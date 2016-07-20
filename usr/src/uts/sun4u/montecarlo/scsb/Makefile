@@ -40,7 +40,6 @@ UTSBASE	  = ../../..
 #
 MODULE		= scsb
 OBJECTS		= $(SCSB_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(SCSB_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_MONTECARLO_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/sun4u/montecarlo/io
 
@@ -53,12 +52,8 @@ include $(UTSBASE)/sun4u/montecarlo/Makefile.montecarlo
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE) -DNORDICA_CP1500
 CERRWARN += -_gcc=-Wno-switch
 CERRWARN += -_gcc=-Wno-unused-variable
@@ -88,15 +83,8 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
-
 install:	$(INSTALL_DEPS)
 
-LINT_LIB_DIR    = $(MONTECARLO_LINT_LIB_DIR)
 
 #
 #	Include common targets.

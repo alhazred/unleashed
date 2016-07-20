@@ -37,7 +37,6 @@ UTSBASE	= ../../..
 #
 MODULE		= todds1307
 OBJECTS		= $(TODDS1307_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(TODDS1307_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_SNOWBIRD_TOD_DIR)/$(MODULE)
 
 #
@@ -45,9 +44,6 @@ ROOTMODULE	= $(ROOT_SNOWBIRD_TOD_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sun4u/snowbird/Makefile.snowbird
 
-# 
-# lint pass one enforcement 
-# 
 CFLAGS += $(CCVERBOSE) -I../../../sun4u
 
 LDFLAGS += -dy -N misc/i2c_svc
@@ -58,7 +54,6 @@ CPPFLAGS += -I$(UTSBASE)/sun4u/snowbird
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 .KEEP_STATE:
@@ -71,15 +66,8 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
-
 install:	$(INSTALL_DEPS)
 
-LINT_LIB_DIR	= $(SNOWBIRD_LINT_LIB_DIR)
 
 #
 #	Include common targets

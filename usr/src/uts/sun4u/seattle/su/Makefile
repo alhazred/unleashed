@@ -69,7 +69,7 @@ $(CONF_INSTALL_OBJ):	FRC
 #
 .KEEP_STATE:
 
-def all clean clobber lint modlintlib clean.lint:
+def all clean clobber:
 
 install:	$(INSTALL_TARGET)
 

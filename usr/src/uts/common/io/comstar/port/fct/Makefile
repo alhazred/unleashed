@@ -38,7 +38,6 @@ ARCHDIR:sh = cd ..; basename `pwd`
 #
 MODULE		= fct
 OBJECTS		= $(FCT_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(FCT_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/common/io/comstar/port/fct
 
@@ -51,7 +50,6 @@ include ../Makefile.$(ARCHDIR)
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 #
@@ -64,12 +62,9 @@ C99MODE=	-xc99=%all
 C99LMODE=	-Xc99=%all
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
 #
-LINTTAGS	+= -erroff=E_BAD_PTR_CAST_ALIGN
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV
-LINTTAGS	+= -erroff=E_IF_ELSE_ANNOTATION
 
 CERRWARN	+= -_gcc=-Wno-unused-label
 CERRWARN	+= -_gcc=-Wno-switch
@@ -87,12 +82,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

@@ -133,35 +133,6 @@ extern "C" {
 
 #define	timerclear(tvp)		(tvp)->tv_sec = (tvp)->tv_usec = 0
 
-#ifdef __lint
-/*
- * Make innocuous, lint-happy versions until do {} while (0) is acknowleged as
- * lint-safe.  If the compiler could know that we always make tv_usec < 1000000
- * we wouldn't need a special linted version.
- */
-#define	timeradd(tvp, uvp, vvp)					\
-	do								\
-	{								\
-		(vvp)->tv_sec = (tvp)->tv_sec + (uvp)->tv_sec;		\
-		(vvp)->tv_usec = (tvp)->tv_usec + (uvp)->tv_usec;	\
-		if ((vvp)->tv_usec >= 1000000)				\
-		{							\
-			(vvp)->tv_sec++;				\
-			(vvp)->tv_usec -= 1000000;			\
-		}							\
-	} while ((vvp)->tv_usec >= 1000000)
-#define	timersub(tvp, uvp, vvp)					\
-	do								\
-	{								\
-		(vvp)->tv_sec = (tvp)->tv_sec - (uvp)->tv_sec;		\
-		(vvp)->tv_usec = (tvp)->tv_usec - (uvp)->tv_usec;	\
-		if ((vvp)->tv_usec < 0)					\
-		{							\
-			(vvp)->tv_sec--;				\
-			(vvp)->tv_usec += 1000000;			\
-		}							\
-	} while ((vvp)->tv_usec >= 1000000)
-#else
 #define	timeradd(tvp, uvp, vvp)					\
 	do								\
 	{								\
@@ -185,7 +156,6 @@ extern "C" {
 			(vvp)->tv_usec += 1000000;			\
 		}							\
 	} while (0)
-#endif /* __lint */
 
 #endif /* !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) */
 

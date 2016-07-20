@@ -40,7 +40,6 @@ UTSBASE	= ../../..
 #
 MODULE		= pcf8574
 OBJECTS		= $(LITTLENECK_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(LITTLENECK_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_LITTLENECK_DRV_DIR)/$(MODULE)
 
 #
@@ -52,17 +51,12 @@ include $(UTSBASE)/sun4u/littleneck/Makefile.littleneck
 #       Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
-CLEANLINTFILES	= $(LINT32_FILES)
 $(NOT_RELEASE_BUILD)DEF_BUILDS = debug64
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -84,15 +78,8 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
-
 install:  	$(INSTALL_DEPS)
 
-LINT_LIB_DIR	= $(LITTLENECK_LINT_LIB_DIR)
 
 #
 #	Include common targets.

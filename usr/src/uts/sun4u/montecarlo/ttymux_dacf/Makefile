@@ -41,7 +41,6 @@ UTSBASE	= ../../..
 #
 MODULE		= ttymux_dacf
 OBJECTS		= $(TTYMUX_DACF_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(TTYMUX_DACF_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_MONTECARLO_DACF_DIR)/$(MODULE)
 
 #
@@ -54,7 +53,6 @@ include $(UTSBASE)/sun4u/montecarlo/Makefile.montecarlo
 #
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
-CLEANLINTFILES	= $(LINT32_FILES)
 
 FILEMODE	 = 644
 
@@ -62,12 +60,8 @@ FILEMODE	 = 644
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -87,12 +81,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

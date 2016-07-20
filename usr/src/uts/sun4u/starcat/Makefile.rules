@@ -36,7 +36,7 @@ IL_CPP=$(CPP) -P -DINLINE -D_ASM $(AS_INC_PATH) \
 	$(CPP_DEFS) $(ALWAYS_DEFS) $(ALL_DEFS) $(CONFIG_DEFS)
 
 #
-#	Section 1a: C object build rules
+#	Section 1: C object build rules
 #
 
 DRMACH_IL=$(OBJS_DIR)/drmach.il
@@ -67,19 +67,3 @@ CLEANFILES += $(DRMACH_IL)
 
 $(DRMACH_IL):		$(UTSBASE)/sun4u/starcat/ml/drmach.il.cpp
 	$(IL_CPP) $(UTSBASE)/sun4u/starcat/ml/drmach.il.cpp > $@
-
-#
-#	Section 1b: Lint object build rules
-#
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/starcat/os/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/drmach.ln		:= LINTFLAGS += -I../sys
-$(LINTS_DIR)/sc_gptwoctfg.ln	:= LINTFLAGS += -I../sys
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/starcat/io/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/starcat/ml/%.s
-	@($(LHEAD) $(LINT.s) $< $(LTAIL))

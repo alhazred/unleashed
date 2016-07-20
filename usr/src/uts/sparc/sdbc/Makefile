@@ -45,7 +45,6 @@ AVSCOMMON = $(UTSCOMMON)/avs
 #
 MODULE		= sdbc
 OBJECTS		= $(SDBC_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(SDBC_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE      = $(USR_DRV_DIR)/$(MODULE)
 INC_PATH	+= -I$(ROOT)/usr/include
 INC_PATH	+= -I$(AVSCOMMON)
@@ -64,16 +63,10 @@ CLOBBERFILES += obj*/*.c debug*/*.c obj*/sd_mkiob debug*/sd_mkiob
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE) -D_SD_8K_BLKSIZE -D_SDBC_SINGLE_BRD
 LDFLAGS += -dy -N"drv/nsctl" -N"drv/ncall" -N"drv/nskern" -N"misc/spuni"
-LINTTAGS += -erroff=E_ASSIGN_NARROW_CONV
-LINTTAGS += -erroff=E_BAD_PTR_CAST_ALIGN
 
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
@@ -88,12 +81,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

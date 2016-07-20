@@ -38,15 +38,9 @@
 #	  alphabetically by the remaining components.
 
 #
-#	Section 1a: C object build rules.  For some reason $< doesn't
+#	Section 1: C object build rules.  For some reason $< doesn't
 #	work here, so we explicitly list the sourcefile.
 #
 $(OBJS_DIR)/lombus.o:		$(UTSBASE)/sun4u/lw2plus/io/lombus.c
 	$(COMPILE.c) -o $@ $(UTSBASE)/sun4u/lw2plus/io/lombus.c
 	$(CTFCONVERT_O)
-
-#
-#	Section 1b: Lint `object' build rules
-#
-$(LINTS_DIR)/lombus.ln:		$(UTSBASE)/sun4u/lw2plus/io/lombus.c
-	@($(LHEAD) $(LINT.c) $(UTSBASE)/sun4u/lw2plus/io/lombus.c $(LTAIL))

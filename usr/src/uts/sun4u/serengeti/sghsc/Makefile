@@ -41,7 +41,6 @@ UTSBASE = ../../..
 #
 MODULE		= sghsc
 OBJECTS		= $(SGHSC_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(SGHSC_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_SERENGETI_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/sun4u/serengeti/io
 
@@ -54,7 +53,6 @@ include $(UTSBASE)/sun4u/serengeti/Makefile.serengeti
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 #
@@ -62,11 +60,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
-CLEANLINTFILES	+= $(LINT32_FILES)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-type-limits
 CERRWARN += -_gcc=-Wno-uninitialized
@@ -93,12 +87,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

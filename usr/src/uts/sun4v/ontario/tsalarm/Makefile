@@ -33,7 +33,6 @@ UTSBASE	= ../../..
 #
 MODULE		= tsalarm
 OBJECTS		= $(ONTARIO_TSALARM_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(ONTARIO_TSALARM_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_ONTARIO_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/sun4v/ontario/io
 
@@ -46,21 +45,13 @@ include $(UTSBASE)/sun4v/ontario/Makefile.ontario
 #
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
-CLEANLINTFILES	+= $(LINT32_FILES)
-
-#
-# lint pass one enforcement
 
 #
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 CFLAGS += -I$(UTSBASE)/sun4u/mpxu
 
@@ -75,12 +66,10 @@ LDFLAGS	+= -dy
 #LDFLAGS	+= -dy  -Ndrv/rmclomv
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_PTRDIFF_OVERFLOW
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV
 
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-uninitialized
@@ -97,12 +86,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

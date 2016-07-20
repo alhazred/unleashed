@@ -40,7 +40,6 @@ UTSBASE	= ../..
 #
 MODULE		= todstarfire
 OBJECTS		= $(TODSTARFIRE_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(TODSTARFIRE_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_PSM_TOD_DIR)/$(MODULE)
 
 #
@@ -52,12 +51,8 @@ include $(UTSBASE)/sun4u/Makefile.sun4u
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -72,12 +67,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

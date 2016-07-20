@@ -39,10 +39,6 @@
 #	  alphabetically by the remaining components.
 
 #
-#	Section 1a: C object build rules
+#	Section 1: C object build rules
 #
 
-
-#
-#	Section 1b: Lint `object' build rules
-#

@@ -39,7 +39,6 @@ UTSBASE	= ../..
 #
 MODULE		= nsmb
 OBJECTS		= $(NSMB_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(NSMB_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(USR_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/common/fs/smbclnt/netsmb
 OFFSETS_SRC	= $(CONF_SRCDIR)/offsets.in
@@ -54,7 +53,6 @@ include $(UTSBASE)/intel/Makefile.intel
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 #
@@ -69,7 +67,6 @@ INC_PATH	+= -I$(UTSBASE)/common/fs/smbclnt
 LDFLAGS         += -dy -Ncrypto/md4 -Ncrypto/md5 -Nmisc/tlimod
 
 # Until CR 4994570 is fixed...
-LINTTAGS	+= -erroff=E_BAD_FORMAT_ARG_TYPE2
 
 # The mb_put/md_get functions are intentionally used with and without
 # return value checks, so filter those out like LGREP.2 does.
@@ -88,12 +85,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

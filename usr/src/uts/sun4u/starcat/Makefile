@@ -47,12 +47,8 @@ install		:=	TARGET= install
 install_h	:=	TARGET= install_h
 clean		:=	TARGET= clean
 clobber		:=	TARGET= clobber
-lint		:=	TARGET= lint
-lintlib		:=	TARGET= lintlib
-modlintlib	:=	TARGET= modlintlib
 modlist		:=	TARGET= modlist
 modlist		:=	NO_STATE= -K $$MODSTATE$$$$
-clean.lint	:=	TARGET= clean.lint
 check		:=	TARGET= check
 
 #
@@ -60,15 +56,11 @@ check		:=	TARGET= check
 #
 .KEEP_STATE:
 
-def all clean clobber clean.lint: genassym unix .WAIT \
+def all clean clobber: genassym unix .WAIT \
 		$(STARCAT_CPU_KMODS) $(STARCAT_KMODS)
 
 modlist:	unix \
 		$(STARCAT_CPU_KMODS) $(STARCAT_KMODS)
-
-lintlib:	unix
-
-modlintlib:	$(STARCAT_KMODS)
 
 IMPLEMENTED_PLATFORM	= SUNW,Sun-Fire-15000
 
@@ -89,28 +81,6 @@ $(STARCAT_CRYPTO_LINKS): $(ROOT_STARCAT_CRYPTO_DIR_64)
 
 install_h check:	FRC
 	@cd sys; pwd; $(MAKE) $(TARGET)
-
-lint:	modlintlib
-
-
-#
-# The 'lint.platmod' target lints the starcat platform module against
-# the sun4u kernel.  This ends up doing all the kernel cross-checks,
-# so it takes a couple of minutes.
-# Due to the low ROI, it's not run by default, but it's a good
-# idea to run this if you change os/starcat.c.
-#
-
-LINT_LIBS	= $(LINT_LIB) \
-		  -L$(STARCAT_LINT_LIB_DIR) \
-		  -L$(LINT_LIB_DIR) $(LINT_KMODS:%=-l%) \
-		      $(CLOSED_LINT_KMODS:%=-l%) \
-		  -L$(SPARC_LIB_DIR) $(SPARC_LINTS:%=-l%)
-
-lint.platmod:   modlintlib
-	@-$(ECHO) "\nStarcat Platform-dependent module: global crosschecks:"
-	@-$(LINT) $(LINTFLAGS) $(LINT_LIBS) 2>&1 | $(LGREP.2)
-
 
 #
 #	Include common targets.

@@ -43,7 +43,6 @@ UTSBASE	= ../../..
 #
 MODULE		= fpc
 OBJECTS		= $(FPC_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(FPC_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_CHICAGO_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/sun4/io/fpc
 
@@ -76,7 +75,6 @@ include $(UTSBASE)/sun4u/chicago/Makefile.chicago
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE) \
 			$(BOSTON_ROOTMODULE) $(BOSTON_CONFFILE) \
 			$(SEATTLE_ROOTMODULE) $(SEATTLE_CONFFILE)
@@ -86,9 +84,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE) \
 #
 INC_PATH	+= -I$(UTSBASE)/sun4/io/fpc
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -97,11 +92,10 @@ CFLAGS += $(CCVERBOSE)
 CFLAGS += -dalign
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_STATIC_UNUSED
 
 CERRWARN	+= -_gcc=-Wno-unused-variable
 
@@ -117,12 +111,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

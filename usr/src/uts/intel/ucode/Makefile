@@ -28,7 +28,6 @@ UTSBASE	= ../..
 
 MODULE		= ucode
 OBJECTS		= $(UCODE_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(UCODE_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/intel/io
 
@@ -37,7 +36,6 @@ INC_PATH	+= -I$(SRC)/common/
 include $(UTSBASE)/intel/Makefile.intel
 
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 .KEEP_STATE:
@@ -49,12 +47,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

@@ -15,7 +15,6 @@ UTSBASE	= ../..
 #
 MODULE		= i2c_svc
 OBJECTS		= $(I2C_SVC_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(I2C_SVC_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_PSM_MISC_DIR)/$(MODULE)
 
 #
@@ -23,9 +22,6 @@ ROOTMODULE	= $(ROOT_PSM_MISC_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sun4u/Makefile.sun4u
 
-# 
-# lint pass one enforcement 
-# 
 CFLAGS += $(CCVERBOSE)
 
 LDFLAGS += -dy
@@ -34,7 +30,6 @@ LDFLAGS += -dy
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 .KEEP_STATE:
@@ -46,12 +41,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

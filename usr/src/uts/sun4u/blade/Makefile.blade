@@ -53,9 +53,6 @@ USR_BLADE_SBIN_DIR	= $(USR_BLADE_DIR)/sbin
 USR_BLADE_LIB_DIR	= $(USR_BLADE_DIR)/lib
 
 
-BLADE_LINT_LIB_DIR= $(UTSBASE)/$(PLATFORM)/blade/lint-libs/$(OBJS_DIR)
-
-
 #	Define Objects
 #
 BLADE_OBJS     = blade.o
@@ -90,12 +87,6 @@ BLADE_KMODS		= platmod
 BLADE_KMODS		+= bscbus
 BLADE_KMODS		+= bscv
 
-LINTS_DIR	= $(OBJS_DIR)
-LINT_LIB_DIR	= $(UTSBASE)/$(PLATFORM)/blade/lint-libs/$(OBJS_DIR)
-LINT_LIB= $(UTSBASE)/$(PLATFORM)/lint-libs/$(OBJS_DIR)/llib-lunix.ln
-GEN_LINT_LIB= $(UTSBASE)/$(PLATFORM)/lint-libs/$(OBJS_DIR)/llib-lgenunix.ln
-
-
 #
 #	Define the actual specific platforms
 #
@@ -110,13 +101,7 @@ MACHINE_DEFS	+= -D$(PLATFORM) -D_MACHDEP -DSFMMU
 #CPP_DEFS	= $(CPP_DEFS_$(CLASS))
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_SUSPICIOUS_COMPARISON
-LINTTAGS	+= -erroff=E_BAD_PTR_CAST_ALIGN
-LINTTAGS	+= -erroff=E_SUPPRESSION_DIRECTIVE_UNUSED
-LINTTAGS	+= -erroff=E_STATIC_UNUSED
-LINTTAGS	+= -erroff=E_PTRDIFF_OVERFLOW
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV

@@ -47,10 +47,6 @@ OBJECTS		= $(CPR_FIRST_OBJS:%=$(OBJS_DIR)/%) \
 		  $(CPR_IMPL_OBJS:%=$(OBJS_DIR)/%) \
 		  $(CPR_OBJS:%=$(OBJS_DIR)/%) \
 		  $(CPR_SPARC_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(CPR_FIRST_OBJS:%.o=$(LINTS_DIR)/%.ln) \
-		  $(CPR_OBJS:%.o=$(LINTS_DIR)/%.ln) \
-		  $(CPR_IMPL_OBJS:%.o=$(LINTS_DIR)/%.ln) \
-		  $(CPR_SPARC_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_PSM_MISC_DIR)/$(MODULE)
 
 #
@@ -66,12 +62,8 @@ include $(UTSBASE)/sun4u/Makefile.sun4u
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -80,14 +72,10 @@ CFLAGS += $(CCVERBOSE)
 LDFLAGS += -dy -N misc/bootdev
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_PTRDIFF_OVERFLOW
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV
-LINTTAGS	+= -erroff=E_SUSPICIOUS_COMPARISON
-LINTTAGS	+= -erroff=E_BAD_PTR_CAST_ALIGN
 
 CERRWARN	+= -_gcc=-Wno-unused-variable
 CERRWARN	+= -_gcc=-Wno-unused-label
@@ -107,12 +95,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

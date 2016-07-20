@@ -40,7 +40,6 @@ UTSBASE = ../../..
 #
 MODULE		= bscbus
 OBJECTS		= $(BSCBUS_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(BSCBUS_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_BLADE_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/sun4u/blade/io
 
@@ -53,7 +52,6 @@ include $(UTSBASE)/sun4u/blade/Makefile.blade
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 #
@@ -61,11 +59,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
-CLEANLINTFILES	+= $(LINT32_FILES)
 
-#
-# lint pass one enforcement
-#
 CFLAGS		+= $(CCVERBOSE)
 
 #
@@ -85,12 +79,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

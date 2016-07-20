@@ -18,8 +18,6 @@ UTSBASE		= ../..
 MODULE		= sfxge
 OBJECTS		= $(SFXGE_OBJS:%=$(OBJS_DIR)/%)
 OBJECTS		+= $(SFXGE_SF_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(SFXGE_OBJS:%.o=$(LINTS_DIR)/%.ln)
-LINTS		+= $(SFXGE_SF_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 
 include $(UTSBASE)/intel/Makefile.intel
@@ -28,7 +26,6 @@ include $(UTSBASE)/intel/Makefile.intel
 # Targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -64,12 +61,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

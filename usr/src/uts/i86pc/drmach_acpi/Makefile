@@ -40,7 +40,6 @@ UTSBASE	= ../..
 #
 MODULE		= drmach_acpi
 OBJECTS		= $(DRMACH_ACPI_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(DRMACH_ACPI_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_PSM_MISC_DIR)/$(MODULE)
 
 #
@@ -52,7 +51,6 @@ include $(UTSBASE)/i86pc/Makefile.i86pc
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -61,9 +59,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 DEF_BUILDS	= $(DEF_BUILDS64)
 ALL_BUILDS	= $(ALL_BUILDS64)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -83,17 +78,10 @@ def:		$(DEF_DEPS)
 
 all:		$(ALL_DEPS)
 
-# This build only 64-bit, but the lint32 below
-# needs corresponding clean/clobber deps.
+# This build only 64-bit
 clean:		$(CLEAN_DEPS) clean.debug32
 
 clobber:	$(CLOBBER_DEPS) clobber.debug32
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS) lint32
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

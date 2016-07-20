@@ -39,7 +39,6 @@ UTSBASE	= ../..
 #
 MODULE		= socksdp
 OBJECTS		= $(SDP_SOCK_MOD_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(SDP_SOCK_MOD_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_SOCK_DIR)/$(MODULE)
 
 #
@@ -51,12 +50,8 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement and OS version
-#
 CFLAGS += $(CCVERBOSE)
 
 CERRWARN	+= -_gcc=-Wno-unused-label
@@ -76,12 +71,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

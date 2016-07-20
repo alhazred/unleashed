@@ -29,13 +29,11 @@ UTSBASE	= ../..
 
 MODULE		= lockstat
 OBJECTS		= $(LOCKSTAT_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(LOCKSTAT_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 ROOTLINK	= $(ROOT_DTRACE_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/common/dtrace
 
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK) $(ROOT_CONFFILE)
 
 include $(UTSBASE)/sparc/Makefile.sparc
@@ -52,12 +50,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

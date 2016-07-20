@@ -73,7 +73,6 @@ USR_MAKAHA_SBIN_DIR	= $(USR_MAKAHA_DIR)/sbin
 USR_MAKAHA_LIB_DIR	= $(USR_MAKAHA_DIR)/lib
 USR_MAKAHA_ISYS_DIR	= $(USR_MAKAHA_INC_DIR)/sys
 
-MAKAHA_LINT_LIB_DIR= $(UTSBASE)/$(PLATFORM)/makaha/lint-libs/$(OBJS_DIR)
 #
 # Definitions for Sputnik, SUNW,UltraSPARC-IIe-NetraCT-60 platform
 #

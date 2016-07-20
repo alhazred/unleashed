@@ -82,6 +82,4 @@ TTYMUX_OBJS +=	ttymux.o ttymux_ioctl.o
 #
 #	Section 3:	Misc.
 #
-LINT_DEFS	+= -Dsun
-
 INC_PATH	+= -I$(UTSBASE)/sun

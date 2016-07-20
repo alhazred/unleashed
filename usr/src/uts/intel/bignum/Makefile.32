@@ -43,10 +43,8 @@ BIGNUM_CFG = -DPSR_MUL -DHWCAP -DMMX_MANAGE
 
 LDFLAGS += -M $(BIGNUMDIR)/i386/cap_mapfile
 
-$(OBJS_DIR)/bignumimpl.o $(LINTS_DIR)/bignumimpl.ln := \
-	CPPFLAGS += $(BIGNUM_CFG)
-$(OBJS_DIR)/bignum_i386.o $(LINTS_DIR)/bignum_i386.ln := \
-	CPPFLAGS += $(BIGNUM_CFG)
+$(OBJS_DIR)/bignumimpl.o := CPPFLAGS += $(BIGNUM_CFG)
+$(OBJS_DIR)/bignum_i386.o := CPPFLAGS += $(BIGNUM_CFG)
 
 $(OBJS_DIR)/bignum_i386.o: $(BIGNUMDIR)/i386/bignum_i386.c
 	$(COMPILE.c) -o $@ $(BIGNUMDIR)/i386/bignum_i386.c
@@ -56,9 +54,3 @@ $(OBJS_DIR)/bignum_i386.o: $(BIGNUMDIR)/i386/bignum_i386.c
 $(OBJS_DIR)/bignum_i386_asm.o: $(BIGNUMDIR)/i386/bignum_i386_asm.s
 	$(COMPILE.s) -P -o $@ $(BIGNUM_CFG) $(BIGNUMDIR)/i386/bignum_i386_asm.s
 	$(POST_PROCESS_O)
-
-$(LINTS_DIR)/bignum_i386.ln: $(BIGNUMDIR)/i386/bignum_i386.c
-	@($(LHEAD) $(LINT.c) $(BIGNUMDIR)/i386/bignum_i386.c $(LTAIL))
-
-$(LINTS_DIR)/bignum_i386_asm.ln: $(BIGNUMDIR)/i386/bignum_i386_asm.s
-	@($(LHEAD) $(LINT.s) $(BIGNUMDIR)/i386/bignum_i386_asm.s $(LTAIL))

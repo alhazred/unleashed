@@ -33,7 +33,6 @@ MODULE		= cpu.generic
 #
 OBJECTS		= $(CPU_GCPU_OBJS:%=$(OBJS_DIR)/%)
 OBJECTS		+= $(CPU_GCPU_NTV_OBJS:%=$(OBJS_DIR)/%)
-LINTS           = $(CPU_GCPU_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE      = $(ROOT_PSM_CPU_DIR)/$(MODULE)
 
 #
@@ -45,15 +44,9 @@ CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
 #
-#	Our lint library has a different name from that of the module we build.
-#
-LINT_MODULE	= generic_cpu
-
-#
 #       Define targets
 #
 ALL_TARGET      = $(BINARY)
-LINT_TARGET     = $(LINT_MODULE).lint
 INSTALL_TARGET  = $(BINARY) $(ROOTMODULE)
 
 #
@@ -68,12 +61,6 @@ all:            $(ALL_DEPS)
 clean:          $(CLEAN_DEPS)
 
 clobber:        $(CLOBBER_DEPS)
-
-lint:           $(LINT_DEPS)
-
-modlintlib:     $(MODLINTLIB_DEPS)
-
-clean.lint:     $(CLEAN_LINT_DEPS)
 
 install:        $(INSTALL_DEPS)
 

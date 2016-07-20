@@ -42,7 +42,6 @@ UTSBASE	= ../..
 #
 MODULE		= vuidm5p
 OBJECTS		= $(VUIDM5P_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(VUIDM5P_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_STRMOD_DIR)/$(MODULE)
 
 #
@@ -54,7 +53,6 @@ include $(UTSBASE)/intel/Makefile.intel
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 ALL_DEFS	+= -DVUIDM5P
@@ -73,12 +71,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

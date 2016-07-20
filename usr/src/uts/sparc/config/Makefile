@@ -80,13 +80,9 @@ $(ROOTETCSEC)/%: $(SRCDIR)/%
 $(SRCDIR)/priv_names: $(PRIVS_DEF) $(PRIVS_AWK)
 	$(AWK) -f $(PRIVS_AWK) < $(PRIVS_DEF) -v pnamesfile=$@
 
-clean lint:
+clean:
 clobber: clobber.targ
 
-# 
-#	No lints, so keep the clobber and clean targets reasonable. 
-# 
-CLEANLINTFILES	= Nothing_to_remove
 CLEANFILES	= Nothing_to_remove
 CLOBBERFILES	= $(SRCDIR)/priv_names
 

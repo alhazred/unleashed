@@ -46,12 +46,8 @@ install		:=	TARGET= install
 install_h	:=	TARGET= install_h
 clean		:=	TARGET= clean
 clobber		:=	TARGET= clobber
-lint		:=	TARGET= lint
-lintlib		:=	TARGET= lintlib
-modlintlib	:=	TARGET= modlintlib
 modlist		:=	TARGET= modlist
 modlist		:=	NO_STATE= -K $$MODSTATE$$$$
-clean.lint	:=	TARGET= clean.lint
 check		:=	TARGET= check
 
 #
@@ -59,10 +55,8 @@ check		:=	TARGET= check
 #
 .KEEP_STATE:
 
-def all clean.lint clean clobber modlist: $(JAVELIN_KMODS) \
+def all clean clobber modlist: $(JAVELIN_KMODS) \
 		$(CLOSED_JAVELIN_KMODS)
-
-modlintlib:	$(JAVELIN_KMODS) $(CLOSED_JAVELIN_KMODS)
 
 install: 	$(ROOT_JAVELIN_DIR) $(USR_JAVELIN_DIR) \
 		$(USR_JAVELIN_INC_DIR) \
@@ -71,24 +65,6 @@ install: 	$(ROOT_JAVELIN_DIR) $(USR_JAVELIN_DIR) \
 		.WAIT $(JAVELIN_KMODS) $(CLOSED_JAVELIN_KMODS)
 
 install_h check:
-
-lint:		modlintlib
-
-#
-# The 'lint.platmod' target lints the javelin platform module against the sun4u
-# kernel.  This ends up doing all the kernel cross-checks, so it takes a couple
-# of minutes.  Due to the low ROI, it's not run by default, but it's a good
-# idea to run this if you change os/javelin.c.
-#
-LINT_LIBS	 = $(LINT_LIB) \
-		   -L$(JAVELIN_LINT_LIB_DIR) \
-		   -L$(LINT_LIB_DIR) $(LINT_KMODS:%=-l%) \
-		       $(CLOSED_LINT_KMODS:%=-l%) \
-		   -L$(SPARC_LIB_DIR) $(SPARC_LINTS:%=-l%)
-
-lint.platmod:   modlintlib
-	@-$(ECHO) "\nJavelin Platform-dependent module: global crosschecks:"
-	@-$(LINT) $(LINTFLAGS) $(LINT_LIBS) 2>&1 | $(LGREP.2)
 
 $(JAVELIN_KMODS):	FRC
 	@cd $@; pwd; $(MAKE) $(NO_STATE) $(TARGET)

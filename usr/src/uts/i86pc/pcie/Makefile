@@ -42,8 +42,6 @@ UTSBASE	= ../..
 MODULE		= pcie
 OBJECTS		= $(PCIE_MISC_OBJS:%=$(OBJS_DIR)/%) \
 		  $(PCI_STRING_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(PCIE_MISC_OBJS:%.o=$(LINTS_DIR)/%.ln) \
-		  $(PCI_STRING_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 
 #
@@ -60,7 +58,6 @@ LDFLAGS		+= -dy -Nmisc/acpica -Nmisc/busra
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 CERRWARN	+= -_gcc=-Wno-unused-value
@@ -81,12 +78,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

@@ -43,5 +43,4 @@ SSM_OBJS	= ssm.o
 #	serengeti-specific header file path
 #
 # CFLAGS	+= -I$(UTSBASE)/sun4u/serengeti/
-# LINTFLAGS	+= -I$(UTSBASE)/sun4u/serengeti/
 INC_PATH	+= -I$(UTSBASE)/sun4u/serengeti/

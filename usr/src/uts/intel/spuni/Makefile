@@ -41,7 +41,6 @@ ARCHDIR:sh = cd ..; basename `pwd`
 #
 MODULE		= spuni
 OBJECTS		= $(UNISTAT_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(UNISTAT_OBJS:%.o=$(LINTS_DIR)/%.ln)
 INC_PATH	+= -I$(ROOT)/usr/include
 ROOTMODULE      = $(USR_MISC_DIR)/$(MODULE)
 
@@ -55,14 +54,9 @@ include $(UTSBASE)/common/avs/Makefile.com
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) 
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) 
 
-#
-# lint pass one enforcement
-#
 CFLAGS += -v
-LINTFLAGS += -erroff=E_BAD_PTR_CAST_ALIGN
 
 .KEEP_STATE:
 
@@ -73,12 +67,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

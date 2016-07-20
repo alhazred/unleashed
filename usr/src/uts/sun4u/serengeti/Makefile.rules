@@ -36,7 +36,7 @@
 #	  alphabetically by the remaining components.
 
 #
-#	Section 1a: C object build rules
+#	Section 1: C object build rules
 #
 SBDP_IL=$(OBJS_DIR)/sbdp.il
 
@@ -61,16 +61,3 @@ CLEANFILES += $(SBDP_IL)
 
 $(SBDP_IL):		$(UTSBASE)/sun4u/serengeti/ml/sbdp.il.cpp
 	$(IL_CPP) $(UTSBASE)/sun4u/serengeti/ml/sbdp.il.cpp >$@
-
-
-#
-#	Section 1b: Lint `object' build rules
-#
-$(LINTS_DIR)/%.ln:              $(UTSBASE)/sun4u/serengeti/io/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:              $(UTSBASE)/sun4u/serengeti/ml/%.s
-	@($(LHEAD) $(LINT.s) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/serengeti/os/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))

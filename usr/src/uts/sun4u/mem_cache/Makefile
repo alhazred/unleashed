@@ -40,7 +40,6 @@ UTSBASE	= ../..
 #
 MODULE		= mem_cache
 OBJECTS		= $(MEM_CACHE_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(MEM_CACHE_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_PSM_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/sun4u/io
 
@@ -53,14 +52,10 @@ include $(UTSBASE)/sun4u/Makefile.sun4u
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 DSF_DIR		= $(UTSBASE)/$(PLATFORM)/mem_cache/genassym
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 ASFLAGS += -DCHEETAH_PLUS
@@ -82,12 +77,6 @@ all:		genassym $(ALL_DEPS)
 clean:		genassym $(CLEAN_DEPS)
 
 clobber:	genassym $(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	genassym $(INSTALL_DEPS)
 

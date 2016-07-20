@@ -42,12 +42,8 @@ install		:=	TARGET= install
 install_h	:=	TARGET= install_h
 clean		:=	TARGET= clean
 clobber		:=	TARGET= clobber
-lint		:=	TARGET= lint
-#lintlib	:=	TARGET= lintlib
-modlintlib	:=	TARGET= modlintlib
 modlist		:=	TARGET= modlist
 modlist		:=	NO_STATE= -K $$MODSTATE$$$$
-clean.lint	:=	TARGET= clean.lint
 check		:=	TARGET= check
 
 #
@@ -55,9 +51,7 @@ check		:=	TARGET= check
 #
 .KEEP_STATE:
 
-def all clean.lint clean clobber modlist: $(MONTECARLO_KMODS)
-
-modlintlib:	$(MONTECARLO_KMODS)
+def all clean clobber modlist: $(MONTECARLO_KMODS)
 
 install:        $(ROOT_MONTECARLO_DIR) $(USR_MONTECARLO_DIR) \
                 $(USR_MONTECARLO_INC_DIR) \
@@ -80,25 +74,6 @@ ttymux.conf:	$(ROOT_MONTECARLO_DRV_DIR)
 
 install_h check:	FRC
 	@cd sys; pwd; $(MAKE) $(TARGET)
-
-lint:		modlintlib
-
-#
-# The 'lint.platmod' target lints the montecarlo platform module against
-# the sun4u kernel.  This ends up doing all the kernel cross-checks,
-# so it takes a couple of minutes.
-# Due to the low ROI, it's not run by default, but it's a good
-# idea to run this if you change os/montecarlo.c.
-#
-LINT_LIBS	 = $(LINT_LIB) \
-		   -L$(MONTECARLO_LINT_LIB_DIR) \
-		   -L$(LINT_LIB_DIR) $(LINT_KMODS:%=-l%) \
-		       $(CLOSED_LINT_KMODS:%=-l%) \
-		   -L$(SPARC_LIB_DIR) $(SPARC_LINTS:%=-l%)
-
-lint.platmod:   modlintlib
-	@-$(ECHO) "\nMonteCarlo Platform-dependent module: global crosschecks:"
-	@-$(LINT) $(LINTFLAGS) $(LINT_LIBS) 2>&1 | $(LGREP.2)
 
 $(MONTECARLO_KMODS): FRC
 	@cd $@; pwd; $(MAKE) $(NO_STATE) $(TARGET)

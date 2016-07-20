@@ -54,8 +54,6 @@ USR_CHICAGO_ISYS_DIR	= $(USR_CHICAGO_INC_DIR)/sys
 USR_CHICAGO_SBIN_DIR	= $(USR_CHICAGO_DIR)/sbin
 USR_CHICAGO_LIB_DIR	= $(USR_CHICAGO_DIR)/lib
 
-CHICAGO_LINT_LIB_DIR= $(UTSBASE)/$(PLATFORM)/chicago/lint-libs/$(OBJS_DIR)
-
 #
 # Define objects.
 #
@@ -79,9 +77,8 @@ include $(UTSBASE)/sun4u/chicago/Makefile.files
 include $(UTSBASE)/sun4u/Makefile.sun4u
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_STATIC_UNUSED
 

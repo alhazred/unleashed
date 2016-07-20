@@ -39,7 +39,6 @@ UTSBASE	= ../../..
 #
 MODULE		= rtls
 OBJECTS		= $(PV_RTLS_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(PV_RTLS_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_HVM_DRV_DIR)/$(MODULE)
 
 #
@@ -48,17 +47,9 @@ ROOTMODULE	= $(ROOT_HVM_DRV_DIR)/$(MODULE)
 include $(UTSBASE)/i86pc/i86hvm/Makefile.i86hvm
 
 #
-# When generating lint libraries, we want the name of the lint module
-# that will be generated to be pv_rtls and not rtls, so override the
-# default lint module name here.
-#
-LINT_MODULE	= pv_rtls
-
-#
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(LINT_MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 LDFLAGS		+= -dy
@@ -75,12 +66,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

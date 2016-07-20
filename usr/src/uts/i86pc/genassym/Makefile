@@ -73,8 +73,6 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-clean.lint:
-
 install:	def
 
 CPPFLAGS += -I../../i86pc/io/ppm

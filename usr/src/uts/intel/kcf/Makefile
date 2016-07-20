@@ -38,7 +38,6 @@ COM_DIR = $(COMMONBASE)/crypto
 #	Define the module and object file sets.
 #
 MODULE		= kcf
-LINTS		= $(KCF_OBJS:%.o=$(LINTS_DIR)/%.ln)
 KCF_OBJS_32	=
 KCF_OBJS_64	= gcm_intel.o
 KCF_OBJS	+= $(KCF_OBJS_$(CLASS))
@@ -54,20 +53,15 @@ include $(UTSBASE)/intel/Makefile.intel
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
 # Linkage dependencies
 #
 
-#
-# lint pass one enforcement
-#
 CFLAGS		+= $(CCVERBOSE) -I$(COM_DIR)
 AS_CPPFLAGS	+= -I../../$(PLATFORM)
 
-LINTTAGS	+= -I$(COM_DIR)
 
 CERRWARN	+= -_gcc=-Wno-switch
 CERRWARN	+= -_gcc=-Wno-uninitialized
@@ -87,12 +81,6 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
-
 install:	$(INSTALL_DEPS)
 
 #
@@ -103,6 +91,3 @@ include $(UTSBASE)/intel/Makefile.targ
 $(OBJS_DIR)/%.o: $(COM_DIR)/modes/amd64/%.s
 	$(COMPILE.s) -o $@ $(COM_DIR)/modes/amd64/${@F:.o=.s}
 	$(POST_PROCESS_O)
-
-$(OBJS_DIR)/%.ln: $(COM_DIR)/modes/amd64/%.s
-	@($(LHEAD) $(LINT.s) $(COM_DIR)/modes/amd64/${@F:.ln=.s} $(LTAIL))

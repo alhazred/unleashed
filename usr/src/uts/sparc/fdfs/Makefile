@@ -42,7 +42,6 @@ UTSBASE	= ../..
 #
 MODULE		= fdfs
 OBJECTS		= $(FDFS_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(FDFS_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(USR_FS_DIR)/$(MODULE)
 
 #
@@ -54,7 +53,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -74,12 +72,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

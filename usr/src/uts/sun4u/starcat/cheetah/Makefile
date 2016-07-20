@@ -39,7 +39,6 @@ UTSBASE	= ../../..
 #
 MODULE		= SUNW,UltraSPARC-III
 OBJECTS		= $(CHEETAH_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(CHEETAH_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_STARCAT_CPU_DIR)/$(MODULE)
 ROOTSOFTLINKS	= $(SOFTLINKS:%=$(ROOT_STARCAT_CPU_DIR)/%)
 
@@ -60,7 +59,6 @@ CLEANFILES	+= $(CPULIB) $(SYM_MOD)
 #	Define targets
 #
 ALL_TARGET	= $(SYM_MOD)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= def $(BINARY) $(ROOTMODULE) $(ROOTSOFTLINKS)
 
 #
@@ -68,11 +66,7 @@ INSTALL_TARGET	= def $(BINARY) $(ROOTMODULE) $(ROOTSOFTLINKS)
 #
 ALL_BUILDS      = $(ALL_BUILDSONLY64)
 DEF_BUILDS      = $(DEF_BUILDSONLY64)
-CLEANLINTFILES  += $(LINT32_FILES)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 CERRWARN	+= -_gcc=-Wno-parentheses
@@ -98,12 +92,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS) lint32
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

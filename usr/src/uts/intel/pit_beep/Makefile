@@ -38,7 +38,6 @@ UTSBASE	= ../..
 #
 MODULE		= pit_beep
 OBJECTS		= $(PIT_BEEP_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(PIT_BEEP_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_PSM_DRV_DIR)/$(MODULE)
 CONF_SRCDIR     = $(UTSBASE)/intel/io
 
@@ -47,16 +46,12 @@ CONF_SRCDIR     = $(UTSBASE)/intel/io
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
 #	Define targets
 #
 ALL_TARGET      = $(BINARY) $(CONFMOD)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET  = $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 .KEEP_STATE:
@@ -68,12 +63,6 @@ def:		$(DEF_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

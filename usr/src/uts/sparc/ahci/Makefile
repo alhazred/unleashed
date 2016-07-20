@@ -42,7 +42,6 @@ UTSBASE	= ../..
 #
 MODULE		= ahci
 OBJECTS		= $(AHCI_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(AHCI_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 CONF_SRCDIR     = $(UTSBASE)/common/io/sata/adapters/ahci
 
@@ -55,7 +54,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -64,9 +62,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 DEBUG_FLGS	=
 DEBUG_DEFS	+= $(DEBUG_FLGS)
 
-#
-# lint pass one enforcement
-#  
 CFLAGS += $(CCVERBOSE)
 
 CERRWARN	+= -_gcc=-Wno-parentheses
@@ -85,12 +80,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

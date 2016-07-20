@@ -38,7 +38,7 @@
 #	  alphabetically by the remaining components.
 
 #
-#	Section 1a: C object build rules
+#	Section 1: C object build rules
 #
 $(OBJS_DIR)/%.o:		$(UTSBASE)/sparc/v9/fpu/%.c
 	$(COMPILE.c) -o $@ $<
@@ -58,22 +58,3 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/sparc/v9/syscall/%.c
 $(OBJS_DIR)/%.o:		$(UTSBASE)/sparc/v9/vm/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-#
-#	Section 1b: Lint `object' build rules.
-#
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sparc/v9/fpu/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sparc/v9/ml/%.s
-	@($(LHEAD) $(LINT.s) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sparc/v9/os/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sparc/v9/syscall/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sparc/v9/vm/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-

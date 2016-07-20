@@ -41,7 +41,6 @@ ARCHDIR:sh = cd ..; basename `pwd`
 #
 MODULE		= sv
 OBJECTS		= $(SV_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(SV_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE      = $(USR_DRV_DIR)/$(MODULE)
 INC_PATH	+= -I$(ROOT)/usr/include
 CONF_SRCDIR	= $(UTSBASE)/common/avs/ns/sv
@@ -56,12 +55,8 @@ include $(UTSBASE)/common/avs/Makefile.com
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 LDFLAGS += -dy -N"drv/nsctl" -N"drv/nskern" -N"misc/spuni"
 
@@ -76,12 +71,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

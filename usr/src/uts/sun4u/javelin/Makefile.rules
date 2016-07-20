@@ -37,7 +37,7 @@
 #	  alphabetically by the remaining components.
 
 #
-#	Section 1a: C object build rules
+#	Section 1: C object build rules
 #
 $(OBJS_DIR)/%.o:		$(UTSBASE)/sun4u/javelin/io/%.c
 	$(COMPILE.c) -o $@ $<
@@ -46,12 +46,3 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/sun4u/javelin/io/%.c
 $(OBJS_DIR)/%.o:		$(UTSBASE)/sun4u/javelin/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-#
-#	Section 1b: Lint `object' build rules
-#
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/javelin/io/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/javelin/os/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))

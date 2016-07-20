@@ -39,7 +39,6 @@ UTSBASE	= ../..
 #
 MODULE		= ntwdt 
 OBJECTS		= $(NTWDT_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(NTWDT_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_PSM_DRV_DIR)/$(MODULE)
 CONF_SRCDIR     = $(UTSBASE)/sun4v/io
 
@@ -59,12 +58,8 @@ CLEANFILES	+= $(MODSTUBS_O)
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += -v
 
 #
@@ -79,12 +74,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

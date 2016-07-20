@@ -45,12 +45,8 @@ install		:=	TARGET= install
 install_h	:=	TARGET= install_h
 clean		:=	TARGET= clean
 clobber		:=	TARGET= clobber
-lint		:=	TARGET= lint
-lintlib		:=	TARGET= lintlib
-modlintlib	:=	TARGET= modlintlib
 modlist		:=	TARGET= modlist
 modlist		:=	NO_STATE= -K $$MODSTATE$$$$
-clean.lint	:=	TARGET= clean.lint
 check		:=	TARGET= check
 
 #
@@ -58,9 +54,7 @@ check		:=	TARGET= check
 #
 .KEEP_STATE:
 
-def all clean.lint clean clobber modlist: $(CHERRYSTONE_KMODS)
-
-modlintlib:	$(CHERRYSTONE_KMODS)
+def all clean clobber modlist: $(CHERRYSTONE_KMODS)
 
 IMPLEMENTED_PLATFORM	= SUNW,Sun-Fire-480R
 
@@ -84,18 +78,6 @@ $(CHERRYSTONE_CRYPTO_LINKS): $(ROOT_CHERRYSTONE_CRYPTO_DIR_64)
 	-$(RM) $(ROOT_CHERRYSTONE_CRYPTO_DIR_64)/$@;
 	$(SYMLINK) $(ROOT_US3_CRYPTO_LINK)/$@ \
 	    $(ROOT_CHERRYSTONE_CRYPTO_DIR_64)/$@
-
-lint:		modlintlib
-
-LINT_LIBS	 = $(LINT_LIB) \
-		   -L$(CHERRYSTONE_LINT_LIB_DIR) \
-		   -L$(LINT_LIB_DIR) $(LINT_KMODS:%=-l%) \
-		       $(CLOSED_LINT_KMODS:%=-l%) \
-		   -L$(SPARC_LIB_DIR) $(SPARC_LINTS:%=-l%)
-
-lint.platmod:   modlintlib
-	@-$(ECHO) "\nCherrystone Platform-dependent module: global crosschecks:"
-	@-$(LINT) $(LINTFLAGS) $(LINT_LIBS) 2>&1 | $(LGREP.2)
 
 $(CHERRYSTONE_KMODS):	FRC
 	@cd $@; pwd; $(MAKE) $(NO_STATE) $(TARGET)

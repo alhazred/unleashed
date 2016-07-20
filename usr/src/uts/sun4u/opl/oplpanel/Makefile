@@ -39,7 +39,6 @@ UTSBASE	= ../../..
 #
 MODULE		= oplpanel
 OBJECTS		= $(OPL_PANEL_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(OPL_PANEL_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_OPL_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/sun4u/opl/io/oplpanel
 
@@ -52,12 +51,8 @@ include $(UTSBASE)/sun4u/opl/Makefile.opl
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE) -I../sys
 CERRWARN += -_gcc=-Wno-unused-function
 
@@ -73,12 +68,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

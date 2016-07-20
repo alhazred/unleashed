@@ -40,7 +40,6 @@ UTSBASE	= ../../..
 #
 MODULE		= oplmsu
 OBJECTS		= $(OPLMSU_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(OPLMSU_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_OPL_DRV_DIR)/$(MODULE)
 
 #
@@ -52,12 +51,8 @@ include $(UTSBASE)/sun4u/opl/Makefile.opl
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE) -I../sys
 LDFLAGS += -dy -Ndrv/su
 
@@ -76,12 +71,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

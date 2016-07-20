@@ -41,7 +41,6 @@ ARCHDIR:sh = cd ..; basename `pwd`
 #
 MODULE		= rdcsrv
 OBJECTS		= $(RDCSRV_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(RDCSRV_OBJS:%.o=$(LINTS_DIR)/%.ln)
 INC_PATH	+= -I$(ROOT)/usr/include
 ROOTMODULE      = $(USR_DRV_DIR)/$(MODULE)
 ROOTLINK        = $(USR_MISC_DIR)/$(MODULE)
@@ -56,14 +55,9 @@ include $(UTSBASE)/common/avs/Makefile.com
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 
-#
-# lint pass one enforcement
-#
 CFLAGS		+= $(CCVERBOSE) -D_SD_8K_BLKSIZE -D_SYSCALL32
-LINT_DEFS	+= -D_SD_8K_BLKSIZE -D_SYSCALL32
 LDFLAGS		+= -dy -N"strmod/rpcmod" -N"misc/rdcstub"
 
 CERRWARN	+= -_gcc=-Wno-unused-label
@@ -78,12 +72,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

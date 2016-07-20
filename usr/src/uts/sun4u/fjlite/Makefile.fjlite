@@ -54,10 +54,6 @@ USR_FJLITE_DIR		= $(USR_PLAT_DIR)/SUNW,UltraAX-i2
 USR_FJLITE_INC_DIR	= $(USR_FJLITE_DIR)/include
 USR_FJLITE_ISYS_DIR	= $(USR_FJLITE_INC_DIR)/sys
 
-
-FJLITE_LINT_LIB_DIR= $(UTSBASE)/$(PLATFORM)/fjlite/lint-libs/$(OBJS_DIR)
-
-
 #	Define Objects
 #
 FJLITE_OBJS     = fjlite.o
@@ -85,8 +81,6 @@ FJLITE_KMODS	= platmod
 include $(UTSBASE)/sun4u/Makefile.sun4u
 
 
-LINTS_DIR	= $(OBJS_DIR)
-LINT_LIB_DIR	= $(UTSBASE)/$(PLATFORM)/fjlite/lint-libs/$(OBJS_DIR)
 
 
 #

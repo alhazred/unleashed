@@ -43,7 +43,7 @@ IL_CPP=$(CPP) -P -DINLINE -D_ASM $(AS_INC_PATH) \
 	$(CPP_DEFS) $(ALWAYS_DEFS) $(ALL_DEFS) $(CONFIG_DEFS)
 
 #
-#	Section 1a: C object build rules
+#	Section 1: C object build rules
 #
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/sun4u/starfire/cvc/%.c
@@ -85,22 +85,3 @@ CLEANFILES += $(DRMACH_IL)
 
 $(DRMACH_IL):	$(UTSBASE)/sun4u/starfire/ml/drmach.il.cpp
 	$(IL_CPP) $(UTSBASE)/sun4u/starfire/ml/drmach.il.cpp > $@
-
-#
-#	Section 1b: Lint object build rules
-#
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/starfire/cvc/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/starfire/cvcredir/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/starfire/io/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/starfire/ml/%.s
-	@($(LHEAD) $(LINT.s) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:		$(UTSBASE)/sun4u/starfire/os/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))

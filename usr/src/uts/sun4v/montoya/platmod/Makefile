@@ -43,7 +43,6 @@ UTSBASE	= ../../..
 #
 MODULE		= platmod
 OBJECTS		= $(MONTOYA_PLATMOD_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(MONTOYA_PLATMOD_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_MONTOYA_MISC_DIR)/$(MODULE)
 
 PLAT_DIR	= .
@@ -63,7 +62,6 @@ CLEANFILES	+= $(PLATLIB) $(SYM_MOD)
 #	Define targets
 #
 ALL_TARGET	= $(SYM_MOD)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -71,11 +69,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
-CLEANLINTFILES	+= $(LINT32_FILES)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -91,17 +85,10 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
-
 install:	$(INSTALL_DEPS)
 
 check:
 
-LINT_LIB_DIR	=$(MONTOYA_LINT_LIB_DIR)
 
 $(PLATLIB):	$(BINARY)
 	$(BUILD.SO) $(BINARY)

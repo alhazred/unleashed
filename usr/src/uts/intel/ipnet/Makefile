@@ -41,7 +41,6 @@ UTSBASE = ../..
 
 MODULE          = ipnet
 OBJECTS         = $(IPNET_OBJS:%=$(OBJS_DIR)/%)
-LINTS           = $(IPNET_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE      = $(ROOT_DRV_DIR)/$(MODULE)
 CONF_SRCDIR     = $(UTSBASE)/common/inet/ipnet
 
@@ -56,20 +55,10 @@ include $(UTSBASE)/intel/Makefile.intel
 #
 
 ALL_TARGET      = $(BINARY) $(SRC_CONFFILE)
-LINT_TARGET     = $(MODULE).lint
 INSTALL_TARGET  = $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 
 CFLAGS          += $(CCVERBOSE)
-
-#
-# STREAMS API limitations force us to turn off these lint checks.
-#
-LINTTAGS        += -erroff=E_BAD_PTR_CAST_ALIGN
-LINTTAGS        += -erroff=E_PTRDIFF_OVERFLOW
 
 #
 # Depends on ip, neti, and hook.
@@ -94,12 +83,6 @@ all:            $(ALL_DEPS)
 clean:          $(CLEAN_DEPS)
 
 clobber:        $(CLOBBER_DEPS)
-
-lint:           $(LINT_DEPS)
-
-modlintlib:     $(MODLINTLIB_DEPS)
-
-clean.lint:     $(CLEAN_LINT_DEPS)
 
 install:        $(INSTALL_DEPS)
 

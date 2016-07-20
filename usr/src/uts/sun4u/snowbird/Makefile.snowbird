@@ -69,10 +69,6 @@ USR_SNOWBIRD_SBIN_FRUADM	= $(USR_SNOWBIRD_SBIN_DIR)/fruadm
 USR_SNOWBIRD_LIB_DIR		= $(USR_SNOWBIRD_DIR)/lib
 USR_SNOWBIRD_ISYS_DIR		= $(USR_SNOWBIRD_INC_DIR)/sys
 
-
-SNOWBIRD_LINT_LIB_DIR= $(UTSBASE)/$(PLATFORM)/snowbird/lint-libs/$(OBJS_DIR)
-
-
 #	Define Objects
 #
 SNOWBIRD_OBJS     = snowbird.o
@@ -107,9 +103,8 @@ MACHINE_DEFS	+= -D$(PLATFORM) -D_MACHDEP -DSFMMU
 MACHINE_DEFS	+= -D_SNOWBIRD
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV
 

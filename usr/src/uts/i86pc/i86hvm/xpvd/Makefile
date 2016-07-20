@@ -40,7 +40,6 @@ UTSBASE	= ../../..
 #
 MODULE		= xpvd
 OBJECTS		= $(XPVD_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(XPVD_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_HVM_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/common/xen/io
 
@@ -53,15 +52,11 @@ include $(UTSBASE)/i86pc/i86hvm/Makefile.i86hvm
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(CONFMOD)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 CPPFLAGS	+= -DHVMPV_XPVD_VERS=1
 LDFLAGS		+= -dy -Ndrv/xpv
 
-LINTTAGS	+= -erroff=E_STATIC_UNUSED
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV
-LINTTAGS	+= -erroff=E_BAD_PTR_CAST_ALIGN
 
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
@@ -77,12 +72,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

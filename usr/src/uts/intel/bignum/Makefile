@@ -38,7 +38,6 @@ CRYPTODIR = $(COMMONBASE)/crypto
 #
 MODULE		= bignum
 OBJECTS		= $(BIGNUM_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(BIGNUM_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 
 BIGNUM_OBJS_32 = bignum_i386.o bignum_i386_asm.o
@@ -54,7 +53,6 @@ include $(UTSBASE)/intel/Makefile.intel
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -76,12 +74,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

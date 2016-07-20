@@ -33,7 +33,6 @@ UTSBASE = ../..
 #
 MODULE		= pcbe.GenuineIntel.6.15
 OBJECTS		= $(CORE_PCBE_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(CORE_PCBE_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(USR_PCBE_DIR)/$(MODULE)
 SOFTLINKS	= pcbe.GenuineIntel.6.23 \
 			pcbe.GenuineIntel.6.26 \
@@ -59,8 +58,6 @@ CERRWARN	+= -_gcc=-Wno-unused-variable
 #	Define targets.
 #
 ALL_TARGET	= $(BINARY)
-LINT_MODULE	= core_pcbe
-LINT_TARGET	= $(LINT_MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTSOFTLINKS)
 
 #
@@ -75,12 +72,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

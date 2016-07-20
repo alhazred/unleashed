@@ -37,7 +37,6 @@ UTSBASE	= ../..
 #
 MODULE		= pci_pci
 OBJECTS		= $(PCI_PCI_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(PCI_PCI_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 
 #
@@ -49,7 +48,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -58,9 +56,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 INC_PATH	+= -I$(UTSBASE)/sun4u
 INC_PATH	+= -I$(UTSBASE)/sun4
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -69,11 +64,10 @@ CFLAGS += $(CCVERBOSE)
 CFLAGS += -dalign
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_SUSPICIOUS_COMPARISON
 
 CERRWARN	+= -_gcc=-Wno-switch
 CERRWARN	+= -_gcc=-Wno-parentheses
@@ -96,12 +90,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

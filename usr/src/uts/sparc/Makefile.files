@@ -108,15 +108,12 @@ SDT_OBJS	+= sdt.o
 #
 #	Build up paths and defines.
 #
-LINT_DEFS	+= -Dsparc
 INC_PATH	+= -I$(UTSBASE)/sparc
 INC_PATH	+= -I$(UTSBASE)/sparc/krtld
 
 #
 # Since assym.h is a derived file, the dependency must be explicit for
 # all files including this file. (This is only actually required in the
-# instance when the .nse_depinfo file does not exist.) It may seem that
-# the lint targets should also have a similar dependency, but they don't
-# since only C headers are included when #defined(lint) is true.
+# instance when the .nse_depinfo file does not exist.)
 #
 ASSYM_DEPS +=	sparc_ddi.o

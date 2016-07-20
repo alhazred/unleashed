@@ -97,12 +97,8 @@ include $(UTSBASE)/sun4u/Makefile.sun4u
 UNIX_DIR	= $(UTSBASE)/$(PLATFORM)/starfire/unix
 MODSTUBS_DIR	= $(UNIX_DIR)
 DSF_DIR		= $(UTSBASE)/$(PLATFORM)/starfire/genassym
-LINTS_DIR	= $(OBJS_DIR)
-LINT_LIB_DIR	= $(UTSBASE)/$(PLATFORM)/starfire/lint-libs/$(OBJS_DIR)
 
 UNIX_O		= $(UNIX_DIR)/$(OBJS_DIR)/unix.o
-
-LINT_LIB	= $(LINT_LIB_DIR)/llib-lunix.ln
 
 #
 #	Define the actual specific platforms
@@ -119,14 +115,7 @@ CPP_DEFS_64	= -D__sparcv9
 CPP_DEFS	= $(CPP_DEFS_$(CLASS))
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_SUSPICIOUS_COMPARISON
-LINTTAGS	+= -erroff=E_BAD_PTR_CAST_ALIGN
-LINTTAGS	+= -erroff=E_SUPPRESSION_DIRECTIVE_UNUSED
-LINTTAGS	+= -erroff=E_STATIC_UNUSED
-LINTTAGS	+= -erroff=E_PTRDIFF_OVERFLOW
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV
-LINTTAGS	+= -erroff=E_BAD_FORMAT_STR2

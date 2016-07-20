@@ -41,7 +41,6 @@ UTSBASE	  = ../../..
 #
 MODULE		= envctrl
 OBJECTS		= $(ENVCTRL_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(ENVCTRL_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_TAZMO_DRV_DIR)/$(MODULE)
 
 #
@@ -53,12 +52,8 @@ include $(UTSBASE)/sun4u/tazmo/Makefile.tazmo
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
@@ -84,15 +79,8 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
-
 install:	$(INSTALL_DEPS)
 
-LINT_LIB_DIR    = $(TAZMO_LINT_LIB_DIR)
 #
 #	Include common targets.
 #

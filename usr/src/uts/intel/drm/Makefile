@@ -37,7 +37,6 @@ UTSBASE	= ../..
 #
 MODULE		= drm
 OBJECTS		= $(DRM_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(DRM_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 DRM_SRC		= $(UTSBASE)/i86pc/io/drm
 GFX_DIR		= $(UTSBASE)/i86pc/io/gfx_private
@@ -60,7 +59,6 @@ CERRWARN	+= -_gcc=-Wno-unused-variable
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -75,12 +73,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

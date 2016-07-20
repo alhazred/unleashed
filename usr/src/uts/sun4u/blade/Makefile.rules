@@ -44,17 +44,3 @@ $(OBJS_DIR)/%.o:	$(UTSBASE)/sun4u/blade/os/%.c
 $(OBJS_DIR)/%.o:	$(UTSBASE)/common/io/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-#
-# Lint object build rules
-#
-
-#
-# blade specific drivers
-#
-
-$(LINTS_DIR)/%.ln:	$(UTSBASE)/sun4u/blade/os/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:	$(UTSBASE)/common/io/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))

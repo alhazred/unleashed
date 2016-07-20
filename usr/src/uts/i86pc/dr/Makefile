@@ -41,7 +41,6 @@ PLATFORM = i86pc
 #
 MODULE		= dr
 OBJECTS		= $(DR_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(DR_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_PSM_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/i86pc/io/dr
 
@@ -54,7 +53,6 @@ include $(UTSBASE)/i86pc/Makefile.i86pc
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 #
@@ -63,9 +61,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 DEF_BUILDS	= $(DEF_BUILDS64)
 ALL_BUILDS	= $(ALL_BUILDS64)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 CERRWARN += -_gcc=-Wno-parentheses
@@ -89,17 +84,10 @@ def:		$(DEF_DEPS)
 
 all:		$(ALL_DEPS)
 
-# This build only 64-bit, but the lint32 below
-# needs corresponding clean/clobber deps.
+# This build only 64-bit
 clean:		$(CLEAN_DEPS) clean.debug32
 
 clobber:	$(CLOBBER_DEPS) clobber.debug32
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS) lint32
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS) $(CONF_INSTALL_DEPS)
 

@@ -44,12 +44,8 @@ install		:=	TARGET= install
 install_h	:=	TARGET= install_h
 clean		:=	TARGET= clean
 clobber		:=	TARGET= clobber
-lint		:=	TARGET= lint
-lintlib		:=	TARGET= lintlib
-modlintlib	:=	TARGET= modlintlib
 modlist		:=	TARGET= modlist
 modlist		:=	NO_STATE= -K $$MODSTATE$$$$
-clean.lint	:=	TARGET= clean.lint
 check		:=	TARGET= check
 
 IMPLEMENTED_PLATFORM	= SUNW,Serverblade1
@@ -64,7 +60,7 @@ BLADE_PLAT_LINK1 =	$(BLADE_LINK_1:%=$(ROOT_PLAT_DIR)/%)
 
 .PARALLEL:	$(BLADE_KMODS) $(CLOSED_BLADE_KMODS)
 
-def all clean clobber clean.lint modlist: $(BLADE_KMODS) $(CLOSED_BLADE_KMODS)
+def all clean clobber modlist: $(BLADE_KMODS) $(CLOSED_BLADE_KMODS)
 
 install:	$(ROOT_BLADE_DIR) \
 		$(USR_BLADE_DIR) \
@@ -74,8 +70,6 @@ install:	$(ROOT_BLADE_DIR) \
 		.WAIT $(BLADE_KMODS) $(CLOSED_BLADE_KMODS) \
 		$(BLADE_OPTION) \
 		$(BLADE_PLAT_LINK_1)
-
-modlintlib:	$(BLADE_KMODS) $(CLOSED_BLADE_KMODS)
 
 $(BLADE_KMODS):	FRC
 	@cd $@; pwd; $(MAKE) $(NO_STATE) $(TARGET)
@@ -87,19 +81,6 @@ $(BLADE_OPTION):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
 install_h check:
-
-lint:	modlintlib .WAIT $(LINT_DEPS)
-
-LINT_LIBS	= $(LINT_LIB) \
-			-L$(BLADE_LINT_LIB_DIR) \
-			-L$(LINT_LIB_DIR) $(LINT_KMODS:%=-l%) \
-			    $(CLOSED_LINT_KMODS:%=-l%) \
-			-L$(SPARC_LIB_DIR) $(SPARC_LINTS:%=-l%)
-
-lint.platmod:   modlintlib
-	@-$(ECHO) "\nJBOS-blade Platform-dependent module: global crosschecks:"
-	@-$(LINT) $(LINTFLAGS) $(LINT_LIBS) 2>&1 | $(LGREP.2)
-
 
 $(BLADE_PLAT_LINK_1): $(ROOT_BLADE_DRV_DIR)
 	$(RM) $@; $(SYMLINK) $(LINK1DESTDIR)/$(@F) $@

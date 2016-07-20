@@ -42,7 +42,6 @@ PORTFS_OBJS	+= port.o port_vnops.o port_fd.o port_fop.o
 #
 MODULE		= portfs
 OBJECTS		= $(PORTFS_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(PORTFS_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_SYS_DIR)/$(MODULE)
 
 #
@@ -55,7 +54,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -68,11 +66,10 @@ CLEANFILES	+= $(MODSTUBS_O)
 CFLAGS		+= $(CCVERBOSE)
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV
 
 CERRWARN	+= -_gcc=-Wno-uninitialized
 CERRWARN	+= -_gcc=-Wno-parentheses
@@ -89,12 +86,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

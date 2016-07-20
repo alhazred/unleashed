@@ -41,7 +41,6 @@ UTSBASE	= ../..
 #
 MODULE		= RT_DPTBL
 OBJECTS		= $(RT_DPTBL_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(RT_DPTBL_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(USR_SCHED_DIR)/$(MODULE)
 
 #
@@ -53,7 +52,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
@@ -63,9 +61,6 @@ MODSTUBS_DIR	= $(OBJS_DIR)
 $(MODSTUBS_O)	:= AS_CPPFLAGS += -DRT_DPTBL_MODULE
 CLEANFILES	+= $(MODSTUBS_O)
 
-#
-# lint pass one enforcement
-#
 CFLAGS		+= $(CCVERBOSE)
 
 #
@@ -80,12 +75,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

@@ -41,14 +41,3 @@
 $(OBJS_DIR)/%.o:	$(UTSBASE)/sun4u/fjlite/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-#
-# Lint object build rules
-#
-
-#
-# fjlite specific drivers
-#
-
-$(LINTS_DIR)/%.ln:	$(UTSBASE)/sun4u/fjlite/os/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))

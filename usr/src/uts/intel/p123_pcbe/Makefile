@@ -34,7 +34,6 @@ UTSBASE = ../..
 #
 MODULE		= pcbe.GenuineIntel.6
 OBJECTS		= $(P123_PCBE_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(P123_PCBE_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(USR_PCBE_DIR)/$(MODULE)
 ROOTLINK	= $(USR_PCBE_DIR)/pcbe.GenuineIntel.5
 
@@ -47,18 +46,13 @@ include $(UTSBASE)/intel/Makefile.intel
 #	Define targets.
 #
 ALL_TARGET	= $(BINARY)
-LINT_MODULE	= p123_pcbe
-LINT_TARGET	= $(LINT_MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_SUSPICIOUS_COMPARISON
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV
-LINTTAGS	+= -erroff=E_STATIC_UNUSED
 
 CERRWARN	+= -_gcc=-Wno-type-limits
 CERRWARN	+= -_gcc=-Wno-unused-function
@@ -75,12 +69,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

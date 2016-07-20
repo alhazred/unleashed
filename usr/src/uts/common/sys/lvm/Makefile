@@ -48,7 +48,7 @@ DERIVED_FILES = \
 RPCGENFLAGS	+=	-C -M -D_KERNEL -DSYSV
 
 
-def all install lint modlintlib clean.lint:	$(DERIVED_FILES)
+def all install:	$(DERIVED_FILES)
 all_h install_h: $(DERIVED_FILES)
 
 clean:

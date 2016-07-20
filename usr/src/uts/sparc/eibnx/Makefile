@@ -39,7 +39,6 @@ UTSBASE	= ../..
 #
 MODULE		= eibnx
 OBJECTS		= $(EIBNX_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(EIBNX_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/common/io/ib/clients/eoib
 
@@ -52,7 +51,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 # Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 #
@@ -65,20 +63,12 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 #
 CPPFLAGS += -DENX_DEBUG
 
-# 
-# Lint pass one enforcement 
-# 
 CFLAGS += $(CCVERBOSE)
 
 #
 # Depends on misc/ibtl
 #
 LDFLAGS	+= -dy -Nmisc/ibcm -Nmisc/ibtl
-
-#
-# The only lint flag we should need
-#
-LINTTAGS += -erroff=E_BAD_PTR_CAST_ALIGN
 
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
@@ -95,12 +85,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS) lint32
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

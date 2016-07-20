@@ -45,9 +45,6 @@ GENUNIX		= $(OBJS_DIR)/$(MODULE)
 OBJECTS		= $(GENUNIX_OBJS:%=$(OBJS_DIR)/%) \
 		  $(NOT_YET_KMODS:%=$(OBJS_DIR)/%)
 
-LINTS		= $(GENUNIX_OBJS:%.o=$(LINTS_DIR)/%.ln) \
-		  $(NOT_YET_KMODS:%.o=$(LINTS_DIR)/%.ln)
-
 ROOTMODULE	= $(ROOT_PSM_KERN_DIR)/$(MODULE)
 
 PLATFORM	= sun4u
@@ -63,17 +60,12 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #	Define targets
 #
 ALL_TARGET	= $(LIBGEN) $(GENUNIX)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(LIBGEN) $(GENUNIX) $(ROOTMODULE)
 
 #
 #	Override defaults
 #
 CLEANFILES	+= $(LIBSTUBS) $(LIBGEN)
-
-LINT_LIB_DIR	= $(UTSBASE)/$(PLATFORM)/lint-libs/$(OBJS_DIR)
-LINT_LIB	= $(LINT_LIB_DIR)/llib-lunix.ln
-GEN_LINT_LIB	=
 
 BINARY		=
 
@@ -89,9 +81,6 @@ CLOBBERFILES	+= $(GENUNIX)
 IPCTF_TARGET	= $(IPCTF)
 $(PATCH_BUILD)IPCTF_TARGET =
 
-# 
-# lint pass one enforcement 
-# 
 CFLAGS += $(CCVERBOSE)
 CPPFLAGS += -I$(SRC)/common
 CPPFLAGS += -I$(SRC)/uts/common/fs/zfs
@@ -99,16 +88,10 @@ CPPFLAGS += -I$(SRC)/uts/common/fs/zfs
 INC_PATH +=  -I$(UTSBASE)/sun4
 
 #
-# For now, disable these lint checks; maintainers should endeavor
-# to investigate and remove these for maximum lint coverage.
-# Please do not carry these forward to new Makefiles.
+# For now, disable these compiler warnings; maintainers should endeavor to
+# investigate and remove these for maximum coverage.  Please do not carry
+# these forward to new Makefiles.
 #
-LINTTAGS	+= -erroff=E_SUSPICIOUS_COMPARISON
-LINTTAGS	+= -erroff=E_BAD_PTR_CAST_ALIGN
-LINTTAGS	+= -erroff=E_SUPPRESSION_DIRECTIVE_UNUSED
-LINTTAGS	+= -erroff=E_STATIC_UNUSED
-LINTTAGS	+= -erroff=E_PTRDIFF_OVERFLOW
-LINTTAGS	+= -erroff=E_ASSIGN_NARROW_CONV
 
 CERRWARN	+= -_gcc=-Wno-unused-label
 CERRWARN	+= -_gcc=-Wno-unused-variable
@@ -120,12 +103,6 @@ CERRWARN	+= -_gcc=-Wno-type-limits
 CERRWARN	+= -_gcc=-Wno-uninitialized
 CERRWARN	+= -_gcc=-Wno-clobbered
 CERRWARN	+= -_gcc=-Wno-empty-body
-
-#
-# Ensure that lint sees 'struct cpu' containing a fully declared
-# embedded 'struct machcpu'
-#
-LINTFLAGS	+= -D_MACHDEP -I../../sun4 -I../../$(PLATFORM) -I../../sfmmu
 
 #	Default build targets.
 #
@@ -140,12 +117,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:  	$(INSTALL_DEPS)
 

@@ -42,7 +42,6 @@ UTSBASE	= ../..
 #
 MODULE		= ppm
 OBJECTS		= $(PPM_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(PPM_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_PSM_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/i86pc/io
 
@@ -55,12 +54,8 @@ include $(UTSBASE)/i86pc/Makefile.i86pc
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 CERRWARN += -_gcc=-Wno-parentheses
@@ -85,12 +80,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS) $(CONF_INSTALL_DEPS)
 

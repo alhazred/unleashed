@@ -42,7 +42,6 @@ UTSBASE	= ../../..
 #
 MODULE		= platmod
 OBJECTS		= $(STARFIRE_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(STARFIRE_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_STARFIRE_MISC_DIR)/$(MODULE)
 PLAT_DIR	= .
 
@@ -60,12 +59,8 @@ CLEANFILES	+= $(PLATLIB)
 #	Define targets
 #
 ALL_TARGET	= $(PLATLIB)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -80,12 +75,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

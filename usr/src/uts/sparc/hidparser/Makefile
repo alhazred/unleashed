@@ -40,7 +40,6 @@ UTSBASE	= ../..
 #
 MODULE		= hidparser
 OBJECTS		= $(HIDPARSER_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(HIDPARSER_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 
 
@@ -49,9 +48,6 @@ ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-# 
-# lint pass one enforcement 
-# 
 CFLAGS		+= $(CCVERBOSE)
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
@@ -64,7 +60,6 @@ LDFLAGS         += -dy -Nmisc/usba
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 .KEEP_STATE:
@@ -76,12 +71,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

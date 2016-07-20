@@ -46,17 +46,3 @@ $(OBJS_DIR)/%.o:	$(UTSBASE)/sun4u/snowbird/io/todds1307/%.c
 $(OBJS_DIR)/%.o:	$(UTSBASE)/sun4u/snowbird/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-#
-# Lint object build rules
-#
-
-#
-# snowbird specific drivers
-#
-
-$(LINTS_DIR)/%.ln:	$(UTSBASE)/sun4u/snowbird/io/todds1307/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))
-
-$(LINTS_DIR)/%.ln:	$(UTSBASE)/sun4u/snowbird/os/%.c
-	@($(LHEAD) $(LINT.c) $< $(LTAIL))

@@ -34,7 +34,6 @@ UTSBASE = ../..
 MODULE		= cpu_ms.AuthenticAMD.15
 #
 OBJECTS		= $(CPU_AO_OBJS:%=$(OBJS_DIR)/%)
-LINTS           = $(CPU_AO_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE      = $(ROOT_PSM_CPU_DIR)/$(MODULE)
 
 SRCDIR		= ../cpu/amd_opteron
@@ -49,15 +48,9 @@ AO_GENDISP	= ../cpu/scripts/ao_gendisp
 include ../cpu/Makefile.cpu
 
 #
-#	Our lint library has a different name from that of the module we build.
-#
-LINT_MODULE	= amd_opteron
-
-#
 #       Define targets
 #
 ALL_TARGET      = $(BINARY)
-LINT_TARGET     = $(LINT_MODULE).lint
 INSTALL_TARGET  = $(BINARY) $(ROOTMODULE)
 
 #
@@ -80,12 +73,6 @@ all:            $(ALL_DEPS)
 clean:          $(CLEAN_DEPS)
 
 clobber:        $(CLOBBER_DEPS)
-
-lint:           $(LINT_DEPS)
-
-modlintlib:     $(MODLINTLIB_DEPS)
-
-clean.lint:     $(CLEAN_LINT_DEPS)
 
 install:        $(INSTALL_DEPS)
 

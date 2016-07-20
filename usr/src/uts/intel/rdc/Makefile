@@ -41,7 +41,6 @@ ARCHDIR:sh = cd ..; basename `pwd`
 #
 MODULE		= rdc
 OBJECTS		= $(RDC_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(RDC_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE      = $(USR_DRV_DIR)/$(MODULE)
 INC_PATH	+= -I$(ROOT)/usr/include
 CONF_SRCDIR	= $(UTSBASE)/common/avs/ns/rdc
@@ -56,17 +55,9 @@ include $(UTSBASE)/common/avs/Makefile.com
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE) -D_SD_8K_BLKSIZE -D_SYSCALL32
-LINT_DEFS += -D_SYSCALL32
-LINTTAGS  += -erroff=E_FUNC_RET_MAYBE_IGNORED2
-LINTTAGS  += -erroff=E_BAD_PTR_CAST_ALIGN
-LINTTAGS  += -erroff=E_INCONS_ARG_DECL2
 LDFLAGS += -dy -N"drv/nsctl" -N"drv/nskern" -N"drv/ncall" -N"misc/spuni" \
 	-N"misc/rdcsrv" -N"strmod/rpcmod"
 
@@ -86,12 +77,6 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 		-rm -f obj*/rdc_prot_xdr.c debug*/rdc_prot_xdr.c
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

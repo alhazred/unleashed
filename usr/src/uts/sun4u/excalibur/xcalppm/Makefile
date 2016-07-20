@@ -40,7 +40,6 @@ UTSBASE	= ../../..
 #
 MODULE		= xcalppm
 OBJECTS		= $(XCALPPM_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(XCALPPM_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_EXCALIBUR_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/sun4u/excalibur/io
 
@@ -49,20 +48,15 @@ CONF_SRCDIR	= $(UTSBASE)/sun4u/excalibur/io
 #
 include $(UTSBASE)/sun4u/excalibur/Makefile.excalibur
 
-CLEANLINTFILES	= $(LINTS) $(PPM_LINT_LIBS)
-CLEANFILES	= $(OBJECTS) $(CLEANLINTFILES)
+CLEANFILES	= $(OBJECTS)
 CLOBBERFILES	= $(OBJS_DIR)/$(MODULE) $(CLEANFILES)
 
 #
 # Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
@@ -87,21 +81,12 @@ def:		$(DEF_DEPS)
 
 all:		$(ALL_DEPS)
 
-lint:		$(LINT_DEPS)
-
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-lint:           $(LINT_DEPS)
-
-modlintlib:     $(MODLINTLIB_DEPS)
-
-clean.lint:     $(CLEAN_LINT_DEPS)
-
 install:        $(INSTALL_DEPS)
 
-LINT_LIB_DIR    = $(EXCALIBUR_LINT_LIB_DIR)
 
 #
 #	Include common targets.

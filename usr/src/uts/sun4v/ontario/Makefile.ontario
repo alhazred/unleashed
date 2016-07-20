@@ -56,9 +56,6 @@ USR_ONTARIO_INC_DIR	= $(USR_ONTARIO_DIR)/include
 USR_ONTARIO_LIB_DIR	= $(USR_ONTARIO_DIR)/lib
 USR_ONTARIO_ISYS_DIR	= $(USR_ONTARIO_INC_DIR)/sys
 
-
-ONTARIO_LINT_LIB_DIR= $(UTSBASE)/$(PLATFORM)/ontario/lint-libs/$(OBJS_DIR)
-
 #
 #	Define modules.
 #
@@ -83,8 +80,6 @@ include $(UTSBASE)/sun4v/ontario/Makefile.files
 include $(UTSBASE)/sun4v/Makefile.sun4v
 
 MODSTUBS_DIR  = $(UNIX_DIR)
-LINTS_DIR	= $(OBJS_DIR)
-LINT_LIB_DIR	= $(UTSBASE)/$(PLATFORM)/ontario/lint-libs/$(OBJS_DIR)
 
 
 #

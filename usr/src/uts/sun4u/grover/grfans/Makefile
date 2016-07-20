@@ -15,7 +15,6 @@ UTSBASE	= ../../..
 #
 MODULE		= grfans
 OBJECTS		= $(GRFANS_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(GRFANS_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_GROVER_DRV_DIR)/$(MODULE)
 
 #
@@ -23,9 +22,6 @@ ROOTMODULE	= $(ROOT_GROVER_DRV_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sun4u/grover/Makefile.grover
 
-# 
-# lint pass one enforcement 
-# 
 CFLAGS += $(CCVERBOSE)
 
 CPPFLAGS += -I$(UTSBASE)/sun4u/grover
@@ -34,7 +30,6 @@ CPPFLAGS += -I$(UTSBASE)/sun4u/grover
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 .KEEP_STATE:
@@ -46,12 +41,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

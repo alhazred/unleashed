@@ -40,7 +40,6 @@ UTSBASE	= ../../..
 #
 MODULE		= idn
 OBJECTS		= $(IDN_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(IDN_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_STARFIRE_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/sun4u/starfire/io
 
@@ -56,12 +55,8 @@ include $(UTSBASE)/sun4u/starfire/Makefile.starfire
 #	Define targets
 #
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE) -DIPV6
 CERRWARN += -_gcc=-Wno-unused-function
 CERRWARN += -_gcc=-Wno-parentheses
@@ -80,12 +75,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

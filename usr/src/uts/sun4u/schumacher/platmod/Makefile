@@ -41,7 +41,6 @@ UTSBASE	= ../../..
 #
 MODULE		= platmod
 OBJECTS		= $(SCHUMACHER_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(SCHUMACHER_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_SCHUMACHER_MISC_DIR)/$(MODULE)
 
 PLAT_DIR	= .
@@ -61,12 +60,8 @@ CLEANFILES	+= $(PLATLIB) $(SYM_MOD)
 #	Define targets
 #
 ALL_TARGET	= $(SYM_MOD)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -82,17 +77,10 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
-
 install:	$(INSTALL_DEPS)
 
 check:
 
-LINT_LIB_DIR	= $(SCHUMACHER_LINT_LIB_DIR)
 
 $(PLATLIB):	$(BINARY)
 	${LD} -o $(PLATLIB) -G $(BINARY)

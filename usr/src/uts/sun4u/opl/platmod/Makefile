@@ -41,7 +41,6 @@ UTSBASE	= ../../..
 #
 MODULE		= platmod
 OBJECTS		= $(OPL_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(OPL_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_OPL_MISC_DIR)/$(MODULE)
 PLAT_DIR	= .
 
@@ -59,12 +58,8 @@ CLEANFILES	+= $(PLATLIB)
 #	Define targets
 #
 ALL_TARGET	= $(PLATLIB)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 #
@@ -79,12 +74,6 @@ def:		$(DEF_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 

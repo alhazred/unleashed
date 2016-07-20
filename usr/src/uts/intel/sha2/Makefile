@@ -42,7 +42,6 @@ SHA2_OBJS_32    =
 SHA2_OBJS_64    = sha512-x86_64.o sha256-x86_64.o
 SHA2_OBJS       += $(SHA2_OBJS_$(CLASS))
 OBJECTS		= $(SHA2_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(SHA2_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_CRYPTO_DIR)/$(MODULE)
 ROOTLINK	= $(ROOT_MISC_DIR)/$(MODULE)
 
@@ -60,7 +59,6 @@ CLEANFILES += sha512-x86_64.s sha256-x86_64.s
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 
 #
@@ -69,7 +67,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 LDFLAGS += -dy -Nmisc/kcf
 
 CFLAGS += -I$(COMDIR)
-LINTFLAGS	+= -I$(COMDIR)
 
 CERRWARN	+= -_gcc=-Wno-switch
 CERRWARN	+= -_gcc=-Wno-uninitialized
@@ -87,12 +84,6 @@ clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
 
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
-
 install:	$(INSTALL_DEPS)
 
 $(ROOTLINK):	$(ROOT_MISC_DIR) $(ROOTMODULE)
@@ -106,9 +97,6 @@ include $(UTSBASE)/intel/Makefile.targ
 $(OBJS_DIR)/%.o: %.s
 	$(COMPILE.s) -o $@ ${@F:.o=.s}
 	$(POST_PROCESS_O)
-
-$(OBJS_DIR)/%.ln: %.s
-	@($(LHEAD) $(LINT.c) ${@F:.ln=.s} $(LTAIL))
 
 sha512-x86_64.s: $(COMDIR)/sha2/amd64/sha512-x86_64.pl
 	$(PERL) $? $@

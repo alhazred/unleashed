@@ -43,9 +43,6 @@ MODULE		= cpr
 OBJECTS		= $(CPR_IMPL_OBJS:%=$(OBJS_DIR)/%) \
 		  $(CPR_OBJS:%=$(OBJS_DIR)/%) \
 		  $(CPR_INTEL_OBJS:%=$(OBJS_DIR)/%)
-LINTS		= $(CPR_OBJS:%.o=$(LINTS_DIR)/%.ln) \
-		  $(CPR_IMPL_OBJS:%.o=$(LINTS_DIR)/%.ln) \
-		  $(CPR_INTEL_OBJS:%.o=$(LINTS_DIR)/%.ln)
 ROOTMODULE	= $(ROOT_PSM_MISC_DIR)/$(MODULE)
 
 #
@@ -64,12 +61,8 @@ LDFLAGS		+= -dy -N misc/acpica -N misc/bootdev
 #	Define targets
 #
 ALL_TARGET	= $(BINARY)
-LINT_TARGET	= $(MODULE).lint
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# lint pass one enforcement
-#
 CFLAGS += $(CCVERBOSE)
 
 CERRWARN	+= -_gcc=-Wno-unused-variable
@@ -89,12 +82,6 @@ all:		$(ALL_DEPS)
 clean:		$(CLEAN_DEPS)
 
 clobber:	$(CLOBBER_DEPS)
-
-lint:		$(LINT_DEPS)
-
-modlintlib:	$(MODLINTLIB_DEPS)
-
-clean.lint:	$(CLEAN_LINT_DEPS)
 
 install:	$(INSTALL_DEPS)
 
