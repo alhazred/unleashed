@@ -39,8 +39,6 @@
 #define	CW_VERSION	"1.30"
 
 /*
- * -#		Verbose mode
- * -###		Show compiler commands built by driver, no compilation
  * -A<name[(tokens)]>	Preprocessor predicate assertion
  * -B<[static|dynamic]>	Specify dynamic or static binding
  * -C		Prevent preprocessor from removing comments
@@ -49,13 +47,11 @@
  * -D<name[=token]>	Associate name with token as if by #define
  * -d[y|n]	dynamic [-dy] or static [-dn] option to linker
  * -E		Compile source through preprocessor only, output to stdout
- * -erroff=<t>	Suppress warnings specified by tags t(%none, %all, <tag list>)
  * -errtags=<a>	Display messages with tags a(no, yes)
  * -errwarn=<t>	Treats warnings specified by tags t(%none, %all, <tag list>)
  *		as errors
  * -fast	Optimize using a selection of options
  * -fd		Report old-style function definitions and declarations
- * -features=zla	Allow zero-length arrays
  * -flags	Show this summary of compiler options
  * -fnonstd	Initialize floating-point hardware to non-standard preferences
  * -fns[=<yes|no>] Select non-standard floating point mode
@@ -84,8 +80,6 @@
  * -nofstore	Do not force floating pt. values to target precision
  *		on assignment
  * -nolib	Same as -xnolib
- * -noqueue	Disable queuing of compiler license requests
- * -norunpath	Do not build in a runtime path for shared libraries
  * -O		Use default optimization level (-xO2 or -xO3. Check man page.)
  * -o <outputfile> Set name of output file to <outputfile>
  * -P		Compile source through preprocessor only, output to .i  file
@@ -93,7 +87,6 @@
  * -p		Compile for profiling with prof
  * -pic		Alias for -Kpic or -xcode=pic13
  * -Q[y|n]	Emit/don't emit identification info to output file
- * -qp		Compile for profiling with prof
  * -R<dir[:dir]> Build runtime search path list into executable
  * -S		Compile and only generate assembly code (.s)
  * -s		Strip symbol table from the executable file
@@ -113,20 +106,13 @@
  * -xarch=<a>	Specify target architecture instruction set
  * -xbuiltin[=<b>] When profitable inline, or substitute intrinisic functions
  *		for system functions, b={%all,%none}
- * -xCC		Accept C++ style comments
  * -xchar_byte_order=<o> Specify multi-char byte order <o> (default, high, low)
  * -xchip=<c>	Specify the target processor for use by the optimizer
  * -xcode=<c>	Generate different code for forming addresses
- * -xcrossfile[=<n>] Enable optimization and inlining across source files,
- *		n={0|1}
  * -xe		Perform only syntax/semantic checking, no code generation
  * -xF		Compile for later mapfile reordering or unused section
  *		elimination
  * -xhelp=<f>	Display on-line help information f(flags, readme, errors)
- * -xildoff	Cancel -xildon
- * -xildon	Enable use of the incremental linker, ild
- * -xinline=[<a>,...,<a>]  Attempt inlining of specified user routines,
- *		<a>={%auto,func,no%func}
  * -xlibmieee	Force IEEE 754 return values for math routines in
  *		exceptional cases
  * -xlibmil	Inline selected libm math routines for optimization
@@ -149,8 +135,6 @@
  * -xsbfast	Generate only WorkShop source browser info, no compilation
  * -xsfpconst	Represent unsuffixed floating point constants as single
  *		precision
- * -xspace	Do not do optimizations that increase code size
- * -xstrconst	Place string literals into read-only data segment
  * -xtarget=<t>	Specify target system for optimization
  * -xtemp=<dir>	Set directory for temporary files to <dir>
  * -xtime	Report the execution time for each compilation phase
@@ -160,8 +144,6 @@
  * -Y<c>,<dir>	Specify <dir> for location of component <c> (a,l,m,p,0,h,i,u)
  * -YA,<dir>	Change default directory searched for components
  * -YI,<dir>	Change default directory searched for include files
- * -YP,<dir>	Change default directory for finding libraries files
- * -YS,<dir>	Change default directory for startup object files
  */
 
 /*
@@ -169,7 +151,6 @@
  */
 /*
  * -#				-v
- * -###				error
  * -A<name[(tokens)]>		pass-thru
  * -B<[static|dynamic]>		pass-thru (syntax error for anything else)
  * -C				pass-thru
@@ -178,12 +159,10 @@
  * -D<name[=token]>		pass-thru
  * -dy or -dn			-Wl,-dy or -Wl,-dn
  * -E				pass-thru
- * -erroff=E_EMPTY_TRANSLATION_UNIT ignore
  * -errtags=%all		-Wall
  * -errwarn=%all		-Werror else -Wno-error
  * -fast			error
  * -fd				error
- * -features=zla		ignore
  * -flags			--help
  * -fnonstd			error
  * -fns[=<yes|no>]		error
@@ -211,8 +190,6 @@
  * -native			error
  * -nofstore			error
  * -nolib			-nodefaultlibs
- * -noqueue			ignore
- * -norunpath			ignore
  * -O				-O1 (Check the man page to be certain)
  * -o <outputfile>		pass-thru
  * -P				-E -o filename.i (or error)
@@ -220,7 +197,6 @@
  * -p				pass-thru
  * -pic				-fpic (C++ only)
  * -Q[y|n]			error
- * -qp				-p
  * -R<dir[:dir]>		pass-thru
  * -S				pass-thru
  * -s				-Wl,-s
@@ -244,18 +220,12 @@
  * -x486			-march=i486 (x86 only)
  * -xarch=<a>			table
  * -xbuiltin[=<b>]		-fbuiltin (-fno-builtin otherwise)
- * -xCC				ignore
  * -xchar_byte_order=<o>	error
  * -xchip=<c>			table
  * -xcode=<c>			table
- * -xdebugformat=<format>	ignore (always use dwarf-2 for gcc)
- * -xcrossfile[=<n>]		ignore
  * -xe				error
  * -xF				error
  * -xhelp=<f>			error
- * -xildoff			ignore
- * -xildon			ignore
- * -xinline			ignore
  * -xlibmieee			error
  * -xlibmil			error
  * -xlic_lib=sunperf		error
@@ -274,8 +244,6 @@
  * -xsb				error
  * -xsbfast			error
  * -xsfpconst			error
- * -xspace			ignore (-not -Os)
- * -xstrconst			ignore
  * -xtarget=<t>			table
  * -xtemp=<dir>			error
  * -xtime			error
@@ -287,8 +255,6 @@
  * -Y<c>,<dir>			error
  * -YA,<dir>			error
  * -YI,<dir>			-nostdinc -I<dir>
- * -YP,<dir>			error
- * -YS,<dir>			error
  */
 
 #include <stdio.h>
@@ -705,10 +671,6 @@ do_gcc(cw_ictx_t *ctx)
 		}
 
 		if (ctx->i_flags & CW_F_CXX) {
-			if (strncmp(arg, "-compat=", 8) == 0) {
-				/* discard -compat=4 and -compat=5 */
-				continue;
-			}
 			if (strcmp(arg, "-Qoption") == 0) {
 				/* discard -Qoption and its two arguments */
 				if (ctx->i_oldargc < 3)
@@ -737,10 +699,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (strcmp(arg, "-PIC") == 0) {
 				newae(ctx->i_ae, "-fPIC");
 				pic = 1;
-				continue;
-			}
-			if (strcmp(arg, "-norunpath") == 0) {
-				/* gcc has no corresponding option */
 				continue;
 			}
 			if (strcmp(arg, "-nolib") == 0) {
@@ -857,18 +815,6 @@ do_gcc(cw_ictx_t *ctx)
 			error(arg);
 			break;
 		case 'e':
-			if (strcmp(arg,
-			    "-erroff=E_EMPTY_TRANSLATION_UNIT") == 0) {
-				/*
-				 * Accept but ignore this -- gcc doesn't
-				 * seem to complain about empty translation
-				 * units
-				 */
-				break;
-			}
-			/* XX64 -- ignore all -erroff= options, for now */
-			if (strncmp(arg, "-erroff=", 8) == 0)
-				break;
 			if (strcmp(arg, "-errtags=yes") == 0) {
 				warnings(ctx->i_ae);
 				break;
@@ -882,13 +828,6 @@ do_gcc(cw_ictx_t *ctx)
 		case 'f':
 			if (strcmp(arg, "-flags") == 0) {
 				newae(ctx->i_ae, "--help");
-				break;
-			}
-			if (strncmp(arg, "-features=zla", 13) == 0) {
-				/*
-				 * Accept but ignore this -- gcc allows
-				 * zero length arrays.
-				 */
 				break;
 			}
 			error(arg);
@@ -969,15 +908,6 @@ do_gcc(cw_ictx_t *ctx)
 				free(s);
 			}
 			break;
-		case 'n':
-			if (strcmp(arg, "-noqueue") == 0) {
-				/*
-				 * Horrid license server stuff - n/a
-				 */
-				break;
-			}
-			error(arg);
-			break;
 		case 'O':
 			if (arglen == 1) {
 				newae(ctx->i_ae, "-O");
@@ -996,13 +926,6 @@ do_gcc(cw_ictx_t *ctx)
 			newae(ctx->i_ae, "-E");
 			op = CW_O_PREPROCESS;
 			nolibc = 1;
-			break;
-		case 'q':
-			if (strcmp(arg, "-qp") == 0) {
-				newae(ctx->i_ae, "-p");
-				break;
-			}
-			error(arg);
 			break;
 		case 's':
 			if (arglen == 1) {
@@ -1190,12 +1113,6 @@ do_gcc(cw_ictx_t *ctx)
 				}
 				error(arg);
 				break;
-			case 'C':
-				/* Accept C++ style comments -- ignore */
-				if (strcmp(arg, "-xCC") == 0)
-					break;
-				error(arg);
-				break;
 			case 'c':
 				if (strncmp(arg, "-xc99=%all", 10) == 0) {
 					newae(ctx->i_ae, "-std=gnu99");
@@ -1217,14 +1134,10 @@ do_gcc(cw_ictx_t *ctx)
 				}
 				if (strncmp(arg, "-xcache=", 8) == 0)
 					break;
-				if (strncmp(arg, "-xcrossfile", 11) == 0)
-					break;
 				error(arg);
 				break;
 			case 'd':
 				if (strcmp(arg, "-xdepend") == 0)
-					break;
-				if (strncmp(arg, "-xdebugformat=", 14) == 0)
 					break;
 				error(arg);
 				break;
@@ -1235,16 +1148,6 @@ do_gcc(cw_ictx_t *ctx)
 				 * more complex, like -xF=%all -- ignore.
 				 */
 				if (strncmp(arg, "-xF", 3) == 0)
-					break;
-				error(arg);
-				break;
-			case 'i':
-				if (strncmp(arg, "-xinline", 8) == 0)
-					/* No inlining; ignore */
-					break;
-				if (strcmp(arg, "-xildon") == 0 ||
-				    strcmp(arg, "-xildoff") == 0)
-					/* No incremental linking; ignore */
 					break;
 				error(arg);
 				break;
@@ -1332,9 +1235,7 @@ do_gcc(cw_ictx_t *ctx)
 				error(arg);
 				break;
 			case 's':
-				if (strcmp(arg, "-xs") == 0 ||
-				    strcmp(arg, "-xspace") == 0 ||
-				    strcmp(arg, "-xstrconst") == 0)
+				if (strcmp(arg, "-xs") == 0)
 					break;
 				error(arg);
 				break;
@@ -1375,9 +1276,6 @@ do_gcc(cw_ictx_t *ctx)
 			} else {
 				arg += 2;
 			}
-			/* Just ignore -YS,... for now */
-			if (strncmp(arg, "S,", 2) == 0)
-				break;
 			if (strncmp(arg, "l,", 2) == 0) {
 				char *s = strdup(arg);
 				s[0] = '-';

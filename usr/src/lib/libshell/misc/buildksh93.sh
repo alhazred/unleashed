@@ -341,7 +341,7 @@ function build_shell
             # Sun Studio flags
             bsunc99="/opt/SUNWspro/bin/cc -xc99=%all -D_XOPEN_SOURCE=600 -D__EXTENSIONS__=1"
             bsuncc_app_ccflags_sparc="-xpagesize_stack=64K" # use bsuncc_app_ccflags_sparc only for final executables
-            bsuncc_ccflags="${bon_flags} -KPIC -g -xs -xspace -Xa -xstrconst -z combreloc -xildoff -xcsi -errtags=yes ${bast_flags} -D_lib_socket=1 -lsocket -lnsl"
+            bsuncc_ccflags="${bon_flags} -KPIC -g -xs -Xa -z combreloc -xcsi -errtags=yes ${bast_flags} -D_lib_socket=1 -lsocket -lnsl"
 
             # gcc flags
             bgcc99="/usr/sfw/bin/gcc -std=gnu99 -D_XOPEN_SOURCE=600 -D__EXTENSIONS__=1"

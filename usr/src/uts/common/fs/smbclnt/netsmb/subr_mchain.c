@@ -362,8 +362,8 @@ mb_reserve(struct mbchain *mbp, int size)
  * Inline version of mb_put_mem().  Handles the easy case in-line,
  * and calls mb_put_mem() if crossing mblk boundaries, etc.
  *
- * We build with -xspace, which causes these inline functions
- * to not be inlined.  Using macros instead for now.
+ * We build in a strage way, which may cause these inline functions to not
+ * be inlined.  Using macros instead for now.
  */
 #ifdef	INLINE_WORKS
 

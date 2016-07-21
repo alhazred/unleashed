@@ -132,9 +132,7 @@ INCS +=		-I$(SRCDIR)
 INCS +=		-I$(SRC)/lib/hbaapi/common
 
 CCFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS
-CCFLAGS +=	-compat=5
 CCFLAGS64 +=	-D_POSIX_PTHREAD_SEMANTICS
-CCFLAGS64 +=	-compat=5
 CPPFLAGS +=	$(INCS) -DBUILD_TIME='"Wed Sep 24 12:00:00 2008"'
 
 LDLIBS			+= -ldevinfo

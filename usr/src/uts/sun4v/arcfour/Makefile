@@ -68,7 +68,7 @@ CFLAGS += -dalign
 COPTIMIZE	= -xO5 -xbuiltin=%all
 
 #
-# Override the default -xspace setting
+# Override the default space setting
 #
 sparc_SPACEFLAG	= -W0,-Lt
 

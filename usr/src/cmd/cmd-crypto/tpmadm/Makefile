@@ -34,7 +34,6 @@ POFILES = $(OBJS:%.o=%.po)
 POFILE = $(PROG)_msg.po
 MSGFILES=$(SRCS:%.c=%.i)
 
-CPPFLAGS += -xCC
 LDLIBS += -ltspi -luuid
 
 CLOBBERFILES = C.ln $(POFILE) $(POFILES)

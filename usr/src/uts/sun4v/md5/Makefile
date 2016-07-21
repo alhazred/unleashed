@@ -56,7 +56,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 CFLAGS += $(CCVERBOSE)
 
 #
-# Override the default -xspace setting
+# Override the default space setting
 #
 sparc_SPACEFLAG	= -W0,-Lt
 

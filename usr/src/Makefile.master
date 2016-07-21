@@ -347,14 +347,9 @@ amd64_STAND_FLAGS	+= $(SAVEARGS)
 STAND_FLAGS_32 = $($(MACH)_STAND_FLAGS)
 STAND_FLAGS_64 = $($(MACH64)_STAND_FLAGS)
 
-#
-# disable the incremental linker
-ILDOFF=			-xildoff
-#
 XDEPEND=		-xdepend
 XFFLAG=			-xF=%all
 XESS=			-xs
-XSTRCONST=		-xstrconst
 
 #
 # turn warnings into errors (C)
@@ -422,12 +417,6 @@ CGLOBALSTATIC= -W0,-xglobalstatic
 CALLSYMS=	-W0,-xdbggen=no%usedonly
 
 #
-# Default debug format for Sun Studio 11 is dwarf, so force it to
-# generate stabs.
-#
-DEBUGFORMAT=	-xdebugformat=stabs
-
-#
 # Flags used to build in debug mode for ctf generation.  Bugs in the Devpro
 # compilers currently prevent us from building with cc-emitted DWARF.
 #
@@ -439,8 +428,8 @@ CTF_FLAGS_amd64		= $(CTF_FLAGS_i386)
 
 CTF_FLAGS_amd64 += $(SAVEARGS)
 
-CTF_FLAGS_32	= $(CTF_FLAGS_$(MACH)) $(DEBUGFORMAT)
-CTF_FLAGS_64	= $(CTF_FLAGS_$(MACH64)) $(DEBUGFORMAT)
+CTF_FLAGS_32	= $(CTF_FLAGS_$(MACH))
+CTF_FLAGS_64	= $(CTF_FLAGS_$(MACH64))
 CTF_FLAGS	= $(CTF_FLAGS_32)
 
 #
@@ -459,9 +448,9 @@ OFFSETS_CREATE64 = $(GENOFFSETS) -s $(CTFSTABS) -r $(CTFCONVERT) \
 #
 # tradeoff time for space (smaller is better)
 #
-sparc_SPACEFLAG		= -xspace -W0,-Lt
-sparcv9_SPACEFLAG	= -xspace -W0,-Lt
-i386_SPACEFLAG		= -xspace
+sparc_SPACEFLAG		= -W0,-Lt
+sparcv9_SPACEFLAG	= -W0,-Lt
+i386_SPACEFLAG		=
 amd64_SPACEFLAG		=
 
 SPACEFLAG		= $($(MACH)_SPACEFLAG)
@@ -513,11 +502,11 @@ $(SRCDBGBLD)CSOURCEDEBUGFLAGS	= -g -xs
 $(SRCDBGBLD)CCSOURCEDEBUGFLAGS	= -g -xs
 
 CFLAGS=         $(COPTFLAG) $($(MACH)_CFLAGS) $(SPACEFLAG) $(CCMODE) \
-		$(ILDOFF) $(CERRWARN) $(C99MODE) $(CCUNBOUND) $(IROPTFLAG) \
+		$(CERRWARN) $(C99MODE) $(CCUNBOUND) $(IROPTFLAG) \
 		$(CGLOBALSTATIC) $(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS)
 CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
-		$(ILDOFF) $(CERRWARN) $(C99MODE) $(CCUNBOUND) $(IROPTFLAG64) \
+		$(CERRWARN) $(C99MODE) $(CCUNBOUND) $(IROPTFLAG64) \
 		$(CGLOBALSTATIC) $(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS64)
 #
@@ -525,7 +514,7 @@ CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
 # run on the build machine (also known as the NATIVE_BUILD).
 #
 NATIVE_CFLAGS=	$(COPTFLAG) $($(NATIVE_MACH)_CFLAGS) $(CCMODE) \
-		$(ILDOFF) $(CERRWARN) $(C99MODE) $($(NATIVE_MACH)_CCUNBOUND) \
+		$(CERRWARN) $(C99MODE) $($(NATIVE_MACH)_CCUNBOUND) \
 		$(IROPTFLAG) $(CGLOBALSTATIC) $(CCNOAUTOINLINE) \
 		$(CSOURCEDEBUGFLAGS) $(CUSERFLAGS)
 
@@ -568,19 +557,18 @@ BUILD.po= $(XGETTEXT) $(XGETFLAGS) -d $(<F) $<.i ;\
 #
 POFILE= $(PROG).po
 
-sparc_CCFLAGS=		-cg92 -compat=4 \
+sparc_CCFLAGS=		-cg92 \
 			-Qoption ccfe -messages=no%anachronism \
 			$(CCERRWARN)
-sparcv9_CCFLAGS=	$(sparcv9_XARCH) -dalign -compat=5 \
+sparcv9_CCFLAGS=	$(sparcv9_XARCH) -dalign \
 			-Qoption ccfe -messages=no%anachronism \
 			-Qoption ccfe -features=no%conststrings \
 			$(CCCREGSYM) \
 			$(CCERRWARN)
-i386_CCFLAGS=		-compat=4 \
-			-Qoption ccfe -messages=no%anachronism \
+i386_CCFLAGS=		-Qoption ccfe -messages=no%anachronism \
 			-Qoption ccfe -features=no%conststrings \
 			$(CCERRWARN)
-amd64_CCFLAGS=		$(amd64_XARCH) -compat=5 \
+amd64_CCFLAGS=		$(amd64_XARCH) \
 			-Qoption ccfe -messages=no%anachronism \
 			-Qoption ccfe -features=no%conststrings \
 			$(CCERRWARN)
@@ -635,11 +623,6 @@ MAPFILE.INT =		mapfile-intf
 # LDLIBS32 and LDLIBS64 can be set in the environment to override the following
 # assignments.
 #
-# These environment settings make sure that no libraries are searched outside
-# of the local workspace proto area:
-#	LDLIBS32=-YP,$ROOT/lib:$ROOT/usr/lib
-#	LDLIBS64=-YP,$ROOT/lib/$MACH64:$ROOT/usr/lib/$MACH64
-#
 LDLIBS32 =	$(ENVLDLIBS1) $(ENVLDLIBS2) $(ENVLDLIBS3)
 LDLIBS32 +=	$(ADJUNCT_PROTO:%=-L%/usr/lib -L%/lib)
 LDLIBS.cmd = 	$(LDLIBS32)
@@ -675,7 +658,7 @@ CCEXTNEEDED	= $(CCNEEDED)
 
 LINK.c=		$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
 LINK64.c=	$(CC) $(CFLAGS64) $(CPPFLAGS) $(LDFLAGS)
-NORUNPATH=	-norunpath -nolib
+NORUNPATH=	-nolib
 LINK.cc=	$(CCC) $(CCFLAGS) $(CPPFLAGS) $(NORUNPATH) \
 		$(LDFLAGS) $(CCNEEDED)
 LINK64.cc=	$(CCC) $(CCFLAGS64) $(CPPFLAGS) $(NORUNPATH) \

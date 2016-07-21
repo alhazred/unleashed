@@ -70,10 +70,6 @@ MSGSUBDIRS=	bootconfchk ifconfig ilbadm in.routed in.talkd \
 		inetadm inetconv ipadm ipmpstat ipqosconf ipsecutils \
 		nwamadm nwamcfg routeadm sppptun snoop wificonfig
 
-# And as programs are verified not to attempt to write into constants,
-# -xstrconst should be used to ensure they stay that way.
-CONSTCLEAN=
-
 include ../../Makefile.cmd
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORK)
 $(ROOTMANIFEST)		:= FILEMODE= 444
@@ -116,9 +112,6 @@ CPPFLAGS +=	-DSYSV -DBSD_COMP -I$(CMDINETCOMMONDIR) -I
 
 include $(SRC)/lib/gss_mechs/mech_krb5/Makefile.mech_krb5
 K5LIBS=
-
-# Eventually just plain CFLAGS should be += -v.
-$(CONSTCLEAN)		:=	CFLAGS += $(XSTRCONST)
 
 $(SYNCPROG)		:=	LDLIBS += -ldlpi
 $(SOCKETPROG)		:=	LDLIBS += -lsocket

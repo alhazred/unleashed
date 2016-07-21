@@ -40,12 +40,10 @@ LDLIBS +=	-lc
 
 CFLAGS +=	-mt
 CFLAGS +=	$(CCVERBOSE)
-CFLAGS +=	-xCC
 CFLAGS +=	-DSOLARIS
 
 CFLAGS64 +=       -mt
 CFLAGS64 +=       $(CCVERBOSE)
-CFLAGS64 +=       -xCC
 CFLAGS64 +=       -DSOLARIS
 
 CERRWARN +=	-_gcc=-Wno-unused-variable

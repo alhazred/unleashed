@@ -55,10 +55,6 @@ CFLAGS += -D_KERNEL -Di386   -DNEWSTAT -DNOMUT -DRCVWORKAROUND \
 	  -DTANAX_WORKAROUND -I$(UTSBASE)/common/io/e1000g \
 	  -I$(UTSBASE)/common/io/e1000api
 
-CFLAGS_CPP_COMMENTS = -xCC
-
-CFLAGS += $(CFLAGS_CPP_COMMENTS)
-
 CERRWARN	+= -_gcc=-Wno-uninitialized
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-switch
