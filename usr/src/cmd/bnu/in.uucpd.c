@@ -48,7 +48,6 @@
 #ifdef ATTSVR4
 #include <shadow.h>
 #endif
-#include <lastlog.h>
 
 #include <security/pam_appl.h>
 
@@ -63,7 +62,6 @@ pam_handle_t    *pamh;
 --- You may not have both BSD4_2 and BSD2_9 defined for this to work
 #endif	/* check for stupidity */
 
-char lastlog[] = "/var/adm/lastlog";
 struct	passwd nouser = {
 	"", "nope", (uid_t)-1, (gid_t)-1, "", "", "", "", "" };
 #ifdef ATTSVR4

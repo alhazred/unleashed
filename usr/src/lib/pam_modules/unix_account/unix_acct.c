@@ -53,7 +53,6 @@
 #include <libintl.h>
 #include <passwdutil.h>
 
-#define	LASTLOG		"/var/adm/lastlog"
 #define	LOGINADMIN	"/etc/default/login"
 #define	UNIX_AUTH_DATA		"SUNW-UNIX-AUTH-DATA"
 #define	UNIX_AUTHTOK_DATA	"SUNW-UNIX-AUTHTOK-DATA"
@@ -70,10 +69,7 @@ typedef struct _unix_authtok_data_ {
 
 /*ARGSUSED*/
 static void
-unix_cleanup(
-	pam_handle_t *pamh,
-	void *data,
-	int pam_status)
+unix_cleanup(pam_handle_t *pamh, void *data, int pam_status)
 {
 	free((unix_authtok_data *)data);
 }
@@ -84,18 +80,19 @@ unix_cleanup(
  */
 
 static int
-check_for_login_inactivity(
-	uid_t		pw_uid,
-	struct 	spwd 	*shpwd)
+check_for_login_inactivity(uid_t pw_uid, struct spwd *shpwd)
 {
 	int		fdl;
-	struct lastlog	ll;
 	int		retval;
 	offset_t	offset;
+	time_t		lltime = 0;
 
-	offset = (offset_t)pw_uid * (offset_t)sizeof (struct lastlog);
+	if (!(shpwd->sp_inact > 0))
+		return (0);
 
-	if ((fdl = open(LASTLOG, O_RDWR|O_CREAT, 0444)) >= 0) {
+	if ((fdl = open(_PATH_LASTLOG, O_RDONLY)) >= 0) {
+		struct lastlog	ll;
+		offset = (offset_t)(pw_uid * sizeof (struct lastlog));
 		/*
 		 * Read the last login (ll) time
 		 */
@@ -110,31 +107,29 @@ check_for_login_inactivity(
 
 		retval = read(fdl, (char *)&ll, sizeof (ll));
 
-		/* Check for login inactivity */
-
-		if ((shpwd->sp_inact > 0) && (retval == sizeof (ll)) &&
-		    ll.ll_time) {
-			/*
-			 * account inactive too long.
-			 * and no update password set
-			 * and no last pwd change date in shadow file
-			 * and last pwd change more than inactive time
-			 * then account inactive too long and no access.
-			 */
-			if (((time_t)((ll.ll_time / DAY) + shpwd->sp_inact)
-			    < DAY_NOW) &&
-			    (shpwd->sp_lstchg != 0) &&
-			    (shpwd->sp_lstchg != -1) &&
-			    ((shpwd->sp_lstchg + shpwd->sp_inact) < DAY_NOW)) {
-				/*
-				 * Account inactive for too long
-				 */
-				(void) close(fdl);
-				return (1);
-			}
-		}
+		if (retval == sizeof (ll))
+			lltime = ll.ll_time;
 
 		(void) close(fdl);
+	}
+	/* Check for login inactivity */
+	if (lltime) {
+		/*
+		 * account inactive too long.
+		 * and no update password set
+		 * and no last pwd change date in shadow file
+		 * and last pwd change more than inactive time
+		 * then account inactive too long and no access.
+		 */
+		if ((((lltime / DAY) + shpwd->sp_inact) < DAY_NOW) &&
+		    (shpwd->sp_lstchg != 0) &&
+		    (shpwd->sp_lstchg != -1) &&
+		    ((shpwd->sp_lstchg + shpwd->sp_inact) < DAY_NOW)) {
+			/*
+			 * Account inactive for too long
+			 */
+			return (1);
+		}
 	}
 	return (0);
 }
@@ -146,9 +141,7 @@ check_for_login_inactivity(
  */
 
 static int
-new_password_check(shpwd, flags)
-	struct 	spwd 	*shpwd;
-	int 		flags;
+new_password_check(struct spwd *shpwd, int flags)
 {
 	time_t	now  = DAY_NOW;
 
@@ -162,11 +155,11 @@ new_password_check(shpwd, flags)
 	if ((flags & PAM_DISALLOW_NULL_AUTHTOK) != 0) {
 		if (shpwd->sp_pwdp[0] == '\0') {
 			if (((shpwd->sp_max == -1) ||
-				((time_t)shpwd->sp_lstchg > now) ||
-				((now >= (time_t)(shpwd->sp_lstchg +
-							shpwd->sp_min)) &&
-				(shpwd->sp_max >= shpwd->sp_min)))) {
-					return (PAM_NEW_AUTHTOK_REQD);
+			    ((time_t)shpwd->sp_lstchg > now) ||
+			    ((now >= (time_t)(shpwd->sp_lstchg +
+			    shpwd->sp_min)) &&
+			    (shpwd->sp_max >= shpwd->sp_min)))) {
+				return (PAM_NEW_AUTHTOK_REQD);
 			}
 		}
 	}
@@ -177,11 +170,8 @@ new_password_check(shpwd, flags)
  * perform_passwd_aging_check
  *		- Check for password exipration.
  */
-static	int
-perform_passwd_aging_check(
-	pam_handle_t *pamh,
-	struct 	spwd 	*shpwd,
-	int	flags)
+static int
+perform_passwd_aging_check(pam_handle_t *pamh, struct spwd *shpwd, int flags)
 {
 	time_t 	now = DAY_NOW;
 	int	idledays = -1;
@@ -239,9 +229,7 @@ perform_passwd_aging_check(
  */
 
 static void
-warn_user_passwd_will_expire(
-	pam_handle_t *pamh,
-	struct 	spwd shpwd)
+warn_user_passwd_will_expire(pam_handle_t *pamh, struct	spwd shpwd)
 {
 	time_t 	now	= DAY_NOW;
 	char	messages[PAM_MAX_NUM_MSG][PAM_MAX_MSG_SIZE];

@@ -1370,22 +1370,6 @@ plogin(user, passwd, msg)
 	tty += 5;
     logwtmp(tty, user, remote_name);		/* Add wtmp login entry */
 
-#ifdef _PATH_LASTLOG
-    if (!use_pam && pw != (struct passwd *)NULL) {
-	struct lastlog ll;
-	int fd;
-
-	if ((fd = open(_PATH_LASTLOG, O_RDWR, 0)) >= 0) {
-	   (void)lseek(fd, (off_t)(pw->pw_uid * sizeof(ll)), SEEK_SET);
-	    BZERO((void *)&ll, sizeof(ll));
-	    (void)time(&ll.ll_time);
-	    (void)strncpy(ll.ll_line, tty, sizeof(ll.ll_line));
-	    (void)write(fd, (char *)&ll, sizeof(ll));
-	    (void)close(fd);
-	}
-    }
-#endif /* _PATH_LASTLOG */
-
     info("user %s logged in", user);
     logged_in = 1;
 
