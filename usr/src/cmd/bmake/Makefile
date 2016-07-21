@@ -19,8 +19,8 @@ CC= $(GCC_ROOT)/bin/gcc
 LDFLAGS= $(LDFLAGS.cmd:%=-Wl,%)
 
 install test: obj/$(PROG)
-	STRIP_FLAG= LDFLAGS="$(LDFLAGS)" CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=$@
+	INSTALL=$$(pwd)/install-sh STRIP_FLAG= LDFLAGS="$(LDFLAGS)" CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=$@
 
 obj/$(PROG):
-	LDFLAGS="$(LDFLAGS)" CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=build
+	INSTALL=$$(pwd)/install-sh LDFLAGS="$(LDFLAGS)" CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=build
 	$(POST_PROCESS)
