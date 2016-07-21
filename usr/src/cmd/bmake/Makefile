@@ -18,7 +18,7 @@ CC= $(GCC_ROOT)/bin/gcc
 # bmake uses ${CC} as its linker, so prefix all options with -Wl,
 LDFLAGS= $(LDFLAGS.cmd:%=-Wl,%)
 
-install test:
+install test: obj/$(PROG)
 	LDFLAGS="$(LDFLAGS)" CC="$(CC)" ./boot-strap --prefix=/usr --install-destdir=$(ROOT) -o obj op=$@
 
 obj/$(PROG):
