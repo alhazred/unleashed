@@ -282,7 +282,7 @@ CCCREGSYM=		-Qoption cg -Qiselect-regsym=0
 CCSTATICSYM=		-Wc,-Qassembler-ounrefsym=0
 #
 # generate 32-bit addresses in the v9 kernel. Saves memory.
-CCABS32=		-Wc,-xcode=abs32
+CCABS32=		-_gcc=-fno-pic -_gcc=-mcmodel=medlow
 #
 # generate v9 code which tolerates callers using the v7 ABI, for the sake of
 # system calls.
@@ -469,8 +469,8 @@ amd64_IROPTFLAG		=
 IROPTFLAG		= $($(MACH)_IROPTFLAG)
 IROPTFLAG64		= $($(MACH64)_IROPTFLAG)
 
-sparc_XREGSFLAG		= -xregs=no%appl
-sparcv9_XREGSFLAG	= -xregs=no%appl
+sparc_XREGSFLAG		= -_gcc=-mno-app-regs
+sparcv9_XREGSFLAG	= -_gcc=-mno-app-regs
 i386_XREGSFLAG		=
 amd64_XREGSFLAG		=
 
@@ -557,7 +557,8 @@ BUILD.po= $(XGETTEXT) $(XGETFLAGS) -d $(<F) $<.i ;\
 #
 POFILE= $(PROG).po
 
-sparc_CCFLAGS=		-cg92 \
+sparc_CCFLAGS=		-m32 -_gcc=mcpu=v8 -_gcc=mno-v8plus \
+			-_gcc=-mtunesupersparc \
 			-Qoption ccfe -messages=no%anachronism \
 			$(CCERRWARN)
 sparcv9_CCFLAGS=	$(sparcv9_XARCH) -dalign \

@@ -50,17 +50,7 @@
  * -errtags=<a>	Display messages with tags a(no, yes)
  * -errwarn=<t>	Treats warnings specified by tags t(%none, %all, <tag list>)
  *		as errors
- * -fast	Optimize using a selection of options
- * -fd		Report old-style function definitions and declarations
  * -flags	Show this summary of compiler options
- * -fnonstd	Initialize floating-point hardware to non-standard preferences
- * -fns[=<yes|no>] Select non-standard floating point mode
- * -fprecision=<p> Set FP rounding precision mode p(single, double, extended)
- * -fround=<r>	Select the IEEE rounding mode in effect at startup
- * -fsimple[=<n>] Select floating-point optimization preferences <n>
- * -fsingle	Use single-precision arithmetic (-Xt and -Xs modes only)
- * -ftrap=<t>	Select floating-point trapping mode in effect at startup
- * -fstore	force floating pt. values to target precision on assignment
  * -G		Build a dynamic shared library
  * -g		Compile for debugging
  * -H		Print path name of each file included during compilation
@@ -77,8 +67,6 @@
  * -mr,"string"	Remove all strings and append "string" to .comment section
  * -mt		Specify options needed when compiling multi-threaded code
  * -native	Find available processor, generate code accordingly
- * -nofstore	Do not force floating pt. values to target precision
- *		on assignment
  * -nolib	Same as -xnolib
  * -O		Use default optimization level (-xO2 or -xO3. Check man page.)
  * -o <outputfile> Set name of output file to <outputfile>
@@ -86,7 +74,6 @@
  * -PIC		Alias for -KPIC or -xcode=pic32
  * -p		Compile for profiling with prof
  * -pic		Alias for -Kpic or -xcode=pic13
- * -Q[y|n]	Emit/don't emit identification info to output file
  * -R<dir[:dir]> Build runtime search path list into executable
  * -S		Compile and only generate assembly code (.s)
  * -s		Strip symbol table from the executable file
@@ -101,46 +88,24 @@
  * -Xc		Compile assuming strict ANSI C conformance
  * -Xs		Compile assuming (pre-ANSI) K & R C style code
  * -Xt		Compile assuming K & R conformance, allow ANSI C
- * -x386	Generate code for the 80386 processor
- * -x486	Generate code for the 80486 processor
  * -xarch=<a>	Specify target architecture instruction set
  * -xbuiltin[=<b>] When profitable inline, or substitute intrinisic functions
  *		for system functions, b={%all,%none}
- * -xchar_byte_order=<o> Specify multi-char byte order <o> (default, high, low)
- * -xchip=<c>	Specify the target processor for use by the optimizer
- * -xcode=<c>	Generate different code for forming addresses
  * -xe		Perform only syntax/semantic checking, no code generation
  * -xF		Compile for later mapfile reordering or unused section
  *		elimination
- * -xhelp=<f>	Display on-line help information f(flags, readme, errors)
- * -xlibmieee	Force IEEE 754 return values for math routines in
- *		exceptional cases
- * -xlibmil	Inline selected libm math routines for optimization
- * -xlic_lib=sunperf	Link in the Sun supplied performance libraries
  * -xlicinfo	Show license server information
  * -xM		Generate makefile dependencies
  * -xM1		Generate makefile dependencies, but exclude /usr/include
  * -xmaxopt=[off,1,2,3,4,5] maximum optimization level allowed on #pragma opt
  * -xnolib	Do not link with default system libraries
- * -xnolibmil	Cancel -xlibmil on command line
  * -xO<n>	Generate optimized code (n={1|2|3|4|5})
- * -xP		Print prototypes for function definitions
- * -xpentium	Generate code for the pentium processor
  * -xpg		Compile for profiling with gprof
  * -xprofile=<p> Collect data for a profile or use a profile to optimize
  *		<p>={{collect,use}[:<path>],tcov}
- * -xregs=<r>	Control register allocation
  * -xs		Allow debugging without object (.o) files
  * -xsb		Compile for use with the WorkShop source browser
  * -xsbfast	Generate only WorkShop source browser info, no compilation
- * -xsfpconst	Represent unsuffixed floating point constants as single
- *		precision
- * -xtarget=<t>	Specify target system for optimization
- * -xtemp=<dir>	Set directory for temporary files to <dir>
- * -xtime	Report the execution time for each compilation phase
- * -xtransition	Emit warnings for differences between K&R C and ANSI C
- * -xtrigraphs[=<yes|no>] Enable|disable trigraph translation
- * -xunroll=n	Enable unrolling loops n times where possible
  * -Y<c>,<dir>	Specify <dir> for location of component <c> (a,l,m,p,0,h,i,u)
  * -YA,<dir>	Change default directory searched for components
  * -YI,<dir>	Change default directory searched for include files
@@ -161,17 +126,7 @@
  * -E				pass-thru
  * -errtags=%all		-Wall
  * -errwarn=%all		-Werror else -Wno-error
- * -fast			error
- * -fd				error
  * -flags			--help
- * -fnonstd			error
- * -fns[=<yes|no>]		error
- * -fprecision=<p>		error
- * -fround=<r>			error
- * -fsimple[=<n>]		error
- * -fsingle[=<n>]		error
- * -ftrap=<t>			error
- * -fstore			error
  * -G				pass-thru
  * -g				pass-thru
  * -H				pass-thru
@@ -188,7 +143,6 @@
  * -mr,"string"			error
  * -mt				-D_REENTRANT
  * -native			error
- * -nofstore			error
  * -nolib			-nodefaultlibs
  * -O				-O1 (Check the man page to be certain)
  * -o <outputfile>		pass-thru
@@ -196,7 +150,6 @@
  * -PIC				-fPIC (C++ only)
  * -p				pass-thru
  * -pic				-fpic (C++ only)
- * -Q[y|n]			error
  * -R<dir[:dir]>		pass-thru
  * -S				pass-thru
  * -s				-Wl,-s
@@ -216,40 +169,20 @@
  * -Xc				-ansi -pedantic
  * -Xt				error
  * -Xs				-traditional -std=c89
- * -x386			-march=i386 (x86 only)
- * -x486			-march=i486 (x86 only)
  * -xarch=<a>			table
  * -xbuiltin[=<b>]		-fbuiltin (-fno-builtin otherwise)
- * -xchar_byte_order=<o>	error
- * -xchip=<c>			table
- * -xcode=<c>			table
  * -xe				error
  * -xF				error
- * -xhelp=<f>			error
- * -xlibmieee			error
- * -xlibmil			error
- * -xlic_lib=sunperf		error
  * -xM				-M
  * -xM1				-MM
  * -xmaxopt=[...]		error
  * -xnolib			-nodefaultlibs
- * -xnolibmil			error
  * -xO<n>			-O<n>
- * -xP				error
- * -xpentium			-march=pentium (x86 only)
  * -xpg				error
  * -xprofile=<p>		error
- * -xregs=<r>			table
  * -xs				error
  * -xsb				error
  * -xsbfast			error
- * -xsfpconst			error
- * -xtarget=<t>			table
- * -xtemp=<dir>			error
- * -xtime			error
- * -xtransition			-Wtransition
- * -xtrigraphs=<yes|no>		-trigraphs -notrigraphs
- * -xunroll=n			error
  * -W0,-xdbggen=no%usedonly	-fno-eliminate-unused-debug-symbols
  *				-fno-eliminate-unused-debug-types
  * -Y<c>,<dir>			error
@@ -376,48 +309,6 @@ static const xarch_table_t xtbl[] = {
 static int xtbl_size = sizeof (xtbl) / sizeof (xarch_table_t);
 
 static const char *progname;
-
-static const char *xchip_tbl[] = {
-#if defined(__x86)
-	"386",		"-mtune=i386", NULL,
-	"486",		"-mtune=i486", NULL,
-	"pentium",	"-mtune=pentium", NULL,
-	"pentium_pro",  "-mtune=pentiumpro", NULL,
-#elif defined(__sparc)
-	"super",	"-mtune=supersparc", NULL,
-	"ultra",	"-mtune=ultrasparc", NULL,
-	"ultra3",	"-mtune=ultrasparc3", NULL,
-#endif
-	NULL,		NULL
-};
-
-static const char *xcode_tbl[] = {
-#if defined(__sparc)
-	"abs32",	"-fno-pic", "-mcmodel=medlow", NULL,
-	"abs44",	"-fno-pic", "-mcmodel=medmid", NULL,
-	"abs64",	"-fno-pic", "-mcmodel=medany", NULL,
-	"pic13",	"-fpic", NULL,
-	"pic32",	"-fPIC", NULL,
-#endif
-	NULL,		NULL
-};
-
-static const char *xtarget_tbl[] = {
-#if defined(__x86)
-	"pentium_pro",	"-march=pentiumpro", NULL,
-#endif	/* __x86 */
-	NULL,		NULL
-};
-
-static const char *xregs_tbl[] = {
-#if defined(__sparc)
-	"appl",		"-mapp-regs", NULL,
-	"no%appl",	"-mno-app-regs", NULL,
-	"float",	"-mfpu", NULL,
-	"no%float",	"-mno-fpu", NULL,
-#endif	/* __sparc */
-	NULL,		NULL
-};
 
 static void
 nomem(void)
@@ -574,26 +465,6 @@ xlate_xtb(struct aelist *h, const char *xarg)
 }
 
 static void
-xlate(struct aelist *h, const char *xarg, const char **table)
-{
-	while (*table != NULL && strcmp(xarg, *table) != 0) {
-		while (*table != NULL)
-			table++;
-		table++;
-	}
-
-	if (*table == NULL)
-		error(xarg);
-
-	table++;
-
-	while (*table != NULL) {
-		newae(h, *table);
-		table++;
-	}
-}
-
-static void
 do_gcc(cw_ictx_t *ctx)
 {
 	int c;
@@ -706,13 +577,6 @@ do_gcc(cw_ictx_t *ctx)
 				nolibc = 1;
 				continue;
 			}
-#if defined(__sparc)
-			if (strcmp(arg, "-cg92") == 0) {
-				mflag |= xlate_xtb(ctx->i_ae, "v8");
-				xlate(ctx->i_ae, "super", xchip_tbl);
-				continue;
-			}
-#endif	/* __sparc */
 		}
 
 		switch ((c = arg[1])) {
@@ -1027,12 +891,6 @@ do_gcc(cw_ictx_t *ctx)
 				 */
 				break;
 			}
-			if (strncmp(arg, "-Wc,-xcode=", 11) == 0) {
-				xlate(ctx->i_ae, arg + 11, xcode_tbl);
-				if (strncmp(arg + 11, "pic", 3) == 0)
-					pic = 1;
-				break;
-			}
 			if (strncmp(arg, "-Wc,-Qiselect", 13) == 0) {
 				/*
 				 * Prevents insertion of register symbols.
@@ -1082,22 +940,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (arglen == 1)
 				error(arg);
 			switch (arg[2]) {
-#if defined(__x86)
-			case '3':
-				if (strcmp(arg, "-x386") == 0) {
-					newae(ctx->i_ae, "-march=i386");
-					break;
-				}
-				error(arg);
-				break;
-			case '4':
-				if (strcmp(arg, "-x486") == 0) {
-					newae(ctx->i_ae, "-march=i486");
-					break;
-				}
-				error(arg);
-				break;
-#endif	/* __x86 */
 			case 'a':
 				if (strncmp(arg, "-xarch=", 7) == 0) {
 					mflag |= xlate_xtb(ctx->i_ae, arg + 7);
@@ -1120,16 +962,6 @@ do_gcc(cw_ictx_t *ctx)
 				}
 				if (strncmp(arg, "-xc99=%none", 11) == 0) {
 					newae(ctx->i_ae, "-std=gnu89");
-					break;
-				}
-				if (strncmp(arg, "-xchip=", 7) == 0) {
-					xlate(ctx->i_ae, arg + 7, xchip_tbl);
-					break;
-				}
-				if (strncmp(arg, "-xcode=", 7) == 0) {
-					xlate(ctx->i_ae, arg + 7, xcode_tbl);
-					if (strncmp(arg + 7, "pic", 3) == 0)
-						pic = 1;
 					break;
 				}
 				if (strncmp(arg, "-xcache=", 8) == 0)
@@ -1217,19 +1049,8 @@ do_gcc(cw_ictx_t *ctx)
 				error(arg);
 				break;
 			case 'p':
-				if (strcmp(arg, "-xpentium") == 0) {
-					newae(ctx->i_ae, "-march=pentium");
-					break;
-				}
 				if (strcmp(arg, "-xpg") == 0) {
 					newae(ctx->i_ae, "-pg");
-					break;
-				}
-				error(arg);
-				break;
-			case 'r':
-				if (strncmp(arg, "-xregs=", 7) == 0) {
-					xlate(ctx->i_ae, arg + 7, xregs_tbl);
 					break;
 				}
 				error(arg);
@@ -1237,25 +1058,6 @@ do_gcc(cw_ictx_t *ctx)
 			case 's':
 				if (strcmp(arg, "-xs") == 0)
 					break;
-				error(arg);
-				break;
-			case 't':
-				if (strcmp(arg, "-xtransition") == 0) {
-					newae(ctx->i_ae, "-Wtransition");
-					break;
-				}
-				if (strcmp(arg, "-xtrigraphs=yes") == 0) {
-					newae(ctx->i_ae, "-trigraphs");
-					break;
-				}
-				if (strcmp(arg, "-xtrigraphs=no") == 0) {
-					newae(ctx->i_ae, "-notrigraphs");
-					break;
-				}
-				if (strncmp(arg, "-xtarget=", 9) == 0) {
-					xlate(ctx->i_ae, arg + 9, xtarget_tbl);
-					break;
-				}
 				error(arg);
 				break;
 			case 'e':
@@ -1295,10 +1097,6 @@ do_gcc(cw_ictx_t *ctx)
 			}
 			error(arg);
 			break;
-		case 'Q':
-			/*
-			 * We could map -Qy into -Wl,-Qy etc.
-			 */
 		default:
 			error(arg);
 			break;

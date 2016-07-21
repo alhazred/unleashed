@@ -68,7 +68,7 @@ CPPINCS		+= -I$(TOPDIR)/psm/stand/boot/sparc/sun4
 
 include $(TOPDIR)/psm/Makefile.psm.64
 
-CFLAGS64	+= -xchip=ultra $(CCABS32)
+CFLAGS64	+= -_gcc=-mtune=ultrasparc $(CCABS32)
 
 #
 # XXX this totally sucks since it effectively turns off -errchk=longptr64,

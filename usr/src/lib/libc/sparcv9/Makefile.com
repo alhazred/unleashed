@@ -1133,7 +1133,7 @@ $(DYNLIB) := CRTI = crti.o
 $(DYNLIB) := CRTN = crtn.o
 
 pics/_Qp%.o := CFLAGS64 += -I$(LIBCDIR)/$(MACH)/fp
-pics/_Q%.o := sparcv9_COPTFLAG = -xO4 -xchip=ultra
+pics/_Q%.o := sparcv9_COPTFLAG = -xO4 -_gcc=-mtune=ultrasparc
 
 # large-file-aware components that should be built large
 
