@@ -170,6 +170,7 @@ TAR=		/usr/bin/tar
 ASTBINDIR=	/usr/ast/bin
 MSGCC=		$(ASTBINDIR)/msgcc
 MSGFMT=		/usr/bin/msgfmt -s
+SETALTUNAME=    /usr/bin/puname -S
 
 FILEMODE=	644
 DIRMODE=	755
