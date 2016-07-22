@@ -50,6 +50,7 @@ sys/OSF1.mk
 sys/OpenBSD.mk
 sys/SunOS.mk
 sys/UnixWare.mk
+sys/illumos.mk
 target-flags.mk
 warnings.mk
 whats.mk
