@@ -160,9 +160,9 @@
 #include <sys/statvfs.h>
 #include <sys/uadmin.h>
 #include <zone.h>
-#if defined(__i386)
+#if defined(__x86)
 #include <libbe.h>
-#endif	/* __i386 */
+#endif	/* __x86 */
 
 #include "startd.h"
 #include "protocol.h"
@@ -3586,9 +3586,9 @@ do_uadmin(void)
 	struct tm nowtm;
 	char down_buf[256], time_buf[256];
 	uintptr_t mdep;
-#if defined(__i386)
+#if defined(__x86)
 	char *fbarg = NULL;
-#endif	/* __i386 */
+#endif	/* __x86 */
 
 	mdep = NULL;
 	fd = creat(resetting, 0777);
@@ -3639,7 +3639,7 @@ do_uadmin(void)
 	 * print warning and fall back to regular reboot.
 	 */
 	if (halting == AD_FASTREBOOT) {
-#if defined(__i386)
+#if defined(__x86)
 		if (be_get_boot_args(&fbarg, BE_ENTRY_DEFAULT) == 0) {
 			mdep = (uintptr_t)fbarg;
 		} else {
@@ -3650,11 +3650,11 @@ do_uadmin(void)
 			uu_warn("Failed to get fast reboot arguments.\n"
 			    "Falling back to regular reboot.\n");
 		}
-#else	/* __i386 */
+#else	/* __x86 */
 		halting = AD_BOOT;
 		uu_warn("Fast reboot configured, but not supported by "
 		    "this ISA\n");
-#endif	/* __i386 */
+#endif	/* __x86 */
 	}
 
 	fork_with_timeout("/sbin/umountall -l", 0, 5);
@@ -3710,10 +3710,10 @@ do_uadmin(void)
 	(void) uadmin(A_SHUTDOWN, halting, mdep);
 	uu_warn("uadmin() failed");
 
-#if defined(__i386)
+#if defined(__x86)
 	if (halting == AD_FASTREBOOT)
 		free(fbarg);
-#endif	/* __i386 */
+#endif	/* __x86 */
 
 	if (remove(resetting) != 0 && errno != ENOENT)
 		uu_warn("Could not remove \"%s\"", resetting);
