@@ -607,6 +607,7 @@ libeti:		libcurses
 libexacct/demo:	libexacct libproject
 libfakekernel:	libumem libcryptoutil
 libfcoe:	libdladm
+libficl:	libumem
 libfru:		libfruutils
 libfsmgt:	libkstat
 libgrubmgmt:	libdevinfo libzfs libfstyp libefi

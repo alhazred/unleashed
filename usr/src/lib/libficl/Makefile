@@ -33,9 +33,9 @@ all install: install_h $(SUBDIRS)
 
 clean clobber: $(SUBDIRS)
 
-install_h: 	$(PLATHDRDIR) $(ROOTHDRS)
+install_h:	$(PLATHDRDIR) $(ROOTHDRS)
 
-check: 		$(CHECKHDRS)
+check:		$(CHECKHDRS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
