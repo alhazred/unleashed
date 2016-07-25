@@ -3127,7 +3127,7 @@ be_has_grub(void)
 	static struct be_defaults be_defaults;
 	static boolean_t be_deflts_set = B_FALSE;
 
-	/* be_has_grub can be called quite many times */
+	/* Cache the defaults, because be_has_grub is used often. */
 	if (be_deflts_set == B_FALSE) {
 		be_get_defaults(&be_defaults);
 		be_deflts_set = B_TRUE;
