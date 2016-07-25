@@ -85,7 +85,7 @@
 #include <spawn.h>
 
 #include <libzfs.h>
-#if defined(__i386)
+#if defined(__x86)
 #include <libbe.h>
 #endif
 
@@ -95,7 +95,7 @@
 
 #if defined(__sparc)
 #define	CUR_ELFDATA	ELFDATA2MSB
-#elif defined(__i386)
+#elif defined(__x86)
 #define	CUR_ELFDATA	ELFDATA2LSB
 #endif
 
@@ -136,11 +136,11 @@ static ctid_t startdct = -1;
  */
 static char	fastboot_mounted[MAXPATHLEN];
 
-#if defined(__i386)
+#if defined(__x86)
 static char *fbarg;
 static char *fbarg_used;
 static int fbarg_entnum = BE_ENTRY_DEFAULT;
-#endif	/* __i386 */
+#endif	/* __x86 */
 
 static int validate_ufs_disk(char *, char *);
 static int validate_zfs_pool(char *, char *);
@@ -1046,7 +1046,7 @@ parse_fastboot_args(char *bootargs_buf, size_t buf_size,
 	if (*is_dryrun)
 		return (rc);
 
-#if defined(__i386)
+#if defined(__x86)
 	/* Read boot args from Boot Environment */
 	if ((bootargs_buf[0] == 0 || isdigit(bootargs_buf[0])) &&
 	    bename == NULL) {
@@ -1086,7 +1086,7 @@ parse_fastboot_args(char *bootargs_buf, size_t buf_size,
 		fbarg_entnum = entnum;
 		return (0);
 	}
-#endif	/* __i386 */
+#endif	/* __x86 */
 
 	/* Zero out the boot argument buffer as we will reconstruct it */
 	bzero(bootargs_buf, buf_size);
@@ -1293,7 +1293,7 @@ main(int argc, char *argv[])
 		fcn = AD_POWEROFF;
 	} else if (strcmp(cmdname, "reboot") == 0) {
 		(void) audit_reboot_setup();
-#if defined(__i386)
+#if defined(__x86)
 		optstring = "dlnqpfe:";
 		usage = gettext("usage: %s [ -dlnq(p|fe:) ] [ boot args ]\n");
 #else
@@ -1340,7 +1340,7 @@ main(int argc, char *argv[])
 		case 'p':
 			prom_reboot = 1;
 			break;
-#if defined(__i386)
+#if defined(__x86)
 		case 'e':
 			bename = optarg;
 			break;
@@ -1501,14 +1501,14 @@ main(int argc, char *argv[])
 		need_check_zones = halt_zones();
 	}
 
-#if defined(__i386)
+#if defined(__x86)
 	/* set new default entry in the GRUB entry */
 	if (fbarg_entnum != BE_ENTRY_DEFAULT) {
 		char buf[32];
 		(void) snprintf(buf, sizeof (buf), "default=%u", fbarg_entnum);
 		(void) halt_exec(BOOTADM_PROG, "set-menu", buf, NULL);
 	}
-#endif	/* __i386 */
+#endif	/* __x86 */
 
 	/* if we're dumping, do the archive update here and don't defer it */
 	if (cmd == A_DUMP && zoneid == GLOBAL_ZONEID && !nosync)
@@ -1662,10 +1662,10 @@ fail:
 
 		} else if (strlen(fastboot_mounted) != 0) {
 			(void) umount(fastboot_mounted);
-#if defined(__i386)
+#if defined(__x86)
 		} else {
 			free(fbarg_used);
-#endif	/* __i386 */
+#endif	/* __x86 */
 		}
 	}
 
