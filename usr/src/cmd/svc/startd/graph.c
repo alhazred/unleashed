@@ -160,7 +160,9 @@
 #include <sys/statvfs.h>
 #include <sys/uadmin.h>
 #include <zone.h>
+#if defined(__i386)
 #include <libbe.h>
+#endif	/* __i386 */
 
 #include "startd.h"
 #include "protocol.h"
