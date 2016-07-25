@@ -1023,9 +1023,9 @@ list_setting(menu_t *mp, char *which, char *setting)
 
 	for (lp = ent->start; lp != NULL; lp = lp->next) {
 		if ((*setting == NULL) && (lp->flags != BAM_COMMENT))
-			bam_print(_("%s\n"), lp->line);
+			bam_print("%s\n", lp->line);
 		else if (lp->cmd != NULL && strcmp(setting, lp->cmd) == 0) {
-			bam_print(_("%s\n"), lp->arg);
+			bam_print("%s\n", lp->arg);
 			found = 1;
 		}
 
