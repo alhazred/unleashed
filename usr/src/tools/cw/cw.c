@@ -44,7 +44,6 @@
  * -C		Prevent preprocessor from removing comments
  * -c		Compile only - produce .o files, suppress linking
  * -D<name[=token]>	Associate name with token as if by #define
- * -d[y|n]	dynamic [-dy] or static [-dn] option to linker
  * -E		Compile source through preprocessor only, output to stdout
  * -errtags=<a>	Display messages with tags a(no, yes)
  * -errwarn=<t>	Treats warnings specified by tags t(%none, %all, <tag list>)
@@ -654,16 +653,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (strcmp(arg, "-D_KERNEL") == 0 ||
 			    strcmp(arg, "-D_BOOT") == 0)
 				newae(ctx->i_ae, "-ffreestanding");
-			break;
-		case 'd':
-			if (strcmp(arg, "-dalign") == 0) {
-				/*
-				 * -dalign forces alignment in some cases;
-				 * gcc does not need any flag to do this.
-				 */
-				break;
-			}
-			error(arg);
 			break;
 		case 'e':
 			if (strcmp(arg, "-errtags=yes") == 0) {

@@ -62,7 +62,7 @@ CFLAGS += $(CCVERBOSE)
 #
 # Turn on doubleword alignment for 64 bit registers
 #
-CFLAGS += -dalign -DPCICFG_INTERPRET_FCODE
+CFLAGS += -DPCICFG_INTERPRET_FCODE
 
 #
 #	Dependency

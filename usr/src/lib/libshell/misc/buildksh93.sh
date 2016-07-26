@@ -353,7 +353,7 @@ function build_shell
                 *.i386.32bit.suncc*)  HOSTTYPE="sol11.i386" CC="${bsunc99} -m32"                  cc_sharedlib="-G" CCFLAGS="${bsuncc_ccflags}"  ;;
                 *.i386.64bit.suncc*)  HOSTTYPE="sol11.i386" CC="${bsunc99} -m64 -KPIC"            cc_sharedlib="-G" CCFLAGS="${bsuncc_ccflags}"  ;;
                 *.sparc.32bit.suncc*) HOSTTYPE="sol11.sun4" CC="${bsunc99} -m32"                  cc_sharedlib="-G" CCFLAGS="${bsuncc_ccflags}" bsuncc_app_ccflags="${bsuncc_app_ccflags_sparc}" ;;
-                *.sparc.64bit.suncc*) HOSTTYPE="sol11.sun4" CC="${bsunc99} -m64 -dalign -KPIC"    cc_sharedlib="-G" CCFLAGS="${bsuncc_ccflags}" bsuncc_app_ccflags="${bsuncc_app_ccflags_sparc}" ;;
+                *.sparc.64bit.suncc*) HOSTTYPE="sol11.sun4" CC="${bsunc99} -m64 -KPIC"    cc_sharedlib="-G" CCFLAGS="${bsuncc_ccflags}" bsuncc_app_ccflags="${bsuncc_app_ccflags_sparc}" ;;
 
                 *.i386.32bit.gcc*)  HOSTTYPE="sol11.i386" CC="${bgcc99} -fPIC"                                            cc_sharedlib="-shared" CCFLAGS="${bgcc_ccflags}"  ;;
                 *.i386.64bit.gcc*)  HOSTTYPE="sol11.i386" CC="${bgcc99} -m64 -mtune=opteron -Ui386 -U__i386 -fPIC"        cc_sharedlib="-shared" CCFLAGS="${bgcc_ccflags}"  ;;

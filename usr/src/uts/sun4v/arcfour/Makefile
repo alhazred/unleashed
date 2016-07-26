@@ -58,11 +58,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 CFLAGS		+= $(CCVERBOSE) -I$(COM_DIR)
 
 #
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
-
-#
 # For niagara specific optimizations
 #
 COPTIMIZE	= -xO5 -xbuiltin=%all

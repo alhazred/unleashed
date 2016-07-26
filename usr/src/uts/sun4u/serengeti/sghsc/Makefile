@@ -65,10 +65,6 @@ CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-type-limits
 CERRWARN += -_gcc=-Wno-uninitialized
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
 
 #
 #	Dependency

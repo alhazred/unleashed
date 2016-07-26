@@ -68,10 +68,6 @@ INC_PATH	+= -I$(CONF_SRCDIR)
 
 CFLAGS          += $(CCVERBOSE)
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS		+= -dalign
 
 #
 # Driver depends on MAC

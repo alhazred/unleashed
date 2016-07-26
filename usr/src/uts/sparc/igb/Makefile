@@ -65,10 +65,6 @@ INC_PATH	+= -I$(CONF_SRCDIR) -I$(UTSBASE)/common/io/e1000api
 
 CFLAGS          += $(CCVERBOSE)
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS		+= -dalign
 
 #
 # Driver depends on MAC

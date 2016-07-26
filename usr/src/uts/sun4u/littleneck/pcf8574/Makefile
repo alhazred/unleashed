@@ -59,10 +59,6 @@ $(NOT_RELEASE_BUILD)DEF_BUILDS = debug64
 
 CFLAGS += $(CCVERBOSE)
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
 
 LDFLAGS += -dy -N misc/i2c_svc
 #

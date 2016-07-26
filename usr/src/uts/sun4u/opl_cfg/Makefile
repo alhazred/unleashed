@@ -66,10 +66,6 @@ LDFLAGS += -dy -Nmisc/fcodem -Nmisc/busra
 # OPL specific header files
 #
 INC_PATH	+= -I$(UTSBASE)/sun4u/opl/
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

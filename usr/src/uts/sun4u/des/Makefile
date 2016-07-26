@@ -68,10 +68,6 @@ LDFLAGS += -dy -Nmisc/kcf
 
 CFLAGS		+= $(CCVERBOSE) -I$(COM_DIR)
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

@@ -1209,8 +1209,8 @@ $(DYNLIB) := CRTN = crtn.o
 pics/rwlock.o pics/synch.o pics/lwp.o pics/door_calls.o := \
 	sparc_CFLAGS += -_gcc=-Wa,-xarch=v8plus
 
-pics/_Q%.o := sparc_COPTFLAG = -xO4 -dalign
-pics/__quad%.o := sparc_COPTFLAG = -xO4 -dalign
+pics/_Q%.o := sparc_COPTFLAG = -xO4
+pics/__quad%.o := sparc_COPTFLAG = -xO4
 
 # large-file-aware components that should be built large
 

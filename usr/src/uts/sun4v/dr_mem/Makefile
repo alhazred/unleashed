@@ -51,11 +51,6 @@ CFLAGS		+= $(CCVERBOSE)
 CERRWARN	+= -_gcc=-Wno-parentheses
 
 #
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS		+= -dalign
-
-#
 # Module Dependencies
 #
 LDFLAGS		+= -dy -Nmisc/ds -Nmisc/platsvc -Ndrv/drctl

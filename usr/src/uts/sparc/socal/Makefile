@@ -57,7 +57,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 #	Overrides
 #
-CFLAGS		+= $(CCVERBOSE) -dalign
+CFLAGS		+= $(CCVERBOSE)
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to
