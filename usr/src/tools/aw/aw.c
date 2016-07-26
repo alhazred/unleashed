@@ -481,7 +481,6 @@ int
 main(int argc, char *argv[])
 {
 	struct aelist *cpp = NULL;
-	struct aelist *m4 = NULL;
 	struct aelist *as = newael();
 	char **asargv;
 	char *outfile = NULL;
@@ -489,8 +488,6 @@ main(int argc, char *argv[])
 	const char *dir, *cmd;
 	static char as_pgm[MAXPATHLEN];
 	static char as64_pgm[MAXPATHLEN];
-	static char m4_pgm[MAXPATHLEN];
-	static char m4_cmdefs[MAXPATHLEN];
 	static char cpp_pgm[MAXPATHLEN];
 	int as64 = 0;
 	int code;
@@ -517,23 +514,6 @@ main(int argc, char *argv[])
 		if ((dir = getenv("AW_AS64_DIR")) == NULL)
 			dir = DEFAULT_AS64_DIR;	/* /usr/sfw/bin */
 		(void) snprintf(as64_pgm, sizeof (as_pgm), "%s/gas", dir);
-	}
-
-	if ((cmd = getenv("AW_M4")) != NULL)
-		strlcpy(m4_pgm, cmd, sizeof (m4_pgm));
-	else {
-		if ((dir = getenv("AW_M4_DIR")) == NULL)
-			dir = DEFAULT_M4_DIR;	/* /usr/ccs/bin */
-		(void) snprintf(m4_pgm, sizeof (m4_pgm), "%s/m4", dir);
-	}
-
-	if ((cmd = getenv("AW_M4LIB")) != NULL)
-		strlcpy(m4_cmdefs, cmd, sizeof (m4_cmdefs));
-	else {
-		if ((dir = getenv("AW_M4LIB_DIR")) == NULL)
-			dir = DEFAULT_M4LIB_DIR;	/* /usr/ccs/lib */
-		(void) snprintf(m4_cmdefs, sizeof (m4_cmdefs),
-		    "%s/cm4defs", dir);
 	}
 
 	if ((cmd = getenv("AW_CPP")) != NULL)
@@ -607,8 +587,6 @@ main(int argc, char *argv[])
 			}
 			if (cpp)
 				newae(cpp, filename);
-			else if (m4)
-				newae(m4, filename);
 			else
 				newae(as, filename);
 			continue;
@@ -677,18 +655,7 @@ main(int argc, char *argv[])
 			argc--;
 			arglen = strlen(arg + 1);
 			break;
-		case 'm':
-			if (cpp)
-				return (usage("-m conflicts with -P"));
-			if (m4 == NULL) {
-				m4 = newael();
-				newae(m4, m4_pgm);
-				newae(m4, m4_cmdefs);
-			}
-			break;
 		case 'P':
-			if (m4)
-				return (usage("-P conflicts with -m"));
 			if (cpp == NULL) {
 				cpp = newael();
 				newae(cpp, cpp_pgm);
@@ -699,8 +666,6 @@ main(int argc, char *argv[])
 		case 'U':
 			if (cpp)
 				newae(cpp, arg);
-			else if (m4)
-				newae(m4, arg);
 			else
 				newae(as, arg);
 			break;
@@ -751,9 +716,7 @@ main(int argc, char *argv[])
 #error	"need isa-dependent defines"
 #endif
 		code = pipeline(aeltoargv(cpp), asargv);
-	} else if (m4)
-		code = pipeline(aeltoargv(m4), asargv);
-	else {
+	} else {
 		/*
 		 * XXX	should arrange to fork/exec so that we
 		 *	can unlink the output file if errors are
