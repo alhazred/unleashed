@@ -631,10 +631,6 @@ main(int argc, char *argv[])
 			if (strcmp(arg, "PIC") != 0 && strcmp(arg, "pic") != 0)
 				return (usage("malformed -K"));
 			break;		/* just ignore -Kpic for gcc */
-		case 'Q':
-			if (strcmp(arg, "-Qn") == 0)
-				break;
-			/*FALLTHROUGH*/
 		case 'b':
 		case 's':
 		case 'T':
