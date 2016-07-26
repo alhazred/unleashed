@@ -26,7 +26,7 @@
 .I cw
 \- invoke one or more compilers with argument translation
 .SH SYNOPSIS
-\fBcw {-_cc|-_gcc|-_CC|-_g++} [options] [compiler args...]\fP
+\fBcw {-_gcc|-_g++} [options] [compiler args...]\fP
 .SH DESCRIPTION
 .LP
 .I cw
@@ -43,14 +43,8 @@ Solaris.
 Exactly one of the following arguments is required, and must appear
 immediately following \fBcw\fP in the argument list:
 .TP 4
-.B \-_cc
-Select Sun Studio C (cc) as the primary compiler.
-.TP 4
 .B \-_gcc
 Select GNU C (gcc) as the primary compiler.
-.TP 4
-.B \-_CC
-Select Sun Studio C++ (CC) as the primary compiler.
 .TP 4
 .B \-_g++
 Select GNU C++ (g++) as the primary compiler.
@@ -63,7 +57,7 @@ Normally, cw writes to standard error the actual compiler commands
 invoked, each prefixed with '+'.  This option suppresses these
 messages.
 .TP 4
-.B \-_cc=,\-_gcc=,\-_CC=,\-g++=
+.B \-_gcc=,\-g++=
 Pass compiler-dependent options.  See ARGUMENT TRANSLATION.
 .SH SHADOW COMPILATION
 .LP
@@ -132,17 +126,8 @@ remaining arguments are translated to their closest appropriate
 semantic equivalents and passed in the same order as their
 counterparts given to \fBcw\fP.  Arguments which begin with
 \fI-_gcc=\fP or \fI-_g++=\fP will be passed in place with the
-leading portion removed.  Arguments which begin with \fI-_cc=\fP or
-\fI-_CC=\fP will be discarded.  See the comments at the head of
+leading portion removed.  See the comments at the head of
 \fIusr/src/tools/cw/cw.c\fP for a detailed list of translations.
-.TP 4
-.B 4.
-If the compiler to be invoked is a Studio C or C++ compiler, the
-remaining arguments are passed unmodified and in the same order as
-given to \fBcw\fP.  Arguments which begin with \fI-_cc=\fP or
-\fI-_CC=\fP will be passed in place with the leading portion removed.
-Arguments which begin with \fI-_gcc=\fP or \fI-_g++=\fP will be
-discarded.
 .SH ENVIRONMENT
 .TP 4
 .B CW_NO_EXEC

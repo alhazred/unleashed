@@ -427,7 +427,7 @@ static void
 usage()
 {
 	(void) fprintf(stderr,
-	    "usage: %s { -_cc | -_gcc | -_CC | -_g++ } ...\n",
+	    "usage: %s { -_gcc | -_g++ } ...\n",
 	    progname);
 	exit(2);
 }
@@ -549,9 +549,6 @@ do_gcc(cw_ictx_t *ctx)
 		case '_':
 			if (strcmp(arg, "-_noecho") == 0)
 				ctx->i_flags &= ~CW_F_ECHO;
-			else if (strncmp(arg, "-_cc=", 5) == 0 ||
-			    strncmp(arg, "-_CC=", 5) == 0)
-				/* EMPTY */;
 			else if (strncmp(arg, "-_gcc=", 6) == 0 ||
 			    strncmp(arg, "-_g++=", 6) == 0)
 				newae(ctx->i_ae, arg + 6);
