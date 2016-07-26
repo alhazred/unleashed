@@ -684,29 +684,46 @@ SPRO_ROOT=		$(BUILD_TOOLS)/SUNWspro
 SPRO_VROOT=		$(SPRO_ROOT)/SS12
 GNU_ROOT=		/usr
 
+BASIC_CC_ARGS=	-_gcc=-fident \
+		-_gcc=-finline \
+		-_gcc=-fno-inline-functions \
+		-_gcc=-fno-builtin \
+		-_gcc=-fno-asm \
+		-_gcc=-fdiagnostics-show-option \
+		-_gcc=-nodefaultlibs
+
+# The SPARC ldd and std instructions require 8-byte alignment of their
+# address operand.  gcc correctly uses them only when the ABI requires
+# 8-byte alignment; unfortunately we have a number of pieces of buggy code
+# that does not conform to the ABI.  This flag makes gcc work more like
+# Studio with -xmemalign=4.
+$(SPARC_BLD)BASIC_CC_ARGS += -_gcc=mno-integer-ldd-std
+
+BASIC_CC_ARGS += -D__sun
+
 # Specify platform compiler versions for languages
 # that we use (currently only c and c++).
 #
-sparc_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
-sparc_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
+sparc_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc $(BASIC_CC_ARGS)
+sparc_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++ $(BASIC_CC_ARGS)
 sparc_CPP=		/usr/ccs/lib/cpp
 sparc_AS=		/usr/ccs/bin/as -xregsym=no
 sparc_LD=		/usr/ccs/bin/ld
 
-sparcv9_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
-sparcv9_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
+sparcv9_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc $(BASIC_CC_ARGS)
+sparcv9_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++ $(BASIC_CC_ARGS)
 sparcv9_CPP=		/usr/ccs/lib/cpp
 sparcv9_AS=		/usr/ccs/bin/as -xregsym=no
 sparcv9_LD=		/usr/ccs/bin/ld
 
-i386_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
-i386_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
+i386_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc $(BASIC_CC_ARGS)
+i386_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++ $(BASIC_CC_ARGS)
 i386_CPP=		/usr/ccs/lib/cpp
 i386_AS=		$(ONBLD_TOOLS)/bin/$(MACH)/aw
 i386_LD=		/usr/ccs/bin/ld
 
-amd64_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
-amd64_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++
+amd64_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc $(BASIC_CC_ARGS)
+amd64_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++ $(BASIC_CC_ARGS)
 amd64_CPP=		/usr/ccs/lib/cpp
 amd64_AS=		$(ONBLD_TOOLS)/bin/$(MACH)/aw
 amd64_LD=		/usr/ccs/bin/ld
