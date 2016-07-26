@@ -631,16 +631,6 @@ main(int argc, char *argv[])
 			if (strcmp(arg, "PIC") != 0 && strcmp(arg, "pic") != 0)
 				return (usage("malformed -K"));
 			break;		/* just ignore -Kpic for gcc */
-		case 'b':
-		case 's':
-		case 'T':
-			/*
-			 * -b	Extra symbol table for source browser ..
-			 *	not relevant to gas, thus should error.
-			 * -s	Put stabs in .stabs section not stabs.excl
-			 *	not clear if there's an equivalent
-			 * -T	4.x migration option
-			 */
 		default:
 			return (error(arg));
 		case 'x':
