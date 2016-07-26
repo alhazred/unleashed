@@ -25,7 +25,7 @@ clean: clobber
 clobber:
 	$(RM) machine x86 $(OBJS) libi386.a
 
-AS=	/usr/bin/gas
+AS=	$(GNU_ROOT)/bin/gas
 CC=	$(GCC_ROOT)/bin/gcc
 OBJCOPY= $(GNU_ROOT)/bin/gobjcopy
 AS_FLAGS=--32
@@ -98,10 +98,12 @@ CLEANFILES +=	machine x86
 include ../Makefile.inc
 
 machine:
-	ln -sf ../../../i386/include machine
+	$(RM) machine
+	$(SYMLINK) ../../../i386/include machine
 
 x86:
-	ln -sf ../../../x86/include x86
+	$(RM) x86
+	$(SYMLINK) ../../../x86/include x86
 
 libi386.a: machine $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)

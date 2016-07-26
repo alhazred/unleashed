@@ -20,7 +20,7 @@ SRCS=	btxldr.S
 OBJS=	btxldr.o
 
 AS=	$(GNU_ROOT)/bin/gas
-LD=	/usr/bin/gld
+LD=	$(GNU_ROOT)/bin/gld
 CC=	$(GCC_ROOT)/bin/gcc
 
 LOADER_ADDRESS=0x200000

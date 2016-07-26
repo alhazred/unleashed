@@ -20,7 +20,7 @@ SRCS=	btx.S
 OBJS=	btx.o
 
 AS=	$(GNU_ROOT)/bin/gas
-LD=	/usr/bin/gld
+LD=	$(GNU_ROOT)/bin/gld
 CC=	$(GCC_ROOT)/bin/gcc
 
 #.if defined(BOOT_BTX_NOHANG)

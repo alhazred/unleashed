@@ -27,9 +27,10 @@ CPPFLAGS +=	-I../libi386
 LIBZFSBOOT=	../../zfs/i386/libzfsboot.a
 LIBI386=        ../libi386/libi386.a
 
-LD=     /usr/bin/gld
-CC=     $(GCC_ROOT)/bin/gcc
-OBJCOPY= $(GNU_ROOT)/bin/gobjcopy
+LD=		$(GNU_ROOT)/bin/gld
+CC=		$(GCC_ROOT)/bin/gcc
+OBJCOPY=	$(GNU_ROOT)/bin/gobjcopy
+GSTRIP=		$(GNU_ROOT)/bin/gstrip
 ROOT_BOOT=	$(ROOT)/boot
 ROOT_BOOT_DEFAULTS=	$(ROOT)/boot/defaults
 ROOT_BOOT_FORTH=	$(ROOT)/boot/forth
@@ -103,18 +104,18 @@ CPPFLAGS +=	-I../btx/lib
 include ../Makefile.inc
 
 vers.c:	../../common/newvers.sh version
-	sh ../../common/newvers.sh version ${NEWVERSWHAT}
+	$(SH) ../../common/newvers.sh version ${NEWVERSWHAT}
 
 ${LOADER}: ${LOADER}.bin ${BTXLDR} ${BTXKERN}
 	$(BTXLD) -v -f aout -e ${LOADER_ADDRESS} -o $@ -l ${BTXLDR} \
 		-b ${BTXKERN} ${LOADER}.bin
 
 ${LOADER}.bin: ${LOADER}.sym
-	cp $^ $@
-	/usr/bin/gstrip -R .comment -R .note $@
+	$(CP) $^ $@
+	$(GSTRIP) -R .comment -R .note $@
 
 loader.help: ../../common/help.common help.i386
-	cat $^ | $(AWK) -f ../../common/merge_help.awk > $@
+	$(CAT) $^ | $(AWK) -f ../../common/merge_help.awk > $@
 
 FILES=	${LOADER} loader.help
 
@@ -133,10 +134,12 @@ CLEANFILES +=	machine x86
 CFLAGS +=	-DLOADER_PREFER_AMD64
 
 machine:
-	ln -sf ../../../i386/include machine
+	$(RM) machine
+	$(SYMLINK) ../../../i386/include machine
 
 x86:
-	ln -sf ../../../x86/include x86
+	$(RM) x86
+	$(SYMLINK) ../../../x86/include x86
 
 OBJS=		$(SRCS:%.c=%.o)
 

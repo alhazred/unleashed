@@ -92,7 +92,7 @@ all: machine x86 loader.efi
 install: all $(ROOTBOOTFILES)
 
 vers.c:	../../common/newvers.sh ../../efi/loader/version
-	sh ../../common/newvers.sh version ${NEWVERSWHAT}
+	$(SH) ../../common/newvers.sh version ${NEWVERSWHAT}
 
 EFI_TARGET=	pei-x86-64
 
@@ -122,13 +122,15 @@ beforedepend ${OBJS}: machine
 CLEANFILES +=   machine x86
 
 machine:
-	ln -sf ../../../${MACHINE}/include machine
+	$(RM) machine
+	$(SYMLINK) ../../../${MACHINE}/include machine
 
 x86:
-	ln -sf ../../../x86/include x86
+	$(RM) x86
+	$(SYMLINK) ../../../x86/include x86
 
 clean clobber:
-	rm -f $(CLEANFILES) $(OBJS) loader.sym loader.efi
+	$(RM) $(CLEANFILES) $(OBJS) loader.sym loader.efi
 
 %.o:	%.c
 	$(COMPILE.c) $<
