@@ -47,10 +47,12 @@ clobber:
 	$(RM) $(CLEANFILES) $(OBJS) machine x86 libstand.a
 
 machine:
-	ln -fs ../../../$(MACHINE)/include machine
+	$(RM) machine
+	$(SYMLINK) ../../../$(MACHINE)/include machine
 
 x86:
-	ln -fs ../../../x86/include x86
+	$(RM) x86
+	$(SYMLINK) ../../../x86/include x86
 
 %.o:	$(LIBSTAND_SRC)/%.c
 	$(COMPILE.c) $<

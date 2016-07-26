@@ -105,10 +105,12 @@ gptzfsboot.out: ${BTXCRT} ${OBJS} ${LIBZFSBOOT} ${LIBSTAND}
 		${LIBZFSBOOT} ${LIBSTAND}
 
 machine:
-	ln -sf ../../../i386/include machine
+	$(RM) machine
+	$(SYMLINK) ../../../i386/include machine
 
 x86:
-	ln -sf ../../../x86/include x86
+	$(RM) x86
+	$(SYMLINK) ../../../x86/include x86
 
 %.o:	../common/%.c
 	$(COMPILE.c) -o $@ $<

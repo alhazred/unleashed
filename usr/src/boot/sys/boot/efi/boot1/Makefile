@@ -19,8 +19,6 @@ CC=	$(GCC_ROOT)/bin/gcc
 LD=	$(GNU_ROOT)/bin/gld
 OBJCOPY= $(GNU_ROOT)/bin/gobjcopy
 OBJDUMP= $(GNU_ROOT)/bin/gobjdump
-OBJCOPY= /code/binutils-gdb/binutils/objcopy
-OBJDUMP= /code/binutils-gdb/binutils/objdump
 
 PROG=		boot1.sym
 MACHINE=$(MACH64)
@@ -103,13 +101,15 @@ ${PROG}:	$(OBJS) $(DPADD)
 CLEANFILES +=   machine x86
 
 machine:
-	ln -sf ./../../../${MACHINE}/include machine
+	$(RM) machine
+	$(SYMLINK) ./../../../${MACHINE}/include machine
 
 x86:
-	ln -sf ./../../../x86/include x86
+	$(RM) x86
+	$(SYMLINK) ./../../../x86/include x86
 
 clean clobber:
-	rm -f $(CLEANFILES) $(OBJS)
+	$(RM) $(CLEANFILES) $(OBJS)
 
 %.o:	../loader/arch/${MACHINE}/%.S
 	$(COMPILE.S) $<
