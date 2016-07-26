@@ -33,9 +33,11 @@ SBINLINKS= $(PROG)
 OBJS= bootadm.o bootadm_upgrade.o bootadm_hyper.o bootadm_digest.o \
 	bootadm_loader.o
 SRCS = $(OBJS:.o=.c)
+POFILES= $(OBJS:%.o=%.po)
 
 include ../Makefile.com
 
+POFILE= bootadm_cmd.po
 
 .KEEP_STATE:
 
@@ -62,10 +64,11 @@ $(PROG): $(OBJS) bootadm.h
 
 install: all $(ROOTSBINPROG) .WAIT $(ROOTUSRSBINLINKS)
 
+$(POFILE): $(POFILES)
+	$(RM) $@
+	$(CAT) $(POFILES) > $@
+
 clean:
-	-$(RM) $(OBJS)
-
-_msg:
-
+	-$(RM) $(OBJS) $(POFILE) $(POFILES)
 
 include ../Makefile.targ

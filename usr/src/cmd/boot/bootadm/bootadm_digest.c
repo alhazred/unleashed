@@ -61,7 +61,7 @@ do_digest(CK_SESSION_HANDLE hSession, CK_MECHANISM_PTR pmech,
 {
 	CK_RV rv;
 	ssize_t nread;
-	int saved_errno;
+	int err;
 
 	if ((rv = C_DigestInit(hSession, pmech)) != CKR_OK) {
 		return (rv);
@@ -74,13 +74,12 @@ do_digest(CK_SESSION_HANDLE hSession, CK_MECHANISM_PTR pmech,
 			return (rv);
 	}
 
-	saved_errno = errno; /* for later use */
-
-	/*
-	 * Perform the C_DigestFinal, even if there is a read error.
-	 * Otherwise C_DigestInit will return CKR_OPERATION_ACTIVE
-	 * next time it is called (for another file)
-	 */
+	/* There was a read error */
+	if (nread == -1) {
+		err = errno;
+		bam_print(gettext("error reading file: %s\n"), strerror(err));
+		return (CKR_GENERAL_ERROR);
+	}
 
 	rv = C_DigestFinal(hSession, *pdigest, pdigestlen);
 
@@ -89,7 +88,7 @@ do_digest(CK_SESSION_HANDLE hSession, CK_MECHANISM_PTR pmech,
 		*pdigest = realloc(*pdigest, *pdigestlen);
 
 		if (*pdigest == NULL) {
-			int err = errno;
+			err = errno;
 			bam_print(gettext("realloc: %s\n"), strerror(err));
 			return (CKR_HOST_MEMORY);
 		}
@@ -97,14 +96,7 @@ do_digest(CK_SESSION_HANDLE hSession, CK_MECHANISM_PTR pmech,
 		rv = C_DigestFinal(hSession, *pdigest, pdigestlen);
 	}
 
-	/* There was a read error */
-	if (nread == -1) {
-		bam_print(gettext(
-		    "error reading file: %s\n"), strerror(saved_errno));
-		return (CKR_GENERAL_ERROR);
-	} else {
-		return (rv);
-	}
+	return (rv);
 }
 
 int

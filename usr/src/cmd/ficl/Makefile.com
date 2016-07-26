@@ -18,6 +18,7 @@ OBJS= main.o
 SRCS= main.c
 
 include ../../Makefile.cmd
+include ../../Makefile.ctf
 
 LDLIBS += -lficl-sys -ltecla -lumem
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -I$(SRC)/common/ficl

@@ -61,17 +61,17 @@ extern uint32_t biospci_locator(uint8_t, uint8_t, uint8_t);
 /*
  *		FreeBSD's loader interaction words and extras
  *
- * 		setenv      ( value n name n' -- )
- * 		setenv?     ( value n name n' flag -- )
- * 		getenv      ( addr n -- addr' n' | -1 )
- * 		unsetenv    ( addr n -- )
- * 		copyin      ( addr addr' len -- )
- * 		copyout     ( addr addr' len -- )
- * 		findfile    ( name len type len' -- addr )
- * 		pnpdevices  ( -- addr )
- * 		pnphandlers ( -- addr )
- * 		ccall       ( [[...[p10] p9] ... p1] n addr -- result )
- * 		.#	    ( value -- )
+ *		setenv      ( value n name n' -- )
+ *		setenv?     ( value n name n' flag -- )
+ *		getenv      ( addr n -- addr' n' | -1 )
+ *		unsetenv    ( addr n -- )
+ *		copyin      ( addr addr' len -- )
+ *		copyout     ( addr addr' len -- )
+ *		findfile    ( name len type len' -- addr )
+ *		pnpdevices  ( -- addr )
+ *		pnphandlers ( -- addr )
+ *		ccall       ( [[...[p10] p9] ... p1] n addr -- result )
+ *		.#	    ( value -- )
  */
 
 void
