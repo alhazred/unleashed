@@ -13,10 +13,7 @@
 
 include $(SRC)/Makefile.master
 
-# We have to use GCC, and only GCC.  The best way is to ask cw(1) which GCC to use.
-CC_CMD =	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc -_compiler
-CC =		$(CC_CMD:sh)
-CFLAGS = 	-O1 -m64
+CFLAGS = 	-_gcc=-O1 -m64
 
 LINK.c = env LD_ALTEXEC=$(PROTO)/usr/bin/amd64/ld $(CC) $(CFLAGS) -o $@ $^
 COMPILE.c = $(CC) $(CFLAGS) -c -o $@ $^

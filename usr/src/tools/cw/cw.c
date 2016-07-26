@@ -427,7 +427,7 @@ static void
 usage()
 {
 	(void) fprintf(stderr,
-	    "usage: %s { -_cc | -_gcc | -_CC | -_g++ } [ -_compiler | ... ]\n",
+	    "usage: %s { -_cc | -_gcc | -_CC | -_g++ } ...\n",
 	    progname);
 	exit(2);
 }
@@ -1379,31 +1379,6 @@ main(int argc, char **argv)
 		argc++;
 		argv--;
 		ctx->i_compiler = CW_C_GCC;
-	}
-
-	/*
-	 * -_compiler - tell us the path to the primary compiler only
-	 */
-	if (argc > 1 && strcmp(argv[1], "-_compiler") == 0) {
-		ctx->i_flags &= ~CW_F_XLATE;
-		prepctx(ctx);
-		(void) printf("%s\n", ctx->i_ae->ael_head->ae_arg);
-		return (0);
-	}
-
-	/*
-	 * -_versions - tell us the cw version, paths to all compilers, and
-	 *		ask each for its version if we know how.
-	 */
-	if (argc > 1 && strcmp(argv[1], "-_versions") == 0) {
-		(void) printf("cw version %s", CW_VERSION);
-		(void) printf("\n");
-		(void) fflush(stdout);
-		ctx->i_flags &= ~CW_F_ECHO;
-		ctx->i_flags |= CW_F_PROG|CW_F_EXEC;
-		argc--;
-		argv++;
-		do_reap = 1;
 	}
 
 	ctx->i_oldargc = argc;
