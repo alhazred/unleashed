@@ -43,7 +43,6 @@
  * -B<[static|dynamic]>	Specify dynamic or static binding
  * -C		Prevent preprocessor from removing comments
  * -c		Compile only - produce .o files, suppress linking
- * -cg92	Alias for -xtarget=ss1000
  * -D<name[=token]>	Associate name with token as if by #define
  * -d[y|n]	dynamic [-dy] or static [-dn] option to linker
  * -E		Compile source through preprocessor only, output to stdout
@@ -120,9 +119,7 @@
  * -B<[static|dynamic]>		pass-thru (syntax error for anything else)
  * -C				pass-thru
  * -c				pass-thru
- * -cg92			-m32 -mcpu=v8 -mtune=supersparc (SPARC only)
  * -D<name[=token]>		pass-thru
- * -dy or -dn			-Wl,-dy or -Wl,-dn
  * -E				pass-thru
  * -errtags=%all		-Wall
  * -errwarn=%all		-Werror else -Wno-error
@@ -659,16 +656,6 @@ do_gcc(cw_ictx_t *ctx)
 				newae(ctx->i_ae, "-ffreestanding");
 			break;
 		case 'd':
-			if (arglen == 2) {
-				if (strcmp(arg, "-dy") == 0) {
-					newae(ctx->i_ae, "-Wl,-dy");
-					break;
-				}
-				if (strcmp(arg, "-dn") == 0) {
-					newae(ctx->i_ae, "-Wl,-dn");
-					break;
-				}
-			}
 			if (strcmp(arg, "-dalign") == 0) {
 				/*
 				 * -dalign forces alignment in some cases;
