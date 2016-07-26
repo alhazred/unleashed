@@ -392,10 +392,19 @@ i386_ASFLAGS=	$(i386_AS_XARCH)
 amd64_ASFLAGS=	$(amd64_AS_XARCH)
 
 #
-sparc_COPTFLAG=		-xO3
-sparcv9_COPTFLAG=	-xO3
+sparc_COPTFLAG=		-_gcc=-fno-strict-aliasing \
+	-_gcc=-fno-unit-at-a-time \
+	-_gcc=-fno-optimize-sibling-calls \
+	-_gcc=-O2
+sparcv9_COPTFLAG=	-_gcc=-fno-strict-aliasing \
+	-_gcc=-fno-unit-at-a-time \
+	-_gcc=-fno-optimize-sibling-calls \
+	-_gcc=-O2
 i386_COPTFLAG=		-O
-amd64_COPTFLAG=		-xO3
+amd64_COPTFLAG=		-_gcc=-fno-strict-aliasing \
+	-_gcc=-fno-unit-at-a-time \
+	-_gcc=-fno-optimize-sibling-calls \
+	-_gcc=-O2
 
 COPTFLAG= $($(MACH)_COPTFLAG)
 COPTFLAG64= $($(MACH64)_COPTFLAG)

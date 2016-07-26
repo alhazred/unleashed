@@ -55,7 +55,10 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #	Overrides.
 #
 CFLAGS				+= $(CCVERBOSE)
-$(RELEASE_BUILD)COPTIMIZE	= -xO5
+$(RELEASE_BUILD)COPTIMIZE	= -_gcc=-fno-strict-aliasing
+$(RELEASE_BUILD)COPTIMIZE	+= -_gcc=-fno-unit-at-a-time
+$(RELEASE_BUILD)COPTIMIZE	+= -_gcc=-fno-optimize-sibling-calls
+$(RELEASE_BUILD)COPTIMIZE	+= -_gcc=-O2
 LDFLAGS				+= -dy
 INC_PATH			+= -I$(UTSBASE)/common/io/bpf
 

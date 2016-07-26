@@ -99,8 +99,14 @@ XARCH_32	= -xarch=v8
 XARCH_64	= -m64
 XARCH		= $(XARCH_$(CLASS))
 
-COPTIMIZE_32	= -xO3
-COPTIMIZE_64	= -xO3
+COPTIMIZE_32	= -_gcc=-fno-strict-aliasing
+COPTIMIZE_32	+= -_gcc=-fno-unit-at-a-time
+COPTIMIZE_32	+= -_gcc=-fno-optimize-sibling-calls
+COPTIMIZE_32	+= -_gcc=-O2
+COPTIMIZE_64	= -_gcc=-fno-strict-aliasing
+COPTIMIZE_64	+= -_gcc=-fno-unit-at-a-time
+COPTIMIZE_64	+= -_gcc=-fno-optimize-sibling-calls
+COPTIMIZE_64	+= -_gcc=-O2
 COPTIMIZE	= $(COPTIMIZE_$(CLASS))
 
 CCMODE		= -Xa

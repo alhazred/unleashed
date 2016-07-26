@@ -51,8 +51,6 @@ INSTALL_TARGET  = $(BINARY) $(ROOTMODULE)
 # Overrides
 #
 
-#COPTIMIZE = -xO4
-
 INC_PATH  += -I$(UTSBASE)/common/io/myri10ge -I$(UTSBASE)/common/io/myri10ge/firmware
 
 CFLAGS    += -DSOLARIS_S11

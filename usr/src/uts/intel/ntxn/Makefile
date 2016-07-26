@@ -54,7 +54,11 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 INC_PATH	+= -I$(CONF_SRCDIR)
 
-CFLAGS		+=  -DSOLARIS11 -xO4
+CFLAGS		+=  -DSOLARIS11
+CFLAGS		+=  -_gcc=-fno-strict-aliasing
+CFLAGS		+=  -_gcc=-fno-unit-at-a-time
+CFLAGS		+=  -_gcc=-fno-optimize-sibling-calls
+CFLAGS		+=  -_gcc=-O2
 CFLAGS64	+=  -DSOLARIS11 -xO -I./
 
 #

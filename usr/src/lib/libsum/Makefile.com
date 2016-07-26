@@ -75,8 +75,16 @@ CFLAGS64 += \
 CERRWARN	+= -_gcc=-Wno-parentheses
 
 # This codepath is performance-critical
-sparc_COPTFLAG=-xO5
-sparcv9_COPTFLAG=-xO5
+sparc_COPTFLAG=\
+	-_gcc=-fno-strict-aliasing \
+	-_gcc=-fno-unit-at-a-time \
+	-_gcc=-fno-optimize-sibling-calls \
+	-_gcc=-O2
+sparcv9_COPTFLAG=\
+	-_gcc=-fno-strict-aliasing \
+	-_gcc=-fno-unit-at-a-time \
+	-_gcc=-fno-optimize-sibling-calls \
+	-_gcc=-O2
 i386_COPTFLAG=
 amd64_COPTFLAG=
 

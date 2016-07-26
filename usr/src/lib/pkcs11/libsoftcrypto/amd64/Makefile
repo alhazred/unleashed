@@ -56,7 +56,10 @@ SRCDIR =	$(SRC)/lib/pkcs11/libsoftcrypto/common
 LIBS =		$(DYNLIB)
 MAPFILEDIR =	../common
 
-CFLAGS +=	-xO4
+CFLAGS +=	-_gcc=-fno-strict-aliasing \
+		-_gcc=-fno-unit-at-a-time \
+		-_gcc=-fno-optimize-sibling-calls \
+		-_gcc=-O2
 CPPFLAGS +=	-I$(CRYPTODIR) -I$(UTSDIR) -D_POSIX_PTHREAD_SEMANTICS
 ASFLAGS +=	$(AS_PICFLAGS) -P -D__STDC__ -D_ASM
 BIGNUM_FLAGS +=	-DPSR_MUL

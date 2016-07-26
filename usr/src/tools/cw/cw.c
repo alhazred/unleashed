@@ -97,7 +97,6 @@
  * -xM1		Generate makefile dependencies, but exclude /usr/include
  * -xmaxopt=[off,1,2,3,4,5] maximum optimization level allowed on #pragma opt
  * -xnolib	Do not link with default system libraries
- * -xO<n>	Generate optimized code (n={1|2|3|4|5})
  * -xpg		Compile for profiling with gprof
  * -xprofile=<p> Collect data for a profile or use a profile to optimize
  *		<p>={{collect,use}[:<path>],tcov}
@@ -172,7 +171,6 @@
  * -xM1				-MM
  * -xmaxopt=[...]		error
  * -xnolib			-nodefaultlibs
- * -xO<n>			-O<n>
  * -xpg				error
  * -xprofile=<p>		error
  * -xs				error
@@ -381,16 +379,6 @@ warnings(struct aelist *h)
 	 */
 	newae(h, "-Wall");
 	newae(h, "-Wextra");
-}
-
-static void
-optim_disable(struct aelist *h, int level)
-{
-	if (level >= 2) {
-		newae(h, "-fno-strict-aliasing");
-		newae(h, "-fno-unit-at-a-time");
-		newae(h, "-fno-optimize-sibling-calls");
-	}
 }
 
 /* ARGSUSED */
@@ -945,41 +933,6 @@ do_gcc(cw_ictx_t *ctx)
 			case 'n':
 				if (strcmp(arg, "-xnolib") == 0) {
 					nolibc = 1;
-					break;
-				}
-				error(arg);
-				break;
-			case 'O':
-				if (strncmp(arg, "-xO", 3) == 0) {
-					size_t len = strlen(arg);
-					char *s;
-					int c = *(arg + 3);
-					int level;
-
-					if (len != 4 || !isdigit(c))
-						error(arg);
-
-					if ((s = malloc(len)) == NULL)
-						nomem();
-
-					level = atoi(arg + 3);
-					if (level > 5)
-						error(arg);
-					if (level >= 2) {
-						/*
-						 * For gcc-3.4.x at -O2 we
-						 * need to disable optimizations
-						 * that break ON.
-						 */
-						optim_disable(ctx->i_ae, level);
-						/*
-						 * limit -xO3 to -O2 as well.
-						 */
-						level = 2;
-					}
-					(void) snprintf(s, len, "-O%d", level);
-					newae(ctx->i_ae, s);
-					free(s);
 					break;
 				}
 				error(arg);

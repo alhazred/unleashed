@@ -183,7 +183,10 @@ IMPLEMENTATIONS		+= lw2plus
 #
 CC_XARCH	= -m64 -xarch=sparcvis
 AS_XARCH	= -xarch=v9a
-COPTIMIZE	= -xO3
+COPTIMIZE	= -_gcc=-fno-strict-aliasing
+COPTIMIZE	+= -_gcc=-fno-unit-at-a-time
+COPTIMIZE	+= -_gcc=-fno-optimize-sibling-calls
+COPTIMIZE	+= -_gcc=-O2
 CCMODE		= -Xa
 
 CFLAGS		= -_gcc=-mtune=ultrasparc $(CCABS32) $(CCREGSYM)
