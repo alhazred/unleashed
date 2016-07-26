@@ -84,10 +84,16 @@ typedef struct zone_be_name_cb_data {
 /*			Public Functions				*/
 /* ******************************************************************** */
 
+/*
+ * Callback for ficl to suppress all output from ficl, as we do not
+ * want to confuse user with messages from ficl, and we are only
+ * checking results from function calls.
+ */
 /*ARGSUSED*/
 static void
-ficlTextOutLocal(ficlCallback *cb, char *text)
+ficlSuppressTextOutput(ficlCallback *cb, char *text)
 {
+	/* This function is intentionally doing nothing. */
 }
 
 /*
@@ -171,7 +177,7 @@ be_get_boot_args(char **fbarg, int entry)
 			be_mounted = B_TRUE;
 	}
 
-	vm = bf_init("", ficlTextOutLocal);
+	vm = bf_init("", ficlSuppressTextOutput);
 	if (vm != NULL) {
 		/*
 		 * zfs MAXNAMELEN is 256, so we need to pick buf large enough
@@ -274,18 +280,12 @@ cleanup:
 		(void) _be_unmount(node->be_node_name, BE_UNMOUNT_FLAG_FORCE);
 	be_free_list(be_nodes);
 done:
-	if (mountpoint != NULL)
-		free(mountpoint);
-	if (bt.obe_name)
-		free(bt.obe_name);
-	if (bt.obe_root_ds)
-		free(bt.obe_root_ds);
-	if (bt.obe_zpool)
-		free(bt.obe_zpool);
-	if (bt.obe_snap_name)
-		free(bt.obe_snap_name);
-	if (bt.obe_altroot)
-		free(bt.obe_altroot);
+	free(mountpoint);
+	free(bt.obe_name);
+	free(bt.obe_root_ds);
+	free(bt.obe_zpool);
+	free(bt.obe_snap_name);
+	free(bt.obe_altroot);
 	be_zfs_fini();
 	return (ret);
 }
