@@ -35,6 +35,16 @@
 #define SET_ME	0xeeeeeeee    /* filled in by btxld */
 
 /*
+ * Our endian.h is implementing functions, so need to use byteorder macros.
+ */
+#ifndef htole16
+#define	htole16	LE_16
+#endif
+#ifndef htole32
+#define	htole32	LE_32
+#endif
+
+/*
  * ELF header template.
  */
 const struct elfh elfhdr = {
@@ -44,80 +54,80 @@ const struct elfh elfhdr = {
 	    ELFCLASS32, ELFDATA2LSB, EV_CURRENT, 0,
 	    'F', 'r', 'e', 'e', 'B', 'S', 'D', 0
 	},
-	LE_16(ET_EXEC),			    /* e_type */
-	LE_16(EM_386),			    /* e_machine */
-	LE_32(EV_CURRENT),			    /* e_version */
-	LE_32(SET_ME),			    /* e_entry */
-	LE_32(offsetof(struct elfh, p)),	    /* e_phoff */
-	LE_32(offsetof(struct elfh, sh)),	    /* e_shoff */
+	htole16(ET_EXEC),			    /* e_type */
+	htole16(EM_386),			    /* e_machine */
+	htole32(EV_CURRENT),			    /* e_version */
+	htole32(SET_ME),			    /* e_entry */
+	htole32(offsetof(struct elfh, p)),	    /* e_phoff */
+	htole32(offsetof(struct elfh, sh)),	    /* e_shoff */
 	0,					    /* e_flags */
-	LE_16(sizeof(elfhdr.e)),		    /* e_ehsize */
-	LE_16(sizeof(elfhdr.p[0])),		    /* e_phentsize */
-	LE_16(sizeof(elfhdr.p) / sizeof(elfhdr.p[0])), /* e_phnum */
-	LE_16(sizeof(elfhdr.sh[0])),		    /* e_shentsize */
-	LE_16(sizeof(elfhdr.sh) / sizeof(elfhdr.sh[0])), /* e_shnum */
-	LE_16(1)				    /* e_shstrndx */
+	htole16(sizeof(elfhdr.e)),		    /* e_ehsize */
+	htole16(sizeof(elfhdr.p[0])),		    /* e_phentsize */
+	htole16(sizeof(elfhdr.p) / sizeof(elfhdr.p[0])), /* e_phnum */
+	htole16(sizeof(elfhdr.sh[0])),		    /* e_shentsize */
+	htole16(sizeof(elfhdr.sh) / sizeof(elfhdr.sh[0])), /* e_shnum */
+	htole16(1)				    /* e_shstrndx */
     },
     {
 	{
-	    LE_32(PT_LOAD),			    /* p_type */
-	    LE_32(sizeof(elfhdr)),		    /* p_offset */
-	    LE_32(SET_ME),			    /* p_vaddr */
-	    LE_32(SET_ME),			    /* p_paddr */
-	    LE_32(SET_ME),			    /* p_filesz */
-	    LE_32(SET_ME),			    /* p_memsz */
-	    LE_32(PF_R | PF_X),		    /* p_flags */
-	    LE_32(0x1000)			    /* p_align */
+	    htole32(PT_LOAD),			    /* p_type */
+	    htole32(sizeof(elfhdr)),		    /* p_offset */
+	    htole32(SET_ME),			    /* p_vaddr */
+	    htole32(SET_ME),			    /* p_paddr */
+	    htole32(SET_ME),			    /* p_filesz */
+	    htole32(SET_ME),			    /* p_memsz */
+	    htole32(PF_R | PF_X),		    /* p_flags */
+	    htole32(0x1000)			    /* p_align */
 	},
 	{
-	    LE_32(PT_LOAD),			    /* p_type */
-	    LE_32(SET_ME),			    /* p_offset */
-	    LE_32(SET_ME),			    /* p_vaddr */
-	    LE_32(SET_ME),			    /* p_paddr */
-	    LE_32(SET_ME),			    /* p_filesz */
-	    LE_32(SET_ME),			    /* p_memsz */
-	    LE_32(PF_R | PF_W),		    /* p_flags */
-	    LE_32(0x1000)			    /* p_align */
+	    htole32(PT_LOAD),			    /* p_type */
+	    htole32(SET_ME),			    /* p_offset */
+	    htole32(SET_ME),			    /* p_vaddr */
+	    htole32(SET_ME),			    /* p_paddr */
+	    htole32(SET_ME),			    /* p_filesz */
+	    htole32(SET_ME),			    /* p_memsz */
+	    htole32(PF_R | PF_W),		    /* p_flags */
+	    htole32(0x1000)			    /* p_align */
 	}
     },
     {
 	{
-	    0, LE_32(SHT_NULL), 0, 0, 0, 0, LE_32(SHN_UNDEF), 0, 0, 0
+	    0, htole32(SHT_NULL), 0, 0, 0, 0, htole32(SHN_UNDEF), 0, 0, 0
 	},
 	{
-	    LE_32(1),				    /* sh_name */
-	    LE_32(SHT_STRTAB), 		    /* sh_type */
+	    htole32(1),				    /* sh_name */
+	    htole32(SHT_STRTAB), 		    /* sh_type */
 	    0,					    /* sh_flags */
 	    0,					    /* sh_addr */
-	    LE_32(offsetof(struct elfh, shstrtab)), /* sh_offset */
-	    LE_32(sizeof(elfhdr.shstrtab)),	    /* sh_size */
-	    LE_32(SHN_UNDEF),			    /* sh_link */
+	    htole32(offsetof(struct elfh, shstrtab)), /* sh_offset */
+	    htole32(sizeof(elfhdr.shstrtab)),	    /* sh_size */
+	    htole32(SHN_UNDEF),			    /* sh_link */
 	    0,					    /* sh_info */
-	    LE_32(1),				    /* sh_addralign */
+	    htole32(1),				    /* sh_addralign */
 	    0					    /* sh_entsize */
 	},
 	{
-	    LE_32(0xb),			    /* sh_name */
-	    LE_32(SHT_PROGBITS),		    /* sh_type */
-	    LE_32(SHF_EXECINSTR | SHF_ALLOC),	    /* sh_flags */
-	    LE_32(SET_ME),			    /* sh_addr */
-	    LE_32(SET_ME),			    /* sh_offset */
-	    LE_32(SET_ME),			    /* sh_size */
-	    LE_32(SHN_UNDEF),			    /* sh_link */
+	    htole32(0xb),			    /* sh_name */
+	    htole32(SHT_PROGBITS),		    /* sh_type */
+	    htole32(SHF_EXECINSTR | SHF_ALLOC),	    /* sh_flags */
+	    htole32(SET_ME),			    /* sh_addr */
+	    htole32(SET_ME),			    /* sh_offset */
+	    htole32(SET_ME),			    /* sh_size */
+	    htole32(SHN_UNDEF),			    /* sh_link */
 	    0,					    /* sh_info */
-	    LE_32(4),				    /* sh_addralign */
+	    htole32(4),				    /* sh_addralign */
 	    0					    /* sh_entsize */
 	},
 	{
-	    LE_32(0x11),			    /* sh_name */
-	    LE_32(SHT_PROGBITS),		    /* sh_type */
-	    LE_32(SHF_ALLOC | SHF_WRITE),	    /* sh_flags */
-	    LE_32(SET_ME),			    /* sh_addr */
-	    LE_32(SET_ME),			    /* sh_offset */
-	    LE_32(SET_ME),			    /* sh_size */
-	    LE_32(SHN_UNDEF),			    /* sh_link */
+	    htole32(0x11),			    /* sh_name */
+	    htole32(SHT_PROGBITS),		    /* sh_type */
+	    htole32(SHF_ALLOC | SHF_WRITE),	    /* sh_flags */
+	    htole32(SET_ME),			    /* sh_addr */
+	    htole32(SET_ME),			    /* sh_offset */
+	    htole32(SET_ME),			    /* sh_size */
+	    htole32(SHN_UNDEF),			    /* sh_link */
 	    0,					    /* sh_info */
-	    LE_32(4),				    /* sh_addralign */
+	    htole32(4),				    /* sh_addralign */
 	    0					    /* sh_entsize */
 	}
     },
