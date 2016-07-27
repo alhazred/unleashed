@@ -180,12 +180,16 @@ function build {
 
 	rm -f $SRC/${INSTALLOG}.out
 	cd $SRC
+        # bmake shouldn't get MAKE or MAKEFLAGS from the nightly env, or really
+        # anything.
+        env -i PATH=/bin /bin/time bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
+            all install 2>&1 | tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
 	/bin/time $MAKE -e install 2>&1 | \
 	    tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
 
 	echo "\n==== Build errors ($LABEL) ====\n" >> $mail_msg_file
 	egrep ":" $SRC/${INSTALLOG}.out |
-		egrep -e "(^${MAKE}:|[ 	]error[: 	\n])" | \
+		egrep -e "(^(${MAKE}|bmake):|[ 	]error[: 	\n])" | \
 		egrep -v "Ignoring unknown host" | \
 		egrep -v "cc .* -o error " | \
 		egrep -v "warning" | tee $TMPDIR/build_errs${SUFFIX} \
@@ -1337,6 +1341,8 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	    \( -name '.make.*' -o -name 'lib*.a' -o -name 'lib*.so*' -o \
 	       -name '*.o' \) -print | \
 	    grep -v 'tools/ctf/dwarf/.*/libdwarf' | xargs rm -f
+        echo "\n==== bmake cleandir ====\n" >> $LOGFILE
+        MAKE= bmake cleandir
 else
 	echo "\n==== No clobber at `date` ====\n" >> $LOGFILE
 fi

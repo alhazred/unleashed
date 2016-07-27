@@ -148,7 +148,7 @@ DIRMODE?=	755
 # Define MANZ to have the man pages compressed (gzip)
 #MANZ=		1
 
-MANTARGET?= cat
+MANTARGET?=	man
 MANDIR?=	${prefix}/share/man/${MANTARGET}
 MANGRP?=	${BINGRP}
 MANOWN?=	${BINOWN}

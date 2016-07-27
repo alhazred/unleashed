@@ -75,7 +75,6 @@ COMMON_SUBDIRS=		\
 	bc		\
 	bdiff		\
 	beadm		\
-	bmake		\
 	bnu		\
 	boot		\
 	busstat		\
@@ -827,5 +826,4 @@ $(FIRST_SUBDIRS) $(BWOSDIRS) $(SUBDIRS) $(AUDITSUBDIRS): FRC
 	else \
 		true; \
 	fi
-
 FRC:

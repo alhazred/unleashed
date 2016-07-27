@@ -536,10 +536,7 @@ int cached_stat(const char *, void *);
 #include <limits.h>
 #endif
 #ifndef MAXPATHLEN
-#define MAXPATHLEN	BMAKE_PATH_MAX
-#endif
-#ifndef PATH_MAX
-#define PATH_MAX	MAXPATHLEN
+#define MAXPATHLEN	PATH_MAX
 #endif
 
 #endif /* _MAKE_H_ */

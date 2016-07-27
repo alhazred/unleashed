@@ -15,11 +15,9 @@
 # and it should be added to the TESTNAMES list.
 # 
 
-srcdir= @srcdir@
-
 .MAIN: all
 
-UNIT_TESTS:= ${srcdir}
+UNIT_TESTS:= ${.CURDIR}
 .PATH: ${UNIT_TESTS}
 
 # Each test is in a sub-makefile.
@@ -87,7 +85,7 @@ TEST_MAKE?= ${.MAKE}
 TOOL_SED?= sed
 TOOL_TR?= tr
 TOOL_DIFF?= diff
-DIFF_FLAGS?= @diff_u@
+DIFF_FLAGS?= -u
 
 .if defined(.PARSEDIR)
 # ensure consistent results from sort(1)
@@ -148,4 +146,4 @@ accept:
 ${TESTNAMES:S/$/.rawout/}: ${TEST_MAKE}
 .endif
 
-.-include <obj.mk>
+.sinclude <bsd.obj.mk>
