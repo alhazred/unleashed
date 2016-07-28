@@ -56,6 +56,6 @@ $(OBJS_DIR)/bignum_amd64.o: $(BIGNUMDIR)/amd64/bignum_amd64.c
 	$(POST_PROCESS_O)
 
 $(OBJS_DIR)/bignum_amd64_asm.o: $(BIGNUMDIR)/amd64/bignum_amd64_asm.s
-	$(COMPILE.s) -P -o $@ $(BIGNUM_CFG) \
+	$(COMPILE.s) -o $@ $(BIGNUM_CFG) \
 		$(BIGNUMDIR)/amd64/bignum_amd64_asm.s
 	$(POST_PROCESS_O)

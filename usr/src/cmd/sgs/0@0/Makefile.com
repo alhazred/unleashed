@@ -36,7 +36,7 @@ CRTS=		$(CRTI)		$(CRTN)
 include 	$(SRC)/lib/Makefile.lib
 
 MAPFILES=
-ASFLAGS=	-P -D_ASM	$(CPPFLAGS)
+ASFLAGS=	-D_ASM	$(CPPFLAGS)
 DYNFLAGS +=	$(BLOCAL) $(ZNOVERSION) $(ZINITFIRST)
 LDLIBS +=	-lc
 BUILD.SO=       $(LD) -o $@ -G $(DYNFLAGS) $(CRTI) $(PICS) $(LDLIBS) $(CRTN)

@@ -42,7 +42,7 @@
 #include "cache.h"
 #include "proc64_id.h"
 
-#define L(s) .memset/**/s
+#define L(s) .memset##s
 
 /*
  * memset algorithm overview:

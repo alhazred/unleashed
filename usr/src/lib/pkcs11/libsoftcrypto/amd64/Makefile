@@ -61,7 +61,7 @@ CFLAGS +=	-_gcc=-fno-strict-aliasing \
 		-_gcc=-fno-optimize-sibling-calls \
 		-_gcc=-O2
 CPPFLAGS +=	-I$(CRYPTODIR) -I$(UTSDIR) -D_POSIX_PTHREAD_SEMANTICS
-ASFLAGS +=	$(AS_PICFLAGS) -P -D__STDC__ -D_ASM
+ASFLAGS +=	$(AS_PICFLAGS) -D_ASM
 BIGNUM_FLAGS +=	-DPSR_MUL
 CLEANFILES +=	arcfour-x86_64.s
 LDLIBS +=	-lcryptoutil -lc

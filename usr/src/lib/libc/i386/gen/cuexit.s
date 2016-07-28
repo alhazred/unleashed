@@ -25,8 +25,8 @@
 
 	.file	"cuexit.s"
 
-/ C library -- exit
-/ exit(code)
+/* C library -- exit */
+/* exit(code) */
 
 #include "SYS.h"
 

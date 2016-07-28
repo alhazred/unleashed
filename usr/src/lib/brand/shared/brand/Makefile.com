@@ -51,7 +51,7 @@ i386_AS		= $(amd64_AS)
 
 CPPFLAGS +=	-D_REENTRANT -U_ASM -I. -I../sys
 CFLAGS +=	$(CCVERBOSE)
-ASFLAGS =	-P $(ASFLAGS_$(CURTYPE)) -D_ASM -I. -I../sys
+ASFLAGS =	$(ASFLAGS_$(CURTYPE)) -D_ASM -I. -I../sys
 
 .KEEP_STATE:
 

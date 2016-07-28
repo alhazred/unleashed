@@ -31,7 +31,7 @@
 #include "SYS.h"
 #include "proc64_id.h"
 
-#define LABEL(s) .strlen/**/s
+#define LABEL(s) .strlen##s
 
 	/*
 	 * This implementation uses SSE instructions to compare up to 16 bytes

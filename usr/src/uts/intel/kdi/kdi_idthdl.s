@@ -100,28 +100,28 @@ this won't assemble
 
 
 #define	MKIVCT(n) \
-	ENTRY_NP(kdi_ivct/**/n/**/);	\
+	ENTRY_NP(kdi_ivct##n##);	\
 	TRAP_ERR(n);			\
 	.align	KDI_MSR_PATCHOFF;	\
 	KDI_MSR_PATCH;			\
 	jmp	kdi_cmnint;		\
-	SET_SIZE(kdi_ivct/**/n/**/)
+	SET_SIZE(kdi_ivct##n##)
 
 #define	MKTRAPHDLR(n) \
-	ENTRY_NP(kdi_trap/**/n);	\
+	ENTRY_NP(kdi_trap##n);	\
 	TRAP_ERR(n);			\
 	.align	KDI_MSR_PATCHOFF;	\
 	KDI_MSR_PATCH;			\
 	jmp	kdi_cmnint;		\
-	SET_SIZE(kdi_trap/**/n/**/)
+	SET_SIZE(kdi_trap##n##)
 
 #define	MKTRAPERRHDLR(n) \
-	ENTRY_NP(kdi_traperr/**/n);	\
+	ENTRY_NP(kdi_traperr##n);	\
 	TRAP_NOERR(n);			\
 	.align	KDI_MSR_PATCHOFF;	\
 	KDI_MSR_PATCH;			\
 	jmp	kdi_cmnint;		\
-	SET_SIZE(kdi_traperr/**/n)
+	SET_SIZE(kdi_traperr##n)
 
 #define	MKNMIHDLR \
 	ENTRY_NP(kdi_int2);		\

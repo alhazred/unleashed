@@ -1300,11 +1300,11 @@ check_for_user_address:
 	 * Interrupts start at 32
 	 */
 #define MKIVCT(n)			\
-	ENTRY_NP(ivct/**/n)		\
+	ENTRY_NP(ivct##n)		\
 	push	$0;			\
 	push	$n - 0x20;		\
 	jmp	cmnint;			\
-	SET_SIZE(ivct/**/n)
+	SET_SIZE(ivct##n)
 
 	MKIVCT(32)
 	MKIVCT(33)

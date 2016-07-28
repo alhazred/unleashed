@@ -52,5 +52,5 @@ $(OBJS_DIR)/bignum_i386.o: $(BIGNUMDIR)/i386/bignum_i386.c
 	$(POST_PROCESS_O)
 
 $(OBJS_DIR)/bignum_i386_asm.o: $(BIGNUMDIR)/i386/bignum_i386_asm.s
-	$(COMPILE.s) -P -o $@ $(BIGNUM_CFG) $(BIGNUMDIR)/i386/bignum_i386_asm.s
+	$(COMPILE.s) -o $@ $(BIGNUM_CFG) $(BIGNUMDIR)/i386/bignum_i386_asm.s
 	$(POST_PROCESS_O)

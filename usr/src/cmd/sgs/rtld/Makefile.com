@@ -81,7 +81,7 @@ CPPFLAGS +=	-I$(SRCBASE)/lib/libc/inc \
 		-I$(ELFCAP) \
 		 $(CPPFEATUREMACROS)
 
-ASFLAGS=	-P -D_ASM $(CPPFLAGS)
+ASFLAGS=	-D_ASM $(CPPFLAGS)
 LDLIB =		-L ../../libld/$(MACH)
 RTLDLIB =	-L ../../librtld/$(MACH)
 

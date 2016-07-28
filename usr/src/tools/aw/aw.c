@@ -22,28 +22,26 @@
 /*
  * Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ * Copyright 2016 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  */
 
 /*
- * Wrapper for the GNU assembler to make it accept the Sun assembler
- * arguments where possible.
+ * The GNU assembler doesn't know how to pre-process files.  We make heavy
+ * use of the preprocessor in assembly files, so we use this utility to wrap
+ * the assembler with a preprocessor step.  That is, an invocation such as:
  *
- * There are several limitations; the Sun assembler takes multiple
- * source files, we only take one.
+ *  $ aw gcc gas foo -o bar ...
  *
- * -b, -s, -xF, -T plain not supported.
- * -S isn't supported either, because while GNU as does generate
- * listings with -a, there's no obvious mapping between sub-options.
- * -K pic, -K PIC not supported either, though it's not clear what
- * these actually do ..
- * -Qy (not supported) adds a string to the .comment section
- * describing the assembler version, while
- * -Qn (supported) suppresses the string (also the default).
+ * Turns effectively into:
  *
- * We also add '-#' support to see invocation lines..
- * We also add '-xarch=amd64' in case we need to feed the assembler
- * something different (or in case we need to invoke a different binary
- * altogether!)
+ *  $ gcc -x assembler-with-cpp -E -D__GNUC_AS__ foo ... | gas -o bar ...
+ *
+ * All -D, -U, and -I arguments to aw are passed to the preprocessor, while
+ * all options beginning with two dashes (e.g., --64) are passed to the
+ * assembler.
+ *
+ * The preprocessor executable is always specified as the first argument.
+ * The assembler executable is always specified as the second argument.
  */
 
 #include <sys/types.h>
@@ -84,13 +82,6 @@ newae(struct aelist *ael, const char *arg)
 		ael->ael_tail->ae_next = ae;
 	ael->ael_tail = ae;
 	ael->ael_argc++;
-}
-
-static void
-fixae_arg(struct ae *ae, const char *newarg)
-{
-	free(ae->ae_arg);
-	ae->ae_arg = strdup(newarg);
 }
 
 static char **
@@ -424,6 +415,15 @@ pipeline(char **ppargv, char **asargv)
 	int active = 0;
 	int rval = 0;
 	pid_t pid_pp, pid_f, pid_as;
+	int i;
+
+	fprintf(stderr, "+ ");
+	for (i = 0; ppargv[i]; i++)
+		fprintf(stderr, "%s ", ppargv[i]);
+	fprintf(stderr, "\n+ ");
+	for (i = 0; asargv[i]; i++)
+		fprintf(stderr, "%s ", asargv[i]);
+	fprintf(stderr, "\n");
 
 	if (pipe(pipedes) == -1 || pipe(pipedes + 2) == -1) {
 		perror("pipe");
@@ -480,54 +480,22 @@ pipeline(char **ppargv, char **asargv)
 int
 main(int argc, char *argv[])
 {
-	struct aelist *cpp = NULL;
-	struct aelist *as = newael();
-	char **asargv;
+	struct aelist *cpp = newael();
+	struct aelist *gas = newael();
 	char *outfile = NULL;
 	char *srcfile = NULL;
-	const char *dir, *cmd;
-	static char as_pgm[MAXPATHLEN];
-	static char as64_pgm[MAXPATHLEN];
-	static char cpp_pgm[MAXPATHLEN];
-	int as64 = 0;
 	int code;
 
-	if ((progname = strrchr(argv[0], '/')) == NULL)
-		progname = argv[0];
-	else
-		progname++;
+	newae(cpp, argv[1]);
+	newae(gas, argv[2]);
 
-	/*
-	 * Helpful when debugging, or when changing tool versions..
-	 */
-	if ((cmd = getenv("AW_AS")) != NULL)
-		strlcpy(as_pgm, cmd, sizeof (as_pgm));
-	else {
-		if ((dir = getenv("AW_AS_DIR")) == NULL)
-			dir = DEFAULT_AS_DIR;	/* /usr/sfw/bin */
-		(void) snprintf(as_pgm, sizeof (as_pgm), "%s/gas", dir);
-	}
+	newae(cpp, "-x");
+	newae(cpp, "assembler-with-cpp");
+	newae(cpp, "-E");
+	newae(cpp, "-D__GNUC_AS__");
 
-	if ((cmd = getenv("AW_AS64")) != NULL)
-		strlcpy(as64_pgm, cmd, sizeof (as64_pgm));
-	else {
-		if ((dir = getenv("AW_AS64_DIR")) == NULL)
-			dir = DEFAULT_AS64_DIR;	/* /usr/sfw/bin */
-		(void) snprintf(as64_pgm, sizeof (as_pgm), "%s/gas", dir);
-	}
-
-	if ((cmd = getenv("AW_CPP")) != NULL)
-		strlcpy(cpp_pgm, cmd, sizeof (cpp_pgm));
-	else {
-		if ((dir = getenv("AW_CPP_DIR")) == NULL)
-			dir = DEFAULT_CPP_DIR;	/* /usr/ccs/lib */
-		(void) snprintf(cpp_pgm, sizeof (cpp_pgm), "%s/cpp", dir);
-	}
-
-	newae(as, as_pgm);
-	newae(as, "--warn");
-	newae(as, "--fatal-warnings");
-	newae(as, "--traditional-format");
+	argv += 2;
+	argc -= 2;
 
 	/*
 	 * Walk the argument list, translating as we go ..
@@ -540,112 +508,41 @@ main(int argc, char *argv[])
 		arglen = strlen(arg);
 
 		if (*arg != '-') {
-			char *filename;
-
 			/*
 			 * filenames ending in '.s' are taken to be
 			 * assembler files, and provide the default
 			 * basename of the output file.
-			 *
-			 * other files are passed through to the
-			 * preprocessor, if present, or to gas if not.
 			 */
-			filename = arg;
-			if ((arglen > 2) &&
-			    ((strcmp(arg + arglen - 2, ".s") == 0) ||
-			    (strcmp(arg + arglen - 2, ".S") == 0))) {
-				/*
-				 * Though 'as' allows multiple assembler
-				 * files to be processed in one invocation
-				 * of the assembler, ON only processes one
-				 * file at a time, which makes things a lot
-				 * simpler!
-				 */
-				if (srcfile == NULL)
-					srcfile = arg;
-				else
-					return (usage(
-					    "one assembler file at a time"));
-
-				/*
-				 * If we haven't seen a -o option yet,
-				 * default the output to the basename
-				 * of the input, substituting a .o on the end
-				 */
-				if (outfile == NULL) {
-					char *argcopy;
-
-					argcopy = strdup(arg);
-					argcopy[arglen - 1] = 'o';
-
-					if ((outfile = strrchr(
-					    argcopy, '/')) == NULL)
-						outfile = argcopy;
-					else
-						outfile++;
-				}
-			}
-			if (cpp)
-				newae(cpp, filename);
+			if (srcfile == NULL)
+				srcfile = arg;
 			else
-				newae(as, filename);
+				return (usage("one assembler file at a time"));
+
+			/*
+			 * If we haven't seen a -o option yet, default the
+			 * output to the basename of the input, substituting
+			 * a .o on the end
+			 */
+			if (outfile == NULL) {
+				char *argcopy;
+
+				argcopy = strdup(arg);
+				argcopy[arglen - 1] = 'o';
+
+				if ((outfile = strrchr( argcopy, '/')) == NULL)
+					outfile = argcopy;
+				else
+					outfile++;
+			}
+
+			newae(cpp, arg);
 			continue;
 		} else
 			arglen--;
 
 		switch (arg[1]) {
-		case 'K':
-			/*
-			 * -K pic
-			 * -K PIC
-			 */
-			if (arglen == 1) {
-				if ((arg = *++argv) == NULL || *arg == '\0')
-					return (usage("malformed -K"));
-				argc--;
-			} else {
-				arg += 2;
-			}
-			if (strcmp(arg, "PIC") != 0 && strcmp(arg, "pic") != 0)
-				return (usage("malformed -K"));
-			break;		/* just ignore -Kpic for gcc */
 		default:
 			return (error(arg));
-		case 'x':
-			/*
-			 * Accept -xarch special case to invoke alternate
-			 * assemblers or assembler flags for different
-			 * architectures.
-			 */
-			if (strcmp(arg, "-xarch=amd64") == 0 ||
-			    strcmp(arg, "-xarch=generic64") == 0) {
-				as64++;
-				fixae_arg(as->ael_head, as64_pgm);
-				break;
-			}
-			/*
-			 * XX64: Is this useful to gas?
-			 */
-			if (strcmp(arg, "-xmodel=kernel") == 0)
-				break;
-
-			/*
-			 * -xF	Generates performance analysis data
-			 *	no equivalent
-			 */
-			return (error(arg));
-		case 'V':
-			newae(as, arg);
-			break;
-		case '#':
-			verbose++;
-			break;
-		case 'L':
-			newae(as, "--keep-locals");
-			break;
-		case 'n':
-			newae(as, "--no-warn");
-			break;
 		case 'o':
 			if (arglen != 1)
 				return (usage("bad -o flag"));
@@ -655,79 +552,27 @@ main(int argc, char *argv[])
 			argc--;
 			arglen = strlen(arg + 1);
 			break;
-		case 'P':
-			if (cpp == NULL) {
-				cpp = newael();
-				newae(cpp, cpp_pgm);
-				newae(cpp, "-D__GNUC_AS__");
-			}
-			break;
 		case 'D':
 		case 'U':
-			if (cpp)
-				newae(cpp, arg);
-			else
-				newae(as, arg);
+			newae(cpp, arg);
 			break;
 		case 'I':
-			if (cpp)
-				newae(cpp, arg);
-			else
-				newae(as, arg);
+			newae(cpp, arg);
 			break;
 		case '-':	/* a gas-specific option */
-			newae(as, arg);
+			newae(gas, arg);
 			break;
 		}
 	}
-
-#if defined(__i386)
-	if (as64)
-		newae(as, "--64");
-	else
-		newae(as, "--32");
-#endif
 
 	if (srcfile == NULL)
 		return (usage("no source file(s) specified"));
 	if (outfile == NULL)
 		outfile = "a.out";
-	newae(as, "-o");
-	newae(as, outfile);
+	newae(gas, "-o");
+	newae(gas, outfile);
 
-	asargv = aeltoargv(as);
-	if (cpp) {
-#if defined(__sparc)
-		newae(cpp, "-Dsparc");
-		newae(cpp, "-D__sparc");
-		if (as64)
-			newae(cpp, "-D__sparcv9");
-		else
-			newae(cpp, "-D__sparcv8");
-#elif defined(__i386) || defined(__x86)
-		if (as64) {
-			newae(cpp, "-D__x86_64");
-			newae(cpp, "-D__amd64");
-		} else {
-			newae(cpp, "-Di386");
-			newae(cpp, "-D__i386");
-		}
-#else
-#error	"need isa-dependent defines"
-#endif
-		code = pipeline(aeltoargv(cpp), asargv);
-	} else {
-		/*
-		 * XXX	should arrange to fork/exec so that we
-		 *	can unlink the output file if errors are
-		 *	detected..
-		 */
-		(void) execvp(asargv[0], asargv);
-		perror("execvp");
-		(void) fprintf(stderr, "%s: couldn't run %s\n",
-		    progname, asargv[0]);
-		code = 7;
-	}
+	code = pipeline(aeltoargv(cpp), aeltoargv(gas));
 	if (code != 0)
 		(void) unlink(outfile);
 	return (code);

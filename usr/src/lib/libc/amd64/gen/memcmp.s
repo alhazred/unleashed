@@ -54,7 +54,7 @@
 #include "SYS.h"
 #include "cache.h"
 
-#define LABEL(s) .memcmp/**/s
+#define LABEL(s) .memcmp##s
 
 	ENTRY(memcmp)                 /* (const void *, const void*, size_t) */
 

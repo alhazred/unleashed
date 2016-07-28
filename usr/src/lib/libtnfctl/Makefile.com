@@ -77,8 +77,6 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-empty-body
 CERRWARN +=	-_gcc=-Wno-parentheses
 
-ASFLAGS +=	-P
-
 $(ROOTHDRS) :=	FILEMODE = 644
 
 .KEEP_STATE:

@@ -37,6 +37,6 @@ include		../../Makefile.com
 
 INTERP=         $(VAR_LDDSTUB_INTERP)
 
-ASFLAGS=	-P -D_ASM
+ASFLAGS=	-D_ASM
 LDFLAGS=	$(VERSREF) $(INTERP) $(CONVLIBDIR) -lconv -e stub \
 		$(LDFLAGS.cmd)

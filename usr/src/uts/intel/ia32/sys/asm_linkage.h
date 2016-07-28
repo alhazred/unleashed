@@ -153,11 +153,11 @@ extern "C" {
 
 #define	MCOUNT(x) \
 /* CSTYLED */ \
-	.lcomm .L_/**/x/**/1, 4, 4; \
+	.lcomm .L_##x##1, 4, 4; \
 	pushl	%ebp; \
 	movl	%esp, %ebp; \
 /* CSTYLED */ \
-	movl	$.L_/**/x/**/1, %edx; \
+	movl	$.L_##x##1, %edx; \
 	call	_mcount; \
 	popl	%ebp
 
@@ -180,11 +180,11 @@ extern "C" {
  */
 #define	ANSI_PRAGMA_WEAK(sym, stype)	\
 /* CSTYLED */ \
-	.weak	_/**/sym; \
+	.weak	_##sym; \
 /* CSTYLED */ \
-	.type	_/**/sym, @stype; \
+	.type	_##sym, @stype; \
 /* CSTYLED */ \
-_/**/sym = sym
+_##sym = sym
 
 /*
  * Like ANSI_PRAGMA_WEAK(), but for unrelated names, as in:
