@@ -19,16 +19,62 @@
 # CDDL HEADER END
 #
 
-# Copyright 2014 Gary Mills
 #
 # Copyright (c) 2001, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
+# Copyright 2014 Gary Mills
 #
+
 #
-# open-tree exception list
+# Exception lists for the findunref tool
+# 
+# Files in this lists are by definition intentionally never used during a
+# standard nightly build.
+# 
+# Most files in this category should be matched by the existing filename globs, so 
+# if you find yourself adding exceptions, please check with your advocate and/or 
+# the gatekeepers to be sure you're doing the right thing.
 #
-# See README.exception_lists for details
+
 #
+# Ignore text files.
+#
+*.[1-9]
+*.memo
+*.mm
+*.txt
+*/*[Rr][Ee][Aa][Dd][Mm][Ee]*
+*/BUGS
+*/COMPATIBILITY
+*/COPYRIGHT
+*/CREDITS
+*/ChangeLog
+*/DESIGN
+*/HISTORY
+*/NOTES
+*/OBSOLETE
+*/READ_ME
+*/RELEASE*
+*/TODO
+
+#
+# Ignore internal test directories and test programs.
+#
+*/tests
+*/test
+*Test.java
+*_test.[ch]
+
+#
+# Ignore internal packages, scripts, and tools that are intentionally not
+# built or used during a nightly.
+#
+*/tools
+
+#
+# Ignore file list generators
+#
+*.flg
 
 #
 # Ignore everything under trees that may be resynched from outside ON.
