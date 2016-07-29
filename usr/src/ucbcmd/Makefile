@@ -94,12 +94,6 @@ BINLINKS=		\
 	arch		\
 	basename	\
 	clear		\
-	e		\
-	edit		\
-	ex		\
-	vedit		\
-	vi		\
-	view		\
 	finger		\
 	fmt		\
 	fold		\

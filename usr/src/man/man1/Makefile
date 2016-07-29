@@ -84,7 +84,6 @@ MANFILES=	acctcom.1			\
 	 	crypt.1				\
 	 	csh.1				\
 	 	csplit.1			\
-	 	ctags.1				\
 	 	ctrun.1				\
 	 	ctstat.1			\
 	 	ctwatch.1			\
@@ -422,7 +421,6 @@ MANLINKS=	batch.1		\
 	 	disable.1	\
 		dmake.1		\
 	 	dumpkeys.1	\
-		edit.1		\
 	 	errange.1	\
 		errdate.1	\
 		errgid.1	\
@@ -524,7 +522,6 @@ MANLINKS=	batch.1		\
 		valtime.1	\
 		valuid.1	\
 		valyorn.1	\
-		vedit.1		\
 		whatis.1	\
 		whence.1	\
 		while.1		\
@@ -698,12 +695,6 @@ onintr.1	:= LINKSRC = trap.1
 false.1		:= LINKSRC = true.1
 
 whence.1	:= LINKSRC = typeset.1
-
-# Links to usr/has/man
-
-edit.1		:= LINKSRC = ../../../has/man/man1has/edit.1has
-
-vedit.1		:= LINKSRC = ../../../has/man/man1has/vi.1has
 
 .KEEP_STATE:
 

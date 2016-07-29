@@ -368,7 +368,6 @@ COMMON_SUBDIRS=		\
 	setpgrp		\
 	setuname	\
 	sgs		\
-	sh		\
 	shcomp		\
 	smbios		\
 	smbsrv		\
@@ -434,7 +433,6 @@ COMMON_SUBDIRS=		\
 	uuidgen		\
 	valtools	\
 	vgrind		\
-	vi		\
 	volcheck	\
 	volrmmount	\
 	vrrpadm		\
@@ -675,7 +673,6 @@ MSGSUBDIRS=		\
 	sdiff		\
 	sdpadm		\
 	sgs		\
-	sh		\
 	shcomp		\
 	smbsrv		\
 	sort		\
@@ -710,7 +707,6 @@ MSGSUBDIRS=		\
 	userattr	\
 	valtools	\
 	vgrind		\
-	vi		\
 	volcheck	\
 	volrmmount	\
 	vrrpadm		\

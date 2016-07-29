@@ -31,12 +31,6 @@
 #
 
 #
-# Ignore oddly-named text files scattered about -- someday these should be
-# suffixed with .txt so we don't have to list them.
-#
-./usr/src/cmd/vi/port/ex.news
-
-#
 # Ignore everything under trees that may be resynched from outside ON.
 #
 ./usr/src/cmd/perl

@@ -42,11 +42,9 @@ file path=usr/xpg4/bin/chgrp mode=0555
 file path=usr/xpg4/bin/chown mode=0555
 file path=usr/xpg4/bin/cp mode=0555
 file path=usr/xpg4/bin/crontab mode=4555
-file path=usr/xpg4/bin/ctags mode=0555
 file path=usr/xpg4/bin/date mode=0555
 file path=usr/xpg4/bin/du mode=0555
 file path=usr/xpg4/bin/ed mode=0555
-file path=usr/xpg4/bin/edit mode=0555
 file path=usr/xpg4/bin/env mode=0555
 file path=usr/xpg4/bin/expr mode=0555
 file path=usr/xpg4/bin/file mode=0555
@@ -68,13 +66,9 @@ file path=usr/xpg4/bin/sort mode=0555
 file path=usr/xpg4/bin/stty mode=0555
 file path=usr/xpg4/bin/who mode=0555
 hardlink path=usr/xpg4/bin/egrep target=../../../usr/xpg4/bin/grep
-hardlink path=usr/xpg4/bin/ex target=../../../usr/xpg4/bin/edit
 hardlink path=usr/xpg4/bin/fgrep target=../../../usr/xpg4/bin/grep
 hardlink path=usr/xpg4/bin/ln target=../../../usr/xpg4/bin/cp
 hardlink path=usr/xpg4/bin/mv target=../../../usr/xpg4/bin/cp
-hardlink path=usr/xpg4/bin/vedit target=../../../usr/xpg4/bin/edit
-hardlink path=usr/xpg4/bin/vi target=../../../usr/xpg4/bin/edit
-hardlink path=usr/xpg4/bin/view target=../../../usr/xpg4/bin/edit
 legacy pkg=SUNWxcu4 \
     desc="utilities providing conformance with XCU4 specifications" \
     name="XCU4 Utilities"
