@@ -168,9 +168,9 @@ __##sym	= sym
 #else
 #define	PIC_SETUP(label) \
 	pushl	%ebx; \
-	call	0f; \
-0:	popl	%ebx; \
-	addl	$_GLOBAL_OFFSET_TABLE_+[.-0b],%ebx
+	call	.PICL##label; \
+.PICL##label:	popl	%ebx; \
+	addl	$_GLOBAL_OFFSET_TABLE_+[.-.PICL##label],%ebx
 #define	PIC_WRAPUP	popl	%ebx
 #define	PIC_F(x)	x@PLT
 #define	PIC_G(x)	x@GOT(%ebx)
