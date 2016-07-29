@@ -110,16 +110,6 @@ codereview
 	Given two filenames, creates a postscript file with the file 
 	differences highlighted.
 
-codesign
-	Tools for signing cryptographic modules using the official
-	Sun release keys stored on a remote signing server. This
-	directory contains signit, a client program for signing
-	files with the signing server; signproto, a shell script
-	that finds crypto modules in $ROOT and signs them using
-	signit; and codesign_server.pl, the code that runs on the
-	server. The codesign_server code is not used on an ON
-	build machine but is kept here for source control purposes.
-
 copyrightchk
 	Checks that files have appropriate SMI copyright notices.
 	Primarily used by wx

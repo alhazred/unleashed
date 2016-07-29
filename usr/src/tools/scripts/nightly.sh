@@ -77,7 +77,6 @@ function fatal_error
 function normal_build {
 
 	typeset orig_p_FLAG="$p_FLAG"
-	typeset crypto_signer="$CODESIGN_USER"
 
 	suffix=""
 
@@ -85,8 +84,7 @@ function normal_build {
 
 	if [ "$F_FLAG" = "n" ]; then
 		set_non_debug_build_flags
-		CODESIGN_USER="$crypto_signer" \
-		    build "non-DEBUG" "$suffix-nd" "-nd" "$MULTI_PROTO"
+		build "non-DEBUG" "$suffix-nd" "-nd" "$MULTI_PROTO"
 	else
 		echo "\n==== No non-DEBUG $open_only build ====\n" >> "$LOGFILE"
 	fi
@@ -97,8 +95,7 @@ function normal_build {
 
 	if [ "$D_FLAG" = "y" ]; then
 		set_debug_build_flags
-		CODESIGN_USER="$crypto_signer" \
-		    build "DEBUG" "$suffix" "" "$MULTI_PROTO"
+		build "DEBUG" "$suffix" "" "$MULTI_PROTO"
 	else
 		echo "\n==== No DEBUG $open_only build ====\n" >> "$LOGFILE"
 	fi
@@ -281,28 +278,6 @@ function build {
 		echo "\n==== Build noise differences ($LABEL) ====\n" \
 			>>$mail_msg_file
 		diff $SRC/${NOISE}.ref $SRC/${NOISE}.out >>$mail_msg_file
-	fi
-
-	#
-	#	Re-sign selected binaries using signing server
-	#	(gatekeeper builds only)
-	#
-	if [ -n "$CODESIGN_USER" -a "$this_build_ok" = "y" ]; then
-		echo "\n==== Signing proto area at `date` ====\n" >> $LOGFILE
-		signing_file="${TMPDIR}/signing"
-		rm -f ${signing_file}
-		export CODESIGN_USER
-		signproto $SRC/tools/codesign/creds 2>&1 | \
-			tee -a ${signing_file} >> $LOGFILE
-		echo "\n==== Finished signing proto area at `date` ====\n" \
-		    >> $LOGFILE
-		echo "\n==== Crypto module signing errors ($LABEL) ====\n" \
-		    >> $mail_msg_file
-		egrep 'WARNING|ERROR' ${signing_file} >> $mail_msg_file
-		if (( $? == 0 )) ; then
-			build_ok=n
-			this_build_ok=n
-		fi
 	fi
 
 	#
