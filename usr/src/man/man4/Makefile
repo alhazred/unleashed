@@ -23,8 +23,6 @@ _MANFILES=	Intro.4				\
 		NISLDAPmapping.4		\
 		a.out.4				\
 		admin.4				\
-		alias.4				\
-		aliases.4			\
 		au.4				\
 		audit.log.4			\
 		audit_class.4			\
@@ -172,7 +170,6 @@ _MANFILES=	Intro.4				\
 		scsi.4				\
 		securenets.4			\
 		sel_config.4			\
-		sendmail.4			\
 		service_bundle.4		\
 		service_provider.conf.4		\
 		services.4			\
@@ -218,13 +215,11 @@ sparc_MANFILES=	sbus.4
 
 i386_MANFILES=	sysbus.4
 
-_MANLINKS=	addresses.4			\
-		devid_cache.4			\
+_MANLINKS=	devid_cache.4			\
 		devname_cache.4			\
 		dir.4				\
 		dumpdates.4			\
 		fbtab.4				\
-		forward.4			\
 		fs.4				\
 		hosts.allow.4			\
 		hosts.deny.4			\
@@ -241,11 +236,9 @@ _MANLINKS=	addresses.4			\
 		pcie.4				\
 		qop.4				\
 		rhosts.4			\
-		sendmail.cf.4			\
 		snapshot_cache.4		\
 		ssh_config.4			\
 		sshd_config.4			\
-		submit.cf.4			\
 		volume-defaults.4		\
 		wtmp.4				\
 		wtmpx.4
@@ -256,9 +249,6 @@ MANFILES=	$(_MANFILES) $($(MACH)_MANFILES)
 MANLINKS=	$(_MANLINKS) $($(MACH)_MANLINKS)
 
 intro.4				:= LINKSRC = Intro.4
-
-addresses.4			:= LINKSRC = aliases.4
-forward.4			:= LINKSRC = aliases.4
 
 fs.4				:= LINKSRC = default_fs.4
 
@@ -292,9 +282,6 @@ md.cf.4				:= LINKSRC = md.tab.4
 qop.4				:= LINKSRC = mech.4
 
 pcie.4				:= LINKSRC = pci.4
-
-sendmail.cf.4			:= LINKSRC = sendmail.4
-submit.cf.4			:= LINKSRC = sendmail.4
 
 ssh_config.4			:= LINKSRC = ssh_config.sunssh.4
 sshd_config.4			:= LINKSRC = sshd_config.sunssh.4

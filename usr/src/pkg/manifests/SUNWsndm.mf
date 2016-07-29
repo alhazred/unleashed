@@ -24,6 +24,5 @@
 #
 
 set name=pkg.fmri value=pkg:/SUNWsndm@8.14.4,5.11-0.133
-set name=pkg.renamed value=true
+set name=pkg.obsolete value=true
 set name=variant.arch value=$(ARCH)
-depend fmri=pkg:/service/network/smtp/sendmail@8.14.4,5.11-0.133 type=require

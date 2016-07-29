@@ -143,7 +143,6 @@ file path=usr/share/man/man1m/lockfs.1m
 file path=usr/share/man/man1m/lofiadm.1m
 file path=usr/share/man/man1m/logadm.1m
 file path=usr/share/man/man1m/logins.1m
-file path=usr/share/man/man1m/mail.local.1m
 file path=usr/share/man/man1m/makedbm.1m
 file path=usr/share/man/man1m/mkdevalloc.1m
 file path=usr/share/man/man1m/mkdevmaps.1m

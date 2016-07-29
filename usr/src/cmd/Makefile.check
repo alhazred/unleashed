@@ -130,7 +130,6 @@ MANIFEST_SUBDIRS=			\
 	print/ppdmgr			\
 	rcap/rcapd			\
 	rpcsvc/rpc.bootparamd		\
-	sendmail/lib			\
 	smbsrv/smbd			\
 	ssh/etc				\
 	svc/milestone			\

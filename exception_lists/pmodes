@@ -63,8 +63,5 @@ var/adm/acct/sum
 var/adm/sa
 var/adm/spellhist
 
-# sendmail 8.12
-var/spool/clientmqueue
-
 var/mail/:saved
 var/spool/uucppublic

@@ -362,7 +362,6 @@ COMMON_SUBDIRS=		\
 	sdiff		\
 	sdpadm		\
 	sed		\
-	sendmail	\
 	setfacl		\
 	setmnt		\
 	setpgrp		\
