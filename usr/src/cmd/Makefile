@@ -368,7 +368,6 @@ COMMON_SUBDIRS=		\
 	setpgrp		\
 	setuname	\
 	sgs		\
-	sh		\
 	shcomp		\
 	smbios		\
 	smbsrv		\
@@ -675,7 +674,6 @@ MSGSUBDIRS=		\
 	sdiff		\
 	sdpadm		\
 	sgs		\
-	sh		\
 	shcomp		\
 	smbsrv		\
 	sort		\

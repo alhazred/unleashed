@@ -214,10 +214,6 @@ DIRS= \
 	/usr/demo \
 	/usr/demo/SOUND \
 	/usr/games \
-	/usr/has \
-	/usr/has/bin \
-	/usr/has/lib \
-        /usr/has/man \
 	/usr/include \
 	/usr/include/ads \
 	/usr/include/ast \

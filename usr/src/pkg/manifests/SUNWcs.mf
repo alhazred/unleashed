@@ -143,11 +143,6 @@ dir path=usr/ccs
 dir path=usr/ccs/bin
 dir path=usr/demo
 dir path=usr/games
-dir path=usr/has
-dir path=usr/has/bin
-dir path=usr/has/lib
-dir path=usr/has/man
-dir path=usr/has/man/man1has
 dir path=usr/kernel group=sys
 dir path=usr/kernel/drv group=sys
 dir path=usr/kernel/drv/$(ARCH64) group=sys
@@ -853,8 +848,6 @@ file path=usr/bin/wracct mode=0555
 file path=usr/bin/write group=tty mode=2555
 file path=usr/bin/xargs mode=0555
 file path=usr/bin/xstr mode=0555
-file path=usr/has/bin/sh mode=0555
-file path=usr/has/man/man1has/sh.1has
 file path=usr/kernel/drv/$(ARCH64)/dump group=sys
 file path=usr/kernel/drv/$(ARCH64)/eventfd group=sys
 file path=usr/kernel/drv/$(ARCH64)/fssnap group=sys
@@ -1734,8 +1727,6 @@ link path=usr/bin/sync target=../../sbin/sync
 link path=usr/bin/tar target=../sbin/tar
 link path=usr/bin/uname target=../../sbin/uname
 link path=usr/ccs/bin/m4 target=../../bin/m4
-link path=usr/has/bin/jsh target=sh
-link path=usr/has/lib/rsh target=../bin/sh
 link path=usr/lib/$(ARCH64)/ld.so.1 target=../../../lib/$(ARCH64)/ld.so.1
 link path=usr/lib/cron target=../../etc/cron.d
 link path=usr/lib/devfsadm/devfsadmd target=../../sbin/devfsadm

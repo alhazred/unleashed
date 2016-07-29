@@ -18,7 +18,6 @@
 SUBDIRS=	man1		\
 		man1b		\
 		man1c		\
-		man1has		\
 		man1m		\
 		man1s		\
 		man2		\
