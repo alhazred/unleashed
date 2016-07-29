@@ -41,8 +41,6 @@ dir path=usr/kernel/drv group=sys
 dir path=usr/kernel/drv/$(ARCH64) group=sys
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
-dir path=usr/share/man/man1
-dir path=usr/share/man/man3lib
 driver name=tnf perms="tnfctl 0600 root sys" perms="tnfmap 0600 root sys"
 file path=usr/include/tnf/tnfctl.h
 file path=usr/kernel/drv/$(ARCH64)/tnf group=sys
@@ -52,7 +50,6 @@ file path=usr/lib/$(ARCH64)/libtnfctl.so.1
 file path=usr/lib/$(ARCH64)/libtnfprobe.so.1
 file path=usr/lib/libtnfctl.so.1
 file path=usr/lib/libtnfprobe.so.1
-file path=usr/share/man/man3lib/libtnfctl.3lib
 legacy pkg=SUNWtnfc \
     desc="utilities needed to enable probe points, in the kernel and in applications, that can generate Trace Normal Format (TNF) records in a trace file" \
     name="TNF Core Components"
