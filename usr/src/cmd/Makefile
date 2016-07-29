@@ -435,7 +435,6 @@ COMMON_SUBDIRS=		\
 	uuidgen		\
 	valtools	\
 	vgrind		\
-	vi		\
 	volcheck	\
 	volrmmount	\
 	vrrpadm		\
@@ -712,7 +711,6 @@ MSGSUBDIRS=		\
 	userattr	\
 	valtools	\
 	vgrind		\
-	vi		\
 	volcheck	\
 	volrmmount	\
 	vrrpadm		\
