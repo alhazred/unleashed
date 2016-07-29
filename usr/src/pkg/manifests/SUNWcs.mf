@@ -1546,7 +1546,6 @@ hardlink path=usr/bin/w target=../../usr/lib/isaexec
 hardlink path=usr/bin/wait target=../../usr/bin/alias
 hardlink path=usr/bin/wc target=../../usr/bin/alias
 hardlink path=usr/has/bin/ex target=edit
-hardlink path=usr/has/bin/pfsh target=../../bin/pfexec
 hardlink path=usr/has/bin/vedit target=edit
 hardlink path=usr/has/bin/vi target=edit
 hardlink path=usr/has/bin/view target=edit

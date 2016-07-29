@@ -47,10 +47,7 @@ install: all $(ROOTBINPFEXEC)
 	$(SYMLINK) ../../bin/pfexec $(ROOTXPG4BIN)/pfsh
 	$(RM) $(ROOTSBIN)/pfsh
 	$(SYMLINK) ../usr/bin/pfexec $(ROOTSBIN)/pfsh
-	$(RM) $(ROOTHASBIN)/pfsh
-	$(LN) $(ROOTBIN)/pfexec $(ROOTHASBIN)/pfsh
 
 clean:
-
 
 include ../Makefile.targ
