@@ -115,7 +115,6 @@ SUBDIRS +=				\
 	libdoor		\
 	libdscfg	\
 	libdtrace	\
-	libdtrace_jni	\
 	libefi		\
 	libelfsign	\
 	libeti		\
@@ -391,7 +390,6 @@ HDRSUBDIRS=				\
 	libdns_sd	\
 	libdscfg	\
 	libdtrace	\
-	libdtrace_jni	\
 	libelfsign	\
 	libeti		\
 	libfakekernel	\
@@ -593,7 +591,6 @@ libdlpi:	libinetutil libdladm
 libds:		libsysevent
 libdscfg:	libnsctl libunistat libadm
 libdtrace:	libproc libgen libctf libmapmalloc
-libdtrace_jni:	libuutil libdtrace
 libefi:		libuuid
 libelfsign:	libcryptoutil libkmf ../cmd/sgs/libelf
 libeti:		libcurses

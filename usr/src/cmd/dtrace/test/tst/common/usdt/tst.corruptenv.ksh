@@ -38,14 +38,6 @@ if (( $# != 1 )); then
 	exit 2
 fi
 
-#
-# jdtrace does not implement the -h option that is required to generate
-# C header files.
-#
-if [[ "$1" == */jdtrace ]]; then
-	exit 0
-fi
-
 dtrace="$1"
 startdir="$PWD"
 dir=$(mktemp -td drtiXXXXXX)

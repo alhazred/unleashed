@@ -166,6 +166,3 @@ usdt/tst.lazyprobe.o: usdt/lazyprobe.h
 
 usdt/lazyprobe.h: usdt/lazyprobe.d
 	$(DTRACE) -h -s usdt/lazyprobe.d -o usdt/lazyprobe.h
-
-SUBDIRS = java_api
-include ../../Makefile.subdirs

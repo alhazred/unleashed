@@ -27,5 +27,5 @@
 
 include $(SRC)/Makefile.master
 
-SUBDIRS = scripts baddof badioctl chkargs jdtrace
+SUBDIRS = scripts baddof badioctl chkargs
 include ../Makefile.subdirs
