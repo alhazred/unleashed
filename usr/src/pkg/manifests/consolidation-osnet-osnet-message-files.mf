@@ -47,12 +47,6 @@ dir path=usr/lib/locale
 dir path=usr/lib/locale/C
 dir path=usr/lib/locale/C/LC_MESSAGES
 dir path=usr/lib/locale/C/LC_TIME
-dir path=usr/share
-dir path=usr/share/lib
-dir path=usr/share/lib/locale
-dir path=usr/share/lib/locale/com
-dir path=usr/share/lib/locale/com/sun
-dir path=usr/share/lib/locale/com/sun/slp
 file path=usr/lib/help/auths/locale/AllSolAuthsHeader.html
 file path=usr/lib/help/auths/locale/AuditHeader.html
 file path=usr/lib/help/auths/locale/AuthJobsAdmin.html
@@ -315,8 +309,6 @@ file path=usr/lib/locale/C/LC_MESSAGES/priv_names group=sys
 file path=usr/lib/locale/C/LC_MESSAGES/uxlibc.src group=sys
 file path=usr/lib/locale/C/LC_TIME/SUNW_OST_OSCMD.po group=sys
 file path=usr/lib/locale/C/LC_TIME/SUNW_OST_OSLIB.po group=sys
-file path=usr/share/lib/locale/com/sun/slp/ClientLib_en.properties group=sys
-file path=usr/share/lib/locale/com/sun/slp/Server_en.properties group=sys
 legacy pkg=SUNW0on arch=all \
     desc="localizable message files for the OS-Networking consolidation" \
     name="Localizable ON message files" version=11.11,REV=2009.11.10

@@ -30,13 +30,6 @@ SVCMETHOD=	ldap-client
 
 include ../Makefile.cmd
 
-#
-# To compile in the $mgr SLP support
-# 1. add -DSLP in to CPPFLAGS line
-# 2. add cachemgr_discovery.o to the OBJS line
-# 3. add -lslp in the LDLIBS line
-#
-
 ROOTLDAPLIB=	$(ROOT)/usr/lib/ldap
 ROOTLDAPPROG=	$(PROG:%=$(ROOTLDAPLIB)/%)
 

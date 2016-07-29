@@ -176,8 +176,6 @@ _MANFILES=	Intro.4				\
 		shadow.4			\
 		sharetab.4			\
 		shells.4			\
-		slp.conf.4			\
-		slpd.reg.4			\
 		smb.4				\
 		smbautohome.4			\
 		smhba.conf.4			\

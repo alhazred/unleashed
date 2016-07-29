@@ -455,7 +455,6 @@ _MANFILES=	6to4relay.1m		\
 		sharemgr.1m		\
 		showmount.1m		\
 		shutdown.1m		\
-		slpd.1m			\
 		smbadm.1m		\
 		smbd.1m			\
 		smbiod.1m		\
