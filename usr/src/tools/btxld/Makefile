@@ -17,16 +17,21 @@ include ../Makefile.tools
 
 .KEEP_STATE:
 
-VPATH=	.:$(SRC)/cmd/boot/common
+COMMON_SRC=	$(SRC)/cmd/boot/common
+EINFO_SRC=	$(COMMON_SRC)/bblk_einfo.c
+UTILS_SRC=	$(COMMON_SRC)/boot_utils.c
+EXTRA_SRC=	$(COMMON_SRC)/mboot_extra.c
 
-PROG=	btxld
-MAN=	btxld.8
-SRCS=	btxld.c elfh.c version.c bblk_einfo.c mboot_extra.c boot_utils.c
-OBJS=	btxld.o elfh.o version.o bblk_einfo.o mboot_extra.o boot_utils.o
-LDLIBS += -lmd5
-C99MODE=$(C99_ENABLE)
-CPPFLAGS += -I$(SRC)/uts/common -I$(SRC)/cmd/boot/common
-CERRWARN += -_gcc=-Wno-uninitialized
+PROG=		btxld
+MAN=		btxld.8
+SRCS=		btxld.c elfh.c version.c $(UTILS_SRC) $(EINFO_SRC) $(EXTRA_SRC)
+OBJS=		btxld.o elfh.o version.o bblk_einfo.o mboot_extra.o boot_utils.o
+LDLIBS +=	-lmd5
+C99MODE=	$(C99_ENABLE)
+CPPFLAGS +=	-I$(SRC)/uts/common -I$(COMMON_SRC)
+
+# Following is needed by sources in $(COMMON_SRC)
+CERRWARN +=	-_gcc=-Wno-uninitialized
 
 all: $(PROG)
 
@@ -38,5 +43,13 @@ install: all .WAIT $(ROOTONBLDMACHPROG)
 
 clean:
 	$(RM) $(OBJS)
+
+%.o:	%.c
+	$(COMPILE.c) -o $@ $<
+	$(POST_PROCESS_O)
+
+%.o:	$(COMMON_SRC)/%.c
+	$(COMPILE.c) -o $@ $<
+	$(POST_PROCESS_O)
 
 include ../Makefile.targ
