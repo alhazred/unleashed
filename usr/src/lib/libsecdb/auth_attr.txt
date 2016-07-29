@@ -79,8 +79,6 @@ solaris.login.:::Login Control::help=LoginHeader.html
 solaris.login.enable:::Enable Logins::help=LoginEnable.html
 solaris.login.remote:::Remote Login::help=LoginRemote.html
 #
-solaris.mail.:::Mail::help=MailHeader.html
-solaris.mail.mailq:::Mail Queue::help=MailQueue.html
 #
 solaris.network.:::Network::help=NetworkHeader.html
 solaris.network.autoconf.read:::View Network Auto-Magic Config::help=NetworkAutoconfRead.html

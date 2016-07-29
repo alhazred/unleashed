@@ -122,7 +122,6 @@
 *_test.[ch]
 ./usr/src/cmd/ldap/common/*test.c
 ./usr/src/cmd/logadm/tester
-./usr/src/cmd/sendmail/libsm/t-*.c
 ./usr/src/cmd/sort/common/convert.c
 ./usr/src/cmd/sort/common/invoke.c
 ./usr/src/lib/crypt_modules/sha256/test.c
@@ -175,20 +174,9 @@
 ./usr/src/cmd/vscan/vscand/vscan.d
 
 #
-# Ignore sample source code.
-#
-./usr/src/cmd/sendmail/libmilter/example.c
-
-#
 # Ignore .xcl files that aren't used because the program is statically linked.
 #
 ./usr/src/cmd/cmd-inet/sbin/dhcpagent/dhcpagent.xcl
-
-#
-# Ignore sendmail files included for completeness' sake, but which won't
-# be used until certain _FFR (for future release) #define's go live.
-#
-./usr/src/cmd/sendmail/src/statusd_shm.h
 
 #
 # Ignore files originally supplied by ISC (Internet Software Consortium) 

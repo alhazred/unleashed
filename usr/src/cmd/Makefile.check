@@ -128,7 +128,6 @@ MANIFEST_SUBDIRS=			\
 	print/bsd-sysv-commands		\
 	rcap/rcapd			\
 	rpcsvc/rpc.bootparamd		\
-	sendmail/lib			\
 	smbsrv/smbd			\
 	ssh				\
 	svc/milestone			\

@@ -62,7 +62,6 @@ SUBDIRS +=		\
 # Build everything else. Aside from explicit dependencies, all libraries
 # are built in parallel.
 SUBDIRS +=				\
-	../cmd/sendmail/libmilter	\
 	../cmd/sgs/libelf	\
 	../cmd/sgs/librtld_db	\
 	abi		\
@@ -364,7 +363,6 @@ sparc_MSGSUBDIRS=	\
 i386_MSGSUBDIRS= libfdisk
 
 HDRSUBDIRS=				\
-	../cmd/sendmail/libmilter	\
 	auditd_plugins	\
 	fm		\
 	hal		\

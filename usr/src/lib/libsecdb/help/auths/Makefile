@@ -44,8 +44,6 @@ HTMLENTS = \
 	LoginEnable.html \
 	LoginHeader.html \
 	LoginRemote.html \
-	MailHeader.html \
-	MailQueue.html \
 	PriAdmin.html \
 	AuthProfmgrAssign.html \
 	AuthProfmgrDelegate.html \
