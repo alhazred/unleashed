@@ -65,7 +65,7 @@ typedef struct scmdata {
 
 /*
  * Hooks used to check if a given unreferenced file is known to an SCM
- * (currently Git, Mercurial and TeamWare).
+ * (currently Git and Mercurial).
  */
 typedef int checkscm_func_t(const char *, const struct FTW *);
 typedef void chdirscm_func_t(const char *);
@@ -76,7 +76,7 @@ typedef struct {
 	chdirscm_func_t	*chdirfunc;
 } scm_t;
 
-static checkscm_func_t check_tw, check_scmdata;
+static checkscm_func_t check_scmdata;
 static chdirscm_func_t chdir_hg, chdir_git;
 static int	pnset_add(pnset_t *, const char *);
 static int	pnset_check(const pnset_t *, const char *);
@@ -88,8 +88,6 @@ static void	warn(const char *, ...);
 static void	die(const char *, ...);
 
 static const scm_t scms[] = {
-	{ "tw",		check_tw,	NULL		},
-	{ "teamware",	check_tw,	NULL		},
 	{ "hg",		check_scmdata,	chdir_hg 	},
 	{ "mercurial",	check_scmdata,	chdir_hg	},
 	{ "git",	check_scmdata,	chdir_git	},
@@ -151,7 +149,7 @@ main(int argc, char *argv[])
 
 	if (argc != 2) {
 usage:		(void) fprintf(stderr, "usage: %s [-s <subtree>] "
-		    "[-t <tstampfile>] [-S hg|tw|git] <srcroot> <exceptfile>\n",
+		    "[-t <tstampfile>] [-S hg|git] <srcroot> <exceptfile>\n",
 		    progname);
 		return (EXIT_FAILURE);
 	}
@@ -369,21 +367,6 @@ check_scmdata(const char *path, const struct FTW *ftwp)
 
 	return (scmdata.manifest != NULL && pnset_check(scmdata.manifest,
 	    path));
-}
-
-/*
- * Check if a file is under TeamWare control by checking for its corresponding
- * SCCS "s-dot" file.
- */
-static int
-check_tw(const char *path, const struct FTW *ftwp)
-{
-	char sccspath[MAXPATHLEN];
-
-	(void) snprintf(sccspath, MAXPATHLEN, "%.*s/SCCS/s.%s", ftwp->base,
-	    path, path + ftwp->base);
-
-	return (access(sccspath, F_OK) == 0);
 }
 
 /*
