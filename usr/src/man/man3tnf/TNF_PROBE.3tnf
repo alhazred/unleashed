@@ -311,7 +311,7 @@ MT Level	MT-Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBld\fR(1), \fBprex\fR(1), \fBtnfdump\fR(1), \fBdlopen\fR(3C),
+\fBld\fR(1), \fBdlopen\fR(3C),
 \fBlibtnfctl\fR(3TNF), \fBTNF_DECLARE_RECORD\fR(3TNF), \fBthreads\fR(5),
 \fBtnf_process_disable\fR(3TNF), \fBtracing\fR(3TNF), \fBattributes\fR(5)
 .SH NOTES

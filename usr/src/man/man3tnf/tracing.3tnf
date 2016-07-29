@@ -33,15 +33,6 @@ See  \fBTNF_DECLARE_RECORD\fR(3TNF).
 .sp
 .ne 2
 .na
-\fB\fBprex\fR\fR
-.ad
-.RS 25n
-Displays and controls probes in running software. See prex(1).
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBkernel\fR \fBprobes\fR\fR
 .ad
 .RS 25n
@@ -49,26 +40,6 @@ A set of probes built into the Solaris kernel which capture information about
 system calls, multithreading, page faults, swapping, memory management, and
 I/O. You can use these probes to obtain detailed traces of kernel activity
 under your application workloads. See  \fBtnf_kernel_probes\fR(4).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBtnfxtract\fR\fR
-.ad
-.RS 25n
-A program that extracts the trace data from the kernel's in-memory buffer into
-a file. See  \fBtnfxtract\fR(1).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBtnfdump\fR\fR
-.ad
-.RS 25n
-A program that displays the information from a trace file. See
-\fBtnfdump\fR(1).
 .RE
 
 .sp
@@ -302,7 +273,6 @@ MT Level	MT-Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBprex\fR(1), \fBtnfdump\fR(1), \fBtnfxtract\fR(1),
 \fBTNF_DECLARE_RECORD\fR(3TNF), \fBTNF_PROBE\fR(3TNF), \fBlibtnfctl\fR(3TNF),
 \fBtnf_process_disable\fR(3TNF), \fBtnf_kernel_probes\fR(4),
 \fBattributes\fR(5)
