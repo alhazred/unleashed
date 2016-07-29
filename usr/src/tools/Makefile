@@ -43,7 +43,6 @@ COMMON_SUBDIRS= \
 	findunref \
 	gk \
 	install.bin \
-	lintdump \
 	make \
 	ndrgen \
 	onbld \

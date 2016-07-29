@@ -76,7 +76,6 @@ file path=opt/onbld/bin/$(ARCH)/findunref mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/forth mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/forth_preload.so.1 mode=0555
 file path=opt/onbld/bin/$(ARCH)/install mode=0555
-file path=opt/onbld/bin/$(ARCH)/lintdump mode=0555
 file path=opt/onbld/bin/$(ARCH)/make mode=0555
 $(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/mbh_patch mode=0555
 file path=opt/onbld/bin/$(ARCH)/ndrgen mode=0555
@@ -207,7 +206,6 @@ file path=opt/onbld/man/man1onbld/hgsetup.1onbld
 file path=opt/onbld/man/man1onbld/interface_check.1onbld
 file path=opt/onbld/man/man1onbld/interface_cmp.1onbld
 file path=opt/onbld/man/man1onbld/jstyle.1onbld
-file path=opt/onbld/man/man1onbld/lintdump.1onbld
 file path=opt/onbld/man/man1onbld/make_pkg_db.1onbld
 file path=opt/onbld/man/man1onbld/mapfilechk.1onbld
 file path=opt/onbld/man/man1onbld/ndrgen.1onbld

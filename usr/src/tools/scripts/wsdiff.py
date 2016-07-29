@@ -1125,16 +1125,7 @@ def compareByDumping(base, ptch, quiet, fileType) :
 	tmpFile1 = tmpDir1 + os.path.basename(base) + t.getName()
 	tmpFile2 = tmpDir2 + os.path.basename(ptch) + t.getName()
 
-	if fileType == "Lint Library" :
-		baseCmd = lintdump_cmd + " -ir " + base + \
-			  " | egrep -v '(LINTOBJ|LINTMOD):'" + \
-			  " | grep -v PASS[1-3]:" + \
-			  " > " + tmpFile1
-		ptchCmd = lintdump_cmd + " -ir " + ptch + \
-			  " | egrep -v '(LINTOBJ|LINTMOD):'" + \
-			  " | grep -v PASS[1-3]:" + \
-			  " > " + tmpFile2
-	elif fileType == "Sqlite Database" :
+	if fileType == "Sqlite Database" :
 		baseCmd = "echo .dump | " + sqlite_cmd + base + " > " + \
 			  tmpFile1
 		ptchCmd = "echo .dump | " + sqlite_cmd + ptch + " > " + \
@@ -1299,7 +1290,7 @@ def main() :
 	global tmpDir1, tmpDir2
 
 	# Command paths
-	global lintdump_cmd, elfdump_cmd, dump_cmd, dis_cmd, od_cmd, diff_cmd, sqlite_cmd
+	global elfdump_cmd, dump_cmd, dis_cmd, od_cmd, diff_cmd, sqlite_cmd
 
 	# Default search path
 	global wsdiff_path
@@ -1368,7 +1359,6 @@ def main() :
 		if len(src) > 0 :
 			wsdiff_path.insert(0, src + "/tools/proto/opt/onbld/bin")
 
-	lintdump_cmd = find_tool("lintdump")
 	elfdump_cmd = find_tool("elfdump")
 	dump_cmd = find_tool("dump")
 	od_cmd = find_tool("od")

@@ -210,9 +210,6 @@ interface_cmp
 	development gate. It can also be used to validate new changes to
 	the development gate before they are integrated.
 
-lintdump
-	dumps the contents of one or more lint libraries; see lintdump(1)
-
 ndrgen
 	Network Data Language (NDL) RPC protocol compiler to support DCE
 	RPC/MSRPC and SMB/CIFS.  ndrgen takes an input protocol definition
