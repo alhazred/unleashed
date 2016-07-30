@@ -420,7 +420,6 @@ def getTheFileType(f) :
 	extensions = { 'a'	:	'ELF Object Archive',
 		       'jar'	:	'Java Archive',
 		       'html'	:	'HTML',
-		       'ln'	:	'Lint Library',
 		       'db'	:	'Sqlite Database' }
 
 	try:
@@ -1252,9 +1251,6 @@ def compareOneFile(base, ptch, quiet) :
 
 	elif (fileType == 'HTML') :
 		return compareBasic(base, ptch, quiet, fileType)
-
-	elif ( fileType == 'Lint Library' ) :
-		return compareByDumping(base, ptch, quiet, fileType)
 
 	elif ( fileType == 'Sqlite Database' ) :
 		return compareByDumping(base, ptch, quiet, fileType)
