@@ -323,8 +323,8 @@ amd64_XARCH=	-m64 -Ui386 -U__i386
 # assembler '-xarch' flag.  Different from compiler '-xarch' flag.
 sparc_AS_XARCH=		-xarch=v8plus -Dsparc -D__sparc -D__sparcv8
 sparcv9_AS_XARCH=	-xarch=v9 -Dsparc -D__sparc -D__sparcv9
-i386_AS_XARCH=		--32 -Di386 -D__i386
-amd64_AS_XARCH=		--64 -Ui386 -U__i386 -D__x86_64 -D__amd64
+i386_AS_XARCH=		-m32 -Di386 -D__i386
+amd64_AS_XARCH=		-m64 -Ui386 -U__i386 -D__x86_64 -D__amd64
 
 #
 # These flags define what we need to be 'standalone' i.e. -not- part
@@ -710,9 +710,12 @@ $(SPARC_BLD)BASIC_CC_ARGS += -_gcc=mno-integer-ldd-std
 
 BASIC_CC_ARGS += -D__sun
 
-BASIC_AS_ARGS=	--warn \
-		--fatal-warnings \
-		--traditional-format
+BASIC_AS_ARGS=	-x assembler-with-cpp \
+		-c \
+		-Wa,--warn \
+		-Wa,--fatal-warnings \
+		-Wa,--traditional-format \
+		-D__GNUC_AS__
 
 # Specify platform compiler versions for languages
 # that we use (currently only c and c++).
@@ -732,15 +735,13 @@ sparcv9_LD=		/usr/ccs/bin/ld
 i386_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc $(BASIC_CC_ARGS)
 i386_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++ $(BASIC_CC_ARGS)
 i386_CPP=		/usr/ccs/lib/cpp
-i386_AS=		$(ONBLD_TOOLS)/bin/$(MACH)/aw \
-	$(GCC_ROOT)/bin/gcc /usr/bin/gas $(BASIC_AS_ARGS)
+i386_AS=		$(GCC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
 i386_LD=		/usr/ccs/bin/ld
 
 amd64_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc $(BASIC_CC_ARGS)
 amd64_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++ $(BASIC_CC_ARGS)
 amd64_CPP=		/usr/ccs/lib/cpp
-amd64_AS=		$(ONBLD_TOOLS)/bin/$(MACH)/aw \
-	$(GCC_ROOT)/bin/gcc /usr/bin/gas $(BASIC_AS_ARGS)
+amd64_AS=		$(GCC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
 amd64_LD=		/usr/ccs/bin/ld
 
 NATIVECC=		$($(NATIVE_MACH)_CC)

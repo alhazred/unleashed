@@ -29,7 +29,7 @@ CFLAGS +=	-m32
 ACFLAGS +=	-m32
 # LD_FLAGS is passed directly to ${LD}, not via ${CC}:
 LD_FLAGS +=	-m elf_i386_sol2
-AFLAGS +=	--32
+AFLAGS +=	-m32
 
 # BTX components
 BTXDIR=		$(SRC)/boot/sys/boot/i386/btx

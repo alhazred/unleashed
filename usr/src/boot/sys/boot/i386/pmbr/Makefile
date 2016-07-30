@@ -33,7 +33,7 @@ SRCS=	$(OBJS:%.o=%.s)
 ORG=	0x600
 
 AS_CPPFLAGS=	# no CPP for now
-ASFLAGS=--32 --divide
+ASFLAGS=-m32 -Wa,--divide
 LDFLAGS=-m elf_i386_sol2 -e start -Ttext ${ORG} -N -S --oformat binary
 
 all: $(PROG)

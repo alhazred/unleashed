@@ -61,7 +61,6 @@ sparc_SUBDIRS= \
 	tokenize
 
 i386_SUBDIRS=		\
-	aw		\
 	elfextract	\
 	mbh_patch	\
 	btxld
