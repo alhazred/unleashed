@@ -262,19 +262,6 @@ CCMODE64=		-Xa
 #
 CCVERBOSE=		-v
 
-# set this to the secret flag "-Wc,-Qiselect-v9abiwarn=1" to get warnings
-# from the compiler about places the -xarch=v9 may differ from -xarch=v9c.
-V9ABIWARN=
-
-# set this to the secret flag "-Wc,-Qiselect-regsym=0" to disable register
-# symbols (used to detect conflicts between objects that use global registers)
-# we disable this now for safety, and because genunix doesn't link with
-# this feature (the v9 default) enabled.
-#
-# REGSYM is separate since the C++ driver syntax is different.
-CCREGSYM=		-Wc,-Qiselect-regsym=0
-CCCREGSYM=		-Qoption cg -Qiselect-regsym=0
-
 # Prevent the removal of static symbols by the SPARC code generator (cg).
 # The x86 code generator (ube) does not remove such symbols and as such
 # using this workaround is not applicable for x86.
@@ -366,8 +353,7 @@ C99MODE=	$(C99_DISABLE)
 # In most places, assignments to these macros should be appended with +=
 # (CPPFLAGS.first allows values to be prepended to CPPFLAGS).
 sparc_CFLAGS=	$(sparc_XARCH) $(CCSTATICSYM)
-sparcv9_CFLAGS=	$(sparcv9_XARCH) $(CCVERBOSE) $(V9ABIWARN) $(CCREGSYM) \
-		$(CCSTATICSYM)
+sparcv9_CFLAGS=	$(sparcv9_XARCH) $(CCVERBOSE) $(CCSTATICSYM)
 i386_CFLAGS=	$(i386_XARCH)
 amd64_CFLAGS=	$(amd64_XARCH)
 
@@ -529,19 +515,11 @@ POFILE= $(PROG).po
 
 sparc_CCFLAGS=		-m32 -_gcc=mcpu=v8 -_gcc=mno-v8plus \
 			-_gcc=-mtunesupersparc \
-			-Qoption ccfe -messages=no%anachronism \
 			$(CCERRWARN)
 sparcv9_CCFLAGS=	$(sparcv9_XARCH) \
-			-Qoption ccfe -messages=no%anachronism \
-			-Qoption ccfe -features=no%conststrings \
-			$(CCCREGSYM) \
 			$(CCERRWARN)
-i386_CCFLAGS=		-Qoption ccfe -messages=no%anachronism \
-			-Qoption ccfe -features=no%conststrings \
-			$(CCERRWARN)
+i386_CCFLAGS=		$(CCERRWARN)
 amd64_CCFLAGS=		$(amd64_XARCH) \
-			-Qoption ccfe -messages=no%anachronism \
-			-Qoption ccfe -features=no%conststrings \
 			$(CCERRWARN)
 
 sparc_CCOPTFLAG=	-O

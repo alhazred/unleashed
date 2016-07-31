@@ -494,14 +494,6 @@ do_gcc(cw_ictx_t *ctx)
 		}
 
 		if (ctx->i_flags & CW_F_CXX) {
-			if (strcmp(arg, "-Qoption") == 0) {
-				/* discard -Qoption and its two arguments */
-				if (ctx->i_oldargc < 3)
-					error(arg);
-				ctx->i_oldargc -= 2;
-				ctx->i_oldargv += 2;
-				continue;
-			}
 			if (strcmp(arg, "-pic") == 0) {
 				newae(ctx->i_ae, "-fpic");
 				pic = 1;
@@ -705,13 +697,6 @@ do_gcc(cw_ictx_t *ctx)
 				/*
 				 * Generate tests at the top of loops.
 				 * There is no direct gcc equivalent, ignore.
-				 */
-				break;
-			}
-			if (strncmp(arg, "-Wc,-Qiselect", 13) == 0) {
-				/*
-				 * Prevents insertion of register symbols.
-				 * gcc doesn't do this, so ignore it.
 				 */
 				break;
 			}

@@ -112,7 +112,7 @@ COPTIMIZE	= $(COPTIMIZE_$(CLASS))
 CCMODE		= -Xa
 
 CFLAGS_32	= -xcg92
-CFLAGS_64	= -_gcc=-mtune=ultrasparc $(CCABS32) $(CCREGSYM)
+CFLAGS_64	= -_gcc=-mtune=ultrasparc $(CCABS32)
 CFLAGS		= $(CFLAGS_$(CLASS))
 
 CFLAGS		+= $(XARCH)
