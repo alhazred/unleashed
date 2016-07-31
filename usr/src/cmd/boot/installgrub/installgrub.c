@@ -727,7 +727,7 @@ get_start_sector(ig_device_t *device)
 	uint32_t		secnum = 0, numsec = 0;
 	int			i, pno, rval, log_part = 0;
 	struct mboot		*mboot;
-	struct ipart		*part;
+	struct ipart		*part = NULL;
 	ext_part_t		*epp;
 	struct part_info	dkpi;
 	struct extpart_info	edkpi;
@@ -884,8 +884,8 @@ found_part:
 static int
 get_disk_fd(ig_device_t *device)
 {
-	int	i;
-	char	save[2];
+	int	i = 0;
+	char	save[2] = { '\0', '\0' };
 	char	*end = NULL;
 
 	assert(device != NULL);

@@ -51,10 +51,7 @@ CFLAGS +=	$(XSTRCONST)
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
 CPPFLAGS +=	-I$(SRC)/uts/common -I$(SRC)/common -I$(SRC)/common/ficl
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-label
-
+C99MODE=	$(C99_ENABLE)
 
 all: $(PROG)
 
