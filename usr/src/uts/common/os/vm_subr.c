@@ -143,7 +143,7 @@ default_physio(int (*strat)(struct buf *), struct buf *bp, dev_t dev,
 	TRACE_1(TR_FAC_PHYSIO, TR_PHYSIO_START, "physio_start: bp %p", bp);
 
 	/* Kernel probe */
-	TNF_PROBE_4(physio_start, "io rawio", /* CSTYLED */,
+	TNF_PROBE_4(physio_start, "io rawio", "",
 	    tnf_device,		device,		dev,
 	    tnf_offset,		offset,		uio->uio_loffset,
 	    tnf_size,		size,		uio->uio_resid,
@@ -291,7 +291,7 @@ default_physio(int (*strat)(struct buf *), struct buf *bp, dev_t dev,
 	}
 
 	/* Kernel probe */
-	TNF_PROBE_1(physio_end, "io rawio", /* CSTYLED */,
+	TNF_PROBE_1(physio_end, "io rawio", "",
 		tnf_device,	device,		dev);
 
 	TRACE_1(TR_FAC_PHYSIO, TR_PHYSIO_END, "physio_end: bp %p", bp);

@@ -436,7 +436,7 @@ static void
 bdev_strategy_tnf_probe(struct buf *bp)
 {
 	/* Kernel probe */
-	TNF_PROBE_5(strategy, "io blockio", /* CSTYLED */,
+	TNF_PROBE_5(strategy, "io blockio", "",
 	    tnf_device, device, bp->b_edev,
 	    tnf_diskaddr, block, bp->b_lblkno,
 	    tnf_size, size, bp->b_bcount,

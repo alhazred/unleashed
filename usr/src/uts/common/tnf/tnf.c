@@ -720,12 +720,12 @@ tnf_settracing(int arg)
 		int i;
 
 		for (i = 0; i < NITER; i++)
-			TNF_PROBE_0(tnf_speed_0, "tnf", /* CSTYLED */);
+			TNF_PROBE_0(tnf_speed_0, "tnf", "");
 		for (i = 0; i < NITER; i++)
-			TNF_PROBE_1(tnf_speed_1, "tnf", /* CSTYLED */,
+			TNF_PROBE_1(tnf_speed_1, "tnf", "",
 			    tnf_long,	long,	i);
 		for (i = 0; i < NITER; i++)
-			TNF_PROBE_2(tnf_speed_2, "tnf", /* CSTYLED */,
+			TNF_PROBE_2(tnf_speed_2, "tnf", "",
 			    tnf_long,	long1,	i,
 			    tnf_long,	long2,	i);
 	}

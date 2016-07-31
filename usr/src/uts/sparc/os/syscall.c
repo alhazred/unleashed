@@ -468,7 +468,7 @@ pre_syscall(int arg0)
 #ifndef NPROBE
 	/* Kernel probe */
 	if (tnf_tracing_active) {
-		TNF_PROBE_1(syscall_start, "syscall thread", /* CSTYLED */,
+		TNF_PROBE_1(syscall_start, "syscall thread", "",
 			tnf_sysnum,	sysnum,		t->t_sysnum);
 		t->t_post_sys = 1;	/* make sure post_syscall runs */
 		repost = 1;
@@ -789,7 +789,7 @@ sig_check:
 #ifndef NPROBE
 	/* Kernel probe */
 	if (tnf_tracing_active) {
-		TNF_PROBE_3(syscall_end, "syscall thread", /* CSTYLED */,
+		TNF_PROBE_3(syscall_end, "syscall thread", "",
 		    tnf_long,	rval1,		rval1,
 		    tnf_long,	rval2,		rval2,
 		    tnf_long,	errno,		(long)error);

@@ -212,7 +212,7 @@ trap(struct regs *rp, caddr_t addr, uint32_t type, uint32_t mmu_fsr)
 			break;
 		}
 		/* Kernel probe */
-		TNF_PROBE_1(thread_state, "thread", /* CSTYLED */,
+		TNF_PROBE_1(thread_state, "thread", "",
 		    tnf_microstate, state, (char)mstate);
 		mstate = new_mstate(curthread, mstate);
 		siginfo.si_signo = 0;
@@ -1219,7 +1219,7 @@ out:	/* We can't get here from a system trap */
 	trap_rtt();
 	(void) new_mstate(curthread, mstate);
 	/* Kernel probe */
-	TNF_PROBE_1(thread_state, "thread", /* CSTYLED */,
+	TNF_PROBE_1(thread_state, "thread", "",
 		tnf_microstate, state, LMS_USER);
 
 	TRACE_0(TR_FAC_TRAP, TR_C_TRAP_HANDLER_EXIT, "C_trap_handler_exit");

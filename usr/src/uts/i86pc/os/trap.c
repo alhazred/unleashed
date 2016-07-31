@@ -568,7 +568,7 @@ trap(struct regs *rp, caddr_t addr, processorid_t cpuid)
 			break;
 		}
 		/* Kernel probe */
-		TNF_PROBE_1(thread_state, "thread", /* CSTYLED */,
+		TNF_PROBE_1(thread_state, "thread", "",
 		    tnf_microstate, state, mstate);
 		mstate = new_mstate(ct, mstate);
 
@@ -1556,7 +1556,7 @@ out:	/* We can't get here from a system trap */
 	(void) new_mstate(ct, mstate);
 
 	/* Kernel probe */
-	TNF_PROBE_1(thread_state, "thread", /* CSTYLED */,
+	TNF_PROBE_1(thread_state, "thread", "",
 	    tnf_microstate, state, LMS_USER);
 
 	return;

@@ -800,7 +800,7 @@ loop:
 	    freemem, lotsfree, nscan, desscan);
 
 	/* Kernel probe */
-	TNF_PROBE_2(pageout_scan_start, "vm pagedaemon", /* CSTYLED */,
+	TNF_PROBE_2(pageout_scan_start, "vm pagedaemon", "",
 	    tnf_ulong, pages_free, freemem, tnf_ulong, pages_needed, needfree);
 
 	pcount = 0;
@@ -908,7 +908,7 @@ loop:
 	    freemem, lotsfree, nscan, desscan, count);
 
 	/* Kernel probe */
-	TNF_PROBE_2(pageout_scan_end, "vm pagedaemon", /* CSTYLED */,
+	TNF_PROBE_2(pageout_scan_end, "vm pagedaemon", "",
 	    tnf_ulong, pages_scanned, nscan, tnf_ulong, pages_free, freemem);
 
 	if (pageout_sample_cnt < pageout_sample_lim) {

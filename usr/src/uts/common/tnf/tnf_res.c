@@ -163,7 +163,7 @@ tnf_thread_create(kthread_t *t)
 	/* If the allocation fails, this thread doesn't trace */
 	t->t_tnf_tpdp = kmem_zalloc(sizeof (tnf_ops_t), KM_NOSLEEP);
 
-	TNF_PROBE_3(thread_create, "thread", /* CSTYLED */,
+	TNF_PROBE_3(thread_create, "thread", "",
 		tnf_kthread_id,	tid,		t,
 		tnf_pid,	pid,		ttoproc(t)->p_pid,
 		tnf_symbol,	start_pc,	t->t_startpc);
@@ -181,7 +181,7 @@ tnf_thread_exit(void)
 	tnf_ops_t *ops;
 	tnf_block_header_t *block;
 
-	TNF_PROBE_0(thread_exit, "thread", /* CSTYLED */);
+	TNF_PROBE_0(thread_exit, "thread", "");
         /* LINTED pointer cast may result in improper alignment */
 	ops = (tnf_ops_t *)curthread->t_tnf_tpdp;
 	/*
@@ -231,7 +231,7 @@ tnf_thread_free(kthread_t *t)
 void
 tnf_thread_queue(kthread_t *t, cpu_t *cp, pri_t tpri)
 {
-	TNF_PROBE_4(thread_queue, "dispatcher", /* CSTYLED */,
+	TNF_PROBE_4(thread_queue, "dispatcher", "",
 		tnf_kthread_id,		tid,		t,
 		tnf_cpuid,		cpuid,		cp->cpu_id,
 		tnf_long,		priority,	tpri,
@@ -239,7 +239,7 @@ tnf_thread_queue(kthread_t *t, cpu_t *cp, pri_t tpri)
 			/* cp->cpu_disp->disp_q[tpri].dq_sruncnt */
 			cp->cpu_disp->disp_nrunnable);
 
-	TNF_PROBE_2(thread_state, "thread", /* CSTYLED */,
+	TNF_PROBE_2(thread_state, "thread", "",
 		tnf_kthread_id,		tid,		t,
 		tnf_microstate,		state,		LMS_WAIT_CPU);
 }
@@ -303,11 +303,11 @@ tnf_thread_switch(kthread_t *next)
 	 */
 	if (ts == TS_SLEEP && t->t_wchan)
 #if defined(__sparc)
-		TNF_PROBE_2(thread_block, "synch", /* CSTYLED */,
+		TNF_PROBE_2(thread_block, "synch", "",
 		    tnf_opaque,	  reason,	t->t_wchan,
 		    tnf_symbols,  stack,	(pc_t *)pcstack(pcs));
 #else /* defined(__sparc) */
-		TNF_PROBE_2(thread_block, "synch", /* CSTYLED */,
+		TNF_PROBE_2(thread_block, "synch", "",
 		    tnf_opaque,   reason,	t->t_wchan,
 		    tnf_symbols,  stack,	(tnf_opaque_t *)pcstack(pcs));
 #endif /* defined(__sparc) */
@@ -320,10 +320,10 @@ tnf_thread_switch(kthread_t *next)
 	 */
 #if defined(_LP64)
 	/* LINTED */
-	TNF_PROBE_1(thread_state, "thread", /* CSTYLED */,
+	TNF_PROBE_1(thread_state, "thread", "",
 	    tnf_microstate,	state,		SLPSTATE(t, ts));
 #else
-	TNF_PROBE_1(thread_state, "thread", /* CSTYLED */,
+	TNF_PROBE_1(thread_state, "thread", "",
 		tnf_microstate,	state,	SLPSTATE(t, ts));
 #endif
 
@@ -336,11 +336,11 @@ do_next:
 	 */
 #if defined(_LP64)
 	/* LINTED */
-	TNF_PROBE_2(thread_state, "thread", /* CSTYLED */,
+	TNF_PROBE_2(thread_state, "thread", "",
 	    tnf_kthread_id,	tid,		next,
 	    tnf_microstate,	state,		RUNSTATE(next, lwp));
 #else
-	TNF_PROBE_2(thread_state, "thread", /* CSTYLED */,
+	TNF_PROBE_2(thread_state, "thread", "",
 		tnf_kthread_id,	tid,	next,
 		tnf_microstate,	state,	RUNSTATE(next, lwp));
 #endif

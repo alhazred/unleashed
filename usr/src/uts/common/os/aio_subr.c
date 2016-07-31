@@ -100,7 +100,7 @@ aphysio(
 		return (EINVAL);
 #endif	/* _ILP32 */
 
-	TNF_PROBE_5(aphysio_start, "kaio", /* CSTYLED */,
+	TNF_PROBE_5(aphysio_start, "kaio", "",
 	    tnf_opaque, bp, bp,
 	    tnf_device, device, dev,
 	    tnf_offset, blkno, btodt(uio->uio_loffset),
@@ -214,7 +214,7 @@ aio_done(struct buf *bp)
 	reqp = (aio_req_t *)bp->b_forw;
 	fd = reqp->aio_req_fd;
 
-	TNF_PROBE_5(aphysio_end, "kaio", /* CSTYLED */,
+	TNF_PROBE_5(aphysio_end, "kaio", "",
 	    tnf_opaque, bp, bp,
 	    tnf_device, device, bp->b_edev,
 	    tnf_offset, blkno, btodt(reqp->aio_req_uio.uio_loffset),

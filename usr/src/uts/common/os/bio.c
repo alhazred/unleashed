@@ -1241,7 +1241,7 @@ static void
 biodone_tnf_probe(struct buf *bp)
 {
 	/* Kernel probe */
-	TNF_PROBE_3(biodone, "io blockio", /* CSTYLED */,
+	TNF_PROBE_3(biodone, "io blockio", "",
 	    tnf_device,		device,		bp->b_edev,
 	    tnf_diskaddr,	block,		bp->b_lblkno,
 	    tnf_opaque,		buf,		bp);
@@ -1330,7 +1330,7 @@ pageio_setup(struct page *pp, size_t len, struct vnode *vp, int flags)
 				lwp->lwp_ru.majflt++;
 			CPU_STATS_ADDQ(cpup, vm, maj_fault, 1);
 			/* Kernel probe */
-			TNF_PROBE_2(major_fault, "vm pagefault", /* CSTYLED */,
+			TNF_PROBE_2(major_fault, "vm pagefault", "",
 			    tnf_opaque,		vnode,		pp->p_vnode,
 			    tnf_offset,		offset,		pp->p_offset);
 		}
@@ -1360,7 +1360,7 @@ pageio_setup(struct page *pp, size_t len, struct vnode *vp, int flags)
 		TRACE_1(TR_FAC_VM, TR_PAGE_WS_IN,
 		    "page_ws_in:pp %p", pp);
 		/* Kernel probe */
-		TNF_PROBE_3(pagein, "vm pageio io", /* CSTYLED */,
+		TNF_PROBE_3(pagein, "vm pageio io", "",
 		    tnf_opaque,	vnode,	pp->p_vnode,
 		    tnf_offset,	offset,	pp->p_offset,
 		    tnf_size,	size,	len);
