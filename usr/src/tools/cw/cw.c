@@ -529,13 +529,6 @@ do_gcc(cw_ictx_t *ctx)
 			else
 				error(arg);
 			break;
-		case '#':
-			if (arglen == 1) {
-				newae(ctx->i_ae, "-v");
-				break;
-			}
-			error(arg);
-			break;
 		case 'g':
 			newae(ctx->i_ae, "-gdwarf-2");
 			break;
@@ -602,13 +595,6 @@ do_gcc(cw_ictx_t *ctx)
 			}
 			error(arg);
 			break;
-		case 'f':
-			if (strcmp(arg, "-flags") == 0) {
-				newae(ctx->i_ae, "--help");
-				break;
-			}
-			error(arg);
-			break;
 		case 'G':
 			newae(ctx->i_ae, "-shared");
 			nolibc = 1;
@@ -635,10 +621,6 @@ do_gcc(cw_ictx_t *ctx)
 			error("-K");
 			break;
 		case 'm':
-			if (strcmp(arg, "-mt") == 0) {
-				newae(ctx->i_ae, "-D_REENTRANT");
-				break;
-			}
 			if (strcmp(arg, "-m64") == 0) {
 				newae(ctx->i_ae, "-m64");
 #if defined(__x86)

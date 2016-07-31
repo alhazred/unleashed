@@ -43,13 +43,12 @@ LDLIBS +=	-lnsl
 LDLIBS +=	-ldevinfo
 LDLIBS +=	-lsysevent
 
-CFLAGS +=	-mt
 CFLAGS +=	$(CCVERBOSE)
-CFLAGS64 +=	-mt
 CFLAGS64 +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-parentheses
 
+CPPFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	-DSOLARIS
 
 .KEEP_STATE:

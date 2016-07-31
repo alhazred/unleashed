@@ -792,7 +792,7 @@ ZTEXT=		-ztext
 ZVERBOSE=	-zverbose
 
 GSHARED=	-G
-CCMT=		-mt
+CCMT=		-D_REENTRANT
 
 # Handle different PIC models on different ISAs
 # (May be overridden by lower-level Makefiles)
