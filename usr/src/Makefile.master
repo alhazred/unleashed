@@ -297,21 +297,6 @@ CCNOAUTOINLINE= -_gcc=-fno-inline-small-functions \
 	-_gcc=-fno-inline-functions-called-once \
 	-_gcc=-fno-ipa-cp
 
-# One optimization the compiler might perform is to turn this:
-#	#pragma weak foo
-#	extern int foo;
-#	if (&foo)
-#		foo = 5;
-# into
-#	foo = 5;
-# Since we do some of this (foo might be referenced in common kernel code
-# but provided only for some cpu modules or platforms), we disable this
-# optimization.
-#
-sparc_CCUNBOUND	= -Wd,-xsafe=unboundsym
-i386_CCUNBOUND	=
-CCUNBOUND	= $($(MACH)_CCUNBOUND)
-
 #
 # compiler '-xarch' flag. This is here to centralize it and make it
 # overridable for testing.
@@ -487,11 +472,11 @@ $(SRCDBGBLD)CSOURCEDEBUGFLAGS	= -g -xs
 $(SRCDBGBLD)CCSOURCEDEBUGFLAGS	= -g -xs
 
 CFLAGS=         $(COPTFLAG) $($(MACH)_CFLAGS) $(SPACEFLAG) $(CCMODE) \
-		$(CERRWARN) $(C99MODE) $(CCUNBOUND) \
+		$(CERRWARN) $(C99MODE) \
 		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS)
 CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
-		$(CERRWARN) $(C99MODE) $(CCUNBOUND) \
+		$(CERRWARN) $(C99MODE) \
 		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS64)
 #
@@ -499,7 +484,7 @@ CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
 # run on the build machine (also known as the NATIVE_BUILD).
 #
 NATIVE_CFLAGS=	$(COPTFLAG) $($(NATIVE_MACH)_CFLAGS) $(CCMODE) \
-		$(CERRWARN) $(C99MODE) $($(NATIVE_MACH)_CCUNBOUND) \
+		$(CERRWARN) $(C99MODE) \
 		$(CCNOAUTOINLINE) \
 		$(CSOURCEDEBUGFLAGS) $(CUSERFLAGS)
 

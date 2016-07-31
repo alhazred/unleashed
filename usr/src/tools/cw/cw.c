@@ -708,14 +708,6 @@ do_gcc(cw_ictx_t *ctx)
 				 */
 				break;
 			}
-			if (strcmp(arg, "-Wd,-xsafe=unboundsym") == 0) {
-				/*
-				 * Prevents optimizing away checks for
-				 * unbound weak symbol addresses.  gcc does
-				 * not do this, so it's not needed.
-				 */
-				break;
-			}
 			if (strncmp(arg, "-Wc,-Qiselect", 13) == 0) {
 				/*
 				 * Prevents insertion of register symbols.
