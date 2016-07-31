@@ -46,7 +46,6 @@
  * -D<name[=token]>	Associate name with token as if by #define
  * -E		Compile source through preprocessor only, output to stdout
  * -errtags=<a>	Display messages with tags a(no, yes)
- * -errwarn=<t>	Treats warnings specified by tags t(%none, %all, <tag list>)
  *		as errors
  * -flags	Show this summary of compiler options
  * -G		Build a dynamic shared library
@@ -120,7 +119,6 @@
  * -D<name[=token]>		pass-thru
  * -E				pass-thru
  * -errtags=%all		-Wall
- * -errwarn=%all		-Werror else -Wno-error
  * -flags			--help
  * -G				pass-thru
  * -g				pass-thru
@@ -612,10 +610,6 @@ do_gcc(cw_ictx_t *ctx)
 		case 'e':
 			if (strcmp(arg, "-errtags=yes") == 0) {
 				warnings(ctx->i_ae);
-				break;
-			}
-			if (strcmp(arg, "-errwarn=%all") == 0) {
-				newae(ctx->i_ae, "-Werror");
 				break;
 			}
 			error(arg);
