@@ -267,7 +267,6 @@ function build {
 			| egrep -v '^Zero Signature length:' \
 			| egrep -v '^Note \(probably harmless\):' \
 			| egrep -v '::' \
-			| egrep -v -- '-xcache' \
 			| egrep -v '^\+' \
 			| egrep -v '^cc1: note: -fwritable-strings' \
 			| egrep -v 'svccfg-native -s svc:/' \

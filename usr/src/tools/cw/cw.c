@@ -740,11 +740,6 @@ do_gcc(cw_ictx_t *ctx)
 				}
 				error(arg);
 				break;
-			case 'c':
-				if (strncmp(arg, "-xcache=", 8) == 0)
-					break;
-				error(arg);
-				break;
 			case 'F':
 				/*
 				 * Compile for mapfile reordering, or unused
