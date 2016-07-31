@@ -125,7 +125,6 @@ tavor_kstat_init(tavor_state_t *state)
 	ksi = (tavor_ks_info_t *)kmem_zalloc(sizeof (tavor_ks_info_t),
 	    KM_SLEEP);
 	if (ksi == NULL) {
-		TNF_PROBE_0(tavor_kstat_init_kma_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_kstat_init);
 		return (DDI_FAILURE);
 	}
@@ -141,8 +140,6 @@ tavor_kstat_init(tavor_state_t *state)
 		ksi->tki_picN_ksp[i] = tavor_kstat_picN_create(state, i,
 		    TAVOR_CNTR_NUMENTRIES, tavor_ib_perfcnt_list);
 		if (ksi->tki_picN_ksp[i] == NULL) {
-			TNF_PROBE_0(tavor_kstat_init_picN_fail,
-			    TAVOR_TNF_ERROR, "");
 			goto kstat_init_fail;
 		}
 
@@ -156,7 +153,6 @@ tavor_kstat_init(tavor_state_t *state)
 	ksi->tki_cntr_ksp = tavor_kstat_cntr_create(state, numports,
 	    tavor_kstat_cntr_update);
 	if (ksi->tki_cntr_ksp == NULL) {
-		TNF_PROBE_0(tavor_kstat_init_cntr_fail, TAVOR_TNF_ERROR, "");
 		goto kstat_init_fail;
 	}
 
@@ -277,8 +273,6 @@ tavor_kstat_picN_create(tavor_state_t *state, int num_pic, int num_evt,
 	picN_ksp = kstat_create(drv_name, drv_instance, pic_name, "bus",
 	    KSTAT_TYPE_NAMED, num_evt, NULL);
 	if (picN_ksp == NULL) {
-		TNF_PROBE_0(tavor_kstat_picN_create_kstat_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_kstat_picN_create);
 		return (NULL);
 	}
@@ -336,8 +330,6 @@ tavor_kstat_cntr_create(tavor_state_t *state, int num_pic,
 	cntr_ksp = kstat_create(drv_name, drv_instance, "counters", "bus",
 	    KSTAT_TYPE_NAMED, num_pic + 1, KSTAT_FLAG_WRITABLE);
 	if (cntr_ksp == NULL) {
-		TNF_PROBE_0(tavor_kstat_picN_create_kstat_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_kstat_cntr_create);
 		return (NULL);
 	}

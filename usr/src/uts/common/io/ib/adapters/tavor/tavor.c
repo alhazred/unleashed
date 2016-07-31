@@ -182,7 +182,6 @@ _init()
 	status = ddi_soft_state_init(&tavor_statep, sizeof (tavor_state_t),
 	    (size_t)TAVOR_INITIAL_STATES);
 	if (status != 0) {
-		TNF_PROBE_0(tavor_init_ssi_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_init);
 #ifndef NPROBE
 		(void) tnf_mod_unload(&tavor_modlinkage);
@@ -192,7 +191,6 @@ _init()
 
 	status = ibc_init(&tavor_modlinkage);
 	if (status != 0) {
-		TNF_PROBE_0(tavor_init_ibc_init_fail, TAVOR_TNF_ERROR, "");
 		ddi_soft_state_fini(&tavor_statep);
 		TAVOR_TNF_EXIT(tavor_init);
 #ifndef NPROBE
@@ -202,7 +200,6 @@ _init()
 	}
 	status = mod_install(&tavor_modlinkage);
 	if (status != 0) {
-		TNF_PROBE_0(tavor_init_modi_fail, TAVOR_TNF_ERROR, "");
 		ibc_fini(&tavor_modlinkage);
 		ddi_soft_state_fini(&tavor_statep);
 		TAVOR_TNF_EXIT(tavor_init);
@@ -247,7 +244,6 @@ _fini()
 
 	status = mod_remove(&tavor_modlinkage);
 	if (status != 0) {
-		TNF_PROBE_0(tavor_fini_modr_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_fini);
 		return (status);
 	}
@@ -284,8 +280,6 @@ tavor_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 		instance = TAVOR_DEV_INSTANCE(dev);
 		state = ddi_get_soft_state(tavor_statep, instance);
 		if (state == NULL) {
-			TNF_PROBE_0(tavor_getinfo_gss_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_getinfo);
 			return (DDI_FAILURE);
 		}
@@ -299,7 +293,6 @@ tavor_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 		return (DDI_SUCCESS);
 
 	default:
-		TNF_PROBE_0(tavor_getinfo_default_fail, TAVOR_TNF_ERROR, "");
 		break;
 	}
 
@@ -329,7 +322,6 @@ tavor_open(dev_t *devp, int flag, int otyp, cred_t *credp)
 	instance = TAVOR_DEV_INSTANCE(*devp);
 	state = ddi_get_soft_state(tavor_statep, instance);
 	if (state == NULL) {
-		TNF_PROBE_0(tavor_open_gss_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_open);
 		return (ENXIO);
 	}
@@ -340,7 +332,6 @@ tavor_open(dev_t *devp, int flag, int otyp, cred_t *credp)
 	 */
 	if ((otyp != OTYP_CHR) || ((flag & FEXCL) &&
 	    secpolicy_excl_open(credp) != 0)) {
-		TNF_PROBE_0(tavor_open_invflags_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_open);
 		return (EINVAL);
 	}
@@ -398,8 +389,6 @@ tavor_open(dev_t *devp, int flag, int otyp, cred_t *credp)
 			if (status != DDI_SUCCESS) {
 				mutex_exit(
 				    &tavor_userland_rsrc_db.tdl_umapdb_lock);
-				TNF_PROBE_0(tavor_open_rsrcalloc_uarpg_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_TNF_EXIT(tavor_open);
 				return (EAGAIN);
 			}
@@ -419,8 +408,6 @@ tavor_open(dev_t *devp, int flag, int otyp, cred_t *credp)
 			if (TAVOR_IS_OPERATIONAL(state->ts_operational_mode)) {
 				tavor_rsrc_free(state, &rsrcp);
 			}
-			TNF_PROBE_0(tavor_open_umap_db_alloc_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_open);
 			return (EAGAIN);
 		}
@@ -447,8 +434,6 @@ tavor_open(dev_t *devp, int flag, int otyp, cred_t *credp)
 			if (TAVOR_IS_OPERATIONAL(state->ts_operational_mode)) {
 				tavor_rsrc_free(state, &rsrcp);
 			}
-			TNF_PROBE_0(tavor_open_umap_db_alloc_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_open);
 			return (EAGAIN);
 		}
@@ -496,7 +481,6 @@ tavor_close(dev_t dev, int flag, int otyp, cred_t *credp)
 	instance = TAVOR_DEV_INSTANCE(dev);
 	state = ddi_get_soft_state(tavor_statep, instance);
 	if (state == NULL) {
-		TNF_PROBE_0(tavor_close_gss_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_close);
 		return (ENXIO);
 	}
@@ -595,7 +579,6 @@ tavor_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		instance = ddi_get_instance(dip);
 		status = ddi_soft_state_zalloc(tavor_statep, instance);
 		if (status != DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_attach_ssz_fail, TAVOR_TNF_ERROR, "");
 			cmn_err(CE_NOTE, "tavor%d: driver failed to attach: "
 			    "attach_ssz_fail", instance);
 			goto fail_attach_nomsg;
@@ -604,7 +587,6 @@ tavor_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		state = ddi_get_soft_state(tavor_statep, instance);
 		if (state == NULL) {
 			ddi_soft_state_free(tavor_statep, instance);
-			TNF_PROBE_0(tavor_attach_gss_fail, TAVOR_TNF_ERROR, "");
 			cmn_err(CE_NOTE, "tavor%d: driver failed to attach: "
 			    "attach_gss_fail", instance);
 			goto fail_attach_nomsg;
@@ -627,8 +609,6 @@ tavor_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		status = tavor_drv_init(state, dip, instance);
 		if ((status != DDI_SUCCESS) &&
 		    (TAVOR_IS_OPERATIONAL(state->ts_operational_mode))) {
-			TNF_PROBE_0(tavor_attach_drvinit_fail,
-			    TAVOR_TNF_ERROR, "");
 			goto fail_attach;
 		}
 
@@ -639,8 +619,6 @@ tavor_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 			tavor_drv_fini(state);
 			TAVOR_ATTACH_MSG(state->ts_attach_buf,
 			    "attach_create_mn_fail");
-			TNF_PROBE_0(tavor_attach_create_mn_fail,
-			    TAVOR_TNF_ERROR, "");
 			goto fail_attach;
 		}
 
@@ -658,8 +636,6 @@ tavor_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 			if (ibc_status != IBC_SUCCESS) {
 				ddi_remove_minor_node(dip, "devctl");
 				tavor_drv_fini(state);
-				TNF_PROBE_0(tavor_attach_ibcattach_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_ATTACH_MSG(state->ts_attach_buf,
 				    "attach_ibcattach_fail");
 				goto fail_attach;
@@ -686,8 +662,6 @@ tavor_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 				ibc_detach(tmp_ibtfpriv);
 				ddi_remove_minor_node(dip, "devctl");
 				tavor_drv_fini(state);
-				TNF_PROBE_0(tavor_attach_agentinit_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_ATTACH_MSG(state->ts_attach_buf,
 				    "attach_agentinit_fail");
 				goto fail_attach;
@@ -715,7 +689,6 @@ tavor_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		return (DDI_FAILURE);
 
 	default:
-		TNF_PROBE_0(tavor_attach_default_fail, TAVOR_TNF_ERROR, "");
 		break;
 	}
 
@@ -747,7 +720,6 @@ tavor_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 	instance = ddi_get_instance(dip);
 	state = ddi_get_soft_state(tavor_statep, instance);
 	if (state == NULL) {
-		TNF_PROBE_0(tavor_detach_gss_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_detach);
 		return (DDI_FAILURE);
 	}
@@ -764,8 +736,6 @@ tavor_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 			/* Unregister agents from IB Mgmt Framework (IBMF) */
 			status = tavor_agent_handlers_fini(state);
 			if (status != DDI_SUCCESS) {
-				TNF_PROBE_0(tavor_detach_agentfini_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_TNF_EXIT(tavor_detach);
 				return (DDI_FAILURE);
 			}
@@ -785,8 +755,6 @@ tavor_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 					TAVOR_WARNING(state, "failed to "
 					    "restart Tavor agents");
 				}
-				TNF_PROBE_0(tavor_detach_ibcpredetach_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_TNF_EXIT(tavor_detach);
 				return (DDI_FAILURE);
 			}
@@ -840,7 +808,6 @@ tavor_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 		return (DDI_FAILURE);
 
 	default:
-		TNF_PROBE_0(tavor_detach_default_fail, TAVOR_TNF_ERROR, "");
 		break;
 	}
 
@@ -885,8 +852,6 @@ tavor_drv_init(tavor_state_t *state, dev_info_t *dip, int instance)
 	} else {
 		state->ts_operational_mode = 0;	/* invalid operational mode */
 		TAVOR_WARNING(state, "unexpected device type detected");
-		TNF_PROBE_0(tavor_hw_init_unexpected_dev_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_hw_init);
 		return (DDI_FAILURE);
 	}
@@ -905,7 +870,6 @@ tavor_drv_init(tavor_state_t *state, dev_info_t *dip, int instance)
 		state->ts_operational_mode = TAVOR_MAINTENANCE_MODE;
 		cmn_err(CE_NOTE, "tavor%d: error during attach: %s", instance,
 		    state->ts_attach_buf);
-		TNF_PROBE_0(tavor_drv_init_hwinit_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_drv_init);
 		return (DDI_FAILURE);
 	}
@@ -914,7 +878,6 @@ tavor_drv_init(tavor_state_t *state, dev_info_t *dip, int instance)
 	status = tavor_isr_init(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, TAVOR_DRV_CLEANUP_ALL);
-		TNF_PROBE_0(tavor_drv_init_isrinit_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_drv_init);
 		return (DDI_FAILURE);
 	}
@@ -924,7 +887,6 @@ tavor_drv_init(tavor_state_t *state, dev_info_t *dip, int instance)
 	if (status != DDI_SUCCESS) {
 		tavor_isr_fini(state);
 		tavor_hw_fini(state, TAVOR_DRV_CLEANUP_ALL);
-		TNF_PROBE_0(tavor_drv_init_ssiinit_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_drv_init);
 		return (DDI_FAILURE);
 	}
@@ -996,7 +958,6 @@ tavor_isr_init(tavor_state_t *state)
 	status = ddi_intr_add_handler(state->ts_intrmsi_hdl, tavor_isr,
 	    (caddr_t)state, NULL);
 	if (status  != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_isr_init_addhndlr_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_isr_init);
 		return (DDI_FAILURE);
 	}
@@ -1010,16 +971,12 @@ tavor_isr_init(tavor_state_t *state)
 	if (state->ts_intrmsi_cap & DDI_INTR_FLAG_BLOCK) {
 		status = ddi_intr_block_enable(&state->ts_intrmsi_hdl, 1);
 		if (status  != DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_isr_init_blockenable_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_isr_init);
 			return (DDI_FAILURE);
 		}
 	} else {
 		status = ddi_intr_enable(state->ts_intrmsi_hdl);
 		if (status  != DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_isr_init_intrenable_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_isr_init);
 			return (DDI_FAILURE);
 		}
@@ -1126,7 +1083,6 @@ tavor_hw_init(tavor_state_t *state)
 	    &state->ts_reg_cmdhdl);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_CMD_ddirms_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_CMD_ddirms_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1139,7 +1095,6 @@ tavor_hw_init(tavor_state_t *state)
 	    &state->ts_reg_uarhdl);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_UAR_ddirms_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_UAR_ddirms_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1152,8 +1107,6 @@ tavor_hw_init(tavor_state_t *state)
 		cmn_err(CE_CONT, "Tavor: ddi_dev_regsize() failed "
 		    "(check HCA-attached DIMM memory?)\n");
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_DDR_ddi_regsize_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_DDR_ddi_regsize_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1202,8 +1155,6 @@ tavor_hw_init(tavor_state_t *state)
 		 * Set the updated config profile setting here.
 		 */
 		if (status == DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_hw_init_DDR_128mb_fallback_success,
-			    TAVOR_TNF_TRACE, "");
 			state->ts_cfg_profile_setting = TAVOR_DDR_SIZE_128;
 		}
 	}
@@ -1214,7 +1165,6 @@ tavor_hw_init(tavor_state_t *state)
 			    "(check HCA-attached DIMM memory?)\n");
 		}
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_DDR_ddirms_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_DDR_ddirms_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1244,7 +1194,6 @@ tavor_hw_init(tavor_state_t *state)
 	status = tavor_cfg_profile_init_phase1(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_cfginit_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf, "hw_init_cfginit_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
 		return (DDI_FAILURE);
@@ -1255,7 +1204,6 @@ tavor_hw_init(tavor_state_t *state)
 	status = tavor_sw_reset(state);
 	if (status != TAVOR_CMD_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_sw_reset_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf, "hw_init_sw_reset_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
 		return (DDI_FAILURE);
@@ -1275,8 +1223,6 @@ tavor_hw_init(tavor_state_t *state)
 			    "0x%" PRIx64 "\n", status, errorcode);
 		}
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_sys_en_cmd_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_sys_en_cmd_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1288,7 +1234,6 @@ tavor_hw_init(tavor_state_t *state)
 	status = tavor_rsrc_init_phase1(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_rsrcinit1_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_rsrcinit1_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1304,8 +1249,6 @@ tavor_hw_init(tavor_state_t *state)
 		cmn_err(CE_CONT, "Tavor: QUERY_DDR command failed: %08x\n",
 		    status);
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_query_ddr_cmd_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_query_ddr_cmd_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1319,8 +1262,6 @@ tavor_hw_init(tavor_state_t *state)
 		cmn_err(CE_CONT, "Tavor: QUERY_FW command failed: %08x\n",
 		    status);
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_query_fw_cmd_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_query_fw_cmd_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1329,8 +1270,6 @@ tavor_hw_init(tavor_state_t *state)
 
 	if (tavor_fix_error_buf(state) != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_fixerrorbuf_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_fixerrorbuf_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1368,8 +1307,6 @@ tavor_hw_init(tavor_state_t *state)
 			    state->ts_fw.fw_rev_subminor);
 		}
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_checkfwver_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_checkfwver_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1390,8 +1327,6 @@ retry:
 		cmn_err(CE_CONT, "Tavor: MOD_STAT_CFG command failed: %08x\n",
 		    status);
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_mod_stat_cfg_cmd_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_mod_stat_cfg_cmd_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1406,8 +1341,6 @@ retry:
 		cmn_err(CE_CONT, "Tavor: QUERY_DEV_LIM command failed: %08x\n",
 		    status);
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_query_devlim_cmd_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_query_devlim_cmd_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1418,7 +1351,6 @@ retry:
 	status = tavor_cfg_profile_init_phase2(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_cfginit2_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf, "hw_init_cfginit2_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
 		return (DDI_FAILURE);
@@ -1428,7 +1360,6 @@ retry:
 	status = tavor_rsrc_init_phase2(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_rsrcinit2_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_rsrcinit2_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1444,8 +1375,6 @@ retry:
 		cmn_err(CE_CONT, "Tavor: QUERY_ADAPTER command failed: %08x\n",
 		    status);
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_query_adapter_cmd_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_query_adapter_cmd_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1462,8 +1391,6 @@ retry:
 		cmn_err(CE_CONT, "Tavor: INIT_HCA command failed: %08x\n",
 		    status);
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_init_hca_cmd_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_init_hca_cmd_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1475,8 +1402,6 @@ retry:
 	status = tavor_pd_alloc(state, &state->ts_pdhdl_internal, TAVOR_SLEEP);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_internal_pd_alloc_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_internal_pd_alloc_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1488,8 +1413,6 @@ retry:
 	status = tavor_internal_uarpgs_init(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_internal_uarpgs_alloc_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_internal_uarpgs_alloc_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1501,8 +1424,6 @@ retry:
 	status = tavor_intr_or_msi_init(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_intr_or_msi_init_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "intr_or_msi_init_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1514,7 +1435,6 @@ retry:
 	status = tavor_eq_init_all(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_eqinitall_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_eqinitall_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1526,8 +1446,6 @@ retry:
 	status = tavor_special_qp_contexts_reserve(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_reserve_special_qp_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_reserve_special_qp_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1539,7 +1457,6 @@ retry:
 	status = tavor_mcg_init(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_mcg_init_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf, "hw_init_mcg_init_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
 		return (DDI_FAILURE);
@@ -1550,8 +1467,6 @@ retry:
 	status = tavor_hca_port_init(state);
 	if (status != DDI_SUCCESS) {
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_hca_port_init_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_hca_port_init_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1566,8 +1481,6 @@ retry:
 		cmn_err(CE_CONT, "Tavor: GetNodeInfo command failed: %08x\n",
 		    status);
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_getnodeinfo_cmd_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_getnodeinfo_cmd_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1619,8 +1532,6 @@ retry:
 		cmn_err(CE_CONT, "Tavor: GetNodeDesc command failed: %08x\n",
 		    status);
 		tavor_hw_fini(state, cleanup);
-		TNF_PROBE_0(tavor_hw_init_getnodedesc_cmd_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "hw_init_getnodedesc_cmd_fail");
 		TAVOR_TNF_EXIT(tavor_hw_init);
@@ -1675,8 +1586,6 @@ tavor_hw_fini(tavor_state_t *state, tavor_drv_cleanup_level_t cleanup)
 		status = tavor_eq_fini_all(state);
 		if (status != DDI_SUCCESS) {
 			TAVOR_WARNING(state, "failed to teardown EQs");
-			TNF_PROBE_0(tavor_hw_fini_eqfiniall_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_hw_fini);
 			return;
 		}
@@ -1686,8 +1595,6 @@ tavor_hw_fini(tavor_state_t *state, tavor_drv_cleanup_level_t cleanup)
 		status = tavor_intr_or_msi_fini(state);
 		if (status != DDI_SUCCESS) {
 			TAVOR_WARNING(state, "failed to free intr/MSI");
-			TNF_PROBE_0(tavor_hw_fini_intrmsifini_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_hw_fini);
 			return;
 		}
@@ -1707,8 +1614,6 @@ tavor_hw_fini(tavor_state_t *state, tavor_drv_cleanup_level_t cleanup)
 		status = tavor_pd_free(state, &state->ts_pdhdl_internal);
 		if (status != DDI_SUCCESS) {
 			TAVOR_WARNING(state, "failed to free internal PD");
-			TNF_PROBE_0(tavor_hw_fini_internal_pd_free_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_hw_fini);
 			return;
 		}
@@ -1724,8 +1629,6 @@ tavor_hw_fini(tavor_state_t *state, tavor_drv_cleanup_level_t cleanup)
 		    TAVOR_CMD_NOSLEEP_SPIN);
 		if (status != TAVOR_CMD_SUCCESS) {
 			TAVOR_WARNING(state, "failed to shutdown HCA");
-			TNF_PROBE_0(tavor_hw_fini_closehcacmd_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_hw_fini);
 			return;
 		}
@@ -1751,8 +1654,6 @@ tavor_hw_fini(tavor_state_t *state, tavor_drv_cleanup_level_t cleanup)
 		status = tavor_sys_dis_cmd_post(state, TAVOR_CMD_NOSLEEP_SPIN);
 		if (status != TAVOR_CMD_SUCCESS) {
 			TAVOR_WARNING(state, "failed to shutdown hardware");
-			TNF_PROBE_0(tavor_hw_fini_sys_dis_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_hw_fini);
 			return;
 		}
@@ -1781,7 +1682,6 @@ tavor_hw_fini(tavor_state_t *state, tavor_drv_cleanup_level_t cleanup)
 
 	default:
 		TAVOR_WARNING(state, "unexpected driver cleanup level");
-		TNF_PROBE_0(tavor_hw_fini_default_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_hw_fini);
 		return;
 	}
@@ -1875,9 +1775,6 @@ tavor_soft_state_init(tavor_state_t *state)
 	val	= ((uint64_t)1 << state->ts_cfg_profile->cp_log_max_qp_sz);
 	if (val > maxval) {
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_2(tavor_soft_state_init_maxqpsz_toobig_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "max QP size "
-		    "exceeds device maximum", tnf_uint, maxsz, maxval);
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_maxqpsz_toobig_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -1890,9 +1787,6 @@ tavor_soft_state_init(tavor_state_t *state)
 	val	= state->ts_cfg_profile->cp_wqe_max_sgl;
 	if (val > maxval) {
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_2(tavor_soft_state_init_toomanysgl_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "number of sgl "
-		    "exceeds device maximum", tnf_uint, maxsgl, maxval);
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_toomanysgl_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -1922,9 +1816,6 @@ tavor_soft_state_init(tavor_state_t *state)
 	val	= ((uint64_t)1 << state->ts_cfg_profile->cp_log_max_cq_sz) - 1;
 	if (val > maxval) {
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_2(tavor_soft_state_init_maxcqsz_toobig_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "max CQ size "
-		    "exceeds device maximum", tnf_uint, maxsz, maxval);
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_maxcqsz_toobig_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -1946,9 +1837,6 @@ tavor_soft_state_init(tavor_state_t *state)
 
 	if (val > maxval) {
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_2(tavor_soft_state_init_maxsrqsz_toobig_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "max SRQ size "
-		    "exceeds device maximum", tnf_uint, maxsz, maxval);
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_maxsrqsz_toobig_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -1960,9 +1848,6 @@ tavor_soft_state_init(tavor_state_t *state)
 	maxval	= state->ts_devlim.max_sg;
 	if (val > maxval) {
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_2(tavor_soft_state_init_toomanysrqsgl_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "number of srq "
-		    "sgl exceeds device maximum", tnf_uint, maxsgl, maxval);
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_toomanysrqsgl_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -1994,9 +1879,6 @@ tavor_soft_state_init(tavor_state_t *state)
 	val	= state->ts_cfg_profile->cp_log_max_mrw_sz;
 	if (val > maxval) {
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_2(tavor_soft_state_init_maxmrwsz_toobig_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "max mrw size "
-		    "exceeds device maximum", tnf_uint, maxsz, maxval);
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_maxmrwsz_toobig_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -2036,9 +1918,6 @@ tavor_soft_state_init(tavor_state_t *state)
 
 	if (val > maxval) {
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_2(tavor_soft_state_init_toomanypkey_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "number of PKeys "
-		    "exceeds device maximum", tnf_uint, maxpkey, maxval);
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_toomanypkey_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -2051,9 +1930,6 @@ tavor_soft_state_init(tavor_state_t *state)
 	val = state->ts_cfg_profile->cp_num_ports;
 	if ((val > maxval) || (val == 0)) {
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_2(tavor_soft_state_init_toomanyports_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "number of ports "
-		    "exceeds device maximum", tnf_uint, maxports, maxval);
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_toomanyports_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -2082,9 +1958,6 @@ tavor_soft_state_init(tavor_state_t *state)
 	val	= ((uint64_t)1 << state->ts_cfg_profile->cp_log_num_pd);
 	if (val > maxval) {
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_2(tavor_soft_state_init_toomanypd_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "number of PD "
-		    "exceeds device maximum", tnf_uint, maxpd, maxval);
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_toomanypd_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -2097,9 +1970,6 @@ tavor_soft_state_init(tavor_state_t *state)
 	val	= ((uint64_t)1 << state->ts_cfg_profile->cp_log_num_ah);
 	if (val > maxval) {
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_2(tavor_soft_state_init_toomanyah_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "number of AH "
-		    "exceeds device maximum", tnf_uint, maxah, maxval);
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_toomanyah_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -2135,8 +2005,6 @@ tavor_soft_state_init(tavor_state_t *state)
 		mutex_destroy(&state->ts_fw_flashlock);
 		mutex_destroy(&state->ts_uar_lock);
 		kmem_free(hca_attr, sizeof (ibt_hca_attr_t));
-		TNF_PROBE_0(tavor_soft_state_init_kstatinit_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_ATTACH_MSG(state->ts_attach_buf,
 		    "soft_state_init_kstatinit_fail");
 		TAVOR_TNF_EXIT(tavor_soft_state_init);
@@ -2363,10 +2231,6 @@ tavor_hca_port_init(tavor_state_t *state)
 		maxval  = state->ts_devlim.max_mtu;
 		val	= cfgprof->cp_max_mtu;
 		if (val > maxval) {
-			TNF_PROBE_2(tavor_hca_port_init_maxmtu_fail,
-			    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "max "
-			    "MTU size exceeds device maximum", tnf_uint,
-			    maxmtu, maxval);
 			TAVOR_TNF_EXIT(tavor_hca_port_init);
 			goto init_ports_fail;
 		}
@@ -2376,10 +2240,6 @@ tavor_hca_port_init(tavor_state_t *state)
 		maxval  = state->ts_devlim.max_port_width;
 		val	= cfgprof->cp_max_port_width;
 		if (val > maxval) {
-			TNF_PROBE_2(tavor_hca_port_init_maxportwidth_fail,
-			    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "max "
-			    "port width exceeds device maximum", tnf_uint,
-			    maxportwidth, maxval);
 			TAVOR_TNF_EXIT(tavor_hca_port_init);
 			goto init_ports_fail;
 		}
@@ -2389,10 +2249,6 @@ tavor_hca_port_init(tavor_state_t *state)
 		maxval  = state->ts_devlim.max_vl;
 		val	= cfgprof->cp_max_vlcap;
 		if (val > maxval) {
-			TNF_PROBE_2(tavor_hca_port_init_maxvlcap_fail,
-			    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "max "
-			    "VLcap size exceeds device maximum", tnf_uint,
-			    maxvlcap, maxval);
 			TAVOR_TNF_EXIT(tavor_hca_port_init);
 			goto init_ports_fail;
 		}
@@ -2402,10 +2258,6 @@ tavor_hca_port_init(tavor_state_t *state)
 		maxval  = ((uint64_t)1 << state->ts_devlim.log_max_gid);
 		val	= ((uint64_t)1 << cfgprof->cp_log_max_gidtbl);
 		if (val > maxval) {
-			TNF_PROBE_2(tavor_hca_port_init_gidtable_fail,
-			    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "max "
-			    "GID table size exceeds device maximum", tnf_uint,
-			    maxgidtbl, maxval);
 			TAVOR_TNF_EXIT(tavor_hca_port_init);
 			goto init_ports_fail;
 		}
@@ -2415,10 +2267,6 @@ tavor_hca_port_init(tavor_state_t *state)
 		maxval	= ((uint64_t)1 << state->ts_devlim.log_max_pkey);
 		val	= ((uint64_t)1 << cfgprof->cp_log_max_pkeytbl);
 		if (val > maxval) {
-			TNF_PROBE_2(tavor_hca_port_init_pkeytable_fail,
-			    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "max "
-			    "PKey table size exceeds device maximum", tnf_uint,
-			    maxpkeytbl, maxval);
 			TAVOR_TNF_EXIT(tavor_hca_port_init);
 			goto init_ports_fail;
 		}
@@ -2434,9 +2282,6 @@ tavor_hca_port_init(tavor_state_t *state)
 		if (status != TAVOR_CMD_SUCCESS) {
 			cmn_err(CE_CONT, "Tavor: INIT_IB (port %02d) command "
 			    "failed: %08x\n", i + 1, status);
-			TNF_PROBE_2(tavor_hca_port_init_init_ib_cmd_fail,
-			    TAVOR_TNF_ERROR, "", tnf_uint, cmd_status, status,
-			    tnf_uint, port, i + 1);
 			TAVOR_TNF_EXIT(tavor_hca_port_init);
 			goto init_ports_fail;
 		}
@@ -2484,9 +2329,6 @@ tavor_hca_ports_shutdown(tavor_state_t *state, uint_t num_init)
 		    TAVOR_CMD_NOSLEEP_SPIN);
 		if (status != TAVOR_CMD_SUCCESS) {
 			TAVOR_WARNING(state, "failed to shutdown HCA port");
-			TNF_PROBE_2(tavor_hca_ports_shutdown_close_ib_cmd_fail,
-			    TAVOR_TNF_ERROR, "", tnf_uint, cmd_status, status,
-			    tnf_uint, port, i + 1);
 			TAVOR_TNF_EXIT(tavor_hca_ports_shutdown);
 			return (status);
 		}
@@ -2516,7 +2358,6 @@ tavor_internal_uarpgs_init(tavor_state_t *state)
 	status = tavor_rsrc_alloc(state, TAVOR_UARPG, 1, TAVOR_SLEEP,
 	    &state->ts_uarpg0_rsrc_rsrvd);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_uarpg0_rsrcalloc_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_internal_uarpgs_init);
 		return (DDI_FAILURE);
 	}
@@ -2530,7 +2371,6 @@ tavor_internal_uarpgs_init(tavor_state_t *state)
 	    &state->ts_uarpg1_rsrc);
 	if (status != DDI_SUCCESS) {
 		tavor_rsrc_free(state, &state->ts_uarpg0_rsrc_rsrvd);
-		TNF_PROBE_0(tavor_uarpg1_rsrcalloc_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_internal_uarpgs_init);
 		return (DDI_FAILURE);
 	}
@@ -2587,8 +2427,6 @@ tavor_special_qp_contexts_reserve(tavor_state_t *state)
 	status = tavor_rsrc_alloc(state, TAVOR_QPC, 2, TAVOR_SLEEP, &qp0_rsrc);
 	if (status != DDI_SUCCESS) {
 		mutex_destroy(&state->ts_spec_qplock);
-		TNF_PROBE_0(tavor_special_qp_contexts_reserve_qp0_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_special_qp_contexts_reserve);
 		return (DDI_FAILURE);
 	}
@@ -2604,8 +2442,6 @@ tavor_special_qp_contexts_reserve(tavor_state_t *state)
 	if (status != DDI_SUCCESS) {
 		tavor_rsrc_free(state, &qp0_rsrc);
 		mutex_destroy(&state->ts_spec_qplock);
-		TNF_PROBE_0(tavor_special_qp_contexts_reserve_qp1_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_special_qp_contexts_reserve);
 		return (DDI_FAILURE);
 	}
@@ -2692,8 +2528,6 @@ tavor_sw_reset(tavor_state_t *state)
 		 */
 		status = pci_config_setup(pdip, &phdl);
 		if (status != DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_sw_reset_pcicfg_p_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_sw_reset);
 			return (DDI_FAILURE);
 		}
@@ -2940,7 +2774,6 @@ tavor_pci_capability_list(tavor_state_t *state, ddi_acc_handle_t hdl)
 	 */
 	data = pci_config_get16(hdl, 0x6);
 	if ((data & 0x10) == 0) {
-		TNF_PROBE_0(tavor_pci_capab_list_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_pci_capability_list);
 		return;
 	}
@@ -3018,7 +2851,6 @@ tavor_pci_read_vpd(ddi_acc_handle_t hdl, uint_t offset, uint32_t addr,
 		}
 	} while (--retry);
 
-	TNF_PROBE_0(tavor_pci_read_vpd_fail, TAVOR_TNF_ERROR, "");
 	TAVOR_TNF_EXIT(tavor_pci_read_vpd);
 	return (DDI_FAILURE);
 }
@@ -3122,7 +2954,6 @@ tavor_pci_capability_vpd(tavor_state_t *state, ddi_acc_handle_t hdl,
 	return;
 out:
 	state->ts_hca_pn_len = 0;
-	TNF_PROBE_0(tavor_pci_capability_vpd_fail, TAVOR_TNF_ERROR, "");
 	TAVOR_TNF_EXIT(tavor_pci_capability_vpd);
 }
 
@@ -3248,8 +3079,6 @@ tavor_intr_or_msi_init(tavor_state_t *state)
 	status = ddi_intr_get_supported_types(state->ts_dip,
 	    &state->ts_intr_types_avail);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_intr_or_msi_init_gettypes_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_intr_or_msi_init);
 		return (DDI_FAILURE);
 	}
@@ -3307,8 +3136,6 @@ tavor_add_intrs(tavor_state_t *state, int intr_type)
 	status = ddi_intr_get_nintrs(state->ts_dip, intr_type,
 	    &state->ts_intrmsi_count);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_add_intrs_getnintrs_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_add_intrs);
 		return (DDI_FAILURE);
 	}
@@ -3317,16 +3144,12 @@ tavor_add_intrs(tavor_state_t *state, int intr_type)
 	status = ddi_intr_get_navail(state->ts_dip, intr_type,
 	    &state->ts_intrmsi_avail);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_add_intrs_getnavail_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_add_intrs);
 		return (DDI_FAILURE);
 	}
 
 	/* Ensure that we have at least one (1) usable MSI or interrupt */
 	if ((state->ts_intrmsi_avail < 1) || (state->ts_intrmsi_count < 1)) {
-		TNF_PROBE_0(tavor_add_intrs_notenoughts_intrmsi_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_add_intrs);
 		return (DDI_FAILURE);
 	}
@@ -3336,16 +3159,12 @@ tavor_add_intrs(tavor_state_t *state, int intr_type)
 	    intr_type, 0, 1, &state->ts_intrmsi_allocd,
 	    DDI_INTR_ALLOC_STRICT);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_add_intrs_intralloc_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_add_intrs);
 		return (DDI_FAILURE);
 	}
 
 	/* Ensure that we have allocated at least one (1) MSI or interrupt */
 	if (state->ts_intrmsi_allocd < 1) {
-		TNF_PROBE_0(tavor_add_intrs_noallocts_intrmsi_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_add_intrs);
 		return (DDI_FAILURE);
 	}
@@ -3360,8 +3179,6 @@ tavor_add_intrs(tavor_state_t *state, int intr_type)
 		/* Free the allocated interrupt/MSI handle */
 		(void) ddi_intr_free(state->ts_intrmsi_hdl);
 
-		TNF_PROBE_0(tavor_add_intrs_getpri_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_add_intrs);
 		return (DDI_FAILURE);
 	}
@@ -3371,8 +3188,6 @@ tavor_add_intrs(tavor_state_t *state, int intr_type)
 		/* Free the allocated interrupt/MSI handle */
 		(void) ddi_intr_free(state->ts_intrmsi_hdl);
 
-		TNF_PROBE_0(tavor_add_intrs_hilevelpri_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_add_intrs);
 		return (DDI_FAILURE);
 	}
@@ -3384,8 +3199,6 @@ tavor_add_intrs(tavor_state_t *state, int intr_type)
 		/* Free the allocated interrupt/MSI handle */
 		(void) ddi_intr_free(state->ts_intrmsi_hdl);
 
-		TNF_PROBE_0(tavor_add_intrs_getcap_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_add_intrs);
 		return (DDI_FAILURE);
 	}
@@ -3409,8 +3222,6 @@ tavor_intr_or_msi_fini(tavor_state_t *state)
 	/* Free the allocated interrupt/MSI handle */
 	status = ddi_intr_free(state->ts_intrmsi_hdl);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_intr_or_msi_fini_freehdl_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_intr_or_msi_fini);
 		return (DDI_FAILURE);
 	}

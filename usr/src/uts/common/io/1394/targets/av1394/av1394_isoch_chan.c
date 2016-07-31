@@ -49,11 +49,9 @@ static void	av1394_ic_rsrc_fail(t1394_isoch_single_handle_t t1394_sii_hdl,
 uint64_t	av1394_ic_bitreverse(uint64_t);
 boolean_t	av1394_ic_onebit(uint64_t);
 
-#define	AV1394_TNF_ENTER(func)	\
-	TNF_PROBE_0_DEBUG(func##_enter, AV1394_TNF_ISOCH_STACK, "");
+#define	AV1394_TNF_ENTER(func)
 
-#define	AV1394_TNF_EXIT(func)	\
-	TNF_PROBE_0_DEBUG(func##_exit, AV1394_TNF_ISOCH_STACK, "");
+#define	AV1394_TNF_EXIT(func)
 
 /* tunables */
 extern int av1394_rate_n_dv_ntsc;
@@ -145,8 +143,6 @@ av1394_ic_init(av1394_inst_t *avp, iec61883_isoch_init_t *ii,
 		mutex_exit(&ip->i_mutex);
 		ii->ii_error = IEC61883_ERR_NOCHANNEL;
 		av1394_ic_cleanup(icp, 2);
-		TNF_PROBE_0(av1394_ic_init_error_chan_used,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		AV1394_TNF_EXIT(av1394_ic_init);
 		return (EINVAL);
 	}
@@ -183,9 +179,6 @@ av1394_ic_init(av1394_inst_t *avp, iec61883_isoch_init_t *ii,
 	ii->ii_rchannel = icp->ic_num;
 	mutex_exit(&icp->ic_mutex);
 	mutex_exit(&ip->i_mutex);
-
-	TNF_PROBE_2_DEBUG(av1394_ic_init, AV1394_TNF_ISOCH, "",
-	    tnf_string, msg, "channel allocated", tnf_int, num, icp->ic_num);
 
 	AV1394_TNF_EXIT(av1394_ic_init);
 	return (0);
@@ -248,28 +241,20 @@ av1394_ic_validate_init_params(iec61883_isoch_init_t *ii)
 	    IEC61883_IMPL_VER_MAJOR(AV1394_IEC61883_VER)) ||
 	    (IEC61883_IMPL_VER_MINOR(ii->ii_version) >
 	    IEC61883_IMPL_VER_MINOR(AV1394_IEC61883_VER))) {
-		TNF_PROBE_0(av1394_ic_validate_init_params_ver_error,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		ii->ii_error = IEC61883_ERR_VERSION;
 		return (EINVAL);
 	}
 	if ((ii->ii_pkt_size % 4) || (ii->ii_pkt_size > 512)) {
-		TNF_PROBE_0(av1394_ic_validate_init_params_pktsz_error,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		ii->ii_error = IEC61883_ERR_PKT_SIZE;
 		return (EINVAL);
 	}
 	framesz = ii->ii_frame_size * ii->ii_pkt_size;
 	if (framesz > AV1394_IC_FRAME_SIZE_MAX) {
-		TNF_PROBE_0(av1394_ic_validate_init_params_frsz_error,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		ii->ii_error = IEC61883_ERR_NOMEM;
 		return (EINVAL);
 	}
 	if ((ii->ii_direction != IEC61883_DIR_RECV) &&
 	    (ii->ii_direction != IEC61883_DIR_XMIT)) {
-		TNF_PROBE_0(av1394_ic_validate_init_params_dir_error,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		ii->ii_error = IEC61883_ERR_INVAL;
 		return (EINVAL);
 	}
@@ -277,29 +262,21 @@ av1394_ic_validate_init_params(iec61883_isoch_init_t *ii)
 	    (ii->ii_frame_cnt < AV1394_IR_NFRAMES_MIN)) ||
 	    ((ii->ii_direction == IEC61883_DIR_XMIT) &&
 	    (ii->ii_frame_cnt < AV1394_IT_NFRAMES_MIN))) {
-		TNF_PROBE_0(av1394_ic_validate_init_params_frcnt_error,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		ii->ii_error = IEC61883_ERR_INVAL;
 		return (EINVAL);
 	}
 	if ((ii->ii_bus_speed != IEC61883_S100) &&
 	    (ii->ii_bus_speed != IEC61883_S200) &&
 	    (ii->ii_bus_speed != IEC61883_S400)) {
-		TNF_PROBE_0(av1394_ic_validate_init_params_speed_error,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		ii->ii_error = IEC61883_ERR_INVAL;
 		return (EINVAL);
 	}
 	if (ii->ii_channel == 0) {
-		TNF_PROBE_0(av1394_ic_validate_init_params_chan_error,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		ii->ii_error = IEC61883_ERR_INVAL;
 		return (EINVAL);
 	}
 	if ((ii->ii_flags & IEC61883_PRIV_ISOCH_NOALLOC) &&
 	    !av1394_ic_onebit(ii->ii_channel)) {
-		TNF_PROBE_0(av1394_ic_validate_init_params_chan_onebit_error,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		ii->ii_error = IEC61883_ERR_INVAL;
 		return (EINVAL);
 	}
@@ -312,15 +289,11 @@ av1394_ic_validate_init_params(iec61883_isoch_init_t *ii)
 	    (ii->ii_rate_n != IEC61883_RATE_N_DV_PAL)) &&
 	    ((ii->ii_rate_d <= 0) || (ii->ii_rate_n < 0) ||
 	    ((ii->ii_rate_n != 0) && (ii->ii_rate_d / ii->ii_rate_n < 2)))) {
-		TNF_PROBE_0(av1394_ic_validate_init_params_rate_error,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		ii->ii_error = IEC61883_ERR_INVAL;
 		return (EINVAL);
 	}
 	if (AV1394_TS_MODE_GET_OFF(ii->ii_ts_mode) +
 	    AV1394_TS_MODE_GET_SIZE(ii->ii_ts_mode) > ii->ii_pkt_size) {
-		TNF_PROBE_0(av1394_ic_validate_init_params_ts_error,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		ii->ii_error = IEC61883_ERR_INVAL;
 		return (EINVAL);
 	}
@@ -386,8 +359,6 @@ av1394_ic_alloc_channel(av1394_ic_t *icp, uint64_t mask, int *num)
 	ret = t1394_alloc_isoch_single(avp->av_t1394_hdl, &sii, 0, &so,
 	    &icp->ic_sii_hdl, &result);
 	if (ret != DDI_SUCCESS) {
-		TNF_PROBE_1(av1394_ic_alloc_channel_error,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, result, result);
 	} else {
 		*num = so.channel_num;
 	}
@@ -439,8 +410,6 @@ av1394_ic_alloc_pool(av1394_isoch_pool_t *pool, size_t framesz, int cnt,
 
 	/* request should be reasonable */
 	if (btopr(totalsz) > physmem / AV1394_MEM_MAX_PERCENT) {
-		TNF_PROBE_0(av1394_ic_alloc_pool_error_physmem,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		AV1394_TNF_EXIT(av1394_ic_alloc_pool);
 		return (0);
 	}
@@ -472,8 +441,6 @@ av1394_ic_alloc_pool(av1394_isoch_pool_t *pool, size_t framesz, int cnt,
 		seg->is_kaddr = ddi_umem_alloc(seg->is_umem_size,
 		    DDI_UMEM_SLEEP, &seg->is_umem_cookie);
 		if (seg->is_kaddr == NULL) {
-			TNF_PROBE_0(av1394_ic_alloc_pool_error_umem_alloc,
-			    AV1394_TNF_ISOCH_ERROR, "");
 			break;
 		}
 		seg->is_size = segsz;
@@ -486,8 +453,6 @@ av1394_ic_alloc_pool(av1394_isoch_pool_t *pool, size_t framesz, int cnt,
 	/* number of frames the pool can hold */
 	ret = pool->ip_size / framesz;
 	if (ret < mincnt) {
-		TNF_PROBE_0(av1394_ic_alloc_pool_error_mincnt,
-		    AV1394_TNF_ISOCH_ERROR, "");
 		av1394_ic_free_pool(pool);
 		ret = 0;
 	}
@@ -540,8 +505,6 @@ av1394_ic_dma_setup(av1394_ic_t *icp, av1394_isoch_pool_t *pool)
 		    &avp->av_attachinfo.dma_attr, DDI_DMA_DONTWAIT, NULL,
 		    &isp->is_dma_hdl);
 		if (ret != DDI_SUCCESS) {
-			TNF_PROBE_0(av1394_ic_dma_setup_error_alloc_hdl,
-			    AV1394_TNF_ISOCH_ERROR, "");
 			av1394_ic_dma_cleanup(icp, pool);
 			AV1394_TNF_EXIT(av1394_ic_dma_setup);
 			return (ret);
@@ -553,16 +516,12 @@ av1394_ic_dma_setup(av1394_ic_t *icp, av1394_isoch_pool_t *pool)
 		    &isp->is_dma_cookie[0], &isp->is_dma_ncookies);
 
 		if (ret != DDI_DMA_MAPPED) {
-			TNF_PROBE_0(av1394_ic_dma_setup_error_bind_hdl,
-			    AV1394_TNF_ISOCH_ERROR, "");
 			av1394_ic_dma_cleanup(icp, pool);
 			AV1394_TNF_EXIT(av1394_ic_dma_setup);
 			return (DDI_FAILURE);
 		}
 
 		if (isp->is_dma_ncookies > COOKIES) {
-			TNF_PROBE_0(av1394_ic_dma_setup_error_ncookies,
-			    AV1394_TNF_ISOCH_ERROR, "");
 			av1394_ic_dma_cleanup(icp, pool);
 			AV1394_TNF_EXIT(av1394_ic_dma_setup);
 			return (DDI_FAILURE);

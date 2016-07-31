@@ -54,11 +54,9 @@ static void	av1394_fcp_common_write_request_cb(cmd1394_cmd_t *, int);
 static int	av1394_fcp_copyin_block(iec61883_arq_t *, mblk_t *,
 		struct uio *);
 
-#define	AV1394_TNF_ENTER(func)	\
-	TNF_PROBE_0_DEBUG(func##_enter, AV1394_TNF_FCP_STACK, "");
+#define	AV1394_TNF_ENTER(func)
 
-#define	AV1394_TNF_EXIT(func)	\
-	TNF_PROBE_0_DEBUG(func##_exit, AV1394_TNF_FCP_STACK, "");
+#define	AV1394_TNF_EXIT(func)
 
 /*
  *
@@ -138,8 +136,6 @@ av1394_fcp_write(av1394_inst_t *avp, iec61883_arq_t *arq, struct uio *uiop)
 	/* check arguments */
 	if ((len == 0) || (len > AV1394_FCP_ARQ_LEN_MAX) ||
 	    (len % IEEE1394_QUADLET != 0)) {
-		TNF_PROBE_1(av1394_fcp_write_error,
-		    AV1394_TNF_FCP_ERROR, "", tnf_int, len, len);
 		AV1394_TNF_EXIT(av1394_fcp_write);
 		return (EINVAL);
 	}
@@ -214,8 +210,6 @@ av1394_fcp_ctl_register(av1394_inst_t *avp)
 
 	ret = t1394_fcp_register_controller(avp->av_t1394_hdl, &evts, 0);
 	if (ret != DDI_SUCCESS) {
-		TNF_PROBE_1(av1394_fcp_ctl_register_error,
-		    AV1394_TNF_FCP_ERROR, "", tnf_int, ret, ret);
 	}
 	return (ret);
 }
@@ -231,8 +225,6 @@ av1394_fcp_tgt_register(av1394_inst_t *avp)
 
 	ret = t1394_fcp_register_target(avp->av_t1394_hdl, &evts, 0);
 	if (ret != DDI_SUCCESS) {
-		TNF_PROBE_1(av1394_fcp_tgt_register_error,
-		    AV1394_TNF_FCP_ERROR, "", tnf_int, ret, ret);
 	}
 	return (ret);
 }
@@ -246,8 +238,6 @@ av1394_fcp_ctl_alloc_cmd(av1394_inst_t *avp)
 	ret = t1394_alloc_cmd(avp->av_t1394_hdl, T1394_ALLOC_CMD_FCP_COMMAND,
 				&fc->fc_cmd);
 	if (ret != DDI_SUCCESS) {
-		TNF_PROBE_1(av1394_fcp_ctl_alloc_cmd_error,
-		    AV1394_TNF_FCP_ERROR, "", tnf_int, ret, ret);
 	}
 	return (ret);
 }
@@ -260,8 +250,6 @@ av1394_fcp_ctl_free_cmd(av1394_inst_t *avp)
 
 	ret = t1394_free_cmd(avp->av_t1394_hdl, 0, &fc->fc_cmd);
 	if (ret != DDI_SUCCESS) {
-		TNF_PROBE_1(av1394_fcp_ctl_free_cmd_error,
-		    AV1394_TNF_FCP_ERROR, "", tnf_int, ret, ret);
 	}
 }
 
@@ -274,8 +262,6 @@ av1394_fcp_tgt_alloc_cmd(av1394_inst_t *avp)
 	ret = t1394_alloc_cmd(avp->av_t1394_hdl, T1394_ALLOC_CMD_FCP_RESPONSE,
 				&fc->fc_cmd);
 	if (ret != DDI_SUCCESS) {
-		TNF_PROBE_1(av1394_fcp_tgt_alloc_cmd_error,
-		    AV1394_TNF_FCP_ERROR, "", tnf_int, ret, ret);
 	}
 	return (ret);
 }
@@ -288,8 +274,6 @@ av1394_fcp_tgt_free_cmd(av1394_inst_t *avp)
 
 	ret = t1394_free_cmd(avp->av_t1394_hdl, 0, &fc->fc_cmd);
 	if (ret != DDI_SUCCESS) {
-		TNF_PROBE_1(av1394_fcp_tgt_free_cmd_error,
-		    AV1394_TNF_FCP_ERROR, "", tnf_int, ret, ret);
 	}
 }
 
@@ -346,9 +330,6 @@ av1394_fcp_cmd_write_sync(av1394_inst_t *avp, av1394_fcp_cmd_t *fc)
 	/* immediate error? */
 	if (ret != DDI_SUCCESS) {
 		fc->fc_xmit = B_FALSE;
-		TNF_PROBE_2(av1394_fcp_cmd_write_sync_error,
-		    AV1394_TNF_FCP_ERROR, "", tnf_int, ret, ret,
-		    tnf_int, cmd_result, cmd->cmd_result);
 		return (EIO);
 	}
 
@@ -360,9 +341,6 @@ av1394_fcp_cmd_write_sync(av1394_inst_t *avp, av1394_fcp_cmd_t *fc)
 	}
 
 	if (cmd->cmd_result != CMD1394_CMDSUCCESS) {
-		TNF_PROBE_1(av1394_fcp_cmd_write_sync_error,
-		    AV1394_TNF_FCP_ERROR, "",
-		    tnf_int, cmd_result, cmd->cmd_result);
 		if (cmd->cmd_result == CMD1394_EDEVICE_BUSY) {
 			return (EBUSY);
 		} else {
@@ -482,18 +460,12 @@ av1394_fcp_common_write_request_cb(cmd1394_cmd_t *req, int mtype)
 
 	err = t1394_recv_request_done(avp->av_t1394_hdl, req, 0);
 	if (err != DDI_SUCCESS) {
-		TNF_PROBE_2(av1394_fcp_common_write_request_cb_done_error,
-		    AV1394_TNF_FCP_ERROR, "", tnf_int, err, err,
-		    tnf_int, result, req->cmd_result);
 	}
 
 	/* allocate mblk and copy quadlet into it */
 	if (req->cmd_type == CMD1394_ASYNCH_WR_QUAD) {
 		mp = allocb(IEEE1394_QUADLET, BPRI_HI);
 		if (mp == NULL) {
-			TNF_PROBE_0(
-			    av1394_fcp_common_write_request_cb_allocb_error,
-			    AV1394_TNF_FCP_ERROR, "");
 			AV1394_TNF_EXIT(av1394_fcp_common_write_request_cb);
 			return;
 		}
@@ -532,8 +504,6 @@ av1394_fcp_copyin_block(iec61883_arq_t *arq, mblk_t *mp, struct uio *uiop)
 	if (copylen > 0) {
 		ret = uiomove(mp->b_wptr, copylen, UIO_WRITE, uiop);
 		if (ret != 0) {
-			TNF_PROBE_1(av1394_fcp_copyin_block_error,
-			    AV1394_TNF_FCP_ERROR, "", tnf_int, ret, ret);
 			return (ret);
 		}
 		mp->b_wptr += copylen;

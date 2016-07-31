@@ -62,11 +62,9 @@ int av1394_ir_hiwat_sub = 2;
 int av1394_ir_lowat_sub = 3;
 int av1394_ir_dump_ixl = 0;
 
-#define	AV1394_TNF_ENTER(func)	\
-	TNF_PROBE_0_DEBUG(func##_enter, AV1394_TNF_ISOCH_STACK, "");
+#define	AV1394_TNF_ENTER(func)
 
-#define	AV1394_TNF_EXIT(func)	\
-	TNF_PROBE_0_DEBUG(func##_exit, AV1394_TNF_ISOCH_STACK, "");
+#define	AV1394_TNF_EXIT(func)
 
 int
 av1394_ir_init(av1394_ic_t *icp, int *error)
@@ -159,8 +157,6 @@ av1394_ir_start(av1394_ic_t *icp)
 		icp->ic_state = AV1394_IC_DMA;
 		mutex_exit(&icp->ic_mutex);
 	} else {
-		TNF_PROBE_1(av1394_ir_start_error, AV1394_TNF_ISOCH_ERROR, "",
-		    tnf_int, result, result);
 		ret = EIO;
 	}
 
@@ -200,8 +196,6 @@ av1394_ir_recv(av1394_ic_t *icp, iec61883_recv_t *recv)
 	/* check arguments */
 	if ((idx < 0) || (idx >= icp->ic_nframes) ||
 	    (cnt < 0) || (cnt > icp->ic_nframes)) {
-		TNF_PROBE_2(av1394_ir_recv_error_args, AV1394_TNF_ISOCH_ERROR,
-		    "", tnf_int, idx, idx, tnf_int, cnt, cnt);
 		return (EINVAL);
 	}
 
@@ -593,8 +587,6 @@ av1394_ir_alloc_isoch_dma(av1394_ic_t *icp)
 
 	if ((ret = t1394_alloc_isoch_dma(avp->av_t1394_hdl, &di, 0,
 	    &icp->ic_isoch_hdl, &result)) != DDI_SUCCESS) {
-		TNF_PROBE_1(av1394_ir_alloc_isoch_dma_error,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, result, result);
 	}
 
 	AV1394_TNF_EXIT(av1394_ir_alloc_isoch_dma);
@@ -700,9 +692,6 @@ av1394_ir_overflow(av1394_ic_t *icp)
 		irp->ir_overflow_idx = idx;
 		icp->ic_state = AV1394_IC_SUSPENDED;
 	} else {
-		TNF_PROBE_2(av1394_ir_overflow_error_update,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, err, err,
-		    tnf_int, result, result);
 	}
 
 	AV1394_TNF_EXIT(av1394_ir_overflow);
@@ -749,9 +738,6 @@ av1394_ir_overflow_resume(av1394_ic_t *icp)
 	if (err == DDI_SUCCESS) {
 		icp->ic_state = AV1394_IC_DMA;
 	} else {
-		TNF_PROBE_2(av1394_ir_overflow_resume_error_update,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, err, err,
-		    tnf_int, result, result);
 	}
 
 	AV1394_TNF_EXIT(av1394_ir_overflow_resume);
@@ -788,8 +774,6 @@ av1394_ir_add_frames(av1394_ic_t *icp, int idx, int cnt)
 
 	/* can only add to the tail */
 	if (idx != ((irp->ir_last_empty + 1) % icp->ic_nframes)) {
-		TNF_PROBE_1(av1394_ir_add_frames_error,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, idx, idx);
 		return (EINVAL);
 	}
 

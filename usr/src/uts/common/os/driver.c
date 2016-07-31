@@ -435,13 +435,6 @@ dev_to_instance(dev_t dev)
 static void
 bdev_strategy_tnf_probe(struct buf *bp)
 {
-	/* Kernel probe */
-	TNF_PROBE_5(strategy, "io blockio", "",
-	    tnf_device, device, bp->b_edev,
-	    tnf_diskaddr, block, bp->b_lblkno,
-	    tnf_size, size, bp->b_bcount,
-	    tnf_opaque, buf, bp,
-	    tnf_bioflags, flags, bp->b_flags);
 }
 
 int

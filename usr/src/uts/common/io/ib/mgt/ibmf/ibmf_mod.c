@@ -77,9 +77,6 @@ _init()
 	 */
 	status = ibmf_saa_impl_init();
 	if (status != IBMF_SUCCESS) {
-		TNF_PROBE_1(_init_error, IBMF_TNF_ERROR, "", tnf_string, msg,
-		    "ibmf_saa_impl_init failed");
-
 #ifndef	NPROBE
 		(void) tnf_mod_unload(&ibmf_modlinkage);
 #endif
@@ -90,9 +87,6 @@ _init()
 
 	status = ibmf_init();
 	if (status != 0) {
-		TNF_PROBE_1(_init_error, IBMF_TNF_ERROR, "", tnf_string, msg,
-		    "ibmf_init failed");
-
 		(void) ibmf_saa_impl_fini();
 
 #ifndef	NPROBE
@@ -103,8 +97,6 @@ _init()
 
 	status = mod_install(&ibmf_modlinkage);
 	if (status != 0) {
-		TNF_PROBE_2(_init_error, IBMF_TNF_ERROR, "", tnf_string, msg,
-		    "mod_install failed", tnf_uint, status, status);
 #ifndef NPROBE
 		(void) tnf_mod_unload(&ibmf_modlinkage);
 #endif
@@ -127,16 +119,12 @@ _fini()
 	int status;
 	status = mod_remove(&ibmf_modlinkage);
 	if (status != 0) {
-		TNF_PROBE_2(_fini_error, IBMF_TNF_ERROR, "", tnf_string, msg,
-		    "mod_remove failed", tnf_uint, status, status);
 		return (status);
 	}
 
 	status = ibmf_saa_impl_fini();
 	if (status != 0) {
 
-		TNF_PROBE_2(_fini_error, IBMF_TNF_ERROR, "", tnf_string, msg,
-		    "ibmf_saa fini failed", tnf_uint, status, status);
 		return (status);
 	}
 

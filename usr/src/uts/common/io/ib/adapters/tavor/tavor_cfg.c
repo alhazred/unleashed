@@ -350,8 +350,6 @@ tavor_cfg_profile_init_phase1(tavor_state_t *state)
 		cp->cp_log_max_srq_sz		= TAVOR_SRQ_SZ_SHIFT_MIN;
 
 	} else {
-		TNF_PROBE_0(tavor_cfg_profile_invalid_dimmsz_fail,
-		    TAVOR_TNF_ERROR, "");
 		return (DDI_FAILURE);
 	}
 
@@ -365,8 +363,6 @@ tavor_cfg_profile_init_phase1(tavor_state_t *state)
 
 		/* Can't do both "streaming" and IOMMU bypass */
 		if (tavor_iommu_bypass != 0) {
-			TNF_PROBE_0(tavor_cfg_profile_streamingbypass_fail,
-			    TAVOR_TNF_ERROR, "");
 			kmem_free(cp, sizeof (tavor_cfg_profile_t));
 			return (DDI_FAILURE);
 		}
@@ -576,8 +572,6 @@ tavor_cfg_profile_init_phase2(tavor_state_t *state)
 		cp->cp_max_mem_rd_byte_cnt	= tavor_max_mem_rd_byte_cnt;
 
 	} else {
-		TNF_PROBE_0(tavor_cfg_profile_invalid_dimmsz_fail,
-		    TAVOR_TNF_ERROR, "");
 		return (DDI_FAILURE);
 	}
 

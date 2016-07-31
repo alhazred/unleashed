@@ -110,8 +110,6 @@ tavor_mr_register(tavor_state_t *state, tavor_pdhdl_t pd,
 	bind.bi_flags = mr_attr->mr_flags;
 	status = tavor_mr_common_reg(state, pd, &bind, mrhdl, op);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_mr_register_cmnreg_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_mr_register);
 		return (status);
 	}
@@ -159,8 +157,6 @@ tavor_mr_register_buf(tavor_state_t *state, tavor_pdhdl_t pd,
 	bind.bi_flags = mr_attr->mr_flags;
 	status = tavor_mr_common_reg(state, pd, &bind, mrhdl, op);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_mr_register_buf_cmnreg_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_mr_register_buf);
 		return (status);
 	}
@@ -403,8 +399,6 @@ tavor_mr_register_shared(tavor_state_t *state, tavor_mrhdl_t mrhdl,
 	if (status != TAVOR_CMD_SUCCESS) {
 		cmn_err(CE_CONT, "Tavor: SW2HW_MPT command failed: %08x\n",
 		    status);
-		TNF_PROBE_1(tavor_mr_register_shared_sw2hw_mpt_cmd_fail,
-		    TAVOR_TNF_ERROR, "", tnf_uint, status, status);
 		/* Set "status" and "errormsg" and goto failure */
 		TAVOR_TNF_FAIL(ibc_get_ci_failure(0),
 		    "tavor SW2HW_MPT command");
@@ -460,8 +454,6 @@ mrshared_fail2:
 mrshared_fail1:
 	tavor_pd_refcnt_dec(pd);
 mrshared_fail:
-	TNF_PROBE_1(tavor_mr_register_shared_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_mr_register_shared);
 	return (status);
 }
@@ -496,8 +488,6 @@ tavor_mr_deregister(tavor_state_t *state, tavor_mrhdl_t *mrhdl, uint_t level,
 	    (sleep != TAVOR_SLEEPFLAG_FOR_CONTEXT())) {
 		/* Set "status" and "errormsg" and goto failure */
 		TAVOR_TNF_FAIL(IBT_INVALID_PARAM, "invalid sleep flags");
-		TNF_PROBE_1(tavor_mr_deregister_fail, TAVOR_TNF_ERROR, "",
-		    tnf_string, msg, errormsg);
 		TAVOR_TNF_EXIT(tavor_mr_deregister);
 		return (status);
 	}
@@ -556,9 +546,6 @@ tavor_mr_deregister(tavor_state_t *state, tavor_mrhdl_t *mrhdl, uint_t level,
 			} else {
 				cmn_err(CE_CONT, "Tavor: HW2SW_MPT command "
 				    "failed: %08x\n", status);
-				TNF_PROBE_1(tavor_hw2sw_mpt_cmd_fail,
-				    TAVOR_TNF_ERROR, "", tnf_uint, status,
-				    status);
 				TAVOR_TNF_EXIT(tavor_mr_deregister);
 				return (IBT_INVALID_PARAM);
 			}
@@ -678,7 +665,6 @@ tavor_mr_query(tavor_state_t *state, tavor_mrhdl_t mr,
 	 */
 	if ((mr->mr_is_umem) && (mr->mr_umemcookie == NULL)) {
 		mutex_exit(&mr->mr_lock);
-		TNF_PROBE_0(tavor_mr_query_inv_mrhdl_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_mr_query);
 		return (IBT_MR_HDL_INVALID);
 	}
@@ -747,8 +733,6 @@ tavor_mr_reregister(tavor_state_t *state, tavor_mrhdl_t mr,
 	bind.bi_flags = mr_attr->mr_flags;
 	status = tavor_mr_common_rereg(state, mr, pd, &bind, mrhdl_new, op);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_mr_reregister_cmnreg_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_mr_reregister);
 		return (status);
 	}
@@ -796,8 +780,6 @@ tavor_mr_reregister_buf(tavor_state_t *state, tavor_mrhdl_t mr,
 	bind.bi_as = NULL;
 	status = tavor_mr_common_rereg(state, mr, pd, &bind, mrhdl_new, op);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_mr_reregister_buf_cmnreg_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_mr_reregister_buf);
 		return (status);
 	}
@@ -890,8 +872,6 @@ tavor_mr_sync(tavor_state_t *state, ibt_mr_sync_t *mr_segs, size_t num_segs)
 	return (DDI_SUCCESS);
 
 mrsync_fail:
-	TNF_PROBE_1(tavor_mr_sync_fail, TAVOR_TNF_ERROR, "", tnf_string, msg,
-	    errormsg);
 	TAVOR_TNF_EXIT(tavor_mr_sync);
 	return (status);
 }
@@ -994,8 +974,6 @@ tavor_mw_alloc(tavor_state_t *state, tavor_pdhdl_t pd, ibt_mw_flags_t flags,
 	if (status != TAVOR_CMD_SUCCESS) {
 		cmn_err(CE_CONT, "Tavor: SW2HW_MPT command failed: %08x\n",
 		    status);
-		TNF_PROBE_1(tavor_mw_alloc_sw2hw_mpt_cmd_fail,
-		    TAVOR_TNF_ERROR, "", tnf_uint, status, status);
 		/* Set "status" and "errormsg" and goto failure */
 		TAVOR_TNF_FAIL(ibc_get_ci_failure(0),
 		    "tavor SW2HW_MPT command");
@@ -1022,8 +1000,6 @@ mwalloc_fail2:
 mwalloc_fail1:
 	tavor_pd_refcnt_dec(pd);
 mwalloc_fail:
-	TNF_PROBE_1(tavor_mw_alloc_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_mw_alloc);
 	return (status);
 }
@@ -1053,8 +1029,6 @@ tavor_mw_free(tavor_state_t *state, tavor_mwhdl_t *mwhdl, uint_t sleep)
 	    (sleep != TAVOR_SLEEPFLAG_FOR_CONTEXT())) {
 		/* Set "status" and "errormsg" and goto failure */
 		TAVOR_TNF_FAIL(IBT_INVALID_PARAM, "invalid sleep flags");
-		TNF_PROBE_1(tavor_mw_free_fail, TAVOR_TNF_ERROR, "",
-		    tnf_string, msg, errormsg);
 		TAVOR_TNF_EXIT(tavor_mw_free);
 		return (status);
 	}
@@ -1081,8 +1055,6 @@ tavor_mw_free(tavor_state_t *state, tavor_mwhdl_t *mwhdl, uint_t sleep)
 	if (status != TAVOR_CMD_SUCCESS) {
 		cmn_err(CE_CONT, "Tavor: HW2SW_MPT command failed: %08x\n",
 		    status);
-		TNF_PROBE_1(tavor_hw2sw_mpt_cmd_fail, TAVOR_TNF_ERROR, "",
-		    tnf_uint, status, status);
 		TAVOR_TNF_EXIT(tavor_mw_free);
 		return (IBT_INVALID_PARAM);
 	}
@@ -1408,8 +1380,6 @@ tavor_mr_common_reg(tavor_state_t *state, tavor_pdhdl_t pd,
 	if (status != TAVOR_CMD_SUCCESS) {
 		cmn_err(CE_CONT, "Tavor: SW2HW_MPT command failed: %08x\n",
 		    status);
-		TNF_PROBE_1(tavor_mr_common_reg_sw2hw_mpt_cmd_fail,
-		    TAVOR_TNF_ERROR, "", tnf_uint, status, status);
 		/* Set "status" and "errormsg" and goto failure */
 		TAVOR_TNF_FAIL(ibc_get_ci_failure(0),
 		    "tavor SW2HW_MPT command");
@@ -1480,8 +1450,6 @@ mrcommon_fail2:
 mrcommon_fail1:
 	tavor_pd_refcnt_dec(pd);
 mrcommon_fail:
-	TNF_PROBE_1(tavor_mr_common_reg_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_mr_common_reg);
 	return (status);
 }
@@ -1752,8 +1720,6 @@ mrmttbind_fail3:
 mrmttbind_fail2:
 	tavor_mr_mem_unbind(state, bind);
 mrmttbind_fail:
-	TNF_PROBE_1(tavor_mr_mtt_bind_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_mr_mtt_bind);
 	return (status);
 }
@@ -1870,8 +1836,6 @@ tavor_mr_common_rereg(tavor_state_t *state, tavor_mrhdl_t mr,
 				TAVOR_WARNING(state, "failed to deregister "
 				    "memory region");
 			}
-			TNF_PROBE_1(tavor_mr_common_rereg_hw2sw_mpt_cmd_fail,
-			    TAVOR_TNF_ERROR, "", tnf_uint, status, status);
 			TAVOR_TNF_EXIT(tavor_mr_common_rereg);
 			return (ibc_get_ci_failure(0));
 		}
@@ -2060,8 +2024,6 @@ tavor_mr_common_rereg(tavor_state_t *state, tavor_mrhdl_t mr,
 			TAVOR_WARNING(state, "failed to deregister memory "
 			    "region");
 		}
-		TNF_PROBE_1(tavor_mr_common_rereg_sw2hw_mpt_cmd_fail,
-		    TAVOR_TNF_ERROR, "", tnf_uint, status, status);
 		TAVOR_TNF_EXIT(tavor_mr_common_rereg);
 		return (ibc_get_ci_failure(0));
 	}
@@ -2093,8 +2055,6 @@ tavor_mr_common_rereg(tavor_state_t *state, tavor_mrhdl_t mr,
 	return (DDI_SUCCESS);
 
 mrrereg_fail:
-	TNF_PROBE_1(tavor_mr_common_rereg_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_mr_common_rereg);
 	return (status);
 }
@@ -2484,8 +2444,6 @@ tavor_mr_rereg_xlat_helper(tavor_state_t *state, tavor_mrhdl_t mr,
 	return (DDI_SUCCESS);
 
 mrrereghelp_fail:
-	TNF_PROBE_1(tavor_mr_rereg_xlat_helper_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_mr_rereg_xlat_helper);
 	return (status);
 }
@@ -2576,8 +2534,6 @@ tavor_mr_mem_bind(tavor_state_t *state, tavor_bind_info_t *bind,
 		status = ddi_dma_alloc_handle(state->ts_dip, &dma_attr,
 		    callback, NULL, &bind->bi_dmahdl);
 		if (status != DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_mr_mem_bind_dmahdl_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_mr_mem_bind);
 			return (status);
 		}
@@ -2609,8 +2565,6 @@ tavor_mr_mem_bind(tavor_state_t *state, tavor_bind_info_t *bind,
 		if (bind->bi_free_dmahdl != 0) {
 			ddi_dma_free_handle(&bind->bi_dmahdl);
 		}
-		TNF_PROBE_0(tavor_mr_mem_bind_dmabind_fail, TAVOR_TNF_ERROR,
-		    "");
 		TAVOR_TNF_EXIT(tavor_mr_mem_bind);
 		return (status);
 	}
@@ -2656,8 +2610,6 @@ tavor_mr_mem_unbind(tavor_state_t *state, tavor_bind_info_t *bind)
 	status = ddi_dma_unbind_handle(bind->bi_dmahdl);
 	if (status != DDI_SUCCESS) {
 		TAVOR_WARNING(state, "failed to unbind DMA mapping");
-		TNF_PROBE_0(tavor_mr_mem_unbind_dmaunbind_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_mr_mem_unbind);
 		return;
 	}
@@ -2753,8 +2705,6 @@ tavor_mtt_refcnt_inc(tavor_rsrc_t *rsrc)
 
 	/* Increment the MTT's reference count */
 	mutex_enter(&rc->swrc_lock);
-	TNF_PROBE_1_DEBUG(tavor_mtt_refcnt_inc, TAVOR_TNF_TRACE, "",
-	    tnf_uint, refcnt, rc->swrc_refcnt);
 	cnt = rc->swrc_refcnt++;
 	mutex_exit(&rc->swrc_lock);
 
@@ -2777,8 +2727,6 @@ tavor_mtt_refcnt_dec(tavor_rsrc_t *rsrc)
 	/* Decrement the MTT's reference count */
 	mutex_enter(&rc->swrc_lock);
 	cnt = --rc->swrc_refcnt;
-	TNF_PROBE_1_DEBUG(tavor_mtt_refcnt_dec, TAVOR_TNF_TRACE, "",
-	    tnf_uint, refcnt, rc->swrc_refcnt);
 	mutex_exit(&rc->swrc_lock);
 
 	return (cnt);

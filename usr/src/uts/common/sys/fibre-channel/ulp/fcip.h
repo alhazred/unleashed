@@ -620,7 +620,6 @@ extern int tnf_mod_unload(struct modlinkage *e);
 #define	FCIP_TNF_BYTE_ARRAY(name, keys, detail, mesg, barray_name, \
 barray, len) \
 { \
-	TNF_PROBE_1(name, keys, detail, tnf_string, msg, mesg); \
 	{ \
 		int i = 0; \
 		char str[65] = ""; \
@@ -630,8 +629,6 @@ barray, len) \
 				((char *)(barray))[i++] & 0xff); \
 			strp += 2; \
 		} \
-		TNF_PROBE_1(name, keys, "", \
-			tnf_string, barray_name, str); \
 	} \
 }
 

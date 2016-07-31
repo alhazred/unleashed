@@ -141,21 +141,18 @@ tavor_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp,
 	TAVOR_TNF_ENTER(tavor_ioctl);
 
 	if (drv_priv(credp) != 0) {
-		TNF_PROBE_0(tavor_ioctl_priv_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl);
 		return (EPERM);
 	}
 
 	instance = TAVOR_DEV_INSTANCE(dev);
 	if (instance == -1) {
-		TNF_PROBE_0(tavor_ioctl_inst_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl);
 		return (EBADF);
 	}
 
 	state = ddi_get_soft_state(tavor_statep, instance);
 	if (state == NULL) {
-		TNF_PROBE_0(tavor_ioctl_gss_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl);
 		return (EBADF);
 	}
@@ -211,7 +208,6 @@ tavor_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp,
 
 	default:
 		status = ENOTTY;
-		TNF_PROBE_0(tavor_ioctl_default_fail, TAVOR_TNF_ERROR, "");
 		break;
 	}
 	*rvalp = status;
@@ -239,7 +235,6 @@ tavor_ioctl_flash_read(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	if ((state->ts_fw_flashdev != dev) ||
 	    (state->ts_fw_flashstarted == 0)) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_flash_bad_state, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_read);
 		return (EIO);
 	}
@@ -252,8 +247,6 @@ tavor_ioctl_flash_read(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		if (ddi_copyin((void *)arg, &info32,
 		    sizeof (tavor_flash_ioctl32_t), mode) != 0) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_ioctl_flash_read_copyin_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_read);
 			return (EFAULT);
 		}
@@ -266,8 +259,6 @@ tavor_ioctl_flash_read(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	if (ddi_copyin((void *)arg, &ioctl_info, sizeof (tavor_flash_ioctl_t),
 	    mode) != 0) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_ioctl_flash_read_copyin_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_read);
 		return (EFAULT);
 	}
@@ -281,8 +272,6 @@ tavor_ioctl_flash_read(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		if (ioctl_info.tf_sector_num >=
 		    (state->ts_fw_device_sz >> state->ts_fw_log_sector_sz)) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_flash_read_sector_num_too_large,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_read);
 			return (EFAULT);
 		}
@@ -296,8 +285,6 @@ tavor_ioctl_flash_read(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		    &ioctl_info.tf_sector[0], 1 << state->ts_fw_log_sector_sz,
 		    mode) != 0) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_flash_read_copyout_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_read);
 			return (EFAULT);
 		}
@@ -307,8 +294,6 @@ tavor_ioctl_flash_read(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		/* Check if addr is too large for flash device */
 		if (ioctl_info.tf_addr >= state->ts_fw_device_sz) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_flash_read_quad_addr_too_large,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_read);
 			return (EFAULT);
 		}
@@ -320,8 +305,6 @@ tavor_ioctl_flash_read(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		break;
 
 	default:
-		TNF_PROBE_0(tavor_ioctl_flash_read_invalid_type,
-		    TAVOR_TNF_ERROR, "");
 		status = EIO;
 		break;
 	}
@@ -340,8 +323,6 @@ tavor_ioctl_flash_read(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		if (ddi_copyout(&info32, (void *)arg,
 		    sizeof (tavor_flash_ioctl32_t), mode) != 0) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_flash_read_copyout_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_read);
 			return (EFAULT);
 		}
@@ -350,8 +331,6 @@ tavor_ioctl_flash_read(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	if (ddi_copyout(&ioctl_info, (void *)arg,
 	    sizeof (tavor_flash_ioctl_t), mode) != 0) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_flash_read_copyout_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_read);
 		return (EFAULT);
 	}
@@ -380,7 +359,6 @@ tavor_ioctl_flash_write(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	if ((state->ts_fw_flashdev != dev) ||
 	    (state->ts_fw_flashstarted == 0)) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_flash_bad_state, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_write);
 		return (EIO);
 	}
@@ -393,8 +371,6 @@ tavor_ioctl_flash_write(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		if (ddi_copyin((void *)arg, &info32,
 		    sizeof (tavor_flash_ioctl32_t), mode) != 0) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_ioctl_flash_write_copyin_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_write);
 			return (EFAULT);
 		}
@@ -408,8 +384,6 @@ tavor_ioctl_flash_write(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	if (ddi_copyin((void *)arg, &ioctl_info,
 	    sizeof (tavor_flash_ioctl_t), mode) != 0) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_ioctl_flash_write_ci_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_write);
 		return (EFAULT);
 	}
@@ -423,8 +397,6 @@ tavor_ioctl_flash_write(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		if (ioctl_info.tf_sector_num >=
 		    (state->ts_fw_device_sz >> state->ts_fw_log_sector_sz)) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_flash_write_sector_num_too_large,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_write);
 			return (EFAULT);
 		}
@@ -434,8 +406,6 @@ tavor_ioctl_flash_write(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		    &state->ts_fw_sector[0], 1 << state->ts_fw_log_sector_sz,
 		    mode) != 0) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_ioctl_flash_write_fw_sector_ci_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_write);
 			return (EFAULT);
 		}
@@ -449,8 +419,6 @@ tavor_ioctl_flash_write(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		/* Check if addr is too large for flash device */
 		if (ioctl_info.tf_addr >= state->ts_fw_device_sz) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_flash_write_byte_addr_too_large,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_write);
 			return (EFAULT);
 		}
@@ -464,8 +432,6 @@ tavor_ioctl_flash_write(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		break;
 
 	default:
-		TNF_PROBE_0(tavor_ioctl_flash_write_invalid_type,
-		    TAVOR_TNF_ERROR, "");
 		status = EIO;
 		break;
 	}
@@ -494,7 +460,6 @@ tavor_ioctl_flash_erase(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	if ((state->ts_fw_flashdev != dev) ||
 	    (state->ts_fw_flashstarted == 0)) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_flash_bad_state, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_erase);
 		return (EIO);
 	}
@@ -507,8 +472,6 @@ tavor_ioctl_flash_erase(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		if (ddi_copyin((void *)arg, &info32,
 		    sizeof (tavor_flash_ioctl32_t), mode) != 0) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_ioctl_flash_read_copyin_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_erase);
 			return (EFAULT);
 		}
@@ -519,8 +482,6 @@ tavor_ioctl_flash_erase(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	if (ddi_copyin((void *)arg, &ioctl_info, sizeof (tavor_flash_ioctl_t),
 	    mode) != 0) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_ioctl_flash_erase_ci_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_erase);
 		return (EFAULT);
 	}
@@ -534,8 +495,6 @@ tavor_ioctl_flash_erase(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		if (ioctl_info.tf_sector_num >=
 		    (state->ts_fw_device_sz >> state->ts_fw_log_sector_sz)) {
 			mutex_exit(&state->ts_fw_flashlock);
-			TNF_PROBE_0(tavor_flash_erase_sector_num_too_large,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_flash_write);
 			return (EFAULT);
 		}
@@ -551,8 +510,6 @@ tavor_ioctl_flash_erase(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		break;
 
 	default:
-		TNF_PROBE_0(tavor_ioctl_flash_erase_invalid_type,
-		    TAVOR_TNF_ERROR, "");
 		status = EIO;
 		break;
 	}
@@ -581,8 +538,6 @@ tavor_ioctl_flash_init(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	mutex_enter(&state->ts_fw_flashlock);
 	if (state->ts_fw_flashstarted == 1) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_ioctl_flash_init_already_started,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_init);
 		return (EIO);
 	}
@@ -591,8 +546,6 @@ tavor_ioctl_flash_init(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	if (ddi_copyin((void *)arg, &init_info,
 	    sizeof (tavor_flash_init_ioctl_t), mode) != 0) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_flash_init_ioctl_copyin_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_init);
 		return (EFAULT);
 	}
@@ -608,9 +561,6 @@ tavor_ioctl_flash_init(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	 */
 	if (state->ts_fw_cmdset == TAVOR_FLASH_UNKNOWN_CMDSET) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_1(tavor_ioctl_flash_init_cmdset_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg,
-		    "UNKNOWN flash command set");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_init);
 		return (EFAULT);
 	}
@@ -642,8 +592,6 @@ tavor_ioctl_flash_init(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		tavor_ioctl_flash_cleanup_nolock(state);
 
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_ioctl_flash_init_copyout_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_init);
 		return (EFAULT);
 	}
@@ -665,8 +613,6 @@ tavor_ioctl_flash_init(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	if (ret != DDI_SUCCESS) {
 		(void) tavor_ioctl_flash_fini(state, dev);
 
-		TNF_PROBE_0(tavor_ioctl_flash_init_set_cb_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_init);
 		return (EFAULT);
 	}
@@ -693,7 +639,6 @@ tavor_ioctl_flash_fini(tavor_state_t *state, dev_t dev)
 	if ((state->ts_fw_flashdev != dev) ||
 	    (state->ts_fw_flashstarted == 0)) {
 		mutex_exit(&state->ts_fw_flashlock);
-		TNF_PROBE_0(tavor_flash_bad_state, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_fini);
 		return (EIO);
 	}
@@ -709,8 +654,6 @@ tavor_ioctl_flash_fini(tavor_state_t *state, dev_t dev)
 	ret = tavor_umap_db_clear_onclose_cb(dev,
 	    TAVOR_ONCLOSE_FLASH_INPROGRESS);
 	if (ret != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_flash_fini_clear_cb_fail, TAVOR_TNF_ERROR,
-		    "");
 		TAVOR_TNF_EXIT(tavor_ioctl_flash_fini);
 		return (EFAULT);
 	}
@@ -775,8 +718,6 @@ tavor_ioctl_info(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	 * Access to Tavor VTS ioctls is not allowed in "maintenance mode".
 	 */
 	if (state->ts_operational_mode == TAVOR_MAINTENANCE_MODE) {
-		TNF_PROBE_0(tavor_ioctl_info_maintenance_mode_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_info);
 		return (EFAULT);
 	}
@@ -784,7 +725,6 @@ tavor_ioctl_info(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	/* copyin the user struct to kernel */
 	if (ddi_copyin((void *)arg, &info, sizeof (tavor_info_ioctl_t),
 	    mode) != 0) {
-		TNF_PROBE_0(tavor_ioctl_info_copyin_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_info);
 		return (EFAULT);
 	}
@@ -793,7 +733,6 @@ tavor_ioctl_info(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	 * Check ioctl revision
 	 */
 	if (info.ti_revision != TAVOR_VTS_IOCTL_REVISION) {
-		TNF_PROBE_0(tavor_ioctl_info_bad_rev, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_info);
 		return (EINVAL);
 	}
@@ -810,8 +749,6 @@ tavor_ioctl_info(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 		if (tavor_ioctl_flash_init(state, dev, (intptr_t)&init_info,
 		    (FKIOCTL | mode)) != 0) {
 			mutex_exit(&state->ts_info_lock);
-			TNF_PROBE_0(tavor_ioctl_info_flash_init_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_info);
 			return (EFAULT);
 		}
@@ -831,7 +768,6 @@ tavor_ioctl_info(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	/* Copy ioctl results back to user struct */
 	if (ddi_copyout(&info, (void *)arg, sizeof (tavor_info_ioctl_t),
 	    mode) != 0) {
-		TNF_PROBE_0(tavor_ioctl_info_copyout_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_info);
 		return (EFAULT);
 	}
@@ -860,8 +796,6 @@ tavor_ioctl_ports(tavor_state_t *state, intptr_t arg, int mode)
 	 * Access to Tavor VTS ioctls is not allowed in "maintenance mode".
 	 */
 	if (state->ts_operational_mode == TAVOR_MAINTENANCE_MODE) {
-		TNF_PROBE_0(tavor_ioctl_ports_maintenance_mode_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_ports);
 		return (EFAULT);
 	}
@@ -873,8 +807,6 @@ tavor_ioctl_ports(tavor_state_t *state, intptr_t arg, int mode)
 
 		if (ddi_copyin((void *)arg, &info32,
 		    sizeof (tavor_ports_ioctl32_t), mode) != 0) {
-			TNF_PROBE_0(tavor_ioctl_ports_copyin_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_ports);
 			return (EFAULT);
 		}
@@ -887,7 +819,6 @@ tavor_ioctl_ports(tavor_state_t *state, intptr_t arg, int mode)
 #endif /* _MULTI_DATAMODEL */
 	if (ddi_copyin((void *)arg, &info, sizeof (tavor_ports_ioctl_t),
 	    mode) != 0) {
-		TNF_PROBE_0(tavor_ioctl_ports_copyin_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_ports);
 		return (EFAULT);
 	}
@@ -896,7 +827,6 @@ tavor_ioctl_ports(tavor_state_t *state, intptr_t arg, int mode)
 	 * Check ioctl revision
 	 */
 	if (info.tp_revision != TAVOR_VTS_IOCTL_REVISION) {
-		TNF_PROBE_0(tavor_ioctl_ports_bad_rev, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_ports);
 		return (EINVAL);
 	}
@@ -926,8 +856,6 @@ tavor_ioctl_ports(tavor_state_t *state, intptr_t arg, int mode)
 		pi.p_sgid_tbl = sgid_tbl;
 		pi.p_pkey_tbl = pkey_tbl;
 		if (tavor_port_query(state, i + 1, &pi) != 0) {
-			TNF_PROBE_0(tavor_ioctl_ports_query_failed,
-			    TAVOR_TNF_ERROR, "");
 		}
 
 		portstat.tsp_port_num	= pi.p_port_num;
@@ -964,8 +892,6 @@ tavor_ioctl_ports(tavor_state_t *state, intptr_t arg, int mode)
 
 		if (ddi_copyout(&info32, (void *)arg,
 		    sizeof (tavor_ports_ioctl32_t), mode) != 0) {
-			TNF_PROBE_0(tavor_ioctl_ports_copyout_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_ports);
 			return (EFAULT);
 		}
@@ -973,8 +899,6 @@ tavor_ioctl_ports(tavor_state_t *state, intptr_t arg, int mode)
 #endif /* _MULTI_DATAMODEL */
 	if (ddi_copyout(&info, (void *)arg, sizeof (tavor_ports_ioctl_t),
 	    mode) != 0) {
-		TNF_PROBE_0(tavor_ioctl_ports_copyout_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_ports);
 		return (EFAULT);
 	}
@@ -1005,8 +929,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 	 * Access to Tavor VTS ioctls is not allowed in "maintenance mode".
 	 */
 	if (state->ts_operational_mode == TAVOR_MAINTENANCE_MODE) {
-		TNF_PROBE_0(tavor_ioctl_loopback_maintenance_mode_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EFAULT);
 	}
@@ -1018,8 +940,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 
 		if (ddi_copyin((void *)arg, &lb32,
 		    sizeof (tavor_loopback_ioctl32_t), mode) != 0) {
-			TNF_PROBE_0(tavor_ioctl_loopback_copyin_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 			return (EFAULT);
 		}
@@ -1037,8 +957,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 #endif /* _MULTI_DATAMODEL */
 	if (ddi_copyin((void *)arg, &lb, sizeof (tavor_loopback_ioctl_t),
 	    mode) != 0) {
-		TNF_PROBE_0(tavor_ioctl_loopback_copyin_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EFAULT);
 	}
@@ -1052,8 +970,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 	if (lb.tlb_revision != TAVOR_VTS_IOCTL_REVISION) {
 		lb.tlb_error_type = TAVOR_LOOPBACK_INVALID_REVISION;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
-		TNF_PROBE_0(tavor_ioctl_loopback_bad_rev,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EINVAL);
 	}
@@ -1062,8 +978,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 	if (!tavor_portnum_is_valid(state, lb.tlb_port_num)) {
 		lb.tlb_error_type = TAVOR_LOOPBACK_INVALID_PORT;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
-		TNF_PROBE_0(tavor_ioctl_loopback_inv_port,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EINVAL);
 	}
@@ -1092,8 +1006,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 		lb.tlb_error_type = TAVOR_LOOPBACK_INVALID_PORT;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
 		tavor_loopback_free_state(&lstate);
-		TNF_PROBE_0(tavor_ioctl_loopback_bad_port,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EINVAL);
 	}
@@ -1133,8 +1045,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 		lb.tlb_error_type = TAVOR_LOOPBACK_SEND_BUF_INVALID;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
 		tavor_loopback_free_state(&lstate);
-		TNF_PROBE_0(tavor_ioctl_loopback_buf_null,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EINVAL);
 	}
@@ -1155,8 +1065,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 		    TAVOR_LOOPBACK_SEND_BUF_MEM_REGION_ALLOC_FAIL;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
 		tavor_loopback_free_state(&lstate);
-		TNF_PROBE_0(tavor_ioctl_loopback_txbuf_alloc_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EFAULT);
 	}
@@ -1168,8 +1076,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 		    TAVOR_LOOPBACK_RECV_BUF_MEM_REGION_ALLOC_FAIL;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
 		tavor_loopback_free_state(&lstate);
-		TNF_PROBE_0(tavor_ioctl_loopback_rxbuf_alloc_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EFAULT);
 	}
@@ -1180,8 +1086,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 		lb.tlb_error_type = TAVOR_LOOPBACK_SEND_BUF_COPY_FAIL;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
 		tavor_loopback_free_state(&lstate);
-		TNF_PROBE_0(tavor_ioctl_loopback_tx_copyin_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EFAULT);
 	}
@@ -1192,8 +1096,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 		lb.tlb_error_type = lstate.tls_err;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
 		tavor_loopback_free_state(&lstate);
-		TNF_PROBE_0(tavor_ioctl_loopback_txqp_alloc_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EFAULT);
 	}
@@ -1204,8 +1106,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 		lb.tlb_error_type = lstate.tls_err;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
 		tavor_loopback_free_state(&lstate);
-		TNF_PROBE_0(tavor_ioctl_loopback_rxqp_alloc_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EFAULT);
 	}
@@ -1217,8 +1117,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 		lb.tlb_error_type = lstate.tls_err;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
 		tavor_loopback_free_state(&lstate);
-		TNF_PROBE_0(tavor_ioctl_loopback_txqp_init_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EFAULT);
 	}
@@ -1230,8 +1128,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 		lb.tlb_error_type = lstate.tls_err;
 		(void) tavor_loopback_copyout(&lb, arg, mode);
 		tavor_loopback_free_state(&lstate);
-		TNF_PROBE_0(tavor_ioctl_loopback_rxqp_init_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 		return (EFAULT);
 	}
@@ -1248,8 +1144,6 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 			lb.tlb_error_type = TAVOR_LOOPBACK_WQE_POST_FAIL;
 			(void) tavor_loopback_copyout(&lb, arg, mode);
 			tavor_loopback_free_state(&lstate);
-			TNF_PROBE_0(tavor_ioctl_loopback_wqe_post_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 			return (EFAULT);
 		}
@@ -1265,16 +1159,11 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 				if (ddi_copyout(lstate.tls_rx.tlc_buf,
 				    lb.tlb_fail_buf, lstate.tls_tx.tlc_buf_sz,
 				    mode) != 0) {
-					TNF_PROBE_0(
-					    tavor_ioctl_loopback_xfer_co_fail,
-					    TAVOR_TNF_ERROR, "");
 					TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 					return (EFAULT);
 				}
 				(void) tavor_loopback_copyout(&lb, arg, mode);
 				tavor_loopback_free_state(&lstate);
-				TNF_PROBE_0(tavor_ioctl_loopback_xfer_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 				return (EFAULT);
 			} else if (ret == IBT_CQ_EMPTY) {
@@ -1291,16 +1180,11 @@ tavor_ioctl_loopback(tavor_state_t *state, intptr_t arg, int mode)
 				if (ddi_copyout(lstate.tls_rx.tlc_buf,
 				    lb.tlb_fail_buf, lstate.tls_tx.tlc_buf_sz,
 				    mode) != 0) {
-					TNF_PROBE_0(
-					    tavor_ioctl_loopback_bcmp_co_fail,
-					    TAVOR_TNF_ERROR, "");
 					TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 					return (EFAULT);
 				}
 				(void) tavor_loopback_copyout(&lb, arg, mode);
 				tavor_loopback_free_state(&lstate);
-				TNF_PROBE_0(tavor_ioctl_loopback_bcmp_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_TNF_EXIT(tavor_ioctl_loopback);
 				return (EFAULT);
 			}
@@ -1339,8 +1223,6 @@ tavor_ioctl_ddr_read(tavor_state_t *state, intptr_t arg, int mode)
 	 * Access to Tavor VTS ioctls is not allowed in "maintenance mode".
 	 */
 	if (state->ts_operational_mode == TAVOR_MAINTENANCE_MODE) {
-		TNF_PROBE_0(tavor_ioctl_ddr_read_maintenance_mode_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_ddr_read);
 		return (EFAULT);
 	}
@@ -1348,8 +1230,6 @@ tavor_ioctl_ddr_read(tavor_state_t *state, intptr_t arg, int mode)
 	/* copyin the user struct to kernel */
 	if (ddi_copyin((void *)arg, &rdreg, sizeof (tavor_ddr_read_ioctl_t),
 	    mode) != 0) {
-		TNF_PROBE_0(tavor_ioctl_ddr_read_copyin_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_ddr_read);
 		return (EFAULT);
 	}
@@ -1358,7 +1238,6 @@ tavor_ioctl_ddr_read(tavor_state_t *state, intptr_t arg, int mode)
 	 * Check ioctl revision
 	 */
 	if (rdreg.tdr_revision != TAVOR_VTS_IOCTL_REVISION) {
-		TNF_PROBE_0(tavor_ioctl_ddr_read_bad_rev, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_ddr_read);
 		return (EINVAL);
 	}
@@ -1368,8 +1247,6 @@ tavor_ioctl_ddr_read(tavor_state_t *state, intptr_t arg, int mode)
 	 */
 	ddr_size = (state->ts_ddr.ddr_endaddr - state->ts_ddr.ddr_baseaddr + 1);
 	if ((uint64_t)rdreg.tdr_offset >= ddr_size) {
-		TNF_PROBE_0(tavor_ioctl_ddr_read_bad_offset,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_ddr_read);
 		return (EINVAL);
 	}
@@ -1386,8 +1263,6 @@ tavor_ioctl_ddr_read(tavor_state_t *state, intptr_t arg, int mode)
 	/* Copy ioctl results back to user struct */
 	if (ddi_copyout(&rdreg, (void *)arg, sizeof (tavor_ddr_read_ioctl_t),
 	    mode) != 0) {
-		TNF_PROBE_0(tavor_ioctl_ddr_read_copyout_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_ddr_read);
 		return (EFAULT);
 	}
@@ -1416,8 +1291,6 @@ tavor_ioctl_reg_read(tavor_state_t *state, intptr_t arg, int mode)
 	 * This is primarily because the device may not have BARs to access
 	 */
 	if (state->ts_operational_mode == TAVOR_MAINTENANCE_MODE) {
-		TNF_PROBE_0(tavor_ioctl_reg_read_maintence_mode_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_reg_read);
 		return (EFAULT);
 	}
@@ -1426,8 +1299,6 @@ tavor_ioctl_reg_read(tavor_state_t *state, intptr_t arg, int mode)
 	status = ddi_copyin((void *)arg, &rdreg, sizeof (tavor_reg_ioctl_t),
 	    mode);
 	if (status != 0) {
-		TNF_PROBE_0(tavor_ioctl_reg_read_copyin_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_reg_read);
 		return (EFAULT);
 	}
@@ -1447,8 +1318,6 @@ tavor_ioctl_reg_read(tavor_state_t *state, intptr_t arg, int mode)
 		break;
 
 	default:
-		TNF_PROBE_0(tavor_ioctl_reg_read_invregset_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_reg_read);
 		return (EFAULT);
 	}
@@ -1463,8 +1332,6 @@ tavor_ioctl_reg_read(tavor_state_t *state, intptr_t arg, int mode)
 	status = ddi_copyout(&rdreg, (void *)arg, sizeof (tavor_reg_ioctl_t),
 	    mode);
 	if (status != 0) {
-		TNF_PROBE_0(tavor_ioctl_reg_read_copyout_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_reg_read);
 		return (EFAULT);
 	}
@@ -1492,8 +1359,6 @@ tavor_ioctl_reg_write(tavor_state_t *state, intptr_t arg, int mode)
 	 * This is primarily because the device may not have BARs to access
 	 */
 	if (state->ts_operational_mode == TAVOR_MAINTENANCE_MODE) {
-		TNF_PROBE_0(tavor_ioctl_reg_write_maintence_mode_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_reg_write);
 		return (EFAULT);
 	}
@@ -1502,8 +1367,6 @@ tavor_ioctl_reg_write(tavor_state_t *state, intptr_t arg, int mode)
 	status = ddi_copyin((void *)arg, &wrreg, sizeof (tavor_reg_ioctl_t),
 	    mode);
 	if (status != 0) {
-		TNF_PROBE_0(tavor_ioctl_reg_write_copyin_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_reg_write);
 		return (EFAULT);
 	}
@@ -1523,8 +1386,6 @@ tavor_ioctl_reg_write(tavor_state_t *state, intptr_t arg, int mode)
 		break;
 
 	default:
-		TNF_PROBE_0(tavor_ioctl_reg_write_invregset_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ioctl_reg_write);
 		return (EFAULT);
 	}
@@ -2403,8 +2264,6 @@ tavor_loopback_init(tavor_state_t *state, tavor_loopback_state_t *lstate)
 	    &lstate->tls_pd_hdl, TAVOR_NOSLEEP);
 	if (lstate->tls_status != IBT_SUCCESS) {
 		lstate->tls_err = TAVOR_LOOPBACK_PROT_DOMAIN_ALLOC_FAIL;
-		TNF_PROBE_0(tavor_ioctl_loopback_alloc_pd_fail,
-		    TAVOR_TNF_ERROR, "");
 		return (EFAULT);
 	}
 
@@ -2614,16 +2473,12 @@ tavor_loopback_copyout(tavor_loopback_ioctl_t *lb, intptr_t arg, int mode)
 
 		if (ddi_copyout(&lb32, (void *)arg,
 		    sizeof (tavor_loopback_ioctl32_t), mode) != 0) {
-			TNF_PROBE_0(tavor_ioctl_loopback_copyout_fail,
-			    TAVOR_TNF_ERROR, "");
 			return (EFAULT);
 		}
 	} else
 #endif /* _MULTI_DATAMODEL */
 	if (ddi_copyout(lb, (void *)arg, sizeof (tavor_loopback_ioctl_t),
 	    mode) != 0) {
-		TNF_PROBE_0(tavor_ioctl_loopback_copyout_fail,
-		    TAVOR_TNF_ERROR, "");
 		return (EFAULT);
 	}
 	return (0);

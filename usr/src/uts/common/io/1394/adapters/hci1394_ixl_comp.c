@@ -121,8 +121,6 @@ hci1394_compile_ixl(hci1394_state_t *soft_statep, hci1394_iso_ctxt_t *ctxtp,
 
 	ASSERT(soft_statep != NULL);
 	ASSERT(ctxtp != NULL);
-	TNF_PROBE_0_DEBUG(hci1394_compile_ixl_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 
 	/* Initialize compiler working variables */
 	hci1394_compile_ixl_init(&wv, soft_statep, ctxtp, ixlp);
@@ -151,12 +149,8 @@ hci1394_compile_ixl(hci1394_state_t *soft_statep, hci1394_iso_ctxt_t *ctxtp,
 
 	*resultp = wv.dma_bld_error;
 	if (*resultp != 0) {
-		TNF_PROBE_0_DEBUG(hci1394_compile_ixl_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (DDI_FAILURE);
 	} else {
-		TNF_PROBE_0_DEBUG(hci1394_compile_ixl_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (DDI_SUCCESS);
 	}
 }
@@ -171,9 +165,6 @@ hci1394_compile_ixl_init(hci1394_comp_ixl_vars_t *wvp,
     hci1394_state_t *soft_statep, hci1394_iso_ctxt_t *ctxtp,
     ixl1394_command_t *ixlp)
 {
-	TNF_PROBE_0_DEBUG(hci1394_compile_ixl_init_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/* initialize common recv/xmit compile values */
 	wvp->soft_statep = soft_statep;
 	wvp->ctxtp = ctxtp;
@@ -232,10 +223,6 @@ hci1394_compile_ixl_init(hci1394_comp_ixl_vars_t *wvp,
 	wvp->storevalue_data = 0;
 	wvp->xmit_pkthdr1 = 0;
 	wvp->xmit_pkthdr2 = 0;
-	/* END XMIT ONLY SECTION */
-
-	TNF_PROBE_0_DEBUG(hci1394_compile_ixl_init_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -251,15 +238,8 @@ hci1394_compile_ixl_endup(hci1394_comp_ixl_vars_t *wvp)
 	hci1394_idma_desc_mem_t *dma_nextp;
 	int err;
 
-	TNF_PROBE_0_DEBUG(hci1394_compile_ixl_endup_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/* error if no descriptor blocks found in ixl & created in dma memory */
 	if ((wvp->dma_bld_error == 0) && (wvp->ixl_xfer_st_cnt == 0)) {
-		TNF_PROBE_1(hci1394_compile_ixl_endup_nodata_error,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_ENO_DATA_PKTS: prog has no data packets");
-
 		wvp->dma_bld_error = IXL1394_ENO_DATA_PKTS;
 	}
 
@@ -270,10 +250,6 @@ hci1394_compile_ixl_endup(hci1394_comp_ixl_vars_t *wvp)
 
 		/* error if a label<->jump loop, or no xfer */
 		if ((err == DDI_FAILURE) || (ixl_exec_stp == NULL)) {
-			TNF_PROBE_1(hci1394_compile_ixl_endup_error,
-			    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-			    "IXL1394_ENO_DATA_PKTS: loop or no xfer detected");
-
 			wvp->dma_bld_error = IXL1394_ENO_DATA_PKTS;
 		}
 	}
@@ -287,9 +263,6 @@ hci1394_compile_ixl_endup(hci1394_comp_ixl_vars_t *wvp)
 		if (err != DDI_SUCCESS) {
 			wvp->dma_bld_error = IXL1394_EINTERNAL_ERROR;
 
-			TNF_PROBE_1(hci1394_compile_ixl_endup_error,
-			    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-			    "IXL1394_INTERNAL_ERROR: dma_sync() failed");
 			break;
 		}
 
@@ -306,8 +279,6 @@ hci1394_compile_ixl_endup(hci1394_comp_ixl_vars_t *wvp)
 		wvp->ctxtp->dma_firstp = wvp->dma_firstp;
 		hci1394_ixl_cleanup(wvp->soft_statep, wvp->ctxtp);
 
-		TNF_PROBE_0_DEBUG(hci1394_compile_ixl_endup_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return;
 	}
 
@@ -328,10 +299,6 @@ hci1394_compile_ixl_endup(hci1394_comp_ixl_vars_t *wvp)
 	wvp->ctxtp->dma_last_time = 0;
 	wvp->ctxtp->ixl_exec_depth = 0;
 	wvp->ctxtp->ixl_execp = NULL;
-
-	/* compile done */
-	TNF_PROBE_0_DEBUG(hci1394_compile_ixl_endup_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -354,9 +321,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 	uint32_t pktsize;
 	uint32_t pktcnt;
 
-	TNF_PROBE_0_DEBUG(hci1394_parse_ixl_enter, HCI1394_TNF_HAL_STACK_ISOCH,
-	    "");
-
 	/* follow ixl links until reach end or find error */
 	while ((ixlnextp != NULL) && (wvp->dma_bld_error == 0)) {
 
@@ -378,21 +342,8 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 
 			/* check if command op failed because it was invalid */
 			if (hci1394_is_opcode_valid(ixlopcode) != B_TRUE) {
-				TNF_PROBE_3(hci1394_parse_ixl_bad_opcode_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_BAD_IXL_OPCODE",
-				    tnf_opaque, ixl_commandp, ixlcurp,
-				    tnf_opaque, ixl_opcode, ixlopcode);
-
 				wvp->dma_bld_error = IXL1394_EBAD_IXL_OPCODE;
 			} else {
-				TNF_PROBE_3(hci1394_parse_ixl_mode_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EWRONG_XR_CMD_MODE: "
-				    "invalid ixlop in mode", tnf_uint, io_mode,
-				    wvp->ixl_io_mode, tnf_opaque, ixl_opcode,
-				    ixlopcode);
-
 				wvp->dma_bld_error = IXL1394_EWRONG_XR_CMD_MODE;
 			}
 			continue;
@@ -458,13 +409,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 				if ((pktcnt == 0) || ((pktsize * pktcnt) !=
 				    cur_xfer_buf_ixlp->size)) {
 
-					TNF_PROBE_3(hci1394_parse_ixl_rat_error,
-					    HCI1394_TNF_HAL_ERROR_ISOCH, "",
-					    tnf_string, errmsg,
-					    "IXL1394_EPKTSIZE_RATIO", tnf_int,
-					    buf_size, cur_xfer_buf_ixlp->size,
-					    tnf_int, pkt_size, pktsize);
-
 					wvp->dma_bld_error =
 					    IXL1394_EPKTSIZE_RATIO;
 					continue;
@@ -493,11 +437,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 
 			/* error if in buffer fill mode */
 			if ((wvp->ixl_io_mode & HCI1394_ISO_CTXT_BFFILL) != 0) {
-				TNF_PROBE_1(hci1394_parse_ixl_mode_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EWRONG_XR_CMD_MODE: "
-				    "RECV_PKT_ST used in BFFILL mode");
-
 				wvp->dma_bld_error = IXL1394_EWRONG_XR_CMD_MODE;
 				continue;
 			}
@@ -529,22 +468,12 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 
 			/* error if in buffer fill mode */
 			if ((wvp->ixl_io_mode & HCI1394_ISO_CTXT_BFFILL) != 0) {
-				TNF_PROBE_1(hci1394_parse_ixl_mode_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EWRONG_XR_CMD_MODE: "
-				    "RECV_PKT_ST used in BFFILL mode");
-
 				wvp->dma_bld_error = IXL1394_EWRONG_XR_CMD_MODE;
 				continue;
 			}
 
 			/* error if xfer_state not xfer pkt */
 			if (wvp->xfer_state != XFER_PKT) {
-				TNF_PROBE_1(hci1394_parse_ixl_misplacercv_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EMISPLACED_RECV: "
-				    "RECV_PKT without RECV_PKT_ST");
-
 				wvp->dma_bld_error = IXL1394_EMISPLACED_RECV;
 				continue;
 			}
@@ -613,12 +542,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 			if ((pktcnt == 0) || ((pktsize * pktcnt) !=
 			    cur_xfer_buf_ixlp->size)) {
 
-				TNF_PROBE_3(hci1394_parse_ixl_rat_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EPKTSIZE_RATIO", tnf_int,
-				    buf_size, cur_xfer_buf_ixlp->size, tnf_int,
-				    pkt_size, pktsize);
-
 				wvp->dma_bld_error = IXL1394_EPKTSIZE_RATIO;
 				continue;
 			}
@@ -675,11 +598,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 			 * else error
 			 */
 			if (cur_xfer_pkt_ixlp->size < 4) {
-				TNF_PROBE_2(hci1394_parse_ixl_hdr_missing_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EPKT_HDR_MISSING", tnf_int,
-				    pkt_size, cur_xfer_pkt_ixlp->size);
-
 				wvp->dma_bld_error = IXL1394_EPKT_HDR_MISSING;
 				continue;
 			}
@@ -706,11 +624,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 
 			/* error if xfer_state not xfer pkt */
 			if (wvp->xfer_state != XFER_PKT) {
-				TNF_PROBE_1(hci1394_parse_ixl_misplacesnd_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EMISPLACED_SEND: SEND_PKT "
-				    "without SEND_PKT_ST");
-
 				wvp->dma_bld_error = IXL1394_EMISPLACED_SEND;
 				continue;
 			}
@@ -779,13 +692,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 			if ((cur_jump_ixlp->label != NULL) &&
 			    (cur_jump_ixlp->label->ixl_opcode !=
 			    IXL1394_OP_LABEL)) {
-				TNF_PROBE_3(hci1394_parse_ixl_jumplabel_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EJUMP_NOT_TO_LABEL",
-				    tnf_opaque, jumpixl_commandp, ixlcurp,
-				    tnf_opaque, jumpto_ixl,
-				    cur_jump_ixlp->label);
-
 				wvp->dma_bld_error = IXL1394_EJUMP_NOT_TO_LABEL;
 				continue;
 			}
@@ -820,12 +726,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 			 * this xfer
 			 */
 			if (wvp->ixl_setskipmode_cmdp != NULL) {
-				TNF_PROBE_2(hci1394_parse_ixl_dup_set_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EDUPLICATE_SET_CMD:"
-				    " duplicate set skipmode", tnf_opaque,
-				    ixl_commandp, ixlcurp);
-
 				wvp->dma_bld_error = IXL1394_EDUPLICATE_SET_CMD;
 				continue;
 			}
@@ -843,12 +743,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 			    (wvp->ixl_setskipmode_cmdp->skipmode !=
 				IXL1394_SKIP_TO_LABEL)) {
 
-				TNF_PROBE_3(hci1394_parse_ixl_dup_set_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL EBAD_SKIPMODE", tnf_opaque,
-				    ixl_commandp, ixlcurp, tnf_int, skip,
-				    wvp->ixl_setskipmode_cmdp->skipmode);
-
 				wvp->dma_bld_error = IXL1394_EBAD_SKIPMODE;
 				continue;
 			}
@@ -862,13 +756,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 			    ((wvp->ixl_setskipmode_cmdp->label == NULL) ||
 			    (wvp->ixl_setskipmode_cmdp->label->ixl_opcode !=
 				IXL1394_OP_LABEL))) {
-
-				TNF_PROBE_3(hci1394_parse_ixl_jump_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EJUMP_NOT_TO_LABEL",
-				    tnf_opaque, jumpixl_commandp, ixlcurp,
-				    tnf_opaque, jumpto_ixl,
-				    wvp->ixl_setskipmode_cmdp->label);
 
 				wvp->dma_bld_error = IXL1394_EJUMP_NOT_TO_LABEL;
 				continue;
@@ -889,12 +776,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 			 * for this xfer
 			 */
 			if (wvp->ixl_settagsync_cmdp != NULL) {
-				TNF_PROBE_2(hci1394_parse_ixl_dup_set_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_EDUPLICATE_SET_CMD:"
-				    " duplicate set tagsync", tnf_opaque,
-				    ixl_commandp, ixlcurp);
-
 				wvp->dma_bld_error = IXL1394_EDUPLICATE_SET_CMD;
 				continue;
 			}
@@ -922,11 +803,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 			break;
 
 		default:
-			/* error - unknown/unimplemented ixl command */
-			TNF_PROBE_3(hci1394_parse_ixl_bad_opcode_error,
-			    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-			    "IXL1394_BAD_IXL_OPCODE", tnf_opaque, ixl_commandp,
-			    ixlcurp, tnf_opaque, ixl_opcode, ixlopcode);
 
 			wvp->dma_bld_error = IXL1394_EBAD_IXL_OPCODE;
 			continue;
@@ -938,9 +814,6 @@ hci1394_parse_ixl(hci1394_comp_ixl_vars_t *wvp, ixl1394_command_t *ixlp)
 	if (wvp->dma_bld_error == 0) {
 		hci1394_finalize_cur_xfer_desc(wvp);
 	}
-
-	TNF_PROBE_0_DEBUG(hci1394_parse_ixl_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -975,9 +848,6 @@ hci1394_finalize_all_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 	int		ii;
 	int		err;
 
-	TNF_PROBE_0_DEBUG(hci1394_finalize_all_xfer_desc_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/*
 	 * If xmit mode and if default skipmode is skip to label -
 	 * follow exec path starting at default skipmode label until
@@ -990,14 +860,6 @@ hci1394_finalize_all_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 		err = hci1394_ixl_find_next_exec_xfer(wvp->default_skiplabelp,
 		    NULL, &wvp->default_skipxferp);
 		if (err == DDI_FAILURE) {
-			TNF_PROBE_2(hci1394_finalize_all_xfer_desc_error,
-			    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-			    "IXL1394_ENO_DATA_PKTS: label<->jump loop detected "
-			    "for skiplabel default w/no xfers", tnf_opaque,
-			    skipixl_cmdp, wvp->default_skiplabelp);
-			TNF_PROBE_0_DEBUG(hci1394_finalize_all_xfer_desc_exit,
-			    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 			wvp->dma_bld_error = IXL1394_ENO_DATA_PKTS;
 			return;
 		}
@@ -1061,11 +923,6 @@ hci1394_finalize_all_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 		if (err == DDI_FAILURE) {
 			wvp->dma_bld_error = IXL1394_ENO_DATA_PKTS;
 
-			TNF_PROBE_2(hci1394_finalize_all_xfer_desc_error,
-			    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-			    "IXL1394_ENO_DATA_PKTS: label<->jump loop detected "
-			    "w/no xfers", tnf_opaque, ixl_cmdp,
-			    ixlcurp->next_ixlp);
 			continue;
 		}
 
@@ -1228,9 +1085,6 @@ hci1394_finalize_all_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 			} /* for */
 		} /* if */
 	} /* while */
-
-	TNF_PROBE_0_DEBUG(hci1394_finalize_all_xfer_desc_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -1245,9 +1099,6 @@ hci1394_finalize_cur_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 {
 	uint16_t ixlopcode;
 	uint16_t ixlopraw;
-
-	TNF_PROBE_0_DEBUG(hci1394_finalize_cur_xfer_desc_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 
 	/* extract opcode from current IXL cmd (if any) */
 	if (wvp->ixl_cur_cmdp != NULL) {
@@ -1277,16 +1128,6 @@ hci1394_finalize_cur_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 
 				wvp->dma_bld_error = IXL1394_EUNAPPLIED_SET_CMD;
 
-				TNF_PROBE_2(
-				    hci1394_finalize_cur_xfer_desc_set_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_UNAPPLIED_SET_CMD: "
-				    "orphaned set (no associated packet)",
-				    tnf_opaque, ixl_commandp,
-				    wvp->ixl_cur_cmdp);
-				TNF_PROBE_0_DEBUG(
-				    hci1394_finalize_cur_xfer_desc_exit,
-				    HCI1394_TNF_HAL_STACK_ISOCH, "");
 				return;
 			}
 		}
@@ -1296,17 +1137,8 @@ hci1394_finalize_cur_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 
 			wvp->dma_bld_error = IXL1394_EUPDATE_DISALLOWED;
 
-			TNF_PROBE_2(hci1394_finalize_cur_xfer_desc_upd_error,
-			    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-			    "IXL1394_EUPDATE_DISALLOWED: jumpU w/out pkt",
-			    tnf_opaque, ixl_commandp, wvp->ixl_cur_cmdp);
-			TNF_PROBE_0_DEBUG(hci1394_finalize_cur_xfer_desc_exit,
-			    HCI1394_TNF_HAL_STACK_ISOCH, "");
 			return;
 		}
-
-		TNF_PROBE_0_DEBUG(hci1394_finalize_cur_xfer_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 
 		/* no error, no xfer */
 		return;
@@ -1354,10 +1186,6 @@ hci1394_finalize_cur_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 			0)) {
 
 			if (hci1394_flush_hci_cache(wvp) != DDI_SUCCESS) {
-				TNF_PROBE_0_DEBUG(
-				    hci1394_finalize_cur_xfer_desc_exit,
-				    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 				/* wvp->dma_bld_error is set by above call */
 				return;
 			}
@@ -1397,18 +1225,11 @@ hci1394_finalize_cur_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 
 	default:
 		/* internal compiler error */
-		TNF_PROBE_2(hci1394_finalize_cur_xfer_desc_internal_error,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_INTERNAL_ERROR: invalid state", tnf_opaque,
-		    ixl_commandp, wvp->ixl_cur_cmdp);
 		wvp->dma_bld_error = IXL1394_EINTERNAL_ERROR;
 	}
 
 	/* return if error */
 	if (wvp->dma_bld_error != 0) {
-		TNF_PROBE_0_DEBUG(hci1394_finalize_cur_xfer_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 		/* wvp->dma_bld_error is set by above call */
 		return;
 	}
@@ -1460,9 +1281,6 @@ hci1394_finalize_cur_xfer_desc(hci1394_comp_ixl_vars_t *wvp)
 
 	/* set no xmit descriptor block being built */
 	wvp->xfer_state = XFER_NONE;
-
-	TNF_PROBE_0_DEBUG(hci1394_finalize_cur_xfer_desc_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -1479,9 +1297,6 @@ hci1394_bld_recv_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 	uint32_t		ii;
 	hci1394_desc_t		*wv_descp;	/* shorthand to local descrpt */
 
-	TNF_PROBE_0_DEBUG(hci1394_bld_recv_pkt_desc_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/*
 	 * is error if number of descriptors to be built exceeds maximum
 	 * descriptors allowed in a descriptor block.
@@ -1490,13 +1305,6 @@ hci1394_bld_recv_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 
 		wvp->dma_bld_error = IXL1394_EFRAGMENT_OFLO;
 
-		TNF_PROBE_3(hci1394_bld_recv_pkt_desc_fragment_oflo_error,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EFRAGMENT_OFLO", tnf_opaque, ixl_commandp,
-		    wvp->ixl_cur_xfer_stp, tnf_int, frag_count,
-		    wvp->descriptors + wvp->xfer_bufcnt);
-		TNF_PROBE_0_DEBUG(hci1394_bld_recv_pkt_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return;
 	}
 
@@ -1505,12 +1313,6 @@ hci1394_bld_recv_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 
 		wvp->dma_bld_error = IXL1394_EMEM_ALLOC_FAIL;
 
-		TNF_PROBE_2(hci1394_bld_recv_pkt_desc_mem_alloc_fail,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EMEM_ALLOC_FAIL: for xfer_ctl", tnf_opaque,
-		    ixl_commandp, wvp->ixl_cur_xfer_stp);
-		TNF_PROBE_0_DEBUG(hci1394_bld_recv_pkt_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return;
 	}
 
@@ -1552,9 +1354,6 @@ hci1394_bld_recv_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 	/* allocate and copy descriptor block to dma memory */
 	if (hci1394_bld_dma_mem_desc_blk(wvp, &dma_descp, &dma_desc_bound) !=
 	    DDI_SUCCESS) {
-		TNF_PROBE_0_DEBUG(hci1394_bld_recv_pkt_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 		/* wvp->dma_bld_error is set by above function call */
 		return;
 	}
@@ -1567,9 +1366,6 @@ hci1394_bld_recv_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 	xctlp->dma[0].dma_descp =
 	    dma_descp + (wvp->xfer_bufcnt - 1) * sizeof (hci1394_desc_t);
 	xctlp->dma[0].dma_buf	= &wvp->dma_currentp->mem;
-
-	TNF_PROBE_0_DEBUG(hci1394_bld_recv_pkt_desc_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -1590,9 +1386,6 @@ hci1394_bld_recv_buf_ppb_desc(hci1394_comp_ixl_vars_t *wvp)
 	uint32_t	ii;
 	hci1394_desc_t	*wv_descp;	/* shorthand to local descriptor */
 
-	TNF_PROBE_0_DEBUG(hci1394_bld_recv_buf_ppb_desc_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	local_ixl_cur_xfer_stp = (ixl1394_xfer_buf_t *)wvp->ixl_cur_xfer_stp;
 
 	/* determine number and size of pkt desc blocks to create */
@@ -1604,12 +1397,6 @@ hci1394_bld_recv_buf_ppb_desc(hci1394_comp_ixl_vars_t *wvp)
 
 		wvp->dma_bld_error = IXL1394_EMEM_ALLOC_FAIL;
 
-		TNF_PROBE_2(hci1394_bld_recv_buf_ppb_desc_mem_alloc_fail,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EMEM_ALLOC_FAIL: for xfer_ctl", tnf_opaque,
-		    ixl_commandp, wvp->ixl_cur_xfer_stp);
-		TNF_PROBE_0_DEBUG(hci1394_bld_recv_buf_ppb_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return;
 	}
 
@@ -1641,12 +1428,6 @@ hci1394_bld_recv_buf_ppb_desc(hci1394_comp_ixl_vars_t *wvp)
 	    DESC_ST_RESCOUNT_MASK;
 	wvp->descriptors++;
 
-	/* useful debug trace info - IXL command, and packet count and size */
-	TNF_PROBE_3_DEBUG(hci1394_bld_recv_buf_ppb_desc_recv_buf_info,
-	    HCI1394_TNF_HAL_INFO_ISOCH, "", tnf_opaque, ixl_commandp,
-	    wvp->ixl_cur_xfer_stp, tnf_int, pkt_count, pktcnt, tnf_int,
-	    pkt_size, pktsize);
-
 	/*
 	 * generate as many contiguous descriptor blocks as there are
 	 * recv pkts
@@ -1658,14 +1439,6 @@ hci1394_bld_recv_buf_ppb_desc(hci1394_comp_ixl_vars_t *wvp)
 			/* check and perform any required hci cache flush */
 			if (hci1394_flush_end_desc_check(wvp, ii) !=
 			    DDI_SUCCESS) {
-				TNF_PROBE_1_DEBUG(
-				    hci1394_bld_recv_buf_ppb_desc_fl_error,
-				    HCI1394_TNF_HAL_INFO_ISOCH, "", tnf_int,
-				    for_ii, ii);
-				TNF_PROBE_0_DEBUG(
-				    hci1394_bld_recv_buf_ppb_desc_exit,
-				    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 				/* wvp->dma_bld_error is set by above call */
 				return;
 			}
@@ -1674,9 +1447,6 @@ hci1394_bld_recv_buf_ppb_desc(hci1394_comp_ixl_vars_t *wvp)
 		/* allocate and copy descriptor block to dma memory */
 		if (hci1394_bld_dma_mem_desc_blk(wvp, &dma_descp,
 		    &dma_desc_bound) != DDI_SUCCESS) {
-
-			TNF_PROBE_0_DEBUG(hci1394_bld_recv_buf_ppb_desc_exit,
-			    HCI1394_TNF_HAL_STACK_ISOCH, "");
 
 			/* wvp->dma_bld_error is set by above call */
 			return;
@@ -1694,8 +1464,6 @@ hci1394_bld_recv_buf_ppb_desc(hci1394_comp_ixl_vars_t *wvp)
 		wvp->descriptor_block[wvp->descriptors - 1].data_addr +=
 		    pktsize;
 	}
-	TNF_PROBE_0_DEBUG(hci1394_bld_recv_buf_ppb_desc_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -1712,9 +1480,6 @@ hci1394_bld_recv_buf_fill_desc(hci1394_comp_ixl_vars_t *wvp)
 	uint32_t		wait_for_sync;
 	ixl1394_xfer_buf_t	*local_ixl_cur_xfer_stp;
 
-	TNF_PROBE_0_DEBUG(hci1394_bld_recv_buf_fill_desc_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	local_ixl_cur_xfer_stp = (ixl1394_xfer_buf_t *)wvp->ixl_cur_xfer_stp;
 
 
@@ -1723,12 +1488,6 @@ hci1394_bld_recv_buf_fill_desc(hci1394_comp_ixl_vars_t *wvp)
 
 		wvp->dma_bld_error = IXL1394_EMEM_ALLOC_FAIL;
 
-		TNF_PROBE_2(hci1394_bld_recv_buf_fill_desc_mem_alloc_fail,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EMEM_ALLOC_FAIL: xfer_ctl", tnf_opaque,
-		    ixl_commandp, wvp->ixl_cur_xfer_stp);
-		TNF_PROBE_0_DEBUG(hci1394_bld_recv_buf_fill_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return;
 	}
 
@@ -1766,9 +1525,6 @@ hci1394_bld_recv_buf_fill_desc(hci1394_comp_ixl_vars_t *wvp)
 
 	/* check and perform any required hci cache flush */
 	if (hci1394_flush_end_desc_check(wvp, 0) != DDI_SUCCESS) {
-		TNF_PROBE_0_DEBUG(hci1394_bld_recv_buf_fill_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 		/* wvp->dma_bld_error is set by above call */
 		return;
 	}
@@ -1776,9 +1532,6 @@ hci1394_bld_recv_buf_fill_desc(hci1394_comp_ixl_vars_t *wvp)
 	/* allocate and copy descriptor block to dma memory */
 	if (hci1394_bld_dma_mem_desc_blk(wvp, &dma_descp, &dma_desc_bound)
 	    != DDI_SUCCESS) {
-		TNF_PROBE_0_DEBUG(hci1394_bld_recv_buf_fill_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 		/* wvp->dma_bld_error is set by above call */
 		return;
 	}
@@ -1790,9 +1543,6 @@ hci1394_bld_recv_buf_fill_desc(hci1394_comp_ixl_vars_t *wvp)
 	xctlp->dma[0].dma_bound = dma_desc_bound;
 	xctlp->dma[0].dma_descp = dma_descp;
 	xctlp->dma[0].dma_buf	= &wvp->dma_currentp->mem;
-
-	TNF_PROBE_0_DEBUG(hci1394_bld_recv_buf_fill_desc_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -1809,9 +1559,6 @@ hci1394_bld_xmit_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 	uint32_t	dma_desc_bound;
 	uint32_t	ii;
 
-	TNF_PROBE_0_DEBUG(hci1394_bld_xmit_pkt_desc_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/*
 	 * is error if number of descriptors to be built exceeds maximum
 	 * descriptors allowed in a descriptor block. Add 2 for the overhead
@@ -1821,13 +1568,6 @@ hci1394_bld_xmit_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 
 		wvp->dma_bld_error = IXL1394_EFRAGMENT_OFLO;
 
-		TNF_PROBE_3(hci1394_bld_xmit_pkt_desc_fragment_oflo_error,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EFRAGMENT_OFLO", tnf_opaque, ixl_commandp,
-		    wvp->ixl_cur_xfer_stp, tnf_int, frag_count,
-		    wvp->descriptors + 2 + wvp->xfer_bufcnt);
-		TNF_PROBE_0_DEBUG(hci1394_bld_xmit_pkt_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return;
 	}
 
@@ -1836,13 +1576,6 @@ hci1394_bld_xmit_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 
 		wvp->dma_bld_error = IXL1394_EPKTSIZE_MAX_OFLO;
 
-		TNF_PROBE_3(hci1394_bld_xmit_pkt_desc_packet_oflo_error,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EPKTSIZE_MAX_OFLO", tnf_opaque, ixl_commandp,
-		    wvp->ixl_cur_xfer_stp, tnf_int, total_pktlen,
-		    wvp->xfer_pktlen);
-		TNF_PROBE_0_DEBUG(hci1394_bld_xmit_pkt_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return;
 	}
 
@@ -1851,12 +1584,6 @@ hci1394_bld_xmit_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 
 		wvp->dma_bld_error = IXL1394_EMEM_ALLOC_FAIL;
 
-		TNF_PROBE_2(hci1394_bld_xmit_pkt_desc_mem_alloc_fail,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EMEM_ALLOC_FAIL: for xfer_ctl", tnf_opaque,
-		    ixl_commandp, wvp->ixl_cur_cmdp);
-		TNF_PROBE_0_DEBUG(hci1394_bld_xmit_pkt_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return;
 	}
 
@@ -1909,9 +1636,6 @@ hci1394_bld_xmit_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 	/* allocate and copy descriptor block to dma memory */
 	if (hci1394_bld_dma_mem_desc_blk(wvp, &dma_descp, &dma_desc_bound) !=
 	    DDI_SUCCESS) {
-		TNF_PROBE_0_DEBUG(hci1394_bld_xmit_pkt_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 		/* wvp->dma_bld_error is set by above call */
 		return;
 	}
@@ -1924,9 +1648,6 @@ hci1394_bld_xmit_pkt_desc(hci1394_comp_ixl_vars_t *wvp)
 	xctlp->dma[0].dma_descp =
 	    dma_descp + (wvp->xfer_bufcnt + 1) * sizeof (hci1394_desc_t);
 	xctlp->dma[0].dma_buf	= &wvp->dma_currentp->mem;
-
-	TNF_PROBE_0_DEBUG(hci1394_bld_xmit_pkt_desc_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -1946,9 +1667,6 @@ hci1394_bld_xmit_buf_desc(hci1394_comp_ixl_vars_t *wvp)
 	uint32_t	pktcnt;
 	uint32_t	ii;
 
-	TNF_PROBE_0_DEBUG(hci1394_bld_xmit_buf_desc_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	local_ixl_cur_xfer_stp = (ixl1394_xfer_buf_t *)wvp->ixl_cur_xfer_stp;
 
 	/* determine number and size of pkt desc blocks to create */
@@ -1960,12 +1678,6 @@ hci1394_bld_xmit_buf_desc(hci1394_comp_ixl_vars_t *wvp)
 
 		wvp->dma_bld_error = IXL1394_EMEM_ALLOC_FAIL;
 
-		TNF_PROBE_2(hci1394_bld_xmit_buf_desc_mem_alloc_fail,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EMEM_ALLOC_FAIL: for xfer_ctl", tnf_opaque,
-		    ixl_commandp, wvp->ixl_cur_cmdp);
-		TNF_PROBE_0_DEBUG(hci1394_bld_xmit_buf_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return;
 	}
 
@@ -2018,10 +1730,6 @@ hci1394_bld_xmit_buf_desc(hci1394_comp_ixl_vars_t *wvp)
 			/* check and perform any required hci cache flush */
 			if (hci1394_flush_end_desc_check(wvp, ii) !=
 			    DDI_SUCCESS) {
-				TNF_PROBE_0_DEBUG(
-				    hci1394_bld_xmit_buf_desc_exit,
-				    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 				/* wvp->dma_bld_error is set by above call */
 				return;
 			}
@@ -2030,9 +1738,6 @@ hci1394_bld_xmit_buf_desc(hci1394_comp_ixl_vars_t *wvp)
 		/* allocate and copy descriptor block to dma memory */
 		if (hci1394_bld_dma_mem_desc_blk(wvp, &dma_descp,
 		    &dma_desc_bound) != DDI_SUCCESS) {
-			TNF_PROBE_0_DEBUG(hci1394_bld_xmit_buf_desc_exit,
-			    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 			/* wvp->dma_bld_error is set by above call */
 			return;
 		}
@@ -2050,8 +1755,6 @@ hci1394_bld_xmit_buf_desc(hci1394_comp_ixl_vars_t *wvp)
 		wvp->descriptor_block[wvp->descriptors - 1].data_addr +=
 		    pktsize;
 	}
-	TNF_PROBE_0_DEBUG(hci1394_bld_xmit_buf_desc_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -2076,9 +1779,6 @@ hci1394_bld_xmit_hdronly_nopkt_desc(hci1394_comp_ixl_vars_t *wvp)
 	uint32_t	repcnt;
 	uint32_t	ii;
 
-	TNF_PROBE_0_DEBUG(hci1394_bld_xmit_hdronly_nopkt_desc_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/* determine # of instances of output hdronly/nopkt to generate */
 	repcnt = ((ixl1394_xmit_special_t *)wvp->ixl_cur_xfer_stp)->count;
 
@@ -2090,12 +1790,6 @@ hci1394_bld_xmit_hdronly_nopkt_desc(hci1394_comp_ixl_vars_t *wvp)
 
 		wvp->dma_bld_error = IXL1394_EMEM_ALLOC_FAIL;
 
-		TNF_PROBE_2(hci1394_bld_xmit_hdronly_nopkt_desc_mem_alloc_fail,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL EMEM_ALLOC_FAIL: for xfer_ctl", tnf_opaque,
-		    ixl_commandp, wvp->ixl_cur_cmdp);
-		TNF_PROBE_0_DEBUG(hci1394_bld_xmit_hdronly_nopkt_desc_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return;
 	}
 
@@ -2164,10 +1858,6 @@ hci1394_bld_xmit_hdronly_nopkt_desc(hci1394_comp_ixl_vars_t *wvp)
 			/* check and perform any required hci cache flush */
 			if (hci1394_flush_end_desc_check(wvp, ii) !=
 			    DDI_SUCCESS) {
-				TNF_PROBE_0_DEBUG(
-				    hci1394_bld_xmit_hdronly_nopkt_desc_exit,
-				    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 				/* wvp->dma_bld_error is set by above call */
 				return;
 			}
@@ -2176,10 +1866,6 @@ hci1394_bld_xmit_hdronly_nopkt_desc(hci1394_comp_ixl_vars_t *wvp)
 		/* allocate and copy descriptor block to dma memory */
 		if (hci1394_bld_dma_mem_desc_blk(wvp, &dma_descp,
 		    &dma_desc_bound) != DDI_SUCCESS) {
-			TNF_PROBE_0_DEBUG(
-			    hci1394_bld_xmit_hdronly_nopkt_desc_exit,
-			    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 			/* wvp->dma_bld_error is set by above call */
 			return;
 		}
@@ -2192,8 +1878,6 @@ hci1394_bld_xmit_hdronly_nopkt_desc(hci1394_comp_ixl_vars_t *wvp)
 		xctlp->dma[ii].dma_descp = dma_descp + sizeof (hci1394_desc_t);
 		xctlp->dma[ii].dma_buf	 = &wvp->dma_currentp->mem;
 	}
-	TNF_PROBE_0_DEBUG(hci1394_bld_xmit_hdronly_nopkt_desc_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -2206,19 +1890,11 @@ hci1394_bld_dma_mem_desc_blk(hci1394_comp_ixl_vars_t *wvp, caddr_t *dma_descpp,
 {
 	uint32_t	dma_bound;
 
-	TNF_PROBE_0_DEBUG(hci1394_bld_dma_mem_desc_blk_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/* set internal error if no descriptor blocks to build */
 	if (wvp->descriptors == 0) {
 
 		wvp->dma_bld_error = IXL1394_EINTERNAL_ERROR;
 
-		TNF_PROBE_1(hci1394_bld_dma_mem_desc_blk_error,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_INTERNAL_ERROR: no descriptors to build");
-		TNF_PROBE_0_DEBUG(hci1394_bld_dma_mem_desc_blk_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (DDI_FAILURE);
 	}
 
@@ -2230,11 +1906,6 @@ hci1394_bld_dma_mem_desc_blk(hci1394_comp_ixl_vars_t *wvp, caddr_t *dma_descpp,
 
 		wvp->dma_bld_error = IXL1394_EMEM_ALLOC_FAIL;
 
-		TNF_PROBE_1(hci1394_bld_dma_mem_desc_blk_fail,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EMEM_ALLOC_FAIL: for descriptors");
-		TNF_PROBE_0_DEBUG(hci1394_bld_dma_mem_desc_blk_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (DDI_FAILURE);
 	}
 #ifdef _KERNEL
@@ -2252,9 +1923,6 @@ hci1394_bld_dma_mem_desc_blk(hci1394_comp_ixl_vars_t *wvp, caddr_t *dma_descpp,
 	 */
 	*dma_desc_bound = (dma_bound & ~DESC_Z_MASK) | wvp->descriptors;
 
-	TNF_PROBE_0_DEBUG(hci1394_bld_dma_mem_desc_blk_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	return (DDI_SUCCESS);
 }
 
@@ -2267,9 +1935,6 @@ hci1394_set_xmit_pkt_hdr(hci1394_comp_ixl_vars_t *wvp)
 {
 	uint16_t tag;
 	uint16_t sync;
-
-	TNF_PROBE_0_DEBUG(hci1394_set_xmit_pkt_hdr_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 
 	/*
 	 * choose tag and sync bits for header either from default values or
@@ -2298,9 +1963,6 @@ hci1394_set_xmit_pkt_hdr(hci1394_comp_ixl_vars_t *wvp)
 	    DESC_PKT_TCODE_SHIFT) | (sync << DESC_PKT_SY_SHIFT);
 
 	wvp->xmit_pkthdr2 = wvp->xfer_pktlen << DESC_PKT_DATALEN_SHIFT;
-
-	TNF_PROBE_0_DEBUG(hci1394_set_xmit_pkt_hdr_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -2315,9 +1977,6 @@ hci1394_set_xmit_skip_mode(hci1394_comp_ixl_vars_t *wvp)
 {
 	int err;
 
-	TNF_PROBE_0_DEBUG(hci1394_set_xmit_skip_mode_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	if (wvp->ixl_setskipmode_cmdp == NULL) {
 		wvp->skipmode = wvp->default_skipmode;
 		wvp->skiplabelp = wvp->default_skiplabelp;
@@ -2330,12 +1989,6 @@ hci1394_set_xmit_skip_mode(hci1394_comp_ixl_vars_t *wvp)
 			err = hci1394_ixl_find_next_exec_xfer(wvp->skiplabelp,
 			    NULL, &wvp->skipxferp);
 			if (err == DDI_FAILURE) {
-				TNF_PROBE_2(hci1394_set_xmit_skip_mode_error,
-				    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string,
-				    errmsg, "IXL1394_ENO_DATA_PKTS: "
-				    "label<->jump loop detected for skiplabel "
-				    "w/no xfers", tnf_opaque, setskip_cmdp,
-				    wvp->ixl_setskipmode_cmdp);
 				wvp->skipxferp = NULL;
 				wvp->dma_bld_error = IXL1394_ENO_DATA_PKTS;
 			}
@@ -2343,8 +1996,6 @@ hci1394_set_xmit_skip_mode(hci1394_comp_ixl_vars_t *wvp)
 		wvp->ixl_setskipmode_cmdp->compiler_privatep =
 		    (void *)wvp->skipxferp;
 	}
-	TNF_PROBE_0_DEBUG(hci1394_set_xmit_skip_mode_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -2356,9 +2007,6 @@ hci1394_set_xmit_skip_mode(hci1394_comp_ixl_vars_t *wvp)
 static void
 hci1394_set_xmit_storevalue_desc(hci1394_comp_ixl_vars_t *wvp)
 {
-	TNF_PROBE_0_DEBUG(hci1394_set_xmit_storevalue_desc_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	wvp->descriptors++;
 
 	HCI1394_INIT_IT_STORE(&wvp->descriptor_block[wvp->descriptors - 1],
@@ -2367,9 +2015,6 @@ hci1394_set_xmit_storevalue_desc(hci1394_comp_ixl_vars_t *wvp)
 	    wvp->storevalue_bufp;
 	wvp->descriptor_block[wvp->descriptors - 1].branch = 0;
 	wvp->descriptor_block[wvp->descriptors - 1].status = 0;
-
-	TNF_PROBE_0_DEBUG(hci1394_set_xmit_storevalue_desc_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 }
 
 /*
@@ -2382,16 +2027,11 @@ static int
 hci1394_set_next_xfer_buf(hci1394_comp_ixl_vars_t *wvp, uint32_t bufp,
     uint16_t size)
 {
-	TNF_PROBE_0_DEBUG(hci1394_set_next_xfer_buf_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/* error if buffer pointer is null (size may be 0) */
 	if (bufp == NULL) {
 
 		wvp->dma_bld_error = IXL1394_ENULL_BUFFER_ADDR;
 
-		TNF_PROBE_0_DEBUG(hci1394_set_next_xfer_buf_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (DDI_FAILURE);
 	}
 
@@ -2403,12 +2043,6 @@ hci1394_set_next_xfer_buf(hci1394_comp_ixl_vars_t *wvp, uint32_t bufp,
 
 		wvp->dma_bld_error = IXL1394_EFRAGMENT_OFLO;
 
-		TNF_PROBE_2(hci1394_set_next_xfer_buf_error,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EFRAGMENT_OFLO", tnf_int, frag_count,
-		    wvp->xfer_bufcnt);
-		TNF_PROBE_0_DEBUG(hci1394_set_next_xfer_buf_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (DDI_FAILURE);
 	}
 
@@ -2419,8 +2053,6 @@ hci1394_set_next_xfer_buf(hci1394_comp_ixl_vars_t *wvp, uint32_t bufp,
 	/* accumulate total packet length */
 	wvp->xfer_pktlen += size;
 
-	TNF_PROBE_0_DEBUG(hci1394_set_next_xfer_buf_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 	return (DDI_SUCCESS);
 }
 
@@ -2439,9 +2071,6 @@ hci1394_set_next_xfer_buf(hci1394_comp_ixl_vars_t *wvp, uint32_t bufp,
 static int
 hci1394_flush_end_desc_check(hci1394_comp_ixl_vars_t *wvp, uint32_t count)
 {
-	TNF_PROBE_0_DEBUG(hci1394_flush_end_desc_check_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	if ((count != 0) ||
 	    ((wvp->xfer_hci_flush & (UPDATEABLE_XFER | UPDATEABLE_SET |
 		INITIATING_LBL)) == 0)) {
@@ -2449,18 +2078,12 @@ hci1394_flush_end_desc_check(hci1394_comp_ixl_vars_t *wvp, uint32_t count)
 		if (wvp->xfer_hci_flush & UPDATEABLE_JUMP) {
 			if (hci1394_flush_hci_cache(wvp) != DDI_SUCCESS) {
 
-				TNF_PROBE_0_DEBUG(
-				    hci1394_flush_end_desc_check_exit,
-				    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 				/* wvp->dma_bld_error is set by above call */
 				return (DDI_FAILURE);
 			}
 		}
 	}
 
-	TNF_PROBE_0_DEBUG(hci1394_flush_end_desc_check_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 	return (DDI_SUCCESS);
 }
 
@@ -2526,24 +2149,14 @@ hci1394_flush_hci_cache(hci1394_comp_ixl_vars_t *wvp)
 {
 	uint32_t	dma_bound;
 
-	TNF_PROBE_0_DEBUG(hci1394_flush_hci_cache_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	if (hci1394_alloc_dma_mem(wvp, sizeof (hci1394_desc_t), &dma_bound) ==
 	    NULL) {
 
 		wvp->dma_bld_error = IXL1394_EMEM_ALLOC_FAIL;
 
-		TNF_PROBE_1(hci1394_flush_hci_cache_fail,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EMEM_ALLOC_FAIL: for flush_hci_cache");
-		TNF_PROBE_0_DEBUG(hci1394_flush_hci_cache_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (DDI_FAILURE);
 	}
 
-	TNF_PROBE_0_DEBUG(hci1394_flush_hci_cache_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 	return (DDI_SUCCESS);
 }
 
@@ -2561,25 +2174,13 @@ hci1394_alloc_storevalue_dma_mem(hci1394_comp_ixl_vars_t *wvp)
 {
 	uint32_t	dma_bound;
 
-	TNF_PROBE_0_DEBUG(hci1394_alloc_storevalue_dma_mem_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	if (hci1394_alloc_dma_mem(wvp, sizeof (hci1394_desc_t),
 	    &dma_bound) == NULL) {
 
 		wvp->dma_bld_error = IXL1394_EMEM_ALLOC_FAIL;
 
-		TNF_PROBE_2(hci1394_bld_alloc_storevalue_dma_mem_alloc_fail,
-		    HCI1394_TNF_HAL_ERROR_ISOCH, "", tnf_string, errmsg,
-		    "IXL1394_EMEM_ALLOC_FAIL: for storevalue dma",
-		    tnf_opaque, ixl_commandp, wvp->ixl_cur_cmdp);
-		TNF_PROBE_0_DEBUG(hci1394_alloc_storevalue_dma_mem_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (NULL);
 	}
-
-	TNF_PROBE_0_DEBUG(hci1394_alloc_storevalue_dma_mem_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 
 	/* return bound address of allocated memory */
 	return (dma_bound);
@@ -2595,9 +2196,6 @@ hci1394_alloc_xfer_ctl(hci1394_comp_ixl_vars_t *wvp, uint32_t dmacnt)
 {
 	hci1394_xfer_ctl_t *xcsp;
 
-	TNF_PROBE_0_DEBUG(hci1394_alloc_xfer_ctl_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/*
 	 * allocate an xfer_ctl struct which includes dmacnt of
 	 * xfer_ctl_dma structs
@@ -2607,8 +2205,6 @@ hci1394_alloc_xfer_ctl(hci1394_comp_ixl_vars_t *wvp, uint32_t dmacnt)
 	    (sizeof (hci1394_xfer_ctl_t) + (dmacnt - 1) *
 	    sizeof (hci1394_xfer_ctl_dma_t)), KM_NOSLEEP)) == NULL) {
 
-		TNF_PROBE_0_DEBUG(hci1394_alloc_xfer_ctl_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (NULL);
 	}
 #else
@@ -2620,8 +2216,6 @@ hci1394_alloc_xfer_ctl(hci1394_comp_ixl_vars_t *wvp, uint32_t dmacnt)
 	    sizeof (hci1394_xfer_ctl_t) + (dmacnt - 1) *
 	    sizeof (hci1394_xfer_ctl_dma_t))) == NULL) {
 
-		TNF_PROBE_0_DEBUG(hci1394_alloc_xfer_ctl_exit,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (NULL);
 	}
 #endif
@@ -2638,9 +2232,6 @@ hci1394_alloc_xfer_ctl(hci1394_comp_ixl_vars_t *wvp, uint32_t dmacnt)
 		wvp->xcs_currentp->ctl_nextp = xcsp;
 		wvp->xcs_currentp = xcsp;
 	}
-
-	TNF_PROBE_0_DEBUG(hci1394_alloc_xfer_ctl_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 
 	/* return allocated xfer_ctl structure */
 	return (xcsp);
@@ -2660,9 +2251,6 @@ hci1394_alloc_dma_mem(hci1394_comp_ixl_vars_t *wvp, uint32_t size,
 	void	*dma_mem_ret;
 	int	ret;
 
-	TNF_PROBE_0_DEBUG(hci1394_alloc_dma_mem_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/*
 	 * if no dma has been allocated or current request exceeds
 	 * remaining memory
@@ -2678,8 +2266,6 @@ hci1394_alloc_dma_mem(hci1394_comp_ixl_vars_t *wvp, uint32_t size,
 		    kmem_zalloc(sizeof (hci1394_idma_desc_mem_t),
 		    KM_NOSLEEP)) == NULL) {
 
-			TNF_PROBE_0_DEBUG(hci1394_alloc_dma_mem_exit,
-			    HCI1394_TNF_HAL_STACK_ISOCH, "");
 			return (NULL);
 		}
 
@@ -2725,8 +2311,6 @@ hci1394_alloc_dma_mem(hci1394_comp_ixl_vars_t *wvp, uint32_t size,
 				kmem_free(dma_new,
 				    sizeof (hci1394_idma_desc_mem_t));
 
-				TNF_PROBE_0_DEBUG(hci1394_alloc_dma_mem_exit,
-				    HCI1394_TNF_HAL_STACK_ISOCH, "");
 				return (NULL);
 			}
 
@@ -2736,8 +2320,6 @@ hci1394_alloc_dma_mem(hci1394_comp_ixl_vars_t *wvp, uint32_t size,
 				kmem_free(dma_new,
 				    sizeof (hci1394_idma_desc_mem_t));
 
-				TNF_PROBE_0_DEBUG(hci1394_alloc_dma_mem_exit,
-				    HCI1394_TNF_HAL_STACK_ISOCH, "");
 				return (NULL);
 			}
 			dma_new->offset = 0;
@@ -2747,16 +2329,12 @@ hci1394_alloc_dma_mem(hci1394_comp_ixl_vars_t *wvp, uint32_t size,
 		/* allocate another dma_desc_mem struct */
 		if ((dma_new = (hci1394_idma_desc_mem_t *)
 			calloc(1, sizeof (hci1394_idma_desc_mem_t))) == NULL) {
-			TNF_PROBE_0_DEBUG(hci1394_alloc_dma_mem_exit,
-			    HCI1394_TNF_HAL_STACK_ISOCH, "");
 			return (NULL);
 		}
 		dma_new->mem.bi_dma_handle = NULL;
 		dma_new->mem.bi_handle = NULL;
 		if ((dma_new->mem.bi_kaddr = (caddr_t)calloc(1,
 			    HCI1394_IXL_PAGESIZE)) == NULL) {
-			TNF_PROBE_0_DEBUG(hci1394_alloc_dma_mem_exit,
-			    HCI1394_TNF_HAL_STACK_ISOCH, "");
 			return (NULL);
 		}
 		dma_new->mem.bi_cookie.dmac_address =
@@ -2782,8 +2360,6 @@ hci1394_alloc_dma_mem(hci1394_comp_ixl_vars_t *wvp, uint32_t size,
 	    wvp->dma_currentp->used;
 	wvp->dma_currentp->used += size;
 
-	TNF_PROBE_0_DEBUG(hci1394_alloc_dma_mem_exit,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
 	return (dma_mem_ret);
 }
 
@@ -2798,9 +2374,6 @@ hci1394_alloc_dma_mem(hci1394_comp_ixl_vars_t *wvp, uint32_t size,
 static boolean_t
 hci1394_is_opcode_valid(uint16_t ixlopcode)
 {
-	TNF_PROBE_0_DEBUG(hci1394_is_opcode_bad_enter,
-	    HCI1394_TNF_HAL_STACK_ISOCH, "");
-
 	/* if it's not one we know about, then it's bad */
 	switch (ixlopcode) {
 	case IXL1394_OP_LABEL:
@@ -2830,19 +2403,8 @@ hci1394_is_opcode_valid(uint16_t ixlopcode)
 	case IXL1394_OP_SEND_BUF_U:
 	case IXL1394_OP_SET_TAGSYNC_U:
 	case IXL1394_OP_SET_SKIPMODE_U:
-		TNF_PROBE_1_DEBUG(hci1394_is_opcode_valid_enter,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "", tnf_string, msg,
-		    "ixl opcode is valid");
-		TNF_PROBE_0_DEBUG(hci1394_is_opcode_bad_enter,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (B_TRUE);
 	default:
-		TNF_PROBE_2(hci1394_is_opcode_valid_enter,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "", tnf_string, msg,
-		    "ixl opcode is NOT valid", tnf_opaque, ixl_opcode,
-		    ixlopcode);
-		TNF_PROBE_0_DEBUG(hci1394_is_opcode_valid_enter,
-		    HCI1394_TNF_HAL_STACK_ISOCH, "");
 		return (B_FALSE);
 	}
 }
