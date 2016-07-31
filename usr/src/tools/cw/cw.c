@@ -701,13 +701,6 @@ do_gcc(cw_ictx_t *ctx)
 				newae(ctx->i_ae, arg);
 				break;
 			}
-			if (strcmp(arg, "-W0,-xglobalstatic") == 0) {
-				/*
-				 * gcc doesn't prefix local symbols
-				 * in debug mode, so this is not needed.
-				 */
-				break;
-			}
 			if (strcmp(arg, "-W0,-Lt") == 0) {
 				/*
 				 * Generate tests at the top of loops.

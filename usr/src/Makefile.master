@@ -409,14 +409,6 @@ amd64_COPTFLAG=		-_gcc=-fno-strict-aliasing \
 COPTFLAG= $($(MACH)_COPTFLAG)
 COPTFLAG64= $($(MACH64)_COPTFLAG)
 
-# Direct the Sun Studio compiler to use a static globalization prefix based on the
-# name of the module rather than something unique. Otherwise, objects
-# will not build deterministically, as subsequent compilations of identical
-# source will yeild objects that always look different.
-#
-# In the same spirit, this will also remove the date from the N_OPT stab.
-CGLOBALSTATIC= -W0,-xglobalstatic
-
 # Sometimes we want all symbols and types in debugging information even
 # if they aren't used.
 CALLSYMS=	-W0,-xdbggen=no%usedonly
@@ -508,11 +500,11 @@ $(SRCDBGBLD)CCSOURCEDEBUGFLAGS	= -g -xs
 
 CFLAGS=         $(COPTFLAG) $($(MACH)_CFLAGS) $(SPACEFLAG) $(CCMODE) \
 		$(CERRWARN) $(C99MODE) $(CCUNBOUND) $(IROPTFLAG) \
-		$(CGLOBALSTATIC) $(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
+		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS)
 CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
 		$(CERRWARN) $(C99MODE) $(CCUNBOUND) $(IROPTFLAG64) \
-		$(CGLOBALSTATIC) $(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
+		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS64)
 #
 # Flags that are used to build parts of the code that are subsequently
@@ -520,7 +512,7 @@ CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
 #
 NATIVE_CFLAGS=	$(COPTFLAG) $($(NATIVE_MACH)_CFLAGS) $(CCMODE) \
 		$(CERRWARN) $(C99MODE) $($(NATIVE_MACH)_CCUNBOUND) \
-		$(IROPTFLAG) $(CGLOBALSTATIC) $(CCNOAUTOINLINE) \
+		$(IROPTFLAG) $(CCNOAUTOINLINE) \
 		$(CSOURCEDEBUGFLAGS) $(CUSERFLAGS)
 
 DTEXTDOM=-DTEXT_DOMAIN=\"$(TEXT_DOMAIN)\"	# For messaging.
