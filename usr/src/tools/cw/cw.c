@@ -88,8 +88,6 @@
  * -xarch=<a>	Specify target architecture instruction set
  *		for system functions, b={%all,%none}
  * -xe		Perform only syntax/semantic checking, no code generation
- * -xF		Compile for later mapfile reordering or unused section
- *		elimination
  * -xlicinfo	Show license server information
  * -xM		Generate makefile dependencies
  * -xM1		Generate makefile dependencies, but exclude /usr/include
@@ -162,7 +160,6 @@
  * -Xs				-traditional -std=c89
  * -xarch=<a>			table
  * -xe				error
- * -xF				error
  * -xM				-M
  * -xM1				-MM
  * -xmaxopt=[...]		error
@@ -738,16 +735,6 @@ do_gcc(cw_ictx_t *ctx)
 					mflag |= xlate_xtb(ctx->i_ae, arg + 7);
 					break;
 				}
-				error(arg);
-				break;
-			case 'F':
-				/*
-				 * Compile for mapfile reordering, or unused
-				 * section elimination, syntax can be -xF or
-				 * more complex, like -xF=%all -- ignore.
-				 */
-				if (strncmp(arg, "-xF", 3) == 0)
-					break;
 				error(arg);
 				break;
 #if defined(__x86)

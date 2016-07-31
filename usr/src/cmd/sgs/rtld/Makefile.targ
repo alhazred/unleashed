@@ -24,9 +24,6 @@
 # Use is subject to license terms.
 #
 
-# Don't generate separate sections for this module
-pics/debugdata.o :=	XFFLAG=
-
 # Since we use RTLD rather than DYNLIB, we must explicitly hook in ctfmerge.
 $(RTLD) :=	CTFMERGE_POST = $(CTFMERGE_LIB)
 
