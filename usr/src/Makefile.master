@@ -409,10 +409,6 @@ amd64_COPTFLAG=		-_gcc=-fno-strict-aliasing \
 COPTFLAG= $($(MACH)_COPTFLAG)
 COPTFLAG64= $($(MACH64)_COPTFLAG)
 
-# When -g is used, the compiler globalizes static objects
-# (gives them a unique prefix). Disable that.
-CNOGLOBAL= -W0,-noglobal
-
 # Direct the Sun Studio compiler to use a static globalization prefix based on the
 # name of the module rather than something unique. Otherwise, objects
 # will not build deterministically, as subsequent compilations of identical
@@ -429,8 +425,8 @@ CALLSYMS=	-W0,-xdbggen=no%usedonly
 # Flags used to build in debug mode for ctf generation.  Bugs in the Devpro
 # compilers currently prevent us from building with cc-emitted DWARF.
 #
-CTF_FLAGS_sparc	= -g -Wc,-Qiselect-T1 $(C99MODE) $(CNOGLOBAL) $(CDWARFSTR)
-CTF_FLAGS_i386	= -g $(C99MODE) $(CNOGLOBAL) $(CDWARFSTR)
+CTF_FLAGS_sparc	= -g -Wc,-Qiselect-T1 $(C99MODE) $(CDWARFSTR)
+CTF_FLAGS_i386	= -g $(C99MODE) $(CDWARFSTR)
 
 CTF_FLAGS_sparcv9	= $(CTF_FLAGS_sparc)
 CTF_FLAGS_amd64		= $(CTF_FLAGS_i386)

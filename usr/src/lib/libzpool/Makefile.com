@@ -56,8 +56,8 @@ CLEANFILES += $(EXTPICS)
 
 C99MODE=	$(C99_ENABLE)
 
-CFLAGS +=	-g $(CCVERBOSE) $(CNOGLOBAL)
-CFLAGS64 +=	-g $(CCVERBOSE)	$(CNOGLOBAL)
+CFLAGS +=	-g $(CCVERBOSE)
+CFLAGS64 +=	-g $(CCVERBOSE)
 LDLIBS +=	-lcmdutils -lumem -lavl -lnvpair -lz -lc -lsysevent -lmd
 CPPFLAGS +=	$(INCS)	-DDEBUG
 
