@@ -262,11 +262,6 @@ CCMODE64=		-Xa
 #
 CCVERBOSE=		-v
 
-# Prevent the removal of static symbols by the SPARC code generator (cg).
-# The x86 code generator (ube) does not remove such symbols and as such
-# using this workaround is not applicable for x86.
-#
-CCSTATICSYM=		-Wc,-Qassembler-ounrefsym=0
 #
 # generate 32-bit addresses in the v9 kernel. Saves memory.
 CCABS32=		-_gcc=-fno-pic -_gcc=-mcmodel=medlow
@@ -352,8 +347,8 @@ C99MODE=	$(C99_DISABLE)
 
 # In most places, assignments to these macros should be appended with +=
 # (CPPFLAGS.first allows values to be prepended to CPPFLAGS).
-sparc_CFLAGS=	$(sparc_XARCH) $(CCSTATICSYM)
-sparcv9_CFLAGS=	$(sparcv9_XARCH) $(CCVERBOSE) $(CCSTATICSYM)
+sparc_CFLAGS=	$(sparc_XARCH)
+sparcv9_CFLAGS=	$(sparcv9_XARCH) $(CCVERBOSE)
 i386_CFLAGS=	$(i386_XARCH)
 amd64_CFLAGS=	$(amd64_XARCH)
 

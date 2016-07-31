@@ -700,13 +700,6 @@ do_gcc(cw_ictx_t *ctx)
 				 */
 				break;
 			}
-			if (strcmp(arg, "-Wc,-Qassembler-ounrefsym=0") == 0) {
-				/*
-				 * Prevents optimizing away of static variables.
-				 * gcc does not do this, so it's not needed.
-				 */
-				break;
-			}
 #if defined(__x86)
 			if (strcmp(arg, "-Wu,-xmodel=kernel") == 0) {
 				newae(ctx->i_ae, "-ffreestanding");
