@@ -150,7 +150,7 @@
  * -V				--version
  * -v				-Wall
  * -Wa,<arg>			pass-thru
- * -Wp,<arg>			pass-thru except -xc99=<a>
+ * -Wp,<arg>			pass-thru
  * -Wl,<arg>			pass-thru
  * -W{m,0,2,h,i,u>		error/ignore
  * -Wu,-xmodel=kernel		-ffreestanding -mcmodel=kernel -mno-red-zone
@@ -739,29 +739,10 @@ do_gcc(cw_ictx_t *ctx)
 			error(arg);
 			break;
 		case 'W':
-			if (strncmp(arg, "-Wp,-xc99", 9) == 0) {
-				/*
-				 * gcc's preprocessor will accept c99
-				 * regardless, so accept and ignore.
-				 */
-				break;
-			}
 			if (strncmp(arg, "-Wa,", 4) == 0 ||
 			    strncmp(arg, "-Wp,", 4) == 0 ||
 			    strncmp(arg, "-Wl,", 4) == 0) {
 				newae(ctx->i_ae, arg);
-				break;
-			}
-			if (strcmp(arg, "-W0,-xc99=pragma") == 0) {
-				/* (undocumented) enables _Pragma */
-				break;
-			}
-			if (strcmp(arg, "-W0,-xc99=%none") == 0) {
-				/*
-				 * This is a polite way of saying
-				 * "no c99 constructs allowed!"
-				 * For now, just accept and ignore this.
-				 */
 				break;
 			}
 			if (strcmp(arg, "-W0,-noglobal") == 0 ||
@@ -874,14 +855,6 @@ do_gcc(cw_ictx_t *ctx)
 				error(arg);
 				break;
 			case 'c':
-				if (strncmp(arg, "-xc99=%all", 10) == 0) {
-					newae(ctx->i_ae, "-std=gnu99");
-					break;
-				}
-				if (strncmp(arg, "-xc99=%none", 11) == 0) {
-					newae(ctx->i_ae, "-std=gnu89");
-					break;
-				}
 				if (strncmp(arg, "-xcache=", 8) == 0)
 					break;
 				error(arg);

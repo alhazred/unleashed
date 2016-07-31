@@ -374,8 +374,8 @@ $(RELEASE_BUILD)CERRWARN += -_gcc=-Wno-empty-body
 CCERRWARN=		-xwe
 
 # C99 mode
-C99_ENABLE=	-xc99=%all
-C99_DISABLE=	-xc99=%none
+C99_ENABLE=	-_gcc=-std=gnu99
+C99_DISABLE=	-_gcc=-std=gnu89
 C99MODE=	$(C99_DISABLE)
 
 # In most places, assignments to these macros should be appended with +=
