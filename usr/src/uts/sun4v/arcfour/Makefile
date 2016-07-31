@@ -64,7 +64,7 @@ COPTIMIZE	= -_gcc=-fno-strict-aliasing
 COPTIMIZE	+= -_gcc=-fno-unit-at-a-time
 COPTIMIZE	+= -_gcc=-fno-optimize-sibling-calls
 COPTIMIZE	+= -_gcc=-O2
-COPTIMIZE	+= -xbuiltin=%all
+COPTIMIZE	+= -_gcc=-fbuiltin
 
 #
 # Override the default space setting

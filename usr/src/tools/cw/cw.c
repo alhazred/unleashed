@@ -86,7 +86,6 @@
  * -Xs		Compile assuming (pre-ANSI) K & R C style code
  * -Xt		Compile assuming K & R conformance, allow ANSI C
  * -xarch=<a>	Specify target architecture instruction set
- * -xbuiltin[=<b>] When profitable inline, or substitute intrinisic functions
  *		for system functions, b={%all,%none}
  * -xe		Perform only syntax/semantic checking, no code generation
  * -xF		Compile for later mapfile reordering or unused section
@@ -162,7 +161,6 @@
  * -Xt				error
  * -Xs				-traditional -std=c89
  * -xarch=<a>			table
- * -xbuiltin[=<b>]		-fbuiltin (-fno-builtin otherwise)
  * -xe				error
  * -xF				error
  * -xM				-M
@@ -738,14 +736,6 @@ do_gcc(cw_ictx_t *ctx)
 			case 'a':
 				if (strncmp(arg, "-xarch=", 7) == 0) {
 					mflag |= xlate_xtb(ctx->i_ae, arg + 7);
-					break;
-				}
-				error(arg);
-				break;
-			case 'b':
-				if (strncmp(arg, "-xbuiltin=", 10) == 0) {
-					if (strcmp(arg + 10, "%all"))
-						newae(ctx->i_ae, "-fbuiltin");
 					break;
 				}
 				error(arg);
