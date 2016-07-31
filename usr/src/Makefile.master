@@ -411,7 +411,8 @@ COPTFLAG64= $($(MACH64)_COPTFLAG)
 
 # Sometimes we want all symbols and types in debugging information even
 # if they aren't used.
-CALLSYMS=	-W0,-xdbggen=no%usedonly
+CALLSYMS=	-_gcc=-fno-eliminate-unused-debug-symbols \
+		-_gcc=-fno-eliminate-unused-debug-types
 
 #
 # Flags used to build in debug mode for ctf generation.  Bugs in the Devpro

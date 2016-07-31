@@ -708,13 +708,6 @@ do_gcc(cw_ictx_t *ctx)
 				 */
 				break;
 			}
-			if (strcmp(arg, "-W0,-xdbggen=no%usedonly") == 0) {
-				newae(ctx->i_ae,
-				    "-fno-eliminate-unused-debug-symbols");
-				newae(ctx->i_ae,
-				    "-fno-eliminate-unused-debug-types");
-				break;
-			}
 			if (strcmp(arg, "-W2,-xwrap_int") == 0) {
 				/*
 				 * Use the legacy behaviour (pre-SS11)
