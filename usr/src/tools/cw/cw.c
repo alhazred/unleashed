@@ -708,14 +708,6 @@ do_gcc(cw_ictx_t *ctx)
 				 */
 				break;
 			}
-			if (strcmp(arg, "-W2,-xwrap_int") == 0) {
-				/*
-				 * Use the legacy behaviour (pre-SS11)
-				 * for integer wrapping.
-				 * gcc does not need this.
-				 */
-				break;
-			}
 			if (strcmp(arg, "-W2,-Rcond_elim") == 0) {
 				/*
 				 * Elimination and expansion of conditionals;

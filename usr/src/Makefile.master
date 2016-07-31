@@ -454,19 +454,6 @@ amd64_SPACEFLAG		=
 SPACEFLAG		= $($(MACH)_SPACEFLAG)
 SPACEFLAG64		= $($(MACH64)_SPACEFLAG)
 
-#
-# The Sun Studio 11 compiler has changed the behaviour of integer
-# wrap arounds and so a flag is needed to use the legacy behaviour
-# (without this flag panics/hangs could be exposed within the source).
-#
-sparc_IROPTFLAG		= -W2,-xwrap_int
-sparcv9_IROPTFLAG	= -W2,-xwrap_int
-i386_IROPTFLAG		=
-amd64_IROPTFLAG		=
-
-IROPTFLAG		= $($(MACH)_IROPTFLAG)
-IROPTFLAG64		= $($(MACH64)_IROPTFLAG)
-
 sparc_XREGSFLAG		= -_gcc=-mno-app-regs
 sparcv9_XREGSFLAG	= -_gcc=-mno-app-regs
 i386_XREGSFLAG		=
@@ -500,11 +487,11 @@ $(SRCDBGBLD)CSOURCEDEBUGFLAGS	= -g -xs
 $(SRCDBGBLD)CCSOURCEDEBUGFLAGS	= -g -xs
 
 CFLAGS=         $(COPTFLAG) $($(MACH)_CFLAGS) $(SPACEFLAG) $(CCMODE) \
-		$(CERRWARN) $(C99MODE) $(CCUNBOUND) $(IROPTFLAG) \
+		$(CERRWARN) $(C99MODE) $(CCUNBOUND) \
 		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS)
 CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
-		$(CERRWARN) $(C99MODE) $(CCUNBOUND) $(IROPTFLAG64) \
+		$(CERRWARN) $(C99MODE) $(CCUNBOUND) \
 		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS64)
 #
@@ -513,7 +500,7 @@ CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
 #
 NATIVE_CFLAGS=	$(COPTFLAG) $($(NATIVE_MACH)_CFLAGS) $(CCMODE) \
 		$(CERRWARN) $(C99MODE) $($(NATIVE_MACH)_CCUNBOUND) \
-		$(IROPTFLAG) $(CCNOAUTOINLINE) \
+		$(CCNOAUTOINLINE) \
 		$(CSOURCEDEBUGFLAGS) $(CUSERFLAGS)
 
 DTEXTDOM=-DTEXT_DOMAIN=\"$(TEXT_DOMAIN)\"	# For messaging.
