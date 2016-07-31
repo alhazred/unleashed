@@ -552,6 +552,7 @@ do_gcc(cw_ictx_t *ctx)
 		case 'C':
 		case 'H':
 		case 'p':
+		case 'O':
 			if (arglen == 1) {
 				newae(ctx->i_ae, arg);
 				break;
@@ -660,13 +661,6 @@ do_gcc(cw_ictx_t *ctx)
 				free(s);
 			}
 			break;
-		case 'O':
-			if (arglen == 1) {
-				newae(ctx->i_ae, "-O");
-				break;
-			}
-			error(arg);
-			break;
 		case 'P':
 			/*
 			 * We could do '-E -o filename.i', but that's hard,
@@ -689,14 +683,6 @@ do_gcc(cw_ictx_t *ctx)
 		case 't':
 			if (arglen == 1) {
 				newae(ctx->i_ae, "-Wl,-t");
-				break;
-			}
-			error(arg);
-			break;
-		case 'V':
-			if (arglen == 1) {
-				ctx->i_flags &= ~CW_F_ECHO;
-				newae(ctx->i_ae, "--version");
 				break;
 			}
 			error(arg);
