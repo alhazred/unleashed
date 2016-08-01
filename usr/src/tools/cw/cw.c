@@ -413,7 +413,6 @@ do_gcc(cw_ictx_t *ctx)
 	int c;
 	int pic = 0, nolibc = 0;
 	int in_output = 0, seen_o = 0, c_files = 0;
-	cw_op_t op = CW_O_LINK;
 	char *model = NULL;
 	int	mflag = 0;
 
@@ -472,7 +471,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (arglen == 1) {
 				newae(ctx->i_ae, "-xc");
 				newae(ctx->i_ae, arg);
-				op = CW_O_PREPROCESS;
 				nolibc = 1;
 				break;
 			}
@@ -481,7 +479,6 @@ do_gcc(cw_ictx_t *ctx)
 		case 'c':
 		case 'S':
 			if (arglen == 1) {
-				op = CW_O_COMPILE;
 				nolibc = 1;
 			}
 			/* FALLTHROUGH */
@@ -606,7 +603,6 @@ do_gcc(cw_ictx_t *ctx)
 			 * in a hurry.
 			 */
 			newae(ctx->i_ae, "-E");
-			op = CW_O_PREPROCESS;
 			nolibc = 1;
 			break;
 		case 's':
