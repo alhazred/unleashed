@@ -17,7 +17,7 @@ LIBMDIR		= $(SRC)/lib/libm
 
 LIBMSRC		= $(LIBMDIR)/common
 
-CPP_CMD		= $(CC) -E -Xs
+CPP_CMD		= $(CC) -E -_gcc=-traditional -_gcc=-traditional-cpp
 
 ASSUFFIX_sparc	= S
 ASSUFFIX_i386	= s
@@ -25,7 +25,7 @@ ASSUFFIX	= $(ASSUFFIX_$(MACH))
 
 # With studio C99MODE of neither enabled nor disabled is "no_lib", whereby we
 # expect C99-the-language, but don't modify the behaviour of library routines.
-# This is VERY IMPORTANT, as -xc99=%all, for instance, would link us with
+# This is VERY IMPORTANT, as -std=gnu99, for instance, would link us with
 # values-xpg6, which would introduce an __xpg6 to our object with the C99
 # flags set, causing us to default C99 libm behaviour on, breaking
 # compatibility.
@@ -51,9 +51,9 @@ CPPFLAGS	+= -I$(LIBMSRC)/C \
 		-I$(LIBMSRC)/$(LDBLDIR) -I$(LIBMDIR)/$(TARGET_ARCH)/src
 
 # GCC needs __C99FEATURES__ such that the implementations of isunordered,
-# isgreaterequal, islessequal, etc, exist.  This is basically equivalent to
-# providing no -xc99 to Studio, in that it gets us the C99 language features,
-# but not values-xpg6, the reason for which is outlined with C99MODE.
+# isgreaterequal, islessequal, etc, exist.  This gets us the C99 language
+# features, but not values-xpg6, the reason for which is outlined with
+# C99MODE.
 CFLAGS		+= -_gcc=-D__C99FEATURES__
 CFLAGS64	+= -_gcc=-D__C99FEATURES__
 

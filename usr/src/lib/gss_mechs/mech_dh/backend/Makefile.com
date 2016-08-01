@@ -50,11 +50,6 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-$(PICS) := 	CFLAGS += $(XFFLAG)
-$(PICS) := 	CCFLAGS += $(XFFLAG)
-$(PICS) :=	CFLAGS64 += $(XFFLAG)
-$(PICS) :=	CCFLAGS64 += $(XFFLAG)
-
 DYNFLAGS +=	$(ZIGNORE)
 
 LIBS = $(DYNLIB)

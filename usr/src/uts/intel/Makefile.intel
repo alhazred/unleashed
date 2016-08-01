@@ -119,7 +119,6 @@ CFLAGS			+= $(COPTIMIZE)
 CFLAGS			+= -D_ASM_INLINES
 CFLAGS			+= $(CCMODE)
 CFLAGS			+= $(SPACEFLAG)
-CFLAGS			+= $(CCUNBOUND)
 CFLAGS			+= $(CFLAGS_uts)
 CFLAGS			+= -_gcc=-fstack-protector
 

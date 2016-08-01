@@ -203,7 +203,7 @@ HSONAMECCC=	-h $(SONAMECCC)
 #
 $(DYNLIBCCC):=	DYNFLAGS = $(HSONAMECCC) $(ZTEXT) $(ZDEFS) \
 		$(MAPFILES:%=-M%) $(MAPFILE.PGA:%=-M%) $(MAPFILE.NED:%=-M%) \
-		$(BDIRECT) $(NORUNPATH)
+		$(BDIRECT)
 
 
 # build rule for "portable" source 

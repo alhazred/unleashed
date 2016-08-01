@@ -44,7 +44,7 @@ POFILE= file_all.po
 POFILES= $(SRCS:%.c=%.po)
 
 # The debug binary can be built using the flag
-# -D COPTFLAG=-g CGLOBALSTATIC=
+# -D COPTFLAG=-g
 # This will avoid the multiple symbols definition error
 # for static global variables in elf_read32.o and elf_read64.o
 

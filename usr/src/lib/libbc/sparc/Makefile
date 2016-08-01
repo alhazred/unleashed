@@ -315,7 +315,7 @@ C99MODE=	$(C99_DISABLE)
 #
 # The BCP include files depend on old preprocessor semantics.
 #
-CCMODE = -Xt
+CCMODE =
 
 # the bcp libraries go in /usr/4lib. override ROOTLIBDIR from ../../Makefile.lib
 # and save it so we can find the libraries with which to link

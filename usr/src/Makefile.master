@@ -248,12 +248,11 @@ i386_BUILD64=
 BUILD64=	$($(MACH)_BUILD64)
 
 #
-# C compiler mode. Future compilers may change the default on us,
-# so force extended ANSI mode globally. Lower level makefiles can
-# override this by setting CCMODE.
+# C compiler mode. Lower level makefiles can override this by setting
+# CCMODE.
 #
-CCMODE=			-Xa
-CCMODE64=		-Xa
+CCMODE=
+CCMODE64=
 
 #
 # C compiler verbose mode. This is so we can enable it globally,
@@ -262,24 +261,6 @@ CCMODE64=		-Xa
 #
 CCVERBOSE=		-v
 
-# set this to the secret flag "-Wc,-Qiselect-v9abiwarn=1" to get warnings
-# from the compiler about places the -xarch=v9 may differ from -xarch=v9c.
-V9ABIWARN=
-
-# set this to the secret flag "-Wc,-Qiselect-regsym=0" to disable register
-# symbols (used to detect conflicts between objects that use global registers)
-# we disable this now for safety, and because genunix doesn't link with
-# this feature (the v9 default) enabled.
-#
-# REGSYM is separate since the C++ driver syntax is different.
-CCREGSYM=		-Wc,-Qiselect-regsym=0
-CCCREGSYM=		-Qoption cg -Qiselect-regsym=0
-
-# Prevent the removal of static symbols by the SPARC code generator (cg).
-# The x86 code generator (ube) does not remove such symbols and as such
-# using this workaround is not applicable for x86.
-#
-CCSTATICSYM=		-Wc,-Qassembler-ounrefsym=0
 #
 # generate 32-bit addresses in the v9 kernel. Saves memory.
 CCABS32=		-_gcc=-fno-pic -_gcc=-mcmodel=medlow
@@ -296,21 +277,6 @@ CC32BITCALLERS=		-_gcc=-massume-32bit-callers
 CCNOAUTOINLINE= -_gcc=-fno-inline-small-functions \
 	-_gcc=-fno-inline-functions-called-once \
 	-_gcc=-fno-ipa-cp
-
-# One optimization the compiler might perform is to turn this:
-#	#pragma weak foo
-#	extern int foo;
-#	if (&foo)
-#		foo = 5;
-# into
-#	foo = 5;
-# Since we do some of this (foo might be referenced in common kernel code
-# but provided only for some cpu modules or platforms), we disable this
-# optimization.
-#
-sparc_CCUNBOUND	= -Wd,-xsafe=unboundsym
-i386_CCUNBOUND	=
-CCUNBOUND	= $($(MACH)_CCUNBOUND)
 
 #
 # compiler '-xarch' flag. This is here to centralize it and make it
@@ -347,13 +313,11 @@ amd64_STAND_FLAGS	+= $(SAVEARGS)
 STAND_FLAGS_32 = $($(MACH)_STAND_FLAGS)
 STAND_FLAGS_64 = $($(MACH64)_STAND_FLAGS)
 
-XDEPEND=		-xdepend
-XFFLAG=			-xF=%all
 XESS=			-xs
 
 #
 # turn warnings into errors (C)
-CERRWARN = -errtags=yes -errwarn=%all
+CERRWARN = -errtags=yes -_gcc=-Werror
 
 CERRWARN += -_gcc=-Wno-missing-braces
 CERRWARN += -_gcc=-Wno-sign-compare
@@ -371,18 +335,17 @@ $(RELEASE_BUILD)CERRWARN += -_gcc=-Wno-empty-body
 
 #
 # turn warnings into errors (C++)
-CCERRWARN=		-xwe
+CCERRWARN=		-_g++=-Werror
 
 # C99 mode
-C99_ENABLE=	-xc99=%all
-C99_DISABLE=	-xc99=%none
+C99_ENABLE=	-_gcc=-std=gnu99
+C99_DISABLE=	-_gcc=-std=gnu89
 C99MODE=	$(C99_DISABLE)
 
 # In most places, assignments to these macros should be appended with +=
 # (CPPFLAGS.first allows values to be prepended to CPPFLAGS).
-sparc_CFLAGS=	$(sparc_XARCH) $(CCSTATICSYM)
-sparcv9_CFLAGS=	$(sparcv9_XARCH) $(CCVERBOSE) $(V9ABIWARN) $(CCREGSYM) \
-		$(CCSTATICSYM)
+sparc_CFLAGS=	$(sparc_XARCH)
+sparcv9_CFLAGS=	$(sparcv9_XARCH) $(CCVERBOSE)
 i386_CFLAGS=	$(i386_XARCH)
 amd64_CFLAGS=	$(amd64_XARCH)
 
@@ -409,28 +372,17 @@ amd64_COPTFLAG=		-_gcc=-fno-strict-aliasing \
 COPTFLAG= $($(MACH)_COPTFLAG)
 COPTFLAG64= $($(MACH64)_COPTFLAG)
 
-# When -g is used, the compiler globalizes static objects
-# (gives them a unique prefix). Disable that.
-CNOGLOBAL= -W0,-noglobal
-
-# Direct the Sun Studio compiler to use a static globalization prefix based on the
-# name of the module rather than something unique. Otherwise, objects
-# will not build deterministically, as subsequent compilations of identical
-# source will yeild objects that always look different.
-#
-# In the same spirit, this will also remove the date from the N_OPT stab.
-CGLOBALSTATIC= -W0,-xglobalstatic
-
 # Sometimes we want all symbols and types in debugging information even
 # if they aren't used.
-CALLSYMS=	-W0,-xdbggen=no%usedonly
+CALLSYMS=	-_gcc=-fno-eliminate-unused-debug-symbols \
+		-_gcc=-fno-eliminate-unused-debug-types
 
 #
 # Flags used to build in debug mode for ctf generation.  Bugs in the Devpro
 # compilers currently prevent us from building with cc-emitted DWARF.
 #
-CTF_FLAGS_sparc	= -g -Wc,-Qiselect-T1 $(C99MODE) $(CNOGLOBAL) $(CDWARFSTR)
-CTF_FLAGS_i386	= -g $(C99MODE) $(CNOGLOBAL) $(CDWARFSTR)
+CTF_FLAGS_sparc	= -g -Wc,-Qiselect-T1 $(C99MODE) $(CDWARFSTR)
+CTF_FLAGS_i386	= -g $(C99MODE) $(CDWARFSTR)
 
 CTF_FLAGS_sparcv9	= $(CTF_FLAGS_sparc)
 CTF_FLAGS_amd64		= $(CTF_FLAGS_i386)
@@ -465,19 +417,6 @@ amd64_SPACEFLAG		=
 SPACEFLAG		= $($(MACH)_SPACEFLAG)
 SPACEFLAG64		= $($(MACH64)_SPACEFLAG)
 
-#
-# The Sun Studio 11 compiler has changed the behaviour of integer
-# wrap arounds and so a flag is needed to use the legacy behaviour
-# (without this flag panics/hangs could be exposed within the source).
-#
-sparc_IROPTFLAG		= -W2,-xwrap_int
-sparcv9_IROPTFLAG	= -W2,-xwrap_int
-i386_IROPTFLAG		=
-amd64_IROPTFLAG		=
-
-IROPTFLAG		= $($(MACH)_IROPTFLAG)
-IROPTFLAG64		= $($(MACH64)_IROPTFLAG)
-
 sparc_XREGSFLAG		= -_gcc=-mno-app-regs
 sparcv9_XREGSFLAG	= -_gcc=-mno-app-regs
 i386_XREGSFLAG		=
@@ -511,20 +450,20 @@ $(SRCDBGBLD)CSOURCEDEBUGFLAGS	= -g -xs
 $(SRCDBGBLD)CCSOURCEDEBUGFLAGS	= -g -xs
 
 CFLAGS=         $(COPTFLAG) $($(MACH)_CFLAGS) $(SPACEFLAG) $(CCMODE) \
-		$(CERRWARN) $(C99MODE) $(CCUNBOUND) $(IROPTFLAG) \
-		$(CGLOBALSTATIC) $(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
+		$(CERRWARN) $(C99MODE) \
+		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS)
 CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
-		$(CERRWARN) $(C99MODE) $(CCUNBOUND) $(IROPTFLAG64) \
-		$(CGLOBALSTATIC) $(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
+		$(CERRWARN) $(C99MODE) \
+		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS64)
 #
 # Flags that are used to build parts of the code that are subsequently
 # run on the build machine (also known as the NATIVE_BUILD).
 #
 NATIVE_CFLAGS=	$(COPTFLAG) $($(NATIVE_MACH)_CFLAGS) $(CCMODE) \
-		$(CERRWARN) $(C99MODE) $($(NATIVE_MACH)_CCUNBOUND) \
-		$(IROPTFLAG) $(CGLOBALSTATIC) $(CCNOAUTOINLINE) \
+		$(CERRWARN) $(C99MODE) \
+		$(CCNOAUTOINLINE) \
 		$(CSOURCEDEBUGFLAGS) $(CUSERFLAGS)
 
 DTEXTDOM=-DTEXT_DOMAIN=\"$(TEXT_DOMAIN)\"	# For messaging.
@@ -568,19 +507,11 @@ POFILE= $(PROG).po
 
 sparc_CCFLAGS=		-m32 -_gcc=mcpu=v8 -_gcc=mno-v8plus \
 			-_gcc=-mtunesupersparc \
-			-Qoption ccfe -messages=no%anachronism \
 			$(CCERRWARN)
 sparcv9_CCFLAGS=	$(sparcv9_XARCH) \
-			-Qoption ccfe -messages=no%anachronism \
-			-Qoption ccfe -features=no%conststrings \
-			$(CCCREGSYM) \
 			$(CCERRWARN)
-i386_CCFLAGS=		-Qoption ccfe -messages=no%anachronism \
-			-Qoption ccfe -features=no%conststrings \
-			$(CCERRWARN)
+i386_CCFLAGS=		$(CCERRWARN)
 amd64_CCFLAGS=		$(amd64_XARCH) \
-			-Qoption ccfe -messages=no%anachronism \
-			-Qoption ccfe -features=no%conststrings \
 			$(CCERRWARN)
 
 sparc_CCOPTFLAG=	-O
@@ -668,10 +599,9 @@ CCEXTNEEDED	= $(CCNEEDED)
 
 LINK.c=		$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
 LINK64.c=	$(CC) $(CFLAGS64) $(CPPFLAGS) $(LDFLAGS)
-NORUNPATH=	-nolib
-LINK.cc=	$(CCC) $(CCFLAGS) $(CPPFLAGS) $(NORUNPATH) \
+LINK.cc=	$(CCC) $(CCFLAGS) $(CPPFLAGS) \
 		$(LDFLAGS) $(CCNEEDED)
-LINK64.cc=	$(CCC) $(CCFLAGS64) $(CPPFLAGS) $(NORUNPATH) \
+LINK64.cc=	$(CCC) $(CCFLAGS64) $(CPPFLAGS) \
 		$(LDFLAGS) $(CCNEEDED)
 
 SECLEVEL=	core
@@ -792,7 +722,7 @@ ZTEXT=		-ztext
 ZVERBOSE=	-zverbose
 
 GSHARED=	-G
-CCMT=		-mt
+CCMT=		-D_REENTRANT
 
 # Handle different PIC models on different ISAs
 # (May be overridden by lower-level Makefiles)
