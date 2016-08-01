@@ -30,9 +30,6 @@ LDLIBS +=	-lmd5
 C99MODE=	$(C99_ENABLE)
 CPPFLAGS +=	-I$(SRC)/uts/common -I$(COMMON_SRC)
 
-# Following is needed by sources in $(COMMON_SRC)
-CERRWARN +=	-_gcc=-Wno-uninitialized
-
 all: $(PROG)
 
 $(PROG): $(OBJS)

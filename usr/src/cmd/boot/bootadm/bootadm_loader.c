@@ -931,7 +931,7 @@ list_entry(struct menu_lst *menu, char *menu_root, char *opt)
 	error_t ret = BAM_SUCCESS;
 	struct menu_entry *entry;
 	char *ptr, *title = NULL;
-	int i, e;
+	int i, e = -1;
 
 	if (opt == NULL) {
 		print_nodes(B_FALSE, menu);
@@ -1135,7 +1135,7 @@ list_setting(struct menu_lst *menu, char *which, char *setting)
 {
 	int entry = -1;
 	struct menu_entry *m;
-	be_node_list_t *be_nodes, *be_node;
+	be_node_list_t *be_nodes, *be_node = NULL;
 	int ret;
 
 	assert(which);
@@ -1177,12 +1177,11 @@ list_setting(struct menu_lst *menu, char *which, char *setting)
 			if (be_node->be_active_on_boot == B_TRUE)
 				break; /* found active node */
 		}
+		be_free_list(be_nodes);
 		if (be_node == NULL) {
-			be_free_list(be_nodes);
 			bam_error(_("None of BE nodes is marked active\n"));
 			return (BAM_ERROR);
 		}
-		be_free_list(be_nodes);
 	} else {
 		STAILQ_FOREACH(m, menu, next)
 			if (m->entry == entry)
