@@ -886,10 +886,9 @@ loop:
 				} else {
 					/*
 					 * Really a "goto loop", but
-					 * if someone is TRACing or
-					 * TNF_PROBE_ing, at least
-					 * make records to show
-					 * where we are.
+					 * if someone is TRACing,  at least
+					 * make records to show where we
+					 * are.
 					 */
 					break;
 				}

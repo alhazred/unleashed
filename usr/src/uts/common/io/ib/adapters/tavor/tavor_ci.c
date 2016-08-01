@@ -1931,16 +1931,12 @@ tavor_ci_alloc_mw(ibc_hca_hdl_t hca, ibc_pd_hdl_t pd, ibt_mw_flags_t flags,
 
 	/* Check for valid HCA handle */
 	if (hca == NULL) {
-		TNF_PROBE_0(tavor_ci_alloc_mw_invhca_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ci_alloc_mw);
 		return (IBT_HCA_HDL_INVALID);
 	}
 
 	/* Check for valid PD handle pointer */
 	if (pd == NULL) {
-		TNF_PROBE_0(tavor_ci_alloc_mw_invpdhdl_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_ci_alloc_mw);
 		return (IBT_PD_HDL_INVALID);
 	}
@@ -1952,8 +1948,6 @@ tavor_ci_alloc_mw(ibc_hca_hdl_t hca, ibc_pd_hdl_t pd, ibt_mw_flags_t flags,
 	/* Allocate the memory window */
 	status = tavor_mw_alloc(state, pdhdl, flags, &mwhdl);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_1(tavor_ci_alloc_mw_fail, TAVOR_TNF_ERROR, "",
-		    tnf_uint, status, status);
 		TAVOR_TNF_EXIT(tavor_ci_alloc_mw);
 		return (status);
 	}
