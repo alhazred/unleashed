@@ -83,7 +83,6 @@
  * -Xa		Compile assuming ANSI C conformance, allow K & R extensions
  *		(default mode)
  * -Xc		Compile assuming strict ANSI C conformance
- * -Xs		Compile assuming (pre-ANSI) K & R C style code
  * -Xt		Compile assuming K & R conformance, allow ANSI C
  * -xarch=<a>	Specify target architecture instruction set
  *		for system functions, b={%all,%none}
@@ -157,7 +156,6 @@
  * -Xa				-std=iso9899:199409 or -ansi
  * -Xc				-ansi -pedantic
  * -Xt				error
- * -Xs				-traditional -std=c89
  * -xarch=<a>			table
  * -xe				error
  * -xM				-M
@@ -390,18 +388,6 @@ Xcmode(struct aelist *h)
 
 	newae(h, "-ansi");
 	newae(h, "-pedantic-errors");
-}
-
-static void
-Xsmode(struct aelist *h)
-{
-	static int xsonce;
-
-	if (xsonce++)
-		return;
-
-	newae(h, "-traditional");
-	newae(h, "-traditional-cpp");
 }
 
 static void
@@ -714,14 +700,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (strcmp(arg, "-Xa") == 0 ||
 			    strcmp(arg, "-Xt") == 0) {
 				Xamode(ctx->i_ae);
-				break;
-			}
-			if (strcmp(arg, "-Xc") == 0) {
-				Xcmode(ctx->i_ae);
-				break;
-			}
-			if (strcmp(arg, "-Xs") == 0) {
-				Xsmode(ctx->i_ae);
 				break;
 			}
 			error(arg);
