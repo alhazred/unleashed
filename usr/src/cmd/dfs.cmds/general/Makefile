@@ -38,7 +38,7 @@ SRCS=	general.c
 
 #ROOTLINK= $(ROOTUSRSBIN)/unshare
 
-CFLAGS += -s
+CFLAGS += -_gcc=-Wl,-s
 
 include ../../Makefile.cmd
 

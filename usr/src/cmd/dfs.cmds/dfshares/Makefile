@@ -29,7 +29,7 @@ OBJS=	dfshares.o
 
 ROOTLINK= $(ROOTUSRSBIN)/dfmounts
 
-CFLAGS += -s
+CFLAGS += -_gcc=-Wl,-s
 
 include ../../Makefile.cmd
 
