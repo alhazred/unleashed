@@ -358,18 +358,6 @@ warnings(struct aelist *h)
 }
 
 static void
-Xcmode(struct aelist *h)
-{
-	static int xconce;
-
-	if (xconce++)
-		return;
-
-	newae(h, "-ansi");
-	newae(h, "-pedantic-errors");
-}
-
-static void
 usage()
 {
 	(void) fprintf(stderr,
