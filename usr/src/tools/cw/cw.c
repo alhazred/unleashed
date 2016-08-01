@@ -64,7 +64,6 @@
  * -mr,"string"	Remove all strings and append "string" to .comment section
  * -mt		Specify options needed when compiling multi-threaded code
  * -native	Find available processor, generate code accordingly
- * -nolib	Same as -xnolib
  * -O		Use default optimization level (-xO2 or -xO3. Check man page.)
  * -o <outputfile> Set name of output file to <outputfile>
  * -P		Compile source through preprocessor only, output to .i  file
@@ -88,7 +87,6 @@
  * -xM		Generate makefile dependencies
  * -xM1		Generate makefile dependencies, but exclude /usr/include
  * -xmaxopt=[off,1,2,3,4,5] maximum optimization level allowed on #pragma opt
- * -xnolib	Do not link with default system libraries
  * -xpg		Compile for profiling with gprof
  * -xprofile=<p> Collect data for a profile or use a profile to optimize
  *		<p>={{collect,use}[:<path>],tcov}
@@ -128,7 +126,6 @@
  * -mr,"string"			error
  * -mt				-D_REENTRANT
  * -native			error
- * -nolib			-nodefaultlibs
  * -O				-O1 (Check the man page to be certain)
  * -o <outputfile>		pass-thru
  * -P				-E -o filename.i (or error)
@@ -156,7 +153,6 @@
  * -xM				-M
  * -xM1				-MM
  * -xmaxopt=[...]		error
- * -xnolib			-nodefaultlibs
  * -xpg				error
  * -xprofile=<p>		error
  * -xs				error
@@ -474,11 +470,6 @@ do_gcc(cw_ictx_t *ctx)
 				pic = 1;
 				continue;
 			}
-			if (strcmp(arg, "-nolib") == 0) {
-				/* -nodefaultlibs is on by default */
-				nolibc = 1;
-				continue;
-			}
 		}
 
 		switch ((c = arg[1])) {
@@ -708,13 +699,6 @@ do_gcc(cw_ictx_t *ctx)
 				error(arg);
 				break;
 #endif	/* __x86 */
-			case 'n':
-				if (strcmp(arg, "-xnolib") == 0) {
-					nolibc = 1;
-					break;
-				}
-				error(arg);
-				break;
 			case 'p':
 				if (strcmp(arg, "-xpg") == 0) {
 					newae(ctx->i_ae, "-pg");
