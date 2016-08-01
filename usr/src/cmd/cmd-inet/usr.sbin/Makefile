@@ -29,7 +29,7 @@ SYNCPROG=	syncinit syncloop syncstat
 PROG=		6to4relay arp if_mpadm \
 		in.comsat in.fingerd in.rarpd in.rexecd in.rlogind \
 		in.rshd in.rwhod in.telnetd in.tftpd ipaddrsel \
-		ndd ndp $(SYNCPROG) wanbootutil
+		ndd ndp $(SYNCPROG)
 
 MANIFEST=	rarp.xml telnet.xml comsat.xml finger.xml \
 		login.xml shell.xml rexec.xml
@@ -61,12 +61,12 @@ K5RSHDOBJS=	in.rshd.o
 K5TELNETOBJS=	in.telnetd.o
 SRCS=		$(PROGSRCS) $(OTHERSRC)
 
-SUBDIRS=	bootconfchk ifconfig ilbadm in.rdisc in.routed \
+SUBDIRS=	ifconfig ilbadm in.rdisc in.routed \
 		in.talkd inetadm inetconv ipadm ipmpstat ipqosconf ipsecutils \
 		nwamadm nwamcfg ping routeadm \
 		snoop sppptun traceroute wificonfig
 
-MSGSUBDIRS=	bootconfchk ifconfig ilbadm in.routed in.talkd \
+MSGSUBDIRS=	ifconfig ilbadm in.routed in.talkd \
 		inetadm inetconv ipadm ipmpstat ipqosconf ipsecutils \
 		nwamadm nwamcfg routeadm sppptun snoop wificonfig
 
