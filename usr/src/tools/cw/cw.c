@@ -80,10 +80,7 @@
  * -v		Do stricter semantic checking
  * -W<c>,<arg>	Pass <arg> to specified component <c> (a,l,m,p,0,2,h,i,u)
  * -w		Suppress compiler warning messages
- * -Xa		Compile assuming ANSI C conformance, allow K & R extensions
- *		(default mode)
  * -Xc		Compile assuming strict ANSI C conformance
- * -Xt		Compile assuming K & R conformance, allow ANSI C
  * -xarch=<a>	Specify target architecture instruction set
  *		for system functions, b={%all,%none}
  * -xe		Perform only syntax/semantic checking, no code generation
@@ -153,9 +150,7 @@
  * -xmodel=kernel		-ffreestanding -mcmodel=kernel -mno-red-zone
  * -Wu,-save_args		-msave-args
  * -w				pass-thru
- * -Xa				-std=iso9899:199409 or -ansi
  * -Xc				-ansi -pedantic
- * -Xt				error
  * -xarch=<a>			table
  * -xe				error
  * -xM				-M
@@ -370,12 +365,6 @@ warnings(struct aelist *h)
 	 */
 	newae(h, "-Wall");
 	newae(h, "-Wextra");
-}
-
-/* ARGSUSED */
-static void
-Xamode(struct aelist *h)
-{
 }
 
 static void
@@ -694,14 +683,6 @@ do_gcc(cw_ictx_t *ctx)
 				break;
 			}
 #endif	/* __x86 */
-			error(arg);
-			break;
-		case 'X':
-			if (strcmp(arg, "-Xa") == 0 ||
-			    strcmp(arg, "-Xt") == 0) {
-				Xamode(ctx->i_ae);
-				break;
-			}
 			error(arg);
 			break;
 		case 'x':

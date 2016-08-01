@@ -248,12 +248,11 @@ i386_BUILD64=
 BUILD64=	$($(MACH)_BUILD64)
 
 #
-# C compiler mode. Future compilers may change the default on us,
-# so force extended ANSI mode globally. Lower level makefiles can
-# override this by setting CCMODE.
+# C compiler mode. Lower level makefiles can override this by setting
+# CCMODE.
 #
-CCMODE=			-Xa
-CCMODE64=		-Xa
+CCMODE=
+CCMODE64=
 
 #
 # C compiler verbose mode. This is so we can enable it globally,
