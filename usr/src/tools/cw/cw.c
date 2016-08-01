@@ -67,9 +67,7 @@
  * -O		Use default optimization level (-xO2 or -xO3. Check man page.)
  * -o <outputfile> Set name of output file to <outputfile>
  * -P		Compile source through preprocessor only, output to .i  file
- * -PIC		Alias for -KPIC or -xcode=pic32
  * -p		Compile for profiling with prof
- * -pic		Alias for -Kpic or -xcode=pic13
  * -R<dir[:dir]> Build runtime search path list into executable
  * -S		Compile and only generate assembly code (.s)
  * -s		Strip symbol table from the executable file
@@ -129,9 +127,7 @@
  * -O				-O1 (Check the man page to be certain)
  * -o <outputfile>		pass-thru
  * -P				-E -o filename.i (or error)
- * -PIC				-fPIC (C++ only)
  * -p				pass-thru
- * -pic				-fpic (C++ only)
  * -R<dir[:dir]>		pass-thru
  * -S				pass-thru
  * -s				-Wl,-s
@@ -457,19 +453,6 @@ do_gcc(cw_ictx_t *ctx)
 			newae(ctx->i_ae, arg);
 			in_output = 0;
 			continue;
-		}
-
-		if (ctx->i_flags & CW_F_CXX) {
-			if (strcmp(arg, "-pic") == 0) {
-				newae(ctx->i_ae, "-fpic");
-				pic = 1;
-				continue;
-			}
-			if (strcmp(arg, "-PIC") == 0) {
-				newae(ctx->i_ae, "-fPIC");
-				pic = 1;
-				continue;
-			}
 		}
 
 		switch ((c = arg[1])) {
