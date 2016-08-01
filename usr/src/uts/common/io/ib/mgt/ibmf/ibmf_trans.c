@@ -41,11 +41,11 @@ ibmf_i_terminate_transaction(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
     uint32_t status)
 {
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_terminate_transaction_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_terminate_transaction(): clientp = 0x%p, msgp = 0x%p, "
-	    "status = 0x%x\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, msg, msgimplp, tnf_uint, status, status);
+	IBMF_TRACE_3(DPRINT_L4,
+		     "ibmf_i_terminate_transaction(): clientp = 0x%p, msgp = 0x%p, ""status = 0x%x\n",
+		     clientp,
+		     msgimplp,
+		     status);
 
 	ASSERT(MUTEX_HELD(&msgimplp->im_mutex));
 
@@ -70,14 +70,11 @@ ibmf_i_terminate_transaction(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 
 	} else {
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_terminate_transaction, IBMF_TNF_TRACE, "",
-		    "ibmf_i_terminate_transaction(): %s, "
-		    "trans_state_flags = 0x%x, msg_flags = 0x%x\n",
-		    tnf_string, msg, "solicted message callback",
-		    tnf_opaque, trans_state_flags,
-		    msgimplp->im_trans_state_flags,
-		    tnf_opaque, flags, msgimplp->im_flags);
+		IBMF_TRACE_3(DPRINT_L3,
+			     "ibmf_i_terminate_transaction(): %s, ""trans_state_flags = 0x%x, msg_flags = 0x%x\n",
+			     "solicted message callback",
+			     msgimplp->im_trans_state_flags,
+			     msgimplp->im_flags);
 
 		/* mark as recv_compl happened */
 		msgimplp->im_trans_state_flags |=
@@ -95,9 +92,7 @@ ibmf_i_terminate_transaction(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		}
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_terminate_transaction_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_terminate_transaction() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_terminate_transaction() exit\n");
 }
 
 /*
@@ -111,9 +106,8 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 	ibmf_msg_cb_t	async_cb;
 	void		*async_cb_arg;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_notify_client_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_notify_client(): msgp = 0x%p\n",
-	    tnf_opaque, msgimplp, msgimplp);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_notify_client(): msgp = 0x%p\n",
+		     msgimplp);
 
 	clientp = msgimplp->im_client;
 
@@ -138,13 +132,9 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 	 */
 	if (msgimplp->im_ref_count != 0) {
 		mutex_exit(&msgimplp->im_mutex);
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_notify_client_err, IBMF_TNF_TRACE,
-		    "", "ibmf_i_notify_client(): %s\n",
-		    tnf_string, msg, "message reference count != 0");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_notify_client_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_notify_client() exit\n");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_i_notify_client(): %s\n",
+			     "message reference count != 0");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_notify_client() exit\n");
 		return;
 	}
 
@@ -182,17 +172,15 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 				mutex_exit(&qpp->isq_mutex);
 			}
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_notify_client_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_notify_client(): %s, status = %d\n",
-			    tnf_string, msg, "message status not success",
-			    tnf_opaque, status, msgimplp->im_msg_status);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_i_notify_client(): %s, status = %d\n",
+				     "message status not success",
+				     msgimplp->im_msg_status);
 
 			ibmf_i_free_msg(msgimplp);
 
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_notify_client_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_notify_client() exit\n");
+			IBMF_TRACE_0(DPRINT_L4,
+				     "ibmf_i_notify_client() exit\n");
 
 			return;
 		}
@@ -214,15 +202,11 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 				IBMF_RECV_CB_CLEANUP(clientp);
 				mutex_exit(&clientp->ic_mutex);
 				ibmf_i_free_msg(msgimplp);
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_i_notify_client_err, IBMF_TNF_ERROR,
-				    "", "ibmf_i_notify_client(): %s\n",
-				    tnf_string, msg,
-				    "ibmf_tear_down_recv_cb already occurred");
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_notify_client_end,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_notify_client() exit\n");
+				IBMF_TRACE_1(DPRINT_L1,
+					     "ibmf_i_notify_client(): %s\n",
+					     "ibmf_tear_down_recv_cb already occurred");
+				IBMF_TRACE_0(DPRINT_L4,
+					     "ibmf_i_notify_client() exit\n");
 				return;
 			}
 
@@ -254,15 +238,11 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 				IBMF_ALT_RECV_CB_CLEANUP(qpp);
 				mutex_exit(&qpp->isq_mutex);
 				ibmf_i_free_msg(msgimplp);
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_i_notify_client_err, IBMF_TNF_ERROR,
-				    "", "ibmf_i_notify_client(): %s\n",
-				    tnf_string, msg,
-				    "ibmf_tear_down_recv_cb already occurred");
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_notify_client_end,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_notify_client() exit\n");
+				IBMF_TRACE_1(DPRINT_L1,
+					     "ibmf_i_notify_client(): %s\n",
+					     "ibmf_tear_down_recv_cb already occurred");
+				IBMF_TRACE_0(DPRINT_L4,
+					     "ibmf_i_notify_client() exit\n");
 				return;
 			}
 
@@ -301,19 +281,17 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 			if (msgimplp->im_trans_state_flags &
 			    IBMF_TRANS_STATE_FLAG_WAIT) {
 
-				IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-				    ibmf_i_notify_client, IBMF_TNF_TRACE, "",
-				    "ibmf_i_notify_client(): %s, msg = 0x%p\n",
-				    tnf_string, msg, "Awaking thread",
-				    tnf_opaque, msgimplp, msgimplp);
+				IBMF_TRACE_2(DPRINT_L3,
+					     "ibmf_i_notify_client(): %s, msg = 0x%p\n",
+					     "Awaking thread",
+					     msgimplp);
 
 				cv_signal(&msgimplp->im_trans_cv);
 			} else {
-				IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-				    ibmf_i_notify_client, IBMF_TNF_TRACE, "",
-				    "ibmf_i_notify_client(): %s, msg = 0x%p\n",
-				    tnf_string, msg, "Notify client, no wait",
-				    tnf_opaque, msgimplp, msgimplp);
+				IBMF_TRACE_2(DPRINT_L3,
+					     "ibmf_i_notify_client(): %s, msg = 0x%p\n",
+					     "Notify client, no wait",
+					     msgimplp);
 			}
 
 			msgimplp->im_trans_state_flags |=
@@ -329,11 +307,10 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 			msgimplp->im_flags &= ~IBMF_MSG_FLAGS_BUSY;
 			mutex_exit(&msgimplp->im_mutex);
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_notify_client, IBMF_TNF_TRACE, "",
-			    "ibmf_i_notify_client(): %s, msg = 0x%p\n",
-			    tnf_string, msg, "No thread is blocking",
-			    tnf_opaque, msgimplp, msgimplp);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_notify_client(): %s, msg = 0x%p\n",
+				     "No thread is blocking",
+				     msgimplp);
 
 			if (msgimplp->im_trans_cb != NULL) {
 				msgimplp->im_trans_cb(
@@ -344,8 +321,7 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 		}
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_notify_client_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_notify_client() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_notify_client() exit\n");
 }
 
 /*
@@ -359,17 +335,16 @@ ibmf_i_notify_sequence(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 {
 	int status;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_notify_sequence_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_notify_sequence() enter, clientp = %p, msgimplp = %p\n",
-	    tnf_opaque, clientp, clientp, tnf_opaque, msgimplp, msgimplp);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_notify_sequence() enter, clientp = %p, msgimplp = %p\n",
+		     clientp,
+		     msgimplp);
 
 	if (msg_flags & IBMF_MSG_FLAGS_TERMINATION) {
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_notify_sequence,
-		    IBMF_TNF_TRACE, "", "ibmf_i_notify_sequence(): %s, "
-		    "msgimplp = %p\n", tnf_string, msg,
-		    "IBMF_MSG_FLAGS_TERMINATION already set",
-		    tnf_opaque, msgimplp, msgimplp);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_i_notify_sequence(): %s, ""msgimplp = %p\n",
+			     "IBMF_MSG_FLAGS_TERMINATION already set",
+			     msgimplp);
 
 		return;
 	}
@@ -392,13 +367,10 @@ ibmf_i_notify_sequence(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		status = ibmf_setup_term_ctx(clientp, msgimplp);
 		if (status != IBMF_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_notify_sequence, IBMF_TNF_TRACE,
-			    "", "ibmf_i_notify_sequence(): %s, "
-			    "msgimplp = %p\n", tnf_string, msg,
-			    "ibmf_setup_term_ctx() failed,"
-			    "reversing to regular termination",
-			    tnf_opaque, msgimplp, msgimplp);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_notify_sequence(): %s, ""msgimplp = %p\n",
+				     "ibmf_setup_term_ctx() failed,""reversing to regular termination",
+				     msgimplp);
 
 			mutex_enter(&msgimplp->im_mutex);
 
@@ -430,8 +402,7 @@ ibmf_i_notify_sequence(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		ibmf_i_notify_client(msgimplp);
 	}
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_notify_sequence_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_notify_sequence() exit, msgimplp = %p\n",
-	    tnf_opaque, msgimplp, msgimplp);
+	IBMF_TRACE_1(DPRINT_L4,
+		     "ibmf_i_notify_sequence() exit, msgimplp = %p\n",
+		     msgimplp);
 }

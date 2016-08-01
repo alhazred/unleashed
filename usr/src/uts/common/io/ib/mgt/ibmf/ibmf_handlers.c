@@ -51,11 +51,9 @@ ibmf_ibt_async_handler(void *clnt_private, ibt_hca_hdl_t hca_hdl,
 {
 	ibmf_ci_t		*cip;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_ibt_async_handler_start,
-	    IBMF_TNF_TRACE, "",
-	    "ibmf_ibt_async_handler: Code %x HCA GUID %016" PRIx64 " Port %d\n",
-	    tnf_uint, code, code, tnf_opaque, hca_guid, event->ev_hca_guid,
-	    tnf_uint, port, event->ev_port);
+	IBMF_TRACE_3(DPRINT_L3,
+	    "ibmf_ibt_async_handler: Code %x HCA GUID %016"PRIx64" Port %d\n",
+	    code, event->ev_hca_guid, event->ev_port);
 
 	/*
 	 * let ibmf_saa know events first hand
@@ -96,11 +94,8 @@ ibmf_ibt_async_handler(void *clnt_private, ibt_hca_hdl_t hca_hdl,
 
 			if (cip->ci_clients != NULL) {
 
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG,
-				    DPRINT_L1, ibmf_ibt_async_handler_err,
-				    IBMF_TNF_TRACE, "",
+				IBMF_TRACE_1(DPRINT_L1,
 				    "%s, returning failure\n",
-				    tnf_string, msg,
 				    "ibmf_ibt_async_handler: Found "
 				    "clients still registered.");
 			}
@@ -146,15 +141,12 @@ ibmf_ibt_async_handler(void *clnt_private, ibt_hca_hdl_t hca_hdl,
 		mutex_exit(&ibmf_statep->ibmf_mutex);
 
 		if (!found)
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG,
-			    DPRINT_L1, ibmf_ibt_async_handler_err,
-			    IBMF_TNF_TRACE, "", "%s, ignoring event\n",
-			    tnf_string, msg, "ibmf_ibt_async_handler: SQD "
+			IBMF_TRACE_1(DPRINT_L1, "%s, ignoring event\n",
+			    "ibmf_ibt_async_handler: SQD "
 			    "event for unknown QP received");
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_ibt_async_handler_end,
-	    IBMF_TNF_TRACE, "", "ibmf_ibt_async_handler: exit.\n");
+	IBMF_TRACE_0(DPRINT_L3, "ibmf_ibt_async_handler: exit.\n");
 }
 
 /*
@@ -175,8 +167,7 @@ ibmf_i_callback_clients(ib_guid_t hca_guid, ibmf_async_event_t evt)
 	ibmf_handle_t		*client_array	= NULL;
 	int			iclient;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_callback_clients_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_callback_clients() enter\n");
+	IBMF_TRACE_0(DPRINT_L3, "ibmf_i_callback_clients() enter\n");
 
 	/* find ci */
 	mutex_enter(&ibmf_statep->ibmf_mutex);
@@ -196,11 +187,9 @@ ibmf_i_callback_clients(ib_guid_t hca_guid, ibmf_async_event_t evt)
 
 	if (cip == NULL) {
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_callback_clients, IBMF_TNF_TRACE, "",
-		    "ibmf_i_callback_clients: "
-		    "ci = %016" PRIx64 "NOT found.\n",
-		    tnf_opaque, hca_guid, hca_guid);
+		IBMF_TRACE_1(DPRINT_L1,
+		    "ibmf_i_callback_clients: ci = %016"PRIx64"NOT found.\n",
+		    hca_guid);
 
 		mutex_exit(&ibmf_statep->ibmf_mutex);
 		goto bail;
@@ -214,12 +203,9 @@ ibmf_i_callback_clients(ib_guid_t hca_guid, ibmf_async_event_t evt)
 	    clientp = clientp->ic_next, nclients++)
 		;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_i_callback_clients, IBMF_TNF_TRACE, "",
-	    "ibmf_i_callback_clients: found %d clients, "
-	    "on ci = %016" PRIx64 "\n",
-	    tnf_int, nclients, nclients,
-	    tnf_opaque, hca_guid, hca_guid);
+	IBMF_TRACE_2(DPRINT_L3,
+	    "ibmf_i_callback_clients: found %d clients, on ci = %016"PRIx64"\n",
+	    nclients, hca_guid);
 
 	/* no clients? bail */
 	if (nclients == 0) {
@@ -243,11 +229,8 @@ ibmf_i_callback_clients(ib_guid_t hca_guid, ibmf_async_event_t evt)
 	if (cb_array == NULL || cb_args_array == NULL ||
 	    client_array == NULL) {
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_callback_clients_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_callback_clients: %s\n",
-		    tnf_string, msg, "could not allocate memory for "
-		    "callback arrays");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_i_callback_clients: %s\n",
+		    "could not allocate memory for callback arrays");
 
 		mutex_exit(&cip->ci_clients_mutex);
 		mutex_exit(&ibmf_statep->ibmf_mutex);
@@ -273,15 +256,11 @@ ibmf_i_callback_clients(ib_guid_t hca_guid, ibmf_async_event_t evt)
 	 */
 	for (iclient = 0; iclient < nclients; iclient++) {
 
-		IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_callback_clients, IBMF_TNF_TRACE, "",
-		    "ibmf_i_callback_clients: client %d"
-		    ", handle = %016" PRIx64
-		    ", callback = %016" PRIx64 ", args = %016" PRIx64 "\n",
-		    tnf_int, iclient, iclient,
-		    tnf_opaque, handle, client_array[iclient],
-		    tnf_opaque, cb_ptr, cb_array[iclient],
-		    tnf_opaque, args_ptr, cb_args_array[iclient]);
+		IBMF_TRACE_4(DPRINT_L3,
+		    "ibmf_i_callback_clients: client %d, handle = %016"PRIx64","
+		    " callback = %016"PRIx64", args = %016"PRIx64"\n", iclient,
+		    client_array[iclient], cb_array[iclient],
+		    cb_args_array[iclient]);
 
 		if (cb_array[iclient] != NULL)
 			cb_array[iclient](client_array[iclient],
@@ -299,8 +278,7 @@ bail:
 	if (client_array != NULL)
 		kmem_free(client_array, nclients * sizeof (ibmf_handle_t));
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_callback_clients_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_callback_clients: exit.\n");
+	IBMF_TRACE_0(DPRINT_L3, "ibmf_i_callback_clients: exit.\n");
 }
 
 /*
@@ -314,10 +292,8 @@ ibmf_i_mad_completions(ibt_cq_hdl_t cq_handle, void *arg)
 	ibt_status_t	status;
 	ibmf_ci_t	*ibmf_cip;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_mad_completions_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_mad_completions() enter, cq_hdl = %p\n",
-	    tnf_opaque, cq_handle, cq_handle);
+	IBMF_TRACE_1(DPRINT_L4,
+	    "ibmf_i_mad_completions() enter, cq_hdl = %p\n", cq_handle);
 
 	ibmf_cip = arg;
 
@@ -376,8 +352,7 @@ ibmf_i_mad_completions(ibt_cq_hdl_t cq_handle, void *arg)
 		ibmf_i_process_completion(ibmf_cip, &cqe);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_mad_completions_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_mad_completions() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_mad_completions() exit\n");
 }
 
 /*
@@ -387,10 +362,9 @@ ibmf_i_mad_completions(ibt_cq_hdl_t cq_handle, void *arg)
 static void
 ibmf_i_process_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 {
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_process_completion_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_process_completion() enter, cip = %p, wcp = %p\n",
-	    tnf_opaque, cip, cip, tnf_opaque, wcp, wcp);
+	IBMF_TRACE_2(DPRINT_L4,
+	    "ibmf_i_process_completion() enter, cip = %p, wcp = %p\n", cip,
+	    wcp);
 
 	if (IBMF_IS_RECV_WR_ID(wcp->wc_id) == B_TRUE) {
 		/* completion from a receive queue */
@@ -400,8 +374,7 @@ ibmf_i_process_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 		ibmf_i_handle_send_completion(cip, wcp);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_process_completion_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_process_completion() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_process_completion() exit\n");
 }
 
 #ifdef DEBUG

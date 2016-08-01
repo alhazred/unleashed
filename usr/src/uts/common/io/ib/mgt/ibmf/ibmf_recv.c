@@ -105,20 +105,18 @@ ibmf_i_handle_recv_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 	struct kmem_cache	*kmem_cachep;
 	ibmf_alt_qp_t		*altqp;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_handle_recv_completion_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_handle_recv_completion() enter, cip = %p, wcp = %p\n",
-	    tnf_opaque, cip, cip, tnf_opaque, wcp, wcp);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_handle_recv_completion() enter, cip = %p, wcp = %p\n",
+		     cip,
+		     wcp);
 
 	mutex_enter(&cip->ci_ud_dest_list_mutex);
 	if (cip->ci_ud_dest_list_count < IBMF_UD_DEST_LO_WATER_MARK) {
 		ret = ibmf_ud_dest_tq_disp(cip);
 		if (ret == 0) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L3,
-			    ibmf_i_handle_recv_completion_err, IBMF_TNF_ERROR,
-			    "", "ibmf_i_handle_recv_completion(): %s\n",
-			    tnf_string, msg, "taskq dispatch of ud_dest "
-			    "population thread failed");
+			IBMF_TRACE_1(DPRINT_L3,
+				     "ibmf_i_handle_recv_completion(): %s\n",
+				     "taskq dispatch of ud_dest ""population thread failed");
 		}
 	}
 	mutex_exit(&cip->ci_ud_dest_list_mutex);
@@ -163,13 +161,11 @@ ibmf_i_handle_recv_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 				cv_signal(&altqp->isq_wqes_cv);
 			mutex_exit(&altqp->isq_mutex);
 		}
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_handle_recv_completion, IBMF_TNF_TRACE,
-		    "", "ibmf_i_handle_recv_completion(): %s\n",
-		    tnf_string, msg, "recv wqe flushed");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_handle_recv_completion_end, IBMF_TNF_TRACE,
-		    "", "ibmf_i_handle_recv_completion() exit\n");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_handle_recv_completion(): %s\n",
+			     "recv wqe flushed");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_i_handle_recv_completion() exit\n");
 		return;
 	}
 
@@ -187,23 +183,19 @@ ibmf_i_handle_recv_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 		if (qpp->iq_rwqes_posted <= (ibmf_recv_wqes_per_port >> 1)) {
 			mutex_exit(&qpp->iq_mutex);
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_handle_recv_compl, IBMF_TNF_TRACE, "",
-			    "ibmf_i_handle_recv_compl(): %s, "
-			    "QP# = %d\n", tnf_string, msg,
-			    "Posting more RQ WQEs",
-			    tnf_int, qpnum, qpp->iq_qp_num);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_handle_recv_compl(): %s, ""QP# = %d\n",
+				     "Posting more RQ WQEs",
+				     qpp->iq_qp_num);
 
 			/* Post an additional WQE to the RQ */
 			ret = ibmf_i_post_recv_buffer(cip, qpp,
 			    B_FALSE, ibmf_qp_handle);
 			if (ret != IBMF_SUCCESS) {
-				IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-				    ibmf_i_handle_recv_compl, IBMF_TNF_TRACE,
-				    "", "ibmf_i_handle_recv_compl(): %s, "
-				    "status = %d\n", tnf_string, msg,
-				    "ibmf_i_post_recv_buffer() failed",
-				    tnf_int, status, ret);
+				IBMF_TRACE_2(DPRINT_L3,
+					     "ibmf_i_handle_recv_compl(): %s, ""status = %d\n",
+					     "ibmf_i_post_recv_buffer() failed",
+					     ret);
 			}
 
 			mutex_enter(&qpp->iq_mutex);
@@ -215,23 +207,19 @@ ibmf_i_handle_recv_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 		if (altqp->isq_rwqes_posted <= (ibmf_recv_wqes_per_port >> 1)) {
 			mutex_exit(&altqp->isq_mutex);
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_handle_recv_compl, IBMF_TNF_TRACE, "",
-			    "ibmf_i_handle_recv_compl(): %s, "
-			    "QP# = %d\n", tnf_string, msg,
-			    "Posting more RQ WQEs",
-			    tnf_int, qpnum, altqp->isq_qpn);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_handle_recv_compl(): %s, ""QP# = %d\n",
+				     "Posting more RQ WQEs",
+				     altqp->isq_qpn);
 
 			/* Post an additional WQE to the RQ */
 			ret = ibmf_i_post_recv_buffer(cip, NULL,
 			    B_FALSE, ibmf_qp_handle);
 			if (ret != IBMF_SUCCESS) {
-				IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-				    ibmf_i_handle_recv_compl, IBMF_TNF_TRACE,
-				    "", "ibmf_i_handle_recv_compl(): %s, "
-				    "status = %d\n", tnf_string, msg,
-				    "ibmf_i_post_recv_buffer() failed",
-				    tnf_int, status, ret);
+				IBMF_TRACE_2(DPRINT_L3,
+					     "ibmf_i_handle_recv_compl(): %s, ""status = %d\n",
+					     "ibmf_i_post_recv_buffer() failed",
+					     ret);
 			}
 
 			mutex_enter(&altqp->isq_mutex);
@@ -245,14 +233,12 @@ ibmf_i_handle_recv_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 	 */
 	if (wcp->wc_status != IBT_WC_SUCCESS) {
 		(void) ibmf_i_repost_recv_buffer(cip, recv_wqep);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_handle_recv_completion_err, IBMF_TNF_ERROR,
-		    "", "ibmf_i_handle_recv_completion(): %s, wc_status = %d\n",
-		    tnf_string, msg, "bad completion status received",
-		    tnf_uint, wc_status, wcp->wc_status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_handle_recv_completion_end, IBMF_TNF_TRACE,
-		    "", "ibmf_i_handle_recv_completion() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_handle_recv_completion(): %s, wc_status = %d\n",
+			     "bad completion status received",
+			     wcp->wc_status);
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_i_handle_recv_completion() exit\n");
 		return;
 	}
 
@@ -263,13 +249,11 @@ ibmf_i_handle_recv_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 	/* drop packet if MAD Base Version is not as expected */
 	if (madhdrp->BaseVersion != MAD_CLASS_BASE_VERS_1) {
 		(void) ibmf_i_repost_recv_buffer(cip, recv_wqep);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_handle_recv_completion_err, IBMF_TNF_ERROR,
-		    "", "ibmf_i_handle_recv_completion(): %s\n",
-		    tnf_string, msg, "bad MAD version");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_handle_recv_completion_end, IBMF_TNF_TRACE,
-		    "", "ibmf_i_handle_recv_completion() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_i_handle_recv_completion(): %s\n",
+			     "bad MAD version");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_i_handle_recv_completion() exit\n");
 		return;
 	}
 
@@ -280,13 +264,11 @@ ibmf_i_handle_recv_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 		ibmf_i_dump_wcp(cip, wcp, recv_wqep);
 #endif
 		(void) ibmf_i_repost_recv_buffer(cip, recv_wqep);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_handle_recv_completion_err, IBMF_TNF_ERROR,
-		    "", "ibmf_i_handle_recv_completion(): %s\n",
-		    tnf_string, msg, "bad class/type");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_handle_recv_completion_end, IBMF_TNF_TRACE,
-		    "", "ibmf_i_handle_recv_completion() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_i_handle_recv_completion(): %s\n",
+			     "bad class/type");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_i_handle_recv_completion() exit\n");
 		return;
 	}
 
@@ -313,17 +295,13 @@ ibmf_i_handle_recv_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 				mutex_enter(&clientp->ic_kstat_mutex);
 				IBMF_SUB32_KSTATS(clientp, recv_cb_active, 1);
 				mutex_exit(&clientp->ic_kstat_mutex);
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_i_handle_recv_completion_err,
-				    IBMF_TNF_ERROR, "",
-				    "ibmf_i_handle_recv_completion(): %s\n",
-				    tnf_string, msg, "dispatch failed");
+				IBMF_TRACE_1(DPRINT_L1,
+					     "ibmf_i_handle_recv_completion(): %s\n",
+					     "dispatch failed");
 				(void) ibmf_i_repost_recv_buffer(cip,
 				    recv_wqep);
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_handle_recv_completion_end,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_handle_recv_completion() exit\n");
+				IBMF_TRACE_0(DPRINT_L4,
+					     "ibmf_i_handle_recv_completion() exit\n");
 				return;
 			}
 		} else {
@@ -369,12 +347,11 @@ ibmf_i_handle_recv_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 
 		recv_wqep->recv_wc = *wcp; /* struct copy */
 
-		IBMF_TRACE_3(IBMF_TNF_NODEBUG, DPRINT_L4,
-		    ibmf_i_handle_recv_completion_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_handle_recv_completion(): %s, port = %d, "
-		    "class = 0x%x\n",
-		    tnf_string, msg, "no client registered", tnf_uint, port,
-		    recv_wqep->recv_port_num, tnf_opaque, class, class);
+		IBMF_TRACE_3(DPRINT_L4,
+			     "ibmf_i_handle_recv_completion(): %s, port = %d, ""class = 0x%x\n",
+			     "no client registered",
+			     recv_wqep->recv_port_num,
+			     class);
 
 		/* Construct the IBMF client module name */
 		ibmf_get_mod_name(madhdrp->MgmtClass, class,
@@ -394,26 +371,19 @@ ibmf_i_handle_recv_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 			if (ret == 0) {
 				kmem_free(modlargsp,
 				    sizeof (ibmf_mod_load_args_t));
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_handle_recv_completion_error,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_handle_recv_completion(): Failed "
-				    "to dispatch ibmf_module_load taskq\n");
+				IBMF_TRACE_0(DPRINT_L4,
+					     "ibmf_i_handle_recv_completion(): Failed ""to dispatch ibmf_module_load taskq\n");
 				(void) ibmf_i_repost_recv_buffer(cip,
 				    recv_wqep);
 			}
 		} else {
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_handle_recv_completion_end, IBMF_TNF_TRACE,
-			    "", "ibmf_i_handle_recv_completion(): "
-			    "Failed to allocate memory for modlargs\n");
+			IBMF_TRACE_0(DPRINT_L4,
+				     "ibmf_i_handle_recv_completion(): ""Failed to allocate memory for modlargs\n");
 			(void) ibmf_i_repost_recv_buffer(cip, recv_wqep);
 		}
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_handle_recv_completion_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_handle_recv_completion() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_handle_recv_completion() exit\n");
 }
 
 /*
@@ -455,10 +425,8 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 	/* Retrieve the QP handle from the receive WQE context */
 	ibmf_qp_handle = recv_wqep->recv_ibmf_qp_handle;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_do_recv_cb_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_do_recv_cb() enter, recv_wqep = %p\n",
-	    tnf_opaque, recv_wqep, recv_wqep);
+	IBMF_TRACE_1(DPRINT_L4,
+		     "ibmf_i_do_recv_cb() enter, recv_wqep = %p\n", recv_wqep);
 
 	/* Retrieve the client context pointer from the receive WQE context */
 	clientp = recv_wqep->recv_client;
@@ -490,14 +458,13 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 	rmpp_hdr = (ibmf_rmpp_hdr_t *)((uintptr_t)recv_wqep->recv_mem +
 	    sizeof (ib_grh_t) + sizeof (ib_mad_hdr_t));
 
-	IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_i_do_recv_cb, IBMF_TNF_TRACE, "",
-	    "ibmf_i_do_recv_cb(): %s, tid = %016" PRIx64 ", class = 0x%x, "
-	    "attrID = 0x%x, lid = 0x%x\n",
-	    tnf_string, msg, "Received MAD", tnf_opaque, tid,
-	    b2h64(mad_hdr->TransactionID), tnf_opaque, class,
-	    mad_hdr->MgmtClass, tnf_opaque, attr_id,
-	    b2h16(mad_hdr->AttributeID), tnf_opaque, remote_lid, lid);
+	IBMF_TRACE_5(DPRINT_L3,
+		     "ibmf_i_do_recv_cb(): %s, tid = %016"PRIx64", class = 0x%x, ""attrID = 0x%x, lid = 0x%x\n",
+		     "Received MAD",
+		     b2h64(mad_hdr->TransactionID),
+		     mad_hdr->MgmtClass,
+		     b2h16(mad_hdr->AttributeID),
+		     lid);
 
 	/*
 	 * Look for the matching message in the client's message list
@@ -560,15 +527,11 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 			mutex_exit(&msgimplp->im_mutex);
 			(void) ibmf_i_repost_recv_buffer(clientp->ic_myci,
 			    recv_wqep);
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L3,
-			    ibmf_i_do_recv_cb_error, IBMF_TNF_ERROR, "",
-			    "ibmf_i_do_recv_cb(): %s, msg = %p\n",
-			    tnf_string, msg,
-			    "Non-RMPP MAD received in RMPP transaction, "
-			    "dropping MAD", tnf_opaque, msgimplp, msgimplp);
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_do_recv_cb_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_do_recv_cb() exit\n");
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_do_recv_cb(): %s, msg = %p\n",
+				     "Non-RMPP MAD received in RMPP transaction, ""dropping MAD",
+				     msgimplp);
+			IBMF_TRACE_0(DPRINT_L4, "ibmf_i_do_recv_cb() exit\n");
 			return;
 		}
 
@@ -611,15 +574,11 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 				    msg_flags);
 
 			}
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L3,
-			    ibmf_i_do_recv_cb_error, IBMF_TNF_ERROR, "",
-			    "ibmf_i_do_recv_cb(): %s, msg = %p\n",
-			    tnf_string, msg,
-			    "Message already marked for removal, dropping MAD",
-			    tnf_opaque, msgimplp, msgimplp);
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_do_recv_cb_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_do_recv_cb() exit\n");
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_do_recv_cb(): %s, msg = %p\n",
+				     "Message already marked for removal, dropping MAD",
+				     msgimplp);
+			IBMF_TRACE_0(DPRINT_L4, "ibmf_i_do_recv_cb() exit\n");
 			return;
 		}
 	} else {
@@ -637,14 +596,11 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 			    IBMF_RMPP_FLAGS_FIRST_PKT) == 0) {
 				(void) ibmf_i_repost_recv_buffer(
 				    clientp->ic_myci, recv_wqep);
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L3,
-				    ibmf_i_do_recv_cb_error, IBMF_TNF_TRACE, "",
-				    "ibmf_i_do_recv_cb(): %s\n",
-				    tnf_string, msg,
-				    "unsolicited rmpp packet not first packet");
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_do_recv_cb_end, IBMF_TNF_TRACE, "",
-				    "ibmf_i_do_recv_cb() exit\n");
+				IBMF_TRACE_1(DPRINT_L3,
+					     "ibmf_i_do_recv_cb(): %s\n",
+					     "unsolicited rmpp packet not first packet");
+				IBMF_TRACE_0(DPRINT_L4,
+					     "ibmf_i_do_recv_cb() exit\n");
 				return;
 			}
 		}
@@ -664,16 +620,12 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 				mutex_exit(&clientp->ic_mutex);
 				(void) ibmf_i_repost_recv_buffer(
 				    clientp->ic_myci, recv_wqep);
-				IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_i_do_recv_cb_error, IBMF_TNF_ERROR, "",
-				    "ibmf_i_do_recv_cb(): %s, class %x\n",
-				    tnf_string, msg,
-				    "ibmf_tear_down_recv_cb already occurred",
-				    tnf_opaque, class,
-				    clientp->ic_client_info.client_class);
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_do_recv_cb_end, IBMF_TNF_TRACE, "",
-				    "ibmf_i_do_recv_cb() exit\n");
+				IBMF_TRACE_2(DPRINT_L1,
+					     "ibmf_i_do_recv_cb(): %s, class %x\n",
+					     "ibmf_tear_down_recv_cb already occurred",
+					     clientp->ic_client_info.client_class);
+				IBMF_TRACE_0(DPRINT_L4,
+					     "ibmf_i_do_recv_cb() exit\n");
 				return;
 			}
 			IBMF_RECV_CB_SETUP(clientp);
@@ -686,16 +638,12 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 				mutex_exit(&qpp->isq_mutex);
 				(void) ibmf_i_repost_recv_buffer(
 				    clientp->ic_myci, recv_wqep);
-				IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_i_do_recv_cb_error, IBMF_TNF_ERROR, "",
-				    "ibmf_i_do_recv_cb(): %s, class %x\n",
-				    tnf_string, msg,
-				    "ibmf_tear_down_recv_cb already occurred",
-				    tnf_opaque, class,
-				    clientp->ic_client_info.client_class);
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_do_recv_cb_end, IBMF_TNF_TRACE, "",
-				    "ibmf_i_do_recv_cb() exit\n");
+				IBMF_TRACE_2(DPRINT_L1,
+					     "ibmf_i_do_recv_cb(): %s, class %x\n",
+					     "ibmf_tear_down_recv_cb already occurred",
+					     clientp->ic_client_info.client_class);
+				IBMF_TRACE_0(DPRINT_L4,
+					     "ibmf_i_do_recv_cb() exit\n");
 				return;
 			}
 			IBMF_ALT_RECV_CB_SETUP(qpp);
@@ -724,13 +672,9 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 			}
 			(void) ibmf_i_repost_recv_buffer(clientp->ic_myci,
 			    recv_wqep);
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_do_recv_cb_error, IBMF_TNF_ERROR, "",
-			    "ibmf_i_do_recv_cb(): %s\n", tnf_string, msg,
-			    "mem allocation failure");
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_do_recv_cb_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_do_recv_cb() exit\n");
+			IBMF_TRACE_1(DPRINT_L1, "ibmf_i_do_recv_cb(): %s\n",
+				     "mem allocation failure");
+			IBMF_TRACE_0(DPRINT_L4, "ibmf_i_do_recv_cb() exit\n");
 			return;
 		}
 
@@ -742,10 +686,9 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 			    clientp->ic_client_info.port_num, NULL,
 			    &clientp->ic_base_lid);
 			if (clientp->ic_base_lid == 0) {
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_i_do_recv_cb_error, IBMF_TNF_ERROR, "",
-				    "ibmf_i_do_recv_cb(): %s\n",
-				    tnf_string, msg, "base_lid is undefined");
+				IBMF_TRACE_1(DPRINT_L1,
+					     "ibmf_i_do_recv_cb(): %s\n",
+					     "base_lid is undefined");
 			}
 		}
 
@@ -768,14 +711,10 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 				    clientp->ic_myci, recv_wqep->recv_port_num,
 				    wcp->wc_pkey_ix, &addrinfo.ia_p_key);
 				if (status != IBMF_SUCCESS) {
-					IBMF_TRACE_2(IBMF_TNF_NODEBUG,
-					    DPRINT_L1, ibmf_i_do_recv_cb_error,
-					    IBMF_TNF_ERROR, "",
-					    "ibmf_i_do_recv_cb(): "
-					    "get_pkey failed for ix %d,"
-					    "status = %d\n", tnf_uint,
-					    pkeyix, wcp->wc_pkey_ix, tnf_uint,
-					    ibmf_status, status);
+					IBMF_TRACE_2(DPRINT_L1,
+						     "ibmf_i_do_recv_cb(): ""get_pkey failed for ix %d,""status = %d\n",
+						     wcp->wc_pkey_ix,
+						     status);
 					mutex_enter(&clientp->ic_mutex);
 					IBMF_RECV_CB_CLEANUP(clientp);
 					mutex_exit(&clientp->ic_mutex);
@@ -785,10 +724,8 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 					cv_destroy(&msgimplp->im_trans_cv);
 					kmem_free(msgimplp,
 					    sizeof (ibmf_msg_impl_t));
-					IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-					    ibmf_i_do_recv_cb_end,
-					    IBMF_TNF_TRACE, "",
-					    "ibmf_i_do_recv_cb() exit\n");
+					IBMF_TRACE_0(DPRINT_L4,
+						     "ibmf_i_do_recv_cb() exit\n");
 					return;
 				}
 			}
@@ -847,14 +784,11 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 			mutex_destroy(&msgimplp->im_mutex);
 			cv_destroy(&msgimplp->im_trans_cv);
 			kmem_free(msgimplp, sizeof (ibmf_msg_impl_t));
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_do_recv_cb_error, IBMF_TNF_ERROR, "",
-			    "ibmf_i_do_recv_cb(): %s, status = %d\n",
-			    tnf_string, msg, "alloc ah failed", tnf_uint,
-			    ibmf_status, status);
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_do_recv_cb_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_do_recv_cb() exit\n");
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_i_do_recv_cb(): %s, status = %d\n",
+				     "alloc ah failed",
+				     status);
+			IBMF_TRACE_0(DPRINT_L4, "ibmf_i_do_recv_cb() exit\n");
 			return;
 		}
 
@@ -903,15 +837,13 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 	/* Perform RMPP or non-RMPP processing */
 	if (ibmf_i_is_rmpp(clientp, ibmf_qp_handle) &&
 	    (rmpp_hdr->rmpp_flags & IBMF_RMPP_FLAGS_ACTIVE)) {
-		IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_do_recv_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_i_do_recv_cb(): %s, tid = %016" PRIx64 ","
-		    "flags = 0x%x rmpp_type = %d, rmpp_segnum = %d\n",
-		    tnf_string, msg, "Handling rmpp MAD",
-		    tnf_opaque, tid, b2h64(mad_hdr->TransactionID),
-		    tnf_opaque, flags, rmpp_hdr->rmpp_flags,
-		    tnf_opaque, type, rmpp_hdr->rmpp_type,
-		    tnf_opaque, segment, b2h32(rmpp_hdr->rmpp_segnum));
+		IBMF_TRACE_5(DPRINT_L3,
+			     "ibmf_i_do_recv_cb(): %s, tid = %016"PRIx64",""flags = 0x%x rmpp_type = %d, rmpp_segnum = %d\n",
+			     "Handling rmpp MAD",
+			     b2h64(mad_hdr->TransactionID),
+			     rmpp_hdr->rmpp_flags,
+			     rmpp_hdr->rmpp_type,
+			     b2h32(rmpp_hdr->rmpp_segnum));
 
 		/*
 		 * Set the RMPP state to "receiver active" on the first packet
@@ -928,11 +860,10 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 				msgimplp->im_rmpp_ctx.rmpp_state =
 				    IBMF_RMPP_STATE_RECEVR_ACTIVE;
 
-				IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-				    ibmf_i_do_recv_cb, IBMF_TNF_TRACE, "",
-				    "ibmf_i_do_recv_cb(): %s, msgimplp = %p\n",
-				    tnf_string, msg, "first RMPP pkt received",
-				    tnf_opaque, msgimplp, msgimplp);
+				IBMF_TRACE_2(DPRINT_L3,
+					     "ibmf_i_do_recv_cb(): %s, msgimplp = %p\n",
+					     "first RMPP pkt received",
+					     msgimplp);
 			}
 
 			msgimplp->im_rmpp_ctx.rmpp_es = 1;
@@ -952,11 +883,10 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 			msgimplp->im_retrans.retrans_rtv =
 			    1 << rmpp_hdr->rmpp_resp_time;
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_do_recv_cb, IBMF_TNF_TRACE, "",
-			    "ibmf_i_do_recv_cb: %s, resp_time %d\n",
-			    tnf_string, msg, "new resp time received",
-			    tnf_uint, resp_time, rmpp_hdr->rmpp_resp_time);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_do_recv_cb: %s, resp_time %d\n",
+				     "new resp time received",
+				     rmpp_hdr->rmpp_resp_time);
 		}
 
 		ibmf_i_handle_rmpp(clientp, ibmf_qp_handle, msgimplp,
@@ -1045,11 +975,10 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 	 * notify the client
 	 */
 	if (msg_trans_state_flags & IBMF_TRANS_STATE_FLAG_DONE) {
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_do_recv_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_i_do_recv_cb(): %s, msgimplp = %p\n",
-		    tnf_string, msg, "notifying client",
-		    tnf_opaque, msgimplp, msgimplp);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_i_do_recv_cb(): %s, msgimplp = %p\n",
+			     "notifying client",
+			     msgimplp);
 
 		/* Remove the message from the client's message list */
 		ibmf_i_client_rem_msg(clientp, msgimplp, &ref_cnt);
@@ -1068,10 +997,8 @@ ibmf_i_do_recv_cb(void *taskq_arg)
 		}
 	}
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_do_recv_cb_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_do_recv_cb() exit, msgimplp = %p\n",
-	    tnf_opaque, msgimplp, msgimplp);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_do_recv_cb() exit, msgimplp = %p\n",
+		     msgimplp);
 }
 
 /*
@@ -1088,11 +1015,11 @@ ibmf_i_handle_non_rmpp(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	uchar_t		*msgbufp;
 	uint32_t	clhdrsz, clhdroff;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_handle_non_rmpp_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_handle_non_rmpp(): clientp = 0x%p, "
-	    "msgp = 0x%p, madp = 0x%p\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, msg, msgimplp, tnf_opaque, mad, mad);
+	IBMF_TRACE_3(DPRINT_L4,
+		     "ibmf_i_handle_non_rmpp(): clientp = 0x%p, ""msgp = 0x%p, madp = 0x%p\n",
+		     clientp,
+		     msgimplp,
+		     mad);
 
 	ASSERT(MUTEX_HELD(&msgimplp->im_mutex));
 
@@ -1109,14 +1036,12 @@ ibmf_i_handle_non_rmpp(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		    (ib_mad_hdr_t *)kmem_zalloc(IBMF_MAD_SIZE, KM_NOSLEEP);
 		if (msgimplp->im_msgbufs_recv.im_bufs_mad_hdr == NULL) {
 
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_handle_non_rmpp_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_handle_non_rmpp(): %s\n", tnf_string, msg,
-			    "mem allocation failure (non-rmpp payload)");
+			IBMF_TRACE_1(DPRINT_L1,
+				     "ibmf_i_handle_non_rmpp(): %s\n",
+				     "mem allocation failure (non-rmpp payload)");
 
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_handle_non_rmpp_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_handle_non_rmpp() exit\n");
+			IBMF_TRACE_0(DPRINT_L4,
+				     "ibmf_i_handle_non_rmpp() exit\n");
 
 			return;
 		}
@@ -1153,8 +1078,7 @@ ibmf_i_handle_non_rmpp(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_DONE;
 	ibmf_i_terminate_transaction(clientp, msgimplp, IBMF_SUCCESS);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_handle_non_rmpp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_handle_non_rmpp() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_handle_non_rmpp() exit\n");
 }
 
 /*
@@ -1172,10 +1096,10 @@ ibmf_i_repost_recv_buffer(ibmf_ci_t *cip, ibmf_recv_wqe_t *recv_wqep)
 	ibmf_alt_qp_t		*altqp;
 	ibmf_qp_t		*qpp;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_repost_recv_buffer_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_repost_recv_buffer() enter, cip = %p, rwqep = %p\n",
-	    tnf_opaque, cip, cip, tnf_opaque, rwqep, recv_wqep);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_repost_recv_buffer() enter, cip = %p, rwqep = %p\n",
+		     cip,
+		     recv_wqep);
 
 	ASSERT(MUTEX_NOT_HELD(&cip->ci_mutex));
 
@@ -1194,11 +1118,10 @@ ibmf_i_repost_recv_buffer(ibmf_ci_t *cip, ibmf_recv_wqe_t *recv_wqep)
 
 	ret = ibmf_i_ibt_to_ibmf_status(status);
 	if (ret != IBMF_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_repost_recv_buffer_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_repost_recv_buffer(): %s, status = %d\n",
-		    tnf_string, msg, "repost_recv failed", tnf_uint,
-		    ibt_status, status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_repost_recv_buffer(): %s, status = %d\n",
+			     "repost_recv failed",
+			     status);
 		kmem_free(recv_wqep->recv_wr.wr_sgl,
 		    IBMF_MAX_RQ_WR_SGL_ELEMENTS * sizeof (ibt_wr_ds_t));
 		kmem_cache_free(kmem_cachep, recv_wqep);
@@ -1230,8 +1153,7 @@ ibmf_i_repost_recv_buffer(ibmf_ci_t *cip, ibmf_recv_wqe_t *recv_wqep)
 		mutex_exit(&altqp->isq_mutex);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_repost_recv_buffer_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_repost_recv_buffer() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_repost_recv_buffer() exit\n");
 	return (ret);
 }
 
@@ -1258,14 +1180,12 @@ ibmf_i_get_class(ib_mad_hdr_t *madhdrp, ibmf_qp_handle_t dest_ibmf_qp_handle,
 	int		class = madhdrp->MgmtClass;
 	uint32_t	attrib_mod = b2h32(madhdrp->AttributeModifier);
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_get_class_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_get_class() enter, class = 0x%x, method = 0x%x, "
-	    "attribute = 0x%x, dest_qp_hdl = 0x%p\n",
-	    tnf_opaque, class, class,
-	    tnf_opaque, method, method,
-	    tnf_opaque, attrib, attrib,
-	    tnf_opaque, ibmf_qp_handle, dest_ibmf_qp_handle);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_get_class() enter, class = 0x%x, method = 0x%x, ""attribute = 0x%x, dest_qp_hdl = 0x%p\n",
+		     class,
+		     method,
+		     attrib,
+		     dest_ibmf_qp_handle);
 
 	/* set default for error checking */
 	*dest_classp = 0;
@@ -1365,19 +1285,16 @@ ibmf_i_get_class(ib_mad_hdr_t *madhdrp, ibmf_qp_handle_t dest_ibmf_qp_handle,
 	}
 
 	if (*dest_classp == 0) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_get_class_type_err, IBMF_TNF_TRACE, "",
-		    "ibmf_i_get_class(): %s, class = 0x%x\n",
-		    tnf_string, msg, "invalid class", tnf_opaque, class, class);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_class_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_get_class() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_get_class(): %s, class = 0x%x\n",
+			     "invalid class",
+			     class);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_get_class() exit\n");
 		return (IBMF_FAILURE);
 	}
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_get_class_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_get_class() exit, class = 0x%x\n",
-	    tnf_opaque, class, *dest_classp);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_get_class() exit, class = 0x%x\n",
+		     *dest_classp);
 
 	return (IBMF_SUCCESS);
 }
@@ -1408,8 +1325,7 @@ ibmf_i_get_class(ib_mad_hdr_t *madhdrp, ibmf_qp_handle_t dest_ibmf_qp_handle,
 static void
 ibmf_get_mod_name(uint8_t mad_class, ibmf_client_type_t class, char *modname)
 {
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_get_mod_name_start,
-	    IBMF_TNF_TRACE, "", "ibmf_get_mod_name_qphdl() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_get_mod_name_qphdl() enter\n");
 
 	if (AGENT_CLASS(class)) {
 		(void) sprintf(modname, "sunwibmgt%02xa", mad_class);
@@ -1420,12 +1336,9 @@ ibmf_get_mod_name(uint8_t mad_class, ibmf_client_type_t class, char *modname)
 		(void) sprintf(modname, "sunwibmgt%02x", mad_class);
 	}
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_get_mod_name,
-	    IBMF_TNF_TRACE, "", "ibmf_get_mod_name(): name = %s\n",
-	    tnf_string, msg, modname);
+	IBMF_TRACE_1(DPRINT_L3, "ibmf_get_mod_name(): name = %s\n", modname);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_get_mod_name_end,
-	    IBMF_TNF_TRACE, "", "ibmf_get_mod_name() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_get_mod_name() exit\n");
 }
 
 /*
@@ -1473,8 +1386,7 @@ ibmf_send_busy(ibmf_mod_load_args_t *modlargsp)
 	ibt_mr_desc_t		mem_desc;
 	ibt_mr_attr_t		mem_attr;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_send_busy_start,
-	    IBMF_TNF_TRACE, "", "ibmf_send_busy() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_send_busy() enter\n");
 
 	/* setup the qp attrs for the alloc call */
 	qp_attrs.qp_scq_hdl = cip->ci_alt_cq_handle;
@@ -1491,12 +1403,11 @@ ibmf_send_busy(ibmf_mod_load_args_t *modlargsp)
 	ibtstatus = ibt_alloc_qp(cip->ci_ci_handle, IBT_UD_RQP,
 	    &qp_attrs, &qp_sizes, &qp_num, &ibt_qp_handle);
 	if (ibtstatus != IBT_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_send_busy_err,
-		    IBMF_TNF_ERROR, "", "ibmf_send_busy(): %s, status = %d\n",
-		    tnf_string, msg, "failed to allocate alternate QP",
-		    tnf_int, ibt_status, ibtstatus);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_send_busy_end,
-		    IBMF_TNF_TRACE, "", "ibmf_send_busy() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_send_busy(): %s, status = %d\n",
+			     "failed to allocate alternate QP",
+			     ibtstatus);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_send_busy() exit\n");
 		return;
 	}
 
@@ -1511,12 +1422,11 @@ ibmf_send_busy(ibmf_mod_load_args_t *modlargsp)
 	ibtstatus = ibt_initialize_qp(ibt_qp_handle, &qp_modify_attr);
 	if (ibtstatus != IBT_SUCCESS) {
 		(void) ibt_free_qp(ibt_qp_handle);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_send_busy_err,
-		    IBMF_TNF_ERROR, "", "ibmf_send_busy(): %s, status = %d\n",
-		    tnf_string, msg, "failed to initialize alternate QP",
-		    tnf_int, ibt_status, ibtstatus);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_send_busy_end,
-		    IBMF_TNF_TRACE, "", "ibmf_send_busy() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_send_busy(): %s, status = %d\n",
+			     "failed to initialize alternate QP",
+			     ibtstatus);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_send_busy() exit\n");
 		return;
 	}
 
@@ -1569,12 +1479,11 @@ ibmf_send_busy(ibmf_mod_load_args_t *modlargsp)
 		ibmf_i_put_ud_dest(cip, msgimplp->im_ibmf_ud_dest);
 		kmem_free(msgimplp, sizeof (ibmf_msg_impl_t));
 		(void) ibt_free_qp(ibt_qp_handle);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_send_busy_err,
-		    IBMF_TNF_ERROR, "", "ibmf_send_busy(): %s, status = %d\n",
-		    tnf_string, msg, "failed to register memory",
-		    tnf_int, ibt_status, ibtstatus);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_send_busy_end,
-		    IBMF_TNF_TRACE, "", "ibmf_send_busy() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_send_busy(): %s, status = %d\n",
+			     "failed to register memory",
+			     ibtstatus);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_send_busy() exit\n");
 		return;
 	}
 
@@ -1622,12 +1531,11 @@ ibmf_send_busy(ibmf_mod_load_args_t *modlargsp)
 		kmem_free(send_wqep, sizeof (ibmf_send_wqe_t));
 		ibmf_i_put_ud_dest(cip, msgimplp->im_ibmf_ud_dest);
 		kmem_free(msgimplp, sizeof (ibmf_msg_impl_t));
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_send_busy_err,
-		    IBMF_TNF_ERROR, "", "ibmf_send_busy(): %s, status = %d\n",
-		    tnf_string, msg, "ibt modify ah failed", tnf_uint,
-		    ibt_status, ibtstatus);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_send_busy_end,
-		    IBMF_TNF_TRACE, "", "ibmf_send_busy(() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_send_busy(): %s, status = %d\n",
+			     "ibt modify ah failed",
+			     ibtstatus);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_send_busy(() exit\n");
 		return;
 	}
 
@@ -1668,17 +1576,15 @@ ibmf_send_busy(ibmf_mod_load_args_t *modlargsp)
 		kmem_free(send_wqep, sizeof (ibmf_send_wqe_t));
 		ibmf_i_put_ud_dest(cip, msgimplp->im_ibmf_ud_dest);
 		kmem_free(msgimplp, sizeof (ibmf_msg_impl_t));
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_send_busy_err, IBMF_TNF_TRACE, "",
-		    "ibmf_send_busy(): %s, status = %d\n", tnf_string, msg,
-		    "post send failure", tnf_uint, ibt_status, ibtstatus);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_send_busy_end,
-		    IBMF_TNF_TRACE, "", "ibmf_send_busy(() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_send_busy(): %s, status = %d\n",
+			     "post send failure",
+			     ibtstatus);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_send_busy(() exit\n");
 		return;
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_send_busy_end,
-	    IBMF_TNF_TRACE, "", "ibmf_send_busy() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_send_busy() exit\n");
 }
 
 /*
@@ -1706,8 +1612,7 @@ ibmf_module_load(void *taskq_arg)
 	ibmf_recv_wqe_t	*recv_wqep = modlargsp->recv_wqep;
 	ibmf_client_type_t class = modlargsp->ibmf_class;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_module_load_start,
-	    IBMF_TNF_TRACE, "", "ibmf_module_load_busy() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_module_load_busy() enter\n");
 	modname = modlargsp->modname;
 
 	if (IS_MANDATORY_CLASS(class)) {
@@ -1717,12 +1622,10 @@ ibmf_module_load(void *taskq_arg)
 	if (modload("misc", modname) < 0) {
 		(void) ibmf_i_repost_recv_buffer(cip, recv_wqep);
 		kmem_free(modlargsp, sizeof (ibmf_mod_load_args_t));
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L1, ibmf_module_load_error,
-		    IBMF_TNF_TRACE, "",
-		    "ibmf_module_load(): modload failed for %s\n",
-		    tnf_string, module, modname);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_module_load_end,
-		    IBMF_TNF_TRACE, "", "ibmf_module_load() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_module_load(): modload failed for %s\n",
+			     modname);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_module_load() exit\n");
 		return;
 	}
 
@@ -1730,6 +1633,5 @@ ibmf_module_load(void *taskq_arg)
 
 	kmem_free(modlargsp, sizeof (ibmf_mod_load_args_t));
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_module_load_end,
-	    IBMF_TNF_TRACE, "", "ibmf_module_load_busy() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_module_load_busy() exit\n");
 }

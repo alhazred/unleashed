@@ -76,10 +76,10 @@ ibmf_send_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	ibmf_ci_t		*cip = (ibmf_ci_t *)cdrarg;
 	ibmf_wqe_mgt_t		*wqe_mgt;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_send_wqe_cache_constructor_start, IBMF_TNF_TRACE, "",
-	    "ibmf_send_wqe_cache_constructor() enter, buf = %p, cdarg = %p\n",
-	    tnf_opaque, buf, buf, tnf_opaque, cdrarg, cdrarg);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_send_wqe_cache_constructor() enter, buf = %p, cdarg = %p\n",
+		     buf,
+		     cdrarg);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*send_wqe))
 
@@ -88,13 +88,11 @@ ibmf_send_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	    (ib_vaddr_t)(uintptr_t)vmem_alloc(cip->ci_wqe_ib_vmem,
 	    IBMF_MEM_PER_WQE, kmflags == KM_SLEEP ? VM_SLEEP : VM_NOSLEEP);
 	if (send_wqe->send_sg_mem == NULL) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_send_wqe_cache_constructor_err, IBMF_TNF_ERROR, "",
-		    "ibmf_send_wqe_cache_constructor(): %s\n", tnf_string, msg,
-		    "Failed vmem allocation in send WQE cache constructor");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_send_wqe_cache_constructor_end, IBMF_TNF_TRACE, "",
-		    "ibmf_send_wqe_cache_constructor() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_send_wqe_cache_constructor(): %s\n",
+			     "Failed vmem allocation in send WQE cache constructor");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_send_wqe_cache_constructor() exit\n");
 		return (-1);
 	}
 
@@ -118,13 +116,11 @@ ibmf_send_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 		mutex_exit(&cip->ci_wqe_mutex);
 		vmem_free(cip->ci_wqe_ib_vmem,
 		    (void *)(uintptr_t)send_wqe->send_sg_mem, IBMF_MEM_PER_WQE);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_send_wqe_cache_constructor_err, IBMF_TNF_ERROR, "",
-		    "ibmf_send_wqe_cache_constructor(): %s\n", tnf_string, msg,
-		    "Address not found in WQE mgt list");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_send_wqe_cache_constructor_end, IBMF_TNF_TRACE, "",
-		    "ibmf_send_wqe_cache_constructor() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_send_wqe_cache_constructor(): %s\n",
+			     "Address not found in WQE mgt list");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_send_wqe_cache_constructor() exit\n");
 		return (-1);
 	}
 
@@ -141,9 +137,7 @@ ibmf_send_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	mutex_exit(&wqe_mgt->wqes_mutex);
 	mutex_exit(&cip->ci_wqe_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_send_wqe_cache_constructor_end, IBMF_TNF_TRACE, "",
-	    "ibmf_send_wqe_cache_constructor() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_send_wqe_cache_constructor() exit\n");
 
 	return (0);
 }
@@ -159,10 +153,10 @@ ibmf_send_wqe_cache_destructor(void *buf, void *cdrarg)
 	ibmf_send_wqe_t		*send_wqe = (ibmf_send_wqe_t *)buf;
 	ibmf_ci_t		*cip = (ibmf_ci_t *)cdrarg;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_send_wqe_cache_destructor_start, IBMF_TNF_TRACE, "",
-	    "ibmf_send_wqe_cache_destructor() enter, buf = %p, cdarg = %p\n",
-	    tnf_opaque, buf, buf, tnf_opaque, cdrarg, cdrarg);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_send_wqe_cache_destructor() enter, buf = %p, cdarg = %p\n",
+		     buf,
+		     cdrarg);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*send_wqe))
 
@@ -171,9 +165,7 @@ ibmf_send_wqe_cache_destructor(void *buf, void *cdrarg)
 	    (void *)(uintptr_t)send_wqe->send_sg_mem, IBMF_MEM_PER_WQE);
 	send_wqe->send_mem = NULL;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_send_wqe_cache_destructor_end, IBMF_TNF_TRACE, "",
-	    "ibmf_send_wqe_cache_destructor() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_send_wqe_cache_destructor() exit\n");
 }
 
 /*
@@ -188,10 +180,10 @@ ibmf_recv_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	ibmf_ci_t		*cip = (ibmf_ci_t *)cdrarg;
 	ibmf_wqe_mgt_t		*wqe_mgt;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_recv_wqe_cache_constructor_start, IBMF_TNF_TRACE, "",
-	    "ibmf_recv_wqe_cache_constructor() enter, buf = %p, cdarg = %p\n",
-	    tnf_opaque, buf, buf, tnf_opaque, cdrarg, cdrarg);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_recv_wqe_cache_constructor() enter, buf = %p, cdarg = %p\n",
+		     buf,
+		     cdrarg);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*recv_wqe))	
 
@@ -200,13 +192,11 @@ ibmf_recv_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	    (ib_vaddr_t)(uintptr_t)vmem_alloc(cip->ci_wqe_ib_vmem,
 	    IBMF_MEM_PER_WQE, kmflags == KM_SLEEP ? VM_SLEEP : VM_NOSLEEP);
 	if (recv_wqe->recv_sg_mem == NULL) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_recv_wqe_cache_constructor_err, IBMF_TNF_ERROR, "",
-		    "ibmf_recv_wqe_cache_constructor(): %s\n", tnf_string, msg,
-		    "Failed vmem allocation in receive WQE cache constructor");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_recv_wqe_cache_constructor_end, IBMF_TNF_TRACE, "",
-		    "ibmf_recv_wqe_cache_constructor() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_recv_wqe_cache_constructor(): %s\n",
+			     "Failed vmem allocation in receive WQE cache constructor");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_recv_wqe_cache_constructor() exit\n");
 		return (-1);
 	}
 
@@ -230,13 +220,11 @@ ibmf_recv_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 		mutex_exit(&cip->ci_wqe_mutex);
 		vmem_free(cip->ci_wqe_ib_vmem,
 		    (void *)(uintptr_t)recv_wqe->recv_sg_mem, IBMF_MEM_PER_WQE);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_recv_wqe_cache_constructor_err, IBMF_TNF_ERROR, "",
-		    "ibmf_recv_wqe_cache_constructor(): %s\n", tnf_string, msg,
-		    "Address not found in WQE mgt list");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_recv_wqe_cache_constructor_end, IBMF_TNF_TRACE, "",
-		    "ibmf_recv_wqe_cache_constructor() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_recv_wqe_cache_constructor(): %s\n",
+			     "Address not found in WQE mgt list");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_recv_wqe_cache_constructor() exit\n");
 		return (-1);
 	}
 
@@ -254,9 +242,7 @@ ibmf_recv_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	mutex_exit(&wqe_mgt->wqes_mutex);
 	mutex_exit(&cip->ci_wqe_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_recv_wqe_cache_constructor_end, IBMF_TNF_TRACE, "",
-	    "ibmf_recv_wqe_cache_constructor() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_recv_wqe_cache_constructor() exit\n");
 
 	return (0);
 }
@@ -272,10 +258,10 @@ ibmf_recv_wqe_cache_destructor(void *buf, void *cdrarg)
 	ibmf_recv_wqe_t		*recv_wqe = (ibmf_recv_wqe_t *)buf;
 	ibmf_ci_t		*cip = (ibmf_ci_t *)cdrarg;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_recv_wqe_cache_destructor_start, IBMF_TNF_TRACE, "",
-	    "ibmf_recv_wqe_cache_destructor() enter, buf = %p, cdarg = %p\n",
-	    tnf_opaque, buf, buf, tnf_opaque, cdrarg, cdrarg);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_recv_wqe_cache_destructor() enter, buf = %p, cdarg = %p\n",
+		     buf,
+		     cdrarg);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*recv_wqe))	
 
@@ -284,9 +270,7 @@ ibmf_recv_wqe_cache_destructor(void *buf, void *cdrarg)
 	    (void *)(uintptr_t)recv_wqe->recv_sg_mem, IBMF_MEM_PER_WQE);
 	recv_wqe->recv_mem = NULL;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_recv_wqe_cache_destructor_end, IBMF_TNF_TRACE, "",
-	    "ibmf_recv_wqe_cache_destructor() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_recv_wqe_cache_destructor() exit\n");
 }
 
 /*
@@ -301,10 +285,10 @@ ibmf_altqp_send_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	ibmf_alt_qp_t	*qp_ctx = (ibmf_alt_qp_t *)cdrarg;
 	ibmf_wqe_mgt_t	*wqe_mgt;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_altqp_send_wqe_cache_constructor_start, IBMF_TNF_TRACE, "",
-	    "ibmf_altqp_send_wqe_cache_constructor() enter, buf = %p, "
-	    "cdarg = %p\n", tnf_opaque, buf, buf, tnf_opaque, cdrarg, cdrarg);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_altqp_send_wqe_cache_constructor() enter, buf = %p, ""cdarg = %p\n",
+		     buf,
+		     cdrarg);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*send_wqe))	
 
@@ -313,14 +297,11 @@ ibmf_altqp_send_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	    qp_ctx->isq_wqe_ib_vmem, IBMF_MEM_PER_WQE,
 	    kmflags == KM_SLEEP ? VM_SLEEP : VM_NOSLEEP);
 	if (send_wqe->send_sg_mem == NULL) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_altqp_send_wqe_cache_constructor_err, IBMF_TNF_ERROR,
-		    "", "ibmf_altqp_send_wqe_cache_constructor(): %s\n",
-		    tnf_string, msg, "Failed vmem allocation in "
-		    "alternate QP send WQE cache constructor");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_altqp_send_wqe_cache_constructor_end, IBMF_TNF_TRACE,
-		    "", "ibmf_altqp_send_wqe_cache_constructor() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_altqp_send_wqe_cache_constructor(): %s\n",
+			     "Failed vmem allocation in ""alternate QP send WQE cache constructor");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_altqp_send_wqe_cache_constructor() exit\n");
 		return (-1);
 	}
 
@@ -344,14 +325,11 @@ ibmf_altqp_send_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 		mutex_exit(&qp_ctx->isq_wqe_mutex);
 		vmem_free(qp_ctx->isq_wqe_ib_vmem,
 		    (void *)(uintptr_t)send_wqe->send_sg_mem, IBMF_MEM_PER_WQE);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_altqp_send_wqe_cache_constructor_err, IBMF_TNF_ERROR,
-		    "", "ibmf_altqp_send_wqe_cache_constructor(): %s\n",
-		    tnf_string, msg, "Address not found in WQE mgt list");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_altqp_send_wqe_cache_constructor_end,
-		    IBMF_TNF_TRACE, "",
-		    "ibmf_altqp_send_wqe_cache_constructor() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_altqp_send_wqe_cache_constructor(): %s\n",
+			     "Address not found in WQE mgt list");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_altqp_send_wqe_cache_constructor() exit\n");
 		return (-1);
 	}
 
@@ -367,9 +345,8 @@ ibmf_altqp_send_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	mutex_exit(&wqe_mgt->wqes_mutex);
 	mutex_exit(&qp_ctx->isq_wqe_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_altqp_send_wqe_cache_constructor_end, IBMF_TNF_TRACE, "",
-	    "ibmf_altqp_send_wqe_cache_constructor() exit\n");
+	IBMF_TRACE_0(DPRINT_L4,
+		     "ibmf_altqp_send_wqe_cache_constructor() exit\n");
 
 	return (0);
 }
@@ -385,10 +362,10 @@ ibmf_altqp_send_wqe_cache_destructor(void *buf, void *cdrarg)
 	ibmf_send_wqe_t	*send_wqe = (ibmf_send_wqe_t *)buf;
 	ibmf_alt_qp_t	*qp_ctx = (ibmf_alt_qp_t *)cdrarg;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_altqp_send_wqe_cache_destructor_start, IBMF_TNF_TRACE, "",
-	    "ibmf_altqp_send_wqe_cache_destructor() enter, buf = %p, "
-	    "cdarg = %p\n", tnf_opaque, buf, buf, tnf_opaque, cdrarg, cdrarg);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_altqp_send_wqe_cache_destructor() enter, buf = %p, ""cdarg = %p\n",
+		     buf,
+		     cdrarg);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*send_wqe))	
 
@@ -397,9 +374,8 @@ ibmf_altqp_send_wqe_cache_destructor(void *buf, void *cdrarg)
 	    (void *)(uintptr_t)send_wqe->send_sg_mem, IBMF_MEM_PER_WQE);
 	send_wqe->send_mem = NULL;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_altqp_send_wqe_cache_destructor_end, IBMF_TNF_TRACE, "",
-	    "ibmf_altqp_send_wqe_cache_destructor() exit\n");
+	IBMF_TRACE_0(DPRINT_L4,
+		     "ibmf_altqp_send_wqe_cache_destructor() exit\n");
 }
 
 /*
@@ -414,10 +390,10 @@ ibmf_altqp_recv_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	ibmf_alt_qp_t	*qp_ctx = (ibmf_alt_qp_t *)cdrarg;
 	ibmf_wqe_mgt_t	*wqe_mgt;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_altqp_recv_wqe_cache_constructor_start, IBMF_TNF_TRACE, "",
-	    "ibmf_altqp_recv_wqe_cache_constructor() enter, buf = %p, "
-	    "cdarg = %p\n", tnf_opaque, buf, buf, tnf_opaque, cdrarg, cdrarg);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_altqp_recv_wqe_cache_constructor() enter, buf = %p, ""cdarg = %p\n",
+		     buf,
+		     cdrarg);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*recv_wqe))	
 
@@ -426,14 +402,11 @@ ibmf_altqp_recv_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	    qp_ctx->isq_wqe_ib_vmem, IBMF_MEM_PER_WQE,
 	    kmflags == KM_SLEEP ? VM_SLEEP : VM_NOSLEEP);
 	if (recv_wqe->recv_sg_mem == NULL) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_altqp_recv_wqe_cache_constructor_err, IBMF_TNF_ERROR,
-		    "", "ibmf_altqp_recv_wqe_cache_constructor(): %s\n",
-		    tnf_string, msg,
-		    "Failed vmem allocation in recv WQE cache constructor");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_altqp_recv_wqe_cache_constructor_end, IBMF_TNF_TRACE,
-		    "", "ibmf_altqp_recv_wqe_cache_constructor() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_altqp_recv_wqe_cache_constructor(): %s\n",
+			     "Failed vmem allocation in recv WQE cache constructor");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_altqp_recv_wqe_cache_constructor() exit\n");
 		return (-1);
 	}
 
@@ -457,13 +430,11 @@ ibmf_altqp_recv_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 		mutex_exit(&qp_ctx->isq_wqe_mutex);
 		vmem_free(qp_ctx->isq_wqe_ib_vmem,
 		    (void *)(uintptr_t)recv_wqe->recv_sg_mem, IBMF_MEM_PER_WQE);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_recv_wqe_cache_constructor_err, IBMF_TNF_ERROR, "",
-		    "ibmf_altqp_recv_wqe_cache_constructor(): %s\n",
-		    tnf_string, msg, "Address not found in WQE mgt list");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_recv_wqe_cache_constructor_end, IBMF_TNF_TRACE, "",
-		    "ibmf_recv_wqe_cache_constructor() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_altqp_recv_wqe_cache_constructor(): %s\n",
+			     "Address not found in WQE mgt list");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_recv_wqe_cache_constructor() exit\n");
 		return (-1);
 	}
 
@@ -479,9 +450,8 @@ ibmf_altqp_recv_wqe_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	mutex_exit(&wqe_mgt->wqes_mutex);
 	mutex_exit(&qp_ctx->isq_wqe_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_altqp_recv_wqe_cache_constructor_end, IBMF_TNF_TRACE, "",
-	    "ibmf_altqp_recv_wqe_cache_constructor() exit\n");
+	IBMF_TRACE_0(DPRINT_L4,
+		     "ibmf_altqp_recv_wqe_cache_constructor() exit\n");
 
 	return (0);
 }
@@ -497,10 +467,10 @@ ibmf_altqp_recv_wqe_cache_destructor(void *buf, void *cdrarg)
 	ibmf_recv_wqe_t	*recv_wqe = (ibmf_recv_wqe_t *)buf;
 	ibmf_alt_qp_t	*qp_ctx = (ibmf_alt_qp_t *)cdrarg;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_altqp_recv_wqe_cache_destructor_start, IBMF_TNF_TRACE, "",
-	    "ibmf_altqp_recv_wqe_cache_destructor() enter, buf = %p, "
-	    "cdarg = %p\n", tnf_opaque, buf, buf, tnf_opaque, cdrarg, cdrarg);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_altqp_recv_wqe_cache_destructor() enter, buf = %p, ""cdarg = %p\n",
+		     buf,
+		     cdrarg);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*recv_wqe))	
 
@@ -509,9 +479,8 @@ ibmf_altqp_recv_wqe_cache_destructor(void *buf, void *cdrarg)
 	    (void *)(uintptr_t)recv_wqe->recv_sg_mem, IBMF_MEM_PER_WQE);
 	recv_wqe->recv_mem = NULL;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_altqp_recv_wqe_cache_destructor_end, IBMF_TNF_TRACE, "",
-	    "ibmf_altqp_recv_wqe_cache_destructor() exit\n");
+	IBMF_TRACE_0(DPRINT_L4,
+		     "ibmf_altqp_recv_wqe_cache_destructor() exit\n");
 }
 
 /*
@@ -528,9 +497,7 @@ ibmf_i_init_wqes(ibmf_ci_t *cip)
 	ibmf_wqe_mgt_t		*wqe_mgtp;
 	char			string[128];
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_wqes_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_wqes() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_init_wqes() enter, cip = %p\n", cip);
 
 	/*
 	 * Allocate memory for the WQE management structure
@@ -560,13 +527,11 @@ ibmf_i_init_wqes(ibmf_ci_t *cip)
 	if (status != IBT_SUCCESS) {
 		kmem_free(wqe_mgtp->wqes_kmem,
 		    wqe_mgtp->wqes_kmem_sz);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_init_wqes_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_init_wqes(): %s, status = %d\n", tnf_string, msg,
-		    "register of WQE mem failed", tnf_uint, status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_init_wqes_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_init_wqes() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_init_wqes(): %s, status = %d\n",
+			     "register of WQE mem failed",
+			     status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_wqes() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 
@@ -600,8 +565,7 @@ ibmf_i_init_wqes(ibmf_ci_t *cip)
 	    sizeof (ibmf_recv_wqe_t), 0, ibmf_recv_wqe_cache_constructor,
 	    ibmf_recv_wqe_cache_destructor, NULL, (void *)cip, NULL, 0);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_wqes_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_wqes() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_wqes() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -618,9 +582,7 @@ ibmf_i_fini_wqes(ibmf_ci_t *cip)
 	void		*wqe_kmem;
 	uint64_t	wqe_kmem_sz;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_fini_wqes_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_fini_wqes() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_fini_wqes() enter, cip = %p\n", cip);
 
 	mutex_enter(&cip->ci_wqe_mutex);
 
@@ -666,8 +628,7 @@ ibmf_i_fini_wqes(ibmf_ci_t *cip)
 	 */
 	vmem_destroy((void *)cip->ci_wqe_ib_vmem);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_fini_wqes_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_fini_wqes() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_fini_wqes() exit\n");
 }
 
 /*
@@ -684,9 +645,8 @@ ibmf_i_init_altqp_wqes(ibmf_alt_qp_t *qp_ctx)
 	ibmf_wqe_mgt_t		*wqe_mgtp;
 	char			string[128];
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_altqp_wqes_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_altqp_wqes() enter, qp_ctx = %p\n",
-	    tnf_opaque, qp, qp_ctx);
+	IBMF_TRACE_1(DPRINT_L4,
+		     "ibmf_i_init_altqp_wqes() enter, qp_ctx = %p\n", qp_ctx);
 
 	/*
 	 * Allocate memory for the WQE management structure
@@ -713,14 +673,11 @@ ibmf_i_init_altqp_wqes(ibmf_alt_qp_t *qp_ctx)
 	    &mem_desc);
 	if (status != IBT_SUCCESS) {
 		kmem_free(wqe_mgtp->wqes_kmem, wqe_mgtp->wqes_kmem_sz);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_init_altqp_wqes_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_init_altqp_wqes(): %s, status = %d\n",
-		    tnf_string, msg,
-		    "register of WQE mem failed", tnf_uint, status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_init_altqp_wqes_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_init_altqp_wqes() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_init_altqp_wqes(): %s, status = %d\n",
+			     "register of WQE mem failed",
+			     status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_altqp_wqes() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 
@@ -765,8 +722,7 @@ ibmf_i_init_altqp_wqes(ibmf_alt_qp_t *qp_ctx)
 	qp_ctx->isq_wqe_mgt_list = wqe_mgtp;
 	mutex_exit(&qp_ctx->isq_wqe_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_altqp_wqes_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_altqp_wqes() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_altqp_wqes() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -783,9 +739,8 @@ ibmf_i_fini_altqp_wqes(ibmf_alt_qp_t *qp_ctx)
 	void		*wqe_kmem;
 	uint64_t	wqe_kmem_sz;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_fini_wqes_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_fini_wqes() enter, qp_ctx = %p\n",
-	    tnf_opaque, qp, qp_ctx);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_fini_wqes() enter, qp_ctx = %p\n",
+		     qp_ctx);
 
 	mutex_enter(&qp_ctx->isq_wqe_mutex);
 	wqe_mgt = qp_ctx->isq_wqe_mgt_list;
@@ -832,8 +787,7 @@ ibmf_i_fini_altqp_wqes(ibmf_alt_qp_t *qp_ctx)
 	 */
 	vmem_destroy((void *)qp_ctx->isq_wqe_ib_vmem);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_fini_wqes_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_fini_wqes() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_fini_wqes() exit\n");
 }
 
 /*
@@ -856,12 +810,13 @@ ibmf_i_init_send_wqe(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	size_t		data_sz, offset;
 	uint32_t	cl_hdr_sz, cl_hdr_off;
 
-	IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_send_wqe_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_send_wqe() enter, "
-	    "clientp = %p, msg = %p, sglp = %p , wqep = %p, qp_hdl = %p\n",
-	    tnf_opaque, clientp, clientp, tnf_opaque, msg, msgimplp,
-	    tnf_opaque, sglp, sglp, tnf_opaque, wqep, wqep,
-	    tnf_opaque, qp_hdl, ibmf_qp_handle);
+	IBMF_TRACE_5(DPRINT_L4,
+		     "ibmf_i_init_send_wqe() enter, ""clientp = %p, msg = %p, sglp = %p , wqep = %p, qp_hdl = %p\n",
+		     clientp,
+		     msgimplp,
+		     sglp,
+		     wqep,
+		     ibmf_qp_handle);
 
 	_NOTE(ASSUMING_PROTECTED(*wqep))
 	_NOTE(ASSUMING_PROTECTED(*sglp))
@@ -936,14 +891,12 @@ ibmf_i_init_send_wqe(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 
 		_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*rmpp_hdr));
 
-		IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_init_send_wqe,
-		    IBMF_TNF_TRACE, "",
-		    "ibmf_init_send_wqe: msgimplp = %p, rmpp_type = %d,"
-		    " next_seg = %d, num_pkts = %d\n",
-		    tnf_opaque, msgimplp, msgimplp,
-		    tnf_opaque, rmpp_type, rmpp_ctx->rmpp_type,
-		    tnf_opaque, next_seg, rmpp_ctx->rmpp_ns,
-		    tnf_opaque, num_pkts, rmpp_ctx->rmpp_num_pkts);
+		IBMF_TRACE_4(DPRINT_L3,
+			     "ibmf_init_send_wqe: msgimplp = %p, rmpp_type = %d,"" next_seg = %d, num_pkts = %d\n",
+			     msgimplp,
+			     rmpp_ctx->rmpp_type,
+			     rmpp_ctx->rmpp_ns,
+			     rmpp_ctx->rmpp_num_pkts);
 
 		/*
 		 * Initialize the RMPP header
@@ -973,15 +926,13 @@ ibmf_i_init_send_wqe(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		    rmpp_ctx->rmpp_status, rmpp_ctx->rmpp_word3,
 		    rmpp_ctx->rmpp_word4)
 
-		IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_init_send_wqe,
-		    IBMF_TNF_TRACE, "",
-		    "ibmf_init_send_wqe: msgimplp = %p, rmpp_type = %d,"
-		    " rmpp_flags = 0x%x, rmpp_segnum = %d, pyld_nwl = %d\n",
-		    tnf_opaque, msgimplp, msgimplp,
-		    tnf_opaque, rmpp_type, rmpp_hdr->rmpp_type,
-		    tnf_opaque, rmpp_flags, rmpp_hdr->rmpp_flags,
-		    tnf_opaque, rmpp_segnum, b2h32(rmpp_hdr->rmpp_segnum),
-		    tnf_opaque, pyld_nwl, b2h32(rmpp_hdr->rmpp_pyldlen_nwl));
+		IBMF_TRACE_5(DPRINT_L3,
+			     "ibmf_init_send_wqe: msgimplp = %p, rmpp_type = %d,"" rmpp_flags = 0x%x, rmpp_segnum = %d, pyld_nwl = %d\n",
+			     msgimplp,
+			     rmpp_hdr->rmpp_type,
+			     rmpp_hdr->rmpp_flags,
+			     b2h32(rmpp_hdr->rmpp_segnum),
+			     b2h32(rmpp_hdr->rmpp_pyldlen_nwl));
 
 		_NOTE(NOW_VISIBLE_TO_OTHER_THREADS(rmpp_hdr));
 	}
@@ -1008,8 +959,7 @@ ibmf_i_init_send_wqe(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 
 	_NOTE(NOW_VISIBLE_TO_OTHER_THREADS(*swrp))
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_send_wqe_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_send_wqe() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_send_wqe() exit\n");
 }
 
 /*
@@ -1023,11 +973,12 @@ ibmf_i_init_recv_wqe(ibmf_qp_t *qpp, ibt_wr_ds_t *sglp,
 {
 	ibt_recv_wr_t		*rwrp;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_recv_wqe_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_recv_wqe() enter, "
-	    "qpp = %p, sglp = %p , wqep = %p, ud_dest = %p, qp_hdl = %p\n",
-	    tnf_opaque, qpp, qpp, tnf_opaque, sglp, sglp, tnf_opaque,
-	    wqep, wqep, tnf_opaque, qp_hdl, ibmf_qp_handle);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_init_recv_wqe() enter, ""qpp = %p, sglp = %p , wqep = %p, ud_dest = %p, qp_hdl = %p\n",
+		     qpp,
+		     sglp,
+		     wqep,
+		     ibmf_qp_handle);
 
 	_NOTE(ASSUMING_PROTECTED(*wqep))
 	_NOTE(ASSUMING_PROTECTED(*sglp))
@@ -1058,8 +1009,7 @@ ibmf_i_init_recv_wqe(ibmf_qp_t *qpp, ibt_wr_ds_t *sglp,
 
 	_NOTE(NOW_VISIBLE_TO_OTHER_THREADS(*rwrp))
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_recv_wqe_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_recv_wqe() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_recv_wqe() exit\n");
 }
 
 /*
@@ -1072,11 +1022,11 @@ ibmf_i_extend_wqe_cache(ibmf_ci_t *cip, ibmf_qp_handle_t ibmf_qp_handle,
 {
 	ibmf_wqe_mgt_t		*wqe_mgt;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_extend_wqe_cache_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_extend_wqe_cache() enter, cip = %p, qp_hdl = %p, "
-	    " block = %d\n", tnf_opaque, cip, cip, tnf_opaque, qp_hdl,
-	    ibmf_qp_handle, tnf_uint, block, block);
+	IBMF_TRACE_3(DPRINT_L4,
+		     "ibmf_i_extend_wqe_cache() enter, cip = %p, qp_hdl = %p, "" block = %d\n",
+		     cip,
+		     ibmf_qp_handle,
+		     block);
 
 	/*
 	 * Allocate memory for the WQE management structure
@@ -1084,13 +1034,9 @@ ibmf_i_extend_wqe_cache(ibmf_ci_t *cip, ibmf_qp_handle_t ibmf_qp_handle,
 	wqe_mgt = kmem_zalloc(sizeof (ibmf_wqe_mgt_t),
 	    (block == B_TRUE ? KM_SLEEP : KM_NOSLEEP));
 	if (wqe_mgt == NULL) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_extend_wqe_cache_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_extend_wqe_cache(): %s\n",
-		    tnf_string, msg, "wqe mgt alloc failed");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_extend_wqe_cache_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_extend_wqe_cache() exit\n");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_i_extend_wqe_cache(): %s\n",
+			     "wqe mgt alloc failed");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_extend_wqe_cache() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 	mutex_init(&wqe_mgt->wqes_mutex, NULL, MUTEX_DRIVER, NULL);
@@ -1101,19 +1047,13 @@ ibmf_i_extend_wqe_cache(ibmf_ci_t *cip, ibmf_qp_handle_t ibmf_qp_handle,
 	    block) != IBMF_SUCCESS) {
 		mutex_destroy(&wqe_mgt->wqes_mutex);
 		kmem_free(wqe_mgt, sizeof (ibmf_wqe_mgt_t));
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_extend_wqe_cache_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_extend_wqe_cache(): %s\n",
-		    tnf_string, msg, "extension of WQE pool failed");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_extend_wqe_cache_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_extend_wqe_cache() exit\n");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_i_extend_wqe_cache(): %s\n",
+			     "extension of WQE pool failed");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_extend_wqe_cache() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_extend_wqe_cache_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_extend_wqe_cache() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_extend_wqe_cache() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -1136,12 +1076,12 @@ ibmf_i_extend_wqe_mem(ibmf_ci_t *cip, ibmf_qp_handle_t ibmf_qp_handle,
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*wqe_mgt))
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_extend_wqe_cache_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_extend_wqe_cache() enter, cip = %p, qp_hdl = %p"
-	    "wqe_mgt = %p, block = %d\n",
-	    tnf_opaque, cip, cip, tnf_opaque, qp_hdl, ibmf_qp_handle,
-	    tnf_opaque, wqe_mgt, wqe_mgt, tnf_uint, block, block);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_extend_wqe_cache() enter, cip = %p, qp_hdl = %p""wqe_mgt = %p, block = %d\n",
+		     cip,
+		     ibmf_qp_handle,
+		     wqe_mgt,
+		     block);
 
 	/*
 	 * Allocate more memory for the WQEs to be used by the
@@ -1153,13 +1093,9 @@ ibmf_i_extend_wqe_mem(ibmf_ci_t *cip, ibmf_qp_handle_t ibmf_qp_handle,
 	wqe_mgt->wqes_kmem = kmem_zalloc(wqe_mgt->wqes_kmem_sz,
 	    (block == B_TRUE ? KM_SLEEP : KM_NOSLEEP));
 	if (wqe_mgt->wqes_kmem == NULL) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_extend_wqe_mem_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_extend_wqe_mem(): %s\n",
-		    tnf_string, msg, "extension of WQE pool failed");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_extend_wqe_mem_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_extend_wqe_mem() exit\n");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_i_extend_wqe_mem(): %s\n",
+			     "extension of WQE pool failed");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_extend_wqe_mem() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 
@@ -1174,13 +1110,9 @@ ibmf_i_extend_wqe_mem(ibmf_ci_t *cip, ibmf_qp_handle_t ibmf_qp_handle,
 	    &mem_attr, &mem_hdl, &mem_desc);
 	if (status != IBT_SUCCESS) {
 		kmem_free(wqe_mgt->wqes_kmem, wqe_mgt->wqes_kmem_sz);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_extend_wqe_mem_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_extend_wqe_mem(): %s\n",
-		    tnf_string, msg, "wqe extension MR failed");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_extend_wqe_mem_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_extend_wqe_mem() exit\n");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_i_extend_wqe_mem(): %s\n",
+			     "wqe extension MR failed");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_extend_wqe_mem() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 
@@ -1204,13 +1136,9 @@ ibmf_i_extend_wqe_mem(ibmf_ci_t *cip, ibmf_qp_handle_t ibmf_qp_handle,
 		(void) ibt_deregister_mr(cip->ci_ci_handle,
 		    wqe_mgt->wqes_ib_mem_hdl);
 		kmem_free(wqe_mgt->wqes_kmem, wqe_mgt->wqes_kmem_sz);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_extend_wqe_mem_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_extend_wqe_mem(): %s\n",
-		    tnf_string, msg, "wqe extension vmem_add failed");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_extend_wqe_mem_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_extend_wqe_mem() exit\n");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_i_extend_wqe_mem(): %s\n",
+			     "wqe extension vmem_add failed");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_extend_wqe_mem() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 
@@ -1237,8 +1165,7 @@ ibmf_i_extend_wqe_mem(ibmf_ci_t *cip, ibmf_qp_handle_t ibmf_qp_handle,
 		mutex_exit(&qp_ctx->isq_wqe_mutex);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_extend_wqe_mem_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_extend_wqe_mem() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_extend_wqe_mem() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -1256,11 +1183,11 @@ ibmf_i_alloc_send_resources(ibmf_ci_t *cip, ibmf_msg_impl_t *msgimplp,
 	ibmf_qp_handle_t	ibmf_qp_handle = msgimplp->im_qp_hdl;
 	ibmf_alt_qp_t		*altqp;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_alloc_send_resources_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_alloc_send_resources() enter, cip = %p, msg = %p, "
-	    " block = %d\n", tnf_opaque, cip, cip, tnf_opaque, msg,
-	    msgimplp, tnf_uint, block, block);
+	IBMF_TRACE_3(DPRINT_L4,
+		     "ibmf_i_alloc_send_resources() enter, cip = %p, msg = %p, "" block = %d\n",
+		     cip,
+		     msgimplp,
+		     block);
 
 	/* Get the WQE kmem cache pointer based on the QP type */
 	if (ibmf_qp_handle == IBMF_QP_HANDLE_DEFAULT)
@@ -1286,13 +1213,11 @@ ibmf_i_alloc_send_resources(ibmf_ci_t *cip, ibmf_msg_impl_t *msgimplp,
 			mutex_enter(&cip->ci_mutex);
 			IBMF_ADD32_PORT_KSTATS(cip, swqe_allocs_failed, 1);
 			mutex_exit(&cip->ci_mutex);
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_alloc_send_resources_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_alloc_send_resources(): %s\n",
-			    tnf_string, msg, "alloc send_wqe failed");
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_alloc_send_resources_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_alloc_send_resources() exit\n");
+			IBMF_TRACE_1(DPRINT_L1,
+				     "ibmf_i_alloc_send_resources(): %s\n",
+				     "alloc send_wqe failed");
+			IBMF_TRACE_0(DPRINT_L4,
+				     "ibmf_i_alloc_send_resources() exit\n");
 			return (IBMF_NO_RESOURCES);
 		} else {
 			send_wqep = kmem_cache_alloc(kmem_cachep, KM_NOSLEEP);
@@ -1302,15 +1227,11 @@ ibmf_i_alloc_send_resources(ibmf_ci_t *cip, ibmf_msg_impl_t *msgimplp,
 				IBMF_ADD32_PORT_KSTATS(cip, swqe_allocs_failed,
 				    1);
 				mutex_exit(&cip->ci_mutex);
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_i_alloc_send_resources_err,
-				    IBMF_TNF_ERROR, "",
-				    "ibmf_i_alloc_send_resources(): %s\n",
-				    tnf_string, msg, "alloc send_wqe failed");
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_alloc_send_resources_end,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_alloc_send_resources() exit\n");
+				IBMF_TRACE_1(DPRINT_L1,
+					     "ibmf_i_alloc_send_resources(): %s\n",
+					     "alloc send_wqe failed");
+				IBMF_TRACE_0(DPRINT_L4,
+					     "ibmf_i_alloc_send_resources() exit\n");
 				return (IBMF_NO_RESOURCES);
 			}
 		}
@@ -1332,9 +1253,7 @@ ibmf_i_alloc_send_resources(ibmf_ci_t *cip, ibmf_msg_impl_t *msgimplp,
 	send_wqep->send_msg = msgimplp;
 	*swqepp = send_wqep;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_alloc_send_resources_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_alloc_send_resources() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_alloc_send_resources() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -1352,11 +1271,11 @@ ibmf_i_free_send_resources(ibmf_ci_t *cip, ibmf_msg_impl_t *msgimplp,
 	ibmf_qp_handle_t	ibmf_qp_handle = msgimplp->im_qp_hdl;
 	ibmf_alt_qp_t		*altqp;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_free_send_resources_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_free_send_resources() enter, cip = %p, msg = %p, "
-	    " swqep = %p\n", tnf_opaque, cip, cip, tnf_opaque, msg,
-	    msgimplp, tnf_opaque, swqep, swqep);
+	IBMF_TRACE_3(DPRINT_L4,
+		     "ibmf_i_free_send_resources() enter, cip = %p, msg = %p, "" swqep = %p\n",
+		     cip,
+		     msgimplp,
+		     swqep);
 
 	/* Get the WQE kmem cache pointer based on the QP type */
 	if (ibmf_qp_handle == IBMF_QP_HANDLE_DEFAULT)
@@ -1386,7 +1305,5 @@ ibmf_i_free_send_resources(ibmf_ci_t *cip, ibmf_msg_impl_t *msgimplp,
 		mutex_exit(&altqp->isq_mutex);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_free_send_resources_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_free_send_resources() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_free_send_resources() exit\n");
 }

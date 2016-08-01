@@ -161,8 +161,7 @@ ibmf_init(void)
 	ibt_status_t 	status;
 	ibt_clnt_hdl_t 	ibmf_ibt_handle;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_init_start,
-	    IBMF_TNF_TRACE, "", "ibmf_init() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_init() enter\n");
 
 	/* setup the IBT module information */
 	ibmf_statep->ibmf_ibt_modinfo.mi_ibt_version = IBTI_V_CURR;
@@ -176,11 +175,9 @@ ibmf_init(void)
 	status = ibt_attach(&ibmf_statep->ibmf_ibt_modinfo, (void *)NULL,
 	    (void *)NULL, (void *)&ibmf_ibt_handle);
 	if (status != IBT_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_init_err,
-		    IBMF_TNF_ERROR, "", "%s, status = %d\n", tnf_string, msg,
-		    "ibt attach failed", tnf_uint, status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_init_end,
-		    IBMF_TNF_TRACE, "", "ibmf_init() exit\n");
+		IBMF_TRACE_2(DPRINT_L1, "%s, status = %d\n",
+		    "ibt attach failed", status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_init() exit\n");
 		return (1);
 	}
 
@@ -194,8 +191,7 @@ ibmf_init(void)
 	ibmf_statep->ibmf_taskq = taskq_create("ibmf_taskq", IBMF_TASKQ_1THREAD,
 	    MINCLSYSPRI, 1, ibmf_taskq_max_tasks, TASKQ_PREPOPULATE);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_init_end,
-	    IBMF_TNF_TRACE, "", "ibmf_init() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_init() exit\n");
 
 	return (0);
 }
@@ -211,8 +207,7 @@ ibmf_fini(void)
 	ibmf_ci_t	*tcip;
 	ibt_status_t	status;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_fini_start,
-	    IBMF_TNF_TRACE, "", "ibmf_fini() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_fini() enter\n");
 
 	ASSERT(MUTEX_NOT_HELD(&ibmf_statep->ibmf_mutex));
 
@@ -259,18 +254,15 @@ ibmf_fini(void)
 	/* detach from IBTF */
 	status = ibt_detach(ibmf_statep->ibmf_ibt_handle);
 	if (status != IBT_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_fini_err,
-		    IBMF_TNF_ERROR, "", "%s, status = %d\n", tnf_string, msg,
-		    "ibt detach error", tnf_uint, status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_fini_end,
-		    IBMF_TNF_TRACE, "", "ibmf_fini() exit\n");
+		IBMF_TRACE_2(DPRINT_L1, "%s, status = %d\n",
+		    "ibt detach error", status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_fini() exit\n");
 		return (1);
 	}
 
 	mutex_destroy(&ibmf_statep->ibmf_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_fini_end,
-	    IBMF_TNF_TRACE, "", "ibmf_fini() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_fini() exit\n");
 
 	return (0);
 }
@@ -282,25 +274,18 @@ ibmf_fini(void)
 int
 ibmf_i_validate_class_mask(ibmf_register_info_t	*client_infop)
 {
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_validate_class_mask_start, IBMF_TNF_TRACE, "",
+	IBMF_TRACE_1(DPRINT_L4,
 	    "ibmf_i_validate_class_mask() enter, client_infop = %p\n",
-	    tnf_opaque, client_infop, client_infop);
+	    client_infop);
 
 	if (IBMF_VALID_CLIENT_TYPE(client_infop->ir_client_class) == B_FALSE) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_validate_class_mask_err, IBMF_TNF_ERROR, "",
-		    "%s, class = %x\n", tnf_string, msg,
-		    "invalid class", tnf_uint, class,
+		IBMF_TRACE_2(DPRINT_L1, "%s, class = %x\n", "invalid class",
 		    client_infop->ir_client_class);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_validate_class_mask_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_validate_class_mask() exit\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_validate_class_mask() exit\n");
 		return (IBMF_BAD_CLASS);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_validate_class_mask_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_validate_class_mask() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_validate_class_mask() exit\n");
 	return (IBMF_SUCCESS);
 }
 
@@ -315,19 +300,14 @@ ibmf_i_validate_ci_guid_and_port(ib_guid_t hca_guid, uint8_t port_num)
 	ibt_status_t	status;
 	ibt_hca_attr_t	hca_attrs;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_validate_ci_guid_and_port_start, IBMF_TNF_TRACE, "",
+	IBMF_TRACE_2(DPRINT_L4,
 	    "ibmf_i_validate_ci_guid_and_port() enter, hca_guid = %x, "
-	    "port_num = %d\n", tnf_opaque, hca_guid, hca_guid,
-	    tnf_uint, port_num, port_num);
+	    "port_num = %d\n", hca_guid, port_num);
 
 	/* check for incorrect port number specification */
 	if (port_num == 0) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, 1,
-		    ibmf_i_validate_ci_guid_and_port_err, IBMF_TNF_ERROR, "",
-		    "%s\n", tnf_string, msg, "port num is 0");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_validate_ci_guid_and_port_end, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_1(1, "%s\n", "port num is 0");
+		IBMF_TRACE_0(DPRINT_L4,
 		    "ibmf_i_validate_ci_guid_and_port() exit\n");
 		return (IBMF_BAD_PORT);
 	}
@@ -335,33 +315,23 @@ ibmf_i_validate_ci_guid_and_port(ib_guid_t hca_guid, uint8_t port_num)
 	/* call IB transport layer for HCA attributes */
 	status = ibt_query_hca_byguid(hca_guid, &hca_attrs);
 	if (status != IBT_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_validate_ci_guid_and_port_err,
-		    IBMF_TNF_ERROR, "", "%s, status = %d\n", tnf_string, msg,
-		    "query_hca_guid failed", tnf_uint, status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_validate_ci_guid_and_port_end, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_2(DPRINT_L1, "%s, status = %d\n",
+		    "query_hca_guid failed", status);
+		IBMF_TRACE_0(DPRINT_L4,
 		    "ibmf_i_validate_ci_guid_and_port() exit\n");
 		return (IBMF_BAD_NODE);
 	}
 
 	/* check if the specified port number is within the HCAs range */
 	if (port_num > hca_attrs.hca_nports) {
-		IBMF_TRACE_3(IBMF_TNF_NODEBUG, 1,
-		    ibmf_i_validate_ci_guid_and_port_err, IBMF_TNF_ERROR, "",
-		    "%s, num = %d, hca_ports = %d\n",
-		    tnf_string, msg, "port num > valid ports",
-		    tnf_uint, num, port_num, tnf_uint, hca_nports,
-		    hca_attrs.hca_nports);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_validate_ci_guid_and_port_end, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_3(1, "%s, num = %d, hca_ports = %d\n",
+		    "port num > valid ports", port_num, hca_attrs.hca_nports);
+		IBMF_TRACE_0(DPRINT_L4,
 		    "ibmf_i_validate_ci_guid_and_port() exit\n");
 		return (IBMF_BAD_PORT);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_validate_ci_guid_and_port_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_validate_ci_guid_and_port() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_validate_ci_guid_and_port() exit\n");
 	return (IBMF_SUCCESS);
 }
 
@@ -377,9 +347,8 @@ ibmf_i_lookup_ci(ib_guid_t ci_guid)
 
 	ASSERT(MUTEX_NOT_HELD(&ibmf_statep->ibmf_mutex));
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_lookup_ci_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_lookup_ci(): enter, guid = 0x%x\n",
-	    tnf_uint64, guid, ci_guid);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_lookup_ci(): enter, guid = 0x%x\n",
+	    ci_guid);
 
 	/* walk the CI list looking for one that matches the provided GUID */
 	mutex_enter(&ibmf_statep->ibmf_mutex);
@@ -393,8 +362,7 @@ ibmf_i_lookup_ci(ib_guid_t ci_guid)
 	}
 	mutex_exit(&ibmf_statep->ibmf_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_lookup_ci_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_lookup_ci() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_lookup_ci() exit\n");
 
 	return (cip);
 }
@@ -414,9 +382,8 @@ ibmf_i_get_ci(ibmf_register_info_t *client_infop, ibmf_ci_t **cipp)
 	ibt_hca_attr_t		hca_attrs;
 	ibmf_port_kstat_t	*ksp;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_ci_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_get_ci() enter, clinfop = %p\n",
-	    tnf_opaque, client_infop, client_infop);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_get_ci() enter, clinfop = %p\n",
+	    client_infop);
 
 	/* look for a CI context with a matching GUID */
 	cip = ibmf_i_lookup_ci(client_infop->ir_ci_guid);
@@ -475,12 +442,9 @@ ibmf_i_get_ci(ibmf_register_info_t *client_infop, ibmf_ci_t **cipp)
 				cv_destroy(&cip->ci_state_cv);
 				cv_destroy(&cip->ci_wqes_cv);
 				kmem_free((void *)cip, sizeof (ibmf_ci_t));
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_i_get_ci_err, IBMF_TNF_ERROR, "",
-				    "%s\n", tnf_string, msg,
+				IBMF_TRACE_1(DPRINT_L1, "%s\n",
 				    "kstat create failed");
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_get_ci_end, IBMF_TNF_TRACE, "",
+				IBMF_TRACE_0(DPRINT_L4,
 				    "ibmf_i_get_ci() exit\n");
 				return (IBMF_NO_RESOURCES);
 			}
@@ -547,12 +511,8 @@ ibmf_i_get_ci(ibmf_register_info_t *client_infop, ibmf_ci_t **cipp)
 			mutex_exit(&ibmf_statep->ibmf_mutex);
 		} else {
 			/* we didn't find it and the CI doesn't exist */
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L1,
-			    ibmf_i_get_ci_err, IBMF_TNF_ERROR, "", "%s\n",
-			    tnf_string, msg, "GUID doesn't exist");
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_get_ci_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_get_ci() exit\n");
+			IBMF_TRACE_1(DPRINT_L1, "%s\n", "GUID doesn't exist");
+			IBMF_TRACE_0(DPRINT_L4, "ibmf_i_get_ci() exit\n");
 			return (IBMF_TRANSPORT_FAILURE);
 		}
 	}
@@ -610,12 +570,9 @@ ibmf_i_get_ci(ibmf_register_info_t *client_infop, ibmf_ci_t **cipp)
 		    (cip->ci_state == IBMF_CI_STATE_INITED && (cip->
 		    ci_state_flags & IBMF_CI_STATE_INVALIDATING) != 0)) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_get_ci_err, IBMF_TNF_ERROR, "",
+			IBMF_TRACE_2(DPRINT_L1,
 			    "ci_state = %x, ci_state_flags = %x\n",
-			    tnf_opaque, cip->ci_state, cip->ci_state,
-			    tnf_opaque, cip->ci_state_flags,
-			    cip->ci_state_flags);
+			    cip->ci_state, cip->ci_state_flags);
 
 			invalid = B_TRUE;
 			mutex_exit(&cip->ci_mutex);
@@ -637,21 +594,17 @@ ibmf_i_get_ci(ibmf_register_info_t *client_infop, ibmf_ci_t **cipp)
 	}
 
 	if (invalid == B_TRUE) {
-		IBMF_TRACE_0(IBMF_TNF_NODEBUG, DPRINT_L2, ibmf_i_get_ci_err,
-		    IBMF_TNF_ERROR, "", "ibmf_i_get_ci() error\n");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_ci_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_get_ci() exit\n");
+		IBMF_TRACE_0(DPRINT_L2, "ibmf_i_get_ci() error\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_get_ci() exit\n");
 		return (IBMF_FAILURE);
 	}
 
 	if (cip != NULL) {
 		*cipp = cip;
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_ci_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_get_ci() exit\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_get_ci() exit\n");
 		return (IBMF_SUCCESS);
 	} else {
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_ci_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_get_ci() exit\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_get_ci() exit\n");
 		return (IBMF_FAILURE);
 	}
 }
@@ -665,9 +618,7 @@ ibmf_i_release_ci(ibmf_ci_t *cip)
 {
 	uint_t ref;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_release_ci_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_release_ci() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_release_ci() enter, cip = %p\n", cip);
 
 	ASSERT(MUTEX_NOT_HELD(&cip->ci_mutex));
 
@@ -683,8 +634,7 @@ ibmf_i_release_ci(ibmf_ci_t *cip)
 		ibmf_i_uninit_ci(cip);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_release_ci_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_release_ci() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_release_ci() exit\n");
 }
 
 /*
@@ -711,9 +661,7 @@ ibmf_i_init_ci(ibmf_register_info_t *client_infop, ibmf_ci_t *cip)
 	ASSERT(MUTEX_NOT_HELD(&ibmf_statep->ibmf_mutex));
 	ASSERT(MUTEX_NOT_HELD(&cip->ci_mutex));
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_ci_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_ci() enter, cip = %p\n",
-	    tnf_opaque, ibmf_ci, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_init_ci() enter, cip = %p\n", cip);
 
 	mutex_enter(&cip->ci_mutex);
 	ci_guid = cip->ci_node_guid;
@@ -818,14 +766,11 @@ ibmf_i_init_ci(ibmf_register_info_t *client_infop, ibmf_ci_t *cip)
 
 bail:
 	if (error) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_i_init_ci_err,
-		    IBMF_TNF_ERROR, "", "%s, status = %d\n", tnf_string, msg,
-		    errmsg, tnf_uint, ibmfstatus, ibmfstatus);
+		IBMF_TRACE_2(DPRINT_L1, "%s, status = %d\n", errmsg,
+		    ibmfstatus);
 	}
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_ci_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_ci() exit, cip = %p\n",
-	    tnf_opaque, ibmf_ci, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_init_ci() exit, cip = %p\n", cip);
 
 	return (ibmfstatus);
 }
@@ -837,9 +782,7 @@ bail:
 static void
 ibmf_i_uninit_ci(ibmf_ci_t *cip)
 {
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_uninit_ci_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_uninit_ci() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_uninit_ci() enter, cip = %p\n", cip);
 
 	ASSERT(MUTEX_HELD(&cip->ci_mutex) == 0);
 
@@ -880,8 +823,7 @@ ibmf_i_uninit_ci(ibmf_ci_t *cip)
 	/* wake up waiters blocked on an un-initialization done event */
 	ibmf_i_uninit_ci_done(cip);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_uninit_ci_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_uninit_ci() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_uninit_ci() exit\n");
 }
 
 /*
@@ -891,9 +833,8 @@ ibmf_i_uninit_ci(ibmf_ci_t *cip)
 static void
 ibmf_i_init_ci_done(ibmf_ci_t *cip)
 {
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_ci_done_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_ci_done() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_init_ci_done() enter, cip = %p\n",
+	    cip);
 
 	mutex_enter(&cip->ci_mutex);
 	cip->ci_state_flags &= ~IBMF_CI_STATE_INITING;
@@ -903,8 +844,7 @@ ibmf_i_init_ci_done(ibmf_ci_t *cip)
 	}
 	mutex_exit(&cip->ci_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_ci_done_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_ci_done() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_ci_done() exit\n");
 }
 
 /*
@@ -914,9 +854,8 @@ ibmf_i_init_ci_done(ibmf_ci_t *cip)
 static void
 ibmf_i_uninit_ci_done(ibmf_ci_t *cip)
 {
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_uninit_ci_done_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_uninit_ci_done() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_uninit_ci_done() enter, cip = %p\n",
+	    cip);
 
 	mutex_enter(&cip->ci_mutex);
 	cip->ci_state_flags &= ~IBMF_CI_STATE_UNINITING;
@@ -926,8 +865,7 @@ ibmf_i_uninit_ci_done(ibmf_ci_t *cip)
 	}
 	mutex_exit(&cip->ci_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_uninit_ci_done_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_uninit_ci_done() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_uninit_ci_done() exit\n");
 }
 
 /*
@@ -944,9 +882,7 @@ ibmf_i_init_cqs(ibmf_ci_t *cip)
 
 	ASSERT(MUTEX_NOT_HELD(&cip->ci_mutex));
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_cqs_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_cqs() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_init_cqs() enter, cip = %p\n", cip);
 
 	/*
 	 * Allocate completion queue handle.
@@ -964,11 +900,9 @@ ibmf_i_init_cqs(ibmf_ci_t *cip)
 	status = ibt_alloc_cq(cip->ci_ci_handle, &cq_attrs,
 	    &cq_handle, &num_entries);
 	if (status != IBT_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_i_init_cqs_err,
-		    IBMF_TNF_ERROR, "", "%s, status = %d\n", tnf_string, msg,
-		    "ibt_alloc_cq failed", tnf_uint, ibt_status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_cqs_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_init_cqs() exit\n");
+		IBMF_TRACE_2(DPRINT_L1, "%s, status = %d\n",
+		    "ibt_alloc_cq failed", status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_cqs() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 	ibt_set_cq_handler(cq_handle, ibmf_statep->ibmf_cq_handler, cip);
@@ -979,11 +913,9 @@ ibmf_i_init_cqs(ibmf_ci_t *cip)
 	    &cq_handle, &num_entries);
 	if (status != IBT_SUCCESS) {
 		(void) ibt_free_cq(cip->ci_cq_handle);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_i_init_cqs_err,
-		    IBMF_TNF_ERROR, "", "%s, status = %d\n", tnf_string, msg,
-		    "ibt_alloc_cq failed", tnf_uint, ibt_status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_cqs_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_init_cqs() exit\n");
+		IBMF_TRACE_2(DPRINT_L1, "%s, status = %d\n",
+		    "ibt_alloc_cq failed", status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_cqs() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 	ibt_set_cq_handler(cq_handle, ibmf_statep->ibmf_cq_handler, cip);
@@ -994,8 +926,7 @@ ibmf_i_init_cqs(ibmf_ci_t *cip)
 	cip->ci_init_state |= IBMF_CI_INIT_CQ_INITED;
 	mutex_exit(&cip->ci_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_cqs_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_cqs() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_cqs() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -1010,9 +941,7 @@ ibmf_i_fini_cqs(ibmf_ci_t *cip)
 	ibt_status_t	status;
 	uint_t		ci_init_state;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_fini_cqs_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_fini_cqs() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_fini_cqs() enter, cip = %p\n", cip);
 
 	mutex_enter(&cip->ci_mutex);
 	ci_init_state = cip->ci_init_state;
@@ -1022,23 +951,18 @@ ibmf_i_fini_cqs(ibmf_ci_t *cip)
 	if (ci_init_state & IBMF_CI_INIT_CQ_INITED) {
 		status = ibt_free_cq(cip->ci_alt_cq_handle);
 		if (status != IBT_SUCCESS) {
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L3,
-			    ibmf_i_fini_cqs_err, IBMF_TNF_ERROR, "",
-			    "%s, status = %d\n", tnf_string, msg,
-			    "ibt free cqs failed", tnf_uint, status, status);
+			IBMF_TRACE_2(DPRINT_L3, "%s, status = %d\n",
+			    "ibt free cqs failed", status);
 		}
 
 		status = ibt_free_cq(cip->ci_cq_handle);
 		if (status != IBT_SUCCESS) {
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L3,
-			    ibmf_i_fini_cqs_err, IBMF_TNF_ERROR, "",
-			    "%s, status = %d\n", tnf_string, msg,
-			    "ibt free cqs failed", tnf_uint, status, status);
+			IBMF_TRACE_2(DPRINT_L3, "%s, status = %d\n",
+			    "ibt free cqs failed", status);
 		}
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_fini_cqs_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_fini_cqs() exit");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_fini_cqs() exit");
 }
 
 /*
@@ -1048,9 +972,8 @@ ibmf_i_fini_cqs(ibmf_ci_t *cip)
 static void
 ibmf_i_init_qplist(ibmf_ci_t *ibmf_cip)
 {
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_qplist_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_qplist() enter, cip = %p\n",
-	    tnf_opaque, cip, ibmf_cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_init_qplist() enter, cip = %p\n",
+	    ibmf_cip);
 
 	mutex_enter(&ibmf_cip->ci_mutex);
 	ASSERT((ibmf_cip->ci_init_state & IBMF_CI_INIT_QP_LIST_INITED) == 0);
@@ -1060,8 +983,7 @@ ibmf_i_init_qplist(ibmf_ci_t *ibmf_cip)
 	ibmf_cip->ci_init_state |= IBMF_CI_INIT_QP_LIST_INITED;
 	mutex_exit(&ibmf_cip->ci_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_qplist_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_qplist() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_qplist() exit\n");
 }
 
 /*
@@ -1075,9 +997,8 @@ ibmf_i_fini_qplist(ibmf_ci_t *ibmf_cip)
 	ibmf_alt_qp_t *altqpp;
 	ibt_status_t status;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_fini_qplist_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_fini_qplist() enter, cip = %p\n",
-	    tnf_opaque, cip, ibmf_cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_fini_qplist() enter, cip = %p\n",
+	    ibmf_cip);
 
 	mutex_enter(&ibmf_cip->ci_mutex);
 
@@ -1096,12 +1017,10 @@ ibmf_i_fini_qplist(ibmf_ci_t *ibmf_cip)
 				/* Flush the special QP */
 				status = ibt_flush_qp(qpp->iq_qp_handle);
 				if (status != IBT_SUCCESS) {
-					IBMF_TRACE_2(IBMF_TNF_NODEBUG,
-					    DPRINT_L1, ibmf_i_fini_qplist_err,
-					    IBMF_TNF_ERROR, "",
-					    "%s, status = %d\n", tnf_string,
-					    msg, "ibt_flush_qp returned error",
-					    tnf_int, status, status);
+					IBMF_TRACE_2(DPRINT_L1,
+					    "%s, status = %d\n",
+					    "ibt_flush_qp returned error",
+					    status);
 				}
 
 				/* Grab the ci_mutex mutex before waiting */
@@ -1118,12 +1037,10 @@ ibmf_i_fini_qplist(ibmf_ci_t *ibmf_cip)
 				/* Free the special QP */
 				status = ibt_free_qp(qpp->iq_qp_handle);
 				if (status != IBT_SUCCESS) {
-					IBMF_TRACE_2(IBMF_TNF_NODEBUG,
-					    DPRINT_L1, ibmf_i_fini_qplist_err,
-					    IBMF_TNF_ERROR, "",
-					    "%s, status = %d\n", tnf_string,
-					    msg, "ibt_free_qp returned error",
-					    tnf_int, status, status);
+					IBMF_TRACE_2(DPRINT_L1,
+					    "%s, status = %d\n",
+					    "ibt_free_qp returned error",
+					    status);
 				}
 			}
 			mutex_destroy(&qpp->iq_mutex);
@@ -1149,23 +1066,19 @@ ibmf_i_fini_qplist(ibmf_ci_t *ibmf_cip)
 				/* Flush the special QP */
 				status = ibt_flush_qp(altqpp->isq_qp_handle);
 				if (status != IBT_SUCCESS) {
-					IBMF_TRACE_2(IBMF_TNF_NODEBUG,
-					    DPRINT_L1, ibmf_i_fini_qplist_err,
-					    IBMF_TNF_ERROR, "",
-					    "%s, status = %d\n", tnf_string,
-					    msg, "ibt_flush_qp returned error",
-					    tnf_int, status, status);
+					IBMF_TRACE_2(DPRINT_L1,
+					    "%s, status = %d\n",
+					    "ibt_flush_qp returned error",
+					    status);
 				}
 
 				/* Free the special QP */
 				status = ibt_free_qp(altqpp->isq_qp_handle);
 				if (status != IBT_SUCCESS) {
-					IBMF_TRACE_2(IBMF_TNF_NODEBUG,
-					    DPRINT_L1, ibmf_i_fini_qplist_err,
-					    IBMF_TNF_ERROR, "",
-					    "%s, status = %d\n", tnf_string,
-					    msg, "ibt_free_qp returned error",
-					    tnf_int, status, status);
+					IBMF_TRACE_2(DPRINT_L1,
+					    "%s, status = %d\n",
+					    "ibt_free_qp returned error",
+					    status);
 				}
 			}
 			mutex_destroy(&altqpp->isq_mutex);
@@ -1179,8 +1092,7 @@ ibmf_i_fini_qplist(ibmf_ci_t *ibmf_cip)
 
 	mutex_exit(&ibmf_cip->ci_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_fini_qplist_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_fini_qplist() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_fini_qplist() exit\n");
 }
 
 /*
@@ -1195,9 +1107,9 @@ ibmf_i_alloc_client(ibmf_register_info_t *client_infop, uint_t flags,
 	char			buf[128];
 	ibmf_kstat_t		*ksp;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_alloc_client_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_alloc_client() enter, "
-	    "client_infop = %p\n", tnf_opaque, client_infop, client_infop);
+	IBMF_TRACE_1(DPRINT_L4,
+	    "ibmf_i_alloc_client() enter, client_infop = %p\n",
+	    client_infop);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*ibmf_clientp))
 
@@ -1228,11 +1140,8 @@ ibmf_i_alloc_client(ibmf_register_info_t *client_infop, uint_t flags,
 			mutex_destroy(&ibmf_clientp->ic_msg_mutex);
 			mutex_destroy(&ibmf_clientp->ic_kstat_mutex);
 			kmem_free((void *)ibmf_clientp, sizeof (ibmf_client_t));
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_alloc_client_err, IBMF_TNF_ERROR, "", "%s\n",
-			    tnf_string, msg, buf);
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_alloc_client_end, IBMF_TNF_TRACE, "",
+			IBMF_TRACE_1(DPRINT_L1, "%s\n", buf);
+			IBMF_TRACE_0(DPRINT_L4,
 			    "ibmf_i_alloc_client() exit\n");
 			return (IBMF_NO_RESOURCES);
 		}
@@ -1260,11 +1169,8 @@ ibmf_i_alloc_client(ibmf_register_info_t *client_infop, uint_t flags,
 			mutex_destroy(&ibmf_clientp->ic_kstat_mutex);
 			taskq_destroy(ibmf_clientp->ic_send_taskq);
 			kmem_free((void *)ibmf_clientp, sizeof (ibmf_client_t));
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_alloc_client_err, IBMF_TNF_ERROR, "", "%s\n",
-			    tnf_string, msg, buf);
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_alloc_client_end, IBMF_TNF_TRACE, "",
+			IBMF_TRACE_1(DPRINT_L1, "%s\n", buf);
+			IBMF_TRACE_0(DPRINT_L4,
 			    "ibmf_i_alloc_client() exit\n");
 			return (IBMF_NO_RESOURCES);
 		}
@@ -1297,12 +1203,8 @@ ibmf_i_alloc_client(ibmf_register_info_t *client_infop, uint_t flags,
 			taskq_destroy(ibmf_clientp->ic_recv_taskq);
 		}
 		kmem_free((void *)ibmf_clientp, sizeof (ibmf_client_t));
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_alloc_client_err, IBMF_TNF_ERROR, "", "%s\n",
-		    tnf_string, msg, "kstat creation failed");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_alloc_client_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_alloc_client() exit\n");
+		IBMF_TRACE_1(DPRINT_L1, "%s\n", "kstat creation failed");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_alloc_client() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 	ksp = (ibmf_kstat_t *)ibmf_clientp->ic_kstatp->ks_data;
@@ -1343,8 +1245,7 @@ ibmf_i_alloc_client(ibmf_register_info_t *client_infop, uint_t flags,
 
 	_NOTE(NOW_VISIBLE_TO_OTHER_THREADS(*ibmf_clientp))
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_alloc_client_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_alloc_client() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_alloc_client() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -1356,9 +1257,8 @@ ibmf_i_alloc_client(ibmf_register_info_t *client_infop, uint_t flags,
 void
 ibmf_i_free_client(ibmf_client_t *clientp)
 {
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_free_client_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_free_client() enter, clientp = %p\n",
-	    tnf_opaque, clientp, clientp);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_free_client() enter, clientp = %p\n",
+	    clientp);
 
 	/* delete the general ibmf kstats */
 	if (clientp->ic_kstatp != NULL) {
@@ -1387,8 +1287,7 @@ ibmf_i_free_client(ibmf_client_t *clientp)
 	cv_destroy(&clientp->ic_recv_cb_teardown_cv);
 	kmem_free((void *)clientp, sizeof (ibmf_client_t));
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_free_client_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_free_client() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_free_client() exit\n");
 }
 
 /*
@@ -1402,23 +1301,19 @@ ibmf_i_validate_classes_and_port(ibmf_ci_t *ibmf_cip,
 	ibmf_client_t		*ibmf_clientp;
 	int			status;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_validate_classes_and_port_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_validate_classes_and_port() enter, cip = %p, "
-	    "clientp = %p\n", tnf_opaque, cip, ibmf_cip,
-	    tnf_opaque, client_infop, client_infop);
+	IBMF_TRACE_2(DPRINT_L4,
+	    "ibmf_i_validate_classes_and_port() enter, cip = %p, clientp = %p\n",
+	    ibmf_cip,
+	    client_infop);
 
 	/*
 	 * the Solaris implementation of IBMF does not support
 	 * the UNIVERSAL_CLASS
 	 */
 	if (client_infop->ir_client_class == UNIVERSAL_CLASS) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_validate_classes_and_port_err, IBMF_TNF_ERROR, "",
-		    "%s\n", tnf_string, msg,
+		IBMF_TRACE_1(DPRINT_L1, "%s\n",
 		    "UNIVERSAL class is not supported");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_validate_classes_and_port_end, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_0(DPRINT_L4,
 		    "ibmf_i_validate_classes_and_port() exit\n");
 		return (IBMF_NOT_SUPPORTED);
 	}
@@ -1434,16 +1329,13 @@ ibmf_i_validate_classes_and_port(ibmf_ci_t *ibmf_cip,
 		/* client class has not been previously registered for */
 		status = IBMF_SUCCESS;
 	} else {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_validate_classes_and_port_err, IBMF_TNF_ERROR, "",
+		IBMF_TRACE_1(DPRINT_L1,
 		    "client already registered, class = 0x%X\n",
-		    tnf_uint, class, client_infop->ir_client_class);
+		    client_infop->ir_client_class);
 		status = IBMF_PORT_IN_USE;
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_validate_classes_and_port_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_validate_classes_and_port() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_validate_classes_and_port() exit\n");
 	return (status);
 }
 
@@ -1457,10 +1349,9 @@ ibmf_i_lookup_client_by_info(ibmf_ci_t *ibmf_cip,
 {
 	ibmf_client_t *clientp;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_lookup_client_by_info_start, IBMF_TNF_TRACE, "",
+	IBMF_TRACE_2(DPRINT_L4,
 	    "ibmf_i_lookup_client_by_info() enter, cip = %p, clientinfo = %p\n",
-	    tnf_opaque, cip, ibmf_cip, tnf_opaque, clientinfo, ir_client);
+	    ibmf_cip, ir_client);
 
 	ASSERT(MUTEX_NOT_HELD(&ibmf_cip->ci_clients_mutex));
 
@@ -1484,14 +1375,12 @@ ibmf_i_lookup_client_by_info(ibmf_ci_t *ibmf_cip,
 
 	if (clientp != NULL) {
 		*clientpp = clientp;
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_lookup_client_by_info_end, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_1(DPRINT_L4,
 		    "ibmf_i_lookup_client_by_info(): clientp = %p\n",
-		    tnf_opaque, clientp, clientp);
+		    clientp);
 		return (IBMF_SUCCESS);
 	} else {
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_lookup_client_by_info_end, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_0(DPRINT_L4,
 		    "ibmf_i_lookup_client_by_info() exit\n");
 		return (IBMF_FAILURE);
 	}
@@ -1504,10 +1393,9 @@ ibmf_i_lookup_client_by_info(ibmf_ci_t *ibmf_cip,
 void
 ibmf_i_add_client(ibmf_ci_t *ibmf_cip, ibmf_client_t *ibmf_clientp)
 {
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_add_start,
-	    IBMF_TNF_TRACE, "",
+	IBMF_TRACE_2(DPRINT_L4,
 	    "ibmf_i_add_client() enter, cip = %p, clientp = %p\n",
-	    tnf_opaque, ibmf_ci, ibmf_cip, tnf_opaque, client, ibmf_clientp);
+	    ibmf_cip, ibmf_clientp);
 
 	ASSERT(MUTEX_NOT_HELD(&ibmf_cip->ci_clients_mutex));
 
@@ -1523,8 +1411,7 @@ ibmf_i_add_client(ibmf_ci_t *ibmf_cip, ibmf_client_t *ibmf_clientp)
 	ibmf_cip->ci_clients_last = ibmf_clientp;
 	mutex_exit(&ibmf_cip->ci_clients_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_add_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_add_client() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_add_client() exit\n");
 }
 
 /*
@@ -1534,10 +1421,9 @@ ibmf_i_add_client(ibmf_ci_t *ibmf_cip, ibmf_client_t *ibmf_clientp)
 void
 ibmf_i_delete_client(ibmf_ci_t *ibmf_cip, ibmf_client_t *ibmf_clientp)
 {
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_delete_client_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_delete_client() enter, "
-	    "ibmf_i_delete_client() enter, cip = %p, clientp = %p\n",
-	    tnf_opaque, ibmf_ci, ibmf_cip, tnf_opaque, client, ibmf_clientp);
+	IBMF_TRACE_2(DPRINT_L4,
+	    "ibmf_i_delete_client() enter, ibmf_i_delete_client() enter, "
+	    "cip = %p, clientp = %p\n", ibmf_cip, ibmf_clientp);
 
 	ASSERT(MUTEX_NOT_HELD(&ibmf_cip->ci_clients_mutex));
 
@@ -1556,8 +1442,7 @@ ibmf_i_delete_client(ibmf_ci_t *ibmf_cip, ibmf_client_t *ibmf_clientp)
 	}
 	mutex_exit(&ibmf_cip->ci_clients_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_delete_client_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_delete_client() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_delete_client() exit\n");
 }
 
 /*
@@ -1571,10 +1456,9 @@ ibmf_i_get_qp(ibmf_ci_t *ibmf_cip, uint_t port_num, ibmf_client_type_t class,
 	ibmf_qp_t		*qpp;
 	int			qp_num, status = IBMF_SUCCESS;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_qp_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_get_qp() enter, cip = %p, "
-	    "port = %d, class = %x\n", tnf_opaque, ibmf_ci, ibmf_cip,
-	    tnf_int, port, port_num, tnf_opaque, class, class);
+	IBMF_TRACE_3(DPRINT_L4,
+	    "ibmf_i_get_qp() enter, cip = %p, port = %d, class = %x\n",
+	    ibmf_cip, port_num, class);
 
 	ASSERT(MUTEX_NOT_HELD(&ibmf_cip->ci_mutex));
 
@@ -1709,16 +1593,13 @@ ibmf_i_get_qp(ibmf_ci_t *ibmf_cip, uint_t port_num, ibmf_client_type_t class,
 
 	if (status == IBMF_SUCCESS) {
 		*qppp = qpp;
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_get_qp() exit "
-		    "qp_handle = %p\n", tnf_opaque, qp_handle, qpp);
+		IBMF_TRACE_1(DPRINT_L4,
+		    "ibmf_i_get_qp() exit qp_handle = %p\n", qpp);
 		return (IBMF_SUCCESS);
 	} else {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_i_get_qp_err,
-		    IBMF_TNF_ERROR, "", "%s\n", tnf_string, msg,
+		IBMF_TRACE_1(DPRINT_L1, "%s\n",
 		    "ibmf_i_get_qp(): qp_not found");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_get_qp() exit\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_get_qp() exit\n");
 		return (status);
 	}
 }
@@ -1732,9 +1613,9 @@ ibmf_i_release_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t **qppp)
 {
 	ibmf_qp_t	*qpp;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_release_qp_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_release_qp() enter, cip = %p, "
-	    "qpp = %p\n", tnf_opaque, cip, ibmf_cip, tnf_opaque, qpp, *qppp);
+	IBMF_TRACE_2(DPRINT_L4,
+	    "ibmf_i_release_qp() enter, cip = %p, ""qpp = %p\n",
+	    ibmf_cip, *qppp);
 
 	ASSERT(MUTEX_NOT_HELD(&ibmf_cip->ci_mutex));
 
@@ -1745,8 +1626,7 @@ ibmf_i_release_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t **qppp)
 		ibmf_i_uninit_qp(ibmf_cip, qpp);
 	mutex_exit(&ibmf_cip->ci_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_release_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_release_qp() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_release_qp() exit\n");
 }
 
 /*
@@ -1764,10 +1644,9 @@ ibmf_i_init_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t *qpp)
 	ibt_status_t		ibt_status;
 	int			i, status;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_qp_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_qp() enter, cip = %p, "
-	    "port = %d, qp = %d\n", tnf_opaque, ibmf_ci, ibmf_cip, tnf_int,
-	    port, qpp->iq_port_num, tnf_int, num, qpp->iq_qp_num);
+	IBMF_TRACE_3(DPRINT_L4,
+	    "ibmf_i_init_qp() enter, cip = %p, ""port = %d, qp = %d\n",
+	    ibmf_cip, qpp->iq_port_num, qpp->iq_qp_num);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(qpp->iq_qp_handle))
 
@@ -1778,11 +1657,8 @@ ibmf_i_init_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t *qpp)
 	if (qpp->iq_qp_handle) {	/* closed but not yet freed */
 		ibt_status = ibt_free_qp(qpp->iq_qp_handle);
 		if (ibt_status != IBT_SUCCESS) {
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_init_qp_err, IBMF_TNF_ERROR, "",
-			    "%s, status = %d\n", tnf_string, msg,
-			    "ibt_free_qp returned error",
-			    tnf_uint, ibt_status, ibt_status);
+			IBMF_TRACE_2(DPRINT_L1, "%s, status = %d\n",
+			    "ibt_free_qp returned error", ibt_status);
 		}
 		qpp->iq_qp_handle = NULL;
 	}
@@ -1808,11 +1684,10 @@ ibmf_i_init_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t *qpp)
 		mutex_enter(&ibmf_cip->ci_mutex);
 		qpp->iq_flags = IBMF_QP_FLAGS_INVALID;
 		cv_broadcast(&ibmf_cip->ci_qp_cv);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_i_init_qp_err,
-		    IBMF_TNF_ERROR, "", "ibmf_i_init_qp() error status = %d\n",
-		    tnf_uint, ibt_status, ibt_status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_init_qp() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+		    "ibmf_i_init_qp() error status = %d\n",
+		    ibt_status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_qp() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
@@ -1827,20 +1702,15 @@ ibmf_i_init_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t *qpp)
 	    IBMF_SUCCESS) {
 		ibt_status = ibt_free_qp(qpp->iq_qp_handle);
 		if (ibt_status != IBT_SUCCESS) {
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_init_qp_err, IBMF_TNF_ERROR, "",
-			    "%s, status = %d\n", tnf_string, msg,
-			    "ibt_free_qp returned error",
-			    tnf_uint, ibt_status, ibt_status);
+			IBMF_TRACE_2(DPRINT_L1, "%s, status = %d\n",
+			    "ibt_free_qp returned error", ibt_status);
 		}
 		mutex_enter(&ibmf_cip->ci_mutex);
 		qpp->iq_flags = IBMF_QP_FLAGS_INVALID;
 		cv_broadcast(&ibmf_cip->ci_qp_cv);
-		IBMF_TRACE_0(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_i_init_qp_err,
-		    IBMF_TNF_ERROR, "", "ibmf_init_qp(): failed to get "
-		    "pkey index\n");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_init_qp() exit\n");
+		IBMF_TRACE_0(DPRINT_L1,
+		    "ibmf_init_qp(): failed to get ""pkey index\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_qp() exit\n");
 		return (IBMF_FAILURE);
 	}
 	qp_modify_attr.qp_transport.ud.ud_sq_psn = 0;
@@ -1852,20 +1722,15 @@ ibmf_i_init_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t *qpp)
 	if (ibt_status != IBT_SUCCESS) {
 		ibt_status = ibt_free_qp(qpp->iq_qp_handle);
 		if (ibt_status != IBT_SUCCESS) {
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_init_qp_err, IBMF_TNF_ERROR, "",
-			    "%s, status = %d\n", tnf_string, msg,
-			    "ibt_free_qp returned error",
-			    tnf_uint, ibt_status, ibt_status);
+			IBMF_TRACE_2(DPRINT_L1, "%s, status = %d\n",
+			    "ibt_free_qp returned error", ibt_status);
 		}
 		mutex_enter(&ibmf_cip->ci_mutex);
 		qpp->iq_flags = IBMF_QP_FLAGS_INVALID;
 		cv_broadcast(&ibmf_cip->ci_qp_cv);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_i_init_qp_err,
-		    IBMF_TNF_ERROR, "", "ibmf_init_qp(): error status = %d\n",
-		    tnf_uint, ibt_status, ibt_status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_init_qp() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+		    "ibmf_init_qp(): error status = %d\n", ibt_status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_qp() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
@@ -1874,10 +1739,8 @@ ibmf_i_init_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t *qpp)
 		status =  ibmf_i_post_recv_buffer(ibmf_cip, qpp,
 		    B_TRUE, IBMF_QP_HANDLE_DEFAULT);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L1,
-			    ibmf_i_init_qp, IBMF_TNF_TRACE, "",
-			    "%s\n", tnf_string, msg, "ibmf_i_init_qp(): "
-			    "ibmf_i_post_recv_buffer() failed");
+			IBMF_TRACE_1(DPRINT_L1, "%s\n",
+			    "ibmf_i_init_qp(): ""ibmf_i_post_recv_buffer() failed");
 		}
 	}
 	mutex_enter(&ibmf_cip->ci_mutex);
@@ -1886,8 +1749,7 @@ ibmf_i_init_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t *qpp)
 	qpp->iq_flags = IBMF_QP_FLAGS_INITED;
 	cv_broadcast(&ibmf_cip->ci_qp_cv);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_qp() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_qp() exit\n");
 	return (IBMF_SUCCESS);
 }
 
@@ -1900,9 +1762,10 @@ ibmf_i_uninit_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t *qpp)
 {
 	ibt_status_t		status;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_uninit_qp_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_uninit_qp() enter, cip = %p "
-	    "qpp = %p\n", tnf_opaque, cip, ibmf_cip, tnf_opaque, qpp, qpp);
+	IBMF_TRACE_2(DPRINT_L4,
+	    "ibmf_i_uninit_qp() enter, cip = %p ""qpp = %p\n",
+		     ibmf_cip,
+		     qpp);
 
 	ASSERT(MUTEX_HELD(&ibmf_cip->ci_mutex));
 
@@ -1914,10 +1777,10 @@ ibmf_i_uninit_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t *qpp)
 	/* note: we ignore error values from ibt_flush_qp */
 	status = ibt_flush_qp(qpp->iq_qp_handle);
 	if (status != IBT_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L2,
-		    ibmf_i_uninit_qp_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_uninit_qp(): %s, status = %d\n", tnf_string, msg,
-		    "ibt_flush_qp returned error", tnf_int, status, status);
+		IBMF_TRACE_2(DPRINT_L2,
+		    "ibmf_i_uninit_qp(): %s, status = %d\n",
+			     "ibt_flush_qp returned error",
+			     status);
 	}
 
 	/* mark state as INVALID and signal any blockers */
@@ -1925,8 +1788,7 @@ ibmf_i_uninit_qp(ibmf_ci_t *ibmf_cip, ibmf_qp_t *qpp)
 	qpp->iq_flags = IBMF_QP_FLAGS_INVALID;
 	cv_broadcast(&ibmf_cip->ci_qp_cv);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_uninit_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_uninit_qp() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_uninit_qp() exit\n");
 }
 
 /*
@@ -1938,11 +1800,11 @@ ibmf_i_alloc_msg(ibmf_client_t *clientp, ibmf_msg_impl_t **msgp, int km_flags)
 {
 	ibmf_msg_impl_t *msgimplp;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_alloc_msg_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_alloc_msg() enter, clientp = %p, msg = %p, "
-	    " kmflags = %d\n", tnf_opaque, clientp, clientp, tnf_opaque, msg,
-	    *msgp, tnf_int, km_flags, km_flags);
+	IBMF_TRACE_3(DPRINT_L4,
+	    "ibmf_i_alloc_msg() enter, clientp = %p, msg = %p, "" kmflags = %d\n",
+		     clientp,
+		     *msgp,
+		     km_flags);
 
 	/* allocate the message context */
 	msgimplp = (ibmf_msg_impl_t *)kmem_zalloc(sizeof (ibmf_msg_impl_t),
@@ -1952,18 +1814,14 @@ ibmf_i_alloc_msg(ibmf_client_t *clientp, ibmf_msg_impl_t **msgp, int km_flags)
 			ibmf_i_pop_ud_dest_thread(clientp->ic_myci);
 		}
 	} else {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_alloc_msg_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_alloc_msg(): %s\n",
-		    tnf_string, msg, "kmem_xalloc failed");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_alloc_msg_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_alloc_msg() exit\n");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_i_alloc_msg(): %s\n",
+		    "kmem_xalloc failed");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_alloc_msg() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 
 	*msgp = msgimplp;
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_alloc_msg_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_alloc_msg() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_alloc_msg() exit\n");
 	return (IBMF_SUCCESS);
 }
 
@@ -1979,9 +1837,8 @@ ibmf_i_free_msg(ibmf_msg_impl_t *msgimplp)
 	ibmf_client_t *clientp = (ibmf_client_t *)msgimplp->im_client;
 	uint32_t	cl_hdr_sz, cl_hdr_off;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_free_msg_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_free_msg() enter, msg = %p\n", tnf_opaque, msg, msgimplp);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_free_msg() enter, msg = %p\n",
+	    msgimplp);
 
 	/* free up the UD destination resource */
 	if (msgimplp->im_ibmf_ud_dest != NULL) {
@@ -2008,8 +1865,7 @@ ibmf_i_free_msg(ibmf_msg_impl_t *msgimplp)
 	/* free the message context */
 	kmem_free(msgimplp, sizeof (ibmf_msg_impl_t));
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_free_msg_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_free_msg() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_free_msg() exit\n");
 }
 
 /*
@@ -2031,11 +1887,9 @@ ibmf_i_msg_transport(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 	char		errmsg[128];
 	timeout_id_t	msg_rp_unset_id, msg_tr_unset_id;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_msg_transport_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_msg_transport(): clientp = 0x%p, "
-	    "qphdl = 0x%p, msgp = 0x%p, block = %d\n",
-	    tnf_opaque, clientp, clientp, tnf_opaque, qphdl, ibmf_qp_handle,
-	    tnf_opaque, msg, msgimplp, tnf_uint, block, blocking);
+	IBMF_TRACE_4(DPRINT_L4,
+	    "ibmf_i_msg_transport(): clientp = 0x%p, ""qphdl = 0x%p, msgp = 0x%p, block = %d\n",
+	    clientp, ibmf_qp_handle, msgimplp, blocking);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*msgimplp, *msgbufp))
 
@@ -2087,19 +1941,14 @@ ibmf_i_msg_transport(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 	if (msgimplp->im_retrans.retrans_rttv == 0)
 		msgimplp->im_retrans.retrans_rttv = IBMF_RETRANS_DEF_RTTV;
 
-	IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_msg_transport,
-	    IBMF_TNF_TRACE, "", "ibmf_i_msg_transport(): %s, msgp = 0x%p, "
-	    "class = 0x%x, method = 0x%x, attributeID = 0x%x\n",
-	    tnf_string, msg, "Added message", tnf_opaque, msgimplp,
-	    msgimplp, tnf_opaque, class, msgimplp->im_mgt_class, tnf_opaque,
-	    method, madhdrp->R_Method, tnf_opaque, attrib_id,
-	    b2h16(madhdrp->AttributeID));
+	IBMF_TRACE_5(DPRINT_L3,
+	    "ibmf_i_msg_transport(): %s, msgp = 0x%p, ""class = 0x%x, method = 0x%x, attributeID = 0x%x\n",
+	    "Added message", msgimplp, msgimplp->im_mgt_class,
+	    madhdrp->R_Method, b2h16(madhdrp->AttributeID));
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_msg_transport,
-	    IBMF_TNF_TRACE, "", "ibmf_i_msg_transport(): msgp = 0x%p, "
-	    "TID = 0x%p, transp_op_flags = 0x%x\n",
-	    tnf_opaque, msgimplp, msgimplp, tnf_opaque, tid, msgimplp->im_tid,
-	    tnf_uint, transp_op_flags, msgimplp->im_transp_op_flags);
+	IBMF_TRACE_3(DPRINT_L3,
+	    "ibmf_i_msg_transport(): msgp = 0x%p, ""TID = 0x%p, transp_op_flags = 0x%x\n",
+	    msgimplp, msgimplp->im_tid, msgimplp->im_transp_op_flags);
 
 	/*
 	 * Do not allow reuse of a message where the receive buffers are
@@ -2130,12 +1979,10 @@ ibmf_i_msg_transport(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 	if ((msgbufp->im_bufs_mad_hdr != NULL) &&
 	    (msgimplp->im_transp_op_flags & IBMF_MSG_TRANS_FLAG_SEQ)) {
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_msg_transport,
-		    IBMF_TNF_TRACE, "", "ibmf_i_msg_transport(): %s, "
-		    "msgp = 0x%p, mad_hdrp = 0x%p\n", tnf_string, msg,
-		    "Freeing recv buffer for reused message",
-		    tnf_opaque, msgimplp, msgimplp,
-		    tnf_opaque, mad_hdr, msgbufp->im_bufs_mad_hdr);
+		IBMF_TRACE_3(DPRINT_L3,
+		    "ibmf_i_msg_transport(): %s, ""msgp = 0x%p, mad_hdrp = 0x%p\n",
+		    "Freeing recv buffer for reused message", msgimplp,
+		    msgbufp->im_bufs_mad_hdr);
 
 		ibmf_i_mgt_class_to_hdr_sz_off(
 		    msgbufp->im_bufs_mad_hdr->MgmtClass,
@@ -2176,19 +2023,15 @@ ibmf_i_msg_transport(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 	/* transition out of uninit state */
 	msgimplp->im_trans_state_flags = IBMF_TRANS_STATE_FLAG_INIT;
 
-	IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_msg_transport,
-	    IBMF_TNF_TRACE, "", "ibmf_i_msg_transport(): msgp = 0x%p, "
-	    "local_lid = 0x%x, remote_lid = 0x%x, remote_qpn = 0x%x, "
-	    "block = %d\n", tnf_opaque, msgp, msgimplp,
-	    tnf_uint, local_lid, msgimplp->im_local_addr.ia_local_lid,
-	    tnf_uint, remote_lid, msgimplp->im_local_addr.ia_remote_lid,
-	    tnf_uint, remote_qpn, msgimplp->im_local_addr.ia_remote_qno,
-	    tnf_uint, blocking, blocking);
+	IBMF_TRACE_5(DPRINT_L3,
+	    "ibmf_i_msg_transport(): msgp = 0x%p, ""local_lid = 0x%x, remote_lid = 0x%x, remote_qpn = 0x%x, ""block = %d\n",
+	    msgimplp, msgimplp->im_local_addr.ia_local_lid,
+	    msgimplp->im_local_addr.ia_remote_lid,
+	    msgimplp->im_local_addr.ia_remote_qno, blocking);
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_msg_transport,
-	    IBMF_TNF_TRACE, "", "ibmf_i_msg_transport(): "
-	    "unsetting timer %p %d\n", tnf_opaque, msgimplp, msgimplp,
-	    tnf_opaque, timeout_id, msgimplp->im_rp_timeout_id);
+	IBMF_TRACE_2(DPRINT_L3,
+	    "ibmf_i_msg_transport(): ""unsetting timer %p %d\n",
+	    msgimplp, msgimplp->im_rp_timeout_id);
 
 	ASSERT(msgimplp->im_rp_timeout_id == 0);
 	ASSERT(msgimplp->im_tr_timeout_id == 0);
@@ -2265,20 +2108,16 @@ ibmf_i_msg_transport(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 		/* indicate that the tranaction is waiting */
 		msgimplp->im_trans_state_flags |= IBMF_TRANS_STATE_FLAG_WAIT;
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_msg_transport,
-		    IBMF_TNF_TRACE, "",
+		IBMF_TRACE_2(DPRINT_L3,
 		    "ibmf_i_msg_transport(): %s, msgp = 0x%p\n",
-		    tnf_string, msg, "blocking for completion",
-		    tnf_opaque, msgimplp, msgimplp);
+		    "blocking for completion", msgimplp);
 
 		/* wait for transaction completion */
 		cv_wait(&msgimplp->im_trans_cv, &msgimplp->im_mutex);
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_msg_transport,
-		    IBMF_TNF_TRACE, "",
+		IBMF_TRACE_2(DPRINT_L3,
 		    "ibmf_i_msg_transport(): %s, msgp = 0x%p\n",
-		    tnf_string, msg, "unblocking for completion",
-		    tnf_opaque, msgimplp, msgimplp);
+		    "unblocking for completion", msgimplp);
 
 		/* clean up flags */
 		msgimplp->im_trans_state_flags &= ~IBMF_TRANS_STATE_FLAG_WAIT;
@@ -2286,10 +2125,9 @@ ibmf_i_msg_transport(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 
 		if (msgimplp->im_msg_status != IBMF_SUCCESS) {
 
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_msg_transport_err, IBMF_TNF_ERROR, "",
+			IBMF_TRACE_1(DPRINT_L1,
 			    "ibmf_i_msg_transport(): msg_status = %d\n",
-			    tnf_uint, msgstatus, msgimplp->im_msg_status);
+			    msgimplp->im_msg_status);
 
 			status = msgimplp->im_msg_status;
 		}
@@ -2298,10 +2136,9 @@ ibmf_i_msg_transport(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 		msgimplp->im_flags &= ~IBMF_MSG_FLAGS_BUSY;
 
 		if (msgimplp->im_msg_status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_msg_transport_err, IBMF_TNF_ERROR, "",
+			IBMF_TRACE_1(DPRINT_L1,
 			    "ibmf_i_msg_transport(): msg_status = %d\n",
-			    tnf_uint, msgstatus, msgimplp->im_msg_status);
+			    msgimplp->im_msg_status);
 			status = msgimplp->im_msg_status;
 		}
 	}
@@ -2330,15 +2167,13 @@ ibmf_i_msg_transport(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 
 bail:
 	if (error) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_msg_transport_err, IBMF_TNF_ERROR, "",
+		IBMF_TRACE_2(DPRINT_L1,
 		    "ibmf_i_msg_transport(): %s, msgp = 0x%p\n",
-		    tnf_string, msg, errmsg, tnf_opaque, msgimplp, msgimplp);
+		    errmsg, msgimplp);
 	}
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_msg_transport_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_msg_transport() exit, status = %d\n",
-	    tnf_uint, status, status);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_msg_transport() exit, status = %d\n",
+	    status);
 
 	return (status);
 }
@@ -2351,8 +2186,7 @@ void
 ibmf_i_init_msg(ibmf_msg_impl_t *msgimplp, ibmf_msg_cb_t trans_cb,
     void *trans_cb_arg, ibmf_retrans_t *retrans, boolean_t block)
 {
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_msg_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_msg() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_msg() enter\n");
 
 	_NOTE(ASSUMING_PROTECTED(msgimplp->im_trans_cb,
 	    msgimplp->im_trans_cb_arg))
@@ -2368,8 +2202,7 @@ ibmf_i_init_msg(ibmf_msg_impl_t *msgimplp, ibmf_msg_cb_t trans_cb,
 		    sizeof (ibmf_retrans_t));
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_msg_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_msg() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_init_msg() exit\n");
 }
 
 /*
@@ -2392,11 +2225,9 @@ ibmf_i_alloc_qp(ibmf_client_t *clientp, ib_pkey_t p_key, ib_qkey_t q_key,
 	char			errmsg[128];
 
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_alloc_qp_start, IBMF_TNF_TRACE, "",
+	IBMF_TRACE_3(DPRINT_L4,
 	    "ibmf_i_alloc_qp() enter, clientp = %p, pkey = %x, qkey = %x \n",
-	    tnf_opaque, clientp, clientp, tnf_uint, p_key, p_key,
-	    tnf_uint, q_key, q_key);
+	    clientp, p_key, q_key);
 
 	/*
 	 * get the pkey index associated with this pkey if present in table
@@ -2518,11 +2349,10 @@ ibmf_i_alloc_qp(ibmf_client_t *clientp, ib_pkey_t p_key, ib_qkey_t q_key,
 		status = ibmf_i_post_recv_buffer(ibmf_cip, clientp->ic_qp,
 		    blocking, *ibmf_qp_handlep);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_alloc_qp, IBMF_TNF_TRACE, "",
+			IBMF_TRACE_2(DPRINT_L3,
 			    "ibmf_i_alloc_qp(): %s, status = %d\n",
-			    tnf_string, msg, "ibmf_i_post_recv_buffer() failed",
-			    tnf_int, status, status);
+			    "ibmf_i_post_recv_buffer() failed",
+			    status);
 		}
 	}
 
@@ -2531,15 +2361,11 @@ ibmf_i_alloc_qp(ibmf_client_t *clientp, ib_pkey_t p_key, ib_qkey_t q_key,
 	mutex_exit(&clientp->ic_kstat_mutex);
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_alloc_qp_err, IBMF_TNF_TRACE, "",
-		    "ibmf_i_alloc_qp(): %s\n", tnf_string, msg, errmsg);
-	}
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_i_alloc_qp(): %s\n", errmsg);
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_alloc_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_alloc_qp() exit, qp = %p\n",
-	    tnf_opaque, qp_handlep, *ibmf_qp_handlep);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_alloc_qp() exit, qp = %p\n",
+	    *ibmf_qp_handlep);
 	return (status);
 }
 
@@ -2557,10 +2383,9 @@ ibmf_i_free_qp(ibmf_qp_handle_t ibmf_qp_handle, uint_t flags)
 	ibmf_alt_qp_t		*qpp, *pqpp;
 	ibt_status_t		ibt_status;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_free_qp_start, IBMF_TNF_TRACE, "",
+	IBMF_TRACE_2(DPRINT_L4,
 	    "ibmf_i_free_qp() enter, qp_hdl = %p, flags = %x\n",
-	    tnf_opaque, qp_hdl, ibmf_qp_handle, tnf_uint, flags, flags);
+	    ibmf_qp_handle, flags);
 
 	/* remove qp from the list in CI context */
 
@@ -2585,13 +2410,10 @@ ibmf_i_free_qp(ibmf_qp_handle_t ibmf_qp_handle, uint_t flags)
 	/* flush the WQEs in the QP queues */
 	ibt_status = ibt_flush_qp(qp_ctx->isq_qp_handle);
 	if (ibt_status != IBT_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_free_qp_err, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_2(DPRINT_L1,
 		    "ibmf_i_free_qp(): %s, status = %d\n",
-		    tnf_string, msg, "failed to close qp",
-		    tnf_uint, ibt_status, ibt_status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_free_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_free_qp() exit\n");
+		    "failed to close qp", ibt_status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_free_qp() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
@@ -2612,13 +2434,10 @@ ibmf_i_free_qp(ibmf_qp_handle_t ibmf_qp_handle, uint_t flags)
 	/* call the IB transport to free the QP */
 	ibt_status = ibt_free_qp(qp_ctx->isq_qp_handle);
 	if (ibt_status != IBT_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_free_qp_err, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_2(DPRINT_L1,
 		    "ibmf_i_free_qp(): %s, status = %d\n",
-		    tnf_string, msg, "failed to free qp",
-		    tnf_uint, ibt_status, ibt_status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_free_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_free_qp() exit\n");
+		    "failed to free qp", ibt_status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_free_qp() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
@@ -2633,8 +2452,7 @@ ibmf_i_free_qp(ibmf_qp_handle_t ibmf_qp_handle, uint_t flags)
 
 	kmem_free(qp_ctx, sizeof (ibmf_alt_qp_t));
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_free_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_free_qp() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_free_qp() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -2653,20 +2471,18 @@ ibmf_i_query_qp(ibmf_qp_handle_t ibmf_qp_handle, uint_t flags,
 	uint16_t		pkey_ix;
 	ibt_status_t		ibt_status;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_free_qp_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_free_qp() enter, qp_hdl = %p, flags = %x\n",
-	    tnf_opaque, qp_hdl, ibmf_qp_handle, tnf_uint, flags, flags);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_free_qp() enter, qp_hdl = %p, flags = %x\n",
+		     ibmf_qp_handle,
+		     flags);
 
 	ibt_status = ibt_query_qp(qp_ctx->isq_qp_handle, &qp_query);
 	if (ibt_status != IBT_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_query_qp_err, IBMF_TNF_TRACE, "",
-		    "ibmf_i_query_qp(): %s, status = %d\n",
-		    tnf_string, msg, "failed to query qp",
-		    tnf_uint, ibt_status, ibt_status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_query_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_query_qp() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_query_qp(): %s, status = %d\n",
+			     "failed to query qp",
+			     ibt_status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_query_qp() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
@@ -2681,22 +2497,21 @@ ibmf_i_query_qp(ibmf_qp_handle_t ibmf_qp_handle, uint_t flags,
 	ibt_status = ibt_index2pkey(qp_ctx->isq_client_hdl->ic_ci_handle,
 	    *portnump, pkey_ix, p_keyp);
 	if (ibt_status != IBT_SUCCESS) {
-		IBMF_TRACE_3(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_query_qp_err, IBMF_TNF_TRACE, "",
-		    "ibmf_i_query_qp(): %s, pkey_ix = %d, status = %d\n",
-		    tnf_string, msg, "failed to get pkey from index",
-		    tnf_uint, pkey_ix, pkey_ix,
-		    tnf_uint, ibt_status, ibt_status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_query_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_query_qp() exit\n");
+		IBMF_TRACE_3(DPRINT_L1,
+			     "ibmf_i_query_qp(): %s, pkey_ix = %d, status = %d\n",
+			     "failed to get pkey from index",
+			     pkey_ix,
+			     ibt_status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_query_qp() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_query_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_query_qp() exit, qp_num = 0x%x, "
-	    "pkey = 0x%x, qkey = 0x%x, portnum = %d\n",
-	    tnf_uint, qp_num, *qp_nump, tnf_uint, pkey, *p_keyp,
-	    tnf_uint, qkey, *q_keyp, tnf_uint, portnum, *portnump);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_query_qp() exit, qp_num = 0x%x, ""pkey = 0x%x, qkey = 0x%x, portnum = %d\n",
+		     *qp_nump,
+		     *p_keyp,
+		     *q_keyp,
+		     *portnump);
 
 	return (IBMF_SUCCESS);
 }
@@ -2720,25 +2535,23 @@ ibmf_i_modify_qp(ibmf_qp_handle_t ibmf_qp_handle, ib_pkey_t p_key,
 	uint16_t		pkey_ix;
 	ibt_status_t		ibt_status;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_modify_qp_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_modify_qp() enter, qp_hdl = %p, flags = %x, pkey = 0x%x, "
-	    "qkey = 0x%x\n", tnf_opaque, qp_hdl, ibmf_qp_handle,
-	    tnf_uint, flags, flags, tnf_uint, p_key, p_key,
-	    tnf_uint, q_key, q_key);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_modify_qp() enter, qp_hdl = %p, flags = %x, pkey = 0x%x, ""qkey = 0x%x\n",
+		     ibmf_qp_handle,
+		     flags,
+		     p_key,
+		     q_key);
 
 	/*
 	 * get the pkey index associated with this pkey if present in table
 	 */
 	if (ibmf_i_get_pkeyix(clientp->ic_ci_handle, p_key,
 	    clientp->ic_client_info.port_num, &pkey_ix) != IBMF_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_modify_qp_err, IBMF_TNF_TRACE, "",
-		    "ibmf_i_modify_qp(): %s, pkey = %x\n",
-		    tnf_string, msg, "pkey not in table",
-		    tnf_uint, pkey, p_key);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_modify_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_modify_qp() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_modify_qp(): %s, pkey = %x\n",
+			     "pkey not in table",
+			     p_key);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_modify_qp() exit\n");
 		return (IBMF_FAILURE);
 	}
 
@@ -2755,12 +2568,9 @@ ibmf_i_modify_qp(ibmf_qp_handle_t ibmf_qp_handle, ib_pkey_t p_key,
 	if (qpp == NULL) {
 		mutex_exit(&ibmf_cip->ci_mutex);
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_modify_qp_err, IBMF_TNF_TRACE, "",
-		    "ibmf_i_modify_qp(): %s\n",
-		    tnf_string, msg, "QP not in altqp list");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_modify_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_modify_qp() exit\n");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_i_modify_qp(): %s\n",
+			     "QP not in altqp list");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_modify_qp() exit\n");
 		return (IBMF_BAD_QP_HANDLE);
 
 	} else {
@@ -2781,13 +2591,11 @@ ibmf_i_modify_qp(ibmf_qp_handle_t ibmf_qp_handle, ib_pkey_t p_key,
 	    &qp_mod, &actual_sz);
 	if (ibt_status != IBT_SUCCESS) {
 		mutex_exit(&qp_ctx->isq_mutex);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_modify_qp_err, IBMF_TNF_TRACE, "",
-		    "ibmf_i_modify_qp(): %s, qp_hdl = %p\n",
-		    tnf_string, msg, "QP transition RTS to SQD failed",
-		    tnf_opaque, qp_handle, qp_ctx->isq_qp_handle);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_modify_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_modify_qp() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_modify_qp(): %s, qp_hdl = %p\n",
+			     "QP transition RTS to SQD failed",
+			     qp_ctx->isq_qp_handle);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_modify_qp() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
@@ -2815,14 +2623,12 @@ ibmf_i_modify_qp(ibmf_qp_handle_t ibmf_qp_handle, ib_pkey_t p_key,
 	    &qp_mod, &actual_sz);
 	if (ibt_status != IBT_SUCCESS) {
 		mutex_exit(&qp_ctx->isq_mutex);
-		IBMF_TRACE_3(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_modify_qp_err, IBMF_TNF_TRACE, "",
-		    "ibmf_i_modify_qp(): %s, qp_hdl = %p, status = %d\n",
-		    tnf_string, msg, "QP transition SQD to RTS failed",
-		    tnf_opaque, qp_handle, qp_ctx->isq_qp_handle,
-		    tnf_uint, ibt_status, ibt_status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_modify_qp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_modify_qp() exit\n");
+		IBMF_TRACE_3(DPRINT_L1,
+			     "ibmf_i_modify_qp(): %s, qp_hdl = %p, status = %d\n",
+			     "QP transition SQD to RTS failed",
+			     qp_ctx->isq_qp_handle,
+			     ibt_status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_modify_qp() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
@@ -2830,8 +2636,7 @@ ibmf_i_modify_qp(ibmf_qp_handle_t ibmf_qp_handle, ib_pkey_t p_key,
 	qp_ctx->isq_qkey = q_key;
 	mutex_exit(&qp_ctx->isq_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_modify_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_modify_qp() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_modify_qp() exit\n");
 	return (IBMF_SUCCESS);
 }
 
@@ -2851,12 +2656,12 @@ ibmf_i_post_recv_buffer(ibmf_ci_t *cip, ibmf_qp_t *qpp, boolean_t block,
 	struct kmem_cache	*kmem_cachep;
 	ibmf_alt_qp_t		*altqp;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_post_recv_buffer_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_post_recv_buffer() enter, cip = %p, qpp = %p, "
-	    "qp_hdl = %p, block = %d\n", tnf_opaque, cip, cip,
-	    tnf_opaque, qpp, qpp, tnf_opaque, qp_hdl, ibmf_qp_handle,
-	    tnf_uint, block, block);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_post_recv_buffer() enter, cip = %p, qpp = %p, ""qp_hdl = %p, block = %d\n",
+		     cip,
+		     qpp,
+		     ibmf_qp_handle,
+		     block);
 
 	/*
 	 * if we haven't hit the max wqes per qp, attempt to allocate a recv
@@ -2889,14 +2694,12 @@ ibmf_i_post_recv_buffer(ibmf_ci_t *cip, ibmf_qp_t *qpp, boolean_t block,
 			mutex_enter(&cip->ci_mutex);
 			IBMF_ADD32_PORT_KSTATS(cip, rwqe_allocs_failed, 1);
 			mutex_exit(&cip->ci_mutex);
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_post_recv_buffer_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_post_recv_buffer(): %s, status = %d\n",
-			    tnf_string, msg, "alloc recv_wqe failed",
-			    tnf_int, ibmf_status, IBMF_NO_RESOURCES);
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_post_recv_buffer_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_post_recv_buffer() exit\n");
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_i_post_recv_buffer(): %s, status = %d\n",
+				     "alloc recv_wqe failed",
+				     IBMF_NO_RESOURCES);
+			IBMF_TRACE_0(DPRINT_L4,
+				     "ibmf_i_post_recv_buffer() exit\n");
 			return (IBMF_NO_RESOURCES);
 		} else {
 			recv_wqep = kmem_cache_alloc(kmem_cachep,
@@ -2907,17 +2710,12 @@ ibmf_i_post_recv_buffer(ibmf_ci_t *cip, ibmf_qp_t *qpp, boolean_t block,
 				IBMF_ADD32_PORT_KSTATS(cip, rwqe_allocs_failed,
 				    1);
 				mutex_exit(&cip->ci_mutex);
-				IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_i_post_recv_buffer_err,
-				    IBMF_TNF_ERROR, "",
-				    "ibmf_i_post_recv_buffer(): %s, "
-				    "status = %d\n",
-				    tnf_string, msg, "alloc recv_wqe failed",
-				    tnf_int, ibmf_status, IBMF_NO_RESOURCES);
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_post_recv_buffer_end,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_post_recv_buffer() exit\n");
+				IBMF_TRACE_2(DPRINT_L1,
+					     "ibmf_i_post_recv_buffer(): %s, ""status = %d\n",
+					     "alloc recv_wqe failed",
+					     IBMF_NO_RESOURCES);
+				IBMF_TRACE_0(DPRINT_L4,
+					     "ibmf_i_post_recv_buffer() exit\n");
 				return (IBMF_NO_RESOURCES);
 			}
 		}
@@ -2943,13 +2741,9 @@ ibmf_i_post_recv_buffer(ibmf_ci_t *cip, ibmf_qp_t *qpp, boolean_t block,
 	    (block == B_TRUE) ? KM_SLEEP : KM_NOSLEEP);
 	if (sgl == NULL) {
 		kmem_cache_free(kmem_cachep, recv_wqep);
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_post_recv_buffer_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_post_recv_buffer(): %s\n",
-		    tnf_string, msg, "failed to kmem_zalloc qp ctx");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_post_recv_buffer_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_post_recv_buffer() exit\n");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_i_post_recv_buffer(): %s\n",
+			     "failed to kmem_zalloc qp ctx");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_post_recv_buffer() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 
@@ -2968,14 +2762,11 @@ ibmf_i_post_recv_buffer(ibmf_ci_t *cip, ibmf_qp_t *qpp, boolean_t block,
 		kmem_free(sgl, IBMF_MAX_RQ_WR_SGL_ELEMENTS *
 		    sizeof (ibt_wr_ds_t));
 		kmem_cache_free(kmem_cachep, recv_wqep);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_post_recv_buffer_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_post_recv_buffer(): %s, status = %d\n",
-		    tnf_string, msg, "ibt_post_recv failed",
-		    tnf_uint, ibt_status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_post_recv_buffer_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_post_recv_buffer() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_post_recv_buffer(): %s, status = %d\n",
+			     "ibt_post_recv failed",
+			     status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_post_recv_buffer() exit\n");
 		return (ret);
 	}
 
@@ -2996,8 +2787,7 @@ ibmf_i_post_recv_buffer(ibmf_ci_t *cip, ibmf_qp_t *qpp, boolean_t block,
 		mutex_exit(&altqp->isq_mutex);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_post_recv_buffer_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_post_recv_buffer() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_post_recv_buffer() exit\n");
 
 	return (ret);
 }
@@ -3012,10 +2802,9 @@ ibmf_i_mgt_class_to_hdr_sz_off(uint32_t mgt_class, uint32_t *szp,
 {
 	uint32_t	hdr_sz = 0, hdr_off = 0;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_mgt_class_to_hdr_sz_off_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_mgt_class_to_hdr_sz_off(): mgt_class = 0x%x\n",
-	    tnf_uint, mgt_class, mgt_class);
+	IBMF_TRACE_1(DPRINT_L4,
+		     "ibmf_i_mgt_class_to_hdr_sz_off(): mgt_class = 0x%x\n",
+		     mgt_class);
 
 	switch (mgt_class) {
 	case MAD_MGMT_CLASS_SUBN_LID_ROUTED :
@@ -3044,12 +2833,9 @@ ibmf_i_mgt_class_to_hdr_sz_off(uint32_t mgt_class, uint32_t *szp,
 			hdr_sz = IBMF_MAD_CL_HDR_SZ_4;
 			hdr_off = IBMF_MAD_CL_HDR_OFF_2;
 		} else {
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_mgt_class_to_hdr_sz_off_start,
-			    IBMF_TNF_TRACE, "",
-			    "ibmf_i_mgt_class_to_hdr_sz_off():"
-			    "got illegal management class = 0x%x\n",
-			    tnf_uint, mgt_class, mgt_class);
+			IBMF_TRACE_1(DPRINT_L4,
+				     "ibmf_i_mgt_class_to_hdr_sz_off():""got illegal management class = 0x%x\n",
+				     mgt_class);
 		}
 		break;
 	}
@@ -3059,10 +2845,10 @@ ibmf_i_mgt_class_to_hdr_sz_off(uint32_t mgt_class, uint32_t *szp,
 	*szp = hdr_sz;
 	*offp = hdr_off;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_mgt_class_to_hdr_sz_off_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_mgt_class_to_hdr_sz_off() exit,hdr_sz = %d, hdr_off = %d\n",
-	    tnf_uint, hdr_sz, hdr_sz, tnf_uint, hdr_off, hdr_off);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_mgt_class_to_hdr_sz_off() exit,hdr_sz = %d, hdr_off = %d\n",
+		     hdr_sz,
+		     hdr_off);
 }
 
 /*
@@ -3077,11 +2863,11 @@ ibmf_i_lookup_client_by_mgmt_class(ibmf_ci_t *ibmf_cip, int port_num,
 	ibmf_client_t 		*clientp;
 	ibmf_client_info_t	*client_infop;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_lookup_client_by_mgmt_class_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_lookup_client_by_mgmt_class() enter, cip = %p, "
-	    "port_num = %d, class = 0x%x\n", tnf_opaque, cip, ibmf_cip,
-	    tnf_int, port, port_num, tnf_opaque, class, class);
+	IBMF_TRACE_3(DPRINT_L4,
+		     "ibmf_i_lookup_client_by_mgmt_class() enter, cip = %p, ""port_num = %d, class = 0x%x\n",
+		     ibmf_cip,
+		     port_num,
+		     class);
 
 	ASSERT(MUTEX_NOT_HELD(&ibmf_cip->ci_clients_mutex));
 
@@ -3104,15 +2890,13 @@ ibmf_i_lookup_client_by_mgmt_class(ibmf_ci_t *ibmf_cip, int port_num,
 
 	if (clientp != NULL) {
 		*clientpp = clientp;
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_lookup_client_by_mgmt_class_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_lookup_client_by_mgmt_class() exit, clp = %p\n",
-		    tnf_opaque, clientp, clientp);
+		IBMF_TRACE_1(DPRINT_L4,
+			     "ibmf_i_lookup_client_by_mgmt_class() exit, clp = %p\n",
+			     clientp);
 		return (IBMF_SUCCESS);
 	} else {
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_lookup_client_by_mgmt_class_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_lookup_client_by_mgmt_class() failure exit\n");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_i_lookup_client_by_mgmt_class() failure exit\n");
 		return (IBMF_FAILURE);
 	}
 }
@@ -3129,10 +2913,11 @@ ibmf_i_get_pkeyix(ibt_hca_hdl_t hca_handle, ib_pkey_t pkey, uint8_t port,
 	ib_pkey_t		tpkey;
 	ibt_status_t		ibt_status;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_pkeyix_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_get_pkeyix() enter, hcahdl = %p, "
-	    "pkey = 0x%x, port = %d\n", tnf_opaque, hcahdl, hca_handle,
-	    tnf_int, pkey, pkey, tnf_int, port, port);
+	IBMF_TRACE_3(DPRINT_L4,
+		     "ibmf_i_get_pkeyix() enter, hcahdl = %p, ""pkey = 0x%x, port = %d\n",
+		     hca_handle,
+		     pkey,
+		     port);
 
 	/*
 	 * If the client specifies the FULL membership pkey and the
@@ -3142,17 +2927,13 @@ ibmf_i_get_pkeyix(ibt_hca_hdl_t hca_handle, ib_pkey_t pkey, uint8_t port,
 		ibt_status = ibt_pkey2index(hca_handle, port,
 		    pkey, pkeyixp);
 		if (ibt_status != IBT_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_get_pkeyix_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_get_pkeyix() error status = %d\n",
-			    tnf_uint, ibt_status, ibt_status);
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_get_pkeyix_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_get_pkeyix() exit\n");
+			IBMF_TRACE_1(DPRINT_L1,
+				     "ibmf_i_get_pkeyix() error status = %d\n",
+				     ibt_status);
+			IBMF_TRACE_0(DPRINT_L4, "ibmf_i_get_pkeyix() exit\n");
 			return (IBMF_TRANSPORT_FAILURE);
 		}
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_pkeyix_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_get_pkeyix() exit\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_get_pkeyix() exit\n");
 		return (IBMF_SUCCESS);
 	}
 
@@ -3162,9 +2943,7 @@ ibmf_i_get_pkeyix(ibt_hca_hdl_t hca_handle, ib_pkey_t pkey, uint8_t port,
 	 */
 	ibt_status = ibt_pkey2index(hca_handle, port, pkey, pkeyixp);
 	if (ibt_status == IBT_SUCCESS) {
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_get_pkeyix_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_get_pkeyix() exit\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_get_pkeyix() exit\n");
 		return (IBMF_SUCCESS);
 	}
 
@@ -3176,19 +2955,15 @@ ibmf_i_get_pkeyix(ibt_hca_hdl_t hca_handle, ib_pkey_t pkey, uint8_t port,
 	tpkey = pkey | IBMF_PKEY_MEMBERSHIP_MASK;
 	ibt_status = ibt_pkey2index(hca_handle, port, tpkey, pkeyixp);
 	if (ibt_status != IBT_SUCCESS) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_get_pkeyix_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_get_pkeyix() error status = %d\n",
-		    tnf_uint, ibt_status, ibt_status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_get_pkeyix_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_get_pkeyix() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_i_get_pkeyix() error status = %d\n",
+			     ibt_status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_get_pkeyix() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_pkeyix_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_get_pkeyix(): pkey_ix = %d\n",
-	    tnf_int, pkeyix, *pkeyixp);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_get_pkeyix(): pkey_ix = %d\n",
+		     *pkeyixp);
 	return (IBMF_SUCCESS);
 }
 
@@ -3202,24 +2977,19 @@ ibmf_i_pkey_ix_to_key(ibmf_ci_t *cip, uint_t port_num, uint_t pkey_ix,
 {
 	ibt_status_t		ibt_status;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_pkey_ix_to_key_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_pkey_ix_to_key() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_pkey_ix_to_key() enter\n");
 
 	ibt_status = ibt_index2pkey(cip->ci_ci_handle, port_num, pkey_ix,
 	    pkeyp);
 	if (ibt_status != IBT_SUCCESS) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_pkey_ix_to_key, IBMF_TNF_TRACE, "",
-		    "ibmf_i_pkey_ix_to_key(): ibt_index2pkey failed for "
-		    " pkey index %d \n", tnf_uint, pkey_ix, pkey_ix);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_pkey_ix_to_key_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_pkey_ix_to_key() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_i_pkey_ix_to_key(): ibt_index2pkey failed for "" pkey index %d \n",
+			     pkey_ix);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_pkey_ix_to_key() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_pkey_ix_to_key_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_pkey_ix_to_key() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_pkey_ix_to_key() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -3233,9 +3003,9 @@ ibmf_i_ibt_to_ibmf_status(ibt_status_t ibt_status)
 {
 	int ibmf_status;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_ibt_to_ibmf_status_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_ibt_to_ibmf_status() enter, "
-	    "status = %d\n", tnf_uint, ibt_status, ibt_status);
+	IBMF_TRACE_1(DPRINT_L4,
+		     "ibmf_i_ibt_to_ibmf_status() enter, ""status = %d\n",
+		     ibt_status);
 
 	switch (ibt_status) {
 
@@ -3262,10 +3032,10 @@ ibmf_i_ibt_to_ibmf_status(ibt_status_t ibt_status)
 		break;
 	}
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_ibt_to_ibmf_status_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_ibt_to_ibmf_status() exit, "
-	    "ibt_status = %d, ibmf_status = %d\n", tnf_uint, ibt_status,
-	    ibt_status, tnf_int, ibmf_status, ibmf_status);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_ibt_to_ibmf_status() exit, ""ibt_status = %d, ibmf_status = %d\n",
+		     ibt_status,
+		     ibmf_status);
 
 	return (ibmf_status);
 }
@@ -3279,10 +3049,9 @@ ibmf_i_ibt_wc_to_ibmf_status(ibt_wc_status_t ibt_wc_status)
 {
 	int ibmf_status;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_ibt_wc_to_ibmf_status_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_ibt_to_ibmf_status() enter, status = %d\n",
-	    tnf_uint, ibt_wc_status, ibt_wc_status);
+	IBMF_TRACE_1(DPRINT_L4,
+		     "ibmf_i_ibt_to_ibmf_status() enter, status = %d\n",
+		     ibt_wc_status);
 
 	switch (ibt_wc_status) {
 
@@ -3295,11 +3064,10 @@ ibmf_i_ibt_wc_to_ibmf_status(ibt_wc_status_t ibt_wc_status)
 		break;
 	}
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_ibt_wc_to_ibmf_status_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_ibt_to_ibmf_status() exit, wc_status = %d, "
-	    "ibmf_status = %d\n", tnf_uint, ibt_wc_status,
-	    ibt_wc_status, tnf_int, ibmf_status, ibmf_status);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_ibt_to_ibmf_status() exit, wc_status = %d, ""ibmf_status = %d\n",
+		     ibt_wc_status,
+		     ibmf_status);
 
 	return (ibmf_status);
 }
@@ -3314,9 +3082,7 @@ ibmf_i_is_ibmf_handle_valid(ibmf_handle_t ibmf_handle)
 	ibmf_ci_t	*cip;
 	ibmf_client_t	*clp, *clientp = (ibmf_client_t *)ibmf_handle;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_is_ibmf_handle_valid_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_is_ibmf_handle_valid() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_is_ibmf_handle_valid() enter\n");
 
 	mutex_enter(&ibmf_statep->ibmf_mutex);
 
@@ -3350,14 +3116,12 @@ ibmf_i_is_ibmf_handle_valid(ibmf_handle_t ibmf_handle)
 	mutex_exit(&ibmf_statep->ibmf_mutex);
 
 	if (cip != NULL) {
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_is_ibmf_handle_valid_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_is_ibmf_handle_valid() exit\n");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_i_is_ibmf_handle_valid() exit\n");
 		return (IBMF_SUCCESS);
 	} else {
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_is_ibmf_handle_valid_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_is_ibmf_handle_valid() failure exit\n");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_i_is_ibmf_handle_valid() failure exit\n");
 		return (IBMF_FAILURE);
 	}
 }
@@ -3374,9 +3138,7 @@ ibmf_i_is_qp_handle_valid(ibmf_handle_t ibmf_handle,
 	ibmf_alt_qp_t	*alt_qp, *qpp = (ibmf_alt_qp_t *)ibmf_qp_handle;
 	ibmf_ci_t	*cip = clientp->ic_myci;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_is_qp_handle_valid_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_is_qp_handle_valid() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_is_qp_handle_valid() enter\n");
 
 	/* the default qp handle is always valid */
 	if (ibmf_qp_handle == IBMF_QP_HANDLE_DEFAULT)
@@ -3399,14 +3161,11 @@ ibmf_i_is_qp_handle_valid(ibmf_handle_t ibmf_handle,
 	mutex_exit(&cip->ci_mutex);
 
 	if (alt_qp != NULL) {
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_is_qp_handle_valid_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_is_qp_handle_valid() exit\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_is_qp_handle_valid() exit\n");
 		return (IBMF_SUCCESS);
 	} else {
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_is_qp_handle_valid_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_is_qp_handle_valid() failure exit\n");
+		IBMF_TRACE_0(DPRINT_L4,
+			     "ibmf_i_is_qp_handle_valid() failure exit\n");
 		return (IBMF_FAILURE);
 	}
 }
@@ -3443,9 +3202,7 @@ ibmf_setup_term_ctx(ibmf_client_t *clientp, ibmf_msg_impl_t *regmsgimplp)
 	uint32_t	cl_hdr_sz, cl_hdr_off;
 	int		status;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_setup_term_ctx_start, IBMF_TNF_TRACE, "",
-	    "ibmf_setup_term_ctx() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_setup_term_ctx() enter\n");
 
 	/*
 	 * Allocate the termination message context
@@ -3453,13 +3210,9 @@ ibmf_setup_term_ctx(ibmf_client_t *clientp, ibmf_msg_impl_t *regmsgimplp)
 	msgimplp = (ibmf_msg_impl_t *)kmem_zalloc(sizeof (ibmf_msg_impl_t),
 	    KM_NOSLEEP);
 	if (msgimplp == NULL) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_setup_term_ctx_error, IBMF_TNF_ERROR, "",
-		    "ibmf_setup_term_ctx(): %s\n", tnf_string, msg,
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_setup_term_ctx(): %s\n",
 		    "message mem allocation failure");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_setup_term_ctx_end, IBMF_TNF_TRACE, "",
-		    "ibmf_setup_term_ctx() exit\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_setup_term_ctx() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 
@@ -3478,13 +3231,9 @@ ibmf_setup_term_ctx(ibmf_client_t *clientp, ibmf_msg_impl_t *regmsgimplp)
 	    (ib_mad_hdr_t *)kmem_zalloc(IBMF_MAD_SIZE, KM_NOSLEEP);
 	if (msgimplp->im_msgbufs_recv.im_bufs_mad_hdr == NULL) {
 		kmem_free(msgimplp, sizeof (ibmf_msg_impl_t));
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_setup_term_ctx_error, IBMF_TNF_ERROR, "",
-		    "ibmf_setup_term_ctx(): %s\n", tnf_string, msg,
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_setup_term_ctx(): %s\n",
 		    "recv buf mem allocation failure");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_setup_term_ctx_end, IBMF_TNF_TRACE, "",
-		    "ibmf_setup_term_ctx() exit\n");
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_setup_term_ctx() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 
@@ -3550,14 +3299,10 @@ ibmf_setup_term_ctx(ibmf_client_t *clientp, ibmf_msg_impl_t *regmsgimplp)
 	    B_FALSE);
 	if (status != IBMF_SUCCESS) {
 		kmem_free(msgimplp, sizeof (ibmf_msg_impl_t));
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_setup_term_ctx_err, IBMF_TNF_ERROR, "",
+		IBMF_TRACE_2(DPRINT_L1,
 		    "ibmf_setup_term_ctx(): %s, status = %d\n",
-		    tnf_string, msg, "UD destination resource allocation"
-		    " failed", tnf_int, ibmf_status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_setup_term_ctx_end, IBMF_TNF_TRACE, "",
-		    "ibmf_setup_term_ctx() exit\n");
+		    "UD destination resource allocation failed", status);
+		IBMF_TRACE_0(DPRINT_L4, "ibmf_setup_term_ctx() exit\n");
 		return (status);
 	}
 
@@ -3583,8 +3328,7 @@ ibmf_setup_term_ctx(ibmf_client_t *clientp, ibmf_msg_impl_t *regmsgimplp)
 	ibmf_i_set_timer(ibmf_i_recv_timeout, msgimplp, IBMF_RESP_TIMER);
 	mutex_exit(&msgimplp->im_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_setup_term_ctx_end,
-	    IBMF_TNF_TRACE, "", "ibmf_setup_term_ctx() exit\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_setup_term_ctx() exit\n");
 
 	return (IBMF_SUCCESS);
 }

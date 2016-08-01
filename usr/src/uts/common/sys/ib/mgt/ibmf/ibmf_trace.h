@@ -57,95 +57,41 @@ extern "C" {
 #define	IBMF_TNF_NODEBUG	0
 #define	IBMF_TNF_DEBUG		1
 
-#ifdef NPROBE /* NPROBE */
-
-#define	IBMF_TRACE_0(debug, trlevel, arg01, arg02, arg03, arg04)	\
+#define	IBMF_TRACE_0(trlevel, arg04)	\
 	if (ibmf_trace_level > 0) {				\
 		ibmf_dprintf(trlevel, arg04);			\
 	}
 
 /* CSTYLED */
-#define	IBMF_TRACE_1(debug, trlevel, arg01, arg02, arg03, arg04, arg11, arg12, arg13)								\
+#define	IBMF_TRACE_1(trlevel, arg04, arg13)		\
 	if (ibmf_trace_level > 0) {				\
 		ibmf_dprintf(trlevel, arg04, arg13);		\
 	}
 
 /* CSTYLED */
-#define	IBMF_TRACE_2(debug, trlevel, arg01, arg02, arg03, arg04, arg11, arg12, arg13, arg21, arg22, arg23)					\
+#define	IBMF_TRACE_2(trlevel, arg04, arg13, arg23)	\
 	if (ibmf_trace_level > 0) {				\
 		ibmf_dprintf(trlevel, arg04, arg13, arg23);	\
 	}
 
 /* CSTYLED */
-#define	IBMF_TRACE_3(debug, trlevel, arg01, arg02, arg03, arg04, arg11, arg12, arg13, arg21, arg22, arg23, arg31, arg32, arg33)			\
+#define	IBMF_TRACE_3(trlevel, arg04, arg13,arg23, arg33)		\
 	if (ibmf_trace_level > 0) {				\
 		ibmf_dprintf(trlevel, arg04, arg13, arg23, arg33);	\
 	}
 
 /* CSTYLED */
-#define	IBMF_TRACE_4(debug, trlevel, arg01, arg02, arg03, arg04, arg11, arg12, arg13, arg21, arg22, arg23, arg31, arg32, arg33, arg41, arg42, arg43)	\
+#define	IBMF_TRACE_4(trlevel, arg04, arg13, arg23, arg33, arg43)	\
 	if (ibmf_trace_level > 0) {				\
 		ibmf_dprintf(trlevel, arg04, arg13, arg23, arg33, arg43);\
 	}
 
 /* CSTYLED */
-#define	IBMF_TRACE_5(debug, trlevel, arg01, arg02, arg03, arg04, arg11, arg12, arg13, arg21, arg22, arg23, arg31, arg32, arg33, arg41, arg42, arg43, arg51, arg52, arg53)	\
+#define	IBMF_TRACE_5(trlevel, arg04, arg13, arg23, arg33, arg43, arg53)	\
 	if (ibmf_trace_level > 0) {				\
 		ibmf_dprintf(trlevel, arg04, arg13, arg23, arg33, \
 		    arg43, arg53);				\
 	}
-
-#else
-
-#define	IBMF_TRACE_0(debug, trlevel, arg01, arg02, arg03, arg04)	\
-{								\
-	if (ibmf_trace_level > 0) {				\
-		ibmf_dprintf(trlevel, arg04);			\
-	}							\
-}
-
-/* CSTYLED */
-#define	IBMF_TRACE_1(debug, trlevel, arg01, arg02, arg03, arg04, arg11, arg12, arg13) 								\
-{								\
-	if (ibmf_trace_level > 0) {				\
-		ibmf_dprintf(trlevel, arg04, arg13);		\
-	}							\
-}
-
-/* CSTYLED */
-#define	IBMF_TRACE_2(debug, trlevel, arg01, arg02, arg03, arg04, arg11, arg12, arg13, arg21, arg22, arg23) 					\
-{								\
-	if (ibmf_trace_level > 0) {				\
-		ibmf_dprintf(trlevel, arg04, arg13, arg23);	\
-	}							\
-}
-
-/* CSTYLED */
-#define	IBMF_TRACE_3(debug, trlevel, arg01, arg02, arg03, arg04, arg11, arg12, arg13, arg21, arg22, arg23, arg31, arg32, arg33) 		\
-{								\
-	if (ibmf_trace_level > 0) {				\
-		ibmf_dprintf(trlevel, arg04, arg13, arg23, arg33);	\
-	}							\
-}
-
-/* CSTYLED */
-#define	IBMF_TRACE_4(debug, trlevel, arg01, arg02, arg03, arg04, arg11, arg12, arg13, arg21, arg22, arg23, arg31, arg32, arg33, arg41, arg42, arg43) \
-{								\
-	if (ibmf_trace_level > 0) {				\
-		ibmf_dprintf(trlevel, arg04, arg13, arg23, arg33, arg43);\
-	}							\
-}
-
-/* CSTYLED */
-#define	IBMF_TRACE_5(debug, trlevel, arg01, arg02, arg03, arg04, arg11, arg12, arg13, arg21, arg22, arg23, arg31, arg32, arg33, arg41, arg42, arg43, arg51, arg52, arg53) 							\
-{								\
-	if (ibmf_trace_level > 0) {				\
-		ibmf_dprintf(trlevel, arg04, arg13, arg23, arg33, arg43, \
-		    arg53);					\
-	}							\
-}
-
-#endif
 
 void
 ibmf_dprintf(int l, const char *fmt, ...);

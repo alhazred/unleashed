@@ -903,10 +903,8 @@ ibmf_saa_utils_pack_sa_hdr(ib_sa_hdr_t *sa_hdr, void **packed_class_hdr,
 	*packed_class_hdr = kmem_zalloc(IBMF_SAA_HDR_SIZE, km_sleep_flag);
 	if (*packed_class_hdr == NULL) {
 
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_utils_pack_sa_hdr_err,
-		    IBMF_TNF_ERROR, "", "ibmf_saa_utils_pack_sa_hdr: "
-		    "could not allocate memory for header\n");
+		IBMF_TRACE_0(DPRINT_L1,
+			     "ibmf_saa_utils_pack_sa_hdr: ""could not allocate memory for header\n");
 
 		return (IBMF_NO_MEMORY);
 	}
@@ -925,13 +923,11 @@ ibmf_saa_utils_unpack_sa_hdr(void *packed_class_hdr,
 {
 	if (packed_class_hdr_len != IBMF_SAA_HDR_SIZE) {
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_utils_unpack_sa_hdr_err,
-		    IBMF_TNF_ERROR, "", "ibmf_saa_utils_unpack_sa_hdr: %s,"
-		    " sa_class_hdr_len = %d, pkt_class_hdr_len = %d\n",
-		    tnf_string, msg, "invalid class hdr length for SA packet",
-		    tnf_int, sa_class_hdr_len, IBMF_SAA_HDR_SIZE,
-		    tnf_int, pkt_class_hdr_len, packed_class_hdr_len);
+		IBMF_TRACE_3(DPRINT_L1,
+			     "ibmf_saa_utils_unpack_sa_hdr: %s,"" sa_class_hdr_len = %d, pkt_class_hdr_len = %d\n",
+			     "invalid class hdr length for SA packet",
+			     IBMF_SAA_HDR_SIZE,
+			     packed_class_hdr_len);
 
 		return (IBMF_REQ_INVALID);
 	}
@@ -939,10 +935,8 @@ ibmf_saa_utils_unpack_sa_hdr(void *packed_class_hdr,
 	*sa_hdr = kmem_zalloc(sizeof (ib_sa_hdr_t), km_sleep_flag);
 	if (*sa_hdr == NULL) {
 
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_utils_unpack_sa_hdr_err,
-		    IBMF_TNF_ERROR, "", "ibmf_saa_utils_unpack_sa_hdr: "
-		    "could not allocate memory for header\n");
+		IBMF_TRACE_0(DPRINT_L1,
+			     "ibmf_saa_utils_unpack_sa_hdr: ""could not allocate memory for header\n");
 
 		return (IBMF_NO_MEMORY);
 	}
@@ -1120,12 +1114,10 @@ ibmf_saa_utils_pack_payload(uchar_t *structs_payload, size_t
 	*buf_payloadp = kmem_zalloc(*buf_payload_lengthp, km_sleep_flag);
 	if (*buf_payloadp == NULL) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_utils_pack_payload_err,
-		    IBMF_TNF_ERROR, "", "ibmf_saa_utils_pack_payload: %s,"
-		    " size = %d\n",
-		    tnf_string, msg, "could not allocate memory for payload",
-		    tnf_int, size, *buf_payload_lengthp);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_utils_pack_payload: %s,"" size = %d\n",
+			     "could not allocate memory for payload",
+			     *buf_payload_lengthp);
 
 		*buf_payload_lengthp = 0;
 		return (IBMF_NO_MEMORY);
@@ -1319,14 +1311,11 @@ ibmf_saa_utils_unpack_payload(uchar_t *buf_payload, size_t buf_payload_length,
 
 		if ((attr_offset * 8) < buf_size) {
 
-			IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L1,
-			    ibmf_saa_utils_unpack_payload, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_utils_unpack_payload: %s, attr_offset = "
-			    "%d, attr_size = %d\n",
-			    tnf_string, msg, "attribute offset times 8 is less"
-			    " than attribute size",
-			    tnf_int, attr_offset, attr_offset,
-			    tnf_int, attr_size, buf_size);
+			IBMF_TRACE_3(DPRINT_L1,
+				     "ibmf_saa_utils_unpack_payload: %s, attr_offset = ""%d, attr_size = %d\n",
+				     "attribute offset times 8 is less"" than attribute size",
+				     attr_offset,
+				     buf_size);
 
 			return (IBMF_TRANS_FAILURE);
 		}
@@ -1351,12 +1340,10 @@ ibmf_saa_utils_unpack_payload(uchar_t *buf_payload, size_t buf_payload_length,
 	    km_sleep_flag);
 	if (*structs_payloadp == NULL) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_utils_unpack_payload_err,
-		    IBMF_TNF_ERROR, "", "ibmf_saa_utils_unpack_payload: %s,"
-		    " size = %d\n",
-		    tnf_string, msg, "could not allocate memory for payload",
-		    tnf_int, size, *structs_payload_lengthp);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_utils_unpack_payload: %s,"" size = %d\n",
+			     "could not allocate memory for payload",
+			     *structs_payload_lengthp);
 
 		*structs_payload_lengthp = 0;
 		return (IBMF_NO_MEMORY);
