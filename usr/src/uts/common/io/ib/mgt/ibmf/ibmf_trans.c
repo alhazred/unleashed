@@ -91,8 +91,6 @@ ibmf_i_terminate_transaction(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 			    IBMF_TRANS_STATE_FLAG_DONE;
 		}
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_terminate_transaction() exit\n");
 }
 
 /*
@@ -134,7 +132,6 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 		mutex_exit(&msgimplp->im_mutex);
 		IBMF_TRACE_1(DPRINT_L3, "ibmf_i_notify_client(): %s\n",
 			     "message reference count != 0");
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_notify_client() exit\n");
 		return;
 	}
 
@@ -179,9 +176,6 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 
 			ibmf_i_free_msg(msgimplp);
 
-			IBMF_TRACE_0(DPRINT_L4,
-				     "ibmf_i_notify_client() exit\n");
-
 			return;
 		}
 
@@ -205,8 +199,6 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 				IBMF_TRACE_1(DPRINT_L1,
 					     "ibmf_i_notify_client(): %s\n",
 					     "ibmf_tear_down_recv_cb already occurred");
-				IBMF_TRACE_0(DPRINT_L4,
-					     "ibmf_i_notify_client() exit\n");
 				return;
 			}
 
@@ -241,8 +233,6 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 				IBMF_TRACE_1(DPRINT_L1,
 					     "ibmf_i_notify_client(): %s\n",
 					     "ibmf_tear_down_recv_cb already occurred");
-				IBMF_TRACE_0(DPRINT_L4,
-					     "ibmf_i_notify_client() exit\n");
 				return;
 			}
 
@@ -320,8 +310,6 @@ ibmf_i_notify_client(ibmf_msg_impl_t *msgimplp)
 			}
 		}
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_notify_client() exit\n");
 }
 
 /*
@@ -401,8 +389,4 @@ ibmf_i_notify_sequence(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	} else {
 		ibmf_i_notify_client(msgimplp);
 	}
-
-	IBMF_TRACE_1(DPRINT_L4,
-		     "ibmf_i_notify_sequence() exit, msgimplp = %p\n",
-		     msgimplp);
 }

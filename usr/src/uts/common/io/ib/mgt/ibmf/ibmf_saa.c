@@ -346,8 +346,6 @@ bail:
 	/* purge invalid entries */
 	ibmf_saa_impl_purge();
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_sa_session_open() exit\n");
-
 	return (status);
 }
 
@@ -550,8 +548,6 @@ bail:
 	/* purge invalid entries */
 	ibmf_saa_impl_purge();
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_sa_session_close() exit\n");
-
 	return (status);
 }
 
@@ -631,8 +627,6 @@ ibmf_sa_access(ibmf_saa_handle_t ibmf_saa_handle,
 	    (saa_client_data_t *)ibmf_saa_handle) == B_FALSE) {
 
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_sa_access: %s\n", "bad handle");
-
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_sa_access() exit\n");
 
 		res = IBMF_BAD_HANDLE;
 		goto bail;
@@ -1282,9 +1276,6 @@ ibmf_saa_update_service_record(ibmf_saa_handle_t ibmf_saa_handle,
 			     "ibmf_saa_update_service_record: %s, access_type = 0x%x\n",
 			     "invalid query type",
 			     access_type);
-
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_saa_update_service_record() exit\n");
 
 		return (IBMF_REQ_INVALID);
 	}

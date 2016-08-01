@@ -217,8 +217,6 @@ ibmf_saa_subscribe_events(saa_port_t *saa_portp, boolean_t subscribe,
 		ibmf_saa_notify_event_clients(saa_portp, &event_details,
 		    IBMF_SAA_EVENT_SUBSCRIBER_STATUS_CHG, NULL);
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_subscribe_events() exit\n");
 }
 
 /*
@@ -584,9 +582,6 @@ ibmf_saa_informinfo_cb(void *arg, size_t length, char *buffer,
 		ibmf_saa_notify_event_clients(saa_portp, &event_details,
 		    IBMF_SAA_EVENT_SUBSCRIBER_STATUS_CHG, NULL);
 	}
-
-bail:
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_informinfo_cb() exit\n");
 }
 
 /*
@@ -764,8 +759,6 @@ ibmf_saa_process_subnet_event(saa_port_t *saa_portp, ib_mad_notice_t *notice)
 
 	ibmf_saa_notify_event_clients(saa_portp, &event_details, subnet_event,
 	    NULL);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_process_subnet_event() exit\n");
 }
 
 /*
@@ -968,8 +961,6 @@ ibmf_saa_notify_event_clients(saa_port_t *saa_portp,
 	}
 
 	mutex_exit(&saa_portp->saa_pt_event_sub_mutex);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_notify_event_clients() exit\n");
 }
 
 /*
@@ -1204,8 +1195,6 @@ bail:
 		ibmf_status = ibmf_free_msg(ibmf_handle, &msgp);
 		ASSERT(ibmf_status == IBMF_SUCCESS);
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_report_cb() exit\n");
 }
 
 /*
@@ -1304,6 +1293,4 @@ ibmf_saa_add_event_subscriber(saa_client_data_t *client,
 		ibmf_saa_notify_event_clients(saa_portp, &event_details,
 		    IBMF_SAA_EVENT_SUBSCRIBER_STATUS_CHG, client);
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_add_event_subscriber() exit\n");
 }

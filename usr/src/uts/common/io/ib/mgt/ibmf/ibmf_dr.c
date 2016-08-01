@@ -85,15 +85,11 @@ ibmf_i_check_for_loopback(ibmf_msg_impl_t *msgimplp, ibmf_msg_cb_t msg_cb,
 		if (status != IBMF_SUCCESS) {
 			IBMF_TRACE_1(DPRINT_L1, "",
 			    "Failure in DR loopback filter");
-			IBMF_TRACE_0(DPRINT_L4,
-			    "ibmf_i_check_for_loopback() exit\n");
 			return (status);
 		}
 
 		*loopback = B_TRUE;
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_check_for_loopback() exit\n");
 
 	return (IBMF_SUCCESS);
 
@@ -177,8 +173,6 @@ ibmf_i_dr_loopback_term(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		msgimplp->im_flags &= ~IBMF_MSG_FLAGS_BUSY;
 		mutex_exit(&msgimplp->im_mutex);
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_dr_loopback_term() exit\n");
 }
 
 /*
@@ -231,8 +225,6 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 			IBMF_TRACE_1(DPRINT_L1,
 			    "ibmf_i_dr_loopback_filter(): %s\n",
 			    "Client for Mgt Class Subnet Agent not found");
-			IBMF_TRACE_0(DPRINT_L4,
-			    "ibmf_i_dr_loopback_filter() exit\n");
 			return (ret);
 		}
 
@@ -246,15 +238,12 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 			IBMF_TRACE_1(DPRINT_L1,
 			    "ibmf_i_dr_loopback_filter(): %s\n",
 			    "Client for Mgt Class Subnet Manager not found");
-			IBMF_TRACE_0(DPRINT_L4,
-			    "ibmf_i_dr_loopback_filter() exit\n");
 			return (ret);
 		}
 	} else {
 		IBMF_TRACE_2(DPRINT_L1,
 		    "ibmf_i_dr_loopback_filter(): %s, method = 0x%x\n",
 		    "Unexpected dr method", dr_hdr->R_Method);
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_dr_loopback_filter() exit\n");
 
 		return (IBMF_FAILURE);
 	}
@@ -320,8 +309,6 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 			    "ibmf_i_dr_loopback_filter(): %s, msg = 0x%p\n",
 			    "Message already marked for removal, dropping MAD",
 			    msgimplp);
-			IBMF_TRACE_0(DPRINT_L4,
-			    "ibmf_i_dr_loopback_filter() exit\n");
 			return (IBMF_FAILURE);
 		}
 	} else {
@@ -336,8 +323,6 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 			IBMF_TRACE_1(DPRINT_L1,
 			    "ibmf_i_dr_loopback_filter(): %s\n",
 			    "Failed to alloc packet");
-			IBMF_TRACE_0(DPRINT_L4,
-			    "ibmf_i_dr_loopback_filter() exit\n");
 			return (IBMF_NO_RESOURCES);
 		}
 
@@ -393,8 +378,6 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 			IBMF_TRACE_1(DPRINT_L1,
 			    "ibmf_i_dr_loopback_filter(): %s\n",
 			    "mem allocation failure");
-			IBMF_TRACE_0(DPRINT_L4,
-			    "ibmf_i_dr_loopback_filter() exit\n");
 			return (IBMF_NO_RESOURCES);
 		}
 		rbuf_alloced = B_TRUE;
@@ -482,9 +465,6 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 
 	/* perform source client transaction termination processing */
 	ibmf_i_dr_loopback_term(clientp, msgimplp, blocking);
-
-	IBMF_TRACE_1(DPRINT_L4,
-	    "ibmf_i_dr_loopback_filter() exit, ret = %d\n", ret);
 
 	return (IBMF_SUCCESS);
 }

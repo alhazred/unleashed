@@ -261,7 +261,6 @@ ibmf_saa_impl_fini()
 	kmem_free(saa_statep, sizeof (saa_state_t));
 
 bail:
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_fini() exit\n");
 
 	return (ret);
 }
@@ -303,8 +302,6 @@ ibmf_saa_is_valid(saa_port_t *saa_portp, int add_ref)
 	}
 	mutex_exit(&saa_portp->saa_pt_mutex);
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_is_valid() exit\n");
-
 	return (is_valid);
 }
 
@@ -339,8 +336,6 @@ ibmf_saa_must_purge(saa_port_t *saa_portp)
 	}
 
 	mutex_exit(&saa_portp->saa_pt_mutex);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_must_purge() exit\n");
 
 	return (must_purge);
 }
@@ -406,8 +401,6 @@ ibmf_saa_impl_purge()
 	}
 
 	mutex_exit(&saa_statep->saa_port_list_mutex);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_purge() exit\n");
 }
 
 /*
@@ -506,8 +499,6 @@ bail:
 		mutex_exit(&saa_portp->saa_pt_mutex);
 	}
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_add_client() exit\n");
-
 	return (status);
 }
 
@@ -605,8 +596,6 @@ ibmf_saa_impl_create_port(ib_guid_t pt_guid, saa_port_t **saa_portpp)
 	*saa_portpp = saa_portp;
 
 bail:
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_create_port() exit\n");
-
 	return (status);
 }
 
@@ -626,8 +615,6 @@ ibmf_saa_impl_invalidate_port(saa_port_t *saa_portp)
 
 	saa_portp->saa_pt_state = IBMF_SAA_PORT_STATE_INVALID;
 	ibmf_saa_impl_uninit_kstats(saa_portp);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_invalidate_port() exit\n");
 }
 
 /*
@@ -667,8 +654,6 @@ ibmf_saa_impl_destroy_port(saa_port_t *saa_portp)
 	mutex_destroy(&saa_portp->saa_pt_kstat_mutex);
 
 	kmem_free(saa_portp, sizeof (saa_port_t));
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_destroy() exit\n");
 }
 
 /*
@@ -720,8 +705,6 @@ ibmf_saa_impl_init_kstats(saa_port_t *saa_portp)
 
 	kstat_install(saa_portp->saa_pt_kstatp);
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_init_kstats() exit\n");
-
 	return (IBMF_SUCCESS);
 }
 
@@ -743,8 +726,6 @@ ibmf_saa_impl_uninit_kstats(saa_port_t *saa_portp)
 	saa_portp->saa_pt_kstatp = NULL;
 
 	mutex_exit(&saa_portp->saa_pt_kstat_mutex);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_uninit_kstats() exit\n");
 }
 
 /*
@@ -768,8 +749,6 @@ ibmf_saa_impl_register_failed(saa_port_t *saa_portp)
 	saa_portp->saa_pt_reference_count--;
 
 	mutex_exit(&saa_portp->saa_pt_mutex);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_register_failed() exit\n");
 }
 
 static int
@@ -1019,8 +998,6 @@ bail:
 		}
 	}
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_register_port() exit\n");
-
 	return (status);
 }
 
@@ -1053,9 +1030,6 @@ ibmf_saa_impl_get_classportinfo(saa_port_t *saa_portp)
 		IBMF_TRACE_1(DPRINT_L1,
 			     "ibmf_saa_impl_get_classportinfo: %s\n",
 			     "Could not allocate memory for classportinfo trans_info");
-
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_saa_impl_get_classportinfo() exiting\n");
 
 		return;
 	}
@@ -1101,8 +1075,6 @@ ibmf_saa_impl_get_classportinfo(saa_port_t *saa_portp)
 		mutex_exit(&saa_portp->saa_pt_mutex);
 
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_get_classportinfo() exit\n");
 }
 
 /*
@@ -1226,8 +1198,6 @@ ibmf_saa_impl_get_cpi_cb(void *arg, size_t length, char *buffer, int status)
 		     resp_time_value);
 
 	mutex_exit(&saa_portp->saa_pt_mutex);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_get_cpi_cb() exit\n");
 }
 
 /*
@@ -2143,8 +2113,6 @@ ibmf_saa_impl_ibt_async_handler(ibt_async_code_t code, ibt_async_event_t *event)
 	default:
 		break;
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_ibt_async_handler() exit\n");
 }
 
 /*
@@ -2237,9 +2205,6 @@ ibmf_saa_impl_port_chg(ibt_async_event_t *event)
 		/* get the classportinfo again */
 		ibmf_saa_impl_get_classportinfo(saa_portp);
 	}
-bail:
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_port_chg() exit\n");
 }
 /*
  * ibmf_saa_impl_client_rereg:
@@ -2350,10 +2315,6 @@ ibmf_saa_impl_client_rereg(ib_guid_t ci_guid, uint8_t port_num)
 		if (event_subs == B_TRUE)
 			ibmf_saa_subscribe_events(saa_portp, B_TRUE, B_FALSE);
 	}
-
-bail:
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_client_rereg() exit\n");
 }
 /*
  * ibmf_saa_impl_port_up:
@@ -2464,10 +2425,6 @@ ibmf_saa_impl_port_up(ib_guid_t ci_guid, uint8_t port_num)
 		if (event_subs == B_TRUE)
 			ibmf_saa_subscribe_events(saa_portp, B_TRUE, B_FALSE);
 	}
-
-bail:
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_port_up() exit\n");
 }
 
 /*
@@ -2481,9 +2438,6 @@ ibmf_saa_impl_port_down(ib_guid_t ci_guid, uint8_t port_num)
 		     "ibmf_saa_impl_port_down: Handling port down"" guid %016"PRIx64" port %d\n",
 		     ci_guid,
 		     port_num);
-
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_port_down() exit\n");
 }
 
 /*
@@ -2830,10 +2784,6 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 	}
 
 	kmem_free(trans_info, sizeof (saa_impl_trans_info_t));
-
-bail:
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_async_cb() exit\n");
 }
 
 /*
@@ -3405,8 +3355,6 @@ ibmf_saa_impl_free_msg(ibmf_handle_t ibmf_hdl, ibmf_msg_t *msgp)
 
 	res = ibmf_free_msg(ibmf_hdl, &msgp);
 	ASSERT(res == IBMF_SUCCESS);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_free_msg() exit\n");
 }
 
 /*
@@ -3501,9 +3449,6 @@ ibmf_saa_impl_set_transaction_params(saa_port_t *saa_portp,
 		     portinfop->p_sm_lid,
 		     portinfop->p_sm_sl,
 		     portinfop->p_subnet_timeout);
-
-	IBMF_TRACE_0(DPRINT_L4,
-		     "ibmf_saa_impl_set_transaction_params() exit\n");
 }
 
 
@@ -3698,7 +3643,6 @@ ibmf_saa_impl_ibmf_unreg(saa_port_t *saa_portp)
 	}
 
 bail:
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_ibmf_unreg() exit\n");
 
 	return (ibmf_status);
 }

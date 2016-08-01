@@ -351,8 +351,6 @@ ibmf_i_mad_completions(ibt_cq_hdl_t cq_handle, void *arg)
 		/* process the completion */
 		ibmf_i_process_completion(ibmf_cip, &cqe);
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_mad_completions() exit\n");
 }
 
 /*
@@ -373,8 +371,6 @@ ibmf_i_process_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 		/* completion from a send queue */
 		ibmf_i_handle_send_completion(cip, wcp);
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_process_completion() exit\n");
 }
 
 #ifdef DEBUG

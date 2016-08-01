@@ -101,7 +101,6 @@ ibmf_i_issue_pkt(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 			     "ibmf_i_issue_pkt(): %s, status = %d\n",
 			     "post send failure",
 			     status);
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_issue_pkt(() exit\n");
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
@@ -125,7 +124,6 @@ ibmf_i_issue_pkt(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		mutex_exit(&clientp->ic_kstat_mutex);
 	}
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_issue_pkt() exit\n");
 	return (ret);
 }
 
@@ -168,7 +166,6 @@ ibmf_i_send_pkt(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 			     "ibmf_i_send_pkt(): %s, status = %d\n",
 			     "unable to allocate send resources",
 			     status);
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_send_pkt() exit\n");
 		return (status);
 	}
 
@@ -194,12 +191,8 @@ ibmf_i_send_pkt(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 			     "ibmf_i_send_pkt(): %s, status = %d\n",
 			     "unable to issue packet",
 			     status);
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_send_pkt() exit\n");
 		return (status);
 	}
-
-	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_send_pkt() exit, status = %d\n",
-		     status);
 
 	return (IBMF_SUCCESS);
 }
@@ -229,11 +222,9 @@ ibmf_i_send_single_pkt(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 			     "ibmf_i_send_single_pkt(): %s, msgp = 0x%p\n",
 			     "unable to send packet",
 			     status);
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_send_single_pkt() exit\n");
 		return (status);
 	}
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_send_single_pkt() exit\n");
 	return (IBMF_SUCCESS);
 }
 
@@ -292,8 +283,6 @@ ibmf_i_handle_send_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 		ibmf_i_put_ud_dest(cip, msgimplp->im_ibmf_ud_dest);
 		ibmf_i_clean_ud_dest_list(cip, B_FALSE);
 		kmem_free(msgimplp, sizeof (ibmf_msg_impl_t));
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_i_handle_send_completion() exit\n");
 		return;
 	}
 
@@ -334,11 +323,6 @@ ibmf_i_handle_send_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 		mutex_enter(&clientp->ic_kstat_mutex);
 		IBMF_SUB32_KSTATS(clientp, send_cb_active, 1);
 		mutex_exit(&clientp->ic_kstat_mutex);
-		IBMF_TRACE_1(DPRINT_L4,
-			     "ibmf_i_handle_send_completion(): %s\n",
-			     "ci_send_taskq == NULL");
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_i_handle_send_completion() exit\n");
 		return;
 	}
 
@@ -365,8 +349,6 @@ ibmf_i_handle_send_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 	mutex_exit(&clientp->ic_kstat_mutex);
 
 	_NOTE(NOW_VISIBLE_TO_OTHER_THREADS(*send_wqep))
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_handle_send_completion() exit\n");
 }
 
 /*
@@ -641,8 +623,6 @@ ibmf_i_do_send_cb(void *taskq_arg)
 			cv_signal(&altqp->isq_wqes_cv);
 		mutex_exit(&altqp->isq_mutex);
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_do_send_cb() exit\n");
 }
 
 /*
@@ -740,7 +720,6 @@ ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
 			}
 		}
 
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_do_send_compl() exit\n");
 		return;
 	}
 
@@ -767,8 +746,6 @@ ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
 		 */
 		if (msgimplp->im_trans_state_flags  &
 		    IBMF_TRANS_STATE_FLAG_SEND_DONE) {
-			IBMF_TRACE_0(DPRINT_L4,
-				     "ibmf_i_do_send_compl() exit, ""Duplicate SEND completion\n");
 			return;
 		}
 
@@ -780,8 +757,6 @@ ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
 		    IBMF_TRANS_STATE_FLAG_RECV_DONE) {
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_DONE;
-			IBMF_TRACE_0(DPRINT_L4,
-				     "ibmf_i_do_send_compl() exit, RECV_DONE\n");
 			return;
 		}
 
@@ -803,6 +778,4 @@ ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
 		    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 		msgimplp->im_trans_state_flags |= IBMF_TRANS_STATE_FLAG_DONE;
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_do_send_compl() exit\n");
 }

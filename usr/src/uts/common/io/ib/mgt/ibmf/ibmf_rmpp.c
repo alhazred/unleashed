@@ -73,9 +73,6 @@ ibmf_i_is_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle)
 		is_rmpp = B_TRUE;
 	}
 
-	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_is_rmpp() exit, is_rmpp = %d\n",
-		     is_rmpp);
-
 	return (is_rmpp);
 }
 
@@ -122,9 +119,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		 */
 		ibmf_i_send_rmpp_window(msgimplp, IBMF_NO_BLOCK);
 
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_i_rmpp_sender_active_flow() exit\n");
-
 		return;
 	}
 
@@ -170,9 +164,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		ibmf_i_set_timer(ibmf_i_err_terminate_timeout, msgimplp,
 		    IBMF_RESP_TIMER);
 
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_i_rmpp_sender_active_flow() exit\n");
-
 		return;
 	}
 
@@ -212,9 +203,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 		    msgimplp, IBMF_RESP_TIMER);
 
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_i_rmpp_sender_active_flow() exit\n");
-
 		return;
 	}
 
@@ -228,9 +216,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 		/* send the window */
 		ibmf_i_send_rmpp_window(msgimplp, IBMF_NO_BLOCK);
-
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_i_rmpp_sender_active_flow() exit\n");
 
 		return;
 	}
@@ -261,9 +246,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 		ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 		    msgimplp, IBMF_RESP_TIMER);
-
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_i_rmpp_sender_active_flow() exit\n");
 
 		return;
 	}
@@ -299,8 +281,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			    msgimplp, IBMF_RESP_TIMER);
 
 			/* proceed with sender switch to receiver */
-			IBMF_TRACE_0(DPRINT_L4,
-				     "ibmf_i_rmpp_sender_active_flow() exit\n");
 			return;
 		}
 
@@ -308,8 +288,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_DONE;
 		ibmf_i_terminate_transaction(clientp, msgimplp, IBMF_SUCCESS);
 
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_i_rmpp_sender_active_flow() exit\n");
 		return;
 	}
 
@@ -329,9 +307,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 	/* send the window */
 	ibmf_i_send_rmpp_window(msgimplp, IBMF_NO_BLOCK);
-
-	/* carry on with the protocol */
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_rmpp_sender_active_flow() exit\n");
 }
 
 /*
@@ -405,8 +380,6 @@ ibmf_i_rmpp_sender_switch_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 		    msgimplp, IBMF_RESP_TIMER);
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_rmpp_sender_switch_flow() exit\n");
 }
 
 /*
@@ -491,8 +464,6 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			    IBMF_RESP_TIMER);
 		}
 
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_i_rmpp_recvr_flow_main() exit\n");
 		return;
 	}
 
@@ -552,8 +523,6 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 			    msgimplp, IBMF_RESP_TIMER);
 
-			IBMF_TRACE_0(DPRINT_L4,
-				     "ibmf_i_rmpp_recvr_flow_main() exit\n");
 			return;
 		}
 
@@ -631,8 +600,6 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			    msgimplp->im_client, msgimplp,
 			    IBMF_NO_MEMORY);
 
-			IBMF_TRACE_0(DPRINT_L4,
-				     "ibmf_i_rmpp_recvr_flow_main() exit\n");
 			return;
 		}
 		mutex_enter(&clientp->ic_kstat_mutex);
@@ -755,9 +722,6 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 			    msgimplp, IBMF_RESP_TIMER);
 
-			IBMF_TRACE_0(DPRINT_L4,
-				     "ibmf_i_rmpp_recvr_flow_main() exit\n");
-
 			return;
 		}
 	} else if (((data_sz + rmpp_ctx->rmpp_data_offset) >=
@@ -797,8 +761,6 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			    msgimplp->im_client, msgimplp,
 			    IBMF_NO_MEMORY);
 
-			IBMF_TRACE_0(DPRINT_L4,
-				     "ibmf_i_rmpp_recvr_flow_main() exit\n");
 			return;
 		}
 		mutex_enter(&clientp->ic_kstat_mutex);
@@ -865,8 +827,6 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 				ibmf_i_terminate_transaction(
 				    msgimplp->im_client, msgimplp,
 				    IBMF_NO_MEMORY);
-				IBMF_TRACE_0(DPRINT_L4,
-					     "ibmf_i_rmpp_recvr_flow_main() exit\n");
 				return;
 			}
 			mutex_enter(&clientp->ic_kstat_mutex);
@@ -994,8 +954,6 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			     "Packet in window received");
 
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_rmpp_recvr_flow_main() exit\n");
 }
 
 /*
@@ -1099,8 +1057,6 @@ ibmf_i_rmpp_recvr_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 		    msgimplp, IBMF_RESP_TIMER);
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_rmpp_recvr_active_flow() exit\n");
 }
 
 /*
@@ -1219,8 +1175,6 @@ ibmf_i_rmpp_recvr_term_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		    msgimplp, IBMF_RESP_TIMER);
 
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_rmpp_recvr_term_flow() exit\n");
 }
 
 /*
@@ -1257,8 +1211,6 @@ ibmf_i_is_valid_rmpp_status(ibmf_rmpp_hdr_t *rmpp_hdr)
 	    (rmpp_hdr->rmpp_status == IBMF_RMPP_STATUS_USP)) &&
 	    (rmpp_hdr->rmpp_type != IBMF_RMPP_TYPE_ABORT))
 		found = B_FALSE;
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_is_valid_rmpp_status_flow() exit\n");
 
 	return (found);
 }
@@ -1351,8 +1303,6 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		IBMF_TRACE_1(DPRINT_L2, "ibmf_i_handle_rmpp(): %s\n",
 			     "Unsupported RMPP version detected, sending ABORT UNV");
 
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_handle_rmpp() exit\n");
-
 		rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_ABORT;
 
 		ibmf_i_unset_timer(msgimplp, IBMF_TRANS_TIMER);
@@ -1428,8 +1378,6 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		IBMF_TRACE_1(DPRINT_L2, "ibmf_i_handle_rmpp(): %s\n",
 			     "Invalid RMPP status detected, sending ABORT IS");
 
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_handle_rmpp() exit\n");
-
 		rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_ABORT;
 
 		ibmf_i_unset_timer(msgimplp, IBMF_TRANS_TIMER);
@@ -1503,8 +1451,6 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			return;
 		}
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_handle_rmpp() exit\n");
 }
 
 /*
@@ -1552,11 +1498,8 @@ ibmf_i_send_rmpp(ibmf_msg_impl_t *msgimplp, uint8_t rmpp_type,
 			     "ibmf_i_send_rmpp(): %s, status = %d\n",
 			     "unable to send packet",
 			     status);
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_send_rmpp() exit\n");
 		return (status);
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_send_rmpp() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -1610,8 +1553,6 @@ ibmf_i_send_rmpp_window(ibmf_msg_impl_t *msgimplp, int block)
 			IBMF_TRACE_1(DPRINT_L1,
 				     "ibmf_i_send_rmpp_window(): %s\n",
 				     "Send rmpp window failed");
-			IBMF_TRACE_0(DPRINT_L4,
-				     "ibmf_i_send_rmpp_window() exit\n");
 			return;
 		}
 
@@ -1626,8 +1567,6 @@ ibmf_i_send_rmpp_window(ibmf_msg_impl_t *msgimplp, int block)
 		     msgimplp->im_rp_timeout_id);
 
 	ibmf_i_set_timer(ibmf_i_send_timeout, msgimplp, IBMF_RESP_TIMER);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_send_rmpp_window() exit\n");
 }
 
 /*
@@ -1685,8 +1624,6 @@ ibmf_i_send_rmpp_pkts(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 	rmpp_ctx->rmpp_data_offset = 0;
 
 	ibmf_i_send_rmpp_window(msgimplp, block);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_send_rmpp_pkts() exit\n");
 
 	return (IBMF_SUCCESS);
 }

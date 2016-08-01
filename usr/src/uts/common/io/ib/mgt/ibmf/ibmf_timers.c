@@ -131,8 +131,6 @@ ibmf_i_set_timer(void (*func)(void *), ibmf_msg_impl_t *msgimplp,
 		msgimplp->im_tr_timeout_id = timeout(func,
 		    (void *)msgimplp, drv_usectohz(interval));
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_set_timer() exit\n");
 }
 
 /*
@@ -160,8 +158,6 @@ ibmf_i_unset_timer(ibmf_msg_impl_t *msgimplp, ibmf_timer_t type)
 			msgimplp->im_tr_timeout_id = 0;
 		}
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_unset_timer() exit\n");
 }
 
 /*
@@ -329,8 +325,6 @@ ibmf_i_recv_timeout(void *argp)
 			}
 		}
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_recv_timeout() exit\n");
 }
 
 /*
@@ -497,8 +491,6 @@ ibmf_i_send_timeout(void *argp)
 			}
 		}
 
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_i_send_timeout() exit\n");
-
 		return;
 	}
 
@@ -603,8 +595,6 @@ ibmf_i_send_timeout(void *argp)
 			ibmf_i_notify_client(msgimplp);
 		}
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_send_timeout() exit\n");
 }
 
 void
@@ -725,6 +715,4 @@ ibmf_i_err_terminate_timeout(void *argp)
 			}
 		}
 	}
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_err_terminate_timeout() exit\n");
 }

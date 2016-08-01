@@ -97,8 +97,6 @@ ibmf_i_client_add_msg(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp)
 	mutex_exit(&msgimplp->im_mutex);
 
 	mutex_exit(&clientp->ic_msg_mutex);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_client_add_msg() exit\n");
 }
 
 /*
@@ -196,8 +194,6 @@ ibmf_i_client_rem_msg(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	mutex_exit(&msgimplp->im_mutex);
 
 	mutex_exit(&clientp->ic_msg_mutex);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_client_rem_msg() exit\n");
 }
 
 /*
@@ -490,9 +486,6 @@ ibmf_i_find_msg(ibmf_client_t *clientp, uint64_t tid, uint8_t mgt_class,
 
 	mutex_exit(&clientp->ic_msg_mutex);
 
-	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_find_msg() exit, msgp = 0x%p\n",
-		     msgimplp);
-
 	return (msgimplp);
 }
 
@@ -571,8 +564,6 @@ ibmf_i_find_msg_client(ibmf_client_t *clp, ibmf_msg_impl_t *msgimplp,
 
 	mutex_exit(&clp->ic_msg_mutex);
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_find_msg_client() exit\n");
-
 	return (found);
 }
 
@@ -608,8 +599,6 @@ ibmf_setup_recvbuf_on_error(ibmf_msg_impl_t *msgimplp, uchar_t *mad)
 		IBMF_TRACE_1(DPRINT_L1,
 			     "ibmf_setup_recvbuf_on_error(): %s\n",
 			     "recv buf mem allocation failure");
-		IBMF_TRACE_0(DPRINT_L4,
-			     "ibmf_setup_recvbuf_on_error() exit\n");
 		return (IBMF_NO_RESOURCES);
 	}
 

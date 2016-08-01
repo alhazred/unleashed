@@ -112,7 +112,6 @@ ibmf_register(ibmf_register_info_t *client_infop, uint_t ibmf_version,
 	if (status != IBMF_SUCCESS) {
 		IBMF_TRACE_2(DPRINT_L1, "ibmf_register(): %s, guid = 0x%p\n",
 		    "unable to get ci", client_infop->ir_ci_guid);
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_register() exit\n");
 		return (status);
 	}
 
@@ -146,7 +145,6 @@ ibmf_register(ibmf_register_info_t *client_infop, uint_t ibmf_version,
 		IBMF_TRACE_2(DPRINT_L1,
 		    "ibmf_register(): %s, class = 0x%x\n", "can't get qp",
 		    client_infop->ir_client_class);
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_register() exit\n");
 		return (status);
 	}
 
@@ -159,7 +157,6 @@ ibmf_register(ibmf_register_info_t *client_infop, uint_t ibmf_version,
 		ibmf_i_release_ci(ibmf_cip);
 		IBMF_TRACE_2(DPRINT_L1, "ibmf_register(): %s, class = 0x%x\n",
 		    "can't alloc client", client_infop->ir_client_class);
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_register() exit\n");
 		return (status);
 	}
 
@@ -196,9 +193,6 @@ ibmf_register(ibmf_register_info_t *client_infop, uint_t ibmf_version,
 bail:
 	if (error)
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_register(): %s\n", errmsg);
-
-	IBMF_TRACE_1(DPRINT_L4, "ibmf_register() exit, ibmf_handle = %p\n",
-	    *ibmf_handlep);
 
 	return (status);
 }
@@ -264,7 +258,6 @@ ibmf_unregister(ibmf_handle_t *ibmf_handlep, uint_t flags)
 		    "recv_cb = 0x%p, msgs_alloced = %d\n",
 		    "busy with resources", clientp->ic_flags,
 		    clientp->ic_recv_cb, clientp->ic_msgs_alloced);
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_unregister() exit\n");
 		mutex_exit(&clientp->ic_mutex);
 		return (IBMF_BUSY);
 	}
@@ -297,8 +290,6 @@ ibmf_unregister(ibmf_handle_t *ibmf_handlep, uint_t flags)
 bail:
 	if (error)
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_unregister(): %s\n", errmsg);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_unregister() exit\n");
 
 	return (status);
 }
@@ -406,8 +397,6 @@ ibmf_setup_async_cb(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 bail:
 	if (error)
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_setup_async_cb(): %s\n", errmsg);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_setup_async_cb() exit\n");
 
 	return (status);
 }
@@ -545,8 +534,6 @@ bail:
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_tear_down_async_cb(): %s\n",
 		    errmsg);
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_tear_down_async_cb() exit\n");
-
 	return (status);
 }
 
@@ -634,8 +621,6 @@ ibmf_alloc_msg(ibmf_handle_t ibmf_handle, int flag, ibmf_msg_t **ibmf_msgpp)
 bail:
 	if (error)
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_alloc_msg(): %s\n", errmsg);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_alloc_msg() exit\n");
 
 	return (status);
 }
@@ -777,8 +762,6 @@ ibmf_free_msg(ibmf_handle_t ibmf_handle, ibmf_msg_t **ibmf_msgpp)
 bail:
 	if (error)
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_free_msg(): %s\n", errmsg);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_free_msg() exit\n");
 
 	return (status);
 }
@@ -975,8 +958,6 @@ ibmf_msg_transport(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 		goto bail;
 	}
 	if (loopback == B_TRUE) {
-		IBMF_TRACE_0(DPRINT_L4, "ibmf_msg_transport() exit, "
-		    "dr_loopback ok\n");
 		return (IBMF_SUCCESS);
 	}
 
@@ -1006,8 +987,6 @@ ibmf_msg_transport(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 bail:
 	if (error)
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_msg_transport(): %s\n", errmsg);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_msg_transport() exit\n");
 
 	return (status);
 }
@@ -1106,8 +1085,6 @@ bail:
 	if (error)
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_alloc_qp(): %s\n", errmsg);
 
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_alloc_qp() exit\n");
-
 	_NOTE(NOW_VISIBLE_TO_OTHER_THREADS(*qp_ctx))
 
 	return (status);
@@ -1197,10 +1174,6 @@ ibmf_query_qp(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 bail:
 	if (error)
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_query_qp(): %s\n", errmsg);
-
-	IBMF_TRACE_3(DPRINT_L4,
-	    "ibmf_query_qp() exit, qp = %d, pkey = 0x%x, qkey = 0x%x\n",
-	    *qp_num, *p_key, *q_key);
 
 	return (status);
 }
@@ -1293,8 +1266,6 @@ ibmf_modify_qp(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 bail:
 	if (error)
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_modify_qp(): %s\n", errmsg);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_modify_qp() exit\n");
 
 	return (status);
 }
@@ -1391,8 +1362,6 @@ ibmf_free_qp(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t *ibmf_qp_handle,
 bail:
 	if (error)
 		IBMF_TRACE_1(DPRINT_L1, "ibmf_free_qp(): %s\n", errmsg);
-
-	IBMF_TRACE_0(DPRINT_L4, "ibmf_free_qp() exit\n");
 
 	return (status);
 }
