@@ -3,7 +3,7 @@
 OS?=		illumos
 unix?=		We run ${OS}.
 
-LIBCRT0=	/dev/null
+LIBCRT0=
 
 BINGRP?=	bin
 MANTARGET?=	man
