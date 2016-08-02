@@ -51,18 +51,14 @@ static void ibmf_i_populate_ud_dest_list(ibmf_ci_t *cip, int kmflag);
 void
 ibmf_i_init_ud_dest(ibmf_ci_t *cip)
 {
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_ud_dest_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_ud_dest() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_init_ud_dest() enter, cip = %p\n",
+		     cip);
 
 	/* initialize the UD dest list mutex */
 	mutex_init(&cip->ci_ud_dest_list_mutex, NULL, MUTEX_DRIVER, NULL);
 
 	/* populate the UD dest list if possible */
 	ibmf_i_pop_ud_dest_thread(cip);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_init_ud_dest_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_init_ud_dest() exit\n");
 }
 
 /*
@@ -72,15 +68,11 @@ ibmf_i_init_ud_dest(ibmf_ci_t *cip)
 void
 ibmf_i_fini_ud_dest(ibmf_ci_t *cip)
 {
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_fini_ud_dest_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_fini_ud_dest() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_fini_ud_dest() enter, cip = %p\n",
+		     cip);
 
 	/* clean up the UD dest list */
 	ibmf_i_clean_ud_dest_list(cip, B_TRUE);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_fini_ud_dest_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_fini_ud_dest() exit\n");
 }
 
 /*
@@ -92,9 +84,7 @@ ibmf_i_get_ud_dest(ibmf_ci_t *cip)
 {
 	ibmf_ud_dest_t		*ibmf_ud_dest;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_ud_dest_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_get_ud_dest() enter, cip = %p\n",
-	    tnf_opaque, cip, cip);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_get_ud_dest() enter, cip = %p\n", cip);
 
 	mutex_enter(&cip->ci_ud_dest_list_mutex);
 	ibmf_ud_dest = cip->ci_ud_dest_list_head;
@@ -104,8 +94,6 @@ ibmf_i_get_ud_dest(ibmf_ci_t *cip)
 	}
 	mutex_exit(&cip->ci_ud_dest_list_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_get_ud_dest_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_get_ud_dest() exit\n");
 	return (ibmf_ud_dest);
 }
 
@@ -116,20 +104,16 @@ ibmf_i_get_ud_dest(ibmf_ci_t *cip)
 void
 ibmf_i_put_ud_dest(ibmf_ci_t *cip, ibmf_ud_dest_t *ud_dest)
 {
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_put_ud_dest_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_put_ud_dest() enter, cip = %p, "
-	    "ud_dest = %p\n", tnf_opaque, cip, cip,
-	    tnf_opaque, ud_dest, ud_dest);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_put_ud_dest() enter, cip = %p, ""ud_dest = %p\n",
+		     cip,
+		     ud_dest);
 
 	mutex_enter(&cip->ci_ud_dest_list_mutex);
 	cip->ci_ud_dest_list_count++;
 	ud_dest->ud_next = cip->ci_ud_dest_list_head;
 	cip->ci_ud_dest_list_head = ud_dest;
 	mutex_exit(&cip->ci_ud_dest_list_mutex);
-
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_put_ud_dest_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_put_ud_dest() exit, cip = %p\n",
-	    tnf_opaque, cip, cip);
 }
 
 /*
@@ -150,20 +134,16 @@ ibmf_i_populate_ud_dest_list(ibmf_ci_t *cip, int kmflag)
 	ibt_status_t		status;
 	ibt_ud_dest_flags_t	ud_dest_flags = IBT_UD_DEST_NO_FLAGS;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_populate_ud_dest_list_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_populate_ud_dest_list() enter, cip = %p, kmflag = %d \n",
-	    tnf_opaque, cip, cip, tnf_int, kmflag, kmflag);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_populate_ud_dest_list() enter, cip = %p, kmflag = %d \n",
+		     cip,
+		     kmflag);
 
 	/* do not allow a population operation if non-blocking */
 	if (kmflag == KM_NOSLEEP) {
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_populate_ud_dest, IBMF_TNF_TRACE, "",
-		    "ibmf_i_populate_ud_dest_list(): %s\n", tnf_string, msg,
-		    "Skipping, called with non-blocking flag\n");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_populate_ud_dest_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_populate_ud_dest_list() exit\n");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_populate_ud_dest_list(): %s\n",
+			     "Skipping, called with non-blocking flag\n");
 		/*
 		 * Don't return a failure code here.
 		 * If ibmf_i_ud_dest_alloc() returns NULL, the
@@ -178,13 +158,9 @@ ibmf_i_populate_ud_dest_list(ibmf_ci_t *cip, int kmflag)
 	/* nothing to do if count is above the low water mark */
 	if (count > IBMF_UD_DEST_LO_WATER_MARK) {
 		mutex_exit(&cip->ci_ud_dest_list_mutex);
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_populate_ud_dest, IBMF_TNF_TRACE, "",
-		    "ibmf_i_populate_ud_dest_list(): %s\n", tnf_string, msg,
-		    "Count not below low water mark\n");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_populate_ud_dest_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_populate_ud_dest_list() exit\n");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_populate_ud_dest_list(): %s\n",
+			     "Count not below low water mark\n");
 		return;
 	}
 
@@ -205,14 +181,10 @@ ibmf_i_populate_ud_dest_list(ibmf_ci_t *cip, int kmflag)
 		    cip->ci_pd, &adds_vect, &ibmf_ud_dest->ud_dest.ud_ah);
 		if (status != IBT_SUCCESS) {
 			kmem_free(ibmf_ud_dest, sizeof (ibmf_ud_dest_t));
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_populate_ud_dest_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_populate_ud_dest_list(): %s, status = %d\n",
-			    tnf_string, msg, "ibt alloc ah failed",
-			    tnf_uint, ibt_status, status);
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_populate_ud_dest_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_populate_ud_dest_list() exit\n");
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_i_populate_ud_dest_list(): %s, status = %d\n",
+				     "ibt alloc ah failed",
+				     status);
 			return;
 		}
 
@@ -236,9 +208,6 @@ ibmf_i_populate_ud_dest_list(ibmf_ci_t *cip, int kmflag)
 	}
 
 	mutex_exit(&cip->ci_ud_dest_list_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_populate_ud_dest_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_populate_ud_dest_list() exit\n");
 }
 
 /*
@@ -256,10 +225,10 @@ ibmf_i_clean_ud_dest_list(ibmf_ci_t *cip, boolean_t all)
 	uint32_t		count;
 	ibt_status_t		status;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_clean_ud_dest_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_clean_ud_dest_list() enter, "
-	    "cip = %p, all = %d\n", tnf_opaque, cip, cip,
-	    tnf_uint, all, all);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_clean_ud_dest_list() enter, ""cip = %p, all = %d\n",
+		     cip,
+		     all);
 
 	mutex_enter(&cip->ci_ud_dest_list_mutex);
 
@@ -284,15 +253,10 @@ ibmf_i_clean_ud_dest_list(ibmf_ci_t *cip, boolean_t all)
 			ud_dest = &ibmf_ud_dest->ud_dest;
 			status = ibt_free_ah(cip->ci_ci_handle, ud_dest->ud_ah);
 			if (status != IBT_SUCCESS) {
-				IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_i_clean_ud_dest_err, IBMF_TNF_ERROR,
-				    "", "ibmf_i_clean_ud_dest_list(): %s, "
-				    "status = %d\n", tnf_string, msg,
-				    "ibt_free_ah failed", tnf_uint, ibt_status,
-				    status);
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_clean_ud_dest_end, IBMF_TNF_TRACE,
-				    "", "ibmf_i_clean_ud_dest_list() exit\n");
+				IBMF_TRACE_2(DPRINT_L1,
+					     "ibmf_i_clean_ud_dest_list(): %s, ""status = %d\n",
+					     "ibt_free_ah failed",
+					     status);
 				return;
 			}
 
@@ -313,9 +277,6 @@ ibmf_i_clean_ud_dest_list(ibmf_ci_t *cip, boolean_t all)
 	}
 
 	mutex_exit(&cip->ci_ud_dest_list_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_clean_ud_dest_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_clean_ud_dest_list() exit\n");
 }
 
 /*
@@ -334,11 +295,12 @@ ibmf_i_alloc_ud_dest(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	ibt_ud_dest_t		*ud_dest;
 	int			ibmf_status, ret;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_alloc_ud_dest_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_alloc_ud_dest_list() enter, "
-	    "clientp = %p, msg = %p, ud_destp = %p, block = %d\n",
-	    tnf_opaque, clientp, clientp, tnf_opaque, msg, msgimplp,
-	    tnf_opaque, ud_dest_p, ud_dest_p, tnf_uint, block, block);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_alloc_ud_dest_list() enter, ""clientp = %p, msg = %p, ud_destp = %p, block = %d\n",
+		     clientp,
+		     msgimplp,
+		     ud_dest_p,
+		     block);
 
 	_NOTE(ASSUMING_PROTECTED(*ud_dest_p))
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*ud_dest))
@@ -353,11 +315,9 @@ ibmf_i_alloc_ud_dest(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	if (cip->ci_ud_dest_list_count < IBMF_UD_DEST_LO_WATER_MARK) {
 		ret = ibmf_ud_dest_tq_disp(cip);
 		if (ret == 0) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L3,
-			    ibmf_i_alloc_ud_dest_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_alloc_ud_dest(): %s\n", tnf_string, msg,
-			    "taskq dispatch of ud_dest population thread "
-			    "failed");
+			IBMF_TRACE_1(DPRINT_L3,
+				     "ibmf_i_alloc_ud_dest(): %s\n",
+				     "taskq dispatch of ud_dest population thread ""failed");
 		}
 	}
 	mutex_exit(&cip->ci_ud_dest_list_mutex);
@@ -393,13 +353,9 @@ ibmf_i_alloc_ud_dest(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		    clientp->ic_client_info.port_num, NULL,
 		    &clientp->ic_base_lid);
 		if (clientp->ic_base_lid == 0) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_alloc_ud_dest_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_alloc_ud_dest(): %s\n", tnf_string, msg,
-			    "base_lid is not defined, i.e., port is down");
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_alloc_ud_dest_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_alloc_ud_dest_list() exit\n");
+			IBMF_TRACE_1(DPRINT_L1,
+				     "ibmf_i_alloc_ud_dest(): %s\n",
+				     "base_lid is not defined, i.e., port is down");
 			return (IBMF_BAD_PORT_STATE);
 		}
 	}
@@ -418,13 +374,9 @@ ibmf_i_alloc_ud_dest(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		/* Get a UD destination resource from the list */
 		ibmf_ud_dest = ibmf_i_get_ud_dest(cip);
 		if (ibmf_ud_dest == NULL) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_alloc_ud_dest_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_alloc_ud_dest(): %s\n",
-			    tnf_string, msg, "No ud_dest available");
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_alloc_ud_dest_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_alloc_ud_dest_list() exit\n");
+			IBMF_TRACE_1(DPRINT_L1,
+				     "ibmf_i_alloc_ud_dest(): %s\n",
+				     "No ud_dest available");
 			return (IBMF_NO_RESOURCES);
 		}
 		ud_dest = &ibmf_ud_dest->ud_dest;
@@ -440,11 +392,10 @@ ibmf_i_alloc_ud_dest(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	/* modify the address handle with the address vector information */
 	status = ibt_modify_ah(cip->ci_ci_handle, ud_dest->ud_ah, &adds_vec);
 	if (status != IBT_SUCCESS)
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_alloc_ud_dest_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_alloc_ud_dest(): %s, status = %d\n",
-		    tnf_string, msg, "ibt alloc ah failed", tnf_uint,
-		    ibt_status, status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_alloc_ud_dest(): %s, status = %d\n",
+			     "ibt alloc ah failed",
+			     status);
 
 	ibmf_status = ibmf_i_ibt_to_ibmf_status(status);
 	if (ibmf_status == IBMF_SUCCESS) {
@@ -452,9 +403,6 @@ ibmf_i_alloc_ud_dest(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		IBMF_ADD32_KSTATS(clientp, ud_dests_alloced, 1);
 		mutex_exit(&clientp->ic_kstat_mutex);
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_alloc_ud_dest_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_alloc_ud_dest() exit\n");
 
 	return (ibmf_status);
 }
@@ -466,8 +414,7 @@ ibmf_i_alloc_ud_dest(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 void
 ibmf_i_free_ud_dest(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp)
 {
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_free_ud_dest_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_free_ud_dest() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_i_free_ud_dest() enter\n");
 
 	ibmf_i_put_ud_dest(clientp->ic_myci, msgimplp->im_ibmf_ud_dest);
 
@@ -480,9 +427,6 @@ ibmf_i_free_ud_dest(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp)
 	mutex_enter(&clientp->ic_kstat_mutex);
 	IBMF_SUB32_KSTATS(clientp, ud_dests_alloced, 1);
 	mutex_exit(&clientp->ic_kstat_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_free_ud_dest_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_free_ud_dest() exit\n");
 
 }
 

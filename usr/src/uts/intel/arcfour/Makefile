@@ -59,7 +59,10 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 # Overrides
 #
 CPPFLAGS	+= -I$(COM_DIR)
-CFLAGS		+= -xO4
+CFLAGS		+= -_gcc=-fno-strict-aliasing \
+		   -_gcc=-fno-unit-at-a-time \
+		   -_gcc=-fno-optimize-sibling-calls \
+		   -_gcc=-O2
 CLEANFILES	+= arcfour-x86_64.s
 
 #

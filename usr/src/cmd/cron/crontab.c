@@ -49,14 +49,10 @@
 #include "cron.h"
 #include "getresponse.h"
 
-#if defined(XPG4)
-#define	VIPATH	"/usr/xpg4/bin/vi"
-#elif defined(XPG6)
-#define	VIPATH	"/usr/xpg6/bin/vi"
-#else
+#if !defined(XPG4) && !defined(XPG6)
 #define	_XPG_NOTDEFINED
-#define	VIPATH	"vi"
 #endif
+#define	VIPATH	"vi"
 
 #define	TMPFILE		"_cron"		/* prefix for tmp file */
 #define	CRMODE		0600	/* mode for creating crontabs */

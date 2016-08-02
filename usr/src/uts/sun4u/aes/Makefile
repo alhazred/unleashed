@@ -65,10 +65,6 @@ LDFLAGS += -dy -Nmisc/kcf
 CFLAGS		+= $(CCVERBOSE) -I$(COM_DIR)
 CPPFLAGS	+= -DCRYPTO_PROVIDER_NAME=\"$(MODULE)\"
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
 
 #
 #	Default build targets.

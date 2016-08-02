@@ -31,7 +31,7 @@
 #include "SYS.h"
 #include "proc64_id.h"
 
-#define LABEL(s) .strcmp/**/s
+#define LABEL(s) .strcmp##s
 
 #ifdef USE_AS_STRNCMP
 	/*

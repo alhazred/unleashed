@@ -18,7 +18,8 @@ include $(SRC)/Makefile.master
 ROOT_BOOT = $(ROOT)/boot
 
 CC=	$(GCC_ROOT)/bin/gcc
-LD=	/usr/bin/gld
+LD=	$(GNU_ROOT)/bin/gld
+DD=	/usr/bin/dd
 CFLAGS= -O2 -I../../..
 CCASFLAGS= -Wa,--divide
 
@@ -53,9 +54,9 @@ LOADERBIN= ../loader/zfsloader.bin
 CLEANFILES += ${BOOT}.tmp
 
 ${BOOT}: ${LDR} ${LOADER}
-	cat ${LDR} ${LOADER} > $@.tmp
-	dd if=$@.tmp of=$@ obs=2k conv=sync
-	rm $@.tmp
+	$(CAT) ${LDR} ${LOADER} > $@.tmp
+	$(DD) if=$@.tmp of=$@ obs=2k conv=sync
+	$(RM) $@.tmp
 
 LDFLAGS +=-e start -Ttext ${ORG} -N -S --oformat binary
 

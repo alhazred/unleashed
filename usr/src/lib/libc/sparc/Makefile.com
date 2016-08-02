@@ -1109,7 +1109,7 @@ MAPFILES =	$(LIBCDIR)/port/mapfile-vers
 CFLAGS +=	$(EXTN_CFLAGS)
 CPPFLAGS=	-D_REENTRANT -Dsparc $(EXTN_CPPFLAGS) $(THREAD_DEBUG) \
 		-I$(LIBCBASE)/inc -I$(LIBCDIR)/inc $(CPPFLAGS.master)
-ASFLAGS=	$(EXTN_ASFLAGS) -K pic -P -D__STDC__ -D_ASM $(CPPFLAGS) $(sparc_AS_XARCH)
+ASFLAGS=	$(EXTN_ASFLAGS) -D_ASM $(CPPFLAGS) $(sparc_AS_XARCH)
 
 # As a favor to the dtrace syscall provider, libc still calls the
 # old syscall traps that have been obsoleted by the *at() interfaces.
@@ -1209,8 +1209,14 @@ $(DYNLIB) := CRTN = crtn.o
 pics/rwlock.o pics/synch.o pics/lwp.o pics/door_calls.o := \
 	sparc_CFLAGS += -_gcc=-Wa,-xarch=v8plus
 
-pics/_Q%.o := sparc_COPTFLAG = -xO4 -dalign
-pics/__quad%.o := sparc_COPTFLAG = -xO4 -dalign
+pics/_Q%.o := sparc_COPTFLAG =	-_gcc=-fno-strict-aliasing \
+				-_gcc=-fno-unit-at-a-time \
+				-_gcc=-fno-optimize-sibling-calls \
+				-_gcc=-O2
+pics/__quad%.o := sparc_COPTFLAG =	-_gcc=-fno-strict-aliasing \
+					-_gcc=-fno-unit-at-a-time \
+					-_gcc=-fno-optimize-sibling-calls \
+					-_gcc=-O2
 
 # large-file-aware components that should be built large
 
@@ -1251,7 +1257,10 @@ $(PORTI18N_COND:%=pics/%) := \
 pics/arc4random.o :=	CPPFLAGS += -I$(SRC)/common/crypto/chacha
 
 # Files which need extra optimization
-pics/getenv.o := sparc_COPTFLAG = -xO4
+pics/getenv.o := sparc_COPTFLAG =	-_gcc=-fno-strict-aliasing \
+					-_gcc=-fno-unit-at-a-time \
+					-_gcc=-fno-optimize-sibling-calls \
+					-_gcc=-O2
 
 .KEEP_STATE:
 

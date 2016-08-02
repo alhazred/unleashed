@@ -81,11 +81,9 @@ int av1394_it_start_thre = 3;	/* xmit start threshold */
 int av1394_it_syt_off = 3;	/* SYT offset in cycles */
 int av1394_it_dump_ixl = 0;
 
-#define	AV1394_TNF_ENTER(func)	\
-	TNF_PROBE_0_DEBUG(func##_enter, AV1394_TNF_ISOCH_STACK, "");
+#define	AV1394_TNF_ENTER(func)
 
-#define	AV1394_TNF_EXIT(func)	\
-	TNF_PROBE_0_DEBUG(func##_exit, AV1394_TNF_ISOCH_STACK, "");
+#define	AV1394_TNF_EXIT(func)
 
 int
 av1394_it_init(av1394_ic_t *icp, int *error)
@@ -186,8 +184,6 @@ av1394_it_start_common(av1394_ic_t *icp)
 	if (err == DDI_SUCCESS) {
 		icp->ic_state = AV1394_IC_DMA;
 	} else {
-		TNF_PROBE_1(av1394_it_start_common_error,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, result, result);
 		ret = EIO;
 	}
 
@@ -235,8 +231,6 @@ av1394_it_xmit(av1394_ic_t *icp, iec61883_xmit_t *xmit)
 	/* check arguments */
 	if ((idx < 0) || (cnt < 0) || (cnt > itp->it_nempty)) {
 		mutex_exit(&icp->ic_mutex);
-		TNF_PROBE_2(av1394_it_xmit_error_args, AV1394_TNF_ISOCH_ERROR,
-		    "", tnf_int, idx, idx, tnf_int, cnt, cnt);
 		return (EINVAL);
 	}
 
@@ -756,8 +750,6 @@ av1394_it_alloc_isoch_dma(av1394_ic_t *icp)
 
 	if ((ret = t1394_alloc_isoch_dma(avp->av_t1394_hdl, &di, 0,
 	    &icp->ic_isoch_hdl, &result)) != DDI_SUCCESS) {
-		TNF_PROBE_1(av1394_it_alloc_isoch_dma_error,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, result, result);
 	}
 
 	AV1394_TNF_EXIT(av1394_it_alloc_isoch_dma);
@@ -905,9 +897,6 @@ av1394_it_underrun(av1394_ic_t *icp)
 		icp->ic_state = AV1394_IC_SUSPENDED;
 		cv_signal(&icp->ic_xfer_cv);
 	} else {
-		TNF_PROBE_2(av1394_it_underrun_error_update,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, err, err,
-		    tnf_int, result, result);
 	}
 
 	AV1394_TNF_EXIT(av1394_it_underrun);
@@ -963,9 +952,6 @@ av1394_it_underrun_resume(av1394_ic_t *icp)
 	mutex_enter(&icp->ic_mutex);
 
 	if (err != DDI_SUCCESS) {
-		TNF_PROBE_2(av1394_it_underrun_resume_error_update1,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, err, err,
-		    tnf_int, result, result);
 		AV1394_TNF_EXIT(av1394_it_underrun_resume);
 		return (EIO);
 	}
@@ -990,9 +976,6 @@ av1394_it_underrun_resume(av1394_ic_t *icp)
 	mutex_enter(&icp->ic_mutex);
 
 	if (err != DDI_SUCCESS) {
-		TNF_PROBE_2(av1394_it_underrun_resume_error_update2,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, err, err,
-		    tnf_int, result, result);
 		AV1394_TNF_EXIT(av1394_it_underrun_resume);
 		return (EIO);
 	}
@@ -1038,8 +1021,6 @@ av1394_it_add_frames(av1394_ic_t *icp, int idx, int cnt)
 
 	/* can only add to tail */
 	if (idx != ((itp->it_last_full + 1) % icp->ic_nframes)) {
-		TNF_PROBE_1(av1394_it_add_frames_error,
-		    AV1394_TNF_ISOCH_ERROR, "", tnf_int, idx, idx);
 		return (EINVAL);
 	}
 

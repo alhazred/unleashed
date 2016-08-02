@@ -65,7 +65,7 @@ CPPFLAGS = $(INCDIRS:%=-I%) -D_KMDB
 CFLAGS += $(STAND_FLAGS_32)
 CFLAGS64 += $(STAND_FLAGS_64)
 
-ASFLAGS += -P -D_ASM
+ASFLAGS += -D_ASM
 
 CERRWARN += -_gcc=-Wno-parentheses
 

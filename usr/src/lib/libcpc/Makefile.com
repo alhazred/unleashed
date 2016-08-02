@@ -40,7 +40,7 @@ LDLIBS +=	-lpctx -lnvpair -lc
 
 SRCDIR =	../common
 
-ASFLAGS +=	-P -D_ASM -I../common
+ASFLAGS +=	-D_ASM -I../common
 CPPFLAGS +=	-D_REENTRANT -I../common
 CFLAGS +=	$(CCVERBOSE)
 

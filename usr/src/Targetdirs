@@ -129,14 +129,6 @@ DIRS= \
 	/etc/dhcp	\
 	/etc/lib  \
 	/etc/mail  \
-	/etc/mail/cf  \
-	/etc/mail/cf/cf  \
-	/etc/mail/cf/domain  \
-	/etc/mail/cf/feature  \
-	/etc/mail/cf/m4  \
-	/etc/mail/cf/mailer  \
-	/etc/mail/cf/ostype  \
-	/etc/mail/cf/sh  \
 	/etc/net-snmp \
 	/etc/net-snmp/snmp \
 	/etc/opt  \
@@ -222,10 +214,6 @@ DIRS= \
 	/usr/demo \
 	/usr/demo/SOUND \
 	/usr/games \
-	/usr/has \
-	/usr/has/bin \
-	/usr/has/lib \
-        /usr/has/man \
 	/usr/include \
 	/usr/include/ads \
 	/usr/include/ast \
@@ -233,7 +221,6 @@ DIRS= \
 	/usr/include/gssapi \
 	/usr/include/hal \
 	/usr/include/kerberosv5 \
-	/usr/include/libmilter \
 	/usr/include/libpolkit \
 	/usr/include/sasl \
 	/usr/include/scsi \
@@ -272,7 +259,6 @@ DIRS= \
 	/usr/lib/inet \
 	/usr/lib/inet/ilb \
 	/usr/lib/inet/$(MACH32) \
-	/usr/lib/inet/wanboot \
 	/usr/lib/krb5 \
 	/usr/lib/link_audit \
 	/usr/lib/lwp \
@@ -344,7 +330,6 @@ DIRS= \
 	/var/adm/log \
 	/var/adm/pool \
 	/var/adm/sa \
-	/var/adm/sm.bin \
 	/var/adm/streams \
 	/var/cores \
 	/var/cron \

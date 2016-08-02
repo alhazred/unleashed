@@ -92,7 +92,6 @@ CFLAGS64		+= $(CCVERBOSE)
 CPPFLAGS		+= $($(MDBTGT)_TGTFLAGS) -I../../../common
 LDFLAGS			+= $(ZTEXT)
 LDFLAGS64		+= $(ZTEXT)
-ASFLAGS			+= -P
 AS_CPPFLAGS		+= -D_ASM
 
 # Module type-specific compiler flags

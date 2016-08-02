@@ -47,7 +47,6 @@ dir path=opt/onbld/bin/$(ARCH)
 dir path=opt/onbld/env
 dir path=opt/onbld/etc
 dir path=opt/onbld/etc/exception_lists
-dir path=opt/onbld/gk
 dir path=opt/onbld/lib
 dir path=opt/onbld/lib/$(ARCH)
 dir path=opt/onbld/lib/$(ARCH)/64
@@ -60,7 +59,6 @@ dir path=opt/onbld/lib/python2.6/onbld/hgext
 dir path=opt/onbld/man
 dir path=opt/onbld/man/man1onbld
 dir path=opt/onbld/share
-$(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/aw mode=0555
 $(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/btxld mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/chk4ubin mode=0555
 file path=opt/onbld/bin/$(ARCH)/codereview mode=0555
@@ -76,7 +74,6 @@ file path=opt/onbld/bin/$(ARCH)/findunref mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/forth mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/forth_preload.so.1 mode=0555
 file path=opt/onbld/bin/$(ARCH)/install mode=0555
-file path=opt/onbld/bin/$(ARCH)/lintdump mode=0555
 file path=opt/onbld/bin/$(ARCH)/make mode=0555
 $(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/mbh_patch mode=0555
 file path=opt/onbld/bin/$(ARCH)/ndrgen mode=0555
@@ -89,7 +86,6 @@ $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/tokenize mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/tokenize.exe mode=0555
 file path=opt/onbld/bin/Install mode=0555
 file path=opt/onbld/bin/bldenv mode=0555
-file path=opt/onbld/bin/bringovercheck mode=0555
 file path=opt/onbld/bin/build_cscope mode=0555
 file path=opt/onbld/bin/cddlchk mode=0555
 file path=opt/onbld/bin/check_rtime mode=0555
@@ -99,7 +95,6 @@ file path=opt/onbld/bin/copyrightchk mode=0555
 file path=opt/onbld/bin/cstyle mode=0555
 file path=opt/onbld/bin/elfcmp mode=0555
 file path=opt/onbld/bin/find_elf mode=0555
-file path=opt/onbld/bin/findcrypto mode=0555
 file path=opt/onbld/bin/flg.flp mode=0555
 file path=opt/onbld/bin/genoffsets mode=0555
 file path=opt/onbld/bin/get_depend_info mode=0555
@@ -115,9 +110,6 @@ file path=opt/onbld/bin/mapfilechk mode=0555
 file path=opt/onbld/bin/nightly mode=0555
 file path=opt/onbld/bin/onu mode=0555
 file path=opt/onbld/bin/protocmp.terse mode=0555
-file path=opt/onbld/bin/sccscheck mode=0555
-file path=opt/onbld/bin/signit mode=0555
-file path=opt/onbld/bin/signproto mode=0555
 file path=opt/onbld/bin/validate_flg mode=0555
 file path=opt/onbld/bin/validate_paths mode=0555
 file path=opt/onbld/bin/validate_pkg mode=0555
@@ -137,9 +129,6 @@ file path=opt/onbld/etc/exception_lists/interface_cmp
 file path=opt/onbld/etc/hgstyle
 file path=opt/onbld/etc/its.conf
 file path=opt/onbld/etc/its.reg
-file path=opt/onbld/gk/.cshrc
-file path=opt/onbld/gk/.login
-file path=opt/onbld/gk/gen_make.machines mode=0755
 file path=opt/onbld/lib/$(ARCH)/64/libmakestate.so.1
 file path=opt/onbld/lib/$(ARCH)/libdwarf.so.1
 file path=opt/onbld/lib/$(ARCH)/libmakestate.so.1
@@ -190,7 +179,6 @@ file path=opt/onbld/lib/python2.6/onbld/hgext/__init__.pyc mode=0444
 file path=opt/onbld/lib/python2.6/onbld/hgext/cdm.py mode=0444
 file path=opt/onbld/man/man1onbld/Install.1onbld
 file path=opt/onbld/man/man1onbld/bldenv.1onbld
-file path=opt/onbld/man/man1onbld/bringovercheck.1onbld
 file path=opt/onbld/man/man1onbld/cddlchk.1onbld
 file path=opt/onbld/man/man1onbld/check_rtime.1onbld
 file path=opt/onbld/man/man1onbld/checkpaths.1onbld
@@ -207,15 +195,11 @@ file path=opt/onbld/man/man1onbld/hgsetup.1onbld
 file path=opt/onbld/man/man1onbld/interface_check.1onbld
 file path=opt/onbld/man/man1onbld/interface_cmp.1onbld
 file path=opt/onbld/man/man1onbld/jstyle.1onbld
-file path=opt/onbld/man/man1onbld/lintdump.1onbld
 file path=opt/onbld/man/man1onbld/make_pkg_db.1onbld
 file path=opt/onbld/man/man1onbld/mapfilechk.1onbld
 file path=opt/onbld/man/man1onbld/ndrgen.1onbld
 file path=opt/onbld/man/man1onbld/nightly.1onbld
 file path=opt/onbld/man/man1onbld/onu.1onbld
-file path=opt/onbld/man/man1onbld/sccscheck.1onbld
-file path=opt/onbld/man/man1onbld/signit.1onbld
-file path=opt/onbld/man/man1onbld/signproto.1onbld
 file path=opt/onbld/man/man1onbld/webrev.1onbld
 file path=opt/onbld/man/man1onbld/which_scm.1onbld
 file path=opt/onbld/man/man1onbld/ws.1onbld

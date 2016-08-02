@@ -183,10 +183,12 @@ IMPLEMENTATIONS		+= lw2plus
 #
 CC_XARCH	= -m64 -xarch=sparcvis
 AS_XARCH	= -xarch=v9a
-COPTIMIZE	= -xO3
-CCMODE		= -Xa
+COPTIMIZE	= -_gcc=-fno-strict-aliasing
+COPTIMIZE	+= -_gcc=-fno-unit-at-a-time
+COPTIMIZE	+= -_gcc=-fno-optimize-sibling-calls
+COPTIMIZE	+= -_gcc=-O2
 
-CFLAGS		= -_gcc=-mtune=ultrasparc $(CCABS32) $(CCREGSYM)
+CFLAGS		= -_gcc=-mtune=ultrasparc $(CCABS32)
 CFLAGS		+= $(CC_XARCH)
 CFLAGS		+= $(COPTIMIZE)
 CFLAGS		+= $(EXTRA_CFLAGS)
@@ -197,12 +199,8 @@ CFLAGS		+= $(SPACEFLAG)
 CFLAGS		+= $(CERRWARN)
 CFLAGS		+= $(CTF_FLAGS_$(CLASS))
 CFLAGS		+= $(C99MODE)
-CFLAGS		+= $(CCUNBOUND)
 CFLAGS		+= $(CCNOAUTOINLINE)
-CFLAGS		+= $(CCSTATICSYM)
 CFLAGS		+= $(CC32BITCALLERS)
-CFLAGS		+= $(IROPTFLAG)
-CFLAGS		+= $(CGLOBALSTATIC)
 CFLAGS		+= -_gcc=-mno-fpu
 CFLAGS		+= $(CSOURCEDEBUGFLAGS)
 CFLAGS		+= $(CUSERFLAGS)

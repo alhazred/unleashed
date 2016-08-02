@@ -30,7 +30,7 @@
 #include "SYS.h"
 #include "proc64_id.h"
 
-#define LABEL(s) .strcpy/**/s
+#define LABEL(s) .strcpy##s
 
 #ifdef USE_AS_STRNCPY
 	ENTRY(strncpy)

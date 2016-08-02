@@ -94,18 +94,11 @@ s1394_parse_selfid_buffer(s1394_hal_t *hal, void *selfid_buf_addr,
 	boolean_t	   error = B_FALSE;
 	int		   valid_pkt_id;
 
-	TNF_PROBE_0_DEBUG(s1394_parse_selfid_buffer_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
 	data = (uint32_t *)selfid_buf_addr;
 
 	if (selfid_size == 0) {
-		TNF_PROBE_1(s1394_parse_selfid_buffer_error,
-		    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-		    "SelfID buffer error - zero size");
-
 		/* Initiate a bus reset */
 		s1394_initiate_hal_reset(hal, CRITICAL);
 
@@ -147,12 +140,6 @@ s1394_parse_selfid_buffer(s1394_hal_t *hal, void *selfid_buf_addr,
 					IEEE1394_SELFID_PCKT_ID_VALID)) {
 					j += 2;
 				} else {
-					TNF_PROBE_1(
-					    s1394_parse_selfid_buffer_error,
-					    S1394_TNF_SL_BR_ERROR, "",
-					    tnf_string, msg, "SelfID packet "
-					    "error - invalid inverse");
-
 					/* Initiate a bus reset */
 					s1394_initiate_hal_reset(hal, CRITICAL);
 
@@ -165,10 +152,6 @@ s1394_parse_selfid_buffer(s1394_hal_t *hal, void *selfid_buf_addr,
 			}
 			i++;
 		} else {
-			TNF_PROBE_1(s1394_parse_selfid_buffer_error,
-			    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-			    "SelfID packet error - invalid inverse");
-
 			/* Initiate a bus reset */
 			s1394_initiate_hal_reset(hal, CRITICAL);
 
@@ -183,8 +166,6 @@ s1394_parse_selfid_buffer(s1394_hal_t *hal, void *selfid_buf_addr,
 	hal->number_of_nodes = i;
 
 parse_buffer_done:
-	TNF_PROBE_0_DEBUG(s1394_parse_selfid_buffer_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 	if (error == B_TRUE)
 		return (DDI_FAILURE);
 	else
@@ -203,8 +184,6 @@ s1394_sort_selfids(s1394_hal_t *hal)
 	uint_t		   number_of_nodes;
 	int		   i;
 	int		   j;
-
-	TNF_PROBE_0_DEBUG(s1394_sort_selfids_enter, S1394_TNF_SL_BR_STACK, "");
 
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
@@ -267,8 +246,6 @@ s1394_sort_selfids(s1394_hal_t *hal)
 			}
 		}
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_sort_selfids_exit, S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -334,13 +311,6 @@ selfid_port_type(s1394_selfid_pkt_t *s, int port)
 	int	block;
 	int	offset = IEEE1394_SELFID_PORT_OFFSET_FIRST;
 
-	if (port > selfid_num_ports(s)) {
-		TNF_PROBE_1(selfid_port_type_error,
-		    "1394 s1394 error",
-		    "Invalid port number requested for node",
-		    tnf_uint, node_num, IEEE1394_SELFID_PHYID(s));
-	}
-
 	if (port > 2) {
 		/* Calculate which quadlet and bits for this port */
 		port -= 3;
@@ -375,9 +345,6 @@ s1394_init_topology_tree(s1394_hal_t *hal, boolean_t copied,
 	uint_t		tree_size;
 	int		i;
 
-	TNF_PROBE_0_DEBUG(s1394_init_topology_tree_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
 	/*
@@ -399,18 +366,8 @@ s1394_init_topology_tree(s1394_hal_t *hal, boolean_t copied,
 			config_rom = node->cfgrom;
 			if (config_rom != NULL) {
 				if (CFGROM_NEW_ALLOC(node) == B_TRUE) {
-					TNF_PROBE_2_DEBUG(
-					    s1394_init_top_tree_free_cfgrom,
-					    S1394_TNF_SL_BR_STACK,
-					    "cfgrom free", tnf_int, node_num, i,
-					    tnf_opaque, cfgrom, config_rom);
 					kmem_free((void *)config_rom,
 					    IEEE1394_CONFIG_ROM_SZ);
-				} else {
-					TNF_PROBE_2_DEBUG(s1394_init_top_tree,
-					    S1394_TNF_SL_BR_STACK, "",
-					    tnf_int, node_num, i,
-					    tnf_opaque, cfgrom, config_rom);
 				}
 			}
 		}
@@ -418,9 +375,6 @@ s1394_init_topology_tree(s1394_hal_t *hal, boolean_t copied,
 
 	tree_size = hal->number_of_nodes * sizeof (s1394_node_t);
 	bzero((void *)hal->topology_tree, tree_size);
-
-	TNF_PROBE_0_DEBUG(s1394_init_topology_tree_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -441,15 +395,6 @@ s1394_topology_tree_build(s1394_hal_t *hal)
 	int		i;
 	int		j;
 
-	/*
-	 * The method for building the tree is described in IEEE 1394-1995
-	 * (Annex E.3.4).  We use an "Orphan" stack to keep track of Child
-	 * nodes which have yet to find their Parent node.
-	 */
-
-	TNF_PROBE_0_DEBUG(s1394_topology_tree_build_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
 	number_of_nodes = hal->number_of_nodes;
@@ -461,15 +406,9 @@ s1394_topology_tree_build(s1394_hal_t *hal)
 	for (i = 0; i < number_of_nodes; i++) {
 		/* Make sure that node numbers are correct */
 		if (i != IEEE1394_SELFID_PHYID(hal->selfid_ptrs[i])) {
-			TNF_PROBE_1(s1394_topology_tree_build_error,
-			    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-			    "SelfIDs - Invalid node numbering");
-
 			/* Initiate a bus reset */
 			s1394_initiate_hal_reset(hal, CRITICAL);
 
-			TNF_PROBE_0_DEBUG(s1394_topology_tree_build_exit,
-			    S1394_TNF_SL_BR_STACK, "");
 			return (DDI_FAILURE);
 		}
 
@@ -504,18 +443,9 @@ s1394_topology_tree_build(s1394_hal_t *hal)
 					found_parent = B_TRUE;
 
 				} else {
-					TNF_PROBE_1(
-					    s1394_topology_tree_build_error,
-					    S1394_TNF_SL_BR_ERROR, "",
-					    tnf_string, msg, "SelfID packet - "
-					    "Has multiple parents");
-
 					/* Initiate a bus reset */
 					s1394_initiate_hal_reset(hal, CRITICAL);
 
-					TNF_PROBE_0_DEBUG(
-					    s1394_topology_tree_build_exit,
-					    S1394_TNF_SL_BR_STACK, "");
 					return (DDI_FAILURE);
 				}
 			} else if (selfid_port_type(hal->selfid_ptrs[i], j) ==
@@ -524,18 +454,9 @@ s1394_topology_tree_build(s1394_hal_t *hal)
 				found_connection = B_TRUE;
 				tmp = (s1394_node_t *)s1394_hal_stack_pop(hal);
 				if (tmp == NULL) {
-					TNF_PROBE_1(
-					    s1394_topology_tree_build_error,
-					    S1394_TNF_SL_BR_ERROR, "",
-					    tnf_string, msg, "Topology Tree "
-					    "invalid - Tree build failed");
-
 					/* Initiate a bus reset */
 					s1394_initiate_hal_reset(hal, CRITICAL);
 
-					TNF_PROBE_0_DEBUG(
-					    s1394_topology_tree_build_exit,
-					    S1394_TNF_SL_BR_STACK, "");
 					return (DDI_FAILURE);
 				}
 
@@ -548,15 +469,9 @@ s1394_topology_tree_build(s1394_hal_t *hal)
 
 		/* If current node has no parents or children - Invalid */
 		if ((found_connection == B_FALSE) && (number_of_nodes > 1)) {
-			TNF_PROBE_1(s1394_topology_tree_build_error,
-			    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-			    "SelfID packet - Has no connections");
-
 			/* Initiate a bus reset */
 			s1394_initiate_hal_reset(hal, CRITICAL);
 
-			TNF_PROBE_0_DEBUG(s1394_topology_tree_build_exit,
-			    S1394_TNF_SL_BR_STACK, "");
 			return (DDI_FAILURE);
 		}
 
@@ -569,23 +484,15 @@ s1394_topology_tree_build(s1394_hal_t *hal)
 
 	/* If the stack is not empty, then something has gone seriously wrong */
 	if (hal->hal_stack_depth != -1) {
-		TNF_PROBE_1(s1394_topology_tree_build_error,
-		    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-		    "Topology Tree invalid - Tree build failed");
-
 		/* Initiate a bus reset */
 		s1394_initiate_hal_reset(hal, CRITICAL);
 
-		TNF_PROBE_0_DEBUG(s1394_topology_tree_build_exit,
-		    S1394_TNF_SL_BR_STACK, "");
 		return (DDI_FAILURE);
 	}
 
 	/* New topology tree is now valid */
 	hal->topology_tree_valid = B_TRUE;
 
-	TNF_PROBE_0_DEBUG(s1394_topology_tree_build_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 	return (DDI_SUCCESS);
 }
 
@@ -598,23 +505,10 @@ s1394_topology_tree_build(s1394_hal_t *hal)
 static void
 s1394_hal_stack_push(s1394_hal_t *hal, void *obj)
 {
-	TNF_PROBE_0_DEBUG(s1394_hal_stack_push_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	if (hal->hal_stack_depth < IEEE1394_MAX_NODES - 1) {
 		hal->hal_stack_depth++;
 		hal->hal_stack[hal->hal_stack_depth] = obj;
-	} else {
-		TNF_PROBE_1(s1394_hal_stack_push_error,
-		    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-		    "HAL stack - Overflow");
-		TNF_PROBE_0_DEBUG(s1394_hal_stack_push_exit,
-		    S1394_TNF_SL_BR_STACK, "");
-		return;
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_hal_stack_push_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -626,21 +520,10 @@ s1394_hal_stack_push(s1394_hal_t *hal, void *obj)
 static void *
 s1394_hal_stack_pop(s1394_hal_t *hal)
 {
-	TNF_PROBE_0_DEBUG(s1394_hal_stack_pop_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	if (hal->hal_stack_depth > -1) {
 		hal->hal_stack_depth--;
-		TNF_PROBE_0_DEBUG(s1394_hal_stack_pop_exit,
-		    S1394_TNF_SL_BR_STACK, "");
 		return (hal->hal_stack[hal->hal_stack_depth + 1]);
-
 	} else {
-		TNF_PROBE_1(s1394_hal_stack_pop_error,
-		    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-		    "HAL stack - Underflow");
-		TNF_PROBE_0_DEBUG(s1394_hal_stack_pop_exit,
-		    S1394_TNF_SL_BR_STACK, "");
 		return (NULL);
 	}
 }
@@ -654,16 +537,8 @@ s1394_hal_stack_pop(s1394_hal_t *hal)
 static void
 s1394_hal_queue_insert(s1394_hal_t *hal, void *obj)
 {
-	TNF_PROBE_0_DEBUG(s1394_hal_queue_insert_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	if (((hal->hal_queue_front + 1) % IEEE1394_MAX_NODES) ==
 	    hal->hal_queue_back) {
-		TNF_PROBE_1(s1394_hal_queue_insert_error,
-		    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-		    "HAL Queue - Overflow");
-		TNF_PROBE_0_DEBUG(s1394_hal_queue_insert_exit,
-		    S1394_TNF_SL_BR_STACK, "");
 		return;
 
 	} else {
@@ -671,9 +546,6 @@ s1394_hal_queue_insert(s1394_hal_t *hal, void *obj)
 		hal->hal_queue_front = (hal->hal_queue_front + 1) %
 		    IEEE1394_MAX_NODES;
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_hal_queue_insert_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 
@@ -688,23 +560,13 @@ s1394_hal_queue_remove(s1394_hal_t *hal)
 {
 	void	*tmp;
 
-	TNF_PROBE_0_DEBUG(s1394_hal_queue_remove_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	if (hal->hal_queue_back == hal->hal_queue_front) {
-		TNF_PROBE_1(s1394_hal_queue_remove_error,
-		    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-		    "HAL Queue - Underflow");
-		TNF_PROBE_0_DEBUG(s1394_hal_queue_remove_exit,
-		    S1394_TNF_SL_BR_STACK, "");
 		return (NULL);
 
 	} else {
 		tmp = hal->hal_queue[hal->hal_queue_back];
 		hal->hal_queue_back = (hal->hal_queue_back + 1) %
 		    IEEE1394_MAX_NODES;
-		TNF_PROBE_0_DEBUG(s1394_hal_queue_remove_exit,
-		    S1394_TNF_SL_BR_STACK, "");
 		return (tmp);
 	}
 }
@@ -720,23 +582,12 @@ s1394_hal_queue_remove(s1394_hal_t *hal)
 static void
 s1394_node_number_list_add(s1394_hal_t *hal, int node_num)
 {
-	TNF_PROBE_1_DEBUG(s1394_node_number_list_add_enter,
-	    S1394_TNF_SL_BR_STACK, "", tnf_int, node_num, node_num);
-
 	if (hal->hal_node_number_list_size >= IEEE1394_MAX_NODES - 1) {
-		TNF_PROBE_1(s1394_node_number_list_add_error,
-		    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-		    "Node Number List - Overflow");
-		TNF_PROBE_0_DEBUG(s1394_node_number_list_add_exit,
-		    S1394_TNF_SL_BR_STACK, "");
 		return;
 	}
 
 	hal->hal_node_number_list[hal->hal_node_number_list_size] = node_num;
 	hal->hal_node_number_list_size++;
-
-	TNF_PROBE_0_DEBUG(s1394_node_number_list_add_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -750,17 +601,11 @@ s1394_topology_tree_mark_all_unvisited(s1394_hal_t *hal)
 	uint_t	number_of_nodes;
 	int	i;
 
-	TNF_PROBE_0_DEBUG(s1394_topology_tree_mark_all_unvisited_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
 	number_of_nodes = hal->number_of_nodes;
 	for (i = 0; i < number_of_nodes; i++)
 		CLEAR_NODE_VISITED(&hal->topology_tree[i]);
-
-	TNF_PROBE_0_DEBUG(s1394_topology_tree_mark_all_unvisited_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -774,17 +619,11 @@ s1394_old_tree_mark_all_unvisited(s1394_hal_t *hal)
 	uint_t	number_of_nodes;
 	int	i;
 
-	TNF_PROBE_0_DEBUG(s1394_old_tree_mark_all_unvisited_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
 	number_of_nodes = hal->old_number_of_nodes;
 	for (i = 0; i < number_of_nodes; i++)
 		CLEAR_NODE_VISITED(&hal->old_tree[i]);
-
-	TNF_PROBE_0_DEBUG(s1394_old_tree_mark_all_unvisited_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -798,18 +637,12 @@ s1394_old_tree_mark_all_unmatched(s1394_hal_t *hal)
 	uint_t	number_of_nodes;
 	int	i;
 
-	TNF_PROBE_0_DEBUG(s1394_old_tree_mark_all_unmatched_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
 	number_of_nodes = hal->old_number_of_nodes;
 
 	for (i = 0; i < number_of_nodes; i++)
 	    CLEAR_NODE_MATCHED(&hal->old_tree[i]);
-
-	TNF_PROBE_0_DEBUG(s1394_old_tree_mark_all_unmatched_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -820,9 +653,6 @@ void
 s1394_copy_old_tree(s1394_hal_t *hal)
 {
 	s1394_node_t	*temp;
-
-	TNF_PROBE_0_DEBUG(s1394_copy_old_tree_enter,
-	    S1394_TNF_SL_BR_STACK, "");
 
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
@@ -836,9 +666,6 @@ s1394_copy_old_tree(s1394_hal_t *hal)
 
 	/* Old tree is now valid and filled also */
 	hal->old_tree_valid = B_TRUE;
-
-	TNF_PROBE_0_DEBUG(s1394_copy_old_tree_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 
@@ -862,9 +689,6 @@ s1394_match_tree_nodes(s1394_hal_t *hal)
 	uint_t		hal_node_num_old;
 	int		i;
 	int		port_type;
-
-	TNF_PROBE_0_DEBUG(s1394_match_tree_nodes_enter,
-	    S1394_TNF_SL_BR_STACK, "");
 
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
@@ -938,9 +762,6 @@ s1394_match_tree_nodes(s1394_hal_t *hal)
 			}
 		}
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_match_tree_nodes_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -962,9 +783,6 @@ s1394_topology_tree_calculate_diameter(s1394_hal_t *hal)
 	int		distance = 0;
 	int		diameter = 0;
 	int		local_diameter = 0;
-
-	TNF_PROBE_0_DEBUG(s1394_topology_tree_calculate_diameter_enter,
-	    S1394_TNF_SL_BR_STACK, "");
 
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
@@ -1028,8 +846,6 @@ s1394_topology_tree_calculate_diameter(s1394_hal_t *hal)
 		}
 	} while (done == B_FALSE);
 
-	TNF_PROBE_0_DEBUG(s1394_topology_tree_calculate_diameter_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 	return (diameter);
 }
 
@@ -1063,9 +879,6 @@ s1394_get_current_gap_count(s1394_hal_t *hal)
 	int	i;
 	int	gap_count = -1;
 
-	TNF_PROBE_0_DEBUG(s1394_get_current_gap_count_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
 	/* Grab the first gap_count in the SelfID packets */
@@ -1076,24 +889,15 @@ s1394_get_current_gap_count(s1394_hal_t *hal)
 		if (gap_count !=
 		    IEEE1394_SELFID_GAP_CNT(hal->selfid_ptrs[i])) {
 
-			/* Inconsistent gap counts */
-			TNF_PROBE_1(s1394_get_current_gap_count_error,
-			    S1394_TNF_SL_BR_ERROR, "", tnf_string, msg,
-			    "Inconsistent gap count");
-
 			if (s1394_ignore_invalid_gap_cnt == 0) {
 				/* Initiate a bus reset */
 				s1394_initiate_hal_reset(hal, CRITICAL);
 			}
 
-			TNF_PROBE_0_DEBUG(s1394_get_current_gap_count_exit,
-			    S1394_TNF_SL_BR_STACK, "");
 			return (-1);
 		}
 	}
 
-	TNF_PROBE_0_DEBUG(s1394_get_current_gap_count_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 	return (gap_count);
 }
 
@@ -1121,9 +925,6 @@ s1394_speed_map_fill(s1394_hal_t *hal)
 	int	i;
 	int	j;
 	int	node_num;
-
-	TNF_PROBE_0_DEBUG(s1394_speed_map_fill_enter,
-	    S1394_TNF_SL_BR_STACK, "");
 
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
@@ -1156,9 +957,6 @@ s1394_speed_map_fill(s1394_hal_t *hal)
 		hal->speed_map[i][i] =
 		    selfid_speed(hal->topology_tree[i].selfid_packet);
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_speed_map_fill_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -1178,9 +976,6 @@ s1394_speed_map_fill_speed_N(s1394_hal_t *hal, int min_spd)
 	int		k;
 	int		size;
 	int		ix_a, ix_b;
-
-	TNF_PROBE_0_DEBUG(s1394_speed_map_fill_speed_N_enter,
-	    S1394_TNF_SL_BR_STACK, "");
 
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
@@ -1246,9 +1041,6 @@ s1394_speed_map_fill_speed_N(s1394_hal_t *hal, int min_spd)
 			hal->hal_node_number_list_size = 0;
 		}
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_speed_map_fill_speed_N_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -1263,9 +1055,6 @@ s1394_speed_map_initialize(s1394_hal_t *hal)
 	uint_t	number_of_nodes;
 	int	i, j;
 
-	TNF_PROBE_0_DEBUG(s1394_speed_map_initialize_enter,
-	    S1394_TNF_SL_BR_STACK, "");
-
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
 	number_of_nodes = hal->number_of_nodes;
@@ -1277,9 +1066,6 @@ s1394_speed_map_initialize(s1394_hal_t *hal)
 				hal->speed_map[i][j] = SPEED_MAP_INVALID;
 		}
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_speed_map_initialize_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -1312,9 +1098,6 @@ s1394_update_speed_map_link_speeds(s1394_hal_t *hal)
 	uint8_t	 link_speed;
 	uint_t	 number_of_nodes;
 	int	 i, j;
-
-	TNF_PROBE_0_DEBUG(s1394_update_speed_map_link_speeds_enter,
-	    S1394_TNF_SL_BR_STACK, "");
 
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
@@ -1353,9 +1136,6 @@ s1394_update_speed_map_link_speeds(s1394_hal_t *hal)
 			}
 		}
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_update_speed_map_link_speeds_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -1370,9 +1150,6 @@ s1394_get_isoch_rsrc_mgr(s1394_hal_t *hal)
 {
 	int	i;
 
-	TNF_PROBE_0_DEBUG(s1394_get_isoch_rsrc_mgr_enter, S1394_TNF_SL_BR_STACK,
-	    "");
-
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
 
 	for (i = hal->number_of_nodes - 1; i >= 0; i--) {
@@ -1380,15 +1157,11 @@ s1394_get_isoch_rsrc_mgr(s1394_hal_t *hal)
 		if ((IEEE1394_SELFID_ISLINKON(hal->selfid_ptrs[i])) &&
 		    (IEEE1394_SELFID_ISCONTENDER(hal->selfid_ptrs[i]))) {
 
-			TNF_PROBE_0_DEBUG(s1394_get_isoch_rsrc_mgr_exit,
-			    S1394_TNF_SL_BR_STACK, "");
 			return (i);
 		}
 	}
 
 	/* No Isochronous Resource Manager */
-	TNF_PROBE_0_DEBUG(s1394_get_isoch_rsrc_mgr_exit, S1394_TNF_SL_BR_STACK,
-	    "");
 	return (-1);
 }
 
@@ -1406,9 +1179,6 @@ s1394_physical_arreq_setup_all(s1394_hal_t *hal)
 	uint64_t	mask = 0;
 	uint32_t	node_num;
 	uint_t		generation;
-
-	TNF_PROBE_0_DEBUG(s1394_physical_arreq_setup_all_enter,
-	    S1394_TNF_SL_BR_STACK, "");
 
 	ASSERT(MUTEX_NOT_HELD(&hal->topology_tree_mutex));
 
@@ -1436,9 +1206,6 @@ s1394_physical_arreq_setup_all(s1394_hal_t *hal)
 	 */
 	(void) HAL_CALL(hal).physical_arreq_enable_set(
 	    hal->halinfo.hal_private, mask, generation);
-
-	TNF_PROBE_0_DEBUG(s1394_physical_arreq_setup_all_exit,
-	    S1394_TNF_SL_BR_STACK, "");
 }
 
 /*
@@ -1454,9 +1221,6 @@ s1394_physical_arreq_set_one(s1394_target_t *target)
 	uint64_t	mask = 0;
 	uint32_t	node_num;
 	uint_t		generation;
-
-	TNF_PROBE_0_DEBUG(s1394_physical_arreq_set_one_enter,
-	    S1394_TNF_SL_STACK, "");
 
 	/* Find the HAL this target resides on */
 	hal = target->on_hal;
@@ -1488,9 +1252,6 @@ s1394_physical_arreq_set_one(s1394_target_t *target)
 		rw_exit(&hal->target_list_rwlock);
 		mutex_exit(&hal->topology_tree_mutex);
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_physical_arreq_set_one_exit,
-	    S1394_TNF_SL_STACK, "");
 }
 
 /*
@@ -1506,9 +1267,6 @@ s1394_physical_arreq_clear_one(s1394_target_t *target)
 	uint64_t	mask = 0;
 	uint32_t	node_num;
 	uint_t		generation;
-
-	TNF_PROBE_0_DEBUG(s1394_physical_arreq_clear_one_enter,
-	    S1394_TNF_SL_STACK, "");
 
 	/* Find the HAL this target resides on */
 	hal = target->on_hal;
@@ -1540,10 +1298,6 @@ s1394_physical_arreq_clear_one(s1394_target_t *target)
 		rw_exit(&hal->target_list_rwlock);
 		mutex_exit(&hal->topology_tree_mutex);
 	}
-
-
-	TNF_PROBE_0_DEBUG(s1394_physical_arreq_clear_one_exit,
-	    S1394_TNF_SL_STACK, "");
 }
 
 /*
@@ -1554,13 +1308,7 @@ s1394_physical_arreq_clear_one(s1394_target_t *target)
 s1394_node_t *
 s1394_topology_tree_get_root_node(s1394_hal_t *hal)
 {
-	TNF_PROBE_0_DEBUG(s1394_topology_tree_get_root_node_enter,
-	    S1394_TNF_SL_STACK, "");
-
 	ASSERT(MUTEX_HELD(&hal->topology_tree_mutex));
-
-	TNF_PROBE_0_DEBUG(s1394_topology_tree_get_root_node_exit,
-	    S1394_TNF_SL_STACK, "");
 
 	return (&hal->topology_tree[hal->number_of_nodes - 1]);
 }

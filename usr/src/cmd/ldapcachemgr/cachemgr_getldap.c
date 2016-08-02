@@ -70,10 +70,6 @@ static int	signal_done = FALSE;
 /* TCP connection timeout (in milliseconds) */
 static int tcptimeout = NS_DEFAULT_BIND_TIMEOUT * 1000;
 
-#ifdef SLP
-extern int	use_slp;
-#endif /* SLP */
-
 /* nis domain information */
 #define	_NIS_FILTER		"objectclass=nisDomainObject"
 #define	_NIS_DOMAIN		"nisdomain"

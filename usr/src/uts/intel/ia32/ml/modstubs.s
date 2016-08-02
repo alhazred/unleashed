@@ -34,6 +34,8 @@ char stubs_base[1], stubs_end[1];
 
 #include "assym.h"
 
+#define	STRINGIFY(x)	#x
+
 /*
  * !!!!!!!! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! !!!!!!!!
  *
@@ -64,27 +66,9 @@ char stubs_base[1], stubs_end[1];
 /*
  * This file uses ansi preprocessor features:
  *
- * 1. 	#define mac(a) extra_ ## a     -->   mac(x) expands to extra_a
- * The old version of this is
- *      #define mac(a) extra_/.*.*./a
- * but this fails if the argument has spaces "mac ( x )"
- * (Ignore the dots above, I had to put them in to keep this a comment.)
+ * 1. 	#define mac(a) extra_ ## a     -->   mac(x) expands to extra_x
  *
  * 2.   #define mac(a) #a             -->    mac(x) expands to "x"
- * The old version is
- *      #define mac(a) "a"
- *
- * For some reason, the 5.0 preprocessor isn't happy with the above usage.
- * For now, we're not using these ansi features.
- *
- * The reason is that "the 5.0 ANSI preprocessor" is built into the compiler
- * and is a tokenizing preprocessor. This means, when confronted by something
- * other than C token generation rules, strange things occur. In this case,
- * when confronted by an assembly file, it would turn the token ".globl" into
- * two tokens "." and "globl". For this reason, the traditional, non-ANSI
- * preprocessor is used on assembly files.
- *
- * It would be desirable to have a non-tokenizing cpp (accp?) to use for this.
  */
 
 /*
@@ -99,14 +83,14 @@ char stubs_base[1], stubs_end[1];
  */
 #define	MODULE(module,namespace)	\
 	.data;				\
-module/**/_modname:			\
-	.string	"namespace/module";	\
-	SET_SIZE(module/**/_modname);	\
+module##_modname:			\
+	.string	STRINGIFY(namespace/module);	\
+	SET_SIZE(module##_modname);	\
 	.align	CPTRSIZE;		\
-	.globl	module/**/_modinfo;	\
-	.type	module/**/_modinfo, @object;	\
-module/**/_modinfo:			\
-	.quad	module/**/_modname;	\
+	.globl	module##_modinfo;	\
+	.type	module##_modinfo, @object;	\
+module##_modinfo:			\
+	.quad	module##_modname;	\
 	.quad	0	/* storage for modctl pointer */
 
 	/* then mod_stub_info structures follow until a mods_func_adr is 0 */
@@ -116,7 +100,7 @@ module/**/_modinfo:			\
 	.data;				\
 	.align	CPTRSIZE;		\
 	.quad 0;			\
-	SET_SIZE(module/**/_modinfo)
+	SET_SIZE(module##_modinfo)
 
 /*
  * The data section in the stub_common macro is the
@@ -125,7 +109,7 @@ module/**/_modinfo:			\
 
 #define STUB_COMMON(module, fcnname, install_fcn, retfcn, weak)		\
 	ENTRY(fcnname);							\
-	leaq	fcnname/**/_info(%rip), %rax;				\
+	leaq	fcnname##_info(%rip), %rax;				\
 	cmpl	$0, MODS_FLAG(%rax);			/* weak? */	\
 	je	stubs_common_code;			/* not weak */	\
 	testb	$MODS_INSTALLED, MODS_FLAG(%rax);	/* installed? */ \
@@ -134,18 +118,18 @@ module/**/_modinfo:			\
 	SET_SIZE(fcnname);						\
 	.data;								\
 	.align	 CPTRSIZE;						\
-	.type	fcnname/**/_info, @object;				\
-fcnname/**/_info:							\
+	.type	fcnname##_info, @object;				\
+fcnname##_info:							\
 	.quad	install_fcn;		/* 0 */				\
-	.quad	module/**/_modinfo;	/* 0x8 */			\
+	.quad	module##_modinfo;	/* 0x8 */			\
 	.quad	fcnname;		/* 0x10 */			\
 	.quad	retfcn;			/* 0x18 */			\
 	.long	weak;			/* 0x20 */			\
-	SET_SIZE(fcnname/**/_info)
+	SET_SIZE(fcnname##_info)
 
 #define STUB_UNLOADABLE(module, fcnname, install_fcn, retfcn, weak)	\
 	ENTRY(fcnname);							\
-	leaq	fcnname/**/_info(%rip), %rax;				\
+	leaq	fcnname##_info(%rip), %rax;				\
 	testb	$MODS_INSTALLED, MODS_FLAG(%rax); /* installed? */	\
 	je	5f;			/* no */			\
 	jmp	*(%rax);		/* yes, jump to install_fcn */	\
@@ -155,14 +139,14 @@ fcnname/**/_info:							\
 	SET_SIZE(fcnname);						\
 	.data;								\
 	.align	CPTRSIZE;						\
-	.type	fcnname/**/_info, @object;				\
-fcnname/**/_info:							\
+	.type	fcnname##_info, @object;				\
+fcnname##_info:							\
 	.quad	install_fcn;		/* 0 */				\
-	.quad	module/**/_modinfo;	/* 0x8 */			\
+	.quad	module##_modinfo;	/* 0x8 */			\
 	.quad	fcnname;		/* 0x10 */			\
 	.quad	retfcn;			/* 0x18 */			\
 	.long   weak;			/* 0x20 */			\
-	SET_SIZE(fcnname/**/_info)
+	SET_SIZE(fcnname##_info)
 
 /*
  * We branch here with the fcnname_info pointer in %rax
@@ -241,14 +225,14 @@ fcnname/**/_info:							\
  */
 #define MODULE(module,namespace)	\
 	.data;				\
-module/**/_modname:			\
-	.string	"namespace/module";	\
-	SET_SIZE(module/**/_modname);	\
+module##_modname:			\
+	.string	STRINGIFY(namespace/module);	\
+	SET_SIZE(module##_modname);	\
 	.align	CPTRSIZE;		\
-	.globl	module/**/_modinfo;	\
-	.type	module/**/_modinfo, @object;	\
-module/**/_modinfo:			\
-	.long	module/**/_modname;	\
+	.globl	module##_modinfo;	\
+	.type	module##_modinfo, @object;	\
+module##_modinfo:			\
+	.long	module##_modname;	\
 	.long	0	/* storage for modctl pointer */
 
 	/* then mod_stub_info structures follow until a mods_func_adr is 0 */
@@ -258,7 +242,7 @@ module/**/_modinfo:			\
 	.data;				\
 	.align	CPTRSIZE;		\
 	.long 0;			\
-	SET_SIZE(module/**/_modinfo)
+	SET_SIZE(module##_modinfo)
 
 /*
  * The data section in the stub_common macro is the
@@ -276,7 +260,7 @@ module/**/_modinfo:			\
 
 #define STUB_COMMON(module, fcnname, install_fcn, retfcn, weak)		\
 	ENTRY(fcnname);							\
-	leal	fcnname/**/_info, %eax;					\
+	leal	fcnname##_info, %eax;					\
 	cmpl	$0, MODS_FLAG(%eax);	/* weak? */			\
 	je	stubs_common_code;	/* not weak */			\
 	testb	$MODS_INSTALLED, MODS_FLAG(%eax); /* installed? */	\
@@ -285,18 +269,18 @@ module/**/_modinfo:			\
 	SET_SIZE(fcnname);						\
 	.data;								\
 	.align	 CPTRSIZE;						\
-	.type	fcnname/**/_info, @object;				\
-fcnname/**/_info:							\
+	.type	fcnname##_info, @object;				\
+fcnname##_info:							\
 	.long	install_fcn;						\
-	.long	module/**/_modinfo;					\
+	.long	module##_modinfo;					\
 	.long	fcnname;						\
 	.long	retfcn;							\
 	.long   weak;							\
-	SET_SIZE(fcnname/**/_info)
+	SET_SIZE(fcnname##_info)
 	
 #define STUB_UNLOADABLE(module, fcnname, install_fcn, retfcn, weak)	\
 	ENTRY(fcnname);							\
-	leal	fcnname/**/_info, %eax;					\
+	leal	fcnname##_info, %eax;					\
 	testb	$MODS_INSTALLED, MODS_FLAG(%eax); /* installed? */	\
 	je	5f;		/* no */				\
 	jmp	*(%eax);	/* yes, just jump to install_fcn */	\
@@ -306,14 +290,14 @@ fcnname/**/_info:							\
 	SET_SIZE(fcnname);						\
 	.data;								\
 	.align	CPTRSIZE;						\
-	.type	fcnname/**/_info, @object;				\
-fcnname/**/_info:							\
+	.type	fcnname##_info, @object;				\
+fcnname##_info:							\
 	.long	install_fcn;		/* 0 */				\
-	.long	module/**/_modinfo;	/* 0x4 */			\
+	.long	module##_modinfo;	/* 0x4 */			\
 	.long	fcnname;		/* 0x8 */			\
 	.long	retfcn;			/* 0xc */			\
 	.long   weak;			/* 0x10 */			\
-	SET_SIZE(fcnname/**/_info)
+	SET_SIZE(fcnname##_info)
 
 /*
  * We branch here with the fcnname_info pointer in %eax

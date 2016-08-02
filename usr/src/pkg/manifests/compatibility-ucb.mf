@@ -161,9 +161,6 @@ link path=usr/ucb/Mail target=../bin/mailx
 link path=usr/ucb/arch target=../bin/arch
 link path=usr/ucb/basename target=../bin/basename
 link path=usr/ucb/clear target=../bin/clear
-link path=usr/ucb/e target=../bin/edit
-link path=usr/ucb/edit target=../bin/edit
-link path=usr/ucb/ex target=../bin/edit
 link path=usr/ucb/finger target=../bin/finger
 link path=usr/ucb/fmt target=../bin/fmt
 link path=usr/ucb/fold target=../bin/fold
@@ -199,9 +196,6 @@ link path=usr/ucb/touch target=../bin/touch
 link path=usr/ucb/tr target=../bin/tr
 link path=usr/ucb/uptime target=../bin/uptime
 link path=usr/ucb/vacation target=../bin/vacation
-link path=usr/ucb/vedit target=../bin/vedit
-link path=usr/ucb/vi target=../bin/edit
-link path=usr/ucb/view target=../bin/edit
 link path=usr/ucb/vmstat target=../bin/vmstat
 link path=usr/ucb/w target=../bin/w
 link path=usr/ucb/wc target=../bin/wc

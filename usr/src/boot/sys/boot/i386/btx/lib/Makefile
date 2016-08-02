@@ -15,8 +15,8 @@
 
 include $(SRC)/Makefile.master
 
-AS=	/usr/bin/gas
-LD=	/usr/bin/gld
+AS=	$(GNU_ROOT)/bin/gas
+LD=	$(GNU_ROOT)/bin/gld
 CC=	$(GCC_ROOT)/bin/gcc
 
 CPPFLAGS= -I./../../common

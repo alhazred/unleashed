@@ -58,10 +58,6 @@ INC_PATH	+= -I$(UTSBASE)/sun4
 
 CFLAGS += $(CCVERBOSE)
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

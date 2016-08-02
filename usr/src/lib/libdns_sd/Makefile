@@ -36,9 +36,9 @@ install	:=	TARGET = install
 
 .KEEP_STATE:
 
-all install: install_h $(SUBDIRS) .WAIT java
+all install: install_h $(SUBDIRS) .WAIT
 
-clean clobber: $(SUBDIRS) java
+clean clobber: $(SUBDIRS)
 
 ROOTHDRDIR=	$(ROOT)/usr/include
 ROOTHDRS=	$(HDR:%=$(ROOTHDRDIR)/%)
@@ -47,7 +47,7 @@ install_h:	$(ROOTHDRS)
 
 check:
 
-$(SUBDIRS) java: FRC
+$(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
 FRC:

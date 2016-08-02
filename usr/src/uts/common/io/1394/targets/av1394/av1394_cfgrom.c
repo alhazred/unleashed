@@ -53,11 +53,9 @@ static int	av1394_cfgrom_rq(av1394_inst_t *, cmd1394_cmd_t *,
 		goto catch; \
 	}
 
-#define	AV1394_TNF_ENTER(func)	\
-	TNF_PROBE_0_DEBUG(func##_enter, AV1394_TNF_ASYNC_STACK, "");
+#define	AV1394_TNF_ENTER(func)
 
-#define	AV1394_TNF_EXIT(func)	\
-	TNF_PROBE_0_DEBUG(func##_exit, AV1394_TNF_ASYNC_STACK, "");
+#define	AV1394_TNF_EXIT(func)
 
 int
 av1394_cfgrom_init(av1394_inst_t *avp)
@@ -510,8 +508,6 @@ av1394_cfgrom_read_leaf(av1394_inst_t *avp, uint64_t leaf_addr, mblk_t **bpp)
 	}
 
 	if ((bp = allocb(leaf_len * 4, BPRI_HI)) == NULL) {
-		TNF_PROBE_0(aav1394_cfgrom_read_leaf_error_allocb,
-		    AV1394_TNF_ASYNC_ERROR, "");
 		return (ENOMEM);
 	}
 
@@ -555,9 +551,6 @@ av1394_cfgrom_rq(av1394_inst_t *avp, cmd1394_cmd_t *cmd, uint64_t addr,
 		*rval = cmd->cmd_u.q.quadlet_data;
 		return (0);
 	} else {
-		TNF_PROBE_2(av1394_cfgrom_rq_error,
-		    AV1394_TNF_ASYNC_ERROR, "", tnf_int, err, err,
-		    tnf_int, result, cmd->cmd_result);
 		return (EIO);
 	}
 }

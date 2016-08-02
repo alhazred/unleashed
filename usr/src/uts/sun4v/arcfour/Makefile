@@ -58,14 +58,13 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 CFLAGS		+= $(CCVERBOSE) -I$(COM_DIR)
 
 #
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
-
-#
 # For niagara specific optimizations
 #
-COPTIMIZE	= -xO5 -xbuiltin=%all
+COPTIMIZE	= -_gcc=-fno-strict-aliasing
+COPTIMIZE	+= -_gcc=-fno-unit-at-a-time
+COPTIMIZE	+= -_gcc=-fno-optimize-sibling-calls
+COPTIMIZE	+= -_gcc=-O2
+COPTIMIZE	+= -_gcc=-fbuiltin
 
 #
 # Override the default space setting

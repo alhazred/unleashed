@@ -34,7 +34,7 @@ LDLIBS +=	-lscf -lc -lsocket -lnsl -lmd -luutil
 
 SRCDIR =	../common
 
-CFLAGS +=			$(CCVERBOSE) -Wp,$(C99_ENABLE)
+CFLAGS +=			$(CCVERBOSE) $(C99_ENABLE)
 CPPFLAGS +=			-I../common -D_REENTRANT
 $(RELEASE_BUILD)CPPFLAGS +=     -DNDEBUG
 

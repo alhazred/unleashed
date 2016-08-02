@@ -113,7 +113,7 @@ although it may also be used to build other consolidations.
 The environment variable NIGHTLY_OPTIONS controls the actions
 .I nightly
 will take as it proceeds.
-The -i, -n, +t and -V options may also be used from the command
+The -i, -n, and -V options may also be used from the command
 line to control the actions without editing your environment file.
 The -i and -n options complete the build more quickly by bypassing
 some actions. If NIGHTLY_OPTIONS is not set, then "-Bmt" build
@@ -166,11 +166,6 @@ workspace.
 .B \-m
 Send mail to $MAILTO at end of build
 .TP
-.B \-t
-Build and use the tools in $SRC/tools (default setting).
-.TP
-.B \+t
-Use the build tools in "$ONBLD_TOOLS/bin".
 
 .LP
 .B Code checking options
@@ -280,9 +275,7 @@ $ROOT-nd contains the non-DEBUG build.
 .B TOOLS_ROOT
 .RS 5
 Root of the tools proto area for the build.  The makefiles direct
-installation of tools build products to this area.  Unless \fB+t\fR
-is part of $NIGHTLY_OPTIONS, these tools will be used during the
-build.
+installation of tools build products to this area.
 .LP
 As built by nightly, this will always contain non-DEBUG objects.
 Therefore, this will always have a -nd suffix, regardless of
@@ -428,16 +421,6 @@ The location for the java compilers for the build, generally /usr/java.
 .RS 5
 The gate-defined default location of things formerly in /opt; e.g.,
 /ws/onnv-tools.  This is used by nightly, but not the makefiles.
-.RE
-.LP
-.B TEAMWARE
-.RS 5
-The gate-defined default location for the Teamware tools; e.g.,
-/ws/onnv-tools/SUNWspro.  By default, it is derived from
-.BR OPTHOME .
-This is used by nightly, but not the makefiles.  There is no
-corresponding variable for Mercurial or Subversion, which are assumed
-to be installed in the default path.
 .RE
 .LP
 .B ON_CLOSED_BINS

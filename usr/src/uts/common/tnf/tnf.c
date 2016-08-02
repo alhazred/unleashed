@@ -714,23 +714,6 @@ tnf_settracing(int arg)
 	else
 		tnf_trace_off();
 
-#ifdef _TNF_SPEED_TEST
-#define	NITER	255
-	{
-		int i;
-
-		for (i = 0; i < NITER; i++)
-			TNF_PROBE_0(tnf_speed_0, "tnf", /* CSTYLED */);
-		for (i = 0; i < NITER; i++)
-			TNF_PROBE_1(tnf_speed_1, "tnf", /* CSTYLED */,
-			    tnf_long,	long,	i);
-		for (i = 0; i < NITER; i++)
-			TNF_PROBE_2(tnf_speed_2, "tnf", /* CSTYLED */,
-			    tnf_long,	long1,	i,
-			    tnf_long,	long2,	i);
-	}
-#endif /* _TNF_SPEED_TEST */
-
 	return (0);
 }
 

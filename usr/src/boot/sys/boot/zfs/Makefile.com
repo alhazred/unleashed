@@ -42,10 +42,12 @@ CFLAGS +=	-Wformat -Wall -std=gnu99
 CLEANFILES +=    machine x86
 
 machine:
-	ln -sf ../../../$(MACHINE)/include machine
+	$(RM) machine
+	$(SYMLINK) ../../../$(MACHINE)/include machine
 
 x86:
-	ln -sf ../../../x86/include x86
+	$(RM) x86
+	$(SYMLINK) ../../../x86/include x86
 
 libzfsboot.a: $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)

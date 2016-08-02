@@ -631,8 +631,6 @@ qpalloc_fail2:
 qpalloc_fail1:
 	tavor_pd_refcnt_dec(pd);
 qpalloc_fail:
-	TNF_PROBE_1(tavor_qp_alloc_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_qp_alloc);
 	return (status);
 }
@@ -1031,8 +1029,6 @@ spec_qpalloc_fail2:
 spec_qpalloc_fail1:
 	tavor_pd_refcnt_dec(pd);
 spec_qpalloc_fail:
-	TNF_PROBE_1(tavor_special_qp_alloc_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_special_qp_alloc);
 	return (status);
 }
@@ -1265,8 +1261,6 @@ tavor_qp_free(tavor_state_t *state, tavor_qphdl_t *qphdl,
 	return (DDI_SUCCESS);
 
 qpfree_fail:
-	TNF_PROBE_1(tavor_qp_free_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_qp_free);
 	return (status);
 }
@@ -1328,8 +1322,6 @@ tavor_qp_query(tavor_state_t *state, tavor_qphdl_t qp,
 		break;
 	default:
 		mutex_exit(&qp->qp_lock);
-		TNF_PROBE_1(tavor_qp_query_inv_qpstate_fail,
-		    TAVOR_TNF_ERROR, "", tnf_uint, qpstate, qp->qp_state);
 		TAVOR_TNF_EXIT(tavor_qp_query);
 		return (ibc_get_ci_failure(0));
 	}
@@ -1379,8 +1371,6 @@ tavor_qp_query(tavor_state_t *state, tavor_qphdl_t qp,
 		mutex_exit(&qp->qp_lock);
 		cmn_err(CE_CONT, "Tavor: QUERY_QP command failed: %08x\n",
 		    status);
-		TNF_PROBE_1(tavor_qp_query_cmd_fail, TAVOR_TNF_ERROR, "",
-		    tnf_uint, status, status);
 		TAVOR_TNF_EXIT(tavor_qp_query);
 		return (ibc_get_ci_failure(0));
 	}
@@ -1818,8 +1808,6 @@ tavor_special_qp_rsrc_alloc(tavor_state_t *state, ibt_sqp_type_t type,
 		 */
 		if (state->ts_cfg_profile->cp_qp0_agents_in_fw != 0) {
 			mutex_exit(&state->ts_spec_qplock);
-			TNF_PROBE_0(tavor_special_qp0_alloc_already_in_fw,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_special_qp_rsrc_alloc);
 			return (IBT_QP_IN_USE);
 		}
@@ -1836,9 +1824,6 @@ tavor_special_qp_rsrc_alloc(tavor_state_t *state, ibt_sqp_type_t type,
 				mutex_exit(&state->ts_spec_qplock);
 				cmn_err(CE_CONT, "Tavor: CONF_SPECIAL_QP "
 				    "command failed: %08x\n", status);
-				TNF_PROBE_1(tavor_conf_special_qp_cmd_fail,
-				    TAVOR_TNF_ERROR, "", tnf_uint, status,
-				    status);
 				TAVOR_TNF_EXIT(tavor_special_qp_rsrc_alloc);
 				return (IBT_INSUFF_RESOURCE);
 			}
@@ -1851,8 +1836,6 @@ tavor_special_qp_rsrc_alloc(tavor_state_t *state, ibt_sqp_type_t type,
 		mask = (1 << (TAVOR_SPECIAL_QP0_RSRC + port));
 		if (flags & mask) {
 			mutex_exit(&state->ts_spec_qplock);
-			TNF_PROBE_1(tavor_ts_spec_qp0_alloc_already,
-			    TAVOR_TNF_ERROR, "", tnf_uint, port, port);
 			TAVOR_TNF_EXIT(tavor_special_qp_rsrc_alloc);
 			return (IBT_QP_IN_USE);
 		}
@@ -1872,9 +1855,6 @@ tavor_special_qp_rsrc_alloc(tavor_state_t *state, ibt_sqp_type_t type,
 				mutex_exit(&state->ts_spec_qplock);
 				cmn_err(CE_CONT, "Tavor: CONF_SPECIAL_QP "
 				    "command failed: %08x\n", status);
-				TNF_PROBE_1(tavor_conf_special_qp_cmd_fail,
-				    TAVOR_TNF_ERROR, "", tnf_uint, status,
-				    status);
 				TAVOR_TNF_EXIT(tavor_special_qp_rsrc_alloc);
 				return (IBT_INSUFF_RESOURCE);
 			}
@@ -1887,8 +1867,6 @@ tavor_special_qp_rsrc_alloc(tavor_state_t *state, ibt_sqp_type_t type,
 		mask = (1 << (TAVOR_SPECIAL_QP1_RSRC + port));
 		if (flags & mask) {
 			mutex_exit(&state->ts_spec_qplock);
-			TNF_PROBE_0(tavor_ts_spec_qp1_alloc_already,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_special_qp_rsrc_alloc);
 			return (IBT_QP_IN_USE);
 		}
@@ -1932,9 +1910,6 @@ tavor_special_qp_rsrc_free(tavor_state_t *state, ibt_sqp_type_t type,
 				mutex_exit(&state->ts_spec_qplock);
 				cmn_err(CE_CONT, "Tavor: CONF_SPECIAL_QP "
 				    "command failed: %08x\n", status);
-				TNF_PROBE_1(tavor_conf_special_qp_cmd_fail,
-				    TAVOR_TNF_ERROR, "", tnf_uint, status,
-				    status);
 				TAVOR_TNF_EXIT(tavor_special_qp_rsrc_free);
 				return (ibc_get_ci_failure(0));
 			}
@@ -1955,9 +1930,6 @@ tavor_special_qp_rsrc_free(tavor_state_t *state, ibt_sqp_type_t type,
 				mutex_exit(&state->ts_spec_qplock);
 				cmn_err(CE_CONT, "Tavor: CONF_SPECIAL_QP "
 				    "command failed: %08x\n", status);
-				TNF_PROBE_1(tavor_conf_special_qp_cmd_fail,
-				    TAVOR_TNF_ERROR, "", tnf_uint, status,
-				    status);
 				TAVOR_TNF_EXIT(tavor_special_qp_rsrc_free);
 				return (ibc_get_ci_failure(0));
 			}
@@ -2063,8 +2035,6 @@ tavor_qp_sgl_to_logwqesz(tavor_state_t *state, uint_t num_sgl,
 
 	default:
 		TAVOR_WARNING(state, "unexpected work queue type");
-		TNF_PROBE_0(tavor_qp_sgl_to_logwqesz_inv_wqtype_fail,
-		    TAVOR_TNF_ERROR, "");
 		break;
 	}
 

@@ -44,7 +44,7 @@ all:	${OBJS}
 	ld -o ld.so -Bsymbolic -assert nosymbolic -assert pure-text ${OBJS}
 
 %.o:%.s
-	as -k -P -I$(ROOT)/usr/include -D_SYS_SYS_S -D_ASM $<
+	as -k -I$(ROOT)/usr/include -D_SYS_SYS_S -D_ASM $<
 	mv -f a.out $*.o
 
 %.o:%.c

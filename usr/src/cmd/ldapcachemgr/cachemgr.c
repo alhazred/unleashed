@@ -75,11 +75,6 @@ static int is_root(int free_uc, char *dc_str, ucred_t **uc);
 int is_root_or_all_privs(char *dc_str, ucred_t **ucp);
 static void admin_modify(LineBuf *config_info, ldap_call_t *in);
 
-#ifdef SLP
-int			use_slp = 0;
-static unsigned int	refresh = 10800;	/* dynamic discovery interval */
-#endif /* SLP */
-
 static ldap_stat_t *
 getcacheptr(char *s)
 {
@@ -355,11 +350,7 @@ main(int argc, char ** argv)
 		}
 	}
 
-#ifndef SLP
 	while ((opt = getopt(argc, argv, "fKgl:r:d:")) != EOF) {
-#else
-	while ((opt = getopt(argc, argv, "fKgs:l:r:d:")) != EOF) {
-#endif /* SLP */
 		ldap_stat_t	*cache;
 
 		switch (opt) {
@@ -391,11 +382,6 @@ main(int argc, char ** argv)
 			doset++;
 			debug_level = atoi(optarg);
 			break;
-#ifdef SLP
-		case 's':	/* undocumented: use dynamic (SLP) config */
-			use_slp = 1;
-			break;
-#endif /* SLP */
 		default:
 			errflg++;
 			break;
@@ -602,20 +588,6 @@ main(int argc, char ** argv)
 		    "chg_cleanup_waiting_threads call failed"));
 		exit(1);
 	}
-
-#ifdef SLP
-	if (use_slp) {
-		/* kick off SLP discovery thread */
-		if (thr_create(NULL, 0, (void *(*)(void *))discover,
-		    (void *)&refresh, 0, NULL) != 0) {
-			logit("thr_create() call failed\n");
-			syslog(LOG_ERR, gettext("ldap_cachemgr: thr_create() "
-			    "call failed"));
-			perror("thr_create");
-			exit(1);
-		}
-	}
-#endif /* SLP */
 
 	if (thr_sigsetmask(SIG_UNBLOCK, &myset, NULL) < 0) {
 		logit("thr_sigsetmask() call failed\n");
@@ -962,11 +934,7 @@ usage(char *s)
 	    gettext("Usage: %s [-d debug_level] [-l logfilename]\n"), s);
 	(void) fprintf(stderr, gettext("	[-K] "
 	    "[-r revalidate_interval] "));
-#ifndef SLP
 	(void) fprintf(stderr, gettext("	[-g]\n"));
-#else
-	(void) fprintf(stderr, gettext("	[-g] [-s]\n"));
-#endif /* SLP */
 	exit(1);
 }
 

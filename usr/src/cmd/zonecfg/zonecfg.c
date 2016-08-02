@@ -936,7 +936,6 @@ long_help(int cmd_num)
  * or the filename itself if it is absolute.
  * Parameters: path string, file name, output string.
  */
-/* Copied almost verbatim from libtnfctl/prb_findexec.c */
 static const char *
 exec_cat(const char *s1, const char *s2, char *si)
 {
@@ -966,7 +965,6 @@ exec_cat(const char *s1, const char *s2, char *si)
 }
 
 /* Determine that a name exists in PATH */
-/* Copied with changes from libtnfctl/prb_findexec.c */
 static int
 path_find(const char *name)
 {

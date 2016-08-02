@@ -24,13 +24,8 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef lint
-static const char rcsid[] =
-  "$FreeBSD$";
-#endif /* not lint */
-
 #include <sys/param.h>
-#include <sys/byteorder.h>
+#include <endian.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
 
@@ -274,9 +269,9 @@ btxld(const char *iname)
 	    break;
 	case I_BTX:
 	    btxle = btx;
-	    btxle.btx_pgctl = LE_16(btxle.btx_pgctl);
-	    btxle.btx_textsz = LE_16(btxle.btx_textsz);
-	    btxle.btx_entry = LE_32(btxle.btx_entry);
+	    btxle.btx_pgctl = htole16(btxle.btx_pgctl);
+	    btxle.btx_textsz = htole16(btxle.btx_textsz);
+	    btxle.btx_entry = htole32(btxle.btx_entry);
 	    writex(fdo, &btxle, sizeof(btxle));
 	    copy(fdi[i], fdo, btx.btx_textsz - sizeof(btx),
 		 sizeof(btx));
@@ -318,9 +313,9 @@ getbtx(int fd, struct btx_hdr * btx)
 	btx->btx_magic[1] != BTX_MAG1 ||
 	btx->btx_magic[2] != BTX_MAG2)
 	errx(1, "%s: Not a BTX kernel", fname);
-    btx->btx_pgctl = LE_16(btx->btx_pgctl);
-    btx->btx_textsz = LE_16(btx->btx_textsz);
-    btx->btx_entry = LE_32(btx->btx_entry);
+    btx->btx_pgctl = le16toh(btx->btx_pgctl);
+    btx->btx_textsz = le16toh(btx->btx_textsz);
+    btx->btx_entry = le32toh(btx->btx_entry);
 }
 
 /*
@@ -360,11 +355,11 @@ gethdr(int fd, struct hdr *hdr)
 			     fmtlist[fmt]);
 		    hdr->flags |= IMPURE;
 		}
-		hdr->text = LE_32(ex->a_text);
-		hdr->data = LE_32(ex->a_data);
-		hdr->bss = LE_32(ex->a_bss);
-		hdr->entry = LE_32(ex->a_entry);
-		if (LE_32(ex->a_entry) >= BTX_PGSIZE)
+		hdr->text = le32toh(ex->a_text);
+		hdr->data = le32toh(ex->a_data);
+		hdr->bss = le32toh(ex->a_bss);
+		hdr->entry = le32toh(ex->a_entry);
+		if (le32toh(ex->a_entry) >= BTX_PGSIZE)
 		    hdr->org = BTX_PGSIZE;
 	    }
 	    break;
@@ -372,21 +367,21 @@ gethdr(int fd, struct hdr *hdr)
 	    ee = p;
 	    if (hdr->size >= sizeof(Elf32_Ehdr) && IS_ELF(*ee)) {
 		hdr->fmt = fmt;
-		for (n = i = 0; i < LE_16(ee->e_phnum); i++) {
-		    ep = (void *)((uint8_t *)p + LE_32(ee->e_phoff) +
-				  LE_16(ee->e_phentsize) * i);
-		    if (LE_32(ep->p_type) == PT_LOAD)
+		for (n = i = 0; i < le16toh(ee->e_phnum); i++) {
+		    ep = (void *)((uint8_t *)p + le32toh(ee->e_phoff) +
+				  le16toh(ee->e_phentsize) * i);
+		    if (le32toh(ep->p_type) == PT_LOAD)
 			switch (n++) {
 			case 0:
-			    hdr->text = LE_32(ep->p_filesz);
-			    hdr->org = LE_32(ep->p_paddr);
-			    if (LE_32(ep->p_flags) & PF_W)
+			    hdr->text = le32toh(ep->p_filesz);
+			    hdr->org = le32toh(ep->p_paddr);
+			    if (le32toh(ep->p_flags) & PF_W)
 				hdr->flags |= IMPURE;
 			    break;
 			case 1:
-			    hdr->data = LE_32(ep->p_filesz);
-			    hdr->bss = LE_32(ep->p_memsz) -
-				LE_32(ep->p_filesz);
+			    hdr->data = le32toh(ep->p_filesz);
+			    hdr->bss = le32toh(ep->p_memsz) -
+				le32toh(ep->p_filesz);
 			    break;
 			case 2:
 			    Warn(fname,
@@ -394,7 +389,7 @@ gethdr(int fd, struct hdr *hdr)
 				 fmtlist[fmt]);
 			}
 		}
-		hdr->entry = LE_32(ee->e_entry);
+		hdr->entry = le32toh(ee->e_entry);
 	    }
 	}
     if (munmap(p, hdr->size))
@@ -415,24 +410,25 @@ puthdr(int fd, struct hdr *hdr)
 	memset(&ex, 0, sizeof(ex));
 	N_SETMAGIC(ex, ZMAGIC, MID_I386, 0);
 	hdr->text = N_ALIGN(ex, hdr->text);
-	ex.a_text = LE_32(hdr->text);
+	ex.a_text = htole32(hdr->text);
 	hdr->data = N_ALIGN(ex, hdr->data);
-	ex.a_data = LE_32(hdr->data);
-	ex.a_entry = LE_32(hdr->entry);
+	ex.a_data = htole32(hdr->data);
+	ex.a_entry = htole32(hdr->entry);
 	writex(fd, &ex, sizeof(ex));
 	hdr->size = N_ALIGN(ex, sizeof(ex));
 	seekx(fd, hdr->size);
 	break;
     case F_ELF:
 	eh = elfhdr;
-	eh.e.e_entry = LE_32(hdr->entry);
-	eh.p[0].p_vaddr = eh.p[0].p_paddr = LE_32(hdr->org);
-	eh.p[0].p_filesz = eh.p[0].p_memsz = LE_32(hdr->text);
-	eh.p[1].p_offset = LE_32(LE_32(eh.p[0].p_offset) +
-	    LE_32(eh.p[0].p_filesz));
+	eh.e.e_entry = htole32(hdr->entry);
+	eh.p[0].p_vaddr = eh.p[0].p_paddr = htole32(hdr->org);
+	eh.p[0].p_filesz = eh.p[0].p_memsz = htole32(hdr->text);
+	eh.p[1].p_offset = htole32(le32toh(eh.p[0].p_offset) +
+	    le32toh(eh.p[0].p_filesz));
 	eh.p[1].p_vaddr = eh.p[1].p_paddr =
-	    LE_32(align(LE_32(eh.p[0].p_paddr) + LE_32(eh.p[0].p_memsz), 4096));
-	eh.p[1].p_filesz = eh.p[1].p_memsz = LE_32(hdr->data);
+	    htole32(align(le32toh(eh.p[0].p_paddr) + le32toh(eh.p[0].p_memsz),
+	    4096));
+	eh.p[1].p_filesz = eh.p[1].p_memsz = htole32(hdr->data);
 	eh.sh[2].sh_addr = eh.p[0].p_vaddr;
 	eh.sh[2].sh_offset = eh.p[0].p_offset;
 	eh.sh[2].sh_size = eh.p[0].p_filesz;

@@ -17,7 +17,7 @@ include $(SRC)/Makefile.master
 
 ROOT_BOOT = $(ROOT)/boot
 
-LD=	/usr/bin/gld
+LD=	$(GNU_ROOT)/bin/gld
 CC=	$(GCC_ROOT)/bin/gcc
 
 CFLAGS =	-O2 -I../common -march=i386 -ffreestanding -mno-mmx -mno-3dnow

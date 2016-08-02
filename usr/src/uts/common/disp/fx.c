@@ -1144,9 +1144,6 @@ fx_preempt(kthread_t *t)
 		} else {
 			schedctl_set_nopreempt(t, 0);
 			DTRACE_SCHED1(schedctl__preempt, kthread_t *, t);
-			TNF_PROBE_2(schedctl_preempt, "schedctl FX fx_preempt",
-			    /* CSTYLED */, tnf_pid, pid, ttoproc(t)->p_pid,
-			    tnf_lwpid, lwpid, t->t_tid);
 			/*
 			 * Fall through and be preempted below.
 			 */
@@ -1293,10 +1290,6 @@ fx_tick(kthread_t *t)
 				thread_unlock_nopreempt(t);
 				return;
 			}
-			TNF_PROBE_2(schedctl_failsafe,
-			    "schedctl FX fx_tick", /* CSTYLED */,
-			    tnf_pid, pid, ttoproc(t)->p_pid,
-			    tnf_lwpid, lwpid, t->t_tid);
 		}
 		new_pri = fx_dptbl[fxpp->fx_pri].fx_globpri;
 		ASSERT(new_pri >= 0 && new_pri <= fx_maxglobpri);

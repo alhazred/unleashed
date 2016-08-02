@@ -57,12 +57,12 @@ ibmf_i_issue_pkt(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	_NOTE(ASSUMING_PROTECTED(*send_wqep))
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*send_wqep))
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_issue_pkt_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_issue_pkt() enter, clientp = %p, msg = %p, "
-	    "qp_hdl = %p,  swqep = %p\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, msg, msgimplp, tnf_opaque, ibmf_qp_handle,
-	    ibmf_qp_handle, tnf_opaque, send_wqep, send_wqep);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_issue_pkt() enter, clientp = %p, msg = %p, ""qp_hdl = %p,  swqep = %p\n",
+		     clientp,
+		     msgimplp,
+		     ibmf_qp_handle,
+		     send_wqep);
 
 	ASSERT(MUTEX_HELD(&msgimplp->im_mutex));
 	ASSERT(MUTEX_NOT_HELD(&clientp->ic_mutex));
@@ -97,13 +97,10 @@ ibmf_i_issue_pkt(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		mutex_enter(&clientp->ic_kstat_mutex);
 		IBMF_ADD32_KSTATS(clientp, send_pkt_failed, 1);
 		mutex_exit(&clientp->ic_kstat_mutex);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_issue_pkt_err, IBMF_TNF_TRACE, "",
-		    "ibmf_i_issue_pkt(): %s, status = %d\n",
-		    tnf_string, msg, "post send failure",
-		    tnf_uint, ibt_status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_issue_pkt_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_issue_pkt(() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_issue_pkt(): %s, status = %d\n",
+			     "post send failure",
+			     status);
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
@@ -127,8 +124,6 @@ ibmf_i_issue_pkt(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		mutex_exit(&clientp->ic_kstat_mutex);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_issue_pkt_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_issue_pkt() exit\n");
 	return (ret);
 }
 
@@ -143,12 +138,12 @@ ibmf_i_send_pkt(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 	ibmf_send_wqe_t	*send_wqep;
 	int		status;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_send_pkt_start,
-	    IBMF_TNF_TRACE, "",
-	    "ibmf_i_send_pkt(): clientp = 0x%p, qp_hdl = 0x%p, "
-	    "msgp = 0x%p, block = %d\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, qp_hdl, ibmf_qp_handle, tnf_opaque, msg, msgimplp,
-	    tnf_uint, block, block);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_send_pkt(): clientp = 0x%p, qp_hdl = 0x%p, ""msgp = 0x%p, block = %d\n",
+		     clientp,
+		     ibmf_qp_handle,
+		     msgimplp,
+		     block);
 
 	ASSERT(MUTEX_HELD(&msgimplp->im_mutex));
 
@@ -167,12 +162,10 @@ ibmf_i_send_pkt(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 	status = ibmf_i_alloc_send_resources(clientp->ic_myci,
 	    msgimplp, block, &send_wqep);
 	if (status != IBMF_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_i_send_pkt_err,
-		    IBMF_TNF_ERROR, "", "ibmf_i_send_pkt(): %s, status = %d\n",
-		    tnf_string, msg, "unable to allocate send resources",
-		    tnf_uint, status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_send_pkt_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_send_pkt() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_send_pkt(): %s, status = %d\n",
+			     "unable to allocate send resources",
+			     status);
 		return (status);
 	}
 
@@ -194,18 +187,12 @@ ibmf_i_send_pkt(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 	if (status != IBMF_SUCCESS) {
 		ibmf_i_free_send_resources(clientp->ic_myci, msgimplp,
 		    send_wqep);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1, ibmf_i_send_pkt_err,
-		    IBMF_TNF_ERROR, "", "ibmf_i_send_pkt(): %s, status = %d\n",
-		    tnf_string, msg, "unable to issue packet",
-		    tnf_uint, status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_send_pkt_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_send_pkt() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_send_pkt(): %s, status = %d\n",
+			     "unable to issue packet",
+			     status);
 		return (status);
 	}
-
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_send_pkt_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_send_pkt() exit, status = %d\n",
-	    tnf_uint, status, status);
 
 	return (IBMF_SUCCESS);
 }
@@ -220,30 +207,24 @@ ibmf_i_send_single_pkt(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 {
 	int	status;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_send_single_pkt_start,
-	    IBMF_TNF_TRACE, "",
-	    "ibmf_i_send_single_pkt(): clientp = 0x%p, qp_hdl = 0x%p, "
-	    "msgp = 0x%p, block = %d\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, qp_hdl, ibmf_qp_handle, tnf_opaque, msg, msgimplp,
-	    tnf_uint, block, block);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_send_single_pkt(): clientp = 0x%p, qp_hdl = 0x%p, ""msgp = 0x%p, block = %d\n",
+		     clientp,
+		     ibmf_qp_handle,
+		     msgimplp,
+		     block);
 
 	ASSERT(MUTEX_HELD(&msgimplp->im_mutex));
 
 	status = ibmf_i_send_pkt(clientp, ibmf_qp_handle, msgimplp, block);
 	if (status != IBMF_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_send_single_pkt_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_send_single_pkt(): %s, msgp = 0x%p\n",
-		    tnf_string, msg, "unable to send packet",
-		    tnf_uint, status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_send_single_pkt_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_send_single_pkt() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_send_single_pkt(): %s, msgp = 0x%p\n",
+			     "unable to send packet",
+			     status);
 		return (status);
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_send_single_pkt_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_send_single_pkt() exit\n");
 	return (IBMF_SUCCESS);
 }
 
@@ -261,10 +242,10 @@ ibmf_i_handle_send_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 	ibmf_alt_qp_t		*qpp;
 	int			ret;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_handle_send_completion_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_handle_send_completion() enter, cip = %p, wcp = %p\n",
-	    tnf_opaque, cip, cip, tnf_opaque, wcp, wcp);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_handle_send_completion() enter, cip = %p, wcp = %p\n",
+		     cip,
+		     wcp);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*send_wqep))
 
@@ -284,9 +265,8 @@ ibmf_i_handle_send_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 	if (clientp == NULL) {
 		ibmf_msg_impl_t		*msgimplp;
 
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_handle_send_completion, IBMF_TNF_TRACE, "",
-		    "ibmf_i_handle_send_completion(): NULL client\n");
+		IBMF_TRACE_0(DPRINT_L3,
+			     "ibmf_i_handle_send_completion(): NULL client\n");
 
 		msgimplp = send_wqep->send_msg;
 
@@ -303,9 +283,6 @@ ibmf_i_handle_send_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 		ibmf_i_put_ud_dest(cip, msgimplp->im_ibmf_ud_dest);
 		ibmf_i_clean_ud_dest_list(cip, B_FALSE);
 		kmem_free(msgimplp, sizeof (ibmf_msg_impl_t));
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_handle_send_completion_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_handle_send_completion() exit\n");
 		return;
 	}
 
@@ -346,13 +323,6 @@ ibmf_i_handle_send_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 		mutex_enter(&clientp->ic_kstat_mutex);
 		IBMF_SUB32_KSTATS(clientp, send_cb_active, 1);
 		mutex_exit(&clientp->ic_kstat_mutex);
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_handle_send_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_handle_send_completion(): %s\n",
-		    tnf_string, msg, "ci_send_taskq == NULL");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_handle_send_completion_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_handle_send_completion() exit\n");
 		return;
 	}
 
@@ -365,10 +335,9 @@ ibmf_i_handle_send_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 		ret = taskq_dispatch(cclientp->ic_send_taskq, ibmf_i_do_send_cb,
 		    send_wqep, TQ_NOSLEEP);
 		if (ret == 0) {
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_handle_send_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_handle_send_completion(): %s\n",
-			    tnf_string, msg, "send: dispatch failed");
+			IBMF_TRACE_1(DPRINT_L4,
+				     "ibmf_i_handle_send_completion(): %s\n",
+				     "send: dispatch failed");
 			ibmf_i_do_send_cb((void *)send_wqep);
 		}
 	} else {
@@ -380,10 +349,6 @@ ibmf_i_handle_send_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 	mutex_exit(&clientp->ic_kstat_mutex);
 
 	_NOTE(NOW_VISIBLE_TO_OTHER_THREADS(*send_wqep))
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_handle_send_completion_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_handle_send_completion() exit\n");
 }
 
 /*
@@ -409,10 +374,8 @@ ibmf_i_do_send_cb(void *taskq_arg)
 
 	send_wqep = taskq_arg;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_do_send_cb_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_do_send_cb() enter, send_wqep = %p\n",
-	    tnf_opaque, send_wqep, send_wqep);
+	IBMF_TRACE_1(DPRINT_L4,
+		     "ibmf_i_do_send_cb() enter, send_wqep = %p\n", send_wqep);
 
 	clientp = send_wqep->send_client;
 	cip = clientp->ic_myci;
@@ -455,10 +418,8 @@ ibmf_i_do_send_cb(void *taskq_arg)
 				cv_signal(&altqp->isq_wqes_cv);
 			mutex_exit(&altqp->isq_mutex);
 		}
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_do_send_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_i_do_send_cb(): %s\n", tnf_string, msg,
-		    "Message not found, return without processing send cb");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_i_do_send_cb(): %s\n",
+			     "Message not found, return without processing send cb");
 		return;
 	}
 
@@ -507,11 +468,8 @@ ibmf_i_do_send_cb(void *taskq_arg)
 				cv_signal(&altqp->isq_wqes_cv);
 			mutex_exit(&altqp->isq_mutex);
 		}
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_do_send_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_i_do_send_cb(): %s\n", tnf_string, msg,
-		    "Message found with pending send completions, "
-		    "return without processing send cb");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_i_do_send_cb(): %s\n",
+			     "Message found with pending send completions, ""return without processing send cb");
 		return;
 	}
 
@@ -565,11 +523,10 @@ ibmf_i_do_send_cb(void *taskq_arg)
 				cv_signal(&altqp->isq_wqes_cv);
 			mutex_exit(&altqp->isq_mutex);
 		}
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_do_send_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_i_do_send_cb(): %s, msg = %p\n", tnf_string, msg,
-		    "Message marked for removal, return without processing "
-		    "send cb", tnf_opaque, msgimplp, msgimplp);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_i_do_send_cb(): %s, msg = %p\n",
+			     "Message marked for removal, return without processing ""send cb",
+			     msgimplp);
 		return;
 	}
 
@@ -622,11 +579,8 @@ ibmf_i_do_send_cb(void *taskq_arg)
 		(void) untimeout(msg_tr_set_id);
 	}
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_i_do_send_cb, IBMF_TNF_TRACE, "",
-	    "ibmf_i_do_send_cb(): %s, msg = %p\n",
-	    tnf_string, msg, "Send callback done.  Dec ref count",
-	    tnf_opaque, msgimplp, msgimplp);
+	IBMF_TRACE_2(DPRINT_L3, "ibmf_i_do_send_cb(): %s, msg = %p\n",
+		     "Send callback done.  Dec ref count", msgimplp);
 
 	/*
 	 * If the transaction is done, signal the block thread if the
@@ -669,10 +623,6 @@ ibmf_i_do_send_cb(void *taskq_arg)
 			cv_signal(&altqp->isq_wqes_cv);
 		mutex_exit(&altqp->isq_mutex);
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_do_send_cb_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_do_send_cb() exit\n");
 }
 
 /*
@@ -684,12 +634,12 @@ static void
 ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
     ibmf_send_wqe_t *send_wqep)
 {
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_do_send_compl_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_do_send_compl(): ibmf_hdl = 0x%p "
-	    "msgp = %p, send_wqep = 0x%p, msg_flags = 0x%x\n",
-	    tnf_opaque, ibmf_hdl, ibmf_handle, tnf_opaque, msgimplp, msgimplp,
-	    tnf_opaque, send_wqep, send_wqep,
-	    tnf_opaque, msg_flags, msgimplp->im_flags);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_do_send_compl(): ibmf_hdl = 0x%p ""msgp = %p, send_wqep = 0x%p, msg_flags = 0x%x\n",
+		     ibmf_handle,
+		     msgimplp,
+		     send_wqep,
+		     msgimplp->im_flags);
 
 	ASSERT(MUTEX_HELD(&msgimplp->im_mutex));
 
@@ -706,12 +656,11 @@ ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
 	if ((msgimplp->im_flags & IBMF_MSG_FLAGS_RECV_RMPP) ||
 	    (msgimplp->im_flags & IBMF_MSG_FLAGS_SEND_RMPP)) {
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_do_send_compl, IBMF_TNF_TRACE, "",
-		    "ibmf_i_do_send_compl(): %s msgp = %p, rmpp_state = 0x%x\n",
-		    tnf_string, msg, "Received send callback for RMPP trans",
-		    tnf_opaque, msg, msgimplp,
-		    tnf_opaque, rmpp_state, msgimplp->im_rmpp_ctx.rmpp_state);
+		IBMF_TRACE_3(DPRINT_L3,
+			     "ibmf_i_do_send_compl(): %s msgp = %p, rmpp_state = 0x%x\n",
+			     "Received send callback for RMPP trans",
+			     msgimplp,
+			     msgimplp->im_rmpp_ctx.rmpp_state);
 
 		/*
 		 * For ABORT state, we should not return control to
@@ -771,9 +720,6 @@ ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
 			}
 		}
 
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_do_send_compl_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_do_send_compl() exit\n");
 		return;
 	}
 
@@ -787,11 +733,10 @@ ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
 	 */
 	if (msgimplp->im_flags & IBMF_MSG_FLAGS_SEQUENCED) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_do_send_compl, IBMF_TNF_TRACE, "",
-		    "ibmf_i_do_send_compl(): %s msgp = %p\n", tnf_string, msg,
-		    "Sequenced transaction, setting response timer",
-		    tnf_opaque, msg, msgimplp);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_i_do_send_compl(): %s msgp = %p\n",
+			     "Sequenced transaction, setting response timer",
+			     msgimplp);
 
 		/*
 		 * Check if the send completion already occured,
@@ -801,10 +746,6 @@ ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
 		 */
 		if (msgimplp->im_trans_state_flags  &
 		    IBMF_TRANS_STATE_FLAG_SEND_DONE) {
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_do_send_compl_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_do_send_compl() exit, "
-			    "Duplicate SEND completion\n");
 			return;
 		}
 
@@ -816,9 +757,6 @@ ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
 		    IBMF_TRANS_STATE_FLAG_RECV_DONE) {
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_DONE;
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_do_send_compl_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_do_send_compl() exit, RECV_DONE\n");
 			return;
 		}
 
@@ -840,7 +778,4 @@ ibmf_i_do_send_compl(ibmf_handle_t ibmf_handle, ibmf_msg_impl_t *msgimplp,
 		    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 		msgimplp->im_trans_state_flags |= IBMF_TRANS_STATE_FLAG_DONE;
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_do_send_compl_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_do_send_compl() exit\n");
 }

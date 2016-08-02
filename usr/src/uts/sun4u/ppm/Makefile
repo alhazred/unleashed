@@ -67,10 +67,6 @@ CERRWARN	+= -_gcc=-Wno-switch
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
 
 #
 #	Default build targets.

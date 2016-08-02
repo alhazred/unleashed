@@ -31,15 +31,12 @@ downloaded from:
 The following components are integrated from the Apple Bonjour
 source in Solaris:
   libdns_sd: 	usr/src/lib/libdns_sd <dns_sd.h>
-  libjdns_sd:   usr/src/lib/libdns_sd/java/common
-  dnssd.jar:    usr/src/lib/libdns_sd/java/com (incl. examples)
   mdnsd:	usr/src/cmd/cmd-inet/usr.lib/mdnsd
   dns-sd:	usr/src/cmd/cmd-inet/usr.bin/dns-sd.c
 
 Following fixes have been made to the Apple Bonjour source 
 integrated in Solaris:
 * 64-bit support by adding pad bytes in ipc_msg_hdr_struct
-* 64-bit support in libjdns_sd, dnssd.jar (JNISupport.c, DNSSD.java)
 * mdnsd switches to user 'noaccess' and not 'nobody' after init
 * Fixes to support IPv6 (mDNSPosix.c, mDNSUNP.c)
 * Fix error raised when uDNS.c is compiled with Sun Studio compiler

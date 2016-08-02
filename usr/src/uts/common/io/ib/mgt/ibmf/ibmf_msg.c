@@ -41,10 +41,10 @@ extern int ibmf_trace_level;
 void
 ibmf_i_client_add_msg(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp)
 {
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_client_add_msg_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_client_add_msg(): clientp = 0x%p, msgp = 0x%p\n",
-	    tnf_opaque, clientp, clientp, tnf_opaque, msg, msgimplp);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_client_add_msg(): clientp = 0x%p, msgp = 0x%p\n",
+		     clientp,
+		     msgimplp);
 
 	ASSERT(MUTEX_NOT_HELD(&msgimplp->im_mutex));
 
@@ -97,10 +97,6 @@ ibmf_i_client_add_msg(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp)
 	mutex_exit(&msgimplp->im_mutex);
 
 	mutex_exit(&clientp->ic_msg_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_client_add_msg_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_client_add_msg() exit\n");
 }
 
 /*
@@ -121,10 +117,10 @@ ibmf_i_client_rem_msg(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 
 	ASSERT(MUTEX_NOT_HELD(&msgimplp->im_mutex));
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_client_rem_msg_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_client_rem_msg(): clientp = 0x%p, msgp = 0x%p\n",
-	    tnf_opaque, clientp, clientp, tnf_opaque, msg, msgimplp);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_client_rem_msg(): clientp = 0x%p, msgp = 0x%p\n",
+		     clientp,
+		     msgimplp);
 
 	mutex_enter(&clientp->ic_msg_mutex);
 
@@ -198,10 +194,6 @@ ibmf_i_client_rem_msg(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	mutex_exit(&msgimplp->im_mutex);
 
 	mutex_exit(&clientp->ic_msg_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_client_rem_msg_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_client_rem_msg() exit\n");
 }
 
 /*
@@ -220,12 +212,13 @@ ibmf_i_find_msg(ibmf_client_t *clientp, uint64_t tid, uint8_t mgt_class,
 	ib_gid_t	*ctx_gidp;
 	int		msg_found;
 
-	IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_find_msg_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_find_msg(): clientp = 0x%p, tid = 0x%p, mgmt_class = 0x%x, "
-	    "lid = 0x%x, gidp = 0x%p\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, tid, tid, tnf_opaque, mgt_class, mgt_class,
-	    tnf_opaque, lid, lid, tnf_opaque, gid, gid);
+	IBMF_TRACE_5(DPRINT_L4,
+		     "ibmf_i_find_msg(): clientp = 0x%p, tid = 0x%p, mgmt_class = 0x%x, ""lid = 0x%x, gidp = 0x%p\n",
+		     clientp,
+		     tid,
+		     mgt_class,
+		     lid,
+		     gid);
 
 	msg_found = B_FALSE;
 
@@ -261,16 +254,13 @@ ibmf_i_find_msg(ibmf_client_t *clientp, uint64_t tid, uint8_t mgt_class,
 			}
 		} else  {
 
-			IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_find_msg, IBMF_TNF_TRACE, "",
-			    "ibmf_i_find_msg(): %s, msgp = 0x%p, tid = 0x%p, "
-			    "remote_lid = 0x%x, mgmt_class = 0x%x\n",
-			    tnf_string, msg, "Comparing to msg",
-			    tnf_opaque, msg, msgimplp,
-			    tnf_opaque, tid, msgimplp->im_tid,
-			    tnf_opaque, remote_lid,
-			    msgimplp->im_local_addr.ia_remote_lid,
-			    tnf_opaque, class, msgimplp->im_mgt_class);
+			IBMF_TRACE_5(DPRINT_L3,
+				     "ibmf_i_find_msg(): %s, msgp = 0x%p, tid = 0x%p, ""remote_lid = 0x%x, mgmt_class = 0x%x\n",
+				     "Comparing to msg",
+				     msgimplp,
+				     msgimplp->im_tid,
+				     msgimplp->im_local_addr.ia_remote_lid,
+				     msgimplp->im_mgt_class);
 
 			/* first match lid */
 			if (msgimplp->im_local_addr.ia_remote_lid != lid) {
@@ -485,21 +475,16 @@ ibmf_i_find_msg(ibmf_client_t *clientp, uint64_t tid, uint8_t mgt_class,
 
 		IBMF_MSG_INCR_REFCNT(msgimplp);
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_find_msg, IBMF_TNF_TRACE, "",
-		    "ibmf_i_find_msg(): %s, msgp = 0x%p, ref_cnt = 0x%d\n",
-		    tnf_string, msg, "Found message. Inc ref count",
-		    tnf_opaque, msgimplp, msgimplp,
-		    tnf_uint, ref_count, msgimplp->im_ref_count);
+		IBMF_TRACE_3(DPRINT_L3,
+			     "ibmf_i_find_msg(): %s, msgp = 0x%p, ref_cnt = 0x%d\n",
+			     "Found message. Inc ref count",
+			     msgimplp,
+			     msgimplp->im_ref_count);
 
 		mutex_exit(&msgimplp->im_mutex);
 	}
 
 	mutex_exit(&clientp->ic_msg_mutex);
-
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_find_msg_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_find_msg() exit, msgp = 0x%p\n", tnf_opaque, msg, msgimplp);
 
 	return (msgimplp);
 }
@@ -515,10 +500,10 @@ ibmf_i_find_msg_client(ibmf_client_t *clp, ibmf_msg_impl_t *msgimplp,
 	ibmf_msg_impl_t	*msgp;
 	boolean_t	found = B_FALSE;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_find_msg_client_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_find_msg_client(): clientp = 0x%p, msgp = 0x%p\n",
-	    tnf_opaque, clientp, clp, tnf_opaque, msg, msgimplp);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_find_msg_client(): clientp = 0x%p, msgp = 0x%p\n",
+		     clp,
+		     msgimplp);
 
 	mutex_enter(&clp->ic_msg_mutex);
 
@@ -533,13 +518,11 @@ ibmf_i_find_msg_client(ibmf_client_t *clp, ibmf_msg_impl_t *msgimplp,
 			if (inc_refcnt == B_TRUE)
 				IBMF_MSG_INCR_REFCNT(msgimplp);
 
-			IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_find_msg_client, IBMF_TNF_TRACE, "",
-			    "ibmf_i_find_msg_client(): %s, msgp = 0x%p, "
-			    "ref_cnt = 0x%d\n",
-			    tnf_string, msg, "Found message. Inc ref count",
-			    tnf_opaque, msgimplp, msgimplp,
-			    tnf_uint, ref_count, msgimplp->im_ref_count);
+			IBMF_TRACE_3(DPRINT_L3,
+				     "ibmf_i_find_msg_client(): %s, msgp = 0x%p, ""ref_cnt = 0x%d\n",
+				     "Found message. Inc ref count",
+				     msgimplp,
+				     msgimplp->im_ref_count);
 
 			mutex_exit(&msgimplp->im_mutex);
 
@@ -565,13 +548,11 @@ ibmf_i_find_msg_client(ibmf_client_t *clp, ibmf_msg_impl_t *msgimplp,
 				if (inc_refcnt == B_TRUE)
 					IBMF_MSG_INCR_REFCNT(msgimplp);
 
-				IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-				    ibmf_i_find_msg_client, IBMF_TNF_TRACE, "",
-				    "ibmf_i_find_msg_client(): %s, "
-				    "msgp = 0x%p, ref_cnt = 0x%d\n", tnf_string,
-				    msg, "Found message. Inc ref count",
-				    tnf_opaque, msgimplp, msgimplp, tnf_uint,
-				    ref_count, msgimplp->im_ref_count);
+				IBMF_TRACE_3(DPRINT_L3,
+					     "ibmf_i_find_msg_client(): %s, ""msgp = 0x%p, ref_cnt = 0x%d\n",
+					     "Found message. Inc ref count",
+					     msgimplp,
+					     msgimplp->im_ref_count);
 
 				mutex_exit(&msgimplp->im_mutex);
 				found = B_TRUE;
@@ -582,10 +563,6 @@ ibmf_i_find_msg_client(ibmf_client_t *clp, ibmf_msg_impl_t *msgimplp,
 	}
 
 	mutex_exit(&clp->ic_msg_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_find_msg_client_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_find_msg_client() exit\n");
 
 	return (found);
 }
@@ -619,13 +596,9 @@ ibmf_setup_recvbuf_on_error(ibmf_msg_impl_t *msgimplp, uchar_t *mad)
 	msgimplp->im_msgbufs_recv.im_bufs_mad_hdr =
 	    (ib_mad_hdr_t *)kmem_zalloc(IBMF_MAD_SIZE, KM_NOSLEEP);
 	if (msgimplp->im_msgbufs_recv.im_bufs_mad_hdr == NULL) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_setup_recvbuf_on_error, IBMF_TNF_ERROR, "",
-		    "ibmf_setup_recvbuf_on_error(): %s\n", tnf_string, msg,
-		    "recv buf mem allocation failure");
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_setup_recvbuf_on_error_end, IBMF_TNF_TRACE, "",
-		    "ibmf_setup_recvbuf_on_error() exit\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_setup_recvbuf_on_error(): %s\n",
+			     "recv buf mem allocation failure");
 		return (IBMF_NO_RESOURCES);
 	}
 

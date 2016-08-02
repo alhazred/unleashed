@@ -29,10 +29,12 @@ libficl.a: $(OBJECTS)
 	$(AR) $(ARFLAGS) libficl.a $(OBJECTS)
 
 machine:
-	ln -sf ../../../$(MACHINE)/include machine
+	$(RM) machine
+	$(SYMLINK) ../../../$(MACHINE)/include machine
 
 x86:
-	ln -sf ../../../x86/include x86
+	$(RM) x86
+	$(SYMLINK) ../../../x86/include x86
 
 %.o:	../softcore/%.c $(HEADERS)
 	$(COMPILE.c) $<

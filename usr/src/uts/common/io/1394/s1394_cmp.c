@@ -90,8 +90,6 @@ s1394_cmp_register(s1394_target_t *target, t1394_cmp_evts_t *evts)
 	s1394_hal_t	*hal = target->on_hal;
 	static t1394_cmp_evts_t default_evts = { NULL, NULL };
 
-	TNF_PROBE_0_DEBUG(s1394_cmp_register_enter, S1394_TNF_SL_CMP_STACK, "");
-
 	rw_enter(&hal->target_list_rwlock, RW_WRITER);
 	/*
 	 * if registering the first target, claim and initialize addresses
@@ -123,7 +121,6 @@ s1394_cmp_register(s1394_target_t *target, t1394_cmp_evts_t *evts)
 
 	rw_exit(&hal->target_list_rwlock);
 
-	TNF_PROBE_0_DEBUG(s1394_cmp_register_exit, S1394_TNF_SL_CMP_STACK, "");
 	return (DDI_SUCCESS);
 }
 
@@ -131,9 +128,6 @@ int
 s1394_cmp_unregister(s1394_target_t *target)
 {
 	s1394_hal_t	*hal = target->on_hal;
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_unregister_enter, S1394_TNF_SL_CMP_STACK,
-	    "");
 
 	rw_enter(&hal->target_list_rwlock, RW_WRITER);
 
@@ -145,14 +139,10 @@ s1394_cmp_unregister(s1394_target_t *target)
 			s1394_cmp_fini(hal);
 		}
 	} else {
-		TNF_PROBE_0(s1394_cmp_unregister_common_error_list,
-		    S1394_TNF_SL_CMP_ERROR, "");
 	}
 
 	rw_exit(&hal->target_list_rwlock);
 
-	TNF_PROBE_0_DEBUG(s1394_cmp_unregister_exit, S1394_TNF_SL_CMP_STACK,
-	    "");
 	return (DDI_SUCCESS);
 }
 
@@ -162,8 +152,6 @@ s1394_cmp_read(s1394_target_t *target, t1394_cmp_reg_t reg, uint32_t *valp)
 	s1394_hal_t	*hal = target->on_hal;
 	s1394_cmp_hal_t *cmp = &hal->hal_cmp;
 	int		ret = DDI_FAILURE;
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_read_enter, S1394_TNF_SL_CMP_STACK, "");
 
 	if (reg == T1394_CMP_OMPR) {
 		rw_enter(&cmp->cmp_ompr_rwlock, RW_READER);
@@ -177,7 +165,6 @@ s1394_cmp_read(s1394_target_t *target, t1394_cmp_reg_t reg, uint32_t *valp)
 		ret = DDI_SUCCESS;
 	}
 
-	TNF_PROBE_0_DEBUG(s1394_cmp_read_exit, S1394_TNF_SL_CMP_STACK, "");
 	return (ret);
 }
 
@@ -188,8 +175,6 @@ s1394_cmp_cas(s1394_target_t *target, t1394_cmp_reg_t reg, uint32_t arg_val,
 	s1394_hal_t	*hal = target->on_hal;
 	s1394_cmp_hal_t *cmp = &hal->hal_cmp;
 	int		ret = DDI_SUCCESS;
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_cas_enter, S1394_TNF_SL_CMP_STACK, "");
 
 	if (reg == T1394_CMP_OMPR) {
 		rw_enter(&cmp->cmp_ompr_rwlock, RW_WRITER);
@@ -214,7 +199,6 @@ s1394_cmp_cas(s1394_target_t *target, t1394_cmp_reg_t reg, uint32_t arg_val,
 		s1394_cmp_notify_reg_change(hal, reg, target);
 	}
 
-	TNF_PROBE_0_DEBUG(s1394_cmp_cas_exit, S1394_TNF_SL_CMP_STACK, "");
 	return (ret);
 }
 
@@ -248,9 +232,6 @@ s1394_cmp_ompr_recv_read_request(cmd1394_cmd_t *req)
 	s1394_hal_t	*hal = req->cmd_callback_arg;
 	s1394_cmp_hal_t *cmp = &hal->hal_cmp;
 
-	TNF_PROBE_0_DEBUG(s1394_cmp_ompr_recv_read_request_enter,
-	    S1394_TNF_SL_CMP_STACK, "");
-
 	if (req->cmd_type != CMD1394_ASYNCH_RD_QUAD) {
 		req->cmd_result = IEEE1394_RESP_TYPE_ERROR;
 	} else {
@@ -261,9 +242,6 @@ s1394_cmp_ompr_recv_read_request(cmd1394_cmd_t *req)
 	}
 
 	(void) s1394_send_response(hal, req);
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_ompr_recv_read_request_exit,
-	    S1394_TNF_SL_CMP_STACK, "");
 }
 
 static void
@@ -271,9 +249,6 @@ s1394_cmp_impr_recv_read_request(cmd1394_cmd_t *req)
 {
 	s1394_hal_t	*hal = req->cmd_callback_arg;
 	s1394_cmp_hal_t *cmp = &hal->hal_cmp;
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_impr_recv_read_request_enter,
-	    S1394_TNF_SL_CMP_STACK, "");
 
 	if (req->cmd_type != CMD1394_ASYNCH_RD_QUAD) {
 		req->cmd_result = IEEE1394_RESP_TYPE_ERROR;
@@ -285,9 +260,6 @@ s1394_cmp_impr_recv_read_request(cmd1394_cmd_t *req)
 	}
 
 	(void) s1394_send_response(hal, req);
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_impr_recv_read_request_exit,
-	    S1394_TNF_SL_CMP_STACK, "");
 }
 
 static void
@@ -296,9 +268,6 @@ s1394_cmp_ompr_recv_lock_request(cmd1394_cmd_t *req)
 	s1394_hal_t	*hal = req->cmd_callback_arg;
 	s1394_cmp_hal_t *cmp = &hal->hal_cmp;
 	boolean_t	notify = B_TRUE;
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_ompr_recv_lock_request_enter,
-	    S1394_TNF_SL_CMP_STACK, "");
 
 	if ((req->cmd_type != CMD1394_ASYNCH_LOCK_32) ||
 	    (req->cmd_u.l32.lock_type != CMD1394_LOCK_COMPARE_SWAP)) {
@@ -323,9 +292,6 @@ s1394_cmp_ompr_recv_lock_request(cmd1394_cmd_t *req)
 	if (notify) {
 		s1394_cmp_notify_reg_change(hal, T1394_CMP_OMPR, NULL);
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_ompr_recv_lock_request_exit,
-	    S1394_TNF_SL_CMP_STACK, "");
 }
 
 static void
@@ -334,9 +300,6 @@ s1394_cmp_impr_recv_lock_request(cmd1394_cmd_t *req)
 	s1394_hal_t	*hal = req->cmd_callback_arg;
 	s1394_cmp_hal_t *cmp = &hal->hal_cmp;
 	boolean_t	notify = B_TRUE;
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_impr_recv_lock_request_enter,
-	    S1394_TNF_SL_CMP_STACK, "");
 
 	if ((req->cmd_type != CMD1394_ASYNCH_LOCK_32) ||
 	    (req->cmd_u.l32.lock_type != CMD1394_LOCK_COMPARE_SWAP)) {
@@ -361,9 +324,6 @@ s1394_cmp_impr_recv_lock_request(cmd1394_cmd_t *req)
 	if (notify) {
 		s1394_cmp_notify_reg_change(hal, T1394_CMP_IMPR, NULL);
 	}
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_impr_recv_lock_request_exit,
-	    S1394_TNF_SL_CMP_STACK, "");
 }
 
 /*
@@ -379,9 +339,6 @@ s1394_cmp_notify_reg_change(s1394_hal_t *hal, t1394_cmp_reg_t reg,
 	int		num_retries = 0;
 	void		(*cb)(opaque_t, t1394_cmp_reg_t);
 	opaque_t	arg;
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_notify_reg_change_enter,
-	    S1394_TNF_SL_CMP_STACK, "");
 
 	rw_enter(&hal->target_list_rwlock, RW_READER);
 
@@ -419,10 +376,6 @@ start:
 		 * target than receiving same notification more than once
 		 */
 		if (saved_gen != s1394_fa_list_gen(hal, S1394_FA_TYPE_CMP)) {
-			TNF_PROBE_2(s1394_cmp_notify_reg_change_error,
-			    S1394_TNF_SL_CMP_ERROR, "",
-			    tnf_string, msg, "list gen changed",
-			    tnf_opaque, num_retries, num_retries);
 			if (++num_retries <= s1394_cmp_notify_retry_cnt) {
 				goto start;
 			} else {
@@ -432,7 +385,4 @@ start:
 	}
 
 	rw_exit(&hal->target_list_rwlock);
-
-	TNF_PROBE_0_DEBUG(s1394_cmp_notify_reg_change_exit,
-	    S1394_TNF_SL_CMP_STACK, "");
 }

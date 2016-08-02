@@ -23,7 +23,7 @@
 # Use is subject to license terms.
 #
 
-ASFLAGS += -D_ASM -K PIC -P
+ASFLAGS += -D_ASM
 
 include ../Makefile.com
 

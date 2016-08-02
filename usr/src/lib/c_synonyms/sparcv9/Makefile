@@ -25,7 +25,7 @@
 # ident	"%Z%%M%	%I%	%E% SMI"
 #
 
-ASFLAGS=	-K pic -P -D__STDC__ -D_ASM $(sparcv9_AS_XARCH)
+ASFLAGS=	-D_ASM $(sparcv9_AS_XARCH)
 
 include ../Makefile.com
 include ../../Makefile.lib.64

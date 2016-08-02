@@ -111,7 +111,7 @@ LDFLAGS = $(LDFLAGS_$(CURTYPE))
 
 ASFLAGS_standalone = -DDIS_STANDALONE
 ASFLAGS_library =
-ASFLAGS += -P $(ASFLAGS_$(CURTYPE)) -D_ASM
+ASFLAGS += $(ASFLAGS_$(CURTYPE)) -D_ASM
 
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized

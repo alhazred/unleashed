@@ -629,7 +629,7 @@ get_start_sector(ib_device_t *device)
 	uint32_t		secnum = 0, numsec = 0;
 	int			i, pno, rval, log_part = 0;
 	struct mboot		*mboot;
-	struct ipart		*part;
+	struct ipart		*part = NULL;
 	ext_part_t		*epp;
 	struct part_info	dkpi;
 	struct extpart_info	edkpi;

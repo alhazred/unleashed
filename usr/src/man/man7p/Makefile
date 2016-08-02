@@ -37,7 +37,6 @@ MANFILES= 	arp.7p		\
 	 	routing.7p	\
 	 	sctp.7p		\
 	 	sip.7p		\
-	 	slp.7p		\
 	 	tcp.7p		\
 	 	udp.7p
 

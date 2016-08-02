@@ -142,7 +142,6 @@ extern int	sof_inject_data_in(sof_handle_t, mblk_t *, size_t, int,
     boolean_t *);
 extern void 	sof_rcv_flowctrl(sof_handle_t, boolean_t);
 extern void 	sof_snd_flowctrl(sof_handle_t, boolean_t);
-extern boolean_t sof_newconn_move(sof_handle_t, sof_handle_t);
 
 #ifdef	__cplusplus
 }

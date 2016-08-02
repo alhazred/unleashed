@@ -152,13 +152,13 @@
 #endif
 
 #define	SMAP_DISABLE_INSTR(ITER)		\
-	.globl	_smap_disable_patch_/**/ITER;	\
-	_smap_disable_patch_/**/ITER/**/:;	\
+	.globl	_smap_disable_patch_##ITER;	\
+	_smap_disable_patch_##ITER##:;	\
 	nop; nop; nop;
 
 #define	SMAP_ENABLE_INSTR(ITER)			\
-	.globl	_smap_enable_patch_/**/ITER;	\
-	_smap_enable_patch_/**/ITER/**/:;	\
+	.globl	_smap_enable_patch_##ITER;	\
+	_smap_enable_patch_##ITER##:;	\
 	nop; nop; nop;
 
 #if defined(__lint)
@@ -468,7 +468,7 @@ bcopy(const void *from, void *to, size_t count)
 	 */
 	ALTENTRY(bcopy_altentry)
 do_copy:
-#define	L(s) .bcopy/**/s
+#define	L(s) .bcopy##s
 	cmpq	$0x50, %rdx		/* 80 */
 	jge	bcopy_ck_size
 
@@ -1154,7 +1154,7 @@ bzero(void *addr, size_t count)
 #endif
 	ALTENTRY(bzero_altentry)
 do_zero:
-#define	L(s) .bzero/**/s
+#define	L(s) .bzero##s
 	xorl	%eax, %eax
 
 	cmpq	$0x50, %rsi		/* 80 */
@@ -2545,7 +2545,7 @@ fuword8(const void *addr, uint8_t *dst)
 	movq	%gs:CPU_THREAD, %r9;		\
 	cmpq	kernelbase(%rip), %rdi;		\
 	jae	1f;				\
-	leaq	_flt_/**/NAME, %rdx;		\
+	leaq	_flt_##NAME, %rdx;		\
 	movq	%rdx, T_LOFAULT(%r9);		\
 	SMAP_DISABLE_INSTR(DISNUM)		\
 	INSTR	(%rdi), REG;			\
@@ -2554,7 +2554,7 @@ fuword8(const void *addr, uint8_t *dst)
 	xorl	%eax, %eax;			\
 	SMAP_ENABLE_INSTR(EN1)			\
 	ret;					\
-_flt_/**/NAME:					\
+_flt_##NAME:					\
 	SMAP_ENABLE_INSTR(EN2)			\
 	movq	$0, T_LOFAULT(%r9);		\
 1:						\
@@ -2580,7 +2580,7 @@ _flt_/**/NAME:					\
 	movl	kernelbase, %eax;		\
 	cmpl	%eax, 4(%esp);			\
 	jae	1f;				\
-	lea	_flt_/**/NAME, %edx;		\
+	lea	_flt_##NAME, %edx;		\
 	movl	%edx, T_LOFAULT(%ecx);		\
 	movl	4(%esp), %eax;			\
 	movl	8(%esp), %edx;			\
@@ -2589,7 +2589,7 @@ _flt_/**/NAME:					\
 	INSTR	REG, (%edx);			\
 	xorl	%eax, %eax;			\
 	ret;					\
-_flt_/**/NAME:					\
+_flt_##NAME:					\
 	movl	$0, T_LOFAULT(%ecx);		\
 1:						\
 	movl	T_COPYOPS(%ecx), %eax;		\
@@ -2655,7 +2655,7 @@ suword8(void *addr, uint8_t value)
 	movq	%gs:CPU_THREAD, %r9;		\
 	cmpq	kernelbase(%rip), %rdi;		\
 	jae	1f;				\
-	leaq	_flt_/**/NAME, %rdx;		\
+	leaq	_flt_##NAME, %rdx;		\
 	SMAP_DISABLE_INSTR(DISNUM)		\
 	movq	%rdx, T_LOFAULT(%r9);		\
 	INSTR	REG, (%rdi);			\
@@ -2663,7 +2663,7 @@ suword8(void *addr, uint8_t value)
 	xorl	%eax, %eax;			\
 	SMAP_ENABLE_INSTR(EN1)			\
 	ret;					\
-_flt_/**/NAME:					\
+_flt_##NAME:					\
 	SMAP_ENABLE_INSTR(EN2)			\
 	movq	$0, T_LOFAULT(%r9);		\
 1:						\
@@ -2689,7 +2689,7 @@ _flt_/**/NAME:					\
 	movl	kernelbase, %eax;		\
 	cmpl	%eax, 4(%esp);			\
 	jae	1f;				\
-	lea	_flt_/**/NAME, %edx;		\
+	lea	_flt_##NAME, %edx;		\
 	movl	%edx, T_LOFAULT(%ecx);		\
 	movl	4(%esp), %eax;			\
 	movl	8(%esp), %edx;			\
@@ -2697,7 +2697,7 @@ _flt_/**/NAME:					\
 	movl	$0, T_LOFAULT(%ecx);		\
 	xorl	%eax, %eax;			\
 	ret;					\
-_flt_/**/NAME:					\
+_flt_##NAME:					\
 	movl	$0, T_LOFAULT(%ecx);		\
 1:						\
 	movl	T_COPYOPS(%ecx), %eax;		\

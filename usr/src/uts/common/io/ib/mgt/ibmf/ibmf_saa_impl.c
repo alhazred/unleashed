@@ -104,8 +104,7 @@ ibmf_saa_impl_init()
 	/* CONSTCOND */
 	ASSERT(NO_COMPETING_THREADS);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_init_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_init() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_init() enter\n");
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*saa_statep))
 
@@ -118,10 +117,8 @@ ibmf_saa_impl_init()
 	    TASKQ_PREPOPULATE);
 	if (saa_statep->saa_event_taskq == NULL) {
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L4,
-		    ibmf_saa_impl_init_end_err,
-		    IBMF_TNF_TRACE, "", "ibmf_saa_impl_init(): %s\n",
-		    tnf_string, msg, "event taskq create failed");
+		IBMF_TRACE_1(DPRINT_L4, "ibmf_saa_impl_init(): %s\n",
+			     "event taskq create failed");
 
 		kmem_free(saa_statep, sizeof (saa_state_t));
 
@@ -138,9 +135,8 @@ ibmf_saa_impl_init()
 	res = IBMF_SUCCESS;
 bail:
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_saa_impl_init_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_init() exit: status = %d\n",
-	    tnf_int, res, res);
+	IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_impl_init() exit: status = %d\n",
+		     res);
 
 	return (res);
 }
@@ -169,8 +165,7 @@ ibmf_saa_impl_fini()
 	saa_port_t	*saa_portp;
 	saa_port_t	*next;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_fini_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_fini() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_fini() enter\n");
 
 	/* make sure there are no registered clients */
 	mutex_enter(&saa_statep->saa_port_list_mutex);
@@ -182,13 +177,10 @@ ibmf_saa_impl_fini()
 
 		if (saa_portp->saa_pt_reference_count > 0) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_fini_err, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_fini: %s, port %016" PRIx64 "\n",
-			    tnf_string, msg,
-			    "cannot unload ibmf_saa. Client on port still"
-			    " registered", tnf_opaque, port,
-			    saa_portp->saa_pt_port_guid);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_fini: %s, port %016"PRIx64"\n",
+				     "cannot unload ibmf_saa. Client on port still"" registered",
+				     saa_portp->saa_pt_port_guid);
 
 			mutex_exit(&saa_portp->saa_pt_mutex);
 
@@ -202,16 +194,11 @@ ibmf_saa_impl_fini()
 
 		if (saa_portp->saa_pt_num_outstanding_trans > 0) {
 
-			IBMF_TRACE_3(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_fini_err, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_fini: %s, port = %016" PRIx64
-			    ", num transactions = %d\n",
-			    tnf_string, msg, "Cannot unload ibmf_saa."
-			    "  Outstanding transactions on port.",
-			    tnf_opaque, port,
-			    saa_portp->saa_pt_port_guid,
-			    tnf_uint, outstanding_transactions,
-			    saa_portp->saa_pt_num_outstanding_trans);
+			IBMF_TRACE_3(DPRINT_L1,
+				     "ibmf_saa_impl_fini: %s, port = %016"PRIx64", num transactions = %d\n",
+				     "Cannot unload ibmf_saa.""  Outstanding transactions on port.",
+				     saa_portp->saa_pt_port_guid,
+				     saa_portp->saa_pt_num_outstanding_trans);
 
 			mutex_exit(&saa_portp->saa_pt_mutex);
 
@@ -240,11 +227,10 @@ ibmf_saa_impl_fini()
 		saa_portp = saa_statep->saa_port_list;
 		next = saa_portp->next;
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_fini, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_fini: %s, prefix = %016" PRIx64 "\n",
-		    tnf_string, msg, "deinitializing port",
-		    tnf_opaque, port_guid, saa_portp->saa_pt_port_guid);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_saa_impl_fini: %s, prefix = %016"PRIx64"\n",
+			     "deinitializing port",
+			     saa_portp->saa_pt_port_guid);
 
 		_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*saa_portp))
 
@@ -275,8 +261,6 @@ ibmf_saa_impl_fini()
 	kmem_free(saa_statep, sizeof (saa_state_t));
 
 bail:
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_fini_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_fini() exit\n");
 
 	return (ret);
 }
@@ -300,8 +284,7 @@ ibmf_saa_is_valid(saa_port_t *saa_portp, int add_ref)
 {
 	boolean_t is_valid = B_TRUE;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_is_valid_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_is_valid() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_is_valid() enter\n");
 
 	mutex_enter(&saa_portp->saa_pt_mutex);
 
@@ -318,9 +301,6 @@ ibmf_saa_is_valid(saa_port_t *saa_portp, int add_ref)
 		saa_portp->saa_pt_reference_count++;
 	}
 	mutex_exit(&saa_portp->saa_pt_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_is_valid_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_is_valid() exit\n");
 
 	return (is_valid);
 }
@@ -344,8 +324,7 @@ ibmf_saa_must_purge(saa_port_t *saa_portp)
 {
 	int must_purge = B_FALSE;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_must_purge_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_must_purge() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_must_purge() enter\n");
 
 	mutex_enter(&saa_portp->saa_pt_mutex);
 
@@ -357,9 +336,6 @@ ibmf_saa_must_purge(saa_port_t *saa_portp)
 	}
 
 	mutex_exit(&saa_portp->saa_pt_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_must_purge_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_must_purge() exit\n");
 
 	return (must_purge);
 }
@@ -385,8 +361,7 @@ ibmf_saa_impl_purge()
 	saa_port_t *prev_portp = NULL;
 	saa_port_t *rem_portp  = NULL;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_purge_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_purge() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_purge() enter\n");
 
 	mutex_enter(&saa_statep->saa_port_list_mutex);
 
@@ -426,9 +401,6 @@ ibmf_saa_impl_purge()
 	}
 
 	mutex_exit(&saa_statep->saa_port_list_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_purge_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_purge() exit\n");
 }
 
 /*
@@ -454,8 +426,7 @@ ibmf_saa_impl_add_client(saa_port_t *saa_portp)
 {
 	int status = IBMF_SUCCESS;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_add_client_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_add_client() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_add_client() enter\n");
 
 	mutex_enter(&saa_portp->saa_pt_mutex);
 
@@ -465,22 +436,18 @@ ibmf_saa_impl_add_client(saa_port_t *saa_portp)
 	if (saa_portp->saa_pt_reference_count >
 	    SAA_MAX_CLIENTS_PER_PORT) {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_add_client_err, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_add_client: %s, num_reg_clients %d\n",
-		    tnf_string, msg, "too many clients registered for"
-		    " port", tnf_uint, num_reg_clients,
-		    saa_portp->saa_pt_reference_count);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_add_client: %s, num_reg_clients %d\n",
+			     "too many clients registered for"" port",
+			     saa_portp->saa_pt_reference_count);
 
 		status = IBMF_BUSY;
 		goto bail;
 	}
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_add_client, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_add_client: num_registered_clients %d\n",
-	    tnf_uint, num_registered_clients,
-	    saa_portp->saa_pt_reference_count);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_add_client: num_registered_clients %d\n",
+		     saa_portp->saa_pt_reference_count);
 
 	/*
 	 * wait until anyone who is currently registering
@@ -488,19 +455,14 @@ ibmf_saa_impl_add_client(saa_port_t *saa_portp)
 	 */
 	while (saa_portp->saa_pt_state == IBMF_SAA_PORT_STATE_REGISTERING) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_add_client, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_add_client: %s\n",
-		    tnf_string, msg, "someone is registering. waiting"
-		    " for them to finish");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_impl_add_client: %s\n",
+			     "someone is registering. waiting"" for them to finish");
 
 		cv_wait(&saa_portp->saa_pt_ibmf_reg_cv,
 		    &saa_portp->saa_pt_mutex);
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_add_client,
-		    IBMF_TNF_TRACE, "", "ibmf_saa_impl_add_client: %s\n",
-		    tnf_string, msg, "done waiting");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_impl_add_client: %s\n",
+			     "done waiting");
 	}
 
 	/*
@@ -508,11 +470,8 @@ ibmf_saa_impl_add_client(saa_port_t *saa_portp)
 	 */
 	if (saa_portp->saa_pt_state != IBMF_SAA_PORT_STATE_READY) {
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_add_client_err, IBMF_TNF_ERROR,
-		    "", "ibmf_saa_impl_add_client: %s\n",
-		    tnf_string, msg, "port state not ready,"
-		    " removing client.");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_saa_impl_add_client: %s\n",
+			     "port state not ready,"" removing client.");
 
 		status = IBMF_BAD_PORT_STATE;
 		goto bail;
@@ -539,10 +498,6 @@ bail:
 
 		mutex_exit(&saa_portp->saa_pt_mutex);
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_add_client_end, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_add_client() exit\n");
 
 	return (status);
 }
@@ -572,10 +527,8 @@ ibmf_saa_impl_create_port(ib_guid_t pt_guid, saa_port_t **saa_portpp)
 	int		status		= IBMF_SUCCESS;
 	saa_port_t	*saa_portp	= NULL;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_saa_impl_create_port_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_create_port:"
-	    " guid %016" PRIx64 "\n",
-	    tnf_opaque, port_guid, pt_guid);
+	IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_impl_create_port:"
+	    " guid %016" PRIx64 "\n", pt_guid);
 
 	ASSERT(MUTEX_HELD(&saa_statep->saa_port_list_mutex));
 
@@ -583,20 +536,16 @@ ibmf_saa_impl_create_port(ib_guid_t pt_guid, saa_port_t **saa_portpp)
 	saa_portp = kmem_zalloc(sizeof (saa_port_t), KM_NOSLEEP);
 
 	if (saa_portp == NULL) {
-
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_sa_session_open_err, IBMF_TNF_ERROR, "",
+		IBMF_TRACE_1(DPRINT_L1,
 		    "ibmf_saa_impl_create_port: %s\n",
-		    tnf_string, msg, "could not allocate memory for "
-		    "new port");
+		    "could not allocate memory for new port");
 
 		status = IBMF_NO_MEMORY;
 		goto bail;
 	}
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_sa_session_open,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_create_port: %s\n",
-	    tnf_string, msg, "first client registering, initializing");
+	IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_impl_create_port: %s\n",
+	    "first client registering, initializing");
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*saa_portp))
 
@@ -647,9 +596,6 @@ ibmf_saa_impl_create_port(ib_guid_t pt_guid, saa_port_t **saa_portpp)
 	*saa_portpp = saa_portp;
 
 bail:
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_create_port_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_create_port() exit\n");
-
 	return (status);
 }
 
@@ -662,19 +608,13 @@ bail:
 static void
 ibmf_saa_impl_invalidate_port(saa_port_t *saa_portp)
 {
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_invalidate_port_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_invalidate_port() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_invalidate_port() enter\n");
 
 	ASSERT(saa_portp != NULL);
 	ASSERT(MUTEX_HELD(&saa_portp->saa_pt_mutex));
 
 	saa_portp->saa_pt_state = IBMF_SAA_PORT_STATE_INVALID;
 	ibmf_saa_impl_uninit_kstats(saa_portp);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_invalidate_port_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_invalidate_port() exit\n");
 }
 
 /*
@@ -694,17 +634,15 @@ ibmf_saa_impl_invalidate_port(saa_port_t *saa_portp)
 static void
 ibmf_saa_impl_destroy_port(saa_port_t *saa_portp)
 {
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_destroy_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_destroy() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_destroy() enter\n");
 
 	ASSERT(saa_portp != NULL);
 
 	_NOTE(ASSUMING_PROTECTED(*saa_portp))
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_destroy, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_destroy(): destroying port_guid %016" PRIx64 "\n",
-	    tnf_opaque, port_guid, saa_portp->saa_pt_port_guid);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_destroy(): destroying port_guid %016"PRIx64"\n",
+		     saa_portp->saa_pt_port_guid);
 
 	ibmf_saa_impl_uninit_kstats(saa_portp);
 
@@ -716,9 +654,6 @@ ibmf_saa_impl_destroy_port(saa_port_t *saa_portp)
 	mutex_destroy(&saa_portp->saa_pt_kstat_mutex);
 
 	kmem_free(saa_portp, sizeof (saa_port_t));
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_destroy_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_destroy() exit\n");
 }
 
 /*
@@ -734,9 +669,7 @@ ibmf_saa_impl_init_kstats(saa_port_t *saa_portp)
 
 	_NOTE(ASSUMING_PROTECTED(saa_portp->saa_pt_kstatp))
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_init_kstats_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_init_kstats() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_init_kstats() enter\n");
 
 	/* set up kstats structure */
 	(void) sprintf(buf, "ibmf_saa_%016" PRIx64 "_stat",
@@ -772,10 +705,6 @@ ibmf_saa_impl_init_kstats(saa_port_t *saa_portp)
 
 	kstat_install(saa_portp->saa_pt_kstatp);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_init_kstats_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_init_kstats() exit\n");
-
 	return (IBMF_SUCCESS);
 }
 
@@ -787,9 +716,7 @@ ibmf_saa_impl_init_kstats(saa_port_t *saa_portp)
 static void
 ibmf_saa_impl_uninit_kstats(saa_port_t *saa_portp)
 {
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_uninit_kstats_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_uninit_kstats() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_uninit_kstats() enter\n");
 
 	mutex_enter(&saa_portp->saa_pt_kstat_mutex);
 
@@ -799,10 +726,6 @@ ibmf_saa_impl_uninit_kstats(saa_port_t *saa_portp)
 	saa_portp->saa_pt_kstatp = NULL;
 
 	mutex_exit(&saa_portp->saa_pt_kstat_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_uninit_kstats_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_uninit_kstats() exit\n");
 }
 
 /*
@@ -812,9 +735,7 @@ ibmf_saa_impl_uninit_kstats(saa_port_t *saa_portp)
 void
 ibmf_saa_impl_register_failed(saa_port_t *saa_portp)
 {
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_register_failed_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_register_failed() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_register_failed() enter\n");
 
 	mutex_enter(&saa_portp->saa_pt_mutex);
 
@@ -828,10 +749,6 @@ ibmf_saa_impl_register_failed(saa_port_t *saa_portp)
 	saa_portp->saa_pt_reference_count--;
 
 	mutex_exit(&saa_portp->saa_pt_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_register_failed_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_register_failed() exit\n");
 }
 
 static int
@@ -853,12 +770,10 @@ ibmf_saa_impl_setup_qp_async_cb(saa_port_t *saa_portp, int setup_async_cb_only)
 
 		if (status != IBMF_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_setup_qp_async_cb, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_setup_qp_async_cb: %s, "
-			    "ibmf_status = %d\n",
-			    tnf_string, msg, "Cannot alloc qp with ibmf",
-			    tnf_int, status, status);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_setup_qp_async_cb: %s, ""ibmf_status = %d\n",
+				     "Cannot alloc qp with ibmf",
+				     status);
 
 			return (status);
 		}
@@ -875,13 +790,10 @@ ibmf_saa_impl_setup_qp_async_cb(saa_port_t *saa_portp, int setup_async_cb_only)
 
 		if (status != IBMF_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_setup_qp_async_cb, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_setup_qp_async_cb: %s, "
-			    "ibmf_status = %d\n",
-			    tnf_string, msg,
-			    "Cannot query alt qp to get qp num",
-			    tnf_int, status, status);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_setup_qp_async_cb: %s, ""ibmf_status = %d\n",
+				     "Cannot query alt qp to get qp num",
+				     status);
 
 			goto bail;
 		}
@@ -896,11 +808,10 @@ ibmf_saa_impl_setup_qp_async_cb(saa_port_t *saa_portp, int setup_async_cb_only)
 	    saa_portp->saa_pt_qp_handle, ibmf_saa_report_cb, saa_portp, 0);
 	if (status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_setup_qp_async_cb, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_setup_qp_async_cb: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "Cannot register async cb with ibmf",
-		    tnf_int, status, status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_setup_qp_async_cb: %s, ibmf_status = %d\n",
+			     "Cannot register async cb with ibmf",
+			     status);
 
 		goto bail;
 	}
@@ -914,12 +825,10 @@ bail:
 		    &saa_portp->saa_pt_qp_handle, 0);
 		if (unreg_status != IBMF_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_setup_qp_async_cb, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_setup_qp_async_cb: %s, ibmf_status ="
-			    " %d\n", tnf_string, msg,
-			    "Cannot free alternate queue pair with ibmf",
-			    tnf_int, unreg_status, unreg_status);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_setup_qp_async_cb: %s, ibmf_status ="" %d\n",
+				     "Cannot free alternate queue pair with ibmf",
+				     unreg_status);
 		}
 	}
 
@@ -945,9 +854,7 @@ ibmf_saa_impl_register_port(
 	ib_guid_t	port_guid;
 	boolean_t	ibmf_reg = B_FALSE;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_register_port_start, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_register_port() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_register_port() enter\n");
 
 	ASSERT(saa_portp != NULL);
 
@@ -959,10 +866,8 @@ ibmf_saa_impl_register_port(
 
 	if (hca_count == 0) {
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_register_port, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_register_port: %s\n",
-		    tnf_string, msg, "cannot register port (no HCAs).\n");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_saa_impl_register_port: %s\n",
+			     "cannot register port (no HCAs).\n");
 
 		status = IBMF_BAD_PORT;
 		goto bail;
@@ -977,11 +882,10 @@ ibmf_saa_impl_register_port(
 
 		if (ibt_status != IBT_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_register_port, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_register_port: %s, %016" PRIx64 "\n",
-			    tnf_string, msg, "Could not query hca.  Exiting.",
-			    tnf_opaque, guid, hca_list[ihca]);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_register_port: %s, %016"PRIx64"\n",
+				     "Could not query hca.  Exiting.",
+				     hca_list[ihca]);
 
 			status = IBMF_TRANSPORT_FAILURE;
 			break;
@@ -997,16 +901,12 @@ ibmf_saa_impl_register_port(
 			if (saa_portp->saa_pt_port_guid != port_guid)
 				continue;
 
-			IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_saa_impl_register_port,
-			    IBMF_TNF_TRACE, "",
-			    "ibmf_saa_impl_register_port: %s, hca_guid = %016"
-			    PRIx64 ", port_guid = %016" PRIx64
-			    ", number = %d\n",
-			    tnf_string, msg, "found port",
-			    tnf_opaque, hca_guid, hca_list[ihca],
-			    tnf_opaque, port_guid, port_guid,
-			    tnf_uint,   port, iport + 1);
+			IBMF_TRACE_4(DPRINT_L3,
+				     "ibmf_saa_impl_register_port: %s, hca_guid = %016"PRIx64", port_guid = %016"PRIx64", number = %d\n",
+				     "found port",
+				     hca_list[ihca],
+				     port_guid,
+				     iport + 1);
 
 			/*
 			 * we're here? then we found our port:
@@ -1038,12 +938,10 @@ ibmf_saa_impl_register_port(
 
 	if (ihca == hca_count) {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_register_port, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_register_port: %s, port_guid %016"
-		    PRIx64 "\n",
-		    tnf_string, msg, "Could not find port,  exiting",
-		    tnf_opaque, port_guid, saa_portp->saa_pt_port_guid);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_register_port: %s, port_guid %016"PRIx64"\n",
+			     "Could not find port,  exiting",
+			     saa_portp->saa_pt_port_guid);
 
 		status = IBMF_BAD_PORT;
 	}
@@ -1058,12 +956,11 @@ ibmf_saa_impl_register_port(
 	 * and open an ibmf session on that port.
 	 */
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_register_port, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_register_port: %s, port_guid = %016" PRIx64
-	    ", port = %d\n", tnf_string, msg, "Registering with ibmf",
-	    tnf_opaque, port_guid, saa_portp->saa_pt_ibmf_reginfo.ir_ci_guid,
-	    tnf_uint, port, saa_portp->saa_pt_ibmf_reginfo.ir_port_num);
+	IBMF_TRACE_3(DPRINT_L3,
+		     "ibmf_saa_impl_register_port: %s, port_guid = %016"PRIx64", port = %d\n",
+		     "Registering with ibmf",
+		     saa_portp->saa_pt_ibmf_reginfo.ir_ci_guid,
+		     saa_portp->saa_pt_ibmf_reginfo.ir_port_num);
 
 	status = ibmf_register(&saa_portp->saa_pt_ibmf_reginfo,
 	    IBMF_VERSION, IBMF_REG_FLAG_RMPP,
@@ -1073,11 +970,10 @@ ibmf_saa_impl_register_port(
 
 	if (status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_register_port, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_register_port: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "Could not register with ibmf",
-		    tnf_int, status, status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_register_port: %s, ibmf_status = %d\n",
+			     "Could not register with ibmf",
+			     status);
 
 		goto bail;
 	}
@@ -1095,17 +991,12 @@ bail:
 
 		if (unreg_status != IBMF_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_register_port, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_register_port: %s, ibmf_status ="
-			    " %d\n", tnf_string, msg,
-			    "Cannot unregister from ibmf",
-			    tnf_int, unreg_status, unreg_status);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_register_port: %s, ibmf_status ="" %d\n",
+				     "Cannot unregister from ibmf",
+				     unreg_status);
 		}
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_register_port_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_register_port() exit\n");
 
 	return (status);
 }
@@ -1119,9 +1010,7 @@ ibmf_saa_impl_get_classportinfo(saa_port_t *saa_portp)
 	int			res;
 	saa_impl_trans_info_t	*trans_info;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_get_classportinfo_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_get_classportinfo() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_get_classportinfo() enter\n");
 
 	/*
 	 * allocate memory for trans_info; send_request's callback will free up
@@ -1138,14 +1027,9 @@ ibmf_saa_impl_get_classportinfo(saa_port_t *saa_portp)
 
 		mutex_exit(&saa_portp->saa_pt_mutex);
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_get_classportinfo_err, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_get_classportinfo: %s\n", tnf_string, msg,
-		    "Could not allocate memory for classportinfo trans_info");
-
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_saa_impl_get_classportinfo_end, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_get_classportinfo() exiting\n");
+		IBMF_TRACE_1(DPRINT_L1,
+			     "ibmf_saa_impl_get_classportinfo: %s\n",
+			     "Could not allocate memory for classportinfo trans_info");
 
 		return;
 	}
@@ -1170,11 +1054,10 @@ ibmf_saa_impl_get_classportinfo(saa_port_t *saa_portp)
 
 	if (res != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_saa_impl_get_classportinfo_err, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_get_classportinfo: %s, res = 0x%x\n",
-		    tnf_string, msg, "ibmf_saa_impl_send_request failed",
-		    tnf_opaque, res, res);
+		IBMF_TRACE_2(DPRINT_L2,
+			     "ibmf_saa_impl_get_classportinfo: %s, res = 0x%x\n",
+			     "ibmf_saa_impl_send_request failed",
+			     res);
 
 		mutex_enter(&saa_portp->saa_pt_kstat_mutex);
 
@@ -1192,10 +1075,6 @@ ibmf_saa_impl_get_classportinfo(saa_port_t *saa_portp)
 		mutex_exit(&saa_portp->saa_pt_mutex);
 
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_get_classportinfo_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_get_classportinfo() exit\n");
 }
 
 /*
@@ -1226,8 +1105,7 @@ ibmf_saa_impl_get_cpi_cb(void *arg, size_t length, char *buffer, int status)
 	int			resp_time_value;
 	uint16_t		sa_cap_mask;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_get_cpi_cb_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_get_cpi_cb() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_get_cpi_cb() enter\n");
 
 	/*
 	 * access port entry: note that it may have become invalid
@@ -1240,13 +1118,12 @@ ibmf_saa_impl_get_cpi_cb(void *arg, size_t length, char *buffer, int status)
 
 	if ((status != IBMF_SUCCESS) || (buffer == NULL)) {
 
-		IBMF_TRACE_4(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_get_cpi_cb, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_get_cpi_cb: %s, status = %d, buffer = "
-		    " 0x%p, length = %d\n", tnf_string, msg,
-		    "could not get classportinfo.  Check node and path to sm"
-		    " lid", tnf_int, status, status,
-		    tnf_opaque, buffer, buffer, tnf_uint, length, length);
+		IBMF_TRACE_4(DPRINT_L1,
+			     "ibmf_saa_impl_get_cpi_cb: %s, status = %d, buffer = "" 0x%p, length = %d\n",
+			     "could not get classportinfo.  Check node and path to sm"" lid",
+			     status,
+			     buffer,
+			     length);
 
 		/*
 		 * IB spec (C13-13) indicates 20 can be used as default or
@@ -1279,13 +1156,11 @@ ibmf_saa_impl_get_cpi_cb(void *arg, size_t length, char *buffer, int status)
 
 		sa_cap_mask = classportinfo->CapabilityMask;
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_get_cpi_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_get_cpi_cb: %s, timeout = 0x%x,"
-		    " cap_mask = 0x%x\n",
-		    tnf_string, msg, "got classportinfo",
-		    tnf_opaque, timeout, resp_time_value,
-		    tnf_opaque, cap_mask, sa_cap_mask);
+		IBMF_TRACE_3(DPRINT_L3,
+			     "ibmf_saa_impl_get_cpi_cb: %s, timeout = 0x%x,"" cap_mask = 0x%x\n",
+			     "got classportinfo",
+			     resp_time_value,
+			     sa_cap_mask);
 
 		kmem_free(buffer, length);
 	}
@@ -1316,18 +1191,13 @@ ibmf_saa_impl_get_cpi_cb(void *arg, size_t length, char *buffer, int status)
 	ASSERT(saa_portp->saa_pt_reference_count > 0);
 	saa_portp->saa_pt_reference_count--;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_get_cpi_cb, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_get_cpi_cb: %s, subnet_timeout = 0x%x, "
-	    "resp_time_value = 0x%x\n",
-	    tnf_string, msg, "updated resp timeout",
-	    tnf_opaque, subnet_timeout, saa_portp->saa_pt_timeout,
-	    tnf_opaque, resp_time_value, resp_time_value);
+	IBMF_TRACE_3(DPRINT_L3,
+		     "ibmf_saa_impl_get_cpi_cb: %s, subnet_timeout = 0x%x, ""resp_time_value = 0x%x\n",
+		     "updated resp timeout",
+		     saa_portp->saa_pt_timeout,
+		     resp_time_value);
 
 	mutex_exit(&saa_portp->saa_pt_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_get_cpi_cb_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_get_cpi_cb() exit\n");
 }
 
 /*
@@ -1356,9 +1226,7 @@ ibmf_saa_impl_send_request(saa_impl_trans_info_t *trans_info)
 	uint16_t		mad_status;
 	boolean_t		sa_is_redirected = B_FALSE;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_send_request_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_send_request() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_send_request() enter\n");
 
 	attr_id = trans_info->si_trans_attr_id;
 	client_data = trans_info->si_trans_client_data;
@@ -1371,19 +1239,12 @@ ibmf_saa_impl_send_request(saa_impl_trans_info_t *trans_info)
 	 */
 	if (ibmf_saa_is_valid(saa_portp, B_FALSE) == B_FALSE) {
 
-		IBMF_TRACE_4(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_send_request,
-		    IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_send_request: %s, hca_guid = %016"
-		    PRIx64 ", port_guid = %016" PRIx64
-		    ", number = %d\n",
-		    tnf_string, msg, "sending on invalid port",
-		    tnf_opaque, hca_guid,
-		    saa_portp->saa_pt_ibmf_reginfo.ir_ci_guid,
-		    tnf_opaque, port_guid,
-		    saa_portp->saa_pt_port_guid,
-		    tnf_uint,   port,
-		    saa_portp->saa_pt_ibmf_reginfo.ir_port_num);
+		IBMF_TRACE_4(DPRINT_L1,
+			     "ibmf_saa_impl_send_request: %s, hca_guid = %016"PRIx64", port_guid = %016"PRIx64", number = %d\n",
+			     "sending on invalid port",
+			     saa_portp->saa_pt_ibmf_reginfo.ir_ci_guid,
+			     saa_portp->saa_pt_port_guid,
+			     saa_portp->saa_pt_ibmf_reginfo.ir_port_num);
 
 		ibmf_status = IBMF_REQ_INVALID;
 		goto bail;
@@ -1401,11 +1262,10 @@ ibmf_saa_impl_send_request(saa_impl_trans_info_t *trans_info)
 
 	if (ibmf_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_send_request_err, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_send_request: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "SA does not support attribute",
-		    tnf_int, ibmf_status, ibmf_status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_send_request: %s, ibmf_status = %d\n",
+			     "SA does not support attribute",
+			     ibmf_status);
 
 		goto bail;
 	}
@@ -1426,11 +1286,10 @@ ibmf_saa_impl_send_request(saa_impl_trans_info_t *trans_info)
 	    &transport_flags, &ibmf_retrans);
 	if (ibmf_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_send_request_err, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_send_request: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "init_msg() failed",
-		    tnf_int, ibmf_status, ibmf_status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_send_request: %s, ibmf_status = %d\n",
+			     "init_msg() failed",
+			     ibmf_status);
 
 		goto bail;
 	}
@@ -1539,21 +1398,18 @@ ibmf_saa_impl_send_request(saa_impl_trans_info_t *trans_info)
 
 		if (mad_status == MAD_STATUS_REDIRECT_REQUIRED) {
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_saa_impl_send_request, IBMF_TNF_TRACE, "",
-			    "ibmf_saa_impl_send_request: %s, retry_count %d\n",
-			    tnf_string, msg,
-			    "response returned redirect status",
-			    tnf_int, retry_count, retry_count);
+			IBMF_TRACE_2(DPRINT_L2,
+				     "ibmf_saa_impl_send_request: %s, retry_count %d\n",
+				     "response returned redirect status",
+				     retry_count);
 
 			/* update address info and copy it into msgp */
 			ibmf_saa_impl_update_sa_address_info(saa_portp, msgp);
 		} else {
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_saa_impl_send_request, IBMF_TNF_TRACE, "",
-			    "ibmf_saa_impl_send_request: %s, retry_count %d\n",
-			    tnf_string, msg, "response returned busy status",
-			    tnf_int, retry_count, retry_count);
+			IBMF_TRACE_2(DPRINT_L2,
+				     "ibmf_saa_impl_send_request: %s, retry_count %d\n",
+				     "response returned busy status",
+				     retry_count);
 		}
 
 		retry_count++;
@@ -1569,11 +1425,10 @@ ibmf_saa_impl_send_request(saa_impl_trans_info_t *trans_info)
 
 	if (ibmf_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_saa_impl_send_request, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_send_request: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "ibmf_msg_transport() failed",
-		    tnf_int, ibmf_status, ibmf_status);
+		IBMF_TRACE_2(DPRINT_L2,
+			     "ibmf_saa_impl_send_request: %s, ibmf_status = %d\n",
+			     "ibmf_msg_transport() failed",
+			     ibmf_status);
 
 		ibmf_saa_impl_free_msg(saa_portp->saa_pt_ibmf_handle, msgp);
 
@@ -1608,10 +1463,8 @@ ibmf_saa_impl_send_request(saa_impl_trans_info_t *trans_info)
 
 		mutex_exit(&saa_portp->saa_pt_mutex);
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_send_request, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_send_request: %s\n",
-		    tnf_string, msg, "Message sent and received successfully");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_impl_send_request: %s\n",
+			     "Message sent and received successfully");
 
 		/* fill in response values and free the message */
 		ibmf_saa_impl_prepare_response(saa_portp->saa_pt_ibmf_handle,
@@ -1634,17 +1487,14 @@ ibmf_saa_impl_send_request(saa_impl_trans_info_t *trans_info)
 		}
 	} else {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_send_request, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_send_request: %s\n",
-		    tnf_string, msg, "Message sent successfully");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_impl_send_request: %s\n",
+			     "Message sent successfully");
 	}
 
 bail:
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_send_request_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_send_request() exiting"
-	    " ibmf_status = %d\n", tnf_int, result, ibmf_status);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_send_request() exiting"" ibmf_status = %d\n",
+		     ibmf_status);
 
 	return (ibmf_status);
 }
@@ -1687,9 +1537,7 @@ ibmf_saa_impl_init_msg(saa_impl_trans_info_t *trans_info, boolean_t sleep_flag,
 	size_t			payload_length;
 	uint32_t		transport_flags;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_init_msg_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_init_msg() entering\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_init_msg() entering\n");
 
 	attr_id = trans_info->si_trans_attr_id;
 	method = trans_info->si_trans_method;
@@ -1708,11 +1556,10 @@ ibmf_saa_impl_init_msg(saa_impl_trans_info_t *trans_info, boolean_t sleep_flag,
 	    ibmf_sleep_flag, &ibmf_msg);
 	if (ibmf_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_init_msg_err, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_init_msg: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "Cannot allocate msg_buf.",
-		    tnf_int, ibmf_status, ibmf_status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_init_msg: %s, ibmf_status = %d\n",
+			     "Cannot allocate msg_buf.",
+			     ibmf_status);
 
 		goto bail;
 	}
@@ -1724,10 +1571,8 @@ ibmf_saa_impl_init_msg(saa_impl_trans_info_t *trans_info, boolean_t sleep_flag,
 
 	if (mad_hdr == NULL) {
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_init_msg_err, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_init_msg: %s\n",
-		    tnf_string, msg, "Cannot allocate mad header.");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_saa_impl_init_msg: %s\n",
+			     "Cannot allocate mad header.");
 
 		free_res = ibmf_free_msg(saa_portp->saa_pt_ibmf_handle,
 		    &ibmf_msg);
@@ -1750,13 +1595,12 @@ ibmf_saa_impl_init_msg(saa_impl_trans_info_t *trans_info, boolean_t sleep_flag,
 	/* attribute modifier is all Fs since RIDs are no longer used */
 	mad_hdr->AttributeModifier = h2b32(0xffffffff);
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_init_msg, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_init_msg: %s, class = 0x%x, method = 0x%x,"
-	    " attr_id = 0x%x\n", tnf_string, msg, "Sending MAD",
-	    tnf_opaque, class, mad_hdr->MgmtClass,
-	    tnf_opaque, method, mad_hdr->R_Method,
-	    tnf_opaque, attr_id, attr_id);
+	IBMF_TRACE_4(DPRINT_L3,
+		     "ibmf_saa_impl_init_msg: %s, class = 0x%x, method = 0x%x,"" attr_id = 0x%x\n",
+		     "Sending MAD",
+		     mad_hdr->MgmtClass,
+		     mad_hdr->R_Method,
+		     attr_id);
 
 	bzero(&sa_hdr, sizeof (ib_sa_hdr_t));
 	sa_hdr.ComponentMask = trans_info->si_trans_component_mask;
@@ -1776,11 +1620,10 @@ ibmf_saa_impl_init_msg(saa_impl_trans_info_t *trans_info, boolean_t sleep_flag,
 
 	if (ibmf_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_init_msg, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_init_msg: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "ibmf_saa_utils_pack_sa_hdr() failed",
-		    tnf_int, ibmf_status, ibmf_status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_init_msg: %s, ibmf_status = %d\n",
+			     "ibmf_saa_utils_pack_sa_hdr() failed",
+			     ibmf_status);
 
 		kmem_free(mad_hdr, sizeof (ib_mad_hdr_t));
 
@@ -1812,12 +1655,10 @@ ibmf_saa_impl_init_msg(saa_impl_trans_info_t *trans_info, boolean_t sleep_flag,
 		if (payload_length == 0) {
 			payload_length = trans_info->si_trans_template_length;
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_saa_impl_init_msg, IBMF_TNF_TRACE, "",
+			IBMF_TRACE_2(DPRINT_L3,
 			    "ibmf_saa_impl_init_msg: %s, length = %d\n",
-			    tnf_string, msg,
 			    "Unknown attribute.  Using user-defined length.",
-			    tnf_uint, length, payload_length)
+			    payload_length);
 		}
 	}
 
@@ -1857,12 +1698,10 @@ ibmf_saa_impl_init_msg(saa_impl_trans_info_t *trans_info, boolean_t sleep_flag,
 		    km_sleep_flag);
 		if (ibmf_status != IBMF_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_init_msg_err, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_init_msg: %s, ibmf_status ="
-			    " %d\n", tnf_string, msg,
-			    "ibmf_saa_utils_pack_payload() failed",
-			    tnf_int, ibmf_status, ibmf_status);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_init_msg: %s, ibmf_status ="" %d\n",
+				     "ibmf_saa_utils_pack_payload() failed",
+				     ibmf_status);
 
 			kmem_free(mad_hdr, sizeof (ib_mad_hdr_t));
 
@@ -1876,22 +1715,20 @@ ibmf_saa_impl_init_msg(saa_impl_trans_info_t *trans_info, boolean_t sleep_flag,
 			goto bail;
 		}
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_init_msg, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_init_msg: %s, attr_id = 0x%x, length ="
-		    " %d\n", tnf_string, msg, "Packed payload successfully",
-		    tnf_opaque, attr_id, attr_id,
-		    tnf_uint, length, req_mad->im_bufs_cl_data_len);
+		IBMF_TRACE_3(DPRINT_L3,
+			     "ibmf_saa_impl_init_msg: %s, attr_id = 0x%x, length ="" %d\n",
+			     "Packed payload successfully",
+			     attr_id,
+			     req_mad->im_bufs_cl_data_len);
 
 		/* non-RMPP transactions have template size limit */
 		if (((transport_flags & IBMF_MSG_TRANS_FLAG_RMPP) == 0) &&
 		    ((req_mad->im_bufs_cl_data_len + req_mad->im_bufs_cl_hdr_len
 		    + sizeof (ib_mad_hdr_t)) > IBMF_MAD_SIZE)) {
 
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_init_msg_err, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_init_msg: %s\n", tnf_string, msg,
-			    "Template too large to fit in single packet");
+			IBMF_TRACE_1(DPRINT_L1,
+				     "ibmf_saa_impl_init_msg: %s\n",
+				     "Template too large to fit in single packet");
 
 			kmem_free(mad_hdr, sizeof (ib_mad_hdr_t));
 
@@ -1938,10 +1775,9 @@ ibmf_saa_impl_init_msg(saa_impl_trans_info_t *trans_info, boolean_t sleep_flag,
 	*msgp = ibmf_msg;
 	*transport_flagsp = transport_flags;
 bail:
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_init_msg_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_init_msg() exiting"
-	    " ibmf_status = %d\n", tnf_int, result, ibmf_status);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_init_msg() exiting"" ibmf_status = %d\n",
+		     ibmf_status);
 
 	return (ibmf_status);
 
@@ -1990,9 +1826,7 @@ ibmf_saa_impl_new_smlid_retry(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 	int			ibmf_status;
 	ibt_status_t		ibt_status;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_new_smlid_retry_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_new_smlid_retry() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_new_smlid_retry() enter\n");
 
 	_NOTE(ASSUMING_PROTECTED(*msgp))
 	_NOTE(ASSUMING_PROTECTED(*msgp->im_msgbufs_send.im_bufs_mad_hdr))
@@ -2003,12 +1837,10 @@ ibmf_saa_impl_new_smlid_retry(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 
 	if (ibt_status != IBT_SUCCESS)  {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_new_smlid_retry_err, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_new_smlid_retry: %s, ibmf_status ="
-		    " %d\n", tnf_string, msg,
-		    "ibt_query_hca_ports_byguid() failed",
-		    tnf_int, ibt_status, ibt_status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_new_smlid_retry: %s, ibmf_status ="" %d\n",
+			     "ibt_query_hca_ports_byguid() failed",
+			     ibt_status);
 
 		ibmf_status = IBMF_TRANSPORT_FAILURE;
 
@@ -2023,13 +1855,11 @@ ibmf_saa_impl_new_smlid_retry(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 	/* if master smlid is different than the remote lid we sent to */
 	if (master_sm_lid != msgp->im_local_addr.ia_remote_lid) {
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_saa_impl_new_smlid_retry, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_new_smlid_retry: %s, new_lid 0x%x,"
-		    " old_lid 0x%x\n", tnf_string, msg,
-		    "master smlid has changed.  retrying msg_transport",
-		    tnf_opaque, new_lid, master_sm_lid,
-		    tnf_opaque, old_lid, msgp->im_local_addr.ia_remote_lid);
+		IBMF_TRACE_3(DPRINT_L2,
+			     "ibmf_saa_impl_new_smlid_retry: %s, new_lid 0x%x,"" old_lid 0x%x\n",
+			     "master smlid has changed.  retrying msg_transport",
+			     master_sm_lid,
+			     msgp->im_local_addr.ia_remote_lid);
 
 		mutex_enter(&saa_portp->saa_pt_mutex);
 
@@ -2068,32 +1898,27 @@ ibmf_saa_impl_new_smlid_retry(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 
 		if (ibmf_status != IBMF_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_saa_impl_new_smlid_retry, IBMF_TNF_TRACE, "",
-			    "ibmf_saa_impl_new_smlid_retry: %s, ibmf_status = "
-			    "%d\n", tnf_string, msg,
-			    "ibmf_msg_transport() failed",
-			    tnf_int, ibmf_status, ibmf_status);
+			IBMF_TRACE_2(DPRINT_L2,
+				     "ibmf_saa_impl_new_smlid_retry: %s, ibmf_status = ""%d\n",
+				     "ibmf_msg_transport() failed",
+				     ibmf_status);
 		}
 
 		goto bail;
 	}
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_new_smlid_retry, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_new_smlid_retry: %s, master_smlid = 0x%x\n",
-	    tnf_string, msg,
-	    "master smlid did not change.  returning failure",
-	    tnf_opaque, master_smlid, master_sm_lid);
+	IBMF_TRACE_2(DPRINT_L3,
+		     "ibmf_saa_impl_new_smlid_retry: %s, master_smlid = 0x%x\n",
+		     "master smlid did not change.  returning failure",
+		     master_sm_lid);
 
 	/* mark status as timeout since that was original failure */
 	ibmf_status = IBMF_TRANS_TIMEOUT;
 
 bail:
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_new_smlid_retry_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_new_smlid_retry() exiting"
-	    " ibmf_status = %d\n", tnf_int, result, ibmf_status);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_new_smlid_retry() exiting"" ibmf_status = %d\n",
+		     ibmf_status);
 
 	return (ibmf_status);
 }
@@ -2136,9 +1961,7 @@ ibmf_saa_impl_revert_to_qp1(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 	int			ibmf_status;
 	ibt_status_t		ibt_status;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_revert_to_qp1_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_revert_to_qp1() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_revert_to_qp1() enter\n");
 
 	_NOTE(ASSUMING_PROTECTED(*msgp))
 	_NOTE(ASSUMING_PROTECTED(*msgp->im_msgbufs_send.im_bufs_mad_hdr))
@@ -2149,12 +1972,10 @@ ibmf_saa_impl_revert_to_qp1(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 
 	if (ibt_status != IBT_SUCCESS)  {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_revert_to_qp1_err, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_impl_revert_to_qp1: %s, ibmf_status ="
-		    " %d\n", tnf_string, msg,
-		    "ibt_query_hca_ports_byguid() failed",
-		    tnf_int, ibt_status, ibt_status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_revert_to_qp1: %s, ibmf_status ="" %d\n",
+			     "ibt_query_hca_ports_byguid() failed",
+			     ibt_status);
 
 		ibmf_status = IBMF_TRANSPORT_FAILURE;
 
@@ -2215,20 +2036,17 @@ ibmf_saa_impl_revert_to_qp1(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 
 	if (ibmf_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_saa_impl_revert_to_qp1, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_revert_to_qp1: %s, ibmf_status = "
-		    "%d\n", tnf_string, msg,
-		    "ibmf_msg_transport() failed",
-		    tnf_int, ibmf_status, ibmf_status);
+		IBMF_TRACE_2(DPRINT_L2,
+			     "ibmf_saa_impl_revert_to_qp1: %s, ibmf_status = ""%d\n",
+			     "ibmf_msg_transport() failed",
+			     ibmf_status);
 	}
 
 bail:
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_revert_to_qp1_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_revert_to_qp1() exiting"
-	    " ibmf_status = %d\n", tnf_int, result, ibmf_status);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_revert_to_qp1() exiting"" ibmf_status = %d\n",
+		     ibmf_status);
 
 	return (ibmf_status);
 }
@@ -2247,10 +2065,9 @@ ibmf_saa_impl_async_event_cb(
 {
 	saa_port_t		*saa_portp;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_async_event_cb_start, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_async_event_cb: Handling event type 0x%x\n",
-	    tnf_opaque, event_type, event_type);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_async_event_cb: Handling event type 0x%x\n",
+		     event_type);
 
 	saa_portp = (saa_port_t *)clnt_private;
 	ASSERT(saa_portp != NULL);
@@ -2264,9 +2081,7 @@ ibmf_saa_impl_async_event_cb(
 		break;
 	}
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_async_event_cb_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_async_event_cb() exit\n");
+	IBMF_TRACE_0(DPRINT_L3, "ibmf_saa_impl_async_event_cb() exit\n");
 }
 
 
@@ -2277,10 +2092,9 @@ ibmf_saa_impl_async_event_cb(
 void
 ibmf_saa_impl_ibt_async_handler(ibt_async_code_t code, ibt_async_event_t *event)
 {
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_ibt_async_handler_start, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_ibt_async_handler: Handling event code 0x%x\n",
-	    tnf_opaque, code, code);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_ibt_async_handler: Handling event code 0x%x\n",
+		     code);
 
 	switch (code) {
 
@@ -2299,9 +2113,6 @@ ibmf_saa_impl_ibt_async_handler(ibt_async_code_t code, ibt_async_event_t *event)
 	default:
 		break;
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_async_handler_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_ibt_async_handler() exit\n");
 }
 
 /*
@@ -2321,10 +2132,10 @@ ibmf_saa_impl_port_chg(ibt_async_event_t *event)
 	ci_guid = event->ev_hca_guid;
 	port_num = event->ev_port;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_saa_impl_port_chg_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_port_chg: Handling port chg"
-	    " guid %016" PRIx64 " port %d\n",
-	    tnf_opaque, hca_guid, ci_guid, tnf_uint, port, port_num);
+	IBMF_TRACE_2(DPRINT_L3,
+		     "ibmf_saa_impl_port_chg: Handling port chg"" guid %016"PRIx64" port %d\n",
+		     ci_guid,
+		     port_num);
 
 	/* Get classportinfo of corresponding entry */
 	mutex_enter(&saa_statep->saa_port_list_mutex);
@@ -2363,14 +2174,12 @@ ibmf_saa_impl_port_chg(ibt_async_event_t *event)
 
 		if (ibt_status != IBT_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_port_chg_err, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_port_chg: %s, ibmf_status ="
-			    " %d\n", tnf_string, msg,
-			    "ibt_query_hca_ports_byguid() failed",
-			    tnf_int, ibt_status, ibt_status);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_port_chg: %s, ibmf_status ="" %d\n",
+				     "ibt_query_hca_ports_byguid() failed",
+				     ibt_status);
 
-			goto bail;
+			return;
 		}
 
 		mutex_enter(&saa_portp->saa_pt_mutex);
@@ -2396,10 +2205,6 @@ ibmf_saa_impl_port_chg(ibt_async_event_t *event)
 		/* get the classportinfo again */
 		ibmf_saa_impl_get_classportinfo(saa_portp);
 	}
-bail:
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_port_chg_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_port_chg() exit\n");
 }
 /*
  * ibmf_saa_impl_client_rereg:
@@ -2415,10 +2220,10 @@ ibmf_saa_impl_client_rereg(ib_guid_t ci_guid, uint8_t port_num)
 	ibt_status_t		ibt_status;
 	boolean_t		event_subs = B_FALSE;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_saa_impl_port_rereg_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_client_rereg: Handling clnt "
-	    "rereg guid %016" PRIx64 " port %d\n",
-	    tnf_opaque, hca_guid, ci_guid, tnf_uint, port, port_num);
+	IBMF_TRACE_2(DPRINT_L3,
+		     "ibmf_saa_impl_client_rereg: Handling clnt ""rereg guid %016"PRIx64" port %d\n",
+		     ci_guid,
+		     port_num);
 
 	/* Get classportinfo of corresponding entry */
 	mutex_enter(&saa_statep->saa_port_list_mutex);
@@ -2462,14 +2267,12 @@ ibmf_saa_impl_client_rereg(ib_guid_t ci_guid, uint8_t port_num)
 
 		if (ibt_status != IBT_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_port_rereg_err, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_client_rereg: %s, ibmf_status ="
-			    " %d\n", tnf_string, msg,
-			    "ibt_query_hca_ports_byguid() failed",
-			    tnf_int, ibt_status, ibt_status);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_client_rereg: %s, ibmf_status ="" %d\n",
+				     "ibt_query_hca_ports_byguid() failed",
+				     ibt_status);
 
-			goto bail;
+			return;
 		}
 
 		master_sm_lid = ibt_portinfop->p_sm_lid;
@@ -2497,12 +2300,10 @@ ibmf_saa_impl_client_rereg(ib_guid_t ci_guid, uint8_t port_num)
 
 		mutex_exit(&saa_portp->saa_pt_mutex);
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_port_rereg, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_client_rereg: %s, master_sm_lid = 0x%x\n",
-		    tnf_string, msg,
-		    "port is up.  Sending classportinfo request",
-		    tnf_opaque, master_sm_lid, master_sm_lid);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_saa_impl_client_rereg: %s, master_sm_lid = 0x%x\n",
+			     "port is up.  Sending classportinfo request",
+			     master_sm_lid);
 
 		/* get the classportinfo again */
 		ibmf_saa_impl_get_classportinfo(saa_portp);
@@ -2514,11 +2315,6 @@ ibmf_saa_impl_client_rereg(ib_guid_t ci_guid, uint8_t port_num)
 		if (event_subs == B_TRUE)
 			ibmf_saa_subscribe_events(saa_portp, B_TRUE, B_FALSE);
 	}
-
-bail:
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_port_rereg_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_client_rereg() exit\n");
 }
 /*
  * ibmf_saa_impl_port_up:
@@ -2534,10 +2330,10 @@ ibmf_saa_impl_port_up(ib_guid_t ci_guid, uint8_t port_num)
 	ibt_status_t		ibt_status;
 	boolean_t		event_subs = B_FALSE;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_saa_impl_port_up_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_port_up: Handling port up"
-	    " guid %016" PRIx64 " port %d\n",
-	    tnf_opaque, hca_guid, ci_guid, tnf_uint, port, port_num);
+	IBMF_TRACE_2(DPRINT_L3,
+		     "ibmf_saa_impl_port_up: Handling port up"" guid %016"PRIx64" port %d\n",
+		     ci_guid,
+		     port_num);
 
 	/* Get classportinfo of corresponding entry */
 	mutex_enter(&saa_statep->saa_port_list_mutex);
@@ -2581,14 +2377,12 @@ ibmf_saa_impl_port_up(ib_guid_t ci_guid, uint8_t port_num)
 
 		if (ibt_status != IBT_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_impl_port_up_err, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_impl_port_up: %s, ibmf_status ="
-			    " %d\n", tnf_string, msg,
-			    "ibt_query_hca_ports_byguid() failed",
-			    tnf_int, ibt_status, ibt_status);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_port_up: %s, ibmf_status ="" %d\n",
+				     "ibt_query_hca_ports_byguid() failed",
+				     ibt_status);
 
-			goto bail;
+			return;
 		}
 
 		master_sm_lid = ibt_portinfop->p_sm_lid;
@@ -2616,12 +2410,10 @@ ibmf_saa_impl_port_up(ib_guid_t ci_guid, uint8_t port_num)
 
 		mutex_exit(&saa_portp->saa_pt_mutex);
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_port_up, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_port_up: %s, master_sm_lid = 0x%x\n",
-		    tnf_string, msg,
-		    "port is up.  Sending classportinfo request",
-		    tnf_opaque, master_sm_lid, master_sm_lid);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_saa_impl_port_up: %s, master_sm_lid = 0x%x\n",
+			     "port is up.  Sending classportinfo request",
+			     master_sm_lid);
 
 		/* get the classportinfo again */
 		ibmf_saa_impl_get_classportinfo(saa_portp);
@@ -2633,11 +2425,6 @@ ibmf_saa_impl_port_up(ib_guid_t ci_guid, uint8_t port_num)
 		if (event_subs == B_TRUE)
 			ibmf_saa_subscribe_events(saa_portp, B_TRUE, B_FALSE);
 	}
-
-bail:
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_port_up_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_port_up() exit\n");
 }
 
 /*
@@ -2647,14 +2434,10 @@ static void
 ibmf_saa_impl_port_down(ib_guid_t ci_guid, uint8_t port_num)
 {
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_saa_impl_port_down_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_port_down: Handling port down"
-	    " guid %016" PRIx64 " port %d\n",
-	    tnf_opaque, hca_guid, ci_guid, tnf_uint, port, port_num);
-
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_port_down_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_port_down() exit\n");
+	IBMF_TRACE_2(DPRINT_L3,
+		     "ibmf_saa_impl_port_down: Handling port down"" guid %016"PRIx64" port %d\n",
+		     ci_guid,
+		     port_num);
 }
 
 /*
@@ -2669,9 +2452,9 @@ ibmf_saa_impl_hca_detach(saa_port_t *saa_removed)
 	saa_port_t 	*saa_portp;
 	boolean_t	must_unreg, must_unsub;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_saa_impl_hca_detach_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_hca_detach: Detaching"
-	    " entry %016" PRIx64 "\n", tnf_opaque, entry, saa_removed);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_hca_detach: Detaching"" entry %016"PRIx64"\n",
+		     saa_removed);
 
 	/* find this entry */
 	mutex_enter(&saa_statep->saa_port_list_mutex);
@@ -2690,13 +2473,10 @@ ibmf_saa_impl_hca_detach(saa_port_t *saa_removed)
 
 	if (saa_portp == NULL) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_hca_detach, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_hca_detach: %s, entry %016"
-		    PRIx64 "\n",
-		    tnf_string, msg,
-		    "Port entry NOT found",
-		    tnf_opaque, entryp, saa_removed);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_hca_detach: %s, entry %016"PRIx64"\n",
+			     "Port entry NOT found",
+			     saa_removed);
 
 		goto bail;
 	}
@@ -2714,16 +2494,11 @@ ibmf_saa_impl_hca_detach(saa_port_t *saa_removed)
 
 	if (saa_portp->saa_pt_num_outstanding_trans > 0) {
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_fini_err, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_fini: %s, port = %016" PRIx64
-		    ", num transactions = %d\n",
-		    tnf_string, msg, "Detaching HCA."
-		    "  Outstanding transactions on port.",
-		    tnf_opaque, port,
-		    saa_portp->saa_pt_port_guid,
-		    tnf_uint, outstanding_transactions,
-		    saa_portp->saa_pt_num_outstanding_trans);
+		IBMF_TRACE_3(DPRINT_L1,
+			     "ibmf_saa_impl_fini: %s, port = %016"PRIx64", num transactions = %d\n",
+			     "Detaching HCA.""  Outstanding transactions on port.",
+			     saa_portp->saa_pt_port_guid,
+			     saa_portp->saa_pt_num_outstanding_trans);
 
 		mutex_exit(&saa_portp->saa_pt_mutex);
 
@@ -2754,32 +2529,23 @@ ibmf_saa_impl_hca_detach(saa_port_t *saa_removed)
 
 	if (saa_portp->saa_pt_reference_count > 0) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_hca_detach, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_hca_detach: %s, port %016"
-		    PRIx64 "\n",
-		    tnf_string, msg,
-		    "Detaching HCA for port with clients still"
-		    " registered", tnf_opaque, port,
-		    saa_portp->saa_pt_port_guid);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_hca_detach: %s, port %016"PRIx64"\n",
+			     "Detaching HCA for port with clients still"" registered",
+			     saa_portp->saa_pt_port_guid);
 	}
 
 	/* synchronize on end of registration */
 	while (saa_portp->saa_pt_state == IBMF_SAA_PORT_STATE_REGISTERING) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_hca_detach, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_hca_detach: %s\n",
-		    tnf_string, msg, "someone is registering. waiting"
-		    " for them to finish");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_saa_impl_hca_detach: %s\n",
+			     "someone is registering. waiting"" for them to finish");
 
 		cv_wait(&saa_portp->saa_pt_ibmf_reg_cv,
 		    &saa_portp->saa_pt_mutex);
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_hca_detach,
-		    IBMF_TNF_TRACE, "", "ibmf_saa_impl_hca_detach: %s\n",
-		    tnf_string, msg, "done waiting");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_saa_impl_hca_detach: %s\n",
+			     "done waiting");
 	}
 
 	/* unregister from ibmf */
@@ -2810,8 +2576,7 @@ ibmf_saa_impl_hca_detach(saa_port_t *saa_removed)
 		}
 	}
 bail:
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_saa_impl_hca_detach_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_hca_detach() exit\n");
+	IBMF_TRACE_0(DPRINT_L3, "ibmf_saa_impl_hca_detach() exit\n");
 }
 
 /* ARGSUSED */
@@ -2829,8 +2594,7 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 	ibmf_retrans_t		ibmf_retrans;
 	boolean_t		sa_is_redirected = B_FALSE;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_async_cb_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_async_cb() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_async_cb() enter\n");
 
 	trans_info = (saa_impl_trans_info_t *)args;
 
@@ -2857,7 +2621,7 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 		 * Otherwise msg could not be resent. Continue normally
 		 */
 		if (ibmf_status == IBMF_SUCCESS)
-			goto bail;
+			return;
 
 	} else if (msgp->im_msg_status == IBMF_TRANS_TIMEOUT) {
 
@@ -2872,7 +2636,7 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 		 * be resent.  Continue normally.
 		 */
 		if (ibmf_status == IBMF_SUCCESS)
-			goto bail;
+			return;
 
 		/*
 		 * check whether we've received anything from the SA in a while.
@@ -2886,7 +2650,7 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 		    trans_info->si_trans_transport_flags);
 
 		if (ibmf_status == IBMF_SUCCESS)
-			goto bail;
+			return;
 	}
 
 	/*
@@ -2903,13 +2667,10 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 		    (trans_info->si_trans_retry_busy_count <
 		    IBMF_SAA_MAX_BUSY_RETRY_COUNT)) {
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_saa_async_cb, IBMF_TNF_TRACE, "",
-			    "ibmf_saa_async_cb: %s, retry_count = %d\n",
-			    tnf_string, msg,
-			    "async response returned busy status",
-			    tnf_int, retry_count,
-			    trans_info->si_trans_retry_busy_count);
+			IBMF_TRACE_2(DPRINT_L2,
+				     "ibmf_saa_async_cb: %s, retry_count = %d\n",
+				     "async response returned busy status",
+				     trans_info->si_trans_retry_busy_count);
 
 			trans_info->si_trans_retry_busy_count++;
 
@@ -2928,14 +2689,12 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 			 * handle the cleanup
 			 */
 			if (ibmf_status == IBMF_SUCCESS)
-				goto bail;
+				return;
 		} else if (b2h16(msgp->im_msgbufs_recv.im_bufs_mad_hdr->Status)
 		    == MAD_STATUS_REDIRECT_REQUIRED) {
 
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_saa_async_cb, IBMF_TNF_TRACE, "",
-			    "ibmf_saa_async_cb: "
-			    "async response returned redirect status\n");
+			IBMF_TRACE_0(DPRINT_L2,
+				     "ibmf_saa_async_cb: ""async response returned redirect status\n");
 
 			/* update address info and copy it into msgp */
 			ibmf_saa_impl_update_sa_address_info(saa_portp, msgp);
@@ -2956,7 +2715,7 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 			 * handle the cleanup
 			 */
 			if (ibmf_status == IBMF_SUCCESS)
-				goto bail;
+				return;
 		}
 	}
 
@@ -2988,10 +2747,8 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 
 	mutex_exit(&saa_portp->saa_pt_kstat_mutex);
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_async_cb, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_async_cb: %s\n", tnf_string, msg,
-	    "Calling ibmf_saa client's callback");
+	IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_async_cb: %s\n",
+		     "Calling ibmf_saa client's callback");
 
 	/*
 	 * there are three classes or trans_info users: ibmf_saa clients and
@@ -3010,10 +2767,8 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 		    trans_info->si_trans_sub_producer_type);
 	}
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_async_cb, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_async_cb: %s\n", tnf_string, msg,
-	    "Returned from callback");
+	IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_async_cb: %s\n",
+		     "Returned from callback");
 
 	if (client_data != NULL) {
 		mutex_enter(&client_data->saa_client_mutex);
@@ -3029,11 +2784,6 @@ ibmf_saa_async_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 	}
 
 	kmem_free(trans_info, sizeof (saa_impl_trans_info_t));
-
-bail:
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_async_cb_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_async_cb() exit\n");
 }
 
 /*
@@ -3094,17 +2844,13 @@ ibmf_saa_check_sa_and_retry(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 
 			mutex_exit(&saa_portp->saa_pt_mutex);
 
-			IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L1,
-			    ibmf_saa_check_sa_and_retry_err, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_check_sa_and_retry: %s, msgp = "
-			    "%p sa_uptime = %" PRIu64 ", trans send time = %"
-			    PRIu64 ", curr_time = %" PRIu64 "\n",
-			    tnf_string, msg,
-			    "Nothing received for this transaction",
-			    tnf_opaque, msgp, msgp,
-			    tnf_long, sa_uptime, sa_uptime,
-			    tnf_long, trans_send_time, trans_send_time,
-			    tnf_long, curr_time, curr_time);
+			IBMF_TRACE_5(DPRINT_L1,
+				     "ibmf_saa_check_sa_and_retry: %s, msgp = ""%p sa_uptime = %"PRIu64", trans send time = %"PRIu64", curr_time = %"PRIu64"\n",
+				     "Nothing received for this transaction",
+				     msgp,
+				     sa_uptime,
+				     trans_send_time,
+				     curr_time);
 
 			ibmf_status = IBMF_TRANS_TIMEOUT;
 
@@ -3119,16 +2865,13 @@ ibmf_saa_check_sa_and_retry(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 		if (((curr_time - sa_uptime) / 1000000000) <
 		    ibmf_saa_max_wait_time) {
 
-			IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_saa_check_sa_and_retry, IBMF_TNF_TRACE, "",
-			    "ibmf_saa_check_sa_and_retry: %s, msgp = "
-			    "%p sa_uptime = %" PRIu64 " trans_send_time = %"
-			    PRIu64 " curr_time = %" PRIu64 "\n",
-			    tnf_string, msg, "Something received.  Retrying",
-			    tnf_opaque, msgp, msgp,
-			    tnf_long, sa_uptime, sa_uptime,
-			    tnf_long, trans_send_time, trans_send_time,
-			    tnf_long, curr_time, curr_time);
+			IBMF_TRACE_5(DPRINT_L2,
+				     "ibmf_saa_check_sa_and_retry: %s, msgp = ""%p sa_uptime = %"PRIu64" trans_send_time = %"PRIu64" curr_time = %"PRIu64"\n",
+				     "Something received.  Retrying",
+				     msgp,
+				     sa_uptime,
+				     trans_send_time,
+				     curr_time);
 
 			/*
 			 * something received in WAIT_TIME_IN_SECS;
@@ -3163,25 +2906,20 @@ ibmf_saa_check_sa_and_retry(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 			if (ibmf_status == IBMF_SUCCESS)
 				goto bail;
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_saa_check_sa_and_retry, IBMF_TNF_TRACE, "",
-			    "ibmf_saa_check_sa_and_retry: %s, ibmf_status = "
-			    "%d\n", tnf_string, msg,
-			    "ibmf_msg_transport() failed",
-			    tnf_int, ibmf_status, ibmf_status);
+			IBMF_TRACE_2(DPRINT_L2,
+				     "ibmf_saa_check_sa_and_retry: %s, ibmf_status = ""%d\n",
+				     "ibmf_msg_transport() failed",
+				     ibmf_status);
 		} else {
 
 			mutex_exit(&saa_portp->saa_pt_mutex);
 
-			IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L1,
-			    ibmf_saa_check_sa_and_retry_err, IBMF_TNF_ERROR, "",
-			    "ibmf_saa_check_sa_and_retry: %s, msgp = "
-			    "%p sa_uptime = %" PRIu64 " curr_time = %"
-			    PRIu64 "\n", tnf_string, msg,
-			    "Nothing received.  Timing out",
-			    tnf_opaque, msgp, msgp,
-			    tnf_long, sa_uptime, sa_uptime,
-			    tnf_long, curr_time, curr_time);
+			IBMF_TRACE_4(DPRINT_L1,
+				     "ibmf_saa_check_sa_and_retry: %s, msgp = ""%p sa_uptime = %"PRIu64" curr_time = %"PRIu64"\n",
+				     "Nothing received.  Timing out",
+				     msgp,
+				     sa_uptime,
+				     curr_time);
 
 			ibmf_status = IBMF_TRANS_TIMEOUT;
 
@@ -3190,10 +2928,9 @@ ibmf_saa_check_sa_and_retry(saa_port_t *saa_portp, ibmf_msg_t *msgp,
 	} while (ibmf_status == IBMF_TRANS_TIMEOUT);
 
 bail:
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_check_sa_and_retry_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_check_sa_and_retry() exiting"
-	    " ibmf_status = %d\n", tnf_int, result, ibmf_status);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_check_sa_and_retry() exiting"" ibmf_status = %d\n",
+		     ibmf_status);
 
 	return (ibmf_status);
 }
@@ -3215,9 +2952,7 @@ ibmf_saa_impl_prepare_response(ibmf_handle_t ibmf_handle,
 	uint16_t	attr_offset;
 	ib_sa_hdr_t	*sa_hdr;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_prepare_response_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_prepare_response() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_prepare_response() enter\n");
 
 	_NOTE(ASSUMING_PROTECTED(*msgp))
 
@@ -3231,11 +2966,9 @@ ibmf_saa_impl_prepare_response(ibmf_handle_t ibmf_handle,
 
 	if (msgp->im_msg_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_saa_impl_prepare_response, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_2(DPRINT_L2,
 		    "ibmf_saa_impl_prepare_response: %s, msg_status = %d\n",
-		    tnf_string, msg, "Bad ibmf status",
-		    tnf_int, msg_status, msgp->im_msg_status);
+		    "Bad ibmf status", msgp->im_msg_status);
 
 		*status = msgp->im_msg_status;
 
@@ -3248,10 +2981,9 @@ ibmf_saa_impl_prepare_response(ibmf_handle_t ibmf_handle,
 		 * this was an unsequenced transaction (from an unsubscribe for
 		 * following a CI_OFFLINE event)
 		 */
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_prepare_response, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_1(DPRINT_L3,
 		    "ibmf_saa_impl_prepare_response: %s\n",
-		    tnf_string, msg, "Unsequenced transaction callback");
+		    "Unsequenced transaction callback");
 
 		goto exit;
 	}
@@ -3294,11 +3026,9 @@ ibmf_saa_impl_prepare_response(ibmf_handle_t ibmf_handle,
 				break;
 		}
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_saa_impl_prepare_response, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_2(DPRINT_L2,
 		    "ibmf_saa_impl_prepare_response: %s, mad_status = %x\n",
-		    tnf_string, msg, "Bad MAD status",
-		    tnf_int, mad_status, mad_status);
+		    "Bad MAD status", mad_status);
 
 		goto exit;
 	}
@@ -3306,12 +3036,9 @@ ibmf_saa_impl_prepare_response(ibmf_handle_t ibmf_handle,
 	attr_id = b2h16(resp_buf->im_bufs_mad_hdr->AttributeID);
 	method = resp_buf->im_bufs_mad_hdr->R_Method;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_prepare_response, IBMF_TNF_TRACE, "",
+	IBMF_TRACE_2(DPRINT_L3,
 	    "ibmf_saa_impl_prepare_response: attr_id = 0x%x, method = "
-	    "0x%x\n",
-	    tnf_opaque, attr_id, attr_id,
-	    tnf_opaque, method, method);
+	    "0x%x\n", attr_id, method);
 
 	/*
 	 * ignore any data from deleteresp since there's no way to know whether
@@ -3320,10 +3047,8 @@ ibmf_saa_impl_prepare_response(ibmf_handle_t ibmf_handle,
 	 */
 	if (method == SA_SUBN_ADM_DELETE_RESP) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_prepare_response, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_1(DPRINT_L3,
 		    "impf_saa_impl_prepare_response: %s\n",
-		    tnf_string, msg,
 		    "DeleteResp or NoticeResp returned.  "
 		    "Ignoring response data");
 
@@ -3341,10 +3066,9 @@ ibmf_saa_impl_prepare_response(ibmf_handle_t ibmf_handle,
 		 * getmulti is only for requests; attribute should not
 		 * be returned from SA
 		 */
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_impl_prepare_response_err, IBMF_TNF_ERROR,
-		    "", "ibmf_saa_impl_prepare_response: %s\n",
-		    tnf_string, msg, "SA returned getmulti record");
+		IBMF_TRACE_1(DPRINT_L1,
+		    "ibmf_saa_impl_prepare_response: %s\n",
+		    "SA returned getmulti record");
 
 		*status = IBMF_REQ_INVALID;
 
@@ -3366,12 +3090,9 @@ ibmf_saa_impl_prepare_response(ibmf_handle_t ibmf_handle,
 	*status = ibmf_saa_utils_unpack_sa_hdr(resp_buf->im_bufs_cl_hdr,
 	    resp_buf->im_bufs_cl_hdr_len, &sa_hdr, sleep_flag);
 	if (*status != IBMF_SUCCESS) {
-
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_prepare_response_err,
-		    IBMF_TNF_TRACE, "", "ibmf_saa_impl_prepare_response: %s,"
-		    " ibmf_status = %d\n", tnf_string, msg,
-		    "Could not unpack sa hdr", tnf_int, ibmf_status, *status);
+		IBMF_TRACE_2(DPRINT_L1,
+		    "ibmf_saa_impl_prepare_response: %s, ibmf_status = %d\n",
+		    "Could not unpack sa hdr", *status);
 
 		goto exit;
 	}
@@ -3388,30 +3109,18 @@ ibmf_saa_impl_prepare_response(ibmf_handle_t ibmf_handle,
 	    attr_offset, is_get_resp, sleep_flag);
 	if (*status == IBMF_SUCCESS) {
 
-		IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_impl_prepare_response,
-		    IBMF_TNF_TRACE, "",
+		IBMF_TRACE_4(DPRINT_L3,
 		    "ibmf_saa_impl_prepare_response: attr_id = "
 		    "0x%x, attr_offset = %d, packed_payload_len = %d, "
-		    "unpacked_payload_len = %d\n",
-		    tnf_opaque, attr_id, attr_id,
-		    tnf_opaque, attr_offset, attr_offset,
-		    tnf_opaque, packed_payload_len,
-		    resp_buf->im_bufs_cl_data_len,
-		    tnf_opaque, unpacked_payload_len, *length);
+		    "unpacked_payload_len = %d\n", attr_id, attr_offset,
+		    resp_buf->im_bufs_cl_data_len, *length);
 	} else {
 
-		IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_prepare_response_err,
-		    IBMF_TNF_TRACE, "", "ibmf_saa_impl_prepare_response: %s,"
-		    "attr_id = 0x%x, attr_offset = %d, packed_payload_len = %d,"
-		    "status = %d\n",
-		    tnf_string, msg, "Could not unpack payload",
-		    tnf_opaque, attr_id, attr_id,
-		    tnf_int, attr_offset, attr_offset,
-		    tnf_int, packed_payload_len,
-		    resp_buf->im_bufs_cl_data_len,
-		    tnf_int, status, *status);
+		IBMF_TRACE_5(DPRINT_L1,
+		    "ibmf_saa_impl_prepare_response: %s, attr_id = 0x%x, "
+		    "attr_offset = %d, packed_payload_len = %d, "
+		    "status = %d\n", "Could not unpack payload", attr_id,
+		    attr_offset, resp_buf->im_bufs_cl_data_len, *status);
 	}
 exit:
 	if (sa_hdr != NULL)
@@ -3419,10 +3128,8 @@ exit:
 
 	ibmf_saa_impl_free_msg(ibmf_handle, msgp);
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_prepare_response_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_prepare_response() exit,"
-	    " status = 0x%d\n", tnf_int, status, *status);
+	IBMF_TRACE_1(DPRINT_L3,
+	    "ibmf_saa_impl_prepare_response() exit, status = 0x%d\n", *status);
 }
 
 
@@ -3444,11 +3151,10 @@ ibmf_saa_impl_check_sa_support(uint16_t cap_mask, uint16_t attr_id)
 {
 	boolean_t	attr_supported = B_TRUE;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_check_sa_support, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_check_sa_support: cap_mask = 0x%x, "
-	    "attr_id = 0x%x\n", tnf_opaque, cap_mask, cap_mask,
-	    tnf_opaque, attr_id, attr_id);
+	IBMF_TRACE_2(DPRINT_L3,
+		     "ibmf_saa_impl_check_sa_support: cap_mask = 0x%x, ""attr_id = 0x%x\n",
+		     cap_mask,
+		     attr_id);
 
 	switch (attr_id) {
 
@@ -3466,14 +3172,11 @@ ibmf_saa_impl_check_sa_support(uint16_t cap_mask, uint16_t attr_id)
 			if ((cap_mask &
 			    SA_CAPMASK_OPT_RECORDS_SUPPORTED) == 0) {
 
-				IBMF_TRACE_3(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_saa_impl_check_sa_support,
-				    IBMF_TNF_ERROR, "",
-				    "ibmf_saa_impl_check_sa_support: %s, "
-				    "cap_mask = 0x%x\n", tnf_string, msg,
-				    "SA does not support optional records",
-				    tnf_opaque, cap_mask, cap_mask,
-				    tnf_opaque, attr_id, attr_id);
+				IBMF_TRACE_3(DPRINT_L1,
+					     "ibmf_saa_impl_check_sa_support: %s, ""cap_mask = 0x%x\n",
+					     "SA does not support optional records",
+					     cap_mask,
+					     attr_id);
 
 				attr_supported = B_FALSE;
 			}
@@ -3483,13 +3186,10 @@ ibmf_saa_impl_check_sa_support(uint16_t cap_mask, uint16_t attr_id)
 
 			if ((cap_mask & SA_CAPMASK_MULTIPATH_SUPPORTED) == 0) {
 
-				IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_saa_impl_check_sa_support,
-				    IBMF_TNF_ERROR, "",
-				    "ibmf_saa_impl_check_sa_support: %s, "
-				    "cap_mask = 0x%x\n", tnf_string, msg,
-				    "SA does not support multipath records",
-				    tnf_opaque, cap_mask, cap_mask);
+				IBMF_TRACE_2(DPRINT_L1,
+					     "ibmf_saa_impl_check_sa_support: %s, ""cap_mask = 0x%x\n",
+					     "SA does not support multipath records",
+					     cap_mask);
 
 				attr_supported = B_FALSE;
 			}
@@ -3499,13 +3199,10 @@ ibmf_saa_impl_check_sa_support(uint16_t cap_mask, uint16_t attr_id)
 
 			if ((cap_mask & SA_CAPMASK_UD_MCAST_SUPPORTED) == 0) {
 
-				IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_saa_impl_check_sa_support,
-				    IBMF_TNF_ERROR, "",
-				    "ibmf_saa_impl_check_sa_support: %s, "
-				    "cap_mask = 0x%x\n", tnf_string, msg,
-				    "SA does not support ud multicast",
-				    tnf_opaque, cap_mask, cap_mask);
+				IBMF_TRACE_2(DPRINT_L1,
+					     "ibmf_saa_impl_check_sa_support: %s, ""cap_mask = 0x%x\n",
+					     "SA does not support ud multicast",
+					     cap_mask);
 
 				attr_supported = B_FALSE;
 			}
@@ -3515,10 +3212,9 @@ ibmf_saa_impl_check_sa_support(uint16_t cap_mask, uint16_t attr_id)
 			break;
 	} /* switch */
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_check_sa_support_end, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_check_sa_support() exiting, attr_supported = %d\n",
-	    tnf_opaque, attr_supported, attr_supported);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_check_sa_support() exiting, attr_supported = %d\n",
+		     attr_supported);
 
 	if (attr_supported == B_FALSE)
 		return (IBMF_UNSUPP_METHOD_ATTR);
@@ -3538,9 +3234,7 @@ ibmf_saa_impl_get_attr_id_length(uint16_t attr_id)
 {
 	uint_t	attr_length;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_get_attr_id_length_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_get_attr_id_length() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_get_attr_id_length() enter\n");
 
 	/* this function should not be used for multipath record */
 	ASSERT(attr_id != SA_MULTIPATHRECORD_ATTRID);
@@ -3615,11 +3309,10 @@ ibmf_saa_impl_get_attr_id_length(uint16_t attr_id)
 			break;
 	}
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_get_attr_id_length_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_get_attr_id_length():"
-	    " attr_id: 0x%x size %d\n",
-	    tnf_opaque, attr_id, attr_id, tnf_uint, attr_length, attr_length);
+	IBMF_TRACE_2(DPRINT_L3,
+		     "ibmf_saa_impl_get_attr_id_length():"" attr_id: 0x%x size %d\n",
+		     attr_id,
+		     attr_length);
 
 	return (attr_length);
 }
@@ -3645,10 +3338,8 @@ ibmf_saa_impl_free_msg(ibmf_handle_t ibmf_hdl, ibmf_msg_t *msgp)
 {
 	int	res;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_free_msg_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_free_msg() enter: msg %p\n",
-	    tnf_opaque, msg, msgp);
+	IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_impl_free_msg() enter: msg %p\n",
+		     msgp);
 
 	ASSERT(msgp != NULL);
 
@@ -3664,10 +3355,6 @@ ibmf_saa_impl_free_msg(ibmf_handle_t ibmf_hdl, ibmf_msg_t *msgp)
 
 	res = ibmf_free_msg(ibmf_hdl, &msgp);
 	ASSERT(res == IBMF_SUCCESS);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_free_msg_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_free_msg() exit\n");
 }
 
 /*
@@ -3677,9 +3364,7 @@ static int
 ibmf_saa_impl_get_port_guid(ibt_hca_portinfo_t *ibt_portinfop,
     ib_guid_t *guid_ret)
 {
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_get_port_guid_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_get_port_guid() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_get_port_guid() enter\n");
 
 	if (ibt_portinfop->p_linkstate != IBT_PORT_ACTIVE) {
 
@@ -3688,20 +3373,17 @@ ibmf_saa_impl_get_port_guid(ibt_hca_portinfo_t *ibt_portinfop,
 
 	if (ibt_portinfop->p_sgid_tbl_sz == 0) {
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L2,
-		    ibmf_saa_impl_get_port_guid_end, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_get_port_guid: %s\n", tnf_string, msg,
-		    "portinfo sgid table size is 0. Exiting.\n");
+		IBMF_TRACE_1(DPRINT_L2, "ibmf_saa_impl_get_port_guid: %s\n",
+			     "portinfo sgid table size is 0. Exiting.\n");
 
 		return (IBMF_TRANSPORT_FAILURE);
 	}
 
 	*guid_ret = ibt_portinfop->p_sgid_tbl[0].gid_guid;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_get_port_guid_end, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_get_port_guid: Returning port_guid %016" PRIx64 "\n",
-	    tnf_opaque, port_guid, *guid_ret);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_impl_get_port_guid: Returning port_guid %016"PRIx64"\n",
+		     *guid_ret);
 
 	return (IBMF_SUCCESS);
 }
@@ -3713,10 +3395,8 @@ static void
 ibmf_saa_impl_set_transaction_params(saa_port_t *saa_portp,
     ibt_hca_portinfo_t *portinfop)
 {
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_set_transaction_params_start,
-	    IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_set_transaction_params() enter\n");
+	IBMF_TRACE_0(DPRINT_L4,
+		     "ibmf_saa_impl_set_transaction_params() enter\n");
 
 	_NOTE(ASSUMING_PROTECTED(*saa_portp))
 
@@ -3763,20 +3443,12 @@ ibmf_saa_impl_set_transaction_params(saa_port_t *saa_portp,
 	if (saa_portp->saa_pt_timeout > ibmf_saa_max_subnet_timeout)
 		saa_portp->saa_pt_timeout = ibmf_saa_max_subnet_timeout;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_impl_set_transaction_params,
-	    IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_set_transaction_params: local_lid = 0x%x, "
-	    "sm_lid = 0x%x, sm_sl = 0x%x, sn_timeout = 0x%x\n",
-	    tnf_opaque, local_lid, portinfop->p_base_lid,
-	    tnf_opaque, sm_lid, portinfop->p_sm_lid,
-	    tnf_opaque, sm_sl, portinfop->p_sm_sl,
-	    tnf_opaque, subnet_timeout, portinfop->p_subnet_timeout);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_set_transaction_params_end,
-	    IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_set_transaction_params() exit\n");
+	IBMF_TRACE_4(DPRINT_L3,
+		     "ibmf_saa_impl_set_transaction_params: local_lid = 0x%x, ""sm_lid = 0x%x, sm_sl = 0x%x, sn_timeout = 0x%x\n",
+		     portinfop->p_base_lid,
+		     portinfop->p_sm_lid,
+		     portinfop->p_sm_sl,
+		     portinfop->p_subnet_timeout);
 }
 
 
@@ -3797,10 +3469,8 @@ ibmf_saa_impl_update_sa_address_info(saa_port_t *saa_portp, ibmf_msg_t *msgp)
 	uint_t			nports, size;
 	ibt_status_t		ibt_status;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_impl_update_sa_address_info,
-	    IBMF_TNF_TRACE, "",
-	    "ibmf_saa_impl_update_sa_address_info() enter\n");
+	IBMF_TRACE_0(DPRINT_L4,
+		     "ibmf_saa_impl_update_sa_address_info() enter\n");
 
 	/*
 	 * decode the respons of msgp as a classportinfo attribute
@@ -3809,22 +3479,20 @@ ibmf_saa_impl_update_sa_address_info(saa_port_t *saa_portp, ibmf_msg_t *msgp)
 	    msgp->im_msgbufs_recv.im_bufs_cl_hdr_len, &sa_hdr, KM_NOSLEEP);
 	if (rv != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_update_sa_address_err,
-		    IBMF_TNF_TRACE, "", "ibmf_saa_impl_update_sa_address_info: "
-		    "%s, ibmf_status = %d\n", tnf_string, msg,
-		    "Could not unpack sa hdr", tnf_int, ibmf_status, rv);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_update_sa_address_info: ""%s, ibmf_status = %d\n",
+			     "Could not unpack sa hdr",
+			     rv);
 
 		return;
 	}
 
 	attr_id = b2h16(msgp->im_msgbufs_recv.im_bufs_mad_hdr->AttributeID);
 	if (attr_id != MAD_ATTR_ID_CLASSPORTINFO) {
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_update_sa_address_info_err,
-		    IBMF_TNF_TRACE, "", "ibmf_saa_impl_update_sa_address_info: "
-		    "%s, attrID = %x\n", tnf_string, msg,
-		    "Wrong attribute ID", tnf_int, ibmf_status, attr_id);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_update_sa_address_info: ""%s, attrID = %x\n",
+			     "Wrong attribute ID",
+			     attr_id);
 
 		kmem_free(sa_hdr, sizeof (ib_sa_hdr_t));
 		return;
@@ -3835,11 +3503,10 @@ ibmf_saa_impl_update_sa_address_info(saa_port_t *saa_portp, ibmf_msg_t *msgp)
 	    &length, sa_hdr->AttributeOffset, B_TRUE, KM_NOSLEEP);
 	if (rv != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_update_sa_address_err,
-		    IBMF_TNF_TRACE, "", "ibmf_saa_impl_update_sa_address_info: "
-		    "%s, ibmf_status = %d\n", tnf_string, msg,
-		    "Could not unpack payload", tnf_int, ibmf_status, rv);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_update_sa_address_info: ""%s, ibmf_status = %d\n",
+			     "Could not unpack payload",
+			     rv);
 
 		kmem_free(sa_hdr, sizeof (ib_sa_hdr_t));
 		return;
@@ -3868,12 +3535,10 @@ ibmf_saa_impl_update_sa_address_info(saa_port_t *saa_portp, ibmf_msg_t *msgp)
 		    &ibt_pinfo, &nports, &size);
 		if (ibt_status != IBT_SUCCESS) {
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-			    ibmf_saa_impl_update_sa_address_err, IBMF_TNF_TRACE,
-			    "", "ibmf_saa_impl_update_sa_address_info: "
-			    "%s, ibt_status = %d\n", tnf_string, msg,
-			    "Could not query hca port",
-			    tnf_int, ibt_status, ibt_status);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_impl_update_sa_address_info: ""%s, ibt_status = %d\n",
+				     "Could not query hca port",
+				     ibt_status);
 
 			kmem_free(result, length);
 			return;
@@ -3935,19 +3600,17 @@ ibmf_saa_impl_ibmf_unreg(saa_port_t *saa_portp)
 {
 	int	ibmf_status;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_ibmf_unreg_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_ibmf_unreg() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_impl_ibmf_unreg() enter\n");
 
 	/* teardown async cb */
 	ibmf_status = ibmf_tear_down_async_cb(saa_portp->saa_pt_ibmf_handle,
 	    saa_portp->saa_pt_qp_handle, 0);
 	if (ibmf_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_ibmf_unreg, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_ibmf_unreg: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "Could not tear down async cb",
-		    tnf_int, ibmf_status, ibmf_status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_ibmf_unreg: %s, ibmf_status = %d\n",
+			     "Could not tear down async cb",
+			     ibmf_status);
 
 		goto bail;
 	}
@@ -3958,11 +3621,10 @@ ibmf_saa_impl_ibmf_unreg(saa_port_t *saa_portp)
 
 	if (ibmf_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_ibmf_unreg, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_ibmf_unreg: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "Could not free queue pair",
-		    tnf_int, ibmf_status, ibmf_status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_ibmf_unreg: %s, ibmf_status = %d\n",
+			     "Could not free queue pair",
+			     ibmf_status);
 
 		(void) ibmf_saa_impl_setup_qp_async_cb(saa_portp, 1);
 		goto bail;
@@ -3972,18 +3634,15 @@ ibmf_saa_impl_ibmf_unreg(saa_port_t *saa_portp)
 
 	if (ibmf_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_impl_ibmf_unreg, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_impl_ibmf_unreg: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "ibmf_unregister() failed",
-		    tnf_int, ibmf_status, ibmf_status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_impl_ibmf_unreg: %s, ibmf_status = %d\n",
+			     "ibmf_unregister() failed",
+			     ibmf_status);
 
 		(void) ibmf_saa_impl_setup_qp_async_cb(saa_portp, 0);
 	}
 
 bail:
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_impl_ibmf_unreg_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_impl_ibmf_unreg() exit\n");
 
 	return (ibmf_status);
 }

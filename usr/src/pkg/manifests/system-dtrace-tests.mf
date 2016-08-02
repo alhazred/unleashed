@@ -34,8 +34,6 @@ dir path=opt/SUNWdtrt group=sys
 dir path=opt/SUNWdtrt/bin
 dir path=opt/SUNWdtrt/bin/$(ARCH32)
 dir path=opt/SUNWdtrt/bin/$(ARCH64)
-dir path=opt/SUNWdtrt/lib
-dir path=opt/SUNWdtrt/lib/java
 dir path=opt/SUNWdtrt/tst
 dir path=opt/SUNWdtrt/tst/$(ARCH)
 dir path=opt/SUNWdtrt/tst/$(ARCH)/arrays
@@ -71,7 +69,6 @@ dir path=opt/SUNWdtrt/tst/common/include
 dir path=opt/SUNWdtrt/tst/common/inline
 dir path=opt/SUNWdtrt/tst/common/io
 dir path=opt/SUNWdtrt/tst/common/ip
-dir path=opt/SUNWdtrt/tst/common/java_api
 dir path=opt/SUNWdtrt/tst/common/json
 dir path=opt/SUNWdtrt/tst/common/lexer
 dir path=opt/SUNWdtrt/tst/common/llquantize
@@ -137,9 +134,6 @@ file path=opt/SUNWdtrt/bin/chkargs mode=0555
 file path=opt/SUNWdtrt/bin/dstyle mode=0555
 file path=opt/SUNWdtrt/bin/dtest mode=0555
 file path=opt/SUNWdtrt/bin/dtfailures mode=0555
-file path=opt/SUNWdtrt/bin/exception.lst mode=0444
-file path=opt/SUNWdtrt/bin/jdtrace mode=0555
-file path=opt/SUNWdtrt/lib/java/jdtrace.jar
 file path=opt/SUNWdtrt/tst/$(ARCH)/arrays/tst.uregsarray.d mode=0444
 $(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/error/tst.DTRACEFLT_DIVZERO.d \
     mode=0444
@@ -943,39 +937,6 @@ file path=opt/SUNWdtrt/tst/common/ip/tst.localtcpstate.ksh mode=0444
 file path=opt/SUNWdtrt/tst/common/ip/tst.localtcpstate.ksh.out mode=0444
 file path=opt/SUNWdtrt/tst/common/ip/tst.remotetcpstate.ksh mode=0444
 file path=opt/SUNWdtrt/tst/common/ip/tst.remotetcpstate.ksh.out mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/test.jar
-file path=opt/SUNWdtrt/tst/common/java_api/tst.Abort.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.Abort.ksh.out mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.Bean.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.Bean.ksh.out mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.Close.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.Close.ksh.out mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.Drop.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.Drop.ksh.out mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.Enable.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.Enable.ksh.out mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.FunctionLookup.exe mode=0555
-file path=opt/SUNWdtrt/tst/common/java_api/tst.FunctionLookup.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.FunctionLookup.ksh.out \
-    mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.GetAggregate.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.MaxConsumers.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.MaxConsumers.ksh.out mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.MultiAggPrinta.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.MultiAggPrinta.ksh.out \
-    mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.ProbeData.exe mode=0555
-file path=opt/SUNWdtrt/tst/common/java_api/tst.ProbeData.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.ProbeData.ksh.out mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.ProbeDescription.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.ProbeDescription.ksh.out \
-    mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.StateMachine.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.StateMachine.ksh.out mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.StopLock.ksh mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.StopLock.ksh.out mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.printa.d mode=0444
-file path=opt/SUNWdtrt/tst/common/java_api/tst.printa.d.out mode=0444
 file path=opt/SUNWdtrt/tst/common/json/tst.general.d mode=0444
 file path=opt/SUNWdtrt/tst/common/json/tst.general.d.out mode=0444
 file path=opt/SUNWdtrt/tst/common/json/tst.strsize.d mode=0444
@@ -2125,5 +2086,3 @@ legacy pkg=SUNWdtrt category=internal \
     hotline="Contact the DTrace discussion forum" name="DTrace Test Suite"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-depend fmri=runtime/java type=require
-depend fmri=runtime/java/runtime64 type=require

@@ -107,9 +107,6 @@ extern int cachemgr_set_dl(admin_t *ptr, int value);
 extern int cachemgr_set_ttl(ldap_stat_t *cache, char *name, int value);
 extern int get_clearance(int callnumber);
 extern int release_clearance(int callnumber);
-#ifdef SLP
-extern void discover();
-#endif /* SLP */
 extern void getldap_serverInfo_refresh(void);
 extern void getldap_getserver(LineBuf *config_info, ldap_call_t *in);
 extern void getldap_get_cacheData(LineBuf *config_info, ldap_call_t *in);

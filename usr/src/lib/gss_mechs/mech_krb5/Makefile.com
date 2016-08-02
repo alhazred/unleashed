@@ -264,10 +264,6 @@ CERRWARN +=	-_gcc=-Wno-address
 MAPFILES =	../mapfile-vers
 
 #CPPFLAGS += 	-D_REENTRANT
-$(PICS) :=	CFLAGS += $(XFFLAG)
-$(PICS) :=	CFLAGS64 += $(XFFLAG)
-$(PICS) :=	CCFLAGS += $(XFFLAG)
-$(PICS) :=	CCFLAGS64 += $(XFFLAG)
 
 LIBS = $(DYNLIB) $(K5LIBLINK)
 

@@ -21,6 +21,7 @@
 #
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
+# Copyright 2016 OmniTI Computer Consulting, Inc.  All rights reserved.
 #
 # uts/sparc/ixgbe/Makefile
 #
@@ -40,6 +41,7 @@ UTSBASE	= ../..
 #
 MODULE		= ixgbe
 OBJECTS		= $(IXGBE_OBJS:%=$(OBJS_DIR)/%)
+OBJECTS		+= $(IXGBE_INTC_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/common/io/ixgbe
 
@@ -54,6 +56,7 @@ INC_PATH	+= -I$(UTSBASE)/common/io/ixgbe/core
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-switch
 CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -_gcc=-Wno-unused-value
 
 #
 #	Define targets
@@ -68,10 +71,6 @@ INC_PATH	+= -I$(CONF_SRCDIR)
 
 CFLAGS          += $(CCVERBOSE)
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS		+= -dalign
 
 #
 # Driver depends on MAC

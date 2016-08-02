@@ -64,10 +64,6 @@ LDFLAGS	+= -dy -Ndrv/sgsbbc
 
 CERRWARN += -_gcc=-Wno-type-limits
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
 
 #
 #	Default build targets.

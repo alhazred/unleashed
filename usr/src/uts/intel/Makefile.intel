@@ -119,7 +119,6 @@ CFLAGS			+= $(COPTIMIZE)
 CFLAGS			+= -D_ASM_INLINES
 CFLAGS			+= $(CCMODE)
 CFLAGS			+= $(SPACEFLAG)
-CFLAGS			+= $(CCUNBOUND)
 CFLAGS			+= $(CFLAGS_uts)
 CFLAGS			+= -_gcc=-fstack-protector
 
@@ -255,6 +254,7 @@ DRV_KMODS	+= ipsecesp
 DRV_KMODS	+= ipw
 DRV_KMODS	+= iwh
 DRV_KMODS	+= iwi
+DRV_KMODS	+= iwn
 DRV_KMODS	+= iwk
 DRV_KMODS	+= iwp
 DRV_KMODS	+= iwscn

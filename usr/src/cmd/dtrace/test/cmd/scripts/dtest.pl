@@ -98,7 +98,6 @@ sub usage
 	print "\t -F  force tests to be run, even if missing dependencies\n";
 	print "\t -h  display verbose usage message\n";
 	print "\t -i  specify ISA to test instead of isaexec(3C) default\n";
-	print "\t -j  execute test suite using jdtrace (Java API) only\n";
 	print "\t -l  save log file of results and PIDs used by tests\n";
 	print "\t -n  execute test suite using dtrace(1m) only\n";
 	print "\t -q  set quiet mode (only report errors and summary)\n";
@@ -566,7 +565,7 @@ $defdir = -d $dt_tst ? $dt_tst : '.';
 $bindir = -d $dt_bin ? $dt_bin : '.';
 
 if (!$opt_F) {
-	my @dependencies = ("gcc", "make", "java", "perl");
+	my @dependencies = ("gcc", "make", "perl");
 	
 	for my $dep (@dependencies) {
 		if (!inpath($dep)) {
@@ -582,14 +581,10 @@ find(\&wanted, "$defdir/$PLATFORM") if (scalar(@ARGV) == 0);
 die $USAGE if (scalar(@files) == 0);
 
 $dtrace_path = '/usr/sbin/dtrace';
-$jdtrace_path = "$bindir/jdtrace";
-
-%exception_lists = ("$jdtrace_path" => "$bindir/exception.lst");
 
 if ($opt_j || $opt_n || $opt_i) {
 	@dtrace_cmds = ();
 	push(@dtrace_cmds, $dtrace_path) if ($opt_n);
-	push(@dtrace_cmds, $jdtrace_path) if ($opt_j);
 	push(@dtrace_cmds, "/usr/sbin/$opt_i/dtrace") if ($opt_i);
 } else {
 	@dtrace_cmds = ($dtrace_path);

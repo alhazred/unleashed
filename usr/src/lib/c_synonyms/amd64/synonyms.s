@@ -29,21 +29,21 @@
 #define	SYN(name)				\
 	.align	16;				\
 	.globl	name;				\
-	.globl	_/**/name;			\
-	.type	_/**/name, @function;		\
-_/**/name:					\
+	.globl	_##name;			\
+	.type	_##name, @function;		\
+_##name:					\
 	movq	name@GOTPCREL(%rip), %rax;	\
 	jmp	*%rax;				\
-	.size	_/**/name, [. - _/**/name]
+	.size	_##name, [. - _##name]
 
 #define	SYN2(name)				\
 	.align	16;				\
 	.globl	name;				\
-	.globl	__/**/name;			\
-	.type	__/**/name, @function;		\
-__/**/name:					\
+	.globl	__##name;			\
+	.type	__##name, @function;		\
+__##name:					\
 	movq	name@GOTPCREL(%rip), %rax;	\
 	jmp	*%rax;				\
-	.size	__/**/name, [. - __/**/name]
+	.size	__##name, [. - __##name]
 
 #include "synonym_list"

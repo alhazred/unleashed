@@ -66,7 +66,6 @@ include		$(SRC)/cmd/sgs/rtld/Makefile.com
 
 CPPFLAGS +=	-I../../../../uts/sparc/krtld -DA_OUT
 CFLAGS +=	-_gcc=-mno-app-regs
-ASFLAGS +=	-K pic
 ADBGENFLAGS +=	-milp32
 ADBSUB=		$(ADBSUB32)
 SONAME=		/lib/ld.so.1

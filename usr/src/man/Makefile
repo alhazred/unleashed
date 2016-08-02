@@ -18,7 +18,6 @@
 SUBDIRS=	man1		\
 		man1b		\
 		man1c		\
-		man1has		\
 		man1m		\
 		man1s		\
 		man2		\
@@ -75,12 +74,10 @@ SUBDIRS=	man1		\
 		man3sec		\
 		man3secdb	\
 		man3sip		\
-		man3slp		\
 		man3socket	\
 		man3stmf	\
 		man3sysevent	\
 		man3tecla	\
-		man3tnf		\
 		man3tsol	\
 		man3uuid	\
 		man3volmgt	\

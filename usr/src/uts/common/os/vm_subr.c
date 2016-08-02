@@ -142,13 +142,6 @@ default_physio(int (*strat)(struct buf *), struct buf *bp, dev_t dev,
 
 	TRACE_1(TR_FAC_PHYSIO, TR_PHYSIO_START, "physio_start: bp %p", bp);
 
-	/* Kernel probe */
-	TNF_PROBE_4(physio_start, "io rawio", /* CSTYLED */,
-	    tnf_device,		device,		dev,
-	    tnf_offset,		offset,		uio->uio_loffset,
-	    tnf_size,		size,		uio->uio_resid,
-	    tnf_bioflags,	rw,		rw);
-
 	if (rw == B_READ) {
 		CPU_STATS_ADD_K(sys, phread, 1);
 	} else {
@@ -289,10 +282,6 @@ default_physio(int (*strat)(struct buf *), struct buf *bp, dev_t dev,
 	if (allocbuf) {
 		kmem_cache_free(physio_buf_cache, bp);
 	}
-
-	/* Kernel probe */
-	TNF_PROBE_1(physio_end, "io rawio", /* CSTYLED */,
-		tnf_device,	device,		dev);
 
 	TRACE_1(TR_FAC_PHYSIO, TR_PHYSIO_END, "physio_end: bp %p", bp);
 

@@ -33,9 +33,11 @@ SBINLINKS= $(PROG)
 OBJS= bootadm.o bootadm_upgrade.o bootadm_hyper.o bootadm_digest.o \
 	bootadm_loader.o
 SRCS = $(OBJS:.o=.c)
+POFILES= $(OBJS:%.o=%.po)
 
 include ../Makefile.com
 
+POFILE= bootadm_cmd.po
 
 .KEEP_STATE:
 
@@ -49,10 +51,7 @@ CFLAGS +=	$(XSTRCONST)
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
 CPPFLAGS +=	-I$(SRC)/uts/common -I$(SRC)/common -I$(SRC)/common/ficl
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-label
-
+C99MODE=	$(C99_ENABLE)
 
 all: $(PROG)
 
@@ -62,10 +61,11 @@ $(PROG): $(OBJS) bootadm.h
 
 install: all $(ROOTSBINPROG) .WAIT $(ROOTUSRSBINLINKS)
 
+$(POFILE): $(POFILES)
+	$(RM) $@
+	$(CAT) $(POFILES) > $@
+
 clean:
-	-$(RM) $(OBJS)
-
-_msg:
-
+	-$(RM) $(OBJS) $(POFILE) $(POFILES)
 
 include ../Makefile.targ

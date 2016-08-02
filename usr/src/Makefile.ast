@@ -66,10 +66,7 @@ LIBSHELLCPPFLAGS = \
 		"[--catalog?libshell]"'
 
 # Default CFLAGS/CFLAGS64 for AST sources
-# (-xcsi works around compiler issues)
 ASTCFLAGS = \
-	$(CCVERBOSE) \
-	-_cc=-xcsi
+	$(CCVERBOSE)
 ASTCFLAGS64 = \
-	$(CCVERBOSE) \
-	-_cc=-xcsi
+	$(CCVERBOSE)

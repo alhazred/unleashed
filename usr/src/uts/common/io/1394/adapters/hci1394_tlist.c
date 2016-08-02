@@ -77,7 +77,6 @@ hci1394_tlist_init(hci1394_drvinfo_t *drvinfo, hci1394_tlist_timer_t *timer,
 
 
 	ASSERT(tlist_handle != NULL);
-	TNF_PROBE_0_DEBUG(hci1394_tlist_init_enter, HCI1394_TNF_HAL_STACK, "");
 
 	/* try to alloc the space to keep track of the list */
 	list = kmem_alloc(sizeof (hci1394_tlist_t), KM_SLEEP);
@@ -99,8 +98,6 @@ hci1394_tlist_init(hci1394_drvinfo_t *drvinfo, hci1394_tlist_timer_t *timer,
 	}
 	mutex_init(&list->tl_mutex, NULL, MUTEX_DRIVER,
 	    drvinfo->di_iblock_cookie);
-
-	TNF_PROBE_0_DEBUG(hci1394_tlist_init_exit, HCI1394_TNF_HAL_STACK, "");
 }
 
 
@@ -117,7 +114,6 @@ hci1394_tlist_fini(hci1394_tlist_handle_t *tlist_handle)
 
 
 	ASSERT(tlist_handle != NULL);
-	TNF_PROBE_0_DEBUG(hci1394_tlist_fini_enter, HCI1394_TNF_HAL_STACK, "");
 
 	list = (hci1394_tlist_t *)*tlist_handle;
 	hci1394_tlist_timeout_cancel(list);
@@ -126,8 +122,6 @@ hci1394_tlist_fini(hci1394_tlist_handle_t *tlist_handle)
 
 	/* set handle to null.  This helps catch bugs. */
 	*tlist_handle = NULL;
-
-	TNF_PROBE_0_DEBUG(hci1394_tlist_fini_exit, HCI1394_TNF_HAL_STACK, "");
 }
 
 
@@ -142,7 +136,6 @@ hci1394_tlist_add(hci1394_tlist_handle_t tlist_handle,
 {
 	ASSERT(tlist_handle != NULL);
 	ASSERT(node != NULL);
-	TNF_PROBE_0_DEBUG(hci1394_tlist_add_enter, HCI1394_TNF_HAL_STACK, "");
 
 	mutex_enter(&tlist_handle->tl_mutex);
 
@@ -185,8 +178,6 @@ hci1394_tlist_add(hci1394_tlist_handle_t tlist_handle,
 	}
 
 	mutex_exit(&tlist_handle->tl_mutex);
-
-	TNF_PROBE_0_DEBUG(hci1394_tlist_add_exit, HCI1394_TNF_HAL_STACK, "");
 }
 
 
@@ -202,8 +193,6 @@ hci1394_tlist_delete(hci1394_tlist_handle_t tlist_handle,
 {
 	ASSERT(tlist_handle != NULL);
 	ASSERT(node != NULL);
-	TNF_PROBE_0_DEBUG(hci1394_tlist_delete_enter,
-	    HCI1394_TNF_HAL_STACK, "");
 
 	mutex_enter(&tlist_handle->tl_mutex);
 
@@ -215,15 +204,12 @@ hci1394_tlist_delete(hci1394_tlist_handle_t tlist_handle,
 	 */
 	if (node->tln_on_list == B_FALSE) {
 		mutex_exit(&tlist_handle->tl_mutex);
-		TNF_PROBE_0_DEBUG(hci1394_tlist_delete_exit,
-		    HCI1394_TNF_HAL_STACK, "");
 		return (DDI_FAILURE);
 	}
 
 	hci1394_tlist_remove(tlist_handle, node);
 	mutex_exit(&tlist_handle->tl_mutex);
 
-	TNF_PROBE_0_DEBUG(hci1394_tlist_delete_exit, HCI1394_TNF_HAL_STACK, "");
 	return (DDI_SUCCESS);
 }
 
@@ -239,7 +225,6 @@ hci1394_tlist_get(hci1394_tlist_handle_t tlist_handle,
 {
 	ASSERT(tlist_handle != NULL);
 	ASSERT(node != NULL);
-	TNF_PROBE_0_DEBUG(hci1394_tlist_get_enter, HCI1394_TNF_HAL_STACK, "");
 
 	mutex_enter(&tlist_handle->tl_mutex);
 
@@ -252,8 +237,6 @@ hci1394_tlist_get(hci1394_tlist_handle_t tlist_handle,
 	}
 
 	mutex_exit(&tlist_handle->tl_mutex);
-
-	TNF_PROBE_0_DEBUG(hci1394_tlist_get_exit, HCI1394_TNF_HAL_STACK, "");
 }
 
 
@@ -268,13 +251,10 @@ hci1394_tlist_peek(hci1394_tlist_handle_t tlist_handle,
 {
 	ASSERT(tlist_handle != NULL);
 	ASSERT(node != NULL);
-	TNF_PROBE_0_DEBUG(hci1394_tlist_peek_enter, HCI1394_TNF_HAL_STACK, "");
 
 	mutex_enter(&tlist_handle->tl_mutex);
 	*node = tlist_handle->tl_head;
 	mutex_exit(&tlist_handle->tl_mutex);
-
-	TNF_PROBE_0_DEBUG(hci1394_tlist_peek_exit, HCI1394_TNF_HAL_STACK, "");
 }
 
 
@@ -290,14 +270,9 @@ hci1394_tlist_timeout_update(hci1394_tlist_handle_t tlist_handle,
     hrtime_t timeout)
 {
 	ASSERT(tlist_handle != NULL);
-	TNF_PROBE_0_DEBUG(hci1394_tlist_update_timeout_enter,
-	    HCI1394_TNF_HAL_STACK, "");
 
 	/* set timeout to the new timeout */
 	tlist_handle->tl_timer_info.tlt_timeout = timeout;
-
-	TNF_PROBE_0_DEBUG(hci1394_tlist_update_timeout_exit,
-	    HCI1394_TNF_HAL_STACK, "");
 }
 
 
@@ -311,8 +286,6 @@ void
 hci1394_tlist_timeout_cancel(hci1394_tlist_handle_t tlist_handle)
 {
 	ASSERT(tlist_handle != NULL);
-	TNF_PROBE_0_DEBUG(hci1394_tlist_timeout_cancel_enter,
-	    HCI1394_TNF_HAL_STACK, "");
 
 	/*
 	 * Cancel the timeout. Do NOT use the tlist mutex here. It could cause a
@@ -322,9 +295,6 @@ hci1394_tlist_timeout_cancel(hci1394_tlist_handle_t tlist_handle)
 		(void) untimeout(tlist_handle->tl_timeout_id);
 		tlist_handle->tl_state = HCI1394_TLIST_TIMEOUT_OFF;
 	}
-
-	TNF_PROBE_0_DEBUG(hci1394_tlist_timeout_cancel_exit,
-	    HCI1394_TNF_HAL_STACK, "");
 }
 
 
@@ -344,8 +314,6 @@ hci1394_tlist_callback(void *tlist_handle)
 
 
 	ASSERT(tlist_handle != NULL);
-	TNF_PROBE_0_DEBUG(hci1394_tlist_callback_enter,
-	    HCI1394_TNF_HAL_STACK, "");
 
 	list = (hci1394_tlist_t *)tlist_handle;
 
@@ -444,9 +412,6 @@ hci1394_tlist_callback(void *tlist_handle)
 	}
 
 	mutex_exit(&list->tl_mutex);
-
-	TNF_PROBE_0_DEBUG(hci1394_tlist_callback_exit,
-	    HCI1394_TNF_HAL_STACK, "");
 }
 
 
@@ -462,8 +427,6 @@ hci1394_tlist_remove(hci1394_tlist_t *list, hci1394_tlist_node_t *node)
 	ASSERT(node != NULL);
 	ASSERT(node->tln_on_list == B_TRUE);
 	ASSERT(MUTEX_HELD(&list->tl_mutex));
-	TNF_PROBE_0_DEBUG(hci1394_tlist_remove_enter,
-	    HCI1394_TNF_HAL_STACK, "");
 
 	/* if this is the only node on the list */
 	if ((list->tl_head == node) &&
@@ -493,8 +456,6 @@ hci1394_tlist_remove(hci1394_tlist_t *list, hci1394_tlist_node_t *node)
 	/* cleanup the node's link pointers */
 	node->tln_prev = NULL;
 	node->tln_next = NULL;
-
-	TNF_PROBE_0_DEBUG(hci1394_tlist_remove_exit, HCI1394_TNF_HAL_STACK, "");
 }
 
 

@@ -437,7 +437,7 @@ main(int argc, char *argv[])
 	}
 
 	while ((c = getopt_long(argc, argv,
-	    "+aAbBcCdeEfFghHiklLmnopqrRsStuUw:x1@vV/:%:", long_options,
+	    "aAbBcCdeEfFghHiklLmnopqrRsStuUw:x1@vV/:%:", long_options,
 	    &option_index)) != -1)
 		switch (c) {
 		case 0:

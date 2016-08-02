@@ -62,10 +62,6 @@ CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-switch
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
 
 #
 # dependency

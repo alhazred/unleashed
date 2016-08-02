@@ -197,7 +197,6 @@ tavor_rsrc_alloc(tavor_state_t *state, tavor_rsrc_type_t rsrc, uint_t num,
 	tmp_rsrc_hdl = (tavor_rsrc_t *)kmem_cache_alloc(state->ts_rsrc_cache,
 	    flag);
 	if (tmp_rsrc_hdl == NULL) {
-		TNF_PROBE_0(tavor_rsrc_alloc_kmca_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_rsrc_alloc);
 		return (DDI_FAILURE);
 	}
@@ -300,8 +299,6 @@ tavor_rsrc_alloc(tavor_state_t *state, tavor_rsrc_type_t rsrc, uint_t num,
 
 	default:
 		TAVOR_WARNING(state, "unexpected resource type in alloc");
-		TNF_PROBE_0(tavor_rsrc_alloc_inv_rsrctype_fail,
-		    TAVOR_TNF_ERROR, "");
 		break;
 	}
 
@@ -313,8 +310,6 @@ tavor_rsrc_alloc(tavor_state_t *state, tavor_rsrc_type_t rsrc, uint_t num,
 	if (status != DDI_SUCCESS) {
 		kmem_cache_free(state->ts_rsrc_cache, tmp_rsrc_hdl);
 		tmp_rsrc_hdl = NULL;
-		TNF_PROBE_1(tavor_rsrc_alloc_fail, TAVOR_TNF_ERROR, "",
-		    tnf_uint, rsrc_type, rsrc_pool->rsrc_type);
 		TAVOR_TNF_EXIT(tavor_rsrc_alloc);
 		return (DDI_FAILURE);
 	} else {
@@ -382,8 +377,6 @@ tavor_rsrc_free(tavor_state_t *state, tavor_rsrc_t **hdl)
 
 	default:
 		TAVOR_WARNING(state, "unexpected resource type in free");
-		TNF_PROBE_0(tavor_rsrc_free_inv_rsrctype_fail,
-		    TAVOR_TNF_ERROR, "");
 		break;
 	}
 
@@ -553,8 +546,6 @@ tavor_rsrc_init_phase1(tavor_state_t *state)
 
 rsrcinitp1_fail:
 	kmem_free(rsrc_name, TAVOR_RSRC_NAME_MAXLEN);
-	TNF_PROBE_1(tavor_rsrc_init_phase1_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_rsrc_init_phase1);
 	return (status);
 }
@@ -1493,8 +1484,6 @@ tavor_rsrc_init_phase2(tavor_state_t *state)
 
 rsrcinitp2_fail:
 	kmem_free(rsrc_name, TAVOR_RSRC_NAME_MAXLEN);
-	TNF_PROBE_1(tavor_rsrc_init_phase2_fail, TAVOR_TNF_ERROR, "",
-	    tnf_string, msg, errormsg);
 	TAVOR_TNF_EXIT(tavor_rsrc_init_phase2);
 	return (status);
 }
@@ -1756,7 +1745,6 @@ tavor_rsrc_fini(tavor_state_t *state, tavor_rsrc_cleanup_level_t clean)
 
 	default:
 		TAVOR_WARNING(state, "unexpected resource cleanup level");
-		TNF_PROBE_0(tavor_rsrc_fini_default_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_rsrc_fini);
 		return;
 	}
@@ -1813,8 +1801,6 @@ tavor_rsrc_mbox_init(tavor_state_t *state, tavor_rsrc_mbox_info_t *info)
 		if (rsrc_pool->rsrc_ddr_offset == NULL) {
 			/* Unable to alloc space for mailboxes */
 			kmem_free(priv, sizeof (tavor_rsrc_priv_mbox_t));
-			TNF_PROBE_0(tavor_rsrc_mbox_init_vma_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_rsrc_mbox_init);
 			return (DDI_FAILURE);
 		}
@@ -1836,8 +1822,6 @@ tavor_rsrc_mbox_init(tavor_state_t *state, tavor_rsrc_mbox_info_t *info)
 			    rsrc_pool->rsrc_ddr_offset,
 			    rsrc_pool->rsrc_pool_size);
 			kmem_free(priv, sizeof (tavor_rsrc_priv_mbox_t));
-			TNF_PROBE_0(tavor_rsrc_mbox_init_vmem_create_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_rsrc_mbox_init);
 			return (DDI_FAILURE);
 		}
@@ -1916,10 +1900,6 @@ tavor_rsrc_hw_entries_init(tavor_state_t *state,
 
 	/* Make sure number of HW entries makes sense */
 	if (num_hwentry > max_hwentry) {
-		TNF_PROBE_2(tavor_rsrc_hw_entries_init_toomany_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "number of HW "
-		    "entries exceeds device maximum", tnf_uint, maxhw,
-		    max_hwentry);
 		TAVOR_TNF_EXIT(tavor_rsrc_hw_entries_init);
 		return (DDI_FAILURE);
 	}
@@ -1936,8 +1916,6 @@ tavor_rsrc_hw_entries_init(tavor_state_t *state,
 		    0, 0, NULL, NULL, VM_NOSLEEP | VM_FIRSTFIT);
 		if (rsrc_pool->rsrc_ddr_offset == NULL) {
 			/* Unable to alloc space for aligned HW table */
-			TNF_PROBE_0(tavor_rsrc_hw_entry_table_vmxalloc_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_rsrc_hw_entries_init);
 			return (DDI_FAILURE);
 		}
@@ -1972,8 +1950,6 @@ tavor_rsrc_hw_entries_init(tavor_state_t *state,
 				    rsrc_pool->rsrc_ddr_offset,
 				    rsrc_pool->rsrc_pool_size);
 			}
-			TNF_PROBE_0(tavor_rsrc_hw_entries_init_vmemcreate_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_rsrc_hw_entries_init);
 			return (DDI_FAILURE);
 		}
@@ -1997,8 +1973,6 @@ tavor_rsrc_hw_entries_init(tavor_state_t *state,
 				    rsrc_pool->rsrc_ddr_offset,
 				    rsrc_pool->rsrc_pool_size);
 			}
-			TNF_PROBE_0(tavor_rsrc_hw_entries_init_pre_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_rsrc_hw_entries_init);
 			return (DDI_FAILURE);
 		}
@@ -2080,9 +2054,6 @@ tavor_rsrc_sw_handles_init(tavor_state_t *state, tavor_rsrc_sw_hdl_info_t *info)
 
 	/* Make sure number of SW handles makes sense */
 	if (num_swhdl > max_swhdl) {
-		TNF_PROBE_2(tavor_rsrc_sw_handles_init_toomany_fail,
-		    TAVOR_TNF_ERROR, "", tnf_string, errmsg, "number of SW "
-		    "handles exceeds maximum", tnf_uint, maxsw, max_swhdl);
 		TAVOR_TNF_EXIT(tavor_rsrc_sw_handles_init);
 		return (DDI_FAILURE);
 	}
@@ -2170,7 +2141,6 @@ tavor_rsrc_pd_handles_init(tavor_state_t *state, tavor_rsrc_sw_hdl_info_t *info)
 	/* Initialize the resource pool for software handle table */
 	status = tavor_rsrc_sw_handles_init(state, info);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_rsrc_pdhdl_alloc_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_rsrc_pdhdl_alloc);
 		return (DDI_FAILURE);
 	}
@@ -2185,8 +2155,6 @@ tavor_rsrc_pd_handles_init(tavor_state_t *state, tavor_rsrc_sw_hdl_info_t *info)
 		/* Unable to create vmem arena */
 		info->swi_table_ptr = NULL;
 		tavor_rsrc_sw_handles_fini(state, info);
-		TNF_PROBE_0(tavor_rsrc_pd_handles_init_vmem_create_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_rsrc_pd_handles_init);
 		return (DDI_FAILURE);
 	}
@@ -2257,8 +2225,6 @@ tavor_rsrc_mbox_alloc(tavor_rsrc_pool_info_t *pool_info, uint_t num,
 	status = ddi_dma_alloc_handle(priv->pmb_dip, &priv->pmb_dmaattr,
 	    DDI_DMA_SLEEP, NULL, &hdl->tr_dmahdl);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_1(tavor_rsrc_mbox_alloc_dmahdl_fail, TAVOR_TNF_ERROR,
-		    "", tnf_uint, status, status);
 		TAVOR_TNF_EXIT(tavor_rsrc_mbox_alloc);
 		return (DDI_FAILURE);
 	}
@@ -2272,8 +2238,6 @@ tavor_rsrc_mbox_alloc(tavor_rsrc_pool_info_t *pool_info, uint_t num,
 		if (addr == NULL) {
 			/* No more DDR available for mailbox entries */
 			ddi_dma_free_handle(&hdl->tr_dmahdl);
-			TNF_PROBE_0(tavor_rsrc_mbox_alloc_vma_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_rsrc_mbox_alloc);
 			return (DDI_FAILURE);
 		}
@@ -2295,8 +2259,6 @@ tavor_rsrc_mbox_alloc(tavor_rsrc_pool_info_t *pool_info, uint_t num,
 		if (status != DDI_SUCCESS) {
 			/* No more sys memory available for mailbox entries */
 			ddi_dma_free_handle(&hdl->tr_dmahdl);
-			TNF_PROBE_0(tavor_rsrc_mbox_alloc_dma_memalloc_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_rsrc_mbox_alloc);
 			return (DDI_FAILURE);
 		}
@@ -2389,8 +2351,6 @@ tavor_rsrc_hw_entry_alloc(tavor_rsrc_pool_info_t *pool_info, uint_t num,
 	    align, 0, 0, NULL, NULL, flag | VM_FIRSTFIT);
 	if (addr == NULL) {
 		/* No more HW entries available */
-		TNF_PROBE_0(tavor_rsrc_hw_entry_alloc_vmxa_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_rsrc_hw_entry_alloc);
 		return (DDI_FAILURE);
 	}
@@ -2458,8 +2418,6 @@ tavor_rsrc_swhdl_alloc(tavor_rsrc_pool_info_t *pool_info, uint_t sleepflag,
 	flag = (sleepflag == TAVOR_SLEEP) ? KM_SLEEP : KM_NOSLEEP;
 	addr = kmem_cache_alloc(pool_info->rsrc_private, flag);
 	if (addr == NULL) {
-		TNF_PROBE_0(tavor_rsrc_swhdl_alloc_kmca_fail, TAVOR_TNF_ERROR,
-		    "");
 		TAVOR_TNF_EXIT(tavor_rsrc_swhdl_alloc);
 		return (DDI_FAILURE);
 	}
@@ -2510,7 +2468,6 @@ tavor_rsrc_pdhdl_alloc(tavor_rsrc_pool_info_t *pool_info, uint_t sleepflag,
 	/* Allocate the software handle */
 	status = tavor_rsrc_swhdl_alloc(pool_info, sleepflag, hdl);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_rsrc_pdhdl_alloc_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_rsrc_pdhdl_alloc);
 		return (DDI_FAILURE);
 	}
@@ -2523,8 +2480,6 @@ tavor_rsrc_pdhdl_alloc(tavor_rsrc_pool_info_t *pool_info, uint_t sleepflag,
 	if (tmpaddr == NULL) {
 		/* No more PD number entries available */
 		tavor_rsrc_swhdl_free(pool_info, hdl);
-		TNF_PROBE_0(tavor_rsrc_pdhdl_alloc_vma_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_rsrc_pdhdl_alloc);
 		return (DDI_FAILURE);
 	}
@@ -2895,8 +2850,6 @@ tavor_rsrc_mcg_entry_get_size(tavor_state_t *state, uint_t *mcg_size_shift)
 	num_qp_per_mcg = state->ts_cfg_profile->cp_num_qp_per_mcg;
 	max_qp_per_mcg = (1 << state->ts_devlim.log_max_qp_mcg);
 	if (num_qp_per_mcg > max_qp_per_mcg) {
-		TNF_PROBE_1(tavor_rsrc_mcg_getsz_toomany_qppermcg_fail,
-		    TAVOR_TNF_ERROR, "", tnf_uint, maxqpmcg, max_qp_per_mcg);
 		TAVOR_TNF_EXIT(tavor_rsrc_mcg_entry_get_size);
 		return (DDI_FAILURE);
 	}

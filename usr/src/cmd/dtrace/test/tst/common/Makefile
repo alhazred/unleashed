@@ -55,7 +55,7 @@ fasttrap/tst.stack.exe := LDLIBS += -ldtrace
 sysevent/tst.post.exe := LDLIBS += -lsysevent
 sysevent/tst.post_chan.exe := LDLIBS += -lsysevent
 
-ustack/tst.bigstack.exe := COPTFLAG += -xO1
+ustack/tst.bigstack.exe := COPTFLAG += -_gcc=-O1
 
 GCC = $(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
 
@@ -166,6 +166,3 @@ usdt/tst.lazyprobe.o: usdt/lazyprobe.h
 
 usdt/lazyprobe.h: usdt/lazyprobe.d
 	$(DTRACE) -h -s usdt/lazyprobe.d -o usdt/lazyprobe.h
-
-SUBDIRS = java_api
-include ../../Makefile.subdirs

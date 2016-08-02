@@ -84,7 +84,6 @@ MANFILES=	acctcom.1			\
 	 	crypt.1				\
 	 	csh.1				\
 	 	csplit.1			\
-	 	ctags.1				\
 	 	ctrun.1				\
 	 	ctstat.1			\
 	 	ctwatch.1			\
@@ -219,13 +218,10 @@ MANFILES=	acctcom.1			\
 	 	mach.1				\
 	 	madv.so.1.1			\
 	 	mail.1				\
-	 	mailcompat.1			\
-	 	mailstats.1			\
 	 	mailx.1				\
 		make.1				\
 	 	man.1				\
 	 	mandoc.1			\
-	 	mconnect.1			\
 	 	mcs.1				\
 	 	mdb.1				\
 	 	mesg.1				\
@@ -286,10 +282,8 @@ MANFILES=	acctcom.1			\
 	 	ppgsz.1				\
 	 	ppriv.1				\
 	 	pr.1				\
-	 	praliases.1			\
 	 	prctl.1				\
 	 	preap.1				\
-	 	prex.1				\
 	 	print.1				\
 	 	printf.1			\
 	 	priocntl.1			\
@@ -329,7 +323,6 @@ MANFILES=	acctcom.1			\
 	 	script.1			\
 	 	sdiff.1				\
 	 	sed.1				\
-		sendmail-mailq.1		\
 	 	set.1				\
 	 	setfacl.1			\
 	 	setlabel.1			\
@@ -372,8 +365,6 @@ MANFILES=	acctcom.1			\
 	 	times.1				\
 	 	timex.1				\
 	 	tip.1				\
-	 	tnfdump.1			\
-	 	tnfxtract.1			\
 	 	touch.1				\
 	 	tput.1				\
 	 	tr.1				\
@@ -394,7 +385,6 @@ MANFILES=	acctcom.1			\
 	 	unix2dos.1			\
 	 	uptime.1			\
 		uuidgen.1			\
-		vacation.1			\
 	 	vgrind.1			\
 	 	volcheck.1			\
 	 	volrmmount.1			\
@@ -430,7 +420,6 @@ MANLINKS=	batch.1		\
 	 	disable.1	\
 		dmake.1		\
 	 	dumpkeys.1	\
-		edit.1		\
 	 	errange.1	\
 		errdate.1	\
 		errgid.1	\
@@ -469,7 +458,6 @@ MANLINKS=	batch.1		\
 		jsh.1		\
 		ksh.1		\
 		ldapadd.1	\
-		mailq.1		\
 		nawk.1		\
 		neqn.1		\
 		notify.1	\
@@ -533,7 +521,6 @@ MANLINKS=	batch.1		\
 		valtime.1	\
 		valuid.1	\
 		valyorn.1	\
-		vedit.1		\
 		whatis.1	\
 		whence.1	\
 		while.1		\
@@ -639,8 +626,6 @@ sh.1		:= LINKSRC = ksh93.1
 
 ldapadd.1	:= LINKSRC = ldapmodify.1
 
-mailq.1		:= LINKSRC = sendmail-mailq.1
-
 ulimit.1	:= LINKSRC = limit.1
 unlimit.1	:= LINKSRC = limit.1
 
@@ -709,12 +694,6 @@ onintr.1	:= LINKSRC = trap.1
 false.1		:= LINKSRC = true.1
 
 whence.1	:= LINKSRC = typeset.1
-
-# Links to usr/has/man
-
-edit.1		:= LINKSRC = ../../../has/man/man1has/edit.1has
-
-vedit.1		:= LINKSRC = ../../../has/man/man1has/vi.1has
 
 .KEEP_STATE:
 

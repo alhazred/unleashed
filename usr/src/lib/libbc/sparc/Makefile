@@ -315,7 +315,7 @@ C99MODE=	$(C99_DISABLE)
 #
 # The BCP include files depend on old preprocessor semantics.
 #
-CCMODE = -Xt
+CCMODE =
 
 # the bcp libraries go in /usr/4lib. override ROOTLIBDIR from ../../Makefile.lib
 # and save it so we can find the libraries with which to link
@@ -323,7 +323,7 @@ ROOTLIBDIR=     $(ROOT)/usr/4lib
 
 CPPFLAGS= -Dsparc \
 	-I. -Iinc -I../inc/include -I../inc/include/sys $(CPPFLAGS.master)
-ASFLAGS=  -P -D__STDC__ -DLOCORE -D_SYS_SYS_S -D_ASM $(CPPFLAGS)
+ASFLAGS=  -DLOCORE -D_SYS_SYS_S -D_ASM $(CPPFLAGS)
 LDLIBS= -t -R/usr/ucblib -L$(ROOT)/usr/ucblib $(LDLIBS.lib) \
 	-lucb -lc -lnsl -lsocket
 
@@ -340,9 +340,9 @@ CERRWARN += -_gcc=-Wno-address
 $(DYNLIB4X) :=	SONAME = $(DYNLIB4X)
 $(DYNLIBS5) :=	SONAME = $(DYNLIBS5)
 
-pics/%.o:= ASFLAGS += -K pic -DPIC
+pics/%.o:= ASFLAGS += -DPIC
 pics/%.o:= CPPFLAGS += -K pic -DPIC
-s5pics/%.o:= ASFLAGS += -K pic -DPIC
+s5pics/%.o:= ASFLAGS += -DPIC
 DYNFLAGS += $(ZINTERPOSE)
 
 BUILD.s=  $(AS) $(ASFLAGS) $< -o $@

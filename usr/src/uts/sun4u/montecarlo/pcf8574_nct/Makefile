@@ -55,10 +55,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 CFLAGS += $(CCVERBOSE) -DNORDICA_CP1500
 CERRWARN += -_gcc=-Wno-uninitialized
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS += -dalign
 
 #
 # Add our depedencies to LDFLAGS

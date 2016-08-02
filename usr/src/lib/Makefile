@@ -62,7 +62,6 @@ SUBDIRS +=		\
 # Build everything else. Aside from explicit dependencies, all libraries
 # are built in parallel.
 SUBDIRS +=				\
-	../cmd/sendmail/libmilter	\
 	../cmd/sgs/libelf	\
 	../cmd/sgs/librtld_db	\
 	abi		\
@@ -83,7 +82,6 @@ SUBDIRS +=				\
 	krb5		\
 	libadm		\
 	libads		\
-	libadt_jni	\
 	libadutils	\
 	libaio		\
 	libast		\
@@ -117,7 +115,6 @@ SUBDIRS +=				\
 	libdoor		\
 	libdscfg	\
 	libdtrace	\
-	libdtrace_jni	\
 	libefi		\
 	libelfsign	\
 	libeti		\
@@ -201,7 +198,6 @@ SUBDIRS +=				\
 	libshell	\
 	libsip		\
 	libsldap	\
-	libslp		\
 	libsmbfs	\
 	libsmbios	\
 	libsmedia	\
@@ -216,9 +212,6 @@ SUBDIRS +=				\
 	libtecla	\
 	libtermcap	\
 	libthread	\
-	libtnf		\
-	libtnfctl	\
-	libtnfprobe	\
 	libtsnet	\
 	libtsol		\
 	libumem		\
@@ -229,8 +222,6 @@ SUBDIRS +=				\
 	libvrrpadm	\
 	libvscan	\
 	libw		\
-	libwanboot	\
-	libwanbootutil	\
 	libwrap		\
 	libxcurses	\
 	libxcurses2	\
@@ -338,7 +329,6 @@ MSGSUBDIRS=		\
 	libshare	\
 	libshell	\
 	libsldap	\
-	libslp		\
 	libsmbfs	\
 	libsmedia	\
 	libsum		\
@@ -346,8 +336,6 @@ MSGSUBDIRS=		\
 	libuutil	\
 	libvrrpadm	\
 	libvscan	\
-	libwanboot	\
-	libwanbootutil	\
 	libzfs		\
 	libzonecfg	\
 	lvm		\
@@ -365,7 +353,6 @@ sparc_MSGSUBDIRS=	\
 i386_MSGSUBDIRS= libfdisk
 
 HDRSUBDIRS=				\
-	../cmd/sendmail/libmilter	\
 	auditd_plugins	\
 	fm		\
 	hal		\
@@ -396,7 +383,6 @@ HDRSUBDIRS=				\
 	libdns_sd	\
 	libdscfg	\
 	libdtrace	\
-	libdtrace_jni	\
 	libelfsign	\
 	libeti		\
 	libfakekernel	\
@@ -452,7 +438,6 @@ HDRSUBDIRS=				\
 	libshare	\
 	libshell	\
 	libsip		\
-	libslp		\
 	libsmbfs	\
 	libsmbios	\
 	libsmedia	\
@@ -466,9 +451,6 @@ HDRSUBDIRS=				\
 	libsysevent	\
 	libtecla	\
 	libtermcap	\
-	libtnf		\
-	libtnfctl	\
-	libtnfprobe	\
 	libtsnet	\
 	libtsol		\
 	libumem		\
@@ -477,8 +459,6 @@ HDRSUBDIRS=				\
 	libvolmgt	\
 	libvrrpadm	\
 	libvscan	\
-	libwanboot	\
-	libwanbootutil	\
 	libwrap		\
 	libxcurses2	\
 	libzfs		\
@@ -578,12 +558,11 @@ gss_mechs/mech_dummy: libgss
 gss_mechs/mech_krb5: libgss libresolv2 pkcs11 libkstat
 gss_mechs/mech_spnego: gss_mechs/mech_krb5
 krb5:		gss_mechs/mech_krb5 libtecla libldap5
-libadt_jni:	libbsm
-libadutils: 	libldap5 libresolv2
-libbe: 		libzfs libinstzones libuuid libgen libdevinfo libefi libficl
+libadutils:	libldap5 libresolv2
+libbe:		libzfs libinstzones libuuid libgen libdevinfo libefi libficl
 libbsm:		libinetutil libscf libsecdb libtsol
 libcfgadm:	libdevinfo
-libcmd: 	libsum libast
+libcmd:		libsum libast
 libcmdutils:	libavl
 libcpc:		libpctx
 libcrypt:	libgen
@@ -600,13 +579,13 @@ libdlpi:	libinetutil libdladm
 libds:		libsysevent
 libdscfg:	libnsctl libunistat libadm
 libdtrace:	libproc libgen libctf libmapmalloc
-libdtrace_jni:	libuutil libdtrace
 libefi:		libuuid
 libelfsign:	libcryptoutil libkmf ../cmd/sgs/libelf
 libeti:		libcurses
 libexacct/demo:	libexacct libproject
 libfakekernel:	libumem libcryptoutil
 libfcoe:	libdladm
+libficl:	libumem
 libfru:		libfruutils
 libfsmgt:	libkstat
 libgrubmgmt:	libdevinfo libzfs libfstyp libefi
@@ -627,7 +606,7 @@ libnisdb:	libldap5
 libnwam:	libscf libbsm libdladm
 libpcp:		libumem libdevinfo
 libpctx:	libproc
-libpkg:		libwanboot libscf libadm
+libpkg:		libscf libadm
 libpool:	libscf libexacct
 libpp:		libast
 libproc:	../cmd/sgs/librtld_db ../cmd/sgs/libelf libctf
@@ -655,7 +634,6 @@ libsun_ima:	libdevinfo libsysevent
 libsysevent:	libsecdb
 libtecla:	libcurses
 libtermcap:	libcurses
-libtnfctl:	../cmd/sgs/libelf
 libtsalarm:	libpcp
 libtsnet:	libtsol libsecdb
 libtsol:	libsecdb
@@ -664,7 +642,6 @@ libv12n:	libds libuuid
 libvolmgt:	libadm
 libvrrpadm:	libdladm libscf
 libvscan:	libscf libsecdb
-libwanboot:	libresolv2 libdevinfo libinetutil libdhcputil
 libzfs:		libdevid libgen libuutil libadm libavl libefi libidmap \
 		libumem libtsol libzfs_core
 libzfs_jni:	libdiskmgt libzfs

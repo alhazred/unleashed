@@ -100,42 +100,42 @@ lz4_decompress(void *s_start, void *d_start, size_t s_len, size_t d_len, int n)
  *
  * Simple Functions:
  * real_LZ4_compress() :
- * 	isize  : is the input size. Max supported value is ~1.9GB
- * 	return : the number of bytes written in buffer dest
+ *	isize  : is the input size. Max supported value is ~1.9GB
+ *	return : the number of bytes written in buffer dest
  *		 or 0 if the compression fails (if LZ4_COMPRESSMIN is set).
- * 	note : destination buffer must be already allocated.
- * 		destination buffer must be sized to handle worst cases
- * 		situations (input data not compressible)
+ *	note : destination buffer must be already allocated.
+ *		destination buffer must be sized to handle worst cases
+ *		situations (input data not compressible)
  *
  * Advanced Functions
  *
  * LZ4_uncompress_unknownOutputSize() :
- * 	isize  : is the input size, therefore the compressed size
- * 	maxOutputSize : is the size of the destination buffer (which must be
- * 		already allocated)
- * 	return : the number of bytes decoded in the destination buffer
- * 		(necessarily <= maxOutputSize). If the source stream is
- * 		malformed, the function will stop decoding and return a
- * 		negative result, indicating the byte position of the faulty
- * 		instruction. This function never writes beyond dest +
- * 		maxOutputSize, and is therefore protected against malicious
- * 		data packets.
- * 	note   : Destination buffer must be already allocated.
+ *	isize  : is the input size, therefore the compressed size
+ *	maxOutputSize : is the size of the destination buffer (which must be
+ *		already allocated)
+ *	return : the number of bytes decoded in the destination buffer
+ *		(necessarily <= maxOutputSize). If the source stream is
+ *		malformed, the function will stop decoding and return a
+ *		negative result, indicating the byte position of the faulty
+ *		instruction. This function never writes beyond dest +
+ *		maxOutputSize, and is therefore protected against malicious
+ *		data packets.
+ *	note   : Destination buffer must be already allocated.
  *
  * LZ4_compressCtx() :
- * 	This function explicitly handles the CTX memory structure.
+ *	This function explicitly handles the CTX memory structure.
  *
- * 	ILLUMOS CHANGES: the CTX memory structure must be explicitly allocated
- * 	by the caller (either on the stack or using kmem_zalloc). Passing NULL
- * 	isn't valid.
+ *	ILLUMOS CHANGES: the CTX memory structure must be explicitly allocated
+ *	by the caller (either on the stack or using kmem_zalloc). Passing NULL
+ *	isn't valid.
  *
  * LZ4_compress64kCtx() :
- * 	Same as LZ4_compressCtx(), but specific to small inputs (<64KB).
- * 	isize *Must* be <64KB, otherwise the output will be corrupted.
+ *	Same as LZ4_compressCtx(), but specific to small inputs (<64KB).
+ *	isize *Must* be <64KB, otherwise the output will be corrupted.
  *
- * 	ILLUMOS CHANGES: the CTX memory structure must be explicitly allocated
- * 	by the caller (either on the stack or using kmem_zalloc). Passing NULL
- * 	isn't valid.
+ *	ILLUMOS CHANGES: the CTX memory structure must be explicitly allocated
+ *	by the caller (either on the stack or using kmem_zalloc). Passing NULL
+ *	isn't valid.
  */
 
 /*

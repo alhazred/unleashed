@@ -44,7 +44,7 @@
 #include "cache.h"
 #include "proc64_id.h"
 
-#define L(s) .memcpy/**/s
+#define L(s) .memcpy##s
 
 /*
  * memcpy algorithm overview:

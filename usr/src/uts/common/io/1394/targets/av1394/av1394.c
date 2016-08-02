@@ -129,11 +129,9 @@ extern int tnf_mod_unload(struct modlinkage *mlp);
 #define	AV1394_DEV2STATE(dev)	\
 		(ddi_get_soft_state(av1394_statep, AV1394_DEV2INST(dev)))
 
-#define	AV1394_TNF_ENTER(func)	\
-	TNF_PROBE_0_DEBUG(func##_enter, AV1394_TNF_INST_STACK, "");
+#define	AV1394_TNF_ENTER(func)
 
-#define	AV1394_TNF_EXIT(func)	\
-	TNF_PROBE_0_DEBUG(func##_exit, AV1394_TNF_INST_STACK, "");
+#define	AV1394_TNF_EXIT(func)
 
 /*
  *
@@ -212,8 +210,6 @@ av1394_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	}
 
 	if (ddi_soft_state_zalloc(av1394_statep, instance) != 0) {
-		TNF_PROBE_0(av1394_attach_error_soft_state_zalloc,
-		    AV1394_TNF_INST_ERROR, "");
 		AV1394_TNF_EXIT(av1394_attach);
 		return (DDI_FAILURE);
 	}
@@ -270,8 +266,6 @@ av1394_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 	AV1394_TNF_ENTER(av1394_detach);
 
 	if ((avp = AV1394_INST2STATE(instance)) == NULL) {
-		TNF_PROBE_0(av1394_detach_error_instance,
-		    AV1394_TNF_INST_ERROR, "");
 		AV1394_TNF_EXIT(av1394_detach);
 		return (DDI_FAILURE);
 	}
@@ -487,8 +481,6 @@ av1394_t1394_attach(av1394_inst_t *avp, dev_info_t *dip)
 	    &avp->av_t1394_hdl);
 
 	if (ret != DDI_SUCCESS) {
-		TNF_PROBE_1(av1394_t1394_attach_error, AV1394_TNF_INST_ERROR,
-		    "", tnf_int, ret, ret);
 	}
 
 	AV1394_TNF_EXIT(av1394_t1394_attach);
@@ -512,29 +504,21 @@ av1394_add_events(av1394_inst_t *avp)
 
 	if (ddi_get_eventcookie(avp->av_dip, DDI_DEVI_BUS_RESET_EVENT,
 	    &br_evc) != DDI_SUCCESS) {
-		TNF_PROBE_0(av1394_add_events_error_bus_reset_cookie,
-		    AV1394_TNF_INST_ERROR, "");
 		return (DDI_FAILURE);
 	}
 	if (ddi_add_event_handler(avp->av_dip, br_evc, av1394_bus_reset,
 	    avp, &avp->av_reset_cb) != DDI_SUCCESS) {
-		TNF_PROBE_0(av1394_add_events_error_bus_reset_event,
-		    AV1394_TNF_INST_ERROR, "");
 		return (DDI_FAILURE);
 	}
 
 	if (ddi_get_eventcookie(avp->av_dip, DDI_DEVI_REMOVE_EVENT,
 	    &rem_evc) != DDI_SUCCESS) {
 		(void) ddi_remove_event_handler(avp->av_reset_cb);
-		TNF_PROBE_0(av1394_add_events_error_remove_cookie,
-		    AV1394_TNF_INST_ERROR, "");
 		return (DDI_FAILURE);
 	}
 	if (ddi_add_event_handler(avp->av_dip, rem_evc, av1394_disconnect,
 	    avp, &avp->av_remove_cb) != DDI_SUCCESS) {
 		(void) ddi_remove_event_handler(avp->av_reset_cb);
-		TNF_PROBE_0(av1394_add_events_error_remove_event,
-		    AV1394_TNF_INST_ERROR, "");
 		return (DDI_FAILURE);
 	}
 
@@ -542,16 +526,12 @@ av1394_add_events(av1394_inst_t *avp)
 	    &ins_evc) != DDI_SUCCESS) {
 		(void) ddi_remove_event_handler(avp->av_remove_cb);
 		(void) ddi_remove_event_handler(avp->av_reset_cb);
-		TNF_PROBE_0(av1394_add_events_error_insert_cookie,
-		    AV1394_TNF_INST_ERROR, "");
 		return (DDI_FAILURE);
 	}
 	if (ddi_add_event_handler(avp->av_dip, ins_evc, av1394_reconnect,
 	    avp, &avp->av_insert_cb) != DDI_SUCCESS) {
 		(void) ddi_remove_event_handler(avp->av_remove_cb);
 		(void) ddi_remove_event_handler(avp->av_reset_cb);
-		TNF_PROBE_0(av1394_add_events_error_insert_event,
-		    AV1394_TNF_INST_ERROR, "");
 		return (DDI_FAILURE);
 	}
 

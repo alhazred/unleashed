@@ -60,7 +60,9 @@ clobber:
 	$(RM) $(CLEANFILES) $(OBJS) machine x86 lib$(LIB).a
 
 machine:
-	ln -fs ../../../amd64/include machine
+	$(RM) machine
+	$(SYMLINK) ../../../amd64/include machine
 
 x86:
-	ln -fs ../../../x86/include x86
+	$(RM) x86
+	$(SYMLINK) ../../../x86/include x86

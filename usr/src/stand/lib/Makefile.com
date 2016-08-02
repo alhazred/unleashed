@@ -79,7 +79,7 @@ CPPINCS	= 	-YI,$(STANDDIR)/lib/sa -I$(STANDDIR)/lib/sa \
 
 CPPFLAGS =	$(CPPDEFS) $(CPPINCS)
 AS_CPPFLAGS =	$(CPPDEFS) $(CPPINCS:-YI,%=-I%)
-ASFLAGS =	-P -D__STDC__ -D_ASM
+ASFLAGS =	-D_ASM
 
 #
 # CPPFLAGS values that *must* be included whenever linking with or

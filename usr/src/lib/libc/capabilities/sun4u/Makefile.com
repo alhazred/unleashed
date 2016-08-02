@@ -35,8 +35,8 @@ include		$(SRC)/lib/Makefile.lib
 IFLAGS =	-I$(SRC)/uts/$(GEN_PLATFORM) \
 		-I$(ROOT)/usr/platform/$(GEN_PLATFORM)/include
 
-AS_CPPFLAGS +=	-D__STDC__ -D_ASM -DPIC -D_REENTRANT -D$(MACH) $(IFLAGS)
-ASFLAGS =	-P -K pic
+AS_CPPFLAGS +=	-D_ASM -DPIC -D_REENTRANT -D$(MACH) $(IFLAGS)
+ASFLAGS =
 
 # memcpy.s provides __align_cpy_1 as an alias for memcpy.  However, this isn't
 # a WEAK symbol, and hence ld(1)'s ability to cull duplicate local symbols with

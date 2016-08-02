@@ -33,50 +33,50 @@ LIBM_ANSI_PRAGMA_WEAK(acos,function)
 #include "libm_protos.h"
 
 	ENTRY(acos)
-	fldl	4(%esp)			/ push x
-	fld1				/ push 1
-	fld	%st(1)			/ x , 1 , x
-	fabs				/ |x| , 1 , x
+	fldl	4(%esp)			/* push x */
+	fld1				/* push 1 */
+	fld	%st(1)			/* x , 1 , x */
+	fabs				/* |x| , 1 , x */
 	fucomp
 	fstsw   %ax
 	sahf
 	ja	.ERR
-	fadd	%st(1),%st		/ 1+x,x
+	fadd	%st(1),%st		/* 1+x,x */
 	fldz
 	fucomp	
 	fstsw	%ax
 	sahf
 	jp	.L1
 	jne	.L1
-	/ x is -1 
-	fstp	%st(0)			/ -1
-	fstp	%st(0)			/ empty NPX stack
+	/* x is -1  */
+	fstp	%st(0)			/* -1 */
+	fstp	%st(0)			/* empty NPX stack */
 	fldpi
 	ret
 .L1:
-	fxch	%st(1)			/ x,1+x
-	fld1				/ 1,x,1+x
-	fsubp	%st,%st(1)		/ 1-x,1+x
-	fdivp	%st,%st(1)		/ (1-x)/(1+x)
+	fxch	%st(1)			/* x,1+x */
+	fld1				/* 1,x,1+x */
+	fsubp	%st,%st(1)		/* 1-x,1+x */
+	fdivp	%st,%st(1)		/* (1-x)/(1+x) */
 	fsqrt
-	fld1				/ 1,sqrt((1-x)/(1+x))
+	fld1				/* 1,sqrt((1-x)/(1+x)) */
 	fpatan
 	fadd	%st(0),%st
 	ret
 
 .ERR:
-	/ |x| > 1
+	/* |x| > 1 */
 	pushl   %ebp
 	movl    %esp,%ebp
 	PIC_SETUP(1)
-	fstp	%st(0)			/ x
-	fstp	%st(0)			/ empty NPX stack
+	fstp	%st(0)			/* x */
+	fstp	%st(0)			/* empty NPX stack */
 	pushl   $1
-	pushl   12(%ebp)                / high x
-	pushl   8(%ebp)                 / low x
-	pushl   12(%ebp)                / high x
-	pushl   8(%ebp)                 / low x
-	call    PIC_F(_SVID_libm_err)	/ report SVID result/error
+	pushl   12(%ebp)                /* high x */
+	pushl   8(%ebp)                 /* low x */
+	pushl   12(%ebp)                /* high x */
+	pushl   8(%ebp)                 /* low x */
+	call    PIC_F(_SVID_libm_err)	/* report SVID result/error */
 	addl    $20,%esp
 	PIC_WRAPUP
 	leave

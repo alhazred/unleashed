@@ -141,7 +141,8 @@ extern "C" {
  */
 
 #if (__STDC__ - 0 == 1 && !defined(__GNUC__)) || \
-	(defined(__GNUC__) && defined(__STRICT_ANSI__))
+	(defined(__GNUC__) && defined(__STRICT_ANSI__)) || \
+	defined(_ASM)
 #define	_STRICT_STDC
 #else
 #undef	_STRICT_STDC

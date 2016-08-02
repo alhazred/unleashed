@@ -63,7 +63,7 @@ $(MAPFILE_INTERMEDIATE): $(MAPFILE_SOURCES) $(MAPFILE_TEMPLATE)
 	$(HDR2MAP) -t $(MAPFILE_TEMPLATE) $(MAPFILE_SOURCES) >$@
 
 $(MAPFILE): $(MAPFILE_INTERMEDIATE)
-	$(CPP) -P $(SACPPFLAGS) <$(MAPFILE_INTERMEDIATE) >$@
+	$(CPP) -E $(SACPPFLAGS) <$(MAPFILE_INTERMEDIATE) >$@
 
 mdb_lex.c: ../../../common/mdb/mdb_lex.l mdb_grammar.h
 	$(LEX) $(LFLAGS) ../../../common/mdb/mdb_lex.l > $@
@@ -82,7 +82,7 @@ kaif_off.h := CPPFLAGS += $(SACPPCFLAGS)
 
 kmdb_modlinktest.c: $(MAPFILE_INTERMEDIATE)
 	$(MAP2LINKTEST) <$(MAPFILE_INTERMEDIATE) >$@
-	$(CPP) -P $(SACPPFLAGS) <$(MAPFILE_INTERMEDIATE) >$(MAPFILE)
+	$(CPP) -E $(SACPPFLAGS) <$(MAPFILE_INTERMEDIATE) >$(MAPFILE)
 
 #
 # Dynamic rules for object construction

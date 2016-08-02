@@ -1080,7 +1080,7 @@ MAPFILES =	$(LIBCDIR)/port/mapfile-vers
 CFLAGS +=	$(EXTN_CFLAGS)
 CPPFLAGS=	-D_REENTRANT -Di386 $(EXTN_CPPFLAGS) $(THREAD_DEBUG) \
 		-I$(LIBCBASE)/inc -I$(LIBCDIR)/inc $(CPPFLAGS.master)
-ASFLAGS=	$(AS_PICFLAGS) -P -D__STDC__ -D_ASM $(CPPFLAGS) $(i386_AS_XARCH)
+ASFLAGS=	$(AS_PICFLAGS) -D_ASM $(CPPFLAGS) $(i386_AS_XARCH)
 
 # As a favor to the dtrace syscall provider, libc still calls the
 # old syscall traps that have been obsoleted by the *at() interfaces.

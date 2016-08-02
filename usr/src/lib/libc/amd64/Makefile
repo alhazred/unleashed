@@ -1027,7 +1027,7 @@ MAPFILES =	$(LIBCDIR)/port/mapfile-vers
 
 CPPFLAGS=	-D_REENTRANT -D$(MACH64) -D__$(MACH64) $(THREAD_DEBUG) \
 		-I. -I$(LIBCBASE)/inc -I$(LIBCDIR)/inc $(CPPFLAGS.master)
-ASFLAGS=	$(AS_PICFLAGS) -P -D__STDC__ -D_ASM $(CPPFLAGS) \
+ASFLAGS=	$(AS_PICFLAGS) -D_ASM $(CPPFLAGS) \
 		$(amd64_AS_XARCH)
 
 # As a favor to the dtrace syscall provider, libc still calls the

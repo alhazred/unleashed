@@ -25,7 +25,7 @@
 # ident	"%Z%%M%	%I%	%E% SMI"
 #
 
-ASFLAGS += $(AS_PICFLAGS) -P -D_ASM
+ASFLAGS += $(AS_PICFLAGS) -D_ASM
 
 MACHOBJS = dis_tables.o
 

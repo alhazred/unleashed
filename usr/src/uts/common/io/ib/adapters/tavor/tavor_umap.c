@@ -129,7 +129,6 @@ tavor_devmap(dev_t dev, devmap_cookie_t dhp, offset_t off, size_t len,
 	instance = TAVOR_DEV_INSTANCE(dev);
 	state = ddi_get_soft_state(tavor_statep, instance);
 	if (state == NULL) {
-		TNF_PROBE_0(tavor_devmap_gss_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_devmap);
 		return (ENXIO);
 	}
@@ -139,8 +138,6 @@ tavor_devmap(dev_t dev, devmap_cookie_t dhp, offset_t off, size_t len,
 	 * "maintenance mode".
 	 */
 	if (state->ts_operational_mode == TAVOR_MAINTENANCE_MODE) {
-		TNF_PROBE_0(tavor_devmap_maintenance_mode_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_devmap);
 		return (EFAULT);
 	}
@@ -166,8 +163,6 @@ tavor_devmap(dev_t dev, devmap_cookie_t dhp, offset_t off, size_t len,
 			 * same process attempting to mmap() UAR page.
 			 */
 			if (key != ddi_get_pid()) {
-				TNF_PROBE_0(tavor_devmap_uarpg_invpid_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_TNF_EXIT(tavor_devmap);
 				return (EINVAL);
 			}
@@ -176,8 +171,6 @@ tavor_devmap(dev_t dev, devmap_cookie_t dhp, offset_t off, size_t len,
 			status = tavor_umap_uarpg(state, dhp, rsrcp, maplen,
 			    &err);
 			if (status != DDI_SUCCESS) {
-				TNF_PROBE_0(tavor_devmap_uarpg_map_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_TNF_EXIT(tavor_devmap);
 				return (err);
 			}
@@ -188,8 +181,6 @@ tavor_devmap(dev_t dev, devmap_cookie_t dhp, offset_t off, size_t len,
 			status = tavor_umap_cqmem(state, dhp, rsrcp, off,
 			    maplen, &err);
 			if (status != DDI_SUCCESS) {
-				TNF_PROBE_0(tavor_devmap_cqmem_map_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_TNF_EXIT(tavor_devmap);
 				return (err);
 			}
@@ -200,8 +191,6 @@ tavor_devmap(dev_t dev, devmap_cookie_t dhp, offset_t off, size_t len,
 			status = tavor_umap_qpmem(state, dhp, rsrcp, off,
 			    maplen, &err);
 			if (status != DDI_SUCCESS) {
-				TNF_PROBE_0(tavor_devmap_qpmem_map_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_TNF_EXIT(tavor_devmap);
 				return (err);
 			}
@@ -212,8 +201,6 @@ tavor_devmap(dev_t dev, devmap_cookie_t dhp, offset_t off, size_t len,
 			status = tavor_umap_srqmem(state, dhp, rsrcp, off,
 			    maplen, &err);
 			if (status != DDI_SUCCESS) {
-				TNF_PROBE_0(tavor_devmap_srqmem_map_fail,
-				    TAVOR_TNF_ERROR, "");
 				TAVOR_TNF_EXIT(tavor_devmap);
 				return (err);
 			}
@@ -221,13 +208,10 @@ tavor_devmap(dev_t dev, devmap_cookie_t dhp, offset_t off, size_t len,
 
 		default:
 			TAVOR_WARNING(state, "unexpected rsrc type in devmap");
-			TNF_PROBE_0(tavor_devmap_invrsrc_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_devmap);
 			return (EINVAL);
 		}
 	} else {
-		TNF_PROBE_0(tavor_devmap_umap_lookup_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_devmap);
 		return (EINVAL);
 	}
@@ -258,7 +242,6 @@ tavor_umap_uarpg(tavor_state_t *state, devmap_cookie_t dhp,
 	    &state->ts_reg_accattr);
 	if (status < 0) {
 		*err = status;
-		TNF_PROBE_0(tavor_umap_uarpg_devmap_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_uarpg);
 		return (DDI_FAILURE);
 	}
@@ -298,7 +281,6 @@ tavor_umap_cqmem(tavor_state_t *state, devmap_cookie_t dhp,
 	    maxprot, (DEVMAP_ALLOW_REMAP | DEVMAP_DEFAULTS), NULL);
 	if (status < 0) {
 		*err = status;
-		TNF_PROBE_0(tavor_umap_cqmem_devmap_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_cqmem);
 		return (DDI_FAILURE);
 	}
@@ -346,7 +328,6 @@ tavor_umap_qpmem(tavor_state_t *state, devmap_cookie_t dhp,
 	    size, maxprot, (DEVMAP_ALLOW_REMAP | DEVMAP_DEFAULTS), NULL);
 	if (status < 0) {
 		*err = status;
-		TNF_PROBE_0(tavor_umap_qpmem_devmap_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_qpmem);
 		return (DDI_FAILURE);
 	}
@@ -394,7 +375,6 @@ tavor_umap_srqmem(tavor_state_t *state, devmap_cookie_t dhp,
 	    size, maxprot, (DEVMAP_ALLOW_REMAP | DEVMAP_DEFAULTS), NULL);
 	if (status < 0) {
 		*err = status;
-		TNF_PROBE_0(tavor_umap_srqmem_devmap_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_srqmem);
 		return (DDI_FAILURE);
 	}
@@ -429,8 +409,6 @@ tavor_devmap_umem_map(devmap_cookie_t dhp, dev_t dev, uint_t flags,
 	instance = TAVOR_DEV_INSTANCE(dev);
 	state = ddi_get_soft_state(tavor_statep, instance);
 	if (state == NULL) {
-		TNF_PROBE_0(tavor_devmap_umem_map_gss_fail, TAVOR_TNF_ERROR,
-		    "");
 		TAVOR_TNF_EXIT(tavor_devmap_umem_map);
 		return (ENXIO);
 	}
@@ -826,8 +804,6 @@ tavor_devmap_devmem_map(devmap_cookie_t dhp, dev_t dev, uint_t flags,
 	instance = TAVOR_DEV_INSTANCE(dev);
 	state = ddi_get_soft_state(tavor_statep, instance);
 	if (state == NULL) {
-		TNF_PROBE_0(tavor_devmap_devmem_map_gss_fail, TAVOR_TNF_ERROR,
-		    "");
 		TAVOR_TNF_EXIT(tavor_devmap_devmem_map);
 		return (ENXIO);
 	}
@@ -976,8 +952,6 @@ tavor_umap_ci_data_in(tavor_state_t *state, ibt_ci_data_flags_t flags,
 		status = tavor_umap_mr_data_in((tavor_mrhdl_t)hdl,
 		    (ibt_mr_data_in_t *)data_p, data_sz);
 		if (status != DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_umap_mr_data_in_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_umap_ci_data_in);
 			return (status);
 		}
@@ -997,8 +971,6 @@ tavor_umap_ci_data_in(tavor_state_t *state, ibt_ci_data_flags_t flags,
 	case IBT_HDL_EEC:
 	case IBT_HDL_RDD:
 	case IBT_HDL_SRQ:
-		TNF_PROBE_0(tavor_umap_ci_data_in_unsupp_type,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_ci_data_in);
 		return (IBT_NOT_SUPPORTED);
 
@@ -1006,8 +978,6 @@ tavor_umap_ci_data_in(tavor_state_t *state, ibt_ci_data_flags_t flags,
 	 * Any other types are invalid.
 	 */
 	default:
-		TNF_PROBE_0(tavor_umap_ci_data_in_invtype_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_ci_data_in);
 		return (IBT_INVALID_PARAM);
 	}
@@ -1028,24 +998,18 @@ tavor_umap_mr_data_in(tavor_mrhdl_t mr, ibt_mr_data_in_t *data,
 	TAVOR_TNF_ENTER(tavor_umap_mr_data_in);
 
 	if (data->mr_rev != IBT_MR_DATA_IN_IF_VERSION) {
-		TNF_PROBE_0(tavor_umap_mr_data_in_ver_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_mr_data_in);
 		return (IBT_NOT_SUPPORTED);
 	}
 
 	/* Check for valid MR handle pointer */
 	if (mr == NULL) {
-		TNF_PROBE_0(tavor_umap_mr_data_in_invmrhdl_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_mr_data_in);
 		return (IBT_MR_HDL_INVALID);
 	}
 
 	/* Check for valid MR input structure size */
 	if (data_sz < sizeof (ibt_mr_data_in_t)) {
-		TNF_PROBE_0(tavor_umap_mr_data_in_invdatasz_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_mr_data_in);
 		return (IBT_INSUFF_RESOURCE);
 	}
@@ -1058,8 +1022,6 @@ tavor_umap_mr_data_in(tavor_mrhdl_t mr, ibt_mr_data_in_t *data,
 	mutex_enter(&mr->mr_lock);
 	if ((mr->mr_is_umem == 0) || (mr->mr_umemcookie == NULL)) {
 		mutex_exit(&mr->mr_lock);
-		TNF_PROBE_0(tavor_umap_mr_data_in_invumem_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_mr_data_in);
 		return (IBT_MR_HDL_INVALID);
 	}
@@ -1103,8 +1065,6 @@ tavor_umap_ci_data_out(tavor_state_t *state, ibt_ci_data_flags_t flags,
 		status = tavor_umap_cq_data_out((tavor_cqhdl_t)hdl,
 		    (mlnx_umap_cq_data_out_t *)data_p, data_sz);
 		if (status != DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_umap_cq_data_out_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_umap_ci_data_out);
 			return (status);
 		}
@@ -1114,8 +1074,6 @@ tavor_umap_ci_data_out(tavor_state_t *state, ibt_ci_data_flags_t flags,
 		status = tavor_umap_qp_data_out((tavor_qphdl_t)hdl,
 		    (mlnx_umap_qp_data_out_t *)data_p, data_sz);
 		if (status != DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_umap_qp_data_out_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_umap_ci_data_out);
 			return (status);
 		}
@@ -1125,8 +1083,6 @@ tavor_umap_ci_data_out(tavor_state_t *state, ibt_ci_data_flags_t flags,
 		status = tavor_umap_srq_data_out((tavor_srqhdl_t)hdl,
 		    (mlnx_umap_srq_data_out_t *)data_p, data_sz);
 		if (status != DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_umap_srq_data_out_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_umap_ci_data_out);
 			return (status);
 		}
@@ -1140,8 +1096,6 @@ tavor_umap_ci_data_out(tavor_state_t *state, ibt_ci_data_flags_t flags,
 		status = tavor_umap_pd_data_out((tavor_pdhdl_t)hdl,
 		    (mlnx_umap_pd_data_out_t *)data_p, data_sz);
 		if (status != DDI_SUCCESS) {
-			TNF_PROBE_0(tavor_umap_pd_data_out_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_umap_ci_data_out);
 			return (status);
 		}
@@ -1154,8 +1108,6 @@ tavor_umap_ci_data_out(tavor_state_t *state, ibt_ci_data_flags_t flags,
 	case IBT_HDL_SCHED:
 	case IBT_HDL_EEC:
 	case IBT_HDL_RDD:
-		TNF_PROBE_0(tavor_umap_ci_data_out_unsupp_type,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_ci_data_out);
 		return (IBT_NOT_SUPPORTED);
 
@@ -1163,8 +1115,6 @@ tavor_umap_ci_data_out(tavor_state_t *state, ibt_ci_data_flags_t flags,
 	 * Any other types are invalid.
 	 */
 	default:
-		TNF_PROBE_0(tavor_umap_ci_data_out_invtype_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_ci_data_out);
 		return (IBT_INVALID_PARAM);
 	}
@@ -1186,16 +1136,12 @@ tavor_umap_cq_data_out(tavor_cqhdl_t cq, mlnx_umap_cq_data_out_t *data,
 
 	/* Check for valid CQ handle pointer */
 	if (cq == NULL) {
-		TNF_PROBE_0(tavor_umap_cq_data_out_invcqhdl_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_cq_data_out);
 		return (IBT_CQ_HDL_INVALID);
 	}
 
 	/* Check for valid CQ mapping structure size */
 	if (data_sz < sizeof (mlnx_umap_cq_data_out_t)) {
-		TNF_PROBE_0(tavor_umap_cq_data_out_invdatasz_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_cq_data_out);
 		return (IBT_INSUFF_RESOURCE);
 	}
@@ -1242,16 +1188,12 @@ tavor_umap_qp_data_out(tavor_qphdl_t qp, mlnx_umap_qp_data_out_t *data,
 
 	/* Check for valid QP handle pointer */
 	if (qp == NULL) {
-		TNF_PROBE_0(tavor_umap_qp_data_out_invqphdl_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_qp_data_out);
 		return (IBT_QP_HDL_INVALID);
 	}
 
 	/* Check for valid QP mapping structure size */
 	if (data_sz < sizeof (mlnx_umap_qp_data_out_t)) {
-		TNF_PROBE_0(tavor_umap_qp_data_out_invdatasz_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_qp_data_out);
 		return (IBT_INSUFF_RESOURCE);
 	}
@@ -1327,16 +1269,12 @@ tavor_umap_srq_data_out(tavor_srqhdl_t srq, mlnx_umap_srq_data_out_t *data,
 
 	/* Check for valid SRQ handle pointer */
 	if (srq == NULL) {
-		TNF_PROBE_0(tavor_umap_srq_data_out_invsrqhdl_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_srq_data_out);
 		return (IBT_SRQ_HDL_INVALID);
 	}
 
 	/* Check for valid SRQ mapping structure size */
 	if (data_sz < sizeof (mlnx_umap_srq_data_out_t)) {
-		TNF_PROBE_0(tavor_umap_srq_data_out_invdatasz_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_srq_data_out);
 		return (IBT_INSUFF_RESOURCE);
 	}
@@ -1390,16 +1328,12 @@ tavor_umap_pd_data_out(tavor_pdhdl_t pd, mlnx_umap_pd_data_out_t *data,
 
 	/* Check for valid PD handle pointer */
 	if (pd == NULL) {
-		TNF_PROBE_0(tavor_umap_pd_data_out_invpdhdl_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_pd_data_out);
 		return (IBT_PD_HDL_INVALID);
 	}
 
 	/* Check for valid PD mapping structure size */
 	if (data_sz < sizeof (mlnx_umap_pd_data_out_t)) {
-		TNF_PROBE_0(tavor_umap_pd_data_out_invdatasz_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_pd_data_out);
 		return (IBT_INSUFF_RESOURCE);
 	}
@@ -1482,7 +1416,6 @@ tavor_umap_db_alloc(uint_t instance, uint64_t key, uint_t type, uint64_t value)
 	/* Allocate an entry to add to the "userland resources database" */
 	umapdb = kmem_zalloc(sizeof (tavor_umap_db_entry_t), KM_NOSLEEP);
 	if (umapdb == NULL) {
-		TNF_PROBE_0(tavor_umap_db_alloc_kmz_fail, TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_db_alloc);
 		return (NULL);
 	}
@@ -1704,8 +1637,6 @@ tavor_umap_umemlock_cb(ddi_umem_cookie_t *umem_cookie)
 		state = ddi_get_soft_state(tavor_statep, instance);
 		if (state == NULL) {
 			cmn_err(CE_WARN, "Unable to match Tavor instance\n");
-			TNF_PROBE_0(tavor_umap_umemlock_cb_gss_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_umap_umemlock_cb);
 			return;
 		}
@@ -1745,8 +1676,6 @@ tavor_umap_umemlock_cb(ddi_umem_cookie_t *umem_cookie)
 		if (status != DDI_SUCCESS) {
 			TAVOR_WARNING(state, "Unexpected failure in "
 			    "deregister from callback\n");
-			TNF_PROBE_0(tavor_umap_umemlock_cb_dereg_fail,
-			    TAVOR_TNF_ERROR, "");
 			TAVOR_TNF_EXIT(tavor_umap_umemlock_cb);
 		}
 	}
@@ -1854,15 +1783,11 @@ tavor_umap_db_set_onclose_cb(dev_t dev, uint64_t flag,
 
 	instance = TAVOR_DEV_INSTANCE(dev);
 	if (instance == -1) {
-		TNF_PROBE_0(tavor_umap_db_set_onclose_cb_inst_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_db_set_onclose_cb);
 		return (DDI_FAILURE);
 	}
 
 	if (flag != TAVOR_ONCLOSE_FLASH_INPROGRESS) {
-		TNF_PROBE_0(tavor_umap_db_set_onclose_cb_invflag_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_db_set_onclose_cb);
 		return (DDI_FAILURE);
 	}
@@ -1878,8 +1803,6 @@ tavor_umap_db_set_onclose_cb(dev_t dev, uint64_t flag,
 	status = tavor_umap_db_find_nolock(instance, dev,
 	    MLNX_UMAP_PID_RSRC, &value, 0, &umapdb);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_umap_db_set_onclose_cb_find_fail,
-		    TAVOR_TNF_ERROR, "");
 		mutex_exit(&tavor_userland_rsrc_db.tdl_umapdb_lock);
 		TAVOR_TNF_EXIT(tavor_umap_db_set_onclose_cb);
 		return (DDI_FAILURE);
@@ -1890,8 +1813,6 @@ tavor_umap_db_set_onclose_cb(dev_t dev, uint64_t flag,
 		priv = (tavor_umap_db_priv_t *)kmem_zalloc(
 		    sizeof (tavor_umap_db_priv_t), KM_NOSLEEP);
 		if (priv == NULL) {
-			TNF_PROBE_0(tavor_umap_db_set_onclose_cb_kmz_fail,
-			    TAVOR_TNF_ERROR, "");
 			mutex_exit(&tavor_userland_rsrc_db.tdl_umapdb_lock);
 			TAVOR_TNF_EXIT(tavor_umap_db_set_onclose_cb);
 			return (DDI_FAILURE);
@@ -1930,15 +1851,11 @@ tavor_umap_db_clear_onclose_cb(dev_t dev, uint64_t flag)
 
 	instance = TAVOR_DEV_INSTANCE(dev);
 	if (instance == -1) {
-		TNF_PROBE_0(tavor_umap_db_clear_onclose_cb_inst_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_db_clear_onclose_cb);
 		return (DDI_FAILURE);
 	}
 
 	if (flag != TAVOR_ONCLOSE_FLASH_INPROGRESS) {
-		TNF_PROBE_0(tavor_umap_db_clear_onclose_cb_invflag_fail,
-		    TAVOR_TNF_ERROR, "");
 		TAVOR_TNF_EXIT(tavor_umap_db_clear_onclose_cb);
 		return (DDI_FAILURE);
 	}
@@ -1954,8 +1871,6 @@ tavor_umap_db_clear_onclose_cb(dev_t dev, uint64_t flag)
 	status = tavor_umap_db_find_nolock(instance, dev,
 	    MLNX_UMAP_PID_RSRC, &value, 0, &umapdb);
 	if (status != DDI_SUCCESS) {
-		TNF_PROBE_0(tavor_umap_db_clear_onclose_cb_find_fail,
-		    TAVOR_TNF_ERROR, "");
 		mutex_exit(&tavor_userland_rsrc_db.tdl_umapdb_lock);
 		TAVOR_TNF_EXIT(tavor_umap_db_clear_onclose_cb);
 		return (DDI_FAILURE);

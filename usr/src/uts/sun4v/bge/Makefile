@@ -55,11 +55,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 CFLAGS		+= $(CCVERBOSE)
 
 #
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS		+= -dalign
-
-#
 # Driver depends on MAC & IP
 #
 LDFLAGS		+= -dy -N misc/mac -N drv/ip

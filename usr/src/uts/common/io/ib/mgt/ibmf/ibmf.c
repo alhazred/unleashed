@@ -56,12 +56,10 @@ ibmf_register(ibmf_register_info_t *client_infop, uint_t ibmf_version,
 	int		status = IBMF_SUCCESS;
 	char		errmsg[128];
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_register_start,
-	    IBMF_TNF_TRACE, "", "ibmf_register() enter, client_infop = %p "
-	    " ibmf_version = %d, flags = 0x%x, ibmf_impl_featuresp = %p\n",
-	    tnf_opaque, client_infop, client_infop,
-	    tnf_uint, ibmf_version, ibmf_version, tnf_uint, flags, flags,
-	    tnf_opaque, ibmf_impl_features, ibmf_impl_features);
+	IBMF_TRACE_4(DPRINT_L4,
+	    "ibmf_register() enter, client_infop = %p ibmf_version = %d, "
+	    "flags = 0x%x, ibmf_impl_featuresp = %p\n", client_infop,
+	    ibmf_version, flags, ibmf_impl_features);
 
 	/* validate client_infop and ibmf_handlep */
 	if ((client_infop == NULL) || (ibmf_handlep == NULL) ||
@@ -112,13 +110,8 @@ ibmf_register(ibmf_register_info_t *client_infop, uint_t ibmf_version,
 	/* get the ci */
 	status = ibmf_i_get_ci(client_infop, &ibmf_cip);
 	if (status != IBMF_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_register_error, IBMF_TNF_ERROR, "",
-		    "ibmf_register(): %s, guid = 0x%p\n",
-		    tnf_string, msg, "unable to get ci",
-		    tnf_ulonglong, guid, client_infop->ir_ci_guid);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_register_end,
-		    IBMF_TNF_TRACE, "", "ibmf_register() exit\n");
+		IBMF_TRACE_2(DPRINT_L1, "ibmf_register(): %s, guid = 0x%p\n",
+		    "unable to get ci", client_infop->ir_ci_guid);
 		return (status);
 	}
 
@@ -149,13 +142,9 @@ ibmf_register(ibmf_register_info_t *client_infop, uint_t ibmf_version,
 		IBMF_ADD32_PORT_KSTATS(ibmf_cip, client_regs_failed, 1);
 		mutex_exit(&ibmf_cip->ci_mutex);
 		ibmf_i_release_ci(ibmf_cip);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_register_error, IBMF_TNF_ERROR, "",
-		    "ibmf_register(): %s, class = 0x%x\n",
-		    tnf_string, msg, "can't get qp",
-		    tnf_int, class, client_infop->ir_client_class);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_register_end,
-		    IBMF_TNF_TRACE, "", "ibmf_register() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+		    "ibmf_register(): %s, class = 0x%x\n", "can't get qp",
+		    client_infop->ir_client_class);
 		return (status);
 	}
 
@@ -166,13 +155,8 @@ ibmf_register(ibmf_register_info_t *client_infop, uint_t ibmf_version,
 		IBMF_ADD32_PORT_KSTATS(ibmf_cip, client_regs_failed, 1);
 		mutex_exit(&ibmf_cip->ci_mutex);
 		ibmf_i_release_ci(ibmf_cip);
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_register_error, IBMF_TNF_ERROR, "",
-		    "ibmf_register(): %s, class = 0x%x\n",
-		    tnf_string, msg, "can't alloc client",
-		    tnf_int, class, client_infop->ir_client_class);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_register_end,
-		    IBMF_TNF_TRACE, "", "ibmf_register() exit\n");
+		IBMF_TRACE_2(DPRINT_L1, "ibmf_register(): %s, class = 0x%x\n",
+		    "can't alloc client", client_infop->ir_client_class);
 		return (status);
 	}
 
@@ -207,15 +191,8 @@ ibmf_register(ibmf_register_info_t *client_infop, uint_t ibmf_version,
 	*ibmf_impl_features = 0;
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_register_error, IBMF_TNF_ERROR, "",
-		    "ibmf_register(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_register_end,
-	    IBMF_TNF_TRACE, "", "ibmf_register() exit, ibmf_handle = %p\n",
-	    tnf_opaque, ibmf_handle, *ibmf_handlep);
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_register(): %s\n", errmsg);
 
 	return (status);
 }
@@ -233,10 +210,8 @@ ibmf_unregister(ibmf_handle_t *ibmf_handlep, uint_t flags)
 
 	clientp = (ibmf_client_t *)*ibmf_handlep;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_unregister_start,
-	    IBMF_TNF_TRACE, "", "ibmf_unregister() enter, "
-	    "ibmf_handlep = %p, flags = 0x%x\n",
-	    tnf_opaque, ibmf_handle, *ibmf_handlep, tnf_uint, flags, flags);
+	IBMF_TRACE_2(DPRINT_L4, "ibmf_unregister() enter, ibmf_handlep = %p, "
+	    "flags = 0x%x\n", *ibmf_handlep, flags);
 
 	/* check for null ibmf_handlep */
 	if (ibmf_handlep == NULL) {
@@ -279,15 +254,10 @@ ibmf_unregister(ibmf_handle_t *ibmf_handlep, uint_t flags)
 	}
 
 	if (clientp->ic_recv_cb != NULL || clientp->ic_msgs_alloced != 0) {
-		IBMF_TRACE_4(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_unregister_err, IBMF_TNF_ERROR, "",
-		    "ibmf_unregister(): %s, flags = 0x%x, recv_cb = 0x%p, "
-		    "msgs_alloced = %d\n",
-		    tnf_string, msg, "busy with resources", tnf_uint, ic_flags,
-		    clientp->ic_flags, tnf_opaque, recv_cb, clientp->ic_recv_cb,
-		    tnf_uint, msgs_allocd, clientp->ic_msgs_alloced);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_unregister_end,
-		    IBMF_TNF_TRACE, "", "ibmf_unregister() exit\n");
+		IBMF_TRACE_4(DPRINT_L1, "ibmf_unregister(): %s, flags = 0x%x, "
+		    "recv_cb = 0x%p, msgs_alloced = %d\n",
+		    "busy with resources", clientp->ic_flags,
+		    clientp->ic_recv_cb, clientp->ic_msgs_alloced);
 		mutex_exit(&clientp->ic_mutex);
 		return (IBMF_BUSY);
 	}
@@ -318,14 +288,8 @@ ibmf_unregister(ibmf_handle_t *ibmf_handlep, uint_t flags)
 	*ibmf_handlep = NULL;
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_unregister_err, IBMF_TNF_ERROR, "",
-		    "ibmf_unregister(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_unregister_end,
-	    IBMF_TNF_TRACE, "", "ibmf_unregister() exit\n");
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_unregister(): %s\n", errmsg);
 
 	return (status);
 }
@@ -343,12 +307,9 @@ ibmf_setup_async_cb(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 
 	clientp = (ibmf_client_t *)ibmf_handle;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_setup_async_cb_start,
-	    IBMF_TNF_TRACE, "", "ibmf_setup_async_cb() enter, "
-	    "ibmf_handlep = %p, cb = 0x%p, cb_args = 0x%p, flags = 0x%x\n",
-	    tnf_opaque, ibmf_handle, ibmf_handle, tnf_opaque, cb,
-	    async_msg_cb, tnf_opaque, cb_args, async_msg_cb_args,
-	    tnf_uint, flags, flags);
+	IBMF_TRACE_4(DPRINT_L4, "ibmf_setup_async_cb() enter, ibmf_handlep = "
+	    "%p, cb = 0x%p, cb_args = 0x%p, flags = 0x%x\n", ibmf_handle,
+	    async_msg_cb, async_msg_cb_args, flags);
 
 	/* check for null ibmf_handlep */
 	if (ibmf_handle == NULL) {
@@ -434,14 +395,8 @@ ibmf_setup_async_cb(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 	}
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_setup_async_cb_err, IBMF_TNF_ERROR, "",
-		    "ibmf_setup_async_cb(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_setup_async_cb_end,
-	    IBMF_TNF_TRACE, "", "ibmf_setup_async_cb() exit\n");
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_setup_async_cb(): %s\n", errmsg);
 
 	return (status);
 }
@@ -459,11 +414,9 @@ ibmf_tear_down_async_cb(ibmf_handle_t ibmf_handle,
 
 	clientp = (ibmf_client_t *)ibmf_handle;
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_tear_down_async_cb_start,
-	    IBMF_TNF_TRACE, "", "ibmf_tear_down_async_cb() enter, "
-	    "ibmf_handlep = %p, ibmf_qp_handle = %p, flags = 0x%x\n",
-	    tnf_opaque, ibmf_handle, ibmf_handle,
-	    tnf_opaque, ibmf_qp_handle, ibmf_qp_handle, tnf_uint, flags, flags);
+	IBMF_TRACE_3(DPRINT_L4, "ibmf_tear_down_async_cb() enter, ibmf_handlep "
+	    "= %p, ibmf_qp_handle = %p, flags = 0x%x\n", ibmf_handle,
+	    ibmf_qp_handle, flags);
 
 	/* check for null ibmf_handlep */
 	if (ibmf_handle == NULL) {
@@ -577,14 +530,9 @@ ibmf_tear_down_async_cb(ibmf_handle_t ibmf_handle,
 	}
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_tear_down_async_cb_err, IBMF_TNF_ERROR, "",
-		    "ibmf_tear_down_async_cb(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_tear_down_async_cb_end,
-	    IBMF_TNF_TRACE, "", "ibmf_tear_down_async_cb() exit\n");
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_tear_down_async_cb(): %s\n",
+		    errmsg);
 
 	return (status);
 }
@@ -602,10 +550,8 @@ ibmf_alloc_msg(ibmf_handle_t ibmf_handle, int flag, ibmf_msg_t **ibmf_msgpp)
 
 	clientp = (ibmf_client_t *)ibmf_handle;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_alloc_msg_start,
-	    IBMF_TNF_TRACE, "", "ibmf_alloc_msg() enter, "
-	    "ibmf_handle = %p, flags = 0x%x\n",
-	    tnf_opaque, ibmf_handle, ibmf_handle, tnf_uint, flag, flag);
+	IBMF_TRACE_2(DPRINT_L4, "ibmf_alloc_msg() enter, ibmf_handle = %p, "
+	    "flags = 0x%x\n", ibmf_handle, flag);
 
 	/* check for null ibmf_handle and ibmf_msgpp */
 	if ((ibmf_handle == NULL) || (ibmf_msgpp == NULL)) {
@@ -673,14 +619,8 @@ ibmf_alloc_msg(ibmf_handle_t ibmf_handle, int flag, ibmf_msg_t **ibmf_msgpp)
 	_NOTE(NOW_VISIBLE_TO_OTHER_THREADS(*ibmf_msg_impl))
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_alloc_msg_err, IBMF_TNF_ERROR, "",
-		    "ibmf_alloc_msg(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_alloc_msg_end,
-	    IBMF_TNF_TRACE, "", "ibmf_alloc_msg() exit\n");
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_alloc_msg(): %s\n", errmsg);
 
 	return (status);
 }
@@ -697,9 +637,8 @@ ibmf_free_msg(ibmf_handle_t ibmf_handle, ibmf_msg_t **ibmf_msgpp)
 	timeout_id_t	msg_rp_set_id, msg_tr_set_id;
 	timeout_id_t	msg_rp_unset_id, msg_tr_unset_id;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_free_msg_start,
-	    IBMF_TNF_TRACE, "", "ibmf_free_msg() enter, " "ibmf_handle = %p\n",
-	    tnf_opaque, ibmf_handle, ibmf_handle);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_free_msg() enter, ibmf_handle = %p\n",
+	    ibmf_handle);
 
 	/* check for null ibmf_handle and ibmf_msgpp */
 	if ((ibmf_handle == NULL) || (ibmf_msgpp == NULL)) {
@@ -821,14 +760,8 @@ ibmf_free_msg(ibmf_handle_t ibmf_handle, ibmf_msg_t **ibmf_msgpp)
 	*ibmf_msgpp = NULL;
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_free_msg_err, IBMF_TNF_ERROR, "",
-		    "ibmf_free_msg(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_free_msg_end,
-	    IBMF_TNF_TRACE, "", "ibmf_free_msg() exit\n");
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_free_msg(): %s\n", errmsg);
 
 	return (status);
 }
@@ -847,13 +780,9 @@ ibmf_msg_transport(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 	sm_dr_mad_hdr_t	*dr_hdr;
 	char		errmsg[128];
 
-	IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_msg_transport_start,
-	    IBMF_TNF_TRACE, "", "ibmf_msg_transport() enter, "
-	    "ibmf_handlep = %p, ibmf_qp_handle = %p, flags = 0x%x "
-	    "msgp = 0x%p, retrans = 0x%p\n",
-	    tnf_opaque, ibmf_handle, ibmf_handle,
-	    tnf_opaque, ibmf_qp_handle, ibmf_qp_handle, tnf_uint, flags, flags,
-	    tnf_opaque, msgp, msgp, tnf_opaque, retrans, retrans);
+	IBMF_TRACE_5(DPRINT_L4, "ibmf_msg_transport() enter, ibmf_handlep = %p,"
+	    " ibmf_qp_handle = %p, flags = 0x%x msgp = 0x%p, retrans = 0x%p\n",
+	    ibmf_handle, ibmf_qp_handle, flags, msgp, retrans);
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*msgp,*msgimplp))
 
@@ -1029,9 +958,6 @@ ibmf_msg_transport(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 		goto bail;
 	}
 	if (loopback == B_TRUE) {
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_msg_transport_end, IBMF_TNF_TRACE, "",
-		    "ibmf_msg_transport() exit, dr_loopback ok\n");
 		return (IBMF_SUCCESS);
 	}
 
@@ -1059,14 +985,8 @@ ibmf_msg_transport(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 	}
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_msg_transport_err, IBMF_TNF_ERROR, "",
-		    "ibmf_msg_transport(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_msg_transport_end,
-	    IBMF_TNF_TRACE, "", "ibmf_msg_transport() exit\n");
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_msg_transport(): %s\n", errmsg);
 
 	return (status);
 }
@@ -1084,11 +1004,9 @@ ibmf_alloc_qp(ibmf_handle_t ibmf_handle, ib_pkey_t p_key, ib_qkey_t q_key,
 	int		status = IBMF_SUCCESS;
 	char		errmsg[128];
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_alloc_qp_start,
-	    IBMF_TNF_TRACE, "", "ibmf_alloc_qp() enter, "
-	    "ibmf_handlep = %p, p_key = 0x%x, q_key = 0x%x\n",
-	    tnf_opaque, ibmf_handle, ibmf_handle,
-	    tnf_uint, pkey, p_key, tnf_uint, qkey, q_key);
+	IBMF_TRACE_3(DPRINT_L4,
+	    "ibmf_alloc_qp() enter, ibmf_handlep = %p, p_key = 0x%x, q_key = 0x%x\n",
+	    ibmf_handle, p_key, q_key);
 
 	/* check for null ibmf_handle and ibmf_qp_handle */
 	if ((ibmf_handle == NULL) || (ibmf_qp_handlep == NULL)) {
@@ -1164,15 +1082,8 @@ ibmf_alloc_qp(ibmf_handle_t ibmf_handle, ib_pkey_t p_key, ib_qkey_t q_key,
 		qp_ctx->isq_supports_rmpp = B_FALSE;
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_alloc_qp_err, IBMF_TNF_ERROR, "",
-		    "ibmf_alloc_qp(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_alloc_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_alloc_qp() exit\n");
-
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_alloc_qp(): %s\n", errmsg);
 
 	_NOTE(NOW_VISIBLE_TO_OTHER_THREADS(*qp_ctx))
 
@@ -1193,11 +1104,9 @@ ibmf_query_qp(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 	int		status = IBMF_SUCCESS;
 	char		errmsg[128];
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_query_qp_start,
-	    IBMF_TNF_TRACE, "", "ibmf_query_qp() enter, "
-	    "ibmf_handlep = %p, ibmf_qp_handle = %p\n",
-	    tnf_opaque, ibmf_handle, ibmf_handle,
-	    tnf_opaque, ibmf_qp_handle, ibmf_qp_handle);
+	IBMF_TRACE_2(DPRINT_L4,
+	    "ibmf_query_qp() enter, ibmf_handlep = %p, ibmf_qp_handle = %p\n",
+	    ibmf_handle, ibmf_qp_handle);
 
 	/* check for null args */
 	if ((ibmf_handle == NULL) || (ibmf_qp_handle == NULL) ||
@@ -1263,16 +1172,8 @@ ibmf_query_qp(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 	}
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_query_qp_err, IBMF_TNF_ERROR, "",
-		    "ibmf_query_qp(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_query_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_query_qp() exit, qp = %d, "
-	    "pkey = 0x%x, qkey = 0x%x\n", tnf_uint, qp_num, *qp_num,
-	    tnf_uint, pkey, *p_key, tnf_uint, qkey, *q_key);
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_query_qp(): %s\n", errmsg);
 
 	return (status);
 }
@@ -1290,12 +1191,10 @@ ibmf_modify_qp(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 	int		status = IBMF_SUCCESS;
 	char		errmsg[128];
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_modify_qp_start,
-	    IBMF_TNF_TRACE, "", "ibmf_modify_qp() enter, "
-	    "ibmf_handlep = %p, ibmf_qp_handle = %p, pkey = 0x%x, "
-	    "qkey = 0x%x\n", tnf_opaque, ibmf_handle, ibmf_handle,
-	    tnf_opaque, ibmf_qp_handle, ibmf_qp_handle,
-	    tnf_uint, p_key, p_key, tnf_uint, q_key, q_key);
+	IBMF_TRACE_4(DPRINT_L4,
+	    "ibmf_modify_qp() enter, ibmf_handlep = %p, ibmf_qp_handle = %p, "
+	    "pkey = 0x%x, qkey = 0x%x\n", ibmf_handle, ibmf_qp_handle, p_key,
+	    q_key);
 
 	/* check for null args */
 	if ((ibmf_handle == NULL) || (ibmf_qp_handle == NULL)) {
@@ -1365,14 +1264,8 @@ ibmf_modify_qp(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t ibmf_qp_handle,
 	}
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_modify_qp_err, IBMF_TNF_ERROR, "",
-		    "ibmf_modify_qp(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_modify_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_modify_qp() exit\n");
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_modify_qp(): %s\n", errmsg);
 
 	return (status);
 }
@@ -1389,11 +1282,9 @@ ibmf_free_qp(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t *ibmf_qp_handle,
 	int		status = IBMF_SUCCESS;
 	char		errmsg[128];
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_free_qp_start,
-	    IBMF_TNF_TRACE, "", "ibmf_free_qp() enter, "
-	    "ibmf_handlep = %p, ibmf_qp_handle = %p\n",
-	    tnf_opaque, ibmf_handle, ibmf_handle,
-	    tnf_opaque, ibmf_qp_handle, *ibmf_qp_handle);
+	IBMF_TRACE_2(DPRINT_L4,
+	    "ibmf_free_qp() enter, ibmf_handlep = %p, ibmf_qp_handle = %p\n",
+	    ibmf_handle, *ibmf_qp_handle);
 
 	/* check for null args */
 	if ((ibmf_handle == NULL) || (ibmf_qp_handle == NULL)) {
@@ -1469,14 +1360,8 @@ ibmf_free_qp(ibmf_handle_t ibmf_handle, ibmf_qp_handle_t *ibmf_qp_handle,
 	*ibmf_qp_handle = NULL;
 
 bail:
-	if (error) {
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_free_qp_err, IBMF_TNF_ERROR, "",
-		    "ibmf_free_qp(): %s\n", tnf_string, msg, errmsg);
-	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_free_qp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_free_qp() exit\n");
+	if (error)
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_free_qp(): %s\n", errmsg);
 
 	return (status);
 }

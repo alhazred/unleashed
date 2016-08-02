@@ -799,10 +799,6 @@ loop:
 	    "pageout_start:freemem %ld lotsfree %ld nscan %ld desscan %ld",
 	    freemem, lotsfree, nscan, desscan);
 
-	/* Kernel probe */
-	TNF_PROBE_2(pageout_scan_start, "vm pagedaemon", /* CSTYLED */,
-	    tnf_ulong, pages_free, freemem, tnf_ulong, pages_needed, needfree);
-
 	pcount = 0;
 	if (pageout_sample_cnt < pageout_sample_lim) {
 		nscan_limit = total_pages;
@@ -890,10 +886,9 @@ loop:
 				} else {
 					/*
 					 * Really a "goto loop", but
-					 * if someone is TRACing or
-					 * TNF_PROBE_ing, at least
-					 * make records to show
-					 * where we are.
+					 * if someone is TRACing,  at least
+					 * make records to show where we
+					 * are.
 					 */
 					break;
 				}
@@ -906,10 +901,6 @@ loop:
 	TRACE_5(TR_FAC_VM, TR_PAGEOUT_END,
 	    "pageout_end:freemem %ld lots %ld nscan %ld des %ld count %u",
 	    freemem, lotsfree, nscan, desscan, count);
-
-	/* Kernel probe */
-	TNF_PROBE_2(pageout_scan_end, "vm pagedaemon", /* CSTYLED */,
-	    tnf_ulong, pages_scanned, nscan, tnf_ulong, pages_free, freemem);
 
 	if (pageout_sample_cnt < pageout_sample_lim) {
 		pageout_sample_pages += pcount;

@@ -362,13 +362,11 @@ COMMON_SUBDIRS=		\
 	sdiff		\
 	sdpadm		\
 	sed		\
-	sendmail	\
 	setfacl		\
 	setmnt		\
 	setpgrp		\
 	setuname	\
 	sgs		\
-	sh		\
 	shcomp		\
 	smbios		\
 	smbsrv		\
@@ -410,7 +408,6 @@ COMMON_SUBDIRS=		\
 	tic		\
 	time		\
 	tip		\
-	tnf		\
 	touch		\
 	tput		\
 	tr		\
@@ -435,7 +432,6 @@ COMMON_SUBDIRS=		\
 	uuidgen		\
 	valtools	\
 	vgrind		\
-	vi		\
 	volcheck	\
 	volrmmount	\
 	vrrpadm		\
@@ -675,7 +671,6 @@ MSGSUBDIRS=		\
 	sdiff		\
 	sdpadm		\
 	sgs		\
-	sh		\
 	shcomp		\
 	smbsrv		\
 	sort		\
@@ -695,7 +690,6 @@ MSGSUBDIRS=		\
 	tar		\
 	tbl		\
 	time		\
-	tnf		\
 	touch		\
 	tput		\
 	troff		\
@@ -711,7 +705,6 @@ MSGSUBDIRS=		\
 	userattr	\
 	valtools	\
 	vgrind		\
-	vi		\
 	volcheck	\
 	volrmmount	\
 	vrrpadm		\

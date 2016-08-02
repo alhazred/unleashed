@@ -1050,7 +1050,7 @@ sparcv9_C_PICFLAGS= -K PIC
 CFLAGS64 +=	$(EXTN_CFLAGS)
 CPPFLAGS=	-D_REENTRANT -Dsparc $(EXTN_CPPFLAGS) $(THREAD_DEBUG) \
 		-I$(LIBCBASE)/inc -I$(LIBCDIR)/inc $(CPPFLAGS.master)
-ASFLAGS=	$(EXTN_ASFLAGS) -K PIC -P -D__STDC__ -D_ASM -D__sparcv9 $(CPPFLAGS) \
+ASFLAGS=	$(EXTN_ASFLAGS) -D_ASM -D__sparcv9 $(CPPFLAGS) \
 		$(sparcv9_AS_XARCH)
 
 # As a favor to the dtrace syscall provider, libc still calls the
@@ -1133,7 +1133,11 @@ $(DYNLIB) := CRTI = crti.o
 $(DYNLIB) := CRTN = crtn.o
 
 pics/_Qp%.o := CFLAGS64 += -I$(LIBCDIR)/$(MACH)/fp
-pics/_Q%.o := sparcv9_COPTFLAG = -xO4 -_gcc=-mtune=ultrasparc
+pics/_Q%.o := sparcv9_COPTFLAG =	-_gcc=-fno-strict-aliasing \
+					-_gcc=-fno-unit-at-a-time \
+					-_gcc=-fno-optimize-sibling-calls \
+					-_gcc=-O2 \
+					-_gcc=-mtune=ultrasparc
 
 # large-file-aware components that should be built large
 
@@ -1164,7 +1168,10 @@ $(PORTI18N_COND:%=pics/%) := \
 pics/arc4random.o :=	CPPFLAGS += -I$(SRC)/common/crypto/chacha
 
 # Files which need extra optimization
-pics/getenv.o := sparcv9_COPTFLAG = -xO4
+pics/getenv.o := sparcv9_COPTFLAG =	-_gcc=-fno-strict-aliasing \
+					-_gcc=-fno-unit-at-a-time \
+					-_gcc=-fno-optimize-sibling-calls \
+					-_gcc=-O2
 
 .KEEP_STATE:
 

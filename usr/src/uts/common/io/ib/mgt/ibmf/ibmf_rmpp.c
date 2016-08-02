@@ -59,10 +59,10 @@ ibmf_i_is_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle)
 	ibmf_alt_qp_t	*qpp = (ibmf_alt_qp_t *)ibmf_qp_handle;
 	boolean_t	is_rmpp;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_is_rmpp_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_is_rmpp(): clientp = %p, "
-	    "ibmf_qp_handle = 0x%p\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, ibmf_qp_handle, ibmf_qp_handle);
+	IBMF_TRACE_2(DPRINT_L4,
+		     "ibmf_i_is_rmpp(): clientp = %p, ""ibmf_qp_handle = 0x%p\n",
+		     clientp,
+		     ibmf_qp_handle);
 
 	if ((clientp->ic_reg_flags & IBMF_REG_FLAG_RMPP) == 0) {
 		is_rmpp = B_FALSE;
@@ -72,10 +72,6 @@ ibmf_i_is_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle)
 	} else {
 		is_rmpp = B_TRUE;
 	}
-
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_is_rmpp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_is_rmpp() exit, is_rmpp = %d\n",
-	    tnf_uint, is_rmpp, is_rmpp);
 
 	return (is_rmpp);
 }
@@ -95,12 +91,12 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 	uint32_t	abort_status;
 	int		status;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_rmpp_sender_active_flow_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_rmpp_sender_active_flow(): clientp = 0x%p, qp_hdl = 0x%p, "
-	    "msgp = 0x%p, madp = 0x%p\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, qp_hdl, qp_hdl, tnf_opaque, msg, msgimplp,
-	    tnf_opaque, mad, mad);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_rmpp_sender_active_flow(): clientp = 0x%p, qp_hdl = 0x%p, ""msgp = 0x%p, madp = 0x%p\n",
+		     clientp,
+		     qp_hdl,
+		     msgimplp,
+		     mad);
 
 	/*
 	 * RMPP header is located just after the MAD header for SA MADs
@@ -112,10 +108,9 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 	if (rmpp_hdr->rmpp_type == IBMF_RMPP_TYPE_DATA) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_sender_active_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow(): %s\n", tnf_string, msg,
-		    "Data packet received, discarding it");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_rmpp_sender_active_flow(): %s\n",
+			     "Data packet received, discarding it");
 
 		/*
 		 * According to the IB spec, we discard the packet and resend
@@ -123,10 +118,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		 * window_last so send_rmpp_window() will just reset the timer.
 		 */
 		ibmf_i_send_rmpp_window(msgimplp, IBMF_NO_BLOCK);
-
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_rmpp_sender_active_flow_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow() exit\n");
 
 		return;
 	}
@@ -136,22 +127,18 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		if ((rmpp_hdr->rmpp_type != IBMF_RMPP_TYPE_STOP) &&
 		    (rmpp_hdr->rmpp_type != IBMF_RMPP_TYPE_ABORT)) {
 
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_i_rmpp_sender_active_flow, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_sender_active_flow(): %s\n",
-			    tnf_string, msg,
-			    "Unrecognized packet received, sending ABORT");
+			IBMF_TRACE_1(DPRINT_L2,
+				     "ibmf_i_rmpp_sender_active_flow(): %s\n",
+				     "Unrecognized packet received, sending ABORT");
 
 			/* abort with status BadT */
 			status = ibmf_i_send_rmpp(msgimplp,
 			    IBMF_RMPP_TYPE_ABORT, IBMF_RMPP_STATUS_BADT,
 			    0, 0, IBMF_NO_BLOCK);
 			if (status != IBMF_SUCCESS) {
-				IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-				    ibmf_i_rmpp_sender_active_flow,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_rmpp_sender_active_flow(): %s\n",
-				    tnf_string, msg, "RMPP ABORT send failed");
+				IBMF_TRACE_1(DPRINT_L2,
+					     "ibmf_i_rmpp_sender_active_flow(): %s\n",
+					     "RMPP ABORT send failed");
 				msgimplp->im_trans_state_flags |=
 				    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 			}
@@ -164,12 +151,10 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 			abort_status = rmpp_hdr->rmpp_status;
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_i_rmpp_sender_active_flow, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_sender_active_flow(): %s, "
-			    "status = %d\n", tnf_string, msg,
-			    "STOP or ABORT packet received, terminating",
-			    tnf_uint, abort_status, abort_status);
+			IBMF_TRACE_2(DPRINT_L2,
+				     "ibmf_i_rmpp_sender_active_flow(): %s, ""status = %d\n",
+				     "STOP or ABORT packet received, terminating",
+				     abort_status);
 		}
 
 		rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_ABORT;
@@ -179,20 +164,16 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		ibmf_i_set_timer(ibmf_i_err_terminate_timeout, msgimplp,
 		    IBMF_RESP_TIMER);
 
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_rmpp_sender_active_flow_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow() exit\n");
-
 		return;
 	}
 
-	IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_rmpp_sender_active_flow,
-	    IBMF_TNF_TRACE, "", "ibmf_i_rmpp_sender_active_flow(): %s, "
-	    "msgp = 0x%p, recvd seg = %d wl = %d wf = %d\n",
-	    tnf_string, msg, "ACK packet received",
-	    tnf_opaque, msgp, msgimplp, tnf_uint, recvd_seg,
-	    b2h32(rmpp_hdr->rmpp_segnum), tnf_uint, wl, rmpp_ctx->rmpp_wl,
-	    tnf_uint, wf, rmpp_ctx->rmpp_wf);
+	IBMF_TRACE_5(DPRINT_L3,
+		     "ibmf_i_rmpp_sender_active_flow(): %s, ""msgp = 0x%p, recvd seg = %d wl = %d wf = %d\n",
+		     "ACK packet received",
+		     msgimplp,
+		     b2h32(rmpp_hdr->rmpp_segnum),
+		     rmpp_ctx->rmpp_wl,
+		     rmpp_ctx->rmpp_wf);
 
 
 	/* only ACK packets get here */
@@ -202,10 +183,9 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		status = ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ABORT,
 		    IBMF_RMPP_STATUS_S2B, 0, 0, IBMF_NO_BLOCK);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_i_rmpp_sender_active_flow, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_sender_active_flow(): %s\n",
-			    tnf_string, msg, "RMPP ABORT send failed");
+			IBMF_TRACE_1(DPRINT_L2,
+				     "ibmf_i_rmpp_sender_active_flow(): %s\n",
+				     "RMPP ABORT send failed");
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 		}
@@ -214,38 +194,28 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		IBMF_ADD32_KSTATS(clientp, rmpp_errors, 1);
 		mutex_exit(&clientp->ic_kstat_mutex);
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_i_rmpp_sender_active_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow(): %s\n",
-		    tnf_string, msg, "Segnum > WL");
+		IBMF_TRACE_1(DPRINT_L2,
+			     "ibmf_i_rmpp_sender_active_flow(): %s\n",
+			     "Segnum > WL");
 
 		rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_ABORT;
 
 		ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 		    msgimplp, IBMF_RESP_TIMER);
 
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_rmpp_sender_active_flow_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow() exit\n");
-
 		return;
 	}
 
 	if (b2h32(rmpp_hdr->rmpp_segnum) < rmpp_ctx->rmpp_wf) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_sender_active_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow(): %s\n",
-		    tnf_string, msg, "Segnum < WF");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_rmpp_sender_active_flow(): %s\n",
+			     "Segnum < WF");
 
 		/* discard the packet by not processing it here */
 
 		/* send the window */
 		ibmf_i_send_rmpp_window(msgimplp, IBMF_NO_BLOCK);
-
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_rmpp_sender_active_flow_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow() exit\n");
 
 		return;
 	}
@@ -253,19 +223,17 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 	/* only ACK packets with valid segnum get here */
 	if (b2h32(rmpp_hdr->rmpp_pyldlen_nwl) < rmpp_ctx->rmpp_wl) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_i_rmpp_sender_active_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow(): %s\n",
-		    tnf_string, msg, "NWL < WL");
+		IBMF_TRACE_1(DPRINT_L2,
+			     "ibmf_i_rmpp_sender_active_flow(): %s\n",
+			     "NWL < WL");
 
 		/* abort with status W2S */
 		status = ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ABORT,
 		    IBMF_RMPP_STATUS_W2S, 0, 0, IBMF_NO_BLOCK);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_i_rmpp_sender_active_flow, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_sender_active_flow(): %s\n",
-			    tnf_string, msg, "RMPP ABORT send failed");
+			IBMF_TRACE_1(DPRINT_L2,
+				     "ibmf_i_rmpp_sender_active_flow(): %s\n",
+				     "RMPP ABORT send failed");
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 		}
@@ -278,10 +246,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 		ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 		    msgimplp, IBMF_RESP_TIMER);
-
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_rmpp_sender_active_flow_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow() exit\n");
 
 		return;
 	}
@@ -290,21 +254,18 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 	if (b2h32(rmpp_hdr->rmpp_segnum) == rmpp_ctx->rmpp_num_pkts) {
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_sender_active_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow(): %s, msgp = 0x%p, "
-		    "double-sided = %d\n", tnf_string, msg, "Last packet",
-		    tnf_opaque, msgimplp, msgimplp,
-		    tnf_opaque, double_sided, rmpp_ctx->rmpp_is_ds);
+		IBMF_TRACE_3(DPRINT_L3,
+			     "ibmf_i_rmpp_sender_active_flow(): %s, msgp = 0x%p, ""double-sided = %d\n",
+			     "Last packet",
+			     msgimplp,
+			     rmpp_ctx->rmpp_is_ds);
 
 		if (rmpp_ctx->rmpp_is_ds) {
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_rmpp_sender_active_flow, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_sender_active_flow(): %s, "
-			    "msgp = 0x%p\n", tnf_string, msg,
-			    "Doublesided,sending ACK and switching to receiver",
-			    tnf_opaque, msgimplp, msgimplp);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_rmpp_sender_active_flow(): %s, ""msgp = 0x%p\n",
+				     "Doublesided,sending ACK and switching to receiver",
+				     msgimplp);
 
 			rmpp_ctx->rmpp_is_ds = B_FALSE;
 			rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_SENDER_SWITCH;
@@ -320,10 +281,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			    msgimplp, IBMF_RESP_TIMER);
 
 			/* proceed with sender switch to receiver */
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_rmpp_sender_active_flow_end,
-			    IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_sender_active_flow() exit\n");
 			return;
 		}
 
@@ -331,9 +288,6 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_DONE;
 		ibmf_i_terminate_transaction(clientp, msgimplp, IBMF_SUCCESS);
 
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_rmpp_sender_active_flow_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_active_flow() exit\n");
 		return;
 	}
 
@@ -344,20 +298,15 @@ ibmf_i_rmpp_sender_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 	    (rmpp_ctx->rmpp_num_pkts < b2h32(rmpp_hdr->rmpp_pyldlen_nwl)) ?
 	    rmpp_ctx->rmpp_num_pkts : b2h32(rmpp_hdr->rmpp_pyldlen_nwl);
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_rmpp_sender_active_flow,
-	    IBMF_TNF_TRACE, "", "ibmf_i_rmpp_sender_active_flow(): %s, "
-	    "wf = %d, wl = %d, ns = %d\n",
-	    tnf_string, msg, "sending next window",
-	    tnf_uint, wf, rmpp_ctx->rmpp_wf, tnf_uint, wl, rmpp_ctx->rmpp_wl,
-	    tnf_uint, ns, rmpp_ctx->rmpp_ns);
+	IBMF_TRACE_4(DPRINT_L3,
+		     "ibmf_i_rmpp_sender_active_flow(): %s, ""wf = %d, wl = %d, ns = %d\n",
+		     "sending next window",
+		     rmpp_ctx->rmpp_wf,
+		     rmpp_ctx->rmpp_wl,
+		     rmpp_ctx->rmpp_ns);
 
 	/* send the window */
 	ibmf_i_send_rmpp_window(msgimplp, IBMF_NO_BLOCK);
-
-	/* carry on with the protocol */
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_rmpp_sender_active_flow_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_rmpp_sender_active_flow() exit\n");
 }
 
 /*
@@ -374,21 +323,20 @@ ibmf_i_rmpp_sender_switch_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 	ibmf_rmpp_hdr_t *rmpp_hdr;
 	int		status;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_rmpp_sender_switch_flow_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_rmpp_sender_switch_flow(): clientp = 0x%p, qp_hdl = 0x%p, "
-	    "msgp = 0x%p, madp = 0x%p\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, qp_hdl, qp_hdl, tnf_opaque, msg, msgimplp,
-	    tnf_opaque, mad, mad);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_rmpp_sender_switch_flow(): clientp = 0x%p, qp_hdl = 0x%p, ""msgp = 0x%p, madp = 0x%p\n",
+		     clientp,
+		     qp_hdl,
+		     msgimplp,
+		     mad);
 
 	rmpp_hdr = (ibmf_rmpp_hdr_t *)(mad + sizeof (ib_mad_hdr_t));
 
 	if (rmpp_hdr->rmpp_type == IBMF_RMPP_TYPE_ACK) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_sender_switch_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_switch_flow(): %s\n", tnf_string, msg,
-		    "ACK packet received, sending ACK");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_rmpp_sender_switch_flow(): %s\n",
+			     "ACK packet received, sending ACK");
 
 		(void) ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ACK,
 		    IBMF_RMPP_STATUS_NORMAL, 0, 1, IBMF_NO_BLOCK);
@@ -399,29 +347,26 @@ ibmf_i_rmpp_sender_switch_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 	} else if (rmpp_hdr->rmpp_type == IBMF_RMPP_TYPE_DATA) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_sender_switch_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_switch_flow(): %s\n", tnf_string, msg,
-		    "DATA packet received, processing packet");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_rmpp_sender_switch_flow(): %s\n",
+			     "DATA packet received, processing packet");
 
 		msgimplp->im_flags |= IBMF_MSG_FLAGS_RECV_RMPP;
 		ibmf_i_rmpp_recvr_flow_main(clientp, qp_hdl, msgimplp, mad);
 
 	} else {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_i_rmpp_sender_switch_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_sender_switch_flow(): %s\n", tnf_string, msg,
-		    "Unexpected packet received, sending ABORT BADT");
+		IBMF_TRACE_1(DPRINT_L2,
+			     "ibmf_i_rmpp_sender_switch_flow(): %s\n",
+			     "Unexpected packet received, sending ABORT BADT");
 
 		/* abort with status BadT */
 		status = ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ABORT,
 		    IBMF_RMPP_STATUS_BADT, 0, 0, IBMF_NO_BLOCK);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_i_rmpp_sender_switch_flow, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_sender_switch_flow(): %s\n",
-			    tnf_string, msg, "RMPP ABORT send failed");
+			IBMF_TRACE_1(DPRINT_L2,
+				     "ibmf_i_rmpp_sender_switch_flow(): %s\n",
+				     "RMPP ABORT send failed");
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 		}
@@ -435,10 +380,6 @@ ibmf_i_rmpp_sender_switch_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 		    msgimplp, IBMF_RESP_TIMER);
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_rmpp_sender_switch_flow_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_rmpp_sender_switch_flow() exit\n");
 }
 
 /*
@@ -461,20 +402,20 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 	size_t		buf_sz;
 	int		status;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_rmpp_recvr_flow_main_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_rmpp_recvr_flow_main(): clientp = 0x%p, qp_hdl = 0x%p, "
-	    "msgp = 0x%p, madp = 0x%p\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, qp_hdl, qp_hdl, tnf_opaque, msg, msgimplp,
-	    tnf_opaque, mad, mad);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_rmpp_recvr_flow_main(): clientp = 0x%p, qp_hdl = 0x%p, ""msgp = 0x%p, madp = 0x%p\n",
+		     clientp,
+		     qp_hdl,
+		     msgimplp,
+		     mad);
 
 	rmpp_hdr = (ibmf_rmpp_hdr_t *)(mad + sizeof (ib_mad_hdr_t));
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_rmpp_recvr_flow_main,
-	    IBMF_TNF_TRACE, "", "ibmf_i_rmpp_recvr_flow_main(): "
-	    "segnum = %d, es = %d, wl = %d\n", tnf_uint, segnum,
-	    b2h32(rmpp_hdr->rmpp_segnum), tnf_uint, es, rmpp_ctx->rmpp_es,
-	    tnf_uint, wl, rmpp_ctx->rmpp_wl);
+	IBMF_TRACE_3(DPRINT_L3,
+		     "ibmf_i_rmpp_recvr_flow_main(): ""segnum = %d, es = %d, wl = %d\n",
+		     b2h32(rmpp_hdr->rmpp_segnum),
+		     rmpp_ctx->rmpp_es,
+		     rmpp_ctx->rmpp_wl);
 
 	/*
 	 * check that this is the segment we expected;
@@ -483,10 +424,9 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 	 */
 	if (b2h32(rmpp_hdr->rmpp_segnum) != rmpp_ctx->rmpp_es) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_flow_main(): %s\n", tnf_string, msg,
-		    "Unexpected segment number, discarding packet");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+			     "Unexpected segment number, discarding packet");
 
 		/* discard this packet by not processing it here */
 
@@ -499,12 +439,9 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		if (msgimplp->im_msgbufs_recv.im_bufs_mad_hdr == NULL) {
 			status = ibmf_setup_recvbuf_on_error(msgimplp, mad);
 			if (status != IBMF_SUCCESS) {
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L2,
-				    ibmf_i_rmpp_recvr_flow_main_err,
-				    IBMF_TNF_ERROR, "",
-				    "ibmf_i_rmpp_recvr_flow_main(): %s\n",
-				    tnf_string, msg,
-				    "ibmf_setup_recvbuf_on_error() failed");
+				IBMF_TRACE_1(DPRINT_L2,
+					     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+					     "ibmf_setup_recvbuf_on_error() failed");
 				return;
 			}
 		}
@@ -527,9 +464,6 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			    IBMF_RESP_TIMER);
 		}
 
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_rmpp_recvr_flow_main_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_flow_main() exit\n");
 		return;
 	}
 
@@ -555,14 +489,9 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 				status = ibmf_setup_recvbuf_on_error(msgimplp,
 				    mad);
 				if (status != IBMF_SUCCESS) {
-					IBMF_TRACE_1(IBMF_TNF_NODEBUG,
-					    DPRINT_L2,
-					    ibmf_i_rmpp_recvr_flow_main_err,
-					    IBMF_TNF_ERROR, "",
-					    "ibmf_i_rmpp_recvr_flow_main(): "
-					    "%s\n", tnf_string, msg,
-					    "ibmf_setup_recvbuf_on_error() "
-					    "failed");
+					IBMF_TRACE_1(DPRINT_L2,
+						     "ibmf_i_rmpp_recvr_flow_main(): ""%s\n",
+						     "ibmf_setup_recvbuf_on_error() ""failed");
 					return;
 				}
 			}
@@ -572,11 +501,9 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			    IBMF_RMPP_TYPE_ABORT, IBMF_RMPP_STATUS_IFSN,
 			    0, 0, IBMF_NO_BLOCK);
 			if (status != IBMF_SUCCESS) {
-				IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-				    ibmf_i_rmpp_recvr_flow_main,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_rmpp_recvr_flow_main(): %s\n",
-				    tnf_string, msg, "RMPP ABORT send failed");
+				IBMF_TRACE_1(DPRINT_L2,
+					     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+					     "RMPP ABORT send failed");
 				msgimplp->im_trans_state_flags |=
 				    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 			}
@@ -585,11 +512,9 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			IBMF_ADD32_KSTATS(clientp, rmpp_errors, 1);
 			mutex_exit(&clientp->ic_kstat_mutex);
 
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_flow_main(): %s\n",
-			    tnf_string, msg, "Inconsistent first and segment "
-			    "number detected, sending ABORT IFSN");
+			IBMF_TRACE_1(DPRINT_L2,
+				     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+				     "Inconsistent first and segment ""number detected, sending ABORT IFSN");
 
 			rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_ABORT;
 
@@ -598,16 +523,13 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 			    msgimplp, IBMF_RESP_TIMER);
 
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_rmpp_recvr_flow_main_end, IBMF_TNF_TRACE,
-			    "", "ibmf_i_rmpp_recvr_flow_main() exit\n");
 			return;
 		}
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_flow_main(): %s\n", tnf_string, msg,
-		    "Segment number 1 received:", tnf_opaque, msgp, msgimplp);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+			     "Segment number 1 received:",
+			     msgimplp);
 
 		cl_data_sz = MAD_SIZE_IN_BYTES -
 		    sizeof (ib_mad_hdr_t) - cl_hdr_off - cl_hdr_sz;
@@ -670,19 +592,14 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		    KM_NOSLEEP);
 		if (msgimplp->im_msgbufs_recv.im_bufs_mad_hdr == NULL) {
 
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_flow_main(): %s\n",
-			    tnf_string, msg,
-			    "mem allocation failure (known rmpp payload)");
+			IBMF_TRACE_1(DPRINT_L3,
+				     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+				     "mem allocation failure (known rmpp payload)");
 
 			ibmf_i_terminate_transaction(
 			    msgimplp->im_client, msgimplp,
 			    IBMF_NO_MEMORY);
 
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_rmpp_recvr_flow_main_end, IBMF_TNF_TRACE,
-			    "", "ibmf_i_rmpp_recvr_flow_main() exit\n");
 			return;
 		}
 		mutex_enter(&clientp->ic_kstat_mutex);
@@ -743,18 +660,15 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		/* set the transaction timer if there are more packets */
 		if ((rmpp_hdr->rmpp_flags & IBMF_RMPP_FLAGS_LAST_PKT) == 0) {
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_flow_main(): %s\n",
-			    tnf_string, msg,
-			    "First pkt recvd; setting trans timer: ",
-			    tnf_opaque, msg, msgimplp);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+				     "First pkt recvd; setting trans timer: ",
+				     msgimplp);
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_flow_main(): setting trans"
-			    " timer %p %d\n", tnf_opaque, msg, msgimplp,
-			    tnf_opaque, timeout_id, msgimplp->im_rp_timeout_id);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_rmpp_recvr_flow_main(): setting trans"" timer %p %d\n",
+				     msgimplp,
+				     msgimplp->im_rp_timeout_id);
 
 			ibmf_i_set_timer(ibmf_i_recv_timeout, msgimplp,
 			    IBMF_TRANS_TIMER);
@@ -786,11 +700,9 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			    IBMF_RMPP_TYPE_ABORT, IBMF_RMPP_STATUS_ILPL,
 			    0, 0, IBMF_NO_BLOCK);
 			if (status != IBMF_SUCCESS) {
-				IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-				    ibmf_i_rmpp_recvr_flow_main,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_rmpp_recvr_flow_main(): %s\n",
-				    tnf_string, msg, "RMPP ABORT send failed");
+				IBMF_TRACE_1(DPRINT_L2,
+					     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+					     "RMPP ABORT send failed");
 				msgimplp->im_trans_state_flags |=
 				    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 			}
@@ -799,12 +711,9 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			IBMF_ADD32_KSTATS(clientp, rmpp_errors, 1);
 			mutex_exit(&clientp->ic_kstat_mutex);
 
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_flow_main(): %s\n",
-			    tnf_string, msg,
-			    "Inconsistent last and payload length detected,"
-			    " sending ABORT ILPL, unsetting trans timer");
+			IBMF_TRACE_1(DPRINT_L2,
+				     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+				     "Inconsistent last and payload length detected,"" sending ABORT ILPL, unsetting trans timer");
 
 			rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_ABORT;
 
@@ -812,10 +721,6 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 			ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 			    msgimplp, IBMF_RESP_TIMER);
-
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_rmpp_recvr_flow_main_end, IBMF_TNF_TRACE,
-			    "", "ibmf_i_rmpp_recvr_flow_main() exit\n");
 
 			return;
 		}
@@ -847,22 +752,15 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		    KM_NOSLEEP);
 		if (msgimplp->im_msgbufs_recv.im_bufs_mad_hdr == NULL) {
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_flow_main(): %s, allocsz = %d\n",
-			    tnf_string, msg,
-			    "mem allocation failure (unknown rmpp payload)",
-			    tnf_uint, alloc_size,
-			    sizeof (ib_mad_hdr_t) + cl_hdr_off + cl_hdr_sz +
-			    rmpp_ctx->rmpp_pyld_len);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_rmpp_recvr_flow_main(): %s, allocsz = %d\n",
+				     "mem allocation failure (unknown rmpp payload)",
+				     sizeof(ib_mad_hdr_t) + cl_hdr_off + cl_hdr_sz + rmpp_ctx->rmpp_pyld_len);
 
 			ibmf_i_terminate_transaction(
 			    msgimplp->im_client, msgimplp,
 			    IBMF_NO_MEMORY);
 
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_rmpp_recvr_flow_main_end, IBMF_TNF_TRACE,
-			    "", "ibmf_i_rmpp_recvr_flow_main() exit\n");
 			return;
 		}
 		mutex_enter(&clientp->ic_kstat_mutex);
@@ -896,9 +794,8 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 	rmpp_ctx->rmpp_es++;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_rmpp_recvr_flow_main,
-	    IBMF_TNF_TRACE, "", "ibmf_i_rmpp_recvr_flow_main(): es = %d\n",
-	    tnf_uint, es, rmpp_ctx->rmpp_es);
+	IBMF_TRACE_1(DPRINT_L3, "ibmf_i_rmpp_recvr_flow_main(): es = %d\n",
+		     rmpp_ctx->rmpp_es);
 
 	if (rmpp_hdr->rmpp_flags & IBMF_RMPP_FLAGS_LAST_PKT) {
 
@@ -924,19 +821,12 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			    cl_hdr_off + cl_hdr_sz + rmpp_ctx->rmpp_pyld_len,
 			    KM_NOSLEEP);
 			if (msgimplp->im_msgbufs_recv.im_bufs_mad_hdr == NULL) {
-				IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-				    ibmf_i_rmpp_recvr_flow_main,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_rmpp_recvr_flow_main(): %s\n",
-				    tnf_string, msg,
-				    "mem allocation failure (final payload)");
+				IBMF_TRACE_1(DPRINT_L3,
+					     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+					     "mem allocation failure (final payload)");
 				ibmf_i_terminate_transaction(
 				    msgimplp->im_client, msgimplp,
 				    IBMF_NO_MEMORY);
-				IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-				    ibmf_i_rmpp_recvr_flow_main_end,
-				    IBMF_TNF_TRACE, "",
-				    "ibmf_i_rmpp_recvr_flow_main() exit\n");
 				return;
 			}
 			mutex_enter(&clientp->ic_kstat_mutex);
@@ -973,12 +863,10 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			    cl_hdr_sz + prev_pyld_len);
 		}
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_flow_main(): %s, msgp = 0x%p\n",
-		    tnf_string, msg,
-		    "Last pkt rcvd; state to recv_term, sending ack",
-		    tnf_opaque, msgp, msgimplp);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_flow_main(): %s, msgp = 0x%p\n",
+			     "Last pkt rcvd; state to recv_term, sending ack",
+			     msgimplp);
 
 		rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_RECEVR_TERMINATE;
 
@@ -987,36 +875,31 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		    rmpp_ctx->rmpp_es - 1 + IBMF_RMPP_DEFAULT_WIN_SZ,
 		    IBMF_NO_BLOCK);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_flow_main(): %s\n",
-			    tnf_string, msg, "RMPP ACK send failed");
+			IBMF_TRACE_1(DPRINT_L3,
+				     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+				     "RMPP ACK send failed");
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 		}
 
 		/* unset the transaction timer if it's not the first segment */
 		if ((rmpp_hdr->rmpp_flags & IBMF_RMPP_FLAGS_FIRST_PKT) == 0) {
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_flow_main(): %s, msgp = 0x%p\n",
-			    tnf_string, msg, "Last, but not first segment",
-			    tnf_opaque, msgp, msgimplp);
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_flow_main(): unsetting timer "
-			    "%p %d\n", tnf_opaque, msgp, msgimplp,
-			    tnf_opaque, timeout_id, msgimplp->im_rp_timeout_id);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_rmpp_recvr_flow_main(): %s, msgp = 0x%p\n",
+				     "Last, but not first segment",
+				     msgimplp);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_rmpp_recvr_flow_main(): unsetting timer ""%p %d\n",
+				     msgimplp,
+				     msgimplp->im_rp_timeout_id);
 
 			ibmf_i_unset_timer(msgimplp, IBMF_TRANS_TIMER);
 		}
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_flow_main(): %s, msgp = 0x%p\n",
-		    tnf_string, msg,
-		    "Last pkt rcvd; setting resp timer",
-		    tnf_opaque, msgp, msgimplp);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_flow_main(): %s, msgp = 0x%p\n",
+			     "Last pkt rcvd; setting resp timer",
+			     msgimplp);
 
 		/*
 		 * The RMPP receive transaction has been broken
@@ -1035,11 +918,9 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		 * that the duplicate message context needs to be created
 		 * to handle the termination loop.
 		 */
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_flow_main(): last packet, "
-		    " returning data to client for message %p\n",
-		    tnf_opaque, msgp, msgimplp);
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_flow_main(): last packet, "" returning data to client for message %p\n",
+			     msgimplp);
 
 		ibmf_i_terminate_transaction(clientp, msgimplp, IBMF_SUCCESS);
 
@@ -1050,13 +931,12 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 	}
 
 	if (b2h32(rmpp_hdr->rmpp_segnum) == rmpp_ctx->rmpp_wl) {
-		IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_flow_main(): %s, msgp = 0x%p"
-		    "segnum = %d, wl = %d\n", tnf_string, msg,
-		    "Last packet in window received", tnf_opaque, msgimplp,
-		    msgimplp, tnf_opaque, seg, b2h32(rmpp_hdr->rmpp_segnum),
-		    tnf_opaque, wl, rmpp_ctx->rmpp_wl);
+		IBMF_TRACE_4(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_flow_main(): %s, msgp = 0x%p""segnum = %d, wl = %d\n",
+			     "Last packet in window received",
+			     msgimplp,
+			     b2h32(rmpp_hdr->rmpp_segnum),
+			     rmpp_ctx->rmpp_wl);
 
 		(void) ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ACK,
 		    IBMF_RMPP_STATUS_NORMAL,
@@ -1069,16 +949,11 @@ ibmf_i_rmpp_recvr_flow_main(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 	} else {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_flow_main, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_flow_main(): %s\n",
-		    tnf_string, msg, "Packet in window received");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_flow_main(): %s\n",
+			     "Packet in window received");
 
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_rmpp_recvr_flow_main_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_rmpp_recvr_flow_main() exit\n");
 }
 
 /*
@@ -1096,12 +971,12 @@ ibmf_i_rmpp_recvr_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 	uint32_t	abort_status;
 	int		status;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_rmpp_recvr_active_flow_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_rmpp_recvr_active_flow(): clientp = 0x%p, qp_hdl = 0x%p, "
-	    "msgp = 0x%p, madp = 0x%p\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, qp_hdl, qp_hdl, tnf_opaque, msg, msgimplp,
-	    tnf_opaque, mad, mad);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_rmpp_recvr_active_flow(): clientp = 0x%p, qp_hdl = 0x%p, ""msgp = 0x%p, madp = 0x%p\n",
+		     clientp,
+		     qp_hdl,
+		     msgimplp,
+		     mad);
 
 	rmpp_hdr = (ibmf_rmpp_hdr_t *)(mad + sizeof (ib_mad_hdr_t));
 
@@ -1109,10 +984,9 @@ ibmf_i_rmpp_recvr_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 		/* discard this packet by not processing it here */
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_active_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_active_flow(): %s\n", tnf_string, msg,
-		    "ACK packet received, discarding packet");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_active_flow(): %s\n",
+			     "ACK packet received, discarding packet");
 
 		/*
 		 * reset the timer if we're still waiting for the first seg;
@@ -1129,10 +1003,9 @@ ibmf_i_rmpp_recvr_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 	if (rmpp_hdr->rmpp_type == IBMF_RMPP_TYPE_DATA) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_active_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_active_flow(): %s\n", tnf_string, msg,
-		    "DATA packet received, processing packet");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_active_flow(): %s\n",
+			     "DATA packet received, processing packet");
 
 		ibmf_i_rmpp_recvr_flow_main(clientp, qp_hdl, msgimplp, mad);
 
@@ -1141,12 +1014,10 @@ ibmf_i_rmpp_recvr_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 		abort_status = rmpp_hdr->rmpp_status;
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_i_rmpp_recvr_active_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_active_flow(): %s, status = %d\n",
-		    tnf_string, msg,
-		    "STOP/ABORT packet received, terminating transaction",
-		    tnf_uint, abort_status, abort_status);
+		IBMF_TRACE_2(DPRINT_L2,
+			     "ibmf_i_rmpp_recvr_active_flow(): %s, status = %d\n",
+			     "STOP/ABORT packet received, terminating transaction",
+			     abort_status);
 
 		/* discard the packet and terminate the transaction */
 		rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_ABORT;
@@ -1160,19 +1031,17 @@ ibmf_i_rmpp_recvr_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 	} else {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_i_rmpp_recvr_active_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_active_flow(): %s\n", tnf_string, msg,
-		    "Unrecognized packet received, terminating transaction");
+		IBMF_TRACE_1(DPRINT_L2,
+			     "ibmf_i_rmpp_recvr_active_flow(): %s\n",
+			     "Unrecognized packet received, terminating transaction");
 
 		/* abort with status BadT */
 		status = ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ABORT,
 		    IBMF_RMPP_STATUS_BADT, 0, 0, IBMF_NO_BLOCK);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_i_rmpp_recvr_active_flow, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_active_flow(): %s\n",
-			    tnf_string, msg, "RMPP ABORT send failed");
+			IBMF_TRACE_1(DPRINT_L2,
+				     "ibmf_i_rmpp_recvr_active_flow(): %s\n",
+				     "RMPP ABORT send failed");
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 		}
@@ -1188,10 +1057,6 @@ ibmf_i_rmpp_recvr_active_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		ibmf_i_set_timer(ibmf_i_err_terminate_timeout,
 		    msgimplp, IBMF_RESP_TIMER);
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_rmpp_recvr_active_flow_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_rmpp_recvr_active_flow() exit\n");
 }
 
 /*
@@ -1208,32 +1073,30 @@ ibmf_i_rmpp_recvr_term_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 	ibmf_rmpp_hdr_t *rmpp_hdr;
 	int		status;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_rmpp_recvr_term_flow_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_rmpp_recvr_term_flow(): clientp = 0x%p, qp_hdl = 0x%p, "
-	    "msgp = 0x%p, madp = 0x%p\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, qp_hdl, qp_hdl, tnf_opaque, msg, msgimplp,
-	    tnf_opaque, mad, mad);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_rmpp_recvr_term_flow(): clientp = 0x%p, qp_hdl = 0x%p, ""msgp = 0x%p, madp = 0x%p\n",
+		     clientp,
+		     qp_hdl,
+		     msgimplp,
+		     mad);
 
 	rmpp_hdr = (ibmf_rmpp_hdr_t *)(mad + sizeof (ib_mad_hdr_t));
 
 	if (rmpp_hdr->rmpp_type == IBMF_RMPP_TYPE_DATA) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_term_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_term_flow(): %s\n", tnf_string, msg,
-		    "Data packet received, resending ACK");
+		IBMF_TRACE_1(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_term_flow(): %s\n",
+			     "Data packet received, resending ACK");
 
 		(void) ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ACK,
 		    IBMF_RMPP_STATUS_NORMAL, rmpp_ctx->rmpp_es - 1,
 		    rmpp_ctx->rmpp_es - 1 + IBMF_RMPP_DEFAULT_WIN_SZ,
 		    IBMF_NO_BLOCK);
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_term_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_term_flow(): setting resp timer %d %p\n",
-		    tnf_opaque, msgimplp, msgimplp, tnf_opaque,
-		    timeout_id, msgimplp->im_rp_timeout_id);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_term_flow(): setting resp timer %d %p\n",
+			     msgimplp,
+			     msgimplp->im_rp_timeout_id);
 
 		/* set the response timer */
 		ibmf_i_set_timer(ibmf_i_recv_timeout, msgimplp,
@@ -1241,11 +1104,10 @@ ibmf_i_rmpp_recvr_term_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 	} else if (rmpp_hdr->rmpp_type == IBMF_RMPP_TYPE_ACK) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_rmpp_recvr_term_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_term_flow(): %s, msgp = 0x%p\n",
-		    tnf_string, msg, "ACK packet received",
-		    tnf_opaque, msgimplp, msgimplp);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_i_rmpp_recvr_term_flow(): %s, msgp = 0x%p\n",
+			     "ACK packet received",
+			     msgimplp);
 
 		if (rmpp_ctx->rmpp_is_ds) {
 			/*
@@ -1253,12 +1115,10 @@ ibmf_i_rmpp_recvr_term_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 			 * we can send response; notify client that data has
 			 * arrived; it will call msg_transport to send response
 			 */
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_rmpp_recvr_term_flow, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_term_flow(): %s, msgp = 0x%p\n",
-			    tnf_string, msg,
-			    "Received final ack for double-sided trans",
-			    tnf_opaque, msgimplp, msgimplp);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_i_rmpp_recvr_term_flow(): %s, msgp = 0x%p\n",
+				     "Received final ack for double-sided trans",
+				     msgimplp);
 
 			/*
 			 * successful termination
@@ -1269,12 +1129,10 @@ ibmf_i_rmpp_recvr_term_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 		} else {
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_i_rmpp_recvr_term_flow, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_term_flow(): %s, msgp = 0x%p\n",
-			    tnf_string, msg, "Received ACK while in recv_term "
-			    "state for single sided trans",
-			    tnf_opaque, msgimplp, msgimplp);
+			IBMF_TRACE_2(DPRINT_L2,
+				     "ibmf_i_rmpp_recvr_term_flow(): %s, msgp = 0x%p\n",
+				     "Received ACK while in recv_term ""state for single sided trans",
+				     msgimplp);
 
 			/* abort with status BadT */
 			(void) ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ABORT,
@@ -1290,19 +1148,17 @@ ibmf_i_rmpp_recvr_term_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 
 	} else {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_i_rmpp_recvr_term_flow, IBMF_TNF_TRACE, "",
-		    "ibmf_i_rmpp_recvr_term_flow(): %s\n", tnf_string, msg,
-		    "Unexpected packet received, sending ABORT BADT");
+		IBMF_TRACE_1(DPRINT_L2,
+			     "ibmf_i_rmpp_recvr_term_flow(): %s\n",
+			     "Unexpected packet received, sending ABORT BADT");
 
 		/* abort with status BadT */
 		status = ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ABORT,
 		    IBMF_RMPP_STATUS_BADT, 0, 0, IBMF_NO_BLOCK);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_i_rmpp_recvr_term_flow, IBMF_TNF_TRACE, "",
-			    "ibmf_i_rmpp_recvr_term_flow(): %s\n",
-			    tnf_string, msg, "RMPP ABORT send failed");
+			IBMF_TRACE_1(DPRINT_L2,
+				     "ibmf_i_rmpp_recvr_term_flow(): %s\n",
+				     "RMPP ABORT send failed");
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 		}
@@ -1319,10 +1175,6 @@ ibmf_i_rmpp_recvr_term_flow(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		    msgimplp, IBMF_RESP_TIMER);
 
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_rmpp_recvr_term_flow_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_rmpp_recvr_term_flow() exit\n");
 }
 
 /*
@@ -1334,10 +1186,9 @@ ibmf_i_is_valid_rmpp_status(ibmf_rmpp_hdr_t *rmpp_hdr)
 {
 	boolean_t	found = B_TRUE;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_is_valid_rmpp_status_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_is_valid_rmpp_status(): rmpp_hdr = 0x%p\n",
-	    tnf_opaque, rmpp_hdr, rmpp_hdr);
+	IBMF_TRACE_1(DPRINT_L4,
+		     "ibmf_i_is_valid_rmpp_status(): rmpp_hdr = 0x%p\n",
+		     rmpp_hdr);
 
 	if (((rmpp_hdr->rmpp_type == IBMF_RMPP_TYPE_DATA) ||
 	    (rmpp_hdr->rmpp_type == IBMF_RMPP_TYPE_ACK)) &&
@@ -1361,10 +1212,6 @@ ibmf_i_is_valid_rmpp_status(ibmf_rmpp_hdr_t *rmpp_hdr)
 	    (rmpp_hdr->rmpp_type != IBMF_RMPP_TYPE_ABORT))
 		found = B_FALSE;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_is_valid_rmpp_status_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_is_valid_rmpp_status_flow() exit\n");
-
 	return (found);
 }
 
@@ -1380,12 +1227,12 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 	ibmf_rmpp_hdr_t *rmpp_hdr;
 	int		status;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_handle_rmpp_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_handle_rmpp(): clientp = 0x%p, qp_hdl = 0x%p, "
-	    "msgp = 0x%p, madp = 0x%p\n", tnf_opaque, clientp, clientp,
-	    tnf_opaque, qp_hdl, qp_hdl, tnf_opaque, msg, msgimplp,
-	    tnf_opaque, mad, madp);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_handle_rmpp(): clientp = 0x%p, qp_hdl = 0x%p, ""msgp = 0x%p, madp = 0x%p\n",
+		     clientp,
+		     qp_hdl,
+		     msgimplp,
+		     madp);
 
 	ASSERT(MUTEX_HELD(&msgimplp->im_mutex));
 
@@ -1405,11 +1252,9 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		if (msgimplp->im_msgbufs_recv.im_bufs_mad_hdr == NULL) {
 			status = ibmf_setup_recvbuf_on_error(msgimplp, madp);
 			if (status != IBMF_SUCCESS) {
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L2,
-				    ibmf_i_handle_rmpp_err, IBMF_TNF_ERROR, "",
-				    "ibmf_i_handle_rmpp(): %s\n", tnf_string,
-				    msg,
-				    "ibmf_setup_recvbuf_on_error() failed");
+				IBMF_TRACE_1(DPRINT_L2,
+					     "ibmf_i_handle_rmpp(): %s\n",
+					     "ibmf_setup_recvbuf_on_error() failed");
 				return;
 			}
 		}
@@ -1435,10 +1280,8 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 				    IBMF_RESP_TIMER);
 			}
 
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_handle_rmpp, IBMF_TNF_TRACE, "",
-			    "ibmf_i_handle_rmpp(): %s\n", tnf_string, msg,
-			    "BAD version detected, dropping MAD");
+			IBMF_TRACE_1(DPRINT_L3, "ibmf_i_handle_rmpp(): %s\n",
+				     "BAD version detected, dropping MAD");
 
 			return;
 		}
@@ -1447,10 +1290,8 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		status = ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ABORT,
 		    IBMF_RMPP_STATUS_UNV, 0, 0, IBMF_NO_BLOCK);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L2,
-			    ibmf_i_handle_rmpp_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_handle_rmpp(): %s\n", tnf_string, msg,
-			    "RMPP ABORT send failed");
+			IBMF_TRACE_1(DPRINT_L2, "ibmf_i_handle_rmpp(): %s\n",
+				     "RMPP ABORT send failed");
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 		}
@@ -1459,14 +1300,8 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		IBMF_ADD32_KSTATS(clientp, rmpp_errors, 1);
 		mutex_exit(&clientp->ic_kstat_mutex);
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_i_handle_rmpp, IBMF_TNF_TRACE, "",
-		    "ibmf_i_handle_rmpp(): %s\n", tnf_string, msg,
-		    "Unsupported RMPP version detected, sending ABORT UNV");
-
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_handle_rmpp_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_handle_rmpp() exit\n");
+		IBMF_TRACE_1(DPRINT_L2, "ibmf_i_handle_rmpp(): %s\n",
+			     "Unsupported RMPP version detected, sending ABORT UNV");
 
 		rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_ABORT;
 
@@ -1492,11 +1327,9 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		if (msgimplp->im_msgbufs_recv.im_bufs_mad_hdr == NULL) {
 			status = ibmf_setup_recvbuf_on_error(msgimplp, madp);
 			if (status != IBMF_SUCCESS) {
-				IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L2,
-				    ibmf_i_handle_rmpp_err, IBMF_TNF_ERROR, "",
-				    "ibmf_i_handle_rmpp(): %s\n", tnf_string,
-				    msg,
-				    "ibmf_setup_recvbuf_on_error() failed");
+				IBMF_TRACE_1(DPRINT_L2,
+					     "ibmf_i_handle_rmpp(): %s\n",
+					     "ibmf_setup_recvbuf_on_error() failed");
 				return;
 			}
 		}
@@ -1522,10 +1355,8 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 				    IBMF_RESP_TIMER);
 			}
 
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_handle_rmpp, IBMF_TNF_TRACE, "",
-			    "ibmf_i_handle_rmpp(): %s\n", tnf_string, msg,
-			    "Invalid RMPP status detected, dropping MAD");
+			IBMF_TRACE_1(DPRINT_L3, "ibmf_i_handle_rmpp(): %s\n",
+				     "Invalid RMPP status detected, dropping MAD");
 
 			return;
 		}
@@ -1534,10 +1365,8 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		status = ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_ABORT,
 		    IBMF_RMPP_STATUS_IS, 0, 0, IBMF_NO_BLOCK);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L2,
-			    ibmf_i_handle_rmpp_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_handle_rmpp(): %s\n", tnf_string, msg,
-			    "RMPP ABORT send failed");
+			IBMF_TRACE_1(DPRINT_L2, "ibmf_i_handle_rmpp(): %s\n",
+				     "RMPP ABORT send failed");
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_SEND_DONE;
 		}
@@ -1546,14 +1375,8 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		IBMF_ADD32_KSTATS(clientp, rmpp_errors, 1);
 		mutex_exit(&clientp->ic_kstat_mutex);
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_i_handle_rmpp, IBMF_TNF_TRACE, "",
-		    "ibmf_i_handle_rmpp(): %s\n", tnf_string, msg,
-		    "Invalid RMPP status detected, sending ABORT IS");
-
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_handle_rmpp_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_handle_rmpp() exit\n");
+		IBMF_TRACE_1(DPRINT_L2, "ibmf_i_handle_rmpp(): %s\n",
+			     "Invalid RMPP status detected, sending ABORT IS");
 
 		rmpp_ctx->rmpp_state = IBMF_RMPP_STATE_ABORT;
 
@@ -1592,11 +1415,10 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 		break;
 	default:
 		/* Including IBMF_RMPP_STATE_ABORT */
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_i_handle_rmpp, IBMF_TNF_TRACE, "",
-		    "ibmf_i_handle_rmpp(): %s, rmpp_state = 0x%x\n",
-		    tnf_string, msg, "Dropping packet",
-		    tnf_opaque, rmpp_state, rmpp_ctx->rmpp_state);
+		IBMF_TRACE_2(DPRINT_L2,
+			     "ibmf_i_handle_rmpp(): %s, rmpp_state = 0x%x\n",
+			     "Dropping packet",
+			     rmpp_ctx->rmpp_state);
 
 		/* Reinitiate the resp timer if the state is ABORT */
 		if (rmpp_ctx->rmpp_state == IBMF_RMPP_STATE_ABORT) {
@@ -1623,18 +1445,12 @@ ibmf_i_handle_rmpp(ibmf_client_t *clientp, ibmf_qp_handle_t qp_hdl,
 				    IBMF_RESP_TIMER);
 			}
 
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_handle_rmpp, IBMF_TNF_TRACE, "",
-			    "ibmf_i_handle_rmpp(): %s\n", tnf_string, msg,
-			    "BAD 1st RMPP packet, dropping MAD");
+			IBMF_TRACE_1(DPRINT_L3, "ibmf_i_handle_rmpp(): %s\n",
+				     "BAD 1st RMPP packet, dropping MAD");
 
 			return;
 		}
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_handle_rmpp_end, IBMF_TNF_TRACE, "",
-	    "ibmf_i_handle_rmpp() exit\n");
 }
 
 /*
@@ -1651,22 +1467,19 @@ ibmf_i_send_rmpp(ibmf_msg_impl_t *msgimplp, uint8_t rmpp_type,
 	ibmf_rmpp_ctx_t	*rmpp_ctx = &msgimplp->im_rmpp_ctx;
 	int		status;
 
-	IBMF_TRACE_5(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_send_rmpp_start,
-	    IBMF_TNF_TRACE, "",
-	    "ibmf_i_send_rmpp(): msgp = 0x%p, rmpp_type = 0x%x, "
-	    "rmpp_status = %d, segno = %d, nwl = %d\n",
-	    tnf_opaque, msg, msgimplp,
-	    tnf_uint, rmpp_type, rmpp_type,
-	    tnf_uint, rmpp_status, rmpp_status,
-	    tnf_uint, segno, segno,
-	    tnf_uint, nwl, nwl);
+	IBMF_TRACE_5(DPRINT_L4,
+		     "ibmf_i_send_rmpp(): msgp = 0x%p, rmpp_type = 0x%x, ""rmpp_status = %d, segno = %d, nwl = %d\n",
+		     msgimplp,
+		     rmpp_type,
+		     rmpp_status,
+		     segno,
+		     nwl);
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_send_rmpp,
-	    IBMF_TNF_TRACE, "", "ibmf_i_send_rmpp(): msgp = 0x%p, "
-	    "next_seg = 0x%x, num_pkts = %d\n",
-	    tnf_opaque, msg, msgimplp,
-	    tnf_uint, next_seg, msgimplp->im_rmpp_ctx.rmpp_ns,
-	    tnf_uint, num_pkts, msgimplp->im_rmpp_ctx.rmpp_num_pkts);
+	IBMF_TRACE_3(DPRINT_L3,
+		     "ibmf_i_send_rmpp(): msgp = 0x%p, ""next_seg = 0x%x, num_pkts = %d\n",
+		     msgimplp,
+		     msgimplp->im_rmpp_ctx.rmpp_ns,
+		     msgimplp->im_rmpp_ctx.rmpp_num_pkts);
 
 	ASSERT(MUTEX_HELD(&msgimplp->im_mutex));
 
@@ -1681,17 +1494,12 @@ ibmf_i_send_rmpp(ibmf_msg_impl_t *msgimplp, uint8_t rmpp_type,
 	status = ibmf_i_send_pkt(msgimplp->im_client, msgimplp->im_qp_hdl,
 	    msgimplp, block);
 	if (status != IBMF_SUCCESS) {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_i_send_rmpp_err, IBMF_TNF_ERROR, "",
-		    "ibmf_i_send_rmpp(): %s, status = %d\n", tnf_string, msg,
-		    "unable to send packet", tnf_uint, status, status);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_send_rmpp_end,
-		    IBMF_TNF_TRACE, "", "ibmf_i_send_rmpp() exit\n");
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_i_send_rmpp(): %s, status = %d\n",
+			     "unable to send packet",
+			     status);
 		return (status);
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_send_rmpp_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_send_rmpp() exit\n");
 
 	return (IBMF_SUCCESS);
 }
@@ -1707,15 +1515,14 @@ ibmf_i_send_rmpp_window(ibmf_msg_impl_t *msgimplp, int block)
 	int status, i, numpkts = rmpp_ctx->rmpp_wl - rmpp_ctx->rmpp_ns + 1;
 	uint32_t	payload_length, cl_hdr_sz, cl_hdr_off;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_send_rmpp_window_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_send_rmpp_window(): msgp = 0x%p\n",
-	    tnf_opaque, msg, msgimplp);
+	IBMF_TRACE_1(DPRINT_L4, "ibmf_i_send_rmpp_window(): msgp = 0x%p\n",
+		     msgimplp);
 
-	IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_send_rmpp_window,
-	    IBMF_TNF_TRACE, "", "ibmf_i_handle_rmpp(): wl = %d "
-	    "ns = %d, num_pkts = %d\n", tnf_uint, wl, rmpp_ctx->rmpp_wl,
-	    tnf_uint, ns, rmpp_ctx->rmpp_ns, tnf_uint, num_pkts,
-	    rmpp_ctx->rmpp_num_pkts);
+	IBMF_TRACE_3(DPRINT_L3,
+		     "ibmf_i_handle_rmpp(): wl = %d ""ns = %d, num_pkts = %d\n",
+		     rmpp_ctx->rmpp_wl,
+		     rmpp_ctx->rmpp_ns,
+		     rmpp_ctx->rmpp_num_pkts);
 
 	ASSERT(MUTEX_HELD(&msgimplp->im_mutex));
 
@@ -1733,23 +1540,19 @@ ibmf_i_send_rmpp_window(ibmf_msg_impl_t *msgimplp, int block)
 		else
 			payload_length = rmpp_ctx->rmpp_pkt_data_sz;
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_send_rmpp_window,
-		    IBMF_TNF_TRACE, "", "ibmf_i_handle_rmpp(): ns = %d, "
-		    "pl = %d\n", tnf_uint, ns, rmpp_ctx->rmpp_ns,
-		    tnf_uint, pl, payload_length);
+		IBMF_TRACE_2(DPRINT_L3,
+			     "ibmf_i_handle_rmpp(): ns = %d, ""pl = %d\n",
+			     rmpp_ctx->rmpp_ns,
+			     payload_length);
 
 		status = ibmf_i_send_rmpp(msgimplp, IBMF_RMPP_TYPE_DATA,
 		    IBMF_RMPP_STATUS_NORMAL, rmpp_ctx->rmpp_ns, payload_length,
 		    block);
 		if (status != IBMF_SUCCESS) {
 
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_send_rmpp_window_err, IBMF_TNF_ERROR, "",
-			    "ibmf_i_send_rmpp_window(): %s\n", tnf_string, msg,
-			    "Send rmpp window failed");
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_send_rmpp_window_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_send_rmpp_window() exit\n");
+			IBMF_TRACE_1(DPRINT_L1,
+				     "ibmf_i_send_rmpp_window(): %s\n",
+				     "Send rmpp window failed");
 			return;
 		}
 
@@ -1759,15 +1562,11 @@ ibmf_i_send_rmpp_window(ibmf_msg_impl_t *msgimplp, int block)
 	}
 
 	/* Set the response timer */
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_i_send_rmpp_window,
-	    IBMF_TNF_TRACE, "", "ibmf_i_handle_rmpp(): setting timer %p %d\n",
-	    tnf_opaque, msgimplp, msgimplp, tnf_opaque, timeout_id,
-	    msgimplp->im_rp_timeout_id);
+	IBMF_TRACE_2(DPRINT_L3,
+		     "ibmf_i_handle_rmpp(): setting timer %p %d\n", msgimplp,
+		     msgimplp->im_rp_timeout_id);
 
 	ibmf_i_set_timer(ibmf_i_send_timeout, msgimplp, IBMF_RESP_TIMER);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_send_rmpp_window_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_send_rmpp_window() exit\n");
 }
 
 /*
@@ -1783,11 +1582,12 @@ ibmf_i_send_rmpp_pkts(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 	uint32_t	num_pkts, resid;
 	uint32_t	cl_hdr_sz, cl_data_sz, cl_hdr_off;
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_send_rmpp_pkts_start,
-	    IBMF_TNF_TRACE, "", "ibmf_i_send_rmpp_pkts(): clientp = 0x%p, "
-	    "qphdl = 0x%p, msgp = 0x%p, block = %d\n",
-	    tnf_opaque, clientp, clientp, tnf_opaque, qphdl, ibmf_qp_handle,
-	    tnf_opaque, msg, msgimplp, tnf_uint, block, block);
+	IBMF_TRACE_4(DPRINT_L4,
+		     "ibmf_i_send_rmpp_pkts(): clientp = 0x%p, ""qphdl = 0x%p, msgp = 0x%p, block = %d\n",
+		     clientp,
+		     ibmf_qp_handle,
+		     msgimplp,
+		     block);
 
 	ASSERT(MUTEX_HELD(&msgimplp->im_mutex));
 
@@ -1824,9 +1624,6 @@ ibmf_i_send_rmpp_pkts(ibmf_client_t *clientp, ibmf_qp_handle_t ibmf_qp_handle,
 	rmpp_ctx->rmpp_data_offset = 0;
 
 	ibmf_i_send_rmpp_window(msgimplp, block);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,	ibmf_i_send_rmpp_pkts_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_send_rmpp_pkts() exit\n");
 
 	return (IBMF_SUCCESS);
 }

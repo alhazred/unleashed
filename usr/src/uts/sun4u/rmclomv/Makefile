@@ -56,10 +56,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 CFLAGS		+= $(CCVERBOSE)
 LDFLAGS += -dy -Ndrv/rmc_comm -Ndrv/pmugpio
 
-#
-# Turn on doubleword alignment for 64 bit registers
-#
-CFLAGS		+= -dalign
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

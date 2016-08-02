@@ -35,15 +35,12 @@ BOOT_SUBDIRS= \
 
 COMMON_SUBDIRS= \
 	codereview \
-	codesign \
 	cscope-fast \
 	ctf \
 	depcheck \
 	env \
 	findunref \
-	gk \
 	install.bin \
-	lintdump \
 	make \
 	ndrgen \
 	onbld \
@@ -64,7 +61,6 @@ sparc_SUBDIRS= \
 	tokenize
 
 i386_SUBDIRS=		\
-	aw		\
 	elfextract	\
 	mbh_patch	\
 	btxld
@@ -94,7 +90,6 @@ ROOTDIRS= \
 	$(ROOTONBLD)/etc \
 	$(ROOTONBLD)/etc/exception_lists \
 	$(ROOTONBLD)/share \
-	$(ROOTONBLD)/gk \
 	$(ROOTONBLD)/man \
 	$(ROOTONBLD)/man/man1onbld
 

@@ -28,10 +28,10 @@
 #
 
 
-LIBRARY= 	libbe.a
-VERS= 		.1
+LIBRARY=	libbe.a
+VERS=		.1
 
-OBJECTS= 	\
+OBJECTS=	\
 		be_activate.o \
 		be_create.o \
 		be_list.o \
@@ -45,13 +45,14 @@ include ../../Makefile.lib
 
 LIBS=		$(DYNLIB)
 
-SRCDIR= 	../common
+SRCDIR=		../common
 
 INCS += -I$(SRCDIR) -I$(SRC)/cmd/boot/common -I$(SRC)/common/ficl
 
-C99MODE= 	$(C99_ENABLE)
+C99MODE=	$(C99_ENABLE)
 
-LDLIBS +=	-lficl-sys -lzfs -linstzones -luuid -lnvpair -lc -lgen -ldevinfo -lefi
+LDLIBS +=	-lficl-sys -lzfs -linstzones -luuid -lnvpair -lc -lgen
+LDLIBS +=	-ldevinfo -lefi
 CPPFLAGS +=	$(INCS)
 CERRWARN +=	-_gcc=-Wno-unused-label
 CERRWARN +=	-_gcc=-Wno-uninitialized

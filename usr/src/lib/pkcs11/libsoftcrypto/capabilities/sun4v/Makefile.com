@@ -32,9 +32,14 @@ OBJECTS =	$(ARCFOUR_OBJS) $(BIGNUM_OBJS)
 
 include		$(SRC)/lib/Makefile.lib
 
-AS_CPPFLAGS +=	-D__STDC__ -D_ASM -DPIC -D_REENTRANT -D$(MACH)
-ASFLAGS +=	$(AS_PICFLAGS) -P
-CFLAGS +=	$(CCVERBOSE) -xO5 -xbuiltin=%all -dalign
+AS_CPPFLAGS +=	-D_ASM -DPIC -D_REENTRANT -D$(MACH)
+ASFLAGS +=	$(AS_PICFLAGS)
+CFLAGS +=	$(CCVERBOSE)
+CFLAGS +=	-_gcc=-fno-strict-aliasing
+CFLAGS +=	-_gcc=-fno-unit-at-a-time
+CFLAGS +=	-_gcc=-fno-optimize-sibling-calls
+CFLAGS +=	-_gcc=-O2
+CFLAGS +=	-_gcc=-fbuiltin
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-unused-variable

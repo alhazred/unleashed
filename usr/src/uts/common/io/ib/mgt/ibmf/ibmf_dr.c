@@ -52,10 +52,8 @@ ibmf_i_check_for_loopback(ibmf_msg_impl_t *msgimplp, ibmf_msg_cb_t msg_cb,
 	int		status;
 	ibmf_ci_t	*cip = ((ibmf_client_t *)msgimplp->im_client)->ic_myci;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_check_for_loopback_start, IBMF_TNF_TRACE, "",
-	    "ibmf_i_check_for_loopback() enter, msg = 0x%p\n",
-	    tnf_opaque, msg, msgimplp);
+	IBMF_TRACE_1(DPRINT_L4,
+	    "ibmf_i_check_for_loopback() enter, msg = 0x%p\n", msgimplp);
 
 	*loopback = B_FALSE;
 	dr_hdr = (sm_dr_mad_hdr_t *)msgimplp->im_msgbufs_send.im_bufs_mad_hdr;
@@ -85,22 +83,13 @@ ibmf_i_check_for_loopback(ibmf_msg_impl_t *msgimplp, ibmf_msg_cb_t msg_cb,
 		status = ibmf_i_dr_loopback_filter(msgimplp->im_client,
 		    msgimplp, blocking);
 		if (status != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_i_check_for_loopback_err,
-			    "ibmf_i_check_for_loopback(): %s\n",
-			    IBMF_TNF_ERROR, "", tnf_string, msg,
+			IBMF_TRACE_1(DPRINT_L1, "",
 			    "Failure in DR loopback filter");
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_check_for_loopback_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_check_for_loopback() exit\n");
 			return (status);
 		}
 
 		*loopback = B_TRUE;
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_check_for_loopback_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_check_for_loopback() exit\n");
 
 	return (IBMF_SUCCESS);
 
@@ -116,10 +105,9 @@ ibmf_i_dr_loopback_term(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 {
 	uint_t refcnt;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_dr_loopback_term_start, IBMF_TNF_TRACE, "",
+	IBMF_TRACE_2(DPRINT_L4,
 	    "ibmf_i_dr_loopback_term() enter, clientp = 0x%p, msg = 0x%p\n",
-	    tnf_opaque, clientp, clientp, tnf_opaque, msg, msgimplp);
+	    clientp, msgimplp);
 
 	mutex_enter(&msgimplp->im_mutex);
 
@@ -137,10 +125,9 @@ ibmf_i_dr_loopback_term(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 			msgimplp->im_trans_state_flags |=
 			    IBMF_TRANS_STATE_FLAG_WAIT;
 
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_i_dr_loopback, IBMF_TNF_TRACE, "",
+			IBMF_TRACE_1(DPRINT_L3,
 			    "ibmf_i_dr_loopback_term(): %s\n",
-			    tnf_string, msg, "Blocking for completion");
+			    "Blocking for completion");
 
 			cv_wait(&msgimplp->im_trans_cv, &msgimplp->im_mutex);
 
@@ -169,10 +156,8 @@ ibmf_i_dr_loopback_term(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 
 	} else if ((msgimplp->im_flags & IBMF_MSG_FLAGS_SEQUENCED) == 0) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_i_dr_loopback, IBMF_TNF_TRACE, "",
-		    "ibmf_i_dr_loopback_term(): %s\n",
-		    tnf_string, msg, "Not sequenced, returning to caller");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_i_dr_loopback_term(): %s\n",
+		    "Not sequenced, returning to caller");
 		msgimplp->im_trans_state_flags |= IBMF_TRANS_STATE_FLAG_DONE;
 		msgimplp->im_flags &= ~IBMF_MSG_FLAGS_BUSY;
 		mutex_exit(&msgimplp->im_mutex);
@@ -188,10 +173,6 @@ ibmf_i_dr_loopback_term(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		msgimplp->im_flags &= ~IBMF_MSG_FLAGS_BUSY;
 		mutex_exit(&msgimplp->im_mutex);
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_dr_loopback_term_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_dr_loopback_term() exit\n");
-
 }
 
 /*
@@ -218,10 +199,9 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 	uint_t		ref_cnt;
 	int		ret;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_i_dr_loopback_filter_start, IBMF_TNF_TRACE, "",
+	IBMF_TRACE_2(DPRINT_L4,
 	    "ibmf_i_dr_loopback_filter() enter, clientp = 0x%p, msg = 0x%p\n",
-	    tnf_opaque, clientp, clientp, tnf_opaque, msg, msgimplp);
+	    clientp, msgimplp);
 
 	dr_hdr = (sm_dr_mad_hdr_t *)msgimplp->im_msgbufs_send.im_bufs_mad_hdr;
 
@@ -242,14 +222,9 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		ret = ibmf_i_lookup_client_by_mgmt_class(clientp->ic_myci,
 		    clientp->ic_client_info.port_num, SUBN_AGENT, &rclientp);
 		if (ret != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_recv_pkt_cb_err, IBMF_TNF_TRACE, "",
+			IBMF_TRACE_1(DPRINT_L1,
 			    "ibmf_i_dr_loopback_filter(): %s\n",
-			    tnf_string, msg,
 			    "Client for Mgt Class Subnet Agent not found");
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_dr_loopback_filter_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_dr_loopback_filter() exit\n");
 			return (ret);
 		}
 
@@ -260,25 +235,15 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		ret = ibmf_i_lookup_client_by_mgmt_class(clientp->ic_myci,
 		    clientp->ic_client_info.port_num, SUBN_MANAGER, &rclientp);
 		if (ret != IBMF_SUCCESS) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_recv_pkt_cb_err, IBMF_TNF_TRACE, "",
+			IBMF_TRACE_1(DPRINT_L1,
 			    "ibmf_i_dr_loopback_filter(): %s\n",
-			    tnf_string, msg,
-			    "Client for Mgt Class Subnet Manager not found")
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_dr_loopback_filter_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_dr_loopback_filter() exit\n");
+			    "Client for Mgt Class Subnet Manager not found");
 			return (ret);
 		}
 	} else {
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_recv_pkt_cb_err, IBMF_TNF_TRACE, "",
+		IBMF_TRACE_2(DPRINT_L1,
 		    "ibmf_i_dr_loopback_filter(): %s, method = 0x%x\n",
-		    tnf_string, msg, "Unexpected dr method",
-		    tnf_opaque, method, dr_hdr->R_Method);
-		IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-		    ibmf_i_dr_loopback_filter_end, IBMF_TNF_TRACE, "",
-		    "ibmf_i_dr_loopback_filter() exit\n");
+		    "Unexpected dr method", dr_hdr->R_Method);
 
 		return (IBMF_FAILURE);
 	}
@@ -340,15 +305,10 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 			    (ref_cnt == 0)) {
 				ibmf_i_notify_client(rmsgimplp);
 			}
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_recv_pkt_cb_err, IBMF_TNF_TRACE, "",
+			IBMF_TRACE_2(DPRINT_L1,
 			    "ibmf_i_dr_loopback_filter(): %s, msg = 0x%p\n",
-			    tnf_string, msg,
 			    "Message already marked for removal, dropping MAD",
-			    tnf_opaque, msgimplp, msgimplp);
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_dr_loopback_filter_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_dr_loopback_filter() exit\n");
+			    msgimplp);
 			return (IBMF_FAILURE);
 		}
 	} else {
@@ -360,13 +320,9 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 		rmsgimplp = (ibmf_msg_impl_t *)kmem_zalloc(
 		    sizeof (ibmf_msg_impl_t), KM_NOSLEEP);
 		if (rmsgimplp == NULL) {
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_recv_pkt_cb_err, IBMF_TNF_TRACE, "",
+			IBMF_TRACE_1(DPRINT_L1,
 			    "ibmf_i_dr_loopback_filter(): %s\n",
-			    tnf_string, msg, "Failed to alloc packet");
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_dr_loopback_filter_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_dr_loopback_filter() exit\n");
+			    "Failed to alloc packet");
 			return (IBMF_NO_RESOURCES);
 		}
 
@@ -419,13 +375,9 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 			IBMF_MSG_DECR_REFCNT(rmsgimplp);
 			mutex_exit(&rmsgimplp->im_mutex);
 			kmem_free(rmsgimplp, sizeof (ibmf_msg_impl_t));
-			IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_recv_pkt_cb_err, IBMF_TNF_TRACE, "",
+			IBMF_TRACE_1(DPRINT_L1,
 			    "ibmf_i_dr_loopback_filter(): %s\n",
-			    tnf_string, msg, "mem allocation failure");
-			IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-			    ibmf_i_dr_loopback_filter_end, IBMF_TNF_TRACE, "",
-			    "ibmf_i_dr_loopback_filter() exit\n");
+			    "mem allocation failure");
 			return (IBMF_NO_RESOURCES);
 		}
 		rbuf_alloced = B_TRUE;
@@ -513,10 +465,6 @@ ibmf_i_dr_loopback_filter(ibmf_client_t *clientp, ibmf_msg_impl_t *msgimplp,
 
 	/* perform source client transaction termination processing */
 	ibmf_i_dr_loopback_term(clientp, msgimplp, blocking);
-
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_i_dr_loopback_filter_end,
-	    IBMF_TNF_TRACE, "", "ibmf_i_dr_loopback_filter() exit, ret = %d\n",
-	    tnf_uint, status, ret);
 
 	return (IBMF_SUCCESS);
 }

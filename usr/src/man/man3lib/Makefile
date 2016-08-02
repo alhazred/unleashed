@@ -91,14 +91,12 @@ MANFILES= 	libMPAPI.3lib		\
 	 	libsecdb.3lib		\
 	 	libsendfile.3lib	\
 	 	libsip.3lib		\
-	 	libslp.3lib		\
 	 	libsocket.3lib		\
 	 	libstmf.3lib		\
 	 	libsys.3lib		\
 	 	libsysevent.3lib	\
 	 	libtecla.3lib		\
 	 	libthread.3lib		\
-	 	libtnfctl.3lib		\
 	 	libtsalarm.3lib		\
 	 	libtsnet.3lib		\
 	 	libtsol.3lib		\

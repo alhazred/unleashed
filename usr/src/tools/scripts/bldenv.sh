@@ -70,8 +70,6 @@ typeset -r USAGE=$'+
 [f?invoke csh with the -f (fast-start) option. This option is valid
     only if $SHELL is unset or if it points to csh.]
 [d?set up environment for doing DEBUG builds (default is non-DEBUG)]
-[t?set up environment to use the tools in usr/src/tools (this is the
-    default, use +t to use the tools from /opt/onbld)]
 
 <env_file> [command]
 
@@ -86,8 +84,6 @@ Build type   is  DEBUG
 RELEASE      is  5.10
 VERSION      is  wopr-2::on10-se::11/01/2001
 RELEASE_DATE is  May 2004
-The top-level `setup\' target is available to build headers
-and tools.
 Using /usr/bin/tcsh as shell.
 {root::wopr-2::49}
 {root::wopr-2::49} cd $SRC/cmd/true
@@ -120,7 +116,6 @@ typeset flags=(
 	typeset d=false
 	typeset O=false
 	typeset o=false
-	typeset t=true
 	typeset s=(
 		typeset e=false
 		typeset h=false
@@ -142,8 +137,6 @@ while getopts -a "${progname}" "${USAGE}" OPT ; do
 	  +f)	flags.f=false ;;
 	  d)	flags.d=true  SUFFIX=""    ;;
 	  +d)	flags.d=false SUFFIX="-nd" ;;
-	  t)	flags.t=true  ;;
-	  +t)	flags.t=false ;;
 	  \?)	usage ;;
     esac
 done
@@ -227,18 +220,6 @@ shift
 [[ -d "${CODEMGR_WS}" ]] || fatal_error "Error: ${CODEMGR_WS} is not a directory."
 [[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
 
-# must match the getopts in nightly.sh
-OPTIND=1
-NIGHTLY_OPTIONS="-${NIGHTLY_OPTIONS#-}"
-while getopts '+0ABCDdFfGIilMmNnpRrtUuwW' FLAG $NIGHTLY_OPTIONS
-do
-	case "$FLAG" in
-	  t)	flags.t=true  ;;
-	  +t)	flags.t=false ;;
-	  *)	;;
-	esac
-done
-
 POUND_SIGN="#"
 # have we set RELEASE_DATE in our env file?
 if [ -z "$RELEASE_DATE" ]; then
@@ -284,20 +265,18 @@ fi
 TOOLS="${SRC}/tools"
 TOOLS_PROTO="${TOOLS}/proto/root_${MACH}-nd" ; export TOOLS_PROTO
 
-if "${flags.t}" ; then
-	export ONBLD_TOOLS="${ONBLD_TOOLS:=${TOOLS_PROTO}/opt/onbld}"
+export ONBLD_TOOLS="${ONBLD_TOOLS:=${TOOLS_PROTO}/opt/onbld}"
 
-	export STABS="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/stabs"
-	export CTFSTABS="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfstabs"
-	export GENOFFSETS="${TOOLS_PROTO}/opt/onbld/bin/genoffsets"
+export STABS="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/stabs"
+export CTFSTABS="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfstabs"
+export GENOFFSETS="${TOOLS_PROTO}/opt/onbld/bin/genoffsets"
 
-	export CTFCONVERT="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfconvert"
-	export CTFMERGE="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfmerge"
+export CTFCONVERT="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfconvert"
+export CTFMERGE="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfmerge"
 
-	PATH="${TOOLS_PROTO}/opt/onbld/bin/${MACH}:${PATH}"
-	PATH="${TOOLS_PROTO}/opt/onbld/bin:${PATH}"
-	export PATH
-fi
+PATH="${TOOLS_PROTO}/opt/onbld/bin/${MACH}:${PATH}"
+PATH="${TOOLS_PROTO}/opt/onbld/bin:${PATH}"
+export PATH
 
 export DMAKE_MODE=${DMAKE_MODE:-parallel}
 
@@ -354,16 +333,8 @@ printf 'RELEASE      is %s\n'   "$RELEASE"
 printf 'VERSION      is %s\n'   "$VERSION"
 printf 'RELEASE_DATE is %s\n\n' "$RELEASE_DATE"
 
-if [[ -f "$SRC/Makefile" ]] && egrep -s '^setup:' "$SRC/Makefile" ; then
-	print "The top-level 'setup' target is available \c"
-	print "to build headers and tools."
-	print ""
-
-elif "${flags.t}" ; then
-	printf \
-	    'The tools can be (re)built with the install target in %s.\n\n' \
-	    "${TOOLS}"
-fi
+print "Use the top-level 'setup' target to build headers and tools."
+print ""
 
 #
 # place ourselves in a new task, respecting BUILD_PROJECT if set.

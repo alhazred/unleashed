@@ -53,7 +53,6 @@ _MANFILES=	6to4relay.1m		\
 		beadm.1m		\
 		boot.1m			\
 		bootadm.1m		\
-		bootconfchk.1m		\
 		busstat.1m		\
 		captoinfo.1m		\
 		catman.1m		\
@@ -68,8 +67,6 @@ _MANFILES=	6to4relay.1m		\
 		cfgadm_sysctrl.1m	\
 		cfgadm_usb.1m		\
 		chat.1m			\
-		check-hostname.1m	\
-		check-permissions.1m	\
 		chroot.1m		\
 		clear_locks.1m		\
 		clinfo.1m		\
@@ -116,11 +113,9 @@ _MANFILES=	6to4relay.1m		\
 		dsstat.1m		\
 		dtrace.1m		\
 		dumpadm.1m		\
-		editmap.1m		\
 		edquota.1m		\
 		eeprom.1m		\
 		embedded_su.1m		\
-		etrn.1m			\
 		fcinfo.1m		\
 		fdetach.1m		\
 		fdisk.1m		\
@@ -170,7 +165,6 @@ _MANFILES=	6to4relay.1m		\
 		halt.1m			\
 		hextoalabel.1m		\
 		hostconfig.1m		\
-		ickey.1m		\
 		id.1m			\
 		idmap.1m		\
 		idmapd.1m		\
@@ -282,10 +276,8 @@ _MANFILES=	6to4relay.1m		\
 		lpsystem.1m		\
 		lpusers.1m		\
 		luxadm.1m		\
-		mail.local.1m		\
 		mailwrapper.1m		\
 		makedbm.1m		\
-		makemap.1m		\
 		mdmonitord.1m		\
 		mdnsd.1m		\
 		medstat.1m		\
@@ -343,7 +335,6 @@ _MANFILES=	6to4relay.1m		\
 		ndmpstat.1m		\
 		netstat.1m		\
 		netstrategy.1m		\
-		newaliases.1m		\
 		newfs.1m		\
 		newkey.1m		\
 		nfs4cbd.1m		\
@@ -454,7 +445,6 @@ _MANFILES=	6to4relay.1m		\
 		scadm.1m		\
 		scmadm.1m		\
 		sdpadm.1m		\
-		sendmail.1m		\
 		setuname.1m		\
 		share.1m		\
 		share_nfs.1m		\
@@ -463,13 +453,11 @@ _MANFILES=	6to4relay.1m		\
 		sharemgr.1m		\
 		showmount.1m		\
 		shutdown.1m		\
-		slpd.1m			\
 		smbadm.1m		\
 		smbd.1m			\
 		smbiod.1m		\
 		smbios.1m		\
 		smbstat.1m		\
-		smrsh.1m		\
 		smtnrhdb.1m		\
 		smtnrhtp.1m		\
 		smtnzonecfg.1m		\
@@ -547,10 +535,6 @@ _MANFILES=	6to4relay.1m		\
 		vscanadm.1m		\
 		vscand.1m		\
 		wall.1m			\
-		wanboot_keygen.1m	\
-		wanboot_keymgmt.1m	\
-		wanboot_p12split.1m	\
-		wanbootutil.1m		\
 		whodo.1m		\
 		wificonfig.1m		\
 		wpad.1m			\

@@ -99,10 +99,7 @@ CLEANFILES	+= $(UNIX_O) $(MODSTUBS_O) $(KRTLD_O) $(KRTLD_OBJECTS) \
 
 CLOBBERFILES	= $(CLEANFILES) $(UNIX_BIN)
 
-#
-# Turn on doubleword alignment for 64 bit counter timer registers
-#
-CFLAGS += $(CCVERBOSE) -dalign
+CFLAGS += $(CCVERBOSE)
 
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-uninitialized

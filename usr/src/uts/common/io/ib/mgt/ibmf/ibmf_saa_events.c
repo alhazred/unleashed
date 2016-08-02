@@ -92,9 +92,7 @@ ibmf_saa_subscribe_events(saa_port_t *saa_portp, boolean_t subscribe,
 	boolean_t			notify_clients = B_FALSE;
 	uint8_t				success_mask;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_subscribe_events_start, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_subscribe_events() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_subscribe_events() enter\n");
 
 	/* subscribes should always be sychronous */
 	ASSERT((subscribe == B_FALSE) || (unseq_unsubscribe == B_FALSE));
@@ -157,10 +155,8 @@ ibmf_saa_subscribe_events(saa_port_t *saa_portp, boolean_t subscribe,
 	/* if none of the subscribe requests succeeded notify the clients */
 	if ((res == 0) && (subscribe == B_TRUE)) {
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_subscribe_events_err, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_subscribe_events: %s\n", tnf_string, msg,
-		    "Could not subscribe for any of the four producer types");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_saa_subscribe_events: %s\n",
+			     "Could not subscribe for any of the four producer types");
 
 		mutex_enter(&saa_portp->saa_pt_event_sub_mutex);
 
@@ -221,9 +217,6 @@ ibmf_saa_subscribe_events(saa_port_t *saa_portp, boolean_t subscribe,
 		ibmf_saa_notify_event_clients(saa_portp, &event_details,
 		    IBMF_SAA_EVENT_SUBSCRIBER_STATUS_CHG, NULL);
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4, ibmf_saa_subscribe_events_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_subscribe_events() exit\n");
 }
 
 /*
@@ -265,17 +258,14 @@ ibmf_saa_send_informinfo(saa_port_t *saa_portp, uint32_t producer_type,
 	int			res;
 	uint8_t			producer_type_mask;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_send_informinfo_start, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_send_informinfo() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_send_informinfo() enter\n");
 
-	IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_saa_send_informinfo,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_send_informinfo: %s, producer_type ="
-	    "%x, subscribe = %x, unseq_unsubscribe = %x\n",
-	    tnf_string, msg, "Sending informinfo request",
-	    tnf_opaque, producer_type, producer_type,
-	    tnf_int, subscribe, subscribe,
-	    tnf_int, unseq_unsubscribe, unseq_unsubscribe);
+	IBMF_TRACE_4(DPRINT_L3,
+		     "ibmf_saa_send_informinfo: %s, producer_type =""%x, subscribe = %x, unseq_unsubscribe = %x\n",
+		     "Sending informinfo request",
+		     producer_type,
+		     subscribe,
+		     unseq_unsubscribe);
 
 	bzero(&inform_info, sizeof (ib_mad_informinfo_t));
 
@@ -335,20 +325,17 @@ ibmf_saa_send_informinfo(saa_port_t *saa_portp, uint32_t producer_type,
 	res = ibmf_saa_impl_send_request(trans_info);
 	if (res != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_send_informinfo, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_send_informinfo: %s, ibmf_status = %d\n",
-		    tnf_string, msg, "ibmf_saa_impl_send_request() failed",
-		    tnf_int, ibmf_status, res);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_send_informinfo: %s, ibmf_status = %d\n",
+			     "ibmf_saa_impl_send_request() failed",
+			     res);
 
 		res = 0;
 
 	} else {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_send_informinfo, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_send_informinfo: %s\n", tnf_string, msg,
-		    "Request sent successfully");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_send_informinfo: %s\n",
+			     "Request sent successfully");
 
 		res = 1;
 
@@ -402,12 +389,10 @@ ibmf_saa_send_informinfo(saa_port_t *saa_portp, uint32_t producer_type,
 				    IBMF_SAA_EVENT_STATUS_MASK_PRODUCER_SM;
 			break;
 			default:
-				IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-				    ibmf_saa_send_informinfo, IBMF_TNF_ERROR,
-				    "", "ibmf_saa_send_informinfo: %s, "
-				    "producer_type = 0x%x\n",
-				    tnf_string, msg, "Unknown producer type",
-				    tnf_opaque, producer_type, producer_type);
+				IBMF_TRACE_2(DPRINT_L1,
+					     "ibmf_saa_send_informinfo: %s, ""producer_type = 0x%x\n",
+					     "Unknown producer type",
+					     producer_type);
 
 				ASSERT(0);
 				producer_type_mask = 0;
@@ -420,10 +405,8 @@ ibmf_saa_send_informinfo(saa_port_t *saa_portp, uint32_t producer_type,
 	}
 
 bail:
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_send_informinfo_end, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_send_informinfo() exit: result = 0x%x\n",
-	    tnf_opaque, result, res);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_send_informinfo() exit: result = 0x%x\n", res);
 
 	return (res);
 }
@@ -460,10 +443,10 @@ ibmf_saa_informinfo_cb(void *arg, size_t length, char *buffer,
 	uint8_t				event_status_mask;
 	ibmf_saa_event_details_t	event_details;
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3, ibmf_saa_informinfo_cb_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_informinfo_cb() enter: producer_type "
-	    "= 0x%x, status = %d\n", tnf_opaque, producer_type, producer_type,
-	    tnf_int, status, status);
+	IBMF_TRACE_2(DPRINT_L3,
+		     "ibmf_saa_informinfo_cb() enter: producer_type ""= 0x%x, status = %d\n",
+		     producer_type,
+		     status);
 
 	saa_portp = (saa_port_t *)arg;
 
@@ -472,15 +455,13 @@ ibmf_saa_informinfo_cb(void *arg, size_t length, char *buffer,
 	/* if producer type is 0 this was an unsubscribe */
 	if (producer_type == 0) {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_informinfo_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_informinfo_cb(): %s",
-		    tnf_string, msg, "handling unsubscribe");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_informinfo_cb(): %s",
+			     "handling unsubscribe");
 
 		if (buffer != NULL)
 			kmem_free(buffer, length);
 
-		goto bail;
+		return;
 	}
 
 	/* determine which event it was */
@@ -504,12 +485,10 @@ ibmf_saa_informinfo_cb(void *arg, size_t length, char *buffer,
 		break;
 
 		default:
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_send_informinfo_cb, IBMF_TNF_ERROR,
-			    "", "ibmf_saa_informinfo_cb: %s, "
-			    "producer_type = 0x%x\n",
-			    tnf_string, msg, "Unknown producer type",
-			    tnf_opaque, producer_type, producer_type);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_informinfo_cb: %s, ""producer_type = 0x%x\n",
+				     "Unknown producer type",
+				     producer_type);
 
 			producer_type_mask = 0;
 		break;
@@ -521,16 +500,15 @@ ibmf_saa_informinfo_cb(void *arg, size_t length, char *buffer,
 
 		mutex_exit(&saa_portp->saa_pt_event_sub_mutex);
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_saa_informinfo_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_informinfo_cb(): %s, prod_type_mask = 0x%x",
-		    tnf_string, msg, "Received duplicate response",
-		    tnf_opaque, producer_type_mask, producer_type_mask);
+		IBMF_TRACE_2(DPRINT_L2,
+			     "ibmf_saa_informinfo_cb(): %s, prod_type_mask = 0x%x",
+			     "Received duplicate response",
+			     producer_type_mask);
 
 		if (buffer != NULL)
 			kmem_free(buffer, length);
 
-		goto bail;
+		return;
 	}
 
 	saa_portp->saa_pt_event_sub_arrive_mask |= producer_type_mask;
@@ -538,13 +516,12 @@ ibmf_saa_informinfo_cb(void *arg, size_t length, char *buffer,
 	/* process response */
 	if ((status != IBMF_SUCCESS) || (buffer == NULL)) {
 
-		IBMF_TRACE_4(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_informinfo_cb, IBMF_TNF_ERROR, "",
-		    "ibmf_saa_informinfo_cb: %s, status = %d,"
-		    " buffer = 0x%p, length = %d\n",
-		    tnf_string, msg, "could not get informinfo resp",
-		    tnf_int, status, status, tnf_opaque, buffer, buffer,
-		    tnf_uint, length, length);
+		IBMF_TRACE_4(DPRINT_L1,
+			     "ibmf_saa_informinfo_cb: %s, status = %d,"" buffer = 0x%p, length = %d\n",
+			     "could not get informinfo resp",
+			     status,
+			     buffer,
+			     length);
 
 	} else if (buffer != NULL) {
 
@@ -556,15 +533,11 @@ ibmf_saa_informinfo_cb(void *arg, size_t length, char *buffer,
 	if (saa_portp->saa_pt_event_sub_arrive_mask ==
 	    IBMF_SAA_PORT_EVENT_SUB_ALL_ARRIVE) {
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_informinfo_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_informinfo_cb(): %s, success mask = 0x%x,"
-		    " last success mask = 0x%x\n",
-		    tnf_string, msg, "all informinfo responses have arrived",
-		    tnf_opaque, success_mask,
-		    saa_portp->saa_pt_event_sub_success_mask,
-		    tnf_opaque, last_success_mask,
-		    saa_portp->saa_pt_event_sub_last_success_mask);
+		IBMF_TRACE_3(DPRINT_L3,
+			     "ibmf_saa_informinfo_cb(): %s, success mask = 0x%x,"" last success mask = 0x%x\n",
+			     "all informinfo responses have arrived",
+			     saa_portp->saa_pt_event_sub_success_mask,
+			     saa_portp->saa_pt_event_sub_last_success_mask);
 
 		mutex_enter(&saa_portp->saa_pt_mutex);
 
@@ -581,11 +554,9 @@ ibmf_saa_informinfo_cb(void *arg, size_t length, char *buffer,
 		if (saa_portp->saa_pt_event_sub_last_success_mask !=
 		    saa_portp->saa_pt_event_sub_success_mask) {
 
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_saa_informinfo_cb, IBMF_TNF_TRACE, "",
-			    "ibmf_saa_informinfo_cb(): %s\n",
-			    tnf_string, msg,
-			    "success mask different - notifying clients");
+			IBMF_TRACE_1(DPRINT_L2,
+				     "ibmf_saa_informinfo_cb(): %s\n",
+				     "success mask different - notifying clients");
 
 			/*
 			 * save status mask to give to clients and update last
@@ -611,11 +582,6 @@ ibmf_saa_informinfo_cb(void *arg, size_t length, char *buffer,
 		ibmf_saa_notify_event_clients(saa_portp, &event_details,
 		    IBMF_SAA_EVENT_SUBSCRIBER_STATUS_CHG, NULL);
 	}
-
-bail:
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_informinfo_cb_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_informinfo_cb() exit\n");
 }
 
 /*
@@ -642,9 +608,7 @@ ibmf_saa_notify_event_client_task(void *args)
 	ibmf_saa_event_taskq_args_t	*event_taskq_args;
 	saa_client_data_t		*client;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_notify_event_client_task_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_notify_event_client_task() enter\n");
+	IBMF_TRACE_0(DPRINT_L3, "ibmf_saa_notify_event_client_task() enter\n");
 
 	event_taskq_args = (ibmf_saa_event_taskq_args_t *)args;
 
@@ -674,9 +638,7 @@ ibmf_saa_notify_event_client_task(void *args)
 
 	mutex_exit(&client->saa_client_mutex);
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_notify_event_client_task_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_notify_event_client_task() exit\n");
+	IBMF_TRACE_0(DPRINT_L3, "ibmf_saa_notify_event_client_task() exit\n");
 }
 
 /*
@@ -705,11 +667,9 @@ ibmf_saa_process_subnet_event(saa_port_t *saa_portp, ib_mad_notice_t *notice)
 	sm_trap_145_t			sys_img_trap_data_details;
 	ibmf_saa_subnet_event_t		subnet_event;
 
-	IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_saa_process_subnet_event_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_process_subnet_event() enter: "
-	    "trap_number = 0x%x\n",
-	    tnf_opaque, trap_number, notice->TrapNumber_DeviceID);
+	IBMF_TRACE_1(DPRINT_L3,
+		     "ibmf_saa_process_subnet_event() enter: ""trap_number = 0x%x\n",
+		     notice->TrapNumber_DeviceID);
 
 	bzero(&event_details, sizeof (ibmf_saa_event_details_t));
 
@@ -790,22 +750,15 @@ ibmf_saa_process_subnet_event(saa_port_t *saa_portp, ib_mad_notice_t *notice)
 			/*
 			 * do nothing if it's not one of the traps we care about
 			 */
-			IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_saa_process_subnet_event_end,
-			    IBMF_TNF_TRACE, "",
-			    "ibmf_saa_process_subnet_event() exit: %s\n",
-			    tnf_string, msg,
-			    "not one of the six ibmf_saa subnet events");
+			IBMF_TRACE_1(DPRINT_L3,
+				     "ibmf_saa_process_subnet_event() exit: %s\n",
+				     "not one of the six ibmf_saa subnet events");
 
 			return;
 	}
 
 	ibmf_saa_notify_event_clients(saa_portp, &event_details, subnet_event,
 	    NULL);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_process_subnet_event_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_process_subnet_event() exit\n");
 }
 
 /*
@@ -846,9 +799,7 @@ ibmf_saa_notify_event_clients(saa_port_t *saa_portp,
 	ibmf_saa_event_taskq_args_t	*event_taskq_args;
 	int				status;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_notify_event_clients_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_notify_event_clients() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_notify_event_clients() enter\n");
 
 	mutex_enter(&saa_portp->saa_pt_event_sub_mutex);
 
@@ -865,12 +816,10 @@ ibmf_saa_notify_event_clients(saa_port_t *saa_portp,
 		    sizeof (ibmf_saa_event_taskq_args_t), KM_NOSLEEP);
 		if (event_taskq_args == NULL) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_notify_event_clients_err, IBMF_TNF_ERROR,
-			    "", "ibmf_saa_notify_event_clients: %s, client = "
-			    "0x%x\n", tnf_string, msg,
-			    "could not allocate memory for taskq args",
-			    tnf_opaque, client, client);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_notify_event_clients: %s, client = ""0x%x\n",
+				     "could not allocate memory for taskq args",
+				     client);
 
 			/*
 			 * if a particular client was not specified continue
@@ -892,12 +841,10 @@ ibmf_saa_notify_event_clients(saa_port_t *saa_portp,
 		    sizeof (ibmf_saa_event_details_t), KM_NOSLEEP);
 		if (event_taskq_args->et_event_details == NULL) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_notify_event_clients_err, IBMF_TNF_ERROR,
-			    "", "ibmf_saa_notify_event_clients: %s, client = "
-			    "0x%x\n", tnf_string, msg,
-			    "could not allocate memory for taskq event details",
-			    tnf_opaque, client, client);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_notify_event_clients: %s, client = ""0x%x\n",
+				     "could not allocate memory for taskq event details",
+				     client);
 
 			kmem_free(event_taskq_args,
 			    sizeof (ibmf_saa_event_taskq_args_t));
@@ -920,13 +867,11 @@ ibmf_saa_notify_event_clients(saa_port_t *saa_portp,
 		 */
 		if (client->saa_client_state != SAA_CLIENT_STATE_ACTIVE) {
 
-			IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L2,
-			    ibmf_saa_notify_event_clients, IBMF_TNF_TRACE,
-			    "", "ibmf_saa_notify_event_clients: %s, client = "
-			    "0x%x, state = 0x%x\n", tnf_string, msg,
-			    "client state not active",
-			    tnf_opaque, client, client,
-			    tnf_opaque, state, client->saa_client_state);
+			IBMF_TRACE_3(DPRINT_L2,
+				     "ibmf_saa_notify_event_clients: %s, client = ""0x%x, state = 0x%x\n",
+				     "client state not active",
+				     client,
+				     client->saa_client_state);
 
 			mutex_exit(&client->saa_client_mutex);
 
@@ -972,12 +917,10 @@ ibmf_saa_notify_event_clients(saa_port_t *saa_portp,
 		    KM_NOSLEEP);
 		if (status == 0) {
 
-			IBMF_TRACE_2(IBMF_TNF_NODEBUG, DPRINT_L1,
-			    ibmf_saa_notify_event_clients_err, IBMF_TNF_ERROR,
-			    "", "ibmf_saa_notify_event_clients: %s, client = "
-			    "0x%x\n",
-			    tnf_string, msg, "Could not dispatch event taskq",
-			    tnf_opaque, client, client);
+			IBMF_TRACE_2(DPRINT_L1,
+				     "ibmf_saa_notify_event_clients: %s, client = ""0x%x\n",
+				     "Could not dispatch event taskq",
+				     client);
 
 			kmem_free(event_taskq_args->et_event_details,
 			    sizeof (ibmf_saa_event_details_t));
@@ -1003,12 +946,10 @@ ibmf_saa_notify_event_clients(saa_port_t *saa_portp,
 
 		} else {
 
-			IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-			    ibmf_saa_notify_event_clients_err, IBMF_TNF_ERROR,
-			    "", "ibmf_saa_notify_event_clients: %s, client = "
-			    "0x%x\n",
-			    tnf_string, msg, "Dispatched task to notify client",
-			    tnf_opaque, client, client);
+			IBMF_TRACE_2(DPRINT_L3,
+				     "ibmf_saa_notify_event_clients: %s, client = ""0x%x\n",
+				     "Dispatched task to notify client",
+				     client);
 		}
 
 
@@ -1020,10 +961,6 @@ ibmf_saa_notify_event_clients(saa_port_t *saa_portp,
 	}
 
 	mutex_exit(&saa_portp->saa_pt_event_sub_mutex);
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_notify_event_clients_end,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_notify_event_clients() exit\n");
 }
 
 /*
@@ -1069,9 +1006,7 @@ ibmf_saa_report_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp,
 	size_t			length;
 	int			status;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_report_cb_start,
-	    IBMF_TNF_TRACE, "", "ibmf_saa_report_cb() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_report_cb() enter\n");
 
 	_NOTE(ASSUMING_PROTECTED(*msgp))
 
@@ -1098,11 +1033,10 @@ ibmf_saa_report_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp,
 
 	if (port_valid == B_FALSE) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_saa_report_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_report_cb: %s, saa_port = 0x%p\n",
-		    tnf_string, msg, "port no longer valid",
-		    tnf_opaque, saa_portp, saa_portp);
+		IBMF_TRACE_2(DPRINT_L2,
+			     "ibmf_saa_report_cb: %s, saa_port = 0x%p\n",
+			     "port no longer valid",
+			     saa_portp);
 
 		goto bail;
 	}
@@ -1114,15 +1048,12 @@ ibmf_saa_report_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp,
 	    (req_mad_hdr == NULL) ||
 	    ((mad_status = b2h16(req_mad_hdr->Status)) != SA_STATUS_NO_ERROR)) {
 
-		IBMF_TRACE_4(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_report_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_report_cb: %s, msg_status = 0x%x,"
-		    " req_mad_hdr = 0x%p, mad_status = 0x%x\n",
-		    tnf_string, msg, "Bad ibmf status",
-		    tnf_opaque, msg_status, msgp->im_msg_status,
-		    tnf_opaque, req_mad_hdr, req_mad_hdr,
-		    tnf_opaque, mad_status,
-		    (req_mad_hdr == NULL ? 0 : mad_status));
+		IBMF_TRACE_4(DPRINT_L1,
+			     "ibmf_saa_report_cb: %s, msg_status = 0x%x,"" req_mad_hdr = 0x%p, mad_status = 0x%x\n",
+			     "Bad ibmf status",
+			     msgp->im_msg_status,
+			     req_mad_hdr,
+			     (req_mad_hdr == NULL ? 0 : mad_status));
 
 		goto bail;
 	}
@@ -1130,13 +1061,11 @@ ibmf_saa_report_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp,
 	/* drop packet if class version is not correct */
 	if (req_mad_hdr->ClassVersion != SAA_MAD_CLASS_VERSION) {
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_report_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_report_cb: %s, msg_class_ver = 0x%x,"
-		    " ibmf_saa_class_ver = 0x%x\n",
-		    tnf_string, msg, "Bad class version",
-		    tnf_opaque, msg_class_ver, req_mad_hdr->ClassVersion,
-		    tnf_opaque, ibmf_saa_class_ver, SAA_MAD_CLASS_VERSION);
+		IBMF_TRACE_3(DPRINT_L1,
+			     "ibmf_saa_report_cb: %s, msg_class_ver = 0x%x,"" ibmf_saa_class_ver = 0x%x\n",
+			     "Bad class version",
+			     req_mad_hdr->ClassVersion,
+			     SAA_MAD_CLASS_VERSION);
 
 		goto bail;
 	}
@@ -1149,13 +1078,11 @@ ibmf_saa_report_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp,
 	if (((attr_id = b2h16(req_mad_hdr->AttributeID)) != SA_NOTICE_ATTRID) ||
 	    (req_mad_hdr->R_Method != SA_SUBN_ADM_REPORT)) {
 
-		IBMF_TRACE_3(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_saa_report_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_report_cb: %s, attr_id = 0x%x, "
-		    "method = 0x%x\n",
-		    tnf_string, msg, "Unsolicited message not notice report",
-		    tnf_opaque, attr_id, attr_id,
-		    tnf_opaque, method, req_mad_hdr->R_Method);
+		IBMF_TRACE_3(DPRINT_L2,
+			     "ibmf_saa_report_cb: %s, attr_id = 0x%x, ""method = 0x%x\n",
+			     "Unsolicited message not notice report",
+			     attr_id,
+			     req_mad_hdr->R_Method);
 
 		goto bail;
 	}
@@ -1172,11 +1099,10 @@ ibmf_saa_report_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp,
 	    (void **)&notice_report, &length, 0, B_TRUE, KM_NOSLEEP);
 	if (status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L2,
-		    ibmf_saa_report_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_report_cb: %s, status = %d",
-		    tnf_string, msg, "Could not unpack data",
-		    tnf_int, status, status);
+		IBMF_TRACE_2(DPRINT_L2,
+			     "ibmf_saa_report_cb: %s, status = %d",
+			     "Could not unpack data",
+			     status);
 
 		goto bail;
 	}
@@ -1218,10 +1144,8 @@ ibmf_saa_report_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp,
 	trans_info = kmem_zalloc(sizeof (saa_impl_trans_info_t), KM_NOSLEEP);
 	if (trans_info == NULL) {
 
-		IBMF_TRACE_1(IBMF_TNF_NODEBUG, DPRINT_L1,
-		    ibmf_saa_report_cb_err, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_report_cb: %s",
-		    tnf_string, msg, "could not allocate trans_info structure");
+		IBMF_TRACE_1(DPRINT_L1, "ibmf_saa_report_cb: %s",
+			     "could not allocate trans_info structure");
 
 		goto bail;
 	}
@@ -1244,11 +1168,10 @@ ibmf_saa_report_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp,
 	    trans_info, 0);
 	if (ibmf_status != IBMF_SUCCESS) {
 
-		IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L1,
-		    ibmf_saa_report_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_report_cb: %s, msg_status = 0x%x\n",
-		    tnf_string, msg, "Could not send report response",
-		    tnf_int, ibmf_status, ibmf_status);
+		IBMF_TRACE_2(DPRINT_L1,
+			     "ibmf_saa_report_cb: %s, msg_status = 0x%x\n",
+			     "Could not send report response",
+			     ibmf_status);
 
 		mutex_enter(&saa_portp->saa_pt_mutex);
 
@@ -1261,10 +1184,8 @@ ibmf_saa_report_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp,
 
 	} else {
 
-		IBMF_TRACE_1(IBMF_TNF_DEBUG, DPRINT_L3,
-		    ibmf_saa_report_cb, IBMF_TNF_TRACE, "",
-		    "ibmf_saa_report_cb: %s\n",
-		    tnf_string, msg, "Asynchronous Report response sent");
+		IBMF_TRACE_1(DPRINT_L3, "ibmf_saa_report_cb: %s\n",
+			     "Asynchronous Report response sent");
 
 		response_sent = B_TRUE;
 	}
@@ -1274,10 +1195,6 @@ bail:
 		ibmf_status = ibmf_free_msg(ibmf_handle, &msgp);
 		ASSERT(ibmf_status == IBMF_SUCCESS);
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_informinfo_cb_end, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_report_cb() exit\n");
 }
 
 /*
@@ -1307,9 +1224,7 @@ ibmf_saa_add_event_subscriber(saa_client_data_t *client,
 	uint8_t				producer_status_mask;
 	ibmf_saa_event_details_t	event_details;
 
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_add_event_subscriber_start, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_add_event_subscriber() enter\n");
+	IBMF_TRACE_0(DPRINT_L4, "ibmf_saa_add_event_subscriber() enter\n");
 
 	/* event_args should be checked before calling this function */
 	ASSERT(event_args != NULL);
@@ -1329,11 +1244,10 @@ ibmf_saa_add_event_subscriber(saa_client_data_t *client,
 	 */
 	mutex_enter(&saa_portp->saa_pt_event_sub_mutex);
 
-	IBMF_TRACE_2(IBMF_TNF_DEBUG, DPRINT_L3,
-	    ibmf_sa_session_open, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_add_event_subscriber: %s, client = 0x%x\n",
-	    tnf_string, msg, "Adding client to event subscriber list",
-	    tnf_opaque, client, client);
+	IBMF_TRACE_2(DPRINT_L3,
+		     "ibmf_saa_add_event_subscriber: %s, client = 0x%x\n",
+		     "Adding client to event subscriber list",
+		     client);
 
 	if (saa_portp->saa_pt_event_sub_client_list == NULL)
 		first_client = B_TRUE;
@@ -1379,8 +1293,4 @@ ibmf_saa_add_event_subscriber(saa_client_data_t *client,
 		ibmf_saa_notify_event_clients(saa_portp, &event_details,
 		    IBMF_SAA_EVENT_SUBSCRIBER_STATUS_CHG, client);
 	}
-
-	IBMF_TRACE_0(IBMF_TNF_DEBUG, DPRINT_L4,
-	    ibmf_saa_add_event_subscriber_end, IBMF_TNF_TRACE, "",
-	    "ibmf_saa_add_event_subscriber() exit\n");
 }

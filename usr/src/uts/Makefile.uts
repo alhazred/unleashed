@@ -24,6 +24,7 @@
 # Copyright (c) 2011 Bayard G. Bell. All rights reserved.
 # Copyright (c) 2011 by Delphix. All rights reserved.
 # Copyright (c) 2013 Andrew Stormont.  All rights reserved.
+# Copyright 2016 Hans Rosenfeld <rosenfeld@grumpf.hope-2000.org>
 #
 
 #
@@ -133,7 +134,7 @@ MODEL		= $(MODEL_$(CLASS))
 #	Build the compile/assemble lines:
 #
 EXTRA_OPTIONS		= 
-AS_DEFS			= -D_ASM -D__STDC__=0
+AS_DEFS			= -D_ASM
 
 ALWAYS_DEFS_32		= -D_KERNEL -D_SYSCALL32 -D_DDI_STRICT
 ALWAYS_DEFS_64		= -D_KERNEL -D_SYSCALL32 -D_SYSCALL32_IMPL -D_ELF64 \
@@ -152,7 +153,6 @@ ALWAYS_DEFS		= $(ALWAYS_DEFS_$(CLASS))
 #
 CPPFLAGS	= $(ALWAYS_DEFS) $(ALL_DEFS) $(CONFIG_DEFS) \
 		   $(INCLUDE_PATH) $(EXTRA_OPTIONS)
-ASFLAGS		+= -P
 AS_CPPFLAGS	= $(ALWAYS_DEFS) $(ALL_DEFS) $(CONFIG_DEFS) $(AS_DEFS) \
 		   $(AS_INC_PATH) $(EXTRA_OPTIONS)
 
@@ -162,7 +162,7 @@ AS_CPPFLAGS	= $(ALWAYS_DEFS) $(ALL_DEFS) $(CONFIG_DEFS) $(AS_DEFS) \
 #
 
 # Override the default, the kernel is squeaky clean
-CERRWARN = -errtags=yes -errwarn=%all
+CERRWARN = -errtags=yes -_gcc=-Werror
 
 CERRWARN += -_gcc=-Wno-missing-braces
 CERRWARN += -_gcc=-Wno-sign-compare
@@ -184,7 +184,6 @@ CFLAGS_uts		+= $(XAOPT)
 CFLAGS_uts		+= $(CTF_FLAGS_$(CLASS))
 CFLAGS_uts		+= $(CERRWARN)
 CFLAGS_uts		+= $(CCNOAUTOINLINE)
-CFLAGS_uts		+= $(CGLOBALSTATIC)
 CFLAGS_uts		+= $(EXTRA_CFLAGS)
 CFLAGS_uts		+= $(CSOURCEDEBUGFLAGS)
 CFLAGS_uts		+= $(CUSERFLAGS)
@@ -412,6 +411,7 @@ ROOT_DACF_DIR		= $(ROOT_DACF_DIR_$(CLASS))
 ROOT_CRYPTO_DIR		= $(ROOT_CRYPTO_DIR_$(CLASS))
 ROOT_MAC_DIR		= $(ROOT_MAC_DIR_$(CLASS))
 ROOT_KICONV_DIR		= $(ROOT_KICONV_DIR_$(CLASS))
+ROOT_FIRMWARE_DIR	= $(ROOT_MOD_DIR)/firmware
 
 ROOT_MOD_DIRS_32	= $(ROOT_BRAND_DIR_32) $(ROOT_DRV_DIR_32)
 ROOT_MOD_DIRS_32	= $(ROOT_BRAND_DIR_32) $(ROOT_DRV_DIR_32)
@@ -429,6 +429,7 @@ ROOT_MOD_DIRS_32	+= $(ROOT_CPU_DIR_32) $(ROOT_FONT_DIR_32)
 ROOT_MOD_DIRS_32	+= $(ROOT_TOD_DIR_32) $(ROOT_DACF_DIR_32)
 ROOT_MOD_DIRS_32	+= $(ROOT_CRYPTO_DIR_32) $(ROOT_MAC_DIR_32)
 ROOT_MOD_DIRS_32	+= $(ROOT_KICONV_DIR_32)
+ROOT_MOD_DIRS_32	+= $(ROOT_FIRMWARE_DIR)
 
 USR_MOD_DIR		= $(ROOT)/usr/kernel
 

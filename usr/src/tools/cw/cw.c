@@ -43,12 +43,9 @@
  * -B<[static|dynamic]>	Specify dynamic or static binding
  * -C		Prevent preprocessor from removing comments
  * -c		Compile only - produce .o files, suppress linking
- * -cg92	Alias for -xtarget=ss1000
  * -D<name[=token]>	Associate name with token as if by #define
- * -d[y|n]	dynamic [-dy] or static [-dn] option to linker
  * -E		Compile source through preprocessor only, output to stdout
  * -errtags=<a>	Display messages with tags a(no, yes)
- * -errwarn=<t>	Treats warnings specified by tags t(%none, %all, <tag list>)
  *		as errors
  * -flags	Show this summary of compiler options
  * -G		Build a dynamic shared library
@@ -67,39 +64,26 @@
  * -mr,"string"	Remove all strings and append "string" to .comment section
  * -mt		Specify options needed when compiling multi-threaded code
  * -native	Find available processor, generate code accordingly
- * -nolib	Same as -xnolib
  * -O		Use default optimization level (-xO2 or -xO3. Check man page.)
  * -o <outputfile> Set name of output file to <outputfile>
  * -P		Compile source through preprocessor only, output to .i  file
- * -PIC		Alias for -KPIC or -xcode=pic32
  * -p		Compile for profiling with prof
- * -pic		Alias for -Kpic or -xcode=pic13
  * -R<dir[:dir]> Build runtime search path list into executable
  * -S		Compile and only generate assembly code (.s)
- * -s		Strip symbol table from the executable file
  * -t		Turn off duplicate symbol warnings when linking
  * -U<name>	Delete initial definition of preprocessor symbol <name>
  * -V		Report version number of each compilation phase
  * -v		Do stricter semantic checking
  * -W<c>,<arg>	Pass <arg> to specified component <c> (a,l,m,p,0,2,h,i,u)
  * -w		Suppress compiler warning messages
- * -Xa		Compile assuming ANSI C conformance, allow K & R extensions
- *		(default mode)
  * -Xc		Compile assuming strict ANSI C conformance
- * -Xs		Compile assuming (pre-ANSI) K & R C style code
- * -Xt		Compile assuming K & R conformance, allow ANSI C
  * -xarch=<a>	Specify target architecture instruction set
- * -xbuiltin[=<b>] When profitable inline, or substitute intrinisic functions
  *		for system functions, b={%all,%none}
  * -xe		Perform only syntax/semantic checking, no code generation
- * -xF		Compile for later mapfile reordering or unused section
- *		elimination
  * -xlicinfo	Show license server information
  * -xM		Generate makefile dependencies
  * -xM1		Generate makefile dependencies, but exclude /usr/include
  * -xmaxopt=[off,1,2,3,4,5] maximum optimization level allowed on #pragma opt
- * -xnolib	Do not link with default system libraries
- * -xO<n>	Generate optimized code (n={1|2|3|4|5})
  * -xpg		Compile for profiling with gprof
  * -xprofile=<p> Collect data for a profile or use a profile to optimize
  *		<p>={{collect,use}[:<path>],tcov}
@@ -120,12 +104,9 @@
  * -B<[static|dynamic]>		pass-thru (syntax error for anything else)
  * -C				pass-thru
  * -c				pass-thru
- * -cg92			-m32 -mcpu=v8 -mtune=supersparc (SPARC only)
  * -D<name[=token]>		pass-thru
- * -dy or -dn			-Wl,-dy or -Wl,-dn
  * -E				pass-thru
  * -errtags=%all		-Wall
- * -errwarn=%all		-Werror else -Wno-error
  * -flags			--help
  * -G				pass-thru
  * -g				pass-thru
@@ -133,7 +114,6 @@
  * -h <name>			pass-thru
  * -I<dir>			pass-thru
  * -i				pass-thru
- * -keeptmp			-save-temps
  * -KPIC			-fPIC
  * -Kpic			-fpic
  * -L<dir>			pass-thru
@@ -143,41 +123,30 @@
  * -mr,"string"			error
  * -mt				-D_REENTRANT
  * -native			error
- * -nolib			-nodefaultlibs
  * -O				-O1 (Check the man page to be certain)
  * -o <outputfile>		pass-thru
  * -P				-E -o filename.i (or error)
- * -PIC				-fPIC (C++ only)
  * -p				pass-thru
- * -pic				-fpic (C++ only)
  * -R<dir[:dir]>		pass-thru
  * -S				pass-thru
- * -s				-Wl,-s
  * -t				-Wl,-t
  * -U<name>			pass-thru
  * -V				--version
  * -v				-Wall
  * -Wa,<arg>			pass-thru
- * -Wp,<arg>			pass-thru except -xc99=<a>
+ * -Wp,<arg>			pass-thru
  * -Wl,<arg>			pass-thru
  * -W{m,0,2,h,i,u>		error/ignore
  * -Wu,-xmodel=kernel		-ffreestanding -mcmodel=kernel -mno-red-zone
  * -xmodel=kernel		-ffreestanding -mcmodel=kernel -mno-red-zone
  * -Wu,-save_args		-msave-args
  * -w				pass-thru
- * -Xa				-std=iso9899:199409 or -ansi
  * -Xc				-ansi -pedantic
- * -Xt				error
- * -Xs				-traditional -std=c89
  * -xarch=<a>			table
- * -xbuiltin[=<b>]		-fbuiltin (-fno-builtin otherwise)
  * -xe				error
- * -xF				error
  * -xM				-M
  * -xM1				-MM
  * -xmaxopt=[...]		error
- * -xnolib			-nodefaultlibs
- * -xO<n>			-O<n>
  * -xpg				error
  * -xprofile=<p>		error
  * -xs				error
@@ -389,50 +358,10 @@ warnings(struct aelist *h)
 }
 
 static void
-optim_disable(struct aelist *h, int level)
-{
-	if (level >= 2) {
-		newae(h, "-fno-strict-aliasing");
-		newae(h, "-fno-unit-at-a-time");
-		newae(h, "-fno-optimize-sibling-calls");
-	}
-}
-
-/* ARGSUSED */
-static void
-Xamode(struct aelist *h)
-{
-}
-
-static void
-Xcmode(struct aelist *h)
-{
-	static int xconce;
-
-	if (xconce++)
-		return;
-
-	newae(h, "-ansi");
-	newae(h, "-pedantic-errors");
-}
-
-static void
-Xsmode(struct aelist *h)
-{
-	static int xsonce;
-
-	if (xsonce++)
-		return;
-
-	newae(h, "-traditional");
-	newae(h, "-traditional-cpp");
-}
-
-static void
 usage()
 {
 	(void) fprintf(stderr,
-	    "usage: %s { -_cc | -_gcc | -_CC | -_g++ } [ -_compiler | ... ]\n",
+	    "usage: %s { -_gcc | -_g++ } ...\n",
 	    progname);
 	exit(2);
 }
@@ -470,7 +399,6 @@ do_gcc(cw_ictx_t *ctx)
 	int c;
 	int pic = 0, nolibc = 0;
 	int in_output = 0, seen_o = 0, c_files = 0;
-	cw_op_t op = CW_O_LINK;
 	char *model = NULL;
 	int	mflag = 0;
 
@@ -478,35 +406,6 @@ do_gcc(cw_ictx_t *ctx)
 		newae(ctx->i_ae, "--version");
 		return;
 	}
-
-	newae(ctx->i_ae, "-fident");
-	newae(ctx->i_ae, "-finline");
-	newae(ctx->i_ae, "-fno-inline-functions");
-	newae(ctx->i_ae, "-fno-builtin");
-	newae(ctx->i_ae, "-fno-asm");
-	newae(ctx->i_ae, "-fdiagnostics-show-option");
-	newae(ctx->i_ae, "-nodefaultlibs");
-
-#if defined(__sparc)
-	/*
-	 * The SPARC ldd and std instructions require 8-byte alignment of
-	 * their address operand.  gcc correctly uses them only when the
-	 * ABI requires 8-byte alignment; unfortunately we have a number of
-	 * pieces of buggy code that doesn't conform to the ABI.  This
-	 * flag makes gcc work more like Studio with -xmemalign=4.
-	 */
-	newae(ctx->i_ae, "-mno-integer-ldd-std");
-#endif
-
-	/*
-	 * This is needed because 'u' is defined
-	 * under a conditional on 'sun'.  Should
-	 * probably just remove the conditional,
-	 * or make it be dependent on '__sun'.
-	 *
-	 * -Dunix is also missing in enhanced ANSI mode
-	 */
-	newae(ctx->i_ae, "-D__sun");
 
 	/*
 	 * Walk the argument list, translating as we go ..
@@ -541,63 +440,15 @@ do_gcc(cw_ictx_t *ctx)
 			continue;
 		}
 
-		if (ctx->i_flags & CW_F_CXX) {
-			if (strcmp(arg, "-Qoption") == 0) {
-				/* discard -Qoption and its two arguments */
-				if (ctx->i_oldargc < 3)
-					error(arg);
-				ctx->i_oldargc -= 2;
-				ctx->i_oldargv += 2;
-				continue;
-			}
-			if (strcmp(arg, "-xwe") == 0) {
-				/* turn warnings into errors */
-				newae(ctx->i_ae, "-Werror");
-				continue;
-			}
-			if (strcmp(arg, "-noex") == 0) {
-				/* no exceptions */
-				newae(ctx->i_ae, "-fno-exceptions");
-				/* no run time type descriptor information */
-				newae(ctx->i_ae, "-fno-rtti");
-				continue;
-			}
-			if (strcmp(arg, "-pic") == 0) {
-				newae(ctx->i_ae, "-fpic");
-				pic = 1;
-				continue;
-			}
-			if (strcmp(arg, "-PIC") == 0) {
-				newae(ctx->i_ae, "-fPIC");
-				pic = 1;
-				continue;
-			}
-			if (strcmp(arg, "-nolib") == 0) {
-				/* -nodefaultlibs is on by default */
-				nolibc = 1;
-				continue;
-			}
-		}
-
 		switch ((c = arg[1])) {
 		case '_':
 			if (strcmp(arg, "-_noecho") == 0)
 				ctx->i_flags &= ~CW_F_ECHO;
-			else if (strncmp(arg, "-_cc=", 5) == 0 ||
-			    strncmp(arg, "-_CC=", 5) == 0)
-				/* EMPTY */;
 			else if (strncmp(arg, "-_gcc=", 6) == 0 ||
 			    strncmp(arg, "-_g++=", 6) == 0)
 				newae(ctx->i_ae, arg + 6);
 			else
 				error(arg);
-			break;
-		case '#':
-			if (arglen == 1) {
-				newae(ctx->i_ae, "-v");
-				break;
-			}
-			error(arg);
 			break;
 		case 'g':
 			newae(ctx->i_ae, "-gdwarf-2");
@@ -606,7 +457,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (arglen == 1) {
 				newae(ctx->i_ae, "-xc");
 				newae(ctx->i_ae, arg);
-				op = CW_O_PREPROCESS;
 				nolibc = 1;
 				break;
 			}
@@ -615,13 +465,13 @@ do_gcc(cw_ictx_t *ctx)
 		case 'c':
 		case 'S':
 			if (arglen == 1) {
-				op = CW_O_COMPILE;
 				nolibc = 1;
 			}
 			/* FALLTHROUGH */
 		case 'C':
 		case 'H':
 		case 'p':
+		case 'O':
 			if (arglen == 1) {
 				newae(ctx->i_ae, arg);
 				break;
@@ -658,40 +508,9 @@ do_gcc(cw_ictx_t *ctx)
 			    strcmp(arg, "-D_BOOT") == 0)
 				newae(ctx->i_ae, "-ffreestanding");
 			break;
-		case 'd':
-			if (arglen == 2) {
-				if (strcmp(arg, "-dy") == 0) {
-					newae(ctx->i_ae, "-Wl,-dy");
-					break;
-				}
-				if (strcmp(arg, "-dn") == 0) {
-					newae(ctx->i_ae, "-Wl,-dn");
-					break;
-				}
-			}
-			if (strcmp(arg, "-dalign") == 0) {
-				/*
-				 * -dalign forces alignment in some cases;
-				 * gcc does not need any flag to do this.
-				 */
-				break;
-			}
-			error(arg);
-			break;
 		case 'e':
 			if (strcmp(arg, "-errtags=yes") == 0) {
 				warnings(ctx->i_ae);
-				break;
-			}
-			if (strcmp(arg, "-errwarn=%all") == 0) {
-				newae(ctx->i_ae, "-Werror");
-				break;
-			}
-			error(arg);
-			break;
-		case 'f':
-			if (strcmp(arg, "-flags") == 0) {
-				newae(ctx->i_ae, "--help");
 				break;
 			}
 			error(arg);
@@ -699,13 +518,6 @@ do_gcc(cw_ictx_t *ctx)
 		case 'G':
 			newae(ctx->i_ae, "-shared");
 			nolibc = 1;
-			break;
-		case 'k':
-			if (strcmp(arg, "-keeptmp") == 0) {
-				newae(ctx->i_ae, "-save-temps");
-				break;
-			}
-			error(arg);
 			break;
 		case 'K':
 			if (arglen == 1) {
@@ -729,10 +541,6 @@ do_gcc(cw_ictx_t *ctx)
 			error("-K");
 			break;
 		case 'm':
-			if (strcmp(arg, "-mt") == 0) {
-				newae(ctx->i_ae, "-D_REENTRANT");
-				break;
-			}
 			if (strcmp(arg, "-m64") == 0) {
 				newae(ctx->i_ae, "-m64");
 #if defined(__x86)
@@ -772,13 +580,6 @@ do_gcc(cw_ictx_t *ctx)
 				free(s);
 			}
 			break;
-		case 'O':
-			if (arglen == 1) {
-				newae(ctx->i_ae, "-O");
-				break;
-			}
-			error(arg);
-			break;
 		case 'P':
 			/*
 			 * We could do '-E -o filename.i', but that's hard,
@@ -788,27 +589,11 @@ do_gcc(cw_ictx_t *ctx)
 			 * in a hurry.
 			 */
 			newae(ctx->i_ae, "-E");
-			op = CW_O_PREPROCESS;
 			nolibc = 1;
-			break;
-		case 's':
-			if (arglen == 1) {
-				newae(ctx->i_ae, "-Wl,-s");
-				break;
-			}
-			error(arg);
 			break;
 		case 't':
 			if (arglen == 1) {
 				newae(ctx->i_ae, "-Wl,-t");
-				break;
-			}
-			error(arg);
-			break;
-		case 'V':
-			if (arglen == 1) {
-				ctx->i_flags &= ~CW_F_ECHO;
-				newae(ctx->i_ae, "--version");
 				break;
 			}
 			error(arg);
@@ -821,87 +606,16 @@ do_gcc(cw_ictx_t *ctx)
 			error(arg);
 			break;
 		case 'W':
-			if (strncmp(arg, "-Wp,-xc99", 9) == 0) {
-				/*
-				 * gcc's preprocessor will accept c99
-				 * regardless, so accept and ignore.
-				 */
-				break;
-			}
 			if (strncmp(arg, "-Wa,", 4) == 0 ||
 			    strncmp(arg, "-Wp,", 4) == 0 ||
 			    strncmp(arg, "-Wl,", 4) == 0) {
 				newae(ctx->i_ae, arg);
 				break;
 			}
-			if (strcmp(arg, "-W0,-xc99=pragma") == 0) {
-				/* (undocumented) enables _Pragma */
-				break;
-			}
-			if (strcmp(arg, "-W0,-xc99=%none") == 0) {
-				/*
-				 * This is a polite way of saying
-				 * "no c99 constructs allowed!"
-				 * For now, just accept and ignore this.
-				 */
-				break;
-			}
-			if (strcmp(arg, "-W0,-noglobal") == 0 ||
-			    strcmp(arg, "-W0,-xglobalstatic") == 0) {
-				/*
-				 * gcc doesn't prefix local symbols
-				 * in debug mode, so this is not needed.
-				 */
-				break;
-			}
 			if (strcmp(arg, "-W0,-Lt") == 0) {
 				/*
 				 * Generate tests at the top of loops.
 				 * There is no direct gcc equivalent, ignore.
-				 */
-				break;
-			}
-			if (strcmp(arg, "-W0,-xdbggen=no%usedonly") == 0) {
-				newae(ctx->i_ae,
-				    "-fno-eliminate-unused-debug-symbols");
-				newae(ctx->i_ae,
-				    "-fno-eliminate-unused-debug-types");
-				break;
-			}
-			if (strcmp(arg, "-W2,-xwrap_int") == 0) {
-				/*
-				 * Use the legacy behaviour (pre-SS11)
-				 * for integer wrapping.
-				 * gcc does not need this.
-				 */
-				break;
-			}
-			if (strcmp(arg, "-W2,-Rcond_elim") == 0) {
-				/*
-				 * Elimination and expansion of conditionals;
-				 * gcc has no direct equivalent.
-				 */
-				break;
-			}
-			if (strcmp(arg, "-Wd,-xsafe=unboundsym") == 0) {
-				/*
-				 * Prevents optimizing away checks for
-				 * unbound weak symbol addresses.  gcc does
-				 * not do this, so it's not needed.
-				 */
-				break;
-			}
-			if (strncmp(arg, "-Wc,-Qiselect", 13) == 0) {
-				/*
-				 * Prevents insertion of register symbols.
-				 * gcc doesn't do this, so ignore it.
-				 */
-				break;
-			}
-			if (strcmp(arg, "-Wc,-Qassembler-ounrefsym=0") == 0) {
-				/*
-				 * Prevents optimizing away of static variables.
-				 * gcc does not do this, so it's not needed.
 				 */
 				break;
 			}
@@ -920,22 +634,6 @@ do_gcc(cw_ictx_t *ctx)
 #endif	/* __x86 */
 			error(arg);
 			break;
-		case 'X':
-			if (strcmp(arg, "-Xa") == 0 ||
-			    strcmp(arg, "-Xt") == 0) {
-				Xamode(ctx->i_ae);
-				break;
-			}
-			if (strcmp(arg, "-Xc") == 0) {
-				Xcmode(ctx->i_ae);
-				break;
-			}
-			if (strcmp(arg, "-Xs") == 0) {
-				Xsmode(ctx->i_ae);
-				break;
-			}
-			error(arg);
-			break;
 		case 'x':
 			if (arglen == 1)
 				error(arg);
@@ -945,42 +643,6 @@ do_gcc(cw_ictx_t *ctx)
 					mflag |= xlate_xtb(ctx->i_ae, arg + 7);
 					break;
 				}
-				error(arg);
-				break;
-			case 'b':
-				if (strncmp(arg, "-xbuiltin=", 10) == 0) {
-					if (strcmp(arg + 10, "%all"))
-						newae(ctx->i_ae, "-fbuiltin");
-					break;
-				}
-				error(arg);
-				break;
-			case 'c':
-				if (strncmp(arg, "-xc99=%all", 10) == 0) {
-					newae(ctx->i_ae, "-std=gnu99");
-					break;
-				}
-				if (strncmp(arg, "-xc99=%none", 11) == 0) {
-					newae(ctx->i_ae, "-std=gnu89");
-					break;
-				}
-				if (strncmp(arg, "-xcache=", 8) == 0)
-					break;
-				error(arg);
-				break;
-			case 'd':
-				if (strcmp(arg, "-xdepend") == 0)
-					break;
-				error(arg);
-				break;
-			case 'F':
-				/*
-				 * Compile for mapfile reordering, or unused
-				 * section elimination, syntax can be -xF or
-				 * more complex, like -xF=%all -- ignore.
-				 */
-				if (strncmp(arg, "-xF", 3) == 0)
-					break;
 				error(arg);
 				break;
 #if defined(__x86)
@@ -995,59 +657,6 @@ do_gcc(cw_ictx_t *ctx)
 				error(arg);
 				break;
 #endif	/* __x86 */
-			case 'M':
-				if (strcmp(arg, "-xM") == 0) {
-					newae(ctx->i_ae, "-M");
-					break;
-				}
-				if (strcmp(arg, "-xM1") == 0) {
-					newae(ctx->i_ae, "-MM");
-					break;
-				}
-				error(arg);
-				break;
-			case 'n':
-				if (strcmp(arg, "-xnolib") == 0) {
-					nolibc = 1;
-					break;
-				}
-				error(arg);
-				break;
-			case 'O':
-				if (strncmp(arg, "-xO", 3) == 0) {
-					size_t len = strlen(arg);
-					char *s;
-					int c = *(arg + 3);
-					int level;
-
-					if (len != 4 || !isdigit(c))
-						error(arg);
-
-					if ((s = malloc(len)) == NULL)
-						nomem();
-
-					level = atoi(arg + 3);
-					if (level > 5)
-						error(arg);
-					if (level >= 2) {
-						/*
-						 * For gcc-3.4.x at -O2 we
-						 * need to disable optimizations
-						 * that break ON.
-						 */
-						optim_disable(ctx->i_ae, level);
-						/*
-						 * limit -xO3 to -O2 as well.
-						 */
-						level = 2;
-					}
-					(void) snprintf(s, len, "-O%d", level);
-					newae(ctx->i_ae, s);
-					free(s);
-					break;
-				}
-				error(arg);
-				break;
 			case 'p':
 				if (strcmp(arg, "-xpg") == 0) {
 					newae(ctx->i_ae, "-pg");
@@ -1411,31 +1020,6 @@ main(int argc, char **argv)
 		argc++;
 		argv--;
 		ctx->i_compiler = CW_C_GCC;
-	}
-
-	/*
-	 * -_compiler - tell us the path to the primary compiler only
-	 */
-	if (argc > 1 && strcmp(argv[1], "-_compiler") == 0) {
-		ctx->i_flags &= ~CW_F_XLATE;
-		prepctx(ctx);
-		(void) printf("%s\n", ctx->i_ae->ael_head->ae_arg);
-		return (0);
-	}
-
-	/*
-	 * -_versions - tell us the cw version, paths to all compilers, and
-	 *		ask each for its version if we know how.
-	 */
-	if (argc > 1 && strcmp(argv[1], "-_versions") == 0) {
-		(void) printf("cw version %s", CW_VERSION);
-		(void) printf("\n");
-		(void) fflush(stdout);
-		ctx->i_flags &= ~CW_F_ECHO;
-		ctx->i_flags |= CW_F_PROG|CW_F_EXEC;
-		argc--;
-		argv++;
-		do_reap = 1;
 	}
 
 	ctx->i_oldargc = argc;

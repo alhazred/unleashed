@@ -23,7 +23,7 @@ ROOT_BOOT = $(ROOT)/boot
 PROG=	pmbr
 
 #AS=	$(GNU_ROOT)/bin/gas
-LD=	/usr/bin/gld
+LD=	$(GNU_ROOT)/bin/gld
 STRIP=				# no strip is needed
 FILEMODE=0444
 MAN=
@@ -33,7 +33,7 @@ SRCS=	$(OBJS:%.o=%.s)
 ORG=	0x600
 
 AS_CPPFLAGS=	# no CPP for now
-ASFLAGS=--32 --divide
+ASFLAGS=-m32 -Wa,--divide
 LDFLAGS=-m elf_i386_sol2 -e start -Ttext ${ORG} -N -S --oformat binary
 
 all: $(PROG)

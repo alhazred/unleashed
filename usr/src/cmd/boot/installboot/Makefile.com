@@ -39,8 +39,6 @@ LDLIBS += -lmd5
 
 C99MODE=	$(C99_ENABLE)
 
-CERRWARN += -_gcc=-Wno-uninitialized
-
 .KEEP_STATE:
 
 all: $(PROG)

@@ -32,20 +32,11 @@ include ../Makefile.tools
 
 $(ROOTONBLDMAN1ONBLDFILES) := FILEMODE=      644
 
-EXCEPTION_SRC= common open
-EXCEPTION_LISTS=	$(EXCEPTION_SRC:%=exception_list.%)
-
-CLOBBERFILES += exception_list
-
 .KEEP_STATE:
 
-all:    $(PROG) exception_list
+all:    $(PROG)
 
 install: all .WAIT $(ROOTONBLDMACHPROG) $(ROOTONBLDMAN1ONBLDFILES)
-
-exception_list: $(EXCEPTION_LISTS)
-	-$(RM) $@
-	$(CAT) $(EXCEPTION_LISTS) > $@
 
 clean:
 
