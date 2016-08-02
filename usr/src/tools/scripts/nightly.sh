@@ -182,11 +182,11 @@ function build {
 	cd $SRC
 	/bin/time $MAKE -e install 2>&1 | \
 	    tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
-        # bmake shouldn't get MAKE, MAKEFLAGS, or really anything, from the
-        # nightly env.
-        env -i PATH=/bin /bin/time bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
-            DESTDIR=${ROOT} MK_INSTALL_AS_USER=yes all install 2>&1 | \
-            tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
+        # unlike dmake, bmake's environment should be quite clean (for example
+        # MAKE and MAKEFLAGS are not desired)
+        env -i PATH=${GCC_ROOT}/bin:/bin /bin/time bmake -j $DMAKE_MAX_JOBS \
+            -C $CODEMGR_WS DESTDIR=${ROOT} MK_INSTALL_AS_USER=yes all install \
+            2>&1 | tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
 
 	echo "\n==== Build errors ($LABEL) ====\n" >> $mail_msg_file
 	egrep ":" $SRC/${INSTALLOG}.out |
