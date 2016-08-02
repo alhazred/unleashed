@@ -536,7 +536,6 @@ bam_loader_menu(char *subcmd, char *opt, int largc, char *largv[])
 		/* ret = menu_write(clean_menu_root, menu); */
 	}
 
-out:
 	INJECT_ERROR1("POOL_SET", pool = "/pooldata");
 	assert((is_zfs(menu_root)) ^ (pool == NULL));
 	if (pool) {

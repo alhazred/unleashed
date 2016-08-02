@@ -93,7 +93,7 @@ get_findroot_cap(const char *osroot)
 		bam_is_findroot = BAM_FINDROOT_ABSENT;
 		BAM_DPRINTF(("%s: findroot capability absent\n", fcn));
 	}
-out:
+
 	ret = fclose(fp);
 	error = errno;
 	INJECT_ERROR1("GET_CAP_FINDROOT_FCLOSE", ret = 1);
