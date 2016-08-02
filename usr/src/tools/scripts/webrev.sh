@@ -704,8 +704,7 @@ strip_unchanged()
 #   brown     - deleted lines
 #
 #  Blank lines are inserted in each file to keep unchanged lines in sync
-#  (side-by-side).  This format is familiar to users of sdiff(1) or
-#  Teamware's filemerge tool.
+#  (side-by-side).  This format is familiar to users of sdiff(1).
 #
 sdiff_to_html()
 {
