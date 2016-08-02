@@ -29,7 +29,6 @@ SHFILES= \
 	Install \
 	bldenv \
 	build_cscope \
-	bringovercheck \
 	checkpaths \
 	checkproto \
 	cstyle \
@@ -77,7 +76,6 @@ SCRIPTLINKS= \
 MAN1ONBLDFILES= \
 	Install.1onbld \
 	bldenv.1onbld \
-	bringovercheck.1onbld \
 	cddlchk.1onbld \
 	checkpaths.1onbld \
 	check_rtime.1onbld \

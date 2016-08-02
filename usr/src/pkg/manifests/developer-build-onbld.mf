@@ -86,7 +86,6 @@ $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/tokenize mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/tokenize.exe mode=0555
 file path=opt/onbld/bin/Install mode=0555
 file path=opt/onbld/bin/bldenv mode=0555
-file path=opt/onbld/bin/bringovercheck mode=0555
 file path=opt/onbld/bin/build_cscope mode=0555
 file path=opt/onbld/bin/cddlchk mode=0555
 file path=opt/onbld/bin/check_rtime mode=0555
@@ -181,7 +180,6 @@ file path=opt/onbld/lib/python2.6/onbld/hgext/__init__.pyc mode=0444
 file path=opt/onbld/lib/python2.6/onbld/hgext/cdm.py mode=0444
 file path=opt/onbld/man/man1onbld/Install.1onbld
 file path=opt/onbld/man/man1onbld/bldenv.1onbld
-file path=opt/onbld/man/man1onbld/bringovercheck.1onbld
 file path=opt/onbld/man/man1onbld/cddlchk.1onbld
 file path=opt/onbld/man/man1onbld/check_rtime.1onbld
 file path=opt/onbld/man/man1onbld/checkpaths.1onbld

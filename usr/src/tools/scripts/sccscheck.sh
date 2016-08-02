@@ -76,7 +76,6 @@ if [ "$sfile" -nt "$file" ]; then
 	ls -E $sfile
 	echo "$0: $w: \c"
 	ls -E $file
-	echo "\n$0: $w: Run bringovercheck ${CODEMGR_WS} to fix this workspace.\n") 1>&2 
 	exit $status
 fi
 exit 0
