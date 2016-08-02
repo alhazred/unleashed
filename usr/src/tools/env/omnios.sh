@@ -38,14 +38,13 @@
 #       sends mail on completion (-m and the MAILTO variable)
 #       creates packages for PIT/RE (-p)
 #       checks for changes in ELF runpaths (-r)
-#       build and use this workspace's tools in $SRC/tools (-t)
 #
 # - This file is sourced by "bldenv.sh" and "nightly.sh" and should not 
 #   be executed directly.
 # - This script is only interpreted by ksh93 and explicitly allows the
 #   use of ksh93 language extensions.
 #
-export NIGHTLY_OPTIONS='-nCAmprt'
+export NIGHTLY_OPTIONS='-nCAmpr'
 
 # CODEMGR_WS - where is your workspace at
 #export CODEMGR_WS="$HOME/ws/illumos-gate"

@@ -70,8 +70,6 @@ typeset -r USAGE=$'+
 [f?invoke csh with the -f (fast-start) option. This option is valid
     only if $SHELL is unset or if it points to csh.]
 [d?set up environment for doing DEBUG builds (default is non-DEBUG)]
-[t?set up environment to use the tools in usr/src/tools (this is the
-    default, use +t to use the tools from /opt/onbld)]
 
 <env_file> [command]
 
@@ -120,7 +118,6 @@ typeset flags=(
 	typeset d=false
 	typeset O=false
 	typeset o=false
-	typeset t=true
 	typeset s=(
 		typeset e=false
 		typeset h=false
@@ -142,8 +139,6 @@ while getopts -a "${progname}" "${USAGE}" OPT ; do
 	  +f)	flags.f=false ;;
 	  d)	flags.d=true  SUFFIX=""    ;;
 	  +d)	flags.d=false SUFFIX="-nd" ;;
-	  t)	flags.t=true  ;;
-	  +t)	flags.t=false ;;
 	  \?)	usage ;;
     esac
 done
@@ -227,18 +222,6 @@ shift
 [[ -d "${CODEMGR_WS}" ]] || fatal_error "Error: ${CODEMGR_WS} is not a directory."
 [[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
 
-# must match the getopts in nightly.sh
-OPTIND=1
-NIGHTLY_OPTIONS="-${NIGHTLY_OPTIONS#-}"
-while getopts '+0ABCDdFfGIilMmNnpRrtUuwW' FLAG $NIGHTLY_OPTIONS
-do
-	case "$FLAG" in
-	  t)	flags.t=true  ;;
-	  +t)	flags.t=false ;;
-	  *)	;;
-	esac
-done
-
 POUND_SIGN="#"
 # have we set RELEASE_DATE in our env file?
 if [ -z "$RELEASE_DATE" ]; then
@@ -284,20 +267,18 @@ fi
 TOOLS="${SRC}/tools"
 TOOLS_PROTO="${TOOLS}/proto/root_${MACH}-nd" ; export TOOLS_PROTO
 
-if "${flags.t}" ; then
-	export ONBLD_TOOLS="${ONBLD_TOOLS:=${TOOLS_PROTO}/opt/onbld}"
+export ONBLD_TOOLS="${ONBLD_TOOLS:=${TOOLS_PROTO}/opt/onbld}"
 
-	export STABS="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/stabs"
-	export CTFSTABS="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfstabs"
-	export GENOFFSETS="${TOOLS_PROTO}/opt/onbld/bin/genoffsets"
+export STABS="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/stabs"
+export CTFSTABS="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfstabs"
+export GENOFFSETS="${TOOLS_PROTO}/opt/onbld/bin/genoffsets"
 
-	export CTFCONVERT="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfconvert"
-	export CTFMERGE="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfmerge"
+export CTFCONVERT="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfconvert"
+export CTFMERGE="${TOOLS_PROTO}/opt/onbld/bin/${MACH}/ctfmerge"
 
-	PATH="${TOOLS_PROTO}/opt/onbld/bin/${MACH}:${PATH}"
-	PATH="${TOOLS_PROTO}/opt/onbld/bin:${PATH}"
-	export PATH
-fi
+PATH="${TOOLS_PROTO}/opt/onbld/bin/${MACH}:${PATH}"
+PATH="${TOOLS_PROTO}/opt/onbld/bin:${PATH}"
+export PATH
 
 export DMAKE_MODE=${DMAKE_MODE:-parallel}
 
@@ -359,7 +340,7 @@ if [[ -f "$SRC/Makefile" ]] && egrep -s '^setup:' "$SRC/Makefile" ; then
 	print "to build headers and tools."
 	print ""
 
-elif "${flags.t}" ; then
+else
 	printf \
 	    'The tools can be (re)built with the install target in %s.\n\n' \
 	    "${TOOLS}"

@@ -444,8 +444,7 @@ function do_wsdiff {
 	oldproto=$2
 	newproto=$3
 
-	wsdiff="wsdiff"
-	[ "$t_FLAG" = y ] && wsdiff="wsdiff -t"
+	wsdiff="wsdiff -t"
 
 	echo "\n==== Getting object changes since last build at `date`" \
 	    "($label) ====\n" | tee -a $LOGFILE >> $mail_msg_file
@@ -480,12 +479,11 @@ if [ "$OPTHOME" = "" ]; then
 	export OPTHOME
 fi
 
-USAGE='Usage: nightly [-in] [+t] [-V VERS ] <env_file>
+USAGE='Usage: nightly [-in] [-V VERS ] <env_file>
 
 Where:
 	-i	Fast incremental options (no clobber, check)
 	-n      Do not do a bringover
-	+t	Use the build tools in $ONBLD_TOOLS/bin
 	-V VERS set the build version string to VERS
 
 	<env_file>  file in Bourne shell syntax that sets and exports
@@ -513,8 +511,6 @@ NIGHTLY_OPTIONS variable in the <env_file> as follows:
 	-n      do not do a bringover
 	-p	create packages
 	-r	check ELF runtime attributes in the proto area
-	-t	build and use the tools in $SRC/tools (default setting)
-	+t	Use the build tools in $ONBLD_TOOLS/bin
 	-u	update proto_list_$MACH and friends in the parent workspace;
 		when used with -f, also build an unrefmaster.out in the parent
 	-w	report on differences between previous and current proto areas
@@ -538,7 +534,6 @@ N_FLAG=n
 n_FLAG=n
 p_FLAG=n
 r_FLAG=n
-t_FLAG=y
 U_FLAG=n
 u_FLAG=n
 V_FLAG=n
@@ -553,14 +548,12 @@ build_extras_ok=y
 #
 
 OPTIND=1
-while getopts +intV:W FLAG
+while getopts +inV:W FLAG
 do
 	case $FLAG in
 	  i )	i_FLAG=y; i_CMD_LINE_FLAG=y
 		;;
 	  n )	n_FLAG=y
-		;;
-	 +t )	t_FLAG=n
 		;;
 	  V )	V_FLAG=y
 		V_ARG="$OPTARG"
@@ -715,7 +708,7 @@ check_closed_bins
 #
 NIGHTLY_OPTIONS=-${NIGHTLY_OPTIONS#-}
 OPTIND=1
-while getopts +ABCDdFfGIiMmNnpRrtUuwW FLAG $NIGHTLY_OPTIONS
+while getopts +ABCDdFfGIiMmNnpRrUuwW FLAG $NIGHTLY_OPTIONS
 do
 	case $FLAG in
 	  A )	A_FLAG=y
@@ -752,8 +745,6 @@ do
 		p_FLAG=y
 		;;
 	  r )	r_FLAG=y
-		;;
-	 +t )	t_FLAG=n
 		;;
 	  U )   if [ -z "${PARENT_ROOT}" ]; then
 			echo "PARENT_ROOT must be set if the U flag is" \
@@ -1313,22 +1304,20 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 		build_extras_ok=n
 	fi
 
-	if [[ "$t_FLAG" = "y" ]]; then
-		echo "\n==== Make tools clobber at `date` ====\n" >> $LOGFILE
-		cd ${TOOLS}
-		rm -f ${TOOLS}/clobber-${MACH}.out
-		$MAKE TOOLS_PROTO=$TOOLS_PROTO -ek clobber 2>&1 | \
-			tee -a ${TOOLS}/clobber-${MACH}.out >> $LOGFILE
-		echo "\n==== Make tools clobber ERRORS ====\n" \
-			>> $mail_msg_file
-		grep "$MAKE:" ${TOOLS}/clobber-${MACH}.out \
-			>> $mail_msg_file
-		if (( $? == 0 )); then
-			build_extras_ok=n
-		fi
-		rm -rf ${TOOLS_PROTO}
-		mkdir -p ${TOOLS_PROTO}
+	echo "\n==== Make tools clobber at `date` ====\n" >> $LOGFILE
+	cd ${TOOLS}
+	rm -f ${TOOLS}/clobber-${MACH}.out
+	$MAKE TOOLS_PROTO=$TOOLS_PROTO -ek clobber 2>&1 | \
+		tee -a ${TOOLS}/clobber-${MACH}.out >> $LOGFILE
+	echo "\n==== Make tools clobber ERRORS ====\n" \
+		>> $mail_msg_file
+	grep "$MAKE:" ${TOOLS}/clobber-${MACH}.out \
+		>> $mail_msg_file
+	if (( $? == 0 )); then
+		build_extras_ok=n
 	fi
+	rm -rf ${TOOLS_PROTO}
+	mkdir -p ${TOOLS_PROTO}
 
 	typeset roots=$(allprotos)
 	echo "\n\nClearing $roots" >> "$LOGFILE"
@@ -1587,15 +1576,13 @@ fi
 #
 # Build and use the workspace's tools if requested
 #
-if [[ "$t_FLAG" = "y" ]]; then
-	set_non_debug_build_flags
+set_non_debug_build_flags
 
-	build_tools ${TOOLS_PROTO}
-	if (( $? != 0 )); then
-		build_ok=n
-	else
-		use_tools $TOOLS_PROTO
-	fi
+build_tools ${TOOLS_PROTO}
+if (( $? != 0 )); then
+	build_ok=n
+else
+	use_tools $TOOLS_PROTO
 fi
 
 # timestamp the start of the normal build; the findunref tool uses it.
