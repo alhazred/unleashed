@@ -423,16 +423,6 @@ The gate-defined default location of things formerly in /opt; e.g.,
 /ws/onnv-tools.  This is used by nightly, but not the makefiles.
 .RE
 .LP
-.B TEAMWARE
-.RS 5
-The gate-defined default location for the Teamware tools; e.g.,
-/ws/onnv-tools/SUNWspro.  By default, it is derived from
-.BR OPTHOME .
-This is used by nightly, but not the makefiles.  There is no
-corresponding variable for Mercurial or Subversion, which are assumed
-to be installed in the default path.
-.RE
-.LP
 .B ON_CLOSED_BINS
 .RS 5
 OpenSolaris builds do not contain the closed source tree.  Instead,
