@@ -27,37 +27,23 @@
 #
 
 PROG=		finger rdate ruptime rwho whois
-SUIDPROG=	rcp rlogin rsh
-ALL=		$(PROG) $(SUIDPROG)
+ALL=		$(PROG)
 SRCS=		$(ALL:%=%.c)
-KCMDPROGS=	rcp rlogin rsh
 
 SUBDIRS=	chat dns-sd ftp nc nca netstat \
-		pppd pppdump pppstats rdist talk telnet tftp
+		pppd pppdump pppstats talk telnet tftp
 SUBDIR1=	talk 
 MSGSUBDIRS=	nca talk
 
 include ../../Makefile.cmd
 include ../Makefile.cmd-inet
 
-COMMONOBJS=	kcmd.o
-COMMONPOFILES=	$(COMMONOBJS:.o=.po)
-COMMONSRCS=	$(CMDINETCOMMONDIR)/$(COMMONOBJS:.o=.c)
-
-POFILES=	rlogin.po rsh.po rcp.po $(COMMONPOFILES)
-POFILE=		usr.bin.po
-
 CLOBBERFILES +=	$(ALL)
-CLEANFILES +=	kcmd.o rcp.o rlogin.o rsh.o
 
 all:=		TARGET= all
 install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
-_msg:=		TARGET= _msg
-
-ROOTSUIDPROG=	$(SUIDPROG:%=$(ROOTBIN)/%)
-$(ROOTSUIDPROG)	:=	FILEMODE=	04555
 
 CPPFLAGS +=	-DSYSV -DSTRNET -DBSD_COMP -I$(CMDINETCOMMONDIR)
 CERRWARN +=	-_gcc=-Wno-parentheses
@@ -71,75 +57,14 @@ finger :=	CFLAGS += $(CCVERBOSE)
 finger :=	CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 finger :=		LDLIBS += -lnsl -lcurses -lsocket
-rcp :=			LDLIBS += -lsocket -lsec -lsendfile
 rdate :=		LDLIBS += -lsocket
-rlogin :=		LDLIBS += -lnsl -lsocket
-rsh :=			LDLIBS += -lsocket
 whois :=		LDLIBS += -lsocket
-
-include  $(SRC)/lib/gss_mechs/mech_krb5/Makefile.mech_krb5
-$(KCMDPROGS)	:=	LDLIBS += -lnsl -lmech_krb5
-$(KCMDPROGS)	:=	LDFLAGS += $(ZIGNORE) $(KRUNPATH) \
-				-L$(ROOT)$(KLIBDIR_DO) \
-				-L$(ROOT)$(KLIBDIR_GL)
-
-$(COMMONPOFILES) \
-rlogin.po rcp.po rsh.po \
-$(KCMDPROGS)	:=	CPPFLAGS += -DKERBEROS \
-			-I$(CMDINETCOMMONDIR) \
-			-I$(SRC)/lib/gss_mechs/mech_krb5 \
-			-I$(SRC)/uts/common/gssapi/mechs/krb5/include \
-			-I$(SRC)/lib/gss_mechs/mech_krb5/include \
-			-I$(SRC)/lib/gss_mechs/mech_krb5/include/krb5
-
-ROOTSUNWRCP=	$(ROOT)/usr/lib/sunw,rcp
-ROOTRSHSYMLINK=	$(ROOT)/usr/ucb/rsh
-ROOTREMSHSYMLINK=$(ROOT)/usr/bin/remsh
 
 .KEEP_STATE:
 
 all: $(ALL) $(SUBDIRS)
 
-install: all .WAIT $(ROOTPROG) $(ROOTSUIDPROG) \
-	$(SUBDIRS) $(ROOTSUNWRCP) $(ROOTRSHSYMLINK) $(ROOTREMSHSYMLINK)
-
-# Messaging - copy $POFILES to $POFILE to work with the parent directory
-# Makefile's '_msg' target.
-#
-_msg: $(MSGSUBDIRS) $(POFILES)
-	$(RM) $(POFILE)
-	$(CAT) $(POFILES)	> $(POFILE)
-
-$(COMMONPOFILES): $(COMMONSRCS)
-	$(COMPILE.cpp) $(COMMONSRCS) > $(@:.po=.c).i
-	$(XGETTEXT) $(XGETFLAGS) $(@:.po=.c).i
-	$(RM) $@
-	sed "/^domain/d" < messages.po  > $@
-	$(RM) messages.po $(@:.po=.c).i
-
-$(COMMONOBJS): $(COMMONSRCS)
-	$(COMPILE.c) $(COMMONSRCS)
-
-rlogin: rlogin.o $(COMMONOBJS)
-	$(LINK.c) $@.o $(COMMONOBJS) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
- 
-rcp: rcp.o $(COMMONOBJS)
-	$(LINK.c) $@.o $(COMMONOBJS) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
-
-rsh: rsh.o $(COMMONOBJS)
-	$(LINK.c) $@.o $(COMMONOBJS) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
- 
-$(ROOTSUNWRCP):
-	$(RM) $@; $(SYMLINK) ../bin/rcp $@
-
-$(ROOTRSHSYMLINK):
-	$(RM) $@; $(SYMLINK) ../bin/rsh $@
-
-$(ROOTREMSHSYMLINK):
-	$(RM) $@; $(SYMLINK) rsh $@
+install: all .WAIT $(ROOTPROG) $(SUBDIRS)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(MFLAGS) $(TARGET)

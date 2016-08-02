@@ -27,28 +27,27 @@
 SYNCPROG=	syncinit syncloop syncstat
 
 PROG=		6to4relay arp if_mpadm \
-		in.comsat in.fingerd in.rarpd in.rexecd in.rlogind \
-		in.rshd in.rwhod in.telnetd in.tftpd ipaddrsel \
+		in.comsat in.fingerd in.rarpd in.rexecd \
+		in.rwhod in.telnetd in.tftpd ipaddrsel \
 		ndd ndp $(SYNCPROG)
 
-MANIFEST=	rarp.xml telnet.xml comsat.xml finger.xml \
-		login.xml shell.xml rexec.xml
+MANIFEST=	rarp.xml telnet.xml comsat.xml finger.xml rexec.xml
 SVCMETHOD=	svc-sockfilter
 
 ROOTFS_PROG=	hostconfig route soconfig
 SBINLINKS=	hostconfig route
 
 RPCSVCPROG=	hostconfig
-AUDITPROG=	in.rexecd in.rlogind in.rshd in.telnetd
-PAMPROG=	in.rexecd in.rlogind in.rshd in.telnetd
+AUDITPROG=	in.rexecd in.telnetd
+PAMPROG=	in.rexecd in.telnetd
 SOCKETPROG=	6to4relay arp hostconfig if_mpadm in.comsat \
-		in.fingerd in.rarpd in.rexecd in.rlogind in.rshd \
+		in.fingerd in.rarpd in.rexecd \
 		in.rwhod in.telnetd in.tftpd ipaddrsel ndp route
 NSLPROG=	6to4relay arp hostconfig in.comsat in.rarpd \
-		in.rexecd in.rlogind in.rshd in.rwhod in.telnetd \
+		in.rexecd in.rwhod in.telnetd \
 		in.tftpd ipaddrsel ndp route
 CMDPROG=	in.telnetd
-K5PROGS=	in.telnetd in.rlogind in.rshd
+K5PROGS=	in.telnetd
 TSNETPROG=	route
 DLADMPROG=	6to4relay
 DEFAULTFILES=	telnetd.dfl
@@ -56,8 +55,6 @@ DEFAULTFILES=	telnetd.dfl
 PROGSRCS=	$(PROG:%=%.c)
 TFTPDOBJS=	in.tftpd.o tftpsubs.o
 OTHERSRC=	../usr.bin/tftp/tftpsubs.c
-K5RLOGINOBJS=	in.rlogind.o
-K5RSHDOBJS=	in.rshd.o
 K5TELNETOBJS=	in.telnetd.o
 SRCS=		$(PROGSRCS) $(OTHERSRC)
 
@@ -77,10 +74,6 @@ include ../Makefile.cmd-inet
 
 ROOTSBINPROG = $(ROOTFS_PROG:%=$(ROOTSBIN)/%)
 ROOTUSRSBINLINKS = $(SBINLINKS:%=$(ROOTUSRSBIN)/%)
-
-COMMONOBJS=	addr_match.o kcmd.o store_forw_creds.o
-COMMONSRCS=	$(COMMONOBJS:%.o=$(CMDINETCOMMONDIR)/%.c)
-SRCS+=		$(COMMONSRCS)
 
 CERRWARN += -_gcc=-Wno-implicit-function-declaration
 CERRWARN += -_gcc=-Wno-uninitialized
@@ -105,8 +98,7 @@ clobber:=	TARGET= clobber
 _msg:=		TARGET= _msg
 
 CLOBBERFILES +=	$(ROOTFS_PROG) $(PROG)
-CLEANFILES += $(COMMONOBJS) $(K5RLOGINOBJS) $(K5RSHDOBJS) $(TFTPDOBJS) \
-		$(K5TELNETOBJS)
+CLEANFILES += $(TFTPDOBJS) $(K5TELNETOBJS)
 
 CPPFLAGS +=	-DSYSV -DBSD_COMP -I$(CMDINETCOMMONDIR) -I
 
@@ -160,14 +152,6 @@ $(POFILE): $(POFILES)
 
 in.telnetd: $(K5TELNETOBJS)
 	$(LINK.c) $(K5TELNETOBJS) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
-
-in.rlogind: $(K5RLOGINOBJS) $(COMMONOBJS)
-	$(LINK.c) $(K5RLOGINOBJS) $(COMMONOBJS) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
-
-in.rshd: $(K5RSHDOBJS) $(COMMONOBJS)
-	$(LINK.c) $(K5RSHDOBJS) $(COMMONOBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
 in.tftpd: $(TFTPDOBJS)

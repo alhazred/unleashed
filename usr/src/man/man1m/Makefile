@@ -191,9 +191,7 @@ _MANFILES=	6to4relay.1m		\
 		in.rdisc.1m		\
 		in.rexecd.1m		\
 		in.ripngd.1m		\
-		in.rlogind.1m		\
 		in.routed.1m		\
-		in.rshd.1m		\
 		in.rwhod.1m		\
 		in.talkd.1m		\
 		in.telnetd.1m		\
@@ -615,9 +613,7 @@ MANLINKS=	acctcon1.1m			\
 		restricted_shell.1m		\
 		rexd.1m				\
 		rexecd.1m			\
-		rlogind.1m			\
 		routed.1m			\
-		rshd.1m				\
 		rstatd.1m			\
 		rusersd.1m			\
 		rwalld.1m			\
@@ -704,9 +700,7 @@ fingerd.1m			:= LINKSRC = in.fingerd.1m
 rarpd.1m			:= LINKSRC = in.rarpd.1m
 rdisc.1m			:= LINKSRC = in.rdisc.1m
 rexecd.1m			:= LINKSRC = in.rexecd.1m
-rlogind.1m			:= LINKSRC = in.rlogind.1m
 routed.1m			:= LINKSRC = in.routed.1m
-rshd.1m				:= LINKSRC = in.rshd.1m
 rwhod.1m			:= LINKSRC = in.rwhod.1m
 talkd.1m			:= LINKSRC = in.talkd.1m
 telnetd.1m			:= LINKSRC = in.telnetd.1m

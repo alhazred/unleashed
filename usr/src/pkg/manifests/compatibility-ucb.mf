@@ -181,7 +181,6 @@ link path=usr/ucb/pagesize target=../bin/pagesize
 link path=usr/ucb/quota target=../lib/fs/ufs/quota
 link path=usr/ucb/rcp target=../bin/rcp
 link path=usr/ucb/rdate target=../bin/rdate
-link path=usr/ucb/rdist target=../bin/rdist
 link path=usr/ucb/renice target=../bin/renice
 link path=usr/ucb/reset target=./tset
 link path=usr/ucb/rlogin target=../bin/rlogin

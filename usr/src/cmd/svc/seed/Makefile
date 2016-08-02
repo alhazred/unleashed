@@ -94,7 +94,6 @@ NONGLOBAL_ZONE_DESCRIPTIONS = \
 MINIROOT_DESCRIPTIONS= \
 	../milestone/sysconfig.xml \
 	../../cmd-inet/usr.lib/inetd/inetd.xml \
-	../../cmd-inet/usr.sbin/login.xml \
 	../milestone/network-service.xml \
 	../../cmd-inet/usr.sbin/telnet.xml \
 	../../../lib/libresolv2/client.xml \

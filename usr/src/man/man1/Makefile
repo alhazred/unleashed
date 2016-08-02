@@ -299,22 +299,18 @@ MANFILES=	acctcom.1			\
 	 	pwd.1				\
 	 	ranlib.1			\
 	 	rcapstat.1			\
-	 	rcp.1				\
-	 	rdist.1				\
 	 	read.1				\
 	 	readonly.1			\
 	 	refer.1				\
 	 	regcmp.1			\
 	 	renice.1			\
 	 	rev.1				\
-	 	rlogin.1			\
 	 	rm.1				\
 	 	rmformat.1			\
 	 	rmmount.1			\
 	 	roffbib.1			\
 	 	roles.1				\
 	 	rpcgen.1			\
-	 	rsh.1				\
 	 	runat.1				\
 	 	rup.1				\
 	 	ruptime.1			\
@@ -484,8 +480,6 @@ MANLINKS=	batch.1		\
 		pwdx.1		\
 		red.1		\
 		rehash.1	\
-		remote_shell.1	\
-		remsh.1		\
 		repeat.1	\
 		return.1	\
 		rksh.1		\
@@ -662,9 +656,6 @@ pwdx.1		:= LINKSRC = proc.1
 rmdir.1		:= LINKSRC = rm.1
 
 rmumount.1	:= LINKSRC = rmmount.1
-
-remote_shell.1	:= LINKSRC = rsh.1
-remsh.1		:= LINKSRC = rsh.1
 
 export.1	:= LINKSRC = set.1
 setenv.1	:= LINKSRC = set.1

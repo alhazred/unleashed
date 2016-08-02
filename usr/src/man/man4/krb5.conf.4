@@ -425,7 +425,7 @@ specific to particular applications.
 .RS 4n
 Forces the application to attempt automatic login by presenting Kerberos
 credentials. This is valid for the following applications: \fBrlogin\fR,
-\fBrsh\fR, \fBrcp\fR, \fBrdist\fR, and \fBtelnet\fR.
+\fBrsh\fR, \fBrcp\fR, and \fBtelnet\fR.
 .RE
 
 .sp
@@ -437,8 +437,7 @@ credentials. This is valid for the following applications: \fBrlogin\fR,
 .RS 4n
 Forces applications to use encryption by default (after authentication) to
 protect the privacy of the sessions. This is valid for the following
-applications: \fBrlogin\fR, \fBrsh\fR, \fBrcp\fR, \fBrdist\fR, and
-\fBtelnet\fR.
+applications: \fBrlogin\fR, \fBrsh\fR, \fBrcp\fR, and \fBtelnet\fR.
 .RE
 
 .sp
@@ -450,7 +449,7 @@ applications: \fBrlogin\fR, \fBrsh\fR, \fBrcp\fR, \fBrdist\fR, and
 .RS 4n
 Forces applications to forward the user'ss credentials (after authentication)
 to the remote server. This is valid for the following applications:
-\fBrlogin\fR, \fBrsh\fR, \fBrcp\fR, \fBrdist\fR, and \fBtelnet\fR.
+\fBrlogin\fR, \fBrsh\fR, \fBrcp\fR, and \fBtelnet\fR.
 .RE
 
 .sp
@@ -533,13 +532,12 @@ the Solaris operating system.
 .sp .6
 .RS 4n
 Specifies which Kerberized "\fBrcmd\fR" protocol to use when using the
-Kerberized \fBrlogin\fR(1), \fBrsh\fR(1), \fBrcp\fR(1), or \fBrdist\fR(1)
-programs. The default is to use \fBrcmdv2\fR by default, as this is the more
-secure and more recent update of the protocol. However, when talking to older
-\fBMIT\fR or \fBSEAM\fR-based "\fBrcmd\fR" servers, it can be necessary to
-force the new clients to use the older \fBrcmdv1\fR protocol. This option is
-valid only for the following applications: \fBrlogin\fR, \fBrcp\fR, \fBrsh\fR,
-and \fBrdist\fR.
+Kerberized \fBrlogin\fR(1), \fBrsh\fR(1), or \fBrcp\fR(1) programs. The
+default is to use \fBrcmdv2\fR by default, as this is the more secure and
+more recent update of the protocol. However, when talking to older \fBMIT\fR
+or \fBSEAM\fR-based "\fBrcmd\fR" servers, it can be necessary to force the
+new clients to use the older \fBrcmdv1\fR protocol. This option is valid
+only for the following applications: \fBrlogin\fR, \fBrcp\fR, and \fBrsh\fR.
 .RE
 
 .sp
@@ -1860,7 +1858,7 @@ All of the keywords are Committed, except for the \fBPKINIT\fR keywords, which
 are Volatile.
 .SH SEE ALSO
 .LP
-\fBkinit\fR(1), \fBrcp\fR(1), \fBrdist\fR(1), \fBrlogin\fR(1), \fBrsh\fR(1),
+\fBkinit\fR(1), \fBrcp\fR(1), \fBrlogin\fR(1), \fBrsh\fR(1),
 \fBtelnet\fR(1), \fBsyslog\fR(3C), \fBattributes\fR(5), \fBkerberos\fR(5),
 \fBregex\fR(5)
 .SH NOTES
