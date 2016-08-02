@@ -232,9 +232,8 @@ tokenize
 webrev
 	Generates a set of HTML pages that show side-by-side diffs of
 	changes in your workspace, for easy communication of code
-	review materials.  Can automagically find edited files or use a
-	manually-generated list; knows how to use wx's active file for
-	lists of checked-out files and proposed SCCS comments.
+	review materials.  Can automatically find edited files or use a
+	manually-generated list.
 
 which_scm
 	Reports the current Source Code Management (SCM) system in use
