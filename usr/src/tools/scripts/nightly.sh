@@ -1343,7 +1343,7 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	       -name '*.o' \) -print | \
 	    grep -v 'tools/ctf/dwarf/.*/libdwarf' | xargs rm -f
         echo "\n==== bmake cleandir ====\n" >> $LOGFILE
-        MAKE= bmake cleandir
+        env -i PATH=/bin bmake -C $CODEMGR_WS cleandir >> $LOGFILE 2>&1
 else
 	echo "\n==== No clobber at `date` ====\n" >> $LOGFILE
 fi
