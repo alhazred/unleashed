@@ -84,8 +84,6 @@ Build type   is  DEBUG
 RELEASE      is  5.10
 VERSION      is  wopr-2::on10-se::11/01/2001
 RELEASE_DATE is  May 2004
-The top-level `setup\' target is available to build headers
-and tools.
 Using /usr/bin/tcsh as shell.
 {root::wopr-2::49}
 {root::wopr-2::49} cd $SRC/cmd/true
@@ -335,16 +333,8 @@ printf 'RELEASE      is %s\n'   "$RELEASE"
 printf 'VERSION      is %s\n'   "$VERSION"
 printf 'RELEASE_DATE is %s\n\n' "$RELEASE_DATE"
 
-if [[ -f "$SRC/Makefile" ]] && egrep -s '^setup:' "$SRC/Makefile" ; then
-	print "The top-level 'setup' target is available \c"
-	print "to build headers and tools."
-	print ""
-
-else
-	printf \
-	    'The tools can be (re)built with the install target in %s.\n\n' \
-	    "${TOOLS}"
-fi
+print "Use the top-level 'setup' target to build headers and tools."
+print ""
 
 #
 # place ourselves in a new task, respecting BUILD_PROJECT if set.
