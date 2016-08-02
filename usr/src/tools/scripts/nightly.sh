@@ -183,10 +183,14 @@ function build {
 	/bin/time $MAKE -e install 2>&1 | \
 	    tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
         # unlike dmake, bmake's environment should be quite clean (for example
-        # MAKE and MAKEFLAGS are not desired)
+        # MAKE and MAKEFLAGS are not desired). additionally bmake's "install"
+        # targets don't depend on "all" so we can't make both with the same
+        # invocation without races
         env -i PATH=${GCC_ROOT}/bin:/bin /bin/time bmake -j $DMAKE_MAX_JOBS \
-            -C $CODEMGR_WS DESTDIR=${ROOT} MK_INSTALL_AS_USER=yes all install \
-            2>&1 | tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
+            -C $CODEMGR_WS all 2>&1 | tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
+        env -i PATH=${GCC_ROOT}/bin:/bin /bin/time bmake -j $DMAKE_MAX_JOBS \
+            -C $CODEMGR_WS DESTDIR=$ROOT MK_INSTALL_AS_USER=yes install 2>&1 \
+            | tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
 
 	echo "\n==== Build errors ($LABEL) ====\n" >> $mail_msg_file
 	egrep ":" $SRC/${INSTALLOG}.out |
