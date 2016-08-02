@@ -406,7 +406,7 @@ $(PDIR)/gendeps: $(DEP_SYNTH_PKGS) $(DEP_PKGS)
 		done; \
 	else \
 		print "Resolving dependencies"; \
-		$(SETALTUNAME) pkgdepend -R $(PKGDEP_RESOLVE_IMAGE) resolve \
+		$(SETLEGACYUNAME) pkgdepend -R $(PKGDEP_RESOLVE_IMAGE) resolve \
 		    -m $(DEP_SYNTH_PKGS) $(DEP_PKGS); \
 		for p in $(DEP_SYNTH_PKGS:%.dep=%) $(DEP_PKGS:%.dep=%); do \
 			if [ "$$(print $$p.metadata.*)" = \
@@ -546,7 +546,7 @@ $(PDIR)/%.dep: $(PDIR)/%.mog
 	@print "Generating dependencies for $(<F)"
 	$(PKGDEBUG)$(RM) $(@)
 	$(PKGDEBUG)if [ ! -f $(@:%.dep=%.nodepend) ]; then \
-		$(SETALTUNAME) pkgdepend generate -m \
+		$(SETLEGACYUNAME) pkgdepend generate -m \
 			$(PKGDEP_TOKENS:%=-D %) $(<) $(PKGROOT) > $(@); \
 	else \
 		$(CP) $(<) $(@); \

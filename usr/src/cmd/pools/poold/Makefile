@@ -116,14 +116,14 @@ install: $(ROOTCMD) $(JAVA_SUBDIRS) $(JARFILE) \
 check:	$(CHKMANIFEST)
 
 $(JAVA_SUBDIRS): FRC
-	@cd $@; pwd; $(SETALTUNAME) $(MAKE) $(TARGET)
+	@cd $@; pwd; $(SETLEGACYUNAME) $(MAKE) $(TARGET)
 	if [ "$(TARGET)" != "clean" ] && [ "$(TARGET)" != "clobber" ]; \
 	then \
 		if [ ! -f $(JARFILE) ]; \
 		then \
-			$(SETALTUNAME) $(JAR) -cf $(JARFILE) $@/*class; \
+			$(SETLEGACYUNAME) $(JAR) -cf $(JARFILE) $@/*class; \
 		else \
-			$(SETALTUNAME) $(JAR) -uf $(JARFILE) $@/*class; \
+			$(SETLEGACYUNAME) $(JAR) -uf $(JARFILE) $@/*class; \
 		fi \
 	fi
 
@@ -131,7 +131,7 @@ $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
 doc:	all
-	$(SETALTUNAME) $(JAVADOC) -private -classpath $(JARFILE): -sourcepath . \
+	$(SETLEGACYUNAME) $(JAVADOC) -private -classpath $(JARFILE): -sourcepath . \
 	    -source 1.4 -d $(DOCDIR) $(PACKAGEDOCS)
 
 $(PROG):	$(OBJS)

@@ -43,11 +43,11 @@ struct utsname utsname = {
 };
 
 #ifndef	ALT_SYSNAME
-#define	ALT_SYSNAME	"SunOS"
+#define	ALT_SYSNAME	"illumos"
 #endif
 
 #ifndef	ALT_RELEASE
-#define	ALT_RELEASE	"5.11"
+#define	ALT_RELEASE	"0.9.71"
 #endif
 
 #ifndef	ALT_VERSION
