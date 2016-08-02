@@ -39,7 +39,6 @@ SHFILES= \
 	nightly \
 	onu \
 	protocmp.terse \
-	sccscheck \
 	webrev \
 	which_scm \
 	ws \
@@ -91,7 +90,6 @@ MAN1ONBLDFILES= \
 	mapfilechk.1onbld \
 	nightly.1onbld \
 	onu.1onbld \
-	sccscheck.1onbld \
 	webrev.1onbld \
 	which_scm.1onbld \
 	ws.1onbld \
