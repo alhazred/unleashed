@@ -1,4 +1,4 @@
-BINDIR?=	/bin
+BINDIR?=	/usr/bin
 
 MAPFILES=	${.CURDIR:H:H}/usr/src/common/mapfiles/common
 _PROGLDOPTS=	-Wl,-Bdirect
