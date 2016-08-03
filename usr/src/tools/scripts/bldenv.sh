@@ -248,7 +248,7 @@ fi
 PKGARCHIVE="${PKGARCHIVE}${SUFFIX}"
 
 # 	Set PATH for a build
-PATH="/opt/onbld/bin:/opt/onbld/bin/${MACH}:/opt/SUNWspro/bin:/usr/ccs/bin:/usr/bin:/usr/sbin:/usr/ucb:/usr/etc:/usr/openwin/bin:/usr/sfw/bin:/opt/sfw/bin:."
+PATH="/opt/onbld/bin:/opt/onbld/bin/${MACH}:/usr/ccs/bin:/usr/bin:/usr/sbin:/usr/ucb:/usr/etc:/usr/openwin/bin:/usr/sfw/bin:/opt/sfw/bin:.:/opt/SUNWspro/bin"
 if [[ "${SUNWSPRO}" != "" ]]; then 
 	export PATH="${SUNWSPRO}/bin:$PATH" 
 fi 
