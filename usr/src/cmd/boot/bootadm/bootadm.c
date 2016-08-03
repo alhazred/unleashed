@@ -1052,7 +1052,7 @@ install_bootloader(void)
 	be_node_list_t	*be_nodes, *node;
 	FILE		*fp;
 	char		*root_ds = NULL;
-	int		ret = BAM_SUCCESS;
+	int		ret = BAM_ERROR;
 
 	if (nvlist_alloc(&nvl, NV_UNIQUE_NAME, 0) != 0) {
 		bam_error(_("out of memory\n"));
@@ -1137,6 +1137,7 @@ install_bootloader(void)
 
 	if (nvlist_add_uint16(nvl, BE_ATTR_INSTALL_FLAGS, flags) != 0) {
 		bam_error(_("out of memory\n"));
+		ret = BAM_ERROR;
 		goto done;
 	}
 
