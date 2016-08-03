@@ -782,6 +782,12 @@ usr/lib/sparcv9/libficl-sys.so		sparc
 usr/lib/libficl-sys.so
 
 #
+# Avoid packaging conflicts with GNU coreutils.
+#
+usr/bin/printenv
+usr/share/man/man1/printenv.1
+
+#
 # Lint garbage - to be removed when we stop building lint libs
 #
 # Pre-existing entries:

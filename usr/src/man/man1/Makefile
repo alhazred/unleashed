@@ -286,6 +286,7 @@ MANFILES=	acctcom.1			\
 	 	prctl.1				\
 	 	preap.1				\
 	 	print.1				\
+		printenv.1			\
 	 	printf.1			\
 	 	priocntl.1			\
 	 	proc.1				\

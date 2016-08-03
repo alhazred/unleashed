@@ -314,6 +314,7 @@ COMMON_SUBDIRS=		\
 	pr		\
 	prctl		\
 	print		\
+	printenv	\
 	printf		\
 	priocntl	\
 	profiles	\

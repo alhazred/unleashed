@@ -48,7 +48,6 @@ COMMON_SUBDIRS=		\
 	install.d	\
 	ls		\
 	mkstr		\
-	printenv	\
 	rusage		\
 	sed		\
 	shutdown	\

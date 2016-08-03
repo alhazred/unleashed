@@ -62,7 +62,6 @@ file path=usr/share/man/man1b/lprm.1b
 file path=usr/share/man/man1b/lptest.1b
 file path=usr/share/man/man1b/mail.1b
 file path=usr/share/man/man1b/mkstr.1b
-file path=usr/share/man/man1b/printenv.1b
 file path=usr/share/man/man1b/ps.1b
 file path=usr/share/man/man1b/rusage.1b
 file path=usr/share/man/man1b/shutdown.1b
@@ -88,7 +87,6 @@ file path=usr/ucb/groups mode=0755
 file path=usr/ucb/install mode=0755
 file path=usr/ucb/ls mode=0755
 file path=usr/ucb/mkstr mode=0555
-file path=usr/ucb/printenv mode=0755
 file path=usr/ucb/rusage mode=0755
 file path=usr/ucb/sed mode=0555
 file path=usr/ucb/shutdown mode=0755
