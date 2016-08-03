@@ -5,6 +5,7 @@ unix?=		We run ${OS}.
 
 LIBCRT0=
 
+MANTARGET?=	man
 BINGRP?=	bin
 STRIP_FLAG?=
 
