@@ -65,7 +65,7 @@ $(PROG): $(OBJS)
 install: all $(DIRS) $(ROOTTZSRCD) $(ROOTTZTABD) $(ROOTUSRSBINPROG) \
 		$(ROOTLIBTZSRCFILES) $(ROOTLIBTZTABFILES) $(ROOTKSHPROG)
 	$(NPROG) -d $(ROOTTZD) $(TZFILES)
-	$(LN) -s ./US/Eastern $(ROOTTZD)/posixrules
+	$(LN) -sf ./US/Eastern $(ROOTTZD)/posixrules
 
 $(NPROG): $(NATIVE) $(NOBJS)
 	$(NATIVECC) $(NATIVE_CFLAGS) -o $@ $(NOBJS)
