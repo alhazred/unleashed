@@ -816,11 +816,6 @@ fi
 export PATH
 export MAKE
 
-if [ "${SUNWSPRO}" != "" ]; then
-	PATH="${SUNWSPRO}/bin:$PATH"
-	export PATH
-fi
-
 hostname=$(uname -n)
 if [[ $DMAKE_MAX_JOBS != +([0-9]) || $DMAKE_MAX_JOBS -eq 0 ]]
 then
