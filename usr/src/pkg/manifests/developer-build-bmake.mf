@@ -130,8 +130,6 @@ file usr/share/mk/sys/OSF1.mk path=usr/share/mk/sys/OSF1.mk group=bin \
     mode=0444 owner=root
 file usr/share/mk/sys/OpenBSD.mk path=usr/share/mk/sys/OpenBSD.mk group=bin \
     mode=0444 owner=root
-file usr/share/mk/sys/SunOS.mk path=usr/share/mk/sys/SunOS.mk group=bin \
-    mode=0444 owner=root
 file usr/share/mk/sys/UnixWare.mk path=usr/share/mk/sys/UnixWare.mk group=bin \
     mode=0444 owner=root
 file usr/share/mk/sys/illumos.mk path=usr/share/mk/sys/illumos.mk group=bin \
@@ -155,3 +153,4 @@ link path=usr/share/mk/bsd.obj.mk target=obj.mk
 link path=usr/share/mk/bsd.own.mk target=own.mk
 link path=usr/share/mk/bsd.prog.mk target=prog.mk
 link path=usr/share/mk/bsd.subdir.mk target=subdir.mk
+link path=usr/share/mk/sys/SunOS.mk target=illumos.mk

@@ -48,7 +48,6 @@ sys/Linux.mk
 sys/NetBSD.mk
 sys/OSF1.mk
 sys/OpenBSD.mk
-sys/SunOS.mk
 sys/UnixWare.mk
 sys/illumos.mk
 target-flags.mk
