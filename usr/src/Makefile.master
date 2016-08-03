@@ -616,11 +616,9 @@ NATIVE_MACH=	$(MACH:amd64=i386)
 # Define native compilation macros
 #
 
-# Base directory where compilers are loaded.
-# Defined here so it can be overridden by developer.
+# Base directory where compilers are located.
+# Defined here so it can be overridden by developers.
 #
-SPRO_ROOT=		$(BUILD_TOOLS)/SUNWspro
-SPRO_VROOT=		$(SPRO_ROOT)/SS12
 GNU_ROOT=		/usr
 
 BASIC_CC_ARGS=	-_gcc=-fident \

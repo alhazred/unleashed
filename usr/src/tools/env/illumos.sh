@@ -188,12 +188,9 @@ export UT_NO_USAGE_TRACKING='1'
 # variables allows you to get the compilers and onbld files locally.
 # Set BUILD_TOOLS to pull everything from one location.
 # Alternately, you can set ONBLD_TOOLS to where you keep the contents of
-# SUNWonbld and SPRO_ROOT to where you keep the compilers.  SPRO_VROOT
-# exists to make it easier to test new versions of the compiler.
+# pkg:/developer/build/onbld.
 export BUILD_TOOLS='/opt'
 #export ONBLD_TOOLS='/opt/onbld'
-export SPRO_ROOT='/opt/SUNWspro'
-export SPRO_VROOT="$SPRO_ROOT"
 
 # Disable shadow compilation by default.
 export CW_NO_SHADOW='1'
