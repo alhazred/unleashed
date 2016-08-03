@@ -194,9 +194,6 @@ CPPFLAGS +=	-I$(SRC)/lib/libnsl/dial
 
 CFLAGS +=	$(CCVERBOSE)
 
-# Make string literals read-only to save memory.
-CFLAGS +=	$(XSTRCONST)
-CFLAGS64 +=	$(XSTRCONST)
 CCFLAGS +=	-_CC=-features=conststrings
 CCFLAGS64 +=	-_CC=-features=conststrings
 

@@ -1097,9 +1097,6 @@ CERRWARN += -_gcc=-Wno-address
 THREAD_DEBUG =
 $(NOT_RELEASE_BUILD)THREAD_DEBUG = -DTHREAD_DEBUG
 
-# Make string literals read-only to save memory.
-CFLAGS += $(XSTRCONST)
-
 ALTPICS= $(TRACEOBJS:%=pics/%)
 
 $(DYNLIB) := BUILD.SO = $(LD) -o $@ -G $(DYNFLAGS) $(PICS) $(ALTPICS) $(EXTPICS)

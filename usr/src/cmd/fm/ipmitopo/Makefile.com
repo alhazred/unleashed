@@ -36,7 +36,7 @@ ROOTPROG = $(ROOTLIBFMD)/$(PROG)
 
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 CPPFLAGS += -I. -I../common
-CFLAGS += $(CTF_FLAGS) $(CCVERBOSE) $(XSTRCONST)
+CFLAGS += $(CTF_FLAGS) $(CCVERBOSE)
 LDLIBS += -lipmi -lnvpair
 
 CERRWARN += -_gcc=-Wno-uninitialized
