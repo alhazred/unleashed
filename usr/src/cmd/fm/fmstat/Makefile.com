@@ -39,7 +39,7 @@ STAT_COMMON_OBJS = timestamp.o
 
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 CPPFLAGS += -I. -I../common -I$(STATCOMMONDIR)
-CFLAGS += $(CTF_FLAGS) $(CCVERBOSE) $(XSTRCONST)
+CFLAGS += $(CTF_FLAGS) $(CCVERBOSE)
 LDLIBS += -L$(ROOT)/usr/lib/fm -lfmd_adm
 LDFLAGS += -R/usr/lib/fm
 

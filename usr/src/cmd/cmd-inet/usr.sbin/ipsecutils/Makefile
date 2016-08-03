@@ -58,7 +58,6 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-switch
 
-CFLAGS += $(XSTRCONST)
 LDLIBS += -lipsecutil -lnsl
 
 LAZYLIBS = $(ZLAZYLOAD) -ltsol $(ZNOLAZYLOAD)
