@@ -60,9 +60,9 @@ include $(SRC)/Makefile.master
 #
 CSCOPE	= $(BUILD_TOOLS)/onbld/bin/$(MACH)/cscope-fast
 CSFLAGS	= -bq
-CTAGS	= /usr/bin/ctags
+CTAGS	= ctags
 CTFLAGS	= -wt
-ETAGS	= $(SPRO_VROOT)/bin/etags
+ETAGS	= etags
 ETFLAGS	= -t
 FLGFLP	= $(BUILD_TOOLS)/onbld/bin/flg.flp
 
