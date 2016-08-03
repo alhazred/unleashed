@@ -177,8 +177,7 @@ export PKGFMT_OUTPUT='v1'
 
 # we want make to do as much as it can, just in case there's more than
 # one problem.
-#export MAKEFLAGS='k'
-export MAKEFLAGS=
+export MAKEFLAGS='k'
 
 # Magic variables to prevent the devpro compilers/teamware from checking
 # for updates or sending mail back to devpro on every use.
