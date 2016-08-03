@@ -6,6 +6,8 @@ unix?=		We run ${OS}.
 LIBCRT0=
 
 MANTARGET?=	man
+# MANTARGET=man causes MANDIR to contain share/man/man with mk-20160802
+MANDIR?=	/usr/share/man
 BINGRP?=	bin
 STRIP_FLAG?=
 
