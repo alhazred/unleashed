@@ -161,5 +161,4 @@ locate the etags utility and the -x option has not been specified, then
 xref will silently not build etags.
 .LP
 The ETAGS environment variable can be used to specify an alternate
-path to the etags utility.  For instance, to use the one included with
-SUNWgnu-emacs, set ETAGS to /usr/gnu/bin/etags prior to invoking xref.
+path to the etags utility.

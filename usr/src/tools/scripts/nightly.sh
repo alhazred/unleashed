@@ -799,8 +799,8 @@ if [ -z "$MAILTO" -o "$MAILTO" = "nobody" ]; then
 fi
 
 PATH="$OPTHOME/onbld/bin:$OPTHOME/onbld/bin/${MACH}:/usr/ccs/bin"
-PATH="$PATH:$OPTHOME/SUNWspro/bin:/usr/bin:/usr/sbin:/usr/ucb"
-PATH="$PATH:/usr/openwin/bin:/usr/sfw/bin:/opt/sfw/bin:."
+PATH="$PATH:/usr/bin:/usr/sbin:/usr/ucb"
+PATH="$PATH:/usr/openwin/bin:/usr/sfw/bin:/opt/sfw/bin:.:$OPTHOME/SUNWspro/bin"
 export PATH
 
 # roots of source trees, both relative to $SRC and absolute.
@@ -832,11 +832,6 @@ elif [[ ! -x "$MAKE" ]]; then
 fi
 export PATH
 export MAKE
-
-if [ "${SUNWSPRO}" != "" ]; then
-	PATH="${SUNWSPRO}/bin:$PATH"
-	export PATH
-fi
 
 hostname=$(uname -n)
 if [[ $DMAKE_MAX_JOBS != +([0-9]) || $DMAKE_MAX_JOBS -eq 0 ]]

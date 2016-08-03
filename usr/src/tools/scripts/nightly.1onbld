@@ -404,14 +404,6 @@ ONBLD_TOOLS is the root of all the tools that are part of SUNWonbld; e.g.,
 It is used by the makefile system, but not nightly.
 .RE
 .LP
-.B SPRO_ROOT
-.RS 5
-The gate-defined default location for the Sun compilers, e.g.
-/ws/onnv-tools/SUNWspro.  By default, it is derived from
-.BR BUILD_TOOLS .
-It is used by the makefile system, but not nightly.
-.RE
-.LP
 .B JAVA_ROOT
 .RS 5
 The location for the java compilers for the build, generally /usr/java.
