@@ -1,3 +1,3 @@
-SUBDIR=	bmake
+SUBDIR=	bmake xinstall
 
 .include <bsd.subdir.mk>

@@ -203,7 +203,6 @@ _MANFILES=	6to4relay.1m		\
 		infocmp.1m		\
 		init.1m			\
 		inityp2l.1m		\
-		install.1m		\
 		installboot.1m		\
 		installf.1m		\
 		installgrub.1m		\

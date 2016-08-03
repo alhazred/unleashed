@@ -1666,7 +1666,6 @@ link path=etc/hosts target=./inet/hosts
 link path=etc/inet/ipnodes target=./hosts
 link path=etc/inetd.conf target=./inet/inetd.conf
 link path=etc/init target=../sbin/init
-link path=etc/install target=../usr/sbin/install
 link path=etc/killall target=../usr/sbin/killall
 link path=etc/labelit target=../usr/sbin/labelit
 link path=etc/lib/ld.so.1 target=../../lib/ld.so.1
