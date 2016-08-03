@@ -24,7 +24,6 @@ MANFILES=	biff.1b		\
 		df.1b		\
 		du.1b		\
 		echo.1b		\
-		exportfs.1b	\
 		expr.1b		\
 		fastboot.1b	\
 		file.1b		\

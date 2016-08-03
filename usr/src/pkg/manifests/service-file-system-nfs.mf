@@ -70,7 +70,6 @@ file path=usr/lib/nfs/nfslogd mode=0555
 file path=usr/lib/nfs/rquotad mode=0555
 file path=usr/lib/reparse/$(ARCH64)/libnfs_basic.so.1
 file path=usr/lib/reparse/libnfs_basic.so.1
-file path=usr/sbin/exportfs mode=0555
 file path=usr/sbin/nfsref mode=0555
 file path=usr/share/man/man1m/mountd.1m
 file path=usr/share/man/man1m/nfsd.1m

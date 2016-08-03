@@ -31,7 +31,7 @@
 
 include $(SRC)/Makefile.master
 
-SUBDIR1=	exportfs nfsd rquotad \
+SUBDIR1=	nfsd rquotad \
 		statd nfsstat mountd dfshares \
 		nfsfind nfs4cbd share
 
