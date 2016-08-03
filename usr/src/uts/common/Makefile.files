@@ -1105,8 +1105,6 @@ RTLS_OBJS +=	rtls.o
 #
 #			exec modules
 #
-AOUTEXEC_OBJS +=aout.o
-
 ELFEXEC_OBJS +=	elf.o elf_notes.o old_notes.o
 
 INTPEXEC_OBJS +=intp.o

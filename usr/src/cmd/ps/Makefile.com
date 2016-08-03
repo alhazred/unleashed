@@ -27,7 +27,7 @@
 
 PROG=	ps
 
-OBJS=	ps.o ucbps.o
+OBJS=	ps.o
 
 SRCS=	$(OBJS:%.o=../%.c)
 

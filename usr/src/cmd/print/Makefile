@@ -34,8 +34,7 @@ PRINT_SUBDIRS  =		\
 		lpget		\
 		lpset		\
 		conv_fix	\
-		selector	\
-		bsd-sysv-commands
+		selector
 
 SUBDIRS = $(PRINT_SUBDIRS)
 

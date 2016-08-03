@@ -32,16 +32,12 @@ PROG= 		pwck
 include ../Makefile.cmd
 
 RELUSRSBIN=	../usr/sbin
-ROOTSYMLINK=	$(ROOTETC)/$(PROG)
 
 .KEEP_STATE:
 
 all: $(PROG) 
 
-install: all $(ROOTUSRSBINPROG) $(ROOTSYMLINK)
-
-$(ROOTSYMLINK):
-	-$(RM) $@; $(SYMLINK) $(RELUSRSBIN)/$(PROG) $@
+install: all $(ROOTUSRSBINPROG)
 
 clean:
 

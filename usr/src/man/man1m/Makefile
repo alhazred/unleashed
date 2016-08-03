@@ -184,7 +184,6 @@ _MANFILES=	6to4relay.1m		\
 		in.echod.1m		\
 		in.fingerd.1m		\
 		in.iked.1m		\
-		in.lpd.1m		\
 		in.mpathd.1m		\
 		in.ndpd.1m		\
 		in.rarpd.1m		\

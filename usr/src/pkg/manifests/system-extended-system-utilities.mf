@@ -256,7 +256,6 @@ license usr/src/cmd/units/THIRDPARTYLICENSE \
 link path=usr/bin/dmesg target=../sbin/dmesg
 link path=usr/bin/pcat target=./unpack
 link path=usr/bin/strace target=../sbin/strace
-link path=usr/dict target=./share/lib/dict
 link path=usr/proc/bin/pcred target=../../bin/pcred
 link path=usr/proc/bin/pfiles target=../../bin/pfiles
 link path=usr/proc/bin/pflags target=../../bin/pflags

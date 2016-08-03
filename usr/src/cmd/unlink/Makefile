@@ -35,8 +35,6 @@ CERRWARN += -_gcc=-Wno-parentheses
 all: $(PROG) 
 
 install: all $(ROOTUSRSBINPROG)
-	-$(RM) $(ROOTETCPROG)
-	-$(SYMLINK) ../usr/sbin/$(PROG) $(ROOTETCPROG)
 
 clean:
 

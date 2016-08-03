@@ -31,16 +31,11 @@ include ../Makefile.cmd
 CERRWARN += -_gcc=-Wno-parentheses
 LDLIBS += -lkstat -ldevinfo
 
-ROOTSYMLINK= $(ROOTETCPROG)
-
 .KEEP_STATE:
 
 all: $(PROG) 
 
-install: all $(ROOTUSRSBINPROG) $(ROOTSYMLINK)
-
-$(ROOTSYMLINK):
-	$(RM) $@; $(SYMLINK) ../usr/sbin/$(PROG) $@
+install: all $(ROOTUSRSBINPROG)
 
 clean:
 

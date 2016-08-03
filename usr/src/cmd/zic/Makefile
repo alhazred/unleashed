@@ -1,6 +1,7 @@
 #
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
+# Copyright 2016 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
 #
 
 NATIVE=native
@@ -64,6 +65,7 @@ $(PROG): $(OBJS)
 install: all $(DIRS) $(ROOTTZSRCD) $(ROOTTZTABD) $(ROOTUSRSBINPROG) \
 		$(ROOTLIBTZSRCFILES) $(ROOTLIBTZTABFILES) $(ROOTKSHPROG)
 	$(NPROG) -d $(ROOTTZD) $(TZFILES)
+	$(LN) -s ./US/Eastern $(ROOTTZD)/posixrules
 
 $(NPROG): $(NATIVE) $(NOBJS)
 	$(NATIVECC) $(NATIVE_CFLAGS) -o $@ $(NOBJS)

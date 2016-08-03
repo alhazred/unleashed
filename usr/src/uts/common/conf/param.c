@@ -329,11 +329,6 @@ short elfmagic = 0x7f45;
 short intpmagic = 0x2321;
 short jmagic = 0x504b;
 
-#if defined(__sparc)
-short aout_nmagic = NMAGIC;
-short aout_zmagic = ZMAGIC;
-short aout_omagic = OMAGIC;
-#endif
 short nomagic = 0;
 
 /*
@@ -357,11 +352,6 @@ char elf64magicstr[] = ELF64MAGIC_STRING;
 char intpmagicstr[] = INTPMAGIC_STRING;
 char shbinmagicstr[] = SHBINMAGIC_STRING;
 char javamagicstr[] = JAVAMAGIC_STRING;
-#if defined(__sparc)
-char aout_nmagicstr[] = AOUT_NMAGIC_STRING;
-char aout_zmagicstr[] = AOUT_ZMAGIC_STRING;
-char aout_omagicstr[] = AOUT_OMAGIC_STRING;
-#endif
 char nomagicstr[] = NOMAGIC_STRING;
 
 char *execswnames[] = {
@@ -372,11 +362,6 @@ char *execswnames[] = {
 	"intpexec",
 	"shbinexec",
 	"javaexec",
-#if defined(__sparc)
-	"aoutexec",
-	"aoutexec",
-	"aoutexec",
-#endif
 	NULL,
 	NULL,
 	NULL
@@ -390,11 +375,6 @@ struct execsw execsw[] = {
 	{ intpmagicstr, 0, 2, NULL, NULL, NULL },
 	{ shbinmagicstr, 0, SHBINMAGIC_LEN, NULL, NULL, NULL },
 	{ javamagicstr, 0, 4, NULL, NULL, NULL },
-#if defined(__sparc)
-	{ aout_zmagicstr, 2, 2, NULL, NULL, NULL },
-	{ aout_nmagicstr, 2, 2, NULL, NULL, NULL },
-	{ aout_omagicstr, 2, 2, NULL, NULL, NULL },
-#endif
 	{ nomagicstr, 0, 0, NULL, NULL, NULL },
 	{ nomagicstr, 0, 0, NULL, NULL, NULL },
 	{ nomagicstr, 0, 0, NULL, NULL, NULL },

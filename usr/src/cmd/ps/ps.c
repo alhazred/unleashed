@@ -302,8 +302,6 @@ static size_t	lpbufsize;
  */
 #define	PTHRESHOLD	40
 
-#define	UCB_OPTS	"-aceglnrtuvwxSU"
-
 static	void	usage(void);
 static	char	*getarg(char **);
 static	char	*parse_format(char *);
@@ -332,47 +330,8 @@ static	int	str2uid(const char *,  uid_t *, unsigned long, unsigned long);
 static	void	*Realloc(void *, size_t);
 static	int	pidcmp(const void *p1, const void *p2);
 
-extern	int	ucbmain(int, char **);
-static	int	stdmain(int, char **);
-
 int
 main(int argc, char **argv)
-{
-	const char *me;
-
-	/*
-	 * The original two ps'es are linked in a single binary;
-	 * their main()s are renamed to stdmain for /usr/bin/ps and
-	 * ucbmain for /usr/ucb/ps.
-	 * We try to figure out which instance of ps the user wants to run.
-	 * Traditionally, the UCB variant doesn't require the flag argument
-	 * start with a "-".  If the first argument doesn't start with a
-	 * "-", we call "ucbmain".
-	 * If there's a first argument and it starts with a "-", we check
-	 * whether any of the options isn't acceptable to "ucbmain"; in that
-	 * case we run "stdmain".
-	 * If we can't tell from the options which main to call, we check
-	 * the binary we are running.  We default to "stdmain" but
-	 * any mention in the executable name of "ucb" causes us to call
-	 * ucbmain.
-	 */
-	if (argv[1] != NULL) {
-		if (argv[1][0] != '-')
-			return (ucbmain(argc, argv));
-		else if (argv[1][strspn(argv[1], UCB_OPTS)] != '\0')
-			return (stdmain(argc, argv));
-	}
-
-	me = getexecname();
-
-	if (me != NULL && strstr(me, "ucb") != NULL)
-		return (ucbmain(argc, argv));
-	else
-		return (stdmain(argc, argv));
-}
-
-static int
-stdmain(int argc, char **argv)
 {
 	char	*p;
 	char	*p1;

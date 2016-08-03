@@ -54,7 +54,6 @@
 #include <sys/stat.h>
 #include <sys/elf.h>
 #include <procfs.h>
-#include <sys/core.h>
 #include <sys/dumphdr.h>
 #include <netinet/in.h>
 #include <gelf.h>
@@ -629,17 +628,6 @@ def_position_tests(char *file)
 		return (1);
 
 	if (elf_check(file) == 0) {
-		(void) putchar('\n');
-		return (1);
-	/* LINTED: pointer cast may result in improper alignment */
-	} else if (*(int *)fbuf == CORE_MAGIC) {
-		/* LINTED: pointer cast may result in improper alignment */
-		struct core *corep = (struct core *)fbuf;
-
-		(void) printf("a.out core file");
-
-		if (*(corep->c_cmdname) != '\0')
-			(void) printf(" from '%s'", corep->c_cmdname);
 		(void) putchar('\n');
 		return (1);
 	}

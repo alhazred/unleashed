@@ -126,21 +126,6 @@ link with, respectively, \fBlibmalloc\fR, \fBlibbsdmalloc\fR,
 \fBlibmtmalloc\fR(3LIB), and \fBlibumem\fR(3LIB).
 .RE
 
-.sp
-.ne 2
-.na
-\fB(3UCB)\fR
-.ad
-.sp .6
-.RS 4n
-These functions constitute the source compatibility (with BSD functions)
-library. It is implemented as a shared object, \fBlibucb.so\fR, but is not
-automatically linked by the C compilation system. Specify \fB-lucb\fR on the
-\fBcc\fR command line to link with this library, which is located in the
-\fB/usr/ucb\fR subdirectory. Headers for this library are located within
-\fB/usr/ucbinclude\fR. See \fBlibucb\fR(3LIBUCB).
-.RE
-
 .SS "Networking Library Functions"
 .LP
 The functions described in this volume comprise the various networking

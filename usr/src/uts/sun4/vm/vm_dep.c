@@ -412,19 +412,6 @@ valid_usr_range(caddr_t addr, size_t len, uint_t prot, struct as *as,
 }
 
 /*
- * Routine used to check to see if an a.out can be executed
- * by the current machine/architecture.
- */
-int
-chkaout(struct exdata *exp)
-{
-	if (exp->ux_mach == M_SPARC)
-		return (0);
-	else
-		return (ENOEXEC);
-}
-
-/*
  * The following functions return information about an a.out
  * which is used when a program is executed.
  */

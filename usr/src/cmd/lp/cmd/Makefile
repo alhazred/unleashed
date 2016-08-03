@@ -26,7 +26,7 @@
 
 include 	../Makefile.lp
 
-SUBDIRS =	lptest lpadmin lpsched scripts
+SUBDIRS =	lpadmin lpsched scripts
 
 LOCALPROG =	lpshut
 

@@ -124,7 +124,6 @@ MANIFEST_SUBDIRS=			\
 	lvm/util			\
 	picl/picld			\
 	pools/poold			\
-	print/bsd-sysv-commands		\
 	rcap/rcapd			\
 	rpcsvc/rpc.bootparamd		\
 	smbsrv/smbd			\

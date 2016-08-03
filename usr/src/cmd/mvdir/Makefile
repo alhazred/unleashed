@@ -35,8 +35,6 @@ FILEMODE= 0555
 all: $(PROG) 
 
 install: all $(ROOTUSRSBINPROG)
-	-$(RM) $(ROOTETCPROG)
-	-$(SYMLINK) ../usr/sbin/$(PROG) $(ROOTETCPROG)
 
 clean:
 

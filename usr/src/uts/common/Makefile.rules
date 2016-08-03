@@ -185,10 +185,6 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/exacct/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/exec/aout/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/exec/elf/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
