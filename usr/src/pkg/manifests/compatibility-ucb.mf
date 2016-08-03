@@ -69,7 +69,6 @@ file path=usr/share/man/man1b/stty.1b
 file path=usr/share/man/man1b/sum.1b
 file path=usr/share/man/man1b/test.1b
 file path=usr/share/man/man1b/tset.1b
-file path=usr/share/man/man1b/users.1b
 file path=usr/share/man/man1b/vipw.1b
 file path=usr/share/man/man1b/whereis.1b
 file path=usr/share/man/man1b/whoami.1b
@@ -94,7 +93,6 @@ file path=usr/ucb/stty mode=0755
 file path=usr/ucb/sum mode=0755
 file path=usr/ucb/test mode=0755
 file path=usr/ucb/tset mode=0755
-file path=usr/ucb/users mode=0755
 file path=usr/ucb/vipw mode=0555
 file path=usr/ucb/whereis mode=0755
 file path=usr/ucb/whoami mode=0755
@@ -133,8 +131,6 @@ license usr/src/ucbcmd/test/THIRDPARTYLICENSE \
     license=usr/src/ucbcmd/test/THIRDPARTYLICENSE
 license usr/src/ucbcmd/tset/THIRDPARTYLICENSE \
     license=usr/src/ucbcmd/tset/THIRDPARTYLICENSE
-license usr/src/ucbcmd/users/THIRDPARTYLICENSE \
-    license=usr/src/ucbcmd/users/THIRDPARTYLICENSE
 license usr/src/ucbcmd/whereis/THIRDPARTYLICENSE \
     license=usr/src/ucbcmd/whereis/THIRDPARTYLICENSE
 license usr/src/ucbcmd/whoami/THIRDPARTYLICENSE \

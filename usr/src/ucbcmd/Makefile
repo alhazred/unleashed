@@ -55,7 +55,6 @@ COMMON_SUBDIRS=		\
 	sum		\
 	test		\
 	tset		\
-	users		\
 	vipw		\
 	whereis		\
 	whoami

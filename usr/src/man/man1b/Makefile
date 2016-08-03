@@ -44,7 +44,6 @@ MANFILES=	biff.1b		\
 		sum.1b		\
 		test.1b		\
 		tset.1b		\
-		users.1b	\
 		vipw.1b		\
 		whereis.1b	\
 		whoami.1b

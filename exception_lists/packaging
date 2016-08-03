@@ -786,6 +786,8 @@ usr/lib/libficl-sys.so
 #
 usr/bin/printenv
 usr/share/man/man1/printenv.1
+usr/bin/users
+usr/share/man/man1/users.1
 
 #
 # Lint garbage - to be removed when we stop building lint libs
