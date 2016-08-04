@@ -199,12 +199,9 @@ function build {
 	)
 
 	echo "\n==== Build errors ($LABEL) ====\n" >> $mail_msg_file
-	egrep ":" $SRC/${INSTALLOG}.out |
-		egrep -e "(^(${MAKE}|bmake[^\s]*:|\*\*\*)[ 	]error[: 	\n])" | \
-		egrep -v "Ignoring unknown host" | \
-		egrep -v "cc .* -o error " | \
-		egrep -v "warning" | tee $TMPDIR/build_errs${SUFFIX} \
-		>> $mail_msg_file
+		egrep -e "(^(${MAKE}:|bmake[^\s]*:|\*\*\*)|[ 	]error[: 	\n])" \
+		    ${SRC}/${INSTALLOG}.out | tee $TMPDIR/build_errs${SUFFIX} \
+		    >> $mail_msg_file
 	if [[ -s $TMPDIR/build_errs${SUFFIX} ]]; then
 		build_ok=n
 		this_build_ok=n
