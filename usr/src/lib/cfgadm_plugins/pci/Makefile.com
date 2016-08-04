@@ -44,7 +44,6 @@ SRCS=		../common/cfga.c $(SRC)/common/pci/pci_strings.c
 LIBS = $(DYNLIB)
 
 CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lc -ldevice -ldevinfo -lrcm
 
 CERRWARN +=	-_gcc=-Wno-parentheses

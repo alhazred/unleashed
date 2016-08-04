@@ -65,7 +65,6 @@ CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-extra
 CERRWARN += -_gcc=-Wno-unused-function
 LDLIBS += -lnsl
-rusers :=	CFLAGS += $(CCVERBOSE)
 $(BINPROG) :=	LDLIBS += -lrpcsvc
 $(RPROG) :=	LDLIBS += -lrpcsvc
 $(SPROG) :=	LDLIBS += -lrpcsvc

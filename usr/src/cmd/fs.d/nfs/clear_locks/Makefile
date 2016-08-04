@@ -50,7 +50,6 @@ $(POFILE):      clear_locks.c
 	$(RM) messages.po $(POFILE).i
 
 
-CFLAGS		+=	$(CCVERBOSE)
 
 .KEEP_STATE:
 

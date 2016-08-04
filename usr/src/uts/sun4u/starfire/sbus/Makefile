@@ -54,7 +54,6 @@ include $(UTSBASE)/sun4u/starfire/Makefile.starfire
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-type-limits
 CERRWARN += -_gcc=-Wno-uninitialized
 

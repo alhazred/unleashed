@@ -35,7 +35,6 @@ SRCS=	$(OBJS:%.o=%.c) $(EXPOBJ:%.o=../acct/lib/%.c)
 include ../Makefile.cmd
 
 LDLIBS += 	-lexacct
-CFLAGS += 	$(CCVERBOSE)
 
 FILEMODE =	0555
 

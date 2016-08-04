@@ -38,8 +38,8 @@ LIBS = $(DYNLIB)
 SRCDIR =	../common
 
 CPPFLAGS += -I../common -I.
-CFLAGS += $(CCVERBOSE) $(C_BIGPICFLAGS)
-CFLAGS64 += $(CCVERBOSE) $(C_BIGPICFLAGS)
+CFLAGS += $(C_BIGPICFLAGS)
+CFLAGS64 += $(C_BIGPICFLAGS)
 CERRWARN += -_gcc=-Wno-uninitialized
 LDLIBS += -lexacct -lnvpair -lgen -lc
 

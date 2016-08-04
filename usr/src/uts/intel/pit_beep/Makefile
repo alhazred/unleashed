@@ -46,8 +46,6 @@ CONF_SRCDIR     = $(UTSBASE)/intel/io
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #	Define targets
 #

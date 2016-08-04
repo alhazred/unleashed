@@ -53,7 +53,6 @@ LDLIBS		+= -lsldap -lnsl -lc
 
 CPPFLAGS	+= -DENABLE_SUNOS_AGING -D_REENTRANT \
 		   -I$(SRC)/lib/libsldap/common -I$(SRC)/lib/libnsl/include
-CFLAGS		+= $(CCVERBOSE)
 
 CERRWARN	+= -_gcc=-Wno-switch
 CERRWARN	+= -_gcc=-Wno-uninitialized

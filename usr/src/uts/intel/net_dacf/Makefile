@@ -43,7 +43,6 @@ ROOTMODULE	= $(ROOT_DACF_DIR)/$(MODULE)
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-CFLAGS += $(CCVERBOSE)
 LDFLAGS += -dy -Ndrv/softmac
 
 #

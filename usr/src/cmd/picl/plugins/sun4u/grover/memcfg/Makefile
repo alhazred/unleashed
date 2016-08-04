@@ -45,7 +45,6 @@ ROOTLIBDIR	= $(ROOT_PLAT_PLUGINDIR)
 
 
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/common/memcfg
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/common/devtree
 LDLIBS +=	-L$(ROOT)/usr/lib/picl/plugins

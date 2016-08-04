@@ -22,8 +22,6 @@ ROOTMODULE	= $(ROOT_GROVER_DRV_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sun4u/grover/Makefile.grover
 
-CFLAGS += $(CCVERBOSE)
-
 CPPFLAGS += -I$(UTSBASE)/sun4u/grover
 
 #

@@ -33,7 +33,6 @@ SRCS=		$(OBJS:%.o=../common/%.c)
 
 DEFLIST=	-DELF_OBJ -DELF
 CPPFLAGS=	$(INCLIST) $(DEFLIST) $(CPPFLAGS.master)
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-char-subscripts
 CERRWARN +=	-_gcc=-Wno-parentheses
 C99MODE=	$(C99_ENABLE)

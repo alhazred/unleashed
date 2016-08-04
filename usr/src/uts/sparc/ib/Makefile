@@ -63,8 +63,6 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # For now, disable these compiler warnings; maintainers should endeavor to
 # investigate and remove these for maximum coverage.  Please do not carry

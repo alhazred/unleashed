@@ -29,7 +29,6 @@ PROG=	raidctl
 include $(SRC)/cmd/Makefile.cmd
 
 LDLIBS   += -lraidcfg
-CFLAGS	 += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 
 .KEEP_STATE:

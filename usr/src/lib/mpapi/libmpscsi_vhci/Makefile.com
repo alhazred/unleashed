@@ -61,7 +61,6 @@ SRCDIR = 	../common
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -ldevinfo -lsysevent -lnvpair
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR) -D_POSIX_PTHREAD_SEMANTICS
 CPPFLAGS +=	-DBUILD_TIME='"Wed Sep 24 12:00:00 2008"'
 

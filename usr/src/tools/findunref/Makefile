@@ -26,7 +26,6 @@
 
 PROG	  = findunref
 MAN1ONBLDFILES = findunref.1onbld
-CFLAGS += $(CCVERBOSE)
 
 include ../Makefile.tools
 

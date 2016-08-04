@@ -39,7 +39,6 @@ SRCDIR =	../common
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lmd5 -lc
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-DOS='"solaris"' -D__OS_solaris -DNDEBUG
 
 .KEEP_STATE:

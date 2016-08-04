@@ -25,7 +25,6 @@
 
 include $(SRC)/cmd/Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 
 ROOTBOOT=		$(ROOT)/boot
 ROOTBOOTSOLARIS=	$(ROOTBOOT)/solaris

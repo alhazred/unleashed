@@ -44,8 +44,6 @@ ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS		+= $(CCVERBOSE)
-
 #
 #	Depends on drv/audio and misc/ac97
 #

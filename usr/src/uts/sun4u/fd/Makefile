@@ -67,8 +67,6 @@ $(OBJS_DIR)/fd_asm.o := AS_CPPFLAGS += -I$(OBJS_DIR)
 CLEANFILES      += $(MODSTUBS_O) $(ASSYM_H) \
 		   $(FDOFF_C) $(FDOFF_S) $(FDOFF_TMP)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # For now, disable these compiler warnings; maintainers should endeavor to
 # investigate and remove these for maximum coverage.  Please do not carry

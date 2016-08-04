@@ -54,7 +54,7 @@ HDRCHK    = hdrchk
 
 CPPFLAGS +=	-I$(SRC)/lib/libfru/include
 CPPFLAGS +=	-I$(SRC)/lib/libfruutils/
-CFLAGS +=	$(CCVERBOSE) -DBIG_ENDIAN
+CFLAGS +=	-DBIG_ENDIAN
 LDLIBS +=	-L$(SRC)/lib/libfruutils/$(MACH)
 LDLIBS +=	-lc -lpicltree -lfruutils
 LDLIBS +=	-ldevinfo

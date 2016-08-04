@@ -61,8 +61,6 @@ $(PROG):=	LDLIBS = $(LDLIBS.cmd)
 BUILD.AR=	$(AR) $(ARFLAGS) $@ `$(LORDER) $(OBJS) | $(TSORT)`
 
 C99MODE= $(C99_ENABLE)
-CFLAGS += $(CCVERBOSE)
-CFLAGS64 += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
 

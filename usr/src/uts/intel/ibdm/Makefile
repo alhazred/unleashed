@@ -52,12 +52,6 @@ ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
-#	Overrides.
-#
-
-CFLAGS += $(CCVERBOSE)
-
-#
 #	depends on misc/ibtl, drv/ib and misc/ibmf
 #
 LDFLAGS	+= -dy -Nmisc/ibtl -Nmisc/ibmf

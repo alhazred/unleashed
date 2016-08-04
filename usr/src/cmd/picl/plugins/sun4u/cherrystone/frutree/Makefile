@@ -37,7 +37,6 @@ ROOT_PLATFORM = $(USR_PLAT_DIR)/SUNW,Sun-Fire-480R
 
 include $(SRC)/cmd/picl/plugins/Makefile.com
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/ -I$(SRC)/uts/common/
 CPPFLAGS +=	-I$(SRC)/lib/libdevfsevent -I$(SRC)/uts/common
 CPPFLAGS +=	-D_REENTRANT

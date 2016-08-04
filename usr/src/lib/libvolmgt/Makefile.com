@@ -36,7 +36,6 @@ SRCDIR =	../common
 LIBS =		$(DYNLIB)
 
 CPPFLAGS =	-I.. $(CPPFLAGS.master)
-CFLAGS +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-unused-variable
 

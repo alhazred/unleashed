@@ -46,8 +46,6 @@ include $(UTSBASE)/intel/Makefile.intel
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # depends on misc/s1394
 LDFLAGS		+= -dy -Nmisc/s1394

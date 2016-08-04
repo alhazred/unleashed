@@ -41,7 +41,6 @@ XGETFLAGS += -a
 POFILE=	picld_pluginutil.po
 
 CPPFLAGS +=	-I.. -I$(SRC)/lib/libpicl -I$(SRC)/lib/libpicltree
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CPPFLAGS +=	-D_REENTRANT
 DYNFLAGS +=	$(ZNOLAZYLOAD)

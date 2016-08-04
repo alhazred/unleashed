@@ -69,7 +69,6 @@ INCDIR=		../../include
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lcryptoutil -lc
 
-CFLAGS	+=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(INCDIR) -I$(SRCDIR) -D_REENTRANT
 
 

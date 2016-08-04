@@ -65,7 +65,6 @@ CPPFLAGS +=	-I$(SRC)/common/mdesc
 CPPFLAGS +=	-I$(SRC)/uts/common/sys
 CPPFLAGS +=	-D_REENTRANT
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-L$(SRC)/lib/libpicl/$(MACH) -L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-L$(ROOT)/usr/lib/picl/plugins -L$(ROOT)/usr/lib/sparcv9
 DYNFLAGS +=	-R$(DYNFLAGS_COM)

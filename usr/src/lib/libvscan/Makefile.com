@@ -39,7 +39,6 @@ SRCDIR =	../common
 ROOTLIBDIR = $(ROOT)/usr/lib/vscan
 
 LDLIBS += -lc -lscf -lsecdb -lnsl -lm
-CFLAGS += $(CCVERBOSE)
 CPPFLAGS += -I$(SRCDIR)
 
 .KEEP_STATE:

@@ -48,8 +48,6 @@ CONF_SRCDIR	= $(UTSBASE)/common/io/usb/hcd/uhci
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS += $(CCVERBOSE)   
-
 #
 # depends on misc/usba
 #

@@ -114,8 +114,6 @@ $(NATIVE_BUILD)LDLIBS = \
 	-L$(ADJUNCT_PROTO)/usr/lib -R$(ADJUNCT_PROTO)/usr/lib \
 	$(SVCCFG_EXTRA_LIBS)
 
-svccfg_lex.o svccfg_grammar.o := CCVERBOSE =
-
 svccfg_help.po := XGETFLAGS =	-a
 
 .KEEP_STATE:

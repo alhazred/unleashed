@@ -38,7 +38,6 @@ LDLIBS +=	-lproc -lc
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS += 	-D_REENTRANT -I$(SRCDIR)
 
 .KEEP_STATE:

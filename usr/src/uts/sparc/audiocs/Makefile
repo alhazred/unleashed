@@ -54,7 +54,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 #	Overrides
 #
-CFLAGS		+= $(CCVERBOSE)
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
 #

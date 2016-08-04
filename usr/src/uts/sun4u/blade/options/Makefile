@@ -54,11 +54,6 @@ ALL_TARGET	= $(SRC_CONFILE)
 INSTALL_TARGET	= $(ROOT_BLADE_DRV_DIR) $(ROOT_CONFFILE)
 
 #
-#	Overrides.
-#
-CFLAGS		+= $(CCVERBOSE)
-
-#
 #	Default build targets.
 #
 .KEEP_STATE:

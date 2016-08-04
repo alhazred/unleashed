@@ -47,7 +47,6 @@ LDLIBS +=	-lbsm -lc -ldladm -lnsl -lnvpair -lscf -lsecdb -lsocket
 
 SRCDIR =	../common
 
-CFLAGS +=       $(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
 
 CERRWARN +=	-_gcc=-Wno-switch

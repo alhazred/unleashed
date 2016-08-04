@@ -30,7 +30,6 @@ PROG= cat
 
 include ../Makefile.cmd
 
-CFLAGS	+= $(CCVERBOSE)
 
 CPPFLAGS += -DEUC -D_FILE_OFFSET_BITS=64
 

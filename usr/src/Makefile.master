@@ -256,13 +256,6 @@ CCMODE=
 CCMODE64=
 
 #
-# C compiler verbose mode. This is so we can enable it globally,
-# but turn it off in the lower level makefiles of things we cannot
-# (or aren't going to) fix.
-#
-CCVERBOSE=		-v
-
-#
 # generate 32-bit addresses in the v9 kernel. Saves memory.
 CCABS32=		-_gcc=-fno-pic -_gcc=-mcmodel=medlow
 #
@@ -346,7 +339,7 @@ C99MODE=	$(C99_DISABLE)
 # In most places, assignments to these macros should be appended with +=
 # (CPPFLAGS.first allows values to be prepended to CPPFLAGS).
 sparc_CFLAGS=	$(sparc_XARCH)
-sparcv9_CFLAGS=	$(sparcv9_XARCH) $(CCVERBOSE)
+sparcv9_CFLAGS=	$(sparcv9_XARCH)
 i386_CFLAGS=	$(i386_XARCH)
 amd64_CFLAGS=	$(amd64_XARCH)
 

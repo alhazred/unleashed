@@ -39,7 +39,6 @@ include ../Makefile.cmd
 
 LIBADMDIR=	../../lib/libadm/inc
 CPPFLAGS +=	-I$(LIBADMDIR)
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS += -ladm
 POFILE= valtools.po
 CLOBBERFILES +=	puttext $(POFILES) $(POFILE)

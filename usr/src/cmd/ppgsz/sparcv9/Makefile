@@ -34,7 +34,7 @@ SRCS=	$(OBJS:%.o=../%.c)
 include ../../Makefile.cmd
 include ../../Makefile.cmd.64
 
-CFLAGS64	+= $(CCVERBOSE) -D_SYSCALL32
+CFLAGS64	+= -D_SYSCALL32
 
 LDLIBS	+= -lproc
 

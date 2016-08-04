@@ -45,7 +45,6 @@ ROOTINTELUCODE = $(INTEL_UCODE_FILE:%=$(ROOTUCODEPATH)/%)
 ROOTAMDUCODE = $(AMD_UCODE_FILE:%=$(ROOTUCODEPATH)/%)
 
 CPPFLAGS = -I../../common -I../../uts/common
-CFLAGS	+= $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-type-limits
 LDLIBS = -lgen

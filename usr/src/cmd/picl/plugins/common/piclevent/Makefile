@@ -59,7 +59,7 @@ CLOBBERFILES += $(MODULES)
 
 CPPFLAGS +=	-I$(SRC)/lib/libsysevent -I$(SRC)/uts/sun
 
-CFLAGS +=	$(CCVERBOSE) $(C_PICFLAGS)
+CFLAGS +=	$(C_PICFLAGS)
 CPPFLAGS +=	-D_REENTRANT
 LDLIBS +=	-L$(SRC)/lib/libsysevent -L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-lc -lpicltree -lnvpair

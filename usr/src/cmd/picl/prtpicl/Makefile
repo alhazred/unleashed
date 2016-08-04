@@ -29,7 +29,6 @@ OBJS = prtpicl.o
 
 include $(SRC)/cmd/Makefile.cmd
 
-CFLAGS	+= $(CCVERBOSE)
 CPPFLAGS +=	-I$(SRC)/lib/libpicl
 LDLIBS +=       -L$(SRC)/lib/libpicl/$(MACH) -lpicl
 

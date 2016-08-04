@@ -61,7 +61,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 MODSTUBS_DIR	= $(OBJS_DIR)
 $(MODSTUBS_O)	:= AS_CPPFLAGS += -DNFS_MODULE
 CLEANFILES	+= $(MODSTUBS_O)
-CFLAGS		+= $(CCVERBOSE)
 
 #
 # Define dependencies on specfs, rpcmod, and rpcsec

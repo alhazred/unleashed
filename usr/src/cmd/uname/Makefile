@@ -27,7 +27,6 @@ ROOTFS_PROG=	$(PROG)
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 
 .KEEP_STATE:

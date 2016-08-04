@@ -63,8 +63,6 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 #
 CPPFLAGS += -DENX_DEBUG
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # Depends on misc/ibtl
 #

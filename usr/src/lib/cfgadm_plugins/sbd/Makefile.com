@@ -44,7 +44,6 @@ SRCDIR =	../common
 
 LIBS = $(DYNLIB)
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lc -lkstat -lnvpair
 
 CERRWARN +=	-_gcc=-Wno-parentheses

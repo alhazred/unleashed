@@ -12,7 +12,6 @@
 # Copyright 2015, Richard Lowe.
 
 MAKE_INCLUDE= $(SRC)/cmd/make/include
-CFLAGS += $(CCVERBOSE)
 CPPFLAGS += -I$(MAKE_INCLUDE) $(MAKE_DEFS)
 
 # So that it's set even for the libraries we build

@@ -39,7 +39,6 @@ LIBS =		$(DYNLIB)
 MAPFILES =
 
 CPPFLAGS +=	-I.. -D_REENTRANT
-CFLAGS +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-switch
 CERRWARN +=	-_gcc=-Wno-uninitialized

@@ -37,7 +37,6 @@ LDLIBS +=	-ldevinfo -lc
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-type-limits
 
 .KEEP_STATE:

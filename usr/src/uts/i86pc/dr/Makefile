@@ -61,8 +61,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 DEF_BUILDS	= $(DEF_BUILDS64)
 ALL_BUILDS	= $(ALL_BUILDS64)
 
-CFLAGS += $(CCVERBOSE)
-
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-empty-body

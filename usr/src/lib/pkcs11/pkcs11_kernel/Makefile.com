@@ -81,7 +81,6 @@ CORESRCS =  \
 LIBS	=	$(DYNLIB)
 LDLIBS  +=      -lc -lcryptoutil -lmd
 
-CFLAGS  +=      $(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-unused-label

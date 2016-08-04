@@ -42,7 +42,6 @@ LIBBSM=		$(SRC)/lib/libbsm/common
 LIBS=		$(DYNLIB)
 LDLIBS		+= -lbsm -lsecdb -lc -lnsl
 
-CFLAGS		+= $(CCVERBOSE)
 CPPFLAGS	+= -D_REENTRANT
 CPPFLAGS	+= -I$(PRAUDIT)
 CPPFLAGS	+= -I$(LIBBSM)

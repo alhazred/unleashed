@@ -123,7 +123,6 @@ SRCS =	\
 LIBS    =       $(DYNLIB)
 LDLIBS  +=      -lc -lmd -lcryptoutil -lsoftcrypto -lgen
 
-CFLAGS 	+=      $(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-unused-label
 CERRWARN +=	-_gcc=-Wno-parentheses

@@ -39,7 +39,6 @@ SRCS =		$(OBJECTS:%.o=$(SRCDIR)/%.c)
 
 LDLIBS +=	-lc
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR) -D__SUN__ -D__STP_INTERNAL__
 
 .KEEP_STATE:

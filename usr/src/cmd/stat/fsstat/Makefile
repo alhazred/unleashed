@@ -34,7 +34,7 @@ COMMON_OBJS = common.o timestamp.o
 COMMON_SRCS = $(COMMON_OBJS:%.o=$(STATCOMMONDIR)/%.c)
 
 LDLIBS += -lkstat
-CFLAGS += $(CCVERBOSE) -I${STATCOMMONDIR}
+CFLAGS += -I${STATCOMMONDIR}
 CERRWARN += -_gcc=-Wno-parentheses
 FILEMODE= 0555
 

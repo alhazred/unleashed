@@ -9,7 +9,6 @@ PROG=		safe_finger tcpd tcpdchk tcpdmatch try-from
 
 include		../Makefile.cmd
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	$(ACCESS) $(PARANOID) $(NETGROUP) $(TLI) \
 		$(UMASK) $(STYLE) $(TABLES) $(KILL_OPT) $(BUGS) \
 		-DRFC931_TIMEOUT=$(RFC931_TIMEOUT) \

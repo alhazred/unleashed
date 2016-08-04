@@ -56,8 +56,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 INC_PATH += -I $(UTSBASE)/common/sys/rsm
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #	depends on rsmops
 #

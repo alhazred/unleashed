@@ -34,7 +34,6 @@ CERRWARN += -_gcc=-Wno-uninitialized
 
 .KEEP_STATE:
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS += -lproject
 $(XPG4) := CFLAGS += -DXPG4
 

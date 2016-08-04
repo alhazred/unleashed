@@ -29,7 +29,6 @@ PROG= hostname
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 
 .KEEP_STATE:
 

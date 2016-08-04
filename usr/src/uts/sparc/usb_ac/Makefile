@@ -47,8 +47,6 @@ CONF_SRCDIR	= $(UTSBASE)/common/io/usb/clients/audio/usb_ac
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS += $(CCVERBOSE)
-
 #
 LDFLAGS	+= -dy -Nmisc/usba -Ndrv/audio
 

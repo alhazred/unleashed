@@ -42,7 +42,6 @@ ROOTLIBDIR64=	$(ROOT)/usr/lib/print/$(MACH)
 LIBS =			$(DYNLIB)
 
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 CPPFLAGS +=	-I../../libpapi-common/common
 

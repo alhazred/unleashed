@@ -44,7 +44,6 @@ SRCS = 		$(COMDIR)/octet.c $(SRCDIR)/inetutil.c \
 
 LDLIBS +=	-lsocket -lc
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized

@@ -192,7 +192,6 @@ CCFLAGS64 += $(NOEXCEPTIONS)
 CPPFLAGS +=	-I$(SRC)/lib/common/inc -I$(SRC)/lib/libnsl/include -D_REENTRANT
 CPPFLAGS +=	-I$(SRC)/lib/libnsl/dial
 
-CFLAGS +=	$(CCVERBOSE)
 
 CCFLAGS +=	-_CC=-features=conststrings
 CCFLAGS64 +=	-_CC=-features=conststrings

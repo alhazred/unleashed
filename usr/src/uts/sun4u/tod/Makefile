@@ -55,7 +55,6 @@ include $(UTSBASE)/sun4u/Makefile.sun4u
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS		+= $(CCVERBOSE)
 CERRWARN 	+= -_gcc=-Wno-parentheses
 
 #

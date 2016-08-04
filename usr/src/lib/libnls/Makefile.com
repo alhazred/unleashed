@@ -35,7 +35,6 @@ SRCDIR =	../common
 
 LIBS =		$(DYNLIB)
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lnsl -lc
 
 CERRWARN +=	-_gcc=-Wno-unused-variable

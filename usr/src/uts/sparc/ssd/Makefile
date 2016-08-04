@@ -56,7 +56,7 @@ include $(UTSBASE)/sparc/Makefile.sparc
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS += $(CCVERBOSE) -D__fibre
+CFLAGS += -D__fibre
 WLCCFLAGS = -D__fibre
 
 #

@@ -28,7 +28,6 @@ include ../../Makefile.cmd
 
 LIBADMDIR = ../../../lib/libadm/inc
 CPPFLAGS += -I$(LIBADMDIR)
-CFLAGS += $(CCVERBOSE)
 
 PROG = devattr devreserv getvol putdgrp devfree getdev listdgrp getdgrp \
     putdev

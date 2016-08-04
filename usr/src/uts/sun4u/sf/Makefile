@@ -56,11 +56,6 @@ ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 #
-#	Overrides
-#
-CFLAGS		+= $(CCVERBOSE)
-
-#
 # Define dependency on scsi
 #
 LDFLAGS += -dy -N misc/scsi

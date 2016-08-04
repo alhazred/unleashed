@@ -67,8 +67,6 @@ INSTALL_TARGET	= def $(BINARY) $(ROOTMODULE) $(ROOTSOFTLINKS)
 ALL_BUILDS      = $(ALL_BUILDSONLY64)
 DEF_BUILDS      = $(DEF_BUILDSONLY64)
 
-CFLAGS += $(CCVERBOSE)
-
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-uninitialized
 CERRWARN	+= -_gcc=-Wno-type-limits

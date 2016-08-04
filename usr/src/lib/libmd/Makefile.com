@@ -38,6 +38,5 @@ COMDIR =	$(SRC)/common/crypto
 SRCDIR =	../common
 MAPFILEDIR =	$(SRCDIR)
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 LDLIBS +=	-lc

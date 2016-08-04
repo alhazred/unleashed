@@ -68,7 +68,7 @@ CPPFLAGS += 	-I$(SRC)/lib/krb5 \
 CERRWARN	+= -_gcc=-Wno-uninitialized
 CERRWARN	+= -_gcc=-Wno-unused-function
 
-CFLAGS +=	$(CCVERBOSE) -I..
+CFLAGS +=	-I..
 DYNFLAGS +=	$(KRUNPATH) $(KMECHLIB) -znodelete
 LDLIBS +=	-L $(ROOTLIBDIR) -lcrypto -lc
 

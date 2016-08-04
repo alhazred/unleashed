@@ -52,7 +52,6 @@ CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/sun4u/psvc/psvcobj
 CPPFLAGS +=	-D_REENTRANT
 
 ZDEFS  =
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-L$(ROOT)/usr/lib
 LDLIBS +=	-L$(SRC)/lib/libpicl/$(MACH) -L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/sun4u/psvc/psvcobj

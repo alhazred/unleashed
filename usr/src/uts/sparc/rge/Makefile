@@ -51,8 +51,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS		+= $(CCVERBOSE)
-
 
 #
 # Driver depends on MAC & IP

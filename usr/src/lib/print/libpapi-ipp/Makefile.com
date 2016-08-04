@@ -43,7 +43,6 @@ $(EXTRALINKS):	$(ROOTLINKS)
 LIBS =			$(DYNLIB)
 
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 CPPFLAGS +=	-I../../libpapi-common/common
 CPPFLAGS +=	-I../../libipp-core/common

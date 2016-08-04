@@ -56,7 +56,6 @@ POFILE= mount.po
 
 LDLIBS += -lrpcsvc -lnsl -lsocket -lscf
 CPPFLAGS += -I. -I../.. -I../lib
-CFLAGS += $(CCVERBOSE)
 
 nfs_sec.o :=	CPPFLAGS += -DWNFS_SEC_NEGO
 

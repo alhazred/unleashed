@@ -65,7 +65,6 @@ ALL_BUILDS	= debug64 obj64
 DEF_BUILDS	= obj64
 $(NOT_RELEASE_BUILD)DEF_BUILDS = debug64
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-unused-function
 
 #

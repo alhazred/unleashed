@@ -57,8 +57,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 INC_PATH	+= -I$(UTSBASE)/sun4
 
-CFLAGS += $(CCVERBOSE)
-
 
 #
 # Define dependency on fcodem and busra

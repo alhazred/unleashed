@@ -48,7 +48,6 @@ ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS		+= $(CCVERBOSE)
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
 #

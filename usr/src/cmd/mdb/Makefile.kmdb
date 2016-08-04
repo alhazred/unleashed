@@ -110,8 +110,6 @@ MAPFILE_SOURCES_COMMON = \
 	../../../common/mdb/mdb_param.h \
 	../../../common/mdb/mdb_whatis.h
 
-mdb_lex.o mdb_grammar.o := CCVERBOSE =
-
 kmdb_ctf_open.o kmdb_ctf_open.ln	:= CPPFLAGS += -I$(SRC)/common/ctf
 
 PROMTGTS	= $(PROMOBJS) $(PROMOBJS:%.o=%.ln)

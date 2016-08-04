@@ -52,7 +52,7 @@ include $(UTSBASE)/sun4u/montecarlo/Makefile.montecarlo
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE) -DNORDICA_CP1500
+CFLAGS += -DNORDICA_CP1500
 CERRWARN += -_gcc=-Wno-uninitialized
 
 

@@ -62,8 +62,6 @@ MODSTUBS_DIR	 = $(OBJS_DIR)
 $(MODSTUBS_O)	:= AS_CPPFLAGS += -DPIPE_MODULE
 CLEANFILES	+= $(MODSTUBS_O)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # Define dependency on fifofs
 #

@@ -59,7 +59,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 MODSTUBS_DIR	 = $(OBJS_DIR)
 $(MODSTUBS_O)	:= AS_CPPFLAGS += -DSAD_MODULE
 CLEANFILES	+= $(MODSTUBS_O)
-CFLAGS		+= $(CCVERBOSE)
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

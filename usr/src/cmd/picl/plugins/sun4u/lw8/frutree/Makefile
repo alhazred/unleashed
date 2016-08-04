@@ -52,7 +52,6 @@ ROOTLIBDIR	= $(ROOT_PLAT_PLUGINDIR)
 
 
 CPPFLAGS +=	-D_SGFRU
-CFLAGS +=	$(CCVERBOSE)
 DYNFLAGS +=	-R/usr/platform/\$$PLATFORM/lib/picl/plugins:/usr/platform/sun4u/lib/picl/plugins:/usr/lib/picl/plugins
 LDLIBS +=	-L$(DEVTREE_SRC_DIR)
 LDLIBS +=	-L$(SRC)/lib/libpicltree/$(MACH)

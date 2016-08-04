@@ -46,7 +46,6 @@ LDLIBS +=	-lc -lnsl -lkstat
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -I$(SRC)/lib/libfsmgt/common \
 		-I$(SRC)/cmd/fs.d/nfs/lib
 

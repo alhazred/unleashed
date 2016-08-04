@@ -28,7 +28,6 @@ include ../Makefile.cmd
 
 LDLIBS += -lvolmgt -ladm
 
-CFLAGS += $(CCVERBOSE)
 
 
 .KEEP_STATE:

@@ -41,7 +41,6 @@ SRCDIR=		../common
 
 LIBS =		$(DYNLIB)
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR) -I. -I../../../common/acl
 LDLIBS += -lc -lavl -lidmap
 

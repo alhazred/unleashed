@@ -35,7 +35,7 @@ include ../../../Makefile.module
 CPPFLAGS += -I$(SRC)/uts/common
 
 # if optimization is on, compiler asserts
-COPTFLAG =	$(CCVERBOSE)
+COPTFLAG =
 
 CERRWARN +=	-_gcc=-Wno-unused-function
 CERRWARN +=	-_gcc=-Wno-unused-variable

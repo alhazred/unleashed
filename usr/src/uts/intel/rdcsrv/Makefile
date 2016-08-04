@@ -57,7 +57,7 @@ include $(UTSBASE)/common/avs/Makefile.com
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 
-CFLAGS		+= $(CCVERBOSE) -D_SD_8K_BLKSIZE -D_SYSCALL32
+CFLAGS		+= -D_SD_8K_BLKSIZE -D_SYSCALL32
 LDFLAGS		+= -dy -N"strmod/rpcmod" -N"misc/rdcstub"
 
 CERRWARN	+= -_gcc=-Wno-unused-label

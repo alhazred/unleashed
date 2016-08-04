@@ -44,7 +44,6 @@ CPPFLAGS +=	-DSYSV -DCONSOLE='"/dev/console"' -DSECURITY \
 		-D_FILE_OFFSET_BITS=64 -I$(SRC)/lib/pam_modules/krb5
 
 LDLIBS += -lbsm -lpam -ldevinfo
-CFLAGS += $(CCVERBOSE)
 
 .KEEP_STATE:
 

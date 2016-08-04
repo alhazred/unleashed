@@ -46,7 +46,6 @@ NSSLIBS64=	$(BERLIB64) -L$(ADJUNCT_PROTO)$(MPSDIR)/$(MACH64) \
 SRCDIR=		../common
 INCDIR=		../../include
 
-CFLAGS		+=	$(CCVERBOSE) 
 CPPFLAGS	+=	-D_REENTRANT $(KMFINC) $(NSSINC)  \
 		-I$(INCDIR) -I$(ADJUNCT_PROTO)/usr/include/libxml2
 

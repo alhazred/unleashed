@@ -54,7 +54,7 @@ include $(UTSBASE)/sun4u/opl/Makefile.opl
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE) -I../sys
+CFLAGS += -I../sys
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-unused-function

@@ -42,7 +42,7 @@ LIBS =		$(DYNLIB)
 ROOTLIBDIR =	$(USR_LIB_PLUGINDIR)
 
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/sys -I$(SRC)/cmd/picl/plugins/common/memcfg
-CFLAGS +=	$(CCVERBOSE) $(C_PICFLAGS)
+CFLAGS +=	$(C_PICFLAGS)
 
 LDLIBS +=	-L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-L../devtree

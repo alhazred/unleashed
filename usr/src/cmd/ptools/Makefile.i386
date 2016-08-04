@@ -28,7 +28,6 @@
 
 include ../../../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 
 ROOTISAPROG=$(ROOTBIN32)/$(PROG)
 

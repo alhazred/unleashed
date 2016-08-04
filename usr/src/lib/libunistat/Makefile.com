@@ -69,10 +69,10 @@ DFLAGS =	-DISSTATIC=static
 # development (debug) - cstyle prohibits use of "STATIC"
 DFLAGS =	-g -DISSTATIC=" "
 
-CFLAGS +=	$(CCVERBOSE) $(DFLAGS) -I. -DLIBSPCS_CLIENT\
+CFLAGS +=	$(DFLAGS) -I. -DLIBSPCS_CLIENT\
 		-I$(JAVAINC) -I$(JAVAINCSOL)\
 		-DLIBUNISTAT_LOCALE=\"/usr/install/unistat/locale\"
-CFLAGS64 +=	$(CCVERBOSE) $(DFLAGS) -I. -DLIBSPCS_CLIENT\
+CFLAGS64 +=	$(DFLAGS) -I. -DLIBSPCS_CLIENT\
 		-I$(JAVAINC) -I$(JAVAINCSOL)\
 		-DLIBUNISTAT_LOCALE=\"/usr/install/unistat/locale\"
 LDLIBS +=	-lc

@@ -69,7 +69,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK) $(ROOT_CONFFILE)
 #
 LDFLAGS += -dy -Nmisc/kcf
 
-CFLAGS		+= $(CCVERBOSE) -I$(COM_DIR)
+CFLAGS		+= -I$(COM_DIR)
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

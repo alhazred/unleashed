@@ -75,7 +75,6 @@ SRCDIR =	../common
 
 LIBS =	 	$(DYNLIB)
 
-CFLAGS	+=	$(CCVERBOSE)
 LDLIBS +=	-lsocket -lnsl -lmd -lc -lsecdb -ltsol -linetutil -lscf
 
 CERRWARN +=	-_gcc=-Wno-parentheses

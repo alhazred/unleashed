@@ -42,7 +42,7 @@ ROOTMODULE	= $(ROOT_PSM_DRV_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sun4u/Makefile.sun4u
 
-CFLAGS += $(CCVERBOSE) -I../../sun4u
+CFLAGS += -I../../sun4u
 
 LDFLAGS += -dy -N misc/i2c_svc
 

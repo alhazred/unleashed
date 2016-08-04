@@ -54,7 +54,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 MACHINE_DEFS    += -DCHEETAH_PLUS
 
-CFLAGS += $(CCVERBOSE) -I../sys -I$(UTSBASE)/sun4u/starcat/sys
+CFLAGS += -I../sys -I$(UTSBASE)/sun4u/starcat/sys
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-unused-variable
 CERRWARN += -_gcc=-Wno-uninitialized

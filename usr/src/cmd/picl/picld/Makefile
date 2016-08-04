@@ -41,7 +41,6 @@ CPPFLAGS += -I../../../lib/libpicltree -I../../../lib/libpicl
 LDLIBS += -L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS += -lpicltree
 
-CFLAGS += $(CCVERBOSE)
 CPPFLAGS += -D_REENTRANT
 
 

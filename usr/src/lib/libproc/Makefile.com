@@ -90,7 +90,6 @@ CPPFLAGS +=	$($(MACH64)_CPPFLAGS)
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized

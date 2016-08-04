@@ -54,7 +54,6 @@ include $(UTSBASE)/sun4u/starcat/Makefile.starcat
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 
 #

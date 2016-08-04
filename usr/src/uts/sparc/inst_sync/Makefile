@@ -57,11 +57,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 CERRWARN	+= -_gcc=-Wno-parentheses
 
 #
-#	Overrides.
-#
-CFLAGS		+= $(CCVERBOSE)
-
-#
 #	Default build targets.
 #
 .KEEP_STATE:

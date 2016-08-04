@@ -54,11 +54,6 @@ ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
-#	Overrides.
-#
-CFLAGS		+= $(CCVERBOSE)
-
-#
 # Define dependency on specfs
 #
 LDFLAGS         += -dy -N fs/specfs

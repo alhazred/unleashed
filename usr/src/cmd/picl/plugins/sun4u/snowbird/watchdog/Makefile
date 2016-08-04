@@ -41,7 +41,6 @@ ROOT_PLATFORM = $(USR_PLAT_DIR)/SUNW,Netra-CP2300
 
 ROOTLIBDIR	= $(ROOT_PLAT_PLUGINDIR)
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/sys -I$(SRC)/uts/common
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/sun4u/snowbird/lib/libctsmc
 CPPFLAGS +=	-I$(SRC)/uts/common

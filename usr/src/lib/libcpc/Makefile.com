@@ -42,7 +42,6 @@ SRCDIR =	../common
 
 ASFLAGS +=	-D_ASM -I../common
 CPPFLAGS +=	-D_REENTRANT -I../common
-CFLAGS +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-switch
 CERRWARN +=	-_gcc=-Wno-uninitialized

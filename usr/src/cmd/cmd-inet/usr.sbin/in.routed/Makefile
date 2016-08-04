@@ -31,7 +31,6 @@ ROOTMANIFESTDIR=	$(ROOTSVCNETWORKROUTING)
 _D_XOPEN_EXTN = -D_XOPEN_SOURCE=500 -D__EXTENSIONS__
 
 CPPFLAGS +=	$(_D_XOPEN_EXTN)
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 LDLIBS +=	-lxnet -lmd -lsocket

@@ -37,7 +37,6 @@ include ../../../Makefile.cmd
 POFILE= talk.po
 #
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CPPFLAGS +=	-DSYSV -DSTRNET -DBSD_COMP
 LDLIBS +=	-lcurses -lsocket -lnsl

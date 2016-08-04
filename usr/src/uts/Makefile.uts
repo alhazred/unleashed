@@ -179,7 +179,6 @@ C99MODE = $(C99_ENABLE)
 
 CFLAGS_uts		=
 CFLAGS_uts		+= $(STAND_FLAGS_$(CLASS))
-CFLAGS_uts		+= $(CCVERBOSE)
 CFLAGS_uts		+= $(XAOPT)
 CFLAGS_uts		+= $(CTF_FLAGS_$(CLASS))
 CFLAGS_uts		+= $(CERRWARN)

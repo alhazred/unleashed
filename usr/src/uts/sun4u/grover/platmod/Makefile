@@ -63,8 +63,6 @@ CLEANFILES	+= $(PLATLIB) $(SYM_MOD)
 ALL_TARGET	= $(SYM_MOD)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #	Default build targets.
 #

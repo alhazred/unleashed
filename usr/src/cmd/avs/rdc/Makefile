@@ -55,7 +55,7 @@ sndrboot	:= LDLIBS += -lrdc -lunistat -ldscfg
 sndrd		:= LDLIBS += -lrdc -lnsl
 sndrsyncd	:= LDLIBS += -lrdc -ldscfg -lunistat
 
-CFLAGS += $(CCVERBOSE) -D_RDC_ -D_SYSCALL32
+CFLAGS += -D_RDC_ -D_SYSCALL32
 CERRWARN += -_gcc=-Wno-unused-label
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized

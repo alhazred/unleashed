@@ -55,7 +55,6 @@ C99MODE=	$(C99_DISABLE)
 # so we must put -I. ahead of the default include directories:
 CPPFLAGS = -I. -I../common/inc $(CPPFLAGS.master) -DDEBUG -DSYSV -D_REENTRANT
 LDLIBS += -lsocket -lnsl -lc
-CFLAGS += $(CCVERBOSE)
 
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized

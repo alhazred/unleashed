@@ -32,7 +32,6 @@ ROOTMANIFESTDIR = $(ROOTSVCSYSTEM)
 .KEEP_STATE:
 
 PROG	= kbd
-CFLAGS	+= $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 LDLIBS	+= -lscf
 

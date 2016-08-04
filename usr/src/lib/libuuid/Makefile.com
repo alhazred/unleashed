@@ -39,7 +39,6 @@ LDLIBS +=	-lsocket -lnsl -lc -ldlpi
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 
 .KEEP_STATE:
 

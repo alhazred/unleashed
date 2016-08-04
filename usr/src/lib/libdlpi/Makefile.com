@@ -38,7 +38,6 @@ LDLIBS +=	-lc -linetutil -ldladm
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
 

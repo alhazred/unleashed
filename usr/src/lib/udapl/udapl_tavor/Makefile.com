@@ -144,7 +144,6 @@ CPPFLAGS +=	-I$(SRC)/lib/udapl/udapl_tavor/tavor
 CPPFLAGS +=	-I$(SRC)/uts/common/sys/ib/clients/daplt
 CPPFLAGS +=	-I$(SRC)/uts/common
 CPPFLAGS +=	-I$(SRC)/uts/common/sys/ib/clients
-CFLAGS +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized

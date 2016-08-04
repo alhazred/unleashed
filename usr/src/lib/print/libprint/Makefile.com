@@ -41,7 +41,6 @@ ROOTLIBDIR=	$(ROOT)/usr/lib
 LIBS =			$(DYNLIB)
 
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 CPPFLAGS +=	-I../../head -D_REENTRANT
 

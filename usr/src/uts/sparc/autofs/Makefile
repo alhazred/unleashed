@@ -55,11 +55,6 @@ ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 
 #
-#	Overrides.
-#
-CFLAGS		+= $(CCVERBOSE)
-
-#
 # Define dependencies on rpmod, rpcsec, and mntfs
 #
 LDFLAGS         += -dy -N strmod/rpcmod -N misc/rpcsec -N fs/mntfs

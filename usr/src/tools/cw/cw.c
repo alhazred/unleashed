@@ -346,8 +346,12 @@ warnings(struct aelist *h)
 {
 	static int warningsonce;
 
-	if (warningsonce++)
+	if (warningsonce++) {
+		(void) fprintf(stderr, "%s: error: multiple -errtags=yes or -v\n",
+			       progname);
+		exit(1);
 		return;
+	}
 
 	/*
 	 * Enable as many warnings as exist, then disable those that we never

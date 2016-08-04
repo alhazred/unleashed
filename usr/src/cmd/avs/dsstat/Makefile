@@ -39,7 +39,6 @@ OBJS=	dsstat.o ii_stats.o sndr_stats.o sdbc_stats.o \
 	multi_stats.o common.o report.o
 SRCS= $(OBJS:%.o=%.c)
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-unused-label

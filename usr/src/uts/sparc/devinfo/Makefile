@@ -49,7 +49,6 @@ CONF_SRCDIR	= $(UTSBASE)/common/io
 include $(UTSBASE)/sparc/Makefile.sparc
 
 CLOBBERFILES	+= $(MODULE)
-CFLAGS		+= $(CCVERBOSE)
 
 #
 #	Define targets
@@ -57,7 +56,6 @@ CFLAGS		+= $(CCVERBOSE)
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS		+= $(CCVERBOSE)
 CPPFLAGS	+= -I$(SRC)/common
 
 CERRWARN	+= -_gcc=-Wno-unused-label

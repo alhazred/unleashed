@@ -35,7 +35,6 @@ OBJS=		$(LIBPROG).o $(COMMON)
 SRCS=		$(LIBPROG).c $(FSLIBSRC) ../lib/replica.c
 
 CPPFLAGS += -I../.. -I../lib
-CFLAGS += $(CCVERBOSE)
 
 LDLIBS +=	-lrpcsvc -lnsl -lkstat
 

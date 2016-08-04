@@ -61,7 +61,7 @@ CFGFLAGS	= -DGEM_CONFIG_POLLING -DGEM_CONFIG_GLDv3 -DGEM_CONFIG_VLAN \
 #	FAST PATH SECTION: Will activate usage of inlines as a regular functions
 #	on fast data path
 
-CPPFLAGS	+= $(VFLAGS) $(AFLAGS) $(DFLAGS) $(CFGFLAGS) $(CCVERBOSE) \
+CPPFLAGS	+= $(VFLAGS) $(AFLAGS) $(DFLAGS) $(CFGFLAGS) \
 	-I$(UTSBASE)/common/io/bfe
 
 CFLAGS		+= $(CPPFLAGS) $(C99_ENABLE)

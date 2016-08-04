@@ -22,7 +22,6 @@ include ../Makefile.cmd
 include ../Makefile.ctf
 
 CLEANFILES += $(OBJS)
-CFLAGS += $(CCVERBOSE)
 LDLIBS += -lipd
 
 .KEEP_STATE:

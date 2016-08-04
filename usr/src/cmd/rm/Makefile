@@ -32,7 +32,6 @@ SRCS= 		$(RMOBJ1:%.o=%.c) $(SRC)/common/util/getresponse.c
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 $(XPG4) := CFLAGS += -DXPG4
 CPPFLAGS += -D_FILE_OFFSET_BITS=64  -I $(SRC)/common/util

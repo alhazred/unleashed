@@ -33,7 +33,6 @@ SRCS = $(OBJS:.o=.c)
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 
 FILEMODE = 0555
 

@@ -52,7 +52,6 @@ LIBS = $(DYNLIB)
 SRCDIR = ../common
 
 CPPFLAGS += -I../common -I../../../common/ctf -DCTF_OLD_VERSIONS
-CFLAGS += $(CCVERBOSE)
 
 CERRWARN += -_gcc=-Wno-uninitialized
 

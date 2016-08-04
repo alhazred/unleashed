@@ -53,7 +53,6 @@ SRCDIR = ../common
 CLEANFILES += ../common/smb_tables.c
 
 CPPFLAGS += -I../common -I$(COMMON_SRCDIR)
-CFLAGS += $(CCVERBOSE)
 LDLIBS += -lc
 
 .KEEP_STATE:

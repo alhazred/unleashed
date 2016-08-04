@@ -55,7 +55,6 @@ $(ROOTCONF)	:= FILEMODE = 0644
 INFOS=          envmodel.info
 
 
-CFLAGS +=	$(CCVERBOSE)
 DYNFLAGS +=	-R/usr/platform/\$$PLATFORM/lib/picl/plugins:/usr/platform/sun4u/lib/picl/plugins:/usr/lib/picl/plugins
 LDLIBS +=	-L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/common/devtree

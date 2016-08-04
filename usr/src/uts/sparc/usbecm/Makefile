@@ -46,8 +46,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 
 LDFLAGS         += -dy -Nmisc/usba -Nmisc/mac
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #	Define targets
 #

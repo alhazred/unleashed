@@ -36,7 +36,6 @@ POFILE=		$(TYPEPROG).po
 
 CLOBBERFILES += $(TYPEPROG)
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-unused-variable
 C99MODE=	$(C99_ENABLE)
 

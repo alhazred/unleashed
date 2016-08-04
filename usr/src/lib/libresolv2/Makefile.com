@@ -82,9 +82,6 @@ include ../../Makefile.lib
 # install this library in the root filesystem
 include ../../Makefile.rootfs
 
-# CC -v complains about things we aren't going to change in the ISC code
-CCVERBOSE=
-
 SRCDIR =	../common
 SRCS=		$(BSDOBJS:%.o=../common/bsd/%.c) \
 		$(DSTOBJS:%.o=../common/dst/%.c) \

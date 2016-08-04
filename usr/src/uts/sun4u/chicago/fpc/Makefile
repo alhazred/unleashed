@@ -84,8 +84,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE) \
 #
 INC_PATH	+= -I$(UTSBASE)/sun4/io/fpc
 
-CFLAGS += $(CCVERBOSE)
-
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

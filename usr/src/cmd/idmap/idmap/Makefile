@@ -51,7 +51,6 @@ INCS += -I. \
 	-I../../../lib/libsldap/common \
 	-I$(IDMAP_PROT_DIR)
 
-CFLAGS += $(CCVERBOSE)
 $(OBJS) :=	CPPFLAGS += $(INCS) -D_REENTRANT
 $(POFILE) :=	CPPFLAGS += $(INCS)
 

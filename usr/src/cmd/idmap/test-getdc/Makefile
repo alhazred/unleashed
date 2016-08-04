@@ -39,7 +39,6 @@ LDFLAGS +=	-R'$$ORIGIN/../lib'
 INCS += -I. -I../../../lib/libadutils/common
 
 
-CFLAGS += $(CCVERBOSE)
 $(OBJS) :=	CPPFLAGS += $(INCS) -D_REENTRANT
 $(POFILE) :=	CPPFLAGS += $(INCS)
 

@@ -57,7 +57,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #
 #	Overrides.
 #
-CFLAGS		+= $(CCVERBOSE)
 CERRWARN	+= -_gcc=-Wno-parentheses
 
 #

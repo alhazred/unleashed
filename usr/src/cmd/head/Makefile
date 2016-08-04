@@ -29,7 +29,6 @@
 PROG= head
 
 include ../Makefile.cmd
-CFLAGS += $(CCVERBOSE)
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 .KEEP_STATE:

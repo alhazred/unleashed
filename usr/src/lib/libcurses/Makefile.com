@@ -137,7 +137,6 @@ SRCDIR =	../screen
 
 LIBS =		$(DYNLIB)
 
-CFLAGS	+=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-char-subscripts
 CERRWARN +=	-_gcc=-Wno-uninitialized

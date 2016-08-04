@@ -40,7 +40,6 @@ ROOT_PLATFORM = $(USR_PLAT_DIR)/$(PLATFORM)
 
 include	$(SRC)/cmd/picl/plugins/Makefile.com
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -I$(SRC)/uts/common/
 
 SRCS=		$(OBJECTS:%.o=%.c)

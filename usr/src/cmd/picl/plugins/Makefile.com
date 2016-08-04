@@ -28,7 +28,6 @@ MAPFILES =
 
 CPPFLAGS	+= -I$(SRC)/lib/libpicl -I$(SRC)/lib/libpicltree
 CPPFLAGS	+= -I$(SRC)/cmd/picl/plugins/inc
-CFLAGS		+= $(CCVERBOSE)
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-char-subscripts
 CERRWARN	+= -_gcc=-Wno-uninitialized

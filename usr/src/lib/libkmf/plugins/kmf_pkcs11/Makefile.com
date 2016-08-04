@@ -48,7 +48,6 @@ SRCS =  \
         $(BIGNUM_COBJECTS:%.o=$(BIGNUMDIR)/%.c)
 
 
-CFLAGS		+=	$(CCVERBOSE)
 CPPFLAGS	+=	-D_REENTRANT $(KMFINC) -I$(INCDIR) \
 			-I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(BIGNUMDIR)
 

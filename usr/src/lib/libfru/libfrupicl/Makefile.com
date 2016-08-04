@@ -45,7 +45,6 @@ CPPFLAGS +=	-I.. \
 		-I$(SRC)/lib/libfruutils \
 		-I$(SRC)/cmd/picl/plugins/inc
 CPPFLAGS += 	-D_REENTRANT
-CFLAGS +=	$(CCVERBOSE)
 
 XGETFLAGS += -a
 POFILE=	picl.po

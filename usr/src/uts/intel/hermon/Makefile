@@ -65,8 +65,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #DEBUG_DEFS_DBG32 += -DTNF_DEBUG
 #DEBUG_DEFS_DBG64 += -DTNF_DEBUG
 
-CFLAGS += $(CCVERBOSE)
-
 CERRWARN	+= -_gcc=-Wno-switch
 CERRWARN	+= -_gcc=-Wno-unused-value
 CERRWARN	+= -_gcc=-Wno-unused-label

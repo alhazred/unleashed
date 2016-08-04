@@ -63,7 +63,6 @@ SRCS =		$(CSRCS)
 NATIVE_DIR =	/.SUNWnative
 CPPFLAGS +=	-D_REENTRANT -U_ASM \
 		-I. -I$(BRAND_SHARED)/brand/sys -I$(UTSBASE)/common/brand/sn1
-CFLAGS +=	$(CCVERBOSE)
 DYNFLAGS +=	$(DYNFLAGS_$(CLASS))
 DYNFLAGS +=	$(BLOCAL) $(ZNOVERSION) -Wl,-e_start
 #DYNFLAGS +=	-R$(NATIVE_DIR)/lib -R$(NATIVE_DIR)/usr/lib

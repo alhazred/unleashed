@@ -37,7 +37,6 @@ SRCDIR =	../common
 LIBS =			$(DYNLIB)
 
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 
 CERRWARN +=	-_gcc=-Wno-switch

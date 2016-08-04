@@ -28,7 +28,6 @@ SRCS=	$(PROG).c ../protocmp/stdusers.c
 
 include ../Makefile.tools
 
-CFLAGS += $(CCVERBOSE)
 CPPFLAGS += -I../protocmp
 CERRWARN += -_gcc=-Wno-parentheses
 CLEANFILES += $(OBJS)

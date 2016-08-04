@@ -32,7 +32,6 @@ SRCS= $(OBJS:%.o=%.c)
 
 include ../../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 XGETFLAGS += -a -x audiotest.xcl
 
 .KEEP_STATE:

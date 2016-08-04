@@ -28,7 +28,6 @@ PROG= ctwatch
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 LDLIBS += -lcontract -luutil
 

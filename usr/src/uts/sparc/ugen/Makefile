@@ -48,7 +48,6 @@ ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
 #

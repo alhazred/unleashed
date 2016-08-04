@@ -49,8 +49,6 @@ CONF_SRCDIR     = $(UTSBASE)/common/io/usb/clients/usbskel
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # depends on misc/usba
 #

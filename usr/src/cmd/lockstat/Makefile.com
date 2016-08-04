@@ -30,8 +30,6 @@ SRCS= $(OBJS:%.o=../%.c)
 include ../../Makefile.cmd
 
 LDLIBS += -lelf -lkstat -ldtrace
-CFLAGS += $(CCVERBOSE)
-CFLAGS64 += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 
 FILEMODE= 0555

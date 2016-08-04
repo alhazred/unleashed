@@ -40,7 +40,6 @@ DEFS = -I.
 LDLIBS += -lsecdb -lumem -lbsm -lnsl -lsocket -lc -L$(ROOT)/usr/lib/vscan -lvscan
 LDFLAGS += -R/usr/lib/vscan
 CFLAGS += $(DEFS)
-CFLAGS += $(CCVERBOSE)
 CFLAGS += -D_FILE_OFFSET_BITS=64
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 

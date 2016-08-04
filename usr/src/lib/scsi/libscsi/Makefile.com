@@ -40,7 +40,6 @@ SRCS = $(OBJECTS:%.o=../common/%.c)
 C99MODE = $(C99_ENABLE)
 CPPFLAGS += -I../common -I. -D_REENTRANT
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
-CFLAGS += $(CCVERBOSE)
 
 CERRWARN += -_gcc=-Wno-type-limits
 

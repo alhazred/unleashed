@@ -38,7 +38,6 @@ LDLIBS +=	-lc -lsocket -ldhcputil -luuid -ldlpi -lcontract
 
 SRCDIR =	../common
 
-CFLAGS += 	$(CCVERBOSE) 
 CERRWARN +=	-_gcc=-Wno-type-limits
 
 .KEEP_STATE:

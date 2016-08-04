@@ -47,8 +47,8 @@ $(NOT_RELEASE_BUILD)DEBUG = -DDEBUG
 
 C99_DISABLE =	$(C99_ENABLE)
 
-CFLAGS +=	$(CCVERBOSE) $(DEBUG)
-CFLAGS64 +=	$(CCVERBOSE) $(DEBUG)
+CFLAGS +=	$(DEBUG)
+CFLAGS64 +=	$(DEBUG)
 
 CERRWARN +=	-_gcc=-Wno-type-limits
 CERRWARN +=	-_gcc=-Wno-parentheses

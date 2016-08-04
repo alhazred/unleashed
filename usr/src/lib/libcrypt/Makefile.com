@@ -40,7 +40,6 @@ SRCDIR=		../common
 
 LIBS=		$(DYNLIB)
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -I../inc -I../../common/inc -I../../libgen/inc
 LDLIBS +=       -lgen -lc
 

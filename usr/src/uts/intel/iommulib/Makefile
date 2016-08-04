@@ -59,8 +59,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 DEBUG_DEFS	+= $(DEBUG_FLGS)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #	Default build targets.
 #

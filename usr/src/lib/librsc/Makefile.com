@@ -48,7 +48,6 @@ MAPFILES =
 
 SRCDIR =	common
 LIBS = $(DYNLIB)
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lc
 PLATLIBS =	$(USR_PLAT_DIR)/$(PLATFORM)/lib/
 INS.slink6=	$(RM) -r $@; $(SYMLINK) ../../$(PLATFORM)/lib/librsc.so.1 $@

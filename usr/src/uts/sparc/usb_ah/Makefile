@@ -46,8 +46,6 @@ ROOTMODULE	= $(ROOT_STRMOD_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # depends on usba, hidparser and audio related misc modules
 #

@@ -59,8 +59,6 @@ CLEANFILES	+= $(MODSTUBS_O)
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE)
-
 # This is for everything except /usr/include/tss
 CPPFLAGS	+= -I$(ROOT)/usr/include
 

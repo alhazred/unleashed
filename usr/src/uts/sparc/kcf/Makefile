@@ -56,7 +56,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 # Linkage dependencies
 #
 
-CFLAGS += $(CCVERBOSE) -I$(COM_DIR)
+CFLAGS += -I$(COM_DIR)
 
 
 CERRWARN	+= -_gcc=-Wno-switch

@@ -47,8 +47,6 @@ ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS += $(CCVERBOSE)
-
 LDFLAGS         += -dy -Nmisc/usba -Nmisc/usbser -Nmisc/usbs49_fw
 
 #

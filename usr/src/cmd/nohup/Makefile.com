@@ -39,8 +39,6 @@ CLEANFILES = $(OBJS) $(XPG4OBJS) $(LNTS)
 
 include ../../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
-CFLAGS64 += $(CCVERBOSE)
 
 $(XPG4) := CPPFLAGS += -DXPG4
 

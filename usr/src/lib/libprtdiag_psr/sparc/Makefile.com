@@ -48,7 +48,6 @@ LIBS = $(DYNLIB)
 # There should be a mapfile here
 MAPFILES =
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-unused-value

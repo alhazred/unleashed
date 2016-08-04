@@ -69,7 +69,6 @@ ttymon := LDLIBS += -lnsl -lsec -ldevinfo
 $(STTYOBJ) := CPPFLAGS += -DEUC
 $(XPG4STTYOBJ) := CPPFLAGS += -DEUC
 
-CFLAGS += $(CCVERBOSE)
 LDFLAGS += $(MAPFILE.NGB:%=-M%)
 
 CERRWARN +=	-_gcc=-Wno-parentheses

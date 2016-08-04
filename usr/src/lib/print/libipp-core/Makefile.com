@@ -37,7 +37,6 @@ ROOTLIBDIR=	$(ROOT)/usr/lib
 LIBS =			$(DYNLIB)
 
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 CPPFLAGS +=	-I../../libpapi-common/common
 

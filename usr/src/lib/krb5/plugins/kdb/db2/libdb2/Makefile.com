@@ -100,7 +100,7 @@ CPPFLAGS += 	-DHAVE_CONFIG_H \
 		-I$(SRC)/lib/krb5/plugins/kdb/db2/libdb2/include \
 		-I$(SRC)/lib/gss_mechs/mech_krb5/include  #for db-ndbm.h
 
-CFLAGS +=	$(CCVERBOSE) -I..
+CFLAGS +=	-I..
 CERRWARN +=	-_gcc=-Wno-uninitialized
 LDLIBS +=	-lc
 

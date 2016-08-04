@@ -50,7 +50,6 @@ TXTS=	compress.sh spell.sh
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 
 XGETFLAGS += -a -x spell.xcl

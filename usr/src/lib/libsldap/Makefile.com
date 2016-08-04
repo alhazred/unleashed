@@ -43,7 +43,6 @@ LDLIBS +=	-lnsl -lldap -lscf -lc
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 LOCFLAGS +=	-D_REENTRANT -DSUNW_OPTIONS
 CPPFLAGS +=	-I../common -I$(SRC)/lib/libldap5/include/ldap \
 		-I$(ADJUNCT_PROTO)/usr/include/mps $(LOCFLAGS)

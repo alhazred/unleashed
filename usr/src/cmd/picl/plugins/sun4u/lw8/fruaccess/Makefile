@@ -47,7 +47,6 @@ LIBS =		$(DYNLIB)
 
 ROOTLIBDIR	= $(ROOT_PLAT_LIBDIR)
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/lw8
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/sun4u/lib/fruaccess
 DYNFLAGS +=	-R/usr/platform/\$$PLATFORM/lib/picl/plugins:/usr/platform/sun4u/lib/picl/plugins:/usr/lib/picl/plugins

@@ -35,7 +35,6 @@ U_BASE	=	../../parser
 U_DIR	= 	$(U_BASE)/$(MACH)
 U_LIB_A	=	$(U_DIR)/lib$(U_LIB).a
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(U_BASE) -I..
 LDFLAGS	+=	-L$(U_DIR)
 

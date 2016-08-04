@@ -55,8 +55,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 INCLUDE_PATH += -I$(UTSBASE)/common/sys/ib/clients/daplt
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #       Overrides.
 #

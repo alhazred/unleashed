@@ -37,7 +37,6 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lsocket -lnsl
 
 CPPFLAGS +=	-I..
-CFLAGS +=	$(CCVERBOSE)
 
 .KEEP_STATE:
 

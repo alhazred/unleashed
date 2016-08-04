@@ -54,8 +54,6 @@ include $(UTSBASE)/sun4v/Makefile.sun4v
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS		+= -v
-
 #
 # Default build targets.
 #

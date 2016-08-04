@@ -52,8 +52,6 @@ LLOBJS=		$(OBJS:%.o=%.ll)
 
 $(ROOTDEMODIR)/stmfproxy.xml	:= FILEMODE = 0444
 
-
-CCVERBOSE	=
 LDLIBS += -lnsl -lstmf -lstmfproxy
 CPPFLAGS += -I. -I$(COMMONBASE)/cmdparse
 

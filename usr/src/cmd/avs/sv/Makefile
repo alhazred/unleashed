@@ -42,7 +42,6 @@ POFILES = $(OBJS:%.o=%.po)
 svadm	:= LDLIBS += -lunistat -ldscfg
 svboot	:= LDLIBS += -lunistat -ldscfg
 
-CFLAGS += -v
 ROOTLINK1 = $(ROOTUSRSBIN)/svadm
 ROOTLINK2 = $(ROOTUSRSBIN)/svboot
 

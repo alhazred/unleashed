@@ -56,8 +56,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 INC_PATH	+= -I$(UTSBASE)/sun4u
 INC_PATH	+= -I$(UTSBASE)/sun4
 
-CFLAGS += $(CCVERBOSE)
-
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

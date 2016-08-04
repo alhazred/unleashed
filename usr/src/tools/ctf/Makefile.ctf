@@ -44,5 +44,4 @@ HDRDIRS= \
 	-I$(NATIVE_ADJUNCT)/include
 
 CPPFLAGS += $(HDRDIRS)
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses

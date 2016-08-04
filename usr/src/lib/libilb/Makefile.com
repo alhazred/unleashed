@@ -41,7 +41,6 @@ SRCDIR =	../common
 
 C99MODE =	$(C99_ENABLE)
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT $(INCS)
 LDLIBS +=	-lsocket
 

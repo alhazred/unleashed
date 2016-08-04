@@ -42,8 +42,6 @@ ROOTMODULE	= $(ROOT_DACF_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #	Define targets
 #

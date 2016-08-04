@@ -98,7 +98,6 @@ CPPINCS =	-I. -I$(SYSDIR)/sun4 -I$(SYSDIR)/$(KARCH) -I$(SYSDIR)/$(MMU) \
 		-I$(SYSDIR)/sparc/v9 -I$(SYSDIR)/sparc \
 		-I$(SYSDIR)/sun -I$(SYSDIR)/common
 CPPFLAGS =	$(CPPDEFS) $(CPPINCS) $(CPPFLAGS.master)
-CFLAGS +=	$(CCVERBOSE)
 
 .KEEP_STATE:
 

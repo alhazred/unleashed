@@ -36,7 +36,6 @@ SRCDIR =	../common
 
 LIBS =          $(DYNLIB)
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT
 DYNFLAGS +=     $(ZINTERPOSE)
 LDLIBS +=       -lc

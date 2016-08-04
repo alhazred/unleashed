@@ -28,8 +28,6 @@ include		../Makefile.com
 CPPFLAGS +=	-D_SYSCALL32
 
 # DEMO DELETE START
-CCVERBOSE=
-
 LDFLAGS=	-L ../../$(MACH64) \
 		-L ../../../libelf/$(MACH64)
 

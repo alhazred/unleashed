@@ -40,7 +40,6 @@ SRCDIR =	$(SRC)/lib/pkcs11/libsoftcrypto/common
 LIBS =		$(DYNLIB)
 MAPFILEDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-type-limits
 CERRWARN +=	-_gcc=-Wno-parentheses

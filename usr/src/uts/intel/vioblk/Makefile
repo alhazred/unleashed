@@ -51,8 +51,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 INC_PATH += -I$(UTSBASE)/common/io/virtio
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # Driver depends on virtio and blkdev
 #

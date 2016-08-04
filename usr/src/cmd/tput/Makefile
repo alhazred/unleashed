@@ -30,7 +30,6 @@ include ../Makefile.cmd
 
 .KEEP_STATE:
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 XGETFLAGS += -a -x tput.xcl
 LDLIBS +=  -lcurses

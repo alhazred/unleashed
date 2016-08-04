@@ -42,7 +42,6 @@ SRCS = $(CMNOBJS:%.o=$(SRCDIR)/%.c)
 
 ASFLAGS +=	-D_ASM -DPIC
 CPPFLAGS +=	-I../../libc/inc -D_REENTRANT
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lc
 
 CERRWARN +=	-_gcc=-Wno-type-limits

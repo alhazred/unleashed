@@ -39,7 +39,6 @@ SRCS =		$(LOCOBJS:%.o=$(SRCDIR)/%.c) $(COMOBJS:%.o=$(COMDIR)/%.c)
 LIBS =		$(DYNLIB)
 LDLIBS += 	-lc -lnvpair
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(COMDIR) -D_FILE_OFFSET_BITS=64
 
 .KEEP_STATE:

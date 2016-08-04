@@ -30,7 +30,7 @@ PROG =		exdump
 CC =		cc
 LDLIBS =	-lexacct -lproject -lsocket -lnsl
 
-CFLAGS =	$(CCVERBOSE)
+CFLAGS =
 
 SRCS =		$(PROG:%=%.c)
 OBJS =		$(PROG:%=%.o)

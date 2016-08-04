@@ -33,7 +33,6 @@ OBJS = datadm.o
 
 SRCS = $(OBJS:%.o=%.c)
 
-CFLAGS += $(CCVERBOSE)
 LDLIBS += -ldlpi -ldladm -lsocket
 
 .KEEP_STATE:

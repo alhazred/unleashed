@@ -30,7 +30,6 @@ PROG= renice
 include ../Makefile.cmd
 
 LDLIBS += -lproject
-CFLAGS += $(CCVERBOSE)
 
 .KEEP_STATE:
 

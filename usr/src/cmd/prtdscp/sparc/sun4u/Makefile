@@ -37,7 +37,6 @@ include	../../../../Makefile.psm
 
 LDLIBS +=	-ldscp -lnsl
 
-CFLAGS +=	$(CCVERBOSE)
 
 LDFLAGS	+=	-L$(USR_PSM_LIB_DIR)
 LDFLAGS	+=	-R\$$ORIGIN/../lib

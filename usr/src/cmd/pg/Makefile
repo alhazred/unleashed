@@ -28,7 +28,7 @@ PROG= pg
 
 include ../Makefile.cmd
 
-CFLAGS += -DSINGLE $(CCVERBOSE)
+CFLAGS += -DSINGLE
 LDLIBS += -lgen -lcurses
 XGETFLAGS += -a -x $(PROG).xcl
 CPPFLAGS += -D_FILE_OFFSET_BITS=64

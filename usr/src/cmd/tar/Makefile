@@ -35,7 +35,6 @@ DCFILE= $(PROG).dc
 
 LDLIBS += -lsec -lcmdutils -lnvpair -ltsol
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 
 CPPFLAGS += -DEUC

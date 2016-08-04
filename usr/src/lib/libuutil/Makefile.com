@@ -64,7 +64,6 @@ LDLIBS +=	-lc
 
 AVLDIR =	../../../common/avl
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR) -I../../common/inc
 
 MY_NATIVE_CPPFLAGS = -DNATIVE_BUILD -I$(SRCDIR)

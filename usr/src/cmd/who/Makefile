@@ -42,7 +42,6 @@ $(ROOTADM)/%: %
 
 .KEEP_STATE:
 
-CFLAGS += $(CCVERBOSE)
 $(XPG4):= CPPFLAGS += -DXPG4
 
 all: $(PROG) $(UTMPS) $(XPG4)

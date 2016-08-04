@@ -35,7 +35,6 @@ TEXT_DOMAIN=	SUNW_OST_SYSOSPAM
 LIBS=		$(DYNLIB)
 LDLIBS +=	-lc
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I $(SRCDIR)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized

@@ -42,8 +42,6 @@ INC_PATH += -I$(UTSBASE)/common/io/sfxge -I$(UTSBASE)/common/io/sfxge/common
 #
 CPPFLAGS += -U_USE_MTU_UPDATE
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # Driver depends on GLDv3 (mac)
 #

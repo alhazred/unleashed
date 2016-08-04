@@ -51,7 +51,6 @@ ROOTCMDDIR=	$(ROOT)/lib/svc/bin
 MYCPPFLAGS = -I. -I../common -I../../../common/svc \
 	-I$(ROOT)/usr/include/sqlite-sys -D_REENTRANT
 CPPFLAGS += $(MYCPPFLAGS)
-CFLAGS	+= $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-type-limits
 CERRWARN += -_gcc=-Wno-unused-label

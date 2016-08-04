@@ -31,7 +31,6 @@ include ../Makefile.cmd
 SED= sed
 DCFILE= $(PROG).dc
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
 

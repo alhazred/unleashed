@@ -59,8 +59,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #	depends on misc/ibtl
 #

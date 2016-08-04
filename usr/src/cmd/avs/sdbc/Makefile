@@ -59,7 +59,7 @@ sd_stats	:= LDLIBS += -lunistat -lcurses
 sd_diag		:= LDLIBS += -lnsctl
 sdbc_dynmem	:= LDLIBS += -lkstat
 
-CFLAGS +=	$(CCVERBOSE) -D_SCM_ -D_SD_8K_BLKSIZE -D_SYSCALL32
+CFLAGS +=	-D_SCM_ -D_SD_8K_BLKSIZE -D_SYSCALL32
 CPPFLAGS +=	-DNSC_MULTI_TERABYTE
 CERRWARN +=	-_gcc=-Wno-uninitialized
 ROOTLINK = $(ROOTUSRSBIN)/scmadm

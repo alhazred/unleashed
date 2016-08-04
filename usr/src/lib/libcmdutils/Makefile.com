@@ -44,7 +44,6 @@ SRCS=	\
 	$(CMD_OBJS:%.o=$(SRCDIR)/%.c)   \
 	$(COM_OBJS:%.o=$(COMDIR)/%.c)
 
-CFLAGS +=	$(CCVERBOSE)
 
 # All commands using the common avltree interfaces must
 # be largefile aware.
