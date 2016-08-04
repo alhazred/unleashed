@@ -48,7 +48,6 @@ CPPFLAGS +=	$(NETGROUP) $(TLI) $(ALWAYS_HOSTNAME) $(AUTH) \
 		$(STYLE) $(TABLES) $(DOT) $(BUGS) \
 		-DRFC931_TIMEOUT=$(RFC931_TIMEOUT) \
 		-I$(SRCDIR) 
-CFLAGS +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-return-type
 CERRWARN +=	-_gcc=-Wno-parentheses

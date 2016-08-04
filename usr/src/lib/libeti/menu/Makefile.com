@@ -68,7 +68,6 @@ LIBS =          $(DYNLIB)
 SRCDIR=		../common
 
 CPPFLAGS +=	-I../inc
-CFLAGS +=       $(CCVERBOSE)
 LDLIBS +=       -lcurses -lc
 
 CERRWARN +=	-_gcc=-Wno-parentheses

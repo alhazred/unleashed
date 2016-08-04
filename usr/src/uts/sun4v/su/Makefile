@@ -53,8 +53,6 @@ include $(UTSBASE)/sun4v/Makefile.sun4v
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # For now, disable these compiler warnings; maintainers should endeavor to
 # investigate and remove these for maximum coverage.  Please do not carry

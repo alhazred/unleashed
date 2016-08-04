@@ -37,7 +37,6 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lnsl -lc
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR) -I..
 # CPPFLAGS +=	-I$(SRC)/lib/libldap5/include/ldap
 

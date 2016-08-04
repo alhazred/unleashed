@@ -54,8 +54,6 @@ DEBUG_FLGS	=
 DEBUG_DEFS	+= $(DEBUG_FLGS)
 CPPFLAGS	+= -DSGPIO_SUPPORT
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # dependency on sata module
 #

@@ -29,7 +29,6 @@ XPG4PROG= du
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
 $(XPG4) := CFLAGS += -DXPG4

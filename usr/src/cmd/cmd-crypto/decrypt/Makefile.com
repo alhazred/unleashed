@@ -34,8 +34,6 @@ SRCS = $(OBJS:%.o=../%.c)
 
 include ../../../Makefile.cmd 
 
-CFLAGS += $(CCVERBOSE) 
-CFLAGS64 += $(CCVERBOSE)
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 CERRWARN += -_gcc=-Wno-parentheses

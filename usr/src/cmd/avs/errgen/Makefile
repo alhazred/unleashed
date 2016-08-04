@@ -30,7 +30,6 @@ PROG=	$(DYNPROG)
 
 OBJS=	errgen.o
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-switch
 CLOBBERFILES += $(DYNPROG)
 

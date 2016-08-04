@@ -38,7 +38,6 @@ INCDIR =	../../include
 
 SRCS =		$(OBJECTS:%.o=$(SRCDIR)/%.c)
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I../../../include -I$(INCDIR)
 
 PICS =		$(OBJECTS:%=pics/%)

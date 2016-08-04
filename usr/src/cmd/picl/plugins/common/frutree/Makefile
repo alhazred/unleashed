@@ -47,7 +47,7 @@ CLOBBERFILES += $(LIBLINKS)
 
 CPPFLAGS +=	-I../devtree
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/lib/picld_pluginutil
-CFLAGS +=	$(CCVERBOSE) $(C_PICFLAGS)
+CFLAGS +=	$(C_PICFLAGS)
 LDLIBS +=	-L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/lib/picld_pluginutil/$(MACH)
 LDLIBS +=	-L../devtree

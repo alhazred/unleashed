@@ -33,7 +33,7 @@ UTSBASE	= ../..
 MODULE		= rdsv3
 OBJECTS		= $(RDSV3_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
-CFLAGS 		+= $(CCVERBOSE) $(_XPG4_2)
+CFLAGS 		+= $(_XPG4_2)
 LDFLAGS		+= -dy -Nfs/sockfs -Nmisc/ksocket -Ndrv/ip -Nmisc/ibtl -Nmisc/ibcm -Nmisc/sol_ofs
 CONF_SRCDIR	= $(UTSBASE)/common/io/ib/clients/rdsv3
 #

@@ -46,7 +46,6 @@ CPPFLAGS += -I../../../../lib/libsmbfs
 LDLIBS += -R '$$ORIGIN/../../../usr/lib'
 LDLIBS += -lsmbfs
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-unused-variable
 C99MODE= $(C99_ENABLE)
 

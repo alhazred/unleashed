@@ -47,7 +47,7 @@ OBJS = $(SRCS:%.c=%.o) inj_grammar.o inj_lex.o
 CLEANFILES += inj_grammar.c inj_grammar.h inj_lex.c y.tab.h y.tab.c
 
 CPPFLAGS += -I. -I../common
-CFLAGS += $(CCVERBOSE) $(CTF_FLAGS)
+CFLAGS += $(CTF_FLAGS)
 CERRWARN += -_gcc=-Wno-switch
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-type-limits

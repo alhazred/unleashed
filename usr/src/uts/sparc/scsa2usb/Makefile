@@ -49,8 +49,6 @@ CONF_SRCDIR	= $(UTSBASE)/common/io/usb/scsa2usb
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS += $(CCVERBOSE)
-
 # depends on misc/usba misc/scsi
 #
 LDFLAGS		+= -dy -Nmisc/usba -Nmisc/scsi

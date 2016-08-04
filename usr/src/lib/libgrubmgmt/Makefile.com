@@ -44,7 +44,6 @@ INCS += -I$(SRCDIR)
 #
 LDLIBS +=	-lc -lzfs -ldevinfo -lfstyp -lefi
 
-CFLAGS +=	$(CCVERBOSE)
 
 .KEEP_STATE:
 

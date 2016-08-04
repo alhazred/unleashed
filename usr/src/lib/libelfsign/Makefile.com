@@ -37,7 +37,7 @@ LIBS =		$(DYNLIB)
 
 LDLIBS +=	-lmd -lelf -lkmf -lcryptoutil -lc
 
-CFLAGS +=	$(CCMT) $(CCVERBOSE)
+CFLAGS +=	$(CCMT)
 CPPFLAGS +=	-D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
 
 .KEEP_STATE:

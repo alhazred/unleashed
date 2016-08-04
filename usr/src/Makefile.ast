@@ -66,7 +66,5 @@ LIBSHELLCPPFLAGS = \
 		"[--catalog?libshell]"'
 
 # Default CFLAGS/CFLAGS64 for AST sources
-ASTCFLAGS = \
-	$(CCVERBOSE)
-ASTCFLAGS64 = \
-	$(CCVERBOSE)
+ASTCFLAGS =
+ASTCFLAGS64 =

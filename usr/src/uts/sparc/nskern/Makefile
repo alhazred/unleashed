@@ -58,8 +58,6 @@ include $(UTSBASE)/common/avs/Makefile.com
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS += -v
-
 .KEEP_STATE:
 
 def:		$(DEF_DEPS)

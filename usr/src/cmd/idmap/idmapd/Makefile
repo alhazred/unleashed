@@ -92,7 +92,6 @@ $(OBJS) := CPPFLAGS += $(INCS) -D_REENTRANT
 $(POFILE) := CPPFLAGS += $(INCS)
 
 
-CFLAGS += $(CCVERBOSE)
 LDLIBS += \
 	-lsqlite-sys \
 	-lsecdb \

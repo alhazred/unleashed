@@ -31,8 +31,6 @@ SRCS = $(OBJS:%.o=../%.c)
 include ../../Makefile.cmd
 include ../../Makefile.ctf
 
-CFLAGS += $(CCVERBOSE)
-CFLAGS64 += $(CCVERBOSE)
 LDLIBS += -ldtrace -lproc -lctf -lelf
 
 FILEMODE = 0555

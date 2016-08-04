@@ -36,7 +36,6 @@ LDLIBS += -laudio -lm
 
 LDFLAGS += -L../utilities
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 
 

@@ -41,7 +41,6 @@ CPPFLAGS +=	-I.. \
 		-I$(SRC)/lib/libfru/include \
 		-I$(SRC)/lib/libfruutils
 CPPFLAGS += 	-D_REENTRANT
-CFLAGS +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized
 

@@ -122,8 +122,8 @@ CLEANFILES += $(LIBDAUDITOBJS) $(DRTIOBJS)
 CLOBBERFILES += $(LIBDAUDIT) drti.o
 
 CPPFLAGS += -I../common -I.
-CFLAGS += $(CCVERBOSE) $(C_BIGPICFLAGS)
-CFLAGS64 += $(CCVERBOSE) $(C_BIGPICFLAGS)
+CFLAGS += $(C_BIGPICFLAGS)
+CFLAGS64 += $(C_BIGPICFLAGS)
 
 CERRWARN += -_gcc=-Wno-unused-label
 CERRWARN += -_gcc=-Wno-unused-variable
@@ -168,8 +168,6 @@ dt_grammar.c dt_grammar.h: $(SRCDIR)/dt_grammar.y
 
 pics/dt_lex.o pics/dt_grammar.o := CFLAGS += $(YYCFLAGS)
 pics/dt_lex.o pics/dt_grammar.o := CFLAGS64 += $(YYCFLAGS)
-
-pics/dt_lex.o pics/dt_grammar.o := CCVERBOSE =
 
 ../common/dt_errtags.c: ../common/mkerrtags.sh ../common/dt_errtags.h
 	sh ../common/mkerrtags.sh < ../common/dt_errtags.h > $@

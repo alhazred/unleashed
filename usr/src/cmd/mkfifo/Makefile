@@ -30,7 +30,6 @@ SRCS= mkfifo.c ../chmod/common.c
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 
 %.o: ../chmod/%.c

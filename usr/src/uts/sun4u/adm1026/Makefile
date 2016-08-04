@@ -46,7 +46,6 @@ ROOTMODULE	= $(ROOT_PSM_DRV_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sun4u/Makefile.sun4u
 
-CFLAGS += $(CCVERBOSE)
 LDFLAGS += -dy -N misc/i2c_svc
 
 # compile time debug flag

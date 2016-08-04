@@ -62,8 +62,6 @@ FILEMODE	 = 644
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE)
-
 
 #
 #	Default build targets.

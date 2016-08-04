@@ -57,8 +57,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 CPPFLAGS += -DENX_DEBUG
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # Depends on misc/ibtl
 #

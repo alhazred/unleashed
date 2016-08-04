@@ -43,7 +43,6 @@ ROOTMANIFESTDIR=	$(ROOTSVCNETWORKRPC)
 LDLIBS +=  -lnsl -lbsm
 
 CPPFLAGS += -D_REENTRANT
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-unused-variable
 

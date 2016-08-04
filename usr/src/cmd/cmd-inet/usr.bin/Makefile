@@ -50,9 +50,6 @@ CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-unused-function
 
-# Eventually just plain CFLAGS should be += -v
-
-finger :=	CFLAGS += $(CCVERBOSE)
 # Enable large file support for reading the lastlog file.
 finger :=	CPPFLAGS += -D_FILE_OFFSET_BITS=64
 

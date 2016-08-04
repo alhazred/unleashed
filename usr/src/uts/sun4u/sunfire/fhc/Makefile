@@ -54,8 +54,6 @@ include $(UTSBASE)/sun4u/sunfire/Makefile.sunfire
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS += $(CCVERBOSE)
-
 
 #
 #	Default build targets.

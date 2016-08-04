@@ -40,8 +40,8 @@ SRCDIR =	../common
 C99MODE = $(C99_ENABLE)
 
 CPPFLAGS += -I../common -I.
-CFLAGS += $(CCVERBOSE) $(C_BIGPICFLAGS)
-CFLAGS64 += $(CCVERBOSE) $(C_BIGPICFLAGS)
+CFLAGS += $(C_BIGPICFLAGS)
+CFLAGS64 += $(C_BIGPICFLAGS)
 
 $(DYNLIB) := LDLIBS += $(MACH_LDLIBS)
 $(DYNLIB) := LDLIBS += -lnvpair -lc -lfmd_msg -lfmevent -lscf -ldiagcode

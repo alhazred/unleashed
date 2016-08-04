@@ -43,7 +43,7 @@ CONF_SRCDIR	= $(UTSBASE)/sun4u/io/i2c/nexus
 #
 include $(UTSBASE)/sun4u/Makefile.sun4u
 
-CFLAGS += $(CCVERBOSE) -I$(UTSBASE)/sun4u
+CFLAGS += -I$(UTSBASE)/sun4u
 
 LDFLAGS += -dy -N misc/i2c_svc
 

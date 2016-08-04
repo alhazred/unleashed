@@ -33,7 +33,6 @@ include		../../../Makefile.cmd
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORK)
 $(ROOTMANIFEST)		:= FILEMODE= 444
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 LDLIBS +=	-lsocket -lnsl

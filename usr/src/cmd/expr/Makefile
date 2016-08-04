@@ -35,7 +35,6 @@ SRCS= expr.c compile.c
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-extra
 $(XPG4) := CFLAGS += -DXPG4

@@ -65,7 +65,7 @@ CLOBBERFILES += obj*/*.c debug*/*.c obj*/sd_mkiob debug*/sd_mkiob
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS += $(CCVERBOSE) -D_SD_8K_BLKSIZE -D_SDBC_SINGLE_BRD
+CFLAGS += -D_SD_8K_BLKSIZE -D_SDBC_SINGLE_BRD
 LDFLAGS += -dy -N"drv/nsctl" -N"drv/ncall" -N"drv/nskern" -N"misc/spuni"
 
 CERRWARN += -_gcc=-Wno-parentheses

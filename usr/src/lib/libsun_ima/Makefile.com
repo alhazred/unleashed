@@ -43,8 +43,6 @@ LDLIBS +=	-lnsl
 LDLIBS +=	-ldevinfo
 LDLIBS +=	-lsysevent
 
-CFLAGS +=	$(CCVERBOSE)
-CFLAGS64 +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-parentheses
 

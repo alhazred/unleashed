@@ -54,8 +54,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE)
-
 LDFLAGS += -dy -Ndacf/consconfig_dacf
 
 #

@@ -41,7 +41,6 @@ LDLIBS +=	-lc -lsecdb
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-DPACKAGE_LOCALE_DIR=\"/usr/lib/locale\"
 
 ROOTMAJLINK =	$(ROOTLIBDIR)/$(LIBRARY:.a=.so)$(VERS_MAJ)

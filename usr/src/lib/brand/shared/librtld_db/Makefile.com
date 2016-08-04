@@ -46,7 +46,6 @@ UTSBASE	=	$(SRC)/uts
 DYNFLAGS +=	$(VERSREF) -M$(BRAND_SHARED)/librtld_db/common/mapfile-vers
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lrtld_db
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT \
 			-I$(SRC)/cmd/sgs/librtld_db/common \
 			-I$(SRC)/cmd/sgs/include \

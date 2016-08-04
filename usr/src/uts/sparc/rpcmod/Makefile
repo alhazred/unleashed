@@ -67,8 +67,6 @@ CLEANFILES	+= $(MODSTUBS_O)
 #
 LDFLAGS		+= -dy -Nmisc/tlimod
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # For now, disable these compiler warnings; maintainers should endeavor to
 # investigate and remove these for maximum coverage.  Please do not carry

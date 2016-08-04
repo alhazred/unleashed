@@ -58,7 +58,6 @@ include $(UTSBASE)/common/avs/Makefile.com
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS += $(CCVERBOSE)
 LDFLAGS += -dy -N"drv/nskern" -N"drv/ncall" -N"misc/spuni"
 
 CERRWARN += -_gcc=-Wno-parentheses

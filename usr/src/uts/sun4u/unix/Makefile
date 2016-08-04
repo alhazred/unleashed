@@ -94,8 +94,6 @@ CLEANFILES	+= $(UNIX_O) $(MODSTUBS_O) $(KRTLD_O) $(KRTLD_OBJECTS) \
 
 CLOBBERFILES	= $(CLEANFILES) $(UNIX_BIN)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # For now, disable these compiler warnings; maintainers should endeavor to
 # investigate and remove these for maximum coverage.  Please do not carry

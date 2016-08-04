@@ -63,7 +63,6 @@ CPPFLAGS	+= -DINTERNAL_BUILD -DSOL2
 #	Additional compiler definitions
 # 
 INC_PATH	+= -I$(UTSBASE)/common/io/ppp/common
-CFLAGS		+= $(CCVERBOSE)
 
 #
 # Define dependency on sppp

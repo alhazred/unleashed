@@ -75,7 +75,6 @@ CPPFLAGS +=	-D_REENTRANT -U_ASM \
 		-I. -I$(BRAND_SHARED)/brand/sys -I../sys \
 		-I$(UTSBASE)/common/brand/solaris10 \
 		-I$(SRC)/uts/common/fs/zfs
-CFLAGS +=	$(CCVERBOSE)
 # Needed to handle zfs include files
 C99MODE=	$(C99_ENABLE)
 DYNFLAGS +=	$(DYNFLAGS_$(CLASS))

@@ -35,7 +35,6 @@ SRCDIR =	../common
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
-CFLAGS +=	$(CCVERBOSE)
 
 .KEEP_STATE:
 

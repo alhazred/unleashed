@@ -51,7 +51,7 @@ MSGFILES=$(SRCS:%.c=%.i)
 CPPFLAGS += -I. -I$(KMFDIR)/include -I$(ADJUNCT_PROTO)/usr/include/libxml2 \
 	-I$(KMFDIR)/ber_der/inc
 
-CFLAGS += $(CCVERBOSE) -DDEBUG
+CFLAGS += -DDEBUG
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-unused-label
 

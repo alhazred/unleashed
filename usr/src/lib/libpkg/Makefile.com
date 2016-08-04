@@ -58,7 +58,6 @@ LIBS = $(DYNLIB)
 
 LDLIBS +=	-lc -lscf -ladm
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-clobbered

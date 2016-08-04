@@ -53,8 +53,6 @@ include $(UTSBASE)/sun4v/Makefile.sun4v
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # Override the default space setting
 #

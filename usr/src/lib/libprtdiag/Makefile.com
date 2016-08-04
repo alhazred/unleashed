@@ -43,7 +43,6 @@ IFLAGS		+= -I $(UTSBASE)/sun4u
 IFLAGS		+= -I $(UTSBASE)/sun4u/sunfire
 IFLAGS		+= -I $(UTSBASE)/sun4u/serengeti
 CPPFLAGS	= $(IFLAGS) $(CPPFLAGS.master)
-CFLAGS		+= $(CCVERBOSE)
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-uninitialized
 CERRWARN	+= -_gcc=-Wno-unused-variable

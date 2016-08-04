@@ -61,7 +61,7 @@ $(PROG): install_h $(OBJS)
 	$(POST_PROCESS)
 
 %.o: $(SRCDIR)/%.c
-	$(COMPILE.c) $(CFLAGS) -o $@ $<
+	$(COMPILE.c) -o $@ $<
 
 all:	$(PROG)
 

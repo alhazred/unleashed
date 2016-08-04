@@ -64,7 +64,6 @@ include ../../Makefile.ctf
 ROOTCMDDIR=	$(ROOT)/lib/svc/bin
 
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
-CFLAGS += $(CCVERBOSE)
 CPPFLAGS += -I. -I../common
 
 CERRWARN += -_gcc=-Wno-parentheses

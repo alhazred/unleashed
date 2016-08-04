@@ -88,7 +88,7 @@ COMPAT_LINKS = disks tapes ports audlinks devlinks drvconfig
 
 CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT \
 		-I$(COMMON) -I$(UTSBASE)/common -I$(MODLOADDIR)
-CFLAGS += $(CCVERBOSE) $(C_PICFLAGS)
+CFLAGS += $(C_PICFLAGS)
 
 
 CERRWARN += -_gcc=-Wno-uninitialized

@@ -32,7 +32,6 @@ include $(SRC)/stand/lib/Makefile.$(MACH)
 
 SRCDIR =	.
 LIBS +=		$(LIBRARY)
-CFLAGS +=	$(CCVERBOSE)
 LDFLAGS =	-r
 LDLIBS +=	-lsa -lfakeboot
 

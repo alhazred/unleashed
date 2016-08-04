@@ -59,7 +59,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 # Linkage dependencies
 #
 
-CFLAGS		+= $(CCVERBOSE) -I$(COM_DIR)
+CFLAGS		+= -I$(COM_DIR)
 AS_CPPFLAGS	+= -I../../$(PLATFORM)
 
 

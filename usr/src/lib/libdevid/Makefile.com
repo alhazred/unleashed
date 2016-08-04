@@ -38,7 +38,6 @@ LIBS =		$(DYNLIB)
 #
 LDLIBS +=	-ldevinfo -lc
 
-CFLAGS +=	$(CCVERBOSE)
 
 .KEEP_STATE:
 

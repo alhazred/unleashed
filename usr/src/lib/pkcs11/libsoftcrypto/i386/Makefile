@@ -44,7 +44,6 @@ SRCDIR =	$(SRC)/lib/pkcs11/libsoftcrypto/common
 LIBS =		$(DYNLIB)
 MAPFILEDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(CRYPTODIR) -I$(UTSDIR) -D_POSIX_PTHREAD_SEMANTICS
 LDLIBS +=	-lcryptoutil -lc
 

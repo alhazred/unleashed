@@ -48,8 +48,6 @@ CONF_SRCDIR     = $(UTSBASE)/intel/io
 #
 include $(UTSBASE)/i86xpv/Makefile.i86xpv
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #	Define targets
 #

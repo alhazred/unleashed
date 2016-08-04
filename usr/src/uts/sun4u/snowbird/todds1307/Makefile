@@ -44,7 +44,7 @@ ROOTMODULE	= $(ROOT_SNOWBIRD_TOD_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sun4u/snowbird/Makefile.snowbird
 
-CFLAGS += $(CCVERBOSE) -I../../../sun4u
+CFLAGS += -I../../../sun4u
 
 LDFLAGS += -dy -N misc/i2c_svc
 

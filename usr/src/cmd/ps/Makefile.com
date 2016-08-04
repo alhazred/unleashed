@@ -33,7 +33,6 @@ SRCS=	$(OBJS:%.o=../%.c)
 
 include ../../Makefile.cmd
 
-CFLAGS	+= $(CCVERBOSE)
 LDLIBS += -lproject
 
 .KEEP_STATE:

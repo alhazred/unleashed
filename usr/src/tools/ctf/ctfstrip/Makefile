@@ -15,7 +15,6 @@ PROG = ctfstrip
 SRCS = \
 	ctfstrip.c
 
-CFLAGS += $(CCVERBOSE)
 include $(SRC)/tools/Makefile.tools
 CERRWARN += -_gcc=-Wno-unused-variable
 

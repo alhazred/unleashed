@@ -32,7 +32,6 @@ OBJS= date.o
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 
 clean $(XPG4) := OBJS += values-xpg4.o
 XGETFLAGS += -a -x $(PROG).xcl

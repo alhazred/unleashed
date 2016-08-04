@@ -28,7 +28,6 @@
 include ../Makefile.com
 include ../../Makefile.cmd.64
 
-CFLAGS64	+= $(CCVERBOSE)
 
 
 all: $(PROG)

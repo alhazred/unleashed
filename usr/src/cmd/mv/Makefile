@@ -39,7 +39,6 @@ include ../Makefile.cmd
 clean $(XPG4)	:= OBJS += values-xpg4.o
 
 CLOBBERFILES += $(CPFILE) $(LNFILE)
-CFLAGS	+=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-uninitialized

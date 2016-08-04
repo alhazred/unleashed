@@ -57,8 +57,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 INC_PATH	+= -I$(UTSBASE)/sun4
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # Turn on doubleword alignment for 64 bit registers
 #

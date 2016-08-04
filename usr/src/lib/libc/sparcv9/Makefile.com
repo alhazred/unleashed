@@ -1017,7 +1017,6 @@ include $(SRC)/lib/Makefile.lib.64
 # be building a variant object (still libc.so.1, but different filename)
 SONAME = libc.so.1
 
-CFLAGS64 += $(CCVERBOSE)
 
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-switch

@@ -37,7 +37,6 @@ include ../Makefile.cmd
 POFILES = $(SRCS:.c=.po)
 POFILE = $(PROG)_msg.po
 
-CFLAGS += $(CCVERBOSE)
 
 LDLIBS += -lsocket -lnsl -lsecdb
 

@@ -22,8 +22,6 @@ ROOTMODULE	= $(ROOT_PSM_MISC_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sun4u/Makefile.sun4u
 
-CFLAGS += $(CCVERBOSE)
-
 LDFLAGS += -dy
 
 #

@@ -44,8 +44,6 @@ ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-CFLAGS		+= $(CCVERBOSE)
-
 #
 #	Depends on misc/ac97 and drv/audio
 #

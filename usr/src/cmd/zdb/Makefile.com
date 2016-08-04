@@ -40,8 +40,6 @@ LDLIBS += -lzpool -lumem -lnvpair -lzfs -lavl
 
 C99MODE=	$(C99_ENABLE)
 
-CFLAGS += $(CCVERBOSE)
-CFLAGS64 += $(CCVERBOSE)
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 -D_REENTRANT $(INCS) -DDEBUG
 
 CERRWARN += -_gcc=-Wno-uninitialized

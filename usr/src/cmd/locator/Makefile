@@ -32,7 +32,6 @@ PROG=	locator
 
 include $(SRC)/cmd/Makefile.cmd
 
-CFLAGS	 += $(CCVERBOSE)
 LDLIBS	 += -lpicl
 
 .KEEP_STATE:

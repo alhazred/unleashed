@@ -33,7 +33,6 @@ SRCS=		isainfo.c $(ELFCAP)/elfcap.c
 include		../Makefile.cmd
 
 CPPFLAGS +=	-I$(ELFCAP) -I../../uts/common
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-type-limits
 
 .KEEP_STATE:

@@ -50,7 +50,6 @@ CLOBBERFILES=	nscd
 
 SRCS=	${OBJS:%.o=%.c}
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -DSUN_THREADS \
 		-I../../lib/libc/port/gen -I../../lib/libc/inc \
 		-I../../lib/libsldap/common

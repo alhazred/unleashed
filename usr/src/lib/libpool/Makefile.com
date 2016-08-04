@@ -42,7 +42,6 @@ LDLIBS +=	-lscf -lnvpair -lexacct -lc -lxml2
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -D_FILE_OFFSET_BITS=64 \
 		-I$(ADJUNCT_PROTO)/usr/include/libxml2
 

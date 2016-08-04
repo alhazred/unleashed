@@ -27,7 +27,6 @@ include ../Makefile.cmd
 
 .KEEP_STATE:
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lsecdb
 
 

@@ -36,7 +36,6 @@ SRCS =		$(COMDIR)/avl.c
 COMDIR = 	$(SRC)/common/avl
 
 LDLIBS +=	-lc
-CFLAGS +=	$(CCVERBOSE)
 
 .KEEP_STATE:
 

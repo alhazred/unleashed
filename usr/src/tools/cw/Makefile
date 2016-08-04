@@ -33,8 +33,6 @@ include ../Makefile.tools
 i386_CC=	$(GCC_ROOT)/bin/gcc
 sparc_CC=	$(GCC_ROOT)/bin/gcc
 
-CFLAGS += $(CCVERBOSE)
-
 # Override CFLAGS.  This is needed only for bootstrap of cw.
 CFLAGS=	-O -D__sun -Wall -Wno-unknown-pragmas -Werror \
 	-std=gnu89 -nodefaultlibs

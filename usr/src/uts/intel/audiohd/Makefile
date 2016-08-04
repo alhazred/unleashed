@@ -44,7 +44,6 @@ CONF_SRCDIR	= $(UTSBASE)/common/io/audio/drv/audiohd
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-CFLAGS		+= $(CCVERBOSE)
 DEBUG_FLGS	=
 $(NOT_RELEASE_BUILD)DEBUG_DEFS	+= $(DEBUG_FLGS)
 

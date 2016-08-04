@@ -32,7 +32,6 @@ OBJS=		$(COMMONOBJS)
 
 include ../../Makefile.cmd
 
-CFLAGS	+=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CPPFLAGS +=
 

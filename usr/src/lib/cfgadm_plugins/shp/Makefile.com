@@ -44,7 +44,6 @@ LIBS = $(DYNLIB)
 
 CPPFLAGS +=     -I$(SRC)/lib/libhotplug/common
 CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lc -ldevinfo -lhotplug
 
 CERRWARN +=	-_gcc=-Wno-parentheses

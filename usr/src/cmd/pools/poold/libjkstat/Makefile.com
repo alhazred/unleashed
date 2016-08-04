@@ -39,7 +39,6 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lkstat
 ROOTLIBDIR =	$(ROOT)/usr/lib/pool
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -D_FILE_OFFSET_BITS=64 $(INCS)
 
 all: $(LIBS)

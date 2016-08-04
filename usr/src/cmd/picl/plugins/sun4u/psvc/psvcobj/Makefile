@@ -47,7 +47,6 @@ USR_PLAT_PSVCOBJ = $(LIBS:%=$(USR_PSM_LIB_DIR)/%)
 
 CPPFLAGS +=	-I$(SRC)/uts/sun4u -I.
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-L$(SRC)/lib/libdevfsevent
 LDLIBS +=	-lc 
 

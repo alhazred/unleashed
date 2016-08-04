@@ -83,10 +83,6 @@ ROOTFORMS=	$(FORMS:%=$(ROOTSHLIBCCS)/%)
 DYNLINKLIBDIR=	$(ROOTLIBDIR)
 DYNLINKLIB=	$(LIBLINKS:%=$(DYNLINKLIBDIR)/%)
 
-# Need to make sure lib-make's are warning free
-$(DYNLIB) :=	CFLAGS += $(CCVERBOSE)
-$(DYNLIB) :=	CFLAGS64 += $(CCVERBOSE)
-
 LDLIBS += -lc
 
 CLEANFILES +=	../common/parser.c

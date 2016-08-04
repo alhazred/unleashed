@@ -50,7 +50,6 @@ CPPFLAGS +=	-I$(SRC)/uts/sun4u
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/sun4u/psvc/psvcobj
 
 ZDEFS =		
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	$(ZNODEFS)
 LDLIBS +=	-L$(SRC)/lib/libpicl/$(MACH) -L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/sun4u/psvc/psvcobj

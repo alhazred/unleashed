@@ -54,8 +54,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # Depends on ip; this is for sharing common option management code
 # which happens to live in "ip" kernel module only.  Needed to do

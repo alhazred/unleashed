@@ -33,7 +33,6 @@ LDLIBS += -lsysevent
 
 CPPFLAGS += -D_POSIX_PTHREAD_SEMANTICS
 CPPFLAGS += -D_REENTRANT
-CFLAGS += $(CCVERBOSE)
 
 #
 # install specifics - directories

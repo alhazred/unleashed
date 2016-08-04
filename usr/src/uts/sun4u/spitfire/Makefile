@@ -64,8 +64,6 @@ CLEANFILES	+= $(CPULIB) $(SYM_MOD)
 ALL_TARGET	= $(SYM_MOD)
 INSTALL_TARGET	= def $(BINARY) $(ROOTMODULE) $(ROOTSOFTLINKS)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # cpu-module-specific flags
 #

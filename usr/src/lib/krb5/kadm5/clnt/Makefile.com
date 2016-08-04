@@ -79,7 +79,7 @@ CPPFLAGS += -I.. -I../.. -I../../.. -I$(SRC)/lib/gss_mechs/mech_krb5/include \
 	-DHAVE_SYSLOG_H=1 -DHAVE_OPENLOG=1 -DHAVE_SYSLOG=1 -DHAVE_CLOSELOG=1 \
 	-DHAVE_STRFTIME=1 -DHAVE_VSPRINTF=1 -DUSE_KADM5_API_VERSION=2
 
-CFLAGS +=	$(CCVERBOSE) -I..
+CFLAGS +=	-I..
 
 CERRWARN +=	-_gcc=-Wno-unused-function
 CERRWARN +=	-_gcc=-Wno-unused-variable

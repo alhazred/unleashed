@@ -61,8 +61,6 @@ AS_INC_PATH	+= -I$(DSF_DIR)/$(OBJS_DIR)
 
 ASSYM_H		= $(DSF_DIR)/$(OBJS_DIR)/assym.h
 
-CFLAGS += -v
-
 .KEEP_STATE:
 
 $(OBJS_DIR)/nsc_asm.o: nsc_asm.s

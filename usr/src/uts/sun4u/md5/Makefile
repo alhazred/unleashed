@@ -53,8 +53,6 @@ include $(UTSBASE)/sun4u/Makefile.sun4u
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 
-CFLAGS += $(CCVERBOSE) 
-
 #
 # md5 depends on the kcf framework
 #

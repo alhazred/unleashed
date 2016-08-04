@@ -69,8 +69,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 INC_PATH	+= -I$(CONF_SRCDIR)
 
-CFLAGS          += $(CCVERBOSE)
-
 
 #
 # Driver depends on MAC

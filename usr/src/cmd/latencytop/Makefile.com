@@ -29,8 +29,6 @@ SRCS = $(OBJS:%.o=../common/%.c)
 
 include ../../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
-CFLAGS64 += $(CCVERBOSE)
 
 CERRWARN += -_gcc=-Wno-uninitialized
 

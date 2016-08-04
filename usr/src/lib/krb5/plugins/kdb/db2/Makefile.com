@@ -63,7 +63,6 @@ CPPFLAGS += 	-DHAVE_CONFIG_H -DHAVE_BT_RSEQ \
 		-I$(SRC)/uts/common/gssapi/include/ \
 		-I$(SRC)/uts/common/gssapi/mechs/krb5/include
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-unused-function
 CERRWARN +=	-_gcc=-Wno-parentheses

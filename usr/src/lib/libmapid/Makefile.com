@@ -49,7 +49,6 @@ LIBSRCS	= $(LIBOBJS:%.o=$(SRCDIR)/%.c)
 
 LDLIBS	+=	-lresolv -lc -lscf
 
-CFLAGS	+=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR) -I$(SMF_DIR) -D_REENTRANT
 
 CERRWARN +=	-_gcc=-Wno-switch

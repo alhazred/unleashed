@@ -64,8 +64,6 @@ DEBUG_DEFS	+= $(DEBUG_FLGS)
 
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #
 # we depend on the sata module

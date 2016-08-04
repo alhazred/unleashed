@@ -29,7 +29,6 @@ SVCMETHOD=	iscsi-initiator	iscsid
 
 include ../Makefile.cmd
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lnsl
 
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORKISCSI)

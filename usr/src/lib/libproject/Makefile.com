@@ -39,7 +39,6 @@ SRCDIR =	../common
 LIBS =		$(DYNLIB)
 
 CPPFLAGS +=	-D_REENTRANT
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 LDLIBS +=	-lc -lsecdb -lproc -lpool

@@ -55,7 +55,6 @@ CPPFLAGS +=	-D_REENTRANT
 #
 #CPPFLAGS +=	-DSNMPPLUGIN_DEBUG
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/sun4v/lib/snmp
 LDLIBS +=	-L$(ROOT)/usr/lib/sparcv9

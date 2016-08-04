@@ -33,7 +33,6 @@ include ../Makefile.cmd
 
 .KEEP_STATE:
 
-CFLAGS += $(CCVERBOSE)
 
 all: $(PROG)
 

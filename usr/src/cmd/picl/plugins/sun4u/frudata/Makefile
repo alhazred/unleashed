@@ -51,7 +51,6 @@ HDRCHK	=	hdrchk
 CPPFLAGS +=	-I$(SRC)/lib/libfru/include -I../lib/fruaccess
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/lib/picld_pluginutil
 CPPFLAGS +=	-I$(SRC)/lib/libfruutils/
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/sun4u/lib/fruaccess
 LDLIBS +=	-L$(SRC)/lib/libfruutils/$(MACH)
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/common/frutree

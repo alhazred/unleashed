@@ -45,7 +45,6 @@ ROOTLIBDIR=	$(ROOT)/usr/lib
 LIBS =			$(DYNLIB)
 
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-DSOLARIS_PRIVATE_POST_0_9
 CPPFLAGS +=	-I$(SRCDIR)
 CPPFLAGS +=	-I../../libpapi-common/common

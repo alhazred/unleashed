@@ -38,7 +38,6 @@ LDLIBS +=	-lnsl -lc
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT
 
 CERRWARN +=	-_gcc=-Wno-parentheses

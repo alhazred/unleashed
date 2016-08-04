@@ -33,7 +33,6 @@ XPG4PROG=	$(PROG)
 
 include ../Makefile.cmd
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lproject
 
 .KEEP_STATE:

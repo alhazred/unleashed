@@ -63,8 +63,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 INC_PATH	+= -I$(CONF_SRCDIR) -I$(UTSBASE)/common/io/e1000api
 
-CFLAGS          += $(CCVERBOSE)
-
 
 #
 # Driver depends on MAC

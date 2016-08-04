@@ -44,7 +44,6 @@ TLM_DIR = tlm
 
 include $(NDMP_DIR)/Makefile.rpcgen
 
-CFLAGS += $(CCVERBOSE)
 
 CPPFLAGS += $(LFLAGS64)
 

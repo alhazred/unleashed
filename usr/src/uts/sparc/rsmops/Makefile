@@ -57,8 +57,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 INC_PATH += -I $(UTSBASE)/common/sys/rsm
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #	Default build targets.
 #

@@ -59,7 +59,6 @@ CPPFLAGS += 	-DHAVE_CONFIG_H \
 		-DKRB5_DEPRECATED=1 -DKRB5_PRIVATE=1 \
 		-DUSE_KADM5_API_VERSION=2
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-unused-function
 

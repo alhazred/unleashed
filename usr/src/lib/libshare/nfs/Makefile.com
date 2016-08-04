@@ -42,7 +42,6 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lshare -lnsl -lscf -lumem -lc -lxml2
 
 #add nfs/lib directory as part of the include path
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-switch
 CERRWARN +=	-_gcc=-Wno-unused-variable

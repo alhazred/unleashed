@@ -57,8 +57,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #	depends on misc/ibtl, and misc/ibmf
 #

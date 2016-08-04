@@ -61,7 +61,6 @@ LNECK_DYNLIB_DIR = ../../../../SUNW,Sun-Fire-280R/lib/picl/plugins
 CPPFLAGS +=	-I$(SRC)/uts/sun4u
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/sun4u/psvc/psvcobj
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-L$(SRC)/lib/libpicl/$(MACH) -L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-L $(ROOT)/usr/platform/$(PLATFORM)/lib
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/sun4u/psvc/psvcobj

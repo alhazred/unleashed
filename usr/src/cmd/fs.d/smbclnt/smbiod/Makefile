@@ -36,7 +36,6 @@ OBJS=	$(TYPEPROG).o
 SRCS=	$(TYPEPROG).c
 POFILE=	$(TYPEPROG).po
 
-CFLAGS += $(CCVERBOSE)
 C99MODE= $(C99_ENABLE)
 
 # This is a multi-thread program but Nevada

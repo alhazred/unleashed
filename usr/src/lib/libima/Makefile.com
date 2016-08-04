@@ -41,8 +41,6 @@ LDLIBS +=	-lc
 CPPFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	-DSOLARIS
 
-CFLAGS +=	$(CCVERBOSE)
-CFLAGS64 +=       $(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-unused-variable
 

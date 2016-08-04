@@ -37,7 +37,6 @@ LDLIBS +=	-lc -lsocket -ldladm -lscf
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
 
 C99MODE =	$(C99_ENABLE)

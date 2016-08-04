@@ -61,8 +61,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 DEBUG_FLGS	=
 DEBUG_DEFS	+= $(DEBUG_FLGS)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # dependency on sda module
 #

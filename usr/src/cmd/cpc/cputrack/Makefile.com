@@ -32,8 +32,8 @@ OBJS =		$(PROG).o caps.o time.o setgrp.o strtoset.o
 SRCS =		$(OBJS:%.o=../../common/%.c)
 LDLIBS +=	-lcpc -lpctx
 
-CFLAGS +=	$(CCVERBOSE) $(CTF_FLAGS)
-CFLAGS64 +=	$(CCVERBOSE) $(CTF_FLAGS)
+CFLAGS +=	$(CTF_FLAGS)
+CFLAGS64 +=	$(CTF_FLAGS)
 CPPFLAGS +=	-I$(SRC)/lib/libcpc/common
 
 

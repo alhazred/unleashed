@@ -66,7 +66,6 @@ CPPFLAGS	+= -DINTERNAL_BUILD -DSOL2
 #	Overrides.
 #
 INC_PATH	+= -I$(UTSBASE)/common/io/ppp/common
-CFLAGS		+= $(CCVERBOSE)
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

@@ -52,7 +52,6 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS += $(CCVERBOSE)
 CFLAGS += -I$(UTSBASE)/sun4u/mpxu
 
 #Need to verify to add glvc driver required 

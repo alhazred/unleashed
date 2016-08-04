@@ -61,8 +61,6 @@ CLEANFILES	+= $(MODSTUBS_O)
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS += -v
-
 #
 # Module Dependencies
 LDFLAGS		+= -dy -Nmisc/ds

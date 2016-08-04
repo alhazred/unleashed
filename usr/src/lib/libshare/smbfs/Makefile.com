@@ -40,7 +40,6 @@ LIBSRCS = $(LIBOBJS:%.o=$(SRCDIR)/%.c)
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lshare -lscf -lumem -luuid -lc -lxml2 -lsmbfs
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-switch
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CPPFLAGS +=	-D_REENTRANT -I$(ADJUNCT_PROTO)/usr/include/libxml2 \

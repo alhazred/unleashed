@@ -55,8 +55,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS += $(CCVERBOSE)
-
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-uninitialized
 CERRWARN	+= -_gcc=-Wno-switch

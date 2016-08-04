@@ -28,7 +28,6 @@ PROG=		nfsstat
 
 include		../../../Makefile.cmd
 
-CFLAGS +=	$(CCVERBOSE)
 COMMON=	nfs_sec.o
 OBJS=	nfsstat.o $(COMMON)
 SRCS=	nfsstat.c ../lib/nfs_sec.c

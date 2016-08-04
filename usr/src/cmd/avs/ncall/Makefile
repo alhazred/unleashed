@@ -38,7 +38,7 @@ SRCS=	$(OBJS:%.o=%.c)
 POFILE=	$(OBJS:%.o=%.po)
 
 LDLIBS += -ldscfg
-CFLAGS += $(CCVERBOSE) -D_SYSCALL32 -D__NCALL__
+CFLAGS += -D_SYSCALL32 -D__NCALL__
 CERRWARN += -_gcc=-Wno-uninitialized
 ROOTLINK = $(ROOTLIB)/$(PROG)
 

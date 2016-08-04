@@ -55,7 +55,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 #	Overrides.
 #
-CFLAGS		+= $(CCVERBOSE)
 LDFLAGS		+= -dy -Nmisc/ipc
 
 #

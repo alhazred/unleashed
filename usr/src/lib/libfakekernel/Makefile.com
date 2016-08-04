@@ -49,7 +49,6 @@ C99MODE =       $(C99_ENABLE)
 # Note: need our sys includes _before_ ENVCPPFLAGS, proto etc.
 CPPFLAGS.first += -I../common
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS += $(INCS) -D_REENTRANT -D_FAKE_KERNEL
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 

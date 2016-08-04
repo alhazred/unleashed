@@ -52,8 +52,6 @@ include $(UTSBASE)/i86xpv/Makefile.i86xpv
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #       Dependency
 LDFLAGS         += -dy -Nmisc/acpica -Nmisc/busra -Nmisc/pci_autoconfig

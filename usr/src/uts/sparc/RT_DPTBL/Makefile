@@ -61,8 +61,6 @@ MODSTUBS_DIR	= $(OBJS_DIR)
 $(MODSTUBS_O)	:= AS_CPPFLAGS += -DRT_DPTBL_MODULE
 CLEANFILES	+= $(MODSTUBS_O)
 
-CFLAGS		+= $(CCVERBOSE)
-
 #
 #	Default build targets.
 #

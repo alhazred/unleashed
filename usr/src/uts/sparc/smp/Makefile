@@ -61,11 +61,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 LDFLAGS += -dy -N"misc/scsi"
 
 #
-# Overrides.
-#
-CFLAGS += $(CCVERBOSE)
-
-#
 # Default build targets.
 #
 .KEEP_STATE:

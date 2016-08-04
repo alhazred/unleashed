@@ -30,7 +30,6 @@ PROG= touch
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 XGETFLAGS += -a -x touch.xcl
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 

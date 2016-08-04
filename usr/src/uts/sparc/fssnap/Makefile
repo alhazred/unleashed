@@ -54,7 +54,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 #	Overrides and depends_on
 #
-CFLAGS		+= $(CCVERBOSE)
 LDFLAGS		+= -dy -Nmisc/fssnap_if -Nfs/ufs
 
 #

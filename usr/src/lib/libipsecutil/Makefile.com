@@ -36,7 +36,6 @@ LDLIBS +=	-ltecla -lsocket -lnsl -lc
 LAZYLIBS = $(ZLAZYLOAD) -ltsol $(ZNOLAZYLOAD)
 LDLIBS += $(LAZYLIBS)
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 
 CERRWARN +=	-_gcc=-Wno-unused-function

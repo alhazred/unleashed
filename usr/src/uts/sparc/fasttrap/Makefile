@@ -37,7 +37,6 @@ include $(UTSBASE)/sparc/Makefile.sparc
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK) $(ROOT_CONFFILE)
 
-CFLAGS		+= $(CCVERBOSE)
 CPPFLAGS	+= -I$(SRC)/common
 LDFLAGS		+= -dy -Ndrv/dtrace
 

@@ -30,8 +30,6 @@ SRCS=	$(OBJS:%.o=../%.c)
 
 include ../../Makefile.cmd
 
-CFLAGS +=	$(CCVERBOSE)
-CFLAGS64 +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-parentheses
 LDLIBS +=	-lkvm

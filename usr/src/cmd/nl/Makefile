@@ -37,7 +37,6 @@ SRCS = nl.c ../expr/compile.c
 include ../Makefile.cmd
 
 LDLIBS += -lgen
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-unused-variable
 $(XPG4):= CPPFLAGS += -DXPG4

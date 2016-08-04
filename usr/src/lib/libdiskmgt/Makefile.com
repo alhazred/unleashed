@@ -42,7 +42,6 @@ DYNFLAGS +=	-R/opt/VRTSvxvm/lib
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-switch
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized

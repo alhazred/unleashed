@@ -51,7 +51,7 @@ POFILE = dsw_all.po
 SRCS=	$(OBJS:%.o=%.c)
 POFILES= $(OBJS:%.o=%.po)
 
-CFLAGS +=	$(CCVERBOSE) -D_DSW_
+CFLAGS +=	-D_DSW_
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized

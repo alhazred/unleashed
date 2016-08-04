@@ -100,8 +100,6 @@ CLEANFILES	+= $(UNIX_O) $(MODSTUBS_O) $(KRTLD_O) $(KRTLD_OBJECTS) \
 
 CLOBBERFILES	= $(CLEANFILES) $(UNIX_BIN)
 
-CFLAGS += $(CCVERBOSE)
-
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-uninitialized
 CERRWARN	+= -_gcc=-Wno-char-subscripts

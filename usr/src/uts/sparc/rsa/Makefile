@@ -59,7 +59,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 LDFLAGS += -dy -Ncrypto/md5 -Ncrypto/sha2 -Nmisc/bignum -Nmisc/kcf
 
-CFLAGS		+= $(CCVERBOSE) -I$(COM1_DIR) -I$(COM2_DIR)
+CFLAGS		+= -I$(COM1_DIR) -I$(COM2_DIR)
 CFLAGS		+= -DUMUL64
 
 #

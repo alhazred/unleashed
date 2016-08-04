@@ -49,7 +49,6 @@ SRCDIR =	../common
 
 COMMONDIR=	$(SRC)/common/tsol
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR) -I$(COMMONDIR)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized

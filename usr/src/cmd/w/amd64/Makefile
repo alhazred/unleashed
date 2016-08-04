@@ -32,7 +32,6 @@ SRCS=	$(OBJS:%.o=../%.c)
 include ../../Makefile.cmd
 include ../../Makefile.cmd.64
 
-CFLAGS64	+= $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 
 ROOTLINK= $(ROOTBIN64)/uptime

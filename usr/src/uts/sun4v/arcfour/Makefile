@@ -55,7 +55,7 @@ include $(UTSBASE)/sun4v/Makefile.sun4v
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CFLAGS		+= $(CCVERBOSE) -I$(COM_DIR)
+CFLAGS		+= -I$(COM_DIR)
 
 #
 # For niagara specific optimizations

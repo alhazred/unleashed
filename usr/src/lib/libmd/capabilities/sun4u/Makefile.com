@@ -33,5 +33,5 @@ include		$(SRC)/lib/Makefile.lib
 
 AS_CPPFLAGS +=	-D_ASM -DPIC -D_REENTRANT -D$(MACH)
 ASFLAGS +=	$(AS_PICFLAGS)
-CFLAGS +=	$(CCVERBOSE) -xarch=sparcvis
+CFLAGS +=	-xarch=sparcvis
 CPPFLAGS +=	-D$(PLATFORM) -DVIS_SHA1

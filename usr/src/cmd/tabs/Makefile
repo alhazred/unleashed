@@ -29,7 +29,6 @@ PROG= tabs
 include ../Makefile.cmd
 
 LDLIBS += -lcurses
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-address
 

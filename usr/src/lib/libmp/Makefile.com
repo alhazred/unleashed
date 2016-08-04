@@ -42,7 +42,6 @@ OMAPFILE =	../common/mapfile_1-vers
 
 LIBS =		$(DYNLIB)
 
-CFLAGS	+=	$(CCVERBOSE)
 LDLIBS +=	-lc
 
 .KEEP_STATE:

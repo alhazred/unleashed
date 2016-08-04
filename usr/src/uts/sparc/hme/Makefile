@@ -54,7 +54,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 #	Overrides.
 #
-CFLAGS		+= $(CCVERBOSE)
 LDFLAGS		+= -dy -Nmisc/mii -Nmisc/mac
 
 CERRWARN	+= -_gcc=-Wno-switch

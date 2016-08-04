@@ -65,7 +65,7 @@ MODSTUBS_DIR	 = $(OBJS_DIR)
 $(MODSTUBS_O)	:= AS_CPPFLAGS += -DBOFI_MODULE
 CLEANFILES	+= $(MODSTUBS_O)
 
-CFLAGS += $(CCVERBOSE) -I../../sun4
+CFLAGS += -I../../sun4
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

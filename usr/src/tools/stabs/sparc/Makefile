@@ -47,8 +47,6 @@ include ../../Makefile.tools
 
 FILEMODE        = 555
 
-CFLAGS		+= $(CCVERBOSE)
-
 INC_PATH = -I$(STABS_SRC)
 
 #

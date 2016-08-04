@@ -31,7 +31,6 @@ include		$(SRC)/lib/Makefile.lib
 
 LIBS=		$(DYNLIB)
 
-CFLAGS		+= $(CCVERBOSE)
 CPPFLAGS	+= -D_REENTRANT
 
 ROOTLIBDIR=	$(ROOT)/usr/lib/security

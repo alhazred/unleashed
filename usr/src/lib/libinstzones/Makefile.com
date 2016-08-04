@@ -57,7 +57,6 @@ DYNFLAGS += $(ZLAZYLOAD)
 
 LDLIBS +=	-lc -lcontract -lzonecfg
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRCDIR)
 
 .KEEP_STATE:

@@ -41,7 +41,6 @@ SRCDIR =	../common
 
 CPPFLAGS +=	-D_REENTRANT -U_ASM -I../sys \
 		-I$(UTSBASE)/common/brand/solaris10
-CFLAGS +=	$(CCVERBOSE)
 DYNFLAGS +=	$(BLOCAL) $(ZNOVERSION)
 LDLIBS +=	-lc
 

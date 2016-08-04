@@ -35,7 +35,6 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 
 CPPFLAGS +=	-I.. -D_REENTRANT
-CFLAGS +=	$(CCVERBOSE)
 
 XGETFLAGS +=	-a
 POFILE =	picl.po

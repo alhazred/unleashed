@@ -46,7 +46,6 @@ LDLIBS += -lc
 SRCDIR =	../common
 
 CPPFLAGS +=     -I../include 
-CFLAGS +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-type-limits
 

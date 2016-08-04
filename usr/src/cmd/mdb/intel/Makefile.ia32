@@ -31,7 +31,7 @@ MACHDIR=i386
 ROOTMOD = $(ROOT)/usr/lib/mdb/$(MDBTGT)
 ROOTKMOD = $(ROOT)/kernel/kmdb
 
-CFLAGS += $(CTF_FLAGS) $(CCVERBOSE)
+CFLAGS += $(CTF_FLAGS)
 CTFSTABSCFLAGS = $(CFLAGS)
 
 KMDBDIR = $(SRC)/cmd/mdb/intel/ia32/kmdb

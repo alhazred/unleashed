@@ -58,11 +58,6 @@ ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 #
-#	Overrides.
-#
-CFLAGS		+= $(CCVERBOSE)
-
-#
 #	Default build targets.
 #
 .KEEP_STATE:

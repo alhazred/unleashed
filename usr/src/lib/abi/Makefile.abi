@@ -31,7 +31,6 @@
 include		$(SRC)/lib/Makefile.lib
 
 SRCDIR = 	../common
-CFLAGS +=	$(CCVERBOSE)
 
 #
 # All ABI libraries are installed under usr/lib/abi rather than usr/lib,

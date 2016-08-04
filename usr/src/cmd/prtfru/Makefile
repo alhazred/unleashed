@@ -31,7 +31,6 @@ SRCS = $(OBJS:%.o=%.c)
 
 include $(SRC)/cmd/Makefile.cmd
 
-CFLAGS    += $(CCVERBOSE)
 CERRWARN  += -_gcc=-Wno-switch
 CERRWARN  += -_gcc=-Wno-parentheses
 CPPFLAGS  += -I$(SRC)/lib/libfru/include \

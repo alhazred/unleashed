@@ -38,7 +38,6 @@ CLOBBERFILES += test $(TSTOBJECTS)
 
 SRCDIR =	../common
 
-CFLAGS +=	$(CCVERBOSE)
 
 
 .KEEP_STATE:

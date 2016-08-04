@@ -45,8 +45,6 @@ ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CFLAGS += $(CCVERBOSE)
-
 #
 # depends on misc/usba
 #

@@ -57,7 +57,7 @@ include $(UTSBASE)/common/avs/Makefile.com
 ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CFLAGS		+= $(CCVERBOSE) -D_SD_8K_BLKSIZE -D_SYSCALL32
+CFLAGS		+= -D_SD_8K_BLKSIZE -D_SYSCALL32
 LDFLAGS		+= -dy -N"drv/nsctl" -N"drv/nskern" -N"drv/ncall" -N"misc/spuni"
 LDFLAGS		+= -N"misc/rdcsrv" -N"strmod/rpcmod"
 

@@ -56,8 +56,6 @@ CERRWARN	+= -_gcc=-Wno-uninitialized
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 
-CFLAGS		+= $(CCVERBOSE)
-
 #
 #	Default build targets.
 #

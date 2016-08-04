@@ -33,7 +33,6 @@ include ../../Makefile.cmd
 
 LDLIBS += -L$(ROOT)/usr/lib/vscan -lvscan
 LDFLAGS += -R/usr/lib/vscan
-CFLAGS += $(CCVERBOSE)
 
 C99MODE =       $(C99_ENABLE)
 

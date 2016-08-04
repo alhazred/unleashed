@@ -38,7 +38,6 @@ XPG4OBJS=	$(BLTOBJ:%=objs.xpg4/%) $(COMOBJ:%=objs.xpg4/%)
 LLDFLAGS =	'-R$$ORIGIN/../../lib'
 LLDFLAGS64 =	'-R$$ORIGIN/../../../lib/$(MACH64)'
 CPPFLAGS=	-I. -I../../include $(CPPFLAGS.master) -I$(ELFCAP)
-CFLAGS +=	$(CCVERBOSE)
 C99MODE=	$(C99_ENABLE)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized

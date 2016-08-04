@@ -33,7 +33,6 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 
 CPPFLAGS +=	-D_REENTRANT -I.. -I../../libpicl -I$(SRC)/cmd/picl/plugins/inc
-CFLAGS +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-uninitialized
 

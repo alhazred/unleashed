@@ -43,7 +43,6 @@ OPENSSLLIBS64=	$(BERLIB64) -lcrypto -lcryptoutil -lc
 SRCDIR=		../common
 INCDIR=		../../include
 
-CFLAGS		+=	$(CCVERBOSE) 
 CPPFLAGS	+=	-D_REENTRANT $(KMFINC) \
 			-I$(INCDIR) -I$(ADJUNCT_PROTO)/usr/include/libxml2
 

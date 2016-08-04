@@ -45,7 +45,6 @@ LIBS =		$(DYNLIB)
 ROOTLIBDIR	= $(ROOT_PLAT_LIBDIR)
 
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_REENTRANT -D_SNOWBIRD -I$(SRC)/uts/sun4u/sys
 LDLIBS +=	-L $(ROOT)/usr/platform/$(PLATFORM)/lib
 LDLIBS +=	-R/usr/platform/sun4u/lib

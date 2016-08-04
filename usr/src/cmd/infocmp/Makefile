@@ -31,7 +31,6 @@ include		../Makefile.cmd
 
 .KEEP_STATE:
 
-CFLAGS +=	$(CCVERBOSE)
 XGETFLAGS +=	-a -x infocmp.xcl
 LDLIBS +=	-lcurses
 CPPFLAGS +=	-I../../lib/libcurses/screen

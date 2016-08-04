@@ -30,7 +30,6 @@ include ../Makefile.cmd
 
 CFLAGS += -I$(SRC)/uts/common
 C99MODE= $(C99_ENABLE)
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-uninitialized
 

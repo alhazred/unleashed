@@ -35,7 +35,6 @@ OBJS=	dsbitmap.o
 SRCS=	$(OBJS:%.o=%.c)
 POFILE=	$(OBJS:%.o=%.po)
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 LDLIBS += -lunistat -ladm
 ROOTLINK = $(ROOTUSRSBIN)/$(PROG)

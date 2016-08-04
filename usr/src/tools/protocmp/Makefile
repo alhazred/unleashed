@@ -32,7 +32,6 @@ CLEANFILES +=	$(CMP_OBJS)
 
 include ../Makefile.tools
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-unused
 

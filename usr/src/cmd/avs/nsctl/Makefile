@@ -37,7 +37,6 @@ POFILES= $(OBJS:%.o=%.po)
 nscadm	:= POBJS = nscadm.o
 nskernd	:= POBJS = nskernd.o
 
-CFLAGS += -v
 CPPFLAGS += -DBUILD_REV_STR='"5.11"'
 NSCADM_LDLIBS = -lnsctl
 NSKERND_LDLIBS = -lnsctl -ldscfg

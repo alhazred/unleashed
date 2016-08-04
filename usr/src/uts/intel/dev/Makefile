@@ -56,7 +56,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #	Override defaults to build a unique, local modstubs.o.
 #
 MODSTUBS_DIR	 = $(OBJS_DIR)
-CFLAGS		+= $(CCVERBOSE)
 LDFLAGS		+= -dy -Nfs/devfs -Nmisc/dls
 INC_PATH	+= -I$(UTSBASE)/common/fs/zfs
 INC_PATH	+= -I$(UTSBASE)/common/io/bpf

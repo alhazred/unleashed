@@ -73,7 +73,7 @@ CLEANFILES	+= $(MODSTUBS_O)
 #
 LDFLAGS += -dy -Nmisc/kcf
 
-CFLAGS		+= $(CCVERBOSE) -I$(COM_DIR)
+CFLAGS		+= -I$(COM_DIR)
 
 CERRWARN	+= -_gcc=-Wno-parentheses
 CERRWARN	+= -_gcc=-Wno-uninitialized

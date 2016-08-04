@@ -42,7 +42,6 @@ MAPFILES +=	$(MAPFILE32)
 LIBS =		$(DYNLIB)
 
 CPPFLAGS =	-I../inc -I../../common/inc $(CPPFLAGS.master)
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lc
 
 .KEEP_STATE:

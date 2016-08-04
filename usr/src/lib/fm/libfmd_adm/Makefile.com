@@ -39,8 +39,8 @@ CLEANFILES += fmd_rpc.c fmd_xdr.c fmd_rpc_adm.h fmd_rpc_adm.x
 SRCDIR =	../common
 
 CPPFLAGS += -I../common -I.
-CFLAGS += $(CCVERBOSE) $(C_BIGPICFLAGS)
-CFLAGS64 += $(CCVERBOSE) $(C_BIGPICFLAGS)
+CFLAGS += $(C_BIGPICFLAGS)
+CFLAGS64 += $(C_BIGPICFLAGS)
 CERRWARN += -_gcc=-Wno-unused-variable
 LDLIBS += -lnvpair -lnsl -lc
 

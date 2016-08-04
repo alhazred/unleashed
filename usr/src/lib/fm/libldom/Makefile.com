@@ -39,8 +39,8 @@ LIBS = $(DYNLIB)
 
 CPPFLAGS += -I. -I$(SRC)/uts/sun4v -I$(ROOT)/usr/platform/sun4v/include \
 	-I$(ADJUNCT_PROTO)/usr/include/libxml2
-CFLAGS += $(CCVERBOSE) $(C_BIGPICFLAGS)
-CFLAGS64 += $(CCVERBOSE) $(C_BIGPICFLAGS)
+CFLAGS += $(C_BIGPICFLAGS)
+CFLAGS64 += $(C_BIGPICFLAGS)
 
 CERRWARN += -_gcc=-Wno-parentheses
 

@@ -61,7 +61,6 @@ CLEANFILES	+= $(MODSTUBS_O)
 
 CERRWARN	+= -_gcc=-Wno-uninitialized
 
-CFLAGS += $(CCVERBOSE)
 LDFLAGS += -dy -Nmisc/tem -Ndacf/consconfig_dacf
 
 #

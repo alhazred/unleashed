@@ -30,7 +30,6 @@ PROG = apptrace
 
 include ../../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 
 .KEEP_STATE:
 

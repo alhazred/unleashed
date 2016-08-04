@@ -68,8 +68,6 @@ CERRWARN	+= -_gcc=-Wno-unused-variable
 INC_PATH	+= -I$(CONF_SRCDIR) -I$(UTSBASE)/common/io/e1000api
 
 
-CFLAGS          += $(CCVERBOSE)
-
 #
 # Driver depends on MAC
 #

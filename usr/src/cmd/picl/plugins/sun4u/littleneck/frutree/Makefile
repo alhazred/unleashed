@@ -56,7 +56,6 @@ CLOBBERFILES += $(LIBLINKS)
 CPPFLAGS +=	-I$(SRC)/lib/libdevfsevent -I$(SRC)/uts/common
 CPPFLAGS +=	-D_REENTRANT
 
-CFLAGS +=	$(CCVERBOSE)
 DEVTREE_SRC_DIR = $(SRC)/cmd/picl/plugins/common/devtree
 LDLIBS +=       -L$(DEVTREE_SRC_DIR)
 LDLIBS +=       -L$(ROOT)/usr/lib/picl/plugins

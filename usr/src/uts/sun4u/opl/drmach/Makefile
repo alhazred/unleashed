@@ -57,7 +57,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 CLEANFILES      += $(DRMACH_OFFSETS_H) $(DRMACH_OFFSETS_OUT)
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-unused-function
 CERRWARN += -_gcc=-Wno-uninitialized

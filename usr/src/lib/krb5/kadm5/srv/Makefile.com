@@ -85,7 +85,7 @@ CPPFLAGS += -I.. -I../.. -I../../.. \
 	-DHAVE_REGEXEC=1 -DHAVE_STRFTIME=1 -DHAVE_VSPRINTF=1 \
 	-DUSE_KADM5_API_VERSION=2
 
-CFLAGS +=	$(CCVERBOSE) -I..
+CFLAGS +=	-I..
 
 CERRWARN +=	-_gcc=-Wno-unused-function
 CERRWARN +=	-_gcc=-Wno-unused-variable

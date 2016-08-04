@@ -26,7 +26,6 @@
 
 include $(SRC)/cmd/Makefile.cmd
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRC)/cmd/svr4pkg/hdrs \
 		-I$(SRC)/lib/libpkg/common \
 		-I$(SRC)/lib/libinstzones/common \

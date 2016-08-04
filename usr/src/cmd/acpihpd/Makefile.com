@@ -38,7 +38,6 @@ OBJS =	acpihpd.o notify.o
 SRCS =	$(OBJS:%.o=../%.c)
 CLOBBERFILES = $(LIBS)
 
-CFLAGS += $(CCVERBOSE)
 CPPFLAGS += -I$(USR_PSM_INCL_DIR)
 LDLIBS += -lsysevent -lnvpair -lcfgadm
 

@@ -1044,7 +1044,7 @@ include ../../Makefile.lib
 # be building a variant object (still libc.so.1, but different filename)
 SONAME = libc.so.1
 
-CFLAGS += $(CCVERBOSE) $(CTF_FLAGS)
+CFLAGS += $(CTF_FLAGS)
 
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-switch

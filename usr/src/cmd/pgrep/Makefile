@@ -35,7 +35,6 @@ POFILES = $(OBJS:.o=.po)
 include ../Makefile.cmd
 
 CLOBBERFILES += $(PKILLFILE)
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-parentheses
 LDLIBS += -luutil -lproject -lcontract
 

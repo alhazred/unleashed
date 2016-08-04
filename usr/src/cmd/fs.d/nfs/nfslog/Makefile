@@ -37,7 +37,6 @@ LOCAL=		process_buffer.o fhtab.o nfslogd.o nfslog_elf.o \
 OBJS=		$(LOCAL) $(COMMON)
 SRCS=		$(LOCAL:%.o=%.c) $(COMMON:%.o=../lib/%.c)
 LDLIBS +=	-lsocket -lnsl
-CFLAGS += 	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-switch

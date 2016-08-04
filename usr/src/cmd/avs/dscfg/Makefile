@@ -38,7 +38,7 @@ SUBDIRS= etc
 
 OBJS=	dscfg.o	
 
-CFLAGS += $(CCVERBOSE) -D_SYSCALL32
+CFLAGS += -D_SYSCALL32
 CERRWARN += -_gcc=-Wno-unused-variable
 CERRWARN += -_gcc=-Wno-address
 LDLIBS += -ldscfg -lunistat

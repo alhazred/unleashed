@@ -31,7 +31,6 @@ XPG4PROG= nice
 OBJS= nice.o
 
 include ../Makefile.cmd
-CFLAGS += $(CCVERBOSE)
 
 clean $(XPG4) := OBJS += values-xpg4.o
 

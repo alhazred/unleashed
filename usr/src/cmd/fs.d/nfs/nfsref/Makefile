@@ -30,7 +30,7 @@ POFILE=		nfsref.po
 
 include		../../../Makefile.cmd
 
-CFLAGS +=	$(CCVERBOSE) -I../lib
+CFLAGS +=	-I../lib
 OBJS=	nfsref.o ref_subr.o
 SRCS=	nfsref.c
 

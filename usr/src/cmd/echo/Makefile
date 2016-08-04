@@ -25,7 +25,6 @@ PROG= echo
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 
 .KEEP_STATE:
 

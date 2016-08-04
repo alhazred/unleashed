@@ -46,8 +46,6 @@ ROOTMODULE	= $(ROOT_PSM_DRV_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sun4u/Makefile.sun4u
 
-CFLAGS += $(CCVERBOSE)
-
 #
 #       Define targets
 #

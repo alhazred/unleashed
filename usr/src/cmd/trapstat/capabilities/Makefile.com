@@ -28,7 +28,6 @@ include		$(SRC)/cmd/Makefile.cmd
 MAPFILE-CAP =	mapfile-cap
 MAPOPT-CAP =	$(MAPFILE-CAP:%=-M%)
 
-CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-I$(SRC)/uts/sun4 -I../../sun4 -D$(PLATFORM)
 
 OBJCAP =	objcap.o

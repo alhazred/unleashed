@@ -30,7 +30,6 @@ SRCS= mkdir.c ../chmod/common.c
 
 include ../Makefile.cmd
 
-CFLAGS += $(CCVERBOSE)
 CERRWARN += -_gcc=-Wno-uninitialized
 CERRWARN += -_gcc=-Wno-parentheses
 LDLIBS += -lgen

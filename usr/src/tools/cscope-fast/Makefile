@@ -50,7 +50,6 @@ CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
 CERRWARN +=	-_gcc=-Wno-unused
 CERRWARN +=	-_gcc=-Wno-uninitialized
 
-CFLAGS +=	$(CCVERBOSE)
 LDLIBS +=	-lcurses -ll
 
 .KEEP_STATE:
@@ -58,9 +57,6 @@ LDLIBS +=	-lcurses -ll
 .PARALLEL: $(OBJS)
 
 all:	$(PROG)
-
-# because of goto's in the scanner
-scanner.o := CCVERBOSE=
 
 $(PROG): $(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)

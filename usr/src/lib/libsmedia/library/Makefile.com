@@ -40,8 +40,6 @@ LIBS = $(DYNLIB)
 CLEANFILES +=	$(DERIVED_FILES:%=../common/%)
 
 CPPFLAGS += -D_REENTRANT -I$(SRC)/cmd/smserverd/
-CFLAGS +=	$(CCVERBOSE) 
-CFLAGS64 +=	$(CCVERBOSE)
 
 CERRWARN +=	-_gcc=-Wno-unused-variable
 

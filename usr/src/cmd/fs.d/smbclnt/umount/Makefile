@@ -40,7 +40,6 @@ SRCS=		$(LIBPROG).c $(FSLIBSRC)
 $(ROOTLIBFSTYPE)/umount := FILEMODE= 04555
 
 CPPFLAGS += -I../.. -I../lib
-CFLAGS += $(CCVERBOSE)
 
 #
 # Message catalog

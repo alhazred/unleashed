@@ -22,7 +22,6 @@ SRCS=		$(OBJS:%.o=%.c)
 
 include		$(SRC)/cmd/Makefile.cmd
 
-CFLAGS +=	$(CCVERBOSE)
 
 ROOTLINKS=	$(LINKS:%=$(ROOTBIN)/%) $(LIBLINKS:%=$(ROOTLIB)/%)
 

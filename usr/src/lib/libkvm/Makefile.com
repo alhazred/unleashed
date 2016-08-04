@@ -35,7 +35,6 @@ SRCDIR =	../common
 
 LIBS =		$(DYNLIB)
 
-CFLAGS	+=	$(CCVERBOSE)
 DYNFLAGS32 +=	-Wl,-f,/usr/platform/\$$PLATFORM/lib/$(DYNLIBPSR)
 DYNFLAGS64 +=	-Wl,-f,/usr/platform/\$$PLATFORM/lib/$(MACH64)/$(DYNLIBPSR)
 LDLIBS +=	-lelf -lc

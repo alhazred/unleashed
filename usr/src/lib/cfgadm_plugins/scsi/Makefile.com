@@ -37,7 +37,6 @@ ROOTLIBDIR64=	$(ROOTLIBDIR)/$(MACH64)
 
 LIBS=	$(DYNLIB)
 
-CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-char-subscripts
 CERRWARN +=	-_gcc=-Wno-uninitialized

@@ -54,7 +54,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 #	Overrides.
 #
-CFLAGS		+= $(CCVERBOSE)
 LDFLAGS		+= -dy -Nmisc/mac
 INC_PATH	+= -I$(UTSBASE)/common/io/bpf
 
