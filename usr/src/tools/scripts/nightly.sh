@@ -186,15 +186,16 @@ function build {
 	exec >> ${SRC}/${INSTALLOG}.out
 	exec 2>&1
 	time {
-	$MAKE -e install
+	$MAKE -e install || echo "$MAKE -e install" >> $TMPDIR/build_fail
 	# unlike dmake, bmake's environment should be quite clean (for example
 	# MAKE and MAKEFLAGS are not desired). additionally bmake's "install"
 	# targets don't depend on "all" so we can't make both with the same
 	# invocation without races
 	env -i PATH=${GCC_ROOT}/bin:/usr/bin bmake -j $DMAKE_MAX_JOBS \
-	    -C $CODEMGR_WS all
+	    -C $CODEMGR_WS all || echo "bmake all" >> $TMPDIR/build_fail
 	env -i PATH=${GCC_ROOT}/bin:/usr/bin bmake -j $DMAKE_MAX_JOBS \
-	    -C $CODEMGR_WS DESTDIR=$ROOT MK_INSTALL_AS_USER=yes install
+	    -C $CODEMGR_WS DESTDIR=$ROOT MK_INSTALL_AS_USER=yes install || \
+	    touch $TMPDIR/build_fail || echo "bmake install"
 	} | tee -a $LOGFILE
 	)
 
@@ -202,7 +203,9 @@ function build {
 		egrep -e "(^(${MAKE}:|bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
 		    ${SRC}/${INSTALLOG}.out | tee $TMPDIR/build_errs${SUFFIX} \
 		    >> $mail_msg_file
-	if [[ -s $TMPDIR/build_errs${SUFFIX} ]]; then
+	if [[ -s $TMPDIR/build_fail ]]; then
+		sed 's,$, returned non-zero exit status,' $TMPDIR/build_fail \
+		    >> $mail_msg_file
 		build_ok=n
 		this_build_ok=n
 	fi
