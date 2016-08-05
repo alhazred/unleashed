@@ -195,7 +195,7 @@ function build {
 	    -C $CODEMGR_WS all || echo "bmake all" >> $TMPDIR/build_fail
 	env -i PATH=${GCC_ROOT}/bin:/usr/bin bmake -j $DMAKE_MAX_JOBS \
 	    -C $CODEMGR_WS DESTDIR=$ROOT MK_INSTALL_AS_USER=yes install || \
-	    touch $TMPDIR/build_fail || echo "bmake install"
+	    echo "bmake install" >> $TMPDIR/build_fail
 	} | tee -a $LOGFILE
 	)
 
