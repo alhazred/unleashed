@@ -141,7 +141,7 @@ read_stage1_from_file(char *path, ib_data_t *dest)
 {
 	int	fd;
 
-	assert(dest);
+	assert(dest != NULL);
 
 	/* read the stage1 file from filesystem */
 	fd = open(path, O_RDONLY);
@@ -252,15 +252,9 @@ read_bootblock_from_disk(ib_device_t *device, ib_bootblock_t *bblock,
 		offset = BBLK_ZFS_BLK_OFF * SECTOR_SIZE;
 		*path = device->target.path;
 	} else {
-		if (device->devtype == IG_DEV_MBR) {
-			dev_fd = device->fd;
-			offset = BBLK_BLKLIST_OFF * SECTOR_SIZE;
-			*path = device->path;
-		} else {
-			dev_fd = device->stage.fd;
-			offset = device->stage.offset * SECTOR_SIZE;
-			*path = device->stage.path;
-		}
+		dev_fd = device->stage.fd;
+		offset = device->stage.offset * SECTOR_SIZE;
+		*path = device->stage.path;
 	}
 
 	if (read_in(dev_fd, mboot_scan, sizeof (mboot_scan), offset)
@@ -449,12 +443,8 @@ prepare_stage1(ib_data_t *data)
 		*((uint64_t *)(data->stage1 + STAGE1_STAGE2_LBA)) =
 		    device->target.start + device->target.offset;
 	else {
-		if (device->devtype == IG_DEV_MBR)
-			*((uint64_t *)(data->stage1 + STAGE1_STAGE2_LBA)) =
-			    BBLK_BLKLIST_OFF;
-		else
-			*((uint64_t *)(data->stage1 + STAGE1_STAGE2_LBA)) =
-			    device->stage.start + device->stage.offset;
+		*((uint64_t *)(data->stage1 + STAGE1_STAGE2_LBA)) =
+		    device->stage.start + device->stage.offset;
 	}
 
 	/*
@@ -518,23 +508,15 @@ write_bootblock(ib_data_t *data)
 		offset = BBLK_ZFS_BLK_OFF * SECTOR_SIZE;
 		path = device->target.path;
 	} else {
-		if (device->devtype == IG_DEV_MBR) {
-			dev_fd = device->fd;
-			abs = BBLK_BLKLIST_OFF;
-			offset = BBLK_BLKLIST_OFF * SECTOR_SIZE;
-			path = device->path;
-		} else {
-			dev_fd = device->stage.fd;
-			abs = device->stage.start + device->stage.offset;
-			offset = device->stage.offset * SECTOR_SIZE;
-			path = device->stage.path;
-			if (bblock->buf_size >
-			    (device->stage.size - device->stage.offset) *
-			    SECTOR_SIZE) {
-				(void) fprintf(stderr, gettext("Device %s is "
-				    "too small to fit the stage2\n"), path);
-				return (BC_ERROR);
-			}
+		dev_fd = device->stage.fd;
+		abs = device->stage.start + device->stage.offset;
+		offset = device->stage.offset * SECTOR_SIZE;
+		path = device->stage.path;
+		if (bblock->buf_size >
+		    (device->stage.size - device->stage.offset) * SECTOR_SIZE) {
+			(void) fprintf(stderr, gettext("Device %s is "
+			    "too small to fit the stage2\n"), path);
+			return (BC_ERROR);
 		}
 	}
 	ret = write_out(dev_fd, bblock->buf, bblock->buf_size, offset);
@@ -567,7 +549,8 @@ write_stage1(ib_data_t *data)
 	 * space, we will not write to pcfs target.
 	 * In addition, in VTOC setup, we will only write VBR to slice 2.
 	 */
-	if (strcmp(device->target.path, device->stage.path)) {
+	if (device->stage.start != 0 &&
+	    strcmp(device->target.path, device->stage.path)) {
 		/* we got separate stage area, use it */
 		if (write_out(device->stage.fd, data->stage1,
 		    sizeof (data->stage1), 0) != BC_SUCCESS) {
@@ -669,6 +652,7 @@ get_start_sector(ib_device_t *device)
 
 	mboot = (struct mboot *)device->mbr;
 
+	/* For MBR we have device->stage filled already. */
 	if (device->devtype == IG_DEV_MBR) {
 		/* MBR partition starts from 0 */
 		pno = device->target.id - 1;
@@ -691,19 +675,6 @@ get_start_sector(ib_device_t *device)
 		if (device->target.fstype == IG_FS_ZFS)
 			device->target.offset = BBLK_ZFS_BLK_OFF;
 
-		pno = device->stage.id - 1;
-		part = (struct ipart *)mboot->parts + pno;
-
-		if (part->relsect == 0) {
-			(void) fprintf(stderr, gettext("Partition %d of the "
-			    "disk has an incorrect offset\n"),
-			    device->stage.id);
-			return (BC_ERROR);
-		}
-		device->stage.start = part->relsect;
-		device->stage.size = part->numsect;
-		if (device->target.fstype == IG_FS_ZFS)
-			device->stage.offset = BBLK_ZFS_BLK_OFF;
 		goto found_part;
 	}
 
@@ -882,7 +853,62 @@ open_device(char *path)
 }
 
 static int
-get_boot_partition(ib_device_t *device, struct dk_gpt *vtoc)
+get_boot_partition(ib_device_t *device, struct mboot *mbr)
+{
+	struct ipart *part;
+	char *path, *ptr;
+	int i;
+
+	part = (struct ipart *) mbr->parts;
+	for (i = 0; i < FD_NUMPART; i++) {
+		if (part[i].systid == X86BOOT)
+			break;
+	}
+
+	/* no X86BOOT, try to use space between MBR and first partition */
+	if (i == FD_NUMPART) {
+		device->stage.path = strdup(device->path);
+		if (device->stage.path == NULL) {
+			perror(gettext("Memory allocation failure"));
+			return (BC_ERROR);
+		}
+		device->stage.fd = dup(device->fd);
+		device->stage.id = 0;
+		device->stage.devtype = IG_DEV_MBR;
+		device->stage.fstype = IG_FS_NONE;
+		device->stage.start = 0;
+		device->stage.size = part[0].relsect;
+		device->stage.offset = BBLK_BLKLIST_OFF;
+		return (BC_SUCCESS);
+	}
+
+	if ((path = strdup(device->path)) == NULL) {
+		perror(gettext("Memory allocation failure"));
+		return (BC_ERROR);
+	}
+
+	ptr = strrchr(path, 'p');
+	ptr++;
+	*ptr = '\0';
+	(void) asprintf(&ptr, "%s%d", path, i+1); /* partitions are p1..p4 */
+	free(path);
+	if (ptr == NULL) {
+		perror(gettext("Memory allocation failure"));
+		return (BC_ERROR);
+	}
+	device->stage.path = ptr;
+	device->stage.fd = open_device(ptr);
+	device->stage.id = i + 1;
+	device->stage.devtype = IG_DEV_MBR;
+	device->stage.fstype = IG_FS_NONE;
+	device->stage.start = part[i].relsect;
+	device->stage.size = part[i].numsect;
+	device->stage.offset = 1; /* leave sector 0 for VBR */
+	return (BC_SUCCESS);
+}
+
+static int
+get_boot_slice(ib_device_t *device, struct dk_gpt *vtoc)
 {
 	uint_t i;
 	char *path, *ptr;
@@ -980,14 +1006,17 @@ init_device(ib_device_t *device, char *path)
 
 	device->devtype = IG_DEV_VTOC;
 	if (efi_alloc_and_read(device->fd, &vtoc) >= 0) {
-		ret = get_boot_partition(device, vtoc);
+		ret = get_boot_slice(device, vtoc);
 		device->devtype = IG_DEV_EFI;
 		efi_free(vtoc);
 		if (ret == BC_ERROR)
 			return (BC_ERROR);
-	} else if (device->target.path[pathlen - 2] == 'p')
+	} else if (device->target.path[pathlen - 2] == 'p') {
 		device->devtype = IG_DEV_MBR;
-	else if (device->target.path[pathlen - 1] == '2') {
+		ret = get_boot_partition(device, (struct mboot *)device->mbr);
+		if (ret == BC_ERROR)
+			return (BC_ERROR);
+	} else if (device->target.path[pathlen - 1] == '2') {
 		/*
 		 * NOTE: we could relax there and allow zfs boot on
 		 * slice 2 for instance, but lets keep traditional limits.
