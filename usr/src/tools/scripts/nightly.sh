@@ -199,7 +199,7 @@ function build {
 	)
 
 	echo "\n==== Build errors ($LABEL) ====\n" >> $mail_msg_file
-		egrep -e "(^(${MAKE}:|bmake[^\s]*:|\*\*\*)|[ 	]error[: 	\n])" \
+		egrep -e "(^(${MAKE}:|bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
 		    ${SRC}/${INSTALLOG}.out | tee $TMPDIR/build_errs${SUFFIX} \
 		    >> $mail_msg_file
 	if [[ -s $TMPDIR/build_errs${SUFFIX} ]]; then
