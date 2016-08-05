@@ -1222,6 +1222,7 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 	int ret = BE_SUCCESS;
 	boolean_t be_mounted = B_FALSE;
 	boolean_t update = B_FALSE;
+	boolean_t verbose = B_FALSE;
 
 	/*
 	 * check versions. This call is to support detached
@@ -1233,6 +1234,7 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 		if (ret != BE_SUCCESS || update == B_FALSE)
 			return (ret);
 	}
+	verbose = do_print;
 
 	if ((zhp = zfs_open(g_zfs, bt->obe_root_ds, ZFS_TYPE_FILESYSTEM)) ==
 	    NULL) {
@@ -1326,7 +1328,9 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 	for (c = 0; c < children; c++) {
 		uint_t i, nchildren = 0;
 		nvlist_t **nvchild;
-		vname = zpool_vdev_name(g_zfs, zphp, child[c], B_FALSE);
+
+		/* ensure update on child status */
+		vname = zpool_vdev_name(g_zfs, zphp, child[c], verbose);
 		if (vname == NULL) {
 			be_print_err(gettext(
 			    "be_do_installboot: "
@@ -1334,30 +1338,49 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 			    libzfs_error_description(g_zfs));
 			ret = zfs_err_to_be_err(g_zfs);
 			goto done;
+		} else if (verbose == B_TRUE) {
+			be_print_err(gettext("be_do_installboot: "
+			    "device %s\n"), vname);
 		}
-		if (strcmp(vname, "mirror") == 0 ||
-		    strcmp(vname, "raidz") == 0 ||
-		    vname[0] != 'c') {
-			free(vname);
+		free(vname);
 
-			if (nvlist_lookup_nvlist_array(child[c],
-			    ZPOOL_CONFIG_CHILDREN, &nvchild, &nchildren) != 0) {
+		ret = nvlist_lookup_nvlist_array(child[c],
+		    ZPOOL_CONFIG_CHILDREN, &nvchild, &nchildren);
+		if (ret != 0) {
+			if (ret != ENOENT) {
 				be_print_err(gettext("be_do_installboot: "
 				    "failed to traverse the vdev tree: %s\n"),
 				    libzfs_error_description(g_zfs));
 				ret = zfs_err_to_be_err(g_zfs);
 				goto done;
 			}
+			nchildren = 0;	/* This is leaf device. */
+		}
 
+		if (nchildren != 0) {
 			for (i = 0; i < nchildren; i++) {
+				/* ensure update on child status */
+				vname = zpool_vdev_name(g_zfs, zphp,
+				    nvchild[i], verbose);
+				if (vname == NULL) {
+					be_print_err(gettext(
+					    "be_do_installboot: "
+					    "failed to get device name: %s\n"),
+					    libzfs_error_description(g_zfs));
+					ret = zfs_err_to_be_err(g_zfs);
+					goto done;
+				} else if (verbose == B_TRUE) {
+					be_print_err(gettext(
+					    "be_do_installboot: device %s\n"),
+					    vname);
+				}
+				free(vname);
 				ret = be_do_installboot_helper(zphp, nvchild[i],
 				    stage1, stage2, flags);
 				if (ret != BE_SUCCESS)
 					goto done;
 			}
 		} else {
-			free(vname);
-
 			ret = be_do_installboot_helper(zphp, child[c], stage1,
 			    stage2, flags);
 			if (ret != BE_SUCCESS)
