@@ -86,7 +86,7 @@ $(TSTDIR):
 	$(INS.dir)
 
 $(TSTDIR)/%: %
-	$(INS) -s -d -m $(DIRMODE) $(@D)
+	$(INS) -d -m $(DIRMODE) $(@D)
 	$(INS.file)
 
 %.exe: %.c

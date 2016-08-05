@@ -49,10 +49,10 @@ install: all $(ROOTINIT_DPROG1) $(ROOTINIT_DPROG2) $(CLUSTERSBINDIR) \
 	$(CP) $(ROOTINIT_D)/sv.cluster $(CLUSTERSBINDIR)/sv
 
 $(ROOTINIT_DPROG1): sv
-	$(INS.file) sv
+	$(INS) -m $(FILEMODE) sv $@
 
 $(ROOTINIT_DPROG2): sv.cluster
-	$(INS.file) sv.cluster
+	$(INS) -m $(FILEMODE) sv.cluster $@
 
 $(CLUSTERLIBSTOPDIR):
 	$(INS.dir)

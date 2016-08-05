@@ -71,7 +71,6 @@ $(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/elfextract mode=0555
 file path=opt/onbld/bin/$(ARCH)/findunref mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/forth mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/forth_preload.so.1 mode=0555
-file path=opt/onbld/bin/$(ARCH)/install mode=0555
 $(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/mbh_patch mode=0555
 file path=opt/onbld/bin/$(ARCH)/ndrgen mode=0555
 file path=opt/onbld/bin/$(ARCH)/ndrgen1 mode=0555
@@ -200,7 +199,6 @@ file path=opt/onbld/man/man1onbld/which_scm.1onbld
 file path=opt/onbld/man/man1onbld/ws.1onbld
 file path=opt/onbld/man/man1onbld/wsdiff.1onbld
 file path=opt/onbld/man/man1onbld/xref.1onbld
-hardlink path=opt/onbld/bin/$(ARCH)/install.bin target=./install
 legacy pkg=SUNWonbld desc="tools used to build the OS-Net consolidation" \
     name="OS-Net Build Tools" version=11.11,REV=2009.10.22
 license cr_Sun license=cr_Sun

@@ -216,13 +216,13 @@ $(ROOTPDIR): $(ROOT)/usr/lib/fm
 	$(INS.dir)
 
 $(ROOTPROG): $(ROOTPDIR) $(PROG)
-	$(RM) $@; $(INS) -s -m 0555 -f $(@D) $(PROG)
+	$(INS) -m 0555 $(PROG) $@
 
 $(ROOT)/usr/lib/mdb/proc: $(ROOT)/usr/lib/mdb
 	$(INS.dir)
 
 $(ROOTDMOD): $(ROOT)/usr/lib/mdb/proc $(DMOD)
-	$(RM) $@; $(INS) -s -m 0555 -f $(@D) $(DMOD)
+	$(INS) -m 0555 $(DMOD) $@
 
 install_h: $(ROOTHDIR) $(ROOTHDRS)
 

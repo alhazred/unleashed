@@ -92,7 +92,7 @@ $(ROOTMANIFESTDIR)/%.xml: ../common/%.xml
 	$(INS.file)
 
 $(ROOTMANIFESTDIR)/notify-params.xml: ../../notify-params.xml
-	$(INS.file) ../../notify-params.xml
+	$(INS) -m $(FILEMODE) ../../notify-params.xml $@
 
 install_h:
 

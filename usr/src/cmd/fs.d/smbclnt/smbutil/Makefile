@@ -64,7 +64,7 @@ $(PROG):	$(OBJS)
 install:	all $(ROOTPROG)
 
 $(ROOTPROG):	$(PROG)
-	$(INS.file) $(PROG)
+	$(INS) -m $(FILEMODE) $(PROG) $@
 
 catalog: $(POFILE)
 

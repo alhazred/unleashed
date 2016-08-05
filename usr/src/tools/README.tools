@@ -172,12 +172,6 @@ hg-active
 	helper used by webrev to generate file lists for Mercurial
 	workspaces.
 
-install.bin
-	binary version of /usr/sbin/install. Used to be vastly faster
-	(since /usr/sbin/install is a shell script), but may only be a bit
-	faster now. One speedup includes avoiding the name service for the
-	well-known, never-changing password entries like 'root' and 'sys.'
-
 interface_check
 	detects and reports invalid versioning in ELF objects.
 	Optionally generates an interface description file for

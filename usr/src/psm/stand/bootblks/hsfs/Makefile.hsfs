@@ -57,7 +57,7 @@ USR_SBIN_INSTALLBOOT	= $(USR_SBIN)/$(INSTALLBOOT)
 #
 # Overrides for installing installboot.
 #
-INS.file.555		= $(RM) $@; $(INS) -s -m 555 -f $(@D) $<
+INS.file.555		= $(INS) -m 555 $< $@
 
 #
 # dependencies

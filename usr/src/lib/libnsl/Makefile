@@ -102,8 +102,7 @@ $(PROTOCOL_DIR)/%.h:	$(PROTOCOL_SRCDIR)/%.h
 $(PROTOCOL_DIR)/nis.h:	$(PROTOCOL_SRCDIR)/nis.x $(PROTOCOL_SRCDIR)/nis_object.x
 	$(RPCGEN) -C -h $(PROTOCOL_SRCDIR)/nis.x > nis-tmp.h
 	$(SED) -e '/EDIT_START/,$$ d' < nis-tmp.h > nis.h
-	$(RM) $@
-	$(INS) -s -m $(FILEMODE) -f $(@D) nis.h
+	$(INS) -m $(FILEMODE) nis.h $@
 	$(RM) nis.h nis-tmp.h
 
 $(PROTOCOL_DIR)/%.x:	$(PROTOCOL_SRCDIR)/%.x

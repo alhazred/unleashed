@@ -101,7 +101,6 @@ MACH=`uname -p`; export MACH
 TMPDIR=/tmp; export TMPDIR
 NODENAME=`uname -n`; export NODENAME
 PATH="$PUBLIC/bin:$PUBLIC/bin/$MACH:/opt/onbld/bin:/opt/onbld/bin/$MACH:/opt/SUNWspro/bin:/opt/teamware/ParallelMake/bin:/usr/ccs/bin:/usr/bin:/usr/sbin:/usr/openwin/bin:."; export PATH
-INS=/opt/onbld/bin/$MACH/install.bin; export INS
 MAKEFLAGS=e; export MAKEFLAGS
 
 #

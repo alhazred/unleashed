@@ -40,7 +40,6 @@ COMMON_SUBDIRS= \
 	depcheck \
 	env \
 	findunref \
-	install.bin \
 	ndrgen \
 	onbld \
 	pmodes \

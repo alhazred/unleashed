@@ -59,8 +59,7 @@ clobber: clean
 install_h:
 
 $(ROOTCONF): $$(@D) $(CONF)
-	$(RM) $@ 
-	$(INS) -s -m 0644 -f $(@D) $(CONF)
+	$(INS) -m 0644 $(CONF) $@
 	$(RM) $(plat_ROOTPROG)
 	$(LN) -s $(sun4v_ROOTPROG) $(plat_ROOTPROG)
 

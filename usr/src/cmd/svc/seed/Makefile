@@ -187,16 +187,13 @@ miniroot.db: common.db $(MINIROOT_DESCRIPTIONS) $(CONFIGD) $(SVCCFG)
 install: install_global install_nonglobal install_miniroot
 
 install_global: global.db
-	$(RM) $(LIBSVCSEED)/global.db
-	$(INS) -f $(LIBSVCSEED) -m $(SEEDFILEMODE) -s global.db
+	$(INS) -m $(SEEDFILEMODE) global.db $(LIBSVCSEED)/
 
 install_nonglobal: nonglobal.db
-	$(RM) $(LIBSVCSEED)/nonglobal.db
-	$(INS) -f $(LIBSVCSEED) -m $(SEEDFILEMODE) -s nonglobal.db
+	$(INS) -m $(SEEDFILEMODE) -s nonglobal.db $(LIBSVCSEED)/
 
 install_miniroot: $(INSTALLSEED) miniroot.db
-	$(RM) $(INSTALLSEED)/miniroot.db
-	$(INS) -f $(INSTALLSEED) -m $(SEEDFILEMODE) -s miniroot.db
+	$(INS) -m $(SEEDFILEMODE) miniroot.db $(INSTALLSEED)/
 
 $(INSTALLSEED):
 	$(INS.dir)

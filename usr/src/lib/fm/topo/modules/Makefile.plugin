@@ -105,7 +105,7 @@ check:	$(CHECKHDRS)
 install_h:
 
 $(ROOTPROG): $$(@D) $(PROG)
-	$(RM) $@; $(INS) -s -m 0555 -f $(@D) $(PROG)
+	$(INS) -m 0555 $(PROG) $@
 
 install: $(ROOTPROG)
 

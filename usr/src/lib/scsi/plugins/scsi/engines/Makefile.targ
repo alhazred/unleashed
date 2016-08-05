@@ -58,12 +58,12 @@ clobber: clean
 install_h:
 
 $(ROOTPROG): $$(@D) $(PROG)
-	$(RM) $@; $(INS) -s -m 0755 -f $(@D) $(PROG)
+	$(INS) -m 0755 $(PROG) $@
 
 $(ROOTPROG64): $$(@D) $(PROG)
-	$(RM) $@; $(INS) -s -m 0755 -f $(@D) $(PROG)
+	$(INS) -m 0755 $(PROG) $@
 
 $(ROOTDMOD): $$(@D) $(DMODPROG)
-	$(RM) $@; $(INS) -s -m 0755 -f $(@D) $(DMODPROG)
+	$(INS) -m 0755 $(DMODPROG) $@
 
 include ../../../../../Makefile.rootdirs

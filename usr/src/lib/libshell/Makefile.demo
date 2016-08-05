@@ -173,7 +173,7 @@ $(ROOTDEMODIRBASE)/bin/%	 := FILEMODE= 755
 
 $(ROOTDEMODIRBASE)/bin/%: common/scripts/%.sh
 	/usr/bin/shcomp "$<" >"$(@F)"
-	$(INS) -s -m $(FILEMODE) -f $(@D) "$(@F)"
+	$(INS) -m $(FILEMODE) "$(@F)" $@
 	$(RM) "$(@F)"
 
 $(ROOTDEMODIRBASE)/src/%.sh: common/scripts/%.sh

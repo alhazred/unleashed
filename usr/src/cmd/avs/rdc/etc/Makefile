@@ -55,13 +55,13 @@ install: $(ROOTINIT_DPROG1) $(ROOTINIT_DPROG2) $(ROOTINIT_DPROG3) $(ROOTLIBSVCME
 	$(CP) $(ROOTINIT_D)/rdc.cluster $(CLUSTERSBINDIR)/rdc
 
 $(ROOTINIT_DPROG1): $(PROG1)
-	$(INS.file) $(PROG1)
+	$(INS) -m $(FILEMODE) $(PROG1) $@
 
 $(ROOTINIT_DPROG2): $(PROG2)
-	$(INS.file) $(PROG2)
+	$(INS) -m $(FILEMODE) $(PROG2) $@
 
 $(ROOTINIT_DPROG3): $(PROG3)
-	$(INS.file) $(PROG3)
+	$(INS) -m $(FILEMODE) $(PROG3) $@
 
 clean:
 	$(RM) $(SHFILES)

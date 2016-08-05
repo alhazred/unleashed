@@ -88,6 +88,6 @@ $($(CLASS)_ROOTTOPOROOT)/%: %
 	$(INS.file)
 
 $(ROOTDTDTARG): $$(@D)
-	$(RM) $@; $(INS) -s -m 0444 -f $(@D) $(DTDSRC)
+	$(INS) -m 0444 $(DTDSRC) $@
 
 install: all $(ROOTDTDTARG) $(ROOTTOPOROOT) $(ROOTTOPOMAPS)
