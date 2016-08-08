@@ -338,29 +338,6 @@ error(const char *arg)
 	exit(2);
 }
 
-/*
- * Add the current favourite set of warnings to the gcc invocation.
- */
-static void
-warnings(struct aelist *h)
-{
-	static int warningsonce;
-
-	if (warningsonce++) {
-		(void) fprintf(stderr, "%s: error: multiple -v\n",
-			       progname);
-		exit(1);
-		return;
-	}
-
-	/*
-	 * Enable as many warnings as exist, then disable those that we never
-	 * ever want.
-	 */
-	newae(h, "-Wall");
-	newae(h, "-Wextra");
-}
-
 static void
 usage()
 {
@@ -591,13 +568,6 @@ do_gcc(cw_ictx_t *ctx)
 		case 't':
 			if (arglen == 1) {
 				newae(ctx->i_ae, "-Wl,-t");
-				break;
-			}
-			error(arg);
-			break;
-		case 'v':
-			if (arglen == 1) {
-				warnings(ctx->i_ae);
 				break;
 			}
 			error(arg);
