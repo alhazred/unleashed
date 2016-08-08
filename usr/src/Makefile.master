@@ -711,7 +711,7 @@ ZREDLOCSYM=	-zredlocsym
 ZTEXT=		-ztext
 ZVERBOSE=	-zverbose
 
-GSHARED=	-G
+GSHARED=	-_gcc=-shared
 CCMT=		-D_REENTRANT
 
 # Handle different PIC models on different ISAs

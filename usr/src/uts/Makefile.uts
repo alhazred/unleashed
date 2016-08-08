@@ -306,7 +306,7 @@ IPCTF		= $(IPDRV_DIR)/$(OBJS_DIR)/ipctf.a
 # tripping over code that isn't really suitable for shared libraries.
 #
 BUILD.SO		= \
-	$(LD) -o $@ $(GSHARED) $(ZNORELOC) -h $(SONAME)
+	$(LD) -o $@ -G $(ZNORELOC) -h $(SONAME)
 
 #
 # SONAME defaults for common fake shared libraries.

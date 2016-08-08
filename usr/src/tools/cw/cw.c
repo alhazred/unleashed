@@ -48,7 +48,6 @@
  * -errtags=<a>	Display messages with tags a(no, yes)
  *		as errors
  * -flags	Show this summary of compiler options
- * -G		Build a dynamic shared library
  * -g		Compile for debugging
  * -H		Print path name of each file included during compilation
  * -h <name>	Assign <name> to generated dynamic shared library
@@ -104,7 +103,6 @@
  * -E				pass-thru
  * -errtags=%all		-Wall
  * -flags			--help
- * -G				pass-thru
  * -g				pass-thru
  * -H				pass-thru
  * -h <name>			pass-thru
@@ -360,6 +358,9 @@ do_gcc(cw_ictx_t *ctx)
 				newae(ctx->i_ae, arg + 6);
 			else
 				error(arg);
+
+			if (strcmp(arg, "-_gcc=-shared") == 0)
+				nolibc = 1;
 			break;
 		case 'g':
 			newae(ctx->i_ae, "-gdwarf-2");
@@ -418,10 +419,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (strcmp(arg, "-D_KERNEL") == 0 ||
 			    strcmp(arg, "-D_BOOT") == 0)
 				newae(ctx->i_ae, "-ffreestanding");
-			break;
-		case 'G':
-			newae(ctx->i_ae, "-shared");
-			nolibc = 1;
 			break;
 		case 'K':
 			if (arglen == 1) {

@@ -79,43 +79,43 @@ dumpbind: \
 
 lib32/bindings.so.1: \
 	obj32/bindings.o obj32/env.o
-	$(LINK.c) -G obj32/bindings.o obj32/env.o -o $@ $(LDLIBS)
+	$(LINK.c) $(GSHARED) obj32/bindings.o obj32/env.o -o $@ $(LDLIBS)
 
 lib64/bindings.so.1: \
 	obj64/bindings.o obj64/env.o
-	$(LINK.c) -G obj64/bindings.o obj64/env.o -o $@ $(LDLIBS)
+	$(LINK.c) $(GSHARED) obj64/bindings.o obj64/env.o -o $@ $(LDLIBS)
 
 lib32/perfcnt.so.1: \
 	obj32/perfcnt.o obj32/hash.o obj32/env.o
-	$(LINK.c) -G obj32/perfcnt.o obj32/hash.o obj32/env.o -o $@ $(LDLIBS)
+	$(LINK.c) $(GSHARED) obj32/perfcnt.o obj32/hash.o obj32/env.o -o $@ $(LDLIBS)
 
 lib64/perfcnt.so.1: \
 	obj64/perfcnt.o obj64/hash.o obj64/env.o
-	$(LINK.c) -G obj64/perfcnt.o obj64/hash.o obj64/env.o -o $@ $(LDLIBS)
+	$(LINK.c) $(GSHARED) obj64/perfcnt.o obj64/hash.o obj64/env.o -o $@ $(LDLIBS)
 
 lib32/symbindrep.so.1: \
 	obj32/symbindrep.o obj32/env.o
-	$(LINK.c) -G obj32/symbindrep.o obj32/env.o -o $@ $(LDLIBS)
+	$(LINK.c) $(GSHARED) obj32/symbindrep.o obj32/env.o -o $@ $(LDLIBS)
 
 lib64/symbindrep.so.1: \
 	obj64/symbindrep.o obj64/env.o
-	$(LINK.c) -G obj64/symbindrep.o obj64/env.o -o $@ $(LDLIBS)
+	$(LINK.c) $(GSHARED) obj64/symbindrep.o obj64/env.o -o $@ $(LDLIBS)
 
 lib32/truss.so.1: \
 	obj32/truss.o obj32/env.o
-	$(LINK.c) -G obj32/truss.o obj32/env.o -o $@ $(LDLIBS)
+	$(LINK.c) $(GSHARED) obj32/truss.o obj32/env.o -o $@ $(LDLIBS)
 
 lib64/truss.so.1: \
 	obj64/truss.o obj64/env.o
-	$(LINK.c) -G obj64/truss.o obj64/env.o -o $@ $(LDLIBS)
+	$(LINK.c) $(GSHARED) obj64/truss.o obj64/env.o -o $@ $(LDLIBS)
 
 lib32/who.so.1: \
 	obj32/who.o obj32/env.o
-	$(LINK.c) -G obj32/who.o obj32/env.o -o $@ -lelf $(LDLIBS)
+	$(LINK.c) $(GSHARED) obj32/who.o obj32/env.o -o $@ -lelf $(LDLIBS)
 
 lib64/who.so.1: \
 	obj64/who.o obj64/env.o
-	$(LINK.c) -G obj64/who.o obj64/env.o -o $@ -lelf $(LDLIBS)
+	$(LINK.c) $(GSHARED) obj64/who.o obj64/env.o -o $@ -lelf $(LDLIBS)
 
 obj32 \
 obj64 \
