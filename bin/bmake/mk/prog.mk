@@ -15,7 +15,6 @@ MAN${_sect}=${MAN}
 
 CFLAGS+=	${COPTS}
 
-.if ${TARGET_OSNAME} == "NetBSD"
 .if ${MACHINE_ARCH} == "sparc64"
 CFLAGS+=	-mcmodel=medlow
 .endif
@@ -23,11 +22,11 @@ CFLAGS+=	-mcmodel=medlow
 # ELF platforms depend on crtbegin.o and crtend.o
 .if ${OBJECT_FMT} == "ELF"
 .ifndef LIBCRTBEGIN
-LIBCRTBEGIN=	${DESTDIR}/usr/lib/crtbegin.o
+LIBCRTBEGIN=	${DESTDIR}/usr/lib/crti.o
 .MADE: ${LIBCRTBEGIN}
 .endif
 .ifndef LIBCRTEND
-LIBCRTEND=	${DESTDIR}/usr/lib/crtend.o
+LIBCRTEND=	${DESTDIR}/usr/lib/crtn.o
 .MADE: ${LIBCRTEND}
 .endif
 _SHLINKER=	${SHLINKDIR}/ld.elf_so
@@ -38,10 +37,9 @@ _SHLINKER=	${SHLINKDIR}/ld.so
 .endif
 
 .ifndef LIBCRT0
-LIBCRT0=	${DESTDIR}/usr/lib/crt0.o
+LIBCRT0=	${DESTDIR}/usr/lib/crt1.o
 .MADE: ${LIBCRT0}
 .endif
-.endif	# NetBSD
 
 # here is where you can define what LIB* are
 .-include <libnames.mk>
