@@ -84,7 +84,6 @@
  * -xM		Generate makefile dependencies
  * -xM1		Generate makefile dependencies, but exclude /usr/include
  * -xmaxopt=[off,1,2,3,4,5] maximum optimization level allowed on #pragma opt
- * -xpg		Compile for profiling with gprof
  * -xprofile=<p> Collect data for a profile or use a profile to optimize
  *		<p>={{collect,use}[:<path>],tcov}
  * -xs		Allow debugging without object (.o) files
@@ -146,7 +145,6 @@
  * -xM				-M
  * -xM1				-MM
  * -xmaxopt=[...]		error
- * -xpg				error
  * -xprofile=<p>		error
  * -xs				error
  * -xsb				error
@@ -612,13 +610,6 @@ do_gcc(cw_ictx_t *ctx)
 				error(arg);
 				break;
 #endif	/* __x86 */
-			case 'p':
-				if (strcmp(arg, "-xpg") == 0) {
-					newae(ctx->i_ae, "-pg");
-					break;
-				}
-				error(arg);
-				break;
 			case 's':
 				if (strcmp(arg, "-xs") == 0)
 					break;

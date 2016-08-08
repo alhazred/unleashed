@@ -65,7 +65,7 @@ CERRWARN +=	-_gcc=-Wno-type-limits
 LDFLAGS +=	$(ZINTERPOSE)
 
 # TCOV_FLAG=	-ql
-# GPROF_FLAG=	-xpg
+# GPROF_FLAG=	-_gcc=-pg
 # DEBUG_FLAG=	-g
 
 PROGLIBS=	$(LDLIBS) -lresolv -lnsl -lsocket -lumem -lscf -lavl
