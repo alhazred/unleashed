@@ -808,8 +808,8 @@ VERSION=	$(SYSNAME) Development
 PATCHID=	$(VERSION)
 RELEASE_DATE=	release date not set
 PATCH_DATE=	$(RELEASE_DATE)
-RELEASE_CM=	"@($(POUND_SIGN))$(SYSNAME) $(RELEASE) $(PATCHID) $(PATCH_DATE)"
-DEV_CM=		"@($(POUND_SIGN))$(SYSNAME) Development: non-nightly build"
+RELEASE_CM=	"$(SYSNAME) $(RELEASE) $(PATCHID) $(PATCH_DATE)"
+DEV_CM=		"$(SYSNAME) Development: non-nightly build"
 
 PROCESS_COMMENT=  @?${MCS} -d -a $(RELEASE_CM) -a $(DEV_CM)
 $(RELEASE_BUILD)PROCESS_COMMENT=   @?${MCS} -d -a $(RELEASE_CM)
