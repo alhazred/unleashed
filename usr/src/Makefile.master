@@ -273,14 +273,14 @@ CCNOAUTOINLINE= -_gcc=-fno-inline-small-functions \
 	-_gcc=-fno-ipa-cp
 
 #
-# compiler '-xarch' flag. This is here to centralize it and make it
-# overridable for testing.
-sparc_XARCH=	-m32
-sparcv9_XARCH=	-m64
-i386_XARCH=	-m32 -xarch=pentium_pro
+# compiler architecture flags.
+#
+sparc_XARCH=	-m32 #-_gcc=-mcpu=v8 -_gcc=-mno-v8plus
+sparcv9_XARCH=	-m64 #-_gcc=-mcpu=v9
+i386_XARCH=	-m32 -_gcc=-march=pentiumpro
 amd64_XARCH=	-m64 -Ui386 -U__i386
 
-# assembler '-xarch' flag.  Different from compiler '-xarch' flag.
+# assembler architecture flags.  Different from compiler architecture flags.
 sparc_AS_XARCH=		-xarch=v8plus -Dsparc -D__sparc -D__sparcv8
 sparcv9_AS_XARCH=	-xarch=v9 -Dsparc -D__sparc -D__sparcv9
 i386_AS_XARCH=		-m32 -Di386 -D__i386

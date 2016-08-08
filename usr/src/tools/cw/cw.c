@@ -236,38 +236,6 @@ typedef struct xarch_table {
 	char	*x_trans[TRANS_ENTRY];
 } xarch_table_t;
 
-/*
- * The translation table for the -xarch= flag used in the Studio compilers.
- */
-static const xarch_table_t xtbl[] = {
-#if defined(__x86)
-	{ "generic",	0 },
-	{ "generic64",	M64, { "-m64", "-mtune=opteron" } },
-	{ "amd64",	M64, { "-m64", "-mtune=opteron" } },
-	{ "386",	0,	{ "-march=i386" } },
-	{ "pentium_pro", 0,	{ "-march=pentiumpro" } },
-	{ "sse",	0, { "-msse", "-mfpmath=sse" } },
-	{ "sse2",	0, { "-msse2", "-mfpmath=sse" } },
-#elif defined(__sparc)
-	{ "generic",	M32, { "-m32", "-mcpu=v8" } },
-	{ "generic64",	M64, { "-m64", "-mcpu=v9" } },
-	{ "v8",		M32, { "-m32", "-mcpu=v8", "-mno-v8plus" } },
-	{ "v8plus",	M32, { "-m32", "-mcpu=v9", "-mv8plus" } },
-	{ "v8plusa",	M32, { "-m32", "-mcpu=ultrasparc", "-mv8plus",
-			"-mvis" } },
-	{ "v8plusb",	M32, { "-m32", "-mcpu=ultrasparc3", "-mv8plus",
-			"-mvis" } },
-	{ "v9",		M64, { "-m64", "-mcpu=v9" } },
-	{ "v9a",	M64, { "-m64", "-mcpu=ultrasparc", "-mvis" } },
-	{ "v9b",	M64, { "-m64", "-mcpu=ultrasparc3", "-mvis" } },
-	{ "sparc",	0, { "-mcpu=v9", "-mv8plus" } },
-	{ "sparcvis",	0, { "-mcpu=ultrasparc", "-mvis" } },
-	{ "sparcvis2",	0, { "-mcpu=ultrasparc3", "-mvis" } }
-#endif
-};
-
-static int xtbl_size = sizeof (xtbl) / sizeof (xarch_table_t);
-
 static const char *progname;
 
 static void
@@ -336,33 +304,6 @@ usage()
 	    "usage: %s { -_gcc | -_g++ } ...\n",
 	    progname);
 	exit(2);
-}
-
-static int
-xlate_xtb(struct aelist *h, const char *xarg)
-{
-	int	i, j;
-
-	for (i = 0; i < xtbl_size; i++) {
-		if (strcmp(xtbl[i].x_arg, xarg) == 0)
-			break;
-	}
-
-	/*
-	 * At the end of the table and so no matching "arg" entry
-	 * found and so this must be a bad -xarch= flag.
-	 */
-	if (i == xtbl_size)
-		error(xarg);
-
-	for (j = 0; j < TRANS_ENTRY; j++) {
-		if (xtbl[i].x_trans[j] != NULL)
-			newae(h, xtbl[i].x_trans[j]);
-		else
-			break;
-	}
-	return (xtbl[i].x_flags);
-
 }
 
 static void
@@ -578,13 +519,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (arglen == 1)
 				error(arg);
 			switch (arg[2]) {
-			case 'a':
-				if (strncmp(arg, "-xarch=", 7) == 0) {
-					mflag |= xlate_xtb(ctx->i_ae, arg + 7);
-					break;
-				}
-				error(arg);
-				break;
 #if defined(__x86)
 			case 'm':
 				if (strcmp(arg, "-xmodel=kernel") == 0) {
