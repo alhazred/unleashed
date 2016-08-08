@@ -608,9 +608,6 @@ do_gcc(cw_ictx_t *ctx)
 				error(arg);
 				break;
 #endif	/* __x86 */
-			case 'e':
-			case 'h':
-			case 'l':
 			default:
 				error(arg);
 				break;
@@ -625,14 +622,6 @@ do_gcc(cw_ictx_t *ctx)
 				arglen = strlen(arg + 1);
 			} else {
 				arg += 2;
-			}
-			if (strncmp(arg, "l,", 2) == 0) {
-				char *s = strdup(arg);
-				s[0] = '-';
-				s[1] = 'B';
-				newae(ctx->i_ae, s);
-				free(s);
-				break;
 			}
 			if (strncmp(arg, "I,", 2) == 0) {
 				char *s = strdup(arg);
