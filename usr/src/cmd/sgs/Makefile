@@ -24,14 +24,14 @@
 
 include		$(SRC)/cmd/Makefile.cmd
 
-# Note: Why SUBDIRS-common isn't sorted alphabetically
+# Note: Why SUBDIRS isn't sorted alphabetically
 #
 # The items under SGS are not independent of each other.
 # They must be built in an order that ensures that
 # all dependencies of an item have been built before the
 # item itself.
 #
-SUBDIRS-common= libconv		\
+SUBDIRS=	libconv		\
 		.WAIT		\
 		libdl		\
 		libelf		\
@@ -75,11 +75,6 @@ SUBDIRS-common= libconv		\
 		tsort		\
 		unifdef		\
 		yacc
-
-SUBDIRS-i386=
-SUBDIRS-sparc=	rtld.4.x
-
-SUBDIRS=	$(SUBDIRS-common) $(SUBDIRS-$(MACH))
 
 # Messaging support
 #
@@ -177,7 +172,7 @@ FRC:
 # Cross-reference customization: ignore the directories named by XRPRUNE,
 # and tweak the file globs slightly.
 #
-XRPRUNE=	rtld.4.x packages abi
+XRPRUNE=	packages abi
 XRADD=		*.msg mapfile* llib-[a-z]*
 XRDEL=		Makefile* kobj_*
 

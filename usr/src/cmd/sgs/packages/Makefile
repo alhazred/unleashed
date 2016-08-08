@@ -51,7 +51,6 @@ SUBDIRS1=	../libconv \
 		../libcrle
 
 SUBDIRS2 =	../rtld \
-		../rtld.4.x \
 		../libldstab \
 		../lari \
 		../ldprof \
