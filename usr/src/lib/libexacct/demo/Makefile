@@ -51,8 +51,8 @@ clean:
 $(ROOTDEMODIR):
 	$(INS.dir)
 
-#$(ROOTDEMODIR)/%: %.demo
-#	$(INS.rename)
+$(ROOTDEMODIR)/%: %.demo
+	$(INS.rename)
 
 $(ROOTDEMODIR)/%: %
 	$(INS.file)
