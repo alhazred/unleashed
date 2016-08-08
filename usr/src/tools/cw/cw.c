@@ -86,7 +86,6 @@
  * -xmaxopt=[off,1,2,3,4,5] maximum optimization level allowed on #pragma opt
  * -xprofile=<p> Collect data for a profile or use a profile to optimize
  *		<p>={{collect,use}[:<path>],tcov}
- * -xs		Allow debugging without object (.o) files
  * -xsb		Compile for use with the WorkShop source browser
  * -xsbfast	Generate only WorkShop source browser info, no compilation
  * -Y<c>,<dir>	Specify <dir> for location of component <c> (a,l,m,p,0,h,i,u)
@@ -146,7 +145,6 @@
  * -xM1				-MM
  * -xmaxopt=[...]		error
  * -xprofile=<p>		error
- * -xs				error
  * -xsb				error
  * -xsbfast			error
  * -W0,-xdbggen=no%usedonly	-fno-eliminate-unused-debug-symbols
@@ -610,11 +608,6 @@ do_gcc(cw_ictx_t *ctx)
 				error(arg);
 				break;
 #endif	/* __x86 */
-			case 's':
-				if (strcmp(arg, "-xs") == 0)
-					break;
-				error(arg);
-				break;
 			case 'e':
 			case 'h':
 			case 'l':

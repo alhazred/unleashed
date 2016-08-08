@@ -37,7 +37,7 @@ CERRWARN += -_gcc=-Wno-unused-function
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-unused-variable
 
-COPTFLAG += $(XESS) #-I$(KINCDIR) 
+COPTFLAG += #-I$(KINCDIR) 
 
 SHAREDLIBS = -lmech_krb5 -lss
 

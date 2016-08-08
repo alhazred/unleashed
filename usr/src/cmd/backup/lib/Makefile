@@ -75,7 +75,7 @@ GLIB=		libdump_g.a
 DEBUGS=		$(OBJECTS:%=.debug/%)
 $(GLIB):=	AROBJS = $(DEBUGS)
 $(GLIB):=	DIR = .debug
-$(GLIB):=	CFLAGS= -g $(XESS) -DDEBUG -DYYDEBUG ${SBFLAGS}
+$(GLIB):=	CFLAGS= -g -DDEBUG -DYYDEBUG ${SBFLAGS}
 
 .KEEP_STATE:
 

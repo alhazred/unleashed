@@ -29,7 +29,7 @@ CPPFLAGS += -I$(SRC)/lib/gss_mechs/mech_krb5/include \
 	-DHAVE_SYS_TIMEB_H=1 -DHAVE_ALLOCA_H=1 -DHAVE_FTIME=1 \
 	-DHAVE_TIMEZONE -DUSE_KADM5_API_VERSION=2
 
-COPTFLAG += $(XESS) #-I$(KINCDIR) 
+COPTFLAG += #-I$(KINCDIR) 
 
 CERRWARN += -_gcc=-Wno-parentheses
 CERRWARN += -_gcc=-Wno-unused-variable

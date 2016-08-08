@@ -65,7 +65,7 @@ ROOTLIB=	$(ROOT)/usr/lib/gss
 DIRS=	$(ROOTLIB)
 
 CPPFLAGS += -I$(SRC)/uts/common/gssapi/include
-COPTFLAG += $(XESS) #-I$(KINCDIR) 
+COPTFLAG += #-I$(KINCDIR) 
 
 CERRWARN += -_gcc=-Wno-unused-variable
 CERRWARN += -_gcc=-Wno-implicit-function-declaration

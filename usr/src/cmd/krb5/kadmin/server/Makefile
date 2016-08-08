@@ -40,7 +40,7 @@ CPPFLAGS += -I. -I$(SRC)/uts/common/gssapi/mechs/krb5/include \
 		-I$(KRB5IPROPDIR) \
 		-I$(SRC)/uts/common/gssapi/include/ $(DEFS)
 
-COPTFLAG += $(XESS) #-I$(KINCDIR) 
+COPTFLAG += #-I$(KINCDIR) 
 
 CERRWARN += -_gcc=-Wno-implicit-function-declaration
 CERRWARN += -_gcc=-Wno-unused-variable
