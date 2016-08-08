@@ -347,7 +347,7 @@ warnings(struct aelist *h)
 	static int warningsonce;
 
 	if (warningsonce++) {
-		(void) fprintf(stderr, "%s: error: multiple -errtags=yes or -v\n",
+		(void) fprintf(stderr, "%s: error: multiple -v\n",
 			       progname);
 		exit(1);
 		return;
@@ -511,13 +511,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (strcmp(arg, "-D_KERNEL") == 0 ||
 			    strcmp(arg, "-D_BOOT") == 0)
 				newae(ctx->i_ae, "-ffreestanding");
-			break;
-		case 'e':
-			if (strcmp(arg, "-errtags=yes") == 0) {
-				warnings(ctx->i_ae);
-				break;
-			}
-			error(arg);
 			break;
 		case 'G':
 			newae(ctx->i_ae, "-shared");
