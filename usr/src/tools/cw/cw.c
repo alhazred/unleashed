@@ -221,8 +221,6 @@ typedef struct cw_ictx {
  */
 #define	M32		0x01	/* -m32 - only on Studio 12 */
 #define	M64		0x02	/* -m64 - only on Studio 12 */
-#define	SS11		0x100	/* Studio 11 */
-#define	SS12		0x200	/* Studio 12 */
 
 #define	TRANS_ENTRY	5
 /*
@@ -243,28 +241,28 @@ typedef struct xarch_table {
  */
 static const xarch_table_t xtbl[] = {
 #if defined(__x86)
-	{ "generic",	SS11 },
-	{ "generic64",	(SS11|M64), { "-m64", "-mtune=opteron" } },
-	{ "amd64",	(SS11|M64), { "-m64", "-mtune=opteron" } },
-	{ "386",	SS11,	{ "-march=i386" } },
-	{ "pentium_pro", SS11,	{ "-march=pentiumpro" } },
-	{ "sse",	SS11, { "-msse", "-mfpmath=sse" } },
-	{ "sse2",	SS11, { "-msse2", "-mfpmath=sse" } },
+	{ "generic",	0 },
+	{ "generic64",	M64, { "-m64", "-mtune=opteron" } },
+	{ "amd64",	M64, { "-m64", "-mtune=opteron" } },
+	{ "386",	0,	{ "-march=i386" } },
+	{ "pentium_pro", 0,	{ "-march=pentiumpro" } },
+	{ "sse",	0, { "-msse", "-mfpmath=sse" } },
+	{ "sse2",	0, { "-msse2", "-mfpmath=sse" } },
 #elif defined(__sparc)
-	{ "generic",	(SS11|M32), { "-m32", "-mcpu=v8" } },
-	{ "generic64",	(SS11|M64), { "-m64", "-mcpu=v9" } },
-	{ "v8",		(SS11|M32), { "-m32", "-mcpu=v8", "-mno-v8plus" } },
-	{ "v8plus",	(SS11|M32), { "-m32", "-mcpu=v9", "-mv8plus" } },
-	{ "v8plusa",	(SS11|M32), { "-m32", "-mcpu=ultrasparc", "-mv8plus",
+	{ "generic",	M32, { "-m32", "-mcpu=v8" } },
+	{ "generic64",	M64, { "-m64", "-mcpu=v9" } },
+	{ "v8",		M32, { "-m32", "-mcpu=v8", "-mno-v8plus" } },
+	{ "v8plus",	M32, { "-m32", "-mcpu=v9", "-mv8plus" } },
+	{ "v8plusa",	M32, { "-m32", "-mcpu=ultrasparc", "-mv8plus",
 			"-mvis" } },
-	{ "v8plusb",	(SS11|M32), { "-m32", "-mcpu=ultrasparc3", "-mv8plus",
+	{ "v8plusb",	M32, { "-m32", "-mcpu=ultrasparc3", "-mv8plus",
 			"-mvis" } },
-	{ "v9",		(SS11|M64), { "-m64", "-mcpu=v9" } },
-	{ "v9a",	(SS11|M64), { "-m64", "-mcpu=ultrasparc", "-mvis" } },
-	{ "v9b",	(SS11|M64), { "-m64", "-mcpu=ultrasparc3", "-mvis" } },
-	{ "sparc",	SS12, { "-mcpu=v9", "-mv8plus" } },
-	{ "sparcvis",	SS12, { "-mcpu=ultrasparc", "-mvis" } },
-	{ "sparcvis2",	SS12, { "-mcpu=ultrasparc3", "-mvis" } }
+	{ "v9",		M64, { "-m64", "-mcpu=v9" } },
+	{ "v9a",	M64, { "-m64", "-mcpu=ultrasparc", "-mvis" } },
+	{ "v9b",	M64, { "-m64", "-mcpu=ultrasparc3", "-mvis" } },
+	{ "sparc",	0, { "-mcpu=v9", "-mv8plus" } },
+	{ "sparcvis",	0, { "-mcpu=ultrasparc", "-mvis" } },
+	{ "sparcvis2",	0, { "-mcpu=ultrasparc3", "-mvis" } }
 #endif
 };
 
@@ -631,17 +629,6 @@ do_gcc(cw_ictx_t *ctx)
 		}
 	}
 
-	/*
-	 * Make sure that we do not have any unintended interactions between
-	 * the xarch options passed in and the version of the Studio compiler
-	 * used.
-	 */
-	if ((mflag & (SS11|SS12)) == (SS11|SS12)) {
-		(void) fprintf(stderr,
-		    "Conflicting \"-xarch=\" flags (both Studio 11 and 12)\n");
-		exit(2);
-	}
-
 	switch (mflag) {
 	case 0:
 		/* FALLTHROUGH */
@@ -663,31 +650,6 @@ do_gcc(cw_ictx_t *ctx)
 		 */
 		newae(ctx->i_ae, "-mcpu=v9");
 #endif
-		break;
-	case SS12:
-#if defined(__sparc)
-		/* no -m32/-m64 flag used - this is an error for sparc builds */
-		(void) fprintf(stderr, "No -m32/-m64 flag defined\n");
-		exit(2);
-#endif
-		break;
-	case SS11:
-		/* FALLTHROUGH */
-	case (SS11|M32):
-	case (SS11|M64):
-		break;
-	case (SS12|M32):
-#if defined(__sparc)
-		/*
-		 * Need to add in further 32 bit options because with SS12
-		 * the xarch=sparcvis option can be applied to 32 or 64
-		 * bit, and so the translatation table (xtbl) cannot handle
-		 * that.
-		 */
-		newae(ctx->i_ae, "-mv8plus");
-#endif
-		break;
-	case (SS12|M64):
 		break;
 	default:
 		(void) fprintf(stderr,
