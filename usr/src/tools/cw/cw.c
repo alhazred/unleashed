@@ -70,7 +70,6 @@
  * -p		Compile for profiling with prof
  * -R<dir[:dir]> Build runtime search path list into executable
  * -S		Compile and only generate assembly code (.s)
- * -t		Turn off duplicate symbol warnings when linking
  * -U<name>	Delete initial definition of preprocessor symbol <name>
  * -V		Report version number of each compilation phase
  * -v		Do stricter semantic checking
@@ -127,7 +126,6 @@
  * -p				pass-thru
  * -R<dir[:dir]>		pass-thru
  * -S				pass-thru
- * -t				-Wl,-t
  * -U<name>			pass-thru
  * -V				--version
  * -v				-Wall
@@ -559,13 +557,6 @@ do_gcc(cw_ictx_t *ctx)
 			 */
 			newae(ctx->i_ae, "-E");
 			nolibc = 1;
-			break;
-		case 't':
-			if (arglen == 1) {
-				newae(ctx->i_ae, "-Wl,-t");
-				break;
-			}
-			error(arg);
 			break;
 		case 'W':
 			if (strncmp(arg, "-Wa,", 4) == 0 ||
