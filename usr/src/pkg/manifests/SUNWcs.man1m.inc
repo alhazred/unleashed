@@ -121,7 +121,6 @@ file path=usr/share/man/man1m/inetconv.1m
 file path=usr/share/man/man1m/inetd.1m
 file path=usr/share/man/man1m/infocmp.1m
 file path=usr/share/man/man1m/init.1m
-file path=usr/share/man/man1m/install.1m
 file path=usr/share/man/man1m/installboot.1m
 file path=usr/share/man/man1m/installgrub.1m
 file path=usr/share/man/man1m/intrd.1m

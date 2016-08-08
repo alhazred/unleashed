@@ -97,6 +97,7 @@ file path=usr/share/man/man1/history.1
 file path=usr/share/man/man1/hostid.1
 file path=usr/share/man/man1/hostname.1
 file path=usr/share/man/man1/iconv.1
+file path=usr/share/man/man1/install.1
 file path=usr/share/man/man1/isainfo.1
 file path=usr/share/man/man1/isalist.1
 file path=usr/share/man/man1/jobs.1
