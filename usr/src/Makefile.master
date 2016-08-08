@@ -311,7 +311,7 @@ XESS=			-xs
 
 #
 # turn warnings into errors (C)
-CERRWARN = -errtags=yes -_gcc=-Werror
+CERRWARN = -_gcc=-Wall -_gcc=-Wextra -_gcc=-Werror
 
 CERRWARN += -_gcc=-Wno-missing-braces
 CERRWARN += -_gcc=-Wno-sign-compare
