@@ -66,7 +66,6 @@
  * -native	Find available processor, generate code accordingly
  * -O		Use default optimization level (-xO2 or -xO3. Check man page.)
  * -o <outputfile> Set name of output file to <outputfile>
- * -P		Compile source through preprocessor only, output to .i  file
  * -p		Compile for profiling with prof
  * -R<dir[:dir]> Build runtime search path list into executable
  * -S		Compile and only generate assembly code (.s)
@@ -122,7 +121,6 @@
  * -native			error
  * -O				-O1 (Check the man page to be certain)
  * -o <outputfile>		pass-thru
- * -P				-E -o filename.i (or error)
  * -p				pass-thru
  * -R<dir[:dir]>		pass-thru
  * -S				pass-thru
@@ -485,17 +483,6 @@ do_gcc(cw_ictx_t *ctx)
 				newae(ctx->i_ae, s);
 				free(s);
 			}
-			break;
-		case 'P':
-			/*
-			 * We could do '-E -o filename.i', but that's hard,
-			 * and we don't need it for the case that's triggering
-			 * this addition.  We'll require the user to specify
-			 * -o in the Makefile.  If they don't they'll find out
-			 * in a hurry.
-			 */
-			newae(ctx->i_ae, "-E");
-			nolibc = 1;
 			break;
 		case 'W':
 			if (strncmp(arg, "-Wa,", 4) == 0 ||

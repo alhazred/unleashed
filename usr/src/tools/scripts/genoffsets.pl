@@ -164,7 +164,7 @@ runit($cc, @cflags, '-c', '-o', $OTmp, $CTmp);
 runit($ctfconvert, '-l', 'ctfstabs', $OTmp);
 
 # Run ctfstabs on the resulting mess.
-runit($cc, @cflags, "-P", "-o", "$GenPPTmp", $GenTmp);
+runit($cc, @cflags, "-E", "-o", "$GenPPTmp", $GenTmp);
 runit($ctfstabs, "-t", "genassym", "-i", $GenPPTmp, $OTmp);
 
 cleanup();
