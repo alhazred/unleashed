@@ -579,13 +579,6 @@ do_gcc(cw_ictx_t *ctx)
 				newae(ctx->i_ae, arg);
 				break;
 			}
-			if (strcmp(arg, "-W0,-Lt") == 0) {
-				/*
-				 * Generate tests at the top of loops.
-				 * There is no direct gcc equivalent, ignore.
-				 */
-				break;
-			}
 #if defined(__x86)
 			if (strcmp(arg, "-Wu,-xmodel=kernel") == 0) {
 				newae(ctx->i_ae, "-ffreestanding");

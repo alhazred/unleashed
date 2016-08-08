@@ -54,11 +54,6 @@ ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 
 #
-# Override the default space setting
-#
-sparc_SPACEFLAG	= -W0,-Lt
-
-#
 # md5 depends on the kcf framework
 #
 LDFLAGS		+= -dy -Nmisc/kcf

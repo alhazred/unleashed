@@ -403,8 +403,8 @@ OFFSETS_CREATE64 = $(GENOFFSETS) -s $(CTFSTABS) -r $(CTFCONVERT) \
 #
 # tradeoff time for space (smaller is better)
 #
-sparc_SPACEFLAG		= -W0,-Lt
-sparcv9_SPACEFLAG	= -W0,-Lt
+sparc_SPACEFLAG		=
+sparcv9_SPACEFLAG	=
 i386_SPACEFLAG		=
 amd64_SPACEFLAG		=
 

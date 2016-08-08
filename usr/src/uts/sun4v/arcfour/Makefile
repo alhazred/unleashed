@@ -67,11 +67,6 @@ COPTIMIZE	+= -_gcc=-O2
 COPTIMIZE	+= -_gcc=-fbuiltin
 
 #
-# Override the default space setting
-#
-sparc_SPACEFLAG	= -W0,-Lt
-
-#
 #	Default build targets.
 #
 .KEEP_STATE:
