@@ -859,7 +859,7 @@ get_boot_partition(ib_device_t *device, struct mboot *mbr)
 	char *path, *ptr;
 	int i;
 
-	part = (struct ipart *) mbr->parts;
+	part = (struct ipart *)mbr->parts;
 	for (i = 0; i < FD_NUMPART; i++) {
 		if (part[i].systid == X86BOOT)
 			break;
