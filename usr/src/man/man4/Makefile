@@ -226,6 +226,7 @@ _MANLINKS=	devid_cache.4			\
 		md.cf.4				\
 		mdi_ib_cache.4			\
 		mdi_scsi_vhci_cache.4		\
+		pam.d.4				\
 		pci_unitaddr_persistent.4	\
 		pcie.4				\
 		qop.4				\
@@ -272,6 +273,8 @@ fbtab.4				:= LINKSRC = logindevperm.4
 md.cf.4				:= LINKSRC = md.tab.4
 
 qop.4				:= LINKSRC = mech.4
+
+pam.d.4				:= LINKSRC = pam.conf.4
 
 pcie.4				:= LINKSRC = pci.4
 

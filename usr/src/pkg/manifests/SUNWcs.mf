@@ -65,6 +65,7 @@ dir path=etc/net/ticlts group=sys
 dir path=etc/net/ticots group=sys
 dir path=etc/net/ticotsord group=sys
 dir path=etc/opt group=sys
+dir path=etc/pam.d group=sys
 dir path=etc/rc0.d group=sys
 dir path=etc/rc1.d group=sys
 dir path=etc/rc2.d group=sys
@@ -392,6 +393,10 @@ file path=etc/nsswitch.dns group=sys
 file path=etc/nsswitch.files group=sys
 file path=etc/nsswitch.ldap group=sys
 file path=etc/pam.conf group=sys preserve=true
+file path=etc/pam.d/cron group=sys preserve=true
+file path=etc/pam.d/login group=sys preserve=true
+file path=etc/pam.d/other group=sys preserve=true
+file path=etc/pam.d/passwd group=sys preserve=true
 file path=etc/passwd group=sys preserve=true
 file path=etc/profile group=sys preserve=renamenew
 file path=etc/project group=sys preserve=true

@@ -1,23 +1,29 @@
 '\" te
 .\" Copyright (C) 2006, Sun Microsystems, Inc. All Rights Reserved.
+.\" Copyright 2012 Joshua M. Clulow <josh@sysmgr.org>
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH PAM.CONF 4 "Jun 19, 2006"
+.TH PAM.CONF 4 "Jun 30, 2012"
 .SH NAME
-pam.conf \- configuration file for pluggable authentication modules
+pam.d, pam.conf \- configuration for pluggable authentication modules
 .SH SYNOPSIS
 .LP
+.nf
+\fB/etc/pam.d\fR
+.fi
 .nf
 \fB/etc/pam.conf\fR
 .fi
 
 .SH DESCRIPTION
 .LP
-\fBpam.conf\fR is the configuration file for the Pluggable Authentication
-Module architecture, or \fBPAM\fR. A \fBPAM\fR module provides functionality
+
+\fB/etc/pam.d\fR is the configuration directory for the Pluggable Authentication
+Module architecture, or \fBPAM\fR.  A \fBPAM\fR module provides functionality
 for one or more of four possible services: authentication, account management,
-session management, and password management.
+session management, and password management.  The configuration directory
+contains per-service 'shards' of the legacy, monolithic \fBpam.conf\fR file.
 .sp
 .ne 2
 .na
@@ -80,6 +86,14 @@ including the end of line, and has the following format:
 
 .sp
 .LP
+If shard files are used in \fB/etc/pam.d\fR instead of the monolithic
+\fBpam.conf\fR file, then the \fIservice_name\fR column is not present in
+those files.  The \fIservice_name\fR is, instead, derived from the
+filename of the shard.  As an example, for the service 'login' the configuration
+would now be in \fB/etc/pam.d/login\fR and would omit the first column
+(previously containing 'login').
+.sp
+.LP
 The following is an example of a \fBpam.conf\fR configuration file with support
 for authentication, account management, session management and password
 management modules (See the \fBpam.conf\fR file that is shipped with your
@@ -130,9 +144,10 @@ The \fIcontrol_flag\fR field determines the behavior of stacking.
 The \fImodule_path\fR field specifies the relative pathname to a shared library
 object, or an included \fBPAM\fR configuration file, which implements the
 service functionality. If the pathname is not absolute, shared library objects
-are assumed to be relative to \fB/usr/lib/security/$ISA/\fR, and included
-\fBPAM\fR configuration files are assumed to be relative to
-\fB/usr/lib/security/\fR.
+are assumed to be relative to \fB/usr/lib/security/$ISA/\fR, and \fBPAM\fR
+configuration files included in shards are assumed to be relative to
+\fB/etc/pam.d/\fR, or \fB/usr/lib/security/\fB if included in the legacy
+\fBpam.conf\fR.
 .sp
 .LP
 The \fBISA\fR token is replaced by an implementation defined directory name
@@ -339,6 +354,15 @@ it.
 .ad
 .RS 29n
 Configuration file
+.RE
+
+.sp
+.ne 2
+.na
+\fB\fB/etc/pam.d\fR\fR
+.ad
+.RS 29n
+Configuration directory
 .RE
 
 .sp

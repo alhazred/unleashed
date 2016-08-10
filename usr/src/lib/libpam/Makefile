@@ -37,7 +37,13 @@ ROOTHDRDIR=	$(ROOT)/usr/include/security
 HDRDIR=		.
 
 # install pam.conf
-ETCFILES=	pam.conf
+ETCFILES=	pam.conf \
+		pam.d/cron \
+		pam.d/ktelnet \
+		pam.d/login \
+		pam.d/other \
+		pam.d/passwd \
+		pam.d/ppp
 ROOTETC=	$(ROOT)/etc
 IETCFILES=	$(ETCFILES:%=$(ROOTETC)/%)
 
@@ -68,6 +74,7 @@ $(SUBDIRS):	FRC
 
 $(ROOTETC)/%:	%
 	$(INS.file)
+
 FRC:
 
 include ../Makefile.targ

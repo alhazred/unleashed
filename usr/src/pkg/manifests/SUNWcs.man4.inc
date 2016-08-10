@@ -114,6 +114,7 @@ link path=usr/share/man/man4/fs.4 target=default_fs.4
 link path=usr/share/man/man4/intro.4 target=Intro.4
 link path=usr/share/man/man4/mdi_ib_cache.4 target=devices.4
 link path=usr/share/man/man4/mdi_scsi_vhci_cache.4 target=devices.4
+link path=usr/share/man/man4/pam.d.4 target=pam.conf.4
 link path=usr/share/man/man4/pci_unitaddr_persistent.4 target=devices.4
 link path=usr/share/man/man4/snapshot_cache.4 target=devices.4
 link path=usr/share/man/man4/wtmp.4 target=utmp.4

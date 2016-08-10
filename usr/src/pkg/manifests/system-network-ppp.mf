@@ -32,6 +32,7 @@ set name=info.classification \
 set name=variant.arch value=$(ARCH)
 dir path=etc group=sys
 dir path=etc/init.d group=sys
+dir path=etc/pam.d group=sys
 dir path=etc/ppp group=sys
 dir path=etc/ppp/peers group=sys
 dir path=etc/ppp/plugins group=sys
@@ -53,6 +54,7 @@ dir path=usr/share/man/man7m
 driver name=sppp
 driver name=sppptun
 file path=etc/init.d/pppd group=sys mode=0744 preserve=true
+file path=etc/pam.d/ppp group=sys preserve=true
 file path=etc/ppp/chap-secrets group=sys mode=0600 preserve=true
 file path=etc/ppp/myisp-chat.tmpl group=sys
 file path=etc/ppp/options.tmpl group=sys
