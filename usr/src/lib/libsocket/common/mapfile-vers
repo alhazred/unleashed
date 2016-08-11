@@ -247,9 +247,7 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	_setsockopt;
 	_shutdown;
 	_socket;
-	_socket_bsd;
 	_socketpair;
-	_socketpair_bsd;
     local:
 	*;
 };

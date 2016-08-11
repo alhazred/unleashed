@@ -31,6 +31,7 @@
  * under license from the Regents of the University of California.
  */
 
+#include <sys/netconfig.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/stat.h>

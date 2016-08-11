@@ -20,6 +20,7 @@
  */
 /*
  * Copyright 2014 Garrett D'Amore <garrett@damore.org>
+ * Copyright 2015 Lauri Tirkkonen <lotheac@iki.fi>
  *
  * Copyright (c) 1989, 2010, Oracle and/or its affiliates. All rights reserved.
  */
@@ -46,12 +47,7 @@
 #include <sys/uio.h>
 #include <sys/feature_tests.h>
 #include <sys/socket_impl.h>
-#if !defined(_XPG4_2) || defined(__EXTENSIONS__)
-#ifndef	_KERNEL
-#include <sys/netconfig.h>
-#endif	/* !_KERNEL */
 #include <netinet/in.h>
-#endif	/* !defined(_XPG4_2) || defined(__EXTENSIONS__) */
 
 #ifdef	__cplusplus
 extern "C" {
@@ -65,11 +61,7 @@ extern "C" {
  * functions.  Exposing all of sys/socket.h via netinet/in.h breaks existing
  * applications and is not required by austin.
  */
-#if defined(_XPG4_2) && !defined(_XPG5) && !defined(_LP64)
-typedef	size_t		socklen_t;
-#else
 typedef	uint32_t	socklen_t;
-#endif	/* defined(_XPG4_2) && !defined(_XPG5) && !defined(_LP64) */
 
 #if defined(_XPG4_2) || defined(_BOOT)
 typedef	socklen_t	*_RESTRICT_KYWD Psocklen_t;
@@ -80,29 +72,11 @@ typedef	void		*_RESTRICT_KYWD Psocklen_t;
 #endif	/* _SOCKLEN_T */
 
 /*
- * Definitions related to sockets: types, address families, options.
- */
-#if !defined(_XPG4_2) || defined(__EXTENSIONS__)
-#ifndef	NC_TPI_CLTS
-#define	NC_TPI_CLTS	1		/* must agree with netconfig.h */
-#define	NC_TPI_COTS	2		/* must agree with netconfig.h */
-#define	NC_TPI_COTS_ORD	3		/* must agree with netconfig.h */
-#define	NC_TPI_RAW	4		/* must agree with netconfig.h */
-#endif	/* !NC_TPI_CLTS */
-#endif	/* !defined(_XPG4_2) || defined(__EXTENSIONS__) */
-
-/*
  * Types
  */
-#if !defined(_XPG4_2) || defined(__EXTENSIONS__)
-#define	SOCK_STREAM	NC_TPI_COTS	/* stream socket */
-#define	SOCK_DGRAM	NC_TPI_CLTS	/* datagram socket */
-#define	SOCK_RAW	NC_TPI_RAW	/* raw-protocol interface */
-#else
 #define	SOCK_STREAM	2		/* stream socket */
 #define	SOCK_DGRAM	1		/* datagram socket */
 #define	SOCK_RAW	4		/* raw-protocol interface */
-#endif	/* !defined(_XPG4_2) || defined(__EXTENSIONS__) */
 #define	SOCK_RDM	5		/* reliably-delivered message */
 #define	SOCK_SEQPACKET	6		/* sequenced packet stream */
 #define	SOCK_TYPE_MASK	0xffff		/* type reside in these bits only */
@@ -155,12 +129,6 @@ struct so_snd_bufinfo {
 	ushort_t	sbi_tail;	/* Extra space available at the end */
 };
 #endif /* _KERNEL */
-
-/*
- * N.B.: The following definition is present only for compatibility
- * with release 3.0.  It will disappear in later releases.
- */
-#define	SO_DONTLINGER	(~SO_LINGER)	/* ~SO_LINGER */
 
 /*
  * Additional options, not kept in so_options.
@@ -245,7 +213,7 @@ struct	linger {
  * Levels for (get/set)sockopt() that don't apply to a specific protocol.
  */
 #define	SOL_SOCKET	0xffff		/* options for socket level */
-#if !defined(_XPG4_2) || defined(__EXTENSIONS__)
+#if defined(_KERNEL) || defined(__EXTENSIONS__)
 #define	SOL_ROUTE	0xfffe		/* options for routing socket level */
 #endif
 #define	SOL_PACKET	0xfffd		/* options for packet level */
@@ -351,14 +319,9 @@ struct msghdr {
 	struct iovec	*msg_iov;		/* scatter/gather array */
 	int		msg_iovlen;		/* # elements in msg_iov */
 
-#if defined(_XPG4_2) || defined(_KERNEL)
 	void		*msg_control;		/* ancillary data */
 	socklen_t	msg_controllen;		/* ancillary data buffer len */
 	int		msg_flags;		/* flags on received message */
-#else
-	caddr_t		msg_accrights;	/* access rights sent/received */
-	int		msg_accrightslen;
-#endif	/* defined(_XPG4_2) || defined(_KERNEL) */
 };
 
 #if	defined(_KERNEL) || defined(_FAKE_KERNEL)
@@ -445,7 +408,6 @@ struct cmsghdr {
 	int		cmsg_type;	/* protocol-specific type */
 };
 
-#if defined(_XPG4_2) || defined(_KERNEL)
 #if defined(__sparc)
 /* To maintain backward compatibility, alignment needs to be 8 on sparc. */
 #define	_CMSG_HDR_ALIGNMENT	8
@@ -453,13 +415,7 @@ struct cmsghdr {
 /* for __i386 (and other future architectures) */
 #define	_CMSG_HDR_ALIGNMENT	4
 #endif	/* defined(__sparc) */
-#endif	/* defined(_XPG4_2) || defined(_KERNEL) */
 
-#if defined(_XPG4_2)
-/*
- * The cmsg headers (and macros dealing with them) were made available as
- * part of UNIX95 and hence need to be protected with a _XPG4_2 define.
- */
 #define	_CMSG_DATA_ALIGNMENT	(sizeof (int))
 #define	_CMSG_HDR_ALIGN(x)	(((uintptr_t)(x) + _CMSG_HDR_ALIGNMENT - 1) & \
 				    ~(_CMSG_HDR_ALIGNMENT - 1))
@@ -490,39 +446,6 @@ struct cmsghdr {
 #define	CMSG_LEN(l)							\
 	((unsigned int)_CMSG_DATA_ALIGN(sizeof (struct cmsghdr)) + (l))
 
-#endif	/* _XPG4_2 */
-
-#ifdef	_XPG4_2
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname bind __xnet_bind
-#pragma redefine_extname connect __xnet_connect
-#pragma redefine_extname recvmsg __xnet_recvmsg
-#pragma redefine_extname sendmsg __xnet_sendmsg
-#pragma redefine_extname sendto __xnet_sendto
-#pragma redefine_extname socket __xnet_socket
-#pragma redefine_extname socketpair __xnet_socketpair
-#pragma redefine_extname getsockopt __xnet_getsockopt
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	bind	__xnet_bind
-#define	connect	__xnet_connect
-#define	recvmsg	__xnet_recvmsg
-#define	sendmsg	__xnet_sendmsg
-#define	sendto	__xnet_sendto
-#define	socket	__xnet_socket
-#define	socketpair	__xnet_socketpair
-#define	getsockopt	__xnet_getsockopt
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-
-#endif	/* _XPG4_2 */
-
-#if defined(_XPG4_2) && !defined(_XPG5)
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname listen __xnet_listen
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	listen	__xnet_listen
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif /* (_XPG4_2) && !defined(_XPG5) */
-
 #if !defined(_KERNEL) || defined(_BOOT)
 extern int accept(int, struct sockaddr *_RESTRICT_KYWD, Psocklen_t);
 extern int accept4(int, struct sockaddr *_RESTRICT_KYWD, Psocklen_t, int);
@@ -531,7 +454,7 @@ extern int connect(int, const struct sockaddr *, socklen_t);
 extern int getpeername(int, struct sockaddr *_RESTRICT_KYWD, Psocklen_t);
 extern int getsockname(int, struct sockaddr *_RESTRICT_KYWD, Psocklen_t);
 extern int getsockopt(int, int, int, void *_RESTRICT_KYWD, Psocklen_t);
-extern int listen(int, int);	/* XXX - fixme???  where do I go */
+extern int listen(int, int);
 extern int socketpair(int, int, int, int *);
 extern ssize_t recv(int, void *, size_t, int);
 extern ssize_t recvfrom(int, void *_RESTRICT_KYWD, size_t, int,
@@ -544,10 +467,7 @@ extern ssize_t sendto(int, const void *, size_t, int, const struct sockaddr *,
 extern int setsockopt(int, int, int, const void *, socklen_t);
 extern int shutdown(int, int);
 extern int socket(int, int, int);
-
-#if !defined(_XPG4_2) || defined(_XPG6) || defined(__EXTENSIONS__)
 extern int sockatmark(int);
-#endif /* !defined(_XPG4_2) || defined(_XPG6) || defined(__EXTENSIONS__) */
 #endif	/* !defined(_KERNEL) || defined(_BOOT) */
 
 #ifdef	__cplusplus

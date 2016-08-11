@@ -48,49 +48,10 @@ extern int _so_socket();
 extern int _s_netconfig_path();
 extern int _setsockopt();
 
-int _socket_create(int, int, int, int);
-
 #pragma weak socket = _socket
 
 int
 _socket(int family, int type, int protocol)
-{
-	return (_socket_create(family, type, protocol, SOV_DEFAULT));
-}
-
-/*
- * Used by the BCP library.
- */
-int
-_socket_bsd(int family, int type, int protocol)
-{
-	return (_socket_create(family, type, protocol, SOV_SOCKBSD));
-}
-
-int
-_socket_svr4(int family, int type, int protocol)
-{
-	return (_socket_create(family, type, protocol, SOV_SOCKSTREAM));
-}
-
-int
-__xnet_socket(int family, int type, int protocol)
-{
-	return (_socket_create(family, type, protocol, SOV_XPG4_2));
-}
-
-/*
- * Create a socket endpoint for socket() and socketpair().
- * In SunOS 4.X and in SunOS 5.X prior to XPG 4.2 the only error
- * that could be returned due to invalid <family, type, protocol>
- * was EPROTONOSUPPORT. (While the SunOS 4.X source contains EPROTOTYPE
- * error as well that error can only be generated if the kernel is
- * incorrectly configured.)
- * For backwards compatibility only applications that request XPG 4.2
- * (through c89 or XOPEN_SOURCE) will get EPROTOTYPE or EAFNOSUPPORT errors.
- */
-int
-_socket_create(int family, int type, int protocol, int version)
 {
 	int fd;
 
@@ -104,7 +65,7 @@ _socket_create(int family, int type, int protocol, int version)
 	 * XXX When all transport providers use /etc/sock2path.d. this
 	 * part of the code can be removed.
 	 */
-	fd = _so_socket(family, type, protocol, NULL, version);
+	fd = _so_socket(family, type, protocol, NULL, SOV_XPG4_2);
 	if (fd == -1) {
 		char *devpath;
 		int saved_errno = errno;
@@ -113,8 +74,6 @@ _socket_create(int family, int type, int protocol, int version)
 		switch (saved_errno) {
 		case EAFNOSUPPORT:
 		case EPROTOTYPE:
-			if (version != SOV_XPG4_2)
-				saved_errno = EPROTONOSUPPORT;
 			break;
 		case EPROTONOSUPPORT:
 			break;
@@ -128,7 +87,7 @@ _socket_create(int family, int type, int protocol, int version)
 			errno = saved_errno;
 			return (-1);
 		}
-		fd = _so_socket(family, type, protocol, devpath, version);
+		fd = _so_socket(family, type, protocol, devpath, SOV_XPG4_2);
 		free(devpath);
 		if (fd == -1) {
 			errno = saved_errno;
@@ -149,4 +108,10 @@ _socket_create(int family, int type, int protocol, int version)
 		}
 	}
 	return (fd);
+}
+
+int
+__xnet_socket(int family, int type, int protocol)
+{
+	return (_socket(family, type, protocol));
 }

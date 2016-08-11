@@ -463,16 +463,6 @@ __rpc_tli_set_options(int fd, int optlevel, int optname, int optval)
 
 
 	switch (optname) {
-	case SO_DONTLINGER: {
-		struct linger *ling;
-		/* LINTED */
-		ling = (struct linger *)
-			(buf + sizeof (struct opthdr));
-		ling->l_onoff = 0;
-		optsz = sizeof (struct linger);
-		break;
-	}
-
 	case SO_LINGER: {
 		struct linger *ling;
 		/* LINTED */
