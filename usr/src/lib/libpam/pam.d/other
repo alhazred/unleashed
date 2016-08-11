@@ -1,0 +1,27 @@
+#
+# Default definitions for Authentication management
+# Used when service name is not explicitly mentioned for authentication
+#
+auth requisite		pam_authtok_get.so.1
+auth required		pam_dhkeys.so.1
+auth required		pam_unix_cred.so.1
+auth required		pam_unix_auth.so.1
+#
+# Default definition for Account management
+# Used when service name is not explicitly mentioned for account management
+#
+account requisite	pam_roles.so.1
+account required	pam_unix_account.so.1
+#
+# Default definition for Session management
+# Used when service name is not explicitly mentioned for session management
+#
+session required	pam_unix_session.so.1
+#
+# Default definition for Password management
+# Used when service name is not explicitly mentioned for password management
+#
+password required	pam_dhkeys.so.1
+password requisite	pam_authtok_get.so.1
+password requisite	pam_authtok_check.so.1
+password required	pam_authtok_store.so.1

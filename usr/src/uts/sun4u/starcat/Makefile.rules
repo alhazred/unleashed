@@ -41,7 +41,7 @@ IL_CPP=$(CPP) -P -DINLINE -D_ASM $(AS_INC_PATH) \
 
 DRMACH_IL=$(OBJS_DIR)/drmach.il
 
-$(OBJS_DIR)/drmach.o	:= CC_XARCH_32 = -xarch=v8plusa
+$(OBJS_DIR)/drmach.o	:= CC_XARCH_32 = -m32 -_gcc=-mcpu=ultrasparc -_gcc=-mv8plus -_gcc=-mvis
 $(OBJS_DIR)/%.o:		$(UTSBASE)/sun4u/starcat/io/%.c $(DRMACH_IL)
 	$(COMPILE.c) $(DRMACH_IL) -o $@ $<
 	$(CTFCONVERT_O)

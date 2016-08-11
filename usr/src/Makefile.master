@@ -273,14 +273,14 @@ CCNOAUTOINLINE= -_gcc=-fno-inline-small-functions \
 	-_gcc=-fno-ipa-cp
 
 #
-# compiler '-xarch' flag. This is here to centralize it and make it
-# overridable for testing.
-sparc_XARCH=	-m32
-sparcv9_XARCH=	-m64
-i386_XARCH=	-m32 -xarch=pentium_pro
+# compiler architecture flags.
+#
+sparc_XARCH=	-m32 #-_gcc=-mcpu=v8 -_gcc=-mno-v8plus
+sparcv9_XARCH=	-m64 #-_gcc=-mcpu=v9
+i386_XARCH=	-m32 -_gcc=-march=pentiumpro
 amd64_XARCH=	-m64 -Ui386 -U__i386
 
-# assembler '-xarch' flag.  Different from compiler '-xarch' flag.
+# assembler architecture flags.  Different from compiler architecture flags.
 sparc_AS_XARCH=		-xarch=v8plus -Dsparc -D__sparc -D__sparcv8
 sparcv9_AS_XARCH=	-xarch=v9 -Dsparc -D__sparc -D__sparcv9
 i386_AS_XARCH=		-m32 -Di386 -D__i386
@@ -301,13 +301,11 @@ NO_SIMD=		-_gcc=-mno-mmx -_gcc=-mno-sse
 i386_STAND_FLAGS=	-_gcc=-ffreestanding $(NO_SIMD)
 amd64_STAND_FLAGS=	-xmodel=kernel $(NO_SIMD)
 
-SAVEARGS=		-Wu,-save_args
+SAVEARGS=		-_gcc=-msave-args
 amd64_STAND_FLAGS	+= $(SAVEARGS)
 
 STAND_FLAGS_32 = $($(MACH)_STAND_FLAGS)
 STAND_FLAGS_64 = $($(MACH64)_STAND_FLAGS)
-
-XESS=			-xs
 
 #
 # turn warnings into errors (C)
@@ -403,8 +401,8 @@ OFFSETS_CREATE64 = $(GENOFFSETS) -s $(CTFSTABS) -r $(CTFCONVERT) \
 #
 # tradeoff time for space (smaller is better)
 #
-sparc_SPACEFLAG		= -W0,-Lt
-sparcv9_SPACEFLAG	= -W0,-Lt
+sparc_SPACEFLAG		=
+sparcv9_SPACEFLAG	=
 i386_SPACEFLAG		=
 amd64_SPACEFLAG		=
 
@@ -440,8 +438,8 @@ CCUSERFLAGS64		= $(CCUSERFLAGS)
 
 CSOURCEDEBUGFLAGS	=
 CCSOURCEDEBUGFLAGS	=
-$(SRCDBGBLD)CSOURCEDEBUGFLAGS	= -g -xs
-$(SRCDBGBLD)CCSOURCEDEBUGFLAGS	= -g -xs
+$(SRCDBGBLD)CSOURCEDEBUGFLAGS	= -g
+$(SRCDBGBLD)CCSOURCEDEBUGFLAGS	= -g
 
 CFLAGS=         $(COPTFLAG) $($(MACH)_CFLAGS) $(SPACEFLAG) $(CCMODE) \
 		$(CERRWARN) $(C99MODE) \
@@ -713,7 +711,7 @@ ZREDLOCSYM=	-zredlocsym
 ZTEXT=		-ztext
 ZVERBOSE=	-zverbose
 
-GSHARED=	-G
+GSHARED=	-_gcc=-shared
 CCMT=		-D_REENTRANT
 
 # Handle different PIC models on different ISAs

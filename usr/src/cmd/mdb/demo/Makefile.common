@@ -42,7 +42,7 @@ all: $(MODULES)
 .PARALLEL: $(OBJECTS)
 
 %.so: %.o
-	$(CC) $(CFLAGS) -G -o $@ $< $(LDFLAGS) $(LIBS)
+	$(CC) $(CFLAGS) $(GSHARED) -o $@ $< $(LDFLAGS) $(LIBS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<

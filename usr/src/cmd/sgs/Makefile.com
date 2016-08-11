@@ -124,7 +124,7 @@ native :=	DYNFLAGS = -R$(SGSPROTO) -L$(SGSPROTO) $(ZNOVERSION)
 
 # Comment out the following two lines to have the sgs built from the system
 # link-editor, rather than the local proto link-editor.
-CC_USE_PROTO =	-Yl,$(SGSPROTO)
+CC_USE_PROTO =	-_gcc=-B$(SGSPROTO)
 LD_USE_PROTO =	$(SGSPROTO)/
 
 LIBNAME32 =	$(LIBNAME:%=%32)

@@ -21,6 +21,8 @@
 /*
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ *
+ * Copyright 2012 Joshua M. Clulow <josh@sysmgr.org>
  */
 
 #ifndef	_PAM_IMPL_H
@@ -37,6 +39,7 @@ extern "C" {
 #define	PAMTXD		"SUNW_OST_SYSOSPAM"
 
 #define	PAM_CONFIG	"/etc/pam.conf"
+#define	PAM_CONFIG_DIR	"/etc/pam.d/"
 #define	PAM_ISA		"/$ISA/"
 #define	PAM_LIB_DIR	"/usr/lib/security/"
 #ifdef	_LP64

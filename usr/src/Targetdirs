@@ -123,6 +123,7 @@ DIRS= \
 	/etc/security/prof_attr.d \
 	/etc/security/tsol	\
 	/etc/gss	\
+	/etc/pam.d	\
 	/etc/init.d  \
 	/etc/dhcp	\
 	/etc/lib  \

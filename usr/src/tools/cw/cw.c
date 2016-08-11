@@ -48,7 +48,6 @@
  * -errtags=<a>	Display messages with tags a(no, yes)
  *		as errors
  * -flags	Show this summary of compiler options
- * -G		Build a dynamic shared library
  * -g		Compile for debugging
  * -H		Print path name of each file included during compilation
  * -h <name>	Assign <name> to generated dynamic shared library
@@ -66,11 +65,9 @@
  * -native	Find available processor, generate code accordingly
  * -O		Use default optimization level (-xO2 or -xO3. Check man page.)
  * -o <outputfile> Set name of output file to <outputfile>
- * -P		Compile source through preprocessor only, output to .i  file
  * -p		Compile for profiling with prof
  * -R<dir[:dir]> Build runtime search path list into executable
  * -S		Compile and only generate assembly code (.s)
- * -t		Turn off duplicate symbol warnings when linking
  * -U<name>	Delete initial definition of preprocessor symbol <name>
  * -V		Report version number of each compilation phase
  * -v		Do stricter semantic checking
@@ -84,10 +81,8 @@
  * -xM		Generate makefile dependencies
  * -xM1		Generate makefile dependencies, but exclude /usr/include
  * -xmaxopt=[off,1,2,3,4,5] maximum optimization level allowed on #pragma opt
- * -xpg		Compile for profiling with gprof
  * -xprofile=<p> Collect data for a profile or use a profile to optimize
  *		<p>={{collect,use}[:<path>],tcov}
- * -xs		Allow debugging without object (.o) files
  * -xsb		Compile for use with the WorkShop source browser
  * -xsbfast	Generate only WorkShop source browser info, no compilation
  * -Y<c>,<dir>	Specify <dir> for location of component <c> (a,l,m,p,0,h,i,u)
@@ -108,7 +103,6 @@
  * -E				pass-thru
  * -errtags=%all		-Wall
  * -flags			--help
- * -G				pass-thru
  * -g				pass-thru
  * -H				pass-thru
  * -h <name>			pass-thru
@@ -125,11 +119,9 @@
  * -native			error
  * -O				-O1 (Check the man page to be certain)
  * -o <outputfile>		pass-thru
- * -P				-E -o filename.i (or error)
  * -p				pass-thru
  * -R<dir[:dir]>		pass-thru
  * -S				pass-thru
- * -t				-Wl,-t
  * -U<name>			pass-thru
  * -V				--version
  * -v				-Wall
@@ -139,7 +131,6 @@
  * -W{m,0,2,h,i,u>		error/ignore
  * -Wu,-xmodel=kernel		-ffreestanding -mcmodel=kernel -mno-red-zone
  * -xmodel=kernel		-ffreestanding -mcmodel=kernel -mno-red-zone
- * -Wu,-save_args		-msave-args
  * -w				pass-thru
  * -Xc				-ansi -pedantic
  * -xarch=<a>			table
@@ -147,9 +138,7 @@
  * -xM				-M
  * -xM1				-MM
  * -xmaxopt=[...]		error
- * -xpg				error
  * -xprofile=<p>		error
- * -xs				error
  * -xsb				error
  * -xsbfast			error
  * -W0,-xdbggen=no%usedonly	-fno-eliminate-unused-debug-symbols
@@ -228,8 +217,6 @@ typedef struct cw_ictx {
  */
 #define	M32		0x01	/* -m32 - only on Studio 12 */
 #define	M64		0x02	/* -m64 - only on Studio 12 */
-#define	SS11		0x100	/* Studio 11 */
-#define	SS12		0x200	/* Studio 12 */
 
 #define	TRANS_ENTRY	5
 /*
@@ -244,38 +231,6 @@ typedef struct xarch_table {
 	int	x_flags;
 	char	*x_trans[TRANS_ENTRY];
 } xarch_table_t;
-
-/*
- * The translation table for the -xarch= flag used in the Studio compilers.
- */
-static const xarch_table_t xtbl[] = {
-#if defined(__x86)
-	{ "generic",	SS11 },
-	{ "generic64",	(SS11|M64), { "-m64", "-mtune=opteron" } },
-	{ "amd64",	(SS11|M64), { "-m64", "-mtune=opteron" } },
-	{ "386",	SS11,	{ "-march=i386" } },
-	{ "pentium_pro", SS11,	{ "-march=pentiumpro" } },
-	{ "sse",	SS11, { "-msse", "-mfpmath=sse" } },
-	{ "sse2",	SS11, { "-msse2", "-mfpmath=sse" } },
-#elif defined(__sparc)
-	{ "generic",	(SS11|M32), { "-m32", "-mcpu=v8" } },
-	{ "generic64",	(SS11|M64), { "-m64", "-mcpu=v9" } },
-	{ "v8",		(SS11|M32), { "-m32", "-mcpu=v8", "-mno-v8plus" } },
-	{ "v8plus",	(SS11|M32), { "-m32", "-mcpu=v9", "-mv8plus" } },
-	{ "v8plusa",	(SS11|M32), { "-m32", "-mcpu=ultrasparc", "-mv8plus",
-			"-mvis" } },
-	{ "v8plusb",	(SS11|M32), { "-m32", "-mcpu=ultrasparc3", "-mv8plus",
-			"-mvis" } },
-	{ "v9",		(SS11|M64), { "-m64", "-mcpu=v9" } },
-	{ "v9a",	(SS11|M64), { "-m64", "-mcpu=ultrasparc", "-mvis" } },
-	{ "v9b",	(SS11|M64), { "-m64", "-mcpu=ultrasparc3", "-mvis" } },
-	{ "sparc",	SS12, { "-mcpu=v9", "-mv8plus" } },
-	{ "sparcvis",	SS12, { "-mcpu=ultrasparc", "-mvis" } },
-	{ "sparcvis2",	SS12, { "-mcpu=ultrasparc3", "-mvis" } }
-#endif
-};
-
-static int xtbl_size = sizeof (xtbl) / sizeof (xarch_table_t);
 
 static const char *progname;
 
@@ -347,33 +302,6 @@ usage()
 	exit(2);
 }
 
-static int
-xlate_xtb(struct aelist *h, const char *xarg)
-{
-	int	i, j;
-
-	for (i = 0; i < xtbl_size; i++) {
-		if (strcmp(xtbl[i].x_arg, xarg) == 0)
-			break;
-	}
-
-	/*
-	 * At the end of the table and so no matching "arg" entry
-	 * found and so this must be a bad -xarch= flag.
-	 */
-	if (i == xtbl_size)
-		error(xarg);
-
-	for (j = 0; j < TRANS_ENTRY; j++) {
-		if (xtbl[i].x_trans[j] != NULL)
-			newae(h, xtbl[i].x_trans[j]);
-		else
-			break;
-	}
-	return (xtbl[i].x_flags);
-
-}
-
 static void
 do_gcc(cw_ictx_t *ctx)
 {
@@ -430,6 +358,9 @@ do_gcc(cw_ictx_t *ctx)
 				newae(ctx->i_ae, arg + 6);
 			else
 				error(arg);
+
+			if (strcmp(arg, "-_gcc=-shared") == 0)
+				nolibc = 1;
 			break;
 		case 'g':
 			newae(ctx->i_ae, "-gdwarf-2");
@@ -488,10 +419,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (strcmp(arg, "-D_KERNEL") == 0 ||
 			    strcmp(arg, "-D_BOOT") == 0)
 				newae(ctx->i_ae, "-ffreestanding");
-			break;
-		case 'G':
-			newae(ctx->i_ae, "-shared");
-			nolibc = 1;
 			break;
 		case 'K':
 			if (arglen == 1) {
@@ -554,36 +481,11 @@ do_gcc(cw_ictx_t *ctx)
 				free(s);
 			}
 			break;
-		case 'P':
-			/*
-			 * We could do '-E -o filename.i', but that's hard,
-			 * and we don't need it for the case that's triggering
-			 * this addition.  We'll require the user to specify
-			 * -o in the Makefile.  If they don't they'll find out
-			 * in a hurry.
-			 */
-			newae(ctx->i_ae, "-E");
-			nolibc = 1;
-			break;
-		case 't':
-			if (arglen == 1) {
-				newae(ctx->i_ae, "-Wl,-t");
-				break;
-			}
-			error(arg);
-			break;
 		case 'W':
 			if (strncmp(arg, "-Wa,", 4) == 0 ||
 			    strncmp(arg, "-Wp,", 4) == 0 ||
 			    strncmp(arg, "-Wl,", 4) == 0) {
 				newae(ctx->i_ae, arg);
-				break;
-			}
-			if (strcmp(arg, "-W0,-Lt") == 0) {
-				/*
-				 * Generate tests at the top of loops.
-				 * There is no direct gcc equivalent, ignore.
-				 */
 				break;
 			}
 #if defined(__x86)
@@ -594,10 +496,6 @@ do_gcc(cw_ictx_t *ctx)
 				nolibc = 1;
 				break;
 			}
-			if (strcmp(arg, "-Wu,-save_args") == 0) {
-				newae(ctx->i_ae, "-msave-args");
-				break;
-			}
 #endif	/* __x86 */
 			error(arg);
 			break;
@@ -605,13 +503,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (arglen == 1)
 				error(arg);
 			switch (arg[2]) {
-			case 'a':
-				if (strncmp(arg, "-xarch=", 7) == 0) {
-					mflag |= xlate_xtb(ctx->i_ae, arg + 7);
-					break;
-				}
-				error(arg);
-				break;
 #if defined(__x86)
 			case 'm':
 				if (strcmp(arg, "-xmodel=kernel") == 0) {
@@ -624,21 +515,6 @@ do_gcc(cw_ictx_t *ctx)
 				error(arg);
 				break;
 #endif	/* __x86 */
-			case 'p':
-				if (strcmp(arg, "-xpg") == 0) {
-					newae(ctx->i_ae, "-pg");
-					break;
-				}
-				error(arg);
-				break;
-			case 's':
-				if (strcmp(arg, "-xs") == 0)
-					break;
-				error(arg);
-				break;
-			case 'e':
-			case 'h':
-			case 'l':
 			default:
 				error(arg);
 				break;
@@ -653,14 +529,6 @@ do_gcc(cw_ictx_t *ctx)
 				arglen = strlen(arg + 1);
 			} else {
 				arg += 2;
-			}
-			if (strncmp(arg, "l,", 2) == 0) {
-				char *s = strdup(arg);
-				s[0] = '-';
-				s[1] = 'B';
-				newae(ctx->i_ae, s);
-				free(s);
-				break;
 			}
 			if (strncmp(arg, "I,", 2) == 0) {
 				char *s = strdup(arg);
@@ -677,17 +545,6 @@ do_gcc(cw_ictx_t *ctx)
 			error(arg);
 			break;
 		}
-	}
-
-	/*
-	 * Make sure that we do not have any unintended interactions between
-	 * the xarch options passed in and the version of the Studio compiler
-	 * used.
-	 */
-	if ((mflag & (SS11|SS12)) == (SS11|SS12)) {
-		(void) fprintf(stderr,
-		    "Conflicting \"-xarch=\" flags (both Studio 11 and 12)\n");
-		exit(2);
 	}
 
 	switch (mflag) {
@@ -711,31 +568,6 @@ do_gcc(cw_ictx_t *ctx)
 		 */
 		newae(ctx->i_ae, "-mcpu=v9");
 #endif
-		break;
-	case SS12:
-#if defined(__sparc)
-		/* no -m32/-m64 flag used - this is an error for sparc builds */
-		(void) fprintf(stderr, "No -m32/-m64 flag defined\n");
-		exit(2);
-#endif
-		break;
-	case SS11:
-		/* FALLTHROUGH */
-	case (SS11|M32):
-	case (SS11|M64):
-		break;
-	case (SS12|M32):
-#if defined(__sparc)
-		/*
-		 * Need to add in further 32 bit options because with SS12
-		 * the xarch=sparcvis option can be applied to 32 or 64
-		 * bit, and so the translatation table (xtbl) cannot handle
-		 * that.
-		 */
-		newae(ctx->i_ae, "-mv8plus");
-#endif
-		break;
-	case (SS12|M64):
 		break;
 	default:
 		(void) fprintf(stderr,

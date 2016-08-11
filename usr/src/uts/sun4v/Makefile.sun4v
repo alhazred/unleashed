@@ -158,7 +158,7 @@ CTFMERGE_GUDIR	= sun4v
 #
 #	machine specific optimization, override default in Makefile.master
 #
-CC_XARCH	= -m64 -xarch=sparcvis
+CC_XARCH	= -m64 -_gcc=-mcpu=ultrasparc -_gcc=-mvis
 AS_XARCH	= -xarch=v9v
 COPTIMIZE	= -_gcc=-fno-strict-aliasing
 COPTIMIZE	+= -_gcc=-fno-unit-at-a-time

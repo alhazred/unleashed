@@ -54,7 +54,7 @@ POFILES=	${OBJS:%.o=%.po}
 
 
 # TCOV_FLAG=	-ql
-# GPROF_FLAG=	-xpg
+# GPROF_FLAG=	-_gcc=-pg
 # DEBUG_FLAG=	-g
 
 LDLIBS += 	-lumem -lsldap
