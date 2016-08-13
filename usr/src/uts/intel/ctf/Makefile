@@ -35,7 +35,7 @@ ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 CPPFLAGS	+= -I$(SRC)/common/ctf -DCTF_OLD_VERSIONS
-LDFLAGS		+= $(BREDUCE) -M$(UTSBASE)/common/ctf/mapfile -dy
+LDFLAGS		+= $(LD_BREDUCE) -M$(UTSBASE)/common/ctf/mapfile -dy
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

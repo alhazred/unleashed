@@ -53,7 +53,7 @@ ROOTSAFPROG= $(PROG:%=$(LIBSAFD)/%)
 # If debug is needed, then:  CPPFLAGS += -DDEBUG
 
 LDLIBS += -lnsl
-LDFLAGS += $(MAPFILE.NGB:%=-M%)
+LDFLAGS += $(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
 FILEMODE= 0755
 
 CERRWARN += -_gcc=-Wno-implicit-function-declaration

@@ -31,7 +31,7 @@ SRCS= $(OBJS:%.o=%.c)
 
 include ../Makefile.cmd
 
-LDFLAGS +=	$(MAPFILE.INT:%=-M%)
+LDFLAGS +=	$(MAPFILE.INT:%=-_gcc=-Wl,-M%)
 LDLIBS +=	-lcurses
 CPPFLAGS +=	-I../../lib/libcurses/screen
 CERRWARN +=	-_gcc=-Wno-parentheses

@@ -102,8 +102,13 @@ LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) \
 		$(RTLDLIB) -lrtld \
 		$(LDLIB) $(LD_LIB) 
 
-DYNFLAGS +=	-i -e _rt_boot $(VERSREF) $(ZNODLOPEN) \
-		$(ZINTERPOSE) -zdtrace=dtrace_data '-R$$ORIGIN'
+# The first few lines are essentially duplicating DYNFLAGS, but without the
+# CW & GCC argument prefixes.
+DYNFLAGS =	$(HSONAME) $(LD_ZTEXT) $(LD_ZDEFS) $(LD_BDIRECT) \
+		$(MAPFILES:%=-M%) $(MAPFILE.PGA:%=-M%) $(MAPFILE.NED:%=-M%) \
+		$(LD_ZIGNORE) \
+		-i -e _rt_boot $(VERSREF) $(LD_ZNODLOPEN) \
+		$(LD_ZINTERPOSE) -zdtrace=dtrace_data '-R$$ORIGIN'
 
 BUILD.s=	$(AS) $(ASFLAGS) $< -o $@
 

@@ -31,7 +31,7 @@ SRCDIR		= ../common/
 
 CPPFLAGS	+= -DLIBM_BUILD
 MAPFILEDIR	= ../common/
-DYNFLAGS 	+= -zignore -Wl,-F'libm.so.2'
+DYNFLAGS 	+= -Wl,-zignore -Wl,-F'libm.so.2'
 
 .KEEP_STATE:
 

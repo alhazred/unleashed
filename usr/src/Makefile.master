@@ -682,34 +682,55 @@ LD=			$(NATIVELD)
 # Pass -Y flag to cpp (method of which is release-dependent)
 CCYFLAG=		-Y I,
 
-BDIRECT=	-Bdirect
-BDYNAMIC=	-Bdynamic
-BLOCAL=		-Blocal
-BNODIRECT=	-Bnodirect
-BREDUCE=	-Breduce
-BSTATIC=	-Bstatic
+LD_BDIRECT=	-Bdirect
+LD_BDYNAMIC=	-Bdynamic
+LD_BLOCAL=	-Blocal
+LD_BNODIRECT=	-Bnodirect
+LD_BREDUCE=	-Breduce
+LD_BSTATIC=	-Bstatic
 
-ZDEFS=		-zdefs
-ZDIRECT=	-zdirect
-ZIGNORE=	-zignore
-ZINITFIRST=	-zinitfirst
-ZINTERPOSE=	-zinterpose
-ZLAZYLOAD=	-zlazyload
-ZLOADFLTR=	-zloadfltr
-ZMULDEFS=	-zmuldefs
-ZNODEFAULTLIB=	-znodefaultlib
-ZNODEFS=	-znodefs
-ZNODELETE=	-znodelete
-ZNODLOPEN=	-znodlopen
-ZNODUMP=	-znodump
-ZNOLAZYLOAD=	-znolazyload
-ZNOLDYNSYM=	-znoldynsym
-ZNORELOC=	-znoreloc
-ZNOVERSION=	-znoversion
-ZRECORD=	-zrecord
-ZREDLOCSYM=	-zredlocsym
-ZTEXT=		-ztext
-ZVERBOSE=	-zverbose
+BDIRECT=	$(LD_BDIRECT:%=-_gcc=-Wl,%)
+BDYNAMIC=	$(LD_BDYNAMIC:%=-_gcc=-Wl,%)
+BLOCAL=		$(LD_BLOCAL:%=-_gcc=-Wl,%)
+BNODIRECT=	$(LD_BNODIRECT:%=-_gcc=-Wl,%)
+BREDUCE=	$(LD_BREDUCE:%=-_gcc=-Wl,%)
+BSTATIC=	$(LD_BSTATIC:%=-_gcc=-Wl,%)
+
+LD_ZDEFS=		-zdefs
+LD_ZDIRECT=		-zdirect
+LD_ZIGNORE=		-zignore
+LD_ZINITFIRST=		-zinitfirst
+LD_ZINTERPOSE=		-zinterpose
+LD_ZLAZYLOAD=		-zlazyload
+LD_ZLOADFLTR=		-zloadfltr
+LD_ZNODEFS=		-znodefs
+LD_ZNODELETE=		-znodelete
+LD_ZNODLOPEN=		-znodlopen
+LD_ZNODUMP=		-znodump
+LD_ZNOLAZYLOAD=		-znolazyload
+LD_ZNOLDYNSYM=		-znoldynsym
+LD_ZNORELOC=		-znoreloc
+LD_ZNOVERSION=		-znoversion
+LD_ZRECORD=		-zrecord
+LD_ZTEXT=		-ztext
+
+ZDEFS=		$(LD_ZDEFS:%=-_gcc=-Wl,%)
+ZDIRECT=	$(LD_ZDIRECT:%=-_gcc=-Wl,%)
+ZIGNORE=	$(LD_ZIGNORE:%=-_gcc=-Wl,%)
+ZINITFIRST=	$(LD_ZINITFIRST:%=-_gcc=-Wl,%)
+ZINTERPOSE=	$(LD_ZINTERPOSE:%=-_gcc=-Wl,%)
+ZLAZYLOAD=	$(LD_ZLAZYLOAD:%=-_gcc=-Wl,%)
+ZLOADFLTR=	$(LD_ZLOADFLTR:%=-_gcc=-Wl,%)
+ZNODEFS=	$(LD_ZNODEFS:%=-_gcc=-Wl,%)
+ZNODELETE=	$(LD_ZNODELETE:%=-_gcc=-Wl,%)
+ZNODLOPEN=	$(LD_ZNODLOPEN:%=-_gcc=-Wl,%)
+ZNODUMP=	$(LD_ZNODUMP:%=-_gcc=-Wl,%)
+ZNOLAZYLOAD=	$(LD_ZNOLAZYLOAD:%=-_gcc=-Wl,%)
+ZNOLDYNSYM=	$(LD_ZNOLDYNSYM:%=-_gcc=-Wl,%)
+NORELOC=	$(LD_ZNORELOC:%=-_gcc=-Wl,%)
+ZNOVERSION=	$(LD_ZNOVERSION:%=-_gcc=-Wl,%)
+ZRECORD=	$(LD_ZRECORD:%=-_gcc=-Wl,%)
+ZTEXT=		$(LD_ZTEXT:%=-_gcc=-Wl,%)
 
 GSHARED=	-_gcc=-shared
 CCMT=		-D_REENTRANT

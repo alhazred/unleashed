@@ -75,7 +75,7 @@ CERRWARN += -_gcc=-Wno-uninitialized
 LDLIBS += -lgss -lnsl
 
 gssd :=	MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
-gssd :=	LDFLAGS += $(MAPFILES:%=-M%)
+gssd :=	LDFLAGS += $(MAPFILES:%=-_gcc=-Wl,-M%)
 
 $(GPROGS) := CPPFLAGS += -DSYSV -DSunOS=50 
 

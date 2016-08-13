@@ -306,7 +306,7 @@ LDLIBS += -lgss -lsocket -lresolv -lc -lpkcs11 -lnsl -lkstat
 DYNFLAGS += $(ZIGNORE)
 
 # mech lib needs special initialization at load time
-DYNFLAGS += -zinitarray=krb5_ld_init
+DYNFLAGS += -_gcc=-Wl,-zinitarray=krb5_ld_init
 
 objs/%.o pics/%.o: $(SRC)/uts/common/gssapi/%.c
 	$(COMPILE.c)  -o $@ $<
