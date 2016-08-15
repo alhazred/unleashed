@@ -133,7 +133,7 @@ clobber: clean
 	$(TARGETS)
 
 $(MODFILE): dmod .WAIT $(MODOBJS) $$(MAPFILE-EXT)
-	$(LINK.c) $(ZDEFS) $(ZIGNORE) $(MAPFILE-EXT:%=-M%) $(GSHARED) \
+	$(LINK.c) $(ZDEFS) $(ZIGNORE) $(MAPFILE-EXT:%=-_gcc=-Wl,-M%) $(GSHARED) \
 	    $(MODOBJS) -o $@ $(LDLIBS) -lc
 	$(CTFMERGE) -L VERSION -o $@ $(MODOBJS)
 	$(POST_PROCESS_SO)
@@ -155,7 +155,7 @@ $(MODFILE): dmod .WAIT $(MODOBJS) $$(MAPFILE-EXT)
 LINKTESTOBJ = $(KMDBDIR)/kmdb_modlinktest.o
 
 KMDB_LINKTEST = \
-	$(LD) $(ZDEFS) -dy -r -o $@.linktest $(KMODOBJS) \
+	$(LD) $(LD_ZDEFS) -dy -r -o $@.linktest $(KMODOBJS) \
 	$(STANDOBJS) $(LINKTESTOBJ) && \
 	$(RM) $@.linktest
 

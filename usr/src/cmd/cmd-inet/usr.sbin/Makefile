@@ -128,7 +128,7 @@ if_mpadm		:=	LDLIBS += -linetutil -lipmp
 if_mpadm.po		:=	XGETFLAGS += -a
 route			:=	CPPFLAGS += -DNDEBUG
 ndd			:=	LDLIBS += -ldladm -lipadm
-in.comsat		:=	LDFLAGS += $(MAPFILE.NGB:%=-M%)
+in.comsat		:=	LDFLAGS += $(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
 
 .KEEP_STATE:
 

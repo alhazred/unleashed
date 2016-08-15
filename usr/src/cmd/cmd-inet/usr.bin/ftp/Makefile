@@ -47,7 +47,7 @@ LDLIBS +=	-lsocket -lnsl -lgss
 
 # ftp defines its own delete and glob - localize all symbols to prevent a
 # name clash.
-LDFLAGS +=	$(MAPFILE.NGB:%=-M%)
+LDFLAGS +=	$(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
 
 .KEEP_STATE:
 

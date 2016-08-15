@@ -36,9 +36,9 @@ CPPFLAGS += -D_LARGEFILE64_SOURCE=1 -DBZ_NO_STDIO -I$(SRC)/uts/common
 # savecore is compiled with bits from $(SRC)/common/bzip2 and some function
 # symbols there are defined as weak; if you leave them out of
 # savecore.c it will compile, but trying to call that function
-# will jump to 0.  So we use -ztext to avoid that.
+# will jump to 0.  So we use $(ZTEXT) to avoid that.
 #
-LDFLAGS += -ztext
+LDFLAGS += $(ZTEXT)
 
 BZIP2OBJS =	bz2blocksort.o	\
 		bz2compress.o	\

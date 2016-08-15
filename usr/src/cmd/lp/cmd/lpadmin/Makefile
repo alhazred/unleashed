@@ -67,7 +67,7 @@ LPLIBS=		$(LIBACC)	\
 SYSLIBS=	-lcurses
 
 LDLIBS +=	-lsecdb $(LPLIBS) $(SYSLIBS) $(I18N)
-LDFLAGS +=	$(MAPFILE.NGB:%=-M%)
+LDFLAGS +=	$(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
 
 PROG=		lpadmin
 

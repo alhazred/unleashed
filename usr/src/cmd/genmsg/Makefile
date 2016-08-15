@@ -46,7 +46,7 @@ CPPFLAGS = -I../head $(CPPFLAGS.master)
 # still export a number of "yy*" (libl) interfaces.  Reduce all other symbols
 # to local scope.
 MAPFILES +=	$(MAPFILE.LEX) $(MAPFILE.NGB)
-MAPOPTS =	$(MAPFILES:%=-M%)
+MAPOPTS =	$(MAPFILES:%=-_gcc=-Wl,-M%)
 
 LDFLAGS +=	$(MAPOPTS)
 

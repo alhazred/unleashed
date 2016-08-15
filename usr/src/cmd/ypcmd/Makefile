@@ -58,7 +58,7 @@ $(LNSLPROG) :=	LDLIBS += -lnsl
 $(NIS2LDAPPROG) := LDLIBS += -lc -lnsl -lnisdb
 stdethers :=	LDLIBS += -lsocket
 makedbm :=	MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
-makedbm :=	LDFLAGS += $(MAPFILES:%=-M%)
+makedbm :=	LDFLAGS += $(MAPFILES:%=-_gcc=-Wl,-M%)
 
 $(ROOTVAR_YP)/aliases :=	FILEMODE=555
 

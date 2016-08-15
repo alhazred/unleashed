@@ -26,7 +26,7 @@
 ROOTTERMINFO = $(ROOTSHLIB)/terminfo
 
 $(PROG).core: $(OBJS) $(KMDBLIBS) $(MAPFILE)
-	$(LD) -r $(BREDUCE) $(ZNOVERSION) $(ZDEFS) -M$(MAPFILE) -o $@ $(OBJS) \
+	$(LD) -r $(LD_BREDUCE) $(LD_ZNOVERSION) $(LD_ZDEFS) -M$(MAPFILE) -o $@ $(OBJS) \
 	    $(KMDBLIBS)
 
 $(PROG): $(PROG).core $(KCTLOBJS)

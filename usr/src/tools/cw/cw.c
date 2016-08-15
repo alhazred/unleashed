@@ -40,7 +40,6 @@
 
 /*
  * -A<name[(tokens)]>	Preprocessor predicate assertion
- * -B<[static|dynamic]>	Specify dynamic or static binding
  * -C		Prevent preprocessor from removing comments
  * -c		Compile only - produce .o files, suppress linking
  * -D<name[=token]>	Associate name with token as if by #define
@@ -96,7 +95,6 @@
 /*
  * -#				-v
  * -A<name[(tokens)]>		pass-thru
- * -B<[static|dynamic]>		pass-thru (syntax error for anything else)
  * -C				pass-thru
  * -c				pass-thru
  * -D<name[=token]>		pass-thru
@@ -456,30 +454,6 @@ do_gcc(cw_ictx_t *ctx)
 				break;
 			}
 			error(arg);
-			break;
-		case 'B':	/* linker options */
-		case 'M':
-		case 'z':
-			{
-				char *opt;
-				size_t len;
-				char *s;
-
-				if (arglen == 1) {
-					opt = *++ctx->i_oldargv;
-					if (opt == NULL || *opt == '\0')
-						error(arg);
-					ctx->i_oldargc--;
-				} else {
-					opt = arg + 2;
-				}
-				len = strlen(opt) + 7;
-				if ((s = malloc(len)) == NULL)
-					nomem();
-				(void) snprintf(s, len, "-Wl,-%c%s", c, opt);
-				newae(ctx->i_ae, s);
-				free(s);
-			}
 			break;
 		case 'W':
 			if (strncmp(arg, "-Wa,", 4) == 0 ||

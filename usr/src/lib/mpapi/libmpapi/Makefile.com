@@ -38,8 +38,8 @@ LDLIBS +=	-lc
 
 CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
 CPPFLAGS +=	-DBUILD_TIME='"Wed Sep 24 12:00:00 2008"'
-DYNFLAGS +=	-z finiarray=ExitLibrary
-DYNFLAGS +=	-z initarray=InitLibrary
+DYNFLAGS +=	-_gcc=-Wl,-zfiniarray=ExitLibrary
+DYNFLAGS +=	-_gcc=-Wl,-zinitarray=InitLibrary
 
 CERRWARN +=	-_gcc=-Wno-type-limits
 CERRWARN +=	-_gcc=-Wno-unused-variable

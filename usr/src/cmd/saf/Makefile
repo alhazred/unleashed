@@ -53,7 +53,7 @@ ROOTSACF= $(SACF:%=$(LIBSAFD)/%)
 ROOTADMF= $(ADMF:%=$(ROOTUSRSBIN)/%)
 
 LDLIBS += -lnsl
-LDFLAGS += $(MAPFILE.NGB:%=-M%)
+LDFLAGS += $(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
 
 CERRWARN += -_gcc=-Wno-implicit-function-declaration
 CERRWARN += -_gcc=-Wno-parentheses

@@ -75,7 +75,7 @@ OBJS += $(PROG_OBJS)
 
 LDFLAGS.cmd = \
         $(ENVLDFLAGS1) $(ENVLDFLAGS2) $(ENVLDFLAGS3) $(BDIRECT) \
-        $(MAPFILE.NES:%=-M%) $(MAPFILE.PGA:%=-M%) $(MAPFILE.NED:%=-M%)
+        $(MAPFILE.NES:%=-_gcc=-Wl,-M%) $(MAPFILE.PGA:%=-_gcc=-Wl,-M%) $(MAPFILE.NED:%=-_gcc=-Wl,-M%)
 
 $(PROG):	$(PROG_OBJS)
 	$(LINK.c) -o $@ $(PROG_OBJS) $(LDFLAGS.cmd) $(LDLIBS)

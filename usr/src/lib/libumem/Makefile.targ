@@ -45,10 +45,19 @@ $(TYPES:%=all.%):
 all.library.targ: $(LIBS)
 all.standalone.targ: $(STANDLIBRARY)
 
+# The use of sed is a gross hack needed because the current build system
+# assumed that the compiler accepted linker flags (-Bfoo -zfoo and -Mfoo)
+# directly.  As part of getting rid of cw (which used to do the mapping for
+# us), we needed to prefix all linker flags passed to the compiler with
+# -Wl,.  Here, however, since we're calling the linker directly, we have to
+# discard the prefixes.  Ideally, we would be using the LD_Z* and LD_B*
+# variables instead, but that would require a lot of mucking with makefiles.
+# So for now, we do this.
+REMOVE_CW_GCC_PREFIX=echo $(LDFLAGS) | $(SED) -e 's/-_gcc=-Wl,//g'
 $(STANDLIBRARY): $(OBJS) $(LINKTEST_OBJ)
-	$(LD) $(BREDUCE) $(ZDEFS) $(LDFLAGS) -o $@.linktest $(OBJS) $(LINKTEST_OBJ)
+	$(LD) $(LD_BREDUCE) $(LD_ZDEFS) $(REMOVE_CW_GCC_PREFIX:sh) -o $@.linktest $(OBJS) $(LINKTEST_OBJ)
 	rm $@.linktest
-	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+	$(LD) $(REMOVE_CW_GCC_PREFIX:sh) -o $@ $(OBJS)
 
 clobber: $(TYPES:%=clobber.%)
 

@@ -64,7 +64,7 @@ CERRWARN +=	-_gcc=-Wno-uninitialized
 CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-clobbered
 LDLIBS +=	-lmail -lcmdutils
-LDFLAGS +=	$(MAPFILE.NGB:%=-M%)
+LDFLAGS +=	$(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
 
 CLOBBERFILES += $(MAILXHELP)
 
