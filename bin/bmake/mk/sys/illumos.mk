@@ -51,9 +51,6 @@ LINK.F?=	${FC} ${FFLAGS} ${CPPFLAGS} ${LDFLAGS}
 COMPILE.r?=	${FC} ${FFLAGS} ${RFLAGS} -c
 LINK.r?=	${FC} ${FFLAGS} ${RFLAGS} ${LDFLAGS}
 
-# XXX: if GNU install moves out of usr/bin, we can drop this
-INSTALL?=	/usr/sbin/install
-
 LEX?=		lex
 LFLAGS?=
 LEX.l?=		${LEX} ${LFLAGS}
