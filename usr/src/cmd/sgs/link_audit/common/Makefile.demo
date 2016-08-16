@@ -30,8 +30,8 @@ sparc_XARCH=
 sparc64_XARCH=	-m64
 i386_XARCH=	
 i38664_XARCH=	-m64
-C_PICFLAGS=	-Kpic
-C_PICFLAGS64=	-Kpic
+C_PICFLAGS=	-_gcc=-fpic
+C_PICFLAGS64=	-_gcc=-fpic
 
 PROGS=		dumpbind
 LIBS=		truss.so.1 symbindrep.so.1 perfcnt.so.1 who.so.1 bindings.so.1

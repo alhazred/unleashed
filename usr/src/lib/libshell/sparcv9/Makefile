@@ -27,7 +27,7 @@
 include ../Makefile.com
 include ../../Makefile.lib.64
 
-# Use -KPIC since libshell is too big for -Kpic on 64bit
+# Use -_gcc=-fPIC since libshell is too big for -_gcc=-fpic on 64bit
 # (and on 32bit it is close to the barrier)
 sparcv9_C_PICFLAGS  = $(C_BIGPICFLAGS)
 

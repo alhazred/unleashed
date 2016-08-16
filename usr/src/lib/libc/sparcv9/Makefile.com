@@ -1042,7 +1042,7 @@ $(DYNLIB) := BUILD.SO = $(LD) -o $@ -G $(DYNFLAGS) $(PICS) $(ALTPICS) $(EXTPICS)
 
 MAPFILES =	$(LIBCDIR)/port/mapfile-vers
 
-sparcv9_C_PICFLAGS= -K PIC
+sparcv9_C_PICFLAGS= -_gcc=-fPIC
 CFLAGS64 +=	$(EXTN_CFLAGS)
 CPPFLAGS=	-D_REENTRANT -Dsparc $(EXTN_CPPFLAGS) $(THREAD_DEBUG) \
 		-I$(LIBCBASE)/inc -I$(LIBCDIR)/inc $(CPPFLAGS.master)
@@ -1191,7 +1191,7 @@ $(LIB_PIC): pics $$(PICS)
 #	$(POST_PROCESS_O)
 
 #crt/_rtbootld.s:	crt/_rtboot.s crt/_rtld.c
-#	$(CC) $(CPPFLAGS) -O -S -K pic crt/_rtld.c -o crt/_rtld.s
+#	$(CC) $(CPPFLAGS) -O -S -_gcc=-fpic crt/_rtld.c -o crt/_rtld.s
 #	$(CAT) crt/_rtboot.s crt/_rtld.s > $@
 #	$(RM) crt/_rtld.s
 
