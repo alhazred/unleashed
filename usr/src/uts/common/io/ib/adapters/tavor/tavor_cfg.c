@@ -268,8 +268,6 @@ tavor_cfg_profile_init_phase1(tavor_state_t *state)
 {
 	tavor_cfg_profile_t	*cp;
 
-	TAVOR_TNF_ENTER(tavor_cfg_profile_init_phase1);
-
 	/*
 	 * Allocate space for the configuration profile structure
 	 */
@@ -379,7 +377,6 @@ tavor_cfg_profile_init_phase1(tavor_state_t *state)
 	/* Attach the configuration profile to Tavor softstate */
 	state->ts_cfg_profile = cp;
 
-	TAVOR_TNF_EXIT(tavor_cfg_profile_init_phase1);
 	return (DDI_SUCCESS);
 }
 
@@ -391,8 +388,6 @@ int
 tavor_cfg_profile_init_phase2(tavor_state_t *state)
 {
 	tavor_cfg_profile_t	*cp;
-
-	TAVOR_TNF_ENTER(tavor_cfg_profile_init_phase2);
 
 	/* Read the configuration profile from Tavor softstate */
 	cp = state->ts_cfg_profile;
@@ -603,7 +598,6 @@ tavor_cfg_profile_init_phase2(tavor_state_t *state)
 	/* Determine additional configuration from optional properties */
 	tavor_cfg_prop_lookup(state, cp);
 
-	TAVOR_TNF_EXIT(tavor_cfg_profile_init_phase2);
 	return (DDI_SUCCESS);
 }
 
@@ -615,14 +609,10 @@ tavor_cfg_profile_init_phase2(tavor_state_t *state)
 void
 tavor_cfg_profile_fini(tavor_state_t *state)
 {
-	TAVOR_TNF_ENTER(tavor_cfg_profile_fini);
-
 	/*
 	 * Free up the space for configuration profile
 	 */
 	kmem_free(state->ts_cfg_profile, sizeof (tavor_cfg_profile_t));
-
-	TAVOR_TNF_EXIT(tavor_cfg_profile_fini);
 }
 
 

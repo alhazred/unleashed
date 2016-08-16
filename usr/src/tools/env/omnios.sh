@@ -34,7 +34,6 @@
 #       do not bringover from the parent (-n)
 #       runs 'make check' (-C)
 #       checks for new interfaces in libraries (-A)
-#       runs lint in usr/src (-l plus the LINTDIRS variable)
 #       sends mail on completion (-m and the MAILTO variable)
 #       creates packages for PIT/RE (-p)
 #       checks for changes in ELF runpaths (-r)
@@ -210,10 +209,6 @@ export CW_NO_SHADOW='1'
 # POST_NIGHTLY can be any command to be run at the end of nightly.  See
 # nightly(1) for interactions between environment variables and this command.
 #POST_NIGHTLY=
-
-# Comment this out to disable support for IPP printing, i.e. if you
-# don't want to bother providing the Apache headers this needs.
-#export ENABLE_IPP_PRINTING=
 
 # Comment this out to disable support for SMB printing, i.e. if you
 # don't want to bother providing the CUPS headers this needs.

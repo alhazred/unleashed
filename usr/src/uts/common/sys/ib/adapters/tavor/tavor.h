@@ -75,25 +75,6 @@
 extern "C" {
 #endif
 
-/*
- * The following defines and macros are used for Tavor TNF tracing
- * Note: TAVOR_TNF_FAIL is used in routines which has many failure cases.
- * It will initialize the "errormsg" and "status" variables (both of which
- * must be declared locally in the routines where this macro is used) for use
- * in a later TNF probe and return from routine.
- */
-#define	TAVOR_TNF_ERROR			"tavor tavor_error "
-#define	TAVOR_TNF_TRACE			"tavor tavor_trace "
-#define	TAVOR_TNF_ENTER(func)						\
-	TNF_PROBE_0_DEBUG(func##_start, TAVOR_TNF_TRACE, "")
-#define	TAVOR_TNF_EXIT(func)						\
-	TNF_PROBE_0_DEBUG(func##_end, TAVOR_TNF_TRACE, "")
-#define	TAVOR_TNF_FAIL(s, e)						\
-{									\
-	errormsg = (e);							\
-	status = (s);							\
-}
-
 #define	TAVOR_VPD_HDR_DWSIZE		0x10 /* 16 Dwords */
 #define	TAVOR_VPD_HDR_BSIZE		0x40 /* 64 Bytes */
 

@@ -73,8 +73,6 @@ tavor_cmd_post(tavor_state_t *state, tavor_cmd_post_t *cmdpost)
 	int		status;
 	uint16_t	token;
 
-	TAVOR_TNF_ENTER(tavor_cmd_post);
-
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*cmdpost))
 
 	/* Determine if we are going to spin until completion */
@@ -83,11 +81,9 @@ tavor_cmd_post(tavor_state_t *state, tavor_cmd_post_t *cmdpost)
 		/* Write the command to the HCR */
 		status = tavor_write_hcr(state, cmdpost, 0);
 		if (status != TAVOR_CMD_SUCCESS) {
-			TAVOR_TNF_EXIT(tavor_cmd_post);
 			return (status);
 		}
 
-		TAVOR_TNF_EXIT(tavor_cmd_post);
 		return (TAVOR_CMD_SUCCESS);
 
 	} else {  /* "TAVOR_CMD_SLEEP_NOSPIN" */
@@ -98,7 +94,6 @@ tavor_cmd_post(tavor_state_t *state, tavor_cmd_post_t *cmdpost)
 		status = tavor_outstanding_cmd_alloc(state, &cmdptr,
 		    cmdpost->cp_flags);
 		if (status != TAVOR_CMD_SUCCESS) {
-			TAVOR_TNF_EXIT(tavor_cmd_post);
 			return (status);
 		}
 		_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*cmdptr))
@@ -119,7 +114,6 @@ tavor_cmd_post(tavor_state_t *state, tavor_cmd_post_t *cmdpost)
 		status = tavor_write_hcr(state, cmdpost, token);
 		if (status != TAVOR_CMD_SUCCESS) {
 			tavor_outstanding_cmd_free(state, &cmdptr);
-			TAVOR_TNF_EXIT(tavor_cmd_post);
 			return (status);
 		}
 
@@ -161,11 +155,9 @@ tavor_cmd_post(tavor_state_t *state, tavor_cmd_post_t *cmdpost)
 		tavor_outstanding_cmd_free(state, &cmdptr);
 
 		if (status != TAVOR_CMD_SUCCESS) {
-			TAVOR_TNF_EXIT(tavor_cmd_post);
 			return (status);
 		}
 
-		TAVOR_TNF_EXIT(tavor_cmd_post);
 		return (TAVOR_CMD_SUCCESS);
 	}
 }
@@ -185,8 +177,6 @@ tavor_mbox_alloc(tavor_state_t *state, tavor_mbox_info_t *mbox_info,
 	int			status;
 	uint_t			sleep_context;
 
-	TAVOR_TNF_ENTER(tavor_mbox_alloc);
-
 	sleep_context = TAVOR_SLEEPFLAG_FOR_CONTEXT();
 
 	/* Allocate an "In" mailbox */
@@ -204,7 +194,6 @@ tavor_mbox_alloc(tavor_state_t *state, tavor_mbox_info_t *mbox_info,
 			    &state->ts_in_mblist, &mbox_info->mbi_in,
 			    mbox_wait);
 			if (status != TAVOR_CMD_SUCCESS) {
-				TAVOR_TNF_EXIT(tavor_mbox_alloc);
 				return (status);
 			}
 		}
@@ -233,7 +222,6 @@ tavor_mbox_alloc(tavor_state_t *state, tavor_mbox_info_t *mbox_info,
 					    &state->ts_in_mblist,
 					    &mbox_info->mbi_in);
 				}
-				TAVOR_TNF_EXIT(tavor_mbox_alloc);
 				return (status);
 			}
 		}
@@ -243,7 +231,6 @@ tavor_mbox_alloc(tavor_state_t *state, tavor_mbox_info_t *mbox_info,
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(mbox_info->mbi_sleep_context))
 	mbox_info->mbi_sleep_context = sleep_context;
 
-	TAVOR_TNF_EXIT(tavor_mbox_alloc);
 	return (TAVOR_CMD_SUCCESS);
 }
 
@@ -255,8 +242,6 @@ tavor_mbox_alloc(tavor_state_t *state, tavor_mbox_info_t *mbox_info,
 void
 tavor_mbox_free(tavor_state_t *state, tavor_mbox_info_t *mbox_info)
 {
-	TAVOR_TNF_ENTER(tavor_mbox_free);
-
 	/*
 	 * The mailbox has to be freed in the same context from which it was
 	 * allocated.  The context is stored in the mbox_info at
@@ -292,8 +277,6 @@ tavor_mbox_free(tavor_state_t *state, tavor_mbox_info_t *mbox_info)
 			    &mbox_info->mbi_out);
 		}
 	}
-
-	TAVOR_TNF_EXIT(tavor_mbox_free);
 }
 
 
@@ -308,8 +291,6 @@ tavor_cmd_complete_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	tavor_cmd_t		*cmdp;
 	uint_t			eqe_evttype;
 
-	TAVOR_TNF_ENTER(tavor_cmd_complete_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_COMMAND_INTF_COMP ||
@@ -318,7 +299,6 @@ tavor_cmd_complete_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_cmd_complete_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -337,7 +317,6 @@ tavor_cmd_complete_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	cv_signal(&cmdp->cmd_comp_cv);
 	mutex_exit(&cmdp->cmd_comp_lock);
 
-	TAVOR_TNF_EXIT(tavor_cmd_complete_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -352,18 +331,14 @@ tavor_inmbox_list_init(tavor_state_t *state)
 	int		status;
 	uint_t		num_inmbox;
 
-	TAVOR_TNF_ENTER(tavor_inmbox_list_init);
-
 	/* Initialize the "In" mailbox list */
 	num_inmbox  =  (1 << state->ts_cfg_profile->cp_log_num_inmbox);
 	status = tavor_impl_mboxlist_init(state, &state->ts_in_mblist,
 	    num_inmbox, TAVOR_IN_MBOX);
 	if (status != DDI_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_inmbox_list_init);
 		return (DDI_FAILURE);
 	}
 
-	TAVOR_TNF_EXIT(tavor_inmbox_list_init);
 	return (DDI_SUCCESS);
 }
 
@@ -378,18 +353,14 @@ tavor_intr_inmbox_list_init(tavor_state_t *state)
 	int		status;
 	uint_t		num_inmbox;
 
-	TAVOR_TNF_ENTER(tavor_intr_inmbox_list_init);
-
 	/* Initialize the interrupt "In" mailbox list */
 	num_inmbox  =  (1 << state->ts_cfg_profile->cp_log_num_intr_inmbox);
 	status = tavor_impl_mboxlist_init(state, &state->ts_in_intr_mblist,
 	    num_inmbox, TAVOR_INTR_IN_MBOX);
 	if (status != DDI_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_intr_inmbox_list_init);
 		return (DDI_FAILURE);
 	}
 
-	TAVOR_TNF_EXIT(tavor_intr_inmbox_list_init);
 	return (DDI_SUCCESS);
 }
 
@@ -404,18 +375,14 @@ tavor_outmbox_list_init(tavor_state_t *state)
 	int		status;
 	uint_t		num_outmbox;
 
-	TAVOR_TNF_ENTER(tavor_outmbox_list_init);
-
 	/* Initialize the "Out" mailbox list */
 	num_outmbox  =  (1 << state->ts_cfg_profile->cp_log_num_outmbox);
 	status = tavor_impl_mboxlist_init(state, &state->ts_out_mblist,
 	    num_outmbox, TAVOR_OUT_MBOX);
 	if (status != DDI_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_outmbox_list_init);
 		return (DDI_FAILURE);
 	}
 
-	TAVOR_TNF_EXIT(tavor_outmbox_list_init);
 	return (DDI_SUCCESS);
 }
 
@@ -430,18 +397,14 @@ tavor_intr_outmbox_list_init(tavor_state_t *state)
 	int		status;
 	uint_t		num_outmbox;
 
-	TAVOR_TNF_ENTER(tavor_intr_outmbox_list_init);
-
 	/* Initialize the interrupts "Out" mailbox list */
 	num_outmbox  =  (1 << state->ts_cfg_profile->cp_log_num_intr_outmbox);
 	status = tavor_impl_mboxlist_init(state, &state->ts_out_intr_mblist,
 	    num_outmbox, TAVOR_INTR_OUT_MBOX);
 	if (status != DDI_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_intr_outmbox_list_init);
 		return (DDI_FAILURE);
 	}
 
-	TAVOR_TNF_EXIT(tavor_intr_outmbox_list_init);
 	return (DDI_SUCCESS);
 }
 
@@ -453,12 +416,8 @@ tavor_intr_outmbox_list_init(tavor_state_t *state)
 void
 tavor_inmbox_list_fini(tavor_state_t *state)
 {
-	TAVOR_TNF_ENTER(tavor_inmbox_list_fini);
-
 	/* Free up the "In" mailbox list */
 	tavor_impl_mboxlist_fini(state, &state->ts_in_mblist);
-
-	TAVOR_TNF_EXIT(tavor_inmbox_list_fini);
 }
 
 
@@ -469,12 +428,8 @@ tavor_inmbox_list_fini(tavor_state_t *state)
 void
 tavor_intr_inmbox_list_fini(tavor_state_t *state)
 {
-	TAVOR_TNF_ENTER(tavor_intr_inmbox_list_fini);
-
 	/* Free up the interupts "In" mailbox list */
 	tavor_impl_mboxlist_fini(state, &state->ts_in_intr_mblist);
-
-	TAVOR_TNF_EXIT(tavor_intr_inmbox_list_fini);
 }
 
 
@@ -485,12 +440,8 @@ tavor_intr_inmbox_list_fini(tavor_state_t *state)
 void
 tavor_outmbox_list_fini(tavor_state_t *state)
 {
-	TAVOR_TNF_ENTER(tavor_outmbox_list_fini);
-
 	/* Free up the "Out" mailbox list */
 	tavor_impl_mboxlist_fini(state, &state->ts_out_mblist);
-
-	TAVOR_TNF_EXIT(tavor_outmbox_list_fini);
 }
 
 
@@ -501,12 +452,8 @@ tavor_outmbox_list_fini(tavor_state_t *state)
 void
 tavor_intr_outmbox_list_fini(tavor_state_t *state)
 {
-	TAVOR_TNF_ENTER(tavor_intr_outmbox_list_fini);
-
 	/* Free up the interrupt "Out" mailbox list */
 	tavor_impl_mboxlist_fini(state, &state->ts_out_intr_mblist);
-
-	TAVOR_TNF_EXIT(tavor_intr_outmbox_list_fini);
 }
 
 
@@ -522,8 +469,6 @@ tavor_impl_mbox_alloc(tavor_state_t *state, tavor_mboxlist_t *mblist,
 	uint_t		index, next, prev;
 	uint_t		count, countmax;
 
-	TAVOR_TNF_ENTER(tavor_impl_mbox_alloc);
-
 	/*
 	 * If the mailbox list is empty, then wait (if appropriate in the
 	 * current context).  Otherwise, grab the next available mailbox.
@@ -538,7 +483,6 @@ tavor_impl_mbox_alloc(tavor_state_t *state, tavor_mboxlist_t *mblist,
 			mutex_exit(&mblist->mbl_lock);
 			/* Delay loop polling for an available mbox */
 			if (++count > countmax) {
-				TAVOR_TNF_EXIT(tavor_impl_mbox_alloc);
 				return (TAVOR_CMD_INSUFF_RSRC);
 			}
 
@@ -588,7 +532,6 @@ tavor_impl_mbox_alloc(tavor_state_t *state, tavor_mboxlist_t *mblist,
 
 	mutex_exit(&mblist->mbl_lock);
 
-	TAVOR_TNF_EXIT(tavor_impl_mbox_alloc);
 	return (TAVOR_CMD_SUCCESS);
 }
 
@@ -601,8 +544,6 @@ static void
 tavor_impl_mbox_free(tavor_mboxlist_t *mblist, tavor_mbox_t **mb)
 {
 	uint_t		mbox_indx;
-
-	TAVOR_TNF_ENTER(tavor_impl_mbox_free);
 
 	mutex_enter(&mblist->mbl_lock);
 
@@ -671,8 +612,6 @@ tavor_impl_mbox_free(tavor_mboxlist_t *mblist, tavor_mbox_t **mb)
 	*mb = NULL;
 
 	mutex_exit(&mblist->mbl_lock);
-
-	TAVOR_TNF_EXIT(tavor_impl_mbox_free);
 }
 
 
@@ -688,8 +627,6 @@ tavor_impl_mboxlist_init(tavor_state_t *state, tavor_mboxlist_t *mblist,
 	ddi_dma_cookie_t	dma_cookie;
 	uint_t			dma_cookiecnt, flag, sync;
 	int			status, i;
-
-	TAVOR_TNF_ENTER(tavor_impl_mboxlist_init);
 
 	/* Allocate the memory for the mailbox entries list */
 	mblist->mbl_list_sz = num_mbox;
@@ -762,13 +699,11 @@ tavor_impl_mboxlist_init(tavor_state_t *state, tavor_mboxlist_t *mblist,
 	mblist->mbl_mbox[mblist->mbl_tail_indx].mb_next =
 	    mblist->mbl_head_indx;
 
-	TAVOR_TNF_EXIT(tavor_impl_mboxlist_init);
 	return (DDI_SUCCESS);
 
 mboxlist_init_fail:
 	tavor_impl_mboxlist_fini(state, mblist);
 
-	TAVOR_TNF_EXIT(tavor_impl_mboxlist_init);
 	return (DDI_FAILURE);
 }
 
@@ -782,8 +717,6 @@ tavor_impl_mboxlist_fini(tavor_state_t *state, tavor_mboxlist_t *mblist)
 {
 	tavor_rsrc_t	*rsrc;
 	int		i, status;
-
-	TAVOR_TNF_ENTER(tavor_impl_mboxlist_fini);
 
 	/* Release the resources for each of the mailbox list entries */
 	for (i = 0; i < mblist->mbl_num_alloc; i++) {
@@ -801,7 +734,6 @@ tavor_impl_mboxlist_fini(tavor_state_t *state, tavor_mboxlist_t *mblist)
 		status = ddi_dma_unbind_handle(rsrc->tr_dmahdl);
 		if (status != DDI_SUCCESS) {
 			TAVOR_WARNING(state, "failed to unbind DMA mapping");
-			TAVOR_TNF_EXIT(tavor_impl_mboxlist_fini);
 			return;
 		}
 
@@ -816,8 +748,6 @@ tavor_impl_mboxlist_fini(tavor_state_t *state, tavor_mboxlist_t *mblist)
 	/* Free up the memory for tracking the mailbox list */
 	kmem_free(mblist->mbl_mbox, mblist->mbl_list_sz *
 	    sizeof (tavor_mbox_t));
-
-	TAVOR_TNF_EXIT(tavor_impl_mboxlist_fini);
 }
 
 
@@ -831,8 +761,6 @@ tavor_outstanding_cmd_alloc(tavor_state_t *state, tavor_cmd_t **cmd_ptr,
 {
 	tavor_cmdlist_t	*cmd_list;
 	uint_t		next, prev, head;
-
-	TAVOR_TNF_ENTER(tavor_outstanding_cmd_alloc);
 
 	cmd_list = &state->ts_cmd_list;
 	mutex_enter(&cmd_list->cml_lock);
@@ -849,7 +777,6 @@ tavor_outstanding_cmd_alloc(tavor_state_t *state, tavor_cmd_t **cmd_ptr,
 		/* No free commands */
 		if (cmd_wait == TAVOR_NOSLEEP) {
 			mutex_exit(&cmd_list->cml_lock);
-			TAVOR_TNF_EXIT(tavor_outstanding_cmd_alloc);
 			return (TAVOR_CMD_INSUFF_RSRC);
 		}
 
@@ -880,7 +807,6 @@ tavor_outstanding_cmd_alloc(tavor_state_t *state, tavor_cmd_t **cmd_ptr,
 
 	mutex_exit(&cmd_list->cml_lock);
 
-	TAVOR_TNF_EXIT(tavor_outstanding_cmd_alloc);
 	return (TAVOR_CMD_SUCCESS);
 }
 
@@ -894,8 +820,6 @@ tavor_outstanding_cmd_free(tavor_state_t *state, tavor_cmd_t **cmd_ptr)
 {
 	tavor_cmdlist_t	*cmd_list;
 	uint_t		cmd_indx;
-
-	TAVOR_TNF_ENTER(tavor_outstanding_cmd_free);
 
 	cmd_list = &state->ts_cmd_list;
 	mutex_enter(&cmd_list->cml_lock);
@@ -940,8 +864,6 @@ tavor_outstanding_cmd_free(tavor_state_t *state, tavor_cmd_t **cmd_ptr)
 	*cmd_ptr = NULL;
 
 	mutex_exit(&cmd_list->cml_lock);
-
-	TAVOR_TNF_EXIT(tavor_outstanding_cmd_free);
 }
 
 
@@ -956,8 +878,6 @@ tavor_write_hcr(tavor_state_t *state, tavor_cmd_post_t *cmdpost,
 	tavor_hw_hcr_t	*hcr;
 	uint_t		status, count, countmax;
 	uint64_t	hcrreg;
-
-	TAVOR_TNF_ENTER(tavor_write_hcr);
 
 	/*
 	 * Grab the "HCR access" lock if the driver is not in
@@ -995,7 +915,6 @@ tavor_write_hcr(tavor_state_t *state, tavor_cmd_post_t *cmdpost,
 			if (!TAVOR_IN_FASTREBOOT(state)) {
 				mutex_exit(&state->ts_cmd_regs.hcr_lock);
 			}
-			TAVOR_TNF_EXIT(tavor_write_hcr);
 			return (TAVOR_CMD_TIMEOUT);
 		}
 	}
@@ -1054,7 +973,6 @@ tavor_write_hcr(tavor_state_t *state, tavor_cmd_post_t *cmdpost,
 					mutex_exit(&state->
 					    ts_cmd_regs.hcr_lock);
 				}
-				TAVOR_TNF_EXIT(tavor_write_hcr);
 				return (TAVOR_CMD_TIMEOUT);
 			}
 		}
@@ -1082,7 +1000,6 @@ tavor_write_hcr(tavor_state_t *state, tavor_cmd_post_t *cmdpost,
 		mutex_exit(&state->ts_cmd_regs.hcr_lock);
 	}
 
-	TAVOR_TNF_EXIT(tavor_write_hcr);
 	return (status);
 }
 
@@ -1096,8 +1013,6 @@ tavor_outstanding_cmdlist_init(tavor_state_t *state)
 {
 	uint_t		num_outstanding_cmds, head, tail;
 	int		i;
-
-	TAVOR_TNF_ENTER(tavor_outstanding_cmdlist_init);
 
 	/*
 	 * Determine the number of the outstanding commands supported
@@ -1149,7 +1064,6 @@ tavor_outstanding_cmdlist_init(tavor_state_t *state)
 		    state->ts_cmd_list.cml_head_indx;
 	}
 
-	TAVOR_TNF_EXIT(tavor_outstanding_cmdlist_init);
 	return (DDI_SUCCESS);
 }
 
@@ -1162,8 +1076,6 @@ void
 tavor_outstanding_cmdlist_fini(tavor_state_t *state)
 {
 	int		i;
-
-	TAVOR_TNF_ENTER(tavor_outstanding_cmdlist_fini);
 
 	/* Destroy the outstanding command list entries */
 	for (i = 0; i < state->ts_cmd_list.cml_num_alloc; i++) {
@@ -1178,8 +1090,6 @@ tavor_outstanding_cmdlist_fini(tavor_state_t *state)
 		kmem_free(state->ts_cmd_list.cml_cmd,
 		    state->ts_cmd_list.cml_list_sz * sizeof (tavor_cmd_t));
 	}
-
-	TAVOR_TNF_EXIT(tavor_outstanding_cmdlist_fini);
 }
 
 
@@ -1193,11 +1103,8 @@ tavor_mbox_sync(tavor_mbox_t *mbox, uint_t offset, uint_t length,
 	ddi_dma_handle_t	dmahdl;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_mbox_sync);
-
 	/* Determine if mailbox needs to be synced or not */
 	if (mbox->mb_sync == 0) {
-		TAVOR_TNF_EXIT(tavor_mbox_sync);
 		return;
 	}
 
@@ -1207,11 +1114,8 @@ tavor_mbox_sync(tavor_mbox_t *mbox, uint_t offset, uint_t length,
 	/* Calculate offset into mailbox */
 	status = ddi_dma_sync(dmahdl, (off_t)offset, (size_t)length, flag);
 	if (status != DDI_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_mbox_sync);
 		return;
 	}
-
-	TAVOR_TNF_EXIT(tavor_mbox_sync);
 }
 
 
@@ -1226,8 +1130,6 @@ tavor_sys_en_cmd_post(tavor_state_t *state, uint_t flags,
 {
 	tavor_cmd_post_t	cmd;
 	int			status;
-
-	TAVOR_TNF_ENTER(tavor_sys_en_cmd_post);
 
 	/* Make sure we are called with the correct flag */
 	ASSERT(sleepflag == TAVOR_CMD_NOSLEEP_SPIN);
@@ -1249,7 +1151,6 @@ tavor_sys_en_cmd_post(tavor_state_t *state, uint_t flags,
 		*errorcode = cmd.cp_outparm;
 	}
 
-	TAVOR_TNF_EXIT(tavor_sys_en_cmd_post);
 	return (status);
 }
 
@@ -1265,8 +1166,6 @@ tavor_sys_dis_cmd_post(tavor_state_t *state, uint_t sleepflag)
 	tavor_cmd_post_t	cmd;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_sys_dis_cmd_post);
-
 	/* Make sure we are called with the correct flag */
 	ASSERT(sleepflag == TAVOR_CMD_NOSLEEP_SPIN);
 
@@ -1281,7 +1180,6 @@ tavor_sys_dis_cmd_post(tavor_state_t *state, uint_t sleepflag)
 	if (status != TAVOR_CMD_SUCCESS) {
 	}
 
-	TAVOR_TNF_EXIT(tavor_sys_dis_cmd_post);
 	return (status);
 }
 
@@ -1301,8 +1199,6 @@ tavor_init_hca_cmd_post(tavor_state_t *state,
 	uint_t			size;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_init_hca_cmd_post);
-
 	/* Make sure we are called with the correct flag */
 	ASSERT(sleepflag == TAVOR_CMD_NOSLEEP_SPIN);
 
@@ -1310,7 +1206,6 @@ tavor_init_hca_cmd_post(tavor_state_t *state,
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_init_hca_cmd_post);
 		return (status);
 	}
 
@@ -1339,7 +1234,6 @@ tavor_init_hca_cmd_post(tavor_state_t *state,
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_init_hca_cmd_post);
 	return (status);
 }
 
@@ -1355,8 +1249,6 @@ tavor_close_hca_cmd_post(tavor_state_t *state, uint_t sleepflag)
 	tavor_cmd_post_t	cmd;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_close_hca_cmd_post);
-
 	/* Make sure we are called with the correct flag */
 	ASSERT(sleepflag == TAVOR_CMD_NOSLEEP_SPIN);
 
@@ -1371,7 +1263,6 @@ tavor_close_hca_cmd_post(tavor_state_t *state, uint_t sleepflag)
 	if (status != TAVOR_CMD_SUCCESS) {
 	}
 
-	TAVOR_TNF_EXIT(tavor_close_hca_cmd_post);
 	return (status);
 }
 
@@ -1391,8 +1282,6 @@ tavor_init_ib_cmd_post(tavor_state_t *state, tavor_hw_initib_t *initib,
 	uint_t			size;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_init_ib_cmd_post);
-
 	/* Make sure we are called with the correct flag */
 	ASSERT(sleepflag == TAVOR_CMD_NOSLEEP_SPIN);
 
@@ -1400,7 +1289,6 @@ tavor_init_ib_cmd_post(tavor_state_t *state, tavor_hw_initib_t *initib,
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_init_ib_cmd_post);
 		return (status);
 	}
 
@@ -1429,7 +1317,6 @@ tavor_init_ib_cmd_post(tavor_state_t *state, tavor_hw_initib_t *initib,
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_init_ib_cmd_post);
 	return (status);
 }
 
@@ -1445,8 +1332,6 @@ tavor_close_ib_cmd_post(tavor_state_t *state, uint_t port, uint_t sleepflag)
 	tavor_cmd_post_t	cmd;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_close_ib_cmd_post);
-
 	/* Setup and post the Tavor "CLOSE_IB" command */
 	cmd.cp_inparm	= 0;
 	cmd.cp_outparm	= 0;
@@ -1458,7 +1343,6 @@ tavor_close_ib_cmd_post(tavor_state_t *state, uint_t port, uint_t sleepflag)
 	if (status != TAVOR_CMD_SUCCESS) {
 	}
 
-	TAVOR_TNF_EXIT(tavor_close_ib_cmd_post);
 	return (status);
 }
 
@@ -1475,13 +1359,10 @@ tavor_set_ib_cmd_post(tavor_state_t *state, uint32_t capmask, uint_t port,
 	tavor_cmd_post_t	cmd;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_set_ib_cmd_post);
-
 	/* Get an "In" mailbox for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_set_ib_cmd_post);
 		return (status);
 	}
 
@@ -1509,7 +1390,6 @@ tavor_set_ib_cmd_post(tavor_state_t *state, uint32_t capmask, uint_t port,
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_set_ib_cmd_post);
 	return (status);
 }
 
@@ -1528,8 +1408,6 @@ tavor_mod_stat_cfg_cmd_post(tavor_state_t *state)
 	uint_t			size;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_mod_stat_cfg_cmd_post);
-
 	/*
 	 * "MOD_STAT_CFG" needs an INMBOX parameter, to specify what operations
 	 * to do.  However, at the point in time that we call this command, the
@@ -1541,7 +1419,6 @@ tavor_mod_stat_cfg_cmd_post(tavor_state_t *state)
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_OUTMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, TAVOR_NOSLEEP);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_mod_stat_cfg_cmd_post);
 		return (status);
 	}
 
@@ -1591,7 +1468,6 @@ tavor_mod_stat_cfg_cmd_post(tavor_state_t *state)
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_mod_stat_cfg_cmd_post);
 	return (status);
 }
 
@@ -1609,13 +1485,10 @@ tavor_mad_ifc_cmd_post(tavor_state_t *state, uint_t port,
 	uint_t			size;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_mad_ifc_cmd_post);
-
 	/* Get "In" and "Out" mailboxes for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX | TAVOR_ALLOC_OUTMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_mad_ifc_cmd_post);
 		return (status);
 	}
 
@@ -1648,7 +1521,6 @@ mad_ifc_fail:
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_mad_ifc_cmd_post);
 	return (status);
 }
 
@@ -1667,13 +1539,10 @@ tavor_getportinfo_cmd_post(tavor_state_t *state, uint_t port,
 	uint_t			size;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_getportinfo_cmd_post);
-
 	/* Get "In" and "Out" mailboxes for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX | TAVOR_ALLOC_OUTMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_getportinfo_cmd_post);
 		return (status);
 	}
 
@@ -1725,7 +1594,6 @@ getportinfo_fail:
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_getportinfo_cmd_post);
 	return (status);
 }
 
@@ -1745,8 +1613,6 @@ tavor_getnodeinfo_cmd_post(tavor_state_t *state, uint_t sleepflag,
 	uint_t			size;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_getnodeinfo_cmd_post);
-
 	/* Make sure we are called with the correct flag */
 	ASSERT(sleepflag == TAVOR_CMD_NOSLEEP_SPIN);
 
@@ -1754,7 +1620,6 @@ tavor_getnodeinfo_cmd_post(tavor_state_t *state, uint_t sleepflag,
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX | TAVOR_ALLOC_OUTMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_getnodeinfo_cmd_post);
 		return (status);
 	}
 
@@ -1803,7 +1668,6 @@ getnodeinfo_fail:
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_getnodeinfo_cmd_post);
 	return (status);
 }
 
@@ -1823,13 +1687,10 @@ tavor_getnodedesc_cmd_post(tavor_state_t *state, uint_t sleepflag,
 	uint_t			size;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_getnodedesc_cmd_post);
-
 	/* Get "In" and "Out" mailboxes for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX | TAVOR_ALLOC_OUTMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_getnodedesc_cmd_post);
 		return (status);
 	}
 
@@ -1873,7 +1734,6 @@ getnodedesc_fail:
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_getnodedesc_cmd_post);
 	return (status);
 }
 
@@ -1892,13 +1752,10 @@ tavor_getguidinfo_cmd_post(tavor_state_t *state, uint_t port,
 	uint_t			size;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_getguidinfo_cmd_post);
-
 	/* Get "In" and "Out" mailboxes for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX | TAVOR_ALLOC_OUTMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_getguidinfo_cmd_post);
 		return (status);
 	}
 
@@ -1949,7 +1806,6 @@ getguidinfo_fail:
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_getguidinfo_cmd_post);
 	return (status);
 }
 
@@ -1968,13 +1824,10 @@ tavor_getpkeytable_cmd_post(tavor_state_t *state, uint_t port,
 	uint_t			size;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_getpkeytable_cmd_post);
-
 	/* Get "In" and "Out" mailboxes for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX | TAVOR_ALLOC_OUTMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_getpkeytable_cmd_post);
 		return (status);
 	}
 
@@ -2025,7 +1878,6 @@ getpkeytable_fail:
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_getpkeytable_cmd_post);
 	return (status);
 }
 
@@ -2041,8 +1893,6 @@ tavor_write_mtt_cmd_post(tavor_state_t *state, tavor_mbox_info_t *mbox_info,
 	tavor_cmd_post_t	cmd;
 	uint_t			size;
 	int			status;
-
-	TAVOR_TNF_ENTER(tavor_write_mtt_cmd_post);
 
 	/*
 	 * The WRITE_MTT command is unlike the other commands we use, in that
@@ -2069,7 +1919,6 @@ tavor_write_mtt_cmd_post(tavor_state_t *state, tavor_mbox_info_t *mbox_info,
 	if (status != TAVOR_CMD_SUCCESS) {
 	}
 
-	TAVOR_TNF_EXIT(tavor_write_mtt_cmd_post);
 	return (status);
 }
 
@@ -2084,8 +1933,6 @@ tavor_sync_tpt_cmd_post(tavor_state_t *state, uint_t sleepflag)
 	tavor_cmd_post_t	cmd;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_sync_tpt_cmd_post);
-
 	/* Setup and post the Tavor "SYNC_TPT" command */
 	cmd.cp_inparm	= 0;
 	cmd.cp_outparm	= 0;
@@ -2097,7 +1944,6 @@ tavor_sync_tpt_cmd_post(tavor_state_t *state, uint_t sleepflag)
 	if (status != TAVOR_CMD_SUCCESS) {
 	}
 
-	TAVOR_TNF_EXIT(tavor_sync_tpt_cmd_post);
 	return (status);
 }
 
@@ -2113,8 +1959,6 @@ tavor_map_eq_cmd_post(tavor_state_t *state, uint_t map, uint_t eqcindx,
 	tavor_cmd_post_t	cmd;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_map_eq_cmd_post);
-
 	/* Setup and post Tavor "MAP_EQ" command */
 	cmd.cp_inparm	= eqmapmask;
 	cmd.cp_outparm	= 0;
@@ -2129,7 +1973,6 @@ tavor_map_eq_cmd_post(tavor_state_t *state, uint_t map, uint_t eqcindx,
 	if (status != TAVOR_CMD_SUCCESS) {
 	}
 
-	TAVOR_TNF_EXIT(tavor_map_eq_cmd_post);
 	return (status);
 }
 
@@ -2148,13 +1991,10 @@ tavor_resize_cq_cmd_post(tavor_state_t *state, tavor_hw_cqc_t *cqc,
 	uint_t			size;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_resize_cq_cmd_post);
-
 	/* Get an "In" mailbox for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_resize_cq_cmd_post);
 		return (status);
 	}
 
@@ -2189,7 +2029,6 @@ tavor_resize_cq_cmd_post(tavor_state_t *state, tavor_hw_cqc_t *cqc,
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_resize_cq_cmd_post);
 	return (status);
 }
 
@@ -2218,8 +2057,6 @@ tavor_cmn_qp_cmd_post(tavor_state_t *state, uint_t opcode,
 	uint64_t		data, in_mapaddr, out_mapaddr;
 	uint_t			size, flags, opmod;
 	int			status, i;
-
-	TAVOR_TNF_ENTER(tavor_cmn_qp_cmd_post);
 
 	/*
 	 * Use the specified opcode type to set the appropriate parameters.
@@ -2281,7 +2118,6 @@ tavor_cmn_qp_cmd_post(tavor_state_t *state, uint_t opcode,
 		mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX;
 		status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 		if (status != TAVOR_CMD_SUCCESS) {
-			TAVOR_TNF_EXIT(tavor_cmn_qp_cmd_post);
 			return (status);
 		}
 		in_mapaddr  = mbox_info.mbi_in->mb_mapaddr;
@@ -2330,7 +2166,6 @@ tavor_cmn_qp_cmd_post(tavor_state_t *state, uint_t opcode,
 		tavor_mbox_free(state, &mbox_info);
 	}
 
-	TAVOR_TNF_EXIT(tavor_cmn_qp_cmd_post);
 	return (status);
 }
 
@@ -2357,13 +2192,10 @@ tavor_cmn_query_cmd_post(tavor_state_t *state, uint_t opcode,
 	uint_t			offset;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_cmn_query_cmd_post);
-
 	/* Get an "Out" mailbox for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_OUTMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_cmn_query_cmd_post);
 		return (status);
 	}
 
@@ -2400,7 +2232,6 @@ cmn_query_fail:
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_cmn_query_cmd_post);
 	return (status);
 }
 
@@ -2431,8 +2262,6 @@ tavor_cmn_ownership_cmd_post(tavor_state_t *state, uint_t opcode,
 	uint_t			direction, opmod;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_cmn_ownership_cmd_post);
-
 	/*
 	 * Determine the direction of the ownership transfer based on the
 	 * provided opcode
@@ -2446,7 +2275,6 @@ tavor_cmn_ownership_cmd_post(tavor_state_t *state, uint_t opcode,
 		direction = TAVOR_CMD_RSRC_SW2HW;
 
 	} else {
-		TAVOR_TNF_EXIT(tavor_cmn_ownership_cmd_post);
 		return (TAVOR_CMD_INVALID_STATUS);
 	}
 
@@ -2479,7 +2307,6 @@ tavor_cmn_ownership_cmd_post(tavor_state_t *state, uint_t opcode,
 			status = tavor_mbox_alloc(state, &mbox_info,
 			    sleepflag);
 			if (status != TAVOR_CMD_SUCCESS) {
-				TAVOR_TNF_EXIT(tavor_cmn_ownership_cmd_post);
 				return (status);
 			}
 			in_mapaddr  = 0;
@@ -2494,7 +2321,6 @@ tavor_cmn_ownership_cmd_post(tavor_state_t *state, uint_t opcode,
 		mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX;
 		status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 		if (status != TAVOR_CMD_SUCCESS) {
-			TAVOR_TNF_EXIT(tavor_sw2hw_mpt_cmd_post);
 			return (status);
 		}
 
@@ -2552,7 +2378,6 @@ cmn_ownership_fail:
 		tavor_mbox_free(state, &mbox_info);
 	}
 
-	TAVOR_TNF_EXIT(tavor_cmn_ownership_cmd_post);
 	return (status);
 }
 
@@ -2568,8 +2393,6 @@ tavor_conf_special_qp_cmd_post(tavor_state_t *state, uint_t qpindx,
 	tavor_cmd_post_t	cmd;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_conf_special_qp_cmd_post);
-
 	/* Setup and post Tavor "CONF_SPECIAL_QP" command */
 	cmd.cp_inparm	= 0;
 	cmd.cp_outparm	= 0;
@@ -2581,7 +2404,6 @@ tavor_conf_special_qp_cmd_post(tavor_state_t *state, uint_t qpindx,
 	if (status != TAVOR_CMD_SUCCESS) {
 	}
 
-	TAVOR_TNF_EXIT(tavor_conf_special_qp_cmd_post);
 	return (status);
 }
 
@@ -2598,13 +2420,10 @@ tavor_mgid_hash_cmd_post(tavor_state_t *state, uint64_t mgid_h,
 	tavor_cmd_post_t	cmd;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_mgid_hash_cmd_post);
-
 	/* Get an "In" mailbox for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_mgid_hash_cmd_post);
 		return (status);
 	}
 
@@ -2635,7 +2454,6 @@ tavor_mgid_hash_cmd_post(tavor_state_t *state, uint64_t mgid_h,
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_mgid_hash_cmd_post);
 	return (status);
 }
 
@@ -2659,13 +2477,10 @@ tavor_read_mgm_cmd_post(tavor_state_t *state, tavor_hw_mcg_t *mcg,
 	uint_t			size, hdrsz, qplistsz;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_read_mgm_cmd_post);
-
 	/* Get an "Out" mailbox for the results */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_OUTMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_read_mgm_cmd_post);
 		return (status);
 	}
 
@@ -2703,7 +2518,6 @@ read_mgm_fail:
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_read_mgm_cmd_post);
 	return (status);
 }
 
@@ -2727,13 +2541,10 @@ tavor_write_mgm_cmd_post(tavor_state_t *state, tavor_hw_mcg_t *mcg,
 	uint_t			size, hdrsz, qplistsz;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_write_mgm_cmd_post);
-
 	/* Get an "In" mailbox for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_write_mgm_cmd_post);
 		return (status);
 	}
 
@@ -2769,7 +2580,6 @@ tavor_write_mgm_cmd_post(tavor_state_t *state, tavor_hw_mcg_t *mcg,
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_write_mgm_cmd_post);
 	return (status);
 
 }
@@ -2789,13 +2599,10 @@ tavor_modify_mpt_cmd_post(tavor_state_t *state, tavor_hw_mpt_t *mpt,
 	uint_t			size;
 	int			status, i;
 
-	TAVOR_TNF_ENTER(tavor_modify_mpt_cmd_post);
-
 	/* Get an "In" mailbox for the command */
 	mbox_info.mbi_alloc_flags = TAVOR_ALLOC_INMBOX;
 	status = tavor_mbox_alloc(state, &mbox_info, sleepflag);
 	if (status != TAVOR_CMD_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_modify_mpt_cmd_post);
 		return (status);
 	}
 
@@ -2824,7 +2631,6 @@ tavor_modify_mpt_cmd_post(tavor_state_t *state, tavor_hw_mpt_t *mpt,
 	/* Free the mailbox */
 	tavor_mbox_free(state, &mbox_info);
 
-	TAVOR_TNF_EXIT(tavor_modify_mpt_cmd_post);
 	return (status);
 }
 

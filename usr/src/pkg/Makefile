@@ -243,9 +243,6 @@ LIST_MANIFESTS_CMD = (cd manifests ; /usr/bin/ls -1 *.mf |\
 	$(SED) $(SPECIAL_MANIFESTS:%=-e '/^%$$/d') )
 MANIFESTS = $(LIST_MANIFESTS_CMD:sh)
 
-# Conditionally add back lp-ipp
-$(ENABLE_IPP_PRINTING) MANIFESTS += print-lp-ipp-ipp-listener.mf
-
 PKGS= $(MANIFESTS:%.mf=%)
 DEP_PKGS= $(PKGS:%=$(PDIR)/%.dep)
 PROC_PKGS= $(PKGS:%=$(PDIR)/%.mog)

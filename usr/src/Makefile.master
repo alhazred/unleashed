@@ -80,7 +80,6 @@ INTEL_BLD=      $(INTEL_BLD_1:i386=)
 # The default is POUND_SIGN, meaning "not enabled". If the environment
 # passes in an override like ENABLE_SMB_PRINTING= (empty) that will
 # uncomment things in the lower Makefiles to enable the feature.
-ENABLE_IPP_PRINTING=	$(POUND_SIGN)
 ENABLE_SMB_PRINTING=	$(POUND_SIGN)
 ENABLE_PERL64=		$(POUND_SIGN)
 
