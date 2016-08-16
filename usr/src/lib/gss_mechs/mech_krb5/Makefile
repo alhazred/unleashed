@@ -39,7 +39,7 @@ include ../../Makefile.lib
 
 GREP= find . \( -name SCCS -prune -o -name '*.[ch]' \) -print | sort | xargs grep
 
-sparcv9_C_PICFLAGS =  -K PIC
+sparcv9_C_PICFLAGS =  -_gcc=-fPIC
 TEXT_DOMAIN = SUNW_OST_NETRPC
 POFILE = mech_krb5.po
 POFILES = generic.po

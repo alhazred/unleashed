@@ -33,7 +33,7 @@ include ../../Makefile.lib.64
 # the whole 64-bit library with PIC instead of "generically" compiling
 # large parts of the 32-bit library with PIC unnecessarily.
 
-sparcv9_C_PICFLAGS = -K PIC
-sparcv9_CC_PICFLAGS = -KPIC
+sparcv9_C_PICFLAGS = -_gcc=-fPIC
+sparcv9_CC_PICFLAGS = -_gcc=-fPIC
 
 install: all $(ROOTLIBS64) $(ROOTLINKS64)

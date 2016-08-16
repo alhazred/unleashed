@@ -65,8 +65,8 @@ CPPFLAGS =	-I. -I../common -I../../include -I../../include/$(MACH) \
 		$(CPPFLAGS.master) -I$(ELFCAP)
 
 # PICS64 is unique to our environment
-$(PICS64) :=	sparc_CFLAGS += -_gcc=-mno-app-regs -K pic
-$(PICS64) :=	sparcv9_CFLAGS += -_gcc=-mno-app-regs -K pic
+$(PICS64) :=	sparc_CFLAGS += -_gcc=-mno-app-regs -_gcc=-fpic
+$(PICS64) :=	sparcv9_CFLAGS += -_gcc=-mno-app-regs -_gcc=-fpic
 $(PICS64) :=	CPPFLAGS += -DPIC -D_REENTRANT
 
 LDFLAGS +=	$(ZIGNORE)

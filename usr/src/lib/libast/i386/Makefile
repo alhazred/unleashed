@@ -37,7 +37,7 @@ OBJDIRS = \
 
 include ../Makefile.com
 
-# Use -KPIC since libast is too big for -Kpic on 64bit
+# Use -_gcc=-fPIC since libast is too big for -_gcc=-fpic on 64bit
 # (and on 32bit it is close to the barrier)
 i386_C_PICFLAGS  = $(C_BIGPICFLAGS)
 

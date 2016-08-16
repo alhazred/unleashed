@@ -359,6 +359,9 @@ do_gcc(cw_ictx_t *ctx)
 
 			if (strcmp(arg, "-_gcc=-shared") == 0)
 				nolibc = 1;
+			else if (strcmp(arg, "-_gcc=-fpic") == 0 ||
+			    strcmp(arg, "-_gcc=-fPIC") == 0)
+				pic = 1;
 			break;
 		case 'g':
 			newae(ctx->i_ae, "-gdwarf-2");
@@ -417,27 +420,6 @@ do_gcc(cw_ictx_t *ctx)
 			if (strcmp(arg, "-D_KERNEL") == 0 ||
 			    strcmp(arg, "-D_BOOT") == 0)
 				newae(ctx->i_ae, "-ffreestanding");
-			break;
-		case 'K':
-			if (arglen == 1) {
-				if ((arg = *++ctx->i_oldargv) == NULL ||
-				    *arg == '\0')
-					error("-K");
-				ctx->i_oldargc--;
-			} else {
-				arg += 2;
-			}
-			if (strcmp(arg, "pic") == 0) {
-				newae(ctx->i_ae, "-fpic");
-				pic = 1;
-				break;
-			}
-			if (strcmp(arg, "PIC") == 0) {
-				newae(ctx->i_ae, "-fPIC");
-				pic = 1;
-				break;
-			}
-			error("-K");
 			break;
 		case 'm':
 			if (strcmp(arg, "-m64") == 0) {

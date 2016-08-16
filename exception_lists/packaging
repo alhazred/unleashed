@@ -792,3 +792,11 @@ usr/lib/llib-like
 usr/lib/llib-like.ln
 usr/lib/amd64/llib-like.ln		i386
 usr/lib/sparcv9/llib-like.ln		sparc
+
+#
+# TNF headers we need to build stuff with, but don't want to ship.
+#
+usr/include/sys/tnf.h
+usr/include/sys/tnf_com.h
+usr/include/sys/tnf_probe.h
+usr/include/sys/tnf_writer.h
