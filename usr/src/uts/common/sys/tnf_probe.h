@@ -126,6 +126,7 @@ struct tnf_probe_control {
 #define	TNF_DEFINE_RECORD_2(ctype, ctype_record, t1, n1, t2, n2)
 #define	TNF_DEFINE_RECORD_3(ctype, ctype_record, t1, n1, t2, n2, t3, n3)
 #define	TNF_DEFINE_RECORD_4(ctype, ctype_record, t1, n1, t2, n2, t3, n3, t4, n4)
+/* CSTYLED */
 #define	TNF_DEFINE_RECORD_5(ctype, ctype_record, t1, n1, t2, n2, t3, n3, t4, n4, t5, n5)
 
 /*
@@ -136,12 +137,16 @@ struct tnf_probe_control {
 		((void)0)
 #define	TNF_PROBE_1(namearg, keysarg, detail, type_1, namearg_1, valarg_1) \
 		((void)0)
+/* CSTYLED */
 #define	TNF_PROBE_2(namearg, keysarg, detail, type_1, namearg_1, valarg_1, type_2, namearg_2, valarg_2) \
 		((void)0)
+/* CSTYLED */
 #define	TNF_PROBE_3(namearg, keysarg, detail, type_1, namearg_1, valarg_1, type_2, namearg_2, valarg_2, type_3, namearg_3, valarg_3) \
 		((void)0)
+/* CSTYLED */
 #define	TNF_PROBE_4(namearg, keysarg, detail, type_1, namearg_1, valarg_1, type_2, namearg_2, valarg_2, type_3, namearg_3, valarg_3, type_4, namearg_4, valarg_4) \
 		((void)0)
+/* CSTYLED */
 #define	TNF_PROBE_5(namearg, keysarg, detail, type_1, namearg_1, valarg_1, type_2, namearg_2, valarg_2, type_3, namearg_3, valarg_3, type_4, namearg_4, valarg_4, type_5, namearg_5, valarg_5) \
 		((void)0)
 
@@ -151,14 +156,19 @@ struct tnf_probe_control {
 
 #define	TNF_PROBE_0_DEBUG(namearg, keysarg, detail) \
 		((void)0)
+/* CSTYLED */
 #define	TNF_PROBE_1_DEBUG(namearg, keysarg, detail, type_1, namearg_1, valarg_1) \
 		((void)0)
+/* CSTYLED */
 #define	TNF_PROBE_2_DEBUG(namearg, keysarg, detail, type_1, namearg_1, valarg_1, type_2, namearg_2, valarg_2) \
 		((void)0)
+/* CSTYLED */
 #define	TNF_PROBE_3_DEBUG(namearg, keysarg, detail, type_1, namearg_1, valarg_1, type_2, namearg_2, valarg_2, type_3, namearg_3, valarg_3) \
 		((void)0)
+/* CSTYLED */
 #define	TNF_PROBE_4_DEBUG(namearg, keysarg, detail, type_1, namearg_1, valarg_1, type_2, namearg_2, valarg_2, type_3, namearg_3, valarg_3, type_4, namearg_4, valarg_4) \
 		((void)0)
+/* CSTYLED */
 #define	TNF_PROBE_5_DEBUG(namearg, keysarg, detail, type_1, namearg_1, valarg_1, type_2, namearg_2, valarg_2, type_3, namearg_3, valarg_3, type_4, namearg_4, valarg_4, type_5, namearg_5, valarg_5) \
 		((void)0)
 
