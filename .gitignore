@@ -23,3 +23,10 @@ cscope.po.out
 /usr/src/noise-*.ref
 /usr/src/tools/clobber-*.out
 /usr/src/tools/install-*.out
+
+#
+# bmake generated files
+#
+.depend
+*.o
+*.dep

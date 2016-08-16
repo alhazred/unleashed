@@ -47,15 +47,15 @@ __depsrcs+=${DEPSRCS:M*.cxx}
 __depsrcs+=${DEPSRCS:M*.pc}
 
 .for s in ${__depsrcs}
-${s:T:R}.d:	$s
+${s:T:R}.dep:	$s
 .endfor
 
-__depsrcs:=${__depsrcs:T:R:S/$/.d/g}
-# we also need to handle makefiles where the .d's from __depsrcs 
+__depsrcs:=${__depsrcs:T:R:S/$/.dep/g}
+# we also need to handle makefiles where the .dep's from __depsrcs 
 # don't  match those from OBJS
 # we avoid using := here, since the modifier applied to OBJS
 # can cause trouble if there are any undefined vars in OBJS.
-__dependsrcsx?= ${__depsrcs} ${OBJS:S/.o/.d/}
+__dependsrcsx?= ${__depsrcs} ${OBJS:S/.o/.dep/}
 __dependsrcs= ${__dependsrcsx:O:u}
 
 # clean up any .c files we may have generated
@@ -67,7 +67,7 @@ __dependsrcs= ${__dependsrcsx:O:u}
 CFLAGS_MD?=-MD 
 # -MF etc not available on all gcc versions.
 # we "fix" the .o later
-CFLAGS_MF?=-MF ${.TARGET:T:R}.d -MT ${.TARGET:T:R}.o
+CFLAGS_MF?=-MF ${.TARGET:T:R}.dep -MT ${.TARGET:T:R}.o
 CFLAGS+= ${CFLAGS_MD} ${CFLAGS_MF}
 RM?= rm
 
@@ -84,50 +84,50 @@ CXX_SUFFIXES?= .cc .cpp .cxx .C
 
 # so we can do an explicit make depend, but not otherwise
 .if make(depend)
-.SUFFIXES:	.d
+.SUFFIXES:	.dep
 
 .if empty(CFLAGS_MD)
-.y.d:
+.y.dep:
 	@echo updating dependencies for $<
 	@${YACC} ${YFLAGS} $<
 	@${SHELL} -ec "${CC_MD} -M ${CPPFLAGS_MD} y.tab.c | sed '/:/s/^/$@ /' > $@" || { ${RM} -f y.tab.c $@; false; }
 	@${RM} -f y.tab.c
 
-.l.d:
+.l.dep:
 	@echo updating dependencies for $<
 	${LEX} ${LFLAGS} $<
 	@${SHELL} -ec "${CC_MD} -M ${CPPFLAGS_MD} lex.yy.c | sed '/:/s/^/$@ /' > $@" || { ${RM} -f lex.yy.c $@; false; }
 	@${RM} -f lex.yy.c
 
-.c.d:
+.c.dep:
 	@echo updating dependencies for $<
 	@${SHELL} -ec "${CC_MD} -M ${CPPFLAGS_MD} $< | sed '/:/s/^/$@ /' > $@" || { ${RM} -f $@; false; }
 
-.s.d .S.d:
+.s.dep .S.dep:
 	@echo updating dependencies for $<
 	@${SHELL} -ec "${CC_MD} -M ${CPPFLAGS_MD} ${AINC} $< | sed '/:/s/^/$@ /' > $@" || { ${RM} -f $@; false; }
 
-${CXX_SUFFIXES:%=%.d}:
+${CXX_SUFFIXES:%=%.dep}:
 	@echo updating dependencies for $<
 	@${SHELL} -ec "${CXX_MD} -M ${CXXFLAGS_MD} $< | sed '/:/s/^/$@ /' > $@" || { ${RM} -f $@; false; }
 .else
-.y.d:
+.y.dep:
 	${YACC} ${YFLAGS} $<
 	${CC_MD} ${CFLAGS_MD:S/D//} ${CPPFLAGS_MD} y.tab.c > $@ || { ${RM} -f y.tab.c $@; false; }
 	${RM} -f y.tab.c
 
-.l.d:
+.l.dep:
 	${LEX} ${LFLAGS} $<
 	${CC_MD} ${CFLAGS_MD:S/D//} ${CPPFLAGS_MD} lex.yy.c > $@ || { ${RM} -f lex.yy.c $@; false; }
 	${RM} -f lex.yy.c
 
-.c.d:
+.c.dep:
 	${CC_MD} ${CFLAGS_MD:S/D//} ${CPPFLAGS_MD} $< > $@ || { ${RM} -f $@; false; }
 
-.s.d .S.d:
+.s.dep .S.dep:
 	${CC_MD} ${CFLAGS_MD:S/D//} ${CPPFLAGS_MD} ${AINC} $< > $@ || { ${RM} -f $@; false; }
 
-${CXX_SUFFIXES:%=%.d}:
+${CXX_SUFFIXES:%=%.dep}:
 	${CXX_MD} ${CFLAGS_MD:S/D//} ${CXXFLAGS_MD} $< > $@ || { ${RM} -f $@; false; }
 .endif
 
@@ -141,19 +141,19 @@ ${DEPENDFILE}:	${DEPSRCS} ${__dependsrcs}
 .endif				# make(depend)
 
 .if empty(CFLAGS_MD)
-# make sure the .d's are generated/updated
+# make sure the .dep's are generated/updated
 ${PROG} ${_LIBS}:	${DEPENDFILE}
 .endif
 
 .ORDER:	beforedepend ${DEPENDFILE} afterdepend
 
 .if ${.OBJDIR} != ${.CURDIR}
-__depfiles= *.d
+__depfiles= *.dep
 .else
 __depfiles= ${__dependsrcs}
 .endif
 
-DEPCLEANFILES= ${DEPENDFILE} ${__depfiles} y.tab.d *.tmp.d
+DEPCLEANFILES= ${DEPENDFILE} ${__depfiles} y.tab.dep *.tmp.dep
 
 cleandir: cleanautodepend
 cleanautodepend:
@@ -196,7 +196,7 @@ MD_SED=cat
 .END:
 .else
 .END:	${DEPENDFILE}
-# we do not want to trigger building .d's just use them if they exist
+# we do not want to trigger building .dep's just use them if they exist
 ${DEPENDFILE}:	${__dependsrcs:@d@${exists($d):?$d:}@}
 .endif
 	-@${MD_SED} ${__depfiles} > ${DEPENDFILE}.new 2> /dev/null && \
