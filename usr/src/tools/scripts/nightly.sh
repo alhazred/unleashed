@@ -196,7 +196,7 @@ function build {
 	env -i PATH=${GCC_ROOT}/bin:/usr/bin bmake -j $DMAKE_MAX_JOBS \
 	    -C $CODEMGR_WS DESTDIR=$ROOT MK_INSTALL_AS_USER=yes install || \
 	    echo "bmake install" >> $TMPDIR/build_fail
-	} | tee -a $LOGFILE
+	} 2>&1 | tee -a $LOGFILE
 	)
 
 	echo "\n==== Build errors ($LABEL) ====\n" >> $mail_msg_file
