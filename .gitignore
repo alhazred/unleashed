@@ -23,3 +23,13 @@ cscope.po.out
 /usr/src/noise-*.ref
 /usr/src/tools/clobber-*.out
 /usr/src/tools/install-*.out
+
+#
+# bmake generated files
+#
+# Note that *.d are bmake generated dependency files, not dtrace scripts.
+# This is most unfortunate, but for now let's ignore them.
+#
+.depend
+*.o
+*.d
