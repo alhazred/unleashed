@@ -27,9 +27,6 @@ cscope.po.out
 #
 # bmake generated files
 #
-# Note that *.d are bmake generated dependency files, not dtrace scripts.
-# This is most unfortunate, but for now let's ignore them.
-#
 .depend
 *.o
-*.d
+*.dep
