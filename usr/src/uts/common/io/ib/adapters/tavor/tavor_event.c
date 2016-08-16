@@ -91,9 +91,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	uint_t		log_eq_size, intr_num;
 	uint_t		num_eq, num_eq_init, num_eq_unmap;
 	int		status, i;
-	char		*errormsg;
-
-	TAVOR_TNF_ENTER(tavor_eq_init_all);
 
 	/*
 	 * For now, all Event Queues default to the same size (pulled from
@@ -140,8 +137,6 @@ tavor_eq_init_all(tavor_state_t *state)
 		status = tavor_eq_alloc(state, log_eq_size, intr_num,
 		    &state->ts_eqhdl[i]);
 		if (status != DDI_SUCCESS) {
-			/* Set "status" and "errormsg" and goto failure */
-			TAVOR_TNF_FAIL(status, "failed EQ alloc");
 			num_eq_init = i;
 			goto all_eq_init_fail;
 		}
@@ -172,8 +167,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	status = tavor_eq_handler_init(state, state->ts_eqhdl[32],
 	    TAVOR_EVT_MSK_CQ_ERRORS, tavor_cq_err_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "completion queue error event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 33;
@@ -190,8 +183,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	status = tavor_eq_handler_init(state, state->ts_eqhdl[33],
 	    TAVOR_EVT_MSK_PORT_STATE_CHANGE, tavor_port_state_change_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "port state change event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 34;
@@ -208,8 +199,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	status = tavor_eq_handler_init(state, state->ts_eqhdl[34],
 	    TAVOR_EVT_MSK_COMM_ESTABLISHED, tavor_comm_estbl_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "communication established event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 35;
@@ -228,8 +217,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	status = tavor_eq_handler_init(state, state->ts_eqhdl[35],
 	    TAVOR_EVT_MSK_COMMAND_INTF_COMP, tavor_cmd_complete_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "command completion event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 36;
@@ -246,8 +233,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	status = tavor_eq_handler_init(state, state->ts_eqhdl[36],
 	    TAVOR_EVT_MSK_LOCAL_WQ_CAT_ERROR, tavor_local_wq_cat_err_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "local WQ catastrophic error event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 37;
@@ -265,8 +250,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	    TAVOR_EVT_MSK_INV_REQ_LOCAL_WQ_ERROR,
 	    tavor_invreq_local_wq_err_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "invalid req local WQ error event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 38;
@@ -284,8 +267,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	    TAVOR_EVT_MSK_LOCAL_ACC_VIO_WQ_ERROR,
 	    tavor_local_acc_vio_wq_err_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "local access violation WQ error event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 39;
@@ -303,8 +284,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	status = tavor_eq_handler_init(state, state->ts_eqhdl[39],
 	    TAVOR_EVT_MSK_SEND_QUEUE_DRAINED, tavor_sendq_drained_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "send queue drained event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 40;
@@ -322,8 +301,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	status = tavor_eq_handler_init(state, state->ts_eqhdl[40],
 	    TAVOR_EVT_MSK_PATH_MIGRATED, tavor_path_mig_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "path migration succeeded event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 41;
@@ -341,8 +318,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	status = tavor_eq_handler_init(state, state->ts_eqhdl[41],
 	    TAVOR_EVT_MSK_PATH_MIGRATE_FAILED, tavor_path_mig_err_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "path migration failed event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 42;
@@ -365,8 +340,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	status = tavor_eq_handler_init(state, state->ts_eqhdl[42],
 	    TAVOR_EVT_MSK_LOCAL_CAT_ERROR, NULL);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "local catastrophic error event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 43;
@@ -384,8 +357,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	    TAVOR_EVT_MSK_SRQ_CATASTROPHIC_ERROR,
 	    tavor_srq_catastrophic_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "srq catastrophic error event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 44;
@@ -403,8 +374,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	    TAVOR_EVT_MSK_SRQ_LAST_WQE_REACHED,
 	    tavor_srq_last_wqe_reached_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "srq last wqe reached event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 45;
@@ -422,8 +391,6 @@ tavor_eq_init_all(tavor_state_t *state)
 	    TAVOR_EVT_MSK_ECC_DETECTION,
 	    tavor_ecc_detection_handler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "ecc detection event");
 		goto all_eq_init_fail;
 	}
 	num_eq_unmap = 46;
@@ -440,12 +407,9 @@ tavor_eq_init_all(tavor_state_t *state)
 	status = tavor_eq_handler_init(state, state->ts_eqhdl[46],
 	    TAVOR_EVT_CATCHALL_MASK, tavor_no_eqhandler);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(status, "all other events");
 		goto all_eq_init_fail;
 	}
 
-	TAVOR_TNF_EXIT(tavor_eq_init_all);
 	return (DDI_SUCCESS);
 
 all_eq_init_fail:
@@ -458,7 +422,6 @@ all_eq_init_fail:
 	for (i = 0; i < num_eq_init; i++) {
 		(void) tavor_eq_free(state, &state->ts_eqhdl[i]);
 	}
-	TAVOR_TNF_EXIT(tavor_eq_init_all);
 	return (status);
 }
 
@@ -472,8 +435,6 @@ tavor_eq_fini_all(tavor_state_t *state)
 {
 	uint_t		num_eq;
 	int		status, i;
-
-	TAVOR_TNF_ENTER(tavor_eq_fini_all);
 
 	/*
 	 * Grab the total number of supported EQs again.  This is the same
@@ -489,7 +450,6 @@ tavor_eq_fini_all(tavor_state_t *state)
 	for (i = 0; i < num_eq; i++) {
 		status = tavor_eq_handler_fini(state, state->ts_eqhdl[i]);
 		if (status != DDI_SUCCESS) {
-			TAVOR_TNF_EXIT(tavor_eq_fini_all);
 			return (DDI_FAILURE);
 		}
 	}
@@ -501,12 +461,10 @@ tavor_eq_fini_all(tavor_state_t *state)
 	for (i = 0; i < num_eq; i++) {
 		status = tavor_eq_free(state, &state->ts_eqhdl[i]);
 		if (status != DDI_SUCCESS) {
-			TAVOR_TNF_EXIT(tavor_eq_fini_all);
 			return (DDI_FAILURE);
 		}
 	}
 
-	TAVOR_TNF_EXIT(tavor_eq_fini_all);
 	return (DDI_SUCCESS);
 }
 
@@ -520,8 +478,6 @@ tavor_eq_arm_all(tavor_state_t *state)
 {
 	uint_t		num_eq;
 	int		i;
-
-	TAVOR_TNF_ENTER(tavor_eq_arm_all);
 
 	/*
 	 * Grab the total number of supported EQs again.  This is the same
@@ -537,8 +493,6 @@ tavor_eq_arm_all(tavor_state_t *state)
 	for (i = 0; i < num_eq; i++) {
 		tavor_eq_doorbell(state, TAVOR_EQDB_REARM_EQ, i, 0);
 	}
-
-	TAVOR_TNF_EXIT(tavor_eq_arm_all);
 }
 
 
@@ -555,8 +509,6 @@ tavor_isr(caddr_t arg1, caddr_t arg2)
 	uint64_t	ecrreg, int_mask;
 	uint_t		status;
 	int		i;
-
-	TAVOR_TNF_ENTER(tavor_isr);
 
 	/*
 	 * Grab the Tavor softstate pointer from the input parameter
@@ -612,7 +564,6 @@ tavor_isr(caddr_t arg1, caddr_t arg2)
 
 	} while (ecrreg != 0x0);
 
-	TAVOR_TNF_EXIT(tavor_isr);
 	return (status);
 }
 
@@ -650,8 +601,6 @@ tavor_eq_poll(tavor_state_t *state, tavor_eqhdl_t eq)
 	int (*eqfunction)(tavor_state_t *state, tavor_eqhdl_t eq,
 	    tavor_hw_eqe_t *eqe);
 
-	TAVOR_TNF_ENTER(tavor_eq_poll);
-
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*eq))
 
 	/* Find the pointer to the clr_ECR register */
@@ -676,7 +625,6 @@ tavor_eq_poll(tavor_state_t *state, tavor_eqhdl_t eq)
 		ecr_mask = ((uint64_t)1 << eq->eq_eqnum);
 		ddi_put64(state->ts_reg_cmdhdl, clr_ecr, ecr_mask);
 
-		TAVOR_TNF_EXIT(tavor_eq_poll);
 		return;
 	}
 
@@ -786,8 +734,6 @@ tavor_eq_poll(tavor_state_t *state, tavor_eqhdl_t eq)
 		    TAVOR_EQ_SYNC_NORMAL);
 
 	} while (TAVOR_EQE_OWNER_IS_SW(eq, eqe));
-
-	TAVOR_TNF_EXIT(tavor_eq_poll);
 }
 
 
@@ -806,8 +752,6 @@ tavor_eq_catastrophic(tavor_state_t *state)
 	uint8_t			err_type;
 	uint32_t		err_buf;
 	int			i;
-
-	TAVOR_TNF_ENTER(tavor_eq_catastrophic);
 
 	bzero(&event, sizeof (ibc_async_event_t));
 
@@ -879,8 +823,6 @@ tavor_eq_catastrophic(tavor_state_t *state)
 	if (state->ts_ibtfpriv != NULL) {
 		TAVOR_DO_IBTF_ASYNC_CALLB(state, type, &event);
 	}
-
-	TAVOR_TNF_EXIT(tavor_eq_catastrophic);
 }
 
 
@@ -904,9 +846,6 @@ tavor_eq_alloc(tavor_state_t *state, uint32_t log_eq_size, uint_t intr,
 	uint32_t		lkey;
 	uint_t			dma_xfer_mode;
 	int			status, i;
-	char			*errormsg;
-
-	TAVOR_TNF_ENTER(tavor_eq_alloc);
 
 	/* Use the internal protection domain (PD) for setting up EQs */
 	pd = state->ts_pdhdl_internal;
@@ -923,8 +862,6 @@ tavor_eq_alloc(tavor_state_t *state, uint32_t log_eq_size, uint_t intr,
 	 */
 	status = tavor_rsrc_alloc(state, TAVOR_EQC, 1, TAVOR_SLEEP, &eqc);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(DDI_FAILURE, "failed EQ context");
 		goto eqalloc_fail1;
 	}
 
@@ -936,8 +873,6 @@ tavor_eq_alloc(tavor_state_t *state, uint32_t log_eq_size, uint_t intr,
 	 */
 	status = tavor_rsrc_alloc(state, TAVOR_EQHDL, 1, TAVOR_SLEEP, &rsrc);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(DDI_FAILURE, "failed EQ handler");
 		goto eqalloc_fail2;
 	}
 	eq = (tavor_eqhdl_t)rsrc->tr_addr;
@@ -959,8 +894,6 @@ tavor_eq_alloc(tavor_state_t *state, uint32_t log_eq_size, uint_t intr,
 	eq->eq_eqinfo.qa_location = TAVOR_QUEUE_LOCATION_NORMAL;
 	status = tavor_queue_alloc(state, &eq->eq_eqinfo, TAVOR_SLEEP);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(DDI_FAILURE, "failed event queue");
 		goto eqalloc_fail3;
 	}
 	buf = (tavor_hw_eqe_t *)eq->eq_eqinfo.qa_buf_aligned;
@@ -997,8 +930,6 @@ tavor_eq_alloc(tavor_state_t *state, uint32_t log_eq_size, uint_t intr,
 	op.mro_bind_override_addr = 0;
 	status = tavor_mr_register(state, pd, &mr_attr, &mr, &op);
 	if (status != DDI_SUCCESS) {
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(DDI_FAILURE, "failed register mr");
 		goto eqalloc_fail4;
 	}
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*mr))
@@ -1046,8 +977,6 @@ tavor_eq_alloc(tavor_state_t *state, uint32_t log_eq_size, uint_t intr,
 	if (status != TAVOR_CMD_SUCCESS) {
 		cmn_err(CE_CONT, "Tavor: SW2HW_EQ command failed: %08x\n",
 		    status);
-		/* Set "status" and "errormsg" and goto failure */
-		TAVOR_TNF_FAIL(ibc_get_ci_failure(0), "tavor SW2HW_EQ command");
 		goto eqalloc_fail5;
 	}
 
@@ -1065,7 +994,6 @@ tavor_eq_alloc(tavor_state_t *state, uint32_t log_eq_size, uint_t intr,
 	eq->eq_mrhdl	 = mr;
 	*eqhdl		 = eq;
 
-	TAVOR_TNF_EXIT(tavor_eq_alloc);
 	return (DDI_SUCCESS);
 
 /*
@@ -1085,7 +1013,6 @@ eqalloc_fail2:
 eqalloc_fail1:
 	tavor_pd_refcnt_dec(pd);
 eqalloc_fail:
-	TAVOR_TNF_EXIT(tavor_eq_alloc);
 	return (status);
 }
 
@@ -1104,8 +1031,6 @@ tavor_eq_free(tavor_state_t *state, tavor_eqhdl_t *eqhdl)
 	tavor_eqhdl_t		eq;
 	uint32_t		eqnum;
 	int			status;
-
-	TAVOR_TNF_ENTER(tavor_eq_free);
 
 	/*
 	 * Pull all the necessary information from the Tavor Event Queue
@@ -1131,7 +1056,6 @@ tavor_eq_free(tavor_state_t *state, tavor_eqhdl_t *eqhdl)
 		TAVOR_WARNING(state, "failed to reclaim EQC ownership");
 		cmn_err(CE_CONT, "Tavor: HW2SW_EQ command failed: %08x\n",
 		    status);
-		TAVOR_TNF_EXIT(tavor_eq_free);
 		return (DDI_FAILURE);
 	}
 
@@ -1145,7 +1069,6 @@ tavor_eq_free(tavor_state_t *state, tavor_eqhdl_t *eqhdl)
 	    TAVOR_NOSLEEP);
 	if (status != DDI_SUCCESS) {
 		TAVOR_WARNING(state, "failed to deregister EQ memory");
-		TAVOR_TNF_EXIT(tavor_eq_free);
 	}
 
 	/* Free the memory for the EQ */
@@ -1163,7 +1086,6 @@ tavor_eq_free(tavor_state_t *state, tavor_eqhdl_t *eqhdl)
 	/* Set the eqhdl pointer to NULL and return success */
 	*eqhdl = NULL;
 
-	TAVOR_TNF_EXIT(tavor_eq_free);
 	return (DDI_SUCCESS);
 }
 
@@ -1178,8 +1100,6 @@ tavor_eq_handler_init(tavor_state_t *state, tavor_eqhdl_t eq,
     tavor_eqhdl_t eq, tavor_hw_eqe_t *eqe))
 {
 	int		status;
-
-	TAVOR_TNF_ENTER(tavor_eq_handler_init);
 
 	/*
 	 * Save away the EQ handler function and the event type mask.  These
@@ -1205,12 +1125,10 @@ tavor_eq_handler_init(tavor_state_t *state, tavor_eqhdl_t eq,
 		if (status != TAVOR_CMD_SUCCESS) {
 			cmn_err(CE_CONT, "Tavor: MAP_EQ command failed: "
 			    "%08x\n", status);
-			TAVOR_TNF_EXIT(tavor_eq_handler_init);
 			return (DDI_FAILURE);
 		}
 	}
 
-	TAVOR_TNF_EXIT(tavor_eq_handler_init);
 	return (DDI_SUCCESS);
 }
 
@@ -1223,8 +1141,6 @@ static int
 tavor_eq_handler_fini(tavor_state_t *state, tavor_eqhdl_t eq)
 {
 	int			status;
-
-	TAVOR_TNF_ENTER(tavor_eq_handler_fini);
 
 	/*
 	 * Unmap the EQ from the event class to which it had been previously
@@ -1245,12 +1161,10 @@ tavor_eq_handler_fini(tavor_state_t *state, tavor_eqhdl_t eq)
 		if (status != TAVOR_CMD_SUCCESS) {
 			cmn_err(CE_CONT, "Tavor: MAP_EQ command failed: "
 			    "%08x\n", status);
-			TAVOR_TNF_EXIT(tavor_eq_handler_fini);
 			return (DDI_FAILURE);
 		}
 	}
 
-	TAVOR_TNF_EXIT(tavor_eq_handler_fini);
 	return (DDI_SUCCESS);
 }
 
@@ -1274,11 +1188,8 @@ tavor_eqe_sync(tavor_eqhdl_t eq, tavor_hw_eqe_t *eqe, uint_t flag,
 	off_t			offset;
 	int			status;
 
-	TAVOR_TNF_ENTER(tavor_eqe_sync);
-
 	/* Determine if EQ needs to be synced or not */
 	if ((eq->eq_sync == 0) && (force_sync == TAVOR_EQ_SYNC_NORMAL)) {
-		TAVOR_TNF_EXIT(tavor_eqe_sync);
 		return;
 	}
 
@@ -1289,11 +1200,8 @@ tavor_eqe_sync(tavor_eqhdl_t eq, tavor_hw_eqe_t *eqe, uint_t flag,
 	offset = (off_t)((uintptr_t)eqe - (uintptr_t)&eq->eq_buf[0]);
 	status = ddi_dma_sync(dmahdl, offset, sizeof (tavor_hw_eqe_t), flag);
 	if (status != DDI_SUCCESS) {
-		TAVOR_TNF_EXIT(tavor_eqe_sync);
 		return;
 	}
-
-	TAVOR_TNF_EXIT(tavor_eqe_sync);
 }
 
 
@@ -1311,8 +1219,6 @@ tavor_port_state_change_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	uint_t			eqe_evttype;
 	char			link_msg[24];
 
-	TAVOR_TNF_ENTER(tavor_port_state_change_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_PORT_STATE_CHANGE ||
@@ -1321,7 +1227,6 @@ tavor_port_state_change_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_port_state_change_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1336,7 +1241,6 @@ tavor_port_state_change_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 		TAVOR_WARNING(state, "Unexpected port number in port state "
 		    "change event");
 		cmn_err(CE_CONT, "  Port number: %02x\n", port);
-		TAVOR_TNF_EXIT(tavor_port_state_change_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1360,7 +1264,6 @@ tavor_port_state_change_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 		    "event");
 		cmn_err(CE_CONT, "  Event type: %02x, subtype: %02x\n",
 		    TAVOR_EQE_EVTTYPE_GET(eq, eqe), subtype);
-		TAVOR_TNF_EXIT(tavor_port_state_change_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1374,7 +1277,6 @@ tavor_port_state_change_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 		TAVOR_DO_IBTF_ASYNC_CALLB(state, type, &event);
 	}
 
-	TAVOR_TNF_EXIT(tavor_port_state_change_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -1393,8 +1295,6 @@ tavor_comm_estbl_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	ibt_async_code_t	type;
 	uint_t			eqe_evttype;
 
-	TAVOR_TNF_ENTER(tavor_comm_estbl_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_COMM_ESTABLISHED ||
@@ -1403,7 +1303,6 @@ tavor_comm_estbl_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_comm_estbl_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1440,7 +1339,6 @@ tavor_comm_estbl_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	} else {
 	}
 
-	TAVOR_TNF_EXIT(tavor_comm_estbl_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -1459,8 +1357,6 @@ tavor_local_wq_cat_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	ibt_async_code_t	type;
 	uint_t			eqe_evttype;
 
-	TAVOR_TNF_ENTER(tavor_local_wq_cat_err_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_LOCAL_WQ_CAT_ERROR ||
@@ -1469,7 +1365,6 @@ tavor_local_wq_cat_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_local_wq_cat_err_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1506,7 +1401,6 @@ tavor_local_wq_cat_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	} else {
 	}
 
-	TAVOR_TNF_EXIT(tavor_local_wq_cat_err_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -1525,8 +1419,6 @@ tavor_invreq_local_wq_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	ibt_async_code_t	type;
 	uint_t			eqe_evttype;
 
-	TAVOR_TNF_ENTER(tavor_invreq_local_wq_err_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_INV_REQ_LOCAL_WQ_ERROR ||
@@ -1535,7 +1427,6 @@ tavor_invreq_local_wq_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_port_state_change_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1572,7 +1463,6 @@ tavor_invreq_local_wq_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	} else {
 	}
 
-	TAVOR_TNF_EXIT(tavor_invreq_local_wq_err_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -1591,8 +1481,6 @@ tavor_local_acc_vio_wq_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	ibt_async_code_t	type;
 	uint_t			eqe_evttype;
 
-	TAVOR_TNF_ENTER(tavor_local_acc_vio_wq_err_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_LOCAL_ACC_VIO_WQ_ERROR ||
@@ -1601,7 +1489,6 @@ tavor_local_acc_vio_wq_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_local_acc_vio_wq_err_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1638,7 +1525,6 @@ tavor_local_acc_vio_wq_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	} else {
 	}
 
-	TAVOR_TNF_EXIT(tavor_local_acc_vio_wq_err_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -1658,8 +1544,6 @@ tavor_sendq_drained_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	ibt_async_code_t	type;
 	uint_t			eqe_evttype;
 
-	TAVOR_TNF_ENTER(tavor_sendq_drained_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_SEND_QUEUE_DRAINED ||
@@ -1668,7 +1552,6 @@ tavor_sendq_drained_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_sendq_drained_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1720,7 +1603,6 @@ tavor_sendq_drained_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	} else {
 	}
 
-	TAVOR_TNF_EXIT(tavor_sendq_drained_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -1739,8 +1621,6 @@ tavor_path_mig_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	ibt_async_code_t	type;
 	uint_t			eqe_evttype;
 
-	TAVOR_TNF_ENTER(tavor_path_mig_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_PATH_MIGRATED ||
@@ -1749,7 +1629,6 @@ tavor_path_mig_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_path_mig_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1786,7 +1665,6 @@ tavor_path_mig_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	} else {
 	}
 
-	TAVOR_TNF_EXIT(tavor_path_mig_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -1805,8 +1683,6 @@ tavor_path_mig_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	ibt_async_code_t	type;
 	uint_t			eqe_evttype;
 
-	TAVOR_TNF_ENTER(tavor_path_mig_err_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_PATH_MIGRATE_FAILED ||
@@ -1815,7 +1691,6 @@ tavor_path_mig_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_path_mig_err_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1852,7 +1727,6 @@ tavor_path_mig_err_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	} else {
 	}
 
-	TAVOR_TNF_EXIT(tavor_path_mig_err_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -1871,8 +1745,6 @@ tavor_srq_catastrophic_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	ibt_async_code_t	type;
 	uint_t			eqe_evttype;
 
-	TAVOR_TNF_ENTER(tavor_srq_catastrophic_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_SRQ_CATASTROPHIC_ERROR ||
@@ -1881,7 +1753,6 @@ tavor_srq_catastrophic_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_srq_catastrophic_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1922,7 +1793,6 @@ tavor_srq_catastrophic_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	} else {
 	}
 
-	TAVOR_TNF_EXIT(tavor_srq_catastrophic_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -1941,8 +1811,6 @@ tavor_srq_last_wqe_reached_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	ibt_async_code_t	type;
 	uint_t			eqe_evttype;
 
-	TAVOR_TNF_ENTER(tavor_srq_last_wqe_reached_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_SRQ_LAST_WQE_REACHED ||
@@ -1951,7 +1819,6 @@ tavor_srq_last_wqe_reached_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_srq_last_wqe_reached_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -1988,7 +1855,6 @@ tavor_srq_last_wqe_reached_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	} else {
 	}
 
-	TAVOR_TNF_EXIT(tavor_srq_last_wqe_reached_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -2005,8 +1871,6 @@ tavor_ecc_detection_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	uint_t			data;
 	int			i;
 
-	TAVOR_TNF_ENTER(tavor_ecc_detection_handler);
-
 	eqe_evttype = TAVOR_EQE_EVTTYPE_GET(eq, eqe);
 
 	ASSERT(eqe_evttype == TAVOR_EVT_ECC_DETECTION ||
@@ -2015,7 +1879,6 @@ tavor_ecc_detection_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 	if (eqe_evttype == TAVOR_EVT_EQ_OVERFLOW) {
 		tavor_eq_overflow_handler(state, eq, eqe);
 
-		TAVOR_TNF_EXIT(tavor_ecc_detection_handler);
 		return (DDI_FAILURE);
 	}
 
@@ -2031,7 +1894,6 @@ tavor_ecc_detection_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 		cmn_err(CE_CONT, "!  EQE[%02x]: %08x\n", i, data);
 	}
 
-	TAVOR_TNF_EXIT(tavor_ecc_detection_handler);
 	return (DDI_SUCCESS);
 }
 
@@ -2045,8 +1907,6 @@ tavor_eq_overflow_handler(tavor_state_t *state, tavor_eqhdl_t eq,
     tavor_hw_eqe_t *eqe)
 {
 	uint_t		error_type, data;
-
-	TAVOR_TNF_ENTER(tavor_eq_overflow_handler);
 
 	ASSERT(TAVOR_EQE_EVTTYPE_GET(eq, eqe) == TAVOR_EVT_EQ_OVERFLOW);
 
@@ -2062,8 +1922,6 @@ tavor_eq_overflow_handler(tavor_state_t *state, tavor_eqhdl_t eq,
 
 	TAVOR_WARNING(state, "Event Queue overflow");
 	cmn_err(CE_CONT, "  Error type: %02x, data: %08x\n", error_type, data);
-
-	TAVOR_TNF_EXIT(tavor_eq_overflow_handler);
 }
 
 
@@ -2078,8 +1936,6 @@ tavor_no_eqhandler(tavor_state_t *state, tavor_eqhdl_t eq,
 {
 	uint_t		data;
 	int		i;
-
-	TAVOR_TNF_ENTER(tavor_no_eqhandler);
 
 	/*
 	 * This "unexpected event" handler (or "catch-all" handler) will
@@ -2098,6 +1954,5 @@ tavor_no_eqhandler(tavor_state_t *state, tavor_eqhdl_t eq,
 		cmn_err(CE_CONT, "  EQE[%02x]: %08x\n", i, data);
 	}
 
-	TAVOR_TNF_EXIT(tavor_no_eqhandler);
 	return (DDI_SUCCESS);
 }
