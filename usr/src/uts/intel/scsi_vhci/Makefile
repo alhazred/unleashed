@@ -54,7 +54,7 @@ CERRWARN	+= -_gcc=-Wno-unused-label
 #
 # Define targets.
 #
-ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
+ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 #

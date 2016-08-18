@@ -55,7 +55,7 @@ include $(UTSBASE)/common/avs/Makefile.com
 #
 #	Define targets
 #
-ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
+ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 AS_INC_PATH	+= -I$(DSF_DIR)/$(OBJS_DIR)
 

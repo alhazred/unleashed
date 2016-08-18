@@ -49,7 +49,7 @@ include $(UTSBASE)/intel/Makefile.intel
 #
 #	Define targets
 #
-ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
+ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 #

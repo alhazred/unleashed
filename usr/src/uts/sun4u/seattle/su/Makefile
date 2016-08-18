@@ -52,7 +52,7 @@ include $(UTSBASE)/sun4u/seattle/Makefile.seattle
 #
 # Define targets
 #
-ALL_TARGET	= $(SRC_CONFILE)
+ALL_TARGET	= $(SRC_CONFFILE)
 INSTALL_TARGET	= $(ROOT_CONFFILE)
 
 #

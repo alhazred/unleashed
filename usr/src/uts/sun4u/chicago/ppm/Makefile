@@ -51,7 +51,7 @@ include $(UTSBASE)/sun4u/chicago/Makefile.chicago
 #
 # Define targets
 #
-ALL_TARGET	= $(SRC_CONFILE)
+ALL_TARGET	= $(SRC_CONFFILE)
 INSTALL_TARGET	= $(ROOT_CONFFILE)
 
 #

@@ -50,7 +50,7 @@ include $(UTSBASE)/sun4u/opl/Makefile.opl
 #
 #	Define targets
 #
-ALL_TARGET	= $(SRC_CONFILE)
+ALL_TARGET	= $(SRC_CONFFILE)
 INSTALL_TARGET	= $(ROOT_OPL_DRV_DIR) $(ROOT_CONFFILE)
 
 #

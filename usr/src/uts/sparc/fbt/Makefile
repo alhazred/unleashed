@@ -33,7 +33,7 @@ CONF_SRCDIR	= $(UTSBASE)/sparc/dtrace
 
 include $(UTSBASE)/sparc/Makefile.sparc
 
-ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
+ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK) $(ROOT_CONFFILE)
 
 LDFLAGS		+= -dy -Ndrv/dtrace -Nmisc/ctf

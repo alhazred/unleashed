@@ -62,7 +62,7 @@ CLOBBERFILES += obj*/*.c debug*/*.c obj*/sd_mkiob debug*/sd_mkiob
 #
 #	Define targets
 #
-ALL_TARGET	= $(BINARY) $(SRC_CONFILE)
+ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 CFLAGS += -D_SD_8K_BLKSIZE -D_SDBC_SINGLE_BRD

@@ -68,9 +68,9 @@ DEF_BUILDS	= $(DEF_BUILDS64) $(DEF_BUILDS32)
 ALL_BUILDS	= $(ALL_BUILDS64) $(ALL_BUILDS32)
 # ... but don't build any 32-bit objects
 ALL_TARGET_debug32	= $(IOC_CHECK_H)
-ALL_TARGET_debug64	= $(BINARY) $(SRC_CONFILE)
+ALL_TARGET_debug64	= $(BINARY) $(SRC_CONFFILE)
 ALL_TARGET_obj32	= $(IOC_CHECK_H)
-ALL_TARGET_obj64	= $(BINARY) $(SRC_CONFILE)
+ALL_TARGET_obj64	= $(BINARY) $(SRC_CONFFILE)
 # ... and remove -xcg92 (not supported by cw)
 CFLAGS_32=
 # ... same deal for install targets
