@@ -819,7 +819,7 @@ list_menu_entry(struct menu_entry *entry, char *setting)
 			timeout = ptr;
 
 		if (*setting == '\0')
-			(void) printf("timeout:     %s\n", timeout);
+			(void) printf("Timeout:     %s\n", timeout);
 		else if (strcasecmp(setting, "timeout") == 0) {
 			(void) printf("%s\n", timeout);
 			goto done;
@@ -829,7 +829,7 @@ list_menu_entry(struct menu_entry *entry, char *setting)
 	ptr = getenv("console");
 	if (ptr != NULL) {
 		if (*setting == '\0')
-			(void) printf("console:     %s\n", ptr);
+			(void) printf("Console:     %s\n", ptr);
 		else if (strcasecmp(setting, "console") == 0) {
 			(void) printf("%s\n", ptr);
 			goto done;
@@ -837,7 +837,7 @@ list_menu_entry(struct menu_entry *entry, char *setting)
 	}
 
 	if (*setting == '\0')
-		(void) printf("bootfs:      %s\n", entry->bootfs);
+		(void) printf("Bootfs:      %s\n", entry->bootfs);
 	else if (strcasecmp(setting, "bootfs") == 0) {
 		(void) printf("%s\n", entry->bootfs);
 		goto done;
@@ -846,14 +846,14 @@ list_menu_entry(struct menu_entry *entry, char *setting)
 	ptr = getenv("xen_kernel");
 	if (ptr != NULL) {
 			if (*setting == '\0') {
-				(void) printf("xen kernel:  %s\n", ptr);
+				(void) printf("Xen kernel:  %s\n", ptr);
 			} else if (strcasecmp(setting, "xen_kernel") == 0) {
 				(void) printf("%s\n", ptr);
 				goto done;
 			}
 
 			if (*setting == '\0') {
-				(void) printf("xen args:    \"%s\"\n",
+				(void) printf("Xen args:    \"%s\"\n",
 				    getenv("xen_cmdline"));
 			} else if (strcasecmp(setting, "xen_cmdline") == 0) {
 				(void) printf("%s\n", getenv("xen_cmdline"));
@@ -861,7 +861,7 @@ list_menu_entry(struct menu_entry *entry, char *setting)
 			}
 
 			if (*setting == '\0') {
-				(void) printf("kernel:      %s\n",
+				(void) printf("Kernel:      %s\n",
 				    getenv("bootfile"));
 			} if (strcasecmp(setting, "kernel") == 0) {
 				(void) printf("%s\n", getenv("bootfile"));
@@ -871,7 +871,7 @@ list_menu_entry(struct menu_entry *entry, char *setting)
 		ptr = getenv("kernelname");
 		if (ptr != NULL) {
 			if (*setting == '\0') {
-				(void) printf("kernel:      %s\n", ptr);
+				(void) printf("Kernel:      %s\n", ptr);
 			} else if (strcasecmp(setting, "kernel") == 0) {
 				(void) printf("%s\n", ptr);
 				goto done;
@@ -882,7 +882,7 @@ list_menu_entry(struct menu_entry *entry, char *setting)
 	ptr = getenv("boot-args");
 	if (ptr != NULL) {
 		if (*setting == '\0') {
-			(void) printf("boot-args:   \"%s\"\n", ptr);
+			(void) printf("Boot-args:   \"%s\"\n", ptr);
 		} else if (strcasecmp(setting, "boot-args") == 0) {
 			(void) printf("%s\n", ptr);
 			goto done;
