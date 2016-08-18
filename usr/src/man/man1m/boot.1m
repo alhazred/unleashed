@@ -6,7 +6,7 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License"). You may not use this file except in compliance with the License. You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.
 .\" See the License for the specific language governing permissions and limitations under the License. When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE. If applicable, add the following below this CDDL HEADER, with the
 .\" fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH BOOT 1M "Jul 27, 2016"
+.TH BOOT 1M "Aug 18, 2016"
 .SH NAME
 boot \- start the system kernel or a standalone program
 .SH SYNOPSIS
@@ -623,13 +623,13 @@ this dataset is mounted at /\fIpoolname\fR in the root file system.
 There can be multiple bootable datasets (that is, root file systems) within a
 pool. The default file system to load the kernel is identified by the boot
 pool \fBbootfs\fR property (see \fBzpool\fR(1M)). All bootable datasets are
-listed in \fBmenu.lst\fR file, which is used by the boot loader to compose
-Boot Environment menu, to implement support to load kernel and boot from
-alternate Boot Environment.
+listed in the \fBmenu.lst\fR file, which is used by the boot loader to compose
+the Boot Environment menu, to implement support to load a kernel and boot from
+an alternate Boot Environment.
 .sp
 .LP
 Kernel initialization starts when the boot loader finishes loading the files
-specified in boot loader configuration and hands control over to the
+specified in the boot loader configuration and hands control over to the
 \fBunix\fR binary. The Unix operating system initializes, links in the
 necessary modules from the boot archive and mounts the root file system on
 the real root device. At this point, the kernel regains
@@ -802,17 +802,17 @@ the first byte of the sector image in memory.
 .LP
 The first sector on a hard disk contains the master boot block (first stage of
 the boot program), which contains the master boot program and the Master Boot
-Record, \fBMBR\fR table. The master boot program has recorded location of the
-secondary stage of boot program and using this location, master boot will load
-and start the secondary stage of the boot program.
+Record (\fBMBR\fR) table. The master boot program has recorded the location of
+the secondary stage of the boot program and using this location, master boot
+will load and start the secondary stage of the boot program.
 
-To support booting multiple operating systems, master boot program is also
-installed as first sector of partition with illumos root file system. This
-will allow to configure third party boot programs to use chainload technique
-to boot illumos system.
+To support booting multiple operating systems, the master boot program is also
+installed as the first sector of the partition with the illumos root file
+system. This will allow configuring third party boot programs to use the
+chainload technique to boot illumos system.
 
-If first stage is installed on the master boot block (see the \fB-m\fR option
-of \fBinstallboot\fR(1M)), then \fBstage2\fR is loaded directly
+If the first stage is installed on the master boot block (see the \fB-m\fR
+option of \fBinstallboot\fR(1M)), then \fBstage2\fR is loaded directly
 from the Solaris partition regardless of the active partition.
 .sp
 .LP
@@ -829,18 +829,19 @@ An x86 \fBMBR\fR partition for the Solaris software begins with a
 one-cylinder boot slice, which contains the boot loader \fBstage1\fR in the
 first sector, the standard Solaris disk label and volume table of contents
 (VTOC) in the second and third sectors, and in case the UFS file system is
-used for root file system, \fBstage2\fR in the fiftieth and subsequent sectors.
+used for the root file system, \fBstage2\fR in the fiftieth and subsequent
+sectors.
 
-If the zfs boot is used, \fBstage2\fR is always stored into zfs pool
+If the zfs boot is used, \fBstage2\fR is always stored into the zfs pool
 boot program area.
 .sp
 .LP
 The behavior is slightly different when a disk is using \fBEFI\fR
 partitioning.
 
-To support UFS root file system in \fBEFI\fR partition, the \fBstage2\fR
+To support a UFS root file system in the \fBEFI\fR partition, the \fBstage2\fR
 must be stored on separate dedicated partition, as there is no space in UFS
-file system boot program area to store current \fBstage2\fR. This separate
+file system boot program area to store the current \fBstage2\fR. This separate
 dedicated partition is used as raw disk space, and must have enough space
 for both \fBstage1\fR and \fBstage2\fR. The type (tag) of this partition
 must be \fBboot\fR, \fBEFI\fR UUID:
@@ -850,16 +851,19 @@ must be \fBboot\fR, \fBEFI\fR UUID:
 \fB6a82cb45-1dd2-11b2-99a6-080020736631\fR
 .fi
 .in -2
+.sp
+For the UUID reference, please see \fB/usr/include/sys/efi_partition.h\fR.
 
-In case of whole disk zfs pool configuration, the \fBstage1\fR is always
+In case of a whole disk zfs pool configuration, the \fBstage1\fR is always
 installed in the first sector of the disk, and it always loads \fBstage2\fR
 from the partition specified at the boot loader installation time.
 .sp
 .LP
-Once \fBstage2\fR is running, it will load and start third stage boot program
-from root file system. Boot loader supports loading from ZFS, UFS and PCFS
-file systems. The stage3 boot program defaults to be \fB/boot/zfsloader\fR,
-and implements user interface to load and boot unix kernel.
+Once \fBstage2\fR is running, it will load and start the third stage boot
+program from root file system. Boot loader supports loading from the ZFS,
+UFS and PCFS file systems. The stage3 boot program defaults to be
+\fB/boot/zfsloader\fR, and implements a user interface to load and boot the
+unix kernel.
 .sp
 .LP
 For network booting, the supported method is Intel's Preboot eXecution
@@ -884,8 +888,9 @@ process in \fB/boot/solaris/bootenv.rc\fR and can be overridden with the
 .sp
 .LP
 When booting from ZFS, the root device is automatically passed by the boot
-loader to kernel as a boot parameter \fB-B\fR \fBzfs-bootfs\fR. The actual value
-used by the boot loader can be observed with \fBeeprom bootcmd\fR command.
+loader to the kernel as a boot parameter \fB-B\fR \fBzfs-bootfs\fR. The actual
+value used by the boot loader can be observed with the \fBeeprom bootcmd\fR
+command.
 .sp
 .LP
 If the console properties are not present, console I/O defaults to \fBscreen\fR
@@ -977,7 +982,7 @@ boot support package processes arguments in \fBnetwork-boot-arguments\fR.
 Mode
 .sp
 .LP
-To boot the default kernel in single-user interactive mode, press ESC key
+To boot the default kernel in single-user interactive mode, press the ESC key
 to get the boot loader \fBok\fR prompt and enter:
 
 .sp

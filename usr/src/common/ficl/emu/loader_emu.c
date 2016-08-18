@@ -1204,7 +1204,8 @@ command_help(int argc, char *argv[])
 	pager_close();
 	close(hfd);
 	if (!matched) {
-		sprintf(command_errbuf, "no help available for '%s'", topic);
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "no help available for '%s'", topic);
 		free(topic);
 		if (subtopic)
 			free(subtopic);
@@ -1271,8 +1272,8 @@ command_show(int argc, char *argv[])
 		if ((cp = getenv(argv[1])) != NULL) {
 			printf("%s\n", cp);
 		} else {
-			sprintf(command_errbuf, "variable '%s' not found",
-			    argv[1]);
+			snprintf(command_errbuf, sizeof (command_errbuf),
+			    "variable '%s' not found", argv[1]);
 			return (CMD_ERROR);
 		}
 	}
@@ -1407,8 +1408,9 @@ command_read(int argc, char *argv[])
 		case 't':
 			timeout = strtol(optarg, &cp, 0);
 			if (cp == optarg) {
-				sprintf(command_errbuf, "bad timeout '%s'",
-				    optarg);
+				snprintf(command_errbuf,
+				    sizeof (command_errbuf),
+				    "bad timeout '%s'", optarg);
 				return (CMD_ERROR);
 			}
 		break;
@@ -1476,8 +1478,10 @@ page_file(char *filename)
 
 	result = pager_file(filename);
 
-	if (result == -1)
-		sprintf(command_errbuf, "error showing %s", filename);
+	if (result == -1) {
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "error showing %s", filename);
+	}
 
 	return (result);
 }
@@ -1583,7 +1587,8 @@ ls_getdir(char **pathp)
 
 	/* Make sure the path is respectable to begin with */
 	if ((cp = get_dev(path)) == NULL) {
-		sprintf(command_errbuf, "bad path '%s'", path);
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "bad path '%s'", path);
 		goto out;
 	}
 
@@ -1593,16 +1598,18 @@ ls_getdir(char **pathp)
 
 	fd = open(cp, O_RDONLY);
 	if (fd < 0) {
-		sprintf(command_errbuf, "open '%s' failed: %s", path,
-		    strerror(errno));
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "open '%s' failed: %s", path, strerror(errno));
 		goto out;
 	}
 	if (fstat(fd, &sb) < 0) {
-		sprintf(command_errbuf, "stat failed: %s", strerror(errno));
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "stat failed: %s", strerror(errno));
 		goto out;
 	}
 	if (!S_ISDIR(sb.st_mode)) {
-		sprintf(command_errbuf, "%s: %s", path, strerror(ENOTDIR));
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "%s: %s", path, strerror(ENOTDIR));
 		goto out;
 	}
 
@@ -1667,7 +1674,8 @@ include(const char *filename)
 
 	path = get_dev(filename);
 	if (((fd = open(path, O_RDONLY)) == -1)) {
-		sprintf(command_errbuf, "can't open '%s': %s", filename,
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "can't open '%s': %s", filename,
 		    strerror(errno));
 		free(path);
 		return (CMD_ERROR);
@@ -1700,7 +1708,7 @@ include(const char *filename)
 				script = script->next;
 				free(se);
 			}
-			sprintf(command_errbuf,
+			snprintf(command_errbuf, sizeof (command_errbuf),
 			    "file '%s' line %d: memory allocation "
 			    "failure - aborting", filename, line);
 			return (CMD_ERROR);
@@ -1730,7 +1738,7 @@ include(const char *filename)
 	for (sp = script; sp != NULL; sp = sp->next) {
 		res = bf_run(sp->text);
 		if (res != FICL_VM_STATUS_OUT_OF_TEXT) {
-			sprintf(command_errbuf,
+			snprintf(command_errbuf, sizeof (command_errbuf),
 			    "Error while including %s, in the line %d:\n%s",
 			    filename, sp->line, sp->text);
 			res = CMD_ERROR;
@@ -1943,7 +1951,8 @@ command_load(int argc, char *argv[])
 
 	filename = file_search(argv[1]);
 	if (filename == NULL) {
-		sprintf(command_errbuf, "can't find '%s'", argv[1]);
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "can't find '%s'", argv[1]);
 		return (CMD_ERROR);
 	}
 	setenv("kernelname", filename, 1);

@@ -1,4 +1,3 @@
-'\" te
 .\" Copyright (c) 1992, X/Open Company Limited All Rights Reserved.
 .\" Portions Copyright (c) 2009, Sun Microsystems, Inc.  All Rights Reserved.
 .\" Sun Microsystems, Inc. gratefully acknowledges The Open Group for permission to reproduce portions of its copyrighted documentation. Original documentation from The Open Group can be obtained online at  http://www.opengroup.org/bookstore/.
@@ -9,39 +8,41 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH SOCKET.H 3HEAD "Jan 28, 2009"
-.SH NAME
-socket.h, socket \- Internet Protocol family
-.SH SYNOPSIS
-.LP
-.nf
-\fB#include <sys/socket.h>\fR
-.fi
-
-.SH DESCRIPTION
-.LP
-The \fB<sys/socket.h>\fR header defines the unsigned integral type
-\fBsa_family_t\fR through \fBtypedef\fR.
-.sp
-.LP
-The \fB<sys/socket.h>\fR header defines the \fBsockaddr\fR structure that
-includes the following members:
-.sp
-.in +2
-.nf
+.Dd Jan 28, 2009
+.Dt SOCKET.H 3HEAD
+.Os
+.Sh NAME
+.Nm socket.h
+.Nd Internet Protocol family
+.Sh SYNOPSIS
+.In sys/socket.h
+.Sh DESCRIPTION
+The
+.Nm
+header defines the unsigned integral type
+.Vt sa_family_t
+through
+.Sy typedef .
+.Pp
+The
+.Nm
+header defines the
+.Vt sockaddr
+structure that includes the following members:
+.Bd -literal -offset indent
 sa_family_t   sa_family     /* address family */
 char          sa_data[]     /* socket   address (variable-length
                                 data) */
-.fi
-.in -2
-
-.SS "\fBlibxnet\fR Interfaces"
-.LP
-The \fB<sys/socket.h>\fR header defines the \fBmsghdr\fR structure for
-\fBlibxnet\fR interfaces that includes the following members:
-.sp
-.in +2
-.nf
+.Ed
+.Ss libxnet Interfaces
+The
+.Nm
+header defines the
+.Vt msghdr
+structure for
+.Lb libxnet
+interfaces that includes the following members:
+.Bd -literal -offset indent
 void            *msg_name         /* optional address */
 socklen_t       msg_namelen       /* size of address */
 struct iovec    *msg_iov          /* scatter/gather array */
@@ -49,673 +50,355 @@ int             msg_iovlen        /* members in msg_iov */
 void            *msg_control      /* ancillary data, see below */
 socklen_t       msg_controllen    /* ancillary data buffer len */
 int             msg_flags         /* flags on received message */
-.fi
-.in -2
-
-.sp
-.LP
-The \fB<sys/socket.h>\fR header defines the \fBcmsghdr\fR structure for
-\fBlibxnet\fR that includes the following members:
-.sp
-.in +2
-.nf
+.Ed
+.Pp
+The
+.Nm
+header defines the
+.Vt cmsghdr
+structure for
+.Lb libxnet that includes the following members:
+.Bd -literal -offset indent
 socklen_t  cmsg_len      /* data byte count, including hdr */
 int        cmsg_level    /* originating protocol */
 int        cmsg_type     /* protocol-specific type */
-.fi
-.in -2
-
-.sp
-.LP
+.Ed
+.Pp
 Ancillary data consists of a sequence of pairs, each consisting of a
-\fBcmsghdr\fR structure followed by a data array. The data array contains the
-ancillary data message, and the \fBcmsghdr\fR structure contains descriptive
-information that allows an application to correctly parse the data.
-.sp
-.LP
-The values for \fBcmsg_level\fR will be legal values for the level argument to
-the \fBgetsockopt()\fR and \fBsetsockopt()\fR functions. The \fBSCM_RIGHTS\fR
-type is supported for level \fBSOL_SOCKET\fR.
-.sp
-.LP
-Ancillary data is also possible at the socket level. The \fB<sys/socket.h>\fR
-header defines the following macros for use as the \fBcmsg_type\fR values when
-\fBcmsg_level\fR is \fBSOL_SOCKET\fR.
-.sp
-.ne 2
-.na
-\fB\fBSCM_RIGHTS\fR\fR
-.ad
-.RS 14n
+.Vt cmsghdr
+structure followed by a data array. The data array contains the ancillary data
+message, and the
+.Vt cmsghdr
+structure contains descriptive information that allows an application to
+correctly parse the data.
+.Pp
+The values for
+.Va cmsg_level
+will be legal values for the level argument to the
+.Fn getsockopt
+and
+.Fn setsockopt
+functions. The
+.Dv SCM_RIGHTS
+type is supported for level
+.Dv SOL_SOCKET .
+.Pp
+Ancillary data is also possible at the socket level. The
+.Nm
+header defines the following macros for use as the
+.Va cmsg_type
+values when
+.Va cmsg_level
+is
+.Dv SOL_SOCKET .
+.Bl -tag -width Ds
+.It Dv SCM_RIGHTS
 Indicates that the data array contains the access rights to be sent or
 received.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSCM_UCRED\fR\fR
-.ad
-.RS 14n
-Indicates that the data array contains a \fBucred_t\fR to be received. The
-\fBucred_t\fR is the credential of the sending process at the time the message
-was sent. This is a Sun-specific, Evolving interface. See \fBucred_get\fR(3C).
-.RE
-
-.sp
-.LP
+.It Dv SCM_UCRED
+Indicates that the data array contains a
+.Vt ucred_t
+to be received. The
+.Vt ucred_t
+is the credential of the sending process at the time the message was sent. This
+is a Sun-specific, Evolving interface. See
+.Xr ucred_get 3C .
+.El
+.Pp
 The IPv4 data formats generally use the same values for data passed back in
-\fBcmsghdr\fR as for \fBsetsockopt()\fR to enable the feature. The IPv4 data
-formats are listed below with the associated payload for each.
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IP\fR\fR
-.ad
-.br
-.na
-\fB\fBIP_RECVDSTADDR\fR\fR
-.ad
-.sp .6
-.RS 4n
-\fBipaddr_t\fR, IP address
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IP\fR\fR
-.ad
-.br
-.na
-\fB\fBIP_RECVOPTS\fR\fR
-.ad
-.sp .6
-.RS 4n
+.Vt cmsghdr
+as for
+.Fn setsockopt
+to enable the feature. The IPv4 data formats are listed below with the
+associated payload for each.
+.Bl -tag -width Ds
+.It Dv IPPROTO_IP IP_RECVDSTADDR
+.Vt ipaddr_t ,
+IP address
+.It Dv IPPROTO_IP IP_RECVOPTS
 variable-length IP options, up to 40 bytes
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IP\fR\fR
-.ad
-.br
-.na
-\fB\fBIP_RECVIF\fR\fR
-.ad
-.sp .6
-.RS 4n
-\fBuint_t\fR, \fBifIndex\fR number
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IP\fR\fR
-.ad
-.br
-.na
-\fB\fBIP_RECVSLLA\fR\fR
-.ad
-.sp .6
-.RS 4n
-\fBstruct sockaddr_dl\fR, link layer address
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IP\fR\fR
-.ad
-.br
-.na
-\fB\fBIP_RECVTTL\fR\fR
-.ad
-.sp .6
-.RS 4n
-\fBuint8_t\fR
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSOL_SOCKET\fR\fR
-.ad
-.br
-.na
-\fB\fBSO_RECVUCRED\fR\fR
-.ad
-.sp .6
-.RS 4n
-\fBucred_t\fR \(em \fBcmsghdr.cmsg_type\fR is \fBSCM_UCRED\fR, not
-\fBSO_RECVUCRED\fR
-.RE
-
-.sp
-.LP
+.It Dv IPPROTO_IP IP_RECVIF
+.Vt uint_t ,
+.Va ifIndex
+number
+.It Dv IPPROTO_IP IP_RECVSLLA
+.Vt struct sockaddr_dl ,
+link layer address
+.It Dv IPPROTO_IP IP_RECVTTL
+.Vt uint8_t
+.It Dv SOL_SOCKET SO_RECVUCRED
+.Vt ucred_t
+-
+.Va cmsghdr.cmsg_type
+is
+.Dv SCM_UCRED ,
+not
+.Dv SO_RECVUCRED
+.El
+.Pp
 The IPv6 data formats use different values for enabling the option and for
 passing the value back to the application. The IPv6 data formats are listed
 below with the associated payload for each.
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IPV6\fR\fR
-.ad
-.br
-.na
-\fB\fBIPV6_RECVPKTINFO\fR\fR
-.ad
-.sp .6
-.RS 4n
-\fBin_pktinfo\fR, \fBcmsg_type\fR \fBIPV6_PKTINFO\fR
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IPV6\fR\fR
-.ad
-.br
-.na
-\fB\fBIPV6_RECVTCLASS\fR\fR
-.ad
-.sp .6
-.RS 4n
-\fBuint_t\fR, \fBcmsg_type\fR \fBIPV6_TCLASS\fR
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IPV6\fR\fR
-.ad
-.br
-.na
-\fB\fBIPV6_RECVPATHMTU\fR\fR
-.ad
-.sp .6
-.RS 4n
-\fBip6_mtuinfo\fR, \fBcmsg_type\fR \fBIPV6_PATHMTU\fR
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IPV6\fR\fR
-.ad
-.br
-.na
-\fB\fBIPV6_RECVHOPLIMIT\fR\fR
-.ad
-.sp .6
-.RS 4n
-\fBuint_t\fR, \fBcmsg_type\fR \fBIPV6_HOPLIMIT\fR
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IPV6\fR\fR
-.ad
-.br
-.na
-\fB\fBIPV6_RECVHOPOPTS\fR\fR
-.ad
-.sp .6
-.RS 4n
-variable-length IPv6 options, \fBcmsg_type\fR \fBIPV6_HOPOPTS\fR
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IPV6\fR\fR
-.ad
-.br
-.na
-\fB\fBIPV6_RECVDSTOPTS\fR\fR
-.ad
-.sp .6
-.RS 4n
-variable-length IPv6 options, \fBcmsg_type\fR \fBIPV6_DSTOPTS\fR
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IPV6\fR\fR
-.ad
-.br
-.na
-\fB\fBIPV6_RECVRTHDR\fR\fR
-.ad
-.sp .6
-.RS 4n
-variable-length IPv6 options, \fBcmsg_type\fR \fBIPV6_RTHDR\fR
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBIPPROTO_IPV6\fR\fR
-.ad
-.br
-.na
-\fB\fBIPV6_RECVRTHDRDSTOPTS\fR\fR
-.ad
-.sp .6
-.RS 4n
-variable-length IPv6 options, \fBcmsg_type\fR \fBIPV6_DSTOPTS\fR
-.RE
-
-.sp
-.LP
-The \fB<sys/socket.h>\fR header defines the following macros to gain access to
-the data arrays in the ancillary data associated with a message header:
-.sp
-.ne 2
-.na
-\fB\fBCMSG_DATA(\fR\fIcmsg\fR)\fR
-.ad
-.sp .6
-.RS 4n
-If the argument is a pointer to a \fBcmsghdr\fR structure, this macro returns
-an unsigned character pointer to the data array associated with the
-\fBcmsghdr\fR structure.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBCMSG_NXTHDR(\fR\fImhdr\fR, \fIcmsg\fR)\fR
-.ad
-.sp .6
-.RS 4n
-If the first argument is a pointer to a \fBmsghdr\fR structure and the second
-argument is a pointer to a \fBcmsghdr\fR structure in the ancillary data,
-pointed to by the \fBmsg_control\fR field of that \fBmsghdr\fR structure, this
-macro returns a pointer to the next \fBcmsghdr\fR structure, or a null pointer
-if this structure is the last \fBcmsghdr\fR in the ancillary data.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBCMSG_FIRSTHDR(\fR\fImhdr\fR)\fR
-.ad
-.sp .6
-.RS 4n
-If the argument is a pointer to a \fBmsghdr\fR structure, this macro returns a
-pointer to the first \fBcmsghdr\fR structure in the ancillary data associated
-with this \fBmsghdr\fR structure, or a null pointer if there is no ancillary
-data associated with the \fBmsghdr\fR structure.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBCMSG_SPACE\fR(\fIlen\fR)\fR
-.ad
-.sp .6
-.RS 4n
-Given the length of an ancillary data object, \fBCMSG_SPACE()\fR returns the
-space required by the object and its \fBcmsghdr\fR structure, including any
-padding needed to satisfy alignment requirements. This macro can be used, for
-example, to allocate space dynamically for the ancillary data. This macro
-should not be used to initialize the \fBcmsg_len\fR member of a \fBcmsghdr\fR
-structure. Use the \fBCMSG_LEN()\fR macro instead.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBCMSG_LEN\fR(\fIlen\fR)\fR
-.ad
-.sp .6
-.RS 4n
-Given the length of an ancillary data object, \fBCMSG_LEN()\fR returns the
-value to store in the cmsg_len member of the \fBcmsghdr\fR structure, taking
-into account any padding needed to satisfy alignment requirements.
-.RE
-
-.sp
-.LP
-The \fB<sys/socket.h>\fR header defines the \fBlinger\fR structure that
-includes the following members:
-.sp
-.in +2
-.nf
+.Bl -tag -width Ds
+.It Dv IPPROTO_IPV6 IPV6_RECVPKTINFO
+.Vt in_pktinfo ,
+.Va cmsg_type
+.Dv IPV6_PKTINFO
+.It Dv IPPROTO_IPV6 IPV6_RECVTCLASS
+.Vt uint_t ,
+.Va cmsg_type
+.Dv IPV6_TCLASS
+.It Dv IPPROTO_IPV6 IPV6_RECVPATHMTU
+.Vt ip6_mtuinfo ,
+.Va cmsg_type
+.Dv IPV6_PATHMTU
+.It Dv IPPROTO_IPV6 IPV6_RECVHOPLIMIT
+.Vt uint_t ,
+.Va cmsg_type
+.Dv IPV6_HOPLIMIT
+.It Dv IPPROTO_IPV6 IPV6_RECVHOPOPTS
+variable-length IPv6 options,
+.Va cmsg_type
+.Dv IPV6_HOPOPTS
+.It Dv IPPROTO_IPV6 IPV6_RECVDSTOPTS
+variable-length IPv6 options,
+.Va cmsg_type
+.Dv IPV6_DSTOPTS
+.It Dv IPPROTO_IPV6 IPV6_RECVRTHDR
+variable-length IPv6 options,
+.Va cmsg_type
+.Dv IPV6_RTHDR
+.It Dv IPPROTO_IPV6 IPV6_RECVRTHDRDSTOPTS
+variable-length IPv6 options,
+.Va cmsg_type
+.Dv IPV6_DSTOPTS
+.El
+.Pp
+The
+.Nm
+header defines the following macros to gain access to the data arrays in the
+ancillary data associated with a message header:
+.Bl -tag -width Ds
+.It Fn CMSG_DATA cmsg
+If the argument is a pointer to a
+.Vt cmsghdr
+structure, this macro returns an unsigned character pointer to the data array
+associated with the
+.Vt cmsghdr
+structure.
+.It Fn CMSG_NXTHDR mhdr cmsg
+If the first argument is a pointer to a
+.Vt msghdr
+structure and the second argument is a pointer to a
+.Vt cmsghdr
+structure in the ancillary data, pointed to by the
+.Va msg_control
+field of that
+.Vt msghdr
+structure, this macro returns a pointer to the next
+.Vt cmsghdr
+structure, or a null pointer if this structure is the last
+.Vt cmsghdr
+in the ancillary data.
+.It Fn CMSG_FIRSTHDR mhdr
+If the argument is a pointer to a
+.Vt msghdr
+structure, this macro returns a pointer to the first
+.Vt cmsghdr
+structure in the ancillary data associated with this
+.Vt msghdr
+structure, or a null pointer if there is no ancillary data associated with the
+.Vt msghdr
+structure.
+.It Fn CMSG_SPACE len
+Given the length of an ancillary data object,
+.Fn CMSG_SPACE
+returns the space required by the object and its
+.Vt cmsghdr
+structure, including any padding needed to satisfy alignment requirements. This
+macro can be used, for example, to allocate space dynamically for the ancillary
+data. This macro should not be used to initialize the
+.Va cmsg_len
+member of a
+.Vt cmsghdr
+structure. Use the
+.Fn CMSG_LEN
+macro instead.
+.It Fn CMSG_LEN len
+Given the length of an ancillary data object,
+.Fn CMSG_LEN
+returns the value to store in the
+.Va cmsg_len
+member of the
+.Vt cmsghdr
+structure, taking into account any padding needed to satisfy alignment
+requirements.
+.El
+.Pp
+The
+.Nm
+header defines the linger structure that includes the following members:
+.Bd -literal -offset indent
 int   l_onoff   /* indicates  whether  linger option is enabled */
 int   l_linger  /* linger time, in seconds */
-.fi
-.in -2
-
-.sp
-.LP
-The \fB<sys/socket.h>\fR header defines the following macros:
-.sp
-.ne 2
-.na
-\fB\fBSOCK_DGRAM\fR\fR
-.ad
-.RS 18n
+.Ed
+.Pp
+The
+.Nm
+header defines the following macros:
+.Bl -tag -width Ds
+.It Dv SOCK_DGRAM
 Datagram socket
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSOCK_STREAM\fR\fR
-.ad
-.RS 18n
+.It Dv SOCK_STREAM
 Byte-stream socket
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSOCK_SEQPACKET\fR\fR
-.ad
-.RS 18n
+.It Dv SOCK_SEQPACKET
 Sequenced-packet socket
-.RE
-
-.sp
-.LP
-The \fB<sys/socket.h>\fR header defines the following macros for use as the
-\fIlevel\fR argument of \fBsetsockopt()\fR and \fBgetsockopt()\fR.
-.sp
-.ne 2
-.na
-\fB\fBSOL_SOCKET\fR\fR
-.ad
-.RS 14n
+.El
+.Pp
+The
+.Nm
+header defines the following macros for use as the
+.Fa level
+argument of
+.Fn setsockopt
+and
+.Fn getsockopt .
+.Bl -tag -width Ds
+.It Dv SOL_SOCKET
 Options to be accessed at the socket level, not the protocol level.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSOL_ROUTE\fR\fR
-.ad
-.RS 14n
+.It Dv SOL_ROUTE
 Options to be accessed at the routing socket level, not the protocol level.
-.RE
-
-.sp
-.LP
-The \fB<sys/socket.h>\fR header defines the following macros for use as the
-\fIoption_name\fR argument of \fBgetsockopt()\fR or \fBsetsockopt()\fR calls:
-.sp
-.ne 2
-.na
-\fB\fBSO_DEBUG\fR\fR
-.ad
-.RS 17n
+.El
+.Pp
+The
+.Nm
+header defines the following macros for use as the
+.Fa option_name
+argument of
+.Fn getsockopt
+or
+.Fn setsockopt
+calls:
+.Bl -tag -width Ds
+.It Dv SO_DEBUG
 Debugging information is being recorded.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_ACCEPTCONN\fR\fR
-.ad
-.RS 17n
+.It Dv SO_ACCEPTCONN
 Socket is accepting connections.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_BROADCAST\fR\fR
-.ad
-.RS 17n
+.It Dv SO_BROADCAST
 Transmission of broadcast messages is supported.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_REUSEADDR\fR\fR
-.ad
-.RS 17n
+.It Dv SO_REUSEADDR
 Reuse of local addresses is supported.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_KEEPALIVE\fR\fR
-.ad
-.RS 17n
+.It Dv SO_KEEPALIVE
 Connections are kept alive with periodic messages.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_LINGER\fR\fR
-.ad
-.RS 17n
+.It Dv SO_LINGER
 Socket lingers on close.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_OOBINLINE\fR\fR
-.ad
-.RS 17n
+.It Dv SO_OOBINLINE
 Out-of-band data is transmitted in line.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_SNDBUF\fR\fR
-.ad
-.RS 17n
+.It Dv SO_SNDBUF
 Send buffer size.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_RCVBUF\fR\fR
-.ad
-.RS 17n
+.It Dv SO_RCVBUF
 Receive buffer size.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_ERROR\fR\fR
-.ad
-.RS 17n
+.It Dv SO_ERROR
 Socket error status.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_TYPE\fR\fR
-.ad
-.RS 17n
+.It Dv SO_TYPE
 Socket type.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_RECVUCRED\fR\fR
-.ad
-.RS 17n
+.It Dv SO_RECVUCRED
 Request the reception of user credential ancillary data. This is a
-Sun-specific, Evolving interface. See \fBucred_get\fR(3C).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_MAC_EXEMPT\fR\fR
-.ad
-.RS 17n
-Mandatory Access Control (\fBMAC\fR) exemption for unlabeled peers. This option
-is available only if the system is configured with Trusted Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSO_ALLZONES\fR\fR
-.ad
-.RS 17n
+Sun-specific, Evolving interface. See
+.Xr ucred_get 3C .
+.It Dv SO_MAC_EXEMPT
+Mandatory Access Control (MAC) exemption for unlabeled peers. This option is
+available only if the system is configured with Trusted Extensions.
+.It Dv SO_ALLZONES
 Bypass zone boundaries (privileged).
-.RE
-
-.sp
-.LP
-The \fB<sys/socket.h>\fR header defines the following macros for use as the
-valid values for the \fBmsg_flags\fR field in the \fBmsghdr\fR structure, or
-the flags parameter in \fBrecvfrom()\fR, \fBrecvmsg()\fR, \fBsendto()\fR, or
-\fBsendmsg()\fR calls:
-.sp
-.ne 2
-.na
-\fB\fBMSG_CTRUNC\fR\fR
-.ad
-.RS 15n
+.El
+.Pp
+The
+.Nm
+header defines the following macros for use as the valid values for the
+.Va msg_flags
+field in the
+.Vt msghdr
+structure, or the flags parameter in
+.Fn recvfrom ,
+.Fn recvmsg ,
+.Fn sendto ,
+or
+.Fn sendmsg
+calls:
+.Bl -tag -width Ds
+.It Dv MSG_CTRUNC
 Control data truncated.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBMSG_EOR\fR\fR
-.ad
-.RS 15n
+.It Dv MSG_EOR
 Terminates a record (if supported by the protocol).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBMSG_OOB\fR\fR
-.ad
-.RS 15n
+.It Dv MSG_OOB
 Out-of-band data.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBMSG_PEEK\fR\fR
-.ad
-.RS 15n
+.It Dv MSG_PEEK
 Leave received data in queue.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBMSG_TRUNC\fR\fR
-.ad
-.RS 15n
+.It Dv MSG_TRUNC
 Normal data truncated.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBMSG_WAITALL\fR\fR
-.ad
-.RS 15n
+.It Dv MSG_WAITALL
 Wait for complete message.
-.RE
-
-.sp
-.LP
-The \fB<sys/socket.h>\fR header defines the following macros:
-.sp
-.ne 2
-.na
-\fB\fBAF_UNIX\fR\fR
-.ad
-.RS 11n
+.El
+.Pp
+The
+.Nm
+header defines the following macros:
+.Bl -tag -width Ds
+.It Dv AF_UNIX
 UNIX domain sockets
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBAF_INET\fR\fR
-.ad
-.RS 11n
+.It Dv AF_INET
 Internet domain sockets
-.RE
-
-.sp
-.LP
-The \fB<sys/socket.h>\fR header defines the following macros:
-.sp
-.ne 2
-.na
-\fB\fBSHUT_RD\fR\fR
-.ad
-.RS 13n
+.El
+.Pp
+The
+.Nm
+header defines the following macros:
+.Bl -tag -width Ds
+.It Dv SHUT_RD
 Disables further receive operations.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSHUT_WR\fR\fR
-.ad
-.RS 13n
+.It Dv SHUT_WR
 Disables further send operations.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBSHUT_RDWR\fR\fR
-.ad
-.RS 13n
+.It Dv SHUT_RDWR
 Disables further send and receive operations.
-.RE
-
-.SS "\fBlibsocket\fR Interfaces"
-.LP
-The \fB<sys/socket.h>\fR header defines the \fBmsghdr\fR structure for
-\fBlibsocket\fR interfaces that includes the following members:
-.sp
-.in +2
-.nf
+.El
+.Ss libsocket Interfaces
+The
+.Nm
+header defines the
+.Vt msghdr
+structure for
+.Lb libsocket
+interfaces that includes the following members:
+.Bd -literal -offset indent
 void           *msg_name        /* optional address */
 socklen_t      msg_namelen      /* size of address */
 struct iovec   *msg_iov         /* scatter/gather array */
 int            msg_iovlen       /* # elements in msg_iov */
 caddr_t        msg_accrights    /* access rights sent/received */
-.fi
-.in -2
-
-.sp
-.LP
-The \fImsg_name\fR and \fImsg_namelen\fR parameters specify the destination
-address when the socket is unconnected The \fImsg_name\fR can be specified as a
-\fINULL\fR pointer if no names are desired or required. The \fImsg_iov\fR and
-\fImsg_iovlen\fR parameters describe the scatter-gather locations, as described
-in \fBread\fR(2). The \fImsg_accrights\fR parameter specifies the buffer in
-which access rights sent along with the message are received. The
-\fImsg_accrightslen\fR specifies the length of the buffer.
-.SH ATTRIBUTES
-.LP
-See \fBattributes\fR(5) for descriptions of the following attributes:
-.sp
-
-.sp
+.Ed
+.Pp
+The
+.Va msg_name
+and
+.Va msg_namelen
+parameters specify the destination address when the socket is unconnected. The
+.Va msg_name can be specified as a
+.Dv NULL
+pointer if no names are desired or required. The
+.Va msg_iov
+and
+.Va msg_iovlen
+parameters describe the scatter-gather locations, as described in
+.Xr read 2 .
+The msg_accrights parameter specifies the buffer in which access rights sent
+along with the message are received. The
+.Va msg_accrightslen
+specifies the length of the buffer.
+.Sh ATTRIBUTES
+See
+.Xr attributes 5
+for descriptions of the following attributes:
 .TS
 box;
 c | c
@@ -724,21 +407,44 @@ ATTRIBUTE TYPE	ATTRIBUTE VALUE
 _
 Interface Stability	Standard
 .TE
-
-.SH SEE ALSO
-.LP
-\fBaccept\fR(3SOCKET), \fBaccept\fR(3XNET), \fBbind\fR(3SOCKET),
-\fBbind\fR(3XNET), \fBconnect\fR(3SOCKET), \fBconnect\fR(3XNET),
-\fBgetpeername\fR(3SOCKET), \fBgetpeername\fR(3XNET), \fBgetpeerucred\fR(3C),
-\fBgetsockname\fR(3SOCKET), \fBgetsockname\fR(3XNET),
-\fBgetsockopt\fR(3SOCKET), \fBgetsockopt\fR(3XNET), \fBlibsocket\fR(3LIB),
-\fBlisten\fR(3SOCKET), \fBlisten\fR(3XNET), \fBrecv\fR(3SOCKET),
-\fBrecv\fR(3XNET), \fBrecvfrom\fR(3SOCKET), \fBrecvfrom\fR(3XNET),
-\fBrecvmsg\fR(3SOCKET), \fBrecvmsg\fR(3XNET), \fBsend\fR(3SOCKET),
-\fBsend\fR(3XNET), \fBsendmsg\fR(3SOCKET), \fBsendmsg\fR(3XNET),
-\fBsendto\fR(3SOCKET), \fBsendto\fR(3XNET), \fBsetsockopt\fR(3SOCKET),
-\fBsetsockopt\fR(3XNET), \fBshutdown\fR(3SOCKET), \fBshutdown\fR(3XNET),
-\fBsockaddr\fR(3SOCKET),
-\fBsocket\fR(3SOCKET), \fBsocket\fR(3XNET), \fBsocketpair\fR(3SOCKET),
-\fBsocketpair\fR(3XNET), \fBucred_get\fR(3C), \fBattributes\fR(5),
-\fBstandards\fR(5)
+.sp
+.Sh SEE ALSO
+.Xr getpeerucred 3C ,
+.Xr ucred_get 3C ,
+.Xr libsocket 3LIB ,
+.Xr accept 3SOCKET ,
+.Xr bind 3SOCKET ,
+.Xr connect 3SOCKET ,
+.Xr getpeername 3SOCKET ,
+.Xr getsockname 3SOCKET ,
+.Xr getsockopt 3SOCKET ,
+.Xr listen 3SOCKET ,
+.Xr recv 3SOCKET ,
+.Xr recvfrom 3SOCKET ,
+.Xr recvmsg 3SOCKET ,
+.Xr send 3SOCKET ,
+.Xr sendmsg 3SOCKET ,
+.Xr sendto 3SOCKET ,
+.Xr setsockopt 3SOCKET ,
+.Xr shutdown 3SOCKET ,
+.Xr sockaddr 3SOCKET ,
+.Xr socket 3SOCKET ,
+.Xr socketpair 3SOCKET ,
+.Xr accept 3XNET ,
+.Xr bind 3XNET ,
+.Xr connect 3XNET ,
+.Xr getpeername 3XNET ,
+.Xr getsockname 3XNET ,
+.Xr getsockopt 3XNET ,
+.Xr listen 3XNET ,
+.Xr recv 3XNET ,
+.Xr recvfrom 3XNET ,
+.Xr recvmsg 3XNET ,
+.Xr send 3XNET ,
+.Xr sendmsg 3XNET ,
+.Xr sendto 3XNET ,
+.Xr setsockopt 3XNET ,
+.Xr shutdown 3XNET ,
+.Xr socketpair 3XNET ,
+.Xr attributes 5 ,
+.Xr standards 5

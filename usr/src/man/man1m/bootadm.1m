@@ -4,9 +4,9 @@
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
 .\" Copyright 2016 Toomas Soome <tsoome@me.com>
-.TH BOOTADM 1M "JUL 27, 2016"
+.TH BOOTADM 1M "Aug 18, 2016"
 .SH NAME
-bootadm \- manage bootability of operating system
+bootadm \- manage bootability of the operating system
 .SH SYNOPSIS
 .LP
 .nf
@@ -69,7 +69,7 @@ the \fBlist-menu\fR option.
 .sp
 .LP
 Note that OpenBoot PROM (OBP)-based machines, such as SPARC systems, use
-PROM variables to set boot behavior and is managed by \fBeeprom\fR(1M)
+PROM variables to set boot behavior and are managed by the \fBeeprom\fR(1M)
 command.
 .sp
 .LP
@@ -142,9 +142,9 @@ program version checks.
 .ad
 .sp .6
 .RS 4n
-Maintain the menu configuration. The index of menu entries is listed in
+Maintain the menu configuration. The index of menu entries is listed in the
 \fBmenu.lst\fR file, and the actual configuration of the menu entry is located
-in boot environment \fB/boot\fR directory.
+in the boot environment \fB/boot\fR directory.
 Applies to x86 platforms only.
 .RE
 
@@ -155,7 +155,7 @@ Applies to x86 platforms only.
 .ad
 .sp .6
 .RS 4n
-Lists the location of the menu.lst, as well as the current menu
+Lists the location of the \fBmenu.lst\fR, as well as the current menu
 entries. This listing includes the default entry, dataset name, and the
 title of each entry. Applies to x86 platforms only.
 .RE
@@ -192,7 +192,7 @@ updated.
 .ad
 .sp .6
 .RS 4n
-In an \fBlist-menu\fR operation, specify menu entry for detailed inspection.
+In a \fBlist-menu\fR operation, specify the menu entry for detailed inspection.
 Possible keys are \fBentry\fR and \fBtitle\fR, taking either entry number or
 title name as values.
 .RE
@@ -338,7 +338,7 @@ The following command updates the boot archive on an alternate root:
 .sp
 .LP
 The following command lists the boot environments and the location of the
-menu.lst:
+\fBmenu.lst\fR:
 
 .sp
 .in +2
@@ -370,7 +370,7 @@ user selects test-183 (item 1).
 \fBExample 5 \fRDetailed information about menu entry.
 .sp
 .LP
-The following command lists more detailed information about boot menu entry:
+The following command lists more detailed information about a boot menu entry:
 
 .sp
 .in +2
@@ -379,11 +379,11 @@ The following command lists more detailed information about boot menu entry:
 the location for the active menu is: /raid/boot/menu.lst
 
 Title:       test-184
-timeout:     10
-console:     text
-bootfs:      raid/ROOT/test-184
-kernel:      /platform/i86pc/kernel/amd64/unix
-boot-args:   "-v"
+Timeout:     10
+Console:     text
+Bootfs:      raid/ROOT/test-184
+Kernel:      /platform/i86pc/kernel/amd64/unix
+Boot-args:   "-v"
 
 Modules:
 Name:        boot_archive
@@ -403,7 +403,6 @@ Hash:        4f4fe2d2dfae393a2a87ce29e3c71b803938c5fb
 Flags:       name=etc/system
 Status:      Load
 
-root@test:~#
 .fi
 .in -2
 

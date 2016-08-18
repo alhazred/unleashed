@@ -851,8 +851,8 @@ command_lsefi(int argc __attribute((unused)),
 
 	status = BS->LocateHandle(AllHandles, NULL, NULL, &bufsz, buffer);
 	if (status != EFI_BUFFER_TOO_SMALL) {
-		sprintf(command_errbuf, "unexpected error: %lld",
-		    (long long)status);
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "unexpected error: %lld", (long long)status);
 		return (CMD_ERROR);
 	}
 	if ((buffer = malloc(bufsz)) == NULL) {
@@ -863,8 +863,8 @@ command_lsefi(int argc __attribute((unused)),
 	status = BS->LocateHandle(AllHandles, NULL, NULL, &bufsz, buffer);
 	if (EFI_ERROR(status)) {
 		free(buffer);
-		sprintf(command_errbuf, "LocateHandle() error: %lld",
-		    (long long)status);
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "LocateHandle() error: %lld", (long long)status);
 		return (CMD_ERROR);
 	}
 
@@ -881,7 +881,7 @@ command_lsefi(int argc __attribute((unused)),
 
 		status = BS->ProtocolsPerHandle(handle, &protocols, &nproto);
 		if (EFI_ERROR(status)) {
-			sprintf(command_errbuf,
+			snprintf(command_errbuf, sizeof (command_errbuf),
 			    "ProtocolsPerHandle() error: %lld",
 			    (long long)status);
 			continue;
@@ -978,8 +978,8 @@ efi_serial_init(void)
 	 */
 	status = BS->LocateHandle(ByProtocol, &serial_io, NULL, &bufsz, buffer);
 	if (status != EFI_BUFFER_TOO_SMALL) {
-		sprintf(command_errbuf, "unexpected error: %lld",
-		    (long long)status);
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "unexpected error: %lld", (long long)status);
 		return;
 	}
 	if ((buffer = malloc(bufsz)) == NULL) {
@@ -993,8 +993,8 @@ efi_serial_init(void)
 	status = BS->LocateHandle(ByProtocol, &serial_io, NULL, &bufsz, buffer);
 	if (EFI_ERROR(status)) {
 		free(buffer);
-		sprintf(command_errbuf, "LocateHandle() error: %lld",
-		    (long long)status);
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "LocateHandle() error: %lld", (long long)status);
 		return;
 	}
 
@@ -1003,8 +1003,8 @@ efi_serial_init(void)
 		status = BS->OpenProtocol(buffer[i], &serial_io, (void**)&sio,
 		    IH, NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
 		if (EFI_ERROR(status)) {
-			sprintf(command_errbuf, "OpenProtocol() error: %lld",
-			    (long long)status);
+			snprintf(command_errbuf, sizeof (command_errbuf),
+			    "OpenProtocol() error: %lld", (long long)status);
 		}
 		printf("serial# %d\n", serial++);
 	}
