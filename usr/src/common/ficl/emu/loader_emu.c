@@ -1478,9 +1478,10 @@ page_file(char *filename)
 
 	result = pager_file(filename);
 
-	if (result == -1)
+	if (result == -1) {
 		snprintf(command_errbuf, sizeof (command_errbuf),
 		    "error showing %s", filename);
+	}
 
 	return (result);
 }
