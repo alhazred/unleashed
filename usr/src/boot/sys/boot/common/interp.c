@@ -192,8 +192,8 @@ include(const char *filename)
     char *cp, input[256];		/* big enough? */
 
     if (((fd = open(filename, O_RDONLY)) == -1)) {
-	sprintf(command_errbuf,"can't open '%s': %s", filename,
-	    strerror(errno));
+	snprintf(command_errbuf, sizeof (command_errbuf), "can't open '%s': %s",
+	    filename, strerror(errno));
 	return(CMD_ERROR);
     }
     /*
@@ -219,8 +219,9 @@ include(const char *filename)
 			script = script->next;
 			free(se);
 		}
-		sprintf(command_errbuf, "file '%s' line %d: memory allocation "
-		    "failure - aborting", filename, line);
+		snprintf(command_errbuf, sizeof (command_errbuf),
+		    "file '%s' line %d: memory allocation failure - aborting",
+		    filename, line);
 		close(fd);
 		return (CMD_ERROR);
 	}
@@ -249,7 +250,7 @@ include(const char *filename)
     for (sp = script; sp != NULL; sp = sp->next) {
 	res = bf_run(sp->text);
 	if (res != FICL_VM_STATUS_OUT_OF_TEXT) {
-		sprintf(command_errbuf,
+		snprintf(command_errbuf, sizeof (command_errbuf),
 		    "Error while including %s, in the line %d:\n%s",
 		    filename, sp->line, sp->text);
 		res = CMD_ERROR;
