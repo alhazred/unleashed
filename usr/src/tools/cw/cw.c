@@ -363,15 +363,6 @@ do_gcc(cw_ictx_t *ctx)
 			    strcmp(arg, "-_gcc=-fPIC") == 0)
 				pic = 1;
 			break;
-		case 'E':
-			if (arglen == 1) {
-				newae(ctx->i_ae, "-xc");
-				newae(ctx->i_ae, arg);
-				nolibc = 1;
-				break;
-			}
-			error(arg);
-			break;
 		case 'c':
 		case 'S':
 			if (arglen == 1) {
@@ -383,6 +374,7 @@ do_gcc(cw_ictx_t *ctx)
 		case 'H':
 		case 'p':
 		case 'O':
+		case 'E':
 			if (arglen == 1) {
 				newae(ctx->i_ae, arg);
 				break;
