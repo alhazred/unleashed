@@ -127,8 +127,6 @@
  * -Wp,<arg>			pass-thru
  * -Wl,<arg>			pass-thru
  * -W{m,0,2,h,i,u>		error/ignore
- * -Wu,-xmodel=kernel		-ffreestanding -mcmodel=kernel -mno-red-zone
- * -xmodel=kernel		-ffreestanding -mcmodel=kernel -mno-red-zone
  * -w				pass-thru
  * -Xc				-ansi -pedantic
  * -xarch=<a>			table
@@ -304,9 +302,8 @@ static void
 do_gcc(cw_ictx_t *ctx)
 {
 	int c;
-	int pic = 0, nolibc = 0;
+	int nolibc = 0;
 	int in_output = 0, seen_o = 0, c_files = 0;
-	char *model = NULL;
 	int	mflag = 0;
 
 	if (ctx->i_flags & CW_F_PROG) {
@@ -359,9 +356,8 @@ do_gcc(cw_ictx_t *ctx)
 
 			if (strcmp(arg, "-_gcc=-shared") == 0)
 				nolibc = 1;
-			else if (strcmp(arg, "-_gcc=-fpic") == 0 ||
-			    strcmp(arg, "-_gcc=-fPIC") == 0)
-				pic = 1;
+			else if (strcmp(arg, "-_gcc=-ffreestanding") == 0)
+				nolibc = 1;
 			break;
 		case 'c':
 		case 'S':
@@ -431,37 +427,7 @@ do_gcc(cw_ictx_t *ctx)
 				newae(ctx->i_ae, arg);
 				break;
 			}
-#if defined(__x86)
-			if (strcmp(arg, "-Wu,-xmodel=kernel") == 0) {
-				newae(ctx->i_ae, "-ffreestanding");
-				newae(ctx->i_ae, "-mno-red-zone");
-				model = "-mcmodel=kernel";
-				nolibc = 1;
-				break;
-			}
-#endif	/* __x86 */
 			error(arg);
-			break;
-		case 'x':
-			if (arglen == 1)
-				error(arg);
-			switch (arg[2]) {
-#if defined(__x86)
-			case 'm':
-				if (strcmp(arg, "-xmodel=kernel") == 0) {
-					newae(ctx->i_ae, "-ffreestanding");
-					newae(ctx->i_ae, "-mno-red-zone");
-					model = "-mcmodel=kernel";
-					nolibc = 1;
-					break;
-				}
-				error(arg);
-				break;
-#endif	/* __x86 */
-			default:
-				error(arg);
-				break;
-			}
 			break;
 		case 'Y':
 			if (arglen == 1) {
@@ -518,8 +484,6 @@ do_gcc(cw_ictx_t *ctx)
 		exit(2);
 	}
 
-	if (model && !pic)
-		newae(ctx->i_ae, model);
 	if (!nolibc)
 		newae(ctx->i_ae, "-lc");
 }
