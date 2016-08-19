@@ -277,7 +277,7 @@ CCNOAUTOINLINE= -_gcc=-fno-inline-small-functions \
 sparc_XARCH=	-m32 #-_gcc=-mcpu=v8 -_gcc=-mno-v8plus
 sparcv9_XARCH=	-m64 #-_gcc=-mcpu=v9
 i386_XARCH=	-m32 -_gcc=-march=pentiumpro
-amd64_XARCH=	-m64 -Ui386 -U__i386
+amd64_XARCH=	-m64 -Ui386 -U__i386 -_gcc=-mtune=opteron
 
 # assembler architecture flags.  Different from compiler architecture flags.
 sparc_AS_XARCH=		-xarch=v8plus -Dsparc -D__sparc -D__sparcv8
