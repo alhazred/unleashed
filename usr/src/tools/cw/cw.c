@@ -314,13 +314,6 @@ do_gcc(cw_ictx_t *ctx)
 		if (*arg == '-') {
 			arglen--;
 		} else {
-			/*
-			 * Discard inline files that gcc doesn't grok
-			 */
-			if (!in_output && arglen > 3 &&
-			    strcmp(arg + arglen - 3, ".il") == 0)
-				continue;
-
 			if (!in_output && arglen > 2 &&
 			    arg[arglen - 2] == '.' &&
 			    (arg[arglen - 1] == 'S' || arg[arglen - 1] == 's' ||
