@@ -207,13 +207,6 @@ typedef struct cw_ictx {
 	char		*i_stderr;
 } cw_ictx_t;
 
-/*
- * Status values to indicate which Studio compiler and associated
- * flags are being used.
- */
-#define	M32		0x01	/* -m32 - only on Studio 12 */
-#define	M64		0x02	/* -m64 - only on Studio 12 */
-
 #define	TRANS_ENTRY	5
 /*
  * Translation table definition for the -xarch= flag. The "x_arg"
@@ -304,7 +297,6 @@ do_gcc(cw_ictx_t *ctx)
 	int c;
 	int nolibc = 0;
 	int in_output = 0, seen_o = 0, c_files = 0;
-	int	mflag = 0;
 
 	if (ctx->i_flags & CW_F_PROG) {
 		newae(ctx->i_ae, "--version");
@@ -408,14 +400,9 @@ do_gcc(cw_ictx_t *ctx)
 				newae(ctx->i_ae, "-ffreestanding");
 			break;
 		case 'm':
-			if (strcmp(arg, "-m64") == 0) {
-				newae(ctx->i_ae, "-m64");
-				mflag |= M64;
-				break;
-			}
-			if (strcmp(arg, "-m32") == 0) {
-				newae(ctx->i_ae, "-m32");
-				mflag |= M32;
+			if (strcmp(arg, "-m64") == 0 ||
+			    strcmp(arg, "-m32") == 0) {
+				newae(ctx->i_ae, arg);
 				break;
 			}
 			error(arg);
@@ -454,34 +441,6 @@ do_gcc(cw_ictx_t *ctx)
 			error(arg);
 			break;
 		}
-	}
-
-	switch (mflag) {
-	case 0:
-		/* FALLTHROUGH */
-	case M32:
-#if defined(__sparc)
-		/*
-		 * Only -m32 is defined and so put in the missing xarch
-		 * translation.
-		 */
-		newae(ctx->i_ae, "-mcpu=v8");
-		newae(ctx->i_ae, "-mno-v8plus");
-#endif
-		break;
-	case M64:
-#if defined(__sparc)
-		/*
-		 * Only -m64 is defined and so put in the missing xarch
-		 * translation.
-		 */
-		newae(ctx->i_ae, "-mcpu=v9");
-#endif
-		break;
-	default:
-		(void) fprintf(stderr,
-		    "Incompatible -xarch= and/or -m32/-m64 options used.\n");
-		exit(2);
 	}
 
 	if (!nolibc)
