@@ -86,7 +86,6 @@
  * -xsbfast	Generate only WorkShop source browser info, no compilation
  * -Y<c>,<dir>	Specify <dir> for location of component <c> (a,l,m,p,0,h,i,u)
  * -YA,<dir>	Change default directory searched for components
- * -YI,<dir>	Change default directory searched for include files
  */
 
 /*
@@ -141,7 +140,6 @@
  *				-fno-eliminate-unused-debug-types
  * -Y<c>,<dir>			error
  * -YA,<dir>			error
- * -YI,<dir>			-nostdinc -I<dir>
  */
 
 #include <stdio.h>
@@ -405,27 +403,6 @@ do_gcc(cw_ictx_t *ctx)
 			    strncmp(arg, "-Wp,", 4) == 0 ||
 			    strncmp(arg, "-Wl,", 4) == 0) {
 				newae(ctx->i_ae, arg);
-				break;
-			}
-			error(arg);
-			break;
-		case 'Y':
-			if (arglen == 1) {
-				if ((arg = *++ctx->i_oldargv) == NULL ||
-				    *arg == '\0')
-					error("-Y");
-				ctx->i_oldargc--;
-				arglen = strlen(arg + 1);
-			} else {
-				arg += 2;
-			}
-			if (strncmp(arg, "I,", 2) == 0) {
-				char *s = strdup(arg);
-				s[0] = '-';
-				s[1] = 'I';
-				newae(ctx->i_ae, "-nostdinc");
-				newae(ctx->i_ae, s);
-				free(s);
 				break;
 			}
 			error(arg);

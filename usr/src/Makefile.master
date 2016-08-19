@@ -679,8 +679,7 @@ CPP=			$(NATIVECPP)
 AS=			$(NATIVEAS)
 LD=			$(NATIVELD)
 
-# Pass -Y flag to cpp (method of which is release-dependent)
-CCYFLAG=		-Y I,
+CCYFLAG=	-_gcc=-nostdinc
 
 LD_BDIRECT=	-Bdirect
 LD_BDYNAMIC=	-Bdynamic

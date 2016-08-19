@@ -108,7 +108,7 @@ MAKEFLAGS=e; export MAKEFLAGS
 # We need to export $BLDID into the compilation environment, and make sure
 # to remap the default include path from /usr/include to $INCROOT/usr/include.
 #
-ENVCPPFLAGS1="-YI,$INCROOT/usr/include"; export ENVCPPFLAGS1
+ENVCPPFLAGS1="-nostdinc -I$INCROOT/usr/include"; export ENVCPPFLAGS1
 ENVCPPFLAGS2="-D_MDB_BLDID=$BLDID"; export ENVCPPFLAGS2
 ENVCPPFLAGS3=; export ENVCPPFLAGS3
 ENVCPPFLAGS4=; export ENVCPPFLAGS4

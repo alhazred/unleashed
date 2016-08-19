@@ -59,4 +59,4 @@ FRC:
 #
 # Cross-reference customization: set the include path to be reasonable.
 #
-XRINCDIRS = $(CPPINCS:-YI,%=-I%)
+XRINCDIRS = $(CPPINCS)

@@ -71,13 +71,13 @@ CMNDIR =	.
 # libc is of course not available to standalone binaries.
 #
 CPPDEFS	= 	-D$(KARCH) -D_BOOT -D_KERNEL -D_MACHDEP
-CPPINCS	= 	-YI,$(STANDDIR)/lib/sa -I$(STANDDIR)/lib/sa \
+CPPINCS	= 	-I$(STANDDIR)/lib/sa \
 		-I$(STANDDIR) -I$(SRCDIR) -I$(CMNDIR) \
 		-I$(STANDDIR)/$(MACH) -I$(SYSDIR)/common $(ARCHDIRS) \
 		-I$(SYSDIR)/sun4 -I$(SYSDIR)/$(KARCH)
 
-CPPFLAGS =	$(CPPDEFS) $(CPPINCS)
-AS_CPPFLAGS =	$(CPPDEFS) $(CPPINCS:-YI,%=-I%)
+CPPFLAGS =	$(CPPDEFS) -nostdinc $(CPPINCS)
+AS_CPPFLAGS =	$(CPPDEFS) -nostdinc $(CPPINCS)
 ASFLAGS =	-D_ASM
 
 #
