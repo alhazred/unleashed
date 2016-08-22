@@ -55,7 +55,7 @@ $(ROOT_DBUS_CONF_DIR):
 	$(INS.dir)
 
 $(ROOT_HAL_CONF): $(ROOT_DBUS_CONF_DIR) $(HAL_CONF)
-	$(INS.file) $(HAL_CONF)
+	$(INS) -m $(FILEMODE) $(HAL_CONF) $@
 
 $(HAL_CONF): $(HAL_CONF).in
 	$(SED) -e "s@\@HAL_USER\@@$(HAL_USER)@" \

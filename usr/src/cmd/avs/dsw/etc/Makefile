@@ -50,10 +50,10 @@ install:  $(ROOTINIT_DPROG) $(ROOTINIT_DPROG2) $(CLUSTERSBINDIR) $(ROOTLIBSVCMET
 	$(CP) $(ROOTINIT_D)/ii.cluster $(CLUSTERSBINDIR)/ii
 
 $(ROOTINIT_DPROG): ii
-	$(INS.file) ii
+	$(INS) -m $(FILEMODE) ii $@
 
 $(ROOTINIT_DPROG2): ii.cluster
-	$(INS.file) ii.cluster
+	$(INS) -m $(FILEMODE) ii.cluster $@
 
 clean:
 	$(RM) $(SHFILES)

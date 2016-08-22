@@ -766,6 +766,7 @@ file path=usr/bin/hostname mode=0555
 file path=usr/bin/iconv mode=0555
 file path=usr/bin/id mode=0555
 file path=usr/bin/infocmp mode=0555
+file path=usr/bin/install mode=0555
 file path=usr/bin/iostat mode=0555
 file path=usr/bin/isainfo mode=0555
 file path=usr/bin/isalist mode=0555
@@ -1318,7 +1319,6 @@ file path=usr/sbin/ikeadm mode=0555
 file path=usr/sbin/ikecert mode=0555
 file path=usr/sbin/inetadm mode=0555
 file path=usr/sbin/inetconv mode=0555
-file path=usr/sbin/install mode=0555
 file path=usr/sbin/installboot group=sys mode=0555
 file path=usr/sbin/ipaddrsel mode=0555
 file path=usr/sbin/ipsecalgs mode=0555

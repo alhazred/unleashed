@@ -192,7 +192,8 @@ function build {
 	# targets don't depend on "all" so we can't make both with the same
 	# invocation without races
 	env -i PATH=${GCC_ROOT}/bin:/usr/bin bmake -j $DMAKE_MAX_JOBS \
-	    -C $CODEMGR_WS all || echo "bmake all" >> $TMPDIR/build_fail
+	    -C $CODEMGR_WS DESTDIR=$ROOT all || \
+	    echo "bmake all" >> $TMPDIR/build_fail
 	env -i PATH=${GCC_ROOT}/bin:/usr/bin bmake -j $DMAKE_MAX_JOBS \
 	    -C $CODEMGR_WS DESTDIR=$ROOT MK_INSTALL_AS_USER=yes install || \
 	    echo "bmake install" >> $TMPDIR/build_fail

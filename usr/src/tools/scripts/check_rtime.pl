@@ -288,12 +288,12 @@ sub ProcFile {
 			$Val++;
 
 			if (($Val == 3) &&
-			    ($Line !~ /^@\(#\)(SunOS|illumos)/)) {
+			    ($Line !~ /^(@\(#\))?(SunOS|illumos)/)) {
 				$Con = 1;
 				last;
 			}
 			if (($Val == 4) &&
-			    ($Line =~ /^@\(#\)(SunOS|illumos)/)) {
+			    ($Line =~ /^(@\(#\))?(SunOS|illumos)/)) {
 				$Dev = 1;
 				next;
 			}

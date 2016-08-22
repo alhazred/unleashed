@@ -62,28 +62,28 @@ $(ROOTHDRDIR):
 	$(INS.dir)
 
 $(ROOTHDRDIR)/spcs_errors.h: $(MACH)/spcs_errors.h
-	$(INS.file) $(MACH)/spcs_errors.h
+	$(INS) -m $(FILEMODE) $(MACH)/spcs_errors.h $@
 
 $(MACH)/spcs_errors.h:	FRC
 	@ cd $(MACH); pwd; $(MAKE) spcs_errors.h
 
 $(ROOTHDRDIR)/spcs_s_u.h: common/spcs_s_u.h
-	$(INS.file) common/spcs_s_u.h
+	$(INS) -m $(FILEMODE) common/spcs_s_u.h $@
 
 $(ROOTHDRDIR)/spcs_etext.h: $(MACH)/spcs_etext.h
-	$(INS.file) $(MACH)/spcs_etext.h
+	$(INS) -m $(FILEMODE) $(MACH)/spcs_etext.h $@
 
 $(MACH)/spcs_etext.h:	FRC
 	@ cd $(MACH); pwd; $(MAKE) spcs_etext.h
 
 $(ROOTHDRDIR)/spcs_dtrinkets.h: $(MACH)/spcs_dtrinkets.h
-	$(INS.file) $(MACH)/spcs_dtrinkets.h
+	$(INS) -m $(FILEMODE) $(MACH)/spcs_dtrinkets.h $@
 
 $(MACH)/spcs_dtrinkets.h:	FRC
 	@ cd $(MACH); pwd; $(MAKE) spcs_dtrinkets.h
 
 $(ROOTHDRDIR)/spcs_etrinkets.h: $(MACH)/spcs_etrinkets.h
-	$(INS.file) $(MACH)/spcs_etrinkets.h
+	$(INS) -m $(FILEMODE) $(MACH)/spcs_etrinkets.h $@
 
 $(MACH)/spcs_etrinkets.h:	FRC
 	@ cd $(MACH); pwd; $(MAKE) spcs_etrinkets.h

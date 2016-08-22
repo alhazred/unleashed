@@ -113,13 +113,13 @@ clobber: clean
 install_h:
 
 $(ROOTPROG): $$(@D) $(PROG)
-	$(RM) $@; $(INS) -s -m 0555 -f $(@D) $(PROG)
+	$(INS) -m 0555 $(PROG) $@
 
 $(ROOTCONF): $$(@D) $(CONF)
-	$(RM) $@; $(INS) -s -m 0644 -f $(@D) $(CONF)
+	$(INS) -m 0644 $(CONF) $@
 
 $(ROOTDMOD): $$(@D) $(DMODPROG)
-	$(RM) $@; $(INS) -s -m 0555 -f $(@D) $(DMODPROG)
+	$(INS) -m 0555 $(DMODPROG) $@
 
 install: $(ROOTPROG) $(ROOTCONF) $(ROOTDMOD)
 

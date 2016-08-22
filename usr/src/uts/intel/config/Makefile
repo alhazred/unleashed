@@ -93,7 +93,7 @@ $(ROOTETCSEC)/%: $(SRCDIR)/%
 	$(INS.file)
 
 $(ROOTBOOT):
-	$(INS) -s -d -m $(DIRMODE) $@
+	$(INS.dir)
 
 $(ROOTBOOT)/%: $(ROOTBOOT) $(SRCDIR)/%
 	$(INS.file)
@@ -103,13 +103,13 @@ $(ROOTBOOT)/solaris.xpm: $(ROOTBOOT)/splashimage.xpm
 
 
 $(BOOTSOLARIS):
-	$(INS) -s -d -m $(DIRMODE) $@
+	$(INS.dir)
 
 $(BOOTSOLARIS)/%: $(BOOTSOLARIS) $(SRCDIR)/%
 	$(INS.file)
 
 $(BOOTDEVICEDB):
-	$(INS) -s -d -m $(DIRMODE) $@
+	$(INS.dir)
 
 $(BOOTDEVICEDB)/%: $(BOOTDEVICEDB) $(SRCDIR)/%
 	$(INS.file)
