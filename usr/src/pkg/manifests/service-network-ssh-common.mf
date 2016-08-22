@@ -17,10 +17,11 @@
 # on it (and uses the SMF manifest and method script from it)
 set name=pkg.fmri value=pkg:/service/network/ssh-common@$(PKGVERS)
 set name=pkg.description \
-    value="Provides a SMF manifest and method script for theSecure Shell (SSH) service which creates RSA and DSA host keys if they are not available and start or stop the sshd (Secure Shell daemon)."
-set name=pkg.summary value="Secure Shell (SSH) service files"
+    value="Provides SMF service for the Secure Shell (SSH) service which creates RSA and DSA host keys if they are not available and start or stop the sshd (Secure Shell daemon)."
+set name=pkg.summary value="Secure Shell (SSH) service."
 set name=info.classification \
     value=org.opensolaris.category.2008:System/Security
+set name=org.opensolaris.noincorp value=true
 set name=variant.arch value=$(ARCH)
 dir path=etc/ssh group=sys
 dir path=lib
