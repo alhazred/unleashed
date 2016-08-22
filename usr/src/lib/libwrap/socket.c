@@ -85,7 +85,7 @@ struct request_info *request;
 {
     static struct sockaddr_gen client;
     static struct sockaddr_gen server;
-    int     len;
+    socklen_t len;
     char    buf[BUFSIZ];
     int     fd = request->fd;
 
@@ -249,7 +249,7 @@ int     fd;
 {
     char    buf[BUFSIZ];
     struct sockaddr_in sin;
-    int     size = sizeof(sin);
+    socklen_t size = sizeof(sin);
 
     /*
      * Eat up the not-yet received datagram. Some systems insist on a

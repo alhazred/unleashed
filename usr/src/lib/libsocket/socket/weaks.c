@@ -41,22 +41,13 @@
 #include <strings.h>
 #include <netinet/sctp.h>
 
-#pragma weak bind = _bind
-#pragma weak listen = _listen
-#pragma weak accept = _accept
-#pragma weak accept4 = _accept4
-#pragma weak connect = _connect
-#pragma weak shutdown = _shutdown
-#pragma weak recv = _recv
-#pragma weak recvfrom = _recvfrom
-#pragma weak recvmsg = _recvmsg
-#pragma weak send = _send
-#pragma weak sendmsg = _sendmsg
-#pragma weak sendto = _sendto
-#pragma weak getpeername = _getpeername
-#pragma weak getsockname = _getsockname
-#pragma weak getsockopt = _getsockopt
-#pragma weak setsockopt = _setsockopt
+#pragma weak __xnet_bind = bind
+#pragma weak __xnet_listen = listen
+#pragma weak __xnet_connect = connect
+#pragma weak __xnet_recvmsg = recvmsg
+#pragma weak __xnet_sendmsg = sendmsg
+#pragma weak __xnet_sendto = sendto
+#pragma weak __xnet_getsockopt = getsockopt
 
 extern int _so_bind();
 extern int _so_listen();
@@ -75,130 +66,93 @@ extern int _so_getsockopt();
 extern int _so_setsockopt();
 
 int
-_bind(int sock, struct sockaddr *addr, int addrlen)
+bind(int sock, const struct sockaddr *addr, socklen_t addrlen)
 {
 	return (_so_bind(sock, addr, addrlen, SOV_XPG4_2));
 }
 
 int
-__xnet_bind(int sock, struct sockaddr *addr, int addrlen)
-{
-	return (_bind(sock, addr, addrlen));
-}
-
-int
-_listen(int sock, int backlog)
+listen(int sock, int backlog)
 {
 	return (_so_listen(sock, backlog, SOV_XPG4_2));
 }
 
 int
-__xnet_listen(int sock, int backlog)
-{
-	return (_listen(sock, backlog));
-}
-
-int
-_accept(int sock, struct sockaddr *addr, int *addrlen)
+accept(int sock, struct sockaddr *addr, socklen_t *addrlen)
 {
 	return (_so_accept(sock, addr, addrlen, SOV_XPG4_2, 0));
 }
 
 int
-_accept4(int sock, struct sockaddr *addr, int *addrlen, int flags)
+accept4(int sock, struct sockaddr *addr, socklen_t *addrlen, int flags)
 {
 	return (_so_accept(sock, addr, addrlen, SOV_XPG4_2, flags));
 }
 
 int
-_connect(int sock, const struct sockaddr *addr, socklen_t addrlen)
+connect(int sock, const struct sockaddr *addr, socklen_t addrlen)
 {
 	return (_so_connect(sock, addr, addrlen, SOV_SOCKBSD));
 }
 
 int
-__xnet_connect(int sock, const struct sockaddr *addr, socklen_t addrlen)
-{
-	return (_connect(sock, addr, addrlen));
-}
-
-int
-_shutdown(int sock, int how)
+shutdown(int sock, int how)
 {
 	return (_so_shutdown(sock, how, SOV_XPG4_2));
 }
 
-int
-_recv(int sock, char *buf, int len, int flags)
+ssize_t
+recv(int sock, void *buf, size_t len, int flags)
 {
 	return (_so_recv(sock, buf, len, flags));
 }
 
-int
-_recvfrom(int sock, char *buf, int len, int flags,
-	struct sockaddr *addr, int *addrlen)
+ssize_t
+recvfrom(int sock, void *buf, size_t len, int flags,
+	struct sockaddr *addr, socklen_t *addrlen)
 {
 	return (_so_recvfrom(sock, buf, len, flags, addr, addrlen));
 }
 
-int
-_recvmsg(int sock, struct msghdr *msg, int flags)
+ssize_t
+recvmsg(int sock, struct msghdr *msg, int flags)
 {
 	return (_so_recvmsg(sock, msg, flags | MSG_XPG4_2));
 }
 
-int
-__xnet_recvmsg(int sock, struct msghdr *msg, int flags)
-{
-	return (_recvmsg(sock, msg, flags));
-}
-
-int
-_send(int sock, char *buf, int len, int flags)
+ssize_t
+send(int sock, const void *buf, size_t len, int flags)
 {
 	return (_so_send(sock, buf, len, flags | MSG_XPG4_2));
 }
 
-int
-_sendmsg(int sock, struct msghdr *msg, int flags)
+ssize_t
+sendmsg(int sock, const struct msghdr *msg, int flags)
 {
 	return (_so_sendmsg(sock, msg, flags | MSG_XPG4_2));
 }
 
-int
-__xnet_sendmsg(int sock, struct msghdr *msg, int flags)
-{
-	return (_sendmsg(sock, msg, flags));
-}
-
-int
-_sendto(int sock, char *buf, int len, int flags, struct sockaddr *addr,
-    int *addrlen)
+ssize_t
+sendto(int sock, const void *buf, size_t len, int flags,
+    const struct sockaddr *addr, socklen_t addrlen)
 {
 	return (_so_sendto(sock, buf, len, flags | MSG_XPG4_2, addr, addrlen));
 }
 
 int
-__xnet_sendto(int sock, char *buf, int len, int flags, struct sockaddr *addr,
-    int *addrlen)
-{
-	return (_sendto(sock, buf, len, flags, addr, addrlen));
-}
-
-int
-_getpeername(int sock, struct sockaddr *name, int *namelen)
+getpeername(int sock, struct sockaddr *name, socklen_t *namelen)
 {
 	return (_so_getpeername(sock, name, namelen, SOV_XPG4_2));
 }
 
 int
-_getsockname(int sock, struct sockaddr *name, int *namelen)
+getsockname(int sock, struct sockaddr *name, socklen_t *namelen)
 {
 	return (_so_getsockname(sock, name, namelen, SOV_XPG4_2));
 }
 
 int
-_getsockopt(int sock, int level, int optname, char *optval, int *optlen)
+getsockopt(int sock, int level, int optname, void *optval, socklen_t *optlen)
 {
 	if (level == IPPROTO_SCTP) {
 		sctp_assoc_t id = 0;
@@ -242,13 +196,8 @@ _getsockopt(int sock, int level, int optname, char *optval, int *optlen)
 }
 
 int
-__xnet_getsockopt(int sock, int level, int optname, char *optval, int *optlen)
-{
-	return (_getsockopt(sock, level, optname, optval, optlen));
-}
-
-int
-_setsockopt(int sock, int level, int optname, char *optval, int optlen)
+setsockopt(int sock, int level, int optname, const void *optval,
+    socklen_t optlen)
 {
 	return (_so_setsockopt(sock, level, optname, optval, optlen,
 	    SOV_XPG4_2));

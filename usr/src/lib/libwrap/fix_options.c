@@ -45,7 +45,7 @@ struct request_info *request;
 #ifdef IP_OPTIONS
     unsigned char optbuf[BUFFER_SIZE / 3], *cp;
     char    lbuf[BUFFER_SIZE], *lp;
-    int     optsize = sizeof(optbuf), ipproto;
+    socklen_t optsize = sizeof(optbuf), ipproto;
     struct protoent *ip;
     int     fd = request->fd;
     unsigned int opt;

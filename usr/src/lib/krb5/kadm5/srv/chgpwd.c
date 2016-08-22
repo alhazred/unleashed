@@ -59,7 +59,7 @@ process_chpw_request(krb5_context context, void *server_handle,
 	krb5_ticket *ticket;
 	krb5_data cipher, clear;
 	struct sockaddr local_addr, remote_addr;
-	int addrlen;
+	socklen_t addrlen;
 	krb5_replay_data replay;
 	krb5_error krberror;
 	int numresult;
@@ -570,7 +570,7 @@ handle_chpw(krb5_context context, int s1,
 	char req[MAXAPREQ];
 	int len;
 	struct sockaddr_in from;
-	int fromlen;
+	socklen_t fromlen;
 	krb5_keytab kt;
 	krb5_data reqdata, repdata;
 	int s2 = -1;

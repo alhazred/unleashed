@@ -86,7 +86,8 @@ static void
 read_msg(struct lock_msg *mp)
 {
 	struct sockaddr from;
-	int rc, len;
+	int rc;
+	socklen_t len;
 
 	/* wait for response */
 	do {

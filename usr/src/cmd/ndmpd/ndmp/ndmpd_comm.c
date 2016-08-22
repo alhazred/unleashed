@@ -1392,7 +1392,8 @@ int
 tcp_accept(int listen_sock, unsigned int *inaddr_p)
 {
 	struct sockaddr_in	sin;
-	int			sock, i;
+	int			sock;
+	socklen_t		i;
 	int			try;
 
 	for (try = 0; try < 3; try++) {
@@ -1426,7 +1427,8 @@ int
 tcp_get_peer(int sock, unsigned int *inaddr_p, int *port_p)
 {
 	struct sockaddr_in sin;
-	int i, rc;
+	socklen_t i;
+	int rc;
 
 	i = sizeof (sin);
 	rc = getpeername(sock, (struct sockaddr *)&sin, &i);

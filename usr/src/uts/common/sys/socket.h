@@ -63,12 +63,6 @@ extern "C" {
  */
 typedef	uint32_t	socklen_t;
 
-#if defined(_XPG4_2) || defined(_BOOT)
-typedef	socklen_t	*_RESTRICT_KYWD Psocklen_t;
-#else
-typedef	void		*_RESTRICT_KYWD Psocklen_t;
-#endif	/* defined(_XPG4_2) || defined(_BOOT) */
-
 #endif	/* _SOCKLEN_T */
 
 /*
@@ -447,18 +441,18 @@ struct cmsghdr {
 	((unsigned int)_CMSG_DATA_ALIGN(sizeof (struct cmsghdr)) + (l))
 
 #if !defined(_KERNEL) || defined(_BOOT)
-extern int accept(int, struct sockaddr *_RESTRICT_KYWD, Psocklen_t);
-extern int accept4(int, struct sockaddr *_RESTRICT_KYWD, Psocklen_t, int);
+extern int accept(int, struct sockaddr *_RESTRICT_KYWD, socklen_t *);
+extern int accept4(int, struct sockaddr *_RESTRICT_KYWD, socklen_t *, int);
 extern int bind(int, const struct sockaddr *, socklen_t);
 extern int connect(int, const struct sockaddr *, socklen_t);
-extern int getpeername(int, struct sockaddr *_RESTRICT_KYWD, Psocklen_t);
-extern int getsockname(int, struct sockaddr *_RESTRICT_KYWD, Psocklen_t);
-extern int getsockopt(int, int, int, void *_RESTRICT_KYWD, Psocklen_t);
+extern int getpeername(int, struct sockaddr *_RESTRICT_KYWD, socklen_t *);
+extern int getsockname(int, struct sockaddr *_RESTRICT_KYWD, socklen_t *);
+extern int getsockopt(int, int, int, void *_RESTRICT_KYWD, socklen_t *);
 extern int listen(int, int);
 extern int socketpair(int, int, int, int *);
 extern ssize_t recv(int, void *, size_t, int);
 extern ssize_t recvfrom(int, void *_RESTRICT_KYWD, size_t, int,
-	struct sockaddr *_RESTRICT_KYWD, Psocklen_t);
+	struct sockaddr *_RESTRICT_KYWD, socklen_t *);
 extern ssize_t recvmsg(int, struct msghdr *, int);
 extern ssize_t send(int, const void *, size_t, int);
 extern ssize_t sendmsg(int, const struct msghdr *, int);

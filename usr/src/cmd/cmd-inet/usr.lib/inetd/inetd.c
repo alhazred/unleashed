@@ -770,7 +770,7 @@ create_bound_socket(const instance_t *inst, socket_info_t *sock_info)
 	 */
 	if (rpc != NULL) {
 		struct sockaddr_storage	ss;
-		int			ss_size = sizeof (ss);
+		socklen_t		ss_size = sizeof (ss);
 
 		if (getsockname(fd, (struct sockaddr *)&ss, &ss_size) < 0) {
 			error_msg(gettext("Failed getsockname for instance %s, "

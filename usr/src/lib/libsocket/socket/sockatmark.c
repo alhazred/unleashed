@@ -29,14 +29,12 @@
 #include <sys/sockio.h>
 #include <unistd.h>
 
-#pragma weak sockatmark = _sockatmark
-
 /*
  * Determine whether the socket is at the out-of-band
  * data mark.
  */
 int
-_sockatmark(int sock)
+sockatmark(int sock)
 {
 	int val;
 

@@ -376,7 +376,7 @@ open_connection(host, fd, Errmsg, ErrmsgSz)
 	int	s;
 	krb5_error_code	retval;
 	
-	int	socket_length;
+	socklen_t	socket_length;
 	struct addrinfo hints, *ai, *aitop;
 	struct sockaddr_storage	  ss;
 	char serv_or_port[NI_MAXSERV];

@@ -46,12 +46,11 @@
 
 extern int _so_socket();
 extern int _s_netconfig_path();
-extern int _setsockopt();
 
-#pragma weak socket = _socket
+#pragma weak __xnet_socket = socket
 
 int
-_socket(int family, int type, int protocol)
+socket(int family, int type, int protocol)
 {
 	int fd;
 
@@ -94,7 +93,7 @@ _socket(int family, int type, int protocol)
 			return (-1);
 		}
 		if (prototype != 0) {
-			if (_setsockopt(fd, SOL_SOCKET, SO_PROTOTYPE,
+			if (setsockopt(fd, SOL_SOCKET, SO_PROTOTYPE,
 			    (caddr_t)&prototype, (int)sizeof (prototype)) < 0) {
 				(void) close(fd);
 				/*
@@ -108,10 +107,4 @@ _socket(int family, int type, int protocol)
 		}
 	}
 	return (fd);
-}
-
-int
-__xnet_socket(int family, int type, int protocol)
-{
-	return (_socket(family, type, protocol));
 }

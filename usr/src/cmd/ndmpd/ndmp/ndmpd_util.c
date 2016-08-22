@@ -1971,7 +1971,7 @@ int
 ndmp_create_socket(ulong_t *addr, ushort_t *port)
 {
 	char *p;
-	int length;
+	socklen_t length;
 	int sd;
 	struct sockaddr_in sin;
 

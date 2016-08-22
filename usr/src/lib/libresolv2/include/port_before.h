@@ -182,7 +182,7 @@ struct timespec {
 #define UNUSED(x) (x) = (x)
 
 #undef NEED_SOLARIS_BITTYPES
-#define ISC_SOCKLEN_T int
+#define ISC_SOCKLEN_T socklen_t
 
 #ifdef __GNUC__
 #define ISC_FORMAT_PRINTF(fmt, args) \

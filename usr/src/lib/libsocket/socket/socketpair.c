@@ -48,15 +48,12 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-extern int _socket(int, int, int);
 extern int _so_socketpair(int*);
 
-int _socketpair_create(int, int, int, int*, int);
-
-#pragma weak socketpair = _socketpair
+#pragma weak __xnet_socketpair = socketpair
 
 int
-_socketpair(int family, int type, int protocol, int sv[2])
+socketpair(int family, int type, int protocol, int sv[2])
 {
 	int res;
 	int fd1, fd2;
@@ -65,10 +62,10 @@ _socketpair(int family, int type, int protocol, int sv[2])
 	 * Create the two sockets and pass them to _so_socketpair, which
 	 * will connect them together.
 	 */
-	fd1 = _socket(family, type, protocol);
+	fd1 = socket(family, type, protocol);
 	if (fd1 < 0)
 		return (-1);
-	fd2 = _socket(family, type, protocol);
+	fd2 = socket(family, type, protocol);
 	if (fd2 < 0) {
 		int error = errno;
 
@@ -98,10 +95,4 @@ _socketpair(int family, int type, int protocol, int sv[2])
 	if (sv[1] != fd2)
 		(void) close(fd2);
 	return (res);
-}
-
-int
-__xnet_socketpair(int family, int type, int protocol, int sv[2])
-{
-	return (_socketpair(family, type, protocol, sv));
 }

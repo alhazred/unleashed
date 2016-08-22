@@ -203,7 +203,6 @@ $endif
 
 SYMBOL_VERSION SUNWprivate_1.3 {
     global:
-        _accept4;
 	_link_aton;
 	_link_ntoa;
 	_nss_initf_ethers;
@@ -227,27 +226,10 @@ SYMBOL_VERSION SUNWprivate_1.2 {
 
 SYMBOL_VERSION SUNWprivate_1.1 {
     global:
-	_accept;
-	_bind;
 	bindresvport;
 	bootparams_getbyname;
-	_connect;
-	_getpeername;
-	_getsockname;
-	_getsockopt;
-	_listen;
-	_recv;
-	_recvfrom;
-	_recvmsg;
 	rresvport_addr;
 	_ruserpass;
-	_send;
-	_sendmsg;
-	_sendto;
-	_setsockopt;
-	_shutdown;
-	_socket;
-	_socketpair;
     local:
 	*;
 };

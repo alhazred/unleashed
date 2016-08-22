@@ -735,7 +735,8 @@ dapls_ns_resolve_addr(int af, struct sockaddr *addr, DAT_TIMEOUT timeout)
 	}
 	retval = poll(&pollfd, 1, tmo);
 	if (retval > 0) {
-		int	so_error = 0, len = sizeof (so_error);
+		int		so_error = 0;
+		socklen_t	len = sizeof (so_error);
 
 		retval = getsockopt(fd, SOL_SOCKET, SO_ERROR,
 		    &so_error, &len);

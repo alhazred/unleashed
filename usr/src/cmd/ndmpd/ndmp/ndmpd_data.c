@@ -1250,7 +1250,7 @@ static void
 data_accept_connection_v3(void *cookie, int fd, ulong_t mode)
 {
 	ndmpd_session_t *session = (ndmpd_session_t *)cookie;
-	int from_len;
+	socklen_t from_len;
 	struct sockaddr_in from;
 
 	from_len = sizeof (from);

@@ -169,7 +169,7 @@ int    *fromlen;
 int     fix_getpeername(sock, sa, len)
 int     sock;
 struct sockaddr *sa;
-int    *len;
+socklen_t    *len;
 {
     int     ret;
     struct sockaddr_in *sin = (struct sockaddr_in *) sa;

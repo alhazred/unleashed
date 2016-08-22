@@ -588,7 +588,7 @@ static void
 new_req(int ev_port, int listener, void *ev_obj)
 {
 	struct sockaddr	sa;
-	int		sa_len;
+	socklen_t	sa_len;
 	int		new_sd;
 	int		sflags;
 	ilbd_client_t	*cli = NULL;

@@ -96,12 +96,11 @@ LIBS =		$(DYNLIB)
 
 # Local Libresolv definitions
 
-SOLCOMPAT =	-Dsocket=_socket
 CRYPTFLAGS=	-DHMAC_MD5 -DUSE_MD5
 
 LOCFLAGS +=	$(CRYPTFLAGS)
 LOCFLAGS +=	-D_SYS_STREAM_H -D_REENTRANT -DSVR4 -DSUNW_OPTIONS \
-		$(SOLCOMPAT) -I../include -I../../common/inc
+		-I../include -I../../common/inc
 
 CPPFLAGS +=	$(LOCFLAGS) 
 

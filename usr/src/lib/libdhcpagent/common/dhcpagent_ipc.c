@@ -469,7 +469,7 @@ int
 dhcp_ipc_accept(int listen_fd, int *fd, int *is_priv)
 {
 	struct sockaddr_in	sin_peer;
-	int			sin_len = sizeof (sin_peer);
+	socklen_t		sin_len = sizeof (sin_peer);
 	int			sockflags;
 
 	/*

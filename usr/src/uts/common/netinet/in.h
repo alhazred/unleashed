@@ -49,18 +49,7 @@ extern "C" {
  * The socklen definitions are reproduced here from sys/socket.h so as to
  * not introduce that namespace into existing users of netinet/in.h.
  */
-#if defined(_XPG4_2) && !defined(_XPG5) && !defined(_LP64)
-typedef	size_t		socklen_t;
-#else
 typedef	uint32_t	socklen_t;
-#endif	/* defined(_XPG4_2) && !defined(_XPG5) && !defined(_LP64) */
-
-#if defined(_XPG4_2) || defined(_BOOT)
-typedef	socklen_t	*Psocklen_t;
-#else
-typedef	void		*Psocklen_t;
-#endif	/* defined(_XPG4_2) || defined(_BOOT) */
-
 #endif /* _SOCKLEN_T */
 
 /*
