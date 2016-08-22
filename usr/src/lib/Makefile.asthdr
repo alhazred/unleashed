@@ -79,7 +79,7 @@ $(ROOTHDRDIR)/%: $(HDRDIR32)/% $(HDRDIR64)/%
 	        /usr/bin/diff -D $(AST64BITCPPSYMBOL) "$(HDRDIR32)/$(@F)" "$(HDRDIR64)/$(@F)" ; true ;\
 	    } >"tmpastinclude/$(@F)" ; \
 	fi
-	$(INS) -s -m $(FILEMODE) -f $(@D) "tmpastinclude/$(@F)"
+	$(INS) -m $(FILEMODE) "tmpastinclude/$(@F)" $@
 
 # Add temporary include files to the list of files to "clobber"
 CLOBBERFILES += tmpastinclude/*

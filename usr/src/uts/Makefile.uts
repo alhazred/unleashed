@@ -250,7 +250,7 @@ ROOT_CONFFILE		= $(ROOT_CONFFILE_$(CLASS))
 
 
 INS.conffile= \
-	$(RM) $@; $(INS) -s -m $(CFILEMODE) -f $(@D) $(SRC_CONFFILE)
+	$(INS) -m $(CFILEMODE) $(SRC_CONFFILE) $(@D)/
 
 #
 # The CTF merge of child kernel modules is performed against one of the genunix

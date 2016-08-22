@@ -70,7 +70,7 @@ $(MANIFESTDIR):
 	$(INS.dir)
 
 $(MANIFESTDIR)/%: %
-	$(INS.file)                                                             
+	$(INS.file)
 $(ROOTSVCMETHOD): $(SVCMETHODDIR)
 
 $(SVCMETHODDIR):

@@ -46,8 +46,7 @@ all:			$(FILES)
 # because of its name, the file ~= is a special case
 #
 install:		all $(ROOTCHARLIB) $(ROOTFILES)
-			$(RM) $(ROOTCHARLIB)/~=
-			$(INS) -m $(FILEMODE) -f $(ROOTCHARLIB) ~=
+			$(INS) -m $(FILEMODE) ~= $(ROOTCHARLIB)
 			$(RM) $(ROOTCHARLIB)/'~'
 			$(LN) $(ROOTCHARLIB)/~= $(ROOTCHARLIB)/'~'
 

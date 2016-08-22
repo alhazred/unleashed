@@ -66,7 +66,7 @@ install: $(PROG_BIN)
 
 $(PROG_BIN) :=	FILEMODE = 755
 $(PROG_BIN): $(PROG)
-	$(INS.file) $(PROG)
+	$(INS) -m $(FILEMODE) $(PROG) $@
 
 clean:
 	-$(RM) $(OBJECTS) $(YACC_OBJS)

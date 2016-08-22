@@ -65,16 +65,16 @@ $(ROOTPERLMODDIR) $(ROOTPERLMODDIR64):
 	$(INS.dir)
 
 $(ROOTPERLMOD): $(ROOTPERLMODDIR) $(MODULE).pm
-	$(RM) $@; $(INS) -s -m $(FILEMODE) -f $^
+	$(INS) -m $(FILEMODE) $(MODULE).pm $@
 
 $(ROOTPERLMOD64): $(ROOTPERLMODDIR64) $(MODULE).pm
-	$(RM) $@; $(INS) -s -m $(FILEMODE) -f $^
+	$(INS) -m $(FILEMODE) $(MODULE).pm $@
 
 $(ROOTPERLEXTDIR) $(ROOTPERLEXTDIR64):
 	$(INS.dir)
 
 $(ROOTPERLEXT): $(ROOTPERLEXTDIR) $(MACH)/$(MODULE).so
-	$(RM) $@; $(INS) -s -m $(FILEMODE) -f $^
+	$(INS) -m $(FILEMODE) $(MACH)/$(MODULE).so $@
 
 $(ROOTPERLEXT64): $(ROOTPERLEXTDIR64) $(MACH64)/$(MODULE).so
-	$(RM) $@; $(INS) -s -m $(FILEMODE) -f $^
+	$(INS) -m $(FILEMODE) $(MACH64)/$(MODULE).so $@

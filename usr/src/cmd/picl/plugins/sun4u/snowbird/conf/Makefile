@@ -54,8 +54,7 @@ all:
 install:	$(ROOTLIBDIR) $(ROOTCONF_2300)
 
 $(CONF_2300): FRC
-	$(RM) $(ROOTLIBPLUGINDIR)/$@
-	$(INS) -s -m 0644 -f $(ROOT_PLAT_PLUGINDIR) $@
+	$(INS) -m 0644 $@ $(ROOT_PLAT_PLUGINDIR)
 
 # include library targets
 include $(SRC)/lib/Makefile.targ

@@ -48,7 +48,7 @@ install: all $(ROOTUSRSBINPROG) install_data
 install_data: $(SECURITYFILES) $(ATTR)
 
 $(SECURITYFILES): $(ROOTAUDITDIR) $(ATTR)
-	$(INS.file) $(ATTR)
+	$(INS) -m $(FILEMODE) $(ATTR) $@
 
 $(ROOTAUDITDIR):
 	$(INS.dir)
@@ -63,7 +63,7 @@ $(ATTR): $(STRIPTEXT) $(ATTRPROC) $(ADTXMLFILE) $(ATTR).txt
 	$(PERL) -I $(LIBBSMDIR) ./$(ATTRPROC) $(ADTXMLFILE) >> $(ATTR)
 
 $(ROOTUSRSBINPROG): $(PROG)
-	$(INS.file) $(PROG)
+	$(INS) -m $(FILEMODE) $(PROG) $@
 
 $(PROG).po: $(PROG) $(ATTR) $(AGETTEXT)
 	export PERL5LIB; PERL5LIB=../perl/contrib; \

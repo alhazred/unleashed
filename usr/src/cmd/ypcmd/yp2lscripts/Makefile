@@ -49,9 +49,9 @@ clobber: FRC
 
 
 $(NETYP)/ypmap2src: ypmap2src
-	$(INS.file) ypmap2src
+	$(INS) -m $(FILEMODE) ypmap2src $@
 
 $(NETYP)/inityp2l: inityp2l
-	$(INS.file) inityp2l
+	$(INS) -m $(FILEMODE) inityp2l $@
 
 FRC:

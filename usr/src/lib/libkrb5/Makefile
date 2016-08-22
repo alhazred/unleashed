@@ -59,11 +59,11 @@ $(SUBDIRS):	FRC
 
 install_h:	$(KRB5INCDIR) $(KRB5HDRS)
 
-$(COMERRHINST):	$(COMERRH)
-	install -s -m 644 -f $(KRB5INCDIR) $(COMERRH)
+$(COMERRHINST): $(COMERRH)
+	$(INS) -m $(FILEMODE) $(COMERRH) $@
 $(KRB5HINST):	$(KRB5H)
-	install -s -m 644 -f $(KRB5INCDIR) $(KRB5H)
+	$(INS) -m $(FILEMODE) $(KRB5H) $@
 $(LOCPLUGHINST): $(LOCPLUGH)
-	install -s -m 644 -f $(KRB5INCDIR) $(LOCPLUGH)
+	$(INS) -m $(FILEMODE) $(LOCPLUGH) $@
 
 FRC:

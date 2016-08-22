@@ -3,8 +3,6 @@
 OS?=		illumos
 unix?=		We run ${OS}.
 
-LIBCRT0=
-
 MANTARGET?=	man
 # MANTARGET=man causes MANDIR to contain share/man/man with mk-20160802
 MANDIR?=	/usr/share/man
@@ -31,6 +29,9 @@ LINK.S?=	${CC} ${AFLAGS} ${CPPFLAGS} ${LDFLAGS}
 
 CC?=		gcc
 CPP?=		gcpp
+.if defined(DESTDIR)
+CPPFLAGS+=	-isysroot ${DESTDIR}
+.endif
 CFLAGS?=	-O2 ${PIPE} ${DBG}
 COMPILE.c?=	${CC} ${CFLAGS} ${CPPFLAGS} -c
 LINK.c?=	${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}
@@ -49,9 +50,6 @@ COMPILE.F?=	${FC} ${FFLAGS} ${CPPFLAGS} -c
 LINK.F?=	${FC} ${FFLAGS} ${CPPFLAGS} ${LDFLAGS}
 COMPILE.r?=	${FC} ${FFLAGS} ${RFLAGS} -c
 LINK.r?=	${FC} ${FFLAGS} ${RFLAGS} ${LDFLAGS}
-
-# XXX: if GNU install moves out of usr/bin, we can drop this
-INSTALL?=	/usr/sbin/install
 
 LEX?=		lex
 LFLAGS?=

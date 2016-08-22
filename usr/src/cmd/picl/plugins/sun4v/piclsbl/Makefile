@@ -70,7 +70,7 @@ all: $(LIBS) $(LIBLINKS)
 install:	all $(ROOTLIBDIR) $(ROOTLIBS) $(ROOTLINKS)
 
 $(ROOTLIBDIR)/$(LIBS) :	$(LIBS)
-	$(RM) -r $@; $(INS) -s -m $(FILEMODE) -f $(@D) $(LIBS)
+	$(INS) -m $(FILEMODE) $(LIBS) $@
 
 $(LIBLINKS):	FRC
 	$(RM) -r $(LIBLINKS); $(SYMLINK) $(DYNLIB) $(LIBLINKS)

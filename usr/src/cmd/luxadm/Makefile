@@ -77,8 +77,8 @@ $(LUXGENCAT_PROG):= FILEMODE= 0644
 $(LUXFIRMWARED):
 	$(INS.dir)
 
-$(LUXIBFIRMWARE):       $(LUXFIRMWARED) ibfirmware
-	$(INS.file) ibfirmware
+$(LUXIBFIRMWARE): ibfirmware $(LUXFIRMWARED)
+	$(INS.file)
 
 $(GENMSG_LUX):		$(SRCS)
 	/usr/bin/genmsg -d -p '$(COMPILE.cpp)' -o $@ $(SRCS)
@@ -86,8 +86,8 @@ $(GENMSG_LUX):		$(SRCS)
 $(GENCAT_PROG):		$(GENMSG_LUX)
 	/usr/bin/gencat $@ $(GENMSG_LUX)
 
-$(LUXGENCAT_PROG):      $(LUXFIRMWARED) $(GENCAT_PROG)
-	$(INS.file) $(GENCAT_PROG)
+$(LUXGENCAT_PROG): $(GENCAT_PROG) $(LUXFIRMWARED)
+	$(INS.file)
 
 install: all $(ROOTUSRSBINPROG) $(LUXIBFIRMWARE) $(LUXGENCAT_PROG)
 
