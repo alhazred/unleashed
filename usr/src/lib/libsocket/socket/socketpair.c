@@ -48,44 +48,12 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-extern int _socket_create(int, int, int, int);
 extern int _so_socketpair(int*);
 
-int _socketpair_create(int, int, int, int*, int);
-
-#pragma weak socketpair = _socketpair
+#pragma weak __xnet_socketpair = socketpair
 
 int
-_socketpair(int family, int type, int protocol, int sv[2])
-{
-	return (_socketpair_create(family, type, protocol, sv, SOV_DEFAULT));
-}
-
-/*
- * Used by the BCP library.
- */
-int
-_socketpair_bsd(int family, int type, int protocol, int sv[2])
-{
-	return (_socketpair_create(family, type, protocol, sv, SOV_SOCKBSD));
-}
-
-int
-_socketpair_svr4(int family, int type, int protocol, int sv[2])
-{
-	return (_socketpair_create(family, type, protocol, sv,
-				SOV_SOCKSTREAM));
-}
-
-int
-__xnet_socketpair(int family, int type, int protocol, int sv[2])
-{
-	return (_socketpair_create(family, type, protocol, sv,
-				SOV_XPG4_2));
-}
-
-int
-_socketpair_create(int family, int type, int protocol, int sv[2], int version)
+socketpair(int family, int type, int protocol, int sv[2])
 {
 	int res;
 	int fd1, fd2;
@@ -94,10 +62,10 @@ _socketpair_create(int family, int type, int protocol, int sv[2], int version)
 	 * Create the two sockets and pass them to _so_socketpair, which
 	 * will connect them together.
 	 */
-	fd1 = _socket_create(family, type, protocol, version);
+	fd1 = socket(family, type, protocol);
 	if (fd1 < 0)
 		return (-1);
-	fd2 = _socket_create(family, type, protocol, version);
+	fd2 = socket(family, type, protocol);
 	if (fd2 < 0) {
 		int error = errno;
 

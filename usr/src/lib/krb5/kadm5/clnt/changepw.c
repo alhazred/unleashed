@@ -95,12 +95,13 @@ krb5_data *srvr_msg;
 	krb5_data ap_req, chpw_req, chpw_rep;
 	krb5_address local_kaddr, remote_kaddr;
 	krb5_error_code code = 0;
-	int i, addrlen;
+	int i;
+	socklen_t addrlen, tmp_len;
 	struct sockaddr *addr_p, local_addr, remote_addr, tmp_addr;
 	struct sockaddr_in *sin_p;
 	struct hostent *hp;
 	int naddr_p;
-	int cc, local_result_code, tmp_len;
+	int cc, local_result_code;
 	SOCKET s1 = INVALID_SOCKET;
 	SOCKET s2 = INVALID_SOCKET;
 

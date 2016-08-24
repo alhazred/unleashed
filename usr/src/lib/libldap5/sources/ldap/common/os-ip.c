@@ -249,7 +249,7 @@ nsldapi_os_connect_with_to(LBER_SOCKET sockfd, struct sockaddr *saptr,
 	int		flags;
 #endif /* _WINDOWS */
 	int		n, error;
-	int		len;
+	socklen_t	len;
 	fd_set		rset, wset;
 	struct timeval	tval;
 #ifdef _WINDOWS

@@ -756,7 +756,8 @@ nbio_connect(int sockfd, const struct sockaddr *sa, int sa_len)
 {
 	struct pollfd pfd;
 	int nbio, rc;
-	int error, len = sizeof (error);
+	int error;
+	socklen_t len = sizeof (error);
 
 	nbio = 1;
 	if ((ioctl(sockfd, FIONBIO, &nbio)) < 0)

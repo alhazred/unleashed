@@ -57,12 +57,6 @@
 #include <resolv.h>
 #include "crossl.h"
 
-/*
- * Undocumented external function in libsocket
- */
-extern int
-_socket(int, int, int);
-
 static int s = -1;	/* socket used for communications */
 #if	BSD >= 43
 static struct sockaddr no_addr;
@@ -191,7 +185,7 @@ res_send(buf, buflen, answer, anslen)
 				 */
 				try = _res.retry;
 				if (s < 0) {
-					s = _socket(AF_INET, SOCK_STREAM, 0);
+					s = socket(AF_INET, SOCK_STREAM, 0);
 					if (s < 0) {
 						terrno = errno;
 #ifdef DEBUG
@@ -325,7 +319,7 @@ res_send(buf, buflen, answer, anslen)
 				 * Use datagrams.
 				 */
 				if (s < 0) {
-					s = _socket(AF_INET, SOCK_DGRAM, 0);
+					s = socket(AF_INET, SOCK_DGRAM, 0);
 					if (s < 0) {
 						terrno = errno;
 #ifdef DEBUG

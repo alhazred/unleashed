@@ -325,7 +325,7 @@ int do_standalone(iprop_role iproprole)
     int	on = 1;
     int	ret, status = 0;
     struct	sockaddr_in6 sin6 = { AF_INET6 };
-    int sin6_size = sizeof (sin6);
+    socklen_t sin6_size = sizeof (sin6);
     /*
      * Timer for accept/read calls, in case of network type errors.
      */
@@ -1401,7 +1401,7 @@ kerberos_authenticate(context, fd, clientp, etype, ss)
     krb5_error_code	  retval;
     krb5_ticket		* ticket;
     struct sockaddr_storage	  r_ss;
-    int			  ss_length;
+    socklen_t		  ss_length;
     krb5_keytab		  keytab = NULL;
 
     /*

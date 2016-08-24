@@ -110,7 +110,7 @@ typedef struct addr_entry {
 	uint32_t		refresh_ttl;
 	uint32_t		ttl;
 	struct sockaddr_in	sin;
-	int			sinlen;
+	socklen_t		sinlen;
 	uint32_t 		flags;
 } addr_entry_t;
 

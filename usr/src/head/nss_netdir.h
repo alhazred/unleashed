@@ -38,6 +38,8 @@
 #ifndef _NSS_NETDIR_H
 #define	_NSS_NETDIR_H
 
+#include <sys/netconfig.h>
+
 #ifdef	__cplusplus
 extern "C" {
 #endif

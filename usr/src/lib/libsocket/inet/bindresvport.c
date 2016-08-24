@@ -57,8 +57,9 @@ bindresvport(int sd, struct sockaddr_in *sin)
 	struct sockaddr_in myaddr;
 	struct sockaddr_in *bindaddr;
 	int level, optname;
-	int optval, len;
+	int optval;
 	int ret;
+	socklen_t len;
 
 	bindaddr = sin;
 	if (bindaddr == (struct sockaddr_in *)0) {

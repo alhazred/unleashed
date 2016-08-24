@@ -176,7 +176,8 @@ static void *
 pipesvc_listener(void *varg)
 {
 	struct sockaddr_un sa;
-	int err, listen_fd, newfd, snlen;
+	int err, listen_fd, newfd;
+	socklen_t snlen;
 	struct pipe_listener *pl = varg;
 	ndr_pipe_t *np;
 	pthread_t tid;

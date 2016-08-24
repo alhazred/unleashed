@@ -1468,7 +1468,8 @@ dyndns_build_signed_tsig_msg(char *buf, int update_zone, const char *hostname,
 static int
 dyndns_udp_send_recv(int s, char *buf, int buf_sz, char *rec_buf)
 {
-	int i, retval, addr_len;
+	int i, retval;
+	socklen_t addr_len;
 	struct timeval tv, timeout;
 	fd_set rfds;
 	struct sockaddr_in6 from_addr;

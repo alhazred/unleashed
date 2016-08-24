@@ -1342,7 +1342,7 @@ main(int argc, char *argv[])
 {
 	struct lock_msg message_buf;
 	daemonaddr_t from;
-	int addrlen;
+	socklen_t addrlen;
 	int rc;
 	int x = 1;		/* kludge to stop warnings from compiler */
 

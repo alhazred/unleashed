@@ -79,7 +79,7 @@ pt_socket_connect(int server_node, char *server)
 	int on = 1;
 	struct sockaddr_in cli_addr, serv_addr;
 	struct	sockaddr_in sin;
-	int cliLen = sizeof (cli_addr);
+	socklen_t cliLen = sizeof (cli_addr);
 
 	if ((sfd = socket(AF_INET, SOCK_STREAM, 0)) <= 0) {
 		syslog(LOG_DAEMON|LOG_WARNING,

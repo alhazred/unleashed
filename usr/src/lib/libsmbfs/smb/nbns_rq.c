@@ -478,7 +478,8 @@ nbns_rq_recv(struct nbns_rq *rqp)
 	struct timeval tv;
 	struct sockaddr_in sender;
 	int s = rqp->nr_fd;
-	int n, len;
+	int n;
+	socklen_t len;
 
 	FD_ZERO(&rd);
 	FD_ZERO(&wr);

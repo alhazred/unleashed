@@ -59,9 +59,9 @@ main(argc, argv)
 	int i, p[2], status;
 	FILE *fp;
 	char *av[MAXARGS + 1];
+	socklen_t len = sizeof (sin);
 
-	i = sizeof (sin);
-	if (getpeername(0, (struct sockaddr *)&sin, &i) < 0)
+	if (getpeername(0, (struct sockaddr *)&sin, &len) < 0)
 		fatal(argv[0], "getpeername");
 	line[0] = '\0';
 	if (fgets(line, sizeof (line), stdin) == NULL)
