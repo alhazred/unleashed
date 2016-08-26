@@ -420,7 +420,7 @@ __elfN(obj_parse_modmetadata)(struct preloaded_file *fp, elf_file_t ef)
 }
 
 static int
-__elfN(obj_lookup_set)(struct preloaded_file *fp, elf_file_t ef,
+__elfN(obj_lookup_set)(struct preloaded_file *fp __unused, elf_file_t ef,
     const char* name, Elf_Addr *startp, Elf_Addr *stopp, int *countp)
 {
 	Elf_Ehdr *hdr;
@@ -429,7 +429,6 @@ __elfN(obj_lookup_set)(struct preloaded_file *fp, elf_file_t ef,
 	vm_offset_t shstrtab;
 	int i;
 
-	(void)fp;
 	hdr = &ef->hdr;
 	shdr = ef->e_shdr;
 	shstrtab = shdr[ef->shstrindex].sh_addr;

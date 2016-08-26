@@ -25,16 +25,11 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD$");
 
 #include <stand.h>
 #include <machine/stdarg.h>
 #include <bootstrap.h>
-#ifdef EFI
-#define	PTOV(x)	(x)
-#else
 #include <btxv86.h>
-#endif
 #include "libi386.h"
 
 #include "platform/acfreebsd.h"
@@ -54,49 +49,36 @@ static ACPI_TABLE_RSDP	*biosacpi_search_rsdp(char *base, int length);
 #define RSDP_CHECKSUM_LENGTH 20
 
 void
-acpi_detect(const caddr_t addr)
+biosacpi_detect(void)
 {
     ACPI_TABLE_RSDP	*rsdp;
     char		buf[24];
     int			revision;
 
-    if (addr == NULL)
-	rsdp = biosacpi_find_rsdp();
-    else
-	rsdp = (ACPI_TABLE_RSDP *)addr;
-
     /* locate and validate the RSDP */
-    if (rsdp == NULL)
+    if ((rsdp = biosacpi_find_rsdp()) == NULL)
 	return;
 
     /* export values from the RSDP */
-#ifdef _LP64
-    sprintf(buf, "0x%016llx", (unsigned long long)rsdp);
-#else
     sprintf(buf, "0x%08x", (unsigned int)VTOP(rsdp));
-#endif
-    setenv("hint.acpi.0.rsdp", buf, 1);
+    setenv("acpi.rsdp", buf, 1);
     revision = rsdp->Revision;
     if (revision == 0)
 	revision = 1;
     sprintf(buf, "%d", revision);
-    setenv("hint.acpi.0.revision", buf, 1);
+    setenv("acpi.revision", buf, 1);
     strncpy(buf, rsdp->OemId, sizeof(rsdp->OemId));
     buf[sizeof(rsdp->OemId)] = '\0';
-    setenv("hint.acpi.0.oem", buf, 1);
-#ifdef _LP64
-    sprintf(buf, "0x%016llx", (unsigned long long)rsdp->RsdtPhysicalAddress);
-#else
+    setenv("acpi.oem", buf, 1);
     sprintf(buf, "0x%08x", rsdp->RsdtPhysicalAddress);
-#endif
-    setenv("hint.acpi.0.rsdt", buf, 1);
+    setenv("acpi.rsdt", buf, 1);
     if (revision >= 2) {
 	/* XXX extended checksum? */
 	sprintf(buf, "0x%016llx",
 	    (unsigned long long)rsdp->XsdtPhysicalAddress);
-	setenv("hint.acpi.0.xsdt", buf, 1);
+	setenv("acpi.xsdt", buf, 1);
 	sprintf(buf, "%d", rsdp->Length);
-	setenv("hint.acpi.0.xsdt_length", buf, 1);
+	setenv("acpi.xsdt_length", buf, 1);
     }
 }
 

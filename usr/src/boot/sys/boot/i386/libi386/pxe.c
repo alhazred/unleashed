@@ -377,7 +377,7 @@ pxe_print(int verbose)
 	if (pxe_call == NULL)
 		return (0);
 
-	snprintf(line, 255, "    pxe0:    %s:%s\n", inet_ntoa(rootip),
+	snprintf(line, sizeof (line), "    pxe0:    %s:%s\n", inet_ntoa(rootip),
 	    rootpath);
 	return (pager_output(line));
 }

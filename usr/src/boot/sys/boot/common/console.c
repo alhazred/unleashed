@@ -104,11 +104,12 @@ cons_mode(int raw)
 {
     int		cons;
 
-    for (cons = 0; consoles[cons] != NULL; cons++)
+    for (cons = 0; consoles[cons] != NULL; cons++) {
 	if (raw == 0)
 	    consoles[cons]->c_flags &= ~C_MODERAW;
 	else
 	    consoles[cons]->c_flags |= C_MODERAW;
+    }
 }
 
 int
@@ -151,7 +152,7 @@ putchar(int c)
 	    if (c == '\n' && (consoles[cons]->c_flags & C_MODERAW) == 0)
 		consoles[cons]->c_out(consoles[cons], '\r');
 	    consoles[cons]->c_out(consoles[cons], c);
-    }
+	}
 }
 
 /*

@@ -93,7 +93,7 @@ struct console ttya = {
     comc_putchar,
     comc_getchar,
     comc_ischar,
-    0
+    NULL
 };
 
 struct console ttyb = {
@@ -105,7 +105,7 @@ struct console ttyb = {
     comc_putchar,
     comc_getchar,
     comc_ischar,
-    0
+    NULL
 };
 
 struct console ttyc = {
@@ -117,7 +117,7 @@ struct console ttyc = {
     comc_putchar,
     comc_getchar,
     comc_ischar,
-    0
+    NULL
 };
 
 struct console ttyd = {
@@ -129,7 +129,7 @@ struct console ttyd = {
     comc_putchar,
     comc_getchar,
     comc_ischar,
-    0
+    NULL
 };
 
 static void

@@ -783,7 +783,7 @@ pager_printf(const char *fmt, ...)
 	va_list args;
 
 	va_start(args, fmt);
-	vsnprintf(line, 80, fmt, args);
+	vsnprintf(line, sizeof (line), fmt, args);
 	va_end(args);
 	return (pager_output(line));
 }

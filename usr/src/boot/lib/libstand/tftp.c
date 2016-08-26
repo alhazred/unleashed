@@ -731,7 +731,7 @@ tftp_parse_oack(struct tftp_handle *h, char *buf, size_t len)
 	    } else if (strcasecmp(tftp_options[i], "tsize") == 0) {
 		if (i + 1 < option_idx)
 			tsize = strtol(tftp_options[i + 1], (char **)NULL, 10);
-		if (tsize)
+		if (tsize != 0)
 			h->tftp_tsize = tsize;
 	    } else {
 		/* Do not allow any options we did not expect to be ACKed. */

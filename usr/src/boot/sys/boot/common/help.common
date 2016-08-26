@@ -35,8 +35,8 @@
 	beadm activate beName [<device>]
 	beadm list [<device>]
 
-	beadm activate does unset loaded configuration and modules,
-	sets currdev to device and loads configuration from new device.
+	beadm activate unloads the currently loaded configuration and modules,
+	sets currdev to <device> and loads configuration from new device.
 	Use lsdev to get available device names.
 
 ################################################################################

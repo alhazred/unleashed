@@ -4,10 +4,6 @@
 #
 # Merge two boot loader help files for FreeBSD 3.0
 # Joe Abley <jabley@patho.gen.nz>
-#
-# Replaced character classes graph, print, blank with corresponding ranges
-# to support nawk. When nawk will be teached to use proper regex(), this
-# change can be reverted.
 
 BEGIN \
 {
@@ -24,14 +20,14 @@ BEGIN \
 }
 
 # entry header
-/^# T[!-~]+ (S[!-~]+ )*D[!-~][ -~]*$/ && (state == 1) \
+/^# T[[:graph:]]+ (S[[:graph:]]+ )*D[[:graph:]][[:print:]]*$/ && (state == 1) \
 {
-  match($0, " T[!-~]+");
+  match($0, " T[[:graph:]]+");
   T = substr($0, RSTART + 2, RLENGTH - 2);
-  match($0, " S[!-~]+");
+  match($0, " S[[:graph:]]+");
   SSTART = RSTART
   S = (RLENGTH == -1) ? "" : substr($0, RSTART + 2, RLENGTH - 2);
-  match($0, " D[!-~][ -~]*$");
+  match($0, " D[[:graph:]][[:print:]]*$");
   D = substr($0, RSTART + 2);
   if (SSTART > RSTART)
     S = "";
@@ -83,8 +79,8 @@ BEGIN \
 
 (state == 2) \
 {
-  sub("[\t ]+$", "");
-  if (help[ind, "text"] == 0 && $0 ~ /^[[\t  ]]*$/) next;
+  sub("[[:blank:]]+$", "");
+  if (help[ind, "text"] == 0 && $0 ~ /^[[:blank:]]*$/) next;
   help[ind, "text", help[ind, "text"]] = $0;
   help[ind, "text"]++;
   next;
@@ -99,7 +95,7 @@ END \
     printf "################################################################################\n";
     printf "# T%s ", help[node, "T"];
     if (help[node, "S"] != "") printf "S%s ", help[node, "S"];
-    printf "D%s\n", help[node, "D"];
+    printf "D%s\n\n", help[node, "D"];
     for (i = 0; i < help[node, "text"]; i++)
       printf "%s\n", help[node, "text", i];
     node = help[node, "link"];

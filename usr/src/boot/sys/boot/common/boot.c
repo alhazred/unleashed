@@ -230,7 +230,7 @@ autoboot(int timeout, char *prompt)
 	printf("\rBooting [%s]...               ", kernelname);
     putchar('\n');
     if (yes) {
-	argv[0] = (char *)(uintptr_t)"boot";
+	argv[0] = "boot";
 	argv[1] = NULL;
 	return(command_boot(1, argv));
     }

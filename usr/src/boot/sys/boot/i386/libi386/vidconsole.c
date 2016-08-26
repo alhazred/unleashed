@@ -81,7 +81,7 @@ struct console text = {
     vidc_putchar,
     vidc_getchar,
     vidc_ischar,
-    0
+    NULL
 };
 
 static void
@@ -598,7 +598,7 @@ vidc_getchar(struct console *cp)
 	v86.addr = 0x16;
 	v86.eax = 0x0;
 	v86int();
-	if (v86.eax & 0xff) {
+	if ((v86.eax & 0xff) != 0) {
 		return (v86.eax & 0xff);
 	}
 

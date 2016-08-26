@@ -63,7 +63,7 @@ struct console spinconsole = {
 	spinc_putchar,
 	spinc_getchar,
 	spinc_ischar,
-	0
+	NULL
 };
 
 static void

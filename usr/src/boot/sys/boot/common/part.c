@@ -102,8 +102,8 @@ static struct parttypes {
 	{ PART_LINUX_SWAP,	"Linux swap" },
 	{ PART_DOS,		"DOS/Windows" },
 	{ PART_SOLARIS2,	"Solaris 2" },
-	{ PART_ILLUMOS_UFS,	"Illumos UFS" },
-	{ PART_ILLUMOS_ZFS,	"Illumos ZFS" },
+	{ PART_ILLUMOS_UFS,	"illumos UFS" },
+	{ PART_ILLUMOS_ZFS,	"illumos ZFS" },
 	{ PART_RESERVED,	"Reserved" },
 	{ PART_VTOC_BOOT,	"boot" },
 	{ PART_VTOC_ROOT,	"root" },
@@ -724,7 +724,7 @@ ptable_open(void *dev, off_t sectors, uint16_t sectorsize,
 		table = NULL;
 		goto out;
 	} else if (table->type == PTABLE_VTOC)
-			goto out;
+		goto out;
 
 #ifdef LOADER_VTOC8_SUPPORT
 	if (be16dec(buf + offsetof(struct vtoc8, magic)) == VTOC_MAGIC) {
@@ -874,8 +874,8 @@ ptable_getpart(const struct ptable *table, struct ptable_entry *part, int idx)
  * 6: non-active FAT/FAT32 slice
  */
 #define PREF_RAWDISK	0
-#define PREF_FBSD_ACT	1
-#define PREF_FBSD	2
+#define PREF_ILLUMOS_ACT	1
+#define PREF_ILLUMOS	2
 #define PREF_LINUX_ACT	3
 #define PREF_LINUX	4
 #define PREF_DOS_ACT	5
@@ -897,8 +897,8 @@ ptable_getbestpart(const struct ptable *table, struct ptable_entry *part)
 		if (table->type == PTABLE_MBR) {
 			switch (entry->type.mbr) {
 			case DOSPTYP_SUNIXOS2:
-				pref = entry->flags & 0x80 ? PREF_FBSD_ACT:
-				    PREF_FBSD;
+				pref = entry->flags & 0x80 ? PREF_ILLUMOS_ACT:
+				    PREF_ILLUMOS;
 				break;
 			case DOSPTYP_LINUX:
 				pref = entry->flags & 0x80 ? PREF_LINUX_ACT:
@@ -923,7 +923,7 @@ ptable_getbestpart(const struct ptable *table, struct ptable_entry *part)
 			if (entry->part.type == PART_DOS)
 				pref = PREF_DOS;
 			else if (entry->part.type == PART_ILLUMOS_ZFS)
-				pref = PREF_FBSD;
+				pref = PREF_ILLUMOS;
 			else
 				pref = PREF_NONE;
 		}

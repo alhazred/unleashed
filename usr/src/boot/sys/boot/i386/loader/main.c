@@ -179,7 +179,7 @@ main(void)
     }
 
     /* detect ACPI for future reference */
-    acpi_detect(NULL);
+    biosacpi_detect();
 
     /* detect SMBIOS for future reference */
     smbios_detect(NULL);

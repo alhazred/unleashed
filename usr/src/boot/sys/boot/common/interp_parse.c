@@ -114,17 +114,18 @@ parse(int *argc, char ***argv, char *str)
 		if (dquote) { /* keep quote */
 			PARSE_FAIL(i == (PARSE_BUFSIZE - 1));
 			buf[i++] = *p++;
-		} else
+		} else {
 			++p;
+		}
 	    } else if (isdquote(*p)) {
 		dquote = dquote ? 0 : *p;
 		if (quote) { /* keep dquote */
 			PARSE_FAIL(i == (PARSE_BUFSIZE - 1));
 			buf[i++] = *p++;
-		} else
+		} else {
 			++p;
-	    }
-	    else if (isspace(*p) && !quote && !dquote) {
+		}
+	    } else if (isspace(*p) && !quote && !dquote) {
 		state = WHITE;
 		if (i) {
 		    buf[i] = '\0';

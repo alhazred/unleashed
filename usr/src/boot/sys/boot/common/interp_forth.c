@@ -25,7 +25,6 @@
  */
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD$");
 
 #include <sys/param.h>		/* to pick up __FreeBSD_version */
 #include <string.h>
@@ -92,7 +91,7 @@ bf_command(ficlVm *vm)
     }
     if (cmd == NULL)
 	panic("callout for unknown command '%s'", name);
-   
+
     /* Check whether we have been compiled or are being interpreted */
     if (ficlStackPopInteger(ficlVmGetDataStack(vm))) {
 	/*
@@ -121,7 +120,7 @@ bf_command(ficlVm *vm)
 
 	for (cp = tail, len = 0; cp != vm->tib.end && *cp != 0 && *cp != '\n'; cp++, len++)
 	    ;
-    
+
 	line = malloc(strlen(name) + len + 2);
 	strcpy(line, name);
 	if (len > 0) {
@@ -131,7 +130,7 @@ bf_command(ficlVm *vm)
 	}
     }
     DEBUG("cmd '%s'", line);
-    
+
     command_errmsg = command_errbuf;
     command_errbuf[0] = 0;
     if (!parse(&argc, &argv, line)) {
@@ -249,7 +248,6 @@ bf_command(ficlVm *vm)
     "throw "			/* throw stack-returned result */ \
   "then ; "
 
-extern int ficlExecFD(ficlVm *, int);
 /*
  * Initialise the Forth interpreter, create all our commands as words.
  */

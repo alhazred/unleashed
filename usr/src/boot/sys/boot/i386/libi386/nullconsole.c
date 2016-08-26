@@ -55,7 +55,7 @@ struct console nullconsole = {
 	nullc_putchar,
 	nullc_getchar,
 	nullc_ischar,
-	0
+	NULL
 };
 
 static void

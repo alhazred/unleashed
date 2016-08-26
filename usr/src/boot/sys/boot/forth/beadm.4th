@@ -1,4 +1,3 @@
-\ Copyright 2015 Toomas Soome <tsoome@me.com>
 \
 \ This file and its contents are supplied under the terms of the
 \ Common Development and Distribution License ("CDDL"), version 1.0.
@@ -9,6 +8,12 @@
 \ source.  A copy of the CDDL is also available via the Internet at
 \ http://www.illumos.org/license/CDDL.
 
+\ Copyright 2015 Toomas Soome <tsoome@me.com>
+
+\ This module is implementing the beadm user command to support listing
+\ and switching Boot Environments (BE) from command line and
+\ support words to provide data for BE menu in loader menu system.
+\ Note: this module needs an update to provide proper BE vocabulary.
 
 only forth also support-functions also file-processing
 also file-processing definitions also parser

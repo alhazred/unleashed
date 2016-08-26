@@ -1122,8 +1122,8 @@ string current_file_name_ref	\ used to print the file name
   closedir
 ;
 
-\ built in prefix directory name, it must end with / so we do not
-\ need to checks and insert it.
+\ built-in prefix directory name; it must end with /, so we don't
+\ need to check and insert it.
 : make_cstring	( addr len -- addr' )
   dup		( addr len len )
   s" /boot/conf.d/" 	( addr len len addr' len' )
@@ -1792,7 +1792,7 @@ also builtins
   then
 
   drop
-  \ we have xen kernel loaded, load unix as module
+  \ we have loaded the xen kernel, load unix as module
   s" bootfile" getenv dup -1 <> if
     s" kernel" s" -t " 3 1 load
   then

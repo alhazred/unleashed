@@ -104,11 +104,11 @@ struct console
 #define C_ACTIVEIN	(1<<2)	    /* user wants input from console */
 #define C_ACTIVEOUT	(1<<3)	    /* user wants output to console */
 #define C_MODERAW	(1<<4)	    /* raw mode */
-    void	(* c_probe)(struct console *);	/* set c_flags to match hardware */
-    int		(* c_init)(struct console *, int);	/* reinit XXX may need more args */
-    void	(* c_out)(struct console *, int);	/* emit c */
-    int		(* c_in)(struct console *);	/* wait for and return input */
-    int		(* c_ready)(struct console *);	/* return nonzer if input waiting */
+    void	(*c_probe)(struct console *);	/* set c_flags to match hardware */
+    int		(*c_init)(struct console *, int);	/* reinit XXX may need more args */
+    void	(*c_out)(struct console *, int);	/* emit c */
+    int		(*c_in)(struct console *);	/* wait for and return input */
+    int		(*c_ready)(struct console *);	/* return nonzer if input waiting */
     void	*private;		/* private data */
 };
 extern struct console	*consoles[];
