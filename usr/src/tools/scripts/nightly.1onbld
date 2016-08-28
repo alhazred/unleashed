@@ -427,13 +427,6 @@ exception lists and req.flg.  Set this flag to 'n' to disable this
 check, which appears in the nightly output as "Check lists of files."
 .RE
 .LP
-.B CHECK_DMAKE
-.RS 5
-Nightly validates that the version of dmake encountered is known to be
-safe to use.  Set this flag to 'n' to disable this test, allowing any
-version of dmake to be used.
-.RE
-.LP
 .B MULTI_PROTO
 .RS 5
 If "no" (the default),
