@@ -30,7 +30,7 @@ include $(SRC)/lib/Makefile.lib
 
 CPPFLAGS +=	-I$(SRC)/lib/libsasl/include
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 LIBS =		$(DYNLIB)
 SRCS=		$(PLUG_OBJS:%.o=../%.c) \

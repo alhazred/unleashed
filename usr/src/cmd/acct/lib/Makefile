@@ -32,9 +32,9 @@ SRCS=	$(OBJS:%.o=%.c)
 include	../../Makefile.cmd
 
 CPPFLAGS = -D_LTYPES -I.. $(CPPFLAGS.master)
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-extra
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-extra
 
 .KEEP_STATE:
 

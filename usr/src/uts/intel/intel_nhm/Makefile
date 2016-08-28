@@ -54,7 +54,7 @@ INSTALL_TARGET  = $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 CPPFLAGS	+=  -I$(UTSBASE)/i86pc
 LDFLAGS		+= -dy -N drv/smbios
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #       Default build targets.

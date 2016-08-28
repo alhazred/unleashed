@@ -52,9 +52,9 @@ SRCS=	$(OBJS:%.o=%.c)
 POFILES= $(OBJS:%.o=%.po)
 
 CFLAGS +=	-D_DSW_
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 all	:=	TARGET= all
 install	:=	TARGET= install

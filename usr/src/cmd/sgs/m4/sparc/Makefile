@@ -51,9 +51,9 @@ SRCS=		$(COBJS:%.o=../common/%.c) $(BLTSRCS)
 INCLIST=	-I../common
 DEFLIST=	-DELF
 CPPFLAGS=	$(INCLIST) $(DEFLIST) $(CPPFLAGS.master)
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-uninitialized
 C99MODE=	$(C99_ENABLE)
 
 CLEANFILES +=	$(BLTSRCS)

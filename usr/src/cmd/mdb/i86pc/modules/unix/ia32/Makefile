@@ -39,7 +39,7 @@ CPPFLAGS += -I../../../../common
 CPPFLAGS += -I$(SRC)/uts/i86pc
 CPPFLAGS += -I$(SRC)/uts/intel
 
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-uninitialized

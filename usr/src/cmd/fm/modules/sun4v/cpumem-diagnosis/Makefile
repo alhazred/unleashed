@@ -36,5 +36,5 @@ include ../../sun4/cpumem-diagnosis/Makefile.cpumem
 LDLIBS += -L$(ROOTLIB)/fm -lmdesc -lldom
 LDFLAGS += -R/usr/lib/fm
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-parentheses

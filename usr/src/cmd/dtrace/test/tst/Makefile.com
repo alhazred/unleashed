@@ -58,13 +58,13 @@ $(ROOT_EXES) := FILEMODE = 0555
 # agressive optimization of small, simple, one compilation-unit programs may
 # utterly subvert.  We force the compiler to not optimize rather than engage
 # in an arms race with increasingly belligerent optimizers.
-COPTFLAG=	-_gcc=-O0
+COPTFLAG=	-O0
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-unused-variable
 
 all: $(EXES)
 

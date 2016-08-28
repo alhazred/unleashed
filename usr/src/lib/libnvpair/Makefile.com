@@ -52,9 +52,9 @@ SRCS=		../libnvpair.c \
 LDLIBS +=	-lc -lnsl
 LIBS =		$(DYNLIB)
 
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 CPPFLAGS +=	-D_REENTRANT
 

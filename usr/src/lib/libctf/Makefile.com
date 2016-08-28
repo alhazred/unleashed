@@ -53,7 +53,7 @@ SRCDIR = ../common
 
 CPPFLAGS += -I../common -I../../../common/ctf -DCTF_OLD_VERSIONS
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 LDLIBS += -lc
 

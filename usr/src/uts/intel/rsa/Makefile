@@ -67,8 +67,8 @@ CPPFLAGS	+= -I$(COM1_DIR) -I$(COM2_DIR)
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

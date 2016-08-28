@@ -33,8 +33,8 @@ include ../../../Makefile.cmd
 XGETFLAGS +=	-a -x $(PROG).xcl
 LDLIBS +=	-linetutil -lnsl -lnwam -lumem -lscf
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

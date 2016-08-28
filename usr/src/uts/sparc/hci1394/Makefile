@@ -71,8 +71,8 @@ DEBUG_DEFS_DBG64 += -DTNF_DEBUG
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

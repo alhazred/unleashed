@@ -59,7 +59,7 @@ CLEANFILES	+= $(MODSTUBS_O)
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 #
 # Module Dependencies

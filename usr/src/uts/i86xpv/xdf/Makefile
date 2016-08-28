@@ -56,8 +56,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 LDFLAGS		+= -dy -Nmisc/cmlb
 
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-switch
 
 #
 #	Default build targets.

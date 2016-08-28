@@ -44,10 +44,10 @@ LIBS =		$(DYNLIB)
 CPPFLAGS +=	-I$(SRCDIR) -I. -I../../../common/acl
 LDLIBS += -lc -lavl -lidmap
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-unused-variable
 
 CLOBBERFILES += acl.output
 

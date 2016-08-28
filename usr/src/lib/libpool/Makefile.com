@@ -45,9 +45,9 @@ SRCDIR =	../common
 CPPFLAGS +=	-D_REENTRANT -D_FILE_OFFSET_BITS=64 \
 		-I$(ADJUNCT_PROTO)/usr/include/libxml2
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

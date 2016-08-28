@@ -62,9 +62,9 @@ CLEANFILES	+= $(MODSTUBS_O)
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN += -_gcc=-Wno-type-limits
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-type-limits
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-uninitialized
 
 #
 # module dependencies

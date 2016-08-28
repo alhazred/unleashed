@@ -36,7 +36,7 @@ SRCS	= $(LOCOBJS:%.o=$(SRCDIR)/%.c) $(CMNOBJS:%.o=$(CMNDIR)/%.c)
 LDLIBS += -lsock
 CPPFLAGS += $(SOCKCPPFLAGS) -I$(TOPDIR)/psm/stand
 
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-uninitialized
 
 include ../Makefile.targ

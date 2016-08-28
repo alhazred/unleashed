@@ -65,8 +65,8 @@ INC_PATH	+= -I$(COMMONBASE)/smbclnt
 LDFLAGS         += -dy -Ndrv/nsmb
 
 # Until CR 4994570 is fixed...
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 # The mb_put/md_get functions are intentionally used with and without
 # return value checks, so filter those out like LGREP.2 does.

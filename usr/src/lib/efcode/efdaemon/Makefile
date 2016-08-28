@@ -33,7 +33,7 @@ EFCODEDIR64 = $(EFCODEDIR)/$(MACH64)
 CPPFLAGS += -DDEBUG -DFCODE_INTERNAL
 CPPFLAGS += -I ../include -I $(ROOT)/usr/platform/sun4u/include
 
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 PROG	= efdaemon
 EFTARGETS += $(EFCODEDIR64)/$(PROG)

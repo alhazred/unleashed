@@ -53,12 +53,12 @@ ROOTSACF= $(SACF:%=$(LIBSAFD)/%)
 ROOTADMF= $(ADMF:%=$(ROOTUSRSBIN)/%)
 
 LDLIBS += -lnsl
-LDFLAGS += $(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
+LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-extra
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-extra
 
 util1.o := CPPFLAGS += -DSAC
 util2.o := CPPFLAGS += -USAC

@@ -38,7 +38,7 @@ LDLIBS +=	-lc -lsocket -ldhcputil -luuid -ldlpi -lcontract
 
 SRCDIR =	../common
 
-CERRWARN +=	-_gcc=-Wno-type-limits
+CERRWARN +=	-Wno-type-limits
 
 .KEEP_STATE:
 

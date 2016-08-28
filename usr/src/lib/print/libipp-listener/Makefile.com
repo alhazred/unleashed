@@ -50,8 +50,8 @@ CPPFLAGS +=	-I$(SRCDIR)
 CPPFLAGS +=	-I../../libpapi-common/common
 CPPFLAGS +=	-I../../libipp-core/common
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
 
 MAPFILES =	$(SRCDIR)/mapfile
 

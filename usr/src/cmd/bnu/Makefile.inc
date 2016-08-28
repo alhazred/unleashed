@@ -39,12 +39,12 @@ SRCS =		account.c anlwrk.c bnuconvert.c callers.c		\
 		uuglist.c uuname.c uusched.c uustat.c uux.c		\
 		uuxqt.c versys.c xio.c xqt.c
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-char-subscripts
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-extra
-CERRWARN	+= -_gcc=-Wno-implicit-function-declaration
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-char-subscripts
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-extra
+CERRWARN	+= -Wno-implicit-function-declaration
 
 TLILIB =	-lnsl -lsocket
 PAMLIB =        -lpam

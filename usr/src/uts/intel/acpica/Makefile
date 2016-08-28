@@ -42,9 +42,9 @@ DEBUG_DEFS	+= $(DEBUG_FLGS)
 
 CFLAGS += -DPWRDMN -DACPI_USE_LOCAL_CACHE -DACPI_DEBUG_OUTPUT
 
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

@@ -37,7 +37,7 @@ LIBS =		$(DYNLIB)
 
 CPPFLAGS =	-I.. $(CPPFLAGS.master)
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable
 
 LDLIBS +=       -ladm -lc
 

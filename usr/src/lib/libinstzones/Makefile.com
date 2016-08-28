@@ -47,9 +47,9 @@ POFILE =	libinstzones.po
 MSGFILES =	$(OBJECTS:%.o=../common/%.i)
 CLEANFILES +=	$(MSGFILES)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-clobbered
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-clobbered
+CERRWARN +=	-Wno-address
 
 LIBS = $(DYNLIB)
 

@@ -63,10 +63,10 @@ LDFLAGS		+= -dy -N misc/acpica -N misc/bootdev
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

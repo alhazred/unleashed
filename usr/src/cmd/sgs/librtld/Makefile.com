@@ -45,10 +45,10 @@ CPPFLAGS +=	-I../../rtld/common -I$(SRCBASE)/lib/libc/inc \
 DYNFLAGS +=	$(VERSREF) $(CC_USE_PROTO)  '-R$$ORIGIN'
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) $(ELFLIBDIR) -lelf -lc
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-value
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-value
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-uninitialized
 
 BLTDEFS=	msg.h
 BLTDATA=	msg.c

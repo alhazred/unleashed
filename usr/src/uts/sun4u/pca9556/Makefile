@@ -49,7 +49,7 @@ LDFLAGS += -dy -N misc/i2c_svc
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Define targets

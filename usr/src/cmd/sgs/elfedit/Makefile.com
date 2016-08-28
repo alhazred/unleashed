@@ -46,12 +46,12 @@ CPPFLAGS=	-I. -I../common -I../../include -I../../include/$(MACH) \
 		$(CPPFLAGS.master) -I$(ELFCAP)
 LLDFLAGS =	$(VAR_ELFEDIT_LLDFLAGS)
 LLDFLAGS64 =	$(VAR_ELFEDIT_LLDFLAGS64)
-LDFLAGS +=	$(VERSREF) $(CC_USE_PROTO) -_gcc=-Wl,-M$(MAPFILE) $(LLDFLAGS)
+LDFLAGS +=	$(VERSREF) $(CC_USE_PROTO) -Wl,-M$(MAPFILE) $(LLDFLAGS)
 LDLIBS +=	$(ELFLIBDIR) -lelf $(LDDBGLIBDIR) $(LDDBG_LIB) \
 		    $(CONVLIBDIR) $(CONV_LIB) -ltecla
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 
 BLTDEFS =	msg.h
 BLTDATA =	msg.c

@@ -60,7 +60,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 ALL_DEFS	+= -DVUIDM4P
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

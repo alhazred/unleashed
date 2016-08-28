@@ -52,7 +52,7 @@ include $(UTSBASE)/sun4u/starfire/Makefile.starfire
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 #
 # Define dependency on cvc

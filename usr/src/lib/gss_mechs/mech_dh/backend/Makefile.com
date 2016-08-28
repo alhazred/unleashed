@@ -46,9 +46,9 @@ include ../../../../Makefile.lib
 
 CPPFLAGS += -I../mech -I../crypto -I$(SRC)/uts/common/gssapi/include
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
 
 DYNFLAGS +=	$(ZIGNORE)
 

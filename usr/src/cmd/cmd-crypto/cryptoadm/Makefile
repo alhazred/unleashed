@@ -39,8 +39,8 @@ include ../../Makefile.cmd
 POFILES = $(OBJS:%.o=%.po)
 POFILE = $(PROG)_all.po
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-parentheses
 
 LDLIBS += -lcryptoutil
 

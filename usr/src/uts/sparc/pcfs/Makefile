@@ -57,11 +57,11 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 #	Overrides.
 #
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-function
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-function
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

@@ -61,7 +61,7 @@ CPPFLAGS +=     -D_REENTRANT -DHAVE_LIBSOCKET=1 -DHAVE_LIBNSL=1 \
 CFLAGS +=	-I..
 LDLIBS +=	-lc
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable
 
 .KEEP_STATE:
 

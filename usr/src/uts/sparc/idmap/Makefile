@@ -54,7 +54,7 @@ LDFLAGS += -dy -N"sys/doorfs" -N"strmod/rpcmod"
 #
 # Function variables unused for rpcgen-generated code
 #
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Define targets

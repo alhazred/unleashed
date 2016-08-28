@@ -71,9 +71,9 @@ LDFLAGS += -dy -Nmisc/pcihp
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-type-limits
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-type-limits
 
 #	Default build targets.
 #

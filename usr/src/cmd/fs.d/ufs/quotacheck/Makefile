@@ -39,8 +39,8 @@ FSOBJS=		preenlib.o
 FSSRCS=		../../preenlib.c
 SRCS=		$(OBJS:.o=.c)
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-type-limits
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-type-limits
 
 
 $(FSOBJS): $(FSSRCS)

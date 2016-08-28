@@ -46,7 +46,7 @@ C99MODE=		$(C99_ENABLE)
 CPPFLAGS += -D_XOPEN_SOURCE=600 -D__EXTENSIONS__
 LDLIBS += -lvrrpadm -lsocket -lnsl -ldladm -linetutil -lipadm -lsysevent -lnvpair -lsecdb
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 #
 # Instrument vrrpd with CTF data to ease debugging.

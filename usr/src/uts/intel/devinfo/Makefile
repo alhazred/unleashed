@@ -58,10 +58,10 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 CPPFLAGS	+= -I$(SRC)/common
 
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-clobbered
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-clobbered
 
 #
 #	Default build targets.

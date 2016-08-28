@@ -64,10 +64,10 @@ LDFLAGS		+= -dy -N misc/iommulib -N misc/acpica
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

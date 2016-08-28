@@ -56,10 +56,10 @@ include $(UTSBASE)/i86pc/Makefile.i86pc
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-variable
 
 #
 # Link to acpica for ACPI services

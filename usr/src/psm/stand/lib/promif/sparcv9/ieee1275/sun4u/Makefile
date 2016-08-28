@@ -32,7 +32,7 @@ include $(TOPDIR)/lib/Makefile.lib
 include $(TOPDIR)/psm/stand/lib/Makefile.lib
 include $(TOPDIR)/psm/Makefile.psm.64
 
-CFLAGS64	+= -_gcc=-mtune=ultrasparc $(CCABS32)
+CFLAGS64	+= -mtune=ultrasparc $(CCABS32)
 
 PLATDIR =	$(TOPDIR)/psm/promif/ieee1275/sun4u
 PLATSUN4DIR =	$(TOPDIR)/psm/promif/ieee1275/sun4

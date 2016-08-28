@@ -39,8 +39,8 @@ SUBDIRS= etc
 OBJS=	dscfg.o	
 
 CFLAGS += -D_SYSCALL32
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-address
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-address
 LDLIBS += -ldscfg -lunistat
 ROOTLINK = $(ROOTUSRSBIN)/$(PROG)
 ROOTSHLINK = $(ROOTUSRSBIN)/$(SHFILES)

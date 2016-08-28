@@ -31,7 +31,7 @@ PROG=	psrinfo
 include	../Makefile.cmd
 
 LDLIBS += -lkstat
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 XGETFLAGS +=  
 $(PROG).po	:= CPPFLAGS += -DXGETTEXT
 

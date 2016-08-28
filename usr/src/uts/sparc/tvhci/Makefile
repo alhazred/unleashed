@@ -61,7 +61,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 # investigate and remove these for maximum coverage.  Please do not carry
 # these forward to new Makefiles.
 #
-CERRWARN	+= -_gcc=-Wno-unused-function
+CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.

@@ -32,7 +32,7 @@ OBJS =	$(PROG).o
 include ../Makefile.cmd
 
 FILEMODE= 0555
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 POFILES = $(SRCS:.c=.po)
 

@@ -39,7 +39,7 @@ SRCS = $(MACHCOBJS:%.o=../$(MACH)/%.c)
 CFLAGS += $(C_BIGPICFLAGS)
 CFLAGS64 += $(C_BIGPICFLAGS)
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

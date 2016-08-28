@@ -158,14 +158,14 @@ CTFMERGE_GUDIR	= sun4v
 #
 #	machine specific optimization, override default in Makefile.master
 #
-CC_XARCH	= -m64 -_gcc=-mcpu=ultrasparc -_gcc=-mvis
+CC_XARCH	= -m64 -mcpu=ultrasparc -mvis
 AS_XARCH	= -xarch=v9v
-COPTIMIZE	= -_gcc=-fno-strict-aliasing
-COPTIMIZE	+= -_gcc=-fno-unit-at-a-time
-COPTIMIZE	+= -_gcc=-fno-optimize-sibling-calls
-COPTIMIZE	+= -_gcc=-O2
+COPTIMIZE	= -fno-strict-aliasing
+COPTIMIZE	+= -fno-unit-at-a-time
+COPTIMIZE	+= -fno-optimize-sibling-calls
+COPTIMIZE	+= -O2
 
-CFLAGS		= -_gcc=-mtune=ultrasparc $(CCABS32)
+CFLAGS		= -mtune=ultrasparc $(CCABS32)
 CFLAGS		+= $(CC_XARCH)
 CFLAGS		+= $(COPTIMIZE)
 CFLAGS		+= $(EXTRA_CFLAGS)
@@ -178,7 +178,7 @@ CFLAGS		+= $(CTF_FLAGS_$(CLASS))
 CFLAGS		+= $(C99MODE)
 CFLAGS		+= $(CCNOAUTOINLINE)
 CFLAGS		+= $(CC32BITCALLERS)
-CFLAGS		+= -_gcc=-mno-fpu
+CFLAGS		+= -mno-fpu
 CFLAGS		+= $(CSOURCEDEBUGFLAGS)
 CFLAGS		+= $(CUSERFLAGS)
 

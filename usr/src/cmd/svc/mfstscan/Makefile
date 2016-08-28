@@ -44,8 +44,8 @@ CPPFLAGS +=	-I../common
 LDLIBS +=	-lscf -luutil -lmd5
 CLOBBERFILES += $(POFILES)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-label
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-label
 
 
 .KEEP_STATE:

@@ -40,7 +40,7 @@ ROOTFSLIB_MPXIO = $(ROOT)/lib/mpxio
 
 ROOTMANIFESTDIR = $(ROOTSVCSYSTEMDEVICE)
 LDLIBS += -ldevinfo -ldevid -lnvpair -lumem
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

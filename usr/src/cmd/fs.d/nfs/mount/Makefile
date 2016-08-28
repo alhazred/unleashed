@@ -42,12 +42,12 @@ SRCS=	$(LIBPROG).c $(FSLIBSRC) ../lib/nfs_sec.c ../lib/replica.c \
 
 UNCHECKED_HDRS=	webnfs.h
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-address
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-address
+CERRWARN += -Wno-unused-function
 
 #
 # Message catalog

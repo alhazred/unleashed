@@ -39,8 +39,8 @@ LDLIBS +=	-lc -lnsl -linetutil -lsocket -ldlpi -lnvpair -ldhcpagent \
 
 SRCDIR =	../common
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
 
 .KEEP_STATE:

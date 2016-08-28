@@ -58,8 +58,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 LDFLAGS +=	-dy -Ndacf/consconfig_dacf
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

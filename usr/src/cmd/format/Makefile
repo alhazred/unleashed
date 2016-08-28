@@ -46,10 +46,10 @@ DATA= format.dat
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-clobbered
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-clobbered
 
 SRCS= $(OBJS:.o=.c)
 

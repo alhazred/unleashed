@@ -32,4 +32,4 @@ ALIASES =	SUN-Storage-J4200
 
 include ../../Makefile.lib
 
-CERRWARN += -_gcc=-Wno-switch
+CERRWARN += -Wno-switch

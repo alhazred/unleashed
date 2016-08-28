@@ -52,8 +52,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 LDFLAGS		+= -dy -Ndrv/dld -Nmisc/mac -Nmisc/strplumb -Nmisc/dls
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Default build targets.

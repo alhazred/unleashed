@@ -68,9 +68,9 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 CFLAGS += -D_SD_8K_BLKSIZE -D_SDBC_SINGLE_BRD
 LDFLAGS += -dy -N"drv/nsctl" -N"drv/ncall" -N"drv/nskern" -N"misc/spuni"
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-label
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-label
 
 .KEEP_STATE:
 

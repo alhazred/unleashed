@@ -34,8 +34,8 @@ ROOTLIBSVCBINPROG = $(ROOT)/lib/svc/bin/$(PROG)
 include ../../Makefile.cmd
 
 LDLIBS +=	-lcontract -lscf -luutil
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 
 .KEEP_STATE:

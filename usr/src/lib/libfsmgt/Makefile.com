@@ -49,8 +49,8 @@ SRCDIR =	../common
 CPPFLAGS +=	-D_REENTRANT -I$(SRC)/lib/libfsmgt/common \
 		-I$(SRC)/cmd/fs.d/nfs/lib
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 CLOBBERFILES	+= $(SRCDIR)/nfs_sec.c
 CLOBBERFILES	+= $(SRCDIR)/replica.c

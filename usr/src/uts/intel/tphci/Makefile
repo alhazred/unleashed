@@ -48,7 +48,7 @@ include $(UTSBASE)/intel/Makefile.intel
 
 CLOBBERFILES	+= $(MODULE)
 
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Define targets

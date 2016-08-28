@@ -55,10 +55,10 @@ LDLIBS +=	-ldhcpagent -ldhcputil -ldladm -ldlpi -lgen \
 		-linetutil -lipadm -lkstat -lnsl -lnvpair -lnwam \
 		-lsecdb -lscf -lsocket -lsysevent -lumem -luutil
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-unused-label
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-unused-label
 
 #
 # Instrument with CTF data to ease debugging.

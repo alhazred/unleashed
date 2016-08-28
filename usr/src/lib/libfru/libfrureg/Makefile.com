@@ -46,7 +46,7 @@ CPPFLAGS +=	-I.. \
 		-I$(SRC)/cmd/picl/plugins/inc
 CPPFLAGS += 	-D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable
 
 XGETFLAGS += -a
 POFILE=	picl.po

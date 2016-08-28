@@ -39,10 +39,10 @@ OBJS=	dsstat.o ii_stats.o sndr_stats.o sdbc_stats.o \
 	multi_stats.o common.o report.o
 SRCS= $(OBJS:%.o=%.c)
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-clobbered
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-clobbered
 LDLIBS += -lkstat
 POFILE = dsstat_all.po
 POFILES = $(OBJS:%.o=%.po)

@@ -91,12 +91,12 @@ CFLAGS +=	-D_FILE_OFFSET_BITS=64
 CPPFLAGS=	-I. -I.. -I../nfs/lib $(CPPFLAGS.master) -D_REENTRANT  \
 			$(MALLOC_DEBUG)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-unused-function
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-unused-function
 
 OBJS=		$(AUTOOBJS) $(MOUNTOBJS) $(TYPEOBJS) \
 		$(SHAREOBJS) $(UNSHAREOBJS)

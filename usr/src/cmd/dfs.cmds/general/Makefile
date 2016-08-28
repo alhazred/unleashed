@@ -38,11 +38,11 @@ SRCS=	general.c
 
 #ROOTLINK= $(ROOTUSRSBIN)/unshare
 
-CFLAGS += -_gcc=-Wl,-s
+CFLAGS += -Wl,-s
 
 include ../../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 .KEEP_STATE:
 

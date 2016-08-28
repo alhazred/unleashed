@@ -56,7 +56,7 @@ LDFLAGS	+= -dy -Nmisc/drm
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Re-define targets

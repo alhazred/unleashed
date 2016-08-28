@@ -39,7 +39,7 @@ CPPFLAGS +=	-I$(SRCBASE)/lib/libc/inc
 DYNFLAGS +=	$(VERSREF)
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) -lc
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 BLTDEFS=	msg.h
 BLTDATA=	msg.c

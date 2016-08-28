@@ -37,8 +37,8 @@ UDFSDIR=	../mkfs
 UDFSOBJS=	udfslib.o
 #UDFSSRCS=	$(UDFSOBJS:%.o=%.c)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
 
 OBJS=		$(FSCKOBJS) $(UDFSOBJS)
 SRCS=		$(FSCKSRCS) $(UDFSSRCS) ../mkfs/udfslib.c

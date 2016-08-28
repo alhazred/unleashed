@@ -19,7 +19,7 @@ include $(SRC)/cmd/perl/Makefile.perl
 
 LDLIBS += -lproject -lgen
 
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 XSUBPPFLAGS = -typemap typemap
 

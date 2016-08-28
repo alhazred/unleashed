@@ -35,9 +35,9 @@ SRCS=	$(TYPEPROG).c ../../fslib.c ../lib/nfs_tbind.c ../lib/thrpool.c
 LDLIBS += -lnsl
 CPPFLAGS += -I. -I../.. -I../lib
 
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-extra
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-extra
 
 .KEEP_STATE:
 

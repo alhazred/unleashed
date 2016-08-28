@@ -44,9 +44,9 @@ LDFLAGS		+= -dy -Ndrv/dtrace -Nmisc/ctf
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-uninitialized
 
 .KEEP_STATE:
 

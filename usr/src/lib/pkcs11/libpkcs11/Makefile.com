@@ -72,8 +72,8 @@ LDLIBS +=	-lcryptoutil -lc
 CPPFLAGS +=	-I$(INCDIR) -I$(SRCDIR) -D_REENTRANT
 
 
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

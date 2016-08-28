@@ -43,9 +43,9 @@ ROOTMODULE      = $(ROOT_PSM_CPU_DIR)/$(MODULE)
 include $(UTSBASE)/i86xpv/Makefile.i86xpv
 include $(UTSBASE)/i86pc/cpu/Makefile.files
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-variable
 
 #
 #       Define targets

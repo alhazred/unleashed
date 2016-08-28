@@ -60,11 +60,11 @@ CFLAGS		+= -I$(COM_DIR)
 #
 # For niagara specific optimizations
 #
-COPTIMIZE	= -_gcc=-fno-strict-aliasing
-COPTIMIZE	+= -_gcc=-fno-unit-at-a-time
-COPTIMIZE	+= -_gcc=-fno-optimize-sibling-calls
-COPTIMIZE	+= -_gcc=-O2
-COPTIMIZE	+= -_gcc=-fbuiltin
+COPTIMIZE	= -fno-strict-aliasing
+COPTIMIZE	+= -fno-unit-at-a-time
+COPTIMIZE	+= -fno-optimize-sibling-calls
+COPTIMIZE	+= -O2
+COPTIMIZE	+= -fbuiltin
 
 #
 #	Default build targets.

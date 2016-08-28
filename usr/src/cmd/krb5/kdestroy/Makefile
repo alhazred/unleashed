@@ -12,8 +12,8 @@ SRCS	= kdestroy.c krpc_sys.c
 include ../../Makefile.cmd
 include $(SRC)/lib/gss_mechs/mech_krb5/Makefile.mech_krb5
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
 
 POFILE = kdestroy.po 
 POFILES = generic.po 

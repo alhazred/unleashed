@@ -55,7 +55,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 LDFLAGS		+= -dy -Nmisc/strategy -Nmisc/cmlb -Ndrv/xpvd -Ndrv/xdf
 LDFLAGS		+= -Nmisc/hvm_sd
 
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

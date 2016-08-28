@@ -57,9 +57,9 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 LDFLAGS		+= -dy -Nmisc/mac -Nmac/mac_wifi -Ndrv/ip
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

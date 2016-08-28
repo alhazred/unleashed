@@ -97,7 +97,7 @@ $(OBJECTS)	:= CPPFLAGS += -Dd37A_read_count=$(MODULE)_d37A_read_count
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

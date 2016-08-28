@@ -63,12 +63,12 @@ INC_PATH	+= -I$(UTSBASE)/intel/io/scsi/targets
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-value
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-value
 
 #
 #	Depends on scsi and cmlb

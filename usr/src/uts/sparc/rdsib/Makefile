@@ -54,8 +54,8 @@ include $(UTSBASE)/sparc/Makefile.sparc
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
 
 LDFLAGS += -dy -Ndrv/rds -Nmisc/ibtl -Nmisc/ibcm -Ndrv/ip
 

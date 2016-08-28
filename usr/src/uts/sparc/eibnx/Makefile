@@ -68,8 +68,8 @@ CPPFLAGS += -DENX_DEBUG
 #
 LDFLAGS	+= -dy -Nmisc/ibcm -Nmisc/ibtl
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 #
 # Default build targets

@@ -36,6 +36,6 @@ C99MODE = $(C99_ENABLE)
 
 CPPFLAGS += -I$(SRC)/uts/common
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-uninitialized

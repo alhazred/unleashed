@@ -57,8 +57,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 LDFLAGS         += -dy -N misc/scsi
 
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-uninitialized
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

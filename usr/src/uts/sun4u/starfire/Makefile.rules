@@ -55,7 +55,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/sun4u/starfire/cvcredir/%.c
 	$(CTFCONVERT_O)
 
 DRMACH_IL=		$(OBJS_DIR)/drmach.il
-$(OBJS_DIR)/drmach.o	:= CC_XARCH_32 = -m32 -_gcc=-mcpu=ultrasparc -_gcc=-mv8plus -_gcc=-mvis
+$(OBJS_DIR)/drmach.o	:= CC_XARCH_32 = -m32 -mcpu=ultrasparc -mv8plus -mvis
 $(OBJS_DIR)/drmach.o:	$(UTSBASE)/sun4u/starfire/io/drmach.c $(DRMACH_IL)
 	$(COMPILE.c) $(DRMACH_IL) -o $@ $(UTSBASE)/sun4u/starfire/io/drmach.c
 	$(CTFCONVERT_O)

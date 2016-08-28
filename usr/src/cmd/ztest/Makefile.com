@@ -41,7 +41,7 @@ CFLAGS += -g
 CFLAGS64 += -g
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 -D_REENTRANT $(INCS) -DDEBUG
 
-CERRWARN += -_gcc=-Wno-switch
+CERRWARN += -Wno-switch
 
 .KEEP_STATE:
 

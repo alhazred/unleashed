@@ -34,10 +34,10 @@ OBJS=		$(LIBPROG).o $(ROLLOBJS) $(FSLIB)
 SRCS=		$(LIBPROG).c $(ROLLSRCS) $(FSLIBSRC)
 MKFSOBJS=	mkfs.o
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-empty-body
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-empty-body
+CERRWARN +=	-Wno-uninitialized
 
 # for messaging catalog
 #

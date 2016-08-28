@@ -126,11 +126,11 @@ CPPFLAGS += -I../common -I.
 CFLAGS += $(C_BIGPICFLAGS)
 CFLAGS64 += $(C_BIGPICFLAGS)
 
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-switch
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-switch
 
 YYCFLAGS =
 LDLIBS += -lgen -lproc -lrtld_db -lnsl -lsocket -lctf -lelf -lc
@@ -221,7 +221,7 @@ $(DRTIOBJ): $(DRTIOBJS)
 
 $(LIBDAUDIT): $(LIBDAUDITOBJS)
 	$(LINK.c) -o $@ $(GSHARED) -h$(LIBDAUDIT) $(ZTEXT) $(ZDEFS) $(BDIRECT) \
-	    $(MAPFILE.PGA:%=-_gcc=-Wl,-M%) $(MAPFILE.NED:%=-_gcc=-Wl,-M%) $(LIBDAUDITOBJS) \
+	    $(MAPFILE.PGA:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%) $(LIBDAUDITOBJS) \
 	    $(LIBDAUDITLIBS)
 	$(POST_PROCESS_SO)
 

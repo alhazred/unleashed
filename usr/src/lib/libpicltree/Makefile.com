@@ -34,7 +34,7 @@ LDLIBS +=	-lc
 
 CPPFLAGS +=	-D_REENTRANT -I.. -I../../libpicl -I$(SRC)/cmd/picl/plugins/inc
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

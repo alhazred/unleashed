@@ -32,8 +32,8 @@ POFILES = $(OBJS:.o=.po)
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 POFILE = rctladm_msg.po
 XGETFLAGS = -a
 FILEMODE = 0555

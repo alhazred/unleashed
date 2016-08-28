@@ -35,4 +35,4 @@ include ../../Makefile.amd64
 include ../../../Makefile.module
 
 CPPFLAGS += -I$(SRC)/lib/fm/topo/libtopo/common
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses

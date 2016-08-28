@@ -38,7 +38,7 @@ LDLIBS += -lc
 CPPFLAGS += -I../common -I../../common/inc -D_REENTRANT
 DYNFLAGS += $(ZINTERPOSE)
 
-CERRWARN += -_gcc=-Wno-unused-label
+CERRWARN += -Wno-unused-label
 
 .KEEP_STATE:
 

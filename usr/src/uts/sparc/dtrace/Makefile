@@ -38,9 +38,9 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #
 DSF_DIR		= $(UTSBASE)/$(PLATFORM)/genassym
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-uninitialized
 
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)

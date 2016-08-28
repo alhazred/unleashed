@@ -61,8 +61,8 @@ LDFLAGS         += -dy -N strmod/rpcmod -N misc/rpcsec -N misc/tlimod
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

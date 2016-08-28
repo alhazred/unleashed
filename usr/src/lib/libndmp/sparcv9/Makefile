@@ -39,6 +39,6 @@
 include ../Makefile.com
 include $(SRC)/lib/Makefile.lib.64
 
-sparcv9_C_PICFLAGS= -_gcc=-fPIC
+sparcv9_C_PICFLAGS= -fPIC
 
 install: all $(ROOTLIBS64) $(ROOTLINKS64)

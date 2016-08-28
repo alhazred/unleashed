@@ -35,9 +35,9 @@ SRCS= $(OBJS:%.o=%.c)
 include ../Makefile.cmd
 
 LDLIBS += 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-char-subscripts
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-char-subscripts
 
 .KEEP_STATE:
 

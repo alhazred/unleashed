@@ -37,7 +37,7 @@ LDLIBS +=	-lc
 
 CPPFLAGS +=	-I $(SRCDIR)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

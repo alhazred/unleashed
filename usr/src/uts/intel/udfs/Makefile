@@ -70,10 +70,10 @@ LDFLAGS += -dy -N fs/specfs
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-type-limits
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-type-limits
 
 #
 #	Default build targets.

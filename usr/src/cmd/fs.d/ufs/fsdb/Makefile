@@ -31,11 +31,11 @@ include		../../Makefile.fstype
 
 CPPFLAGS +=     -D_LARGEFILE64_SOURCE
 
-CERRWARN +=	-_gcc=-Wno-char-subscripts
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-char-subscripts
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
 
 SRCS=	$(LIBPROG).c
 

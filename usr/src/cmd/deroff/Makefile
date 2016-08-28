@@ -27,9 +27,9 @@ PROG= deroff
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-parentheses
 
 .KEEP_STATE:
 

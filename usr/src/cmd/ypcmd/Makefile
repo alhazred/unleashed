@@ -58,7 +58,7 @@ $(LNSLPROG) :=	LDLIBS += -lnsl
 $(NIS2LDAPPROG) := LDLIBS += -lc -lnsl -lnisdb
 stdethers :=	LDLIBS += -lsocket
 makedbm :=	MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
-makedbm :=	LDFLAGS += $(MAPFILES:%=-_gcc=-Wl,-M%)
+makedbm :=	LDFLAGS += $(MAPFILES:%=-Wl,-M%)
 
 $(ROOTVAR_YP)/aliases :=	FILEMODE=555
 
@@ -143,15 +143,15 @@ INIS2LDAPPROG = 	$(NIS2LDAPPROG:%=$(NETYP)/%)
 
 NIS2LDAPINC =		-I$(SRC)/lib/libnisdb/yptol
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-extra
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-address
-CERRWARN +=	-_gcc=-Wno-unused-function
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-extra
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-address
+CERRWARN +=	-Wno-unused-function
 
 #conditional assignments
 ypalias.o :=	CPPFLAGS= -DMAIN $(CPPFLAGS.master)

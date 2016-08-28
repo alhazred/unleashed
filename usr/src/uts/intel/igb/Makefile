@@ -49,8 +49,8 @@ CONF_SRCDIR	= $(UTSBASE)/common/io/igb
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
 
 CFLAGS		+= -I$(UTSBASE)/common/io/e1000api
 CFLAGS		+= -I$(UTSBASE)/common/io/igb

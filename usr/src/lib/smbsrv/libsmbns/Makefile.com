@@ -53,8 +53,8 @@ LDLIBS +=	-lsmb -lads -lgss -lcmdutils -lldap \
 		-lsocket -lnsl -lc -lkrb5
 CPPFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	-Dsyslog=smb_syslog
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-uninitialized
 
 include ../../Makefile.targ
 include ../../../Makefile.targ

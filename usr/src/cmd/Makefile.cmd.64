@@ -31,6 +31,6 @@
 
 include $(SRC)/Makefile.master.64
 
-V9CODESIZE = -_gcc=-fno-pic -_gcc=-mcmodel=medmid
+V9CODESIZE = -fno-pic -mcmodel=medmid
 
 sparcv9_CFLAGS += $(V9CODESIZE)

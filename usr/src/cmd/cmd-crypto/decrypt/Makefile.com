@@ -36,8 +36,8 @@ include ../../../Makefile.cmd
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 LDLIBS += -lkmf -lpkcs11 -lcryptoutil
 

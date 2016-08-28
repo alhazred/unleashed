@@ -99,12 +99,12 @@ C99MODE=	$(C99_ENABLE)
 
 LDLIBS += -lcurses -lkvm -lproc -lrtld_db -lctf -lumem -ldisasm -lscf
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-clobbered
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-clobbered
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-unused-variable
 
 PROG = mdb
 OBJS = $(SRCS:%.c=%.o) mdb_lex.o mdb_grammar.o

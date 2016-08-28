@@ -91,7 +91,7 @@ INC_PATH	+= -I$(UTSBASE)/sun4/io/fpc
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

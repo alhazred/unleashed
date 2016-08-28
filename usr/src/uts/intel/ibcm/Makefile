@@ -55,13 +55,13 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #	Overrides.
 #
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-value
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-value
 
 #
 #	depends on misc/ibtl and misc/ibmf

@@ -19,12 +19,12 @@ tcpd tcpdmatch try-from := \
 		LDLIBS += -lwrap
 tcpdchk :=	LDLIBS += -lwrap -lnsl
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-return-type
-CERRWARN +=	-_gcc=-Wno-clobbered
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-return-type
+CERRWARN +=	-Wno-clobbered
 
 # Various components must export interfaces, but also contain name-space
 # clashes with system libraries.
@@ -32,9 +32,9 @@ MAPFILE.INT.D=	$(MAPFILE.NGB) mapfile-intf-tcpdchk
 MAPFILE.INT.M=	$(MAPFILE.NGB) mapfile-intf-tcpdmatch
 MAPFILE.INT.F=	$(MAPFILE.NGB) mapfile-intf-tryfrom
 
-tcpdchk :=	LDFLAGS +=$(MAPFILE.INT.D:%=-_gcc=-Wl,-M%)
-tcpdmatch :=	LDFLAGS +=$(MAPFILE.INT.M:%=-_gcc=-Wl,-M%)
-try-from :=	LDFLAGS +=$(MAPFILE.INT.F:%=-_gcc=-Wl,-M%)
+tcpdchk :=	LDFLAGS +=$(MAPFILE.INT.D:%=-Wl,-M%)
+tcpdmatch :=	LDFLAGS +=$(MAPFILE.INT.M:%=-Wl,-M%)
+try-from :=	LDFLAGS +=$(MAPFILE.INT.F:%=-Wl,-M%)
 
 .KEEP_STATE:
 

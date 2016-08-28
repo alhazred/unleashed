@@ -60,8 +60,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

@@ -62,8 +62,8 @@ INCS 		+= -I$(SRC)/uts/common/
 
 LDFLAGS		+= -dy -Nmisc/fctl -Ndrv/fcp -Nmisc/scsi
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-function
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.

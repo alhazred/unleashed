@@ -57,18 +57,18 @@ LDLIBS_pwdx		= -lproc
 
 LDLIBS += $(LDLIBS_$(PROG))
 
-CERRWARN_plgrp	+= -_gcc=-Wno-parentheses
+CERRWARN_plgrp	+= -Wno-parentheses
 
-CERRWARN_ppriv	+= -_gcc=-Wno-parentheses
-CERRWARN_ppriv	+= -_gcc=-Wno-uninitialized
+CERRWARN_ppriv	+= -Wno-parentheses
+CERRWARN_ppriv	+= -Wno-uninitialized
 
-CERRWARN_ptree	+= -_gcc=-Wno-parentheses
+CERRWARN_ptree	+= -Wno-parentheses
 
-CERRWARN_pstack	+= -_gcc=-Wno-uninitialized
-CERRWARN_pstack	+= -_gcc=-Wno-clobbered
+CERRWARN_pstack	+= -Wno-uninitialized
+CERRWARN_pstack	+= -Wno-clobbered
 
-CERRWARN_pargs	+= -_gcc=-Wno-clobbered
-CERRWARN_pargs	+= -_gcc=-Wno-type-limits
+CERRWARN_pargs	+= -Wno-clobbered
+CERRWARN_pargs	+= -Wno-type-limits
 
 CERRWARN += $(CERRWARN_$(PROG))
 

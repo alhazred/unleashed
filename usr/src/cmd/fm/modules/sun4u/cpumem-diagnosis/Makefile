@@ -43,6 +43,6 @@ include ../../sun4/cpumem-diagnosis/Makefile.cpumem
 LDLIBS += -L$(ROOT)/usr/lib/fm -lfmd_adm
 LDFLAGS += -R/usr/lib/fm
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-char-subscripts
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-char-subscripts

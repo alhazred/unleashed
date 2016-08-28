@@ -58,7 +58,7 @@ CPPFLAGS	+= -DHVMPV_XPVD_VERS=1
 LDFLAGS		+= -dy -Ndrv/xpv
 
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

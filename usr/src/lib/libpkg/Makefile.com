@@ -58,10 +58,10 @@ LIBS = $(DYNLIB)
 
 LDLIBS +=	-lc -lscf -ladm
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-clobbered
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-clobbered
+CERRWARN +=	-Wno-switch
 CPPFLAGS +=	-I$(SRCDIR) -D_FILE_OFFSET_BITS=64
 
 .KEEP_STATE:

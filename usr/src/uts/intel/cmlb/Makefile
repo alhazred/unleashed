@@ -68,11 +68,11 @@ CPPFLAGS	+= -D_EXTVTOC
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

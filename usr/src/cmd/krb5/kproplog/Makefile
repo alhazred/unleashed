@@ -33,9 +33,9 @@ CPPFLAGS	+=	-I. -I$(SRC)/lib/krb5 \
 			-I$(SRC)/lib/gss_mechs/mech_krb5/include \
 			-I$(SRC)/uts/common/gssapi/mechs/krb5/include
 
-CERRWARN	+=	-_gcc=-Wno-unused-variable
-CERRWARN	+=	-_gcc=-Wno-unused-function
-CERRWARN	+=	-_gcc=-Wno-implicit-function-declaration
+CERRWARN	+=	-Wno-unused-variable
+CERRWARN	+=	-Wno-unused-function
+CERRWARN	+=	-Wno-implicit-function-declaration
 
 all:		$(PROG)
 

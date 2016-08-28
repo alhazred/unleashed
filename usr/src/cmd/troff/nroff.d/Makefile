@@ -39,11 +39,11 @@ SRCS =		$(OBJS:%.o=%.c) $(COMMONOBJS:%.o=../%.c)
 
 CPPFLAGS =	-DNROFF -DUSG -DINCORE -DEUC -I. -I.. $(CPPFLAGS.master)
 
-CERRWARN +=	-_gcc=-Wno-unused-value
-CERRWARN +=	-_gcc=-Wno-extra
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-value
+CERRWARN +=	-Wno-extra
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
 
 LDLIBS +=	-lmapmalloc
 #

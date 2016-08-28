@@ -96,8 +96,8 @@ LLDFLAGS64 =	'-R$$ORIGIN/../../../../lib/$(MACH64)'
 LDFLAGS +=	$(CC_USE_PROTO) $(LLDFLAGS)
 DYNFLAGS +=	$(VERSREF)
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 
 BLTDEFS =	$(ELFEDITLIBS:%.so=%_msg.h)
 BLTDATA =	$(ELFEDITLIBS:%.so=%_msg.c)

@@ -44,7 +44,7 @@ LDLIBS +=	-ldevinfo
 LDLIBS +=	-lsysevent
 
 
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 CPPFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	-DSOLARIS

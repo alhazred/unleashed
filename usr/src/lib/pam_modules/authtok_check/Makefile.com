@@ -33,7 +33,7 @@ include		../../Makefile.pam_modules
 LDLIBS		+= -lpam -lc
 
 CPPFLAGS	+= -D_FILE_OFFSET_BITS=64
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-parentheses
 
 all:	$(LIBS)
 

@@ -56,8 +56,8 @@ SRCS		= $(LOCOBJS:%.o=$(SRCDIR)/%.c) $(CMNOBJS:%.o=$(CMNDIR)/%.c) \
 LDLIBS += -lsock
 CPPFLAGS += $(SOCKCPPFLAGS)
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 objs/%.o: $(MACH)/%.s
 	  $(COMPILE.s) -o $@ $<

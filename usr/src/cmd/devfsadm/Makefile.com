@@ -91,9 +91,9 @@ CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT \
 CFLAGS += $(C_PICFLAGS)
 
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-parentheses
 
 # Define the dependencies required by devfsadm and all shared objects.
 LDLIBS +=		-ldevinfo

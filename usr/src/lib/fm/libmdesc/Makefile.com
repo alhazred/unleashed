@@ -50,8 +50,8 @@ LIBS = $(DYNLIB)
 SRCDIR =	../common
 
 CPPFLAGS += -I../common -I.
-CFLAGS += -_gcc=-fPIC
-CFLAGS64 += -_gcc=-fPIC
+CFLAGS += -fPIC
+CFLAGS64 += -fPIC
 LDLIBS += -lc
 
 .KEEP_STATE:

@@ -43,7 +43,7 @@ CPPFLAGS += -I../../../../../lib/libzpool/common \
 
 C99MODE=	$(C99_ENABLE)
 
-CERRWARN 	+= -_gcc=-Wno-type-limits
+CERRWARN 	+= -Wno-type-limits
 
 dmod/%.o: $(GENUNIX_DIR)/%.c
 	$(COMPILE.c) -o $@ $<

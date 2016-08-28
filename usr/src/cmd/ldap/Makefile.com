@@ -81,11 +81,11 @@ CLOBBERFILES += $(OBJS) $(PROG) $(LDAPCLIENTPROG) $(LDAPADDENTPROG) \
 ROOTVAR_LDAP=	$(ROOT)/var/ldap
 
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
 
 all:=           TARGET= all
 install:=       TARGET= install

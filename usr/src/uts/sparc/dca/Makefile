@@ -64,8 +64,8 @@ CFLAGS += $(C99_ENABLE)
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

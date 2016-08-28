@@ -36,8 +36,8 @@ include		../../Makefile.fstype
 LDLIBS	+=	-ladm
 CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 
 $(ROOTUSRSBIN)/$(LIBPROG):	FRC

@@ -13,9 +13,9 @@ DEFS =  -DHAVE_LIBSOCKET=1 -DHAVE_LIBNSL=1 -DHAVE_PWD_H=1 -DHAVE_COMPILE=1 -DHAV
 include ../../Makefile.cmd
 include $(SRC)/lib/gss_mechs/mech_krb5/Makefile.mech_krb5
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-parentheses
 
 POFILE = kinit.po
 POFILES = generic.po

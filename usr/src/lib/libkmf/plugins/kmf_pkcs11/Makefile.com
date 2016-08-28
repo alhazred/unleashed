@@ -51,7 +51,7 @@ SRCS =  \
 CPPFLAGS	+=	-D_REENTRANT $(KMFINC) -I$(INCDIR) \
 			-I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(BIGNUMDIR)
 
-CERRWARN	+=	-_gcc=-Wno-unused-label
+CERRWARN	+=	-Wno-unused-label
 
 PICS=	$(OBJECTS:%=pics/%)
 

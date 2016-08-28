@@ -39,6 +39,6 @@ LDFLAGS += -R/usr/lib/fm
 
 DYNFLAGS += -R/usr/lib
 
-CERRWARN += -_gcc=-Wno-unused-value
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-value
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized

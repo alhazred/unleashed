@@ -49,9 +49,9 @@ CPPFLAGS +=	-D_FILE_OFFSET_BITS=64 -I$(CMDINETCOMMONDIR) -D_REENTRANT
 CPPFLAGS +=	-I$(LIB_INC)
 CPPFLAGS +=	-I$(SRC)/uts/common
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-label
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-label
 
 C99MODE =      $(C99_ENABLE)
 

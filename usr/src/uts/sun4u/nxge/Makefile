@@ -70,11 +70,11 @@ INC_PATH	+= -I$(UTSBASE)/common/sys/nxge
 
 CFLAGS += -DSOLARIS
 
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-type-limits
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-type-limits
 
 #
 #	Driver depends on mac & IP

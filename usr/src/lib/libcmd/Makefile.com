@@ -130,11 +130,11 @@ CFLAGS += \
 CFLAGS64 += \
 	$(ASTCFLAGS64)
 
-CERRWARN	+= -_gcc=-Wno-unused-value
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-implicit-function-declaration
+CERRWARN	+= -Wno-unused-value
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-implicit-function-declaration
 
 .KEEP_STATE:
 

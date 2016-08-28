@@ -29,11 +29,11 @@
 # COMMON_DIR.
 #
 
-LDFLAGS +=	$(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
+LDFLAGS +=	$(MAPFILE.NGB:%=-Wl,-M%)
 
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-parentheses
 
 %.o: $(COMMON_DIR)/%.c
 	$(COMPILE.c) $<

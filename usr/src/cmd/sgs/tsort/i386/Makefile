@@ -37,7 +37,7 @@ DEFLIST=	-DELF
 CPPFLAGS=	$(INCLIST) $(DEFLIST) $(CPPFLAGS.master)
 C99MODE=	$(C99_ENABLE)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 %.o:		../common/%.c
 		$(COMPILE.c) $<

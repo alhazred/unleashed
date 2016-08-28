@@ -35,14 +35,14 @@ OBJS =		$(BLTOBJ) $(COMOBJS)
 .PARALLEL:	$(OBJS)
 
 MAPFILES =	../common/mapfile-intf $(MAPFILE.NGB)
-MAPOPTS =	$(MAPFILES:%=-_gcc=-Wl,-M%)
+MAPOPTS =	$(MAPFILES:%=-Wl,-M%)
 
 LDFLAGS +=	$(VERSREF) $(CC_USE_PROTO) $(MAPOPTS) $(VAR_LD_LLDFLAGS)
 LDLIBS +=	$(LDLIBDIR) $(LD_LIB) $(ELFLIBDIR) -lelf \
 		    $(LDDBGLIBDIR) $(LDDBG_LIB) $(CONVLIBDIR) $(CONV_LIB)
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-parentheses
 
 native :=	LDFLAGS = -R$(SGSPROTO) $(ZNOVERSION)
 native :=	LDLIBS = -L$(SGSPROTO) $(LD_LIB) -lelf $(CONVLIBDIR) \

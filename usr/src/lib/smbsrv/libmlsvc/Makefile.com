@@ -90,8 +90,8 @@ CPPFLAGS += $(INCS) -D_REENTRANT
 CPPFLAGS += -Dsyslog=smb_syslog
 $(ENABLE_SMB_PRINTING) CPPFLAGS += -DHAVE_CUPS
 
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-uninitialized
 
 SRCS=   $(OBJS_COMMON:%.o=$(SRCDIR)/%.c)
 

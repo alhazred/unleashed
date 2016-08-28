@@ -38,12 +38,12 @@ LDLIBS +=	-lc
 
 CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
 CPPFLAGS +=	-DBUILD_TIME='"Wed Sep 24 12:00:00 2008"'
-DYNFLAGS +=	-_gcc=-Wl,-zfiniarray=ExitLibrary
-DYNFLAGS +=	-_gcc=-Wl,-zinitarray=InitLibrary
+DYNFLAGS +=	-Wl,-zfiniarray=ExitLibrary
+DYNFLAGS +=	-Wl,-zinitarray=InitLibrary
 
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
 
 ROOTETC =	$(ROOT)/etc
 CONFDIR =	../common

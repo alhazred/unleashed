@@ -48,11 +48,11 @@ CLEANFILES += inj_grammar.c inj_grammar.h inj_lex.c y.tab.h y.tab.c
 
 CPPFLAGS += -I. -I../common
 CFLAGS += $(CTF_FLAGS)
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-type-limits
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-type-limits
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-unused-variable
 LDLIBS += -L$(ROOT)/usr/lib/fm -lfmd_log -lsysevent -lnvpair -lumem
 LDFLAGS += -R/usr/lib/fm
 STRIPFLAG =

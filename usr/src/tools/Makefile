@@ -27,12 +27,6 @@
 
 include ../Makefile.master
 
-# Bootstrap problem --
-# 'cw' must be built before anything else can be built.
-
-BOOT_SUBDIRS= \
-	cw
-
 COMMON_SUBDIRS= \
 	codereview \
 	cscope-fast \
@@ -116,9 +110,7 @@ _msg: $(MSGSUBDIRS)
 
 .PARALLEL: $(SUBDIRS) $(CLOSED_SUBDIRS)
 
-$(SUBDIRS) $(CLOSED_SUBDIRS): $(BOOT_SUBDIRS)
-
-$(BOOT_SUBDIRS) $(SUBDIRS): $$(DOROOTDIRS) $(ROOTONBLDLIBPY) FRC
+$(SUBDIRS): $$(DOROOTDIRS) $(ROOTONBLDLIBPY) FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
 $(ROOTDIRS):

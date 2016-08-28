@@ -33,7 +33,7 @@ EXTOBJS =	../capabilities/sun4u/symcap.o \
 		../capabilities/sun4v/symcap.o
 
 CPPFLAGS +=	-I$(SRC)/uts/sun4 -I.
-CERRWARN +=	-_gcc=-Wno-clobbered
+CERRWARN +=	-Wno-clobbered
 
 .KEEP_STATE:
 

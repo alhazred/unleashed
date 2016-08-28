@@ -39,7 +39,7 @@ LIBS =			$(DYNLIB)
 
 CPPFLAGS +=	-I$(SRCDIR)
 
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-switch
 
 MAPFILES =	$(SRCDIR)/mapfile
 

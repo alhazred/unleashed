@@ -36,9 +36,9 @@ ATTMK=		$(TYPEPROG)
 include		../../Makefile.fstype
 CPPFLAGS +=     -D_REENTRANT -DSUN_THREADS
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 LOCAL=		sm_svc.o sm_proc.o sm_statd.o
 OBJS= 		$(LOCAL) selfcheck.o daemon.o

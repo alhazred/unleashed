@@ -145,9 +145,9 @@ CPPFLAGS +=	-I$(SRC)/uts/common/sys/ib/clients/daplt
 CPPFLAGS +=	-I$(SRC)/uts/common
 CPPFLAGS +=	-I$(SRC)/uts/common/sys/ib/clients
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-switch
 
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDAPL_DBG
 debug := COPTFLAG = -g

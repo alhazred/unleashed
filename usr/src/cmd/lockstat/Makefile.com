@@ -30,7 +30,7 @@ SRCS= $(OBJS:%.o=../%.c)
 include ../../Makefile.cmd
 
 LDLIBS += -lelf -lkstat -ldtrace
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 FILEMODE= 0555
 

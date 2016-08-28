@@ -46,7 +46,7 @@ LINKED_LLIBLPCP_DIR 	= \
 	$(LINKED_PLATFORMS:%=$(USR_PLAT_DIR)/%/lib/llib-lpcp.ln)
 
 LIBS = $(DYNLIB)
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 LDLIBS +=	-lc -lumem -ldevinfo
 PLATLIBS =	$(USR_PLAT_DIR)/$(PLATFORM)/lib
 INS.slink6=	$(RM) -r $@; $(SYMLINK) ../../$(PLATFORM)/lib/libpcp.so.1 $@

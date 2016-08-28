@@ -38,4 +38,4 @@ CPPFLAGS += -I../../../../../uts/common/fs/zfs
 
 C99MODE=	$(C99_ENABLE)
 
-CERRWARN 	+= -_gcc=-Wno-type-limits
+CERRWARN 	+= -Wno-type-limits

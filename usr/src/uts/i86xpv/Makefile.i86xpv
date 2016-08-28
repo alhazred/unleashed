@@ -188,8 +188,8 @@ $(IF_DEBUG_OBJ)evtchn.o		:= DEBUG_DEFS += -DTRAPTRACE
 ALL_DEFS	 = $(MACHINE_DEFS) $(WORKAROUND_DEFS) $(DEBUG_DEFS) \
 		   $(OPTION_DEFS)
 GENASSYM_DEFS	 = $(MACHINE_DEFS) $(OPTION_DEFS) \
-			-_gcc=-fno-eliminate-unused-debug-symbols \
-			-_gcc=-fno-eliminate-unused-debug-types
+			-fno-eliminate-unused-debug-symbols \
+			-fno-eliminate-unused-debug-types
 
 #
 # ----- TRANSITIONAL SECTION --------------------------------------------------

@@ -35,7 +35,7 @@ XGETFLAGS += -a -x write.xcl
 
 .KEEP_STATE:
 
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 all: $(PROG)
 

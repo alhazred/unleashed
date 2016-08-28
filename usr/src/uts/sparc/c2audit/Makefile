@@ -64,9 +64,9 @@ LDFLAGS         += -dy -N fs/sockfs
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-clobbered
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-clobbered
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

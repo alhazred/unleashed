@@ -35,9 +35,9 @@ CLOBBERFILES= $(LIBB)
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-label
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-label
 
 $(XPG6EXOBJS) := CFLAGS += -DXPG6
 ROOTLIBB= $(LIBB:%=$(ROOTLIB)/%)

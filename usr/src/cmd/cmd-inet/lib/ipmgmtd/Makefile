@@ -38,8 +38,8 @@ ROOTCFGDIR=		$(ROOTETC)/ipadm
 ROOTCFGFILES=		$(CFGFILES:%=$(ROOTCFGDIR)/%)
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORK)
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-uninitialized
 
 $(ROOTCFGFILES)	:= OWNER= ipadm
 $(ROOTCFGFILES)	:= GROUP= sys

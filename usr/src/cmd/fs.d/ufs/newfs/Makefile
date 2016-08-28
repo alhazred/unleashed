@@ -35,8 +35,8 @@ include		../../Makefile.fstype
 CPPFLAGS +=	-I../../ -D_LARGEFILE64_SOURCE
 LDLIBS += -ladm -lefi
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 OBJS=		$(LIBPROG).o $(FSLIB)
 SRCS=		$(LIBPROG).c $(FSLIBSRC)

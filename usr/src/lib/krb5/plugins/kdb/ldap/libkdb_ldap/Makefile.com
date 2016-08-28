@@ -74,8 +74,8 @@ CPPFLAGS += 	-DHAVE_CONFIG_H \
 		-DUSE_KADM5_API_VERSION=2
 
 CFLAGS +=	-I..
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-function
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-function
 DYNFLAGS +=	$(KRUNPATH) $(KERBRUNPATH) $(KMECHLIB)
 LDLIBS +=	-L $(ROOTLIBDIR) -lkadm5srv -lc -lnsl -lldap
 

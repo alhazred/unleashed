@@ -31,12 +31,12 @@ RPCGENFLAGS = -C -M $(DEFINES)
 RPCGENFLAGS_SERVER = $(RPCGENFLAGS) -s circuit_n
 
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-unused-value
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-unused-value
 
 CSTYLE=cstyle

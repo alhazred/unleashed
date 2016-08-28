@@ -56,9 +56,9 @@ ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 CFLAGS += -I../sys
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-type-limits
 
 #
 #	Turn on doubleword alignment for 64 bit registers

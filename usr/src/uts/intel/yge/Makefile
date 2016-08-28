@@ -55,7 +55,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 LDFLAGS		+=  -dy -N misc/mac -N misc/mii
 
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-unused-label
 
 #
 #

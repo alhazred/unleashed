@@ -35,7 +35,7 @@ COMMON_SRCS = $(COMMON_OBJS:%.o=$(STATCOMMONDIR)/%.c)
 
 LDLIBS += -lkstat
 CFLAGS += -I${STATCOMMONDIR}
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 FILEMODE= 0555
 
 

@@ -35,7 +35,7 @@ include ../Makefile.cmd
 
 CPPFLAGS += -I $(SRC)/common/util
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 .KEEP_STATE:
 

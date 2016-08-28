@@ -45,8 +45,8 @@ UDFSDIR=	../../../../uts/common/fs/ufs
 #UDFSOBJS=	ufs_subr.o ufs_tables.o
 UDFSOBJS=
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 OBJS=		$(MKFSOBJS) $(UDFSOBJS)
 SRCS=		$(OBJS:%.o=%.c)

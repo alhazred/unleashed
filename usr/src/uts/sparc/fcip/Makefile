@@ -60,8 +60,8 @@ INC_PATH	+= -I$(SRC)/uts/common
 
 LDFLAGS		+= -dy -Nmisc/fctl -Ndrv/ip
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-type-limits
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-type-limits
 
 #
 #	Default build targets.

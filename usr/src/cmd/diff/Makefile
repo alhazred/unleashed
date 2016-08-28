@@ -30,9 +30,9 @@ LIBDIFFH= diffh
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-address
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-address
 
 #
 # for messaging catalog

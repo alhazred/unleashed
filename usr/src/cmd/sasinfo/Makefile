@@ -45,7 +45,7 @@ POFILES = $(LOCAL_OBJS:%.o=%.po)
 
 LDLIBS += -lSMHBAAPI
 
-CERRWARN += -_gcc=-Wno-unused-value
+CERRWARN += -Wno-unused-value
 
 INCS += -I.
 INCS += -I$(SRC)/lib/smhba/common

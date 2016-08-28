@@ -39,8 +39,8 @@ SRCDIR=		../common
 
 LIBS 	+=	$(DYNLIB)
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-variable
 
 all:=	  TARGET= all
 clean:=   TARGET= clean

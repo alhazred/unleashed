@@ -256,28 +256,28 @@ CCMODE64=
 
 #
 # generate 32-bit addresses in the v9 kernel. Saves memory.
-CCABS32=		-_gcc=-fno-pic -_gcc=-mcmodel=medlow
+CCABS32=		-fno-pic -mcmodel=medlow
 #
 # generate v9 code which tolerates callers using the v7 ABI, for the sake of
 # system calls.
-CC32BITCALLERS=		-_gcc=-massume-32bit-callers
+CC32BITCALLERS=		-massume-32bit-callers
 
 # GCC, especially, is increasingly beginning to auto-inline functions and
 # sadly does so separately not under the general -fno-inline-functions
 # Additionally, we wish to prevent optimisations which cause GCC to clone
 # functions -- in particular, these may cause unhelpful symbols to be
 # emitted instead of function names
-CCNOAUTOINLINE= -_gcc=-fno-inline-small-functions \
-	-_gcc=-fno-inline-functions-called-once \
-	-_gcc=-fno-ipa-cp
+CCNOAUTOINLINE= -fno-inline-small-functions \
+	-fno-inline-functions-called-once \
+	-fno-ipa-cp
 
 #
 # compiler architecture flags.
 #
-sparc_XARCH=	-m32 -_gcc=-mcpu=v8 -_gcc=-mno-v8plus
-sparcv9_XARCH=	-m64 -_gcc=-mcpu=v9
-i386_XARCH=	-m32 -_gcc=-march=pentiumpro
-amd64_XARCH=	-m64 -Ui386 -U__i386 -_gcc=-mtune=opteron
+sparc_XARCH=	-m32 -mcpu=v8 -mno-v8plus
+sparcv9_XARCH=	-m64 -mcpu=v9
+i386_XARCH=	-m32 -march=pentiumpro
+amd64_XARCH=	-m64 -Ui386 -U__i386 -mtune=opteron
 
 # assembler architecture flags.  Different from compiler architecture flags.
 sparc_AS_XARCH=		-xarch=v8plus -Dsparc -D__sparc -D__sparcv8
@@ -292,16 +292,16 @@ amd64_AS_XARCH=		-m64 -Ui386 -U__i386 -D__x86_64 -D__amd64
 #
 # XX64	future versions of gcc will make -mcmodel=kernel imply -mno-red-zone
 #
-sparc_STAND_FLAGS=	-_gcc=-ffreestanding
-sparcv9_STAND_FLAGS=	-_gcc=-ffreestanding
+sparc_STAND_FLAGS=	-ffreestanding
+sparcv9_STAND_FLAGS=	-ffreestanding
 # Disabling MMX also disables 3DNow, disabling SSE also disables all later
 # additions to SSE (SSE2, AVX ,etc.)
-NO_SIMD=		-_gcc=-mno-mmx -_gcc=-mno-sse
-i386_STAND_FLAGS=	-_gcc=-ffreestanding $(NO_SIMD)
-amd64_STAND_FLAGS=	-_gcc=-ffreestanding -_gcc=-mno-red-zone \
-			-_gcc=-mcmodel=kernel $(NO_SIMD)
+NO_SIMD=		-mno-mmx -mno-sse
+i386_STAND_FLAGS=	-ffreestanding $(NO_SIMD)
+amd64_STAND_FLAGS=	-ffreestanding -mno-red-zone \
+			-mcmodel=kernel $(NO_SIMD)
 
-SAVEARGS=		-_gcc=-msave-args
+SAVEARGS=		-msave-args
 amd64_STAND_FLAGS	+= $(SAVEARGS)
 
 STAND_FLAGS_32 = $($(MACH)_STAND_FLAGS)
@@ -309,29 +309,29 @@ STAND_FLAGS_64 = $($(MACH64)_STAND_FLAGS)
 
 #
 # turn warnings into errors (C)
-CERRWARN = -_gcc=-Wall -_gcc=-Wextra -_gcc=-Werror
+CERRWARN = -Wall -Wextra -Werror
 
-CERRWARN += -_gcc=-Wno-missing-braces
-CERRWARN += -_gcc=-Wno-sign-compare
-CERRWARN += -_gcc=-Wno-unknown-pragmas
-CERRWARN += -_gcc=-Wno-unused-parameter
-CERRWARN += -_gcc=-Wno-missing-field-initializers
+CERRWARN += -Wno-missing-braces
+CERRWARN += -Wno-sign-compare
+CERRWARN += -Wno-unknown-pragmas
+CERRWARN += -Wno-unused-parameter
+CERRWARN += -Wno-missing-field-initializers
 
 # Unfortunately, this option can misfire very easily and unfixably.
-CERRWARN +=	-_gcc=-Wno-array-bounds
+CERRWARN +=	-Wno-array-bounds
 
 # DEBUG v. -nd make for frequent unused variables, empty conditions, etc. in
 # -nd builds
-$(RELEASE_BUILD)CERRWARN += -_gcc=-Wno-unused
-$(RELEASE_BUILD)CERRWARN += -_gcc=-Wno-empty-body
+$(RELEASE_BUILD)CERRWARN += -Wno-unused
+$(RELEASE_BUILD)CERRWARN += -Wno-empty-body
 
 #
 # turn warnings into errors (C++)
 CCERRWARN=		-_g++=-Werror
 
 # C99 mode
-C99_ENABLE=	-_gcc=-std=gnu99
-C99_DISABLE=	-_gcc=-std=gnu89
+C99_ENABLE=	-std=gnu99
+C99_DISABLE=	-std=gnu89
 C99MODE=	$(C99_DISABLE)
 
 # In most places, assignments to these macros should be appended with +=
@@ -347,27 +347,27 @@ i386_ASFLAGS=	$(i386_AS_XARCH)
 amd64_ASFLAGS=	$(amd64_AS_XARCH)
 
 #
-sparc_COPTFLAG=		-_gcc=-fno-strict-aliasing \
-	-_gcc=-fno-unit-at-a-time \
-	-_gcc=-fno-optimize-sibling-calls \
-	-_gcc=-O2
-sparcv9_COPTFLAG=	-_gcc=-fno-strict-aliasing \
-	-_gcc=-fno-unit-at-a-time \
-	-_gcc=-fno-optimize-sibling-calls \
-	-_gcc=-O2
+sparc_COPTFLAG=		-fno-strict-aliasing \
+	-fno-unit-at-a-time \
+	-fno-optimize-sibling-calls \
+	-O2
+sparcv9_COPTFLAG=	-fno-strict-aliasing \
+	-fno-unit-at-a-time \
+	-fno-optimize-sibling-calls \
+	-O2
 i386_COPTFLAG=		-O
-amd64_COPTFLAG=		-_gcc=-fno-strict-aliasing \
-	-_gcc=-fno-unit-at-a-time \
-	-_gcc=-fno-optimize-sibling-calls \
-	-_gcc=-O2
+amd64_COPTFLAG=		-fno-strict-aliasing \
+	-fno-unit-at-a-time \
+	-fno-optimize-sibling-calls \
+	-O2
 
 COPTFLAG= $($(MACH)_COPTFLAG)
 COPTFLAG64= $($(MACH64)_COPTFLAG)
 
 # Sometimes we want all symbols and types in debugging information even
 # if they aren't used.
-CALLSYMS=	-_gcc=-fno-eliminate-unused-debug-symbols \
-		-_gcc=-fno-eliminate-unused-debug-types
+CALLSYMS=	-fno-eliminate-unused-debug-symbols \
+		-fno-eliminate-unused-debug-types
 
 #
 # Flags used to build in debug mode for ctf generation.  Bugs in the Devpro
@@ -409,8 +409,8 @@ amd64_SPACEFLAG		=
 SPACEFLAG		= $($(MACH)_SPACEFLAG)
 SPACEFLAG64		= $($(MACH64)_SPACEFLAG)
 
-sparc_XREGSFLAG		= -_gcc=-mno-app-regs
-sparcv9_XREGSFLAG	= -_gcc=-mno-app-regs
+sparc_XREGSFLAG		= -mno-app-regs
+sparcv9_XREGSFLAG	= -mno-app-regs
 i386_XREGSFLAG		=
 amd64_XREGSFLAG		=
 
@@ -481,7 +481,7 @@ DCMSGDOMAIN= $(MSGROOT)/LC_TIME/$(TEXT_DOMAIN)
 DCMSGDOMAINPOFILE = $(DCMSGDOMAIN)/$(DCFILE:.dc=.po)
 
 CLOBBERFILES += $(POFILE) $(POFILES)
-COMPILE.cpp= $(CC) -_gcc=-xc -E -C $(CFLAGS) $(CPPFLAGS)
+COMPILE.cpp= $(CC) -xc -E -C $(CFLAGS) $(CPPFLAGS)
 XGETTEXT= /usr/bin/xgettext
 XGETFLAGS= -c TRANSLATION_NOTE
 GNUXGETTEXT= /usr/gnu/bin/xgettext
@@ -497,8 +497,8 @@ BUILD.po= $(XGETTEXT) $(XGETFLAGS) -d $(<F) $<.i ;\
 #
 POFILE= $(PROG).po
 
-sparc_CCFLAGS=		-m32 -_gcc=mcpu=v8 -_gcc=mno-v8plus \
-			-_gcc=-mtunesupersparc \
+sparc_CCFLAGS=		-m32 mcpu=v8 mno-v8plus \
+			-mtunesupersparc \
 			$(CCERRWARN)
 sparcv9_CCFLAGS=	$(sparcv9_XARCH) \
 			$(CCERRWARN)
@@ -613,20 +613,20 @@ NATIVE_MACH=	$(MACH:amd64=i386)
 #
 GNU_ROOT=		/usr
 
-BASIC_CC_ARGS=	-_gcc=-fident \
-		-_gcc=-finline \
-		-_gcc=-fno-inline-functions \
-		-_gcc=-fno-builtin \
-		-_gcc=-fno-asm \
-		-_gcc=-fdiagnostics-show-option \
-		-_gcc=-nodefaultlibs
+BASIC_CC_ARGS=	-fident \
+		-finline \
+		-fno-inline-functions \
+		-fno-builtin \
+		-fno-asm \
+		-fdiagnostics-show-option \
+		-nodefaultlibs
 
 # The SPARC ldd and std instructions require 8-byte alignment of their
 # address operand.  gcc correctly uses them only when the ABI requires
 # 8-byte alignment; unfortunately we have a number of pieces of buggy code
 # that does not conform to the ABI.  This flag makes gcc work more like
 # Studio with -xmemalign=4.
-$(SPARC_BLD)BASIC_CC_ARGS += -_gcc=mno-integer-ldd-std
+$(SPARC_BLD)BASIC_CC_ARGS += mno-integer-ldd-std
 
 BASIC_CC_ARGS += -D__sun
 
@@ -640,26 +640,26 @@ BASIC_AS_ARGS=	-x assembler-with-cpp \
 # Specify platform compiler versions for languages
 # that we use (currently only c and c++).
 #
-sparc_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc $(BASIC_CC_ARGS)
-sparc_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++ $(BASIC_CC_ARGS)
+sparc_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
+sparc_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 sparc_CPP=		/usr/ccs/lib/cpp
 sparc_AS=		/usr/ccs/bin/as -xregsym=no
 sparc_LD=		/usr/ccs/bin/ld
 
-sparcv9_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc $(BASIC_CC_ARGS)
-sparcv9_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++ $(BASIC_CC_ARGS)
+sparcv9_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
+sparcv9_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 sparcv9_CPP=		/usr/ccs/lib/cpp
 sparcv9_AS=		/usr/ccs/bin/as -xregsym=no
 sparcv9_LD=		/usr/ccs/bin/ld
 
-i386_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc $(BASIC_CC_ARGS)
-i386_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++ $(BASIC_CC_ARGS)
+i386_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
+i386_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 i386_CPP=		/usr/ccs/lib/cpp
 i386_AS=		$(GCC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
 i386_LD=		/usr/ccs/bin/ld
 
-amd64_CC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc $(BASIC_CC_ARGS)
-amd64_CCC=		$(ONBLD_TOOLS)/bin/$(MACH)/cw -_g++ $(BASIC_CC_ARGS)
+amd64_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
+amd64_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 amd64_CPP=		/usr/ccs/lib/cpp
 amd64_AS=		$(GCC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
 amd64_LD=		/usr/ccs/bin/ld
@@ -679,7 +679,7 @@ CPP=			$(NATIVECPP)
 AS=			$(NATIVEAS)
 LD=			$(NATIVELD)
 
-CCYFLAG=	-_gcc=-nostdinc
+CCYFLAG=	-nostdinc
 
 LD_BDIRECT=	-Bdirect
 LD_BDYNAMIC=	-Bdynamic
@@ -688,12 +688,12 @@ LD_BNODIRECT=	-Bnodirect
 LD_BREDUCE=	-Breduce
 LD_BSTATIC=	-Bstatic
 
-BDIRECT=	$(LD_BDIRECT:%=-_gcc=-Wl,%)
-BDYNAMIC=	$(LD_BDYNAMIC:%=-_gcc=-Wl,%)
-BLOCAL=		$(LD_BLOCAL:%=-_gcc=-Wl,%)
-BNODIRECT=	$(LD_BNODIRECT:%=-_gcc=-Wl,%)
-BREDUCE=	$(LD_BREDUCE:%=-_gcc=-Wl,%)
-BSTATIC=	$(LD_BSTATIC:%=-_gcc=-Wl,%)
+BDIRECT=	$(LD_BDIRECT:%=-Wl,%)
+BDYNAMIC=	$(LD_BDYNAMIC:%=-Wl,%)
+BLOCAL=		$(LD_BLOCAL:%=-Wl,%)
+BNODIRECT=	$(LD_BNODIRECT:%=-Wl,%)
+BREDUCE=	$(LD_BREDUCE:%=-Wl,%)
+BSTATIC=	$(LD_BSTATIC:%=-Wl,%)
 
 LD_ZDEFS=		-zdefs
 LD_ZDIRECT=		-zdirect
@@ -713,49 +713,49 @@ LD_ZNOVERSION=		-znoversion
 LD_ZRECORD=		-zrecord
 LD_ZTEXT=		-ztext
 
-ZDEFS=		$(LD_ZDEFS:%=-_gcc=-Wl,%)
-ZDIRECT=	$(LD_ZDIRECT:%=-_gcc=-Wl,%)
-ZIGNORE=	$(LD_ZIGNORE:%=-_gcc=-Wl,%)
-ZINITFIRST=	$(LD_ZINITFIRST:%=-_gcc=-Wl,%)
-ZINTERPOSE=	$(LD_ZINTERPOSE:%=-_gcc=-Wl,%)
-ZLAZYLOAD=	$(LD_ZLAZYLOAD:%=-_gcc=-Wl,%)
-ZLOADFLTR=	$(LD_ZLOADFLTR:%=-_gcc=-Wl,%)
-ZNODEFS=	$(LD_ZNODEFS:%=-_gcc=-Wl,%)
-ZNODELETE=	$(LD_ZNODELETE:%=-_gcc=-Wl,%)
-ZNODLOPEN=	$(LD_ZNODLOPEN:%=-_gcc=-Wl,%)
-ZNODUMP=	$(LD_ZNODUMP:%=-_gcc=-Wl,%)
-ZNOLAZYLOAD=	$(LD_ZNOLAZYLOAD:%=-_gcc=-Wl,%)
-ZNOLDYNSYM=	$(LD_ZNOLDYNSYM:%=-_gcc=-Wl,%)
-NORELOC=	$(LD_ZNORELOC:%=-_gcc=-Wl,%)
-ZNOVERSION=	$(LD_ZNOVERSION:%=-_gcc=-Wl,%)
-ZRECORD=	$(LD_ZRECORD:%=-_gcc=-Wl,%)
-ZTEXT=		$(LD_ZTEXT:%=-_gcc=-Wl,%)
+ZDEFS=		$(LD_ZDEFS:%=-Wl,%)
+ZDIRECT=	$(LD_ZDIRECT:%=-Wl,%)
+ZIGNORE=	$(LD_ZIGNORE:%=-Wl,%)
+ZINITFIRST=	$(LD_ZINITFIRST:%=-Wl,%)
+ZINTERPOSE=	$(LD_ZINTERPOSE:%=-Wl,%)
+ZLAZYLOAD=	$(LD_ZLAZYLOAD:%=-Wl,%)
+ZLOADFLTR=	$(LD_ZLOADFLTR:%=-Wl,%)
+ZNODEFS=	$(LD_ZNODEFS:%=-Wl,%)
+ZNODELETE=	$(LD_ZNODELETE:%=-Wl,%)
+ZNODLOPEN=	$(LD_ZNODLOPEN:%=-Wl,%)
+ZNODUMP=	$(LD_ZNODUMP:%=-Wl,%)
+ZNOLAZYLOAD=	$(LD_ZNOLAZYLOAD:%=-Wl,%)
+ZNOLDYNSYM=	$(LD_ZNOLDYNSYM:%=-Wl,%)
+NORELOC=	$(LD_ZNORELOC:%=-Wl,%)
+ZNOVERSION=	$(LD_ZNOVERSION:%=-Wl,%)
+ZRECORD=	$(LD_ZRECORD:%=-Wl,%)
+ZTEXT=		$(LD_ZTEXT:%=-Wl,%)
 
-GSHARED=	-_gcc=-shared
+GSHARED=	-shared
 CCMT=		-D_REENTRANT
 
 # Handle different PIC models on different ISAs
 # (May be overridden by lower-level Makefiles)
 
-sparc_C_PICFLAGS =	-_gcc=-fpic
-sparcv9_C_PICFLAGS =	-_gcc=-fpic
-i386_C_PICFLAGS =	-_gcc=-fpic
-amd64_C_PICFLAGS =	-_gcc=-fpic
+sparc_C_PICFLAGS =	-fpic
+sparcv9_C_PICFLAGS =	-fpic
+i386_C_PICFLAGS =	-fpic
+amd64_C_PICFLAGS =	-fpic
 C_PICFLAGS =		$($(MACH)_C_PICFLAGS)
 C_PICFLAGS64 =		$($(MACH64)_C_PICFLAGS)
 
-sparc_C_BIGPICFLAGS =	-_gcc=-fPIC
-sparcv9_C_BIGPICFLAGS =	-_gcc=-fPIC
-i386_C_BIGPICFLAGS =	-_gcc=-fPIC
-amd64_C_BIGPICFLAGS =	-_gcc=-fPIC
+sparc_C_BIGPICFLAGS =	-fPIC
+sparcv9_C_BIGPICFLAGS =	-fPIC
+i386_C_BIGPICFLAGS =	-fPIC
+amd64_C_BIGPICFLAGS =	-fPIC
 C_BIGPICFLAGS =		$($(MACH)_C_BIGPICFLAGS)
 C_BIGPICFLAGS64 =	$($(MACH64)_C_BIGPICFLAGS)
 
 # CC requires there to be no space between '-K' and 'pic' or 'PIC'.
-sparc_CC_PICFLAGS =	-_gcc=-fpic
-sparcv9_CC_PICFLAGS =	-_gcc=-fPIC
-i386_CC_PICFLAGS = 	-_gcc=-fpic
-amd64_CC_PICFLAGS = 	-_gcc=-fpic
+sparc_CC_PICFLAGS =	-fpic
+sparcv9_CC_PICFLAGS =	-fPIC
+i386_CC_PICFLAGS = 	-fpic
+amd64_CC_PICFLAGS = 	-fpic
 CC_PICFLAGS =		$($(MACH)_CC_PICFLAGS)
 CC_PICFLAGS64 =		$($(MACH64)_CC_PICFLAGS)
 

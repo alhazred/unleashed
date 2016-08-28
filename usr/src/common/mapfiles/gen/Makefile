@@ -67,9 +67,7 @@ clobber:	clean
 # mapfiles are not delivered into the $ROOT area, and therefore are not
 # delivered as packaged components of the OSNet.
 
-$(MACH)_gcc_map.noexeglobs :=	CC =	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
 $(MACH)_gcc_map.noexeglobs :=	LINK =	$(LINK.c)
-$(MACH64)_gcc_map.noexeglobs :=	CC =	$(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
 $(MACH64)_gcc_map.noexeglobs :=	LINK =	$(LINK64.c)
  
 # This generic target creates two dynamic executables from an empty "main"
@@ -88,10 +86,10 @@ $(MACH64)_gcc_map.noexeglobs :=	LINK =	$(LINK64.c)
 # global.
 
 %map.noexeglobs:main.c $(TEMPLATE1) $(TEMPLATE2)
-	$(LINK) -o $(MAIN1) -_gcc=-Wl,-M$(TEMPLATE1) main.c
+	$(LINK) -o $(MAIN1) -Wl,-M$(TEMPLATE1) main.c
 	$(ELFDUMP) -s -N.dynsym $(MAIN1) | $(EGREP) "WEAK|GLOB" | \
 	    $(GREP) -v UNDEF | $(AWK) '{print $$9 }' | $(SORT) > $(SYMS1)
-	$(LINK) -o $(MAIN2) -_gcc=-Wl,-M$(TEMPLATE2) main.c
+	$(LINK) -o $(MAIN2) -Wl,-M$(TEMPLATE2) main.c
 	$(ELFDUMP) -s -N.dynsym $(MAIN2) | $(EGREP) "WEAK|GLOB" | \
 	    $(GREP) -v UNDEF | $(AWK) '{print $$9 }' | $(SORT) > $(SYMS2)
 	$(ECHO) "# GENERATED FILE - DO NOT EDIT"	>  $@

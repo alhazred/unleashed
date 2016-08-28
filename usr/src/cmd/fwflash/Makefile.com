@@ -28,9 +28,9 @@
 
 CLOSED=			$(SRC)/../closed
 
-CERRWARN +=		-_gcc=-Wno-parentheses
-CERRWARN +=		-_gcc=-Wno-uninitialized
-CERRWARN +=		-_gcc=-Wno-address
+CERRWARN +=		-Wno-parentheses
+CERRWARN +=		-Wno-uninitialized
+CERRWARN +=		-Wno-address
 
 ROOTUSR=                $(ROOT)/usr
 ROOTUSRINCLD=		$(ROOTUSR)/include

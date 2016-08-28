@@ -54,13 +54,13 @@ include $(UTSBASE)/intel/Makefile.intel
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK) $(ROOT_CONFFILE)
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-type-limits
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-type-limits
 
 #
 # To get the BPF header files included by ipnet.h

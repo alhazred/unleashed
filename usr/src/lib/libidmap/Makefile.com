@@ -51,8 +51,8 @@ IDMAP_PROT_X =		../../../uts/common/rpcsvc/idmap_prot.x
 
 CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR)
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-switch
 
 CLOBBERFILES +=	idmap_xdr.c
 

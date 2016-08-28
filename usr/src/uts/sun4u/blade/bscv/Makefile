@@ -59,7 +59,7 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 #
 #	Default build targets.

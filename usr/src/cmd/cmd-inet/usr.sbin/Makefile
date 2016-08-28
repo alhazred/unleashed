@@ -75,14 +75,14 @@ include ../Makefile.cmd-inet
 ROOTSBINPROG = $(ROOTFS_PROG:%=$(ROOTSBIN)/%)
 ROOTUSRSBINLINKS = $(SBINLINKS:%=$(ROOTUSRSBIN)/%)
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-extra
-CERRWARN += -_gcc=-Wno-address
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-extra
+CERRWARN += -Wno-address
 
 #
 # Message catalog
@@ -128,7 +128,7 @@ if_mpadm		:=	LDLIBS += -linetutil -lipmp
 if_mpadm.po		:=	XGETFLAGS += -a
 route			:=	CPPFLAGS += -DNDEBUG
 ndd			:=	LDLIBS += -ldladm -lipadm
-in.comsat		:=	LDFLAGS += $(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
+in.comsat		:=	LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
 
 .KEEP_STATE:
 

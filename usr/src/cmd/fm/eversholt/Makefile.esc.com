@@ -40,10 +40,10 @@ COMMONSRCS = $(COMMONOBJS:%.o=$(EVERCMNSRC)/%.c)
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
 CPPFLAGS += -I$(EVERCMNSRC) -I.
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-switch
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-switch
 
 CTFCONVO = $(CTFCONVERT_O)
 CTFMRG = $(CTFMERGE) -L VERSION -o $@ $(OBJS)

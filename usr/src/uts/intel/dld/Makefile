@@ -60,9 +60,9 @@ INC_PATH	+= -I$(UTSBASE)/common/io/bpf
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

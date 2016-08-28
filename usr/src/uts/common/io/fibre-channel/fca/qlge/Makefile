@@ -61,8 +61,8 @@ LDFLAGS		+= -dy -Nmisc/mac -Ndrv/ip
 
 C99MODE=	$(C99_ENABLE)
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

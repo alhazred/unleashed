@@ -48,10 +48,10 @@ SRCS=	$(GEN_OBJECTS:%.o=../../common/%.c) $(OPL_OBJECTS:%.o=../common/%.c)
 
 LIBS=	$(DYNLIB)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-address
-CERRWARN +=	-_gcc=-Wno-char-subscripts
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-address
+CERRWARN +=	-Wno-char-subscripts
 
 LDLIBS +=	-lc -ldevice -ldevinfo -lrcm
 

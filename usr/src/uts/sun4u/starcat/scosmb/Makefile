@@ -53,8 +53,8 @@ include $(UTSBASE)/sun4u/starcat/Makefile.starcat
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-uninitialized
 
 #
 # module dependencies

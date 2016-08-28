@@ -66,7 +66,7 @@ LDFLAGS += -dy -Ndrv/ip -Ndrv/ipsecah -Nmisc/kcf
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

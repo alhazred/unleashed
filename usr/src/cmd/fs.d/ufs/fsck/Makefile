@@ -47,9 +47,9 @@ SRCS=		$(FSCKSRCS) $(UFSSRCS) $(ROLLSRCS) $(FSLIBSRC)
 CPPFLAGS +=	-D_LARGEFILE64_SOURCE -I../../ -I../../../../lib/libadm/inc
 LDLIBS +=	-lefi -lavl
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-uninitialized
 
 $(LIBPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS) $(CTFMERGE_HOOK)

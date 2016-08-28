@@ -33,7 +33,7 @@ OBJS=	bootparam_ip_route.o bootparam_prot_svc.o \
 include ../Makefile.rpc
 
 CPPFLAGS= -I. $(CPPFLAGS.master)
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 CFLAGS += -DSYSV
 LDLIBS += -lsocket -lnsl
 

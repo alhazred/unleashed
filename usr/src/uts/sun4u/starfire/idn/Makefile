@@ -58,10 +58,10 @@ ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 CFLAGS += -DIPV6
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-type-limits
 
 #
 #	Default build targets.

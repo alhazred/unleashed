@@ -63,11 +63,11 @@ LDFLAGS		+= -dy -Nmisc/scsi
 # 	Overrides
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-value
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-value
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-switch
 
 #
 #	Default build targets.

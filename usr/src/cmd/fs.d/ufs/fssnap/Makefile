@@ -39,10 +39,10 @@ OBJS=		$(FSSNAPOBJS) $(TOPOBJS)
 SRCS=		$(FSSNAPSRCS) $(TOPSRCS)
 
 CPPFLAGS +=     -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
 LDLIBS +=	-lkstat -ldevinfo
 
 # message catalog

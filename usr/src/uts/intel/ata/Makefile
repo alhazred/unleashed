@@ -69,8 +69,8 @@ INC_PATH	+= -I$(UTSBASE)/intel/io/dktp/hba/ghd
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 #
 # Depends on scsi

@@ -37,10 +37,10 @@ EXTRA_INSTALL_TARGETS= $($(MACH)_EXTRA_INSTALL_TARGETS)
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-uninitialized
 
 CLOBBERFILES = $(PROG) loadkeys.c
 

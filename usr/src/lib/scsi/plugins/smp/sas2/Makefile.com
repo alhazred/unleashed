@@ -32,4 +32,4 @@ PLUGINTYPE =    framework
 
 include ../../Makefile.lib
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable

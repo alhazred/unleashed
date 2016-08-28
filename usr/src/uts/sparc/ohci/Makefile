@@ -59,7 +59,7 @@ LDFLAGS         += -dy -Nmisc/usba
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

@@ -162,18 +162,18 @@ AS_CPPFLAGS	= $(ALWAYS_DEFS) $(ALL_DEFS) $(CONFIG_DEFS) $(AS_DEFS) \
 #
 
 # Override the default, the kernel is squeaky clean
-CERRWARN = -_gcc=-Wall -_gcc=-Wextra -_gcc=-Werror
+CERRWARN = -Wall -Wextra -Werror
 
-CERRWARN += -_gcc=-Wno-missing-braces
-CERRWARN += -_gcc=-Wno-sign-compare
-CERRWARN += -_gcc=-Wno-unknown-pragmas
-CERRWARN += -_gcc=-Wno-unused-parameter
-CERRWARN += -_gcc=-Wno-missing-field-initializers
+CERRWARN += -Wno-missing-braces
+CERRWARN += -Wno-sign-compare
+CERRWARN += -Wno-unknown-pragmas
+CERRWARN += -Wno-unused-parameter
+CERRWARN += -Wno-missing-field-initializers
 
 # DEBUG v. -nd make for frequent unused variables, empty conditions, etc. in
 # -nd builds
-$(RELEASE_BUILD)CERRWARN += -_gcc=-Wno-unused
-$(RELEASE_BUILD)CERRWARN += -_gcc=-Wno-empty-body
+$(RELEASE_BUILD)CERRWARN += -Wno-unused
+$(RELEASE_BUILD)CERRWARN += -Wno-empty-body
 
 C99MODE = $(C99_ENABLE)
 

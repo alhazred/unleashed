@@ -75,9 +75,9 @@ LDLIBS		+= -lz -lelf
 CPPFLAGS	+= -D_REENTRANT
 CFLAGS		+= $(CTF_FLAGS)
 
-CERRWARN	+= -_gcc=-Wno-unused
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-unused
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-switch
 
 C99MODE		= $(C99_ENABLE)
 

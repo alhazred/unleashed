@@ -91,7 +91,7 @@ $(OBJECTS)	:= CPPFLAGS += -Dd37A_read_addr=$(MODULE)_d37A_read_addr
 $(OBJECTS)	:= CPPFLAGS += -Dd37A_write_count=$(MODULE)_d37A_write_count
 $(OBJECTS)	:= CPPFLAGS += -Dd37A_read_count=$(MODULE)_d37A_read_count
 
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

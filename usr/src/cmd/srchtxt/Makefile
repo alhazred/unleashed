@@ -27,7 +27,7 @@ PROG= srchtxt
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 LDLIBS += -lgen
 
 .KEEP_STATE:

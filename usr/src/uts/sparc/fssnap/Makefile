@@ -62,7 +62,7 @@ LDFLAGS		+= -dy -Nmisc/fssnap_if -Nfs/ufs
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

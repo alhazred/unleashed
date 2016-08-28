@@ -48,8 +48,8 @@ CONF_SRCDIR	= $(UTSBASE)/common/io/usb/hcd/ehci
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-switch
 
 #
 # depends on misc/usba

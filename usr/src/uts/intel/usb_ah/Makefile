@@ -69,7 +69,7 @@ LDFLAGS += -dy -Nmisc/usba -Nmisc/hidparser -Ndrv/usb_ac
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

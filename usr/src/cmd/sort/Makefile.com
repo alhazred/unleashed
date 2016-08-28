@@ -83,9 +83,9 @@ CFLAGS +=	$(SORT_DEBUG)
 CFLAGS64 +=	$(SORT_DEBUG)
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-function
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-function
 
 $(XPG4)	:=	CFLAGS += -DXPG4
 

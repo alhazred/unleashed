@@ -75,9 +75,9 @@ CFLAGS		+= -I$(COM_DIR)
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Default build targets.

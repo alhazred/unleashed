@@ -30,8 +30,8 @@ TXTS= 	$(PKGINFO)
 include ../Makefile.cmd
 TEXT_DOMAIN= SUNW_OST_ADMIN
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 FILEMODE= 0750
 

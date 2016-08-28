@@ -34,7 +34,7 @@ CFLAGS +=	-I../lib
 OBJS=	nfsref.o ref_subr.o
 SRCS=	nfsref.c
 
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 LDLIBS += -lreparse -lnvpair -lnsl -lumem
 

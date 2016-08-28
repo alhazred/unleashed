@@ -57,11 +57,11 @@ CPPFLAGS +=	-I$(SRC)/cmd/svr4pkg/hdrs \
 # For stop-in-your-tracks debugging
 #CPPFLAGS +=	-DBUG_DEBUG
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-clobbered
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-clobbered
+CERRWARN += -Wno-unused-variable
 
 .KEEP_STATE:
 

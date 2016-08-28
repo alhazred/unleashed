@@ -721,18 +721,18 @@ CFLAGS += \
 CFLAGS64 += \
 	$(ASTCFLAGS64)
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-clobbered
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-unused-value
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-empty-body
-CERRWARN += -_gcc=-Wno-type-limits
-CERRWARN += -_gcc=-Wno-address
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-clobbered
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-unused-value
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-empty-body
+CERRWARN += -Wno-type-limits
+CERRWARN += -Wno-address
 
 .KEEP_STATE:
 

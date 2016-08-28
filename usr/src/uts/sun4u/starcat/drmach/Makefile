@@ -55,10 +55,10 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 MACHINE_DEFS    += -DCHEETAH_PLUS
 
 CFLAGS += -I../sys -I$(UTSBASE)/sun4u/starcat/sys
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-type-limits
 
 #
 # module dependencies

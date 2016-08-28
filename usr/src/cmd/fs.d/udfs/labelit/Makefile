@@ -34,8 +34,8 @@ LDLIBS += -ladm
 CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 
 
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-uninitialized
 
 labelit : labelit.o  ud_lib.o
 	$(LINK.c) -o $@ labelit.o ud_lib.o $(LDLIBS)

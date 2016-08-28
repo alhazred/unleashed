@@ -37,10 +37,10 @@ SRCS=		$(LOCAL:%.o=%.c) ../lib/nfs_tbind.c ../lib/thrpool.c ../lib/daemon.c \
 		../lib/smfcfg.c
 
 CPPFLAGS +=	-I../lib
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-extra
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-extra
 
 $(TYPEPROG):	$(OBJS)
 		$(CC) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)

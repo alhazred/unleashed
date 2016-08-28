@@ -33,9 +33,9 @@ OBJS= 		$(LIBPROG).o
 SRCS=		$(OBJS:%.o=%.c)
 
 LDLIBS +=	-lrpcsvc -lnsl
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
 
 $(LIBPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS)

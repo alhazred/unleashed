@@ -44,7 +44,7 @@ CPPFLAGS +=	-I../../libpapi-common/common
 CPPFLAGS +=	-DNSS_SOLARIS
 LDLIBS +=	-lc
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable
 
 .KEEP_STATE:
 

@@ -32,7 +32,7 @@ OBJS=		$(COMMONOBJS)
 
 include ../../Makefile.cmd
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 CPPFLAGS +=
 
 FILEMODE = 0555

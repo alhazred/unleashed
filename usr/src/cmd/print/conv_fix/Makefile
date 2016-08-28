@@ -39,7 +39,7 @@ FILEMODE=	0555
 
 CPPFLAGS +=	-I$(NPRTINC)
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-implicit-function-declaration
 
 .KEEP_STATE:
 

@@ -45,7 +45,7 @@ INCLIST=	-I../../include -I../../include/i386 \
 DEFLIST=	-DTARGET=I386 -DI386=1 -D$(ARFORMAT) -DELF
 CPPFLAGS=	$(INCLIST) $(DEFLIST) $(CPPFLAGS.master) -I$(ELFCAP)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) $(ELFLIBDIR) -lelf
 objs.xpg4/%.o := CPPFLAGS += -DXPG4

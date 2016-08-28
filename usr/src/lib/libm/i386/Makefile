@@ -20,8 +20,8 @@ include ../Makefile.com
 # Without this option GCC will place floats into x87 (or wider) floating point
 # registers, ending up with better-than-ieee precision.
 #
-CFLAGS		+= -_gcc=-ffloat-store
-$(OBJS_M9XSSE)	:= CFLAGS += -_gcc=-msse2 -_gcc=-mfpmath=sse
+CFLAGS		+= -ffloat-store
+$(OBJS_M9XSSE)	:= CFLAGS += -msse2 -mfpmath=sse
 
 install: 	all $(ROOTLIBS) $(ROOTLINKS)
 

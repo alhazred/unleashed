@@ -35,7 +35,7 @@ POFILES = $(OBJS:.o=.po)
 include ../Makefile.cmd
 
 CLOBBERFILES += $(PKILLFILE)
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 LDLIBS += -luutil -lproject -lcontract
 
 POFILE = ppgrep.po

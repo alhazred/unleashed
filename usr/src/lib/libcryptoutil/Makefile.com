@@ -48,8 +48,8 @@ LDLIBS += -lc
 
 CPPFLAGS +=	-D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -I$(SRCDIR)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 all: $(LIBS)
 

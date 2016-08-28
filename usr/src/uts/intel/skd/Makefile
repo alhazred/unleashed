@@ -58,8 +58,8 @@ LDFLAGS		+= -dy -N drv/blkdev
 # For now, disable these compiler warnigns; maintainers should endeavor
 # investigate and remove these for maximum coverage.  Please do not carry
 # these forward to new Makefiles.
-CERRWARN	+= -_gcc=-Wno-format
-CERRWARN	+= -_gcc=-Wno-format-extra-args
+CERRWARN	+= -Wno-format
+CERRWARN	+= -Wno-format-extra-args
 
 #
 #	Default build targets.

@@ -60,7 +60,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 INC_PATH	+= -I$(UTSBASE)/sun4v/io/n2piupc
 
-CERRWARN += -_gcc=-Wno-unused-label
+CERRWARN += -Wno-unused-label
 
 CFLAGS += -DMODULE_NAME=\"$(MODULE)\"
 

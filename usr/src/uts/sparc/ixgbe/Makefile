@@ -53,10 +53,10 @@ include $(UTSBASE)/sparc/Makefile.sparc
 INC_PATH	+= -I$(UTSBASE)/common/io/ixgbe
 INC_PATH	+= -I$(UTSBASE)/common/io/ixgbe/core
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-value
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-value
 
 #
 #	Define targets

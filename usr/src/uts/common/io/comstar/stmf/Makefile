@@ -62,9 +62,9 @@ C99MODE=	$(C99_ENABLE)
 # investigate and remove these for maximum coverage.  Please do not carry
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

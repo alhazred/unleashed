@@ -51,7 +51,7 @@ include $(UTSBASE)/intel/Makefile.intel
 #
 LDFLAGS		+= -dy -Ndrv/audio -Nmisc/ac97
 
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-switch
 
 #
 #	Define targets

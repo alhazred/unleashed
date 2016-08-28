@@ -41,7 +41,7 @@ SRCDIR =	../common
 CPPFLAGS += -I../common -I.
 CFLAGS += $(C_BIGPICFLAGS)
 CFLAGS64 += $(C_BIGPICFLAGS)
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 LDLIBS += -lnvpair -lnsl -lc
 
 

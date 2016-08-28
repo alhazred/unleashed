@@ -41,7 +41,7 @@ INCLIST=	-I../common -I../../include -I../../include/$(MACH)
 
 CPPFLAGS=	$(INCLIST) $(DEFLIST) $(CPPFLAGS.master) -I$(ELFCAP)
 C99MODE=	$(C99_ENABLE)
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) $(ELFLIBDIR) -lelf
 
 %.o:		../common/%.c

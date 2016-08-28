@@ -60,8 +60,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-clobbered
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-clobbered
 
 #
 #	Default build targets.

@@ -26,7 +26,7 @@
 include		$(SRC)/cmd/Makefile.cmd
 
 MAPFILE-CAP =	mapfile-cap
-MAPOPT-CAP =	$(MAPFILE-CAP:%=-_gcc=-Wl,-M%)
+MAPOPT-CAP =	$(MAPFILE-CAP:%=-Wl,-M%)
 
 CPPFLAGS +=	-I$(SRC)/uts/sun4 -I../../sun4 -D$(PLATFORM)
 

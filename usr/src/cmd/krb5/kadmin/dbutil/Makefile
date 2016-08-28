@@ -35,10 +35,10 @@ CPPFLAGS += -I. -I$(SRC)/lib/gss_mechs/mech_krb5/include/kerberosIV \
 	-DUSE_KADM5_API_VERSION=2
 COPTFLAG += #-I$(KINCDIR) 
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-implicit-function-declaration
 
 LDFLAGS += $(KRUNPATH) $(KERBRUNPATH)
 LDLIBS += -L $(ROOT_KLIBDIR) -L $(KRB5LIB) -lkadm5srv -lkdb \

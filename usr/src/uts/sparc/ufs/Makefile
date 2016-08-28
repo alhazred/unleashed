@@ -68,10 +68,10 @@ $(MODSTUBS_O)	:= AS_CPPFLAGS += -DUFS_MODULE
 CLEANFILES	+= $(MODSTUBS_O)
 LDFLAGS		+= -dy -Nfs/specfs -Nmisc/fssnap_if
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Default build targets.

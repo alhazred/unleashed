@@ -36,8 +36,8 @@ SRCS=	$(OBJS:%.o=../%.c)
 include ../../Makefile.cmd
 
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-switch
 
 C99MODE=	$(C99_ENABLE)
 

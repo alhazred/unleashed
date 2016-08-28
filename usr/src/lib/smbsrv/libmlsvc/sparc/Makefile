@@ -25,9 +25,9 @@
 include ../Makefile.com
 
 # With compiling with gcc, the symbol table goes over
-# the limit for Kpic, so we add -_gcc=-fPIC here.
-sparc_C_PICFLAGS =	-_gcc=-fPIC
-sparc_CC_PICFLAGS =	-_gcc=-fPIC
+# the limit for Kpic, so we add -fPIC here.
+sparc_C_PICFLAGS =	-fPIC
+sparc_CC_PICFLAGS =	-fPIC
 
 DYNFLAGS +=	-R/usr/lib/smbsrv
 

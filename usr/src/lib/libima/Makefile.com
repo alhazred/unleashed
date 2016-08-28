@@ -42,7 +42,7 @@ CPPFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	-DSOLARIS
 
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable
 
 SRCDIR =	../common
 

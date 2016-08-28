@@ -70,7 +70,7 @@ LDFLAGS		+= -dy -N misc/mac
 CFLAGS		+= -D_SOLARIS
 
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

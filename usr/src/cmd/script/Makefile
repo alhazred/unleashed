@@ -28,7 +28,7 @@ include ../Makefile.cmd
 
 FILEMODE= 0555
 
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 .KEEP_STATE:
 

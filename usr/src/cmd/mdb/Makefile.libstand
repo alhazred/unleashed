@@ -67,7 +67,7 @@ CFLAGS64 += $(STAND_FLAGS_64)
 
 ASFLAGS += -D_ASM
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 LIB = libstand.a
 COBJS = $(SRCS:%.c=%.o)

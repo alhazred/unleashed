@@ -34,7 +34,7 @@ SRCS= $(OBJS:.o=.c)
 
 LDLIBS +=	-lsmedia -lvolmgt -ladm -lefi
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 

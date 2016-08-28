@@ -69,9 +69,9 @@ FWIMAGES        += 8100
 FWMODULES        = $(FWIMAGES:%=$(MODULE)_fw_%)
 FWMODULES_SRC    = $(FWIMAGES:%=$(CONF_SRCDIR)/ql_fw_%.c)
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

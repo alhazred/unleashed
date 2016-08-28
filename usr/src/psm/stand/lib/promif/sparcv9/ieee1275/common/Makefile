@@ -34,8 +34,8 @@ include $(TOPDIR)/lib/Makefile.lib
 include $(TOPDIR)/psm/stand/lib/Makefile.lib
 include $(TOPDIR)/psm/Makefile.psm.64
 
-CFLAGS64	+= -_gcc=-mtune=ultrasparc $(CCABS32)
-CERRWARN	+= -_gcc=-Wno-parentheses
+CFLAGS64	+= -mtune=ultrasparc $(CCABS32)
+CERRWARN	+= -Wno-parentheses
 
 PROMDIR =	$(TOPDIR)/psm/promif/ieee1275/common
 SYSDIR =	$(TOPDIR)/uts

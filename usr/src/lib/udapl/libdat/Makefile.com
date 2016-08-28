@@ -47,7 +47,7 @@ SRCDIR =	../common
 
 CPPFLAGS +=     -I../include 
 
-CERRWARN +=	-_gcc=-Wno-type-limits
+CERRWARN +=	-Wno-type-limits
 
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 debug := COPTFLAG = -g

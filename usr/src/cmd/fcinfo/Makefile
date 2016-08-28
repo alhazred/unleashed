@@ -47,7 +47,7 @@ include ../Makefile.cmd
 POFILE = fcinfo_cmd.po
 POFILES = fcinfo.po fcinfo-list.po fcadm-list.po printAttrs.po fcoeadm.po
 
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORK)
 

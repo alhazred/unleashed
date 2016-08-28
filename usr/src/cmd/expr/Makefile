@@ -35,8 +35,8 @@ SRCS= expr.c compile.c
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-extra
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-extra
 $(XPG4) := CFLAGS += -DXPG4
 $(XPG6) := CFLAGS += -DXPG6
 
@@ -45,7 +45,7 @@ XGETFLAGS += -a -x expr.xcl
 LDLIBS += -lgen
 
 MAPFILES =	$(MAPFILE.INT) $(MAPFILE.NGB)
-LDFLAGS +=	$(MAPFILES:%=-_gcc=-Wl,-M%)
+LDFLAGS +=	$(MAPFILES:%=-Wl,-M%)
 
 .KEEP_STATE:
 

@@ -40,8 +40,8 @@ C99MODE = $(C99_ENABLE)
 CPPFLAGS += -I../common -I. -D_REENTRANT
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
-CERRWARN += -_gcc=-Wno-type-limits
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-type-limits
+CERRWARN += -Wno-uninitialized
 
 LDLIBS += \
 	-lumem \

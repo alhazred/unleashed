@@ -37,9 +37,9 @@ LDLIBS += -L$(ROOT)/lib -lsocket
 LDLIBS += -ldladm -ldlpi -lkstat -lsecdb -lbsm -linetutil -ldevinfo
 LDLIBS += $(ZLAZYLOAD) -lrstp $(ZNOLAZYLOAD)
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-uninitialized
 
 # For headers from librstp.
 

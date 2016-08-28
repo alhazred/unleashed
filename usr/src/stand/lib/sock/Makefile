@@ -31,5 +31,5 @@ include ../Makefile.com
 
 LDLIBS += -linet -ltcp
 CPPFLAGS += -I../inet -I../tcp $(SOCKCPPFLAGS)
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-type-limits
 include ../Makefile.targ

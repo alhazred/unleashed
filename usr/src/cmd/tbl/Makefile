@@ -36,10 +36,10 @@ OBJS =		$(SRCS:%.c=%.o)
 POFILES=        $(OBJS:%.o=%.po)
 POFILE=         tbl.po
 
-CERRWARN	+= -_gcc=-Wno-implicit-function-declaration
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-char-subscripts
+CERRWARN	+= -Wno-implicit-function-declaration
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-char-subscripts
 
 .KEEP_STATE :
 

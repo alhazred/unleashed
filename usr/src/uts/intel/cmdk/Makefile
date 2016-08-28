@@ -64,10 +64,10 @@ LDFLAGS		+= -dy -Nmisc/dadk -Nmisc/strategy -Nmisc/cmlb
 # Larger than 1TB VTOC support
 CPPFLAGS	+= -D_EXTVTOC
 
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-type-limits
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-type-limits
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

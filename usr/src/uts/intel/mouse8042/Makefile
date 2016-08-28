@@ -60,8 +60,8 @@ LDFLAGS += -dy -Ndacf/consconfig_dacf
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-switch
 
 #
 #	Default build targets.

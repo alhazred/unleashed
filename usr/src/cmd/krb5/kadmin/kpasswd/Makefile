@@ -31,9 +31,9 @@ CPPFLAGS += -I$(SRC)/lib/gss_mechs/mech_krb5/include \
 
 COPTFLAG += #-I$(KINCDIR) 
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-unused-function
 
 LDFLAGS += $(KRUNPATH) $(KERBRUNPATH)
 LDLIBS += -L $(KRB5LIBDIR)

@@ -38,7 +38,7 @@ OBJS=		shell.o
 $(OBJS) :=	CFLAGS += $(CTF_FLAGS)
 $(OBJS) :=	CTFCONVERT_POST = $(CTFCONVERT_O)
 
-CERRWARN +=	-_gcc=-Wno-empty-body
+CERRWARN +=	-Wno-empty-body
 
 LDLIBS +=	-lsqlite-sys
 
@@ -54,7 +54,7 @@ CPPFLAGS +=	-D_REENTRANT -DTHREADSAFE=1 -DHAVE_USLEEP=1 \
 
 $(PROG): $(OBJS) $(SQLITEHDRDIR)/sqlite.h
 	$(LINK.c) -o $@ $(OBJS) \
-	    $(MAPFILE.NES:%=-_gcc=-Wl,-M%) $(MAPFILE.NED:%=-_gcc=-Wl,-M%) $(LDLIBS)
+	    $(MAPFILE.NES:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%) $(LDLIBS)
 	$(CTFMERGE) -t -L VERSION -o $@ $(OBJS)
 	$(POST_PROCESS)
 

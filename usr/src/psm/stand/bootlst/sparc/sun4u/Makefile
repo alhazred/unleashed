@@ -51,8 +51,8 @@ ALL = bootlst
 
 include ../../common/Makefile.com
 include $(TOPDIR)/psm/Makefile.psm.64
-CFLAGS64 += -_gcc=-mtune=ultrasparc $(CCABS32)
-CERRWARN += -_gcc=-Wno-char-subscripts
+CFLAGS64 += -mtune=ultrasparc $(CCABS32)
+CERRWARN += -Wno-char-subscripts
 
 POST_PROCESS +=	; $(CHK4UBINARY)
 

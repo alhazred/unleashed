@@ -1018,17 +1018,17 @@ include $(SRC)/lib/Makefile.lib.64
 SONAME = libc.so.1
 
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-value
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-type-limits
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-clobbered
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-address
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-value
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-type-limits
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-clobbered
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-address
 
 # Setting THREAD_DEBUG = -DTHREAD_DEBUG (make THREAD_DEBUG=-DTHREAD_DEBUG ...)
 # enables ASSERT() checking in the threads portion of the library.
@@ -1042,7 +1042,7 @@ $(DYNLIB) := BUILD.SO = $(LD) -o $@ -G $(DYNFLAGS) $(PICS) $(ALTPICS) $(EXTPICS)
 
 MAPFILES =	$(LIBCDIR)/port/mapfile-vers
 
-sparcv9_C_PICFLAGS= -_gcc=-fPIC
+sparcv9_C_PICFLAGS= -fPIC
 CFLAGS64 +=	$(EXTN_CFLAGS)
 CPPFLAGS=	-D_REENTRANT -Dsparc $(EXTN_CPPFLAGS) $(THREAD_DEBUG) \
 		-I$(LIBCBASE)/inc -I$(LIBCDIR)/inc $(CPPFLAGS.master)
@@ -1129,11 +1129,11 @@ $(DYNLIB) := CRTI = crti.o
 $(DYNLIB) := CRTN = crtn.o
 
 pics/_Qp%.o := CFLAGS64 += -I$(LIBCDIR)/$(MACH)/fp
-pics/_Q%.o := sparcv9_COPTFLAG =	-_gcc=-fno-strict-aliasing \
-					-_gcc=-fno-unit-at-a-time \
-					-_gcc=-fno-optimize-sibling-calls \
-					-_gcc=-O2 \
-					-_gcc=-mtune=ultrasparc
+pics/_Q%.o := sparcv9_COPTFLAG =	-fno-strict-aliasing \
+					-fno-unit-at-a-time \
+					-fno-optimize-sibling-calls \
+					-O2 \
+					-mtune=ultrasparc
 
 # large-file-aware components that should be built large
 
@@ -1164,10 +1164,10 @@ $(PORTI18N_COND:%=pics/%) := \
 pics/arc4random.o :=	CPPFLAGS += -I$(SRC)/common/crypto/chacha
 
 # Files which need extra optimization
-pics/getenv.o := sparcv9_COPTFLAG =	-_gcc=-fno-strict-aliasing \
-					-_gcc=-fno-unit-at-a-time \
-					-_gcc=-fno-optimize-sibling-calls \
-					-_gcc=-O2
+pics/getenv.o := sparcv9_COPTFLAG =	-fno-strict-aliasing \
+					-fno-unit-at-a-time \
+					-fno-optimize-sibling-calls \
+					-O2
 
 .KEEP_STATE:
 
@@ -1191,7 +1191,7 @@ $(LIB_PIC): pics $$(PICS)
 #	$(POST_PROCESS_O)
 
 #crt/_rtbootld.s:	crt/_rtboot.s crt/_rtld.c
-#	$(CC) $(CPPFLAGS) -O -S -_gcc=-fpic crt/_rtld.c -o crt/_rtld.s
+#	$(CC) $(CPPFLAGS) -O -S -fpic crt/_rtld.c -o crt/_rtld.s
 #	$(CAT) crt/_rtboot.s crt/_rtld.s > $@
 #	$(RM) crt/_rtld.s
 

@@ -26,7 +26,7 @@
 
 include $(SRC)/lib/Makefile.lib
 
-sparc_C_PICFLAGS =	-_gcc=-fPIC
+sparc_C_PICFLAGS =	-fPIC
 
 SRCDIR =		../common
 
@@ -34,8 +34,8 @@ SRCDIR =		../common
 ROOTDIRS = $(ROOT)/usr $(ROOTHDRDIR) $(ROOTLIBDIR) 
 
 RPCGENFLAGS =	-C -M
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-unused-label
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-label

@@ -43,7 +43,7 @@ include ../../common/Makefile.util
 # running kernel's includes and libraries.
 #
 CPPFLAGS = -I../../common -I../common
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 LDFLAGS =
 LDLIBS = -lelf
 

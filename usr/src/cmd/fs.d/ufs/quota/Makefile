@@ -39,9 +39,9 @@ XFILE=		$(ROOT)/usr/include/rpcsvc/rquota.x
 CPPFLAGS +=	-I $(ROOT)/usr/include/sys -D_LARGEFILE64_SOURCE
 LDLIBS +=		-lnsl
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
 
 FILEMODE= 04555
 

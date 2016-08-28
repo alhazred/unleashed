@@ -54,7 +54,7 @@ LDFLAGS += -dy -Nmisc/cmlb
 #
 #	Overrides.
 #
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 INC_PATH	+= -I$(SRC)/common/lzma  
 

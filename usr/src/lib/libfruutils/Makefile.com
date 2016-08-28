@@ -40,8 +40,8 @@ MAPFILES =
 
 CPPFLAGS +=	-I.. -D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

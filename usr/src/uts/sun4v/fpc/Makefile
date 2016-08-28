@@ -61,7 +61,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 INC_PATH	+= -I$(UTSBASE)/sun4/io/fpc
 INC_PATH	+= -I$(UTSBASE)/sun4v/io/fpc
 
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

@@ -41,11 +41,11 @@ CPPFLAGS +=	-I$(ROOT)/usr/include/hal
 CPPFLAGS +=	-I$(SRC)/cmd/rmvolmgr
 C99MODE =	$(C99_ENABLE)
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-function
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-function
 
 .KEEP_STATE:
 

@@ -30,7 +30,7 @@ include ../Makefile.cmd
 
 .KEEP_STATE:
 
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 LDLIBS += -ldevice -l devinfo
 
 all: $(PROG)

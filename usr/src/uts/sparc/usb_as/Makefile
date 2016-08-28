@@ -57,7 +57,7 @@ LDFLAGS		+= -dy -Nmisc/usba -Ndrv/usb_ac
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-unused-label
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

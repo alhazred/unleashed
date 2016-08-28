@@ -209,8 +209,8 @@ CPPFLAGS += -D_FILE_OFFSET_BITS=64
 # Always want DEBUG here
 CPPFLAGS += -DDEBUG
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-switch
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-switch
 
 SRCS=   $(OBJS_LOCAL:%.o=$(SRCDIR)/%.c) \
 	$(OBJS_FS_SMBSRV:%.o=$(SRC)/uts/common/fs/smbsrv/%.c) \

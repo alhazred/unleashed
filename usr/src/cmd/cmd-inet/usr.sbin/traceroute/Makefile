@@ -42,8 +42,8 @@ LDLIBS +=	-lxnet -lsocket -lnsl -linetutil
 # These #defines are required to use UNIX 98 interfaces
 CPPFLAGS += -D_XOPEN_SOURCE=500 -D__EXTENSIONS__
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-clobbered
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-clobbered
 
 .KEEP_STATE:
 

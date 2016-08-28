@@ -37,9 +37,9 @@ SRCS = $(OBJS:.o=.c)
 POFILE=zoneadmd_all.po
 POFILES= $(OBJS:%.o=%.po)
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 LDLIBS += -lsocket -lzonecfg -lnsl -ldevinfo -ldevice -lnvpair \
 	-lgen -lbsm -lcontract -lzfs -luuid -lbrand -ldladm -ltsnet -ltsol \

@@ -61,8 +61,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
 
-CERRWARN += -_gcc=-Wno-type-limits
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-type-limits
+CERRWARN += -Wno-uninitialized
 
 
 #

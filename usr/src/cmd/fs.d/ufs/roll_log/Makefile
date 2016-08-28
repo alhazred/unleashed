@@ -31,7 +31,7 @@ SRCS=		roll_log.c
 OBJS=		$(SRCS:%.c=$(MACH)/%.o)
 POFILE=		roll_log.po
 
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-switch
 
 .KEEP_STATE:
 

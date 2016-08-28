@@ -42,8 +42,8 @@ LDLIBS +=	-lc -lnsl -lgen -linetutil -ldlpi
 SRCDIR =	../common
 SRCS =		$(LOCOBJS:%.o=$(SRCDIR)/%.c) $(COMOBJS:%.o=$(COMDIR)/%.c)
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 CPPFLAGS +=	-I$(COMDIR)
 
 .KEEP_STATE:

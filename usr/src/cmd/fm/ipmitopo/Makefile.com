@@ -39,7 +39,7 @@ CPPFLAGS += -I. -I../common
 CFLAGS += $(CTF_FLAGS)
 LDLIBS += -lipmi -lnvpair
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .NO_PARALLEL:
 .PARALLEL: $(OBJS)

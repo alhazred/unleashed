@@ -26,8 +26,8 @@ OBJS=	biz22.o biz31.o df.o dn11.o hayes.o ventel.o v831.o v3451.o
 include ../../Makefile.cmd
 
 CPPFLAGS=	-I../ -DUSG $(CPPFLAGS.master)
-CERRWARN +=	-_gcc=-Wno-clobbered
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-clobbered
+CERRWARN +=	-Wno-parentheses
 
 .KEEP_STATE:
 

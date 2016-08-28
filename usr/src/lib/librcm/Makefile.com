@@ -36,7 +36,7 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lnvpair
 
 
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 .KEEP_STATE:
 

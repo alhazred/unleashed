@@ -13,7 +13,7 @@
 
 include $(SRC)/Makefile.master
 
-CFLAGS = 	-_gcc=-O1 -m64
+CFLAGS = 	-O1 -m64
 
 LINK.c = env LD_ALTEXEC=$(PROTO)/usr/bin/amd64/ld $(CC) $(CFLAGS) -o $@ $^
 COMPILE.c = $(CC) $(CFLAGS) -c -o $@ $^

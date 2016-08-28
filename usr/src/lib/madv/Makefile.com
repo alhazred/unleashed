@@ -39,8 +39,8 @@ LDLIBS +=	-lc -lgen
 CPPFLAGS +=	-D_REENTRANT
 DYNFLAGS +=	$(ZNOVERSION) $(ZINTERPOSE)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

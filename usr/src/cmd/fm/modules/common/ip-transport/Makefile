@@ -32,4 +32,4 @@ SRCS = ip.c
 include ../../Makefile.plugin
 
 LDLIBS += -lsocket -lnsl
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized

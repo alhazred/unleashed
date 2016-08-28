@@ -84,12 +84,12 @@ C99MODE = $(99_ENABLE)
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-clobbered
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-clobbered
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Default build targets.

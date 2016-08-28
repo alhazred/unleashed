@@ -57,6 +57,6 @@ DIRMODE		= 755
 # shouldn't feel too bad: the whole kernel is built with this turned off as
 # well (along with a dozen other disabled warnings).
 #
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-char-subscripts
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-char-subscripts

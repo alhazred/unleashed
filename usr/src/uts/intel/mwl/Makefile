@@ -61,8 +61,8 @@ LDFLAGS		+= -dy -Nmisc/mac -Nmisc/net80211
 #	Overrides
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-value
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-value
 
 #
 #	Default build targets.

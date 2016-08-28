@@ -34,15 +34,15 @@ include		$(SRC)/lib/Makefile.lib
 
 AS_CPPFLAGS +=	-D_ASM -DPIC -D_REENTRANT -D$(MACH)
 ASFLAGS +=	$(AS_PICFLAGS)
-CFLAGS +=	-_gcc=-fno-strict-aliasing
-CFLAGS +=	-_gcc=-fno-unit-at-a-time
-CFLAGS +=	-_gcc=-fno-optimize-sibling-calls
-CFLAGS +=	-_gcc=-O2
-CFLAGS +=	-_gcc=-fbuiltin
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-unused-function
+CFLAGS +=	-fno-strict-aliasing
+CFLAGS +=	-fno-unit-at-a-time
+CFLAGS +=	-fno-optimize-sibling-calls
+CFLAGS +=	-O2
+CFLAGS +=	-fbuiltin
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-function
 CPPFLAGS +=	-D$(PLATFORM) -I$(CRYPTODIR) -I$(UTSDIR) \
 		-D_POSIX_PTHREAD_SEMANTICS
 BIGNUM_FLAGS +=	-DUMUL64 -DNO_BIG_ONE -DNO_BIG_TWO

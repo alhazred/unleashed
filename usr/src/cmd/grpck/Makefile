@@ -27,7 +27,7 @@ PROG= grpck
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 RELUSRSBIN=	../usr/sbin
 ROOTSYMLINK=	$(ROOTETC)/$(PROG)

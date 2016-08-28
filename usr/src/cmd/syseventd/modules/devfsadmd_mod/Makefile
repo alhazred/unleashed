@@ -29,7 +29,7 @@ LIBRARY =	devfsadmd_mod
 include ../Makefile.com
 
 CPPFLAGS += -I $(SRC)/cmd/devfsadm
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 .KEEP_STATE:
 

@@ -34,8 +34,8 @@ SRCS=	$(OBJS:%.o=%.c)
 XFILE=	$(ROOT)/usr/include/rpcsvc/rquota.x
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-variable
 LDLIBS += -lnsl
 
 $(TYPEPROG):	$(OBJS)

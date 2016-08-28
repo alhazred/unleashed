@@ -17,7 +17,7 @@ MODULE = Intrs
 
 include $(SRC)/cmd/perl/Makefile.perl
 
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 MAPFILES = mapfile-vers
 

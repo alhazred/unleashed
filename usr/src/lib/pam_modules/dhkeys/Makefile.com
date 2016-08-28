@@ -35,7 +35,7 @@ include		../../Makefile.pam_modules
 
 LDLIBS		+= -lpam -lnsl -lc
 CPPFLAGS	+= -I$(SRC)/lib/libnsl/include
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-parentheses
 
 all:	$(LIBS)
 

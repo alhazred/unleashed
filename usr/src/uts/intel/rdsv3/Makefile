@@ -43,11 +43,11 @@ include $(UTSBASE)/intel/Makefile.intel
 
 # CFLAGS 		+= -DOFA_SOLARIS
 
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Define targets

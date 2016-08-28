@@ -66,7 +66,7 @@ CLEANFILES	+= $(MODSTUBS_O)
 
 CPPFLAGS	+= -I../../sun4
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

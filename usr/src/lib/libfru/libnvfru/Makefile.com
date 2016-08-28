@@ -40,7 +40,7 @@ CPPFLAGS +=	-I.. \
 		-I$(SRC)/lib/libfruutils
 CPPFLAGS += 	-D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-switch
 
 XGETFLAGS += -a
 

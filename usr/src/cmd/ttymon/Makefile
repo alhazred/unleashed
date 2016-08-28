@@ -69,12 +69,12 @@ ttymon := LDLIBS += -lnsl -lsec -ldevinfo
 $(STTYOBJ) := CPPFLAGS += -DEUC
 $(XPG4STTYOBJ) := CPPFLAGS += -DEUC
 
-LDFLAGS += $(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
+LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-extra
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-extra
 
 #
 # Message catalog

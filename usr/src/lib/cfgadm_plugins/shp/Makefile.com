@@ -46,10 +46,10 @@ CPPFLAGS +=     -I$(SRC)/lib/libhotplug/common
 CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS
 LDLIBS +=	-lc -ldevinfo -lhotplug
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-char-subscripts
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-char-subscripts
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-variable
 
 .KEEP_STATE:
 

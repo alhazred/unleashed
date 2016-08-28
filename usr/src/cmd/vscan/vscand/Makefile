@@ -43,7 +43,7 @@ CFLAGS += $(DEFS)
 CFLAGS += -D_FILE_OFFSET_BITS=64
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
-CERRWARN += -_gcc=-Wno-switch
+CERRWARN += -Wno-switch
 
 C99MODE =       $(C99_ENABLE)
 

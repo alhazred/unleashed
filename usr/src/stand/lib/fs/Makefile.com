@@ -28,8 +28,8 @@ DIRREL	= ../
 
 include ../../Makefile.com
 
-CERRWARN += -_gcc=-Wno-type-limits
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-char-subscripts
+CERRWARN += -Wno-type-limits
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-char-subscripts

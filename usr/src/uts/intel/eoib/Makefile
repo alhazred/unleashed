@@ -56,8 +56,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 CPPFLAGS += -DEIB_DEBUG
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
 
 #
 # Depends on misc/ibtl

@@ -41,6 +41,6 @@ LLDFLAGS =	'$(LDPASS)-R$$ORIGIN/../../lib'
 LLDFLAGS64 =	'$(LDPASS)-R$$ORIGIN/../../../lib/$(MACH64)'
 LDFLAGS +=	$(LLDFLAGS)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) $(ELFLIBDIR) -lelf

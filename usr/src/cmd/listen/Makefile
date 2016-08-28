@@ -53,14 +53,14 @@ ROOTSAFPROG= $(PROG:%=$(LIBSAFD)/%)
 # If debug is needed, then:  CPPFLAGS += -DDEBUG
 
 LDLIBS += -lnsl
-LDFLAGS += $(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
+LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
 FILEMODE= 0755
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-empty-body
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-empty-body
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 $(LIBSAFD)/% : %
 	$(INS.file)

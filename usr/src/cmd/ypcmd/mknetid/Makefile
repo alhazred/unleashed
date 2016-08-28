@@ -33,9 +33,9 @@ LDLIBS += -lnsl
 OBJS = mknetid.o getname.o 
 SRCS = $(OBJS:.o=.c)
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-function
 
 .KEEP_STATE:
 

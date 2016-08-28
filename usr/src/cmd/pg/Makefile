@@ -33,9 +33,9 @@ LDLIBS += -lgen -lcurses
 XGETFLAGS += -a -x $(PROG).xcl
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-clobbered
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-clobbered
 
 .KEEP_STATE:
 

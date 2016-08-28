@@ -43,12 +43,12 @@ include		../../../Makefile.cmd
 
 CPPFLAGS +=	-DKLUDGELINEMODE -DUSE_TERMIO -DENV_HACK -DOLD_ENVIRON
 CPPFLAGS +=	$(AUTH_INCLUDES)
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-extra
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-unused-label
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-extra
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-unused-label
 LDLIBS +=	-lsocket -lnsl -ltermlib
 LDLIBS +=	-lmech_krb5 
 LDFLAGS +=	$(KRUNPATH) -L$(ROOT)$(KLIBDIR_DO) -L$(ROOT)$(KLIBDIR_GL)

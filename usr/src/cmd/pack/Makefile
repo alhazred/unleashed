@@ -27,8 +27,8 @@ PROG= pack
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 XGETFLAGS += -a -x $(PROG).xcl
 CPPFLAGS +=  -D_FILE_OFFSET_BITS=64
 

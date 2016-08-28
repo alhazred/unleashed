@@ -36,7 +36,7 @@ include ../../../Makefile.module
 
 CFLAGS += -I../../../../../lib/libproc/common
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 %.o: $(MODSRCS_DIR)/%.c
 	$(COMPILE.c) $<

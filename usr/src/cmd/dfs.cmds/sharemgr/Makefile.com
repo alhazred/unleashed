@@ -42,7 +42,7 @@ CPPFLAGS += $(MYCPPFLAGS)
 LDLIBS += -lshare -lscf -lsecdb -lumem
 all install := LDLIBS += -lxml2
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 POFILES = $(SRCS:.c=.po)
 POFILE  = sharemgr.po

@@ -41,11 +41,11 @@ LIBS=	$(DYNLIB)
 
 
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-char-subscripts
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-char-subscripts
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-address
 
 CPPFLAGS += -D_POSIX_PTHREAD_SEMANTICS
 

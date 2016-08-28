@@ -29,9 +29,9 @@ SRCS= ${PROG:%=%.c}
 
 include ../../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-variable
 
 .KEEP_STATE:
 

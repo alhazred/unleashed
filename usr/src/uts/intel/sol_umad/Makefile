@@ -41,7 +41,7 @@ LDFLAGS		+= -dy -Nmisc/sol_ofs -Nmisc/ibmf -Nmisc/ibtl
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Define targets

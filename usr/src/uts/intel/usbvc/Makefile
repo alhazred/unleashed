@@ -69,7 +69,7 @@ LDFLAGS		+= -dy -Nmisc/usba
 # and it is surely safe
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

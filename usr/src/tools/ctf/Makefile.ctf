@@ -36,7 +36,7 @@ include ../../../Makefile.tools
 # 
 
 HDRDIRS= \
-	-_gcc=-nostdinc \
+	-nostdinc \
 	-I../../common \
 	-I$(SRC) \
 	-I/usr/include \
@@ -44,4 +44,4 @@ HDRDIRS= \
 	-I$(NATIVE_ADJUNCT)/include
 
 CPPFLAGS += $(HDRDIRS)
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses

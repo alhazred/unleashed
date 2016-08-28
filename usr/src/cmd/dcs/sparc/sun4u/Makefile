@@ -84,8 +84,8 @@ CPPFLAGS= 	-I$(USR_PSM_INCL_DIR) $(CPPFLAGS.master) \
 
 XGETFLAGS +=	-a -s -x $(PROG).xcl
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 #
 # LIBRARIES:

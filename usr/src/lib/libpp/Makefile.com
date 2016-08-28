@@ -96,13 +96,13 @@ CFLAGS += \
 CFLAGS64 += \
 	$(ASTCFLAGS64)
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-char-subscripts
-CERRWARN	+= -_gcc=-Wno-empty-body
-CERRWARN	+= -_gcc=-Wno-unused-value
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-char-subscripts
+CERRWARN	+= -Wno-empty-body
+CERRWARN	+= -Wno-unused-value
 
-pics/ppsearch.o 	:= CERRWARN += -_gcc=-Wno-sequence-point
+pics/ppsearch.o 	:= CERRWARN += -Wno-sequence-point
 
 .KEEP_STATE:
 

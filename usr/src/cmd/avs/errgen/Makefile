@@ -30,7 +30,7 @@ PROG=	$(DYNPROG)
 
 OBJS=	errgen.o
 
-CERRWARN += -_gcc=-Wno-switch
+CERRWARN += -Wno-switch
 CLOBBERFILES += $(DYNPROG)
 
 .KEEP_STATE:

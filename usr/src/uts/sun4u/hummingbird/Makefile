@@ -105,4 +105,4 @@ include $(UTSBASE)/sun4u/Makefile.targ
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized

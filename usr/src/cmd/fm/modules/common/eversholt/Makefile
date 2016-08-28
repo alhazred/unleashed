@@ -43,11 +43,11 @@ DMOD_SRCS = eft_mdb.c
 include ../../Makefile.plugin
 
 CPPFLAGS += -DFMAPLUGIN -I$(EVERSRCDIR) -I.
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-implicit-function-declaration
 
 $(PROG) := LDFLAGS += -R/usr/lib/fm
 $(PROG) := LDLIBS += -L$(ROOTLIB)/fm -ltopo

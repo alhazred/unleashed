@@ -47,7 +47,7 @@ LIBS =			$(DYNLIB)
 CPPFLAGS +=	-I$(SRCDIR)
 CPPFLAGS +=	-I../../libpapi-common/common
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable
 
 MAPFILES =	$(SRCDIR)/mapfile
 
@@ -75,7 +75,7 @@ OBJS += $(PROG_OBJS)
 
 LDFLAGS.cmd = \
         $(ENVLDFLAGS1) $(ENVLDFLAGS2) $(ENVLDFLAGS3) $(BDIRECT) \
-        $(MAPFILE.NES:%=-_gcc=-Wl,-M%) $(MAPFILE.PGA:%=-_gcc=-Wl,-M%) $(MAPFILE.NED:%=-_gcc=-Wl,-M%)
+        $(MAPFILE.NES:%=-Wl,-M%) $(MAPFILE.PGA:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%)
 
 $(PROG):	$(PROG_OBJS)
 	$(LINK.c) -o $@ $(PROG_OBJS) $(LDFLAGS.cmd) $(LDLIBS)

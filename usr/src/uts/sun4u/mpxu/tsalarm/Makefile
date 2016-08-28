@@ -53,7 +53,7 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 
 LDFLAGS	+= -dy  -Ndrv/rmclomv

@@ -67,18 +67,18 @@ $(NATIVE_BUILD)OBJS = $(MYOBJS:%.o=%-native.o)
 # still export a number of "yy*" (libl) interfaces.  Reduce all other symbols
 # to local scope.
 MAPFILES +=	$(MAPFILE.LEX) $(MAPFILE.NGB)
-MAPOPTS =	$(MAPFILES:%=-_gcc=-Wl,-M%)
+MAPOPTS =	$(MAPFILES:%=-Wl,-M%)
 
 MYCPPFLAGS =	-I ../common -I$(ADJUNCT_PROTO)/usr/include/libxml2
 CPPFLAGS +=	$(MYCPPFLAGS)
 LDFLAGS +=	$(MAPOPTS)
 
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
 
 LFLAGS = -t
 YFLAGS = -d

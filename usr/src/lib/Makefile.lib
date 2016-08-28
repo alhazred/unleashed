@@ -127,7 +127,7 @@ SONAME=		$(DYNLIB)
 
 HSONAME=	-h$(SONAME)
 DYNFLAGS=	$(HSONAME) $(ZTEXT) $(ZDEFS) $(BDIRECT) \
-		$(MAPFILES:%=-_gcc=-Wl,-M%) $(MAPFILE.PGA:%=-_gcc=-Wl,-M%) $(MAPFILE.NED:%=-_gcc=-Wl,-M%)
+		$(MAPFILES:%=-Wl,-M%) $(MAPFILE.PGA:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%)
 
 LDLIBS=		$(LDLIBS.lib)
 
@@ -176,15 +176,15 @@ CTFMERGE_LIB	= $(CTFMERGE) $(CTFMRGFLAGS) -t -f -L VERSION -o $@ $(PICS)
 
 # conditional assignments
 
-$(OBJS)  :=	sparc_CFLAGS += -_gcc=-mno-app-regs
+$(OBJS)  :=	sparc_CFLAGS += -mno-app-regs
 
-$(PICS)  :=	sparc_CFLAGS += -_gcc=-mno-app-regs $(sparc_C_PICFLAGS)
-$(PICS)  :=	sparcv9_CFLAGS += -_gcc=-mno-app-regs $(sparcv9_C_PICFLAGS)
+$(PICS)  :=	sparc_CFLAGS += -mno-app-regs $(sparc_C_PICFLAGS)
+$(PICS)  :=	sparcv9_CFLAGS += -mno-app-regs $(sparcv9_C_PICFLAGS)
 $(PICS)  :=	i386_CFLAGS += $(i386_C_PICFLAGS)
 $(PICS)  :=	amd64_CFLAGS += $(amd64_C_PICFLAGS)
 $(PICS)  :=	CCFLAGS += $(CC_PICFLAGS)
 $(PICS)  :=	CPPFLAGS += -DPIC -D_REENTRANT
-$(PICS)  :=	sparcv9_CCFLAGS += -_gcc=-mno-app-regs $(sparcv9_CC_PICFLAGS)
+$(PICS)  :=	sparcv9_CCFLAGS += -mno-app-regs $(sparcv9_CC_PICFLAGS)
 $(PICS)  :=	amd64_CCFLAGS += $(amd64_CC_PICFLAGS)
 $(PICS)  :=	CFLAGS += $(CTF_FLAGS)
 $(PICS)	 :=	CFLAGS64 += $(CTF_FLAGS)
@@ -202,7 +202,7 @@ HSONAMECCC=	-h $(SONAMECCC)
 # Keep in sync with the standard DYNFLAGS
 #
 $(DYNLIBCCC):=	DYNFLAGS = $(HSONAMECCC) $(ZTEXT) $(ZDEFS) \
-		$(MAPFILES:%=-_gcc=-Wl,-M%) $(MAPFILE.PGA:%=-_gcc=-Wl,-M%) $(MAPFILE.NED:%=-_gcc=-Wl,-M%) \
+		$(MAPFILES:%=-Wl,-M%) $(MAPFILE.PGA:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%) \
 		$(BDIRECT)
 
 

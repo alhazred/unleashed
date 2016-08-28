@@ -65,7 +65,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
 
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-unused-function
 
 #
 #	Default build targets.

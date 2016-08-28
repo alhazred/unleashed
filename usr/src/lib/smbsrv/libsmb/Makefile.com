@@ -82,9 +82,9 @@ LDLIBS +=	-lsec -lidmap -lreparse -lcmdutils -lavl
 LDLIBS +=	-lnvpair -lresolv -lsocket -lnsl -lc
 CPPFLAGS +=	$(INCS) -D_REENTRANT
 CPPFLAGS +=	-Dsyslog=smb_syslog
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-char-subscripts
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-char-subscripts
+CERRWARN +=	-Wno-switch
 
 SRCS=   $(OBJS_COMMON:%.o=$(SRCDIR)/%.c)	\
 	$(OBJS_SHARED:%.o=$(SRC)/common/smbsrv/%.c)

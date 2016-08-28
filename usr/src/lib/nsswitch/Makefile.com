@@ -33,11 +33,11 @@ ROOT64DYNLIB =	$(ROOTLIBDIR64)/$(DYNLIB1)
 
 CPPFLAGS +=	-D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-address
 
 LDLIBS +=	-lc
 HSONAME =

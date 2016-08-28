@@ -67,12 +67,12 @@ $(ROOTKEYSERVDFLT) :=				FILEMODE=	444
 CPPFLAGS += -I. -I$(SRC)/lib/libnsl/include -I$(SRC)/lib/libsldap/common \
 		-D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-address
-CERRWARN +=	-_gcc=-Wno-unused-function
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-address
+CERRWARN +=	-Wno-unused-function
 
 LDLIBS +=	-lnsl
 chkey :=	LDLIBS += -lsldap

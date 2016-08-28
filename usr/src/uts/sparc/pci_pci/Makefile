@@ -63,9 +63,9 @@ INC_PATH	+= -I$(UTSBASE)/sun4
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-value
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-value
 
 #
 #	Dependency

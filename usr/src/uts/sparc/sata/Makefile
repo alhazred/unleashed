@@ -77,12 +77,12 @@ clobber:	$(CLOBBER_DEPS);
 
 install:	$(INSTALL_DEPS)
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-empty-body
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-empty-body
 
 #
 #	Include common targets.

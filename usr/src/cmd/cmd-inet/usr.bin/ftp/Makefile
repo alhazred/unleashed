@@ -38,16 +38,16 @@ CPPFLAGS +=	-D_FILE_OFFSET_BITS=64 \
 		-I$(SRC)/lib/gss_mechs/mech_krb5/include \
 		-I$(SRC)/uts/common/gssapi/mechs/krb5/include
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-clobbered
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-clobbered
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-address
 
 LDLIBS +=	-lsocket -lnsl -lgss
 
 # ftp defines its own delete and glob - localize all symbols to prevent a
 # name clash.
-LDFLAGS +=	$(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
+LDFLAGS +=	$(MAPFILE.NGB:%=-Wl,-M%)
 
 .KEEP_STATE:
 

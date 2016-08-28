@@ -30,7 +30,7 @@ include ../../Makefile.cmd
 
 LDLIBS 		+= -lscf -lzonestat -lumem
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 .KEEP_STATE:
 

@@ -37,17 +37,17 @@ POFILES= $(EDOBJ:%.o=%.po)
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-uninitialized
 $(XPG4) := CFLAGS += -DXPG4  
 $(XPG6) := CFLAGS += -DXPG6 -I$(SRC)/lib/libc/inc 
 LDLIBS += -lmapmalloc -lgen -lcrypt_i
 XGETFLAGS += -a -x ed.xcl
 
 MAPFILE.INT =	../expr/mapfile-intf
-LDFLAGS +=	$(MAPFILE.INT:%=-_gcc=-Wl,-M%)
+LDFLAGS +=	$(MAPFILE.INT:%=-Wl,-M%)
 
 POFILE= ed_cmd.po
 
