@@ -251,15 +251,15 @@ CPPFLAGS += -I$(REL_PATH)/libgss -I../include  \
 
 CPPFLAGS += $(KRB5_DEFS)
 
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-unused-value
-CERRWARN +=	-_gcc=-Wno-empty-body
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-unused-value
+CERRWARN +=	-Wno-empty-body
+CERRWARN +=	-Wno-address
 
 MAPFILES =	../mapfile-vers
 
@@ -306,7 +306,7 @@ LDLIBS += -lgss -lsocket -lresolv -lc -lpkcs11 -lnsl -lkstat
 DYNFLAGS += $(ZIGNORE)
 
 # mech lib needs special initialization at load time
-DYNFLAGS += -_gcc=-Wl,-zinitarray=krb5_ld_init
+DYNFLAGS += -Wl,-zinitarray=krb5_ld_init
 
 objs/%.o pics/%.o: $(SRC)/uts/common/gssapi/%.c
 	$(COMPILE.c)  -o $@ $<

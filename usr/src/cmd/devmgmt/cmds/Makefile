@@ -34,8 +34,8 @@ PROG = devattr devreserv getvol putdgrp devfree getdev listdgrp getdgrp \
 
 LDLIBS += -ladm
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

@@ -35,8 +35,8 @@ XGETFLAGS += -a -x $(PROG).xcl
 LDLIBS += -L$(ROOT)/lib
 LDLIBS += -ldladm -linetutil
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-uninitialized
 
 ROOTCFGDIR=	$(ROOTETC)/dladm
 

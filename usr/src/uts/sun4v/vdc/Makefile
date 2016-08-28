@@ -62,8 +62,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 CFLAGS += -D_EXTVTOC
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 LDFLAGS += -dy -Nmisc/ldc -Nmisc/platsvc -Nmisc/scsi
 

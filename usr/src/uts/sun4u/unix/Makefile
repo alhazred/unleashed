@@ -99,17 +99,17 @@ CLOBBERFILES	= $(CLEANFILES) $(UNIX_BIN)
 # investigate and remove these for maximum coverage.  Please do not carry
 # these forward to new Makefiles.
 #
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-char-subscripts
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-clobbered
-CERRWARN	+= -_gcc=-Wno-empty-body
-CERRWARN	+= -_gcc=-Wno-unused-value
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-char-subscripts
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-clobbered
+CERRWARN	+= -Wno-empty-body
+CERRWARN	+= -Wno-unused-value
+CERRWARN	+= -Wno-switch
 
 #
 #	Default build targets.

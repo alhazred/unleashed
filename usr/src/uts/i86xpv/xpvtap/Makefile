@@ -68,7 +68,7 @@ LDFLAGS		+=
 CFLAGS		+= -D_SOLARIS
 
 
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Default build targets.

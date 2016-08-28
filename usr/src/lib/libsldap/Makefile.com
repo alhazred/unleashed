@@ -47,9 +47,9 @@ LOCFLAGS +=	-D_REENTRANT -DSUNW_OPTIONS
 CPPFLAGS +=	-I../common -I$(SRC)/lib/libldap5/include/ldap \
 		-I$(ADJUNCT_PROTO)/usr/include/mps $(LOCFLAGS)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

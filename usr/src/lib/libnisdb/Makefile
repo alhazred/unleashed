@@ -157,11 +157,11 @@ pics/update.o \
 pics/yptol_utils.o \
 pics/map_ctrl.o
 
-$(UVAR_PICS) := CERRWARN += -_gcc=-Wno-unused-variable
+$(UVAR_PICS) := CERRWARN += -Wno-unused-variable
 
 # Correcting these might alter logic
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-switch
 
 # Extra includes, from yp, for yptol files.
 CPPFLAGS += -I$(SRC)/cmd/ypcmd

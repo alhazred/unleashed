@@ -32,8 +32,8 @@ include ../Makefile.cmd
 
 .KEEP_STATE:
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-clobbered
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-clobbered
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -I $(SRC)/common/util
 
 LDLIBS += -lcmdutils -lsec

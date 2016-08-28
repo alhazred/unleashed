@@ -42,7 +42,7 @@ C99MODE=        $(C99_ENABLE)
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lsec -lidmap -lpython2.6
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable
 CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/python2.6
 
 .KEEP_STATE:

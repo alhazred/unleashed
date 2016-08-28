@@ -45,10 +45,10 @@ PATLEN=		250
 STMTMAX=	10000
 YYLMAX=		10251
 CFLAGS +=	-DPATLEN=$(PATLEN) -DSTMTMAX=$(STMTMAX) -DYYLMAX=$(YYLMAX)
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-unused
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-unused
+CERRWARN +=	-Wno-uninitialized
 
 LDLIBS +=	-lcurses -ll
 

@@ -67,10 +67,10 @@ INSTALL_TARGET	= def $(BINARY) $(ROOTMODULE) $(ROOTSOFTLINKS)
 ALL_BUILDS      = $(ALL_BUILDSONLY64)
 DEF_BUILDS      = $(DEF_BUILDSONLY64)
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-clobbered
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-clobbered
 
 #
 # cpu-module-specific flags

@@ -34,4 +34,4 @@ include ../../../Makefile.module
 
 CPPFLAGS += -I$(SRC)/uts/common
 
-CERRWARN += -_gcc=-Wno-trigraphs
+CERRWARN += -Wno-trigraphs

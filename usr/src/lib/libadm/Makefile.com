@@ -43,9 +43,9 @@ SRCDIR=		../common
 
 CPPFLAGS +=	-I ../inc
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-char-subscripts
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-char-subscripts
 
 LDLIBS +=	-lc
 

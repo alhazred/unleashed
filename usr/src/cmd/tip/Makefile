@@ -59,9 +59,9 @@ $(ROOTETCREMOTE) :=	FILEMODE =	644
 $(ROOTACULOG) :=	FILEMODE =	600
 
 CPPFLAGS +=	-DDEFBR=300 -DDEFFS=BUFSIZ -DACULOG -DUSG
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-clobbered
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-clobbered
+CERRWARN +=	-Wno-uninitialized
 CONFIG=	-DV831 -DVENTEL -DV3451 -DDF02 -DDF03 -DBIZ1031 -DBIZ1022 -DHAYES
 ACULIB=	aculib/aculib.a
 LDLIBS=	$(ACULIB) $(LDLIBS.cmd)

@@ -34,7 +34,7 @@ LDLIBS +=	-lcmdutils -lumem -lc
 SRCDIR =	../common
 CPPFLAGS +=	-I../common -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

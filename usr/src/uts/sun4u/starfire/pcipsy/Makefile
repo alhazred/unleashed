@@ -53,9 +53,9 @@ include $(UTSBASE)/sun4u/starfire/Makefile.starfire
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-function
 
 
 #

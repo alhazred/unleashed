@@ -20,8 +20,8 @@ include $(SRC)/cmd/perl/Makefile.perl
 
 LDLIBS += -lkstat
 
-CERRWARN += -_gcc=-Wno-unused-value
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-value
+CERRWARN += -Wno-unused-variable
 
 # Additional include directories only needed for the SPARC platform
 

@@ -40,8 +40,8 @@ ROOTMODULE      = $(ROOT_PSM_CPU_DIR)/$(MODULE)
 #
 include ../cpu/Makefile.cpu
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 #
 #       Define targets

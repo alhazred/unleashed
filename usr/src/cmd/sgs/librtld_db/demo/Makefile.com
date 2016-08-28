@@ -58,9 +58,9 @@ CLEANFILES +=	$(BLTSRC) $(BLTHDR) simp libsub.so.1
 # DEMO DELETE START
 # The following error suppression definitions are to remove lex errors
 # we have no control over.
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-unused-variable
 # DEMO DELETE END
 
 test-sparc=	test-sparc-regs

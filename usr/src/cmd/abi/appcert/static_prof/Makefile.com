@@ -32,8 +32,8 @@ include		$(SRC)/cmd/Makefile.cmd
 PROG = static_prof
 SRCS = $(PROG:%=../%.c)
 
-CERRWARN +=	-_gcc=-Wno-unused-value
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-unused-value
+CERRWARN +=	-Wno-parentheses
 
 LDLIBS +=	-lelf
 

@@ -90,16 +90,16 @@ INC_PATH +=  -I$(UTSBASE)/sun4
 # investigate and remove these for maximum coverage.  Please do not carry
 # these forward to new Makefiles.
 #
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-unused-value
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-clobbered
-CERRWARN	+= -_gcc=-Wno-empty-body
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-unused-value
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-clobbered
+CERRWARN	+= -Wno-empty-body
 
 #
 #	Default build targets.

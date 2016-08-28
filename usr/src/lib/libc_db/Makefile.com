@@ -44,8 +44,8 @@ ASFLAGS +=	-D_ASM -DPIC
 CPPFLAGS +=	-I../../libc/inc -D_REENTRANT
 LDLIBS +=	-lc
 
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

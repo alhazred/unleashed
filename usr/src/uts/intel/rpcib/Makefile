@@ -64,9 +64,9 @@ LDFLAGS	+= -dy -Nmisc/ibtl -Nmisc/ibcm
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

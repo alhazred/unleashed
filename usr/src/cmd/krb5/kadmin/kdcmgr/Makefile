@@ -34,8 +34,8 @@ include ../../../Makefile.cmd
 
 POFILE=		$(SSRCS:%.sh=%.po)
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-uninitialized
 
 LDLIBS	+=	-lresolv -lnsl
 

@@ -30,7 +30,7 @@ include ../Makefile.cmd
 
 CFLAGS += -I$(SRC)/lib/pam_modules/authtok_check
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 CRACK_SRCDIR=	$(SRC)/lib/pam_modules/authtok_check/
 CRACK_OBJS=	packer.o packlib.o dict.o stringlib.o

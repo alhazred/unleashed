@@ -196,14 +196,14 @@ CPPFLAGS +=	-I$(SRC)/lib/libnsl/dial
 CCFLAGS +=	-_CC=-features=conststrings
 CCFLAGS64 +=	-_CC=-features=conststrings
 
-CERRWARN +=	-_gcc=-Wno-char-subscripts
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-char-subscripts
-CERRWARN +=	-_gcc=-Wno-empty-body
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-clobbered
+CERRWARN +=	-Wno-char-subscripts
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-char-subscripts
+CERRWARN +=	-Wno-empty-body
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-clobbered
 
 LIBMP =		-lmp
 LDLIBS +=	$(LIBMP) -lmd -lc

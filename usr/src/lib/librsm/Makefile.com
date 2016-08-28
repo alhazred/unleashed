@@ -48,8 +48,8 @@ $(NOT_RELEASE_BUILD)COPTFLAG64 =
 
 CPPFLAGS = -I../inc -I../../common/inc $(CPPFLAGS.master) -D_REENTRANT $(DEBUG)
 
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-parentheses
 
 LDLIBS += -lc
 

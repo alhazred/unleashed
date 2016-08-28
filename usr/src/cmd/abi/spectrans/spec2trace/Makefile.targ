@@ -45,7 +45,7 @@ OBJECTS	=	trace.o		\
 
 include		../../Makefile.cmd
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-unused-label
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-label

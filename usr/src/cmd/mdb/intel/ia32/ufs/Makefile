@@ -32,4 +32,4 @@ include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.module
 
-CERRWARN += -_gcc=-Wno-trigraphs
+CERRWARN += -Wno-trigraphs

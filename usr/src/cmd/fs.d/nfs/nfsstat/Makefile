@@ -40,7 +40,7 @@ SRCS += $(STAT_COMMON_SRCS)
 OBJS += $(STAT_COMMON_OBJS)
 
 CPPFLAGS += -I$(STATCOMMONDIR)
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 LDLIBS += -lkstat -lnsl
 
 $(PROG):	$(OBJS)

@@ -42,7 +42,7 @@ CPPFLAGS +=	-I.. \
 		-I$(SRC)/lib/libfruutils
 CPPFLAGS += 	-D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 XGETFLAGS += -a
 POFILE=	picl.po

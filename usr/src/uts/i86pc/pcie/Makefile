@@ -60,11 +60,11 @@ LDFLAGS		+= -dy -Nmisc/acpica -Nmisc/busra
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN	+= -_gcc=-Wno-unused-value
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-unused-function # safe
+CERRWARN	+= -Wno-unused-value
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-unused-function # safe
 
 #
 #	Default build targets.

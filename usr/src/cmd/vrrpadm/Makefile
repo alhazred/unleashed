@@ -30,7 +30,7 @@ include ../Makefile.cmd
 XGETFLAGS += -a -x $(PROG).xcl
 LDLIBS += -lvrrpadm -lnsl -linetutil
 
-CERRWARN += -_gcc=-Wno-unused-label
+CERRWARN += -Wno-unused-label
 
 .KEEP_STATE:
 

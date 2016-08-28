@@ -37,7 +37,7 @@ LIBS =		$(DYNLIB)
 
 LDLIBS +=	-lnsl -lc
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable
 
 .KEEP_STATE:
 

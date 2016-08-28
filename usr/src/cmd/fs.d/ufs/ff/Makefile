@@ -39,7 +39,7 @@ POFILE=
 
 CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 $(LIBPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS)

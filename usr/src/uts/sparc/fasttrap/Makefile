@@ -40,7 +40,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK) $(ROOT_CONFFILE)
 CPPFLAGS	+= -I$(SRC)/common
 LDFLAGS		+= -dy -Ndrv/dtrace
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 .KEEP_STATE:
 

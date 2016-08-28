@@ -32,8 +32,8 @@ FILEMODE= 4555
 LDLIBS += -lproc -lproject -lsecdb
 
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 CPPFLAGS += -I..
 

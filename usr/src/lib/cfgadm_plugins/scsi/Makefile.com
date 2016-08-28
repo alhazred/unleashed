@@ -37,10 +37,10 @@ ROOTLIBDIR64=	$(ROOTLIBDIR)/$(MACH64)
 
 LIBS=	$(DYNLIB)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-char-subscripts
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-char-subscripts
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-address
 
 LDLIBS +=	-lc -ldevice -ldevinfo -lrcm
 

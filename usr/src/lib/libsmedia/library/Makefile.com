@@ -41,7 +41,7 @@ CLEANFILES +=	$(DERIVED_FILES:%=../common/%)
 
 CPPFLAGS += -D_REENTRANT -I$(SRC)/cmd/smserverd/
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable
 
 LDLIBS +=	-lnsl -lc
 

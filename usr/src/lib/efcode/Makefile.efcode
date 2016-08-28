@@ -46,12 +46,12 @@ CPPFLAGS += -DDEBUG -DFCODE_INTERNAL
 CPPFLAGS += -I $(SRC)/lib/efcode/include -I $(ROOT)/usr/platform/sun4u/include
 DYNFLAGS += -R\$$ORIGIN
 
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-unused-value
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-unused-value
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-type-limits
 
 EFCODE64DIR = /usr/lib/efcode/$(MACH64)
 ROOTLIBDIR = $(ROOT)/usr/lib/efcode

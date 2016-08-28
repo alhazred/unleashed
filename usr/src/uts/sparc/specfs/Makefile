@@ -62,8 +62,8 @@ $(MODSTUBS_O)	:= AS_CPPFLAGS += -DSPEC_MODULE
 CLEANFILES	+= $(MODSTUBS_O)
 LDFLAGS 	+= -dy -Nfs/fifofs
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

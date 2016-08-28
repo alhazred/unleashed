@@ -58,7 +58,7 @@ CPPFLAGS= 	-I$(SRC)/uts/sun4v $(CPPFLAGS.master) -D_REENTRANT
 
 XGETFLAGS +=	-a -s -x $(PROG).xcl
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 
 #

@@ -30,8 +30,8 @@ SRCS= mkdir.c ../chmod/common.c
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-parentheses
 LDLIBS += -lgen
 
 %.o: ../chmod/%.c

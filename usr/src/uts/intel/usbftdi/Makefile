@@ -45,7 +45,7 @@ CONF_SRCDIR	= $(UTSBASE)/common/io/usb/clients/usbser/usbftdi
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 LDFLAGS         += -dy -Nmisc/usba -Nmisc/usbser
 

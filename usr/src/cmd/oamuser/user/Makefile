@@ -73,7 +73,7 @@ INSSBINPROG=	$(SBINPROG:%=$(ROOTUSRSBIN)/%)
 INSSKELFILE=	$(SKELFILE:%=$(ROOTSKEL)/%)
 
 CPPFLAGS=	-I$(HERE) -I$(LOCAL) $(CPPFLAGS.master)
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-implicit-function-declaration
 
 $(INSSBINPROG)  := FILEMODE = 0555
 $(INSSYSADMPROG):= FILEMODE = 0500

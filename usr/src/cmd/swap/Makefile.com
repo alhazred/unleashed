@@ -31,7 +31,7 @@ SRCS=	$(OBJS:%.o=../%.c)
 include ../../Makefile.cmd
 
 CPPFLAGS +=	-D_LARGEFILE64_SOURCE
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 FILEMODE=02555
 

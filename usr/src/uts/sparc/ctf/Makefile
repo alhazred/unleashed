@@ -43,7 +43,7 @@ LDFLAGS		+= $(LD_BREDUCE) -M$(UTSBASE)/common/ctf/mapfile -dy
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 .KEEP_STATE:
 

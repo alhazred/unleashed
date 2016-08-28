@@ -55,10 +55,10 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 INC_PATH	+= -I$(CONF_SRCDIR)
 
 CFLAGS		+=  -DSOLARIS11
-CFLAGS		+=  -_gcc=-fno-strict-aliasing
-CFLAGS		+=  -_gcc=-fno-unit-at-a-time
-CFLAGS		+=  -_gcc=-fno-optimize-sibling-calls
-CFLAGS		+=  -_gcc=-O2
+CFLAGS		+=  -fno-strict-aliasing
+CFLAGS		+=  -fno-unit-at-a-time
+CFLAGS		+=  -fno-optimize-sibling-calls
+CFLAGS		+=  -O2
 CFLAGS64	+=  -DSOLARIS11 -xO -I./
 
 #
@@ -66,9 +66,9 @@ CFLAGS64	+=  -DSOLARIS11 -xO -I./
 #
 LDFLAGS		+=  -dy -N misc/mac -N drv/ip
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-type-limits
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-type-limits
 
 #
 #	Default build targets.

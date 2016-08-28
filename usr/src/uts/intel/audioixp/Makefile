@@ -50,7 +50,7 @@ include $(UTSBASE)/intel/Makefile.intel
 #
 LDFLAGS		+= -dy -Ndrv/audio -Nmisc/ac97
 
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Define targets

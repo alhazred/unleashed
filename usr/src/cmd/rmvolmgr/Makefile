@@ -42,11 +42,11 @@ CPPFLAGS +=	$(HAL_DBUS_CPPFLAGS) $(HAL_GLIB_CPPFLAGS)
 CPPFLAGS +=	-I$(ROOT)/usr/include/hal
 C99MODE =	$(C99_ENABLE)
 
-CERRWARN += 	-_gcc=-Wno-switch
-CERRWARN += 	-_gcc=-Wno-uninitialized
-CERRWARN += 	-_gcc=-Wno-unused-variable
-CERRWARN += 	-_gcc=-Wno-parentheses
-CERRWARN += 	-_gcc=-Wno-unused-function
+CERRWARN += 	-Wno-switch
+CERRWARN += 	-Wno-uninitialized
+CERRWARN += 	-Wno-unused-variable
+CERRWARN += 	-Wno-parentheses
+CERRWARN += 	-Wno-unused-function
 
 ROOTCMDDIR =		$(ROOTLIB)
 ROOTMANIFESTDIR =	$(ROOTSVCSYSTEMFILESYSTEM)

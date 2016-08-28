@@ -32,8 +32,8 @@ ROOTTZSRCD=	$(ROOTSHLIB)/zoneinfo/src
 ROOTTZTABD=	$(ROOTSHLIB)/zoneinfo/tab
 DIRS=  $(ROOTTZSRCD) $(ROOTTZTABD)
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
 
 ROOTLIBTZSRCFILES=	$(SRCFILES:%=$(ROOTTZSRCD)/%)
 ROOTLIBTZTABFILES=	$(TABFILES:%=$(ROOTTZTABD)/%)

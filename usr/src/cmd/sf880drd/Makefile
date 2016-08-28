@@ -39,10 +39,10 @@ ROOTMANIFESTDIR = $(ROOTSVCPLATFORMSUN4U)
 CPPFLAGS += -I$(ROOT)/usr/platform/sun4u/include
 LDLIBS += -lcfgadm
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-uninitialized
 
 PSMPROG = $(USR_PSM_LIB_DIR)/$(PROG)
 

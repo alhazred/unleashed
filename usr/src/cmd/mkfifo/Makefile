@@ -30,7 +30,7 @@ SRCS= mkfifo.c ../chmod/common.c
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 %.o: ../chmod/%.c
 	$(COMPILE.c) -o $@ $<

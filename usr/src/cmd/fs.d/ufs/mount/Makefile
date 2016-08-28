@@ -38,6 +38,6 @@ include		../../Makefile.fstype
 include		../../Makefile.mount
 
 CPPFLAGS +=	-D_LARGEFILE64_SOURCE
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 include		../../Makefile.mount.targ

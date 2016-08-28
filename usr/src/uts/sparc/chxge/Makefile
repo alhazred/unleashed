@@ -78,10 +78,10 @@ LDFLAGS		+= -dy -N misc/gld -N drv/ip
 # investigate and remove these for maximum coverage.  Please do not carry
 # these forward to new Makefiles.
 #
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-parentheses
 
 #
 #

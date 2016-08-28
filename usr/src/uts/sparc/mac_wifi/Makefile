@@ -43,7 +43,7 @@ ROOTMODULE	= $(ROOT_MAC_DIR)/$(MODULE)
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-switch
 
 #
 #	Define targets

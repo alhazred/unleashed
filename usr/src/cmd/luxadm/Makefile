@@ -37,10 +37,10 @@ POFILE = luxadm.po
 
 include ../Makefile.cmd
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-address
 
 sparc_LDLIBS = -la5k -lg_fc -ldevid -lkstat -ldevinfo
 i386_LDLIBS =

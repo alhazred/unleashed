@@ -46,9 +46,9 @@ LIBS = $(DYNLIB)
 CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS
 LDLIBS +=	-lc -ldevice -ldevinfo -lrcm
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-char-subscripts
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-char-subscripts
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

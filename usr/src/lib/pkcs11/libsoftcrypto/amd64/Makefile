@@ -35,9 +35,9 @@ BIGNUM_PSM_OBJS = bignum_amd64.o bignum_amd64_asm.o
 include		$(SRC)/lib/Makefile.lib
 include		$(SRC)/lib/Makefile.lib.64
 
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 AES_PSM_SRC =	$(AES_DIR)/$(MACH64)/aes_amd64.s \
 		$(AES_DIR)/$(MACH64)/aes_intel.s \
@@ -56,10 +56,10 @@ SRCDIR =	$(SRC)/lib/pkcs11/libsoftcrypto/common
 LIBS =		$(DYNLIB)
 MAPFILEDIR =	../common
 
-CFLAGS +=	-_gcc=-fno-strict-aliasing \
-		-_gcc=-fno-unit-at-a-time \
-		-_gcc=-fno-optimize-sibling-calls \
-		-_gcc=-O2
+CFLAGS +=	-fno-strict-aliasing \
+		-fno-unit-at-a-time \
+		-fno-optimize-sibling-calls \
+		-O2
 CPPFLAGS +=	-I$(CRYPTODIR) -I$(UTSDIR) -D_POSIX_PTHREAD_SEMANTICS
 ASFLAGS +=	$(AS_PICFLAGS) -D_ASM
 BIGNUM_FLAGS +=	-DPSR_MUL

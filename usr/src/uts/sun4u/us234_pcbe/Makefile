@@ -54,7 +54,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK)
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-type-limits
+CERRWARN	+= -Wno-type-limits
 
 #
 #	Default build targets.

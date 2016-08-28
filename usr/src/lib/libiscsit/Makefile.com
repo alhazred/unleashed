@@ -42,7 +42,7 @@ INCS += -I$(SRCDIR)
 C99MODE=	$(C99_ENABLE)
 LDLIBS +=	-lc -lnvpair -lstmf -luuid -lnsl -lscf
 CPPFLAGS +=	$(INCS) -D_REENTRANT
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 SRCS=	$(OBJS_COMMON:%.o=$(SRCDIR)/%.c)			\
 	$(ISCSIT_OBJS_SHARED:%.o=$(SRC)/common/iscsit/%.c)	\

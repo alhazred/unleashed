@@ -78,23 +78,23 @@ CLEANFILES = 	$(OBJS) $(YTABC) $(YTABH) $(LEXYY) $(YOUT) \
 		$(POFILES) $(POFILE)
 
 CPPFLAGS	+= -I. -I..
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-implicit-function-declaration
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-implicit-function-declaration
 YFLAGS		+= -d -v
 CFLAGS 		+= -D_FILE_OFFSET_BITS=64
 
 $(ITM) :=	CFLAGS += $(GSHARED) $(C_PICFLAGS) $(ZTEXT) -h $@
 $(ITM) :=	CPPFLAGS += -D_REENTRANT 
-$(ITM) :=	sparc_CFLAGS += -_gcc=-mno-app-regs
-$(ITM) :=	sparcv9_CFLAGS += -_gcc=-mno-app-regs
+$(ITM) :=	sparc_CFLAGS += -mno-app-regs
+$(ITM) :=	sparcv9_CFLAGS += -mno-app-regs
 
 LDLIBS += -lgen
 
 MY_NATIVE_CPPFLAGS = -D_FILE_OFFSET_BITS=64 -I. -I..
-MY_NATIVE_LDFLAGS = $(MAPFILE.NES:%=-_gcc=-Wl,-M%) $(MAPFILE.PGA:%=-_gcc=-Wl,-M%) $(MAPFILE.NED:%=-_gcc=-Wl,-M%)
+MY_NATIVE_LDFLAGS = $(MAPFILE.NES:%=-Wl,-M%) $(MAPFILE.PGA:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%)
 MY_NATIVE_LDLIBS = -lgen
 
 #
@@ -114,7 +114,7 @@ $(PROG): $(OBJS)
 	$(POST_PROCESS)
 
 $(ITM): $(SRCI)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -_gcc=-Wl,-M$(MAPFILE) -o $@ $(SRCI) $(LDLIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -Wl,-M$(MAPFILE) -o $@ $(SRCI) $(LDLIBS)
 	$(POST_PROCESS_SO)
 
 $(YTABC) $(YTABH): $(SRCY)

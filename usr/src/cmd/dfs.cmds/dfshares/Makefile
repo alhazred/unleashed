@@ -29,12 +29,12 @@ OBJS=	dfshares.o
 
 ROOTLINK= $(ROOTUSRSBIN)/dfmounts
 
-CFLAGS += -_gcc=-Wl,-s
+CFLAGS += -Wl,-s
 
 include ../../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

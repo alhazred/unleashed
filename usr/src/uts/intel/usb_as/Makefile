@@ -68,7 +68,7 @@ LDFLAGS		+= -dy -Nmisc/usba -Ndrv/usb_ac
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Default build targets.

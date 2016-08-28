@@ -36,8 +36,8 @@ MAPFILES =
 CFLAGS +=	$(C_PICFLAGS)
 DYNLIB=		$(LIBPROG)
 
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-uninitialized
 
 LDLIBS += -lnvpair -ladm -lc
 

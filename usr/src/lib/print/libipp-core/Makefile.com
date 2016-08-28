@@ -40,9 +40,9 @@ LIBS =			$(DYNLIB)
 CPPFLAGS +=	-I$(SRCDIR)
 CPPFLAGS +=	-I../../libpapi-common/common
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-char-subscripts
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-char-subscripts
+CERRWARN +=	-Wno-switch
 
 MAPFILES =	$(SRCDIR)/mapfile
 

@@ -70,8 +70,8 @@ LDFLAGS += -dy -Nmisc/pcie
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-value
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-unused-value
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

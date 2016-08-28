@@ -38,9 +38,9 @@ include $(UTSBASE)/intel/Makefile.intel
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-uninitialized
 
 CPPFLAGS	+= -I$(SRC)/common/util
 

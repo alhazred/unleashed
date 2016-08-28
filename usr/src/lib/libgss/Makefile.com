@@ -102,10 +102,10 @@ CPPFLAGS += 	-I$(GSSCRED_DIR) -I$(SRC)/uts/common/gssapi/include \
 		 -I$(SRC)/lib/gss_mechs/mech_krb5/include/ \
 		-DHAVE_STDLIB_H
 
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-empty-body
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-empty-body
 
 .KEEP_STATE:
 

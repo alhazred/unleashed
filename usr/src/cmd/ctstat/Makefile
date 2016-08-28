@@ -36,7 +36,7 @@ STAT_COMMON_SRCS = $(STAT_COMMON_OBJS:%.o=$(STATCOMMONDIR)/%.c)
 SRCS += $(STAT_COMMON_SRCS)
 
 CPPFLAGS += -I$(STATCOMMONDIR)
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 LDLIBS += -lcontract -luutil
 
 .KEEP_STATE:

@@ -46,7 +46,7 @@ LLDFLAGS64 =	'-R$$ORIGIN/../../../lib/$(MACH64)'
 LDFLAGS +=	$(VERSREF) $(LLDFLAGS)
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) $(ELFLIBDIR) -lelf
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 SRCS =		$(COMOBJS:%.o=../common/%.c) \
 		$(TOOLSOBJS:%.o=$(SGSTOOLS)/common/%.c)

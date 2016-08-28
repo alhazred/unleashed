@@ -36,7 +36,7 @@ LDLIBS += -laudio -lm
 
 LDFLAGS += -L../utilities
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 
 .KEEP_STATE:

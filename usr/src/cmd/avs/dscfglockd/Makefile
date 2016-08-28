@@ -41,7 +41,7 @@ dscfgcli	:= LDLIBS += -ldscfg -lnsl
 dscfglockd	:= LDLIBS += -lunistat -ldscfg -lsocket -lnsl
 
 CFLAGS += -D_RDC_ -D_SYSCALL32
-CERRWARN += -_gcc=-Wno-switch
+CERRWARN += -Wno-switch
 POFILE = dscfglockd_all.po
 ROOTLINK = $(ROOTLIB)/dscfglockd
 

@@ -44,11 +44,11 @@ TXTS =		README maketables troff.sh
 
 CPPFLAGS =	-DUSG -DINCORE -I. -I.. $(CPPFLAGS.master)
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-extra
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-extra
 
 #
 # For message catalog

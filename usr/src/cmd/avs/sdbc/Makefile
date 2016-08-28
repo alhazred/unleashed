@@ -61,7 +61,7 @@ sdbc_dynmem	:= LDLIBS += -lkstat
 
 CFLAGS +=	-D_SCM_ -D_SD_8K_BLKSIZE -D_SYSCALL32
 CPPFLAGS +=	-DNSC_MULTI_TERABYTE
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 ROOTLINK = $(ROOTUSRSBIN)/scmadm
 
 all	:=	TARGET= all

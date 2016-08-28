@@ -46,7 +46,7 @@ ROOTCMDDIR = $(ROOTLIBDIR)
 
 CPPFLAGS += -D_REENTRANT -I$(HDRDIR)
 
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-type-limits
 
 # Note that LDFLAGS is NOT used in the build rules for shared objects!
 # LDLIBS is limited to -L and -l options; all other options must be added to

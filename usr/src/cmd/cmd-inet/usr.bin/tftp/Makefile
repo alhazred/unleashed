@@ -38,8 +38,8 @@ ROOTMANIFESTDIR = $(ROOTSVCNETWORK)
 $(ROOTMANIFEST):= FILEMODE = 0444
 
 CPPFLAGS +=	-DSYSV -DSTRNET -DBSD_COMP -I$(CMDINETCOMMONDIR)
-CERRWARN +=	-_gcc=-Wno-clobbered
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-clobbered
+CERRWARN +=	-Wno-parentheses
 LDLIBS +=	-lsocket -lnsl
 
 .KEEP_STATE:

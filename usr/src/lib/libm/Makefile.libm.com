@@ -32,8 +32,8 @@ ASSUFFIX	= $(ASSUFFIX_$(MACH))
 # in that case setting it back to gnu89, which _also_ accepts C99 syntax as
 # far as is important.
 C99MODE		=
-CFLAGS		+= -_gcc=-std=gnu89
-CFLAGS64	+= -_gcc=-std=gnu89
+CFLAGS		+= -std=gnu89
+CFLAGS64	+= -std=gnu89
 
 M4FLAGS		= -D__STDC__ -DPIC
 
@@ -52,12 +52,12 @@ CPPFLAGS	+= -I$(LIBMSRC)/C \
 # isgreaterequal, islessequal, etc, exist.  This gets us the C99 language
 # features, but not values-xpg6, the reason for which is outlined with
 # C99MODE.
-CFLAGS		+= -_gcc=-D__C99FEATURES__
-CFLAGS64	+= -_gcc=-D__C99FEATURES__
+CFLAGS		+= -D__C99FEATURES__
+CFLAGS64	+= -D__C99FEATURES__
 
 # libm depends on integer overflow characteristics
-CFLAGS		+= -_gcc=-fno-strict-overflow
-CFLAGS64	+= -_gcc=-fno-strict-overflow
+CFLAGS		+= -fno-strict-overflow
+CFLAGS64	+= -fno-strict-overflow
 
 $(DYNLIB) 	:= LDLIBS += -lc
 

@@ -52,7 +52,7 @@ COMMONSRC = $(DRVCOMMONSRC) $(MODCOMMONSRC)
 
 CLOBBERFILES = $(PROG)
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 # install specifics
 

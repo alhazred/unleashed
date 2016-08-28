@@ -57,8 +57,8 @@ LDFLAGS		+= -Nmisc/hvm_cmdk
 
 CPPFLAGS	+= -D_EXTVTOC
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

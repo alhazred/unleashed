@@ -1046,17 +1046,17 @@ SONAME = libc.so.1
 
 CFLAGS += $(CTF_FLAGS)
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-value
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-type-limits
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-clobbered
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-address
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-value
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-type-limits
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-clobbered
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-address
 
 # Setting THREAD_DEBUG = -DTHREAD_DEBUG (make THREAD_DEBUG=-DTHREAD_DEBUG ...)
 # enables ASSERT() checking in the threads portion of the library.
@@ -1068,14 +1068,12 @@ ALTPICS= $(TRACEOBJS:%=pics/%)
 
 # The use of sed is a gross hack needed because the current build system
 # assumed that the compiler accepted linker flags (-Bfoo -zfoo and -Mfoo)
-# directly.  As part of getting rid of cw (which used to do the mapping for
-# us), we needed to prefix all linker flags passed to the compiler with
-# -Wl,.  Here, however, since we're calling the linker directly, we have to
+# directly.  Here, since we're calling the linker directly, we have to
 # discard the prefixes.  Ideally, we would be using the LD_Z* and LD_B*
 # variables instead, but that would require a lot of mucking with makefiles.
 # So for now, we do this.
-REMOVE_CW_GCC_PREFIX=echo $(DYNFLAGS) | $(SED) -e 's/-_gcc=-Wl,//g'
-$(DYNLIB) := BUILD.SO = $(LD) -o $@ -G $(REMOVE_CW_GCC_PREFIX:sh) $(PICS) $(ALTPICS) \
+REMOVE_GCC_PREFIX=echo $(DYNFLAGS) | $(SED) -e 's/-Wl,//g'
+$(DYNLIB) := BUILD.SO = $(LD) -o $@ -G $(REMOVE_GCC_PREFIX:sh) $(PICS) $(ALTPICS) \
 		$(EXTPICS) $(LDLIBS)
 
 MAPFILES =	$(LIBCDIR)/port/mapfile-vers

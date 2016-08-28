@@ -30,8 +30,8 @@ include ../Makefile.cmd
 
 CFLAGS += -I$(SRC)/uts/common
 C99MODE= $(C99_ENABLE)
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 SRCS = $(PROG:%=%.c)
 OBJECTS = $(SRCS:%.c=%.o)

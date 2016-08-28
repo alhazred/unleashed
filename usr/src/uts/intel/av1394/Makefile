@@ -57,9 +57,9 @@ DEBUG_DEFS_DBG32	+= -DTNF_DEBUG
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-type-limits
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-type-limits
 
 #
 # depends on misc/s1394

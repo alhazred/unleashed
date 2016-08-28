@@ -47,9 +47,9 @@ CONF_SRCDIR	= $(UTSBASE)/common/io/scsi/adapters/scsi_vhci
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-label
 
 #
 # Define targets.

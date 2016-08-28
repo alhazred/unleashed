@@ -28,7 +28,7 @@ SHFILES= calendar
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
+CERRWARN += -Wno-implicit-function-declaration
 CLOBBERFILES = $(SHFILES)
 
 .KEEP_STATE:

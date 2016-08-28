@@ -60,7 +60,7 @@ MAPFILE-ORDER =	../common/mapfile-order-gcc
 
 # Add any machine specific flags.
 
-CFLAGS +=	-_gcc=-mno-app-regs
+CFLAGS +=	-mno-app-regs
 ASFLAGS +=	-D__amd64 -D_ELF64 $(amd64_ASFLAGS)
 ADBGENFLAGS +=	-mlp64
 ADBSUB=		$(ADBSUB64)

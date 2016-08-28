@@ -57,7 +57,7 @@ LDLIBS +=	$(XXXLDLIBS)
 
 CPPFLAGS +=	-I.. -I$(SRC)/uts/common
 # XX64 -- this should not be needed -- fix me
-DYNFLAGS +=	-_gcc=-nostdlib
+DYNFLAGS +=	-nostdlib
 
 CLOBBERFILES +=	$(LIBRARIES)
 

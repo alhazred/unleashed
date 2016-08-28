@@ -53,7 +53,7 @@ INSTALL_TARGET  = $(BINARY) $(ROOTMODULE)
 #
 LDFLAGS		+= -dy -Nmisc/usbser
 
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-parentheses
 
 .KEEP_STATE:
 

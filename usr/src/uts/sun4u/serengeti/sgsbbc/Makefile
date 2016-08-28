@@ -61,11 +61,11 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
 
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 #
 #	Default build targets.

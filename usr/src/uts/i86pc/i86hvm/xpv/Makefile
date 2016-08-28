@@ -60,7 +60,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 CPPFLAGS	+= -DHVMPV_XPV_VERS=1
 LDFLAGS		+= -dy -N mach/pcplusmp
 
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Default build targets.

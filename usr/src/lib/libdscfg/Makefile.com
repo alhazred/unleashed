@@ -42,11 +42,11 @@ SRCS=		$(OBJECTS:%.o=../common/%.c)
 
 LIBS +=		$(DYNLIB)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-address
 
 LDLIBS +=	-lnsctl -lunistat -ladm -lsocket -lnsl -lc
 

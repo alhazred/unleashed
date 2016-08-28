@@ -48,7 +48,7 @@ INCS += -I$(JAVA_ROOT)/include \
 LDLIBS +=	-lc -lnvpair -ldiskmgt -lzfs
 CPPFLAGS +=	$(INCS)
 $(NOT_RELEASE_BUILD) CPPFLAGS += -DDEBUG
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-switch
 
 SRCDIR =	../common
 

@@ -52,8 +52,8 @@ OBJS =			$(RPCYPUPDATEOBJ)
 
 SRCS =			$(OBJS:%.o=%.c)
 
-CERRWARN +=		-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=		-_gcc=-Wno-unused-variable
+CERRWARN +=		-Wno-implicit-function-declaration
+CERRWARN +=		-Wno-unused-variable
 
 CLOBBERFILES += ypupdated_prot.h
 

@@ -38,7 +38,7 @@ PROGS= $(PROG) $(RT) $(TS) $(IA) $(FSS) $(FX) $(SDC)
 
 include ../Makefile.cmd
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 ROOTDIR=	$(ROOT)/usr/lib/class
 ROOTDIRS=	$(ROOTDIR)	\

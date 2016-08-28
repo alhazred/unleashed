@@ -31,11 +31,11 @@ XPG6EXOBJS= exobjs.xpg6/dc.o
 
 include ../Makefile.cmd
 
-LDFLAGS += $(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-value
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-value
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

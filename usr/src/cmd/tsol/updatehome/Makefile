@@ -34,7 +34,7 @@ OBJS= setupfiles.o updatehome.o
 SRCS= $(OBJS:%.o=%.c)
 
 LDLIBS += -ltsol -lsecdb
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 .KEEP_STATE:
 

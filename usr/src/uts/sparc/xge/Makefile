@@ -84,16 +84,16 @@ XGE_CFLAGS	= $(HAL_CFLAGS) $(TRACE_CFLAGS) \
 		-I$(UTSBASE)/common/io/xge/drv -DSOLARIS
 
 CFLAGS		+= $(XGE_CFLAGS)
-CFLAGS		+= -_gcc=-fno-strict-aliasing
-CFLAGS		+= -_gcc=-fno-unit-at-a-time
-CFLAGS		+= -_gcc=-fno-optimize-sibling-calls
-CFLAGS		+= -_gcc=-O2
+CFLAGS		+= -fno-strict-aliasing
+CFLAGS		+= -fno-unit-at-a-time
+CFLAGS		+= -fno-optimize-sibling-calls
+CFLAGS		+= -O2
 CFLAGS		+= $(C99_ENABLE)
 CFLAGS64	+= $(XGE_CFLAGS)
-CFLAGS64	+= -_gcc=-fno-strict-aliasing
-CFLAGS64	+= -_gcc=-fno-unit-at-a-time
-CFLAGS64	+= -_gcc=-fno-optimize-sibling-calls
-CFLAGS64	+= -_gcc=-O2
+CFLAGS64	+= -fno-strict-aliasing
+CFLAGS64	+= -fno-unit-at-a-time
+CFLAGS64	+= -fno-optimize-sibling-calls
+CFLAGS64	+= -O2
 CFLAGS64	+= $(C99_ENABLE)
 
 #
@@ -107,11 +107,11 @@ LDFLAGS		+=  -dy -N misc/mac -N drv/ip
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-empty-body
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-empty-body
+CERRWARN	+= -Wno-uninitialized
 
 #
 #

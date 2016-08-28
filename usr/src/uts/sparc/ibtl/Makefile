@@ -64,11 +64,11 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-value
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-value
 
 #
 #	Default build targets.

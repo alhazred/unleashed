@@ -19,7 +19,7 @@ include $(SRC)/cmd/perl/Makefile.perl
 
 LDLIBS += -llgrp
 
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-type-limits
 
 XSUBPPFLAGS = -typemap typemap
 

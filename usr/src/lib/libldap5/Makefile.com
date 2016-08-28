@@ -97,13 +97,13 @@ sparcv9_C_PICFLAGS =	$(sparcv9_C_BIGPICFLAGS)
 CFLAGS +=	$(LOCFLAGS)
 CFLAGS64 +=	$(LOCFLAGS)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-unused-value
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-value
+CERRWARN +=	-Wno-address
 
 LDLIBS +=	-lsasl -lsocket -lnsl -lmd -lc
 

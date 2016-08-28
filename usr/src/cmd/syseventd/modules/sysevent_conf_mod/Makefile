@@ -30,7 +30,7 @@ include ../Makefile.com
 LDLIBS +=	-lnvpair
 CPPFLAGS +=	-I ../../daemons/syseventconfd
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

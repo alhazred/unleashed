@@ -46,7 +46,7 @@ include $(UTSBASE)/sparc/Makefile.sparc
 
 LDFLAGS         += -dy -Nmisc/usba -Nmisc/usbser
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Define targets

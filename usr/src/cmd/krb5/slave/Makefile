@@ -55,13 +55,13 @@ CPPFLAGS +=	-I. \
 		-I$(SRC)/lib/krb5/kadm5 \
 		-I$(SRC)/uts/common/gssapi/mechs/krb5/include
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-value
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-value
+CERRWARN +=	-Wno-address
 
 LDFLAGS +=	$(KRUNPATH) $(KERBRUNPATH)
 LDLIBS +=	-lmech_krb5 -lsocket

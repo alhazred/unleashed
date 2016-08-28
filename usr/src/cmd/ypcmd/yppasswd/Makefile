@@ -42,7 +42,7 @@ ROOTDIRS =	$(NETSVC) $(NETYP)
 #LDLIBS +=	-lrpcsvc -lnsl -lcrypt -lintl -lgen
 LDLIBS +=	-lnsl -lnisdb -lc
 MAPFILES =	$(MAPFILE.INT) $(MAPFILE.NGB)
-LDFLAGS +=	$(MAPFILES:%=-_gcc=-Wl,-M%)
+LDFLAGS +=	$(MAPFILES:%=-Wl,-M%)
 
 # Pick up includes from library
 CPPFLAGS += -I$(SRC)/lib/libnisdb/yptol
@@ -56,9 +56,9 @@ INETYPPROG=		$(NETYPPROG:%=$(NETYP)/%)
 COMMONOBJ =		yppasswdxdr.o yplckpwdf.o
 RPCYPPASSWDDOBJ =	yppasswdd.o changepasswd.o
 
-CERRWARN +=		-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=		-_gcc=-Wno-parentheses
-CERRWARN +=		-_gcc=-Wno-uninitialized
+CERRWARN +=		-Wno-implicit-function-declaration
+CERRWARN +=		-Wno-parentheses
+CERRWARN +=		-Wno-uninitialized
 
 #
 # Objects shared between all the major components

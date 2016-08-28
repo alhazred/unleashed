@@ -61,7 +61,7 @@ CFLAGS += \
 CFLAGS64 += \
 	$(ASTCFLAGS64)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 ROOTCMDDIR=$(ROOT)/usr/bin
 

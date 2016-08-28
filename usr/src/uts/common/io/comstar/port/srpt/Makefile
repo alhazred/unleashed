@@ -60,7 +60,7 @@ LDFLAGS		+= -dy -Ndrv/stmf -Nmisc/ibtl -Nmisc/ibcm
 
 C99MODE=	$(C99_ENABLE)
 
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Default build targets.

@@ -64,11 +64,11 @@ LDFLAGS += -dy -N"misc/scsi" -N"fs/sockfs" -N"sys/doorfs" -Nmisc/md5 -Nmisc/ksoc
 LDFLAGS += -N"misc/idm"
 
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-uninitialized
 
 #
 # Default build targets.

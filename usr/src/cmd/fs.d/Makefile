@@ -80,11 +80,11 @@ SYMDEVNM=		$(ROOTUSRSBIN)/devnm
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-function
 
 $(SPPROG) :=	LDLIBS += -lkstat
 

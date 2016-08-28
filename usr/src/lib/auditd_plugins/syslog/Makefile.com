@@ -46,8 +46,8 @@ CPPFLAGS	+= -D_REENTRANT
 CPPFLAGS	+= -I$(PRAUDIT)
 CPPFLAGS	+= -I$(LIBBSM)
 
-CERRWARN	+= -_gcc=-Wno-char-subscripts
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-char-subscripts
+CERRWARN	+= -Wno-uninitialized
 
 ROOTLIBDIR=	$(ROOT)/usr/lib/security
 

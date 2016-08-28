@@ -32,8 +32,8 @@ SRCS=	../prctl.c ../utils.c
 
 include ../../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 LDLIBS	+= -lproc -lproject
 

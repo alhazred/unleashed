@@ -50,9 +50,9 @@ include ../../../Makefile.module
 
 dmod/$(MODULE) := LDLIBS += -lproc -lm
 
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 %.o: $(MODSRCS_DIR)/%.c
 	$(COMPILE.c) $<

@@ -55,9 +55,7 @@ fasttrap/tst.stack.exe := LDLIBS += -ldtrace
 sysevent/tst.post.exe := LDLIBS += -lsysevent
 sysevent/tst.post_chan.exe := LDLIBS += -lsysevent
 
-ustack/tst.bigstack.exe := COPTFLAG += -_gcc=-O1
-
-GCC = $(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
+ustack/tst.bigstack.exe := COPTFLAG += -O1
 
 nfs/%.o: $(SNOOPDIR)/%.c
 	$(COMPILE.c) -o $@ $< -I$(SNOOPDIR)
@@ -76,7 +74,7 @@ nfs/tst.call3.exe: nfs/tst.call3.o nfs/$(RPCSVCOBJS)
 	$(POST_PROCESS) ; $(STRIP_STABS)
 
 pid/tst.gcc.exe: pid/tst.gcc.c
-	$(GCC) -o pid/tst.gcc.exe pid/tst.gcc.c $(LDFLAGS) $(LDLIBS)
+	$(CC) -o pid/tst.gcc.exe pid/tst.gcc.c $(LDFLAGS) $(LDLIBS)
 	$(POST_PROCESS) ; $(STRIP_STABS)
 
 json/tst.usdt.o: json/usdt.h

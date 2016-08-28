@@ -63,10 +63,10 @@ CFLAGS		+= -I$(COM_DIR)
 AS_CPPFLAGS	+= -I../../$(PLATFORM)
 
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-label
 
 #
 #	Default build targets.

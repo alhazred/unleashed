@@ -61,10 +61,10 @@ CFLAGS += -D_SD_8K_BLKSIZE -D_SYSCALL32
 LDFLAGS += -dy -N"drv/nsctl" -N"drv/nskern" -N"drv/ncall" -N"misc/spuni" \
 	-N"misc/rdcsrv" -N"strmod/rpcmod"
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 
 .KEEP_STATE:

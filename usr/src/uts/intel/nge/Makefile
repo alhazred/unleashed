@@ -66,8 +66,8 @@ LDFLAGS		+= -dy -N misc/mac
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

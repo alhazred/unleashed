@@ -41,12 +41,12 @@ include ../Makefile.cmd
 LDLIBS += -lcurses
 CPPFLAGS += -I../../lib/libcurses/screen
 MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
-LDFLAGS += $(MAPFILES:%=-_gcc=-Wl,-M%)
+LDFLAGS += $(MAPFILES:%=-Wl,-M%)
 
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

@@ -67,8 +67,8 @@ LDFLAGS	+= -dy -Nmisc/acpica -Nmisc/pcie
 CFLAGS		+= -D_MODULE_NAME="\"$(MODULE)\""
 
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

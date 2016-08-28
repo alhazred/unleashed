@@ -34,7 +34,7 @@ include ../../Makefile.ctf
 LDLIBS +=	-lscf -luutil
 
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

@@ -60,7 +60,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 ALL_BUILDS	= $(ALL_BUILDSONLY64)
 DEF_BUILDS	= $(DEF_BUILDSONLY64)
 
-CERRWARN += -_gcc=-Wno-char-subscripts
+CERRWARN += -Wno-char-subscripts
 
 
 #	Dependency

@@ -69,18 +69,18 @@ LIBREQ	=	$(LPLIB)/requests/liblpreq.a
 LIBSEC	=	$(LPLIB)/secure/liblpsec.a
 LIBUSR	=	$(LPLIB)/users/liblpusr.a
 
-CERRWARN +=	-_gcc=-Wno-sequence-point
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-unused-value
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-clobbered
-CERRWARN +=	-_gcc=-Wno-empty-body
-CERRWARN +=	-_gcc=-Wno-extra
-CERRWARN +=	-_gcc=-Wno-address
+CERRWARN +=	-Wno-sequence-point
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-value
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-clobbered
+CERRWARN +=	-Wno-empty-body
+CERRWARN +=	-Wno-extra
+CERRWARN +=	-Wno-address
 
 all:=		TARGET= all
 install:=	TARGET= install

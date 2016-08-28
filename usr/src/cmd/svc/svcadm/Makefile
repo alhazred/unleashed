@@ -33,8 +33,8 @@ include ../../Makefile.cmd
 POFILE = 	$(PROG)_all.po
 LDLIBS +=	-lscf -luutil -lcontract
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 
 
 .KEEP_STATE:

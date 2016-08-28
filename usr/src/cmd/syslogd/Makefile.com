@@ -34,7 +34,7 @@ LLOBJS=		$(OBJS:%.o=%.ll)
 include ../../Makefile.cmd
 
 $(PROG)		:= LDLIBS += -lscf -lnsl
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 CPPFLAGS	+= -D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT
 CFLAGS		+= -DNDEBUG
 

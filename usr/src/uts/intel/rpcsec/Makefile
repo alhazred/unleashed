@@ -63,8 +63,8 @@ LDFLAGS += -dy -N strmod/rpcmod -N misc/tlimod
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

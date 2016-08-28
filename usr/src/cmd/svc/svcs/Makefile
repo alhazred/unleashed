@@ -37,9 +37,9 @@ POFILE =	$(PROG)_all.po
 LDLIBS +=	-lcontract -lscf -luutil -lumem -lnvpair -lzonecfg
 CPPFLAGS += -I ../common
 
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-parentheses
 
 .KEEP_STATE:
 

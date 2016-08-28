@@ -32,7 +32,7 @@ TMPDIR= /tmp
 
 include ../Makefile.tools
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 MAN1ONBLDFILES= codereview.1onbld
 

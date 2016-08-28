@@ -32,9 +32,9 @@ OBJS = revnetgroup.o getgroup.o table.o util.o
 SRCS = $(OBJS:.o=.c)
 HDRS = getgroup.h table.h util.h
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

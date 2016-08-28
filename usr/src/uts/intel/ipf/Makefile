@@ -69,11 +69,11 @@ INC_PATH += -I$(UTSBASE)/common/inet/ipf
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-empty-body
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-empty-body
 
 #
 #	Default build targets.

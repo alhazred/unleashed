@@ -32,9 +32,9 @@ INCLUDES += -I../include
 
 CPPFLAGS += $(INCLUDES)
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-parentheses
 
 
 AR=     /usr/ccs/bin/ar

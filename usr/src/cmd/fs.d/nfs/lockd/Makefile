@@ -40,10 +40,10 @@ LDLIBS	 +=	-lnsl -lscf
 CPPFLAGS +=	-I../lib
 C99MODE	  =	$(C99_ENABLE)
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-uninitialized
 
 $(TYPEPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS)

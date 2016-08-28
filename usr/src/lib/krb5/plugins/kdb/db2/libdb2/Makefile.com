@@ -101,7 +101,7 @@ CPPFLAGS += 	-DHAVE_CONFIG_H \
 		-I$(SRC)/lib/gss_mechs/mech_krb5/include  #for db-ndbm.h
 
 CFLAGS +=	-I..
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 LDLIBS +=	-lc
 
 # Identify that this library is an interposer (on dbm_ routines from libc.so.1).

@@ -25,8 +25,8 @@ CPPFLAGS += -I$(SRC)/uts/common/gssapi/include \
 	 -DHAVE_TIMEZONE
 COPTFLAG += #-I$(KINCDIR) 
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-function
 
 LDFLAGS += $(KRUNPATH) $(KERBRUNPATH)
 LDLIBS += $(KMECHLIB) $(ROOT)$(KERBLIBDIR)/libss.so

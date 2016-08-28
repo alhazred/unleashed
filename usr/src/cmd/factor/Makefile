@@ -28,7 +28,7 @@ PROG= factor
 include ../Makefile.cmd
 
 LDLIBS += -lm
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
+CERRWARN += -Wno-implicit-function-declaration
 
 .KEEP_STATE:
 

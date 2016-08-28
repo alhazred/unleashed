@@ -35,10 +35,10 @@ OBJS=	df.o
 CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 LDLIBS += -ladm
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-unused-function
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-unused-function
 
 # for messaging catalogue file
 #

@@ -70,16 +70,16 @@ EDITPATH= \
 	    -e 's!VAR_MAIL!/var/mail!g' < $? > $@
 
 CPPFLAGS =	-DSVR4 -I. $(CPPFLAGS.master)
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-clobbered
-CERRWARN +=	-_gcc=-Wno-extra
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-clobbered
+CERRWARN +=	-Wno-extra
 
 LDLIBS +=	-lmail -lsocket
 
 # mail defines its own delete() - reduce symbols to locals to remove name clash.
-LDFLAGS +=	$(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
+LDFLAGS +=	$(MAPFILE.NGB:%=-Wl,-M%)
 
 # conditional assignments
 #

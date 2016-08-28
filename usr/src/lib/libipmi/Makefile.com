@@ -58,7 +58,7 @@ LDLIBS +=	-lc -lm -lnvpair -lsocket -lnsl
 CPPFLAGS +=	$(INCS)
 C99MODE = $(C99_ENABLE)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

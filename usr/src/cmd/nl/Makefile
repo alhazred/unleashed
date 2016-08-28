@@ -37,12 +37,12 @@ SRCS = nl.c ../expr/compile.c
 include ../Makefile.cmd
 
 LDLIBS += -lgen
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-variable
 $(XPG4):= CPPFLAGS += -DXPG4
 
 MAPFILE.INT =	../expr/mapfile-intf
-LDFLAGS +=	$(MAPFILE.INT:%=-_gcc=-Wl,-M%)
+LDFLAGS +=	$(MAPFILE.INT:%=-Wl,-M%)
 
 .KEEP_STATE:
 

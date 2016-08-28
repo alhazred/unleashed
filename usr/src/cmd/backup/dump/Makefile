@@ -67,11 +67,11 @@ GLOBAL=		../../../head
 CPPFLAGS=	-I$(LOCAL) -I$(GENERAL) -I$(GLOBAL) -DPARTIAL \
 		-I$(ROLLDIR) $(CPPFLAGS.master) \
 		-D_LARGEFILE64_SOURCE=1
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-clobbered
-CERRWARN +=	-_gcc=-Wno-extra
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-clobbered
+CERRWARN +=	-Wno-extra
 LIBDUMP=	../lib/libdump.a
 LDLIBS +=	$(BSTATIC) -L../lib -ldump $(BDYNAMIC) \
 		-lsocket -lnsl -ladm -lm -lkstat

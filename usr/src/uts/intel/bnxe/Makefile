@@ -83,13 +83,13 @@ CPPFLAGS	+= -DLM_RXPKT_NON_CONTIGUOUS \
 		   -I$(SRCDIR)
 
 LDFLAGS		+= -dy -r -Ndrv/ip -Nmisc/mac
-#CERRWARN	+= -_gcc=-Wno-old-style-declaration
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-function
-CERRWARN	+= -_gcc=-Wno-unused-value
-CERRWARN	+= -_gcc=-Wno-unused-variable
+#CERRWARN	+= -Wno-old-style-declaration
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-function
+CERRWARN	+= -Wno-unused-value
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

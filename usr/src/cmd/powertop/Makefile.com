@@ -39,8 +39,8 @@ SRCS		= $(COMMON_OBJS:%.o=../common/%.c)
 include ../../Makefile.cmd
 .KEEP_STATE:
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 LDLIBS		+= -lcurses -ldtrace -lkstat
 
 FILEMODE	= 0555

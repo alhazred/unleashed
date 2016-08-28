@@ -31,7 +31,7 @@ include ../Makefile.cmd
 SED = sed
 DCFILE = $(PROG).dc
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 $(XPG4):= CPPFLAGS += -DXPG4
 $(POFILE) := XGETFLAGS += -a -x pr.xcl

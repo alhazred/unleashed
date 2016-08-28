@@ -54,10 +54,10 @@ CPPFLAGS 	+= -I./ -I$(ADJUNCT_PROTO)/usr/include/libxml2
 CPPFLAGS	+= -DTARGET_DATA_STORE=$(DATA_STORE)
 CPPFLAGS	+= -D_POSIX_PTHREAD_SEMANTICS
 
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-ignored-qualifiers
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-ignored-qualifiers
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-implicit-function-declaration
 
 CLOBBERFILES += $(DTRACE_HEADER)
 

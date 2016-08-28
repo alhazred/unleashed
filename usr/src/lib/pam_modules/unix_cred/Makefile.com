@@ -30,8 +30,8 @@ OBJECTS=	unix_cred.o
 include		../../Makefile.pam_modules
 
 LDLIBS		+= -lbsm -lpam -lsecdb -lproject -lc
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 all:	$(LIBS)
 

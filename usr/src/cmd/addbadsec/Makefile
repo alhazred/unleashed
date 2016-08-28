@@ -32,7 +32,7 @@ include ../Makefile.cmd
 
 CPPFLAGS += -D_EXTVTOC
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

@@ -29,7 +29,7 @@ include ../Makefile.cmd
 LDLIBS += -lsocket -lzonecfg -lcontract -lbrand -lsecdb
 FILEMODE = 0555
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

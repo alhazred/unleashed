@@ -63,10 +63,10 @@ POFILES=	$(OBJECTS:.o=.po)
 GENERAL=	../include
 GLOBAL=		../../../head
 CPPFLAGS=	-I$(GENERAL) -I$(GLOBAL) $(CPPFLAGS.master)
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-unused-variable
 CLEANFILES=	$(OBJECTS) $(DEBUGS) *.ln \
 		$(YSRC) $(LIBRARY)
 

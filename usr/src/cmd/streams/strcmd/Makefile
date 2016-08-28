@@ -26,7 +26,7 @@ PROG= strchg strconf
 
 include ../../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

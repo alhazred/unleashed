@@ -61,7 +61,7 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 
 LDFLAGS	+= -dy -Ndrv/sgsbbc
 
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-type-limits
 
 #
 #	Default build targets.

@@ -56,8 +56,8 @@ plat_ROOTCONF = $(PLATFORMS:%=$(ROOT)/usr/platform/%/lib/fm/topo/plugins/$(CONF)
 ROOTCONF = $($(CLASS)_ROOTCONF)
 
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-parentheses
 
 APIMAP = ../../../libtopo/common/topo_mod.map
 MAPFILES =		# use APIMAP instead
@@ -68,7 +68,7 @@ CFLAGS += $(GSHARED) $(XREGSFLAG)
 
 CPPFLAGS += -I.
 CPPFLAGS += -D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT
-LDFLAGS += $(ZIGNORE) -_gcc=-Wl,-M$(APIMAP)
+LDFLAGS += $(ZIGNORE) -Wl,-M$(APIMAP)
 LDLIBS += -L$(ROOTLIBDIR)/fm -ltopo -lnvpair -lc
 DYNFLAGS += -R/usr/lib/fm
 

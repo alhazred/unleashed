@@ -83,9 +83,9 @@ LDFLAGS		+= -Nmisc/bignum -Nmisc/fctl
 # investigate and remove these for maximum coverage.  Please do not carry
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

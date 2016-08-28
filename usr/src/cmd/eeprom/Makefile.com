@@ -37,9 +37,9 @@ DIRMODE		= 755
 
 OBJS		= error.o
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-implicit-function-declaration
 
 SOURCES = $(OBJS:%.o=%.c)
 

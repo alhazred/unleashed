@@ -36,7 +36,7 @@ clean $(XPG4) := OBJS += values-xpg4.o
 
 FILEMODE= 0555
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 .KEEP_STATE:
 

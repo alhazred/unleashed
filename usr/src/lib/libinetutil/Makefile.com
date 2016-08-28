@@ -46,8 +46,8 @@ LDLIBS +=	-lsocket -lc
 
 CPPFLAGS +=	-I$(SRCDIR)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
 
 .KEEP_STATE:
 

@@ -37,9 +37,9 @@ CPPFLAGS	+= -I$(ADJUNCT_PROTO)/usr/include/libxml2
 LDLIBS 		+= -lkstat -lpool -lexacct -lscf \
 		    -lcontract -lcmdutils -lumem
 
-CERRWARN 	+= -_gcc=-Wno-parentheses
-CERRWARN 	+= -_gcc=-Wno-unused-label
-CERRWARN 	+= -_gcc=-Wno-uninitialized
+CERRWARN 	+= -Wno-parentheses
+CERRWARN 	+= -Wno-unused-label
+CERRWARN 	+= -Wno-uninitialized
 
 OBJS =		$(SRCS:%.c=%.o)
 

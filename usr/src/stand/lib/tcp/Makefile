@@ -33,7 +33,7 @@ CMNDIR  = $(CMNNETDIR)/dhcp
 LDLIBS += -linet
 CPPFLAGS += -I../inet $(SOCKCPPFLAGS)
 
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-uninitialized
 
 include ../Makefile.targ

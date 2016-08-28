@@ -29,8 +29,8 @@ PROG= tabs
 include ../Makefile.cmd
 
 LDLIBS += -lcurses
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-address
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-address
 
 .KEEP_STATE:
 

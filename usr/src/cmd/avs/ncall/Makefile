@@ -39,7 +39,7 @@ POFILE=	$(OBJS:%.o=%.po)
 
 LDLIBS += -ldscfg
 CFLAGS += -D_SYSCALL32 -D__NCALL__
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 ROOTLINK = $(ROOTLIB)/$(PROG)
 
 all	:=	TARGET= all

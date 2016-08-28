@@ -63,8 +63,8 @@ INC_PATH	+= -I$(ROOT)/usr/include
 #
 LDFLAGS		+= -dy -Nmisc/fctl
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

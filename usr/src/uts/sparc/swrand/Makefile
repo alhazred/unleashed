@@ -65,7 +65,7 @@ LDFLAGS += -dy -Nmisc/kcf -Nmisc/sha1
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-function
+CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.

@@ -51,10 +51,10 @@ POFILES = generic.po
 COPTFLAG +=	#-I$(KINCDIR) 
 CPPFLAGS +=	-D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-parentheses
 
 CPPFLAGS += -I../../lib/gss_mechs/mech_krb5/include \
                  -I$(SRC)/lib/gss_mechs/mech_krb5 \
@@ -62,7 +62,7 @@ CPPFLAGS += -I../../lib/gss_mechs/mech_krb5/include \
                  -I$(SRC)/uts/common/gssapi/mechs/krb5/include
 
 ktkt_warnd :=	MAPFILES =	$(MAPFILE.INT) $(MAPFILE.NGB)
-ktkt_warnd :=	LDFLAGS +=	$(KRUNPATH) $(MAPFILES:%=-_gcc=-Wl,-M%)
+ktkt_warnd :=	LDFLAGS +=	$(KRUNPATH) $(MAPFILES:%=-Wl,-M%)
 
 LDFLAGS +=	$(KRUNPATH)
 LDLIBS +=	$(KMECHLIB) -lnsl

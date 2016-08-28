@@ -38,8 +38,8 @@ C99MODE=	$(C99_ENABLE)
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 -D_REENTRANT $(INCS)
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-switch
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-switch
 
 .KEEP_STATE:
 

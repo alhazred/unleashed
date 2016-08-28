@@ -47,8 +47,8 @@ ALL = cprboot
 
 include ../../common/Makefile.com
 include $(TOPDIR)/psm/Makefile.psm.64
-CFLAGS64 += -_gcc=-mtune=ultrasparc $(CCABS32)
-CERRWARN += -_gcc=-Wno-uninitialized
+CFLAGS64 += -mtune=ultrasparc $(CCABS32)
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

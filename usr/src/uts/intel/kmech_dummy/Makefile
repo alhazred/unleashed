@@ -47,7 +47,7 @@ ROOTMODULE	= $(ROOT_KGSS_DIR)/$(MODULE)
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-parentheses
 
 #
 # Define dependency on kgssapi

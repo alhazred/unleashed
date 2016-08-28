@@ -63,7 +63,7 @@ CLEANFILES	+= $(CPULIB) $(SYM_MOD)
 ALL_TARGET	= $(SYM_MOD)
 INSTALL_TARGET	= def $(BINARY) $(ROOTMODULE) $(ROOTSOFTLINKS)
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 #
 # cpu-module-specific flags

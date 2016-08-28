@@ -45,8 +45,8 @@ MAPFILES =	../mapfile-vers
 
 CPPFLAGS += -I$(SRC)/uts/common/gssapi/include $(DEBUG) -I$(SRC)/lib/gss_mechs/mech_krb5/include -I$(SRC)/uts/common/gssapi/mechs/krb5/include -I$(SRC)/lib/gss_mechs/mech_krb5/mech
 
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-type-limits
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-type-limits
 
 .KEEP_STATE:
 

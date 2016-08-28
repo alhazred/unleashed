@@ -127,8 +127,8 @@ ASFLAGS_standalone = -DUMEM_STANDALONE
 ASFLAGS_library =
 ASFLAGS += $(ASFLAGS_$(CURTYPE)) -D_ASM
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-uninitialized
 
 # We want the thread-specific errno in the library, but we don't want it in
 # the standalone.  $(DTS_ERRNO) is designed to add -D_TS_ERRNO to $(CPPFLAGS),

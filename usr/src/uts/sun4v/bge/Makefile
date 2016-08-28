@@ -63,11 +63,11 @@ LDFLAGS		+= -dy -N misc/mac -N drv/ip
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-unused-function
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.

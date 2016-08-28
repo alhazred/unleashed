@@ -57,9 +57,9 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 CLEANFILES      += $(DRMACH_OFFSETS_H) $(DRMACH_OFFSETS_OUT)
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-uninitialized
 
 #
 # module dependencies

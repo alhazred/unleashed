@@ -61,8 +61,8 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 
 LDFLAGS += -dy -Ndrv/sgsbbc
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 #
 #	Default build targets.

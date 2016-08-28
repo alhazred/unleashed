@@ -35,7 +35,7 @@ LDLIBS +=	-lc -lnvpair
 SRCDIR =	../common
 CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 .KEEP_STATE:
 

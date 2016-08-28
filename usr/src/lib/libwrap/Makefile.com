@@ -49,10 +49,10 @@ CPPFLAGS +=	$(NETGROUP) $(TLI) $(ALWAYS_HOSTNAME) $(AUTH) \
 		-DRFC931_TIMEOUT=$(RFC931_TIMEOUT) \
 		-I$(SRCDIR) 
 
-CERRWARN +=	-_gcc=-Wno-return-type
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-return-type
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

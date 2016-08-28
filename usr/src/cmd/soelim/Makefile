@@ -31,7 +31,7 @@ OBJS =		soelim.o
 
 SRCS =		$(OBJS:%.o=%.c)
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-implicit-function-declaration
 
 all :		$(PROG)
 

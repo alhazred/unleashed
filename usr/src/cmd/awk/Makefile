@@ -35,11 +35,11 @@ SRCS= $(OBJ1:%.o=%.c)
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-uninitialized
 
 #
 # Message catalog

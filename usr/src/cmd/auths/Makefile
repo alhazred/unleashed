@@ -29,7 +29,7 @@ AUTHS= auths
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 ROOTBINAUTHS = $(AUTHS:%=$(ROOTBIN)/%)
 

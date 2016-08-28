@@ -40,7 +40,7 @@ C99MODE=	$(C99_ENABLE)
 LDLIBS +=	-lc -lnvpair -lscf -lm
 CPPFLAGS +=	$(INCS) -D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-unused-label
+CERRWARN +=	-Wno-unused-label
 
 .KEEP_STATE:
 

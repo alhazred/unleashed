@@ -31,8 +31,8 @@ BART=	bart
 include ../Makefile.cmd
 
 LDLIBS +=	-lsec -lmd
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 #
 # for messaging catalog

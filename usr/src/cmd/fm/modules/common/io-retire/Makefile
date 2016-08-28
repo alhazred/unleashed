@@ -30,4 +30,4 @@ SRCS = rio_main.c
 include ../../Makefile.plugin
 
 LDLIBS += -ldevinfo
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses

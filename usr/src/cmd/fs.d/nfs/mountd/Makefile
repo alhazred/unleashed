@@ -41,8 +41,8 @@ DOBJ	  =	$(DSRC:%.d=%.o)
 LDLIBS	 +=	-lrpcsvc -lnsl -lbsm -lsocket -ltsnet -ltsol -lnvpair -lscf -lumem
 CPPFLAGS +=	-D_REENTRANT -I../lib
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-switch
 
 $(TYPEPROG):	$(OBJS)
 		$(COMPILE.d) -s $(DSRC) -o $(DOBJ) $(OBJS)

@@ -77,8 +77,8 @@ IFLAGS = -I$(SRCDIR) -I$(USR_PSM_INCL_DIR) \
 
 CPPFLAGS = $(IFLAGS) $(CPPFLAGS.master) -D_SYSCALL32
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-variable
 
 LINKED_DIRS     = $(PLATLINKS:%=$(USR_PLAT_DIR)/%)
 LINKED_SBIN_DIRS = $(PLATLINKS:%=$(USR_PLAT_DIR)/%/sbin)

@@ -32,7 +32,7 @@ include		../../Makefile.fstype
 # still export a number of "yy*" (libl) interfaces.  Reduce all other symbols
 # to local scope.
 MAPFILES +=	$(MAPFILE.INT) $(MAPFILE.LEX) $(MAPFILE.NGB)
-MAPOPTS =	$(MAPFILES:%=-_gcc=-Wl,-M%)
+MAPOPTS =	$(MAPFILES:%=-Wl,-M%)
 
 CPPFLAGS +=	-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 LDLIBS +=	-lmalloc -ll -ladm
@@ -40,12 +40,12 @@ LDFLAGS +=	$(MAPOPTS)
 YFLAGS =	"-d"
 
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-value
-CERRWARN +=	-_gcc=-Wno-unused-function
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-value
+CERRWARN +=	-Wno-unused-function
 
 SRCS=	fsdb.c ud_lib.c
 

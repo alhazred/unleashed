@@ -32,7 +32,7 @@ include ../../Makefile.abi
 LIBS =		$(DYNLIB)
 CPPFLAGS =      -I. $(CPPFLAGS.master)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 # No mapfile here
 MAPFILES =
@@ -42,7 +42,7 @@ MAPFILES =
 # to run amd64 64-bit executables:
 ZDEFS =
 $(SUPPRESS_LIBS)LDLIBS += -lmapmalloc -lproc -lctf -lc
-$(SUPPRESS_LIBS)ZDEFS = -_gcc=-Wl,-zdefs
+$(SUPPRESS_LIBS)ZDEFS = -Wl,-zdefs
 
 all:	$(LIBS)
 

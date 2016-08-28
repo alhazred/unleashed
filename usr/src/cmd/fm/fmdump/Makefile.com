@@ -36,8 +36,8 @@ CPPFLAGS += -I. -I../common -I../../include
 CFLAGS += $(CTF_FLAGS)
 LDLIBS += -L$(ROOT)/usr/lib/fm -lfmd_log -lnvpair -ltopo -lfmd_msg
 LDFLAGS += -R/usr/lib/fm
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 .NO_PARALLEL:
 .PARALLEL: $(OBJS)

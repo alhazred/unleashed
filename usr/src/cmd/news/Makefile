@@ -29,8 +29,8 @@ include ../Makefile.cmd
 VARNEWSD= $(ROOT)/var/news
 DIRS= $(VARNEWSD)
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
 
 .KEEP_STATE:
 

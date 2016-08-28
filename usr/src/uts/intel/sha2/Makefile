@@ -68,8 +68,8 @@ LDFLAGS += -dy -Nmisc/kcf
 
 CFLAGS += -I$(COMDIR)
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

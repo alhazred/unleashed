@@ -61,7 +61,7 @@ MODSTUBS_DIR	 = $(OBJS_DIR)
 $(MODSTUBS_O)	:= AS_CPPFLAGS += -DSWAPGENERIC_MODULE
 CLEANFILES	+= $(MODSTUBS_O)
 
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

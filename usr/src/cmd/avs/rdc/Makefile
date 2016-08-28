@@ -56,9 +56,9 @@ sndrd		:= LDLIBS += -lrdc -lnsl
 sndrsyncd	:= LDLIBS += -lrdc -ldscfg -lunistat
 
 CFLAGS += -D_RDC_ -D_SYSCALL32
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 POFILE = rdc_all.po
 POFILES = sndradm.po sndrboot.po
 ROOTLIBLINKS = $(ROOTLIB)/sndrd $(ROOTLIB)/sndrsyncd

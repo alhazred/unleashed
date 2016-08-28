@@ -59,9 +59,9 @@ clobber :=	TARGET = clobber
 
 include ../../Makefile.cmd
 
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 
 TEXT_DOMAIN =	SUNW_OST_OSLIB
 XGETTEXT =	$(GNUXGETTEXT)
@@ -113,7 +113,7 @@ LDLIBS += \
 rpc_svc.o := CFLAGS += $(RPC_MSGOUT_OPT)
 
 $(PROG) := MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
-$(PROG) := LDFLAGS += $(MAPFILES:%=-_gcc=-Wl,-M%) \
+$(PROG) := LDFLAGS += $(MAPFILES:%=-Wl,-M%) \
 	-R /usr/lib/smbsrv
 
 DIRMODE = 0755

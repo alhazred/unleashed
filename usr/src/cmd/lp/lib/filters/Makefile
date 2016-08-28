@@ -49,8 +49,8 @@ LIBS = $(LIBRARY)
 
 CPPFLAGS =	-I../../include $(CPPFLAGS.master)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
 
 POFILE =	lp_lib_filters.po
 

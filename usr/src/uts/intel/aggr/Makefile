@@ -58,11 +58,11 @@ LDFLAGS		+= -dy -Ndrv/dld -Nmisc/mac -Nmisc/dls
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

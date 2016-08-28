@@ -32,8 +32,8 @@ CLEANFILES +=	$(CMP_OBJS)
 
 include ../Makefile.tools
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused
 
 .KEEP_STATE:
 

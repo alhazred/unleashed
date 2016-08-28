@@ -87,8 +87,8 @@ CTFMERGE_LIB =	:
 include 	$(SRC)/lib/Makefile.lib
 include 	$(SRC)/cmd/sgs/Makefile.com
 
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-switch
 
 CTFCONVERT_O=
 

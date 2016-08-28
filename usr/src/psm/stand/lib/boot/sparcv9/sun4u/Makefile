@@ -39,4 +39,4 @@ include ../Makefile.com
 
 include $(TOPDIR)/psm/Makefile.psm.64
 
-CFLAGS64	+= -_gcc=-mtune=ultrasparc $(CCABS32)
+CFLAGS64	+= -mtune=ultrasparc $(CCABS32)

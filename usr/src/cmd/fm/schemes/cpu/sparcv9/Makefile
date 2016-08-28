@@ -32,7 +32,7 @@ LDLIBS += -lkstat \
 	-L$(ROOTLIB)/fm/$(MACH64) -ltopo
 LDFLAGS += -R/usr/lib/fm/$(MACH64)
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 include ../../Makefile.targ
 

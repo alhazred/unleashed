@@ -29,7 +29,7 @@ PROG= audioctl
 include ../../Makefile.cmd
 
 LDLIBS += -ldevinfo
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

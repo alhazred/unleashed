@@ -54,9 +54,9 @@ include $(UTSBASE)/sun4u/tazmo/Makefile.tazmo
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-type-limits
 
 
 LDFLAGS	+= -dy -Ndrv/pcipsy

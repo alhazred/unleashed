@@ -72,7 +72,7 @@ INC_PATH	+= -I$(UTSBASE)/common/io/ppp/common
 # investigate and remove these for maximum coverage.  Please do not carry
 # these forward to new Makefiles.
 #
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

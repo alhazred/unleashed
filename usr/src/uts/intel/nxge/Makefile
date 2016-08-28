@@ -71,11 +71,11 @@ CFLAGS += -DSOLARIS
 #ALL_BUILDS      = $(ALL_BUILDS64)
 #DEF_BUILDS      = $(DEF_BUILDS64)
 
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-type-limits
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-type-limits
 
 #
 #	Driver depends on mac & IP

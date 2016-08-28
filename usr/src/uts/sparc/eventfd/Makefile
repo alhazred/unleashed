@@ -31,7 +31,7 @@ CONF_SRCDIR	= $(UTSBASE)/common/io
 #
 include $(UTSBASE)/sparc/Makefile.sparc
 
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Define targets

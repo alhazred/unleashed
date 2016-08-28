@@ -28,8 +28,8 @@ PROG= getfacl
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

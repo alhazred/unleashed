@@ -69,8 +69,8 @@ INC_PATH	+= -I$(UTSBASE)/common/io/ppp/common
 #
 LDFLAGS += -dy -N drv/sppp
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

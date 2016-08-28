@@ -82,8 +82,8 @@ LIBS	=	$(DYNLIB)
 LDLIBS  +=      -lc -lcryptoutil -lmd
 
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-unused-label
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-unused-label
 
 ROOTLIBDIR=     $(ROOT)/usr/lib/security
 ROOTLIBDIR64=   $(ROOT)/usr/lib/security/$(MACH64)

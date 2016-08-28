@@ -33,9 +33,9 @@ SRCS   = $(OBJS:%.o=%.c)
 
 CPPFLAGS	+= -I $(SRC)/lib/libc/port/locale
 NATIVE_CPPFLAGS	+= -I $(SRC)/lib/libc/port/locale
-CERRWARN	+= -_gcc=-Wno-char-subscripts
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-char-subscripts
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-label
 LDLIBS		+= -lgen
 LDLIBS 		+= -lavl
 

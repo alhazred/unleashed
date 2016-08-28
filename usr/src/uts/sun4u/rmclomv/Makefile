@@ -62,7 +62,7 @@ LDFLAGS += -dy -Ndrv/rmc_comm -Ndrv/pmugpio
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

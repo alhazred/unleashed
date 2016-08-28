@@ -42,9 +42,9 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lshare -lscf -lumem -lc -lxml2
 
 #add nfs/lib directory as part of the include path
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-uninitialized
 CPPFLAGS +=	-D_REENTRANT -I$(AUTOFSSMFLIB_DIR) \
 			-I$(ADJUNCT_PROTO)/usr/include/libxml2 \
   			-I$(SRCDIR)../common

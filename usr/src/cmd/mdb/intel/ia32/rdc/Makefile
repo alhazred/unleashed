@@ -33,4 +33,4 @@ include ../../Makefile.ia32
 include ../../../Makefile.module
 include ../../../common/modules/rdc/Makefile.com
 
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-unused-function

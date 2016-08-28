@@ -57,7 +57,7 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #
 #	Overrides.
 #
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-parentheses
 
 #
 #	Default build targets.

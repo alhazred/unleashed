@@ -44,8 +44,8 @@ LDLIBS += -lnsl -ltsnet
 CPPFLAGS += $(IFLAGS)
 CPPFLAGS += -DDEBUG
 
-CERRWARN += -_gcc=-Wno-unused-value
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-unused-value
+CERRWARN += -Wno-parentheses
 
 .KEEP_STATE:
 

@@ -45,7 +45,7 @@ $(OBJS)		:= CPPFLAGS +=  $(_EXTN)
 
 
 INC_PATH +=	../../../../uts/common/inet/nca -I.
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 CPPFLAGS +=	-I$(INC_PATH)
 
 .KEEP_STATE:

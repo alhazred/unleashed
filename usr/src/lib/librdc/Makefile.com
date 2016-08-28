@@ -36,9 +36,9 @@ SRCDIR= ../common
 
 LIBS +=		$(DYNLIB)
 
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-address
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-address
 
 CPPFLAGS +=	-DBUILD_REV_STR='"5.11"'
 CFLAGS +=	-I..

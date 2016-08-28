@@ -48,7 +48,7 @@ LDLIBS += -L$(ROOT)/usr/lib/fm -lnvpair -lfmevent -lfmd_msg -lfmnotify \
 	-lumem -lnetsnmp -lnetsnmpagent
 LDFLAGS += -R/usr/lib/fm
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 .NO_PARALLEL:
 .PARALLEL: $(OBJS)

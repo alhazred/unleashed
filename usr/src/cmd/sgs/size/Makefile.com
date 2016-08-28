@@ -33,7 +33,7 @@ COMOBJS=	main.o process.o fcns.o
 
 SRCS=		$(COMOBJS:%.o=../common/%.c)
 
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-variable
 
 OBJS =		$(COMOBJS)
 .PARALLEL:	$(OBJS)

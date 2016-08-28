@@ -57,8 +57,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 LDFLAGS += -dy -N drv/md -N fs/ufs
 
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-parentheses
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-parentheses
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

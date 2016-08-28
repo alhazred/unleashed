@@ -35,4 +35,4 @@ include $(SRC)/psm/Makefile.psm.64
 # XXX this totally sucks since it effectively turns off -errchk=longptr64,
 # which we really should be using.
 #
-CFLAGS64 += -_gcc=-mtune=ultrasparc $(CCABS32)
+CFLAGS64 += -mtune=ultrasparc $(CCABS32)

@@ -41,8 +41,8 @@ SRCDIR =	../common
 CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR)
 CPPFLAGS +=	-I$(SRC)/lib/libldap5/include/ldap
 
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

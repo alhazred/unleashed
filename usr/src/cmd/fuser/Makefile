@@ -28,7 +28,7 @@ PROG= fuser
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 LDLIBS += -lkstat -ldevinfo
 
 .KEEP_STATE:

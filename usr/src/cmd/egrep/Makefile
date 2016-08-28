@@ -29,10 +29,10 @@ PROG= egrep
 include ../Makefile.cmd
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-unused-label
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-unused-label
 
 .KEEP_STATE:
 

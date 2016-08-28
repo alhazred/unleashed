@@ -384,12 +384,6 @@ but want one hierarchy of packages.
 Set default flags to make; e.g., -k to build all targets regardless of errors.
 .RE
 .LP
-.B UT_NO_USAGE_TRACKING
-.RS 5
-Disables usage reporting by listed Devpro tools. Otherwise it sends mail
-to some Devpro machine every time the tools are used.
-.RE
-.LP
 .B BUILD_TOOLS
 .RS 5
 BUILD_TOOLS is the root of all tools including the compilers; e.g.,
@@ -431,13 +425,6 @@ Normally, nightly runs the 'checkpaths' script to check for
 discrepancies among the files that list paths to other files, such as
 exception lists and req.flg.  Set this flag to 'n' to disable this
 check, which appears in the nightly output as "Check lists of files."
-.RE
-.LP
-.B CHECK_DMAKE
-.RS 5
-Nightly validates that the version of dmake encountered is known to be
-safe to use.  Set this flag to 'n' to disable this test, allowing any
-version of dmake to be used.
 .RE
 .LP
 .B MULTI_PROTO

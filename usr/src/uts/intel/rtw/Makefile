@@ -56,9 +56,9 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 LDFLAGS		+= -dy -Nmisc/mac -Nmisc/net80211
 
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-unused-label
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-unused-label
+CERRWARN	+= -Wno-switch
 
 #
 #	Default build targets.

@@ -60,10 +60,10 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 LDFLAGS += -dy -Nmisc/busra
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-value
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-value
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-type-limits
 
 #
 #	Default build targets.

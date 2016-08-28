@@ -30,8 +30,8 @@ SRCS= $(OBJS:%.o=%.c)
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-value
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-value
 
 .KEEP_STATE:
 

@@ -61,8 +61,8 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 #
 #	Overrides.
 #
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-label
 LDFLAGS		+= -dy -N misc/mac -N drv/ip
 
 #

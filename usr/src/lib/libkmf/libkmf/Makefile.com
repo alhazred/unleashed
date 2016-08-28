@@ -62,10 +62,10 @@ LDLIBS64 += $(BERDERLIB64) $(CRYPTOUTILLIB64) -lmd -lpkcs11 -lnsl -lsocket -lc \
 CPPFLAGS	+=	-I$(INCDIR) -I$(ADJUNCT_PROTO)/usr/include/libxml2 \
 			-I../../ber_der/inc -I$(SRCDIR)
 
-CERRWARN	+=	-_gcc=-Wno-parentheses
-CERRWARN	+=	-_gcc=-Wno-switch
-CERRWARN	+=	-_gcc=-Wno-type-limits
-CERRWARN	+=	-_gcc=-Wno-uninitialized
+CERRWARN	+=	-Wno-parentheses
+CERRWARN	+=	-Wno-switch
+CERRWARN	+=	-Wno-type-limits
+CERRWARN	+=	-Wno-uninitialized
 
 .KEEP_STATE:
 

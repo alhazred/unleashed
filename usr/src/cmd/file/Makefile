@@ -37,8 +37,8 @@ SRCS=	file.c elf_read.c magicutils.c $(ELFCAP)/elfcap.c
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-type-limits
 
 POFILE= file_all.po
 POFILES= $(SRCS:%.c=%.po)

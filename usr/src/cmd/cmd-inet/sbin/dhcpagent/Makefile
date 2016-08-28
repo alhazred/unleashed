@@ -37,8 +37,8 @@ SRCS    = $(OBJS:%.o=%.c)
 POFILES = $(OBJS:%.o=%.po)
 XGETFLAGS += -a -x dhcpagent.xcl
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-parentheses
 
 #
 # to compile a debug version, do a `make COPTFLAG="-g -XO0"'

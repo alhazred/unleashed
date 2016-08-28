@@ -43,8 +43,8 @@ SRCDIR =	../common
 ASFLAGS +=	-D_ASM -I../common
 CPPFLAGS +=	-D_REENTRANT -I../common
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

@@ -33,4 +33,4 @@ XPORTLIBS = -lsocket -lnsl -ldscp
 
 include ../../common/event-transport/Makefile.etm
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses

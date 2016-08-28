@@ -164,7 +164,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/ml/%.s
 	$(COMPILE.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/os/%.c
-	$(COMPILE.c) -_gcc=-fno-stack-protector -o $@ $<
+	$(COMPILE.c) -fno-stack-protector -o $@ $<
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/os/cpupm/%.c

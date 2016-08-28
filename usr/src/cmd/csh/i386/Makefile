@@ -24,18 +24,18 @@ CPPFLAGS +=	-I../../sh
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 LDLIBS += -lcurses
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-implicit-int
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-clobbered
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-extra
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-implicit-int
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-clobbered
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-extra
 
 MAPFILES =	../mapfile-intf $(MAPFILE.NGB)
-LDFLAGS +=	$(MAPFILES:%=-_gcc=-Wl,-M%)
+LDFLAGS +=	$(MAPFILES:%=-Wl,-M%)
 
 HDDEP = sh.o sh.dir.o sh.dol.o sh.err.o sh.exec.o sh.exp.o sh.file.o \
 	sh.func.o sh.glob.o sh.hist.o sh.init.o sh.lex.o sh.misc.o \

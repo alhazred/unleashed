@@ -33,7 +33,7 @@ include ../../Makefile.cmd
 LDLIBS +=	-lelf
 
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 CLEANFILES	+= $(PROG) $(OBJS)
 

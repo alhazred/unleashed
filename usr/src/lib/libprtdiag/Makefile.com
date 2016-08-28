@@ -43,11 +43,11 @@ IFLAGS		+= -I $(UTSBASE)/sun4u
 IFLAGS		+= -I $(UTSBASE)/sun4u/sunfire
 IFLAGS		+= -I $(UTSBASE)/sun4u/serengeti
 CPPFLAGS	= $(IFLAGS) $(CPPFLAGS.master)
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-variable
-CERRWARN	+= -_gcc=-Wno-unused-value
-CERRWARN	+= -_gcc=-Wno-unused-label
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-variable
+CERRWARN	+= -Wno-unused-value
+CERRWARN	+= -Wno-unused-label
 LDLIBS		+= -lc -lkstat
 DYNFLAGS	+= -Wl,-f/usr/platform/\$$PLATFORM/lib/$(DYNLIBPSR)
 

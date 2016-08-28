@@ -35,4 +35,4 @@ include ../../../Makefile.module
 CPPFLAGS += -I$(SRC)/uts/common
 
 
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-unused-function

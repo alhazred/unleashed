@@ -27,7 +27,7 @@ PROG= exstr
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-extra
+CERRWARN += -Wno-extra
 
 .KEEP_STATE:
 

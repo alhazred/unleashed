@@ -42,9 +42,9 @@ DYNFLAGS +=	-R/opt/VRTSvxvm/lib
 
 SRCDIR =	../common
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 CPPFLAGS +=	-D_REENTRANT -I$(SRC)/lib/libdiskmgt/common 
 
 .KEEP_STATE:

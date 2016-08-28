@@ -46,7 +46,7 @@ OBJS=		$(BLTOBJ) $(COMOBJ) $(MACHOBJ) $(COMOBJ32) $(COMOBJ64) \
 		$(TOOLOBJS)
 
 MAPFILES =	$(MAPFILE.NGB)
-MAPOPTS =	$(MAPFILES:%=-_gcc=-Wl,-M%)
+MAPOPTS =	$(MAPFILES:%=-Wl,-M%)
 
 CPPFLAGS =	-I. -I../common -I../../include $(CPPFLAGS.master) -I$(ELFCAP)
 LLDFLAGS =
@@ -54,7 +54,7 @@ LLDFLAGS64 =
 LDFLAGS +=	$(VERSREF) $(CC_USE_PROTO) $(MAPOPTS) $(LLDFLAGS)
 LDLIBS +=	$(ELFLIBDIR) -lelf $(CONVLIBDIR) $(CONV_LIB)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 BLTDEFS =	msg.h
 BLTDATA =	msg.c

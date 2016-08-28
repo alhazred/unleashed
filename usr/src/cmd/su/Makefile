@@ -53,7 +53,7 @@ $(PROG) :=	LDLIBS += -lbsm -lpam -lsecdb
 
 CLOBBERFILES	+= $(ROOTFS_PROG) $(EMB_PROG)
 
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 
 .KEEP_STATE:

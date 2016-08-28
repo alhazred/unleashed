@@ -34,8 +34,8 @@ include ../../Makefile.lib
 CPPFLAGS +=     -D_REENTRANT -I$(SRC)/uts/common/gssapi/include  \
 		-I$(SRC)/uts/common
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
 
 DYNFLAGS +=	$(ZIGNORE)
 

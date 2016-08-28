@@ -55,7 +55,7 @@ ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 CFLAGS += -DNORDICA_CP1500 -DACEBUS_HOTPLUG
-CERRWARN += -_gcc=-Wno-switch
+CERRWARN += -Wno-switch
 
 
 # Add our depedencies to LDFLAGS

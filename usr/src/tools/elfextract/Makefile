@@ -30,8 +30,8 @@ PROG	= elfextract
 
 include ../Makefile.tools
 
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-implicit-function-declaration
 
 .KEEP_STATE:
 

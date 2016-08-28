@@ -39,7 +39,7 @@ OBJDIRS = \
 include ../Makefile.com
 include ../../Makefile.lib.64
 
-# Use -_gcc=-fPIC since libast is too big for -_gcc=-fpic on 64bit
+# Use -fPIC since libast is too big for -fpic on 64bit
 # (and on 32bit it is close to the barrier)
 sparcv9_C_PICFLAGS  = $(C_BIGPICFLAGS)
 

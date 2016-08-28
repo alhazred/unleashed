@@ -41,8 +41,8 @@ CONF_SRCDIR	= $(UTSBASE)/common/io/ib/clients/rds
 #
 include $(UTSBASE)/intel/Makefile.intel
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Define targets

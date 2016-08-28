@@ -62,7 +62,7 @@ ALL_TARGET	= $(SYM_MOD)
 INSTALL_TARGET	= def $(BINARY) $(ROOTMODULE)
 
 CFLAGS += -DNIAGARA_IMPL
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 #
 # cpu-module-specific flags

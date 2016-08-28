@@ -54,7 +54,7 @@ ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 CFLAGS += -I../sys
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-unused-function
 
 #
 #	Default build targets.

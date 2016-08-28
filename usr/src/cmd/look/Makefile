@@ -35,7 +35,7 @@ ROOTDATA=	$(DATA:%=$(ROOTDATADIR)/%)
 #DIRS=		$(ROOTLIB) $(ROOTDATADIR)
 DIRS=		$(ROOTDATADIR)
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-implicit-function-declaration
 
 FILEMODE=	755
 

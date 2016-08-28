@@ -47,7 +47,7 @@ SGSMSGTARG=	../common/rtld.msg
 SGSMSGALL=	../common/rtld.msg
 SGSMSGFLAGS +=	-h $(BLTDEFS) -d $(BLTDATA)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 FILEMODE=	555
 

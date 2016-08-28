@@ -35,7 +35,7 @@ XGETFLAGS +=	-a -x infocmp.xcl
 LDLIBS +=	-lcurses
 CPPFLAGS +=	-I../../lib/libcurses/screen
 MAPFILES =	$(MAPFILE.INT) $(MAPFILE.NGB)
-LDFLAGS +=	$(MAPFILES:%=-_gcc=-Wl,-M%)
+LDFLAGS +=	$(MAPFILES:%=-Wl,-M%)
 
 all:		$(PROG) $(MAPFILES)
 

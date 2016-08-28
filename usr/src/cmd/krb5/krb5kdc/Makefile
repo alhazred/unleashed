@@ -42,7 +42,7 @@ ROOTMANIFESTDIR=	$(ROOTSVCNETWORKSECURITY)
 CFLAGS += $(CCOPTS) $(DEFS) $(LOCALINCLUDE)
 # The SET macros in network.c will be mis-optimized if GCC believes it
 # may rely on undefined signed overflow behaviour.
-CFLAGS += -_gcc=-fno-strict-overflow
+CFLAGS += -fno-strict-overflow
 
 CPPFLAGS += \
 	-I$(SRC)/lib/gss_mechs/mech_krb5/include \
@@ -50,11 +50,11 @@ CPPFLAGS += \
 	-I$(SRC)/uts/common/gssapi/mechs/krb5/include \
 	-DHAVE_SYSLOG_H=1 
 
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-type-limits
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-type-limits
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
 
 LDFLAGS += $(KRUNPATH) $(KERBRUNPATH)
 LDLIBS += -L$(ROOT_KLIBDIR) -L$(KRB5LIB) \

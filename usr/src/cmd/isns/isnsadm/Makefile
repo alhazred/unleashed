@@ -35,8 +35,8 @@ POFILE = isnsadm_all.po
 POFILES = $(OBJS:%.o=%.po)
 
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

@@ -38,6 +38,6 @@ CPPFLAGS += -I$(SRC)/uts/common
 # if optimization is on, compiler asserts
 COPTFLAG64 =
 
-CERRWARN +=	-_gcc=-Wno-unused-function
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-unused-function
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses

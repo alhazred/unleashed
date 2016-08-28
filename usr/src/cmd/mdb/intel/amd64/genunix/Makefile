@@ -69,11 +69,11 @@ CPPFLAGS += -I$(SRC)/uts/common
 # Needed to find include file mutex_impl.h
 CPPFLAGS += -I$(SRC)/uts/intel
 
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-type-limits
 
 
 MODSRCS_DIR = ../../../intel/modules/genunix

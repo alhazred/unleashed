@@ -35,7 +35,7 @@ LDLIBS +=	-lc -lnvpair
 
 CPPFLAGS +=	-D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 all: $(LIBS)
 

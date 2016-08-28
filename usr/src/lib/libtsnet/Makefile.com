@@ -46,7 +46,7 @@ LDLIBS +=	-lsocket -lnsl -lc -lsecdb -ltsol
 LIBTSOLINC =	$(SRC)/lib/libtsol/common
 
 CPPFLAGS +=	-D_REENTRANT -I$(LIBTSOLINC)
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

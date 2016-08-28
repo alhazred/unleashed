@@ -31,11 +31,11 @@ CPPFLAGS += -I$(SRC)/uts/common/gssapi/include/ \
 		-I$(SRC)/lib/krb5 \
 		-I$(SRC)/lib/gss_mechs/mech_krb5/include $(DEFS)
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-variable
 
 COPTFLAG += #-I$(KINCDIR) 
 

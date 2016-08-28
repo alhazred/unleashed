@@ -40,7 +40,7 @@ LLDFLAGS64 =	'-R$$ORIGIN/../../../lib/$(MACH64)'
 CPPFLAGS=	-I. -I../../include $(CPPFLAGS.master) -I$(ELFCAP)
 C99MODE=	$(C99_ENABLE)
 
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-uninitialized
 LDLIBS +=	-lelf $(CONVLIBDIR) $(CONV_LIB) -lsendfile
 
 $(XPG4) :=	CPPFLAGS += -DXPG4

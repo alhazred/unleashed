@@ -35,9 +35,9 @@ include ../Makefile.cmd
 $(XPG4)	:= CFLAGS += -DXPG4
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -I $(SRC)/common/util
 
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 LDLIBS += -lsec
 

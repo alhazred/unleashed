@@ -31,7 +31,7 @@ include ../Makefile.cmd
 FILEMODE=	755
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

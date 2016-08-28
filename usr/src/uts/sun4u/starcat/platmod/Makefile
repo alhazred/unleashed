@@ -60,7 +60,7 @@ CLEANFILES	+= $(PLATLIB)
 ALL_TARGET	= $(PLATLIB)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 #
 #	Default build targets.

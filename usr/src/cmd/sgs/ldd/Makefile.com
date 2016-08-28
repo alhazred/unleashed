@@ -36,7 +36,7 @@ TOOLSOBJ=	alist.o
 OBJS=		$(BLTOBJ) $(COMOBJ) $(TOOLSOBJ)
 
 MAPFILE=	$(MAPFILE.NGB)
-MAPOPTS=	$(MAPFILE:%=-_gcc=-Wl,-M%)
+MAPOPTS=	$(MAPFILE:%=-Wl,-M%)
 
 CPPFLAGS +=	-I. -I../../include -I../../include/$(MACH) \
 		-I$(SRCBASE)/uts/$(ARCH)/sys \

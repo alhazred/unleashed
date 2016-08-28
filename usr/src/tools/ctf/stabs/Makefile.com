@@ -42,8 +42,8 @@ LDLIBS += -lctf
 
 OBJS = $(SRCS:%.c=%.o)
 
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused
 
 .NO_PARALLEL:
 .PARALLEL: $(OBJS)

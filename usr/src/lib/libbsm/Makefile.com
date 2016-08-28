@@ -77,8 +77,8 @@ LIBS =	 	$(DYNLIB)
 
 LDLIBS +=	-lsocket -lnsl -lmd -lc -lsecdb -ltsol -linetutil -lscf
 
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 COMDIR=		../common
 AUDITD=		$(SRC)/cmd/auditd

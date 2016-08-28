@@ -49,8 +49,8 @@ SRCDIR =	../common
 
 CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
 
-CERRWARN +=	-_gcc=-Wno-switch
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:
 

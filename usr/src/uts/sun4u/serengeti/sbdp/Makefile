@@ -62,10 +62,10 @@ MACHINE_DEFS	+= -DCHEETAH_PLUS
 
 LDFLAGS	+= -dy -Ndrv/sgsbbc
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-unused-variable
 
 
 #

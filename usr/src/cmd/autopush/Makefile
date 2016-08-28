@@ -29,7 +29,7 @@ ROOTFS_PROG= $(PROG)
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

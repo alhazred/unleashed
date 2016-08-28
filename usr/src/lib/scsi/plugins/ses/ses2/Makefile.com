@@ -37,4 +37,4 @@ PLUGINTYPE =	framework
 
 include ../../Makefile.lib
 
-CERRWARN += 	-_gcc=-Wno-switch
+CERRWARN += 	-Wno-switch

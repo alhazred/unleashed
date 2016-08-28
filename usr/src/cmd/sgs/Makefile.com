@@ -50,9 +50,9 @@ C99_DISABLE =	$(C99_ENABLE)
 CFLAGS +=	$(DEBUG)
 CFLAGS64 +=	$(DEBUG)
 
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-value
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-value
 
 #
 # Location of the shared elfcap code
@@ -65,8 +65,8 @@ CPPFLAGS =	-I. -I../common -I../../include -I../../include/$(MACH) \
 		$(CPPFLAGS.master) -I$(ELFCAP)
 
 # PICS64 is unique to our environment
-$(PICS64) :=	sparc_CFLAGS += -_gcc=-mno-app-regs -_gcc=-fpic
-$(PICS64) :=	sparcv9_CFLAGS += -_gcc=-mno-app-regs -_gcc=-fpic
+$(PICS64) :=	sparc_CFLAGS += -mno-app-regs -fpic
+$(PICS64) :=	sparcv9_CFLAGS += -mno-app-regs -fpic
 $(PICS64) :=	CPPFLAGS += -DPIC -D_REENTRANT
 
 LDFLAGS +=	$(ZIGNORE)
@@ -124,7 +124,7 @@ native :=	DYNFLAGS = -R$(SGSPROTO) -L$(SGSPROTO) $(ZNOVERSION)
 
 # Comment out the following two lines to have the sgs built from the system
 # link-editor, rather than the local proto link-editor.
-CC_USE_PROTO =	-_gcc=-B$(SGSPROTO)
+CC_USE_PROTO =	-B$(SGSPROTO)
 LD_USE_PROTO =	$(SGSPROTO)/
 
 LIBNAME32 =	$(LIBNAME:%=%32)

@@ -34,9 +34,9 @@ LEXSRCS=	genmsg.l
 LEXINTSRCS=	lex.yy.c
 LEXOBJS=	lex.yy.o
 
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-unused-variable
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-unused-variable
 
 LDLIBS += -ll
 YFLAGS = -d
@@ -46,7 +46,7 @@ CPPFLAGS = -I../head $(CPPFLAGS.master)
 # still export a number of "yy*" (libl) interfaces.  Reduce all other symbols
 # to local scope.
 MAPFILES +=	$(MAPFILE.LEX) $(MAPFILE.NGB)
-MAPOPTS =	$(MAPFILES:%=-_gcc=-Wl,-M%)
+MAPOPTS =	$(MAPFILES:%=-Wl,-M%)
 
 LDFLAGS +=	$(MAPOPTS)
 

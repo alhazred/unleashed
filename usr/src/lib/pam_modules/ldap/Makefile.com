@@ -40,7 +40,7 @@ include		../../Makefile.pam_modules
 
 LDLIBS +=	-lpam -lsldap -lc
 CPPFLAGS +=	-I$(SRC)/lib/libsldap/common
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 all:	$(LIBS)
 

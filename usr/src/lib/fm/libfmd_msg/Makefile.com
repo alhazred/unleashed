@@ -40,8 +40,8 @@ SRCDIR =	../common
 CPPFLAGS += -I../common -I.
 CFLAGS += $(C_BIGPICFLAGS)
 CFLAGS64 += $(C_BIGPICFLAGS)
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-uninitialized
 LDLIBS += -lnvpair -lc
 
 CLOBBERFILES += fmd_msg_test fmd_msg_test.core fmd_msg_test.out

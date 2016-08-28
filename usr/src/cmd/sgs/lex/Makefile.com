@@ -46,9 +46,9 @@ SRCDIR =	../common
 
 C99MODE=	$(C99_ENABLE)
 
-CERRWARN +=	-_gcc=-Wno-unused-label
-CERRWARN +=	-_gcc=-Wno-uninitialized
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-uninitialized
+CERRWARN +=	-Wno-parentheses
 
 # Override default source file derivation rule (in Makefile.lib)
 # from objects

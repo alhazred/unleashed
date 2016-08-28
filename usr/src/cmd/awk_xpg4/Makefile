@@ -40,9 +40,9 @@ SRCS= $(OBJ1:%.o=%.c)
 include ../Makefile.cmd
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
-CERRWARN += -_gcc=-Wno-unused-label
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-label
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 YFLAGS += -d
 LDLIBS += -lm
 CLEANFILES= awk.c y.tab.h

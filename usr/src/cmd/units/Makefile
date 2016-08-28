@@ -28,8 +28,8 @@ UNITTAB=unittab
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-implicit-function-declaration
 
 LIBUNITTAB= $(UNITTAB:%=$(ROOTSHLIB)/%)
 $(LIBUNITTAB) :=	FILEMODE =	$(LIBFILEMODE)

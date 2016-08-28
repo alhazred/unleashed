@@ -34,4 +34,4 @@ include ../../Makefile.sparcv9
 include ../../../Makefile.module
 include ../../../common/modules/rdc/Makefile.com
 
-CERRWARN += -_gcc=-Wno-unused-function
+CERRWARN += -Wno-unused-function

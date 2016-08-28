@@ -40,7 +40,7 @@ CFLAGS 		+= $(C_PICFLAGS)
 CPPFLAGS	+= -I../common -I../../common/inc -D_REENTRANT
 DYNFLAGS 	+= $(ZINTERPOSE)
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 .KEEP_STATE:
 

@@ -54,20 +54,20 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 #	Overrides.
 #
-$(RELEASE_BUILD)COPTIMIZE	= -_gcc=-fno-strict-aliasing
-$(RELEASE_BUILD)COPTIMIZE	+= -_gcc=-fno-unit-at-a-time
-$(RELEASE_BUILD)COPTIMIZE	+= -_gcc=-fno-optimize-sibling-calls
-$(RELEASE_BUILD)COPTIMIZE	+= -_gcc=-O2
+$(RELEASE_BUILD)COPTIMIZE	= -fno-strict-aliasing
+$(RELEASE_BUILD)COPTIMIZE	+= -fno-unit-at-a-time
+$(RELEASE_BUILD)COPTIMIZE	+= -fno-optimize-sibling-calls
+$(RELEASE_BUILD)COPTIMIZE	+= -O2
 LDFLAGS				+= -dy
 INC_PATH			+= -I$(UTSBASE)/common/io/bpf
 
 
-CERRWARN		 	+= -_gcc=-Wno-unused-label
-CERRWARN		 	+= -_gcc=-Wno-uninitialized
-CERRWARN		 	+= -_gcc=-Wno-parentheses
-CERRWARN		 	+= -_gcc=-Wno-type-limits
-CERRWARN		 	+= -_gcc=-Wno-switch
-CERRWARN		 	+= -_gcc=-Wno-unused-variable
+CERRWARN		 	+= -Wno-unused-label
+CERRWARN		 	+= -Wno-uninitialized
+CERRWARN		 	+= -Wno-parentheses
+CERRWARN		 	+= -Wno-type-limits
+CERRWARN		 	+= -Wno-switch
+CERRWARN		 	+= -Wno-unused-variable
 
 #
 #	Default build targets.

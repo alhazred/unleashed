@@ -37,7 +37,7 @@ AUDITD = $(SRC)/cmd/auditd
 CPPFLAGS += -D_REENTRANT
 CPPFLAGS += -I$(LIBBSM) -I$(AUDITD)
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 
 LDLIBS += -lbsm -lsecdb
 

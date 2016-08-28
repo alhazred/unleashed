@@ -59,8 +59,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-empty-body
-CERRWARN	+= -_gcc=-Wno-unused-braces
+CERRWARN	+= -Wno-empty-body
+CERRWARN	+= -Wno-unused-braces
 
 .KEEP_STATE:
 

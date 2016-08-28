@@ -46,7 +46,7 @@ SRCDIR=		../common
 CPPFLAGS +=	-I../inc
 LDLIBS +=       -lcurses -lc
 
-CERRWARN +=	-_gcc=-Wno-parentheses
+CERRWARN +=	-Wno-parentheses
 
 .KEEP_STATE:
 

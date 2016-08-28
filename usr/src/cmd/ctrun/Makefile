@@ -28,8 +28,8 @@ PROG= ctrun
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 LDLIBS += -lcontract -luutil
 
 .KEEP_STATE:

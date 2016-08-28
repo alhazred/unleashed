@@ -67,15 +67,15 @@ DIRS=	$(ROOTLIB)
 CPPFLAGS += -I$(SRC)/uts/common/gssapi/include
 COPTFLAG += #-I$(KINCDIR) 
 
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
 
 LDLIBS += -lgss -lnsl
 
 gssd :=	MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
-gssd :=	LDFLAGS += $(MAPFILES:%=-_gcc=-Wl,-M%)
+gssd :=	LDFLAGS += $(MAPFILES:%=-Wl,-M%)
 
 $(GPROGS) := CPPFLAGS += -DSYSV -DSunOS=50 
 

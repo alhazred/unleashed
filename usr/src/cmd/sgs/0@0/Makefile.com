@@ -41,14 +41,12 @@ DYNFLAGS +=	$(BLOCAL) $(ZNOVERSION) $(ZINITFIRST)
 LDLIBS +=	-lc
 # The use of sed is a gross hack needed because the current build system
 # assumed that the compiler accepted linker flags (-Bfoo -zfoo and -Mfoo)
-# directly.  As part of getting rid of cw (which used to do the mapping for
-# us), we needed to prefix all linker flags passed to the compiler with
-# -Wl,.  Here, however, since we're calling the linker directly, we have to
+# directly.  Here, since we're calling the linker directly, we have to
 # discard the prefixes.  Ideally, we would be using the LD_Z* and LD_B*
 # variables instead, but that would require a lot of mucking with makefiles.
 # So for now, we do this.
-REMOVE_CW_GCC_PREFIX=echo $(DYNFLAGS) | $(SED) -e 's/-_gcc=-Wl,//g'
-BUILD.SO=       $(LD) -o $@ -G $(REMOVE_CW_GCC_PREFIX:sh) $(CRTI) $(PICS) $(LDLIBS) $(CRTN)
+REMOVE_GCC_PREFIX=echo $(DYNFLAGS) | $(SED) -e 's/-Wl,//g'
+BUILD.SO=       $(LD) -o $@ -G $(REMOVE_GCC_PREFIX:sh) $(CRTI) $(PICS) $(LDLIBS) $(CRTN)
 BUILD.s=	$(AS) $(ASFLAGS) $< -o $@
 
 SRCS=		$(OBJECTS:%.o=../common/%.c)

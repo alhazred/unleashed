@@ -16,7 +16,7 @@ SRCS = \
 	ctfstrip.c
 
 include $(SRC)/tools/Makefile.tools
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-unused-variable
 
 OBJS = $(SRCS:%.c=%.o)
 

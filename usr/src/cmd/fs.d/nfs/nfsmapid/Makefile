@@ -39,10 +39,10 @@ DOBJ	  =	$(DSRC:%.d=%.o)
 OBJS	  =	nfsmapid.o nfsmapid_server.o $(COMMON)
 CPPFLAGS +=	-I../lib -D_POSIX_PTHREAD_SEMANTICS
 
-CERRWARN +=	-_gcc=-Wno-implicit-function-declaration
-CERRWARN +=	-_gcc=-Wno-unused-variable
-CERRWARN +=	-_gcc=-Wno-parentheses
-CERRWARN +=	-_gcc=-Wno-uninitialized
+CERRWARN +=	-Wno-implicit-function-declaration
+CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-parentheses
+CERRWARN +=	-Wno-uninitialized
 
 all:		$(TYPEPROG) $(TESTPROG)
 

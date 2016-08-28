@@ -65,11 +65,11 @@ CPPFLAGS += 	-I$(SRC)/lib/krb5 \
 		-I$(SRC)/uts/common/gssapi/mechs/krb5/include \
 		-I$(SRC)
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-unused-function
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-function
 
 CFLAGS +=	-I..
-DYNFLAGS +=	$(KRUNPATH) $(KMECHLIB) -_gcc=-Wl,-znodelete
+DYNFLAGS +=	$(KRUNPATH) $(KMECHLIB) -Wl,-znodelete
 LDLIBS +=	-L $(ROOTLIBDIR) -lcrypto -lc
 
 ROOTLIBDIR= $(ROOT)/usr/lib/krb5/plugins/preauth

@@ -32,7 +32,7 @@ VTINFO_SRC= vtinfo.c
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 vtdaemon := LDLIBS += -lpam -lbsm
 

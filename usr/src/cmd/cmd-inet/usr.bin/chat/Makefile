@@ -10,9 +10,9 @@ SRCS=		$(OBJS:%.o=%.c)
 include		../../../Makefile.cmd
 
 CPPFLAGS +=	-DSOL2
-LDFLAGS +=	$(MAPFILE.NGB:%=-_gcc=-Wl,-M%)
-CERRWARN +=	-_gcc=-Wno-unused-value
-CERRWARN +=	-_gcc=-Wno-trigraphs
+LDFLAGS +=	$(MAPFILE.NGB:%=-Wl,-M%)
+CERRWARN +=	-Wno-unused-value
+CERRWARN +=	-Wno-trigraphs
 
 .KEEP_STATE:
 

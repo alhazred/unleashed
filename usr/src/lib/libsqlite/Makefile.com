@@ -91,10 +91,10 @@ SRCS = \
 MYCPPFLAGS = -D_REENTRANT -DTHREADSAFE=1 -DHAVE_USLEEP=1 -I. -I.. -I$(SRCDIR)
 CPPFLAGS += $(MYCPPFLAGS)
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-unused-label
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-unused-label
 
 MAPFILES = ../mapfile-sqlite
 

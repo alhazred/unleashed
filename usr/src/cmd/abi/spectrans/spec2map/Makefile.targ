@@ -35,4 +35,4 @@ OBJECTS	=	xlator.o	\
 
 include ../../Makefile.cmd
 
-CERRWARN +=	-_gcc=-Wno-switch
+CERRWARN +=	-Wno-switch

@@ -67,7 +67,7 @@ LDFLAGS += -dy -N misc/acpica
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-unused-variable
+CERRWARN	+= -Wno-unused-variable
 
 #
 #	Default build targets.

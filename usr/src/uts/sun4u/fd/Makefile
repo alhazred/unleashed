@@ -73,9 +73,9 @@ CLEANFILES      += $(MODSTUBS_O) $(ASSYM_H) \
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-char-subscripts
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-char-subscripts
 
 #
 #	Default build targets.

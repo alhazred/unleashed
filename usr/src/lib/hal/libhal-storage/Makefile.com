@@ -39,8 +39,8 @@ LDLIBS +=	-lc -ldbus-1 -lhal
 
 SRCDIR =	../common
 
-CFLAGS +=	-_gcc=-Wno-deprecated-declarations
-CFLAGS64 +=	-_gcc=-Wno-deprecated-declarations
+CFLAGS +=	-Wno-deprecated-declarations
+CFLAGS64 +=	-Wno-deprecated-declarations
 CPPFLAGS +=	-DGETTEXT_PACKAGE=\"$(HAL_GETTEXT_PACKAGE)\" -DENABLE_NLS
 CPPFLAGS +=	-DPACKAGE_LOCALE_DIR=\"/usr/lib/locale\"
 CPPFLAGS +=	-I$(ROOT)/usr/include/hal

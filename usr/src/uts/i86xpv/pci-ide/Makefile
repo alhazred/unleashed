@@ -63,7 +63,7 @@ DEBUG_DEFS	+= $(DEBUG_FLGS)
 
 INC_PATH	+= -I$(UTSBASE)/common/io/pci-ide
 
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-switch
 
 #
 #	Default build targets.

@@ -40,7 +40,7 @@ POFILE = stmfadm_all.po
 POFILES = $(LOCAL_OBJS:%.o=%.po) $(COMMON_OBJS:%.o=$(COMMONBASE)/cmdparse/%.po)
 
 CPPFLAGS += -I. -I$(COMMONBASE)/cmdparse
-CERRWARN += -_gcc=-Wno-unused-label
+CERRWARN += -Wno-unused-label
 LDLIBS += -lstmf 
 
 .KEEP_STATE:

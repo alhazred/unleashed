@@ -62,8 +62,8 @@ DEF_BUILDS	= $(DEF_BUILDSONLY64)
 #
 CPPFLAGS += -DEIB_DEBUG
 
-CERRWARN	+= -_gcc=-Wno-switch
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
 
 #
 # Depends on misc/ibtl

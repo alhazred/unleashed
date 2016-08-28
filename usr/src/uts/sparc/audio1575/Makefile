@@ -49,7 +49,7 @@ include $(UTSBASE)/sparc/Makefile.sparc
 #
 LDFLAGS		+= -dy -Ndrv/audio -Nmisc/ac97
 
-CERRWARN	+= -_gcc=-Wno-switch
+CERRWARN	+= -Wno-switch
 
 #
 #	Define targets

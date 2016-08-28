@@ -35,12 +35,12 @@ MANIFEST=	rex.xml
 
 include ../Makefile.cmd
 
-CERRWARN += -_gcc=-Wno-implicit-function-declaration
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-unused-variable
-CERRWARN += -_gcc=-Wno-address
-CERRWARN += -_gcc=-Wno-unused-function
-CERRWARN += -_gcc=-Wno-extra
+CERRWARN += -Wno-implicit-function-declaration
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-address
+CERRWARN += -Wno-unused-function
+CERRWARN += -Wno-extra
 
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORKRPC)
 

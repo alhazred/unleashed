@@ -31,7 +31,7 @@ PROG= devinfo
 include ../Makefile.cmd
 
 LDLIBS += -ladm -lefi
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

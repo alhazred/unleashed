@@ -29,7 +29,7 @@ PROG= rmdir
 include ../Makefile.cmd
 
 LDLIBS += -lgen
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 XGETFLAGS += -a -x rmdir.xcl
 

@@ -67,10 +67,10 @@ DEBUG_DEFS	+= $(DEBUG_FLGS)
 LDFLAGS		+= -dy -N misc/acpica
 
 
-CERRWARN	+= -_gcc=-Wno-type-limits
-CERRWARN	+= -_gcc=-Wno-parentheses
-CERRWARN	+= -_gcc=-Wno-uninitialized
-CERRWARN	+= -_gcc=-Wno-empty-body
+CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-empty-body
 
 #	Default build targets.
 #

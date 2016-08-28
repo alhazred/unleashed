@@ -112,7 +112,7 @@ include $(UTSBASE)/sun4u/Makefile.targ
 # these forward to new Makefiles.
 #
 
-CERRWARN 	+= -_gcc=-Wno-parentheses
-CERRWARN 	+= -_gcc=-Wno-uninitialized
-CERRWARN 	+= -_gcc=-Wno-type-limits
-CERRWARN 	+= -_gcc=-Wno-clobbered
+CERRWARN 	+= -Wno-parentheses
+CERRWARN 	+= -Wno-uninitialized
+CERRWARN 	+= -Wno-type-limits
+CERRWARN 	+= -Wno-clobbered

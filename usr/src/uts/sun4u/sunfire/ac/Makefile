@@ -52,7 +52,7 @@ include $(UTSBASE)/sun4u/sunfire/Makefile.sunfire
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-CERRWARN += -_gcc=-Wno-uninitialized
+CERRWARN += -Wno-uninitialized
 
 
 #

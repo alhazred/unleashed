@@ -34,8 +34,8 @@ LDLIBS +=	-ldevinfo -lc
 
 SRCDIR =	../common
 
-CERRWARN +=	-_gcc=-Wno-type-limits
-CERRWARN +=	-_gcc=-Wno-unused-label
+CERRWARN +=	-Wno-type-limits
+CERRWARN +=	-Wno-unused-label
 
 .KEEP_STATE:
 

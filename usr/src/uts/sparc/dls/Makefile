@@ -49,10 +49,10 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 # Overrides.
 #
-$(RELEASE_BUILD)COPTIMIZE	= -_gcc=-fno-strict-aliasing
-$(RELEASE_BUILD)COPTIMIZE	+= -_gcc=-fno-unit-at-a-time
-$(RELEASE_BUILD)COPTIMIZE	+= -_gcc=-fno-optimize-sibling-calls
-$(RELEASE_BUILD)COPTIMIZE	+= -_gcc=-O2
+$(RELEASE_BUILD)COPTIMIZE	= -fno-strict-aliasing
+$(RELEASE_BUILD)COPTIMIZE	+= -fno-unit-at-a-time
+$(RELEASE_BUILD)COPTIMIZE	+= -fno-optimize-sibling-calls
+$(RELEASE_BUILD)COPTIMIZE	+= -O2
 LDFLAGS				+= -dy -N misc/mac
 INC_PATH			+= -I$(UTSBASE)/common/io/bpf
 
@@ -62,7 +62,7 @@ INC_PATH			+= -I$(UTSBASE)/common/io/bpf
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -_gcc=-Wno-uninitialized
+CERRWARN	+= -Wno-uninitialized
 
 #
 # Default build targets.

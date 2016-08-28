@@ -43,8 +43,8 @@ ROOTMANIFESTDIR=	$(ROOTSVCNETWORKRPC)
 LDLIBS +=  -lnsl -lbsm
 
 CPPFLAGS += -D_REENTRANT
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-unused-variable
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-variable
 
 .KEEP_STATE:
 

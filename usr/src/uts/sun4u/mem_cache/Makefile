@@ -56,7 +56,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 DSF_DIR		= $(UTSBASE)/$(PLATFORM)/mem_cache/genassym
 
-CERRWARN += -_gcc=-Wno-parentheses
+CERRWARN += -Wno-parentheses
 ASFLAGS += -DCHEETAH_PLUS
 AS_INC_PATH	+= -I$(DSF_DIR)/$(OBJS_DIR)
 

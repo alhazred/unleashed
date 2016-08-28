@@ -86,12 +86,12 @@ include 	$(SRC)/cmd/sgs/Makefile.com
 
 SRCDIR =	../common
 
-CERRWARN += -_gcc=-Wno-unused-value
-CERRWARN += -_gcc=-Wno-parentheses
-CERRWARN += -_gcc=-Wno-uninitialized
-CERRWARN += -_gcc=-Wno-switch
-CERRWARN += -_gcc=-Wno-char-subscripts
-CERRWARN += -_gcc=-Wno-type-limits
+CERRWARN += -Wno-unused-value
+CERRWARN += -Wno-parentheses
+CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-switch
+CERRWARN += -Wno-char-subscripts
+CERRWARN += -Wno-type-limits
 
 # Location of the shared relocation engines maintained under usr/src/uts.
 #
