@@ -384,12 +384,6 @@ but want one hierarchy of packages.
 Set default flags to make; e.g., -k to build all targets regardless of errors.
 .RE
 .LP
-.B UT_NO_USAGE_TRACKING
-.RS 5
-Disables usage reporting by listed Devpro tools. Otherwise it sends mail
-to some Devpro machine every time the tools are used.
-.RE
-.LP
 .B BUILD_TOOLS
 .RS 5
 BUILD_TOOLS is the root of all tools including the compilers; e.g.,

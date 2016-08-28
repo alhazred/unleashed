@@ -87,9 +87,6 @@ function maxjobs
 maxjobs DMAKE_MAX_JOBS # "DMAKE_MAX_JOBS" passed as ksh(1) name reference
 export DMAKE_MAX_JOBS
 
-# path to onbld tool binaries
-ONBLD_BIN='/opt/onbld/bin'
-
 # PARENT_WS is used to determine the parent of this workspace. This is
 # for the options that deal with the parent workspace (such as where the
 # proto area will go).
@@ -146,14 +143,6 @@ export MULTI_PROTO="no"
 #
 export VERSION="`git describe --long --all HEAD | cut -d/ -f2-`"
 
-#
-# the RELEASE and RELEASE_DATE variables are set in Makefile.master;
-# there might be special reasons to override them here, but that
-# should not be the case in general
-#
-# export RELEASE='5.11'
-# export RELEASE_DATE='October 2007'
-
 # proto area in parent for optionally depositing a copy of headers and
 # libraries corresponding to the protolibs target
 # not applicable given the NIGHTLY_OPTIONS
@@ -178,11 +167,6 @@ export PKGFMT_OUTPUT='v1'
 # one problem.
 export MAKEFLAGS='k'
 
-# Magic variables to prevent the devpro compilers/teamware from checking
-# for updates or sending mail back to devpro on every use.
-export SUNW_NO_UPDATE_NOTIFY='1'
-export UT_NO_USAGE_TRACKING='1'
-
 # Build tools - don't change these unless you know what you're doing.  These
 # variables allows you to get the compilers and onbld files locally.
 # Set BUILD_TOOLS to pull everything from one location.
@@ -190,13 +174,6 @@ export UT_NO_USAGE_TRACKING='1'
 # pkg:/developer/build/onbld.
 export BUILD_TOOLS='/opt'
 #export ONBLD_TOOLS='/opt/onbld'
-
-# This goes along with lint - it is a series of the form "A [y|n]" which
-# means "go to directory A and run 'make lint'" Then mail me (y) the
-# difference in the lint output. 'y' should only be used if the area you're
-# linting is actually lint clean or you'll get lots of mail.
-# You shouldn't need to change this though.
-#export LINTDIRS="$SRC y"
 
 # Set this flag to 'n' to disable the use of 'checkpaths'.  The default,
 # if the 'N' option is not specified, is to run this test.
