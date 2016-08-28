@@ -167,14 +167,6 @@ export PKGFMT_OUTPUT='v1'
 # one problem.
 export MAKEFLAGS='k'
 
-# Build tools - don't change these unless you know what you're doing.  These
-# variables allows you to get the compilers and onbld files locally.
-# Set BUILD_TOOLS to pull everything from one location.
-# Alternately, you can set ONBLD_TOOLS to where you keep the contents of
-# pkg:/developer/build/onbld.
-export BUILD_TOOLS='/opt'
-#export ONBLD_TOOLS='/opt/onbld'
-
 # Set this flag to 'n' to disable the use of 'checkpaths'.  The default,
 # if the 'N' option is not specified, is to run this test.
 #CHECK_PATHS='y'
