@@ -54,7 +54,6 @@ used in the output format):
 	rcs
 	sccs
 	subversion
-	teamware
 .fi
 
 If the type of SCM in use is not known, then the string "unknown" is

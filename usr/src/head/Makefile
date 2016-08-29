@@ -35,8 +35,6 @@ include ../Makefile.master
 sparc_HDRS= 
 i386_HDRS=	stack_unwind.h
 
-# Headers are listed one per line so that TeamWare can auto-merge most changes
-
 KRB5HDRS= mit_copyright.h mit-sipb-copyright.h
 
 ATTRDB_HDRS=	secdb.h auth_attr.h exec_attr.h prof_attr.h user_attr.h \

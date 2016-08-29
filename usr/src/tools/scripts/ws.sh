@@ -70,17 +70,13 @@ check_proto()
 		return
 	fi
 
-	if [[ "$SCM_MODE" = "teamware" ]]; then
-		# Check for problematic parent specification and adjust
-		proto=`echo $1|fmtwsname`
-		echo "${proto}/root_${MACH}"
-	elif [[ "$SCM_MODE" = "mercurial" ]]; then
+	if [[ "$SCM_MODE" = "mercurial" ]]; then
 		proto=$1
 		#
 		# If the proto is a local repository then we can use it
 		# to point to the parents proto area. Don't bother to
-		# check if it exists or not, we never did for Teamware,
-		# since it might appear later anyway.
+		# check if it exists or not, since it might appear later
+		# anyway.
 		#
 		if [[ "${proto##ssh://}" == "$proto" && \
 		     "${proto##http://}" == "$proto" && \
@@ -217,11 +213,7 @@ CODEMGR_WS=$wsname ; export CODEMGR_WS
 SRC=$wsname/usr/src; export SRC
 TSRC=$wsname/usr/ontest; export TSRC
 
-if [[ "$SCM_MODE" = "teamware" && -d ${wsname}/Codemgr_wsdata ]]; then
-	CM_DATA="Codemgr_wsdata"
-	wsosdir=$CODEMGR_WS/$CM_DATA/sunos
-	protofile=$wsosdir/protodefs
-elif [[ "$SCM_MODE" = "mercurial" && -d ${wsname}/.hg ]]; then
+if [[ "$SCM_MODE" = "mercurial" && -d ${wsname}/.hg ]]; then
 	CM_DATA=".hg"
 	wsosdir=$CODEMGR_WS/$CM_DATA
 	protofile=$wsosdir/org.opensolaris.protodefs
@@ -286,20 +278,7 @@ if [[ ! -f $protofile ]]; then
 PROTO1=\$CODEMGR_WS/proto
 PROTOFILE_EoF
 	
-	if [[ "$SCM_MODE" = "teamware" ]]; then
-		cat << PROTOFILE_EoF >> $protofile
-if [[ -f "\$CODEMGR_WS/Codemgr_wsdata/parent" ]]; then
-   #
-   # If this workspace has an codemgr parent then set PROTO2 to
-   # point to the parents proto space.
-   #
-   parent=\`workspace parent \$CODEMGR_WS\`
-   if [[ -n \$parent ]]; then
-	   PROTO2=\$parent/proto
-   fi
-fi
-PROTOFILE_EoF
-	elif [[ "$SCM_MODE" = "mercurial" ]]; then
+	if [[ "$SCM_MODE" = "mercurial" ]]; then
 		cat << PROTOFILE_EoF >> $protofile
 parent=\`(cd \$CODEMGR_WS && hg path default 2>/dev/null)\`
 if [[ \$? -eq 0 && -n \$parent ]]; then

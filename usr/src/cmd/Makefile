@@ -41,9 +41,6 @@ include ../Makefile.master
 #	$(ROOT)/usr/lib/platexec must exist when some other commands are built
 #	because their 'make install' creates a hard link to one of them.
 #
-#	Commands are listed one per line so that TeamWare can auto-merge most
-#	changes.
-#
 
 FIRST_SUBDIRS=		\
 	isaexec		\

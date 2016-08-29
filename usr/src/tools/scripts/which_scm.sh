@@ -33,7 +33,7 @@
 # type have a control directory per directory (RCS and SCCS), with no other
 # structure.  The second type have a control directory in each subdirectory
 # within a tree (CVS and SVN).  The last type have a single control
-# directory at the top of the tree (Teamware and Mercurial).
+# directory at the top of the tree (Mercurial and Git).
 
 # If the common CODEMGR_WS variable is set, then we look there for the
 # SCM type and bail out if we can't determine it.
@@ -53,7 +53,6 @@ function primary_type
 {
 	typeset scmid
 
-	[ -d "$1/Codemgr_wsdata" ] && scmid="$scmid teamware"
 	[ -d "$1/.hg" ] && scmid="$scmid mercurial"
 	[ -d "$1/CVS" ] && scmid="$scmid cvs"
 	[ -d "$1/.svn" ] && scmid="$scmid subversion"
@@ -81,7 +80,7 @@ if [[ -d RCS ]]; then
 	exit 0
 fi
 
-# If it's not Teamware, it could just be local SCCS.
+# It could just be local SCCS.
 LOCAL_TYPE=
 [[ -d SCCS ]] && LOCAL_TYPE="sccs"
 
@@ -99,7 +98,7 @@ while [[ "$DIR" != / ]]; do
 	# We're done searching if we hit either a change in type or the top
 	# of a "third type" control system.
 	if [[ "$SCM_TYPE" != "$CWD_TYPE" || "$SCM_TYPE" == git || \
-	    "$SCM_TYPE" == mercurial || "$SCM_TYPE" == teamware ]]; then
+	    "$SCM_TYPE" == mercurial ]]; then
 		break
 	fi
 	PREVDIR="$DIR"

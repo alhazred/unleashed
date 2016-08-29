@@ -33,7 +33,7 @@
 
 ONBLDDIR=$(dirname $(whence $0))
 
-PATH=/usr/bin:${BUILD_TOOLS:-/opt}/teamware/bin:$ONBLDDIR
+PATH=/usr/bin:$ONBLDDIR
 export PATH
 PROG=`basename $0`
 
@@ -72,16 +72,7 @@ find_files()
    	pat=$1
    	shift
 
-	if [[ "$SCM_MODE" = "teamware" ]]; then
-		for dir; do
-			if [[ -d $CODEMGR_WS/$dir ]]; then
-				cd $CODEMGR_WS
-				find $dir -name "$pat" | \
-					sed -n s:/SCCS/s.:/:p | prpath
-				cd - > /dev/null
-			fi
-		done
-	elif [[ "$SCM_MODE" = "mercurial" || "$SCM_MODE" == "git" ]]; then
+	if [[ "$SCM_MODE" = "mercurial" || "$SCM_MODE" == "git" ]]; then
 		dirs=""
 		for dir; do
 			if [[ -d $CODEMGR_WS/$dir ]]; then
@@ -182,7 +173,7 @@ elif [[ $SCM_MODE == "mercurial" ]]; then
 	FILELIST=$(hg manifest)
 elif [[ $SCM_MODE == "git" ]]; then
 	FILELIST=$(cd $(dirname $(git rev-parse --git-dir)) && git ls-files)
-elif [[ $SCM_MODE != "teamware" ]]; then
+else
 	fail "Unsupported SCM in use: $SCM_MODE"
 fi
 

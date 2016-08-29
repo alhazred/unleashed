@@ -64,8 +64,8 @@ not end with a known architecture.
 .LP
 .B CODEMGR_WS
 .RS 4
-The root of your TeamWare workspace, which is the directory
-containing \fICodemgr_wsdata\fP.
+The root of your workspace, which is the directory containing
+\fI.git\fP.
 .RE
 .LP
 .B SRC
