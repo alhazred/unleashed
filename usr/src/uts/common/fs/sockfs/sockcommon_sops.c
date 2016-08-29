@@ -130,8 +130,6 @@ so_bind(struct sonode *so, struct sockaddr *name, socklen_t namelen,
 
 	SO_BLOCK_FALLBACK(so, SOP_BIND(so, name, namelen, flags, cr));
 
-	ASSERT(flags == _SOBIND_XPG4_2 || flags == _SOBIND_SOCKBSD);
-
 	/* X/Open requires this check */
 	if ((so->so_state & SS_CANTSENDMORE) && !xnet_skip_checks) {
 		if (xnet_check_print) {
@@ -158,14 +156,7 @@ so_bind(struct sonode *so, struct sockaddr *name, socklen_t namelen,
 			goto done;
 		}
 
-		if ((flags & _SOBIND_XPG4_2) &&
-		    (name->sa_family != so->so_family)) {
-			/*
-			 * This check has to be made for X/Open
-			 * sockets however application failures have
-			 * been observed when it is applied to
-			 * all sockets.
-			 */
+		if (name->sa_family != so->so_family) {
 			error = EAFNOSUPPORT;
 			eprintsoline(so, error);
 			goto done;
@@ -379,14 +370,6 @@ so_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
 	error = 0;
 	dontblock = (flags & MSG_DONTWAIT) ||
 	    (uiop->uio_fmode & (FNONBLOCK|FNDELAY));
-
-	if (!(flags & MSG_XPG4_2) && msg->msg_controllen != 0) {
-		/*
-		 * Old way of passing fd's is not supported
-		 */
-		SO_UNBLOCK_FALLBACK(so);
-		return (EOPNOTSUPP);
-	}
 
 	if ((so->so_mode & SM_ATOMIC) &&
 	    uiop->uio_resid > so->so_proto_props.sopp_maxpsz &&
@@ -846,15 +829,6 @@ so_setsockopt(struct sonode *so, int level, int option_name,
 			mutex_exit(&so->so_lock);
 			break;
 		}
-		case SO_RCVBUF:
-			/*
-			 * XXX XPG 4.2 applications retrieve SO_RCVBUF from
-			 * sockfs since the transport might adjust the value
-			 * and not return exactly what was set by the
-			 * application.
-			 */
-			so->so_xpg_rcvbuf = *(int32_t *)optval;
-			break;
 		}
 	}
 	error = (*so->so_downcalls->sd_setsockopt)
@@ -1770,8 +1744,7 @@ retry:
 			}
 			if (so->so_family == AF_UNIX)
 				so_getopt_srcaddr(opt, optlen, &addr, &addrlen);
-			ncontrollen = so_cmsglen(mctlp, opt, optlen,
-			    !(flags & MSG_XPG4_2));
+			ncontrollen = so_cmsglen(mctlp, opt, optlen);
 			if (controllen != 0)
 				controllen = ncontrollen;
 			else if (ncontrollen != 0)
@@ -1803,8 +1776,8 @@ retry:
 			 */
 			control = kmem_zalloc(controllen, KM_SLEEP);
 
-			error = so_opt2cmsg(mctlp, opt, optlen,
-			    !(flags & MSG_XPG4_2), control, controllen);
+			error = so_opt2cmsg(mctlp, opt, optlen, control,
+			    controllen);
 			if (error) {
 				freemsg(mctlp);
 				if (msg->msg_namelen != 0)
@@ -1844,8 +1817,7 @@ retry:
 				goto out;
 			}
 
-			ncontrollen = so_cmsglen(mctlp, opt, optlen,
-			    !(flags & MSG_XPG4_2));
+			ncontrollen = so_cmsglen(mctlp, opt, optlen);
 			if (controllen != 0)
 				controllen = ncontrollen;
 			else if (ncontrollen != 0)
@@ -1862,8 +1834,8 @@ retry:
 			 */
 			control = kmem_zalloc(controllen, KM_SLEEP);
 
-			error = so_opt2cmsg(mctlp, opt, optlen,
-			    !(flags & MSG_XPG4_2), control, controllen);
+			error = so_opt2cmsg(mctlp, opt, optlen, control,
+			    controllen);
 			if (error) {
 				freemsg(mctlp);
 				kmem_free(control, controllen);

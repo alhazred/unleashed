@@ -32,7 +32,7 @@
 /* C library -- _so_socket					*/
 /*
  * int _so_socket (int domain, int type, int protocol,
- *			dev_t dev, int version);
+ *			dev_t dev);
  */
 
 #include "SYS.h"

@@ -57,7 +57,7 @@ extern int	sogetwrerr(vnode_t *, int, int *);
 extern int	so_addr_verify(struct sonode *, const struct sockaddr *,
 			socklen_t);
 extern int	so_ux_addr_xlate(struct sonode *, struct sockaddr *,
-			socklen_t, int, void **, socklen_t *);
+			socklen_t, void **, socklen_t *);
 extern void	so_unix_close(struct sonode *);
 
 extern int	sowaitprim(struct sonode *, t_scalar_t, t_scalar_t,

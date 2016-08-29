@@ -1865,23 +1865,6 @@ prt_skp(private_t *pri, int raw, long val)
 
 
 /*
- * Print so_socket() 5th argument.
- */
-/*ARGSUSED*/
-void
-prt_skv(private_t *pri, int raw, long val)
-{
-	switch (val) {
-	case SOV_STREAM:	outstring(pri, "SOV_STREAM");	break;
-	case SOV_DEFAULT:	outstring(pri, "SOV_DEFAULT");	break;
-	case SOV_SOCKSTREAM:	outstring(pri, "SOV_SOCKSTREAM");	break;
-	case SOV_SOCKBSD:	outstring(pri, "SOV_SOCKBSD");	break;
-	case SOV_XPG4_2:	outstring(pri, "SOV_XPG4_2");	break;
-	default:		prt_dec(pri, 0, val);		break;
-	}
-}
-
-/*
  * Print accept4() flags argument.
  */
 void
@@ -2934,7 +2917,6 @@ void (* const Print[])() = {
 	prt_pfm,	/* PFM -- print so_socket() proto-family (1st) arg */
 	prt_skt,	/* SKT -- print so_socket() socket-type (2nd) arg */
 	prt_skp,	/* SKP -- print so_socket() protocol (3rd) arg */
-	prt_skv,	/* SKV -- print socket version arg */
 	prt_sol,	/* SOL -- print [sg]etsockopt() level (2nd) arg */
 	prt_son,	/* SON -- print [sg]etsockopt() opt-name (3rd) arg */
 	prt_utt,	/* UTT -- print utrap type */

@@ -30,7 +30,7 @@
 	.file	"_so_connect.s"
 
 /* C library -- __so_connect						*/
-/* int __so_connect(int sock, struct sockaddr *addr, int addrlen, int vers) */
+/* int __so_connect(int sock, struct sockaddr *addr, int addrlen) */
 
 #include "SYS.h"
 

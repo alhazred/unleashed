@@ -30,7 +30,7 @@
 	.file	"_so_listen.s"
 
 /* C library -- _so_listen					*/
-/* int _so_listen (int socket, int backlog, int vers);	 	*/
+/* int _so_listen (int socket, int backlog);		 	*/
 
 #include "SYS.h"
 

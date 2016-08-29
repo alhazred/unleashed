@@ -33,8 +33,7 @@
 
 /* C library -- __so_accept						*/
 /*
- * int __so_accept(int sock, struct sockaddr *addr, int *addrlen, int vers,
- *     int flags)
+ * int __so_accept(int sock, struct sockaddr *addr, int *addrlen, int flags)
  */
 
 #include "SYS.h"

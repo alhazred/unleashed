@@ -184,7 +184,6 @@ struct sonode {
 #define	so_minpsz	so_proto_props.sopp_minpsz
 #define	so_maxpsz	so_proto_props.sopp_maxpsz
 
-	int	so_xpg_rcvbuf;		/* SO_RCVBUF value for XPG4 socket */
 	clock_t	so_sndtimeo;		/* send timeout */
 	clock_t	so_rcvtimeo;		/* recv timeout */
 
@@ -370,13 +369,10 @@ struct sonode {
 #define	SM_SENDFILESUPP		0x800	/* Private: proto supp sendfile  */
 
 /*
- * Socket versions. Used by the socket library when calling _so_socket().
+ * Socket versions.
  */
 #define	SOV_STREAM	0	/* Not a socket - just a stream */
-#define	SOV_DEFAULT	1	/* Select based on so_default_version */
-#define	SOV_SOCKSTREAM	2	/* Socket plus streams operations */
 #define	SOV_SOCKBSD	3	/* Socket with no streams operations */
-#define	SOV_XPG4_2	4	/* Xnet socket */
 
 #if defined(_KERNEL) || defined(_KMEMUSER)
 
@@ -384,7 +380,7 @@ struct sonode {
  * sonode create and destroy functions.
  */
 typedef struct sonode *(*so_create_func_t)(struct sockparams *,
-    int, int, int, int, int, int *, cred_t *);
+    int, int, int, int, int *, cred_t *);
 typedef void (*so_destroy_func_t)(struct sonode *);
 
 /* STREAM device information */
@@ -767,8 +763,6 @@ struct sonodeops {
 #define	_SOBIND_UNSPEC		0x02	/* Bind to unspecified address */
 #define	_SOBIND_LOCK_HELD	0x04	/* so_excl_lock held by caller */
 #define	_SOBIND_NOXLATE		0x08	/* No addr translation for AF_UNIX */
-#define	_SOBIND_XPG4_2		0x10	/* xpg4.2 semantics */
-#define	_SOBIND_SOCKBSD		0x20	/* BSD semantics */
 #define	_SOBIND_LISTEN		0x40	/* Make into SS_ACCEPTCONN */
 #define	_SOBIND_SOCKETPAIR	0x80	/* Internal flag for so_socketpair() */
 					/* to enable listen with backlog = 1 */
@@ -783,17 +777,11 @@ struct sonodeops {
  */
 #define	_SOCONNECT_NOXLATE	0x01	/* No addr translation for AF_UNIX */
 #define	_SOCONNECT_DID_BIND	0x02	/* Unbind when connect fails */
-#define	_SOCONNECT_XPG4_2	0x04	/* xpg4.2 semantics */
 
 /*
  * Internal flags for sodisconnect()
  */
 #define	_SODISCONNECT_LOCK_HELD	0x01	/* so_excl_lock held by caller */
-
-/*
- * Internal flags for sotpi_getsockopt().
- */
-#define	_SOGETSOCKOPT_XPG4_2	0x01	/* xpg4.2 semantics */
 
 /*
  * Internal flags for soallocproto*()
@@ -901,13 +889,13 @@ extern int	so_getopt_unix_close(void *, t_uscalar_t);
 extern void	fdbuf_free(struct fdbuf *);
 extern mblk_t	*fdbuf_allocmsg(int, struct fdbuf *);
 extern int	fdbuf_create(void *, int, struct fdbuf **);
-extern void	so_closefds(void *, t_uscalar_t, int, int);
-extern int	so_getfdopt(void *, t_uscalar_t, int, void **, int *);
-t_uscalar_t	so_optlen(void *, t_uscalar_t, int);
-extern void	so_cmsg2opt(void *, t_uscalar_t, int, mblk_t *);
+extern void	so_closefds(void *, t_uscalar_t, int);
+extern int	so_getfdopt(void *, t_uscalar_t, void **, int *);
+t_uscalar_t	so_optlen(void *, t_uscalar_t);
+extern void	so_cmsg2opt(void *, t_uscalar_t, mblk_t *);
 extern t_uscalar_t
-		so_cmsglen(mblk_t *, void *, t_uscalar_t, int);
-extern int	so_opt2cmsg(mblk_t *, void *, t_uscalar_t, int,
+		so_cmsglen(mblk_t *, void *, t_uscalar_t);
+extern int	so_opt2cmsg(mblk_t *, void *, t_uscalar_t,
 			void *, t_uscalar_t);
 extern void	soisconnecting(struct sonode *);
 extern void	soisconnected(struct sonode *);
@@ -940,8 +928,7 @@ extern int	sogetsockopt(struct sonode *, int, int, void *, socklen_t *,
 extern int	sosetsockopt(struct sonode *, int, int, const void *,
 		    t_uscalar_t);
 
-extern struct sonode	*socreate(struct sockparams *, int, int, int, int,
-			    int *);
+extern struct sonode	*socreate(struct sockparams *, int, int, int, int *);
 
 extern int	so_copyin(const void *, void *, size_t, int);
 extern int	so_copyout(const void *, void *, size_t, int);

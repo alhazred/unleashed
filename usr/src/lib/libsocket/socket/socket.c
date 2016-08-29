@@ -64,7 +64,7 @@ socket(int family, int type, int protocol)
 	 * XXX When all transport providers use /etc/sock2path.d. this
 	 * part of the code can be removed.
 	 */
-	fd = _so_socket(family, type, protocol, NULL, SOV_XPG4_2);
+	fd = _so_socket(family, type, protocol, NULL);
 	if (fd == -1) {
 		char *devpath;
 		int saved_errno = errno;
@@ -86,7 +86,7 @@ socket(int family, int type, int protocol)
 			errno = saved_errno;
 			return (-1);
 		}
-		fd = _so_socket(family, type, protocol, devpath, SOV_XPG4_2);
+		fd = _so_socket(family, type, protocol, devpath);
 		free(devpath);
 		if (fd == -1) {
 			errno = saved_errno;

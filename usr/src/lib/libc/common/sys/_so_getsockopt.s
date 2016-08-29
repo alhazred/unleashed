@@ -31,7 +31,7 @@
 
 /* C library -- _so_getsockopt					*/
 /* int _so_getsockopt (int socket, int level, int option_name,	*/
-/*	 void *option_value, size_t *option_len, int vers);	*/
+/*	 void *option_value, size_t *option_len);		*/
 
 #include "SYS.h"
 

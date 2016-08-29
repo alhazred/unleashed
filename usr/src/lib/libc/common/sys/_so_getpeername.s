@@ -31,7 +31,7 @@
 
 /* C library -- _so_getpeername					*/
 /* int _so_getpeername (int fildes, struct sockaddr *name,	*/
-/*			int namelen, int vers);			*/
+/*			int namelen);				*/
 
 #include "SYS.h"
 

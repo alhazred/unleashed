@@ -35,7 +35,7 @@
 #include "socksdp.h"
 
 struct sonode *socksdp_create(struct sockparams *, int, int, int,
-    int, int, int *, cred_t *);
+    int, int *, cred_t *);
 static void socksdp_destroy(struct sonode *);
 
 static __smod_priv_t sosdp_priv = {
@@ -71,8 +71,8 @@ static struct modlinkage modlinkage = {
  */
 /* ARGSUSED */
 struct sonode *
-socksdp_create(struct sockparams *sp, int family, int type, int protocol,
-		    int version, int sflags, int *errorp, cred_t *cr)
+socksdp_create(struct sockparams *sp, int family, int type, int protocol, int
+    sflags, int *errorp, cred_t *cr)
 {
 	struct sonode *so;
 	int kmflags = (sflags & SOCKET_NOSLEEP) ? KM_NOSLEEP : KM_SLEEP;
@@ -83,11 +83,6 @@ socksdp_create(struct sockparams *sp, int family, int type, int protocol,
 	*errorp = 0;
 	if (is_system_labeled()) {
 		*errorp = EOPNOTSUPP;
-		return (NULL);
-	}
-
-	if (version == SOV_STREAM) {
-		*errorp = EINVAL;
 		return (NULL);
 	}
 
@@ -113,10 +108,7 @@ socksdp_create(struct sockparams *sp, int family, int type, int protocol,
 	dprint(2, ("sosdp_create: %p domain %d type %d\n", (void *)so, family,
 	    type));
 
-	if (version == SOV_DEFAULT) {
-		version = so_default_version;
-	}
-	so->so_version = (short)version;
+	so->so_version = SOV_SOCKBSD;
 
 	/*
 	 * set the default values to be INFPSZ

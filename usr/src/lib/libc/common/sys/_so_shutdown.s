@@ -30,7 +30,7 @@
 	.file	"_so_shutdown.s"
 
 /* C library -- _so_shutdown					*/
-/* int _so_shutdown (int fildes, int how, int vers);		*/
+/* int _so_shutdown (int fildes, int how);			*/
 
 #include "SYS.h"
 

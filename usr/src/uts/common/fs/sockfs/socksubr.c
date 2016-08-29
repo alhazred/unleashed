@@ -438,8 +438,7 @@ sogetoff(mblk_t *mp, t_uscalar_t offset,
  * references the actual stream head (hence indirectly the actual sonode).
  */
 static int
-so_ux_lookup(struct sonode *so, struct sockaddr_un *soun, int checkaccess,
-		vnode_t **vpp)
+so_ux_lookup(struct sonode *so, struct sockaddr_un *soun, vnode_t **vpp)
 {
 	vnode_t		*vp;	/* Underlying filesystem vnode */
 	vnode_t		*rvp;	/* real vnode */
@@ -471,16 +470,13 @@ so_ux_lookup(struct sonode *so, struct sockaddr_un *soun, int checkaccess,
 		goto done2;
 	}
 
-	if (checkaccess) {
-		/*
-		 * Check that we have permissions to access the destination
-		 * vnode. This check is not done in BSD but it is required
-		 * by X/Open.
-		 */
-		if (error = VOP_ACCESS(vp, VREAD|VWRITE, 0, CRED(), NULL)) {
-			eprintsoline(so, error);
-			goto done2;
-		}
+	/*
+	 * Check that we have permissions to access the destination
+	 * vnode.
+	 */
+	if (error = VOP_ACCESS(vp, VREAD|VWRITE, 0, CRED(), NULL)) {
+		eprintsoline(so, error);
+		goto done2;
 	}
 
 	/*
@@ -629,8 +625,7 @@ so_addr_verify(struct sonode *so, const struct sockaddr *name,
 /*ARGSUSED*/
 int
 so_ux_addr_xlate(struct sonode *so, struct sockaddr *name,
-    socklen_t namelen, int checkaccess,
-    void **addrp, socklen_t *addrlenp)
+    socklen_t namelen, void **addrp, socklen_t *addrlenp)
 {
 	int			error;
 	struct sockaddr_un	*soun;
@@ -639,8 +634,8 @@ so_ux_addr_xlate(struct sonode *so, struct sockaddr *name,
 	socklen_t		addrlen;
 	sotpi_info_t		*sti = SOTOTPI(so);
 
-	dprintso(so, 1, ("so_ux_addr_xlate(%p, %p, %d, %d)\n",
-	    (void *)so, (void *)name, namelen, checkaccess));
+	dprintso(so, 1, ("so_ux_addr_xlate(%p, %p, %d)\n",
+	    (void *)so, (void *)name, namelen));
 
 	ASSERT(name != NULL);
 	ASSERT(so->so_family == AF_UNIX);
@@ -652,7 +647,7 @@ so_ux_addr_xlate(struct sonode *so, struct sockaddr *name,
 	 * Lookup vnode for the specified path name and verify that
 	 * it is a socket.
 	 */
-	error = so_ux_lookup(so, soun, checkaccess, &vp);
+	error = so_ux_lookup(so, soun, &vp);
 	if (error) {
 		eprintsoline(so, error);
 		return (error);
@@ -942,18 +937,13 @@ close_fds(void *fdbuf, int fdbuflen, int startoff)
  * the startoffset.
  */
 void
-so_closefds(void *control, t_uscalar_t controllen, int oldflg,
-    int startoff)
+so_closefds(void *control, t_uscalar_t controllen, int startoff)
 {
 	struct cmsghdr *cmsg;
 
 	if (control == NULL)
 		return;
 
-	if (oldflg) {
-		close_fds(control, controllen, startoff);
-		return;
-	}
 	/* Scan control part for file descriptors. */
 	for (cmsg = (struct cmsghdr *)control;
 	    CMSG_VALID(cmsg, control, (uintptr_t)control + controllen);
@@ -976,8 +966,7 @@ so_closefds(void *control, t_uscalar_t controllen, int oldflg,
  * Fail if there are multiple SCM_RIGHT cmsgs.
  */
 int
-so_getfdopt(void *control, t_uscalar_t controllen, int oldflg,
-    void **fdsp, int *fdlenp)
+so_getfdopt(void *control, t_uscalar_t controllen, void **fdsp, int *fdlenp)
 {
 	struct cmsghdr *cmsg;
 	void *fds;
@@ -986,16 +975,6 @@ so_getfdopt(void *control, t_uscalar_t controllen, int oldflg,
 	if (control == NULL) {
 		*fdsp = NULL;
 		*fdlenp = -1;
-		return (0);
-	}
-
-	if (oldflg) {
-		*fdsp = control;
-		if (controllen == 0)
-			*fdlenp = -1;
-		else
-			*fdlenp = controllen;
-		dprint(1, ("so_getfdopt: old %d\n", *fdlenp));
 		return (0);
 	}
 
@@ -1028,7 +1007,7 @@ so_getfdopt(void *control, t_uscalar_t controllen, int oldflg,
  * Return the length of the options including any file descriptor options.
  */
 t_uscalar_t
-so_optlen(void *control, t_uscalar_t controllen, int oldflg)
+so_optlen(void *control, t_uscalar_t controllen)
 {
 	struct cmsghdr *cmsg;
 	t_uscalar_t optlen = 0;
@@ -1036,10 +1015,6 @@ so_optlen(void *control, t_uscalar_t controllen, int oldflg)
 
 	if (control == NULL)
 		return (0);
-
-	if (oldflg)
-		return ((t_uscalar_t)(sizeof (struct T_opthdr) +
-		    fdbuf_optlen(controllen)));
 
 	for (cmsg = (struct cmsghdr *)control;
 	    CMSG_VALID(cmsg, control, (uintptr_t)control + controllen);
@@ -1053,8 +1028,8 @@ so_optlen(void *control, t_uscalar_t controllen, int oldflg)
 		optlen += (t_uscalar_t)(_TPI_ALIGN_TOPT(len) +
 		    sizeof (struct T_opthdr));
 	}
-	dprint(1, ("so_optlen: controllen %d, flg %d -> optlen %d\n",
-	    controllen, oldflg, optlen));
+	dprint(1, ("so_optlen: controllen %d -> optlen %d\n",
+	    controllen, optlen));
 	return (optlen);
 }
 
@@ -1062,7 +1037,7 @@ so_optlen(void *control, t_uscalar_t controllen, int oldflg)
  * Copy options from control to the mblk. Skip any file descriptor options.
  */
 void
-so_cmsg2opt(void *control, t_uscalar_t controllen, int oldflg, mblk_t *mp)
+so_cmsg2opt(void *control, t_uscalar_t controllen, mblk_t *mp)
 {
 	struct T_opthdr toh;
 	struct cmsghdr *cmsg;
@@ -1070,10 +1045,6 @@ so_cmsg2opt(void *control, t_uscalar_t controllen, int oldflg, mblk_t *mp)
 	if (control == NULL)
 		return;
 
-	if (oldflg) {
-		/* No real options - caller has handled file descriptors */
-		return;
-	}
 	for (cmsg = (struct cmsghdr *)control;
 	    CMSG_VALID(cmsg, control, (uintptr_t)control + controllen);
 	    cmsg = CMSG_NEXT(cmsg)) {
@@ -1103,13 +1074,12 @@ so_cmsg2opt(void *control, t_uscalar_t controllen, int oldflg, mblk_t *mp)
 /*
  * Return the length of the control message derived from the options.
  * Exclude SO_SRCADDR and SO_UNIX_CLOSE options. Include SO_FILEP.
- * When oldflg is set only include SO_FILEP.
  * so_opt2cmsg and so_cmsglen are inter-related since so_cmsglen
  * allocates the space that so_opt2cmsg fills. If one changes, the other should
  * also be checked for any possible impacts.
  */
 t_uscalar_t
-so_cmsglen(mblk_t *mp, void *opt, t_uscalar_t optlen, int oldflg)
+so_cmsglen(mblk_t *mp, void *opt, t_uscalar_t optlen)
 {
 	t_uscalar_t cmsglen = 0;
 	struct T_opthdr *tohp;
@@ -1137,15 +1107,9 @@ so_cmsglen(mblk_t *mp, void *opt, t_uscalar_t optlen, int oldflg)
 
 			if (!fdbuf_verify(mp, fdbuf, fdbuflen))
 				continue;
-			if (oldflg) {
-				cmsglen += fdbuf_cmsglen(fdbuflen);
-				continue;
-			}
 			len = fdbuf_cmsglen(fdbuflen);
 		} else if (tohp->level == SOL_SOCKET &&
 		    tohp->name == SCM_TIMESTAMP) {
-			if (oldflg)
-				continue;
 
 			if (get_udatamodel() == DATAMODEL_NATIVE) {
 				len = sizeof (struct timeval);
@@ -1153,8 +1117,6 @@ so_cmsglen(mblk_t *mp, void *opt, t_uscalar_t optlen, int oldflg)
 				len = sizeof (struct timeval32);
 			}
 		} else {
-			if (oldflg)
-				continue;
 			len = (t_uscalar_t)_TPI_TOPT_DATALEN(tohp);
 		}
 		/*
@@ -1168,8 +1130,8 @@ so_cmsglen(mblk_t *mp, void *opt, t_uscalar_t optlen, int oldflg)
 		    last_roundup;
 	}
 	cmsglen -= last_roundup;
-	dprint(1, ("so_cmsglen: optlen %d, flg %d -> cmsglen %d\n",
-	    optlen, oldflg, cmsglen));
+	dprint(1, ("so_cmsglen: optlen %d -> cmsglen %d\n",
+	    optlen, cmsglen));
 	return (cmsglen);
 }
 
@@ -1182,8 +1144,8 @@ so_cmsglen(mblk_t *mp, void *opt, t_uscalar_t optlen, int oldflg)
  * also be checked for any possible impacts.
  */
 int
-so_opt2cmsg(mblk_t *mp, void *opt, t_uscalar_t optlen, int oldflg,
-    void *control, t_uscalar_t controllen)
+so_opt2cmsg(mblk_t *mp, void *opt, t_uscalar_t optlen, void *control,
+    t_uscalar_t controllen)
 {
 	struct T_opthdr *tohp;
 	struct cmsghdr *cmsg;
@@ -1216,34 +1178,23 @@ so_opt2cmsg(mblk_t *mp, void *opt, t_uscalar_t optlen, int oldflg,
 
 			if (!fdbuf_verify(mp, fdbuf, fdbuflen))
 				return (EPROTO);
-			if (oldflg) {
-				error = fdbuf_extract(fdbuf, control,
-				    (int)controllen);
-				if (error != 0)
-					return (error);
-				continue;
-			} else {
-				int fdlen;
+			int fdlen;
 
-				fdlen = (int)fdbuf_cmsglen(
-				    (int)_TPI_TOPT_DATALEN(tohp));
+			fdlen = (int)fdbuf_cmsglen(
+			    (int)_TPI_TOPT_DATALEN(tohp));
 
-				cmsg->cmsg_level = tohp->level;
-				cmsg->cmsg_type = SCM_RIGHTS;
-				cmsg->cmsg_len = (socklen_t)(fdlen +
-				    sizeof (struct cmsghdr));
+			cmsg->cmsg_level = tohp->level;
+			cmsg->cmsg_type = SCM_RIGHTS;
+			cmsg->cmsg_len = (socklen_t)(fdlen +
+			    sizeof (struct cmsghdr));
 
-				error = fdbuf_extract(fdbuf,
-				    CMSG_CONTENT(cmsg), fdlen);
-				if (error != 0)
-					return (error);
-			}
+			error = fdbuf_extract(fdbuf,
+			    CMSG_CONTENT(cmsg), fdlen);
+			if (error != 0)
+				return (error);
 		} else if (tohp->level == SOL_SOCKET &&
 		    tohp->name == SCM_TIMESTAMP) {
 			timestruc_t *timestamp;
-
-			if (oldflg)
-				continue;
 
 			cmsg->cmsg_level = tohp->level;
 			cmsg->cmsg_type = tohp->name;
@@ -1279,9 +1230,6 @@ so_opt2cmsg(mblk_t *mp, void *opt, t_uscalar_t optlen, int oldflg,
 			}
 
 		} else {
-			if (oldflg)
-				continue;
-
 			cmsg->cmsg_level = tohp->level;
 			cmsg->cmsg_type = tohp->name;
 			cmsg->cmsg_len = (socklen_t)(_TPI_TOPT_DATALEN(tohp) +

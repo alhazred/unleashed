@@ -178,7 +178,7 @@ int xnet_truncate_print = 0;
 
 static void sotpi_destroy(struct sonode *);
 static struct sonode *sotpi_create(struct sockparams *, int, int, int, int,
-    int, int *, cred_t *cr);
+    int *, cred_t *cr);
 
 static boolean_t	sotpi_info_create(struct sonode *, int);
 static void		sotpi_info_init(struct sonode *);
@@ -276,7 +276,7 @@ sonodeops_t sotpi_sonodeops = {
 /* ARGSUSED */
 static struct sonode *
 sotpi_create(struct sockparams *sp, int family, int type, int protocol,
-    int version, int sflags, int *errorp, cred_t *cr)
+    int sflags, int *errorp, cred_t *cr)
 {
 	struct sonode	*so;
 	kmem_cache_t 	*cp;
@@ -318,10 +318,7 @@ sotpi_create(struct sockparams *sp, int family, int type, int protocol,
 		SOTOTPI(so)->sti_nl7c_flags = NL7C_AF_NCA;
 	}
 
-	if (version == SOV_DEFAULT)
-		version = so_default_version;
-
-	so->so_version = (short)version;
+	so->so_version = SOV_SOCKBSD;
 	*errorp = 0;
 
 	return (so);
@@ -610,20 +607,6 @@ so_automatic_bind(struct sonode *so)
 /*
  * bind the socket.
  *
- * If the socket is already bound and none of _SOBIND_SOCKBSD or _SOBIND_XPG4_2
- * are passed in we allow rebinding. Note that for backwards compatibility
- * even "svr4" sockets pass in _SOBIND_SOCKBSD/SOV_SOCKBSD to sobind/bind.
- * Thus the rebinding code is currently not executed.
- *
- * The constraints for rebinding are:
- * - it is a SOCK_DGRAM, or
- * - it is a SOCK_STREAM/SOCK_SEQPACKET that has not been connected
- *   and no listen() has been done.
- * This rebinding code was added based on some language in the XNET book
- * about not returning EINVAL it the protocol allows rebinding. However,
- * this language is not present in the Posix socket draft. Thus maybe the
- * rebinding logic should be deleted from the source.
- *
  * A null "name" can be used to unbind the socket if:
  * - it is a SOCK_DGRAM, or
  * - it is a SOCK_STREAM/SOCK_SEQPACKET that has not been connected
@@ -766,43 +749,10 @@ sotpi_bindlisten(struct sonode *so, struct sockaddr *name,
 
 	} else {
 		if (so->so_state & SS_ISBOUND) {
-			/*
-			 * If it is ok to rebind the socket, first unbind
-			 * with the transport. A rebind to the NULL address
-			 * is interpreted as an unbind.
-			 * Note that a bind to NULL in BSD does unbind the
-			 * socket but it fails with EINVAL.
-			 * Note that regular sockets set SOV_SOCKBSD i.e.
-			 * _SOBIND_SOCKBSD gets set here hence no type of
-			 * socket does currently allow rebinding.
-			 *
-			 * If the name is NULL just do an unbind.
-			 */
-			if (flags & (_SOBIND_SOCKBSD|_SOBIND_XPG4_2) &&
-			    name != NULL) {
-				error = EINVAL;
-				unbind_on_err = 0;
-				eprintsoline(so, error);
-				goto done;
-			}
-			if ((so->so_mode & SM_CONNREQUIRED) &&
-			    (so->so_state & SS_CANTREBIND)) {
-				error = EINVAL;
-				unbind_on_err = 0;
-				eprintsoline(so, error);
-				goto done;
-			}
-			error = sotpi_unbind(so, 0);
-			if (error) {
-				eprintsoline(so, error);
-				goto done;
-			}
-			ASSERT(!(so->so_state & SS_ISBOUND));
-			if (name == NULL) {
-				so->so_state &=
-				    ~(SS_ISCONNECTED|SS_ISCONNECTING);
-				goto done;
-			}
+			error = EINVAL;
+			unbind_on_err = 0;
+			eprintsoline(so, error);
+			goto done;
 		}
 
 		/* X/Open requires this check */
@@ -850,14 +800,7 @@ sotpi_bindlisten(struct sonode *so, struct sockaddr *name,
 				eprintsoline(so, error);
 				goto done;
 			}
-			if ((flags & _SOBIND_XPG4_2) &&
-			    (name->sa_family != so->so_family)) {
-				/*
-				 * This check has to be made for X/Open
-				 * sockets however application failures have
-				 * been observed when it is applied to
-				 * all sockets.
-				 */
+			if ((name->sa_family != so->so_family)) {
 				error = EAFNOSUPPORT;
 				eprintsoline(so, error);
 				goto done;
@@ -2408,7 +2351,6 @@ sotpi_connect(struct sonode *so,
 			    srclen, src));
 			error = so_ux_addr_xlate(so,
 			    sti->sti_faddr_sa, (socklen_t)sti->sti_faddr_len,
-			    (flags & _SOCONNECT_XPG4_2),
 			    &addr, &addrlen);
 			if (error)
 				goto bad;
@@ -2887,7 +2829,7 @@ so_unix_close(struct sonode *so)
 			    srclen, src));
 			error = so_ux_addr_xlate(so,
 			    sti->sti_faddr_sa,
-			    (socklen_t)sti->sti_faddr_len, 0,
+			    (socklen_t)sti->sti_faddr_len,
 			    &addr, &addrlen);
 			if (error) {
 				eprintsoline(so, error);
@@ -3391,8 +3333,7 @@ retry:
 			}
 			if (so->so_family == AF_UNIX)
 				so_getopt_srcaddr(opt, optlen, &addr, &addrlen);
-			ncontrollen = so_cmsglen(mp, opt, optlen,
-			    !(flags & MSG_XPG4_2));
+			ncontrollen = so_cmsglen(mp, opt, optlen);
 			if (controllen != 0)
 				controllen = ncontrollen;
 			else if (ncontrollen != 0)
@@ -3424,9 +3365,8 @@ retry:
 			 */
 			control = kmem_zalloc(controllen, KM_SLEEP);
 
-			error = so_opt2cmsg(mp, opt, optlen,
-			    !(flags & MSG_XPG4_2),
-			    control, controllen);
+			error = so_opt2cmsg(mp, opt, optlen, control,
+			    controllen);
 			if (error) {
 				freemsg(mp);
 				if (msg->msg_namelen != 0)
@@ -3473,8 +3413,7 @@ retry:
 				goto out;
 			}
 
-			ncontrollen = so_cmsglen(mp, opt, optlen,
-			    !(flags & MSG_XPG4_2));
+			ncontrollen = so_cmsglen(mp, opt, optlen);
 			if (controllen != 0)
 				controllen = ncontrollen;
 			else if (ncontrollen != 0)
@@ -3491,9 +3430,8 @@ retry:
 			 */
 			control = kmem_zalloc(controllen, KM_SLEEP);
 
-			error = so_opt2cmsg(mp, opt, optlen,
-			    !(flags & MSG_XPG4_2),
-			    control, controllen);
+			error = so_opt2cmsg(mp, opt, optlen, control,
+			    controllen);
 			if (error) {
 				freemsg(mp);
 				kmem_free(control, controllen);
@@ -3719,7 +3657,6 @@ sosend_dgramcmsg(struct sonode *so, struct sockaddr *name, socklen_t namelen,
 			    ("sosend_dgramcmsg UNIX: srclen %d, src %p\n",
 			    srclen, src));
 			error = so_ux_addr_xlate(so, name, namelen,
-			    (flags & MSG_XPG4_2),
 			    &addr, &addrlen);
 			if (error) {
 				eprintsoline(so, error);
@@ -3732,8 +3669,7 @@ sosend_dgramcmsg(struct sonode *so, struct sockaddr *name, socklen_t namelen,
 		src = NULL;
 		srclen = 0;
 	}
-	optlen = so_optlen(control, controllen,
-	    !(flags & MSG_XPG4_2));
+	optlen = so_optlen(control, controllen);
 	tudr.PRIM_type = T_UNITDATA_REQ;
 	tudr.DEST_length = addrlen;
 	tudr.DEST_offset = (t_scalar_t)sizeof (tudr);
@@ -3750,8 +3686,7 @@ sosend_dgramcmsg(struct sonode *so, struct sockaddr *name, socklen_t namelen,
 	/*
 	 * File descriptors only when SM_FDPASSING set.
 	 */
-	error = so_getfdopt(control, controllen,
-	    !(flags & MSG_XPG4_2), &fds, &fdlen);
+	error = so_getfdopt(control, controllen, &fds, &fdlen);
 	if (error)
 		return (error);
 	if (fdlen != -1) {
@@ -3809,7 +3744,7 @@ sosend_dgramcmsg(struct sonode *so, struct sockaddr *name, socklen_t namelen,
 		ASSERT(__TPI_TOPT_ISALIGNED(mp->b_wptr));
 	}
 	ASSERT(mp->b_wptr <= mp->b_datap->db_lim);
-	so_cmsg2opt(control, controllen, !(flags & MSG_XPG4_2), mp);
+	so_cmsg2opt(control, controllen, mp);
 	/*
 	 * Normally at most 3 bytes left in the message, but we might have
 	 * allowed for extra space if we're passing fd's through.
@@ -3884,7 +3819,7 @@ sosend_svccmsg(struct sonode *so, struct uio *uiop, int more, void *control,
 		dprintso(so, 1, ("sosend_svccmsg: sending %d, %ld bytes\n",
 		    tdr.DATA_flag, iosize));
 
-		optlen = so_optlen(control, controllen, !(flags & MSG_XPG4_2));
+		optlen = so_optlen(control, controllen);
 		tdr.OPT_length = optlen;
 		tdr.OPT_offset = (t_scalar_t)sizeof (tdr);
 
@@ -3892,8 +3827,7 @@ sosend_svccmsg(struct sonode *so, struct uio *uiop, int more, void *control,
 		/*
 		 * File descriptors only when SM_FDPASSING set.
 		 */
-		error = so_getfdopt(control, controllen,
-		    !(flags & MSG_XPG4_2), &fds, &fdlen);
+		error = so_getfdopt(control, controllen, &fds, &fdlen);
 		if (error)
 			return (error);
 		if (fdlen != -1) {
@@ -3935,7 +3869,7 @@ sosend_svccmsg(struct sonode *so, struct uio *uiop, int more, void *control,
 			soappendmsg(mp, fdbuf, fdbuf->fd_size);
 			ASSERT(__TPI_TOPT_ISALIGNED(mp->b_wptr));
 		}
-		so_cmsg2opt(control, controllen, !(flags & MSG_XPG4_2), mp);
+		so_cmsg2opt(control, controllen, mp);
 		/*
 		 * Normally at most 3 bytes left in the message, but we might
 		 * have allowed for extra space if we're passing fd's through.
@@ -4039,7 +3973,6 @@ sosend_dgram(struct sonode *so, struct sockaddr	*name, socklen_t namelen,
 			    ("sosend_dgram UNIX: srclen %d, src %p\n",
 			    srclen, src));
 			error = so_ux_addr_xlate(so, name, namelen,
-			    (flags & MSG_XPG4_2),
 			    &addr, &addrlen);
 			if (error) {
 				eprintsoline(so, error);
@@ -5299,13 +5232,6 @@ sotpi_getsockopt(struct sonode *so, int level, int option_name,
 			 * value from the read queue. This value is
 			 * returned if the transport fails
 			 * the T_SVR4_OPTMGMT_REQ.
-			 *
-			 * XXX If SO_RCVBUF has been set and this is an
-			 * XPG 4.2 application then do not ask the transport
-			 * since the transport might adjust the value and not
-			 * return exactly what was set by the application.
-			 * For non-XPG 4.2 application we return the value
-			 * that the transport is actually using.
 			 */
 			lvalue = so->so_rcvbuf;
 			if (lvalue == 0) {
@@ -5315,10 +5241,6 @@ sotpi_getsockopt(struct sonode *so, int level, int option_name,
 				mutex_enter(&so->so_lock);
 				dprintso(so, 1,
 				    ("got SO_RCVBUF %ld from q\n", lvalue));
-			} else if (flags & _SOGETSOCKOPT_XPG4_2) {
-				value = (int)lvalue;
-				option = &value;
-				goto copyout;	/* skip asking transport */
 			}
 			value = (int)lvalue;
 			option = &value;

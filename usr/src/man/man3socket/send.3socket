@@ -130,7 +130,7 @@ buffered to be sent.
 .RS 16n
 The message is too large to be sent all at once (as the socket requires), or
 the \fImsg_iovlen\fR member of the \fBmsghdr\fR structure pointed to by message
-is less than or equal to 0 or is greater than {\fBIOV_MAX\fR}.
+is less than 0 or is greater than {\fBIOV_MAX\fR}.
 .RE
 
 .sp

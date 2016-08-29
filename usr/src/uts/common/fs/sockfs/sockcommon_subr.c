@@ -1212,10 +1212,9 @@ sorecvoob(struct sonode *so, struct nmsghdr *msg, struct uio *uiop, int flags,
 /*
  * Allocate and initializ sonode
  */
-/* ARGSUSED */
 struct sonode *
 socket_sonode_create(struct sockparams *sp, int family, int type,
-    int protocol, int version, int sflags, int *errorp, struct cred *cr)
+    int protocol, int sflags, int *errorp, struct cred *cr)
 {
 	sonode_t *so;
 	int	kmflags;
@@ -1246,10 +1245,7 @@ socket_sonode_create(struct sockparams *sp, int family, int type,
 
 	sonode_init(so, sp, family, type, protocol, &so_sonodeops);
 
-	if (version == SOV_DEFAULT)
-		version = so_default_version;
-
-	so->so_version = (short)version;
+	so->so_version = SOV_SOCKBSD;
 
 	/*
 	 * set the default values to be INFPSZ
@@ -1282,7 +1278,6 @@ socket_init_common(struct sonode *so, struct sonode *pso, int flags, cred_t *cr)
 		so->so_pgrp = pso->so_pgrp;
 		so->so_rcvtimeo = pso->so_rcvtimeo;
 		so->so_sndtimeo = pso->so_sndtimeo;
-		so->so_xpg_rcvbuf = pso->so_xpg_rcvbuf;
 		/*
 		 * Make note of the socket level options. TCP and IP level
 		 * options are already inherited. We could do all this after
@@ -1774,24 +1769,6 @@ socket_getopt_common(struct sonode *so, int level, int option_name,
 
 		if (optlen < (t_uscalar_t)sizeof (int32_t))
 			return (EINVAL);
-
-		if ((flags & _SOGETSOCKOPT_XPG4_2) && so->so_xpg_rcvbuf != 0) {
-			/*
-			 * XXX If SO_RCVBUF has been set and this is an
-			 * XPG 4.2 application then do not ask the transport
-			 * since the transport might adjust the value and not
-			 * return exactly what was set by the application.
-			 * For non-XPG 4.2 application we return the value
-			 * that the transport is actually using.
-			 */
-			*(int32_t *)optval = so->so_xpg_rcvbuf;
-			*optlenp = sizeof (so->so_xpg_rcvbuf);
-			return (0);
-		}
-		/*
-		 * If the option has not been set then get a default
-		 * value from the transport.
-		 */
 		break;
 	}
 	case SO_LINGER: {

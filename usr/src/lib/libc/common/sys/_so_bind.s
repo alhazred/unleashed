@@ -30,7 +30,7 @@
 	.file	"_so_bind.s"
 
 /* C library -- _so_bind						*/
-/* int _so_bind (int fildes, struct sockaddr *name, int namelen, int vers); */
+/* int _so_bind (int fildes, struct sockaddr *name, int namelen); */
 
 #include "SYS.h"
 

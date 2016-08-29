@@ -457,11 +457,6 @@ sosctp_seq_connect(struct sonode *so, struct sockaddr *name,
 
 	error = sosctp_assoc_createconn(ss, name, namelen, NULL, 0, fflag,
 	    cr, &ssa);
-	if (error != 0) {
-		if ((error == EHOSTUNREACH) && (flags & _SOCONNECT_XPG4_2)) {
-			error = ENETUNREACH;
-		}
-	}
 	if (ssa != NULL) {
 		SSA_REFRELE(ss, ssa);
 	}
@@ -868,8 +863,7 @@ sosctp_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
 			fflag |= FNDELAY;
 		}
 		error = sosctp_connect(so, msg->msg_name, msg->msg_namelen,
-		    fflag, (so->so_version == SOV_XPG4_2) * _SOCONNECT_XPG4_2,
-		    cr);
+		    fflag, 0, cr);
 		if (error) {
 			/*
 			 * Check for non-fatal errors, socket connected
@@ -987,10 +981,6 @@ sosctp_seq_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
 		error = sosctp_assoc_createconn(ss, msg->msg_name, namelen,
 		    msg->msg_control, optlen, flags, cr, &ssa);
 		if (error) {
-			if ((so->so_version == SOV_XPG4_2) &&
-			    (error == EHOSTUNREACH)) {
-				error = ENETUNREACH;
-			}
 			if (ssa == NULL) {
 				/*
 				 * Fatal error during connect(). Bail out.
@@ -1726,8 +1716,7 @@ sosctp_ioctl(struct sonode *so, int cmd, intptr_t arg, int mode,
 		SSA_REFHOLD(ssa);
 
 		nso = socksctp_create(sp, so->so_family, SOCK_STREAM,
-		    so->so_protocol, so->so_version, SOCKET_NOSLEEP,
-		    &error, cr);
+		    so->so_protocol, SOCKET_NOSLEEP, &error, cr);
 		if (nso == NULL) {
 			SSA_REFRELE(ss, ssa);
 			mutex_exit(&so->so_lock);

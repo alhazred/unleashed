@@ -66,13 +66,6 @@ get_sock_peer_name(struct ps_prochandle *Pr,
 	adp->arg_inout = AI_INOUT;
 	adp->arg_size = sizeof (*namelen);
 
-	adp++;			/* version argument */
-	adp->arg_value = SOV_DEFAULT;
-	adp->arg_object = NULL;
-	adp->arg_type = AT_BYVAL;
-	adp->arg_inout = AI_INPUT;
-	adp->arg_size = 0;
-
 	error = Psyscall(Pr, &rval, syscall, 4, &argd[0]);
 
 	if (error) {
@@ -83,8 +76,8 @@ get_sock_peer_name(struct ps_prochandle *Pr,
 }
 
 /* libc system call interface */
-extern int _so_getsockname(int, struct sockaddr *, socklen_t *, int);
-extern int _so_getpeername(int, struct sockaddr *, socklen_t *, int);
+extern int _so_getsockname(int, struct sockaddr *, socklen_t *);
+extern int _so_getpeername(int, struct sockaddr *, socklen_t *);
 extern int _so_getsockopt(int, int, int, void *, int *);
 
 /*
@@ -95,7 +88,7 @@ pr_getsockname(struct ps_prochandle *Pr,
 	int sock, struct sockaddr *name, socklen_t *namelen)
 {
 	if (Pr == NULL)		/* no subject process */
-		return (_so_getsockname(sock, name, namelen, SOV_DEFAULT));
+		return (_so_getsockname(sock, name, namelen));
 
 	return (get_sock_peer_name(Pr, SYS_getsockname, sock, name, namelen));
 }
@@ -108,7 +101,7 @@ pr_getpeername(struct ps_prochandle *Pr,
 	int sock, struct sockaddr *name, socklen_t *namelen)
 {
 	if (Pr == NULL)		/* no subject process */
-		return (_so_getpeername(sock, name, namelen, SOV_DEFAULT));
+		return (_so_getpeername(sock, name, namelen));
 
 	return (get_sock_peer_name(Pr, SYS_getpeername, sock, name, namelen));
 }

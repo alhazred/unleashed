@@ -68,8 +68,6 @@
 #include <fs/sockfs/socktpi.h>
 #include <fs/sockfs/socktpi_impl.h>
 
-int so_default_version = SOV_SOCKSTREAM;
-
 #ifdef DEBUG
 /* Set sockdebug to print debug messages when SO_DEBUG is set */
 int sockdebug = 0;
@@ -303,7 +301,7 @@ so_stream2sock(struct sonode *so)
 	mutex_enter(&so->so_lock);
 	so_lock_single(so);
 	ASSERT(so->so_version == SOV_STREAM);
-	so->so_version = SOV_SOCKSTREAM;
+	so->so_version = SOV_SOCKBSD;
 	sti->sti_pushcnt = 0;
 	mutex_exit(&so->so_lock);
 
@@ -2872,11 +2870,6 @@ sock_getmsg(
 /*
  * Wrapper for putmsg. If the socket has been converted to a stream
  * pass the request to the stream head.
- *
- * Note that a while a regular socket (SOV_SOCKSTREAM) does support the
- * streams ioctl set it does not support putmsg and getmsg.
- * Allowing putmsg would prevent sockfs from tracking the state of
- * the socket/transport and would also invalidate the locking in sockfs.
  */
 int
 sock_putmsg(

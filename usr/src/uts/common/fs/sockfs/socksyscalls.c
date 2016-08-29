@@ -94,15 +94,13 @@ extern int	sockfs_defer_nl7c_init;
 /*
  * Kernel component of socket creation.
  *
- * The socket library determines which version number to use.
  * First the library calls this with a NULL devpath. If this fails
  * to find a transport (using solookup) the library will look in /etc/netconfig
  * for the appropriate transport. If one is found it will pass in the
  * devpath for the kernel to use.
  */
 int
-so_socket(int family, int type_w_flags, int protocol, char *devpath,
-    int version)
+so_socket(int family, int type_w_flags, int protocol, char *devpath)
 {
 	struct sonode *so;
 	vnode_t *vp;
@@ -127,11 +125,11 @@ so_socket(int family, int type_w_flags, int protocol, char *devpath,
 			return (set_errno(error));
 		}
 		so = socket_create(family, type, protocol, buf, NULL,
-		    SOCKET_SLEEP, version, CRED(), &error);
+		    SOCKET_SLEEP, CRED(), &error);
 		kmem_free(buf, MAXPATHLEN);
 	} else {
 		so = socket_create(family, type, protocol, NULL, NULL,
-		    SOCKET_SLEEP, version, CRED(), &error);
+		    SOCKET_SLEEP, CRED(), &error);
 	}
 	if (so == NULL)
 		return (set_errno(error));
@@ -554,7 +552,7 @@ done:
 }
 
 int
-bind(int sock, struct sockaddr *name, socklen_t namelen, int version)
+bind(int sock, struct sockaddr *name, socklen_t namelen)
 {
 	struct sonode *so;
 	int error;
@@ -582,17 +580,7 @@ bind(int sock, struct sockaddr *name, socklen_t namelen, int version)
 		namelen = 0;
 	}
 
-	switch (version) {
-	default:
-		error = socket_bind(so, name, namelen, 0, CRED());
-		break;
-	case SOV_XPG4_2:
-		error = socket_bind(so, name, namelen, _SOBIND_XPG4_2, CRED());
-		break;
-	case SOV_SOCKBSD:
-		error = socket_bind(so, name, namelen, _SOBIND_SOCKBSD, CRED());
-		break;
-	}
+	error = socket_bind(so, name, namelen, 0, CRED());
 done:
 	releasef(sock);
 	if (name != NULL)
@@ -603,9 +591,8 @@ done:
 	return (0);
 }
 
-/* ARGSUSED2 */
 int
-listen(int sock, int backlog, int version)
+listen(int sock, int backlog)
 {
 	struct sonode *so;
 	int error;
@@ -624,10 +611,8 @@ listen(int sock, int backlog, int version)
 	return (0);
 }
 
-/*ARGSUSED3*/
 int
-accept(int sock, struct sockaddr *name, socklen_t *namelenp, int version,
-    int flags)
+accept(int sock, struct sockaddr *name, socklen_t *namelenp, int flags)
 {
 	struct sonode *so;
 	file_t *fp;
@@ -772,7 +757,7 @@ accept(int sock, struct sockaddr *name, socklen_t *namelenp, int version,
 }
 
 int
-connect(int sock, struct sockaddr *name, socklen_t namelen, int version)
+connect(int sock, struct sockaddr *name, socklen_t namelen)
 {
 	struct sonode *so;
 	file_t *fp;
@@ -795,8 +780,7 @@ connect(int sock, struct sockaddr *name, socklen_t namelen, int version)
 	} else
 		name = NULL;
 
-	error = socket_connect(so, name, namelen, fp->f_flag,
-	    (version != SOV_XPG4_2) ? 0 : _SOCONNECT_XPG4_2, CRED());
+	error = socket_connect(so, name, namelen, fp->f_flag, 0, CRED());
 	releasef(sock);
 	if (name)
 		kmem_free(name, (size_t)namelen);
@@ -805,9 +789,8 @@ connect(int sock, struct sockaddr *name, socklen_t namelen, int version)
 	return (0);
 }
 
-/*ARGSUSED2*/
 int
-shutdown(int sock, int how, int version)
+shutdown(int sock, int how)
 {
 	struct sonode *so;
 	int error;
@@ -860,7 +843,7 @@ recvit(int sock,
 	controllen = msg->msg_controllen;
 
 	msg->msg_flags = flags & (MSG_OOB | MSG_PEEK | MSG_WAITALL |
-	    MSG_DONTWAIT | MSG_XPG4_2);
+	    MSG_DONTWAIT);
 
 	error = socket_recvmsg(so, msg, uiop, CRED());
 	if (error) {
@@ -876,11 +859,6 @@ recvit(int sock,
 		goto err;
 
 	if (flagsp != NULL) {
-		/*
-		 * Clear internal flag.
-		 */
-		msg->msg_flags &= ~MSG_XPG4_2;
-
 		/*
 		 * Determine MSG_CTRUNC. sorecvmsg sets MSG_CTRUNC only
 		 * when controllen is zero and there is control data to
@@ -905,13 +883,6 @@ recvit(int sock,
 	 * of the file descriptor array.
 	 */
 	if (controllen != 0) {
-		if (!(flags & MSG_XPG4_2)) {
-			/*
-			 * Good old msg_accrights can only return a multiple
-			 * of 4 bytes.
-			 */
-			controllen &= ~((int)sizeof (uint32_t) - 1);
-		}
 		error = copyout_arg(control, controllen, controllenp,
 		    msg->msg_control, msg->msg_controllen);
 		if (error)
@@ -921,7 +892,7 @@ recvit(int sock,
 			if (control == NULL)
 				controllen = 0;
 			so_closefds(msg->msg_control, msg->msg_controllen,
-			    !(flags & MSG_XPG4_2), controllen);
+			    controllen);
 		}
 	}
 	if (msg->msg_namelen != 0)
@@ -936,8 +907,7 @@ err:
 	 * we have to close the fd's.
 	 */
 	if (msg->msg_controllen != 0)
-		so_closefds(msg->msg_control, msg->msg_controllen,
-		    !(flags & MSG_XPG4_2), 0);
+		so_closefds(msg->msg_control, msg->msg_controllen, 0);
 	if (msg->msg_namelen != 0)
 		kmem_free(msg->msg_name, (size_t)msg->msg_namelen);
 	if (msg->msg_controllen != 0)
@@ -1015,10 +985,6 @@ recvfrom(int sock, void *buffer, size_t len, int flags,
 	return (recvit(sock, &lmsg, &auio, flags, namelenp, NULL, NULL));
 }
 
-/*
- * Uses the MSG_XPG4_2 flag to determine if the caller is using
- * struct omsghdr or struct nmsghdr.
- */
 ssize_t
 recvmsg(int sock, struct nmsghdr *msg, int flags)
 {
@@ -1040,21 +1006,9 @@ recvmsg(int sock, struct nmsghdr *msg, int flags)
 	STRUCT_INIT(u_lmsg, model);
 	STRUCT_SET_HANDLE(umsgptr, model, msg);
 
-	if (flags & MSG_XPG4_2) {
-		if (copyin(msg, STRUCT_BUF(u_lmsg), STRUCT_SIZE(u_lmsg)))
-			return (set_errno(EFAULT));
-		flagsp = STRUCT_FADDR(umsgptr, msg_flags);
-	} else {
-		/*
-		 * Assumes that nmsghdr and omsghdr are identically shaped
-		 * except for the added msg_flags field.
-		 */
-		if (copyin(msg, STRUCT_BUF(u_lmsg),
-		    SIZEOF_STRUCT(omsghdr, model)))
-			return (set_errno(EFAULT));
-		STRUCT_FSET(u_lmsg, msg_flags, 0);
-		flagsp = NULL;
-	}
+	if (copyin(msg, STRUCT_BUF(u_lmsg), STRUCT_SIZE(u_lmsg)))
+		return (set_errno(EFAULT));
+	flagsp = STRUCT_FADDR(umsgptr, msg_flags);
 
 	/*
 	 * Code below us will kmem_alloc memory and hang it
@@ -1247,20 +1201,9 @@ send(int sock, void *buffer, size_t len, int flags)
 
 	lmsg.msg_name = NULL;
 	lmsg.msg_control = NULL;
-	if (!(flags & MSG_XPG4_2)) {
-		/*
-		 * In order to be compatible with the libsocket/sockmod
-		 * implementation we set EOR for all send* calls.
-		 */
-		flags |= MSG_EOR;
-	}
 	return (sendit(sock, &lmsg, &auio, flags));
 }
 
-/*
- * Uses the MSG_XPG4_2 flag to determine if the caller is using
- * struct omsghdr or struct nmsghdr.
- */
 ssize_t
 sendmsg(int sock, struct nmsghdr *msg, int flags)
 {
@@ -1278,25 +1221,9 @@ sendmsg(int sock, struct nmsghdr *msg, int flags)
 	model = get_udatamodel();
 	STRUCT_INIT(u_lmsg, model);
 
-	if (flags & MSG_XPG4_2) {
-		if (copyin(msg, (char *)STRUCT_BUF(u_lmsg),
-		    STRUCT_SIZE(u_lmsg)))
-			return (set_errno(EFAULT));
-	} else {
-		/*
-		 * Assumes that nmsghdr and omsghdr are identically shaped
-		 * except for the added msg_flags field.
-		 */
-		if (copyin(msg, (char *)STRUCT_BUF(u_lmsg),
-		    SIZEOF_STRUCT(omsghdr, model)))
-			return (set_errno(EFAULT));
-		/*
-		 * In order to be compatible with the libsocket/sockmod
-		 * implementation we set EOR for all send* calls.
-		 */
-		flags |= MSG_EOR;
-	}
-
+	if (copyin(msg, (char *)STRUCT_BUF(u_lmsg),
+	    STRUCT_SIZE(u_lmsg)))
+		return (set_errno(EFAULT));
 	/*
 	 * Code below us will kmem_alloc memory and hang it
 	 * off msg_control and msg_name fields. This forces
@@ -1312,14 +1239,8 @@ sendmsg(int sock, struct nmsghdr *msg, int flags)
 
 	iovcnt = lmsg.msg_iovlen;
 
-	if (iovcnt <= 0 || iovcnt > MSG_MAXIOVLEN) {
-		/*
-		 * Unless this is XPG 4.2 we allow iovcnt == 0 to
-		 * be compatible with SunOS 4.X and 4.4BSD.
-		 */
-		if (iovcnt != 0 || (flags & MSG_XPG4_2))
-			return (set_errno(EMSGSIZE));
-	}
+	if (iovcnt < 0 || iovcnt > MSG_MAXIOVLEN)
+		return (set_errno(EMSGSIZE));
 
 #ifdef _SYSCALL32_IMPL
 	/*
@@ -1399,19 +1320,11 @@ sendto(int sock, void *buffer, size_t len, int flags,
 	lmsg.msg_name = (char *)name;
 	lmsg.msg_namelen = namelen;
 	lmsg.msg_control = NULL;
-	if (!(flags & MSG_XPG4_2)) {
-		/*
-		 * In order to be compatible with the libsocket/sockmod
-		 * implementation we set EOR for all send* calls.
-		 */
-		flags |= MSG_EOR;
-	}
 	return (sendit(sock, &lmsg, &auio, flags));
 }
 
-/*ARGSUSED3*/
 int
-getpeername(int sock, struct sockaddr *name, socklen_t *namelenp, int version)
+getpeername(int sock, struct sockaddr *name, socklen_t *namelenp)
 {
 	struct sonode *so;
 	int error;
@@ -1446,10 +1359,9 @@ rel_out:
 bad:	return (error != 0 ? set_errno(error) : 0);
 }
 
-/*ARGSUSED3*/
 int
 getsockname(int sock, struct sockaddr *name,
-		socklen_t *namelenp, int version)
+		socklen_t *namelenp)
 {
 	struct sonode *so;
 	int error;
@@ -1484,14 +1396,12 @@ rel_out:
 bad:	return (error != 0 ? set_errno(error) : 0);
 }
 
-/*ARGSUSED5*/
 int
 getsockopt(int sock,
 	int level,
 	int option_name,
 	void *option_value,
-	socklen_t *option_lenp,
-	int version)
+	socklen_t *option_lenp)
 {
 	struct sonode *so;
 	socklen_t optlen, optlen_res;
@@ -1521,8 +1431,7 @@ getsockopt(int sock,
 	optval = kmem_alloc(optlen, KM_SLEEP);
 	optlen_res = optlen;
 	error = socket_getsockopt(so, level, option_name, optval,
-	    &optlen_res, (version != SOV_XPG4_2) ? 0 : _SOGETSOCKOPT_XPG4_2,
-	    CRED());
+	    &optlen_res, 0, CRED());
 	releasef(sock);
 	if (error) {
 		kmem_free(optval, optlen);
@@ -1536,14 +1445,12 @@ getsockopt(int sock,
 	return (0);
 }
 
-/*ARGSUSED5*/
 int
 setsockopt(int sock,
 	int level,
 	int option_name,
 	void *option_value,
-	socklen_t option_len,
-	int version)
+	socklen_t option_len)
 {
 	struct sonode *so;
 	intptr_t buffer[2];
@@ -3070,7 +2977,7 @@ sosetsockopt(struct sonode *so, int level, int option_name, const void *optval,
  * able to handle the creation of TPI sockfs sockets.
  */
 struct sonode *
-socreate(struct sockparams *sp, int family, int type, int protocol, int version,
+socreate(struct sockparams *sp, int family, int type, int protocol,
     int *errorp)
 {
 	struct sonode *so;
@@ -3078,7 +2985,7 @@ socreate(struct sockparams *sp, int family, int type, int protocol, int version,
 	ASSERT(sp != NULL);
 
 	so = sp->sp_smod_info->smod_sock_create_func(sp, family, type, protocol,
-	    version, SOCKET_SLEEP, errorp, CRED());
+	    SOCKET_SLEEP, errorp, CRED());
 	if (so == NULL) {
 		SOCKPARAMS_DEC_REF(sp);
 	} else {

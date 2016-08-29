@@ -204,7 +204,7 @@ The sum of the \fBiov_len\fR values overflows an \fBssize_t\fR.
 .RS 16n
 The message is to large to be sent all at once (as the socket requires), or the
 \fBmsg_iovlen\fR member of the \fBmsghdr\fR structure pointed to by
-\fImessage\fR is less than or equal to 0 or is greater than \fBIOV_MAX\fR.
+\fImessage\fR is less than 0 or is greater than \fBIOV_MAX\fR.
 .RE
 
 .sp

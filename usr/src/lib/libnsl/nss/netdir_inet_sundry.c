@@ -71,15 +71,9 @@
 
 #define	MAXIFS 32
 
-/*
- * Extracted from socketvar.h
- */
-#define	SOV_DEFAULT	1	/* Select based on so_default_version */
-#define	SOV_SOCKBSD	3	/* Socket with no streams operations */
-
-extern int _so_socket(int, int, int, char *, int);
-extern int _so_connect(int, struct sockaddr *, socklen_t, int);
-extern int _so_getsockname(int, struct sockaddr *, socklen_t *, int);
+extern int _so_socket(int, int, int, char *);
+extern int _so_connect(int, struct sockaddr *, socklen_t);
+extern int _so_getsockname(int, struct sockaddr *, socklen_t *);
 
 
 static char *inet_netdir_mergeaddr(struct netconfig *, char *, char *);
@@ -675,14 +669,14 @@ select_server_addr(union any_in_addr *dst_addr, int family,
 	}
 
 	/* open a UDP socket */
-	tmp_fd = _so_socket(family, SOCK_DGRAM, 0, NULL, SOV_SOCKBSD);
+	tmp_fd = _so_socket(family, SOCK_DGRAM, 0, NULL);
 	if (tmp_fd < 0) {
 		syslog(LOG_ERR, "select_server_addr: connect failed\n");
 		return (FALSE);
 	}
 
 	/* connect it */
-	if (_so_connect(tmp_fd, sock, sock_len, SOV_SOCKBSD) < 0) {
+	if (_so_connect(tmp_fd, sock, sock_len) < 0) {
 		/*
 		 * If there's no route to the destination, this connect() call
 		 * fails. We just return all-zero (wildcard) as the source
@@ -706,7 +700,7 @@ select_server_addr(union any_in_addr *dst_addr, int family,
 	}
 
 	/* get the local sock info */
-	if (_so_getsockname(tmp_fd, sock, &sock_len, SOV_DEFAULT) < 0) {
+	if (_so_getsockname(tmp_fd, sock, &sock_len) < 0) {
 		syslog(LOG_ERR, "select_server_addr: getsockname failed\n");
 		(void) close(tmp_fd);
 		free(sock);

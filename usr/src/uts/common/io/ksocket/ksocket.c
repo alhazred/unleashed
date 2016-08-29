@@ -49,7 +49,6 @@ int
 ksocket_socket(ksocket_t *ksp, int domain, int type, int protocol, int flags,
     struct cred *cr)
 {
-	static const int version = SOV_DEFAULT;
 	int error = 0;
 	struct sonode *so;
 	*ksp = NULL;
@@ -61,7 +60,7 @@ ksocket_socket(ksocket_t *ksp, int domain, int type, int protocol, int flags,
 		return (EAFNOSUPPORT);
 
 	ASSERT(flags == KSOCKET_SLEEP || flags == KSOCKET_NOSLEEP);
-	so = socket_create(domain, type, protocol, NULL, NULL, version, flags,
+	so = socket_create(domain, type, protocol, NULL, NULL, flags,
 	    cr, &error);
 	if (so == NULL) {
 		if (error == EAFNOSUPPORT) {
@@ -84,7 +83,7 @@ ksocket_socket(ksocket_t *ksp, int domain, int type, int protocol, int flags,
 			}
 
 			so = socket_create(domain, type, protocol, NULL,
-			    mod, version, flags, cr, &error);
+			    mod, flags, cr, &error);
 			if (so == NULL)
 				return (error);
 		} else {
@@ -110,7 +109,7 @@ ksocket_bind(ksocket_t ks, struct sockaddr *addr, socklen_t addrlen,
 	if (!KSOCKET_VALID(ks))
 		return (ENOTSOCK);
 
-	error = socket_bind(KSTOSO(ks), addr, addrlen, _SOBIND_SOCKBSD, cr);
+	error = socket_bind(KSTOSO(ks), addr, addrlen, 0, cr);
 
 	return (error);
 }

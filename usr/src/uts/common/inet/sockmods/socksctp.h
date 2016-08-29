@@ -86,7 +86,7 @@ extern sock_upcalls_t sosctp_sock_upcalls;
 extern sock_upcalls_t sosctp_assoc_upcalls;
 
 extern struct sonode *socksctp_create(struct sockparams *, int, int,
-    int, int, int, int *, cred_t *);
+    int, int, int *, cred_t *);
 extern void sosctp_fini(struct sonode *, struct cred *);
 extern int sosctp_aid_grow(struct sctp_sonode *ss, sctp_assoc_t maxid,
     int kmflags);

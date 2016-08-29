@@ -30,8 +30,7 @@
 	.file	"_so_getsockname.s"
 
 /* C library -- _so_getsockname						*/
-/* int _so_getsockname (int fildes, struct sockaddr *name, int namelen,	*/
-/*			int vers);					*/
+/* int _so_getsockname (int fildes, struct sockaddr *name, int namelen);*/
 
 #include "SYS.h"
 

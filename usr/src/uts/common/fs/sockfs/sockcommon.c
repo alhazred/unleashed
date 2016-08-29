@@ -65,7 +65,7 @@ extern int xnet_skip_checks, xnet_check_print, xnet_truncate_print;
 /* ARGSUSED */
 struct sonode *
 socket_create(int family, int type, int protocol, char *devpath, char *mod,
-    int flags, int version, struct cred *cr, int *errorp)
+    int flags, struct cred *cr, int *errorp)
 {
 	struct sonode *so;
 	struct sockparams *sp = NULL;
@@ -107,7 +107,7 @@ socket_create(int family, int type, int protocol, char *devpath, char *mod,
 	ASSERT(flags == SOCKET_SLEEP || flags == SOCKET_NOSLEEP);
 	sp->sp_stats.sps_ncreate.value.ui64++;
 	so = sp->sp_smod_info->smod_sock_create_func(sp, family, type,
-	    protocol, version, flags, errorp, cr);
+	    protocol, flags, errorp, cr);
 	if (so == NULL) {
 		SOCKPARAMS_DEC_REF(sp);
 	} else {
@@ -141,8 +141,7 @@ socket_newconn(struct sonode *parent, sock_lower_handle_t lh,
 
 	sp->sp_stats.sps_ncreate.value.ui64++;
 	so = sp->sp_smod_info->smod_sock_create_func(sp, parent->so_family,
-	    parent->so_type, parent->so_protocol, parent->so_version, flags,
-	    errorp, cr);
+	    parent->so_type, parent->so_protocol, flags, errorp, cr);
 	if (so != NULL) {
 		SOCKPARAMS_INC_REF(sp);
 
@@ -233,16 +232,6 @@ socket_connect(struct sonode *so, struct sockaddr *name,
 	}
 
 	error = SOP_CONNECT(so, name, namelen, fflag, flags, cr);
-
-	if (error == EHOSTUNREACH && flags & _SOCONNECT_XPG4_2) {
-		/*
-		 * X/Open specification contains a requirement that
-		 * ENETUNREACH be returned but does not require
-		 * EHOSTUNREACH. In order to keep the test suite
-		 * happy we mess with the errno here.
-		 */
-		error = ENETUNREACH;
-	}
 
 	return (error);
 }
@@ -574,7 +563,6 @@ sonode_init(struct sonode *so, struct sockparams *sp, int family,
 	so->so_error	= 0;
 	so->so_rcvtimeo	= 0;
 	so->so_sndtimeo = 0;
-	so->so_xpg_rcvbuf = 0;
 
 	ASSERT(so->so_oobmsg == NULL);
 	so->so_oobmark	= 0;

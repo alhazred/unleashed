@@ -45,7 +45,7 @@ extern kmem_cache_t *socket_cache;
  * descriptors should ever be expected, or created), and to implement
  * the socket system calls.
  */
-extern struct sonode *socket_create(int, int, int, char *, char *, int, int,
+extern struct sonode *socket_create(int, int, int, char *, char *, int,
     struct cred *, int *);
 extern struct sonode *socket_newconn(struct sonode *, sock_lower_handle_t,
     sock_downcalls_t *, int, int *);
@@ -199,7 +199,7 @@ extern int	sorecvoob(struct sonode *, struct nmsghdr *, struct uio *,
 extern void	so_timer_callback(void *);
 
 extern struct sonode *socket_sonode_create(struct sockparams *, int, int, int,
-    int, int, int *, struct cred *);
+    int, int *, struct cred *);
 
 extern void socket_sonode_destroy(struct sonode *);
 extern int socket_init_common(struct sonode *, struct sonode *, int flags,

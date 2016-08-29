@@ -34,8 +34,8 @@
 #include <fs/sockfs/sockcommon.h>
 #include "socksctp.h"
 
-struct sonode 	*socksctp_create(struct sockparams *, int, int, int,
-			    int, int, int *, cred_t *);
+struct sonode 	*socksctp_create(struct sockparams *, int, int, int, int,
+    int *, cred_t *);
 void 		socksctp_destroy(struct sonode *);
 
 static int 	socksctp_constructor(void *, void *, int);
@@ -117,16 +117,11 @@ socksctp_destructor(void *buf, void *cdrarg)
 /* ARGSUSED */
 struct sonode *
 socksctp_create(struct sockparams *sp, int family, int type, int protocol,
-    int version, int sflags, int *errorp, cred_t *cr)
+    int sflags, int *errorp, cred_t *cr)
 {
 	struct sctp_sonode *ss;
 	struct sonode *so;
 	int kmflags = (sflags & SOCKET_NOSLEEP) ? KM_NOSLEEP : KM_SLEEP;
-
-	if (version == SOV_STREAM) {
-		*errorp = EINVAL;
-		return (NULL);
-	}
 
 	/*
 	 * We only support two types of SCTP socket.  Let sotpi_create()
@@ -162,10 +157,7 @@ socksctp_create(struct sockparams *sp, int family, int type, int protocol,
 		mutex_exit(&so->so_lock);
 	}
 
-	if (version == SOV_DEFAULT) {
-		version = so_default_version;
-	}
-	so->so_version = (short)version;
+	so->so_version = SOV_SOCKBSD;
 
 	dprint(2, ("sosctp_create: %p domain %d type %d\n", (void *)so, family,
 	    type));
