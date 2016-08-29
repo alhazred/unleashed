@@ -91,7 +91,6 @@ invoke lower level Makefiles to perform the actual tasks.
 uts/Makefile
 uts/sparc/Makefile
 uts/sun4c/Makefile
-uts/sun4c/svvs/Makefile
 	These Makefiles generally are cognizant of the components
 	made in subdirectories and invoke Makefiles in those sub-
 	directories to perform the actual build. Some targets (or

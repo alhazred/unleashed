@@ -101,7 +101,7 @@ static devfsadm_create_t misc_cbt[] = {
 	{ "pseudo", "ddi_pseudo",
 	    "(^lockstat$)|(^SUNW,rtvc$)|(^vol$)|(^log$)|(^sy$)|"
 	    "(^ksyms$)|(^clone$)|(^tl$)|(^tnf$)|(^kstat$)|(^mdesc$)|(^eeprom$)|"
-	    "(^ptsl$)|(^mm$)|(^wc$)|(^dump$)|(^cn$)|(^svvslo$)|(^ptm$)|"
+	    "(^ptsl$)|(^mm$)|(^wc$)|(^dump$)|(^cn$)|(^ptm$)|"
 	    "(^ptc$)|(^openeepr$)|(^poll$)|(^sysmsg$)|(^random$)|(^trapstat$)|"
 	    "(^cryptoadm$)|(^crypto$)|(^pool$)|(^poolctl$)|(^bl$)|(^kmdb$)|"
 	    "(^sysevent$)|(^physmem$)",

@@ -403,7 +403,7 @@ priv_policy_ap(const cred_t *cr, int priv, boolean_t allzone, int err,
 		if ((allzone || priv == PRIV_ALL ||
 		    !PRIV_ISMEMBER(priv_basic, priv)) &&
 		    !servicing_interrupt()) {
-			PTOU(curproc)->u_acflag |= ASU; /* Needed for SVVS */
+			PTOU(curproc)->u_acflag |= ASU;
 			if (AU_AUDITING())
 				audit_priv(priv,
 				    allzone ? ZONEPRIVS(cr) : NULL, 1);

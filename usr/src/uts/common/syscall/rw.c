@@ -609,9 +609,6 @@ out:
 
 /*
  * XXX -- The SVID refers to IOV_MAX, but doesn't define it.  Grrrr....
- * XXX -- However, SVVS expects readv() and writev() to fail if
- * XXX -- iovcnt > 16 (yes, it's hard-coded in the SVVS source),
- * XXX -- so I guess that's the "interface".
  */
 #define	DEF_IOV_MAX	16
 

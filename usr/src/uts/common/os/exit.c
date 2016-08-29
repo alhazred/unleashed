@@ -1117,11 +1117,7 @@ waitid(idtype_t idtype, id_t id, k_siginfo_t *ip, int options)
 		if (options & WNOHANG) {
 			mutex_exit(&pidlock);
 			bzero(ip, sizeof (k_siginfo_t));
-			/*
-			 * We should set ip->si_signo = SIGCLD,
-			 * but there is an SVVS test that expects
-			 * ip->si_signo to be zero in this case.
-			 */
+			/* XXX: should set ip->si_signo = SIGCLD? */
 			return (0);
 		}
 

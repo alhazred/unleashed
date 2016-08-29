@@ -84,10 +84,6 @@
 	<device match="rdsk" />
 	<device match="rmt" />
 	<device match="sad/user" />
-	<device match="svvslo0" />
-	<device match="svvslo1" />
-	<device match="svvslo2" />
-	<device match="svvslo3" />
 	<device match="swap" />
 	<device match="sysevent" />
 	<device match="tcp" />

@@ -7599,7 +7599,6 @@ recov_retry:
 				mi->mi_flags &= ~MI4_LINK;
 				mutex_exit(&mi->mi_lock);
 			}
-			/* Remap EISDIR to EPERM for non-root user for SVVS */
 			/* XXX-LP */
 			if (e.error == EISDIR && crgetuid(cr) != 0)
 				e.error = EPERM;

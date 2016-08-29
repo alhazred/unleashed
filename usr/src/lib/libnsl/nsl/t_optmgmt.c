@@ -28,8 +28,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "mt.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -302,7 +300,7 @@ _tx_optmgmt(
 	 * t_optmgmt() are the drivers used for conformance testing to the
 	 * broken TLI standard.
 	 * These are /dev/{ticots,ticotsord,ticlts} used by the Sparc ABI test
-	 * suite. Others are /dev/{tivc,tidg} used by the SVVS test suite.
+	 * suite.
 	 */
 
 	_T_TX_NEXTSTATE(T_OPTMGMT, tiptr,
