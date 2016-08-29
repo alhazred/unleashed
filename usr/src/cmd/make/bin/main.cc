@@ -106,6 +106,7 @@ static	Boolean		pmake_cap_r_specified;		/* `-R' */
 static	Boolean		pmake_machinesfile_specified;	/* `-M' */
 static	Boolean		stop_after_error_ever_seen;	/* `-S' */
 static	Boolean		trace_status;			/* `-p' */
+static	char		*working_dir;			/* `-C' */
 
 #ifdef DMAKE_STATISTICS
 static	Boolean		getname_stat = false;
@@ -364,6 +365,13 @@ main(int argc, char *argv[])
 	}
 
 	setup_interrupt(handle_interrupt);
+
+	if (working_dir) {
+		chdir(working_dir);
+		report_dir_enter_leave(true);
+		printf(gettext("%s: Entering directory `%s'\n"),
+		    getprogname(), get_current_path());
+	}
 
 	read_files_and_state(argc, argv);
 
@@ -905,9 +913,9 @@ read_command_options(register int argc, register char **argv)
 	extern char		*optarg;
 	extern int		optind, opterr, optopt;
 
-#define SUNPRO_CMD_OPTS	"-~Bbc:Ddef:g:ij:K:kM:m:NnO:o:PpqRrSsTtuVvwx:"
+#define SUNPRO_CMD_OPTS	"-~BbC:c:Ddef:g:ij:K:kM:m:NnO:o:PpqRrSsTtuVvwx:"
 
-#	define SVR4_CMD_OPTS   "-c:ef:g:ij:km:nO:o:pqrsTtVv"
+#	define SVR4_CMD_OPTS   "-C:c:ef:g:ij:km:nO:o:pqrsTtVv"
 
 	/*
 	 * Added V in SVR4_CMD_OPTS also, which is going to be a hidden
@@ -1008,6 +1016,9 @@ read_command_options(register int argc, register char **argv)
 				fatal(gettext("Missing argument after `-%c'"), optopt);
 			}
 		}
+
+		if (ch == 'C')
+			working_dir = optarg;
 
 
 
@@ -1306,6 +1317,8 @@ parse_command_option(register char ch)
 	case 'B':			 /* Obsolete */
 		return 0;
 	case 'b':			 /* Obsolete */
+		return 0;
+	case 'C':			 /* Change directory */
 		return 0;
 	case 'c':			 /* Read alternative dmakerc file */
 		if (invert_this) {
