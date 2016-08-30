@@ -327,7 +327,7 @@ $(RELEASE_BUILD)CERRWARN += -Wno-empty-body
 
 #
 # turn warnings into errors (C++)
-CCERRWARN=		-_g++=-Werror
+CCERRWARN=		-Werror
 
 # C99 mode
 C99_ENABLE=	-std=gnu99

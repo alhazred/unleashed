@@ -185,7 +185,7 @@ $(BIGPICS) :=	sparc_C_PICFLAGS = $(C_BIGPICFLAGS)
 $(BIGPICS) :=	i386_C_PICFLAGS = $(C_BIGPICFLAGS)
 
 # Compile C++ code without exceptions to avoid a dependence on libstdc++.
-NOEXCEPTIONS= -_g++=-fno_exceptions -_g++=-fno-rtti
+NOEXCEPTIONS= -fno_exceptions -fno-rtti
 CCFLAGS += $(NOEXCEPTIONS)
 CCFLAGS64 += $(NOEXCEPTIONS)
 
