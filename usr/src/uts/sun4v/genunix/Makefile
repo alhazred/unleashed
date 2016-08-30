@@ -70,16 +70,6 @@ BINARY		=
 
 CLOBBERFILES	+= $(GENUNIX)
 
-#
-# Non-patch genunix builds merge a version of the ip module called ipctf.  This
-# is to ensure that the common network-related types are included in genunix and
-# can thus be uniquified out of other modules.  We don't want to do this for
-# patch builds, since we can't guarantee that ip and genunix will be in the same
-# patch.
-#
-IPCTF_TARGET	= $(IPCTF)
-$(PATCH_BUILD)IPCTF_TARGET =
-
 CPPFLAGS += -I$(SRC)/common
 CPPFLAGS += -I$(SRC)/uts/common/fs/zfs
 
@@ -121,10 +111,10 @@ install:  	$(INSTALL_DEPS)
 $(LIBGEN):	$(GENUNIX) $(LIBSTUBS)
 	$(BUILD.SO) $(GENUNIX) $(LIBSTUBS)
 
-$(GENUNIX): $(IPCTF_TARGET) $(OBJECTS)
+$(GENUNIX): $(OBJECTS)
 	@pwd
 	$(LD) -r $(LDFLAGS) -o $@ $(OBJECTS)
-	$(CTFMERGE_GENUNIX_MERGE)
+	$(CTFMERGE_MODULE)
 	$(POST_PROCESS)
 
 $(OBJECTS): $(OBJS_DIR)
