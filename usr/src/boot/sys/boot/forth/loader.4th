@@ -230,7 +230,7 @@ only forth also support-functions also builtins definitions
   0= if ( interpreted ) get_arguments then
   set-boot-args
 
-  \ Unload only if a path was passed. Path is starting with /
+  \ Unload only if a path was passed. Paths start with /
   dup if
     >r over r> swap
     c@ [char] / = if
@@ -286,12 +286,12 @@ only forth definitions also support-functions
 \ -d to boot_debug=YES
 \ -r to boot_reconfigure=YES
 \ -B acpi-user-options=X to acpi-user-options=X
-\ this is needed to provide menu an data to manage options above
-\ to allow menu to manage those options.
-\ unfortunately thos also means boot-args will override previously
-\ set options, but we have no way to control the processing order here.
-\ boot-args will be re-built at boot.
-\ NOTE: the best way to address the order is *not* set any above options
+\ 
+\ This is needed so that the menu can manage these options. Unfortunately, this
+\ also means that boot-args will override previously set options, but we have no
+\ way to control the processing order here. boot-args will be rebuilt at boot.
+\ 
+\ NOTE: The best way to address the order is to *not* set any above options
 \ in boot-args.
 
 : parse-boot-args  { | baddr blen -- }

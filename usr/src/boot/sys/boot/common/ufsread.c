@@ -187,11 +187,11 @@ inode_type(ufs_ino_t inode)
 	indbuf = dmadat->indbuf;
 
 	if (!inode)
-		return 0;
+		return (0);
 	if (inomap != inode) {
 		n = IPERVBLK(&fs);
 		if (dskread(blkbuf, INO_TO_VBA(&fs, n, inode), DBPERVBLK))
-			return -1;
+			return (-1);
 		n = INO_TO_VBO(n, inode);
 #if defined(UFS1_ONLY)
 		memcpy(&dp1, (struct ufs1_dinode *)blkbuf + n,

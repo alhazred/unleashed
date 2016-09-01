@@ -998,7 +998,7 @@ elf_hash(const char *name)
 
 static const char __elfN(bad_symtable)[] = "elf" __XSTRING(__ELF_WORD_SIZE) "_lookup_symbol: corrupt symbol table\n";
 int
-__elfN(lookup_symbol)(struct preloaded_file *fp, elf_file_t ef,
+__elfN(lookup_symbol)(struct preloaded_file *fp __unused, elf_file_t ef,
     const char* name, Elf_Sym *symp)
 {
     Elf_Hashelt symnum;
@@ -1006,7 +1006,6 @@ __elfN(lookup_symbol)(struct preloaded_file *fp, elf_file_t ef,
     char *strp;
     unsigned long hash;
 
-    (void)fp;
     hash = elf_hash(name);
     COPYOUT(&ef->buckets[hash % ef->nbuckets], &symnum, sizeof(symnum));
 
@@ -1084,10 +1083,8 @@ __elfN(reloc_ptr)(struct preloaded_file *mp, elf_file_t ef,
 }
 
 static Elf_Addr
-__elfN(symaddr)(struct elf_file *ef, Elf_Size symidx)
+__elfN(symaddr)(struct elf_file *ef __unused, Elf_Size symidx __unused)
 {
-	(void)ef;
-	(void)symidx;
 	/* Symbol lookup by index not required here. */
 	return (0);
 }

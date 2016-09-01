@@ -436,8 +436,7 @@ command_reboot(int argc __attribute((unused)),
 		if (devsw[i]->dv_cleanup != NULL)
 			(devsw[i]->dv_cleanup)();
 
-	RS->ResetSystem(EfiResetCold, EFI_SUCCESS, 23,
-	    (CHAR16 *)(uintptr_t)msg);
+	RS->ResetSystem(EfiResetCold, EFI_SUCCESS, 23, (CHAR16 *)msg);
 
 	/* NOTREACHED */
 	return (CMD_ERROR);

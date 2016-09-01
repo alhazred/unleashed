@@ -74,7 +74,7 @@ find_real_addr(struct preloaded_file *fp)
 		printf("no memory smap\n");
 		return (candidate);
 	}
-	entries = md->md_size / sizeof(struct bios_smap);
+	entries = md->md_size / sizeof (struct bios_smap);
 	smap = (struct bios_smap *)md->md_data;
 	for (i = 0; i < entries; i++) {
 		if (smap[i].type != SMAP_TYPE_MEMORY)
@@ -101,7 +101,7 @@ linux_loadkernel(char *filename, uint64_t dest, struct preloaded_file **result)
 
 	/*
 	 * relocater_data is space allocated in relocater_tramp.S
-	 * There is space for 3 instances + terminating zero for case
+	 * There is space for 3 instances + terminating zero in case
 	 * all 3 entries are used.
 	 */
 	rdata = (struct relocate_data *)&relocater_data;
@@ -356,7 +356,8 @@ linux_exec(struct preloaded_file *fp)
 		if (moveto + mfp->f_size >= max_addr)
 			moveto = (max_addr - mfp->f_size) & 0xfffff000;
 
-		/* XXX: Linux 2.3.xx has a bug in the memory range check,
+		/*
+		 * XXX: Linux 2.3.xx has a bug in the memory range check,
 		 * so avoid the last page.
 		 * XXX: Linux 2.2.xx has a bug in the memory range check,
 		 * which is worse than that of Linux 2.3.xx, so avoid the

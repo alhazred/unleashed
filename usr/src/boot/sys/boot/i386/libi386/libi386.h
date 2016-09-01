@@ -139,7 +139,7 @@ int biospci_write_config(uint32_t locator, int offset, int width, uint32_t val);
 int biospci_read_config(uint32_t locator, int offset, int width, uint32_t *val);
 uint32_t biospci_locator(int8_t bus, uint8_t device, uint8_t function);
 
-void	acpi_detect(const caddr_t);
+void	biosacpi_detect(void);
 
 int	i386_autoload(void);
 

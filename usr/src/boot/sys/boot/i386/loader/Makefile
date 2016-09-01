@@ -27,6 +27,8 @@ CPPFLAGS +=	-I../libi386
 LIBZFSBOOT=	../../zfs/i386/libzfsboot.a
 LIBI386=        ../libi386/libi386.a
 
+# loader.help build needs better awk
+AWK=		/usr/xpg4/bin/awk
 LD=		$(GNU_ROOT)/bin/gld
 CC=		$(GCC_ROOT)/bin/gcc
 OBJCOPY=	$(GNU_ROOT)/bin/gobjcopy

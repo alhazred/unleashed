@@ -31,7 +31,7 @@
 #
 # Partly from: src/sys/boot/i386/mbr/mbr.s 1.7
 
-# A 512 byte PMBR boot manager to read boot program and run it.
+# A 512 byte PMBR boot manager to read a boot program and run it.
 # The embedded MBR is set up for PMBR and default bootblock sector
 # is hardcoded to 256 and size 1. The actual values are supposed to be
 # updated by installboot.

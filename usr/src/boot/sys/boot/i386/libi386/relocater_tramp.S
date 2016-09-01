@@ -8,20 +8,23 @@
  * source.  A copy of the CDDL is also available via the Internet at
  * http://www.illumos.org/license/CDDL.
  */
+/*
+ * Copyright 2016 Toomas Soome <tsoome@me.com>
+ */
 
 /*
- * relocate is needed to support loading code which has to be located
+ * Relocate is needed to support loading code which has to be located
  * below 1MB, as both BTX and loader are using low memory area.
  *
- * relocate and start loaded code. Since loaded code may need to be
- * placed to already occupied memory area, this code is moved to safe
+ * Relocate and start loaded code. Since loaded code may need to be
+ * placed in an already occupied memory area, the code is moved to a safe
  * memory area and then btx __exec will be called with physical pointer
- * to this area. __exec will set pointer to %eax and use call *%eax,
- * so on entry, we have new "base" address in %eax.
+ * to this area. __exec will set the pointer to %eax and call *%eax,
+ * so that on entry, we have the new "base" address in %eax.
  *
  * Relocate will first set up and load new safe GDT to shut down BTX,
  * then loaded code will be relocated to final memory location,
- * then machine will be switched from 32bit protected mode to 16bit
+ * then machine will be switched from 32-bit protected mode to 16-bit
  * protected mode following by switch to real mode with A20 enabled or
  * disabled. Finally the loaded code will be started and it will take
  * over the whole system.
@@ -106,7 +109,7 @@ loop.1:
 loop.2:
 		movl	%ebx, %esi		/* restore esi */
 		/*
-		 * data is relocated, switch to 16bit mode
+		 * data is relocated, switch to 16-bit mode
 		 */
 		lea	(relocater.3-relocater)(%esi), %eax
 		movl	%eax, (jump_vector-relocater) (%esi)

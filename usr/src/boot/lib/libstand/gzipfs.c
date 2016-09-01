@@ -339,7 +339,7 @@ zf_stat(struct open_file *f, struct stat *sb)
 	pos1 = lseek(zf->zf_rawfd, 0, SEEK_CUR);
 	pos2 = lseek(zf->zf_rawfd, sb->st_size - 4, SEEK_SET);
 	if (pos2 != -1) {
-	    if(read(zf->zf_rawfd, &size, 4) == 4)
+	    if (read(zf->zf_rawfd, &size, 4) == 4)
 		sb->st_size = (off_t) size;
 	    else
 		sb->st_size = -1;

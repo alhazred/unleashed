@@ -179,8 +179,8 @@ struct includeline
 };
 
 /*
- * the PXE tftp service allows to open exactly one connection at the time,
- * so we need to read included file to memory, then process line by line
+ * The PXE TFTP service allows opening exactly one connection at the time,
+ * so we need to read included file into memory, then process line by line
  * as it may contain embedded include commands.
  */
 int
@@ -277,12 +277,12 @@ include(const char *filename)
  * for embedding environment variables.
  */
 static char *
-prompt(void) 
+prompt(void)
 {
     static char promptbuf[20];	/* probably too large, but well... */
     char	*pr, *p, *cp, *ev;
     int n = 0;
-    
+
     if ((cp = getenv("prompt")) == NULL)
 	cp = (char *)(uintptr_t)">";
     pr = p = strdup(cp);
@@ -293,7 +293,7 @@ prompt(void)
 		;
 	    *cp = 0;
 	    ev = getenv(p + 2);
-	    
+
 	    if (ev != NULL)
 		n = sprintf(promptbuf+n, "%s", ev);
 	    p = cp + 1;
