@@ -23,12 +23,10 @@ CFLAGS +=	-march=i386 -ffreestanding
 CFLAGS +=	-mpreferred-stack-boundary=2
 CFLAGS +=	-mno-mmx -mno-3dnow -mno-sse -mno-sse2 -mno-sse3 -msoft-float
 CFLAGS +=	-std=gnu99 -fno-reorder-functions
-LDFLAGS +=	-nostdlib -m elf_i386_sol2
+LDFLAGS +=	-nostdlib
 
 CFLAGS +=	-m32
 ACFLAGS +=	-m32
-# LD_FLAGS is passed directly to ${LD}, not via ${CC}:
-LD_FLAGS +=	-m elf_i386_sol2
 AFLAGS +=	-m32
 
 # BTX components

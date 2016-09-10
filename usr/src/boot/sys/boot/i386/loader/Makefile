@@ -90,7 +90,7 @@ CPPFLAGS +=	-I.
 CLEANFILES=	vers.c ${LOADER} ${LOADER}.sym ${LOADER}.bin loader.help
 
 CFLAGS +=	-Wall
-LDFLAGS=	-m elf_i386_sol2 -static -Ttext 0x0
+LDFLAGS=	-static -Ttext 0x0
 
 # i386 standalone support library
 CPPFLAGS +=	-I.. -I../../../../lib/libstand

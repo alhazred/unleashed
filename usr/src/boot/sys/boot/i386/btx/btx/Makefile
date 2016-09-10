@@ -46,7 +46,7 @@ CFLAGS += -Wa,--divide
 
 ORG=	0x9000
 
-LDFLAGS=-m elf_i386_sol2 -e start -Ttext ${ORG} -N -S --oformat binary
+LDFLAGS=-e start -Ttext ${ORG} -N -S --oformat binary
 
 all:	$(PROG)
 
