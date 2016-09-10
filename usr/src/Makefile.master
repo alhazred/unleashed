@@ -388,8 +388,7 @@ CTF_FLAGS	= $(CTF_FLAGS_32)
 #
 # Flags used with genoffsets
 #
-GOFLAGS = -_noecho \
-	$(CALLSYMS) \
+GOFLAGS = $(CALLSYMS) \
 	$(CDWARFSTR)
 
 OFFSETS_CREATE = $(GENOFFSETS) -s $(CTFSTABS) -r $(CTFCONVERT) \
