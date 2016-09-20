@@ -1132,7 +1132,7 @@ FICL_PLATFORM_EXTERN int ficlVmExecuteXT(ficlVm *vm, ficlWord *pWord);
 FICL_PLATFORM_EXTERN void
 ficlVmExecuteInstruction(ficlVm *vm, ficlInstruction i);
 FICL_PLATFORM_EXTERN void ficlVmExecuteWord(ficlVm *vm, ficlWord *pWord);
-FICL_PLATFORM_EXTERN void ficlExecFD(ficlVm *vm, int fd);
+FICL_PLATFORM_EXTERN int ficlExecFD(ficlVm *vm, int fd);
 
 FICL_PLATFORM_EXTERN void
 ficlVmDictionaryAllot(ficlVm *vm, ficlDictionary *dictionary, int n);
