@@ -15,4 +15,4 @@ include ../Makefile.com
 
 all:
 
-include ../Makefile.targ
+include $(SRC)/cmd/boot/Makefile.targ

@@ -25,7 +25,7 @@
  */
 
 #include <sys/param.h>
-#include <endian.h>
+#include "endian.h"
 #include <sys/stat.h>
 #include <sys/mman.h>
 

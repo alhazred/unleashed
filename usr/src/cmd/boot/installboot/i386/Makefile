@@ -12,13 +12,12 @@
 #
 
 include ../Makefile.com
-OBJS += getresponse.o
-SRCS += $(SRC)/common/util/getresponse.c
 
-CPPFLAGS += -I$(SRC)/common/util
-LDLIBS += -lfdisk -lefi -lfstyp -luuid
+OBJS +=		getresponse.o
+SRCS +=		$(SRC)/common/util/getresponse.c
 
-C99MODE=	$(C99_ENABLE)
+CPPFLAGS +=	-I$(SRC)/common/util
+LDLIBS +=	-lfdisk -lefi -lfstyp -luuid
 
 .KEEP_STATE:
 
@@ -29,4 +28,4 @@ $(PROG): $(OBJS)
 %.o:	$(SRC)/common/util/%.c
 	$(COMPILE.c) $(OUTPUT_OPTION) $<
 
-include ../Makefile.targ
+include $(SRC)/cmd/boot/Makefile.targ
