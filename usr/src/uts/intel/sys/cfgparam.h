@@ -5,5 +5,6 @@
 
 #define	CONFIG_LINUX_CORE_SUPPORT
 #define	CONFIG_SMB_PRINTING
+#undef	CONFIG_VM_STATS
 
 #endif

@@ -84,12 +84,13 @@ typedef int	selock_t;
 
 /*
  * Define VM_STATS to turn on all sorts of statistic gathering about
- * the VM layer.  By default, it is only turned on when DEBUG is
- * also defined.
+ * the VM layer.  By default, it is turned on when DEBUG is defined or if
+ * explicitly enabled by CONFIG_VM_STATS.
  */
-#ifdef DEBUG
+#include <sys/cfgparam.h>
+#if	defined(DEBUG) || defined(CONFIG_VM_STATS)
 #define	VM_STATS
-#endif	/* DEBUG */
+#endif	/* DEBUG || CONFIG_VM_STATS */
 
 #ifdef VM_STATS
 #define	VM_STAT_ADD(stat)		do { (stat)++; } while (0)
