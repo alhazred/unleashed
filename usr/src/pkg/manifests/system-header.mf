@@ -836,6 +836,7 @@ file path=usr/include/sys/callo.h
 file path=usr/include/sys/cap_util.h
 file path=usr/include/sys/ccompile.h
 file path=usr/include/sys/cdio.h
+file path=usr/include/sys/cfgparam.h
 file path=usr/include/sys/cladm.h
 file path=usr/include/sys/class.h
 file path=usr/include/sys/clconf.h

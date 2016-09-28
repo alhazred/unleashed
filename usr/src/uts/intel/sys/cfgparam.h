@@ -1,0 +1,8 @@
+/* GENERATED FILE - DO NOT EDIT */
+
+#ifndef	_SYS_CFGPARAM_H
+#define	_SYS_CFGPARAM_H
+
+#define	CONFIG_LINUX_CORE_SUPPORT
+
+#endif

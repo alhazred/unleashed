@@ -30,7 +30,7 @@ include ../../../Makefile.master
 #	stock SVr4 programs.  Every effort is to be made to prevent objects
 #	from being built, so these headers are not exported (installed).
 
-HDRS	=			\
+CHECKED_HDRS	=		\
 	archsystm.h		\
 	asm_linkage.h		\
 	bootconf.h		\
@@ -91,6 +91,9 @@ HDRS	=			\
 	x86_archext.h		\
 	xen_errno.h
 
+HDRS=	$(CHECKED_HDRS)		\
+	cfgparam.h
+
 ROOTDIR=	$(ROOT)/usr/include/sys
 SCSIDIR=	$(ROOTDIR)/scsi
 SCSIDIRS=	$(SCSIDIR) $(SCSIDIR)/conf $(SCSIDIR)/generic \
@@ -101,7 +104,7 @@ ROOTDIRS=	$(ROOTDIR) $(ROOTFSDIR)
 ROOTHDRS= $(HDRS:%=$(ROOTDIR)/%)
 
 CHECKHDRS= 			\
-	$(HDRS:%.h=%.check)
+	$(CHECKED_HDRS:%.h=%.check)
 
 # install rules
 $(ROOTDIR)/%: %
