@@ -318,7 +318,7 @@ sotpi_create(struct sockparams *sp, int family, int type, int protocol,
 		SOTOTPI(so)->sti_nl7c_flags = NL7C_AF_NCA;
 	}
 
-	so->so_version = SOV_SOCKBSD;
+	so->so_is_stream = false;
 	*errorp = 0;
 
 	return (so);
@@ -3028,7 +3028,7 @@ sotpi_recvmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
 	    (void *)so, (void *)msg, flags,
 	    pr_state(so->so_state, so->so_mode), so->so_error));
 
-	if (so->so_version == SOV_STREAM) {
+	if (so->so_is_stream) {
 		so_update_attrs(so, SOACC);
 		/* The imaginary "sockmod" has been popped - act as a stream */
 		return (strread(SOTOV(so), uiop, cr));
@@ -4159,7 +4159,7 @@ sotpi_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
 	    (void *)so, (void *)msg, msg->msg_flags,
 	    pr_state(so->so_state, so->so_mode), so->so_error));
 
-	if (so->so_version == SOV_STREAM) {
+	if (so->so_is_stream) {
 		/* The imaginary "sockmod" has been popped - act as a stream */
 		so_update_attrs(so, SOMOD);
 		return (strwrite(SOTOV(so), uiop, cr));
@@ -5743,7 +5743,7 @@ sotpi_ioctl(struct sonode *so, int cmd, intptr_t arg, int mode,
 		return (error);
 
 	default:
-		if (so->so_version != SOV_STREAM)
+		if (!so->so_is_stream)
 			break;
 
 		/*
@@ -5752,7 +5752,7 @@ sotpi_ioctl(struct sonode *so, int cmd, intptr_t arg, int mode,
 		return (strioctl(vp, cmd, arg, mode, U_TO_K, cr, rvalp));
 	}
 
-	ASSERT(so->so_version != SOV_STREAM);
+	ASSERT(!so->so_is_stream);
 
 	/*
 	 * Process socket-specific ioctls.
@@ -5918,7 +5918,7 @@ sotpi_ioctl(struct sonode *so, int cmd, intptr_t arg, int mode,
 		 * that it is an I_* streams ioctl?
 		 */
 		if ((cmd & 0xffffff00U) == STR &&
-		    so->so_version == SOV_SOCKBSD) {
+		    !so->so_is_stream) {
 #ifdef DEBUG
 			zcmn_err(getzoneid(), CE_WARN,
 			    "Unsupported STREAMS ioctl 0x%x on socket. "
@@ -5945,10 +5945,10 @@ socktpi_plumbioctl(struct vnode *vp, int cmd, intptr_t arg, int mode,
 
 	ASSERT(MUTEX_HELD(&sti->sti_plumb_lock));
 
-	if (so->so_version == SOV_SOCKBSD)
+	if (!so->so_is_stream)
 		return (EOPNOTSUPP);
 
-	if (so->so_version == SOV_STREAM) {
+	if (so->so_is_stream) {
 		/*
 		 * The imaginary "sockmod" has been popped - act as a stream.
 		 * If this is a push of sockmod then change back to a socket.
@@ -6151,7 +6151,7 @@ sotpi_poll(
 	ASSERT(vp->v_type == VSOCK);
 	ASSERT(vp->v_stream != NULL);
 
-	if (so->so_version == SOV_STREAM) {
+	if (so->so_is_stream) {
 		/* The imaginary "sockmod" has been popped - act as a stream */
 		return (strpoll(vp->v_stream, events, anyyet,
 		    reventsp, phpp));

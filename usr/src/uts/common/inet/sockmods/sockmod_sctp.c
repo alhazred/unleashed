@@ -157,7 +157,7 @@ socksctp_create(struct sockparams *sp, int family, int type, int protocol,
 		mutex_exit(&so->so_lock);
 	}
 
-	so->so_version = SOV_SOCKBSD;
+	so->so_is_stream = false;
 
 	dprint(2, ("sosctp_create: %p domain %d type %d\n", (void *)so, family,
 	    type));

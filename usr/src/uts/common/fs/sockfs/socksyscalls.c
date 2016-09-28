@@ -196,7 +196,7 @@ getsonode(int sock, int *errorp, file_t **fpp)
 		vp = vp->v_stream->sd_vnode;
 
 		so = VTOSO(vp);
-		if (so->so_version == SOV_STREAM) {
+		if (so->so_is_stream) {
 			releasef(sock);
 			*errorp = ENOTSOCK;
 			eprintsoline(so, *errorp);

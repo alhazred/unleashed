@@ -133,7 +133,7 @@ so_sock2stream(struct sonode *so)
 	mutex_enter(&so->so_lock);
 	so_lock_single(so);
 
-	ASSERT(so->so_version != SOV_STREAM);
+	ASSERT(!so->so_is_stream);
 
 	if (sti->sti_direct) {
 		mblk_t **mpp;
@@ -219,7 +219,7 @@ so_sock2stream(struct sonode *so)
 		}
 	}
 
-	so->so_version = SOV_STREAM;
+	so->so_is_stream = true;
 	so->so_proto_handle = NULL;
 
 	/*
@@ -300,8 +300,8 @@ so_stream2sock(struct sonode *so)
 
 	mutex_enter(&so->so_lock);
 	so_lock_single(so);
-	ASSERT(so->so_version == SOV_STREAM);
-	so->so_version = SOV_SOCKBSD;
+	ASSERT(so->so_is_stream);
+	so->so_is_stream = false;
 	sti->sti_pushcnt = 0;
 	mutex_exit(&so->so_lock);
 
@@ -2859,7 +2859,7 @@ sock_getmsg(
 	dprintso(so, 1, ("sock_getmsg(%p) %s\n",
 	    (void *)so, pr_state(so->so_state, so->so_mode)));
 
-	if (so->so_version == SOV_STREAM) {
+	if (so->so_is_stream) {
 		/* The imaginary "sockmod" has been popped - act as a stream */
 		return (strgetmsg(vp, mctl, mdata, prip, flagsp, fmode, rvp));
 	}
@@ -2899,7 +2899,7 @@ sock_putmsg(
 	dprintso(so, 1, ("sock_putmsg(%p) %s\n",
 	    (void *)so, pr_state(so->so_state, so->so_mode)));
 
-	if (so->so_version == SOV_STREAM) {
+	if (so->so_is_stream) {
 		/* The imaginary "sockmod" has been popped - act as a stream */
 		return (strputmsg(vp, mctl, mdata, pri, flag, fmode));
 	}
@@ -2928,7 +2928,7 @@ sock_getfasync(vnode_t *vp)
 	else
 		so = VTOSO(vp);
 
-	if (so->so_version == SOV_STREAM || !(so->so_state & SS_ASYNC))
+	if (so->so_is_stream || !(so->so_state & SS_ASYNC))
 		return (0);
 
 	return (FASYNC);

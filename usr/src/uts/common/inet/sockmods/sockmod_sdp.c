@@ -108,7 +108,7 @@ socksdp_create(struct sockparams *sp, int family, int type, int protocol, int
 	dprint(2, ("sosdp_create: %p domain %d type %d\n", (void *)so, family,
 	    type));
 
-	so->so_version = SOV_SOCKBSD;
+	so->so_is_stream = false;
 
 	/*
 	 * set the default values to be INFPSZ

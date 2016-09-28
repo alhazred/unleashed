@@ -44,6 +44,7 @@ extern "C" {
 
 #include <sys/types.h>
 #include <sys/ksynch.h>
+#include <sys/stdbool.h>
 
 /*
  * User Objects functions and structures.
@@ -116,7 +117,6 @@ sol_ofs_uobj_t	*sol_ofs_uobj_get_write(sol_ofs_uobj_table_t *, uint32_t);
 /*
  * Generic linked list management functions
  */
-typedef uchar_t		bool;
 #define	FALSE		0
 #define	TRUE		1
 #define	INVALID_HANDLE	0xFFFFFFFF

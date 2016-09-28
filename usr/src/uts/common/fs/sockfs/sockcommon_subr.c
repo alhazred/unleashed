@@ -1245,7 +1245,7 @@ socket_sonode_create(struct sockparams *sp, int family, int type,
 
 	sonode_init(so, sp, family, type, protocol, &so_sonodeops);
 
-	so->so_version = SOV_SOCKBSD;
+	so->so_is_stream = false;
 
 	/*
 	 * set the default values to be INFPSZ
@@ -2197,7 +2197,7 @@ so_integrity_check(struct sonode *cur, struct sonode *orig)
 	VERIFY(cur->so_family == orig->so_family);
 	VERIFY(cur->so_type == orig->so_type);
 	VERIFY(cur->so_protocol == orig->so_protocol);
-	VERIFY(cur->so_version == orig->so_version);
+	VERIFY(cur->so_is_stream == orig->so_is_stream);
 	/* New conns might have arrived, but none should have been lost */
 	VERIFY(cur->so_acceptq_len >= orig->so_acceptq_len);
 	VERIFY(list_head(&cur->so_acceptq_list) ==

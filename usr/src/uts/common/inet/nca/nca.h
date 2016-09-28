@@ -121,9 +121,10 @@ typedef struct iph_s {
 	uchar_t	iph_dst[4];
 } iph_t;
 
-
+#ifndef __bool_true_false_are_defined
 #define	true	B_TRUE			/* used with type boolean_t */
 #define	false	B_FALSE			/* used with type boolean_t */
+#endif
 
 /*
  * Power of 2^N Primes useful for hashing for N of 0-28,

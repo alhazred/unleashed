@@ -56,6 +56,7 @@
 #include <sys/socket.h>
 #include <sys/ksocket.h>
 #include <sys/kstat.h>
+#include <sys/stdbool.h>
 
 #ifdef _KERNEL
 #include <sys/vfs_opreg.h>
@@ -161,7 +162,13 @@ struct sonode {
 	short	so_family;
 	short	so_type;
 	short	so_protocol;
-	short	so_version;		/* From so_socket call */
+	/*
+	 * XXX: We removed socket versions, but SOV_STREAM, which was
+	 * documented as "Not a socket - just a stream", is special. We use
+	 * this flag as a direct replacement for now, but drop the SOV_* and
+	 * "version" terminology for clarity.
+	 */
+	bool	so_is_stream;
 
 	/* Accept queue */
 	kmutex_t	so_acceptq_lock;	/* protects accept queue */
@@ -367,12 +374,6 @@ struct sonode {
 /* The modes below are only for non-streams sockets */
 #define	SM_ACCEPTSUPP		0x400	/* can handle accept() */
 #define	SM_SENDFILESUPP		0x800	/* Private: proto supp sendfile  */
-
-/*
- * Socket versions.
- */
-#define	SOV_STREAM	0	/* Not a socket - just a stream */
-#define	SOV_SOCKBSD	3	/* Socket with no streams operations */
 
 #if defined(_KERNEL) || defined(_KMEMUSER)
 

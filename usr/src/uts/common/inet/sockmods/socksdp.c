@@ -1079,7 +1079,7 @@ sosdp_poll(struct sonode *so, short events, int anyyet, short *reventsp,
 
 	so_state = so->so_state;
 
-	ASSERT(so->so_version != SOV_STREAM);
+	ASSERT(!so->so_is_stream);
 
 	if (!(so_state & SS_ISCONNECTED) && (so->so_type == SOCK_STREAM)) {
 		/*

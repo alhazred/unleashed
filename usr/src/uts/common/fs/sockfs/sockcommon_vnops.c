@@ -244,7 +244,7 @@ socket_vop_setfl(vnode_t *vp, int oflags, int nflags, cred_t *cr,
 	 * of the FASYNC flag passed to fcntl(F_SETFL).
 	 * This exists solely for BSD fcntl() FASYNC compatibility.
 	 */
-	if ((oflags ^ nflags) & FASYNC && so->so_version != SOV_STREAM) {
+	if ((oflags ^ nflags) & FASYNC && !so->so_is_stream) {
 		int async = nflags & FASYNC;
 		int32_t rv;
 
@@ -293,7 +293,7 @@ socket_vop_getattr(struct vnode *vp, struct vattr *vap, int flags,
 	so = VTOSO(vp);
 	fsid = sockdev;
 
-	if (so->so_version == SOV_STREAM) {
+	if (so->so_is_stream) {
 		/*
 		 * The imaginary "sockmod" has been popped - act
 		 * as a stream
