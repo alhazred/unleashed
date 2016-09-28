@@ -50,7 +50,7 @@ CERRWARN +=	-Wno-char-subscripts
 CERRWARN +=	-Wno-switch
 CPPFLAGS +=	-D_REENTRANT -I$(ADJUNCT_PROTO)/usr/include/libxml2 \
   		-I$(SRCDIR)/../common
-$(ENABLE_SMB_PRINTING) CPPFLAGS += -DHAVE_CUPS
+$(CONFIG_SMB_PRINTING) CPPFLAGS += -DHAVE_CUPS
 
 .KEEP_STATE:
 

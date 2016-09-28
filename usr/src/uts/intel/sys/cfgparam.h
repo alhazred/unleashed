@@ -4,5 +4,6 @@
 #define	_SYS_CFGPARAM_H
 
 #define	CONFIG_LINUX_CORE_SUPPORT
+#define	CONFIG_SMB_PRINTING
 
 #endif
