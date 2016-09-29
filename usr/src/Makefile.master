@@ -233,13 +233,6 @@ i386_BUILD64=
 BUILD64=	$($(MACH)_BUILD64)
 
 #
-# C compiler mode. Lower level makefiles can override this by setting
-# CCMODE.
-#
-CCMODE=
-CCMODE64=
-
-#
 # generate 32-bit addresses in the v9 kernel. Saves memory.
 CCABS32=		-fno-pic -mcmodel=medlow
 #
@@ -425,11 +418,11 @@ CCSOURCEDEBUGFLAGS	=
 $(SRCDBGBLD)CSOURCEDEBUGFLAGS	= -g
 $(SRCDBGBLD)CCSOURCEDEBUGFLAGS	= -g
 
-CFLAGS=         $(COPTFLAG) $($(MACH)_CFLAGS) $(SPACEFLAG) $(CCMODE) \
+CFLAGS=         $(COPTFLAG) $($(MACH)_CFLAGS) $(SPACEFLAG) \
 		$(CERRWARN) $(C99MODE) \
 		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS)
-CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
+CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) \
 		$(CERRWARN) $(C99MODE) \
 		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS64)
@@ -437,7 +430,7 @@ CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) $(SPACEFLAG64) $(CCMODE64) \
 # Flags that are used to build parts of the code that are subsequently
 # run on the build machine (also known as the NATIVE_BUILD).
 #
-NATIVE_CFLAGS=	$(COPTFLAG) $($(NATIVE_MACH)_CFLAGS) $(CCMODE) \
+NATIVE_CFLAGS=	$(COPTFLAG) $($(NATIVE_MACH)_CFLAGS) \
 		$(CERRWARN) $(C99MODE) \
 		$(CCNOAUTOINLINE) \
 		$(CSOURCEDEBUGFLAGS) $(CUSERFLAGS)
