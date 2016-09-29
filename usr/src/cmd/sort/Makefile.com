@@ -76,9 +76,6 @@ include ../../Makefile.cmd
 SED =		sed
 DCFILE = 	$(PROG).dc
 
-SPACEFLAG =
-SPACEFLAG64 =
-
 CFLAGS +=	$(SORT_DEBUG)
 CFLAGS64 +=	$(SORT_DEBUG)
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64

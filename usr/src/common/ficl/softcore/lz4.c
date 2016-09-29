@@ -102,7 +102,7 @@ lz4_decompress(void *s_start, void *d_start, size_t s_len, size_t d_len, int n)
  * real_LZ4_compress() :
  *	isize  : is the input size. Max supported value is ~1.9GB
  *	return : the number of bytes written in buffer dest
- *		 or 0 if the compression fails (if LZ4_COMPRESSMIN is set).
+ *		or 0 if the compression fails (if LZ4_COMPRESSMIN is set).
  *	note : destination buffer must be already allocated.
  *		destination buffer must be sized to handle worst cases
  *		situations (input data not compressible)

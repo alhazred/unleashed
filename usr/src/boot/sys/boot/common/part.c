@@ -866,8 +866,8 @@ ptable_getpart(const struct ptable *table, struct ptable_entry *part, int idx)
 /*
  * Search for a slice with the following preferences:
  *
- * 1: Active FreeBSD slice
- * 2: Non-active FreeBSD slice
+ * 1: Active illumos slice
+ * 2: Non-active illumos slice
  * 3: Active Linux slice
  * 4: non-active Linux slice
  * 5: Active FAT/FAT32 slice

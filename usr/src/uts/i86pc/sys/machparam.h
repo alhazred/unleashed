@@ -69,7 +69,6 @@ extern "C" {
  * page_t have room for 16 nodes.
  */
 #define	MAXNODES 	4
-#define	NUMA_NODEMASK	0x0f
 
 /*
  * Define the FPU symbol if we could run on a machine with an external

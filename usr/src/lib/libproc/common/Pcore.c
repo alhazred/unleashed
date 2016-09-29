@@ -32,6 +32,7 @@
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <sys/sysmacros.h>
+#include <sys/cfgparam.h>
 #include <sys/proc.h>
 
 #include <alloca.h>
@@ -50,7 +51,7 @@
 #include "Pcontrol.h"
 #include "P32ton.h"
 #include "Putil.h"
-#ifdef __x86
+#ifdef CONFIG_LINUX_CORE_SUPPORT
 #include "Pcore_linux.h"
 #endif
 
@@ -445,7 +446,7 @@ err:
 	return (-1);
 }
 
-#ifdef __x86
+#ifdef CONFIG_LINUX_CORE_SUPPORT
 
 static void
 lx_prpsinfo32_to_psinfo(lx_prpsinfo32_t *p32, psinfo_t *psinfo)
@@ -560,7 +561,7 @@ lx_prstatus32_to_lwp(lx_prstatus32_t *prs32, lwp_info_t *lwp)
 	LTIME_TO_TIMESPEC(lwp->lwp_status.pr_utime, prs32->pr_utime);
 	LTIME_TO_TIMESPEC(lwp->lwp_status.pr_stime, prs32->pr_stime);
 
-#ifdef __amd64
+#if defined(__amd64)
 	lwp->lwp_status.pr_reg[REG_GS] = prs32->pr_reg.lxr_gs;
 	lwp->lwp_status.pr_reg[REG_FS] = prs32->pr_reg.lxr_fs;
 	lwp->lwp_status.pr_reg[REG_DS] = prs32->pr_reg.lxr_ds;
@@ -577,7 +578,7 @@ lx_prstatus32_to_lwp(lx_prstatus32_t *prs32, lwp_info_t *lwp)
 	lwp->lwp_status.pr_reg[REG_RFL] = prs32->pr_reg.lxr_flags;
 	lwp->lwp_status.pr_reg[REG_RSP] = prs32->pr_reg.lxr_sp;
 	lwp->lwp_status.pr_reg[REG_SS] = prs32->pr_reg.lxr_ss;
-#else /* __amd64 */
+#elif defined(__i386)
 	lwp->lwp_status.pr_reg[EBX] = prs32->pr_reg.lxr_bx;
 	lwp->lwp_status.pr_reg[ECX] = prs32->pr_reg.lxr_cx;
 	lwp->lwp_status.pr_reg[EDX] = prs32->pr_reg.lxr_dx;
@@ -596,7 +597,9 @@ lx_prstatus32_to_lwp(lx_prstatus32_t *prs32, lwp_info_t *lwp)
 	lwp->lwp_status.pr_reg[SS] = prs32->pr_reg.lxr_ss;
 
 	lwp->lwp_status.pr_reg[EFL] = prs32->pr_reg.lxr_flags;
-#endif	/* !__amd64 */
+#else
+#error "port me"
+#endif
 }
 
 static int
@@ -645,7 +648,7 @@ err:
 	return (-1);
 }
 
-#endif /* __x86 */
+#endif /* CONFIG_LINUX_CORE_SUPPORT */
 
 static int
 note_psinfo(struct ps_prochandle *P, size_t nbytes)
@@ -1171,13 +1174,13 @@ note_notsup(struct ps_prochandle *P, size_t nbytes)
  */
 static int (*nhdlrs[])(struct ps_prochandle *, size_t) = {
 	note_notsup,		/*  0	unassigned		*/
-#ifdef __x86
-	note_linux_prstatus,		/*  1	NT_PRSTATUS (old)	*/
+#ifdef CONFIG_LINUX_CORE_SUPPORT
+	note_linux_prstatus,	/*  1	NT_PRSTATUS (old)	*/
 #else
 	note_notsup,		/*  1	NT_PRSTATUS (old)	*/
 #endif
 	note_notsup,		/*  2	NT_PRFPREG (old)	*/
-#ifdef __x86
+#ifdef CONFIG_LINUX_CORE_SUPPORT
 	note_linux_psinfo,		/*  3	NT_PRPSINFO (old)	*/
 #else
 	note_notsup,		/*  3	NT_PRPSINFO (old)	*/
@@ -2256,7 +2259,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 	struct stat64 stbuf;
 	void *phbuf, *php;
 	size_t nbytes;
-#ifdef __x86
+#ifdef CONFIG_LINUX_CORE_SUPPORT
 	boolean_t from_linux = B_FALSE;
 #endif
 
@@ -2502,11 +2505,11 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 				*perr = G_NOTE;
 				goto err;
 			}
+#ifdef CONFIG_LINUX_CORE_SUPPORT
 			/*
 			 * The presence of either of these notes indicates that
 			 * the dump was generated on Linux.
 			 */
-#ifdef __x86
 			if (nhdr.n_type == NT_PRSTATUS ||
 			    nhdr.n_type == NT_PRPSINFO)
 				from_linux = B_TRUE;
@@ -2532,7 +2535,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 		nleft -= sizeof (nhdr) + namesz + descsz;
 	}
 
-#ifdef __x86
+#ifdef CONFIG_LINUX_CORE_SUPPORT
 	if (from_linux) {
 		size_t tcount, pid;
 		lwp_info_t *lwp;
@@ -2586,7 +2589,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 		(void) memcpy(&P->status.pr_lwp, &lwp->lwp_status,
 		    sizeof (P->status.pr_lwp));
 	}
-#endif /* __x86 */
+#endif /* CONFIG_LINUX_CORE_SUPPORT */
 
 	if (nleft != 0) {
 		dprintf("Pgrab_core: note section malformed\n");
@@ -2704,11 +2707,11 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 		P->map_exec = core_name_mapping(P, addr, "a.out");
 
 	/*
-	 * If we're a statically linked executable (or we're on x86 and looking
-	 * at a Linux core dump), then just locate the executable's text and
-	 * data and name them after the executable.
+	 * If we're a statically linked executable (or we're looking at a
+	 * Linux core dump), then just locate the executable's text and data
+	 * and name them after the executable.
 	 */
-#ifndef __x86
+#ifndef CONFIG_LINUX_CORE_SUPPORT
 	if (base_addr == (uintptr_t)-1L) {
 #else
 	if (base_addr == (uintptr_t)-1L || from_linux) {

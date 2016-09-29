@@ -74,7 +74,7 @@ LDLIBS += -lmlsvc -lmlrpc -lsmbns -lsmb -lsmbfs -lgss
 LDLIBS += -lzfs -lbsm -lscf -lcmdutils -lsocket -lnsl -lumem
 $(PROG) := LDLIBS += -lkrb5
 
-$(ENABLE_SMB_PRINTING) CPPFLAGS += -DHAVE_CUPS
+$(CONFIG_SMB_PRINTING) CPPFLAGS += -DHAVE_CUPS
 
 ROOTSMBDDIR = $(ROOTLIB)/smbsrv
 ROOTSMBDFILE = $(PROG:%=$(ROOTSMBDDIR)/%)
