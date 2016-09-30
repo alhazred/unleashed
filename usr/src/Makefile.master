@@ -141,8 +141,9 @@ PERL_ARCH=		i86pc-solaris-64int
 PERL_ARCH64=	i86pc-solaris-64
 $(SPARC_BLD)PERL_ARCH=		sun4-solaris-64int
 $(SPARC_BLD)PERL_ARCH64=	sun4-solaris-64
-PYTHON_26=	/usr/bin/python2.6
-PYTHON=		$(PYTHON_26)
+PYTHON_VERSION=	2.7
+PYTHON_PKGVERS=	-27
+PYTHON=		/usr/bin/python$(PYTHON_VERSION)
 SORT=		/usr/bin/sort
 TOUCH=		/usr/bin/touch
 WC=		/usr/bin/wc
@@ -210,7 +211,7 @@ INS.symlink=	$(RM) $@; $(SYMLINK) $(INSLINKTARGET) $@
 # files we must make certain to not adjust the mtime of the source
 # (.py) file.
 #
-INS.pyfile=	$(INS) -p -m $(FILEMODE) $< $@
+INS.pyfile=	$(RM) $@; $(SED) -e "1s:^\#!@PYTHON@:\#!/usr/bin/python$(PYTHON_VERSION):" < $< > $@; $(CHMOD) $(FILEMODE) $@; $(TOUCH) -r $< $@
 
 # MACH must be set in the shell environment per uname -p on the build host
 # More specific architecture variables should be set in lower makefiles.
@@ -918,7 +919,7 @@ PKGPUBLISHER_REDIST=	on-nightly
 	$(CHMOD) +x $@
 
 .py:
-	$(RM) $@; $(CAT) $< > $@; $(CHMOD) +x $@
+	$(RM) $@; $(SED) -e "1s:^\#!@PYTHON@:\#!/usr/bin/python$(PYTHON_VERSION):" < $< > $@; $(CHMOD) +x $@
 
 .py.pyc:
 	$(RM) $@

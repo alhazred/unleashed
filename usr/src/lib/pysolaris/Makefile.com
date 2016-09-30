@@ -32,18 +32,17 @@ include ../../Makefile.lib
 
 LIBLINKS = 
 SRCDIR =	../common
-ROOTLIBDIR=	$(ROOT)/usr/lib/python2.6/vendor-packages/solaris
+ROOTLIBDIR=	$(ROOT)/usr/lib/python$(PYTHON_VERSION)/vendor-packages/solaris
 PYOBJS=		$(PYSRCS:%.py=$(SRCDIR)/%.pyc)
 PYFILES=	$(PYSRCS) $(PYSRCS:%.py=%.pyc)
 ROOTPYSOLFILES= $(PYFILES:%=$(ROOTLIBDIR)/%)
-PYTHON=		$(PYTHON_26)
 
 C99MODE=        $(C99_ENABLE)
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lc -lsec -lidmap -lpython2.6
+LDLIBS +=	-lc -lsec -lidmap -lpython$(PYTHON_VERSION)
 CERRWARN +=	-Wno-unused-variable
-CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/python2.6
+CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/python$(PYTHON_VERSION)
 
 .KEEP_STATE:
 
@@ -51,7 +50,7 @@ all: $(PYOBJS) $(LIBS)
 
 install: all $(ROOTPYSOLFILES)
 
-$(ROOTLIBDIR)/%: $(SRCDIR)/%
+$(ROOTLIBDIR)/%: ../common/%
 	$(INS.pyfile)
 
 include ../../Makefile.targ
