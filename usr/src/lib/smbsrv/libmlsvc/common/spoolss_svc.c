@@ -35,6 +35,7 @@
 #include <strings.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <sys/cfgparam.h>
 #include <smbsrv/libsmb.h>
 #include <smbsrv/libmlrpc.h>
 #include <smbsrv/libmlsvc.h>
@@ -46,7 +47,7 @@
 #include <smbsrv/nmpipes.h>
 #include <mlsvc.h>
 
-#ifdef	HAVE_CUPS
+#ifdef	CONFIG_SMB_PRINTING
 
 #define	SPOOLSS_PRINTER		"Postscript"
 
@@ -1199,10 +1200,10 @@ fixup_spoolss_GetPrinter(struct spoolss_GetPrinter *val)
 	FIXUP_PDU_SIZE(spoolss_GetPrinter, size3);
 }
 
-#else	/* HAVE_CUPS */
+#else	/* CONFIG_SMB_PRINTING */
 
 /*
- * If not HAVE_CUPS, just provide a few "stubs".
+ * If not CONFIG_SMB_PRINTING, just provide a few "stubs".
  */
 
 void
@@ -1221,4 +1222,4 @@ spoolss_register_copyfile(spoolss_copyfile_t copyfile)
 {
 }
 
-#endif 	/* HAVE_CUPS */
+#endif	/* CONFIG_SMB_PRINTING */

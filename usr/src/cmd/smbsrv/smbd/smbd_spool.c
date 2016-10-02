@@ -37,11 +37,13 @@
 #include <synch.h>
 #include <dlfcn.h>
 #include <errno.h>
+#include <sys/cfgparam.h>
 #include <smbsrv/smb.h>
 #include <smbsrv/smb_share.h>
 #include "smbd.h"
 
-#ifdef	HAVE_CUPS
+#ifdef	CONFIG_SMB_PRINTING
+#define	_IPP_PRIVATE_STRUCTURES 1
 #include <cups/cups.h>
 
 #define	SMB_SPOOL_WAIT			2
@@ -516,10 +518,10 @@ smbd_print_share_comment(smb_share_t *si, cups_dest_t *dest)
 	(void) strlcpy(si->shr_cmnt, comment, SMB_SHARE_CMNT_MAX);
 }
 
-#else	/* HAVE_CUPS */
+#else	/* CONFIG_SMB_PRINTING */
 
 /*
- * If not HAVE_CUPS, just provide a few "stubs".
+ * If not CONFIG_SMB_PRINTING, just provide a few "stubs".
  */
 
 int
@@ -558,4 +560,4 @@ smbd_spool_stop(void)
 {
 }
 
-#endif 	/* HAVE_CUPS */
+#endif	/* CONFIG_SMB_PRINTING */

@@ -58,7 +58,6 @@ $(ROOTSVCMETHOD):= FILEMODE = 0555
 $(ROOTVARSMBDLL):= FILEMODE = 0755
 
 
-CPPFLAGS += -D_IPP_PRIVATE_STRUCTURES
 CPPFLAGS += -D_REENTRANT
 CPPFLAGS += -Dsyslog=smb_syslog
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
@@ -74,8 +73,6 @@ LDLIBS += -L$(ROOT)/usr/lib/smbsrv
 LDLIBS += -lmlsvc -lmlrpc -lsmbns -lsmb -lsmbfs -lgss
 LDLIBS += -lzfs -lbsm -lscf -lcmdutils -lsocket -lnsl -lumem
 $(PROG) := LDLIBS += -lkrb5
-
-$(CONFIG_SMB_PRINTING) CPPFLAGS += -DHAVE_CUPS
 
 ROOTSMBDDIR = $(ROOTLIB)/smbsrv
 ROOTSMBDFILE = $(PROG:%=$(ROOTSMBDDIR)/%)

@@ -88,7 +88,6 @@ LDLIBS += -lmlrpc -lsmb -lsmbns -lshare -lsmbfs -lnsl -lpkcs11 \
 
 CPPFLAGS += $(INCS) -D_REENTRANT
 CPPFLAGS += -Dsyslog=smb_syslog
-$(CONFIG_SMB_PRINTING) CPPFLAGS += -DHAVE_CUPS
 
 CERRWARN += -Wno-unused-function
 CERRWARN += -Wno-uninitialized

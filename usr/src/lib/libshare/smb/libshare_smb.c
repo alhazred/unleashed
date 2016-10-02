@@ -46,6 +46,7 @@
 #include <libscf.h>
 #include <libscf_priv.h>
 #include <strings.h>
+#include <sys/cfgparam.h>
 #include "libshare_smb.h"
 #include <rpcsvc/daemon_utils.h>
 #include <smbsrv/smb_share.h>
@@ -1006,7 +1007,7 @@ print_enable_validator(int index, char *value)
 	if (value == NULL)
 		return (SA_BAD_VALUE);
 
-#ifdef	HAVE_CUPS
+#ifdef	CONFIG_SMB_PRINTING
 	if (strcasecmp(value, "true") == 0)
 		return (SA_OK);
 #endif
