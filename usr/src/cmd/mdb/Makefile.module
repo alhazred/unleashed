@@ -89,12 +89,18 @@ ROOTTGTS_proc		= $(ROOTMOD)/$(MODULE)
 ROOTTGTS_raw		= $(ROOTMOD)/$(MODULE)
 ROOTTGTS		= $(ROOTTGTS_$(MDBTGT))
 
+#
+# Python specific flags. To try and make life easier for folks how are
+# building with an LFS python.
+#
+PYCPPFLAGS		= -isystem $(ADJUNCT_PROTO)/usr/include/python$(PYTHON_VERSION)
+
 kvm_TGTFLAGS		= -D_KERNEL
 proc_TGTFLAGS		= -D_USER
 
 C99MODE			= $(C99_ENABLE)
 
-CPPFLAGS		+= $($(MDBTGT)_TGTFLAGS) -I../../../common -I/usr/include/python$(PYTHON_VERSION)
+CPPFLAGS		+= $($(MDBTGT)_TGTFLAGS) -I../../../common
 LDFLAGS			+= $(ZTEXT)
 LDFLAGS64		+= $(ZTEXT)
 AS_CPPFLAGS		+= -D_ASM

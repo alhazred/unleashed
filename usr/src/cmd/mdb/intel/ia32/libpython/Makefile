@@ -37,7 +37,7 @@ include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.module
 
-%.o := CPPFLAGS +=	-isystem $(ADJUNCT_PROTO)/usr/include
+%.o := CPPFLAGS += $(PYCPPFLAGS)
 
 dmod/$(MODULE) := LDLIBS += -lproc
 

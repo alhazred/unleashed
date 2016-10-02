@@ -37,6 +37,8 @@ include ../../../../Makefile.cmd
 include ../../Makefile.sparcv7
 include ../../../Makefile.module
 
+%.o := CPPFLAGS += $(PYCPPFLAGS)
+
 dmod/$(MODULE) := LDLIBS += -lproc
 
 %.o: $(MODSRCS_DIR)/%.c
