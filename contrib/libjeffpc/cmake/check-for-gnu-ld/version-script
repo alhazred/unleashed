@@ -1,0 +1,8 @@
+VERSION {
+	TEST_1.0 {
+		global:
+			dummy;
+		local:
+			*;
+	};
+};
