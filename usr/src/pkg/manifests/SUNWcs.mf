@@ -32,7 +32,6 @@
 <include SUNWcs.man4.inc>
 <include SUNWcs.man5.inc>
 <include SUNWcs.man7d.inc>
-<include SUNWcs.man7fs.inc>
 set name=pkg.fmri value=pkg:/SUNWcs@$(PKGVERS)
 set name=pkg.description \
     value="core software for a specific instruction-set architecture"
@@ -885,9 +884,7 @@ file path=usr/kernel/exec/$(ARCH64)/shbinexec group=sys mode=0755
 $(i386_ONLY)file path=usr/kernel/exec/javaexec group=sys mode=0755
 $(i386_ONLY)file path=usr/kernel/exec/shbinexec group=sys mode=0755
 file path=usr/kernel/fs/$(ARCH64)/fdfs group=sys mode=0755
-file path=usr/kernel/fs/$(ARCH64)/pcfs group=sys mode=0755
 $(i386_ONLY)file path=usr/kernel/fs/fdfs group=sys mode=0755
-$(i386_ONLY)file path=usr/kernel/fs/pcfs group=sys mode=0755
 file path=usr/kernel/sched/$(ARCH64)/FX group=sys mode=0755
 file path=usr/kernel/sched/$(ARCH64)/FX_DPTBL group=sys mode=0755
 file path=usr/kernel/sched/$(ARCH64)/IA group=sys mode=0755

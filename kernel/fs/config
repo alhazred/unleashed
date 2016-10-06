@@ -1,0 +1,6 @@
+((config
+   ; support for FAT12/FAT16/FAT32 file systems
+   FS_PCFS
+   #t))
+
+; vim: set syntax=scheme:

@@ -1293,9 +1293,6 @@ SMBSRV_OBJS +=	$(SMBSRV_SHARED_OBJS)			\
 		smb2_tree_disconn.o \
 		smb2_write.o
 
-PCFS_OBJS +=	pc_alloc.o	pc_dir.o	pc_node.o	pc_subr.o \
-		pc_vfsops.o	pc_vnops.o
-
 PROC_OBJS +=	prcontrol.o	prioctl.o	prsubr.o	prusrio.o \
 		prvfsops.o	prvnops.o
 

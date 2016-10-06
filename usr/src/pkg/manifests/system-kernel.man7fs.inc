@@ -23,6 +23,7 @@ file path=usr/share/man/man7fs/fd.7fs
 file path=usr/share/man/man7fs/hsfs.7fs
 file path=usr/share/man/man7fs/lofs.7fs
 file path=usr/share/man/man7fs/objfs.7fs
+file path=usr/share/man/man7fs/pcfs.7fs
 file path=usr/share/man/man7fs/sharefs.7fs
 file path=usr/share/man/man7fs/tmpfs.7fs
 file path=usr/share/man/man7fs/ufs.7fs

@@ -586,6 +586,7 @@ file path=kernel/fs/$(ARCH64)/lofs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/mntfs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/namefs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/objfs group=sys mode=0755
+file path=kernel/fs/$(ARCH64)/pcfs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/procfs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/sharefs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/sockfs group=sys mode=0755
@@ -604,6 +605,7 @@ $(i386_ONLY)file path=kernel/fs/lofs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/mntfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/namefs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/objfs group=sys mode=0755
+$(i386_ONLY)file path=kernel/fs/pcfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/procfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/sharefs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/sockfs group=sys mode=0755

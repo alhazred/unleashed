@@ -273,10 +273,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/objfs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/pcfs/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/portfs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
