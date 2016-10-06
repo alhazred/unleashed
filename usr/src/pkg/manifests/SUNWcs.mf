@@ -152,8 +152,6 @@ dir path=usr/kernel/fs group=sys
 dir path=usr/kernel/fs/$(ARCH64) group=sys
 dir path=usr/kernel/pcbe group=sys
 dir path=usr/kernel/pcbe/$(ARCH64) group=sys
-dir path=usr/kernel/sched group=sys
-dir path=usr/kernel/sched/$(ARCH64) group=sys
 dir path=usr/kernel/strmod group=sys
 dir path=usr/kernel/strmod/$(ARCH64) group=sys
 dir path=usr/kernel/sys group=sys
@@ -885,16 +883,6 @@ $(i386_ONLY)file path=usr/kernel/exec/javaexec group=sys mode=0755
 $(i386_ONLY)file path=usr/kernel/exec/shbinexec group=sys mode=0755
 file path=usr/kernel/fs/$(ARCH64)/fdfs group=sys mode=0755
 $(i386_ONLY)file path=usr/kernel/fs/fdfs group=sys mode=0755
-file path=usr/kernel/sched/$(ARCH64)/FX group=sys mode=0755
-file path=usr/kernel/sched/$(ARCH64)/FX_DPTBL group=sys mode=0755
-file path=usr/kernel/sched/$(ARCH64)/IA group=sys mode=0755
-file path=usr/kernel/sched/$(ARCH64)/RT group=sys mode=0755
-file path=usr/kernel/sched/$(ARCH64)/RT_DPTBL group=sys mode=0755
-$(i386_ONLY)file path=usr/kernel/sched/FX group=sys mode=0755
-$(i386_ONLY)file path=usr/kernel/sched/FX_DPTBL group=sys mode=0755
-$(i386_ONLY)file path=usr/kernel/sched/IA group=sys mode=0755
-$(i386_ONLY)file path=usr/kernel/sched/RT group=sys mode=0755
-$(i386_ONLY)file path=usr/kernel/sched/RT_DPTBL group=sys mode=0755
 file path=usr/kernel/strmod/$(ARCH64)/cryptmod group=sys mode=0755
 file path=usr/kernel/strmod/$(ARCH64)/rlmod group=sys mode=0755
 file path=usr/kernel/strmod/$(ARCH64)/telmod group=sys mode=0755

@@ -1544,24 +1544,6 @@ KB_OBJS +=	kbd.o		keytables.o
 IDMAP_OBJS +=	idmap_mod.o	idmap_kapi.o	idmap_xdr.o	idmap_cache.o
 
 #
-#			scheduling class modules
-#
-SDC_OBJS +=		sysdc.o
-
-RT_OBJS +=		rt.o
-RT_DPTBL_OBJS +=	rt_dptbl.o
-
-TS_OBJS +=		ts.o
-TS_DPTBL_OBJS +=	ts_dptbl.o
-
-IA_OBJS +=		ia.o
-
-FSS_OBJS +=		fss.o
-
-FX_OBJS +=		fx.o
-FX_DPTBL_OBJS +=	fx_dptbl.o
-
-#
 #			Inter-Process Communication (IPC) modules
 #
 IPC_OBJS +=	ipc.o
