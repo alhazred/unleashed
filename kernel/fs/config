@@ -1,4 +1,9 @@
 ((config
+   ; support for ISO9660/High Sierra file systems
+   FS_HSFS
+   #t)
+
+ (config
    ; support for loopback file systems
    FS_LOFS
    #t)
