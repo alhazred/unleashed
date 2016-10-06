@@ -7,7 +7,7 @@
 #   MODULE_TYPE		- "fs", "drv", etc.
 #   MODULE_TYPE_LINKS	- "fs", "drv", etc. which will be hardlinked to
 #   			  MODULE_TYPE
-#   MODULE_DEPS		- TODO: dependencies
+#   MODULE_DEPS		- dependencies
 #   SRCS		- source files
 #   SRCS32		- additional source files (32-bit build only)
 #   SRCS64		- additional source files (64-bit build only)

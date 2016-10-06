@@ -15,6 +15,4 @@ CERRWARN += -Wno-unused-function
 CERRWARN += -Wno-type-limits
 CERRWARN += -Wno-switch
 
-# TODO: LDFLAGS += -dy
-
 .include <../../kmod.mk>
