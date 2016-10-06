@@ -1,4 +1,9 @@
 ((config
+   ; support for file system automounter
+   FS_AUTOFS
+   #t)
+
+ (config
    ; support for ISO9660/High Sierra file systems
    FS_HSFS
    #t)

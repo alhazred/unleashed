@@ -1116,8 +1116,6 @@ JAVAEXEC_OBJS +=java.o
 #
 #			file system modules
 #
-AUTOFS_OBJS +=	auto_vfsops.o auto_vnops.o auto_subr.o auto_xdr.o auto_sys.o
-
 DCFS_OBJS +=	dc_vnops.o
 
 DEVFS_OBJS +=	devfs_subr.o	devfs_vfsops.o	devfs_vnops.o
