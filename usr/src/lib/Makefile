@@ -315,7 +315,6 @@ MSGSUBDIRS=		\
 	libipmp		\
 	libipsecutil	\
 	libldap5	\
-	libnsl		\
 	libnwam		\
 	libpam		\
 	libpicl		\
@@ -413,7 +412,6 @@ HDRSUBDIRS=				\
 	libmtmalloc	\
 	libndmp		\
 	libnsctl	\
-	libnsl		\
 	libnvpair	\
 	libnwam		\
 	libpam		\
@@ -441,7 +439,6 @@ HDRSUBDIRS=				\
 	libsmbfs	\
 	libsmbios	\
 	libsmedia	\
-	libsocket	\
 	libsqlite	\
 	libsrpt		\
 	libstmf		\

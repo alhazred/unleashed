@@ -664,7 +664,7 @@ get_section(raw_list_t *rawlist, hash_obj_t *sec_hash, section_t *section)
 
 	/* verify crc8 */
 	retval = verify_header_crc8(hdrver, buffer, size);
-	if (retval != TRUE) {
+	if (retval != 1) {
 		return (-1);
 	}
 

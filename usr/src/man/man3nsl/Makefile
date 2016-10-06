@@ -18,8 +18,7 @@ include		$(SRC)/Makefile.master
 
 MANSECT= 	3nsl
 
-MANFILES= 	dial.3nsl			\
-	 	doconfig.3nsl			\
+MANFILES= 	doconfig.3nsl			\
 	 	gethostbyname.3nsl		\
 	 	getipsecalgbyname.3nsl		\
 	 	getipsecprotobyname.3nsl	\
@@ -254,7 +253,6 @@ MANLINKS=	auth_destroy.3nsl			\
 		svcudp_create.3nsl			\
 		taddr2uaddr.3nsl			\
 		uaddr2taddr.3nsl			\
-		undial.3nsl				\
 		user2netname.3nsl			\
 		xdr_accepted_reply.3nsl			\
 		xdr_array.3nsl				\
@@ -318,8 +316,6 @@ MANLINKS=	auth_destroy.3nsl			\
 		yp_unbind.3nsl				\
 		yperr_string.3nsl			\
 		ypprot_err.3nsl
-
-undial.3nsl				:= LINKSRC = dial.3nsl
 
 endhostent.3nsl				:= LINKSRC = gethostbyname.3nsl
 gethostbyaddr.3nsl			:= LINKSRC = gethostbyname.3nsl

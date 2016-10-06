@@ -37,7 +37,6 @@ extern "C" {
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <dial.h>
 #include <strings.h>
 #include <libdevinfo.h>
 #include <sys/systeminfo.h>

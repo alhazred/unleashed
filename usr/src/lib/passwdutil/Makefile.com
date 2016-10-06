@@ -52,7 +52,7 @@ LIBS=		$(DYNLIB)
 LDLIBS		+= -lsldap -lnsl -lc
 
 CPPFLAGS	+= -DENABLE_SUNOS_AGING -D_REENTRANT \
-		   -I$(SRC)/lib/libsldap/common -I$(SRC)/lib/libnsl/include
+		   -I$(SRC)/lib/libsldap/common -I$(SRC)/lib/libc/inc
 
 CERRWARN	+= -Wno-switch
 CERRWARN	+= -Wno-uninitialized

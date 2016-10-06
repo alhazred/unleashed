@@ -41,7 +41,7 @@ OBJECTS= $(DH192)
 include ../../../../Makefile.lib
 
 CPPFLAGS += -I../../backend/mech -I../../backend/crypto
-CPPFLAGS += -I$(SRC)/lib/libnsl/include
+CPPFLAGS += -I$(SRC)/lib/libc/inc
 CPPFLAGS += -I$(SRC)/uts/common/gssapi/include
 
 DYNFLAGS +=	$(ZIGNORE)

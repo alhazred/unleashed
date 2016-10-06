@@ -34,7 +34,7 @@ OBJECTS=	dhkeys.o	\
 include		../../Makefile.pam_modules
 
 LDLIBS		+= -lpam -lnsl -lc
-CPPFLAGS	+= -I$(SRC)/lib/libnsl/include
+CPPFLAGS	+= -I$(SRC)/lib/libc/inc
 CERRWARN	+= -Wno-parentheses
 
 all:	$(LIBS)

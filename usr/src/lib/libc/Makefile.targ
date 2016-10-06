@@ -178,8 +178,18 @@ pics/%.o %.o: $(LIBCBASE)/../port/gen/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
+# inet rules
+pics/%.o: $(LIBCBASE)/../port/inet/%.c
+	$(COMPILE.c) -DSYSV -o $@ $<
+	$(POST_PROCESS_O)
+
 # locale rules
 pics/%.o %.o: $(LIBCBASE)/../port/locale/%.c
+	$(COMPILE.c) -o $@ $<
+	$(POST_PROCESS_O)
+
+# nsl rules
+pics/%.o: $(LIBCBASE)/../port/nsl/%.c $(LIBCBASE)/../port/nsl/nis_clnt.h
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
@@ -193,6 +203,11 @@ pics/%.o: $(LIBCBASE)/../port/regex/%.c
 	$(COMPILE.c) -DM_I18N_MB -DI18N \
 	-I$(LIBCBASE)/../port/regex \
 	-I$(LIBCBASE)/../port/gen -o $@ $<
+	$(POST_PROCESS_O)
+
+# socket rules
+pics/%.o: $(LIBCBASE)/../port/socket/%.c
+	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
 # stdio rules
@@ -309,3 +324,41 @@ pics/%.o: $(LIBCBASE)/../port/threads/%.d $(THREADSOBJS:%=pics/%)
 	$(POST_PROCESS_O)
 
 include $(SRC)/lib/Makefile.targ
+
+# rpcgen'd stuff originally from libnsl
+
+RPCSVC_DIR= $(ROOTHDRDIR)/rpcsvc
+RPCSVC_SRCDIR= $(SRC)/head/rpcsvc
+RPCSVC_UTS_SRCDIR= $(SRC)/uts/common/rpc
+
+RPCSVC_FILES= daemon_utils.h nis.x nis.h nis_object.x
+RPCSVC_FILES_UTS= key_prot.x
+
+ROOTHDRS += $(RPCSVC_FILES:%=$(RPCSVC_DIR)/%)
+
+$(RPCSVC_DIR):
+	$(INS.dir)
+
+$(RPCSVC_DIR)/%.h:	$(RPCSVC_SRCDIR)/%.h
+	$(INS.file)
+
+$(RPCSVC_DIR)/nis.h:	$(RPCSVC_SRCDIR)/nis.x $(RPCSVC_SRCDIR)/nis_object.x
+	$(RPCGEN) -C -h $(RPCSVC_SRCDIR)/nis.x > nis-tmp.h
+	$(SED) -e '/EDIT_START/,$$ d' < nis-tmp.h > nis.h
+	$(INS) -m $(FILEMODE) nis.h $@
+	$(RM) nis.h nis-tmp.h
+
+$(RPCSVC_DIR)/%.x:	$(RPCSVC_SRCDIR)/%.x
+	$(INS.file)
+
+$(RPCSVC_DIR)/%.x:	$(RPCSVC_UTS_SRCDIR)/%.x
+	$(INS.file)
+
+$(LIBCBASE)/../port/nsl/nis_clnt.h: $(RPCSVC_DIR)/nis.x $(RPCSVC_DIR)/nis_object.x
+	$(RPCGEN) -C -h $(RPCSVC_DIR)/nis.x > nis_clnt-gen.h
+	$(SED) -n -e '/EDIT_START/,$$ p' < nis_clnt-gen.h |\
+	$(SED) -e 's/_3_svc/_svc/' |\
+	$(SED) -e 's/_3/_clnt/' > $@
+	$(RM) nis_clnt-gen.h
+
+CLEANFILES += $(LIBCBASE)/../port/nsl/nis_clnt.h

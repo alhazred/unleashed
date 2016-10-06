@@ -14,7 +14,6 @@
 # Copyright 2012 Nexenta Systems, Inc. All rights reserved.
 #
 
-file path=usr/share/man/man3nsl/dial.3nsl
 file path=usr/share/man/man3nsl/doconfig.3nsl
 file path=usr/share/man/man3nsl/gethostbyname.3nsl
 file path=usr/share/man/man3nsl/getipsecalgbyname.3nsl
@@ -280,7 +279,6 @@ link path=usr/share/man/man3nsl/svcudp_bufcreate.3nsl target=rpc_soc.3nsl
 link path=usr/share/man/man3nsl/svcudp_create.3nsl target=rpc_soc.3nsl
 link path=usr/share/man/man3nsl/taddr2uaddr.3nsl target=netdir.3nsl
 link path=usr/share/man/man3nsl/uaddr2taddr.3nsl target=netdir.3nsl
-link path=usr/share/man/man3nsl/undial.3nsl target=dial.3nsl
 link path=usr/share/man/man3nsl/user2netname.3nsl target=secure_rpc.3nsl
 link path=usr/share/man/man3nsl/xdr_accepted_reply.3nsl target=rpc_xdr.3nsl
 link path=usr/share/man/man3nsl/xdr_array.3nsl target=xdr_complex.3nsl

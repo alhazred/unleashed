@@ -34,11 +34,11 @@ HDRS= key_prot.h
 
 DEFAULTFILES = keyserv.dfl
 
-KEYSERVOBJS = keyserv.o
+KEYSERVOBJS = keyserv.o gen_dhkeys.o xcrypt.o
 KEYLOGOUTOBJS = keylogout.o
 KEYLOGINOBJS = keylogin.o
-CHKEYOBJS = chkey.o
-NEWKEYOBJS = newkey.o
+CHKEYOBJS = chkey.o gen_dhkeys.o xcrypt.o
+NEWKEYOBJS = newkey.o gen_dhkeys.o xcrypt.o
 UPDATEOBJS = update.o
 
 DOMAINNAMEOBJS = domainname.o
@@ -64,7 +64,7 @@ $(ROOTBIN)/chkey :=				FILEMODE=	4555
 
 $(ROOTKEYSERVDFLT) :=				FILEMODE=	444
 
-CPPFLAGS += -I. -I$(SRC)/lib/libnsl/include -I$(SRC)/lib/libsldap/common \
+CPPFLAGS += -I. -I$(SRC)/lib/libc/inc -I$(SRC)/lib/libsldap/common \
 		-D_REENTRANT
 
 CERRWARN +=	-Wno-implicit-function-declaration
@@ -75,9 +75,9 @@ CERRWARN +=	-Wno-address
 CERRWARN +=	-Wno-unused-function
 
 LDLIBS +=	-lnsl
-chkey :=	LDLIBS += -lsldap
-keyserv :=	LDLIBS += -lmp
-newkey  :=	LDLIBS += -lsldap -lsocket
+chkey :=	LDLIBS += -lsldap -lmp -lmd
+keyserv :=	LDLIBS += -lmp -lmd
+newkey  :=	LDLIBS += -lsldap -lsocket -lmp -lmd
 
 .KEEP_STATE:
 

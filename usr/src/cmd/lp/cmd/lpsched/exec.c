@@ -31,13 +31,11 @@
 #if defined PS_FAULTED
 #undef  PS_FAULTED
 #endif /* PS_FAULTED */
-#include <dial.h>
 
 #include <stdlib.h>
 #include "limits.h"
 #include "stdarg.h"
 #include "wait.h"
-#include "dial.h"
 #include "lpsched.h"
 #include <syslog.h>
 #include "tsol/label.h"
@@ -54,7 +52,6 @@ static MESG *		ChildMd;
 
 static int		ChildPid;
 static int		WaitedChildPid;
-static int		do_undial;
 
 static char		argbuf[ARG_MAX];
 
@@ -563,25 +560,12 @@ exec(int type, ...)
 		procuid = request->secure->uid;
 		procgid = request->secure->gid;
 
-		if (printer->printer->dial_info)
-		{
-			ret = open_dialup(request->printer_type,
-				printer->printer);
-			if (ret == 0)
-				do_undial = 1;
-		}
-		else
-		{
-			ret = open_direct(request->printer_type,
-				printer->printer);
-			do_undial = 0;
-			/* this is a URI */
-			if (is_printer_uri(printer->printer->device) == 0)
-				addenv(&envp, "DEVICE_URI",
-					 printer->printer->device);
-		}
-				addenv(&envp, "DEVICE_URI",
-					 printer->printer->device);
+		ret = open_direct(request->printer_type,
+		    printer->printer);
+		/* this is a URI */
+		if (is_printer_uri(printer->printer->device) == 0)
+			addenv(&envp, "DEVICE_URI",
+			    printer->printer->device);
 		if (ret != 0)
 			Done (ret, errno);
 			
@@ -1411,9 +1395,6 @@ sigtrap(int sig)
 static void
 done(int status, int err)
 {
-	if (do_undial)
-		undial (1);
-
 	mputm (ChildMd, S_CHILD_DONE, key, status, err);
 	mdisconnect (ChildMd);
 

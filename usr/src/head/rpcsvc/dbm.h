@@ -48,17 +48,17 @@ extern "C" {
 #define	DBLKSIZ	4096
 #define	BYTESIZ	8
 
-long	bitno;
-long	maxbno;
-long	blkno;
-long	hmask;
+static long	bitno;
+static long	maxbno;
+static long	blkno;
+static long	hmask;
 
-char	pagbuf[PBLKSIZ];
-char	dirbuf[DBLKSIZ];
+static char	pagbuf[PBLKSIZ];
+static char	dirbuf[DBLKSIZ];
 
-int	dirf;
-int	pagf;
-int	dbrdonly;
+static int	dirf;
+static int	pagf;
+static int	dbrdonly;
 
 typedef	struct
 {

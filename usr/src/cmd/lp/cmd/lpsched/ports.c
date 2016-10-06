@@ -28,7 +28,6 @@
  */
 
 #include "termio.h"
-#include "dial.h"
 #include "unistd.h"
 
 #include "lpsched.h"
@@ -40,111 +39,6 @@ static void		sigalrm(int);
 static int		push_module(int, char *, char *);
 
 static int		SigAlrm;
-
-/*
- * open_dialup() - OPEN A PORT TO A ``DIAL-UP'' PRINTER
- */
-
-int
-open_dialup(char *ptype, PRINTER *pp)
-{
-	static char		*baud_table[]	= {
-		0,
-		"50",
-		"75",
-		"110",
-		"134",
-		"150",
-		"200",
-		"300",
-		"600",
-		"1200",
-		"1800",
-		"2400",
-		"4800",
-		"9600",
-		"19200",
-		"38400",
-		"57600",
-		"76800",
-		"115200",
-		"153600",
-		"230400",
-		"307200",
-		"460800",
-		"921600"
-	};
-
-	struct termio		tio;
-	struct termios		tios;
-
-	CALL			call;
-
-	int			speed, fd;
-
-	char			*sspeed;
-
-
-	if (pp->speed == NULL || (speed = atoi(pp->speed)) <= 0)
-		speed = -1;
-
-	call.attr = 0;
-	call.speed = speed;
-	call.line = 0;
-	call.telno = pp->dial_info;
-
-	if ((fd = dial(call)) < 0)
-		return (EXEC_EXIT_NDIAL | (~EXEC_EXIT_NMASK & abs(fd)));
-
-	/*
-	 * "dial()" doesn't guarantee which file descriptor
-	 * it uses when it opens the port, so we probably have to
-	 * move it.
-	 */
-	if (fd != 1) {
-		dup2(fd, 1);
-		Close(fd);
-	}
-
-	/*
-	 * The "printermgmt()" routines move out of ".stty"
-	 * anything that looks like a baud rate, and puts it
-	 * in ".speed", if the printer port is dialed. Thus
-	 * we are saved the task of cleaning out spurious
-	 * baud rates from ".stty".
-	 *
-	 * However, we must determine the baud rate and
-	 * concatenate it onto ".stty" so that that we can
-	 * override the default in the interface progam.
-	 * Putting the override in ".stty" allows the user
-	 * to override us (although it would be probably be
-	 * silly for him or her to do so.)
-	 */
-	if (ioctl(1, TCGETS, &tios) < 0) {
-		ioctl(1, TCGETA, &tio);
-		tios.c_cflag = tio.c_cflag;
-	}
-	if ((sspeed = baud_table[cfgetospeed(&tios)]) != NULL) {
-
-		if (pp->stty == NULL)
-			pp->stty = "";
-
-		{
-			char *new_stty = Malloc(
-			    strlen(pp->stty) + 1 + strlen(sspeed) + 1);
-
-			sprintf(new_stty, "%s %s", pp->stty, sspeed);
-
-			/*
-			 * We can trash "pp->stty" because
-			 * the parent process has the good copy.
-			 */
-			pp->stty = new_stty;
-		}
-	}
-
-	return (0);
-}
 
 /*
  * open_direct() - OPEN A PORT TO A DIRECTLY CONNECTED PRINTER

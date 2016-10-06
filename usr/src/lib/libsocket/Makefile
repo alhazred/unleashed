@@ -24,8 +24,6 @@
 
 include ../Makefile.lib
 
-HDRS = libsocket_priv.h
-HDRDIR = common
 SUBDIRS = $(MACH)
 $(BUILD64)SUBDIRS += $(MACH64)
 
@@ -34,27 +32,11 @@ clean	:= TARGET= clean
 clobber	:= TARGET= clobber
 install	:= TARGET= install
 
-POFILE =	libsocket.po
-MSGFILES =	`$(GREP) -l gettext */*.[ch]`
-XGETFLAGS +=	-a
-TEXT_DOMAIN =	SUNW_OST_NETRPC
-
 .KEEP_STATE:
 
 all clean clobber install: $(SUBDIRS)
-
-install_h: $(ROOTHDRS)
-
-check: $(CHECKHDRS)
-
-_msg: $(MSGDOMAINPOFILE)
-
-$(POFILE): pofile_MSGFILES
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
 FRC:
-
-include $(SRC)/lib/Makefile.targ
-include $(SRC)/Makefile.msg.targ

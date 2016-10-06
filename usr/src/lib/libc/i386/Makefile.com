@@ -765,6 +765,14 @@ PORTI18N_COND=			\
 	wcstol_longlong.o	\
 	wcstoul_longlong.o
 
+PORTINET= bindresvport.o bootparams_getbyname.o ether_addr.o \
+	  getaddrinfo.o getnameinfo.o getnetent.o getnetent_r.o \
+	  getprotoent.o getprotoent_r.o getservbyname_r.o getservent.o \
+	  getservent_r.o inet_lnaof.o inet_mkaddr.o inet_network.o \
+	  inet6_opt.o inet6_rthdr.o interface_id.o link_addr.o \
+	  netmasks.o rcmd.o rexec.o ruserpass.o sourcefilter.o \
+	  getifaddrs.o
+
 PORTLOCALE=			\
 	big5.o			\
 	btowc.o			\
@@ -840,6 +848,36 @@ PORTLOCALE=			\
 	wctype.o		\
 	wcwidth.o		\
 	wscol.o
+
+PORTNSL= _conn_util.o _data2.o _errlst.o _utility.o algs.o auth_des.o \
+         auth_none.o auth_sys.o auth_time.o authdes_prot.o authsys_prot.o \
+         can_use_af.o checkver.o clnt_bcast.o clnt_dg.o clnt_door.o \
+         clnt_generic.o clnt_perror.o clnt_raw.o clnt_simple.o clnt_vc.o \
+         daemon_utils.o dbm.o des_crypt.o des_soft.o doconfig.o getauthattr.o \
+         getauuser.o getdname.o getexecattr.o gethostby_door.o \
+         gethostbyname_r.o gethostent.o gethostent6.o gethostent_r.o \
+         getipnodeby.o getipnodeby_door.o getprofattr.o getrpcent.o \
+         getrpcent_r.o getuserattr.o inet_matchaddr.o inet_ntoa.o inet_ntop.o \
+         inet_pton.o key_call.o key_prot.o mt_misc.o netdir.o netdir_inet.o \
+         netdir_inet_sundry.o netname.o netnamer.o netselect.o nis_misc.o \
+         nis_misc_proc.o nis_sec_mechs.o nis_subr.o nis_xdr.o parse.o \
+         pmap_clnt.o pmap_prot.o publickey.o rpc_callmsg.o rpc_comdata.o \
+         rpc_comdata1.o rpc_fdsync.o rpc_generic.o rpc_prot.o rpc_sel2poll.o \
+         rpc_soc.o rpc_td.o rpcb_clnt.o rpcb_prot.o rpcb_st_xdr.o rpcdname.o \
+         rpcsec_gss_if.o rtime_tli.o svc.o svc_auth.o svc_auth_loopb.o \
+         svc_auth_sys.o svc_dg.o svc_door.o svc_generic.o svc_raw.o svc_run.o \
+         svc_simple.o svc_vc.o svcauth_des.o svid_funcs.o t_accept.o \
+         t_alloc.o t_bind.o t_close.o t_connect.o t_error.o t_free.o \
+         t_getinfo.o t_getname.o t_getstate.o t_listen.o t_look.o t_open.o \
+         t_optmgmt.o t_rcv.o t_rcvconnect.o t_rcvdis.o t_rcvrel.o \
+         t_rcvreldata.o t_rcvudata.o t_rcvuderr.o t_rcvv.o t_rcvvudata.o \
+         t_snd.o t_snddis.o t_sndrel.o t_sndreldata.o t_sndudata.o t_sndv.o \
+         t_sndvudata.o t_strerror.o t_sync.o t_sysconf.o t_unbind.o \
+         thr_get_storage.o ti_opts.o tli_wrappers.o xdr.o xdr_array.o \
+         xdr_float.o xdr_mem.o xdr_rec.o xdr_refer.o xdr_sizeof.o xdr_stdio.o \
+         xti_wrappers.o yp_all.o yp_b_clnt.o yp_b_xdr.o yp_bind.o yp_enum.o \
+         yp_master.o yp_match.o yp_order.o yp_rsvd.o yp_update.o yp_xdr.o \
+         yperr_string.o yppasswd_xdr.o ypprot_err.o ypupd.o
 
 AIOOBJS=			\
 	aio.o			\
@@ -975,6 +1013,8 @@ PORTREGEX=			\
 PORTREGEX64=			\
 	glob64.o
 
+PORTSOCKET= _soutil.o sockatmark.o socket.o socketpair.o weaks.o
+
 MOSTOBJS=			\
 	$(STRETS)		\
 	$(CRTOBJS)		\
@@ -992,12 +1032,15 @@ MOSTOBJS=			\
 	$(PORTGEN64)		\
 	$(PORTI18N)		\
 	$(PORTI18N_COND)	\
+	$(PORTINET)		\
 	$(PORTLOCALE)		\
+	$(PORTNSL)		\
 	$(PORTPRINT)		\
 	$(PORTPRINT_C89)	\
 	$(PORTPRINT_W)		\
 	$(PORTREGEX)		\
 	$(PORTREGEX64)		\
+	$(PORTSOCKET)		\
 	$(PORTSTDIO)		\
 	$(PORTSTDIO64)		\
 	$(PORTSTDIO_C89)	\
