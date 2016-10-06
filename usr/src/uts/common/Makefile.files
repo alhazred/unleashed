@@ -1138,8 +1138,6 @@ FIFO_OBJS +=	fifosubr.o	fifovnops.o
 
 PIPE_OBJS +=	pipe.o
 
-NAMEFS_OBJS +=	namevfs.o	namevno.o
-
 NFS_OBJS +=	nfs_client.o	nfs_common.o	nfs_dump.o \
 		nfs_subr.o	nfs_vfsops.o	nfs_vnops.o \
 		nfs_xdr.o	nfs_sys.o	nfs_strerror.o \

@@ -13,6 +13,7 @@
 #define	CONFIG_FS_AUTOFS
 #define	CONFIG_FS_HSFS
 #define	CONFIG_FS_LOFS
+#define	CONFIG_FS_NAMEFS
 #define	CONFIG_FS_PCFS
 #undef	CONFIG_VM_STATS
 
