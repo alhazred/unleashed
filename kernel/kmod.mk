@@ -5,6 +5,8 @@
 #
 #   MODULE		- name of the kernel module
 #   MODULE_TYPE		- "fs", "drv", etc.
+#   MODULE_TYPE_LINKS	- "fs", "drv", etc. which will be hardlinked to
+#   			  MODULE_TYPE
 #   MODULE_DEPS		- TODO: dependencies
 #   SRCS		- source files
 #   SRCS32		- additional source files (32-bit build only)
@@ -142,6 +144,18 @@ LDFLAGS = \
 LDFLAGS += -dy $(MODULE_DEPS:%=-N %)
 .endif
 
+# generate all the hard link names even though we may not use it all
+LINKS32=
+LINKS64=
+.if !empty(MODULE_TYPE_LINKS)
+.for type in ${MODULE_TYPE_LINKS}
+LINKS32+="/kernel/${MODULE_TYPE}/${MODULE}" \
+	 "/kernel/${type}/${MODULE}"
+LINKS64+="/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}" \
+	 "/kernel/${type}/${CONFIG_MACH64}/${MODULE}"
+.endfor
+.endif
+
 OBJS32=$(SRCS:%.c=%-32.o) $(SRCS32:%.c=%-32.o)
 OBJS64=$(SRCS:%.c=%-64.o) $(SRCS64:%.c=%-64.o)
 
@@ -171,13 +185,21 @@ clean:
 
 install: $(INSTALLTGTS)
 
+.include <links.mk>
+
 install-32: $(MODULE)-32
 	$(INS) -d -m 755 "$(DESTDIR)/kernel/${MODULE_TYPE}"
 	$(INS) -m 755 ${.ALLSRC} "$(DESTDIR)/kernel/${MODULE_TYPE}/${MODULE}"
+.if !empty(LINKS32)
+	@set ${LINKS32}; ${_LINKS_SCRIPT}
+.endif
 	
 install-64: $(MODULE)-64
 	$(INS) -d -m 755 "$(DESTDIR)/kernel/${MODULE_TYPE}/${CONFIG_MACH64}"
 	$(INS) -m 755 ${.ALLSRC} "$(DESTDIR)/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}"
+.if !empty(LINKS64)
+	@set ${LINKS64}; ${_LINKS_SCRIPT}
+.endif
 
 .PHONY: all clean install-32 install-64
 
