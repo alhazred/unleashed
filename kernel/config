@@ -1,0 +1,3 @@
+((include "vm/config"))
+
+; vim: set syntax=scheme:
