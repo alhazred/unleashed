@@ -1,0 +1,5 @@
+((include "fs/config")
+ (include "sched/config")
+ (include "vm/config"))
+
+; vim: set syntax=scheme:

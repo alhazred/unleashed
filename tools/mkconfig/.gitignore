@@ -1,0 +1,5 @@
+mkconfig
+*.o
+sexpr.lex.c
+sexpr.tab.c
+sexpr.tab.h

@@ -1140,11 +1140,6 @@ FIFO_OBJS +=	fifosubr.o	fifovnops.o
 
 PIPE_OBJS +=	pipe.o
 
-HSFS_OBJS +=	hsfs_node.o	hsfs_subr.o	hsfs_vfsops.o	hsfs_vnops.o \
-		hsfs_susp.o	hsfs_rrip.o	hsfs_susp_subr.o
-
-LOFS_OBJS +=	lofs_subr.o	lofs_vfsops.o	lofs_vnops.o
-
 NAMEFS_OBJS +=	namevfs.o	namevno.o
 
 NFS_OBJS +=	nfs_client.o	nfs_common.o	nfs_dump.o \
@@ -1292,9 +1287,6 @@ SMBSRV_OBJS +=	$(SMBSRV_SHARED_OBJS)			\
 		smb2_tree_connect.o \
 		smb2_tree_disconn.o \
 		smb2_write.o
-
-PCFS_OBJS +=	pc_alloc.o	pc_dir.o	pc_node.o	pc_subr.o \
-		pc_vfsops.o	pc_vnops.o
 
 PROC_OBJS +=	prcontrol.o	prioctl.o	prsubr.o	prusrio.o \
 		prvfsops.o	prvnops.o
@@ -1550,24 +1542,6 @@ KB_OBJS +=	kbd.o		keytables.o
 #			ID mapping module
 #
 IDMAP_OBJS +=	idmap_mod.o	idmap_kapi.o	idmap_xdr.o	idmap_cache.o
-
-#
-#			scheduling class modules
-#
-SDC_OBJS +=		sysdc.o
-
-RT_OBJS +=		rt.o
-RT_DPTBL_OBJS +=	rt_dptbl.o
-
-TS_OBJS +=		ts.o
-TS_DPTBL_OBJS +=	ts_dptbl.o
-
-IA_OBJS +=		ia.o
-
-FSS_OBJS +=		fss.o
-
-FX_OBJS +=		fx.o
-FX_DPTBL_OBJS +=	fx_dptbl.o
 
 #
 #			Inter-Process Communication (IPC) modules

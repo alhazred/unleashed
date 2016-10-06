@@ -318,14 +318,9 @@ MISC_KMODS      += md_sp
 EXEC_KMODS	+= elfexec intpexec shbinexec javaexec
 
 #
-#	Scheduling Class Modules (/kernel/sched):
-#
-SCHED_KMODS	+= RT TS RT_DPTBL TS_DPTBL IA FSS FX FX_DPTBL SDC
-
-#
 #	File System Modules (/kernel/fs):
 #
-FS_KMODS	+= dev devfs fdfs fifofs hsfs lofs namefs nfs pcfs tmpfs zfs
+FS_KMODS	+= dev devfs fdfs fifofs namefs nfs tmpfs zfs
 FS_KMODS	+= zut specfs udfs ufs autofs procfs sockfs mntfs
 FS_KMODS	+= ctfs objfs sharefs dcfs smbfs bootfs
 

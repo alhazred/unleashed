@@ -1,0 +1,13 @@
+((config
+   ; Support for Linux core files
+   LINUX_CORE_SUPPORT
+   (= MACH 'i386))
+
+ (config
+   ; should SMB expose CUPS printers?
+   SMB_PRINTING
+   #t)
+
+ (include "../kernel/config"))
+
+; vim: set syntax=scheme:

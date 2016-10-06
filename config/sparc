@@ -1,0 +1,25 @@
+((const
+   MACH
+   'sparc)
+
+ (const
+   MACH32
+   'sparcv7)
+
+ (const
+   MACH64
+   'sparcv9)
+
+ (const
+   ; Build 32-bit kernel modules
+   BUILD_KMOD_32
+   #f)
+
+ (const
+   ; Build 64-bit kernel modules
+   BUILD_KMOD_64
+   #t)
+
+ (include "common"))
+
+; vim: set syntax=scheme:

@@ -1,0 +1,6 @@
+((config
+   ; VM subsystem statistics gathering; always enabled on DEBUG builds
+   VM_STATS
+   #f))
+
+; vim: set syntax=scheme:

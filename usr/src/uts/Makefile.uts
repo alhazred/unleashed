@@ -459,7 +459,7 @@ USR_PLAT_LINKS_2	 = $(PLAT_LINKS_2:%=$(USR_PLAT_DIR)/%)
 # it does get rebuilt.  So we always force the issue here rather than try to
 # build genunix in parallel with everything else.
 #
-PARALLEL_KMODS = $(DRV_KMODS) $(EXEC_KMODS) $(FS_KMODS) $(SCHED_KMODS) \
+PARALLEL_KMODS = $(DRV_KMODS) $(EXEC_KMODS) $(FS_KMODS) \
 		 $(TOD_KMODS) $(STRMOD_KMODS) $(SYS_KMODS) $(MISC_KMODS) \
 		 $(NLMISC_KMODS) $(MACH_KMODS) $(CPU_KMODS) $(GSS_KMODS) \
 		 $(MMU_KMODS) $(DACF_KMODS) $(EXPORT_KMODS) $(IPP_KMODS) \

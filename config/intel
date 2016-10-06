@@ -1,0 +1,25 @@
+((const
+   MACH
+   'i386)
+
+ (const
+   MACH32
+   'i86)
+
+ (const
+   MACH64
+   'amd64)
+
+ (const
+   ; Build 32-bit kernel modules
+   BUILD_KMOD_32
+   #t)
+
+ (const
+   ; Build 64-bit kernel modules
+   BUILD_KMOD_64
+   #t)
+
+ (include "common"))
+
+; vim: set syntax=scheme:

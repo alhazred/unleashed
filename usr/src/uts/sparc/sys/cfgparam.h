@@ -3,8 +3,16 @@
 #ifndef	_SYS_CFGPARAM_H
 #define	_SYS_CFGPARAM_H
 
+#define	CONFIG_MACH sparc
+#define	CONFIG_MACH32 sparcv7
+#define	CONFIG_MACH64 sparcv9
+#undef	CONFIG_BUILD_KMOD_32
+#define	CONFIG_BUILD_KMOD_64
 #undef	CONFIG_LINUX_CORE_SUPPORT
 #define	CONFIG_SMB_PRINTING
+#define	CONFIG_FS_HSFS
+#define	CONFIG_FS_LOFS
+#define	CONFIG_FS_PCFS
 #undef	CONFIG_VM_STATS
 
 #endif

@@ -345,11 +345,6 @@ DRV_KMODS	+= vsw
 EXEC_KMODS	+=
 
 #
-#	Scheduling Class Modules (/kernel/sched):
-#
-SCHED_KMODS	+=
-
-#
 #	File System Modules (/kernel/fs):
 #
 FS_KMODS	+=
