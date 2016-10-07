@@ -180,7 +180,7 @@ CTFMERGE=/opt/onbld/bin/i386/ctfmerge
 
 all: $(MODULES)
 
-clean:
+clean cleandir:
 	rm -f $(MODULE)-32 $(MODULE)-64 $(OBJS32) $(OBJS64)
 
 install: $(INSTALLTGTS)
