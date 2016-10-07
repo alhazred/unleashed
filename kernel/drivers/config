@@ -1,0 +1,6 @@
+((config
+   ; support for virtio devices
+   VIRTIO
+   (= MACH 'i386)))
+
+; vim: set syntax=scheme:

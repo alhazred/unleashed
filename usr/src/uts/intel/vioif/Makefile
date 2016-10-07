@@ -40,7 +40,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #	Overrides
 #
 
-INC_PATH += -I$(UTSBASE)/common/io/virtio
+INC_PATH += -I$(UTSBASE)/../../../kernel/drivers/virtio
 
 #
 # Driver depends on virtio and blkdev

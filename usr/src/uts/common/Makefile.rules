@@ -1439,10 +1439,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/skd/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/virtio/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/vioblk/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

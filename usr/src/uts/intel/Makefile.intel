@@ -398,9 +398,6 @@ DRV_KMODS	+= vr
 # Virtio drivers
 #
 
-# Virtio core
-DRV_KMODS	+= virtio
-
 # Virtio block driver
 DRV_KMODS	+= vioblk
 

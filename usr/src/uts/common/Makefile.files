@@ -2019,9 +2019,6 @@ NXGE_HCALL_OBJS =	\
 # Virtio modules
 #
 
-# Virtio core
-VIRTIO_OBJS = virtio.o
-
 # Virtio block driver
 VIOBLK_OBJS = vioblk.o
 
