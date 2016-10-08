@@ -35,7 +35,6 @@
 #		SRC
 #		TSRC
 #		ROOT
-#		PARENT_ROOT
 #		MACH
 #		MAKEFLAGS
 #		ENVCPPFLAGS{1-4}
@@ -355,14 +354,6 @@ fi
 
 export PATH
 
-if [[ -n "$PROTO2" ]]; then
-   # This should point to the parent's proto
-   PARENT_ROOT=$PROTO2
-   export PARENT_ROOT
-else
-   # Clear it in case it's already in the env.
-   PARENT_ROOT=
-fi
 export ONBLD_DIR
 export MACH
 
@@ -383,9 +374,6 @@ if [[ -n "$parent" ]]; then
    echo "Workspace Parent             : $parent"
 fi
 echo "Proto area (\$ROOT)           : $ROOT"
-if [[ -n "$PARENT_ROOT" ]]; then
-   echo "Parent proto area (\$PARENT_ROOT) : $PARENT_ROOT"
-fi
 echo "Root of source (\$SRC)        : $SRC"
 echo "Root of test source (\$TSRC)  : $TSRC"
 if [[ $osbld_flag = "1" ]]; then

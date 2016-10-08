@@ -51,7 +51,6 @@ The following Environment variables are set when you invoke this script:
 CODEMGR_WS
 SRC
 ROOT
-PARENT_ROOT
 PATH
 MAKEFLAGS
 ENVCPPFLAGS{1-4}
@@ -373,12 +372,6 @@ SunOS Makefiles.  This value is set based on PROTO1 as defined in
 the protodefs file.  ROOT is also the destination of
 .I install
 operations.
-.RE
-PARENT_ROOT
-.RS 5
-Parent proto area for this workspace.  This is used by the
-SunOS Makefiles.  This value is set based on PROTO2 as defined in
-the protodefs file.
 .RE
 PATH
 .RS 5

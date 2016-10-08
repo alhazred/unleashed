@@ -303,8 +303,6 @@ ENVCPPFLAGS1=
 ENVCPPFLAGS2=
 ENVCPPFLAGS3=
 ENVCPPFLAGS4=
-PARENT_ROOT=
-PARENT_TOOLS_ROOT=
 
 if [[ "$MULTI_PROTO" != "yes" && "$MULTI_PROTO" != "no" ]]; then
 	printf \
@@ -327,9 +325,7 @@ export \
         ENVCPPFLAGS2 \
         ENVCPPFLAGS3 \
 	ENVCPPFLAGS4 \
-        MAKEFLAGS \
-        PARENT_ROOT \
-        PARENT_TOOLS_ROOT
+        MAKEFLAGS
 
 printf 'RELEASE      is %s\n'   "$RELEASE"
 printf 'VERSION      is %s\n'   "$VERSION"

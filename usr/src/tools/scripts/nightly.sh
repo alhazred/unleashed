@@ -551,8 +551,6 @@ N_FLAG=n
 n_FLAG=n
 p_FLAG=n
 r_FLAG=n
-U_FLAG=n
-u_FLAG=n
 V_FLAG=n
 w_FLAG=n
 W_FLAG=n
@@ -725,7 +723,7 @@ check_closed_bins
 #
 NIGHTLY_OPTIONS=-${NIGHTLY_OPTIONS#-}
 OPTIND=1
-while getopts +ABCDdFfGIiMmNnpRrUuwW FLAG $NIGHTLY_OPTIONS
+while getopts +ABCDdFfGIiMmNnpRrwW FLAG $NIGHTLY_OPTIONS
 do
 	case $FLAG in
 	  A )	A_FLAG=y
@@ -740,11 +738,9 @@ do
 		;;
 	  f )	f_FLAG=y
 		;;
-	  G )   u_FLAG=y
-		;;
+	  G )   ;;
 	  I )	m_FLAG=y
 		p_FLAG=y
-		u_FLAG=y
 		;;
 	  i )	i_FLAG=y
 		;;
@@ -762,19 +758,6 @@ do
 		p_FLAG=y
 		;;
 	  r )	r_FLAG=y
-		;;
-	  U )   if [ -z "${PARENT_ROOT}" ]; then
-			echo "PARENT_ROOT must be set if the U flag is" \
-			    "present in NIGHTLY_OPTIONS."
-			exit 1
-		fi
-		NIGHTLY_PARENT_ROOT=$PARENT_ROOT
-		if [ -n "${PARENT_TOOLS_ROOT}" ]; then
-			NIGHTLY_PARENT_TOOLS_ROOT=$PARENT_TOOLS_ROOT
-		fi
-		U_FLAG=y
-		;;
-	  u )	u_FLAG=y
 		;;
 	  w )	w_FLAG=y
 		;;
@@ -930,10 +913,9 @@ ENVCPPFLAGS1=
 ENVCPPFLAGS2=
 ENVCPPFLAGS3=
 ENVCPPFLAGS4=
-PARENT_ROOT=
 
 export ENVLDLIBS3 ENVCPPFLAGS1 ENVCPPFLAGS2 ENVCPPFLAGS3 ENVCPPFLAGS4 \
-	ENVLDLIBS1 ENVLDLIBS2 PARENT_ROOT
+	ENVLDLIBS1 ENVLDLIBS2
 
 PKGARCHIVE_ORIG=$PKGARCHIVE
 
@@ -1022,11 +1004,6 @@ function logshuffle {
 			${MAILTO}
 	fi
 
-	if [ "$u_FLAG" = "y" -a "$build_ok" = "y" ]; then
-	    	staffer cp ${LLOG}/mail_msg $PARENT_WS/usr/src/mail_msg-${MACH}
-		staffer cp $LOGFILE $PARENT_WS/usr/src/nightly-${MACH}.log
-	fi
-
 	mv $LOGFILE $LLOG
 }
 
@@ -1112,24 +1089,13 @@ if [ -n "$LOCKNAME" ]; then
 	create_lock /tmp/$LOCKNAME "lockfile"
 fi
 #
-# Create from one, two, or three other locks:
+# Create the other lock:
 #	$ATLOG/nightly.lock
 #		- protects against multiple builds in same workspace
-#	$PARENT_WS/usr/src/nightly.$MACH.lock
-#		- protects against multiple 'u' copy-backs
-#	$NIGHTLY_PARENT_ROOT/nightly.lock
-#		- protects against multiple 'U' copy-backs
 #
 # Overriding ISUSER to 1 causes the lock to be created as root if the
 # script is run as root.  The default is to create it as $STAFFER.
 ISUSER=1 create_lock $ATLOG/nightly.lock "atloglockfile"
-if [ "$u_FLAG" = "y" ]; then
-	create_lock $PARENT_WS/usr/src/nightly.$MACH.lock "ulockfile"
-fi
-if [ "$U_FLAG" = "y" ]; then
-	# NIGHTLY_PARENT_ROOT is written as root if script invoked as root.
-	ISUSER=1 create_lock $NIGHTLY_PARENT_ROOT/nightly.lock "Ulockfile"
-fi
 
 # Locks have been taken, so we're doing a build and we're committed to
 # the directories we may have created so far.
@@ -1659,66 +1625,6 @@ if [ "$build_ok" = "y" ]; then
 			build_extras_ok=n
 		fi
 	fi
-
-	if [ "$N_FLAG" != "y" -a -f "$REF_PROTO_LIST" ]; then
-		echo "\n==== Impact on proto area ====\n" >> $mail_msg_file
-		if [ -n "$E2" ]; then
-			ELIST=$E2
-		else
-			ELIST=$E1
-		fi
-		$PROTOCMPTERSE \
-			"Files in yesterday's proto area, but not today's:" \
-			"Files in today's proto area, but not yesterday's:" \
-			"Files that changed between yesterday and today:" \
-			${ELIST} \
-			-d $REF_PROTO_LIST \
-			$ATLOG/proto_list_${MACH} \
-			>> $mail_msg_file
-	fi
-fi
-
-if [[ "$u_FLAG" == "y" && "$build_ok" == "y" && \
-    "$build_extras_ok" == "y" ]]; then
-	staffer cp $ATLOG/proto_list_${MACH} \
-		$PARENT_WS/usr/src/proto_list_${MACH}
-fi
-
-# Update parent proto area if necessary. This is done now
-# so that the proto area has either DEBUG or non-DEBUG kernels.
-# Note that this clears out the lock file, so we can dispense with
-# the variable now.
-if [ "$U_FLAG" = "y" -a "$build_ok" = "y" ]; then
-	echo "\n==== Copying proto area to $NIGHTLY_PARENT_ROOT ====\n" | \
-	    tee -a $LOGFILE >> $mail_msg_file
-	rm -rf $NIGHTLY_PARENT_ROOT/*
-	unset Ulockfile
-	mkdir -p $NIGHTLY_PARENT_ROOT
-	if [[ "$MULTI_PROTO" = no || "$D_FLAG" = y ]]; then
-		( cd $ROOT; tar cf - . |
-		    ( cd $NIGHTLY_PARENT_ROOT;  umask 0; tar xpf - ) ) 2>&1 |
-		    tee -a $mail_msg_file >> $LOGFILE
-	fi
-	if [[ "$MULTI_PROTO" = yes && "$F_FLAG" = n ]]; then
-		rm -rf $NIGHTLY_PARENT_ROOT-nd/*
-		mkdir -p $NIGHTLY_PARENT_ROOT-nd
-		cd $ROOT-nd
-		( tar cf - . |
-		    ( cd $NIGHTLY_PARENT_ROOT-nd; umask 0; tar xpf - ) ) 2>&1 |
-		    tee -a $mail_msg_file >> $LOGFILE
-	fi
-	if [ -n "${NIGHTLY_PARENT_TOOLS_ROOT}" ]; then
-		echo "\n==== Copying tools proto area to $NIGHTLY_PARENT_TOOLS_ROOT ====\n" | \
-		    tee -a $LOGFILE >> $mail_msg_file
-		rm -rf $NIGHTLY_PARENT_TOOLS_ROOT/*
-		mkdir -p $NIGHTLY_PARENT_TOOLS_ROOT
-		if [[ "$MULTI_PROTO" = no || "$D_FLAG" = y ]]; then
-			( cd $TOOLS_PROTO; tar cf - . |
-			    ( cd $NIGHTLY_PARENT_TOOLS_ROOT; 
-			    umask 0; tar xpf - ) ) 2>&1 |
-			    tee -a $mail_msg_file >> $LOGFILE
-		fi
-	fi
 fi
 
 #
@@ -1831,30 +1737,6 @@ if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 				>> $mail_msg_file
 		fi
 	fi
-
-	# If -u set, copy contents of ELF-data.$MACH to the parent workspace.
-	if [[ "$u_FLAG" = "y" ]]; then
-		p_elf_ddir=$PARENT_WS/usr/src/ELF-data.$MACH
-
-		# If parent lacks the ELF-data.$MACH directory, create it
-		if [[ ! -d $p_elf_ddir ]]; then
-			staffer mkdir -p $p_elf_ddir
-		fi
-
-		# These files are used asynchronously by other builds for ABI
-		# verification, as above for the -A option. As such, we require
-		# the file replacement to be atomic. Copy the data to a temp
-		# file in the same filesystem and then rename into place. 
-		(
-			cd $elf_ddir
-			for elf_dfile in *; do
-				staffer cp $elf_dfile \
-				    ${p_elf_ddir}/${elf_dfile}.new
-				staffer mv -f ${p_elf_ddir}/${elf_dfile}.new \
-				    ${p_elf_ddir}/${elf_dfile}
-			done
-		)
-	fi
 fi
 
 # "make check" begins
@@ -1966,35 +1848,6 @@ echo "\n==== Total build time ====" | \
     tee -a $LOGFILE >> $build_time_file
 echo "\nreal    ${hours}:${minutes}:${seconds}" | \
     tee -a $LOGFILE >> $build_time_file
-
-if [ "$u_FLAG" = "y" -a "$f_FLAG" = "y" -a "$build_ok" = "y" ]; then
-	staffer cp ${SRC}/unref-${MACH}.out $PARENT_WS/usr/src/
-
-	#
-	# Produce a master list of unreferenced files -- ideally, we'd
-	# generate the master just once after all of the nightlies
-	# have finished, but there's no simple way to know when that
-	# will be.  Instead, we assume that we're the last nightly to
-	# finish and merge all of the unref-${MACH}.out files in
-	# $PARENT_WS/usr/src/.  If we are in fact the final ${MACH} to
-	# finish, then this file will be the authoritative master
-	# list.  Otherwise, another ${MACH}'s nightly will eventually
-	# overwrite ours with its own master, but in the meantime our
-	# temporary "master" will be no worse than any older master
-	# which was already on the parent.
-	#
-
-	set -- $PARENT_WS/usr/src/unref-*.out
-	cp "$1" ${TMPDIR}/unref.merge
-	shift
-
-	for unreffile; do
-		comm -12 ${TMPDIR}/unref.merge "$unreffile" > ${TMPDIR}/unref.$$
-		mv ${TMPDIR}/unref.$$ ${TMPDIR}/unref.merge
-	done
-
-	staffer cp ${TMPDIR}/unref.merge $PARENT_WS/usr/src/unrefmaster.out
-fi
 
 #
 # All done save for the sweeping up.

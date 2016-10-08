@@ -87,11 +87,6 @@ function maxjobs
 maxjobs DMAKE_MAX_JOBS # "DMAKE_MAX_JOBS" passed as ksh(1) name reference
 export DMAKE_MAX_JOBS
 
-# PARENT_WS is used to determine the parent of this workspace. This is
-# for the options that deal with the parent workspace (such as where the
-# proto area will go).
-export PARENT_WS=''
-
 # CLONE_WS is the workspace nightly should do a bringover from.
 export CLONE_WS='ssh://anonhg@hg.illumos.org/illumos-gate'
 
@@ -124,12 +119,6 @@ export MACH="$(uname -p)"
 # Location of encumbered binaries.
 export ON_CLOSED_BINS="$CODEMGR_WS/closed"
 
-# REF_PROTO_LIST - for comparing the list of stuff in your proto area
-# with. Generally this should be left alone, since you want to see differences
-# from your parent (the gate).
-#
-export REF_PROTO_LIST="$PARENT_WS/usr/src/proto_list_${MACH}"
-
 
 export ROOT="$CODEMGR_WS/proto/root_${MACH}"
 export SRC="$CODEMGR_WS/usr/src"
@@ -142,13 +131,6 @@ export MULTI_PROTO="no"
 # release
 #
 export VERSION="`git describe --long --all HEAD | cut -d/ -f2-`"
-
-# proto area in parent for optionally depositing a copy of headers and
-# libraries corresponding to the protolibs target
-# not applicable given the NIGHTLY_OPTIONS
-#
-export PARENT_ROOT="$PARENT_WS/proto/root_$MACH"
-export PARENT_TOOLS_ROOT="$PARENT_WS/usr/src/tools/proto/root_$MACH-nd"
 
 # Package creation variables.  You probably shouldn't change these,
 # either.
