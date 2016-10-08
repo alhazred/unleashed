@@ -8,6 +8,7 @@
 #   MODULE_TYPE_LINKS	- "fs", "drv", etc. which will be hardlinked to
 #   			  MODULE_TYPE
 #   MODULE_DEPS		- dependencies
+#   MODULE_CONF		- name of .conf file to install
 #   SRCS		- source files
 #   SRCS32		- additional source files (32-bit build only)
 #   SRCS64		- additional source files (64-bit build only)
@@ -170,6 +171,9 @@ INSTALLTGTS+=install-32
 MODULES+=$(MODULE)-64
 INSTALLTGTS+=install-64
 .endif
+.if !empty(MODULE_CONF)
+INSTALLTGTS+=install-conf
+.endif
 .endif
 
 CC=/opt/gcc/4.4.4/bin/gcc
@@ -202,7 +206,10 @@ install-64: $(MODULE)-64
 	@set ${LINKS64}; ${_LINKS_SCRIPT}
 .endif
 
-.PHONY: all clean install-32 install-64
+install-conf: ${MODULE_CONF}
+	$(INS) -m 644 ${MODULE_CONF} "$(DESTDIR)/kernel/${MODULE_TYPE}/${MODULE}.conf"
+
+.PHONY: all clean install-32 install-64 install-conf
 
 $(MODULE)-32: $(OBJS32)
 	$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
