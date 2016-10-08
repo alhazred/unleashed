@@ -26,9 +26,7 @@
 #
 # By default, the cross-reference is built for all files underneath the
 # currrent working directory that match the criteria specified in the
-# xref.files rule below, and any files that would also be hauled over as
-# part of a `bringover' of the working directory (though this can be
-# turned off via the -f flag to `xref').
+# xref.files rule below.
 #
 # However, this behavior can be customized in each directory of the build
 # tree through the following Makefile macros, if necessary:

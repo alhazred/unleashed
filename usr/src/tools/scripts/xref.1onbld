@@ -152,7 +152,6 @@ references; see \fIEXAMPLES\fP.
 .SH SEE ALSO
 .LP
 .IR make(1),
-.IR bringover(1ONBLD)
 .IR flg.flp(1ONBLD)
 .SH NOTES
 The etags utility is no longer bundled with the Sun Studio, which

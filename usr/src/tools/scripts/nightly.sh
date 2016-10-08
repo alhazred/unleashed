@@ -31,9 +31,6 @@
 # Mostly modified and owned by mike_s.
 # Changes also by kjc, dmk.
 #
-# BRINGOVER_WS may be specified in the env file.
-# The default is the old behavior of CLONE_WS
-#
 # -i on the command line, means fast options, so when it's on the
 # command line (only), check builds are skipped no matter what
 # the setting of their individual flags are in NIGHTLY_OPTIONS.
@@ -500,7 +497,6 @@ USAGE='Usage: nightly [-in] [-V VERS ] <env_file>
 
 Where:
 	-i	Fast incremental options (no clobber, check)
-	-n      Do not do a bringover
 	-V VERS set the build version string to VERS
 
 	<env_file>  file in Bourne shell syntax that sets and exports
@@ -525,7 +521,6 @@ NIGHTLY_OPTIONS variable in the <env_file> as follows:
 	-f	find unreferenced files
 	-i	do an incremental build (no "make clobber")
 	-m	send mail to $MAILTO at end of build
-	-n      do not do a bringover
 	-p	create packages
 	-r	check ELF runtime attributes in the proto area
 	-u	update proto_list_$MACH and friends in the parent workspace;
@@ -548,7 +543,6 @@ i_FLAG=n; i_CMD_LINE_FLAG=n
 M_FLAG=n
 m_FLAG=n
 N_FLAG=n
-n_FLAG=n
 p_FLAG=n
 r_FLAG=n
 V_FLAG=n
@@ -563,12 +557,10 @@ build_extras_ok=y
 #
 
 OPTIND=1
-while getopts +inV:W FLAG
+while getopts +iV:W FLAG
 do
 	case $FLAG in
 	  i )	i_FLAG=y; i_CMD_LINE_FLAG=y
-		;;
-	  n )	n_FLAG=y
 		;;
 	  V )	V_FLAG=y
 		V_ARG="$OPTARG"
@@ -673,14 +665,12 @@ fi
 # STDENV_END
 
 # Check if we have sufficient data to continue...
-[[ -v CODEMGR_WS ]] || fatal_error "Error: Variable CODEMGR_WS not set."
-if  [[ "${NIGHTLY_OPTIONS}" == ~(F)n ]] ; then
-	# Check if the gate data are valid if we don't do a "bringover" below
-	[[ -d "${CODEMGR_WS}" ]] || \
-		fatal_error "Error: ${CODEMGR_WS} is not a directory."
-	[[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || \
-		fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
-fi
+[[ -v CODEMGR_WS ]] || \
+	fatal_error "Error: Variable CODEMGR_WS not set."
+[[ -d "${CODEMGR_WS}" ]] || \
+	fatal_error "Error: ${CODEMGR_WS} is not a directory."
+[[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || \
+	fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
 
 #
 # place ourselves in a new task, respecting BUILD_PROJECT if set.
@@ -701,20 +691,6 @@ if [ "$NIGHTLY_OPTIONS" = "" ]; then
 	NIGHTLY_OPTIONS="-aBm"
 fi
 
-#
-# If BRINGOVER_WS was not specified, let it default to CLONE_WS
-#
-if [ "$BRINGOVER_WS" = "" ]; then
-	BRINGOVER_WS=$CLONE_WS
-fi
-
-#
-# If BRINGOVER_FILES was not specified, default to usr
-#
-if [ "$BRINGOVER_FILES" = "" ]; then
-	BRINGOVER_FILES="usr"
-fi
-
 check_closed_bins
 
 #
@@ -723,7 +699,7 @@ check_closed_bins
 #
 NIGHTLY_OPTIONS=-${NIGHTLY_OPTIONS#-}
 OPTIND=1
-while getopts +ABCDdFfGIiMmNnpRrwW FLAG $NIGHTLY_OPTIONS
+while getopts +ABCDdFfGIiMmNpRrwW FLAG $NIGHTLY_OPTIONS
 do
 	case $FLAG in
 	  A )	A_FLAG=y
@@ -749,8 +725,6 @@ do
 	  m )	m_FLAG=y
 		;;
 	  N )	N_FLAG=y
-		;;
-	  n )	n_FLAG=y
 		;;
 	  p )	p_FLAG=y
 		;;
@@ -1202,40 +1176,7 @@ if [ "$w_FLAG" = "y" -a "$MULTI_PROTO" = yes -a -d "$ROOT-nd" ]; then
 	mv $ROOT-nd $ROOT-nd.prev
 fi
 
-#
-# Echo the SCM type of the parent workspace, this can't just be which_scm
-# as that does not know how to identify various network repositories.
-#
-function parent_wstype {
-	typeset scm_type junk
-
-	CODEMGR_WS="$BRINGOVER_WS" "$WHICH_SCM" 2>/dev/null \
-	    | read scm_type junk
-	if [[ -z "$scm_type" || "$scm_type" == unknown ]]; then
-		# Probe BRINGOVER_WS to determine its type
-		if [[ $BRINGOVER_WS == ssh://* ]]; then
-			scm_type="mercurial"
-		elif [[ $BRINGOVER_WS == http://* ]] && \
-		    wget -q -O- --save-headers "$BRINGOVER_WS/?cmd=heads" | \
-		    egrep -s "application/mercurial" 2> /dev/null; then
-			scm_type="mercurial"
-		else
-			scm_type="none"
-		fi
-	fi    
-
-	# fold both unsupported and unrecognized results into "none"
-	case "$scm_type" in
-	mercurial)
-		;;
-	*)	scm_type=none
-		;;
-	esac
-
-	echo $scm_type
-}
-
-# Echo the SCM types of $CODEMGR_WS and $BRINGOVER_WS
+# Echo the SCM types of $CODEMGR_WS
 function child_wstype {
 	typeset scm_type junk
 
@@ -1318,174 +1259,6 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	env -i PATH=/usr/bin bmake -C $CODEMGR_WS cleandir >> $LOGFILE 2>&1
 else
 	echo "\n==== No clobber at `date` ====\n" >> $LOGFILE
-fi
-
-type bringover_mercurial > /dev/null 2>&1 || function bringover_mercurial {
-	typeset -x PATH=$PATH
-
-	# If the repository doesn't exist yet, then we want to populate it.
-	if [[ ! -d $CODEMGR_WS/.hg ]]; then
-		staffer hg init $CODEMGR_WS
-		staffer echo "[paths]" > $CODEMGR_WS/.hg/hgrc
-		staffer echo "default=$BRINGOVER_WS" >> $CODEMGR_WS/.hg/hgrc
-		touch $TMPDIR/new_repository
-	fi
-
-	typeset -x HGMERGE="/bin/false"
-
-	#
-	# If the user has changes, regardless of whether those changes are
-	# committed, and regardless of whether those changes conflict, then
-	# we'll attempt to merge them either implicitly (uncommitted) or
-	# explicitly (committed).
-	#
-	# These are the messages we'll use to help clarify mercurial output
-	# in those cases.
-	#
-	typeset mergefailmsg="\
-***\n\
-*** nightly was unable to automatically merge your changes.  You should\n\
-*** redo the full merge manually, following the steps outlined by mercurial\n\
-*** above, then restart nightly.\n\
-***\n"
-	typeset mergepassmsg="\
-***\n\
-*** nightly successfully merged your changes.  This means that your working\n\
-*** directory has been updated, but those changes are not yet committed.\n\
-*** After nightly completes, you should validate the results of the merge,\n\
-*** then use hg commit manually.\n\
-***\n"
-
-	#
-	# For each repository in turn:
-	#
-	# 1. Do the pull.  If this fails, dump the output and bail out.
-	#
-	# 2. If the pull resulted in an extra head, do an explicit merge.
-	#    If this fails, dump the output and bail out.
-	#
-	# Because we can't rely on Mercurial to exit with a failure code
-	# when a merge fails (Mercurial issue #186), we must grep the
-	# output of pull/merge to check for attempted and/or failed merges.
-	#
-	# 3. If a merge failed, set the message and fail the bringover.
-	#
-	# 4. Otherwise, if a merge succeeded, set the message
-	#
-	# 5. Dump the output, and any message from step 3 or 4.
-	#
-
-	typeset HG_SOURCE=$BRINGOVER_WS
-	if [ ! -f $TMPDIR/new_repository ]; then
-		HG_SOURCE=$TMPDIR/open_bundle.hg
-		staffer hg --cwd $CODEMGR_WS incoming --bundle $HG_SOURCE \
-		    -v $BRINGOVER_WS > $TMPDIR/incoming_open.out
-
-		#
-		# If there are no incoming changesets, then incoming will
-		# fail, and there will be no bundle file.  Reset the source,
-		# to allow the remaining logic to complete with no false
-		# negatives.  (Unlike incoming, pull will return success
-		# for the no-change case.)
-		#
-		if (( $? != 0 )); then
-			HG_SOURCE=$BRINGOVER_WS
-		fi
-	fi
-
-	staffer hg --cwd $CODEMGR_WS pull -u $HG_SOURCE \
-	    > $TMPDIR/pull_open.out 2>&1
-	if (( $? != 0 )); then
-		printf "%s: pull failed as follows:\n\n" "$CODEMGR_WS"
-		cat $TMPDIR/pull_open.out
-		if grep "^merging.*failed" $TMPDIR/pull_open.out > /dev/null 2>&1; then
-			printf "$mergefailmsg"
-		fi
-		touch $TMPDIR/bringover_failed
-		return
-	fi
-
-	if grep "not updating" $TMPDIR/pull_open.out > /dev/null 2>&1; then
-		staffer hg --cwd $CODEMGR_WS merge \
-		    >> $TMPDIR/pull_open.out 2>&1
-		if (( $? != 0 )); then
-			printf "%s: merge failed as follows:\n\n" \
-			    "$CODEMGR_WS"
-			cat $TMPDIR/pull_open.out
-			if grep "^merging.*failed" $TMPDIR/pull_open.out \
-			    > /dev/null 2>&1; then
-				printf "$mergefailmsg"
-			fi
-			touch $TMPDIR/bringover_failed
-			return
-		fi
-	fi
-
-	printf "updated %s with the following results:\n" "$CODEMGR_WS"
-	cat $TMPDIR/pull_open.out
-	if grep "^merging" $TMPDIR/pull_open.out >/dev/null 2>&1; then
-		printf "$mergepassmsg"
-	fi
-	printf "\n"
-
-	#
-	# Per-changeset output is neither useful nor manageable for a
-	# newly-created repository.
-	#
-	if [ -f $TMPDIR/new_repository ]; then
-		return
-	fi
-
-	printf "\nadded the following changesets to open repository:\n"
-	cat $TMPDIR/incoming_open.out
-}
-
-type bringover_none > /dev/null 2>&1 || function bringover_none {
-	echo "Couldn't figure out what kind of SCM to use for $BRINGOVER_WS."
-	touch $TMPDIR/bringover_failed
-}
-
-#
-#	Decide whether to bringover to the codemgr workspace
-#
-if [ "$n_FLAG" = "n" ]; then
-	PARENT_SCM_TYPE=$(parent_wstype)
-
-	if [[ $SCM_TYPE != none && $SCM_TYPE != $PARENT_SCM_TYPE ]]; then
-		echo "cannot bringover from $PARENT_SCM_TYPE to $SCM_TYPE, " \
-		    "quitting at `date`." | tee -a $mail_msg_file >> $LOGFILE
-		exit 1
-	fi
-
-	run_hook PRE_BRINGOVER
-
-	echo "\n==== bringover to $CODEMGR_WS at `date` ====\n" >> $LOGFILE
-	echo "\n==== BRINGOVER LOG ====\n" >> $mail_msg_file
-
-	eval "bringover_${PARENT_SCM_TYPE}" 2>&1 |
-		tee -a $mail_msg_file >> $LOGFILE
-
-	if [ -f $TMPDIR/bringover_failed ]; then
-		rm -f $TMPDIR/bringover_failed
-		build_ok=n
-		echo "trouble with bringover, quitting at `date`." |
-			tee -a $mail_msg_file >> $LOGFILE
-		exit 1
-	fi
-
-	#
-	# It's possible that we used the bringover above to create
-	# $CODEMGR_WS.  If so, then SCM_TYPE was previously "none,"
-	# but should now be the same as $BRINGOVER_WS.
-	#
-	[[ $SCM_TYPE = none ]] && SCM_TYPE=$PARENT_SCM_TYPE
-
-	run_hook POST_BRINGOVER
-
-	check_closed_bins
-
-else
-	echo "\n==== No bringover to $CODEMGR_WS ====\n" >> $LOGFILE
 fi
 
 # Safeguards

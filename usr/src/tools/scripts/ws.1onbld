@@ -217,19 +217,6 @@ build a new command in your avocet workspace you will be building
 against the new copy of the constrained file(libc.so) which you
 obtain from your parents proto area, you are no longer isolated from
 these updates as you were in the NSE.
-.LP
-If you would like to be isolated from updates in the
-world around you there are a couple of approaches you can take.  First,
-if you bringover a full copy of the SunOS source base you could
-build your own PROTO area which you would link against.
-Secondly, you could link against a private
-PROTO area which is a stable snapshot of a global proto area.
-This proto area could be a subset
-of a full proto area and contain only those files which you are concerned
-about.  Both of these methods would protect you from updates to files
-because you would be in full control of the proto areas you are linking
-against.  It would be your responsiblity to update your proto area
-as your work progressed.
 .SH EXAMPLES
 .LP
 In the following examples you will modify the
@@ -353,8 +340,6 @@ CODEMGR_WS
 .RS 5
 Absolute pathname to the Avocet workspace.  This environment variable
 is referenced by the
-.I bringover
-,
 .I putback
 ,
 and
@@ -405,7 +390,6 @@ $CODEMGR_WS/avocet/sunos/protodefs
 .SH "SEE ALSO"
 .LP
 .IR workspace (1),
-.IR bringover (1ONBLD),
 .IR putback (1),
 .IR protodefs(5)
 .SH BUGS

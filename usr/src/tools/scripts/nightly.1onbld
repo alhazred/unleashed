@@ -29,7 +29,7 @@
 .LP
 .I nightly,
 the mother of all build scripts,
-can bringover, build, archive, package, error check, and
+can build, archive, package, error check, and
 generally do everything it takes to
 turn OS/Net consolidation source code into useful stuff.
 It is customizable to permit you to run anything from a
@@ -52,9 +52,6 @@ all these things are desired:
 .TP
 \(bu
 perform a "make clobber" to clean up old binaries
-.TP
-\(bu
-bringover from the identified parent gate/clone
 .TP
 \(bu
 perform non-DEBUG and DEBUG builds
@@ -135,10 +132,6 @@ Do an incremental build, suppressing the "make clobber" that by
 default removes all existing binaries and derived files.  From the
 command line, -i also suppresses the cstyle/hdrchk pass
 .TP
-.B \-n
-Suppress the bringover so that the build will start immediately with
-current source code
-.TP
 .B \-p
 Create packages for regular install
 .TP
@@ -205,22 +198,6 @@ the source code management system.  This is the workspace in which the
 build will be done.
 .RE
 .LP
-.B BRINGOVER_WS
-.RS 5
-This is the workspace from which
-.I nightly
-will fetch sources to either populate or update your workspace;
-it defaults to $CLONE_WS.
-.RE
-.LP
-.B CLONE_WS
-.RS 5
-This is the workspace from which
-.I nightly
-will fetch sources by default.  This is
-often distinct from the parent, particularly if the parent is a gate.
-.RE
-.LP
 .B SRC
 .RS 5
 Root of OS-Net source code, referenced by the Makefiles.  It is
@@ -280,8 +257,7 @@ This should generally be left to the default setting.
 .B STAFFER
 .RS 5
 The non-root account to use on the build machine for the
-bringover from the clone or parent workspace.
-This may not be the same identify used by the SCM.
+creation of certain files and directories during nightly run.
 .RE
 .LP
 .B MAILTO
@@ -402,16 +378,6 @@ per-build-machine customizations and should be set only in /etc/nightly.conf
 .B PRE_NIGHTLY
 .RS 5
 Run just after SYS_PRE_NIGHTLY.
-.RE
-.LP
-.B PRE_BRINGOVER
-.RS 5
-Run just before bringover is started; not run if no bringover is done.
-.RE
-.LP
-.B POST_BRINGOVER
-.RS 5
-Run just after bringover completes; not run if no bringover is done.
 .RE
 .LP
 .B POST_NIGHTLY

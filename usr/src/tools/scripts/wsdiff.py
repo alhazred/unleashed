@@ -32,7 +32,6 @@
 # and without the source changes.
 #
 # Using wsdiff(1) is fairly simple:
-#	- Bringover to a fresh workspace
 #	- Perform a full non-debug build (clobber if workspace isn't fresh)
 #	- Move the proto area aside, call it proto.old, or something.
 #	- Integrate your changes to the workspace

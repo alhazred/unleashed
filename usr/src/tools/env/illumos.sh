@@ -31,7 +31,6 @@
 # will contain the resulting archives. It is based off the onnv
 # release. It sets NIGHTLY_OPTIONS to make nightly do:
 #       DEBUG build only (-D, -F)
-#       do not bringover from the parent (-n)
 #       runs 'make check' (-C)
 #       checks for new interfaces in libraries (-A)
 #       sends mail on completion (-m and the MAILTO variable)
@@ -87,15 +86,9 @@ function maxjobs
 maxjobs DMAKE_MAX_JOBS # "DMAKE_MAX_JOBS" passed as ksh(1) name reference
 export DMAKE_MAX_JOBS
 
-# CLONE_WS is the workspace nightly should do a bringover from.
-export CLONE_WS='ssh://anonhg@hg.illumos.org/illumos-gate'
-
-# The bringover, if any, is done as STAFFER.
-# Set STAFFER to your own login as gatekeeper or developer
-# The point is to use group "staff" and avoid referencing the parent
-# workspace as root.
+# Set STAFFER to your own login and nightly will use this account (if run as
+# root) for certain file and directory creation.
 # Some scripts optionally send mail messages to MAILTO.
-#
 export STAFFER="$LOGNAME"
 export MAILTO="$STAFFER"
 
