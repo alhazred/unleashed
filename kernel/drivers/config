@@ -1,4 +1,9 @@
 ((config
+   ; support for loopback disk devices
+   LOFI
+   #t)
+
+ (config
    ; support for ramdisk devices
    RAMDISK
    #t)
