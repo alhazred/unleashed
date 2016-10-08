@@ -1027,8 +1027,6 @@ PCIHPNEXUS_OBJS += pcihp.o
 
 OPENEEPR_OBJS += openprom.o
 
-RANDOM_OBJS += random.o
-
 PSHOT_OBJS += pshot.o
 
 GEN_DRV_OBJS += gen_drv.o

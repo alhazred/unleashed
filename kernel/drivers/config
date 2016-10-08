@@ -4,6 +4,11 @@
    #t)
 
  (config
+   ; support for /dev/random and /dev/urandom
+   RANDOM
+   #t)
+
+ (config
    ; support for virtio devices
    VIRTIO
    (= MACH 'i386)))

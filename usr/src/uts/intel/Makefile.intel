@@ -296,7 +296,6 @@ DRV_KMODS	+= ptsl
 DRV_KMODS	+= qlge
 DRV_KMODS	+= radeon
 DRV_KMODS	+= ral
-DRV_KMODS	+= random
 DRV_KMODS	+= rds
 DRV_KMODS	+= rdsv3
 DRV_KMODS	+= rpcib
