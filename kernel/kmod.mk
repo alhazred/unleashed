@@ -12,6 +12,7 @@
 #   SRCS		- source files
 #   SRCS32		- additional source files (32-bit build only)
 #   SRCS64		- additional source files (64-bit build only)
+#   SRCS_DIRS		- additional source directories to search in
 #   INCS		- compiler include directives
 #   CERRWARN		- compiler error warning args (e.g., -Wno-parentheses)
 #
@@ -174,6 +175,10 @@ INSTALLTGTS+=install-64
 .if !empty(MODULE_CONF)
 INSTALLTGTS+=install-conf
 .endif
+.endif
+
+.if !empty(SRCS_DIRS)
+.PATH: ${SRCS_DIRS}
 .endif
 
 CC=/opt/gcc/4.4.4/bin/gcc
