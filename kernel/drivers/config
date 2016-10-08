@@ -1,4 +1,9 @@
 ((config
+   ; support for ramdisk devices
+   RAMDISK
+   #t)
+
+ (config
    ; support for virtio devices
    VIRTIO
    (= MACH 'i386)))

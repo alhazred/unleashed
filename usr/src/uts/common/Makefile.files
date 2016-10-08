@@ -753,8 +753,6 @@ SRN_OBJS +=	srn.o
 
 PSEUDO_OBJS +=	pseudonex.o
 
-RAMDISK_OBJS +=	ramdisk.o
-
 LLC1_OBJS += llc1.o
 
 USBKBM_OBJS += usbkbm.o
