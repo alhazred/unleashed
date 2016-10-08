@@ -209,7 +209,7 @@ install-64: $(MODULE)-64
 install-conf: ${MODULE_CONF}
 	$(INS) -m 644 ${MODULE_CONF} "$(DESTDIR)/kernel/${MODULE_TYPE}/${MODULE}.conf"
 
-.PHONY: all clean install-32 install-64 install-conf
+.PHONY: all clean cleandir install-32 install-64 install-conf
 
 $(MODULE)-32: $(OBJS32)
 	$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
