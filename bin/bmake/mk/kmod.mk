@@ -194,6 +194,18 @@ INS=/usr/bin/install
 CTFCONVERT=/opt/onbld/bin/i386/ctfconvert
 CTFMERGE=/opt/onbld/bin/i386/ctfmerge
 
+.if !empty(VERBOSE) && ${VERBOSE} != "0" && ${VERBOSE} != "no"
+QCC=
+QLD=
+QCTFCVT=
+QCTFMRG=
+.else
+QCC=@echo "  CC    ${.IMPSRC}";
+QLD=@echo "  LD    ${.TARGET}";
+QCTFCVT=@
+QCTFMRG=@
+.endif
+
 all: $(MODULES)
 
 clean cleandir:
@@ -224,19 +236,19 @@ install-conf: ${MODULE_CONF}
 .PHONY: all clean cleandir install-32 install-64 install-conf
 
 $(MODULE)-32: $(OBJS32)
-	$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
-	$(CTFMERGE) -L VERSION -o ${.TARGET} ${.ALLSRC}
+	${QLD}$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
+	${QCTFMRG}$(CTFMERGE) -L VERSION -o ${.TARGET} ${.ALLSRC}
 
 $(MODULE)-64: $(OBJS64)
-	$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
-	$(CTFMERGE) -L VERSION -o ${.TARGET} ${.ALLSRC}
+	${QLD}$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
+	${QCTFMRG}$(CTFMERGE) -L VERSION -o ${.TARGET} ${.ALLSRC}
 
 .SUFFIXES: -32.o -64.o
 
 .c-32.o:
-	$(CC) $(CFLAGS32) -c -o ${.TARGET} ${.IMPSRC}
-	$(CTFCONVERT) -i -L VERSION ${.TARGET}
+	${QCC}$(CC) $(CFLAGS32) -c -o ${.TARGET} ${.IMPSRC}
+	${QCTFCVT}$(CTFCONVERT) -i -L VERSION ${.TARGET}
 
 .c-64.o:
-	$(CC) $(CFLAGS64) -c -o ${.TARGET} ${.IMPSRC}
-	$(CTFCONVERT) -i -L VERSION ${.TARGET}
+	${QCC}$(CC) $(CFLAGS64) -c -o ${.TARGET} ${.IMPSRC}
+	${QCTFCVT}$(CTFCONVERT) -i -L VERSION ${.TARGET}
