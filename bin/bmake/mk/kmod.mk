@@ -14,6 +14,7 @@
 #   SRCS64		- additional source files (64-bit build only)
 #   SRCS_DIRS		- additional source directories to search in
 #   INCS		- compiler include directives
+#   DEFS		- compiler defines (e.g., -DFOO -UBAR)
 #   CERRWARN		- compiler error warning args (e.g., -Wno-parentheses)
 #
 # The config system tells us:
@@ -128,7 +129,8 @@ CFLAGS32 = \
 	$(KERNEL_INCLUDES) \
 	$(KERNEL_INCLUDES_$(CONFIG_MACH)) \
 	$(CERRWARN) \
-	$(INCS:%=-I%)
+	$(INCS:%=-I%) \
+	$(DEFS)
 
 CFLAGS64 = \
 	$(KERNEL_CFLAGS) \
@@ -138,7 +140,8 @@ CFLAGS64 = \
 	$(KERNEL_INCLUDES) \
 	$(KERNEL_INCLUDES_$(CONFIG_MACH)) \
 	$(CERRWARN) \
-	$(INCS:%=-I%)
+	$(INCS:%=-I%) \
+	$(DEFS)
 
 KERNEL_LDFLAGS = \
 	-r
