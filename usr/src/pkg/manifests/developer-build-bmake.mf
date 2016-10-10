@@ -16,134 +16,75 @@
 set name=pkg.fmri value=pkg:/developer/build/bmake@$(PKGVERS)
 set name=pkg.description value="NetBSD make(1)"
 set name=pkg.summary value="NetBSD make(1)"
+dir path=usr
+dir path=usr/share
+dir path=usr/share/man
 dir path=usr/share/man/man1
-dir path=usr/share/mk group=bin mode=0755 owner=root
-dir path=usr/share/mk/sys group=bin mode=0755 owner=root
-file usr/bin/bmake path=usr/bin/bmake group=bin mode=0555 owner=root
-file usr/share/man/man1/bmake.1 path=usr/share/man/man1/bmake.1 group=bin \
-    mode=0444 owner=root
-file usr/share/mk/auto.dep.mk path=usr/share/mk/auto.dep.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/auto.obj.mk path=usr/share/mk/auto.obj.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/autoconf.mk path=usr/share/mk/autoconf.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/autodep.mk path=usr/share/mk/autodep.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/cython.mk path=usr/share/mk/cython.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/dep.mk path=usr/share/mk/dep.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/dirdeps.mk path=usr/share/mk/dirdeps.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/doc.mk path=usr/share/mk/doc.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/dpadd.mk path=usr/share/mk/dpadd.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/final.mk path=usr/share/mk/final.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/gendirdeps.mk path=usr/share/mk/gendirdeps.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/host-target.mk path=usr/share/mk/host-target.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/host.libnames.mk path=usr/share/mk/host.libnames.mk \
-    group=bin mode=0444 owner=root
-file usr/share/mk/inc.mk path=usr/share/mk/inc.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/init.mk path=usr/share/mk/init.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/install-new.mk path=usr/share/mk/install-new.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/java.mk path=usr/share/mk/java.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/kmod.mk path=usr/share/mk/kmod.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/lib.mk path=usr/share/mk/lib.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/libnames.mk path=usr/share/mk/libnames.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/libs.mk path=usr/share/mk/libs.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/links.mk path=usr/share/mk/links.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/man.mk path=usr/share/mk/man.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/manifest.mk path=usr/share/mk/manifest.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/meta.autodep.mk path=usr/share/mk/meta.autodep.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/meta.stage.mk path=usr/share/mk/meta.stage.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/meta.subdir.mk path=usr/share/mk/meta.subdir.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/meta.sys.mk path=usr/share/mk/meta.sys.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/meta2deps.py path=usr/share/mk/meta2deps.py group=bin \
-    mode=0555 owner=root pkg.depend.bypass-generate=.*
-file usr/share/mk/meta2deps.sh path=usr/share/mk/meta2deps.sh group=bin \
-    mode=0555 owner=root
-file usr/share/mk/mkopt.sh path=usr/share/mk/mkopt.sh group=bin mode=0555 \
-    owner=root
-file usr/share/mk/nls.mk path=usr/share/mk/nls.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/obj.mk path=usr/share/mk/obj.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/options.mk path=usr/share/mk/options.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/own.mk path=usr/share/mk/own.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/prlist.mk path=usr/share/mk/prlist.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/prog.mk path=usr/share/mk/prog.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/progs.mk path=usr/share/mk/progs.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/rst2htm.mk path=usr/share/mk/rst2htm.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/scripts.mk path=usr/share/mk/scripts.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/srctop.mk path=usr/share/mk/srctop.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/stage-install.sh path=usr/share/mk/stage-install.sh \
-    group=bin mode=0555 owner=root
-file usr/share/mk/subdir.mk path=usr/share/mk/subdir.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/sys.clean-env.mk path=usr/share/mk/sys.clean-env.mk \
-    group=bin mode=0444 owner=root
-file usr/share/mk/sys.dependfile.mk path=usr/share/mk/sys.dependfile.mk \
-    group=bin mode=0444 owner=root
-file usr/share/mk/sys.mk path=usr/share/mk/sys.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/sys/AIX.mk path=usr/share/mk/sys/AIX.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/sys/Darwin.mk path=usr/share/mk/sys/Darwin.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/sys/Generic.mk path=usr/share/mk/sys/Generic.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/sys/HP-UX.mk path=usr/share/mk/sys/HP-UX.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/sys/IRIX.mk path=usr/share/mk/sys/IRIX.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/sys/Linux.mk path=usr/share/mk/sys/Linux.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/sys/NetBSD.mk path=usr/share/mk/sys/NetBSD.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/sys/OSF1.mk path=usr/share/mk/sys/OSF1.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/sys/OpenBSD.mk path=usr/share/mk/sys/OpenBSD.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/sys/UnixWare.mk path=usr/share/mk/sys/UnixWare.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/sys/illumos.mk path=usr/share/mk/sys/illumos.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/target-flags.mk path=usr/share/mk/target-flags.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/warnings.mk path=usr/share/mk/warnings.mk group=bin \
-    mode=0444 owner=root
-file usr/share/mk/whats.mk path=usr/share/mk/whats.mk group=bin mode=0444 \
-    owner=root
-file usr/share/mk/yacc.mk path=usr/share/mk/yacc.mk group=bin mode=0444 \
-    owner=root
+dir path=usr/share/mk
+dir path=usr/share/mk/sys
+file path=usr/bin/bmake mode=0555
+file path=usr/share/man/man1/bmake.1
+file path=usr/share/mk/auto.dep.mk
+file path=usr/share/mk/auto.obj.mk
+file path=usr/share/mk/autoconf.mk
+file path=usr/share/mk/autodep.mk
+file path=usr/share/mk/cython.mk
+file path=usr/share/mk/dep.mk
+file path=usr/share/mk/dirdeps.mk
+file path=usr/share/mk/doc.mk
+file path=usr/share/mk/dpadd.mk
+file path=usr/share/mk/final.mk
+file path=usr/share/mk/gendirdeps.mk
+file path=usr/share/mk/host-target.mk
+file path=usr/share/mk/host.libnames.mk
+file path=usr/share/mk/inc.mk
+file path=usr/share/mk/init.mk
+file path=usr/share/mk/install-new.mk
+file path=usr/share/mk/java.mk
+file path=usr/share/mk/kmod.mk
+file path=usr/share/mk/lib.mk
+file path=usr/share/mk/libnames.mk
+file path=usr/share/mk/libs.mk
+file path=usr/share/mk/links.mk
+file path=usr/share/mk/man.mk
+file path=usr/share/mk/manifest.mk
+file path=usr/share/mk/meta.autodep.mk
+file path=usr/share/mk/meta.stage.mk
+file path=usr/share/mk/meta.subdir.mk
+file path=usr/share/mk/meta.sys.mk
+file path=usr/share/mk/meta2deps.py mode=0555 pkg.depend.bypass-generate=.*
+file path=usr/share/mk/meta2deps.sh mode=0555
+file path=usr/share/mk/mkopt.sh mode=0555
+file path=usr/share/mk/nls.mk
+file path=usr/share/mk/obj.mk
+file path=usr/share/mk/options.mk
+file path=usr/share/mk/own.mk
+file path=usr/share/mk/prlist.mk
+file path=usr/share/mk/prog.mk
+file path=usr/share/mk/progs.mk
+file path=usr/share/mk/rst2htm.mk
+file path=usr/share/mk/scripts.mk
+file path=usr/share/mk/srctop.mk
+file path=usr/share/mk/stage-install.sh mode=0555
+file path=usr/share/mk/subdir.mk
+file path=usr/share/mk/sys.clean-env.mk
+file path=usr/share/mk/sys.dependfile.mk
+file path=usr/share/mk/sys.mk
+file path=usr/share/mk/sys/AIX.mk
+file path=usr/share/mk/sys/Darwin.mk
+file path=usr/share/mk/sys/Generic.mk
+file path=usr/share/mk/sys/HP-UX.mk
+file path=usr/share/mk/sys/IRIX.mk
+file path=usr/share/mk/sys/Linux.mk
+file path=usr/share/mk/sys/NetBSD.mk
+file path=usr/share/mk/sys/OSF1.mk
+file path=usr/share/mk/sys/OpenBSD.mk
+file path=usr/share/mk/sys/UnixWare.mk
+file path=usr/share/mk/sys/illumos.mk
+file path=usr/share/mk/target-flags.mk
+file path=usr/share/mk/warnings.mk
+file path=usr/share/mk/whats.mk
+file path=usr/share/mk/yacc.mk
 link path=usr/share/mk/bsd.dep.mk target=dep.mk
 link path=usr/share/mk/bsd.doc.mk target=doc.mk
 link path=usr/share/mk/bsd.init.mk target=init.mk
