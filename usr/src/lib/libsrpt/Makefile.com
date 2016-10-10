@@ -32,7 +32,7 @@ LIBS =		$(DYNLIB)
 
 SRCDIR =	../common
 
-SRPTMODDIR =	../../../uts/common/io/comstar/port/srpt
+SRPTMODDIR =	../../../../../kernel/comstar/port/srpt
 
 INCS +=		-I$(SRCDIR) -I$(SRPTMODDIR)
 

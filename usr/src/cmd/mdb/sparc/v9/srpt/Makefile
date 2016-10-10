@@ -29,7 +29,7 @@ MDBTGT = kvm
 MODSRCS = srpt.c
 
 UTSBASE = ../../../../../uts
-COMSTARBASE = $(UTSBASE)/common/io/comstar
+COMSTARBASE = $(UTSBASE)/../../../kernel/comstar
 SRPTBASE = $(COMSTARBASE)/port/srpt
 
 include ../../../../Makefile.cmd

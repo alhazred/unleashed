@@ -28,7 +28,7 @@ PROG =	svc-srpt
 
 include ../Makefile.cmd
 
-SRPTBASE = ../../uts/common/io/comstar/port/srpt
+SRPTBASE = ../../../../kernel/comstar/port/srpt
 
 OBJS = srptsvc.o
 SRCS =	$(OBJS:%.o=%.c)

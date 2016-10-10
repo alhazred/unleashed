@@ -28,7 +28,7 @@ MDBTGT = kvm
 
 MODSRCS = idm.c
 
-ISCSITBASE = ../../../../../uts/common/io/comstar/port/iscsit
+ISCSITBASE = ../../../../../../../kernel/comstar/port/iscsit
 ISCSIBASE = ../../../../../uts/common/io/scsi/adapters/iscsi
 ISERBASE = ../../../../../uts/common
 

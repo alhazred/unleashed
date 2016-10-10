@@ -28,7 +28,7 @@ MDBTGT = kvm
 
 MODSRCS = stmf.c
 
-COMSTARBASE = ../../../../../uts/common/io/comstar
+COMSTARBASE = ../../../../../../../kernel/comstar
 
 include ../../../../Makefile.cmd
 include ../../../../Makefile.cmd.64

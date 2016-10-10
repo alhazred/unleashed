@@ -1,4 +1,5 @@
-SUBDIR = drivers \
+SUBDIR = comstar \
+	 drivers \
 	 fs \
 	 sched
 
