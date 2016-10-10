@@ -16,6 +16,8 @@
  (config
    ; support for virtio devices
    VIRTIO
-   (= MACH 'i386)))
+   (= MACH 'i386))
+
+ (include "net/config"))
 
 ; vim: set syntax=scheme:
