@@ -8,8 +8,6 @@ SRCS=		pc_alloc.c \
 		pc_vnops.c
 
 CERRWARN =  -Wno-parentheses
-CERRWARN += -Wno-type-limits
-CERRWARN += -Wno-unused-label
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-unused-function
 
