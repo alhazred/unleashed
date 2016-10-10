@@ -206,7 +206,8 @@ function build {
 	rm -f $SRC/${INSTALLOG}-bmake-all.out
 	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
 		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
-			DESTDIR=$ROOT all 2>&1 | \
+			DESTDIR=$ROOT \
+			VERBOSE=yes all 2>&1 | \
 		tee -a $SRC/${INSTALLOG}-bmake-all.out >> $LOGFILE
 
 	echo "\n==== \`bmake all\` errors ($LABEL) ====\n" >> $mail_msg_file
@@ -228,7 +229,8 @@ function build {
 	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
 		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
 			DESTDIR=$ROOT \
-			MK_INSTALL_AS_USER=yes install 2>&1 | \
+			MK_INSTALL_AS_USER=yes \
+			VERBOSE=yes install 2>&1 | \
 		tee -a $SRC/${INSTALLOG}-bmake-install.out >> $LOGFILE
 
 	echo "\n==== \`bmake install\` errors ($LABEL) ====\n" >> $mail_msg_file
