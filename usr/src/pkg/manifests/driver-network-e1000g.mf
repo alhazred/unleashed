@@ -218,5 +218,5 @@ $(i386_ONLY)file path=kernel/drv/e1000g group=sys
 file path=kernel/drv/e1000g.conf group=sys preserve=renamenew
 legacy pkg=SUNWintgige desc="Intel(R) PRO/1000 Server Adapter Driver" \
     name="Intel(R) PRO/1000 Server Adapter Driver"
-license usr/src/uts/common/io/e1000g/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/e1000g/THIRDPARTYLICENSE
+license kernel/drivers/net/e1000g/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/e1000g/THIRDPARTYLICENSE

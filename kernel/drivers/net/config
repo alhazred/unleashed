@@ -1,4 +1,14 @@
 ((config
+   ; support for e1000g network adapters
+   E1000G
+   #t)
+
+ (config
+   ; support for igb network adapters
+   IGB
+   #t)
+
+ (config
    ; support for virtio network devices
    VIRTIO_NET
    (and
