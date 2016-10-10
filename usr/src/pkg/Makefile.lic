@@ -40,6 +40,12 @@ $(LICROOT)/usr/src/%: $(CODEMGR_WS)/usr/src/%
 	$(PKGDEBUG)if [ ! -d $(@D) ]; then mkdir -p $(@D); fi
 	$(PKGDEBUG)$(INS.file)
 
+# this is a terrible hack, we're reaching into bmake-build source tree to
+# grab the license file
+$(LICROOT)/kernel/%: $(CODEMGR_WS)/kernel/%
+	$(PKGDEBUG)if [ ! -d $(@D) ]; then mkdir -p $(@D); fi
+	$(PKGDEBUG)$(INS.file)
+
 #
 # A build without closed source relies on closed-bins extraction to stage
 # the license file and does nothing here.

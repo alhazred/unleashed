@@ -4,4 +4,5 @@ MODULE_DEPS=	misc/kcf
 MODULE_CONF=	random.conf
 SRCS=		random.c
 
-.include <../../kmod.mk>
+REPOROOT = ../../..
+.include <kmod.mk>

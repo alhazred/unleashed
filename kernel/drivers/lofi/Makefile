@@ -9,4 +9,5 @@ INCS=		-I../../../usr/src/common/lzma
 
 CERRWARN = -Wno-uninitialized
 
-.include <../../kmod.mk>
+REPOROOT = ../../..
+.include <kmod.mk>

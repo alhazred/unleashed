@@ -39,7 +39,11 @@
 # build the module for.
 #
 
-.include <../../../Makefile.cfgparam>
+.if empty(REPOROOT)
+.error "You must define REPOROOT to point to the top-level of the repository"
+.endif
+
+.include <${REPOROOT}/Makefile.cfgparam>
 
 KERNEL_CFLAGS = \
 	-fident \

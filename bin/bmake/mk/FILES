@@ -16,6 +16,7 @@ inc.mk
 init.mk
 install-mk
 java.mk
+kmod.mk
 lib.mk
 libnames.mk
 libs.mk

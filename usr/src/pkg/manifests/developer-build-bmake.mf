@@ -56,6 +56,8 @@ file usr/share/mk/install-new.mk path=usr/share/mk/install-new.mk group=bin \
     mode=0444 owner=root
 file usr/share/mk/java.mk path=usr/share/mk/java.mk group=bin mode=0444 \
     owner=root
+file usr/share/mk/kmod.mk path=usr/share/mk/kmod.mk group=bin mode=0444 \
+    owner=root
 file usr/share/mk/lib.mk path=usr/share/mk/lib.mk group=bin mode=0444 \
     owner=root
 file usr/share/mk/libnames.mk path=usr/share/mk/libnames.mk group=bin \

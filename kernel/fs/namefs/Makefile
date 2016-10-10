@@ -5,4 +5,5 @@ SRCS=		namevfs.c \
 
 CERRWARN = -Wno-parentheses
 
-.include <../../kmod.mk>
+REPOROOT = ../../..
+.include <kmod.mk>

@@ -4,4 +4,5 @@ SRCS=		fx.c
 
 CERRWARN = -Wno-unused-variable
 
-.include <../../kmod.mk>
+REPOROOT = ../../..
+.include <kmod.mk>

@@ -17,4 +17,5 @@ CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-empty-body
 CERRWARN += -Wno-unused-variable
 
-.include <../../kmod.mk>
+REPOROOT = ../../..
+.include <kmod.mk>

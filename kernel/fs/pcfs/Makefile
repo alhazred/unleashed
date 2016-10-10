@@ -13,4 +13,5 @@ CERRWARN += -Wno-unused-label
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-unused-function
 
-.include <../../kmod.mk>
+REPOROOT = ../../..
+.include <kmod.mk>

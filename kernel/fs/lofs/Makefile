@@ -6,4 +6,5 @@ SRCS=		lofs_subr.c \
 
 CERRWARN = -Wno-parentheses
 
-.include <../../kmod.mk>
+REPOROOT = ../../..
+.include <kmod.mk>

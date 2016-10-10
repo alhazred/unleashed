@@ -15,4 +15,5 @@ CERRWARN += -Wno-unused-function
 CERRWARN += -Wno-type-limits
 CERRWARN += -Wno-switch
 
-.include <../../kmod.mk>
+REPOROOT = ../../..
+.include <kmod.mk>

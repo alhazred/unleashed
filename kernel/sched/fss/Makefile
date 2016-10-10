@@ -4,4 +4,5 @@ SRCS=		fss.c
 
 CERRWARN = -Wno-uninitialized
 
-.include <../../kmod.mk>
+REPOROOT = ../../..
+.include <kmod.mk>
