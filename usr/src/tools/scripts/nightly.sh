@@ -170,37 +170,20 @@ function build {
 
 	this_build_ok=y
 	#
-	#	Build OS-Networking source
+	#	Build the legacy part of the source
 	#
-	echo "\n==== Building OS-Net source at `date` ($LABEL) ====\n" \
+	echo "\n==== Building legacy source at `date` ($LABEL) ====\n" \
 		>> $LOGFILE
 
 	rm -f $SRC/${INSTALLOG}.out
 	cd $SRC
-	# ksh's time builtin's output can't be redirected in a command line, so
-	# run a subshell for that.
-	(
-	exec >> ${SRC}/${INSTALLOG}.out
-	exec 2>&1
-	time {
-	$MAKE -e install || echo "$MAKE -e install" >> $TMPDIR/build_fail
-	# unlike dmake, bmake's environment should be quite clean (for example
-	# MAKE and MAKEFLAGS are not desired). additionally bmake's "install"
-	# targets don't depend on "all" so we can't make both with the same
-	# invocation without races
-	env -i PATH=${GCC_ROOT}/bin:/usr/bin bmake -j $DMAKE_MAX_JOBS \
-	    -C $CODEMGR_WS DESTDIR=$ROOT all || \
-	    echo "bmake all" >> $TMPDIR/build_fail
-	env -i PATH=${GCC_ROOT}/bin:/usr/bin bmake -j $DMAKE_MAX_JOBS \
-	    -C $CODEMGR_WS DESTDIR=$ROOT MK_INSTALL_AS_USER=yes install || \
-	    echo "bmake install" >> $TMPDIR/build_fail
-	} 2>&1 | tee -a $LOGFILE
-	)
+	/bin/time $MAKE -e install 2>&1 | \
+	       tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
 
-	echo "\n==== Build errors ($LABEL) ====\n" >> $mail_msg_file
-		egrep -e "(^(${MAKE}:|bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
-		    ${SRC}/${INSTALLOG}.out | tee $TMPDIR/build_errs${SUFFIX} \
-		    >> $mail_msg_file
+	echo "\n==== Legacy build errors ($LABEL) ====\n" >> $mail_msg_file
+	egrep -e "(^(${MAKE}:|\*\*\*)|[ 	]error:[ 	\n])" \
+		${SRC}/${INSTALLOG}.out | tee $TMPDIR/build_errs${SUFFIX} \
+		>> $mail_msg_file
 	if [[ -s $TMPDIR/build_fail ]]; then
 		sed 's,$, returned non-zero exit status,' $TMPDIR/build_fail \
 		    >> $mail_msg_file
@@ -214,8 +197,57 @@ function build {
 		this_build_ok=n
 	fi
 
+	#
+	#	Build the new part of the source
+	#
+	echo "\n==== \`bmake all\` at `date` ($LABEL) ====\n" \
+		>> $LOGFILE
+
+	rm -f $SRC/${INSTALLOG}-bmake-all.out
+	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
+		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
+			DESTDIR=$ROOT all 2>&1 | \
+		tee -a $SRC/${INSTALLOG}-bmake-all.out >> $LOGFILE
+
+	echo "\n==== \`bmake all\` errors ($LABEL) ====\n" >> $mail_msg_file
+	egrep -e "(^(bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
+		${SRC}/${INSTALLOG}-bmake-all.out | \
+		tee $TMPDIR/build_errs${SUFFIX} \
+		>> $mail_msg_file
+	if [[ -s $TMPDIR/build_fail ]]; then
+		sed 's,$, returned non-zero exit status,' $TMPDIR/build_fail \
+		    >> $mail_msg_file
+		build_ok=n
+		this_build_ok=n
+	fi
+
+	echo "\n==== \`bmake install\` at `date` ($LABEL) ====\n" \
+		>> $LOGFILE
+
+	rm -f $SRC/${INSTALLOG}-bmake-install.out
+	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
+		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
+			DESTDIR=$ROOT \
+			MK_INSTALL_AS_USER=yes install 2>&1 | \
+		tee -a $SRC/${INSTALLOG}-bmake-install.out >> $LOGFILE
+
+	echo "\n==== \`bmake install\` errors ($LABEL) ====\n" >> $mail_msg_file
+	egrep -e "(^(bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
+		${SRC}/${INSTALLOG}-bmake-install.out | \
+		tee $TMPDIR/build_errs${SUFFIX} \
+		>> $mail_msg_file
+	if [[ -s $TMPDIR/build_fail ]]; then
+		sed 's,$, returned non-zero exit status,' $TMPDIR/build_fail \
+		    >> $mail_msg_file
+		build_ok=n
+		this_build_ok=n
+	fi
+
 	echo "\n==== Build warnings ($LABEL) ====\n" >>$mail_msg_file
-	egrep -i warning: $SRC/${INSTALLOG}.out \
+	cat $SRC/${INSTALLOG}.out \
+	    $SRC/${INSTALLOG}-bmake-all.out \
+	    $SRC/${INSTALLOG}-bmake-install.out \
+		| egrep -i warning: \
 		| egrep -v '^tic:' \
 		| egrep -v "symbol (\`|')timezone' has differing types:" \
 		| egrep -v "parameter <PSTAMP> set to" \
@@ -231,14 +263,24 @@ function build {
 		>> $LOGFILE
 
 	echo "\n==== Elapsed build time ($LABEL) ====\n" >>$mail_msg_file
+	echo "dmake install:" >>$mail_msg_file
 	tail -3  $SRC/${INSTALLOG}.out >>$mail_msg_file
+	echo >>$mail_msg_file
+	echo "bmake all:" >>$mail_msg_file
+	tail -3  $SRC/${INSTALLOG}-bmake-all.out >>$mail_msg_file
+	echo >>$mail_msg_file
+	echo "bmake install:" >>$mail_msg_file
+	tail -3  $SRC/${INSTALLOG}-bmake-install.out >>$mail_msg_file
 
 	if [ "$i_FLAG" = "n" ]; then
 		rm -f $SRC/${NOISE}.ref
 		if [ -f $SRC/${NOISE}.out ]; then
 			mv $SRC/${NOISE}.out $SRC/${NOISE}.ref
 		fi
-		grep : $SRC/${INSTALLOG}.out \
+		cat $SRC/${INSTALLOG}.out \
+		    $SRC/${INSTALLOG}-bmake-all.out \
+		    $SRC/${INSTALLOG}-bmake-install.out \
+			| grep : \
 			| egrep -v '^/' \
 			| egrep -v '^(Start|Finish|real|user|sys|./bld_awk)' \
 			| egrep -v '^tic:' \
