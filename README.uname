@@ -27,14 +27,6 @@ workaround until software is updated.  Fix the software if you can.
   BUSTED THINGS
 #################
 
-* lint - checks for Solaris 7 or newer
-  - lint defined to use $(SETALTUNAME)
-
-* cc (CC?) - checks for Solaris 7 or newer when building 64-bit
-  - the libc symbols test suite checks this and handles it
-  - the cw program is left alone, we use gcc and don't shadow compile
-  - use puname(1) with make or nightly if this causes too much grief
-
 * pkgdepend - vendor-packages/terminatorlib/cwd.py
   - usr/src/pkg/Makefile edited so pkgdepend uses $(SETALTUNAME). (see #61)
   - error is at /usr/lib/python2.6/vendor-packages/terminatorlib/cwd.py
