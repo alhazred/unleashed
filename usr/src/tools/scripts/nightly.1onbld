@@ -233,13 +233,6 @@ The instruction set architecture of the build machine as given
 by \fIuname -p\fP, e.g. sparc, i386.
 .RE
 .LP
-.B LOCKNAME
-.RS 5
-The name of the file used to lock out multiple runs of
-.IR nightly .
-This should generally be left to the default setting.
-.RE
-.LP
 .B ATLOG
 .RS 5
 The location of the log directory maintained by
@@ -371,8 +364,8 @@ defined in the environment file will be available.
 .LP
 .B SYS_PRE_NIGHTLY
 .RS 5
-Run just after the workspace lock is acquired.  This is reserved for
-per-build-machine customizations and should be set only in /etc/nightly.conf
+This is reserved for per-build-machine customizations and should be set only
+in /etc/nightly.conf
 .RE
 .LP
 .B PRE_NIGHTLY

@@ -1026,15 +1026,10 @@ function logshuffle {
 }
 
 #
-#	Remove the locks and temporary files on any exit
+#	Remove the temporary files on any exit
 #
 function cleanup {
     	logshuffle
-
-	[ -z "$lockfile" ] || staffer rm -f $lockfile
-	[ -z "$atloglockfile" ] || rm -f $atloglockfile
-	[ -z "$ulockfile" ] || staffer rm -f $ulockfile
-	[ -z "$Ulockfile" ] || rm -f $Ulockfile
 
 	set -- $newdirlist
 	while [ $# -gt 0 ]; do
@@ -1054,39 +1049,6 @@ trap cleanup 0
 trap cleanup_signal 1 2 3 15
 
 #
-# Generic lock file processing -- make sure that the lock file doesn't
-# exist.  If it does, it should name the build host and PID.  If it
-# doesn't, then make sure we can create it.  Clean up locks that are
-# known to be stale (assumes host name is unique among build systems
-# for the workspace).
-#
-function create_lock {
-	lockf=$1
-	lockvar=$2
-
-	ldir=`dirname $lockf`
-	[ -d $ldir ] || newdir $ldir || exit 1
-	eval $lockvar=$lockf
-
-	while ! staffer ln -s $hostname.$STAFFER.$$ $lockf 2> /dev/null; do
-		basews=`basename $CODEMGR_WS`
-		ls -l $lockf | nawk '{print $NF}' | IFS=. read host user pid
-		if [ "$host" != "$hostname" ]; then
-			echo "$MACH build of $basews apparently" \
-			    "already started by $user on $host as $pid."
-			exit 1
-		elif kill -s 0 $pid 2>/dev/null; then
-			echo "$MACH build of $basews already started" \
-			    "by $user as $pid."
-			exit 1
-		else
-			# stale lock; clear it out and try again
-			rm -f $lockf
-		fi
-	done
-}
-
-#
 # Return the list of interesting proto areas, depending on the current
 # options.
 #
@@ -1100,23 +1062,6 @@ function allprotos {
 	echo $roots
 }
 
-# Ensure no other instance of this script is running on this host.
-# LOCKNAME can be set in <env_file>, and is by default, but is not
-# required due to the use of $ATLOG below.
-if [ -n "$LOCKNAME" ]; then
-	create_lock /tmp/$LOCKNAME "lockfile"
-fi
-#
-# Create the other lock:
-#	$ATLOG/nightly.lock
-#		- protects against multiple builds in same workspace
-#
-# Overriding ISUSER to 1 causes the lock to be created as root if the
-# script is run as root.  The default is to create it as $STAFFER.
-ISUSER=1 create_lock $ATLOG/nightly.lock "atloglockfile"
-
-# Locks have been taken, so we're doing a build and we're committed to
-# the directories we may have created so far.
 newdirlist=
 
 #
@@ -1127,9 +1072,10 @@ touch $mail_msg_file
 build_time_file="${TMPDIR}/build_time"
 build_environ_file="${TMPDIR}/build_environ"
 touch $build_environ_file
+
+mkdir -p "$ATLOG"
 #
 #	Move old LOGFILE aside
-#	ATLOG directory already made by 'create_lock' above
 #
 if [ -f $LOGFILE ]; then
 	mv -f $LOGFILE ${LOGFILE}-
