@@ -468,20 +468,6 @@ function use_tools {
 	echo "ONBLD_TOOLS=${ONBLD_TOOLS}" >> $LOGFILE
 }
 
-function staffer {
-	if [ $ISUSER -ne 0 ]; then
-		"$@"
-	else
-		arg="\"$1\""
-		shift
-		for i
-		do
-			arg="$arg \"$i\""
-		done
-		eval su $STAFFER -c \'$arg\'
-	fi
-}
-
 #
 # Verify that the closed bins are present
 #
@@ -625,12 +611,6 @@ if [ $# -ne 1 ]; then
 	echo "$USAGE"
 	exit 1
 fi
-
-# check if user is running nightly as root
-# ISUSER is set non-zero if an ordinary user runs nightly, or is zero
-# when root invokes nightly.
-/usr/bin/id | grep '^uid=0(' >/dev/null 2>&1
-ISUSER=$?;	export ISUSER
 
 #
 # force locale to C
@@ -787,16 +767,8 @@ do
 	esac
 done
 
-if [ $ISUSER -ne 0 ]; then
-	# Set default value for STAFFER, if needed.
-	if [ -z "$STAFFER" -o "$STAFFER" = "nobody" ]; then
-		STAFFER=`/usr/xpg4/bin/id -un`
-		export STAFFER
-	fi
-fi
-
 if [ -z "$MAILTO" -o "$MAILTO" = "nobody" ]; then
-	MAILTO=$STAFFER
+	MAILTO=`/usr/xpg4/bin/id -un`
 	export MAILTO
 fi
 
@@ -905,11 +877,11 @@ function newdir {
 	torm=
 	newlist=
 	for dir in $toadd; do
-		if staffer mkdir $dir; then
-			newlist="$ISUSER $dir $newlist"
+		if mkdir $dir; then
+			newlist="$dir $newlist"
 			torm="$dir $torm"
 		else
-			[ -z "$torm" ] || staffer rmdir $torm
+			[ -z "$torm" ] || rmdir $torm
 			return 1
 		fi
 	done
@@ -1033,7 +1005,7 @@ function cleanup {
 
 	set -- $newdirlist
 	while [ $# -gt 0 ]; do
-		ISUSER=$1 staffer rmdir $2
+		rmdir $1
 		shift; shift
 	done
 	rm -rf $TMPDIR

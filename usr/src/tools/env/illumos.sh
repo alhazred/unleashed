@@ -86,11 +86,8 @@ function maxjobs
 maxjobs DMAKE_MAX_JOBS # "DMAKE_MAX_JOBS" passed as ksh(1) name reference
 export DMAKE_MAX_JOBS
 
-# Set STAFFER to your own login and nightly will use this account (if run as
-# root) for certain file and directory creation.
 # Some scripts optionally send mail messages to MAILTO.
-export STAFFER="$LOGNAME"
-export MAILTO="$STAFFER"
+export MAILTO="$LOGNAME"
 
 # If you wish the mail messages to be From: an arbitrary address, export
 # MAILFROM.

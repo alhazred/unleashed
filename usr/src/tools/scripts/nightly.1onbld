@@ -247,12 +247,6 @@ The name of the log file in the $ATLOG directory maintained by
 This should generally be left to the default setting.
 .RE
 .LP
-.B STAFFER
-.RS 5
-The non-root account to use on the build machine for the
-creation of certain files and directories during nightly run.
-.RE
-.LP
 .B MAILTO
 .RS 5
 The address to be used to send completion e-mail at the end of
