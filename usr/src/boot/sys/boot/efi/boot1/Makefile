@@ -11,6 +11,7 @@
 
 #
 # Copyright 2016 Toomas Soome <tsoome@me.com>
+# Copyright 2016 RackTop Systems.
 #
 
 include $(SRC)/Makefile.master
@@ -64,7 +65,8 @@ LDFLAGS=	-nostdlib --eh-frame-hdr -znocombreloc
 LDFLAGS +=	-shared --hash-style=both --enable-new-dtags
 LDFLAGS +=	-T${LDSCRIPT} -Bsymbolic
 
-all: machine x86 boot1.efi
+all: boot1.efi
+
 install: all $(ROOTBOOTFILES)
 
 #
@@ -107,6 +109,8 @@ machine:
 x86:
 	$(RM) x86
 	$(SYMLINK) ./../../../x86/include x86
+
+$(OBJS): machine x86
 
 clean clobber:
 	$(RM) $(CLEANFILES) $(OBJS)
