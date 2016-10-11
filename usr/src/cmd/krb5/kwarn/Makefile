@@ -65,7 +65,7 @@ ktkt_warnd :=	MAPFILES =	$(MAPFILE.INT) $(MAPFILE.NGB)
 ktkt_warnd :=	LDFLAGS +=	$(KRUNPATH) $(MAPFILES:%=-Wl,-M%)
 
 LDFLAGS +=	$(KRUNPATH)
-LDLIBS +=	$(KMECHLIB) -lnsl
+LDLIBS +=	$(KMECHLIB)
 
 .KEEP_STATE:
 

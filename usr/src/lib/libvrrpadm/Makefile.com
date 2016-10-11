@@ -33,7 +33,7 @@ include ../../Makefile.lib
 #include ../../Makefile.rootfs
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lc -lsocket -ldladm -lscf
+LDLIBS +=	-lc -ldladm -lscf
 
 SRCDIR =	../common
 

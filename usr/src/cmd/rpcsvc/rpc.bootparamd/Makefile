@@ -35,7 +35,6 @@ include ../Makefile.rpc
 CPPFLAGS= -I. $(CPPFLAGS.master)
 CERRWARN += -Wno-parentheses
 CFLAGS += -DSYSV
-LDLIBS += -lsocket -lnsl
 
 SRCS= $(OBJS:%.o=%.c)
 

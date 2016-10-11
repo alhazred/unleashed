@@ -132,7 +132,7 @@ OBJECTS = $(LOCOBJS) $(TAVOROBJS)
 include $(SRC)/lib/Makefile.lib
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-ldevinfo -lsocket -lnsl -ldat -lc -ldladm
+LDLIBS +=	-ldevinfo -ldat -lc -ldladm
 
 SRCDIR =	../common
 TAVORSRCDIR =	../tavor

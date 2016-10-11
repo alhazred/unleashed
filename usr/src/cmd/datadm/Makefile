@@ -33,7 +33,7 @@ OBJS = datadm.o
 
 SRCS = $(OBJS:%.o=%.c)
 
-LDLIBS += -ldlpi -ldladm -lsocket
+LDLIBS += -ldlpi -ldladm
 
 .KEEP_STATE:
 

@@ -42,7 +42,6 @@ all:		$(PROG)
 
 OBJS=		$(CLIENT_OBJS) $(DAEMON_OBJS)
 
-LDLIBS +=	-lsocket -lnsl
 
 .PARALLEL:	$(OBJS)
 

@@ -50,9 +50,9 @@ XTRA_OBJS= \
 
 SRCS=	$(OBJS:%.o=%.c) ../sdbc/sdbc_ioctl.c
 
-sndradm		:= LDLIBS += -lrdc -lunistat -ldscfg -lnsctl -lnsl
+sndradm		:= LDLIBS += -lrdc -lunistat -ldscfg -lnsctl
 sndrboot	:= LDLIBS += -lrdc -lunistat -ldscfg
-sndrd		:= LDLIBS += -lrdc -lnsl
+sndrd		:= LDLIBS += -lrdc
 sndrsyncd	:= LDLIBS += -lrdc -ldscfg -lunistat
 
 CFLAGS += -D_RDC_ -D_SYSCALL32

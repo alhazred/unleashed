@@ -64,9 +64,9 @@ CERRWARN +=	-Wno-unused-value
 CERRWARN +=	-Wno-address
 
 LDFLAGS +=	$(KRUNPATH) $(KERBRUNPATH)
-LDLIBS +=	-lmech_krb5 -lsocket
+LDLIBS +=	-lmech_krb5
 $(PROG1) :=	LDLIBS += -L$(KRB5LIB) -lkadm5srv
-$(PROG2) :=	LDLIBS += -L$(KRB5LIB) -lnsl -lkdb -lkadm5clnt
+$(PROG2) :=	LDLIBS += -L$(KRB5LIB) -lkdb -lkadm5clnt
 
 .KEEP_STATE:
 

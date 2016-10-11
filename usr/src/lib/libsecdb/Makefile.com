@@ -34,7 +34,7 @@ include ../../Makefile.lib
 include ../../Makefile.rootfs
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lnsl -lc
+LDLIBS +=	 -lc
 
 SRCDIR =	../common
 

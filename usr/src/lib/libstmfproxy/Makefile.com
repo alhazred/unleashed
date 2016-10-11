@@ -37,7 +37,7 @@ SRCDIR =	../common
 INCS += -I$(SRCDIR)
 
 C99MODE=	$(C99_ENABLE)
-LDLIBS +=	-lc -lsocket -lnsl
+LDLIBS +=	-lc
 CPPFLAGS +=	$(INCS) -D_REENTRANT
 
 .KEEP_STATE:

@@ -35,7 +35,7 @@ include ../../Makefile.lib
 C99MODE=	$(C99_ENABLE)
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lldap -lresolv -lsocket -lnsl -lc
+LDLIBS +=	-lldap -lresolv -lc
 SRCDIR =	../common
 
 CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR)

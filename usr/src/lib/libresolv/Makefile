@@ -54,7 +54,7 @@ C99MODE=	$(C99_DISABLE)
 # but some system header files are replaced by local versions
 # so we must put -I. ahead of the default include directories:
 CPPFLAGS = -I. -I../common/inc $(CPPFLAGS.master) -DDEBUG -DSYSV -D_REENTRANT
-LDLIBS += -lsocket -lnsl -lc
+LDLIBS += -lc
 
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized

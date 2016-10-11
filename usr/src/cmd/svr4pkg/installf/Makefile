@@ -36,7 +36,6 @@ include $(SRC)/cmd/svr4pkg/Makefile.svr4pkg
 ROOTUSRSBINLINK  = $(ROOTUSRSBIN)/removef
 
 LDLIBS	+=	-lpkg -linstzones -ladm
-LDLIBS	+=	-lnsl -lsocket
 
 .KEEP_STATE:
 

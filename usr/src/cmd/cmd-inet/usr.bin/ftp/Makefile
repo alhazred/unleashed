@@ -43,7 +43,7 @@ CERRWARN +=	-Wno-clobbered
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-address
 
-LDLIBS +=	-lsocket -lnsl -lgss
+LDLIBS +=	 -lgss
 
 # ftp defines its own delete and glob - localize all symbols to prevent a
 # name clash.

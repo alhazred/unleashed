@@ -39,7 +39,7 @@ CLOBBERFILES += $(TYPEPROG)
 CERRWARN +=	-Wno-unused-variable
 C99MODE=	$(C99_ENABLE)
 
-LDLIBS +=	-lreparse -lnsl
+LDLIBS +=	-lreparse
 
 CPPFLAGS +=	-I$(SRC)/uts/common
 

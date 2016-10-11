@@ -41,7 +41,7 @@ CERRWARN += -Wno-switch
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 
-LDLIBS += -lsocket -lzonecfg -lnsl -ldevinfo -ldevice -lnvpair \
+LDLIBS += -lzonecfg -ldevinfo -ldevice -lnvpair \
 	-lgen -lbsm -lcontract -lzfs -luuid -lbrand -ldladm -ltsnet -ltsol \
 	-linetutil -lscf
 XGETFLAGS += -a -x zoneadmd.xcl

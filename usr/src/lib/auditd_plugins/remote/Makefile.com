@@ -33,7 +33,7 @@ LIBBSM=		$(SRC)/lib/libbsm/common
 include		$(SRC)/lib/Makefile.lib
 
 LIBS=		$(DYNLIB)
-LDLIBS		+= -lbsm -lsecdb -lc -lnsl -lsocket -lgss -lmtmalloc
+LDLIBS		+= -lbsm -lsecdb -lc -lgss -lmtmalloc
 
 CPPFLAGS	+= -D_REENTRANT -I$(LIBBSM)
 CPPFLAGS	+= -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64

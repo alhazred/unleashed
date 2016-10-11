@@ -62,7 +62,7 @@ LPLIBS =			\
 		$(LIBSEC)	\
 		$(LIBSYS)
 
-SYSLIBS=	-lnsl -lsocket
+SYSLIBS=	
 
 LDLIBS +=	$(LPLIBS) $(SYSLIBS)
 ROOTLIBLPBIN =	$(ROOTLIBLP)/bin

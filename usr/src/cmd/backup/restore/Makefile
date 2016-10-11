@@ -43,7 +43,7 @@ GLOBAL=		../../../head
 CPPFLAGS=	-I$(LOCAL) -I$(GENERAL) -I$(GLOBAL) \
 			$(CPPFLAGS.master) -D_LARGEFILE64_SOURCE=1
 LIBDUMP=	../lib/libdump.a
-LDLIBS +=	$(BSTATIC) -L../lib -ldump $(BDYNAMIC) -lsocket -lnsl -lsec
+LDLIBS +=	$(BSTATIC) -L../lib -ldump $(BDYNAMIC) -lsec
 
 UFSROOTLINK=	$(UFSROOTUSRSBIN)/$(PROG)
 LINKVALUE=	../lib/fs/$(FSTYPE)/$(PROG)

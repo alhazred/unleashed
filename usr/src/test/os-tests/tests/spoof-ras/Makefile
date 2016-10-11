@@ -20,7 +20,6 @@ PROG = spoof-ras
 OBJS = $(PROG:%=%.o)
 SRCS = $(OBJS:%.o=%.c)
 
-LDLIBS += -lsocket -lnsl
 C99MODE = $(C99_ENABLE)
 
 ROOTOPTPKG = $(ROOT)/opt/os-tests

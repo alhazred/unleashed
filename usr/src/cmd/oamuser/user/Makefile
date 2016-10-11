@@ -89,7 +89,7 @@ $(USERDEL) :=	LIBS = $(LIBUSRGRP)
 $(USERMOD) :=	OBJS = $(MOD_OBJ)
 $(USERMOD) :=	LIBS = $(LIBUSRGRP)
 
-LDLIBS +=	-lbsm -lnsl -lsecdb -lproject -lzfs -ltsol
+LDLIBS +=	-lbsm -lsecdb -lproject -lzfs -ltsol
 
 .PARALLEL: $(OBJECTS)
 

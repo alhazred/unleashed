@@ -45,7 +45,7 @@ CFLAGS64 += $(C_BIGPICFLAGS)
 CERRWARN += -Wno-parentheses
 
 $(DYNLIB) := LDLIBS += $(MACH_LDLIBS)
-$(DYNLIB) := LDLIBS += -lfmd_agent -lnvpair -lscf -lmdesc -lc -lxml2 -lsocket \
+$(DYNLIB) := LDLIBS += -lfmd_agent -lnvpair -lscf -lmdesc -lc -lxml2 \
 	-lumem
 
 

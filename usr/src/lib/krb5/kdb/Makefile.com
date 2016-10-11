@@ -88,7 +88,7 @@ CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-parentheses
 
 DYNFLAGS +=	$(KRUNPATH) $(KMECHLIB)
-LDLIBS +=	-lc -lnsl
+LDLIBS +=	-lc
 
 .KEEP_STATE:
 

@@ -35,7 +35,7 @@ SRCDIR =	../common
 LIBSRCS =	$(LIBOBJS:%.o=$(SRCDIR)/%.c)
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lc -lnsl -lscf -lzfs -luuid -lxml2 -lnvpair
+LDLIBS +=	-lc -lscf -lzfs -luuid -lxml2 -lnvpair
 
 #add nfs/lib directory as part of the include path
 CERRWARN +=	-Wno-parentheses

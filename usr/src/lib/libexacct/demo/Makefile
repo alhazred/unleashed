@@ -29,7 +29,7 @@ PROG = exdump
 
 include ../../../cmd/Makefile.cmd
 
-LDLIBS += -lexacct -lproject -lsocket -lnsl
+LDLIBS += -lexacct -lproject
 CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:

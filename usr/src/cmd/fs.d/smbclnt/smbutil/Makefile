@@ -41,7 +41,7 @@ CLOBBERFILES+=  $(POFILE) $(POFILES)
 
 C99MODE= $(C99_ENABLE)
 
-LDLIBS += -lsmbfs -lnsl
+LDLIBS += -lsmbfs
 
 CPPFLAGS += -I$(SRC)/lib/libsmbfs \
 	-I$(SRC)/uts/common/smbclnt -I$(SRC)/uts/common

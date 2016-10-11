@@ -29,7 +29,7 @@ OBJECTS=	libzonecfg.o getzoneent.o scratchops.o
 include ../../Makefile.lib
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lc -lsocket -lnsl -luuid -lnvpair -lsysevent -lsec -lbrand \
+LDLIBS +=	-lc -luuid -lnvpair -lsysevent -lsec -lbrand \
 		-lpool -lscf -lproc -luutil -lbsm -lsecdb -lxml2
 
 SRCDIR =	../common

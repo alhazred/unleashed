@@ -43,7 +43,7 @@ CERRWARN +=	-Wno-switch
 
 MAPFILES =	$(SRCDIR)/mapfile
 
-LDLIBS +=	-lc -lsocket -lnsl
+LDLIBS +=	-lc
 
 .KEEP_STATE:
 

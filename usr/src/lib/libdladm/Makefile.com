@@ -35,8 +35,8 @@ include ../../Makefile.lib
 include ../../Makefile.rootfs
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-ldevinfo -lc -linetutil -lsocket -lscf -lrcm -lnvpair \
-		-lexacct -lnsl -lkstat -lpool
+LDLIBS +=	-ldevinfo -lc -linetutil -lscf -lrcm -lnvpair \
+		-lexacct -lkstat -lpool
 
 SRCDIR =	../common
 

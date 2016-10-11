@@ -28,7 +28,6 @@ PROG = mknetid
 
 include ../../Makefile.cmd
 
-LDLIBS += -lnsl
 
 OBJS = mknetid.o getname.o 
 SRCS = $(OBJS:.o=.c)

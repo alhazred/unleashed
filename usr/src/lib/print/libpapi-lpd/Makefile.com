@@ -68,7 +68,7 @@ include ../../../Makefile.targ
 PROG =	lpd-port
 LPD_PORT_OBJS = lpd-port.o $(COMMON_OBJS)
 
-$(PROG) :=	LDLIBS += -lsocket -lnsl -lsendfile
+$(PROG) :=	LDLIBS += -lsendfile
 
 PROG_OBJS = $(LPD_PORT_OBJS:%=pics/%)
 OBJS += $(PROG_OBJS)

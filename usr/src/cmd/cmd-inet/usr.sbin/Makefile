@@ -106,8 +106,6 @@ include $(SRC)/lib/gss_mechs/mech_krb5/Makefile.mech_krb5
 K5LIBS=
 
 $(SYNCPROG)		:=	LDLIBS += -ldlpi
-$(SOCKETPROG)		:=	LDLIBS += -lsocket
-$(NSLPROG)		:=	LDLIBS += -lnsl
 $(AUDITPROG)		:=	LDLIBS += -lbsm
 $(PAMPROG)		:=	LDLIBS += -lpam
 $(RPCSVCPROG)		:=	LDLIBS += -lrpcsvc

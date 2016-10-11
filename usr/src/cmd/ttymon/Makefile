@@ -61,8 +61,7 @@ include ../Makefile.cmd
 # fix for 1111333 - turn on SYS_NAME so /etc/issue will be read if it exists
 CPPFLAGS += -DSYS_NAME
 $(XPG4):= CPPFLAGS += -DXPG4
-sttydefs := LDLIBS += -lnsl
-ttymon := LDLIBS += -lnsl -lsec -ldevinfo
+ttymon := LDLIBS += -lsec -ldevinfo
 
 # Only stty can be built with -DEUC.  ttymon will dump core unless further
 # changes are made to it.

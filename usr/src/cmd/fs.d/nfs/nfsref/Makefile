@@ -36,7 +36,7 @@ SRCS=	nfsref.c
 
 CERRWARN += -Wno-unused-variable
 
-LDLIBS += -lreparse -lnvpair -lnsl -lumem
+LDLIBS += -lreparse -lnvpair -lumem
 
 $(PROG):	$(OBJS)
 		$(LINK.c) -o $@ $(LDLIBS) $(OBJS)

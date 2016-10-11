@@ -44,7 +44,7 @@ C99MODE=		$(C99_ENABLE)
 # via the SUS standards.  Further, C99 support requires SUSv3 or higher.
 #
 CPPFLAGS += -D_XOPEN_SOURCE=600 -D__EXTENSIONS__
-LDLIBS += -lvrrpadm -lsocket -lnsl -ldladm -linetutil -lipadm -lsysevent -lnvpair -lsecdb
+LDLIBS += -lvrrpadm -ldladm -linetutil -lipadm -lsysevent -lnvpair -lsecdb
 
 CERRWARN += -Wno-uninitialized
 

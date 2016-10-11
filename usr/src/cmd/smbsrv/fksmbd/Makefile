@@ -82,7 +82,7 @@ LDLIBS += -L$(ROOT)/usr/lib/smbsrv
 LDLIBS += -lfksmbsrv -lfakekernel
 # prefer to keep libs ordered by dependence
 LDLIBS += -lmlsvc -lmlrpc -lsmbns -lsmb -lsmbfs -lgss
-LDLIBS += -lzfs -lbsm -lscf -lcmdutils -lsocket -lnsl -lumem
+LDLIBS += -lzfs -lbsm -lscf -lcmdutils -lumem
 $(PROG) := LDLIBS += -lkrb5
 
 

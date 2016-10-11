@@ -30,7 +30,7 @@ OBJECTS =	inetsvc.o
 include ../../Makefile.lib
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lscf -lc -lsocket -lnsl -lmd -luutil
+LDLIBS +=	-lscf -lc -lmd -luutil
 
 SRCDIR =	../common
 

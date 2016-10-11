@@ -36,7 +36,7 @@ SRCS = $(OBJS:.o=.c)
 POFILE=zoneadm_all.po
 POFILES= $(OBJS:%.o=%.po)
 
-LDLIBS += -lzonecfg -lsocket -lgen -lpool -lzfs -luuid -lnvpair -lbrand -ldladm -lsecdb
+LDLIBS += -lzonecfg -lgen -lpool -lzfs -luuid -lnvpair -lbrand -ldladm -lsecdb
 
 CERRWARN += -Wno-uninitialized
 

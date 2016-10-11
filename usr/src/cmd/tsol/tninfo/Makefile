@@ -33,7 +33,7 @@ POFILES= $(PROG).po
 include ../../Makefile.cmd
 
 CFLAGS += -I../tnctl
-LDLIBS += -lnsl -ltsnet -ltsol -lsocket
+LDLIBS += -ltsnet -ltsol
 
 .KEEP_STATE:
 

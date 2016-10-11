@@ -38,7 +38,7 @@ SRCDIR =	../common
 # Reset the Makefile.lib macro ROOTLIBDIR to refer to usr/lib/vscan
 ROOTLIBDIR = $(ROOT)/usr/lib/vscan
 
-LDLIBS += -lc -lscf -lsecdb -lnsl -lm
+LDLIBS += -lc -lscf -lsecdb -lm
 CPPFLAGS += -I$(SRCDIR)
 
 .KEEP_STATE:

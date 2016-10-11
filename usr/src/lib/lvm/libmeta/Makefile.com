@@ -136,7 +136,7 @@ include ../../../Makefile.rootfs
 LIBS =		$(DYNLIB)
 SRCS =		$(CMN_SRCS) $(LOCAL_SRCS) $(DERIVED_SRCS)
 CPPFLAGS +=     -I$(SRC)/lib/lvm/libmeta/common/hdrs
-LDLIBS += 	-lnsl -lc -ladm -ldevid -lgen -lefi -ldevinfo -lscf
+LDLIBS += 	 -lc -ladm -ldevid -lgen -lefi -ldevinfo -lscf
 CLEANFILES += 	$(DERIVED_SRCS) $(MSGFILES) $(DCFILES)
 
 .KEEP_STATE:

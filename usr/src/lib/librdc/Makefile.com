@@ -43,7 +43,7 @@ CERRWARN	+= -Wno-address
 CPPFLAGS +=	-DBUILD_REV_STR='"5.11"'
 CFLAGS +=	-I..
 CFLAGS64 +=	-I..
-LDLIBS +=	-lsocket -lnsl -lnsctl -lc -lunistat -ldscfg
+LDLIBS +=	 -lnsctl -lc -lunistat -ldscfg
 
 .KEEP_STATE:
 

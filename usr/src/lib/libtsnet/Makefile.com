@@ -41,7 +41,7 @@ LIBS =		$(DYNLIB)
 
 SRCDIR =	../common
 
-LDLIBS +=	-lsocket -lnsl -lc -lsecdb -ltsol
+LDLIBS +=	 -lc -lsecdb -ltsol
 
 LIBTSOLINC =	$(SRC)/lib/libtsol/common
 

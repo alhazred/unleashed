@@ -39,7 +39,7 @@ POFILE= talk.po
 
 CERRWARN +=	-Wno-uninitialized
 CPPFLAGS +=	-DSYSV -DSTRNET -DBSD_COMP
-LDLIBS +=	-lcurses -lsocket -lnsl
+LDLIBS +=	-lcurses
 
 .KEEP_STATE:
 

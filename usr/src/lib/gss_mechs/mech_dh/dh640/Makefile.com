@@ -51,7 +51,7 @@ LIBNAME = $(LIBRARY:%.a=%)
 
 MAPFILES =	../mapfile-vers
 
-LDLIBS += -lnsl -lmp -lc
+LDLIBS += -lmp -lc
 
 .KEEP_STATE:
 

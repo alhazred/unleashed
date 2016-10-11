@@ -49,7 +49,7 @@ CERRWARN +=	-Wno-unused-function
 CERRWARN +=	-Wno-extra
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-unused-label
-LDLIBS +=	-lsocket -lnsl -ltermlib
+LDLIBS +=	 -ltermlib
 LDLIBS +=	-lmech_krb5 
 LDFLAGS +=	$(KRUNPATH) -L$(ROOT)$(KLIBDIR_DO) -L$(ROOT)$(KLIBDIR_GL)
 

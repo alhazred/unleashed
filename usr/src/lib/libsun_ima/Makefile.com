@@ -39,7 +39,6 @@ SRCDIR =	../common
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
-LDLIBS +=	-lnsl
 LDLIBS +=	-ldevinfo
 LDLIBS +=	-lsysevent
 

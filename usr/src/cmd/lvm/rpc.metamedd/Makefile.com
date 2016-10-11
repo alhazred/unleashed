@@ -58,7 +58,7 @@ DERIVED_SRCS = $(DERIVED_OBJS:%.o=%.c)
 include ../../../Makefile.cmd
 include ../../Makefile.lvm
 
-LDLIBS += -lmeta -lsocket -lnsl
+LDLIBS += -lmeta
 LDFLAGS += $(ZINTERPOSE)
 
 CPPFLAGS += $(DEFINES)

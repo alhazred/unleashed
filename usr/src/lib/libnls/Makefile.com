@@ -35,7 +35,7 @@ SRCDIR =	../common
 
 LIBS =		$(DYNLIB)
 
-LDLIBS +=	-lnsl -lc
+LDLIBS +=	 -lc
 
 CERRWARN +=	-Wno-unused-variable
 

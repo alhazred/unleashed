@@ -50,7 +50,7 @@ SRCS=   $(OBJS_COMMON:%.o=$(SRCDIR)/%.c)	\
 
 LDLIBS +=	$(MACH_LDLIBS)
 LDLIBS +=	-lsmb -lads -lgss -lcmdutils -lldap \
-		-lsocket -lnsl -lc -lkrb5
+		 -lc -lkrb5
 CPPFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	-Dsyslog=smb_syslog
 CERRWARN +=	-Wno-unused-function

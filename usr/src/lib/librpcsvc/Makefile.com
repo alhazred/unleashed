@@ -54,7 +54,7 @@ CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-parentheses
 
-LDLIBS += -lnsl -lc
+LDLIBS += -lc
 
 # Needed so header files with relative paths will work
 CPPFLAGS += -I..

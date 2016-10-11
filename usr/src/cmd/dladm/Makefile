@@ -33,7 +33,7 @@ ROOTCFGFILES=	$(CFGFILES:%=$(ROOTCFGDIR)/%)
 include ../Makefile.cmd
 
 XGETFLAGS += -a -x $(PROG).xcl
-LDLIBS += -L$(ROOT)/lib -lsocket
+LDLIBS += -L$(ROOT)/lib
 LDLIBS += -ldladm -ldlpi -lkstat -lsecdb -lbsm -linetutil -ldevinfo
 LDLIBS += $(ZLAZYLOAD) -lrstp $(ZNOLAZYLOAD)
 

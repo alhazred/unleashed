@@ -52,7 +52,6 @@ ROOTSAFPROG= $(PROG:%=$(LIBSAFD)/%)
 # before the service prompt is printed, then:  CPPFLAGS += -DSYS_NAME
 # If debug is needed, then:  CPPFLAGS += -DDEBUG
 
-LDLIBS += -lnsl
 LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
 FILEMODE= 0755
 

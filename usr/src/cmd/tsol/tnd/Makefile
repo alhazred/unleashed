@@ -40,7 +40,7 @@ SVCMETHOD= svc-tnd
 $(ROOTMANIFEST) :=	FILEMODE= 444
 
 IFLAGS += -I.
-LDLIBS += -lnsl -ltsnet
+LDLIBS += -ltsnet
 CPPFLAGS += $(IFLAGS)
 CPPFLAGS += -DDEBUG
 

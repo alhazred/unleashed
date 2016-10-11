@@ -38,7 +38,7 @@ ROOTMANIFESTDIR= $(ROOTSVCNETWORK)
 
 all:		$(PROG)
 
-LDLIBS +=	-lsocket -lrstp -ldlpi -ldladm -lumem
+LDLIBS +=	 -lrstp -ldlpi -ldladm -lumem
 CPPFLAGS +=	-D__SUN__
 
 .PARALLEL:	$(OBJS)

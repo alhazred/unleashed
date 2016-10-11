@@ -37,8 +37,8 @@ OBJS=	dscfglockd.o dscfgcli.o
 SRCS=	$(OBJS:%.o=%.c)
 POFILES= $(OBJS:%.o=%.po)
 
-dscfgcli	:= LDLIBS += -ldscfg -lnsl
-dscfglockd	:= LDLIBS += -lunistat -ldscfg -lsocket -lnsl
+dscfgcli	:= LDLIBS += -ldscfg
+dscfglockd	:= LDLIBS += -lunistat -ldscfg
 
 CFLAGS += -D_RDC_ -D_SYSCALL32
 CERRWARN += -Wno-switch

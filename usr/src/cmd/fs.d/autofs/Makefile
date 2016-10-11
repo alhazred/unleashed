@@ -83,9 +83,9 @@ POFILE= autofs.po
 GREP= egrep
 SED= sed
 
-$(AUTO) := 	LDLIBS += -lnsl -lsldap -lscf
+$(AUTO) := 	LDLIBS += -lsldap -lscf
 $(MOUNT):=	LDLIBS += -lscf
-$(TYPEPROG) :=	LDLIBS += -lrpcsvc -lsocket -lnsl -lsldap -lkstat -lscf
+$(TYPEPROG) :=	LDLIBS += -lrpcsvc -lsldap -lkstat -lscf
 
 CFLAGS +=	-D_FILE_OFFSET_BITS=64
 CPPFLAGS=	-I. -I.. -I../nfs/lib $(CPPFLAGS.master) -D_REENTRANT  \

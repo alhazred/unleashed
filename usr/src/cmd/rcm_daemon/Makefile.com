@@ -139,7 +139,7 @@ SUNW_ip_rcm.so := LDLIBS_MODULES += -L$(ROOT)/lib -linetutil -ldladm -lipmp -lip
 SUNW_ip_anon_rcm.so := LDLIBS_MODULES += -L$(ROOT)/lib -linetutil
 SUNW_bridge_rcm.so := LDLIBS_MODULES += -L$(ROOT)/lib -ldladm
 
-LDLIBS += -lgen -lelf -lrcm -lnvpair -ldevinfo -lnsl -lsocket
+LDLIBS += -lgen -lelf -lrcm -lnvpair -ldevinfo
 
 SRCS = $(RCM_SRC) $(COMMON_MOD_SRC)
 

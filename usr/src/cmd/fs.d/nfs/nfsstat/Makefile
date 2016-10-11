@@ -41,7 +41,7 @@ OBJS += $(STAT_COMMON_OBJS)
 
 CPPFLAGS += -I$(STATCOMMONDIR)
 CERRWARN += -Wno-parentheses
-LDLIBS += -lkstat -lnsl
+LDLIBS += -lkstat
 
 $(PROG):	$(OBJS)
 		$(LINK.c) -o $@ $(LDLIBS) $(OBJS)

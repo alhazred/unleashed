@@ -129,7 +129,6 @@ LDLIBS += \
 	-lcmd \
 	-ldll \
 	-last \
-	-lsocket \
 	-lm \
 	-lc
 

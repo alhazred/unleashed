@@ -29,7 +29,7 @@ include $(SRC)/cmd/Makefile.cmd
 
 LIBBSM = $(SRC)/lib/libbsm/common
 
-LDLIBS += -lnsl -lbsm -lsecdb
+LDLIBS += -lbsm -lsecdb
 
 OBJS = auditconfig.o 
 SRCS = $(OBJS:%.o=%.c)

@@ -95,8 +95,6 @@ LIBS =		$(DYNLIB)
 LDLIBS += \
 	-lsum \
 	-last \
-	-lsocket \
-	-lnsl \
 	-lc
 
 SRCDIR =	../common

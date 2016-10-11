@@ -52,8 +52,8 @@ $(ROOTCFGFILES) := FILEMODE= 644
 ROOTCMDDIR=	$(ROOTFS_LIBDIR)/inet
 
 LDLIBS +=	-ldhcpagent -ldhcputil -ldladm -ldlpi -lgen \
-		-linetutil -lipadm -lkstat -lnsl -lnvpair -lnwam \
-		-lsecdb -lscf -lsocket -lsysevent -lumem -luutil
+		-linetutil -lipadm -lkstat -lnvpair -lnwam \
+		-lsecdb -lscf -lsysevent -lumem -luutil
 
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-parentheses

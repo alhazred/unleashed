@@ -40,7 +40,7 @@ SRCS=		$(OBJS:%.o=%.c)
 #
 POFILE= showmount.po
 
-LDLIBS +=	-lrpcsvc -lnsl
+LDLIBS +=	-lrpcsvc
 
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-parentheses

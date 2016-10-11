@@ -59,7 +59,6 @@ include ../../../Makefile.rootfs
 
 CPPFLAGS +=	-I../../../common/inc
 
-LDLIBS +=	-lsocket -lnsl
 DYNLIB1 =	nss_files.so$(VERS)
 
 all: $(DYNLIB1)

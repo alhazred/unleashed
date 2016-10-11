@@ -43,5 +43,4 @@ include		../../Makefile.com
 # install this library in the root filesystem
 include ../../../Makefile.rootfs
 
-LDLIBS +=	-lnsl
 DYNLIB1 =	nss_compat.so$(VERS)

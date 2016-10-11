@@ -93,7 +93,7 @@ SRCS=		$(OBJ_LIB:%.o=$(SRCDIR)/%.c) \
 
 C99MODE=	$(C99_ENABLE)
 
-LDLIBS += -lsocket -lnsl -lc -lmd -lpkcs11 -lkrb5 -lsec -lidmap
+LDLIBS += -lc -lmd -lpkcs11 -lkrb5 -lsec -lidmap
 
 # normal warnings...
 

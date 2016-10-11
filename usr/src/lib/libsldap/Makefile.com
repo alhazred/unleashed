@@ -39,7 +39,7 @@ include ../../Makefile.lib
 
 SRCS =		$(SLDAPOBJ:%.o=../common/%.c)
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lnsl -lldap -lscf -lc
+LDLIBS +=	 -lldap -lscf -lc
 
 SRCDIR =	../common
 

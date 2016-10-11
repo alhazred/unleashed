@@ -39,8 +39,8 @@ NETYP =		$(NETSVC)/yp
 ROOTDIRS =	$(NETSVC) $(NETYP)
 
 # include library definitions
-#LDLIBS +=	-lrpcsvc -lnsl -lcrypt -lintl -lgen
-LDLIBS +=	-lnsl -lnisdb -lc
+#LDLIBS +=	-lrpcsvc -lcrypt -lintl -lgen
+LDLIBS +=	 -lnisdb -lc
 MAPFILES =	$(MAPFILE.INT) $(MAPFILE.NGB)
 LDFLAGS +=	$(MAPFILES:%=-Wl,-M%)
 

@@ -44,7 +44,7 @@ ROOTMANIFESTDIR=	$(ROOTSVCNETWORKRPC)
 CPPFLAGS= -I. -DPORTMAP $(CPPFLAGS.master)
 CPPFLAGS += -D_REENTRANT
 $(RELEASE_BUILD)CPPFLAGS += -DNDEBUG
-LDLIBS += -lsocket -lnsl -lwrap -lscf -lumem
+LDLIBS += -lwrap -lscf -lumem
 
 .KEEP_STATE:
 

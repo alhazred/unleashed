@@ -36,7 +36,7 @@ POFILE	  =	lockd.po
 
 SRCS	  =	$(LOCAL:%.o=%.c) ../lib/daemon.c ../lib/nfs_tbind.c \
 		../lib/smfcfg.c ../lib/thrpool.c
-LDLIBS	 +=	-lnsl -lscf
+LDLIBS	 +=	 -lscf
 CPPFLAGS +=	-I../lib
 C99MODE	  =	$(C99_ENABLE)
 

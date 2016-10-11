@@ -36,7 +36,7 @@ PROG=	$(BINPROG) $(SBINPROG) $(NETYPPROG) $(NIS2LDAPPROG) $(SVCMETHOD)
 
 MANIFEST = server.xml client.xml xfr.xml
 
-# These only need -lnsl
+# These only need
 LNSLPROG = ypmatch ypwhich ypcat yppoll ypset \
 	ypbind ypxfr yppush mkalias stdhosts
 
@@ -54,9 +54,7 @@ ROOTDIRS =	$(ROOT) $(ROOTUSR) $(ROOTLIB) $(ROOTETC) $(ROOTVAR) \
 		$(NETSVC) $(NETYP) $(ROOTVAR_YP) $(ROOTBINDING) \
 		$(ROOTUSRSBIN) $(ROOTBIN)
 
-$(LNSLPROG) :=	LDLIBS += -lnsl
-$(NIS2LDAPPROG) := LDLIBS += -lc -lnsl -lnisdb
-stdethers :=	LDLIBS += -lsocket
+$(NIS2LDAPPROG) := LDLIBS += -lc -lnisdb
 makedbm :=	MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
 makedbm :=	LDFLAGS += $(MAPFILES:%=-Wl,-M%)
 

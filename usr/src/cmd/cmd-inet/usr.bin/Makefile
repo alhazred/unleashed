@@ -53,9 +53,7 @@ CERRWARN +=	-Wno-unused-function
 # Enable large file support for reading the lastlog file.
 finger :=	CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
-finger :=		LDLIBS += -lnsl -lcurses -lsocket
-rdate :=		LDLIBS += -lsocket
-whois :=		LDLIBS += -lsocket
+finger :=		LDLIBS += -lcurses
 
 .KEEP_STATE:
 

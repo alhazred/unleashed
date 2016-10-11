@@ -65,12 +65,10 @@ CPPFLAGS	+= -I. -DIPFILTER_LOOKUP -DIPFILTER_LOG
 ipfstat.o	:=	CPPFLAGS += -DSTATETOP
 ipfstat		:=	LDLIBS += -lcurses
 
-ipf		:=	LDLIBS += -lsocket -lnsl
-ipftest		:=	LDLIBS += -lsocket -lnsl -lmd
-ipfstat		:=	LDLIBS += -lsocket -lnsl -lkvm -lelf
-ipmon		:=	LDLIBS += -lsocket -lnsl
-ipnat		:=	LDLIBS += -lsocket -lnsl -lkvm -lelf
-ippool		:=	LDLIBS += -lsocket -lnsl -lkvm -lelf
+ipftest		:=	LDLIBS += -lmd
+ipfstat		:=	LDLIBS += -lkvm -lelf
+ipnat		:=	LDLIBS += -lkvm -lelf
+ippool		:=	LDLIBS += -lkvm -lelf
 
 CLEANFILES	+= $(OBJS)
 CLOBBERFILES	+= $(IPFPROG)

@@ -58,7 +58,7 @@ include ../../Makefile.lvm
 
 
 MDLIBS =
-LDLIBS +=	-ladm -lsocket -lnsl
+LDLIBS +=	-ladm
 
 POFILES= $(OBJECTS:%.o=%.po)
 

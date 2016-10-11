@@ -74,10 +74,9 @@ CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-address
 CERRWARN +=	-Wno-unused-function
 
-LDLIBS +=	-lnsl
 chkey :=	LDLIBS += -lsldap -lmp -lmd
 keyserv :=	LDLIBS += -lmp -lmd
-newkey  :=	LDLIBS += -lsldap -lsocket -lmp -lmd
+newkey  :=	LDLIBS += -lsldap -lmp -lmd
 
 .KEEP_STATE:
 

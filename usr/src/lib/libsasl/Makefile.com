@@ -40,7 +40,7 @@ include ../../Makefile.lib
 
 LIBS=		$(DYNLIB)
 SRCS=		$(SASLOBJS:%.o=../lib/%.c) $(COMMONOBJS:%.o=$(PLUGDIR)/%.c)
-LDLIBS +=	-lsocket -lc -lmd
+LDLIBS +=	 -lc -lmd
 
 SRCDIR=		../lib
 PLUGDIR=	../plugin

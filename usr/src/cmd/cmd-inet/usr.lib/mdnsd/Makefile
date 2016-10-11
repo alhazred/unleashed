@@ -70,7 +70,6 @@ include ../Makefile.lib
 
 C99MODE = $(C99_ENABLE)
 CPPFLAGS += -D_REENTRANT $(MDNSFLAGS) -I$(CMN_DIR)
-LDLIBS += -lsocket -lnsl
 
 install:	all $(ROOTLIBINETPROG) $(ROOTMANIFEST)
 

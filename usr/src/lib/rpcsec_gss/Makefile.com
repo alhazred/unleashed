@@ -42,7 +42,7 @@ DYNFLAGS +=	$(ZIGNORE)
 
 LIBS  = $(DYNLIB)
 
-LDLIBS += -lgss -lnsl -lc
+LDLIBS += -lgss -lc
 
 .KEEP_STATE:
 

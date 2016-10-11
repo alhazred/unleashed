@@ -32,7 +32,7 @@ LIBS +=		$(DYNLIB)
 
 SRCDIR =	../common
 
-LDLIBS +=	-ltecla -lsocket -lnsl -lc
+LDLIBS +=	-ltecla -lc
 LAZYLIBS = $(ZLAZYLOAD) -ltsol $(ZNOLAZYLOAD)
 LDLIBS += $(LAZYLIBS)
 

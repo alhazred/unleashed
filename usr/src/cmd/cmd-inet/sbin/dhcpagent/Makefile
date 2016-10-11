@@ -45,7 +45,7 @@ CERRWARN += -Wno-parentheses
 #
 
 CPPFLAGS  += -D_XOPEN_SOURCE=500 -D__EXTENSIONS__
-LDLIBS    += -lxnet -lnvpair -ldhcpagent -ldhcputil -linetutil -ldevinfo -ldlpi
+LDLIBS    += -lnvpair -ldhcpagent -ldhcputil -linetutil -ldevinfo -ldlpi
 
 # Disable warnings that affect all XPG applications.
 

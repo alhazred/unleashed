@@ -95,7 +95,6 @@ MULTI_THR_LIBS=		-D_REENTRANT
 MULTI_PROC_LIBS=
 
 LDLIBS +=	$($(CONCURR_MODE)_LIBS) \
-		-lsocket \
 		-lcfgadm \
 		-ldevinfo \
 		-lrcm \

@@ -35,7 +35,7 @@ OBJS=		$(PROG:%=%.o)
 include	../../../Makefile.cmd
 include	../../../../Makefile.psm
 
-LDLIBS +=	-ldscp -lnsl
+LDLIBS +=	-ldscp
 
 
 LDFLAGS	+=	-L$(USR_PSM_LIB_DIR)

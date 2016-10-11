@@ -47,7 +47,7 @@ CPPFLAGS +=	-I../../libpapi-common/common
 
 MAPFILES =	$(SRCDIR)/mapfile
 
-LDLIBS +=	-lsocket -lnsl -lc
+LDLIBS +=	 -lc
 
 .KEEP_STATE:
 

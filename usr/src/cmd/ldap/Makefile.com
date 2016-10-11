@@ -106,7 +106,7 @@ ldapsearch :=	LDLIBS += -lldap
 ldapdelete :=	LDLIBS += -lldap
 ldapmodify :=	LDLIBS += -lldap
 ldaplist :=	LDLIBS += -lsldap
-ldapaddent :=	LDLIBS += -lsldap -lnsl -lsecdb
+ldapaddent :=	LDLIBS += -lsldap -lsecdb
 ldapclient :=	LDLIBS += -lsldap -lscf
 
 ldaplist :=	C99MODE = $(C99_ENABLE)

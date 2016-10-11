@@ -36,7 +36,7 @@ include ../../Makefile.cmd
 include ../Makefile.com
 
 LDLIBS += ../lib/mksh/libmksh.a ../lib/vroot/libvroot.a
-LDLIBS += ../lib/bsd/libbsd.a -lc -lnsl -lumem
+LDLIBS += ../lib/bsd/libbsd.a -lc -lumem
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 

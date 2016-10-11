@@ -33,7 +33,6 @@ all:	$(PROG)
 include ../../../Makefile.cmd
 include ../Makefile.lib
 
-LDLIBS += -lsocket -lnsl
 CPPFLAGS += -I$(SRC)/uts/common/inet/nca
 
 CERRWARN += -Wno-uninitialized

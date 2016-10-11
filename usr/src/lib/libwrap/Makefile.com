@@ -42,7 +42,7 @@ ROOTLINKS64 +=	$(ROOTLIBDIR64)/$(LIBLINKS)$(MAJOR)
 
 MAPFILES =	../mapfile-vers
 
-LDLIBS +=	-lsocket -lnsl -lc
+LDLIBS +=	 -lc
 
 CPPFLAGS +=	$(NETGROUP) $(TLI) $(ALWAYS_HOSTNAME) $(AUTH) \
 		$(STYLE) $(TABLES) $(DOT) $(BUGS) \

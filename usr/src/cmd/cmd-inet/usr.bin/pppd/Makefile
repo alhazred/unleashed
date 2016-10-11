@@ -21,7 +21,7 @@ install:=	TARGET= install
 clean:=		TARGET= clean
 clobber:=	TARGET= clobber
 
-LDLIBS +=	-lpam -lmd -lsocket -lnsl -ldlpi
+LDLIBS +=	-lpam -lmd -ldlpi
 
 #
 # We need absolute path to /etc/ppp/plugins and /usr/lib/inet/ppp, not

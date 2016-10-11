@@ -54,9 +54,9 @@ INCDIR=	../../include
 
 LIBS=	$(DYNLIB)
 
-LDLIBS   += $(BERDERLIB) $(CRYPTOUTILLIB) -lmd -lpkcs11 -lnsl -lsocket -lc \
+LDLIBS   += $(BERDERLIB) $(CRYPTOUTILLIB) -lmd -lpkcs11 -lc \
 	-lxml2
-LDLIBS64 += $(BERDERLIB64) $(CRYPTOUTILLIB64) -lmd -lpkcs11 -lnsl -lsocket -lc \
+LDLIBS64 += $(BERDERLIB64) $(CRYPTOUTILLIB64) -lmd -lpkcs11 -lc \
 	-lxml2
 
 CPPFLAGS	+=	-I$(INCDIR) -I$(ADJUNCT_PROTO)/usr/include/libxml2 \

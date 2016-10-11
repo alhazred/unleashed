@@ -49,7 +49,7 @@ CERRWARN += -Wno-unused-function
 
 LDFLAGS += $(KRUNPATH) $(KERBRUNPATH)
 LDLIBS += -lgss -L$(KRB5LIB) \
-	-lmech_krb5 -lkadm5srv -lkdb -lnsl -lresolv -lbsm -lpam -lsocket
+	-lmech_krb5 -lkadm5srv -lkdb -lresolv -lbsm -lpam
 
 .KEEP_STATE:
 

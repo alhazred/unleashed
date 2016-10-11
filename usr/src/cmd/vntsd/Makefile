@@ -38,7 +38,7 @@ POFILES = $(SRCS:.c=.po)
 POFILE = $(PROG)_msg.po
 
 
-LDLIBS += -lsocket -lnsl -lsecdb
+LDLIBS += -lsecdb
 
 ROOTCMDDIR =	$(ROOTLIB)/ldoms
 ROOTMANIFESTDIR = $(ROOTSVCPLATFORMSUN4V)

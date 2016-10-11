@@ -108,7 +108,7 @@ CERRWARN +=	-Wno-implicit-function-declaration
 
 DYNFLAGS +=	$(ZNODELETE)
 
-LDLIBS +=	-lsocket -lnsl -lc -lmd
+LDLIBS +=	 -lc -lmd
 
 .KEEP_STATE:
 

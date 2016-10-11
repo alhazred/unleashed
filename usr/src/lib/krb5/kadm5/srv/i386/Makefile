@@ -30,6 +30,6 @@ include ../Makefile.com
 # library dependency
 DYNFLAGS += $(KRUNPATH) $(KERBRUNPATH) $(KMECHLIB)
 DYNFLAGS += $(KRB5LIB)/libkdb.so $(KRB5LIB)/libdyn.so
-LDLIBS += -L $(ROOTLIBDIR) -lgss -lnsl -lc -lsocket
+LDLIBS += -L $(ROOTLIBDIR) -lgss -lc
 
 install: all $(ROOTLIBS) $(ROOTLINKS)

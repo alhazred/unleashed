@@ -31,7 +31,7 @@ PROG= nwamadm
 include ../../../Makefile.cmd
 
 XGETFLAGS +=	-a -x $(PROG).xcl
-LDLIBS +=	-linetutil -lnsl -lnwam -lumem -lscf
+LDLIBS +=	-linetutil -lnwam -lumem -lscf
 
 CERRWARN += -Wno-switch
 CERRWARN += -Wno-uninitialized

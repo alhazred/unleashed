@@ -37,7 +37,7 @@ POFILES = $(SRCS:.c=.po)
 include ../../Makefile.cmd
 
 DEFS = -I.
-LDLIBS += -lsecdb -lumem -lbsm -lnsl -lsocket -lc -L$(ROOT)/usr/lib/vscan -lvscan
+LDLIBS += -lsecdb -lumem -lbsm -lc -L$(ROOT)/usr/lib/vscan -lvscan
 LDFLAGS += -R/usr/lib/vscan
 CFLAGS += $(DEFS)
 CFLAGS += -D_FILE_OFFSET_BITS=64

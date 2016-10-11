@@ -35,7 +35,7 @@ CERRWARN +=	-Wno-uninitialized
 LIBS =		$(DYNLIB)
 SRCS=		$(PLUG_OBJS:%.o=../%.c) \
 		$(COMMONOBJS:%.o=$(SRC)/lib/libsasl/plugin/%.c)
-LDLIBS +=	-lsocket -lc $(PLUG_LIBS)
+LDLIBS +=	 -lc $(PLUG_LIBS)
 
 MAPFILES =	../../mapfile-vers
 

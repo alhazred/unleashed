@@ -38,7 +38,7 @@ SRCS=	$(OBJS:%.o=%.c)
 POFILES= $(OBJS:%.o=%.po)
 POFILE= dfmounts.po
 
-LDLIBS +=	-lrpcsvc -lnsl
+LDLIBS +=	-lrpcsvc
 
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-parentheses
