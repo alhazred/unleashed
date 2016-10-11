@@ -14,6 +14,11 @@
    #t)
 
  (config
+   ; support for sfxge network adapters
+   SFXGE
+   (= MACH 'i386))
+
+ (config
    ; support for virtio network devices
    VIRTIO_NET
    (and

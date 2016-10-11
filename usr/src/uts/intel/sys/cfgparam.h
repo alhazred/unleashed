@@ -17,6 +17,7 @@
 #define	CONFIG_E1000G
 #define	CONFIG_IGB
 #define	CONFIG_IXGBE
+#define	CONFIG_SFXGE
 #define	CONFIG_VIRTIO_NET
 #define	CONFIG_FS_AUTOFS
 #define	CONFIG_FS_HSFS
