@@ -22,8 +22,8 @@ include ../../../../../Makefile.cmd
 include ../../../Makefile.ia32
 include ../../../../Makefile.module
 
-CPPFLAGS += -I$(SRC)/uts/common/io/i40e
-CPPFLAGS += -I$(SRC)/uts/common/io/i40e/core
+CPPFLAGS += -I$(SRC)/../../kernel/drivers/net/i40e
+CPPFLAGS += -I$(SRC)/../../kernel/drivers/net/i40e/core
 CPPFLAGS += -I$(SRC)/uts/common
 CPPFLAGS += -D_I40E_MDB_DMOD
 

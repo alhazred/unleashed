@@ -1762,9 +1762,6 @@ HME_OBJS += hme.o
 IXGB_OBJS += ixgb.o ixgb_atomic.o ixgb_chip.o ixgb_gld.o ixgb_kstats.o \
 		ixgb_log.o ixgb_ndd.o ixgb_rx.o ixgb_tx.o ixgb_xmii.o
 
-NGE_OBJS += nge_main.o nge_atomic.o nge_chip.o nge_ndd.o nge_kstats.o \
-		nge_log.o nge_rx.o nge_tx.o nge_xmii.o
-
 PCN_OBJS += pcn.o
 
 RGE_OBJS += rge_main.o rge_chip.o rge_ndd.o rge_kstats.o rge_log.o rge_rxtx.o
@@ -1893,37 +1890,6 @@ XGE_HAL_OBJS =  xgehal-channel.o xgehal-fifo.o xgehal-ring.o  xgehal-config.o \
 #	Intel Pro/100 NIC driver module
 #
 IPRB_OBJS =	iprb.o
-
-#
-#	Intel 40GbE PCIe NIC driver module
-#
-
-# illumos-written ones.
-I40E_OBJS =	i40e_main.o i40e_osdep.o i40e_intr.o i40e_transceiver.o \
-		i40e_stats.o i40e_gld.o 
-# Intel-written ones.
-I40E_INTC_OBJS = i40e_adminq.o i40e_common.o i40e_hmc.o i40e_lan_hmc.o \
-		 i40e_nvm.o
-
-#
-#	NIU 10G/1G driver module
-#
-NXGE_OBJS =	nxge_mac.o nxge_ipp.o nxge_rxdma.o		\
-		nxge_txdma.o nxge_txc.o nxge_main.o		\
-		nxge_hw.o nxge_fzc.o nxge_virtual.o		\
-		nxge_send.o nxge_classify.o nxge_fflp.o		\
-		nxge_fflp_hash.o nxge_ndd.o nxge_kstats.o	\
-		nxge_zcp.o nxge_fm.o nxge_espc.o nxge_hv.o	\
-		nxge_hio.o nxge_hio_guest.o nxge_intr.o
-
-NXGE_NPI_OBJS =	\
-		npi.o npi_mac.o npi_ipp.o			\
-		npi_txdma.o npi_rxdma.o npi_txc.o		\
-		npi_zcp.o npi_espc.o npi_fflp.o			\
-		npi_vir.o
-
-NXGE_HCALL_OBJS =	\
-		nxge_hcall.o
 
 #
 # Virtio modules

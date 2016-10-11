@@ -374,7 +374,6 @@ DRV_KMODS	+= rmc_comm
 DRV_KMODS	+= rmcadm
 DRV_KMODS	+= rmclomv
 DRV_KMODS	+= sf
-DRV_KMODS	+= nxge
 DRV_KMODS	+= i2bsc 
 DRV_KMODS	+= mem_cache
 

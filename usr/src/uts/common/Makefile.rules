@@ -928,24 +928,9 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/net80211/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/nge/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/nvme/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
-
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/nxge/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/nxge/npi/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/nxge/%.s
-	$(COMPILE.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/pci-ide/%.c
 	$(COMPILE.c) -o $@ $<
@@ -1276,14 +1261,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/xge/hal/xgehal/%.c
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/iprb/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/i40e/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/i40e/core/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 

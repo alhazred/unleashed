@@ -320,7 +320,6 @@ DRV_KMODS	+= glvc
 DRV_KMODS	+= mdesc
 DRV_KMODS	+= niumx
 DRV_KMODS	+= ntwdt
-DRV_KMODS	+= nxge
 DRV_KMODS	+= n2piupc
 DRV_KMODS	+= iospc
 DRV_KMODS	+= n2rng

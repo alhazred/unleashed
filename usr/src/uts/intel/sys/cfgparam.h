@@ -15,8 +15,11 @@
 #define	CONFIG_RANDOM
 #define	CONFIG_VIRTIO
 #define	CONFIG_E1000G
+#define	CONFIG_I40E
 #define	CONFIG_IGB
 #define	CONFIG_IXGBE
+#define	CONFIG_NGE
+#define	CONFIG_NXGE
 #define	CONFIG_SFXGE
 #define	CONFIG_VIRTIO_NET
 #define	CONFIG_FS_AUTOFS

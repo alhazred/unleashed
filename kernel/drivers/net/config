@@ -4,6 +4,11 @@
    #t)
 
  (config
+   ; support for i40e network adapters
+   I40E
+   (= MACH 'i386))
+
+ (config
    ; support for igb network adapters
    IGB
    #t)
@@ -11,6 +16,16 @@
  (config
    ; support for ixgbe network adapters
    IXGBE
+   #t)
+
+ (config
+   ; support for nge network adapters
+   NGE
+   (= MACH 'i386))
+
+ (config
+   ; support for nxge network adapters
+   NXGE
    #t)
 
  (config

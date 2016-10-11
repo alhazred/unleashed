@@ -38,6 +38,6 @@ file path=kernel/drv/$(ARCH64)/i40e group=sys
 file path=kernel/drv/i40e group=sys
 file path=kernel/drv/i40e.conf group=sys
 file path=usr/share/man/man7d/i40e.7d
+license kernel/drivers/net/i40e/core/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/i40e/core/THIRDPARTYLICENSE
 license lic_CDDL license=lic_CDDL
-license usr/src/uts/common/io/i40e/core/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/i40e/core/THIRDPARTYLICENSE
