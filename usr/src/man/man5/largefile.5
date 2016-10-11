@@ -91,19 +91,7 @@ l l l l l .
 See the USAGE section of the \fBswap\fR(1M) manual page for limitations of
 \fBswap\fR on block devices greater than 2 Gbyte on a 32-bit operating system.
 .sp
-.LP
-The following \fB/usr/ucb\fR utilities are large file aware:
-.sp
 
-.sp
-.TS
-l l l l l
-l l l l l .
-\fBchown\fR	\fBfrom\fR	\fBln\fR	\fBls\fR	\fBsed\fR
-\fBsum\fR	\fBtouch\fR			
-.TE
-
-.LP
 The \fB/usr/bin/cpio\fR and \fB/usr/bin/pax\fR utilities are large file aware,
 but cannot archive a file whose size exceeds 8 Gbyte - 1 byte.
 .LP
@@ -202,16 +190,6 @@ The following \fB/usr/sbin\fR utilities are large file safe:
 .TS
 l l l l l .
 lpfilter		lpforms			
-.TE
-
-.LP
-The following \fB/usr/ucb\fR utilities are large file safe:
-.sp
-
-.sp
-.TS
-l l l l l .
-\fBMail\fR	\fBlpr\fR			
 .TE
 
 .SH SEE ALSO

@@ -308,29 +308,6 @@ int \fBfstatvfs\fR(..., 	int \fBfstatvfs64\fR(...,
    struct \fBstatvfs\fR *);	  struct \fBstatvfs64\fR *);
 .TE
 
-.SS "<\fBucbinclude/stdio.h\fR>"
-
-.TS
-l l
-l l .
-FILE *\fBfopen()\fR	FILE *\fBfopen64()\fR
-FILE *\fBfreopen()\fR	FILE *\fBfreopen64()\fR
-.TE
-
-.SS "<\fBucbinclude/sys/dir.h\fR>"
-
-.TS
-l l
-l l .
-int \fBalphasort\fR(	int \fBalphasort64\fR(
-   struct \fBdirect\fR **,	   struct \fBdirect64\fR **,
-   struct \fBdirect\fR **);	   struct \fBdirect64\fR **);
-struct \fBdirect *\fR\fBreaddir()\fR;	struct \fBdirect64 *\fR\fBreaddir64()\fR;
-int \fBscandir\fR(...,	int \fBscandir64\fR(...,
-   struct \fBdirect\fR *(*[]);,  ...);	   struct \fBdirect64\fR *(*[]);,  ...);
-	
-.TE
-
 .SS "<\fBunistd.h\fR>"
 
 .TS

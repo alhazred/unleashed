@@ -25,16 +25,6 @@ mailx \- interactive message processing system
      [\fB-r\fR \fIaddress\fR] [\fB-s\fR \fIsubject\fR] \fIrecipient\fR...
 .fi
 
-.LP
-.nf
-\fB/usr/ucb/mail\fR ...
-.fi
-
-.LP
-.nf
-\fB/usr/ucb/Mail\fR ...
-.fi
-
 .SH DESCRIPTION
 .LP
 The mail utilities listed above provide a comfortable, flexible environment for
@@ -2003,8 +1993,7 @@ option. Enabled by default.
 Automatically incorporate new messages into the current session as they arrive.
 This has an affect similar to issuing the \fBinc\fR command every time the
 command prompt is displayed. Disabled by default, but \fBautoinc\fR is set in
-the default system startup file for \fBmailx\fR; it is not set for
-\fB/usr/ucb/mail\fR or \fB/usr/ucb/Mail\fR.
+the default system startup file for \fBmailx\fR.
 .RE
 
 .sp
@@ -2747,17 +2736,6 @@ lock file to prevent multiple writers of system mailbox
 .sp .6
 .RS 4n
 optional system startup file for \fBmailx\fR only
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB/etc/mail/Mail.rc\fR\fR
-.ad
-.sp .6
-.RS 4n
-BSD compatibility system-wide startup file for \fB/usr/ucb/mail\fR and
-\fB/usr/ucb/Mail\fR
 .RE
 
 .sp

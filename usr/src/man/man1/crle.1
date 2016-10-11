@@ -731,7 +731,7 @@ $ \fBldd /usr/bin/vi\fR
     libcurses.so.1 =>  /lib/libcurses.so.1
     ....
 
-# \fBcrle -a /lib/libcurses.so.1 -o /usr/ucblib\fR
+# \fBcrle -a /lib/libcurses.so.1 -o /usr/something\fR
 # \fBcrle\fR
 
 Configuration file [version 4]: /var/ld/ld.config
@@ -741,11 +741,11 @@ Configuration file [version 4]: /var/ld/ld.config
                                (system default)
 
 Directory: /lib
-  libcurses.so.1  (alternate: /usr/ucblib/libcurses.so.1)
+  libcurses.so.1  (alternate: /usr/something/libcurses.so.1)
 \&....
 
 $ \fBldd /usr/bin/vi\fR
-    libcurses.so.1 => /usr/ucblib/libcurses.so.1 (alternate)
+    libcurses.so.1 => /usr/something/libcurses.so.1 (alternate)
     ....
 .fi
 .in -2
@@ -755,7 +755,7 @@ $ \fBldd /usr/bin/vi\fR
 .LP
 With this configuration, any dependency that would normally resolve to
 \fB/usr/lib/libcurses.so.1\fR instead resolves to
-\fB/usr/ucblib/libcurses.so.1\fR.
+\fB/usr/something/libcurses.so.1\fR.
 
 .LP
 \fBExample 8 \fRSetting Replaceable and Permanent Environment Variables

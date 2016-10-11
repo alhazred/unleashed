@@ -220,11 +220,9 @@ True if \fIfile\fR exists. (Not available in \fBsh\fR.)
 \fB\fB-f\fR \fIfile\fR\fR
 .ad
 .RS 28n
-True if \fIfile\fR exists and is a regular file. Alternatively, if
-\fB/usr/bin/sh\fR users specify \fB/usr/ucb\fR before \fB/usr/bin\fR in their
-\fBPATH\fR environment variable, then \fBtest\fR returns true if \fIfile\fR
-exists and is (\fBnot\(mia\(midirectory\fR). The \fBcsh\fR \fBtest\fR and
-\fB[\fR built-ins always use this alternative behavior.
+True if \fIfile\fR exists and is a regular file.  The \fBcsh\fR \fBtest\fR
+and \fB[\fR built-ins return true if \fIfile\fR exists and is
+(\fBnot\(mia\(midirectory\fR).
 .RE
 
 .sp

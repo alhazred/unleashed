@@ -329,7 +329,7 @@ in.tftpd: LOCAL, .my.domain
 /etc/hosts.deny:
 .in +3
 in.tftpd: ALL: (/some/where/safe_finger -l @%h | \\
-	/usr/ucb/mail -s %d-%h root) &
+	/usr/bin/mail -s %d-%h root) &
 .fi
 .PP
 The safe_finger command comes with the tcpd wrapper and should be

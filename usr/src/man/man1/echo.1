@@ -38,11 +38,8 @@ full pathname. See \fBshell_builtins\fR(1). \fBsh\fR's \fBecho\fR, \fBksh\fR's
 back-slashed escape characters, except that \fBsh\fR's \fBecho\fR does not
 understand \fB\ea\fR as the alert character. In addition, \fBksh\fR's and
 \fBksh93\fR's \fBecho\fR does not have an \fB-n\fR option.
-\fBcsh\fR's \fBecho\fR and \fB/usr/ucb/echo\fR, on the other hand, have an
-\fB-n\fR option, but do not understand the back-slashed escape characters.
-\fBsh\fR and \fBksh\fR determine whether \fB/usr/ucb/echo\fR is found first in
-the \fBPATH\fR and, if so, they adapt the behavior of the \fBecho\fR builtin to
-match \fB/usr/ucb/echo\fR.
+\fBcsh\fR's \fBecho\fR, on the other hand, has an
+\fB-n\fR option, but does not understand the back-slashed escape characters.
 .SH OPERANDS
 .LP
 The following operand is supported:
@@ -153,52 +150,7 @@ Where \fIn\fR is the 8-bit character whose \fBASCII\fR code is the 1-, 2- or
 .LP
 Portable applications should not use \fB-n\fR (as the first argument) or escape
 sequences.
-.sp
-.LP
-The \fBprintf\fR(1) utility can be used portably to emulate any of the
-traditional behaviors of the \fBecho\fR utility as follows:
-.RS +4
-.TP
-.ie t \(bu
-.el o
-The Solaris 2.6 operating environment or compatible version's
-\fB/usr/bin/echo\fR is equivalent to:
-.sp
-.in +2
-.nf
-\fBprintf "%b\en" "$*"\fR
-.fi
-.in -2
-.sp
 
-.RE
-.RS +4
-.TP
-.ie t \(bu
-.el o
-The \fB/usr/ucb/echo\fR is equivalent to:
-.sp
-.in +2
-.nf
-if [ "X$1" = "X-n" ]
-
-then
-
-        shift
-
-        printf "%s" "$*"
-
-else
-
-        printf "%s\en" "$*"
-
-fi
-.fi
-.in -2
-
-.RE
-.sp
-.LP
 New applications are encouraged to use \fBprintf\fR instead of \fBecho\fR.
 .SH EXAMPLES
 .LP
@@ -269,16 +221,6 @@ example$ \fBecho "$USER's current directory is $PWD\ec"\fR
 .in +2
 .nf
 example% \fBecho -n "$USER's current directory is $PWD"\fR
-.fi
-.in -2
-.sp
-
-.LP
-\fBExample 5 \fR/usr/ucb/echo
-.sp
-.in +2
-.nf
-example% \fB/usr/ucb/echo -n "$USER's current directory is $PWD"\fR
 .fi
 .in -2
 .sp

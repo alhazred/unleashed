@@ -81,7 +81,7 @@ Example \fB/etc/default/cron\fR file:
 .in +2
 .nf
 CRONLOG=YES
-PATH=/usr/bin:/usr/ucb:
+PATH=/usr/bin:/usr/sbin
 .fi
 .in -2
 .sp
@@ -89,7 +89,7 @@ PATH=/usr/bin:/usr/ucb:
 .sp
 .LP
 This example enables logging and sets the default \fBPATH\fR used by non-root
-jobs to \fB/usr/bin:/usr/ucb:\fR. Root jobs continue to use
+jobs to \fB/usr/bin:/usr/sbin\fR. Root jobs continue to use
 \fB/usr/sbin:/usr/bin\fR.
 .sp
 .LP
