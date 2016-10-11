@@ -9,6 +9,11 @@
    #t)
 
  (config
+   ; support for ixgbe network adapters
+   IXGBE
+   #t)
+
+ (config
    ; support for virtio network devices
    VIRTIO_NET
    (and

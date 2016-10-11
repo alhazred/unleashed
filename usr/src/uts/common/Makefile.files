@@ -1895,20 +1895,6 @@ XGE_HAL_OBJS =  xgehal-channel.o xgehal-fifo.o xgehal-ring.o  xgehal-config.o \
 IPRB_OBJS =	iprb.o
 
 #
-#       Intel 10GbE PCIE NIC driver module
-#
-
-# illumos-written source files
-IXGBE_OBJS =    ixgbe_buf.o ixgbe_debug.o ixgbe_gld.o ixgbe_log.o ixgbe_main.o \
-		ixgbe_osdep.o ixgbe_rx.o ixgbe_stat.o ixgbe_tx.o
-
-# Intel-written source files
-IXGBE_INTC_OBJS	=	ixgbe_82598.o ixgbe_82599.o ixgbe_api.o ixgbe_common.o \
-			ixgbe_phy.o ixgbe_dcb.o ixgbe_dcb_82598.o \
-			ixgbe_dcb_82599.o ixgbe_mbx.o ixgbe_vf.o ixgbe_x540.o \
-			ixgbe_x550.o
-
-#
 #	Intel 40GbE PCIe NIC driver module
 #
 
