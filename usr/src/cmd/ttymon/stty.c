@@ -321,6 +321,8 @@ prmodes(void)				/* print modes, no options, argc is 1 */
 			pit(cb.c_cc[VQUIT], "quit", "; ");
 		if (cb.c_cc[VERASE] != CERASE)
 			pit(cb.c_cc[VERASE], "erase", "; ");
+		if (cb.c_cc[VERASE2] != CERASE2)
+			pit(cb.c_cc[VERASE], "erase2", "; ");
 		if (cb.c_cc[VKILL] != CKILL)
 			pit(cb.c_cc[VKILL], "kill", "; ");
 		if (cb.c_cc[VEOF] != CEOF)
@@ -543,6 +545,7 @@ pramodes(void)				/* print all modes, -a option */
 		pit(cb.c_cc[VINTR], "intr", "; ");
 		pit(cb.c_cc[VQUIT], "quit", "; ");
 		pit(cb.c_cc[VERASE], "erase", "; ");
+		pit(cb.c_cc[VERASE2], "erase2", "; ");
 		pit(cb.c_cc[VKILL], "kill", ";\n");
 		pit(cb.c_cc[VEOF], "eof", "; ");
 		pit(cb.c_cc[VEOL], "eol", "; ");
