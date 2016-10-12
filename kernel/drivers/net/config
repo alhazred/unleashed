@@ -1,4 +1,9 @@
 ((config
+   ; support for bnxe network adapters
+   BNXE
+   #t)
+
+ (config
    ; support for e1000g network adapters
    E1000G
    #t)

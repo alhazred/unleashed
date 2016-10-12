@@ -227,7 +227,6 @@ DRV_KMODS	+= audiols
 DRV_KMODS	+= audiop16x
 DRV_KMODS	+= audiopci
 DRV_KMODS	+= audiots
-DRV_KMODS	+= bnxe
 DRV_KMODS	+= efe
 DRV_KMODS	+= hxge
 DRV_KMODS	+= mxfe

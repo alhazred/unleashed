@@ -14,6 +14,7 @@
 #define	CONFIG_RAMDISK
 #define	CONFIG_RANDOM
 #undef	CONFIG_VIRTIO
+#define	CONFIG_BNXE
 #define	CONFIG_E1000G
 #undef	CONFIG_I40E
 #define	CONFIG_IGB

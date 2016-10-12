@@ -356,7 +356,6 @@ DRV_KMODS	+= pvscsi
 DRV_KMODS	+= afe
 DRV_KMODS	+= atge
 DRV_KMODS	+= bfe
-DRV_KMODS	+= bnxe
 DRV_KMODS	+= dmfe
 DRV_KMODS	+= efe
 DRV_KMODS	+= elxl
