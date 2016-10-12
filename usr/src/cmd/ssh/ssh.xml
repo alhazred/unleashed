@@ -36,7 +36,7 @@
 <service
 	name='network/ssh'
 	type='service'
-	version='1'>
+	version='2'>
 
 	<create_default_instance enabled='false' />
 
@@ -123,7 +123,7 @@
 	<exec_method
 		type='method'
 		name='refresh'
-		exec='/lib/svc/method/sshd restart'
+		exec=':kill -HUP'
 		timeout_seconds='60' />
 
 	<property_group name='startd'
