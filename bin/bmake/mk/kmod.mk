@@ -9,6 +9,7 @@
 #   			  MODULE_TYPE
 #   MODULE_DEPS		- dependencies
 #   MODULE_CONF		- name of .conf file to install
+#   MODULE_FW		- firmware files to install
 #   SRCS		- source files
 #   SRCS32		- additional source files (32-bit build only)
 #   SRCS64		- additional source files (64-bit build only)
@@ -182,6 +183,9 @@ INSTALLTGTS+=install-64
 .if !empty(MODULE_CONF)
 INSTALLTGTS+=install-conf
 .endif
+.if !empty(MODULE_FW)
+INSTALLTGTS+=install-fw
+.endif
 .endif
 
 .if !empty(SRCS_DIRS)
@@ -233,7 +237,13 @@ install-64: $(MODULE)-64
 install-conf: ${MODULE_CONF}
 	$(INS) -m 644 ${MODULE_CONF} "$(DESTDIR)/kernel/${MODULE_TYPE}/${MODULE}.conf"
 
-.PHONY: all clean cleandir install-32 install-64 install-conf
+install-fw: ${MODULE_FW}
+	$(INS) -d -m 755 "$(DESTDIR)/kernel/firmware/${MODULE}"
+	for x in ${MODULE_FW} ; do \
+		$(INS) -m 644 $$x "$(DESTDIR)/kernel/firmware/${MODULE}" ; \
+	done
+
+.PHONY: all clean cleandir install-32 install-64 install-conf install-fw
 
 $(MODULE)-32: $(OBJS32)
 	${QLD}$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
