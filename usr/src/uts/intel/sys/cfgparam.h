@@ -22,7 +22,11 @@
 #define	CONFIG_NXGE
 #define	CONFIG_SFXGE
 #define	CONFIG_VIRTIO_NET
+#define	CONFIG_IWH
+#define	CONFIG_IWI
+#define	CONFIG_IWK
 #define	CONFIG_IWN
+#define	CONFIG_IWP
 #define	CONFIG_FS_AUTOFS
 #define	CONFIG_FS_HSFS
 #define	CONFIG_FS_LOFS
