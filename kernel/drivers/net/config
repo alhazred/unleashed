@@ -38,6 +38,8 @@
    VIRTIO_NET
    (and
      (= MACH 'i386)
-     (= VIRTIO #t))))
+     (= VIRTIO #t)))
+
+ (include "wifi/config"))
 
 ; vim: set syntax=scheme:

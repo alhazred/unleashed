@@ -9,6 +9,7 @@ SUBDIR_${CONFIG_NXGE}		+= nxge
 SUBDIR_${CONFIG_SFXGE}		+= sfxge
 SUBDIR_${CONFIG_VIRTIO_NET}	+= vioif
 
-SUBDIR = ${SUBDIR_y}
+SUBDIR = ${SUBDIR_y} \
+	 wifi
 
 .include <bsd.subdir.mk>
