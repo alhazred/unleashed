@@ -169,7 +169,7 @@ CPPFLAGS += -I$(SRC)/cmd/ypcmd
 # Need the path to nis_clnt.h
 CLNT_PICS = pics/db_entry_c_xdr.o pics/ldap_xdr.o pics/db_mindex_c_xdr.o
 
-$(CLNT_PICS) := CPPFLAGS += -I../libnsl/nis/gen
+$(CLNT_PICS) := CPPFLAGS += -I../libc/port/nsl
 
 LIBS = $(DYNLIB)
 ZDEFS=
