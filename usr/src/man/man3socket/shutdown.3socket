@@ -10,7 +10,7 @@ shutdown \- shut down part of a full-duplex connection
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lsocket\fR \fB -lnsl \fR [ \fIlibrary\fR... ]
+\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
 #include <sys/socket.h>
 
 \fBint\fR \fBshutdown\fR(\fBint\fR \fIs\fR, \fBint\fR \fIhow\fR);

@@ -11,7 +11,7 @@ rpc \- library routines for remote procedure calls
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lnsl\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <rpc/rpc.h>
 #include <netconfig.h>
 .fi

@@ -32,7 +32,6 @@ include		../../Makefile.fstype
 OBJS=	$(TYPEPROG).o nfs_tbind.o thrpool.o
 SRCS=	$(TYPEPROG).c ../../fslib.c ../lib/nfs_tbind.c ../lib/thrpool.c
 
-LDLIBS += -lnsl
 CPPFLAGS += -I. -I../.. -I../lib
 
 CERRWARN += -Wno-unused-variable

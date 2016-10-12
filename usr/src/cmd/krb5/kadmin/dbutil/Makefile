@@ -42,7 +42,7 @@ CERRWARN += -Wno-implicit-function-declaration
 
 LDFLAGS += $(KRUNPATH) $(KERBRUNPATH)
 LDLIBS += -L $(ROOT_KLIBDIR) -L $(KRB5LIB) -lkadm5srv -lkdb \
-	-lmech_krb5 -lnsl
+	-lmech_krb5
 
 .KEEP_STATE:
 

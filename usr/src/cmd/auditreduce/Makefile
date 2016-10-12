@@ -39,7 +39,7 @@ POFILE = $(PROG).po
 MSGFILES = $(SRCS)
 
 CPPFLAGS += -I$(TABLEDIR) -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-LDLIBS += -lnsl -lbsm -lscf -ltsol
+LDLIBS += -lbsm -lscf -ltsol
 
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-parentheses

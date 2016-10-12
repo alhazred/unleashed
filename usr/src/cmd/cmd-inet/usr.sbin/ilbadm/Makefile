@@ -32,7 +32,7 @@ include	../../../Makefile.cmd
 include	../../../Makefile.ctf
 include ../../Makefile.cmd-inet
 
-LDLIBS +=	-lcmdutils -lsocket -lnsl -lilb -linetutil -lkstat
+LDLIBS +=	-lcmdutils -lilb -linetutil -lkstat
 CPPFLAGS +=	-I$(SRC)/lib/libilb/common -I$(SRC)/uts/common
 
 CERRWARN +=	-Wno-switch

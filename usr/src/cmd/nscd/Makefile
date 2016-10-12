@@ -68,7 +68,7 @@ LDFLAGS +=	$(ZINTERPOSE)
 # GPROF_FLAG=	-pg
 # DEBUG_FLAG=	-g
 
-PROGLIBS=	$(LDLIBS) -lresolv -lnsl -lsocket -lumem -lscf -lavl
+PROGLIBS=	$(LDLIBS) -lresolv -lumem -lscf -lavl
 
 # install macros and rule
 #

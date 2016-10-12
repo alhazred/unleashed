@@ -45,10 +45,9 @@ ROOTUSRSBINLINKS = $(PROG:%=$(ROOTUSRSBIN)/%)
 
 # ifconfig uses the ancillary data feature which is available only through
 # UNIX 98 standards version of Socket interface. This interface is supposed to
-# be accessed by -lxnet. In addition -lsocket and -lnsl are used to
-# capture new not-yet-standard interfaces. Someday -lxnet alone should be
+# be accessed by. In addition and are used to
+# capture new not-yet-standard interfaces. Someday alone should be
 # enough when IPv6 inspired new interfaces are part of standards.
-LDLIBS +=	-lxnet -lsocket -lnsl
 
 # these #defines are required to use UNIX 98 interfaces
 _D_UNIX98_EXTN= -D_XOPEN_SOURCE=500 -D__EXTENSIONS__

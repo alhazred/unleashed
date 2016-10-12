@@ -478,7 +478,7 @@ cause libinetutil.so.1 to be installed in /lib rather than /usr/lib:
 			$(SRCDIR)/ifspec.c $(SRCDIR)/eh.c $(SRCDIR)/tq.c \
 			$(SRCDIR)/ifaddrlist.c
 
-	LDLIBS +=	-lsocket -lc
+	LDLIBS +=	 -lc
 
 	CPPFLAGS +=	-I$(SRCDIR)
 

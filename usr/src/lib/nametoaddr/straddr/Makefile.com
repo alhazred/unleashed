@@ -38,7 +38,7 @@ DYNLIB =	straddr.so$(VERS)
 LIBLINKS =	straddr.so
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lnsl -lc
+LDLIBS +=	 -lc
 
 SRCDIR =	../common
 

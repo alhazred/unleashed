@@ -44,7 +44,6 @@ LDFLAGS=''
 RPATH_FLAG='-R'
 PTHREAD_CFLAGS='-D_REENTRANT '
 
-#LIBS='-lresolv -lsocket -lnsl '
 GEN_LIB=
 
 # Defaults for program
@@ -198,7 +197,7 @@ if test -n "$do_libs"; then
     fi
 
     if test $library = 'krb5'; then
-	lib_flags="$lib_flags -lkrb5  $LIBS $GEN_LIB"
+	lib_flags="$lib_flags -lkrb5  $GEN_LIB"
     fi
 
     echo $lib_flags

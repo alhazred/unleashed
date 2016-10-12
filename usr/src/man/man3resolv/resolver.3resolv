@@ -16,7 +16,7 @@ BIND 8.2.2 Interfaces
 
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lresolv\fR \fB -lsocket \fR \fB -lnsl \fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lresolv\fR [ \fIlibrary\fR ... ]
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/nameser.h>
@@ -121,7 +121,7 @@ Deprecated Interfaces
 
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lresolv\fR \fB -lsocket \fR \fB -lnsl \fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lresolv\fR [ \fIlibrary\fR ... ]
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/nameser.h>

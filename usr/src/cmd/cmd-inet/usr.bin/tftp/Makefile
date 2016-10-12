@@ -40,7 +40,6 @@ $(ROOTMANIFEST):= FILEMODE = 0444
 CPPFLAGS +=	-DSYSV -DSTRNET -DBSD_COMP -I$(CMDINETCOMMONDIR)
 CERRWARN +=	-Wno-clobbered
 CERRWARN +=	-Wno-parentheses
-LDLIBS +=	-lsocket -lnsl
 
 .KEEP_STATE:
 

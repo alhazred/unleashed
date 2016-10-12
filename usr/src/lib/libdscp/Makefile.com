@@ -34,7 +34,7 @@ include	../../Makefile.lib
 include	../../Makefile.rootfs
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lc -lsocket -lnsl
+LDLIBS +=	-lc
 
 CPPFLAGS +=	-I..
 

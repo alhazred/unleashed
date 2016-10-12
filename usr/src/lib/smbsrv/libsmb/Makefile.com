@@ -79,7 +79,7 @@ LDLIBS +=	$(MACH_LDLIBS)
 # perfer to keep libs ordered by dependence
 LDLIBS +=	-lscf -lmd -luuid -lpkcs11 -lcryptoutil
 LDLIBS +=	-lsec -lidmap -lreparse -lcmdutils -lavl
-LDLIBS +=	-lnvpair -lresolv -lsocket -lnsl -lc
+LDLIBS +=	-lnvpair -lresolv -lc
 CPPFLAGS +=	$(INCS) -D_REENTRANT
 CPPFLAGS +=	-Dsyslog=smb_syslog
 CERRWARN +=	-Wno-uninitialized

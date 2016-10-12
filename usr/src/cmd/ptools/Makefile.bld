@@ -37,7 +37,7 @@ FILEMODE = 0555
 # libproc is added individually as pwait doesn't need it.
 LDLIBS_pargs		= -lproc
 LDLIBS_pcred		= -lproc
-LDLIBS_pfiles		= -lproc -lnsl
+LDLIBS_pfiles		= -lproc
 LDLIBS_pflags		= -lproc
 LDLIBS_pldd		= -lproc
 LDLIBS_plgrp		= -lproc -llgrp

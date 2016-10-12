@@ -63,7 +63,6 @@ ROOTONPROG=	$(ONPROG:%=$(ROOTON)/%)
 
 CPPFLAGS =	-I. $(CPPFLAGS.master)
 
-LDLIBS +=	-lsocket -lnsl
 rpc.rexd :=	LDLIBS += -lrpcsvc -lbsm -lpam
 
 TYPESRCS=	../nfs/lib/nfs_subr.c

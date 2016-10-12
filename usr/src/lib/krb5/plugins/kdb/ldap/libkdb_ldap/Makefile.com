@@ -77,7 +77,7 @@ CFLAGS +=	-I..
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-unused-function
 DYNFLAGS +=	$(KRUNPATH) $(KERBRUNPATH) $(KMECHLIB)
-LDLIBS +=	-L $(ROOTLIBDIR) -lkadm5srv -lc -lnsl -lldap
+LDLIBS +=	-L $(ROOTLIBDIR) -lkadm5srv -lc -lldap
 
 .KEEP_STATE:
 

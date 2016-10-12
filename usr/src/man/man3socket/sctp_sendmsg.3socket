@@ -9,7 +9,7 @@ sctp_sendmsg \- send message from an SCTP socket
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lsocket\fR \fB -lnsl \fR \fB -lsctp \fR [ \fIlibrary\fR... ]
+\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB -lsctp \fR [ \fIlibrary\fR... ]
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/sctp.h>

@@ -17,7 +17,7 @@ CPPFLAGS +=	$(ACCESS) $(PARANOID) $(NETGROUP) $(TLI) \
 		-I../../lib/libwrap
 tcpd tcpdmatch try-from := \
 		LDLIBS += -lwrap
-tcpdchk :=	LDLIBS += -lwrap -lnsl
+tcpdchk :=	LDLIBS += -lwrap
 
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-parentheses

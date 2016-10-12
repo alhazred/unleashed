@@ -76,7 +76,7 @@ CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-clobbered
 CERRWARN +=	-Wno-extra
 
-LDLIBS +=	-lmail -lsocket
+LDLIBS +=	-lmail
 
 # mail defines its own delete() - reduce symbols to locals to remove name clash.
 LDFLAGS +=	$(MAPFILE.NGB:%=-Wl,-M%)

@@ -35,7 +35,6 @@ $(ROOTMANIFEST)		:= FILEMODE= 444
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
-LDLIBS +=	-lsocket -lnsl
 
 .KEEP_STATE:
 

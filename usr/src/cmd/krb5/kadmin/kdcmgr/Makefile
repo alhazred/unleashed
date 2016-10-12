@@ -37,7 +37,7 @@ POFILE=		$(SSRCS:%.sh=%.po)
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-uninitialized
 
-LDLIBS	+=	-lresolv -lnsl
+LDLIBS	+=	-lresolv
 
 CLOBBERFILES +=	$(KLPROG)
 

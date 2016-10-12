@@ -45,7 +45,7 @@ CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 
-LDLIBS += -lbsm -lnsl -lpam -ltsol
+LDLIBS += -lbsm -lpam -ltsol
 
 .KEEP_STATE:
 

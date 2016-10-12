@@ -454,11 +454,7 @@ to connect to a remote host
 .Lp
 The following example shows how one would open a socket and prepare it
 to connect to the remote host whose address is the IP address 127.0.0.1
-on port 80. This program should be compiled with the C compiler
-.Sy cc
-and linked against the libraries libsocket and libnsl. If this example
-was named ip4.c, then the full link line would be
-.Ic cc ip4.c -lsocket -lnsl .
+on port 80.
 .Bd -literal
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -504,12 +500,7 @@ Preparing an IPv6
 to bind to a local address
 .Lp
 The following example shows how one would open a socket and prepare it
-to bind to the local IPv6 address ::1 port on port 12345. This program
-should be compiled with the C compiler
-.Sy cc
-and linked against the libraries libsocket and libnsl. If this example
-was named ip6.c, then the full compiler line would be
-.Ic cc ip6.c -lsocket -lnsl .
+to bind to the local IPv6 address ::1 port on port 12345.
 .Bd -literal
 #include <sys/types.h>
 #include <sys/socket.h>

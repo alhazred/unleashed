@@ -30,7 +30,6 @@ SRCS= $(PROG).c
 include ../Makefile.cmd
 
 CPPFLAGS= -DPORTMAP $(CPPFLAGS.master)
-LDLIBS += -lnsl
 CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:

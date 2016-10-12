@@ -64,7 +64,6 @@ CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-extra
 CERRWARN += -Wno-unused-function
-LDLIBS += -lnsl
 $(BINPROG) :=	LDLIBS += -lrpcsvc
 $(RPROG) :=	LDLIBS += -lrpcsvc
 $(SPROG) :=	LDLIBS += -lrpcsvc

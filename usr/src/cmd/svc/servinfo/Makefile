@@ -31,7 +31,6 @@ POFILES = 	$(OBJS:.o=.po)
 include ../../Makefile.cmd
 include ../../Makefile.ctf
 
-LDLIBS +=	-lnsl -lsocket
 
 
 .KEEP_STATE:

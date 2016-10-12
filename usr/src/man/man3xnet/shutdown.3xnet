@@ -14,7 +14,7 @@ shutdown \- shut down socket send and receive operations
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/socket.h>
 
 \fBint\fR \fBshutdown\fR(\fBint\fR \fIsocket\fR, \fBint\fR \fIhow\fR);

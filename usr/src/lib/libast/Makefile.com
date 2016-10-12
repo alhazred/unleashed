@@ -675,7 +675,6 @@ SRCS=		$(OBJECTS:%.o=../%.c)
 LIBS =		$(DYNLIB)
 
 LDLIBS += \
-	-lsocket \
 	-lm \
 	-lc
 

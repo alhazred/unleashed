@@ -33,7 +33,7 @@ include ../../Makefile.lib
 
 SRCDIR =	../common
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lsocket -lc
+LDLIBS +=	 -lc
 
 
 .KEEP_STATE:

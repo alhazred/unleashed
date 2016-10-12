@@ -45,7 +45,7 @@ OBJS= 		$(LOCAL) selfcheck.o daemon.o
 
 SRCS=		$(LOCAL:%.o=%.c) ../lib/selfcheck.c ../lib/daemon.c
 
-LDLIBS +=	-lsocket -lrpcsvc -lnsl
+LDLIBS +=	 -lrpcsvc
 
 $(TYPEPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS)

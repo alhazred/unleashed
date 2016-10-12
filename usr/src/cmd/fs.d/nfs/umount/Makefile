@@ -36,7 +36,7 @@ SRCS=		$(LIBPROG).c $(FSLIBSRC) ../lib/replica.c
 
 CPPFLAGS += -I../.. -I../lib
 
-LDLIBS +=	-lrpcsvc -lnsl -lkstat
+LDLIBS +=	-lrpcsvc -lkstat
 
 #
 # Message catalog

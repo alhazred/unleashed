@@ -35,7 +35,7 @@ ROOTMANIFESTDIR = $(ROOTSVCNETWORK)
 SVCMETHOD= svc-tnctl
 $(ROOTMANIFEST) :=	FILEMODE= 444
 
-LDLIBS += -lnsl -ltsnet
+LDLIBS += -ltsnet
 
 CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-parentheses

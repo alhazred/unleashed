@@ -95,8 +95,6 @@ $(POFILE) := CPPFLAGS += $(INCS)
 LDLIBS += \
 	-lsqlite-sys \
 	-lsecdb \
-	-lsocket \
-	-lnsl \
 	-lidmap \
 	-lscf \
 	-lsldap \

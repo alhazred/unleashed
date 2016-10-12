@@ -43,5 +43,4 @@ include ../../../Makefile.rootfs
 CPPFLAGS +=	-DNSS_DNS_LIBRESOLV=\"libresolv.so.2\"
 
 
-LDLIBS +=	-lnsl -lsocket
 DYNLIB1 =	nss_dns.so$(VERS)

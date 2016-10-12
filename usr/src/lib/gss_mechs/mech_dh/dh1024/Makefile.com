@@ -41,7 +41,7 @@ OBJECTS= $(DH1024)
 include ../../../../Makefile.lib
 
 CPPFLAGS += -I../../backend/mech -I../../backend/crypto
-CPPFLAGS += -I$(SRC)/lib/libnsl/include
+CPPFLAGS += -I$(SRC)/lib/libc/inc
 CPPFLAGS += -I$(SRC)/uts/common/gssapi/include
 
 DYNFLAGS +=	$(ZIGNORE)
@@ -51,7 +51,7 @@ LIBNAME = $(LIBRARY:%.a=%)
 
 MAPFILES =	../mapfile-vers
 
-LDLIBS += -lnsl -lmp -lc
+LDLIBS += -lmp -lc
 
 .KEEP_STATE:
 

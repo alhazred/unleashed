@@ -28,7 +28,7 @@
 
 PROG =		exdump
 CC =		cc
-LDLIBS =	-lexacct -lproject -lsocket -lnsl
+LDLIBS =	-lexacct -lproject
 
 CFLAGS =
 

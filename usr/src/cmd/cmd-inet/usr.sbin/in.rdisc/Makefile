@@ -30,7 +30,6 @@ include		../../../Makefile.cmd
 
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORKROUTING)
 
-LDLIBS +=	-lsocket -lnsl
 
 CPPFLAGS +=	-DSYSV -DBSD_COMP
 CERRWARN +=	-Wno-extra

@@ -14,7 +14,7 @@ form
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <arpa/inet.h>
 
 \fBconst char *\fR\fBinet_ntop\fR(\fBint\fR \fIaf\fR, \fBconst void *restrict\fR \fIsrc\fR,

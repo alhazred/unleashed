@@ -56,7 +56,7 @@ CPPFLAGS += -D_FILE_OFFSET_BITS=64
 # this library is for debugging, let's always define DEBUG here.
 CPPFLAGS += -DDEBUG
 
-LDLIBS += -lumem -lcryptoutil -lsocket -lc
+LDLIBS += -lumem -lcryptoutil -lc
 
 .KEEP_STATE:
 

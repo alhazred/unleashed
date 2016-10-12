@@ -120,7 +120,6 @@ OBJS_FS_SMBSRV = \
 		smb_vops.o				\
 		smb_vss.o				\
 		smb_write.o				\
-		\
 		smb2_dispatch.o \
 		smb2_cancel.o \
 		smb2_change_notify.o \
@@ -202,7 +201,7 @@ INCS += -I$(SRC)/common
 
 LDLIBS +=	$(MACH_LDLIBS)
 LDLIBS +=	-lfakekernel -lidmap -lcmdutils
-LDLIBS +=	-lavl -lnvpair -lnsl -lpkcs11 -lreparse -lc
+LDLIBS +=	-lavl -lnvpair -lpkcs11 -lreparse -lc
 
 CPPFLAGS += $(INCS) -D_REENTRANT -D_FAKE_KERNEL
 CPPFLAGS += -D_FILE_OFFSET_BITS=64

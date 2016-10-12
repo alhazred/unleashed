@@ -13,7 +13,7 @@ sendto \- send a message on a socket
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR ... ]
 #include <sys/socket.h>
 
 \fBssize_t\fR \fBsendto\fR(\fBint\fR \fIsocket\fR, \fBconst void *\fR\fImessage\fR, \fBsize_t\fR \fIlength\fR, \fBint\fR \fIflags\fR,

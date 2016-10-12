@@ -37,7 +37,7 @@ $(ROOTFILE):=	FILEMODE= $(LIBFILEMODE)
 
 .KEEP_STATE:
 
-LDLIBS +=	-lsecdb -lnsl
+LDLIBS +=	-lsecdb
 CERRWARN +=	-Wno-type-limits
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-uninitialized

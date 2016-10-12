@@ -34,7 +34,7 @@
  * the family AF_NCA.  Afterwards, the real bind(3SOCKET) is called
  * descriptors, etc. *
  *
- * Compile:	cc -Kpic -G -o ncad_addr.so ncad_addr.c -lsocket -lnsl
+ * Compile:	cc -Kpic -G -o ncad_addr.so ncad_addr.c
  * Use:		LD_PRELOAD=/path/to/ncad_addr.so my_program
  */
 

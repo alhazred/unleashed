@@ -7,7 +7,7 @@ getprotoent, getprotoent_r, setprotoent, endprotoent \- get protocol entry
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lsocket\fR \fB -lnsl \fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <netdb.h>
 
 \fBstruct protoent *\fR\fBgetprotobyname\fR(\fBconst char *\fR\fIname\fR);

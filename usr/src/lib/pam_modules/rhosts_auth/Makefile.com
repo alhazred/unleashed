@@ -34,7 +34,7 @@ OBJECTS=	rhosts_auth.o
 
 include		../../Makefile.pam_modules
 
-LDLIBS +=	-lpam -lsocket -lc
+LDLIBS +=	-lpam -lc
 
 all: $(LIBS)
 

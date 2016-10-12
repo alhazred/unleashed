@@ -74,7 +74,7 @@ CERRWARN +=	-Wno-clobbered
 CERRWARN +=	-Wno-extra
 LIBDUMP=	../lib/libdump.a
 LDLIBS +=	$(BSTATIC) -L../lib -ldump $(BDYNAMIC) \
-		-lsocket -lnsl -ladm -lm -lkstat
+		 -ladm -lm -lkstat
 
 UFSROOTDUMPDATES=	$(UFSROOTETC)/dumpdates
 UFSROOTLINK=		$(UFSROOTUSRSBIN)/$(PROG)

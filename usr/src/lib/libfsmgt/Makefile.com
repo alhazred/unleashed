@@ -42,7 +42,7 @@ ROOTHDRS= $(HDRS:%=$(ROOTDIRS)/%)
 CHECKHDRS= $(HDRS:%.h=%.check)
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lc -lnsl -lkstat
+LDLIBS +=	-lc -lkstat
 
 SRCDIR =	../common
 

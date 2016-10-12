@@ -58,7 +58,7 @@ CERRWARN += -Wno-parentheses
 
 LDFLAGS += $(KRUNPATH) $(KERBRUNPATH)
 LDLIBS += -L$(ROOT_KLIBDIR) -L$(KRB5LIB) \
-	  -lmech_krb5 -lkdb -lkadm5srv -lnsl -lsocket -lbsm -lc
+	  -lmech_krb5 -lkdb -lkadm5srv -lbsm -lc
 
 .KEEP_STATE:
 

@@ -10,7 +10,7 @@ socketpair \- create a pair of connected sockets
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lsocket\fR \fB -lnsl \fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/types.h>
 #include <sys/socket.h>
 

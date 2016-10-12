@@ -30,7 +30,7 @@ PROG= clear_locks
 
 include         ../../../Makefile.cmd
 
-LDLIBS		+=	-lrpcsvc -lnsl
+LDLIBS		+=	-lrpcsvc
 
 #
 # Message catalog

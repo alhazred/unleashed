@@ -46,7 +46,7 @@ CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-extra
 CERRWARN	+= -Wno-implicit-function-declaration
 
-TLILIB =	-lnsl -lsocket
+TLILIB =	
 PAMLIB =        -lpam
 
 # use this if you don't have strpbrk/getopt in libc

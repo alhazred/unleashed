@@ -57,7 +57,7 @@ LIBNAME = $(LIBRARY:%.a=%)
 
 MAPFILES =	../mapfile-vers
 
-LDLIBS +=  -lgss -lnsl -lc 
+LDLIBS +=  -lgss -lc 
 
 RPCGEN += -C
 SED = sed

@@ -40,7 +40,7 @@ SRCS=		$(SRCDIR)/sysplugin.c	\
 LIBBSM=		$(SRC)/lib/libbsm/common
 
 LIBS=		$(DYNLIB)
-LDLIBS		+= -lbsm -lsecdb -lc -lnsl
+LDLIBS		+= -lbsm -lsecdb -lc
 
 CPPFLAGS	+= -D_REENTRANT
 CPPFLAGS	+= -I$(PRAUDIT)

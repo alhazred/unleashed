@@ -300,9 +300,9 @@ $(K5MECHLINK):	$(ROOTLIBDIR)/$(LIBLINKS)$(VERS)
 $(K5MECHLINK64):	$(ROOTLIBDIR64)/$(LIBLINKS)$(VERS)
 	$(INS.liblink2)
 
-LDLIBS += -lgss -lsocket -lresolv -lc -lpkcs11 -lnsl -lkstat
+LDLIBS += -lgss -lresolv -lc -lpkcs11 -lkstat
 # -z ignore causes linker to ignore unneeded dependencies.  This is
-#  needed because -lnsl is only used if DEBUG is defined.
+#  needed because is only used if DEBUG is defined.
 DYNFLAGS += $(ZIGNORE)
 
 # mech lib needs special initialization at load time

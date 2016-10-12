@@ -69,7 +69,7 @@ CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 
 DYNFLAGS +=	$(KRUNPATH) $(KERBRUNPATH) $(KMECHLIB)
-LDLIBS +=	-L $(ROOTLIBDIR) -ldb2 -lkdb -lkadm5srv -lc -lnsl
+LDLIBS +=	-L $(ROOTLIBDIR) -ldb2 -lkdb -lkadm5srv -lc
 
 .KEEP_STATE:
 

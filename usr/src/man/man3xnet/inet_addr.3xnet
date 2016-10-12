@@ -15,7 +15,7 @@ Internet address manipulation
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <arpa/inet.h>
 
 \fBin_addr_t\fR \fBinet_addr\fR(\fBconst char *\fR\fIcp\fR);

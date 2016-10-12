@@ -45,7 +45,7 @@ POFILES= $(OBJS:%.o=%.po)
 include ../../../Makefile.cmd
 include ../../Makefile.lvm
 
-LDLIBS +=	-lmeta -lsocket -lnsl -ldevid
+LDLIBS +=	-lmeta -ldevid
 
 CFLAGS += $(DEFINES)
 #

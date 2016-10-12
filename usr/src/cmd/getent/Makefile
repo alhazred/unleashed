@@ -48,7 +48,7 @@ OBJECTS= \
 
 SRCS=	$(OBJECTS:.o=.c)
 
-LDLIBS	+= -lsocket -lnsl -lproject
+LDLIBS	+= -lproject
 
 #
 # for message catalog

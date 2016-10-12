@@ -32,7 +32,7 @@ POFILE= iscsiadm.po
 
 include ../Makefile.cmd
 
-LDLIBS += -lnsl -ldevinfo -lima
+LDLIBS += -ldevinfo -lima
 
 CPPFLAGS += -DSOLARIS
 CPPFLAGS += -I.

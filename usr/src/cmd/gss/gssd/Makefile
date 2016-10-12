@@ -72,7 +72,7 @@ CERRWARN += -Wno-implicit-function-declaration
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 
-LDLIBS += -lgss -lnsl
+LDLIBS += -lgss
 
 gssd :=	MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
 gssd :=	LDFLAGS += $(MAPFILES:%=-Wl,-M%)

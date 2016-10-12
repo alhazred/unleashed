@@ -67,7 +67,7 @@ CFLAGS += $(DEFINES)
 all:	$(PROG)
 
 $(COMMD): $(DERIVED_FILES) $(COMMD_OBJECTS)
-	$(LINK.c) -o $@ $(COMMD_OBJECTS) $(LDLIBS) -lnsl
+	$(LINK.c) -o $@ $(COMMD_OBJECTS) $(LDLIBS)
 	$(POST_PROCESS)
 
 $(MDDOORS): ../mddoors.c

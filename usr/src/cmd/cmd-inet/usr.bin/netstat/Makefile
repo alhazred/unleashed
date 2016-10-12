@@ -48,7 +48,7 @@ SRCS=		$(LOCALSRCS) $(COMMONSRCS) $(STAT_COMMON_SRCS)
 CPPFLAGS += -DNDEBUG -I$(CMDINETCOMMONDIR) -I$(STATCOMMONDIR)
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-parentheses
-LDLIBS += -ldhcpagent -lsocket -lnsl -lkstat -ltsnet -ltsol
+LDLIBS += -ldhcpagent -lkstat -ltsnet -ltsol
 
 .KEEP_STATE:
 

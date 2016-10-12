@@ -26,6 +26,9 @@
 # ident	"%Z%%M%	%I%	%E% SMI"
 #
 
+include $(SRC)/lib/Makefile.filter.com
 include ../Makefile.com
 
 install: all $(ROOTLIBS) $(ROOTLINKS)
+
+include $(SRC)/lib/Makefile.filter.targ

@@ -9,7 +9,7 @@ au_open, au_close, au_write \- construct and write audit records
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lbsm\fR \fB -lsocket \fR \fB -lnsl \fR  [ \fIlibrary\fR... ]
+\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lbsm\fR [ \fIlibrary\fR... ]
 #include <bsm/libbsm.h>
 
 \fBint\fR \fBau_close\fR(\fBint\fR \fId\fR, \fBint\fR \fIkeep\fR, \fBshort\fR \fIevent\fR);

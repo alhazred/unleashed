@@ -59,7 +59,6 @@ HDRS=   $($(MACH)_HDRS)  $(ATTRDB_HDRS) \
 	devid.h		\
 	devmgmt.h	\
 	devpoll.h	\
-	dial.h		\
 	dirent.h	\
 	dlfcn.h		\
 	door.h		\
@@ -97,6 +96,7 @@ HDRS=   $($(MACH)_HDRS)  $(ATTRDB_HDRS) \
 	libelf.h	\
 	libgen.h	\
 	libintl.h	\
+	libsocket_priv.h\
 	libw.h		\
 	libzonecfg.h	\
 	limits.h	\
@@ -127,6 +127,7 @@ HDRS=   $($(MACH)_HDRS)  $(ATTRDB_HDRS) \
 	note.h		\
 	nsctl.h		\
 	nsswitch.h	\
+	nss.h		\
 	nss_common.h	\
 	nss_dbdefs.h	\
 	nss_netdir.h	\

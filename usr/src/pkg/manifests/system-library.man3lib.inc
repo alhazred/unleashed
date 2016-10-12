@@ -52,7 +52,6 @@ file path=usr/share/man/man3lib/libmenu.3lib
 file path=usr/share/man/man3lib/libmp.3lib
 file path=usr/share/man/man3lib/libmtmalloc.3lib
 file path=usr/share/man/man3lib/libnls.3lib
-file path=usr/share/man/man3lib/libnsl.3lib
 file path=usr/share/man/man3lib/libnvpair.3lib
 file path=usr/share/man/man3lib/libpam.3lib
 file path=usr/share/man/man3lib/libpanel.3lib
@@ -70,7 +69,6 @@ file path=usr/share/man/man3lib/libsec.3lib
 file path=usr/share/man/man3lib/libsecdb.3lib
 file path=usr/share/man/man3lib/libsendfile.3lib
 file path=usr/share/man/man3lib/libsip.3lib
-file path=usr/share/man/man3lib/libsocket.3lib
 file path=usr/share/man/man3lib/libsys.3lib
 file path=usr/share/man/man3lib/libsysevent.3lib
 file path=usr/share/man/man3lib/libthread.3lib
@@ -80,7 +78,6 @@ file path=usr/share/man/man3lib/libumem.3lib
 file path=usr/share/man/man3lib/libuuid.3lib
 file path=usr/share/man/man3lib/libvolmgt.3lib
 file path=usr/share/man/man3lib/libw.3lib
-file path=usr/share/man/man3lib/libxnet.3lib
 file path=usr/share/man/man3lib/liby.3lib
 link path=usr/share/man/man3lib/libposix4.3lib target=librt.3lib
 link path=usr/share/man/man3lib/libtermcap.3lib target=libcurses.3lib

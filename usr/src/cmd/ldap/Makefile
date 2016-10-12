@@ -27,7 +27,7 @@ _msg :=		TARGET= _msg
 package :=	TARGET= package
 $(POFILES) :=	CFLAGS += -I ../../lib/libldap5/include/ldap \
 			-I ../../lib/libsldap/common \
-			-I ../../lib/libnsl/include/rpcsvc \
+			-I ../../lib/libc/inc/rpcsvc \
 			-DNO_LIBLCACHE -DLDAP_REFERRALS -DNET_SSL \
 			-DLDAPSSLIO -DHAVE_SASL_OPTIONS \
 			-DSOLARIS_LDAP_CMD

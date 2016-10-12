@@ -29,6 +29,6 @@ include ../Makefile.com
 include ../../../../Makefile.lib.64
 
 DYNFLAGS += $(KRUNPATH64) $(KMECHLIB64)
-LDLIBS += -L $(ROOTLIBDIR) -lgss -lnsl -lsocket -lc
+LDLIBS += -L $(ROOTLIBDIR) -lgss -lc
 
 install: all $(ROOTLIBS64) $(ROOTLINKS64)

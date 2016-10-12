@@ -39,7 +39,7 @@ ROOTLIBDIR64 =	$(ROOT)/usr/lib/fs/nfs/$(MACH64)
 LIBSRCS = $(LIBOBJS:%.o=$(SRCDIR)/%.c)
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lshare -lnsl -lscf -lumem -lc -lxml2
+LDLIBS +=	-lshare -lscf -lumem -lc -lxml2
 
 #add nfs/lib directory as part of the include path
 CERRWARN +=	-Wno-parentheses

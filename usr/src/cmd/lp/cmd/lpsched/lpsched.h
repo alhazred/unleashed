@@ -258,7 +258,6 @@ int		disable ( PSTATUS * , char * , int );
 int		enable ( PSTATUS * );
 int		exec ( int , ... );
 int		one_printer_with_charsets ( RSTATUS * );
-int		open_dialup ( char * , PRINTER * );
 int		open_direct ( char * , PRINTER * );
 int		qchk_filter ( RSTATUS * );
 int		qchk_form ( RSTATUS * );

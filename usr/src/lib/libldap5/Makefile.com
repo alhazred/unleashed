@@ -105,7 +105,7 @@ CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-unused-value
 CERRWARN +=	-Wno-address
 
-LDLIBS +=	-lsasl -lsocket -lnsl -lmd -lc
+LDLIBS +=	-lsasl -lmd -lc
 
 .KEEP_STATE:
 

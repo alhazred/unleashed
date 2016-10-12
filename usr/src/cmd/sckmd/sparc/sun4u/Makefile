@@ -51,7 +51,7 @@ CPPFLAGS= 	-I$(USR_PSM_INCL_DIR) -I$(SRC)/uts/sun4u/starcat $(CPPFLAGS.master)
 #
 # LIBRARIES:
 #
-LDLIBS +=	-lsocket -lipsecutil
+LDLIBS +=	 -lipsecutil
 
 #
 # Build rules

@@ -26,7 +26,7 @@ PROG = zlogin
 
 include ../Makefile.cmd
 
-LDLIBS += -lsocket -lzonecfg -lcontract -lbrand -lsecdb
+LDLIBS += -lzonecfg -lcontract -lbrand -lsecdb
 FILEMODE = 0555
 
 CERRWARN += -Wno-uninitialized

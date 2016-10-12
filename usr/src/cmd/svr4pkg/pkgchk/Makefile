@@ -33,7 +33,6 @@ OBJS=		checkmap.o	\
 include $(SRC)/cmd/svr4pkg/Makefile.svr4pkg
 
 LDLIBS	+=	-ll -lpkg -linstzones -ladm
-LDLIBS	+=	-lnsl -lsocket
 
 
 .KEEP_STATE:

@@ -48,7 +48,7 @@ CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-address
 
-LDLIBS +=	-lnsctl -lunistat -ladm -lsocket -lnsl -lc
+LDLIBS +=	-lnsctl -lunistat -ladm -lc
 
 .KEEP_STATE:
 

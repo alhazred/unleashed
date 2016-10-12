@@ -40,7 +40,7 @@ include ../Makefile.cmd
 
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORKRPC)
 
-LDLIBS +=  -lnsl -lbsm
+LDLIBS += -lbsm
 
 CPPFLAGS += -D_REENTRANT
 CERRWARN += -Wno-uninitialized

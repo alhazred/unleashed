@@ -9,7 +9,7 @@ spray \- scatter data in order to test the network
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lsocket\fR \fB -lnsl \fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <rpcsvc/spray.h>
 
 \fBbool_t\fR \fBxdr_sprayarr\fR(\fBXDR *\fR\fIxdrs\fR, \fBsprayarr *\fR\fIobjp\fR);

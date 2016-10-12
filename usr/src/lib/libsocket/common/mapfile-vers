@@ -41,63 +41,63 @@ $mapfile_version 2
 
 SYMBOL_VERSION ILLUMOS_0.2 {	# reentrant ethers(3SOCKET)
     global:
-	ether_aton_r;
-	ether_ntoa_r;
+	ether_aton_r	{ TYPE = FUNCTION };
+	ether_ntoa_r	{ TYPE = FUNCTION };
 } ILLUMOS_0.1;
 
 SYMBOL_VERSION ILLUMOS_0.1 {    # Illumos additions
     global:
-        accept4;
+        accept4	{ TYPE = FUNCTION };
 } SUNW_1.7;
 
 SYMBOL_VERSION SUNW_1.7 {
     global:
-	freeifaddrs;
-	getifaddrs;
+	freeifaddrs	{ TYPE = FUNCTION };
+	getifaddrs	{ TYPE = FUNCTION };
 } SUNW_1.6;
 
 SYMBOL_VERSION SUNW_1.6 {
     global:
-	getipv4sourcefilter;
-	getsourcefilter;
-	setipv4sourcefilter;
-	setsourcefilter;
+	getipv4sourcefilter	{ TYPE = FUNCTION };
+	getsourcefilter	{ TYPE = FUNCTION };
+	setipv4sourcefilter	{ TYPE = FUNCTION };
+	setsourcefilter	{ TYPE = FUNCTION };
 } SUNW_1.5;
 
 SYMBOL_VERSION SUNW_1.5 {
     global:
-	inet6_opt_append;
-	inet6_opt_find;
-	inet6_opt_finish;
-	inet6_opt_get_val;
-	inet6_opt_init;
-	inet6_opt_next;
-	inet6_opt_set_val;
-	inet6_rth_add;
-	inet6_rth_getaddr;
-	inet6_rth_init;
-	inet6_rth_reverse;
-	inet6_rth_segments;
-	inet6_rth_space;
-	sockatmark;
-	__xnet_getaddrinfo;
+	inet6_opt_append	{ TYPE = FUNCTION };
+	inet6_opt_find	{ TYPE = FUNCTION };
+	inet6_opt_finish	{ TYPE = FUNCTION };
+	inet6_opt_get_val	{ TYPE = FUNCTION };
+	inet6_opt_init	{ TYPE = FUNCTION };
+	inet6_opt_next	{ TYPE = FUNCTION };
+	inet6_opt_set_val	{ TYPE = FUNCTION };
+	inet6_rth_add	{ TYPE = FUNCTION };
+	inet6_rth_getaddr	{ TYPE = FUNCTION };
+	inet6_rth_init	{ TYPE = FUNCTION };
+	inet6_rth_reverse	{ TYPE = FUNCTION };
+	inet6_rth_segments	{ TYPE = FUNCTION };
+	inet6_rth_space	{ TYPE = FUNCTION };
+	sockatmark	{ TYPE = FUNCTION };
+	__xnet_getaddrinfo	{ TYPE = FUNCTION };
 } SUNW_1.4;
 
 SYMBOL_VERSION SUNW_1.4 {
     global:
-	freeaddrinfo;
-	gai_strerror;
-	getaddrinfo;
-	getnameinfo;
-	if_freenameindex;
-	if_indextoname;
-	if_nameindex;
-	if_nametoindex;
-	in6addr_any;
-	in6addr_loopback;
-	rcmd_af;
-	rexec_af;
-	rresvport_af;
+	freeaddrinfo	{ TYPE = FUNCTION };
+	gai_strerror	{ TYPE = FUNCTION };
+	getaddrinfo	{ TYPE = FUNCTION };
+	getnameinfo	{ TYPE = FUNCTION };
+	if_freenameindex	{ TYPE = FUNCTION };
+	if_indextoname	{ TYPE = FUNCTION };
+	if_nameindex	{ TYPE = FUNCTION };
+	if_nametoindex	{ TYPE = FUNCTION };
+	in6addr_any	{ TYPE = DATA; SIZE = 0x10 };
+	in6addr_loopback	{ TYPE = DATA; SIZE = 0x10 };
+	rcmd_af	{ TYPE = FUNCTION };
+	rexec_af	{ TYPE = FUNCTION };
+	rresvport_af	{ TYPE = FUNCTION };
 } SUNW_1.3;
 
 # Due to mistakes made early in the history of this library, there are
@@ -116,52 +116,52 @@ SYMBOL_VERSION SUNW_1.2 {
 
 SYMBOL_VERSION SUNW_1.1 {
     global:
-	__xnet_bind;
-	__xnet_connect;
-	__xnet_getsockopt;
-	__xnet_listen;
-	__xnet_recvmsg;
-	__xnet_sendmsg;
-	__xnet_sendto;
-	__xnet_socket;
-	__xnet_socketpair;
+	__xnet_bind	{ TYPE = FUNCTION };
+	__xnet_connect	{ TYPE = FUNCTION };
+	__xnet_getsockopt	{ TYPE = FUNCTION };
+	__xnet_listen	{ TYPE = FUNCTION };
+	__xnet_recvmsg	{ TYPE = FUNCTION };
+	__xnet_sendmsg	{ TYPE = FUNCTION };
+	__xnet_sendto	{ TYPE = FUNCTION };
+	__xnet_socket	{ TYPE = FUNCTION };
+	__xnet_socketpair	{ TYPE = FUNCTION };
 } SUNW_0.7;
 
 SYMBOL_VERSION SUNW_0.7 {
     global:
-	endnetent;
-	endprotoent;
-	endservent;
-	ether_aton;
-	ether_hostton;
-	ether_line;
-	ether_ntoa;
-	ether_ntohost;
-	getnetbyaddr;
-	getnetbyaddr_r;
-	getnetbyname;
-	getnetbyname_r;
-	getnetent;
-	getnetent_r;
-	getprotobyname_r;
-	getprotobynumber_r;
-	getprotoent_r;
-	getservbyname_r;
-	getservbyport_r;
-	getservent;
-	getservent_r;
-	htonl			{ TYPE = FUNCTION; FILTER = libc.so.1 };
-	htons			{ TYPE = FUNCTION; FILTER = libc.so.1 };
-	ntohl			{ TYPE = FUNCTION; FILTER = libc.so.1 };
-	ntohs			{ TYPE = FUNCTION; FILTER = libc.so.1 };
-	rcmd;
-	rexec;
-	rresvport;
-	ruserok;
-	setnetent;
-	setprotoent;
-	setservent;
-	socketpair;
+	endnetent	{ TYPE = FUNCTION };
+	endprotoent	{ TYPE = FUNCTION };
+	endservent	{ TYPE = FUNCTION };
+	ether_aton	{ TYPE = FUNCTION };
+	ether_hostton	{ TYPE = FUNCTION };
+	ether_line	{ TYPE = FUNCTION };
+	ether_ntoa	{ TYPE = FUNCTION };
+	ether_ntohost	{ TYPE = FUNCTION };
+	getnetbyaddr	{ TYPE = FUNCTION };
+	getnetbyaddr_r	{ TYPE = FUNCTION };
+	getnetbyname	{ TYPE = FUNCTION };
+	getnetbyname_r	{ TYPE = FUNCTION };
+	getnetent	{ TYPE = FUNCTION };
+	getnetent_r	{ TYPE = FUNCTION };
+	getprotobyname_r	{ TYPE = FUNCTION };
+	getprotobynumber_r	{ TYPE = FUNCTION };
+	getprotoent_r	{ TYPE = FUNCTION };
+	getservbyname_r	{ TYPE = FUNCTION };
+	getservbyport_r	{ TYPE = FUNCTION };
+	getservent	{ TYPE = FUNCTION };
+	getservent_r	{ TYPE = FUNCTION };
+	htonl			{ TYPE = FUNCTION };
+	htons			{ TYPE = FUNCTION };
+	ntohl			{ TYPE = FUNCTION };
+	ntohs			{ TYPE = FUNCTION };
+	rcmd	{ TYPE = FUNCTION };
+	rexec	{ TYPE = FUNCTION };
+	rresvport	{ TYPE = FUNCTION };
+	ruserok	{ TYPE = FUNCTION };
+	setnetent	{ TYPE = FUNCTION };
+	setprotoent	{ TYPE = FUNCTION };
+	setservent	{ TYPE = FUNCTION };
+	socketpair	{ TYPE = FUNCTION };
 
 	# For ABI reasons, the following symbols are in SISCD_2.3 on 32-bit
 	# sparc, which is inherited by SUNW_0.7. On all other platforms,
@@ -172,30 +172,30 @@ $if _sparc && _ELF32
 SYMBOL_VERSION SISCD_2.3 {
     global:
 $endif
-	accept;
-	bind;
-	connect;
-	getpeername;
-	getprotobyname;
-	getprotobynumber;
-	getprotoent;
-	getservbyname;
-	getservbyport;
-	getsockname;
-	getsockopt;
-	inet_lnaof;
-	inet_makeaddr;
-	inet_network;
-	listen;
-	recv;
-	recvfrom;
-	recvmsg;
-	send;
-	sendmsg;
-	sendto;
-	setsockopt;
-	shutdown;
-	socket;
+	accept	{ TYPE = FUNCTION };
+	bind	{ TYPE = FUNCTION };
+	connect	{ TYPE = FUNCTION };
+	getpeername	{ TYPE = FUNCTION };
+	getprotobyname	{ TYPE = FUNCTION };
+	getprotobynumber	{ TYPE = FUNCTION };
+	getprotoent	{ TYPE = FUNCTION };
+	getservbyname	{ TYPE = FUNCTION };
+	getservbyport	{ TYPE = FUNCTION };
+	getsockname	{ TYPE = FUNCTION };
+	getsockopt	{ TYPE = FUNCTION };
+	inet_lnaof	{ TYPE = FUNCTION };
+	inet_makeaddr	{ TYPE = FUNCTION };
+	inet_network	{ TYPE = FUNCTION };
+	listen	{ TYPE = FUNCTION };
+	recv	{ TYPE = FUNCTION };
+	recvfrom	{ TYPE = FUNCTION };
+	recvmsg	{ TYPE = FUNCTION };
+	send	{ TYPE = FUNCTION };
+	sendmsg	{ TYPE = FUNCTION };
+	sendto	{ TYPE = FUNCTION };
+	setsockopt	{ TYPE = FUNCTION };
+	shutdown	{ TYPE = FUNCTION };
+	socket	{ TYPE = FUNCTION };
 };
 
 # There really should be only one SUNWprivate version.
@@ -203,33 +203,33 @@ $endif
 
 SYMBOL_VERSION SUNWprivate_1.3 {
     global:
-	_link_aton;
-	_link_ntoa;
-	_nss_initf_ethers;
-	_nss_initf_net;
-	_nss_initf_netmasks;
-	_nss_initf_proto;
-	_nss_initf_services;
-	getallifaddrs;
-	getallifs;
-	str2ether;
-	str2addr;
-	str2netent;
-	str2protoent;
+	_link_aton	{ TYPE = FUNCTION };
+	_link_ntoa	{ TYPE = FUNCTION };
+	_nss_initf_ethers	{ TYPE = FUNCTION };
+	_nss_initf_net	{ TYPE = FUNCTION };
+	_nss_initf_netmasks	{ TYPE = FUNCTION };
+	_nss_initf_proto	{ TYPE = FUNCTION };
+	_nss_initf_services	{ TYPE = FUNCTION };
+	getallifaddrs	{ TYPE = FUNCTION };
+	getallifs	{ TYPE = FUNCTION };
+	str2ether	{ TYPE = FUNCTION };
+	str2addr	{ TYPE = FUNCTION };
+	str2netent	{ TYPE = FUNCTION };
+	str2protoent	{ TYPE = FUNCTION };
 } SUNWprivate_1.2;
 
 SYMBOL_VERSION SUNWprivate_1.2 {
     global:
-	getnetmaskbyaddr;
-	getnetmaskbynet;
+	getnetmaskbyaddr	{ TYPE = FUNCTION };
+	getnetmaskbynet		{ TYPE = FUNCTION };
 } SUNWprivate_1.1;
 
 SYMBOL_VERSION SUNWprivate_1.1 {
     global:
-	bindresvport;
-	bootparams_getbyname;
-	rresvport_addr;
-	_ruserpass;
+	bindresvport	{ TYPE = FUNCTION };
+	bootparams_getbyname	{ TYPE = FUNCTION };
+	rresvport_addr	{ TYPE = FUNCTION };
+	_ruserpass	{ TYPE = FUNCTION };
     local:
 	*;
 };

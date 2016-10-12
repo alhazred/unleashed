@@ -42,7 +42,7 @@ include ../../Makefile.lib
 C99MODE = $(C99_ENABLE)
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lc -lavl -lnsl -lnvpair -luutil
+LDLIBS +=	-lc -lavl -lnvpair -luutil
 
 SRCDIR =	../common
 

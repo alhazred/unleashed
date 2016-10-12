@@ -30,7 +30,7 @@ ROOTFS_PROG = $(PROG)
 
 include ../../../Makefile.cmd
 
-LDLIBS	+= -lsocket -ldevinfo
+LDLIBS	+= -ldevinfo
 
 .KEEP_STATE:
 

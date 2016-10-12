@@ -61,7 +61,7 @@ nfs/%.o: $(SNOOPDIR)/%.c
 	$(COMPILE.c) -o $@ $< -I$(SNOOPDIR)
 	$(POST_PROCESS_O)
 nfs/tst.call.exe: nfs/tst.call.o nfs/$(SNOOPOBJS)
-	$(LINK.c) -o $@ nfs/tst.call.o nfs/$(SNOOPOBJS) $(LDLIBS) -lnsl
+	$(LINK.c) -o $@ nfs/tst.call.o nfs/$(SNOOPOBJS) $(LDLIBS)
 	$(POST_PROCESS) ; $(STRIP_STABS)
 $(RPCSVCDIR)/%.c: $(RPCSVCDIR)/%.x
 	$(RPCGEN) -Cc $< > $@
@@ -70,7 +70,7 @@ nfs/$(RPCSVCOBJS): $(RPCSVCDIR)/$(RPCSVCSRCS)
 	$(POST_PROCESS_O)
 nfs/tst.call3.exe: nfs/tst.call3.o nfs/$(RPCSVCOBJS)
 	$(LINK.c) -o $@ nfs/tst.call3.o nfs/$(RPCSVCOBJS) \
-	$(LDLIBS) -lnsl -lrpcsvc
+	$(LDLIBS) -lrpcsvc
 	$(POST_PROCESS) ; $(STRIP_STABS)
 
 pid/tst.gcc.exe: pid/tst.gcc.c

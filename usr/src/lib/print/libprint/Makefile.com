@@ -44,7 +44,7 @@ LIBS =			$(DYNLIB)
 CPPFLAGS +=	-I$(SRCDIR)
 CPPFLAGS +=	-I../../head -D_REENTRANT
 
-LDLIBS +=	-lnsl -lsocket -lc -lldap
+LDLIBS +=	 -lc -lldap
 
 
 .KEEP_STATE:

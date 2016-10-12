@@ -66,7 +66,6 @@ MANFILES= 	libMPAPI.3lib		\
 	 	libmp.3lib		\
 	 	libmtmalloc.3lib	\
 	 	libnls.3lib		\
-	 	libnsl.3lib		\
 	 	libnvpair.3lib		\
 	 	libpam.3lib		\
 	 	libpanel.3lib		\
@@ -91,7 +90,6 @@ MANFILES= 	libMPAPI.3lib		\
 	 	libsecdb.3lib		\
 	 	libsendfile.3lib	\
 	 	libsip.3lib		\
-	 	libsocket.3lib		\
 	 	libstmf.3lib		\
 	 	libsys.3lib		\
 	 	libsysevent.3lib	\
@@ -104,7 +102,6 @@ MANFILES= 	libMPAPI.3lib		\
 	 	libuuid.3lib		\
 	 	libvolmgt.3lib		\
 	 	libw.3lib		\
-	 	libxnet.3lib		\
 	 	liby.3lib
 
 MANLINKS=	SMHBA_GetAdapterAttributes.3lib			\

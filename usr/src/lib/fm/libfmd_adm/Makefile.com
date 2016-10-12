@@ -42,7 +42,7 @@ CPPFLAGS += -I../common -I.
 CFLAGS += $(C_BIGPICFLAGS)
 CFLAGS64 += $(C_BIGPICFLAGS)
 CERRWARN += -Wno-unused-variable
-LDLIBS += -lnvpair -lnsl -lc
+LDLIBS += -lnvpair -lc
 
 
 

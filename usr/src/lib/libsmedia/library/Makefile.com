@@ -43,7 +43,7 @@ CPPFLAGS += -D_REENTRANT -I$(SRC)/cmd/smserverd/
 
 CERRWARN +=	-Wno-unused-variable
 
-LDLIBS +=	-lnsl -lc
+LDLIBS +=	 -lc
 
 .KEEP_STATE:
 

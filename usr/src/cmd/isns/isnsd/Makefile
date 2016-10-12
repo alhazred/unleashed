@@ -61,7 +61,7 @@ CERRWARN += -Wno-implicit-function-declaration
 
 CLOBBERFILES += $(DTRACE_HEADER)
 
-LDLIBS		+= -lsecdb -lsocket -lnsl -lscf -lxml2
+LDLIBS		+= -lsecdb -lscf -lxml2
 
 .KEEP_STATE:
 

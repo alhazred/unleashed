@@ -36,5 +36,5 @@ OBJECTS =	gethostent.o	\
 include		../../Makefile.com
 
 C99MODE =       $(C99_ENABLE)
-LDLIBS +=	-lnsl -ldns_sd -lscf
+LDLIBS +=	 -ldns_sd -lscf
 DYNLIB1 =	nss_mdns.so$(VERS)

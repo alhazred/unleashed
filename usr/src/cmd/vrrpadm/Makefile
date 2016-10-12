@@ -28,7 +28,7 @@ PROG=	vrrpadm
 include ../Makefile.cmd
 
 XGETFLAGS += -a -x $(PROG).xcl
-LDLIBS += -lvrrpadm -lnsl -linetutil
+LDLIBS += -lvrrpadm -linetutil
 
 CERRWARN += -Wno-unused-label
 

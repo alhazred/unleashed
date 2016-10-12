@@ -33,7 +33,7 @@ LIBS =		$(DYNLIB)
 
 SRCDIR =	../common
 
-LDLIBS +=	-lsocket -lnsl -lc
+LDLIBS +=	 -lc
 
 C99MODE =	$(C99_ENABLE)
 CPPFLAGS +=	-I$(SRCDIR) -DNOT_HAVE_SA_LEN -D_XPG4_2 -D__EXTENSIONS__

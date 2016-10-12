@@ -16,7 +16,7 @@ gethostent_r, sethostent, endhostent \- get network host entry
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lnsl\fR [ \fIlibrary\fR... ]
+\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
 #include <netdb.h>
 
 \fBstruct hostent *\fR\fBgethostbyname\fR(\fBconst char *\fR\fIname\fR);

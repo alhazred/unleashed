@@ -62,7 +62,6 @@ CPPFLAGS +=	-D_REENTRANT
 # the behavior of the library with an SNMP agent over network.
 #
 #CPPFLAGS +=	-DUSE_SOCKETS
-#LDLIBS +=	-lsocket -lnsl
 
 CFLAGS +=	-DBIG_ENDIAN
 LDLIBS +=	-lc -lnvpair

@@ -9,7 +9,7 @@ au_preselect \- preselect an audit event
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lbsm\fR \fB -lsocket \fR \fB -lnsl \fR  [ \fIlibrary\fR... ]
+\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lbsm\fR [ \fIlibrary\fR... ]
 #include <bsm/libbsm.h>
 
 \fBint\fR \fBau_preselect\fR(\fBau_event_t\fR \fIevent\fR, \fBau_mask_t *\fR\fImask_p\fR, \fBint\fR \fIsorf\fR, \fBint\fR \fIflag\fR);

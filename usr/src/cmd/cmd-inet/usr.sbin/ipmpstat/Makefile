@@ -30,7 +30,7 @@ include $(SRC)/cmd/Makefile.cmd
 
 C99MODE = $(C99_ENABLE)
 CERRWARN += -Wno-uninitialized
-LDLIBS += -lipmp -lsocket -lsysevent -lnvpair -linetutil
+LDLIBS += -lipmp -lsysevent -lnvpair -linetutil
 XGETFLAGS += -a -x $(PROG).xcl
 
 .KEEP_STATE:

@@ -160,10 +160,10 @@
 /* #undef HAVE_LIBNDBM */
 
 /* Define if you have the nsl library (-lnsl).  */
-#define HAVE_LIBNSL 1
+/* #undef HAVE_LIBNSL 1 */
 
 /* Define if you have the socket library (-lsocket).  */
-#define HAVE_LIBSOCKET 1
+/* #undef HAVE_LIBSOCKET 1 */
 
 /* Define if you have <sys/filio.h> */
 #define HAVE_SYS_FILIO_H 1

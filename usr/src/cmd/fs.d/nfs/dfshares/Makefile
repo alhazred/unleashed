@@ -32,7 +32,7 @@ include		../../Makefile.fstype
 OBJS= 		$(LIBPROG).o
 SRCS=		$(OBJS:%.o=%.c)
 
-LDLIBS +=	-lrpcsvc -lnsl
+LDLIBS +=	-lrpcsvc
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-parentheses

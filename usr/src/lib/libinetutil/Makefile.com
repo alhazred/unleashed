@@ -42,7 +42,7 @@ SRCS = 		$(COMDIR)/octet.c $(SRCDIR)/inetutil.c \
 		$(SRCDIR)/ifaddrlist.c $(SRCDIR)/ifaddrlistx.c \
 		$(SRCDIR)/ofmt.c
 
-LDLIBS +=	-lsocket -lc
+LDLIBS +=	 -lc
 
 CPPFLAGS +=	-I$(SRCDIR)
 

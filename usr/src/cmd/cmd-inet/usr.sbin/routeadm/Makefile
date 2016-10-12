@@ -53,7 +53,7 @@ CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 $(NOT_RELEASE_BUILD)CPPFLAGS +=	-DDEBUG
 
-LDLIBS +=		-lscf -luutil -lsocket
+LDLIBS +=		-lscf -luutil
 
 ROOTSBINPROG=		$(ROOTFS_PROG:%=$(ROOTSBIN)/%)
 

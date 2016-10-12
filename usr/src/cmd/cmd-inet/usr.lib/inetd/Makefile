@@ -42,7 +42,7 @@ $(RELEASE_BUILD)CPPFLAGS +=     -DNDEBUG
 CERRWARN += -Wno-switch
 CERRWARN += -Wno-unused-label
 
-LDLIBS    += -lsocket -lnsl -lrestart -lscf -lcontract -linetutil \
+LDLIBS    += -lrestart -lscf -lcontract -linetutil \
 		-lwrap -linetsvc -luutil -lumem -lbsm
 
 CLOBBERFILES += $(SVCMETHOD)

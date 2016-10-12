@@ -26,7 +26,7 @@ POFILE	= kproplog.po
 POFILES	= generic.po
 
 LDFLAGS		+=	-R$(KRB5RUNPATH) $(KRUNPATH)
-LDLIBS		+=	-L$(KRB5LIB) $(KLIB) -lnsl -lkdb -lkadm5clnt
+LDLIBS		+=	-L$(KRB5LIB) $(KLIB) -lkdb -lkadm5clnt
 
 CPPFLAGS	+=	-I. -I$(SRC)/lib/krb5 \
 			-I$(KRB5IPROPDIR) \

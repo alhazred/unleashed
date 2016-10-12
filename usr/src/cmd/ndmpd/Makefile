@@ -57,7 +57,7 @@ CERRWARN += -Wno-switch
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-address
 
-LDLIBS   += -lsocket -lnsl -lzfs -lsec -lndmp -lmd5 -lnvpair -lumem -lbsm -lgen -lcmdutils -linetutil
+LDLIBS   += -lzfs -lsec -lndmp -lmd5 -lnvpair -lumem -lbsm -lgen -lcmdutils -linetutil
 
 OBJS= \
 	$(NDMP_DIR)/ndmp_xdr.o \

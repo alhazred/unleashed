@@ -30,7 +30,7 @@ SRCS= $(OBJS:%.o=%.c)
 
 include		../../../Makefile.cmd
 
-LDLIBS +=	-lresolv -lsocket
+LDLIBS +=	-lresolv
 CERRWARN +=	-Wno-uninitialized
 
 .KEEP_STATE:

@@ -58,5 +58,4 @@ include		../../Makefile.com
 include ../../../Makefile.rootfs
 
 
-LDLIBS +=	-lnsl -lsocket
 DYNLIB1 =	nss_nis.so$(VERS)

@@ -26,13 +26,10 @@
 # ident	"%Z%%M%	%I%	%E% SMI"
 #
 
+include $(SRC)/lib/Makefile.filter.com
 include ../Makefile.com
 include ../../Makefile.lib.64
 
-# We do a blanket override of these here because it's simpler to compile
-# the whole 64-bit library with PIC instead of "generically" compiling
-# large parts of the 32-bit library with PIC unnecessarily.
-
-amd64_C_PICFLAGS = $(amd64_C_BIGPICFLAGS)
-
 install: all $(ROOTLIBS64) $(ROOTLINKS64)
+
+include $(SRC)/lib/Makefile.filter.targ

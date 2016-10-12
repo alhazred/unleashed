@@ -44,6 +44,7 @@ usr/include/getxby_door.h
 usr/include/lastlog.h
 usr/include/passwdutil.h
 usr/include/priv_utils.h
+usr/include/rpcsvc/dbm.h
 usr/include/rpcsvc/daemon_utils.h
 usr/include/rpcsvc/svc_dg_priv.h
 usr/include/security/pam_impl.h

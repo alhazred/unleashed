@@ -19,7 +19,6 @@ SRCS=	bind-helper.c
 include ../../Makefile.cmd
 include ../Makefile.smbsrv.defs
 
-LDLIBS += -lsocket -lnsl
 
 ROOTLIBSMBSRVDIR = $(ROOTLIB)/smbsrv
 ROOTLIBSMBSRVPROG = $(PROG:%=$(ROOTLIBSMBSRVDIR)/%)

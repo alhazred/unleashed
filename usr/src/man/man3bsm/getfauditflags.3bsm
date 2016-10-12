@@ -9,7 +9,7 @@ getfauditflags \- generate process audit state
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lbsm\fR  \fB -lsocket \fR \fB -lnsl \fR [ \fIlibrary\fR... ]
+\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lbsm\fR [ \fIlibrary\fR... ]
 #include <sys/param.h>
 #include <bsm/libbsm.h>
 

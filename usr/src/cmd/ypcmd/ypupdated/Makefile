@@ -39,7 +39,6 @@ NETYP =		$(NETSVC)/yp
 ROOTDIRS =	$(NETSVC) $(NETYP)
 
 # include library definitions
-LDLIBS +=	-lnsl
 
 # include path to yptol.h (for name of N2L mapping file)
 CPPFLAGS += -I$(SRC)/lib/libnisdb/yptol

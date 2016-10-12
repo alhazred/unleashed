@@ -14,7 +14,7 @@ functions
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <netdb.h>
 
 \fBvoid\fR \fBendnetent\fR(\fBvoid);struct netent *getnetbyaddr(in_addr_t\fR \fInet\fR, \fBint\fR \fItype\fR);

@@ -45,7 +45,6 @@ CPPFLAGS = -I$(USR_PSM_INCL_DIR) -I$(SRC)/uts/sun4u/starcat $(CPPFLAGS.master)
 CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-uninitialized
 
-LDLIBS +=	-lsocket
 
 .KEEP_STATE:
 

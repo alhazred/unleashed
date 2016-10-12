@@ -55,7 +55,7 @@ CERRWARN +=	-Wno-uninitialized
 
 MAPFILES =	$(SRCDIR)/mapfile
 
-LDLIBS +=	-lipp-core -lpapi -lc -lsocket -lnsl
+LDLIBS +=	-lipp-core -lpapi -lc
 
 .KEEP_STATE:
 

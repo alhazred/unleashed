@@ -44,7 +44,7 @@ ROOTLIBDIR64 =	$(ROOT)/usr/lib/fs/smb/$(MACH64)
 LIBSRCS = $(LIBOBJS:%.o=$(SRCDIR)/%.c)
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lshare -lscf -luuid -ldlpi -lnsl -lnvpair -lxml2 -lumem -lc
+LDLIBS +=	-lshare -lscf -luuid -ldlpi -lnvpair -lxml2 -lumem -lc
 
 CERRWARN +=	-Wno-char-subscripts
 CERRWARN +=	-Wno-switch

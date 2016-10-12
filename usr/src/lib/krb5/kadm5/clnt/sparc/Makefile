@@ -28,6 +28,6 @@
 include ../Makefile.com
 
 DYNFLAGS += $(KRUNPATH) $(KMECHLIB)
-LDLIBS += -L $(ROOTLIBDIR) -lgss -lnsl -lsocket -lc
+LDLIBS += -L $(ROOTLIBDIR) -lgss -lc
 
 install: all $(ROOTLIBS) $(ROOTLINKS)

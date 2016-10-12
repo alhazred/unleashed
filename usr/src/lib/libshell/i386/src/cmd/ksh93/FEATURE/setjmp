@@ -7,7 +7,6 @@
 #define _LIB_m	1	/* -lm is a library */
 #define _LIB_cmd	1	/* /home/gisburn/ksh93/ast_ksh_20100309/build_i386_32bit/arch/sol11.i386/lib/libcmd.a is a library */
 #define _LIB_md	1	/* -lmd is a library */
-#define _LIB_nsl	1	/* -lnsl is a library */
 #define _lib_sigsetjmp	1	/* sigsetjmp() in default lib(s) */
 #define _lib__setjmp	1	/* _setjmp() in default lib(s) */
 #define _lib__longjmp	1	/* _longjmp() in default lib(s) */

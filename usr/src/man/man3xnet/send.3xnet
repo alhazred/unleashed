@@ -13,7 +13,7 @@ send \- send a message on a socket
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/socket.h>
 
 \fBssize_t\fR \fBsend\fR(\fBint\fR \fIsocket\fR, \fBconst void *\fR\fIbuffer\fR, \fBsize_t\fR \fIlength\fR, \fBint flags\fR);

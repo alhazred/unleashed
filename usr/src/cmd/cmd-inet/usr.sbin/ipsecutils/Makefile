@@ -58,12 +58,11 @@ CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-switch
 
-LDLIBS += -lipsecutil -lnsl
+LDLIBS += -lipsecutil
 
 LAZYLIBS = $(ZLAZYLOAD) -ltsol $(ZNOLAZYLOAD)
 
 $(TSOLPROG)	:=	LDLIBS += $(LAZYLIBS)
-$(SOCKETPROG)	:=      LDLIBS += -lsocket
 
 .KEEP_STATE:
 

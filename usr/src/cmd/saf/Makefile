@@ -52,7 +52,6 @@ ADMF= sacadm pmadm
 ROOTSACF= $(SACF:%=$(LIBSAFD)/%)
 ROOTADMF= $(ADMF:%=$(ROOTUSRSBIN)/%)
 
-LDLIBS += -lnsl
 LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
 
 CERRWARN += -Wno-implicit-function-declaration

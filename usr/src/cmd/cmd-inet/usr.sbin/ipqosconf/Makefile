@@ -55,7 +55,7 @@ CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 
-LDLIBS +=	-lsocket -lnsl -lnvpair -lipp
+LDLIBS +=	 -lnvpair -lipp
 
 .KEEP_STATE:
 

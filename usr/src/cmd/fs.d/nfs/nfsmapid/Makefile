@@ -31,7 +31,7 @@ ATTMK	  =	$(TYPEPROG)
 include		../../Makefile.fstype
 
 LDLIBS   +=	-L$(ROOT)/usr/lib/nfs -R/usr/lib/nfs
-LDLIBS   +=	-lnsl -lmapid -ldtrace -lidmap
+LDLIBS   +=	 -lmapid -ldtrace -lidmap
 COMMON    =	nfs_resolve.o
 SRCS	  =	nfsmapid.c ../lib/nfs_resolve.c nfsmapid_server.c
 DSRC	  =	nfsmapid_dt.d

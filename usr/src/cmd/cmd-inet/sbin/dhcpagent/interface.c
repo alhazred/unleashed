@@ -853,9 +853,9 @@ canonize_lif(dhcp_lif_t *lif, boolean_t dhcponly)
 	dhcpmsg(MSG_VERBOSE, "canonizing IPv%d interface %s",
 	    isv6 ? 6 : 4, lif->lif_name);
 
-	lif->lif_v6addr = my_in6addr_any;
-	lif->lif_v6mask = my_in6addr_any;
-	lif->lif_v6peer = my_in6addr_any;
+	lif->lif_v6addr = in6addr_any;
+	lif->lif_v6mask = in6addr_any;
+	lif->lif_v6peer = in6addr_any;
 
 	(void) memset(&lifr, 0, sizeof (struct lifreq));
 	(void) strlcpy(lifr.lifr_name, lif->lif_name, LIFNAMSIZ);
@@ -884,7 +884,7 @@ canonize_lif(dhcp_lif_t *lif, boolean_t dhcponly)
 		    (struct sockaddr_in6 *)&lifr.lifr_addr;
 
 		sin6->sin6_family = AF_INET6;
-		sin6->sin6_addr = my_in6addr_any;
+		sin6->sin6_addr = in6addr_any;
 	} else {
 		struct sockaddr_in *sinv =
 		    (struct sockaddr_in *)&lifr.lifr_addr;

@@ -311,10 +311,6 @@ function build_shell
             # to enable it if /etc/ksh.kshrc or /etc/bash.bashrc are available on the
             # build machine).
             #
-            # 5. -D_lib_socket=1 -lsocket -lnsl" was added to make sure ksh93 is compiled
-            # with networking support enabled, the current AST build infratructure has
-            # problems with detecting networking support in Solaris.
-            #
             # 6. "-xc99=%all -D_XOPEN_SOURCE=600 -D__EXTENSIONS__=1" is used to force
             # the compiler into C99 mode. Otherwise ksh93 will be much slower and lacks
             # lots of arithmethic functions.
@@ -341,12 +337,12 @@ function build_shell
             # Sun Studio flags
             bsunc99="/opt/SUNWspro/bin/cc -xc99=%all -D_XOPEN_SOURCE=600 -D__EXTENSIONS__=1"
             bsuncc_app_ccflags_sparc="-xpagesize_stack=64K" # use bsuncc_app_ccflags_sparc only for final executables
-            bsuncc_ccflags="${bon_flags} -KPIC -g -xs -Xa -z combreloc -xcsi -errtags=yes ${bast_flags} -D_lib_socket=1 -lsocket -lnsl"
+            bsuncc_ccflags="${bon_flags} -KPIC -g -xs -Xa -z combreloc -xcsi -errtags=yes ${bast_flags}"
 
             # gcc flags
             bgcc99="/usr/sfw/bin/gcc -std=gnu99 -D_XOPEN_SOURCE=600 -D__EXTENSIONS__=1"
             bgcc_warnflags="-Wall -Wextra -Wno-unknown-pragmas -Wno-missing-braces -Wno-sign-compare -Wno-parentheses -Wno-uninitialized -Wno-implicit-function-declaration -Wno-unused -Wno-trigraphs -Wno-char-subscripts -Wno-switch"
-            bgcc_ccflags="${bon_flags} ${bgcc_warnflags} ${bast_flags} -D_lib_socket=1 -lsocket -lnsl"
+            bgcc_ccflags="${bon_flags} ${bgcc_warnflags} ${bast_flags}"
  
             case "${buildmode}" in
 	        # for -m32/-m64 flags see usr/src/Makefile.master, makefile symbols *_XARCH/co.

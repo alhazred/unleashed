@@ -10,7 +10,7 @@ fgetuserattr \- get user_attr entry
 .SH SYNOPSIS
 .LP
 .nf
-cc [ \fIflag\fR... ] \fIfile\fR... -lsecdb  -lsocket  -lnsl [ \fIlibrary\fR... ]
+cc [ \fIflag\fR... ] \fIfile\fR... -lsecdb [ \fIlibrary\fR... ]
 #include <user_attr.h>
 
 \fBuserattr_t *\fR\fBgetuserattr\fR(\fBvoid\fR);

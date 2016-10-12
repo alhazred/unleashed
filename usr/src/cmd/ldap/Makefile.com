@@ -96,7 +96,7 @@ clobber:=       TARGET= clobber
 CPPFLAGS +=	-DSUN -DSVR4 -DSOLARIS_LDAP_CMD \
 		-I $(SRC)/lib/libldap5/include/ldap \
 		-I $(SRC)/lib/libsldap/common \
-		-I $(SRC)/lib/libnsl/include/rpcsvc \
+		-I $(SRC)/lib/libc/inc/rpcsvc \
 		-DNO_LIBLCACHE -DLDAP_REFERRALS -DNET_SSL -DLDAPSSLIO \
 		-DHAVE_SASL_OPTIONS -DSOLARIS_LDAP_CMD
 LDLIBS +=	$(COMPLIB)
@@ -106,7 +106,7 @@ ldapsearch :=	LDLIBS += -lldap
 ldapdelete :=	LDLIBS += -lldap
 ldapmodify :=	LDLIBS += -lldap
 ldaplist :=	LDLIBS += -lsldap
-ldapaddent :=	LDLIBS += -lsldap -lnsl -lsecdb
+ldapaddent :=	LDLIBS += -lsldap -lsecdb
 ldapclient :=	LDLIBS += -lsldap -lscf
 
 ldaplist :=	C99MODE = $(C99_ENABLE)

@@ -49,7 +49,7 @@ SRCS=		../libnvpair.c \
 #
 # Libraries added to the next line must be present in miniroot
 #
-LDLIBS +=	-lc -lnsl
+LDLIBS +=	-lc
 LIBS =		$(DYNLIB)
 
 CERRWARN +=	-Wno-type-limits

@@ -33,7 +33,7 @@ MSGFILES=	dhkeys.c
 
 # BUILDPO runs the sourcefile through the pre-processor
 # make sure it can find what it needs.
-$(POFILE) := CPPFLAGS += -D_REENTRANT -I$(SRC)/lib/libnsl/include
+$(POFILE) := CPPFLAGS += -D_REENTRANT -I$(SRC)/lib/libc/inc
 
 SUBDIRS=	$(MACH)
 $(BUILD64)SUBDIRS += $(MACH64)

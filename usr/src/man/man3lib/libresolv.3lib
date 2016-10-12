@@ -9,7 +9,7 @@ libresolv \- resolver library
 .SH SYNOPSIS
 .LP
 .nf
-cc [ \fIflag\fR... ] \fIfile\fR... \fB-lresolv\fR \fB -lsocket \fR \fB -lnsl \fR [ \fIlibrary\fR... ]
+cc [ \fIflag\fR... ] \fIfile\fR... \fB-lresolv\fR [ \fIlibrary\fR... ]
 #include <\fBsys/types.h\fR>
 #include <\fBnetinet/in.h\fR>
 #include <\fBarpa/nameser.h\fR>

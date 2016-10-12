@@ -30,7 +30,7 @@ include ../Makefile.cmd
 
 passwd := LDLIBS += $(ROOT)/usr/lib/passwdutil.so.1 
 LDFLAGS += $(ZIGNORE)
-LDLIBS += -lbsm -lpam -lnsl
+LDLIBS += -lbsm -lpam
 
 FILEMODE = 06555
 XGETFLAGS += -a -x $(PROG).xcl

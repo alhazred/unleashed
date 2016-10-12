@@ -54,7 +54,7 @@ CERRWARN += -Wno-unused-function
 #
 POFILE= mount.po
 
-LDLIBS += -lrpcsvc -lnsl -lsocket -lscf
+LDLIBS += -lrpcsvc -lscf
 CPPFLAGS += -I. -I../.. -I../lib
 
 nfs_sec.o :=	CPPFLAGS += -DWNFS_SEC_NEGO
