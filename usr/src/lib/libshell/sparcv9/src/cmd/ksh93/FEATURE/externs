@@ -68,7 +68,6 @@
 #define _LIB_m	1	/* -lm is a library */
 #define _LIB_cmd	1	/* /home/gisburn/ksh93/ast_ksh_20100309/build_sparc_64bit/arch/sol11.sun4/lib/libcmd.a is a library */
 #define _LIB_md	1	/* -lmd is a library */
-#define _LIB_nsl	1	/* -lnsl is a library */
 #define _hdr_exec_attr	1	/* #include <exec_attr.h> ok */
 #define _hdr_math	1	/* #include <math.h> ok */
 #define _mem_name_exception	1	/* name is a member of struct exception */

@@ -13,7 +13,7 @@ generic transport name-to-address translation
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lnsl\fR [ \fIlibrary\fR...]
+\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR...]
 #include <netdir.h>
 
 \fBint\fR \fBnetdir_getbyname\fR(\fBstruct netconfig  *\fR\fIconfig\fR,

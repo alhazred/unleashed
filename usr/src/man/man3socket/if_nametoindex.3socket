@@ -10,7 +10,7 @@ map Internet Protocol network interface names and interface indexes
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lsocket\fR [ \fIlibrary\fR... ]
+\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
 #include <net/if.h>
 
 \fBunsigned int\fR \fBif_nametoindex\fR(\fBconst char *\fR\fIifname\fR);

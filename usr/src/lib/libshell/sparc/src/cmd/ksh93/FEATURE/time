@@ -7,7 +7,6 @@
 #define _LIB_m	1	/* -lm is a library */
 #define _LIB_cmd	1	/* /home/gisburn/ksh93/ast_ksh_20100309/build_sparc_32bit/arch/sol11.sun4/lib/libcmd.a is a library */
 #define _LIB_md	1	/* -lmd is a library */
-#define _LIB_nsl	1	/* -lnsl is a library */
 #define _hdr_utime	1	/* #include <utime.h> ok */
 #define _lib_gettimeofday	1	/* gettimeofday() in default lib(s) */
 #define _lib_setitimer	1	/* setitimer() in default lib(s) */

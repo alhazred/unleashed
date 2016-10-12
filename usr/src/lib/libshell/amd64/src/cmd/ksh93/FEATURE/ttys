@@ -7,7 +7,6 @@
 #define _LIB_m	1	/* -lm is a library */
 #define _LIB_cmd	1	/* /home/gisburn/ksh93/ast_ksh_20100309/build_i386_64bit/arch/sol11.i386/lib/libcmd.a is a library */
 #define _LIB_md	1	/* -lmd is a library */
-#define _LIB_nsl	1	/* -lnsl is a library */
 #define _hdr_termios	1	/* #include <termios.h> ok */
 #define _hdr_termio	1	/* #include <termio.h> ok */
 #define _hdr_sgtty	1	/* #include <sgtty.h> ok */

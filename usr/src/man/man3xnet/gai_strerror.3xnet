@@ -14,7 +14,7 @@ gai_strerror \- address and name information error description
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <netdb.h>
 
 \fBconst char *\fR\fBgai_strerror\fR(\fBint\fR \fIecode\fR);

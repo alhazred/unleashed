@@ -13,7 +13,7 @@ recvfrom \- receive a message from a socket
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/socket.h>
 
 \fBssize_t\fR \fBrecvfrom\fR(\fBint\fR \fIsocket\fR, \fBvoid *restrict\fR \fIbuffer\fR, \fBsize_t\fR \fIlength\fR,

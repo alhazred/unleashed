@@ -13,7 +13,7 @@ getpeername \- get the name of the peer socket
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/socket.h>
 
 \fBint\fR \fBgetpeername\fR(\fBint\fR \fIsocket\fR, \fBstruct sockaddr *restrict\fR \fIaddress\fR,

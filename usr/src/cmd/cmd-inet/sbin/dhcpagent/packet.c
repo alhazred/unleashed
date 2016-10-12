@@ -56,12 +56,6 @@ const in6_addr_t ipv6_all_dhcp_relay_and_servers = {
 	0x00, 0x01, 0x00, 0x02
 };
 
-/*
- * We have our own version of this constant because dhcpagent is compiled with
- * -lxnet.
- */
-const in6_addr_t my_in6addr_any = IN6ADDR_ANY_INIT;
-
 static void 	retransmit(iu_tq_t *, void *);
 static void	next_retransmission(dhcp_smach_t *, boolean_t, boolean_t);
 static boolean_t send_pkt_internal(dhcp_smach_t *);
@@ -968,7 +962,7 @@ send_pkt_internal(dhcp_smach_t *dsmp)
 		if (ismcast)
 			ipi6->ipi6_addr = lif->lif_v6addr;
 		else
-			ipi6->ipi6_addr = my_in6addr_any;
+			ipi6->ipi6_addr = in6addr_any;
 		if (lif->lif_pif->pif_under_ipmp)
 			ipi6->ipi6_ifindex = lif->lif_pif->pif_grindex;
 		else

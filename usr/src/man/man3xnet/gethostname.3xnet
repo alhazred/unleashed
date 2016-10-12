@@ -13,7 +13,7 @@ gethostname \- get name of current host
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <unistd.h>
 
 \fBint\fR \fBgethostname\fR(\fBchar *\fR\fIname\fR, \fBsize_t\fR \fInamelen\fR);

@@ -546,9 +546,7 @@ Sockets and I/O Handling
 
   In the case of DHCPv6, we already have IPV6_PKTINFO, so we will pave
   the way for IPv4 by beginning to using this now, and thus have just
-  a single socket (bound to "::") for all of DHCPv6.  Doing this
-  requires switching from the old BSD4.2 -lsocket -lnsl to the
-  standards-compliant -lxnet in order to use ancillary data.
+  a single socket (bound to "::") for all of DHCPv6.
 
   It may also be possible to remove the need for DLPI for IPv4, and
   incidentally simplify the code a fair amount, by adding a kernel

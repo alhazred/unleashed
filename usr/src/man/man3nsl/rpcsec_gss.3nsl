@@ -9,7 +9,7 @@ rpcsec_gss \- security flavor incorporating GSS-API protections
 .SH SYNOPSIS
 .LP
 .nf
-cc [ \fIflag\fR... ] \fIfile\fR...  -lnsl [ \fIlibrary\fR... ]
+cc [ \fIflag\fR... ] \fIfile\fR...  [ \fIlibrary\fR... ]
 #include <rpc/rpcsec_gss.h>
 .fi
 

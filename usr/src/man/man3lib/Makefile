@@ -102,7 +102,6 @@ MANFILES= 	libMPAPI.3lib		\
 	 	libuuid.3lib		\
 	 	libvolmgt.3lib		\
 	 	libw.3lib		\
-	 	libxnet.3lib		\
 	 	liby.3lib
 
 MANLINKS=	SMHBA_GetAdapterAttributes.3lib			\

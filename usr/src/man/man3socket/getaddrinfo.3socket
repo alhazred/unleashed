@@ -10,7 +10,7 @@ name and address
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR\&.\|.\|. ] \fIfile\fR \&.\|.\|. \fB-lsocket\fR \fB -lnsl \fR [ \fIlibrary\fR \&.\|.\|. ]
+\fBcc\fR [ \fIflag\fR\&.\|.\|. ] \fIfile\fR \&.\|.\|. [ \fIlibrary\fR \&.\|.\|. ]
 #include <sys/socket.h>
 #include <netdb.h>
 

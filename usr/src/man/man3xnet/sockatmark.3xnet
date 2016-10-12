@@ -13,7 +13,7 @@ sockatmark \- determine whether a socket is at the out-of-band mark
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/socket.h>
 
 \fBint\fR \fBsockatmark\fR(\fBint\fR \fIs\fR);

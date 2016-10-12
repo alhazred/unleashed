@@ -13,7 +13,7 @@ recv \- receive a message from a connected socket
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/socket.h>
 
 \fBssize_t\fR \fBrecv\fR(\fBint\fR \fIsocket\fR, \fBvoid *\fR\fIbuffer\fR, \fBsize_t\fR \fIlength\fR, \fBint\fR \fIflags\fR);

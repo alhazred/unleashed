@@ -12,7 +12,7 @@ connect \- initiate a connection on a socket
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lsocket\fR \fB -lnsl \fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/types.h>
 #include <sys/socket.h>
 
@@ -71,9 +71,7 @@ connection will be established and there is no need to poll for completion.
 .sp
 .LP
 The following sample C program shows how to create and connect to a remote host
-using TCP. The program should be compiled and linked against libnsl and
-libsocket. For example, if the contents of this example where in a file called
-example.c, one would run cc example.c -lnsl -lsocket.
+using TCP.
 .sp
 .in +2
 .nf

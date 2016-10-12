@@ -111,7 +111,7 @@ extern int v6_sock_fd;
 extern int v4_sock_fd;
 
 extern const in6_addr_t ipv6_all_dhcp_relay_and_servers;
-extern const in6_addr_t my_in6addr_any;
+extern const in6_addr_t in6addr_any;
 
 PKT_LIST	*alloc_pkt_entry(size_t, boolean_t);
 void		free_pkt_entry(PKT_LIST *);

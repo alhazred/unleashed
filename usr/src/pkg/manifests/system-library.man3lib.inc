@@ -78,7 +78,6 @@ file path=usr/share/man/man3lib/libumem.3lib
 file path=usr/share/man/man3lib/libuuid.3lib
 file path=usr/share/man/man3lib/libvolmgt.3lib
 file path=usr/share/man/man3lib/libw.3lib
-file path=usr/share/man/man3lib/libxnet.3lib
 file path=usr/share/man/man3lib/liby.3lib
 link path=usr/share/man/man3lib/libposix4.3lib target=librt.3lib
 link path=usr/share/man/man3lib/libtermcap.3lib target=libcurses.3lib

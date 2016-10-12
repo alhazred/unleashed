@@ -201,23 +201,6 @@ See \fBldap\fR(3LDAP).
 .sp
 .ne 2
 .na
-\fB(3NSL)\fR
-.ad
-.sp .6
-.RS 4n
-These functions constitute the network service library, \fBlibnsl\fR. This
-library is implemented as a shared object, \fBlibnsl.so\fR, but is not
-automatically linked by the C compilation system. Specify \fB-lnsl\fR on the
-\fBcc\fR command line to link with this library. See \fBlibnsl\fR(3LIB).
-.sp
-Many base networking functions are also available in the X/Open networking
-interfaces library, \fBlibxnet\fR. See section (3XNET) below for more
-information on the \fBlibxnet\fR interfaces.
-.RE
-
-.sp
-.ne 2
-.na
 \fB(3RESOLV)\fR
 .ad
 .sp .6
@@ -270,34 +253,6 @@ These functions constitute the session initiation protocol library,
 but it is not automatically linked by the C compilation system. Specify
 \fB-lsip\fR on the \fBcc\fR command line to link with this library. See
 \fBlibsip\fR(3LIB).
-.RE
-
-.sp
-.ne 2
-.na
-\fB(3SOCKET)\fR
-.ad
-.sp .6
-.RS 4n
-These functions constitute the sockets library, \fBlibsocket\fR. This library
-is implemented as a shared object, \fBlibsocket.so\fR, but is not automatically
-linked by the C compilation system. Specify \fB-lsocket\fR on the \fBcc\fR
-command line to link with this library. See \fBlibsocket\fR(3LIB).
-.RE
-
-.sp
-.ne 2
-.na
-\fB(3XNET)\fR
-.ad
-.sp .6
-.RS 4n
-These functions constitute X/Open networking interfaces which comply with the
-X/Open CAE Specification, Networking Services, Issue 4 (September, 1994). This
-library is implemented as a shared object, \fBlibxnet.so\fR, but is not
-automatically linked by the C compilation system. Specify \fB-lxnet\fR on the
-\fBcc\fR command line to link with this library. See \fBlibxnet\fR(3LIB) and
-\fBstandards\fR(5) for compilation information.
 .RE
 
 .sp

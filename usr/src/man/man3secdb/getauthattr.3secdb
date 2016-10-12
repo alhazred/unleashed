@@ -10,7 +10,7 @@ getauthattr, getauthnam, free_authattr, setauthattr, endauthattr, chkauthattr
 .SH SYNOPSIS
 .LP
 .nf
-cc [ \fIflag\fR... ] \fIfile\fR... -lsecdb  -lsocket  -lnsl  [ \fIlibrary\fR... ]
+cc [ \fIflag\fR... ] \fIfile\fR... -lsecdb [ \fIlibrary\fR... ]
 #include <auth_attr.h>
 #include <secdb.h>
 

@@ -7,7 +7,6 @@
 #define _LIB_m	1	/* -lm is a library */
 #define _LIB_cmd	1	/* /home/gisburn/ksh93/ast_ksh_20100309/build_sparc_32bit/arch/sol11.sun4/lib/libcmd.a is a library */
 #define _LIB_md	1	/* -lmd is a library */
-#define _LIB_nsl	1	/* -lnsl is a library */
 #define _cmd_newgrp	1	/* newgrp in ?(/usr)/(bin|etc|ucb) */
 #define _bin_newgrp	1	/* /bin/newgrp found */
 #define _usr_bin_newgrp	1	/* /usr/bin/newgrp found */

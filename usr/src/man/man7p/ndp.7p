@@ -182,12 +182,9 @@ There is no entry matching the specified address.
 .El
 .Sh EXAMPLES
 The following examples demonstrate how to get and set NDP mappings using the
-provided ioctls. They can be compiled by using a C compiler and linking against
-the sockets library.
+provided ioctls.
 .Ss Example 1: Getting a mapping
 .Bd -literal -offset indent
-$ gcc -Wall -lsocket -o get get.c
-$ cat get.c
 /*
  * Example of getting a mapping for a node name.
  */
@@ -262,8 +259,6 @@ you would instead use the
 ioctl.
 .Ss Example 2: Adding a mapping
 .Bd -literal -offset indent
-$ gcc -Wall -lsocket -o set set.c
-$ cat set.c
 /*
  * Example of setting a mapping to an all-zero Ethernet address.
  */

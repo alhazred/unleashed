@@ -59,8 +59,8 @@ static char *readdomain(char *, int);
  *	Retrieve the domain name from xgetenv("DOMAIN").
  *	If that is not set, look in /etc/resolv.conf, /etc/inet/named.boot
  *	and /etc/named.boot for "^domain[ ]+<domain>".
- *	If that is not set, use sysinfo(SI_SRPC_DOMAIN) from
- *	-lnsl. Otherwise, return an empty string.
+ *	If that is not set, use sysinfo(SI_SRPC_DOMAIN). Otherwise, return an
+ *	empty string.
  */
 
 /* read a file for the domain */

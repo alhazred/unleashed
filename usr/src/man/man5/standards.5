@@ -455,7 +455,7 @@ with command lines of the form:
 .nf
 c89 $(getconf XBS5_LP64_OFF64_CFLAGS) -D_XOPEN_SOURCE=500 \e
     $(getconf XBS5_LP64_OFF64_LDFLAGS) foo.c -o foo \e
-    $(getconf XBS5_LP64_OFF64_LIBS) -lxnet
+    $(getconf XBS5_LP64_OFF64_LIBS)
 .fi
 .in -2
 
@@ -468,7 +468,7 @@ of the form:
 .nf
 c99 $(getconf POSIX_V6_LP64_OFF64_CFLAGS) -D_XOPEN_SOURCE=600 \e
     $(getconf POSIX_V6_LP64_OFF64_LDFLAGS) foo.c -o foo \e
-    $(getconf POSIX_V6_LP64_OFF64_LIBS) -lxnet
+    $(getconf POSIX_V6_LP64_OFF64_LIBS)
 .fi
 .in -2
 

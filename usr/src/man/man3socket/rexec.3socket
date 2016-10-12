@@ -10,7 +10,7 @@ rexec, rexec_af \- return stream to a remote command
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR... \fB-lsocket\fR \fB -lnsl \fR [ \fIlibrary\fR... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR... [ \fIlibrary\fR... ]
 #include <netdb.h>
 #include <unistd.h>
 

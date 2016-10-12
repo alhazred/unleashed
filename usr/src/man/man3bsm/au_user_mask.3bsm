@@ -9,7 +9,7 @@ au_user_mask \- get user's binary preselection mask
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lbsm\fR \fB -lsocket \fR \fB -lnsl \fR  [ \fIlibrary\fR... ]
+\fBcc\fR [ \fIflag\fR... ] \fIfile\fR... \fB-lbsm\fR [ \fIlibrary\fR... ]
 #include <bsm/libbsm.h>
 
 \fBint\fR \fBau_user_mask\fR(\fBchar *\fR\fIusername\fR, \fBau_mask_t *\fR\fImask_p\fR);

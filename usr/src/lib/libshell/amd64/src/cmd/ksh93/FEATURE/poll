@@ -67,7 +67,6 @@
 #define _LIB_m	1	/* -lm is a library */
 #define _LIB_cmd	1	/* /home/gisburn/ksh93/ast_ksh_20100309/build_i386_64bit/arch/sol11.i386/lib/libcmd.a is a library */
 #define _LIB_md	1	/* -lmd is a library */
-#define _LIB_nsl	1	/* -lnsl is a library */
 #define _hdr_poll	1	/* #include <poll.h> ok */
 #define _hdr_netinet_in	1	/* #include <netinet/in.h> ok */
 #define _sys_poll	1	/* #include <sys/poll.h> ok */

@@ -388,8 +388,6 @@ get_myaddress_ipv6(char *fmly, struct sockaddr *addr)
 		sin6->sin6_family = AF_INET6;
 		sin6->sin6_port = htons(PMAPPORT);
 		if (__can_use_af(AF_INET6)) {
-			/* Local copy of in6addr_any to avoid -lsocket */
-			struct in6_addr in6addr_any = IN6ADDR_ANY_INIT;
 			sin6->sin6_addr = in6addr_any;
 		} else {
 			struct in_addr in4;

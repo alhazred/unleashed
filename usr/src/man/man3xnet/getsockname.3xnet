@@ -13,7 +13,7 @@ getsockname \- get the socket name
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/socket.h>
 
 \fBint\fR \fBgetsockname\fR(\fBint\fR \fIsocket\fR, \fBstruct sockaddr *restrict\fR \fIaddress\fR,

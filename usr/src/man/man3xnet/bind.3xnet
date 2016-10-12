@@ -14,7 +14,7 @@ bind \- bind a name to a socket
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/socket.h>
 
 \fBint\fR \fBbind\fR(\fBint\fR \fIsocket\fR, \fBconst struct sockaddr *\fR\fIaddress\fR,

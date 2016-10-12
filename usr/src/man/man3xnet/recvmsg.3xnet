@@ -13,7 +13,7 @@ recvmsg \- receive a message from a socket
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lxnet\fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <sys/socket.h>
 
 \fBssize_t\fR \fBrecvmsg\fR(\fBint\fR \fIsocket\fR, \fBstruct msghdr *\fR\fImessage\fR, \fBint\fR \fIflags\fR);

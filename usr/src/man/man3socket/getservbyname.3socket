@@ -8,7 +8,7 @@ getservent_r, setservent, endservent \- get service entry
 .SH SYNOPSIS
 .LP
 .nf
-\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... \fB-lsocket\fR \fB -lnsl \fR [ \fIlibrary\fR ... ]
+\fBcc\fR [ \fIflag\fR ... ] \fIfile\fR ... [ \fIlibrary\fR ... ]
 #include <netdb.h>
 
 \fBstruct servent *\fR\fBgetservbyname\fR(\fBconst char *\fR\fIname\fR, \fBconst char *\fR\fIproto\fR);
