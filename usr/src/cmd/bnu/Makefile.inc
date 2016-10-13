@@ -46,7 +46,6 @@ CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-extra
 CERRWARN	+= -Wno-implicit-function-declaration
 
-TLILIB =	
 PAMLIB =        -lpam
 
 # use this if you don't have strpbrk/getopt in libc
@@ -85,7 +84,7 @@ uucico.cat :=	POBJS =	uucpdefs.o uucico.o conn.o callers.o cntrl.o	\
 			perfstat.o account.o security.o limits.o	\
 			$(STRPBRK) $(PROTOCOLOBJS) $(OTHEROBJS)		\
 			versys.o setmode.o
-uucico:=	PLIBS =	$(TLILIB) -lgen
+uucico:=	PLIBS =	-lgen
 
 uuname \
 uuname.cat :=	POBJS =	uuname.o uucpname.o uucpdefs.o getpwinfo.o	\
@@ -126,13 +125,13 @@ cu \
 cu.cat :=	POBJS =	cu.o callers.o getargs.o line.o uucpdefs.o	\
 			ulockf.o conn.o interface.o strsave.o		\
 			sysfiles.o stoa.o setmode.o
-cu:=		PLIBS =	$(TLILIB) -lgen
+cu:=		PLIBS =	-lgen
 
 ct \
 ct.cat :=	POBJS =	ct.o callers.o getargs.o line.o uucpdefs.o	\
 			ulockf.o conn.o interface.o sysfiles.o		\
 			strsave.o stoa.o setmode.o
-ct:=		PLIBS =	$(TLILIB) -lgen
+ct:=		PLIBS =	-lgen
 
 uudecode \
 uudecode.cat :=	POBJS =	uudecode.o common.o
@@ -145,4 +144,4 @@ uucheck.cat :=	POBJS =	uucheck.o uucpname.o getargs.o $(GETOPT)
 
 in.uucpd \
 in.uucpd.cat :=	POBJS = in.uucpd.o
-in.uucpd:=	PLIBS = $(TLILIB) $(PAMLIB)
+in.uucpd:=	PLIBS = $(PAMLIB)

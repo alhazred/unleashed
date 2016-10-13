@@ -36,10 +36,6 @@ PROG=	$(BINPROG) $(SBINPROG) $(NETYPPROG) $(NIS2LDAPPROG) $(SVCMETHOD)
 
 MANIFEST = server.xml client.xml xfr.xml
 
-# These only need
-LNSLPROG = ypmatch ypwhich ypcat yppoll ypset \
-	ypbind ypxfr yppush mkalias stdhosts
-
 include ../Makefile.cmd
 
 ROOTMANIFESTDIR = $(ROOTSVCNETWORKNIS)
