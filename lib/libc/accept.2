@@ -30,7 +30,7 @@
 .\"
 .\"     @(#)accept.2	8.2 (Berkeley) 12/11/93
 .\"
-.Dd $Mdocdate: September 9 2014 $
+.Dd October 13, 2016
 .Dt ACCEPT 2
 .Os
 .Sh NAME
@@ -64,15 +64,24 @@ The
 .Fn accept4
 system call is similar, however the non-blocking I/O mode of the
 new socket is determined by the
+.Dv SOCK_NDELAY
+and
 .Dv SOCK_NONBLOCK
-flag in the
+flags in the
 .Fa flags
 argument and the close-on-exec flag on the new file descriptor is
 determined by the
 .Dv SOCK_CLOEXEC
 flag in the
 .Fa flags
-argument.
+argument. See
+.Dv O_NDELAY ,
+.Dv O_NONBLOCK
+and
+.Dv FD_CLOEXEC
+in
+.Xr fcntl.h 3HEAD
+for more details.
 .Pp
 If no pending connections are present on the queue,
 and the socket is not marked as non-blocking,
@@ -175,10 +184,10 @@ The socket is marked non-blocking and no connections
 are present to be accepted.
 .It Bq Er EMFILE
 The per-process descriptor table is full.
-.It Bq Er ENFILE
-The system file table is full.
 .It Bq Er ECONNABORTED
 A connection has been aborted.
+.It Bq Er ENOMEM
+There was insufficient memory available to complete the operation.
 .El
 .Pp
 In addition,
@@ -208,20 +217,4 @@ function is expected to conform to a future revision of that standard.
 The
 .Fn accept
 system call first appeared in
-.Bx 4.1c
-and
-.Fn accept4
-in
-.Ox 5.7 .
-.Sh CAVEATS
-When
-.Er EMFILE
-or
-.Er ENFILE
-is returned,
-new connections are neither dequeued nor discarded.
-Thus considerable care is required in
-.Xr select 2
-and
-.Xr poll 2
-loops.
+.Bx 4.1c .
