@@ -24,6 +24,8 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2016, Joyent, Inc.
+#
 
 #
 #	This makefile drives the production of the pcplusmp "mach"
@@ -70,6 +72,7 @@ LDFLAGS		+= -dy -N misc/acpica
 #
 
 CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.

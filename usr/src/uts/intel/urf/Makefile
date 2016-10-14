@@ -33,9 +33,9 @@ include $(UTSBASE)/intel/Makefile.intel
 CPPFLAGS	+= -I$(UTSBASE)/common/io/usbgem
 CPPFLAGS	+= -DVERSION=\"2.0.0\"
 CPPFLAGS	+= -DUSBGEM_CONFIG_GLDv3
-CERRWARN	+= -_gcc=-Wno-uninitialized
 LDFLAGS		+= -dy -N misc/mac -N drv/ip -N misc/usba -N misc/usbgem
 
+CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-unused-label

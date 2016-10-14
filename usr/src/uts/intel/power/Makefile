@@ -23,6 +23,8 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2016 Joyent, Inc.
+#
 
 #
 #	This makefile drives the production of the power driver
@@ -67,7 +69,8 @@ LDFLAGS += -dy -N misc/acpica
 # these forward to new Makefiles.
 #
 
-CERRWARN	+= -Wno-unused-variable
+CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-unused-function
 
 #
 #	Default build targets.

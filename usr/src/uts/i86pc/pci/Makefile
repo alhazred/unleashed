@@ -23,6 +23,8 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2016 Joyent, Inc.
+#
 
 #
 #	This makefile drives the production of the PCI nexus driver
@@ -72,6 +74,7 @@ CFLAGS		+= -D_MODULE_NAME="\"$(MODULE)\""
 
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
+CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.
