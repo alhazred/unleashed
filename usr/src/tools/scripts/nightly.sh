@@ -445,10 +445,6 @@ function use_tools {
 	GENOFFSETS=${TOOLSROOT}/opt/onbld/bin/genoffsets
 	export GENOFFSETS
 
-	CTFCONVERT=${TOOLSROOT}/opt/onbld/bin/${MACH}/ctfconvert
-	export CTFCONVERT
-	CTFMERGE=${TOOLSROOT}/opt/onbld/bin/${MACH}/ctfmerge
-	export CTFMERGE
 
 	PATH="${TOOLSROOT}/opt/onbld/bin/${MACH}:${PATH}"
 	PATH="${TOOLSROOT}/opt/onbld/bin:${PATH}"
@@ -462,8 +458,6 @@ function use_tools {
 	echo "\n==== New environment settings. ====\n" >> $LOGFILE
 	echo "STABS=${STABS}" >> $LOGFILE
 	echo "CTFSTABS=${CTFSTABS}" >> $LOGFILE
-	echo "CTFCONVERT=${CTFCONVERT}" >> $LOGFILE
-	echo "CTFMERGE=${CTFMERGE}" >> $LOGFILE
 	echo "PATH=${PATH}" >> $LOGFILE
 	echo "ONBLD_TOOLS=${ONBLD_TOOLS}" >> $LOGFILE
 }

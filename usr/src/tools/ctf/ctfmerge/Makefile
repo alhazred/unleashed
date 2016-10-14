@@ -23,6 +23,21 @@
 # Copyright (c) 2001 by Sun Microsystems, Inc.
 # All rights reserved.
 #
-#ident	"%Z%%M%	%I%	%E% SMI"
 
-include ../Makefile.com
+include		../../Makefile.tools
+
+SUBDIRS	= $(MACH)
+
+all	:= TARGET= all
+install	:= TARGET= install
+clean	:= TARGET= clean
+clobber	:= TARGET= clobber
+
+.KEEP_STATE:
+
+install all clean clobber: $(SUBDIRS)
+
+$(SUBDIRS): FRC
+	@cd $@; pwd; $(MAKE) $(TARGET)
+
+FRC:
