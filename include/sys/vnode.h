@@ -257,6 +257,8 @@ typedef struct vnode {
 	struct vsd_node *v_vsd;		/* vnode specific data */
 	struct vnode	*v_xattrdir;	/* unnamed extended attr dir (GFS) */
 	uint_t		v_count_dnlc;	/* dnlc reference count */
+
+	kmutex_t	v_pagecache_lock;
 } vnode_t;
 
 #define	IS_DEVVP(vp)	\

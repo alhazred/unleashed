@@ -337,10 +337,10 @@ struct as;
  * lock is indeterminate.
  *
  * In addition, when both a hash list lock (ph_mutex[]) and a vnode list
- * lock (vph_mutex[]) are needed, the hash list lock must be acquired first.
- * The routine page_hashin() is a good example of this sequence.
- * This sequence is ASSERTed by checking that the vph_mutex[] is not held
- * just before each acquisition of one of the mutexs in ph_mutex[].
+ * lock (v_pagecache_lock) are needed, the hash list lock must be acquired
+ * first.  The routine page_hashin() is a good example of this sequence.
+ * This sequence is ASSERTed by checking that the vnode page cache lock is
+ * not held just before each acquisition of one of the mutexs in ph_mutex[].
  *
  * So, as a quick summary:
  *
@@ -350,7 +350,7 @@ struct as;
  *
  * 	ph_mutex[]'s protect the page_hash[] array and its chains.
  *
- * 	vph_mutex[]'s protect the v_pages field and the vp page chains.
+ *	v_pagecache_lock protects the v_pages field and the vp page chains.
  *
  *	First lock the page, then the hash chain, then the vnode chain.  When
  *	this is not possible `trylocks' must be used.  Sleeping while holding
@@ -367,8 +367,8 @@ struct as;
  *	p_hash		p_selock(E,S)	p_selock(E) &&	    p_selock, ph_mutex
  *					ph_mutex[]
  *	=====================================================================
- *	p_vpnext	p_selock(E,S)	p_selock(E) &&	    p_selock, vph_mutex
- *	p_vpprev			vph_mutex[]
+ *	p_vpnext	p_selock(E,S)	p_selock(E) &&      p_selock,
+ *	p_vpprev			v_pagecache_lock    v_pagecache_lock
  *	=====================================================================
  *	When the p_free bit is set:
  *
@@ -407,10 +407,10 @@ struct as;
  *	=====================================================================
  *	page_hash[]	ph_mutex[]	ph_mutex[]	    can hold this lock
  *							    before acquiring
- *							    a vph_mutex or
- *							    pse_mutex.
+ *							    a v_pagecache_lock
+ *							    or pse_mutex.
  *	=====================================================================
- *	vp->v_pages	vph_mutex[]	vph_mutex[]	    can only acquire
+ *	vp->v_pages	v_pagecache_lock v_pagecache_lock   can only acquire
  *							    a pse_mutex while
  *							    holding this lock.
  *	=====================================================================
@@ -495,7 +495,7 @@ struct as;
  * Please see comments in front of page_demote_vp_pages(), hat_page_demote()
  * and page_szc_lock() for more details.
  *
- * Lock order: p_selock, page_szc_lock, ph_mutex/vph_mutex/freelist,
+ * Lock order: p_selock, page_szc_lock, ph_mutex/v_pagecache_lock/freelist,
  * hat level locks.
  */
 

@@ -180,7 +180,7 @@ struct	swapinfo {
  * multiple threads and come from a small range of addresses (same slab), in
  * which case high order AP bits do not vary much, so choose vnum from low
  * order bits which vary the most.  Different threads will thus get different
- * vnums and vnodes, which avoids vph_mutex_contention on the subsequent
+ * vnums and vnodes, which avoids contention on the subsequent
  * page_hashin().
  *
  * +-----------...-------------------+-----------------------+----+

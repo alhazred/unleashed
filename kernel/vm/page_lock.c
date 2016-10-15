@@ -113,41 +113,6 @@ static pad_mutex_t	pszc_mutex[PSZC_MTX_TABLE_SIZE];
 		(PSZC_MTX_TABLE_SIZE - 1))].pad_mutex
 
 /*
- * The vph_mutex[] array  holds the mutexes to protect the vnode chains,
- * (i.e., the list of pages anchored by v_pages and connected via p_vpprev
- * and p_vpnext).
- *
- * The page_vnode_mutex(vp) function returns the address of the appropriate
- * mutex from this array given a pointer to a vnode.  It is complicated
- * by the fact that the kernel's vnode and the swapfs vnode are referenced
- * frequently enough to warrent their own mutexes.
- *
- * The VP_HASH_FUNC returns the index into the vph_mutex array given
- * an address of a vnode.
- */
-
-#if defined(_LP64)
-#define	VPH_TABLE_SIZE  (8 * NCPU_P2)
-#else	/* 32 bits */
-#define	VPH_TABLE_SIZE	(2 * NCPU_P2)
-#endif
-
-#define	VP_HASH_FUNC(vp) \
-	((((uintptr_t)(vp) >> 6) + \
-	    ((uintptr_t)(vp) >> 8) + \
-	    ((uintptr_t)(vp) >> 10) + \
-	    ((uintptr_t)(vp) >> 12)) \
-	    & (VPH_TABLE_SIZE - 1))
-
-/*
- * Two slots after VPH_TABLE_SIZE are reserved in vph_mutex for kernel vnodes.
- * The lock for kvp is VPH_TABLE_SIZE + 0, and the lock for zvp is
- * VPH_TABLE_SIZE + 1.
- */
-
-kmutex_t	vph_mutex[VPH_TABLE_SIZE + 2];
-
-/*
  * Initialize the locks used by the Virtual Memory Management system.
  */
 void
@@ -866,34 +831,10 @@ page_iolock_assert(page_t *pp)
 	return (page_io_locked(pp));
 }
 
-/*
- * Wrapper exported to kernel routines that are built
- * platform-independent (the macro is platform-dependent;
- * the size of vph_mutex[] is based on NCPU).
- *
- * Note that you can do stress testing on this by setting the
- * variable page_vnode_mutex_stress to something other than
- * zero in a DEBUG kernel in a debugger after loading the kernel.
- * Setting it after the kernel is running may not work correctly.
- */
-#ifdef DEBUG
-static int page_vnode_mutex_stress = 0;
-#endif
-
 kmutex_t *
 page_vnode_mutex(vnode_t *vp)
 {
-	if (vp == &kvp)
-		return (&vph_mutex[VPH_TABLE_SIZE + 0]);
-
-	if (vp == &zvp)
-		return (&vph_mutex[VPH_TABLE_SIZE + 1]);
-#ifdef DEBUG
-	if (page_vnode_mutex_stress != 0)
-		return (&vph_mutex[0]);
-#endif
-
-	return (&vph_mutex[VP_HASH_FUNC(vp)]);
+	return (&vp->v_pagecache_lock);
 }
 
 kmutex_t *
