@@ -676,7 +676,7 @@ marker_constructor(void *buf, void *cdrarg, int kmflags)
 {
 	page_t *mark = buf;
 	bzero(mark, sizeof (page_t));
-	mark->p_hash = PVN_VPLIST_HASH_TAG;
+	PP_SETPVN_TAG(mark);
 	return (0);
 }
 
@@ -999,7 +999,7 @@ pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
 
 	for (;;) {
 		next = pp->p_vpnext;
-		if (pp->p_hash != PVN_VPLIST_HASH_TAG && page_check(pp)) {
+		if (!PP_ISPVN_TAG(pp) && page_check(pp)) {
 			/*
 			 * hat_setmod_only() in contrast to hat_setmod() does
 			 * not shuffle the pages and does not grab the mutex

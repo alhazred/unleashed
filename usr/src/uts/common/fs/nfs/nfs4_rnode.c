@@ -178,7 +178,7 @@ nfs4_dross_pages(vnode_t *vp)
 	mutex_enter(vphm);
 	if ((pp = vp->v_pages) != NULL) {
 		do {
-			if (pp->p_hash != PVN_VPLIST_HASH_TAG &&
+			if (PP_ISPVN_TAG(pp) &&
 			    pp->p_fsdata != C_NOCOMMIT) {
 				mutex_exit(vphm);
 				return (1);

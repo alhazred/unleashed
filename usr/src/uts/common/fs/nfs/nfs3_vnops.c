@@ -6302,7 +6302,7 @@ nfs3_get_commit(vnode_t *vp)
 	 */
 	do {
 		/* Skip marker pages. */
-		if (pp->p_hash == PVN_VPLIST_HASH_TAG)
+		if (PP_ISPVN_TAG(pp))
 			continue;
 
 		/*

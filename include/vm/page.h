@@ -935,6 +935,7 @@ int	page_szc_user_filtered(size_t);
 #define	P_SWAP		0x10		/* belongs to vnode that is V_ISSWAP */
 #define	P_BOOTPAGES	0x08		/* member of bootpages list */
 #define	P_RAF		0x04		/* page retired at free */
+#define	P_PVN_TAG	0x02		/* pvn_vplist_dirty tag */
 
 #define	PP_ISFREE(pp)		((pp)->p_state & P_FREE)
 #define	PP_ISAGED(pp)		(((pp)->p_state & P_FREE) && \
@@ -946,6 +947,7 @@ int	page_szc_user_filtered(size_t);
 #define	PP_ISSWAP(pp)		((pp)->p_state & P_SWAP)
 #define	PP_ISBOOTPAGES(pp)	((pp)->p_state & P_BOOTPAGES)
 #define	PP_ISRAF(pp)		((pp)->p_state & P_RAF)
+#define	PP_ISPVN_TAG(pp)	((pp)->p_state & P_PVN_TAG)
 
 #define	PP_SETFREE(pp)		((pp)->p_state = ((pp)->p_state & ~P_MIGRATE) \
 				| P_FREE)
@@ -955,6 +957,7 @@ int	page_szc_user_filtered(size_t);
 #define	PP_SETSWAP(pp)		((pp)->p_state |= P_SWAP)
 #define	PP_SETBOOTPAGES(pp)	((pp)->p_state |= P_BOOTPAGES)
 #define	PP_SETRAF(pp)		((pp)->p_state |= P_RAF)
+#define	PP_SETPVN_TAG(pp)	((pp)->p_state |= P_PVN_TAG)
 
 #define	PP_CLRFREE(pp)		((pp)->p_state &= ~P_FREE)
 #define	PP_CLRAGED(pp)		ASSERT(!PP_ISAGED(pp))
@@ -963,6 +966,7 @@ int	page_szc_user_filtered(size_t);
 #define	PP_CLRSWAP(pp)		((pp)->p_state &= ~P_SWAP)
 #define	PP_CLRBOOTPAGES(pp)	((pp)->p_state &= ~P_BOOTPAGES)
 #define	PP_CLRRAF(pp)		((pp)->p_state &= ~P_RAF)
+#define	PP_CLRPVN_TAG(pp)	((pp)->p_state &= ~P_PVN_TAG)
 
 /*
  * Flags for page_t p_toxic, for tracking memory hardware errors.

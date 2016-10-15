@@ -85,12 +85,6 @@ void		pvn_plist_init(struct page *pp, struct page **pl, size_t plsz,
 			u_offset_t off, size_t io_len, enum seg_rw rw);
 void		pvn_init(void);
 
-/*
- * The value is put in p_hash to identify marker pages. It is safe to
- * test p_hash ==(!=) PVN_VPLIST_HASH_TAG even without holding p_selock.
- */
-#define	PVN_VPLIST_HASH_TAG	((page_t *)-1)
-
 #endif	/* _KERNEL */
 
 #ifdef	__cplusplus
