@@ -14,6 +14,7 @@
 #define	CONFIG_RAMDISK
 #define	CONFIG_RANDOM
 #undef	CONFIG_VIRTIO
+#define	CONFIG_BNXE
 #define	CONFIG_E1000G
 #undef	CONFIG_I40E
 #define	CONFIG_IGB
@@ -22,6 +23,11 @@
 #define	CONFIG_NXGE
 #undef	CONFIG_SFXGE
 #undef	CONFIG_VIRTIO_NET
+#undef	CONFIG_IWH
+#undef	CONFIG_IWI
+#undef	CONFIG_IWK
+#undef	CONFIG_IWN
+#undef	CONFIG_IWP
 #define	CONFIG_FS_AUTOFS
 #define	CONFIG_FS_HSFS
 #define	CONFIG_FS_LOFS

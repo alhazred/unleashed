@@ -93,8 +93,8 @@ file path=kernel/firmware/iwn/iwlwifi-6000g2a-5.ucode
 file path=kernel/firmware/iwn/iwlwifi-6000g2b-6.ucode
 file path=kernel/firmware/iwn/iwlwifi-6050-5.ucode
 file path=usr/share/man/man7d/iwn.7d
+license kernel/drivers/net/wifi/iwn/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/iwn/THIRDPARTYLICENSE
+license kernel/drivers/net/wifi/iwn/fw/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/iwn/fw/THIRDPARTYLICENSE
 license lic_CDDL license=lic_CDDL
-license usr/src/uts/common/io/iwn/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/iwn/THIRDPARTYLICENSE
-license usr/src/uts/common/io/iwn/fw-iw/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/iwn/fw-iw/THIRDPARTYLICENSE

@@ -1,0 +1,26 @@
+((config
+   ; support for iwh wireless network adapters
+   IWH
+   (= MACH 'i386))
+
+ (config
+   ; support for iwi wireless network adapters
+   IWI
+   (= MACH 'i386))
+
+ (config
+   ; support for iwk wireless network adapters
+   IWK
+   (= MACH 'i386))
+
+ (config
+   ; support for iwn wireless network adapters
+   IWN
+   (= MACH 'i386))
+
+ (config
+   ; support for iwp wireless network adapters
+   IWP
+   (= MACH 'i386)))
+
+; vim: set syntax=scheme:
