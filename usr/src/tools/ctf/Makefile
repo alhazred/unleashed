@@ -26,7 +26,7 @@
 
 include ../Makefile.tools
 
-SUBDIRS = cvt stabs ctfstrip libctf ctfdiff ctfmerge ctfdump ctfconvert
+SUBDIRS = stabs ctfstrip libctf ctfdiff ctfmerge ctfdump ctfconvert
 
 .PARALLEL: $(SUBDIRS)
 
