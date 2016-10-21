@@ -7,8 +7,8 @@ SUBDIR = bin \
 # Config related support
 #
 
-CFGINTEL=config/intel
-CFGSPARC=config/sparc
+CFGINTEL=kernel/arch/x86/Sconfig
+CFGSPARC=kernel/arch/sparc/Sconfig
 
 gen-config:
 	${.MAKE} -C tools
