@@ -45,6 +45,6 @@
      (= MACH 'i386)
      (= VIRTIO #t)))
 
- (include "wifi/config"))
+ (include "wifi/Sconfig"))
 
 ; vim: set syntax=scheme:
