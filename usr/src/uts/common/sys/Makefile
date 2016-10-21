@@ -673,7 +673,8 @@ CHKHDRS=			\
 
 HDRS=				\
 	$(GENHDRS)		\
-	$(CHKHDRS)
+	$(CHKHDRS)		\
+	cfgparam.h
 
 AUDIOHDRS=			\
 	ac97.h			\
