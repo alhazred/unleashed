@@ -30,7 +30,7 @@
 .\"
 .\"     @(#)getpeername.2	8.1 (Berkeley) 6/4/93
 .\"
-.Dd $Mdocdate: September 10 2015 $
+.Dd October 24, 2016
 .Dt GETPEERNAME 2
 .Os
 .Sh NAME
@@ -124,6 +124,8 @@ or
 .Fa namelen
 parameter points to memory not in a valid part of the
 process address space.
+.It Bq Er EINVAL
+The socket has been shut down.
 .El
 .Sh SEE ALSO
 .Xr accept 2 ,

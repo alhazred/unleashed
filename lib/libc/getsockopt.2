@@ -30,7 +30,7 @@
 .\"
 .\"     @(#)getsockopt.2	8.3 (Berkeley) 4/19/94
 .\"
-.Dd $Mdocdate: June 13 2016 $
+.Dd October 24, 2016
 .Dt GETSOCKOPT 2
 .Os
 .Sh NAME
@@ -97,8 +97,8 @@ protocol module for interpretation.
 The include file
 .In sys/socket.h
 contains definitions for socket level options, described below.
-Options at other protocol levels vary in format and name;
-consult the appropriate entries in section 4 of the manual.
+Options at other protocol levels vary in format and name.
+consult the appropriate entries in section 7P of the manual.
 .Pp
 Most socket-level options utilize an
 .Li int
@@ -134,44 +134,40 @@ and set with
 enables recording of debugging information
 .It Dv SO_REUSEADDR
 enables local address reuse
-.It Dv SO_REUSEPORT
-enables duplicate address and port bindings
 .It Dv SO_KEEPALIVE
 enables keep connections alive
 .It Dv SO_DONTROUTE
-enables routing bypass; not supported
+enables routing bypass for outgoing messages
 .It Dv SO_LINGER
 linger on close if data present
 .It Dv SO_BROADCAST
 enables permission to transmit broadcast messages
 .It Dv SO_OOBINLINE
 enables reception of out-of-band data in band
-.It Dv SO_BINDANY
-enables binding to any address
 .It Dv SO_SNDBUF
 set buffer size for output
 .It Dv SO_RCVBUF
 set buffer size for input
-.It Dv SO_SNDLOWAT
-set minimum count for output
-.It Dv SO_RCVLOWAT
-set minimum count for input
 .It Dv SO_SNDTIMEO
 set timeout value for output
 .It Dv SO_RCVTIMEO
 set timeout value for input
 .It Dv SO_TIMESTAMP
 enables reception of a timestamp with datagrams
-.It Dv SO_PEERCRED
-get the credentials from other side of connection
-.It Dv SO_RTABLE
-set the routing table used for route lookups
-.It Dv SO_SPLICE
-splice two sockets together or get data length
+.It Dv SO_DGRAM_ERRIND
+application wants delayed error
+.It Dv SO_EXCLBIND
+enables exclusive binding of the socket
+.It Dv SO_ALLZONES
+bypass zone boundaries (privileged)
 .It Dv SO_TYPE
 get the type of the socket (get only)
 .It Dv SO_ERROR
 get and clear error on the socket (get only)
+.It Dv SO_DOMAIN
+get the domain used in the socket (get only)
+.It Dv SO_PROTOTYPE
+get the protocol type of the socket (get only)
 .El
 .Pp
 .Dv SO_DEBUG
@@ -180,18 +176,17 @@ enables debugging in the underlying protocol modules.
 indicates that the rules used in validating addresses supplied in a
 .Xr bind 2
 call should allow reuse of local addresses.
-.Dv SO_REUSEPORT
-allows completely duplicate bindings by multiple processes if they all set
-.Dv SO_REUSEPORT
-before binding the port.
-This option permits multiple instances of a program to each
-receive UDP/IP multicast or broadcast datagrams destined for the bound port.
 .Dv SO_KEEPALIVE
 enables the periodic transmission of messages on a connected socket.
 Should the connected party fail to respond to these messages, the connection
 is considered broken and processes using the socket are notified via a
 .Dv SIGPIPE
 signal when attempting to send data.
+The
+.Dv SO_DONTROUTE
+option indicates that outgoing messages should bypass the standard
+routing facilities. Messages are directed to the appropriate network
+interface according to the destination address.
 .Pp
 .Dv SO_LINGER
 controls the action taken when unsent messages
@@ -233,23 +228,6 @@ calls without the
 flag.
 Some protocols always behave as if this option is set.
 .Pp
-.Dv SO_BINDANY
-allows the socket to be bound to addresses
-which are not local to the machine, so it
-can be used to make a transparent proxy.
-Note that this option is limited to the super-user.
-In order to receive packets for these addresses,
-.Dv SO_BINDANY
-needs to be combined with matching outgoing
-.Xr pf 4
-rules with the
-.Ar divert-reply
-parameter.
-For example, with the following rule the socket receives packets
-for 192.168.0.10 even if it is not a local address:
-.Pp
-.Dl pass out inet from 192.168.0.10 divert-reply
-.Pp
 .Dv SO_SNDBUF
 and
 .Dv SO_RCVBUF
@@ -258,41 +236,6 @@ buffer sizes allocated for output and input buffers, respectively.
 The buffer size may be increased for high-volume connections,
 or may be decreased to limit the possible backlog of incoming data.
 The system places an absolute limit on these values.
-.Pp
-.Dv SO_SNDLOWAT
-is an option to set the minimum count for output operations.
-Most output operations process all of the data supplied
-by the call, delivering data to the protocol for transmission
-and blocking as necessary for flow control.
-Nonblocking output operations will process as much data as permitted
-subject to flow control without blocking, but will process no data
-if flow control does not allow the smaller of the low water mark value
-or the entire request to be processed.
-A
-.Xr select 2
-or
-.Xr poll 2
-operation testing the ability to write to a socket will return true
-only if the low water mark amount could be processed.
-The default value for
-.Dv SO_SNDLOWAT
-is set to a convenient size for network efficiency, often 1024.
-.Dv SO_RCVLOWAT
-is an option to set the minimum count for input operations.
-In general, receive calls will block until any (non-zero) amount of data
-is received, then return with the smaller of the amount available or the amount
-requested.
-The default value for
-.Dv SO_RCVLOWAT
-is 1.
-If
-.Dv SO_RCVLOWAT
-is set to a larger value, blocking receive calls normally
-wait until they have received the smaller of the low water mark value
-or the requested amount.
-Receive calls may still return less than the low water mark if an error
-occurs, a signal is caught, or the type of data next in the receive queue
-is different than that returned.
 .Pp
 .Dv SO_SNDTIMEO
 is an option to set a timeout value for output operations.
@@ -340,111 +283,60 @@ cmsg_level = SOL_SOCKET
 cmsg_type = SCM_TIMESTAMP
 .Ed
 .Pp
-.Dv SO_PEERCRED
-fetches the
-.Va struct sockpeercred
-credentials from the other side of the connection
-(currently only possible on
-.Dv AF_UNIX
-sockets).
-These credentials are from the time that
-.Xr bind 2
+If
+.Dv SO_DGRAM_ERRIND
+is set, certain delayed errors (such as ICMP port unreachable packets)
+received after completion of
+.Fn sendto
 or
-.Xr connect 2
-were called.
-.Pp
-The
-.Dv SO_RTABLE
-option gets or sets the routing table which will be used by the socket
-for address lookups.
-If a protocol family of the socket doesn't support switching routing tables,
-the
-.Er ENOPROTOOPT
-error is returned.
-Only the superuser is allowed to change the routing table if it is already
-set to a non-zero value.
-A socket's chosen routing table is initialized from the process's configuration,
-previously selected using
-.Xr setrtable 2 .
-.Pp
-.Dv SO_SPLICE
-can splice together two TCP or UDP sockets for unidirectional
-zero-copy data transfers.
-Splice also the other way around to get bidirectional data flow.
-Both sockets must be of the same type.
-In the first form,
-.Fn setsockopt
-is called with the source socket
-.Fa s
-and the drain socket's
-.Vt int
-file descriptor as
-.Fa optval .
-In the second form,
-.Fa optval
-is a
-.Vt struct splice
-with the drain socket in
-.Va sp_fd ,
-a positive maximum number of bytes or 0 in
-.Va sp_max
-and an idle timeout
-.Va sp_idle
-in the form of a
-.Vt struct timeval .
-If \-1 is given as drain socket, the source socket
-.Fa s
-gets unspliced.
-Otherwise the spliced data transfer continues within the kernel
-until the optional maximum is reached, one of the connections
-terminates, idle timeout expires or an error occurs.
-A successful
-.Xr select 2 ,
-.Xr poll 2 ,
+.Fn sendmsg
+will cause a subsequent
+.Fn sendto
 or
-.Xr kqueue 2
-operation testing the ability to read from the source socket indicates
-that the splicing has terminated.
-When one of the sockets gets closed, splicing ends.
-The error status can be examined with
-.Dv SO_ERROR
-at the source socket.
-The
-.Er ELOOP
-error is set if userland created a loop by splicing sockets connected
-to localhost.
-The
-.Er ETIMEDOUT
-error is set if there was no data transferred between two sockets
-during the
-.Va sp_idle
-period of time.
-The
-.Er EFBIG
-error is set after exactly
-.Va sp_max
-bytes have been transferred.
-Note that if a maximum is given, it is only guaranteed that no more
-bytes are transferred.
-A short splice can happen, but then a second call to splice will
-transfer the remaining data immediately.
-The
-.Dv SO_SPLICE
-option with
-.Fn getsockopt
-and an
-.Vt off_t
-value as
-.Fa optval
-can be used to retrieve the number of bytes transferred so far from the
-source socket
-.Fa s .
-A successful new splice resets this number.
+.Fn sendmsg
+with the same destination address to fail with the appropriate error.
+.Pp
+.Dv SO_EXCLBIND
+enables the exclusive binding of a socket, overriding the use of
+.Dv SO_REUSEADDR .
+The actual semantics of
+.Dv SO_EXCLBIND
+depend on the underlying protocol; see
+.Xr tcp 7P
+or
+.Xr udp 7P
+for more information.
+.Pp
+.Dv SO_ALLZONES
+can be used to bypass zone boundaries between shared-IP zones.
+Normally, the system prevents a socket from being bound to an address
+that is not assigned to the current zone. It also prevents a socket
+that is bound to a wildcard address from receiving traffic for other
+zones. However, some daemons which run in the global zone might need
+to send and receive traffic using addresses that belong to other
+shared-IP zones. If set before a socket is bound,
+.Dv SO_ALLZONES
+causes the socket to ignore zone boundaries between shared-IP zones
+and permits the socket to be bound to any address assigned to the
+shared-IP zones. If the socket is bound to a wildcard address, it
+receives traffic intended for all shared-IP zones and behaves as if an
+equivalent socket were bound in each active shared-IP zone.
+Applications that use the
+.Dv SO_ALLZONES
+option to initiate connections or send datagram traffic should specify
+the source address for outbound traffic by binding to a specific
+address. There is no effect from setting this option in an
+exclusive-IP zone. Setting this option requires the
+.Dv sys_net_config
+privilege. See
+.Xr zones 5 .
 .Pp
 Finally,
-.Dv SO_TYPE
+.Dv SO_TYPE ,
+.Dv SO_ERROR ,
+.Dv SO_DOMAIN
 and
-.Dv SO_ERROR
+.Dv SO_PROTOTYPE
 are options used only with
 .Fn getsockopt .
 .Dv SO_TYPE
@@ -455,6 +347,17 @@ it is useful for servers that inherit sockets on startup.
 returns any pending error on the socket and clears the error status.
 It may be used to check for asynchronous errors on connected
 datagram sockets or for other asynchronous errors.
+.Dv SO_DOMAIN
+returns the address family of the socket, such as
+.Dv AF_INET .
+.Dv SO_PROTOTYPE
+returns the underlying protocol number for the socket if it is in the
+.Dv PF_INET
+or
+.Dv PF_INET6
+domains, or the address family used if the socket is in the
+.Dv PF_ROUTE
+domain.
 .Sh RETURN VALUES
 .Rv -std
 .Sh ERRORS
@@ -481,19 +384,28 @@ For
 this error may also be returned if
 .Fa optlen
 is not in a valid part of the process address space.
+.It Bq Er ENOBUFS
+Insufficient resources are available in the system to complete the
+call.
+.It Bq Er ENOPROTOOPT
+The option is unknown at the level indicated.
+.It Bq Er EINVAL
+The specified option is invalid at the specified socket level or the
+socket has been shut down.
+.It Bq Er EACCES
+The calling process does not have the appropriate privileges.
 .El
 .Sh SEE ALSO
 .Xr connect 2 ,
-.Xr getrtable 2 ,
 .Xr ioctl 2 ,
 .Xr poll 2 ,
 .Xr select 2 ,
 .Xr socket 2 ,
 .Xr getprotoent 3 ,
-.Xr divert 4 ,
-.Xr pf.conf 5 ,
-.Xr protocols 5 ,
-.Xr sosplice 9
+.Xr protocols 4 ,
+.Xr zones 5 ,
+.Xr tcp 7P ,
+.Xr udp 7P
 .Sh STANDARDS
 The
 .Fn getsockopt

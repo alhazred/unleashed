@@ -30,7 +30,7 @@
 .\"
 .\"     @(#)connect.2	8.1 (Berkeley) 6/4/93
 .\"
-.Dd $Mdocdate: August 20 2016 $
+.Dd October 24, 2016
 .Dt CONNECT 2
 .Os
 .Sh NAME
@@ -171,7 +171,9 @@ The socket is already connected.
 Connection establishment timed out without establishing a connection.
 .It Bq Er EINVAL
 A TCP connection with a local broadcast, the all-ones or a
-multicast address as the peer was attempted.
+multicast address as the peer was attempted, or
+.Fa namelen
+is not a valid length for the address family.
 .It Bq Er ECONNREFUSED
 The attempt to connect was forcefully rejected.
 .It Bq Er EHOSTUNREACH
@@ -234,6 +236,8 @@ whereas
 .Fa name
 may refer to a socket of type
 .Dv SOCK_DGRAM .
+.It Bq Er EIO
+An I/O error occurred.
 .El
 .Sh SEE ALSO
 .Xr accept 2 ,
