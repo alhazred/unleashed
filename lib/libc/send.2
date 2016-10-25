@@ -101,9 +101,6 @@ bypass routing tables, silently ignored
 don't block
 .It Dv MSG_EOR
 terminate the record (SOCK_SEQPACKET only)
-.It Dv MSG_NOSIGNAL
-don't send
-.Dv SIGPIPE
 .It Dv MSG_OOB
 process out-of-band data
 .El
@@ -117,11 +114,6 @@ data on sockets that support this notion (e.g.,
 the underlying protocol must also support
 .Dq out-of-band
 data.
-.Dv MSG_NOSIGNAL
-is used to request not to send the
-.Dv SIGPIPE
-signal if an attempt to send is made on a socket that is shut down for
-writing or no longer connected.
 .Pp
 See
 .Xr recv 2
@@ -155,39 +147,28 @@ The socket is marked non-blocking or the
 flag is set and the requested operation
 would block.
 .It Bq Er ENOBUFS
-The system was unable to allocate an internal buffer.
-The operation may succeed when buffers become available.
-.It Bq Er ENOBUFS
-The output queue for a network interface was full.
-This generally indicates that the interface has stopped sending,
-but may be caused by transient congestion.
-.It Bq Er EACCES
-The
-.Dv SO_BROADCAST
-option is not set on the socket, and a broadcast address
-was given as the destination.
-.It Bq Er EHOSTUNREACH
-The destination address specified an unreachable host.
+Insufficient resources were available in the system to perform the operation.
 .It Bq Er EINVAL
 The
 .Fa flags
 parameter is invalid.
-.It Bq Er EHOSTDOWN
-The destination address specified a host that is down.
-.It Bq Er ENETDOWN
-The destination address specified a network that is down.
 .It Bq Er ECONNREFUSED
 The destination host rejected the message (or a previous one).
 This error can only be returned by connected sockets.
-.It Bq Er ENOPROTOOPT
-There was a problem sending the message.
-This error can only be returned by connected sockets.
+.It Bq Er ECONNRESET
+The peer forcibly closed the connection. This error can only be returned by
+connected sockets.
 .It Bq Er EDESTADDRREQ
 The socket is not connected, and no destination address was specified.
+.It Bq Er EINTR
+The operation was interrupted by a signal before any data was transmitted.
 .It Bq Er EPIPE
-The socket is shut down for writing or not longer connected and the
-.Dv MSG_NOSIGNAL
-flag is set.
+The socket is shut down for writing or not longer connected. If the socket is
+of type
+.Dv SOCK_STREAM ,
+the
+.Dv SIGPIPE
+signal is also sent to the calling thread.
 .El
 .Pp
 In addition,
@@ -255,9 +236,7 @@ functions conform to
 .St -p1003.1-2008 .
 The
 .Dv MSG_DONTWAIT
-and
-.Dv MSG_NOSIGNAL
-flags are extensions to that specification.
+flag is an extension to that specification.
 .Sh HISTORY
 The
 .Fn send

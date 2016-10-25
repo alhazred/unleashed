@@ -30,7 +30,7 @@
 .\"
 .\"     @(#)recv.2	8.3 (Berkeley) 2/21/94
 .\"
-.Dd $Mdocdate: February 16 2015 $
+.Dd October 25, 2016
 .Dt RECV 2
 .Os
 .Sh NAME
@@ -114,7 +114,7 @@ The
 .Fa flags
 argument is the bitwise OR of zero or more of the following values:
 .Pp
-.Bl -tag -width "MSG_CMSG_CLOEXECXX" -offset indent -compact
+.Bl -tag -width "MSG_DONTWAITXX" -offset indent -compact
 .It Dv MSG_OOB
 process out-of-band data
 .It Dv MSG_PEEK
@@ -123,8 +123,6 @@ peek at incoming message
 wait for full request or error
 .It Dv MSG_DONTWAIT
 don't block
-.It Dv MSG_CMSG_CLOEXEC
-set the close-on-exec flag on received file descriptors
 .El
 .Pp
 The
@@ -153,13 +151,6 @@ If no data is available,
 .Va errno
 is set to
 .Er EAGAIN .
-This flag is not available in strict ANSI or C99 compilation mode.
-The
-.Dv MSG_CMSG_CLOEXEC
-requests that any file descriptors received as ancillary data with
-.Fn recvmsg
-(see below)
-have their close-on-exec flag set.
 .Pp
 The
 .Fn recvmsg
@@ -173,7 +164,7 @@ struct msghdr {
 	void		*msg_name;	/* optional address */
 	socklen_t	msg_namelen;	/* size of address */
 	struct		iovec *msg_iov;	/* scatter/gather array */
-	unsigned int	msg_iovlen;	/* # elements in msg_iov */
+	int		msg_iovlen;	/* # elements in msg_iov */
 	void		*msg_control;	/* ancillary data, see below */
 	socklen_t	msg_controllen; /* ancillary data buffer len */
 	int		msg_flags;	/* flags on received message */
@@ -244,10 +235,6 @@ was larger than the buffer supplied.
 Indicates that some
 control data were discarded due to lack of space in the buffer
 for ancillary data.
-.It Dv MSG_BCAST
-Indicates that the packet was received as broadcast.
-.It Dv MSG_MCAST
-Indicates that the packet was received as multicast.
 .El
 .Sh RETURN VALUES
 These calls return the number of bytes received, or \-1 if an error occurred.
@@ -283,17 +270,15 @@ any data were available.
 .It Bq Er EFAULT
 The receive buffer pointer(s) point outside the process's
 address space.
-.It Bq Er EHOSTUNREACH
-A socket operation was attempted to an unreachable host.
-.It Bq Er EHOSTDOWN
-A socket operation failed
-because the destination host was down.
-.It Bq Er ENETDOWN
-A socket operation encountered a dead network.
 .It Bq Er ECONNREFUSED
 The socket is associated with a connection-oriented protocol
 and the connection was forcefully rejected (see
 .Xr connect 2 ) .
+.It Bq Er ECONNRESET
+The socket is associated with a connection-oriented protocol
+and the connection was forcefully closed by the peer.
+.It Bq Er EINVAL
+The MSG_OOB flag is set and no out-of-band data is available.
 .El
 .Pp
 In addition,
@@ -326,13 +311,6 @@ member of
 .Fa msg
 was less than 0 or larger than
 .Dv IOV_MAX .
-.It Bq Er EMSGSIZE
-The receiving program did not have sufficient
-free file descriptor slots.
-The descriptors are closed
-and any pending data can be returned
-by another call to
-.Fn recvmsg .
 .El
 .Sh SEE ALSO
 .Xr connect 2 ,
@@ -354,11 +332,8 @@ and
 functions conform to
 .St -p1003.1-2008 .
 The
-.Dv MSG_DONTWAIT ,
-.Dv MSG_BCAST ,
-and
-.Dv MSG_MCAST
-flags are extensions to that specification.
+.Dv MSG_DONTWAIT
+flag is an extension to that specification.
 .Sh HISTORY
 The
 .Fn recv

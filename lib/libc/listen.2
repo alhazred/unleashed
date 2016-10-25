@@ -30,7 +30,7 @@
 .\"
 .\"     @(#)listen.2	8.2 (Berkeley) 12/11/93
 .\"
-.Dd $Mdocdate: September 10 2015 $
+.Dd October 25, 2016
 .Dt LISTEN 2
 .Os
 .Sh NAME
@@ -90,8 +90,7 @@ The socket is already connected.
 .Sh SEE ALSO
 .Xr accept 2 ,
 .Xr connect 2 ,
-.Xr socket 2 ,
-.Xr sysctl 8
+.Xr socket 2
 .Sh STANDARDS
 The
 .Fn listen
@@ -102,8 +101,3 @@ The
 .Fn listen
 system call first appeared in
 .Bx 4.1c .
-.Sh BUGS
-The
-.Fa backlog
-is currently limited (silently) to the value of the kern.somaxconn
-sysctl, which defaults to 128.
