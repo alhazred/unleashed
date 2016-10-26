@@ -30,7 +30,7 @@
 .\"
 .\"     @(#)shutdown.2	8.1 (Berkeley) 6/4/93
 .\"
-.Dd $Mdocdate: September 9 2014 $
+.Dd October 26, 2016
 .Dt SHUTDOWN 2
 .Os
 .Sh NAME
@@ -124,8 +124,8 @@ does not support this operation.
 .Sh SEE ALSO
 .Xr connect 2 ,
 .Xr socket 2 ,
-.Xr inet 4 ,
-.Xr inet6 4
+.Xr inet 7P  ,
+.Xr inet6 7P
 .Sh STANDARDS
 The
 .Fn shutdown
@@ -142,13 +142,3 @@ and
 .Dv SHUT_RDWR
 constants appeared in
 .St -p1003.1g-2000 .
-.Sh BUGS
-The ICMP
-.Dq port unreachable
-message should be generated in response to
-datagrams received on a local port to which
-.Fa s
-is bound
-after
-.Fn shutdown
-is called.

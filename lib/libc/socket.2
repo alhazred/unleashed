@@ -30,7 +30,7 @@
 .\"
 .\"     @(#)socket.2	8.1 (Berkeley) 6/4/93
 .\"
-.Dd $Mdocdate: March 19 2016 $
+.Dd October 26, 2016
 .Dt SOCKET 2
 .Os
 .Sh NAME
@@ -90,11 +90,20 @@ socket may provide a sequenced, reliable,
 two-way connection-based data transmission path for datagrams
 of fixed maximum length; a consumer may be required to read
 an entire packet with each read system call.
-This facility is protocol specific, and presently implemented only for
-.Dv AF_UNIX .
+This facility is protocol specific, and currently implemented for
+.Dv AF_UNIX
+as well as
+.Dv IPPROTO_SCTP
+in the
+.Dv AF_INET
+and
+.Dv AF_INET6
+domains.
 .Dv SOCK_RAW
 sockets provide access to internal network protocols and interfaces,
-and are available only to the superuser.
+and are available only with the
+.Dv net_rawaccess
+privilege.
 .Pp
 Any combination of the following flags may additionally be used in the
 .Fa type
@@ -105,17 +114,6 @@ argument:
 Set close-on-exec flag on the new descriptor.
 .It SOCK_NONBLOCK
 Set non-blocking I/O mode on the new socket.
-.It SOCK_DNS
-For domains
-.Dv AF_INET
-or
-.Dv AF_INET6 ,
-only allow
-.Xr connect 2 ,
-.Xr sendto 2 ,
-or
-.Xr sendmsg 2
-to the DNS port (typically 53).
 .El
 .Pp
 The
@@ -128,7 +126,7 @@ in which case a particular protocol must be specified in this manner.
 The protocol number to use is particular to the
 .Dq communication domain
 in which communication is to take place; see
-.Xr protocols 5 .
+.Xr protocols 4 .
 A value of 0 for
 .Fa protocol
 will let the system select an appropriate protocol for the requested
@@ -240,6 +238,8 @@ The system file table is full.
 .It Bq Er ENOBUFS
 Insufficient resources were available in the system
 to perform the operation.
+.It Bq Er ENOMEM
+Insufficient user memory was available to perform the operation.
 .It Bq Er EACCES
 Permission to create a socket of the specified type and/or protocol
 is denied.
@@ -262,10 +262,8 @@ is denied.
 .Xr socketpair 2 ,
 .Xr write 2 ,
 .Xr getprotoent 3 ,
-.Xr inet 4 ,
-.Xr inet6 4 ,
-.Xr netintro 4 ,
-.Xr unix 4
+.Xr inet 7P ,
+.Xr inet6 7P
 .Rs
 .%T "An Introductory 4.3 BSD Interprocess Communication Tutorial"
 .%O "reprinted in UNIX Programmer's Supplementary Documents Volume 1"
@@ -284,24 +282,8 @@ The
 and
 .Dv SOCK_NONBLOCK
 flags are expected to conform to a future revision of that standard.
-.Pp
-The
-.Dv SOCK_DNS
-flag is an
-.Ox
-extension.
 .Sh HISTORY
 The
 .Fn socket
 system call first appeared in
 .Bx 4.1c .
-Support for the
-.Dv SOCK_CLOEXEC
-and
-.Dv SOCK_NONBLOCK
-flags appeared in
-.Ox 5.7 .
-Support for the
-.Dv SOCK_DNS
-flag appeared in
-.Ox 5.9 .
