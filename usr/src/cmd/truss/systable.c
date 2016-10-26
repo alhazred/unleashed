@@ -1729,7 +1729,7 @@ const char * const socktype_codes[] = {		/* cf socket.h */
 	"SOCK_STREAM",		/* 2 */
 	NULL,
 	"SOCK_RAW",		/* 4 */
-	"SOCK_RDM",		/* 5 */
+	NULL,
 	"SOCK_SEQPACKET"	/* 6 */
 };
 #if MAX_SOCKTYPES != 7

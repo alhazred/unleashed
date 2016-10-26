@@ -71,7 +71,6 @@ typedef	uint32_t	socklen_t;
 #define	SOCK_STREAM	2		/* stream socket */
 #define	SOCK_DGRAM	1		/* datagram socket */
 #define	SOCK_RAW	4		/* raw-protocol interface */
-#define	SOCK_RDM	5		/* reliably-delivered message */
 #define	SOCK_SEQPACKET	6		/* sequenced packet stream */
 #define	SOCK_TYPE_MASK	0xffff		/* type reside in these bits only */
 

@@ -306,11 +306,6 @@ b_fds(int argc, char** argv, void* context)
 				s = "raw";
 				break;
 #endif
-#ifdef SOCK_RDM
-			case SOCK_RDM:
-				s = "rdm";
-				break;
-#endif
 #ifdef SOCK_SEQPACKET
 			case SOCK_SEQPACKET:
 				s = "seqpacket";
