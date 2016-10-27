@@ -328,7 +328,8 @@ printf 'RELEASE      is %s\n'   "$RELEASE"
 printf 'VERSION      is %s\n'   "$VERSION"
 printf 'RELEASE_DATE is %s\n\n' "$RELEASE_DATE"
 
-print "Use the top-level 'setup' target to build headers and tools."
+print "Use 'bmake gen-config' target to generate config makefiles/headers."
+print "Use 'dmake setup' target to build legacy headers and tools."
 print ""
 
 #
