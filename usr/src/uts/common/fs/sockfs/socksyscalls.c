@@ -1019,9 +1019,8 @@ recvmsg(int sock, struct nmsghdr *msg, int flags)
 
 	iovcnt = lmsg.msg_iovlen;
 
-	if (iovcnt <= 0 || iovcnt > IOV_MAX) {
+	if (iovcnt < 0 || iovcnt > IOV_MAX)
 		return (set_errno(EMSGSIZE));
-	}
 
 	if (iovcnt > IOV_MAX_STACK) {
 		iovsize = iovcnt * sizeof (struct iovec);
