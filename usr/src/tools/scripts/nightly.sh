@@ -1153,6 +1153,11 @@ function child_wstype {
 
 SCM_TYPE=$(child_wstype)
 
+# Safeguards
+[[ -v CODEMGR_WS ]] || fatal_error "Error: Variable CODEMGR_WS not set."
+[[ -d "${CODEMGR_WS}" ]] || fatal_error "Error: ${CODEMGR_WS} is not a directory."
+[[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
+
 #
 #	Decide whether to clobber
 #
@@ -1216,11 +1221,6 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 else
 	echo "\n==== No clobber at `date` ====\n" >> $LOGFILE
 fi
-
-# Safeguards
-[[ -v CODEMGR_WS ]] || fatal_error "Error: Variable CODEMGR_WS not set."
-[[ -d "${CODEMGR_WS}" ]] || fatal_error "Error: ${CODEMGR_WS} is not a directory."
-[[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
 
 echo "\n==== Build environment ====\n" | tee -a $build_environ_file >> $LOGFILE
 
