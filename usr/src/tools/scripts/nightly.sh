@@ -184,9 +184,9 @@ function build {
 	egrep -e "(^(${MAKE}:|\*\*\*)|[ 	]error:[ 	\n])" \
 		${SRC}/${INSTALLOG}.out | tee $TMPDIR/build_errs${SUFFIX} \
 		>> $mail_msg_file
-	if [[ -s $TMPDIR/build_fail ]]; then
-		sed 's,$, returned non-zero exit status,' $TMPDIR/build_fail \
-		    >> $mail_msg_file
+	if [[ -s $TMPDIR/build_errs${SUFFIX} ]]; then
+		sed 's,$, returned non-zero exit status,' \
+			$TMPDIR/build_errs${SUFFIX} >> $mail_msg_file
 		build_ok=n
 		this_build_ok=n
 	fi
