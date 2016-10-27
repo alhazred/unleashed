@@ -200,50 +200,8 @@ function build {
 	#
 	#	Build the new part of the source
 	#
-	echo "\n==== \`bmake all\` at `date` ($LABEL) ====\n" \
-		>> $LOGFILE
-
-	rm -f $SRC/${INSTALLOG}-bmake-all.out
-	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
-		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
-			DESTDIR=$ROOT \
-			VERBOSE=yes all 2>&1 | \
-		tee -a $SRC/${INSTALLOG}-bmake-all.out >> $LOGFILE
-
-	echo "\n==== \`bmake all\` errors ($LABEL) ====\n" >> $mail_msg_file
-	egrep -e "(^(bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
-		${SRC}/${INSTALLOG}-bmake-all.out | \
-		tee $TMPDIR/build_errs${SUFFIX} \
-		>> $mail_msg_file
-	if [[ -s $TMPDIR/build_fail ]]; then
-		sed 's,$, returned non-zero exit status,' $TMPDIR/build_fail \
-		    >> $mail_msg_file
-		build_ok=n
-		this_build_ok=n
-	fi
-
-	echo "\n==== \`bmake install\` at `date` ($LABEL) ====\n" \
-		>> $LOGFILE
-
-	rm -f $SRC/${INSTALLOG}-bmake-install.out
-	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
-		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
-			DESTDIR=$ROOT \
-			MK_INSTALL_AS_USER=yes \
-			VERBOSE=yes install 2>&1 | \
-		tee -a $SRC/${INSTALLOG}-bmake-install.out >> $LOGFILE
-
-	echo "\n==== \`bmake install\` errors ($LABEL) ====\n" >> $mail_msg_file
-	egrep -e "(^(bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
-		${SRC}/${INSTALLOG}-bmake-install.out | \
-		tee $TMPDIR/build_errs${SUFFIX} \
-		>> $mail_msg_file
-	if [[ -s $TMPDIR/build_fail ]]; then
-		sed 's,$, returned non-zero exit status,' $TMPDIR/build_fail \
-		    >> $mail_msg_file
-		build_ok=n
-		this_build_ok=n
-	fi
+	bmake_build_step_user all
+	bmake_build_step_user install
 
 	echo "\n==== Build warnings ($LABEL) ====\n" >>$mail_msg_file
 	cat $SRC/${INSTALLOG}.out \
@@ -1151,12 +1109,54 @@ function child_wstype {
 	echo $scm_type
 }
 
+function run_bmake {
+	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
+		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
+			VERBOSE=yes \
+			"$@" 2>&1
+}
+
+# usage: bmake_build_step_args <target> <args...>
+function bmake_build_step_args {
+	echo "\n==== \`bmake $1\` at `date` ($LABEL) ====\n" >> $LOGFILE
+
+	rm -f $SRC/${INSTALLOG}-bmake-${1}.out
+	run_bmake "$@" | \
+		tee -a $SRC/${INSTALLOG}-bmake-${1}.out >> $LOGFILE
+
+	echo "\n==== \`bmake $1\` errors ($LABEL) ====\n" >> $mail_msg_file
+	egrep -e "(^(bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
+		${SRC}/${INSTALLOG}-bmake-${1}.out | \
+		tee $TMPDIR/build_errs-${1}-${SUFFIX} >> $mail_msg_file
+	if [ -s $TMPDIR/build_errs-${1}-${SUFFIX} ] ; then
+		sed 's,$, returned non-zero exit status,' \
+			$TMPDIR/build_errs-${1}-${SUFFIX} >> $mail_msg_file
+		build_ok=n
+		this_build_ok=n
+		return 1
+	fi
+
+	return 0
+}
+
+# usage: bmake_build_step_user <target>
+function bmake_build_step_user {
+	bmake_build_step_args $1 DESTDIR=$ROOT MK_INSTALL_AS_USER=yes
+}
+
 SCM_TYPE=$(child_wstype)
 
 # Safeguards
 [[ -v CODEMGR_WS ]] || fatal_error "Error: Variable CODEMGR_WS not set."
 [[ -d "${CODEMGR_WS}" ]] || fatal_error "Error: ${CODEMGR_WS} is not a directory."
 [[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
+
+#
+#	Generate the cfgparam files
+#
+# We have to do this before running *any* make commands.
+#
+bmake_build_step_args gen-config || build_extras_ok=n
 
 #
 #	Decide whether to clobber
@@ -1217,7 +1217,7 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	       -name '*.o' \) -print | \
 	    grep -v 'tools/ctf/dwarf/.*/libdwarf' | xargs rm -f
 	echo "\n==== bmake cleandir ====\n" >> $LOGFILE
-	env -i PATH=/usr/bin bmake -C $CODEMGR_WS cleandir >> $LOGFILE 2>&1
+	run_bmake cleandir >> $LOGFILE 2>&1
 else
 	echo "\n==== No clobber at `date` ====\n" >> $LOGFILE
 fi
