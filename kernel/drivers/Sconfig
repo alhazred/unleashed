@@ -18,6 +18,6 @@
    VIRTIO
    (= MACH 'i386))
 
- (include "net/config"))
+ (include "net/Sconfig"))
 
 ; vim: set syntax=scheme:

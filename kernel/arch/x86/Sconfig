@@ -20,6 +20,6 @@
    BUILD_KMOD_64
    #t)
 
- (include "common"))
+ (include "../../../Sconfig"))
 
 ; vim: set syntax=scheme:

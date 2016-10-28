@@ -8,6 +8,6 @@
    SMB_PRINTING
    #t)
 
- (include "../kernel/config"))
+ (include "kernel/Sconfig"))
 
 ; vim: set syntax=scheme:
