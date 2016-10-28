@@ -28,7 +28,7 @@ YFLAGS		= -d -b parser
 CPPFLAGS	+= -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
 $(RELEASE_BUILD) CPPFLAGS += -DNDEBUG
 
-CERRWARN +=	-_gcc=-Wno-unused-label
+CERRWARN +=	-Wno-unused-label
 
 CLEANFILES	= $(OBJS) parser.tab.c parser.tab.h
 CLOBBERFILES	= $(PROG) $(POFILE)
@@ -47,9 +47,6 @@ $(OBJS):	parser.tab.h
 
 parser.tab.c parser.tab.h: parser.y
 	$(YACC) $(YFLAGS) parser.y
-
-lint:	$(SRCS)
-	$(LINT.c) $(CPPFLAGS) $(SRCS)
 
 clean:
 	$(RM) $(CLEANFILES)
