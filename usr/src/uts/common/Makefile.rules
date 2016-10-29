@@ -241,10 +241,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/smbsrv/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/portfs/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/proc/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

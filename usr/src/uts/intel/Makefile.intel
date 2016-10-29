@@ -517,7 +517,6 @@ SYS_KMODS	+= inst_sync
 SYS_KMODS	+= kaio
 SYS_KMODS	+= msgsys
 SYS_KMODS	+= pipe
-SYS_KMODS	+= portfs
 SYS_KMODS	+= pset
 SYS_KMODS	+= semsys
 SYS_KMODS	+= shmsys
