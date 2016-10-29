@@ -13,6 +13,7 @@ SUBDIR = ${SUBDIR_y} \
 	 mntfs \
 	 objfs \
 	 portfs \
+	 specfs \
 	 tmpfs
 
 .include <bsd.subdir.mk>
