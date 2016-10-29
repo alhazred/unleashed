@@ -126,10 +126,10 @@ export VERSION="`git describe --long --all HEAD | cut -d/ -f2-`"
 #
 # PKGARCHIVE determines where the repository will be created.
 #
-# PKGPUBLISHER_REDIST controls the publisher setting for the repository.
+# PKGPUBLISHER controls the publisher setting for the repository.
 #
 export PKGARCHIVE="${CODEMGR_WS}/packages/${MACH}/nightly"
-# export PKGPUBLISHER_REDIST='on-redist'
+# export PKGPUBLISHER='publisher'
 
 # Package manifest format version.
 export PKGFMT_OUTPUT='v1'

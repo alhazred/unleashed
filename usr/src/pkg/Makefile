@@ -130,8 +130,6 @@ PDIR= packages.$(PKGMACH)
 #
 $(PDIR)/developer-build-onbld.dep:= PKGROOT= $(TOOLSROOT)
 
-PKGPUBLISHER= $(PKGPUBLISHER_REDIST)
-
 #
 # To get these defaults, manifests should simply refer to $(PKGVERS).
 #

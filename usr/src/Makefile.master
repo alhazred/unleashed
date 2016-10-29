@@ -830,7 +830,7 @@ PKGARCHIVE=$(SRC)/../../packages/$(MACH)/nightly
 # update an image to the resulting repositories, this must match the
 # publisher name provided to "pkg set-publisher."
 #
-PKGPUBLISHER_REDIST=	on-nightly
+PKGPUBLISHER=	on-nightly
 
 #	Default build rules which perform comment section post-processing.
 #
