@@ -69,12 +69,12 @@
 
 #include <c2/audit.h>
 
-#include <fs/sockfs/nl7c.h>
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/sockfilter_impl.h>
-#include <fs/sockfs/socktpi.h>
-#include <fs/sockfs/socktpi_impl.h>
-#include <fs/sockfs/sodirect.h>
+#include "nl7c.h"
+#include "sockcommon.h"
+#include "sockfilter_impl.h"
+#include "socktpi.h"
+#include "socktpi_impl.h"
+#include "sodirect.h"
 
 /*
  * Macros that operate on struct cmsghdr.

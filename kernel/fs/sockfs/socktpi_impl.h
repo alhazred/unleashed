@@ -28,7 +28,7 @@
 #define	_SOCKFS_SOCKTPI_IMPL_H
 
 #include <sys/socketvar.h>
-#include <fs/sockfs/socktpi.h>
+#include "socktpi.h"
 
 #ifdef	__cplusplus
 extern "C" {

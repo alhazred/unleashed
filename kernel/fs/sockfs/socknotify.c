@@ -34,9 +34,9 @@
 #include <sys/socketvar.h>
 #include <sys/ksocket.h>
 #include <io/ksocket/ksocket_impl.h>
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/sodirect.h>
-#include <fs/sockfs/sockfilter_impl.h>
+#include "sockcommon.h"
+#include "sodirect.h"
+#include "sockfilter_impl.h"
 
 /*
  * There can only be a single thread waiting for data (enforced by

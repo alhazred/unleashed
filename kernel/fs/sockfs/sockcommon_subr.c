@@ -40,10 +40,10 @@
 #include <sys/atomic.h>
 #include <sys/tihdr.h>
 
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/sockfilter_impl.h>
-#include <fs/sockfs/socktpi.h>
-#include <fs/sockfs/sodirect.h>
+#include "sockcommon.h"
+#include "sockfilter_impl.h"
+#include "socktpi.h"
+#include "sodirect.h"
 #include <sys/ddi.h>
 #include <inet/ip.h>
 #include <sys/time.h>

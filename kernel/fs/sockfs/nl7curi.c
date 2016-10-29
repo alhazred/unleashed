@@ -30,9 +30,9 @@
 #include <vm/seg_kpm.h>
 #include <sys/condvar_impl.h>
 #include <sys/sendfile.h>
-#include <fs/sockfs/nl7c.h>
-#include <fs/sockfs/nl7curi.h>
-#include <fs/sockfs/socktpi_impl.h>
+#include "nl7c.h"
+#include "nl7curi.h"
+#include "socktpi_impl.h"
 
 #include <inet/common.h>
 #include <inet/ip.h>

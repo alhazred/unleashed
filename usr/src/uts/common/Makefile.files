@@ -1256,14 +1256,6 @@ PROC_OBJS +=	prcontrol.o	prioctl.o	prsubr.o	prusrio.o \
 
 SHAREFS_OBJS +=	sharetab.o	sharefs_vfsops.o	sharefs_vnops.o
 
-SOCK_OBJS +=	socksubr.o	sockvfsops.o	sockparams.o	\
-		socksyscalls.o	socktpi.o	sockstr.o \
-		sockcommon_vnops.o	sockcommon_subr.o \
-		sockcommon_sops.o	sockcommon.o	\
-		sock_notsupp.o	socknotify.o \
-		nl7c.o		nl7curi.o	nl7chttp.o	nl7clogd.o \
-		nl7cnca.o	sodirect.o	sockfilter.o
-
 UFS_OBJS +=	ufs_alloc.o	ufs_bmap.o	ufs_dir.o 	ufs_xattr.o \
 		ufs_inode.o	ufs_subr.o	ufs_tables.o	ufs_vfsops.o \
 		ufs_vnops.o	quota.o		quotacalls.o	quota_ufs.o \

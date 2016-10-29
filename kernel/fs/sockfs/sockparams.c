@@ -37,9 +37,9 @@
 #include <sys/socket.h>
 #include <sys/socketvar.h>
 
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/sockfilter_impl.h>
-#include <fs/sockfs/socktpi.h>
+#include "sockcommon.h"
+#include "sockfilter_impl.h"
+#include "socktpi.h"
 
 /*
  * Socket Parameters

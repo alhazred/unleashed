@@ -33,8 +33,8 @@
 #include <sys/stropts.h>
 #include <sys/taskq.h>
 #include <sys/socketvar.h>
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/sockfilter_impl.h>
+#include "sockcommon.h"
+#include "sockfilter_impl.h"
 
 /*
  * Socket Filter Framework

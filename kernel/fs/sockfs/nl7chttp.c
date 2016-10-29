@@ -25,9 +25,9 @@
 
 #include <sys/sysmacros.h>
 #include <sys/strsubr.h>
-#include <fs/sockfs/nl7c.h>
-#include <fs/sockfs/nl7curi.h>
-#include <fs/sockfs/socktpi.h>
+#include "nl7c.h"
+#include "nl7curi.h"
+#include "socktpi.h"
 
 #include <inet/nca/ncadoorhdr.h>
 #include <inet/nca/ncalogd.h>

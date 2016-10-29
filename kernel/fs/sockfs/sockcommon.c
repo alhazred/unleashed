@@ -43,11 +43,11 @@
 #include <sys/uio.h>
 
 #include <inet/ipclassifier.h>
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/sockfilter_impl.h>
-#include <fs/sockfs/nl7c.h>
-#include <fs/sockfs/socktpi.h>
-#include <fs/sockfs/sodirect.h>
+#include "sockcommon.h"
+#include "sockfilter_impl.h"
+#include "nl7c.h"
+#include "socktpi.h"
+#include "sodirect.h"
 #include <inet/ip.h>
 
 extern int xnet_skip_checks, xnet_check_print, xnet_truncate_print;

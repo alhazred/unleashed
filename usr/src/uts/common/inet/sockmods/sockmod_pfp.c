@@ -42,7 +42,7 @@
 #include <sys/time.h>
 #include <sys/ethernet.h>
 #include <sys/llc1.h>
-#include <fs/sockfs/sockcommon.h>
+#include <../../../../kernel/fs/sockfs/sockcommon.h>
 #include <net/if.h>
 #include <inet/ip_arp.h>
 

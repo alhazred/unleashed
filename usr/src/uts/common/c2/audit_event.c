@@ -73,7 +73,7 @@
 #include <sys/socket.h>
 #include <sys/socketvar.h>
 #include <sys/vfs_opreg.h>
-#include <fs/sockfs/sockcommon.h>
+#include <../../../../kernel/fs/sockfs/sockcommon.h>
 #include <netinet/in.h>
 #include <sys/ddi.h>
 #include <sys/port_impl.h>

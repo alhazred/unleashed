@@ -65,8 +65,8 @@
 
 #include <c2/audit.h>
 
-#include <fs/sockfs/socktpi.h>
-#include <fs/sockfs/socktpi_impl.h>
+#include "socktpi.h"
+#include "socktpi_impl.h"
 
 #ifdef DEBUG
 /* Set sockdebug to print debug messages when SO_DEBUG is set */

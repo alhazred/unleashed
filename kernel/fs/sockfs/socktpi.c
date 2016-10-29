@@ -78,12 +78,12 @@
 
 #include <sys/zone.h>
 
-#include <fs/sockfs/nl7c.h>
-#include <fs/sockfs/nl7curi.h>
+#include "nl7c.h"
+#include "nl7curi.h"
 
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/socktpi.h>
-#include <fs/sockfs/socktpi_impl.h>
+#include "sockcommon.h"
+#include "socktpi.h"
+#include "socktpi_impl.h"
 
 /*
  * Possible failures when memory can't be allocated. The documented behavior:

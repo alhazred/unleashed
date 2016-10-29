@@ -13,6 +13,7 @@ SUBDIR = ${SUBDIR_y} \
 	 mntfs \
 	 objfs \
 	 portfs \
+	 sockfs \
 	 specfs \
 	 tmpfs
 

@@ -49,15 +49,15 @@
 #include <netinet/in.h>
 #include <inet/ip.h>
 
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/sockfilter_impl.h>
+#include "sockcommon.h"
+#include "sockfilter_impl.h"
 
 #include <sys/socket_proto.h>
 
-#include <fs/sockfs/socktpi_impl.h>
-#include <fs/sockfs/sodirect.h>
+#include "socktpi_impl.h"
+#include "sodirect.h"
 #include <sys/tihdr.h>
-#include <fs/sockfs/nl7c.h>
+#include "nl7c.h"
 
 extern int xnet_skip_checks;
 extern int xnet_check_print;

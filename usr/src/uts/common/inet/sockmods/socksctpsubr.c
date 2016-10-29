@@ -40,7 +40,7 @@
 
 #include <netinet/sctp.h>
 #include <inet/sctp_itf.h>
-#include <fs/sockfs/sockcommon.h>
+#include <../../../../kernel/fs/sockfs/sockcommon.h>
 #include "socksctp.h"
 
 extern kmem_cache_t *sosctp_assoccache;

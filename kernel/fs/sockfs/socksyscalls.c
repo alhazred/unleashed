@@ -69,10 +69,10 @@
 #include <vm/seg_map.h>
 #include <vm/seg_kpm.h>
 
-#include <fs/sockfs/nl7c.h>
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/sockfilter_impl.h>
-#include <fs/sockfs/socktpi.h>
+#include "nl7c.h"
+#include "sockcommon.h"
+#include "sockfilter_impl.h"
+#include "socktpi.h"
 
 #ifdef SOCK_TEST
 int do_useracc = 1;		/* Controlled by setting SO_DEBUG to 4 */

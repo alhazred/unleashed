@@ -31,7 +31,7 @@
 #include <sys/modctl.h>
 #include <sys/cmn_err.h>
 #include <netinet/sctp.h>
-#include <fs/sockfs/sockcommon.h>
+#include <../../../../kernel/fs/sockfs/sockcommon.h>
 #include "socksctp.h"
 
 struct sonode 	*socksctp_create(struct sockparams *, int, int, int, int,

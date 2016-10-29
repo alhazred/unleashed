@@ -42,8 +42,8 @@
 #include <inet/nd.h>
 #include <sys/strsun.h>
 
-#include <fs/sockfs/nl7c.h>
-#include <fs/sockfs/nl7curi.h>
+#include "nl7c.h"
+#include "nl7curi.h"
 
 #include <inet/nca/nca.h>
 #include <inet/nca/ncalogd.h>

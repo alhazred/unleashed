@@ -32,8 +32,8 @@
 #include <sys/pathname.h>
 #include <sys/cpuvar.h>
 #include <sys/promif.h>
-#include <fs/sockfs/nl7c.h>
-#include <fs/sockfs/nl7curi.h>
+#include "nl7c.h"
+#include "nl7curi.h"
 
 #include <inet/nca/ncadoorhdr.h>
 #include <inet/nca/ncalogd.h>

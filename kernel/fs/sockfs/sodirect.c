@@ -31,7 +31,7 @@
 #include <sys/strsun.h>
 #include <sys/systm.h>
 #include <sys/socketvar.h>
-#include <fs/sockfs/sodirect.h>
+#include "sodirect.h"
 
 /*
  * In support of on-board asynchronous DMA hardware (e.g. Intel I/OAT)

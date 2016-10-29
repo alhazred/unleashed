@@ -47,8 +47,8 @@
 #include <sys/socketvar.h>
 #include <sys/strsun.h>
 
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/socktpi.h>
+#include "sockcommon.h"
+#include "socktpi.h"
 
 /*
  * Generic vnode ops
