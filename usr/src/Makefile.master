@@ -823,8 +823,7 @@ CHK4UBINARY=	$(CHK4UBIN) $(CHK4UBINFLAGS) $@
 # PKGARCHIVE specifies the default location where packages should be
 # placed if built.
 #
-$(RELEASE_BUILD)PKGARCHIVESUFFIX=	-nd
-PKGARCHIVE=$(SRC)/../../packages/$(MACH)/nightly$(PKGARCHIVESUFFIX)
+PKGARCHIVE=$(SRC)/../../packages/$(MACH)/nightly
 
 #
 # The repositories will be created with these publisher settings.  To

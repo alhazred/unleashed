@@ -112,7 +112,6 @@ export ON_CLOSED_BINS="$CODEMGR_WS/closed"
 
 export ROOT="$CODEMGR_WS/proto/root_${MACH}"
 export SRC="$CODEMGR_WS/usr/src"
-export MULTI_PROTO="no"
 
 #
 #	build environment variables, including version info for mcs, motd,

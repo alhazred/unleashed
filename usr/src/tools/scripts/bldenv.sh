@@ -127,7 +127,6 @@ typeset flags=(
 typeset progname="$(basename -- "${0}")"
 
 OPTIND=1
-SUFFIX="-nd"
 
 while getopts -a "${progname}" "${USAGE}" OPT ; do 
     case ${OPT} in
@@ -135,8 +134,8 @@ while getopts -a "${progname}" "${USAGE}" OPT ; do
 	  +c)	flags.c=false ;;
 	  f)	flags.f=true  ;;
 	  +f)	flags.f=false ;;
-	  d)	flags.d=true  SUFFIX=""    ;;
-	  +d)	flags.d=false SUFFIX="-nd" ;;
+	  d)	flags.d=true  ;;
+	  +d)	flags.d=false ;;
 	  \?)	usage ;;
     esac
 done
@@ -250,7 +249,7 @@ else
 fi
 
 # update build-type variables
-PKGARCHIVE="${PKGARCHIVE}${SUFFIX}"
+PKGARCHIVE="${PKGARCHIVE}"
 
 # 	Set PATH for a build
 PATH="/opt/onbld/bin:/opt/onbld/bin/${MACH}:/usr/ccs/bin:/usr/bin:/usr/sbin:/usr/ucb:/usr/etc:/usr/openwin/bin:/usr/sfw/bin:/opt/sfw/bin:.:/opt/SUNWspro/bin"
@@ -300,15 +299,6 @@ ENVCPPFLAGS1=
 ENVCPPFLAGS2=
 ENVCPPFLAGS3=
 ENVCPPFLAGS4=
-
-if [[ "$MULTI_PROTO" != "yes" && "$MULTI_PROTO" != "no" ]]; then
-	printf \
-	    'WARNING: invalid value for MULTI_PROTO (%s); setting to "no".\n' \
-	    "$MULTI_PROTO"
-	export MULTI_PROTO="no"
-fi
-
-[[ "$MULTI_PROTO" == "yes" ]] && export ROOT="${ROOT}${SUFFIX}"
 
 ENVLDLIBS1="-L$ROOT/lib -L$ROOT/usr/lib"
 ENVCPPFLAGS1="-I$ROOT/usr/include"
