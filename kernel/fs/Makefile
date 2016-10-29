@@ -11,6 +11,7 @@ SUBDIR = ${SUBDIR_y} \
 	 bootfs \
 	 ctfs \
 	 dcfs \
+	 dev \
 	 devfs \
 	 doorfs \
 	 fifofs \
