@@ -9,6 +9,7 @@ SUBDIR_${CONFIG_FS_UDFS}	+= udfs
 
 SUBDIR = ${SUBDIR_y} \
 	 fifofs \
+	 mntfs \
 	 tmpfs
 
 .include <bsd.subdir.mk>
