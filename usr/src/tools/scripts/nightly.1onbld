@@ -119,10 +119,7 @@ options will be used.
 .B Basic action options
 .TP 10
 .B \-D
-Do a build with DEBUG on (non-DEBUG is built by default)
-.TP
-.B \-F
-Do _not_ do a non-DEBUG build (use with -D to get just a DEBUG build)
+Do a DEBUG build instead of non-DEBUG
 .TP
 .B \-M
 Do not run pmodes (safe file permission checker)

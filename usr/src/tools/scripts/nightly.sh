@@ -76,27 +76,13 @@ function normal_build {
 
 	typeset orig_p_FLAG="$p_FLAG"
 
-	# non-DEBUG build begins
-
-	if [ "$F_FLAG" = "n" ]; then
+	if [ "$D_FLAG" = "n" ]; then
 		set_non_debug_build_flags
 		build "non-DEBUG"
 	else
-		echo "\n==== No non-DEBUG $open_only build ====\n" >> "$LOGFILE"
-	fi
-
-	# non-DEBUG build ends
-
-	# DEBUG build begins
-
-	if [ "$D_FLAG" = "y" ]; then
 		set_debug_build_flags
 		build "DEBUG"
-	else
-		echo "\n==== No DEBUG $open_only build ====\n" >> "$LOGFILE"
 	fi
-
-	# DEBUG build ends
 
 	p_FLAG="$orig_p_FLAG"
 }
@@ -478,7 +464,6 @@ NIGHTLY_OPTIONS variable in the <env_file> as follows:
 	-A	check for ABI differences in .so files
 	-C	check for cstyle/hdrchk errors
 	-D	do a build with DEBUG on
-	-F	do _not_ do a non-DEBUG build
 	-G	gate keeper default group of options (-au)
 	-I	integration engineer default group of options (-ampu)
 	-M	do not run pmodes (safe file permission checker)
@@ -505,7 +490,6 @@ NIGHTLY_OPTIONS variable in the <env_file> as follows:
 A_FLAG=n
 C_FLAG=n
 D_FLAG=n
-F_FLAG=n
 f_FLAG=n
 i_FLAG=n; i_CMD_LINE_FLAG=n
 M_FLAG=n
@@ -661,7 +645,7 @@ check_closed_bins
 #
 NIGHTLY_OPTIONS=-${NIGHTLY_OPTIONS#-}
 OPTIND=1
-while getopts +ABCDdFfGIiMmNpRrwW FLAG $NIGHTLY_OPTIONS
+while getopts +ABCDdfGIiMmNpRrwW FLAG $NIGHTLY_OPTIONS
 do
 	case $FLAG in
 	  A )	A_FLAG=y
@@ -671,8 +655,6 @@ do
 	  C )	C_FLAG=y
 		;;
 	  D )	D_FLAG=y
-		;;
-	  F )	F_FLAG=y
 		;;
 	  f )	f_FLAG=y
 		;;
@@ -1492,7 +1474,7 @@ fi
 if [ "$w_FLAG" = "y" -a "$build_ok" = "y" ]; then
 	if [[ "$D_FLAG" = y ]]; then
 		do_wsdiff DEBUG $ROOT.prev $ROOT
-	elif [[ "$F_FLAG" = n ]]; then
+	else
 		do_wsdiff non-DEBUG $ROOT.prev $ROOT
 	fi
 fi

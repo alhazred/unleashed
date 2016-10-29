@@ -30,7 +30,7 @@
 # This example is suitable for building an illumos workspace, which
 # will contain the resulting archives. It is based off the onnv
 # release. It sets NIGHTLY_OPTIONS to make nightly do:
-#       DEBUG build only (-D, -F)
+#       DEBUG build instead of non-DEBUG (-D)
 #       runs 'make check' (-C)
 #       checks for new interfaces in libraries (-A)
 #       sends mail on completion (-m and the MAILTO variable)
@@ -42,7 +42,7 @@
 # - This script is only interpreted by ksh93 and explicitly allows the
 #   use of ksh93 language extensions.
 #
-export NIGHTLY_OPTIONS='-FCDAmpr'
+export NIGHTLY_OPTIONS='-DCAmpr'
 
 # CODEMGR_WS - where is your workspace at
 #export CODEMGR_WS="$HOME/ws/illumos-gate"
