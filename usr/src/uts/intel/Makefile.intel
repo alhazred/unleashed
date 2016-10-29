@@ -486,7 +486,7 @@ EXEC_KMODS	+= elfexec intpexec shbinexec javaexec
 #
 FS_KMODS	+= ctfs dcfs dev devfs fdfs fifofs
 FS_KMODS	+= mntfs nfs objfs zfs zut
-FS_KMODS	+= procfs sockfs specfs tmpfs udfs ufs sharefs
+FS_KMODS	+= procfs sockfs specfs udfs ufs sharefs
 FS_KMODS	+= smbfs bootfs
 
 #

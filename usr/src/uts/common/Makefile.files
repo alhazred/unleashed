@@ -1273,9 +1273,6 @@ SOCK_OBJS +=	socksubr.o	sockvfsops.o	sockparams.o	\
 		nl7c.o		nl7curi.o	nl7chttp.o	nl7clogd.o \
 		nl7cnca.o	sodirect.o	sockfilter.o
 
-TMPFS_OBJS +=	tmp_dir.o	tmp_subr.o	tmp_tnode.o	tmp_vfsops.o \
-		tmp_vnops.o
-
 UDFS_OBJS +=	udf_alloc.o	udf_bmap.o	udf_dir.o	\
 		udf_inode.o	udf_subr.o	udf_vfsops.o	\
 		udf_vnops.o
