@@ -1271,10 +1271,6 @@ SOCK_OBJS +=	socksubr.o	sockvfsops.o	sockparams.o	\
 		nl7c.o		nl7curi.o	nl7chttp.o	nl7clogd.o \
 		nl7cnca.o	sodirect.o	sockfilter.o
 
-UDFS_OBJS +=	udf_alloc.o	udf_bmap.o	udf_dir.o	\
-		udf_inode.o	udf_subr.o	udf_vfsops.o	\
-		udf_vnops.o
-
 UFS_OBJS +=	ufs_alloc.o	ufs_bmap.o	ufs_dir.o 	ufs_xattr.o \
 		ufs_inode.o	ufs_subr.o	ufs_tables.o	ufs_vfsops.o \
 		ufs_vnops.o	quota.o		quotacalls.o	quota_ufs.o \

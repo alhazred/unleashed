@@ -21,6 +21,11 @@
  (config
    ; support for FAT12/FAT16/FAT32 file systems
    FS_PCFS
+   #t)
+
+ (config
+   ; support for UDF file system
+   FS_UDFS
    #t))
 
 ; vim: set syntax=scheme:

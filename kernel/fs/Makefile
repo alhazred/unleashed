@@ -5,6 +5,7 @@ SUBDIR_${CONFIG_FS_HSFS}	+= hsfs
 SUBDIR_${CONFIG_FS_LOFS}	+= lofs
 SUBDIR_${CONFIG_FS_NAMEFS}	+= namefs
 SUBDIR_${CONFIG_FS_PCFS}	+= pcfs
+SUBDIR_${CONFIG_FS_UDFS}	+= udfs
 
 SUBDIR = ${SUBDIR_y} \
 	 fifofs \
