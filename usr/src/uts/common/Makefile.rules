@@ -233,10 +233,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/fd/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/fifofs/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/mntfs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

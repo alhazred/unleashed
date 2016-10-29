@@ -1106,8 +1106,6 @@ OBJFS_OBJS +=	objfs_vfs.o	objfs_root.o	objfs_common.o \
 
 FDFS_OBJS +=	fdops.o
 
-FIFO_OBJS +=	fifosubr.o	fifovnops.o
-
 PIPE_OBJS +=	pipe.o
 
 NFS_OBJS +=	nfs_client.o	nfs_common.o	nfs_dump.o \

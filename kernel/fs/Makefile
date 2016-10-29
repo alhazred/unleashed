@@ -7,6 +7,7 @@ SUBDIR_${CONFIG_FS_NAMEFS}	+= namefs
 SUBDIR_${CONFIG_FS_PCFS}	+= pcfs
 
 SUBDIR = ${SUBDIR_y} \
+	 fifofs \
 	 tmpfs
 
 .include <bsd.subdir.mk>
