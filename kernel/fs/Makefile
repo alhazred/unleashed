@@ -14,6 +14,7 @@ SUBDIR = ${SUBDIR_y} \
 	 dev \
 	 devfs \
 	 doorfs \
+	 fdfs \
 	 fifofs \
 	 mntfs \
 	 objfs \

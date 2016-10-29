@@ -1088,8 +1088,6 @@ JAVAEXEC_OBJS +=java.o
 #
 #			file system modules
 #
-FDFS_OBJS +=	fdops.o
-
 PIPE_OBJS +=	pipe.o
 
 NFS_OBJS +=	nfs_client.o	nfs_common.o	nfs_dump.o \

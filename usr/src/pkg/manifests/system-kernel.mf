@@ -580,6 +580,7 @@ file path=kernel/fs/$(ARCH64)/ctfs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/dcfs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/dev group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/devfs group=sys mode=0755
+file path=kernel/fs/$(ARCH64)/fdfs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/fifofs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/hsfs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/lofs group=sys mode=0755
@@ -599,6 +600,7 @@ $(i386_ONLY)file path=kernel/fs/ctfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/dcfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/dev group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/devfs group=sys mode=0755
+$(i386_ONLY)file path=kernel/fs/fdfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/fifofs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/hsfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/lofs group=sys mode=0755
