@@ -329,7 +329,7 @@ STRMOD_KMODS	+= vuid3ps2
 SYS_KMODS	+= c2audit
 SYS_KMODS	+= exacctsys
 SYS_KMODS	+= inst_sync kaio msgsys semsys shmsys sysacct pipe
-SYS_KMODS	+= doorfs pset acctctl portfs
+SYS_KMODS	+= pset acctctl portfs
 
 #
 #	'User' Modules (/kernel/misc):

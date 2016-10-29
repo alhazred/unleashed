@@ -8,6 +8,7 @@ SUBDIR_${CONFIG_FS_PCFS}	+= pcfs
 SUBDIR_${CONFIG_FS_UDFS}	+= udfs
 
 SUBDIR = ${SUBDIR_y} \
+	 doorfs \
 	 fifofs \
 	 mntfs \
 	 tmpfs

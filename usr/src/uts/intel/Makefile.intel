@@ -512,7 +512,6 @@ STRMOD_KMODS	+= vuidm5p
 #	'System' Modules (/kernel/sys):
 #
 SYS_KMODS	+= c2audit
-SYS_KMODS	+= doorfs
 SYS_KMODS	+= exacctsys
 SYS_KMODS	+= inst_sync
 SYS_KMODS	+= kaio
