@@ -11,6 +11,7 @@ SUBDIR = ${SUBDIR_y} \
 	 doorfs \
 	 fifofs \
 	 mntfs \
+	 objfs \
 	 tmpfs
 
 .include <bsd.subdir.mk>

@@ -309,7 +309,7 @@ EXEC_KMODS	+= elfexec intpexec shbinexec javaexec
 #
 FS_KMODS	+= dev devfs fdfs nfs zfs
 FS_KMODS	+= zut specfs ufs procfs sockfs
-FS_KMODS	+= ctfs objfs sharefs dcfs smbfs bootfs
+FS_KMODS	+= ctfs sharefs dcfs smbfs bootfs
 
 #
 #	Streams Modules (/kernel/strmod):

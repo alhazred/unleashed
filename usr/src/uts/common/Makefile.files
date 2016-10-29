@@ -1101,9 +1101,6 @@ DEV_OBJS  +=	sdev_subr.o	sdev_vfsops.o	sdev_vnops.o	\
 CTFS_OBJS +=	ctfs_all.o ctfs_cdir.o ctfs_ctl.o ctfs_event.o \
 		ctfs_latest.o ctfs_root.o ctfs_sym.o ctfs_tdir.o ctfs_tmpl.o
 
-OBJFS_OBJS +=	objfs_vfs.o	objfs_root.o	objfs_common.o \
-		objfs_odir.o	objfs_data.o
-
 FDFS_OBJS +=	fdops.o
 
 PIPE_OBJS +=	pipe.o
