@@ -265,10 +265,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/swapfs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/ufs/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/vscan/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

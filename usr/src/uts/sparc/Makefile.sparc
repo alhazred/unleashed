@@ -308,7 +308,7 @@ EXEC_KMODS	+= elfexec intpexec shbinexec javaexec
 #	File System Modules (/kernel/fs):
 #
 FS_KMODS	+= dev devfs fdfs nfs zfs
-FS_KMODS	+= zut ufs procfs
+FS_KMODS	+= zut procfs
 FS_KMODS	+= ctfs sharefs dcfs smbfs bootfs
 
 #

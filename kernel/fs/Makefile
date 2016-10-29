@@ -15,6 +15,7 @@ SUBDIR = ${SUBDIR_y} \
 	 portfs \
 	 sockfs \
 	 specfs \
-	 tmpfs
+	 tmpfs \
+	 ufs
 
 .include <bsd.subdir.mk>

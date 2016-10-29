@@ -1256,13 +1256,6 @@ PROC_OBJS +=	prcontrol.o	prioctl.o	prsubr.o	prusrio.o \
 
 SHAREFS_OBJS +=	sharetab.o	sharefs_vfsops.o	sharefs_vnops.o
 
-UFS_OBJS +=	ufs_alloc.o	ufs_bmap.o	ufs_dir.o 	ufs_xattr.o \
-		ufs_inode.o	ufs_subr.o	ufs_tables.o	ufs_vfsops.o \
-		ufs_vnops.o	quota.o		quotacalls.o	quota_ufs.o \
-		ufs_filio.o	ufs_lockfs.o	ufs_thread.o	ufs_trans.o \
-		ufs_acl.o	ufs_panic.o	ufs_directio.o	ufs_log.o \
-		ufs_extvnops.o	ufs_snap.o	lufs.o		lufs_thread.o \
-		lufs_log.o	lufs_map.o	lufs_top.o	lufs_debug.o
 VSCAN_OBJS +=	vscan_drv.o	vscan_svc.o vscan_door.o
 
 NSMB_OBJS +=	smb_conn.o	smb_dev.o	smb_iod.o	smb_pass.o \
