@@ -10,6 +10,7 @@ SUBDIR_${CONFIG_FS_UDFS}	+= udfs
 SUBDIR = ${SUBDIR_y} \
 	 bootfs \
 	 ctfs \
+	 dcfs \
 	 devfs \
 	 doorfs \
 	 fifofs \

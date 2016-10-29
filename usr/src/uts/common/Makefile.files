@@ -1088,8 +1088,6 @@ JAVAEXEC_OBJS +=java.o
 #
 #			file system modules
 #
-DCFS_OBJS +=	dc_vnops.o
-
 DEV_OBJS  +=	sdev_subr.o	sdev_vfsops.o	sdev_vnops.o	\
 		sdev_ptsops.o	sdev_zvolops.o	sdev_comm.o	\
 		sdev_profile.o	sdev_ncache.o	sdev_netops.o	\
