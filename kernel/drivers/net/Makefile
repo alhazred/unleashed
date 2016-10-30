@@ -1,6 +1,7 @@
 .include <../../../Makefile.cfgparam>
 
-SUBDIR_${CONFIG_BNXE}		=  bnxe
+SUBDIR_${CONFIG_BGE}		=  bge
+SUBDIR_${CONFIG_BNXE}		+= bnxe
 SUBDIR_${CONFIG_CHXGE}		+= chxge
 SUBDIR_${CONFIG_E1000G}		+= e1000g
 SUBDIR_${CONFIG_I40E}		+= i40e
