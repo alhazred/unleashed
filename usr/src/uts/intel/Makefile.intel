@@ -232,7 +232,6 @@ DRV_KMODS	+= fd
 DRV_KMODS	+= fdc
 DRV_KMODS	+= fm
 DRV_KMODS	+= fssnap
-DRV_KMODS	+= hxge
 DRV_KMODS	+= i8042
 DRV_KMODS	+= i915
 DRV_KMODS	+= icmp

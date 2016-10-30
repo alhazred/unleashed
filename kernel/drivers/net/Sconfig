@@ -19,6 +19,11 @@
    #t)
 
  (config
+   ; support for hxge network adapters
+   HXGE
+   #t)
+
+ (config
    ; support for i40e network adapters
    I40E
    (= MACH 'i386))
