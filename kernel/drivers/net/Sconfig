@@ -4,6 +4,11 @@
    #t)
 
  (config
+   ; support for chxge network adapters
+   CHXGE
+   #t)
+
+ (config
    ; support for e1000g network adapters
    E1000G
    #t)

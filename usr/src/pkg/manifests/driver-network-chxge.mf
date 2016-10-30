@@ -51,6 +51,6 @@ legacy pkg=SUNWchxge \
     desc="Chelsio N110 10 Gigabit Ethernet Network Adapter Driver" \
     name="Chelsio N110 10GE NIC Driver"
 license cr_Sun license=cr_Sun
+license kernel/drivers/net/chxge/com/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/chxge/com/THIRDPARTYLICENSE
 license lic_CDDL license=lic_CDDL
-license usr/src/uts/common/io/chxge/com/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/chxge/com/THIRDPARTYLICENSE

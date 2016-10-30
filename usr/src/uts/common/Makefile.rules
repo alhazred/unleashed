@@ -1128,14 +1128,6 @@ $(OBJS_DIR)/%.o:                $(UTSBASE)/common/io/zyd/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/chxge/com/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/chxge/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/cxgbe/common/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

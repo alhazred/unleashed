@@ -204,7 +204,6 @@ DRV_KMODS	+= vnic
 DRV_KMODS	+= xge
 DRV_KMODS	+= rds
 DRV_KMODS	+= rdsv3
-DRV_KMODS	+= chxge
 DRV_KMODS	+= smbsrv
 DRV_KMODS	+= vscan
 DRV_KMODS	+= nsmb
