@@ -23,6 +23,7 @@
  * Copyright 2015 Lauri Tirkkonen <lotheac@iki.fi>
  *
  * Copyright (c) 1989, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright 2015, Joyent, Inc. All rights reserved.
  */
 
 /*	Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1989 AT&T	*/
@@ -71,7 +72,6 @@ typedef	uint32_t	socklen_t;
 #define	SOCK_STREAM	2		/* stream socket */
 #define	SOCK_DGRAM	1		/* datagram socket */
 #define	SOCK_RAW	4		/* raw-protocol interface */
-#define	SOCK_RDM	5		/* reliably-delivered message */
 #define	SOCK_SEQPACKET	6		/* sequenced packet stream */
 #define	SOCK_TYPE_MASK	0xffff		/* type reside in these bits only */
 
@@ -376,6 +376,7 @@ struct msghdr32 {
 #define	MSG_DONTWAIT	0x80		/* Don't block for this recv */
 #define	MSG_NOTIFICATION 0x100		/* Notification, not data */
 
+/* Obsolete but kept for compilation compatability. Use IOV_MAX. */
 #define	MSG_MAXIOVLEN	16
 
 #ifdef _KERNEL

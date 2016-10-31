@@ -15,29 +15,21 @@
 # Copyright 2013, OmniTI Computer Consulting, Inc.
 #
 
-file path=usr/share/man/man3socket/accept.3socket
-file path=usr/share/man/man3socket/bind.3socket
 file path=usr/share/man/man3socket/byteorder.3socket
-file path=usr/share/man/man3socket/connect.3socket
 file path=usr/share/man/man3socket/ethers.3socket
 file path=usr/share/man/man3socket/getaddrinfo.3socket
 file path=usr/share/man/man3socket/getifaddrs.3socket
 file path=usr/share/man/man3socket/getipnodebyname.3socket
 file path=usr/share/man/man3socket/getnetbyname.3socket
-file path=usr/share/man/man3socket/getpeername.3socket
 file path=usr/share/man/man3socket/getprotobyname.3socket
 file path=usr/share/man/man3socket/getservbyname.3socket
-file path=usr/share/man/man3socket/getsockname.3socket
-file path=usr/share/man/man3socket/getsockopt.3socket
 file path=usr/share/man/man3socket/getsourcefilter.3socket
 file path=usr/share/man/man3socket/icmp6_filter.3socket
 file path=usr/share/man/man3socket/if_nametoindex.3socket
 file path=usr/share/man/man3socket/inet.3socket
 file path=usr/share/man/man3socket/inet6_opt.3socket
 file path=usr/share/man/man3socket/inet6_rth.3socket
-file path=usr/share/man/man3socket/listen.3socket
 file path=usr/share/man/man3socket/rcmd.3socket
-file path=usr/share/man/man3socket/recv.3socket
 file path=usr/share/man/man3socket/rexec.3socket
 file path=usr/share/man/man3socket/sctp_bindx.3socket
 file path=usr/share/man/man3socket/sctp_getladdrs.3socket
@@ -47,13 +39,8 @@ file path=usr/share/man/man3socket/sctp_peeloff.3socket
 file path=usr/share/man/man3socket/sctp_recvmsg.3socket
 file path=usr/share/man/man3socket/sctp_send.3socket
 file path=usr/share/man/man3socket/sctp_sendmsg.3socket
-file path=usr/share/man/man3socket/send.3socket
-file path=usr/share/man/man3socket/shutdown.3socket
 file path=usr/share/man/man3socket/sockaddr.3socket
-file path=usr/share/man/man3socket/socket.3socket
-file path=usr/share/man/man3socket/socketpair.3socket
 file path=usr/share/man/man3socket/spray.3socket
-link path=usr/share/man/man3socket/accept4.3socket target=accept.3socket
 link path=usr/share/man/man3socket/endnetent.3socket \
     target=getnetbyname.3socket
 link path=usr/share/man/man3socket/endprotoent.3socket \
@@ -160,8 +147,6 @@ link path=usr/share/man/man3socket/ntohl.3socket target=byteorder.3socket
 link path=usr/share/man/man3socket/ntohll.3socket target=byteorder.3socket
 link path=usr/share/man/man3socket/ntohs.3socket target=byteorder.3socket
 link path=usr/share/man/man3socket/rcmd_af.3socket target=rcmd.3socket
-link path=usr/share/man/man3socket/recvfrom.3socket target=recv.3socket
-link path=usr/share/man/man3socket/recvmsg.3socket target=recv.3socket
 link path=usr/share/man/man3socket/rexec_af.3socket target=rexec.3socket
 link path=usr/share/man/man3socket/rresvport.3socket target=rcmd.3socket
 link path=usr/share/man/man3socket/rresvport_af.3socket target=rcmd.3socket
@@ -170,8 +155,6 @@ link path=usr/share/man/man3socket/sctp_freeladdrs.3socket \
     target=sctp_getladdrs.3socket
 link path=usr/share/man/man3socket/sctp_freepaddrs.3socket \
     target=sctp_getpaddrs.3socket
-link path=usr/share/man/man3socket/sendmsg.3socket target=send.3socket
-link path=usr/share/man/man3socket/sendto.3socket target=send.3socket
 link path=usr/share/man/man3socket/setipv4sourcefilter.3socket \
     target=getsourcefilter.3socket
 link path=usr/share/man/man3socket/setnetent.3socket \
@@ -180,8 +163,6 @@ link path=usr/share/man/man3socket/setprotoent.3socket \
     target=getprotobyname.3socket
 link path=usr/share/man/man3socket/setservent.3socket \
     target=getservbyname.3socket
-link path=usr/share/man/man3socket/setsockopt.3socket \
-    target=getsockopt.3socket
 link path=usr/share/man/man3socket/setsourcefilter.3socket \
     target=getsourcefilter.3socket
 link path=usr/share/man/man3socket/sockaddr_dl.3socket target=sockaddr.3socket
