@@ -78,7 +78,6 @@ COMMON_MODULES_KVM = \
 	mm \
 	mpt_sas \
 	mr_sas \
-	nca \
 	nsctl \
 	nsmb \
 	pmcs \

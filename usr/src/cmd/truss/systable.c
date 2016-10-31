@@ -1712,7 +1712,7 @@ const char * const afcodes[] = {
 	"LINK",		/* 25 */
 	"INET6",	/* 26 */
 	"KEY",		/* 27 */
-	"NCA",		/* 28 */
+	NULL,		/* 28 */
 	"POLICY",	/* 29 */
 	"RDS",		/* 30 */
 	"TRILL",	/* 31 */

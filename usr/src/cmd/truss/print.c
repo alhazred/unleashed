@@ -1852,8 +1852,7 @@ prt_skp(private_t *pri, int raw, long val)
 	/* cheating -- look at the protocol-family */
 	switch (pri->sys_args[0]) {
 	case PF_INET6:
-	case PF_INET:
-	case PF_NCA:	if ((s = ipprotos((int)val)) != NULL) {
+	case PF_INET:	if ((s = ipprotos((int)val)) != NULL) {
 				outstring(pri, s);
 				break;
 			}

@@ -26,9 +26,8 @@ The \fBsendfilev()\fR function supports the following parameters:
 \fB\fIfildes\fR\fR
 .ad
 .RS 11n
-A file descriptor to a regular file or to a \fBAF_NCA\fR, \fBAF_INET\fR, or
+A file descriptor to a regular file or to a \fBAF_INET\fR or
 \fBAF_INET6\fR family type \fBSOCK_STREAM\fR socket that is open for writing.
-For \fBAF_NCA\fR, the protocol type should be zero.
 .RE
 
 .sp
@@ -65,7 +64,7 @@ The total number of bytes written to \fBout_fd\fR.
 The \fBsendfilev()\fR function attempts to write data from the \fIsfvcnt\fR
 buffers specified by the members of \fIvec\fR array: \fBvec[0], vec[1], ... ,
 vec[sfvcnt-1]\fR. The \fIfildes\fR argument is a file descriptor to a regular
-file or to an \fBAF_NCA\fR, \fBAF_INET\fR, or \fBAF_INET6\fR family type
+file or to an \fBAF_INET\fR or \fBAF_INET6\fR family type
 \fBSOCK_STREAM\fR socket that is open for writing.
 .sp
 .LP

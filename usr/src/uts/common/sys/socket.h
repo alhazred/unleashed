@@ -250,7 +250,6 @@ struct	linger {
 #define	AF_LINK		25		/* Link-layer interface */
 #define	AF_INET6	26		/* Internet Protocol, Version 6 */
 #define	AF_KEY		27		/* Security Association DB socket */
-#define	AF_NCA		28		/* NCA socket */
 #define	AF_POLICY	29		/* Security Policy DB socket */
 #define	AF_INET_OFFLOAD	30		/* Sun private; do not use */
 #define	AF_TRILL	31		/* TRILL interface */
@@ -291,7 +290,6 @@ struct	linger {
 #define	PF_LINK		AF_LINK
 #define	PF_INET6	AF_INET6
 #define	PF_KEY		AF_KEY
-#define	PF_NCA		AF_NCA
 #define	PF_POLICY	AF_POLICY
 #define	PF_INET_OFFLOAD	AF_INET_OFFLOAD	/* Sun private; do not use */
 #define	PF_TRILL	AF_TRILL

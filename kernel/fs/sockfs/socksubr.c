@@ -70,7 +70,6 @@
 
 #include <c2/audit.h>
 
-#include "nl7c.h"
 #include "sockcommon.h"
 #include "sockfilter_impl.h"
 #include "socktpi.h"
@@ -92,7 +91,6 @@
 #define	SO_LOCK_WAKEUP_TIME	3000	/* Wakeup time in milliseconds */
 
 dev_t sockdev;	/* For fsid in getattr */
-int sockfs_defer_nl7c_init = 0;
 
 struct socklist socklist;
 
@@ -109,8 +107,6 @@ static int sockfs_snapshot(kstat_t *, void *, int);
 extern smod_info_t *sotpi_smod_create(void);
 
 extern void sendfile_init();
-
-extern void nl7c_init(void);
 
 extern int modrootloaded;
 
@@ -291,12 +287,6 @@ sockinit(int fstype, char *name)
 
 	mutex_init(&socklist.sl_lock, NULL, MUTEX_DEFAULT, NULL);
 	sendfile_init();
-	if (!modrootloaded) {
-		sockfs_defer_nl7c_init = 1;
-	} else {
-		nl7c_init();
-	}
-
 	/* Initialize socket filters */
 	sof_init();
 
