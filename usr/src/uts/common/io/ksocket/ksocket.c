@@ -56,9 +56,6 @@ ksocket_socket(ksocket_t *ksp, int domain, int type, int protocol, int flags,
 	/* All Solaris components should pass a cred for this operation. */
 	ASSERT(cr != NULL);
 
-	if (domain == AF_NCA)
-		return (EAFNOSUPPORT);
-
 	ASSERT(flags == KSOCKET_SLEEP || flags == KSOCKET_NOSLEEP);
 	so = socket_create(domain, type, protocol, NULL, NULL, flags,
 	    cr, &error);

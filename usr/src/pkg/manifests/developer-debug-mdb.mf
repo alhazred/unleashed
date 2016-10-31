@@ -113,7 +113,6 @@ file path=kernel/kmdb/$(ARCH64)/mm group=sys mode=0555
 file path=kernel/kmdb/$(ARCH64)/mpt group=sys mode=0555
 file path=kernel/kmdb/$(ARCH64)/mpt_sas group=sys mode=0555
 file path=kernel/kmdb/$(ARCH64)/mr_sas group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/nca group=sys mode=0555
 file path=kernel/kmdb/$(ARCH64)/neti group=sys mode=0555
 file path=kernel/kmdb/$(ARCH64)/nfs group=sys mode=0555
 file path=kernel/kmdb/$(ARCH64)/ptm group=sys mode=0555
@@ -151,7 +150,6 @@ $(i386_ONLY)file path=kernel/kmdb/mm group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/mpt group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/mpt_sas group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/mr_sas group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/nca group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/neti group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/nfs group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/ptm group=sys mode=0555
@@ -234,7 +232,6 @@ file path=usr/lib/mdb/kvm/$(ARCH64)/mm.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/mpt.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/mpt_sas.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/mr_sas.so group=sys mode=0555
-file path=usr/lib/mdb/kvm/$(ARCH64)/nca.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/neti.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/nfs.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/ptm.so group=sys mode=0555
@@ -274,7 +271,6 @@ $(i386_ONLY)file path=usr/lib/mdb/kvm/mm.so group=sys mode=0555
 $(i386_ONLY)file path=usr/lib/mdb/kvm/mpt.so group=sys mode=0555
 $(i386_ONLY)file path=usr/lib/mdb/kvm/mpt_sas.so group=sys mode=0555
 $(i386_ONLY)file path=usr/lib/mdb/kvm/mr_sas.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/nca.so group=sys mode=0555
 $(i386_ONLY)file path=usr/lib/mdb/kvm/neti.so group=sys mode=0555
 $(i386_ONLY)file path=usr/lib/mdb/kvm/nfs.so group=sys mode=0555
 $(i386_ONLY)file path=usr/lib/mdb/kvm/ptm.so group=sys mode=0555

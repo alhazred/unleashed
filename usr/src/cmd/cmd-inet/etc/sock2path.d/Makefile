@@ -28,8 +28,7 @@ SOCK2PATHFILES= \
     driver%2Fnetwork%2Frds \
     driver%2Fnetwork%2Frdsv3 \
     driver%2Fnetwork%2Fsdp \
-    system%2Fkernel \
-    system%2Fnetwork%2Fhttp%2Fcache%2Faccelerator
+    system%2Fkernel
 
 include ../../../Makefile.cmd
 
