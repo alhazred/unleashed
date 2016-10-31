@@ -1,0 +1,50 @@
+((config
+   ; support for bnxe network adapters
+   BNXE
+   #t)
+
+ (config
+   ; support for e1000g network adapters
+   E1000G
+   #t)
+
+ (config
+   ; support for i40e network adapters
+   I40E
+   (= MACH 'i386))
+
+ (config
+   ; support for igb network adapters
+   IGB
+   #t)
+
+ (config
+   ; support for ixgbe network adapters
+   IXGBE
+   #t)
+
+ (config
+   ; support for nge network adapters
+   NGE
+   (= MACH 'i386))
+
+ (config
+   ; support for nxge network adapters
+   NXGE
+   #t)
+
+ (config
+   ; support for sfxge network adapters
+   SFXGE
+   (= MACH 'i386))
+
+ (config
+   ; support for virtio network devices
+   VIRTIO_NET
+   (and
+     (= MACH 'i386)
+     (= VIRTIO #t)))
+
+ (include "wifi/Sconfig"))
+
+; vim: set syntax=scheme:

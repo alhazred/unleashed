@@ -22,6 +22,7 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2016 Joyent, Inc.
 
 MODULE = unix.so
 MDBTGT = kvm
@@ -47,3 +48,4 @@ CERRWARN += -Wno-char-subscripts
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-unused-label
 CERRWARN += -Wno-uninitialized
+CERRWARN += -Wno-unused-function

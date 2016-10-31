@@ -52,8 +52,8 @@
 
 #include <sys/socket.h>
 #include <sys/socketvar.h>
-#include <fs/sockfs/sockcommon.h>
-#include <fs/sockfs/socktpi.h>
+#include <../../../../../../kernel/fs/sockfs/sockcommon.h>
+#include <../../../../../../kernel/fs/sockfs/socktpi.h>
 
 #include <netinet/in.h>
 #include <sys/sendfile.h>

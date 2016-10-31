@@ -25,7 +25,7 @@
 
 include ../../../Makefile.master
 
-CHECKED_HDRS=  \
+HDRS=  \
 	archsystm.h	\
 	asm_linkage.h	\
 	cmpregs.h	\
@@ -68,12 +68,6 @@ FMCPUHDRS= \
 	UltraSPARC-T1.h \
 	SPARC64-VI.h
 
-HDRS= \
-	$(CHECKED_HDRS)	\
-	$(FPUHDRS)	\
-	$(FMCPUHDRS)	\
-	cfgparam.h
-
 ROOTDIR=	$(ROOT)/usr/include/sys
 ROOTDIRS= \
 	$(ROOTDIR) \
@@ -91,7 +85,7 @@ fm/cpu/%.check:	fm/cpu/%.h
 	$(DOT_H_CHECK)
 
 CHECKHDRS= \
-	$(CHECKED_HDRS:%.h=%.check) \
+	$(HDRS:%.h=%.check) \
 	$(FPUHDRS:%.h=fpu/%.check) \
 	$(FMCPUHDRS:%.h=fm/cpu/%.check)
 

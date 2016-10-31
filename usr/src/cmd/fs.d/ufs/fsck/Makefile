@@ -36,7 +36,7 @@ FSCKOBJS=	main.o dir.o dup_avl.o inode.o pass1.o pass1b.o \
 		utilities.o
 FSCKSRCS=	$(FSCKOBJS:%.o=%.c)
 
-UFSDIR=		../../../../uts/common/fs/ufs
+UFSDIR=		../../../../../../kernel/fs/ufs
 UFSOBJS=	ufs_subr.o ufs_tables.o
 UFSSRCS=	$(UFSOBJS:%.o=$(UFSDIR)/%.c)
 ROLLDIR=	../roll_log

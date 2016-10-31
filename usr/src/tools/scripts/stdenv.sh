@@ -38,11 +38,3 @@
 # builds.
 #
 [ -n "$OPEN_SRCDIR" ] || export OPEN_SRCDIR="$CODEMGR_WS/open_src"
-
-#
-# Flag to enable creation of per-build-type proto areas.  If "yes",
-# more proto areas are created, which speeds up incremental builds but
-# increases storage consumption.  Will be forced to "yes" for
-# OpenSolaris deliveries.
-#
-[ -n "$MULTI_PROTO" ] || export MULTI_PROTO=no

@@ -62,6 +62,12 @@
 int use_brk_lpg = 1;
 int use_stk_lpg = 1;
 
+/*
+ * If set, we will not randomize mappings where the 'addr' argument is
+ * non-NULL and not an alignment.
+ */
+int aslr_respect_mmap_hint = 1;
+
 static int brk_lpg(caddr_t nva);
 static int grow_lpg(caddr_t sp);
 
@@ -72,18 +78,22 @@ brk(caddr_t nva)
 	proc_t *p = curproc;
 
 	/*
-	 * As a special case to aid the implementation of sbrk(3C), if given a
-	 * new brk of 0, return the current brk.  We'll hide this in brk(3C).
-	 */
-	if (nva == 0)
-		return ((intptr_t)(p->p_brkbase + p->p_brksize));
-
-	/*
 	 * Serialize brk operations on an address space.
 	 * This also serves as the lock protecting p_brksize
 	 * and p_brkpageszc.
 	 */
 	as_rangelock(p->p_as);
+
+	/*
+	 * As a special case to aid the implementation of sbrk(3C), if given a
+	 * new brk of 0, return the current brk.  We'll hide this in brk(3C).
+	 */
+	if (nva == 0) {
+		intptr_t base = (intptr_t)(p->p_brkbase + p->p_brksize);
+		as_rangeunlock(p->p_as);
+		return (base);
+	}
+
 	if (use_brk_lpg && (p->p_flag & SAUTOLPG) != 0) {
 		error = brk_lpg(nva);
 	} else {
@@ -595,6 +605,9 @@ zmap(struct as *as, caddr_t *addrp, size_t len, uint_t uprot, int flags,
 	return (as_map(as, *addrp, len, segvn_create, &vn_a));
 }
 
+#define	RANDOMIZABLE_MAPPING(addr, flags) (((flags & MAP_FIXED) == 0) && \
+	!(((flags & MAP_ALIGN) == 0) && (addr != 0) && aslr_respect_mmap_hint))
+
 static int
 smmap_common(caddr_t *addrp, size_t len,
     int prot, int flags, struct file *fp, offset_t pos)
@@ -629,7 +642,7 @@ smmap_common(caddr_t *addrp, size_t len,
 	 * If it's not a fixed allocation and mmap ASLR is enabled, randomize
 	 * it.
 	 */
-	if (((flags & MAP_FIXED) == 0) &&
+	if (RANDOMIZABLE_MAPPING(*addrp, flags) &&
 	    secflag_enabled(curproc, PROC_SEC_ASLR))
 		flags |= _MAP_RANDOMIZE;
 

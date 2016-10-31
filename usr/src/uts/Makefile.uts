@@ -512,3 +512,10 @@ PRIVS_DEF = $(SRC)/uts/common/os/priv_defs
 #
 USBDEVS_AWK =	$(SRC)/uts/common/io/usb/usbdevs2h.awk
 USBDEVS_DATA =	$(SRC)/uts/common/io/usb/usbdevs
+
+
+#
+# We need to make sure that we are building with the private -X option to
+# ctfconvert which allows us to fixup the struct cpu to account for machcpu.
+#
+CTFCVTFLAGS += -X

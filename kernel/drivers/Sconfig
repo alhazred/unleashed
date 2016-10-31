@@ -1,0 +1,23 @@
+((config
+   ; support for loopback disk devices
+   LOFI
+   #t)
+
+ (config
+   ; support for ramdisk devices
+   RAMDISK
+   #t)
+
+ (config
+   ; support for /dev/random and /dev/urandom
+   RANDOM
+   #t)
+
+ (config
+   ; support for virtio devices
+   VIRTIO
+   (= MACH 'i386))
+
+ (include "net/Sconfig"))
+
+; vim: set syntax=scheme:

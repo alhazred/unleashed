@@ -24,6 +24,8 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2016 Joyent, Inc.
+#
 #	This makefile drives the production of the PCI-E nexus driver
 #
 #	i86pc implementation architecture dependent
@@ -75,6 +77,7 @@ CFLAGS		+= -D_MODULE_NAME="\"$(MODULE)\""
 
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.

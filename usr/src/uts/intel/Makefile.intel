@@ -250,11 +250,6 @@ DRV_KMODS	+= ippctl
 DRV_KMODS	+= ipsecah
 DRV_KMODS	+= ipsecesp
 DRV_KMODS	+= ipw
-DRV_KMODS	+= iwh
-DRV_KMODS	+= iwi
-DRV_KMODS	+= iwn
-DRV_KMODS	+= iwk
-DRV_KMODS	+= iwp
 DRV_KMODS	+= iwscn
 DRV_KMODS	+= kb8042
 DRV_KMODS	+= keysock
@@ -361,7 +356,6 @@ DRV_KMODS	+= pvscsi
 DRV_KMODS	+= afe
 DRV_KMODS	+= atge
 DRV_KMODS	+= bfe
-DRV_KMODS	+= bnxe
 DRV_KMODS	+= dmfe
 DRV_KMODS	+= efe
 DRV_KMODS	+= elxl
@@ -448,6 +442,15 @@ DRV_KMODS	+= usbftdi
 DRV_KMODS	+= usbecm
 
 #
+#	USBGEM modules
+#
+DRV_KMODS	+= usbgem
+DRV_KMODS	+= axf
+DRV_KMODS	+= udmf 
+DRV_KMODS	+= upf
+DRV_KMODS	+= urf 
+
+#
 #	1394 modules
 #
 MISC_KMODS	+= s1394 sbp2
@@ -481,10 +484,9 @@ EXEC_KMODS	+= elfexec intpexec shbinexec javaexec
 #
 #	File System Modules (/kernel/fs):
 #
-FS_KMODS	+= ctfs dcfs dev devfs fdfs fifofs
-FS_KMODS	+= mntfs nfs objfs zfs zut
-FS_KMODS	+= procfs sockfs specfs tmpfs udfs ufs sharefs
-FS_KMODS	+= smbfs bootfs
+FS_KMODS	+= nfs zfs zut
+FS_KMODS	+= procfs sharefs
+FS_KMODS	+= smbfs
 
 #
 #	Streams Modules (/kernel/strmod):
@@ -509,13 +511,11 @@ STRMOD_KMODS	+= vuidm5p
 #	'System' Modules (/kernel/sys):
 #
 SYS_KMODS	+= c2audit
-SYS_KMODS	+= doorfs
 SYS_KMODS	+= exacctsys
 SYS_KMODS	+= inst_sync
 SYS_KMODS	+= kaio
 SYS_KMODS	+= msgsys
 SYS_KMODS	+= pipe
-SYS_KMODS	+= portfs
 SYS_KMODS	+= pset
 SYS_KMODS	+= semsys
 SYS_KMODS	+= shmsys

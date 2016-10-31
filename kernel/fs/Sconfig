@@ -1,0 +1,31 @@
+((config
+   ; support for file system automounter
+   FS_AUTOFS
+   #t)
+
+ (config
+   ; support for ISO9660/High Sierra file systems
+   FS_HSFS
+   #t)
+
+ (config
+   ; support for loopback file systems
+   FS_LOFS
+   #t)
+
+ (config
+   ; support for namefs
+   FS_NAMEFS
+   #t)
+
+ (config
+   ; support for FAT12/FAT16/FAT32 file systems
+   FS_PCFS
+   #t)
+
+ (config
+   ; support for UDF file system
+   FS_UDFS
+   #t))
+
+; vim: set syntax=scheme:

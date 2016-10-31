@@ -25,5 +25,5 @@
 #
 
 find_files "s.*"\
-	usr/src/uts/common/fs/ufs
+	kernel/fs/ufs
 
