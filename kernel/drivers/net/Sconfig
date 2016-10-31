@@ -39,6 +39,11 @@
    #t)
 
  (config
+   ; support for myri10ge network adapters
+   MYRI10GE
+   #t)
+
+ (config
    ; support for nge network adapters
    NGE
    (= MACH 'i386))

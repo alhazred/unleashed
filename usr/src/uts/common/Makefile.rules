@@ -1164,10 +1164,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/ntxn/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/myri10ge/drv/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/ipp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

@@ -208,7 +208,6 @@ DRV_KMODS	+= bscbus
 DRV_KMODS	+= bscv
 DRV_KMODS	+= cxgbe
 DRV_KMODS	+= ntxn
-DRV_KMODS	+= myri10ge
 DRV_KMODS	+= clone
 DRV_KMODS	+= cmdk
 DRV_KMODS	+= cn
