@@ -48,9 +48,9 @@ file path=usr/share/man/man7d/iwh.7d
 legacy pkg=SUNWiwh desc="Intel(R) WiFi Link 5100/5300 driver" \
     name="Intel(R) WiFi Link 5100/5300 driver"
 license cr_Sun license=cr_Sun
-license usr/src/uts/common/io/iwh/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/iwh/THIRDPARTYLICENSE
-license usr/src/uts/common/io/iwh/fw-iw/fw_5000/LICENSE \
-    license=usr/src/uts/common/io/iwh/fw-iw/fw_5000/LICENSE
-license usr/src/uts/common/io/iwh/fw-iw/fw_5150/LICENSE \
-    license=usr/src/uts/common/io/iwh/fw-iw/fw_5150/LICENSE
+license kernel/drivers/net/wifi/iwh/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/iwh/THIRDPARTYLICENSE
+license kernel/drivers/net/wifi/iwh/fw-iw/fw_5000/LICENSE \
+    license=kernel/drivers/net/wifi/iwh/fw-iw/fw_5000/LICENSE
+license kernel/drivers/net/wifi/iwh/fw-iw/fw_5150/LICENSE \
+    license=kernel/drivers/net/wifi/iwh/fw-iw/fw_5150/LICENSE

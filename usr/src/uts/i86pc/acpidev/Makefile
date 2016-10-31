@@ -24,6 +24,8 @@
 # Copyright (c) 2009, Intel Corporation.
 # All rights reserved.
 #
+# Copyright 2016, Joyent, Inc.
+#
 #	This makefile drives the production of the ACPI device configuration
 #	kernel module.
 #
@@ -60,6 +62,7 @@ LDFLAGS		+= -dy -N misc/acpica
 
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-type-limits
+CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.

@@ -21,6 +21,7 @@
 # Use is subject to license terms.
 #
 # Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
+# Copyright 2016 Joyent, Inc.
 #
 
 #
@@ -57,6 +58,7 @@ INSTALL_TARGET  = $(BINARY) $(ROOTMODULE)
 #
 #	Overrides and additions
 #
+$(OBJS_DIR)/ao_mca.o :=	CERRWARN	+= -Wno-unused-function
 CLEANFILES	+= $(AO_MCA_DISP_C)
 CPPFLAGS	+= -I$(SRCDIR) -I$(OBJS_DIR)
 ASFLAGS		+= -I$(SRCDIR) -I$(OBJS_DIR)

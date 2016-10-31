@@ -24,6 +24,8 @@
 # Copyright (c) 2009, Intel Corporation.
 # All rights reserved.
 #
+# Copyright 2016, Joyent, Inc.
+#
 #	This makefile drives the production of the ACPI virtual nexus 
 #	kernel module.
 #
@@ -57,6 +59,8 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 # Depends on acpica ACPI CA interpreter
 #
 LDFLAGS		+= -dy -N misc/acpica -N misc/acpidev
+
+CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.

@@ -24,6 +24,7 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 # Copyright (c) 2011 Bayard G. Bell. All rights reserved.
+# Copyright 2016 Joyent, Inc.
 #
 #	This makefile drives the production of the power managment
 #	module for the ACPI subsystem
@@ -57,6 +58,8 @@ ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 CERRWARN	+= -Wno-unused-variable
+$(OBJS_DIR)/acpippm.o :=	CERRWARN	+= -Wno-unused-function
+$(OBJS_DIR)/acpisleep.o :=	CERRWARN	+= -Wno-unused-function
 
 #
 # Declare dependency on misc/acpica

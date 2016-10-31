@@ -23,6 +23,8 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2016 Joyent, Inc.
+#
 #	This makefile drives the production of the ISA nexus driver
 #
 #	i86pc implementation architecture dependent
@@ -98,6 +100,7 @@ $(OBJECTS)	:= CPPFLAGS += -Dd37A_read_count=$(MODULE)_d37A_read_count
 #
 
 CERRWARN	+= -Wno-unused-variable
+$(OBJS_DIR)/isa.o :=	CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.

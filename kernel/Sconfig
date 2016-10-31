@@ -1,0 +1,6 @@
+((include "drivers/Sconfig")
+ (include "fs/Sconfig")
+ (include "sched/Sconfig")
+ (include "vm/Sconfig"))
+
+; vim: set syntax=scheme:

@@ -20,6 +20,7 @@
 #
 #
 # Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2016, Joyent, Inc.
 #
 #	This makefile drives the production of the cpu driver
 #	kernel module.
@@ -50,6 +51,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-parentheses
+CERRWARN	+= -Wno-unused-function
 
 #
 # Link to acpica for ACPI services

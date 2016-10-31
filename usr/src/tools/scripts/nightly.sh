@@ -76,29 +76,13 @@ function normal_build {
 
 	typeset orig_p_FLAG="$p_FLAG"
 
-	suffix=""
-
-	# non-DEBUG build begins
-
-	if [ "$F_FLAG" = "n" ]; then
+	if [ "$D_FLAG" = "n" ]; then
 		set_non_debug_build_flags
-		build "non-DEBUG" "$suffix-nd" "-nd" "$MULTI_PROTO"
+		build "non-DEBUG"
 	else
-		echo "\n==== No non-DEBUG $open_only build ====\n" >> "$LOGFILE"
-	fi
-
-	# non-DEBUG build ends
-
-	# DEBUG build begins
-
-	if [ "$D_FLAG" = "y" ]; then
 		set_debug_build_flags
-		build "DEBUG" "$suffix" "" "$MULTI_PROTO"
-	else
-		echo "\n==== No DEBUG $open_only build ====\n" >> "$LOGFILE"
+		build "DEBUG"
 	fi
-
-	# DEBUG build ends
 
 	p_FLAG="$orig_p_FLAG"
 }
@@ -145,25 +129,15 @@ function myheaders {
 
 #
 # Function to do the build, including package generation.
-# usage: build LABEL SUFFIX ND MULTIPROTO
+# usage: build LABEL
 # - LABEL is used to tag build output.
-# - SUFFIX is used to distinguish files (e.g., DEBUG vs non-DEBUG,
-#   open-only vs full tree).
-# - ND is "-nd" (non-DEBUG builds) or "" (DEBUG builds).
-# - If MULTIPROTO is "yes", it means to name the proto area according to
-#   SUFFIX.  Otherwise ("no"), (re)use the standard proto area.
 #
 function build {
 	LABEL=$1
-	SUFFIX=$2
-	ND=$3
-	MULTIPROTO=$4
-	INSTALLOG=install${SUFFIX}-${MACH}
-	NOISE=noise${SUFFIX}-${MACH}
-	PKGARCHIVE=${PKGARCHIVE_ORIG}${SUFFIX}
+	INSTALLOG=install-${MACH}
+	NOISE=noise-${MACH}
 
-	ORIGROOT=$ROOT
-	[ $MULTIPROTO = no ] || export ROOT=$ROOT$SUFFIX
+	export ROOT
 
 	export ENVLDLIBS1=`myldlibs $ROOT`
 	export ENVCPPFLAGS1=`myheaders $ROOT`
@@ -182,11 +156,11 @@ function build {
 
 	echo "\n==== Legacy build errors ($LABEL) ====\n" >> $mail_msg_file
 	egrep -e "(^(${MAKE}:|\*\*\*)|[ 	]error:[ 	\n])" \
-		${SRC}/${INSTALLOG}.out | tee $TMPDIR/build_errs${SUFFIX} \
+		${SRC}/${INSTALLOG}.out | tee $TMPDIR/build_errs \
 		>> $mail_msg_file
-	if [[ -s $TMPDIR/build_fail ]]; then
-		sed 's,$, returned non-zero exit status,' $TMPDIR/build_fail \
-		    >> $mail_msg_file
+	if [[ -s $TMPDIR/build_errs ]]; then
+		sed 's,$, returned non-zero exit status,' \
+			$TMPDIR/build_errs >> $mail_msg_file
 		build_ok=n
 		this_build_ok=n
 	fi
@@ -200,50 +174,8 @@ function build {
 	#
 	#	Build the new part of the source
 	#
-	echo "\n==== \`bmake all\` at `date` ($LABEL) ====\n" \
-		>> $LOGFILE
-
-	rm -f $SRC/${INSTALLOG}-bmake-all.out
-	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
-		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
-			DESTDIR=$ROOT \
-			VERBOSE=yes all 2>&1 | \
-		tee -a $SRC/${INSTALLOG}-bmake-all.out >> $LOGFILE
-
-	echo "\n==== \`bmake all\` errors ($LABEL) ====\n" >> $mail_msg_file
-	egrep -e "(^(bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
-		${SRC}/${INSTALLOG}-bmake-all.out | \
-		tee $TMPDIR/build_errs${SUFFIX} \
-		>> $mail_msg_file
-	if [[ -s $TMPDIR/build_fail ]]; then
-		sed 's,$, returned non-zero exit status,' $TMPDIR/build_fail \
-		    >> $mail_msg_file
-		build_ok=n
-		this_build_ok=n
-	fi
-
-	echo "\n==== \`bmake install\` at `date` ($LABEL) ====\n" \
-		>> $LOGFILE
-
-	rm -f $SRC/${INSTALLOG}-bmake-install.out
-	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
-		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
-			DESTDIR=$ROOT \
-			MK_INSTALL_AS_USER=yes \
-			VERBOSE=yes install 2>&1 | \
-		tee -a $SRC/${INSTALLOG}-bmake-install.out >> $LOGFILE
-
-	echo "\n==== \`bmake install\` errors ($LABEL) ====\n" >> $mail_msg_file
-	egrep -e "(^(bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
-		${SRC}/${INSTALLOG}-bmake-install.out | \
-		tee $TMPDIR/build_errs${SUFFIX} \
-		>> $mail_msg_file
-	if [[ -s $TMPDIR/build_fail ]]; then
-		sed 's,$, returned non-zero exit status,' $TMPDIR/build_fail \
-		    >> $mail_msg_file
-		build_ok=n
-		this_build_ok=n
-	fi
+	bmake_build_step_user all
+	bmake_build_step_user install
 
 	echo "\n==== Build warnings ($LABEL) ====\n" >>$mail_msg_file
 	cat $SRC/${INSTALLOG}.out \
@@ -255,8 +187,8 @@ function build {
 		| egrep -v "parameter <PSTAMP> set to" \
 		| egrep -v "Ignoring unknown host" \
 		| egrep -v "redefining segment flags attribute for" \
-		| tee $TMPDIR/build_warnings${SUFFIX} >> $mail_msg_file
-	if [[ -s $TMPDIR/build_warnings${SUFFIX} ]]; then
+		| tee $TMPDIR/build_warnings >> $mail_msg_file
+	if [[ -s $TMPDIR/build_warnings ]]; then
 		build_ok=n
 		this_build_ok=n
 	fi
@@ -376,8 +308,6 @@ function build {
 	else
 		echo "\n==== Not creating $LABEL packages ====\n" >> $LOGFILE
 	fi
-
-	ROOT=$ORIGROOT
 }
 
 #
@@ -445,10 +375,6 @@ function use_tools {
 	GENOFFSETS=${TOOLSROOT}/opt/onbld/bin/genoffsets
 	export GENOFFSETS
 
-	CTFCONVERT=${TOOLSROOT}/opt/onbld/bin/${MACH}/ctfconvert
-	export CTFCONVERT
-	CTFMERGE=${TOOLSROOT}/opt/onbld/bin/${MACH}/ctfmerge
-	export CTFMERGE
 
 	PATH="${TOOLSROOT}/opt/onbld/bin/${MACH}:${PATH}"
 	PATH="${TOOLSROOT}/opt/onbld/bin:${PATH}"
@@ -462,8 +388,6 @@ function use_tools {
 	echo "\n==== New environment settings. ====\n" >> $LOGFILE
 	echo "STABS=${STABS}" >> $LOGFILE
 	echo "CTFSTABS=${CTFSTABS}" >> $LOGFILE
-	echo "CTFCONVERT=${CTFCONVERT}" >> $LOGFILE
-	echo "CTFMERGE=${CTFMERGE}" >> $LOGFILE
 	echo "PATH=${PATH}" >> $LOGFILE
 	echo "ONBLD_TOOLS=${ONBLD_TOOLS}" >> $LOGFILE
 }
@@ -540,7 +464,6 @@ NIGHTLY_OPTIONS variable in the <env_file> as follows:
 	-A	check for ABI differences in .so files
 	-C	check for cstyle/hdrchk errors
 	-D	do a build with DEBUG on
-	-F	do _not_ do a non-DEBUG build
 	-G	gate keeper default group of options (-au)
 	-I	integration engineer default group of options (-ampu)
 	-M	do not run pmodes (safe file permission checker)
@@ -567,7 +490,6 @@ NIGHTLY_OPTIONS variable in the <env_file> as follows:
 A_FLAG=n
 C_FLAG=n
 D_FLAG=n
-F_FLAG=n
 f_FLAG=n
 i_FLAG=n; i_CMD_LINE_FLAG=n
 M_FLAG=n
@@ -723,7 +645,7 @@ check_closed_bins
 #
 NIGHTLY_OPTIONS=-${NIGHTLY_OPTIONS#-}
 OPTIND=1
-while getopts +ABCDdFfGIiMmNpRrwW FLAG $NIGHTLY_OPTIONS
+while getopts +ABCDdfGIiMmNpRrwW FLAG $NIGHTLY_OPTIONS
 do
 	case $FLAG in
 	  A )	A_FLAG=y
@@ -733,8 +655,6 @@ do
 	  C )	C_FLAG=y
 		;;
 	  D )	D_FLAG=y
-		;;
-	  F )	F_FLAG=y
 		;;
 	  f )	f_FLAG=y
 		;;
@@ -907,8 +827,6 @@ ENVCPPFLAGS4=
 export ENVLDLIBS3 ENVCPPFLAGS1 ENVCPPFLAGS2 ENVCPPFLAGS3 ENVCPPFLAGS4 \
 	ENVLDLIBS1 ENVLDLIBS2
 
-PKGARCHIVE_ORIG=$PKGARCHIVE
-
 #
 # Juggle the logs and optionally send mail on completion.
 #
@@ -1020,20 +938,6 @@ function cleanup_signal {
 trap cleanup 0
 trap cleanup_signal 1 2 3 15
 
-#
-# Return the list of interesting proto areas, depending on the current
-# options.
-#
-function allprotos {
-	typeset roots="$ROOT"
-
-	if [[ "$F_FLAG" = n && "$MULTI_PROTO" = yes ]]; then
-		roots="$roots $ROOT-nd"
-	fi
-
-	echo $roots
-}
-
 newdirlist=
 
 #
@@ -1108,17 +1012,6 @@ if [ "$w_FLAG" = "y" -a ! -d $ROOT ]; then
 	w_FLAG=n
 fi
 
-case $MULTI_PROTO in
-yes|no)	;;
-*)
-	echo "WARNING: MULTI_PROTO is \"$MULTI_PROTO\"; " \
-	    "should be \"yes\" or \"no\"." | tee -a $mail_msg_file >> $LOGFILE
-	echo "Setting MULTI_PROTO to \"no\".\n" | \
-	    tee -a $mail_msg_file >> $LOGFILE
-	export MULTI_PROTO=no
-	;;
-esac
-
 echo "\n==== Build version ====\n" | tee -a $mail_msg_file >> $LOGFILE
 echo $VERSION | tee -a $mail_msg_file >> $LOGFILE
 
@@ -1128,14 +1021,6 @@ if [ "$w_FLAG" = "y" -a -d "$ROOT" ]; then
 	rm -rf $ROOT.prev
     fi
     mv $ROOT $ROOT.prev
-fi
-
-# Same for non-DEBUG proto area
-if [ "$w_FLAG" = "y" -a "$MULTI_PROTO" = yes -a -d "$ROOT-nd" ]; then
-	if [ -d "$ROOT-nd.prev" ]; then
-		rm -rf $ROOT-nd.prev
-	fi
-	mv $ROOT-nd $ROOT-nd.prev
 fi
 
 # Echo the SCM types of $CODEMGR_WS
@@ -1157,7 +1042,54 @@ function child_wstype {
 	echo $scm_type
 }
 
+function run_bmake {
+	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
+		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
+			VERBOSE=yes \
+			"$@" 2>&1
+}
+
+# usage: bmake_build_step_args <target> <args...>
+function bmake_build_step_args {
+	echo "\n==== \`bmake $1\` at `date` ($LABEL) ====\n" >> $LOGFILE
+
+	rm -f $SRC/${INSTALLOG}-bmake-${1}.out
+	run_bmake "$@" | \
+		tee -a $SRC/${INSTALLOG}-bmake-${1}.out >> $LOGFILE
+
+	echo "\n==== \`bmake $1\` errors ($LABEL) ====\n" >> $mail_msg_file
+	egrep -e "(^(bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
+		${SRC}/${INSTALLOG}-bmake-${1}.out | \
+		tee $TMPDIR/build_errs-${1} >> $mail_msg_file
+	if [ -s $TMPDIR/build_errs-${1} ] ; then
+		sed 's,$, returned non-zero exit status,' \
+			$TMPDIR/build_errs-${1} >> $mail_msg_file
+		build_ok=n
+		this_build_ok=n
+		return 1
+	fi
+
+	return 0
+}
+
+# usage: bmake_build_step_user <target>
+function bmake_build_step_user {
+	bmake_build_step_args $1 DESTDIR=$ROOT MK_INSTALL_AS_USER=yes
+}
+
 SCM_TYPE=$(child_wstype)
+
+# Safeguards
+[[ -v CODEMGR_WS ]] || fatal_error "Error: Variable CODEMGR_WS not set."
+[[ -d "${CODEMGR_WS}" ]] || fatal_error "Error: ${CODEMGR_WS} is not a directory."
+[[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
+
+#
+#	Generate the cfgparam files
+#
+# We have to do this before running *any* make commands.
+#
+bmake_build_step_args gen-config || build_extras_ok=n
 
 #
 #	Decide whether to clobber
@@ -1201,7 +1133,7 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	rm -rf ${TOOLS_PROTO}
 	mkdir -p ${TOOLS_PROTO}
 
-	typeset roots=$(allprotos)
+	typeset roots=$ROOT
 	echo "\n\nClearing $roots" >> "$LOGFILE"
 	rm -rf $roots
 
@@ -1218,15 +1150,10 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	       -name '*.o' \) -print | \
 	    grep -v 'tools/ctf/dwarf/.*/libdwarf' | xargs rm -f
 	echo "\n==== bmake cleandir ====\n" >> $LOGFILE
-	env -i PATH=/usr/bin bmake -C $CODEMGR_WS cleandir >> $LOGFILE 2>&1
+	run_bmake cleandir >> $LOGFILE 2>&1
 else
 	echo "\n==== No clobber at `date` ====\n" >> $LOGFILE
 fi
-
-# Safeguards
-[[ -v CODEMGR_WS ]] || fatal_error "Error: Variable CODEMGR_WS not set."
-[[ -d "${CODEMGR_WS}" ]] || fatal_error "Error: ${CODEMGR_WS} is not a directory."
-[[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
 
 echo "\n==== Build environment ====\n" | tee -a $build_environ_file >> $LOGFILE
 
@@ -1309,22 +1236,10 @@ normal_build
 ORIG_SRC=$SRC
 BINARCHIVE=${CODEMGR_WS}/bin-${MACH}.cpio.Z
 
-
-#
-# There are several checks that need to look at the proto area, but
-# they only need to look at one, and they don't care whether it's
-# DEBUG or non-DEBUG.
-#
-if [[ "$MULTI_PROTO" = yes && "$D_FLAG" = n ]]; then
-	checkroot=$ROOT-nd
-else
-	checkroot=$ROOT
-fi
-
 if [ "$build_ok" = "y" ]; then
 	echo "\n==== Creating protolist system file at `date` ====" \
 		>> $LOGFILE
-	protolist $checkroot > $ATLOG/proto_list_${MACH}
+	protolist $ROOT > $ATLOG/proto_list_${MACH}
 	echo "==== protolist system file created at `date` ====\n" \
 		>> $LOGFILE
 
@@ -1354,7 +1269,7 @@ if [ "$build_ok" = "y" ]; then
 	if [ "$N_FLAG" != "y" -a -d $SRC/pkg ]; then
 		echo "\n==== Validating manifests against proto area ====\n" \
 		    >> $mail_msg_file
-		( cd $SRC/pkg ; $MAKE -e protocmp ROOT="$checkroot" ) | \
+		( cd $SRC/pkg ; $MAKE -e protocmp ROOT="$ROOT" ) | \
 		    tee $TMPDIR/protocmp_noise >> $mail_msg_file
 		if [[ -s $TMPDIR/protocmp_noise ]]; then
 			build_extras_ok=n
@@ -1381,7 +1296,7 @@ if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 	# Call find_elf to produce a list of the ELF objects in the proto area.
 	# This list is passed to check_rtime and interface_check, preventing
 	# them from separately calling find_elf to do the same work twice.
-	find_elf -fr $checkroot > $elf_ddir/object_list
+	find_elf -fr $ROOT > $elf_ddir/object_list
 
 	if [[ $A_FLAG = y ]]; then
 	       	echo "\n==== Check versioning and ABI information ====\n"  | \
@@ -1482,7 +1397,7 @@ if [ "$i_CMD_LINE_FLAG" = "n" -a "$C_FLAG" = "y" ]; then
 
 	rm -f $SRC/check-${MACH}.out
 	cd $SRC
-	$MAKE -ek check ROOT="$checkroot" 2>&1 | tee -a $SRC/check-${MACH}.out \
+	$MAKE -ek check ROOT="$ROOT" 2>&1 | tee -a $SRC/check-${MACH}.out \
 	    >> $LOGFILE
 	echo "\n==== cstyle/hdrchk errors ====\n" >> $mail_msg_file
 
@@ -1531,7 +1446,7 @@ if [ "$CHECK_PATHS" = y -a "$N_FLAG" != y ]; then
 		>>$mail_msg_file
 	arg=-b
 	[ "$build_ok" = y ] && arg=
-	checkpaths $arg $checkroot > $SRC/check-paths.out 2>&1
+	checkpaths $arg $ROOT > $SRC/check-paths.out 2>&1
 	if [[ -s $SRC/check-paths.out ]]; then
 		tee -a $LOGFILE < $SRC/check-paths.out >> $mail_msg_file
 		build_extras_ok=n
@@ -1557,12 +1472,10 @@ if [ "$M_FLAG" != "y" -a "$build_ok" = y ]; then
 fi
 
 if [ "$w_FLAG" = "y" -a "$build_ok" = "y" ]; then
-	if [[ "$MULTI_PROTO" = no || "$D_FLAG" = y ]]; then
+	if [[ "$D_FLAG" = y ]]; then
 		do_wsdiff DEBUG $ROOT.prev $ROOT
-	fi
-
-	if [[ "$MULTI_PROTO" = yes && "$F_FLAG" = n ]]; then
-		do_wsdiff non-DEBUG $ROOT-nd.prev $ROOT-nd
+	else
+		do_wsdiff non-DEBUG $ROOT.prev $ROOT
 	fi
 fi
 

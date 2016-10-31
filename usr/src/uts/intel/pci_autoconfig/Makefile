@@ -23,6 +23,8 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2016 Joyent, Inc.
+#
 #	This makefile drives the production of the PCI autoconfiguration
 #	kernel module.
 #
@@ -65,6 +67,8 @@ LDFLAGS		+= -dy -Nmisc/acpica -Nmisc/pcie
 #
 
 CERRWARN	+= -Wno-parentheses
+$(OBJS_DIR)/pci_boot.o :=	CERRWARN += -Wno-unused-function
+$(OBJS_DIR)/pci_resource.o :=	CERRWARN += -Wno-unused-function
 
 #
 #	Default build targets.

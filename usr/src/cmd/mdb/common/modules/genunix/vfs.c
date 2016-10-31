@@ -44,7 +44,7 @@
 #include <sys/socketvar.h>
 #include <sys/strsubr.h>
 #include <sys/un.h>
-#include <fs/sockfs/socktpi_impl.h>
+#include <../../../../kernel/fs/sockfs/socktpi_impl.h>
 #include <inet/ipclassifier.h>
 #include <inet/ip_if.h>
 #include <inet/sctp/sctp_impl.h>

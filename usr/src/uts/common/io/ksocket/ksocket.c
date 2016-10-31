@@ -36,7 +36,7 @@
 #include <sys/cmn_err.h>
 #include <sys/ksocket.h>
 #include <io/ksocket/ksocket_impl.h>
-#include <fs/sockfs/sockcommon.h>
+#include <../../../../kernel/fs/sockfs/sockcommon.h>
 
 #define	SOCKETMOD_TCP	"tcp"
 #define	SOCKETMOD_UDP	"udp"

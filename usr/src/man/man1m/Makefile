@@ -11,8 +11,8 @@
 
 #
 # Copyright 2011, Richard Lowe
-# Copyright (c) 2012, Joyent, Inc.  All rights reserved.
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
+# Copyright 2016 Joyent, Inc.
 # Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
 # Copyright 2016 Toomas Soome <tsoome@me.com>
 #
@@ -555,6 +555,8 @@ _MANFILES=	6to4relay.1m		\
 		zstreamdump.1m
 
 i386_MANFILES=				\
+		acpidump.1m		\
+		acpixtract.1m		\
 		lms.1m
 
 sparc_MANFILES=	cvcd.1m			\

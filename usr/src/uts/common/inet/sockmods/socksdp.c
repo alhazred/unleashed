@@ -52,7 +52,7 @@
 
 #include <inet/sdp_itf.h>
 #include "socksdp.h"
-#include <fs/sockfs/sockcommon.h>
+#include <../../../../kernel/fs/sockfs/sockcommon.h>
 
 /*
  * SDP sockfs sonode operations

@@ -1086,26 +1086,6 @@ JAVAEXEC_OBJS +=java.o
 #
 #			file system modules
 #
-DCFS_OBJS +=	dc_vnops.o
-
-DEVFS_OBJS +=	devfs_subr.o	devfs_vfsops.o	devfs_vnops.o
-
-DEV_OBJS  +=	sdev_subr.o	sdev_vfsops.o	sdev_vnops.o	\
-		sdev_ptsops.o	sdev_zvolops.o	sdev_comm.o	\
-		sdev_profile.o	sdev_ncache.o	sdev_netops.o	\
-		sdev_ipnetops.o	\
-		sdev_vtops.o
-
-CTFS_OBJS +=	ctfs_all.o ctfs_cdir.o ctfs_ctl.o ctfs_event.o \
-		ctfs_latest.o ctfs_root.o ctfs_sym.o ctfs_tdir.o ctfs_tmpl.o
-
-OBJFS_OBJS +=	objfs_vfs.o	objfs_root.o	objfs_common.o \
-		objfs_odir.o	objfs_data.o
-
-FDFS_OBJS +=	fdops.o
-
-FIFO_OBJS +=	fifosubr.o	fifovnops.o
-
 PIPE_OBJS +=	pipe.o
 
 NFS_OBJS +=	nfs_client.o	nfs_common.o	nfs_dump.o \
@@ -1257,33 +1237,8 @@ SMBSRV_OBJS +=	$(SMBSRV_SHARED_OBJS)			\
 PROC_OBJS +=	prcontrol.o	prioctl.o	prsubr.o	prusrio.o \
 		prvfsops.o	prvnops.o
 
-MNTFS_OBJS +=	mntvfsops.o	mntvnops.o
-
 SHAREFS_OBJS +=	sharetab.o	sharefs_vfsops.o	sharefs_vnops.o
 
-SPEC_OBJS +=	specsubr.o	specvfsops.o	specvnops.o
-
-SOCK_OBJS +=	socksubr.o	sockvfsops.o	sockparams.o	\
-		socksyscalls.o	socktpi.o	sockstr.o \
-		sockcommon_vnops.o	sockcommon_subr.o \
-		sockcommon_sops.o	sockcommon.o	\
-		sock_notsupp.o	socknotify.o \
-		sodirect.o	sockfilter.o
-
-TMPFS_OBJS +=	tmp_dir.o	tmp_subr.o	tmp_tnode.o	tmp_vfsops.o \
-		tmp_vnops.o
-
-UDFS_OBJS +=	udf_alloc.o	udf_bmap.o	udf_dir.o	\
-		udf_inode.o	udf_subr.o	udf_vfsops.o	\
-		udf_vnops.o
-
-UFS_OBJS +=	ufs_alloc.o	ufs_bmap.o	ufs_dir.o 	ufs_xattr.o \
-		ufs_inode.o	ufs_subr.o	ufs_tables.o	ufs_vfsops.o \
-		ufs_vnops.o	quota.o		quotacalls.o	quota_ufs.o \
-		ufs_filio.o	ufs_lockfs.o	ufs_thread.o	ufs_trans.o \
-		ufs_acl.o	ufs_panic.o	ufs_directio.o	ufs_log.o \
-		ufs_extvnops.o	ufs_snap.o	lufs.o		lufs_thread.o \
-		lufs_log.o	lufs_map.o	lufs_top.o	lufs_debug.o
 VSCAN_OBJS +=	vscan_drv.o	vscan_svc.o vscan_door.o
 
 NSMB_OBJS +=	smb_conn.o	smb_dev.o	smb_iod.o	smb_pass.o \
@@ -1297,8 +1252,6 @@ SMBFS_OBJS +=	smbfs_vfsops.o	smbfs_vnops.o	smbfs_node.o	\
 		smbfs_subr.o	smbfs_subr2.o	\
 		smbfs_rwlock.o	smbfs_xattr.o	\
 		$(SMBFS_COMMON_OBJS)
-
-BOOTFS_OBJS +=	bootfs_construct.o bootfs_vfsops.o bootfs_vnops.o
 
 #
 #			LVM modules
@@ -1774,16 +1727,6 @@ ATU_OBJS += atu.o
 
 IPW_OBJS += ipw2100_hw.o ipw2100.o
 
-IWI_OBJS += ipw2200_hw.o ipw2200.o
-
-IWH_OBJS += iwh.o
-
-IWK_OBJS += iwk2.o
-
-IWN_OBJS += if_iwn.o
-
-IWP_OBJS += iwp.o
-
 MWL_OBJS += mwl.o
 
 MWLFW_OBJS += mwlfw_mode.o
@@ -1978,58 +1921,10 @@ NULLDRIVER_OBJS =	nulldriver.o
 TPM_OBJS =	tpm.o tpm_hcall.o
 
 #
-#	BNXE objects
+# USB Fast ethernet drivers
 #
-BNXE_OBJS +=	bnxe_cfg.o		\
-		bnxe_fcoe.o		\
-		bnxe_debug.o		\
-		bnxe_gld.o		\
-		bnxe_hw.o		\
-		bnxe_intr.o		\
-		bnxe_kstat.o		\
-		bnxe_lock.o		\
-		bnxe_main.o		\
-		bnxe_mm.o		\
-		bnxe_mm_l4.o		\
-		bnxe_mm_l5.o		\
-		bnxe_rr.o		\
-		bnxe_rx.o		\
-		bnxe_timer.o		\
-		bnxe_tx.o		\
-		bnxe_workq.o		\
-		bnxe_clc.o		\
-		ecore_sp_verbs.o	\
-		bnxe_context.o		\
-		57710_init_values.o	\
-		57711_init_values.o	\
-		57712_init_values.o	\
-		bnxe_fw_funcs.o		\
-		bnxe_hw_debug.o		\
-		lm_l4fp.o		\
-		lm_l4rx.o		\
-		lm_l4sp.o		\
-		lm_l4tx.o		\
-		lm_l5.o			\
-		lm_l5sp.o		\
-		lm_dcbx.o		\
-		lm_devinfo.o		\
-		lm_dmae.o		\
-		lm_er.o			\
-		lm_hw_access.o		\
-		lm_hw_attn.o		\
-		lm_hw_init_reset.o	\
-		lm_main.o		\
-		lm_mcp.o		\
-		lm_niv.o		\
-		lm_nvram.o		\
-		lm_phy.o		\
-		lm_power.o		\
-		lm_recv.o		\
-		lm_resc.o		\
-		lm_sb.o			\
-		lm_send.o		\
-		lm_sp.o			\
-		lm_dcbx_mp.o		\
-		lm_sp_req_mgr.o		\
-		lm_stats.o		\
-		lm_util.o
+USBGEM_OBJS = usbgem.o
+AXF_OBJS = axf_usbgem.o
+UDMF_OBJS = udmf_usbgem.o
+URF_OBJS = urf_usbgem.o
+UPF_OBJS = upf_usbgem.o

@@ -47,7 +47,7 @@
 #include <inet/udp_impl.h>
 #include <inet/rawip_impl.h>
 #include <inet/mi.h>
-#include <fs/sockfs/socktpi_impl.h>
+#include <../../../../kernel/fs/sockfs/socktpi_impl.h>
 #include <net/bridge_impl.h>
 #include <io/trill_impl.h>
 #include <sys/mac_impl.h>

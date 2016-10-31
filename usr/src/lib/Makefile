@@ -22,7 +22,7 @@
 #
 # Copyright (c) 1989, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright (c) 2012 by Delphix. All rights reserved.
-# Copyright (c) 2012, Joyent, Inc. All rights reserved.
+# Copyright 2015, Joyent, Inc.
 # Copyright (c) 2013 Gary Mills
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright (c) 2015 Gary Mills
@@ -115,6 +115,7 @@ SUBDIRS +=				\
 	libdoor		\
 	libdscfg	\
 	libdtrace	\
+	libdwarf	\
 	libefi		\
 	libelfsign	\
 	libeti		\
@@ -376,6 +377,7 @@ HDRSUBDIRS=				\
 	libdhcputil	\
 	libdisasm	\
 	libdiskmgt	\
+	libdwarf	\
 	libdladm	\
 	libdll		\
 	libdlpi		\
@@ -563,6 +565,7 @@ libcmd:		libsum libast
 libcmdutils:	libavl
 libcpc:		libpctx
 libcrypt:	libgen
+libctf:		libdwarf
 libdevid:	libdevinfo
 libdevinfo:	libsec libgen
 libdhcpagent:	libdhcputil libuuid libdlpi libcontract

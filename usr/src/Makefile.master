@@ -127,6 +127,7 @@ JAVADOC=	$(JAVA_ROOT)/bin/javadoc
 RMIC=		$(JAVA_ROOT)/bin/rmic
 JAR=		$(JAVA_ROOT)/bin/jar
 CTFCONVERT=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfconvert
+CTFDIFF=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfdiff
 CTFMERGE=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfmerge
 CTFSTABS=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfstabs
 CTFSTRIP=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfstrip
@@ -822,15 +823,14 @@ CHK4UBINARY=	$(CHK4UBIN) $(CHK4UBINFLAGS) $@
 # PKGARCHIVE specifies the default location where packages should be
 # placed if built.
 #
-$(RELEASE_BUILD)PKGARCHIVESUFFIX=	-nd
-PKGARCHIVE=$(SRC)/../../packages/$(MACH)/nightly$(PKGARCHIVESUFFIX)
+PKGARCHIVE=$(SRC)/../../packages/$(MACH)/nightly
 
 #
 # The repositories will be created with these publisher settings.  To
 # update an image to the resulting repositories, this must match the
 # publisher name provided to "pkg set-publisher."
 #
-PKGPUBLISHER_REDIST=	on-nightly
+PKGPUBLISHER=	on-nightly
 
 #	Default build rules which perform comment section post-processing.
 #

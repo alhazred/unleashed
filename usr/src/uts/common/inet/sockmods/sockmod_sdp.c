@@ -31,7 +31,7 @@
 #include <sys/cmn_err.h>
 #include <sys/vfs.h>
 #include <inet/sdp_itf.h>
-#include <fs/sockfs/sockcommon.h>
+#include <../../../../kernel/fs/sockfs/sockcommon.h>
 #include "socksdp.h"
 
 struct sonode *socksdp_create(struct sockparams *, int, int, int,
