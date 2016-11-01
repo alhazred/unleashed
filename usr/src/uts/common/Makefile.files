@@ -1755,8 +1755,6 @@ MXFE_OBJS += mxfe.o
 MPTSAS_OBJS += mptsas.o mptsas_hash.o mptsas_impl.o mptsas_init.o \
 		mptsas_raid.o mptsas_smhba.o
 
-SFE_OBJS += sfe.o sfe_util.o
-
 BFE_OBJS += bfe.o
 
 BRIDGE_OBJS += bridge.o

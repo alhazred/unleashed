@@ -948,10 +948,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/sdcard/targets/sdcard/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/sfe/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/simnet/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

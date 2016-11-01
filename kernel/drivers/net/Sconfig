@@ -54,6 +54,11 @@
    #t)
 
  (config
+   ; support for sfe network adapters
+   SFE
+   #t)
+
+ (config
    ; support for sfxge network adapters
    SFXGE
    (= MACH 'i386))

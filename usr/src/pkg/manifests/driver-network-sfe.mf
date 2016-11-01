@@ -50,5 +50,5 @@ $(i386_ONLY)file path=kernel/drv/sfe group=sys
 file path=usr/share/man/man7d/sfe.7d
 legacy pkg=SUNWsfe desc="SiS900 series Fast Ethernet Network Adapter Driver" \
     name="SiS900 Ethernet Driver"
-license usr/src/uts/common/io/sfe/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/sfe/THIRDPARTYLICENSE
+license kernel/drivers/net/sfe/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/sfe/THIRDPARTYLICENSE
