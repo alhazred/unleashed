@@ -21,11 +21,9 @@
 
 /*
  * Copyright (c) 1995, 2010, Oracle and/or its affiliates. All rights reserved.
- */
-
-/* Copyright (c) 2013, OmniTI Computer Consulting, Inc. All rights reserved. */
-/*
+ * Copyright (c) 2013, OmniTI Computer Consulting, Inc. All rights reserved.
  * Copyright 2015 Nexenta Systems, Inc. All rights reserved.
+ * Copyright 2015, Joyent, Inc.  All rights reserved.
  */
 
 #include <sys/types.h>
@@ -54,6 +52,7 @@
 #include <sys/cmn_err.h>
 #include <sys/vmsystm.h>
 #include <sys/policy.h>
+#include <sys/limits.h>
 
 #include <sys/socket.h>
 #include <sys/socketvar.h>
@@ -69,7 +68,6 @@
 #include <vm/seg_map.h>
 #include <vm/seg_kpm.h>
 
-#include "nl7c.h"
 #include "sockcommon.h"
 #include "sockfilter_impl.h"
 #include "socktpi.h"
@@ -81,15 +79,6 @@ int do_useracc = 1;		/* Controlled by setting SO_DEBUG to 4 */
 #endif /* SOCK_TEST */
 
 extern int 	xnet_truncate_print;
-
-extern void	nl7c_init(void);
-extern int	sockfs_defer_nl7c_init;
-
-/*
- * Note: DEF_IOV_MAX is defined and used as it is in "fs/vncalls.c"
- *	 as there isn't a formal definition of IOV_MAX ???
- */
-#define	MSG_MAXIOVLEN	16
 
 /*
  * Kernel component of socket creation.
@@ -992,9 +981,10 @@ recvmsg(int sock, struct nmsghdr *msg, int flags)
 	STRUCT_HANDLE(nmsghdr, umsgptr);
 	struct nmsghdr lmsg;
 	struct uio auio;
-	struct iovec aiov[MSG_MAXIOVLEN];
+	struct iovec buf[IOV_MAX_STACK], *aiov = buf;
+	ssize_t iovsize = 0;
 	int iovcnt;
-	ssize_t len;
+	ssize_t len, rval;
 	int i;
 	int *flagsp;
 	model_t	model;
@@ -1025,8 +1015,12 @@ recvmsg(int sock, struct nmsghdr *msg, int flags)
 
 	iovcnt = lmsg.msg_iovlen;
 
-	if (iovcnt <= 0 || iovcnt > MSG_MAXIOVLEN) {
+	if (iovcnt < 0 || iovcnt > IOV_MAX)
 		return (set_errno(EMSGSIZE));
+
+	if (iovcnt > IOV_MAX_STACK) {
+		iovsize = iovcnt * sizeof (struct iovec);
+		aiov = kmem_alloc(iovsize, KM_SLEEP);
 	}
 
 #ifdef _SYSCALL32_IMPL
@@ -1035,12 +1029,22 @@ recvmsg(int sock, struct nmsghdr *msg, int flags)
 	 * that they can't move more than 2Gbytes of data in a single call.
 	 */
 	if (model == DATAMODEL_ILP32) {
-		struct iovec32 aiov32[MSG_MAXIOVLEN];
+		struct iovec32 buf32[IOV_MAX_STACK], *aiov32 = buf32;
+		ssize_t iov32size;
 		ssize32_t count32;
 
-		if (copyin((struct iovec32 *)lmsg.msg_iov, aiov32,
-		    iovcnt * sizeof (struct iovec32)))
+		iov32size = iovcnt * sizeof (struct iovec32);
+		if (iovsize != 0)
+			aiov32 = kmem_alloc(iov32size, KM_SLEEP);
+
+		if (copyin((struct iovec32 *)lmsg.msg_iov, aiov32, iov32size)) {
+			if (iovsize != 0) {
+				kmem_free(aiov32, iov32size);
+				kmem_free(aiov, iovsize);
+			}
+
 			return (set_errno(EFAULT));
+		}
 
 		count32 = 0;
 		for (i = 0; i < iovcnt; i++) {
@@ -1048,15 +1052,28 @@ recvmsg(int sock, struct nmsghdr *msg, int flags)
 
 			iovlen32 = aiov32[i].iov_len;
 			count32 += iovlen32;
-			if (iovlen32 < 0 || count32 < 0)
+			if (iovlen32 < 0 || count32 < 0) {
+				if (iovsize != 0) {
+					kmem_free(aiov32, iov32size);
+					kmem_free(aiov, iovsize);
+				}
+
 				return (set_errno(EINVAL));
+			}
+
 			aiov[i].iov_len = iovlen32;
 			aiov[i].iov_base =
 			    (caddr_t)(uintptr_t)aiov32[i].iov_base;
 		}
+
+		if (iovsize != 0)
+			kmem_free(aiov32, iov32size);
 	} else
 #endif /* _SYSCALL32_IMPL */
 	if (copyin(lmsg.msg_iov, aiov, iovcnt * sizeof (struct iovec))) {
+		if (iovsize != 0)
+			kmem_free(aiov, iovsize);
+
 		return (set_errno(EFAULT));
 	}
 	len = 0;
@@ -1064,6 +1081,9 @@ recvmsg(int sock, struct nmsghdr *msg, int flags)
 		ssize_t iovlen = aiov[i].iov_len;
 		len += iovlen;
 		if (iovlen < 0 || len < 0) {
+			if (iovsize != 0)
+				kmem_free(aiov, iovsize);
+
 			return (set_errno(EINVAL));
 		}
 	}
@@ -1078,12 +1098,20 @@ recvmsg(int sock, struct nmsghdr *msg, int flags)
 	    (do_useracc == 0 ||
 	    useracc(lmsg.msg_control, lmsg.msg_controllen,
 	    B_WRITE) != 0)) {
+		if (iovsize != 0)
+			kmem_free(aiov, iovsize);
+
 		return (set_errno(EFAULT));
 	}
 
-	return (recvit(sock, &lmsg, &auio, flags,
+	rval = recvit(sock, &lmsg, &auio, flags,
 	    STRUCT_FADDR(umsgptr, msg_namelen),
-	    STRUCT_FADDR(umsgptr, msg_controllen), flagsp));
+	    STRUCT_FADDR(umsgptr, msg_controllen), flagsp);
+
+	if (iovsize != 0)
+		kmem_free(aiov, iovsize);
+
+	return (rval);
 }
 
 /*
@@ -1210,9 +1238,10 @@ sendmsg(int sock, struct nmsghdr *msg, int flags)
 	struct nmsghdr lmsg;
 	STRUCT_DECL(nmsghdr, u_lmsg);
 	struct uio auio;
-	struct iovec aiov[MSG_MAXIOVLEN];
+	struct iovec buf[IOV_MAX_STACK], *aiov = buf;
+	ssize_t iovsize = 0;
 	int iovcnt;
-	ssize_t len;
+	ssize_t len, rval;
 	int i;
 	model_t	model;
 
@@ -1239,8 +1268,13 @@ sendmsg(int sock, struct nmsghdr *msg, int flags)
 
 	iovcnt = lmsg.msg_iovlen;
 
-	if (iovcnt < 0 || iovcnt > MSG_MAXIOVLEN)
+	if (iovcnt < 0 || iovcnt > IOV_MAX)
 		return (set_errno(EMSGSIZE));
+
+	if (iovcnt > IOV_MAX_STACK) {
+		iovsize = iovcnt * sizeof (struct iovec);
+		aiov = kmem_alloc(iovsize, KM_SLEEP);
+	}
 
 #ifdef _SYSCALL32_IMPL
 	/*
@@ -1248,13 +1282,23 @@ sendmsg(int sock, struct nmsghdr *msg, int flags)
 	 * that they can't move more than 2Gbytes of data in a single call.
 	 */
 	if (model == DATAMODEL_ILP32) {
-		struct iovec32 aiov32[MSG_MAXIOVLEN];
+		struct iovec32 buf32[IOV_MAX_STACK], *aiov32 = buf32;
+		ssize_t iov32size;
 		ssize32_t count32;
 
+		iov32size = iovcnt * sizeof (struct iovec32);
+		if (iovsize != 0)
+			aiov32 = kmem_alloc(iov32size, KM_SLEEP);
+
 		if (iovcnt != 0 &&
-		    copyin((struct iovec32 *)lmsg.msg_iov, aiov32,
-		    iovcnt * sizeof (struct iovec32)))
+		    copyin((struct iovec32 *)lmsg.msg_iov, aiov32, iov32size)) {
+			if (iovsize != 0) {
+				kmem_free(aiov32, iov32size);
+				kmem_free(aiov, iovsize);
+			}
+
 			return (set_errno(EFAULT));
+		}
 
 		count32 = 0;
 		for (i = 0; i < iovcnt; i++) {
@@ -1262,17 +1306,30 @@ sendmsg(int sock, struct nmsghdr *msg, int flags)
 
 			iovlen32 = aiov32[i].iov_len;
 			count32 += iovlen32;
-			if (iovlen32 < 0 || count32 < 0)
+			if (iovlen32 < 0 || count32 < 0) {
+				if (iovsize != 0) {
+					kmem_free(aiov32, iov32size);
+					kmem_free(aiov, iovsize);
+				}
+
 				return (set_errno(EINVAL));
+			}
+
 			aiov[i].iov_len = iovlen32;
 			aiov[i].iov_base =
 			    (caddr_t)(uintptr_t)aiov32[i].iov_base;
 		}
+
+		if (iovsize != 0)
+			kmem_free(aiov32, iov32size);
 	} else
 #endif /* _SYSCALL32_IMPL */
 	if (iovcnt != 0 &&
 	    copyin(lmsg.msg_iov, aiov,
 	    (unsigned)iovcnt * sizeof (struct iovec))) {
+		if (iovsize != 0)
+			kmem_free(aiov, iovsize);
+
 		return (set_errno(EFAULT));
 	}
 	len = 0;
@@ -1280,6 +1337,9 @@ sendmsg(int sock, struct nmsghdr *msg, int flags)
 		ssize_t iovlen = aiov[i].iov_len;
 		len += iovlen;
 		if (iovlen < 0 || len < 0) {
+			if (iovsize != 0)
+				kmem_free(aiov, iovsize);
+
 			return (set_errno(EINVAL));
 		}
 	}
@@ -1290,7 +1350,12 @@ sendmsg(int sock, struct nmsghdr *msg, int flags)
 	auio.uio_segflg = UIO_USERSPACE;
 	auio.uio_limit = 0;
 
-	return (sendit(sock, &lmsg, &auio, flags));
+	rval = sendit(sock, &lmsg, &auio, flags);
+
+	if (iovsize != 0)
+		kmem_free(aiov, iovsize);
+
+	return (rval);
 }
 
 ssize_t
@@ -1522,37 +1587,9 @@ sockconf_add_sock(int family, int type, int protocol, char *name)
 	}
 	if (strncmp(buf, "/dev", strlen("/dev")) == 0) {
 		/* For device */
-
-		/*
-		 * Special handling for NCA:
-		 *
-		 * DEV_NCA is never opened even if an application
-		 * requests for AF_NCA. The device opened is instead a
-		 * predefined AF_INET transport (NCA_INET_DEV).
-		 *
-		 * Prior to Volo (PSARC/2007/587) NCA would determine
-		 * the device using a lookup, which worked then because
-		 * all protocols were based on TPI. Since TPI is no
-		 * longer the default, we have to explicitly state
-		 * which device to use.
-		 */
-		if (strcmp(buf, NCA_DEV) == 0) {
-			/* only support entry <28, 2, 0> */
-			if (family != AF_NCA || type != SOCK_STREAM ||
-			    protocol != 0) {
-				kmem_free(buf, MAXPATHLEN);
-				return (EINVAL);
-			}
-
-			pathlen = strlen(NCA_INET_DEV) + 1;
-			kdevpath = kmem_alloc(pathlen, KM_SLEEP);
-			bcopy(NCA_INET_DEV, kdevpath, pathlen);
-			kdevpath[pathlen - 1] = '\0';
-		} else {
-			kdevpath = kmem_alloc(pathlen, KM_SLEEP);
-			bcopy(buf, kdevpath, pathlen);
-			kdevpath[pathlen - 1] = '\0';
-		}
+		kdevpath = kmem_alloc(pathlen, KM_SLEEP);
+		bcopy(buf, kdevpath, pathlen);
+		kdevpath[pathlen - 1] = '\0';
 	} else {
 		/* For socket module */
 		kmodule = kmem_alloc(pathlen, KM_SLEEP);
@@ -1751,11 +1788,6 @@ sockconfig(int cmd, void *arg1, void *arg2, void *arg3, void *arg4)
 
 	if (secpolicy_net_config(CRED(), B_FALSE) != 0)
 		return (set_errno(EPERM));
-
-	if (sockfs_defer_nl7c_init) {
-		nl7c_init();
-		sockfs_defer_nl7c_init = 0;
-	}
 
 	switch (cmd) {
 	case SOCKCONFIG_ADD_SOCK:

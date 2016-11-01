@@ -1150,7 +1150,7 @@ sorecvoob(struct sonode *so, struct nmsghdr *msg, struct uio *uiop, int flags,
 	    (so->so_state & (SS_OOBPEND|SS_HADOOBDATA)) != SS_OOBPEND) {
 		dprintso(so, 1, ("sorecvoob: inline or data consumed\n"));
 		mutex_exit(&so->so_lock);
-		return (EINVAL);
+		return (EAGAIN);
 	}
 	if (!(so->so_state & SS_HAVEOOBDATA)) {
 		dprintso(so, 1, ("sorecvoob: no data yet\n"));

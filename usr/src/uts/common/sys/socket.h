@@ -23,6 +23,7 @@
  * Copyright 2015 Lauri Tirkkonen <lotheac@iki.fi>
  *
  * Copyright (c) 1989, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright 2015, Joyent, Inc. All rights reserved.
  */
 
 /*	Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1989 AT&T	*/
@@ -71,7 +72,6 @@ typedef	uint32_t	socklen_t;
 #define	SOCK_STREAM	2		/* stream socket */
 #define	SOCK_DGRAM	1		/* datagram socket */
 #define	SOCK_RAW	4		/* raw-protocol interface */
-#define	SOCK_RDM	5		/* reliably-delivered message */
 #define	SOCK_SEQPACKET	6		/* sequenced packet stream */
 #define	SOCK_TYPE_MASK	0xffff		/* type reside in these bits only */
 
@@ -250,7 +250,6 @@ struct	linger {
 #define	AF_LINK		25		/* Link-layer interface */
 #define	AF_INET6	26		/* Internet Protocol, Version 6 */
 #define	AF_KEY		27		/* Security Association DB socket */
-#define	AF_NCA		28		/* NCA socket */
 #define	AF_POLICY	29		/* Security Policy DB socket */
 #define	AF_INET_OFFLOAD	30		/* Sun private; do not use */
 #define	AF_TRILL	31		/* TRILL interface */
@@ -291,7 +290,6 @@ struct	linger {
 #define	PF_LINK		AF_LINK
 #define	PF_INET6	AF_INET6
 #define	PF_KEY		AF_KEY
-#define	PF_NCA		AF_NCA
 #define	PF_POLICY	AF_POLICY
 #define	PF_INET_OFFLOAD	AF_INET_OFFLOAD	/* Sun private; do not use */
 #define	PF_TRILL	AF_TRILL
@@ -376,6 +374,7 @@ struct msghdr32 {
 #define	MSG_DONTWAIT	0x80		/* Don't block for this recv */
 #define	MSG_NOTIFICATION 0x100		/* Notification, not data */
 
+/* Obsolete but kept for compilation compatability. Use IOV_MAX. */
 #define	MSG_MAXIOVLEN	16
 
 #ifdef _KERNEL

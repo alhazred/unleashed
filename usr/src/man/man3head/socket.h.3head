@@ -34,14 +34,11 @@ sa_family_t   sa_family     /* address family */
 char          sa_data[]     /* socket   address (variable-length
                                 data) */
 .Ed
-.Ss libxnet Interfaces
 The
 .Nm
 header defines the
 .Vt msghdr
-structure for
-.Lb libxnet
-interfaces that includes the following members:
+structure that includes the following members:
 .Bd -literal -offset indent
 void            *msg_name         /* optional address */
 socklen_t       msg_namelen       /* size of address */
@@ -56,8 +53,7 @@ The
 .Nm
 header defines the
 .Vt cmsghdr
-structure for
-.Lb libxnet that includes the following members:
+structure that includes the following members:
 .Bd -literal -offset indent
 socklen_t  cmsg_len      /* data byte count, including hdr */
 int        cmsg_level    /* originating protocol */
@@ -178,62 +174,11 @@ The
 .Nm
 header defines the following macros to gain access to the data arrays in the
 ancillary data associated with a message header:
-.Bl -tag -width Ds
-.It Fn CMSG_DATA cmsg
-If the argument is a pointer to a
-.Vt cmsghdr
-structure, this macro returns an unsigned character pointer to the data array
-associated with the
-.Vt cmsghdr
-structure.
-.It Fn CMSG_NXTHDR mhdr cmsg
-If the first argument is a pointer to a
-.Vt msghdr
-structure and the second argument is a pointer to a
-.Vt cmsghdr
-structure in the ancillary data, pointed to by the
-.Va msg_control
-field of that
-.Vt msghdr
-structure, this macro returns a pointer to the next
-.Vt cmsghdr
-structure, or a null pointer if this structure is the last
-.Vt cmsghdr
-in the ancillary data.
-.It Fn CMSG_FIRSTHDR mhdr
-If the argument is a pointer to a
-.Vt msghdr
-structure, this macro returns a pointer to the first
-.Vt cmsghdr
-structure in the ancillary data associated with this
-.Vt msghdr
-structure, or a null pointer if there is no ancillary data associated with the
-.Vt msghdr
-structure.
-.It Fn CMSG_SPACE len
-Given the length of an ancillary data object,
-.Fn CMSG_SPACE
-returns the space required by the object and its
-.Vt cmsghdr
-structure, including any padding needed to satisfy alignment requirements. This
-macro can be used, for example, to allocate space dynamically for the ancillary
-data. This macro should not be used to initialize the
-.Va cmsg_len
-member of a
-.Vt cmsghdr
-structure. Use the
-.Fn CMSG_LEN
-macro instead.
-.It Fn CMSG_LEN len
-Given the length of an ancillary data object,
-.Fn CMSG_LEN
-returns the value to store in the
-.Va cmsg_len
-member of the
-.Vt cmsghdr
-structure, taking into account any padding needed to satisfy alignment
-requirements.
-.El
+.Xr CMSG_DATA 3 ,
+.Xr CMSG_FIRSTHDR 3,
+.Xr CMSG_NXTHDR 3 ,
+and
+.Xr CMSG_SPACE 3 .
 .Pp
 The
 .Nm
@@ -362,53 +307,8 @@ Disables further send operations.
 .It Dv SHUT_RDWR
 Disables further send and receive operations.
 .El
-.Ss libsocket Interfaces
-The
-.Nm
-header defines the
-.Vt msghdr
-structure for
-.Lb libsocket
-interfaces that includes the following members:
-.Bd -literal -offset indent
-void           *msg_name        /* optional address */
-socklen_t      msg_namelen      /* size of address */
-struct iovec   *msg_iov         /* scatter/gather array */
-int            msg_iovlen       /* # elements in msg_iov */
-caddr_t        msg_accrights    /* access rights sent/received */
-.Ed
-.Pp
-The
-.Va msg_name
-and
-.Va msg_namelen
-parameters specify the destination address when the socket is unconnected. The
-.Va msg_name can be specified as a
-.Dv NULL
-pointer if no names are desired or required. The
-.Va msg_iov
-and
-.Va msg_iovlen
-parameters describe the scatter-gather locations, as described in
-.Xr read 2 .
-The msg_accrights parameter specifies the buffer in which access rights sent
-along with the message are received. The
-.Va msg_accrightslen
-specifies the length of the buffer.
-.Sh ATTRIBUTES
-See
-.Xr attributes 5
-for descriptions of the following attributes:
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-Interface Stability	Standard
-.TE
-.sp
 .Sh SEE ALSO
+.Xr CMSG_DATA 3 ,
 .Xr getpeerucred 3C ,
 .Xr ucred_get 3C ,
 .Xr libsocket 3LIB ,

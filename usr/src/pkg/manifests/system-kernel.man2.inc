@@ -25,6 +25,7 @@ file path=usr/share/man/man2/_lwp_mutex_lock.2
 file path=usr/share/man/man2/_lwp_self.2
 file path=usr/share/man/man2/_lwp_sema_wait.2
 file path=usr/share/man/man2/_lwp_suspend.2
+file path=usr/share/man/man2/accept.2
 file path=usr/share/man/man2/access.2
 file path=usr/share/man/man2/acct.2
 file path=usr/share/man/man2/acl.2
@@ -32,12 +33,14 @@ file path=usr/share/man/man2/adjtime.2
 file path=usr/share/man/man2/alarm.2
 file path=usr/share/man/man2/audit.2
 file path=usr/share/man/man2/auditon.2
+file path=usr/share/man/man2/bind.2
 file path=usr/share/man/man2/brk.2
 file path=usr/share/man/man2/chdir.2
 file path=usr/share/man/man2/chmod.2
 file path=usr/share/man/man2/chown.2
 file path=usr/share/man/man2/chroot.2
 file path=usr/share/man/man2/close.2
+file path=usr/share/man/man2/connect.2
 file path=usr/share/man/man2/creat.2
 file path=usr/share/man/man2/dup.2
 file path=usr/share/man/man2/exec.2
@@ -55,17 +58,21 @@ file path=usr/share/man/man2/getisax.2
 file path=usr/share/man/man2/getitimer.2
 file path=usr/share/man/man2/getlabel.2
 file path=usr/share/man/man2/getmsg.2
+file path=usr/share/man/man2/getpeername.2
 file path=usr/share/man/man2/getpflags.2
 file path=usr/share/man/man2/getpid.2
 file path=usr/share/man/man2/getppriv.2
 file path=usr/share/man/man2/getrlimit.2
 file path=usr/share/man/man2/getsid.2
+file path=usr/share/man/man2/getsockname.2
+file path=usr/share/man/man2/getsockopt.2
 file path=usr/share/man/man2/getuid.2
 file path=usr/share/man/man2/getustack.2
 file path=usr/share/man/man2/ioctl.2
 file path=usr/share/man/man2/issetugid.2
 file path=usr/share/man/man2/kill.2
 file path=usr/share/man/man2/link.2
+file path=usr/share/man/man2/listen.2
 file path=usr/share/man/man2/llseek.2
 file path=usr/share/man/man2/lseek.2
 file path=usr/share/man/man2/memcntl.2
@@ -106,6 +113,7 @@ file path=usr/share/man/man2/pset_setattr.2
 file path=usr/share/man/man2/putmsg.2
 file path=usr/share/man/man2/read.2
 file path=usr/share/man/man2/readlink.2
+file path=usr/share/man/man2/recv.2
 file path=usr/share/man/man2/rename.2
 file path=usr/share/man/man2/resolvepath.2
 file path=usr/share/man/man2/rmdir.2
@@ -113,6 +121,7 @@ file path=usr/share/man/man2/semctl.2
 file path=usr/share/man/man2/semget.2
 file path=usr/share/man/man2/semids.2
 file path=usr/share/man/man2/semop.2
+file path=usr/share/man/man2/send.2
 file path=usr/share/man/man2/setpgid.2
 file path=usr/share/man/man2/setpgrp.2
 file path=usr/share/man/man2/setrctl.2
@@ -125,6 +134,7 @@ file path=usr/share/man/man2/shmctl.2
 file path=usr/share/man/man2/shmget.2
 file path=usr/share/man/man2/shmids.2
 file path=usr/share/man/man2/shmop.2
+file path=usr/share/man/man2/shutdown.2
 file path=usr/share/man/man2/sigaction.2
 file path=usr/share/man/man2/sigaltstack.2
 file path=usr/share/man/man2/sigpending.2
@@ -132,6 +142,8 @@ file path=usr/share/man/man2/sigprocmask.2
 file path=usr/share/man/man2/sigsend.2
 file path=usr/share/man/man2/sigsuspend.2
 file path=usr/share/man/man2/sigwait.2
+file path=usr/share/man/man2/socket.2
+file path=usr/share/man/man2/socketpair.2
 file path=usr/share/man/man2/stat.2
 file path=usr/share/man/man2/statvfs.2
 file path=usr/share/man/man2/stime.2
@@ -168,6 +180,7 @@ link path=usr/share/man/man2/_lwp_mutex_unlock.2 target=_lwp_mutex_lock.2
 link path=usr/share/man/man2/_lwp_sema_init.2 target=_lwp_sema_wait.2
 link path=usr/share/man/man2/_lwp_sema_post.2 target=_lwp_sema_wait.2
 link path=usr/share/man/man2/_lwp_sema_trywait.2 target=_lwp_sema_wait.2
+link path=usr/share/man/man2/accept4.2 target=accept.2
 link path=usr/share/man/man2/execl.2 target=exec.2
 link path=usr/share/man/man2/execle.2 target=exec.2
 link path=usr/share/man/man2/execlp.2 target=exec.2
@@ -224,9 +237,13 @@ link path=usr/share/man/man2/pwrite.2 target=write.2
 link path=usr/share/man/man2/pwritev.2 target=write.2
 link path=usr/share/man/man2/readlinkat.2 target=readlink.2
 link path=usr/share/man/man2/readv.2 target=read.2
+link path=usr/share/man/man2/recvfrom.2 target=recv.2
+link path=usr/share/man/man2/recvmsg.2 target=recv.2
 link path=usr/share/man/man2/renameat.2 target=rename.2
 link path=usr/share/man/man2/sbrk.2 target=brk.2
 link path=usr/share/man/man2/semtimedop.2 target=semop.2
+link path=usr/share/man/man2/sendto.2 target=send.2
+link path=usr/share/man/man2/sendmsg.2 target=send.2
 link path=usr/share/man/man2/setaudit.2 target=getaudit.2
 link path=usr/share/man/man2/setaudit_addr.2 target=getaudit.2
 link path=usr/share/man/man2/setauid.2 target=getauid.2
@@ -239,6 +256,7 @@ link path=usr/share/man/man2/setitimer.2 target=getitimer.2
 link path=usr/share/man/man2/setpflags.2 target=getpflags.2
 link path=usr/share/man/man2/setppriv.2 target=getppriv.2
 link path=usr/share/man/man2/setrlimit.2 target=getrlimit.2
+link path=usr/share/man/man2/setsockopt.2 target=getsockopt.2
 link path=usr/share/man/man2/setustack.2 target=getustack.2
 link path=usr/share/man/man2/shmat.2 target=shmop.2
 link path=usr/share/man/man2/shmdt.2 target=shmop.2

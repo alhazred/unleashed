@@ -598,8 +598,6 @@ TCP_OBJS +=	tcpddi.o
 
 TCP6_OBJS +=	tcp6ddi.o
 
-NCA_OBJS +=	ncaddi.o
-
 SDP_SOCK_MOD_OBJS += sockmod_sdp.o socksdp.o socksdpsubr.o
 
 SCTP_SOCK_MOD_OBJS += sockmod_sctp.o socksctp.o socksctpsubr.o

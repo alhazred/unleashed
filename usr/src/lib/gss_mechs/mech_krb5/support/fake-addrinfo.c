@@ -382,7 +382,6 @@ static const char *socktypename (int t, char *buf) {
     case SOCK_DGRAM: return "DGRAM";
     case SOCK_STREAM: return "STREAM";
     case SOCK_RAW: return "RAW";
-    case SOCK_RDM: return "RDM";
     case SOCK_SEQPACKET: return "SEQPACKET";
     }
     sprintf(buf, " %-2d", t);

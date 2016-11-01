@@ -30,10 +30,10 @@ PROG=		finger rdate ruptime rwho whois
 ALL=		$(PROG)
 SRCS=		$(ALL:%=%.c)
 
-SUBDIRS=	chat dns-sd ftp nc nca netstat \
+SUBDIRS=	chat dns-sd ftp nc netstat \
 		pppd pppdump pppstats talk telnet tftp
 SUBDIR1=	talk 
-MSGSUBDIRS=	nca talk
+MSGSUBDIRS=	talk
 
 include ../../Makefile.cmd
 include ../Makefile.cmd-inet

@@ -34,11 +34,6 @@ include		../../../Makefile.cmd
 
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORKROUTING)
 
-# in.ndpd uses the ancillary data feature which is available only through
-# UNIX 98 standards version of Socket interface. This interface is supposed to
-# be accessed by. In addition and are used to
-# capture new not-yet-standard interfaces. Someday alone should be enough
-# when IPv6 inspired new interfaces are part of standards.
 LDLIBS +=	-ldhcpagent -lipadm
 
 # these #defines are required to use UNIX 98 interfaces
