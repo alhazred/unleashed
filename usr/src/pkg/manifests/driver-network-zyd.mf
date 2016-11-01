@@ -51,5 +51,5 @@ file path=usr/share/man/man7d/zyd.7d
 legacy pkg=SUNWzyd desc="ZyDAS ZD1211 USB 802.11b/g Wireless Driver" \
     name="ZyDAS ZD1211 USB 802.11b/g Wireless Driver"
 license cr_Sun license=cr_Sun
-license usr/src/uts/common/io/zyd/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/zyd/THIRDPARTYLICENSE
+license kernel/drivers/net/wifi/zyd/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/zyd/THIRDPARTYLICENSE

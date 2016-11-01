@@ -1748,8 +1748,6 @@ URAL_OBJS += ural.o
 
 RTW_OBJS += rtw.o smc93cx6.o rtwphy.o rtwphyio.o
 
-ZYD_OBJS += zyd.o zyd_usb.o zyd_hw.o zyd_fw.o
-
 MXFE_OBJS += mxfe.o
 
 MPTSAS_OBJS += mptsas.o mptsas_hash.o mptsas_impl.o mptsas_init.o \

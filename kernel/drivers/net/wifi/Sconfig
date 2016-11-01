@@ -21,6 +21,11 @@
  (config
    ; support for iwp wireless network adapters
    IWP
+   (= MACH 'i386))
+
+ (config
+   ; support for zyd network devices
+   ZYD
    (= MACH 'i386)))
 
 ; vim: set syntax=scheme:
