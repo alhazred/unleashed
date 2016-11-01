@@ -56,5 +56,5 @@ file path=usr/share/man/man7d/yge.7d
 legacy pkg=SUNWyge desc="Marvell Yukon 2 Gigabit Ethernet Controller Driver" \
     name="Marvell Yukon 2 Gigabit Ethernet Driver"
 license cr_Sun license=cr_Sun
-license usr/src/uts/common/io/yge/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/yge/THIRDPARTYLICENSE
+license kernel/drivers/net/yge/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/yge/THIRDPARTYLICENSE

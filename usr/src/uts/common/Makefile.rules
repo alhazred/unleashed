@@ -1236,10 +1236,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/vr/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/yge/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/skd/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

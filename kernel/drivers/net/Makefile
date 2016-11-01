@@ -13,6 +13,7 @@ SUBDIR_${CONFIG_NGE}		+= nge
 SUBDIR_${CONFIG_NXGE}		+= nxge
 SUBDIR_${CONFIG_SFXGE}		+= sfxge
 SUBDIR_${CONFIG_VIRTIO_NET}	+= vioif
+SUBDIR_${CONFIG_YGE}		+= yge
 
 SUBDIR = ${SUBDIR_y} \
 	 wifi

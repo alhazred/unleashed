@@ -234,7 +234,6 @@ DRV_KMODS	+= sfe
 DRV_KMODS	+= aac
 DRV_KMODS	+= vr
 DRV_KMODS	+= mr_sas
-DRV_KMODS	+= yge
 
 #
 #	Machine Specific Driver Modules (/kernel/drv):

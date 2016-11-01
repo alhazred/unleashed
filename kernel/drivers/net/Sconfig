@@ -65,6 +65,11 @@
      (= MACH 'i386)
      (= VIRTIO #t)))
 
+ (config
+   ; support for yge network devices
+   YGE
+   #t)
+
  (include "wifi/Sconfig"))
 
 ; vim: set syntax=scheme:
