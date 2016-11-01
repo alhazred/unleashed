@@ -398,13 +398,7 @@ thread_affinity_set(kthread_id_t t, int cpu_id)
 		mutex_enter(&cpu_lock);
 		cpu_id = CPU->cpu_id;
 	}
-	/*
-	 * We should be asserting that cpu_lock is held here, but
-	 * the NCA code doesn't acquire it.  The following assert
-	 * should be uncommented when the NCA code is fixed.
-	 *
-	 * ASSERT(MUTEX_HELD(&cpu_lock));
-	 */
+	ASSERT(MUTEX_HELD(&cpu_lock));
 	ASSERT((cpu_id >= 0) && (cpu_id < NCPU));
 	cp = cpu[cpu_id];
 	ASSERT(cp != NULL);		/* user must provide a good cpu_id */
