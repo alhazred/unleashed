@@ -11,9 +11,9 @@
 
 #
 # Copyright 2011, Richard Lowe
-# Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
 # Copyright 2016 Garrett D'Amore <garrett@damore.org>
 # Copyright 2016 Joyent, Inc.
+# Copyright 2016 Nexenta Systems, Inc.
 #
 
 include		$(SRC)/Makefile.master
@@ -80,8 +80,6 @@ _MANFILES=	aac.7d		\
 		lockstat.7d	\
 		lofi.7d		\
 		log.7d		\
-		md.7d		\
-		mediator.7d	\
 		mem.7d		\
 		mpt_sas.7d	\
 		mr_sas.7d	\
