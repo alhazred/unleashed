@@ -13,8 +13,8 @@
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2011, Richard Lowe
 # Copyright 2012 OmniTI Computer Consulting, Inc.  All rights reserved.
-# Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
 # Copyright 2015, Joyent, Inc.
+# Copyright 2016 Nexenta Systems, Inc.
 #
 
 include		$(SRC)/Makefile.master
@@ -106,10 +106,7 @@ _MANFILES=	Intro.4				\
 		loginlog.4			\
 		magic.4				\
 		mailer.conf.4			\
-		md.tab.4			\
-		mddb.cf.4			\
 		mech.4				\
-		meddb.4				\
 		mnttab.4			\
 		mpapi.conf.4			\
 		ndmp.4				\
@@ -192,8 +189,6 @@ _MANFILES=	Intro.4				\
 		utmp.4				\
 		utmpx.4				\
 		vfstab.4			\
-		volume-config.4			\
-		volume-request.4		\
 		warn.conf.4			\
 		ypfiles.4			\
 		yppasswdd.4			\
@@ -218,7 +213,6 @@ _MANLINKS=	devid_cache.4			\
 		ipmon.conf.4			\
 		ipnat.conf.4			\
 		ippool.conf.4			\
-		md.cf.4				\
 		mdi_ib_cache.4			\
 		mdi_scsi_vhci_cache.4		\
 		pam.d.4				\
@@ -227,7 +221,6 @@ _MANLINKS=	devid_cache.4			\
 		qop.4				\
 		rhosts.4			\
 		snapshot_cache.4		\
-		volume-defaults.4		\
 		wtmp.4				\
 		wtmpx.4
 
@@ -265,8 +258,6 @@ ippool.conf.4			:= LINKSRC = ippool.4
 
 fbtab.4				:= LINKSRC = logindevperm.4
 
-md.cf.4				:= LINKSRC = md.tab.4
-
 qop.4				:= LINKSRC = mech.4
 
 pam.d.4				:= LINKSRC = pam.conf.4
@@ -280,8 +271,6 @@ dumpdates.4			:= LINKSRC = ufsdump.4
 wtmp.4				:= LINKSRC = utmp.4
 
 wtmpx.4				:= LINKSRC = utmpx.4
-
-volume-defaults.4		:= LINKSRC = volume-request.4
 
 .KEEP_STATE:
 

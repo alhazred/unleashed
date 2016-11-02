@@ -1,6 +1,13 @@
-'\" te
-.\"  Copyright (c) 1983 Regents of the University of California. All rights reserved. The Berkeley software License Agreement specifies the terms and conditions for redistribution. Copyright (c) 2003, Sun Microsystems, Inc. All Rights Reserved
-.TH NEWFS 1M "Mar 1, 2007"
+.\"
+.\" The Berkeley software License Agreement specifies the terms and conditions
+.\" for redistribution.
+.\"
+.\"
+.\" Copyright (c) 1983 Regents of the University of California.
+.\" All rights reserved.
+.\" Copyright (c) 2003, Sun Microsystems, Inc. All Rights Reserved
+.\"
+.TH NEWFS 1M "Oct 8, 2016"
 .SH NAME
 newfs \- construct a UFS file system
 .SH SYNOPSIS
@@ -10,7 +17,6 @@ newfs \- construct a UFS file system
 .fi
 
 .SH DESCRIPTION
-.sp
 .LP
 \fBnewfs\fR is a "friendly" front-end to the \fBmkfs\fR(1M) program for making
 \fBUFS\fR file systems on disk partitions. \fBnewfs\fR calculates the
@@ -29,7 +35,6 @@ You must be super-user or have appropriate write privileges to use this
 command, except when creating a \fBUFS\fR file system on a \fIdiskette\fR. See
 \fBEXAMPLES\fR.
 .SS "Creating a Multiterabyte UFS File System"
-.sp
 .LP
 Keep the following limitations in mind when creating a multiterabyte UFS file
 system:
@@ -47,7 +52,6 @@ set \fInbpi\fR lower than 1 Mbyte on a multiterabyte UFS file system.
 \fIfragsize\fR is set equal to \fIbsize\fR.
 .RE
 .SH OPTIONS
-.sp
 .LP
 The following options are supported:
 .sp
@@ -254,9 +258,6 @@ Greater than 1 Tbyte
 .fi
 .in -2
 .sp
-
-The number of inodes can increase if the file system is expanded with the
-\fBgrowfs\fR command.
 .RE
 
 .sp
@@ -346,7 +347,6 @@ This option is not applicable for disks with EFI labels and is ignored.
 .RE
 
 .SH OPERANDS
-.sp
 .LP
 The following operands are supported:
 .sp
@@ -361,7 +361,6 @@ example, \fB/dev/rdsk/c0t0d0s6\fR) on which to create the file system.
 .RE
 
 .SH USAGE
-.sp
 .LP
 See \fBlargefile\fR(5) for the description of the behavior of \fBnewfs\fR when
 encountering files greater than or equal to 2 Gbyte ( 2^31 bytes).
@@ -405,52 +404,7 @@ super-block backups (for fsck \fB-F\fR ufs \fB-o\fR b=#) at:
 32, 640, 1184, 1792, 2336, .\|.\|.
 .fi
 .in -2
-.sp
-
-.LP
-\fBExample 3 \fRCreating a \fBUFS\fR File System That Will Eventually Be Grown
-to a Multiterabyte UFS File System
-.sp
-.LP
-The following example creates a \fBUFS\fR file system that will eventually be
-grown to a multiterabyte UFS file system.
-
-.sp
-.LP
-This command creates a 800-Gbyte file system on the volume,
-\fB/dev/md/rdsk/d99\fR.
-
-.sp
-.in +2
-.nf
-# newfs -T /dev/md/rdsk/d99
-newfs: construct a new file system /dev/md/rdsk/d99: (y/n)? y
-   /dev/md/rdsk/d99: 1677754368 sectors in 45512 cylinders of
-   144 tracks, 256 sectors
-   819216.0MB in 1821 cyl groups (25 c/g, 450.00MB/g, 448 i/g) .\|.\|.
-.fi
-.in -2
-.sp
-
-.sp
-.LP
-Then, if you increase the volume size for this file system, you can use the
-\fBgrowfs\fR command to expand the file system. The file system is grown to 1.2
-terabytes in this example:
-
-.sp
-.in +2
-.nf
-# growfs -v /dev/md/rdsk/d99
-/usr/lib/fs/ufs/mkfs -G /dev/md/rdsk/d99 2516631552 /dev/md/rdsk/d99:
-   2516631552 sectors in 68268 cylinders of 144 tracks, 256  sectors
-   1228824.0MB in 2731 cyl groups (25 c/g, 450.00MB/g, 448 i/g).\|.\|.
-.fi
-.in -2
-.sp
-
 .SH EXIT STATUS
-.sp
 .LP
 The following exit values are returned:
 .sp
@@ -479,13 +433,11 @@ the error.
 Other exit values may be returned by \fBmkfs\fR(1M), which is called by
 \fBnewfs\fR.
 .SH SEE ALSO
-.sp
 .LP
 \fBfsck\fR(1M), \fBfsck_ufs\fR(1M), \fBfsirand\fR(1M), \fBmkfs\fR(1M),
 \fBmkfs_ufs\fR(1M), \fBtunefs\fR(1M), \fBattributes\fR(5), \fBlargefile\fR(5),
 \fBufs\fR(7FS)
 .SH DIAGNOSTICS
-.sp
 .ne 2
 .na
 \fB\fBnewfs: No such file or directory\fR\fR

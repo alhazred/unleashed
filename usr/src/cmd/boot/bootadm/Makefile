@@ -21,9 +21,9 @@
 #
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
-# 
-# Copyright 2011 Nexenta Systems, Inc. All rights reserved.
+#
 # Copyright 2016 Toomas Soome <tsoome@me.com>
+# Copyright 2016 Nexenta Systems, Inc.
 #
 
 PROG= bootadm
@@ -43,7 +43,7 @@ POFILE= bootadm_cmd.po
 
 LDLIBS_i386= -lfdisk
 LDLIBS += -lficl-sys -lpkcs11 -lcryptoutil -lnvpair -lgen -ladm -lefi
-LDLIBS += -lscf -lz -lbe -lzfs $(LDLIBS_$(MACH))
+LDLIBS += -lz -lbe -lzfs $(LDLIBS_$(MACH))
 
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
 CPPFLAGS +=	-I$(SRC)/uts/common -I$(SRC)/common -I$(SRC)/common/ficl

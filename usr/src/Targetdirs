@@ -26,7 +26,7 @@
 # Copyright 2012 OmniTI Computer Consulting, Inc.  All rights reserved.
 # Copyright (c) 2013 RackTop Systems.
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
-# Copyright 2014 Nexenta Systems, Inc.  All rights reserved.
+# Copyright 2016 Nexenta Systems, Inc.
 #
 
 #
@@ -243,7 +243,6 @@ DIRS= \
 	/usr/lib/class/SDC \
 	/usr/lib/class/TS \
 	/usr/lib/crypto \
-	/usr/lib/drv \
 	/usr/lib/elfedit \
 	/usr/lib/fm \
 	/usr/lib/font \
@@ -311,8 +310,6 @@ DIRS= \
 	/usr/share/lib/xml/dtd \
 	/usr/share/man \
 	/usr/share/src \
-	/usr/snadm \
-	/usr/snadm/lib \
 	/usr/xpg4 \
 	/usr/xpg4/bin \
 	/usr/xpg4/include \
@@ -786,8 +783,6 @@ $(ROOT)/usr/lib/libmd.so.1:=		REALPATH=../../lib/libmd.so.1
 $(ROOT)/usr/lib/libmd.so:=		REALPATH=../../lib/libmd.so.1
 $(ROOT)/usr/lib/libmd5.so.1:=		REALPATH=../../lib/libmd5.so.1
 $(ROOT)/usr/lib/libmd5.so:=		REALPATH=../../lib/libmd5.so.1
-$(ROOT)/usr/lib/libmeta.so.1:=		REALPATH=../../lib/libmeta.so.1
-$(ROOT)/usr/lib/libmeta.so:=		REALPATH=../../lib/libmeta.so.1
 $(ROOT)/usr/lib/libmp.so.1:=		REALPATH=../../lib/libmp.so.1
 $(ROOT)/usr/lib/libmp.so.2:=		REALPATH=../../lib/libmp.so.2
 $(ROOT)/usr/lib/libmp.so:=		REALPATH=../../lib/libmp.so.2
@@ -1209,8 +1204,6 @@ SYM.USRLIB= \
 	/usr/lib/libmd.so.1 \
 	/usr/lib/libmd5.so \
 	/usr/lib/libmd5.so.1 \
-	/usr/lib/libmeta.so \
-	/usr/lib/libmeta.so.1 \
 	/usr/lib/libmp.so \
 	/usr/lib/libmp.so.1 \
 	/usr/lib/libmp.so.2 \

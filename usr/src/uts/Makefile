@@ -134,7 +134,6 @@ COMMON_HDRDIRS= common/avs \
 		common/inet/sockmods/netpacket \
 		common/io/bpf/net \
 		common/io/fibre-channel/fca/qlc \
-		common/io/lvm/md \
 		common/ipp \
 		common/net \
 		common/netinet \
@@ -158,7 +157,6 @@ DYNHDRDIRS =	common/avs \
 		common/gssapi \
 		common/idmap \
 		common/io/fibre-channel/fca/qlc \
-		common/io/lvm/md \
 		common/klm \
 		common/rpc \
 		common/rpcsvc \
