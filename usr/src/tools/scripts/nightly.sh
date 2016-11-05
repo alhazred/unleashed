@@ -144,6 +144,13 @@ function build {
 
 	this_build_ok=y
 	#
+	#	Before we build anything via dmake, we need to install
+	#	bmake-ified headers to the proto area
+	#
+	bmake_build_step_user_dir $CODEMGR_WS/include all
+	bmake_build_step_user_dir $CODEMGR_WS/include install
+
+	#
 	#	Build the legacy part of the source
 	#
 	echo "\n==== Building legacy source at `date` ($LABEL) ====\n" \
@@ -1078,6 +1085,12 @@ function bmake_build_step_args {
 # usage: bmake_build_step_user <target>
 function bmake_build_step_user {
 	bmake_build_step_args $CODEMGR_WS $1 \
+		DESTDIR=$ROOT MK_INSTALL_AS_USER=yes
+}
+
+# usage: bmake_build_step_user_dir <dir> <target>
+function bmake_build_step_user_dir {
+	bmake_build_step_args $1 $2 \
 		DESTDIR=$ROOT MK_INSTALL_AS_USER=yes
 }
 
