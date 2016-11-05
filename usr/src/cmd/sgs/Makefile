@@ -183,7 +183,7 @@ XRDEL=		Makefile* kobj_*
 #
 XRDIRS=		. \
 		../../common/elfcap \
-		../../head \
+		../../../../include \
 		../../uts/common/krtld \
 		../../uts/common/sys \
 		../../uts/sparc/sys \

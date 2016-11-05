@@ -31,7 +31,7 @@ POFILE=		ufsrestore.po
 
 # XXX This is only needed for the check: target.  It would be nice to
 # XXX automatically generate the list when needed.
-HEADERS=	../../../head/protocols/dumprestore.h \
+HEADERS=	../../../../../include/protocols/dumprestore.h \
 	../include/byteorder.h ../include/memutils.h \
 	../include/rmt.h restore.h
 
@@ -39,7 +39,7 @@ CLOBBERFILES +=	$(PRODUCT) $(DEBUGPRODUCTS)
 
 LOCAL=		.
 GENERAL=	../include
-GLOBAL=		../../../head
+GLOBAL=		../../../../../include
 CPPFLAGS=	-I$(LOCAL) -I$(GENERAL) -I$(GLOBAL) \
 			$(CPPFLAGS.master) -D_LARGEFILE64_SOURCE=1
 LIBDUMP=	../lib/libdump.a

@@ -32,7 +32,7 @@
 
 	Note: if this service is modified to consist of anything other
 	than a single instance named 'default', you must make changes to
-	$SRC/head/rpcsvc/daemon_utils.h and libnsl:open_daemon_lock().
+	include/rpcsvc/daemon_utils.h and libnsl:open_daemon_lock().
 -->
 
 <service_bundle type='manifest' name='SUNWnfssr:nfs-server'>

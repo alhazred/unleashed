@@ -328,7 +328,7 @@ include $(SRC)/lib/Makefile.targ
 # rpcgen'd stuff originally from libnsl
 
 RPCSVC_DIR= $(ROOTHDRDIR)/rpcsvc
-RPCSVC_SRCDIR= $(SRC)/head/rpcsvc
+RPCSVC_SRCDIR= $(CODEMGR_WS)/include/rpcsvc
 RPCSVC_UTS_SRCDIR= $(SRC)/uts/common/rpc
 
 RPCSVC_FILES= daemon_utils.h nis.x nis.h nis_object.x

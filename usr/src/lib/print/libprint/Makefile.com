@@ -42,7 +42,7 @@ LIBS =			$(DYNLIB)
 
 
 CPPFLAGS +=	-I$(SRCDIR)
-CPPFLAGS +=	-I../../head -D_REENTRANT
+CPPFLAGS +=	-I../../../../include -D_REENTRANT
 
 LDLIBS +=	 -lc -lldap
 

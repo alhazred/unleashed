@@ -46,7 +46,7 @@ LIBS=	$(LIBRARY)
 
 HDRS=		../include/byteorder.h \
 	../include/memutils.h ../include/myrcmd.h \
-	../../../head/protocols/dumprestore.h \
+	../../../../../include/protocols/dumprestore.h \
 	../include/rmt.h
 
 YFILE=		getdate.y
@@ -61,7 +61,7 @@ LOBJS=		rmtlib.o myrcmd.o \
 OBJECTS=	$(LOBJS)
 POFILES=	$(OBJECTS:.o=.po)
 GENERAL=	../include
-GLOBAL=		../../../head
+GLOBAL=		../../../../../include
 CPPFLAGS=	-I$(GENERAL) -I$(GLOBAL) $(CPPFLAGS.master)
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-parentheses

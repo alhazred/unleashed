@@ -48,17 +48,17 @@ $(SPARC_BLD)psm: stand
 
 SUBDIRS= $(COMMON_SUBDIRS) $($(MACH)_SUBDIRS)
 
-HDRSUBDIRS=	uts head lib cmd
+HDRSUBDIRS=	uts lib cmd
 
 # UCB headers are bug-for-bug compatible and not checkable against the header
 # standards.
 #
-CHKHDRSUBDIRS=	head uts lib
+CHKHDRSUBDIRS=	uts lib
 
 #
 # Headers that can be built in parallel
 #
-PARALLEL_HEADERS = sysheaders userheaders libheaders cmdheaders
+PARALLEL_HEADERS = sysheaders libheaders cmdheaders
 
 #
 # Directories that can be built in parallel
@@ -131,8 +131,8 @@ _msg: _msgdirs rootdirs FRC
 mapfiles: bldtools
 	@cd common/mapfiles; pwd; $(MAKE) install
 
-clean: $(SUBDIRS) head pkg
-clobber: $(SUBDIRS) head pkg clobber_local
+clean: $(SUBDIRS) pkg
+clobber: $(SUBDIRS) pkg clobber_local
 clobber_local:
 	@cd tools; pwd; $(MAKE) clobber
 	@cd common/mapfiles; pwd; $(MAKE) clobber
@@ -172,12 +172,10 @@ closedbins: bldtools $(ROOTDIRS) FRC
 .PARALLEL: $(PARALLEL_HEADERS) DUMMY
 .PARALLEL: $(PARALLEL_DIRS) DUMMY
 
-$(SUBDIRS) head pkg: FRC
+$(SUBDIRS) pkg: FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
-# librpcsvc has a dependency on headers installed by
-# userheaders, hence the .WAIT before libheaders.
-sgs: rootdirs .WAIT sysheaders userheaders .WAIT \
+sgs: rootdirs .WAIT sysheaders .WAIT \
 	libheaders cmdheaders
 
 #
@@ -203,9 +201,6 @@ _msgdirs:       $(MSGDIRS)
 $(ROOTDIRS) $(MSGDIRS):
 	$(INS.dir)
 
-userheaders: FRC
-	@cd head; pwd; $(MAKE) install_h
-
 libheaders: bldtools
 	@cd lib; pwd; $(MAKE) install_h
 
@@ -223,7 +218,7 @@ check:	$(CHKHDRSUBDIRS) $(CHKMFSTSUBDIRS) $(CHKMANSUBDIRS)
 # don't contain actual source code.
 #
 XRPRUNE = pkg prototypes
-XRINCDIRS = uts/common head
+XRINCDIRS = uts/common
 
 cscope.out tags: FRC
 	$(XREF) -f -x $@

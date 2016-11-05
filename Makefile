@@ -1,6 +1,7 @@
 SUBDIR = bin \
-	 lib \
-	 kernel
+	 include \
+	 kernel \
+	 lib
 
 .include <bsd.subdir.mk>
 

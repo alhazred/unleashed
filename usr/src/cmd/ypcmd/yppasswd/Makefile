@@ -47,10 +47,6 @@ LDFLAGS +=	$(MAPFILES:%=-Wl,-M%)
 # Pick up includes from library
 CPPFLAGS += -I$(SRC)/lib/libnisdb/yptol
 
-# This file is now in the $(SRC)/head/rpcsvc directory.
-#HDRFILE= yppasswd.h
-#IHDRFILE= $(HDRFILE:%=$(RPCSVC)/%)
-
 INETYPPROG=		$(NETYPPROG:%=$(NETYP)/%)
 
 COMMONOBJ =		yppasswdxdr.o yplckpwdf.o

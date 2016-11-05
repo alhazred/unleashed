@@ -28,6 +28,6 @@
 
 echo_file usr/src/lib/Makefile.lib
 echo_file usr/src/lib/Makefile.targ
-echo_file usr/src/head/protocols/dumprestore.h
+echo_file include/protocols/dumprestore.h
 echo_file usr/src/cmd/fs.d/Makefile.fstype
 find_files "s.*" usr/src/cmd/fs.d/ufs/roll_log

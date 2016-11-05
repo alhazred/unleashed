@@ -40,7 +40,7 @@ CERRWARN +=	-Wno-unused-variable
 
 LDLIBS += -ll
 YFLAGS = -d
-CPPFLAGS = -I../head $(CPPFLAGS.master)
+CPPFLAGS = -I../../../include $(CPPFLAGS.master)
 
 # genmsg has a name clash with main() and libl.so.1.  However, genmsg must
 # still export a number of "yy*" (libl) interfaces.  Reduce all other symbols

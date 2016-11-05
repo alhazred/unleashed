@@ -27,7 +27,7 @@
 include  ../../Makefile.master
 
 # Relative path to ensure path to header file is also relative
-HEAD_DIR= ../../head/rpcsvc
+HEAD_DIR= ../../../../include/rpcsvc
 UTS_DIR= ../../uts/common/rpcsvc
 RPC_DIR= ../../uts/common/rpc
 

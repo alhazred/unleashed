@@ -45,7 +45,7 @@ SRCS	= $(LOCOBJS:%.o=$(SRCDIR)/%.c) $(RPC_CMNOBJS:%.o=$(RPC_CMNDIR)/%.c) \
 
 LDLIBS += -linet -lsock -lxdr
 CPPFLAGS += $(SOCKCPPFLAGS) $(DHCPCPPFLAGS) -I../../inet
-CPPFLAGS += -I$(STANDDIR)/lib/sa -I$(TOPDIR)/head
+CPPFLAGS += -I$(STANDDIR)/lib/sa -I$(TOPDIR)/../../include
 
 #
 # This is really wrong, but we have no choice since <rpc/*.h> needs to

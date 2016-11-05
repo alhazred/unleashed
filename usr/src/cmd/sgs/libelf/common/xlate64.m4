@@ -45,7 +45,7 @@
  * to be created.  If you've introduced a new structure - then
  * it will need to be described - this is done by:
  *
- * o adding a new type ELF_T_* to usr/src/head/libelf.h
+ * o adding a new type ELF_T_* to include/libelf.h
  * o Create a new macro to define the bytes contained in the structure. Take a
  *   look at the 'Syminfo_1' macro defined below.  The declarations describe
  *   the structure based off of the field size of each element of the structure.

@@ -147,7 +147,7 @@ nsc_getsystemid(int *id)
  *	map         - optional array of nsc_release_t defining
  *			acceptable build release / runtime release
  *			matches. If supplied, must end will a NULL
- *			array element.  See src/head/nsctl.h for info.
+ *			array element.  See include/nsctl.h for info.
  *	reqd        - used to return the required OS versions if the
  *			return value is not -1.  The returned string
  *			is readonly.

@@ -54,7 +54,7 @@ ROLLPOFILES=	roll_log.po
 
 # XXX This is only needed for the check: target.  It would be nice to
 # XXX automatically generate the list when needed.
-HEADERS=	../../../head/protocols/dumprestore.h \
+HEADERS=	../../../../../include/protocols/dumprestore.h \
 	../../fs.d/ufs/roll_log/roll_log.h ../include/byteorder.h \
 	../include/memutils.h \
 	../include/rmt.h dump.h dumpusg.h
@@ -63,7 +63,7 @@ CLOBBERFILES +=	$(PRODUCT) $(DEBUGPRODUCTS) dumpdates
 
 LOCAL=		.
 GENERAL=	../include
-GLOBAL=		../../../head
+GLOBAL=		../../../../../include
 CPPFLAGS=	-I$(LOCAL) -I$(GENERAL) -I$(GLOBAL) -DPARTIAL \
 		-I$(ROLLDIR) $(CPPFLAGS.master) \
 		-D_LARGEFILE64_SOURCE=1
