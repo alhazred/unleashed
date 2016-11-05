@@ -1044,17 +1044,20 @@ function child_wstype {
 
 function run_bmake {
 	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
-		bmake -j $DMAKE_MAX_JOBS -C $CODEMGR_WS \
+		bmake -j $DMAKE_MAX_JOBS \
 			VERBOSE=yes \
 			"$@" 2>&1
 }
 
-# usage: bmake_build_step_args <target> <args...>
+# usage: bmake_build_step_args <dir> <target> <args...>
 function bmake_build_step_args {
+	D=$1
+	shift
+
 	echo "\n==== \`bmake $1\` at `date` ($LABEL) ====\n" >> $LOGFILE
 
 	rm -f $SRC/${INSTALLOG}-bmake-${1}.out
-	run_bmake "$@" | \
+	run_bmake -C $D "$@" | \
 		tee -a $SRC/${INSTALLOG}-bmake-${1}.out >> $LOGFILE
 
 	echo "\n==== \`bmake $1\` errors ($LABEL) ====\n" >> $mail_msg_file
@@ -1074,7 +1077,8 @@ function bmake_build_step_args {
 
 # usage: bmake_build_step_user <target>
 function bmake_build_step_user {
-	bmake_build_step_args $1 DESTDIR=$ROOT MK_INSTALL_AS_USER=yes
+	bmake_build_step_args $CODEMGR_WS $1 \
+		DESTDIR=$ROOT MK_INSTALL_AS_USER=yes
 }
 
 SCM_TYPE=$(child_wstype)
@@ -1089,7 +1093,7 @@ SCM_TYPE=$(child_wstype)
 #
 # We have to do this before running *any* make commands.
 #
-bmake_build_step_args gen-config || build_extras_ok=n
+bmake_build_step_args $CODEMGR_WS gen-config || build_extras_ok=n
 
 #
 #	Decide whether to clobber
@@ -1150,7 +1154,7 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	       -name '*.o' \) -print | \
 	    grep -v 'tools/ctf/dwarf/.*/libdwarf' | xargs rm -f
 	echo "\n==== bmake cleandir ====\n" >> $LOGFILE
-	run_bmake cleandir >> $LOGFILE 2>&1
+	run_bmake -C $CODEMGR_WS cleandir >> $LOGFILE 2>&1
 else
 	echo "\n==== No clobber at `date` ====\n" >> $LOGFILE
 fi
