@@ -32,7 +32,7 @@ include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.module
 
-CPPFLAGS += -I$(SRC)/uts/common
+CPPFLAGS += -I$(CODEMGR_WS)/include
 
 # if optimization is on, compiler asserts
 COPTFLAG =

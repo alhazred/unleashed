@@ -39,6 +39,8 @@ include ../../Makefile.cmd
 POFILES = $(OBJS:%.o=%.po)
 POFILE = $(PROG)_all.po
 
+CPPFLAGS += -I$(CODEMGR_WS)/include
+
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-parentheses
 

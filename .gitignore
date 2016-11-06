@@ -36,4 +36,4 @@ cscope.po.out
 #
 /Makefile.cfgparam
 /usr/src/Makefile.cfgparam
-/usr/src/uts/common/sys/cfgparam.h
+/include/sys/cfgparam.h

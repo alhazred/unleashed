@@ -45,10 +45,10 @@ dir path=usr/lib
 dir path=usr/lib/ipqosconf
 dir path=usr/sbin
 dir path=usr/share/man/man1m
-file path=usr/include/ipp/dlcosmk/dlcosmk.h
-file path=usr/include/ipp/dscpmk/dscpmk.h
-file path=usr/include/ipp/flowacct/flowacct.h
-file path=usr/include/ipp/meters/meter.h
+file path=usr/include/ipp/dlcosmk/dlcosmk.h mode=0644
+file path=usr/include/ipp/dscpmk/dscpmk.h mode=0644
+file path=usr/include/ipp/flowacct/flowacct.h mode=0644
+file path=usr/include/ipp/meters/meter.h mode=0644
 file path=usr/lib/ipqosconf/dlcosmk.types mode=0444
 file path=usr/lib/ipqosconf/dscpmk.types mode=0444
 file path=usr/lib/ipqosconf/flowacct.types mode=0444

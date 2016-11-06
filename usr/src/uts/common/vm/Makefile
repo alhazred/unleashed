@@ -36,6 +36,8 @@ ROOTDIRS= $(ROOT)/usr/include/vm
 
 ROOTHDRS= $(HDRS:%=$(ROOTDIRS)/%)
 
+$(ROOTHDRS) := FILEMODE = 444
+
 CHECKHDRS= $(HDRS:%.h=%.check)
 
 # install rule

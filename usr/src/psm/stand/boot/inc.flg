@@ -33,7 +33,7 @@
 find_files "s.*.h"\
         usr/src/uts/sparc\
         usr/src/uts/sun\
-        usr/src/uts/common/sys\
+        include/sys\
         usr/src/uts/common/vm\
         usr/src/uts/common/rpc\
         usr/src/uts/common/nfs\

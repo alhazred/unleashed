@@ -24,8 +24,7 @@
  */
 
 /*
- * mdb dcmds for selected structures from
- * usr/src/uts/common/sys/crypto/spi.h
+ * mdb dcmds for selected structures from include/sys/crypto/spi.h
  *
  * Also the mdb module housekeeping
  */

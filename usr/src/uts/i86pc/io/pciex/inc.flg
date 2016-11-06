@@ -31,7 +31,7 @@
 
 # header files
 find_files "s.*.h"	\
-	usr/src/uts/common/sys		\
+	include/sys		\
 	usr/src/uts/sparc/sys		\
 	usr/src/uts/sparc/v7/sys	\
 	usr/src/uts/sparc/v9/sys	\
@@ -90,7 +90,7 @@ echo_file  usr/src/uts/sun/Makefile.files
 echo_file  usr/src/uts/sun/Makefile.rules
 echo_file  usr/src/uts/common/Makefile.files
 echo_file  usr/src/uts/common/Makefile.rules
-echo_file  usr/src/uts/common/sys/Makefile
+echo_file  include/sys/Makefile
 echo_file  usr/src/uts/i86pc/Makefile
 echo_file  usr/src/uts/i86pc/Makefile.files
 echo_file  usr/src/uts/i86pc/Makefile.rules

@@ -23,8 +23,7 @@
  */
 
 /*
- * mdb dcmds for selected structures from
- * usr/src/uts/common/sys/crypto/impl.h
+ * mdb dcmds for selected structures from include/sys/crypto/impl.h
  */
 #include <stdio.h>
 #include <sys/mdb_modapi.h>

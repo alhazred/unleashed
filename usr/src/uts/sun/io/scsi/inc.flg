@@ -30,7 +30,7 @@
 
 find_files "s.*"	\
 	usr/src/uts/common/io/scsi \
-	usr/src/uts/common/sys \
+	include/sys \
 	usr/src/uts/sparc/dada	\
 	usr/src/uts/sparc/fas	\
 	usr/src/uts/sparc/scsi	\

@@ -52,7 +52,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 # path for header files
 #
-INCLUDE_PATH += -I$(UTSBASE)/common/sys/ib/clients/of/sol_umad
+INCLUDE_PATH += -I$(CODEMGR_WS)/include/sys/ib/clients/of/sol_umad
 
 
 

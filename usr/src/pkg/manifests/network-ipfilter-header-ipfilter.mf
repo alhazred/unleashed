@@ -38,18 +38,18 @@ set name=variant.arch value=$(ARCH)
 dir path=usr group=sys
 dir path=usr/include
 dir path=usr/include/netinet
-file path=usr/include/netinet/ip_auth.h
-file path=usr/include/netinet/ip_compat.h
-file path=usr/include/netinet/ip_fil.h
-file path=usr/include/netinet/ip_frag.h
-file path=usr/include/netinet/ip_htable.h
-file path=usr/include/netinet/ip_lookup.h
-file path=usr/include/netinet/ip_nat.h
-file path=usr/include/netinet/ip_pool.h
-file path=usr/include/netinet/ip_proxy.h
-file path=usr/include/netinet/ip_state.h
-file path=usr/include/netinet/ipf_stack.h
-file path=usr/include/netinet/ipl.h
+file path=usr/include/netinet/ip_auth.h mode=0644
+file path=usr/include/netinet/ip_compat.h mode=0644
+file path=usr/include/netinet/ip_fil.h mode=0644
+file path=usr/include/netinet/ip_frag.h mode=0644
+file path=usr/include/netinet/ip_htable.h mode=0644
+file path=usr/include/netinet/ip_lookup.h mode=0644
+file path=usr/include/netinet/ip_nat.h mode=0644
+file path=usr/include/netinet/ip_pool.h mode=0644
+file path=usr/include/netinet/ip_proxy.h mode=0644
+file path=usr/include/netinet/ip_state.h mode=0644
+file path=usr/include/netinet/ipf_stack.h mode=0644
+file path=usr/include/netinet/ipl.h mode=0644
 legacy pkg=SUNWipfh desc="C header files for IP Filter" \
     name="IP Filter header files"
 license cr_Sun license=cr_Sun

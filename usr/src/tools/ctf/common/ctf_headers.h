@@ -36,8 +36,8 @@
  *
  * $(SRC)/lib/libctf/common/libctf.h
  * $(SRC)/lib/libctf/common/libctf_impl.h
- * $(SRC)/uts/common/sys/ctf_api.h
- * $(SRC)/uts/common/sys/ctf.h
+ * include/sys/ctf_api.h
+ * include/sys/ctf.h
  *
  * These headers get installed in the proto area in the build environment
  * under $(ROOT)/usr/include and $(ROOT)/usr/include/sys. Though these
@@ -48,7 +48,7 @@
  * ctf headers. Depending on the order of the -I includes, we can also have
  * a problem with mismatched headers when building the ctf tools with some
  * headers getting pulled in from /usr/include and others from
- * $(SRC)/uts/common/sys.
+ * include/sys.
  *
  * To address the problem, we have done two things:
  * 1) Created this header with a specific order of inclusion for the
@@ -58,14 +58,14 @@
  *    the headers.
  * 2) In $(SRC)/tools/ctf/Makefile.ctf, we order the -I includes such
  *    that we first search the directories where the ctf headers
- *    live, followed by /usr/include, followed by $(SRC)/uts/common.
- *    This last -I include is needed in order to prevent a build failure
- *    when <sys/ctf_api.h> is included via a nested #include rather than
- *    an explicit path #include.
+ *    live, followed by /usr/include, followed by include.  This last -I
+ *    include is needed in order to prevent a build failure when
+ *    <sys/ctf_api.h> is included via a nested #include rather than an
+ *    explicit path #include.
  */
 
-#include <uts/common/sys/ctf.h>
-#include <uts/common/sys/ctf_api.h>
+#include <sys/ctf.h>
+#include <sys/ctf_api.h>
 #include <common/ctf/ctf_impl.h>
 #include <lib/libctf/common/libctf.h>
 #include <lib/libctf/common/libctf_impl.h>

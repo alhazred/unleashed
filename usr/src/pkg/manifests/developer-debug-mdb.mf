@@ -204,7 +204,7 @@ $(sparc_ONLY)file path=platform/sun4v/kernel/kmdb/$(ARCH64)/vdsk group=sys \
     mode=0555
 file path=usr/bin/$(ARCH32)/mdb mode=0555
 file path=usr/bin/$(ARCH64)/mdb mode=0555
-file path=usr/include/sys/mdb_modapi.h
+file path=usr/include/sys/mdb_modapi.h mode=0644
 file path=usr/lib/mdb/kvm/$(ARCH64)/arp.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/cpc.so group=sys mode=0555
 $(i386_ONLY)file path=usr/lib/mdb/kvm/$(ARCH64)/cpu.generic.so group=sys \

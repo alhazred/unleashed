@@ -33,6 +33,12 @@
 #
 
 #
+# rpc_sztypes.{h,x} are unfortunate files; see comment in
+# include/rpcsvc/Makefile
+#
+usr/include/rpc/rpc_sztypes.x
+
+#
 # The following entries are built in the /proto area
 # but not included in any packages - this is intentional.
 #
@@ -298,14 +304,6 @@ usr/include/net/simnet.h
 #
 usr/include/net/bridge_impl.h
 #
-# User<->kernel interface used by cfgadm/USB only
-#
-usr/include/sys/usb/hubd/hubd_impl.h
-#
-# User<->kernel interface used by cfgadm/SATA only
-#
-usr/include/sys/sata/sata_cfgadm.h			i386
-#
 # Private ucred kernel header
 #
 usr/include/sys/ucred.h
@@ -351,13 +349,6 @@ usr/include/sys/multidata_impl.h
 # these are merely intermediate objects, they do not need to be packaged.
 #
 stand					sparc
-#
-# Private KCF header files
-#
-usr/include/sys/crypto/elfsign.h
-usr/include/sys/crypto/impl.h
-usr/include/sys/crypto/ops_impl.h
-usr/include/sys/crypto/sched_impl.h
 #
 # The following files are installed in the proto area
 # by the build of libcmdutils (Command Utilities Library).
@@ -406,12 +397,6 @@ usr/include/libzfs_jni_pool.h
 usr/include/libzfs_jni_property.h
 usr/include/libzfs_jni_util.h
 #
-# These files are installed in the proto area for Solaris scsi_vhci driver
-# (for MPAPI support) and should not be shipped
-#
-usr/include/sys/scsi/adapters/mpapi_impl.h
-usr/include/sys/scsi/adapters/mpapi_scsi_vhci.h
-#
 # This library is installed in the proto area by the build of libdisasm, and is
 # only used when building the KMDB disasm module.
 #
@@ -458,15 +443,6 @@ usr/include/libdscp.h		sparc
 usr/include/sys/iscsi_protocol.h
 usr/include/sys/iscsi_authclient.h
 usr/include/sys/iscsi_authclientglue.h
-#
-# These files are used by the COMSTAR iSCSI target port provider
-#
-usr/include/sys/idm
-usr/include/sys/iscsit/chap.h
-usr/include/sys/iscsit/iscsi_if.h
-usr/include/sys/iscsit/isns_protocol.h
-usr/include/sys/iscsit/radius_packet.h
-usr/include/sys/iscsit/radius_protocol.h
 #
 # libshare is private and the 64-bit sharemgr is not delivered.
 #
@@ -649,7 +625,6 @@ usr/include/l_common.h		sparc
 usr/include/l_error.h		sparc
 usr/include/rom.h		sparc
 usr/include/stgcom.h		sparc
-usr/include/sys/fibre-channel
 #
 usr/bin/dscfgcli
 usr/bin/sd_diag
@@ -664,12 +639,6 @@ usr/include/sys/unistat
 usr/lib/libnsctl.so
 usr/lib/librdc.so
 usr/lib/libunistat.so
-#
-# These files are used by the iSCSI initiator only.
-# No reason to ship them.
-#
-usr/include/sys/scsi/adapters/iscsi_door.h
-usr/include/sys/scsi/adapters/iscsi_if.h
 #
 # sbd ioctl hdr
 #

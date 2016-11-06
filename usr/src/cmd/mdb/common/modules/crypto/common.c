@@ -27,8 +27,7 @@
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
- * mdb dcmds for selected structures from
- * usr/src/uts/common/sys/crypto/common.h
+ * mdb dcmds for selected structures from include/sys/crypto/common.h
  */
 
 #include <sys/mdb_modapi.h>

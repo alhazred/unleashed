@@ -50,7 +50,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 #	Overrides and depends_on
 #
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel/fca/oce
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel/fca/oce
 
 LDFLAGS		+= -dy -Nmisc/mac
 

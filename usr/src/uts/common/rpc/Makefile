@@ -52,9 +52,9 @@ HDRS=			\
 
 RPC_SRC=	pmap_prot.x	rpcb_prot.x
 
-RPCSVC_SRC=	key_prot.x	rpc_sztypes.x
+RPCSVC_SRC=	key_prot.x
 
-DERIVED_FILES=	key_prot.h	pmap_prot.h	rpcb_prot.h	rpc_sztypes.h
+DERIVED_FILES=	key_prot.h	pmap_prot.h	rpcb_prot.h
 
 RPCHDRS=	$(HDRS)	$(RPC_SRC) $(DERIVED_FILES)
 
@@ -63,7 +63,11 @@ RPCSVCHDRS=	$(RPCSVC_SRC)
 RPCDIRS=	$(ROOT)/usr/include/rpc
 RPCSVCDIRS=	$(ROOT)/usr/include/rpcsvc
 
-ROOTHDRS= $(RPCHDRS:%=$(RPCDIRS)/%) $(RPCSVCHDRS:%=$(RPCSVCDIRS)/%)
+ROOTHDRS= \
+	$(RPCHDRS:%=$(RPCDIRS)/%) \
+	$(RPCSVCHDRS:%=$(RPCSVCDIRS)/%)
+
+$(ROOTHDRS) := FILEMODE = 444
 
 $(RPCDIRS)/%: %
 	$(INS.file)
@@ -106,9 +110,6 @@ key_prot.h: key_prot.x
 
 pmap_prot.h: pmap_prot.x
 	$(RPCGEN) -M -h pmap_prot.x > $@
-
-rpc_sztypes.h: rpc_sztypes.x
-	$(RPCGEN) -C -h rpc_sztypes.x > $@
 
 rpcb_prot.h: rpcb_prot.x
 	$(RPCGEN) -M -h rpcb_prot.x > $@

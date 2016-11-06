@@ -106,8 +106,8 @@ common/mount_xdr.c: $(HEAD_DIR)/mount.x
 common/nsm_addr_xdr.c: $(UTS_DIR)/nsm_addr.x
 	$(RPCGEN) -c $(UTS_DIR)/nsm_addr.x > $@
 
-common/rpc_sztypes.c: $(RPC_DIR)/rpc_sztypes.x
-	$(RPCGEN) -c $(RPC_DIR)/rpc_sztypes.x > $@
+common/rpc_sztypes.c: $(CODEMGR_WS)/include/rpc/rpc_sztypes.x
+	$(RPCGEN) -c $(CODEMGR_WS)/include/rpc/rpc_sztypes.x > $@
 
 # include library targets
 include ../Makefile.targ

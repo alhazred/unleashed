@@ -26,6 +26,6 @@
 #
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-echo_file usr/src/uts/common/sys/ctf.h
-echo_file usr/src/uts/common/sys/ctf_api.h
+echo_file include/sys/ctf.h
+echo_file include/sys/ctf_api.h
 echo_file usr/src/lib/libctf/common/libctf.h

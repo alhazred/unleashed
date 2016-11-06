@@ -191,8 +191,10 @@ SUBDIR=	arpa \
 	iso \
 	kerberosv5 \
 	protocols \
+	rpc \
 	rpcsvc \
-	uuid
+	uuid \
+	sys
 
 .include <prog.mk>
 .include <inc.mk>

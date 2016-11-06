@@ -45,6 +45,7 @@ LIBS =		$(DYNLIB)
 MAPFILEDIR =	../common
 
 CPPFLAGS +=	-I$(CRYPTODIR) -I$(UTSDIR) -D_POSIX_PTHREAD_SEMANTICS
+CPPFLAGS += -I$(CODEMGR_WS)/include
 LDLIBS +=	-lcryptoutil -lc
 
 # Symbol capabilities objects are i386.

@@ -77,7 +77,7 @@ extern "C" {
  *	The active queue is any queue defined in the connection context.
  *	If you want more information about the meaning of the fields of this
  *	structure you can read the nice explanation contained in the file:
- *	/usr/src/uts/common/sys/kstat.h.
+ *	include/sys/kstat.h.
  *	At any rate, all the sessions are given a sun_iscsi_sess_io structure.
  *	The fields are:
  *

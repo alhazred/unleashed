@@ -42,6 +42,6 @@ file path=usr/include/sys/agpgart.h
 legacy pkg=SUNWagph desc="AGP GART Header Files for x86 Workstations" \
     name="AGP GART Driver Header Files"
 license cr_Sun license=cr_Sun
+license include/sys/THIRDPARTYLICENSE.agpgart \
+    license=include/sys/THIRDPARTYLICENSE.agpgart
 license lic_CDDL license=lic_CDDL
-license usr/src/uts/common/sys/THIRDPARTYLICENSE.agpgart \
-    license=usr/src/uts/common/sys/THIRDPARTYLICENSE.agpgart

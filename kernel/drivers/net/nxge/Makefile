@@ -26,7 +26,7 @@ SRCS=		nxge_classify.c \
 		nxge_virtual.c \
 		nxge_zcp.c
 # sunv4 also needs: nxge_hcall.s
-INCS=		../../../../usr/src/uts/common/sys/nxge
+INCS=		../../../../include/sys/nxge
 DEFS=		-DSOLARIS
 
 SRCS+=		npi.c \

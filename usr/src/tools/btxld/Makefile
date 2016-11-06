@@ -28,7 +28,7 @@ SRCS=		btxld.c elfh.c version.c $(UTILS_SRC) $(EINFO_SRC) $(EXTRA_SRC)
 OBJS=		btxld.o elfh.o version.o bblk_einfo.o mboot_extra.o boot_utils.o
 LDLIBS +=	-lmd5
 C99MODE=	$(C99_ENABLE)
-CPPFLAGS +=	-I$(SRC)/uts/common -I$(COMMON_SRC)
+CPPFLAGS +=	-I$(CODEMGR_WS)/include -I$(COMMON_SRC)
 
 all: $(PROG)
 

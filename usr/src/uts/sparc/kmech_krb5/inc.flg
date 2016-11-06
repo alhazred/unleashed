@@ -26,7 +26,7 @@
 # Copyright 2005 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-find_files "s.*.h" usr/src/uts/common/sys
+find_files "s.*.h" include/sys
 find_files "s.*.h" usr/src/uts/common/rpc
 find_files "s.*.h" usr/src/uts/common/gssapi
 find_files "s.*.h" usr/src/uts/common/vm

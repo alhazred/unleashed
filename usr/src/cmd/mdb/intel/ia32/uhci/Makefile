@@ -34,7 +34,7 @@ include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.module
 
-CPPFLAGS += -I../../../../../uts/common 
+CPPFLAGS += -I$(CODEMGR_WS)/include
 
 # Needed because we're including uhciutil.h from uhci, but we obviously
 # don't use all of its functions.

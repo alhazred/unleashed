@@ -42,7 +42,7 @@ extern "C" {
 /*
  * This file contains a number of static inline functions implementing
  * various atomic variable functions.  Note that these are *not* all of the
- * atomic_* functions as defined in usr/src/uts/common/sys/atomic.h.  All
+ * atomic_* functions as defined in include/sys/atomic.h.  All
  * possible atomic_* functions are implemented in usr/src/common/atomic in
  * pure assembly.  In the absence of an identically named function in this
  * header file, any use of the function will result in the compiler emitting

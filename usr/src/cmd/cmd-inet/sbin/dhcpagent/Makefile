@@ -37,6 +37,8 @@ SRCS    = $(OBJS:%.o=%.c)
 POFILES = $(OBJS:%.o=%.po)
 XGETFLAGS += -a -x dhcpagent.xcl
 
+CPPFLAGS += -I$(CODEMGR_WS)/include
+
 CERRWARN += -Wno-switch
 CERRWARN += -Wno-parentheses
 

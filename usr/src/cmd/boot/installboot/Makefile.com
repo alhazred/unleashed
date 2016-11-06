@@ -33,7 +33,7 @@ SRCS= installboot.c $(UTILS_SRC) $(EINFO_SRC) $(EXTRA_SRC)
 
 include ../../Makefile.com
 
-CPPFLAGS += -I$(SRC)/uts/common
+CPPFLAGS += -I$(CODEMGR_WS)/include
 
 LDLIBS += -lmd5
 

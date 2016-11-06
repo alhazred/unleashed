@@ -28,4 +28,4 @@
 
 find_files "s.*" usr/src/common/zfs
 find_files "s.*" usr/src/uts/common/fs/zfs/sys
-echo_file usr/src/uts/common/sys/fs/zfs.h
+echo_file include/sys/fs/zfs.h

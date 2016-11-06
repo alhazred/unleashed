@@ -27,4 +27,4 @@
 #ident	"%Z%%M%	%I%	%E% SMI"
 
 find_files "s.*" usr/src/uts/common/fs/zfs/sys
-echo_file usr/src/uts/common/sys/fs/zfs.h
+echo_file include/sys/fs/zfs.h

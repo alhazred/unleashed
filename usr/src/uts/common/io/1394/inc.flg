@@ -30,10 +30,10 @@
 #
 
 find_files "s.*.h"	\
-	usr/src/uts/common/sys/1394
+	include/sys/1394
 
 find_files "s.*.h"	\
-	usr/src/uts/common/sys
+	include/sys
 
 find_files "s.*.h"	\
 	usr/src/uts/sparc/sys 
@@ -69,7 +69,7 @@ echo_file  usr/src/uts/sun/Makefile.files
 echo_file  usr/src/uts/sun/Makefile.rules
 echo_file  usr/src/uts/common/Makefile.files
 echo_file  usr/src/uts/common/Makefile.rules
-echo_file  usr/src/uts/common/sys/Makefile
+echo_file  include/sys/Makefile
 echo_file  usr/src/uts/sparc/Makefile
 echo_file  usr/src/uts/sparc/Makefile.files
 echo_file  usr/src/uts/sparc/Makefile.rules

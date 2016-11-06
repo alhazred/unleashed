@@ -56,19 +56,12 @@ VAR_PLAT_amd64=		intel/amd64
 #
 # VAR_AVLDIR - directory to find avl.c in.
 #
-# The avl.c file is under usr/src/common/avl in Solaris 10 (and later),
-# but in earlier releases it is not present (problem to be solved).
+# The avl.c file is under usr/src/common/avl.
 #
-# The avl.h and avl_impl.h files are under usr/src/uts/common/sys in
-# Solaris 10 (and later). They are under usr/src/cmd/sgs/tools/common/sys
-# in Solaris 9 and earlier.
-#
-# For Solaris 9 and earlier releases, we will have our own copy of the
-# files avl.c, avl.h and avl_impl.h until these files are back ported into
-# the system.
+# The avl.h and avl_impl.h files are under include/sys.
 #
 VAR_AVLDIR=		$(SRCBASE)/common/avl
-VAR_AVLINCDIR=		-I $(SRCBASE)/uts/common
+VAR_AVLINCDIR=		-I $(CODEMGR_WS)/include
 
 #
 # VAR_DTRDIR - directory to find dtrace_data.c in.

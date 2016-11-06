@@ -68,6 +68,7 @@ CLOBBERFILES	+= $(GENUNIX)
 CLEANFILES	+= $(LIBSTUBS) $(LIBGEN)
 BINARY		=
 
+CPPFLAGS	+= -I$(CODEMGR_WS)/include
 CPPFLAGS	+= -I$(SRC)/common
 CPPFLAGS	+= -I$(SRC)/uts/common/fs/zfs
 

@@ -159,7 +159,7 @@ file path=usr/include/sys/dtrace.h
 file path=usr/include/sys/dtrace_impl.h
 file path=usr/include/sys/fasttrap.h
 file path=usr/include/sys/fasttrap_impl.h
-file path=usr/include/sys/fasttrap_isa.h
+file path=usr/include/sys/fasttrap_isa.h mode=0644
 file path=usr/include/sys/lockstat.h
 file path=usr/include/sys/sdt.h
 file path=usr/lib/$(ARCH64)/libdtrace.so.1

@@ -519,3 +519,5 @@ USBDEVS_DATA =	$(SRC)/uts/common/io/usb/usbdevs
 # ctfconvert which allows us to fixup the struct cpu to account for machcpu.
 #
 CTFCVTFLAGS += -X
+
+INC_PATH += -I${CODEMGR_WS}/include

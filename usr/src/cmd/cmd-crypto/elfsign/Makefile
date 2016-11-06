@@ -33,6 +33,7 @@ SRCS = $(OBJS:.o=.c)
 
 include $(SRC)/cmd/Makefile.cmd 
 
+CPPFLAGS += -I$(CODEMGR_WS)/include
 
 LDLIBS += -lkmf -lelfsign -lcryptoutil
 

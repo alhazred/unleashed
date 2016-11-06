@@ -23,7 +23,7 @@ CFGFILE=kernel/arch/${CFGARCH}/Sconfig
 
 gen-config:
 	${.MAKE} -C tools
-	${.CURDIR}/tools/mkconfig/mkconfig -I _SYS_CFGPARAM_H -H -o usr/src/uts/common/sys/cfgparam.h ${CFGFILE}
+	${.CURDIR}/tools/mkconfig/mkconfig -I _SYS_CFGPARAM_H -H -o include/sys/cfgparam.h ${CFGFILE}
 	${.CURDIR}/tools/mkconfig/mkconfig -m -o usr/src/Makefile.cfgparam ${CFGFILE}
 	${.CURDIR}/tools/mkconfig/mkconfig -M -o Makefile.cfgparam ${CFGFILE}
 

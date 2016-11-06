@@ -219,6 +219,7 @@ XDT_OBJS += xdt.o
 #
 #	Build up defines and paths.
 #
+INC_PATH	+= -I$(CODEMGR_WS)/include
 INC_PATH	+= -I$(UTSBASE)/i86xpv -I$(UTSBASE)/i86pc -I$(SRC)/common \
 	-I$(UTSBASE)/common/xen
 

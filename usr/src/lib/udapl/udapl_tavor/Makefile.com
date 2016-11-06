@@ -141,9 +141,9 @@ SRCS = $(LOCOBJS:%.o=$(SRCDIR)/%.c) $(TAVOROBJS:%.o=$(TAVORSRCDIR)/%.c)
 
 CPPFLAGS +=	-I$(SRC)/lib/udapl/udapl_tavor/include 
 CPPFLAGS +=	-I$(SRC)/lib/udapl/udapl_tavor/tavor
-CPPFLAGS +=	-I$(SRC)/uts/common/sys/ib/clients/daplt
-CPPFLAGS +=	-I$(SRC)/uts/common
-CPPFLAGS +=	-I$(SRC)/uts/common/sys/ib/clients
+CPPFLAGS +=	-I$(CODEMGR_WS)/include/sys/ib/clients/daplt
+CPPFLAGS +=	-I$(CODEMGR_WS)/include
+CPPFLAGS +=	-I$(CODEMGR_WS)/include/sys/ib/clients
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized

@@ -9,7 +9,22 @@ INCS=	bootparam.h	\
 	ypclnt.h	\
 	yppasswd.h	\
 	ypupd.h		\
-	rpc_sztypes.h
+	rpc_sztypes.h	\
+	../rpc/rpc_sztypes.x
+
+# CAUTION: The rpc_sztypes.h above is *NOT* generated from the rpc_sztypes.x
+# above.  It's terrible really, there are three files that should get
+# installed:
+#
+# /usr/include/rpc/rpc_sztypes.h    - rpcgen'd from include/rpc/rpc_sztypes.x
+# /usr/include/rpcsvc/rpc_sztypes.h - copy of include/rpcsvc/rpc_sztypes.h
+# /usr/include/rpcsvc/rpc_sztypes.x - copy of include/rpc/rpc_sztypes.x
+#
+# Sadly, this is so convoluted that we also end up with:
+#
+# /usr/include/rpc/rpc_sztypes.x    - copy of include/rpc/rpc_sztypes.x
+#
+# And we have to ignore it in packaging.
 
 # the .x files
 INCS+=	bootparam_prot.x \
@@ -26,7 +41,8 @@ INCS+=	bootparam_prot.x \
 	rwall.x		\
 	spray.x		\
 	ufs_prot.x	\
-	yp.x
+	yp.x		\
+	autofs_prot.x
 
 # headers generated from .x files
 GENERATED_INCS= \
@@ -42,7 +58,8 @@ GENERATED_INCS= \
 	rwall.h		\
 	spray.h		\
 	ufs_prot.h	\
-	nfs_acl.h
+	nfs_acl.h	\
+	autofs_prot.h
 
 INCS+=	${GENERATED_INCS}
 CLEANFILES+= ${GENERATED_INCS}

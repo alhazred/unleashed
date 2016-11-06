@@ -63,13 +63,13 @@ CFLAGS	                += $(EMLXS_CFLAGS) -DEMLXS_ARCH=\"$(CLASS)\"
 #	Overrides and depends_on
 #
 INC_PATH	+= -I$(ROOT)/usr/include
-INC_PATH	+= -I$(UTSBASE)/common/sys
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys
 INC_PATH	+= -I$(COMMON_BASE)/bignum
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel/fca
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel/fca/emlxs
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel/impl
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel/ulp
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel/fca
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel/fca/emlxs
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel/impl
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel/ulp
 
 #
 #	misc/fctl required because #ifdef MODSYM_LOAD code

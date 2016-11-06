@@ -65,6 +65,7 @@ CPPFLAGS += -I$(SRC)/uts/i86xpv
 
 # Needed to include c2/audit.h (from cred.h)
 CPPFLAGS += -I$(SRC)/uts/common
+CPPFLAGS += -I$(CODEMGR_WS)/include
 
 # Needed to find include file mutex_impl.h
 CPPFLAGS += -I$(SRC)/uts/intel

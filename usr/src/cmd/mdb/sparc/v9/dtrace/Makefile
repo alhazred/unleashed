@@ -42,5 +42,5 @@ CPPFLAGS += -I$(SRC)/uts/sun4u
 LDLIBS  += -ldtrace -lm
 CLEANFILES += dof_names.c
 
-dof_names.c: $(MODSRCS_DIR)/mkdof.sh $(SRC)/uts/common/sys/dtrace.h
-	sh $(MODSRCS_DIR)/mkdof.sh < $(SRC)/uts/common/sys/dtrace.h > $@
+dof_names.c: $(MODSRCS_DIR)/mkdof.sh $(CODEMGR_WS)/include/sys/dtrace.h
+	sh $(MODSRCS_DIR)/mkdof.sh < $(CODEMGR_WS)/include/sys/dtrace.h > $@

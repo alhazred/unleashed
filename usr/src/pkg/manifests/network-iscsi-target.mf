@@ -58,7 +58,7 @@ file path=lib/svc/manifest/network/iscsi/iscsi-target.xml group=sys mode=0444 \
     variant.opensolaris.zone=global
 file path=lib/svc/method/iscsi-target mode=0555 \
     variant.opensolaris.zone=global
-file path=usr/include/libiscsit.h
+file path=usr/include/libiscsit.h mode=0644
 file path=usr/include/sys/iscsit/iscsit_common.h
 file path=usr/lib/$(ARCH64)/libiscsit.so.1
 file path=usr/lib/libiscsit.so.1

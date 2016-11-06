@@ -37,7 +37,7 @@ ROOTLIBDIR64=	$(ROOTLIBDIR)/$(MACH64)
 
 LIBS=	$(DYNLIB)
 
-
+CPPFLAGS += -I$(CODEMGR_WS)/include
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-char-subscripts

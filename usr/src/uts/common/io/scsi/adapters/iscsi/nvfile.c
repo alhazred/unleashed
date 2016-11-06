@@ -57,7 +57,7 @@ extern int modrootloaded;
  * the NVFILE/NVPAIR or the backing file.
  *
  * These flags are derived from a like NVPAIR/NVFILE implementation
- * in usr/src/uts/common/sys/devctl_impl.h
+ * in include/sys/devctl_impl.h
  */
 #define	NVF_ACTIVE	0x01	/* nvlist/nvpair file is active */
 #define	NVF_DIRTY	0x02	/* needs to be flushed */
@@ -104,7 +104,7 @@ int			nvf_errno;
  * file header data structure definition
  *
  * This data structure definition was derived from a like data structure
- * (nvpf_hdr_t) in usr/src/uts/common/sys/devctl_impl.h
+ * (nvpf_hdr_t) in include/sys/devctl_impl.h
  *
  * This header is larger than need in order to support extensability in the
  * future

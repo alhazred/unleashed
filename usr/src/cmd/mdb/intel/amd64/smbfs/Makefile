@@ -39,6 +39,7 @@ include ../../../Makefile.module
 
 CPPFLAGS	+= -I$(SRC)/uts/common/fs/smbclnt
 CPPFLAGS	+= -I$(SRC)/uts/common
+CPPFLAGS	+= -I$(CODEMGR_WS)/include
 
 C99MODE=	$(C99_ENABLE)
 

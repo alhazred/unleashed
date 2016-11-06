@@ -893,6 +893,12 @@ legacy pkg=SUNWckr \
     desc="core kernel software for a specific instruction-set architecture" \
     name="Core Solaris Kernel (Root)"
 license cr_Sun license=cr_Sun
+license include/sys/THIRDPARTYLICENSE.firmload \
+    license=include/sys/THIRDPARTYLICENSE.firmload
+license include/sys/THIRDPARTYLICENSE.icu \
+    license=include/sys/THIRDPARTYLICENSE.icu
+license include/sys/THIRDPARTYLICENSE.unicode \
+    license=include/sys/THIRDPARTYLICENSE.unicode
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/mdb/common/libstand/THIRDPARTYLICENSE \
     license=usr/src/cmd/mdb/common/libstand/THIRDPARTYLICENSE
@@ -915,12 +921,6 @@ license usr/src/uts/common/inet/tcp/THIRDPARTYLICENSE \
     license=usr/src/uts/common/inet/tcp/THIRDPARTYLICENSE
 license usr/src/uts/common/io/THIRDPARTYLICENSE.etheraddr \
     license=usr/src/uts/common/io/THIRDPARTYLICENSE.etheraddr
-license usr/src/uts/common/sys/THIRDPARTYLICENSE.firmload \
-    license=usr/src/uts/common/sys/THIRDPARTYLICENSE.firmload
-license usr/src/uts/common/sys/THIRDPARTYLICENSE.icu \
-    license=usr/src/uts/common/sys/THIRDPARTYLICENSE.icu
-license usr/src/uts/common/sys/THIRDPARTYLICENSE.unicode \
-    license=usr/src/uts/common/sys/THIRDPARTYLICENSE.unicode
 $(i386_ONLY)license usr/src/uts/intel/io/acpica/THIRDPARTYLICENSE \
     license=usr/src/uts/intel/io/acpica/THIRDPARTYLICENSE
 $(i386_ONLY)link path=boot/solaris/bin/root_archive \

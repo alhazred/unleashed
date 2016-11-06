@@ -101,6 +101,7 @@ proc_TGTFLAGS		= -D_USER
 C99MODE			= $(C99_ENABLE)
 
 CPPFLAGS		+= $($(MDBTGT)_TGTFLAGS) -I../../../common
+CPPFLAGS		+= -I$(CODEMGR_WS)/include
 LDFLAGS			+= $(ZTEXT)
 LDFLAGS64		+= $(ZTEXT)
 AS_CPPFLAGS		+= -D_ASM

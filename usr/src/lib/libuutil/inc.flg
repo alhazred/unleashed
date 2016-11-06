@@ -27,5 +27,5 @@
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 find_files "s.*" usr/src/common/avl
-echo_file usr/src/uts/common/sys/avl.h
-echo_file usr/src/uts/common/sys/avl_impl.h
+echo_file include/sys/avl.h
+echo_file include/sys/avl_impl.h

@@ -164,7 +164,7 @@ enum s10_emulated_features {
  *
  * NOTE: There must be at least one byte in the bitmap.
  *
- * We don't use the bitmap macros provided by usr/src/uts/common/sys/bitmap.h
+ * We don't use the bitmap macros provided by include/sys/bitmap.h
  * because they operate on ulong_t arrays.  The size of a ulong_t depends on
  * the data model in which the code that declares the ulong_t is compiled:
  * four bytes on 32-bit architectures and eight bytes 64-bit architectures.

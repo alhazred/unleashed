@@ -143,7 +143,6 @@ COMMON_HDRDIRS= common/avs \
 		common/sharefs \
 		common/smb \
 		common/smbsrv \
-		common/sys \
 		common/vm
 
 
@@ -159,8 +158,7 @@ DYNHDRDIRS =	common/avs \
 		common/io/fibre-channel/fca/qlc \
 		common/klm \
 		common/rpc \
-		common/rpcsvc \
-		common/sys
+		common/rpcsvc
 
 sparc_HDRDIRS= sun/sys
 i386_HDRDIRS= i86pc/vm i86xpv/vm
@@ -175,7 +173,6 @@ $(HDRDIRS): FRC
 # for kernel builds to reference without building install_h
 #
 all_h: FRC
-	@cd common/sys; pwd; $(MAKE) $@
 	@cd common/rpc; pwd; $(MAKE) $@
 	@cd common/rpcsvc; pwd; $(MAKE) $@
 	@cd common/gssapi; pwd; $(MAKE) $@

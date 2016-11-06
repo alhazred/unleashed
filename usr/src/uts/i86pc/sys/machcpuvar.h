@@ -57,7 +57,7 @@ extern int vcpu_on_pcpu(processorid_t);
 
 /*
  * Machine specific fields of the cpu struct
- * defined in common/sys/cpuvar.h.
+ * defined in include/sys/cpuvar.h.
  *
  * Note:  This is kinda kludgy but seems to be the best
  * of our alternatives.

@@ -218,7 +218,7 @@ check:	$(CHKHDRSUBDIRS) $(CHKMFSTSUBDIRS) $(CHKMANSUBDIRS)
 # don't contain actual source code.
 #
 XRPRUNE = pkg prototypes
-XRINCDIRS = uts/common
+XRINCDIRS = ../../include
 
 cscope.out tags: FRC
 	$(XREF) -f -x $@

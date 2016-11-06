@@ -47,7 +47,7 @@ install: all
 
 $(PICS): $(AVLHEADERS)
 
-sys/%: $(SRC)/uts/common/sys/%
+sys/%: $(CODEMGR_WS)/include/sys/%
 	@mkdir -p sys
 	cp -f $< $@
 

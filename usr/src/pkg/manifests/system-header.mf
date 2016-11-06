@@ -189,9 +189,9 @@ $(sparc_ONLY)dir path=usr/share/src/uts/sun4u
 $(sparc_ONLY)dir path=usr/share/src/uts/sun4v
 dir path=usr/xpg4
 dir path=usr/xpg4/include
-$(i386_ONLY)file path=usr/include/$(ARCH64)/sys/kdi_regs.h
-$(i386_ONLY)file path=usr/include/$(ARCH64)/sys/privmregs.h
-$(i386_ONLY)file path=usr/include/$(ARCH64)/sys/privregs.h
+$(i386_ONLY)file path=usr/include/$(ARCH64)/sys/kdi_regs.h mode=0644
+$(i386_ONLY)file path=usr/include/$(ARCH64)/sys/privmregs.h mode=0644
+$(i386_ONLY)file path=usr/include/$(ARCH64)/sys/privregs.h mode=0644
 file path=usr/include/ads/dsgetdc.h
 file path=usr/include/aio.h
 file path=usr/include/alloca.h
@@ -205,17 +205,17 @@ file path=usr/include/arpa/nameser.h
 file path=usr/include/arpa/nameser_compat.h
 file path=usr/include/arpa/telnet.h
 file path=usr/include/arpa/tftp.h
-$(i386_ONLY)file path=usr/include/asm/atomic.h
-$(i386_ONLY)file path=usr/include/asm/bitmap.h
-$(i386_ONLY)file path=usr/include/asm/byteorder.h
-$(i386_ONLY)file path=usr/include/asm/clock.h
-$(i386_ONLY)file path=usr/include/asm/cpu.h
-$(i386_ONLY)file path=usr/include/asm/cpuvar.h
+$(i386_ONLY)file path=usr/include/asm/atomic.h mode=0644
+$(i386_ONLY)file path=usr/include/asm/bitmap.h mode=0644
+$(i386_ONLY)file path=usr/include/asm/byteorder.h mode=0644
+$(i386_ONLY)file path=usr/include/asm/clock.h mode=0644
+$(i386_ONLY)file path=usr/include/asm/cpu.h mode=0644
+$(i386_ONLY)file path=usr/include/asm/cpuvar.h mode=0644
 $(sparc_ONLY)file path=usr/include/asm/flush.h
-$(i386_ONLY)file path=usr/include/asm/htable.h
-$(i386_ONLY)file path=usr/include/asm/mmu.h
-file path=usr/include/asm/sunddi.h
-file path=usr/include/asm/thread.h
+$(i386_ONLY)file path=usr/include/asm/htable.h mode=0644
+$(i386_ONLY)file path=usr/include/asm/mmu.h mode=0644
+file path=usr/include/asm/sunddi.h mode=0644
+file path=usr/include/asm/thread.h mode=0644
 file path=usr/include/assert.h
 file path=usr/include/ast/align.h
 file path=usr/include/ast/ast.h
@@ -324,15 +324,15 @@ file path=usr/include/ast/wordexp.h
 file path=usr/include/atomic.h
 file path=usr/include/attr.h
 file path=usr/include/auth_attr.h
-file path=usr/include/bsm/adt.h
-file path=usr/include/bsm/adt_event.h
-file path=usr/include/bsm/audit.h
-file path=usr/include/bsm/audit_kernel.h
-file path=usr/include/bsm/audit_kevents.h
-file path=usr/include/bsm/audit_record.h
+file path=usr/include/bsm/adt.h mode=0644
+file path=usr/include/bsm/adt_event.h mode=0644
+file path=usr/include/bsm/audit.h mode=0644
+file path=usr/include/bsm/audit_kernel.h mode=0644
+file path=usr/include/bsm/audit_kevents.h mode=0644
+file path=usr/include/bsm/audit_record.h mode=0644
 file path=usr/include/bsm/audit_uevents.h
-file path=usr/include/bsm/devices.h
-file path=usr/include/bsm/libbsm.h
+file path=usr/include/bsm/devices.h mode=0644
+file path=usr/include/bsm/libbsm.h mode=0644
 file path=usr/include/config_admin.h
 file path=usr/include/cpio.h
 file path=usr/include/crypt.h
@@ -350,10 +350,10 @@ file path=usr/include/dat/udat_config.h
 file path=usr/include/dat/udat_redirection.h
 file path=usr/include/dat/udat_vendor_specific.h
 file path=usr/include/deflt.h
-file path=usr/include/des/des.h
-file path=usr/include/des/desdata.h
-file path=usr/include/des/softdes.h
-file path=usr/include/device_info.h
+file path=usr/include/des/des.h mode=0644
+file path=usr/include/des/desdata.h mode=0644
+file path=usr/include/des/softdes.h mode=0644
+file path=usr/include/device_info.h mode=0644
 file path=usr/include/devid.h
 file path=usr/include/devmgmt.h
 file path=usr/include/devpoll.h
@@ -364,7 +364,7 @@ file path=usr/include/elf.h
 file path=usr/include/endian.h
 file path=usr/include/err.h
 file path=usr/include/errno.h
-file path=usr/include/eti.h
+file path=usr/include/eti.h mode=0644
 file path=usr/include/euc.h
 file path=usr/include/exacct.h
 file path=usr/include/exacct_impl.h
@@ -375,72 +375,72 @@ file path=usr/include/fcntl.h
 file path=usr/include/float.h
 file path=usr/include/fmtmsg.h
 file path=usr/include/fnmatch.h
-file path=usr/include/form.h
+file path=usr/include/form.h mode=0644
 file path=usr/include/ftw.h
 file path=usr/include/gelf.h
 file path=usr/include/getopt.h
 file path=usr/include/getwidth.h
 file path=usr/include/glob.h
 file path=usr/include/grp.h
-file path=usr/include/gssapi/gssapi.h
-file path=usr/include/gssapi/gssapi_ext.h
+file path=usr/include/gssapi/gssapi.h mode=0644
+file path=usr/include/gssapi/gssapi_ext.h mode=0644
 file path=usr/include/hal/libhal-storage.h
 file path=usr/include/hal/libhal.h
-$(i386_ONLY)file path=usr/include/ia32/sys/asm_linkage.h
-$(i386_ONLY)file path=usr/include/ia32/sys/kdi_regs.h
-$(i386_ONLY)file path=usr/include/ia32/sys/machtypes.h
-$(i386_ONLY)file path=usr/include/ia32/sys/privmregs.h
-$(i386_ONLY)file path=usr/include/ia32/sys/privregs.h
-$(i386_ONLY)file path=usr/include/ia32/sys/psw.h
-$(i386_ONLY)file path=usr/include/ia32/sys/pte.h
-$(i386_ONLY)file path=usr/include/ia32/sys/reg.h
-$(i386_ONLY)file path=usr/include/ia32/sys/stack.h
-$(i386_ONLY)file path=usr/include/ia32/sys/trap.h
-$(i386_ONLY)file path=usr/include/ia32/sys/traptrace.h
+$(i386_ONLY)file path=usr/include/ia32/sys/asm_linkage.h mode=0644
+$(i386_ONLY)file path=usr/include/ia32/sys/kdi_regs.h mode=0644
+$(i386_ONLY)file path=usr/include/ia32/sys/machtypes.h mode=0644
+$(i386_ONLY)file path=usr/include/ia32/sys/privmregs.h mode=0644
+$(i386_ONLY)file path=usr/include/ia32/sys/privregs.h mode=0644
+$(i386_ONLY)file path=usr/include/ia32/sys/psw.h mode=0644
+$(i386_ONLY)file path=usr/include/ia32/sys/pte.h mode=0644
+$(i386_ONLY)file path=usr/include/ia32/sys/reg.h mode=0644
+$(i386_ONLY)file path=usr/include/ia32/sys/stack.h mode=0644
+$(i386_ONLY)file path=usr/include/ia32/sys/trap.h mode=0644
+$(i386_ONLY)file path=usr/include/ia32/sys/traptrace.h mode=0644
 file path=usr/include/iconv.h
 file path=usr/include/idmap.h
 file path=usr/include/ieeefp.h
 file path=usr/include/ifaddrs.h
-file path=usr/include/inet/arp.h
-file path=usr/include/inet/common.h
-file path=usr/include/inet/ip.h
-file path=usr/include/inet/ip6.h
-file path=usr/include/inet/ip6_asp.h
-file path=usr/include/inet/ip_arp.h
-file path=usr/include/inet/ip_ftable.h
-file path=usr/include/inet/ip_if.h
-file path=usr/include/inet/ip_ire.h
-file path=usr/include/inet/ip_multi.h
-file path=usr/include/inet/ip_netinfo.h
-file path=usr/include/inet/ip_rts.h
-file path=usr/include/inet/ip_stack.h
-file path=usr/include/inet/ipclassifier.h
-file path=usr/include/inet/ipdrop.h
-file path=usr/include/inet/ipnet.h
-file path=usr/include/inet/ipp_common.h
-file path=usr/include/inet/led.h
-file path=usr/include/inet/mi.h
-file path=usr/include/inet/mib2.h
-file path=usr/include/inet/nd.h
-file path=usr/include/inet/optcom.h
-file path=usr/include/inet/sctp_itf.h
-file path=usr/include/inet/snmpcom.h
-file path=usr/include/inet/tcp.h
-file path=usr/include/inet/tcp_sack.h
-file path=usr/include/inet/tcp_stack.h
-file path=usr/include/inet/tcp_stats.h
-file path=usr/include/inet/tunables.h
-file path=usr/include/inet/wifi_ioctl.h
+file path=usr/include/inet/arp.h mode=0644
+file path=usr/include/inet/common.h mode=0644
+file path=usr/include/inet/ip.h mode=0644
+file path=usr/include/inet/ip6.h mode=0644
+file path=usr/include/inet/ip6_asp.h mode=0644
+file path=usr/include/inet/ip_arp.h mode=0644
+file path=usr/include/inet/ip_ftable.h mode=0644
+file path=usr/include/inet/ip_if.h mode=0644
+file path=usr/include/inet/ip_ire.h mode=0644
+file path=usr/include/inet/ip_multi.h mode=0644
+file path=usr/include/inet/ip_netinfo.h mode=0644
+file path=usr/include/inet/ip_rts.h mode=0644
+file path=usr/include/inet/ip_stack.h mode=0644
+file path=usr/include/inet/ipclassifier.h mode=0644
+file path=usr/include/inet/ipdrop.h mode=0644
+file path=usr/include/inet/ipnet.h mode=0644
+file path=usr/include/inet/ipp_common.h mode=0644
+file path=usr/include/inet/led.h mode=0644
+file path=usr/include/inet/mi.h mode=0644
+file path=usr/include/inet/mib2.h mode=0644
+file path=usr/include/inet/nd.h mode=0644
+file path=usr/include/inet/optcom.h mode=0644
+file path=usr/include/inet/sctp_itf.h mode=0644
+file path=usr/include/inet/snmpcom.h mode=0644
+file path=usr/include/inet/tcp.h mode=0644
+file path=usr/include/inet/tcp_sack.h mode=0644
+file path=usr/include/inet/tcp_stack.h mode=0644
+file path=usr/include/inet/tcp_stats.h mode=0644
+file path=usr/include/inet/tunables.h mode=0644
+file path=usr/include/inet/wifi_ioctl.h mode=0644
 file path=usr/include/inttypes.h
 file path=usr/include/ipmp.h
 file path=usr/include/ipmp_admin.h
 file path=usr/include/ipmp_mpathd.h
 file path=usr/include/ipmp_query.h
-file path=usr/include/ipp/ipgpc/ipgpc.h
-file path=usr/include/ipp/ipp.h
-file path=usr/include/ipp/ipp_config.h
-file path=usr/include/ipp/ipp_impl.h
-file path=usr/include/ipp/ippctl.h
+file path=usr/include/ipp/ipgpc/ipgpc.h mode=0644
+file path=usr/include/ipp/ipp.h mode=0644
+file path=usr/include/ipp/ipp_config.h mode=0644
+file path=usr/include/ipp/ipp_impl.h mode=0644
+file path=usr/include/ipp/ippctl.h mode=0644
 file path=usr/include/iso/ctype_iso.h
 file path=usr/include/iso/limits_iso.h
 file path=usr/include/iso/locale_iso.h
@@ -460,23 +460,23 @@ file path=usr/include/iso/wchar_c99.h
 file path=usr/include/iso/wchar_iso.h
 file path=usr/include/iso/wctype_iso.h
 file path=usr/include/iso646.h
-file path=usr/include/kerberosv5/com_err.h
-file path=usr/include/kerberosv5/krb5.h
-file path=usr/include/kerberosv5/locate_plugin.h
+file path=usr/include/kerberosv5/com_err.h mode=0644
+file path=usr/include/kerberosv5/krb5.h mode=0644
+file path=usr/include/kerberosv5/locate_plugin.h mode=0644
 file path=usr/include/kerberosv5/mit-sipb-copyright.h
 file path=usr/include/kerberosv5/mit_copyright.h
 file path=usr/include/klpd.h
 file path=usr/include/kmfapi.h
 file path=usr/include/kmftypes.h
-file path=usr/include/kstat.h
+file path=usr/include/kstat.h mode=0644
 file path=usr/include/kvm.h
 file path=usr/include/langinfo.h
 file path=usr/include/lber.h
 file path=usr/include/ldap.h
 file path=usr/include/libcontract.h
 file path=usr/include/libctf.h
-file path=usr/include/libdevice.h
-file path=usr/include/libdevinfo.h
+file path=usr/include/libdevice.h mode=0644
+file path=usr/include/libdevinfo.h mode=0644
 file path=usr/include/libdladm.h
 file path=usr/include/libdlbridge.h
 file path=usr/include/libdlib.h
@@ -492,16 +492,16 @@ file path=usr/include/libgrubmgmt.h
 file path=usr/include/libintl.h
 file path=usr/include/libipmi.h
 file path=usr/include/libipp.h
-file path=usr/include/libnvpair.h
+file path=usr/include/libnvpair.h mode=0644
 file path=usr/include/libnwam.h
 file path=usr/include/libpolkit/libpolkit.h
-file path=usr/include/libproc.h
-file path=usr/include/librcm.h
+file path=usr/include/libproc.h mode=0644
+file path=usr/include/librcm.h mode=0644
 file path=usr/include/libscf.h
 file path=usr/include/libscf_priv.h
 file path=usr/include/libshare.h
-file path=usr/include/libsysevent.h
-file path=usr/include/libsysevent_impl.h
+file path=usr/include/libsysevent.h mode=0644
+file path=usr/include/libsysevent_impl.h mode=0644
 file path=usr/include/libtsnet.h
 $(sparc_ONLY)file path=usr/include/libv12n.h
 file path=usr/include/libw.h
@@ -514,88 +514,88 @@ file path=usr/include/link.h
 file path=usr/include/listen.h
 file path=usr/include/locale.h
 file path=usr/include/macros.h
-file path=usr/include/maillock.h
+file path=usr/include/maillock.h mode=0644
 file path=usr/include/malloc.h
 file path=usr/include/md4.h
 file path=usr/include/md5.h
 file path=usr/include/memory.h
-file path=usr/include/menu.h
+file path=usr/include/menu.h mode=0644
 file path=usr/include/mon.h
 file path=usr/include/monetary.h
 file path=usr/include/mp.h
 file path=usr/include/mqueue.h
-file path=usr/include/mtmalloc.h
+file path=usr/include/mtmalloc.h mode=0644
 file path=usr/include/nan.h
 file path=usr/include/ndbm.h
 file path=usr/include/ndpd.h
-file path=usr/include/net/af.h
-file path=usr/include/net/bridge.h
-file path=usr/include/net/if.h
-file path=usr/include/net/if_arp.h
-file path=usr/include/net/if_dl.h
-file path=usr/include/net/if_types.h
-file path=usr/include/net/pfkeyv2.h
-file path=usr/include/net/pfpolicy.h
-file path=usr/include/net/ppp-comp.h
-file path=usr/include/net/ppp_defs.h
-file path=usr/include/net/pppio.h
-file path=usr/include/net/radix.h
-file path=usr/include/net/route.h
-file path=usr/include/net/trill.h
-file path=usr/include/net/vjcompress.h
+file path=usr/include/net/af.h mode=0644
+file path=usr/include/net/bridge.h mode=0644
+file path=usr/include/net/if.h mode=0644
+file path=usr/include/net/if_arp.h mode=0644
+file path=usr/include/net/if_dl.h mode=0644
+file path=usr/include/net/if_types.h mode=0644
+file path=usr/include/net/pfkeyv2.h mode=0644
+file path=usr/include/net/pfpolicy.h mode=0644
+file path=usr/include/net/ppp-comp.h mode=0644
+file path=usr/include/net/ppp_defs.h mode=0644
+file path=usr/include/net/pppio.h mode=0644
+file path=usr/include/net/radix.h mode=0644
+file path=usr/include/net/route.h mode=0644
+file path=usr/include/net/trill.h mode=0644
+file path=usr/include/net/vjcompress.h mode=0644
 file path=usr/include/netconfig.h
 file path=usr/include/netdb.h
 file path=usr/include/netdir.h
-file path=usr/include/netinet/arp.h
-file path=usr/include/netinet/dhcp.h
-file path=usr/include/netinet/dhcp6.h
-file path=usr/include/netinet/icmp6.h
-file path=usr/include/netinet/icmp_var.h
-file path=usr/include/netinet/if_ether.h
-file path=usr/include/netinet/igmp.h
-file path=usr/include/netinet/igmp_var.h
-file path=usr/include/netinet/in.h
-file path=usr/include/netinet/in_pcb.h
-file path=usr/include/netinet/in_systm.h
-file path=usr/include/netinet/in_var.h
-file path=usr/include/netinet/ip.h
-file path=usr/include/netinet/ip6.h
-file path=usr/include/netinet/ip_icmp.h
-file path=usr/include/netinet/ip_mroute.h
-file path=usr/include/netinet/ip_var.h
-file path=usr/include/netinet/pim.h
-file path=usr/include/netinet/sctp.h
-file path=usr/include/netinet/tcp.h
-file path=usr/include/netinet/tcp_debug.h
-file path=usr/include/netinet/tcp_fsm.h
-file path=usr/include/netinet/tcp_seq.h
-file path=usr/include/netinet/tcp_timer.h
-file path=usr/include/netinet/tcp_var.h
-file path=usr/include/netinet/tcpip.h
-file path=usr/include/netinet/udp.h
-file path=usr/include/netinet/udp_var.h
+file path=usr/include/netinet/arp.h mode=0644
+file path=usr/include/netinet/dhcp.h mode=0644
+file path=usr/include/netinet/dhcp6.h mode=0644
+file path=usr/include/netinet/icmp6.h mode=0644
+file path=usr/include/netinet/icmp_var.h mode=0644
+file path=usr/include/netinet/if_ether.h mode=0644
+file path=usr/include/netinet/igmp.h mode=0644
+file path=usr/include/netinet/igmp_var.h mode=0644
+file path=usr/include/netinet/in.h mode=0644
+file path=usr/include/netinet/in_pcb.h mode=0644
+file path=usr/include/netinet/in_systm.h mode=0644
+file path=usr/include/netinet/in_var.h mode=0644
+file path=usr/include/netinet/ip.h mode=0644
+file path=usr/include/netinet/ip6.h mode=0644
+file path=usr/include/netinet/ip_icmp.h mode=0644
+file path=usr/include/netinet/ip_mroute.h mode=0644
+file path=usr/include/netinet/ip_var.h mode=0644
+file path=usr/include/netinet/pim.h mode=0644
+file path=usr/include/netinet/sctp.h mode=0644
+file path=usr/include/netinet/tcp.h mode=0644
+file path=usr/include/netinet/tcp_debug.h mode=0644
+file path=usr/include/netinet/tcp_fsm.h mode=0644
+file path=usr/include/netinet/tcp_seq.h mode=0644
+file path=usr/include/netinet/tcp_timer.h mode=0644
+file path=usr/include/netinet/tcp_var.h mode=0644
+file path=usr/include/netinet/tcpip.h mode=0644
+file path=usr/include/netinet/udp.h mode=0644
+file path=usr/include/netinet/udp_var.h mode=0644
 file path=usr/include/netinet/vrrp.h
-file path=usr/include/nfs/auth.h
-file path=usr/include/nfs/export.h
-file path=usr/include/nfs/lm.h
+file path=usr/include/nfs/auth.h mode=0644
+file path=usr/include/nfs/export.h mode=0644
+file path=usr/include/nfs/lm.h mode=0644
 file path=usr/include/nfs/mapid.h
-file path=usr/include/nfs/mount.h
-file path=usr/include/nfs/nfs.h
-file path=usr/include/nfs/nfs4.h
-file path=usr/include/nfs/nfs4_attr.h
-file path=usr/include/nfs/nfs4_clnt.h
-file path=usr/include/nfs/nfs4_db_impl.h
-file path=usr/include/nfs/nfs4_idmap_impl.h
-file path=usr/include/nfs/nfs4_kprot.h
-file path=usr/include/nfs/nfs_acl.h
-file path=usr/include/nfs/nfs_clnt.h
-file path=usr/include/nfs/nfs_cmd.h
-file path=usr/include/nfs/nfs_log.h
-file path=usr/include/nfs/nfs_sec.h
-file path=usr/include/nfs/nfsid_map.h
-file path=usr/include/nfs/nfssys.h
-file path=usr/include/nfs/rnode.h
-file path=usr/include/nfs/rnode4.h
+file path=usr/include/nfs/mount.h mode=0644
+file path=usr/include/nfs/nfs.h mode=0644
+file path=usr/include/nfs/nfs4.h mode=0644
+file path=usr/include/nfs/nfs4_attr.h mode=0644
+file path=usr/include/nfs/nfs4_clnt.h mode=0644
+file path=usr/include/nfs/nfs4_db_impl.h mode=0644
+file path=usr/include/nfs/nfs4_idmap_impl.h mode=0644
+file path=usr/include/nfs/nfs4_kprot.h mode=0644
+file path=usr/include/nfs/nfs_acl.h mode=0644
+file path=usr/include/nfs/nfs_clnt.h mode=0644
+file path=usr/include/nfs/nfs_cmd.h mode=0644
+file path=usr/include/nfs/nfs_log.h mode=0644
+file path=usr/include/nfs/nfs_sec.h mode=0644
+file path=usr/include/nfs/nfsid_map.h mode=0644
+file path=usr/include/nfs/nfssys.h mode=0644
+file path=usr/include/nfs/rnode.h mode=0644
+file path=usr/include/nfs/rnode4.h mode=0644
 file path=usr/include/nl_types.h
 file path=usr/include/nlist.h
 file path=usr/include/note.h
@@ -603,7 +603,7 @@ file path=usr/include/nss_common.h
 file path=usr/include/nss_dbdefs.h
 file path=usr/include/nss_netdir.h
 file path=usr/include/nsswitch.h
-file path=usr/include/panel.h
+file path=usr/include/panel.h mode=0644
 file path=usr/include/paths.h
 file path=usr/include/pcsample.h
 file path=usr/include/pfmt.h
@@ -627,7 +627,7 @@ file path=usr/include/protocols/timed.h
 file path=usr/include/pthread.h
 file path=usr/include/pw.h
 file path=usr/include/pwd.h
-file path=usr/include/rcm_module.h
+file path=usr/include/rcm_module.h mode=0644
 file path=usr/include/rctl.h
 file path=usr/include/re_comp.h
 file path=usr/include/regex.h
@@ -689,10 +689,10 @@ file path=usr/include/rpcsvc/nis.x
 file path=usr/include/rpcsvc/nis_db.h
 file path=usr/include/rpcsvc/nis_object.x
 file path=usr/include/rpcsvc/nislib.h
-file path=usr/include/rpcsvc/nlm_prot.h
-file path=usr/include/rpcsvc/nlm_prot.x
-file path=usr/include/rpcsvc/nsm_addr.h
-file path=usr/include/rpcsvc/nsm_addr.x
+file path=usr/include/rpcsvc/nlm_prot.h mode=0644
+file path=usr/include/rpcsvc/nlm_prot.x mode=0644
+file path=usr/include/rpcsvc/nsm_addr.h mode=0644
+file path=usr/include/rpcsvc/nsm_addr.x mode=0644
 file path=usr/include/rpcsvc/rex.h
 file path=usr/include/rpcsvc/rex.x
 file path=usr/include/rpcsvc/rpc_sztypes.h
@@ -705,8 +705,8 @@ file path=usr/include/rpcsvc/rusers.h
 file path=usr/include/rpcsvc/rusers.x
 file path=usr/include/rpcsvc/rwall.h
 file path=usr/include/rpcsvc/rwall.x
-file path=usr/include/rpcsvc/sm_inter.h
-file path=usr/include/rpcsvc/sm_inter.x
+file path=usr/include/rpcsvc/sm_inter.h mode=0644
+file path=usr/include/rpcsvc/sm_inter.x mode=0644
 file path=usr/include/rpcsvc/spray.h
 file path=usr/include/rpcsvc/spray.x
 file path=usr/include/rpcsvc/ufs_prot.h
@@ -716,7 +716,7 @@ file path=usr/include/rpcsvc/yp_prot.h
 file path=usr/include/rpcsvc/ypclnt.h
 file path=usr/include/rpcsvc/yppasswd.h
 file path=usr/include/rpcsvc/ypupd.h
-file path=usr/include/rsmapi.h
+file path=usr/include/rsmapi.h mode=0644
 file path=usr/include/rtld_db.h
 file path=usr/include/sac.h
 file path=usr/include/sasl/prop.h
@@ -737,7 +737,7 @@ file path=usr/include/scsi/plugins/ses/vendor/sun.h
 file path=usr/include/sdp.h
 file path=usr/include/search.h
 file path=usr/include/secdb.h
-file path=usr/include/security/auditd.h
+file path=usr/include/security/auditd.h mode=0644
 file path=usr/include/security/cryptoki.h
 file path=usr/include/security/pam_appl.h
 file path=usr/include/security/pam_modules.h
@@ -750,9 +750,9 @@ file path=usr/include/sgtty.h
 file path=usr/include/sha1.h
 file path=usr/include/sha2.h
 file path=usr/include/shadow.h
-file path=usr/include/sharefs/share.h
-file path=usr/include/sharefs/sharefs.h
-file path=usr/include/sharefs/sharetab.h
+file path=usr/include/sharefs/share.h mode=0644
+file path=usr/include/sharefs/sharefs.h mode=0644
+file path=usr/include/sharefs/sharetab.h mode=0644
 file path=usr/include/siginfo.h
 file path=usr/include/signal.h
 file path=usr/include/sip.h
@@ -786,9 +786,9 @@ file path=usr/include/sys/aio.h
 file path=usr/include/sys/aio_impl.h
 file path=usr/include/sys/aio_req.h
 file path=usr/include/sys/aiocb.h
-file path=usr/include/sys/archsystm.h
+file path=usr/include/sys/archsystm.h mode=0644
 file path=usr/include/sys/ascii.h
-file path=usr/include/sys/asm_linkage.h
+file path=usr/include/sys/asm_linkage.h mode=0644
 file path=usr/include/sys/asynch.h
 file path=usr/include/sys/atomic.h
 file path=usr/include/sys/attr.h
@@ -806,10 +806,10 @@ file path=usr/include/sys/bl.h
 file path=usr/include/sys/blkdev.h
 file path=usr/include/sys/bofi.h
 file path=usr/include/sys/bofi_impl.h
-file path=usr/include/sys/bootconf.h
-$(i386_ONLY)file path=usr/include/sys/bootregs.h
+file path=usr/include/sys/bootconf.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/bootregs.h mode=0644
 file path=usr/include/sys/bootstat.h
-$(i386_ONLY)file path=usr/include/sys/bootsvcs.h
+$(i386_ONLY)file path=usr/include/sys/bootsvcs.h mode=0644
 file path=usr/include/sys/bpp_io.h
 file path=usr/include/sys/brand.h
 file path=usr/include/sys/buf.h
@@ -841,14 +841,14 @@ file path=usr/include/sys/contract/device_impl.h
 file path=usr/include/sys/contract/process.h
 file path=usr/include/sys/contract/process_impl.h
 file path=usr/include/sys/contract_impl.h
-$(i386_ONLY)file path=usr/include/sys/controlregs.h
+$(i386_ONLY)file path=usr/include/sys/controlregs.h mode=0644
 file path=usr/include/sys/copyops.h
 file path=usr/include/sys/core.h
 file path=usr/include/sys/corectl.h
 file path=usr/include/sys/cpc_impl.h
 file path=usr/include/sys/cpc_pcbe.h
 file path=usr/include/sys/cpr.h
-file path=usr/include/sys/cpu.h
+file path=usr/include/sys/cpu.h mode=0644
 file path=usr/include/sys/cpucaps.h
 file path=usr/include/sys/cpucaps_impl.h
 file path=usr/include/sys/cpupart.h
@@ -882,7 +882,7 @@ file path=usr/include/sys/ddi_impldefs.h
 file path=usr/include/sys/ddi_implfuncs.h
 file path=usr/include/sys/ddi_intr.h
 file path=usr/include/sys/ddi_intr_impl.h
-file path=usr/include/sys/ddi_isa.h
+file path=usr/include/sys/ddi_isa.h mode=0644
 file path=usr/include/sys/ddi_obsolete.h
 file path=usr/include/sys/ddi_periodic.h
 file path=usr/include/sys/ddidevmap.h
@@ -893,7 +893,7 @@ file path=usr/include/sys/ddimapreq.h
 file path=usr/include/sys/ddipropdefs.h
 file path=usr/include/sys/dditypes.h
 file path=usr/include/sys/debug.h
-$(i386_ONLY)file path=usr/include/sys/debugreg.h
+$(i386_ONLY)file path=usr/include/sys/debugreg.h mode=0644
 file path=usr/include/sys/des.h
 file path=usr/include/sys/devcache.h
 file path=usr/include/sys/devcache_impl.h
@@ -989,12 +989,12 @@ file path=usr/include/sys/fm/io/sun4upci.h
 file path=usr/include/sys/fm/protocol.h
 file path=usr/include/sys/fm/util.h
 file path=usr/include/sys/fork.h
-$(i386_ONLY)file path=usr/include/sys/fp.h
+$(i386_ONLY)file path=usr/include/sys/fp.h mode=0644
 $(sparc_ONLY)file path=usr/include/sys/fpu/fpu_simulator.h
 $(sparc_ONLY)file path=usr/include/sys/fpu/fpusystm.h
 $(sparc_ONLY)file path=usr/include/sys/fpu/globals.h
 $(sparc_ONLY)file path=usr/include/sys/fpu/ieee.h
-file path=usr/include/sys/frame.h
+file path=usr/include/sys/frame.h mode=0644
 file path=usr/include/sys/fs/autofs.h
 file path=usr/include/sys/fs/decomp.h
 file path=usr/include/sys/fs/dv_node.h
@@ -1035,8 +1035,8 @@ file path=usr/include/sys/fs/ufs_quota.h
 file path=usr/include/sys/fs/ufs_snap.h
 file path=usr/include/sys/fs/ufs_trans.h
 file path=usr/include/sys/fs/zfs.h
-file path=usr/include/sys/fs_reparse.h
-file path=usr/include/sys/fs_subr.h
+file path=usr/include/sys/fs_reparse.h mode=0644
+file path=usr/include/sys/fs_subr.h mode=0644
 file path=usr/include/sys/fsid.h
 $(sparc_ONLY)file path=usr/include/sys/fsr.h
 file path=usr/include/sys/fss.h
@@ -1060,7 +1060,7 @@ file path=usr/include/sys/hotplug/hpctrl.h
 file path=usr/include/sys/hotplug/pci/pcicfg.h
 file path=usr/include/sys/hotplug/pci/pcihp.h
 file path=usr/include/sys/hwconf.h
-$(i386_ONLY)file path=usr/include/sys/hypervisor.h
+$(i386_ONLY)file path=usr/include/sys/hypervisor.h mode=0644
 $(i386_ONLY)file path=usr/include/sys/i8272A.h
 file path=usr/include/sys/ia.h
 file path=usr/include/sys/iapriocntl.h
@@ -1114,7 +1114,7 @@ file path=usr/include/sys/ibpart.h
 file path=usr/include/sys/id32.h
 file path=usr/include/sys/id_space.h
 file path=usr/include/sys/idmap.h
-file path=usr/include/sys/inline.h
+file path=usr/include/sys/inline.h mode=0644
 file path=usr/include/sys/instance.h
 file path=usr/include/sys/int_const.h
 file path=usr/include/sys/int_fmtio.h
@@ -1123,7 +1123,7 @@ file path=usr/include/sys/int_types.h
 file path=usr/include/sys/inttypes.h
 file path=usr/include/sys/ioccom.h
 file path=usr/include/sys/ioctl.h
-$(i386_ONLY)file path=usr/include/sys/iommulib.h
+$(i386_ONLY)file path=usr/include/sys/iommulib.h mode=0644
 file path=usr/include/sys/ipc.h
 file path=usr/include/sys/ipc_impl.h
 file path=usr/include/sys/ipc_rctl.h
@@ -1137,8 +1137,8 @@ file path=usr/include/sys/kcpc.h
 file path=usr/include/sys/kd.h
 file path=usr/include/sys/kdi.h
 file path=usr/include/sys/kdi_impl.h
-file path=usr/include/sys/kdi_machimpl.h
-$(i386_ONLY)file path=usr/include/sys/kdi_regs.h
+file path=usr/include/sys/kdi_machimpl.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/kdi_regs.h mode=0644
 file path=usr/include/sys/kiconv.h
 file path=usr/include/sys/kidmap.h
 file path=usr/include/sys/klpd.h
@@ -1152,7 +1152,7 @@ file path=usr/include/sys/kstat.h
 file path=usr/include/sys/kstr.h
 file path=usr/include/sys/ksyms.h
 file path=usr/include/sys/ksynch.h
-file path=usr/include/sys/lc_core.h
+file path=usr/include/sys/lc_core.h mode=0644
 file path=usr/include/sys/ldterm.h
 file path=usr/include/sys/lgrp.h
 file path=usr/include/sys/lgrp_user.h
@@ -1162,7 +1162,7 @@ file path=usr/include/sys/list.h
 file path=usr/include/sys/list_impl.h
 file path=usr/include/sys/llc1.h
 file path=usr/include/sys/loadavg.h
-file path=usr/include/sys/localedef.h
+file path=usr/include/sys/localedef.h mode=0644
 file path=usr/include/sys/lock.h
 file path=usr/include/sys/lockfs.h
 file path=usr/include/sys/lofi.h
@@ -1176,16 +1176,16 @@ file path=usr/include/sys/mac_ether.h
 file path=usr/include/sys/mac_flow.h
 file path=usr/include/sys/mac_provider.h
 file path=usr/include/sys/machelf.h
-file path=usr/include/sys/machlock.h
-file path=usr/include/sys/machsig.h
-file path=usr/include/sys/machtypes.h
+file path=usr/include/sys/machlock.h mode=0644
+file path=usr/include/sys/machsig.h mode=0644
+file path=usr/include/sys/machtypes.h mode=0644
 file path=usr/include/sys/map.h
-$(i386_ONLY)file path=usr/include/sys/mc.h
-$(i386_ONLY)file path=usr/include/sys/mc_amd.h
-$(i386_ONLY)file path=usr/include/sys/mc_intel.h
-$(i386_ONLY)file path=usr/include/sys/mca_amd.h
-$(i386_ONLY)file path=usr/include/sys/mca_x86.h
-file path=usr/include/sys/mcontext.h
+$(i386_ONLY)file path=usr/include/sys/mc.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/mc_amd.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/mc_intel.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/mca_amd.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/mca_x86.h mode=0644
+file path=usr/include/sys/mcontext.h mode=0644
 file path=usr/include/sys/md4.h
 file path=usr/include/sys/md5.h
 file path=usr/include/sys/md5_consts.h
@@ -1217,7 +1217,7 @@ file path=usr/include/sys/msreg.h
 file path=usr/include/sys/mtio.h
 file path=usr/include/sys/multidata.h
 file path=usr/include/sys/mutex.h
-$(i386_ONLY)file path=usr/include/sys/mutex_impl.h
+$(i386_ONLY)file path=usr/include/sys/mutex_impl.h mode=0644
 file path=usr/include/sys/nbmlock.h
 file path=usr/include/sys/ndi_impldefs.h
 file path=usr/include/sys/ndifm.h
@@ -1231,8 +1231,8 @@ file path=usr/include/sys/nvpair.h
 file path=usr/include/sys/nvpair_impl.h
 file path=usr/include/sys/objfs.h
 file path=usr/include/sys/objfs_impl.h
-file path=usr/include/sys/obpdefs.h
-file path=usr/include/sys/old_procfs.h
+file path=usr/include/sys/obpdefs.h mode=0644
+file path=usr/include/sys/old_procfs.h mode=0644
 file path=usr/include/sys/open.h
 file path=usr/include/sys/openpromio.h
 file path=usr/include/sys/panic.h
@@ -1241,7 +1241,7 @@ file path=usr/include/sys/pathconf.h
 file path=usr/include/sys/pathname.h
 file path=usr/include/sys/pattr.h
 file path=usr/include/sys/pbio.h
-file path=usr/include/sys/pcb.h
+file path=usr/include/sys/pcb.h mode=0644
 file path=usr/include/sys/pci.h
 file path=usr/include/sys/pcie.h
 file path=usr/include/sys/pctypes.h
@@ -1253,7 +1253,7 @@ $(i386_ONLY)file path=usr/include/sys/pic.h
 $(i386_ONLY)file path=usr/include/sys/pit.h
 file path=usr/include/sys/pkp_hash.h
 file path=usr/include/sys/pm.h
-$(i386_ONLY)file path=usr/include/sys/pmem.h
+$(i386_ONLY)file path=usr/include/sys/pmem.h mode=0644
 file path=usr/include/sys/policy.h
 file path=usr/include/sys/poll.h
 file path=usr/include/sys/poll_impl.h
@@ -1269,26 +1269,26 @@ file path=usr/include/sys/priv.h
 file path=usr/include/sys/priv_const.h
 file path=usr/include/sys/priv_impl.h
 file path=usr/include/sys/priv_names.h
-$(i386_ONLY)file path=usr/include/sys/privmregs.h
-$(i386_ONLY)file path=usr/include/sys/privregs.h
+$(i386_ONLY)file path=usr/include/sys/privmregs.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/privregs.h mode=0644
 file path=usr/include/sys/prnio.h
 file path=usr/include/sys/proc.h
-file path=usr/include/sys/proc/prdata.h
+file path=usr/include/sys/proc/prdata.h mode=0644
 file path=usr/include/sys/processor.h
 file path=usr/include/sys/procfs.h
-file path=usr/include/sys/procfs_isa.h
+file path=usr/include/sys/procfs_isa.h mode=0644
 file path=usr/include/sys/procset.h
 file path=usr/include/sys/project.h
-$(i386_ONLY)file path=usr/include/sys/prom_emul.h
-$(i386_ONLY)file path=usr/include/sys/prom_isa.h
-$(i386_ONLY)file path=usr/include/sys/prom_plat.h
-file path=usr/include/sys/promif.h
-file path=usr/include/sys/promimpl.h
+$(i386_ONLY)file path=usr/include/sys/prom_emul.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/prom_isa.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/prom_plat.h mode=0644
+file path=usr/include/sys/promif.h mode=0644
+file path=usr/include/sys/promimpl.h mode=0644
 file path=usr/include/sys/protosw.h
 file path=usr/include/sys/prsystm.h
 file path=usr/include/sys/pset.h
-file path=usr/include/sys/psw.h
-$(i386_ONLY)file path=usr/include/sys/pte.h
+file path=usr/include/sys/psw.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/pte.h mode=0644
 file path=usr/include/sys/ptem.h
 file path=usr/include/sys/ptms.h
 file path=usr/include/sys/ptyvar.h
@@ -1302,15 +1302,15 @@ file path=usr/include/sys/rds.h
 file path=usr/include/sys/reboot.h
 file path=usr/include/sys/refstr.h
 file path=usr/include/sys/refstr_impl.h
-file path=usr/include/sys/reg.h
-file path=usr/include/sys/regset.h
+file path=usr/include/sys/reg.h mode=0644
+file path=usr/include/sys/regset.h mode=0644
 file path=usr/include/sys/resource.h
 file path=usr/include/sys/rlioctl.h
 file path=usr/include/sys/rsm/rsm.h
 file path=usr/include/sys/rsm/rsm_common.h
 file path=usr/include/sys/rsm/rsmapi_common.h
 file path=usr/include/sys/rsm/rsmka_path_int.h
-file path=usr/include/sys/rsm/rsmndi.h
+file path=usr/include/sys/rsm/rsmndi.h mode=0644
 file path=usr/include/sys/rsm/rsmpi.h
 file path=usr/include/sys/rsm/rsmpi_driver.h
 file path=usr/include/sys/rt.h
@@ -1370,8 +1370,8 @@ file path=usr/include/sys/scsi/targets/smp.h
 $(sparc_ONLY)file path=usr/include/sys/scsi/targets/ssddef.h
 file path=usr/include/sys/scsi/targets/stdef.h
 file path=usr/include/sys/secflags.h
-$(i386_ONLY)file path=usr/include/sys/segment.h
-$(i386_ONLY)file path=usr/include/sys/segments.h
+$(i386_ONLY)file path=usr/include/sys/segment.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/segments.h mode=0644
 file path=usr/include/sys/select.h
 file path=usr/include/sys/sem.h
 file path=usr/include/sys/sem_impl.h
@@ -1396,7 +1396,7 @@ file path=usr/include/sys/skein.h
 file path=usr/include/sys/sleepq.h
 file path=usr/include/sys/smbios.h
 file path=usr/include/sys/smbios_impl.h
-file path=usr/include/sys/smedia.h
+file path=usr/include/sys/smedia.h mode=0644
 file path=usr/include/sys/sobject.h
 $(sparc_ONLY)file path=usr/include/sys/socal_cq_defs.h
 $(sparc_ONLY)file path=usr/include/sys/socalio.h
@@ -1408,12 +1408,12 @@ file path=usr/include/sys/socket_impl.h
 file path=usr/include/sys/socket_proto.h
 file path=usr/include/sys/socketvar.h
 file path=usr/include/sys/sockio.h
-file path=usr/include/sys/spl.h
+file path=usr/include/sys/spl.h mode=0644
 file path=usr/include/sys/squeue.h
 file path=usr/include/sys/squeue_impl.h
-file path=usr/include/sys/stack.h
+file path=usr/include/sys/stack.h mode=0644
 file path=usr/include/sys/stat.h
-file path=usr/include/sys/stat_impl.h
+file path=usr/include/sys/stat_impl.h mode=0644
 file path=usr/include/sys/statfs.h
 file path=usr/include/sys/statvfs.h
 file path=usr/include/sys/stdbool.h
@@ -1442,7 +1442,7 @@ file path=usr/include/sys/synch.h
 file path=usr/include/sys/syscall.h
 file path=usr/include/sys/sysconf.h
 file path=usr/include/sys/sysconfig.h
-file path=usr/include/sys/sysconfig_impl.h
+file path=usr/include/sys/sysconfig_impl.h mode=0644
 file path=usr/include/sys/sysdc.h
 file path=usr/include/sys/sysdc_impl.h
 file path=usr/include/sys/sysevent.h
@@ -1456,7 +1456,7 @@ file path=usr/include/sys/sysevent/ipmp.h
 file path=usr/include/sys/sysevent/pwrctl.h
 file path=usr/include/sys/sysevent/vrrp.h
 file path=usr/include/sys/sysevent_impl.h
-$(i386_ONLY)file path=usr/include/sys/sysi86.h
+$(i386_ONLY)file path=usr/include/sys/sysi86.h mode=0644
 file path=usr/include/sys/sysinfo.h
 file path=usr/include/sys/syslog.h
 file path=usr/include/sys/sysmacros.h
@@ -1490,8 +1490,8 @@ file path=usr/include/sys/tiuser.h
 file path=usr/include/sys/tl.h
 file path=usr/include/sys/todio.h
 file path=usr/include/sys/tpicommon.h
-file path=usr/include/sys/trap.h
-$(i386_ONLY)file path=usr/include/sys/traptrace.h
+file path=usr/include/sys/trap.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/traptrace.h mode=0644
 file path=usr/include/sys/ts.h
 file path=usr/include/sys/tsol/label.h
 file path=usr/include/sys/tsol/label_macro.h
@@ -1499,7 +1499,7 @@ file path=usr/include/sys/tsol/priv.h
 file path=usr/include/sys/tsol/tndb.h
 file path=usr/include/sys/tsol/tsyscall.h
 file path=usr/include/sys/tspriocntl.h
-$(i386_ONLY)file path=usr/include/sys/tss.h
+$(i386_ONLY)file path=usr/include/sys/tss.h mode=0644
 file path=usr/include/sys/ttcompat.h
 file path=usr/include/sys/ttold.h
 file path=usr/include/sys/tty.h
@@ -1515,7 +1515,7 @@ file path=usr/include/sys/tzfile.h
 file path=usr/include/sys/u8_textprep.h
 file path=usr/include/sys/uadmin.h
 $(i386_ONLY)file path=usr/include/sys/ucode.h
-file path=usr/include/sys/ucontext.h
+file path=usr/include/sys/ucontext.h mode=0644
 file path=usr/include/sys/uio.h
 file path=usr/include/sys/ulimit.h
 file path=usr/include/sys/un.h
@@ -1523,7 +1523,7 @@ file path=usr/include/sys/unistd.h
 file path=usr/include/sys/user.h
 file path=usr/include/sys/ustat.h
 file path=usr/include/sys/utime.h
-file path=usr/include/sys/utrap.h
+file path=usr/include/sys/utrap.h mode=0644
 file path=usr/include/sys/utsname.h
 file path=usr/include/sys/utssys.h
 file path=usr/include/sys/uuid.h
@@ -1541,7 +1541,7 @@ file path=usr/include/sys/vm_usage.h
 file path=usr/include/sys/vmem.h
 file path=usr/include/sys/vmem_impl.h
 file path=usr/include/sys/vmem_impl_user.h
-file path=usr/include/sys/vmparam.h
+file path=usr/include/sys/vmparam.h mode=0644
 file path=usr/include/sys/vmsystm.h
 file path=usr/include/sys/vnode.h
 file path=usr/include/sys/vt.h
@@ -1556,8 +1556,8 @@ file path=usr/include/sys/vuid_wheel.h
 file path=usr/include/sys/wait.h
 file path=usr/include/sys/waitq.h
 file path=usr/include/sys/watchpoint.h
-$(i386_ONLY)file path=usr/include/sys/x86_archext.h
-$(i386_ONLY)file path=usr/include/sys/xen_errno.h
+$(i386_ONLY)file path=usr/include/sys/x86_archext.h mode=0644
+$(i386_ONLY)file path=usr/include/sys/xen_errno.h mode=0644
 file path=usr/include/sys/xti_inet.h
 file path=usr/include/sys/xti_osi.h
 file path=usr/include/sys/xti_xtiopt.h
@@ -1591,7 +1591,7 @@ file path=usr/include/unistd.h
 file path=usr/include/user_attr.h
 file path=usr/include/userdefs.h
 file path=usr/include/ustat.h
-file path=usr/include/utility.h
+file path=usr/include/utility.h mode=0644
 file path=usr/include/utime.h
 file path=usr/include/utmp.h
 file path=usr/include/utmpx.h
@@ -1925,12 +1925,12 @@ legacy pkg=SUNWhea \
     desc="SunOS C/C++ header files for general development of software" \
     name="SunOS Header Files"
 license cr_Sun license=cr_Sun
+license include/sys/THIRDPARTYLICENSE.firmload \
+    license=include/sys/THIRDPARTYLICENSE.firmload
 license lic_CDDL license=lic_CDDL
 license license_in_headers license=license_in_headers
 license usr/src/lib/pkcs11/include/THIRDPARTYLICENSE \
     license=usr/src/lib/pkcs11/include/THIRDPARTYLICENSE
-license usr/src/uts/common/sys/THIRDPARTYLICENSE.firmload \
-    license=usr/src/uts/common/sys/THIRDPARTYLICENSE.firmload
 link path=usr/include/iso/assert_iso.h target=../assert.h
 link path=usr/include/iso/errno_iso.h target=../errno.h
 link path=usr/include/iso/float_iso.h target=../float.h

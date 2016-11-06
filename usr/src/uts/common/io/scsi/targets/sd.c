@@ -98,7 +98,7 @@
  * INTERCONNECT_1394 and INTERCONNECT_USB types are not supported and
  * will result in the driver assuming parallel SCSI behaviors.)
  *
- * (see common/sys/scsi/impl/services.h)
+ * (see include/sys/scsi/impl/services.h)
  *
  * Note: For ssd semantics, don't use INTERCONNECT_FABRIC as the default
  * since some FC HBAs may already support that, and there is some code in

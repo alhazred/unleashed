@@ -39,6 +39,7 @@ LDLIBS +=	-lmd -lelf -lkmf -lcryptoutil -lc
 
 CFLAGS +=	$(CCMT)
 CPPFLAGS +=	-D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
+CPPFLAGS += -I$(CODEMGR_WS)/include
 
 .KEEP_STATE:
 

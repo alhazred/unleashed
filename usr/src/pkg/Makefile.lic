@@ -46,6 +46,10 @@ $(LICROOT)/kernel/%: $(CODEMGR_WS)/kernel/%
 	$(PKGDEBUG)if [ ! -d $(@D) ]; then mkdir -p $(@D); fi
 	$(PKGDEBUG)$(INS.file)
 
+$(LICROOT)/include/%: $(CODEMGR_WS)/include/%
+	$(PKGDEBUG)if [ ! -d $(@D) ]; then mkdir -p $(@D); fi
+	$(PKGDEBUG)$(INS.file)
+
 #
 # A build without closed source relies on closed-bins extraction to stage
 # the license file and does nothing here.

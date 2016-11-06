@@ -58,7 +58,7 @@
 #include <dirent.h>
 #include <limits.h>
 #include <sys/mkdev.h>
-#include "../../../../uts/common/sys/hotplug/pci/pcie_hp.h"
+#include "../../../../../../include/sys/hotplug/pci/pcie_hp.h"
 #include "../../../../common/pci/pci_strings.h"
 #include <libhotplug.h>
 

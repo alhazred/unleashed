@@ -38,6 +38,7 @@ OBJS =	$(LOCAL_OBJS) $(COMMON_OBJS)
 SRCS = $(LOCAL_SRCS) $(COMMON_SRCS)
 
 CPPFLAGS += -I$(COMMONBASE)/cmdparse
+CPPFLAGS += -I$(CODEMGR_WS)/include
 
 MANIFEST    = iscsi-target.xml
 SVCMETHOD   = iscsi-target

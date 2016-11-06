@@ -1,0 +1,45 @@
+INCDIR=	/usr/include/sys/fs
+INCS=	autofs.h \
+	decomp.h \
+	dv_node.h \
+	fifonode.h \
+	hsfs_isospec.h \
+	hsfs_node.h \
+	hsfs_rrip.h \
+	hsfs_spec.h \
+	hsfs_susp.h \
+	lofs_info.h \
+	lofs_node.h \
+	mntdata.h \
+	namenode.h \
+	pc_dir.h \
+	pc_fs.h \
+	pc_label.h \
+	pc_node.h \
+	pxfs_ki.h \
+	sdev_impl.h \
+	snode.h \
+	swapnode.h \
+	tmp.h \
+	tmpnode.h \
+	udf_inode.h \
+	udf_volume.h \
+	ufs_acl.h \
+	ufs_bio.h \
+	ufs_filio.h \
+	ufs_fs.h \
+	ufs_fsdir.h \
+	ufs_inode.h \
+	ufs_lockfs.h \
+	ufs_log.h \
+	ufs_mount.h \
+	ufs_panic.h \
+	ufs_prot.h \
+	ufs_quota.h \
+	ufs_snap.h \
+	ufs_trans.h \
+	zfs.h \
+	zut.h
+
+.include <prog.mk>
+.include <inc.mk>

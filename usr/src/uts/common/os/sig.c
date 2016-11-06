@@ -2231,7 +2231,7 @@ sigcheck(proc_t *p, kthread_t *t)
 #error "fix me: CANTMASK1 and CANTMASK2 are not zero"
 #endif
 
-/* see uts/common/sys/signal.h for why this must be true */
+/* see include/sys/signal.h for why this must be true */
 #if ((MAXSIG > (2 * 32)) && (MAXSIG <= (3 * 32)))
 	return (((p->p_sig.__sigbits[0] | t->t_sig.__sigbits[0]) &
 	    ~t->t_hold.__sigbits[0]) |

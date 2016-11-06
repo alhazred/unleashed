@@ -46,6 +46,7 @@ C99MODE= $(C99_ENABLE)
 
 LDLIBS += -lsmbfs
 
+CPPFLAGS += -I$(CODEMGR_WS)/include
 CPPFLAGS += -I$(SRC)/uts/common -I$(SRC)/lib/libsmbfs 
 
 # uncomment these for dbx debugging

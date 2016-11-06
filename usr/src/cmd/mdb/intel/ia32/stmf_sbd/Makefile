@@ -28,13 +28,15 @@ MDBTGT = kvm
 MODSRCS = stmf_sbd.c
 
 UTSBASE = ../../../../../uts
-COMSTARBASE = $(UTSBASE)/../../../kernel/comstar
+COMSTARBASE = $(CODEMGR_WS)/kernel/comstar
 STMFSBDBASE = $(COMSTARBASE)/lu/stmf_sbd
 
 include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.module
 
-CPPFLAGS += -I$(UTSBASE)/common -I$(UTSBASE)/common/sys -I$(STMFSBDBASE)
+CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(CODEMGR_WS)/include/sys
+CPPFLAGS += -I$(STMFSBDBASE)
 
 C99MODE=	$(C99_ENABLE)

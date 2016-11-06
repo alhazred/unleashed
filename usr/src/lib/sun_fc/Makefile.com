@@ -129,6 +129,7 @@ LIBS =		$(DYNLIBCCC)
 SRCDIR=		../common
 
 INCS +=		-I$(SRCDIR)
+INCS += -I$(CODEMGR_WS)/include
 INCS +=		-I$(SRC)/lib/hbaapi/common
 
 CCFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS

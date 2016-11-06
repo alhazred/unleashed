@@ -67,7 +67,7 @@ enum Ports { SOURCE, DESTINATION };
 #define	FD_TO_SOCKET(v)	((v) - SOCKETTYPE)
 
 /*
- * Message block descriptor copied from usr/src/uts/common/sys/stream.h.
+ * Message block descriptor copied from include/sys/stream.h.
  * We need to do that to simplify the porting of TCP code from core
  * kernel to inetboot.  Note that fields which are not used by TCP
  * code are removed.

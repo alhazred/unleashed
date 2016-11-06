@@ -35,4 +35,4 @@ include ../../Makefile.ia32
 include ../../../Makefile.module
 
 # Needed to #include <sys/1394/s1394.h>
-CPPFLAGS += -I$(SRC)/uts/common
+CPPFLAGS += -I$(CODEMGR_WS)/include

@@ -43,7 +43,7 @@ dir path=usr/lib/fwflash/identify
 dir path=usr/lib/fwflash/verify
 dir path=usr/sbin
 dir path=usr/share/man/man1m
-file path=usr/include/fwflash/fwflash.h
+file path=usr/include/fwflash/fwflash.h mode=0644
 file path=usr/lib/fwflash/identify/hermon.so
 file path=usr/lib/fwflash/identify/sd.so
 file path=usr/lib/fwflash/identify/ses.so

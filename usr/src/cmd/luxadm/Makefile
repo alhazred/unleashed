@@ -50,6 +50,7 @@ LDLIBS += -ldevice
 LDLIBS += -lHBAAPI
 
 INCS += -I$(SRC)/lib/sun_fc/common
+INCS += -I$(CODEMGR_WS)/include
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 -D_REENTRANT $(INCS)
 

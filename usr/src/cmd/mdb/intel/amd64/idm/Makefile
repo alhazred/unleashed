@@ -30,7 +30,6 @@ MODSRCS = idm.c
 
 ISCSITBASE = ../../../../../../../kernel/comstar/port/iscsit
 ISCSIBASE = ../../../../../uts/common/io/scsi/adapters/iscsi
-ISERBASE = ../../../../../uts/common
 
 include ../../../../Makefile.cmd
 include ../../../../Makefile.cmd.64
@@ -39,6 +38,6 @@ include ../../../Makefile.module
 
 CPPFLAGS += -I$(ISCSITBASE)
 CPPFLAGS += -I$(ISCSIBASE)
-CPPFLAGS += -I$(ISERBASE)
+CPPFLAGS += -I$(CODEMGR_WS)/include
 
 CERRWARN += -Wno-uninitialized

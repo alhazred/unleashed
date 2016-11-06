@@ -40,7 +40,7 @@ HDRDIRS= \
 	-I../../common \
 	-I$(SRC) \
 	-I/usr/include \
-	-I$(SRC)/uts/common \
+	-I$(CODEMGR_WS)/include \
 	-I$(SRC)/common/ctf \
 	-I$(NATIVE_ADJUNCT)/include
 

@@ -36,7 +36,7 @@ find_files "s.*.h" \
 	usr/src/uts/common/fs \
 	usr/src/uts/common/netinet \
 	usr/src/uts/common/rpc \
-	usr/src/uts/common/sys \
+	include/sys \
 	usr/src/uts/common/vm \
 	usr/src/uts/sparc/sys \
 	usr/src/uts/sun/sys

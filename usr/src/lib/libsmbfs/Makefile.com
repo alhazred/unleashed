@@ -103,6 +103,7 @@ CERRWARN +=	-Wno-unused-variable
 CPPFLAGS += -D__EXTENSIONS__ -D_REENTRANT -DMIA \
 	-I$(SRCDIR) -I.. -I../netsmb \
 	-I$(SRC)/uts/common \
+	-I$(CODEMGR_WS)/include \
 	-I$(SRC)/common/smbclnt
 
 # Debugging

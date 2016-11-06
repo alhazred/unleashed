@@ -40,6 +40,9 @@ $(ROOTFS_LIBDIR)/$(DYNLIBCCC) :=	FILEMODE= 755
 $(ROOTLIBDIR64)/$(DYNLIB) :=	FILEMODE= 755
 $(ROOTLIBDIR64)/$(DYNLIBCCC) :=	FILEMODE= 755
 
+# conditional assignment of default permissions for the installed headers
+$(ROOTHDRS) := FILEMODE = 444
+
 # install rules
 $(ROOTHDRDIR)/%: $(HDRDIR)/%
 	$(INS.file)

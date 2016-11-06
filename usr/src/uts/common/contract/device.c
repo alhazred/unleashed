@@ -189,7 +189,7 @@
  * 	In addition, there are other device identifiers such the devinfo node,
  * 	dev_t and spec_type of the minor node. There are also a few fields that
  * 	are used during negotiation to maintain state. See
- *		uts/common/sys/contract/device_impl.h
+ *		include/sys/contract/device_impl.h
  * 	for details.
  * 	The ctd structure represents the device private part of a contract of
  * 	type "device"

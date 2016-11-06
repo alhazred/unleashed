@@ -27,7 +27,7 @@
 /*
  * Dummy module to load usba module on behalf of legacy drivers.
  *
- * Please see the on81-patch gate usr/src/uts/common/sys/usba10/usba10_usbai.h
+ * Please see the on81-patch gate include/sys/usba10/usba10_usbai.h
  * header file for descriptions and comments for these functions.
  */
 

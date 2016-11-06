@@ -1,3 +1,4 @@
+autofs_prot.h
 bootparam_prot.h
 mount.h
 nfs4_prot.h

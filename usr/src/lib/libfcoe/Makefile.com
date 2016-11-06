@@ -35,7 +35,7 @@ LIBS=	$(DYNLIB)
 SRCDIR =	../common
 
 INCS +=		-I$(SRCDIR)
-INCS +=		-I$(SRC)/uts/common/sys/fcoe
+INCS +=		-I$(CODEMGR_WS)/include/sys/fcoe
 
 LDLIBS +=	-lc -ldladm -lscf
 C99MODE=	$(C99_ENABLE)

@@ -52,10 +52,10 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #	header file directories
 #
 INC_PATH	+= -I$(ROOT)/usr/include
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel/ulp
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel/fca/qlc
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel/impl
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel/ulp
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel/fca/qlc
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel/impl
 
 LDFLAGS		+= -dy -Nmisc/fctl
 

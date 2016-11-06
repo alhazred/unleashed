@@ -46,7 +46,7 @@ LDLIBS += -lficl-sys -lpkcs11 -lcryptoutil -lnvpair -lgen -ladm -lefi
 LDLIBS += -lz -lbe -lzfs $(LDLIBS_$(MACH))
 
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
-CPPFLAGS +=	-I$(SRC)/uts/common -I$(SRC)/common -I$(SRC)/common/ficl
+CPPFLAGS +=	-I$(CODEMGR_WS)/include -I$(SRC)/common -I$(SRC)/common/ficl
 
 C99MODE=	$(C99_ENABLE)
 

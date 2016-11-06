@@ -57,6 +57,9 @@ ROOTHDRDIR=	$(ROOT)/usr/include
 ROOTHDRS=	$(HDRS:%=$(ROOTHDRDIR)/%)
 CHECKHDRS=	$(HDRS:%.h=%.check)
 
+HDRTGTS = $(HDRS:%=$(ROOTHDRDIR)/%)
+$(HDRTGTS) := FILEMODE = 444
+
 # install rule for install_h target
 $(ROOTHDRDIR)/%: %
 	$(INS.file)

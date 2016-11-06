@@ -29,6 +29,7 @@ SVCMETHOD=	iscsi-initiator	iscsid
 
 include ../Makefile.cmd
 
+CPPFLAGS += -I$(CODEMGR_WS)/include
 
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORKISCSI)
 $(ROOTSVCNETWORKISCSI)/iscsi-initiator.xml := FILEMODE = 0444

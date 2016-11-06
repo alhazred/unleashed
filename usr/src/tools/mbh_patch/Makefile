@@ -31,7 +31,7 @@ PROG	= mbh_patch
 
 include ../Makefile.tools
 
-CPPFLAGS += -I../../uts/common
+CPPFLAGS += -I../../../../include
 
 .KEEP_STATE:
 

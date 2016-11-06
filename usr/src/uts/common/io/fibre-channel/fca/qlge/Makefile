@@ -55,7 +55,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 MODSTUBS_DIR	 = $(OBJS_DIR)
 
-INC_PATH	+= -I$(UTSBASE)/common/sys/fibre-channel/fca/qlge
+INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel/fca/qlge
 
 LDFLAGS		+= -dy -Nmisc/mac -Ndrv/ip
 

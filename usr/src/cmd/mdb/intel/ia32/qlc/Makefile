@@ -32,10 +32,10 @@ include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.module
 
-CPPFLAGS += -I$(SRC)/uts/common
-CPPFLAGS += -I$(SRC)/uts/common/sys/fibre-channel
-CPPFLAGS += -I$(SRC)/uts/common/sys/fibre-channel/fca/qlc
-CPPFLAGS += -I$(SRC)/uts/common/sys/fibre-channel/impl
+CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(CODEMGR_WS)/include/sys/fibre-channel
+CPPFLAGS += -I$(CODEMGR_WS)/include/sys/fibre-channel/fca/qlc
+CPPFLAGS += -I$(CODEMGR_WS)/include/sys/fibre-channel/impl
 
 
 C99MODE=	$(C99_ENABLE)

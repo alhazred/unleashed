@@ -283,23 +283,23 @@ file path=lib/svc/manifest/system/fmd.xml group=sys mode=0444 \
 # While some of these are from global-zone-only components
 # there's no harm in including them in both contexts.
 #
-file path=usr/include/fm/diagcode.h
-file path=usr/include/fm/fmd_adm.h
-file path=usr/include/fm/fmd_agent.h
-file path=usr/include/fm/fmd_api.h
-file path=usr/include/fm/fmd_fmri.h
-file path=usr/include/fm/fmd_log.h
-file path=usr/include/fm/fmd_msg.h
-file path=usr/include/fm/fmd_snmp.h
-file path=usr/include/fm/libdiskstatus.h
-file path=usr/include/fm/libfmevent.h
-file path=usr/include/fm/libfmevent_ruleset.h
-file path=usr/include/fm/libseslog.h
-file path=usr/include/fm/libtopo.h
-file path=usr/include/fm/topo_hc.h
-file path=usr/include/fm/topo_list.h
-file path=usr/include/fm/topo_method.h
-file path=usr/include/fm/topo_mod.h
+file path=usr/include/fm/diagcode.h mode=0644
+file path=usr/include/fm/fmd_adm.h mode=0644
+file path=usr/include/fm/fmd_agent.h mode=0644
+file path=usr/include/fm/fmd_api.h mode=0644
+file path=usr/include/fm/fmd_fmri.h mode=0644
+file path=usr/include/fm/fmd_log.h mode=0644
+file path=usr/include/fm/fmd_msg.h mode=0644
+file path=usr/include/fm/fmd_snmp.h mode=0644
+file path=usr/include/fm/libdiskstatus.h mode=0644
+file path=usr/include/fm/libfmevent.h mode=0644
+file path=usr/include/fm/libfmevent_ruleset.h mode=0644
+file path=usr/include/fm/libseslog.h mode=0644
+file path=usr/include/fm/libtopo.h mode=0644
+file path=usr/include/fm/topo_hc.h mode=0644
+file path=usr/include/fm/topo_list.h mode=0644
+file path=usr/include/fm/topo_method.h mode=0644
+file path=usr/include/fm/topo_mod.h mode=0644
 #
 #	64-bit .so.1
 #

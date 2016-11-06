@@ -36,8 +36,7 @@ include ../../../Makefile.master
 # Also, the v3 headers have been hacked so that they no longer
 # quite reflect what goes over the wire.
 IDMAP_PROT_X=	idmap_prot.x
-RPCGEN_SRC=	autofs_prot.x nlm_prot.x sm_inter.x nsm_addr.x \
-		$(IDMAP_PROT_X)
+RPCGEN_SRC=	nlm_prot.x sm_inter.x nsm_addr.x $(IDMAP_PROT_X)
 
 DERIVED_HDRS=	$(RPCGEN_SRC:%.x=%.h)
 

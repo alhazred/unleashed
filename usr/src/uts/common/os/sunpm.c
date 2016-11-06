@@ -398,7 +398,7 @@ static int	pm_processes_stopped;
 #ifdef	DEBUG
 
 /*
- * see common/sys/epm.h for PMD_* values
+ * see include/sys/epm.h for PMD_* values
  */
 
 uint_t		pm_debug = 0;

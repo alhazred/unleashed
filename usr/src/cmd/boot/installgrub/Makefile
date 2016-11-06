@@ -37,7 +37,7 @@ SBINLINKS= $(PROG)
 
 include ../Makefile.com
 
-CPPFLAGS += -I$(SRC)/uts/i86pc -I$(SRC)/uts/intel -I$(SRC)/uts/common
+CPPFLAGS += -I$(SRC)/uts/i86pc -I$(SRC)/uts/intel -I$(CODEMGR_WS)/include
 CPPFLAGS += -I$(SRC)/common/util
 
 LDLIBS += -lmd5
