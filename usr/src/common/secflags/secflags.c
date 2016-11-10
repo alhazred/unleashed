@@ -163,8 +163,8 @@ psecflags_validate(const psecflags_t *sf)
 void
 psecflags_default(psecflags_t *sf)
 {
-	secflags_zero(&sf->psf_effective);
-	secflags_zero(&sf->psf_inherit);
+	secflags_fullset(&sf->psf_effective);
+	secflags_fullset(&sf->psf_inherit);
 	secflags_zero(&sf->psf_lower);
 	secflags_fullset(&sf->psf_upper);
 }
