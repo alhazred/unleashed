@@ -1,5 +1,6 @@
 SUBDIR = bin \
 	 lib \
+	 share \
 	 kernel
 
 .include <bsd.subdir.mk>

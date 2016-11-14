@@ -238,7 +238,6 @@ COMMON_SUBDIRS=		\
 	listen		\
 	loadkeys	\
 	locale		\
-	localedef	\
 	lockstat	\
 	locator		\
 	lofiadm		\

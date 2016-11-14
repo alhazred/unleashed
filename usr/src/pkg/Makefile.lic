@@ -42,7 +42,7 @@ $(LICROOT)/usr/src/%: $(CODEMGR_WS)/usr/src/%
 
 # this is a terrible hack, we're reaching into bmake-build source tree to
 # grab the license file
-$(LICROOT)/kernel/%: $(CODEMGR_WS)/kernel/%
+$(LICROOT)/%: $(CODEMGR_WS)/%
 	$(PKGDEBUG)if [ ! -d $(@D) ]; then mkdir -p $(@D); fi
 	$(PKGDEBUG)$(INS.file)
 
