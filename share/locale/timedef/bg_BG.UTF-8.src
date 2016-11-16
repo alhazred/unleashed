@@ -53,34 +53,17 @@
 %H:%M:%S
 #
 # x_fmt
-%d.%m.%y г.
+%e.%m.%y г.
 #
 # c_fmt
-%A %e %B %Y г. %H:%M:%S
+%e %B %Y г., %H:%M:%S %Z
 #
 # AM/PM
 пр.об.
 сл.об.
 #
 # date_fmt
-%A %e %B %Y г. %H:%M:%S %Z
-#
-# Long month names (without case ending)
-януари
-февруари
-март
-април
-май
-юни
-юли
-август
-септември
-октомври
-ноември
-декември
-#
-# md_order
-dm
+%e %B %Y г., %H:%M:%S %Z
 #
 # ampm_fmt
 %I:%M:%S %p

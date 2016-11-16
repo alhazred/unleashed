@@ -56,7 +56,7 @@ sestdiena
 %d.%m.%y
 #
 # c_fmt
-%Y. gada %e. %B %H:%M:%S
+%Y. gada %e. %B %H:%M:%S %Z
 #
 # AM/PM
 priekðpusdienâ
@@ -64,23 +64,6 @@ pçcpusdienâ
 #
 # date_fmt
 %Y. gada %e. %B %H:%M:%S %Z
-#
-# Long month names (without case ending)
-janvâris
-februâris
-marts
-aprîlis
-maijs
-jûnijs
-jûlijs
-augusts
-septembris
-oktobris
-novembris
-decembris
-#
-# md_order
-dm
 #
 # ampm_fmt
 %I:%M:%S %p

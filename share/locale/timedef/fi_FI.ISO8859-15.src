@@ -53,34 +53,17 @@ lauantaina
 %H.%M.%S
 #
 # x_fmt
-%d.%m.%Y
+%e.%m.%Y
 #
 # c_fmt
-%A %e %B %Y klo %H.%M.%S
+%e. %B %Y klo %H.%M.%S %Z
 #
 # AM/PM
 ap.
 ip.
 #
 # date_fmt
-%A %e %B %Y klo %H.%M.%S %Z
-#
-# Long month names (without case ending)
-tammikuuta
-helmikuuta
-maaliskuuta
-huhtikuuta
-toukokuuta
-kesäkuuta
-heinäkuuta
-elokuuta
-syyskuuta
-lokakuuta
-marraskuuta
-joulukuuta
-#
-# md_order
-dm
+%e. %B %Y klo %H.%M.%S %Z
 #
 # ampm_fmt
 %I.%M.%S %p

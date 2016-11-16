@@ -53,34 +53,17 @@
 %I:%M:%S %p
 #
 # x_fmt
-%d/%m/%y
+%e/%m/%y
 #
 # c_fmt
-%A %e %B %Y %I:%M:%S %p
+%e %B %Y %I:%M:%S %p %Z
 #
 # AM/PM
 ਪੂ.ਦੁ.
 ਬਾ.ਦੁ.
 #
 # date_fmt
-%A %e %B %Y %I:%M:%S %p %Z
-#
-# Long month names (without case ending)
-ਜਨਵਰੀ
-ਫ਼ਰਵਰੀ
-ਮਾਰਚ
-ਅਪ੍ਰੈਲ
-ਮਈ
-ਜੂਨ
-ਜੁਲਾਈ
-ਅਗਸਤ
-ਸਤੰਬਰ
-ਅਕਤੂਬਰ
-ਨਵੰਬਰ
-ਦਸੰਬਰ
-#
-# md_order
-dm
+%e %B %Y %I:%M:%S %p %Z
 #
 # ampm_fmt
 %I:%M:%S %p

@@ -56,7 +56,7 @@
 %Oy-%Om-%Od
 #
 # c_fmt
-%Oy %B %Oe %OH:%OM:%OS
+%Oy %B %Oe %OH:%OM:%OS %Z
 #
 # AM/PM
 पूर्वाह्न
@@ -64,23 +64,6 @@
 #
 # date_fmt
 %Oy %B %Oe %OH:%OM:%OS %Z
-#
-# Long month names (without case ending)
-जनवरी
-फेब्रुअरी
-मार्च
-अप्रिल
-मई
-जुन
-जुलाई
-अगस्ट
-सेप्टेम्बर
-अक्टोबर
-नोभेम्बर
-डिसेम्बर
-#
-# md_order
-md
 #
 # ampm_fmt
 %OI:%OM:%OS %p

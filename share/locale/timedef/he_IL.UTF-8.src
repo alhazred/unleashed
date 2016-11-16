@@ -53,10 +53,10 @@
 %H:%M:%S
 #
 # x_fmt
-%d.%m.%Y
+%e.%m.%Y
 #
 # c_fmt
-%e ב%B %Y בשעה %H:%M:%S
+%e ב%B %Y בשעה %H:%M:%S %Z
 #
 # AM/PM
 לפנה״צ
@@ -64,23 +64,6 @@
 #
 # date_fmt
 %e ב%B %Y בשעה %H:%M:%S %Z
-#
-# Long month names (without case ending)
-ינואר
-פברואר
-מרץ
-אפריל
-מאי
-יוני
-יולי
-אוגוסט
-ספטמבר
-אוקטובר
-נובמבר
-דצמבר
-#
-# md_order
-dm
 #
 # ampm_fmt
 %I:%M:%S %p

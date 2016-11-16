@@ -56,31 +56,14 @@ subota
 %d.%m.%Y.
 #
 # c_fmt
-%A %e %B %Y. u %H:%M:%S
+%e. %B %Y. u %H:%M:%S %Z
 #
 # AM/PM
 AM
 PM
 #
 # date_fmt
-%A %e %B %Y. u %H:%M:%S %Z
-#
-# Long month names (without case ending)
-siječnja
-veljače
-ožujka
-travnja
-svibnja
-lipnja
-srpnja
-kolovoza
-rujna
-listopada
-studenoga
-prosinca
-#
-# md_order
-dm
+%e. %B %Y. u %H:%M:%S %Z
 #
 # ampm_fmt
 %I:%M:%S %p

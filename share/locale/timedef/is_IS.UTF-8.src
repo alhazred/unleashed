@@ -53,34 +53,17 @@ laugardagur
 %H:%M:%S
 #
 # x_fmt
-%d.%m.%Y
+%e.%m.%Y
 #
 # c_fmt
-%A %e %B %Y kl. %H:%M:%S
+%e. %B %Y kl. %H:%M:%S %Z
 #
 # AM/PM
 f.h.
 e.h.
 #
 # date_fmt
-%A %e %B %Y kl. %H:%M:%S %Z
-#
-# Long month names (without case ending)
-janúar
-febrúar
-mars
-apríl
-maí
-júní
-júlí
-ágúst
-september
-október
-nóvember
-desember
-#
-# md_order
-dm
+%e. %B %Y kl. %H:%M:%S %Z
 #
 # ampm_fmt
 %I:%M:%S %p

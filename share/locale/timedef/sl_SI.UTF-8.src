@@ -56,7 +56,7 @@ sobota
 %e. %m. %y
 #
 # c_fmt
-%d. %B %Y %H:%M:%S
+%d. %B %Y %H:%M:%S %Z
 #
 # AM/PM
 dop.
@@ -64,23 +64,6 @@ pop.
 #
 # date_fmt
 %d. %B %Y %H:%M:%S %Z
-#
-# Long month names (without case ending)
-januar
-februar
-marec
-april
-maj
-junij
-julij
-avgust
-september
-oktober
-november
-december
-#
-# md_order
-dm
 #
 # ampm_fmt
 %I:%M:%S %p

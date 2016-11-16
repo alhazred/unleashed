@@ -56,7 +56,7 @@
 %Oe/%Om/%Oy
 #
 # c_fmt
-%Oe %B, %Oy रोजी %OI:%OM:%OS %p
+%Oe %B, %Oy रोजी %OI:%OM:%OS %p %Z
 #
 # AM/PM
 म.पू.
@@ -64,23 +64,6 @@
 #
 # date_fmt
 %Oe %B, %Oy रोजी %OI:%OM:%OS %p %Z
-#
-# Long month names (without case ending)
-जानेवारी
-फेब्रुवारी
-मार्च
-एप्रिल
-मे
-जून
-जुलै
-ऑगस्ट
-सप्टेंबर
-ऑक्टोबर
-नोव्हेंबर
-डिसेंबर
-#
-# md_order
-dm
 #
 # ampm_fmt
 %OI:%OM:%OS %p

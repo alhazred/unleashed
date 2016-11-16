@@ -56,7 +56,7 @@ subota
 %d.%m.%y.
 #
 # c_fmt
-%d. %B %Y. u %H:%M:%S
+%d. %B %Y. u %H:%M:%S %Z
 #
 # AM/PM
 prije podne
@@ -64,23 +64,6 @@ popodne
 #
 # date_fmt
 %d. %B %Y. u %H:%M:%S %Z
-#
-# Long month names (without case ending)
-januar
-februar
-mart
-april
-maj
-juni
-juli
-august
-septembar
-oktobar
-novembar
-decembar
-#
-# md_order
-dm
 #
 # ampm_fmt
 %I:%M:%S %p

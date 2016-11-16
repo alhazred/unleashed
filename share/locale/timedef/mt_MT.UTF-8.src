@@ -56,7 +56,7 @@ Is-Sibt
 %d/%m/%Y
 #
 # c_fmt
-%e ta’ %B %Y %H:%M:%S
+%e ta’ %B %Y %H:%M:%S %Z
 #
 # AM/PM
 AM
@@ -64,23 +64,6 @@ PM
 #
 # date_fmt
 %e ta’ %B %Y %H:%M:%S %Z
-#
-# Long month names (without case ending)
-Jannar
-Frar
-Marzu
-April
-Mejju
-Ġunju
-Lulju
-Awwissu
-Settembru
-Ottubru
-Novembru
-Diċembru
-#
-# md_order
-dm
 #
 # ampm_fmt
 %I:%M:%S %p

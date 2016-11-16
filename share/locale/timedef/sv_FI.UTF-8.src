@@ -56,31 +56,14 @@ lördag
 %d-%m-%Y
 #
 # c_fmt
-%A %e %B %Y %H:%M:%S
+%e %B %Y %H:%M:%S %Z
 #
 # AM/PM
 fm
 em
 #
 # date_fmt
-%A %e %B %Y %H:%M:%S %Z
-#
-# Long month names (without case ending)
-januari
-februari
-mars
-april
-maj
-juni
-juli
-augusti
-september
-oktober
-november
-december
-#
-# md_order
-dm
+%e %B %Y %H:%M:%S %Z
 #
 # ampm_fmt
 %I:%M:%S %p

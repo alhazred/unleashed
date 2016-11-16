@@ -53,34 +53,17 @@
 %I:%M:%S %p
 #
 # x_fmt
-%d/%m/%y
+%e/%m/%y
 #
 # c_fmt
-%A %e %B %Y को %I:%M:%S %p
+%e %B %Y को %I:%M:%S %p %Z
 #
 # AM/PM
 पूर्वाह्न
 अपराह्न
 #
 # date_fmt
-%A %e %B %Y को %I:%M:%S %p %Z
-#
-# Long month names (without case ending)
-जनवरी
-फ़रवरी
-मार्च
-अप्रैल
-मई
-जून
-जुलाई
-अगस्त
-सितंबर
-अक्तूबर
-नवंबर
-दिसंबर
-#
-# md_order
-dm
+%e %B %Y को %I:%M:%S %p %Z
 #
 # ampm_fmt
 %I:%M:%S %p

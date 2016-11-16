@@ -53,34 +53,17 @@ Cumartesi
 %H:%M:%S
 #
 # x_fmt
-%d.%m.%Y
+%e.%m.%Y
 #
 # c_fmt
-%A %e %B %Y %H:%M:%S
+%e %B %Y %H:%M:%S %Z
 #
 # AM/PM
 ÖÖ
 ÖS
 #
 # date_fmt
-%A %e %B %Y %H:%M:%S %Z
-#
-# Long month names (without case ending)
-Ocak
-Şubat
-Mart
-Nisan
-Mayıs
-Haziran
-Temmuz
-Ağustos
-Eylül
-Ekim
-Kasım
-Aralık
-#
-# md_order
-dm
+%e %B %Y %H:%M:%S %Z
 #
 # ampm_fmt
 %p %I:%M:%S

@@ -53,10 +53,10 @@
 %I:%M:%S %p
 #
 # x_fmt
-%d-%m-%y
+%e-%m-%y
 #
 # c_fmt
-%e %B, %Y ’அன்று’ %I:%M:%S %p
+%e %B, %Y ’அன்று’ %I:%M:%S %p %Z
 #
 # AM/PM
 முற்பகல்
@@ -64,23 +64,6 @@
 #
 # date_fmt
 %e %B, %Y ’அன்று’ %I:%M:%S %p %Z
-#
-# Long month names (without case ending)
-ஜனவரி
-பிப்ரவரி
-மார்ச்
-ஏப்ரல்
-மே
-ஜூன்
-ஜூலை
-ஆகஸ்ட்
-செப்டம்பர்
-அக்டோபர்
-நவம்பர்
-டிசம்பர்
-#
-# md_order
-dm
 #
 # ampm_fmt
 %I:%M:%S %p

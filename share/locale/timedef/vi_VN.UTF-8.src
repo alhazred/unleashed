@@ -56,7 +56,7 @@ Thứ Bảy
 %d/%m/%Y
 #
 # c_fmt
-%H:%M:%S Ngày %d tháng %m năm %Y
+%H:%M:%S %Z Ngày %d tháng %m năm %Y
 #
 # AM/PM
 SA
@@ -64,23 +64,6 @@ CH
 #
 # date_fmt
 %H:%M:%S %Z Ngày %d tháng %m năm %Y
-#
-# Long month names (without case ending)
-tháng 1
-tháng 2
-tháng 3
-tháng 4
-tháng 5
-tháng 6
-tháng 7
-tháng 8
-tháng 9
-tháng 10
-tháng 11
-tháng 12
-#
-# md_order
-dm
 #
 # ampm_fmt
 %I:%M:%S %p

@@ -56,7 +56,7 @@ penktadienis
 %Y-%m-%d
 #
 # c_fmt
-%Y m. %B %e d. %H:%M:%S
+%Y m. %B %e d. %H:%M:%S %Z
 #
 # AM/PM
 priešpiet
@@ -64,23 +64,6 @@ popiet
 #
 # date_fmt
 %Y m. %B %e d. %H:%M:%S %Z
-#
-# Long month names (without case ending)
-sausis
-vasaris
-kovas
-balandis
-gegužė
-birželis
-liepa
-rugpjūtis
-rugsėjis
-spalis
-lapkritis
-gruodis
-#
-# md_order
-md
 #
 # ampm_fmt
 %I:%M:%S %p

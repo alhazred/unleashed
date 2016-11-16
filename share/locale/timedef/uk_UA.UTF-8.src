@@ -56,31 +56,14 @@
 %d.%m.%y
 #
 # c_fmt
-%A %e %B %Y р. %H:%M:%S
+%e %B %Y р. %H:%M:%S %Z
 #
 # AM/PM
 дп
 пп
 #
 # date_fmt
-%A %e %B %Y р. %H:%M:%S %Z
-#
-# Long month names (without case ending)
-січень
-лютий
-березень
-квітень
-травень
-червень
-липень
-серпень
-вересень
-жовтень
-листопад
-грудень
-#
-# md_order
-dm
+%e %B %Y р. %H:%M:%S %Z
 #
 # ampm_fmt
 %I:%M:%S %p

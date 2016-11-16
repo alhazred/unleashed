@@ -53,10 +53,10 @@
 %H.%M.%S
 #
 # x_fmt
-%d.%m.%y.
+%e.%m.%y.
 #
 # c_fmt
-%d. %B %Y. %H.%M.%S
+%d. %B %Y. %H.%M.%S %Z
 #
 # AM/PM
 пре подне
@@ -64,23 +64,6 @@
 #
 # date_fmt
 %d. %B %Y. %H.%M.%S %Z
-#
-# Long month names (without case ending)
-јануар
-фебруар
-март
-април
-мај
-јун
-јул
-август
-септембар
-октобар
-новембар
-децембар
-#
-# md_order
-dm
 #
 # ampm_fmt
 %I.%M.%S %p

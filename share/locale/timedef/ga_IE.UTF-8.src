@@ -56,31 +56,14 @@ Dé Sathairn
 %d/%m/%Y
 #
 # c_fmt
-%A %e %B %Y %H:%M:%S
+%e %B %Y %H:%M:%S %Z
 #
 # AM/PM
 a.m.
 p.m.
 #
 # date_fmt
-%A %e %B %Y %H:%M:%S %Z
-#
-# Long month names (without case ending)
-Eanáir
-Feabhra
-Márta
-Aibreán
-Bealtaine
-Meitheamh
-Iúil
-Lúnasa
-Meán Fómhair
-Deireadh Fómhair
-Samhain
-Nollaig
-#
-# md_order
-dm
+%e %B %Y %H:%M:%S %Z
 #
 # ampm_fmt
 %I:%M:%S %p

@@ -65,13 +65,7 @@ my %FILESNAMES = (
 );
 
 my %callback = (
-	mdorder => \&callback_mdorder,
-	altmon => \&callback_altmon,
-	cformat => \&callback_cformat,
-	dformat => \&callback_dformat,
-	dtformat => \&callback_dtformat,
 	cbabmon => \&callback_abmon,
-	cbampm => \&callback_ampm,
 	data => undef,
 );
 
@@ -116,8 +110,6 @@ my %DESC = (
 	"c_fmt"		=> "c_fmt",
 	"am_pm"		=> "AM/PM",
 	"d_t_fmt"	=> "date_fmt",
-	"altmon"	=> "Long month names (without case ending)",
-	"md_order"	=> "md_order",
 	"t_fmt_ampm"	=> "ampm_fmt",
 );
 
@@ -179,133 +171,20 @@ if ($TYPE eq "msgdef") {
 
 if ($TYPE eq "timedef") {
 	%keys = (
-	    "abmon"		=> "<cbabmon<abmon<as",
+	    "abmon"		=> "as",
 	    "mon"		=> "as",
 	    "abday"		=> "as",
 	    "day"		=> "as",
 	    "t_fmt"		=> "s",
-	    "d_fmt"		=> "<dformat<d_fmt<s",
-	    "c_fmt"		=> "<cformat<d_t_fmt<s",
-	    "am_pm"		=> "<cbampm<am_pm<as",
-	    "d_t_fmt"		=> "<dtformat<d_t_fmt<s",
-	    "altmon"		=> "<altmon<mon<as",
-	    "md_order"		=> "<mdorder<d_fmt<s",
+	    "d_fmt"		=> "s",
+	    "c_fmt"		=> ">d_t_fmt",
+	    "am_pm"		=> "as",
+	    "d_t_fmt"		=> "s",
 	    "t_fmt_ampm"	=> "s",
 	);
 	get_fields();
 	print_fields();
 	make_makefile();
-}
-
-sub callback_ampm {
-	my $s = shift;
-	my $nl = $callback{data}{l} . "_" . $callback{data}{c};
-	my $enc = $callback{data}{e};
-
-	if ($nl eq 'ru_RU') {
-		if ($enc eq 'UTF-8') {
-			$s = 'дп;пп';
-		} else {
-			my  $converter = Text::Iconv->new("utf-8", "$enc");
-			$s = $converter->convert("дп;пп");
-		}
-	}
-	return $s;
-}
-
-sub callback_cformat {
-	my $s = shift;
-	my $nl = $callback{data}{l} . "_" . $callback{data}{c};
-
-	if ($nl eq 'ko_KR') {
-		$s =~ s/(> )(%p)/$1%A $2/;
-	}
-	$s =~ s/\.,/\./;
-	$s =~ s/ %Z//;
-	$s =~ s/ %z//;
-	$s =~ s/^"%e\./%A %e/;
-	$s =~ s/^"(%B %e, )/"%A, $1/;
-	$s =~ s/^"(%e %B )/"%A $1/;
-	return $s;
-};
-
-sub callback_dformat {
-	my $s = shift;
-
-	$s =~ s/(%m(<SOLIDUS>|[-.]))%e/$1%d/;
-	$s =~ s/%e((<SOLIDUS>|[-.])%m)/%d$1/;
-	return $s;
-};
-
-sub callback_dtformat {
-	my $s = shift;
-	my $nl = $callback{data}{l} . "_" . $callback{data}{c};
-
-	if ($nl eq 'ja_JP') {
-		$s =~ s/(> )(%H)/$1%A $2/;
-	} elsif ($nl eq 'ko_KR' || $nl eq 'zh_CN' || $nl eq 'zh_TW') {
-		if ($nl ne 'ko_KR') {
-			$s =~ s/%m/%_m/;
-		}
-		$s =~ s/(> )(%p)/$1%A $2/;
-	}
-	$s =~ s/\.,/\./;
-	$s =~ s/^"%e\./%A %e/;
-	$s =~ s/^"(%B %e, )/"%A, $1/;
-	$s =~ s/^"(%e %B )/"%A $1/;
-	return $s;
-};
-
-sub callback_mdorder {
-	my $s = shift;
-	return undef if (!defined $s);
-	$s =~ s/[^dem]//g;
-	$s =~ s/e/d/g;
-	return $s;
-};
-
-sub callback_altmon {
-	# if the language/country is known in %alternative months then
-	# return that, otherwise repeat mon
-	my $s = shift;
-
-	if (defined $alternativemonths{$callback{data}{l}}{$callback{data}{c}}) {
-		my @altnames = split(";",$alternativemonths{$callback{data}{l}}{$callback{data}{c}});
-		my @cleaned;
-		foreach (@altnames)
-		{
-			$_ =~ s/^\s+//;
-			$_ =~ s/\s+$//;
-			push @cleaned, $_;
-		}
-		return join(";",@cleaned);
-	}
-
-	return $s;
-}
-
-sub callback_abmon {
-	# for specified CJK locales, pad result with a space to enable
-	# columns to line up (style established in FreeBSD in 2001)
-	my $s = shift;
-	my $nl = $callback{data}{l} . "_" . $callback{data}{c};
-
-	if ($nl eq 'ja_JP' || $nl eq 'ko_KR' || $nl eq 'zh_CN' ||
-	    $nl eq 'zh_HK' || $nl eq 'zh_TW') {
-		my @monthnames = split(";", $s);
-		my @cleaned;
-		foreach (@monthnames)
-		{
-			if ($_ =~ /^"<(two|three|four|five|six|seven|eight|nine)>/ ||
-			   ($_ =~ /^"<one>/ && $_ !~ /^"<one>(<zero>|<one>|<two>)/))
-			{
-				$_ =~ s/^"/"<space>/;
-			}
-			push @cleaned, $_;
-		}
-		return join(";",@cleaned);
-	}
-	return $s;
 }
 
 ############################

@@ -53,34 +53,17 @@ e shtunë
 %H:%M:%S
 #
 # x_fmt
-%d.%m.%y
+%e.%m.%y
 #
 # c_fmt
-%A %e %B %Y në %H:%M:%S
+%e %B %Y në %H:%M:%S %Z
 #
 # AM/PM
 paradite
 pasdite
 #
 # date_fmt
-%A %e %B %Y në %H:%M:%S %Z
-#
-# Long month names (without case ending)
-janar
-shkurt
-mars
-prill
-maj
-qershor
-korrik
-gusht
-shtator
-tetor
-nëntor
-dhjetor
-#
-# md_order
-dm
+%e %B %Y në %H:%M:%S %Z
 #
 # ampm_fmt
 %I:%M:%S %p

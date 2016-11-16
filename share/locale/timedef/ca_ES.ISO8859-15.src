@@ -53,34 +53,17 @@ dissabte
 %H:%M:%S
 #
 # x_fmt
-%d/%m/%y
+%e/%m/%y
 #
 # c_fmt
-%A %e %B de %Y, %H:%M:%S
+%e %B de %Y, %H:%M:%S %Z
 #
 # AM/PM
 a. m.
 p. m.
 #
 # date_fmt
-%A %e %B de %Y, %H:%M:%S %Z
-#
-# Long month names (without case ending)
-de gener
-de febrer
-de març
-d'abril
-de maig
-de juny
-de juliol
-d'agost
-de setembre
-d'octubre
-de novembre
-de desembre
-#
-# md_order
-dm
+%e %B de %Y, %H:%M:%S %Z
 #
 # ampm_fmt
 %I:%M:%S %p

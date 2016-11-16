@@ -56,7 +56,7 @@
 %d/%m/%y
 #
 # c_fmt
-%Y年%m月%e日 %p%I:%M:%S
+%Y年%m月%e日 %Z %p%I:%M:%S
 #
 # AM/PM
 上午
@@ -64,23 +64,6 @@
 #
 # date_fmt
 %Y年%m月%e日 %Z %p%I:%M:%S
-#
-# Long month names (without case ending)
-一月
-二月
-三月
-四月
-五月
-六月
-七月
-八月
-九月
-十月
-十一月
-十二月
-#
-# md_order
-dm
 #
 # ampm_fmt
 %p%I:%M:%S

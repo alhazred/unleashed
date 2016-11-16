@@ -56,7 +56,7 @@ sestdiena
 %d.%m.%y
 #
 # c_fmt
-%Y. gada %e. %B %H:%M:%S
+%Y. gada %e. %B %H:%M:%S %Z
 #
 # AM/PM
 priekšpusdienā
@@ -64,23 +64,6 @@ pēcpusdienā
 #
 # date_fmt
 %Y. gada %e. %B %H:%M:%S %Z
-#
-# Long month names (without case ending)
-janvāris
-februāris
-marts
-aprīlis
-maijs
-jūnijs
-jūlijs
-augusts
-septembris
-oktobris
-novembris
-decembris
-#
-# md_order
-dm
 #
 # ampm_fmt
 %I:%M:%S %p

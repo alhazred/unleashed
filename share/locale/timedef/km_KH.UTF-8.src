@@ -53,34 +53,17 @@
 %I:%M:%S %p
 #
 # x_fmt
-%d/%m/%y
+%e/%m/%y
 #
 # c_fmt
-%A %e %B %Y នៅ %I:%M:%S %p
+%e %B %Y នៅ %I:%M:%S %p %Z
 #
 # AM/PM
 ព្រឹក
 ល្ងាច
 #
 # date_fmt
-%A %e %B %Y នៅ %I:%M:%S %p %Z
-#
-# Long month names (without case ending)
-មករា
-កុម្ភៈ
-មីនា
-មេសា
-ឧសភា
-មិថុនា
-កក្កដា
-សីហា
-កញ្ញា
-តុលា
-វិច្ឆិកា
-ធ្នូ
-#
-# md_order
-dm
+%e %B %Y នៅ %I:%M:%S %p %Z
 #
 # ampm_fmt
 %I:%M:%S %p

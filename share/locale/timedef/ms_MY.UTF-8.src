@@ -53,34 +53,17 @@ Sabtu
 %I:%M:%S %p
 #
 # x_fmt
-%d/%m/%y
+%e/%m/%y
 #
 # c_fmt
-%A %e %B %Y %I:%M:%S %p
+%e %B %Y %I:%M:%S %p %Z
 #
 # AM/PM
 PG
 PTG
 #
 # date_fmt
-%A %e %B %Y %I:%M:%S %p %Z
-#
-# Long month names (without case ending)
-Januari
-Februari
-Mac
-April
-Mei
-Jun
-Julai
-Ogos
-September
-Oktober
-November
-Disember
-#
-# md_order
-dm
+%e %B %Y %I:%M:%S %p %Z
 #
 # ampm_fmt
 %I:%M:%S %p

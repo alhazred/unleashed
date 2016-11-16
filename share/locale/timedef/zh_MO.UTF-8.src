@@ -4,67 +4,67 @@
 # -----------------------------------------------------------------------------
 #
 # Short month names
-jan
-feb
-mar
-apr
-maj
-jun
-jul
-avg
-sep
-okt
-nov
-dec
+1月
+2月
+3月
+4月
+5月
+6月
+7月
+8月
+9月
+10月
+11月
+12月
 #
 # Long month names (as in a date)
-januar
-februar
-mart
-april
-maj
-jun
-jul
-avgust
-septembar
-oktobar
-novembar
-decembar
+一月
+二月
+三月
+四月
+五月
+六月
+七月
+八月
+九月
+十月
+十一月
+十二月
 #
 # Short weekday names
-ned
-pon
-uto
-sre
-čet
-pet
-sub
+周日
+周一
+周二
+周三
+周四
+周五
+周六
 #
 # Long weekday names
-nedelja
-ponedeljak
-utorak
-sreda
-četvrtak
-petak
-subota
+星期日
+星期一
+星期二
+星期三
+星期四
+星期五
+星期六
 #
 # X_fmt
-%H:%M:%S
+%p%I:%M:%S
 #
 # x_fmt
-%e.%m.%y.
+%e/%m/%y
 #
 # c_fmt
-%d. %B %Y. %H:%M:%S %Z
+%Y年%m月%e日 %Z %p%I:%M:%S
 #
 # AM/PM
-pre podne
-po podne
+上午
+下午
 #
 # date_fmt
-%d. %B %Y. %H:%M:%S %Z
+%Y年%m月%e日 %Z %p%I:%M:%S
 #
 # ampm_fmt
-%I.%M.%S %p
+%p%I:%M:%S
 # EOF

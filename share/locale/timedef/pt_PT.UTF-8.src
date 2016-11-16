@@ -56,7 +56,7 @@ sábado
 %d/%m/%y
 #
 # c_fmt
-%e de %B de %Y às %H:%M:%S
+%e de %B de %Y às %H:%M:%S %Z
 #
 # AM/PM
 da manhã
@@ -64,23 +64,6 @@ da tarde
 #
 # date_fmt
 %e de %B de %Y às %H:%M:%S %Z
-#
-# Long month names (without case ending)
-janeiro
-fevereiro
-março
-abril
-maio
-junho
-julho
-agosto
-setembro
-outubro
-novembro
-dezembro
-#
-# md_order
-dm
 #
 # ampm_fmt
 %I:%M:%S %p

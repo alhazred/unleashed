@@ -56,7 +56,7 @@
 %Y-%m-%d
 #
 # c_fmt
-%Y %B %e %p %I.%M.%S
+%Y %B %e %p %I.%M.%S %Z
 #
 # AM/PM
 පෙ.ව.
@@ -64,23 +64,6 @@
 #
 # date_fmt
 %Y %B %e %p %I.%M.%S %Z
-#
-# Long month names (without case ending)
-ජනවාරි
-පෙබරවාරි
-මාර්තු
-අප්‍රේල්
-මැයි
-ජූනි
-ජූලි
-අගෝස්තු
-සැප්තැම්බර්
-ඔක්තෝබර්
-නොවැම්බර්
-දෙසැම්බර්
-#
-# md_order
-md
 #
 # ampm_fmt
 %p %I.%M.%S

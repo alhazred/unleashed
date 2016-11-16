@@ -56,7 +56,7 @@
 %Oe/%Om/%Oy
 #
 # c_fmt
-%Oe %B، %Oy %OI:%OM:%OS %p
+%Oe %B، %Oy %OI:%OM:%OS %p %Z
 #
 # AM/PM
 قبل دوپہر
@@ -64,23 +64,6 @@
 #
 # date_fmt
 %Oe %B، %Oy %OI:%OM:%OS %p %Z
-#
-# Long month names (without case ending)
-جنوری
-فروری
-مارچ
-اپریل
-مئی
-جون
-جولائی
-اگست
-ستمبر
-اکتوبر
-نومبر
-دسمبر
-#
-# md_order
-dm
 #
 # ampm_fmt
 %OI:%OM:%OS %p
