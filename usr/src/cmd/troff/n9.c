@@ -51,8 +51,6 @@
 #include <wctype.h>
 #include <langinfo.h>
 
-#define	ISO646	"646"
-
 int	multi_locale;
 int	(*wdbdg)(wchar_t, wchar_t, int);
 wchar_t	*(*wddlm)(wchar_t, wchar_t, int);
@@ -571,12 +569,12 @@ localize()
 		multi_locale = 1;
 	else {
 		if (*codeset == '\0' ||
-			(strcmp(codeset, ISO646) == 0)) {
+			(strcmp(codeset, "US-ASCII") == 0)) {
 			/*
 			 * if codeset is an empty string
 			 * assumes this is C locale (7-bit) locale.
 			 * This happens in 2.5, 2.5.1, and 2.6 system
-			 * Or, if codeset is "646"
+			 * Or, if codeset is "US-ASCII"
 			 * this is 7-bit locale.
 			 */
 			multi_locale = 0;

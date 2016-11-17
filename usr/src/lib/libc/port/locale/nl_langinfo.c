@@ -58,11 +58,7 @@ nl_langinfo_l(nl_item item, locale_t loc)
 	case CODESET:
 		s = loc->runelocale->__encoding;
 		if (strcmp(s, "NONE") == 0)
-			/*
-			 * Note that although FreeBSD uses US-ASCII, Solaris
-			 * historically has reported "646" for the C locale.
-			 */
-			ret = "646";
+			ret = "US-ASCII";
 		else if (strncmp(s, "NONE:", 5) == 0)
 			ret = (char *)(s + 5);
 		else

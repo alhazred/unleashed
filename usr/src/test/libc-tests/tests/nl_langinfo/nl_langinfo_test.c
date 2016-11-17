@@ -45,7 +45,7 @@ struct langinfo_test {
 };
 
 struct langinfo_test C_data[] = {
-	{ CODESET,	"646" },
+	{ CODESET,	"US-ASCII" },
 	{ D_T_FMT,	"%a %b %e %H:%M:%S %Y" },
 	{ D_FMT,	"%m/%d/%y" },
 	{ T_FMT,	"%H:%M:%S" },
