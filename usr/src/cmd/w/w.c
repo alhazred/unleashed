@@ -285,9 +285,8 @@ main(int argc, char *argv[])
 					if (hrs > 0)
 						PRINTF((gettext(
 						    " %d hr(s),"), hrs));
-					if (mins > 0)
-						PRINTF((gettext(
-						    " %d min(s),"), mins));
+					PRINTF((gettext(
+					    " %d min(s),"), mins));
 				}
 			}
 		}
