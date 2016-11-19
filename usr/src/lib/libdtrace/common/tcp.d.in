@@ -89,6 +89,7 @@ inline string tcp_state_string[int32_t state] =
 	"<unknown>";
 #pragma D binding "1.6.3" tcp_state_string
 
+typedef struct tcphdr_s tcph_t;
 /*
  * tcpinfo is the TCP header fields.
  */

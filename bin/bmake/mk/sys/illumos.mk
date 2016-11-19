@@ -72,7 +72,7 @@ SHELL?=		sh
 SIZE?=		size
 
 YACC?=		yacc
-YFLAGS?=
+YFLAGS?=	-d
 YACC.y?=	${YACC} ${YFLAGS}
 
 # C
