@@ -71,6 +71,7 @@ dir path=kernel/drv group=sys
 dir path=kernel/drv/$(ARCH64) group=sys
 dir path=kernel/exec group=sys
 dir path=kernel/exec/$(ARCH64) group=sys
+dir path=kernel/firmware group=sys
 dir path=kernel/fs group=sys
 dir path=kernel/fs/$(ARCH64) group=sys
 dir path=kernel/ipp group=sys

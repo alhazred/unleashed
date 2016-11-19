@@ -22,10 +22,12 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# ident	"%Z%%M%	%I%	%E% SMI"
+# Copyright (c) 2015 by Delphix. All rights reserved.
 #
 
 PROG:sh=	basename `pwd`
+BASHPROG=	zloop
+ROOTBASHPROG=	$(ROOTBIN)/$(BASHPROG)
 
 include ../Makefile.cmd
 
@@ -39,9 +41,11 @@ clobber	:=	TARGET = clobber
 
 .KEEP_STATE:
 
-all clean clobber:	$(SUBDIRS)
+all:	$(SUBDIRS) $(BASHPROG)
 
-install:	$(SUBDIRS)
+clean clobber:	$(SUBDIRS)
+
+install:	$(SUBDIRS) $(ROOTBASHPROG)
 	-$(RM) $(ROOTPROG)
 	-$(LN) $(ISAEXEC) $(ROOTPROG)
 

@@ -500,7 +500,7 @@ only forth definitions also support-functions
 \ ***** start
 \
 \       Initializes support.4th global variables, sets loader_conf_files,
-\       processes conf files, and, if any one such file was succesfully
+\       processes conf files, and, if any one such file was successfully
 \       read to the end, loads kernel and modules.
 
 : start  ( -- ) ( throws: abort & user-defined )
@@ -508,9 +508,11 @@ only forth definitions also support-functions
   include_bootenv
   include_conf_files
   include_transient
+  \ If the user defined a post-initialize hook, call it now
+  s" post-initialize" sfind if execute else drop then
   parse-boot-args
   \ Will *NOT* try to load kernel and modules if no configuration file
-  \ was succesfully loaded!
+  \ was successfully loaded!
   any_conf_read? if
     s" loader_delay" getenv -1 = if
       load_xen_throw
@@ -531,13 +533,15 @@ only forth definitions also support-functions
 \
 \	Overrides support.4th initialization word with one that does
 \	everything start one does, short of loading the kernel and
-\	modules. Returns a flag
+\	modules. Returns a flag.
 
 : initialize ( -- flag )
   s" /boot/defaults/loader.conf" initialize
   include_bootenv
   include_conf_files
   include_transient
+  \ If the user defined a post-initialize hook, call it now
+  s" post-initialize" sfind if execute else drop then
   parse-boot-args
   any_conf_read?
 ;

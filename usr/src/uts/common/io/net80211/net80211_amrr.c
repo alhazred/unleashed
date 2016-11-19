@@ -28,11 +28,6 @@
 
 #include <net/if.h>
 
-#ifdef INET
-#include <netinet/in.h>
-#include <netinet/if_ether.h>
-#endif
-
 #include <sys/net80211.h>
 #include <sys/net80211_amrr.h>
 #include "net80211_impl.h"
