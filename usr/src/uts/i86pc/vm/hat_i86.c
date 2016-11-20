@@ -33,7 +33,7 @@
 /*
  * VM - Hardware Address Translation management for i386 and amd64
  *
- * Implementation of the interfaces described in <common/vm/hat.h>
+ * Implementation of the interfaces described in <vm/hat.h>
  *
  * Nearly all the details of how the hardware is managed should not be
  * visible outside this layer except for misc. machine specific functions

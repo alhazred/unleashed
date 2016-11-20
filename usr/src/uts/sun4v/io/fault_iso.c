@@ -320,7 +320,7 @@ mem_data_handler(ds_cb_arg_t arg, void *buf, size_t buflen)
 
 	/*
 	 * Information about return values for page calls can be referenced
-	 * in usr/src/uts/common/vm/page_retire.c
+	 * in kernel/vm/page_retire.c
 	 */
 	switch (msg->msg_type) {
 	case FMA_MEM_REQ_STATUS:

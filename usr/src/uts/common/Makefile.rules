@@ -1295,7 +1295,7 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/unicode/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/vm/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/vm/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 

@@ -6265,7 +6265,7 @@ sfmmu_ttesync(struct hat *sfmmup, caddr_t addr, tte_t *ttep, page_t *pp)
 
 	/*
 	 * XXX I want to use cas to update nrm bits but they
-	 * currently belong in common/vm and not in hat where
+	 * currently belong in kernel/vm and not in hat where
 	 * they should be.
 	 * The nrm bits are protected by the same mutex as
 	 * the one that protects the page's mapping list.

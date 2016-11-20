@@ -113,7 +113,7 @@ dump_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *cred, int *rvalp)
 			 * This kernel size equation takes care of the
 			 * boot time kernel footprint and also accounts
 			 * for availrmem changes due to user explicit locking.
-			 * Refer to common/vm/vm_page.c for an explanation
+			 * Refer to kernel/vm/vm_page.c for an explanation
 			 * of these counters.
 			 */
 			dumpsize_in_pages = (physinstalled - obp_pages -
