@@ -51,7 +51,7 @@ find_files "s.*.h"	\
 	usr/src/uts/sun4u/sys 
 
 find_files "s.*.h"	\
-	usr/src/uts/common/vm 
+	include/vm
 
 find_files "s.*"	\
 	usr/src/uts/sparc/hci1394	\

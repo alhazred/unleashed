@@ -142,8 +142,7 @@ COMMON_HDRDIRS= common/avs \
 		common/rpcsvc \
 		common/sharefs \
 		common/smb \
-		common/smbsrv \
-		common/vm
+		common/smbsrv
 
 
 #

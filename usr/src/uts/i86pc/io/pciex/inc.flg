@@ -43,7 +43,7 @@ find_files "s.*.h"	\
 	usr/src/uts/common/netinet	\
 	usr/src/uts/common/inet		\
 	usr/src/uts/common/net		\
-	usr/src/uts/common/vm		\
+	include/vm		\
 	usr/src/uts/common/gssapi
 
 # cfgadm plugin directory

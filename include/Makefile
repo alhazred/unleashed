@@ -194,6 +194,7 @@ SUBDIR=	arpa \
 	rpc \
 	rpcsvc \
 	uuid \
+	vm \
 	sys
 
 .include <prog.mk>

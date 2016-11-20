@@ -39,7 +39,7 @@ find_files "s.*.h" \
 	usr/src/uts/common/nfs \
 	usr/src/uts/common/rpc \
 	include/sys \
-	usr/src/uts/common/vm \
+	include/vm \
 	usr/src/uts/sparc/sys \
 	usr/src/uts/sun/sys
 

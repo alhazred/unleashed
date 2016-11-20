@@ -34,7 +34,7 @@ find_files "s.*.h"\
         usr/src/uts/sparc\
         usr/src/uts/sun\
         include/sys\
-        usr/src/uts/common/vm\
+        include/vm\
         usr/src/uts/common/rpc\
         usr/src/uts/common/nfs\
         usr/src/stand/sys
