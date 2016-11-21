@@ -1,3 +1,3 @@
-SUBDIR=	bmake xinstall
+SUBDIR=	bmake localedef xinstall
 
 .include <bsd.subdir.mk>

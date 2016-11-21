@@ -117,7 +117,6 @@ file path=usr/share/man/man1/list_devices.1
 file path=usr/share/man/man1/listusers.1
 file path=usr/share/man/man1/ln.1
 file path=usr/share/man/man1/loadkeys.1
-file path=usr/share/man/man1/localedef.1
 file path=usr/share/man/man1/logger.1
 file path=usr/share/man/man1/login.1
 file path=usr/share/man/man1/logname.1

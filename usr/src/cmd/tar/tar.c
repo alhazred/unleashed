@@ -7263,8 +7263,8 @@ utf8_local(
 	} else if (charset_type == 0) {	/* iconv_open has not yet been done */
 		nl_target = nl_langinfo(CODESET);
 		if (strlen(nl_target) == 0)	/* locale using 7-bit codeset */
-			nl_target = "646";
-		if (strcmp(nl_target, "646") == 0)
+			nl_target = "US-ASCII";
+		if (strcmp(nl_target, "US-ASCII") == 0)
 			charset_type = 1;
 		else if (strcmp(nl_target, "UTF-8") == 0)
 			charset_type = 3;
@@ -7371,8 +7371,8 @@ gen_utf8_names(const char *filename)
 	if (charset_type == 0) {	/* Need to get conversion descriptor */
 		nl_target = nl_langinfo(CODESET);
 		if (strlen(nl_target) == 0)	/* locale using 7-bit codeset */
-			nl_target = "646";
-		if (strcmp(nl_target, "646") == 0)
+			nl_target = "US-ASCII";
+		if (strcmp(nl_target, "US-ASCII") == 0)
 			charset_type = 1;
 		else if (strcmp(nl_target, "UTF-8") == 0)
 			charset_type = 3;

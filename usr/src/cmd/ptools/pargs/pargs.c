@@ -538,7 +538,7 @@ lookup_locale(pargs_data_t *datap)
 	} else {
 		/* composite locale */
 		pd_locale = safe_zalloc(len + 1);
-		(void) snprintf(pd_locale, len + 1, "/%s/%s/%s/%s/%s/%s",
+		(void) snprintf(pd_locale, len + 1, "%s/%s/%s/%s/%s/%s",
 		    lcs[0], lcs[1], lcs[2], lcs[3], lcs[4], lcs[5]);
 	}
 	datap->pd_locale = pd_locale;
@@ -1058,9 +1058,9 @@ convert_str(pargs_data_t *datap, const char *str, int *unprintable)
 	 * characters which aren't printable according to the *current*
 	 * locale (independent of the current codeset) get taken care of.
 	 * Without this second stage, we might (for example) fail to
-	 * properly handle characters converted into the 646 character set
+	 * properly handle characters converted into the ASCII character set
 	 * (which are 8-bits wide), but which must be displayed in the C
-	 * locale (which uses 646, but whose printable characters are a
+	 * locale (which uses ASCII, but whose printable characters are a
 	 * subset of the 7-bit characters).
 	 *
 	 * Note that assuming the victim's locale using LC_ALL will be
