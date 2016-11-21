@@ -210,10 +210,6 @@ else
 fi
 shift
 
-# contents of stdenv.sh inserted after next line:
-# STDENV_START
-# STDENV_END
-
 # Check if we have sufficient data to continue...
 [[ -v CODEMGR_WS ]] || fatal_error "Error: Variable CODEMGR_WS not set."
 [[ -d "${CODEMGR_WS}" ]] || fatal_error "Error: ${CODEMGR_WS} is not a directory."
