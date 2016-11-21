@@ -14,7 +14,7 @@ MODULE_FW=	fw/iwlwifi-100-5.ucode \
 		fw/iwlwifi-5000-2.ucode \
 		fw/iwlwifi-5150-2.ucode \
 		fw/iwlwifi-6000-4.ucode \
-		fw/iwlwifi-6000g2a-5.ucode \
+		fw/iwlwifi-6000g2a-6.ucode \
 		fw/iwlwifi-6000g2b-6.ucode \
 		fw/iwlwifi-6050-5.ucode
 SRCS=		if_iwn.c
