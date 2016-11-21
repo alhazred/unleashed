@@ -921,7 +921,7 @@ convert_prompt(const sasl_utils_t *utils, void **h, const char *s)
 
 /*
  * local_to_utf converts a string in the current codeset to utf-8.
- * If no codeset is specified, then codeset 646 will be used.
+ * If no codeset is specified, then codeset US-ASCII will be used.
  * Upon successful completion, this function will return a non-NULL buffer
  * that is allocated by local_to_utf.
  *
@@ -948,7 +948,7 @@ local_to_utf(const sasl_utils_t *utils, const char *s)
 	    return NULL;
 
 	if (code_set == NULL)
-	    code_set = "646";
+	    code_set = "US-ASCII";
 
 	if (strcasecmp(code_set, "UTF-8") == 0) {
 	    if (utils == NULL)

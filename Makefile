@@ -2,6 +2,7 @@ SUBDIR = bin \
 	 include \
 	 kernel \
 	 lib
+	 share
 
 .include <bsd.subdir.mk>
 

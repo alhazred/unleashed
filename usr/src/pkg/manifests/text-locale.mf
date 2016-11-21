@@ -64,6 +64,7 @@ file path=usr/share/man/man1/gencat.1
 file path=usr/share/man/man1/genmsg.1
 file path=usr/share/man/man1/gettxt.1
 file path=usr/share/man/man1/locale.1
+file path=usr/share/man/man1/localedef.1
 file path=usr/share/man/man1/mkmsgs.1
 file path=usr/share/man/man1/msgfmt.1
 file path=usr/share/man/man1/printf.1

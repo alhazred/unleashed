@@ -205,7 +205,6 @@ MANFILES=	acctcom.1			\
 	 	ln.1				\
 	 	loadkeys.1			\
 	 	locale.1			\
-	 	localedef.1			\
 	 	logger.1			\
 	 	login.1				\
 	 	logname.1			\
