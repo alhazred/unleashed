@@ -277,7 +277,7 @@ nvf_load(void)
  * nvf_update - start process of updating the NVPAIR/NVLIST file.
  *
  * This function is derived from a like NVPAIR/NVFILE implementation
- * in usr/src/uts/common/os/devctl.c
+ * in kernel/os/devctl.c
  *
  */
 void
@@ -813,7 +813,7 @@ nvf_data_clear(char *id, char *name)
  * nvf_cksum - calculate checksum of given buffer.
  *
  * This function was derived from like function (nvp_cksum) in
- * usr/src/uts/common/os/devctl.c
+ * kernel/os/devctl.c
  */
 static uint16_t
 nvf_chksum(char *buf, int64_t buflen)
@@ -910,7 +910,7 @@ nvf_thread(void *arg)
  * nvf_flush - write contents of NVLIST/NVPAIR to a backing file.
  *
  * This function is derived from a like NVPAIR/NVFILE implementation
- * in usr/src/uts/common/os/devctl.c
+ * in kernel/os/devctl.c
  */
 static boolean_t
 nvf_flush(void)
@@ -1074,7 +1074,7 @@ nvf_flush(void)
  * nvf_parse - read contents of NVLIST/NVPAIR file.
  *
  * This function is derived from a like NVPAIR/NVFILE implementation
- * in usr/src/uts/common/os/devctl.c
+ * kernel/os/devctl.c
  */
 static boolean_t
 nvf_parse(char *filename)

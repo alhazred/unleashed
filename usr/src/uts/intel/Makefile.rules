@@ -265,7 +265,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/syscall/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/os/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 

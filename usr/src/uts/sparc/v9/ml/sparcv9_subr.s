@@ -1618,7 +1618,7 @@ int dtrace_panic_trigger(int *tp) { return (0); }
  * values.  If we are not dying due to a fatal trap, these registers will
  * then be preserved in panicbuf as the current processor state.  Before
  * invoking panicsys(), vpanic() activates the first panic trigger (see
- * common/os/panic.c) and switches to the panic_stack if successful.  Note that
+ * kernel/os/panic.c) and switches to the panic_stack if successful.  Note that
  * DTrace takes a slightly different panic path if it must panic from probe
  * context.  Instead of calling panic, it calls into dtrace_vpanic(), which
  * sets up the initial stack as vpanic does, calls dtrace_panic_trigger(), and

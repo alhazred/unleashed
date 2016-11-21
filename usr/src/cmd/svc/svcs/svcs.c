@@ -260,7 +260,7 @@ ht_hash_fmri(const char *fmri)
 	k = fmri + sizeof ("svc:/") - 1;
 
 	/*
-	 * Generic hash function from uts/common/os/modhash.c.
+	 * Generic hash function from kernel/os/modhash.c.
 	 */
 	for (p = k; *p != '\0'; ++p) {
 		h = (h << 4) + *p;

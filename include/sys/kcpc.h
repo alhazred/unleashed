@@ -209,7 +209,7 @@ extern void kcpc_free(kcpc_ctx_t *ctx, int isexec);
 
 /*
  * 'dtrace_cpc_in_use' contains the number of currently active cpc provider
- * based enablings. See the block comment in uts/common/os/dtrace_subr.c for
+ * based enablings. See the block comment in kernel/os/dtrace_subr.c for
  * details of its actual usage.
  */
 extern uint32_t		dtrace_cpc_in_use;

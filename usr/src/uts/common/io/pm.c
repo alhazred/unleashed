@@ -25,7 +25,7 @@
 
 /*
  * pm	This driver now only handles the ioctl interface.  The scanning
- *	and policy stuff now lives in common/os/sunpm.c.
+ *	and policy stuff now lives in kernel/os/sunpm.c.
  *	Not DDI compliant
  */
 
@@ -705,7 +705,7 @@ static int
 pm_chpoll(dev_t dev, short events, int anyyet, short *reventsp,
 	struct pollhead **phpp)
 {
-	extern struct pollhead pm_pollhead;	/* common/os/sunpm.c */
+	extern struct pollhead pm_pollhead;	/* kernel/os/sunpm.c */
 	int	clone;
 
 	clone = PM_MINOR_TO_CLONE(getminor(dev));

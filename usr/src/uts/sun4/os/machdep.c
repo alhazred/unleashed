@@ -512,7 +512,7 @@ cpu_kstat_intrstat_update(kstat_t *ksp, int rw)
 }
 
 /*
- * Called by common/os/cpu.c for psrinfo(1m) kstats
+ * Called by kernel/os/cpu.c for psrinfo(1m) kstats
  */
 char *
 cpu_fru_fmri(cpu_t *cp)

@@ -76,7 +76,7 @@ priv_set_t priv_unsafe;	/* unsafe to exec set-uid root if these are not in L */
 
 /*
  * Privilege initialization functions.
- * Called from common/os/cred.c when cred_init is called.
+ * Called from kernel/os/cred.c when cred_init is called.
  */
 
 void

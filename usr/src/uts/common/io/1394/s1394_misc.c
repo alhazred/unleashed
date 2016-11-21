@@ -679,7 +679,7 @@ s1394_print_node_info(s1394_hal_t *hal)
 	uint_t	hal_node_num;
 	char	str[200], tmp[200];
 
-	/* These are in common/os/logsubr.c */
+	/* These are in kernel/os/logsubr.c */
 	extern void log_enter(void);
 	extern void log_exit(void);
 

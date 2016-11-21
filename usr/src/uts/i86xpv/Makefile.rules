@@ -111,7 +111,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/pciex/%.c
 	$(CTFCONVERT_O)
 
 #	We need this one to make sure we share dtrace_subr.c with i86pc
-#	Otherwise we pick up common/os/dtrace_subr.c instead :(
+#	Otherwise we pick up kernel/os/dtrace_subr.c instead :(
 
 $(OBJS_DIR)/dtrace_subr.o:	$(UTSBASE)/i86pc/os/dtrace_subr.c
 	$(COMPILE.c) -o $@ $(UTSBASE)/i86pc/os/dtrace_subr.c

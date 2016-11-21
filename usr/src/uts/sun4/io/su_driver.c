@@ -1933,7 +1933,7 @@ asy_ppsevent(struct asycom *asy, int msr)
 		 * Note: the kernel has nano based time values while
 		 * NTP requires micro based, an in-line fast algorithm
 		 * to convert nsec to usec is used here -- see hrt2ts()
-		 * in common/os/timers.c for a full description.
+		 * in kernel/os/timers.c for a full description.
 		 */
 		struct timeval *tvp = &asy_ppsev.tv;
 		timestruc_t ts;

@@ -1759,7 +1759,7 @@ ufs_imark(struct inode *ip)
 
 	/*
 	 * Fast algorithm to convert nsec to usec -- see hrt2ts()
-	 * in common/os/timers.c for a full description.
+	 * in kernel/os/timers.c for a full description.
 	 */
 	nsec = now.tv_nsec;
 	usec = nsec + (nsec >> 2);

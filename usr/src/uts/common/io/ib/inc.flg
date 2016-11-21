@@ -72,7 +72,7 @@ find_files "s.*" usr/src/pkg/license_files
 
 # extra files needed
 find_files "s.*"	\
-	usr/src/uts/common/os		\
+	kernel/os		\
 	usr/src/uts/common/rpc		\
 	usr/src/uts/intel/asm		\
 	usr/src/uts/intel/amd64

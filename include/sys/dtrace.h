@@ -1367,7 +1367,7 @@ typedef struct dof_helper {
  *
  * The following functions are implemented by the DTrace framework and are
  * used to implement separate in-kernel DTrace providers.  Common functions
- * are provided in uts/common/os/dtrace.c.  ISA-dependent subroutines are
+ * are provided in kernel/os/dtrace.c.  ISA-dependent subroutines are
  * defined in uts/<isa>/dtrace/dtrace_asm.s or uts/<isa>/dtrace/dtrace_isa.c.
  *
  * The provider API has two halves:  the API that the providers consume from
@@ -2247,7 +2247,7 @@ extern int dtrace_meta_unregister(dtrace_meta_provider_id_t);
  *
  * The following functions are implemented by the base kernel and form a set of
  * hooks used by the DTrace framework.  DTrace hooks are implemented in either
- * uts/common/os/dtrace_subr.c, an ISA-specific assembly file, or in a
+ * kernel/os/dtrace_subr.c, an ISA-specific assembly file, or in a
  * uts/<platform>/os/dtrace_subr.c corresponding to each hardware platform.
  */
 

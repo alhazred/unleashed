@@ -28,7 +28,7 @@ System Call Files
 ------ ---- -----
 
 The universal dumping grounds for system calls in Solaris 2.x,
-common/os/scalls.c and common/fs/vncalls.c, have been sub-divided into
+kernel/os/scalls.c and common/fs/vncalls.c, have been sub-divided into
 smaller files.
 
 The old files had become quite large, and contained much completely
@@ -81,17 +81,17 @@ to them if you add new system calls.
 5) If a number of system calls make use of a local function, or,
    if a function is used more widely than in a few system calls,
    then perhaps this function needs to be moved to one of the
-   kernel-implementation files in common/os or common/fs. For
+   kernel-implementation files in kernel/os or common/fs. For
    example, this was done with the functions namesetattr and
    fdsetattr, which were used by several different system calls.
-   These functions were moved into common/os/fio.c, where they
+   These functions were moved into kernel/os/fio.c, where they
    seemed to fit better.
 
 -------------------------------------------------------------------
 System Call Reorganization
 ------ ---- --------------
 
-The system calls in common/os/scalls.c, common/fs/vncalls.c
+The system calls in kernel/os/scalls.c, common/fs/vncalls.c
 have been broken up into smaller files. In addition, system
 calls that previously resided in <arch>/os/archdep.c have
 been removed from that file. The table below describes the

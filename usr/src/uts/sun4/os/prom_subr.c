@@ -369,7 +369,7 @@ kern_postprom(void)
  * If the frame buffer device is busy, briefly capture the other CPUs so that
  * another CPU executing code to manipulate the device does not execute at the
  * same time we are rendering characters.  Refer to the comments and code in
- * common/os/console.c for more information on these callbacks.
+ * kernel/os/console.c for more information on these callbacks.
  *
  * Notice that we explicitly acquire the PROM lock using kern_preprom() prior
  * to idling other CPUs.  The idling mechanism will cross-trap the other CPUs

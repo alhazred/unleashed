@@ -186,7 +186,7 @@ hash_fmri(const char *str)
 	uint32_t h = 0, g;
 	const char *p;
 
-	/* Generic hash function from uts/common/os/modhash.c . */
+	/* Generic hash function from kernel/os/modhash.c . */
 	for (p = str; *p != '\0'; ++p) {
 		h = (h << 4) + *p;
 		if ((g = (h & 0xf0000000)) != 0) {

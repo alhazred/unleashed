@@ -191,7 +191,7 @@ main(int argc, char **argv)
 	 * in our session structure is NULL.  In these cases it
 	 * must be assumed that the default console is used.
 	 *
-	 * See uts/common/os/session.c:cttydev().
+	 * See kernel/os/session.c:cttydev().
 	 */
 	(void) strcpy(cttyname, DEFAULT_CONSOLE);
 	(void) strcpy(scratchlist, namedlist);

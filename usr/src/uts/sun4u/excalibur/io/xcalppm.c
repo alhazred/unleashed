@@ -50,7 +50,7 @@
  *
  * When the autopm framework needs to change the power of a component of a
  * device, it needs to hold the associated power lock (see discussion at
- * top of uts/common/os/sunpm.c).
+ * top of kernel/os/sunpm.c).
  *
  * If the framework needs to lock a dev/cmpt for a device which this ppm
  * has claimed, xcppm_ctlops will be called with PMR_PPM_LOCK_POWER.  Ppm

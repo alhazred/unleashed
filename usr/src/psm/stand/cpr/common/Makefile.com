@@ -34,7 +34,7 @@ include $(TOPDIR)/psm/stand/lib/Makefile.lib
 
 SYSDIR	=  	$(TOPDIR)/uts
 COMDIR	=  	../../common
-OSDIR  =	$(SYSDIR)/common/os
+OSDIR  =	$(CODEMGR_WS)/kernel/os
 ARCHDIR	= 	$(SYSDIR)/$(ARCH)
 MACHDIR	= 	$(SYSDIR)/$(MACH)
 MMUDIR	=	$(SYSDIR)/$(MMU)

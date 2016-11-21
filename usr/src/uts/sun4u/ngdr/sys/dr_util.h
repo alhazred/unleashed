@@ -83,7 +83,7 @@ extern struct memlist	*dr_memlist_cat_span(struct memlist *mlist,
 
 /*
  * These are all utilities internal for DR.  There are
- * similar functions in common/os which have similar names.
+ * similar functions in kernel/os which have similar names.
  * We rename them to make sure there is no name space
  * conflict.
  */

@@ -237,7 +237,7 @@ p_online_internal(processorid_t cpun, int new_status, int *old_status)
  *   As noted in os/cpu.c, the P_ONLINE and other state constants are for use
  *   only in this system call path and other paths conveying CPU state to
  *   userland.  In general, other kernel consumers should be using the accessor
- *   functions in uts/common/os/cpu.c.
+ *   functions in kernel/os/cpu.c.
  */
 int
 p_online(processorid_t cpun, int new_status)

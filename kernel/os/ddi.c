@@ -43,7 +43,7 @@
  * are specified by DDI to exist in the kernel and are implemented here.
  *
  * Note that putnext() and put() are not in this file. The C version of
- * these routines are in uts/common/os/putnext.c and assembly versions
+ * these routines are in kernel/os/putnext.c and assembly versions
  * might exist for some architectures.
  */
 

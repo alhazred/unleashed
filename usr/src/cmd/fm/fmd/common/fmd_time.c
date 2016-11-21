@@ -111,7 +111,7 @@ fmd_time_sync(fmd_timeval_t *ftv, hrtime_t *hrp, uint_t samples)
  * Convert a high-resolution timestamp into 64-bit seconds and nanoseconds.
  * For efficiency, the multiplication and division are expanded using the
  * clever algorithm originally designed for the kernel in hrt2ts().  Refer to
- * the comments in uts/common/os/timers.c for an explanation of how it works.
+ * the comments in kernel/os/timers.c for an explanation of how it works.
  */
 static void
 fmd_time_hrt2ftv(hrtime_t hrt, fmd_timeval_t *ftv)

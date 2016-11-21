@@ -1131,7 +1131,7 @@ smb_tree_get_volname(vfs_t *vfsp, smb_tree_t *tree)
  * that don't support them.
  *
  * Some flags are dependent on the typename, which is also set up here.
- * File system types are hardcoded in uts/common/os/vfs_conf.c.
+ * File system types are hardcoded in kernel/os/vfs_conf.c.
  */
 static void
 smb_tree_get_flags(const smb_kshare_t *si, vfs_t *vfsp, smb_tree_t *tree)

@@ -34,7 +34,7 @@
  * This function is blatently stolen from the kernel.
  * See the dissertation in the comments preceding the
  * hrt2ts() function in:
- *	uts/common/os/timers.c
+ *	kernel/os/timers.c
  */
 void
 hrt2ts(hrtime_t hrt, timespec_t *tsp)

@@ -341,8 +341,8 @@ struct brand;
  * help users and developers quickly identify subsystems that stall zone
  * shutdowns indefinitely.
  *
- * NOTE: You must modify zone_ref_subsys_names in usr/src/uts/common/os/zone.c
- * when you modify this enumeration.
+ * NOTE: You must modify zone_ref_subsys_names in kernel/os/zone.c when you
+ * modify this enumeration.
  */
 typedef enum zone_ref_subsys {
 	ZONE_REF_NFS,			/* NFS */

@@ -23,7 +23,7 @@
 #
 
 PROG= savecore
-SRCS= ../savecore.c ../../../uts/common/os/compress.c
+SRCS= ../savecore.c ../../../../../kernel/os/compress.c
 OBJS= savecore.o compress.o
 
 include ../../Makefile.cmd
@@ -65,7 +65,7 @@ include ../../Makefile.targ
 	$(COMPILE.c) -I$(SRC)/common $<
 	$(POST_PROCESS_O)
 
-%.o: ../../../uts/common/os/%.c
+%.o: ../../../../../kernel/os/%.c
 	$(COMPILE.c) $<
 	$(POST_PROCESS_O)
 

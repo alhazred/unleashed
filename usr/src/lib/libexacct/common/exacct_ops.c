@@ -854,7 +854,7 @@ ea_write_object(ea_file_t *ef, ea_object_t *obj)
 
 /*
  * validate_header() must be kept in sync with write_header(), given below, and
- * exacct_create_header(), in uts/common/os/exacct.c.
+ * exacct_create_header(), in kernel/os/exacct.c.
  */
 static int
 validate_header(ea_file_t *ef, const char *creator)

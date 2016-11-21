@@ -740,7 +740,7 @@ static rndmag_pad_t *rndmag;
 static uint8_t	*rndbuf;
 static size_t 	rndmag_total;
 /*
- * common/os/cpu.c says that platform support code can shrinkwrap
+ * kernel/os/cpu.c says that platform support code can shrinkwrap
  * max_ncpus.  On the off chance that we get loaded very early, we
  * read it exactly once, to copy it here.
  */

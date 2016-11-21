@@ -1004,7 +1004,7 @@ blacklist(int cmd, const char *scheme, nvlist_t *fmri, const char *class)
  * we are still calling into the early boot services.  Once we start calling
  * the kernel console emulator, it will disable interrupts completely during
  * character rendering (see sysp_putchar, for example).  Refer to the comments
- * and code in common/os/console.c for more information on these callbacks.
+ * and code in kernel/os/console.c for more information on these callbacks.
  */
 /*ARGSUSED*/
 int

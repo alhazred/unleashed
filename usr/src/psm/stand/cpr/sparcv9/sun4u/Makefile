@@ -62,6 +62,6 @@ CPPINCS	+=	-I$(STANDDIR)
 XRDIRS	+=	../../common \
 		$(STANDDIR)/lib $(STANDDIR)/sys \
 		../../../../promif/ieee1275 \
-		$(TOPDIR)/uts/common/os/compress.c \
+		$(CODEMGR_WS)/kernel/os/compress.c \
 		$(TOPDIR)/uts/common/sys/cpr.h \
 		$(TOPDIR)/uts/sun4u/sys/cpr_impl.h

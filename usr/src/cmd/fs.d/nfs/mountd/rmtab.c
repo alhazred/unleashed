@@ -265,7 +265,7 @@ mntlist_send(SVCXPRT *transp)
  * The string hashing algorithm is from the "Dragon Book" --
  * "Compilers: Principles, Tools & Techniques", by Aho, Sethi, Ullman
  *
- * And is modified for this application from usr/src/uts/common/os/modhash.c
+ * And is modified for this application from kernel/os/modhash.c
  */
 
 static uint_t

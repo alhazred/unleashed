@@ -1339,7 +1339,7 @@ pc_hash(const char *auth)
 	const char *p;
 
 	/*
-	 * Generic hash function from uts/common/os/modhash.c.
+	 * Generic hash function from kernel/os/modhash.c.
 	 */
 	for (p = auth; *p != '\0'; ++p) {
 		h = (h << 4) + *p;

@@ -233,8 +233,8 @@ pics/pathname.o:	   $(SRC)/uts/common/fs/pathname.c
 	$(COMPILE.c) -o $@ $(SRC)/uts/common/fs/pathname.c
 	$(POST_PROCESS_O)
 
-pics/refstr.o:		   $(SRC)/uts/common/os/refstr.c
-	$(COMPILE.c) -o $@ $(SRC)/uts/common/os/refstr.c
+pics/refstr.o:		   $(CODEMGR_WS)/kernel/os/refstr.c
+	$(COMPILE.c) -o $@ $(CODEMGR_WS)/kernel/os/refstr.c
 	$(POST_PROCESS_O)
 
 pics/xattr_common.o:	   $(SRC)/common/xattr/xattr_common.c

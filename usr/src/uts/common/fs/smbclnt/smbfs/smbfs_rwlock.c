@@ -38,7 +38,7 @@
  * See: uts/common/fs/nfs/nfs_subr.c
  *
  * XXX: Could we make this serve our needs instead?
- * See: uts/common/os/rwstlock.c
+ * See: kernel/os/rwstlock.c
  * (and then use it for NFS too)
  */
 

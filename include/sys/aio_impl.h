@@ -166,7 +166,7 @@ typedef struct aio {
 #define	AIO_CLEANUP_EXIT	1	/* aio_cleanup_exit() */
 #define	AIO_CLEANUP_THREAD	2	/* aio_cleanup_thread() */
 
-/* functions exported by common/os/aio_subr.c */
+/* functions exported by kernel/os/aio_subr.c */
 
 extern int aphysio(int (*)(), int (*)(), dev_t, int, void (*)(),
 		struct aio_req *);

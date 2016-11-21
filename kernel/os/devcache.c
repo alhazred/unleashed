@@ -236,11 +236,10 @@ void
 i_ddi_read_devices_files(void)
 {
 	/*
-	 * The retire store should be the first file read as it
-	 * may need to offline devices. kfio_disable_read is not
-	 * used for retire. For the rationale see the tunable
-	 * ddi_retire_store_bypass and comments in:
-	 *	uts/common/os/retire_store.c
+	 * The retire store should be the first file read as it may need to
+	 * offline devices. kfio_disable_read is not used for retire. For
+	 * the rationale see the tunable ddi_retire_store_bypass and
+	 * comments in: kernel/os/retire_store.c
 	 */
 
 	retire_store_read();

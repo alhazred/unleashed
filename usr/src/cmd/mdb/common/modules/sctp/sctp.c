@@ -63,7 +63,7 @@
 #define	MDB_SCTP_SHOW_ALL	0xffffffff
 
 /*
- * Copy from usr/src/uts/common/os/list.c.  Should we have a generic
+ * Copy from kernel/os/list.c.  Should we have a generic
  * mdb list walker?
  */
 #define	list_object(a, node) ((void *)(((char *)node) - (a)->list_offset))

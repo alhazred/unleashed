@@ -30,7 +30,7 @@
  */
 
 /*
- * based on usr/src/uts/common/os/kmem.c r1.64 from 2001/12/18
+ * based on kernel/os/kmem.c r1.64 from 2001/12/18
  *
  * The slab allocator, as described in the following two papers:
  *

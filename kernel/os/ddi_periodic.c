@@ -31,9 +31,9 @@ extern void sir_on(int);
  *
  * This file contains the implementation of the ddi_periodic_add(9F) interface.
  * It is a thin wrapper around the cyclic subsystem (see documentation in
- * uts/common/os/cyclic.c), providing a DDI interface for registering
- * (and unregistering) callbacks for periodic invocation at arbitrary
- * interrupt levels, or in kernel context.
+ * kernel/os/cyclic.c), providing a DDI interface for registering (and
+ * unregistering) callbacks for periodic invocation at arbitrary interrupt
+ * levels, or in kernel context.
  *
  * Each call to ddi_periodic_add will result in a new opaque handle, as
  * allocated from an id_space, a new "periodic" object (ddi_periodic_impl_t)

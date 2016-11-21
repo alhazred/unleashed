@@ -28,10 +28,10 @@
 
 /*
  * We keep our own copy of this algorithm for 2 main reasons:
- * 	1. If we didn't, anyone modifying common/os/compress.c would
+ * 	1. If we didn't, anyone modifying kernel/os/compress.c would
  *         directly break our on disk format
  * 	2. Our version of lzjb does not have a number of checks that the
- *         common/os version needs and uses
+ *         kernel/os version needs and uses
  * In particular, we are adding the "feature" that compress() can
  * take a destination buffer size and return -1 if the data will not
  * compress to d_len or less.

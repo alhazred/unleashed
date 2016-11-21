@@ -342,7 +342,7 @@ kernelheap_init(
 	/*
 	 * Create an arena for translation data (ptes, hmes, or hblks).
 	 * We need an arena for this because hat_memload() is essential
-	 * to vmem_populate() (see comments in common/os/vmem.c).
+	 * to vmem_populate() (see comments in kernel/os/vmem.c).
 	 *
 	 * Note: any kmem cache that allocates from hat_memload_arena
 	 * must be created as a KMC_NOHASH cache (i.e. no external slab

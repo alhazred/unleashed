@@ -79,7 +79,7 @@ new-device
 
    \ decompression
    \
-   \ uts/common/os/compress.c has a definitive theory of operation comment
+   \ kernel/os/compress.c has a definitive theory of operation comment
    \ on lzjb, but here's the reader's digest version:
    \
    \ repeated phrases are replaced by referenced to the original

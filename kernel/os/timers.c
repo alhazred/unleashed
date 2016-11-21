@@ -98,7 +98,7 @@ uniqtime(struct timeval *tv)
 
 	/*
 	 * Fast algorithm to convert nsec to usec -- see hrt2ts()
-	 * in common/os/timers.c for a full description.
+	 * in kernel/os/timers.c for a full description.
 	 */
 	nsec = ts.tv_nsec;
 	usec = nsec + (nsec >> 2);

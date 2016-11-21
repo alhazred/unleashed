@@ -36,7 +36,7 @@
  *	Proceedings of the 2001 Usenix Conference.
  *	Available as /shared/sac/PSARC/2000/550/materials/vmem.pdf.
  *
- * For the "Big Theory Statement", see usr/src/uts/common/os/vmem.c
+ * For the "Big Theory Statement", see kernel/os/vmem.c
  *
  * 1. Overview of changes
  * ------------------------------

@@ -2399,7 +2399,7 @@ static kmutex_t i_hca_test_lock; 	/* lock for serial numer */
  *      i_hca_test_init() creates two hash tables, one of which is for string,
  *      and the other of which is for ID, then saves pointers to arguments
  *      passed. This function uses the mod_hash utilities to manage the
- *      hash tables. About the mod_hash, see common/os/modhash.c.
+ *      hash tables. About the mod_hash, see kernel/os/modhash.c.
  *
  *  Argument
  *      strHashp: pointer to String hash table pointer
