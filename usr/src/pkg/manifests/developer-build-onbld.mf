@@ -81,7 +81,6 @@ $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/stabs mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/tokenize mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/tokenize.exe mode=0555
 file path=opt/onbld/bin/Install mode=0555
-file path=opt/onbld/bin/bldenv mode=0555
 file path=opt/onbld/bin/build_cscope mode=0555
 file path=opt/onbld/bin/cddlchk mode=0555
 file path=opt/onbld/bin/check_rtime mode=0555
@@ -103,7 +102,6 @@ file path=opt/onbld/bin/interface_cmp mode=0555
 file path=opt/onbld/bin/jstyle mode=0555
 file path=opt/onbld/bin/make_pkg_db mode=0555
 file path=opt/onbld/bin/mapfilechk mode=0555
-file path=opt/onbld/bin/nightly mode=0555
 file path=opt/onbld/bin/onu mode=0555
 file path=opt/onbld/bin/protocmp.terse mode=0555
 file path=opt/onbld/bin/validate_flg mode=0555
@@ -207,7 +205,6 @@ file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/hgext/__init__.pyc \
     mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/hgext/cdm.py mode=0444
 file path=opt/onbld/man/man1onbld/Install.1onbld
-file path=opt/onbld/man/man1onbld/bldenv.1onbld
 file path=opt/onbld/man/man1onbld/cddlchk.1onbld
 file path=opt/onbld/man/man1onbld/check_rtime.1onbld
 file path=opt/onbld/man/man1onbld/checkpaths.1onbld
@@ -226,7 +223,6 @@ file path=opt/onbld/man/man1onbld/jstyle.1onbld
 file path=opt/onbld/man/man1onbld/make_pkg_db.1onbld
 file path=opt/onbld/man/man1onbld/mapfilechk.1onbld
 file path=opt/onbld/man/man1onbld/ndrgen.1onbld
-file path=opt/onbld/man/man1onbld/nightly.1onbld
 file path=opt/onbld/man/man1onbld/onu.1onbld
 file path=opt/onbld/man/man1onbld/webrev.1onbld
 file path=opt/onbld/man/man1onbld/which_scm.1onbld
@@ -247,5 +243,3 @@ link path=opt/onbld/lib/python target=python$(PYTHON_VERSION)
 link path=opt/onbld/man/man1onbld/git-nits.1onbld target=git-pbchk.1onbld
 # webrev(1) requires ps2pdf
 depend fmri=print/filter/ghostscript type=require
-# nightly(1) uses wget
-depend fmri=web/wget type=require
