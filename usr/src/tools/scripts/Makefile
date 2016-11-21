@@ -27,7 +27,6 @@ SHELL=/usr/bin/ksh93
 
 SHFILES= \
 	Install \
-	build_cscope \
 	checkpaths \
 	checkproto \
 	cstyle \
@@ -39,8 +38,7 @@ SHFILES= \
 	protocmp.terse \
 	webrev \
 	which_scm \
-	ws \
-	xref
+	ws
 
 PERLFILES= \
 	check_rtime \
@@ -89,14 +87,10 @@ MAN1ONBLDFILES= \
 	webrev.1onbld \
 	which_scm.1onbld \
 	ws.1onbld \
-	wsdiff.1onbld \
-	xref.1onbld
+	wsdiff.1onbld
 
 MAN1ONBLDLINKS= \
 	git-nits.1onbld
-
-MAKEFILES= \
-	xref.mk
 
 ETCFILES= \
 	hgstyle \
@@ -127,7 +121,7 @@ $(ROOTONBLDMAN1ONBLDFILES)	:= FILEMODE=	644
 .KEEP_STATE:
 
 all:	$(SHFILES) $(PERLFILES) $(PERLMODULES) $(PYFILES) \
-	$(MAN1ONBLDFILES) $(MAKEFILES)
+	$(MAN1ONBLDFILES)
 
 $(ROOTONBLDBIN)/git-nits:
 	$(RM) $(ROOTONBLDBIN)/git-nits

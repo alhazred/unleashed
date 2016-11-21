@@ -45,26 +45,4 @@ clobber: $(SUBDIRS)
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
-#
-# Cross-reference customization: include all boot-related source files.
-#
-UTSDIR =	../../../uts
-UTSCLOSED =	../../../../closed/uts
-STANDLIBDIR =	../../../stand/lib
-STANDSYSDIRS =	../../../stand/sys
-PROMDIRS =	../../promif
-NAMESDIRS =	../lib/names
-XRDIRS += 	$(STANDLIBDIR) $(STANDSYSDIRS) $(PROMDIRS) $(NAMESDIRS)
-
-#
-# Components beginning with B! are in the open and closed trees; those
-# beginning with O! are just in the open tree.
-#
-XRINCCOMP = B!sun4u O!sfmmu O!sparc/v7 O!sparc/v9 B!sparc B!sun B!common
-XRINC_TMP = $(XRINCCOMP:B!%=$(UTSDIR)/%)
-XRINCDIRS = $(XRINC_TMP:O!%=$(UTSDIR)/%)
-
-cscope.out tags: FRC
-	$(XREF) -x $@
-
 FRC:

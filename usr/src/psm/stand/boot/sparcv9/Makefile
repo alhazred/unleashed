@@ -43,6 +43,3 @@ FRC:
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(MFLAGS) $(TARGET)
-
-cscope.out tags: FRC
-	$(XREF) -x $@

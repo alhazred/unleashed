@@ -185,19 +185,4 @@ clobber_h: $(DYNHDRDIRS)
 
 modlist: $($(MACH)_ARCHITECTURES)
 
-#
-# Cross-reference customization: build a cross-reference over all of
-# the supported architectures.  Although there's no correct way to set
-# the include path (since we don't know what architecture is the one
-# the user will be interested in), it's historically been set to
-# mirror the $(XRDIRS) list, and that works kinda sorta okay.
-#
-XRDIRS = $(sparc_ARCHITECTURES) $(i386_ARCHITECTURES) sun4 sfmmu	\
-	sun common
-
-XRINCDIRS = $(XRDIRS)
-
-cscope.out tags: FRC
-	$(XREF) -x $@
-
 FRC:

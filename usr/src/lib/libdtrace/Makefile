@@ -53,10 +53,3 @@ $(SUBDIRS): FRC
 FRC:
 
 include ../Makefile.targ
-
-#
-# Cross-reference customization: build the cross-reference only over the
-# source directories, and ignore Makefiles and machine-generated source.
-#
-XRDIRS = common i386 sparc sparcv9
-XRDEL = dt_lex.c dt_grammar.c Makefile*

@@ -43,12 +43,3 @@ $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
 FRC:
-
-#
-# Cross-reference customization: include all of the PROM and standalone
-# goo in the cross-reference, except for the crufty "old" directory.
-#
-STANDDIR=	../../stand
-PROMDIRS=	../promif ../../uts/intel/ia32/promif ../../uts/intel/promif
-XRDIRS +=	$(STANDDIR)/lib $(STANDDIR)/sys $(PROMDIRS)
-XRPRUNE =	old

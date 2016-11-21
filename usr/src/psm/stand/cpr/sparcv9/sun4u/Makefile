@@ -54,14 +54,3 @@ CERRWARN += -Wno-uninitialized
 
 STANDDIR = 	$(TOPDIR)/stand
 CPPINCS	+=	-I$(STANDDIR)
-
-#
-# Cross-reference customization: build a cross-reference over all of
-# the sun4u-related CPR source files.
-#
-XRDIRS	+=	../../common \
-		$(STANDDIR)/lib $(STANDDIR)/sys \
-		../../../../promif/ieee1275 \
-		$(CODEMGR_WS)/kernel/os/compress.c \
-		$(TOPDIR)/uts/common/sys/cpr.h \
-		$(TOPDIR)/uts/sun4u/sys/cpr_impl.h

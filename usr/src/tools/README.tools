@@ -75,10 +75,6 @@ bldenv
 	sets the environment up differently and may cause everything
 	to rebuild (because of different -I or -L paths).
 
-build_cscope
-	builds cscope databases in the uts, the platform subdirectories
-	of uts, and in usr/src. Uses cscope-fast.
-
 cdm 
 	A Mercurial extension providing various commands useful for ON
 	development

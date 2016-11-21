@@ -63,7 +63,4 @@ SECLEVEL=core
 clean:     
 	$(RM) $(FSCKOBJS) $(UFSOBJS)
 
-cscope.out tags: FRC
-	$(XREF) -f -x $@
-
 FRC:

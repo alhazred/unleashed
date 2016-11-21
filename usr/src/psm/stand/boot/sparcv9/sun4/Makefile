@@ -75,18 +75,6 @@ CFLAGS64	+= -mtune=ultrasparc $(CCABS32)
 # which we really should be using.
 #
 
-#
-# Cross-reference customization: include all boot-related source files.
-#
-STANDLIBDIR=	../../../../../stand/lib
-STANDSYSDIR=	../../../../../stand/sys
-PROMDIRS=	../../../../promif
-NAMESDIRS=	../../../lib/names/sparcv9 ../../../lib/names/sparc/common
-XRDIRS +=	../../sparc/common ../../common $(STANDLIBDIR) \
-		$(STANDSYSDIR) $(PROMDIRS) $(NAMESDIRS)
-XRPRUNE =	i86pc i386
-
-
 #############################
 #
 # NFS booter

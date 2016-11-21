@@ -219,13 +219,3 @@ $(USR_DESKTOP_LIB_DIR):		$(USR_DESKTOP_DIR)
 	-$(INS.dir)
 
 include ../Makefile.targ
-
-#
-# Cross-reference customization: build a cross-reference over all of the
-# sun4u-related directories.
-#
-XRDIRS	= ../sun4u ../sun4 ../sfmmu ../sparc ../sun ../common
-XRPRUNE = i86pc
-
-cscope.out tags: FRC
-	$(XREF) -x $@

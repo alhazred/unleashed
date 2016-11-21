@@ -100,14 +100,3 @@ install_platforms:	$(ROOT_PSM_DIR) $(USR_PSM_DIR) \
 			$(OEM_USR_PLAT_LINKS)
 
 include ../Makefile.targ
-
-#
-# Cross-reference customization: build a cross-reference over all of the
-# i86pc-related directories.
-#
-XRDIRS	= ../i86pc ../intel ../common
-
-XRPRUNE	= sun4u sun4
-
-cscope.out tags: FRC
-	$(XREF) -x $@

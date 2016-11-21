@@ -213,16 +213,6 @@ cmdheaders: FRC
 
 check:	$(CHKHDRSUBDIRS) $(CHKMFSTSUBDIRS) $(CHKMANSUBDIRS)
 
-#
-# Cross-reference customization: skip all of the subdirectories that
-# don't contain actual source code.
-#
-XRPRUNE = pkg prototypes
-XRINCDIRS = ../../include
-
-cscope.out tags: FRC
-	$(XREF) -f -x $@
-
 FRC:
 
 #

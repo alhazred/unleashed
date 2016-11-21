@@ -46,14 +46,6 @@ all install clean clobber: $(SUBDIRS)
 
 TOPDIR= ../../..
 
-#
-# Cross-reference customization: include other relevant CPR-related code
-# in the cross-reference.
-#
-STANDDIR =	$(TOPDIR)/stand
-XRDIRS	+=	$(STANDDIR)/lib $(STANDDIR)/sys ../../promif \
-		$(TOPDIR)/uts/*/cpr $(TOPDIR)/uts/*/sys/cpr_*
-
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 

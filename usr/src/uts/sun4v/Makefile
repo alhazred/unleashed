@@ -255,13 +255,3 @@ $(USR_MONZA_SBIN_LINKS):	$(USR_MONZA_SBIN_DIR)
 	$(INS.slink7)
 
 include ../Makefile.targ
-
-#
-# Cross-reference customization: build a cross-reference over all of the
-# sun4v-related directories.
-#
-XRDIRS	= ../sun4v ../sun4 ../sfmmu ../sparc ../sun ../common
-XRPRUNE = i86pc sun4u intel
-
-cscope.out tags: FRC
-	$(XREF) -x $@
