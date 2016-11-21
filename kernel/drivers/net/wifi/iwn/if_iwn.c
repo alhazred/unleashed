@@ -113,49 +113,6 @@ static ddi_device_acc_attr_t iwn_dma_accattr = {
 };
 
 
-static const uint16_t iwn_devices[] = {
-	PCI_PRODUCT_INTEL_WIFI_LINK_1030_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_1030_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_4965_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_4965_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_4965_3,
-	PCI_PRODUCT_INTEL_WIFI_LINK_4965_4,
-	PCI_PRODUCT_INTEL_WIFI_LINK_5100_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_5100_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_5150_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_5150_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_5300_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_5300_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_5350_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_5350_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_1000_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_1000_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6000_3X3_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6000_3X3_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6000_IPA_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6000_IPA_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6050_2X2_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6050_2X2_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6005_2X2_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6005_2X2_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6230_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6230_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6235,
-	PCI_PRODUCT_INTEL_WIFI_LINK_6235_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_100_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_100_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_130_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_130_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_2230_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_2230_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_2200_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_2200_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_135_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_135_2,
-	PCI_PRODUCT_INTEL_WIFI_LINK_105_1,
-	PCI_PRODUCT_INTEL_WIFI_LINK_105_2,
-};
-
 /*
  * Supported rates for 802.11a/b/g modes (in 500Kbps unit).
  */
@@ -175,10 +132,9 @@ static void	iwn_kstat_init(struct iwn_softc *);
 static void	iwn_kstat_init_2000(struct iwn_softc *);
 static void	iwn_kstat_init_4965(struct iwn_softc *);
 static void	iwn_kstat_init_6000(struct iwn_softc *);
-static void	iwn_intr_del(struct iwn_softc *, int);
+static void	iwn_intr_teardown(struct iwn_softc *);
 static int	iwn_intr_add(struct iwn_softc *, int);
 static int	iwn_intr_setup(struct iwn_softc *);
-static int	iwn_match(struct iwn_softc *);
 static int	iwn_attach(dev_info_t *, ddi_attach_cmd_t);
 static int	iwn4965_attach(struct iwn_softc *);
 static int	iwn5000_attach(struct iwn_softc *, uint16_t);
@@ -244,7 +200,6 @@ static void	iwn_cmd_done(struct iwn_softc *, struct iwn_rx_desc *);
 static void	iwn_notif_intr(struct iwn_softc *);
 static void	iwn_wakeup_intr(struct iwn_softc *);
 static void	iwn_fatal_intr(struct iwn_softc *);
-static uint_t	iwn_softintr(caddr_t, caddr_t);
 static uint_t	iwn_intr(caddr_t, caddr_t);
 static void	iwn4965_update_sched(struct iwn_softc *, int, int, uint8_t,
 		    uint16_t);
@@ -353,7 +308,8 @@ static int	iwn_hw_prepare(struct iwn_softc *);
 static int	iwn_hw_init(struct iwn_softc *);
 static void	iwn_hw_stop(struct iwn_softc *, boolean_t);
 static int	iwn_init(struct iwn_softc *);
-static void	iwn_thread(struct iwn_softc *);
+static void	iwn_abort_scan(void *);
+static void	iwn_periodic(void *);
 static int	iwn_fast_recover(struct iwn_softc *);
 
 static uint8_t	*ieee80211_add_ssid(uint8_t *, const uint8_t *, uint32_t);
@@ -406,21 +362,14 @@ int iwn_beacons_missed_disconnect = 50;
 int iwn_beacons_missed_sensitivity = 5;
 
 /*
- * iwn_thread cycle time, in usec
- * the below timeouts are in unit of this cycle time
+ * iwn_periodic interval, in units of msec
  */
-int iwn_thread_cycle = 100000;
+int iwn_periodic_interval = 100;
 
 /*
- * scan timeout
+ * scan timeout in sec
  */
-int iwn_scan_timeout = 100;
-
-/*
- * tx timeout, specified in wait cycles and wait duration
- */
-int iwn_tx_timeout_wait = 10;
-int iwn_tx_timeout_cycle = 4;
+int iwn_scan_timeout = 20;
 
 static ether_addr_t etherbroadcastaddr = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
@@ -491,8 +440,7 @@ iwn_kstat_create(struct iwn_softc *sc, const char *name, size_t size,
 	    ddi_get_instance(sc->sc_dip), name, "misc", KSTAT_TYPE_NAMED,
 	    size / sizeof (kstat_named_t), 0);
 	if (*ks == NULL)
-		*data =
-		    kmem_zalloc(size, KM_SLEEP);
+		*data = kmem_zalloc(size, KM_SLEEP);
 	else
 		*data = (*ks)->ks_data;
 }
@@ -500,9 +448,9 @@ iwn_kstat_create(struct iwn_softc *sc, const char *name, size_t size,
 static void
 iwn_kstat_free(kstat_t *ks, void *data, size_t size)
 {
-	if (ks)
+	if (ks != NULL)
 		kstat_delete(ks);
-	else if (data && size)
+	else if (data != NULL)
 		kmem_free(data, size);
 }
 
@@ -676,35 +624,22 @@ iwn_kstat_init_6000(struct iwn_softc *sc)
 }
 
 static void
-iwn_intr_del(struct iwn_softc *sc, int state)
+iwn_intr_teardown(struct iwn_softc *sc)
 {
-	int i;
-
-	switch (state) {
-	case 4:
-		(void) ddi_intr_remove_softint(sc->sc_softint_hdl);
-		/*FALLTHROUGH*/
-	case 3:
-		if (sc->sc_intr_cap & DDI_INTR_FLAG_BLOCK)
+	if (sc->sc_intr_htable != NULL) {
+		if ((sc->sc_intr_cap & DDI_INTR_FLAG_BLOCK) != 0) {
 			(void) ddi_intr_block_disable(sc->sc_intr_htable,
 			    sc->sc_intr_count);
-		else
-			for (i = 0; i != sc->sc_intr_count; i++)
-				(void) ddi_intr_disable(sc->sc_intr_htable[i]);
+		} else {
+			(void) ddi_intr_disable(sc->sc_intr_htable[0]);
+		}
+		(void) ddi_intr_remove_handler(sc->sc_intr_htable[0]);
+		(void) ddi_intr_free(sc->sc_intr_htable[0]);
+		sc->sc_intr_htable[0] = NULL;
 
-		for (i = 0; i != sc->sc_intr_count; i++)
-			(void) ddi_intr_remove_handler(sc->sc_intr_htable[i]);
-
-		/*FALLTHROUGH*/
-	case 2:
-		for (i = 0; i != sc->sc_intr_count; i++)
-			(void) ddi_intr_free(sc->sc_intr_htable[i]);
-		/*FALLTHROUGH*/
-	case 1:
 		kmem_free(sc->sc_intr_htable, sc->sc_intr_size);
 		sc->sc_intr_size = 0;
 		sc->sc_intr_htable = NULL;
-		/*FALLTHROUGH*/
 	}
 }
 
@@ -712,75 +647,57 @@ static int
 iwn_intr_add(struct iwn_softc *sc, int intr_type)
 {
 	int ni, na;
-	int i;
 	int ret;
+	char *func;
 
-	if (ddi_intr_get_nintrs(sc->sc_dip, intr_type, &ni) != DDI_SUCCESS) {
-		dev_err(sc->sc_dip, CE_WARN, "!ddi_intr_get_nintrs() failed");
+	if (ddi_intr_get_nintrs(sc->sc_dip, intr_type, &ni) != DDI_SUCCESS)
 		return (DDI_FAILURE);
-	}
 
-	if (ddi_intr_get_navail(sc->sc_dip, intr_type, &na) != DDI_SUCCESS) {
-		dev_err(sc->sc_dip, CE_WARN, "!ddi_intr_get_navail() failed");
+
+	if (ddi_intr_get_navail(sc->sc_dip, intr_type, &na) != DDI_SUCCESS)
 		return (DDI_FAILURE);
-	}
 
-	sc->sc_intr_size = na * sizeof (ddi_intr_handle_t);
+	sc->sc_intr_size = sizeof (ddi_intr_handle_t);
 	sc->sc_intr_htable = kmem_zalloc(sc->sc_intr_size, KM_SLEEP);
 
-	ret = ddi_intr_alloc(sc->sc_dip, sc->sc_intr_htable, intr_type, 0, na,
+	ret = ddi_intr_alloc(sc->sc_dip, sc->sc_intr_htable, intr_type, 0, 1,
 	    &sc->sc_intr_count, DDI_INTR_ALLOC_STRICT);
 	if (ret != DDI_SUCCESS) {
 		dev_err(sc->sc_dip, CE_WARN, "!ddi_intr_alloc() failed");
-		iwn_intr_del(sc, 1);
 		return (DDI_FAILURE);
 	}
 
 	ret = ddi_intr_get_pri(sc->sc_intr_htable[0], &sc->sc_intr_pri);
 	if (ret != DDI_SUCCESS) {
 		dev_err(sc->sc_dip, CE_WARN, "!ddi_intr_get_pri() failed");
-		iwn_intr_del(sc, 2);
+		return (DDI_FAILURE);
+	}
+
+	ret = ddi_intr_add_handler(sc->sc_intr_htable[0], iwn_intr, (caddr_t)sc,
+	    NULL);
+	if (ret != DDI_SUCCESS) {
+		dev_err(sc->sc_dip, CE_WARN, "!ddi_intr_add_handler() failed");
 		return (DDI_FAILURE);
 	}
 
 	ret = ddi_intr_get_cap(sc->sc_intr_htable[0], &sc->sc_intr_cap);
 	if (ret != DDI_SUCCESS) {
 		dev_err(sc->sc_dip, CE_WARN, "!ddi_intr_get_cap() failed");
-		iwn_intr_del(sc, 2);
 		return (DDI_FAILURE);
 	}
 
-	for (i = 0; i != sc->sc_intr_count; i++) {
-		ret = ddi_intr_add_handler(sc->sc_intr_htable[i], iwn_intr,
-		    (caddr_t)sc, (caddr_t)(uintptr_t)i);
-		if (ret != DDI_SUCCESS) {
-			dev_err(sc->sc_dip, CE_WARN,
-			    "!ddi_intr_add_handler() failed for intr %d", i);
-			while (--i >= 0)
-				(void) ddi_intr_remove_handler(
-				    sc->sc_intr_htable[i]);
-			iwn_intr_del(sc, 2);
-			return (DDI_FAILURE);
-		}
-	}
-
-	if (sc->sc_intr_cap & DDI_INTR_FLAG_BLOCK) {
+	if ((sc->sc_intr_cap & DDI_INTR_FLAG_BLOCK) != 0) {
 		ret = ddi_intr_block_enable(sc->sc_intr_htable,
 		    sc->sc_intr_count);
-		if (ret != DDI_SUCCESS) {
-			dev_err(sc->sc_dip, CE_WARN,
-			    "!ddi_intr_block_enable() failed");
-			iwn_intr_del(sc, 3);
-			return (DDI_FAILURE);
-		}
-	} else for (i = 0; i != sc->sc_intr_count; i++) {
-		ret = ddi_intr_enable(sc->sc_intr_htable[i]);
-		if (ret != DDI_SUCCESS) {
-			dev_err(sc->sc_dip, CE_WARN,
-			    "!ddi_intr_enable() failed for intr %d", i);
-			iwn_intr_del(sc, 3);
-			return (DDI_FAILURE);
-		}
+		func = "ddi_intr_enable_block";
+	} else {
+		ret = ddi_intr_enable(sc->sc_intr_htable[0]);
+		func = "ddi_intr_enable";
+	}
+
+	if (ret != DDI_SUCCESS) {
+		dev_err(sc->sc_dip, CE_WARN, "!%s() failed", func);
+		return (DDI_FAILURE);
 	}
 
 	return (DDI_SUCCESS);
@@ -792,66 +709,49 @@ iwn_intr_setup(struct iwn_softc *sc)
 	int intr_type;
 	int ret;
 
-	ret = ddi_intr_add_softint(sc->sc_dip, &sc->sc_softint_hdl,
-	    DDI_INTR_SOFTPRI_MAX, iwn_softintr, (caddr_t)sc);
-	if (ret != DDI_SUCCESS) {
-		dev_err(sc->sc_dip, CE_WARN, "!ddi_intr_add_softint() failed");
-		goto fail1;
-	}
-
 	ret = ddi_intr_get_supported_types(sc->sc_dip, &intr_type);
 	if (ret != DDI_SUCCESS) {
 		dev_err(sc->sc_dip, CE_WARN,
 		    "!ddi_intr_get_supported_types() failed");
-		goto fail2;
+		return (DDI_FAILURE);
 	}
 
-	if ((intr_type & DDI_INTR_TYPE_MSIX))
+	if ((intr_type & DDI_INTR_TYPE_MSIX)) {
 		if (iwn_intr_add(sc, DDI_INTR_TYPE_MSIX) == DDI_SUCCESS)
 			return (DDI_SUCCESS);
+		iwn_intr_teardown(sc);
+	}
 
-	if ((intr_type & DDI_INTR_TYPE_MSI))
+	if ((intr_type & DDI_INTR_TYPE_MSI)) {
 		if (iwn_intr_add(sc, DDI_INTR_TYPE_MSI) == DDI_SUCCESS)
 			return (DDI_SUCCESS);
+		iwn_intr_teardown(sc);
+	}
 
-	if ((intr_type & DDI_INTR_TYPE_FIXED))
+	if ((intr_type & DDI_INTR_TYPE_FIXED)) {
 		if (iwn_intr_add(sc, DDI_INTR_TYPE_FIXED) == DDI_SUCCESS)
 			return (DDI_SUCCESS);
+		iwn_intr_teardown(sc);
+	}
 
-fail2:
-	(void) ddi_intr_remove_softint(sc->sc_softint_hdl);
-fail1:
 	dev_err(sc->sc_dip, CE_WARN, "!iwn_intr_setup() failed");
 	return (DDI_FAILURE);
-}
-
-static int
-iwn_match(struct iwn_softc *sc)
-{
-	int i;
-
-	if (pci_config_get16(sc->sc_pcih, PCI_CONF_VENID) != PCI_VENDOR_INTEL)
-		return 0;
-
-	sc->sc_devid = pci_config_get16(sc->sc_pcih, PCI_CONF_DEVID);
-
-	for (i = 0; i < __arraycount(iwn_devices); i++)
-		if (sc->sc_devid == iwn_devices[i])
-			return 1;
-
-	return 0;
 }
 
 static int
 iwn_pci_get_capability(ddi_acc_handle_t pcih, int cap, int *cap_off)
 {
 	uint8_t ptr;
-
+	uint8_t val;
 
 	for (ptr = pci_config_get8(pcih, PCI_CONF_CAP_PTR);
-	    ptr != 0;
+	    ptr != 0 && ptr != 0xff;
 	    ptr = pci_config_get8(pcih, ptr + PCI_CAP_NEXT_PTR)) {
-		if (cap != pci_config_get8(pcih, ptr + PCIE_CAP_ID))
+		val = pci_config_get8(pcih, ptr + PCIE_CAP_ID);
+		if (val == 0xff)
+			return (DDI_FAILURE);
+
+		if (cap != val)
 			continue;
 
 		*cap_off = ptr;
@@ -925,12 +825,6 @@ iwn_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		goto fail_pci_config;
 	}
 
-	if (!iwn_match(sc)) {
-		dev_err(sc->sc_dip, CE_WARN, "!unknown device type 0x%x",
-		    sc->sc_devid);
-		goto fail_hwtype;
-	}
-
 	/*
 	 * Get the offset of the PCI Express Capability Structure in PCI
 	 * Configuration Space.
@@ -948,15 +842,6 @@ iwn_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	if (reg)
 		pci_config_put8(sc->sc_pcih, 0x41, 0);
 
-	/* Enable bus-mastering and hardware bug workaround. */
-	/* XXX verify the bus-mastering is really needed (not in OpenBSD) */
-	reg = pci_config_get16(sc->sc_pcih, PCI_CONF_COMM);
-	reg |= PCI_COMM_ME;
-	if (reg & PCI_COMM_INTX_DISABLE) {
-		reg &= ~PCI_COMM_INTX_DISABLE;
-	}
-	pci_config_put16(sc->sc_pcih, PCI_CONF_COMM, reg);
-
 	error = ddi_regs_map_setup(dip, 1, &sc->sc_base, 0, 0, &iwn_reg_accattr,
 	    &sc->sc_regh);
 	if (error != DDI_SUCCESS) {
@@ -966,6 +851,9 @@ iwn_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 
 	/* Clear pending interrupts. */
 	IWN_WRITE(sc, IWN_INT, 0xffffffff);
+
+	/* Disable all interrupts. */
+	IWN_WRITE(sc, IWN_INT_MASK, 0);
 
 	/* Install interrupt handler. */
 	if (iwn_intr_setup(sc) != DDI_SUCCESS)
@@ -983,13 +871,6 @@ iwn_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	cv_init(&sc->sc_fhdma_cv, NULL, CV_DRIVER, NULL);
 	cv_init(&sc->sc_alive_cv, NULL, CV_DRIVER, NULL);
 	cv_init(&sc->sc_calib_cv, NULL, CV_DRIVER, NULL);
-
-	/*
-	 * initialize the mfthread
-	 */
-	cv_init(&sc->sc_mt_cv, NULL, CV_DRIVER, NULL);
-	sc->sc_mf_thread = NULL;
-	sc->sc_mf_thread_switch = 0;
 
 	iwn_kstat_init(sc);
 
@@ -1154,12 +1035,7 @@ iwn_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	 */
 	ieee80211_attach(ic);
 
-	/*
-	 * different instance has different WPA door
-	 */
-	(void) snprintf(ic->ic_wpadoor, MAX_IEEE80211STR, "%s_%s%d", WPA_DOOR,
-	    ddi_driver_name(dip),
-	    ddi_get_instance(dip));
+	ieee80211_register_door(ic, ddi_driver_name(dip), ddi_get_instance(dip));
 
 	/* Override 802.11 state transition machine. */
 	sc->sc_newstate = ic->ic_newstate;
@@ -1212,7 +1088,7 @@ iwn_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	mac_free(macp);
 	if (error != DDI_SUCCESS) {
 		dev_err(sc->sc_dip, CE_WARN, "!mac_register() failed");
-		goto fail_mac_reg;
+		goto fail_mac_alloc;
 	}
 
 	/*
@@ -1231,17 +1107,8 @@ iwn_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	 */
 	mac_link_update(ic->ic_mach, LINK_STATE_DOWN);
 
-	/*
-	 * create the mf thread to handle the link status,
-	 * recovery fatal error, etc.
-	 */
-	sc->sc_mf_thread_switch = 1;
-	if (NULL == sc->sc_mf_thread) {
-		extern pri_t minclsyspri;
-
-		sc->sc_mf_thread = thread_create((caddr_t)NULL, 0,
-		    iwn_thread, sc, 0, &p0, TS_RUN, minclsyspri);
-	}
+	sc->sc_periodic = ddi_periodic_add(iwn_periodic, sc,
+	    iwn_periodic_interval * MICROSEC, 0);
 
 	if (sc->sc_ks_misc)
 		kstat_install(sc->sc_ks_misc);
@@ -1266,9 +1133,6 @@ iwn_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 fail_minor:
 	mac_unregister(ic->ic_mach);
 
-fail_mac_reg:
-	mac_free(macp);
-
 fail_mac_alloc:
 	ieee80211_detach(ic);
 	iwn_free_rx_ring(sc, &sc->rxq);
@@ -1292,14 +1156,23 @@ fail_kw:
 
 fail_fwmem:
 fail_hw:
-	iwn_intr_del(sc, 4);
+	iwn_intr_teardown(sc);
+
+	iwn_kstat_free(sc->sc_ks_txpower, sc->sc_txpower,
+	    sizeof (struct iwn_ks_txpower));
+
+	if (sc->hw_type == IWN_HW_REV_TYPE_6005)
+		iwn_kstat_free(sc->sc_ks_toff, sc->sc_toff.t6000,
+		    sizeof (struct iwn_ks_toff_6000));
+	else
+		iwn_kstat_free(sc->sc_ks_toff, sc->sc_toff.t2000,
+		    sizeof (struct iwn_ks_toff_2000));
 
 fail_intr:
 	ddi_regs_map_free(&sc->sc_regh);
 
 fail_regs_map:
 fail_pci_capab:
-fail_hwtype:
 	pci_config_teardown(&sc->sc_pcih);
 
 fail_pci_config:
@@ -1313,15 +1186,6 @@ fail_pci_config:
 	    sizeof (struct iwn_ks_timing));
 	iwn_kstat_free(sc->sc_ks_edca, sc->sc_edca,
 	    sizeof (struct iwn_ks_edca));
-	iwn_kstat_free(sc->sc_ks_txpower, sc->sc_txpower,
-	    sizeof (struct iwn_ks_txpower));
-
-	if (sc->hw_type == IWN_HW_REV_TYPE_6005)
-		iwn_kstat_free(sc->sc_ks_toff, sc->sc_toff.t6000,
-		    sizeof (struct iwn_ks_toff_6000));
-	else
-		iwn_kstat_free(sc->sc_ks_toff, sc->sc_toff.t2000,
-		    sizeof (struct iwn_ks_toff_2000));
 
 	ddi_soft_state_free(iwn_state, instance);
 
@@ -1541,27 +1405,23 @@ iwn_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 		return (DDI_FAILURE);
 	}
 
-	if (sc->calib_to) {
-		(void) untimeout(sc->calib_to);
-		sc->calib_to = 0;
-	}
-
-	/*
-	 * Destroy the mf_thread
-	 */
-	sc->sc_mf_thread_switch = 0;
-
-	mutex_enter(&sc->sc_mt_mtx);
-	while (sc->sc_mf_thread != NULL) {
-		if (cv_wait_sig(&sc->sc_mt_cv, &sc->sc_mt_mtx) == 0) {
-			break;
-		}
-	}
-	mutex_exit(&sc->sc_mt_mtx);
-
 	error = mac_disable(ic->ic_mach);
 	if (error != DDI_SUCCESS)
 		return (error);
+
+	mutex_enter(&sc->sc_mtx);
+	sc->sc_flags |= IWN_FLAG_STOP_CALIB_TO;
+	mutex_exit(&sc->sc_mtx);
+
+	if (sc->calib_to != 0)
+		(void) untimeout(sc->calib_to);
+	sc->calib_to = 0;
+
+	if (sc->scan_to != 0)
+		(void) untimeout(sc->scan_to);
+	sc->scan_to = 0;
+
+	ddi_periodic_delete(sc->sc_periodic);
 
 	/*
 	 * stop chipset
@@ -1575,7 +1435,7 @@ iwn_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 	ieee80211_detach(ic);
 
 	/* Uninstall interrupt handler. */
-	(void) iwn_intr_del(sc, 4);
+	iwn_intr_teardown(sc);
 
 	/* Free DMA resources. */
 	mutex_enter(&sc->sc_mtx);
@@ -1617,14 +1477,6 @@ iwn_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 	return 0;
 }
 
-/*
- * quiesce(9E) entry point.
- * This function is called when the system is single-threaded at high
- * PIL with preemption disabled. Therefore, this function must not be
- * blocked.
- * This function returns DDI_SUCCESS on success, or DDI_FAILURE on failure.
- * DDI_FAILURE indicates an error condition and should almost never happen.
- */
 static int
 iwn_quiesce(dev_info_t *dip)
 {
@@ -1930,6 +1782,7 @@ iwn_dma_contig_alloc(struct iwn_softc *sc, struct iwn_dma_info *dma,
 	    dma->length, flags, DDI_DMA_SLEEP, NULL, &dma->cookie,
 	    &dma->ncookies);
 	if (error != DDI_DMA_MAPPED) {
+		dma->ncookies = 0;
 		dev_err(sc->sc_dip, CE_WARN,
 		    "ddi_dma_addr_bind_handle() failed, error = %d", error);
 		goto fail3;
@@ -1948,7 +1801,7 @@ fail3:
 fail2:
 	ddi_dma_free_handle(&dma->dma_hdl);
 fail:
-	memset(dma, 0, sizeof (struct iwn_dma_info));
+	bzero(dma, sizeof (struct iwn_dma_info));
 	return (DDI_FAILURE);
 }
 
@@ -1964,7 +1817,7 @@ iwn_dma_contig_free(struct iwn_dma_info *dma)
 	if (dma->acc_hdl != NULL)
 		ddi_dma_mem_free(&dma->acc_hdl);
 
-	memset(dma, 0, sizeof (struct iwn_dma_info));
+	bzero(dma, sizeof (struct iwn_dma_info));
 }
 
 static int
@@ -2076,8 +1929,7 @@ iwn_alloc_rx_ring(struct iwn_softc *sc, struct iwn_rx_ring *ring)
 		ring->desc[i] = htole32(data->dma_data.paddr >> 8);
 	}
 
-	(void) ddi_dma_sync(ring->desc_dma.dma_hdl, 0, size,
-	    DDI_DMA_SYNC_FORDEV);
+	(void) ddi_dma_sync(ring->desc_dma.dma_hdl, 0, 0, DDI_DMA_SYNC_FORDEV);
 
 	return 0;
 
@@ -2192,14 +2044,13 @@ iwn_reset_tx_ring(struct iwn_softc *sc, struct iwn_tx_ring *ring)
 		for (i = 0; i < IWN_TX_RING_COUNT; i++) {
 			struct iwn_tx_data *data = &ring->data[i];
 
-			(void) ddi_dma_sync(data->dma_data.dma_hdl, 0,
-			    data->dma_data.length, DDI_DMA_SYNC_FORDEV);
+			(void) ddi_dma_sync(data->dma_data.dma_hdl, 0, 0,
+			    DDI_DMA_SYNC_FORDEV);
 		}
 
 	/* Clear TX descriptors. */
 	memset(ring->desc, 0, ring->desc_dma.size);
-	(void) ddi_dma_sync(ring->desc_dma.dma_hdl, 0,
-	    ring->desc_dma.length, DDI_DMA_SYNC_FORDEV);
+	(void) ddi_dma_sync(ring->desc_dma.dma_hdl, 0, 0, DDI_DMA_SYNC_FORDEV);
 	sc->qfullmsk &= ~(1 << ring->qid);
 	ring->queued = 0;
 	ring->cur = 0;
@@ -2606,6 +2457,13 @@ iwn_newstate(struct ieee80211com *ic, enum ieee80211_state nstate, int arg)
 	int error;
 
 	mutex_enter(&sc->sc_mtx);
+	sc->sc_flags |= IWN_FLAG_STOP_CALIB_TO;
+	mutex_exit(&sc->sc_mtx);
+
+	(void) untimeout(sc->calib_to);
+	sc->calib_to = 0;
+
+	mutex_enter(&sc->sc_mtx);
 	ostate = ic->ic_state;
 
 	DTRACE_PROBE5(new__state, int, sc->sc_flags,
@@ -2625,9 +2483,6 @@ iwn_newstate(struct ieee80211com *ic, enum ieee80211_state nstate, int arg)
 		return (IWN_FAIL);
 	}
 
-	untimeout(sc->calib_to);
-	sc->calib_to = 0;
-
 	switch (nstate) {
 	case IEEE80211_S_SCAN:
 		/* XXX Do not abort a running scan. */
@@ -2642,30 +2497,6 @@ iwn_newstate(struct ieee80211com *ic, enum ieee80211_state nstate, int arg)
 
 		bcopy(&sc->rxon, &sc->rxon_save, sizeof (sc->rxon));
 		sc->sc_ostate = ostate;
-
-		if (sc->hw_type == IWN_HW_REV_TYPE_6005) {
-			/*
-			 * clear association to receive beacons from
-			 * all BSS'es
-			 */
-
-			sc->rxon.associd = 0;
-			sc->rxon.filter &= htole32(~IWN_FILTER_BSS);
-			IEEE80211_ADDR_COPY(sc->rxon.bssid,
-			    ic->ic_bss->in_bssid);
-
-			DTRACE_PROBE2(rxon, struct iwn_rxon *, &sc->rxon,
-			    int, sc->rxonsz);
-			error = iwn_cmd(sc, IWN_CMD_RXON, &sc->rxon,
-			    sizeof (struct iwn_rxon), 1);
-			if (error != IWN_SUCCESS) {
-				dev_err(sc->sc_dip, CE_WARN, "!iwn_newstate(): "
-				    "could not clear association");
-				sc->sc_flags &= ~IWN_FLAG_SCANNING;
-				mutex_exit(&sc->sc_mtx);
-				return (error);
-			}
-		}
 
 		/* XXX Not sure if call and flags are needed. */
 		ieee80211_node_table_reset(&ic->ic_scan);
@@ -2687,11 +2518,15 @@ iwn_newstate(struct ieee80211com *ic, enum ieee80211_state nstate, int arg)
 		}
 
 		mutex_exit(&sc->sc_mtx);
+		sc->scan_to = timeout(iwn_abort_scan, sc, iwn_scan_timeout *
+		    drv_usectohz(MICROSEC));
 		return (error);
 
 	case IEEE80211_S_ASSOC:
-		if (ostate != IEEE80211_S_RUN)
+		if (ostate != IEEE80211_S_RUN) {
+			mutex_exit(&sc->sc_mtx);
 			break;
+		}
 		/* FALLTHROUGH */
 	case IEEE80211_S_AUTH:
 		/* Reset state to handle reassociations correctly. */
@@ -2705,6 +2540,7 @@ iwn_newstate(struct ieee80211com *ic, enum ieee80211_state nstate, int arg)
 			    "!could not move to auth state");
 			return error;
 		}
+		mutex_exit(&sc->sc_mtx);
 		break;
 
 	case IEEE80211_S_RUN:
@@ -2714,7 +2550,7 @@ iwn_newstate(struct ieee80211com *ic, enum ieee80211_state nstate, int arg)
 			    "!could not move to run state");
 			return error;
 		}
-		mac_tx_update(ic->ic_mach);
+		mutex_exit(&sc->sc_mtx);
 		break;
 
 	case IEEE80211_S_INIT:
@@ -2727,11 +2563,19 @@ iwn_newstate(struct ieee80211com *ic, enum ieee80211_state nstate, int arg)
 		iwn_set_led(sc, IWN_LED_LINK, 1, 0);
 
 		cv_signal(&sc->sc_scan_cv);
+		mutex_exit(&sc->sc_mtx);
+		if (sc->scan_to != 0)
+			(void) untimeout(sc->scan_to);
+		sc->scan_to = 0;
 		break;
 	}
 
-	mutex_exit(&sc->sc_mtx);
-	return sc->sc_newstate(ic, nstate, arg);
+	error = sc->sc_newstate(ic, nstate, arg);
+
+	if (nstate == IEEE80211_S_RUN)
+		ieee80211_start_watchdog(ic, 1);
+
+	return (error);
 }
 
 static void
@@ -2741,20 +2585,6 @@ iwn_iter_func(void *arg, struct ieee80211_node *ni)
 	struct iwn_node *wn = (struct iwn_node *)ni;
 
 	ieee80211_amrr_choose(&sc->amrr, ni, &wn->amn);
-}
-
-static void
-iwn_amrr_timeout(struct iwn_softc *sc)
-{
-	ieee80211com_t *ic = &sc->sc_ic;
-
-	if (IEEE80211_M_STA == ic->ic_opmode) {
-		iwn_iter_func(sc, ic->ic_bss);
-	} else {
-		ieee80211_iterate_nodes(&ic->ic_sta, iwn_iter_func, sc);
-	}
-
-	sc->sc_clk = ddi_get_lbolt();
 }
 
 static void
@@ -2782,9 +2612,10 @@ iwn_calib_timeout(void *arg)
 	}
 
 	/* Automatic rate control triggered every 500ms. */
-	if (sc->calib_to)
+	if ((sc->sc_flags & IWN_FLAG_STOP_CALIB_TO) == 0)
 		sc->calib_to = timeout(iwn_calib_timeout, sc,
 		    drv_usectohz(500000));
+
 	mutex_exit(&sc->sc_mtx);
 }
 
@@ -2839,7 +2670,7 @@ iwn_rx_done(struct iwn_softc *sc, struct iwn_rx_desc *desc,
 	} else
 		stat = (struct iwn_rx_stat *)(desc + 1);
 
-	(void) ddi_dma_sync(data->dma_data.dma_hdl, 0, IWN_RBUF_SIZE,
+	(void) ddi_dma_sync(data->dma_data.dma_hdl, 0, 0,
 	    DDI_DMA_SYNC_FORKERNEL);
 
 	if (stat->cfg_phy_len > IWN_STAT_MAXLEN) {
@@ -2855,7 +2686,6 @@ iwn_rx_done(struct iwn_softc *sc, struct iwn_rx_desc *desc,
 		head = (char *)(stat + 1) + stat->cfg_phy_len;
 		len = le16toh(stat->len);
 	}
-	/* XXX: sanity check len? */
 	/*LINTED: E_PTR_BAD_CAST_ALIGN*/
 	flags = le32toh(*(uint32_t *)(head + len));
 
@@ -3081,7 +2911,7 @@ iwn5000_tx_done(struct iwn_softc *sc, struct iwn_rx_desc *desc,
 
 	(void) ddi_dma_sync(data->dma_data.dma_hdl, sizeof (*desc),
 	    sizeof (*stat), DDI_DMA_SYNC_FORKERNEL);
-	iwn_tx_done(sc, desc, stat->ackfailcnt, le32toh(stat->status) & 0xff);
+	iwn_tx_done(sc, desc, stat->ackfailcnt, le16toh(stat->status) & 0xff);
 }
 
 /*
@@ -3113,8 +2943,8 @@ iwn_tx_done(struct iwn_softc *sc, struct iwn_rx_desc *desc, int ackfailcnt,
 	if (--ring->queued < IWN_TX_RING_LOMARK) {
 		sc->qfullmsk &= ~(1 << ring->qid);
 	}
-	mutex_exit(&sc->sc_tx_mtx);
 	mac_tx_update(sc->sc_ic.ic_mach);
+	mutex_exit(&sc->sc_tx_mtx);
 }
 
 /*
@@ -3132,13 +2962,12 @@ iwn_cmd_done(struct iwn_softc *sc, struct iwn_rx_desc *desc)
 
 	data = &ring->data[desc->idx];
 
-	(void) ddi_dma_sync(data->dma_data.dma_hdl, 0,
-	    data->dma_data.length, DDI_DMA_SYNC_FORDEV);
+	(void) ddi_dma_sync(data->dma_data.dma_hdl, 0, 0, DDI_DMA_SYNC_FORDEV);
 
 	/* If the command was mapped in an extra buffer, free it. */
 	if (data->cmd_dma.dma_hdl) {
-		(void) ddi_dma_sync(data->cmd_dma.dma_hdl, 0,
-		    data->cmd_dma.length, DDI_DMA_SYNC_FORDEV);
+		(void) ddi_dma_sync(data->cmd_dma.dma_hdl, 0, 0,
+		    DDI_DMA_SYNC_FORDEV);
 		iwn_dma_contig_free(&data->cmd_dma);
 	}
 
@@ -3160,8 +2989,8 @@ iwn_notif_intr(struct iwn_softc *sc)
 
 	ASSERT(sc != NULL);
 
-	(void) ddi_dma_sync(sc->rxq.stat_dma.dma_hdl, 0,
-	    sc->rxq.stat_dma.length, DDI_DMA_SYNC_FORKERNEL);
+	(void) ddi_dma_sync(sc->rxq.stat_dma.dma_hdl, 0, 0,
+	    DDI_DMA_SYNC_FORKERNEL);
 
 	hw = le16toh(sc->rxq.stat->closed_count) & 0xfff;
 	while (sc->rxq.cur != hw) {
@@ -3342,6 +3171,8 @@ iwn_notif_intr(struct iwn_softc *sc)
 			sc->sc_flags &= ~IWN_FLAG_SCANNING;
 			cv_signal(&sc->sc_scan_cv);
 			mutex_exit(&sc->sc_mtx);
+			(void) untimeout(sc->scan_to);
+			sc->scan_to = 0;
 			break;
 		}
 		case IWN5000_CALIBRATION_RESULT:
@@ -3449,22 +3280,6 @@ iwn_fatal_intr(struct iwn_softc *sc)
 	dev_err(sc->sc_dip, CE_WARN, "!  802.11 state %d", sc->sc_ic.ic_state);
 }
 
-static uint_t
-iwn_softintr(caddr_t arg1, caddr_t arg2)
-{
-	/*LINTED: E_PTR_BAD_CAST_ALIGN*/
-	struct iwn_softc *sc = (struct iwn_softc *)arg1;
-	int ena = (int)(uintptr_t)arg2;
-
-	iwn_notif_intr(sc);
-	if (ena) {
-		IWN_WRITE_1(sc, IWN_INT_PERIODIC,
-		    IWN_INT_PERIODIC_ENA);
-	}
-
-	return (DDI_INTR_CLAIMED);
-}
-
 /*ARGSUSED1*/
 static uint_t
 iwn_intr(caddr_t arg, caddr_t unused)
@@ -3482,7 +3297,7 @@ iwn_intr(caddr_t arg, caddr_t unused)
 
 	/* Read interrupts from ICT (fast) or from registers (slow). */
 	if (sc->sc_flags & IWN_FLAG_USE_ICT) {
-		(void) ddi_dma_sync(sc->ict_dma.dma_hdl, 0, IWN_ICT_SIZE,
+		(void) ddi_dma_sync(sc->ict_dma.dma_hdl, 0, 0,
 		    DDI_DMA_SYNC_FORKERNEL);
 		tmp = 0;
 		while (sc->ict[sc->ict_cur] != 0) {
@@ -3490,7 +3305,7 @@ iwn_intr(caddr_t arg, caddr_t unused)
 			sc->ict[sc->ict_cur] = 0;	/* Acknowledge. */
 			sc->ict_cur = (sc->ict_cur + 1) % IWN_ICT_COUNT;
 		}
-		(void) ddi_dma_sync(sc->ict_dma.dma_hdl, 0, IWN_ICT_SIZE,
+		(void) ddi_dma_sync(sc->ict_dma.dma_hdl, 0, 0,
 		    DDI_DMA_SYNC_FORDEV);
 		tmp = le32toh(tmp);
 		if (tmp == 0xffffffff)	/* Shouldn't happen. */
@@ -3548,11 +3363,12 @@ iwn_intr(caddr_t arg, caddr_t unused)
 				IWN_WRITE(sc, IWN_FH_INT, IWN_FH_INT_RX);
 			IWN_WRITE_1(sc, IWN_INT_PERIODIC,
 			    IWN_INT_PERIODIC_DIS);
-			(void) ddi_intr_trigger_softint(sc->sc_softint_hdl,
-			    (caddr_t)(uintptr_t)ena);
+			iwn_notif_intr(sc);
+			if (ena)
+				IWN_WRITE_1(sc, IWN_INT_PERIODIC,
+				    IWN_INT_PERIODIC_ENA);
 		} else {
-			(void) ddi_intr_trigger_softint(sc->sc_softint_hdl,
-			    (caddr_t)0);
+			iwn_notif_intr(sc);
 		}
 	}
 
@@ -3560,12 +3376,14 @@ iwn_intr(caddr_t arg, caddr_t unused)
 		if (sc->sc_flags & IWN_FLAG_USE_ICT)
 			IWN_WRITE(sc, IWN_FH_INT, IWN_FH_INT_TX);
 		mutex_enter(&sc->sc_mtx);
+		sc->sc_flags |= IWN_FLAG_FW_DMA;
 		cv_signal(&sc->sc_fhdma_cv);
 		mutex_exit(&sc->sc_mtx);
 	}
 
 	if (r1 & IWN_INT_ALIVE) {
 		mutex_enter(&sc->sc_mtx);
+		sc->sc_flags |= IWN_FLAG_FW_ALIVE;
 		cv_signal(&sc->sc_alive_cv);
 		mutex_exit(&sc->sc_mtx);
 	}
@@ -3591,10 +3409,8 @@ iwn4965_update_sched(struct iwn_softc *sc, int qid, int idx, uint8_t id,
 	uint16_t *w = &sc->sched[w_idx];
 
 	*w = htole16(len + 8);
-	(void) ddi_dma_sync(sc->sched_dma.dma_hdl,
-	    w_idx * sizeof (uint16_t),
-	    sizeof (uint16_t),
-	    DDI_DMA_SYNC_FORDEV);
+	(void) ddi_dma_sync(sc->sched_dma.dma_hdl, w_idx * sizeof (uint16_t),
+	    sizeof (uint16_t), DDI_DMA_SYNC_FORDEV);
 	if (idx < IWN_SCHED_WINSZ) {
 		*(w + IWN_TX_RING_COUNT) = *w;
 		(void) ddi_dma_sync(sc->sched_dma.dma_hdl,
@@ -3611,8 +3427,7 @@ iwn5000_update_sched(struct iwn_softc *sc, int qid, int idx, uint8_t id,
 	uint16_t *w = &sc->sched[w_idx];
 
 	*w = htole16(id << 12 | (len + 8));
-	(void) ddi_dma_sync(sc->sched_dma.dma_hdl,
-	    w_idx * sizeof (uint16_t),
+	(void) ddi_dma_sync(sc->sched_dma.dma_hdl, w_idx * sizeof (uint16_t),
 	    sizeof (uint16_t), DDI_DMA_SYNC_FORDEV);
 	if (idx < IWN_SCHED_WINSZ) {
 		*(w + IWN_TX_RING_COUNT) = *w;
@@ -3630,8 +3445,7 @@ iwn5000_reset_sched(struct iwn_softc *sc, int qid, int idx)
 	uint16_t *w = &sc->sched[w_idx];
 
 	*w = (*w & htole16(0xf000)) | htole16(1);
-	(void) ddi_dma_sync(sc->sched_dma.dma_hdl,
-	    w_idx * sizeof (uint16_t),
+	(void) ddi_dma_sync(sc->sched_dma.dma_hdl, w_idx * sizeof (uint16_t),
 	    sizeof (uint16_t), DDI_DMA_SYNC_FORDEV);
 	if (idx < IWN_SCHED_WINSZ) {
 		*(w + IWN_TX_RING_COUNT) = *w;
@@ -3657,13 +3471,7 @@ iwn_wme_update(struct ieee80211com *ic)
 static int
 iwn_wme_to_qos_ac(struct iwn_softc *sc, int wme_ac)
 {
-	int qos_ac = QOS_AC_INVALID;
-
-	if (wme_ac < WME_AC_BE || wme_ac > WME_AC_VO) {
-		dev_err(sc->sc_dip, CE_WARN, "!iwn_wme_to_qos_ac(): "
-		    "WME AC index is not in suitable range.\n");
-		return (qos_ac);
-	}
+	int qos_ac;
 
 	switch (wme_ac) {
 	case WME_AC_BE:
@@ -3677,6 +3485,11 @@ iwn_wme_to_qos_ac(struct iwn_softc *sc, int wme_ac)
 		break;
 	case WME_AC_VO:
 		qos_ac = QOS_AC_VO;
+		break;
+	default:
+		dev_err(sc->sc_dip, CE_WARN, "!iwn_wme_to_qos_ac(): "
+		    "WME AC index is not in suitable range.\n");
+		qos_ac = QOS_AC_INVALID;
 		break;
 	}
 
@@ -3878,11 +3691,9 @@ iwn_send(ieee80211com_t *ic, mblk_t *mp, uint8_t type)
 		return (EIO);
 
 	if (sc->sc_flags & IWN_FLAG_SUSPEND) {
-		if ((type & IEEE80211_FC0_TYPE_MASK) !=
-		    IEEE80211_FC0_TYPE_DATA) {
-			freemsg(mp);
-		}
-		return (EIO);
+		freemsg(mp);
+		sc->sc_tx_err++;
+		return(EIO);
 	}
 
 	wh = (struct ieee80211_frame *)mp->b_rptr;
@@ -3898,8 +3709,7 @@ iwn_send(ieee80211com_t *ic, mblk_t *mp, uint8_t type)
 		    "failed to find tx node");
 		freemsg(mp);
 		sc->sc_tx_err++;
-
-		return (0);
+		return(EIO);
 	}
 
 	wn = (struct iwn_node *)in;
@@ -3921,8 +3731,7 @@ iwn_send(ieee80211com_t *ic, mblk_t *mp, uint8_t type)
 				    (txq_id > TXQ_FOR_AC_MAX)) {
 					freemsg(mp);
 					sc->sc_tx_err++;
-
-					return (0);
+					return(EIO);
 				}
 			} else {
 				txq_id = NON_QOS_TXQ;
@@ -3938,9 +3747,12 @@ iwn_send(ieee80211com_t *ic, mblk_t *mp, uint8_t type)
 	}
 
 	if (sc->qfullmsk & (1 << txq_id)) {
-		freemsg(mp);
 		sc->sc_tx_err++;
-		return (0);
+		/* net80211-initiated send */
+		if ((type & IEEE80211_FC0_TYPE_MASK) !=
+		    IEEE80211_FC0_TYPE_DATA)
+			freemsg(mp);
+		return (EAGAIN);
 	}
 
 	/* Choose a TX rate index. */
@@ -3958,7 +3770,7 @@ iwn_send(ieee80211com_t *ic, mblk_t *mp, uint8_t type)
 	if (m) {
 		for (off = 0, m0 = mp; m0 != NULL; m0 = m0->b_cont) {
 			mblen = MBLKL(m0);
-			(void) memcpy(m->b_rptr + off, m0->b_rptr, mblen);
+			bcopy(m0->b_rptr, m->b_rptr + off, mblen);
 			off += mblen;
 		}
 
@@ -3970,8 +3782,11 @@ iwn_send(ieee80211com_t *ic, mblk_t *mp, uint8_t type)
 		wh = (struct ieee80211_frame *)mp->b_rptr;
 	} else {
 		dev_err(sc->sc_dip, CE_WARN, "!iwn_send(): can't copy");
-		freemsg(mp);
-		return (0);
+		/* net80211-initiated send */
+		if ((type & IEEE80211_FC0_TYPE_MASK) !=
+		    IEEE80211_FC0_TYPE_DATA)
+			freemsg(mp);
+		return (EAGAIN);
 	}
 
 
@@ -3988,7 +3803,7 @@ iwn_send(ieee80211com_t *ic, mblk_t *mp, uint8_t type)
 		k = ieee80211_crypto_encap(ic, mp);
 		if (k == NULL) {
 			freemsg(mp);
-			return (0);
+			return(EIO);
 		}
 		/* Packet header may have moved, reset our local pointer. */
 		wh = (struct ieee80211_frame *)mp->b_rptr;
@@ -4146,13 +3961,10 @@ iwn_send(ieee80211com_t *ic, mblk_t *mp, uint8_t type)
 			ddi_dma_nextcookie(data->dma_data.dma_hdl, &cookie);
 	}
 
-	(void) ddi_dma_sync(data->dma_data.dma_hdl, 0, data->dma_data.length,
-	    DDI_DMA_SYNC_FORDEV);
-	(void) ddi_dma_sync(ring->cmd_dma.dma_hdl,
-	    ring->cur * sizeof (*cmd),
+	(void) ddi_dma_sync(data->dma_data.dma_hdl, 0, 0, DDI_DMA_SYNC_FORDEV);
+	(void) ddi_dma_sync(ring->cmd_dma.dma_hdl, ring->cur * sizeof (*cmd),
 	    sizeof (*cmd), DDI_DMA_SYNC_FORDEV);
-	(void) ddi_dma_sync(ring->desc_dma.dma_hdl,
-	    ring->cur * sizeof (*desc),
+	(void) ddi_dma_sync(ring->desc_dma.dma_hdl, ring->cur * sizeof (*desc),
 	    sizeof (*desc), DDI_DMA_SYNC_FORDEV);
 
 	/* Update TX scheduler. */
@@ -4172,7 +3984,7 @@ iwn_send(ieee80211com_t *ic, mblk_t *mp, uint8_t type)
 
 	mutex_enter(&sc->sc_mt_mtx);
 	if (sc->sc_tx_timer == 0)
-		sc->sc_tx_timer = iwn_tx_timeout_cycle;
+		sc->sc_tx_timer = 5;
 	mutex_exit(&sc->sc_mt_mtx);
 
 	return 0;
@@ -4195,18 +4007,19 @@ iwn_m_tx(void *arg, mblk_t *mp)
 	}
 
 	if (ic->ic_state != IEEE80211_S_RUN) {
-		return (mp);
+		freemsgchain(mp);
+		return (NULL);
 	}
 
-	if ((sc->sc_flags & IWN_FLAG_HW_ERR_RECOVER) &&
-	    IWN_CHK_FAST_RECOVER(sc)) {
-		return (mp);
+	if ((sc->sc_flags & IWN_FLAG_HW_ERR_RECOVER)) {
+		freemsgchain(mp);
+		return (NULL);
 	}
 
 	while (mp != NULL) {
 		next = mp->b_next;
 		mp->b_next = NULL;
-		if (iwn_send(ic, mp, IEEE80211_FC0_TYPE_DATA) != 0) {
+		if (iwn_send(ic, mp, IEEE80211_FC0_TYPE_DATA) == EAGAIN) {
 			mp->b_next = next;
 			break;
 		}
@@ -4224,6 +4037,17 @@ iwn_watchdog(void *arg)
 	timeout_id_t timeout_id = ic->ic_watchdog_timer;
 
 	ieee80211_stop_watchdog(ic);
+
+	mutex_enter(&sc->sc_mt_mtx);
+	if (sc->sc_tx_timer > 0) {
+		if (--sc->sc_tx_timer == 0) {
+			dev_err(sc->sc_dip, CE_WARN, "!device timeout");
+			sc->sc_flags |= IWN_FLAG_HW_ERR_RECOVER;
+			sc->sc_ostate = IEEE80211_S_RUN;
+			DTRACE_PROBE(recover__send__fail);
+		}
+	}
+	mutex_exit(&sc->sc_mt_mtx);
 
 	if ((ic->ic_state != IEEE80211_S_AUTH) &&
 	    (ic->ic_state != IEEE80211_S_ASSOC))
@@ -4347,7 +4171,7 @@ iwn_m_setprop(void *arg, const char *pr_name, mac_prop_id_t wldp_pr_num,
 }
 
 /*
- * invoked by GLD supply statistics NIC and driver
+ * invoked by GLD get statistics from NIC and driver
  */
 static int
 iwn_m_stat(void *arg, uint_t stat, uint64_t *val)
@@ -4435,8 +4259,8 @@ iwn_m_unicst(void *arg, const uint8_t *macaddr)
 	ic = &sc->sc_ic;
 
 	if (!IEEE80211_ADDR_EQ(ic->ic_macaddr, macaddr)) {
-		IEEE80211_ADDR_COPY(ic->ic_macaddr, macaddr);
 		mutex_enter(&sc->sc_mtx);
+		IEEE80211_ADDR_COPY(ic->ic_macaddr, macaddr);
 		err = iwn_config(sc);
 		mutex_exit(&sc->sc_mtx);
 		if (err != IWN_SUCCESS) {
@@ -4468,149 +4292,104 @@ iwn_m_promisc(void *arg, boolean_t on)
 	return (IWN_SUCCESS);
 }
 
+static void
+iwn_abort_scan(void *arg)
+{
+	struct iwn_softc *sc = (struct iwn_softc *)arg;
+	ieee80211com_t *ic = &sc->sc_ic;
+
+	mutex_enter(&sc->sc_mtx);
+	if ((sc->sc_flags & IWN_FLAG_SCANNING) == 0)
+		return;
+
+	dev_err(sc->sc_dip, CE_WARN,
+	    "!aborting scan, flags = %x, state = %s",
+	    sc->sc_flags, ieee80211_state_name[ic->ic_state]);
+	sc->sc_flags &= ~IWN_FLAG_SCANNING;
+	iwn_hw_stop(sc, B_FALSE);
+	mutex_exit(&sc->sc_mtx);
+
+	sc->scan_to = 0;
+	(void) iwn_init(sc);
+	ieee80211_new_state(ic, IEEE80211_S_INIT, -1);
+}
+
 /*
- * kernel thread to deal with exceptional situation
+ * periodic function to deal with RF switch and HW error recovery
  */
 static void
-iwn_thread(struct iwn_softc *sc)
+iwn_periodic(void *arg)
 {
+	struct iwn_softc *sc = (struct iwn_softc *)arg;
 	ieee80211com_t	*ic = &sc->sc_ic;
-	clock_t clk;
-	int err, n = 0, timeout = 0;
+	int err;
 	uint32_t tmp;
-	int times = 0;
 
-	while (sc->sc_mf_thread_switch) {
-		mutex_enter(&sc->sc_mtx);
-		tmp = IWN_READ(sc, IWN_GP_CNTRL);
-		if (tmp & IWN_GP_CNTRL_RFKILL) {
-			sc->sc_flags &= ~IWN_FLAG_RADIO_OFF;
-		} else {
-			sc->sc_flags |= IWN_FLAG_RADIO_OFF;
-		}
-		mutex_exit(&sc->sc_mtx);
-
-		/*
-		 * If  in SUSPEND or the RF is OFF, do nothing.
-		 */
-		if (sc->sc_flags & IWN_FLAG_RADIO_OFF) {
-			delay(drv_usectohz(iwn_thread_cycle));
-			continue;
-		}
-
-		/*
-		 * recovery fatal error
-		 */
-		if (ic->ic_mach &&
-		    (sc->sc_flags & IWN_FLAG_HW_ERR_RECOVER)) {
-
-			dev_err(sc->sc_dip, CE_WARN,
-			    "!try to recover fatal hw error: %d", times++);
-
-			mutex_enter(&sc->sc_mtx);
-			if (sc->calib_to) {
-				(void) untimeout(sc->calib_to);
-				sc->calib_to = 0;
-			}
-
-			iwn_hw_stop(sc, B_FALSE);
-			mutex_exit(&sc->sc_mtx);
-
-			if (IWN_CHK_FAST_RECOVER(sc)) {
-				/* save runtime configuration */
-				bcopy(&sc->rxon, &sc->rxon_save,
-				    sizeof (sc->rxon));
-			} else {
-				ieee80211_new_state(ic, IEEE80211_S_INIT, -1);
-				delay(drv_usectohz(2000000 + n*500000));
-			}
-
-			err = iwn_init(sc);
-			if (err != IWN_SUCCESS) {
-				n++;
-				if (n < 20) {
-					continue;
-				}
-			}
-
-			n = 0;
-			if (!err) {
-				mutex_enter(&sc->sc_mtx);
-				sc->sc_flags |= IWN_FLAG_RUNNING;
-				mutex_exit(&sc->sc_mtx);
-			}
-
-
-			if (!IWN_CHK_FAST_RECOVER(sc) ||
-			    iwn_fast_recover(sc) != IWN_SUCCESS) {
-				mutex_enter(&sc->sc_mtx);
-				sc->sc_flags &= ~IWN_FLAG_HW_ERR_RECOVER;
-				mutex_exit(&sc->sc_mtx);
-
-				delay(drv_usectohz(2000000));
-				if (sc->sc_ostate != IEEE80211_S_INIT) {
-					ieee80211_new_state(ic,
-					    IEEE80211_S_SCAN, 0);
-				}
-			}
-		}
-
-		mutex_enter(&sc->sc_mtx);
-		if (sc->sc_flags & IWN_FLAG_SCANNING)
-			sc->sc_scancnt++;
-		else
-			sc->sc_scancnt = 0;
-		/* 
-		 * scanning for more than iwn_scan_timeout s, hardware likely
-		 * to be hung
-		 */
-		if (sc->sc_scancnt >= iwn_scan_timeout) {
-			dev_err(sc->sc_dip, CE_WARN,
-			    "!aborting scan, flags = %x, state = %s",
-			    sc->sc_flags, ieee80211_state_name[ic->ic_state]);
-			sc->sc_scancnt = 0;
-			sc->sc_flags &= ~IWN_FLAG_SCANNING;
-			iwn_hw_stop(sc, B_FALSE);
-			mutex_exit(&sc->sc_mtx);
-
-			(void) iwn_init(sc);
-			ieee80211_new_state(ic, IEEE80211_S_INIT, -1);
-		} else {
-			mutex_exit(&sc->sc_mtx);
-		}
-
-		/*
-		 * rate ctl
-		 */
-		if (ic->ic_mach &&
-		    (sc->sc_flags & IWN_FLAG_RATE_AUTO_CTL)) {
-			clk = ddi_get_lbolt();
-			if (clk > sc->sc_clk + drv_usectohz(1000000)) {
-				iwn_amrr_timeout(sc);
-			}
-		}
-
-		delay(drv_usectohz(iwn_thread_cycle));
-		mutex_enter(&sc->sc_mt_mtx);
-		if (sc->sc_tx_timer && ic->ic_state == IEEE80211_S_RUN) {
-			timeout++;
-			if (iwn_tx_timeout_wait == timeout) {
-				sc->sc_tx_timer--;
-				if (0 == sc->sc_tx_timer) {
-					sc->sc_flags |= IWN_FLAG_HW_ERR_RECOVER;
-					sc->sc_ostate = IEEE80211_S_RUN;
-					DTRACE_PROBE(recover__send__fail);
-				}
-				timeout = 0;
-			}
-		}
-		mutex_exit(&sc->sc_mt_mtx);
+	mutex_enter(&sc->sc_mtx);
+	tmp = IWN_READ(sc, IWN_GP_CNTRL);
+	if (tmp & IWN_GP_CNTRL_RFKILL) {
+		sc->sc_flags &= ~IWN_FLAG_RADIO_OFF;
+	} else {
+		sc->sc_flags |= IWN_FLAG_RADIO_OFF;
 	}
 
-	mutex_enter(&sc->sc_mt_mtx);
-	sc->sc_mf_thread = NULL;
-	cv_signal(&sc->sc_mt_cv);
-	mutex_exit(&sc->sc_mt_mtx);
+	/*
+	 * If the RF is OFF, do nothing.
+	 */
+	if (sc->sc_flags & IWN_FLAG_RADIO_OFF) {
+		mutex_exit(&sc->sc_mtx);
+		return;
+	}
+
+	mutex_exit(&sc->sc_mtx);
+
+	/*
+	 * recovery fatal error
+	 */
+	if (ic->ic_mach &&
+	    (sc->sc_flags & IWN_FLAG_HW_ERR_RECOVER)) {
+		dev_err(sc->sc_dip, CE_WARN,
+		    "!trying to restore previous state");
+
+		mutex_enter(&sc->sc_mtx);
+		sc->sc_flags |= IWN_FLAG_STOP_CALIB_TO;
+		mutex_exit(&sc->sc_mtx);
+
+		if (sc->calib_to != 0)
+			(void) untimeout(sc->calib_to);
+		sc->calib_to = 0;
+
+		if (sc->scan_to != 0)
+			(void) untimeout(sc->scan_to);
+		sc->scan_to = 0;
+
+		iwn_hw_stop(sc, B_TRUE);
+
+		if (IWN_CHK_FAST_RECOVER(sc)) {
+			/* save runtime configuration */
+			bcopy(&sc->rxon, &sc->rxon_save, sizeof (sc->rxon));
+		} else {
+			ieee80211_new_state(ic, IEEE80211_S_INIT, -1);
+		}
+
+		err = iwn_init(sc);
+		if (err != IWN_SUCCESS)
+			return;
+
+		mutex_enter(&sc->sc_mtx);
+		sc->sc_flags |= IWN_FLAG_RUNNING;
+		mutex_exit(&sc->sc_mtx);
+
+		if (!IWN_CHK_FAST_RECOVER(sc) ||
+		    iwn_fast_recover(sc) != IWN_SUCCESS) {
+			mutex_enter(&sc->sc_mtx);
+			sc->sc_flags &= ~IWN_FLAG_HW_ERR_RECOVER;
+			mutex_exit(&sc->sc_mtx);
+			if (sc->sc_ostate != IEEE80211_S_INIT) {
+				ieee80211_new_state(ic, IEEE80211_S_SCAN, 0);
+			}
+		}
+	}
 }
 
 /*
@@ -6165,7 +5944,6 @@ iwn_auth(struct iwn_softc *sc)
 static int
 iwn_fast_recover(struct iwn_softc *sc)
 {
-	ieee80211com_t *ic = &sc->sc_ic;
 	int err = IWN_FAIL;
 
 	mutex_enter(&sc->sc_mtx);
@@ -6202,7 +5980,6 @@ iwn_fast_recover(struct iwn_softc *sc)
 
 	/* start queue */
 	DTRACE_PROBE(resume__xmit);
-	mac_tx_update(ic->ic_mach);
 
 	return (IWN_SUCCESS);
 }
@@ -6292,6 +6069,7 @@ iwn_run(struct iwn_softc *sc)
 	}
 
 	/* Start periodic calibration timer. */
+	sc->sc_flags &= ~IWN_FLAG_STOP_CALIB_TO;
 	sc->calib.state = IWN_CALIB_STATE_ASSOC;
 	sc->calib_cnt = 0;
 	sc->calib_to = timeout(iwn_calib_timeout, sc, drv_usectohz(500000));
@@ -6910,12 +6688,9 @@ iwn4965_load_firmware(struct iwn_softc *sc)
 
 	/* Copy initialization sections into pre-allocated DMA-safe memory. */
 	memcpy(dma->vaddr, fw->init.data, fw->init.datasz);
-	(void) ddi_dma_sync(dma->dma_hdl, 0, fw->init.datasz,
-	    DDI_DMA_SYNC_FORDEV);
 	memcpy((char *)dma->vaddr + IWN4965_FW_DATA_MAXSZ,
 	    fw->init.text, fw->init.textsz);
-	(void) ddi_dma_sync(dma->dma_hdl, 0, fw->init.textsz,
-	    DDI_DMA_SYNC_FORDEV);
+	(void) ddi_dma_sync(dma->dma_hdl, 0, 0, DDI_DMA_SYNC_FORDEV);
 
 	/* Tell adapter where to find initialization sections. */
 	if ((error = iwn_nic_lock(sc)) != 0)
@@ -6939,10 +6714,12 @@ iwn4965_load_firmware(struct iwn_softc *sc)
 
 	/* Wait at most one second for first alive notification. */
 	clk = ddi_get_lbolt() + drv_usectohz(1000000);
-	if (cv_timedwait(&sc->sc_alive_cv, &sc->sc_mtx, clk) < 0) {
-		dev_err(sc->sc_dip, CE_WARN,
-		    "!timeout waiting for adapter to initialize");
-		return (IWN_FAIL);
+	while ((sc->sc_flags & IWN_FLAG_FW_ALIVE) == 0) {
+		if (cv_timedwait(&sc->sc_alive_cv, &sc->sc_mtx, clk) < 0) {
+			dev_err(sc->sc_dip, CE_WARN,
+			    "!timeout waiting for adapter to initialize");
+			return (IWN_FAIL);
+		}
 	}
 
 	/* Retrieve current temperature for initial TX power calibration. */
@@ -6952,12 +6729,9 @@ iwn4965_load_firmware(struct iwn_softc *sc)
 
 	/* Copy runtime sections into pre-allocated DMA-safe memory. */
 	memcpy(dma->vaddr, fw->main.data, fw->main.datasz);
-	(void) ddi_dma_sync(dma->dma_hdl, 0, fw->main.datasz,
-	    DDI_DMA_SYNC_FORDEV);
 	memcpy((char *)dma->vaddr + IWN4965_FW_DATA_MAXSZ,
 	    fw->main.text, fw->main.textsz);
-	(void) ddi_dma_sync(dma->dma_hdl, 0, fw->main.textsz,
-	    DDI_DMA_SYNC_FORDEV);
+	(void) ddi_dma_sync(dma->dma_hdl, 0, 0, DDI_DMA_SYNC_FORDEV);
 
 	/* Tell adapter where to find runtime sections. */
 	if ((error = iwn_nic_lock(sc)) != 0)
@@ -6985,7 +6759,7 @@ iwn5000_load_firmware_section(struct iwn_softc *sc, uint32_t dst,
 
 	/* Copy firmware section into pre-allocated DMA-safe memory. */
 	memcpy(dma->vaddr, section, size);
-	(void) ddi_dma_sync(dma->dma_hdl, 0, size, DDI_DMA_SYNC_FORDEV);
+	(void) ddi_dma_sync(dma->dma_hdl, 0, 0, DDI_DMA_SYNC_FORDEV);
 
 	if ((error = iwn_nic_lock(sc)) != 0)
 		return error;
@@ -7011,8 +6785,11 @@ iwn5000_load_firmware_section(struct iwn_softc *sc, uint32_t dst,
 
 	/* Wait at most five seconds for FH DMA transfer to complete. */
 	clk = ddi_get_lbolt() + drv_usectohz(5000000);
-	if (cv_timedwait(&sc->sc_fhdma_cv, &sc->sc_mtx, clk) < 0)
-		return (IWN_FAIL);
+	while ((sc->sc_flags & IWN_FLAG_FW_DMA) == 0) {
+		if (cv_timedwait(&sc->sc_fhdma_cv, &sc->sc_mtx, clk) < 0)
+			return (IWN_FAIL);
+	}
+	sc->sc_flags &= ~IWN_FLAG_FW_DMA;
 
 	return (IWN_SUCCESS);
 }
@@ -7246,14 +7023,14 @@ iwn_read_firmware(struct iwn_softc *sc)
 	if (fw->size < sizeof (uint32_t)) {
 		dev_err(sc->sc_dip, CE_WARN,
 		    "!firmware too short: %lld bytes", (longlong_t)fw->size);
-		firmware_close(fwh);
+		(void) firmware_close(fwh);
 		return EINVAL;
 	}
 
 	/* Read the firmware. */
 	fw->data = kmem_alloc(fw->size, KM_SLEEP);
 	error = firmware_read(fwh, 0, fw->data, fw->size);
-	firmware_close(fwh);
+	(void) firmware_close(fwh);
 	if (error != 0) {
 		dev_err(sc->sc_dip, CE_WARN,
 		    "!could not read firmware %s", sc->fwname);
@@ -7608,10 +7385,12 @@ iwn_hw_init(struct iwn_softc *sc)
 	}
 	/* Wait at most one second for firmware alive notification. */
 	clk = ddi_get_lbolt() + drv_usectohz(1000000);
-	if (cv_timedwait(&sc->sc_alive_cv, &sc->sc_mtx, clk) < 0) {
-		dev_err(sc->sc_dip, CE_WARN,
-		    "!timeout waiting for adapter to initialize");
-		return (IWN_FAIL);
+	while ((sc->sc_flags & IWN_FLAG_FW_ALIVE) == 0) {
+		if (cv_timedwait(&sc->sc_alive_cv, &sc->sc_mtx, clk) < 0) {
+			dev_err(sc->sc_dip, CE_WARN,
+			    "!timeout waiting for adapter to initialize");
+			return (IWN_FAIL);
+		}
 	}
 	/* Do post-firmware initialization. */
 	return ops->post_alive(sc);
@@ -7670,7 +7449,7 @@ iwn_hw_stop(struct iwn_softc *sc, boolean_t lock)
 	/* Power OFF adapter. */
 	iwn_apm_stop(sc);
 
-	sc->sc_flags &= ~IWN_FLAG_HW_INITED;
+	sc->sc_flags &= ~(IWN_FLAG_HW_INITED | IWN_FLAG_FW_ALIVE);
 
 	if (lock) {
 		mutex_exit(&sc->sc_mtx);
@@ -7859,6 +7638,7 @@ iwn_m_start(void *arg)
 		    !(IWN_READ(sc, IWN_GP_CNTRL) & IWN_GP_CNTRL_RFKILL)) {
 			mutex_enter(&sc->sc_mtx);
 			sc->sc_flags |= IWN_FLAG_HW_ERR_RECOVER;
+			sc->sc_flags |= IWN_FLAG_RADIO_OFF;
 			mutex_exit(&sc->sc_mtx);
 			return (IWN_SUCCESS);
 		}

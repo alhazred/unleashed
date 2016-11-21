@@ -173,7 +173,6 @@ struct iwn_softc {
 	clock_t			sc_clk;
 	struct ieee80211_amrr	amrr;
 	uint8_t			fixed_ridx;
-	int			sc_scancnt;
 
 	uint16_t		sc_devid;
 	caddr_t			sc_base;
@@ -184,6 +183,7 @@ struct iwn_softc {
 #define IWN_FLAG_CALIB_DONE	(1 << 2)
 #define IWN_FLAG_USE_ICT	(1 << 3)
 #define IWN_FLAG_INTERNAL_PA	(1 << 4)
+#define	IWN_FLAG_FW_DMA		(1 << 5)
 #define IWN_FLAG_HAS_11N	(1 << 6)
 #define IWN_FLAG_ENH_SENS	(1 << 7)
 /* Added for NetBSD */
@@ -194,7 +194,7 @@ struct iwn_softc {
 /* From iwp.c */
 #define	IWN_FLAG_ATTACHED	(1 << 11)
 #define	IWN_FLAG_CMD_DONE	(1 << 12)
-#define	IWN_FLAG_FW_INIT	(1 << 13)
+#define	IWN_FLAG_FW_ALIVE	(1 << 13)
 #define	IWN_FLAG_HW_ERR_RECOVER	(1 << 14)
 #define	IWN_FLAG_RATE_AUTO_CTL	(1 << 15)
 #define	IWN_FLAG_RUNNING	(1 << 16)
@@ -205,6 +205,7 @@ struct iwn_softc {
 #define	IWN_FLAG_PUT_SEG	(1 << 21)
 #define	IWN_FLAG_QUIESCED	(1 << 22)
 #define	IWN_FLAG_LAZY_RESUME	(1 << 23)
+#define	IWN_FLAG_STOP_CALIB_TO	(1 << 24)
 
 	uint8_t 		hw_type;
 
@@ -250,11 +251,14 @@ struct iwn_softc {
 	int			sc_intr_count;
 	size_t			sc_intr_size;
 	ddi_intr_handle_t	*sc_intr_htable;
-	ddi_softint_handle_t	sc_softint_hdl;
 	int			sc_cap_off;	/* PCIe Capabilities. */
+
+	ddi_periodic_t		sc_periodic;
+	timeout_id_t		scan_to;
 	timeout_id_t		calib_to;
 	int			calib_cnt;
 	struct iwn_calib_state	calib;
+
 
 	struct iwn_fw_info	fw;
 	struct iwn_calib_info	calibcmd[5];
@@ -299,12 +303,7 @@ struct iwn_softc {
 	uint8_t			chainmask;
 
 	int			sc_tx_timer;
-	uint32_t		sc_scan_pending;
 	void			*powerhook;
-
-	kthread_t		*sc_mf_thread;
-	volatile uint32_t	sc_mf_thread_switch;
-	ddi_taskq_t		*sc_scan_taskq;
 
 	kmutex_t		sc_mtx;		/* mutex for init/stop */
 	kmutex_t		sc_tx_mtx;
@@ -322,8 +321,6 @@ struct iwn_softc {
 #define	SC_CMD_FLG_NONE		(0)
 #define	SC_CMD_FLG_PENDING	(1)
 #define	SC_CMD_FLG_DONE		(2)
-	volatile uint32_t	sc_scan_flag;
-#define	SC_SCAN_FLG_DONE	1
 
 	/* kstats */
 	uint32_t		sc_tx_nobuf;
