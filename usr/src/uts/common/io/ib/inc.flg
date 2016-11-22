@@ -41,7 +41,7 @@ find_files "s.*.h"	\
 	usr/src/uts/intel/ia32/sys	\
 	usr/src/uts/common/rpc		\
 	usr/src/uts/common/netinet	\
-	usr/src/uts/common/inet		\
+	kernel/net		\
 	usr/src/uts/common/net		\
 	include/vm		\
 	usr/src/uts/common/gssapi

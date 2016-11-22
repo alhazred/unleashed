@@ -384,43 +384,43 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/idmap/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/arp/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/arp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/ip/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/ip/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/ipnet/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/ipnet/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:                $(UTSBASE)/common/inet/iptun/%.c
+$(OBJS_DIR)/%.o:                $(CODEMGR_WS)/kernel/net/iptun/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/sctp/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/sctp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/tcp/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/tcp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/ilb/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/ilb/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/ipf/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/ipf/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/ipd/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/ipd/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -428,15 +428,15 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/net/patricia/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/udp/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/udp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/sockmods/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/sockmods/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/inet/dlpistub/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/dlpistub/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -1184,7 +1184,7 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/iscsi/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:                $(UTSBASE)/common/inet/kifconf/%.c
+$(OBJS_DIR)/%.o:                $(CODEMGR_WS)/kernel/net/kifconf/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 

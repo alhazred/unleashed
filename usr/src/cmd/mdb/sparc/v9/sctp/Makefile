@@ -34,6 +34,6 @@ include ../../../../Makefile.cmd
 include ../../../../Makefile.cmd.64
 include ../../Makefile.sparcv9
 
-CPPFLAGS += -I$(SRC)/uts/common/inet
+CPPFLAGS += -I$(CODEMGR_WS)/include/inet
 
 include ../../../Makefile.module

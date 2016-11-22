@@ -45,7 +45,7 @@ file path=etc/sock2path.d/driver%2Fnetwork%2Fbpf group=sys
 file path=usr/include/net/bpf.h mode=0644
 file path=usr/include/net/bpfdesc.h mode=0644
 file path=usr/include/net/dlt.h mode=0644
-file path=usr/include/netpacket/packet.h mode=0644
+file path=usr/include/netpacket/packet.h
 file path=usr/kernel/drv/$(ARCH64)/bpf group=sys
 $(i386_ONLY)file path=usr/kernel/drv/bpf group=sys
 file path=usr/kernel/drv/bpf.conf group=sys

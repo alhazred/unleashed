@@ -34,7 +34,7 @@ UTSBASE	= ../..
 MODULE		= iptun
 OBJECTS		= $(IPTUN_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
-CONF_SRCDIR	= $(UTSBASE)/common/inet/iptun
+CONF_SRCDIR	= $(CODEMGR_WS)/kernel/net/iptun
 
 #
 # Include common rules.

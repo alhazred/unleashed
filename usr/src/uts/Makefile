@@ -129,9 +129,6 @@ COMMON_HDRDIRS= common/avs \
 		common/gssapi \
 		common/idmap \
 		common/klm \
-		common/inet \
-		common/inet/ipf/netinet \
-		common/inet/sockmods/netpacket \
 		common/io/bpf/net \
 		common/io/fibre-channel/fca/qlc \
 		common/ipp \

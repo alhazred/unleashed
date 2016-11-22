@@ -32,4 +32,4 @@ include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.module
 
-CPPFLAGS += -I$(SRC)/uts/common/inet
+CPPFLAGS += -I$(CODEMGR_WS)/include/inet

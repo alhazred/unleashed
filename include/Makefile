@@ -188,8 +188,11 @@ INCS=	$($(CONFIG_MACH)_INCS) \
 
 SUBDIR=	arpa \
 	audio \
+	inet \
 	iso \
 	kerberosv5 \
+	netinet \
+	netpacket \
 	protocols \
 	rpc \
 	rpcsvc \

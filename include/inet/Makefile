@@ -1,0 +1,48 @@
+INCDIR=	/usr/include/inet
+INCS=	arp.h \
+	common.h \
+	ip.h \
+	ip2mac.h \
+	ip2mac_impl.h \
+	ip6.h \
+	ip6_asp.h \
+	ip_arp.h \
+	ip_ftable.h \
+	ip_if.h \
+	ip_impl.h \
+	ip_ire.h \
+	ip_multi.h \
+	ip_ndp.h \
+	ip_netinfo.h \
+	ip_rts.h \
+	ip_stack.h \
+	ipclassifier.h \
+	ipdrop.h \
+	ipnet.h \
+	ipp_common.h \
+	ipsec_impl.h \
+	ipsec_info.h \
+	ipsecah.h \
+	ipsecesp.h \
+	iptun.h \
+	keysock.h \
+	led.h \
+	mi.h \
+	mib2.h \
+	nd.h \
+	optcom.h \
+	rawip_impl.h \
+	sadb.h \
+	sctp_itf.h \
+	snmpcom.h \
+	tcp.h \
+	tcp_impl.h \
+	tcp_sack.h \
+	tcp_stack.h \
+	tcp_stats.h \
+	tunables.h \
+	udp_impl.h \
+	wifi_ioctl.h
+
+.include <prog.mk>
+.include <inc.mk>

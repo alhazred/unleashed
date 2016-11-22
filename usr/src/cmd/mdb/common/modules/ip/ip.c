@@ -1640,7 +1640,7 @@ static size_t
 mi_osize(const queue_t *q)
 {
 	/*
-	 * The code in common/inet/mi.c allocates an extra word to store the
+	 * The code in kernel/net/mi.c allocates an extra word to store the
 	 * size of the allocation.  An mi_o_s is thus a size_t plus an mi_o_s.
 	 */
 	struct mi_block {

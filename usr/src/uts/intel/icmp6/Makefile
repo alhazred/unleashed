@@ -41,7 +41,7 @@ UTSBASE	= ../..
 MODULE		= icmp6
 OBJECTS		= $(ICMP6_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
-CONF_SRCDIR	= $(UTSBASE)/common/inet/ip
+CONF_SRCDIR	= $(CODEMGR_WS)/kernel/net/ip
 
 #
 #	Include common rules.

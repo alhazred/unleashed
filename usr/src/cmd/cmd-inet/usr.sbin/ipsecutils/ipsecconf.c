@@ -855,7 +855,7 @@ alg_rangecheck(uint_t type, uint_t algid, const algreq_t *ar)
 }
 
 /*
- * Inspired by uts/common/inet/spd.c:ipsec_act_wildcard_expand()
+ * Inspired by kernel/net/spd.c:ipsec_act_wildcard_expand()
  */
 
 static struct spd_attribute *

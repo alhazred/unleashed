@@ -401,36 +401,36 @@ file path=usr/include/iconv.h
 file path=usr/include/idmap.h
 file path=usr/include/ieeefp.h
 file path=usr/include/ifaddrs.h
-file path=usr/include/inet/arp.h mode=0644
-file path=usr/include/inet/common.h mode=0644
-file path=usr/include/inet/ip.h mode=0644
-file path=usr/include/inet/ip6.h mode=0644
-file path=usr/include/inet/ip6_asp.h mode=0644
-file path=usr/include/inet/ip_arp.h mode=0644
-file path=usr/include/inet/ip_ftable.h mode=0644
-file path=usr/include/inet/ip_if.h mode=0644
-file path=usr/include/inet/ip_ire.h mode=0644
-file path=usr/include/inet/ip_multi.h mode=0644
-file path=usr/include/inet/ip_netinfo.h mode=0644
-file path=usr/include/inet/ip_rts.h mode=0644
-file path=usr/include/inet/ip_stack.h mode=0644
-file path=usr/include/inet/ipclassifier.h mode=0644
-file path=usr/include/inet/ipdrop.h mode=0644
-file path=usr/include/inet/ipnet.h mode=0644
-file path=usr/include/inet/ipp_common.h mode=0644
-file path=usr/include/inet/led.h mode=0644
-file path=usr/include/inet/mi.h mode=0644
-file path=usr/include/inet/mib2.h mode=0644
-file path=usr/include/inet/nd.h mode=0644
-file path=usr/include/inet/optcom.h mode=0644
-file path=usr/include/inet/sctp_itf.h mode=0644
-file path=usr/include/inet/snmpcom.h mode=0644
-file path=usr/include/inet/tcp.h mode=0644
-file path=usr/include/inet/tcp_sack.h mode=0644
-file path=usr/include/inet/tcp_stack.h mode=0644
-file path=usr/include/inet/tcp_stats.h mode=0644
-file path=usr/include/inet/tunables.h mode=0644
-file path=usr/include/inet/wifi_ioctl.h mode=0644
+file path=usr/include/inet/arp.h
+file path=usr/include/inet/common.h
+file path=usr/include/inet/ip.h
+file path=usr/include/inet/ip6.h
+file path=usr/include/inet/ip6_asp.h
+file path=usr/include/inet/ip_arp.h
+file path=usr/include/inet/ip_ftable.h
+file path=usr/include/inet/ip_if.h
+file path=usr/include/inet/ip_ire.h
+file path=usr/include/inet/ip_multi.h
+file path=usr/include/inet/ip_netinfo.h
+file path=usr/include/inet/ip_rts.h
+file path=usr/include/inet/ip_stack.h
+file path=usr/include/inet/ipclassifier.h
+file path=usr/include/inet/ipdrop.h
+file path=usr/include/inet/ipnet.h
+file path=usr/include/inet/ipp_common.h
+file path=usr/include/inet/led.h
+file path=usr/include/inet/mi.h
+file path=usr/include/inet/mib2.h
+file path=usr/include/inet/nd.h
+file path=usr/include/inet/optcom.h
+file path=usr/include/inet/sctp_itf.h
+file path=usr/include/inet/snmpcom.h
+file path=usr/include/inet/tcp.h
+file path=usr/include/inet/tcp_sack.h
+file path=usr/include/inet/tcp_stack.h
+file path=usr/include/inet/tcp_stats.h
+file path=usr/include/inet/tunables.h
+file path=usr/include/inet/wifi_ioctl.h
 file path=usr/include/inttypes.h
 file path=usr/include/ipmp.h
 file path=usr/include/ipmp_admin.h
