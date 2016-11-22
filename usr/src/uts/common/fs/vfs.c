@@ -578,7 +578,7 @@ vfsimpl_teardown(vfs_t *vfsp)
 
 /*
  * VFS system calls: mount, umount, syssync, statfs, fstatfs, statvfs,
- * fstatvfs, and sysfs moved to common/syscall.
+ * fstatvfs, and sysfs are in kernel/syscall.
  */
 
 /*

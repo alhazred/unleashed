@@ -1275,7 +1275,7 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/crypto/skein/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/syscall/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/syscall/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 

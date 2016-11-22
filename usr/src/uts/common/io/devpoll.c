@@ -133,7 +133,7 @@ static void pcachelink_purge_all(pollcache_t *);
  * Locking Design
  *
  * The /dev/poll driver shares most of its code with poll sys call whose
- * code is in common/syscall/poll.c. In poll(2) design, the pollcache
+ * code is in kernel/syscall/poll.c. In poll(2) design, the pollcache
  * structure is per lwp. An implicit assumption is made there that some
  * portion of pollcache will never be touched by other lwps. E.g., in
  * poll(2) design, no lwp will ever need to grow bitmap of other lwp.
