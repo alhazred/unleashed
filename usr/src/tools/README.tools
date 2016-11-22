@@ -49,9 +49,6 @@ Layout of /opt/onbld
 /opt/onbld/lib/python<version>/
 	python modules used by the build tools.
 
-/opt/onbld/lib/python<version>/onbld/hgext
-	Mercurial extensions.
-
 /opt/onbld/lib/python/ 
         symlink to the modules directory of the currently preferred
         python version.  This exists to retain compatibility both for
@@ -160,13 +157,6 @@ findunref
 hdrchk
 	checks headers for compliance with OS/Net standards (form, includes,
 	C++ guards).
-
-hgsetup
-	creates a basic Mercurial configuration for the user.
-
-hg-active
-	helper used by webrev to generate file lists for Mercurial
-	workspaces.
 
 interface_check
 	detects and reports invalid versioning in ELF objects.
