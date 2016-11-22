@@ -267,7 +267,6 @@ DIRS= \
 	/usr/lib/nfs \
 	/usr/net \
 	/usr/net/servers \
-	/usr/lib/pool \
 	/usr/lib/python$(PYTHON_VERSION) \
 	/usr/lib/python$(PYTHON_VERSION)/vendor-packages \
 	/usr/lib/python$(PYTHON_VERSION)/vendor-packages/64 \

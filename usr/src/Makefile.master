@@ -78,11 +78,6 @@ CLOSED=		$(SRC)/../closed
 BUILD_TOOLS=		/opt
 ONBLD_TOOLS=		$(BUILD_TOOLS)/onbld
 
-# define runtime JAVA_HOME, primarily for cmd/pools/poold
-JAVA_HOME=	/usr/java
-# define buildtime JAVA_ROOT
-JAVA_ROOT=	/usr/java
-
 GCC_ROOT=	/opt/gcc/4.4.4
 GCCLIBDIR=	$(GCC_ROOT)/lib
 GCCLIBDIR64=	$(GCC_ROOT)/lib/$(MACH64)
@@ -121,11 +116,6 @@ LEX=		/usr/ccs/bin/lex
 FLEX=		/usr/bin/flex
 YACC=		/usr/ccs/bin/yacc
 CPP=		/usr/lib/cpp
-JAVAC=		$(JAVA_ROOT)/bin/javac
-JAVAH=		$(JAVA_ROOT)/bin/javah
-JAVADOC=	$(JAVA_ROOT)/bin/javadoc
-RMIC=		$(JAVA_ROOT)/bin/rmic
-JAR=		$(JAVA_ROOT)/bin/jar
 CTFCONVERT=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfconvert
 CTFDIFF=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfdiff
 CTFMERGE=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfmerge
@@ -435,7 +425,6 @@ CPPFLAGS.native=$(ENVCPPFLAGS1) $(ENVCPPFLAGS2) $(ENVCPPFLAGS3) \
 		$(ENVCPPFLAGS4) -I$(NATIVE_ADJUNCT)/include
 CPPFLAGS=	$(CPPFLAGS.first) $(CPPFLAGS.master)
 AS_CPPFLAGS=	$(CPPFLAGS.first) $(CPPFLAGS.master)
-JAVAFLAGS=	-source 1.6 -target 1.6 -Xlint:deprecation,-options
 
 #
 # For source message catalogue
@@ -546,9 +535,6 @@ COMPILE.d=	$(DTRACE) -G -32
 COMPILE64.d=	$(DTRACE) -G -64
 COMPILE.b=	$(ELFWRAP) $(ELFWRAP_FLAGS$(CLASS))
 COMPILE64.b=	$(ELFWRAP) $(ELFWRAP_FLAGS$(CLASS))
-
-CLASSPATH=	.
-COMPILE.java=	$(JAVAC) $(JAVAFLAGS) -classpath $(CLASSPATH)
 
 #
 # Link time macros

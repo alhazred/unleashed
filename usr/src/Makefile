@@ -214,16 +214,3 @@ cmdheaders: FRC
 check:	$(CHKHDRSUBDIRS) $(CHKMFSTSUBDIRS) $(CHKMANSUBDIRS)
 
 FRC:
-
-#
-# Targets for reporting compiler versions; nightly uses these.
-#
-
-java-version:
-	@if [ -x "$(JAVAC)" ]; then			\
-		$(ECHO) $(JAVAC);			\
-		$(JAVA_ROOT)/bin/java -fullversion 2>&1 | head -1;	\
-	else						\
-		$(ECHO) No Java compiler found;		\
-		exit 1;					\
-	fi

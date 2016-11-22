@@ -91,12 +91,10 @@ file path=lib/libzfs.so.1
 file path=lib/libzfs_core.so.1
 file path=sbin/zfs mode=0555
 file path=sbin/zpool mode=0555
-file path=usr/lib/$(ARCH64)/libzfs_jni.so.1
 file path=usr/lib/$(ARCH64)/libzpool.so.1
 file path=usr/lib/devfsadm/linkmod/SUNW_zfs_link.so group=sys
 file path=usr/lib/fs/zfs/bootinstall mode=0555
 file path=usr/lib/fs/zfs/fstyp.so.1 mode=0555
-file path=usr/lib/libzfs_jni.so.1
 $(i386_ONLY)file path=usr/lib/libzpool.so.1
 file path=usr/lib/mdb/kvm/$(ARCH64)/zfs.so group=sys mode=0555
 $(i386_ONLY)file path=usr/lib/mdb/kvm/zfs.so group=sys mode=0555
@@ -122,7 +120,6 @@ file path=usr/lib/python$(PYTHON_VERSION)/vendor-packages/zfs/userspace.pyc
 file path=usr/lib/python$(PYTHON_VERSION)/vendor-packages/zfs/util.py
 file path=usr/lib/python$(PYTHON_VERSION)/vendor-packages/zfs/util.pyc
 file path=usr/lib/sysevent/modules/zfs_mod.so group=sys
-file path=usr/lib/zfs/availdevs mode=0555
 file path=usr/lib/zfs/pyzfs.py mode=0555
 file path=usr/lib/zfs/pyzfs.pyc mode=0555
 $(i386_ONLY)file path=usr/sbin/$(ARCH32)/zdb mode=0555
@@ -159,7 +156,6 @@ link path=usr/lib/$(ARCH64)/libzfs_core.so \
     target=../../../lib/$(ARCH64)/libzfs_core.so.1
 link path=usr/lib/$(ARCH64)/libzfs_core.so.1 \
     target=../../../lib/$(ARCH64)/libzfs_core.so.1
-link path=usr/lib/$(ARCH64)/libzfs_jni.so target=libzfs_jni.so.1
 link path=usr/lib/$(ARCH64)/libzpool.so target=libzpool.so.1
 link path=usr/lib/fs/zfs/mount target=../../../../sbin/zfs
 link path=usr/lib/fs/zfs/umount target=../../../../sbin/zfs
@@ -167,7 +163,6 @@ link path=usr/lib/libzfs.so target=../../lib/libzfs.so.1
 link path=usr/lib/libzfs.so.1 target=../../lib/libzfs.so.1
 link path=usr/lib/libzfs_core.so target=../../lib/libzfs_core.so.1
 link path=usr/lib/libzfs_core.so.1 target=../../lib/libzfs_core.so.1
-link path=usr/lib/libzfs_jni.so target=libzfs_jni.so.1
 $(i386_ONLY)link path=usr/lib/libzpool.so target=libzpool.so.1
 link path=usr/sbin/zfs target=../../sbin/zfs
 link path=usr/sbin/zpool target=../../sbin/zpool

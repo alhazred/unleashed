@@ -290,7 +290,6 @@ replace_with_native /sbin/zfs 0555 root:bin
 replace_with_native /sbin/zpool 0555 root:bin
 replace_with_native /usr/lib/fs/ufs/quota 0555 root:bin
 replace_with_native /usr/lib/fs/zfs/fstyp 0555 root:bin
-replace_with_native /usr/lib/zfs/availdevs 0555 root:bin
 replace_with_native /usr/sbin/df 0555 root:bin
 replace_with_native /usr/sbin/zstreamdump 0555 root:bin
 replace_with_native_py /usr/lib/zfs/pyzfs.py 0555 root:bin

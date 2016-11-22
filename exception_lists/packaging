@@ -386,17 +386,6 @@ usr/include/sys/mdesc.h					sparc
 usr/include/sys/mdesc_impl.h				sparc
 usr/platform/sun4v/include/sys/mach_descrip.h		sparc
 #
-# ZFS JNI headers
-#
-usr/include/libzfs_jni_dataset.h
-usr/include/libzfs_jni_disk.h
-usr/include/libzfs_jni_diskmgt.h
-usr/include/libzfs_jni_ipool.h
-usr/include/libzfs_jni_main.h
-usr/include/libzfs_jni_pool.h
-usr/include/libzfs_jni_property.h
-usr/include/libzfs_jni_util.h
-#
 # This library is installed in the proto area by the build of libdisasm, and is
 # only used when building the KMDB disasm module.
 #

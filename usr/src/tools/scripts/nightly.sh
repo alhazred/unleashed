@@ -1192,31 +1192,6 @@ if [[ ! -f $SRC/Makefile ]]; then
 	exit 1
 fi
 
-( cd $SRC
-  for target in java-version; do
-	echo
-	#
-	# Put statefile somewhere we know we can write to rather than trip
-	# over a read-only $srcroot.
-	#
-	rm -f $TMPDIR/make-state
-	export SRC
-	if $MAKE -K $TMPDIR/make-state -e $target 2>/dev/null; then
-		continue
-	fi
-	touch $TMPDIR/nocompiler
-  done
-  echo
-) | tee -a $build_environ_file >> $LOGFILE
-
-if [ -f $TMPDIR/nocompiler ]; then
-	rm -f $TMPDIR/nocompiler
-	build_ok=n
-	echo "Aborting due to missing compiler." |
-		tee -a $build_environ_file >> $LOGFILE
-	exit 1
-fi
-
 # Check that we're running a capable link-editor
 whence ld | tee -a $build_environ_file >> $LOGFILE
 LDVER=`ld -V 2>&1`

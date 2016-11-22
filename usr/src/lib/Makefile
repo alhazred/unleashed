@@ -229,7 +229,6 @@ SUBDIRS +=				\
 	libxnet		\
 	libzfs		\
 	libzfs_core	\
-	libzfs_jni	\
 	libzonecfg	\
 	libzoneinfo	\
 	libzonestat	\
@@ -459,7 +458,6 @@ HDRSUBDIRS=				\
 	libxcurses2	\
 	libzfs		\
 	libzfs_core	\
-	libzfs_jni	\
 	libzoneinfo	\
 	libzonestat	\
 	mpapi		\
@@ -640,7 +638,6 @@ libvrrpadm:	libdladm libscf
 libvscan:	libscf libsecdb
 libzfs:		libdevid libgen libuutil libadm libavl libefi libidmap \
 		libumem libtsol libzfs_core
-libzfs_jni:	libdiskmgt libzfs
 libzonecfg:	libuuid libsysevent libsec libbrand libpool libscf libproc \
 		libuutil libbsm libsecdb
 libzonestat:	libcmdutils libumem
