@@ -394,10 +394,8 @@ typedef enum {
 #define	SPA_VERSION_5000		5000ULL
 
 /*
- * When bumping up SPA_VERSION, make sure GRUB ZFS understands the on-disk
- * format change. Go to usr/src/grub/grub-0.97/stage2/{zfs-include/, fsys_zfs*},
- * and do the appropriate changes.  Also bump the version number in
- * usr/src/grub/capability.
+ * When bumping up SPA_VERSION, make sure the boot loader ZFS understands
+ * the on-disk format change.
  */
 #define	SPA_VERSION			SPA_VERSION_5000
 #define	SPA_VERSION_STRING		"5000"
@@ -463,8 +461,8 @@ typedef enum {
  * occurs.  This is independent of SPA/DMU/ZAP versioning.  You must
  * also update the version_table[] and help message in zfs_prop.c.
  *
- * When changing, be sure to teach GRUB how to read the new format!
- * See usr/src/grub/grub-0.97/stage2/{zfs-include/,fsys_zfs*}
+ * When changing, be sure to teach boot loader ZFS how to read
+ * the new format!
  */
 #define	ZPL_VERSION_1			1ULL
 #define	ZPL_VERSION_2			2ULL
