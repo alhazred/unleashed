@@ -108,7 +108,6 @@ for lib in \
   libzpool \
   libzfs_core \
   libzfs \
-  libzfs_jni
 do
   (cd $SRC/lib/$lib && $make $targ)
 done
@@ -177,7 +176,6 @@ for lib in \
   libzpool \
   libzfs_core \
   libzfs \
-  libzfs_jni \
   pyzfs
 do
   (cd $SRC/lib/$lib && $make $1)
@@ -190,7 +188,6 @@ done
 do_cmds() {
 
 for cmd in \
-  availdevs \
   isaexec \
   fstyp \
   zdb \
@@ -313,12 +310,10 @@ lib/libzfs.so.1
 lib/libzfs_core.so.1
 usr/bin/$arch32/ztest
 usr/bin/$arch64/ztest
-usr/lib/$arch64/libzfs_jni.so.1
 usr/lib/$arch64/libzpool.so.1
 usr/lib/devfsadm/linkmod/SUNW_zfs_link.so
 usr/lib/fs/zfs/bootinstall
 usr/lib/fs/zfs/fstyp.so.1
-usr/lib/libzfs_jni.so.1
 usr/lib/libzpool.so.1
 usr/lib/mdb/kvm/$arch64/zfs.so
 usr/lib/mdb/kvm/zfs.so
@@ -327,7 +322,6 @@ usr/lib/mdb/proc/libzpool.so
 sbin/zfs
 sbin/zpool
 usr/lib/sysevent/modules/zfs_mod.so
-usr/lib/zfs/availdevs
 usr/lib/zfs/pyzfs.py
 usr/lib/zfs/pyzfs.pyc
 usr/sbin/$arch32/zdb

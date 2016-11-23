@@ -337,7 +337,6 @@ _MANFILES=	6to4relay.1m		\
 		pooladm.1m		\
 		poolbind.1m		\
 		poolcfg.1m		\
-		poold.1m		\
 		poolstat.1m		\
 		ports.1m		\
 		powerd.1m		\

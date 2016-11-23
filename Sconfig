@@ -6,7 +6,7 @@
  (config
    ; should SMB expose CUPS printers?
    SMB_PRINTING
-   #t)
+   #f)
 
  (include "kernel/Sconfig"))
 

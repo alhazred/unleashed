@@ -14,5 +14,8 @@ SRCS=	parser.y \
 CPPFLAGS+=	-I${.CURDIR:H:H}/usr/src/lib/libc/port/locale
 LDADD=		-lavl -lgen
 
+${SRCS:M*.c}: parser.h
+parser.h: parser.y
+
 .include <yacc.mk>
 .include <prog.mk>

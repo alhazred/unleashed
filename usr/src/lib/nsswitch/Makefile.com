@@ -48,7 +48,6 @@ CLOBBERFILES +=	$(DYNLIB1)
 # LIBS.  The use of "+=" creates both the default archive library and DYNLIB1,
 # use of "=" creates DYNLIB1 only.  Archives are built and installed for some
 # libraries as they are required to build things like ufsrestore, rcp.static,
-# tar.static, metastat, metainit etc. however they do not get shipped with the
-# final product.
+# tar.static etc. However they do not get shipped with the final product.
 
 .KEEP_STATE:

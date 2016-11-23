@@ -120,7 +120,6 @@ MANIFEST_SUBDIRS=			\
 	krb5/slave			\
 	lp/cmd/lpsched			\
 	picl/picld			\
-	pools/poold			\
 	rcap/rcapd			\
 	rpcsvc/rpc.bootparamd		\
 	smbsrv/smbd			\

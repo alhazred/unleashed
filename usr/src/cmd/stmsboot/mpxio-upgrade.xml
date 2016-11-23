@@ -45,14 +45,6 @@
 	<single_instance />
 
 	<dependency
-	    name='metainit'
-	    type='service'
-	    grouping='optional_all'
-	    restart_on='none'>
-		<service_fmri value='svc:/system/metainit' />
-	</dependency>
-
-	<dependency
 	    name='vxvm-sysboot'
 	    type='service'
 	    grouping='optional_all'

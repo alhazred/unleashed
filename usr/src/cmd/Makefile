@@ -50,7 +50,6 @@ FIRST_SUBDIRS=		\
 
 COMMON_SUBDIRS=		\
 	allocate	\
-	availdevs	\
 	lp		\
 	perl		\
 	Adm		\

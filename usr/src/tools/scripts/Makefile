@@ -33,7 +33,6 @@ SHFILES= \
 	elfcmp \
 	flg.flp \
 	genoffsets \
-	hgsetup \
 	onu \
 	protocmp.terse \
 	webrev \
@@ -60,7 +59,6 @@ PYFILES= \
 	copyrightchk \
 	git-pbchk \
 	hdrchk \
-	hg-active \
 	mapfilechk \
 	validate_pkg \
 	wsdiff
@@ -80,7 +78,6 @@ MAN1ONBLDFILES= \
 	hdrchk.1onbld \
 	interface_check.1onbld \
 	interface_cmp.1onbld \
-	hgsetup.1onbld \
 	jstyle.1onbld \
 	mapfilechk.1onbld \
 	onu.1onbld \

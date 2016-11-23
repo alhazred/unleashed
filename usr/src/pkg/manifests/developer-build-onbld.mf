@@ -54,7 +54,6 @@ dir path=opt/onbld/lib/python$(PYTHON_VERSION)
 dir path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld
 dir path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks
 dir path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm
-dir path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/hgext
 dir path=opt/onbld/man
 dir path=opt/onbld/man/man1onbld
 $(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/btxld mode=0555
@@ -94,8 +93,6 @@ file path=opt/onbld/bin/genoffsets mode=0555
 file path=opt/onbld/bin/get_depend_info mode=0555
 file path=opt/onbld/bin/git-pbchk mode=0555
 file path=opt/onbld/bin/hdrchk mode=0555
-file path=opt/onbld/bin/hg-active mode=0555
-file path=opt/onbld/bin/hgsetup mode=0555
 file path=opt/onbld/bin/interface_check mode=0555
 file path=opt/onbld/bin/interface_cmp mode=0555
 file path=opt/onbld/bin/jstyle mode=0555
@@ -196,11 +193,6 @@ file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/__init__.pyc \
     mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/__init__.py mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/__init__.pyc mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/hgext/__init__.py \
-    mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/hgext/__init__.pyc \
-    mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/hgext/cdm.py mode=0444
 file path=opt/onbld/man/man1onbld/Install.1onbld
 file path=opt/onbld/man/man1onbld/cddlchk.1onbld
 file path=opt/onbld/man/man1onbld/check_rtime.1onbld
@@ -213,7 +205,6 @@ file path=opt/onbld/man/man1onbld/flg.flp.1onbld
 file path=opt/onbld/man/man1onbld/get_depend_info.1onbld
 file path=opt/onbld/man/man1onbld/git-pbchk.1onbld
 file path=opt/onbld/man/man1onbld/hdrchk.1onbld
-file path=opt/onbld/man/man1onbld/hgsetup.1onbld
 file path=opt/onbld/man/man1onbld/interface_check.1onbld
 file path=opt/onbld/man/man1onbld/interface_cmp.1onbld
 file path=opt/onbld/man/man1onbld/jstyle.1onbld
@@ -237,5 +228,3 @@ link path=opt/onbld/bin/git-nits target=git-pbchk
 link path=opt/onbld/lib/$(ARCH)/libctf.so target=libctf.so.1
 link path=opt/onbld/lib/python target=python$(PYTHON_VERSION)
 link path=opt/onbld/man/man1onbld/git-nits.1onbld target=git-pbchk.1onbld
-# webrev(1) requires ps2pdf
-depend fmri=print/filter/ghostscript type=require
