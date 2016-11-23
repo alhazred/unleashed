@@ -438,9 +438,6 @@ CLOBBERFILES += $(POFILE) $(POFILES)
 COMPILE.cpp= $(CC) -xc -E -C $(CFLAGS) $(CPPFLAGS)
 XGETTEXT= /usr/bin/xgettext
 XGETFLAGS= -c TRANSLATION_NOTE
-GNUXGETTEXT= /usr/gnu/bin/xgettext
-GNUXGETFLAGS= --add-comments=TRANSLATION_NOTE --keyword=_ \
-	--strict --no-location --omit-header
 BUILD.po= $(XGETTEXT) $(XGETFLAGS) -d $(<F) $<.i ;\
 	$(RM)	$@ ;\
 	$(SED) "/^domain/d" < $(<F).po > $@ ;\
@@ -903,9 +900,6 @@ PKGPUBLISHER=	on-nightly
 	$(RM) $@
 	$(PYTHON) -mpy_compile $<
 	@[ $(<)c = $@ ] || $(MV) $(<)c $@
-
-.py.po:
-	$(GNUXGETTEXT) $(GNUXGETFLAGS) -d $(<F:%.py=%) $< ;
 
 .pl.po .pm.po:
 	$(XGETTEXT) $(XGETFLAGS) -d $(<F) $< ;

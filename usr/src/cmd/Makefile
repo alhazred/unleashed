@@ -618,7 +618,6 @@ MSGSUBDIRS=		\
 	psrinfo		\
 	ptools		\
 	pwconv		\
-	pyzfs		\
 	raidctl		\
 	ramdiskadm	\
 	rcap		\

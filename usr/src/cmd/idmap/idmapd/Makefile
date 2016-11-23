@@ -64,10 +64,6 @@ CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-uninitialized
 
 TEXT_DOMAIN =	SUNW_OST_OSLIB
-XGETTEXT =	$(GNUXGETTEXT)
-XGETFLAGS =	--foreign-user --strict -n -E --width=72 \
-		--omit-header --keyword=directoryError:2 \
-		--language=C --force-po
 
 C99MODE = $(C99_ENABLE)
 POFILE =	$(PROG)_all.po

@@ -33,10 +33,6 @@ $(BUILD64)SUBDIRS += $(MACH64)
 
 POFILE =	libidmap.po
 MSGFILES:sh =	echo common/*.[ch]
-XGETTEXT =	$(GNUXGETTEXT)
-XGETFLAGS =	--foreign-user --strict -n -E --width=72 \
-		--omit-header --keyword=directoryError:2 \
-		--language=C --force-po
 
 all := 		TARGET = all
 clean :=	TARGET = clean

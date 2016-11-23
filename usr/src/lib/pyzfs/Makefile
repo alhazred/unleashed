@@ -26,29 +26,20 @@
 include	../Makefile.lib
 
 SUBDIRS=	$(MACH)
-XGETTEXT=	$(GNUXGETTEXT)
-XGETFLAGS=	$(GNUXGETFLAGS)
 
 all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
 clobber :=	TARGET= clobber
 
-MSGFIND =	$(FIND) . -name '*.py' -o -name '*.c'
-MSGFILES =	$(MSGFIND:sh)
 PYCFIND =	$(FIND) . -name '*.pyc'
 PYCFILES = 	$(PYCFIND:sh)
-POFILE =	pyzfs.po
 
 .KEEP_STATE:
 
 all install clean: $(SUBDIRS)
 clobber: $(SUBDIRS)
-	$(RM) $(POFILE) $(PYCFILES)
-
-$(POFILE):	pofile_MSGFILES
-
-_msg: $(MSGDOMAINPOFILE)
+	$(RM) $(PYCFILES)
 
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
