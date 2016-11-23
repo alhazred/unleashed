@@ -20,8 +20,6 @@ CDDL HEADER END
 Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 Use is subject to license terms.
 
-ident	"%Z%%M%	%I%	%E% SMI"
-
 
 **  PLEASE NOTE:
 **
@@ -656,11 +654,10 @@ Persistent State
   root is mounted read/write:
 
      svc:/system/filesystem/root:default ->
-        svc:/system/metainit:default ->
-           svc:/system/identity:node ->
-              svc:/network/physical:default
-           svc:/network/iscsi_initiator:default ->
-              svc:/network/physical:default
+        svc:/system/identity:node ->
+           svc:/network/physical:default
+        svc:/network/iscsi_initiator:default ->
+           svc:/network/physical:default
 
   and, of course, well before either /var or /usr is mounted.  This
   means that any persistent state must be kept in the root file
