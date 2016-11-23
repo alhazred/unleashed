@@ -83,7 +83,6 @@
 ./usr/src/cmd/sqlite
 ./usr/src/lib/libsqlite
 ./usr/src/cmd/tcpd
-./usr/src/grub
 ./usr/src/uts/intel/sys/acpi
 
 #

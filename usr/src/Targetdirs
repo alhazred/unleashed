@@ -50,8 +50,6 @@ TARGETDIRS	+= $(FILELINKS) $(DIRLINKS)
 i386_DIRS=			\
 	/boot/acpi		\
 	/boot/acpi/tables	\
-	/boot/grub		\
-	/boot/grub/bin		\
 	/platform/i86pc		\
 	/lib/libmvec		\
 	/usr/lib/xen		\

@@ -57,10 +57,9 @@ extern "C" {
 
 /*
  * BOOTSZ was reduced from 446 to 440 bytes to NOT overwrite the Windows
- * Vista DISKID. Otherwise Vista won't boot from Solaris GRUB in a dual-boot
- * setup.
- * The actual size of mboot code is 425 bytes while that of GRUB stage1 is
- * 423 bytes. So this changes does not harm them.
+ * Vista DISKID. Otherwise Vista won't boot in a dual-boot setup.
+ * The actual size of mboot code is 425 bytes while that of loader pmbr is
+ * 278 bytes. So this changes does not harm them.
  */
 #define	BOOTSZ		440	/* size of boot code in master boot block */
 #define	FD_NUMPART	4	/* number of 'partitions' in fdisk table */

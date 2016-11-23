@@ -42,8 +42,8 @@
 
 
 	<!--
-	  This needs to depend on filesystem/local because the boot-archive
-	  or the GRUB menu may live in /stubboot.
+	  This needs to depend on filesystem/local to support separate
+	  /usr or some other required directory tree.
 	-->
 	<dependency
 		name='filesystem'

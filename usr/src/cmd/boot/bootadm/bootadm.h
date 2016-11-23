@@ -70,42 +70,6 @@ typedef struct line {
 	struct line *prev;
 } line_t;
 
-typedef struct entry {
-	struct entry *next;
-	struct entry *prev;
-	line_t *start;
-	line_t *end;
-	int	entryNum;
-	uint_t	flags;
-} entry_t;
-
-/* For flags value in entry_t */
-#define	BAM_ENTRY_BOOTADM	0x01	/* entry created by bootadm */
-#define	BAM_ENTRY_LU		0x02	/* entry created by Live Upgrade */
-#define	BAM_ENTRY_CHAINLOADER	0x04	/* chainloader entry; do not disturb */
-#define	BAM_ENTRY_ROOT		0x08	/* entry has a root line */
-#define	BAM_ENTRY_FAILSAFE	0x10	/* failsafe entry  */
-#define	BAM_ENTRY_DBOOT		0x20	/* Is dboot (normal or failsafe) */
-#define	BAM_ENTRY_32BIT		0x40	/* Is a 32-bit entry */
-#define	BAM_ENTRY_HV		0x80	/* Is a hypervisor entry */
-#define	BAM_ENTRY_FINDROOT	0x100	/* entry has a findroot line */
-#define	BAM_ENTRY_MULTIBOOT	0x200	/* is multiboot (normal or failsafe) */
-#define	BAM_ENTRY_64BIT		0x400	/* Is a 64-bit entry */
-
-#define	BAM_ENTRY_UPGFSKERNEL	0x800	/* Upgrade failsafe kernel entry */
-#define	BAM_ENTRY_UPGFSMODULE	0x1000  /* Upgrade failsafe module entry */
-
-#define	BAM_ENTRY_LIBBE		0x2000	/* entry created by libbe */
-
-typedef struct {
-	line_t	*start;
-	line_t	*end;
-	line_t	*curdefault;	/* line containing default */
-	line_t	*olddefault;	/* old default line (commented) */
-	line_t	*old_rc_default;	/* old default line for bootenv.rc */
-	entry_t	*entries;	/* os entries */
-} menu_t;
-
 typedef enum {
 	BAM_ERROR = -1,	/* Must be negative. add_boot_entry() depends on it */
 	BAM_SUCCESS = 0,
@@ -113,32 +77,6 @@ typedef enum {
 	BAM_MSG,	/* Used by upgrade_menu() */
 	BAM_NOCHANGE	/* Used by cvt_to_hyper()/cvt_to_metal() */
 } error_t;
-
-/*
- * Menu related
- * menu_cmd_t and menu_cmds must be kept in sync
- *
- * The *_DOLLAR_CMD values must be 1 greater than the
- * respective [KERNEL|MODULE]_CMD values.
- */
-typedef enum {
-	DEFAULT_CMD = 0,
-	TIMEOUT_CMD,
-	TITLE_CMD,
-	ROOT_CMD,
-	KERNEL_CMD,
-	KERNEL_DOLLAR_CMD,	/* Must be KERNEL_CMD + 1 */
-	MODULE_CMD,
-	MODULE_DOLLAR_CMD,	/* Must be MODULE_CMD + 1 */
-	SEP_CMD,
-	COMMENT_CMD,
-	CHAINLOADER_CMD,
-	ARGS_CMD,
-	FINDROOT_CMD,
-	BOOTFS_CMD
-} menu_cmd_t;
-
-extern char *menu_cmds[];
 
 /* For multi- or direct-boot */
 typedef enum {
@@ -189,12 +127,6 @@ extern hv_t bam_is_hv;
 extern findroot_t bam_is_findroot;
 extern int bam_debug;
 
-extern void bam_add_line(menu_t *mp, entry_t *entry, line_t *prev, line_t *lp);
-extern void update_numbering(menu_t *mp);
-extern error_t set_global(menu_t *, char *, int);
-extern error_t upgrade_menu(menu_t *, char *, char *);
-extern error_t cvt_to_hyper(menu_t *, char *, char *);
-extern error_t cvt_to_metal(menu_t *, char *, char *);
 extern error_t check_subcmd_and_options(char *, char *, subcmd_defn_t *,
     error_t (**fp)());
 extern char *mount_top_dataset(char *pool, zfs_mnted_t *mnted);
@@ -212,19 +144,9 @@ extern error_t bam_loader_menu(char *, char *, int, char *[]);
 extern error_t get_boot_cap(const char *osroot);
 extern char *get_special(char *);
 extern char *os_to_grubdisk(char *, int);
-extern void update_line(line_t *);
-extern int add_boot_entry(menu_t *, char *, char *, char *, char *, char *,
-    char *);
-extern error_t delete_boot_entry(menu_t *, int, int);
 extern int is_grub(const char *);
-extern char *get_grubsign(char *osroot, char *osdev);
-extern char *get_grubroot(char *osroot, char *osdev, char *menu_root);
-extern int root_optional(char *osroot, char *menu_root);
-extern void unlink_line(menu_t *mp, line_t *lp);
-extern void line_free(line_t *lp);
 extern char *s_strdup(char *);
 extern int is_sparc(void);
-extern int is_pcfs(char *);
 extern int is_zfs(char *);
 extern int bootadm_digest(const char *, char **);
 
@@ -244,14 +166,6 @@ extern int bootadm_digest(const char *, char **);
 #define	BAM_OLDDEF	"BOOTADM SAVED DEFAULT: "
 #define	BAM_OLD_RC_DEF	"BOOTADM RC SAVED DEFAULT: "
 
-/*
- * menu.lst comment created by libbe
- */
-#define	BAM_LIBBE_FTR	"============ End of LIBBE entry ============="
-
-/* Title used for failsafe entries */
-#define	FAILSAFE_TITLE	"Solaris failsafe"
-
 /* Title used for hv entries */
 #define	NEW_HV_ENTRY	"Solaris xVM"
 
@@ -268,11 +182,6 @@ extern int bootadm_digest(const char *, char **);
 #define	DIRECT_BOOT_32	"/platform/i86pc/kernel/unix"
 #define	DIRECT_BOOT_64	"/platform/i86pc/kernel/amd64/unix"
 #define	DIRECT_BOOT_KERNEL	"/platform/i86pc/kernel/$ISADIR/unix"
-#define	DIRECT_BOOT_FAILSAFE_32	"/boot/platform/i86pc/kernel/unix"
-#define	DIRECT_BOOT_FAILSAFE_64	"/boot/platform/i86pc/kernel/amd64/unix"
-#define	DIRECT_BOOT_FAILSAFE_KERNEL \
-	"/boot/platform/i86pc/kernel/$ISADIR/unix"
-#define	DIRECT_BOOT_FAILSAFE_LINE	DIRECT_BOOT_FAILSAFE_KERNEL " -s"
 #define	DIRECT_BOOT_KERNEL_ZFS	DIRECT_BOOT_KERNEL " " ZFS_BOOT
 #define	DIRECT_BOOT_PREFIX	"/platform/i86pc/"
 #define	KERNEL_PREFIX	"/platform/i86pc/"
@@ -291,9 +200,6 @@ extern int bootadm_digest(const char *, char **);
 #define	DIRECT_BOOT_ARCHIVE_32	"/platform/i86pc/boot_archive"
 #define	DIRECT_BOOT_ARCHIVE_64	"/platform/i86pc/amd64/boot_archive"
 #define	MULTIBOOT_ARCHIVE	DIRECT_BOOT_ARCHIVE_32
-#define	FAILSAFE_ARCHIVE	"/boot/$ISADIR/x86.miniroot-safe"
-#define	FAILSAFE_ARCHIVE_32	"/boot/x86.miniroot-safe"
-#define	FAILSAFE_ARCHIVE_64	"/boot/amd64/x86.miniroot-safe"
 #define	CACHEDIR_32		"/platform/i86pc/archive_cache"
 #define	CACHEDIR_64		"/platform/i86pc/amd64/archive_cache"
 #define	UPDATEDIR_32		"/platform/i86pc/updates"
@@ -303,9 +209,6 @@ extern int bootadm_digest(const char *, char **);
 #define	XEN_64			"/boot/amd64/xen.gz"
 #define	XEN_MENU		"/boot/$ISADIR/xen.gz"
 #define	HYPERVISOR_KERNEL	"/platform/i86xpv/kernel/$ISADIR/unix"
-#define	XEN_KERNEL_MODULE_LINE	HYPERVISOR_KERNEL " " HYPERVISOR_KERNEL
-#define	XEN_KERNEL_MODULE_LINE_ZFS	\
-	HYPERVISOR_KERNEL " " HYPERVISOR_KERNEL " " ZFS_BOOT
 
 /* Helpers */
 #define	MKISOFS_PATH		"/usr/bin/mkisofs"

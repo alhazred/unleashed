@@ -30,8 +30,7 @@ PROG= bootadm
 
 SBINLINKS= $(PROG)
 
-OBJS= bootadm.o bootadm_upgrade.o bootadm_hyper.o bootadm_digest.o \
-	bootadm_loader.o
+OBJS= bootadm.o bootadm_upgrade.o bootadm_digest.o bootadm_loader.o
 SRCS = $(OBJS:.o=.c)
 POFILES= $(OBJS:%.o=%.po)
 
@@ -41,12 +40,12 @@ POFILE= bootadm_cmd.po
 
 .KEEP_STATE:
 
-LDLIBS_i386= -lfdisk
-LDLIBS += -lficl-sys -lpkcs11 -lcryptoutil -lnvpair -lgen -ladm -lefi
+LDLIBS += -lficl-sys -lpkcs11 -lcryptoutil -lnvpair -lgen
 LDLIBS += -lz -lbe -lzfs $(LDLIBS_$(MACH))
 
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
 CPPFLAGS +=	-I$(CODEMGR_WS)/include -I$(SRC)/common -I$(SRC)/common/ficl
+CERRWARN +=	-Wall -Wno-unknown-pragmas
 
 C99MODE=	$(C99_ENABLE)
 

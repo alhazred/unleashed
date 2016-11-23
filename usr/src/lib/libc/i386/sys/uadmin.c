@@ -28,8 +28,7 @@
 /*
  * Wrapper function to implement reboot w/ arguments on x86
  * platforms. Extract reboot arguments and place them in
- * in a transient entry in /[stub]boot/grub/menu.lst
- * All other commands are passed through.
+ * in a transient entry. All other commands are passed through.
  */
 #include "lint.h"
 #include "mtlib.h"
@@ -211,12 +210,7 @@ uadmin(int cmd, int fcn, uintptr_t mdep)
 			(void) pthread_setcancelstate(PTHREAD_CANCEL_DISABLE,
 			    NULL);
 
-			/* check for /stubboot */
-			if (stat("/stubboot/boot/grub/menu.lst", &sbuf) == 0) {
-				altroot = "-R /stubboot ";
-			} else {
-				altroot = "";
-			}
+			altroot = "";
 
 			if (fcn == AD_FASTREBOOT) {
 				char *newarg, *head;
@@ -247,7 +241,7 @@ uadmin(int cmd, int fcn, uintptr_t mdep)
 					break;
 			}
 
-			/* are we rebooting to a GRUB menu entry? */
+			/* are we rebooting to a boot menu entry? */
 			if (isdigit(bargs[0])) {
 				int entry = strtol(bargs, NULL, 10);
 				(void) snprintf(cmdbuf, sizeof (cmdbuf),

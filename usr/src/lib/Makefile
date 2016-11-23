@@ -129,7 +129,6 @@ SUBDIRS +=				\
 	libfsmgt	\
 	libfstyp	\
 	libgen		\
-	libgrubmgmt	\
 	libgss		\
 	libhotplug	\
 	libidmap	\
@@ -303,7 +302,6 @@ MSGSUBDIRS=		\
 	libdiskmgt	\
 	libdladm	\
 	libdll		\
-	libgrubmgmt	\
 	libgss		\
 	libidmap	\
 	libilb		\
@@ -387,7 +385,6 @@ HDRSUBDIRS=				\
 	libfru		\
 	libfstyp	\
 	libgen		\
-	libgrubmgmt	\
 	libidmap	\
 	libilb		\
 	libima		\
@@ -582,8 +579,6 @@ libfcoe:	libdladm
 libficl:	libumem
 libfru:		libfruutils
 libfsmgt:	libkstat
-libgrubmgmt:	libdevinfo libzfs libfstyp libefi
-$(INTEL_BLD)libgrubmgmt: libfdisk
 libidmap:	libavl libuutil
 libinetsvc:	libscf
 libinstzones:	libzonecfg libcontract

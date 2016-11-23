@@ -1502,7 +1502,7 @@ main(int argc, char *argv[])
 	}
 
 #if defined(__x86)
-	/* set new default entry in the GRUB entry */
+	/* set new default boot environment */
 	if (fbarg_entnum != BE_ENTRY_DEFAULT) {
 		char buf[32];
 		(void) snprintf(buf, sizeof (buf), "default=%u", fbarg_entnum);

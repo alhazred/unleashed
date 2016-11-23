@@ -212,11 +212,11 @@ be_rename(nvlist_t *be_attrs)
 		goto done;
 	}
 
-	/* Update this BE's GRUB menu entry */
+	/* Update this BE's menu entry */
 	if (getzoneid() == GLOBAL_ZONEID && (ret = be_update_menu(bt.obe_name,
 	    bt.nbe_name, bt.obe_zpool, NULL)) != BE_SUCCESS) {
 		be_print_err(gettext("be_rename: "
-		    "failed to update grub menu entry from %s to %s\n"),
+		    "failed to update menu entry from %s to %s\n"),
 		    bt.obe_name, bt.nbe_name);
 	}
 

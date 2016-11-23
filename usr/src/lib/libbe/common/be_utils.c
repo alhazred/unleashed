@@ -131,15 +131,6 @@ be_get_boot_args(char **fbarg, int entry)
 		return (ret);
 	}
 
-	/*
-	 * be_get_boot_args() is for loader, fail with grub will trigger
-	 * normal boot.
-	 */
-	if (be_has_grub()) {
-		ret = BE_ERR_INIT;
-		goto done;
-	}
-
 	ret = _be_list(NULL, &be_nodes);
 	if (ret != BE_SUCCESS)
 		goto done;
@@ -405,7 +396,6 @@ be_get_defaults(struct be_defaults *defaults)
 {
 	void	*defp;
 
-	defaults->be_deflt_grub = B_FALSE;
 	defaults->be_deflt_rpool_container = B_FALSE;
 	defaults->be_deflt_bename_starts_with[0] = '\0';
 
@@ -415,13 +405,6 @@ be_get_defaults(struct be_defaults *defaults)
 			(void) strlcpy(defaults->be_deflt_bename_starts_with,
 			    res, ZFS_MAX_DATASET_NAME_LEN);
 			defaults->be_deflt_rpool_container = B_TRUE;
-		}
-		if (be_is_isa("i386")) {
-			res = defread_r(BE_DFLT_BE_HAS_GRUB, defp);
-			if (res != NULL && res[0] != '\0') {
-				if (strcasecmp(res, "true") == 0)
-					defaults->be_deflt_grub = B_TRUE;
-			}
 		}
 		defclose_r(defp);
 	}
@@ -598,8 +581,8 @@ be_maxsize_avail(zfs_handle_t *zhp, uint64_t *ret)
  * Parameters:
  *		be_name - pointer to name of BE to add boot menu entry for.
  *		be_root_pool - pointer to name of pool BE lives in.
- *		boot_pool - Used if the pool containing the grub menu is
- *			    different than the one contaiing the BE. This
+ *		boot_pool - Used if the pool containing the menu is
+ *			    different than the one containing the BE. This
  *			    will normally be NULL.
  *		be_orig_root_ds - The root dataset for the BE. This is
  *			used to check to see if an entry already exists
@@ -666,22 +649,14 @@ be_append_menu(char *be_name, char *be_root_pool, char *boot_pool,
 	 */
 	if (!zfs_is_mounted(zhp, &pool_mntpnt)) {
 		be_print_err(gettext("be_append_menu: pool "
-		    "dataset (%s) is not mounted. Can't set "
-		    "the default BE in the grub menu.\n"), be_root_pool);
+		    "dataset (%s) is not mounted. Can't append "
+		    "the BE into the boot menu.\n"), be_root_pool);
 		ret = BE_ERR_NO_MENU;
 		goto cleanup;
 	}
 
-	/*
-	 * Check to see if this system supports grub
-	 */
-	if (be_has_grub()) {
-		(void) snprintf(menu_file, sizeof (menu_file),
-		    "%s%s", pool_mntpnt, BE_GRUB_MENU);
-	} else {
-		(void) snprintf(menu_file, sizeof (menu_file),
-		    "%s%s", pool_mntpnt, BE_SPARC_MENU);
-	}
+	(void) snprintf(menu_file, sizeof (menu_file),
+	    "%s%s", pool_mntpnt, BE_SPARC_MENU);
 
 	be_make_root_ds(be_root_pool, be_name, be_root_ds, sizeof (be_root_ds));
 
@@ -777,16 +752,7 @@ be_append_menu(char *be_name, char *be_root_pool, char *boot_pool,
 			 * get the rest of the lines for the original BE and
 			 * store them.
 			 */
-			if (strstr(line, BE_GRUB_COMMENT) != NULL ||
-			    strstr(line, "BOOTADM") != NULL)
-				continue;
-			if (strcmp(tok, "splashimage") == 0) {
-				entries[num_lines] =
-				    strdup("splashimage "
-				    "/boot/splashimage.xpm\n");
-			} else {
-				entries[num_lines] = strdup(temp_line);
-			}
+			entries[num_lines] = strdup(temp_line);
 			num_lines++;
 		} else if (found_title && !found_orig_be) {
 			tmp_entries[num_tmp_lines] = strdup(temp_line);
@@ -838,29 +804,11 @@ be_append_menu(char *be_name, char *be_root_pool, char *boot_pool,
 			free(entries[i]);
 		}
 		num_lines = 0;
-
-		/*
-		 * Check to see if this system supports grub
-		 */
-		if (be_has_grub())
-			(void) fprintf(menu_fp, "%s\n", BE_GRUB_COMMENT);
 		ret = BE_SUCCESS;
 	} else {
 		(void) fprintf(menu_fp, "title %s\n",
 		    description ? description : be_name);
 		(void) fprintf(menu_fp, "bootfs %s\n", be_root_ds);
-
-		/*
-		 * Check to see if this system supports grub
-		 */
-		if (be_has_grub()) {
-			(void) fprintf(menu_fp, "kernel$ "
-			    "/platform/i86pc/kernel/$ISADIR/unix -B "
-			    "$ZFS-BOOTFS\n");
-			(void) fprintf(menu_fp, "module$ "
-			    "/platform/i86pc/$ISADIR/boot_archive\n");
-			(void) fprintf(menu_fp, "%s\n", BE_GRUB_COMMENT);
-		}
 		ret = BE_SUCCESS;
 	}
 	(void) fclose(menu_fp);
@@ -925,7 +873,6 @@ be_remove_menu(char *be_name, char *be_root_pool, char *boot_pool)
 	int		fd;
 	int		err = 0;
 	int		nlines = 0;
-	int		default_entry = 0;
 	int		entry_cnt = 0;
 	int		entry_del = 0;
 	int		num_entry_del = 0;
@@ -965,22 +912,15 @@ be_remove_menu(char *be_name, char *be_root_pool, char *boot_pool)
 	 */
 	if (!zfs_is_mounted(zhp, &pool_mntpnt)) {
 		be_print_err(gettext("be_remove_menu: pool "
-		    "dataset (%s) is not mounted. Can't set "
-		    "the default BE in the grub menu.\n"), be_root_pool);
+		    "dataset (%s) is not mounted. Can't remove "
+		    "the BE from the boot menu.\n"), be_root_pool);
 		ret = BE_ERR_NO_MENU;
 		goto cleanup;
 	}
 
 	/* Get path to boot menu */
 	(void) strlcpy(menu, pool_mntpnt, sizeof (menu));
-
-	/*
-	 * Check to see if this system supports grub
-	 */
-	if (be_has_grub())
-		(void) strlcat(menu, BE_GRUB_MENU, sizeof (menu));
-	else
-		(void) strlcat(menu, BE_SPARC_MENU, sizeof (menu));
+	(void) strlcat(menu, BE_SPARC_MENU, sizeof (menu));
 
 	/* Get handle to boot menu file */
 	if ((ret = be_open_menu(be_root_pool, menu, &menu_fp, "r",
@@ -1054,23 +994,10 @@ be_remove_menu(char *be_name, char *be_root_pool, char *boot_pool)
 					goto cleanup;
 				}
 
-			} else if (write || strncmp(menu_buf, BE_GRUB_COMMENT,
-			    strlen(BE_GRUB_COMMENT)) != 0) {
+			} else if (write != 0) {
 				/* Write this line out */
 				(void) fputs(menu_buf, tmp_menu_fp);
 			}
-		} else if (strcmp(tok, "default") == 0) {
-			/*
-			 * Record what 'default' is set to because we might
-			 * need to adjust this upon deleting an entry.
-			 */
-			tok = strtok(NULL, BE_WHITE_SPACE);
-
-			if (tok != NULL) {
-				default_entry = atoi(tok);
-			}
-
-			(void) fputs(menu_buf, tmp_menu_fp);
 		} else if (strcmp(tok, "title") == 0) {
 			/*
 			 * If we've reached a 'title' line and do_buffer is
@@ -1198,113 +1125,6 @@ be_remove_menu(char *be_name, char *be_root_pool, char *boot_pool)
 	free(tmp_menu);
 	tmp_menu = NULL;
 
-	/*
-	 * If we've removed an entry, see if we need to
-	 * adjust the default value in the menu.lst.  If the
-	 * entry we've deleted comes before the default entry
-	 * we need to adjust the default value accordingly.
-	 *
-	 * be_has_grub is used here to check to see if this system
-	 * supports grub.
-	 */
-	if (be_has_grub() && num_entry_del > 0) {
-		if (entry_del <= default_entry) {
-			default_entry = default_entry - num_entry_del;
-			if (default_entry < 0)
-				default_entry = 0;
-
-			/*
-			 * Adjust the default value by rewriting the
-			 * menu.lst file.  This may be overkill, but to
-			 * preserve the location of the 'default' entry
-			 * in the file, we need to do this.
-			 */
-
-			/* Get handle to boot menu file */
-			if ((menu_fp = fopen(menu, "r")) == NULL) {
-				err = errno;
-				be_print_err(gettext("be_remove_menu: "
-				    "failed to open menu.lst (%s): %s\n"),
-				    menu, strerror(err));
-				ret = errno_to_be_err(err);
-				goto cleanup;
-			}
-
-			/* Create a tmp file for the modified menu.lst */
-			tmp_menu_len = strlen(menu) + 7;
-			if ((tmp_menu = (char *)malloc(tmp_menu_len))
-			    == NULL) {
-				be_print_err(gettext("be_remove_menu: "
-				    "malloc failed\n"));
-				ret = BE_ERR_NOMEM;
-				goto cleanup;
-			}
-			(void) memset(tmp_menu, 0, tmp_menu_len);
-			(void) strlcpy(tmp_menu, menu, tmp_menu_len);
-			(void) strlcat(tmp_menu, "XXXXXX", tmp_menu_len);
-			if ((fd = mkstemp(tmp_menu)) == -1) {
-				err = errno;
-				be_print_err(gettext("be_remove_menu: "
-				    "mkstemp failed: %s\n"), strerror(err));
-				ret = errno_to_be_err(err);
-				free(tmp_menu);
-				tmp_menu = NULL;
-				goto cleanup;
-			}
-			if ((tmp_menu_fp = fdopen(fd, "w")) == NULL) {
-				err = errno;
-				be_print_err(gettext("be_remove_menu: "
-				    "could not open tmp file for write: %s\n"),
-				    strerror(err));
-				(void) close(fd);
-				ret = errno_to_be_err(err);
-				goto cleanup;
-			}
-
-			while (fgets(menu_buf, BUFSIZ, menu_fp)) {
-				char tline [BUFSIZ];
-				char *tok = NULL;
-
-				(void) strlcpy(tline, menu_buf, sizeof (tline));
-
-				/* Tokenize line */
-				tok = strtok(tline, BE_WHITE_SPACE);
-
-				if (tok == NULL) {
-					/* Found empty line, write it out */
-					(void) fputs(menu_buf, tmp_menu_fp);
-				} else if (strcmp(tok, "default") == 0) {
-					/* Found the default line, adjust it */
-					(void) snprintf(tline, sizeof (tline),
-					    "default %d\n", default_entry);
-
-					(void) fputs(tline, tmp_menu_fp);
-				} else {
-					/* Pass through all other lines */
-					(void) fputs(menu_buf, tmp_menu_fp);
-				}
-			}
-
-			(void) fclose(menu_fp);
-			menu_fp = NULL;
-			(void) fclose(tmp_menu_fp);
-			tmp_menu_fp = NULL;
-
-			/* Copy the modified menu.lst into place */
-			if (rename(tmp_menu, menu) != 0) {
-				err = errno;
-				be_print_err(gettext("be_remove_menu: "
-				    "failed to rename file %s to %s: %s\n"),
-				    tmp_menu, menu, strerror(err));
-				ret = errno_to_be_err(err);
-				goto cleanup;
-			}
-
-			free(tmp_menu);
-			tmp_menu = NULL;
-		}
-	}
-
 	/* Set the perms and ownership of the updated file */
 	if (chmod(menu, sb.st_mode) != 0) {
 		err = errno;
@@ -1346,400 +1166,13 @@ cleanup:
 }
 
 /*
- * Function:	be_default_grub_bootfs
- * Description:	This function returns the dataset in the default entry of
- *		the grub menu. If no default entry is found with a valid bootfs
- *		entry NULL is returned.
- * Parameters:
- *		be_root_pool - This is the name of the root pool where the
- *			       grub menu can be found.
- *              def_bootfs - This is used to pass back the bootfs string. On
- *				error NULL is returned here.
- * Returns:
- *		Success - BE_SUCCESS is returned.
- *		Failure - a be_errno_t is returned.
- * Scope:
- *		Semi-private (library wide use only)
- */
-int
-be_default_grub_bootfs(const char *be_root_pool, char **def_bootfs)
-{
-	zfs_handle_t	*zhp = NULL;
-	char		grub_file[MAXPATHLEN];
-	FILE		*menu_fp;
-	char		line[BUFSIZ];
-	char		*pool_mntpnt = NULL;
-	char		*ptmp_mntpnt = NULL;
-	char		*orig_mntpnt = NULL;
-	int		default_entry = 0, entries = 0;
-	int		found_default = 0;
-	int		ret = BE_SUCCESS;
-	boolean_t	pool_mounted = B_FALSE;
-
-	errno = 0;
-
-	/*
-	 * Check to see if this system supports grub
-	 */
-	if (!be_has_grub()) {
-		be_print_err(gettext("be_default_grub_bootfs: operation "
-		    "not supported on this architecture\n"));
-		return (BE_ERR_NOTSUP);
-	}
-
-	*def_bootfs = NULL;
-
-	/* Get handle to pool dataset */
-	if ((zhp = zfs_open(g_zfs, be_root_pool, ZFS_TYPE_DATASET)) == NULL) {
-		be_print_err(gettext("be_default_grub_bootfs: "
-		    "failed to open pool dataset for %s: %s"),
-		    be_root_pool, libzfs_error_description(g_zfs));
-		return (zfs_err_to_be_err(g_zfs));
-	}
-
-	/*
-	 * Check to see if the pool's dataset is mounted. If it isn't we'll
-	 * attempt to mount it.
-	 */
-	if ((ret = be_mount_pool(zhp, &ptmp_mntpnt, &orig_mntpnt,
-	    &pool_mounted)) != BE_SUCCESS) {
-		be_print_err(gettext("be_default_grub_bootfs: pool dataset "
-		    "(%s) could not be mounted\n"), be_root_pool);
-		ZFS_CLOSE(zhp);
-		return (ret);
-	}
-
-	/*
-	 * Get the mountpoint for the root pool dataset.
-	 */
-	if (!zfs_is_mounted(zhp, &pool_mntpnt)) {
-		be_print_err(gettext("be_default_grub_bootfs: failed "
-		    "to get mount point for the root pool. Can't set "
-		    "the default BE in the grub menu.\n"));
-		ret = BE_ERR_NO_MENU;
-		goto cleanup;
-	}
-
-	(void) snprintf(grub_file, MAXPATHLEN, "%s%s",
-	    pool_mntpnt, BE_GRUB_MENU);
-
-	if ((ret = be_open_menu((char *)be_root_pool, grub_file,
-	    &menu_fp, "r", B_FALSE)) != BE_SUCCESS) {
-		goto cleanup;
-	} else if (menu_fp == NULL) {
-		ret = BE_ERR_NO_MENU;
-		goto cleanup;
-	}
-
-	free(pool_mntpnt);
-	pool_mntpnt = NULL;
-
-	while (fgets(line, BUFSIZ, menu_fp)) {
-		char *tok = strtok(line, BE_WHITE_SPACE);
-
-		if (tok != NULL && tok[0] != '#') {
-			if (!found_default) {
-				if (strcmp(tok, "default") == 0) {
-					tok = strtok(NULL, BE_WHITE_SPACE);
-					if (tok != NULL) {
-						default_entry = atoi(tok);
-						rewind(menu_fp);
-						found_default = 1;
-					}
-				}
-				continue;
-			}
-			if (strcmp(tok, "title") == 0) {
-				entries++;
-			} else if (default_entry == entries - 1) {
-				if (strcmp(tok, "bootfs") == 0) {
-					tok = strtok(NULL, BE_WHITE_SPACE);
-					(void) fclose(menu_fp);
-
-					if (tok == NULL) {
-						ret = BE_SUCCESS;
-						goto cleanup;
-					}
-
-					if ((*def_bootfs = strdup(tok)) !=
-					    NULL) {
-						ret = BE_SUCCESS;
-						goto cleanup;
-					}
-					be_print_err(gettext(
-					    "be_default_grub_bootfs: "
-					    "memory allocation failed\n"));
-					ret = BE_ERR_NOMEM;
-					goto cleanup;
-				}
-			} else if (default_entry < entries - 1) {
-				/*
-				 * no bootfs entry for the default entry.
-				 */
-				break;
-			}
-		}
-	}
-	(void) fclose(menu_fp);
-
-cleanup:
-	if (pool_mounted) {
-		int err = BE_SUCCESS;
-		err = be_unmount_pool(zhp, ptmp_mntpnt, orig_mntpnt);
-		if (ret == BE_SUCCESS)
-			ret = err;
-		free(orig_mntpnt);
-		free(ptmp_mntpnt);
-	}
-	ZFS_CLOSE(zhp);
-	return (ret);
-}
-
-/*
- * Function:	be_change_grub_default
- * Description:	This function takes two parameters. These are the name of
- *		the BE we want to have as the default booted in the grub
- *		menu and the root pool where the path to the grub menu exists.
- *		The code takes this and finds the BE's entry in the grub menu
- *		and changes the default entry to point to that entry in the
- *		list.
- * Parameters:
- *		be_name - This is the name of the BE wanted as the default
- *			for the next boot.
- *		be_root_pool - This is the name of the root pool where the
- *			grub menu can be found.
- * Returns:
- *		BE_SUCCESS - Success
- *		be_errno_t - Failure
- * Scope:
- *		Semi-private (library wide use only)
- */
-int
-be_change_grub_default(char *be_name, char *be_root_pool)
-{
-	zfs_handle_t	*zhp = NULL;
-	char	grub_file[MAXPATHLEN];
-	char	*temp_grub;
-	char	*pool_mntpnt = NULL;
-	char	*ptmp_mntpnt = NULL;
-	char	*orig_mntpnt = NULL;
-	char	line[BUFSIZ];
-	char	temp_line[BUFSIZ];
-	char	be_root_ds[MAXPATHLEN];
-	FILE	*grub_fp = NULL;
-	FILE	*temp_fp = NULL;
-	struct stat	sb;
-	int	temp_grub_len = 0;
-	int	fd, entries = 0;
-	int	err = 0;
-	int	ret = BE_SUCCESS;
-	boolean_t	found_default = B_FALSE;
-	boolean_t	pool_mounted = B_FALSE;
-
-	errno = 0;
-
-	/*
-	 * Check to see if this system supports grub
-	 */
-	if (!be_has_grub()) {
-		be_print_err(gettext("be_change_grub_default: operation "
-		    "not supported on this architecture\n"));
-		return (BE_ERR_NOTSUP);
-	}
-
-	/* Generate string for BE's root dataset */
-	be_make_root_ds(be_root_pool, be_name, be_root_ds, sizeof (be_root_ds));
-
-	/* Get handle to pool dataset */
-	if ((zhp = zfs_open(g_zfs, be_root_pool, ZFS_TYPE_DATASET)) == NULL) {
-		be_print_err(gettext("be_change_grub_default: "
-		    "failed to open pool dataset for %s: %s"),
-		    be_root_pool, libzfs_error_description(g_zfs));
-		return (zfs_err_to_be_err(g_zfs));
-	}
-
-	/*
-	 * Check to see if the pool's dataset is mounted. If it isn't we'll
-	 * attempt to mount it.
-	 */
-	if ((ret = be_mount_pool(zhp, &ptmp_mntpnt, &orig_mntpnt,
-	    &pool_mounted)) != BE_SUCCESS) {
-		be_print_err(gettext("be_change_grub_default: pool dataset "
-		    "(%s) could not be mounted\n"), be_root_pool);
-		ZFS_CLOSE(zhp);
-		return (ret);
-	}
-
-	/*
-	 * Get the mountpoint for the root pool dataset.
-	 */
-	if (!zfs_is_mounted(zhp, &pool_mntpnt)) {
-		be_print_err(gettext("be_change_grub_default: pool "
-		    "dataset (%s) is not mounted. Can't set "
-		    "the default BE in the grub menu.\n"), be_root_pool);
-		ret = BE_ERR_NO_MENU;
-		goto cleanup;
-	}
-
-	(void) snprintf(grub_file, MAXPATHLEN, "%s%s",
-	    pool_mntpnt, BE_GRUB_MENU);
-
-	if ((ret = be_open_menu(be_root_pool, grub_file,
-	    &grub_fp, "r+", B_TRUE)) != BE_SUCCESS) {
-		goto cleanup;
-	} else if (grub_fp == NULL) {
-		ret = BE_ERR_NO_MENU;
-		goto cleanup;
-	}
-
-	free(pool_mntpnt);
-	pool_mntpnt = NULL;
-
-	/* Grab the stats of the original menu file */
-	if (stat(grub_file, &sb) != 0) {
-		err = errno;
-		be_print_err(gettext("be_change_grub_default: "
-		    "failed to stat file %s: %s\n"), grub_file, strerror(err));
-		ret = errno_to_be_err(err);
-		goto cleanup;
-	}
-
-	/* Create a tmp file for the modified menu.lst */
-	temp_grub_len = strlen(grub_file) + 7;
-	if ((temp_grub = (char *)malloc(temp_grub_len)) == NULL) {
-		be_print_err(gettext("be_change_grub_default: "
-		    "malloc failed\n"));
-		ret = BE_ERR_NOMEM;
-		goto cleanup;
-	}
-	(void) memset(temp_grub, 0, temp_grub_len);
-	(void) strlcpy(temp_grub, grub_file, temp_grub_len);
-	(void) strlcat(temp_grub, "XXXXXX", temp_grub_len);
-	if ((fd = mkstemp(temp_grub)) == -1) {
-		err = errno;
-		be_print_err(gettext("be_change_grub_default: "
-		    "mkstemp failed: %s\n"), strerror(err));
-		ret = errno_to_be_err(err);
-		free(temp_grub);
-		temp_grub = NULL;
-		goto cleanup;
-	}
-	if ((temp_fp = fdopen(fd, "w")) == NULL) {
-		err = errno;
-		be_print_err(gettext("be_change_grub_default: "
-		    "failed to open %s file: %s\n"),
-		    temp_grub, strerror(err));
-		(void) close(fd);
-		ret = errno_to_be_err(err);
-		goto cleanup;
-	}
-
-	while (fgets(line, BUFSIZ, grub_fp)) {
-		char *tok = strtok(line, BE_WHITE_SPACE);
-
-		if (tok == NULL || tok[0] == '#') {
-			continue;
-		} else if (strcmp(tok, "title") == 0) {
-			entries++;
-			continue;
-		} else if (strcmp(tok, "bootfs") == 0) {
-			char *bootfs = strtok(NULL, BE_WHITE_SPACE);
-			if (bootfs == NULL)
-				continue;
-
-			if (strcmp(bootfs, be_root_ds) == 0) {
-				found_default = B_TRUE;
-				break;
-			}
-		}
-	}
-
-	if (!found_default) {
-		be_print_err(gettext("be_change_grub_default: failed "
-		    "to find entry for %s in the grub menu\n"),
-		    be_name);
-		ret = BE_ERR_BE_NOENT;
-		goto cleanup;
-	}
-
-	rewind(grub_fp);
-
-	while (fgets(line, BUFSIZ, grub_fp)) {
-		char *tok = NULL;
-
-		(void) strncpy(temp_line, line, BUFSIZ);
-
-		if ((tok = strtok(temp_line, BE_WHITE_SPACE)) != NULL &&
-		    strcmp(tok, "default") == 0) {
-			(void) snprintf(temp_line, BUFSIZ, "default %d\n",
-			    entries - 1 >= 0 ? entries - 1 : 0);
-			(void) fputs(temp_line, temp_fp);
-		} else {
-			(void) fputs(line, temp_fp);
-		}
-	}
-
-	(void) fclose(grub_fp);
-	grub_fp = NULL;
-	(void) fclose(temp_fp);
-	temp_fp = NULL;
-
-	if (rename(temp_grub, grub_file) != 0) {
-		err = errno;
-		be_print_err(gettext("be_change_grub_default: "
-		    "failed to rename file %s to %s: %s\n"),
-		    temp_grub, grub_file, strerror(err));
-		ret = errno_to_be_err(err);
-		goto cleanup;
-	}
-	free(temp_grub);
-	temp_grub = NULL;
-
-	/* Set the perms and ownership of the updated file */
-	if (chmod(grub_file, sb.st_mode) != 0) {
-		err = errno;
-		be_print_err(gettext("be_change_grub_default: "
-		    "failed to chmod %s: %s\n"), grub_file, strerror(err));
-		ret = errno_to_be_err(err);
-		goto cleanup;
-	}
-	if (chown(grub_file, sb.st_uid, sb.st_gid) != 0) {
-		err = errno;
-		be_print_err(gettext("be_change_grub_default: "
-		    "failed to chown %s: %s\n"), grub_file, strerror(err));
-		ret = errno_to_be_err(err);
-	}
-
-cleanup:
-	if (pool_mounted) {
-		int err = BE_SUCCESS;
-		err = be_unmount_pool(zhp, ptmp_mntpnt, orig_mntpnt);
-		if (ret == BE_SUCCESS)
-			ret = err;
-		free(orig_mntpnt);
-		free(ptmp_mntpnt);
-	}
-	ZFS_CLOSE(zhp);
-	if (grub_fp != NULL)
-		(void) fclose(grub_fp);
-	if (temp_fp != NULL)
-		(void) fclose(temp_fp);
-	if (temp_grub != NULL) {
-		(void) unlink(temp_grub);
-		free(temp_grub);
-	}
-
-	return (ret);
-}
-
-/*
  * Function:	be_update_menu
  * Description:	This function is used by be_rename to change the BE name in
- *		an existing entry in the grub menu to the new name of the BE.
+ *		an existing entry in the menu to the new name of the BE.
  * Parameters:
  *		be_orig_name - the original name of the BE
  *		be_new_name - the new name the BE is being renameed to.
- *		be_root_pool - The pool which contains the grub menu
+ *		be_root_pool - The pool which contains the boot menu
  *		boot_pool - the pool where the BE is, if different than
  *			the pool containing the boot menu.  If this is
  *			NULL it will be set to be_root_pool.
@@ -1800,22 +1233,14 @@ be_update_menu(char *be_orig_name, char *be_new_name, char *be_root_pool,
 	 */
 	if (!zfs_is_mounted(zhp, &pool_mntpnt)) {
 		be_print_err(gettext("be_update_menu: failed "
-		    "to get mount point for the root pool. Can't set "
-		    "the default BE in the grub menu.\n"));
+		    "to get mount point for the root pool. Can't update "
+		    "the BE in the boot menu.\n"));
 		ret = BE_ERR_NO_MENU;
 		goto cleanup;
 	}
 
-	/*
-	 * Check to see if this system supports grub
-	 */
-	if (be_has_grub()) {
-		(void) snprintf(menu_file, sizeof (menu_file),
-		    "%s%s", pool_mntpnt, BE_GRUB_MENU);
-	} else {
-		(void) snprintf(menu_file, sizeof (menu_file),
-		    "%s%s", pool_mntpnt, BE_SPARC_MENU);
-	}
+	(void) snprintf(menu_file, sizeof (menu_file),
+	    "%s%s", pool_mntpnt, BE_SPARC_MENU);
 
 	be_make_root_ds(be_root_pool, be_orig_name, be_root_ds,
 	    sizeof (be_root_ds));
@@ -2019,8 +1444,7 @@ cleanup:
 
 /*
  * Function:	be_has_menu_entry
- * Description:	Checks to see if the BEs root dataset has an entry in the grub
- *		menu.
+ * Description:	Checks to see if the BEs root dataset has an entry in the menu.
  * Parameters:
  *		be_dataset - The root dataset of the BE
  *		be_root_pool - The pool which contains the boot menu
@@ -2047,9 +1471,6 @@ be_has_menu_entry(char *be_dataset, char *be_root_pool, int *entry)
 	boolean_t	pool_mounted = B_FALSE;
 
 
-	/*
-	 * Check to see if this system supports grub
-	 */
 	if ((zhp = zfs_open(g_zfs, be_root_pool, ZFS_TYPE_DATASET)) == NULL) {
 		be_print_err(gettext("be_has_menu_entry: failed to open "
 		    "pool dataset for %s: %s\n"), be_root_pool,
@@ -2075,18 +1496,13 @@ be_has_menu_entry(char *be_dataset, char *be_root_pool, int *entry)
 	if (!zfs_is_mounted(zhp, &rpool_mntpnt)) {
 		be_print_err(gettext("be_has_menu_entry: pool "
 		    "dataset (%s) is not mounted. Can't set "
-		    "the default BE in the grub menu.\n"), be_root_pool);
+		    "the BE in the boot menu.\n"), be_root_pool);
 		ret = B_FALSE;
 		goto cleanup;
 	}
 
-	if (be_has_grub()) {
-		(void) snprintf(menu_file, MAXPATHLEN, "/%s%s",
-		    rpool_mntpnt, BE_GRUB_MENU);
-	} else {
-		(void) snprintf(menu_file, MAXPATHLEN, "/%s%s",
-		    rpool_mntpnt, BE_SPARC_MENU);
-	}
+	(void) snprintf(menu_file, MAXPATHLEN, "/%s%s",
+	    rpool_mntpnt, BE_SPARC_MENU);
 
 	if (be_open_menu(be_root_pool, menu_file, &menu_fp, "r",
 	    B_FALSE) != 0) {
@@ -3113,30 +2529,6 @@ be_err_to_str(int err)
 }
 
 /*
- * Function:    be_has_grub
- * Description: Boolean function indicating whether the current system
- *		uses grub.
- * Return:      B_FALSE - the system does not have grub
- *              B_TRUE - the system does have grub.
- * Scope:
- *		Semi-private (library wide use only)
- */
-boolean_t
-be_has_grub(void)
-{
-	static struct be_defaults be_defaults;
-	static boolean_t be_deflts_set = B_FALSE;
-
-	/* Cache the defaults, because be_has_grub is used often. */
-	if (be_deflts_set == B_FALSE) {
-		be_get_defaults(&be_defaults);
-		be_deflts_set = B_TRUE;
-	}
-
-	return (be_defaults.be_deflt_grub);
-}
-
-/*
  * Function:    be_is_isa
  * Description: Boolean function indicating whether the instruction set
  *              architecture of the executing system matches the name provided.
@@ -3813,52 +3205,6 @@ be_get_auto_name(char *obe_name, char *be_container_ds, boolean_t zone_be)
 }
 
 /*
- * Function:	be_get_console_prop
- * Description:	Determine console device.
- * Returns:
- *		Success - pointer to console setting.
- *		Failure - NULL
- * Scope:
- *		Private
- */
-static char *
-be_get_console_prop(void)
-{
-	di_node_t	dn;
-	char *console = NULL;
-
-	if ((dn = di_init("/", DINFOPROP)) == DI_NODE_NIL) {
-		be_print_err(gettext("be_get_console_prop: "
-		    "di_init() failed\n"));
-		return (NULL);
-	}
-
-	if (di_prop_lookup_strings(DDI_DEV_T_ANY, dn,
-	    "console", &console) != -1) {
-		di_fini(dn);
-		return (console);
-	}
-
-	if (console == NULL) {
-		if (di_prop_lookup_strings(DDI_DEV_T_ANY, dn,
-		    "output-device", &console) != -1) {
-			di_fini(dn);
-			if (strncmp(console, "screen", strlen("screen")) == 0)
-				console = BE_DEFAULT_CONSOLE;
-		}
-	}
-
-	/*
-	 * Default console to text
-	 */
-	if (console == NULL) {
-		console = BE_DEFAULT_CONSOLE;
-	}
-
-	return (console);
-}
-
-/*
  * Function:	be_create_menu
  * Description:
  *		This function is used if no menu.lst file exists. In
@@ -3889,7 +3235,6 @@ be_create_menu(
 	char *menu_path = NULL;
 	char *be_rpool = NULL;
 	char *be_name = NULL;
-	char *console = NULL;
 	errno = 0;
 
 	if (menu_file == NULL || menu_fp == NULL || mode == NULL)
@@ -3915,58 +3260,15 @@ be_create_menu(
 	free(menu_path);
 
 	/*
-	 * Check to see if this system supports grub
+	 * The menu file doesn't exist so we need to create a
+	 * blank file.
 	 */
-	if (be_has_grub()) {
-		/*
-		 * The grub menu is missing so we need to create it
-		 * and fill in the first few lines.
-		 */
-		FILE *temp_fp = fopen(menu_file, "a+");
-		if (temp_fp == NULL) {
-			*menu_fp = NULL;
-			return (errno_to_be_err(errno));
-		}
-
-		if ((console = be_get_console_prop()) != NULL) {
-
-			/*
-			 * If console is redirected to serial line,
-			 * GRUB splash screen will not be enabled.
-			 */
-			if (strncmp(console, "text", strlen("text")) == 0 ||
-			    strncmp(console, "graphics",
-			    strlen("graphics")) == 0) {
-
-				(void) fprintf(temp_fp, "%s\n", BE_GRUB_SPLASH);
-				(void) fprintf(temp_fp, "%s\n",
-				    BE_GRUB_FOREGROUND);
-				(void) fprintf(temp_fp, "%s\n",
-				    BE_GRUB_BACKGROUND);
-				(void) fprintf(temp_fp, "%s\n",
-				    BE_GRUB_DEFAULT);
-			} else {
-				be_print_err(gettext("be_create_menu: "
-				    "console on serial line, "
-				    "GRUB splash image will be disabled\n"));
-			}
-		}
-
-		(void) fprintf(temp_fp,	"timeout 30\n");
-		(void) fclose(temp_fp);
-
-	} else {
-		/*
-		 * The menu file doesn't exist so we need to create a
-		 * blank file.
-		 */
-		FILE *temp_fp = fopen(menu_file, "w+");
-		if (temp_fp == NULL) {
-			*menu_fp = NULL;
-			return (errno_to_be_err(errno));
-		}
-		(void) fclose(temp_fp);
+	FILE *temp_fp = fopen(menu_file, "w+");
+	if (temp_fp == NULL) {
+		*menu_fp = NULL;
+		return (errno_to_be_err(errno));
 	}
+	(void) fclose(temp_fp);
 
 	/*
 	 * Now we need to add all the BE's back into the the file.
@@ -3987,14 +3289,6 @@ be_create_menu(
 	}
 	be_free_list(be_nodes);
 
-	/*
-	 * Check to see if this system supports grub
-	 */
-	if (be_has_grub()) {
-		int err = be_change_grub_default(be_name, be_rpool);
-		if (err != BE_SUCCESS)
-			return (err);
-	}
 	*menu_fp = fopen(menu_file, mode);
 	if (*menu_fp == NULL)
 		return (errno_to_be_err(errno));
