@@ -241,15 +241,12 @@ fi
 
 do_tags() {
 	(cd $SRC ;
-	find uts/common/sys -name '*.[ch]' -print |sort
-	find uts/common/net -name '*.[ch]' -print |sort
-	find uts/common/netinet -name '*.[ch]' -print |sort
 	find uts/common/smb -name '*.[ch]' -print |sort
 	find uts/common/smbsrv -name '*.ndl' -print |sort
 	find uts/common/smbsrv -name '*.[ch]' -print |sort
 	find uts/common/fs/smbsrv -name '*.[ch]' -print |sort
 	find uts/common/gssapi -name '*.[ch]' -print |sort
-	find head -name '*.h' -print |sort
+	find .../../include -name '*.h' -print |sort
 	find lib/smbsrv -name '*.[ch]' -print |sort
 	find lib/libsmbfs -name '*.[ch]' -print |sort
 	find lib/libads -name '*.[ch]' -print |sort

@@ -163,12 +163,9 @@ do_cmds() {
 
 do_tags() {
 	(cd $SRC ;
-	find uts/common/sys -name '*.[ch]' -print |sort
-	find uts/common/net -name '*.[ch]' -print |sort
-	find uts/common/netinet -name '*.[ch]' -print |sort
 	find uts/common/rpcsvc -name '*.[ch]' -print |sort
 	find uts/common/idmap -name '*.[ch]' -print |sort
-	find head -name '*.h' -print |sort
+	find ../../include -name '*.h' -print |sort
 	find lib/libidmap -name '*.[ch]' -print |sort
 	find lib/libadutils -name '*.[ch]' -print |sort
 	find lib/libldap5 -name '*.[ch]' -print |sort

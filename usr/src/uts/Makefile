@@ -132,7 +132,6 @@ COMMON_HDRDIRS= common/avs \
 		common/io/bpf/net \
 		common/io/fibre-channel/fca/qlc \
 		common/ipp \
-		common/net \
 		common/netinet \
 		common/nfs \
 		common/rpc \

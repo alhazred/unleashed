@@ -42,7 +42,7 @@ find_files "s.*.h"	\
 	usr/src/uts/common/rpc		\
 	usr/src/uts/common/netinet	\
 	kernel/net		\
-	usr/src/uts/common/net		\
+	include/net		\
 	include/vm		\
 	usr/src/uts/common/gssapi
 

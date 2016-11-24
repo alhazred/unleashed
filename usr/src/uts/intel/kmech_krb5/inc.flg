@@ -31,7 +31,7 @@ find_files "s.*.h" usr/src/uts/common/rpc
 find_files "s.*.h" usr/src/uts/common/gssapi
 find_files "s.*.h" include/vm
 find_files "s.*.h" usr/src/uts/common/netinet
-find_files "s.*.h" usr/src/uts/common/net
+find_files "s.*.h" include/net
 find_files "s.*.h" usr/src/uts/intel/sys
 find_files "s.*.h" usr/src/uts/intel/ia32/sys
 find_files "s.*.h" usr/src/lib/krb5/kadm5

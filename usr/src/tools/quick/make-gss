@@ -146,11 +146,8 @@ do_cmds() {
 
 do_tags() {
 	(cd $SRC ;
-	find uts/common/sys -name '*.[ch]' -print |sort
-	find uts/common/net -name '*.[ch]' -print |sort
-	find uts/common/netinet -name '*.[ch]' -print |sort
 	find uts/common/gssapi -name '*.[ch]' -print |sort
-	find head -name '*.h' -print |sort
+	find ../../include -name '*.h' -print |sort
 	find lib/gss_mechs -name '*.[ch]' -print |sort
 	find cmd/gss -name '*.[ch]' -print |sort
 	) > $SRC/cscope.files

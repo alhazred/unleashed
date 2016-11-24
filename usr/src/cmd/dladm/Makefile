@@ -32,6 +32,8 @@ ROOTCFGFILES=	$(CFGFILES:%=$(ROOTCFGDIR)/%)
 
 include ../Makefile.cmd
 
+CPPFLAGS += -I$(CODEMGR_WS)/include
+
 XGETFLAGS += -a -x $(PROG).xcl
 LDLIBS += -L$(ROOT)/lib
 LDLIBS += -ldladm -ldlpi -lkstat -lsecdb -lbsm -linetutil -ldevinfo

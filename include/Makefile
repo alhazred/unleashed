@@ -191,6 +191,7 @@ SUBDIR=	arpa \
 	inet \
 	iso \
 	kerberosv5 \
+	net \
 	netinet \
 	netpacket \
 	protocols \

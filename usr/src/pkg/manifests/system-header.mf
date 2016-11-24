@@ -528,21 +528,21 @@ file path=usr/include/mtmalloc.h mode=0644
 file path=usr/include/nan.h
 file path=usr/include/ndbm.h
 file path=usr/include/ndpd.h
-file path=usr/include/net/af.h mode=0644
-file path=usr/include/net/bridge.h mode=0644
-file path=usr/include/net/if.h mode=0644
-file path=usr/include/net/if_arp.h mode=0644
-file path=usr/include/net/if_dl.h mode=0644
-file path=usr/include/net/if_types.h mode=0644
-file path=usr/include/net/pfkeyv2.h mode=0644
-file path=usr/include/net/pfpolicy.h mode=0644
-file path=usr/include/net/ppp-comp.h mode=0644
-file path=usr/include/net/ppp_defs.h mode=0644
-file path=usr/include/net/pppio.h mode=0644
-file path=usr/include/net/radix.h mode=0644
-file path=usr/include/net/route.h mode=0644
-file path=usr/include/net/trill.h mode=0644
-file path=usr/include/net/vjcompress.h mode=0644
+file path=usr/include/net/af.h
+file path=usr/include/net/bridge.h
+file path=usr/include/net/if.h
+file path=usr/include/net/if_arp.h
+file path=usr/include/net/if_dl.h
+file path=usr/include/net/if_types.h
+file path=usr/include/net/pfkeyv2.h
+file path=usr/include/net/pfpolicy.h
+file path=usr/include/net/ppp-comp.h
+file path=usr/include/net/ppp_defs.h
+file path=usr/include/net/pppio.h
+file path=usr/include/net/radix.h
+file path=usr/include/net/route.h
+file path=usr/include/net/trill.h
+file path=usr/include/net/vjcompress.h
 file path=usr/include/netconfig.h
 file path=usr/include/netdb.h
 file path=usr/include/netdir.h
