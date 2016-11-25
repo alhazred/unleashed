@@ -31,14 +31,10 @@ UPDATEFILE=/etc/svc/volatile/boot_archive_safefile_update
 
 smf_is_globalzone || exit $SMF_EXIT_OK
 
-# on x86 get rid of transient reboot entry in the GRUB menu
+# on x86 get rid of transient reboot entry
 #
 if [ `uname -p` = "i386" ]; then
-	if [ -f /stubboot/boot/grub/menu.lst ]; then
-		/sbin/bootadm -m update_temp -R /stubboot
-	else
-		/sbin/bootadm -m update_temp
-	fi
+	/sbin/bootadm -m update_temp
 fi
 
 if [ -f $UPDATEFILE ] || [ -f /reconfigure ]; then

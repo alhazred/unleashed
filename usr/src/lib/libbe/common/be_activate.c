@@ -58,8 +58,6 @@ static boolean_t be_do_install_mbr(char *, nvlist_t *);
 static int be_do_installboot_helper(zpool_handle_t *, nvlist_t *, char *,
     char *, uint16_t);
 static int be_do_installboot(be_transaction_data_t *, uint16_t);
-static int be_get_grub_vers(be_transaction_data_t *, char **, char **);
-static int get_ver_from_capfile(char *, char **);
 static int be_promote_zone_ds(char *, char *);
 static int be_promote_ds_callback(zfs_handle_t *, void *);
 
@@ -73,8 +71,7 @@ static int be_promote_ds_callback(zfs_handle_t *, void *);
  *		attributes passed in through be_attrs. The process of
  *		activation sets the bootfs property of the root pool, resets
  *		the canmount property to noauto, and sets the default in the
- *		grub menu to the entry corresponding to the entry for the named
- *		BE.
+ *		menu to the entry corresponding to the entry for the named BE.
  * Parameters:
  *		be_attrs - pointer to nvlist_t of attributes being passed in.
  *			The follow attribute values are used by this function:
@@ -262,14 +259,6 @@ _be_activate(char *be_name)
 				be_print_err(gettext("be_activate: Failed to "
 				    "add BE (%s) to the menu\n"),
 				    cb.obe_name);
-				goto done;
-			}
-		}
-		if (be_has_grub()) {
-			if ((ret = be_change_grub_default(cb.obe_name,
-			    cb.obe_zpool)) != BE_SUCCESS) {
-				be_print_err(gettext("be_activate: failed to "
-				    "change the default entry in menu.lst\n"));
 				goto done;
 			}
 		}
@@ -603,209 +592,6 @@ set_canmount(be_node_list_t *be_nodes, char *value)
 }
 
 /*
- * Function:	be_get_grub_vers
- * Description:	Gets the grub version number from /boot/grub/capability. If
- *              capability file doesn't exist NULL is returned.
- * Parameters:
- *              bt - The transaction data for the BE we're getting the grub
- *                   version for.
- *              cur_vers - used to return the current version of grub from
- *                         the root pool.
- *              new_vers - used to return the grub version of the BE we're
- *                         activating.
- * Return:
- *              BE_SUCCESS - Success
- *              be_errno_t - Failed to find version
- * Scope:
- *		Private
- */
-static int
-be_get_grub_vers(be_transaction_data_t *bt, char **cur_vers, char **new_vers)
-{
-	zfs_handle_t	*zhp = NULL;
-	zfs_handle_t	*pool_zhp = NULL;
-	int ret = BE_SUCCESS;
-	char cap_file[MAXPATHLEN];
-	char *temp_mntpnt = NULL;
-	char *zpool_mntpt = NULL;
-	char *ptmp_mntpnt = NULL;
-	char *orig_mntpnt = NULL;
-	boolean_t be_mounted = B_FALSE;
-	boolean_t pool_mounted = B_FALSE;
-
-	if (!be_has_grub()) {
-		be_print_err(gettext("be_get_grub_vers: Not supported on "
-		    "this architecture\n"));
-		return (BE_ERR_NOTSUP);
-	}
-
-	if (bt == NULL || bt->obe_name == NULL || bt->obe_zpool == NULL ||
-	    bt->obe_root_ds == NULL) {
-		be_print_err(gettext("be_get_grub_vers: Invalid BE\n"));
-		return (BE_ERR_INVAL);
-	}
-
-	if ((pool_zhp = zfs_open(g_zfs, bt->obe_zpool, ZFS_TYPE_FILESYSTEM)) ==
-	    NULL) {
-		be_print_err(gettext("be_get_grub_vers: zfs_open failed: %s\n"),
-		    libzfs_error_description(g_zfs));
-		return (zfs_err_to_be_err(g_zfs));
-	}
-
-	/*
-	 * Check to see if the pool's dataset is mounted. If it isn't we'll
-	 * attempt to mount it.
-	 */
-	if ((ret = be_mount_pool(pool_zhp, &ptmp_mntpnt,
-	    &orig_mntpnt, &pool_mounted)) != BE_SUCCESS) {
-		be_print_err(gettext("be_get_grub_vers: pool dataset "
-		    "(%s) could not be mounted\n"), bt->obe_zpool);
-		ZFS_CLOSE(pool_zhp);
-		return (ret);
-	}
-
-	/*
-	 * Get the mountpoint for the root pool dataset.
-	 */
-	if (!zfs_is_mounted(pool_zhp, &zpool_mntpt)) {
-		be_print_err(gettext("be_get_grub_vers: pool "
-		    "dataset (%s) is not mounted. Can't read the "
-		    "grub capability file.\n"), bt->obe_zpool);
-		ret = BE_ERR_NO_MENU;
-		goto cleanup;
-	}
-
-	/*
-	 * get the version of the most recent grub update.
-	 */
-	(void) snprintf(cap_file, sizeof (cap_file), "%s%s",
-	    zpool_mntpt, BE_CAP_FILE);
-	free(zpool_mntpt);
-	zpool_mntpt = NULL;
-
-	if ((ret = get_ver_from_capfile(cap_file, cur_vers)) != BE_SUCCESS)
-		goto cleanup;
-
-	if ((zhp = zfs_open(g_zfs, bt->obe_root_ds, ZFS_TYPE_FILESYSTEM)) ==
-	    NULL) {
-		be_print_err(gettext("be_get_grub_vers: failed to "
-		    "open BE root dataset (%s): %s\n"), bt->obe_root_ds,
-		    libzfs_error_description(g_zfs));
-		free(cur_vers);
-		ret = zfs_err_to_be_err(g_zfs);
-		goto cleanup;
-	}
-	if (!zfs_is_mounted(zhp, &temp_mntpnt)) {
-		if ((ret = _be_mount(bt->obe_name, &temp_mntpnt,
-		    BE_MOUNT_FLAG_NO_ZONES)) != BE_SUCCESS) {
-			be_print_err(gettext("be_get_grub_vers: failed to "
-			    "mount BE (%s)\n"), bt->obe_name);
-			free(*cur_vers);
-			*cur_vers = NULL;
-			ZFS_CLOSE(zhp);
-			goto cleanup;
-		}
-		be_mounted = B_TRUE;
-	}
-	ZFS_CLOSE(zhp);
-
-	/*
-	 * Now get the grub version for the BE being activated.
-	 */
-	(void) snprintf(cap_file, sizeof (cap_file), "%s%s", temp_mntpnt,
-	    BE_CAP_FILE);
-	ret = get_ver_from_capfile(cap_file, new_vers);
-	if (ret != BE_SUCCESS) {
-		free(*cur_vers);
-		*cur_vers = NULL;
-	}
-	if (be_mounted)
-		(void) _be_unmount(bt->obe_name, 0);
-
-cleanup:
-	if (pool_mounted) {
-		int iret = BE_SUCCESS;
-		iret = be_unmount_pool(pool_zhp, ptmp_mntpnt, orig_mntpnt);
-		if (ret == BE_SUCCESS)
-			ret = iret;
-		free(orig_mntpnt);
-		free(ptmp_mntpnt);
-	}
-	ZFS_CLOSE(pool_zhp);
-
-	free(temp_mntpnt);
-	return (ret);
-}
-
-/*
- * Function:	get_ver_from_capfile
- * Description: Parses the capability file passed in looking for the VERSION
- *              line. If found the version is returned in vers, if not then
- *              NULL is returned in vers.
- *
- * Parameters:
- *              file - the path to the capability file we want to parse.
- *              vers - the version string that will be passed back.
- * Return:
- *              BE_SUCCESS - Success
- *              be_errno_t - Failed to find version
- * Scope:
- *		Private
- */
-static int
-get_ver_from_capfile(char *file, char **vers)
-{
-	FILE *fp = NULL;
-	char line[BUFSIZ];
-	char *last = NULL;
-	int err = BE_SUCCESS;
-	errno = 0;
-
-	if (!be_has_grub()) {
-		be_print_err(gettext("get_ver_from_capfile: Not supported "
-		    "on this architecture\n"));
-		return (BE_ERR_NOTSUP);
-	}
-
-	/*
-	 * Set version string to NULL; the only case this shouldn't be set
-	 * to be NULL is when we've actually found a version in the capability
-	 * file, which is set below.
-	 */
-	*vers = NULL;
-
-	/*
-	 * If the capability file doesn't exist, we're returning success
-	 * because on older releases, the capability file did not exist
-	 * so this is a valid scenario.
-	 */
-	if (access(file, F_OK) == 0) {
-		if ((fp = fopen(file, "r")) == NULL) {
-			err = errno;
-			be_print_err(gettext("get_ver_from_capfile: failed to "
-			    "open file %s with error %s\n"), file,
-			    strerror(err));
-			err = errno_to_be_err(err);
-			return (err);
-		}
-
-		while (fgets(line, BUFSIZ, fp)) {
-			char *tok = strtok_r(line, "=", &last);
-
-			if (tok == NULL || tok[0] == '#') {
-				continue;
-			} else if (strcmp(tok, "VERSION") == 0) {
-				*vers = strdup(last);
-				break;
-			}
-		}
-		(void) fclose(fp);
-	}
-
-	return (BE_SUCCESS);
-}
-
-/*
  * To be able to boot EFI labeled disks, stage1 needs to be written
  * into the MBR. We do not do this if we're on disks with a traditional
  * fdisk partition table only, or if any foreign EFI partitions exist.
@@ -895,7 +681,7 @@ be_do_installboot_helper(zpool_handle_t *zphp, nvlist_t *child, char *stage1,
 	    (uint64_t **)&vs, &vsc) != 0) ||
 	    vs->vs_state < VDEV_STATE_DEGRADED) {
 		/*
-		 * Don't try to run installgrub on a vdev that is not ONLINE
+		 * Don't try to run installboot on a vdev that is not ONLINE
 		 * or DEGRADED. Try to print a warning for each such vdev.
 		 */
 		be_print_err(gettext("be_do_installboot: "
@@ -946,15 +732,9 @@ be_do_installboot_helper(zpool_handle_t *zphp, nvlist_t *child, char *stage1,
 				flag = "-m -f";
 		}
 
-		if (be_has_grub()) {
-			(void) snprintf(install_cmd, sizeof (install_cmd),
-			    "%s %s %s %s %s", BE_INSTALL_GRUB, flag,
-			    stage1, stage2, diskname);
-		} else {
-			(void) snprintf(install_cmd, sizeof (install_cmd),
-			    "%s %s %s %s %s", BE_INSTALL_BOOT, flag,
-			    stage1, stage2, diskname);
-		}
+		(void) snprintf(install_cmd, sizeof (install_cmd),
+		    "%s %s %s %s %s", BE_INSTALL_BOOT, flag,
+		    stage1, stage2, diskname);
 	} else if (be_is_isa("sparc")) {
 		if ((flags & BE_INSTALLBOOT_FLAG_FORCE) ==
 		    BE_INSTALLBOOT_FLAG_FORCE)
@@ -998,203 +778,8 @@ be_do_installboot_helper(zpool_handle_t *zphp, nvlist_t *child, char *stage1,
 }
 
 /*
- * Function:	be_do_copy_grub_cap
- * Description:	This function will copy grub capability file to BE.
- *
- * Parameters:
- *              bt - The transaction data for the BE we're activating.
- * Return:
- *		BE_SUCCESS - Success
- *		be_errno_t - Failure
- *
- * Scope:
- *		Private
- */
-static int
-be_do_copy_grub_cap(be_transaction_data_t *bt)
-{
-	zfs_handle_t *zhp = NULL;
-	char cap_file[MAXPATHLEN];
-	char zpool_cap_file[MAXPATHLEN];
-	char line[BUFSIZ];
-	char *tmp_mntpnt = NULL;
-	char *orig_mntpnt = NULL;
-	char *pool_mntpnt = NULL;
-	FILE *cap_fp = NULL;
-	FILE *zpool_cap_fp = NULL;
-	int err = 0;
-	int ret = BE_SUCCESS;
-	boolean_t pool_mounted = B_FALSE;
-	boolean_t be_mounted = B_FALSE;
-
-	/*
-	 * first get BE dataset mountpoint, we can free all the resources
-	 * once cap_file is built, leaving only be unmount to be done.
-	 */
-	if ((zhp = zfs_open(g_zfs, bt->obe_root_ds, ZFS_TYPE_FILESYSTEM)) ==
-	    NULL) {
-		be_print_err(gettext("be_do_copy_grub_cap: failed to "
-		    "open BE root dataset (%s): %s\n"), bt->obe_root_ds,
-		    libzfs_error_description(g_zfs));
-		return (zfs_err_to_be_err(g_zfs));
-	}
-
-	if (!zfs_is_mounted(zhp, &tmp_mntpnt)) {
-		if ((ret = _be_mount(bt->obe_name, &tmp_mntpnt,
-		    BE_MOUNT_FLAG_NO_ZONES)) != BE_SUCCESS) {
-			be_print_err(gettext("be_do_copy_grub_cap: failed to "
-			    "mount BE (%s)\n"), bt->obe_name);
-			ZFS_CLOSE(zhp);
-			goto done;
-		}
-		be_mounted = B_TRUE;
-	}
-	ZFS_CLOSE(zhp);	/* BE dataset handle is not needed any more */
-
-	(void) snprintf(cap_file, sizeof (cap_file), "%s%s", tmp_mntpnt,
-	    BE_CAP_FILE);
-	free(tmp_mntpnt);
-
-	/* get pool root dataset mountpoint */
-	zhp = zfs_open(g_zfs, bt->obe_zpool, ZFS_TYPE_FILESYSTEM);
-	if (zhp == NULL) {
-		be_print_err(gettext("be_do_copy_grub_cap: zfs_open "
-		    "failed: %s\n"), libzfs_error_description(g_zfs));
-		ret = zfs_err_to_be_err(g_zfs);
-		goto done;
-	}
-
-	/*
-	 * Check to see if the pool's dataset is mounted. If it isn't we'll
-	 * attempt to mount it.
-	 */
-	if ((ret = be_mount_pool(zhp, &tmp_mntpnt,
-	    &orig_mntpnt, &pool_mounted)) != BE_SUCCESS) {
-		be_print_err(gettext("be_do_copy_grub_cap: pool dataset "
-		    "(%s) could not be mounted\n"), bt->obe_zpool);
-		ZFS_CLOSE(zhp);
-		goto done;
-	}
-
-	/*
-	 * Get the mountpoint for the root pool dataset.
-	 * NOTE: zhp must be kept for _be_unmount_pool()
-	 */
-	if (!zfs_is_mounted(zhp, &pool_mntpnt)) {
-		be_print_err(gettext("be_do_copy_grub_cap: pool "
-		    "dataset (%s) is not mounted. Can't check the grub "
-		    "version from the grub capability file.\n"), bt->obe_zpool);
-		ret = BE_ERR_NO_MENU;
-		goto done;
-	}
-
-	(void) snprintf(zpool_cap_file, sizeof (zpool_cap_file), "%s%s",
-	    pool_mntpnt, BE_CAP_FILE);
-	free(pool_mntpnt);
-
-	if ((cap_fp = fopen(cap_file, "r")) == NULL) {
-		err = errno;
-		be_print_err(gettext("be_do_copy_grub_cap: failed to open grub "
-		    "capability file\n"));
-		ret = errno_to_be_err(err);
-		goto done;
-	}
-	if ((zpool_cap_fp = fopen(zpool_cap_file, "w")) == NULL) {
-		err = errno;
-		be_print_err(gettext("be_do_copy_grub_cap: failed to open new "
-		    "grub capability file\n"));
-		ret = errno_to_be_err(err);
-		(void) fclose(cap_fp);
-		goto done;
-	}
-
-	while (fgets(line, BUFSIZ, cap_fp)) {
-		(void) fputs(line, zpool_cap_fp);
-	}
-
-	(void) fclose(zpool_cap_fp);
-	(void) fclose(cap_fp);
-
-done:
-	if (be_mounted)
-		(void) _be_unmount(bt->obe_name, 0);
-
-	if (pool_mounted) {
-		err = be_unmount_pool(zhp, tmp_mntpnt, orig_mntpnt);
-		if (ret == BE_SUCCESS)
-			ret = err;
-		free(orig_mntpnt);
-		free(tmp_mntpnt);
-		zfs_close(zhp);
-	}
-	return (ret);
-}
-
-/*
- * Function:	be_is_install_needed
- * Description:	Check detached version files to detect if bootloader
- *		install/update is needed.
- *
- * Parameters:
- *              bt - The transaction data for the BE we're activating.
- *		update - set B_TRUE is update is needed.
- * Return:
- *		BE_SUCCESS - Success
- *		be_errno_t - Failure
- *
- * Scope:
- *		Private
- */
-static int
-be_is_install_needed(be_transaction_data_t *bt, boolean_t *update)
-{
-	int	ret = BE_SUCCESS;
-	char	*cur_vers = NULL, *new_vers = NULL;
-
-	assert(bt != NULL);
-	assert(update != NULL);
-
-	if (!be_has_grub()) {
-		/*
-		 * no detached versioning, let installboot to manage
-		 * versioning.
-		 */
-		*update = B_TRUE;
-		return (ret);
-	}
-
-	*update = B_FALSE;	/* set default */
-
-	/*
-	 * We need to check to see if the version number from
-	 * the BE being activated is greater than the current
-	 * one.
-	 */
-	ret = be_get_grub_vers(bt, &cur_vers, &new_vers);
-	if (ret != BE_SUCCESS) {
-		be_print_err(gettext("be_activate: failed to get grub "
-		    "versions from capability files.\n"));
-		return (ret);
-	}
-	/* update if we have both versions and can compare */
-	if (cur_vers != NULL) {
-		if (new_vers != NULL) {
-			if (atof(cur_vers) < atof(new_vers))
-				*update = B_TRUE;
-			free(new_vers);
-		}
-		free(cur_vers);
-	} else if (new_vers != NULL) {
-		/* we only got new version - update */
-		*update = B_TRUE;
-		free(new_vers);
-	}
-	return (ret);
-}
-
-/*
  * Function:	be_do_installboot
- * Description:	This function runs installgrub/installboot using the boot
+ * Description:	This function runs installboot using the boot
  *		loader files from the BE we're activating and installing
  *		them on the pool the BE lives in.
  *
@@ -1221,20 +806,7 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 	char *vname;
 	int ret = BE_SUCCESS;
 	boolean_t be_mounted = B_FALSE;
-	boolean_t update = B_FALSE;
 	boolean_t verbose = B_FALSE;
-
-	/*
-	 * check versions. This call is to support detached
-	 * version implementation like grub. Embedded versioning is
-	 * checked by actual installer.
-	 */
-	if ((flags & BE_INSTALLBOOT_FLAG_FORCE) != BE_INSTALLBOOT_FLAG_FORCE) {
-		ret = be_is_install_needed(bt, &update);
-		if (ret != BE_SUCCESS || update == B_FALSE)
-			return (ret);
-	}
-	verbose = do_print;
 
 	if ((zhp = zfs_open(g_zfs, bt->obe_root_ds, ZFS_TYPE_FILESYSTEM)) ==
 	    NULL) {
@@ -1257,17 +829,10 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 	ZFS_CLOSE(zhp);
 
 	if (be_is_isa("i386")) {
-		if (be_has_grub()) {
-			(void) snprintf(stage1, sizeof (stage1), "%s%s",
-			    tmp_mntpt, BE_GRUB_STAGE_1);
-			(void) snprintf(stage2, sizeof (stage2), "%s%s",
-			    tmp_mntpt, BE_GRUB_STAGE_2);
-		} else {
-			(void) snprintf(stage1, sizeof (stage1), "%s%s",
-			    tmp_mntpt, BE_LOADER_STAGE_1);
-			(void) snprintf(stage2, sizeof (stage2), "%s%s",
-			    tmp_mntpt, BE_LOADER_STAGE_2);
-		}
+		(void) snprintf(stage1, sizeof (stage1), "%s%s",
+		    tmp_mntpt, BE_LOADER_STAGE_1);
+		(void) snprintf(stage2, sizeof (stage2), "%s%s",
+		    tmp_mntpt, BE_LOADER_STAGE_2);
 	} else if (be_is_isa("sparc")) {
 		char *platform = be_get_platform();
 
@@ -1386,10 +951,6 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 			if (ret != BE_SUCCESS)
 				goto done;
 		}
-	}
-
-	if (be_has_grub()) {
-		ret = be_do_copy_grub_cap(bt);
 	}
 
 done:

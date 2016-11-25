@@ -632,7 +632,6 @@ file path=sbin/hostconfig mode=0555
 file path=sbin/ifconfig mode=0555
 file path=sbin/ifparse mode=0555
 file path=sbin/init group=sys mode=0555
-$(i386_ONLY)file path=sbin/installgrub group=sys mode=0555
 file path=sbin/ipmpstat mode=0555
 file path=sbin/mount mode=0555
 file path=sbin/mountall group=sys mode=0555
@@ -1750,7 +1749,6 @@ link path=usr/sbin/hostconfig target=../../sbin/hostconfig
 link path=usr/sbin/ifconfig target=../../sbin/ifconfig
 link path=usr/sbin/inetd target=../lib/inet/inetd
 link path=usr/sbin/init target=../../sbin/init
-$(i386_ONLY)link path=usr/sbin/installgrub target=../../sbin/installgrub
 link path=usr/sbin/ipadm target=../../sbin/ipadm
 link path=usr/sbin/ipmpstat target=../../sbin/ipmpstat
 link path=usr/sbin/labelit target=./clri

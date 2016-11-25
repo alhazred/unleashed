@@ -15,7 +15,7 @@
 .\" CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your
 .\" own identifying information:
 .\" Portions Copyright [yyyy] [name of copyright owner]
-.TH ZPOOL-FEATURES 5 "Aug 27, 2013"
+.TH ZPOOL-FEATURES 5 "Nov 23, 2016"
 .SH NAME
 zpool\-features \- ZFS pool feature descriptions
 .SH DESCRIPTION
@@ -473,8 +473,7 @@ can turn on the \fBsha512\fR checksum on any dataset using the
 and will return to being \fBenabled\fR once all filesystems that have
 ever had their checksum set to \fBsha512\fR are destroyed.
 
-Booting off of pools utilizing SHA-512/256 is supported (provided that
-the updated GRUB stage2 module is installed).
+Booting off of pools utilizing SHA-512/256 is supported.
 
 .RE
 

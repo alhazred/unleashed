@@ -98,12 +98,6 @@ usr/src/common/bzip2/decompress.c
 usr/src/common/bzip2/bzlib_private.h
 usr/src/common/bzip2/huffman.c
 usr/src/common/ficl/*
-usr/src/grub/grub-0.97/stage2/Makefile.am
-usr/src/grub/grub-0.97/stage2/builtins.c
-usr/src/grub/grub-0.97/stage2/disk_io.c
-usr/src/grub/grub-0.97/stage2/pc_slice.h
-usr/src/grub/grub-0.97/stage2/gpt.h
-usr/src/grub/grub-0.97/stage2/shared.h
 usr/src/head/rpcsvc/THIRDPARTYLICENSE.nfs4_prot.descrip
 usr/src/lib/gss_mechs/mech_krb5/crypto/cksumtype_to_string.c
 usr/src/lib/gss_mechs/mech_krb5/crypto/coll_proof_cksum.c

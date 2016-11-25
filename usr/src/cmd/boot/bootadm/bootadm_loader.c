@@ -78,14 +78,14 @@ static error_t enable_hyper(struct menu_lst *, char *, char *);
 
 /* Menu related sub commands */
 static subcmd_defn_t menu_subcmds[] = {
-	"set_option",		OPT_ABSENT,	set_option, 0,	/* PUB */
-	"list_entry",		OPT_OPTIONAL,	list_entry, 1,	/* PUB */
-	"update_entry",		OPT_REQ,	update_entry, 0, /* menu */
-	"update_temp",		OPT_OPTIONAL,	update_temp, 0,	/* reboot */
-	"list_setting",		OPT_OPTIONAL,	list_setting, 1, /* menu */
-	"disable_hypervisor",	OPT_ABSENT,	disable_hyper, 0, /* menu */
-	"enable_hypervisor",	OPT_ABSENT,	enable_hyper, 0, /* menu */
-	NULL,			0,		NULL, 0 /* must be last */
+	{ "set_option", OPT_ABSENT, set_option, 0 },		/* PUB */
+	{ "list_entry", OPT_OPTIONAL, list_entry, 1 },		/* PUB */
+	{ "update_entry", OPT_REQ, update_entry, 0 },		/* menu */
+	{ "update_temp", OPT_OPTIONAL, update_temp, 0 },	/* reboot */
+	{ "list_setting", OPT_OPTIONAL, list_setting, 1 },	/* menu */
+	{ "disable_hypervisor", OPT_ABSENT, disable_hyper, 0 },	/* menu */
+	{ "enable_hypervisor", OPT_ABSENT, enable_hyper, 0 },	/* menu */
+	{ NULL, 0, NULL, 0 }				/* must be last */
 };
 
 #define	NUM_COLS	(4)

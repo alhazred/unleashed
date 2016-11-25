@@ -488,7 +488,6 @@ $(i386_ONLY)file path=usr/include/libfdisk.h
 file path=usr/include/libfstyp.h
 file path=usr/include/libfstyp_module.h
 file path=usr/include/libgen.h
-file path=usr/include/libgrubmgmt.h
 file path=usr/include/libintl.h
 file path=usr/include/libipmi.h
 file path=usr/include/libipp.h

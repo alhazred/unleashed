@@ -703,7 +703,7 @@ Persistent State
   This mechanism depends on the interface name, and thus will need to
   be revisited when Clearview vanity naming and NWAM are available.
 
-  Currently, the boot system (GRUB, OBP, the miniroot) does not
+  Currently, the boot system (loader, OBP, the miniroot) does not
   support installing over IPv6.  This could change in the future, so
   one of the goals of the above stability plan is to support that
   event.

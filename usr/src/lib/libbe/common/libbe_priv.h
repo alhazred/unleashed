@@ -42,25 +42,13 @@ extern "C" {
 #define	BE_AUTO_NAME_DELIM	'-'
 #define	BE_DEFAULTS		"/etc/default/be"
 #define	BE_DFLT_BENAME_STARTS	"BENAME_STARTS_WITH="
-#define	BE_DFLT_BE_HAS_GRUB	"BE_HAS_GRUB="
 #define	BE_CONTAINER_DS_NAME	"ROOT"
-#define	BE_DEFAULT_CONSOLE	"text"
 #define	BE_POLICY_PROPERTY	"org.opensolaris.libbe:policy"
 #define	BE_UUID_PROPERTY	"org.opensolaris.libbe:uuid"
 #define	BE_PLCY_STATIC		"static"
 #define	BE_PLCY_VOLATILE	"volatile"
-#define	BE_GRUB_MENU		"/boot/grub/menu.lst"
 #define	BE_SPARC_MENU		"/boot/menu.lst"
-#define	BE_GRUB_COMMENT		"#============ End of LIBBE entry ============="
-#define	BE_GRUB_SPLASH		"splashimage /boot/solaris.xpm"
-#define	BE_GRUB_FOREGROUND	"foreground 343434"
-#define	BE_GRUB_BACKGROUND	"background F7FBFF"
-#define	BE_GRUB_DEFAULT		"default 0"
 #define	BE_WHITE_SPACE		" \t\r\n"
-#define	BE_CAP_FILE		"/boot/grub/capability"
-#define	BE_INSTALL_GRUB		"/sbin/installgrub"
-#define	BE_GRUB_STAGE_1		"/boot/grub/stage1"
-#define	BE_GRUB_STAGE_2		"/boot/grub/stage2"
 #define	BE_INSTALL_BOOT		"/usr/sbin/installboot"
 #define	BE_LOADER_STAGE_1	"/boot/pmbr"
 #define	BE_LOADER_STAGE_2	"/boot/gptzfsboot"
@@ -138,7 +126,6 @@ typedef struct be_plcy_list {
 
 struct be_defaults {
 	boolean_t	be_deflt_rpool_container;
-	boolean_t	be_deflt_grub;
 	char		be_deflt_bename_starts_with[ZFS_MAX_DATASET_NAME_LEN];
 };
 
@@ -179,10 +166,8 @@ char *be_make_name_from_ds(const char *, char *);
 int be_append_menu(char *, char *, char *, char *, char *);
 int be_remove_menu(char *, char *, char *);
 int be_update_menu(char *, char *, char *, char *);
-int be_default_grub_bootfs(const char *, char **);
 boolean_t be_has_menu_entry(char *, char *, int *);
 int be_run_cmd(char *, char *, int, char *, int);
-int be_change_grub_default(char *, char *);
 int be_update_vfstab(char *, char *, char *, be_fs_list_data_t *, char *);
 int be_update_zone_vfstab(zfs_handle_t *, char *, char *, char *,
     be_fs_list_data_t *);
@@ -218,7 +203,6 @@ boolean_t be_zone_compare_uuids(char *);
 char *be_get_default_isa(void);
 char *be_get_platform(void);
 boolean_t be_is_isa(char *);
-boolean_t be_has_grub(void);
 
 /* callback functions */
 int be_exists_callback(zpool_handle_t *, void *);
