@@ -1,0 +1,77 @@
+.\" Copyright 1989 AT&T
+.\" Copyright (c) 2009, Sun Microsystems, Inc.  All Rights Reserved
+.\" Portions Copyright (c) 1992, X/Open Company Limited  All Rights Reserved
+.\" Sun Microsystems, Inc. gratefully acknowledges The Open Group for permission to reproduce portions of its copyrighted documentation. Original documentation from The Open Group can be obtained online at  http://www.opengroup.org/bookstore/.
+.\" The Institute of Electrical and Electronics Engineers and The Open Group, have given us permission to reprint portions of their documentation. In the following statement, the phrase "this text" refers to portions of the system documentation. Portions of this text
+.\" are reprinted and reproduced in electronic form in the Sun OS Reference Manual, from IEEE Std 1003.1, 2004 Edition, Standard for Information Technology -- Portable Operating System Interface (POSIX), The Open Group Base Specifications Issue 6, Copyright (C) 2001-2004 by the Institute of Electrical
+.\" and Electronics Engineers, Inc and The Open Group. In the event of any discrepancy between these versions and the original IEEE and The Open Group Standard, the original IEEE and The Open Group Standard is the referee document. The original Standard can be obtained online at http://www.opengroup.org/unix/online.html.
+.\"  This notice shall appear on any product containing this material.
+.\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License. You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.
+.\"  See the License for the specific language governing permissions and limitations under the License. When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with
+.\" the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
+.Dd Nov 28, 2016
+.Dt DIS 1
+.Os
+.Sh NAME
+.Nm dis
+.Nd object code disassembler
+.Sh SYNOPSIS
+.Nm
+.Op Fl Cnoq
+.Op Fl d Ar section
+.Op Fl D Ar section
+.Op Fl F Ar function
+.Op Fl t Ar section
+.Ar
+.Sh DESCRIPTION
+The
+.Nm
+command produces an assembly language listing of each
+.Ar file ,
+which can be object files or archives of object files. The listing includes
+assembly statements and an octal or hexadecimal representation of the binary
+that produced those statements.
+.Pp
+The options are as follows:
+.Bl -tag -width Ds
+.It Fl C
+Demangle C++ symbol names.
+.It Fl d Ar section
+Disassemble
+.Ar section
+as data, printing the offset of the data from the beginning of the section.
+.It Fl D Ar section
+Disassemble
+.Ar section
+as data, printing the actual address of the data.
+.It Fl F Ar function
+Disassemble
+.Ar function .
+May be specified multiple times.
+.It Fl n
+Show numeric addresses instead of symbol names.
+.It Fl o
+Display numbers in octal (the default is hexadecimal).
+.It Fl q
+Do not show headers or function entry labels.
+.It Fl t Ar section
+Disassemble
+.Ar section
+as text.
+.El
+.Pp
+If
+.Fl d ,
+.Fl D ,
+.Fl F
+or
+.Fl t
+are specified, only the specified sections or functions are disassembled.
+Otherwise, all text sections are disassembled.
+.Sh EXIT STATUS
+.Ex -std
+.Sh SEE ALSO
+.Xr ar 1 ,
+.Xr as 1 ,
+.Xr ld 1 ,
+.Xr a.out 4

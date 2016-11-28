@@ -643,27 +643,20 @@ dis_file(const char *filename)
 void
 usage(void)
 {
-	(void) fprintf(stderr, "usage: dis [-CVoqn] [-d sec] \n");
-	(void) fprintf(stderr, "\t[-D sec] [-F function] [-t sec] file ..\n");
+	(void) fprintf(stderr, "usage: dis [-Cnoq] [-d sec] [-D sec] "
+	     "[-F function] [-t sec] file ...\n");
 	exit(2);
 }
-
-typedef struct lib_node {
-	char *path;
-	struct lib_node *next;
-} lib_node_t;
 
 int
 main(int argc, char **argv)
 {
 	int optchar;
 	int i;
-	lib_node_t *libs = NULL;
-
 	g_funclist = dis_namelist_create();
 	g_seclist = dis_namelist_create();
 
-	while ((optchar = getopt(argc, argv, "Cd:D:F:l:Lot:Vqn")) != -1) {
+	while ((optchar = getopt(argc, argv, "Cd:D:F:ot:qn")) != -1) {
 		switch (optchar) {
 		case 'C':
 			g_demangle = 1;
@@ -677,42 +670,6 @@ main(int argc, char **argv)
 		case 'F':
 			dis_namelist_add(g_funclist, optarg, 0);
 			break;
-		case 'l': {
-			/*
-			 * The '-l foo' option historically would attempt to
-			 * disassemble '$LIBDIR/libfoo.a'.  The $LIBDIR
-			 * environment variable has never been supported or
-			 * documented for our linker.  However, until this
-			 * option is formally EOLed, we have to support it.
-			 */
-			char *dir;
-			lib_node_t *node;
-			size_t len;
-
-			if ((dir = getenv("LIBDIR")) == NULL ||
-			    dir[0] == '\0')
-				dir = "/usr/lib";
-			node = safe_malloc(sizeof (lib_node_t));
-			len = strlen(optarg) + strlen(dir) + sizeof ("/lib.a");
-			node->path = safe_malloc(len);
-
-			(void) snprintf(node->path, len, "%s/lib%s.a", dir,
-			    optarg);
-			node->next = libs;
-			libs = node;
-			break;
-		}
-		case 'L':
-			/*
-			 * The '-L' option historically would attempt to read
-			 * the .debug section of the target to determine source
-			 * line information in order to annotate the output.
-			 * No compiler has emitted these sections in many years,
-			 * and the option has never done what it purported to
-			 * do.  We silently consume the option for
-			 * compatibility.
-			 */
-			break;
 		case 'n':
 			g_numeric = 1;
 			break;
@@ -725,9 +682,6 @@ main(int argc, char **argv)
 		case 't':
 			dis_namelist_add(g_seclist, optarg, DIS_TEXT);
 			break;
-		case 'V':
-			(void) printf("Solaris disassembler version 1.0\n");
-			return (0);
 		default:
 			usage();
 			break;
@@ -737,25 +691,13 @@ main(int argc, char **argv)
 	argc -= optind;
 	argv += optind;
 
-	if (argc == 0 && libs == NULL) {
+	if (argc == 0) {
 		warn("no objects specified");
 		usage();
 	}
 
 	if (dis_namelist_empty(g_funclist) && dis_namelist_empty(g_seclist))
 		g_doall = 1;
-
-	/*
-	 * See comment for 'l' option, above.
-	 */
-	while (libs != NULL) {
-		lib_node_t *node = libs->next;
-
-		dis_file(libs->path);
-		free(libs->path);
-		free(libs);
-		libs = node;
-	}
 
 	for (i = 0; i < argc; i++)
 		dis_file(argv[i]);

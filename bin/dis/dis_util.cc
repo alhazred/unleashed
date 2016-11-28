@@ -30,11 +30,11 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <demangle.h>
+#include <cxxabi.h>
 
 #include "dis_util.h"
 
-int g_error;	/* global process exit status, set when warn() is called */
+extern int g_error;	/* global process exit status, set when warn() is called */
 
 /*
  * Fatal error.  Print out the error with a leading "dis: ", and then exit the
@@ -92,22 +92,23 @@ safe_malloc(size_t size)
 
 
 /*
- * Generic interface to demangle C++ names.  Calls cplus_demangle to do the
+ * Generic interface to demangle C++ names.  Calls __cxa_demangle to do the
  * necessary translation.  If the translation fails, the argument is returned
  * unchanged.  The memory returned is only valid until the next call to
  * demangle().
  *
- * We dlopen() libdemangle.so rather than linking directly against it in case it
+ * We dlopen() libstdc++.so rather than linking directly against it in case it
  * is not installed on the system.
  */
 const char *
 dis_demangle(const char *name)
 {
 	static char *demangled_name;
-	static int (*demangle_func)() = NULL;
-	static int size = BUFSIZE;
+	static char *(*demangle_func)(
+	    const char *, char *, size_t *, int *
+	    ) = NULL;
+	static size_t size = BUFSIZE;
 	static int first_flag = 0;
-	int ret;
 
 	/*
 	 * If this is the first call, allocate storage
@@ -116,31 +117,25 @@ dis_demangle(const char *name)
 	if (first_flag == 0) {
 		void *demangle_hand;
 
-		demangle_hand = dlopen("libdemangle.so.1", RTLD_LAZY);
+		demangle_hand = dlopen("libstdc++.so.6", RTLD_LAZY);
 		if (demangle_hand != NULL)
-			demangle_func = (int (*)(int))dlsym(
-				demangle_hand, "cplus_demangle");
+			demangle_func = (char *(*)(const char *, char *,
+			    size_t *, int *))dlsym(demangle_hand,
+				"__cxa_demangle");
 
-		demangled_name = safe_malloc(size);
+		demangled_name = (char*) safe_malloc(size);
 		first_flag = 1;
 	}
 
-	/*
-	 * If libdemangle is not present, pass through unchanged.
-	 */
-	if (demangle_func == NULL)
+	/* If we failed to find __cxa_demangle, return the original name. */
+	if (!demangle_func)
 		return (name);
 
 	/*
-	 * The function returns -1 when the buffer size is not sufficient.
+	 * __cxa_demangle will realloc our buffer if necessary, but even if
+	 * that fails we want to keep the buffer around for the next call.
 	 */
-	while ((ret = (*demangle_func)(name, demangled_name, size)) == -1) {
-		free(demangled_name);
-		size = size + BUFSIZE;
-		demangled_name = safe_malloc(size);
-	}
-
-	if (ret != 0)
+	if (!demangle_func(name, demangled_name, &size, NULL))
 		return (name);
 
 	return (demangled_name);
