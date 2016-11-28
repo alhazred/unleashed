@@ -47,7 +47,7 @@
 #include <sys/mode.h>
 #include <sys/atomic.h>
 #include <vm/pvn.h>
-#include "fs/fs_subr.h"
+#include "sys/fs_subr.h"
 #include <sys/zfs_dir.h>
 #include <sys/zfs_acl.h>
 #include <sys/zfs_ioctl.h>

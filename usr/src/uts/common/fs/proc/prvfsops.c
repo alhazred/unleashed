@@ -50,8 +50,8 @@
 #include <sys/bitmap.h>
 #include <sys/kmem.h>
 #include <sys/policy.h>
-#include <fs/fs_subr.h>
-#include <fs/proc/prdata.h>
+#include <sys/fs_subr.h>
+#include <sys/proc/prdata.h>
 
 /*
  * This is the loadable module wrapper.

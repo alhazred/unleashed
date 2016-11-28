@@ -39,7 +39,7 @@
 #include <sys/mount.h>
 #include <sys/pathname.h>
 #include <sys/dirent.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/contract.h>
 #include <sys/contract_impl.h>
 #include <sys/ctfs.h>

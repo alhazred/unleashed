@@ -50,7 +50,7 @@
 #include <sys/ticotsord.h>
 #include <sys/dirent.h>
 #include <sys/sysmacros.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/fs/autofs.h>
 
 bool_t xdr_autofs_netbuf(XDR *, struct netbuf *);

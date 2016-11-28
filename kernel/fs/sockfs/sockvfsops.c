@@ -37,7 +37,7 @@
 #include <sys/thread.h>
 #include <sys/zone.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 #include <sys/stream.h>
 #include <sys/socket.h>

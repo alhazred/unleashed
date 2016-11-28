@@ -42,7 +42,7 @@
 #include <sys/time.h>
 #include <sys/vfs.h>
 #include <sys/vnode.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/sysmacros.h>
 #include <sys/kmem.h>
 #include <sys/mkdev.h>

@@ -1034,8 +1034,8 @@ file path=usr/include/sys/fs/ufs_quota.h
 file path=usr/include/sys/fs/ufs_snap.h
 file path=usr/include/sys/fs/ufs_trans.h
 file path=usr/include/sys/fs/zfs.h
-file path=usr/include/sys/fs_reparse.h mode=0644
-file path=usr/include/sys/fs_subr.h mode=0644
+file path=usr/include/sys/fs_reparse.h
+file path=usr/include/sys/fs_subr.h
 file path=usr/include/sys/fsid.h
 $(sparc_ONLY)file path=usr/include/sys/fsr.h
 file path=usr/include/sys/fss.h
@@ -1272,7 +1272,7 @@ $(i386_ONLY)file path=usr/include/sys/privmregs.h mode=0644
 $(i386_ONLY)file path=usr/include/sys/privregs.h mode=0644
 file path=usr/include/sys/prnio.h
 file path=usr/include/sys/proc.h
-file path=usr/include/sys/proc/prdata.h mode=0644
+file path=usr/include/sys/proc/prdata.h
 file path=usr/include/sys/processor.h
 file path=usr/include/sys/procfs.h
 file path=usr/include/sys/procfs_isa.h mode=0644

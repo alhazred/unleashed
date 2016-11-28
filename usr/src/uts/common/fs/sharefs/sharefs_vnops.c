@@ -24,7 +24,7 @@
  * Use is subject to license terms.
  */
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 #include <sys/errno.h>
 #include <sys/file.h>

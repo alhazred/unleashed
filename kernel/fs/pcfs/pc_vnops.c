@@ -73,7 +73,7 @@
 #include <vm/as.h>
 #include <vm/seg_kmem.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 static int pcfs_open(struct vnode **, int, struct cred *, caller_context_t *ct);
 static int pcfs_close(struct vnode *, int, int, offset_t, struct cred *,

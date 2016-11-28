@@ -58,7 +58,7 @@
 #include <sys/ddi.h>
 #include <sys/zone.h>
 
-#include <fs/fs_reparse.h>
+#include <sys/fs_reparse.h>
 
 #include <rpc/types.h>
 #include <rpc/auth.h>

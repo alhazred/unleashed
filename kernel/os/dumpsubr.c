@@ -54,7 +54,7 @@
 #include <sys/var.h>
 #include <sys/debug.h>
 #include <sys/sunddi.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/fs/snode.h>
 #include <sys/ontrap.h>
 #include <sys/panic.h>

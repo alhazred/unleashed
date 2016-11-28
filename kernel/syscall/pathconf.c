@@ -47,7 +47,7 @@
 #include <sys/file.h>
 #include <sys/uio.h>
 #include <sys/debug.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * Common code for pathconf(), fpathconf() system calls

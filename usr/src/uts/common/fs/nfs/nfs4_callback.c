@@ -67,7 +67,7 @@
 #include <nfs/mount.h>
 #include <nfs/nfs_acl.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 #include <nfs/nfs4.h>
 #include <nfs/rnode4.h>

@@ -54,7 +54,7 @@
 #include <sys/debug.h>
 #include <sys/cmn_err.h>
 #include <c2/audit.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * Get the vp to be stated and the cred to be used for the call

@@ -39,7 +39,7 @@
 #include <sys/mntent.h>
 #include <sys/mount.h>
 #include <sys/cmn_err.h>
-#include "fs/fs_subr.h"
+#include "sys/fs_subr.h"
 #include <sys/zfs_znode.h>
 #include <sys/zfs_dir.h>
 #include <sys/zil.h>

@@ -33,7 +33,7 @@
 #include <sys/kmem.h>
 #include <sys/debug.h>
 #include <sys/cmn_err.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/zone.h>
 #include <sys/tsol/label.h>
 

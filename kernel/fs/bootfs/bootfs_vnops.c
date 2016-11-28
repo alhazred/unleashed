@@ -24,7 +24,7 @@
 #include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/mman.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/policy.h>
 #include <sys/sysmacros.h>
 #include <sys/dirent.h>

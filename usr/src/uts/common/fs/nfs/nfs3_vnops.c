@@ -88,7 +88,7 @@
 #include <vm/seg_kpm.h>
 #include <vm/seg_vn.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 #include <sys/ddi.h>
 

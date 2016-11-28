@@ -46,7 +46,7 @@
 #include <sys/uio.h>
 #include <sys/debug.h>
 #include <c2/audit.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * Create a symbolic link.  Similar to link or rename except target

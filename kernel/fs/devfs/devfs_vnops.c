@@ -57,7 +57,7 @@
 #include <sys/policy.h>
 #include <sys/modctl.h>
 #include <sys/sunndi.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/fs/dv_node.h>
 
 extern struct vattr	dv_vattr_dir, dv_vattr_file;

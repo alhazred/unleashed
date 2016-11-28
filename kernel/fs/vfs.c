@@ -91,7 +91,7 @@
 
 #include <vm/page.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 /* Private interfaces to create vopstats-related data structures */
 extern void		initialize_vopstats(vopstats_t *);
 extern vopstats_t	*get_fstype_vopstats(struct vfs *, struct vfssw *);

@@ -59,7 +59,7 @@
 #include <sys/schedctl.h>
 #include <vm/as.h>
 #include <vm/seg.h>
-#include <fs/proc/prdata.h>
+#include <sys/proc/prdata.h>
 #include <sys/contract/process_impl.h>
 
 static	void	pr_settrace(proc_t *, sigset_t *);

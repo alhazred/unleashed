@@ -37,7 +37,7 @@
 #include <sys/debug.h>
 #include <vm/seg.h>
 #include <sys/fs/swapnode.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/cmn_err.h>
 #include <sys/mem_config.h>
 #include <sys/atomic.h>

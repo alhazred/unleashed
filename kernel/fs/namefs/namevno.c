@@ -57,7 +57,7 @@
 #include <vm/seg.h>
 #include <sys/fs/namenode.h>
 #include <sys/stream.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/policy.h>
 
 /*

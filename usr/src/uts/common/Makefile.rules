@@ -201,7 +201,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/exec/java/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/fs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 

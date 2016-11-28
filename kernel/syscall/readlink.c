@@ -44,7 +44,7 @@
 #include <sys/fcntl.h>
 #include <sys/uio.h>
 #include <sys/debug.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <c2/audit.h>
 
 /*

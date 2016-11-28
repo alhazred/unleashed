@@ -52,7 +52,7 @@
 #include <vm/seg_kp.h>
 #include <vm/seg_vn.h>
 #include <vm/as.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * Page handling structures.  This is set up as a list of per-page

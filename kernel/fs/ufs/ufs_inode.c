@@ -73,7 +73,7 @@
 #include <sys/errno.h>
 #include <sys/kmem.h>
 #include <sys/debug.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/policy.h>
 
 struct kmem_cache *inode_cache;		/* cache of free inodes */

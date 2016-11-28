@@ -54,7 +54,7 @@
 #include <sys/strsubr.h>
 #include <sys/stropts.h>
 #include <sys/cmn_err.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/ddi.h>
 
 

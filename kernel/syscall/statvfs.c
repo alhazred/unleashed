@@ -53,7 +53,7 @@
 #include <sys/pathname.h>
 
 #include <vm/page.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 #define	STATVFSCOPY(dst, src)					\
 	(dst)->f_bsize	= (src)->f_bsize;			\

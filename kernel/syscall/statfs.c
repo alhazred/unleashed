@@ -49,7 +49,7 @@
 #include <sys/pathname.h>
 
 #include <vm/page.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 #if defined(_SYSCALL32_IMPL) || defined(_ILP32)
 

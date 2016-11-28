@@ -44,7 +44,7 @@
 #include <sys/cmn_err.h>
 #include <sys/debug.h>
 #include <sys/file.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <c2/audit.h>
 #include <sys/fcntl.h>
 

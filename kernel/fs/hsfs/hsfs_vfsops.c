@@ -65,7 +65,7 @@
 #include <sys/swap.h>
 #include <sys/errno.h>
 #include <sys/debug.h>
-#include "fs/fs_subr.h"
+#include "sys/fs_subr.h"
 #include <sys/cmn_err.h>
 #include <sys/bootconf.h>
 

@@ -45,7 +45,7 @@
 #include <rpc/clnt.h>
 #include <sys/fs/autofs.h>
 #include <rpcsvc/autofs_prot.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  *  Vnode ops for autofs

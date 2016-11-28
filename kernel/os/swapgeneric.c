@@ -55,7 +55,7 @@
 #include <sys/autoconf.h>
 #include <sys/debug.h>
 #include <sys/fs/snode.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/socket.h>
 #include <net/if.h>
 

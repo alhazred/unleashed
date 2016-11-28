@@ -61,7 +61,7 @@
 #include <smbfs/smbfs_subr.h>
 
 #include <sys/fs/smbfs_ioctl.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * We assign directory offsets like the NFS client, where the

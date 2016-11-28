@@ -65,7 +65,7 @@
 #include <sys/file.h>
 #include <sys/fcntl.h>
 #include <sys/flock.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/cmn_err.h>
 #include <sys/policy.h>
 #include <sys/fs/ufs_log.h>

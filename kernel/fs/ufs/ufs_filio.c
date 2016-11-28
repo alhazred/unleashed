@@ -76,7 +76,7 @@
 #include <sys/model.h>
 #include <sys/policy.h>
 
-#include "fs/fs_subr.h"
+#include "sys/fs_subr.h"
 
 /*
  * ufs_fioio is the ufs equivalent of NFS_CNVT and is tailored to

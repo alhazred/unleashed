@@ -30,7 +30,7 @@
 #include <acl/acl_common.h>
 #include <sys/fcntl.h>
 #include <sys/flock.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 extern caller_context_t smb_ct;
 

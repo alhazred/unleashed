@@ -64,9 +64,9 @@
 #include <sys/acl.h>
 #include <sys/nbmlock.h>
 #include <sys/fcntl.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/taskq.h>
-#include <fs/fs_reparse.h>
+#include <sys/fs_reparse.h>
 
 /* Determine if this vnode is a file that is read-only */
 #define	ISROFILE(vp)	\

@@ -125,7 +125,6 @@ $($(MACH)_ARCHITECTURES): $(PREREQ_TARGET) FRC
 COMMON_HDRDIRS= common/avs \
 		common/c2 \
 		common/des \
-		common/fs \
 		common/gssapi \
 		common/idmap \
 		common/klm \

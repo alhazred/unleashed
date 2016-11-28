@@ -121,7 +121,7 @@
 #include <sys/attr.h>
 #include <sys/gfs.h>
 #include <sys/mutex.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/kidmap.h>
 
 typedef struct {

@@ -189,9 +189,9 @@ INCS=	${${CONFIG_MACH}_INCS}	\
 	exec.h			\
 	exechdr.h		\
 	extdirent.h		\
-	fault.h			\
 	fasttrap.h		\
 	fasttrap_impl.h		\
+	fault.h			\
 	fbio.h			\
 	fbuf.h			\
 	fcntl.h			\
@@ -207,11 +207,13 @@ INCS=	${${CONFIG_MACH}_INCS}	\
 	flock.h			\
 	flock_impl.h		\
 	fork.h			\
-	fss.h			\
-	fsspriocntl.h		\
+	fs_reparse.h		\
+	fs_subr.h		\
 	fsid.h			\
+	fss.h			\
 	fssnap.h		\
 	fssnap_if.h		\
+	fsspriocntl.h		\
 	fstyp.h			\
 	ftrace.h		\
 	fx.h			\
@@ -662,6 +664,7 @@ SUBDIR=	1394 \
 	ib \
 	iscsit \
 	iso \
+	proc \
 	rsm \
 	sata \
 	scsi \

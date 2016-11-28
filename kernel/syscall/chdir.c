@@ -57,7 +57,7 @@
 
 #include <sys/debug.h>
 #include <c2/audit.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * Change current working directory (".").

@@ -54,7 +54,7 @@
 #include <sys/sdt.h>
 #include <netinet/in.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <rpcsvc/nlm_prot.h>
 
 #include <nfs/nfs.h>

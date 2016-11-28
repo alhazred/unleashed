@@ -52,7 +52,7 @@
 #include <smbfs/smbfs_node.h>
 #include <smbfs/smbfs_subr.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * Solaris wants there to be a directory node to contain

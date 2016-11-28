@@ -48,8 +48,8 @@
 #include <sys/debug.h>
 #include <sys/cmn_err.h>
 #include <sys/stream.h>
-#include <fs/fs_subr.h>
-#include <fs/fs_reparse.h>
+#include <sys/fs_subr.h>
+#include <sys/fs_reparse.h>
 #include <sys/door.h>
 #include <sys/acl.h>
 #include <sys/share.h>

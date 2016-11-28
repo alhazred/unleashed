@@ -55,7 +55,7 @@
 
 #include <sys/unistd.h>
 #include <sys/debug.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 static int cacl(int cmd, int nentries, void *aclbufp,
     vnode_t *vp, int *rv);

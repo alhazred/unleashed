@@ -62,7 +62,7 @@
 #include <sys/proc.h>
 #include <sys/unistd.h>
 #include <sys/debug.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/filio.h>
 #include <sys/termio.h>
 #include <sys/ddi.h>

@@ -34,7 +34,7 @@
 #include <sys/vfs.h>
 #include <sys/vfs_opreg.h>
 #include <sys/fs/mntdata.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/vmsystm.h>
 #include <vm/seg_vn.h>
 #include <sys/time.h>

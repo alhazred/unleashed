@@ -96,7 +96,7 @@
 #include <sys/pathname.h>
 #include <sys/sdt.h>
 #include <sys/nbmlock.h>
-#include <fs/fs_reparse.h>
+#include <sys/fs_reparse.h>
 
 uint32_t smb_is_executable(char *);
 static void smb_node_delete_on_close(smb_node_t *);

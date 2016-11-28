@@ -50,7 +50,7 @@
 #include <sys/debug.h>
 #include <sys/mode.h>
 #include <sys/policy.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/mount.h>
 #include <sys/fs/snode.h>
 #include <sys/fs/dv_node.h>

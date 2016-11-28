@@ -78,7 +78,7 @@
 #include <vm/seg_vn.h>
 #include <vm/rm.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * The order and contents of this structure must be kept in sync with that of

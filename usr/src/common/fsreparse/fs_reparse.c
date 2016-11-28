@@ -29,14 +29,15 @@
 
 #ifdef _KERNEL
 #include <sys/sunddi.h>
-#include <fs/fs_reparse.h>
 #else
 #include <string.h>
 #include <limits.h>
-#include <sys/fs_reparse.h>
 
 #define	strfree(str)		free((str))
 #endif
+
+/* this needs to be after the above includes */
+#include <sys/fs_reparse.h>
 
 static char *reparse_skipspace(char *cp);
 static int reparse_create_nvlist(const char *string, nvlist_t *nvl);

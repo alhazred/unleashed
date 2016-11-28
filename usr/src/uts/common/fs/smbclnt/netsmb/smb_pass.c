@@ -49,7 +49,7 @@
 #include <sys/pathname.h>
 #include <sys/mount.h>
 #include <sys/sdt.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/devops.h>
 #include <sys/thread.h>
 #include <sys/mkdev.h>

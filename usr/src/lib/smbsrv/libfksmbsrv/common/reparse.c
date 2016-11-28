@@ -34,13 +34,13 @@
 #include <sys/nvpair.h>
 #include <sys/uio.h>
 #include <sys/kmem.h>
-#include <fs/fs_subr.h>
-#include <fs/fs_reparse.h>
+#include <sys/fs_subr.h>
+#include <sys/fs_reparse.h>
 
 
 /*
  * support functions for reparse point
- * copied from uts/common/fs/fs_subr.c
+ * copied from kernel/fs/fs_subr.c
  */
 
 /*

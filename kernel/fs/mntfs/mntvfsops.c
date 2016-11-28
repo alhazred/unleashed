@@ -45,7 +45,7 @@
 #include <sys/bitmap.h>
 #include <sys/kmem.h>
 #include <sys/policy.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/fs/mntdata.h>
 #include <sys/zone.h>
 
