@@ -116,6 +116,7 @@ KERNEL_CFLAGS_sparcv9 =
 
 KERNEL_INCLUDES = \
 	-I${REPOROOT}/usr/src/uts/common \
+	-I${REPOROOT}/kernel/arch/${CONFIG_MACH}/include \
 	-I${REPOROOT}/include
 
 KERNEL_INCLUDES_i386 = \

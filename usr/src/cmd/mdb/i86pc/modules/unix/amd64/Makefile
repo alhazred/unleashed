@@ -39,6 +39,7 @@ include ../../../../Makefile.module
 CPPFLAGS += -DMP -D_MACHDEP
 CPPFLAGS += -I../../../../common
 CPPFLAGS += -I$(SRC)/uts/i86pc
+CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/include
 CPPFLAGS += -I$(SRC)/uts/intel
 
 CERRWARN += -Wno-char-subscripts

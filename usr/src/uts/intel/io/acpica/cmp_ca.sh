@@ -41,7 +41,7 @@ DIFF="diff -w"
 which_scm | read WS_SCM WSDIR
 
 WSSRC=usr/src/uts/intel/io/acpica
-WSHDR=usr/src/uts/intel/sys/acpi
+WSHDR=kernel/arch/x86/include/sys/acpi
 ACFILES=/tmp/$$.acfiles
 SRCDIRS="debugger \
 	disassembler \

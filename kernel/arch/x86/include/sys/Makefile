@@ -1,0 +1,63 @@
+INCDIR=	/usr/include/sys
+INCS=	archsystm.h \
+	asm_linkage.h \
+	bootconf.h \
+	bootregs.h \
+	bootsvcs.h \
+	controlregs.h \
+	cpu.h \
+	ddi_isa.h \
+	debugreg.h \
+	fasttrap_isa.h \
+	fp.h \
+	frame.h \
+	hypervisor.h \
+	inline.h \
+	iommulib.h \
+	kdi_machimpl.h \
+	kdi_regs.h \
+	machlock.h \
+	machsig.h \
+	machtypes.h \
+	mc.h \
+	mc_amd.h \
+	mc_intel.h \
+	mca_amd.h \
+	mca_x86.h \
+	mcontext.h \
+	mutex_impl.h \
+	obpdefs.h \
+	old_procfs.h \
+	pcb.h \
+	pmem.h \
+	privmregs.h \
+	privregs.h \
+	procfs_isa.h \
+	prom_emul.h \
+	prom_isa.h \
+	prom_plat.h \
+	promif.h \
+	promimpl.h \
+	psw.h \
+	pte.h \
+	reg.h \
+	regset.h \
+	segment.h \
+	segments.h \
+	spl.h \
+	stack.h \
+	stat_impl.h \
+	synch32.h \
+	sysconfig_impl.h \
+	sysi86.h \
+	trap.h \
+	traptrace.h \
+	tss.h \
+	ucontext.h \
+	utrap.h \
+	vmparam.h \
+	x86_archext.h \
+	xen_errno.h
+
+.include <prog.mk>
+.include <inc.mk>

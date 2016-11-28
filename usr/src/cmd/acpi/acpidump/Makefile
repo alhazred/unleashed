@@ -23,7 +23,7 @@ SRCS = $(OBJS:.o=.c)
 
 CERRWARN += -Wno-unused-function
 
-CPPFLAGS += -I$(SRC)/uts/intel/sys/acpi -DACPI_DUMP_APP
+CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/include/sys/acpi -DACPI_DUMP_APP
 
 .KEEP_STATE:
 
