@@ -173,7 +173,7 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/devid/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/disp/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/disp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
