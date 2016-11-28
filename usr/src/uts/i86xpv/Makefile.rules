@@ -118,7 +118,7 @@ $(OBJS_DIR)/dtrace_subr.o:	$(UTSBASE)/i86pc/os/dtrace_subr.c
 	$(CTFCONVERT_O)
 
 #
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/cpr/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/cpr/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
