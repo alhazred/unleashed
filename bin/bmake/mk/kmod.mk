@@ -1,27 +1,15 @@
 #
-# Build an install a kernel module
+# Build and install a kernel module helper.
 #
-# Inputs:
-#
-#   MODULE		- name of the kernel module
-#   MODULE_TYPE		- "fs", "drv", etc.
-#   MODULE_TYPE_LINKS	- "fs", "drv", etc. which will be hardlinked to
-#   			  MODULE_TYPE
-#   MODULE_DEPS		- dependencies
-#   MODULE_CONF		- name of .conf file to install
-#   MODULE_FW		- firmware files to install
-#   SRCS		- source files
-#   SRCS32		- additional source files (32-bit build only)
-#   SRCS64		- additional source files (64-bit build only)
-#   SRCS_DIRS		- additional source directories to search in
-#   INCS		- compiler include directives
-#   DEFS		- compiler defines (e.g., -DFOO -UBAR)
-#   CERRWARN		- compiler error warning args (e.g., -Wno-parentheses)
+# See kernel/mk/kmod-build.mk for description of inputs used during the
+# build.  This makefile is responsible for making and cleaning up object
+# subdirectories.  All other tasks are handled by secondary makefile -
+# kmod-build.mk which we invoke for each of the bit-nesses.
 #
 # The config system tells us:
 #
 #   (1) whether to build this module at all
-#   (2) if we're supposed to build it, should we build 32? 64? both?
+#   (2) if we're supposed to build it, should we build 32-bit? 64-bit? both?
 #
 # The following two config vars address #2 above:
 #
@@ -31,7 +19,7 @@
 # and the following config var tells us whether to bother with this
 # particular module:
 #
-#   CONFIG_FS_FOOFS = y
+#   CONFIG_FOOBAR = y
 #
 # If we are not supposed to care about this module, we do not even recurse
 # into the module's build directory.
@@ -40,6 +28,11 @@
 # (generically) built, from which platforms/ISA/whatever we're supposed to
 # build the module for.
 #
+# To avoid recursively including kmod-build.mk, this makefile turns into a
+# giant no-op if _KMOD_BUILD is set.
+#
+
+.if empty(_KMOD_BUILD)
 
 .if empty(REPOROOT)
 .error "You must define REPOROOT to point to the top-level of the repository"
@@ -47,220 +40,34 @@
 
 .include <${REPOROOT}/Makefile.cfgparam>
 
-KERNEL_CFLAGS = \
-	-fident \
-	-finline \
-	-fno-inline-functions \
-	-fno-builtin \
-	-fno-asm \
-	-fdiagnostics-show-option \
-	-nodefaultlibs \
-	-D_ASM_INLINES \
-	-ffreestanding \
-	-std=gnu99 \
-	-g \
-	-Wall \
-	-Wextra \
-	-Werror \
-	-Wno-missing-braces \
-	-Wno-sign-compare \
-	-Wno-unknown-pragmas \
-	-Wno-unused-parameter \
-	-Wno-missing-field-initializers \
-	-fno-inline-small-functions \
-	-fno-inline-functions-called-once \
-	-fno-ipa-cp \
-	-fstack-protector \
-	-D_KERNEL \
-	-D_SYSCALL32 \
-	-D_DDI_STRICT \
-	-D__sun \
-	-nostdinc
-
-# TODO: support for debug builds
-# KERNEL_CFLAGS += -DDEBUG
-
-KERNEL_CFLAGS_32 = \
-	-m32
-
-KERNEL_CFLAGS_64 = \
-	-m64 \
-	-D_ELF64
-
-KERNEL_CFLAGS_i386 = \
-	-mno-mmx \
-	-mno-sse
-
-KERNEL_CFLAGS_i86 = \
-	-O \
-	-march=pentiumpro
-
-KERNEL_CFLAGS_amd64 = \
-	-O2 \
-	-Dsun \
-	-D__SVR4 \
-	-Ui386 \
-	-U__i386 \
-	-mtune=opteron \
-	-msave-args \
-	-mcmodel=kernel \
-	-fno-strict-aliasing \
-	-fno-unit-at-a-time \
-	-fno-optimize-sibling-calls \
-	-mno-red-zone \
-	-D_SYSCALL32_IMPL
-
-KERNEL_CFLAGS_sparc =
-KERNEL_CFLAGS_sparcv7 =
-KERNEL_CFLAGS_sparcv9 =
-
-KERNEL_INCLUDES = \
-	-I${REPOROOT}/usr/src/uts/common \
-	-I${REPOROOT}/kernel/arch/${CONFIG_MACH}/include \
-	-I${REPOROOT}/include
-
-KERNEL_INCLUDES_i386 = \
-	-I${REPOROOT}/usr/src/uts/intel
-
-KERNEL_INCLUDES_sparc =
-
-CFLAGS32 = \
-	$(KERNEL_CFLAGS) \
-	$(KERNEL_CFLAGS_32) \
-	$(KERNEL_CFLAGS_$(CONFIG_MACH32)) \
-	$(KERNEL_CFLAGS_$(CONFIG_MACH)) \
-	$(KERNEL_INCLUDES) \
-	$(KERNEL_INCLUDES_$(CONFIG_MACH)) \
-	$(CERRWARN) \
-	$(INCS:%=-I%) \
-	$(DEFS)
-
-CFLAGS64 = \
-	$(KERNEL_CFLAGS) \
-	$(KERNEL_CFLAGS_64) \
-	$(KERNEL_CFLAGS_$(CONFIG_MACH64)) \
-	$(KERNEL_CFLAGS_$(CONFIG_MACH)) \
-	$(KERNEL_INCLUDES) \
-	$(KERNEL_INCLUDES_$(CONFIG_MACH)) \
-	$(CERRWARN) \
-	$(INCS:%=-I%) \
-	$(DEFS)
-
-KERNEL_LDFLAGS = \
-	-r
-
-LDFLAGS = \
-	$(KERNEL_LDFLAGS)
-
-.if defined(MODULE_DEPS) && ${MODULE_DEPS} != ""
-LDFLAGS += -dy $(MODULE_DEPS:%=-N %)
-.endif
-
-# generate all the hard link names even though we may not use it all
-LINKS32=
-LINKS64=
-.if !empty(MODULE_TYPE_LINKS)
-.for type in ${MODULE_TYPE_LINKS}
-LINKS32+="/kernel/${MODULE_TYPE}/${MODULE}" \
-	 "/kernel/${type}/${MODULE}"
-LINKS64+="/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}" \
-	 "/kernel/${type}/${CONFIG_MACH64}/${MODULE}"
-.endfor
-.endif
-
-OBJS32=$(SRCS:%.c=%-32.o) $(SRCS32:%.c=%-32.o)
-OBJS64=$(SRCS:%.c=%-64.o) $(SRCS64:%.c=%-64.o)
-
-MODULES=
-INSTALLTGTS=
-.if defined(CONFIG_FS_PCFS) && ${CONFIG_FS_PCFS} == "y"
+BUILD=
 .if defined(CONFIG_BUILD_KMOD_32) && ${CONFIG_BUILD_KMOD_32} == "y"
-MODULES+=$(MODULE)-32
-INSTALLTGTS+=install-32
+BUILD += 32
 .endif
 .if defined(CONFIG_BUILD_KMOD_64) && ${CONFIG_BUILD_KMOD_64} == "y"
-MODULES+=$(MODULE)-64
-INSTALLTGTS+=install-64
-.endif
-.if !empty(MODULE_CONF)
-INSTALLTGTS+=install-conf
-.endif
-.if !empty(MODULE_FW)
-INSTALLTGTS+=install-fw
-.endif
+BUILD += 64
 .endif
 
-.if !empty(SRCS_DIRS)
-.PATH: ${SRCS_DIRS}
-.endif
-
-CC=/opt/gcc/4.4.4/bin/gcc
-LD=/usr/bin/ld
-INS=/usr/bin/install
-CTFCONVERT=/opt/onbld/bin/i386/ctfconvert
-CTFMERGE=/opt/onbld/bin/i386/ctfmerge
-
-.if !empty(VERBOSE) && ${VERBOSE} != "0" && ${VERBOSE} != "no"
-QCC=
-QLD=
-QCTFCVT=
-QCTFMRG=
-.else
-QCC=@echo "  CC    ${.IMPSRC}";
-QLD=@echo "  LD    ${.TARGET}";
-QCTFCVT=@
-QCTFMRG=@
-.endif
-
-all: $(MODULES)
+all:
+.for bits in ${BUILD}
+	@mkdir -p obj${bits}
+	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk all \
+		BITS=${bits} REPOROOT=${REPOROOT}
+.endfor
 
 clean cleandir:
-	rm -f $(MODULE)-32 $(OBJS32)
-	rm -f $(MODULE)-64 $(OBJS64)
+	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk clean \
+		REPOROOT=${REPOROOT}
+	@rm -rf obj32 obj64
 
-install: $(INSTALLTGTS)
+install:
+	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk install-misc \
+		REPOROOT=${REPOROOT}
+.for bits in ${BUILD}
+	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk install \
+		BITS=${bits} REPOROOT=${REPOROOT}
+.endfor
 
-.include <links.mk>
+.PHONY: all clean cleandir install
 
-install-32: $(MODULE)-32
-	$(INS) -d -m 755 "$(DESTDIR)/kernel/${MODULE_TYPE}"
-	$(INS) -m 755 ${.ALLSRC} "$(DESTDIR)/kernel/${MODULE_TYPE}/${MODULE}"
-.if !empty(LINKS32)
-	@set ${LINKS32}; ${_LINKS_SCRIPT}
 .endif
-	
-install-64: $(MODULE)-64
-	$(INS) -d -m 755 "$(DESTDIR)/kernel/${MODULE_TYPE}/${CONFIG_MACH64}"
-	$(INS) -m 755 ${.ALLSRC} "$(DESTDIR)/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}"
-.if !empty(LINKS64)
-	@set ${LINKS64}; ${_LINKS_SCRIPT}
-.endif
-
-install-conf: ${MODULE_CONF}
-	$(INS) -m 644 ${MODULE_CONF} "$(DESTDIR)/kernel/${MODULE_TYPE}/${MODULE}.conf"
-
-install-fw: ${MODULE_FW}
-	$(INS) -d -m 755 "$(DESTDIR)/kernel/firmware/${MODULE}"
-	for x in ${MODULE_FW} ; do \
-		$(INS) -m 644 $$x "$(DESTDIR)/kernel/firmware/${MODULE}" ; \
-	done
-
-.PHONY: all clean cleandir install-32 install-64 install-conf install-fw
-
-$(MODULE)-32: $(OBJS32)
-	${QLD}$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
-	${QCTFMRG}$(CTFMERGE) -L VERSION -o ${.TARGET} ${.ALLSRC}
-
-$(MODULE)-64: $(OBJS64)
-	${QLD}$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
-	${QCTFMRG}$(CTFMERGE) -L VERSION -o ${.TARGET} ${.ALLSRC}
-
-.SUFFIXES: -32.o -64.o
-
-.c-32.o:
-	${QCC}$(CC) $(CFLAGS32) -c -o ${.TARGET} ${.IMPSRC}
-	${QCTFCVT}$(CTFCONVERT) -i -L VERSION ${.TARGET}
-
-.c-64.o:
-	${QCC}$(CC) $(CFLAGS64) -c -o ${.TARGET} ${.IMPSRC}
-	${QCTFCVT}$(CTFCONVERT) -i -L VERSION ${.TARGET}
