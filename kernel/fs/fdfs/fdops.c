@@ -52,7 +52,7 @@
 #include <sys/t_lock.h>
 #include <sys/modctl.h>
 #include <sys/policy.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/atomic.h>
 #include <sys/mkdev.h>
 

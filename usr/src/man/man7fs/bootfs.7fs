@@ -12,7 +12,7 @@
 .\" Copyright (c) 2014 Joyent, Inc.  All rights reserved.
 .\"
 
-.TH BOOTFS 7FS "May 8, 2014"
+.TH BOOTFS 7FS "Nov 23, 2016"
 .SH NAME
 bootfs \- boot-time module file system
 
@@ -85,5 +85,4 @@ lists the number of duplicate entries that were found and therefore not displaye
 This information is provided for informational purposes only, it is not to be construed as a stable interface.
 
 .SH SEE ALSO
-.BR kstat (1M),
-.BR grub (5)
+.BR kstat (1M)

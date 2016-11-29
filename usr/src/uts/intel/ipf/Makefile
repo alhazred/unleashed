@@ -43,7 +43,7 @@ UTSBASE	= ../..
 MODULE		= ipf
 OBJECTS		= $(IPF_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(USR_DRV_DIR)/$(MODULE)
-CONF_SRCDIR	= $(UTSBASE)/common/inet/ipf
+CONF_SRCDIR	= $(CODEMGR_WS)/kernel/net/ipf
 
 #
 #	Include common rules.
@@ -61,7 +61,8 @@ CPPFLAGS += -DIPFILTER_LKM -DIPFILTER_LOG -DIPFILTER_LOOKUP -DUSE_INET6
 CPPFLAGS += -DSUNDDI -DSOLARIS2=11 -DIRE_ILL_CN
 LDFLAGS += -dy -Ndrv/ip -Nmisc/md5 -Nmisc/neti -Nmisc/hook -Nmisc/kcf
 
-INC_PATH += -I$(UTSBASE)/common/inet/ipf
+INC_PATH += -I$(CODEMGR_WS)/include/inet/ipf
+INC_PATH += -I$(CODEMGR_WS)/kernel/net/ipf
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

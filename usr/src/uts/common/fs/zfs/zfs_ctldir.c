@@ -65,7 +65,7 @@
  * so that it cannot be freed until all snapshots have been unmounted.
  */
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/zfs_ctldir.h>
 #include <sys/zfs_ioctl.h>
 #include <sys/zfs_vfsops.h>

@@ -87,7 +87,7 @@
 #include <sys/swap.h>
 #include <sys/epm.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 static void	*ufs_directio_zero_buf;
 static int	ufs_directio_zero_len	= 8192;

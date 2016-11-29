@@ -32,9 +32,7 @@ SVCMETHOD= boot-archive-update
 
 sparc_BOOTPROG=
 
-i386_BOOTPROG=			\
-	create_diskmap		\
-	update_grub
+i386_BOOTPROG=
 
 COMMON_BOOTPROG=		\
 	create_ramdisk		\

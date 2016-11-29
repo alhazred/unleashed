@@ -59,7 +59,7 @@
 #include <sys/wait.h>
 #include <vm/seg.h>
 #include <vm/vpage.h>
-#include <fs/proc/prdata.h>
+#include <sys/proc/prdata.h>
 
 #undef exit
 

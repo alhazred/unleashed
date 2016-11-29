@@ -51,12 +51,8 @@ INCS += -I$(SRCDIR) -I$(SRC)/cmd/boot/common -I$(SRC)/common/ficl
 
 C99MODE=	$(C99_ENABLE)
 
-LDLIBS +=	-lficl-sys -lzfs -linstzones -luuid -lnvpair -lc -lgen
-LDLIBS +=	-ldevinfo -lefi
+LDLIBS +=	-lficl-sys -lzfs -linstzones -luuid -lnvpair -lc -lgen -lefi
 CPPFLAGS +=	$(INCS)
-CERRWARN +=	-Wno-unused-label
-CERRWARN +=	-Wno-uninitialized
-CERRWARN +=	-Wno-address
 
 CLOBBERFILES += $(LIBRARY)
 

@@ -75,7 +75,7 @@
 #include <vm/seg_kmem.h>
 #include <vm/seg_map.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * dcfs - A filesystem for automatic decompressing of fiocompressed files

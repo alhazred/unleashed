@@ -39,7 +39,7 @@ include Targetdirs
 
 COMMON_SUBDIRS=	uts lib cmd psm man test
 sparc_SUBDIRS= stand
-i386_SUBDIRS= grub boot
+i386_SUBDIRS= boot
 
 #
 # sparc needs to build stand before psm

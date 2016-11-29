@@ -946,7 +946,7 @@ vmxnet3_ioctl(void *arg, queue_t *wq, mblk_t *mp)
 		mp1->b_datap->db_lim[-1] = '\0';
 
 		/*
-		 * From /usr/src/uts/common/inet/nd.c : nd_getset()
+		 * From kernel/net/nd.c : nd_getset()
 		 * "logic throughout nd_xxx assumes single data block for ioctl.
 		 *  However, existing code sends in some big buffers."
 		 */

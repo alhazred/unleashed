@@ -66,7 +66,7 @@
 #include <nfs/nfs_clnt.h>
 #include <nfs/nfs_acl.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * These are the interface routines for the server side of the

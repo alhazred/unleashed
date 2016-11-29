@@ -33,7 +33,7 @@
 #include <sys/ddi.h>
 #include <sys/sunndi.h>
 #include <sys/sunldi.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/fs/dv_node.h>
 #include <sys/fs/sdev_impl.h>
 #include <sys/zfs_ioctl.h>

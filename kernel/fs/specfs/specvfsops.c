@@ -50,7 +50,7 @@
 #include <sys/fs/snode.h>
 #include <sys/thread.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * This is the loadable module wrapper.

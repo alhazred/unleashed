@@ -69,7 +69,7 @@
 #include <vm/seg_kp.h>
 #include <vm/page.h>
 
-#include <fs/proc/prdata.h>
+#include <sys/proc/prdata.h>
 #include <v9/sys/psr_compat.h>
 
 int	prnwatch = 10000;	/* maximum number of watched areas */

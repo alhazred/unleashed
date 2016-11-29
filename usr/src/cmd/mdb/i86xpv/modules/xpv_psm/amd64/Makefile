@@ -43,6 +43,7 @@ CPPFLAGS += -I../../../../i86pc/modules/common
 CPPFLAGS += -I$(SRC)/uts/common
 CPPFLAGS += -I$(SRC)/uts/i86xpv
 CPPFLAGS += -I$(SRC)/uts/i86pc
+CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/include
 CPPFLAGS += -I$(SRC)/uts/intel
 
 CERRWARN += -Wno-unused-function

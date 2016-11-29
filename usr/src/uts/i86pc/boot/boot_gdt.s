@@ -46,8 +46,8 @@ struct {
 	.align 16
 	.data
 	/*
-	 * This must remain in sync with the entries in intel/sys/gdt.h; in
-	 * particular kmdb uses B64CODE_SEL or B32CODE_SEL in perpetuity for
+	 * This must remain in sync with the entries in x86/include/sys/gdt.h;
+	 * in particular kmdb uses B64CODE_SEL or B32CODE_SEL in perpetuity for
 	 * its IDT entries (they're copied to the kernel's GDT in init_idt()).
 	 */
 

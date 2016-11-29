@@ -108,7 +108,7 @@ smb_inet_ntop(smb_inaddr_t *addr, char *buf, int size)
 	int sz = size;
 
 	/*
-	 * Until uts/common/inet/ip/inet_ntop.c is fixed so it
+	 * Until kernel/net/ip/inet_ntop.c is fixed so it
 	 * no longer uses leading zeros printing IPv4 addresses,
 	 * we need to handle IPv4 ourselves.  If we leave the
 	 * leading zeros, Windows clients get errors trying to

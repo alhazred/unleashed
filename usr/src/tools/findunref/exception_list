@@ -83,8 +83,7 @@
 ./usr/src/cmd/sqlite
 ./usr/src/lib/libsqlite
 ./usr/src/cmd/tcpd
-./usr/src/grub
-./usr/src/uts/intel/sys/acpi
+./kernel/arch/x86/include/sys/acpi
 
 #
 # Ignore ksh93/ast-related files that are only used to resync our build

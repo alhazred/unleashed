@@ -41,6 +41,7 @@ all:	$(PROG)
 _msg:	$(POFILE)
 
 CPPFLAGS	+= -I$(SRC)/uts/common
+CPPFLAGS	+= -I$(CODEMGR_WS)/include
 
 LDLIBS	+=	-ldlpi
 

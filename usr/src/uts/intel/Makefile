@@ -118,7 +118,6 @@ $(XMODS):	FRC
 	fi
 
 install_h check:	FRC
-	@cd sys; pwd; $(MAKE) $(TARGET)
 	@cd asm; pwd; $(MAKE) $(TARGET)
 	@cd ia32/sys; pwd; $(MAKE) $(TARGET)
 	@cd amd64/sys; pwd; $(MAKE) $(TARGET)

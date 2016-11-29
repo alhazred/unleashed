@@ -72,7 +72,7 @@
 #include <sys/sunddi.h>
 #include <sys/filio.h>
 #include <sys/sid.h>
-#include "fs/fs_subr.h"
+#include "sys/fs_subr.h"
 #include <sys/zfs_ctldir.h>
 #include <sys/zfs_fuid.h>
 #include <sys/zfs_sa.h>

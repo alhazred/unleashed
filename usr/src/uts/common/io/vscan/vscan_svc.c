@@ -33,7 +33,7 @@
 #include <sys/modctl.h>
 #include <sys/cmn_err.h>
 #include <sys/vnode.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/types.h>
 #include <sys/file.h>
 #include <sys/disp.h>

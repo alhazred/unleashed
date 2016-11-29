@@ -21,7 +21,7 @@ SRCS = $(OBJECTS:.o=.c)
 
 CERRWARN += -Wno-unused-function
 
-CPPFLAGS += -I$(SRC)/uts/intel/sys/acpi -DACPI_APPLICATION
+CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/include/sys/acpi -DACPI_APPLICATION
 
 LDLIBS += -lc
 

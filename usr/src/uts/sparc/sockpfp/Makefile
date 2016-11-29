@@ -52,7 +52,7 @@ ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
 LDFLAGS += -dy -Nfs/sockfs -Nmisc/dls -Nmisc/mac -Ndrv/bpf -Ndrv/ip
-INC_PATH += -I$(UTSBASE)/common/inet/sockmods -I$(UTSBASE)/common/io/bpf
+INC_PATH += -I$(CODEMGR_WS)/kernel/net/sockmods -I$(UTSBASE)/common/io/bpf
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

@@ -71,7 +71,7 @@
 
 #include <sys/sysi86.h>
 
-#include <fs/proc/prdata.h>
+#include <sys/proc/prdata.h>
 
 int	prnwatch = 10000;	/* maximum number of watched areas */
 

@@ -20,8 +20,6 @@ CDDL HEADER END
 Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 Use is subject to license terms.
 
-ident	"%Z%%M%	%I%	%E% SMI"
-
 
 **  PLEASE NOTE:
 **
@@ -656,11 +654,10 @@ Persistent State
   root is mounted read/write:
 
      svc:/system/filesystem/root:default ->
-        svc:/system/metainit:default ->
-           svc:/system/identity:node ->
-              svc:/network/physical:default
-           svc:/network/iscsi_initiator:default ->
-              svc:/network/physical:default
+        svc:/system/identity:node ->
+           svc:/network/physical:default
+        svc:/network/iscsi_initiator:default ->
+           svc:/network/physical:default
 
   and, of course, well before either /var or /usr is mounted.  This
   means that any persistent state must be kept in the root file
@@ -706,7 +703,7 @@ Persistent State
   This mechanism depends on the interface name, and thus will need to
   be revisited when Clearview vanity naming and NWAM are available.
 
-  Currently, the boot system (GRUB, OBP, the miniroot) does not
+  Currently, the boot system (loader, OBP, the miniroot) does not
   support installing over IPv6.  This could change in the future, so
   one of the goals of the above stability plan is to support that
   event.

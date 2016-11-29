@@ -42,7 +42,7 @@ UTSBASE = ../..
 MODULE          = ipnet
 OBJECTS         = $(IPNET_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE      = $(ROOT_DRV_DIR)/$(MODULE)
-CONF_SRCDIR     = $(UTSBASE)/common/inet/ipnet
+CONF_SRCDIR     = $(CODEMGR_WS)/kernel/net/ipnet
 
 #
 #   Include common rules.

@@ -40,6 +40,7 @@ MODSRCS_DIR = ../../common
 CPPFLAGS += -DMP -D_MACHDEP
 CPPFLAGS += -I../../common
 CPPFLAGS += -I../../../../common
+CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/include
 CPPFLAGS += -I$(SRC)/uts/intel
 CPPFLAGS += -I$(SRC)/uts/i86pc
 

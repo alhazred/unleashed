@@ -41,7 +41,7 @@
 #include <sys/vnode.h>
 #include <sys/pathname.h>
 #include <sys/bootconf.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <rpc/types.h>
 #include <nfs/nfs.h>
 #include <nfs/nfs4.h>

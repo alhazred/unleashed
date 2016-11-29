@@ -229,8 +229,8 @@ pics/smb_status2winerr.o:  $(SRC)/common/smbclnt/smb_status2winerr.c
 	$(COMPILE.c) -o $@ $(SRC)/common/smbclnt/smb_status2winerr.c
 	$(POST_PROCESS_O)
 
-pics/pathname.o:	   $(SRC)/uts/common/fs/pathname.c
-	$(COMPILE.c) -o $@ $(SRC)/uts/common/fs/pathname.c
+pics/pathname.o:	   $(CODEMGR_WS)/kernel/fs/pathname.c
+	$(COMPILE.c) -o $@ $(CODEMGR_WS)/kernel/fs/pathname.c
 	$(POST_PROCESS_O)
 
 pics/refstr.o:		   $(CODEMGR_WS)/kernel/os/refstr.c

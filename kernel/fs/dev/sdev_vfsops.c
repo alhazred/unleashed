@@ -51,7 +51,7 @@
 #include <sys/debug.h>
 #include <sys/modctl.h>
 #include <sys/mkdev.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/fs/sdev_impl.h>
 #include <sys/fs/snode.h>
 #include <sys/fs/dv_node.h>

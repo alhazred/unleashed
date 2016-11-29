@@ -77,7 +77,7 @@
 #include <vm/seg_kmem.h>
 #include <vm/vm_dep.h>
 #include <sys/vm_usage.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/ddi.h>
 #include <sys/modctl.h>
 

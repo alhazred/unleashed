@@ -61,7 +61,7 @@
 #include <sys/sysmacros.h>
 #include <sys/errno.h>
 #include <sys/debug.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /*
  * This macro expects a name that ends in '.' and returns TRUE if the

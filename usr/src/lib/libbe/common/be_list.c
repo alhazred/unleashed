@@ -1009,7 +1009,6 @@ be_get_node_data(
 	nvlist_t *zone_propval = NULL;
 	char *prop_str = NULL;
 	char *zone_prop_str = NULL;
-	char *grub_default_bootfs = NULL;
 	zpool_handle_t *zphp = NULL;
 	int err = 0;
 
@@ -1059,21 +1058,13 @@ be_get_node_data(
 
 		(void) zpool_get_prop(zphp, ZPOOL_PROP_BOOTFS, prop_buf,
 		    ZFS_MAXPROPLEN, NULL, B_FALSE);
-		if (be_has_grub() && (be_default_grub_bootfs(rpool,
-		    &grub_default_bootfs) == BE_SUCCESS) &&
-		    grub_default_bootfs != NULL)
-			if (strcmp(grub_default_bootfs, be_ds) == 0)
-				be_node->be_active_on_boot = B_TRUE;
-			else
-				be_node->be_active_on_boot = B_FALSE;
-		else if (prop_buf != NULL && strcmp(prop_buf, be_ds) == 0)
+		if (strcmp(prop_buf, be_ds) == 0)
 			be_node->be_active_on_boot = B_TRUE;
 		else
 			be_node->be_active_on_boot = B_FALSE;
 
 		be_node->be_global_active = B_TRUE;
 
-		free(grub_default_bootfs);
 		zpool_close(zphp);
 	} else {
 		if (be_zone_compare_uuids(be_node->be_root_ds))

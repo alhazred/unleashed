@@ -34,7 +34,6 @@ COMMON_SUBDIRS=		\
 	installboot
 
 i386_SUBDIRS=		\
-	installgrub	\
 	mbr		\
 	symdef
 
@@ -45,8 +44,7 @@ COMMON_MSGSUBDIRS=	\
 	fiocompress	\
 	installboot
 
-i386_MSGSUBDIRS=	\
-	installgrub
+i386_MSGSUBDIRS=
 
 sparc_MSGSUBDIRS=
 

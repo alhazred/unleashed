@@ -41,7 +41,7 @@ MODULE		= udp
 OBJECTS		= $(UDP_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 ROOTLINK	= $(ROOT_STRMOD_DIR)/$(MODULE) $(ROOT_SOCK_DIR)/$(MODULE)
-CONF_SRCDIR	= $(UTSBASE)/common/inet/udp
+CONF_SRCDIR	= $(CODEMGR_WS)/kernel/net/udp
 
 #
 # Extra for $(MODULE).check target

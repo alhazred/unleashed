@@ -52,7 +52,7 @@
 #include <sys/policy.h>
 #include <sys/disp.h>
 #include <sys/door.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/mount.h>
 #include <sys/fs/snode.h>
 #include <sys/fs/dv_node.h>

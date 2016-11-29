@@ -75,7 +75,7 @@
 #include <vm/page.h>
 #include <sys/vmparam.h>
 #include <sys/swap.h>
-#include <fs/proc/prdata.h>
+#include <sys/proc/prdata.h>
 #include <sys/task.h>
 #include <sys/project.h>
 #include <sys/contract_impl.h>

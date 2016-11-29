@@ -37,12 +37,12 @@ find_files "s.*.h"	\
 	usr/src/uts/sparc/v7/sys	\
 	usr/src/uts/sparc/v9/sys	\
 	usr/src/uts/sun/sys		\
-	usr/src/uts/intel/sys		\
+	kernel/arch/x86/include/sys	\
 	usr/src/uts/intel/ia32/sys	\
 	usr/src/uts/common/rpc		\
 	usr/src/uts/common/netinet	\
-	usr/src/uts/common/inet		\
-	usr/src/uts/common/net		\
+	kernel/net		\
+	include/net		\
 	include/vm		\
 	usr/src/uts/common/gssapi
 

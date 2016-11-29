@@ -44,7 +44,7 @@
 #include <rpc/types.h>
 #include <rpc/auth.h>
 #include <rpc/clnt.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/fs/autofs.h>
 #include <sys/modctl.h>
 #include <sys/mntent.h>

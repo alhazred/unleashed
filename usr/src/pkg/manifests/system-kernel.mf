@@ -291,12 +291,10 @@ $(i386_ONLY)driver name=vgatext \
     alias=pnpPNP,900
 driver name=vnic clone_perms="vnic 0666 root sys" perms="* 0666 root sys"
 driver name=wc perms="* 0600 root sys"
-$(i386_ONLY)file path=boot/solaris/bin/create_diskmap group=sys mode=0555
 file path=boot/solaris/bin/create_ramdisk group=sys mode=0555
 file path=boot/solaris/bin/extract_boot_filelist group=sys mode=0555
 $(i386_ONLY)file path=boot/solaris/bin/mbr group=sys mode=0555
 $(i386_ONLY)file path=boot/solaris/bin/symdef group=sys mode=0555
-$(i386_ONLY)file path=boot/solaris/bin/update_grub group=sys mode=0555
 file path=boot/solaris/filelist.ramdisk group=sys
 file path=boot/solaris/filelist.safe group=sys
 file path=etc/crypto/kcf.conf group=sys preserve=true
@@ -900,6 +898,10 @@ license include/sys/THIRDPARTYLICENSE.icu \
     license=include/sys/THIRDPARTYLICENSE.icu
 license include/sys/THIRDPARTYLICENSE.unicode \
     license=include/sys/THIRDPARTYLICENSE.unicode
+license kernel/net/ip/THIRDPARTYLICENSE.rts \
+    license=kernel/net/ip/THIRDPARTYLICENSE.rts
+license kernel/net/tcp/THIRDPARTYLICENSE \
+    license=kernel/net/tcp/THIRDPARTYLICENSE
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/mdb/common/libstand/THIRDPARTYLICENSE \
     license=usr/src/cmd/mdb/common/libstand/THIRDPARTYLICENSE
@@ -916,10 +918,6 @@ $(i386_ONLY)license usr/src/common/crypto/md5/amd64/THIRDPARTYLICENSE \
     license=usr/src/common/crypto/md5/amd64/THIRDPARTYLICENSE
 license usr/src/common/mpi/THIRDPARTYLICENSE \
     license=usr/src/common/mpi/THIRDPARTYLICENSE
-license usr/src/uts/common/inet/ip/THIRDPARTYLICENSE.rts \
-    license=usr/src/uts/common/inet/ip/THIRDPARTYLICENSE.rts
-license usr/src/uts/common/inet/tcp/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/inet/tcp/THIRDPARTYLICENSE
 license usr/src/uts/common/io/THIRDPARTYLICENSE.etheraddr \
     license=usr/src/uts/common/io/THIRDPARTYLICENSE.etheraddr
 $(i386_ONLY)license usr/src/uts/intel/io/acpica/THIRDPARTYLICENSE \

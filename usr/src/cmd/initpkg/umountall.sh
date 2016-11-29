@@ -265,7 +265,6 @@ doumounts () {
 		/system/contract	| \
 		/system/object		| \
 		/tmp			| \
-		/tmp/.libgrubmgmt*	| \
 		/usr			| \
 		/var			| \
 		/var/adm		| \

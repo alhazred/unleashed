@@ -1082,8 +1082,8 @@ ASFLAGS=	$(AS_PICFLAGS) -D_ASM $(CPPFLAGS) \
 # Delete this to compile libc using only the new *at() system call traps
 CPPFLAGS += -D_RETAIN_OLD_SYSCALLS
 
-# proc64_id.o is built with defines in $(SRC)/uts/intel/sys/x86_archext.h
-pics/proc64_id.o	:= CFLAGS64 += -I$(SRC)/uts/intel
+# proc64_id.o is built with defines in $(CODEMGR_WS)/kernel/arch/x86/include/sys/x86_archext.h
+pics/proc64_id.o	:= CFLAGS64 += -I$(CODEMGR_WS)/kernel/arch/x86/include
 
 # Inform the run-time linker about libc specialized initialization
 RTLDINFO =	-z rtldinfo=tls_rtldinfo

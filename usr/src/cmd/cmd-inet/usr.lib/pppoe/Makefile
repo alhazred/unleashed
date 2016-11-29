@@ -35,6 +35,7 @@ CLIENT_OBJS=	pppoec.o common.o logging.o
 DAEMON_OBJS=	pppoed.o options.o logging.o common.o
 
 CPPFLAGS +=	-I$(SRC)/uts/common
+CPPFLAGS +=	-I$(CODEMGR_WS)/include
 
 .KEEP_STATE:
 

@@ -74,7 +74,7 @@
 #include <sys/sysi86.h>
 #endif
 
-#include <fs/proc/prdata.h>
+#include <sys/proc/prdata.h>
 
 static	int	isprwrioctl(int);
 static	ulong_t	prmaprunflags(long);

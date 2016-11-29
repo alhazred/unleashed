@@ -69,7 +69,7 @@
 #include <sys/vm.h>
 #include <sys/vtrace.h>
 #include <sys/policy.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 static int	tmp_getapage(struct vnode *, u_offset_t, size_t, uint_t *,
 	page_t **, size_t, struct seg *, caddr_t, enum seg_rw, struct cred *);

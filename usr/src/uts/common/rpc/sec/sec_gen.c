@@ -25,10 +25,8 @@
  */
 
 /*
- *  From  common/syscall/systeminfo.c
+ *  From  kernel/syscall/systeminfo.c
  */
-
-#ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <sys/types.h>
 #include <sys/systeminfo.h>	/* for SI_KERB stuff */

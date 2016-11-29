@@ -666,7 +666,7 @@ strisprint(const char *s)
 
 /*
  * This is a near direct copy of the inet_ntop() code in
- * uts/common/inet/ip/ipv6.c, duplicated here for kmdb's sake.
+ * kernel/net/ip/ipv6.c, duplicated here for kmdb's sake.
  */
 static void
 convert2ascii(char *buf, const in6_addr_t *addr)

@@ -94,7 +94,7 @@
 #include <sys/fs/hsfs_susp.h>
 #include <sys/fs/hsfs_rrip.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 /* # of contiguous requests to detect sequential access pattern */
 static int seq_contig_requests = 2;

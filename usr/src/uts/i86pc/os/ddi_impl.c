@@ -1808,7 +1808,7 @@ impl_check_cpu(dev_info_t *devi)
 }
 
 /*
- * Referenced in common/cpr_driver.c: Power off machine.
+ * Referenced in kernel/cpr/cpr_driver.c: Power off machine.
  * Don't know how to power off i86pc.
  */
 void

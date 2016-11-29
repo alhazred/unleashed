@@ -70,10 +70,6 @@
 #define	DEV	"/dev"
 #define	DEVICES	"/devices"
 
-/* for boot device identification on x86 */
-#define	CREATE_DISKMAP		"/boot/solaris/bin/create_diskmap"
-#define	GRUBDISK_MAP		"/var/run/solaris_grubdisk.map"
-
 /*
  * internal structure declarations
  */
@@ -769,54 +765,14 @@ get_boot_dev_var(struct openpromio *opp)
 }
 
 #ifndef __sparc
-static FILE *
-open_diskmap(void)
-{
-	FILE *fp;
-	char cmd[PATH_MAX];
-
-	/* make sure we have a map file */
-	fp = fopen(GRUBDISK_MAP, "r");
-	if (fp == NULL) {
-		(void) snprintf(cmd, sizeof (cmd),
-		    "%s > /dev/null", CREATE_DISKMAP);
-		(void) system(cmd);
-		fp = fopen(GRUBDISK_MAP, "r");
-	}
-	return (fp);
-}
-
+/*
+ * Just return error from it, at least for now.
+ * This is part of private interface, no consumers on gate.
+ */
 static int
 find_x86_boot_device(struct openpromio *opp)
 {
-	int ret = DEVFS_ERR;
-	char *cp, line[MAXVALSIZE + 6];
-	FILE *file;
-
-	file = open_diskmap();
-	if (file == NULL)
-		return (DEVFS_ERR);
-
-	while (fgets(line, MAXVALSIZE + 6, file)) {
-		if (strncmp(line, "0 ", 2) != 0)
-			continue;
-		/* drop new-line */
-		line[strlen(line) - 1] = '\0';
-		/*
-		 * an x86 BIOS only boots a disk, not a partition
-		 * or a slice, so hard-code :q (p0)
-		 */
-		cp = strchr(line + 2, ' ');
-		if (cp == NULL)
-			break;
-		(void) snprintf(opp->oprom_array, MAXVALSIZE,
-		    "%s:q", cp + 1);
-		opp->oprom_size = MAXVALSIZE;
-		ret = 0;
-		break;
-	}
-	(void) fclose(file);
-	return (ret);
+	return (DEVFS_ERR);
 }
 #endif /* ndef __sparc */
 

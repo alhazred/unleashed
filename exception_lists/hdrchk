@@ -57,7 +57,6 @@ usr/src/cmd/mandoc/roff.h
 usr/src/cmd/mandoc/tag.h
 usr/src/cmd/mandoc/term.h
 usr/src/common/ficl/ficltokens.h
-usr/src/grub/grub-0.97/stage2/shared.h
 usr/src/lib/libdwarf/common/cmplrs/dwarf_addr_finder.h
 usr/src/lib/libdwarf/common/config.h
 usr/src/lib/libdwarf/common/dwarf_abbrev.h

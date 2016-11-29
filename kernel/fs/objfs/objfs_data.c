@@ -25,7 +25,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 #include <sys/elf.h>
 #include <sys/errno.h>

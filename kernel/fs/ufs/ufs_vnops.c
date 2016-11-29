@@ -95,7 +95,7 @@
 #include <vm/rm.h>
 #include <sys/swap.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 #include <sys/fs/decomp.h>
 

@@ -48,7 +48,7 @@
 #include <sys/cmn_err.h>
 #include <sys/debug.h>
 #include <sys/modctl.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/fs/dv_node.h>
 #include <sys/fs/snode.h>
 #include <sys/sunndi.h>

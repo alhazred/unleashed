@@ -37,7 +37,7 @@
 #include <sys/debug.h>
 #include <sys/systm.h>
 #include <sys/dirent.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/fs/autofs.h>
 #include <sys/callb.h>
 #include <sys/sysmacros.h>

@@ -51,18 +51,8 @@ usage() {
 # default platform is what we're running on
 PLATFORM=`uname -m`
 
-#
-# set path, but inherit /tmp/bfubin if owned by
-# same uid executing this process, which must be root.
-#
-if [ "`echo $PATH | cut -f 1 -d :`" = /tmp/bfubin ] && \
-    [ -O /tmp/bfubin ] ; then
-	export PATH=/tmp/bfubin
-	export GZIP_CMD=/tmp/bfubin/gzip
-else
-	export PATH=/usr/sbin:/usr/bin:/sbin
-	export GZIP_CMD=/usr/bin/gzip
-fi
+export PATH=/usr/sbin:/usr/bin:/sbin
+export GZIP_CMD=/usr/bin/gzip
 
 EXTRACT_FILELIST="/boot/solaris/bin/extract_boot_filelist"
 
@@ -92,17 +82,8 @@ do
 	shift
 done
 
-if [ -x /usr/bin/mkisofs -o -x /tmp/bfubin/mkisofs ] ; then
+if [ -x /usr/bin/mkisofs ] ; then
 	format=isofs
-fi
-
-#
-# mkisofs on s8 doesn't support functionality used by GRUB boot.
-# Use ufs format for boot archive instead.
-#
-release=`uname -r`
-if [ "$release" = "5.8" ]; then
-	format=ufs
 fi
 
 shift `expr $OPTIND - 1`

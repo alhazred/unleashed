@@ -32,7 +32,7 @@
 #include <sys/vnode.h>
 #include <sys/vfs_opreg.h>
 #include <sys/kmem.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/proc.h>
 #include <sys/kstat.h>
 #include <sys/port_impl.h>

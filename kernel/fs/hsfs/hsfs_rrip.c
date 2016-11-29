@@ -63,7 +63,7 @@
 #include <sys/swap.h>
 #include <sys/errno.h>
 #include <sys/debug.h>
-#include "fs/fs_subr.h"
+#include "sys/fs_subr.h"
 #include <sys/cmn_err.h>
 
 static void form_time(int, uchar_t *, struct timeval *);

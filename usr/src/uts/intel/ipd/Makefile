@@ -19,7 +19,7 @@ UTSBASE	= ../..
 MODULE		= ipd
 OBJECTS		= $(IPD_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
-CONF_SRCDIR	= $(UTSBASE)/common/inet/ipd
+CONF_SRCDIR	= $(CODEMGR_WS)/kernel/net/ipd
 
 include $(UTSBASE)/intel/Makefile.intel
 

@@ -289,21 +289,6 @@ usr/include/sys/net80211_ht.h
 usr/include/sys/net80211_proto.h
 usr/include/sys/net80211.h
 #
-usr/include/net/wpa.h
-#
-# PPPoE files not delivered to customers.
-#
-usr/include/net/pppoe.h
-usr/include/net/sppptun.h
-#
-# Simnet
-#
-usr/include/net/simnet.h
-#
-# Bridging internal data structures
-#
-usr/include/net/bridge_impl.h
-#
 # Private ucred kernel header
 #
 usr/include/sys/ucred.h

@@ -34,7 +34,7 @@ include ../../Makefile.lib
 
 LIB_SRCS=	$(LIB_OBJS:%.o=$(SRCDIR)/%.c)
 LIBS =		$(DYNLIB)
-INCS +=		-I../common -I$(SRC)/uts/common
+INCS +=		-I../common -I$(CODEMGR_WS)/include
 LDLIBS +=	-lc
 
 SRCDIR =	../common

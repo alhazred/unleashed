@@ -86,7 +86,7 @@
 #include <vm/seg_dev.h>
 #include <vm/seg_vn.h>
 
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 
 #include <sys/esunddi.h>
 #include <sys/autoconf.h>

@@ -2361,7 +2361,6 @@ static const char *timeout_ovr_svcs[] = {
 	"svc:/network/loopback:default",
 	"svc:/network/physical:default",
 	"svc:/system/device/local:default",
-	"svc:/system/metainit:default",
 	"svc:/system/filesystem/usr:default",
 	"svc:/system/filesystem/minimal:default",
 	"svc:/system/filesystem/local:default",

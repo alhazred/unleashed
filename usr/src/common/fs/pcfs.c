@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Basic file system reading code for standalone I/O system.
  * Simulates a primitive UNIX I/O system (read(), write(), open(), etc).
@@ -34,7 +32,7 @@
 
 /*
  * WARNING:
- * This is currently used by installgrub for creating bootable floppy.
+ * This was used by installgrub for creating bootable floppy.
  * The special part is diskread_callback/fileread_callback for gathering
  * fileblock list.
  */

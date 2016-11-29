@@ -204,7 +204,6 @@ _MANFILES=	6to4relay.1m		\
 		inityp2l.1m		\
 		installboot.1m		\
 		installf.1m		\
-		installgrub.1m		\
 		intrd.1m		\
 		intrstat.1m		\
 		iostat.1m		\

@@ -58,7 +58,7 @@
 #include <sys/strsubr.h>
 #include <sys/cmn_err.h>
 #include <sys/modctl.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/policy.h>
 #include <sys/vmem.h>
 #include <sys/fs/sdev_impl.h>

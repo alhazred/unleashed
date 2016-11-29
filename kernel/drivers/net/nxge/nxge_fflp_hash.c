@@ -31,7 +31,7 @@ static void nxge_crc32c_word(uint32_t *crcptr, const uint32_t *buf, int len);
 
 /*
  * The crc32c algorithms are taken from sctp_crc32 implementation
- * common/inet/sctp_crc32.{c,h}
+ * kernel/net/sctp_crc32.{c,h}
  *
  */
 

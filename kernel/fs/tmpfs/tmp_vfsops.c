@@ -43,7 +43,7 @@
 #include <sys/debug.h>
 #include <sys/systm.h>
 #include <sys/mntent.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <vm/page.h>
 #include <vm/anon.h>
 #include <sys/model.h>

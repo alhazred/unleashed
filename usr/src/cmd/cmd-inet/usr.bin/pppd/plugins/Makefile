@@ -55,7 +55,7 @@ XXXLDLIBS =
 $(PASSPROMPT):=	XXXLDLIBS = -lc
 LDLIBS +=	$(XXXLDLIBS)
 
-CPPFLAGS +=	-I.. -I$(SRC)/uts/common
+CPPFLAGS +=	-I.. -I$(SRC)/uts/common -I$(CODEMGR_WS)/include
 # XX64 -- this should not be needed -- fix me
 DYNFLAGS +=	-nostdlib
 

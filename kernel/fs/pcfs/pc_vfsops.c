@@ -55,7 +55,7 @@
 #include <sys/fs/pc_fs.h>
 #include <sys/fs/pc_dir.h>
 #include <sys/fs/pc_node.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <sys/modctl.h>
 #include <sys/dkio.h>
 #include <sys/open.h>

@@ -63,13 +63,13 @@
 #include <sys/contract_impl.h>
 #include <sys/ctfs.h>
 #include <sys/avl.h>
-#include <fs/fs_subr.h>
+#include <sys/fs_subr.h>
 #include <vm/rm.h>
 #include <vm/as.h>
 #include <vm/seg.h>
 #include <vm/seg_vn.h>
 #include <vm/hat.h>
-#include <fs/proc/prdata.h>
+#include <sys/proc/prdata.h>
 #if defined(__sparc)
 #include <sys/regset.h>
 #endif
