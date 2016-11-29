@@ -48,12 +48,18 @@ BUILD += 32
 BUILD += 64
 .endif
 
-all:
-.for bits in ${BUILD}
-	@mkdir -p obj${bits}
+all: ${BUILD:%=all-%}
+
+# we don't use a for loop to allow for more parallelism
+all-32:
+	@mkdir -p obj32
 	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk all \
-		BITS=${bits} REPOROOT=${REPOROOT}
-.endfor
+		BITS=32 REPOROOT=${REPOROOT}
+
+all-64:
+	@mkdir -p obj64
+	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk all \
+		BITS=64 REPOROOT=${REPOROOT}
 
 clean cleandir:
 	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk clean \
@@ -68,6 +74,6 @@ install:
 		BITS=${bits} REPOROOT=${REPOROOT}
 .endfor
 
-.PHONY: all clean cleandir install
+.PHONY: all all-32 all-64 clean cleandir install
 
 .endif
