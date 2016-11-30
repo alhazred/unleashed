@@ -14,19 +14,18 @@ SRCS=		ixgbe_buf.c \
 INCS=		.
 
 # Intel generic code
-SRCS+=		ixgbe_82598.c \
-		ixgbe_82599.c \
-		ixgbe_api.c \
-		ixgbe_common.c \
-		ixgbe_dcb.c \
-		ixgbe_dcb_82598.c \
-		ixgbe_dcb_82599.c \
-		ixgbe_mbx.c \
-		ixgbe_phy.c \
-		ixgbe_vf.c \
-		ixgbe_x540.c \
-		ixgbe_x550.c
-SRCS_DIRS+=	core
+SRCS+=		core/ixgbe_82598.c \
+		core/ixgbe_82599.c \
+		core/ixgbe_api.c \
+		core/ixgbe_common.c \
+		core/ixgbe_dcb.c \
+		core/ixgbe_dcb_82598.c \
+		core/ixgbe_dcb_82599.c \
+		core/ixgbe_mbx.c \
+		core/ixgbe_phy.c \
+		core/ixgbe_vf.c \
+		core/ixgbe_x540.c \
+		core/ixgbe_x550.c
 INCS+=		core
 
 CERRWARN =  -Wno-switch

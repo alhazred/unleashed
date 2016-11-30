@@ -3,18 +3,47 @@ MODULE_TYPE=	drv
 MODULE_DEPS=	drv/ip \
 		misc/mac
 MODULE_CONF=	bnxe.conf
-SRCS=		57710_init_values.c \
-		57711_init_values.c \
-		57712_init_values.c \
+SRCS=		577xx/common/bnxe_clc.c \
+		577xx/drivers/common/ecore/ecore_sp_verbs.c \
+		577xx/drivers/common/lm/device/bnxe_context.c \
+		577xx/drivers/common/lm/device/bnxe_hw_debug.c \
+		577xx/drivers/common/lm/device/lm_dcbx.c \
+		577xx/drivers/common/lm/device/lm_dcbx_mp.c \
+		577xx/drivers/common/lm/device/lm_devinfo.c \
+		577xx/drivers/common/lm/device/lm_dmae.c \
+		577xx/drivers/common/lm/device/lm_er.c \
+		577xx/drivers/common/lm/device/lm_hw_access.c \
+		577xx/drivers/common/lm/device/lm_hw_attn.c \
+		577xx/drivers/common/lm/device/lm_hw_init_reset.c \
+		577xx/drivers/common/lm/device/lm_main.c \
+		577xx/drivers/common/lm/device/lm_mcp.c \
+		577xx/drivers/common/lm/device/lm_niv.c \
+		577xx/drivers/common/lm/device/lm_nvram.c \
+		577xx/drivers/common/lm/device/lm_phy.c \
+		577xx/drivers/common/lm/device/lm_power.c \
+		577xx/drivers/common/lm/device/lm_recv.c \
+		577xx/drivers/common/lm/device/lm_resc.c \
+		577xx/drivers/common/lm/device/lm_sb.c \
+		577xx/drivers/common/lm/device/lm_send.c \
+		577xx/drivers/common/lm/device/lm_sp.c \
+		577xx/drivers/common/lm/device/lm_sp_req_mgr.c \
+		577xx/drivers/common/lm/device/lm_stats.c \
+		577xx/drivers/common/lm/device/lm_util.c \
+		577xx/drivers/common/lm/fw/57710_init_values.c \
+		577xx/drivers/common/lm/fw/57711_init_values.c \
+		577xx/drivers/common/lm/fw/57712_init_values.c \
+		577xx/drivers/common/lm/fw/bnxe_fw_funcs.c \
+		577xx/drivers/common/lm/l4/lm_l4fp.c \
+		577xx/drivers/common/lm/l4/lm_l4rx.c \
+		577xx/drivers/common/lm/l4/lm_l4sp.c \
+		577xx/drivers/common/lm/l4/lm_l4tx.c \
+		577xx/drivers/common/lm/l5/lm_l5.c \
+		577xx/drivers/common/lm/l5/lm_l5sp.c \
 		bnxe_cfg.c \
-		bnxe_clc.c \
-		bnxe_context.c \
 		bnxe_debug.c \
 		bnxe_fcoe.c \
-		bnxe_fw_funcs.c \
 		bnxe_gld.c \
 		bnxe_hw.c \
-		bnxe_hw_debug.c \
 		bnxe_intr.c \
 		bnxe_kstat.c \
 		bnxe_lock.c \
@@ -26,42 +55,7 @@ SRCS=		57710_init_values.c \
 		bnxe_rx.c \
 		bnxe_timer.c \
 		bnxe_tx.c \
-		bnxe_workq.c \
-		ecore_sp_verbs.c \
-		lm_dcbx.c \
-		lm_dcbx_mp.c \
-		lm_devinfo.c \
-		lm_dmae.c \
-		lm_er.c \
-		lm_hw_access.c \
-		lm_hw_attn.c \
-		lm_hw_init_reset.c \
-		lm_l4fp.c \
-		lm_l4rx.c \
-		lm_l4sp.c \
-		lm_l4tx.c \
-		lm_l5.c \
-		lm_l5sp.c \
-		lm_main.c \
-		lm_mcp.c \
-		lm_niv.c \
-		lm_nvram.c \
-		lm_phy.c \
-		lm_power.c \
-		lm_recv.c \
-		lm_resc.c \
-		lm_sb.c \
-		lm_send.c \
-		lm_sp.c \
-		lm_sp_req_mgr.c \
-		lm_stats.c \
-		lm_util.c
-SRCS_DIRS=	577xx/common \
-		577xx/drivers/common/ecore \
-		577xx/drivers/common/lm/device \
-		577xx/drivers/common/lm/fw \
-		577xx/drivers/common/lm/l4 \
-		577xx/drivers/common/lm/l5
+		bnxe_workq.c
 INCS=		577xx/include \
 		577xx/drivers/common/ecore \
 		577xx/drivers/common/include \

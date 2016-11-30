@@ -24,47 +24,46 @@ INCS=		.
 DEFS=		-D_USE_MTU_UPDATE
 
 # Intel generic code
-SRCS+=		ef10_ev.c \
-		ef10_filter.c \
-		ef10_intr.c \
-		ef10_mac.c \
-		ef10_mcdi.c \
-		ef10_nic.c \
-		ef10_nvram.c \
-		ef10_phy.c \
-		ef10_rx.c \
-		ef10_tx.c \
-		ef10_vpd.c \
-		efx_bootcfg.c \
-		efx_crc32.c \
-		efx_ev.c \
-		efx_filter.c \
-		efx_hash.c \
-		efx_intr.c \
-		efx_lic.c \
-		efx_mac.c \
-		efx_mcdi.c \
-		efx_mon.c \
-		efx_nic.c \
-		efx_nvram.c \
-		efx_phy.c \
-		efx_port.c \
-		efx_rx.c \
-		efx_sram.c \
-		efx_tx.c \
-		efx_vpd.c \
-		efx_wol.c \
-		hunt_nic.c \
-		hunt_phy.c \
-		mcdi_mon.c \
-		siena_mac.c \
-		siena_mcdi.c \
-		siena_nic.c \
-		siena_nvram.c \
-		siena_phy.c \
-		siena_sram.c \
-		siena_vpd.c
-SRCS_DIRS+=	common
+SRCS+=		common/ef10_ev.c \
+		common/ef10_filter.c \
+		common/ef10_intr.c \
+		common/ef10_mac.c \
+		common/ef10_mcdi.c \
+		common/ef10_nic.c \
+		common/ef10_nvram.c \
+		common/ef10_phy.c \
+		common/ef10_rx.c \
+		common/ef10_tx.c \
+		common/ef10_vpd.c \
+		common/efx_bootcfg.c \
+		common/efx_crc32.c \
+		common/efx_ev.c \
+		common/efx_filter.c \
+		common/efx_hash.c \
+		common/efx_intr.c \
+		common/efx_lic.c \
+		common/efx_mac.c \
+		common/efx_mcdi.c \
+		common/efx_mon.c \
+		common/efx_nic.c \
+		common/efx_nvram.c \
+		common/efx_phy.c \
+		common/efx_port.c \
+		common/efx_rx.c \
+		common/efx_sram.c \
+		common/efx_tx.c \
+		common/efx_vpd.c \
+		common/efx_wol.c \
+		common/hunt_nic.c \
+		common/hunt_phy.c \
+		common/mcdi_mon.c \
+		common/siena_mac.c \
+		common/siena_mcdi.c \
+		common/siena_nic.c \
+		common/siena_nvram.c \
+		common/siena_phy.c \
+		common/siena_sram.c \
+		common/siena_vpd.c
 INCS+=		common
 
 CERRWARN =  -Wno-unused-variable

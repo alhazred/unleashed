@@ -29,18 +29,17 @@ SRCS=		nxge_classify.c \
 INCS=		../../../../include/sys/nxge
 DEFS=		-DSOLARIS
 
-SRCS+=		npi.c \
-		npi_espc.c \
-		npi_fflp.c \
-		npi_ipp.c \
-		npi_mac.c \
-		npi_rxdma.c \
-		npi_txc.c \
-		npi_txdma.c \
-		npi_vir.c \
-		npi_zcp.c
+SRCS+=		npi/npi.c \
+		npi/npi_espc.c \
+		npi/npi_fflp.c \
+		npi/npi_ipp.c \
+		npi/npi_mac.c \
+		npi/npi_rxdma.c \
+		npi/npi_txc.c \
+		npi/npi_txdma.c \
+		npi/npi_vir.c \
+		npi/npi_zcp.c
 INCS+=		npi
-SRCS_DIRS+=	npi
 
 CERRWARN =  -Wno-uninitialized
 CERRWARN += -Wno-parentheses
