@@ -24,7 +24,7 @@
  */
 
 #include	<stdio.h>
-#include	<demangle.h>
+#include	<cxxabi.h>
 #include	"_conv.h"
 #include	"demangle_msg.h"
 
@@ -35,11 +35,11 @@
  * like elfdump(1) and pvs(1)), ld(1) and ld.so.1(1).
  *
  * The C++ ABI-2 places no limits on symbol names, thus when demangling a name
- * it's possible the buffer won't be big enough (DEMANGLE_ESPACE) so here we
- * try to allocate bigger buffers.  However, we place a limit on this buffer
- * size for fear of a C++ error sending us into an infinit loop.
+ * it's possible the buffer won't be big enough (return -1) so here we try to
+ * allocate bigger buffers.  However, we place a limit on this buffer size for
+ * fear of a C++ error sending us into an infinit loop.
  *
- * NOTE. we create and use a common buffer for use by cplus_demangle(), thus
+ * NOTE. we create and use a common buffer for use by __cxa_demangle(), thus
  * each call to this routine will override the contents of any existing call.
  * Normally this is sufficient for typical error diagnostics referencing one
  * symbol.  For those diagnostics using more than one symbol name, all but the
@@ -62,7 +62,7 @@ conv_demangle_name(const char *name)
 	static char	_str[SYM_MAX], *str = _str;
 	static size_t	size = SYM_MAX;
 	static int	again = 1;
-	static int	(*fptr)() = 0;
+	static char *	(*fptr)(const char *, char *, size_t *, int *) = 0;
 	int		error;
 
 	if (str == 0)
@@ -70,25 +70,27 @@ conv_demangle_name(const char *name)
 
 	/*
 	 * If we haven't located the demangler yet try now (we do this rather
-	 * than maintain a static dependency on libdemangle as it's part of an
-	 * optional package).  Null the str element out to reject any other
-	 * callers until this operation is complete - under ld.so.1 we can get
-	 * into serious recursion without this.
+	 * than maintain a static dependency on libstdc++). Null the str
+	 * element out to reject any other callers until this operation is
+	 * complete - under ld.so.1 we can get into serious recursion without
+	 * this.
 	 */
 	if (fptr == 0) {
 		void	*hdl;
 
 		str = 0;
 		if (!(hdl = dlopen(MSG_ORIG(MSG_DEM_LIB), RTLD_LAZY)) ||
-		    !(fptr = (int (*)())dlsym(hdl, MSG_ORIG(MSG_DEM_SYM))))
+		    !(fptr = (char *(*)(const char *, char *, size_t *, int *))
+		    dlsym(hdl, MSG_ORIG(MSG_DEM_SYM))))
 			return (name);
 		str = _str;
 	}
 
-	if ((error = (*fptr)(name, str, size)) == 0)
+	fptr(name, str, &size, &error);
+	if (str)
 		return ((const char *)str);
 
-	while ((error == DEMANGLE_ESPACE) && again) {
+	while ((error == -1) && again) {
 		char	*_str;
 		size_t	_size = size;
 
@@ -98,7 +100,7 @@ conv_demangle_name(const char *name)
 		 * that we at least have the old buffer on failure.
 		 */
 		if (((_size += SYM_MAX) > (SYM_MAX * 4)) ||
-		    ((_str = malloc(_size)) == 0)) {
+		    ((_str = (char *)malloc(_size)) == 0)) {
 			again = 0;
 			break;
 		}
@@ -108,7 +110,8 @@ conv_demangle_name(const char *name)
 		str = _str;
 		size = _size;
 
-		if ((error = (*fptr)(name, str, size)) == 0)
+		fptr(name, str, &size, &error);
+		if (str)
 			return ((const char *)str);
 	}
 	return (name);
