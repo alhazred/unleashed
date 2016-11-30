@@ -33,14 +33,24 @@ include ../Makefile.cmd
 
 SED= sed
 DCFILE= $(PROG).dc
+OBJS= $(PROG).o getresponse.o
 
 XGETFLAGS += -a -x cfgadm.xcl
+CPPFLAGS += -I$(SRC)/common/util
 
 LDLIBS += -lcfgadm 
 
 .KEEP_STATE:
 
 all: $(PROG) 
+
+$(PROG): $(OBJS)
+	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
+	$(POST_PROCESS)
+
+%.o: $(SRC)/common/util/%.c
+	$(COMPILE.c) $<
+	$(POST_PROCESS_O)
 
 install: all $(ROOTUSRSBINPROG)
 	-$(RM) $(ROOTETCPROG)
