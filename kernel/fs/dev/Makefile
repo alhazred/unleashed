@@ -13,13 +13,13 @@ SRCS=		sdev_comm.c \
 		sdev_vnops.c \
 		sdev_vtops.c \
 		sdev_zvolops.c
-INCS=		../../../usr/src/uts/common/fs/zfs \
-		../../../usr/src/uts/common/io/bpf
+INCS=		${REPOROOT}/usr/src/uts/common/fs/zfs \
+		${REPOROOT}/usr/src/uts/common/io/bpf
 
 CERRWARN =  -Wno-unused-label
 CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-parentheses
 
-REPOROOT = ../../..
+REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

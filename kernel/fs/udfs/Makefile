@@ -14,5 +14,5 @@ CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-type-limits
 
-REPOROOT = ../../..
+REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

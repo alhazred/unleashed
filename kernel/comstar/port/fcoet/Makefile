@@ -7,5 +7,5 @@ SRCS=		fcoet.c \
 		fcoet_eth.c \
 		fcoet_fc.c
 
-REPOROOT = ../../../..
+REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

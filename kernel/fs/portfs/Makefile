@@ -8,5 +8,5 @@ SRCS=		port.c \
 CERRWARN =  -Wno-uninitialized
 CERRWARN += -Wno-parentheses
 
-REPOROOT = ../../..
+REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

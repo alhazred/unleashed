@@ -21,7 +21,7 @@ SRCS=		hpi.c \
 		hxge_txdma.c \
 		hxge_virtual.c \
 		hxge_vmac.c
-INCS=		.
+INCS=		${.CURDIR}
 DEFS=		-DSOLARIS
 
 CERRWARN =  -Wno-uninitialized
@@ -29,5 +29,5 @@ CERRWARN += -Wno-switch
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-unused-label
 
-REPOROOT = ../../../..
+REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

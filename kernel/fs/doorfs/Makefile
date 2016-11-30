@@ -7,5 +7,5 @@ SRCS=		door_sys.c \
 CERRWARN =  -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 
-REPOROOT = ../../..
+REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

@@ -23,8 +23,8 @@ SRCS=		ch.c \
 		com/vsc7321.c \
 		com/vsc7326.c \
 		com/xpak.c
-INCS=		. \
-		com
+INCS=		${.CURDIR} \
+		${.CURDIR}/com
 DEFS=		-DC99_NOT_SUPPORTED \
 		-DCONFIG_CHELSIO_T1_1G \
 		-DCONFIG_CHELSIO_T1_OFFLOAD \
@@ -39,5 +39,5 @@ CERRWARN =  -Wno-parentheses
 CERRWARN += -Wno-unused-function
 CERRWARN += -Wno-unused-variable
 
-REPOROOT = ../../../..
+REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

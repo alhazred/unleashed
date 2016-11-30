@@ -4,5 +4,5 @@ SRCS=		sysdc.c
 
 CERRWARN = -Wno-unused-variable
 
-REPOROOT = ../../..
+REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

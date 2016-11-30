@@ -56,20 +56,20 @@ SRCS=		577xx/common/bnxe_clc.c \
 		bnxe_timer.c \
 		bnxe_tx.c \
 		bnxe_workq.c
-INCS=		577xx/include \
-		577xx/drivers/common/ecore \
-		577xx/drivers/common/include \
-		577xx/drivers/common/include/l4 \
-		577xx/drivers/common/include/l5 \
-		577xx/drivers/common/lm/device \
-		577xx/drivers/common/lm/fw \
-		577xx/drivers/common/lm/include \
-		577xx/drivers/common/lm/l4 \
-		577xx/drivers/common/lm/l4/include \
-		577xx/drivers/common/lm/l5 \
-		577xx/drivers/common/lm/l5/include \
-		577xx/hsi/hw/include \
-		577xx/hsi/mcp
+INCS=		${.CURDIR}/577xx/include \
+		${.CURDIR}/577xx/drivers/common/ecore \
+		${.CURDIR}/577xx/drivers/common/include \
+		${.CURDIR}/577xx/drivers/common/include/l4 \
+		${.CURDIR}/577xx/drivers/common/include/l5 \
+		${.CURDIR}/577xx/drivers/common/lm/device \
+		${.CURDIR}/577xx/drivers/common/lm/fw \
+		${.CURDIR}/577xx/drivers/common/lm/include \
+		${.CURDIR}/577xx/drivers/common/lm/l4 \
+		${.CURDIR}/577xx/drivers/common/lm/l4/include \
+		${.CURDIR}/577xx/drivers/common/lm/l5 \
+		${.CURDIR}/577xx/drivers/common/lm/l5/include \
+		${.CURDIR}/577xx/hsi/hw/include \
+		${.CURDIR}/577xx/hsi/mcp
 DEFS=		-DLM_RXPKT_NON_CONTIGUOUS \
 		-DELINK_ENHANCEMENTS \
 		-DELINK_57711E_SUPPORT \
@@ -92,5 +92,5 @@ CERRWARN += -Wno-switch
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-parentheses
 
-REPOROOT = ../../../..
+REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

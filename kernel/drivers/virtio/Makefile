@@ -2,5 +2,5 @@ MODULE=		virtio
 MODULE_TYPE=	misc
 SRCS=		virtio.c
 
-REPOROOT = ../../..
+REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

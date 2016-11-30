@@ -5,10 +5,10 @@ MODULE_DEPS=	misc/mac \
 		drv/random \
 		drv/ip
 SRCS=		iwh.c
-INCS=		.
+INCS=		${.CURDIR}
 
 CERRWARN =  -Wno-unused-label
 CERRWARN += -Wno-uninitialized
 
-REPOROOT = ../../../../..
+REPOROOT = ${.CURDIR:H:H:H:H:H}
 .include <kmod.mk>

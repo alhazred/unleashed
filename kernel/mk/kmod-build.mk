@@ -101,14 +101,13 @@ KERNEL_CFLAGS_sparc =
 KERNEL_CFLAGS_sparcv7 =
 KERNEL_CFLAGS_sparcv9 =
 
-# need at extra .. to escape the obj{32,64} subdirs
 KERNEL_INCLUDES = \
-	-I${REPOROOT}/../usr/src/uts/common \
-	-I${REPOROOT}/../kernel/arch/${CONFIG_MACH}/include \
-	-I${REPOROOT}/../include
+	-I${REPOROOT}/usr/src/uts/common \
+	-I${REPOROOT}/kernel/arch/${CONFIG_MACH}/include \
+	-I${REPOROOT}/include
 
 KERNEL_INCLUDES_i386 = \
-	-I${REPOROOT}/../usr/src/uts/intel
+	-I${REPOROOT}/usr/src/uts/intel
 
 KERNEL_INCLUDES_sparc =
 
@@ -120,7 +119,7 @@ CFLAGS = \
 	$(KERNEL_INCLUDES) \
 	$(KERNEL_INCLUDES_$(CONFIG_MACH)) \
 	$(CERRWARN) \
-	$(INCS:%=-I../%) \
+	$(INCS:%=-I%) \
 	$(DEFS)
 
 KERNEL_LDFLAGS = \
@@ -153,7 +152,7 @@ OBJS =	$(SRCS:%.c=%.o) \
 	$(SRCS$(BITS):%.c=%.o)
 
 .if !empty(SRCS_DIRS)
-.PATH: ${SRCS_DIRS:%=../%}
+.PATH: ${SRCS_DIRS:%=%}
 .endif
 
 CC=/opt/gcc/4.4.4/bin/gcc

@@ -3,5 +3,5 @@ MODULE_TYPE=	drv
 MODULE_CONF=	ramdisk.conf
 SRCS=		ramdisk.c
 
-REPOROOT = ../../..
+REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

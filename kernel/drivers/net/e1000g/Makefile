@@ -10,7 +10,7 @@ SRCS=		e1000g_alloc.c \
 		e1000g_stat.c \
 		e1000g_tx.c \
 		e1000g_workarounds.c
-INCS=		.
+INCS=		${.CURDIR}
 
 CERRWARN =  -Wno-uninitialized
 CERRWARN += -Wno-parentheses
@@ -20,5 +20,5 @@ CERRWARN += -Wno-unused-variable
 
 .include <../e1000api/Makefile.common>
 
-REPOROOT = ../../../..
+REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

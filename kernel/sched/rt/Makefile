@@ -2,5 +2,5 @@ MODULE=		RT
 MODULE_TYPE=	sched
 SRCS=		rt.c
 
-REPOROOT = ../../..
+REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

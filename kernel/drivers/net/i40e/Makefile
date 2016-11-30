@@ -8,14 +8,14 @@ SRCS=		i40e_gld.c \
 		i40e_osdep.c \
 		i40e_stats.c \
 		i40e_transceiver.c
-INCS=		.
+INCS=		${.CURDIR}
 
 SRCS+=		core/i40e_adminq.c \
 		core/i40e_common.c \
 		core/i40e_hmc.c \
 		core/i40e_lan_hmc.c \
 		core/i40e_nvm.c
-INCS+=		core
+INCS+=		${.CURDIR}/core
 
-REPOROOT = ../../../..
+REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

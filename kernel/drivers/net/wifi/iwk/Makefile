@@ -5,7 +5,7 @@ MODULE_DEPS=	misc/mac \
 		drv/random \
 		drv/ip
 SRCS=		iwk2.c
-INCS=		.
+INCS=		${.CURDIR}
 DEFS=		-DIWL=4965
 
 CERRWARN =  -Wno-unused-label
@@ -14,5 +14,5 @@ CERRWARN += -Wno-unused-function
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-empty-body
 
-REPOROOT = ../../../../..
+REPOROOT = ${.CURDIR:H:H:H:H:H}
 .include <kmod.mk>

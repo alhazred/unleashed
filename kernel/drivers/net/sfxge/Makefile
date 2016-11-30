@@ -20,7 +20,7 @@ SRCS=		sfxge.c \
 		sfxge_tcp.c \
 		sfxge_tx.c \
 		sfxge_vpd.c
-INCS=		.
+INCS=		${.CURDIR}
 DEFS=		-D_USE_MTU_UPDATE
 
 # Intel generic code
@@ -64,10 +64,10 @@ SRCS+=		common/ef10_ev.c \
 		common/siena_phy.c \
 		common/siena_sram.c \
 		common/siena_vpd.c
-INCS+=		common
+INCS+=		${.CURDIR}/common
 
 CERRWARN =  -Wno-unused-variable
 CERRWARN += -Wno-unused-function
 
-REPOROOT = ../../../..
+REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

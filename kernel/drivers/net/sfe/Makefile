@@ -20,5 +20,5 @@ CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-unused-label
 
-REPOROOT = ../../../..
+REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

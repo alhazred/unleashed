@@ -6,9 +6,9 @@ MODULE_DEPS=	misc/mac \
 		drv/ip
 SRCS=		ipw2200.c \
 		ipw2200_hw.c
-INCS=		.
+INCS=		${.CURDIR}
 
 CERRWARN = -Wno-unused-variable
 
-REPOROOT = ../../../../..
+REPOROOT = ${.CURDIR:H:H:H:H:H}
 .include <kmod.mk>

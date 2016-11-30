@@ -11,7 +11,7 @@ SRCS=		igb_buf.c \
 		igb_rx.c \
 		igb_stat.c \
 		igb_tx.c
-INCS=		.
+INCS=		${.CURDIR}
 
 CERRWARN =  -Wno-uninitialized
 CERRWARN += -Wno-switch
@@ -19,5 +19,5 @@ CERRWARN += -Wno-unused-variable
 
 .include <../e1000api/Makefile.common>
 
-REPOROOT = ../../../..
+REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

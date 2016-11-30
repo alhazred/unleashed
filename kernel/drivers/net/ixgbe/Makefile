@@ -11,7 +11,7 @@ SRCS=		ixgbe_buf.c \
 		ixgbe_rx.c \
 		ixgbe_stat.c \
 		ixgbe_tx.c
-INCS=		.
+INCS=		${.CURDIR}
 
 # Intel generic code
 SRCS+=		core/ixgbe_82598.c \
@@ -26,12 +26,12 @@ SRCS+=		core/ixgbe_82598.c \
 		core/ixgbe_vf.c \
 		core/ixgbe_x540.c \
 		core/ixgbe_x550.c
-INCS+=		core
+INCS+=		${.CURDIR}/core
 
 CERRWARN =  -Wno-switch
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-empty-body
 
-REPOROOT = ../../../..
+REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

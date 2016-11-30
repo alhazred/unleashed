@@ -14,5 +14,5 @@ SRCS+=		e1000_80003es2lan.c \
 		e1000_nvm.c \
 		e1000_phy.c \
 		e1000_vf.c
-SRCS_DIRS+=	../e1000api
-INCS+=		../e1000api
+SRCS_DIRS+=	${REPOROOT}/kernel/drivers/net/e1000api
+INCS+=		${REPOROOT}/kernel/drivers/net/e1000api
