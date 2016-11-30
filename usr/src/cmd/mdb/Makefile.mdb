@@ -46,7 +46,6 @@ SRCS += \
 	mdb_ctf.c \
 	mdb_ctf_open.c \
 	mdb_debug.c \
-	mdb_demangle.c \
 	mdb_disasm.c \
 	mdb_dump.c \
 	mdb_err.c \
@@ -107,7 +106,7 @@ CERRWARN += -Wno-unused-label
 CERRWARN += -Wno-unused-variable
 
 PROG = mdb
-OBJS = $(SRCS:%.c=%.o) mdb_lex.o mdb_grammar.o
+OBJS = $(SRCS:%.c=%.o) mdb_demangle.o mdb_lex.o mdb_grammar.o
 
 LINK = adb
 ROOTLINK = $(ROOTBIN)/$(LINK)
@@ -148,6 +147,13 @@ ffs.o ffs.ln := CPPFLAGS += -Dffs=mdb_ffs
 
 %.o: ../../../common/mdb/%.c
 	$(COMPILE.c) $<
+	$(CTFCONVERT_O)
+
+# cxxabi.h is easiest to get into header search path by just using c++ for the
+# one object that needs it (mdb_demangle.o), but we need to make sure to avoid
+# a libstdc++ link-time dependency
+%.o: ../../../common/mdb/%.cc
+	$(COMPILE.cc) -fno-rtti -fno-exceptions $<
 	$(CTFCONVERT_O)
 
 %.o: ../../mdb/%.c

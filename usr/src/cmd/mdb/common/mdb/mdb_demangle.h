@@ -42,7 +42,7 @@ extern "C" {
 typedef struct mdb_demangler {
 	char dm_pathname[MAXPATHLEN];	/* pathname of demangling library */
 	void *dm_handle;		/* rtld handle to demangling library */
-	int (*dm_convert)(const char *, char *, size_t);	/* demangler */
+	char *(*dm_convert)(const char *, char *, size_t *, int *);	/* demangler */
 	char *dm_buf;			/* demangling buffer */
 	size_t dm_len;			/* size of dm_buf in bytes */
 	char *dm_dem;			/* start of demangled string (in buf) */
