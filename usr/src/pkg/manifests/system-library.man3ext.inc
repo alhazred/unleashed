@@ -18,7 +18,6 @@ file path=usr/share/man/man3ext/NOTE.3ext
 file path=usr/share/man/man3ext/SUNW_C_GetMechSession.3ext
 file path=usr/share/man/man3ext/auto_ef.3ext
 file path=usr/share/man/man3ext/crypt.3ext
-file path=usr/share/man/man3ext/demangle.3ext
 file path=usr/share/man/man3ext/ecb_crypt.3ext
 file path=usr/share/man/man3ext/efi_alloc_and_init.3ext
 file path=usr/share/man/man3ext/ld_support.3ext
@@ -65,7 +64,6 @@ link path=usr/share/man/man3ext/auto_ef_get_encoding.3ext target=auto_ef.3ext
 link path=usr/share/man/man3ext/auto_ef_get_score.3ext target=auto_ef.3ext
 link path=usr/share/man/man3ext/auto_ef_str.3ext target=auto_ef.3ext
 link path=usr/share/man/man3ext/cbc_crypt.3ext target=ecb_crypt.3ext
-link path=usr/share/man/man3ext/cplus_demangle.3ext target=demangle.3ext
 link path=usr/share/man/man3ext/crypt_close.3ext target=crypt.3ext
 link path=usr/share/man/man3ext/des_crypt.3ext target=crypt.3ext
 link path=usr/share/man/man3ext/des_encrypt.3ext target=crypt.3ext

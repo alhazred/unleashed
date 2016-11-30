@@ -22,7 +22,6 @@ MANFILES= 	NOTE.3ext			\
 	 	SUNW_C_GetMechSession.3ext	\
 	 	auto_ef.3ext			\
 	 	crypt.3ext			\
-	 	demangle.3ext			\
 	 	ecb_crypt.3ext			\
 	 	efi_alloc_and_init.3ext		\
 	 	ld_support.3ext			\
@@ -69,7 +68,6 @@ MANLINKS=	DES_FAILED.3ext			\
 		auto_ef_get_score.3ext		\
 		auto_ef_str.3ext		\
 		cbc_crypt.3ext			\
-		cplus_demangle.3ext		\
 		crypt_close.3ext		\
 		des_crypt.3ext			\
 		des_encrypt.3ext		\
@@ -145,8 +143,6 @@ encrypt.3ext			:= LINKSRC = crypt.3ext
 run_crypt.3ext			:= LINKSRC = crypt.3ext
 run_setkey.3ext			:= LINKSRC = crypt.3ext
 setkey.3ext			:= LINKSRC = crypt.3ext
-
-cplus_demangle.3ext		:= LINKSRC = demangle.3ext
 
 DES_FAILED.3ext			:= LINKSRC = ecb_crypt.3ext
 cbc_crypt.3ext			:= LINKSRC = ecb_crypt.3ext
