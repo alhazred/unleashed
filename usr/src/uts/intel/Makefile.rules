@@ -246,9 +246,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/io/scsi/adapters/pvscsi/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/intel/nskern/%.s
-	$(COMPILE.s) -o $@ $<
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

@@ -106,11 +106,6 @@ _MANFILES=	6to4relay.1m		\
 		dns-sd.1m		\
 		domainname.1m		\
 		drvconfig.1m		\
-		dsbitmap.1m		\
-		dscfg.1m		\
-		dscfgadm.1m		\
-		dscfglockd.1m		\
-		dsstat.1m		\
 		dtrace.1m		\
 		dumpadm.1m		\
 		edquota.1m		\
@@ -171,9 +166,6 @@ _MANFILES=	6to4relay.1m		\
 		if_mpadm.1m		\
 		ifconfig.1m		\
 		ifparse.1m		\
-		iiadm.1m		\
-		iicpbmp.1m		\
-		iicpshd.1m		\
 		ikeadm.1m		\
 		ikecert.1m		\
 		in.chargend.1m		\
@@ -317,7 +309,6 @@ _MANFILES=	6to4relay.1m		\
 		nfsmapid.1m		\
 		nfsstat.1m		\
 		nlsadmin.1m		\
-		nscadm.1m		\
 		nscd.1m			\
 		nwamd.1m		\
 		passmgmt.1m		\
@@ -412,7 +403,6 @@ _MANFILES=	6to4relay.1m		\
 		savecore.1m		\
 		sbdadm.1m		\
 		scadm.1m		\
-		scmadm.1m		\
 		sdpadm.1m		\
 		setuname.1m		\
 		share.1m		\
@@ -430,9 +420,6 @@ _MANFILES=	6to4relay.1m		\
 		smtnrhdb.1m		\
 		smtnrhtp.1m		\
 		smtnzonecfg.1m		\
-		sndradm.1m		\
-		sndrd.1m		\
-		sndrsyncd.1m		\
 		snoop.1m		\
 		soconfig.1m		\
 		sppptun.1m		\
@@ -446,7 +433,6 @@ _MANFILES=	6to4relay.1m		\
 		sttydefs.1m		\
 		su.1m			\
 		sulogin.1m		\
-		svadm.1m		\
 		svc.configd.1m		\
 		svc.ipfd.1m		\
 		svc.startd.1m		\

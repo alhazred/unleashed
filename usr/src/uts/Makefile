@@ -122,8 +122,7 @@ $($(MACH)_ARCHITECTURES): $(PREREQ_TARGET) FRC
 # the architecture/machine dependent subdirectories are in completely
 # isomorphic locations.
 #
-COMMON_HDRDIRS= common/avs \
-		common/c2 \
+COMMON_HDRDIRS= common/c2 \
 		common/des \
 		common/gssapi \
 		common/idmap \
@@ -146,8 +145,7 @@ COMMON_HDRDIRS= common/avs \
 # Other directories should be included here, but do not yet have the
 # necessary Makefile support (make clean).  See 6414855.
 #
-DYNHDRDIRS =	common/avs \
-		common/gssapi \
+DYNHDRDIRS =	common/gssapi \
 		common/idmap \
 		common/io/fibre-channel/fca/qlc \
 		common/klm \

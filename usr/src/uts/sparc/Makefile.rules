@@ -82,9 +82,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/sparc/krtld/%.s
 $(OBJS_DIR)/%.o:		$(UTSBASE)/sparc/ml/%.s
 	$(COMPILE.s) -o $@ $<
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/sparc/nskern/%.s
-	$(COMPILE.s) -o $@ $<
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/sparc/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
