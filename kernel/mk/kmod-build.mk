@@ -35,6 +35,7 @@ _KMOD_BUILD=yes
 .include <${.CURDIR}/Makefile>
 
 KERNEL_CFLAGS = \
+	-pipe \
 	-fident \
 	-finline \
 	-fno-inline-functions \
