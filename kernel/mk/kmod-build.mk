@@ -213,11 +213,10 @@ install-fw: ${MODULE_FW}
 
 $(MODULE): $(OBJS)
 	${QLD}$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
-	${QCTFMRG}$(CTFMERGE) -L VERSION -o ${.TARGET} ${.ALLSRC}
+	${QCTFCVT}$(CTFCONVERT) -L VERSION ${.TARGET}
 
 .SUFFIXES: .o
 
 .c.o:
 	@mkdir -p ${.TARGET:H}
 	${QCC}$(CC) $(CFLAGS) -c -o ${.TARGET} ${.IMPSRC}
-	${QCTFCVT}$(CTFCONVERT) -i -L VERSION ${.TARGET}
