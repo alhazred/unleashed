@@ -26,5 +26,5 @@
 # ident	"%Z%%M%	%I%	%E% SMI"
 #
 
-@ MSG_DEM_SYM		"cplus_demangle"
-@ MSG_DEM_LIB		"libdemangle.so.1"
+@ MSG_DEM_SYM		"__cxa_demangle"
+@ MSG_DEM_LIB		"libstdc++.so.6"

@@ -63,7 +63,6 @@ COMMON_SUBDIRS=		\
 	audio		\
 	auths		\
 	autopush	\
-	avs		\
 	awk		\
 	awk_xpg4	\
 	backup		\
@@ -126,7 +125,6 @@ COMMON_SUBDIRS=		\
 	diffmk		\
 	dircmp		\
 	dirname		\
-	dis		\
 	diskmgtd	\
 	dispadmin	\
 	dladm		\
@@ -512,7 +510,6 @@ MSGSUBDIRS=		\
 	auditset	\
 	auths		\
 	autopush	\
-	avs		\
 	awk		\
 	awk_xpg4	\
 	backup		\

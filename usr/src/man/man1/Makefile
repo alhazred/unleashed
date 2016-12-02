@@ -100,7 +100,6 @@ MANFILES=	acctcom.1			\
 	 	diffmk.1			\
 	 	digest.1			\
 	 	dircmp.1			\
-	 	dis.1				\
 	 	disown.1			\
 	 	dispgid.1			\
 	 	dispuid.1			\

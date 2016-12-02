@@ -91,7 +91,6 @@ INCS=	$($(CONFIG_MACH)_INCS) \
 	nl_types.h	\
 	nlist.h		\
 	note.h		\
-	nsctl.h		\
 	nsswitch.h	\
 	nss.h		\
 	nss_common.h	\

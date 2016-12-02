@@ -28,6 +28,11 @@ pics/%.o:	../common/%.c
 		$(COMPILE.c) -o $@ $<
 		$(POST_PROCESS_O)
 
+# avoid libstdc++ link-time dependency
+pics/demangle.o:	../common/demangle.cc
+		$(COMPILE.cc) -fpic -fno-rtti -fno-exceptions -o $@ ../common/demangle.cc
+		$(POST_PROCESS_O)
+
 pics/%.o:	%.s
 		$(COMPILE.s) -o $@ $<
 		$(POST_PROCESS_O)
@@ -56,7 +61,7 @@ pics/elfcap.o:	$(ELFCAP)/elfcap.c
 report_bufsize.h:	../Makefile.targ
 		perl ../../tools/libconv_mk_report_bufsize.pl 8000
 
-../common/%.c ../common/%_machelf.c:	%_msg.h
+../common/%.c ../common/%.cc ../common/%_machelf.c:	%_msg.h
 
 %_msg.h %_msg.c: $(SGSMSG) ../common/%.msg report_bufsize.h
 		$(SGSMSG) $(SGSMSGFLAGS) -h $*_msg.h -d $*_msg.c \

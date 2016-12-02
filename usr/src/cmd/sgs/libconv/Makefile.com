@@ -37,7 +37,7 @@ COMOBJS=	arch.o			audit.o \
 		c_literal.o \
 		cap.o			config.o \
 		corenote.o 		data.o \
-		deftag.o 		demangle.o \
+		deftag.o \
 		dl.o			dwarf.o \
 		dwarf_ehe.o 		dynamic.o \
 		elf.o			entry.o \
@@ -95,7 +95,7 @@ CTFCONVERT_O=
 README_REVISION=../../packages/common/readme_revision
 ONLDREADME=	../../packages/common/SUNWonld-README
 
-PICS=		$(OBJECTS:%=pics/%)
+PICS=		$(OBJECTS:%=pics/%) pics/demangle.o
 
 CPPFLAGS +=	-I$(SRCBASE)/lib/libc/inc -I$(ELFCAP) \
 		-I$(SRC)/common/sgsrtcid

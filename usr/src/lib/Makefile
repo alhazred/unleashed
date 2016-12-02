@@ -113,7 +113,6 @@ SUBDIRS +=				\
 	libdlpi		\
 	libdns_sd	\
 	libdoor		\
-	libdscfg	\
 	libdtrace	\
 	libdwarf	\
 	libefi		\
@@ -163,7 +162,6 @@ SUBDIRS +=				\
 	libndmp		\
 	libnisdb	\
 	libnls		\
-	libnsctl	\
 	libnwam		\
 	libpam		\
 	libpcidb	\
@@ -215,7 +213,6 @@ SUBDIRS +=				\
 	libtsnet	\
 	libtsol		\
 	libumem		\
-	libunistat	\
 	libuuid		\
 	libuutil	\
 	libvolmgt	\
@@ -376,7 +373,6 @@ HDRSUBDIRS=				\
 	libdll		\
 	libdlpi		\
 	libdns_sd	\
-	libdscfg	\
 	libdtrace	\
 	libelfsign	\
 	libeti		\
@@ -406,7 +402,6 @@ HDRSUBDIRS=				\
 	libmd		\
 	libmtmalloc	\
 	libndmp		\
-	libnsctl	\
 	libnvpair	\
 	libnwam		\
 	libpam		\
@@ -446,7 +441,6 @@ HDRSUBDIRS=				\
 	libtsnet	\
 	libtsol		\
 	libumem		\
-	libunistat	\
 	libuutil	\
 	libvolmgt	\
 	libvrrpadm	\
@@ -568,7 +562,6 @@ libdladm:	libdevinfo libinetutil libscf librcm libexacct libkstat \
 libdll: 	libast
 libdlpi:	libinetutil libdladm
 libds:		libsysevent
-libdscfg:	libnsctl libunistat libadm
 libdtrace:	libproc libgen libctf libmapmalloc
 libefi:		libuuid
 libelfsign:	libcryptoutil libkmf ../cmd/sgs/libelf
@@ -604,7 +597,6 @@ libproject:	libpool libproc libsecdb
 libprtdiag:	libkstat
 libprtdiag_psr:	libprtdiag
 libraidcfg:	libdevinfo
-librdc:		libnsctl libunistat libdscfg
 librestart:	libuutil libscf libpool libproject libsecdb libsysevent
 libsasl:	libgss pkcs11
 libsaveargs:	libdisasm

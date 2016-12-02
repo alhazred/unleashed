@@ -1135,28 +1135,24 @@ chkfiles(char *source, char **to)
 			if (overwrite && override) {
 				(void) fprintf(stderr,
 				    gettext("%s: overwrite %s and override "
-				    "protection %o (%s/%s)? "), cmd, target,
-				    FMODE(s2) & MODEBITS, yesstr, nostr);
+				    "protection %o? "), cmd, target,
+				    FMODE(s2) & MODEBITS);
 				if (yes() == 0) {
 					free(buf);
 					return (2);
 				}
 			} else if (overwrite && ISREG(s2)) {
 				(void) fprintf(stderr,
-				    gettext("%s: overwrite %s (%s/%s)? "),
-				    cmd, target, yesstr, nostr);
+				    gettext("%s: overwrite %s? "),
+				    cmd, target);
 				if (yes() == 0) {
 					free(buf);
 					return (2);
 				}
 			} else if (override) {
 				(void) fprintf(stderr,
-				    gettext("%s: %s: override protection "
-				    /*CSTYLED*/
-				    "%o (%s/%s)? "),
-				    /*CSTYLED*/
-				    cmd, target, FMODE(s2) & MODEBITS,
-				    yesstr, nostr);
+				    gettext("%s: %s: override protection %o? "),
+				    cmd, target, FMODE(s2) & MODEBITS);
 				if (yes() == 0) {
 					free(buf);
 					return (2);

@@ -130,7 +130,6 @@ link path=usr/ccs/bin/$(ARCH64)/nm target=../../../bin/$(ARCH64)/nm
 link path=usr/ccs/bin/$(ARCH64)/size target=../../../bin/$(ARCH64)/size
 link path=usr/ccs/bin/$(ARCH64)/strip target=../../../bin/$(ARCH64)/strip
 link path=usr/ccs/bin/ar target=../../bin/ar
-link path=usr/ccs/bin/dis target=../../bin/dis
 link path=usr/ccs/bin/dump target=../../bin/dump
 link path=usr/ccs/bin/elfdump target=../../bin/elfdump
 link path=usr/ccs/bin/error target=../../bin/error
