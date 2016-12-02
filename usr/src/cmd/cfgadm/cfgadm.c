@@ -681,7 +681,6 @@ confirm_interactive(
 	static char yeschr[YESNO_STR_MAX + 2];
 	static char nochr[YESNO_STR_MAX + 2];
 	static int inited = 0;
-	int isyes;
 
 #ifdef lint
 	appdata_ptr = appdata_ptr;
