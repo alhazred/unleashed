@@ -104,7 +104,6 @@ SYMBOL_VERSION SUNWprivate_1.2 {
 	ctf_parent_file;
 	ctf_parent_label;
 	ctf_parent_name;
-	ctf_parent_label;
 	ctf_set_array;
 	ctf_set_root;
 	ctf_set_size;
