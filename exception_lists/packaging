@@ -455,7 +455,6 @@ usr/lib/sparcv9/libpri.so	sparc
 #
 usr/lib/libds.so			sparc
 usr/lib/sparcv9/libds.so		sparc
-usr/lib/libdscfg.so
 usr/platform/sun4v/include/sys/libds.h	sparc
 usr/platform/sun4v/include/sys/vlds.h	sparc
 #
@@ -599,20 +598,6 @@ usr/include/l_common.h		sparc
 usr/include/l_error.h		sparc
 usr/include/rom.h		sparc
 usr/include/stgcom.h		sparc
-#
-usr/bin/dscfgcli
-usr/bin/sd_diag
-usr/bin/sd_stats
-usr/include/nsctl.h
-usr/include/sys/ncall
-usr/include/sys/nsc_ddi.h
-usr/include/sys/nsc_thread.h
-usr/include/sys/nsctl
-usr/include/sys/nskernd.h
-usr/include/sys/unistat
-usr/lib/libnsctl.so
-usr/lib/librdc.so
-usr/lib/libunistat.so
 #
 # sbd ioctl hdr
 #

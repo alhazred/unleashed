@@ -60,7 +60,6 @@ _MANFILES=	Intro.4				\
 		dialups.4			\
 		dir_ufs.4			\
 		driver.conf.4			\
-		ds.log.4			\
 		ethers.4			\
 		exec_attr.4			\
 		fdi.4				\
@@ -152,7 +151,6 @@ _MANFILES=	Intro.4				\
 		publickey.4			\
 		queuedefs.4			\
 		rcmscript.4			\
-		rdc.cf.4			\
 		remote.4			\
 		resolv.conf.4			\
 		rmtab.4				\
@@ -171,7 +169,6 @@ _MANFILES=	Intro.4				\
 		smb.4				\
 		smbautohome.4			\
 		smhba.conf.4			\
-		sndr.4				\
 		sock2path.d.4			\
 		space.4				\
 		sulog.4				\

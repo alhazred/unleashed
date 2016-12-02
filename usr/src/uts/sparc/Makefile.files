@@ -67,7 +67,6 @@ PCI_PCI_OBJS +=		pci_pci.o pci_debug.o pci_pwr.o pcix.o
 PCIE_MISC_OBJS +=	pcie_sparc.o
 PCIEB_OBJS +=		pcieb_sparc.o
 FCODE_OBJS +=		fcode.o
-NSKERN_OBJS +=		nsc_asm.o
 
 #
 #			file system modules
