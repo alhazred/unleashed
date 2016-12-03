@@ -1159,9 +1159,6 @@ segkp_unlock(
 	anoff_t off;
 	struct anon *ap;
 
-#ifdef lint
-	seg = seg;
-#endif /* lint */
 
 	ASSERT(MUTEX_HELD(&kpd->kp_lock));
 

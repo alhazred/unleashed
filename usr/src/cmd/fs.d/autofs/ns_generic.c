@@ -211,9 +211,6 @@ gethostkeys(mapname, list, error, cache_time)
 	struct dir_entry *last = NULL;
 	struct hostent ent;
 
-#ifdef lint
-	mapname = mapname;
-#endif
 
 	*cache_time = RDDIR_CACHE_TIME * 2;
 	*error = 0;

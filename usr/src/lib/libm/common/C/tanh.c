@@ -86,9 +86,6 @@ tanh(double x) {
 		} else {
 			/* raise the INEXACT flag for non-zero t */
 			dummy = t + big;
-#ifdef lint
-			dummy = dummy;
-#endif
 			return (x);
 		}
 	} else if (!finite(t))

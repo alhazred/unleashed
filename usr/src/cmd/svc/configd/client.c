@@ -59,11 +59,7 @@
 /*
  * lint doesn't like constant assertions
  */
-#ifdef lint
-#define	assert_nolint(x) (void)0
-#else
 #define	assert_nolint(x) assert(x)
-#endif
 
 /*
  * Protects client linkage and the freelist

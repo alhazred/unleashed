@@ -5316,9 +5316,6 @@ afsr_to_msynd_status(uint64_t afsr, uint64_t afsr_bit)
 static int
 afsr_to_synd_status(uint_t cpuid, uint64_t afsr, uint64_t afsr_bit)
 {
-#ifdef lint
-	cpuid = cpuid;
-#endif
 #if defined(CHEETAH_PLUS)
 	/*
 	 * The M_SYND overwrite policy is combined with the E_SYND overwrite
@@ -5420,9 +5417,6 @@ sticksync_slave(void)
 			    av_tskew;
 		++tries;
 #endif /* DEBUG */
-#ifdef lint
-		tries = tries;
-#endif
 
 	} /* while */
 

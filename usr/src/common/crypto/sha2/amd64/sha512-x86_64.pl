@@ -209,18 +209,6 @@ ___
 #
 
 $code=<<___;
-#if defined(lint) || defined(__lint)
-#include <sys/stdint.h>
-#include <sys/sha2.h>
-
-/* ARGSUSED */
-void
-$func(SHA2_CTX *ctx, const void *in, size_t num)
-{
-}
-
-
-#else
 #include <sys/asm_linkage.h>
 
 ENTRY_NP($func)
@@ -394,7 +382,6 @@ $TABLE:
 ___
 }
 $code.=<<___;
-#endif /* !lint && !__lint */
 ___
 
 $code =~ s/\`([^\`]*)\`/eval $1/gem;

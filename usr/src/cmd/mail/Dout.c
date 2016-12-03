@@ -68,14 +68,6 @@ va_dcl
 #endif
 	va_list args;
 
-#ifndef __STDC__
-#ifdef lint
-	subname = Xsubname;
-	level = Xlevel;
-	fmt = Xfmt;
-# endif
-#endif
-
 #ifdef __STDC__
 	va_start(args, fmt);
 #else

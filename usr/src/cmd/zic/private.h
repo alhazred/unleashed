@@ -81,12 +81,7 @@ const char	*scheck(const char *string, const char *format);
  */
 
 #ifndef INITIALIZE
-#ifdef lint
-#define	INITIALIZE(x)	((x) = 0)
-#endif /* defined lint */
-#ifndef lint
 #define	INITIALIZE(x)
-#endif /* !defined lint */
 #endif /* !defined INITIALIZE */
 
 #ifdef	__cplusplus

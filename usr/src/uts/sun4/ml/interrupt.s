@@ -22,12 +22,7 @@
  * Copyright (c) 2003, 2010, Oracle and/or its affiliates. All rights reserved.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-#include <sys/thread.h>
-#else	/* lint */
 #include "assym.h"
-#endif	/* lint */
 
 #include <sys/cmn_err.h>
 #include <sys/ftrace.h>
@@ -41,14 +36,6 @@
 #include <sys/traptrace.h>
 #endif /* TRAPTRACE */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-pil_interrupt(int level)
-{}
-
-#else	/* lint */
 
 
 /*
@@ -160,10 +147,8 @@ pil_interrupt(int level)
 	SET_SIZE(pil_interrupt_common)
 	SET_SIZE(pil_interrupt)
 
-#endif	/* lint */
 
 
-#ifndef	lint
 _spurious:
 	.asciz	"!interrupt 0x%x at level %d not serviced"
 
@@ -329,16 +314,7 @@ _spurious:
 #define SERVE_INTR_TRACE2(inum, os1, os2, os3, os4)
 #endif	/* TRAPTRACE */
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-intr_thread(struct regs *regs, uint64_t iv_p, uint_t pil)
-{}
-
-#else	/* lint */
 
 #define	INTRCNT_LIMIT 16
 
@@ -892,38 +868,7 @@ intr_thread_exit_actv_bit_set:
 intr_thread_t_intr_start_zero:
 	.asciz	"intr_thread():	t_intr_start zero upon handler return"
 #endif /* DEBUG */
-#endif	/* lint */
 
-#if defined(lint)
-
-/*
- * Handle an interrupt in the current thread
- *	Entry:
- *		%o0       = pointer to regs structure
- *		%o1       = pointer to current intr_vec_t (iv) to be processed
- *		%o2       = pil
- *		%sp       = on current thread's kernel stack
- *		%o7       = return linkage to trap code
- *		%g7       = current thread
- *		%pstate   = normal globals, interrupts enabled, 
- *		            privileged, fp disabled
- *		%pil      = PIL_MAX
- *
- *	Register Usage
- *		%l0       = return linkage
- *		%l1       = old stack
- *		%l2 - %l3 = scratch
- *		%l4 - %l7 = reserved for sys_trap
- *		%o3       = cpu
- *		%o0       = scratch
- *		%o4 - %o5 = scratch
- */
-/* ARGSUSED */
-void
-current_thread(struct regs *regs, uint64_t iv_p, uint_t pil)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(current_thread)
 	
@@ -1398,7 +1343,6 @@ current_thread_timestamp_zero:
 current_thread_nested_PIL_not_found:
 	.asciz	"current_thread: couldn't find nested high-level PIL"
 #endif /* DEBUG */
-#endif /* lint */
 
 /*
  * Return a thread's interrupt level.
@@ -1412,30 +1356,13 @@ current_thread_nested_PIL_not_found:
  *	kthread_id_t	t;
  */
 
-#if defined(lint)
-
-/* ARGSUSED */
-int
-intr_level(kthread_id_t t)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY_NP(intr_level)
 	retl
 	ldub	[%o0 + T_PIL], %o0		! return saved pil
 	SET_SIZE(intr_level)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-int
-disable_pil_intr()
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY_NP(disable_pil_intr)
 	rdpr	%pil, %o0
@@ -1443,32 +1370,14 @@ disable_pil_intr()
 	wrpr	%g0, PIL_MAX, %pil		! disable interrupts (1-15)
 	SET_SIZE(disable_pil_intr)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-enable_pil_intr(int pil_save)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(enable_pil_intr)
 	retl
 	wrpr	%o0, %pil
 	SET_SIZE(enable_pil_intr)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-uint_t
-disable_vec_intr(void)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY_NP(disable_vec_intr)
 	rdpr	%pstate, %o0
@@ -1477,31 +1386,14 @@ disable_vec_intr(void)
 	wrpr	%g0, %g1, %pstate		! disable interrupt
 	SET_SIZE(disable_vec_intr)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-enable_vec_intr(uint_t pstate_save)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(enable_vec_intr)
 	retl
 	wrpr	%g0, %o0, %pstate
 	SET_SIZE(enable_vec_intr)
 
-#endif	/* lint */
 
-#if defined(lint)
- 
-void
-cbe_level14(void)
-{}
-
-#else   /* lint */
 
 	ENTRY_NP(cbe_level14)
 	save    %sp, -SA(MINFRAME), %sp ! get a new window
@@ -1522,17 +1414,8 @@ cbe_level14(void)
 	restore	%g0, 1, %o0
 	SET_SIZE(cbe_level14)
 
-#endif  /* lint */
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-kdi_setsoftint(uint64_t iv_p)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(kdi_setsoftint)
 	save	%sp, -SA(MINFRAME), %sp	! get a new window 
@@ -1607,16 +1490,7 @@ kdi_setsoftint(uint64_t iv_p)
 	restore
 	SET_SIZE(kdi_setsoftint)
 	
-#endif	/* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-setsoftint_tl1(uint64_t iv_p, uint64_t dummy)
-{}
-
-#else	/* lint */
 
 	!
 	! Register usage
@@ -1702,16 +1576,7 @@ setsoftint_tl1(uint64_t iv_p, uint64_t dummy)
 	retry
 	SET_SIZE(setsoftint_tl1)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-setvecint_tl1(uint64_t inum, uint64_t dummy)
-{}
-
-#else	/* lint */
 
 	!
 	! Register usage
@@ -1845,32 +1710,14 @@ setvecint_tl1(uint64_t inum, uint64_t dummy)
 	mov	PIL_15, %g4
 	SET_SIZE(setvecint_tl1)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-wr_clr_softint(uint_t value)
-{}
-
-#else
 
 	ENTRY_NP(wr_clr_softint)
 	retl
 	wr	%o0, CLEAR_SOFTINT
 	SET_SIZE(wr_clr_softint)
 
-#endif /* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-intr_enqueue_req(uint_t pil, uint64_t inum)
-{}
-
-#else   /* lint */
 
 /*
  * intr_enqueue_req
@@ -1921,20 +1768,12 @@ intr_enqueue_req(uint_t pil, uint64_t inum)
 	nop
 	SET_SIZE(intr_enqueue_req)
 
-#endif  /* lint */
 
 /*
  * Set CPU's base SPL level, based on which interrupt levels are active.
  * 	Called at spl7 or above.
  */
 
-#if defined(lint)
-
-void
-set_base_spl(void)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(set_base_spl)
 	ldn	[THREAD_REG + T_CPU], %o2	! load CPU pointer
@@ -1986,7 +1825,6 @@ _intr_flag_table:
 	.byte	5, 5, 5, 5,	5, 5, 5, 5,	5, 5, 5, 5,	5, 5, 5, 5
 	.align	4
 
-#endif	/* lint */
 
 /*
  * int
@@ -1995,14 +1833,6 @@ _intr_flag_table:
  *	kthread_id_t	to;		interrupted thread
  */
 
-#if defined(lint)
-
-/* ARGSUSED */
-int
-intr_passivate(kthread_id_t from, kthread_id_t to)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY_NP(intr_passivate)
 	save	%sp, -SA(MINFRAME), %sp	! get a new window 
@@ -2060,76 +1890,7 @@ intr_passivate(kthread_id_t from, kthread_id_t to)
 	restore
 	SET_SIZE(intr_passivate)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/*
- * intr_get_time() is a resource for interrupt handlers to determine how
- * much time has been spent handling the current interrupt. Such a function
- * is needed because higher level interrupts can arrive during the
- * processing of an interrupt, thus making direct comparisons of %tick by
- * the handler inaccurate. intr_get_time() only returns time spent in the
- * current interrupt handler.
- *
- * The caller must be calling from an interrupt handler running at a pil
- * below or at lock level. Timings are not provided for high-level
- * interrupts.
- *
- * The first time intr_get_time() is called while handling an interrupt,
- * it returns the time since the interrupt handler was invoked. Subsequent
- * calls will return the time since the prior call to intr_get_time(). Time
- * is returned as ticks, adjusted for any clock divisor due to power 
- * management. Use tick2ns() to convert ticks to nsec. Warning: ticks may 
- * not be the same across CPUs.
- *
- * Theory Of Intrstat[][]:
- *
- * uint64_t intrstat[pil][0..1] is an array indexed by pil level, with two
- * uint64_ts per pil.
- *
- * intrstat[pil][0] is a cumulative count of the number of ticks spent
- * handling all interrupts at the specified pil on this CPU. It is
- * exported via kstats to the user.
- *
- * intrstat[pil][1] is always a count of ticks less than or equal to the
- * value in [0]. The difference between [1] and [0] is the value returned
- * by a call to intr_get_time(). At the start of interrupt processing,
- * [0] and [1] will be equal (or nearly so). As the interrupt consumes
- * time, [0] will increase, but [1] will remain the same. A call to
- * intr_get_time() will return the difference, then update [1] to be the
- * same as [0]. Future calls will return the time since the last call.
- * Finally, when the interrupt completes, [1] is updated to the same as [0].
- *
- * Implementation:
- *
- * intr_get_time() works much like a higher level interrupt arriving. It
- * "checkpoints" the timing information by incrementing intrstat[pil][0]
- * to include elapsed running time, and by setting t_intr_start to %tick.
- * It then sets the return value to intrstat[pil][0] - intrstat[pil][1],
- * and updates intrstat[pil][1] to be the same as the new value of
- * intrstat[pil][0].
- *
- * In the normal handling of interrupts, after an interrupt handler returns
- * and the code in intr_thread() updates intrstat[pil][0], it then sets
- * intrstat[pil][1] to the new value of intrstat[pil][0]. When [0] == [1],
- * the timings are reset, i.e. intr_get_time() will return [0] - [1] which
- * is 0.
- *
- * Whenever interrupts arrive on a CPU which is handling a lower pil
- * interrupt, they update the lower pil's [0] to show time spent in the
- * handler that they've interrupted. This results in a growing discrepancy
- * between [0] and [1], which is returned the next time intr_get_time() is
- * called. Time spent in the higher-pil interrupt will not be returned in
- * the next intr_get_time() call from the original interrupt, because
- * the higher-pil interrupt's time is accumulated in intrstat[higherpil][].
- */
-
-/*ARGSUSED*/
-uint64_t
-intr_get_time(void)
-{ return 0; }
-#else	/* lint */
 
 	ENTRY_NP(intr_get_time)
 #ifdef DEBUG
@@ -2239,4 +2000,3 @@ intr_get_time_not_intr:
 intr_get_time_no_start_time:
 	.asciz	"intr_get_time(): t_intr_start == 0"
 #endif /* DEBUG */
-#endif  /* lint */

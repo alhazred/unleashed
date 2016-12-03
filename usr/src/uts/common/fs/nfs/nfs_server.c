@@ -426,9 +426,6 @@ nfs_svc(struct nfs_svc_args *arg, model_t model)
 	struct netbuf addrmask;
 	SVC_CALLOUT_TABLE *sctp = NULL;
 
-#ifdef lint
-	model = model;		/* STRUCT macros don't always refer to it */
-#endif
 
 	STRUCT_SET_HANDLE(uap, model, arg);
 

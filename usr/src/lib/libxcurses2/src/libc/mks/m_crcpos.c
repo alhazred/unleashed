@@ -39,10 +39,8 @@
  *	x**8 + x**7 + x**5 + x**4 + x**2 + x**1 + x**0
  */
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] = "$Header: /rd/src/libc/mks/rcs/m_crcpos.c 1.11 "
 "1992/11/19 11:51:55 tj Exp $";
-#endif
 #endif
 
 #include <sys/isa_defs.h>

@@ -83,10 +83,8 @@ cstatvfs32(struct vfs *vfsp, struct statvfs32 *ubp)
 	struct statvfs32 ds32;
 	int error;
 
-#if !defined(lint)
 	ASSERT32(sizeof (struct statvfs) == sizeof (struct statvfs32));
 	ASSERT32(sizeof (struct statvfs64) == sizeof (struct statvfs64_32));
-#endif
 
 	bzero(&ds64, sizeof (ds64));
 	if ((error = VFS_STATVFS(vfsp, &ds64)) != 0)
@@ -145,9 +143,7 @@ cstatvfs64(struct vfs *vfsp, struct statvfs64 *ubp)
 	struct statvfs64 ds64;
 	int error;
 
-#if !defined(lint)
 	ASSERT64(sizeof (struct statvfs) == sizeof (struct statvfs64));
-#endif
 	bzero(&ds64, sizeof (ds64));
 	if ((error = VFS_STATVFS(vfsp, &ds64)) != 0)
 		return (error);

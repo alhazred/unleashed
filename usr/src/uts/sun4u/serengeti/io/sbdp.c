@@ -772,9 +772,6 @@ sbdp_teardown_instance(caddr_t arg)
 int
 sbdp_disabled_component(sbdp_handle_t *hp)
 {
-#ifdef lint
-	hp = hp;
-#endif
 	return (0);
 }
 

@@ -32,17 +32,6 @@
  * dreaded "Empty translation unit"  warning.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-
-/*ARGSUSED*/
-u_int
-fd_intr(caddr_t arg)
-{
-	return (0);
-}
-
-#else	/* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/fdreg.h>
@@ -356,4 +345,3 @@ fd_intr(caddr_t arg)
 	nop
 
 
-#endif  /* lint */

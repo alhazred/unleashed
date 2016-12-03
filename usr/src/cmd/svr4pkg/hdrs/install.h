@@ -132,9 +132,6 @@ struct fstable {
 #define	PARAMETRIC(x) (x[0] == '$')
 #define	RELATIVE(x)	(x[0] != '/')
 
-#if defined(lint) && !defined(gettext)
-#define	gettext(x)	x
-#endif	/* defined(lint) && !defined(gettext) */
 
 #ifdef __cplusplus
 }

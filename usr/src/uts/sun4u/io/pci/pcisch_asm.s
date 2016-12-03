@@ -34,13 +34,6 @@
 
 #define	VIS_BLOCKSIZE	64
 
-#if defined(lint)
-
-void
-tomatillo_store_store_order()
-{}
-
-#else /* lint */
 
 	.seg    ".data"
 	.align  VIS_BLOCKSIZE
@@ -62,4 +55,3 @@ sync_buf:
 	membar  #Sync
 	SET_SIZE(tomatillo_store_store_order)
 
-#endif /* lint */

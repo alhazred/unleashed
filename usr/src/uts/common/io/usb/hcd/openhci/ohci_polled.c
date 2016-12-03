@@ -299,9 +299,7 @@ ohci_hcdi_polled_read(
 
 	ohcip = ohci_polledp->ohci_polled_ohcip;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 	*num_characters = 0;
 	intr = (Get_OpReg(hcr_intr_status) & Get_OpReg(hcr_intr_enable));
 
@@ -334,9 +332,7 @@ ohci_hcdi_polled_read(
 		/* Acknowledge the WDH interrupt */
 		ohci_polled_finish_interrupt(ohcip, HCR_INTR_WDH);
 	}
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 	return (USB_SUCCESS);
 }
@@ -474,9 +470,7 @@ ohci_hcdi_polled_write(usb_console_info_impl_t *info, uchar_t *buf,
 	uint_t			intr, bulk_pkg_size;
 	int			i;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 
 	ohci_polledp = (ohci_polled_t *)info->uci_private;
 	ohcip = ohci_polledp->ohci_polled_ohcip;
@@ -499,9 +493,7 @@ ohci_hcdi_polled_write(usb_console_info_impl_t *info, uchar_t *buf,
 
 	ASSERT(tw != NULL);
 	if (tw->tw_hctd_free_list == NULL) {
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 		return (USB_SUCCESS);
 	}
 
@@ -561,9 +553,7 @@ ohci_hcdi_polled_write(usb_console_info_impl_t *info, uchar_t *buf,
 
 	Set_OpReg(hcr_intr_status, intr);
 	(void) Get_OpReg(hcr_intr_status);
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 	return (USB_SUCCESS);
 }
 
@@ -885,18 +875,14 @@ ohci_polled_save_state(ohci_polled_t	*ohci_polledp)
 	ohci_td_t		*td, *prev_td;
 	ohci_td_t		*done_head, **done_list;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 
 	/*
 	 * If either of these two flags are set, then we have already
 	 * saved off the state information and setup the controller.
 	 */
 	if (ohci_polledp->ohci_polled_flags & POLLED_INPUT_MODE_INUSE) {
-#ifndef lint
 		_NOTE(COMPETING_THREADS_NOW);
-#endif
 		return;
 	}
 
@@ -907,9 +893,7 @@ ohci_polled_save_state(ohci_polled_t	*ohci_polledp)
 	 * support in polled mode
 	 */
 	if (++ ohcip->ohci_polled_enter_count > MAX_NUM_FOR_KEYBOARD) {
-#ifndef lint
 		_NOTE(COMPETING_THREADS_NOW);
-#endif
 		return;
 	}
 	/* Get the endpoint addr. */
@@ -1195,9 +1179,7 @@ ohci_polled_save_state(ohci_polled_t	*ohci_polledp)
 		Set_OpReg(hcr_control,
 		    (Get_OpReg(hcr_control) | HCR_CONTROL_PLE));
 	}
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 }
 
 
@@ -1274,9 +1256,7 @@ ohci_polled_restore_state(ohci_polled_t	*ohci_polledp)
 	usba_pipe_handle_data_t	*ph;
 	uint8_t			ep_addr;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 
 	/*
 	 * If this flag is set, then we are still using this structure,
@@ -1284,9 +1264,7 @@ ohci_polled_restore_state(ohci_polled_t	*ohci_polledp)
 	 */
 	if (ohci_polledp->ohci_polled_flags & POLLED_INPUT_MODE_INUSE) {
 
-#ifndef lint
 		_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 		return;
 	}
@@ -1471,9 +1449,7 @@ ohci_polled_restore_state(ohci_polled_t	*ohci_polledp)
 			Set_OpReg(hcr_intr_enable, mask | HCR_INTR_MIE);
 		}
 	}
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 }
 
 /*

@@ -69,9 +69,7 @@
 #include "chap_ms.h"
 #include "md4.h"
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 typedef struct {
     u_char LANManResp[24];

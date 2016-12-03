@@ -35,9 +35,7 @@
   * course of action.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) options.c 1.17 96/02/11 17:01:31";
-#endif
 
 /* System libraries. */
 

@@ -35,9 +35,7 @@ void _STUB_expm1(){}
  * SUCH DAMAGE.
  */
 
-#ifndef lint
 static char sccsid[] = "@(#)expm1.c	8.1 (Berkeley) 6/4/93";
-#endif /* not lint */
 
 /* EXPM1(X)
  * RETURN THE EXPONENTIAL OF X MINUS ONE

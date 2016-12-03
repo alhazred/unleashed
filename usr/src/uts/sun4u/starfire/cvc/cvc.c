@@ -363,9 +363,6 @@ cvc_open(register queue_t *q, dev_t *devp, int flag, int sflag, cred_t *crp)
 	} else {
 		mutex_exit(&cvcmutex);
 	}
-#ifdef lint
-	cvc_input_daemon_thread = cvc_input_daemon_thread;
-#endif
 	return (err);
 }
 
@@ -455,9 +452,6 @@ cvc_wput(register queue_t *q, register mblk_t *mp)
 			cmn_err(CE_WARN, "cvc_wput: type = 0x%x",
 			    mp->b_datap->db_type);
 			/* FALLTHROUGH */
-#ifdef lint
-			break;
-#endif
 
 		case M_DATA:
 			if (cvc_stopped == 1 || cvc_suspended == 1) {

@@ -43,11 +43,7 @@
 /*
  * Definitions
  */
-#ifndef lint
 #define	_(x)	gettext(x)
-#else
-#define	_(x)	x
-#endif
 
 /* Some generic well-knowns and defaults used in this module */
 #define	RCM_LINK_PREFIX		"SUNW_datalink"	/* RCM datalink name prefix */

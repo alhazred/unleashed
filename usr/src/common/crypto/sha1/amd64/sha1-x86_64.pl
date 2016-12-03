@@ -226,17 +226,6 @@ ___
 #
 
 $code=<<___;
-#if defined(lint) || defined(__lint)
-#include <sys/stdint.h>
-#include <sys/sha1.h>
-
-/* ARGSUSED */
-void
-sha1_block_data_order(SHA1_CTX *ctx, const void *inpp, size_t blocks)
-{
-}
-
-#else
 #include <sys/asm_linkage.h>
 ___
 
@@ -273,7 +262,6 @@ ___
 $code.=<<___;
 .asciz	"SHA1 block transform for x86_64, CRYPTOGAMS by <appro\@openssl.org>"
 
-#endif /* lint || __lint */
 ___
 
 ####################################################################

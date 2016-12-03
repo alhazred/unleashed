@@ -247,10 +247,6 @@ autofs_validate_property(sa_handle_t handle, sa_property_t property,
 	int optionindex;
 	char *value;
 
-#ifdef lint
-	handle = handle;
-	parent = parent;
-#endif
 	propname = sa_get_property(property, "type");
 	if (propname == NULL)
 		return (SA_NO_SUCH_PROP);
@@ -489,9 +485,6 @@ static int
 true_false_validator(int index, char *value)
 {
 
-#ifdef lint
-	index = index;
-#endif
 	if ((strcasecmp(value, "true") == 0) ||
 	    (strcasecmp(value, "on") == 0) ||
 	    (strcasecmp(value, "yes") == 0) ||
@@ -525,9 +518,6 @@ strlen_validator(int index, char *value)
 static int
 autofs_validate_proto_prop(int index, char *name, char *value)
 {
-#ifdef lint
-	name = name;
-#endif
 	return (proto_options[index].check(index, value));
 }
 

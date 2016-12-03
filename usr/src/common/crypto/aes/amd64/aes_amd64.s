@@ -183,22 +183,6 @@
  * For the x86 64-bit architecture, OpenSolaris OS uses ks32 instead of ks64.
  */
 
-#if defined(lint) || defined(__lint)
-
-#include <sys/types.h>
-/* ARGSUSED */
-void
-aes_encrypt_amd64(const uint32_t rk[], int Nr, const uint32_t pt[4],
-	uint32_t ct[4]) {
-}
-/* ARGSUSED */
-void
-aes_decrypt_amd64(const uint32_t rk[], int Nr, const uint32_t ct[4],
-	uint32_t pt[4]) {
-}
-
-
-#else
 
 #include <sys/asm_linkage.h>
 
@@ -896,4 +880,3 @@ dec_tab:
 	ret
 
 	SET_SIZE(aes_decrypt_amd64)
-#endif	/* lint || __lint */

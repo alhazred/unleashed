@@ -315,9 +315,6 @@ ufs_fiosdio(
 	struct ulockfs	*ulp;
 	int		error = 0;
 
-#ifdef lint
-	flag = flag;
-#endif
 
 	/* check input conditions */
 	if (secpolicy_fs_config(cr, vp->v_vfsp) != 0)

@@ -88,9 +88,6 @@ tanf(float x)
 			if (ix < 0x3c000000) {		/* |x| < 2**-7 */
 				if (ix <= 0x39800000) {	/* |x| < 2**-12 */
 					i = (int)y;
-#ifdef lint
-					i = i;
-#endif
 					return (x);
 				}
 				return ((float)((y * T0) * (T1 + y * y)));

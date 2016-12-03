@@ -33,19 +33,7 @@
 
 #define	STKSIZE	0x1000
 
-#if defined(lint)
-void *estack;
-caddr_t _end;
-#endif
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-_start(void *a, ...)
-{}
-
-#else	/* !lint */
 
 	.seg	".bss"
 	.align	MMU_PAGESIZE
@@ -86,17 +74,8 @@ local_cif:
 	nop
 	SET_SIZE(_start)
 
-#endif	/* lint */
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-int
-client_handler(void *cif_handler, void *arg_array)
-{ return (0); }
-
-#else
 
 	!
 	! 64/64 client interface for ieee1275 prom
@@ -109,5 +88,4 @@ client_handler(void *cif_handler, void *arg_array)
 	mov	%g1, %o7
 	SET_SIZE(client_handler)
 
-#endif	/* lint */
 

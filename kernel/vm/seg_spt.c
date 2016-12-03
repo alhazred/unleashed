@@ -261,9 +261,6 @@ segspt_shmincore(struct seg *seg, caddr_t addr, size_t len, char *vec)
 	struct spt_data *sptd;
 
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
-#ifdef lint
-	seg = seg;
-#endif
 	sptseg = shmd->shm_sptseg;
 	sptd = sptseg->s_data;
 
@@ -1419,9 +1416,6 @@ segspt_reclaim(void *ptag, caddr_t addr, size_t len, struct page **pplist,
 	pgcnt_t npages, i, free_availrmem = 0;
 	int	done = 0;
 
-#ifdef lint
-	addr = addr;
-#endif
 	sptseg = shmd->shm_sptseg;
 	sptd = sptseg->s_data;
 	npages = (len >> PAGESHIFT);
@@ -1815,9 +1809,6 @@ segspt_dismfault(struct hat *hat, struct seg *seg, caddr_t addr,
 	caddr_t	a;
 	pgcnt_t	pidx;
 
-#ifdef lint
-	hat = hat;
-#endif
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
 	/*
@@ -2001,9 +1992,6 @@ segspt_shmfault(struct hat *hat, struct seg *seg, caddr_t addr,
 	pgcnt_t		pidx;
 	size_t		sz;
 
-#ifdef lint
-	hat = hat;
-#endif
 
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 

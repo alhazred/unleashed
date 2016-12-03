@@ -398,9 +398,6 @@ _m_media_format(rmedia_handle_t *handle, void *ip)
 		return (size_t)(-1);
 	}
 	retformat = (smedia_retformat_t *)((void *)door_args.data_ptr);
-#ifdef lint
-	retformat = retformat;
-#endif
 	reterror = (smedia_reterror_t *)((void *)door_args.data_ptr);
 	if (reterror->cnum == SMEDIA_CNUM_ERROR) {
 		DPRINTF1("Error in format. errnum = 0x%x \n", reterror->errnum);
@@ -602,9 +599,6 @@ _m_check_format_status(rmedia_handle_t *handle, void *ip)
 	smedia_reterror_t	*reterror;
 	door_arg_t	door_args;
 	char	rbuf[sizeof (smedia_services_t) + sizeof (door_desc_t)];
-#ifdef	lint
-	ip = ip;
-#endif
 
 	/* Check for valid handle */
 	if (handle == NULL) {

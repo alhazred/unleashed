@@ -27,9 +27,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if !defined(lint)
 #include "assym.h"
-#endif	/* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/mmu.h>
@@ -55,7 +53,6 @@
 #endif /* TRAPTRACE */
 
 
-#if !defined(lint)
 
 /* BEGIN CSTYLED */
 
@@ -147,7 +144,6 @@
 	or	l2_idx_out, scr3, l2_idx_out;					\
 	PN_ECACHE_REFLUSH_LINE(l2_idx_out, l3_idx_out, scr3, scr4)
 
-#endif	/* !lint */
 
 /*
  * Fast ECC error at TL>0 handler
@@ -157,13 +153,6 @@
  * comment block "Cheetah/Cheetah+ Fast ECC at TL>0 trap strategy" in
  * us3_common_asm.s
  */
-#if defined(lint)
-
-void
-fast_ecc_tl1_err(void)
-{}
-
-#else	/* lint */
 
 	.section ".text"
 	.align	64
@@ -413,38 +402,8 @@ skip_traptrace:
 
 	SET_SIZE(fast_ecc_tl1_err)
 
-#endif	/* lint */
 
 
-#if defined(lint)
-/*
- * scrubphys - Pass in the aligned physical memory address
- * that you want to scrub, along with the ecache set size.
- *
- *	1) Displacement flush the E$ line corresponding to %addr.
- *	   The first ldxa guarantees that the %addr is no longer in
- *	   M, O, or E (goes to I or S (if instruction fetch also happens).
- *	2) "Write" the data using a CAS %addr,%g0,%g0.
- *	   The casxa guarantees a transition from I to M or S to M.
- *	3) Displacement flush the E$ line corresponding to %addr.
- *	   The second ldxa pushes the M line out of the ecache, into the
- *	   writeback buffers, on the way to memory.
- *	4) The "membar #Sync" pushes the cache line out of the writeback
- *	   buffers onto the bus, on the way to dram finally.
- *
- * This is a modified version of the algorithm suggested by Gary Lauterbach.
- * In theory the CAS %addr,%g0,%g0 is supposed to mark the addr's cache line
- * as modified, but then we found out that for spitfire, if it misses in the
- * E$ it will probably install as an M, but if it hits in the E$, then it
- * will stay E, if the store doesn't happen. So the first displacement flush
- * should ensure that the CAS will miss in the E$.  Arrgh.
- */
-/* ARGSUSED */
-void
-scrubphys(uint64_t paddr, int ecache_set_size)
-{}
-
-#else	/* lint */
 	ENTRY(scrubphys)
 	rdpr	%pstate, %o4
 	andn	%o4, PSTATE_IE | PSTATE_AM, %o5
@@ -470,27 +429,8 @@ scrubphys_2:
 	membar	#Sync			! move the data out of the load buffer
 	SET_SIZE(scrubphys)
 
-#endif	/* lint */
 
 
-#if defined(lint)
-/*
- * clearphys - Pass in the physical memory address of the checkblock
- * that you want to push out, cleared with a recognizable pattern,
- * from the ecache.
- *
- * To ensure that the ecc gets recalculated after the bad data is cleared,
- * we must write out enough data to fill the w$ line (64 bytes). So we read
- * in an entire ecache subblock's worth of data, and write it back out.
- * Then we overwrite the 16 bytes of bad data with the pattern.
- */
-/* ARGSUSED */
-void
-clearphys(uint64_t paddr, int ecache_set_size, int ecache_linesize)
-{
-}
-
-#else	/* lint */
 	ENTRY(clearphys)
 	/* turn off IE, AM bits */
 	rdpr	%pstate, %o4
@@ -548,26 +488,8 @@ clearphys_3:
 	  wrpr	%g0, %o4, %pstate
 	SET_SIZE(clearphys)
 
-#endif	/* lint */
 
 
-#if defined(lint)
-/*
- * Cheetah+ Ecache displacement flush the specified line from the E$
- *
- * For Panther, this means flushing the specified line from both the
- * L2 cache and L3 cache.
- *
- * Register usage:
- *	%o0 - 64 bit physical address for flushing
- *	%o1 - Ecache set size
- */
-/*ARGSUSED*/
-void
-ecache_flush_line(uint64_t flushaddr, int ec_set_size)
-{
-}
-#else	/* lint */
 	ENTRY(ecache_flush_line)
 
 	GET_CPU_IMPL(%o3)		! Panther Ecache is flushed differently
@@ -584,15 +506,7 @@ ecache_flush_line_2:
 	retl
 	  nop
 	SET_SIZE(ecache_flush_line)
-#endif	/* lint */
 
-#if defined(lint)
-void
-set_afsr_ext(uint64_t afsr_ext)
-{
-	afsr_ext = afsr_ext;
-}
-#else /* lint */
 
 	ENTRY(set_afsr_ext)
 	set	ASI_AFSR_EXT_VA, %o1
@@ -602,35 +516,8 @@ set_afsr_ext(uint64_t afsr_ext)
 	nop
 	SET_SIZE(set_afsr_ext)
 
-#endif /* lint */
 
 
-#if defined(lint)
-/*
- * The CPU jumps here from the MMU exception handler if an ITLB parity
- * error is detected and we are running on Panther.
- *
- * In this routine we collect diagnostic information and write it to our
- * logout structure (if possible) and clear all ITLB entries that may have
- * caused our parity trap.
- * Then we call cpu_tlb_parity_error via systrap in order to drop down to TL0
- * and log any error messages. As for parameters to cpu_tlb_parity_error, we
- * send two:
- *
- * %g2	- Contains the VA whose lookup in the ITLB caused the parity error
- * %g3	- Contains the tlo_info field of the pn_tlb_logout logout struct,
- *	  regardless of whether or not we actually used the logout struct.
- *
- * In the TL0 handler (cpu_tlb_parity_error) we will compare those two
- * parameters to the data contained in the logout structure in order to
- * determine whether the logout information is valid for this particular
- * error or not.
- */
-void
-itlb_parity_trap(void)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(itlb_parity_trap)
 	/*
@@ -754,34 +641,7 @@ itlb_parity_trap_1:
 	  nop
 	SET_SIZE(itlb_parity_trap)
 
-#endif	/* lint */
 
-#if defined(lint)
-/*
- * The CPU jumps here from the MMU exception handler if a DTLB parity
- * error is detected and we are running on Panther.
- *
- * In this routine we collect diagnostic information and write it to our
- * logout structure (if possible) and clear all DTLB entries that may have
- * caused our parity trap.
- * Then we call cpu_tlb_parity_error via systrap in order to drop down to TL0
- * and log any error messages. As for parameters to cpu_tlb_parity_error, we
- * send two:
- *
- * %g2	- Contains the VA whose lookup in the DTLB caused the parity error
- * %g3	- Contains the tlo_info field of the pn_tlb_logout logout struct,
- *	  regardless of whether or not we actually used the logout struct.
- *
- * In the TL0 handler (cpu_tlb_parity_error) we will compare those two
- * parameters to the data contained in the logout structure in order to
- * determine whether the logout information is valid for this particular
- * error or not.
- */
-void
-dtlb_parity_trap(void)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(dtlb_parity_trap)
 	/*
@@ -967,24 +827,8 @@ dtlb_parity_trap_2:
 	  nop
 	SET_SIZE(dtlb_parity_trap)
 
-#endif	/* lint */
 
 
-#if defined(lint)
-/*
- * Calculates the Panther TLB index based on a virtual address and page size
- *
- * Register usage:
- *	%o0 - virtual address whose index we want
- *	%o1 - Page Size of the TLB in question as encoded in the
- *	      ASI_[D|I]MMU_TAG_ACCESS_EXT register.
- */
-uint64_t
-pn_get_tlb_index(uint64_t va, uint64_t pg_sz)
-{
-	return ((va + pg_sz)-(va + pg_sz));
-}
-#else	/* lint */
 	ENTRY(pn_get_tlb_index)
 
 	PN_GET_TLB_INDEX(%o0, %o1)
@@ -992,19 +836,8 @@ pn_get_tlb_index(uint64_t va, uint64_t pg_sz)
 	retl
 	  nop
 	SET_SIZE(pn_get_tlb_index)
-#endif	/* lint */
 
 
-#if defined(lint)
-/*
- * For Panther CPUs we need to flush the IPB after any I$ or D$
- * parity errors are detected.
- */
-void
-flush_ipb(void)
-{ return; }
-
-#else	/* lint */
 
 	ENTRY(flush_ipb)
 	clr	%o0
@@ -1022,6 +855,5 @@ flush_ipb_1:
 	nop
 	SET_SIZE(flush_ipb)
 
-#endif	/* lint */
 
 

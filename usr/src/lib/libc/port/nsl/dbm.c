@@ -265,10 +265,6 @@ nextkey(datum key)
 	long hash;
 	int f;
 
-#ifdef lint
-	bitem.dptr = NULL;
-	bitem.dsize = 0;
-#endif /* lint */
 	hash = calchash(key);
 	dbm_access(hash);
 	f = 1;

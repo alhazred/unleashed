@@ -251,10 +251,6 @@ cpwnam(char *nam)
 static int
 uid_hash(void *datap, int datalen, int hsz)
 {
-#ifdef lint
-	int i = datalen;
-	datalen = i;
-#endif	/* lint */
 
 	return (*((uid_t *)datap) % hsz);
 }
@@ -262,10 +258,6 @@ uid_hash(void *datap, int datalen, int hsz)
 static int
 uid_comp(void *datap1, void *datap2, int datalen)
 {
-#ifdef lint
-	int i = datalen;
-	datalen = i;
-#endif	/* lint */
 
 	return (*((uid_t *)datap1) - *((uid_t *)datap2));
 }

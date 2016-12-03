@@ -41,9 +41,6 @@
  * functions written in a DDI-compliant way.
  */
 
-#if defined(lint) && !defined(DEBUG)
-#define	DEBUG
-#endif
 #ifdef __lock_lint
 #define	_MULTI_DATAMODEL
 #endif

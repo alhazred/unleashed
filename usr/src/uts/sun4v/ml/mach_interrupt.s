@@ -23,12 +23,7 @@
  * Use is subject to license terms.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-#include <sys/thread.h>
-#else	/* lint */
 #include "assym.h"
-#endif	/* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/machthread.h>
@@ -47,13 +42,6 @@
 #include <sys/traptrace.h>
 #endif /* TRAPTRACE */
 
-#if defined(lint)
-
-void
-cpu_mondo(void)
-{}
-
-#else	/* lint */
 
 
 /*
@@ -195,15 +183,7 @@ sfmmu_shctx_cpu_mondo_patch:
 	/* Never Reached */
 	SET_SIZE(cpu_mondo)
 
-#endif /* lint */
 
-#if defined(lint)
-
-void
-dev_mondo(void)
-{}
-
-#else	/* lint */
 
 
 /*
@@ -344,11 +324,7 @@ dev_mondo(void)
 
 	/* Never Reached */
 	SET_SIZE(dev_mondo)
-#endif /* lint */
 
-#if defined(lint)
-uint64_t cpu_mondo_inval;
-#else /* lint */
 	.seg	".data"
 	.global	cpu_mondo_inval
 	.align	8
@@ -356,16 +332,8 @@ cpu_mondo_inval:
 	.skip	8
 
 	.seg	".text"
-#endif	/* lint */
 
 
-#if defined(lint)
-
-void
-resumable_error(void)
-{}
-
-#else	/* lint */
 
 /*
  * (TT 0x7e, TL>0) Resumeable Error Queue Handler
@@ -482,15 +450,7 @@ resumable_error(void)
 
 	/*NOTREACHED*/
 	SET_SIZE(resumable_error)
-#endif /* lint */
 
-#if defined(lint)
-
-void
-nonresumable_error(void)
-{}
-
-#else	/* lint */
 
 /*
  * (TT 0x7f, TL>0) Non-resumeable Error Queue Handler
@@ -663,4 +623,3 @@ nonresumable_error(void)
 
 	/*NOTREACHED*/
 	SET_SIZE(nonresumable_error)
-#endif /* lint */

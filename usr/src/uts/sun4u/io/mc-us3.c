@@ -1662,15 +1662,9 @@ mlayout_add(int mc_id, int bank_no, uint64_t reg, void *dimminfop)
 	 * gcc.
 	 */
 
-#if defined(lint)
-	DPRINTF(MC_CNSTRC_DEBUG, ("mlayout_add 3: logical bank num %d, "
-	    "lk 0x%lx uk 0x%lx um 0x%lx ifactor 0x%x size 0x%lx base 0x%lx\n",
-	    idx, mcreg._s.lk, mcreg._s.uk, mcreg._s.um, ifactor, size, base));
-#else /* lint */
 	DPRINTF(MC_CNSTRC_DEBUG, ("mlayout_add 3: logical bank num %d, "
 	    "lk 0x%x uk 0x%x um 0x%x ifactor 0x%x size 0x%lx base 0x%lx\n",
 	    idx, mcreg._s.lk, mcreg._s.uk, mcreg._s.um, ifactor, size, base));
-#endif /* lint */
 
 	/* connect the entry and update the size on dgrp_info list */
 	idx = mc_id * NDGRPS + (bank_no % NDGRPS);

@@ -45,9 +45,7 @@
 #include "fsm.h"
 #include "lcp.h"
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 static char *frame;
 static int framelen;

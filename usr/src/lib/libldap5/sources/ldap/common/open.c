@@ -34,9 +34,7 @@
  */
 
 #if 0
-#ifndef lint 
 static char copyright[] = "@(#) Copyright (c) 1995 Regents of the University of Michigan.\nAll rights reserved.\n";
-#endif
 #endif
 
 #include "ldap-int.h"

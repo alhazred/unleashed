@@ -296,9 +296,6 @@ exp(double x) {
 				volatile int	dummy;
 
 				dummy = (int)x;	/* raise inexact if x != 0 */
-#ifdef lint
-				dummy = dummy;
-#endif
 				if (hx < 0x3e300000)
 					return (one + x);
 				return (one + x * (one + half * x));

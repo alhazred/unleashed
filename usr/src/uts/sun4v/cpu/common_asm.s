@@ -22,9 +22,7 @@
  * Copyright (c) 2005, 2010, Oracle and/or its affiliates. All rights reserved.
  */
 
-#if !defined(lint)
 #include "assym.h"
-#endif
 
 /*
  * General assembly language routines.
@@ -44,14 +42,6 @@
 #include <sys/machclock.h>
 #include <sys/clock.h>
 
-#if defined(lint)
-#include <sys/types.h>
-#include <sys/scb.h>
-#include <sys/systm.h>
-#include <sys/regset.h>
-#include <sys/sunddi.h>
-#include <sys/lockstat.h>
-#endif	/* lint */
 
 
 #include <sys/asm_linkage.h>
@@ -67,23 +57,10 @@
 #include <sys/intr.h>
 #include <sys/hypervisor_api.h>
 
-#if !defined(lint)
 #include "assym.h"
-#endif
 
 #define	ICACHE_FLUSHSZ	0x20
 
-#if defined(lint)
-/*
- * Softint generated when counter field of tick reg matches value field 
- * of tick_cmpr reg
- */
-/*ARGSUSED*/
-void
-tickcmpr_set(uint64_t clock_cycles)
-{}
-
-#else   /* lint */
 
 	ENTRY_NP(tickcmpr_set)
 	! get 64-bit clock_cycles interval
@@ -106,15 +83,7 @@ tickcmpr_set(uint64_t clock_cycles)
 	  nop
 	SET_SIZE(tickcmpr_set)
 
-#endif  /* lint */
 
-#if defined(lint)
-
-void
-tickcmpr_disable(void)
-{}
-
-#else
 
 	ENTRY_NP(tickcmpr_disable)
 	mov	1, %g1
@@ -124,28 +93,7 @@ tickcmpr_disable(void)
 	  nop
 	SET_SIZE(tickcmpr_disable)
 
-#endif
 
-#if defined(lint)
-
-/*
- * tick_write_delta() is intended to increment %stick by the specified delta,
- * but %stick is only writeable in hyperprivileged mode and at present there
- * is no provision for this. tick_write_delta is called by the cylic subsystem
- * if a negative %stick delta is observed after cyclic processing is resumed
- * after an event such as an OS suspend/resume. On sun4v, the suspend/resume
- * routines should adjust the %stick offset preventing the cyclic subsystem
- * from detecting a negative delta. If a negative delta is detected, panic the
- * system. The negative delta could be caused by improper %stick
- * synchronization after a suspend/resume.
- */
-
-/*ARGSUSED*/
-void
-tick_write_delta(uint64_t delta)
-{}
-
-#else	/* lint */
 
 	.seg	".text"
 tick_write_delta_panic:
@@ -160,18 +108,7 @@ tick_write_delta_panic:
 	/*NOTREACHED*/
 	retl
 	  nop
-#endif
 
-#if defined(lint)
-/*
- *  return 1 if disabled
- */
-
-int
-tickcmpr_disabled(void)
-{ return (0); }
-
-#else   /* lint */
 
 	ENTRY_NP(tickcmpr_disabled)
 	RD_TICKCMPR(%g1,%o0,%o1,__LINE__)
@@ -179,22 +116,10 @@ tickcmpr_disabled(void)
 	  srlx	%g1, TICKINT_DIS_SHFT, %o0
 	SET_SIZE(tickcmpr_disabled)
 
-#endif  /* lint */
 
 /*
  * Get current tick
  */
-#if defined(lint)
-
-u_longlong_t
-gettick(void)
-{ return (0); }
-
-u_longlong_t
-randtick(void)
-{ return (0); }
-
-#else   /* lint */
 
 	ENTRY(gettick)
 	ALTENTRY(randtick)
@@ -204,44 +129,20 @@ randtick(void)
 	SET_SIZE(randtick)
 	SET_SIZE(gettick)
 
-#endif  /* lint */
 
 /*
  * Get current tick. For trapstat use only.
  */
-#if defined (lint)
-
-hrtime_t
-rdtick()
-{ return (0); }
-
-#else
 	ENTRY(rdtick)
 	retl
 	RD_TICK_PHYSICAL(%o0)
 	SET_SIZE(rdtick)
-#endif /* lint */
 
 
 /*
  * Return the counter portion of the tick register.
  */
 
-#if defined(lint)
-
-uint64_t
-gettick_counter(void)
-{ return(0); }
-
-uint64_t
-gettick_npt(void)
-{ return(0); }
-
-uint64_t
-getstick_npt(void)
-{ return(0); }
-
-#else	/* lint */
 
 	ENTRY_NP(gettick_counter)
 	RD_TICK(%o0,%o1,%o2,__LINE__)
@@ -260,71 +161,12 @@ getstick_npt(void)
 	retl
 	srlx	%o0, 63, %o0
 	SET_SIZE(getstick_npt)
-#endif	/* lint */
 
 /*
  * Provide a C callable interface to the trap that reads the hi-res timer.
  * Returns 64-bit nanosecond timestamp in %o0 and %o1.
  */
 
-#if defined(lint)
-
-hrtime_t
-gethrtime(void)
-{
-	return ((hrtime_t)0);
-}
-
-hrtime_t
-gethrtime_unscaled(void)
-{
-	return ((hrtime_t)0);
-}
-
-hrtime_t
-gethrtime_max(void)
-{
-	return ((hrtime_t)0);
-}
-
-void
-scalehrtime(hrtime_t *hrt)
-{
-	*hrt = 0;
-}
-
-void
-gethrestime(timespec_t *tp)
-{
-	tp->tv_sec = 0;
-	tp->tv_nsec = 0;
-}
-
-time_t
-gethrestime_sec(void)
-{
-	return (0);
-}
-
-void
-gethrestime_lasttick(timespec_t *tp)
-{
-	tp->tv_sec = 0;
-	tp->tv_nsec = 0;
-}
-
-/*ARGSUSED*/
-void
-hres_tick(void)
-{
-}
-
-void
-panic_hres_tick(void)
-{
-}
-
-#else	/* lint */
 
 	ENTRY_NP(gethrtime)
 	GET_HRTIME(%g1,%o0,%o1,%o2,%o3,%o4,%o5,%g2,__LINE__)
@@ -618,9 +460,7 @@ hrtime_base_panic:
 
 	SET_SIZE(hres_tick)
 
-#endif	/* lint */
 
-#if !defined(lint) && !defined(__lint)
 
 	.seg	".text"
 kstat_q_panic_msg:
@@ -731,20 +571,7 @@ QRETURN;								\
 	KSTAT_Q_UPDATE(add, BRZPT, 1f, 1:retl, KSTAT_IO_W)
 	SET_SIZE(kstat_runq_back_to_waitq)
 
-#endif /* lint */
 
-#ifdef lint	
-
-int64_t timedelta;
-hrtime_t hres_last_tick;
-volatile timestruc_t hrestime;
-int64_t hrestime_adj;
-volatile int hres_lock;
-uint_t nsec_scale;
-hrtime_t hrtime_base;
-int traptrace_use_stick;
-
-#else
 	/*
 	 *  -- WARNING --
 	 *
@@ -788,7 +615,6 @@ native_tick_offset:
 native_stick_offset:
 	.word	0, 0
 
-#endif
 
 
 /*
@@ -803,19 +629,6 @@ native_stick_offset:
  * use %stick to implement this routine.
  */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-drv_usecwait(clock_t n)
-{}
-
-/*ARGSUSED*/
-void
-usec_delay(int n)
-{}
-
-#else	/* lint */
 
 	ENTRY(drv_usecwait)
 	ALTENTRY(usec_delay)
@@ -837,16 +650,7 @@ usec_delay(int n)
 	  nop
 	SET_SIZE(usec_delay)
 	SET_SIZE(drv_usecwait)
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-pil14_interrupt(int level)
-{}
-
-#else
 
 /*
  * Level-14 interrupt prologue.
@@ -933,16 +737,7 @@ pil14_interrupt(int level)
 	  nop
 	SET_SIZE(tick_rtt)
 
-#endif /* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-pil15_interrupt(int level)
-{}
-
-#else   /* lint */
 
 /*
  * Level-15 interrupt prologue.
@@ -961,23 +756,7 @@ pil15_interrupt(int level)
        stn     %g0, [%g1 + CPU_CPCPROFILE_UPC] ! zero user PC
        SET_SIZE(pil15_interrupt)
 
-#endif  /* lint */
 
-#if defined(lint)
-/*
- * Prefetch a page_t for write or read, this assumes a linear
- * scan of sequential page_t's.
- */
-/*ARGSUSED*/
-void
-prefetch_page_w(void *pp)
-{}
-
-/*ARGSUSED*/
-void
-prefetch_page_r(void *pp)
-{}
-#else	/* lint */
 
 /* XXXQ These should be inline templates, not functions */
         ENTRY(prefetch_page_w)
@@ -990,17 +769,7 @@ prefetch_page_r(void *pp)
 	  nop
         SET_SIZE(prefetch_page_r)
 
-#endif	/* lint */
 
-#if defined(lint)
-/*
- * Prefetch struct smap for write. 
- */
-/*ARGSUSED*/
-void
-prefetch_smap_w(void *smp)
-{}
-#else	/* lint */
 
 /* XXXQ These should be inline templates, not functions */
 	ENTRY(prefetch_smap_w)
@@ -1008,60 +777,11 @@ prefetch_smap_w(void *smp)
 	  nop
 	SET_SIZE(prefetch_smap_w)
 
-#endif	/* lint */
 
 /*
  * Generic sun4v MMU and Cache operations.
  */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-vtag_flushpage(caddr_t vaddr, uint64_t sfmmup)
-{}
-
-/*ARGSUSED*/
-void
-vtag_flushall(void)
-{}
-
-/*ARGSUSED*/
-void
-vtag_unmap_perm_tl1(uint64_t vaddr, uint64_t ctxnum)
-{}
-
-/*ARGSUSED*/
-void
-vtag_flushpage_tl1(uint64_t vaddr, uint64_t sfmmup)
-{}
-
-/*ARGSUSED*/
-void
-vtag_flush_pgcnt_tl1(uint64_t vaddr, uint64_t sfmmup_pgcnt)
-{}
-
-/*ARGSUSED*/
-void
-vtag_flushall_tl1(uint64_t dummy1, uint64_t dummy2)
-{}
-
-/*ARGSUSED*/
-void
-vac_flushpage(pfn_t pfnum, int vcolor)
-{}
-
-/*ARGSUSED*/
-void
-vac_flushpage_tl1(uint64_t pfnum, uint64_t vcolor)
-{}
-
-/*ARGSUSED*/
-void
-flush_instr_mem(caddr_t vaddr, size_t len)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(vtag_flushpage)
 	/*
@@ -1262,7 +982,6 @@ flush_instr_mem(caddr_t vaddr, size_t len)
 	  nop
 	SET_SIZE(flush_instr_mem)
 
-#endif /* !lint */
 
 #if !defined(CUSTOM_FPZERO)
 
@@ -1270,13 +989,6 @@ flush_instr_mem(caddr_t vaddr, size_t len)
  * fp_zero() - clear all fp data registers and the fsr
  */
 
-#if defined(lint) || defined(__lint)
-
-void
-fp_zero(void)
-{}
-
-#else	/* lint */
 
 .global	fp_zero_zero
 .align 8
@@ -1321,5 +1033,4 @@ fp_zero_zero:
 	fmovd	%f0, %f62
 	SET_SIZE(fp_zero)
 
-#endif	/* lint */
 #endif  /* CUSTOM_FPZERO */

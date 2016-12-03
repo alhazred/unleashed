@@ -35,9 +35,7 @@
 #ifdef HAVE_MULTILINK
 #include "tdb.h"
 #endif
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 #define set_ip_epdisc(ep, addr) (	\
 	ep->length = 4,			\

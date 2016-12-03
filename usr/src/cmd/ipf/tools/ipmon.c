@@ -82,10 +82,8 @@
 #include "ipmon.h"
 #include "ipfzone.h"
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)ipmon.c	1.21 6/5/96 (C)1993-2000 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ipmon.c,v 1.33.2.10 2005/06/18 02:41:35 darrenr Exp $";
-#endif
 
 
 #if	defined(sun) && !defined(SOLARIS2)

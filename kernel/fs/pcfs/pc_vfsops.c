@@ -179,11 +179,9 @@ _init(void)
 {
 	int	error;
 
-#if !defined(lint)
 	/* make sure the on-disk structures are sane */
 	ASSERT(sizeof (struct pcdir) == 32);
 	ASSERT(sizeof (struct pcdir_lfn) == 32);
-#endif
 	mutex_init(&pcfslock, NULL, MUTEX_DEFAULT, NULL);
 	rw_init(&pcnodes_lock, NULL, RW_DEFAULT, NULL);
 	error = mod_install(&modlinkage);

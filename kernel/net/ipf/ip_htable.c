@@ -54,9 +54,7 @@ struct file;
 #include "netinet/ipf_stack.h"
 /* END OF INCLUDES */
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: ip_htable.c,v 2.34.2.3 2005/05/14 05:11:38 darrenr Exp $";
-#endif
 
 #ifdef	IPFILTER_LOOKUP
 static iphtent_t *fr_iphmfind __P((iphtable_t *, struct in_addr *));

@@ -29,11 +29,7 @@
  * only by DR.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-#else
 #include "assym.h"
-#endif /* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/clock.h>
@@ -50,56 +46,6 @@
 #include <sys/intreg.h>
 #include <sys/cheetahasm.h>
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-drmach_shutdown_asm(uint64_t estack, uint64_t flushaddr,
-    int size, int lsz, uint64_t physmem)
-{}
-
-/*ARGSUSED*/
-void
-drmach_rename(uint64_t *script, uint_t *err, uint64_t *id)
-{}
-
-void
-drmach_rename_end(void)
-{}
-
-/*ARGSUSED*/
-void
-drmach_rename_wait(uint64_t not_used_0, uint64_t not_used_1)
-{
-}
-
-/*ARGSUSED*/
-void
-drmach_rename_done(uint64_t not_used_0, uint64_t not_used_1)
-{
-}
-
-/*ARGSUSED*/
-void
-drmach_rename_abort(uint64_t not_used_0, uint64_t not_used_1)
-{
-}
-
-/*ARGSUSED*/
-uint64_t
-lddsafconfig(void)
-{
-	return (0x0ull);
-}
-
-/* ARGSUSED */
-uint32_t
-drmach_bc_bzero(void *addr, size_t size)
-{
-	return (0x0);
-}
-
-#else /* lint */
 
 #define BUS_SYNC(reg1, reg2)					\
 1:								;\
@@ -972,4 +918,3 @@ drmach_rename_wait_asm_end:
 
 	SET_SIZE(drmach_bc_bzero)
 
-#endif /* lint */

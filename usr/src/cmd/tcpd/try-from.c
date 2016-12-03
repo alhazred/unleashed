@@ -10,9 +10,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) try-from.c 1.2 94/12/28 17:42:55";
-#endif
 
 /* System libraries. */
 

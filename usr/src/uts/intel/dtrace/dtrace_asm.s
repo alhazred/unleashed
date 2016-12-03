@@ -29,19 +29,8 @@
 #include <sys/asm_linkage.h>
 #include <sys/regset.h>
 
-#if defined(lint)
-#include <sys/dtrace_impl.h>
-#else
 #include "assym.h"
-#endif
 
-#if defined(lint) || defined(__lint)
-
-greg_t
-dtrace_getfp(void)
-{ return (0); }
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -58,17 +47,8 @@ dtrace_getfp(void)
 	SET_SIZE(dtrace_getfp)
 
 #endif	/* __i386 */
-#endif	/* lint */
 
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-uint64_t
-dtrace_getvmreg(uint32_t reg, volatile uint16_t *flags)
-{ return (0); }
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -96,32 +76,8 @@ dtrace_getvmreg(uint32_t reg, volatile uint16_t *flags)
 	SET_SIZE(dtrace_getvmreg)
 
 #endif	/* __i386 */
-#endif	/* lint */
 
 
-#if defined(lint) || defined(__lint)
-
-uint32_t
-dtrace_cas32(uint32_t *target, uint32_t cmp, uint32_t new)
-{
-	uint32_t old;
-
-	if ((old = *target) == cmp)
-		*target = new;
-	return (old);
-}
-
-void *
-dtrace_casptr(void *target, void *cmp, void *new)
-{
-	void *old;
-
-	if ((old = *(void **)target) == cmp)
-		*(void **)target = new;
-	return (old);
-}
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -153,18 +109,7 @@ dtrace_casptr(void *target, void *cmp, void *new)
 	SET_SIZE(dtrace_cas32)
 
 #endif	/* __i386 */
-#endif	/* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uintptr_t
-dtrace_caller(int aframes)
-{
-	return (0);
-}
-
-#else	/* lint */
 
 #if defined(__amd64)
 	ENTRY(dtrace_caller)
@@ -180,16 +125,7 @@ dtrace_caller(int aframes)
 	SET_SIZE(dtrace_caller)
 
 #endif	/* __i386 */
-#endif	/* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-dtrace_copy(uintptr_t src, uintptr_t dest, size_t size)
-{}
-
-#else
 
 #if defined(__amd64)
 
@@ -229,17 +165,7 @@ dtrace_copy(uintptr_t src, uintptr_t dest, size_t size)
 	SET_SIZE(dtrace_copy)
 
 #endif	/* __i386 */
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-dtrace_copystr(uintptr_t uaddr, uintptr_t kaddr, size_t size,
-    volatile uint16_t *flags)
-{}
-
-#else
 
 #if defined(__amd64)
 
@@ -307,16 +233,7 @@ dtrace_copystr(uintptr_t uaddr, uintptr_t kaddr, size_t size,
 	SET_SIZE(dtrace_copystr)
 
 #endif	/* __i386 */
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uintptr_t
-dtrace_fulword(void *addr)
-{ return (0); }
-
-#else
 #if defined(__amd64)
 
 	ENTRY(dtrace_fulword)
@@ -336,16 +253,7 @@ dtrace_fulword(void *addr)
 	SET_SIZE(dtrace_fulword)
 
 #endif	/* __i386 */
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uint8_t
-dtrace_fuword8_nocheck(void *addr)
-{ return (0); }
-
-#else
 #if defined(__amd64)
 
 	ENTRY(dtrace_fuword8_nocheck)
@@ -366,16 +274,7 @@ dtrace_fuword8_nocheck(void *addr)
 	SET_SIZE(dtrace_fuword8_nocheck)
 
 #endif	/* __i386 */
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uint16_t
-dtrace_fuword16_nocheck(void *addr)
-{ return (0); }
-
-#else
 #if defined(__amd64)
 
 	ENTRY(dtrace_fuword16_nocheck)
@@ -396,16 +295,7 @@ dtrace_fuword16_nocheck(void *addr)
 	SET_SIZE(dtrace_fuword16_nocheck)
 
 #endif	/* __i386 */
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uint32_t
-dtrace_fuword32_nocheck(void *addr)
-{ return (0); }
-
-#else
 #if defined(__amd64)
 
 	ENTRY(dtrace_fuword32_nocheck)
@@ -426,16 +316,7 @@ dtrace_fuword32_nocheck(void *addr)
 	SET_SIZE(dtrace_fuword32_nocheck)
 
 #endif	/* __i386 */
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uint64_t
-dtrace_fuword64_nocheck(void *addr)
-{ return (0); }
-
-#else
 #if defined(__amd64)
 
 	ENTRY(dtrace_fuword64_nocheck)
@@ -457,17 +338,7 @@ dtrace_fuword64_nocheck(void *addr)
 	SET_SIZE(dtrace_fuword64_nocheck)
 
 #endif	/* __i386 */
-#endif
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-void
-dtrace_probe_error(dtrace_state_t *state, dtrace_epid_t epid, int which,
-    int fault, int fltoffs, uintptr_t illval)
-{}
-
-#else	/* lint */
 #if defined(__amd64)
 
 	ENTRY(dtrace_probe_error)
@@ -506,4 +377,3 @@ dtrace_probe_error(dtrace_state_t *state, dtrace_epid_t epid, int which,
 	SET_SIZE(dtrace_probe_error)
 
 #endif	/* __i386 */
-#endif

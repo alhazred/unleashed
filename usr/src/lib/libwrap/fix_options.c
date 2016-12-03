@@ -12,9 +12,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) fix_options.c 1.6 97/04/08 02:29:19";
-#endif
 
 #include <sys/types.h>
 #include <sys/param.h>

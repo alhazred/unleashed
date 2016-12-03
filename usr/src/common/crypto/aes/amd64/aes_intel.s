@@ -149,35 +149,6 @@
  * ====================================================================
  */
 
-#if defined(lint) || defined(__lint)
-
-#include <sys/types.h>
-
-/* ARGSUSED */
-void
-aes_encrypt_intel(const uint32_t rk[], int Nr, const uint32_t pt[4],
-    uint32_t ct[4]) {
-}
-/* ARGSUSED */
-void
-aes_decrypt_intel(const uint32_t rk[], int Nr, const uint32_t ct[4],
-    uint32_t pt[4]) {
-}
-/* ARGSUSED */
-int
-rijndael_key_setup_enc_intel(uint32_t rk[], const uint32_t cipherKey[],
-    uint64_t keyBits) {
-	return (0);
-}
-/* ARGSUSED */
-int
-rijndael_key_setup_dec_intel(uint32_t rk[], const uint32_t cipherKey[],
-   uint64_t keyBits) {
-	return (0);
-}
-
-
-#else	/* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/controlregs.h>
@@ -851,4 +822,3 @@ ENTRY_NP(aes_decrypt_intel)
 	ret
 	SET_SIZE(aes_decrypt_intel)
 
-#endif	/* lint || __lint */

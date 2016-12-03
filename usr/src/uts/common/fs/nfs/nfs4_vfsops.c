@@ -3964,12 +3964,7 @@ add_new_nfs4_server(struct servinfo4 *svp, cred_t *cr)
 
 int nfs4_server_t_debug = 0;
 
-#ifdef lint
-extern void
-dumpnfs4slist(char *, mntinfo4_t *, clientid4, servinfo4_t *);
-#endif
 
-#ifndef lint
 #ifdef DEBUG
 void
 dumpnfs4slist(char *txt, mntinfo4_t *mi, clientid4 clientid, servinfo4_t *srv_p)
@@ -4004,7 +3999,6 @@ dumpnfs4slist(char *txt, mntinfo4_t *mi, clientid4 clientid, servinfo4_t *srv_p)
 	}
 	delay(hz);
 }
-#endif
 #endif
 
 

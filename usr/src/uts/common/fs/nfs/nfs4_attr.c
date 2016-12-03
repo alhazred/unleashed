@@ -246,13 +246,11 @@ vattr_to_fattr4(vattr_t *vap, vsecattr_t *vsap, fattr4 *fattrp, int flags,
 	uint_t va_mask = vap->va_mask;
 	bool_t (*attrfunc)();
 
-#ifndef lint
 	/*
 	 * Make sure that maximum attribute number can be expressed as an
 	 * 8 bit quantity.
 	 */
 	ASSERT(NFS4_MAXNUM_ATTRS <= (UINT8_MAX + 1));
-#endif
 	fattrp->attrmask = 0;
 	fattrp->attrlist4_len = 0;
 	fattrp->attrlist4 = NULL;

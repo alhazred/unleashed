@@ -440,9 +440,6 @@ thr_statd_init(void)
 		syslog(LOG_ERR,
 		    "statd: unable to create thread for sm_try().\n");
 	thr_exit((void *) 0);
-#ifdef lint
-	return (0);
-#endif
 }
 
 /*
@@ -528,9 +525,6 @@ thr_call_statd(void *namep)
 		free(name);
 	}
 	thr_exit((void *) 0);
-#ifdef lint
-	return (0);
-#endif
 }
 
 /*
@@ -705,9 +699,6 @@ out:
 	if (debug)
 		(void) printf("EXITING sm_try\n");
 	thr_exit((void *) 0);
-#ifdef lint
-	return (0);
-#endif
 }
 
 /*

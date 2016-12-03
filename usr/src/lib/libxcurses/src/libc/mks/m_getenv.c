@@ -36,9 +36,7 @@
  */
 
 #ifdef M_RCSID
-#ifndef lint
 static char const rcsID[] = "$Header: /rd/src/libc/mks/rcs/m_getenv.c 1.2 1995/07/11 16:53:01 ross Exp $";
-#endif /*lint*/
 #endif /*M_RCSID*/
 
 #include <mks.h>

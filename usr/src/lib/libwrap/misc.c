@@ -10,9 +10,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsic[] = "@(#) misc.c 1.2 96/02/11 17:01:29";
-#endif
 
 #include <sys/types.h>
 #include <sys/param.h>

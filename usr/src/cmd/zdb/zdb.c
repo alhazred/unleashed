@@ -74,17 +74,10 @@
 	(((idx) == DMU_OTN_ZAP_DATA || (idx) == DMU_OTN_ZAP_METADATA) ?	\
 	DMU_OT_ZAP_OTHER : DMU_OT_NUMTYPES))
 
-#ifndef lint
 extern int reference_tracking_enable;
 extern boolean_t zfs_recover;
 extern uint64_t zfs_arc_max, zfs_arc_meta_limit;
 extern int zfs_vdev_async_read_max_active;
-#else
-int reference_tracking_enable;
-boolean_t zfs_recover;
-uint64_t zfs_arc_max, zfs_arc_meta_limit;
-int zfs_vdev_async_read_max_active;
-#endif
 
 const char cmdname[] = "zdb";
 uint8_t dump_opt[256];

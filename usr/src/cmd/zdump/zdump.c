@@ -68,13 +68,9 @@ static char	elsieid[] = "@(#)zdump.c	7.74";
 #define	SECSPERLYEAR	(SECSPERNYEAR + SECSPERDAY)
 
 #ifndef GNUC_or_lint
-#ifdef lint
-#define	GNUC_or_lint
-#else /* !defined lint */
 #ifdef __GNUC__
 #define	GNUC_or_lint
 #endif /* defined __GNUC__ */
-#endif /* !defined lint */
 #endif /* !defined GNUC_or_lint */
 
 #ifndef INITIALIZE

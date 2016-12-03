@@ -127,9 +127,7 @@
 #include "magic.h"
 #include "pathnames.h"
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 /* global vars */
 ipv6cp_options ipv6cp_wantoptions[NUM_PPP];     /* Options that we want to request */

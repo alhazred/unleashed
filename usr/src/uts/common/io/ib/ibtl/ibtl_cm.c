@@ -576,9 +576,7 @@ get_plist_start:
 		}
 	}
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW)
-#endif
 
 	IBTF_DPRINTF_L3(ibtf_cm, "ibtl_cm_get_active_plist: "
 	    "Returned <%d> entries @0x%p", count, *port_list_p);

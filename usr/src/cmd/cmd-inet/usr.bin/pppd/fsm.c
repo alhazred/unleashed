@@ -39,9 +39,7 @@
 #include "pppd.h"
 #include "fsm.h"
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 static void fsm_timeout __P((void *));
 static void fsm_rconfreq __P((fsm *, int, u_char *, int));

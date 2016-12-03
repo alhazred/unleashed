@@ -33,12 +33,6 @@
  * Do nothing efficiently.
  */
 
-#ifdef lint
-void
-smt_pause(void)
-{
-}
-#else
 #define	BANKS	(4 * 64)
 	ENTRY(smt_pause)
 	save %sp, -SA(MINFRAME+BANKS), %sp
@@ -52,4 +46,3 @@ smt_pause(void)
 	ret
 	restore
 	SET_SIZE(smt_pause)
-#endif

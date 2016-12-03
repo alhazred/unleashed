@@ -32,9 +32,7 @@
  */
 
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] = "$Id: m_errorx.c 1.9 1995/02/08 15:03:16 rob Exp $";
-#endif
 #endif
 
 #include <mks.h>

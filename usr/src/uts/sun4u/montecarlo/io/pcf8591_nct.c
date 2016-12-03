@@ -262,10 +262,6 @@ pcf8591_close(dev_t devp, int flags, int otyp, cred_t *credp)
 	int instance = PCF8591_MINOR_TO_DEVINST(minor);
 	int channel = PCF8591_MINOR_TO_CHANNEL(minor);
 
-#ifdef lint
-	flags = flags;
-	otyp = otyp;
-#endif
 
 	if (instance < 0) {
 		return (ENXIO);
@@ -1082,9 +1078,6 @@ pcf8591_read_props(struct pcf8591_unit *unitp)
 	char *function;
 	uint_t		tblsz;
 
-#ifdef lint
-	instance = instance;
-#endif
 	/*
 	 * Check for the pcf8591_function property, and make sure it's
 	 * cputemp.

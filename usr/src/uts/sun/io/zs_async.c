@@ -96,11 +96,7 @@ ushort_t zs_speeds[NSPEED] = {
 	ZSPEED(50),	/* 1 */
 	ZSPEED(75),	/* 2 */
 	ZSPEED(110),	/* 3 */
-#ifdef lint
-	ZSPEED(134),	/* 4 */
-#else
 	ZSPEED(269/2),			/* XXX - This is sleazy */
-#endif
 	ZSPEED(150),	/* 5 */
 	ZSPEED(200),	/* 6 */
 	ZSPEED(300),	/* 7 */
@@ -144,11 +140,7 @@ ushort_t zsdelay[NSPEED] = {
 	ZDELAY(50),	/* 1 */
 	ZDELAY(75),	/* 2 */
 	ZDELAY(110),    /* 3 */
-#ifdef lint
-	ZDELAY(134),    /* 4 */
-#else
 	ZDELAY(269/2),
-#endif
 	ZDELAY(150),    /* 5 */
 	ZDELAY(200),    /* 6 */
 	ZDELAY(300),    /* 7 */

@@ -28,9 +28,7 @@
  * $Header: /cvs/krbdev/krb5/src/lib/kadm5/srv/adb_openclose.c,v 1.8 2002/10/08 20:20:29 tlyu Exp $ 
  */
 
-#if !defined(lint) && !defined(__CODECENTER__)
 static char *rcsid = "$Header: /cvs/krbdev/krb5/src/lib/kadm5/srv/adb_openclose.c,v 1.8 2002/10/08 20:20:29 tlyu Exp $";
-#endif
 
 #include	<sys/file.h>
 #include	<fcntl.h>

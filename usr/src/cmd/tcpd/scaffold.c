@@ -4,9 +4,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccs_id[] = "@(#) scaffold.c 1.6 97/03/21 19:27:24";
-#endif
 
 /* System libraries. */
 

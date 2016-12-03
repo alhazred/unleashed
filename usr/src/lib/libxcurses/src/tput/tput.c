@@ -91,9 +91,7 @@
  *	NOTE 2: tput has knowledge about the TERMINAL structure.
  */
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] = "$Id: tput.c 1.28 1995/04/12 09:28:05 ross Exp $";
-#endif
 #endif
 
 #include <mks.h>

@@ -75,14 +75,6 @@
  *
  */
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-int
-wc_save_context(wc_cpu_t *pcpu)
-{ return 0; }
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -224,7 +216,6 @@ wc_save_context(wc_cpu_t *pcpu)
 
 #endif	/* __amd64 */
 
-#endif /* lint */
 
 
 /*
@@ -243,17 +234,6 @@ wc_save_context(wc_cpu_t *pcpu)
  *		- We return to original caller (a la setjmp)
  */
 
-#if defined(lint) || defined(__lint)
-
-void
-wc_rm_start(void)
-{}
-
-void
-wc_rm_end(void)
-{}
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -1162,5 +1142,4 @@ kernel_wc_code:
 
 #endif	/* defined(__amd64) */
 
-#endif /* lint */
 

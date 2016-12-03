@@ -32,16 +32,11 @@
 #include	"machdep.h"
 #include	"_audit.h"
 
-#if	defined(lint)
-#include	<sys/types.h>
-#include	"_rtld.h"
-#else
 #include	<sys/stack.h>
 #include	<sys/asm_linkage.h>
 
 	.file	"boot_elf.s"
 	.seg	".text"
-#endif
 
 /*
  * We got here because the initial call to a function resolved to a procedure
@@ -68,18 +63,6 @@
  *	jmpl	%g1 + %lo(entry_pt), %g0
  */
 
-#if	defined(lint)
-
-extern unsigned long	elf_bndr(Rt_map *, unsigned long, caddr_t);
-
-static void
-elf_rtbndr(Rt_map *lmp, unsigned long pltoff, caddr_t from)
-{
-	(void) elf_bndr(lmp, pltoff, from);
-}
-
-
-#else
 	.weak	_elf_rtbndr		! keep dbx happy as it likes to
 	_elf_rtbndr = elf_rtbndr	! rummage around for our symbols
 
@@ -104,22 +87,8 @@ elf_rtbndr:
 	restore
 	.size 	elf_rtbndr, . - elf_rtbndr
 
-#endif
 
 
-#if defined(lint)
-void
-iflush_range(caddr_t addr, size_t len)
-{
-	/* LINTED */
-	uintptr_t base;
-
-	base = (uintptr_t)addr & ~7;	/* round down to 8 byte alignment */
-	len = (len + 7) & ~7;		/* round up to multiple of 8 bytes */
-	for (len -= 8; (long)len >= 0; len -= 8)
-		/* iflush(base + len) */;
-}
-#else
 	ENTRY(iflush_range)
 	add	%o1, 7, %o1
 	andn	%o0, 7, %o0
@@ -130,7 +99,6 @@ iflush_range(caddr_t addr, size_t len)
 	retl
 	nop
 	SET_SIZE(iflush_range)
-#endif
 
 /*
  * Initialize the first plt entry so that function calls go to elf_rtbndr
@@ -143,19 +111,6 @@ iflush_range(caddr_t addr, size_t len)
  *	address of lm
  */
 
-#if	defined(lint)
-
-void
-elf_plt_init(void *plt, caddr_t lmp)
-{
-	*((uint_t *)plt + 0) = (unsigned long) M_SAVESP64;
-	*((uint_t *)plt + 4) = M_CALL | (((unsigned long)elf_rtbndr -
-			((unsigned long)plt)) >> 2);
-	*((uint_t *)plt + 8) = M_NOP;
-	*((uint_t *)plt + 12) = (unsigned long) lmp;
-}
-
-#else
 	.global	elf_plt_init
 	.type	elf_plt_init, #function
 	.align	4
@@ -189,16 +144,7 @@ elf_plt_init:
 	ret
 	restore
 	.size	elf_plt_init, . - elf_plt_init
-#endif
 
-#if	defined(lint)
-
-ulong_t
-elf_plt_trace()
-{
-	return (0);
-}
-#else
 	.global	elf_plt_trace
 	.type   elf_plt_trace, #function
 	.align	4
@@ -392,7 +338,6 @@ elf_plt_trace:
 	restore
 	.size	elf_plt_trace, . - elf_plt_trace
 
-#endif
 
 /*
  * After the first call to a plt, elf_bndr() will have determined the true
@@ -407,17 +352,6 @@ elf_plt_trace:
  *	jmpl	%g1 + %lo(function address, %g0	! patched first
  */
 
-#if	defined(lint)
-
-void
-plt_full_range(uintptr_t pc, uintptr_t symval)
-{
-	uint_t *	plttab = (uint_t *)pc;
-	plttab[2] = (M_JMPL | ((unsigned long)symval & S_MASK(10)));
-	plttab[1] = (M_SETHIG1 | ((unsigned long)symval >> (32 - 22)));
-}
-
-#else
 	ENTRY(plt_full_range)
 
 	sethi	%hi(M_JMPL), %o3	! Get jmpl instruction
@@ -436,5 +370,4 @@ plt_full_range(uintptr_t pc, uintptr_t symval)
 
 	SET_SIZE(plt_full_range)
 
-#endif	/* defined(lint) */
 

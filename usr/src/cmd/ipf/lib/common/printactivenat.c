@@ -9,9 +9,7 @@
 #include "ipf.h"
 
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: printactivenat.c,v 1.3.2.4 2004/05/11 16:07:32 darrenr Exp $";
-#endif
 
 
 void printactivenat(nat, opts, alive)

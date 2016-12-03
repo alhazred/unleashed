@@ -91,9 +91,7 @@
 #endif
 #include "pathnames.h"
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 /* Bits in scan_authfile return value */
 #define NONWILD_SERVER	1

@@ -28,29 +28,6 @@
 
 #include <sys/asm_linkage.h>
 
-#if defined(lint)
-
-void *
-getfp(void)
-{
-	return (NULL);
-}
-
-void
-flush_windows(void)
-{
-
-}
-
-#ifndef UMEM_STANDALONE
-void
-_breakpoint(void)
-{
-	return;
-}
-#endif
-
-#else	/* lint */
 
 	ENTRY(getfp)
 	retl
@@ -89,4 +66,3 @@ _breakpoint(void)
 	SET_SIZE(_breakpoint)
 #endif
 
-#endif	/* lint */

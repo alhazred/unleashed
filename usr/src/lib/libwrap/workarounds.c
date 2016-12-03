@@ -13,9 +13,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 char    sccsid[] = "@(#) workarounds.c 1.6 96/03/19 16:22:25";
-#endif
 
 #include <sys/types.h>
 #include <sys/param.h>

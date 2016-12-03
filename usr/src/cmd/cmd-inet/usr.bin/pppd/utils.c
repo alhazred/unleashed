@@ -63,9 +63,7 @@
 
 #include "pppd.h"
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 #if defined(SUNOS4)
 extern char *strerror();

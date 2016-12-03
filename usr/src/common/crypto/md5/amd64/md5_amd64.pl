@@ -157,16 +157,6 @@ my $output = shift;
 open STDOUT,">$output" or die "can't open $output: $!";
 
 $code .= <<EOF;
-#if defined(lint) || defined(__lint)
-#include <sys/md5.h>
-
-/* ARGSUSED */
-void md5_block_asm_host_order(MD5_CTX *ctx, const void *inpp,
-    unsigned int input_length_in_blocks)
-{
-}
-
-#else
 #include <sys/asm_linkage.h>
 
 	ENTRY_NP(md5_block_asm_host_order)
@@ -300,7 +290,6 @@ $code .= <<EOF;
 	ret
 	SET_SIZE(md5_block_asm_host_order)
 
-#endif /* lint || __lint */
 EOF
 
 print $code;

@@ -25,22 +25,6 @@
  * Copyright (c) 2012 Joyent, Inc. All rights reserved.
  */
 
-#if	defined(lint)
-
-#include	<sys/types.h>
-#include	<_rtld.h>
-#include	<_audit.h>
-#include	<_elf.h>
-#include	<sys/regset.h>
-#include	<sys/auxv_386.h>
-
-/* ARGSUSED0 */
-int
-elf_plt_trace()
-{
-	return (0);
-}
-#else
 
 #include	<link.h>
 #include	<_audit.h>
@@ -498,7 +482,6 @@ elf_plt_trace:
 	popq	%rbp				/
 	ret					/ return to caller
 	.size	elf_plt_trace, .-elf_plt_trace
-#endif
 
 /*
  * We got here because a call to a function resolved to a procedure
@@ -527,17 +510,6 @@ elf_plt_trace:
  *	lmp				0(%rsp)
  *
  */
-#if defined(lint)
-
-extern unsigned long	elf_bndr(Rt_map *, unsigned long, caddr_t);
-
-void
-elf_rtbndr(Rt_map * lmp, unsigned long reloc, caddr_t pc)
-{
-	(void) elf_bndr(lmp, reloc, pc);
-}
-
-#else
 
 /*
  * The PLT code that landed us here placed 2 arguments on the stack as
@@ -756,4 +728,3 @@ elf_rtbndr(Rt_map * lmp, unsigned long reloc, caddr_t pc)
 
 	ret			/* invoke resolved function */
 	.size 	elf_rtbndr, .-elf_rtbndr
-#endif

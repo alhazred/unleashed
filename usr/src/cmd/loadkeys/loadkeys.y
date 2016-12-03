@@ -21,9 +21,7 @@
  * CDDL HEADER END
  */
 
-#ifndef lint
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
-#endif
 
 /*
  * Copyright (c) 1999 by Sun Microsystems, Inc.

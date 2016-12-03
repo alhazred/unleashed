@@ -36,9 +36,7 @@
  */
 
 #if M_RCSID
-#ifndef lint
 static char rcsID[] = "$Header: /rd/src/libc/xcurses/rcs/echochar.c 1.1 1995/06/05 20:09:54 ant Exp $";
-#endif
 #endif
 
 #include <private.h>

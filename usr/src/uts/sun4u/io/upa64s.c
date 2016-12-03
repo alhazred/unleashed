@@ -670,9 +670,7 @@ upa64s_remove_intr_impl(dev_info_t *dip, dev_info_t *rdip,
 	upa64s_devstate_t *upa64s_p =
 	    get_upa64s_soft_state(ddi_get_instance(dip));
 	int upaport;
-#ifndef lint
 	volatile uint64_t tmp;
-#endif
 
 	/*
 	 * Make sure the mondo is valid.
@@ -695,10 +693,8 @@ upa64s_remove_intr_impl(dev_info_t *dip, dev_info_t *rdip,
 	i_ddi_rem_ivintr(hdlp);
 
 	ddi_put64(upa64s_p->imr_ah[upaport], upa64s_p->imr[upaport], 0);
-#ifndef lint
 	/* Flush store buffers */
 	tmp = ddi_get64(upa64s_p->imr_ah[upaport], upa64s_p->imr[upaport]);
-#endif
 
 	upa64s_p->ino_state[upaport] = INO_FREE;
 	return (DDI_SUCCESS);
@@ -891,18 +887,14 @@ save_state(upa64s_devstate_t *upa64s_p)
 static void
 restore_state(upa64s_devstate_t *upa64s_p)
 {
-#ifndef lint
 	volatile uint64_t tmp;
-#endif
 	ddi_put64(upa64s_p->imr_ah[0], upa64s_p->imr[0],
 	    upa64s_p->imr_data[0]);
 	ddi_put64(upa64s_p->imr_ah[1], upa64s_p->imr[1],
 	    upa64s_p->imr_data[1]);
-#ifndef lint
 	/* Flush the store buffer */
 	tmp = ddi_get64(upa64s_p->imr_ah[0], upa64s_p->imr[0]);
 	tmp = ddi_get64(upa64s_p->imr_ah[1], upa64s_p->imr[1]);
-#endif
 }
 
 

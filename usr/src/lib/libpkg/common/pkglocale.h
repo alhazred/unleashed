@@ -38,11 +38,7 @@ extern "C" {
 #if !defined(TEXT_DOMAIN)
 #define	TEXT_DOMAIN	"SYS_TEST"
 #endif
-#ifdef lint
-#define	pkg_gt(x)	x
-#else	/* !lint */
 #define	pkg_gt(x)	dgettext(TEXT_DOMAIN, x)
-#endif	/* lint */
 
 #ifdef __cplusplus
 }

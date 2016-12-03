@@ -26,9 +26,6 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(lint)
-#include <sys/types.h>
-#else
 
 #include "assym.h"
 
@@ -49,4 +46,3 @@
 	.4byte		FOUR_MEG
 .desc1_end:
 	.align		4
-#endif

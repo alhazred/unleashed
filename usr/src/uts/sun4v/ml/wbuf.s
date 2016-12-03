@@ -36,7 +36,6 @@
 #include <sys/machtrap.h>
 #include <sys/traptrace.h>
 
-#if !defined(lint)
 #include "assym.h"
 
 	/*
@@ -513,4 +512,3 @@
 	mov	PTL1_BAD_WTRAP, %g1
 	SET_SIZE(fault_32bit_not)
 	SET_SIZE(fault_64bit_not)
-#endif /* !lint */

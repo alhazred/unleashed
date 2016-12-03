@@ -25,15 +25,11 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#ifndef lint
 char copyright[] =
 "@(#) Copyright(c) 1988 Regents of the University of California.\n\
 All rights reserved.\n";
-#endif /* not lint */
 
-#ifndef lint
 static char sccsid[] = "@(#)fsdb.c	5.8 (Berkeley) 6/1/90";
-#endif /* not lint */
 
 /*
  *  fsdb - file system debugger

@@ -34,9 +34,6 @@
  *	creates/manages child nodes for the included interfaces.
  */
 
-#if defined(lint) && !defined(DEBUG)
-#define	DEBUG	1
-#endif
 #include <sys/usb/usba/usbai_version.h>
 #include <sys/usb/usba.h>
 #include <sys/usb/usba/usba_types.h>

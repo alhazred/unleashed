@@ -23,9 +23,7 @@
  * Use is subject to license terms.
  */
 
-#if !defined(lint)
 #include "assym.h"
-#endif
 
 /*
  * Niagara2 processor specific assembly routines
@@ -40,18 +38,6 @@
 #include <sys/niagaraasi.h>
 #include <vm/hat_sfmmu.h>
 
-#if defined(lint)
-/*ARGSUSED*/
-uint64_t
-hv_niagara_getperf(uint64_t perfreg, uint64_t *datap)
-{ return (0); }
-
-/*ARGSUSED*/
-uint64_t
-hv_niagara_setperf(uint64_t perfreg, uint64_t data)
-{ return (0); }
-
-#else   /* lint */
 
 	/*
 	 * hv_niagara_getperf(uint64_t perfreg, uint64_t *datap)
@@ -89,26 +75,7 @@ hv_niagara_setperf(uint64_t perfreg, uint64_t data)
 	nop
 	SET_SIZE(hv_niagara_setperf)
 
-#endif /* !lint */
 
-#if defined (lint)
-/*
- * Invalidate all of the entries within the TSB, by setting the inv bit
- * in the tte_tag field of each tsbe.
- *
- * We take advantage of the fact that the TSBs are page aligned and a
- * multiple of PAGESIZE to use ASI_BLK_INIT_xxx ASI.
- *
- * See TSB_LOCK_ENTRY and the miss handlers for how this works in practice
- * (in short, we set all bits in the upper word of the tag, and we give the
- * invalid bit precedence over other tag bits in both places).
- */
-/*ARGSUSED*/
-void
-cpu_inv_tsb(caddr_t tsb_base, uint_t tsb_bytes)
-{}
-
-#else /* lint */
 
 	ENTRY(cpu_inv_tsb)
 
@@ -151,22 +118,10 @@ cpu_inv_tsb(caddr_t tsb_base, uint_t tsb_bytes)
 	nop
 
 	SET_SIZE(cpu_inv_tsb)
-#endif /* lint */
 
-#if defined (lint)
-/*
- * This is CPU specific delay routine for atomic backoff. It is used in case
- * of Niagara2 and VF CPUs. The rd instruction uses less resources than casx
- * on these CPUs.
- */
-void
-cpu_atomic_delay(void)
-{}
-#else	/* lint */
 	ENTRY(cpu_atomic_delay)
 	rd	%ccr, %g0
 	rd	%ccr, %g0
 	retl
 	rd	%ccr, %g0
 	SET_SIZE(cpu_atomic_delay)
-#endif	/* lint */

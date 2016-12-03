@@ -49,9 +49,6 @@ sc_create(pci_t *pci_p)
 	sc_t *sc_p;
 	uint64_t paddr;
 
-#ifdef lint
-	dip = dip;
-#endif
 
 	if (!pci_stream_buf_exists)
 		return;

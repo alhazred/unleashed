@@ -25,69 +25,33 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(lint) || defined(__lint)
-#include <sys/dtrace_impl.h>
-#else
 #include <sys/asm_linkage.h>
 #include <sys/privregs.h>
 #include <sys/fsr.h>
 #include <sys/asi.h>
 #include "assym.h"
-#endif
 
-#if defined(lint) || defined(__lint)
-
-int
-dtrace_getipl(void)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY_NP(dtrace_getipl)
 	retl
 	rdpr	%pil, %o0
 	SET_SIZE(dtrace_getipl)
 
-#endif	/* lint */
 
-#if defined(lint) || defined(__lint)
-
-uint_t
-dtrace_getotherwin(void)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY_NP(dtrace_getotherwin)
 	retl
 	rdpr	%otherwin, %o0
 	SET_SIZE(dtrace_getotherwin)
 
-#endif	/* lint */
 
-#if defined(lint) || defined(__lint)
-
-uint_t
-dtrace_getfprs(void)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY_NP(dtrace_getfprs)
 	retl
 	rd	%fprs, %o0
 	SET_SIZE(dtrace_getfprs)
 
-#endif	/* lint */
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-void
-dtrace_getfsr(uint64_t *val)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(dtrace_getfsr)
 	rdpr	%pstate, %o1
@@ -105,30 +69,14 @@ dtrace_getfsr(uint64_t *val)
 	stx	%g0, [%o0]
 	SET_SIZE(dtrace_getfsr)
 
-#endif	/* lint */
 
-#if defined(lint) || defined(__lint)
-
-greg_t
-dtrace_getfp(void)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY_NP(dtrace_getfp)
 	retl
 	mov	%fp, %o0
 	SET_SIZE(dtrace_getfp)
 
-#endif	/* lint */
 
-#if defined(lint) || defined(__lint)
-
-void
-dtrace_flush_user_windows(void)
-{}
-
-#else
 
 	ENTRY_NP(dtrace_flush_user_windows)
 	rdpr	%otherwin, %g1
@@ -148,31 +96,7 @@ dtrace_flush_user_windows(void)
 	nop
 	SET_SIZE(dtrace_flush_user_windows)
 
-#endif	/* lint */
 
-#if defined(lint) || defined(__lint)
-
-uint32_t
-dtrace_cas32(uint32_t *target, uint32_t cmp, uint32_t new)
-{
-	uint32_t old;
-
-	if ((old = *target) == cmp)
-		*target = new;
-	return (old);
-}
-
-void *
-dtrace_casptr(void *target, void *cmp, void *new)
-{
-	void *old;
-
-	if ((old = *(void **)target) == cmp)
-		*(void **)target = new;
-	return (old);
-}
-
-#else	/* lint */
 
 	ENTRY(dtrace_cas32)
 	cas	[%o0], %o1, %o2
@@ -186,18 +110,7 @@ dtrace_casptr(void *target, void *cmp, void *new)
 	mov	%o2, %o0
 	SET_SIZE(dtrace_casptr)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uintptr_t
-dtrace_caller(int aframes)
-{
-	return (0);
-}
-
-#else	/* lint */
 
 	ENTRY(dtrace_caller)
 	sethi	%hi(nwin_minus_one), %g4
@@ -233,18 +146,7 @@ dtrace_caller(int aframes)
 	mov	-1, %o0
 	SET_SIZE(dtrace_caller)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-int
-dtrace_fish(int aframes, int reg, uintptr_t *regval)
-{
-	return (0);
-}
-
-#else	/* lint */
 
 	ENTRY(dtrace_fish)
 
@@ -311,17 +213,7 @@ dtrace_fish(int aframes, int reg, uintptr_t *regval)
 	add	%g2, 1, %o0		! Failure; return deepest frame + 1
 	SET_SIZE(dtrace_fish)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-dtrace_copyin(uintptr_t uaddr, uintptr_t kaddr, size_t size,
-    volatile uint16_t *flags)
-{}
-
-#else
 
 	ENTRY(dtrace_copyin)
 	tst	%o2
@@ -348,17 +240,7 @@ dtrace_copyin(uintptr_t uaddr, uintptr_t kaddr, size_t size,
 
 	SET_SIZE(dtrace_copyin)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-dtrace_copyinstr(uintptr_t uaddr, uintptr_t kaddr, size_t size,
-    volatile  uint16_t *flags)
-{}
-
-#else
 
 	ENTRY(dtrace_copyinstr)
 	tst	%o2
@@ -388,17 +270,7 @@ dtrace_copyinstr(uintptr_t uaddr, uintptr_t kaddr, size_t size,
 
 	SET_SIZE(dtrace_copyinstr)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-dtrace_copyout(uintptr_t kaddr, uintptr_t uaddr, size_t size,
-    volatile  uint16_t *flags)
-{}
-
-#else
 
 	ENTRY(dtrace_copyout)
 	tst	%o2
@@ -424,17 +296,7 @@ dtrace_copyout(uintptr_t kaddr, uintptr_t uaddr, size_t size,
 	nop
 	SET_SIZE(dtrace_copyout)
 
-#endif
 	
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-dtrace_copyoutstr(uintptr_t kaddr, uintptr_t uaddr, size_t size,
-    volatile  uint16_t *flags)
-{}
-
-#else
 
 	ENTRY(dtrace_copyoutstr)
 	tst	%o2
@@ -463,16 +325,7 @@ dtrace_copyoutstr(uintptr_t kaddr, uintptr_t uaddr, size_t size,
 	nop
 	SET_SIZE(dtrace_copyoutstr)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uintptr_t
-dtrace_fulword(void *addr)
-{ return (0); }
-
-#else
 
 	ENTRY(dtrace_fulword)
 	clr	%o1
@@ -481,16 +334,7 @@ dtrace_fulword(void *addr)
 	mov	%o1, %o0
 	SET_SIZE(dtrace_fulword)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uint8_t
-dtrace_fuword8(void *addr)
-{ return (0); }
-
-#else
 
 	ENTRY(dtrace_fuword8)
 	clr	%o1
@@ -499,16 +343,7 @@ dtrace_fuword8(void *addr)
 	mov	%o1, %o0
 	SET_SIZE(dtrace_fuword8)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uint16_t
-dtrace_fuword16(void *addr)
-{ return (0); }
-
-#else
 
 	ENTRY(dtrace_fuword16)
 	clr	%o1
@@ -517,16 +352,7 @@ dtrace_fuword16(void *addr)
 	mov	%o1, %o0
 	SET_SIZE(dtrace_fuword16)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uint32_t
-dtrace_fuword32(void *addr)
-{ return (0); }
-
-#else
 
 	ENTRY(dtrace_fuword32)
 	clr	%o1
@@ -535,16 +361,7 @@ dtrace_fuword32(void *addr)
 	mov	%o1, %o0
 	SET_SIZE(dtrace_fuword32)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-uint64_t
-dtrace_fuword64(void *addr)
-{ return (0); }
-
-#else
 
 	ENTRY(dtrace_fuword64)
 	clr	%o1
@@ -553,16 +370,7 @@ dtrace_fuword64(void *addr)
 	mov	%o1, %o0
 	SET_SIZE(dtrace_fuword64)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-int
-dtrace_getupcstack_top(uint64_t *pcstack, int pcstack_limit, uintptr_t *sp)
-{ return (0); }
-
-#else
 
 	/*
 	 * %g1	pcstack
@@ -628,16 +436,7 @@ dtrace_getupcstack_top(uint64_t *pcstack, int pcstack_limit, uintptr_t *sp)
 	nop
 	SET_SIZE(dtrace_getupcstack_top)
 
-#endif
 
-#if defined(lint)
-
-/*ARGSUSED*/
-int
-dtrace_getustackdepth_top(uintptr_t *sp)
-{ return (0); }
-
-#else
 
 	ENTRY(dtrace_getustackdepth_top)
 	mov	%o0, %o2
@@ -669,16 +468,7 @@ dtrace_getustackdepth_top(uintptr_t *sp)
 	nop
 	SET_SIZE(dtrace_getustackdepth_top)
 
-#endif
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-ulong_t
-dtrace_getreg_win(uint_t reg, uint_t depth)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY(dtrace_getreg_win)
 	sub	%o0, 16, %o0
@@ -735,16 +525,7 @@ dtrace_getreg_win_table:
 	mov	%i7, %g1
 	SET_SIZE(dtrace_getreg_win)
 
-#endif	/* lint */
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-void
-dtrace_putreg_win(uint_t reg, ulong_t value)
-{}
-
-#else	/* lint */
 
 	ENTRY(dtrace_putreg_win)
 	sub	%o0, 16, %o0
@@ -802,17 +583,7 @@ dtrace_putreg_table:
 	mov	%g1, %i7
 	SET_SIZE(dtrace_putreg_win)
 
-#endif	/* lint */
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-void
-dtrace_probe_error(dtrace_state_t *state, dtrace_epid_t epid, int which,
-    int fault, int fltoffs, uintptr_t illval)
-{}
-
-#else	/* lint */
 
 	ENTRY(dtrace_probe_error)
 	save	%sp, -SA(MINFRAME), %sp
@@ -828,4 +599,3 @@ dtrace_probe_error(dtrace_state_t *state, dtrace_epid_t epid, int which,
 	restore
 	SET_SIZE(dtrace_probe_error)
 
-#endif

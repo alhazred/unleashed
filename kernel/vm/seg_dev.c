@@ -2494,9 +2494,6 @@ devmap_do_ctxmgt(devmap_cookie_t dhc, void *pvtp, offset_t off, size_t len,
 	int do_timeout = 0;
 	int ret;
 
-#ifdef lint
-	pvtp = pvtp;
-#endif
 
 	DEBUGF(7, (CE_CONT, "devmap_do_ctxmgt: dhp %p off %llx len %lx\n",
 	    (void *)dhp, off, len));
@@ -2994,9 +2991,6 @@ devmap_setup(dev_t dev, offset_t off, struct as *as, caddr_t *addrp,
 	offset_t map_off = off;
 	struct devmap_softlock *slock = NULL;
 
-#ifdef lint
-	cred = cred;
-#endif
 
 	DEBUGF(3, (CE_CONT, "devmap_setup: off %llx len %lx\n",
 	    off, len));
@@ -3441,9 +3435,6 @@ devmap_umem_setup(devmap_cookie_t dhc, dev_info_t *dip,
 	devmap_handle_t *dhp = (devmap_handle_t *)dhc;
 	struct ddi_umem_cookie *cp = (struct ddi_umem_cookie *)cookie;
 
-#ifdef lint
-	dip = dip;
-#endif
 
 	DEBUGF(2, (CE_CONT, "devmap_umem_setup: dhp %p offset %llx "
 	    "cookie %p len %lx\n", (void *)dhp, off, (void *)cookie, len));
@@ -3541,10 +3532,6 @@ devmap_umem_remap(devmap_cookie_t dhc, dev_info_t *dip,
 	DEBUGF(2, (CE_CONT, "devmap_umem_remap: dhp %p offset %llx "
 	    "cookie %p len %lx\n", (void *)dhp, off, (void *)cookie, len));
 
-#ifdef lint
-	dip = dip;
-	accattrp = accattrp;
-#endif
 	/*
 	 * Reture failure if setup has not been done or no remap permission
 	 * has been granted during the setup.
@@ -3610,9 +3597,6 @@ int
 devmap_default_access(devmap_cookie_t dhp, void *pvtp, offset_t off,
     size_t len, uint_t type, uint_t rw)
 {
-#ifdef lint
-	pvtp = pvtp;
-#endif
 
 	return (devmap_load(dhp, off, len, type, rw));
 }

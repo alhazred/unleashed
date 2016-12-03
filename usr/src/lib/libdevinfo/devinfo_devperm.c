@@ -25,9 +25,6 @@
  */
 
 #define	_POSIX_PTHREAD_SEMANTICS	/* for getgrnam_r */
-#ifdef lint
-#define	_REENTRANT			/* for strtok_r */
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>

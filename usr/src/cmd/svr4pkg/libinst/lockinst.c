@@ -144,10 +144,6 @@ rdlockdata(int fd)
 static void
 do_alarm(int n)
 {
-#ifdef lint
-	int i = n;
-	n = i;
-#endif	/* lint */
 	(void) signal(SIGALRM, do_alarm);
 	(void) alarm(LOCKWAIT);
 }

@@ -25,9 +25,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#ifndef lint
 static char sccsid[] = "%Z%%M%	%I%	%E% SMI";
-#endif
 
 /*
  * getfacl [-ad] file ...

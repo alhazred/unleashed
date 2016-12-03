@@ -36,9 +36,7 @@
  */
 
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] = "$Header: /rd/src/tic/rcs/ticscan.c 1.13 1994/02/08 20:19:29 rog Exp $";
-#endif
 #endif
 
 #include "tic.h"

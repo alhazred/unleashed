@@ -75,10 +75,8 @@
 #endif
 #include "ipfzone.h"
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)fils.c	1.21 4/20/96 (C) 1993-2000 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ipfstat.c,v 1.44.2.12 2005/06/12 07:18:46 darrenr Exp $";
-#endif
 
 #ifdef __hpux
 # define	nlist	nlist64

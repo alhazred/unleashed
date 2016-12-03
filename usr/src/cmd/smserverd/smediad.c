@@ -2836,9 +2836,7 @@ closedown(void *arg)
 	int	current_run_level;
 
 	/*CONSTCOND*/
-#ifndef lint
 	while (1) {
-#endif
 		(void) sleep(SVC_CLOSEDOWN/2);
 
 		/*
@@ -2850,11 +2848,7 @@ closedown(void *arg)
 		if (svcstart_level == 1) {
 			current_run_level = get_run_level();
 			if (current_run_level == 1)
-#ifndef lint
 				continue;
-#else
-				return (NULL);
-#endif
 			/*
 			 * who ever started the server at level 1 has
 			 * forgotten to stop the server. we will kill ourself.
@@ -2865,11 +2859,7 @@ closedown(void *arg)
 		}
 
 		if (mutex_trylock(&svcstate_lock) != 0)
-#ifndef lint
 			continue;
-#else
-			return (NULL);
-#endif
 		if (svcstate == _IDLE && svccount == 0) {
 			int size;
 			int i, openfd = 0;
@@ -2887,11 +2877,7 @@ closedown(void *arg)
 			svcstate = _IDLE;
 
 		(void) mutex_unlock(&svcstate_lock);
-#ifndef lint
 	}
-#else
-	return (NULL);
-#endif
 
 }
 

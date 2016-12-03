@@ -46,10 +46,6 @@
  * fas - QLogic fas366 wide/fast SCSI Processor HBA driver with
  *	tagged and non-tagged queueing support
  */
-#if defined(lint) && !defined(DEBUG)
-#define	DEBUG	1
-#define	FASDEBUG
-#endif
 
 #define	DMA_REG_TRACING 	/* enable dma register access tracing */
 

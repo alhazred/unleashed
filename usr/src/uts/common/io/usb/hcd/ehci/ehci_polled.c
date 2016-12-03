@@ -245,18 +245,14 @@ ehci_hcdi_polled_input_enter(usb_console_info_impl_t *info)
 	ehci_pipe_private_t	*pp;
 	int			pipe_attr;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 	ehci_polledp = (ehci_polled_t *)info->uci_private;
 	ehcip = ehci_polledp->ehci_polled_ehcip;
 	ph = ehci_polledp->ehci_polled_input_pipe_handle;
 	pp = (ehci_pipe_private_t *)ph->p_hcd_private;
 
 	pipe_attr = ph->p_ep.bmAttributes & USB_EP_ATTR_MASK;
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 	ehci_polledp->ehci_polled_entry++;
 	/*
@@ -272,9 +268,7 @@ ehci_hcdi_polled_input_enter(usb_console_info_impl_t *info)
 		ehci_polled_save_state(ehci_polledp);
 		break;
 	case USB_EP_ATTR_BULK:
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 		Set_OpReg(ehci_command, (Get_OpReg(ehci_command) &
 		    ~(EHCI_CMD_PERIODIC_SCHED_ENABLE |
 		    EHCI_CMD_ASYNC_SCHED_ENABLE)));
@@ -285,9 +279,7 @@ ehci_hcdi_polled_input_enter(usb_console_info_impl_t *info)
 
 		Set_OpReg(ehci_command,
 		    (Get_OpReg(ehci_command) | EHCI_CMD_ASYNC_SCHED_ENABLE));
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 		/* Wait for few milliseconds */
 		drv_usecwait(EHCI_POLLED_TIMEWAIT);
 		break;
@@ -315,9 +307,7 @@ ehci_hcdi_polled_input_exit(usb_console_info_impl_t *info)
 	ehci_pipe_private_t	*pp;
 	int			pipe_attr;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 	ehci_polledp = (ehci_polled_t *)info->uci_private;
 	ehcip = ehci_polledp->ehci_polled_ehcip;
 	pp = (ehci_pipe_private_t *)ehci_polledp->
@@ -325,9 +315,7 @@ ehci_hcdi_polled_input_exit(usb_console_info_impl_t *info)
 
 	pipe_attr = ehci_polledp->ehci_polled_input_pipe_handle->
 	    p_ep.bmAttributes & USB_EP_ATTR_MASK;
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 	ehci_polledp->ehci_polled_entry--;
 
@@ -346,9 +334,7 @@ ehci_hcdi_polled_input_exit(usb_console_info_impl_t *info)
 		ehci_polled_restore_state(ehci_polledp);
 		break;
 	case USB_EP_ATTR_BULK:
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 		Set_OpReg(ehci_command, (Get_OpReg(ehci_command) &
 		    ~(EHCI_CMD_PERIODIC_SCHED_ENABLE |
 		    EHCI_CMD_ASYNC_SCHED_ENABLE)));
@@ -360,9 +346,7 @@ ehci_hcdi_polled_input_exit(usb_console_info_impl_t *info)
 		Set_OpReg(ehci_command,
 		    (Get_OpReg(ehci_command) | EHCI_CMD_ASYNC_SCHED_ENABLE |
 		    EHCI_CMD_ASYNC_SCHED_ENABLE));
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 		/* Wait for few milliseconds */
 		drv_usecwait(EHCI_POLLED_TIMEWAIT);
 		break;
@@ -394,9 +378,7 @@ ehci_hcdi_polled_read(
 
 	ehcip = ehci_polledp->ehci_polled_ehcip;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 
 	*num_characters = 0;
 
@@ -426,9 +408,7 @@ ehci_hcdi_polled_read(
 	*num_characters =
 	    ehci_polled_process_active_intr_qtd_list(ehci_polledp);
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 	return (USB_SUCCESS);
 }
@@ -579,9 +559,7 @@ ehci_hcdi_polled_write(usb_console_info_impl_t *info, uchar_t *buf,
 	usba_pipe_handle_data_t	*ph;
 	int			intr;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 	ehci_polledp = (ehci_polled_t *)info->uci_private;
 	ehcip = ehci_polledp->ehci_polled_ehcip;
 	ph = ehci_polledp->ehci_polled_input_pipe_handle;
@@ -656,9 +634,7 @@ ehci_hcdi_polled_write(usb_console_info_impl_t *info, uchar_t *buf,
 
 	*num_characters_written = num_characters;
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 	return (USB_SUCCESS);
 }
@@ -960,18 +936,14 @@ ehci_polled_save_state(ehci_polled_t	*ehci_polledp)
 	ehci_regs_t			*ehci_polled_regsp;
 	ehci_qh_t			*qh;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 
 	/*
 	 * If either of these two flags are set, then we have already
 	 * saved off the state information and setup the controller.
 	 */
 	if (ehci_polledp->ehci_polled_flags & POLLED_INPUT_MODE_INUSE) {
-#ifndef lint
 		_NOTE(COMPETING_THREADS_NOW);
-#endif
 		return;
 	}
 
@@ -982,9 +954,7 @@ ehci_polled_save_state(ehci_polled_t	*ehci_polledp)
 	 * support in polled mode
 	 */
 	if (++ ehcip->ehci_polled_enter_count > MAX_NUM_FOR_KEYBOARD) {
-#ifndef lint
 		_NOTE(COMPETING_THREADS_NOW);
-#endif
 		return;
 	}
 	ehci_polled_regsp = &ehcip->ehci_polled_save_regs;
@@ -1149,9 +1119,7 @@ ehci_polled_save_state(ehci_polled_t	*ehci_polledp)
 		/* Wait for few milliseconds */
 		drv_usecwait(EHCI_POLLED_TIMEWAIT);
 	}
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 }
 
 
@@ -1175,9 +1143,7 @@ ehci_polled_restore_state(ehci_polled_t	*ehci_polledp)
 	usba_pipe_handle_data_t		*ph;
 	uint8_t				ep_addr;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 
 	/*
 	 * If this flag is set, then we are still using this structure,
@@ -1185,9 +1151,7 @@ ehci_polled_restore_state(ehci_polled_t	*ehci_polledp)
 	 */
 	if (ehci_polledp->ehci_polled_flags & POLLED_INPUT_MODE_INUSE) {
 
-#ifndef lint
 		_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 		return;
 	}
@@ -1259,9 +1223,7 @@ ehci_polled_restore_state(ehci_polled_t	*ehci_polledp)
 		ehci_polled_start_processing(ehci_polledp);
 	}
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 }
 
 

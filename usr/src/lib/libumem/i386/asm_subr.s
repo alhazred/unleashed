@@ -50,23 +50,6 @@
 	NOP64	\
 	NOP64
 
-#if defined(lint)
-
-void *
-getfp(void)
-{
-	return (NULL);
-}
-
-#ifndef UMEM_STANDALONE
-void
-_breakpoint(void)
-{
-	return;
-}
-#endif
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -112,4 +95,3 @@ _breakpoint(void)
 	ANSI_PRAGMA_WEAK2(malloc,_malloc,function)
 	ANSI_PRAGMA_WEAK2(free,_free,function)
 	
-#endif	/* lint */

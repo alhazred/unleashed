@@ -65,9 +65,7 @@ struct file;
 #include "netinet/ipf_stack.h"
 /* END OF INCLUDES */
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: ip_lookup.c,v 2.35.2.7 2005/06/12 07:18:20 darrenr Exp $";
-#endif
 
 #ifdef	IPFILTER_LOOKUP
 static int iplookup_addnode __P((caddr_t, ipf_stack_t *));

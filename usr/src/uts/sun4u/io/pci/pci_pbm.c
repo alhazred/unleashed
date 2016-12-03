@@ -62,9 +62,6 @@ pbm_create(pci_t *pci_p)
 	pci_ranges_t *rangep = pci_p->pci_ranges;
 	uint64_t base_addr, last_addr;
 
-#ifdef lint
-	dip = dip;
-#endif
 
 	/*
 	 * Allocate a state structure for the PBM and cross-link it

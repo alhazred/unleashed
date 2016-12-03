@@ -1563,9 +1563,6 @@ ac_timeout(void *arg)
 	struct ac_soft_state *softsp;
 	fhc_bd_t	*board;
 
-#ifdef lint
-	arg = arg;
-#endif /* lint */
 
 	ac_hot_plug_timeout = (timeout_id_t)NULL;
 

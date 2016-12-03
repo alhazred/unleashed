@@ -34,9 +34,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#ifndef lint
 static char sccsid[] = "@(#)rpc.ypupdated.c 1.9 87/10/30 Copyr 1986 Sun Micro";
-#endif
 
 /*
  * YP update service

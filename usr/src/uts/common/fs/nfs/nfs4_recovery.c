@@ -975,13 +975,6 @@ nfs4_end_fop(mntinfo4_t *mi, vnode_t *vp1, vnode_t *vp2, nfs4_op_hint_t op,
 	nfs4_server_t *sp = rsp->rs_sp;
 	rnode4_t *rp = NULL;
 
-#ifdef	lint
-	/*
-	 * The op hint isn't used any more, but might be in
-	 * the future.
-	 */
-	op = op;
-#endif
 
 #ifdef	DEBUG
 	ASSERT(tsd_get(nfs4_tsd_key) != NULL);
@@ -1578,16 +1571,6 @@ recov_newserver(recov_info_t *recovp, nfs4_server_t **spp, bool_t *recov_fail)
 	tv.tv_sec = 2;
 	tv.tv_usec = 0;
 
-#ifdef lint
-	/*
-	 * Lint can't follow the logic, so thinks that snames and len
-	 * can be used before being set.  They can't, but lint can't
-	 * figure it out.  To address the lint warning, initialize
-	 * snames and len for lint.
-	 */
-	snames = NULL;
-	len = 0;
-#endif
 
 	/*
 	 * Ping the null NFS procedure of every server in

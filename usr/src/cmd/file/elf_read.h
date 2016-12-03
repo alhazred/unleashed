@@ -99,8 +99,5 @@ extern int is_in_list(char *str);
 #endif
 
 /* so lint can understand elf_read64 is defined */
-#ifdef lint
-#define	elf_read64	elf_read
-#endif /* lint */
 
 #endif /* _ELF_READ_H */

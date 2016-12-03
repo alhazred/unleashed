@@ -30,9 +30,6 @@
  * handler for IDN cross-domain interrupts.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-#endif /* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/machasi.h>
@@ -42,9 +39,7 @@
 
 #include <sys/idn.h>
 
-#if !defined(lint)
 #include "idn_offsets.h"
-#endif /* !lint */
 
 #define	IDN_MONDO
 
@@ -58,18 +53,6 @@
 /*
  *--------------------------------------------------------
  */
-#if defined(lint)
-
-/*
- * Would be nice to use init_mondo, but unforunately
- * it assumes the first arg is 32-bits.
- */
-/*ARGSUSED*/
-void
-idnxf_init_mondo(uint64_t arg0, uint64_t arg1, uint64_t arg2)
-{}
-
-#else /* lint */
 
 	.global _idn_dispatch_status_busy
 _idn_dispatch_status_busy:
@@ -101,27 +84,9 @@ _idn_dispatch_status_busy:
 
 	SET_SIZE(idnxf_init_mondo)
 
-#endif /* lint */
 /*
  *--------------------------------------------------------
  */
-#if defined(lint)
-
-/*
- * Unfortunately, send_mondo is rather picky about getting
- * a result from the cpu it sends an interrupt to.  If it
- * doesn't get a result within a specific timeframe it
- * will panic!  For IDN that's not cool since a cpu hungup
- * in one could ultimately result in the demise of a cpu
- * in another domain.  Instead of getting our panties in
- * a bind, we simply bail out.
- */
-/*ARGSUSED*/
-int
-idnxf_send_mondo(int upaid)
-{ return (0); }
-
-#else /* lint */
 
 	.seg	".data"
 
@@ -275,18 +240,9 @@ _idn_send_mondo_failure:
 #endif /* IDN_MONDO */
 	SET_SIZE(idnxf_send_mondo)
 
-#endif /* lint */
 /*
  *--------------------------------------------------------
  */
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-idn_dmv_handler(void *arg)
-{}
-
-#else /* lint */
 
 	ENTRY_NP(idn_dmv_handler)
 	!
@@ -382,4 +338,3 @@ idn_dmv_handler(void *arg)
 
 	SET_SIZE(idn_dmv_handler)
 
-#endif /* lint */

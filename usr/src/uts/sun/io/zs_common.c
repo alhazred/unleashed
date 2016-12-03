@@ -1067,9 +1067,6 @@ zsnull_intr(struct zscom *zs)
 	SCC_WRITE0(ZSWR0_RESET_STATUS);
 	c = SCC_READDATA();
 	ZSDELAY();
-#ifdef lint
-	c = c;
-#endif /* lint */
 	SCC_WRITE0(ZSWR0_RESET_ERRORS);
 }
 

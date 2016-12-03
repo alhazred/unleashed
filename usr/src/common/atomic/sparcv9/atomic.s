@@ -53,10 +53,8 @@
 
 #ifdef ATOMIC_BO_ENABLE_SHIFT
 
-#if !defined(lint)
 	.weak   cpu_atomic_delay
 	.type   cpu_atomic_delay, #function
-#endif  /* lint */
 
 /*
  * For the kernel, invoke processor specific delay routine to perform

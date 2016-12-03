@@ -37,28 +37,6 @@
 
 #endif /* _KERNEL */
 
-#if defined(lint)
-
-#ifdef _KERNEL
-
-/* ARGSUSED */
-int
-sha1_savefp(kfpu_t *fpu, int svfp_ok)
-{ return(0); }
-
-/* ARGSUSED */
-void
-sha1_restorefp(kfpu_t *fpu)
-{}
-
-#endif /* _KERNEL */
-
-/* ARGSUSED */
-void
-SHA1TransformVIS(uint64_t *X0, uint64_t *blk, uint32_t *cstate, uint64_t *VIS)
-{}
-
-#else /* defined(lint) */
 
 #ifdef _KERNEL
 
@@ -2454,4 +2432,3 @@ SHA1TransformVIS(uint64_t *X0, uint64_t *blk, uint32_t *cstate, uint64_t *VIS)
 	restore
 	SET_SIZE(SHA1TransformVIS)
 
-#endif	/* defined(lint) */

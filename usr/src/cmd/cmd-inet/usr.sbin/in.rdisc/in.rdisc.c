@@ -49,11 +49,7 @@
 #include <unistd.h>
 #include <assert.h>
 
-#ifdef lint
-#define	ALIGN(ptr)	(ptr ? 0 : 0)
-#else
 #define	ALIGN(ptr)	(ptr)
-#endif
 
 #ifdef SYSV
 #define	signal(s, f)	sigset(s, (void (*)(int))f)

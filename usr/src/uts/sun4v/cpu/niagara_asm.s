@@ -25,9 +25,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if !defined(lint)
 #include "assym.h"
-#endif
 
 /*
  * Niagara processor specific assembly routines
@@ -42,18 +40,6 @@
 #include <sys/niagaraasi.h>
 #include <vm/hat_sfmmu.h>
 
-#if defined(lint)
-/*ARGSUSED*/
-uint64_t
-hv_niagara_getperf(uint64_t perfreg, uint64_t *datap)
-{ return (0); }
-
-/*ARGSUSED*/
-uint64_t
-hv_niagara_setperf(uint64_t perfreg, uint64_t data)
-{ return (0); }
-
-#else   /* lint */
 
 	/*
 	 * hv_niagara_getperf(uint64_t perfreg, uint64_t *datap)
@@ -79,26 +65,7 @@ hv_niagara_setperf(uint64_t perfreg, uint64_t data)
 	nop
 	SET_SIZE(hv_niagara_setperf)
 
-#endif /* !lint */
 
-#if defined (lint)
-/*
- * Invalidate all of the entries within the TSB, by setting the inv bit
- * in the tte_tag field of each tsbe.
- *
- * We take advantage of the fact that the TSBs are page aligned and a
- * multiple of PAGESIZE to use ASI_BLK_INIT_xxx ASI.
- *
- * See TSB_LOCK_ENTRY and the miss handlers for how this works in practice
- * (in short, we set all bits in the upper word of the tag, and we give the
- * invalid bit precedence over other tag bits in both places).
- */
-/*ARGSUSED*/
-void
-cpu_inv_tsb(caddr_t tsb_base, uint_t tsb_bytes)
-{}
-
-#else /* lint */
 
 	ENTRY(cpu_inv_tsb)
 
@@ -141,20 +108,7 @@ cpu_inv_tsb(caddr_t tsb_base, uint_t tsb_bytes)
 	nop
 
 	SET_SIZE(cpu_inv_tsb)
-#endif /* lint */
 
-#if defined(lint)
-/*ARGSUSED*/
-uint64_t
-hv_niagara_mmustat_conf(uint64_t buf, uint64_t *prev_buf)
-{ return (0); }
-
-/*ARGSUSED*/
-uint64_t
-hv_niagara_mmustat_info(uint64_t *buf)
-{ return (0); }
-
-#else   /* lint */
 
 	/*
 	 * hv_niagara_mmustat_conf(uint64_t buf, uint64_t *prev_buf)
@@ -178,4 +132,3 @@ hv_niagara_mmustat_info(uint64_t *buf)
 	stx	%o1, [%o4]
 	SET_SIZE(hv_niagara_mmustat_info)
 
-#endif /* !lint */

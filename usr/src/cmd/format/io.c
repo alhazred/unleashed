@@ -500,22 +500,15 @@ reprompt:
 	if (deflt != NULL) {
 		switch (type) {
 		case FIO_BN:
-#if !defined(lint)	/* caller has aligned the pointer specifying FIO_BN */
 			fmt_print("[%llu, ", *(diskaddr_t *)deflt);
 			pr_dblock(fmt_print, *(diskaddr_t *)deflt);
 			fmt_print("]");
-#endif
 			break;
 		case FIO_INT:
 			fmt_print("[%d]", *deflt);
 			break;
 		case FIO_INT64:
-#if defined(lint)
-			/* caller is longlong aligned specifying FIO_INT64 */
-			efi_deflt = NULL;
-#else
 			efi_deflt = (efi_deflt_t *)deflt;
-#endif
 			fmt_print("[%llu]", efi_deflt->start_sector);
 			break;
 		case FIO_CSTR:
@@ -597,12 +590,7 @@ reprompt:
 
 			break;
 		case FIO_EFI:
-#if defined(lint)
-			/* caller is longlong aligned when specifying FIO_EFI */
-			efi_deflt = NULL;
-#else
 			efi_deflt = (efi_deflt_t *)deflt;
-#endif
 
 			fmt_print("[%llub, %llue, %llumb, %llugb, %llutb]",
 			    efi_deflt->end_sector,

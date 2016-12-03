@@ -81,16 +81,6 @@
  */
 
 
-#if defined(lint) || defined(__lint)
-
-#include <sys/types.h>
-
-/* ARGSUSED */
-void
-gcm_mul_pclmulqdq(uint64_t *x_in, uint64_t *y, uint64_t *res) {
-}
-
-#else	/* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/controlregs.h>
@@ -334,4 +324,3 @@ ENTRY_NP(gcm_mul_pclmulqdq)
 	ret
 	SET_SIZE(gcm_mul_pclmulqdq)
 
-#endif	/* lint || __lint */

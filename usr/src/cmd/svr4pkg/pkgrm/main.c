@@ -787,9 +787,6 @@ main(int argc, char **argv)
 
 		quit(0);
 		/* NOTREACHED */
-#ifdef lint
-		return (0);
-#endif	/* lint */
 	}
 }
 

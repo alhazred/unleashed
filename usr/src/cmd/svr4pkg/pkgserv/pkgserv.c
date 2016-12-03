@@ -63,9 +63,6 @@
  * sticks around.  (Install == install, (live)upgrade, zone install)
  */
 
-#ifdef lint
-#undef _FILE_OFFSET_BITS
-#endif
 
 #include <door.h>
 #include <errno.h>

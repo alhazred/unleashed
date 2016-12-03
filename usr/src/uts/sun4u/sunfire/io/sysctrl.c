@@ -566,9 +566,6 @@ sysctrl_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 	*(softsp->csr) &= ~(SYS_PPS_FAN_FAIL_EN | SYS_PS_FAIL_EN |
 	    SYS_AC_PWR_FAIL_EN | SYS_SBRD_PRES_EN);
 	tmp_reg = *(softsp->csr);
-#ifdef lint
-	tmp_reg = tmp_reg;
-#endif
 
 	/*
 	 * Now register our high interrupt with the system.
@@ -733,9 +730,6 @@ sysctrl_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 	    (SYS_AC_PWR_FAIL_EN | SYS_PS_FAIL_EN |
 	    SYS_PPS_FAN_FAIL_EN | SYS_SBRD_PRES_EN);
 	tmp_reg = *(softsp->csr);
-#ifdef lint
-	tmp_reg = tmp_reg;
-#endif
 	mutex_exit(&softsp->csr_mutex);
 
 	/* Initialize the temperature */
@@ -1542,9 +1536,6 @@ system_high_handler(caddr_t arg)
 	/* update the real csr */
 	*(softsp->csr) = csr;
 	tmp_reg = *(softsp->csr);
-#ifdef lint
-	tmp_reg = tmp_reg;
-#endif
 	mutex_exit(&softsp->csr_mutex);
 
 	return (DDI_INTR_CLAIMED);
@@ -1653,9 +1644,6 @@ spur_reenable(caddr_t arg)
 	    (SYS_AC_PWR_FAIL_EN | SYS_PS_FAIL_EN |
 	    SYS_PPS_FAN_FAIL_EN | SYS_SBRD_PRES_EN);
 	tmp_reg = *(softsp->csr);
-#ifdef lint
-	tmp_reg = tmp_reg;
-#endif
 
 	/* clear out the saved state */
 	softsp->saved_en_state = 0;
@@ -1767,9 +1755,6 @@ ac_fail_reenable(caddr_t arg)
 	mutex_enter(&softsp->csr_mutex);
 	*(softsp->csr) |= SYS_AC_PWR_FAIL_EN;
 	tmp_reg = *(softsp->csr);
-#ifdef lint
-	tmp_reg = tmp_reg;
-#endif
 	mutex_exit(&softsp->csr_mutex);
 
 	return (DDI_INTR_CLAIMED);
@@ -2032,9 +2017,6 @@ ps_fail_handler(struct sysctrl_soft_state *softsp, int fromint)
 						*(softsp->clk_freq2) &=
 						    ~RCONS_UART_EN;
 					tmp_reg = *(softsp->csr);
-#ifdef lint
-					tmp_reg = tmp_reg;
-#endif
 
 				}
 
@@ -2138,9 +2120,6 @@ ps_fail_handler(struct sysctrl_soft_state *softsp, int fromint)
 		mutex_enter(&softsp->csr_mutex);
 		*(softsp->csr) |= SYS_PS_FAIL_EN;
 		tmp_reg = *(softsp->csr);
-#ifdef lint
-		tmp_reg = tmp_reg;
-#endif
 		mutex_exit(&softsp->csr_mutex);
 	}
 
@@ -2520,9 +2499,6 @@ pps_fanfail_reenable(caddr_t arg)
 
 	*(softsp->csr) |= SYS_PPS_FAN_FAIL_EN;
 	tmp_reg = *(softsp->csr);
-#ifdef lint
-	tmp_reg = tmp_reg;
-#endif
 	mutex_exit(&softsp->csr_mutex);
 
 	return (DDI_INTR_CLAIMED);
@@ -2793,9 +2769,6 @@ bd_insert_normal(caddr_t arg)
 		*(softsp->csr) |= SYS_SBRD_PRES_EN;
 		/* flush the hardware store buffer */
 		tmp_reg = *(softsp->csr);
-#ifdef lint
-		tmp_reg = tmp_reg;
-#endif
 		mutex_exit(&softsp->csr_mutex);
 	}
 
@@ -2846,9 +2819,6 @@ blink_led_handler(caddr_t arg)
 
 	/* flush the hardware store buffer */
 	tmp_reg = *(softsp->csr);
-#ifdef lint
-	tmp_reg = tmp_reg;
-#endif
 	mutex_exit(&softsp->csr_mutex);
 
 	(void) timeout(blink_led_timeout, softsp, blink_led_timeout_hz);
@@ -3397,7 +3367,4 @@ rcons_reinit(struct sysctrl_soft_state *softsp)
 
 	/* print some info for user to watch */
 	cmn_err(CE_NOTE, "Remote console reinitialized");
-#ifdef lint
-	tmp_reg = tmp_reg;
-#endif
 }

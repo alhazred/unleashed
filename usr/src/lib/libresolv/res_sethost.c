@@ -63,7 +63,4 @@ void
 res_sethostfile(name)
 char *name;
 {
-#ifdef lint
-name = name;
-#endif
 }

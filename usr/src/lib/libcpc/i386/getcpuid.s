@@ -28,19 +28,6 @@
 
 #include <sys/asm_linkage.h>
 
-#if defined(lint)
-
-#include <sys/types.h>
-#include <sys/inttypes.h>
-
-#include "getcpuid.h"
-
-/*ARGSUSED*/
-uint32_t
-cpc_getcpuid(uint32_t eax, uint32_t *ebxp, uint32_t *ecxp, uint32_t *edxp)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY(cpc_getcpuid)
 	pushl	%ebp
@@ -61,4 +48,3 @@ cpc_getcpuid(uint32_t eax, uint32_t *ebxp, uint32_t *ecxp, uint32_t *edxp)
 	ret
 	SET_SIZE(cpc_getcpuid)
 
-#endif	/* lint */

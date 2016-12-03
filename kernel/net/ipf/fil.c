@@ -141,10 +141,8 @@ struct file;
 #endif
 /* END OF INCLUDES */
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)fil.c	1.36 6/5/96 (C) 1993-2000 Darren Reed";
 static const char rcsid[] = "@(#)$Id: fil.c,v 2.243.2.64 2005/08/13 05:19:59 darrenr Exp $";
-#endif
 
 #ifndef	_KERNEL
 # include "ipf.h"

@@ -698,13 +698,9 @@ px_lib_dma_sync(dev_info_t *dip, dev_info_t *rdip, ddi_dma_handle_t handle,
 	 * CPU's internal "invalidate FIFOs" are flushed.
 	 */
 
-#if !defined(lint)
 	kpreempt_disable();
-#endif
 	jbus_stst_order();
-#if !defined(lint)
 	kpreempt_enable();
-#endif
 	return (DDI_SUCCESS);
 }
 

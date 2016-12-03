@@ -33,11 +33,7 @@
 #include <sys/machthread.h>
 #include <sys/machparam.h>
 
-#if defined(lint)
-#include <sys/types.h>
-#else	/* lint */
 #include "assym.h"
-#endif	/* lint */
 
 /*
  * Prefetch considerations
@@ -75,14 +71,6 @@
  *
  */
 
-#if defined(lint) 
-
-/* ARGSUSED */
-unsigned int
-ip_ocsum(u_short *address, int halfword_count, unsigned int sum)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY(ip_ocsum)
 
@@ -461,4 +449,3 @@ ip_ocsum(u_short *address, int halfword_count, unsigned int sum)
 
 	SET_SIZE(ip_ocsum_long)	! 64-bit version
 
-#endif 	/* lint */

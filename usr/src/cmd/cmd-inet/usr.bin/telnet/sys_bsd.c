@@ -37,9 +37,7 @@
  *
  */
 
-#ifndef lint
 static char sccsid[] = "@(#)sys_bsd.c	8.1 (Berkeley) 6/6/93";
-#endif /* not lint */
 
 /*
  * The following routines try to encapsulate what is system dependent

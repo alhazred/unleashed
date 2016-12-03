@@ -238,11 +238,7 @@ struct hat_mmu_info {
  */
 #if defined(__amd64)
 
-#ifdef lint
-#define	IN_VA_HOLE(va)	(__lintzero)
-#else
 #define	IN_VA_HOLE(va)	(mmu.hole_start <= (va) && (va) < mmu.hole_end)
-#endif
 
 #define	FMT_PTE "0x%lx"
 #define	GET_PTE(ptr)		(*(x86pte_t *)(ptr))

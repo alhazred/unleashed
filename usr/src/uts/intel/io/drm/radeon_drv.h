@@ -1154,9 +1154,6 @@ do {									\
 } while (*"\0")
 
 
-#if defined(lint) || defined(__lint)
-#define	COMMIT_RING()		/* For lint clean */
-#else
 #define	COMMIT_RING() do {						\
 	/* Flush writes to ring */					\
 	DRM_MEMORYBARRIER();						\
@@ -1165,7 +1162,6 @@ do {									\
 	/* read from PCI bus to ensure correct posting */		\
 	RADEON_READ(RADEON_CP_RB_RPTR);				\
 } while (*"\0")
-#endif
 
 #define	OUT_RING(x) do {						\
 	ring[write++] = (x);						\

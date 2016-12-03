@@ -13,9 +13,7 @@
 #include "snoop.h"
 #include "ipt.h"
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: ipft_sn.c,v 1.7 2003/02/16 02:32:36 darrenr Exp $";
-#endif
 
 struct	llc	{
 	int	lc_sz;	/* LLC header length */

@@ -34,9 +34,6 @@
 
 #ident	"%Z%%M%	%I%	%E% SMI"
 
-#if !defined(lint) && defined(SCCSIDS)
-static char sccsid[] = "@(#)rwallxdr.c 1.3 89/03/24 Copyr 1985 Sun Micro";
-#endif
 
 #include <rpc/rpc.h>
 #include <rpcsvc/rwall.h>

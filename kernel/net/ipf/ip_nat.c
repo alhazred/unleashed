@@ -110,10 +110,8 @@ extern struct ifnet vpnif;
 #undef	SOCKADDR_IN
 #define	SOCKADDR_IN	struct sockaddr_in
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)ip_nat.c	1.11 6/5/96 (C) 1995 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ip_nat.c,v 2.195.2.42 2005/08/11 19:51:36 darrenr Exp $";
-#endif
 
 
 /* ======================================================================== */

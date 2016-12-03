@@ -23,9 +23,7 @@
  * 
  */
 
-#if !defined(lint) && !defined(__CODECENTER__)
 static char *rcsid = "$Header$";
-#endif
 #include	<kadm5/admin.h>
 #include	<stdlib.h>
 #include	"server_internal.h"

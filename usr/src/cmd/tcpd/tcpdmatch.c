@@ -13,9 +13,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) tcpdmatch.c 1.5 96/02/11 17:01:36";
-#endif
 
 /* System libraries. */
 

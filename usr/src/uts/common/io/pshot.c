@@ -67,9 +67,6 @@
  *	failattach.*	- induce error at attach
  */
 
-#if defined(lint) && !defined(DEBUG)
-#define	DEBUG	1
-#endif
 
 #include <sys/types.h>
 #include <sys/cmn_err.h>

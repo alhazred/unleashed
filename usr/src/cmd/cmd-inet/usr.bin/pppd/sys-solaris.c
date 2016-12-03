@@ -89,9 +89,7 @@
 #endif /* INET6 */
 #include "ccp.h"
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 #define	PPPSTRTIMOUT	1	/* Timeout in seconds for ioctl */
 #define	MAX_POLLFDS	32

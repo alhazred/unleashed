@@ -5043,13 +5043,11 @@ do_rfs4_set_attrs(bitmap4 *resp, fattr4 *fattrp, struct compound_state *cs,
 	union nfs4_attr_u *na;
 	uint8_t *amap;
 
-#ifndef lint
 	/*
 	 * Make sure that maximum attribute number can be expressed as an
 	 * 8 bit quantity.
 	 */
 	ASSERT(NFS4_MAXNUM_ATTRS <= (UINT8_MAX + 1));
-#endif
 
 	if (vp == NULL) {
 		if (resp)

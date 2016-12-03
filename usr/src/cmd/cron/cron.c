@@ -33,10 +33,6 @@
 /*	Copyright (c) 1987, 1988 Microsoft Corporation	*/
 /*	  All Rights Reserved	*/
 
-#ifdef lint
-/* make lint happy */
-#define	__EXTENSIONS__
-#endif
 
 #include <sys/contract/process.h>
 #include <sys/ctfs.h>

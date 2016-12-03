@@ -26,11 +26,7 @@
  * Process switching routines.
  */
 
-#if !defined(lint)
 #include "assym.h"
-#else	/* lint */
-#include <sys/thread.h>
-#endif	/* lint */
 
 #include <sys/param.h>
 #include <sys/asm_linkage.h>
@@ -69,14 +65,6 @@
  * off the stack.
  */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-resume(kthread_id_t t)
-{}
-
-#else	/* lint */
 
 	ENTRY(resume)
 	save	%sp, -SA(MINFRAME), %sp		! save ins and locals
@@ -454,16 +442,7 @@ resume(kthread_id_t t)
 	SET_SIZE(_resume_from_idle)
 	SET_SIZE(resume)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-resume_from_zombie(kthread_id_t t)
-{}
-
-#else	/* lint */
 
 	ENTRY(resume_from_zombie)
 	save	%sp, -SA(MINFRAME), %sp		! save ins and locals
@@ -509,16 +488,7 @@ resume_from_zombie(kthread_id_t t)
 	ldn	[%i0 + T_PROCP], %i3		! new process
 	SET_SIZE(resume_from_zombie)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-resume_from_intr(kthread_id_t t)
-{}
-
-#else	/* lint */
 
 	ENTRY(resume_from_intr)
 	save	%sp, -SA(MINFRAME), %sp		! save ins and locals
@@ -614,7 +584,6 @@ resume_from_intr(kthread_id_t t)
 	nop
 	SET_SIZE(resume_from_intr)
 
-#endif /* lint */
 
 
 /*
@@ -628,13 +597,6 @@ resume_from_intr(kthread_id_t t)
  * procedure.
  */
 
-#if defined(lint)
-
-void
-thread_start(void)
-{}
-
-#else	/* lint */
 
 	ENTRY(thread_start)
 	mov	%i0, %o0
@@ -646,4 +608,3 @@ thread_start(void)
 	unimp 0
 	SET_SIZE(thread_start)
 
-#endif	/* lint */

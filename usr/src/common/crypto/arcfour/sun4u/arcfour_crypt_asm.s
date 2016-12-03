@@ -23,16 +23,6 @@
  * Use is subject to license terms.
  */
 
-#if defined(lint) || defined(__lint)
-
-#include "arcfour.h"
-
-/* ARGSUSED */
-void
-arcfour_crypt_aligned(ARCFour_key *key, size_t len, uchar_t *in, uchar_t *out)
-{}
-
-#else	/* lint || __lint */
 
 	.register	%g2,#scratch
 	.register	%g3,#scratch
@@ -519,4 +509,3 @@ arcfour_crypt_aligned:
 	.type	arcfour_crypt_aligned,2
 	.size	arcfour_crypt_aligned,(. - arcfour_crypt_aligned)
 
-#endif	/* lint || __lint */

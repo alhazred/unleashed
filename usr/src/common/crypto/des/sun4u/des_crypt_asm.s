@@ -78,10 +78,6 @@
  * the next key schedule item to the partially computed next R).
  */
 
-#if defined(lint) || defined(__lint)
-	/* LINTED */
-	/* Nothing to be linted in this file, its pure assembly source */
-#else	/* lint || __lint */ 
 
 	.register	%g2,#scratch
 	.register	%g3,#scratch
@@ -3641,4 +3637,3 @@ des_fp_table:
 	.type	des_fp_table,#object
 	.size	des_fp_table,1024
 
-#endif	/* lint || __lint */

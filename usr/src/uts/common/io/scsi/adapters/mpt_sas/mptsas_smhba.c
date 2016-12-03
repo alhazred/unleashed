@@ -27,7 +27,7 @@
  * This file contains SM-HBA support for MPT SAS driver
  */
 
-#if defined(lint) || defined(DEBUG)
+#if defined(DEBUG)
 #define	MPTSAS_DEBUG
 #endif
 

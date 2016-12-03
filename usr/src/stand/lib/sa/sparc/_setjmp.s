@@ -26,15 +26,9 @@
 
 #ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(lint)
-
-typedef long *jmp_buf_ptr;
-
-#else	/* lint */
 
 #include <sys/asm_linkage.h>
 
-#endif	/* lint */
 
 /*
  * _setjmp(buf_ptr)
@@ -54,14 +48,6 @@ typedef long *jmp_buf_ptr;
  *		+----------------+
  */
 
-#if defined(lint)
-
-/* ARGSUSED */
-int
-_setjmp(jmp_buf_ptr buf_ptr)
-{ return (0); }
-
-#else	/* lint */
 
 	PCVAL	=	0	! offsets in buf structure
 	SPVAL	=	4
@@ -81,7 +67,6 @@ _setjmp(jmp_buf_ptr buf_ptr)
 	clr	%o0
 	SET_SIZE(_setjmp)
 
-#endif	/* lint */
 
 /*
  * _longjmp(buf_ptr, val)
@@ -94,16 +79,6 @@ _setjmp(jmp_buf_ptr buf_ptr)
  * Then, we set fp from the saved fp and make ourselves a stack frame.
  */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-_longjmp(jmp_buf_ptr buf_ptr, int val)
-{
-	return;
-}
-
-#else	/* lint */
 
 	ENTRY(_longjmp)
 	save	%sp, -WINDOWSIZE, %sp
@@ -130,4 +105,3 @@ _longjmp(jmp_buf_ptr buf_ptr, int val)
 	restore	%i1, 0, %o0		! return (val)
 	SET_SIZE(_longjmp)
 
-#endif	/* lint */

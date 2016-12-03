@@ -36,23 +36,10 @@
 #include <sys/param.h>
 #include <sys/mmu.h>
 
-#if defined(lint)
-#include <sys/cpr.h>
-void *estack;
-caddr_t _end[1];
-#endif
 
 #include "cprboot.h"
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-_start(void *a, ...)
-{}
-
-#else	/* !lint */
 
 	.seg	".bss"
 	.align	MMU_PAGESIZE
@@ -119,26 +106,8 @@ local_cif:
 	nop
 	SET_SIZE(_start)
 
-#endif	/* lint */
 
 
-#if defined(lint)
-
-/*
- * args from cprboot main:
- * 	%o0	prom cookie
- *	%o1	struct sun4u_machdep *mdp
- *
- * Any change to this register assignment requires
- * changes to uts/sun4u/ml/cpr_resume_setup.s
- */
-
-/* ARGSUSED */
-void
-exit_to_kernel(void *cookie, csu_md_t *mdp)
-{}
-
-#else	/* lint */
 
 	ENTRY(exit_to_kernel)
 	!
@@ -170,17 +139,8 @@ exit_to_kernel(void *cookie, csu_md_t *mdp)
 	unimp	0
 	SET_SIZE(exit_to_kernel)
 
-#endif	/* lint */
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-int
-client_handler(void *cif_handler, void *arg_array)
-{ return (0); }
-
-#else
 
 	!
 	! 64/64 client interface for ieee1275 prom
@@ -193,17 +153,8 @@ client_handler(void *cif_handler, void *arg_array)
 	mov	%g1, %o7
 	SET_SIZE(client_handler)
 
-#endif	/* lint */
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-bzero(void *base, size_t len)
-{}
-
-#else
 
 	ENTRY(bzero)
 	brz,pn	%o1, 2f
@@ -220,17 +171,8 @@ bzero(void *base, size_t len)
 	nop
 	SET_SIZE(bzero)
 
-#endif	/* lint */
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-phys_xcopy(physaddr_t phys_src, physaddr_t phys_dst, size_t len)
-{}
-
-#else
 
 	!
 	! copy len bytes from src to dst phys addrs;
@@ -253,17 +195,8 @@ phys_xcopy(physaddr_t phys_src, physaddr_t phys_dst, size_t len)
 	nop
 	SET_SIZE(phys_xcopy)
 
-#endif
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-get_dtlb_entry(int index, caddr_t *vaddrp, tte_t *tte)
-{}
-
-#else	/* lint */
 
 	ENTRY(get_dtlb_entry)
 	sllx	%o0, 3, %o0
@@ -274,22 +207,8 @@ get_dtlb_entry(int index, caddr_t *vaddrp, tte_t *tte)
 	stx	%o4, [%o1]
 	SET_SIZE(get_dtlb_entry)
 
-#endif
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-set_itlb_entry(int index, caddr_t vaddr, tte_t *tte)
-{}
-
-/* ARGSUSED */
-void
-set_dtlb_entry(int index, caddr_t vaddr, tte_t *tte)
-{}
-
-#else	/* lint */
 
 	ENTRY(set_dtlb_entry)
 	sllx    %o0, 3, %o0
@@ -317,16 +236,8 @@ set_dtlb_entry(int index, caddr_t vaddr, tte_t *tte)
 	nop
 	SET_SIZE(set_itlb_entry)
 
-#endif
 
 
-#if defined(lint)
-
-uint_t
-getmid(void)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY(getmid)
 	CPU_INDEX(%o0, %o1)
@@ -334,19 +245,8 @@ getmid(void)
 	nop
 	SET_SIZE(getmid)
 
-#endif
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-cpu_launch(int cpuid)
-{
-	slave_init(cpuid);
-}
-
-#else	/* lint */
 
 	ENTRY(cpu_launch)
 	set	CB_STACK_VIRT + CB_SSS, %o5
@@ -357,33 +257,16 @@ cpu_launch(int cpuid)
 	unimp	0
 	SET_SIZE(cpu_launch)
 
-#endif
 
 
-#if defined(lint)
-
-void
-membar_stld(void)
-{}
-
-#else	/* lint */
 
 	ENTRY(membar_stld)
 	retl
 	membar	#StoreLoad
 	SET_SIZE(membar_stld)
 
-#endif
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-cb_usec_wait(int usecs)
-{}
-
-#else
 
 	.align	32			! cache alignment for next 8 instr
 	ENTRY(cb_usec_wait)
@@ -402,4 +285,3 @@ cb_usec_wait(int usecs)
 	nop
 	SET_SIZE(cb_usec_wait)
 
-#endif

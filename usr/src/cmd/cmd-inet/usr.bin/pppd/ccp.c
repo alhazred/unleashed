@@ -39,9 +39,7 @@
 #include "ccp.h"
 #include <net/ppp-comp.h>
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 /*
  * Command-line options.

@@ -2575,10 +2575,8 @@ struct scsi_pkt_wrapper {
 	int			pkt_wrapper_len;
 };
 
-#if !defined(lint)
 _NOTE(SCHEME_PROTECTS_DATA("unique per thread", scsi_pkt_wrapper))
 _NOTE(SCHEME_PROTECTS_DATA("Unshared Data", dev_ops))
-#endif
 
 /*
  * Called by an HBA to allocate a scsi_pkt

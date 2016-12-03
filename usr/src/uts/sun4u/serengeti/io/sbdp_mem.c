@@ -1203,12 +1203,6 @@ _sbdp_copy_rename_end(void)
 int
 sbdp_memory_rename(sbdp_handle_t *hp)
 {
-#ifdef lint
-	/*
-	 * Delete when implemented
-	 */
-	hp = hp;
-#endif
 	return (0);
 }
 
@@ -1219,9 +1213,6 @@ sbdp_memory_rename(sbdp_handle_t *hp)
 int
 sbdp_post_configure_mem(sbdp_handle_t *hp)
 {
-#ifdef lint
-	hp = hp;
-#endif
 	return (0);
 }
 
@@ -1231,9 +1222,6 @@ sbdp_post_configure_mem(sbdp_handle_t *hp)
 int
 sbdp_post_unconfigure_mem(sbdp_handle_t *hp)
 {
-#ifdef lint
-	hp = hp;
-#endif
 	return (0);
 }
 

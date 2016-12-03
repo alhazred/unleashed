@@ -497,9 +497,6 @@ segmap_unlock(
 
 	ASSERT(smp->sm_refcnt > 0);
 
-#ifdef lint
-	seg = seg;
-#endif
 
 	if (segmap_kpm && IS_KPM_ADDR(addr)) {
 

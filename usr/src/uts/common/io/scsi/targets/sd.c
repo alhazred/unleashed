@@ -8600,9 +8600,7 @@ sd_unit_detach(dev_info_t *devi)
 
 	dev = sd_make_device(SD_DEVINFO(un));
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 	mutex_enter(SD_MUTEX(un));
 
@@ -15785,7 +15783,6 @@ sd_retry_command(struct sd_lun *un, struct buf *bp, int retry_check_flag,
 					goto fail_command;
 				}
 
-#if !defined(lint) && !defined(__lint)
 			} else {
 				/*
 				 * If neither of the preceeding conditionals
@@ -15801,7 +15798,6 @@ sd_retry_command(struct sd_lun *un, struct buf *bp, int retry_check_flag,
 				 * will be cleared when the wait queue is
 				 * flushed anyway.
 				 */
-#endif
 			}
 		}
 	} else {

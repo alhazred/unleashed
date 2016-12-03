@@ -179,9 +179,6 @@ restore_page_group(cpd_t *descp)
 	caddr_t src;
 	int raw;
 
-#if defined(lint)
-	(void) compress(0, 0, 0);
-#endif
 
 	/*
 	 * move any source buf pages that clash with dst kernel pages;

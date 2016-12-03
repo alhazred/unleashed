@@ -157,13 +157,6 @@ catch_fault:
  * do a longjmp(&curthread->t_ontrap->ot_jmpbuf) if this is ever called.
  */
 
-#if defined(lint)
-
-void
-on_trap_trampoline(void)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -185,21 +178,12 @@ on_trap_trampoline(void)
 	SET_SIZE(on_trap_trampoline)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Push a new element on to the t_ontrap stack.  Refer to <sys/ontrap.h> for
  * more information about the on_trap() mechanism.  If the on_trap_data is the
  * same as the topmost stack element, we just modify that element.
  */
-#if defined(lint)
-
-/*ARGSUSED*/
-int
-on_trap(on_trap_data_t *otp, uint_t prot)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -249,7 +233,6 @@ on_trap(on_trap_data_t *otp, uint_t prot)
 	SET_SIZE(on_trap)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Setjmp and longjmp implement non-local gotos using state vectors
@@ -2375,17 +2358,6 @@ dtrace_interrupt_enable(dtrace_icookie_t cookie)
 #endif	/* __lint */
 
 
-#if defined(lint)
-
-void
-dtrace_membar_producer(void)
-{}
-
-void
-dtrace_membar_consumer(void)
-{}
-
-#else	/* __lint */
 
 	ENTRY(dtrace_membar_producer)
 	rep;	ret	/* use 2 byte return instruction when branch target */
@@ -2397,7 +2369,6 @@ dtrace_membar_consumer(void)
 			/* AMD Software Optimization Guide - Section 6.2 */
 	SET_SIZE(dtrace_membar_consumer)
 
-#endif	/* __lint */
 
 #if defined(__lint)
 

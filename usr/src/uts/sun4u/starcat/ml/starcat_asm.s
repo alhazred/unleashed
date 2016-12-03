@@ -26,11 +26,7 @@
 
 #pragma	ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(lint)
-#include <sys/types.h>
-#else
 #include "assym.h"
-#endif /* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/param.h>
@@ -50,16 +46,6 @@
 #include <sys/cmpregs.h>
 #include <sys/cheetahregs.h>
 
-#if defined(lint)
-
-/* ARGSUSED */
-uint64_t
-lddmcdecode(uint64_t physaddr)
-{
-	return (0x0ull);
-}
-
-#else /* !lint */
 
 !
 ! Load the mc_decode reg for this CPU.
@@ -74,5 +60,4 @@ lddmcdecode(uint64_t physaddr)
 	wrpr    %g0, %o4, %pstate		! restore pstate value
 	SET_SIZE(lddmcdecode)
 
-#endif /* lint */
 

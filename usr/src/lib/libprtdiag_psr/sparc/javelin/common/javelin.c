@@ -94,9 +94,6 @@ error_check(Sys_tree *tree, struct system_kstat_data *kstats)
 {
 	int exit_code = 0;	/* init to all OK */
 
-#ifdef	lint
-	kstats = kstats;
-#endif
 	/*
 	 * silently check for any types of machine errors
 	 */
@@ -146,9 +143,6 @@ display_memoryconf(Sys_tree *tree, struct grp_info *grps)
 	Prop *status_prop;
 	char interleave[8];
 	int total_size = 0;
-#ifdef lint
-	grps = grps;
-#endif
 
 	log_printf("\n", 0);
 	log_printf("=========================", 0);
@@ -359,9 +353,6 @@ disp_fail_parts(Sys_tree *tree)
 void
 display_hp_fail_fault(Sys_tree *tree, struct system_kstat_data *kstats)
 {
-#ifdef lint
-	kstats = kstats;
-#endif
 	/* Display failed units */
 	(void) disp_fail_parts(tree);
 }
@@ -770,11 +761,6 @@ read_platform_kstats(Sys_tree *tree, struct system_kstat_data *sys_kstat,
 	if ((kc = kstat_open()) == NULL) {
 		return;
 	}
-#ifdef lint
-	tree = tree;
-	bdp = bdp;
-	ep = ep;
-#endif
 
 	/* read the envctrltwo kstats */
 	ecp = &sys_kstat->envc_data;

@@ -369,14 +369,11 @@ xdr_bool(XDR *xdrs, bool_t *bp)
  * Changes must be reviewed by Solaris File Sharing
  * Changes must be communicated to contract-2003-523@sun.com
  */
-#ifndef lint
 enum sizecheck { SIZEVAL } sizecheckvar;	/* used to find the size of */
 						/* an enum */
-#endif
 bool_t
 xdr_enum(XDR *xdrs, enum_t *ep)
 {
-#ifndef lint
 	/*
 	 * enums are treated as ints
 	 */
@@ -387,10 +384,6 @@ xdr_enum(XDR *xdrs, enum_t *ep)
 	} else {
 		return (FALSE);
 	}
-#else
-	(void) (xdr_short(xdrs, (short *)ep));
-	return (xdr_int(xdrs, (int32_t *)ep));
-#endif
 }
 
 /*

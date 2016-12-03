@@ -26,15 +26,6 @@
 #include <sys/asm_linkage.h>
 #include <brand_misc.h>
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-brand_runexe(void *argv, ulong_t entry)
-{
-}
-
-#else	/* lint */
 	/*
 	 * Prepare to jump to the target program we actually want to run.
 	 * If this program is dynamically linked then we'll be jumping to
@@ -76,4 +67,3 @@ brand_runexe(void *argv, ulong_t entry)
 	 * target will never return.
 	 */
 	SET_SIZE(brand_runexe)
-#endif	/* lint */

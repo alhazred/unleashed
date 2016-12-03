@@ -70,10 +70,8 @@ extern	char	*sys_errlist[];
 # define	STRERROR(x)	strerror(x)
 #endif
 
-#if !defined(lint)
 static const char sccsid[] ="@(#)ipnat.c	1.9 6/5/96 (C) 1993 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ipnat.c,v 1.24.2.2 2005/05/10 21:19:30 darrenr Exp $";
-#endif
 
 
 #if	SOLARIS

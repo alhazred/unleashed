@@ -6933,11 +6933,7 @@ dtrace_probe(dtrace_id_t id, uintptr_t arg0, uintptr_t arg1,
 		 * arguments to aggregating actions, one iteration of the
 		 * action loop will use the last iteration's value.
 		 */
-#ifdef lint
-		uint64_t val = 0;
-#else
 		uint64_t val;
-#endif
 
 		mstate.dtms_present = DTRACE_MSTATE_ARGS | DTRACE_MSTATE_PROBE;
 		mstate.dtms_access = DTRACE_ACCESS_ARGS | DTRACE_ACCESS_PROC;

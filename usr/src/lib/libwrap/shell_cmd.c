@@ -15,9 +15,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) shell_cmd.c 1.5 94/12/28 17:42:44";
-#endif
 
 /* System libraries. */
 

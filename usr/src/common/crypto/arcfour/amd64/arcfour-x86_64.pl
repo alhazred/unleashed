@@ -133,21 +133,6 @@ $YY="%r12";
 $TY="%r13";
 
 $code=<<___;
-#if defined(lint) || defined(__lint)
-
-#include "arcfour.h"
-
-/* ARGSUSED */
-void
-arcfour_crypt_asm(ARCFour_key *key, uchar_t *in, uchar_t *out, size_t len)
-{}
-
-/* ARGSUSED */
-void
-arcfour_key_init(ARCFour_key *key, uchar_t *keyval, int keyvallen)
-{}
-
-#else
 #include <sys/asm_linkage.h>
 
 ENTRY_NP(arcfour_crypt_asm)
@@ -328,7 +313,6 @@ ENTRY_NP(arcfour_key_init)
 	ret
 SET_SIZE(arcfour_key_init)
 .asciz	"RC4 for x86_64, CRYPTOGAMS by <appro\@openssl.org>"
-#endif /* !lint && !__lint */
 ___
 
 $code =~ s/#([bwd])/$1/gm;

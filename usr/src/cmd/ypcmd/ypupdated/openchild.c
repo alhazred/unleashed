@@ -34,9 +34,6 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if !defined(lint) && defined(SCCSIDS)
-static char sccsid[] = "%Z%%M%	%I%	%E% SMI";
-#endif
 
 /*
  * openchild.c

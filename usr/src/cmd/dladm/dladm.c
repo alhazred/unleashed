@@ -8177,13 +8177,11 @@ print_bridge_stats(show_state_t *state, datalink_id_t linkid,
 	brsum_t			*brsum = (brsum_t *)&state->ls_prevstats;
 	brsum_t			newval;
 
-#ifndef lint
 	/* This is a compile-time assertion; optimizer normally fixes this */
 	extern void brsum_t_is_too_large(void);
 
 	if (sizeof (*brsum) > sizeof (state->ls_prevstats))
 		brsum_t_is_too_large();
-#endif
 
 	if (state->ls_firstonly) {
 		if (state->ls_donefirst)
@@ -8370,13 +8368,11 @@ print_bridge_link_stats(show_state_t *state, datalink_id_t linkid,
 	brlsum_t		*brlsum = (brlsum_t *)&state->ls_prevstats;
 	brlsum_t		newval;
 
-#ifndef lint
 	/* This is a compile-time assertion; optimizer normally fixes this */
 	extern void brlsum_t_is_too_large(void);
 
 	if (sizeof (*brlsum) > sizeof (state->ls_prevstats))
 		brlsum_t_is_too_large();
-#endif
 
 	if (state->ls_firstonly) {
 		if (state->ls_donefirst)

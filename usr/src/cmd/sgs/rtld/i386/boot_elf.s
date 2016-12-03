@@ -29,20 +29,6 @@
  */
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if	defined(lint)
-
-#include	<sys/types.h>
-#include	"_rtld.h"
-#include	"_audit.h"
-#include	"_elf.h"
-
-/* ARGSUSED0 */
-int
-elf_plt_trace()
-{
-	return (0);
-}
-#else
 
 #include	<link.h>
 #include	"_audit.h"
@@ -265,7 +251,6 @@ elf_plt_trace:
 	popl	%ebp				/
 	ret					/ return to caller
 	.size	elf_plt_trace, .-elf_plt_trace
-#endif
 
 /*
  * We got here because a call to a function resolved to a procedure
@@ -285,17 +270,6 @@ elf_plt_trace:
  *	nop; nop; nop;nop;
  *
  */
-#if defined(lint)
-
-extern unsigned long	elf_bndr(Rt_map *, unsigned long, caddr_t);
-
-void
-elf_rtbndr(Rt_map * lmp, unsigned long reloc, caddr_t pc)
-{
-	(void) elf_bndr(lmp, reloc, pc);
-}
-
-#else
 	.globl	elf_bndr
 	.globl	elf_rtbndr
 	.weak	_elf_rtbndr
@@ -323,4 +297,3 @@ elf_rtbndr:
 	addl	$4,%esp			/ pop args
 	ret				/ invoke resolved function
 	.size 	elf_rtbndr, .-elf_rtbndr
-#endif

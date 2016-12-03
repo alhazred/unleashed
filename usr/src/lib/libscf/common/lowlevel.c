@@ -96,11 +96,7 @@ static char index32[128] = {
 
 #define	DECODE32_GS	(8)	/* scf_decode32 group size */
 
-#ifdef lint
-#define	assert_nolint(x) (void)0
-#else
 #define	assert_nolint(x) assert(x)
-#endif
 
 static void scf_iter_reset_locked(scf_iter_t *iter);
 static void scf_value_reset_locked(scf_value_t *val, int and_destroy);

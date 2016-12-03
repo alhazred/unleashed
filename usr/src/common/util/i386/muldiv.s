@@ -24,11 +24,9 @@
  * Use is subject to license terms.
  */
 
-#if !defined(lint)
 	.ident	"%Z%%M%	%I%	%E% SMI"
 
 	.file	"muldiv.s"
-#endif
 
 #if defined(__i386) && !defined(__amd64)
 

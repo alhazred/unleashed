@@ -566,9 +566,6 @@ char 		*sml_strPrintf(char *a_format, ...);
 char		*sml_XmlEncodeString(char *a_plainTextString);
 char		*sml_XmlDecodeString(char *a_xmlEncodedString);
 
-#if defined(lint) && !defined(gettext)
-#define	gettext(x)	x
-#endif	/* defined(lint) && !defined(gettext) */
 
 #ifdef __cplusplus
 }

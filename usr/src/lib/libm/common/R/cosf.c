@@ -87,9 +87,6 @@ cosf(float x)
 		if (ix <= 0x3f490fdb) {		/* |x| < pi/4 */
 			if (ix <= 0x39800000) {	/* |x| <= 2**-12 */
 				i = (int)y;
-#ifdef lint
-				i = i;
-#endif
 				return (1.0f);
 			}
 			z = y * y;

@@ -66,16 +66,7 @@
 #define	FREESZ(p, sz) kmem_free(p, sz)
 #else	/* _KERNEL */
 #define	MALLOC(size) malloc(size)
-#ifndef lint
 #define	FREESZ(p, sz) free(p)
-#else	/* lint */
-/* ARGSUSED */
-static void
-FREESZ(void *p, size_t sz)
-{
-	free(p);
-}
-#endif	/* lint */
 #endif	/* _KERNEL */
 
 #define	ERRCHK(expr)	if ((error = expr) != 0) goto errout

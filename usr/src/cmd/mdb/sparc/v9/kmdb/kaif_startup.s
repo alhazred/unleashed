@@ -901,12 +901,6 @@ obp_normal_entry:
 
 #endif	/* __lint */
 
-#if defined(lint)
-void
-kaif_dtrap_dprot(void)
-{
-}
-#else   /* lint */
 
 	/*
 	 * This routine is used to handle all "failed" traps.  A trap is
@@ -949,4 +943,3 @@ kaif_dtrap_dprot(void)
 
 	SET_SIZE(kaif_dtrap)
 
-#endif	/* lint */

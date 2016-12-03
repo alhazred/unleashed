@@ -373,9 +373,6 @@ ata_repair(diskaddr_t bn, int flag)
 	struct	badsec_lst	*blc_p;
 	struct	badsec_lst	*blc_p_nxt;
 
-#ifdef lint
-	flag++;
-#endif
 
 	(void) get_alts_slice();
 	if (!gbadsl_chain) {

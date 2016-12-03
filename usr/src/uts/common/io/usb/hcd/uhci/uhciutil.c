@@ -5004,9 +5004,7 @@ uhci_print_td(uhci_state_t *uhcip, uhci_td_t *td)
 {
 	uint_t	*ptr = (uint_t *)td;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 	USB_DPRINTF_L3(PRINT_MASK_DUMPING, uhcip->uhci_log_hdl,
 	    "\tDWORD 1 0x%x\t DWORD 2 0x%x", ptr[0], ptr[1]);
 	USB_DPRINTF_L3(PRINT_MASK_DUMPING, uhcip->uhci_log_hdl,
@@ -5019,9 +5017,7 @@ uhci_print_td(uhci_state_t *uhcip, uhci_td_t *td)
 	    "Queue Head Details:");
 	uhci_print_qh(uhcip, td->tw->tw_pipe_private->pp_qh);
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 }
 
 

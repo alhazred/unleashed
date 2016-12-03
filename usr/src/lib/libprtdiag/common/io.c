@@ -290,9 +290,6 @@ display_io_devices(Sys_tree *tree)
 void
 display_pci(Board_node *bnode)
 {
-#ifdef  lint
-	bnode = bnode;
-#endif
 	/*
 	 * This function is intentionally empty
 	 */

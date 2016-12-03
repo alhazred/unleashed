@@ -33,11 +33,7 @@
 extern "C" {
 #endif
 
-#ifndef lint
 #define	_(x)    gettext(x)
-#else
-#define	_(x)    x
-#endif
 
 #define	UNKNOWN		1	   /* flags */
 #define	PRESENT		2	   /* flags */

@@ -68,10 +68,6 @@
 #include "unm_version.h"
 #include "unm_brdcfg.h"
 
-#if defined(lint)
-#undef MBLKL
-#define	MBLKL(_mp_)	((uintptr_t)(_mp_)->b_wptr - (uintptr_t)(_mp_)->b_rptr)
-#endif /* lint */
 
 #undef UNM_LOOPBACK
 #undef SINGLE_DMA_BUF

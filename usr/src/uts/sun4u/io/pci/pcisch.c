@@ -368,9 +368,7 @@ wait:
 	mutex_exit(&pbm_p->pbm_sync_mutex);
 }
 
-#if !defined(lint)
 #include <sys/cpuvar.h>
-#endif
 
 #define	SYNC_HW_BUSY(pa, mask)	(lddphysio(pa) & (mask))
 
@@ -430,13 +428,9 @@ done:
 		mutex_exit(&pbm_p->pbm_sync_mutex);
 
 	if (tomatillo_store_store_wrka) {
-#if !defined(lint)
 		kpreempt_disable();
-#endif
 		tomatillo_store_store_order();
-#if !defined(lint)
 		kpreempt_enable();
-#endif
 	}
 
 }

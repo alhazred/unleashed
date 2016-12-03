@@ -31,9 +31,7 @@
  * Written by T. J. Thompson
  */
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] = "$Header: /rd/src/libc/i18n/rcs/m_text.c 1.18 1995/02/02 16:42:09 jeffhe Exp $";
-#endif
 #endif
 
 #define	I18N	1	/* InternaltionalizatioN on */

@@ -9,10 +9,8 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)ip_fil.c	2.41 6/5/96 (C) 1993-2000 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ipfcomp.c,v 1.24.2.2 2004/04/28 10:34:44 darrenr Exp $";
-#endif
 
 #include "ipf.h"
 

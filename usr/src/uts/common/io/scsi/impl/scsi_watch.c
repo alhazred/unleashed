@@ -95,9 +95,7 @@ static struct scsi_watch {
 						/* blocked */
 } sw;
 
-#if !defined(lint)
 _NOTE(MUTEX_PROTECTS_DATA(scsi_watch::sw_mutex, scsi_watch))
-#endif
 
 /*
  * Values for sw_state
@@ -136,9 +134,7 @@ struct scsi_watch_request {
  */
 #define	SUSPEND_DESTROY		1
 
-#if !defined(lint)
 _NOTE(SCHEME_PROTECTS_DATA("unshared data", scsi_watch_request))
-#endif
 
 /*
  * values for sw_what
@@ -632,10 +628,8 @@ static int sw_cpr_flag = 0;
 static callb_cpr_t cpr_info;
 static kmutex_t cpr_mutex;
 
-#if !defined(lint)
 _NOTE(MUTEX_PROTECTS_DATA(cpr_mutex, cpr_info))
 _NOTE(MUTEX_PROTECTS_DATA(cpr_mutex, sw_cmd_count))
-#endif
 /*
  * the scsi watch thread:
  * it either wakes up if there is work to do or if the cv_timeait
@@ -658,17 +652,13 @@ scsi_watch_thread()
 	SW_DEBUG((dev_info_t *)NULL, sw_label, SCSI_DEBUG,
 	    "scsi_watch_thread: Entering ...\n");
 
-#if !defined(lint)
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 	mutex_init(&cpr_mutex, NULL, MUTEX_DRIVER, NULL);
 	CALLB_CPR_INIT(&cpr_info,
 	    &cpr_mutex, callb_generic_cpr, "scsi_watch");
 	sw_cpr_flag = 0;
-#if !defined(lint)
 	/*LINTED*/
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 	/*
 	 * grab the mutex and wait for work
 	 */

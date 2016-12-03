@@ -44,26 +44,20 @@
 #include "libm.h"
 
 static const long double zero = 0.0L, small = 1.0e-20L, half = 0.5L, one = 1.0L;
-#ifndef lint
 static const long double big = 1.0e+20L;
-#endif
 
 long double
 asinl(long double x) {
 	long double t, w;
-#ifndef lint
 	volatile long double dummy;
-#endif
 
 	w = fabsl(x);
 	if (isnanl(x))
 		return (x + x);
 	else if (w <= half) {
 		if (w < small) {
-#ifndef lint
 			dummy = w + big;
 							/* inexact if w != 0 */
-#endif
 			return (x);
 		} else
 			return (atanl(x / sqrtl(one - x * x)));

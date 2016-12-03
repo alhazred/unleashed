@@ -738,9 +738,6 @@ tdirrename(
 	int doingdirectory;
 	timestruc_t now;
 
-#if defined(lint)
-	nm = nm;
-#endif
 	ASSERT(RW_WRITE_HELD(&toparent->tn_rwlock));
 
 	/*

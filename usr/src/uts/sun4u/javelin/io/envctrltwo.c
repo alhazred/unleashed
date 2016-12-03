@@ -508,11 +508,7 @@ envctrl_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 			    ((t_port[k] == ENVCTRL_UE250_CPU1_PORT) &&
 			    (unitp->cpu_pr_location[ENVCTRL_CPU1] == B_FALSE)))
 				/* Don't increment the kstat line count */
-#ifdef lint
-				k = k;
-#else
 				;
-#endif
 			else
 				k++;
 		} else
@@ -689,9 +685,6 @@ envctrl_getinfo(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg,
 
 	instance = getminor(dev);
 
-#ifdef lint
-	dip = dip;
-#endif
 
 
 	switch (infocmd) {
@@ -793,10 +786,6 @@ envctrl_ioctl(dev_t dev, int cmd, intptr_t arg, int flag, cred_t *cred_p,
 	struct envctrl_chip temp, a_fanspeed;
 	int rval = 0, status, tfanspeed;
 
-#ifdef lint
-	cred_p = cred_p;
-	rvalp = rvalp;
-#endif
 	instance = getminor(dev);
 	unitp = (struct envctrlunit *)
 	    ddi_get_soft_state(envctrlsoft_statep, instance);

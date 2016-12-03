@@ -704,13 +704,11 @@ strpqcpy(char *target, char *p, char *q)
 	return (target);
 }
 
-#ifndef lint
 int
 breakpoint(void)
 {
 	return (0);
 }
-#endif
 
 
 int

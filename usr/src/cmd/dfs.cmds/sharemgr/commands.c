@@ -1722,9 +1722,6 @@ sa_list(sa_handle_t handle, int flags, int argc, char *argv[])
 	int c;
 	char *protocol = NULL;
 	int ret = SA_OK;
-#ifdef lint
-	flags = flags;
-#endif
 
 	while ((c = getopt(argc, argv, "?hvP:")) != EOF) {
 		switch (c) {
@@ -2291,9 +2288,6 @@ sa_show(sa_handle_t handle, int flags, int argc, char *argv[])
 	char *protocol = NULL;
 	int xml = 0;
 	xmlDocPtr doc;
-#ifdef lint
-	flags = flags;
-#endif
 
 	while ((c = getopt(argc, argv, "?hvP:px")) !=	EOF) {
 		switch (c) {
@@ -4938,9 +4932,6 @@ sa_start_group(sa_handle_t handle, int flags, int argc, char *argv[])
 	char *state;
 	struct list *worklist = NULL;
 	sa_group_t group;
-#ifdef lint
-	flags = flags;
-#endif
 
 	while ((c = getopt(argc, argv, "?havP:")) != EOF) {
 		switch (c) {
@@ -5066,9 +5057,6 @@ sa_stop_group(sa_handle_t handle, int flags, int argc, char *argv[])
 	char *state;
 	struct list *worklist = NULL;
 	sa_group_t group;
-#ifdef lint
-	flags = flags;
-#endif
 
 	while ((c = getopt(argc, argv, "?havP:")) != EOF) {
 		switch (c) {
@@ -5445,9 +5433,6 @@ sa_legacy_share(sa_handle_t handle, int flags, int argc, char *argv[])
 	sa_share_t share;
 	char dir[MAXPATHLEN];
 	uint64_t features;
-#ifdef lint
-	flags = flags;
-#endif
 
 	while ((c = getopt(argc, argv, "?hF:d:o:p")) != EOF) {
 		switch (c) {
@@ -5723,10 +5708,6 @@ sa_legacy_unshare(sa_handle_t handle, int flags, int argc, char *argv[])
 	uint64_t features = 0;
 	sa_resource_t resource = NULL;
 	char cmd[MAXPATHLEN];
-#ifdef lint
-	flags = flags;
-	options = options;
-#endif
 
 	while ((c = getopt(argc, argv, "?hF:o:p")) != EOF) {
 		switch (c) {
@@ -5985,9 +5966,6 @@ sa_lookup(char *cmd, char *proto)
 {
 	int i;
 	size_t len;
-#ifdef lint
-	proto = proto;
-#endif
 
 	len = strlen(cmd);
 	for (i = 0; commands[i].cmdname != NULL; i++) {
@@ -6001,9 +5979,6 @@ void
 sub_command_help(char *proto)
 {
 	int i;
-#ifdef lint
-	proto = proto;
-#endif
 
 	(void) printf(gettext("\tsub-commands:\n"));
 	for (i = 0; commands[i].cmdname != NULL; i++) {

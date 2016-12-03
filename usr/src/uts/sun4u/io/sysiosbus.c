@@ -884,9 +884,7 @@ sbus_resume_init(struct sbus_soft_state *softsp, int resume)
 		/* Program the slot configuration registers */
 		for (i = 0; i < MAX_SBUS_SLOTS; i++) {
 			volatile uint64_t *config;
-#ifndef lint
 			uint64_t tmpreg;
-#endif /* !lint */
 			uint_t slave_burstsizes;
 
 			slave_burstsizes = 0;
@@ -915,9 +913,7 @@ sbus_resume_init(struct sbus_soft_state *softsp, int resume)
 				*config |= (uint64_t)slave_burstsizes;
 
 				/* Flush any write buffers */
-#ifndef lint
 				tmpreg = *softsp->sbus_ctrl_reg;
-#endif /* !lint */
 			}
 		}
 	}
@@ -1151,9 +1147,7 @@ sbus_initchild(dev_info_t *dip, dev_info_t *child)
 	ulong_t slave_burstsizes;
 	int slot;
 	volatile uint64_t *slot_reg;
-#ifndef lint
 	uint64_t tmp;
-#endif /* !lint */
 	struct sbus_soft_state *softsp = (struct sbus_soft_state *)
 	    ddi_get_soft_state(sbusp, ddi_get_instance(dip));
 
@@ -1291,9 +1285,7 @@ sbus_initchild(dev_info_t *dip, dev_info_t *child)
 		*slot_reg |= (uint64_t)burstsizes;
 
 		/* Flush system load/store buffers */
-#ifndef lint
 		tmp = *slot_reg;
-#endif /* !lint */
 	}
 
 done:
@@ -1761,9 +1753,6 @@ sbus_add_intr_impl(dev_info_t *dip, dev_info_t *rdip,
 		*mondo_vec_reg = tmp_mondo_vec;
 
 		tmpreg = *softsp->sbus_ctrl_reg;
-#ifdef	lint
-		tmpreg = tmpreg;
-#endif
 
 		DPRINTF(SBUS_INTERRUPT_DEBUG, ("Add intr:sbus_arg exists "
 		    "0x%p\n", (void *)sbus_arg));
@@ -1923,9 +1912,7 @@ sbus_remove_intr_impl(dev_info_t *dip, dev_info_t *rdip,
 {
 	volatile uint64_t *mondo_vec_reg;
 	volatile uint64_t *intr_state_reg;
-#ifndef lint
 	volatile uint64_t tmpreg;
-#endif /* !lint */
 	struct sbus_soft_state *softsp = (struct sbus_soft_state *)
 	    ddi_get_soft_state(sbusp, ddi_get_instance(dip));
 	int start_bit, ino, slot;
@@ -1949,9 +1936,7 @@ sbus_remove_intr_impl(dev_info_t *dip, dev_info_t *rdip,
 
 	/* Turn off the valid bit in the mapping register. */
 	*mondo_vec_reg &= ~INTERRUPT_VALID;
-#ifndef lint
 	tmpreg = *softsp->sbus_ctrl_reg;
-#endif /* !lint */
 
 	/* Get our bit position for checking intr pending */
 	if (ino > MAX_MONDO_EXTERNAL) {
@@ -1997,9 +1982,7 @@ sbus_remove_intr_impl(dev_info_t *dip, dev_info_t *rdip,
 	 */
 	if (softsp->intr_hndlr_cnt[slot] > 0) {
 		*mondo_vec_reg |= INTERRUPT_VALID;
-#ifndef lint
 		tmpreg = *softsp->sbus_ctrl_reg;
-#endif /* !lint */
 	}
 
 	if ((softsp->intr_hndlr_cnt[slot] == 0) || (slot >= EXT_SBUS_SLOTS)) {
@@ -2267,9 +2250,6 @@ sbus_intrdist(void *arg)
 
 		tmpreg = *softsp->sbus_ctrl_reg;
 
-#ifdef	lint
-		tmpreg = tmpreg;
-#endif	/* lint */
 
 		if (mondo > MAX_MONDO_EXTERNAL) {
 			start_bit = ino_table[mondo]->diagreg_shift;
@@ -2330,9 +2310,6 @@ sbus_intrdist(void *arg)
 		/* flush the hardware buffers. */
 		tmpreg = *mondo_vec_reg;
 
-#ifdef	lint
-		tmpreg = tmpreg;
-#endif	/* lint */
 	}
 }
 

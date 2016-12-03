@@ -1411,10 +1411,8 @@ xdr_faststatfs(XDR *xdrs, struct nfsstatfs *fs)
 /*
  * XDR enumerations
  */
-#ifndef lint
 static enum sizecheck { SIZEVAL } sizecheckvar;	/* used to find the size of */
 						/* an enum */
-#endif
 bool_t
 xdr_fastenum(XDR *xdrs, enum_t *ep)
 {
@@ -1423,7 +1421,6 @@ xdr_fastenum(XDR *xdrs, enum_t *ep)
 	if (xdrs->x_op == XDR_DECODE)
 		return (FALSE);
 
-#ifndef lint
 	/*
 	 * enums are treated as ints
 	 */
@@ -1435,10 +1432,6 @@ xdr_fastenum(XDR *xdrs, enum_t *ep)
 		return (FALSE);
 	}
 	return (TRUE);
-#else
-	(void) (xdr_short(xdrs, (short *)ep));
-	return (xdr_int(xdrs, (int *)ep));
-#endif
 }
 #endif
 

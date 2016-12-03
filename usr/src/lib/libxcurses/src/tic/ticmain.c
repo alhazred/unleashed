@@ -38,9 +38,7 @@
  */
 
 #ifdef M_RCSID
-#ifndef lint
 static char const rcsID[] = "$Header: /rd/src/tic/rcs/ticmain.c 1.11 1995/06/22 18:40:30 ross Exp $";
-#endif
 #endif
 
 #include "tic.h"

@@ -112,9 +112,6 @@ error_check(Sys_tree *tree, struct system_kstat_data *kstats)
 {
 	int exit_code = 0;	/* init to all OK */
 
-#ifdef lint
-	kstats = kstats;
-#endif
 
 	/*
 	 * silently check for any types of machine errors
@@ -133,10 +130,6 @@ error_check(Sys_tree *tree, struct system_kstat_data *kstats)
 void
 display_memoryconf(Sys_tree *tree, struct grp_info *grps)
 {
-#ifdef lint
-	tree = tree;
-	grps = grps;
-#endif
 }
 
 /*
@@ -258,9 +251,6 @@ void
 display_hp_fail_fault(Sys_tree *tree, struct system_kstat_data *kstats)
 {
 
-#ifdef lint
-	kstats = kstats;
-#endif
 	/* Display failed units */
 	(void) disp_fail_parts(tree);
 }
@@ -270,9 +260,6 @@ display_diaginfo(int flag, Prom_node *root, Sys_tree *tree,
 	struct system_kstat_data *kstats)
 {
 
-#ifdef	lint
-	kstats = kstats;
-#endif
 	/*
 	 * Now display the last powerfail time and the fatal hardware
 	 * reset information. We do this under a couple of conditions.
@@ -323,12 +310,6 @@ read_platform_kstats(Sys_tree *tree, struct system_kstat_data *sys_kstat,
 	struct bd_kstat_data *bdp, struct envctrl_kstat_data *ep)
 
 {
-#ifdef	lint
-	tree = tree;
-	sys_kstat = sys_kstat;
-	bdp = bdp;
-	ep = ep;
-#endif
 }
 
 

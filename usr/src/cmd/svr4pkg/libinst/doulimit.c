@@ -141,10 +141,6 @@ assign_ulimit(char *fslimit)
 void
 ulimit_quit(int n)
 {
-#ifdef lint
-	int i = n;
-	n = i;
-#endif	/* lint */
 
 	setrlimit(RLIMIT_FSIZE, &dblimit);
 	signal(SIGXFSZ, SIG_IGN);

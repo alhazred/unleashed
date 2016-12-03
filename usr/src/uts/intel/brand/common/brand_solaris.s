@@ -31,11 +31,6 @@
  * use brand-specific #defines to replace the XXX_brand_... definitions.
  */ 
 
-#ifdef lint
-
-#include <sys/systm.h>
-
-#else /* !lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/privregs.h>
@@ -43,33 +38,7 @@
 #include "assym.h"
 #include "brand_asm.h"
 
-#endif	/* !lint */
 
-#ifdef  lint
-
-void
-XXX_brand_sysenter_callback(void)
-{
-}
-
-void
-XXX_brand_syscall_callback(void)
-{
-}
-
-#if defined(__amd64)
-void
-XXX_brand_syscall32_callback(void)
-{
-}
-#endif  /* amd64 */
-
-void
-XXX_brand_int91_callback(void)
-{
-}
-
-#else   /* !lint */
 
 #ifdef _ASM	/* The remainder of this file is only for assembly files */
 
@@ -192,4 +161,3 @@ SET_SIZE(XXX_brand_sysenter_callback)
 
 #endif	/* !__amd64 */
 #endif	/* _ASM */
-#endif  /* !lint */

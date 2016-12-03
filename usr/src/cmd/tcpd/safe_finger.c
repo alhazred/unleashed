@@ -14,9 +14,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) safe_finger.c 1.4 94/12/28 17:42:41";
-#endif
 
 /* System libraries */
 

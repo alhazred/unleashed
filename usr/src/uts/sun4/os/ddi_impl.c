@@ -1020,9 +1020,6 @@ i_ddi_cacheattr_to_hatacc(uint_t flags, uint_t *hataccp)
 {
 	uint_t cache_attr = IOMEM_CACHE_ATTR(flags);
 	static char *fname = "i_ddi_cacheattr_to_hatacc";
-#if defined(lint)
-	*hataccp = *hataccp;
-#endif
 	/*
 	 * set HAT attrs according to the cache attrs.
 	 */
@@ -1165,9 +1162,6 @@ i_ddi_mem_alloc(dev_info_t *dip, ddi_dma_attr_t *attr,
 	int iomin, align, streaming;
 	uint_t endian_flags = DDI_NEVERSWAP_ACC;
 
-#if defined(lint)
-	*handlep = *handlep;
-#endif
 
 	/*
 	 * Check legality of arguments

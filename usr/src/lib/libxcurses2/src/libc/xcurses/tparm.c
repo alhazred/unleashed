@@ -38,12 +38,10 @@
  */
 
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] =
 "$Header: /team/ps/sun_xcurses/archive/local_changes/xcurses/src/lib/"
 "libxcurses/src/libc/xcurses/rcs/tparm.c 1.3 1998/06/03 12:57:01 "
 "cbates Exp $";
-#endif
 #endif
 
 /*

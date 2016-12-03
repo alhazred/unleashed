@@ -307,11 +307,7 @@ z_compress(void *arg, mblk_t **mret, mblk_t *mp, int orig_len, int maxolen)
 	int			r;
 	int			flush;
 	mblk_t			*m;
-#if defined(lint) || defined(_lint)
-	uchar_t			hdlcaddr, hdlcctrl;
-#else
 	int			hdlcaddr, hdlcctrl;
-#endif
 
 #define	ADJRPTR() {						\
 	if (rptr != NULL) {					\
@@ -779,11 +775,7 @@ z_decompress(void *arg, mblk_t **mop)
 	int			flush;
 	int			r;
 	int			decode_proto;
-#if defined(lint) || defined(_lint)
-	uchar_t			hdlcaddr, hdlcctrl;
-#else
 	int			hdlcaddr, hdlcctrl;
-#endif
 
 	/* Note: spppcomp already did a pullup to fix the first buffer. */
 	*mop = NULL;

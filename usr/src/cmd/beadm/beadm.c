@@ -43,11 +43,7 @@
 
 #include "libbe.h"
 
-#ifndef lint
 #define	_(x) gettext(x)
-#else
-#define	_(x) (x)
-#endif
 
 #ifndef TEXT_DOMAIN
 #define	TEXT_DOMAIN "SYS_TEST"

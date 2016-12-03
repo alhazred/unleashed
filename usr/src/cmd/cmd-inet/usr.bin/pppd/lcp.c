@@ -49,9 +49,7 @@
 #include "magic.h"
 #include "patchlevel.h"
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 /*
  * Special failure codes for logging link failure reasons.

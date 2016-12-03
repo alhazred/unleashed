@@ -32,11 +32,7 @@
  * only by DR for the copy-rename sequence.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-#else
 #include "assym.h"
-#endif /* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/param.h>
@@ -49,7 +45,6 @@
 #include <sys/stack.h>
 #include <sys/vis.h>
 
-#ifndef	lint
 
 /*
  * arg1 = icache_size
@@ -221,16 +216,7 @@ lbl/**/1:							;\
 	sub	estk, SA(MINFRAME) + STACK_BIAS, %sp		;\
 	mov	estk, %fp
 
-#endif	/* !lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-drmach_shutdown_asm(uint64_t mbox_addr)
-{}
-
-#else /* lint */
 
 	ENTRY_NP(drmach_shutdown_asm)
 	mov	%o0, %o5
@@ -358,4 +344,3 @@ drmach_shutdown_asm(uint64_t mbox_addr)
 
 drmach_shutdown_asm_end:
 
-#endif /* lint */

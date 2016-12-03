@@ -35,9 +35,6 @@
  *	shared endpoints
  */
 
-#if defined(lint) && !defined(DEBUG)
-#define	DEBUG	1
-#endif
 #include <sys/usb/usba/usbai_version.h>
 #include <sys/usb/usba.h>
 #include <sys/usb/usba/usba_types.h>
@@ -904,9 +901,7 @@ usb_mid_ugen_attach(usb_mid_t *usb_mid, boolean_t remove_children)
 		}
 	}
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 }
 
 

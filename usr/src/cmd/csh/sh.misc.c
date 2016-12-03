@@ -75,9 +75,6 @@ nomem(size_t i)
 	child++;
 #ifndef debug
 	error("Out of memory");
-#ifdef lint
-	i = i;
-#endif
 #else
 	showall(av);
 	printf("i=%d: Out of memory\n", i);

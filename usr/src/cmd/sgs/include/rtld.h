@@ -904,11 +904,7 @@ typedef struct rt_map32 {
  * conversion. The LINKMAP_TO_RTMAP macro is used to handle the conversion
  * in a manner that satisfies lint.
  */
-#ifdef lint
-#define	LINKMAP_TO_RTMAP(X)	(Rt_map *)(void *)(X)
-#else
 #define	LINKMAP_TO_RTMAP(X)	(Rt_map *)(X)
-#endif
 
 /*
  * Convenience macros for the common case of using

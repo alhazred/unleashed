@@ -36,12 +36,10 @@
  */
 
 #ifdef M_RCSID
-#ifndef lint
 static char const rcsID[] =
 "$Header: /team/ps/sun_xcurses/archive/local_changes/xcurses/src/lib/"
 "libxcurses/src/libc/xcurses/rcs/newterm.c 1.13 1998/06/04 19:55:52 "
 "cbates Exp $";
-#endif
 #endif
 
 #include <sys/isa_defs.h>

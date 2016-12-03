@@ -20,18 +20,12 @@
 #include <sys/list.h>
 #include <sys/ddi.h>
 
-#ifdef lint
-extern refhash_link_t *obj_to_link(refhash_t *, void *);
-extern void *link_to_obj(refhash_t *, refhash_link_t *);
-extern void *obj_to_tag(refhash_t *, void *);
-#else
 #define	obj_to_link(_h, _o)	\
 	((refhash_link_t *)(((char *)(_o)) + (_h)->rh_link_off))
 #define	link_to_obj(_h, _l)	\
 	((void *)(((char *)(_l)) - (_h)->rh_link_off))
 #define	obj_to_tag(_h, _o)	\
 	((void *)(((char *)(_o)) + (_h)->rh_tag_off))
-#endif
 
 refhash_t *
 refhash_create(uint_t bucket_count, refhash_hash_f hash,

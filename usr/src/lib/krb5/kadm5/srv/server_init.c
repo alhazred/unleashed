@@ -29,9 +29,7 @@
  * $Source$
  */
 
-#if !defined(lint) && !defined(__CODECENTER__)
 static char *rcsid = "$Header: /cvs/krbdev/krb5/src/lib/kadm5/srv/server_init.c,v 1.8 2002/10/15 15:40:49 epeisach Exp $";
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>

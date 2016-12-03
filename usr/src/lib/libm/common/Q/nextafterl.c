@@ -102,7 +102,6 @@ nextafterl(long double x, long double y) {
 				INC(px)
 		}
 	}
-#ifndef lint
 	{
 		volatile long double dummy;
 		int k = XBIASED_EXP(x);
@@ -112,6 +111,5 @@ nextafterl(long double x, long double y) {
 		else if (k == 0x7fff)
 			dummy = LDBL_MAX * copysignl(LDBL_MAX, x);
 	}
-#endif
 	return (x);
 }

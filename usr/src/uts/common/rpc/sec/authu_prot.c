@@ -74,16 +74,11 @@ xdr_authunix_parms(XDR *xdrs, struct authunix_parms *p)
 bool_t
 xdr_uid_t(XDR *xdrs, uid_t *ip)
 {
-#ifdef lint
-	(void) (xdr_short(xdrs, (short *)ip));
-	return (xdr_int32(xdrs, (int32_t *)ip));
-#else
 	if (sizeof (uid_t) == sizeof (int32_t)) {
 		return (xdr_int(xdrs, (int32_t *)ip));
 	} else {
 		return (xdr_short(xdrs, (short *)ip));
 	}
-#endif
 }
 
 /*
@@ -92,16 +87,11 @@ xdr_uid_t(XDR *xdrs, uid_t *ip)
 bool_t
 xdr_gid_t(XDR *xdrs, gid_t *ip)
 {
-#ifdef lint
-	(void) (xdr_short(xdrs, (short *)ip));
-	return (xdr_int32(xdrs, (int32_t *)ip));
-#else
 	if (sizeof (gid_t) == sizeof (int32_t)) {
 		return (xdr_int32(xdrs, (int32_t *)ip));
 	} else {
 		return (xdr_short(xdrs, (short *)ip));
 	}
-#endif
 }
 
 /*

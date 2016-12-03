@@ -106,9 +106,6 @@ i_dmae_init(dev_info_t *dip)
 int
 i_dmae_acquire(dev_info_t *dip, int chnl, int (*dmae_waitfp)(), caddr_t arg)
 {
-#if defined(lint)
-	dip = dip;
-#endif
 	dprintf(("i_dmae_acquire: channel %d, waitfp %p\n",
 	    chnl, (void *)dmae_waitfp));
 
@@ -146,9 +143,6 @@ i_dmae_acquire(dev_info_t *dip, int chnl, int (*dmae_waitfp)(), caddr_t arg)
 int
 i_dmae_free(dev_info_t *dip, int chnl)
 {
-#if defined(lint)
-	dip = dip;
-#endif
 	dprintf(("i_dmae_free: channel %d\n", chnl));
 
 	d37A_dma_release(chnl);
@@ -172,9 +166,6 @@ i_dmae_free(dev_info_t *dip, int chnl)
 uchar_t
 i_dmae_get_best_mode(dev_info_t *dip, struct ddi_dmae_req *dmaereqp)
 {
-#if defined(lint)
-	dip = dip;
-#endif
 	return (d37A_get_best_mode(dmaereqp));
 }
 
@@ -225,9 +216,6 @@ i_dmae_prog(dev_info_t *dip, struct ddi_dmae_req *dmaereqp,
 	struct dmae_chnl *dcp;
 	int rval;
 
-#if defined(lint)
-	dip = dip;
-#endif
 	rval = d37A_prog_chan(dmaereqp, cp, chnl);
 	if (rval != DDI_SUCCESS) {
 		dprintf(("i_dmae_prog: failure on channel %d dmaereq=%p\n",
@@ -264,9 +252,6 @@ i_dmae_swsetup(dev_info_t *dip, struct ddi_dmae_req *dmaereqp,
 	struct dmae_chnl *dcp;
 	int rval;
 
-#if defined(lint)
-	dip = dip;
-#endif
 	rval = d37A_dma_swsetup(dmaereqp, cp, chnl);
 	if (rval != DDI_SUCCESS) {
 		dprintf(("i_dmae_swsetup: failure on channel %d dmaereq=%p\n",
@@ -293,9 +278,6 @@ i_dmae_swsetup(dev_info_t *dip, struct ddi_dmae_req *dmaereqp,
 void
 i_dmae_swstart(dev_info_t *dip, int chnl)
 {
-#if defined(lint)
-	dip = dip;
-#endif
 	dprintf(("i_dmae_swstart: channel %d.\n", chnl));
 
 	d37A_dma_swstart(chnl);
@@ -313,9 +295,6 @@ i_dmae_swstart(dev_info_t *dip, int chnl)
 void
 i_dmae_stop(dev_info_t *dip, int chnl)
 {
-#if defined(lint)
-	dip = dip;
-#endif
 	dprintf(("i_dmae_stop: channel %d\n", chnl));
 
 	/* call d37A the stop the channel */
@@ -337,9 +316,6 @@ i_dmae_stop(dev_info_t *dip, int chnl)
 void
 i_dmae_enable(dev_info_t *dip, int chnl)
 {
-#if defined(lint)
-	dip = dip;
-#endif
 	dprintf(("i_dmae_enable: channel %d\n", chnl));
 
 	d37A_dma_enable(chnl);
@@ -357,9 +333,6 @@ i_dmae_enable(dev_info_t *dip, int chnl)
 void
 i_dmae_disable(dev_info_t *dip, int chnl)
 {
-#if defined(lint)
-	dip = dip;
-#endif
 	/* dprintf(("i_dmae_disable: disable channel %d.\n", chnl)); */
 
 	d37A_dma_disable(chnl);
@@ -378,9 +351,6 @@ i_dmae_disable(dev_info_t *dip, int chnl)
 void
 i_dmae_get_chan_stat(dev_info_t *dip, int chnl, ulong_t *addressp, int *countp)
 {
-#if defined(lint)
-	dip = dip;
-#endif
 	dprintf(("i_dmae_get_chan_stat: channel %d", chnl));
 
 	d37A_get_chan_stat(chnl, addressp, countp);

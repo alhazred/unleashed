@@ -490,9 +490,7 @@ ehci_quiesce(dev_info_t *dip)
 	if (ehcip == NULL)
 		return (DDI_FAILURE);
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 	/*
 	 * To reset the host controller, the HCRESET bit should be set to one.
 	 * Software should not set this bit to a one when the HCHalted bit in
@@ -521,9 +519,7 @@ ehci_quiesce(dev_info_t *dip)
 	Set_OpReg(ehci_command,
 	    Get_OpReg(ehci_command) | EHCI_CMD_HOST_CTRL_RESET);
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 	return (DDI_SUCCESS);
 }
 

@@ -25,26 +25,6 @@
 
 #include <sys/asm_linkage.h>
 
-#if defined(lint) || defined(__lint)
-
-#include <sys/types.h>
-
-/* ARGSUSED */
-uint64_t
-big_mul_set_vec(uint64_t *r, uint64_t *a, int len, uint64_t digit)
-{ return (0); }
-
-/* ARGSUSED */
-uint64_t
-big_mul_add_vec(uint64_t *r, uint64_t *a, int len, uint64_t digit)
-{ return (0); }
-
-/* ARGSUSED */
-void
-big_sqr_vec(uint64_t *r, uint64_t *a, int len)
-{}
-
-#else	/* lint */
 
 / ------------------------------------------------------------------------
 /
@@ -546,4 +526,3 @@ big_sqr_vec(uint64_t *r, uint64_t *a, int len)
 
 	SET_SIZE(big_sqr_vec)
 
-#endif	/* lint */

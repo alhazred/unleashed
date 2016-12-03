@@ -15,9 +15,7 @@
 #include "kmem.h"
 
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: printnat.c,v 1.22.2.9 2005/06/12 07:18:43 darrenr Exp $";
-#endif
 
 /*
  * Print out a NAT rule

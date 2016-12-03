@@ -3480,9 +3480,6 @@ build_cmd(struct megasas_instance *instance, struct scsi_address *ap,
 
 		break;
 	}
-#ifdef lint
-	context = context;
-#endif
 	/* bzero(mfi_sgl, sizeof (struct megasas_sge64) * MAX_SGL); */
 
 	/* prepare the scatter-gather list for the firmware */
@@ -4764,9 +4761,6 @@ disable_intr_ppc(struct megasas_instance *instance)
 
 	/* dummy read to force PCI flush */
 	mask = RD_OB_INTR_MASK(instance);
-#ifdef lint
-	mask = mask;
-#endif
 }
 
 static int

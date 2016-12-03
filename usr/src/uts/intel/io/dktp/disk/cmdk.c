@@ -545,9 +545,6 @@ cmdkinfo(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 	int 		instance;
 	struct	cmdk	*dkp;
 
-#ifdef lint
-	dip = dip;	/* no one ever uses this */
-#endif
 #ifdef CMDK_DEBUG
 	if (cmdk_debug & DENT)
 		PRF("cmdkinfo: call\n");

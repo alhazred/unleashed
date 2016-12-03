@@ -8,9 +8,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) percent_m.c 1.1 94/12/28 17:42:37";
-#endif
 
 #include <stdio.h>
 #include <errno.h>

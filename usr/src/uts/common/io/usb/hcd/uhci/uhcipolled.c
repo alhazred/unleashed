@@ -222,9 +222,7 @@ uhci_hcdi_polled_read(usb_console_info_impl_t *info, uint_t *num_characters)
 		}
 	}
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 #ifndef __sparc
 	invalidate_cache();
 #endif
@@ -271,9 +269,7 @@ uhci_hcdi_polled_read(usb_console_info_impl_t *info, uint_t *num_characters)
 		Set_OpReg16(USBSTS, intr_status);
 	}
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 	return (USB_SUCCESS);
 }
@@ -394,9 +390,7 @@ uhci_hcdi_polled_write(usb_console_info_impl_t *info, uchar_t *buf,
 	uhci_pipe_private_t	*pp;
 	usba_pipe_handle_data_t	*ph;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 
 	uhci_polledp = (uhci_polled_t *)info->uci_private;
 	uhcip = uhci_polledp->uhci_polled_uhcip;
@@ -461,9 +455,7 @@ uhci_hcdi_polled_write(usb_console_info_impl_t *info, uchar_t *buf,
 		    HC_END_OF_LIST);
 	}
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 	return (USB_SUCCESS);
 }
@@ -572,18 +564,14 @@ uhci_polled_save_state(uhci_polled_t	*uhci_polledp)
 	uhci_state_t		*uhcip;
 	usba_pipe_handle_data_t	*ph;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 
 	/*
 	 * If either of these two flags are set, then we have already
 	 * saved off the state information and setup the controller.
 	 */
 	if (uhci_polledp->uhci_polled_flags & POLLED_INPUT_MODE_INUSE) {
-#ifndef lint
 		_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 		return;
 	}
@@ -595,9 +583,7 @@ uhci_polled_save_state(uhci_polled_t	*uhci_polledp)
 	 * support in polled mode
 	 */
 	if (++ uhcip->uhci_polled_count > MAX_NUM_FOR_KEYBORAD) {
-#ifndef lint
 		_NOTE(COMPETING_THREADS_NOW);
-#endif
 		return;
 	}
 
@@ -687,9 +673,7 @@ uhci_polled_save_state(uhci_polled_t	*uhci_polledp)
 		    USBCMD_REG_CONFIG_FLAG));
 	}
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 }
 
 
@@ -705,17 +689,13 @@ uhci_polled_restore_state(uhci_polled_t	*uhci_polledp)
 	uhci_state_t		*uhcip;
 	uhci_pipe_private_t	*pp;
 
-#ifndef lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 	/*
 	 * If this flags is set, then we are still using this structure,
 	 * so don't restore any controller state information yet.
 	 */
 	if (uhci_polledp->uhci_polled_flags & POLLED_INPUT_MODE_INUSE) {
-#ifndef lint
 		_NOTE(COMPETING_THREADS_NOW);
-#endif
 		return;
 	}
 
@@ -776,9 +756,7 @@ uhci_polled_restore_state(uhci_polled_t	*uhci_polledp)
 		}
 	}
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 }
 
 

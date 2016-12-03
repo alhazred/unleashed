@@ -37,9 +37,7 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#if !defined(lint) && !defined(__CODECENTER__)
 static char *rcsid = "$Header: /cvs/krbdev/krb5/src/kadmin/cli/keytab.c,v 1.28 2004/05/31 12:39:16 epeisach Exp $";
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>

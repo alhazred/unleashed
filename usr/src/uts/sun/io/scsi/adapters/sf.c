@@ -32,9 +32,6 @@
  * here, though.)
  */
 
-#if defined(lint) && !defined(DEBUG)
-#define	DEBUG	1
-#endif
 
 /*
  * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

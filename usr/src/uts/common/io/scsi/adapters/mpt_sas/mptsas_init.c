@@ -57,7 +57,7 @@
  * MPT2.0 based hardware.
  */
 
-#if defined(lint) || defined(DEBUG)
+#if defined(DEBUG)
 #define	MPTSAS_DEBUG
 #endif
 

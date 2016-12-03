@@ -5312,9 +5312,6 @@ build_cmd(struct mrsas_instance *instance, struct scsi_address *ap,
 
 		break;
 	}
-#ifdef lint
-	context = context;
-#endif
 	/* prepare the scatter-gather list for the firmware */
 	if (instance->flag_ieee) {
 		for (i = 0; i < acmd->cmd_cookiecnt; i++, mfi_sgl_ieee++) {
@@ -6879,9 +6876,6 @@ disable_intr_ppc(struct mrsas_instance *instance)
 
 	/* dummy read to force PCI flush */
 	mask = RD_OB_INTR_MASK(instance);
-#ifdef lint
-	mask = mask;
-#endif
 }
 
 static int

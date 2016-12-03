@@ -37,11 +37,7 @@
 #define	ASSERT(a)	assert(a)
 #endif
 
-#ifdef lint
-extern list_node_t *list_d2l(list_t *list, void *obj);
-#else
 #define	list_d2l(a, obj) ((list_node_t *)(((char *)obj) + (a)->list_offset))
-#endif
 #define	list_object(a, node) ((void *)(((char *)node) - (a)->list_offset))
 #define	list_empty(a) ((a)->list_head.list_next == &(a)->list_head)
 

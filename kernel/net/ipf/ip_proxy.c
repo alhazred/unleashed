@@ -109,9 +109,7 @@ struct file;
 
 /* END OF INCLUDES */
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: ip_proxy.c,v 2.62.2.14 2005/06/18 02:41:33 darrenr Exp $";
-#endif
 
 static int appr_fixseqack __P((fr_info_t *, ip_t *, ap_session_t *, int ));
 

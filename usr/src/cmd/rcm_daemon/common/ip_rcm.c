@@ -59,11 +59,7 @@
 /*
  * Definitions
  */
-#ifndef lint
 #define	_(x)	gettext(x)
-#else
-#define	_(x)	x
-#endif
 
 /* Some generic well-knowns and defaults used in this module */
 #define	ARP_MOD_NAME		"arp"		/* arp module */

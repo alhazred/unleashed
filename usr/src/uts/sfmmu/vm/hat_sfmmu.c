@@ -12025,11 +12025,6 @@ sfmmu_tlbcache_demap(caddr_t addr, sfmmu_t *sfmmup, struct hme_blk *hmeblkp,
 
 	ASSERT(!hmeblkp->hblk_shared);
 
-#if defined(lint) && !defined(VAC)
-	pfnum = pfnum;
-	cpu_flag = cpu_flag;
-	cache_flush_flag = cache_flush_flag;
-#endif
 
 	/*
 	 * There is no longer a need to protect against ctx being
@@ -13267,9 +13262,6 @@ chk_tte(tte_t *orig_old, tte_t *cur, tte_t *new, struct hme_blk *hmeblkp)
 	gcur[cpuid] = cur;
 	gnew[cpuid] = new;
 
-#ifdef lint
-	hmeblkp = hmeblkp;
-#endif
 
 	if (TTE_IS_VALID(orig_old)) {
 		if (TTE_IS_VALID(cur)) {

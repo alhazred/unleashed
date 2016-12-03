@@ -14,9 +14,7 @@
 #include "ipf.h"
 #include "kmem.h"
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: getnattype.c,v 1.3 2004/01/17 17:26:07 darrenr Exp $";
-#endif
 
 
 /*

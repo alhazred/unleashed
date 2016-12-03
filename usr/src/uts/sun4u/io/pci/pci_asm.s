@@ -37,16 +37,6 @@
 
 /*LINTLIBRARY*/
 
-#if defined(lint)
-
-/*ARGSUSED*/
-int pci_do_phys_peek(size_t size, uint64_t paddr, uint64_t *value, int type)
-{ return (0); }
-
-int pci_do_phys_poke(size_t size, uint64_t paddr, uint64_t *value, int type)
-{ return (0); }
-
-#else /* lint */
 
 ! pci_do_phys_peek: Do physical address read.
 !
@@ -164,4 +154,3 @@ int pci_do_phys_poke(size_t size, uint64_t paddr, uint64_t *value, int type)
 	mov	%g0, %o0
 	SET_SIZE(pci_do_phys_poke)
  
-#endif

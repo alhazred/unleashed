@@ -36,9 +36,7 @@
  * Use is subject to license terms.
  */
 
-#ifndef lint
 static char sccsid[] = "@(#)network.c	8.1 (Berkeley) 6/6/93";
-#endif /* not lint */
 
 #include <sys/types.h>
 #include <sys/socket.h>

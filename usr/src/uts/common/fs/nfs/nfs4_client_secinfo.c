@@ -119,9 +119,7 @@ nfs4_secinfo_init(void)
 	val[5].flavor_info.service = 0;
 	val[5].flavor_info.qop = 0;
 
-#if !defined(lint)
 	ASSERT(SECINFO_SUPPORT_COUNT == 6);
-#endif
 
 	secinfo_support->SECINFO4resok_val = val;
 }

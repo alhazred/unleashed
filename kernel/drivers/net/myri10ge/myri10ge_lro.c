@@ -24,10 +24,8 @@
  * Use is subject to license terms.
  */
 
-#ifndef lint
 static const char __idstring[] =
 	"@(#)$Id: myri10ge_lro.c,v 1.7 2009-06-29 13:47:22 gallatin Exp $";
-#endif
 
 #include "myri10ge_var.h"
 

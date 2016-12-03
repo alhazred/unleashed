@@ -30,7 +30,6 @@
 #include <sys/machparam.h>	/* To get SYSBASE and PAGESIZE */
 #include <sys/privregs.h>
 
-#if !defined(lint)
 
 	.seg	".text"
 	.align	4
@@ -56,7 +55,6 @@
 	b	splx; \
 	mov	((level) << PSR_PIL_BIT), %o0
 
-#endif	/* lint */
 
 	/*
 	 * Berkley 4.3 introduced symbolically named interrupt levels
@@ -101,17 +99,6 @@
 	 *	splsoftclock()	Used by hardclock to lower priority.
 	 */
 
-#if defined(lint)
-
-int splimp(void)	{ return (0); }
-int splnet(void)	{ return (0); }
-
-#ifdef	notdef
-int spl6(void)		{ return (0); }
-int spl5(void)		{ return (0); }
-#endif	notdef
-
-#else	/* lint */
 
 	/* locks out all interrupts, including memory errors */
 	ENTRY(spl8)
@@ -205,7 +192,6 @@ int spl5(void)		{ return (0); }
 	SETPRI(0)
 	SET_SIZE(spl0)
 
-#endif	/* lint */
 
 /*
  * splx - set PIL back to that indicated by the old %PSR passed as an argument,
@@ -213,15 +199,6 @@ int spl5(void)		{ return (0); }
  * sys_rtt (in locore.s) relies on this not to use %g1 or %g2.
  */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-splx(int level)
-{
-}
-
-#else	/* lint */
 
 	ENTRY(splx)
 	rdpr	%pil, %o1	! get current pil
@@ -230,7 +207,6 @@ splx(int level)
 	mov	%o1, %o0
 	SET_SIZE(splx)
 
-#endif	/* level */
 
 /*
  * splr()
@@ -243,16 +219,6 @@ splx(int level)
  *
  */
 
-#if defined(lint)
-#ifdef	notdef
-
-/* ARGSUSED */
-int
-splr(int level)
-{ return (0); }
-
-#endif	notdef
-#else	/* lint */
 
 /*
  * splr(psr_pri_field)
@@ -269,19 +235,10 @@ splr(int level)
 	mov	%o1, %o0	! return the old pil
 	SET_SIZE(splr)
 
-#endif	/* lint */
 
 /*
  * get_ticks()
  */
-#if defined(lint)
-
-/* ARGSUSED */
-uint64_t
-get_ticks(void)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY(get_ticks)
 	rdpr	%tick, %o0
@@ -290,4 +247,3 @@ get_ticks(void)
 	srlx	%o0, 1, %o0		! shake off npt bit
 	SET_SIZE(get_ticks)
 
-#endif	/* lint */

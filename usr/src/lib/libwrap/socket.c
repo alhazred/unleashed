@@ -22,9 +22,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) socket.c 1.15 97/03/21 19:27:24";
-#endif
 
 /* System libraries. */
 

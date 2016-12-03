@@ -317,10 +317,6 @@ ptslclose(queue_t *q, int flag, cred_t *cred)
 	struct pty *pty;
 	bufcall_id_t pt_wbufcid = 0;
 
-#ifdef lint
-	flag = flag;
-	cred = cred;
-#endif
 
 	if ((pty = (struct pty *)q->q_ptr) == NULL)
 		return (ENODEV);	/* already been closed once */

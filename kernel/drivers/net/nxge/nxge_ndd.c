@@ -1773,9 +1773,6 @@ nxge_param_set_ether_usr(p_nxge_t nxgep, queue_t *q,
 	/* do the actual hw setup  */
 	if (cfg_it == B_TRUE) {
 		ether_class = mi_strtol(pa->name, &end, 10);
-#ifdef lint
-		ether_class = ether_class;
-#endif
 		NXGE_DEBUG_MSG((nxgep, NDD_CTL, " nxge_param_set_ether_usr"));
 	}
 

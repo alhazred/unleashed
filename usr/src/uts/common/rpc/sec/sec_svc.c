@@ -229,9 +229,6 @@ sec_svc_loadrootnames(int flavor, int count, caddr_t **proots, model_t model)
 	uint_t i, j;
 	size_t len, allocsz, oallocsz;
 
-#ifdef lint
-	model = model;
-#endif
 
 	/*
 	 * Get list of names from user space

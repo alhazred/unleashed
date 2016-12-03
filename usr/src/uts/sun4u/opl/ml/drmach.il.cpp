@@ -32,9 +32,6 @@
  * only by DR for the copy-rename sequence.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-#endif /* lint */
 
 #ifndef	INLINE
 
@@ -60,14 +57,6 @@
  * between physical addresses.
  * Borrowed from Starfire DR 2.6.
  */
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-bcopy32_il(uint64_t paddr1, uint64_t paddr2)
-{}
-
-#else /* lint */
 
 	ENTRY_NP(bcopy32_il)
 	.register %g2, #scratch
@@ -93,16 +82,7 @@ bcopy32_il(uint64_t paddr1, uint64_t paddr2)
 	nop
 	SET_SIZE(bcopy32_il)
 
-#endif /* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-flush_cache_il(void)
-{}
-
-#else /* lint */
 
 	ENTRY_NP(flush_cache_il)
 	rdpr	%pstate, %o3
@@ -115,43 +95,18 @@ flush_cache_il(void)
 	wrpr	%g0, %o3, %pstate	! restore earlier pstate
 	SET_SIZE(flush_cache_il)
 
-#endif /* lint */
 
-#if defined(lint)
-/* ARGUSED */
-uint64_t
-drmach_get_stick_il(void)
-{}
-
-#else /* lint */
 	ENTRY_NP(drmach_get_stick_il)
 	retl
 	rd	STICK, %o0
 	SET_SIZE(drmach_get_stick_il)
-#endif /* lint */
 
-#if defined(lint)
-/* ARGUSED */
-void
-membar_sync_il(void)
-{}
-
-#else /* lint */
 	ENTRY_NP(membar_sync_il)
 	retl
 	membar #Sync
 	SET_SIZE(membar_sync_il)
-#endif /* lint */
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-flush_instr_mem_il(caddr_t vaddr)
-{}
-
-#else	/* lint */
 
 /*
  * flush_instr_mem:
@@ -171,16 +126,7 @@ flush_instr_mem_il(caddr_t vaddr)
 	 nop
 	SET_SIZE(flush_instr_mem_il)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-drmach_sleep_il(void)
-{}
-
-#else	/* lint */
 
 /*
  * drmach-sleep_il:
@@ -195,16 +141,7 @@ drmach_sleep_il(void)
 	 nop
 	SET_SIZE(drmach_sleep_il)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-flush_windows_il(void)
-{}
-
-#else	/* lint */
 
 /*
  * flush_windows_il:
@@ -216,4 +153,3 @@ flush_windows_il(void)
 	 flushw
 	SET_SIZE(flush_windows_il)
 
-#endif	/* lint */

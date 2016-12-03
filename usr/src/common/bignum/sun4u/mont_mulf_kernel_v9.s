@@ -41,42 +41,6 @@
 #include <sys/machtrap.h>
 #include <sys/machsig.h>
 
-#if defined(lint) || defined(__lint)
-#include <sys/types.h>
-
-/* ARGSUSED */
-uint64_t
-double2uint64_t(double* d)
-{
-	return (0ULL);
-}
-
-/* ARGSUSED */
-void
-conv_d16_to_i32(uint32_t *i32, double *d16, int64_t *tmp, int ilen)
-{
-}
-
-/* ARGSUSED */
-void
-conv_i32_to_d32(double *d32, uint32_t *i32, int len)
-{
-}
-
-/* ARGSUSED */
-void
-conv_i32_to_d16(double *d16, uint32_t *i32, int len)
-{
-}
-
-/* ARGSUSED */
-void
-mont_mulf_noconv(uint32_t *result, double *dm1, double *dm2, double *dt,
-    double *dn, uint32_t *nint, int nlen, double dn0)
-{
-}
-
-#else	/* lint || __lint */
 
 	.section	".text",#alloc,#execinstr
 	.file	"mont_mulf.c"
@@ -3152,4 +3116,3 @@ TwoToMinus32:
 	nop
 	SET_SIZE(big_restorefp)
 
-#endif	/* lint || __lint */

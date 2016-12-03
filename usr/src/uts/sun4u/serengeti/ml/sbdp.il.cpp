@@ -32,9 +32,6 @@
  * only by DR for the copy-rename sequence.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-#endif /* lint */
 
 #ifndef	INLINE
 
@@ -60,14 +57,6 @@
  * between physical addresses. 
  * Borrowed from Starfire DR 2.6.
  */
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-bcopy32_il(uint64_t paddr1, uint64_t paddr2)
-{}
-
-#else /* lint */
 
 	ENTRY_NP(bcopy32_il)
 	.register %g2, #scratch
@@ -99,16 +88,7 @@ bcopy32_il(uint64_t paddr1, uint64_t paddr2)
         wrpr    %g0, %o4, %pstate       ! restore earlier pstate register value
 	SET_SIZE(bcopy32_il)
 
-#endif /* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-flush_ecache_il(uint64_t physaddr, uint_t size, uint_t linesize)
-{}
-
-#else /* lint */
 
 	ENTRY_NP(flush_ecache_il)
 	rdpr	%pstate, %o3
@@ -130,29 +110,7 @@ flush_ecache_il(uint64_t physaddr, uint_t size, uint_t linesize)
 	wrpr	%g0, %o3, %pstate	! restore earlier pstate
 	SET_SIZE(flush_ecache_il)
 
-#endif /* lint */
 
-#if defined(lint)
-
-/*ARGUSED*/
-void
-stphysio_il(uint64_t physaddr, u_int value)
-{}
- 
-/*ARGSUSED*/
-u_int
-ldphysio_il(uint64_t physaddr)
-{ return(0); }
-
-uint64_t
-lddphys_il(uint64_t physaddr)
-{ return (0x0ull); }
-
-uint64_t
-ldxasi_il(uint64_t physaddr, uint_t asi)
-{ return (0x0ull); }
-
-#else /* lint */
 
 	ENTRY_NP(stphysio_il)
 	rdpr	%pstate, %o2		/* read PSTATE reg */
@@ -206,27 +164,7 @@ ldxasi_il(uint64_t physaddr, uint_t asi)
         wrpr    %g0, %o4, %pstate       /* restore earlier pstate register value */
         SET_SIZE(ldxasi_il)
 
-#endif /* lint */
 
-#if defined(lint)
-
-/*
- * Argument to sbdp_exec_script_il is a pointer to:
- *
- * typedef struct {
- *	uint64_t	masr_addr;
- *	uint64_t	masr;
- *	uint_t	asi;
- *	uint_t		_filler;
- * } sbdp_rename_script_t;
- */
-
-/*ARGUSED*/
-void
-sbdp_exec_script_il(void *sp)
-{}
- 
-#else /* lint */
 
 	ENTRY_NP(sbdp_exec_script_il)
 	mov	%o0, %o2
@@ -271,4 +209,3 @@ sbdp_exec_script_il(void *sp)
 	wrpr	%g0, %o4, %pstate	/* restore the PSTATE */
 	SET_SIZE(sbdp_exec_script_il)
 
-#endif /* lint */

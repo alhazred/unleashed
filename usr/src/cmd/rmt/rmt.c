@@ -359,9 +359,6 @@ main(int argc, char *argv[])
 			n = (size_t)atol(count);
 			checkbuf(n);
 			DEBUG1("rmtd: W %s\n", count);
-#ifdef lint
-			cc = 0;
-#endif
 			for (i = 0; i < n; i += (size_t)cc) {
 				cc = read(0, &record[i], n - i);
 				if (cc <= 0) {

@@ -1737,9 +1737,6 @@ nfs_getfh(struct nfs_getfh_args *args, model_t model, cred_t *cr)
 	int vers;
 	STRUCT_HANDLE(nfs_getfh_args, uap);
 
-#ifdef lint
-	model = model;		/* STRUCT macros don't always use it */
-#endif
 
 	STRUCT_SET_HANDLE(uap, model, args);
 

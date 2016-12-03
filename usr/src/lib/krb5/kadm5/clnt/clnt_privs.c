@@ -30,9 +30,7 @@
  * 
  */
 
-#if !defined(lint) && !defined(__CODECENTER__)
 static char *rcsid = "$Header$";
-#endif
 
 #include    <rpc/rpc.h> /* SUNWresync121 XXX */
 #include    <kadm5/admin.h>

@@ -109,11 +109,6 @@ amd64_enable_gart(amd64_gart_softstate_t *sc, int enable)
 	aper_base = pci_config_get32(sc->gsoft_pcihdl, AMD64_APERTURE_BASE);
 	gart_ctl = pci_config_get32(sc->gsoft_pcihdl, AMD64_GART_CACHE_CTL);
 	gart_base = pci_config_get32(sc->gsoft_pcihdl, AMD64_GART_BASE);
-#ifdef lint
-	aper_base = aper_base;
-	gart_ctl = gart_ctl;
-	gart_base = gart_base;
-#endif /* lint */
 	AMD64DB_PRINT1((CE_NOTE, "before: aper_base = %x", aper_base));
 	AMD64DB_PRINT1((CE_NOTE, "before: gart_ctl = %x", gart_ctl));
 	AMD64DB_PRINT1((CE_NOTE, "before: gart_base = %x", gart_base));

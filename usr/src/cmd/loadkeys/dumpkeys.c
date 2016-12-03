@@ -19,9 +19,7 @@
  *
  * CDDL HEADER END
  */
-#ifndef lint
 #ident	"%Z%%M%	%I%	%E% SMI"
-#endif
 
 /*
  * Copyright (c) 1988 by Sun Microsystems, Inc.

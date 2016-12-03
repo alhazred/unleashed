@@ -131,9 +131,7 @@ write_to_cd(void *arg)
 	int i;
 
 	i = 0;
-#ifndef lint
 	while (1) {
-#endif
 		(void) mutex_lock(&tio_mutex);
 		while ((tio_iobs[i].iob_state != IOBS_READY) &&
 		    (tio_abort == 0)) {
@@ -209,9 +207,7 @@ write_to_cd(void *arg)
 		i++;
 		if (i == NIOBS)
 			i = 0;
-#ifndef lint
 	}
-#endif
 	return (NULL);
 }
 
@@ -241,11 +237,7 @@ pc_again:
 		(void) mutex_unlock(&pcb_mutex);
 		thr_exit((void *)0);
 	}
-#ifdef lint
-	return (NULL);
-#else
 	goto pc_again;
-#endif
 }
 
 /* ARGSUSED */

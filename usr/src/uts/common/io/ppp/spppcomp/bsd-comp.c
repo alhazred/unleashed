@@ -574,11 +574,7 @@ bsd_compress(void *state, mblk_t **mretp, mblk_t *mp, int slen,	int maxolen)
 	int		olen;
 	mblk_t		*m;
 	mblk_t		**mnp;
-#if defined(lint) || defined(_lint)
-	uchar_t		hdlcaddr, hdlcctl;
-#else
 	int		hdlcaddr, hdlcctl;
-#endif
 
 	ASSERT(db->flags & DS_INITDONE);
 
@@ -1118,11 +1114,7 @@ bsd_decompress(void *state, mblk_t **dmpp)
 	int		decode_proto;
 	int		blockctr;
 	int		outlen;
-#if defined(lint) || defined(_lint)
-	uchar_t		adrs, ctrl;
-#else
 	int		adrs, ctrl;
-#endif
 
 	ASSERT(db->flags & DS_INITDONE);
 

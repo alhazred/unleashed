@@ -38,10 +38,8 @@ tcpdump -nqte
 #include <netinet/tcpip.h>
 
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)ipft_td.c	1.8 2/4/96 (C)1995 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ipft_td.c,v 1.15 2004/01/08 13:34:31 darrenr Exp $";
-#endif
 
 static	int	tcpd_open __P((char *));
 static	int	tcpd_close __P((void));

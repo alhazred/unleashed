@@ -41,9 +41,6 @@
  * For details on USB Mass Storage Class overview:
  *	http://www.usb.org/developers/devclass_docs/usbmassover_11.pdf
  */
-#if defined(lint) && !defined(DEBUG)
-#define	DEBUG	1
-#endif
 
 #include <sys/usb/usba/usbai_version.h>
 #include <sys/scsi/scsi.h>
@@ -2069,9 +2066,7 @@ scsa2usb_panic_callb(void *arg, int code)
 		scsa2usb_flush_waitQ(scsa2usbp, lun, CMD_CMPLT);
 	}
 
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 	return (B_TRUE);
 }

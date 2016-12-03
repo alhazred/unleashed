@@ -459,9 +459,6 @@ rdtmp(
 	int error;
 	long oresid = uio->uio_resid;
 
-#if defined(lint)
-	tm = tm;
-#endif
 	vp = TNTOV(tp);
 
 	TRACE_1(TR_FAC_TMPFS, TR_TMPFS_RWTMP_START, "tmp_rdtmp_start:vp %p",

@@ -59,9 +59,6 @@
  * NOTE: PM and CPR will be enabled at a later release of S10.
  */
 
-#if defined(lint) && !defined(DEBUG)
-#define	DEBUG
-#endif
 
 #define	USBDRV_MAJOR_VER	2
 #define	USBDRV_MINOR_VER	0

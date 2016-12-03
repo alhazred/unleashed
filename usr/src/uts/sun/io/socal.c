@@ -417,9 +417,7 @@ static struct modlinkage modlinkage = {
  * This is the module initialization/completion routines
  */
 
-#if !defined(lint)
 static char socal_initmsg[] = "socal _init: socal.c\t1.62\t08/19/2008\n";
-#endif
 
 int
 _init(void)
@@ -1816,18 +1814,14 @@ socal_ioctl(dev_t dev,
 static	void
 socal_disable(socal_state_t *socalp)
 {
-#if !defined(lint)
 	int i;
-#endif
 	/* Don't touch the hardware if the registers aren't mapped */
 	if (!socalp->socal_rp)
 		return;
 
 	socalp->socal_rp->socal_imr = socalp->socal_k_imr = 0;
 	socalp->socal_rp->socal_csr.w = SOCAL_CSR_SOFT_RESET;
-#if !defined(lint)
 	i = socalp->socal_rp->socal_csr.w;
-#endif
 	DEBUGF(9, (CE_CONT, "csr.w = %x\n", i));
 }
 
@@ -3183,9 +3177,7 @@ socal_intr(caddr_t arg)
 	register volatile socal_reg_t *socalreg = socalp->socal_rp;
 	unsigned csr;
 	int cause = 0;
-#if !defined(lint)
 	int instance = ddi_get_instance(socalp->dip);
-#endif
 	int i, j, request;
 	char full;
 	struct fcal_packet *fpkt, *nfpkt;

@@ -31,21 +31,6 @@
  * use brand-specific #defines to replace the XXX_brand_... definitions.
  */ 
 
-#ifdef lint
-
-#include <sys/systm.h>
-
-void
-XXX_brand_syscall32_callback(void)
-{
-}
-
-void
-XXX_brand_syscall_callback(void)
-{
-}
-
-#else   /* !lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/machthread.h>
@@ -299,4 +284,3 @@ _exit:
 SET_SIZE(XXX_brand_syscall_callback_common)
 
 #endif	/* _ASM */
-#endif	/* !lint */

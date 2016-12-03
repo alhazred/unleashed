@@ -409,9 +409,7 @@ double
 atan2(double oy, double ox) {
 	double	ah, al, t, xh, x, y, z;
 	int	i, k, hx, hy, sx, sy;
-#ifndef lint
 	volatile int	inexact;
-#endif
 
 	hy = ((int *)&oy)[HIWORD];
 	sy = hy & 0x80000000;
@@ -454,9 +452,7 @@ atan2(double oy, double ox) {
 				return (ox * oy);
 			if (hy >= 0x7ff00000)
 				ah += pio4;
-#ifndef lint
 			inexact = (int)ah;	/* inexact if ah != 0 */
-#endif
 			return ((sy)? -ah : ah);
 		}
 		if (hx - hy >= 0x03600000) {
@@ -472,9 +468,7 @@ atan2(double oy, double ox) {
 		if ((hy | ((int *)&y)[LOWORD]) == 0) {
 			if ((hx | ((int *)&x)[LOWORD]) == 0)
 				return (_SVID_libm_err(ox, oy, 3));
-#ifndef lint
 			inexact = (int)ah;	/* inexact if ah != 0 */
-#endif
 			return ((sy)? -ah : ah);
 		}
 		y *= two110;

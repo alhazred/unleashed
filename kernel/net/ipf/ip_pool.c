@@ -80,10 +80,8 @@ static int rn_freenode __P((struct radix_node *, void *));
 
 /* END OF INCLUDES */
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)ip_fil.c	2.41 6/5/96 (C) 1993-2000 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ip_pool.c,v 2.55.2.14 2005/06/12 07:18:26 darrenr Exp $";
-#endif
 
 #ifdef IPFILTER_LOOKUP
 

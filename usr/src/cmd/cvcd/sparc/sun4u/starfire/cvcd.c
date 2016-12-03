@@ -544,10 +544,6 @@ main(int argc, char **argv)
 		}
 	} /* End forever loop */
 
-#ifdef lint
-	/* NOTREACHED */
-	return (1);
-#endif /* lint */
 }
 
 static void

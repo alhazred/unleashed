@@ -1456,9 +1456,6 @@ build_default_partition(
 	int				blks_per_cyl;
 	int				ncyl;
 
-#ifdef lint
-	ctrl_type = ctrl_type;
-#endif
 
 	/*
 	 * Install a default vtoc

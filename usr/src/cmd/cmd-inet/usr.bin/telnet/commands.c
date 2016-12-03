@@ -34,9 +34,7 @@
  * Use is subject to license terms.
  */
 
-#ifndef lint
 static char sccsid[] = "@(#)commands.c	8.1 (Berkeley) 6/6/93";
-#endif /* not lint */
 
 #include <sys/param.h>
 #include <sys/file.h>
@@ -1825,11 +1823,7 @@ env_find(var)
 int
 env_init()
 {
-#ifdef	lint
-	char **environ = NULL;
-#else	/* lint */
 	extern char **environ;
-#endif	/* lint */
 	char **epp, *cp;
 	struct env_lst *ep;
 

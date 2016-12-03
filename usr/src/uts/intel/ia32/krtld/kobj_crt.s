@@ -39,14 +39,6 @@
  *	There is NO RETURN from exitto(). ????
  */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-exitto(caddr_t entrypoint)
-{}
-
-#else	/* lint */
 
 	.data
 save_esp2:
@@ -79,4 +71,3 @@ save_esp2:
 
 	ret
 	SET_SIZE(exitto)
-#endif

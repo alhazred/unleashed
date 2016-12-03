@@ -62,20 +62,6 @@
  * the trap processing and B) simplicity is more of a concern than is speed.
  */
 
-#if defined(lint)
-#include <kmdb/kaif.h>
-
-void
-kaif_hdlr_dmiss(void)
-{
-}
-
-void
-kaif_itlb_handler(void)
-{
-}
-
-#else /* lint */
 
 #ifdef sun4v
 
@@ -325,4 +311,3 @@ patch_lbl:							\
 	.align	32*4			/* force length to 32 instr. */
 	SET_SIZE(kaif_hdlr_generic)
 
-#endif /* lint */

@@ -24,9 +24,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) hosts_access.c 1.21 97/02/12 02:13:22";
-#endif
 
 /* System libraries. */
 

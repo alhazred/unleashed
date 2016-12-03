@@ -34,14 +34,6 @@
 #include <sys/privregs.h>
 #include <sys/stack.h>
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-_start(void *a, ...)
-{}
-
-#else
 	.seg	".text"
 	.align	8
 	.global	end
@@ -116,23 +108,7 @@ _local_p1275cif:
 	nop
 	SET_SIZE(_start)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-exitto(int (*entrypoint)(void *romvec, void *dvec, void *bootops,
-    void *bootvec))
-{}
-
-/* ARGSUSED */
-void
-exitto64(int (*entrypoint)(void *romvec, void *dvec, void *bootops,
-    void *bootvec), void *bootvec)
-{}
-
-#else	/* lint */
 
 	ENTRY(exitto)
 	!
@@ -184,24 +160,7 @@ exitto64(int (*entrypoint)(void *romvec, void *dvec, void *bootops,
 .msg64:	.asciz	"exitto64 returned from client program"
 	SET_SIZE(exitto64)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/*
- * The interface for our 64-bit client program
- * calling the 64-bit romvec OBP.
- */
-
-#include <sys/promif.h>
-#include <sys/prom_isa.h>
-
-/* ARGSUSED */
-int
-client_handler(void *cif_handler, void *arg_array)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY(client_handler)
 	mov	%o7, %g1
@@ -211,4 +170,3 @@ client_handler(void *cif_handler, void *arg_array)
 	mov	%g1, %o7
 	SET_SIZE(client_handler)
 
-#endif	/* lint */

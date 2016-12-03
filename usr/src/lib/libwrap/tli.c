@@ -19,9 +19,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) tli.c 1.15 97/03/21 19:27:25";
-#endif
 
 #ifdef TLI
 

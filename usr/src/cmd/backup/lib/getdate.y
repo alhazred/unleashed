@@ -38,10 +38,8 @@ struct timeb {
 #include <note.h>
 #include <libintl.h>
 
-#if	!defined(lint) && !defined(SABER)
 static char RCS[] =
 	"$Header: /home/laramie/berliner/ws/backup/usr/src/cmd/backup/lib/getdate.y,v 1.5 1992/06/09 21:46:21 sam Exp $";
-#endif	/* !defined(lint) && !defined(SABER) */
 
 
 #define EPOCH		1970

@@ -37,9 +37,7 @@
 #define tic_h	1
 
 #ifdef M_RCSID
-#ifndef lint
 static char const tic_h_rcsID[] = "$Header: /rd/src/tic/rcs/tic.h 1.11 1995/06/22 20:03:36 ant Exp $";
-#endif
 #endif
 
 #include <mks.h>

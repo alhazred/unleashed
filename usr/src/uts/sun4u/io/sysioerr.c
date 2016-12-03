@@ -302,9 +302,6 @@ sysio_dis_err(struct sbus_soft_state *softsp)
 
 	/* Flush store buffers */
 	tmpreg = *softsp->sbus_ctrl_reg;
-#ifdef lint
-	tmpreg = tmpreg;
-#endif
 
 	/* Unmap mapping registers */
 	mondo_vec_reg = (softsp->intr_mapping_reg + UE_ECC_MAPREG);

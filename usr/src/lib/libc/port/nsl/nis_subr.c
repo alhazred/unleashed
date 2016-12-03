@@ -392,9 +392,6 @@ nis_name_of_r(
 	size_t			dl, sl;
 	name_pos		p;
 
-#ifdef lint
-	bufsize = bufsize;
-#endif /* lint */
 	if ((!s) || (!ln))
 		return (NULL);		/* No string, this can't continue */
 

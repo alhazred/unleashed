@@ -864,10 +864,6 @@ iommu_dma_bindhdl(dev_info_t *dip, dev_info_t *rdip,
 	ddi_dma_impl_t *mp = (ddi_dma_impl_t *)handle;
 	struct dma_impl_priv *mppriv = (struct dma_impl_priv *)mp;
 
-#ifdef lint
-	dip = dip;
-	rdip = rdip;
-#endif
 
 	if (mp->dmai_inuse)
 		return (DDI_DMA_INUSE);

@@ -91,42 +91,4 @@ ntohs(uint16_t in)
 
 #else	/* _LITTLE_ENDIAN */
 
-#if defined(lint)
-uint64_t
-htonll(uint64_t in)
-{
-	return (in);
-}
-
-uint64_t
-ntohll(uint64_t in)
-{
-	return (in);
-}
-
-uint32_t
-htonl(uint32_t in)
-{
-	return (in);
-}
-
-uint32_t
-ntohl(uint32_t in)
-{
-	return (in);
-}
-
-uint16_t
-htons(uint16_t in)
-{
-	return (in);
-}
-
-uint16_t
-ntohs(uint16_t in)
-{
-	return (in);
-}
-
-#endif	/* lint */
 #endif	/* _LITTLE_ENDIAN */

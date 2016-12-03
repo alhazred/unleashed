@@ -47,10 +47,8 @@
 # define	const
 #endif
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)kmem.c	1.4 1/12/96 (C) 1992 Darren Reed";
 static const char rcsid[] = "@(#)$Id: kmem.c,v 1.16.2.2 2005/06/12 07:18:41 darrenr Exp $";
-#endif
 
 
 

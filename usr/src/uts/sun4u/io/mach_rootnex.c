@@ -196,9 +196,6 @@ rootnex_remove_intr_impl(dev_info_t *dip, dev_info_t *rdip,
 
 			/* Flush write buffers */
 			flush_data = *intr_mapping_reg;
-#ifdef lint
-			flush_data = flush_data;
-#endif /* lint */
 		}
 	}
 

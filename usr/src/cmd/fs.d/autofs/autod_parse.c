@@ -1913,9 +1913,6 @@ retry:
 	/* now sort by length of names - to get mount order right */
 	exlist = ex;
 	texlist = NULL;
-#ifdef lint
-	exnext = NULL;
-#endif
 	for (; ex; ex = exnext) {
 		exnext = ex->ex_next;
 		exlen = strlen(ex->ex_dir);

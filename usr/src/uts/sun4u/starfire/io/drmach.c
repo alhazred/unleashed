@@ -1413,9 +1413,6 @@ drmach_prep_rename_script(drmach_device_t *s_mem, drmach_device_t *t_mem,
 	DRMACH_PR("total number of bytes consumed is %d\n", b);
 	ASSERT(b <= buflen);
 
-#ifdef lint
-	buflen = buflen;
-#endif
 
 	return (NULL);
 }

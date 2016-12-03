@@ -61,18 +61,14 @@
 #include "longdouble.h"
 
 static const long double small = 1.0e-20L, one = 1.0, two = 2.0,
-#ifndef lint
 	big = 1.0e+20L,
-#endif
 	threshold = 45.0L;
 
 long double
 tanhl(long double x) {
 	long double t, y, z;
 	int signx;
-#ifndef lint
 	volatile long double dummy;
-#endif
 
 	if (isnanl(x))
 		return (x + x);		/* x is NaN */
@@ -86,10 +82,8 @@ tanhl(long double x) {
 			y = expm1l(-t - t);
 			z = -y / (y + two);
 		} else {
-#ifndef lint
 			dummy = t + big;
 							/* inexact if t != 0 */
-#endif
 			return (x);
 		}
 	} else if (!finitel(t))

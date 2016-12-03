@@ -471,9 +471,6 @@ nfs_setopts(vnode_t *vp, model_t model, struct nfs_args *buf)
 	STRUCT_HANDLE(nfs_args, args);
 	int flags;
 
-#ifdef lint
-	model = model;
-#endif
 
 	STRUCT_SET_HANDLE(args, model, buf);
 

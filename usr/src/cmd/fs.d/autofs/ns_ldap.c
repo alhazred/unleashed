@@ -175,10 +175,6 @@ init_ldap(char **stack, char ***stkptr)
 	enum __nsw_parse_err pserr;
 	int	ldap_configured = 0;
 
-#ifdef lint
-	stack = stack;
-	stkptr = stkptr;
-#endif /* lint */
 
 	/* get nsswitch info of "automount */
 	conf = __nsw_getconfig("automount", &pserr);
@@ -833,10 +829,6 @@ int *cache_time, char **stack, char ***stkptr)
 	ns_ldap_error_t *errp = NULL;
 	struct dir_cbdata readdir_cbdata;
 
-#ifdef lint
-	stack = stack;
-	stkptr = stkptr;
-#endif /* lint */
 
 	if (trace > 1)
 		trace_prt(1, "getmapkeys_ldap called\n");

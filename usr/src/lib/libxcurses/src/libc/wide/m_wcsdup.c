@@ -31,9 +31,7 @@
  *
  */
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] = "$Id: m_wcsdup.c 1.5 1994/08/17 15:32:51 jeffhe Exp $";
-#endif
 #endif
 
 #include <mks.h>

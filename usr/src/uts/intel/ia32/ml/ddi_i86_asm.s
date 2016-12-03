@@ -26,246 +26,10 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(lint) || defined(__lint)
-#include <sys/types.h>
-#include <sys/sunddi.h>
-#else
 #include <sys/asm_linkage.h>
 #include <sys/asm_misc.h>
 #include "assym.h"
-#endif
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-uint8_t
-ddi_get8(ddi_acc_handle_t handle, uint8_t *addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint8_t
-ddi_mem_get8(ddi_acc_handle_t handle, uint8_t *addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint8_t
-ddi_io_get8(ddi_acc_handle_t handle, uint8_t *dev_addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint16_t
-ddi_get16(ddi_acc_handle_t handle, uint16_t *addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint16_t
-ddi_mem_get16(ddi_acc_handle_t handle, uint16_t *addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint16_t
-ddi_io_get16(ddi_acc_handle_t handle, uint16_t *dev_addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint32_t
-ddi_get32(ddi_acc_handle_t handle, uint32_t *addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint32_t
-ddi_mem_get32(ddi_acc_handle_t handle, uint32_t *addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint32_t
-ddi_io_get32(ddi_acc_handle_t handle, uint32_t *dev_addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint64_t
-ddi_get64(ddi_acc_handle_t handle, uint64_t *addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint64_t
-ddi_mem_get64(ddi_acc_handle_t handle, uint64_t *addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-void
-ddi_put8(ddi_acc_handle_t handle, uint8_t *addr, uint8_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_put8(ddi_acc_handle_t handle, uint8_t *dev_addr, uint8_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_io_put8(ddi_acc_handle_t handle, uint8_t *dev_addr, uint8_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_put16(ddi_acc_handle_t handle, uint16_t *addr, uint16_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_put16(ddi_acc_handle_t handle, uint16_t *dev_addr, uint16_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_io_put16(ddi_acc_handle_t handle, uint16_t *dev_addr, uint16_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_put32(ddi_acc_handle_t handle, uint32_t *addr, uint32_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_put32(ddi_acc_handle_t handle, uint32_t *dev_addr, uint32_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_io_put32(ddi_acc_handle_t handle, uint32_t *dev_addr, uint32_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_put64(ddi_acc_handle_t handle, uint64_t *addr, uint64_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_put64(ddi_acc_handle_t handle, uint64_t *dev_addr, uint64_t value)
-{}
-
-/*ARGSUSED*/
-void
-ddi_rep_get8(ddi_acc_handle_t handle, uint8_t *host_addr, uint8_t *dev_addr,
-    size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_rep_get16(ddi_acc_handle_t handle, uint16_t *host_addr, uint16_t *dev_addr,
-    size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_rep_get32(ddi_acc_handle_t handle, uint32_t *host_addr, uint32_t *dev_addr,
-    size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_rep_get64(ddi_acc_handle_t handle, uint64_t *host_addr, uint64_t *dev_addr,
-    size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_rep_put8(ddi_acc_handle_t handle, uint8_t *host_addr, uint8_t *dev_addr,
-    size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_rep_put16(ddi_acc_handle_t handle, uint16_t *host_addr, uint16_t *dev_addr,
-    size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_rep_put32(ddi_acc_handle_t handle, uint32_t *host_addr, uint32_t *dev_addr,
-    size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_rep_put64(ddi_acc_handle_t handle, uint64_t *host_addr, uint64_t *dev_addr,
-    size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_rep_get8(ddi_acc_handle_t handle, uint8_t *host_addr,
-    uint8_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_rep_get16(ddi_acc_handle_t handle, uint16_t *host_addr,
-    uint16_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_rep_get32(ddi_acc_handle_t handle, uint32_t *host_addr,
-    uint32_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_rep_get64(ddi_acc_handle_t handle, uint64_t *host_addr,
-    uint64_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_rep_put8(ddi_acc_handle_t handle, uint8_t *host_addr,
-    uint8_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_rep_put16(ddi_acc_handle_t handle, uint16_t *host_addr,
-    uint16_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_rep_put32(ddi_acc_handle_t handle, uint32_t *host_addr,
-    uint32_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-ddi_mem_rep_put64(ddi_acc_handle_t handle, uint64_t *host_addr,
-    uint64_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-#else	/* lint */
 
 	
 #if defined(__amd64)
@@ -911,39 +675,7 @@ ddi_mem_rep_put64(ddi_acc_handle_t handle, uint64_t *host_addr,
 
 #endif	/* __i386 */
 
-#endif /* lint */
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-uint8_t
-i_ddi_vaddr_get8(ddi_acc_impl_t *hdlp, uint8_t *addr)
-{
-	return (*addr);
-}
-
-/*ARGSUSED*/
-uint16_t
-i_ddi_vaddr_get16(ddi_acc_impl_t *hdlp, uint16_t *addr)
-{
-	return (*addr);
-}
-
-/*ARGSUSED*/
-uint32_t
-i_ddi_vaddr_get32(ddi_acc_impl_t *hdlp, uint32_t *addr)
-{
-	return (*addr);
-}
-
-/*ARGSUSED*/
-uint64_t
-i_ddi_vaddr_get64(ddi_acc_impl_t *hdlp, uint64_t *addr)
-{
-	return (*addr);
-}
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -1014,33 +746,8 @@ i_ddi_vaddr_get64(ddi_acc_impl_t *hdlp, uint64_t *addr)
 
 #endif	/* __i386 */
 
-#endif /* lint */
 
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-uint8_t
-i_ddi_io_get8(ddi_acc_impl_t *hdlp, uint8_t *addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint16_t
-i_ddi_io_get16(ddi_acc_impl_t *hdlp, uint16_t *addr)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-uint32_t
-i_ddi_io_get32(ddi_acc_impl_t *hdlp, uint32_t *addr)
-{
-	return (0);
-}
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -1100,39 +807,7 @@ i_ddi_io_get32(ddi_acc_impl_t *hdlp, uint32_t *addr)
 
 #endif	/* __i386 */
 
-#endif /* lint */
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-void
-i_ddi_vaddr_put8(ddi_acc_impl_t *hdlp, uint8_t *addr, uint8_t value)
-{
-	*addr = value;
-}
-
-/*ARGSUSED*/
-void
-i_ddi_vaddr_put16(ddi_acc_impl_t *hdlp, uint16_t *addr, uint16_t value)
-{
-	*addr = value;
-}
-
-/*ARGSUSED*/
-void
-i_ddi_vaddr_put32(ddi_acc_impl_t *hdlp, uint32_t *addr, uint32_t value)
-{
-	*(uint32_t *)addr = value;
-}
-
-/*ARGSUSED*/
-void
-i_ddi_vaddr_put64(ddi_acc_impl_t *hdlp, uint64_t *addr, uint64_t value)
-{
-	*addr = value;
-}
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -1208,26 +883,7 @@ i_ddi_vaddr_put64(ddi_acc_impl_t *hdlp, uint64_t *addr, uint64_t value)
 
 #endif	/* __i386 */
 
-#endif /* lint */
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-void
-i_ddi_io_put8(ddi_acc_impl_t *hdlp, uint8_t *addr, uint8_t value)
-{}
-
-/*ARGSUSED*/
-void
-i_ddi_io_put16(ddi_acc_impl_t *hdlp, uint16_t *addr, uint16_t value)
-{}
-
-/*ARGSUSED*/
-void
-i_ddi_io_put32(ddi_acc_impl_t *hdlp, uint32_t *addr, uint32_t value)
-{}
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -1289,29 +945,7 @@ i_ddi_io_put32(ddi_acc_impl_t *hdlp, uint32_t *addr, uint32_t value)
 
 #endif	/* __i386 */
 
-#endif /* lint */
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-void
-i_ddi_io_rep_get8(ddi_acc_impl_t *hdlp, uint8_t *host_addr,
-	uint8_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-i_ddi_io_rep_get16(ddi_acc_impl_t *hdlp, uint16_t *host_addr,
-	uint16_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-i_ddi_io_rep_get32(ddi_acc_impl_t *hdlp, uint32_t *host_addr,
-	uint32_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -1514,29 +1148,7 @@ gl_ioadv_done:
 
 #endif	/* __i386 */
 
-#endif /* lint */
 
-#if defined(lint) || defined(__lint)
-
-/*ARGSUSED*/
-void
-i_ddi_io_rep_put8(ddi_acc_impl_t *hdlp, uint8_t *host_addr,
-	uint8_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-i_ddi_io_rep_put16(ddi_acc_impl_t *hdlp, uint16_t *host_addr,
-	uint16_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-/*ARGSUSED*/
-void
-i_ddi_io_rep_put32(ddi_acc_impl_t *hdlp, uint32_t *host_addr,
-	uint32_t *dev_addr, size_t repcount, uint_t flags)
-{}
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -1735,4 +1347,3 @@ pl_ioadv_done:
 
 #endif	/* __i386 */
 
-#endif /* lint */

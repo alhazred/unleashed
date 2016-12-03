@@ -22,9 +22,7 @@
  * Copyright (c) 1999, 2010, Oracle and/or its affiliates. All rights reserved.
  */
 
-#if !defined(lint)
 #include "assym.h"
-#endif	/* !lint */
 
 /*
  * General assembly language routines.
@@ -213,14 +211,6 @@
 
 #include <sys/clock.h>
 
-#if defined(lint)
-#include <sys/types.h>
-#include <sys/scb.h>
-#include <sys/systm.h>
-#include <sys/regset.h>
-#include <sys/sunddi.h>
-#include <sys/lockstat.h>
-#endif	/* lint */
 
 
 #include <sys/asm_linkage.h>
@@ -234,17 +224,8 @@
 #include <sys/dditypes.h>
 #include <sys/intr.h>
 
-#if !defined(lint)
 #include "assym.h"
-#endif	/* !lint */
 
-#if defined(lint)
-
-uint_t
-get_impl(void)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY(get_impl)
 	GET_CPU_IMPL(%o0)
@@ -252,19 +233,7 @@ get_impl(void)
 	nop
 	SET_SIZE(get_impl)
 
-#endif	/* lint */
 
-#if defined(lint)
-/*
- * Softint generated when counter field of tick reg matches value field 
- * of tick_cmpr reg
- */
-/*ARGSUSED*/
-void
-tickcmpr_set(uint64_t clock_cycles)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(tickcmpr_set)
 	! get 64-bit clock_cycles interval
@@ -287,15 +256,7 @@ tickcmpr_set(uint64_t clock_cycles)
 	nop
 	SET_SIZE(tickcmpr_set)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-void
-tickcmpr_disable(void)
-{}
-
-#else	/* lint */
 
 	ENTRY_NP(tickcmpr_disable)
 	mov	1, %g1
@@ -305,24 +266,7 @@ tickcmpr_disable(void)
 	nop
 	SET_SIZE(tickcmpr_disable)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/*
- * tick_write_delta() increments %tick by the specified delta.  This should
- * only be called after a CPR event to assure that gethrtime() continues to
- * increase monotonically.  Obviously, writing %tick needs to de done very
- * carefully to avoid introducing unnecessary %tick skew across CPUs.  For
- * this reason, we make sure we're i-cache hot before actually writing to
- * %tick.
- */
-/*ARGSUSED*/
-void
-tick_write_delta(uint64_t delta)
-{}
-
-#else	/* lint */
 
 #ifdef DEBUG
 	.seg	".text"
@@ -350,18 +294,7 @@ tick_write_panic:
 
 	retl				! Return
 	wrpr	%g0, %g1, %pstate	!     delay: Re-enable interrupts
-#endif	/* lint */
 
-#if defined(lint)
-/*
- *  return 1 if disabled
- */
-
-int
-tickcmpr_disabled(void)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY_NP(tickcmpr_disabled)
 	RD_TICKCMPR(%g1, %o0)
@@ -369,22 +302,10 @@ tickcmpr_disabled(void)
 	srlx	%g1, TICKINT_DIS_SHFT, %o0
 	SET_SIZE(tickcmpr_disabled)
 
-#endif	/* lint */
 
 /*
  * Get current tick
  */
-#if defined(lint)
-
-u_longlong_t
-gettick(void)
-{ return (0); }
-
-u_longlong_t
-randtick(void)
-{ return (0); }
-
-#else	/* lint */
 
 	ENTRY(gettick)
 	ALTENTRY(randtick)
@@ -394,20 +315,12 @@ randtick(void)
 	SET_SIZE(randtick)
 	SET_SIZE(gettick)
 
-#endif	/* lint */
 
 
 /*
  * Return the counter portion of the tick register.
  */
 
-#if defined(lint)
-
-uint64_t
-gettick_counter(void)
-{ return(0); }
-
-#else	/* lint */
 
 	ENTRY_NP(gettick_counter)
 	rdpr	%tick, %o0
@@ -415,71 +328,12 @@ gettick_counter(void)
 	retl
 	srlx	%o0, 1, %o0		! shake off npt bit
 	SET_SIZE(gettick_counter)
-#endif	/* lint */
 
 /*
  * Provide a C callable interface to the trap that reads the hi-res timer.
  * Returns 64-bit nanosecond timestamp in %o0 and %o1.
  */
 
-#if defined(lint)
-
-hrtime_t
-gethrtime(void)
-{
-	return ((hrtime_t)0);
-}
-
-hrtime_t
-gethrtime_unscaled(void)
-{
-	return ((hrtime_t)0);
-}
-
-hrtime_t
-gethrtime_max(void)
-{
-	return ((hrtime_t)0);
-}
-
-void
-scalehrtime(hrtime_t *hrt)
-{
-	*hrt = 0;
-}
-
-void
-gethrestime(timespec_t *tp)
-{
-	tp->tv_sec = 0;
-	tp->tv_nsec = 0;
-}
-
-time_t
-gethrestime_sec(void)
-{
-	return (0);
-}
-
-void
-gethrestime_lasttick(timespec_t *tp)
-{
-	tp->tv_sec = 0;
-	tp->tv_nsec = 0;
-}
-
-/*ARGSUSED*/
-void
-hres_tick(void)
-{
-}
-
-void
-panic_hres_tick(void)
-{
-}
-
-#else	/* lint */
 
 	ENTRY_NP(gethrtime)
 	GET_HRTIME(%g1, %o0, %o1, %o2, %o3, %o4, %o5, %g2)
@@ -772,9 +626,7 @@ hrtime_base_panic:
 
 	SET_SIZE(hres_tick)
 
-#endif	/* lint */
 
-#if !defined(lint) && !defined(__lint)
 
 	.seg	".text"
 kstat_q_panic_msg:
@@ -885,20 +737,7 @@ QRETURN;								\
 	KSTAT_Q_UPDATE(add, BRZPT, 1f, 1:retl, KSTAT_IO_W)
 	SET_SIZE(kstat_runq_back_to_waitq)
 
-#endif	/* !(lint || __lint) */
 
-#ifdef lint	
-
-int64_t timedelta;
-hrtime_t hres_last_tick;
-volatile timestruc_t hrestime;
-int64_t hrestime_adj;
-volatile int hres_lock;
-uint_t nsec_scale;
-hrtime_t hrtime_base;
-int traptrace_use_stick;
-
-#else	/* lint */
 	/*
 	 *  -- WARNING --
 	 *
@@ -936,7 +775,6 @@ nsec_shift:
 adj_shift:
 	.word	ADJ_SHIFT
 
-#endif	/* lint */
 
 
 /*
@@ -958,19 +796,6 @@ adj_shift:
  * We chose less code duplication for this.
  */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-drv_usecwait(clock_t n)
-{}
-
-/*ARGSUSED*/
-void
-usec_delay(int n)
-{}
-
-#else	/* lint */
 
 	ENTRY(drv_usecwait)
 	ALTENTRY(usec_delay)
@@ -996,16 +821,7 @@ usec_delay(int n)
 	nop
 	SET_SIZE(usec_delay)
 	SET_SIZE(drv_usecwait)
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-pil14_interrupt(int level)
-{}
-
-#else	/* lint */
 
 /*
  * Level-14 interrupt prologue.
@@ -1096,16 +912,7 @@ pil14_interrupt(int level)
 	nop
 	SET_SIZE(tick_rtt)
 
-#endif	/* lint */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-pil15_interrupt(int level)
-{}
-
-#else  /* lint */
 
 /*
  * Level-15 interrupt prologue.
@@ -1124,18 +931,7 @@ pil15_interrupt(int level)
        stn     %g0, [%g1 + CPU_CPCPROFILE_UPC] ! zero user PC
        SET_SIZE(pil15_interrupt)
 
-#endif /* lint */
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-uint64_t
-find_cpufrequency(volatile uchar_t *clock_ptr)
-{
-	return (0);
-}
-
-#else	/* lint */
 
 #ifdef DEBUG
 	.seg	".text"
@@ -1184,23 +980,7 @@ find_cpufreq_panic:
 	sub	%o5, %o3, %o0		! return the difference in ticks
 	SET_SIZE(find_cpufrequency)
 
-#endif	/* lint */
 
-#if defined(lint)
-/*
- * Prefetch a page_t for write or read, this assumes a linear
- * scan of sequential page_t's.
- */
-/*ARGSUSED*/
-void
-prefetch_page_w(void *pp)
-{}
-
-/*ARGSUSED*/
-void
-prefetch_page_r(void *pp)
-{}
-#else	/* lint */
 
 #if defined(CHEETAH) || defined(CHEETAH_PLUS) || defined(JALAPENO) || \
 	defined(SERRANO)
@@ -1358,17 +1138,7 @@ prefetch_page_r(void *pp)
 
 #endif	/* OLYMPUS_C */
 
-#endif	/* lint */
 
-#if defined(lint)
-/*
- * Prefetch struct smap for write. 
- */
-/*ARGSUSED*/
-void
-prefetch_smap_w(void *smp)
-{}
-#else	/* lint */
 
 #if defined(CHEETAH) || defined(CHEETAH_PLUS) || defined(JALAPENO) || \
 	defined(SERRANO)
@@ -1421,20 +1191,10 @@ prefetch_smap_w(void *smp)
 	prefetch	[%o0-SMAP_STRIDE], #n_writes
 	SET_SIZE(prefetch_smap_w)
 
-#endif	/* lint */
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-uint64_t
-getidsr(void)
-{ return 0; }
-
-#else	/* lint */
 
 	ENTRY_NP(getidsr)
 	retl
 	ldxa	[%g0]ASI_INTR_DISPATCH_STATUS, %o0
 	SET_SIZE(getidsr)
 
-#endif	/* lint */

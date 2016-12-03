@@ -24,10 +24,8 @@
 #include "netinet/ipl.h"
 #include "ipfzone.h"
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)ipf.c	1.23 6/5/96 (C) 1993-2000 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ipf.c,v 1.35.2.3 2004/12/15 18:27:17 darrenr Exp $";
-#endif
 
 #if !defined(__SVR4) && defined(__GNUC__)
 extern	char	*index __P((const char *, int));

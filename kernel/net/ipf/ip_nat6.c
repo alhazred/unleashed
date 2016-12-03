@@ -110,9 +110,7 @@ extern struct ifnet vpnif;
 #undef	SOCKADDR_IN
 #define	SOCKADDR_IN	struct sockaddr_in
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: ip_nat6.c,v 1.2 2008/02/14 21:05:50 darrenr Exp $";
-#endif
 
 static	hostmap_t *nat6_hostmap __P((ipnat_t *, i6addr_t *, i6addr_t *,
 				    i6addr_t *, u_32_t, ipf_stack_t *));

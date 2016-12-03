@@ -25,14 +25,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(lint) || defined(__lint)
-#include <sys/types.h>
-#include <sys/thread.h>
-#include <sys/cpuvar.h>
-#include <vm/page.h>
-#else	/* __lint */
 #include "assym.h"
-#endif	/* __lint */
 
 #include <sys/mutex_impl.h>
 #include <sys/asm_linkage.h>
@@ -49,24 +42,6 @@
  * ulock_try() is for a lock in the user address space.
  */
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-int
-lock_try(lock_t *lp)
-{ return (0); }
-
-/* ARGSUSED */
-int
-lock_spin_try(lock_t *lp)
-{ return (0); }
-
-/* ARGSUSED */
-int
-ulock_try(lock_t *lp)
-{ return (0); }
-
-#else	/* __lint */
 	.globl	kernelbase
 
 #if defined(__amd64)
@@ -176,26 +151,12 @@ ulock_pass:
 	.text
 #endif	/* DEBUG */
 
-#endif	/* __lint */
 
 /*
  * lock_clear(lp)
  *	- unlock lock without changing interrupt priority level.
  */
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-void
-lock_clear(lock_t *lp)
-{}
-
-/* ARGSUSED */
-void
-ulock_clear(lock_t *lp)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -267,21 +228,12 @@ ulock_clr:
 #endif	/* DEBUG */
 
 
-#endif	/* __lint */
 
 /*
  * lock_set_spl(lock_t *lp, int new_pil, u_short *old_pil)
  * Drops lp, sets pil to new_pil, stores old pil in *old_pil.
  */
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-void
-lock_set_spl(lock_t *lp, int new_pil, u_short *old_pil)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -347,7 +299,6 @@ lock_set_spl(lock_t *lp, int new_pil, u_short *old_pil)
 
 #endif	/* !__amd64 */
 
-#endif	/* __lint */
 
 /*
  * void
@@ -387,14 +338,6 @@ lock_init(lock_t *lp)
  * lock_set(lp)
  */
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-void
-lock_set(lock_t *lp)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -428,20 +371,11 @@ lock_set(lock_t *lp)
 
 #endif	/* !__amd64 */
 
-#endif	/* __lint */
 
 /*
  * lock_clear_splx(lp, s)
  */
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-void
-lock_clear_splx(lock_t *lp, int s)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -506,7 +440,6 @@ lock_clear_splx(lock_t *lp, int s)
 	[.lock_clear_splx_lockstat_patch_point + 1]
 #endif
 
-#endif	/* __lint */
 
 /*
  * mutex_enter() and mutex_exit().
@@ -531,29 +464,6 @@ lock_clear_splx(lock_t *lp, int s)
  * Note that we don't need to test lockstat_event_mask here -- we won't
  * patch this code in unless we're gathering ADAPTIVE_HOLD lockstats.
  */
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-void
-mutex_enter(kmutex_t *lp)
-{}
-
-/* ARGSUSED */
-int
-mutex_tryenter(kmutex_t *lp)
-{ return (0); }
-
-/* ARGSUSED */
-int
-mutex_adaptive_tryenter(mutex_impl_t *lp)
-{ return (0); }
-
-/* ARGSUSED */
-void
-mutex_exit(kmutex_t *lp)
-{}
-
-#else
 
 #if defined(__amd64)
 
@@ -889,7 +799,6 @@ mutex_exit_critical_size:
 
 #endif	/* !__amd64 */
 
-#endif	/* __lint */
 
 /*
  * rw_enter() and rw_exit().
@@ -899,19 +808,6 @@ mutex_exit_critical_size:
  * and rw_exit (no waiters or not the last reader).  If anything complicated
  * is going on we punt to rw_enter_sleep() and rw_exit_wakeup(), respectively.
  */
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-void
-rw_enter(krwlock_t *lp, krw_t rw)
-{}
-
-/* ARGSUSED */
-void
-rw_exit(krwlock_t *lp)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1089,18 +985,8 @@ rw_exit(krwlock_t *lp)
 
 #endif	/* !__amd64 */
 
-#endif	/* __lint */
 
 #if defined(OPTERON_WORKAROUND_6323525)
-#if defined(lint) || defined(__lint)
-
-int	workaround_6323525_patched;
-
-void
-patch_workaround_6323525(void)
-{}
-
-#else	/* lint */
 
 /*
  * If it is necessary to patch the lock enter routines with the lfence
@@ -1225,17 +1111,9 @@ _lfence_insn:
 	SET_SIZE(patch_workaround_6323525)
 
 #endif	/* !__amd64 */
-#endif	/* !lint */
 #endif	/* OPTERON_WORKAROUND_6323525 */
 
 
-#if defined(lint) || defined(__lint)
-
-void
-lockstat_hot_patch(void)
-{}
-
-#else
 
 #if defined(__amd64)
 
@@ -1328,33 +1206,7 @@ lockstat_hot_patch(void)
 	ret
 	SET_SIZE(lockstat_hot_patch)
 
-#endif	/* __lint */
 
-#if defined(lint) || defined(__lint)
-
-/* XX64 membar_*() should be inlines */
-
-void
-membar_sync(void)
-{}
-
-void
-membar_enter(void)
-{}
-
-void
-membar_exit(void)
-{}
-
-void
-membar_producer(void)
-{}
-
-void
-membar_consumer(void)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1412,7 +1264,6 @@ _patch_lfence_ret:			/* c.f. membar #LoadLoad */
 
 #endif	/* !__amd64 */
 
-#endif	/* __lint */
 
 /*
  * thread_onproc()
@@ -1421,16 +1272,6 @@ _patch_lfence_ret:			/* c.f. membar #LoadLoad */
  * Since the new lock isn't held, the store ordering is important.
  * If not done in assembler, the compiler could reorder the stores.
  */
-#if defined(lint) || defined(__lint)
-
-void
-thread_onproc(kthread_id_t t, cpu_t *cp)
-{
-	t->t_state = TS_ONPROC;
-	t->t_lockp = &cp->cpu_thread_lock;
-}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1454,20 +1295,12 @@ thread_onproc(kthread_id_t t, cpu_t *cp)
 
 #endif	/* !__amd64 */
 
-#endif	/* __lint */
 
 /*
  * mutex_delay_default(void)
  * Spins for approx a few hundred processor cycles and returns to caller.
  */
 
-#if defined(lint) || defined(__lint)
-
-void
-mutex_delay_default(void)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1494,4 +1327,3 @@ mutex_delay_default(void)
 	SET_SIZE(mutex_delay_default)
 
 #endif	/* !__amd64 */
-#endif	/* __lint */

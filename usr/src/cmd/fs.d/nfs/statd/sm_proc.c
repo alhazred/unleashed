@@ -720,10 +720,6 @@ thr_send_notice(void *arg)
 	free(minfop);
 
 	thr_exit((void *) 0);
-#ifdef lint
-	/*NOTREACHED*/
-	return ((void *)0);
-#endif
 }
 
 /*

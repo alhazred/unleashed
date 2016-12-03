@@ -66,9 +66,7 @@
 char *strdup __P((char *));
 #endif
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 /*
  * Option variables and default values.

@@ -682,9 +682,6 @@ confirm_interactive(
 	static char nochr[YESNO_STR_MAX + 2];
 	static int inited = 0;
 
-#ifdef lint
-	appdata_ptr = appdata_ptr;
-#endif /* lint */
 	/*
 	 * First time through initialisation.  In the original
 	 * version of this command this function is only called once,

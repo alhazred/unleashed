@@ -35,12 +35,6 @@
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
- * #if !defined(lint) && defined(SCCSIDS)
- * static char sccsid[] = "@(#)xdr_refer.c 1.21 89/02/28 SMI";
- * #endif
- */
-
-/*
  * xdr_refer.c, Generic XDR routines impelmentation.
  *
  * These are the "non-trivial" xdr primitives used to serialize and de-serialize

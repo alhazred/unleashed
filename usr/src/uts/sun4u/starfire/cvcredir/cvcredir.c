@@ -141,9 +141,6 @@ _info(struct modinfo *modinfop)
 static int
 cvcr_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 {
-#ifdef lint
-	cvcr_suspend = cvcr_suspend;
-#endif
 	if (cmd == DDI_RESUME) {
 		cvcr_suspend = 0;
 	} else {

@@ -40,9 +40,7 @@
 #include "pppd.h"
 #include "upap.h"
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 static bool hide_password = 1;
 

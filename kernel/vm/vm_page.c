@@ -4809,10 +4809,6 @@ do_page_relocate(
 		VM_STAT_ADD(vmm_vmstats.ppr_relocok[szc]);
 		return (0);
 	}
-#else
-#if defined(lint)
-	dofree = dofree;
-#endif
 #endif
 
 	first_repl = repl;

@@ -37,10 +37,4 @@ rename(char *x, char *y)
 }
 #else
 static int dummy;  /* used to make compillor warning go away */
-#ifdef lint
-_______a()
-{
-	return (dummy++);
-}
-#endif	/* lint */
 #endif

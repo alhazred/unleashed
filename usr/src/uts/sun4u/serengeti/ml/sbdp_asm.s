@@ -32,13 +32,7 @@
  * only by DR for the copy-rename sequence.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-#include <sys/sbd_ioctl.h>
-#include <sys/sbdp_priv.h>
-#else
 #include "assym.h"
-#endif /* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/param.h>
@@ -58,7 +52,6 @@
 #include <sys/cheetahregs.h>
 #include <sys/cheetahasm.h>
 
-#ifndef lint
 
 /*
  * Invalidating the E$ tags is only needed on Cheetah following
@@ -109,16 +102,7 @@
 	set	CH_ICACHE_LSIZE, reg2				;\
 2:
 
-#endif  /* !lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-sbdp_shutdown_asm(sbdp_shutdown_t *shutshown)
-{}
-
-#else /* lint */
 
         ENTRY_NP(sbdp_shutdown_asm)
         ! %o0 = address of sbdp_shutdown_t structure passed in
@@ -215,31 +199,12 @@ sbdp_shutdown_asm(sbdp_shutdown_t *shutshown)
 
 sbdp_shutdown_asm_end:
 
-#endif  /* lint */
 
 
-#if defined(lint)
-
-#else	/* lint */
 #include "assym.h"
-#endif	/* lint */
 
 #define	TT_HSM	0x99
 
-#if defined(lint)
-/* ARGSUSED */
-void
-sgdr_mem_blkcopy(caddr_t src, caddr_t dst, u_int linecount, u_int linesize)
-{}
-
-void
-stdmcdecode(uint64_t physaddr, uint64_t value)
-{
-	physaddr = physaddr;
-	value = value;
-}
-
-#else /* !lint */
 !
 ! Move a single cache line of data.  Survive UE and CE on the read
 !
@@ -322,4 +287,3 @@ stdmcdecode(uint64_t physaddr, uint64_t value)
         wrpr    %g0, %o4, %pstate       ! restore earlier pstate register value
         SET_SIZE(stdmcdecode)
 
-#endif /* lint */

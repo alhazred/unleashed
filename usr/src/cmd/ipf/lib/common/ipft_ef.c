@@ -29,10 +29,8 @@ etherfind -n -t
 #include <netinet/tcpip.h>
 
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)ipft_ef.c	1.6 2/4/96 (C)1995 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ipft_ef.c,v 1.14 2004/01/08 13:34:31 darrenr Exp $";
-#endif
 
 static	int	etherf_open __P((char *));
 static	int	etherf_close __P((void));

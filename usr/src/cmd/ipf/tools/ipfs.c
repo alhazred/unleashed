@@ -48,9 +48,7 @@
 #include "netinet/ipl.h"
 #include "ipfzone.h"
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)Id: ipfs.c,v 1.12 2003/12/01 01:56:53 darrenr Exp";
-#endif
 
 #ifndef	IPF_SAVEDIR
 # define	IPF_SAVEDIR	"/var/db/ipf"

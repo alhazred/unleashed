@@ -7,9 +7,7 @@
 #include "ipf.h"
 
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: printproto.c,v 1.1.2.1 2005/06/12 07:21:53 darrenr Exp $";
-#endif
 
 
 void printproto(pr, p, np)

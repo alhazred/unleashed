@@ -19,9 +19,7 @@
 #include <syslog.h>
 #include "facpri.h"
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: facpri.c,v 1.6 2003/12/01 01:59:43 darrenr Exp $";
-#endif
 
 
 typedef	struct	table	{

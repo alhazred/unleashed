@@ -16,9 +16,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) fromhost.c 1.17 94/12/28 17:42:23";
-#endif
 
 #if defined(TLI) || defined(PTX) || defined(TLI_SEQUENT)
 

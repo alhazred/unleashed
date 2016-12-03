@@ -343,9 +343,6 @@ ehc_start_pcf8584(struct ehc_envcunit *ehcp, uint8_t byteaddress)
 	i = 0;
 	if (byteaddress & EHC_BYTE_READ) {
 		discard = ddi_get8(ehcp->ctlr_handle, &ehcp->bus_ctl_regs->s0);
-#ifdef lint
-		discard = discard;
-#endif
 
 		/* wait for completion of transmission */
 		do {
@@ -522,9 +519,6 @@ ehc_after_read_pcf8584(struct ehc_envcunit *ehcp, uint8_t *data)
 	 * Read the "last" byte.
 	 */
 	discard = ddi_get8(ehcp->ctlr_handle, &ehcp->bus_ctl_regs->s0);
-#ifdef lint
-	discard = discard;
-#endif
 
 	return (EHC_SUCCESS);
 }
@@ -601,9 +595,6 @@ ehc_init_pcf8584(struct ehc_envcunit *ehcp)
 int
 ehc_read_tda8444(struct ehc_envcunit *ehcp)
 {
-#ifdef lint
-	ehcp = ehcp;
-#endif
 	return (EHC_FAILURE);
 }
 
@@ -689,9 +680,6 @@ ehc_read_pcf8574a(struct ehc_envcunit *ehcp, int byteaddress, uint8_t *buf,
 			 */
 			discard =
 			ddi_get8(ehcp->ctlr_handle, &ehcp->bus_ctl_regs->s0);
-#ifdef lint
-			discard = discard;
-#endif
 		}
 		return (EHC_FAILURE);
 	}
@@ -791,9 +779,6 @@ ehc_read_pcf8574(struct ehc_envcunit *ehcp, int byteaddress, uint8_t *buf,
 			 */
 			discard =
 			ddi_get8(ehcp->ctlr_handle, &ehcp->bus_ctl_regs->s0);
-#ifdef lint
-			discard = discard;
-#endif
 		}
 		return (EHC_FAILURE);
 	}
@@ -892,9 +877,6 @@ ehc_read_lm75(struct ehc_envcunit *ehcp, int byteaddress, uint8_t *buf,
 			 */
 			discard =
 			ddi_get8(ehcp->ctlr_handle, &ehcp->bus_ctl_regs->s0);
-#ifdef lint
-			discard = discard;
-#endif
 		}
 		return (EHC_FAILURE);
 	}
@@ -1047,9 +1029,6 @@ ehc_read_pcf8591(struct ehc_envcunit *ehcp, int byteaddress, int channel,
 		 * Read the last byte - discard it.
 		 */
 		discard = ddi_get8(ehcp->ctlr_handle, &ehcp->bus_ctl_regs->s0);
-#ifdef lint
-		discard = discard;
-#endif
 		return (EHC_FAILURE);
 	}
 

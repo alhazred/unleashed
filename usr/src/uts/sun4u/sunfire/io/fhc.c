@@ -532,9 +532,6 @@ fhc_handle_imr(struct fhc_soft_state *softsp)
 		if (want_igr != act_igr) {
 			*softsp->igr = want_igr;
 			tmp_reg = *softsp->igr;
-#ifdef lint
-			tmp_reg = tmp_reg;
-#endif
 			/* We must now re-issue any pending interrupts. */
 			for (i = 0; i < FHC_MAX_INO; i++) {
 				if (*(softsp->intr_regs[i].clear_reg) == 3) {
@@ -543,9 +540,6 @@ fhc_handle_imr(struct fhc_soft_state *softsp)
 
 					tmp_reg =
 					    *(softsp->intr_regs[i].clear_reg);
-#ifdef lint
-					tmp_reg = tmp_reg;
-#endif
 				}
 			}
 			cmn_err(CE_NOTE, "central IGN corruption fixed: "
@@ -571,9 +565,6 @@ fhc_handle_imr(struct fhc_soft_state *softsp)
 			 * ensure atomic write with this read.
 			 */
 			tmp_reg = *(softsp->intr_regs[i].clear_reg);
-#ifdef lint
-			tmp_reg = tmp_reg;
-#endif
 		}
 
 		/*
@@ -590,9 +581,6 @@ fhc_handle_imr(struct fhc_soft_state *softsp)
 		 * ensure atomic write with this read.
 		 */
 		tmp_reg = *(softsp->intr_regs[i].mapping_reg);
-#ifdef lint
-		tmp_reg = tmp_reg;
-#endif
 
 	}
 }
@@ -970,9 +958,6 @@ fhc_init(struct fhc_soft_state *softsp)
 		*(softsp->ctrl) |= FHC_NOT_BRD_PRES;
 		/* Now flush the hardware store buffers. */
 		tmp_reg = *(softsp->ctrl);
-#ifdef lint
-		tmp_reg = tmp_reg;
-#endif
 		/* XXX record the board state in global space */
 		mutex_exit(&softsp->ctrl_lock);
 
@@ -1001,9 +986,6 @@ fhc_init(struct fhc_soft_state *softsp)
 
 	/* Now flush the hardware store buffers. */
 	tmp_reg = *(softsp->id);
-#ifdef lint
-	tmp_reg = tmp_reg;
-#endif
 
 	/* Add the interrupt redistribution callback. */
 	intr_dist_add(fhc_intrdist, (void *)softsp->dip);
@@ -1040,9 +1022,6 @@ fhc_intr_wrapper(caddr_t arg)
 
 	/* Flush the hardware store buffers. */
 	tmpreg = *(intr_info->clear_reg);
-#ifdef lint
-	tmpreg = tmpreg;
-#endif	/* lint */
 
 	return (intr_return);
 }
@@ -1105,9 +1084,6 @@ fhc_zs_intr_wrapper(caddr_t arg)
 
 	/* flush the store buffers. */
 	tmp_reg = *(clear_reg);
-#ifdef lint
-	tmp_reg = tmp_reg;
-#endif
 
 	return (result);
 }
@@ -1308,9 +1284,6 @@ fhc_add_intr_impl(dev_info_t *dip, dev_info_t *rdip,
 
 	/* Read a FHC register to flush store buffers */
 	tmpreg = *(softsp->id);
-#ifdef lint
-	tmpreg = tmpreg;
-#endif
 
 done:
 	return (ret);
@@ -1401,9 +1374,6 @@ fhc_remove_intr_impl(dev_info_t *dip, dev_info_t *rdip,
 
 		/* flush the hardware store buffers */
 		tmpreg = *(softsp->id);
-#ifdef lint
-		tmpreg = tmpreg;
-#endif
 
 		/* Eliminate the particular handler from the system. */
 		i_ddi_rem_ivintr(hdlp);
@@ -2435,9 +2405,6 @@ update_board_leds(fhc_bd_t *board, uint_t mask, uint_t value)
 
 		/* flush the hardware registers */
 		temp = *board->softsp->ctrl;
-#ifdef lint
-		temp = temp;
-#endif
 
 		mutex_exit(&board->softsp->ctrl_lock);
 	}
@@ -2605,9 +2572,6 @@ fhc_intrdist(void *arg)
 		/* flush the hardware buffers. */
 		tmp_reg = *(softsp->id);
 
-#ifdef	lint
-		tmp_reg = tmp_reg;
-#endif	/* lint */
 	}
 }
 
@@ -3156,9 +3120,6 @@ fhc_board_poweroffcpus(int board, char *errbuf, int cpu_flags)
 
 			for (i = 0; i < FHC_DTAG_SIZE; i += FHC_DTAG_SKIP) {
 				u_longlong_t value = lddphysio(base+i);
-#ifdef lint
-				value = value;
-#endif
 #ifdef DEBUG
 				if (cpa != NULL && (value & FHC_DTAG_LOW))
 					nonz0++;
@@ -3422,9 +3383,6 @@ os_completes_shutdown(void)
 		 * localspace sram by interleaving reads with writes.
 		 */
 		dummy = *dst;
-#ifdef lint
-		dummy = dummy;
-#endif
 	}
 
 	/*

@@ -32,9 +32,6 @@
  * only by DR for the copy-rename sequence.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-#endif /* lint */
 
 #ifndef	INLINE
 
@@ -57,14 +54,6 @@
  * between physical addresses. 
  * Borrowed from Starfire DR 2.6.
  */
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-bcopy32_il(uint64_t paddr1, uint64_t paddr2)
-{}
-
-#else /* lint */
 
 	ENTRY_NP(bcopy32_il)
 	.register %g2, #scratch
@@ -93,16 +82,7 @@ bcopy32_il(uint64_t paddr1, uint64_t paddr2)
         wrpr    %g0, %o4, %pstate       ! restore earlier pstate register value
 	SET_SIZE(bcopy32_il)
 
-#endif /* lint */
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-flush_ecache_il(uint64_t physaddr, uint_t size, uint_t linesize)
-{}
-
-#else /* lint */
 
 	ENTRY_NP(flush_ecache_il)
 	srl	%o1, 0, %o1		! clear upper 32 bits
@@ -123,21 +103,7 @@ flush_ecache_il(uint64_t physaddr, uint_t size, uint_t linesize)
 	wrpr	%g0, %o3, %pstate	! restore earlier pstate
 	SET_SIZE(flush_ecache_il)
 
-#endif /* lint */
 
-#if defined(lint)
-
-/*ARGUSED*/
-void
-stphysio_il(uint64_t physaddr, u_int value)
-{}
- 
-/*ARGSUSED*/
-u_int
-ldphysio_il(uint64_t physaddr)
-{ return(0); }
-
-#else /* lint */
 
 	ENTRY_NP(stphysio_il)
 	rdpr	%pstate, %o2		/* read PSTATE reg */
@@ -162,26 +128,7 @@ ldphysio_il(uint64_t physaddr)
 	wrpr	%g0, %o2, %pstate	/* restore pstate */
 	SET_SIZE(ldphysio_il)
 
-#endif /* lint */
 
-#if defined(lint)
-
-/*
- * Argument to drmach_exec_script_il is a pointer to:
- *
- * typedef struct {
- *	uint64_t	masr_addr;
- *	uint_t		masr;
- *	uint_t		_filler;
- * } drmach_rename_script_t;
- */
-
-/*ARGUSED*/
-void
-drmach_exec_script_il(void *sp)
-{}
- 
-#else /* lint */
 
 	ENTRY_NP(drmach_exec_script_il)
 	mov	%o0, %o2
@@ -219,4 +166,3 @@ drmach_exec_script_il(void *sp)
 	wrpr	%g0, %o4, %pstate	/* restore the PSTATE */
 	SET_SIZE(drmach_exec_script_il)
 
-#endif /* lint */

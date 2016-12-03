@@ -2799,10 +2799,6 @@ uscsi_reserve_release(int fd, int cmd)
 	}
 #else /* not sparc */
 
-#ifdef lint
-	fd = fd;
-	cmd = cmd;
-#endif /* lint */
 
 #endif /* not sparc */
 

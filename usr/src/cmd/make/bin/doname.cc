@@ -174,9 +174,6 @@ try_again:
 		fatal(gettext("Don't know how to make target `%s'"), target->string_mb);
 		break;
 	}
-#ifdef lint
-	return build_failed;
-#endif
 }
 
 

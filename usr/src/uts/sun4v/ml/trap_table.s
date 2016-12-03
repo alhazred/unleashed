@@ -24,9 +24,7 @@
  * Use is subject to license terms.
  */
 
-#if !defined(lint)
 #include "assym.h"
-#endif /* !lint */
 #include <sys/asm_linkage.h>
 #include <sys/privregs.h>
 #include <sys/sun4asi.h>
@@ -118,9 +116,7 @@
  * NOT is used for traps that just shouldn't happen.
  * It comes in both single and quadruple flavors.
  */
-#if !defined(lint)
 	.global	trap
-#endif /* !lint */
 #define	NOT			\
 	TT_TRACE(trace_gen)	;\
 	set	trap, %g1	;\
@@ -154,9 +150,7 @@
  * TRAP vectors to the trap() function.
  * It's main use is for user errors.
  */
-#if !defined(lint)
 	.global	trap
-#endif /* !lint */
 #define	TRAP(arg)		\
 	TT_TRACE(trace_gen)	;\
 	set	trap, %g1	;\
@@ -273,7 +267,6 @@
 	clr %o4; clr %o5; clr %o6; clr %o7			;\
 	retry; .align 128
 
-#if !defined(lint)
 
 /*
  * If we get an unresolved tlb miss while in a window handler, the fault
@@ -584,7 +577,6 @@
 	.empty
 
 
-#endif /* !lint */
 
 /*
  * SPILL_mixed spills either size window, depending on
@@ -725,7 +717,6 @@
 	nop				;\
 	.align	32
 
-#if !defined(lint)
 
 /*
  * ECACHE_ECC error traps at level 0 and level 1
@@ -740,7 +731,6 @@ table_name:				;\
 	sub	%g0, 1, %g4		;\
 	.align	32
 
-#endif /* !lint */
 
 /*
  * illegal instruction trap
@@ -1087,12 +1077,6 @@ table_name/**/_itlbmiss:						;\
 #endif
 
 
-#if defined(lint)
-
-struct scb	trap_table;
-struct scb	scb;		/* trap_table/scb are the same object */
-
-#else /* lint */
 
 /*
  * =======================================================================
@@ -2897,4 +2881,3 @@ fast_trap_dummy_call:
 	SYSCALL_NOTT(syscall_trap)
 	SET_SIZE(syscall_wrapper)
 
-#endif	/* lint */

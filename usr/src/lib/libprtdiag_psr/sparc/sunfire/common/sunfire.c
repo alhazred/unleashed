@@ -590,9 +590,6 @@ display_memoryconf(Sys_tree *tree, struct grp_info *grps)
 	char *cond_str[] = {    " Unknown  ", "    OK    ", " Failing  ",
 				"  Failed  ", " Uninit.  " };
 
-#ifdef lint
-	tree = tree;
-#endif
 	/* Print the header for the memory section. */
 	log_printf("\n", 0);
 	log_printf("=========================", 0);

@@ -26,11 +26,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(lint)
-#include <sys/types.h>
-#else   /* lint */
 #include "assym.h"
-#endif  /* lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/machthread.h>		/* for reg definition */
@@ -62,29 +58,6 @@
  * require changes to cprboot_srt0.s
  */
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-i_cpr_resume_setup(void *cookie, csu_md_t *mdp)
-{}
-
-/* ARGSUSED */
-int
-i_cpr_cif_wrapper(void *args)
-{ return (0); }
-
-/* ARGSUSED */
-void
-dtlb_wr_entry(uint_t index, tte_t *tte, uint64_t *va_tag)
-{}
-
-/* ARGSUSED */
-void
-itlb_wr_entry(uint_t index, tte_t *tte, uint64_t *va_tag)
-{}
-
-#else	/* lint */
 
 	!
 	! reserve 4k for cpr tmp stack; tstack should be first,
@@ -280,4 +253,3 @@ i_cpr_tmp_cif:
 	nop
 	SET_SIZE(itlb_wr_entry)
 
-#endif /* !lint */

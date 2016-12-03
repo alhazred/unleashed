@@ -1417,11 +1417,7 @@ execute (char *filename, char *cmd, ...)
 	    va_start(ap, cmd);
 	    count = 0;
 	    do {
-#ifndef lint
 		argp[count] = va_arg(ap, char *);
-#else
-		ap = ap;
-#endif
 		count++;
 		if (count > MAXARGS)
 			error (gettext("Too many arguments in execute()\n"));

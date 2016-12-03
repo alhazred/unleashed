@@ -10,9 +10,7 @@
 #include "bpf-ipf.h"
 #include "ipt.h"
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: ipft_pc.c,v 1.10 2004/02/07 18:17:40 darrenr Exp $";
-#endif
 
 struct	llc	{
 	int	lc_type;

@@ -26,10 +26,6 @@
 #include <sys/asm_linkage.h>
 #include <sys/asm_misc.h>
 
-#if defined(lint) || defined(__lint)
-#include <sys/types.h>
-#include "acpi.h"
-#endif	/* lint */
 
 /*
  * Implementation as specific by ACPI 3.0 specification
@@ -54,14 +50,6 @@
 /* Offset of GlobalLock element in FACS structure */
 #define	GlobalLock	0x10
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-UINT32
-__acpi_acquire_global_lock(void *Facs)
-{ return (0); }
-
-#else	/* lint */
 
 #if defined(__amd64)
 	ENTRY(__acpi_acquire_global_lock)
@@ -109,17 +97,8 @@ __acpi_acquire_global_lock(void *Facs)
 
 #endif	/* i386 */
 
-#endif	/* lint */
 
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-UINT32
-__acpi_release_global_lock(void *Facs)
-{ return (0); }
-
-#else	/* lint */
 
 #if defined(__amd64)
 	ENTRY(__acpi_release_global_lock)
@@ -161,26 +140,16 @@ __acpi_release_global_lock(void *Facs)
 
 #endif	/* i386 */
 
-#endif	/* lint */
 
 
 /*
  * execute WBINVD instruction
  */
 
-#if defined(lint) || defined(__lint)
-
-/* ARGSUSED */
-void
-__acpi_wbinvd(void)
-{ }
-
-#else	/* lint */
 
 	ENTRY(__acpi_wbinvd)
 	wbinvd
 	ret
 	SET_SIZE(__acpi_wbinvd)
 
-#endif	/* lint */
 

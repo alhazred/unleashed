@@ -55,9 +55,7 @@
 #include "chap_ms.h"
 #endif
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 /*
  * Command-line options.

@@ -55,19 +55,6 @@
 
 #include <sys/stack.h>
 
-#if defined(lint) || defined(__lint)
-
-#include <sys/types.h>
-/* ARGSUSED */
-void aes_encrypt_impl(const uint32_t rk[], int Nr, const uint32_t pt[4],
-	uint32_t ct[4]) {
-}
-/* ARGSUSED */
-void aes_decrypt_impl(const uint32_t rk[], int Nr, const uint32_t ct[4],
-	uint32_t pt[4]) {
-}
-
-#else	/* lint || __lint */
 
 	.section	".text",#alloc,#execinstr
 	.file	"aes_crypt_asm.s"
@@ -5874,4 +5861,3 @@ rcon:
 	.ident	"acomp: WorkShop Compilers 5.0 99/02/25 C 5.0 patch 107289-01"	! (/tmp/acompAAA5jaWsZ:4675)
 ! End Disassembling Ident
 
-#endif	/* lint || __lint */

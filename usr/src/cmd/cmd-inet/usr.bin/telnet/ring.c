@@ -42,9 +42,7 @@
  * SUCH DAMAGE.
  */
 
-#ifndef lint
 static char sccsid[] = "@(#)ring.c	8.1 (Berkeley) 6/6/93";
-#endif /* not lint */
 
 /*
  * This defines a structure for a ring buffer.

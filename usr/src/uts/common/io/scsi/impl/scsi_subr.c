@@ -2046,9 +2046,7 @@ typedef	struct	uscsi_i_cmd {
 	struct scsi_address	*uic_ap;
 } uscsi_i_cmd_t;
 
-#if !defined(lint)
 _NOTE(SCHEME_PROTECTS_DATA("unshared data", uscsi_i_cmd))
-#endif
 
 /*ARGSUSED*/
 static void

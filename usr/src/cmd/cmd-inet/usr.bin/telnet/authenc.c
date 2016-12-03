@@ -41,9 +41,7 @@
  * SUCH DAMAGE.
  */
 
-#ifndef lint
 static char sccsid[] = "@(#)authenc.c	8.1 (Berkeley) 6/6/93";
-#endif /* not lint */
 
 #include <sys/types.h>
 #include <arpa/telnet.h>

@@ -122,9 +122,7 @@ extern struct ifqueue   ipintrq;		/* ip packet input queue */
 #endif
 /* END OF INCLUDES */
 
-#if !defined(lint)
 static const char rcsid[] = "@(#)$Id: ip_auth.c,v 2.73.2.5 2005/06/12 07:18:14 darrenr Exp $";
-#endif
 
 void fr_authderef __P((frauthent_t **));
 int fr_authgeniter __P((ipftoken_t *, ipfgeniter_t *, ipf_stack_t *));

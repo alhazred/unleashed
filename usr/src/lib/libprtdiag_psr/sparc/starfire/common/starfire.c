@@ -77,10 +77,6 @@ Prom_node	*find_device(Board_node *, int, char *);
 int
 error_check(Sys_tree *tree, struct system_kstat_data *kstats)
 {
-#ifdef lint
-	tree = tree;
-	kstats = kstats;
-#endif
 	return (0);
 }
 
@@ -90,9 +86,6 @@ display_memoryconf(Sys_tree *tree, struct grp_info *grps)
 	Board_node *bnode;
 	char indent_str[] = "           ";
 
-#ifdef lint
-	grps = grps;
-#endif
 
 	/* Print the header for the memory section. */
 	log_printf("\n", 0);
@@ -143,10 +136,6 @@ display_memoryconf(Sys_tree *tree, struct grp_info *grps)
 void
 display_hp_fail_fault(Sys_tree *tree, struct system_kstat_data *kstats)
 {
-#ifdef lint
-	tree = tree;
-	kstats = kstats;
-#endif
 }
 
 void
@@ -157,12 +146,6 @@ display_diaginfo(int flag, Prom_node *root, Sys_tree *tree,
 	char hostname[128];	/* used for starfire output */
 	struct utsname uts_buf;
 
-#ifdef lint
-	flag = flag;
-	root = root;
-	tree = tree;
-	kstats = kstats;
-#endif
 
 	/*
 	 * Get hostname from system Banner

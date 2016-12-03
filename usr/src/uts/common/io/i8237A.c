@@ -557,9 +557,6 @@ d37A_set_mode(struct ddi_dmae_req *dmaereqp, int chnl)
 	uchar_t mode = 0, emode = 0;
 
 #ifdef ISA_MODE
-#if defined(lint)
-	emode = emode;
-#endif
 	mode = chnl & 3;
 
 	switch (dmaereqp->der_command) {

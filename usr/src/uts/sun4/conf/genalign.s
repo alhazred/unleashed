@@ -26,11 +26,6 @@
 
 #pragma	ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(lint)
-
-/*LINTED: empty translation unit*/
-
-#else
 
 #include "assym.h"
 #include <sys/machparam.h>
@@ -56,4 +51,3 @@
 .desc_end:
 	.align		4
 
-#endif /* !lint */

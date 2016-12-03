@@ -1101,16 +1101,10 @@ cache_remove_ch(struct cachekey_header *ch, uid_t uid, keybuf3 *public) {
 			cache_refcnt++; \
 			mutex_unlock(&cache_lock)
 
-#if !defined(lint) && !defined(__lint)
 #define	DECCACHEREFCNT	mutex_lock(&cache_lock); \
 			if (cache_refcnt > 0) \
 				if (cache_refcnt-- == 0) (void) cond_broadcast(&cache_cv); \
 			mutex_unlock(&cache_lock)
-#else
-#define	DECCACHEREFCNT	mutex_lock(&cache_lock); \
-			if (cache_refcnt-- == 0) (void) cond_broadcast(&cache_cv); \
-			mutex_unlock(&cache_lock)
-#endif
 
 /*
  * Return the cachekey structure for the specified keylen and algtype.
@@ -1133,9 +1127,7 @@ get_cache_header(keylen_t keylen, algtype_t algtype) {
 
 	/* Spin until there are no cache readers */
 	mutex_lock(&cache_lock);
-#if !defined(lint) && !defined(__lint)
 	if (cache_refcnt > 0)
-#endif
 		cache_refcnt--;
 	while (cache_refcnt != 0) {
 		(void) cond_wait(&cache_cv, &cache_lock);

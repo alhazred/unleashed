@@ -72,10 +72,6 @@ extern "C" {
 /* Flags for lscf_service_export() */
 #define	SCE_ALL_VALUES	0x01		/* Include all property values */
 
-#ifdef lint
-extern int yyerror(const char *);
-extern int yyparse(void);
-#endif /* lint */
 
 extern int lex_lineno;
 

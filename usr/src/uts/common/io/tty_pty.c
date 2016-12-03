@@ -329,9 +329,6 @@ ptcread(dev_t dev, struct uio *uio, struct cred *cred)
 	int error;
 	off_t off;
 
-#ifdef lint
-	cred = cred;
-#endif
 
 	off = uio->uio_offset;
 
@@ -532,9 +529,6 @@ ptcwrite(dev_t dev, struct uio *uio, struct cred *cred)
 	off_t off;
 	off = uio->uio_offset;
 
-#ifdef lint
-	cred = cred;
-#endif
 
 
 	mutex_enter(&pty->ptc_lock);
@@ -986,9 +980,6 @@ ptcpoll(dev_t dev,
 	queue_t *q;
 	int pos = 0;
 
-#ifdef lint
-	anyyet = anyyet;
-#endif
 	if (polllock(php, &pty->ptc_lock) != 0) {
 		*reventsp = POLLNVAL;
 		return (0);

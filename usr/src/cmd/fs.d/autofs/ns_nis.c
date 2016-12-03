@@ -62,10 +62,6 @@ static int readdir_callback(int, char *, int, const char *,
 void
 init_nis(char **stack, char ***stkptr)
 {
-#ifdef lint
-	stack = stack;
-	stkptr = stkptr;
-#endif /* lint */
 
 	(void) sysinfo(SI_SRPC_DOMAIN, nis_mydomain, sizeof (nis_mydomain));
 }
@@ -433,10 +429,6 @@ getmapkeys_nis(nsmap, list, error, cache_time, stack, stkptr)
 	char *key = NULL, *val = NULL;
 	int nkl, vl;
 
-#ifdef lint
-	stack = stack;
-	stkptr = stkptr;
-#endif /* lint */
 
 	*cache_time = RDDIR_CACHE_TIME;
 
@@ -515,10 +507,6 @@ readdir_callback(instatus, inkey, inkeylen, inval, invallen, indata)
 	struct dir_entry *last = indata->last;
 	char key[MAXPATHLEN];
 
-#ifdef lint
-	inval = inval;
-	invallen = invallen;
-#endif
 
 	if (instatus != YP_TRUE)
 		return (0);	/* next entry. yp_all may decide otherwise... */

@@ -375,9 +375,6 @@ environ_init(struct environ_soft_state *softsp)
 	/* Wait 30 usec for ADC hardware to stabilize. */
 	DELAY(30);
 
-#ifdef lint
-	tmp = tmp;
-#endif
 
 	/*
 	 * Now add this soft state structure to the front of the linked list

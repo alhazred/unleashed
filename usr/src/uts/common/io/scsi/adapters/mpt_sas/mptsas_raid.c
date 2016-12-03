@@ -58,7 +58,7 @@
  * MPT interface.
  */
 
-#if defined(lint) || defined(DEBUG)
+#if defined(DEBUG)
 #define	MPTSAS_DEBUG
 #endif
 

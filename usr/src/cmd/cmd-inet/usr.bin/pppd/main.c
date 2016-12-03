@@ -83,9 +83,7 @@
 #include "atcp.h"
 #endif
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 /* interface vars */
 char ifname[32];		/* Interface name */

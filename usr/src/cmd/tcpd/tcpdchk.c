@@ -14,9 +14,7 @@
   * Author: Wietse Venema, Eindhoven University of Technology, The Netherlands.
   */
 
-#ifndef lint
 static char sccsid[] = "@(#) tcpdchk.c 1.8 97/02/12 02:13:25";
-#endif
 
 /* System libraries. */
 

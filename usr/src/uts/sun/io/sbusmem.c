@@ -111,9 +111,7 @@ static struct modlinkage modlinkage = {
 
 static int sbmem_rw(dev_t, struct uio *, enum uio_rw, cred_t *);
 
-#if !defined(lint)
 static char sbusmem_initmsg[] = "sbusmem _init: sbusmem.c\t1.28\t08/19/2008\n";
-#endif
 
 int
 _init(void)
@@ -284,9 +282,6 @@ sbmem_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 	int instance, error = DDI_FAILURE;
 	struct sbusmem_unit *un;
 
-#if defined(lint) || defined(__lint)
-	dip = dip;
-#endif /* lint || __lint */
 
 	switch (infocmd) {
 	case DDI_INFO_DEVT2DEVINFO:
@@ -338,9 +333,6 @@ sbmem_rw(dev_t dev, struct uio *uio, enum uio_rw rw, cred_t *cred)
 	dev_info_t *dip;
 	caddr_t reg;
 
-#if defined(lint) || defined(__lint)
-	cred = cred;
-#endif /* lint || __lint */
 
 	instance = getminor(dev);
 	if ((un = ddi_get_soft_state(sbusmem_state_head, instance)) == NULL) {
@@ -388,9 +380,6 @@ sbmem_devmap(dev_t dev, devmap_cookie_t dhp, offset_t off, size_t len,
 	struct sbusmem_unit *un;
 	int instance, error;
 
-#if defined(lint) || defined(__lint)
-	model = model;
-#endif /* lint || __lint */
 
 	instance = getminor(dev);
 	if ((un = ddi_get_soft_state(sbusmem_state_head, instance)) == NULL) {

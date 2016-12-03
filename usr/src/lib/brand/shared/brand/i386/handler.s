@@ -38,18 +38,6 @@
 #define JMP64	JMP16; JMP16; JMP16; JMP16
 #define JMP256	JMP64; JMP64; JMP64; JMP64
 
-#if defined(lint)
-
-void
-brand_handler_table(void)
-{}
-
-void
-brand_handler(void)
-{
-}
-
-#else	/* lint */
 
 	/*
 	 * On entry to this table, %eax will hold the return address. The
@@ -192,4 +180,3 @@ return:
 	SET_SIZE(brand_handler)
 
 
-#endif	/* lint */

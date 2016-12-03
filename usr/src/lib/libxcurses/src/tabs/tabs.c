@@ -80,9 +80,7 @@
  *	>0	An error occured.
  */
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] = "$Id: tabs.c 1.20 1995/09/21 21:00:28 ant Exp $";
-#endif
 #endif
 
 #include <mks.h>

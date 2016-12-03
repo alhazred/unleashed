@@ -22,9 +22,7 @@
  * $Header$
  */
 
-#if !defined(lint) && !defined(__CODECENTER__)
 static char *rcsid = "$Header$";
-#endif
 
 #include	"server_internal.h"
 #include	<sys/types.h>

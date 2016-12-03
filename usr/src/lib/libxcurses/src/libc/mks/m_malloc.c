@@ -34,9 +34,7 @@
  *
  */
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] = "$Header: /rd/src/libc/mks/rcs/m_malloc.c 1.4 1993/12/17 15:22:04 rog Exp $";
-#endif /*lint*/
 #endif /*M_RCSID*/
 
 #include <mks.h>

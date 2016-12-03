@@ -109,9 +109,6 @@ sincosf(float x, float *s, float *c)
 		if (ix <= 0x3f490fdb) {		/* |x| < pi/4 */
 			if (ix <= 0x39800000) {	/* |x| <= 2**-12 */
 				i = (int)y;
-#ifdef lint
-				i = i;
-#endif
 				*s = x;
 				*c = 1.0f;
 				return;

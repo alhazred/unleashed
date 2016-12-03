@@ -28,9 +28,6 @@
  * skeleton hub driver, the actual code is in hubdi.c
  * as it is shared between the root hub and the other hub instances
  */
-#if defined(lint) && !defined(DEBUG)
-#define	DEBUG	1
-#endif
 
 #include <sys/usb/usba/usbai_version.h>
 #include <sys/usb/usba.h>

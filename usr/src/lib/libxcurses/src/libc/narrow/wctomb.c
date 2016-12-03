@@ -32,9 +32,7 @@
  */
 
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] = "$Header: /rd/src/libc/narrow/rcs/wctomb.c 1.3 1995/01/20 00:34:51 fredw Exp $";
-#endif
 #endif
 
 #include <mks.h>

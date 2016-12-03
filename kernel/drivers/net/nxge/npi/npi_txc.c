@@ -941,9 +941,6 @@ npi_txc_ro_ecc_state_clr(npi_handle_t handle, uint8_t port)
  *	NPI_FAILURE	-
  *	NPI_TXC_PORT_INVALID
  */
-#ifdef lint
-/*ARGSUSED*/
-#endif
 npi_status_t
 npi_txc_sf_states_get(npi_handle_t handle, uint8_t port,
 				txc_sf_states_t *states)

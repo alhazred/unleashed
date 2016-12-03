@@ -26,14 +26,6 @@
 #include <sys/asm_linkage.h>
 #include <sys/link.h>
 
-#if defined(lint)
-
-void
-_start(void)
-{
-}
-
-#else	/* lint */
 	.section	".text"
 	/*
 	 * Initial entry point for the brand emulation library.
@@ -76,4 +68,3 @@ _start(void)
 
 	/*NOTREACHED*/
 	SET_SIZE(_start)
-#endif	/* lint */

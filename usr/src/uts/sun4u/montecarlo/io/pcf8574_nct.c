@@ -263,10 +263,6 @@ pcf8574_close(dev_t dev, int flags, int otyp, cred_t *credp)
 	struct pcf8574_unit *unitp;
 	register int    instance;
 
-#ifdef lint
-	flags = flags;
-	otyp = otyp;
-#endif
 
 	instance = getminor(dev);
 

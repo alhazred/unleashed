@@ -2473,9 +2473,6 @@ nfs_putpages(vnode_t *vp, u_offset_t off, size_t len, int flags, cred_t *cr)
 		 * to deal with.
 		 */
 		error = 0;
-#ifdef lint
-		io_len = 0;
-#endif
 		eoff = off + len;
 		mutex_enter(&rp->r_statelock);
 		for (io_off = off; io_off < eoff && io_off < rp->r_size;

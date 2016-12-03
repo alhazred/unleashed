@@ -70,9 +70,6 @@ read_platform_kstats(Sys_tree *tree, struct system_kstat_data *sys_kstat,
 	int		i;
 	struct hp_info	*hp;
 
-#ifdef lint
-	ep = ep;
-#endif
 	if ((kc = kstat_open()) == NULL) {
 		return;
 	}
@@ -398,9 +395,6 @@ read_sun4u_kstats(Sys_tree *tree, struct system_kstat_data *sys_kstat)
 	if ((kc = kstat_open()) == NULL) {
 		return;
 	}
-#ifdef lint
-	kc = kc;
-#endif
 
 	/* Initialize the kstats structure */
 	sys_kstat->sys_kstats_ok = 0;

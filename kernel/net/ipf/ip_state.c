@@ -111,10 +111,8 @@ struct file;
 /* END OF INCLUDES */
 
 
-#if !defined(lint)
 static const char sccsid[] = "@(#)ip_state.c	1.8 6/5/96 (C) 1993-2000 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ip_state.c,v 2.186.2.36 2005/08/11 19:58:03 darrenr Exp $";
-#endif
 
 #ifdef	USE_INET6
 static ipstate_t *fr_checkicmp6matchingstate __P((fr_info_t *));

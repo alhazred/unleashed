@@ -1000,12 +1000,8 @@ ahdlc_encode(queue_t *q, mblk_t	*mp)
 	uchar_t		*dp;
 	uchar_t		*tp;
 	uchar_t		*tpmax;
-#if defined(lint) || defined(_lint)
-	uchar_t		chr;	/* lint likes this */
-#else
 	int		chr;	/* not uchar_t; more efficient this way */
 				/* with WorkShop compiler */
-#endif
 	int		is_lcp, is_ctrl;
 	int		code;
 	hrtime_t	hrtime;
@@ -1299,10 +1295,6 @@ receive_frame(queue_t *q, mblk_t *outmp, ushort_t fcs16, uint32_t fcs32)
 		if (crclen != 0) {
 			i = adjmsg(outmp, -crclen);
 			ASSERT(i != 0);
-#if defined(lint) || defined(_lint)
-			/* lint is happier this way in a non-DEBUG build */
-			i = i;
-#endif
 		}
 
 		if (proto == PPP_MUX) {
@@ -1380,12 +1372,8 @@ ahdlc_decode(queue_t *q, mblk_t  *mp)
 	uchar_t		*tp;		/* pointer to decoded output data */
 	uchar_t		*tpmax;		/* output buffer limit */
 	int		flagtmp;	/* temporary cache of flags */
-#if defined(lint) || defined(_lint)
-	uchar_t		chr;	/* lint likes this */
-#else
 	int		chr;	/* not uchar_t; more efficient this way */
 				/* with WorkShop compiler */
-#endif
 	ushort_t	fcs16;		/* running CRC-16 */
 	uint32_t	fcs32;		/* running CRC-32 */
 #ifdef HANDLE_ZERO_LENGTH

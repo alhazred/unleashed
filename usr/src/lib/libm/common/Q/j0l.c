@@ -163,9 +163,6 @@ y0l(x) GENERIC x;{
 		else
 		    d = zero/(x-x);
 	}
-#ifdef lint
-	d = d;
-#endif
 	if (x > 1.28L) {
 		if (!finitel(x)) return zero;
 		s = sinl(x);

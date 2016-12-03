@@ -36,19 +36,6 @@
 
 /*LINTLIBRARY*/
 
-#if defined(lint)
-
-/*ARGSUSED*/
-int
-px_phys_peek_4u(size_t size, uint64_t paddr, uint64_t *value, int type)
-{ return (0); }
-
-/*ARGSUSED*/
-int
-px_phys_poke_4u(size_t size, uint64_t paddr, uint64_t *value, int type)
-{ return (0); }
-
-#else /* lint */
 
 ! px_phys_peek_4u: Do physical address read.
 !
@@ -167,4 +154,3 @@ px_phys_poke_4u(size_t size, uint64_t paddr, uint64_t *value, int type)
 	mov	%g0, %o0
 	SET_SIZE(px_phys_poke_4u)
  
-#endif

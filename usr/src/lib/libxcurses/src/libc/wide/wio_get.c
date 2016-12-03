@@ -36,9 +36,7 @@
  */
 
 #if M_RCSID
-#ifndef lint
 static char rcsID[] = "$Header: /rd/src/libc/wide/rcs/wio_get.c 1.3 1995/07/26 17:50:45 ant Exp $";
-#endif
 #endif
 
 #include <mks.h>

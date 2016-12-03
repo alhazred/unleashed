@@ -311,8 +311,5 @@ extern int	puttext __P((FILE *fp, char *str, int lmarg, int rmarg));
 extern int	read_vtoc __P((int fd, struct vtoc *vtoc));
 extern int	write_vtoc __P((int fd, struct vtoc *vtoc));
 
-#if defined(lint) && !defined(gettext)
-#define	gettext(x)	x
-#endif	/* defined(lint) && !defined(gettext) */
 
 #endif	/* __PKG_LIBADM_H__ */

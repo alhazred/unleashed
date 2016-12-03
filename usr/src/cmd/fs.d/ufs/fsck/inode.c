@@ -313,13 +313,6 @@ ckinode_common(struct dinode *dp, struct inodesc *idesc,
 			return (ret);
 	}
 
-#ifdef lint
-	/*
-	 * Cure a lint complaint of ``possible use before set''.
-	 * Apparently it can't quite figure out the switch statement.
-	 */
-	indir_data_blks = 0;
-#endif
 	/*
 	 * indir_data_blks contains the number of data blocks in all
 	 * the previous levels for this iteration.  E.g., for the

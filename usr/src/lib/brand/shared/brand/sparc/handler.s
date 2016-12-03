@@ -24,14 +24,6 @@
 
 #include <brand_misc.h>
 
-#if defined(lint)
-
-void
-brand_handler(void)
-{
-}
-
-#else	/* !lint */
 
 #define	PIC_SETUP(r)						\
 	mov	%o7, %g1;					\
@@ -221,4 +213,3 @@ return:
 	SET_SIZE(brand_handler)
 
 
-#endif	/* !lint */

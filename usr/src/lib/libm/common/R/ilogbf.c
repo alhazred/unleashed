@@ -55,14 +55,12 @@ ilogbf_subnormal(unsigned v) {
 
 static int
 raise_invalid(int v) {	/* SUSv3 requires ilogbf(0,+/-Inf,NaN) raise invalid */
-#ifndef lint
 	if ((__xpg6 & _C99SUSv3_ilogb_0InfNaN_raises_invalid) != 0) {
 		static const double zero = 0.0;
 		volatile double dummy;
 
 		dummy = zero / zero;
 	}
-#endif
 	return (v);
 }
 

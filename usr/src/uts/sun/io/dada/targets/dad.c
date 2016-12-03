@@ -57,9 +57,7 @@ int dcd_error_level	= DCD_ERR_RETRYABLE;
 
 static int dcd_io_time		= DCD_IO_TIME;
 static int dcd_retry_count	= DCD_RETRY_COUNT;
-#ifndef lint
 static int dcd_report_pfa = 1;
-#endif
 static int dcd_rot_delay = 4;
 static int dcd_poll_busycnt = DCD_POLL_TIMEOUT;
 
@@ -140,11 +138,9 @@ static cmlb_tg_ops_t dcd_lb_ops = {
 /*
  * Error and Logging Functions
  */
-#ifndef lint
 static void clean_print(dev_info_t *dev, char *label, uint_t level,
     char *title, char *data, int len);
 static void dcdrestart(void *arg);
-#endif /* lint */
 
 static int dcd_check_error(struct dcd_disk *un, struct buf *bp);
 
@@ -773,9 +769,7 @@ dcd_dr_detach(dev_info_t *devi)
 	 * It's possible to have outstanding commands through the physio
 	 * code path, even though everything's closed.
 	 */
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 	mutex_enter(DCD_MUTEX);
 	if (un->un_ncmds) {
 		mutex_exit(DCD_MUTEX);
@@ -1437,9 +1431,7 @@ failed_exclusive:
 		 */
 		(void) dcd_create_errstats(un, instance);
 	}
-#ifndef lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 
 	sema_v(&un->un_semoclose);
 	DAD_DEBUG2(DCD_DEVINFO, dcd_label, DCD_DEBUG, "Open success\n");
@@ -1573,9 +1565,7 @@ dcdclose(dev_t dev, int flag, int otyp, cred_t *cred_p)
 		}
 		mutex_enter(DCD_MUTEX);
 
-#ifndef lint
 		_NOTE(COMPETING_THREADS_NOW);
-#endif
 	}
 
 	mutex_exit(DCD_MUTEX);
@@ -1678,9 +1668,6 @@ dcdread(dev_t dev, struct uio *uio, cred_t *cred_p)
 {
 	int secmask;
 	GET_SOFT_STATE(dev);
-#ifdef lint
-	part = part;
-#endif /* lint */
 	secmask = un->un_secsize - 1;
 
 	if (uio->uio_loffset & ((offset_t)(secmask))) {
@@ -1703,9 +1690,6 @@ dcdaread(dev_t dev, struct aio_req *aio, cred_t *cred_p)
 	int secmask;
 	struct uio *uio = aio->aio_uio;
 	GET_SOFT_STATE(dev);
-#ifdef lint
-	part = part;
-#endif /* lint */
 	secmask = un->un_secsize - 1;
 
 	if (uio->uio_loffset & ((offset_t)(secmask))) {
@@ -1727,9 +1711,6 @@ dcdwrite(dev_t dev, struct uio *uio, cred_t *cred_p)
 {
 	int secmask;
 	GET_SOFT_STATE(dev);
-#ifdef lint
-	part = part;
-#endif /* lint */
 	secmask = un->un_secsize - 1;
 
 	if (uio->uio_loffset & ((offset_t)(secmask))) {
@@ -1753,9 +1734,6 @@ dcdawrite(dev_t dev, struct aio_req *aio, cred_t *cred_p)
 	int secmask;
 	struct uio *uio = aio->aio_uio;
 	GET_SOFT_STATE(dev);
-#ifdef lint
-	part = part;
-#endif /* lint */
 	secmask = un->un_secsize - 1;
 
 	if (uio->uio_loffset & ((offset_t)(secmask))) {
@@ -2891,9 +2869,6 @@ dcddump(dev_t dev, caddr_t addr, daddr_t blkno, int nblk)
 	diskaddr_t lblocks;
 
 	GET_SOFT_STATE(dev);
-#ifdef lint
-	part = part;
-#endif /* lint */
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*un))
 
@@ -3057,11 +3032,6 @@ dcdioctl(dev_t dev, int cmd, intptr_t arg, int flag,
 	struct dcd_cmd dcdcmd;
 
 	GET_SOFT_STATE(dev);
-#ifdef lint
-	part = part;
-	state = state;
-	uioseg = uioseg;
-#endif  /* lint */
 
 	DAD_DEBUG2(DCD_DEVINFO, dcd_label, DCD_DEBUG,
 	    "dcd_ioctl : cmd %x, arg %lx\n", cmd, arg);
@@ -3583,14 +3553,10 @@ dcdrunout(caddr_t arg)
 static int
 dcd_unit_ready(dev_t dev)
 {
-#ifndef lint
 	auto struct udcd_cmd dcmd, *com = &dcmd;
 	auto struct dcd_cmd cmdblk;
-#endif
 	int error;
-#ifndef lint
 	GET_SOFT_STATE(dev);
-#endif
 
 	/*
 	 * Now that we protect the special buffer with
@@ -3617,9 +3583,6 @@ dcdioctl_cmd(dev_t devp, struct udcd_cmd *in, enum uio_seg cdbspace,
 
 	GET_SOFT_STATE(devp);
 
-#ifdef lint
-	part = part;
-#endif
 
 	/*
 	 * Is this a request to reset the bus?
@@ -3749,9 +3712,6 @@ static void
 dcdudcdmin(struct buf *bp)
 {
 
-#ifdef lint
-	bp = bp;
-#endif
 
 }
 
@@ -4174,7 +4134,6 @@ dcd_validate_model_serial(char *str, int *retlen, int totallen)
 	}
 }
 
-#ifndef lint
 void
 clean_print(dev_info_t *dev, char *label, uint_t level,
 	char *title, char *data, int len)
@@ -4190,9 +4149,7 @@ clean_print(dev_info_t *dev, char *label, uint_t level,
 
 	dcd_log(dev, label, level, "%s", buf);
 }
-#endif /* Not lint */
 
-#ifndef lint
 /*
  * Print a piece of inquiry data- cleaned up for non-printable characters
  * and stopping at the first space character after the beginning of the
@@ -4215,7 +4172,6 @@ inq_fill(char *p, int l, char *s)
 	}
 	*s++ = 0;
 }
-#endif /* Not lint */
 
 char *
 dcd_sname(uchar_t status)

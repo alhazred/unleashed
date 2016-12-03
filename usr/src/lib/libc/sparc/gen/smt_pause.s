@@ -38,12 +38,6 @@
  * takes lots of cycles.
  */
 
-#ifdef lint
-void
-smt_pause(void)
-{
-}
-#else
 #define	BANKS	(4 * 64)	/* covers 4 cachelines, all banks */
 	ENTRY(smt_pause)
 	save	%sp, -SA(MINFRAME+BANKS), %sp
@@ -57,4 +51,3 @@ smt_pause(void)
 	ret
 	restore
 	SET_SIZE(smt_pause)
-#endif

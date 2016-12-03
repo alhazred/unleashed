@@ -1064,9 +1064,6 @@ void
 cpu_async_log_tlb_parity_err(void *flt) {
 	ch_async_flt_t *ch_flt = (ch_async_flt_t *)flt;
 	struct async_flt *aflt = (struct async_flt *)flt;
-#ifdef lint
-	aflt = aflt;
-#endif
 
 	/*
 	 * We only capture TLB information if we encountered

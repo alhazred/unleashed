@@ -3035,9 +3035,6 @@ nfs_validate_proto_prop(int index, char *name, char *value)
 {
 	int ret = SA_OK;
 	char *cp;
-#ifdef lint
-	name = name;
-#endif
 	switch (proto_options[index].type) {
 	case OPT_TYPE_NUMBER:
 		if (!is_a_number(value))

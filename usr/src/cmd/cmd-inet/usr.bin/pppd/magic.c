@@ -29,9 +29,7 @@
 #include "pppd.h"
 #include "magic.h"
 
-#if !defined(lint) && !defined(_lint)
 static const char rcsid[] = RCSID;
-#endif
 
 #ifdef NO_DRAND48
 long mrand48 __P((void));

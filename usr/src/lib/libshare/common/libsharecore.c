@@ -1630,9 +1630,6 @@ update_legacy_config(sa_handle_t handle)
 	 * no longer used -- this is a placeholder in case we need to
 	 * add it back later.
 	 */
-#ifdef lint
-	handle = handle;
-#endif
 }
 
 /*

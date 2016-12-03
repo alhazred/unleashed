@@ -33,9 +33,7 @@
 ** Written by Trevor John Thompson
  */
 #ifdef M_RCSID
-#ifndef lint
 static char rcsID[] = "$Header: /rd/src/libc/i18n/rcs/m_strmsg.c 1.5 1992/07/16 19:08:40 tj Exp $";
-#endif
 #endif
 
 #define	I18N	1	/* InternationalizatioN on */

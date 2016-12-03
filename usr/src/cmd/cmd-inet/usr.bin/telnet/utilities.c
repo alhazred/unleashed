@@ -42,20 +42,11 @@
  * SUCH DAMAGE.
  */
 
-#ifndef lint
 static char sccsid[] = "@(#)utilities.c	8.1 (Berkeley) 6/6/93";
-#endif /* not lint */
 
 #define	TELOPTS
-#ifdef	lint
-static char *telcmds[] = {0};
-static char *slc_names[] = {0};
-static char *encrypt_names[] = {0};
-static char *enctype_names[] = {0};
-#else	/* lint */
 #define	TELCMDS
 #define	SLC_NAMES
-#endif	/* lint */
 #include <arpa/telnet.h>
 #include <sys/types.h>
 #include <sys/time.h>

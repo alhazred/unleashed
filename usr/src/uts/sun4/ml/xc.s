@@ -26,12 +26,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(lint)
-#include <sys/types.h>
-#include <sys/cpuvar.h>
-#else	/*lint */
 #include "assym.h"
-#endif	/* lint */
 
 #include <sys/param.h>
 #include <sys/asm_linkage.h>
@@ -50,14 +45,6 @@
 #endif /* TRAPTRACE */
 
 
-#if defined(lint)
-
-/* ARGSUSED */
-void
-send_self_xcall(struct cpu *cpu, uint64_t arg1, uint64_t arg2, xcfunc_t *func)
-{}
-
-#else
 /*
  * For a x-trap request to the same processor, just send a fast trap.
  * Does not accept inums.
@@ -67,13 +54,7 @@ send_self_xcall(struct cpu *cpu, uint64_t arg1, uint64_t arg2, xcfunc_t *func)
 	retl
 	nop
 	SET_SIZE(send_self_xcall)
-#endif	/* lint */
 
-#if defined(lint)
-void
-idle_stop_xcall(void)
-{}
-#else
 /*
  * idle or stop xcall handler.
  *
@@ -99,5 +80,4 @@ idle_stop_xcall(void)
 	  movl	%xcc, XCALL_PIL, %g4
 	SET_SIZE(idle_stop_xcall)
 
-#endif	/* lint */
 

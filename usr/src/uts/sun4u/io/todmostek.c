@@ -226,9 +226,6 @@ todm_set_power_alarm(timestruc_t ts)
 	tod = utc_to_tod(ts.tv_sec);
 
 	c = CLOCK->clk_flags; /* clear alarm intr flag by reading the reg */
-#ifdef lint
-	CLOCK->clk_flags = c;
-#endif
 	CLOCK->clk_interrupts &= ~CLK_ALARM_ENABLE; /* disable alarm intr */
 
 	CLOCK->clk_day &= ~CLK_FREQT; /* keep Freqency Test bit cleared */
@@ -253,9 +250,6 @@ todm_clear_power_alarm()
 
 	c = CLOCK->clk_flags; /* clear alarm intr flag by reading the reg */
 
-#ifdef lint
-	CLOCK->clk_flags = c;
-#endif
 
 	CLOCK->clk_interrupts &= ~CLK_ALARM_ENABLE; /* disable alarm intr */
 }

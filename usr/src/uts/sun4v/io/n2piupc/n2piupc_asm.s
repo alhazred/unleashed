@@ -36,19 +36,6 @@
 
 /*LINTLIBRARY*/
 
-#if defined(lint)
-
-/*ARGSUSED*/	
-int
-n2piupc_get_perfreg(cntr_handle_t handle, int regid, uint64_t *data)
-{ return (0); }
-
-/*ARGSUSED*/	
-int
-n2piupc_set_perfreg(cntr_handle_t handle, int regid, uint64_t data)
-{ return (0); }
-
-#else /* lint */
 
 	ENTRY(n2piupc_get_perfreg)
 	mov	N2PIU_GET_PERFREG, %o5
@@ -66,4 +53,3 @@ n2piupc_set_perfreg(cntr_handle_t handle, int regid, uint64_t data)
 	nop
 	SET_SIZE(n2piupc_set_perfreg)
 
-#endif

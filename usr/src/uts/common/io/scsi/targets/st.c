@@ -28,9 +28,6 @@
  * SCSI	 SCSA-compliant and not-so-DDI-compliant Tape Driver
  */
 
-#if defined(lint) && !defined(DEBUG)
-#define	DEBUG	1
-#endif
 
 #include <sys/modctl.h>
 #include <sys/scsi/scsi.h>
@@ -675,14 +672,12 @@ static void st_debug_cmds(struct scsi_tape *un, int com, int count, int wait);
 #endif /* STDEBUG */
 static char *st_dev_name(dev_t dev);
 
-#if !defined(lint)
 _NOTE(SCHEME_PROTECTS_DATA("unique per pkt",
     scsi_pkt buf uio scsi_cdb uscsi_cmd))
 _NOTE(SCHEME_PROTECTS_DATA("unique per pkt", scsi_extended_sense scsi_status))
 _NOTE(SCHEME_PROTECTS_DATA("unique per pkt", recov_info))
 _NOTE(SCHEME_PROTECTS_DATA("stable data", scsi_device))
 _NOTE(DATA_READABLE_WITHOUT_LOCK(st_drivetype scsi_address))
-#endif
 
 /*
  * autoconfiguration routines.
@@ -6820,9 +6815,7 @@ st_done_and_mutex_exit(struct scsi_tape *un, struct buf *bp)
 	pkt_info *pktinfo = pkt->pkt_private;
 
 	ASSERT(MUTEX_HELD(&un->un_sd->sd_mutex));
-#if !defined(lint)
 	_NOTE(LOCK_RELEASED_AS_SIDE_EFFECT(&un->un_sd->sd_mutex))
-#endif
 
 	ST_FUNC(ST_DEVINFO, st_done_and_mutex_exit);
 
@@ -16792,9 +16785,7 @@ st_recov_ret(struct scsi_tape *un, st_err_info *errinfo, errstate err)
 	ST_FUNC(ST_DEVINFO, st_recov_ret);
 
 	ASSERT(MUTEX_HELD(&un->un_sd->sd_mutex));
-#if !defined(lint)
 	_NOTE(LOCK_RELEASED_AS_SIDE_EFFECT(&un->un_sd->sd_mutex))
-#endif
 
 	bp = errinfo->ei_failing_bp;
 	kmem_free(errinfo, ST_ERR_INFO_SIZE);

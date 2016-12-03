@@ -32,9 +32,6 @@
  * only by DR for the copy-rename sequence.
  */
 
-#if defined(lint)
-#include <sys/types.h>
-#endif /* lint */
 
 #include <sys/sun4asi.h>
 #include <sys/privregs.h>
@@ -44,31 +41,6 @@
 #include <sys/mmu.h>
 #include <sys/cheetahasm.h>
 
-#if defined(lint)
-
-/*ARGSUSED*/
-void
-bcopy32_il(uint64_t paddr1, uint64_t paddr2)
-{}
-
-void
-flush_dcache_il(void)
-{}
-
-void
-flush_icache_il(void)
-{}
-
-void
-flush_pcache_il(void)
-{}
-
-/*ARGSUSED*/
-void
-flush_ecache_il(uint64_t physaddr, uint_t size, uint_t linesz)
-{}
-
-#else /* lint */
 
 	!
 	! bcopy32_il
@@ -206,5 +178,4 @@ flush_ecache_il(uint64_t physaddr, uint_t size, uint_t linesz)
 	ECACHE_FLUSHALL(%o1, %o2, %o0, %o3)
 	.end
 
-#endif /* lint */
 
