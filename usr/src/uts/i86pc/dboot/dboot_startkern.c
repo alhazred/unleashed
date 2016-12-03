@@ -1390,13 +1390,6 @@ build_page_tables(void)
 	DBG_MSG("\nPage tables constructed\n");
 }
 
-#define	NO_MULTIBOOT	\
-"multiboot is no longer used to boot the Solaris Operating System.\n\
-The grub entry should be changed to:\n\
-kernel$ /platform/i86pc/kernel/$ISADIR/unix\n\
-module$ /platform/i86pc/$ISADIR/boot_archive\n\
-See http://illumos.org/msg/SUNOS-8000-AK for details.\n"
-
 /*
  * startup_kernel has a pretty simple job. It builds pagetables which reflect
  * 1:1 mappings for all memory in use. It then also adds mappings for
@@ -1441,10 +1434,6 @@ startup_kernel(void)
 	DBG_MSG("\n\nSolaris prekernel set: ");
 	DBG_MSG(cmdline);
 	DBG_MSG("\n");
-
-	if (strstr(cmdline, "multiboot") != NULL) {
-		dboot_panic(NO_MULTIBOOT);
-	}
 
 	/*
 	 * boot info must be 16 byte aligned for 64 bit kernel ABI

@@ -38,7 +38,6 @@ UTSBASE	= ../..
 #
 UNIX		= unix
 DBOOT		= dboot
-MULTIBOOT	= multiboot
 
 OBJECTS		= $(SPECIAL_OBJS:%=$(OBJS_DIR)/%) \
 		  $(CORE_OBJS:%=$(OBJS_DIR)/%) \
@@ -46,7 +45,6 @@ OBJECTS		= $(SPECIAL_OBJS:%=$(OBJS_DIR)/%) \
 		  $(MACH_NOT_YET_KMODS:%=$(OBJS_DIR)/%)
 
 ROOTMODULE	= $(ROOT_PSM_KERN_DIR)/$(UNIX)
-ROOT_MULTIBOOT	= $(ROOT_PSM_DIR)/$(MULTIBOOT)
 
 UNIX_BIN	= $(OBJS_DIR)/$(UNIX)
 
@@ -73,8 +71,8 @@ include $(UTSBASE)/i86pc/Makefile.i86pc
 #
 #	Define targets
 #
-ALL_TARGET	= $(UNIX_BIN) $(MULTIBOOT)
-INSTALL_TARGET	= $(UNIX_BIN) $(MULTIBOOT) $(ROOTMODULE) $(ROOT_MULTIBOOT)
+ALL_TARGET	= $(UNIX_BIN)
+INSTALL_TARGET	= $(UNIX_BIN) $(ROOTMODULE)
 
 #
 #	This is UNIX_DIR. Use a short path.
@@ -107,7 +105,7 @@ CLEANFILES	+= \
 	$(ZLIB_OBJS:%.o=$(OBJS_DIR)/%.o) \
 	$(ZLIB_OBJS:%.o=$(OBJS_DIR)/%.ln)
 
-CLOBBERFILES	= $(CLEANFILES) $(UNIX_BIN) $(MULTIBOOT)
+CLOBBERFILES	= $(CLEANFILES) $(UNIX_BIN)
 
 # instr_size needs a special header
 $(OBJS_DIR)/instr_size.o :=	EXTRA_OPTIONS	= -I$(SRC)/common/dis/i386
@@ -177,14 +175,6 @@ $(DBOOT_O):	$(DBOOT_BIN)
 
 $(DBOOT_OBJS_DIR):
 	-@mkdir -p $@ 2> /dev/null
-
-#
-# dboot is built as an intermediate target in dboot.o, so just make
-# dboot.o the dependency here.
-#
-$(MULTIBOOT):	$(DBOOT_O)
-	$(CP)	$(DBOOT_BIN) $(MULTIBOOT)
-	$(POST_PROCESS)
 
 #
 #	Special rules for generating assym.h for inclusion in assembly files.

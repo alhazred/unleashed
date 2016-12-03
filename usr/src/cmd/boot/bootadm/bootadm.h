@@ -172,12 +172,6 @@ extern int bootadm_digest(const char *, char **);
 /* ZFS boot option */
 #define	ZFS_BOOT	"-B $ZFS-BOOTFS"
 
-/* multiboot */
-#define	MULTI_BOOT	"/platform/i86pc/multiboot"
-#define	MULTI_BOOT_FAILSAFE	"/boot/multiboot"
-#define	MULTI_BOOT_FAILSAFE_UNIX	"kernel/unix"
-#define	MULTI_BOOT_FAILSAFE_LINE	"/boot/multiboot kernel/unix -s"
-
 /* directboot kernels */
 #define	DIRECT_BOOT_32	"/platform/i86pc/kernel/unix"
 #define	DIRECT_BOOT_64	"/platform/i86pc/kernel/amd64/unix"
