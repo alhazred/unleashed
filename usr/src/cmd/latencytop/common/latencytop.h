@@ -35,16 +35,6 @@ extern "C" {
 #endif
 
 /*
- * Without this lint seems to be confused by glib header file.
- */
-#ifdef __lint
-#undef g_assert
-#define	g_assert(x)	((void)(x))
-#undef TRUE
-#define	TRUE		1
-#endif
-
-/*
  * We define our own conversions in order to avoid compiler warnings.
  */
 #define	LT_INT_TO_POINTER(a)	((void *)(unsigned long)(a))

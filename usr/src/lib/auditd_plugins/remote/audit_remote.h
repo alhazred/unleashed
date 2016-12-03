@@ -35,12 +35,6 @@ extern "C" {
 #include <stdio.h>
 #include <security/auditd.h>
 
-/* gettext() obfuscation routine for lint */
-#ifdef __lint
-#define	gettext(x)	x
-#endif
-
-
 /* send_record() return code */
 enum send_record_rc {
 	SEND_RECORD_SUCCESS,

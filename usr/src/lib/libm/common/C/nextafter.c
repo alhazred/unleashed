@@ -77,11 +77,9 @@ nextafter(double x, double y) {
 	if (k == 0x7ff) {
 		/* overflow */
 		return (_SVID_libm_err(x, y, 46));
-#if !defined(__lint)
 	} else if (k == 0) {
 		/* underflow */
 		dummy = DBL_MIN * copysign(DBL_MIN, x);
-#endif
 	}
 	return (ans);
 }

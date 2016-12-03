@@ -80,9 +80,6 @@ __base_conversion_set_exception(fp_exception_field_type ef)
 
 	/* Storage forces exception */
 	tstored = t * t;
-#if defined(__lint)
-	tstored = tstored;
-#endif
 }
 
 /*

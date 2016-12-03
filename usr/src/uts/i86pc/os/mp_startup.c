@@ -173,7 +173,6 @@ init_cpu_syscall(struct cpu *cp)
 	    is_x86_feature(x86_featureset, X86FSET_ASYSC)) {
 		uint64_t flags;
 
-#if !defined(__lint)
 		/*
 		 * The syscall instruction imposes a certain ordering on
 		 * segment selectors, so we double-check that ordering
@@ -182,7 +181,6 @@ init_cpu_syscall(struct cpu *cp)
 		ASSERT(KDS_SEL == KCS_SEL + 8);
 		ASSERT(UDS_SEL == U32CS_SEL + 8);
 		ASSERT(UCS_SEL == U32CS_SEL + 16);
-#endif
 		/*
 		 * Turn syscall/sysret extensions on.
 		 */
@@ -217,7 +215,6 @@ init_cpu_syscall(struct cpu *cp)
 	if (is_x86_feature(x86_featureset, X86FSET_MSR) &&
 	    is_x86_feature(x86_featureset, X86FSET_SEP)) {
 
-#if !defined(__lint)
 		/*
 		 * The sysenter instruction imposes a certain ordering on
 		 * segment selectors, so we double-check that ordering
@@ -232,7 +229,6 @@ init_cpu_syscall(struct cpu *cp)
 
 		ASSERT64(U32CS_SEL == ((KCS_SEL + 16) | 3));
 		ASSERT64(UDS_SEL == U32CS_SEL + 8);
-#endif
 
 		cpu_sep_enable();
 
@@ -385,9 +381,7 @@ mp_cpu_configure_common(int cpun, boolean_t boot)
 	/*
 	 * Allocate page for new GDT and initialize from current GDT.
 	 */
-#if !defined(__lint)
 	ASSERT((sizeof (*cp->cpu_gdt) * NGDT) <= PAGESIZE);
-#endif
 	cp->cpu_gdt = kmem_zalloc(PAGESIZE, KM_SLEEP);
 	bcopy(CPU->cpu_gdt, cp->cpu_gdt, (sizeof (*cp->cpu_gdt) * NGDT));
 
@@ -406,9 +400,7 @@ mp_cpu_configure_common(int cpun, boolean_t boot)
 	 * cmpxchgl register bug
 	 */
 	if (system_hardware.hd_nodes && x86_type != X86_TYPE_P5) {
-#if !defined(__lint)
 		ASSERT((sizeof (*CPU->cpu_idt) * NIDT) <= PAGESIZE);
-#endif
 		cp->cpu_idt = kmem_zalloc(PAGESIZE, KM_SLEEP);
 		bcopy(CPU->cpu_idt, cp->cpu_idt, PAGESIZE);
 	} else {

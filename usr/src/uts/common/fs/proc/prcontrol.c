@@ -966,9 +966,7 @@ pr_control32(int32_t cmd, arg32_t *argp, prnode_t *pnp, cred_t *cr)
 			 */
 			prcred_t *prcred = (prcred_t *)&argp->prcred;
 
-#ifndef __lint
 			ASSERT(sizeof (prcred_t) == sizeof (prcred32_t));
-#endif
 
 			error = pr_scred(p, prcred, cr, cmd == PCSCREDX);
 			break;

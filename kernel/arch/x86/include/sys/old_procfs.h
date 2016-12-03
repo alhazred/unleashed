@@ -55,31 +55,6 @@ extern "C" {
 #if _STRUCTURED_PROC == 0
 
 /*
- * The old (ioctl-based) and new (structured) /proc interfaces define
- * related structures of the same name, but slightly diferent contents:
- *	prmap_t
- *	prcred_t
- * This doesn't hurt because you can't include both of these
- * in the same compilation unit:
- *	<sys/procfs.h>
- *	<sys/old_procfs.h>
- * unless _STRUCTURED_PROC is first defined to be 1.
- * (Including <procfs.h> defines it to be 1.)
- *
- * However, the latest version of lint goes overboard in hunting
- * down and reporting differences in functions and data of the
- * same name across multiple compilation units, even though there
- * is no real problem.  To mitigate this, we redefine the old procfs
- * names when performing lint.
- */
-#if defined(__lint)
-#define	prmap		Prmap
-#define	prmap_t		Prmap_t
-#define	prcred		Prcred
-#define	prcred_t	Prcred_t
-#endif	/* __lint */
-
-/*
  * ioctl codes and system call interfaces for /proc.
  */
 

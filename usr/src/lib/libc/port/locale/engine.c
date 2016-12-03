@@ -446,9 +446,6 @@ dissect(struct match *m, const char *start, const char *stop, sopno startst,
 			if (slow(m, sp, rest, ssub, esub) != NULL) {
 				dp = dissect(m, sp, rest, ssub, esub);
 				assert(dp == rest);
-#if defined(__lint)
-				(void) dp;
-#endif
 			} else		/* no */
 				assert(sp == rest);
 			sp = rest;

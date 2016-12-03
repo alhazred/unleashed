@@ -442,22 +442,6 @@ kctl_boot_activate(struct bootops *ops, void *romp, size_t memsz,
 {
 	void *old;
 
-#ifdef __lint
-	{
-	/*
-	 * krtld does a name-based symbol lookup to find this routine.  It then
-	 * casts the address it gets, calling the result.  We want to make sure
-	 * that the call in krtld stays in sync with the prototype for this
-	 * function, so we define a type (kctl_boot_activate_f) that matches the
-	 * current prototype.  The following assignment ensures that the type
-	 * still matches the declaration, with lint as the enforcer.
-	 */
-	kctl_boot_activate_f *kba = kctl_boot_activate;
-	if (kba == NULL)	/* Make lint think kba is actually used */
-		return (0);
-	}
-#endif
-
 	old = kctl_boot_tmpinit();	/* Set up temporary state */
 
 	ASSERT(ops != NULL);

@@ -32,31 +32,8 @@
 #include <sys/segments.h>
 #include <sys/trap.h>
 
-#if defined(__lint)
-#include <sys/types.h>
-#include <sys/systm.h>
-#include <sys/thread.h>
-#include <sys/archsystm.h>
-#include <sys/byteorder.h>
-#include <sys/dtrace.h>
-#include <sys/x86_archext.h>
-#else   /* __lint */
 #include "assym.h"
-#endif  /* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-rd_idtr(desctbr_t *idtr)
-{}
-
-/*ARGSUSED*/
-void
-wr_idtr(desctbr_t *idtr)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -91,21 +68,7 @@ wr_idtr(desctbr_t *idtr)
 	SET_SIZE(wr_idtr)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-rd_gdtr(desctbr_t *gdtr)
-{}
-
-/*ARGSUSED*/
-void
-wr_gdtr(desctbr_t *gdtr)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -152,22 +115,8 @@ wr_gdtr(desctbr_t *gdtr)
 	SET_SIZE(wr_gdtr)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 #if defined(__amd64)
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-load_segment_registers(selector_t cs, selector_t fs, selector_t gs,
-    selector_t ss)
-{}
-
-selector_t
-get_cs_register()
-{ return (0); }
-
-#else	/* __lint */
 
 	/*
 	 * loads zero selector for ds and es.
@@ -200,23 +149,8 @@ get_cs_register()
 	ret
 	SET_SIZE(get_cs_register)
 
-#endif	/* __lint */
 #elif defined(__i386)
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-load_segment_registers(
-    selector_t cs, selector_t ds, selector_t es,
-    selector_t fs, selector_t gs, selector_t ss)
-{}
-
-selector_t
-get_cs_register()
-{ return ((selector_t) 0); }
-
-#else	/* __lint */
 
 	ENTRY_NP(load_segment_registers)
 	pushl	%ebp
@@ -246,21 +180,8 @@ get_cs_register()
 	ret
 	SET_SIZE(get_cs_register)
 
-#endif	/* __lint */
 #endif	/* __i386 */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-wr_ldtr(selector_t ldtsel)
-{}
-
-selector_t
-rd_ldtr(void)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -291,16 +212,7 @@ rd_ldtr(void)
 	SET_SIZE(rd_ldtr)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-wr_tsr(selector_t tsssel)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -319,4 +231,3 @@ wr_tsr(selector_t tsssel)
 	SET_SIZE(wr_tsr)
 
 #endif	/* __i386 */
-#endif	/* __lint */

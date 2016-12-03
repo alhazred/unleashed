@@ -35,9 +35,6 @@
 #include	<fcntl.h>
 #include	"m4.h"
 
-#if defined(__lint)
-extern int yydebug;
-#endif
 
 #define	match(c, s)	(c == *s && (!s[1] || inpmatch(s+1)))
 
@@ -74,9 +71,6 @@ main(int argc, char **argv)
 	int i, opt_end = 0;
 	int sigs[] = {SIGHUP, SIGINT, SIGPIPE, 0};
 
-#if defined(__lint)
-	yydebug = 0;
-#endif
 
 	for (i = 0; sigs[i]; ++i) {
 		if (signal(sigs[i], SIG_IGN) != SIG_IGN)
@@ -529,19 +523,15 @@ expand(wchar_t **a1, int c)
 	sp = (struct nlist *)a1[-1];
 
 	if (sp->tflag || trace) {
-#if !defined(__lint)	/* lint doesn't grok "%ws" */
 		int	i;
 
 		(void) fprintf(stderr,
 		    "Trace(%d): %ws", Cp-callst, a1[0]);
-#endif
 
 		if (c > 0) {
-#if !defined(__lint)	/* lint doesn't grok "%ws" */
 			(void) fprintf(stderr, "(%ws", chkbltin(a1[1]));
 			for (i = 2; i <= c; ++i)
 				(void) fprintf(stderr, ",%ws", chkbltin(a1[i]));
-#endif
 			(void) fprintf(stderr, ")");
 		}
 		(void) fprintf(stderr, "\n");

@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 #if defined(__i386) || defined(__amd64)
 
@@ -94,7 +93,6 @@ mmu_tlbflush_entry(caddr_t addr)
 
 #endif	/* __i386 || __amd64 */
 
-#endif	/* !__lint && __GNUC__ */
 
 #ifdef	__cplusplus
 }

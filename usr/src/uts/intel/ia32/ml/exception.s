@@ -54,13 +54,6 @@
  * only one routine in this file is interesting to lint
  */
 
-#if defined(__lint)
-
-void
-ndptrap_frstor(void)
-{}
-
-#else
 
 #include "assym.h"
 
@@ -1531,4 +1524,3 @@ check_for_user_address:
 	MKIVCT(254)
 	MKIVCT(255)
 
-#endif	/* __lint */

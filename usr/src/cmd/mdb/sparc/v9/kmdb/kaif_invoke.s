@@ -34,7 +34,6 @@
  * Kernel function call invocation
  */
 
-#if !defined(__lint)
 
 	.section	RODATA
 	.align		8
@@ -53,17 +52,7 @@ copyargs:
 copyargsend:
 	.xword	cp6arg
 
-#endif	/* __lint */
 
-#if defined(__lint)
-/*ARGSUSED*/
-uintptr_t
-kaif_invoke(uintptr_t funcva, uint_t argc, const uintptr_t *argv, 
-    kreg_t g6, kreg_t g7)
-{
-	return (0);
-}
-#else
 
 	ENTRY_NP(kaif_invoke)
 
@@ -153,4 +142,3 @@ cp0arg:
 
 	SET_SIZE(kaif_invoke)
 	
-#endif

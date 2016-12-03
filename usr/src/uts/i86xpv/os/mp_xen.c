@@ -261,9 +261,7 @@ mp_set_cpu_context(vcpu_guest_context_t *vgc, cpu_t *cp)
 	/*
 	 * Initialize the trap_info_t from the IDT
 	 */
-#if !defined(__lint)
 	ASSERT(NIDT == sizeof (vgc->trap_ctxt) / sizeof (vgc->trap_ctxt[0]));
-#endif
 	for (vec = 0; vec < NIDT; vec++) {
 		trap_info_t *ti = &vgc->trap_ctxt[vec];
 

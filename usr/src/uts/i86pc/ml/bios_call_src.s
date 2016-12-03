@@ -26,11 +26,6 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(__lint)
-
-int silence_lint = 0;
-
-#else
 
 #include <sys/segments.h>
 #include <sys/controlregs.h>
@@ -562,4 +557,3 @@ idt_info:
  * We need to trampoline thru a gdt we have in low memory.
  */
 #include "../boot/boot_gdt.s"
-#endif /* __lint */

@@ -29,8 +29,6 @@
 
 #include <sys/ccompile.h>
 
-#if !defined(__lint) && defined(__GNUC__)
-
 /* inlines for gcc */
 
 /*
@@ -331,7 +329,5 @@ ht_pause(void)
 }
 
 #endif	/* __x86 */
-
-#endif	/* !__lint && __GNUC__ */
 
 #endif	/* _THR_INLINES_H */

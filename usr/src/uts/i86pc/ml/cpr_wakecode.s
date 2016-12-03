@@ -29,10 +29,8 @@
 #include <sys/x86_archext.h>
 #include <sys/cpr_wakecode.h>
 
-#if !defined(__lint)
 #include <sys/segments.h>
 #include "assym.h"
-#endif
 
 #ifdef  DEBUG
 #define LED     1

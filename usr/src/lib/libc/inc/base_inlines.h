@@ -30,8 +30,6 @@
 #include <sys/ccompile.h>
 #include <sys/types.h>
 
-#if !defined(__lint) && defined(__GNUC__)
-
 /*
  * This file is intended to contain gcc-style inline assembly for all
  * architectures.  At the moment these inlines exist only for sparc and
@@ -130,7 +128,5 @@ __set_ieee_flags(__ieee_flags_type *b)
 	    : "m" (*b));
 }
 #endif	/* __sparc */
-
-#endif	/* !__lint && __GNUC__ */
 
 #endif	/* _BASE_INLINES_H */

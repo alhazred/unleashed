@@ -13,9 +13,7 @@
  * Copyright 2015 Joyent, Inc.
  */
 
-#if !defined(__lint)
 	.file	"unix_sup.s"
-#endif /* __lint */
 
 /*
  * Support routines for the unix kmdb module
@@ -23,19 +21,6 @@
 
 #include <sys/asm_linkage.h>
 
-#if defined(__lint)
-
-#include <sys/types.h>
-
-ulong_t
-kmdb_unix_getcr0(void)
-{ return (0); }
-
-ulong_t
-kmdb_unix_getcr4(void)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 	ENTRY(kmdb_unix_getcr0)
@@ -61,4 +46,3 @@ kmdb_unix_getcr4(void)
 
 #endif	/* __i386 */
 
-#endif /* __lint */

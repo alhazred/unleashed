@@ -36,9 +36,6 @@
 static PyObject *ZFSError;
 static int zfsdevfd;
 
-#ifdef __lint
-#define	dgettext(x, y) y
-#endif
 
 #define	_(s) dgettext(TEXT_DOMAIN, s)
 

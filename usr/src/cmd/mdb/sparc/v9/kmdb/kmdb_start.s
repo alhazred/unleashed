@@ -29,9 +29,6 @@
 #include <sys/asm_linkage.h>
 #include <sys/privregs.h>
 
-#if defined(__lint)
-#include <kmdb/kmdb_start.h>
-#endif
 
 #include <kmdb/kaif_asmutil.h>
 
@@ -41,12 +38,6 @@
  * before entering the debugger.  Subsequent re-entries will longjmp their
  * way in.
  */
-#if defined(__lint)
-void
-kmdb_first_start(void)
-{
-}
-#else	/* __lint */
 
 	ENTRY(kmdb_first_start)
 
@@ -75,5 +66,4 @@ kmdb_first_start(void)
 	nop
 
 	SET_SIZE(kmdb_first_start)
-#endif
 

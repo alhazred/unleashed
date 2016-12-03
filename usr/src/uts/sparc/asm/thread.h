@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 struct _kthread;
 
@@ -84,7 +83,6 @@ callee(void)
 	return (__value);
 }
 
-#endif	/* !__lint && __GNUC__ */
 
 #ifdef	__cplusplus
 }

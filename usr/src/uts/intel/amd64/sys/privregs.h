@@ -253,7 +253,6 @@ struct regs {
 #include <sys/controlregs.h>
 
 #if defined(_KERNEL) && !defined(_ASM)
-#if !defined(__lint) && defined(__GNUC__)
 
 extern __GNU_INLINE ulong_t
 getcr8(void)
@@ -275,12 +274,6 @@ setcr8(ulong_t value)
 	    : "r" (value));
 }
 
-#else
-
-extern ulong_t getcr8(void);
-extern void setcr8(ulong_t);
-
-#endif	/* !defined(__lint) && defined(__GNUC__) */
 #endif	/* _KERNEL && !_ASM */
 
 /* Control register layout for panic dump */

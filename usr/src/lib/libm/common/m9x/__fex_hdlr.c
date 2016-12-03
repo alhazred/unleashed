@@ -358,10 +358,8 @@ not_ieee:
 		sigaction(SIGFPE, &act, NULL);
 		kill(getpid(), SIGFPE);
 		break;
-#if !defined(__lint)
 	case (unsigned long)SIG_IGN:
 		break;
-#endif
 	default:
 		act.sa_handler(sig, sip, uap);
 	}
@@ -729,10 +727,8 @@ not_ieee:
 		sigaction(SIGFPE, &act, NULL);
 		kill(getpid(), SIGFPE);
 		break;
-#if !defined(__lint)
 	case (unsigned long)SIG_IGN:
 		break;
-#endif
 	default:
 		act.sa_handler(sig, &osip, uap);
 	}

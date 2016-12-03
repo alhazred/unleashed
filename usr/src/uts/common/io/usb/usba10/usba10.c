@@ -71,7 +71,6 @@ _info(struct modinfo *modinfop)
  * Turn off lint checking of this module because it will find duplicate names
  * defined here and in the usbai.c source for the usba module.
  */
-#ifndef __lint
 
 int
 usb_register_client(
@@ -850,4 +849,3 @@ usb_release_access(usb_serialization_t usb_serp)
 	usba10_usb_release_access(usb_serp);
 }
 
-#endif

@@ -26,11 +26,6 @@
 
 #include <sys/asm_linkage.h>
 
-#if defined(__lint)
-
-char stubs_base[1], stubs_end[1];
-
-#else	/* __lint */
 
 #include "assym.h"
 
@@ -1411,4 +1406,3 @@ fcnname##_info:							\
 	ENTRY_NP(stubs_end)
 	nop
 
-#endif	/* lint */

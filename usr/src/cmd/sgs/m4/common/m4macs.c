@@ -184,9 +184,7 @@ dump(wchar_t *name, wchar_t *defnn)
 {
 	wchar_t	*s = defnn;
 
-#if !defined(__lint)	/* lint doesn't grok "%ws" */
 	(void) fprintf(stderr, "%ws:\t", name);
-#endif
 
 	while (*s++)
 		;
@@ -195,11 +193,9 @@ dump(wchar_t *name, wchar_t *defnn)
 	while (s > defnn) {
 		--s;
 		if (is_builtin(*s)) {
-#if !defined(__lint)	/* lint doesn't grok "%ws" */
 			(void) fprintf(stderr, "<%ws>",
 			    barray[builtin_idx(*s)].bname);
 		} else {
-#endif
 			(void) fputwc(*s, stderr);
 		}
 	}
@@ -210,10 +206,8 @@ dump(wchar_t *name, wchar_t *defnn)
 static void
 doerrp(wchar_t **ap, int c)
 {
-#if !defined(__lint)	/* lint doesn't grok "%ws" */
 	if (c > 0)
 		(void) fprintf(stderr, "%ws", ap[1]);
-#endif
 }
 
 long	evalval;	/* return value from yacc stuff */

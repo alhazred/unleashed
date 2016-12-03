@@ -46,9 +46,6 @@ extern "C" {
  * Lint can't handle static's in include files.
  * Complains "defined but not used" and then "used but not defined"
  */
-#ifdef __lint
-#define	static
-#endif
 
 /*
  * Permuted-choice 1 from the key bits

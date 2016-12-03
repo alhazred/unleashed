@@ -30,9 +30,6 @@
  * Debugger entry for both master and slave CPUs
  */
 
-#if defined(__lint)
-#include <sys/types.h>
-#endif
 
 #include <sys/segments.h>
 #include <sys/asm_linkage.h>
@@ -209,12 +206,6 @@
  * The main entry point for master CPUs.  It also serves as the trap handler
  * for all traps and interrupts taken during single-step.
  */
-#if defined(__lint)
-void
-kdi_cmnint(void)
-{
-}
-#else	/* __lint */
 
  	/* XXX implement me */
 	ENTRY_NP(kdi_nmiint)
@@ -361,7 +352,6 @@ kdi_cmnint(void)
 	SET_SIZE(kdi_master_entry)
 	SET_SIZE(kdi_cmnint)
 
-#endif	/* __lint */
 
 /*
  * The cross-call handler for slave CPUs.
@@ -373,14 +363,6 @@ kdi_cmnint(void)
  * master.
  */
 
-#if defined(__lint)
-char kdi_slave_entry_patch;
-
-void
-kdi_slave_entry(void)
-{
-}
-#else /* __lint */
 	.globl	kdi_slave_entry_patch;
 
 	ENTRY_NP(kdi_slave_entry)
@@ -452,7 +434,6 @@ kdi_slave_entry_patch:
 
 	SET_SIZE(kdi_slave_entry)
 
-#endif	/* __lint */
 
 /*
  * The state of the world:
@@ -467,7 +448,6 @@ kdi_slave_entry_patch:
  * we want to clear out bits 16-31 of the saved selectors, as the
  * selector pushls don't automatically clear them.
  */
-#if !defined(__lint)
 
 	ENTRY_NP(kdi_save_common_state)
 
@@ -582,18 +562,11 @@ no_msr:
 
 	SET_SIZE(kdi_save_common_state)
 
-#endif	/* !__lint */
 
 /*
  * Resume the world.  The code that calls kdi_resume has already
  * decided whether or not to restore the IDT.
  */
-#if defined(__lint)
-void
-kdi_resume(void)
-{
-}
-#else	/* __lint */
 
 	/* cpusave in %eax */
 	ENTRY_NP(kdi_resume)
@@ -641,9 +614,7 @@ kdi_resume(void)
 	IRET
 
 	SET_SIZE(kdi_resume)
-#endif	/* __lint */
 
-#if !defined(__lint)
 
 	ENTRY_NP(kdi_pass_to_kernel)
 
@@ -717,15 +688,7 @@ kpass_invaltrap:
 
 	SET_SIZE(kdi_reboot)
 
-#endif	/* !__lint */
 
-#if defined(__lint)
-/*ARGSUSED*/
-void
-kdi_cpu_debug_init(kdi_cpusave_t *save)
-{
-}
-#else	/* __lint */
 
 	ENTRY_NP(kdi_cpu_debug_init)
 	pushl	%ebp
@@ -744,5 +707,4 @@ kdi_cpu_debug_init(kdi_cpusave_t *save)
 	ret
 
 	SET_SIZE(kdi_cpu_debug_init)
-#endif	/* !__lint */
 

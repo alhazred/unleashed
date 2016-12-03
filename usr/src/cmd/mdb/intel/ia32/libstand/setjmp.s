@@ -26,9 +26,6 @@
 	
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(__lint)
-#include <setjmp.h>
-#endif
 
 #include <sys/asm_linkage.h>
 
@@ -49,21 +46,6 @@
  * env[5] = %eip	 20
  */
 
-#if defined(__lint)
-/* ARGSUSED */
-int 
-setjmp(jmp_buf env)
-{
-	return (0);
-}
-
-/* ARGSUSED */
-int
-sigsetjmp(sigjmp_buf env, int savemask)
-{
-	return (0);
-}
-#else	/* __lint */
 
 	ENTRY(setjmp)
 	ALTENTRY(sigsetjmp)
@@ -80,21 +62,7 @@ sigsetjmp(sigjmp_buf env, int savemask)
 	SET_SIZE(sigsetjmp)
 	SET_SIZE(setjmp)
 
-#endif	/* __lint */
 
-#if defined(__lint)
-/* ARGSUSED */
-void 
-longjmp(jmp_buf env, int val)
-{
-}
-
-/* ARGSUSED */
-void 
-siglongjmp(sigjmp_buf env, int val)
-{
-}
-#else	/* __lint */
 
 	ENTRY(longjmp)
 	ALTENTRY(siglongjmp)
@@ -113,4 +81,3 @@ siglongjmp(sigjmp_buf env, int val)
 	SET_SIZE(siglongjmp)
 	SET_SIZE(longjmp)
 
-#endif	/* __lint */

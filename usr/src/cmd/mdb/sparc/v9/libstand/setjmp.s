@@ -26,9 +26,6 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(__lint)
-#include <setjmp.h>
-#endif
 
 #include <sys/asm_linkage.h>
 
@@ -41,34 +38,17 @@
  * since the latter is smaller than the former.
  */
 
-#if !defined(__lint)
 JB_FLAGS	= (0*8)	! offsets in jmpbuf (see sigsetjmp.c)
 JB_SP		= (1*8)	! words 5 through 11 are unused!
 JB_PC		= (2*8)
 JB_FP		= (3*8)
 JB_I7		= (4*8)
-#endif
 
 /*
  * setjmp(buf_ptr)
  * buf_ptr points to a twelve word array (jmp_buf)
  */
 
-#if defined(__lint)
-/* ARGSUSED */
-int 
-setjmp(jmp_buf env)
-{
-	return (0);
-}
-
-/* ARGSUSED */
-int
-sigsetjmp(sigjmp_buf env, int savemask)
-{
-	return (0);
-}
-#else	/* __lint */
 
 	ENTRY(setjmp)
 	ALTENTRY(sigsetjmp)
@@ -83,7 +63,6 @@ sigsetjmp(sigjmp_buf env, int savemask)
 	clr	%o0			! return (0)
 
 	SET_SIZE(setjmp)
-#endif	/* __lint */
 
 /*
  * longjmp(buf_ptr, val)
@@ -119,19 +98,6 @@ sigsetjmp(sigjmp_buf env, int savemask)
  * routines that call setjmp() must not be flat.
  */
 
-#if defined(__lint)
-/* ARGSUSED */
-void 
-longjmp(jmp_buf env, int val)
-{
-}
-
-/* ARGSUSED */
-void 
-siglongjmp(sigjmp_buf env, int val)
-{
-}
-#else	/* __lint */
 
 	ENTRY(longjmp)
 	ALTENTRY(siglongjmp)
@@ -170,4 +136,3 @@ siglongjmp(sigjmp_buf env, int val)
 	mov	%o1, %o0		! return (val)
 
 	SET_SIZE(longjmp)
-#endif	/* __lint */

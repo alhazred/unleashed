@@ -408,7 +408,6 @@ fpnoextflt(struct regs *rp)
 {
 	struct fpu_ctx *fp = &ttolwp(curthread)->lwp_pcb.pcb_fpu;
 
-#if !defined(__lint)
 	ASSERT(sizeof (struct fxsave_state) == 512 &&
 	    sizeof (struct fnsave_state) == 108);
 	ASSERT((offsetof(struct fxsave_state, fx_xmm[0]) & 0xf) == 0);
@@ -418,7 +417,6 @@ fpnoextflt(struct regs *rp)
 #if defined(__i386)
 	ASSERT(sizeof (struct _fpu) == sizeof (struct __old_fpu));
 #endif	/* __i386 */
-#endif	/* !__lint */
 
 	/*
 	 * save area MUST be 16-byte aligned, else will page fault

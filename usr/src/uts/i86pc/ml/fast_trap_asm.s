@@ -30,14 +30,6 @@
 #include <sys/regset.h>
 #include <sys/psw.h>
 
-#if defined(__lint)
-
-#include <sys/types.h>
-#include <sys/thread.h>
-#include <sys/systm.h>
-#include <sys/lgrp.h>
-
-#else   /* __lint */
 
 #include <sys/pcb.h>
 #include <sys/trap.h>
@@ -49,41 +41,8 @@
 
 #include "assym.h"
 
-#endif	/* __lint */
 
 
-#if defined(__lint)
-
-hrtime_t
-get_hrtime(void)
-{ return (0); }
-
-hrtime_t
-get_hrestime(void)
-{
-	hrtime_t ts;
-
-	gethrestime((timespec_t *)&ts);
-	return (ts);
-}
-
-hrtime_t
-gethrvtime(void)
-{
-	klwp_t *lwp = ttolwp(curthread);
-	struct mstate *ms = &lwp->lwp_mstate;
-
-	return (gethrtime() - ms->ms_state_start + ms->ms_acct[LMS_USER]);
-}
-
-uint64_t
-getlgrp(void)
-{
-	return (((uint64_t)(curthread->t_lpl->lpl_lgrpid) << 32) |
-			curthread->t_cpu->cpu_id);
-}
-
-#else	/* __lint */
 
 /*
  * XX64: We are assuming that libc continues to expect the 64-bit value being
@@ -224,4 +183,3 @@ getlgrp(void)
 
 #endif	/* __i386 */
 
-#endif	/* __lint */

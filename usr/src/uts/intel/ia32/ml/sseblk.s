@@ -29,12 +29,7 @@
 #include <sys/regset.h>
 #include <sys/privregs.h>
 
-#if defined(__lint)
-#include <sys/types.h>
-#include <sys/archsystm.h>
-#else
 #include "assym.h"
-#endif
 
 /*
  * Do block operations using Streaming SIMD extensions
@@ -77,14 +72,6 @@
 #error	"mucked up constants"
 #endif
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-hwblkclr(void *addr, size_t size)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 #define	ADD	addq
@@ -206,17 +193,8 @@ hwblkclr(void *addr, size_t size)
 	SET_SIZE(hwblkclr)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-hwblkpagecopy(const void *src, void *dst)
-{}
-
-#else	/* __lint */
 
 #define	PREFETCH_START(src)			\
 	prefetchnta	0x0(src);		\
@@ -374,23 +352,14 @@ hwblkpagecopy(const void *src, void *dst)
 	SET_SIZE(hwblkpagecopy)
 
 #endif	/* __i386 */
-#endif	/* __lint */
-
-#if defined(__lint)
 
 /*
  * Version of hwblkclr which doesn't use XMM registers.
  * Note that it requires aligned dst and len.
  *
  * XXPV This needs to be performance tuned at some point.
- *	Is 4 the best number of iterations to unroll?
+ *     Is 4 the best number of iterations to unroll?
  */
-/*ARGSUSED*/
-void
-block_zero_no_xmm(void *dst, int len)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -435,24 +404,14 @@ block_zero_no_xmm(void *dst, int len)
 	SET_SIZE(block_zero_no_xmm)
 
 #endif	/* __i386 */
-#endif	/* __lint */
-
-
-#if defined(__lint)
 
 /*
  * Version of page copy which doesn't use XMM registers.
  *
- * XXPV	This needs to be performance tuned at some point.
- *	Is 4 the right number of iterations to unroll?
- *	Is the load/store order optimal? Should it use prefetch?
+ * XXPV        This needs to be performance tuned at some point.
+ *     Is 4 the right number of iterations to unroll?
+ *     Is the load/store order optimal? Should it use prefetch?
  */
-/*ARGSUSED*/
-void
-page_copy_no_xmm(void *dst, void *src)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -503,7 +462,6 @@ page_copy_no_xmm(void *dst, void *src)
 	SET_SIZE(page_copy_no_xmm)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 #if defined(DEBUG) && !defined(__lint)
 	.text

@@ -41,20 +41,8 @@
 #include <sys/privregs.h>
 #include <sys/x86_archext.h>
 
-#if defined(__lint)
-#include <sys/types.h>
-#include <sys/fp.h>
-#else
 #include "assym.h"
-#endif
 
-#if defined(__lint)
- 
-uint_t
-fpu_initial_probe(void)
-{ return (0); }
-
-#else	/* __lint */
 
 	/*
 	 * Returns zero if x87 "chip" is present(!)
@@ -67,16 +55,7 @@ fpu_initial_probe(void)
 	ret
 	SET_SIZE(fpu_initial_probe)
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-fxsave_insn(struct fxsave_state *fx)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -95,7 +74,6 @@ fxsave_insn(struct fxsave_state *fx)
 
 #endif
 
-#endif	/* __lint */
 
 #if defined(__i386)
 
@@ -103,13 +81,6 @@ fxsave_insn(struct fxsave_state *fx)
  * If (num1/num2 > num1/num3) the FPU has the FDIV bug.
  */
 
-#if defined(__lint)
-
-int
-fpu_probe_pentium_fdivbug(void)
-{ return (0); }
-
-#else	/* __lint */
 
 	ENTRY_NP(fpu_probe_pentium_fdivbug)
 	fldl	.num1
@@ -136,7 +107,6 @@ fpu_probe_pentium_fdivbug(void)
 	.4byte	0x402dffff
 	SET_SIZE(fpu_probe_pentium_fdivbug)
 
-#endif	/* __lint */
 
 /*
  * To cope with processors that do not implement fxsave/fxrstor
@@ -144,21 +114,6 @@ fpu_probe_pentium_fdivbug(void)
  * when that feature has been detected.
  */
 
-#if defined(__lint)
-
-void
-patch_sse(void)
-{}
-
-void
-patch_sse2(void)
-{}
-
-void
-patch_xsave(void)
-{}
-
-#else	/* __lint */
 
 	ENTRY_NP(patch_sse)
 	_HOT_PATCH_PROLOG
@@ -211,17 +166,9 @@ _xrstor_ebx_insn:			/ see ndptrap_frstor()
 	.byte	0x0f, 0xae, 0x2b
 	SET_SIZE(patch_xsave)
 
-#endif	/* __lint */
 #endif	/* __i386 */
 
 #if defined(__amd64)
-#if defined(__lint)
-
-void
-patch_xsave(void)
-{}
-
-#else	/* __lint */
 
 	/*
 	 * Patch lazy fp restore instructions in the trap handler
@@ -259,7 +206,6 @@ _xrstor_rbx_insn:			/ see ndptrap_frstor()
 	.byte	0x48, 0x0f, 0xae, 0x2b
 	SET_SIZE(patch_xsave)
 
-#endif	/* __lint */
 #endif	/* __amd64 */
 
 /*
@@ -267,24 +213,6 @@ _xrstor_rbx_insn:			/ see ndptrap_frstor()
  * point context as part of the prolog of a context switch.
  */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-xsave_ctxt(void *arg)
-{}
-
-/*ARGSUSED*/
-void
-fpxsave_ctxt(void *arg)
-{}
-
-/*ARGSUSED*/
-void
-fpnsave_ctxt(void *arg)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -411,27 +339,8 @@ fpnsave_ctxt(void *arg)
 	.4byte	0x0
 	.4byte	0x0
 
-#endif	/* __lint */
 
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-fpsave(struct fnsave_state *f)
-{}
-
-/*ARGSUSED*/
-void
-fpxsave(struct fxsave_state *f)
-{}
-
-/*ARGSUSED*/
-void
-xsave(struct xsave_state *f, uint64_t m)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -489,26 +398,7 @@ xsave(struct xsave_state *f, uint64_t m)
 	SET_SIZE(xsave)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-fprestore(struct fnsave_state *f)
-{}
-
-/*ARGSUSED*/
-void
-fpxrestore(struct fxsave_state *f)
-{}
-
-/*ARGSUSED*/
-void
-xrestore(struct xsave_state *f, uint64_t m)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -555,19 +445,11 @@ xrestore(struct xsave_state *f, uint64_t m)
 	SET_SIZE(xrestore)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Disable the floating point unit.
  */
 
-#if defined(__lint)
-
-void
-fpdisable(void)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -584,19 +466,11 @@ fpdisable(void)
 	SET_SIZE(fpdisable)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Initialize the fpu hardware.
  */
 
-#if defined(__lint)
-
-void
-fpinit(void)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -655,24 +529,12 @@ fpinit(void)
 	SET_SIZE(fpinit)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Clears FPU exception state.
  * Returns the FP status word.
  */
 
-#if defined(__lint)
-
-uint32_t
-fperr_reset(void)
-{ return (0); }
-
-uint32_t
-fpxerr_reset(void)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -719,17 +581,7 @@ fpxerr_reset(void)
 	SET_SIZE(fpxerr_reset)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-uint32_t
-fpgetcwsw(void)
-{
-	return (0);
-}
-
-#else   /* __lint */
 
 #if defined(__amd64)
 
@@ -758,21 +610,11 @@ fpgetcwsw(void)
 	SET_SIZE(fpgetcwsw)
 
 #endif	/* __i386 */
-#endif  /* __lint */
 
 /*
  * Returns the MXCSR register.
  */
 
-#if defined(__lint)
-
-uint32_t
-fpgetmxcsr(void)
-{
-	return (0);
-}
-
-#else   /* __lint */
 
 #if defined(__amd64)
 
@@ -799,4 +641,3 @@ fpgetmxcsr(void)
 	SET_SIZE(fpgetmxcsr)
 
 #endif	/* __i386 */
-#endif  /* __lint */

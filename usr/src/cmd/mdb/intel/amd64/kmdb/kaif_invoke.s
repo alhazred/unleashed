@@ -32,14 +32,6 @@
  * Kernel function call invocation
  */
 
-#if defined(__lint)
-/*ARGSUSED*/
-uintptr_t
-kaif_invoke(uintptr_t funcva, uint_t argc, const uintptr_t argv[])
-{
-	return (0);
-}
-#else
 	/*
 	 * A jump table containing the addresses for register argument copy
 	 * code.
@@ -133,4 +125,3 @@ cp0arg:
 
 	SET_SIZE(kaif_invoke)
 
-#endif

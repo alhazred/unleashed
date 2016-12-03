@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 extern __GNU_INLINE void
 doflush(void *addr)
@@ -50,7 +49,6 @@ doflush(void *addr)
 #endif
 }
 
-#endif	/* !__lint && __GNUC__ */
 
 #ifdef	__cplusplus
 }

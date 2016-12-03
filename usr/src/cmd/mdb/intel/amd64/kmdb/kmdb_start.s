@@ -26,9 +26,6 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(__lint)
-#include <kmdb/kmdb_start.h>
-#endif
 
 #include <sys/asm_linkage.h>
 
@@ -37,12 +34,6 @@
  * to switch over to the debugger stack before entering the debugger.
  * Subsequent re-entries will longjmp their way in.
  */
-#if defined(__lint)
-void
-kmdb_first_start(void)
-{
-}
-#else
 
 	ENTRY(kmdb_first_start)
 	movq	kmdb_main_stack, %rsp
@@ -57,4 +48,3 @@ kmdb_first_start(void)
 	ret
 	SET_SIZE(kmdb_first_start)
 
-#endif

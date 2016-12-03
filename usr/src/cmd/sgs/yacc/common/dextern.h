@@ -338,12 +338,7 @@ extern char *parser;
  * When lint is able to handle %ws, it would be appropriate
  * to come back through and remove the use of this macro.
  */
-#if defined(__lint)
-static const char *lint_ws_fmt = "";
-#define	WSFMT(_fmt) lint_ws_fmt
-#else
 #define	WSFMT(_fmt) _fmt
-#endif
 
 #ifdef	__cplusplus
 }

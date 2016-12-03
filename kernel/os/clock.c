@@ -1642,9 +1642,6 @@ profil_tick(uintptr_t upc)
 		 */
 		model_t model = lwp_getdatamodel(lwp);
 		int result;
-#ifdef __lint
-		model = model;
-#endif
 		while (ticks-- > 0) {
 			if (pr->pr_samples == pr->pr_size) {
 				/* buffer full, turn off sampling */

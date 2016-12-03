@@ -32,10 +32,8 @@
 #include <sys/privregs.h>
 #include <sys/x86_archext.h>
 
-#if !defined(__lint)
 #include <sys/segments.h>
 #include "assym.h"
-#endif
 
 /*
  *	Our assumptions:
@@ -58,21 +56,6 @@
  *
  */
 
-#if defined(__lint)
-
-void
-real_mode_start_cpu(void)
-{}
-
-void
-real_mode_stop_cpu_stage1(void)
-{}
-
-void
-real_mode_stop_cpu_stage2(void)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -636,4 +619,3 @@ real_mode_stop_cpu_stage2_end:
 
 	SET_SIZE(real_mode_stop_cpu_stage2)
 
-#endif	/* __lint */

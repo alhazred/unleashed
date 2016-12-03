@@ -134,9 +134,6 @@ initenv()
 
 				/* Pacify leak detectors in normal operation. */
 				orig_environ = _environ;
-#ifdef __lint
-				my_environ = orig_environ;
-#endif
 			}
 
 			my_environ = _environ;

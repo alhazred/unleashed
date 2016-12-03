@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 #include <sys/machlock.h>
 
@@ -74,7 +73,6 @@ __rdtsc_insn(void)
 
 #endif /* __xpv */
 
-#endif	/* !__lint && __GNUC__ */
 
 #ifdef	__cplusplus
 }

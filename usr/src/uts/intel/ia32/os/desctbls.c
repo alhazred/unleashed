@@ -580,12 +580,10 @@ init_gdt(void)
 	ulong_t ma[1];		/* XXPV should be a memory_t */
 	ulong_t addr;
 
-#if !defined(__lint)
 	/*
 	 * Our gdt is never larger than a single page.
 	 */
 	ASSERT((sizeof (*gdt0) * NGDT) <= PAGESIZE);
-#endif
 	gdt0 = (user_desc_t *)BOP_ALLOC(bootops, (caddr_t)GDT_VA,
 	    PAGESIZE, PAGESIZE);
 	bzero(gdt0, PAGESIZE);
@@ -650,12 +648,10 @@ init_gdt(void)
 	desctbr_t	r_bgdt, r_gdt;
 	user_desc_t	*bgdt;
 
-#if !defined(__lint)
 	/*
 	 * Our gdt is never larger than a single page.
 	 */
 	ASSERT((sizeof (*gdt0) * NGDT) <= PAGESIZE);
-#endif
 	gdt0 = (user_desc_t *)BOP_ALLOC(bootops, (caddr_t)GDT_VA,
 	    PAGESIZE, PAGESIZE);
 	bzero(gdt0, PAGESIZE);
@@ -803,12 +799,10 @@ init_gdt(void)
 	uint64_t gdtpa;
 	ulong_t ma[1];		/* XXPV should be a memory_t */
 
-#if !defined(__lint)
 	/*
 	 * Our gdt is never larger than a single page.
 	 */
 	ASSERT((sizeof (*gdt0) * NGDT) <= PAGESIZE);
-#endif
 	gdt0 = (user_desc_t *)BOP_ALLOC(bootops, (caddr_t)GDT_VA,
 	    PAGESIZE, PAGESIZE);
 	bzero(gdt0, PAGESIZE);
@@ -852,12 +846,10 @@ init_gdt(void)
 	desctbr_t	r_bgdt, r_gdt;
 	user_desc_t	*bgdt;
 
-#if !defined(__lint)
 	/*
 	 * Our gdt is never larger than a single page.
 	 */
 	ASSERT((sizeof (*gdt0) * NGDT) <= PAGESIZE);
-#endif
 	/*
 	 * XXX this allocation belongs in our caller, not here.
 	 */
@@ -1192,9 +1184,7 @@ init_desctbls(void)
 	/*
 	 * Setup and install our IDT.
 	 */
-#if !defined(__lint)
 	ASSERT(NIDT * sizeof (*idt0) <= PAGESIZE);
-#endif
 	idt0 = (gate_desc_t *)BOP_ALLOC(bootops, (caddr_t)IDT_VA,
 	    PAGESIZE, PAGESIZE);
 	bzero(idt0, PAGESIZE);
@@ -1227,23 +1217,17 @@ init_desctbls(void)
 	 * Allocate IDT and TSS structures on unique pages for better
 	 * performance in virtual machines.
 	 */
-#if !defined(__lint)
 	ASSERT(NIDT * sizeof (*idt0) <= PAGESIZE);
-#endif
 	idt0 = (gate_desc_t *)BOP_ALLOC(bootops, (caddr_t)IDT_VA,
 	    PAGESIZE, PAGESIZE);
 	bzero(idt0, PAGESIZE);
-#if !defined(__lint)
 	ASSERT(sizeof (*ktss0) <= PAGESIZE);
-#endif
 	ktss0 = (tss_t *)BOP_ALLOC(bootops, (caddr_t)KTSS_VA,
 	    PAGESIZE, PAGESIZE);
 	bzero(ktss0, PAGESIZE);
 
 #if defined(__i386)
-#if !defined(__lint)
 	ASSERT(sizeof (*dftss0) <= PAGESIZE);
-#endif
 	dftss0 = (tss_t *)BOP_ALLOC(bootops, (caddr_t)DFTSS_VA,
 	    PAGESIZE, PAGESIZE);
 	bzero(dftss0, PAGESIZE);

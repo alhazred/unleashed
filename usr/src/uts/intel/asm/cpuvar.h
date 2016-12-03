@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 struct cpu;
 
@@ -57,7 +56,6 @@ curcpup(void)
 	return (__value);
 }
 
-#endif	/* !__lint && __GNUC__ */
 
 #ifdef	__cplusplus
 }

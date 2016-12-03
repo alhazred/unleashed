@@ -39,12 +39,6 @@ extern "C" {
  * for the purpose of running lint over libc, else lint errors occur due to
  * lint not knowing the details of the implementation of locales and stdio.
  */
-#if defined(__lint)
-
-#include "mbstatet.h"
-#include "file64.h"
-
-#else
 
 /*
  * Small optimization for callers of syscall() and __systemcall().
@@ -81,7 +75,6 @@ extern "C" {
 #pragma	redefine_extname	memmove		_memmove
 #pragma	redefine_extname	memset		_memset
 
-#endif
 
 #ifdef __cplusplus
 }

@@ -26,23 +26,13 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if !defined(__lint)
 #include <sys/asm_linkage.h>
 #include <sys/privregs.h>
-#endif
 
 /*
  * The interface for a client programs that call the 64-bit romvec OBP
  */
 
-#if defined(__lint)
-/* ARGSUSED */
-int
-client_handler(void *cif_handler, void *arg_array)
-{
-	return (0);
-}
-#else	/* __lint */
 
 	ENTRY(client_handler)
 	save	%sp, -SA64(MINFRAME64), %sp	! 32 bit frame, 64 bit sized
@@ -58,4 +48,3 @@ client_handler(void *cif_handler, void *arg_array)
 	restore	%o0, %g0, %o0			! delay; result in %o0
 	SET_SIZE(client_handler)
 
-#endif	/* __lint */

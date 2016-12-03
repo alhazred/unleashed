@@ -33,7 +33,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 /*
  * htonll(), ntohll(), htonl(), ntohl(), htons(), ntohs()
@@ -113,7 +112,6 @@ ntohll(uint64_t value)
 
 #endif	/* __i386 || __amd64 */
 
-#endif	/* !__lint && __GNUC__ */
 
 #ifdef	__cplusplus
 }

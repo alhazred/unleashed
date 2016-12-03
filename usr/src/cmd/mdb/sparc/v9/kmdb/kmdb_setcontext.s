@@ -29,22 +29,11 @@
 #include <sys/asm_linkage.h>
 #include <sys/regset.h>
 
-#if defined(__lint)
-#include <ucontext.h>
-#endif
 
 #include "kmdb_context_off.h"
 
 #define	UC_GREG(name)	(UC_MCTX + MCTX_GREGS + (name * MCTX_GREGS_INCR))
 
-#if defined(__lint)
-/*ARGSUSED*/
-int
-kmdb_setcontext(ucontext_t *ucp)
-{
-	return (0);
-}
-#else
 
 	ENTRY(kmdb_setcontext)
 	flushw
@@ -74,4 +63,3 @@ kmdb_setcontext(ucontext_t *ucp)
 
 	SET_SIZE(kmdb_setcontext)
 
-#endif

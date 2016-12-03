@@ -26,21 +26,9 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(__lint)
-#include <sys/types.h>
-#include <kmdb/kmdb_asmutil.h>
-#endif
 
 #include <sys/asm_linkage.h>
 
-#if defined(__lint)
-/*ARGSUSED*/
-uintptr_t
-cas(uintptr_t *rs1, uintptr_t rs2, uintptr_t rd)
-{
-	return (0);
-}
-#else
 
 	ENTRY(cas)
 	casx	[%o0], %o1, %o2
@@ -48,15 +36,7 @@ cas(uintptr_t *rs1, uintptr_t rs2, uintptr_t rd)
 	mov	%o2, %o0
 	SET_SIZE(cas)
 
-#endif
 
-#if defined(__lint)
-/*ARGSUSED*/
-void
-flush_windows(void)
-{
-}
-#else
 
 	ENTRY(flush_windows)
 	save
@@ -66,15 +46,7 @@ flush_windows(void)
 	nop
 	SET_SIZE(flush_windows)
 
-#endif
 
-#if defined(__lint)
-/*ARGSUSED*/
-void
-membar_producer(void)
-{
-}
-#else
 
 	/*
 	 * US I has a problem with membars in the delay slot.  We don't care 
@@ -87,16 +59,7 @@ membar_producer(void)
 	nop
 	SET_SIZE(membar_producer)
 
-#endif
 
-#if defined(__lint)
-/*ARGSUSED*/
-uint64_t
-rdasi(uint32_t asi, uintptr_t va)
-{
-	return (0);
-}
-#else
 
 	ENTRY_NP(rdasi)
 	rd	%asi, %o3
@@ -106,15 +69,7 @@ rdasi(uint32_t asi, uintptr_t va)
 	wr	%o3, %asi
 	SET_SIZE(rdasi)
 
-#endif
 
-#if defined(__lint)
-/*ARGSUSED*/
-void
-wrasi(uint32_t asi, uintptr_t va, uint64_t val)
-{
-}
-#else
 
 	ENTRY_NP(wrasi)
 	rd	%asi, %o3
@@ -124,4 +79,3 @@ wrasi(uint32_t asi, uintptr_t va, uint64_t val)
 	wr	%o3, %asi
 	SET_SIZE(wrasi)
 
-#endif

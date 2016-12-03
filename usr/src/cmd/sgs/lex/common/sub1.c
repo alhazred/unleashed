@@ -156,7 +156,6 @@ int p, d;
  * that it does not have the same signature as the libc function
  * of the same name. So, take it out of view for lint.
  */
-#if !defined(__lint)
 int
 index(int a, CHR *s)
 {
@@ -166,7 +165,6 @@ index(int a, CHR *s)
 			return (k);
 	return (-1);
 }
-#endif
 
 int
 alpha(int c)

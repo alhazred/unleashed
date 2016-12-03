@@ -32,7 +32,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 #if defined(__i386) || defined(__amd64)
 
@@ -176,7 +175,6 @@ __swapgs(void)
 
 #endif	/* __amd64 */
 
-#endif	/* !__lint && __GNUC__ */
 
 #ifdef	__cplusplus
 }

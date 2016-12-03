@@ -35,7 +35,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 #if defined(__amd64)
 #define	__SUF	"q"
@@ -95,7 +94,6 @@ atomic_btr32(uint32_t *memory, uint_t bitnum)
 
 #undef __SUF
 
-#endif	/* !__lint && __GNUC__ */
 
 #ifdef	__cplusplus
 }

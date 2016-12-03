@@ -1024,11 +1024,6 @@ umad_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **resultp)
 {
 	int rc;
 
-#if defined(__lint)
-	extern void dummy2(void *);
-
-	dummy2(arg);
-#endif
 
 	switch (cmd) {
 	case DDI_INFO_DEVT2DEVINFO:
@@ -1395,11 +1390,6 @@ umad_open(dev_t *dev, int flag, int otyp, cred_t *cred)
 	umad_port_info_t	*port;
 	umad_uctx_t		*uctx;
 
-#if defined(__lint)
-	extern void dummy(int);
-
-	dummy(flag);
-#endif
 
 	rc = priv_policy(cred, PRIV_SYS_NET_CONFIG, B_FALSE, EACCES, NULL);
 	if (rc != 0)
@@ -1833,9 +1823,6 @@ umad_solicited_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 	umad_agent_t *agent = umad_ctx->send_agent;
 	int rc;
 
-#if defined(__lint)
-	ibmf_handle = 0;
-#endif
 	msgp->im_msgbufs_send.im_bufs_mad_hdr = NULL;
 	msgp->im_msgbufs_send.im_bufs_cl_hdr = NULL;
 	msgp->im_msgbufs_send.im_bufs_cl_hdr_len = 0;
@@ -2632,9 +2619,6 @@ umad_unsolicited_cb(ibmf_handle_t ibmf_handle, ibmf_msg_t *msgp, void *args)
 	ib_mad_hdr_t *mad_hdr;
 	int rc;
 
-#if defined(__lint)
-	ibmf_handle = 0;
-#endif
 
 	ASSERT(msgp->im_msgbufs_send.im_bufs_mad_hdr == NULL);
 	ASSERT(msgp->im_msgbufs_send.im_bufs_cl_data == NULL);
@@ -2679,18 +2663,3 @@ reject:
 	mutex_exit(&ibmf_info->ibmf_reg_lock);
 }
 
-#if defined(__lint)
-/*
- * This is needed because rdma/ib_verbs.h and sol_ofs/sol_ofs_common.h
- * both implement static functions.  Not all of those functions are
- * used by sol_umad, but lint doesn't like seeing static function that
- * are defined but not used.
- */
-void
-lint_function(llist_head_t *a, llist_head_t *b)
-{
-	(void) llist_is_last(a, b);
-	llist_add_tail(a, b);
-	(void) ib_width_enum_to_int(IB_WIDTH_1X);
-}
-#endif

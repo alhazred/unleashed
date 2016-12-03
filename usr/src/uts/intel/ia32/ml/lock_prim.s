@@ -305,14 +305,6 @@ ulock_clr:
  * lock_init(lp)
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-lock_init(lock_t *lp)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -331,7 +323,6 @@ lock_init(lock_t *lp)
 
 #endif	/* !__amd64 */
 
-#endif	/* __lint */
 
 /*
  * void

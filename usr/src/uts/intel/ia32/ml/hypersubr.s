@@ -49,71 +49,6 @@
  * to build the hypervisor calls up from C wrappers.)
  */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-long
-__hypercall0(int callnum)
-{ return (0); }
-
-/*ARGSUSED*/
-long
-__hypercall1(int callnum, ulong_t a1)
-{ return (0); }
-
-/*ARGSUSED*/
-long
-__hypercall2(int callnum, ulong_t a1, ulong_t a2)
-{ return (0); }
-
-/*ARGSUSED*/
-long
-__hypercall3(int callnum, ulong_t a1, ulong_t a2, ulong_t a3)
-{ return (0); }
-
-/*ARGSUSED*/
-long
-__hypercall4(int callnum, ulong_t a1, ulong_t a2, ulong_t a3, ulong_t a4)
-{ return (0); }
-
-/*ARGSUSED*/
-long
-__hypercall5(int callnum,
-    ulong_t a1, ulong_t a2, ulong_t a3, ulong_t a4, ulong_t a5)
-{ return (0); }
-
-/*ARGSUSED*/
-int
-__hypercall0_int(int callnum)
-{ return (0); }
-
-/*ARGSUSED*/
-int
-__hypercall1_int(int callnum, ulong_t a1)
-{ return (0); }
-
-/*ARGSUSED*/
-int
-__hypercall2_int(int callnum, ulong_t a1, ulong_t a2)
-{ return (0); }
-
-/*ARGSUSED*/
-int
-__hypercall3_int(int callnum, ulong_t a1, ulong_t a2, ulong_t a3)
-{ return (0); }
-
-/*ARGSUSED*/
-int
-__hypercall4_int(int callnum, ulong_t a1, ulong_t a2, ulong_t a3, ulong_t a4)
-{ return (0); }
-
-/*ARGSUSED*/
-int
-__hypercall5_int(int callnum,
-    ulong_t a1, ulong_t a2, ulong_t a3, ulong_t a4, ulong_t a5)
-{ return (0); }
-
-#else	/* __lint */
 
 /*
  * XXPV grr - assembler can't deal with an instruction in a quoted string
@@ -318,4 +253,3 @@ hypercall_page:
 
 #endif	/* __i386 */
 
-#endif	/* lint */

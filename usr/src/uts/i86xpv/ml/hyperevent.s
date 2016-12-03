@@ -36,21 +36,8 @@
 #include <sys/x86_archext.h>
 #include <sys/asm_misc.h>
 
-#if !defined(__lint)
 #include "assym.h"
-#endif
 
-#if defined(__lint)
-
-void
-xen_failsafe_callback(void)
-{}
-
-void
-xen_callback(void)
-{}
-
-#else	/* __lint */
 
 	/*
 	 * The stack frame for events is exactly that of an x86 hardware
@@ -246,4 +233,3 @@ xen_callback(void)
 	SET_SIZE(xen_callback)
 
 #endif	/* __i386 */
-#endif	/* __lint */

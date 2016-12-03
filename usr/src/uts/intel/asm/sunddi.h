@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 #if defined(__i386) || defined(__amd64)
 
@@ -122,7 +121,6 @@ sync_instruction_memory(caddr_t v, size_t len)
 
 #endif /* __i386 || __amd64 */
 
-#endif /* !__lint && __GNUC__ */
 
 #ifdef __cplusplus
 }

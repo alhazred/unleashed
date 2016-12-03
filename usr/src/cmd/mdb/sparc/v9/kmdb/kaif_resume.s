@@ -31,7 +31,6 @@
  * or merely a single CPU, is to be resumed.
  */
 
-#if !defined(__lint)
 #include <sys/asm_linkage.h>
 #include <sys/trap.h>
 #include <sys/machtrap.h>
@@ -42,25 +41,13 @@
 #undef _KERNEL
 #include <sys/machthread.h>
 #include <sys/machparam.h>
-#endif
 
-#if defined(__lint)
-#include <sys/ddi.h>
-#include <sys/sunddi.h>
-#endif
 
 #include <mdb/mdb_kreg.h>
 #include <kmdb/kaif_asmutil.h>
 #include <kmdb/kaif_off.h>
 #include <kmdb/kaif.h>
 
-#if defined(__lint)
-/*ARGSUSED*/
-void
-kaif_resume(int work_required)
-{
-}
-#else /* __lint */
 
 	/*
 	 * Used to start the world back up, as a whole or in part (single-step).
@@ -180,4 +167,3 @@ kaif_resume(int work_required)
 
 	SET_SIZE(kaif_resume)
 
-#endif	/* __lint */

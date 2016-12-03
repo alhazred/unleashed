@@ -32,85 +32,7 @@
 #include <sys/privregs.h>
 #include <sys/psw.h>
 
-#if defined(__lint)
-#include <sys/types.h>
-#include <sys/segments.h>
-#endif
 
-#if defined(__lint)
-
-ulong_t
-kdi_getdr0(void)
-{
-	return (0);
-}
-
-ulong_t
-kdi_getdr1(void)
-{
-	return (0);
-}
-
-ulong_t
-kdi_getdr2(void)
-{
-	return (0);
-}
-
-ulong_t
-kdi_getdr3(void)
-{
-	return (0);
-}
-
-ulong_t
-kdi_getdr6(void)
-{
-	return (0);
-}
-
-ulong_t
-kdi_getdr7(void)
-{
-	return (0);
-}
-
-/*ARGSUSED*/
-void
-kdi_setdr0(ulong_t value)
-{}
-
-/*ARGSUSED*/
-void
-kdi_setdr1(ulong_t value)
-{}
-
-/*ARGSUSED*/
-void
-kdi_setdr2(ulong_t value)
-{}
-
-/*ARGSUSED*/
-void
-kdi_setdr3(ulong_t value)
-{}
-
-/*ARGSUSED*/
-void
-kdi_setdr4(ulong_t value)
-{}
-
-/*ARGSUSED*/
-void
-kdi_setdr6(ulong_t value)
-{}
-
-/*ARGSUSED*/
-void
-kdi_setdr7(ulong_t value)
-{}
-
-#else
 
 #if defined(__amd64)
 
@@ -157,4 +79,3 @@ kdi_setdr7(ulong_t value)
 	SETDREG(kdi_setdr6, %dr6)
 	SETDREG(kdi_setdr7, %dr7)
 
-#endif	/* __lint */

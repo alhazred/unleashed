@@ -26,20 +26,9 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(__lint)
-#include <kmdb/kmdb_asmutil.h>
-#endif
 
 #include <sys/asm_linkage.h>
 
-#if defined(__lint)
-/*ARGSUSED*/
-uintptr_t
-cas(uintptr_t *rs1, uintptr_t rs2, uintptr_t rd)
-{
-	return (0);
-}
-#else
 
         ENTRY_NP(cas)
 	movl	4(%esp), %edx	/* rs1 */
@@ -50,14 +39,7 @@ cas(uintptr_t *rs1, uintptr_t rs2, uintptr_t rd)
 	ret
 	SET_SIZE(cas)
 
-#endif
 
-#if defined(__lint)
-void
-membar_producer(void)
-{
-}
-#else
 
 	ENTRY(membar_producer)
 	lock
@@ -65,15 +47,7 @@ membar_producer(void)
 	ret
 	SET_SIZE(membar_producer)
 
-#endif
 
-#if defined(__lint)
-/*ARGSUSED*/
-void
-rdmsr(uint32_t addr, uint64_t *retp)
-{
-}
-#else
 
 	ENTRY(rdmsr)
 	movl	4(%esp), %ecx
@@ -84,15 +58,7 @@ rdmsr(uint32_t addr, uint64_t *retp)
 	ret
 	SET_SIZE(rdmsr)
 
-#endif
 
-#if defined(__lint)
-/*ARGSUSED*/
-void
-wrmsr(uint32_t addr, uint64_t *valp)
-{
-}
-#else
 
 	ENTRY(wrmsr)
 	movl	8(%esp), %ecx
@@ -103,36 +69,14 @@ wrmsr(uint32_t addr, uint64_t *valp)
 	ret
 	SET_SIZE(wrmsr)
 
-#endif
 
-#if defined(__lint)
-uintptr_t
-get_fp(void)
-{
-	return (0);
-}
-#else
 
 	ENTRY(get_fp)
 	movl	%ebp, %eax
 	ret
 	SET_SIZE(get_fp)
 
-#endif
 
-#if defined(__lint)
-/*ARGSUSED*/
-void
-kmt_in(void *buf, size_t nbytes, uintptr_t addr)
-{
-}
-
-/*ARGSUSED*/
-void
-kmt_out(void *buf, size_t nbytes, uintptr_t addr)
-{
-}
-#else
 
 	ENTRY_NP(kmt_in)
 	movl	4(%esp), %ecx	/* buf */
@@ -180,4 +124,3 @@ kmt_out(void *buf, size_t nbytes, uintptr_t addr)
 	ret
 	SET_SIZE(kmt_out)
 
-#endif

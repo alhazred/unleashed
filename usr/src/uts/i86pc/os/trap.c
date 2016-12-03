@@ -1719,17 +1719,8 @@ showregs(uint_t type, struct regs *rp, caddr_t addr)
 	    (ttoproc(curthread) && ttoproc(curthread)->p_pidp) ?
 	    ttoproc(curthread)->p_pid : 0, rp->r_pc, rp->r_sp, rp->r_ps);
 
-#if defined(__lint)
-	/*
-	 * this clause can be deleted when lint bug 4870403 is fixed
-	 * (lint thinks that bit 32 is illegal in a %b format string)
-	 */
-	printf("cr0: %x cr4: %b\n",
-	    (uint_t)getcr0(), (uint_t)getcr4(), FMT_CR4);
-#else
 	printf("cr0: %b cr4: %b\n",
 	    (uint_t)getcr0(), FMT_CR0, (uint_t)getcr4(), FMT_CR4);
-#endif	/* __lint */
 
 	printf("cr2: %lx", getcr2());
 #if !defined(__xpv)

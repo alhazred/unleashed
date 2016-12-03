@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 extern __GNU_INLINE void
 prefetch_read_many(void *addr)
@@ -88,7 +87,6 @@ prefetch_write_once(void *addr)
 #endif
 }
 
-#endif	/* !__lint && __GNUC__ */
 
 #ifdef	__cplusplus
 }

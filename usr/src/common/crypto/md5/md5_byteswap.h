@@ -87,8 +87,6 @@ extern "C" {
 #define	_MD5_CHECK_ALIGNMENT
 #define	LOAD_LITTLE_32(addr)    load_little_32((uint32_t *)(void *)(addr))
 
-#if !defined(__lint) && defined(__GNUC__)
-
 static __inline__ uint32_t
 load_little_32(uint32_t *addr)
 {
@@ -101,20 +99,6 @@ load_little_32(uint32_t *addr)
 
 	return (value);
 }
-#endif	/* !__lint && __GNUC__ */
-
-#if !defined(__GNUC__)
-extern	uint32_t load_little_32(uint32_t *);
-#endif	/* !__GNUC__ */
-
-/* Placate lint */
-#if defined(__lint)
-uint32_t
-load_little_32(uint32_t *addr)
-{
-	return (*addr);
-}
-#endif	/* __lint */
 
 #elif defined(_LITTLE_ENDIAN)
 #define	LOAD_LITTLE_32(addr)	htonl(addr)
@@ -153,8 +137,6 @@ load_little_32(uint32_t *addr)
 #define	LOAD_LITTLE_32_d(addr)	load_little_32_d((uint32_t *)(addr))
 #define	LOAD_LITTLE_32_e(addr)	load_little_32_e((uint32_t *)(addr))
 #define	LOAD_LITTLE_32_f(addr)	load_little_32_f((uint32_t *)(addr))
-
-#if !defined(__lint) && defined(__GNUC__)
 
 /*
  * This actually sets the ASI register, not necessarily to ASI_PL.
@@ -215,36 +197,6 @@ LL_TEMPLATE(e)
 LL_TEMPLATE(f)
 #undef	LL_TEMPLATE
 
-#endif	/* !__lint && __GNUC__ */
-
-#if !defined(__GNUC__)
-/*
- * Using the %asi register to achieve little endian loads - register
- * is set using a inline template.
- *
- * Saves a few arithmetic ops as can now use an immediate offset with the
- * lduwa instructions.
- */
-extern void set_little(uint32_t);
-extern uint32_t get_little(void);
-
-extern	uint32_t load_little_32_0(uint32_t *);
-extern	uint32_t load_little_32_1(uint32_t *);
-extern	uint32_t load_little_32_2(uint32_t *);
-extern	uint32_t load_little_32_3(uint32_t *);
-extern	uint32_t load_little_32_4(uint32_t *);
-extern	uint32_t load_little_32_5(uint32_t *);
-extern	uint32_t load_little_32_6(uint32_t *);
-extern	uint32_t load_little_32_7(uint32_t *);
-extern	uint32_t load_little_32_8(uint32_t *);
-extern	uint32_t load_little_32_9(uint32_t *);
-extern	uint32_t load_little_32_a(uint32_t *);
-extern	uint32_t load_little_32_b(uint32_t *);
-extern	uint32_t load_little_32_c(uint32_t *);
-extern	uint32_t load_little_32_d(uint32_t *);
-extern	uint32_t load_little_32_e(uint32_t *);
-extern	uint32_t load_little_32_f(uint32_t *);
-#endif	/* !__GNUC__ */
 #endif	/* sun4v */
 
 #endif	/* _LITTLE_ENDIAN */

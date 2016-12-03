@@ -74,7 +74,6 @@ extern "C" {
 #if defined(__amd64) || defined(__i386)
 /* use inline code to get performance of bswap* instructions */
 
-#if !defined(__lint) && defined(__GNUC__)
 /* use GNU inline */
 	/* works for both i386 and amd64 */
 	extern __inline__ uint32_t dapls_byteswap32(uint32_t value)
@@ -107,12 +106,6 @@ extern "C" {
 	}
 #endif
 
-#else	/* !defined(__lint) && defined(__GNUC__) */
-/* use SUN inline with .il files */
-uint64_t dapls_byteswap64(uint64_t);
-uint32_t dapls_byteswap32(uint32_t);
-
-#endif	/* !defined(__lint) && defined(__GNUC__) */
 
 #define	HTOBE_64(x)	dapls_byteswap64(x)
 #define	HTOBE_32(x)	dapls_byteswap32(x)

@@ -209,11 +209,6 @@ struct _Mouse {
 /*
  * Various tricks to shut up lint about things that are perfectly fine.
  */
-#if defined(__lint) && !defined(CURSES) /* if not internal to curses source */
-struct screen {
-	int _nobody_;
-};
-#endif /* __lint */
 
 /* common external variables */
 

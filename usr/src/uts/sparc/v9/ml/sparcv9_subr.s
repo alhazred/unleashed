@@ -831,39 +831,6 @@ $done3:
 	SET_SIZE(suword64_noerr)
 
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-int
-subyte(void *addr, uchar_t value)
-{ return (0); }
-
-/*ARGSUSED*/
-void
-subyte_noerr(void *addr, uchar_t value)
-{}
-
-/*ARGSUSED*/
-int
-fulword(const void *addr, ulong_t *valuep)
-{ return (0); }
-
-/*ARGSUSED*/
-void
-fulword_noerr(const void *addr, ulong_t *valuep)
-{}
-
-/*ARGSUSED*/
-int
-sulword(void *addr, ulong_t valuep)
-{ return (0); }
-
-/*ARGSUSED*/
-void
-sulword_noerr(void *addr, ulong_t valuep)
-{}
-
-#else
 
 	.weak	subyte
 	subyte=suword8
@@ -889,7 +856,6 @@ sulword_noerr(void *addr, ulong_t valuep)
 	sulword_noerr=suword32_noerr
 #endif	/* LP64 */
 
-#endif	/* lint */
 
 /*
  * We define rdtick here, but not for sun4v. On sun4v systems, the %tick

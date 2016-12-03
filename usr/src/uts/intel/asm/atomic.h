@@ -36,7 +36,6 @@
 extern "C" {
 #endif
 
-#if !defined(__lint) && defined(__GNUC__)
 
 /* BEGIN CSTYLED */
 /*
@@ -370,7 +369,6 @@ __ATOMIC_OP64(membar_consumer, "lfence")
 
 /* END CSTYLED */
 
-#endif /* !__lint && __GNUC__ */
 
 #ifdef __cplusplus
 }

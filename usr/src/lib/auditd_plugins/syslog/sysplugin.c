@@ -68,11 +68,6 @@
 #include "systoken.h"
 #include <audit_plugin.h>
 
-/* gettext() obfuscation routine for lint */
-#ifdef __lint
-#define	gettext(x)	x
-#endif
-
 #if DEBUG
 static FILE	*dbfp;			/* debug file */
 #endif

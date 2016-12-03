@@ -722,7 +722,6 @@ extern wchar_t *wunctrl(cchar_t *);
 extern int wvline(WINDOW *, chtype, int);
 extern int wvline_set(WINDOW *, const cchar_t *, int);
 
-#if !defined(__lint)
 /*
  * These macros can improve speed and size of an application.
  */
@@ -1087,7 +1086,6 @@ extern cchar_t	*__pcht2;
 #define	untouchwin(w)	wtouchln(__w1 = (w), 0, __w1->_maxy, 0)
 #define	termname()			(cur_term->_term)
 
-#endif	/* !defined(__lint) */
 
 /*
  * Special Keys

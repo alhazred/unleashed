@@ -26,82 +26,6 @@
 #include <sys/x86_archext.h>
 #include <sys/controlregs.h>
 
-#if defined(__lint)
-
-#include <sys/types.h>
-
-uint32_t
-bignum_use_sse2()
-{ return (0); }
-
-/* Not to be called by C code */
-/* ARGSUSED */
-uint32_t
-big_mul_set_vec_sse2_r()
-{ return (0); }
-
-/* Not to be called by C code */
-/* ARGSUSED */
-uint32_t
-big_mul_add_vec_sse2_r()
-{ return (0); }
-
-/* ARGSUSED */
-uint32_t
-big_mul_set_vec_sse2(uint32_t *r, uint32_t *a, int len, uint32_t digit)
-{ return (0); }
-
-/* ARGSUSED */
-uint32_t
-big_mul_add_vec_sse2(uint32_t *r, uint32_t *a, int len, uint32_t digit)
-{ return (0); }
-
-/* ARGSUSED */
-void
-big_mul_vec_sse2(uint32_t *r, uint32_t *a, int alen, uint32_t *b, int blen)
-{}
-
-/* ARGSUSED */
-void
-big_sqr_vec_sse2(uint32_t *r, uint32_t *a, int len)
-{}
-
-#if defined(MMX_MANAGE)
-
-/* ARGSUSED */
-uint32_t
-big_mul_set_vec_sse2_nsv(uint32_t *r, uint32_t *a, int len, uint32_t digit)
-{ return (0); }
-
-/* ARGSUSED */
-uint32_t
-big_mul_add_vec_sse2_nsv(uint32_t *r, uint32_t *a, int len, uint32_t digit)
-{ return (0); }
-
-/* Not to be called by C code */
-/* ARGSUSED */
-void
-big_sqr_vec_sse2_fc(uint32_t *r, uint32_t *a, int len)
-{}
-
-#endif	/* MMX_MANAGE */
-
-/*
- * UMUL
- *
- */
-
-/* ARGSUSED */
-uint32_t
-big_mul_set_vec_umul(uint32_t *r, uint32_t *a, int len, uint32_t digit)
-{ return (0); }
-
-/* ARGSUSED */
-uint32_t
-big_mul_add_vec_umul(uint32_t *r, uint32_t *a, int len, uint32_t digit)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(MMX_MANAGE)
 
@@ -1209,4 +1133,3 @@ big_mul_add_vec_umul(uint32_t *r, uint32_t *a, int len, uint32_t digit)
 	ret
 	SET_SIZE(big_mul_add_vec_umul)
 
-#endif	/* __lint */

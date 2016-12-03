@@ -2809,15 +2809,6 @@ envd_log(int pri, const char *fmt, ...)
 	va_end(ap);
 }
 
-#ifdef __lint
-/*
- * Redefine sigwait to posix style external declaration so that LINT
- * does not check against libc version of sigwait() and complain as
- * it uses different number of arguments.
- */
-#define	sigwait	my_posix_sigwait
-extern int my_posix_sigwait(const sigset_t *set, int *sig);
-#endif
 
 /*
  * sleep() in libpthread gets affected by time being set back, hence

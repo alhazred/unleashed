@@ -963,9 +963,7 @@ init_debug_info(void)
 	caddr_t mem;
 	debug_info_t *di;
 
-#ifndef __lint
 	ASSERT(sizeof (debug_info_t) < MMU_PAGESIZE);
-#endif
 
 	mem = BOP_ALLOC(bootops, (caddr_t)DEBUG_INFO_VA, MMU_PAGESIZE,
 	    MMU_PAGESIZE);

@@ -26,21 +26,8 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(__lint)
-#include <sys/thread.h>
-#include <kmdb/kctl/kctl.h>
-#else
 #include <sys/asm_linkage.h>
-#endif
 
-#if defined(__lint)
-/*ARGSUSED*/
-kthread_t *
-kctl_curthread_set(kthread_t *thr)
-{
-	return (NULL);
-}
-#else
 
 	ENTRY_NP(kctl_curthread_set)
 	mov	%o0, %o1
@@ -49,4 +36,3 @@ kctl_curthread_set(kthread_t *thr)
 	mov	%o1, %g7
 	SET_SIZE(kctl_curthread_set)
 
-#endif

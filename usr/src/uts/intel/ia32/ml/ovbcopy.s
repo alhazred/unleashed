@@ -42,17 +42,9 @@
 
 #include <sys/asm_linkage.h>
 
-#if defined(__lint)
-
 /*
  * Overlapping bcopy (source and target may overlap arbitrarily).
  */
-/* ARGSUSED */
-void
-ovbcopy(const void *from, void *to, size_t count)
-{}
-
-#else	/* __lint */
 
 /*
  * Adapted from fbsd bcopy().
@@ -151,4 +143,3 @@ reverse:
 
 #endif	/* __i386 */
 
-#endif	/* __lint */

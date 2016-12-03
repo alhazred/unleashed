@@ -30,13 +30,6 @@
 #include <sys/psw.h>
 #include <sys/machbrand.h>
 
-#if defined(__lint)
-
-#include <sys/types.h>
-#include <sys/thread.h>
-#include <sys/systm.h>
-
-#else	/* __lint */
 
 #include <sys/segments.h>
 #include <sys/pcb.h>
@@ -53,7 +46,6 @@
 
 #include "assym.h"
 
-#endif	/* __lint */
 
 /*
  * We implement five flavours of system call entry points
@@ -273,7 +265,6 @@
  */
 #if defined(DEBUG)
 
-#if !defined(__lint)
 
 __lwptoregs_msg:
 	.string	"syscall_asm_amd64.s:%d lwptoregs(%p) [%p] != rp [%p]"
@@ -284,7 +275,6 @@ __codesel_msg:
 __no_rupdate_msg:
 	.string	"syscall_asm_amd64.s:%d lwp %p, pcb_rupdate != 0"
 
-#endif	/* !__lint */
 
 #define	ASSERT_LWPTOREGS(lwp, rp)			\
 	movq	LWP_REGS(lwp), %r11;			\
@@ -406,20 +396,6 @@ __no_rupdate_msg:
 #define	XPV_SYSCALL_PROD /* nothing */
 #endif
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-sys_syscall()
-{}
-
-void
-_allsyscalls()
-{}
-
-size_t _allsyscalls_size;
-
-#else	/* __lint */
 
 	ENTRY_NP2(brand_sys_syscall,_allsyscalls)
 	SWAPGS				/* kernel gsbase */
@@ -709,16 +685,7 @@ _syscall_post_call:
 	SET_SIZE(sys_syscall)
 	SET_SIZE(brand_sys_syscall)
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-sys_syscall32()
-{}
-
-#else	/* __lint */
 
 	ENTRY_NP(brand_sys_syscall32)
 	SWAPGS				/* kernel gsbase */
@@ -909,7 +876,6 @@ _full_syscall_postsys32:
 	SET_SIZE(sys_syscall32)
 	SET_SIZE(brand_sys_syscall32)
 
-#endif	/* __lint */
 
 /*
  * System call handler via the sysenter instruction
@@ -952,13 +918,6 @@ _full_syscall_postsys32:
  * simply add a jump over the instruction at sys_sysenter to make it
  * impossible to single-step to it.
  */
-#if defined(__lint)
-
-void
-sys_sysenter()
-{}
-
-#else	/* __lint */
 
 	ENTRY_NP(brand_sys_sysenter)
 	SWAPGS				/* kernel gsbase */
@@ -1158,21 +1117,12 @@ sys_sysenter()
 	SET_SIZE(_sys_sysenter_post_swapgs)
 	SET_SIZE(brand_sys_sysenter)
 
-#endif	/* __lint */
 
 /*
  * This is the destination of the "int $T_SYSCALLINT" interrupt gate, used by
  * the generic i386 libc to do system calls. We do a small amount of setup
  * before jumping into the existing sys_syscall32 path.
  */
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-sys_syscall_int()
-{}
-
-#else	/* __lint */
 
 	ENTRY_NP(brand_sys_syscall_int)
 	SWAPGS				/* kernel gsbase */
@@ -1212,7 +1162,6 @@ nopop_syscall_int:
 	SET_SIZE(sys_syscall_int)
 	SET_SIZE(brand_sys_syscall_int)
 
-#endif	/* __lint */
 	
 /*
  * Legacy 32-bit applications and old libc implementations do lcalls;
@@ -1228,14 +1177,6 @@ nopop_syscall_int:
  * instruction of this handler being either swapgs or cli.
  */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-sys_lcall32()
-{}
-
-#else	/* __lint */
 
 	ENTRY_NP(sys_lcall32)
 	SWAPGS				/* kernel gsbase */
@@ -1261,25 +1202,11 @@ _allsyscalls_size:
 	.NWORD	. - _allsyscalls
 	SET_SIZE(_allsyscalls_size)
 
-#endif	/* __lint */
 
 /*
  * These are the thread context handlers for lwps using sysenter/sysexit.
  */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-sep_save(void *ksp)
-{}
-
-/*ARGSUSED*/
-void
-sep_restore(void *ksp)
-{}
-
-#else	/* __lint */
 
 	/*
 	 * setting this value to zero as we switch away causes the
@@ -1307,4 +1234,3 @@ sep_restore(void *ksp)
 	ret
 	SET_SIZE(sep_restore)
 
-#endif	/* __lint */

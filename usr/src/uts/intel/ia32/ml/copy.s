@@ -42,12 +42,7 @@
 #include <sys/errno.h>
 #include <sys/asm_linkage.h>
 
-#if defined(__lint)
-#include <sys/types.h>
-#include <sys/systm.h>
-#else	/* __lint */
 #include "assym.h"
-#endif	/* __lint */
 
 #define	KCOPY_MIN_SIZE	128	/* Must be >= 16 bytes */
 #define	XCOPY_MIN_SIZE	128	/* Must be >= 16 bytes */
@@ -161,14 +156,6 @@
 	_smap_enable_patch_##ITER##:;	\
 	nop; nop; nop;
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-kcopy(const void *from, void *to, size_t count)
-{ return (0); }
-
-#else	/* __lint */
 
 	.globl	kernelbase
 	.globl	postbootkernelbase
@@ -273,21 +260,11 @@ _kcopy_copyerr:
 #undef	ARG_COUNT
 
 #endif	/* __i386 */
-#endif	/* __lint */
-
-#if defined(__lint)
 
 /*
  * Copy a block of storage.  Similar to kcopy but uses non-temporal
  * instructions.
  */
-
-/* ARGSUSED */
-int
-kcopy_nta(const void *from, void *to, size_t count, int copy_cached)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -436,16 +413,7 @@ _kcopy_nta_copyerr:
 #undef	ARG_COUNT
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-bcopy(const void *from, void *to, size_t count)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1022,7 +990,6 @@ do_copy:
 #undef	ARG_TO
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
 /*
@@ -1031,14 +998,6 @@ do_copy:
  * Returns errno value on pagefault error, 0 if all ok
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-kzero(void *addr, size_t count)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1127,20 +1086,11 @@ _kzeroerr:
 #undef	ARG_COUNT
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Zero a block of storage.
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-bzero(void *addr, size_t count)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1494,7 +1444,6 @@ do_zero:
 #undef	ARG_COUNT
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Transfer data to and from user space -
@@ -1518,14 +1467,6 @@ do_zero:
  * Copy user data to kernel space.
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-copyin(const void *uaddr, void *kaddr, size_t count)
-{ return (0); }
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -1626,16 +1567,7 @@ _copyin_err:
 #undef	ARG_KADDR
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-xcopyin_nta(const void *uaddr, void *kaddr, size_t count, int copy_cached)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1799,20 +1731,11 @@ _xcopyin_err:
 #undef	ARG_CACHED
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Copy kernel data to user space.
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-copyout(const void *kaddr, void *uaddr, size_t count)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1913,16 +1836,7 @@ _copyout_err:
 #undef	ARG_KADDR
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-xcopyout_nta(const void *kaddr, void *uaddr, size_t count, int copy_cached)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2085,21 +1999,12 @@ _xcopyout_err:
 #undef	ARG_CACHED
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Copy a null terminated string from one point to another in
  * the kernel address space.
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-copystr(const char *from, char *to, size_t maxlength, size_t *lencopied)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2251,22 +2156,12 @@ copystr_done:
 #undef	ARG_LENCOPIED
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Copy a null terminated string from the user address space into
  * the kernel address space.
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-copyinstr(const char *uaddr, char *kaddr, size_t maxlength,
-    size_t *lencopied)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2374,22 +2269,12 @@ _copyinstr_error:
 #undef	ARG_KADDR
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Copy a null terminated string from the kernel
  * address space to the user address space.
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-copyoutstr(const char *kaddr, char *uaddr, size_t maxlength,
-    size_t *lencopied)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2496,40 +2381,12 @@ _copyoutstr_error:
 #undef	ARG_UADDR
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Since all of the fuword() variants are so similar, we have a macro to spit
  * them out.  This allows us to create DTrace-unobservable functions easily.
  */
 	
-#if defined(__lint)
-
-#if defined(__amd64)
-
-/* ARGSUSED */
-int
-fuword64(const void *addr, uint64_t *dst)
-{ return (0); }
-
-#endif
-
-/* ARGSUSED */
-int
-fuword32(const void *addr, uint32_t *dst)
-{ return (0); }
-
-/* ARGSUSED */
-int
-fuword16(const void *addr, uint16_t *dst)
-{ return (0); }
-
-/* ARGSUSED */
-int
-fuword8(const void *addr, uint8_t *dst)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2609,39 +2466,11 @@ _flt_##NAME:					\
 
 #undef	FUWORD
 
-#endif	/* __lint */
 
 /*
  * Set user word.
  */
 
-#if defined(__lint)
-
-#if defined(__amd64)
-
-/* ARGSUSED */
-int
-suword64(void *addr, uint64_t value)
-{ return (0); }
-
-#endif
-
-/* ARGSUSED */
-int
-suword32(void *addr, uint32_t value)
-{ return (0); }
-
-/* ARGSUSED */
-int
-suword16(void *addr, uint16_t value)
-{ return (0); }
-
-/* ARGSUSED */
-int
-suword8(void *addr, uint8_t value)
-{ return (0); }
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -2718,35 +2547,7 @@ _flt_##NAME:					\
 
 #undef	SUWORD
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-#if defined(__amd64)
-
-/*ARGSUSED*/
-void
-fuword64_noerr(const void *addr, uint64_t *dst)
-{}
-
-#endif
-
-/*ARGSUSED*/
-void
-fuword32_noerr(const void *addr, uint32_t *dst)
-{}
-
-/*ARGSUSED*/
-void
-fuword8_noerr(const void *addr, uint8_t *dst)
-{}
-
-/*ARGSUSED*/
-void
-fuword16_noerr(const void *addr, uint16_t *dst)
-{}
-
-#else   /* __lint */
 
 #if defined(__amd64)
 
@@ -2786,35 +2587,7 @@ fuword16_noerr(const void *addr, uint16_t *dst)
 
 #undef	FUWORD_NOERR
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-#if defined(__amd64)
-
-/*ARGSUSED*/
-void
-suword64_noerr(void *addr, uint64_t value)
-{}
-
-#endif
-
-/*ARGSUSED*/
-void
-suword32_noerr(void *addr, uint32_t value)
-{}
-
-/*ARGSUSED*/
-void
-suword16_noerr(void *addr, uint16_t value)
-{}
-
-/*ARGSUSED*/
-void
-suword8_noerr(void *addr, uint8_t value)
-{}
-
-#else	/* lint */
 
 #if defined(__amd64)
 
@@ -2853,42 +2626,8 @@ suword8_noerr(void *addr, uint8_t value)
 
 #undef	SUWORD_NOERR
 
-#endif	/* lint */
 
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-int
-subyte(void *addr, uchar_t value)
-{ return (0); }
-
-/*ARGSUSED*/
-void
-subyte_noerr(void *addr, uchar_t value)
-{}
-
-/*ARGSUSED*/
-int
-fulword(const void *addr, ulong_t *valuep)
-{ return (0); }
-
-/*ARGSUSED*/
-void
-fulword_noerr(const void *addr, ulong_t *valuep)
-{}
-
-/*ARGSUSED*/
-int
-sulword(void *addr, ulong_t valuep)
-{ return (0); }
-
-/*ARGSUSED*/
-void
-sulword_noerr(void *addr, ulong_t valuep)
-{}
-
-#else
 
 	.weak	subyte
 	subyte=suword8
@@ -2919,53 +2658,10 @@ sulword_noerr(void *addr, ulong_t valuep)
 
 #endif /* __i386 */
 
-#endif /* __lint */
-
-#if defined(__lint)
-
 /*
  * Copy a block of storage - must not overlap (from + len <= to).
  * No fault handler installed (to be called under on_fault())
  */
-
-/* ARGSUSED */
-void
-copyout_noerr(const void *kfrom, void *uto, size_t count)
-{}
-
-/* ARGSUSED */
-void
-copyin_noerr(const void *ufrom, void *kto, size_t count)
-{}
-
-/*
- * Zero a block of storage in user space
- */
-
-/* ARGSUSED */
-void
-uzero(void *addr, size_t count)
-{}
-
-/*
- * copy a block of storage in user space
- */
-
-/* ARGSUSED */
-void
-ucopy(const void *ufrom, void *uto, size_t ulength)
-{}
-
-/*
- * copy a string in user space
- */
-
-/* ARGSUSED */
-void
-ucopystr(const char *ufrom, char *uto, size_t umaxlength, size_t *lencopied)
-{}
-
-#else /* __lint */
 
 #if defined(__amd64)
 
@@ -3136,7 +2832,6 @@ ucopystr(const char *ufrom, char *uto, size_t umaxlength, size_t *lencopied)
 	.string "copyout_noerr: argument not in kernel address space"
 #endif
 
-#endif	/* __lint */
 
 /*
  * These functions are used for SMAP, supervisor mode access protection. They
@@ -3148,17 +2843,6 @@ ucopystr(const char *ufrom, char *uto, size_t umaxlength, size_t *lencopied)
  * out of paranoia, the kernel will likely call it at several points.
  */
 
-#if defined(__lint)
-
-void
-smap_enable(void)
-{}
-
-void
-smap_disable(void)
-{}
-
-#else
 
 #if defined (__amd64) || defined(__i386)
 	ENTRY(smap_disable)
@@ -3177,9 +2861,7 @@ smap_disable(void)
 
 #endif /* __amd64 || __i386 */
 
-#endif /* __lint */
 
-#ifndef __lint
 
 .data
 .align 	4
@@ -3195,4 +2877,3 @@ _smap_enable_patch_count:
 _smap_disable_patch_count:
 	.long SMAP_DISABLE_COUNT
 
-#endif /* __lint */

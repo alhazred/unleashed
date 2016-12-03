@@ -22,7 +22,6 @@
  * Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
  */
 
-#if !defined(__lint)
 #include <sys/asm_linkage.h>
 #include <sys/trap.h>
 #include <sys/mmu.h>
@@ -34,7 +33,6 @@
 #include <sys/machthread.h>
 #include <sys/machtrap.h>
 #include <sys/machparam.h>
-#endif
 
 #include <mdb/mdb_kreg_impl.h>
 #include <kmdb/kaif_regs.h>
@@ -80,7 +78,6 @@
 	or	ctx, tmp, ctx
 #endif /* sun4v */
 	
-#if !defined(__lint)
 
 	/*
 	 * Calculate the address of the save area for the current CPU.  This
@@ -328,7 +325,6 @@
 
 	SET_SIZE(kaif_trap_common)
 
-#endif	/* !__lint */
 
 	/*
 	 * The primary debugger-entry routine.  This routine is the trap handler
@@ -379,12 +375,6 @@
 	 *    and will attempt to trigger a panic.
 	 */
 
-#if defined(__lint)
-void
-kaif_ktrap(void)
-{
-}
-#else	/* __lint */
 
 	ENTRY_NP(kaif_ktrap)
 
@@ -535,7 +525,6 @@ main_obp_fail:
 
 	SET_SIZE(kaif_ktrap)
 
-#endif	/* __lint */
 
 	/*
 	 * The target for slave-stopping cross calls.  This routine is entered at
@@ -559,12 +548,6 @@ main_obp_fail:
 	 *    release the CPU.
 	 */
 
-#if defined(__lint)
-void
-kaif_slave_entry(void)
-{
-}
-#else	/* __lint */
 
 	ENTRY_NP(kaif_slave_entry)
 
@@ -678,7 +661,6 @@ ivec_not_in_obp:
 
 	SET_SIZE(kaif_slave_entry)
 
-#endif
 
 	/*
 	 * The trap handler used when we're on OBP's trap table, which is used
@@ -710,12 +692,6 @@ ivec_not_in_obp:
 	 * in sync with kaif_save_tl1_state.
 	 */
 
-#if defined(__lint)
-void
-kaif_trap_obp(void)
-{
-}
-#else	/* __lint */
 
 	ENTRY_NP(kaif_trap_obp)
 
@@ -899,7 +875,6 @@ obp_normal_entry:
 	SET_SIZE(kaif_trap_obp_saved)
 	SET_SIZE(kaif_trap_obp)
 
-#endif	/* __lint */
 
 
 	/*

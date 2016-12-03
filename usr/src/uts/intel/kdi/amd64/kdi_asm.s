@@ -30,9 +30,6 @@
  * Debugger entry for both master and slave CPUs
  */
 
-#if defined(__lint)
-#include <sys/types.h>
-#endif
 
 #include <sys/segments.h>
 #include <sys/asm_linkage.h>
@@ -272,12 +269,6 @@
 
 #endif	/* _ASM */
 
-#if defined(__lint)
-void
-kdi_cmnint(void)
-{
-}
-#else	/* __lint */
 
 	/* XXX implement me */
 	ENTRY_NP(kdi_nmiint)
@@ -387,7 +378,6 @@ kdi_cmnint(void)
 	SET_SIZE(kdi_master_entry)
 	SET_SIZE(kdi_cmnint)
 
-#endif	/* __lint */
 
 /*
  * The cross-call handler for slave CPUs.
@@ -399,14 +389,6 @@ kdi_cmnint(void)
  * master.
  */
 
-#if defined(__lint)
-char kdi_slave_entry_patch;
-
-void
-kdi_slave_entry(void)
-{
-}
-#else /* __lint */
 	.globl	kdi_slave_entry_patch;
 
 	ENTRY_NP(kdi_slave_entry)
@@ -465,7 +447,6 @@ kdi_slave_entry_patch:
 
 	SET_SIZE(kdi_slave_entry)
 
-#endif	/* __lint */
 
 /*
  * The state of the world:
@@ -480,7 +461,6 @@ kdi_slave_entry_patch:
  * machine for debugger entry, and enter the debugger.
  */
 
-#if !defined(__lint)
 
 	ENTRY_NP(kdi_save_common_state)
 
@@ -582,18 +562,11 @@ no_msr:
 
 	SET_SIZE(kdi_save_common_state)
 
-#endif	/* !__lint */
 
 /*
  * Resume the world.  The code that calls kdi_resume has already
  * decided whether or not to restore the IDT.
  */
-#if defined(__lint)
-void
-kdi_resume(void)
-{
-}
-#else	/* __lint */
 
 	/* cpusave in %rdi */
 	ENTRY_NP(kdi_resume)
@@ -615,9 +588,7 @@ kdi_resume(void)
 	/*NOTREACHED*/
 	SET_SIZE(kdi_resume)
 
-#endif	/* __lint */
 
-#if !defined(__lint)
 
 	ENTRY_NP(kdi_pass_to_kernel)
 
@@ -689,15 +660,7 @@ kdi_resume(void)
 
 	SET_SIZE(kdi_reboot)
 
-#endif	/* !__lint */
 
-#if defined(__lint)
-/*ARGSUSED*/
-void
-kdi_cpu_debug_init(kdi_cpusave_t *save)
-{
-}
-#else	/* __lint */
 
 	ENTRY_NP(kdi_cpu_debug_init)
 	pushq	%rbp
@@ -711,5 +674,4 @@ kdi_cpu_debug_init(kdi_cpusave_t *save)
 	ret
 
 	SET_SIZE(kdi_cpu_debug_init)
-#endif	/* !__lint */
 

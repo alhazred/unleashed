@@ -34,11 +34,7 @@
 #include	"msg.h"
 
 struct name_pair {
-#ifdef __lint
-	char	* s1, * s2;
-#else
 	int	s1, s2;
-#endif
 };
 
 struct name_pair nplist[100] = {

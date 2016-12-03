@@ -34,29 +34,6 @@
  * Hand-customized compiler output - see comments for details.
  */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-uint64_t
-__udivdi3(uint64_t a, uint64_t b)
-{ return (0); }
-
-/*ARGSUSED*/
-uint64_t
-__umoddi3(uint64_t a, uint64_t b)
-{ return (0); }
-
-/*ARGSUSED*/
-int64_t
-__divdi3(int64_t a, int64_t b)
-{ return (0); }
-
-/*ARGSUSED*/
-int64_t
-__moddi3(int64_t a, int64_t b)
-{ return (0); }
-
-#else
 
 /*
  * __udivdi3
@@ -268,4 +245,3 @@ __moddi3(int64_t a, int64_t b)
 	ret
 	SET_SIZE(__moddi3)
 
-#endif	/* __lint */

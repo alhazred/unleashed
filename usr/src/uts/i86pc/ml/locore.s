@@ -43,18 +43,6 @@
 #include <sys/x86_archext.h>
 #include <sys/machparam.h>
 
-#if defined(__lint)
-
-#include <sys/types.h>
-#include <sys/thread.h>
-#include <sys/systm.h>
-#include <sys/lgrp.h>
-#include <sys/regset.h>
-#include <sys/link.h>
-#include <sys/bootconf.h>
-#include <sys/bootsvcs.h>
-
-#else	/* __lint */
 
 #include <sys/segments.h>
 #include <sys/pcb.h>
@@ -133,23 +121,14 @@
 	.comm	t0stack, DEFAULTSTKSZ, 32
 	.comm	t0, 4094, 32
 
-#endif	/* __lint */
 
 
 #if defined(__amd64)
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-_locore_start(struct boot_syscalls *sysp, ulong_t rsi, struct bootops *bop)
-{}
-
-#else	/* __lint */
 
 	/*
 	 * kobj_init() vectors us back to here with (note) a slightly different
-	 * set of arguments than _start is given (see lint prototypes above).
+	 * set of arguments than _start is given.
 	 *
 	 * XXX	Make this less vile, please.
 	 */
@@ -230,27 +209,16 @@ _locore_start(struct boot_syscalls *sysp, ulong_t rsi, struct bootops *bop)
 	SET_SIZE(_locore_start)
 
 #endif	/* __amd64 */
-#endif	/* __lint */
 
-#if !defined(__lint)
 
 __return_from_main:
 	.string	"main() returned"
 __unsupported_cpu:
 	.string	"486 style cpu detected - no longer supported!"
 
-#endif	/* !__lint */
 
 #if !defined(__amd64)
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-_locore_start(struct boot_syscalls *sysp, struct bootops *bop)
-{}
-
-#else	/* __lint */
 
 	/*
 	 * kobj_init() vectors us back to here with (note) a slightly different
@@ -1072,7 +1040,6 @@ cpu_486:
 	call	panic
 	SET_SIZE(_locore_start)
 
-#endif	/* __lint */
 #endif	/* !__amd64 */
 
 
@@ -1082,14 +1049,6 @@ cpu_486:
  *  When cmntrap_pushed gets called, the entire struct regs has been pushed.
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-cmntrap()
-{}
-
-#else	/* __lint */
 
 	.globl	trap		/* C handler called below */
 
@@ -1320,22 +1279,7 @@ dtrace_badflags:
 dtrace_badtrap:
 	.string "bad DTrace trap"
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-cmninttrap()
-{}
-
-#if !defined(__xpv)
-void
-bop_trap_handler(void)
-{}
-#endif
-
-#else	/* __lint */
 
 	.globl	trap		/* C handler called below */
 
@@ -1410,16 +1354,7 @@ bop_trap_handler(void)
 
 #endif	/* __i386 */
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-dtrace_trap()
-{}
-
-#else	/* __lint */
 
 	.globl	dtrace_user_probe
 
@@ -1483,27 +1418,11 @@ dtrace_trap()
 
 #endif	/* __i386 */
 
-#endif	/* __lint */
 
 /*
  * Return from _sys_trap routine.
  */
 
-#if defined(__lint)
-
-void
-lwp_rtt_initial(void)
-{}
-
-void
-lwp_rtt(void)
-{}
-
-void
-_sys_rtt(void)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1729,10 +1648,6 @@ _lwp_rtt:
 
 #endif	/* __i386 */
 
-#endif	/* __lint */
-
-#if defined(__lint)
-
 /*
  * So why do we have to deal with all this crud in the world of ia32?
  *
@@ -1743,15 +1658,6 @@ _lwp_rtt:
  * reliable TSC. This crud has to be here in order to sift through all the
  * variants.
  */
-
-/*ARGSUSED*/
-uint64_t
-freq_tsc(uint32_t *pit_counter)
-{
-	return (0);
-}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2164,24 +2070,13 @@ freq_tsc_end:
 	SET_SIZE(freq_tsc)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 #if !defined(__amd64)
-#if defined(__lint)
-
 /*
  * We do not have a TSC so we use a block of instructions with well known
  * timings.
  */
 
-/*ARGSUSED*/
-uint64_t
-freq_notsc(uint32_t *pit_counter)
-{
-	return (0);
-}
-
-#else	/* __lint */
 	ENTRY_NP(freq_notsc)
 	pushl	%ebp
 	movl	%esp, %ebp
@@ -2349,10 +2244,8 @@ freq_notsc_end:
 	ret
 	SET_SIZE(freq_notsc)
 
-#endif	/* __lint */
 #endif	/* !__amd64 */
 
-#if !defined(__lint)
 	.data
 #if !defined(__amd64)
 	.align	4
@@ -2366,4 +2259,3 @@ cpu_vendor:
 	.globl	x86_vendor
 #endif
 
-#endif	/* __lint */

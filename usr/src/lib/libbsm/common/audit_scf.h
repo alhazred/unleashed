@@ -44,11 +44,6 @@ extern "C" {
 #include <ucontext.h>
 #include <zone.h>
 
-/* gettext() obfuscation routine for lint */
-#ifdef __lint
-#define	gettext(x)	x
-#endif
-
 #ifndef DEBUG
 #define	DEBUG	0
 #endif

@@ -37,13 +37,6 @@
 #include <sys/machbrand.h>
 #include <sys/privregs.h>
 
-#if defined(__lint)
-
-#include <sys/types.h>
-#include <sys/thread.h>
-#include <sys/systm.h>
-
-#else	/* __lint */
 
 #include <sys/segments.h>
 #include <sys/pcb.h>
@@ -54,7 +47,6 @@
 #include <sys/panic.h>
 #include "assym.h"
 
-#endif	/* __lint */
 
 /*
  * We implement two flavours of system call entry points
@@ -176,7 +168,6 @@
 	addl	$1, %gs:CPU_STATS_SYS_SYSCALL;		\
 	adcl	$0, %gs:CPU_STATS_SYS_SYSCALL+4;
 
-#if !defined(__lint)
 
 /*
  * ASSERT(lwptoregs(lwp) == rp);
@@ -210,7 +201,6 @@ __lwptoregs_msg:
 #define	ASSERT_LWPTOREGS(t, rp)
 #endif
 
-#endif	/* __lint */
 
 /*
  * This is an assembler version of this fragment:
@@ -347,20 +337,6 @@ __lwptoregs_msg:
  */
 #define	SYS_DROP	_CONST(_MUL(MAXSYSARGS, 4))
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-sys_call()
-{}
-
-void
-_allsyscalls()
-{}
-
-size_t _allsyscalls_size;
-
-#else	/* __lint */
 
 	ENTRY_NP2(brand_sys_call, _allsyscalls)
 	BRAND_CALLBACK(BRAND_CB_SYSCALL)
@@ -457,7 +433,6 @@ _syscall_fault:
 	SET_SIZE(sys_call)
 	SET_SIZE(brand_sys_call)
 
-#endif	/* __lint */
 
 /*
  * System call handler via the sysenter instruction
@@ -535,13 +510,6 @@ _syscall_fault:
  * simply add a jump over the instruction at sys_sysenter to make it
  * impossible to single-step to it.
  */
-#if defined(__lint)
-
-void
-sys_sysenter()
-{}
-
-#else	/* __lint */
 
 	ENTRY_NP(brand_sys_sysenter)
 	pushl	%edx
@@ -643,25 +611,11 @@ _allsyscalls_size:
 	.NWORD	. - _allsyscalls
 	SET_SIZE(_allsyscalls_size)
 
-#endif	/* __lint */
 
 /*
  * These are the thread context handlers for lwps using sysenter/sysexit.
  */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-sep_save(void *ksp)
-{}
-
-/*ARGSUSED*/			
-void
-sep_restore(void *ksp)
-{}
-
-#else	/* __lint */
 
 	/*
 	 * setting this value to zero as we switch away causes the
@@ -688,19 +642,11 @@ sep_restore(void *ksp)
 	ret
 	SET_SIZE(sep_restore)
 
-#endif	/* __lint */
 
 /*
  * Call syscall().  Called from trap() on watchpoint at lcall 0,7
  */
 
-#if defined(__lint)
-
-void
-watch_syscall(void)
-{}
-
-#else	/* __lint */
 
 	ENTRY_NP(watch_syscall)
 	CLI(%eax)
@@ -710,4 +656,3 @@ watch_syscall(void)
 	jmp	_watch_do_syscall
 	SET_SIZE(watch_syscall)
 
-#endif	/* __lint */

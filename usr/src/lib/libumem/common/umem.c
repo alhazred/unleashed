@@ -3264,10 +3264,6 @@ umem_startup(caddr_t start, size_t len, size_t pagesize, caddr_t minstack,
 	umem_forkhandler_init(); /* register the fork handler */
 #endif
 
-#ifdef __lint
-	/* make lint happy */
-	minstack = maxstack;
-#endif
 
 #ifdef UMEM_STANDALONE
 	umem_ready = UMEM_READY_STARTUP;

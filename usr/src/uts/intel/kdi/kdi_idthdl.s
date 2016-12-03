@@ -37,7 +37,6 @@
 #include <sys/kdi_regs.h>
 
 /* Nothing in this file is of interest to lint. */
-#if !defined(__lint)
 
 /* 
  * The default ASM_ENTRY_ALIGN (16) wastes far too much space.  Pay no
@@ -230,4 +229,3 @@ kdi_ivct_base:
 	MKIVCT(248);	MKIVCT(249);	MKIVCT(250);	MKIVCT(251);
 	MKIVCT(252);	MKIVCT(253);	MKIVCT(254);	MKIVCT(255);
 
-#endif

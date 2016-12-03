@@ -35,13 +35,6 @@
 #include <sys/psw.h>
 #include <sys/x86_archext.h>
 
-#if defined(__lint)
-
-#include <sys/types.h>
-#include <sys/thread.h>
-#include <sys/systm.h>
-
-#else   /* __lint */
 
 #include <sys/segments.h>
 #include <sys/pcb.h>
@@ -52,15 +45,7 @@
 #include <sys/panic.h>
 #include "assym.h"
 
-#endif	/* lint */
 
-#if defined(__lint)
-
-void
-_interrupt(void)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -149,15 +134,7 @@ _interrupt_size:
 	.NWORD	. - _interrupt
 	.type	_interrupt_size, @object
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-void
-fakesoftint(void)
-{}
-
-#else	/* __lint */
 
 	/
 	/ If we're here, we're being called from splx() to fake a soft
@@ -218,4 +195,3 @@ fakesoftint(void)
 	SET_SIZE(fakesoftint)
 
 #endif	/* __i386 */
-#endif	/* __lint */

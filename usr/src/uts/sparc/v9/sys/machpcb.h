@@ -29,9 +29,6 @@
 #include <sys/stack.h>
 #include <sys/regset.h>
 #include <v9/sys/privregs.h>
-#if defined(__lint)
-#include <sys/thread.h>
-#endif /* __lint */
 
 #ifdef	__cplusplus
 extern "C" {

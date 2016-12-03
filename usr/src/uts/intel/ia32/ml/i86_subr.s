@@ -56,17 +56,7 @@
 #include <sys/psw.h>
 #include <sys/x86_archext.h>
 
-#if defined(__lint)
-#include <sys/types.h>
-#include <sys/systm.h>
-#include <sys/thread.h>
-#include <sys/archsystm.h>
-#include <sys/byteorder.h>
-#include <sys/dtrace.h>
-#include <sys/ftrace.h>
-#else	/* __lint */
 #include "assym.h"
-#endif	/* __lint */
 #include <sys/dditypes.h>
 
 /*
@@ -79,18 +69,6 @@
  * uts/intel/ia32/ml/copy.s.
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-on_fault(label_t *ljb)
-{ return (0); }
-
-void
-no_fault(void)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -150,7 +128,6 @@ catch_fault:
 	SET_SIZE(no_fault)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Default trampoline code for on_trap() (see <sys/ontrap.h>).  We just
@@ -239,19 +216,6 @@ catch_fault:
  * type label_t.
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-setjmp(label_t *lp)
-{ return (0); }
-
-/* ARGSUSED */
-void
-longjmp(label_t *lp)
-{}
-
-#else	/* __lint */
 
 #if LABEL_PC != 0
 #error LABEL_PC MUST be defined as 0 for setjmp/longjmp to work as coded
@@ -317,7 +281,6 @@ longjmp(label_t *lp)
 	SET_SIZE(longjmp)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * if a() calls b() calls caller(),
@@ -326,13 +289,6 @@ longjmp(label_t *lp)
  *  sequence.)
  */
 
-#if defined(__lint)
-
-caddr_t
-caller(void)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -349,20 +305,12 @@ caller(void)
 	SET_SIZE(caller)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * if a() calls callee(), callee() returns the
  * return address in a();
  */
 
-#if defined(__lint)
-
-caddr_t
-callee(void)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -379,19 +327,11 @@ callee(void)
 	SET_SIZE(callee)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * return the current frame pointer
  */
 
-#if defined(__lint)
-
-greg_t
-getfp(void)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -408,20 +348,11 @@ getfp(void)
 	SET_SIZE(getfp)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Invalidate a single page table entry in the TLB
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-mmu_tlbflush_entry(caddr_t m)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -439,66 +370,12 @@ mmu_tlbflush_entry(caddr_t m)
 	SET_SIZE(mmu_tlbflush_entry)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
 /*
  * Get/Set the value of various control registers
  */
 
-#if defined(__lint)
-
-ulong_t
-getcr0(void)
-{ return (0); }
-
-/* ARGSUSED */
-void
-setcr0(ulong_t value)
-{}
-
-ulong_t
-getcr2(void)
-{ return (0); }
-
-ulong_t
-getcr3(void)
-{ return (0); }
-
-#if !defined(__xpv)
-/* ARGSUSED */
-void
-setcr3(ulong_t val)
-{}
-
-void
-reload_cr3(void)
-{}
-#endif
-
-ulong_t
-getcr4(void)
-{ return (0); }
-
-/* ARGSUSED */
-void
-setcr4(ulong_t val)
-{}
-
-#if defined(__amd64)
-
-ulong_t
-getcr8(void)
-{ return (0); }
-
-/* ARGSUSED */
-void
-setcr8(ulong_t val)
-{}
-
-#endif	/* __amd64 */
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -636,16 +513,7 @@ setcr8(ulong_t val)
 	SET_SIZE(setcr4)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-uint32_t
-__cpuid_insn(struct cpuid_regs *regs)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -693,16 +561,7 @@ __cpuid_insn(struct cpuid_regs *regs)
 	SET_SIZE(__cpuid_insn)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-i86_monitor(volatile uint32_t *addr, uint32_t extensions, uint32_t hints)
-{}
-
-#else   /* __lint */
 
 #if defined(__amd64)
 
@@ -733,16 +592,7 @@ ENTRY_NP(i86_monitor)
 	SET_SIZE(i86_monitor)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-i86_mwait(uint32_t data, uint32_t extensions)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -769,7 +619,6 @@ i86_mwait(uint32_t data, uint32_t extensions)
 	SET_SIZE(i86_mwait)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 #if defined(__xpv)
 	/*
@@ -777,15 +626,6 @@ i86_mwait(uint32_t data, uint32_t extensions)
 	 */
 #else
 
-#if defined(__lint)
-
-hrtime_t
-tsc_read(void)
-{
-	return (0);
-}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -873,23 +713,14 @@ _tsc_lfence_end:
 
 #endif	/* __i386 */
 
-#endif	/* __lint */
-
-
 #endif	/* __xpv */
 
-#ifdef __lint
 /*
  * Do not use this function for obtaining clock tick.  This
  * is called by callers who do not need to have a guarenteed
  * correct tick value.  The proper routine to use is tsc_read().
  */
-u_longlong_t
-randtick(void)
-{
-	return (0);
-}
-#else
+
 #if defined(__amd64)
 	ENTRY_NP(randtick)
 	rdtsc
@@ -903,19 +734,10 @@ randtick(void)
 	ret
 	SET_SIZE(randtick)
 #endif /* __i386 */
-#endif /* __lint */
+
 /*
  * Insert entryp after predp in a doubly linked list.
  */
-
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-_insque(caddr_t entryp, caddr_t predp)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -942,20 +764,11 @@ _insque(caddr_t entryp, caddr_t predp)
 	SET_SIZE(_insque)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Remove entryp from a doubly linked list
  */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-_remque(caddr_t entryp)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -979,21 +792,12 @@ _remque(caddr_t entryp)
 	SET_SIZE(_remque)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Returns the number of
  * non-NULL bytes in string argument.
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-size_t
-strlen(const char *str)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1092,7 +896,6 @@ str_valid:
 	.string "strlen: argument below kernelbase"
 #endif /* DEBUG */
 
-#endif	/* __lint */
 
 	/*
 	 * Berkeley 4.3 introduced symbolically named interrupt levels
@@ -1132,22 +935,6 @@ str_valid:
 	 *	spl0()		Used to lower priority to 0.
 	 */
 
-#if defined(__lint)
-
-int spl0(void)		{ return (0); }
-int spl6(void)		{ return (0); }
-int spl7(void)		{ return (0); }
-int spl8(void)		{ return (0); }
-int splhigh(void)	{ return (0); }
-int splhi(void)		{ return (0); }
-int splzs(void)		{ return (0); }
-
-/* ARGSUSED */
-void
-splx(int level)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1213,7 +1000,6 @@ splx(int level)
 	jmp	do_splx		/* redirect to common splx code */
 	SET_SIZE(splx)
 
-#endif	/* __lint */
 
 #if defined(__i386)
 
@@ -1221,19 +1007,6 @@ splx(int level)
  * Read and write the %gs register
  */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-uint16_t
-getgs(void)
-{ return (0); }
-
-/*ARGSUSED*/
-void
-setgs(uint16_t sel)
-{}
-
-#else	/* __lint */
 
 	ENTRY(getgs)
 	clr	%eax
@@ -1246,20 +1019,8 @@ setgs(uint16_t sel)
 	ret
 	SET_SIZE(setgs)
 
-#endif	/* __lint */
 #endif	/* __i386 */
 
-#if defined(__lint)
-
-void
-pc_reset(void)
-{}
-
-void
-efi_reset(void)
-{}
-
-#else	/* __lint */
 
 	ENTRY(wait_500ms)
 #if defined(__amd64)
@@ -1386,20 +1147,11 @@ efi_reset(void)
 	SET_SIZE(efi_reset)
 	SET_SIZE(pc_reset)
 
-#endif	/* __lint */
 
 /*
  * C callable in and out routines
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-outl(int port_address, uint32_t val)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1423,16 +1175,7 @@ outl(int port_address, uint32_t val)
 	SET_SIZE(outl)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-outw(int port_address, uint16_t val)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1453,16 +1196,7 @@ outw(int port_address, uint16_t val)
 	SET_SIZE(outw)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-outb(int port_address, uint8_t val)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1483,16 +1217,7 @@ outb(int port_address, uint8_t val)
 	SET_SIZE(outb)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-uint32_t
-inl(int port_address)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1512,16 +1237,7 @@ inl(int port_address)
 	SET_SIZE(inl)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-uint16_t
-inw(int port_address)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1542,17 +1258,8 @@ inw(int port_address)
 	SET_SIZE(inw)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
-#if defined(__lint)
-
-/* ARGSUSED */
-uint8_t
-inb(int port_address)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1573,17 +1280,8 @@ inb(int port_address)
 	SET_SIZE(inb)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-repoutsw(int port, uint16_t *addr, int cnt)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1624,17 +1322,8 @@ repoutsw(int port, uint16_t *addr, int cnt)
 	SET_SIZE(repoutsw)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-repinsw(int port_addr, uint16_t *addr, int cnt)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1660,17 +1349,8 @@ repinsw(int port_addr, uint16_t *addr, int cnt)
 	SET_SIZE(repinsw)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-repinsb(int port, uint8_t *addr, int count)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1712,21 +1392,12 @@ repinsb(int port, uint8_t *addr, int count)
 	SET_SIZE(repinsb)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
 /*
  * Input a stream of 32-bit words.
  * NOTE: count is a DWORD count.
  */
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-repinsd(int port, uint32_t *addr, int count)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 	
@@ -1753,20 +1424,11 @@ repinsd(int port, uint32_t *addr, int count)
 	SET_SIZE(repinsd)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Output a stream of bytes
  * NOTE: count is a byte count
  */
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-repoutsb(int port, uint8_t *addr, int count)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1792,20 +1454,11 @@ repoutsb(int port, uint8_t *addr, int count)
 	SET_SIZE(repoutsb)
 
 #endif	/* __i386 */	
-#endif	/* __lint */
 
 /*
  * Output a stream of 32-bit words
  * NOTE: count is a DWORD count
  */
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-repoutsd(int port, uint32_t *addr, int count)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1831,7 +1484,6 @@ repoutsd(int port, uint32_t *addr, int count)
 	SET_SIZE(repoutsd)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * void int3(void)
@@ -1840,25 +1492,6 @@ repoutsd(int port, uint32_t *addr, int count)
  * void int_cmci(void)
  */
 
-#if defined(__lint)
-
-void
-int3(void)
-{}
-
-void
-int18(void)
-{}
-
-void
-int20(void)
-{}
-
-void
-int_cmci(void)
-{}
-
-#else	/* __lint */
 
 	ENTRY(int3)
 	int	$T_BPTFLT
@@ -1886,16 +1519,7 @@ int_cmci(void)
 	ret
 	SET_SIZE(int_cmci)
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-int
-scanc(size_t size, uchar_t *cp, uchar_t *table, uchar_t mask)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -1947,24 +1571,12 @@ scanc(size_t size, uchar_t *cp, uchar_t *table, uchar_t mask)
 	SET_SIZE(scanc)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * Replacement functions for ones that are normally inlined.
  * In addition to the copy in i86.il, they are defined here just in case.
  */
 
-#if defined(__lint)
-
-ulong_t
-intr_clear(void)
-{ return (0); }
-
-ulong_t
-clear_int_flag(void)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2023,15 +1635,7 @@ clear_int_flag(void)
 	SET_SIZE(intr_clear)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-struct cpu *
-curcpup(void)
-{ return 0; }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2048,7 +1652,6 @@ curcpup(void)
 	SET_SIZE(curcpup)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /* htonll(), ntohll(), htonl(), ntohl(), htons(), ntohs()
  * These functions reverse the byte order of the input parameter and returns
@@ -2056,33 +1659,6 @@ curcpup(void)
  * (little endian) to network byte order (big endian), or vice versa.
  */
 
-#if defined(__lint)
-
-uint64_t
-htonll(uint64_t i)
-{ return (i); }
-
-uint64_t
-ntohll(uint64_t i)
-{ return (i); }
-
-uint32_t
-htonl(uint32_t i)
-{ return (i); }
-
-uint32_t
-ntohl(uint32_t i)
-{ return (i); }
-
-uint16_t
-htons(uint16_t i)
-{ return (i); }
-
-uint16_t
-ntohs(uint16_t i)
-{ return (i); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2143,22 +1719,8 @@ ntohs(uint16_t i)
 	SET_SIZE(htons)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-intr_restore(ulong_t i)
-{ return; }
-
-/* ARGSUSED */
-void
-restore_int_flag(ulong_t i)
-{ return; }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2211,19 +1773,7 @@ restore_int_flag(ulong_t i)
 	SET_SIZE(intr_restore)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-void
-sti(void)
-{}
-
-void
-cli(void)
-{}
-
-#else	/* __lint */
 
 	ENTRY(sti)
 	STI
@@ -2239,15 +1789,7 @@ cli(void)
 	ret
 	SET_SIZE(cli)
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-dtrace_icookie_t
-dtrace_interrupt_disable(void)
-{ return (0); }
-
-#else   /* __lint */
 
 #if defined(__amd64)
 
@@ -2300,16 +1842,7 @@ dtrace_interrupt_disable(void)
 	SET_SIZE(dtrace_interrupt_disable)
 
 #endif	/* __i386 */	
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-dtrace_interrupt_enable(dtrace_icookie_t cookie)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2355,7 +1888,6 @@ dtrace_interrupt_enable(dtrace_icookie_t cookie)
 	SET_SIZE(dtrace_interrupt_enable)
 
 #endif	/* __i386 */	
-#endif	/* __lint */
 
 
 
@@ -2370,13 +1902,6 @@ dtrace_interrupt_enable(dtrace_icookie_t cookie)
 	SET_SIZE(dtrace_membar_consumer)
 
 
-#if defined(__lint)
-
-kthread_id_t
-threadp(void)
-{ return ((kthread_id_t)0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 	
@@ -2393,42 +1918,11 @@ threadp(void)
 	SET_SIZE(threadp)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  *   Checksum routine for Internet Protocol Headers
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-unsigned int
-ip_ocsum(
-	ushort_t *address,	/* ptr to 1st message buffer */
-	int halfword_count,	/* length of data */
-	unsigned int sum)	/* partial checksum */
-{ 
-	int		i;
-	unsigned int	psum = 0;	/* partial sum */
-
-	for (i = 0; i < halfword_count; i++, address++) {
-		psum += *address;
-	}
-
-	while ((psum >> 16) != 0) {
-		psum = (psum & 0xffff) + (psum >> 16);
-	}
-
-	psum += sum;
-
-	while ((psum >> 16) != 0) {
-		psum = (psum & 0xffff) + (psum >> 16);
-	}
-
-	return (psum);
-}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2664,22 +2158,11 @@ ip_ocsum(
 
 	
 #endif	/* __i386 */		
-#endif	/* __lint */
 
 /*
  * multiply two long numbers and yield a u_longlong_t result, callable from C.
  * Provided to manipulate hrtime_t values.
  */
-#if defined(__lint)
-
-/* result = a * b; */
-
-/* ARGSUSED */
-unsigned long long
-mul32(uint_t a, uint_t b)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2702,15 +2185,8 @@ mul32(uint_t a, uint_t b)
 	SET_SIZE(mul32)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 #if defined(notused)
-#if defined(__lint)
-/* ARGSUSED */
-void
-load_pte64(uint64_t *pte, uint64_t pte_value)
-{}
-#else	/* __lint */
 	.globl load_pte64
 load_pte64:
 	movl	4(%esp), %eax
@@ -2719,17 +2195,8 @@ load_pte64:
 	movl	%edx, 4(%eax)
 	movl	%ecx, (%eax)
 	ret
-#endif	/* __lint */
 #endif	/* notused */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-scan_memory(caddr_t addr, size_t size)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2762,17 +2229,8 @@ scan_memory(caddr_t addr, size_t size)
 	SET_SIZE(scan_memory)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
-#if defined(__lint)
-
-/*ARGSUSED */
-int
-lowbit(ulong_t i)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2797,21 +2255,7 @@ lowbit(ulong_t i)
 	SET_SIZE(lowbit)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-int
-highbit(ulong_t i)
-{ return (0); }
-
-/*ARGSUSED*/
-int
-highbit64(uint64_t i)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -2845,45 +2289,7 @@ highbit64(uint64_t i)
 	SET_SIZE(highbit64)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-uint64_t
-rdmsr(uint_t r)
-{ return (0); }
-
-/*ARGSUSED*/
-void
-wrmsr(uint_t r, const uint64_t val)
-{}
-
-/*ARGSUSED*/
-uint64_t
-xrdmsr(uint_t r)
-{ return (0); }
-
-/*ARGSUSED*/
-void
-xwrmsr(uint_t r, const uint64_t val)
-{}
-
-void
-invalidate_cache(void)
-{}
-
-/*ARGSUSED*/
-uint64_t
-get_xcr(uint_t r)
-{ return (0); }
-
-/*ARGSUSED*/
-void
-set_xcr(uint_t r, const uint64_t val)
-{}
-
-#else  /* __lint */
 
 #define	XMSR_ACCESS_VAL		$0x9c5a203a
 
@@ -3015,16 +2421,7 @@ set_xcr(uint_t r, const uint64_t val)
 	ret
 	SET_SIZE(invalidate_cache)
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-getcregs(struct cregs *crp)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -3149,7 +2546,6 @@ getcregs(struct cregs *crp)
 	SET_SIZE(getcregs)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 
 /*
@@ -3160,19 +2556,6 @@ getcregs(struct cregs *crp)
  * has its own version of this function to allow it to panic correctly from
  * probe context.
  */
-#if defined(__lint)
-
-/*ARGSUSED*/
-int
-panic_trigger(int *tp)
-{ return (0); }
-
-/*ARGSUSED*/
-int
-dtrace_panic_trigger(int *tp)
-{ return (0); }
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -3231,7 +2614,6 @@ dtrace_panic_trigger(int *tp)
 	SET_SIZE(dtrace_panic_trigger)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * The panic() and cmn_err() functions invoke vpanic() as a common entry point
@@ -3247,19 +2629,6 @@ dtrace_panic_trigger(int *tp)
  * sets up the initial stack as vpanic does, calls dtrace_panic_trigger(), and
  * branches back into vpanic().
  */
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-vpanic(const char *format, va_list alist)
-{}
-
-/*ARGSUSED*/
-void
-dtrace_vpanic(const char *format, va_list alist)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -3552,22 +2921,7 @@ vpanic_common:
 	SET_SIZE(dtrace_vpanic)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-void
-hres_tick(void)
-{}
-
-int64_t timedelta;
-hrtime_t hres_last_tick;
-volatile timestruc_t hrestime;
-int64_t hrestime_adj;
-volatile int hres_lock;
-hrtime_t hrtime_base;
-
-#else	/* __lint */
 
 	DGDEF3(hrestime, _MUL(2, CLONGSIZE), 8)
 	.NWORD	0, 0
@@ -3851,7 +3205,6 @@ __adj_hrestime:
 	SET_SIZE(hres_tick)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
 /*
  * void prefetch_smap_w(void *)
@@ -3860,49 +3213,24 @@ __adj_hrestime:
  * Not implemented for ia32.  Stub for compatibility.
  */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void prefetch_smap_w(void *smp)
-{}
-
-#else	/* __lint */
 
 	ENTRY(prefetch_smap_w)
 	rep;	ret	/* use 2 byte return instruction when branch target */
 			/* AMD Software Optimization Guide - Section 6.2 */
 	SET_SIZE(prefetch_smap_w)
 
-#endif	/* __lint */
 
 /*
  * prefetch_page_r(page_t *)
  * issue prefetch instructions for a page_t
  */
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-prefetch_page_r(void *pp)
-{}
-
-#else	/* __lint */
 
 	ENTRY(prefetch_page_r)
 	rep;	ret	/* use 2 byte return instruction when branch target */
 			/* AMD Software Optimization Guide - Section 6.2 */
 	SET_SIZE(prefetch_page_r)
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-int
-bcmp(const void *s1, const void *s2, size_t count)
-{ return (0); }
-
-#else   /* __lint */
 
 #if defined(__amd64)
 
@@ -4006,21 +3334,7 @@ bcmp(const void *s1, const void *s2, size_t count)
 	.string "bcmp: arguments below kernelbase"
 #endif	/* DEBUG */
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-uint_t
-bsrw_insn(uint16_t mask)
-{
-	uint_t index = sizeof (mask) * NBBY - 1;
-
-	while ((mask & (1 << index)) == 0)
-		index--;
-	return (index);
-}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -4040,17 +3354,7 @@ bsrw_insn(uint16_t mask)
 	SET_SIZE(bsrw_insn)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-uint_t
-atomic_btr32(uint32_t *pending, uint_t pil)
-{
-	return (*pending &= ~(1 << pil));
-}
-
-#else	/* __lint */
 
 #if defined(__i386)
 
@@ -4065,17 +3369,7 @@ atomic_btr32(uint32_t *pending, uint_t pil)
 	SET_SIZE(atomic_btr32)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-switch_sp_and_call(void *newsp, void (*func)(uint_t, uint_t), uint_t arg1,
-	    uint_t arg2)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -4106,15 +3400,7 @@ switch_sp_and_call(void *newsp, void (*func)(uint_t, uint_t), uint_t arg1,
 	SET_SIZE(switch_sp_and_call)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-void
-kmdb_enter(void)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -4164,32 +3450,14 @@ kmdb_enter(void)
 	SET_SIZE(kmdb_enter)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-void
-return_instr(void)
-{}
-
-#else	/* __lint */
 
 	ENTRY_NP(return_instr)
 	rep;	ret	/* use 2 byte instruction when branch target */
 			/* AMD Software Optimization Guide - Section 6.2 */
 	SET_SIZE(return_instr)
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-ulong_t
-getflags(void)
-{
-	return (0);
-}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -4237,15 +3505,7 @@ getflags(void)
 
 #endif	/* __i386 */
 
-#endif	/* __lint */
 
-#if defined(__lint)
-
-ftrace_icookie_t
-ftrace_interrupt_disable(void)
-{ return (0); }
-
-#else   /* __lint */
 
 #if defined(__amd64)
 
@@ -4266,16 +3526,7 @@ ftrace_interrupt_disable(void)
 	SET_SIZE(ftrace_interrupt_disable)
 
 #endif	/* __i386 */	
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/*ARGSUSED*/
-void
-ftrace_interrupt_enable(ftrace_icookie_t cookie)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -4295,16 +3546,7 @@ ftrace_interrupt_enable(ftrace_icookie_t cookie)
 	SET_SIZE(ftrace_interrupt_enable)
 
 #endif	/* __i386 */
-#endif	/* __lint */
 
-#if defined (__lint)
-
-/*ARGSUSED*/
-void
-clflush_insn(caddr_t addr)
-{}
-
-#else /* __lint */
 
 #if defined (__amd64)
 	ENTRY(clflush_insn)
@@ -4319,15 +3561,7 @@ clflush_insn(caddr_t addr)
 	SET_SIZE(clflush_insn)
 
 #endif /* __i386 */
-#endif /* __lint */
 
-#if defined (__lint)
-/*ARGSUSED*/
-void
-mfence_insn(void)
-{}
-
-#else /* __lint */
 
 #if defined (__amd64)
 	ENTRY(mfence_insn)
@@ -4341,7 +3575,6 @@ mfence_insn(void)
 	SET_SIZE(mfence_insn)
 
 #endif /* __i386 */
-#endif /* __lint */
 
 /*
  * VMware implements an I/O port that programs can query to detect if software
@@ -4352,13 +3585,6 @@ mfence_insn(void)
  * References: http://kb.vmware.com/kb/1009458 
  */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-vmware_port(int cmd, uint32_t *regs) { return; }
-
-#else
 
 #if defined(__amd64)
 
@@ -4398,4 +3624,3 @@ vmware_port(int cmd, uint32_t *regs) { return; }
 	SET_SIZE(vmware_port)
 
 #endif /* __i386 */
-#endif /* __lint */

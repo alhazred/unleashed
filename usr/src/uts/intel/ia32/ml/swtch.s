@@ -31,13 +31,7 @@
  * Process switching routines.
  */
 
-#if defined(__lint)
-#include <sys/thread.h>
-#include <sys/systm.h>
-#include <sys/time.h>
-#else	/* __lint */
 #include "assym.h"
-#endif	/* __lint */
 
 #include <sys/asm_linkage.h>
 #include <sys/asm_misc.h>
@@ -74,13 +68,11 @@
  * off the stack.
  */
 
-#if !defined(__lint)
 
 #if LWP_PCB_FPU != 0
 #error LWP_PCB_FPU MUST be defined as 0 for code in swtch.s to work
 #endif	/* LWP_PCB_FPU != 0 */
 
-#endif	/* !__lint */
 
 #if defined(__amd64)
 
@@ -224,14 +216,6 @@
 
 #endif	/* __amd64 */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-resume(kthread_t *t)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -627,16 +611,7 @@ resume_return:
 	SET_SIZE(resume)
 
 #endif	/* __amd64 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-resume_from_zombie(kthread_t *t)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -783,16 +758,7 @@ resume_from_zombie_return:
 	SET_SIZE(resume_from_zombie)
 
 #endif	/* __amd64 */
-#endif	/* __lint */
 
-#if defined(__lint)
-
-/* ARGSUSED */
-void
-resume_from_intr(kthread_t *t)
-{}
-
-#else	/* __lint */
 
 #if defined(__amd64)
 
@@ -892,15 +858,7 @@ resume_from_intr_return:
 	SET_SIZE(resume_from_intr)
 
 #endif	/* __amd64 */
-#endif /* __lint */
 
-#if defined(__lint)
-
-void
-thread_start(void)
-{}
-
-#else   /* __lint */
 
 #if defined(__amd64)
 
@@ -928,4 +886,3 @@ thread_start(void)
 
 #endif	/* __i386 */
 
-#endif  /* __lint */

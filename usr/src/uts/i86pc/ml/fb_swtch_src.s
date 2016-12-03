@@ -25,11 +25,6 @@
  */
 
 
-#if defined(__lint)
-
-int fb_swtch_silence_lint = 0;
-
-#else
 
 #include <sys/asm_linkage.h>
 #include <sys/segments.h>
@@ -447,4 +442,3 @@ idt_info:
  * We need to trampoline thru a gdt we have in low memory.
  */
 #include "../boot/boot_gdt.s"
-#endif /* __lint */
