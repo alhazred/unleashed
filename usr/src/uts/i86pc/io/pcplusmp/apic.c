@@ -1331,7 +1331,7 @@ x2apic_update_psm(void)
 	pops->psm_intr_exit = x2apic_intr_exit;
 	pops->psm_setspl = x2apic_setspl;
 
-	pops->psm_send_ipi =  x2apic_send_ipi;
+	pops->psm_send_ipi = x2apic_send_ipi;
 	send_dirintf = pops->psm_send_ipi;
 
 	apic_mode = LOCAL_X2APIC;
