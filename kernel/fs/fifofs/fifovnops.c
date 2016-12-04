@@ -1126,6 +1126,21 @@ fifo_ioctl(vnode_t *vp, int cmd, intptr_t arg, int mode,
 	    fifo_strioctl(vp, cmd, arg, mode, cr, rvalp));
 }
 
+static inline int
+fifo_ioctl_getpeercred(fifonode_t *fnp, intptr_t arg, int mode)
+{
+	k_peercred_t *kp = (k_peercred_t *)arg;
+
+	if (mode == FKIOCTL && fnp->fn_pcredp != NULL) {
+		crhold(fnp->fn_pcredp);
+		kp->pc_cr = fnp->fn_pcredp;
+		kp->pc_cpid = fnp->fn_cpid;
+		return (0);
+	} else {
+		return (ENOTSUP);
+	}
+}
+
 static int
 fifo_fastioctl(vnode_t *vp, int cmd, intptr_t arg, int mode,
 	cred_t *cr, int *rvalp)
@@ -1345,6 +1360,10 @@ fifo_fastioctl(vnode_t *vp, int cmd, intptr_t arg, int mode,
 		*rvalp = 0;
 		break;
 
+	case _I_GETPEERCRED:
+		error = fifo_ioctl_getpeercred(fnp, arg, mode);
+		break;
+
 	/*
 	 * invalid calls for stream head or fifos
 	 */
@@ -1392,17 +1411,8 @@ fifo_strioctl(vnode_t *vp, int cmd, intptr_t arg, int mode,
 	int		error;
 	fifolock_t	*fn_lock;
 
-	if (cmd == _I_GETPEERCRED) {
-		if (mode == FKIOCTL && fnp->fn_pcredp != NULL) {
-			k_peercred_t *kp = (k_peercred_t *)arg;
-			crhold(fnp->fn_pcredp);
-			kp->pc_cr = fnp->fn_pcredp;
-			kp->pc_cpid = fnp->fn_cpid;
-			return (0);
-		} else {
-			return (ENOTSUP);
-		}
-	}
+	if (cmd == _I_GETPEERCRED)
+		return (fifo_ioctl_getpeercred(fnp, arg, mode));
 
 	error = strioctl(vp, cmd, arg, mode, U_TO_K, cr, rvalp);
 
