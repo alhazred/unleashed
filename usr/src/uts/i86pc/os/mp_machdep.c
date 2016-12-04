@@ -1033,11 +1033,7 @@ mach_init()
 #ifndef __xpv
 		if (is_x86_feature(x86_featureset, X86FSET_MWAIT) &&
 		    idle_cpu_prefer_mwait) {
-			CPU->cpu_m.mcpu_mwait = cpuid_mwait_alloc(CPU);
-			/*
-			 * Protect ourself from insane mwait size.
-			 */
-			if (CPU->cpu_m.mcpu_mwait == NULL) {
+			if (cpuid_mwait_alloc(CPU) != 0) {
 #ifdef DEBUG
 				cmn_err(CE_NOTE, "Using hlt idle.  Cannot "
 				    "handle cpu 0 mwait size.");

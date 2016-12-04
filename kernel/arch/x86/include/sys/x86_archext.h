@@ -749,7 +749,7 @@ extern void cpuid_get_addrsize(struct cpu *, uint_t *, uint_t *);
 extern uint_t cpuid_get_dtlb_nent(struct cpu *, size_t);
 
 #if !defined(__xpv)
-extern uint32_t *cpuid_mwait_alloc(struct cpu *);
+extern int cpuid_mwait_alloc(struct cpu *);
 extern void cpuid_mwait_free(struct cpu *);
 extern int cpuid_deep_cstates_supported(void);
 extern int cpuid_arat_supported(void);

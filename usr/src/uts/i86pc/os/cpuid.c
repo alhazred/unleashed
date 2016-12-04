@@ -4542,46 +4542,51 @@ getl2cacheinfo(cpu_t *cpu, int *csz, int *lsz, int *assoc)
 
 #if !defined(__xpv)
 
-uint32_t *
+int
 cpuid_mwait_alloc(cpu_t *cpu)
 {
-	uint32_t	*ret;
-	size_t		mwait_size;
+	uint32_t	*buf;
+	uint32_t	*mwait;
+	size_t		size;
 
 	ASSERT(cpuid_checkpass(CPU, 2));
 
-	mwait_size = CPU->cpu_m.mcpu_cpi->cpi_mwait.mon_max;
-	if (mwait_size == 0)
-		return (NULL);
+	size = CPU->cpu_m.mcpu_cpi->cpi_mwait.mon_max;
+	if (size == 0)
+		return (EINVAL);
 
 	/*
-	 * kmem_alloc() returns cache line size aligned data for mwait_size
-	 * allocations.  mwait_size is currently cache line sized.  Neither
-	 * of these implementation details are guarantied to be true in the
+	 * kmem_alloc() returns cache line size aligned data for size
+	 * allocations.  size is currently cache line sized.  Neither of
+	 * these implementation details are guarantied to be true in the
 	 * future.
 	 *
-	 * First try allocating mwait_size as kmem_alloc() currently returns
+	 * First try allocating size as kmem_alloc() currently returns
 	 * correctly aligned memory.  If kmem_alloc() does not return
-	 * mwait_size aligned memory, then use mwait_size ROUNDUP.
+	 * size aligned memory, then use size ROUNDUP.
 	 *
 	 * Set cpi_mwait.buf_actual and cpi_mwait.size_actual in case we
 	 * decide to free this memory.
 	 */
-	ret = kmem_zalloc(mwait_size, KM_SLEEP);
-	if (ret == (uint32_t *)P2ROUNDUP((uintptr_t)ret, mwait_size)) {
-		cpu->cpu_m.mcpu_cpi->cpi_mwait.buf_actual = ret;
-		cpu->cpu_m.mcpu_cpi->cpi_mwait.size_actual = mwait_size;
-		*ret = MWAIT_RUNNING;
-		return (ret);
+	buf = kmem_zalloc(size, KM_SLEEP);
+	if (buf == (uint32_t *)P2ROUNDUP((uintptr_t)buf, size)) {
+		mwait = buf;
 	} else {
-		kmem_free(ret, mwait_size);
-		ret = kmem_zalloc(mwait_size * 2, KM_SLEEP);
-		cpu->cpu_m.mcpu_cpi->cpi_mwait.buf_actual = ret;
-		cpu->cpu_m.mcpu_cpi->cpi_mwait.size_actual = mwait_size * 2;
-		ret = (uint32_t *)P2ROUNDUP((uintptr_t)ret, mwait_size);
-		*ret = MWAIT_RUNNING;
-		return (ret);
+		kmem_free(buf, size);
+		buf = kmem_zalloc(size * 2, KM_SLEEP);
+
+		mwait = (uint32_t *)P2ROUNDUP((uintptr_t)buf, size);
+		size *= 2;
 	}
+
+	cpu->cpu_m.mcpu_cpi->cpi_mwait.buf_actual = buf;
+	cpu->cpu_m.mcpu_cpi->cpi_mwait.size_actual = size;
+
+	*mwait = MWAIT_RUNNING;
+
+	cpu->cpu_m.mcpu_mwait = mwait;
+
+	return (0);
 }
 
 void

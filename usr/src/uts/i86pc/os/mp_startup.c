@@ -411,10 +411,11 @@ mp_cpu_configure_common(int cpun, boolean_t boot)
 	 * alloc space for cpuid info
 	 */
 	cpuid_alloc_space(cp);
+
 #if !defined(__xpv)
 	if (is_x86_feature(x86_featureset, X86FSET_MWAIT) &&
 	    idle_cpu_prefer_mwait) {
-		cp->cpu_m.mcpu_mwait = cpuid_mwait_alloc(cp);
+		VERIFY0(cpuid_mwait_alloc(cp));
 		cp->cpu_m.mcpu_idle_cpu = cpu_idle_mwait;
 	} else
 #endif
