@@ -56,6 +56,7 @@
 #include <sys/dtrace.h>
 #include <sys/sdt.h>
 #include <sys/archsystm.h>
+#include <sys/stdbool.h>
 
 #include <vm/as.h>
 
@@ -1160,91 +1161,113 @@ cpu_resched(cpu_t *cp, pri_t tpri)
 #define	THREAD_HAS_CACHE_WARMTH(thread)	\
 	((thread == curthread) ||	\
 	((ddi_get_lbolt() - thread->t_disp_time) <= rechoose_interval))
+
 /*
- * Put the specified thread on the back of the dispatcher
- * queue corresponding to its current priority.
+ * Put the specified thread on the front/back of the dispatcher queue
+ * corresponding to its current priority.
  *
- * Called with the thread in transition, onproc or stopped state
- * and locked (transition implies locked) and at high spl.
- * Returns with the thread in TS_RUN state and still locked.
+ * Called with the thread in transition, onproc or stopped state and locked
+ * (transition implies locked) and at high spl.  Returns with the thread in
+ * TS_RUN state and still locked.
  */
-void
-setbackdq(kthread_t *tp)
+static void
+setfrontbackdq(kthread_t *tp, bool front)
 {
-	dispq_t	*dq;
+	dispq_t		*dq;
 	disp_t		*dp;
 	cpu_t		*cp;
 	pri_t		tpri;
-	int		bound;
+	bool		bound;
 	boolean_t	self;
 
 	ASSERT(THREAD_LOCK_HELD(tp));
 	ASSERT((tp->t_schedflag & TS_ALLSTART) == 0);
 	ASSERT(!thread_on_queue(tp));	/* make sure tp isn't on a runq */
 
-	self = (tp == curthread);
-
-	if (tp->t_bound_cpu || tp->t_weakbound_cpu)
-		bound = 1;
-	else
-		bound = 0;
+	self  = (tp == curthread);
+	bound = (tp->t_bound_cpu || tp->t_weakbound_cpu);
 
 	tpri = DISP_PRIO(tp);
 	if (ncpus == 1)
 		cp = tp->t_cpu;
 	else if (!bound) {
 		if (tpri >= kpqpri) {
-			setkpdq(tp, SETKP_BACK);
+			setkpdq(tp, front ? SETKP_FRONT : SETKP_BACK);
 			return;
 		}
 
-		/*
-		 * We'll generally let this thread continue to run where
-		 * it last ran...but will consider migration if:
-		 * - We thread probably doesn't have much cache warmth.
-		 * - The CPU where it last ran is the target of an offline
-		 *   request.
-		 * - The thread last ran outside it's home lgroup.
-		 */
-		if ((!THREAD_HAS_CACHE_WARMTH(tp)) ||
-		    (tp->t_cpu == cpu_inmotion)) {
-			cp = disp_lowpri_cpu(tp->t_cpu, tp->t_lpl, tpri, NULL);
-		} else if (!LGRP_CONTAINS_CPU(tp->t_lpl->lpl_lgrp, tp->t_cpu)) {
-			cp = disp_lowpri_cpu(tp->t_cpu, tp->t_lpl, tpri,
-			    self ? tp->t_cpu : NULL);
-		} else {
-			cp = tp->t_cpu;
+		cp = tp->t_cpu;
+
+		if (!front) {
+			/*
+			 * We'll generally let this thread continue to run where
+			 * it last ran...but will consider migration if:
+			 * - We thread probably doesn't have much cache warmth.
+			 * - The CPU where it last ran is the target of an offline
+			 *   request.
+			 * - The thread last ran outside it's home lgroup.
+			 */
+			if ((!THREAD_HAS_CACHE_WARMTH(tp)) || (cp == cpu_inmotion)) {
+				cp = disp_lowpri_cpu(cp, tp->t_lpl, tpri, NULL);
+			} else if (!LGRP_CONTAINS_CPU(tp->t_lpl->lpl_lgrp, cp)) {
+				cp = disp_lowpri_cpu(cp, tp->t_lpl, tpri,
+				    self ? cp : NULL);
+			}
+
 		}
 
 		if (tp->t_cpupart == cp->cpu_part) {
-			int	qlen;
-
-			/*
-			 * Perform any CMT load balancing
-			 */
-			cp = cmt_balance(tp, cp);
-
-			/*
-			 * Balance across the run queues
-			 */
-			qlen = RUNQ_LEN(cp, tpri);
-			if (tpri >= RUNQ_MATCH_PRI &&
-			    !(tp->t_schedflag & TS_RUNQMATCH))
-				qlen -= RUNQ_MAX_DIFF;
-			if (qlen > 0) {
-				cpu_t *newcp;
-
-				if (tp->t_lpl->lpl_lgrpid == LGRP_ROOTID) {
-					newcp = cp->cpu_next_part;
-				} else if ((newcp = cp->cpu_next_lpl) == cp) {
-					newcp = cp->cpu_next_part;
+			if (front) {
+				/*
+				 * We'll generally let this thread continue to run
+				 * where it last ran, but will consider migration if:
+				 * - The thread last ran outside it's home lgroup.
+				 * - The CPU where it last ran is the target of an
+				 *   offline request (a thread_nomigrate() on the in
+				 *   motion CPU relies on this when forcing a preempt).
+				 * - The thread isn't the highest priority thread where
+				 *   it last ran, and it is considered not likely to
+				 *   have significant cache warmth.
+				 */
+				if ((!LGRP_CONTAINS_CPU(tp->t_lpl->lpl_lgrp, cp)) ||
+				    (cp == cpu_inmotion)) {
+					cp = disp_lowpri_cpu(cp, tp->t_lpl, tpri,
+					    self ? cp : NULL);
+				} else if ((tpri < cp->cpu_disp->disp_maxrunpri) &&
+				    (!THREAD_HAS_CACHE_WARMTH(tp))) {
+					cp = disp_lowpri_cpu(cp, tp->t_lpl, tpri,
+					    NULL);
 				}
+			} else {
+				int	qlen;
 
-				if (RUNQ_LEN(newcp, tpri) < qlen) {
-					DTRACE_PROBE3(runq__balance,
-					    kthread_t *, tp,
-					    cpu_t *, cp, cpu_t *, newcp);
-					cp = newcp;
+				/*
+				 * Perform any CMT load balancing
+				 */
+				cp = cmt_balance(tp, cp);
+
+				/*
+				 * Balance across the run queues
+				 */
+				qlen = RUNQ_LEN(cp, tpri);
+				if (tpri >= RUNQ_MATCH_PRI &&
+				    !(tp->t_schedflag & TS_RUNQMATCH))
+					qlen -= RUNQ_MAX_DIFF;
+				if (qlen > 0) {
+					cpu_t *newcp;
+
+					if (tp->t_lpl->lpl_lgrpid == LGRP_ROOTID) {
+						newcp = cp->cpu_next_part;
+					} else if ((newcp = cp->cpu_next_lpl) == cp) {
+						newcp = cp->cpu_next_part;
+					}
+
+					if (RUNQ_LEN(newcp, tpri) < qlen) {
+						DTRACE_PROBE3(runq__balance,
+						    kthread_t *, tp,
+						    cpu_t *, cp, cpu_t *, newcp);
+						cp = newcp;
+					}
 				}
 			}
 		} else {
@@ -1254,6 +1277,7 @@ setbackdq(kthread_t *tp)
 			cp = disp_lowpri_cpu(tp->t_cpupart->cp_cpulist,
 			    tp->t_lpl, tp->t_pri, NULL);
 		}
+
 		ASSERT((cp->cpu_flags & CPU_QUIESCED) == 0);
 	} else {
 		/*
@@ -1265,6 +1289,7 @@ setbackdq(kthread_t *tp)
 		cp = tp->t_weakbound_cpu ?
 		    tp->t_weakbound_cpu : tp->t_bound_cpu;
 	}
+
 	/*
 	 * A thread that is ONPROC may be temporarily placed on the run queue
 	 * but then chosen to run again by disp.  If the thread we're placing on
@@ -1286,9 +1311,7 @@ setbackdq(kthread_t *tp)
 	dp = cp->cpu_disp;
 	disp_lock_enter_high(&dp->disp_lock);
 
-	DTRACE_SCHED3(enqueue, kthread_t *, tp, disp_t *, dp, int, 0);
-	TRACE_3(TR_FAC_DISP, TR_BACKQ, "setbackdq:pri %d cpu %p tid %p",
-	    tpri, cp, tp);
+	DTRACE_SCHED3(enqueue, kthread_t *, tp, disp_t *, dp, int, front);
 
 #ifndef NPROBE
 	/* Kernel probe */
@@ -1309,9 +1332,15 @@ setbackdq(kthread_t *tp)
 	membar_enter();
 
 	if (dq->dq_sruncnt++ != 0) {
-		ASSERT(dq->dq_first != NULL);
-		dq->dq_last->t_link = tp;
-		dq->dq_last = tp;
+		if (front) {
+			ASSERT(dq->dq_last != NULL);
+			tp->t_link = dq->dq_first;
+			dq->dq_first = tp;
+		} else {
+			ASSERT(dq->dq_first != NULL);
+			dq->dq_last->t_link = tp;
+			dq->dq_last = tp;
+		}
 	} else {
 		ASSERT(dq->dq_first == NULL);
 		ASSERT(dq->dq_last == NULL);
@@ -1338,7 +1367,22 @@ setbackdq(kthread_t *tp)
 		}
 		dp->disp_max_unbound_pri = tpri;
 	}
+
 	(*disp_enq_thread)(cp, bound);
+}
+
+/*
+ * Put the specified thread on the back of the dispatcher
+ * queue corresponding to its current priority.
+ *
+ * Called with the thread in transition, onproc or stopped state
+ * and locked (transition implies locked) and at high spl.
+ * Returns with the thread in TS_RUN state and still locked.
+ */
+void
+setbackdq(kthread_t *tp)
+{
+	setfrontbackdq(tp, false);
 }
 
 /*
@@ -1352,144 +1396,7 @@ setbackdq(kthread_t *tp)
 void
 setfrontdq(kthread_t *tp)
 {
-	disp_t		*dp;
-	dispq_t		*dq;
-	cpu_t		*cp;
-	pri_t		tpri;
-	int		bound;
-
-	ASSERT(THREAD_LOCK_HELD(tp));
-	ASSERT((tp->t_schedflag & TS_ALLSTART) == 0);
-	ASSERT(!thread_on_queue(tp));	/* make sure tp isn't on a runq */
-
-	if (tp->t_bound_cpu || tp->t_weakbound_cpu)
-		bound = 1;
-	else
-		bound = 0;
-
-	tpri = DISP_PRIO(tp);
-	if (ncpus == 1)
-		cp = tp->t_cpu;
-	else if (!bound) {
-		if (tpri >= kpqpri) {
-			setkpdq(tp, SETKP_FRONT);
-			return;
-		}
-		cp = tp->t_cpu;
-		if (tp->t_cpupart == cp->cpu_part) {
-			/*
-			 * We'll generally let this thread continue to run
-			 * where it last ran, but will consider migration if:
-			 * - The thread last ran outside it's home lgroup.
-			 * - The CPU where it last ran is the target of an
-			 *   offline request (a thread_nomigrate() on the in
-			 *   motion CPU relies on this when forcing a preempt).
-			 * - The thread isn't the highest priority thread where
-			 *   it last ran, and it is considered not likely to
-			 *   have significant cache warmth.
-			 */
-			if ((!LGRP_CONTAINS_CPU(tp->t_lpl->lpl_lgrp, cp)) ||
-			    (cp == cpu_inmotion)) {
-				cp = disp_lowpri_cpu(tp->t_cpu, tp->t_lpl, tpri,
-				    (tp == curthread) ? cp : NULL);
-			} else if ((tpri < cp->cpu_disp->disp_maxrunpri) &&
-			    (!THREAD_HAS_CACHE_WARMTH(tp))) {
-				cp = disp_lowpri_cpu(tp->t_cpu, tp->t_lpl, tpri,
-				    NULL);
-			}
-		} else {
-			/*
-			 * Migrate to a cpu in the new partition.
-			 */
-			cp = disp_lowpri_cpu(tp->t_cpupart->cp_cpulist,
-			    tp->t_lpl, tp->t_pri, NULL);
-		}
-		ASSERT((cp->cpu_flags & CPU_QUIESCED) == 0);
-	} else {
-		/*
-		 * It is possible that t_weakbound_cpu != t_bound_cpu (for
-		 * a short time until weak binding that existed when the
-		 * strong binding was established has dropped) so we must
-		 * favour weak binding over strong.
-		 */
-		cp = tp->t_weakbound_cpu ?
-		    tp->t_weakbound_cpu : tp->t_bound_cpu;
-	}
-
-	/*
-	 * A thread that is ONPROC may be temporarily placed on the run queue
-	 * but then chosen to run again by disp.  If the thread we're placing on
-	 * the queue is in TS_ONPROC state, don't set its t_waitrq until a
-	 * replacement process is actually scheduled in swtch().  In this
-	 * situation, curthread is the only thread that could be in the ONPROC
-	 * state.
-	 */
-	if ((tp != curthread) && (tp->t_waitrq == 0)) {
-		hrtime_t curtime;
-
-		curtime = gethrtime_unscaled();
-		(void) cpu_update_pct(tp, curtime);
-		tp->t_waitrq = curtime;
-	} else {
-		(void) cpu_update_pct(tp, gethrtime_unscaled());
-	}
-
-	dp = cp->cpu_disp;
-	disp_lock_enter_high(&dp->disp_lock);
-
-	TRACE_2(TR_FAC_DISP, TR_FRONTQ, "frontq:pri %d tid %p", tpri, tp);
-	DTRACE_SCHED3(enqueue, kthread_t *, tp, disp_t *, dp, int, 1);
-
-#ifndef NPROBE
-	/* Kernel probe */
-	if (tnf_tracing_active)
-		tnf_thread_queue(tp, cp, tpri);
-#endif /* NPROBE */
-
-	ASSERT(tpri >= 0 && tpri < dp->disp_npri);
-
-	THREAD_RUN(tp, &dp->disp_lock);		/* set TS_RUN state and lock */
-	tp->t_disp_queue = dp;
-
-	dq = &dp->disp_q[tpri];
-	dp->disp_nrunnable++;
-	if (!bound)
-		dp->disp_steal = 0;
-	membar_enter();
-
-	if (dq->dq_sruncnt++ != 0) {
-		ASSERT(dq->dq_last != NULL);
-		tp->t_link = dq->dq_first;
-		dq->dq_first = tp;
-	} else {
-		ASSERT(dq->dq_last == NULL);
-		ASSERT(dq->dq_first == NULL);
-		tp->t_link = NULL;
-		dq->dq_first = dq->dq_last = tp;
-		BT_SET(dp->disp_qactmap, tpri);
-		if (tpri > dp->disp_maxrunpri) {
-			dp->disp_maxrunpri = tpri;
-			membar_enter();
-			cpu_resched(cp, tpri);
-		}
-	}
-
-	if (!bound && tpri > dp->disp_max_unbound_pri) {
-		if (tp == curthread && dp->disp_max_unbound_pri == -1 &&
-		    cp == CPU) {
-			/*
-			 * If there are no other unbound threads on the
-			 * run queue, don't allow other CPUs to steal
-			 * this thread while we are in the middle of a
-			 * context switch. We may just switch to it
-			 * again right away. CPU_DISP_DONTSTEAL is cleared
-			 * in swtch and swtch_to.
-			 */
-			cp->cpu_disp_flags |= CPU_DISP_DONTSTEAL;
-		}
-		dp->disp_max_unbound_pri = tpri;
-	}
-	(*disp_enq_thread)(cp, bound);
+	setfrontbackdq(tp, true);
 }
 
 /*
