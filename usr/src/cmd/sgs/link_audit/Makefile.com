@@ -26,8 +26,6 @@
 include		../../../../lib/Makefile.lib
 include		../../Makefile.com
 
-SGSPROTO=	../../proto/$(MACH)
-
 TRUSSLIB=	truss.so.1
 TRUSSSRC=	truss.c
 

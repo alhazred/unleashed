@@ -7,6 +7,7 @@ i386_INCS=			\
 	fdc.h			\
 	fdmedia.h		\
 	firmload.h		\
+	gfx_private.h		\
 	i8272A.h		\
 	mouse.h			\
 	pic.h			\

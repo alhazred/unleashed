@@ -45,8 +45,8 @@ LDLIBS +=	$(LDLIBDIR) $(LD_LIB) $(ELFLIBDIR) -lelf \
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-parentheses
 
-native :=	LDFLAGS = -R$(SGSPROTO) $(ZNOVERSION)
-native :=	LDLIBS = -L$(SGSPROTO) $(LD_LIB) -lelf $(CONVLIBDIR) \
+native :=	LDFLAGS = -R$(SGSLIBDIR) $(ZNOVERSION)
+native :=	LDLIBS = -L$(SGSLIBDIR) $(LD_LIB) -lelf $(CONVLIBDIR) \
 		    $(CONV_LIB)
 native :=	CPPFLAGS += -DNATIVE_BUILD
 

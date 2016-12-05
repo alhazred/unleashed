@@ -353,6 +353,7 @@ file path=usr/include/deflt.h
 file path=usr/include/des/des.h mode=0644
 file path=usr/include/des/desdata.h mode=0644
 file path=usr/include/des/softdes.h mode=0644
+file path=usr/include/devfsadm.h
 file path=usr/include/device_info.h mode=0644
 file path=usr/include/devid.h
 file path=usr/include/devmgmt.h
@@ -1047,6 +1048,7 @@ file path=usr/include/sys/ftrace.h
 file path=usr/include/sys/fx.h
 file path=usr/include/sys/fxpriocntl.h
 file path=usr/include/sys/gfs.h
+file path=usr/include/sys/gfx_private.h
 file path=usr/include/sys/gld.h
 file path=usr/include/sys/gldpriv.h
 file path=usr/include/sys/group.h

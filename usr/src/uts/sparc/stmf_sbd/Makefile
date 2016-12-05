@@ -1,1 +1,0 @@
-../../common/io/comstar/lu/stmf_sbd/Makefile

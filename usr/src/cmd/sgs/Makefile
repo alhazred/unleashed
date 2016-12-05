@@ -20,6 +20,7 @@
 #
 #
 # Copyright (c) 1991, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2016 RackTop Systems.
 #
 
 include		$(SRC)/cmd/Makefile.cmd
@@ -150,7 +151,7 @@ $(SUBDIRS):	FRC
 # itself and ld.so.1.  Once this new functionality appears in the standard ld
 # this target can be disabled.
 
-native-add:	native-proto FRC
+native-add:	FRC
 		@ cd tools/$(MACH); pwd; $(MAKE) native
 		@ cd libconv/$(MACH); pwd; $(MAKE)
 		@ cd libelf/$(MACH); pwd; $(MAKE) native
@@ -162,8 +163,5 @@ native-add:	native-proto FRC
 native-clobber:
 		@ cd tools; pwd; $(MAKE) $(TARGET)
 		$(RM) -r proto/$(MACH)
-
-native-proto:
-		-@mkdir -p proto/$(MACH)
 
 FRC:
