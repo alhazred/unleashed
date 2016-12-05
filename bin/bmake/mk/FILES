@@ -25,6 +25,7 @@ man.mk
 manifest.mk
 mk-files.txt
 mkopt.sh
+mlib.mk
 nls.mk
 obj.mk
 options.mk
