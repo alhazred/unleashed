@@ -156,37 +156,8 @@ extern int	alphasort64(const struct dirent64 **, const struct dirent64 **);
 	defined(_POSIX_PTHREAD_SEMANTICS)
 
 #if	!defined(_LP64) && _FILE_OFFSET_BITS == 32
-
-#if	(_POSIX_C_SOURCE - 0 >= 199506L) || defined(_POSIX_PTHREAD_SEMANTICS)
-
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname readdir_r	__posix_readdir_r
 extern int readdir_r(DIR *_RESTRICT_KYWD, struct dirent *_RESTRICT_KYWD,
 		struct dirent **_RESTRICT_KYWD);
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-
-extern int __posix_readdir_r(DIR *_RESTRICT_KYWD,
-    struct dirent *_RESTRICT_KYWD, struct dirent **_RESTRICT_KYWD);
-
-#ifdef	__lint
-#define	readdir_r	__posix_readdir_r
-#else	/* !__lint */
-
-static int
-readdir_r(DIR *_RESTRICT_KYWD __dp, struct dirent *_RESTRICT_KYWD __ent,
-		struct dirent **_RESTRICT_KYWD __res) {
-	return (__posix_readdir_r(__dp, __ent, __res));
-}
-
-#endif /* !__lint */
-#endif /* __PRAGMA_REDEFINE_EXTNAME */
-
-#else  /* (_POSIX_C_SOURCE - 0 >= 199506L) || ... */
-
-extern struct dirent *readdir_r(DIR *__dp, struct dirent *__ent);
-
-#endif  /* (_POSIX_C_SOURCE - 0 >= 199506L) || ... */
-
 #else	/* !_LP64 && _FILE_OFFSET_BITS == 32 */
 
 #if defined(_LP64)

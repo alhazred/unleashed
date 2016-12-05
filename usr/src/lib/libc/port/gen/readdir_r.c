@@ -20,14 +20,14 @@
  */
 
 /*
+ * Copyright 2014 Garrett D'Amore <garrett@damore.org>
+ *
  * Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
 
 /*	Copyright (c) 1988 AT&T	*/
 /*	  All Rights Reserved  	*/
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
  * readdir_r -- C library extension routine
@@ -153,7 +153,7 @@ readdir64_r(DIR *dirp, dirent64_t *entry, dirent64_t **result)
  */
 
 int
-__posix_readdir_r(DIR *dirp, dirent_t *entry, dirent_t **result)
+readdir_r(DIR *dirp, dirent_t *entry, dirent_t **result)
 {
 	int error;
 	dirent64_t *dp64;
@@ -181,22 +181,6 @@ __posix_readdir_r(DIR *dirp, dirent_t *entry, dirent_t **result)
 	(void) strcpy(entry->d_name, dp64->d_name);
 	*result = entry;
 	return (0);
-}
-
-/*
- * POSIX.1c Draft-6 version of the function readdir_r.
- * It was implemented by Solaris 2.3.
- */
-
-dirent_t *
-readdir_r(DIR *dirp, dirent_t *entry)
-{
-	int error;
-	dirent_t *result;
-
-	if ((error = __posix_readdir_r(dirp, entry, &result)) != 0)
-		errno = error;
-	return (result);
 }
 
 #endif	/* _LP64 */

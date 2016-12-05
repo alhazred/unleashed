@@ -370,7 +370,6 @@ file path=usr/share/man/man3c/random.3c
 file path=usr/share/man/man3c/rctl_walk.3c
 file path=usr/share/man/man3c/rctlblk_set_value.3c
 file path=usr/share/man/man3c/re_comp.3c
-file path=usr/share/man/man3c/readdir.3c
 file path=usr/share/man/man3c/realpath.3c
 file path=usr/share/man/man3c/reboot.3c
 file path=usr/share/man/man3c/regcmp.3c
@@ -1194,7 +1193,6 @@ link path=usr/share/man/man3c/rctlblk_set_recipient_pid.3c \
     target=rctlblk_set_value.3c
 link path=usr/share/man/man3c/rctlblk_size.3c target=rctlblk_set_value.3c
 link path=usr/share/man/man3c/re_exec.3c target=re_comp.3c
-link path=usr/share/man/man3c/readdir_r.3c target=readdir.3c
 link path=usr/share/man/man3c/realloc.3c target=malloc.3c
 link path=usr/share/man/man3c/regerror.3c target=regcomp.3c
 link path=usr/share/man/man3c/regex.3c target=regcmp.3c
