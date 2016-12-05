@@ -57,6 +57,8 @@ LEX.l?=		${LEX} ${LFLAGS}
 
 LD?=		ld
 LDFLAGS?=
+LD_X?=
+LD_x?=
 
 MAKE?=		${.MAKE}
 
