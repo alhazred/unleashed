@@ -487,7 +487,7 @@ cleanlib: .PHONY
 	rm -f a.out [Ee]rrs mklog core *.core ${CLEANFILES}
 	rm -f lib${LIB}.a ${OBJS}
 	rm -f lib${LIB}_p.a ${POBJS}
-	rm -f lib${LIB}_pic.a lib${LIB}.so.*.* ${SOBJS}
+	rm -f lib${LIB}_pic.a lib${LIB}.so.* ${SOBJS}
 	rm -f llib-l${LIB}.ln ${LOBJS}
 .if !empty(SHLIB_LINKS)
 	rm -f ${SHLIB_LINKS}
