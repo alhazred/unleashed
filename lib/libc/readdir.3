@@ -8,8 +8,8 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.Dd Sep 21, 2014
-.Dt READDIR 3C
+.Dd Dec 5, 2016
+.Dt READDIR 3
 .Os
 .
 .Sh NAME
@@ -27,7 +27,7 @@
 .Fa "DIR *dirp"
 .Fc
 .
-.Ft "struct dirent *"
+.Ft int
 .Fo readdir_r
 .Fa "DIR *restrict dirp"
 .Fa "struct dirent **restrict result"
@@ -294,21 +294,6 @@ These functions have transitional interfaces for 64-bit file offsets.
 See
 .Xr lf64 5 .
 .
-.Sh INTERFACE STABILITY
-.
-Standard .
-.
-.Sh MT-LEVEL
-.
-The
-.Fn readdir
-function is
-.Sy Unsafe .
-The
-.Fn readdir_r
-function is
-.Sy Safe .
-.
 .Sh SEE ALSO
 .Xr fork 2 ,
 .Xr lstat 2 ,
@@ -319,49 +304,11 @@ function is
 .Xr rewinddir 3C ,
 .Xr scandir 3C ,
 .Xr seekdir 3C ,
-.Xr lf64 5 ,
-.Xr standards 5
-.
-.Sh NOTES
-.
-Solaris provided a
-.Fn readdir_r
-interface as specified in POSIX.1c Draft 6.
-The final POSIX.1c standard changed the interface as described above.
-New applications and libraries should use the standard-conforming interface.
+.Xr lf64 5
 .
 .Sh STANDARDS
-.
-These functions are available in the following compilation environments.
-See
-.Xr standards 5 .
-.
-.Ss Fn readdir
-.
-.Bl -bullet -compact
-.It
-.St -p1003.1
-.It
-.St -p1003.1-2001
-.It
-.St -p1003.1-2008
-.It
-.St -xpg4.2
-.It
-.St -susv2
-.It
-.St -susv3
-.El
-.
-.Ss Fn readdir_r
-.
-.Bl -bullet -compact
-.It
-.St -p1003.1-2001
-.It
-.St -p1003.1-2008
-.It
-.St -susv2
-.It
-.St -susv3
-.El
+.Fn readdir
+and
+.Fn readdir_r
+conform to
+.St -p1003.1-2008 .

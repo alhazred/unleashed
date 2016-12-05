@@ -375,7 +375,6 @@ MANFILES= 	__fbufsize.3c					\
 	 	rctl_walk.3c					\
 	 	rctlblk_set_value.3c				\
 	 	re_comp.3c					\
-	 	readdir.3c					\
 	 	realpath.3c					\
 	 	reboot.3c					\
 	 	regcmp.3c					\
@@ -1127,7 +1126,6 @@ MANLINKS=	FD_CLR.3c				\
 	 	rctlblk_set_recipient_pid.3c		\
 	 	rctlblk_size.3c				\
 	 	re_exec.3c				\
-	 	readdir_r.3c				\
 	 	realloc.3c				\
 	 	regerror.3c				\
 	 	regex.3c				\
@@ -2176,8 +2174,6 @@ rctlblk_set_recipient_pid.3c		:= LINKSRC = rctlblk_set_value.3c
 rctlblk_size.3c				:= LINKSRC = rctlblk_set_value.3c
 
 re_exec.3c				:= LINKSRC = re_comp.3c
-
-readdir_r.3c				:= LINKSRC = readdir.3c
 
 regex.3c				:= LINKSRC = regcmp.3c
 
