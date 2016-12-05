@@ -983,9 +983,9 @@ bitness(char *isaname)
  * Determine the application architecture (derived from uname -m) to expand
  * the $ARCH and $KARCH macros.
  *
- * Like arch(1), we need to substitute "sun4" for "sun4u", "sun4v", ... for
- * backward compatibility. When kflag is set (like arch -k), the unmodifed
- * value is returned instead.
+ * We need to substitute "sun4" for "sun4u", "sun4v", ... for backward
+ * compatibility. When kflag is set (like arch -k), the unmodifed value is
+ * returned instead.
  */
 static int
 arch(char *buf, size_t bufsize, bool_t karch)

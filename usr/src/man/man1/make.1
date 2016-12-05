@@ -1188,8 +1188,9 @@ The following macros are provided for use with cross-compilation:
 .ad
 .RS 15n
 The processor type of the host system. By default, this is the output of the
-\fBmach\fR(1) command, prepended with \fB-\fR\&. Under normal circumstances,
-this value should never be altered by the user.
+\fBuname\fR(1) command with the \fB\(mip\fR option, prepended with
+\fB-\fR\&. Under normal circumstances, this value should never be altered by
+the user.
 .RE
 
 .sp
@@ -1199,8 +1200,9 @@ this value should never be altered by the user.
 .ad
 .RS 15n
 The machine architecture of the host system. By default, this is the output of
-the \fBarch\fR(1) command, prepended with \fB\(mi\fR\&. Under normal
-circumstances, this value should never be altered by the user.
+the \fBuname\fR(1) command with \fB\(mim\fR option, prepended with
+\fB\(mi\fR\&. Under normal circumstances, this value should never be altered
+by the user.
 .RE
 
 .sp
@@ -1209,8 +1211,8 @@ circumstances, this value should never be altered by the user.
 \fB\fBTARGET_ARCH\fR\fR
 .ad
 .RS 15n
-The processor type of the target system. By default, the output of \fBmach\fR,
-prepended with \fB\(mi\fR\&.
+The processor type of the target system. By default, the output of
+\fBuname\fR with the \fB\(mip\fR option, prepended with \fB\(mi\fR\&.
 .RE
 
 .SS "Dynamic Macros"
@@ -2578,8 +2580,8 @@ Standard	See \fBstandards\fR(5).
 
 .SH SEE ALSO
 .LP
-\fBar\fR(1), \fBarch\fR(1), \fBcd\fR(1), \fBcpp\fR(1), \fBlex\fR(1),
-\fBmach\fR(1), \fBsccs-get\fR(1), \fBsh\fR(1), \fBsysV-make\fR(1),
+\fBar\fR(1), \fBcd\fR(1), \fBcpp\fR(1), \fBlex\fR(1),
+\fBsccs-get\fR(1), \fBsh\fR(1), \fBsysV-make\fR(1),
 \fByacc\fR(1), \fBwordexp\fR(3C), \fBpasswd\fR(4), \fBattributes\fR(5),
 \fBenviron\fR(5), \fBPOSIX.2\fR(5), \fBstandards\fR(5)
 .sp

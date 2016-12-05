@@ -29,7 +29,6 @@ MANFILES=	acctcom.1			\
 	 	apptrace.1			\
 	 	apropos.1			\
 	 	ar.1				\
-	 	arch.1				\
 	 	asa.1				\
 	 	at.1				\
 	 	atq.1				\
@@ -216,7 +215,6 @@ MANFILES=	acctcom.1			\
 	 	ls.1				\
 	 	m4.1				\
 	 	mac.1				\
-	 	mach.1				\
 	 	madv.so.1.1			\
 	 	mail.1				\
 	 	mailx.1				\

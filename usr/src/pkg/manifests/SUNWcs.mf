@@ -684,7 +684,6 @@ file path=usr/bin/$(ARCH64)/uptime mode=4555
 $(i386_ONLY)file path=usr/bin/addbadsec mode=0555
 file path=usr/bin/alias mode=0555
 file path=usr/bin/amt mode=0555
-file path=usr/bin/arch mode=0555
 file path=usr/bin/at group=sys mode=4755
 file path=usr/bin/atq group=sys mode=4755
 file path=usr/bin/atrm group=sys mode=4755
@@ -779,7 +778,6 @@ file path=usr/bin/login mode=4555
 file path=usr/bin/logins mode=0750
 file path=usr/bin/ls mode=0555
 file path=usr/bin/m4 mode=0555
-file path=usr/bin/mach mode=0555
 file path=usr/bin/mail group=mail mode=2511
 file path=usr/bin/mailx group=mail mode=2511
 file path=usr/bin/makedev mode=0555

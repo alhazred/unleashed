@@ -57,7 +57,6 @@ COMMON_SUBDIRS=		\
 	adbgen		\
 	acct		\
 	acctadm		\
-	arch		\
 	asa		\
 	ast		\
 	audio		\
@@ -245,7 +244,6 @@ COMMON_SUBDIRS=		\
 	look		\
 	ls		\
 	luxadm		\
-	mach		\
 	mail		\
 	mailwrapper	\
 	mailx		\
