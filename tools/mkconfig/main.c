@@ -75,6 +75,20 @@
  * The generated makefile and header lines are indistinguishable from config
  * statement lines.
  *
+ * Select
+ * ------
+ *
+ * In some cases, the domain of the values is narrower than the domain of
+ * all integers, booleans, strings, etc.  For these cases, there is the
+ * select statement.  For example, given the following statement:
+ *
+ * (select
+ *   PLATFORM
+ *   ('i86pc 'i86xpv))
+ *
+ * The only possible values for CONFIG_PLATFORM are i86pc and i86xpv.  The
+ * default is the first value listed.
+ *
  * Mapping of Default Values
  * -------------------------
  *
@@ -161,6 +175,7 @@
 
 #define CONFIG_STMT	"config"
 #define CONST_STMT	"const"
+#define SELECT_STMT	"select"
 #define INCLUDE_STMT	"include"
 
 enum gen_what {
@@ -386,6 +401,31 @@ static void __config(struct val *args)
 
 	item->name = str_getref(name->str);
 	item->value = val_getref(value);
+	item->select = false;
+
+	avl_add(&mapping_tree, item);
+	list_insert_tail(&mapping_list, item);
+
+	val_putref(name);
+	val_putref(value);
+}
+
+static void __select(struct val *args)
+{
+	struct val *name = sexpr_nth(val_getref(args), 1);
+	struct val *value = sexpr_nth(val_getref(args), 2);
+	struct config_item *item;
+
+	if (name->type != VT_SYM)
+		die("name not a VT_SYM");
+
+	item = malloc(sizeof(struct config_item));
+	if (!item)
+		die("failed to allocate config item");
+
+	item->name = str_getref(name->str);
+	item->value = val_getref(value);
+	item->select = true;
 
 	avl_add(&mapping_tree, item);
 	list_insert_tail(&mapping_list, item);
@@ -451,6 +491,8 @@ static int process(int dirfd, const char *infile)
 		if (strcmp(str_cstr(stmt->str), CONFIG_STMT) == 0 ||
 		    strcmp(str_cstr(stmt->str), CONST_STMT) == 0) {
 			__config(args);
+		} else if (strcmp(str_cstr(stmt->str), SELECT_STMT) == 0) {
+			__select(args);
 		} else if (strcmp(str_cstr(stmt->str), INCLUDE_STMT) == 0) {
 			__include(dirfd, args);
 		} else {
@@ -484,8 +526,18 @@ static void map(const char *outfile, enum gen_what what)
 
 	for (cur = list_head(&mapping_list);
 	     cur != NULL;
-	     cur = list_next(&mapping_list, cur))
-		m->entry[cur->value->type](f, cur->name, cur->value);
+	     cur = list_next(&mapping_list, cur)) {
+		struct val *value;
+
+		if (!cur->select)
+			value = val_getref(cur->value);
+		else
+			value = sexpr_car(val_getref(cur->value));
+
+		m->entry[cur->value->type](f, cur->name, value);
+
+		val_putref(value);
+	}
 
 	if (m->file_end)
 		m->file_end(f);

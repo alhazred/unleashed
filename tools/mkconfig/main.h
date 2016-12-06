@@ -39,6 +39,7 @@
 struct config_item {
 	const struct str *name;
 	struct val *value;
+	bool select;
 
 	avl_node_t tree;
 	list_node_t list;
