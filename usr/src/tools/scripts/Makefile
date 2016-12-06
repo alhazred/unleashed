@@ -31,7 +31,6 @@ SHFILES= \
 	checkproto \
 	cstyle \
 	elfcmp \
-	flg.flp \
 	genoffsets \
 	onu \
 	protocmp.terse \
@@ -45,7 +44,6 @@ PERLFILES= \
 	interface_check \
 	interface_cmp \
 	jstyle \
-	validate_flg \
 	validate_paths \
 	wdiff
 
@@ -73,7 +71,6 @@ MAN1ONBLDFILES= \
 	check_rtime.1onbld \
 	cstyle.1onbld \
 	find_elf.1onbld \
-	flg.flp.1onbld \
 	git-pbchk.1onbld \
 	hdrchk.1onbld \
 	interface_check.1onbld \

@@ -117,6 +117,4 @@ if [ -f $SRC/tools/opensolaris/license-list ]; then
 		validate_paths -n SRC/tools/opensolaris/license-list
 fi
 
-validate_flg -f
-
 exit 0

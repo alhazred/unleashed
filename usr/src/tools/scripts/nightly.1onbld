@@ -324,7 +324,7 @@ build.
 .RS 5
 Normally, nightly runs the 'checkpaths' script to check for
 discrepancies among the files that list paths to other files, such as
-exception lists and req.flg.  Set this flag to 'n' to disable this
+the exception lists.  Set this flag to 'n' to disable this
 check, which appears in the nightly output as "Check lists of files."
 .RE
 .SH NIGHTLY HOOK ENVIRONMENT VARIABLES

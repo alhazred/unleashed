@@ -34,7 +34,7 @@ inspects the contents of various files within an OS-Net workspace to
 ensure that the file paths listed in those files are valid.  This
 provides an integrity check of the workspace to catch cases where a
 file was removed or renamed without updating the corresponding
-\fIinc.flg\fP, \fIcry_files\fP, or \fIexception_list\fP entry.
+\fIexception_list\fP entry.
 .LP
 .I checkpaths
 is typically called from \fBnightly(1ONBLD)\fP.  It may be invoked

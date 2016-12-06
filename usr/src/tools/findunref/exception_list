@@ -72,11 +72,6 @@
 */tools
 
 #
-# Ignore file list generators
-#
-*.flg
-
-#
 # Ignore everything under trees that may be resynched from outside ON.
 #
 ./usr/src/cmd/perl
