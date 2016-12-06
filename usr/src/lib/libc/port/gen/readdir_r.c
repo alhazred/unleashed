@@ -149,7 +149,6 @@ readdir64_r(DIR *dirp, dirent64_t *entry, dirent64_t **result)
 
 /*
  * POSIX.1c standard version of the function readdir_r.
- * User gets it via static readdir_r from header file.
  */
 
 int
@@ -182,5 +181,12 @@ readdir_r(DIR *dirp, dirent_t *entry, dirent_t **result)
 	*result = entry;
 	return (0);
 }
+
+/*
+ * Compatibility alias.  Solaris and illumos default to non-POSIX readdir_r,
+ * and the posix version gets a mangled name.  We keep this symbol here to
+ * allow for a smoother transition.
+ */
+#pragma weak __posix_readdir_r = readdir_r
 
 #endif	/* _LP64 */
