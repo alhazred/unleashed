@@ -18,6 +18,10 @@
    ISA64
    'v9)
 
+ (select
+   PLATFORM
+   ('sun4u 'sun4v))
+
  (const
    ; Build 32-bit kernel modules
    BUILD_KMOD_32

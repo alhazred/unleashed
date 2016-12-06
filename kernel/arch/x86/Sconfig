@@ -18,6 +18,10 @@
    ISA64
    'amd64)
 
+ (select
+   PLATFORM
+   ('i86pc 'i86xpv))
+
  (const
    ; Build 32-bit kernel modules
    BUILD_KMOD_32
