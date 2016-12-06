@@ -8220,8 +8220,7 @@ sd_unit_attach(dev_info_t *devi)
 #endif
 
 	if (cmlb_attach(devi, &sd_tgops, (int)devp->sd_inq->inq_dtype,
-	    VOID2BOOLEAN(un->un_f_has_removable_media != 0),
-	    VOID2BOOLEAN(un->un_f_is_hotpluggable != 0),
+	    un->un_f_has_removable_media != 0, un->un_f_is_hotpluggable != 0,
 	    un->un_node_type, offbyone, un->un_cmlbhandle,
 	    (void *)SD_PATH_DIRECT) != 0) {
 		goto cmlb_attach_failed;

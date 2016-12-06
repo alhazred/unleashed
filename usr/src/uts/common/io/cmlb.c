@@ -689,9 +689,6 @@ cmlb_attach(dev_info_t *devi, cmlb_tg_ops_t *tgopsp, int device_type,
 	diskaddr_t	cap;
 	int		status;
 
-	ASSERT(VALID_BOOLEAN(is_removable));
-	ASSERT(VALID_BOOLEAN(is_hotpluggable));
-
 	if (tgopsp->tg_version < TG_DK_OPS_VERSION_1)
 		return (EINVAL);
 
@@ -1419,8 +1416,6 @@ static int
 cmlb_create_minor(dev_info_t *dip, char *name, int spec_type,
     minor_t minor_num, char *node_type, int flag, boolean_t internal)
 {
-	ASSERT(VALID_BOOLEAN(internal));
-
 	if (internal)
 		return (ddi_create_internal_pathname(dip,
 		    name, spec_type, minor_num));
@@ -1457,8 +1452,7 @@ cmlb_create_minor_nodes(struct cmlb_lun *cl)
 	ASSERT(cl != NULL);
 	ASSERT(mutex_owned(CMLB_MUTEX(cl)));
 
-	internal = VOID2BOOLEAN(
-	    (cl->cl_alter_behavior & (CMLB_INTERNAL_MINOR_NODES)) != 0);
+	internal = (cl->cl_alter_behavior & CMLB_INTERNAL_MINOR_NODES) != 0;
 
 	if (cl->cl_alter_behavior & CMLB_CREATE_P0_MINOR_NODE)
 		shift = CMLBUNIT_FORCE_P0_SHIFT;
@@ -1623,7 +1617,6 @@ cmlb_validate_geometry(struct cmlb_lun *cl, boolean_t forcerevalid, int flags,
 	int		count;
 
 	ASSERT(mutex_owned(CMLB_MUTEX(cl)));
-	ASSERT(VALID_BOOLEAN(forcerevalid));
 
 	if ((cl->cl_f_geometry_is_valid) && (!forcerevalid)) {
 		if (cl->cl_cur_labeltype == CMLB_LABEL_EFI)
@@ -2084,8 +2077,7 @@ cmlb_update_ext_minor_nodes(struct cmlb_lun *cl, int num_parts)
 	ASSERT(mutex_owned(CMLB_MUTEX(cl)));
 	ASSERT(cl->cl_update_ext_minor_nodes == 1);
 
-	internal = VOID2BOOLEAN(
-	    (cl->cl_alter_behavior & (CMLB_INTERNAL_MINOR_NODES)) != 0);
+	internal = (cl->cl_alter_behavior & CMLB_INTERNAL_MINOR_NODES) != 0;
 	instance = ddi_get_instance(CMLB_DEVINFO(cl));
 	demdp = dk_ext_minor_data;
 	demdpr = &dk_ext_minor_data[MAX_EXT_PARTS];
@@ -4345,8 +4337,7 @@ cmlb_dkio_set_vtoc(struct cmlb_lun *cl, dev_t dev, caddr_t arg, int flag,
 	int		shift, rval = 0;
 	boolean_t	internal;
 
-	internal = VOID2BOOLEAN(
-	    (cl->cl_alter_behavior & (CMLB_INTERNAL_MINOR_NODES)) != 0);
+	internal = (cl->cl_alter_behavior & CMLB_INTERNAL_MINOR_NODES) != 0;
 
 	if (cl->cl_alter_behavior & CMLB_CREATE_P0_MINOR_NODE)
 		shift = CMLBUNIT_FORCE_P0_SHIFT;
@@ -4473,8 +4464,7 @@ cmlb_dkio_set_extvtoc(struct cmlb_lun *cl, dev_t dev, caddr_t arg, int flag,
 	vtoctovtoc32(user_extvtoc, user_vtoc);
 #endif
 
-	internal = VOID2BOOLEAN(
-	    (cl->cl_alter_behavior & (CMLB_INTERNAL_MINOR_NODES)) != 0);
+	internal = (cl->cl_alter_behavior & CMLB_INTERNAL_MINOR_NODES) != 0;
 	mutex_enter(CMLB_MUTEX(cl));
 #if defined(__i386) || defined(__amd64)
 	if (cl->cl_tgt_blocksize != cl->cl_sys_blocksize) {
@@ -4976,8 +4966,7 @@ cmlb_dkio_set_efi(struct cmlb_lun *cl, dev_t dev, caddr_t arg, int flag,
 	if (ddi_copyin(arg, &user_efi, sizeof (dk_efi_t), flag))
 		return (EFAULT);
 
-	internal = VOID2BOOLEAN(
-	    (cl->cl_alter_behavior & (CMLB_INTERNAL_MINOR_NODES)) != 0);
+	internal = (cl->cl_alter_behavior & CMLB_INTERNAL_MINOR_NODES) != 0;
 
 	if (cl->cl_alter_behavior & CMLB_CREATE_P0_MINOR_NODE)
 		shift = CMLBUNIT_FORCE_P0_SHIFT;

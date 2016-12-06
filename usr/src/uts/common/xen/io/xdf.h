@@ -271,11 +271,11 @@ typedef struct xdf {
 /* wrap pa_to_ma() for xdf to run in dom0 */
 #define	PATOMA(addr)	(DOMAIN_IS_INITDOMAIN(xen_info) ? addr : pa_to_ma(addr))
 
-#define	XD_IS_RO(vbd)	VOID2BOOLEAN((vbd)->xdf_dinfo & VDISK_READONLY)
-#define	XD_IS_CD(vbd)	VOID2BOOLEAN((vbd)->xdf_dinfo & VDISK_CDROM)
-#define	XD_IS_RM(vbd)	VOID2BOOLEAN((vbd)->xdf_dinfo & VDISK_REMOVABLE)
-#define	IS_READ(bp)	VOID2BOOLEAN((bp)->b_flags & B_READ)
-#define	IS_ERROR(bp)	VOID2BOOLEAN((bp)->b_flags & B_ERROR)
+#define	XD_IS_RO(vbd)	(((vbd)->xdf_dinfo & VDISK_READONLY) != 0)
+#define	XD_IS_CD(vbd)	(((vbd)->xdf_dinfo & VDISK_CDROM) != 0)
+#define	XD_IS_RM(vbd)	(((vbd)->xdf_dinfo & VDISK_REMOVABLE) != 0)
+#define	IS_READ(bp)	(((bp)->b_flags & B_READ) != 0)
+#define	IS_ERROR(bp)	(((bp)->b_flags & B_ERROR) != 0)
 
 #define	XDF_UPDATE_IO_STAT(vdp, bp)					\
 	{								\

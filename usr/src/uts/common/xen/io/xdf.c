@@ -116,7 +116,7 @@
 	(!IS_READ(bp) && USE_FLUSH_DISKCACHE(vdp) && ((bp)->b_bcount == 0))
 
 #define	VREQ_DONE(vreq)							\
-	VOID2BOOLEAN(((vreq)->v_status == VREQ_DMAWIN_DONE) &&		\
+	   (((vreq)->v_status == VREQ_DMAWIN_DONE) &&		\
 	    (((vreq)->v_flush_diskcache == FLUSH_DISKCACHE) ||		\
 	    (((vreq)->v_dmaw + 1) == (vreq)->v_ndmaws)))
 
@@ -2656,13 +2656,13 @@ xdf_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp,
 		return (0);
 	}
 	case DKIOCREMOVABLE: {
-		int i = BOOLEAN2VOID(XD_IS_RM(vdp));
+		int i = XD_IS_RM(vdp) ? 1 : 0;
 		if (ddi_copyout(&i, (caddr_t)arg, sizeof (i), mode))
 			return (EFAULT);
 		return (0);
 	}
 	case DKIOCGETWCE: {
-		int i = BOOLEAN2VOID(XD_IS_RM(vdp));
+		int i = XD_IS_RM(vdp) ? 1 : 0;
 		if (ddi_copyout(&i, (void *)arg, sizeof (i), mode))
 			return (EFAULT);
 		return (0);
@@ -2671,7 +2671,7 @@ xdf_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp,
 		int i;
 		if (ddi_copyin((void *)arg, &i, sizeof (i), mode))
 			return (EFAULT);
-		vdp->xdf_wce = VOID2BOOLEAN(i);
+		vdp->xdf_wce = (i != 0);
 		return (0);
 	}
 	case DKIOCFLUSHWRITECACHE: {
