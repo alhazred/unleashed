@@ -70,7 +70,7 @@ case "$_INIT_NET_STRATEGY" in
 			if smf_is_globalzone; then
 				hostname=`/sbin/hostconfig -h -p bootparams`
 			else
-				hostname=`/sbin/uname -n`
+				hostname=`/usr/bin/uname -n`
 			fi
 		fi ;;
 esac
@@ -86,9 +86,9 @@ if [ -z "$hostname" ]; then
 	fi
 fi
 
-/sbin/uname -S $hostname
+/usr/bin/hostname $hostname
 
-echo "Hostname: `/sbin/uname -n`" > /dev/msglog
+echo "Hostname: `/usr/bin/uname -n`" > /dev/msglog
 
 # Reset the library path now that we are past the critical stage
 unset LD_LIBRARY_PATH

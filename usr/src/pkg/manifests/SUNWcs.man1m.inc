@@ -211,7 +211,6 @@ file path=usr/share/man/man1m/sac.1m
 file path=usr/share/man/man1m/sacadm.1m
 file path=usr/share/man/man1m/saf.1m
 file path=usr/share/man/man1m/savecore.1m
-file path=usr/share/man/man1m/setuname.1m
 file path=usr/share/man/man1m/share.1m
 file path=usr/share/man/man1m/share_nfs.1m
 file path=usr/share/man/man1m/shareall.1m

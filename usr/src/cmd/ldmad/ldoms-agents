@@ -30,7 +30,7 @@
 SVCNAME='Logical Domains agents'
 LDMAD='/usr/lib/ldoms/ldmad'
 VLDS='/devices/virtual-devices@100/channel-devices@200/virtual-domain-service@0:vlds'
-mach=`/sbin/uname -m`
+mach=`/usr/bin/uname -m`
 
 if [ "$mach" != "sun4v" ]; then
 	echo "The $SVCNAME service is not supported on this platform."

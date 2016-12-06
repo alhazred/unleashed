@@ -404,7 +404,6 @@ _MANFILES=	6to4relay.1m		\
 		sbdadm.1m		\
 		scadm.1m		\
 		sdpadm.1m		\
-		setuname.1m		\
 		share.1m		\
 		share_nfs.1m		\
 		shareall.1m		\

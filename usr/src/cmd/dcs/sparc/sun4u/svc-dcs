@@ -46,7 +46,7 @@ getproparg() {
 }
 
 DCS=/usr/lib/dcs
-platform=`/sbin/uname -i`
+platform=`/usr/bin/uname -i`
 e10k="SUNW,Ultra-Enterprise-10000"
 sf15k="SUNW,Sun-Fire-15000"
 opl="SUNW,SPARC-Enterprise"

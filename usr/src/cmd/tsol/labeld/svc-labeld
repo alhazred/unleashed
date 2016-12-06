@@ -126,7 +126,7 @@ _DEL_LOCAL_NSCD
 
 do_bootupd()
 {
-	if [ -f $ROOT_PATH/platform/`/sbin/uname -m`/boot_archive ]; then
+	if [ -f $ROOT_PATH/platform/`/usr/bin/uname -m`/boot_archive ]; then
 		if [ -z "$ROOT_PATH" -o "$ROOT_PATH" = "/" ]; then
 			/sbin/bootadm update-archive
 		else
@@ -275,8 +275,8 @@ do_commonstart()
 do_servicetag_register()
 {
 	ROOTDIR=$1
-	SOL_ARCH=`/sbin/uname -p`
-	SOL_VERS=`/sbin/uname -r`
+	SOL_ARCH=`/usr/bin/uname -p`
+	SOL_VERS=`/usr/bin/uname -r`
 	TX_PROD_URN="urn:uuid:fc720df3-410f-11dc-9b8e-080020a9ed93"
 
 	if [ ! -x /usr/bin/stclient ]; then

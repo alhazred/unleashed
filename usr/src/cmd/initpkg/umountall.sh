@@ -51,8 +51,8 @@ MNTTAB=/etc/mnttab
 #	exec
 #	read
 #
-# /sbin commands we use:
-#	/sbin/uname
+# commands we use:
+#	/usr/bin/uname
 #	/sbin/umount
 #
 # The following /usr based commands may be used by this script (depending on

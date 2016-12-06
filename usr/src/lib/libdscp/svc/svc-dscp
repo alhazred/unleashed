@@ -38,7 +38,7 @@ DM2S_DEVICE=/dev/dm2s0
 PPP_OPTIONS=${OPL_LIB}/dscp.ppp.options
 DSCP_IFNAME=/var/run/dscp.ifname
 PRTDSCP=/usr/platform/${OPL}/sbin/prtdscp
-PLATFORM=`/sbin/uname -i`
+PLATFORM=`/usr/bin/uname -i`
 SLEEP=/bin/sleep
 PKILL=/bin/pkill
 

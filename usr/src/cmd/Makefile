@@ -362,7 +362,6 @@ COMMON_SUBDIRS=		\
 	setfacl		\
 	setmnt		\
 	setpgrp		\
-	setuname	\
 	sgs		\
 	shcomp		\
 	smbios		\
@@ -418,7 +417,6 @@ COMMON_SUBDIRS=		\
 	tzreload	\
 	uadmin		\
 	ul		\
-	uname		\
 	units		\
 	unlink		\
 	unpack		\
@@ -696,7 +694,6 @@ MSGSUBDIRS=		\
 	ttymon		\
 	tzreload	\
 	ul		\
-	uname		\
 	units		\
 	unlink		\
 	unpack		\

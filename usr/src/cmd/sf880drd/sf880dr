@@ -28,7 +28,7 @@
 
 . /lib/svc/share/smf_include.sh
 
-platform=${_INIT_UTS_PLATFORM:=`/sbin/uname -i`}
+platform=${_INIT_UTS_PLATFORM:=`/usr/bin/uname -i`}
 if [ $platform = "SUNW,Sun-Fire-880" -o $platform = "SUNW,Sun-Fire-V890" ]
 then
 	if [ -f /usr/platform/$platform/lib/sf880drd ]; then
