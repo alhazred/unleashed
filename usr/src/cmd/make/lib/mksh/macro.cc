@@ -38,6 +38,8 @@
 #include <mksh/macro.h>
 #include <mksh/misc.h>		/* retmem() */
 #include <mksh/read.h>		/* get_next_block_fn() */
+#include <sys/utsname.h>
+#include <sys/systeminfo.h>
 
 #include <libintl.h>
 
@@ -904,7 +906,6 @@ init_arch_macros(void)
 	FILE		*pipe;
 	Name		value;
 	int		set_host, set_target;
-	const char	*mach_command = "/bin/mach";
 
 	set_host = (get_prop(host_arch->prop, macro_prop) == NULL);
 	set_target = (get_prop(target_arch->prop, macro_prop) == NULL);
@@ -912,17 +913,10 @@ init_arch_macros(void)
 	if (set_host || set_target) {
 		INIT_STRING_FROM_STACK(result_string, wc_buf);
 		append_char((int) hyphen_char, &result_string);
-
-		if ((pipe = popen(mach_command, "r")) == NULL) {
-			fatal_mksh(gettext("Execute of %s failed"), mach_command);
-		}
-		while (fgets(mb_buf, sizeof(mb_buf), pipe) != NULL) {
-			MBSTOWCS(wcs_buffer, mb_buf);
-			append_string(wcs_buffer, &result_string, wcslen(wcs_buffer));
-		}
-		if (pclose(pipe) != 0) {
-			fatal_mksh(gettext("Execute of %s failed"), mach_command);
-		}
+		if (sysinfo(SI_PLATFORM, mb_buf, sizeof (mb_buf)) < 0)
+			fatal_mksh(gettext("sysinfo() failed"));
+		MBSTOWCS(wcs_buffer, mb_buf);
+		append_string(wcs_buffer, &result_string, wcslen(wcs_buffer));
 
 		value = GETNAME(result_string.buffer.start, wcslen(result_string.buffer.start));
 
@@ -955,11 +949,10 @@ init_mach_macros(void)
 {
 	String_rec	result_string;
 	wchar_t		wc_buf[STRING_BUFFER_LENGTH];
-	char		mb_buf[STRING_BUFFER_LENGTH];
 	FILE		*pipe;
 	Name		value;
 	int		set_host, set_target;
-	const char	*arch_command = "/bin/arch";
+	struct utsname	uts;
 
 	set_host = (get_prop(host_mach->prop, macro_prop) == NULL);
 	set_target = (get_prop(target_mach->prop, macro_prop) == NULL);
@@ -967,17 +960,10 @@ init_mach_macros(void)
 	if (set_host || set_target) {
 		INIT_STRING_FROM_STACK(result_string, wc_buf);
 		append_char((int) hyphen_char, &result_string);
-
-		if ((pipe = popen(arch_command, "r")) == NULL) {
-			fatal_mksh(gettext("Execute of %s failed"), arch_command);
-		}
-		while (fgets(mb_buf, sizeof(mb_buf), pipe) != NULL) {
-			MBSTOWCS(wcs_buffer, mb_buf);
-			append_string(wcs_buffer, &result_string, wcslen(wcs_buffer));
-		}
-		if (pclose(pipe) != 0) {
-			fatal_mksh(gettext("Execute of %s failed"), arch_command);
-		}
+		if (uname(&uts) < 0)
+			fatal_mksh(gettext("uname() failed"));
+		MBSTOWCS(wcs_buffer, uts.machine);
+		append_string(wcs_buffer, &result_string, wcslen(wcs_buffer));
 
 		value = GETNAME(result_string.buffer.start, wcslen(result_string.buffer.start));
 

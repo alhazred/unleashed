@@ -34,8 +34,6 @@ install := TARGET += install
 install_h := TARGET += install_h
 _msg := TARGET += _msg
 
-MACH:sh= mach
-
 all clean clobber install install_h: $(SUBDIRS)
 
 $(SUBDIRS): FRC
