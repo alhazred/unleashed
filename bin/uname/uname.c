@@ -35,7 +35,6 @@
  * contributors.
  */
 
-#define	__EXTENSIONS__
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -44,6 +43,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <err.h>
 #include <sys/fcntl.h>
 #include <sys/stat.h>
 #include <sys/utsname.h>
@@ -56,9 +56,9 @@ int
 main(int argc, char *argv[], char *envp[])
 {
 	char *nodename;
-	char *optstring = "asnrpvmiS:X";
+	char *optstring = "asnrpvmiX";
 	int sflg = 0, nflg = 0, rflg = 0, vflg = 0, mflg = 0;
-	int pflg = 0, iflg = 0, Sflg = 0;
+	int pflg = 0, iflg = 0;
 	int errflg = 0, optlet;
 	int Xflg = 0;
 	struct utsname  unstr, *un;
@@ -71,10 +71,6 @@ main(int argc, char *argv[], char *envp[])
 	(void) uname(un);
 
 	(void) setlocale(LC_ALL, "");
-#if !defined(TEXT_DOMAIN)
-#define	TEXT_DOMAIN "SYS_TEST"
-#endif
-	(void) textdomain(TEXT_DOMAIN);
 
 	while ((optlet = getopt(argc, argv, optstring)) != EOF)
 		switch (optlet) {
@@ -104,10 +100,6 @@ main(int argc, char *argv[], char *envp[])
 		case 'i':
 			iflg++;
 			break;
-		case 'S':
-			Sflg++;
-			nodename = optarg;
-			break;
 		case 'X':
 			Xflg++;
 			break;
@@ -118,32 +110,6 @@ main(int argc, char *argv[], char *envp[])
 
 	if (errflg || (optind != argc))
 		usage();
-
-	if ((Sflg > 1) ||
-	    (Sflg && (sflg || nflg || rflg || vflg || mflg || pflg || iflg ||
-	    Xflg))) {
-		usage();
-	}
-
-	/* If we're changing the system name */
-	if (Sflg) {
-		int len = strlen(nodename);
-
-		if (len > SYS_NMLN - 1) {
-			(void) fprintf(stderr, gettext(
-			    "uname: name must be <= %d letters\n"),
-			    SYS_NMLN-1);
-			exit(1);
-		}
-		if (sysinfo(SI_SET_HOSTNAME, nodename, len) < 0) {
-			int err = errno;
-			(void) fprintf(stderr, gettext(
-			    "uname: error in setting name: %s\n"),
-			    strerror(err));
-			exit(1);
-		}
-		return (0);
-	}
 
 	/*
 	 * "uname -s" is the default
@@ -173,22 +139,20 @@ main(int argc, char *argv[], char *envp[])
 	}
 	if (pflg) {
 		if (sysinfo(SI_ARCHITECTURE, procbuf, sizeof (procbuf)) == -1) {
-			(void) fprintf(stderr, gettext(
-			    "uname: sysinfo failed\n"));
-			exit(1);
+			err(1, "sysinfo");
 		}
 		(void) fprintf(stdout, fs, strlen(procbuf), procbuf);
 		fs = fmt_string;
 	}
 	if (iflg) {
 		if (sysinfo(SI_PLATFORM, procbuf, sizeof (procbuf)) == -1) {
-			(void) fprintf(stderr, gettext(
-			    "uname: sysinfo failed\n"));
-			exit(1);
+			err(1, "sysinfo");
 		}
 		(void) fprintf(stdout, fs, strlen(procbuf), procbuf);
 		fs = fmt_string;
 	}
+	if (sflg || nflg || rflg || vflg || mflg || pflg || iflg)
+		(void) putchar('\n');
 	if (Xflg) {
 		int	val;
 
@@ -203,29 +167,15 @@ main(int argc, char *argv[], char *envp[])
 		(void) fprintf(stdout, "Machine = %.*s\n", sizeof (un->machine),
 		    un->machine);
 
-		/* Not availible on Solaris so hardcode the output */
-		(void) fprintf(stdout, "BusType = <unknown>\n");
-
-		/* Serialization is not supported in 2.6, so hard code output */
-		(void) fprintf(stdout, "Serial = <unknown>\n");
-		(void) fprintf(stdout, "Users = <unknown>\n");
-		(void) fprintf(stdout, "OEM# = 0\n");
-		(void) fprintf(stdout, "Origin# = 1\n");
-
 		val = sysconf(_SC_NPROCESSORS_CONF);
 		(void) fprintf(stdout, "NumCPU = %d\n", val);
 	}
-	(void) putchar('\n');
 	return (0);
 }
 
 static void
 usage(void)
 {
-	{
-		(void) fprintf(stderr, gettext(
-		    "usage:	uname [-snrvmapiX]\n"
-		    "	uname [-S system_name]\n"));
-	}
+	(void) fprintf(stderr, "usage:	uname [-snrvmapiX]\n");
 	exit(1);
 }
