@@ -11,6 +11,14 @@
    'amd64)
 
  (const
+   ISA32
+   'ia32)
+
+ (const
+   ISA64
+   'amd64)
+
+ (const
    ; Build 32-bit kernel modules
    BUILD_KMOD_32
    #t)
