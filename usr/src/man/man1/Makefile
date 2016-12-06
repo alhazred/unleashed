@@ -372,7 +372,6 @@ MANFILES=	acctcom.1			\
 	 	typeset.1			\
 	 	ul.1				\
 	 	umask.1				\
-	 	uname.1				\
 	 	unifdef.1			\
 	 	uniq.1				\
 	 	units.1				\

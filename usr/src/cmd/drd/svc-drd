@@ -30,7 +30,7 @@
 . /lib/svc/share/smf_include.sh
 
 DRD=/usr/lib/ldoms/drd
-mach=`/sbin/uname -m`
+mach=`/usr/bin/uname -m`
 
 EXIT=$SMF_EXIT_ERR_CONFIG
 

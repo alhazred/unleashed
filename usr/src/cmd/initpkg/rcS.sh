@@ -75,7 +75,7 @@ else
 	_INIT_PREV_LEVEL=0
 fi
 
-set -- `/sbin/uname -a`
+set -- `/usr/bin/uname -a`
 
 #
 # If we're booting, uname -a will produce one fewer token than usual because

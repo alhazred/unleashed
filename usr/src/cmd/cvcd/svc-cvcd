@@ -44,7 +44,7 @@ getproparg() {
 	[ -n "$val" ] && [ "$val" != 'none' ] &&  echo $1 $val
 }
 
-platform=`/sbin/uname -i`
+platform=`/usr/bin/uname -i`
 starfire="SUNW,Ultra-Enterprise-10000"
 starcat="SUNW,Sun-Fire-15000" 
 

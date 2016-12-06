@@ -28,7 +28,7 @@
 
 sparc_enterprise="SUNW,SPARC-Enterprise"
 OPLHPD=/usr/platform/${sparc_enterprise}/lib/sparcv9/oplhpd
-platform=`/sbin/uname -i`
+platform=`/usr/bin/uname -i`
 
 if [ $platform = "$sparc_enterprise" ]; then
 	$OPLHPD				# Fail if can't execute
