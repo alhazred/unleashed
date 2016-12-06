@@ -226,7 +226,6 @@ DIRS= \
 	/usr/include/sys/crypto \
 	/usr/include/tsol \
 	/usr/kernel  \
-	/usr/kvm \
 	/usr/lib \
 	/usr/lib/abi \
 	/usr/lib/brand \
