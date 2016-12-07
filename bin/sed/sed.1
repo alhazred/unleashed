@@ -72,7 +72,7 @@ The following options are available:
 Interpret regular expressions as extended (modern) regular expressions
 rather than basic regular expressions (BRE's).
 The
-.Xr re_format 7
+.Xr regex 5
 manual page fully describes both formats.
 .It Fl a
 The files listed as parameters for the
@@ -238,7 +238,7 @@ function.
 The regular expressions used in
 .Nm ,
 by default, are basic regular expressions (BREs, see
-.Xr re_format 7
+.Xr regex 5
 for more information), but extended (modern) regular expressions can be used
 instead if the
 .Fl E
@@ -482,7 +482,7 @@ where
 .Dq #
 is a digit, is replaced by the text matched
 by the corresponding backreference expression (see
-.Xr re_format 7 ) .
+.Xr regex 5 ) .
 .Pp
 A line can be split by substituting a newline character into it.
 To specify a newline character in the replacement string, precede it with
@@ -583,7 +583,7 @@ and
 environment variables affect the execution of
 .Nm
 as described in
-.Xr environ 7 .
+.Xr environ 5 .
 .Sh EXIT STATUS
 .Ex -std
 .Sh SEE ALSO
@@ -591,7 +591,7 @@ as described in
 .Xr ed 1 ,
 .Xr grep 1 ,
 .Xr regex 3 ,
-.Xr re_format 7
+.Xr regex 5
 .Sh STANDARDS
 The
 .Nm
@@ -609,9 +609,7 @@ in the second member of an address range,
 as well as the
 .Dq I
 flag to the address regular expression and substitution command are
-non-standard
-.Fx
-extensions and may not be available on other operating systems.
+non-standard extensions and may not be available on other operating systems.
 .Sh HISTORY
 A
 .Nm
