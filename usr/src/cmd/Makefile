@@ -358,7 +358,6 @@ COMMON_SUBDIRS=		\
 	scsi		\
 	sdiff		\
 	sdpadm		\
-	sed		\
 	setfacl		\
 	setmnt		\
 	setpgrp		\

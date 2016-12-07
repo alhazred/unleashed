@@ -1,5 +1,4 @@
-/*
- * Copyright 2010 Nexenta Systems, Inc.  All rights reserved.
+/*-
  * Copyright (c) 1992 Diomidis Spinellis.
  * Copyright (c) 1992, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -30,52 +29,28 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
+ *
+ *	@(#)extern.h	8.1 (Berkeley) 6/6/93
+ * $FreeBSD$
  */
 
-#include <sys/types.h>
+extern struct s_command *prog;
+extern struct s_appends *appends;
+extern regmatch_t *match;
+extern size_t maxnsub;
+extern u_long linenum;
+extern int appendnum;
+extern int aflag, eflag, nflag;
+extern const char *fname, *outfname;
+extern FILE *infile, *outfile;
+extern int rflags;	/* regex flags to use */
 
-#include <err.h>
-#include <limits.h>
-#include <regex.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-
-#include "defs.h"
-#include "extern.h"
-
-/*
- * Return a string for a regular expression error passed.  This is overkill,
- * because of the silly semantics of regerror (we can never know the size of
- * the buffer).
- */
-char *
-strregerror(int errcode, regex_t *preg)
-{
-	static char *oe;
-	size_t s;
-
-	free(oe);
-	s = regerror(errcode, preg, NULL, 0);
-	if ((oe = malloc(s)) == NULL)
-		err(1, "malloc");
-	(void) regerror(errcode, preg, oe, s);
-	return (oe);
-}
-
-void
-fatal(const char *fmt, ...)
-{
-	va_list ap;
-
-	(void) fprintf(stderr, "%s: %lu: ", fname, linenum);
-
-	va_start(ap, fmt);
-	(void) vfprintf(stderr, fmt, ap);
-	va_end(ap);
-
-	(void) fputc('\n', stderr);
-
-	exit(1);
-}
+void	 cfclose(struct s_command *, struct s_command *);
+void	 compile(void);
+void	 cspace(SPACE *, const char *, size_t, enum e_spflag);
+char	*cu_fgets(char *, int, int *);
+int	 mf_fgets(SPACE *, enum e_spflag);
+int	 lastline(void);
+void	 process(void);
+void	 resetstate(void);
+char	*strregerror(int, regex_t *);
