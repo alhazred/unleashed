@@ -1,5 +1,4 @@
-/*
- * Copyright 2010 Nexenta Systems, Inc.  All rights reserved.
+/*-
  * Copyright (c) 1992 Diomidis Spinellis.
  * Copyright (c) 1992, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -40,7 +39,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 
 #include "defs.h"
 #include "extern.h"
@@ -56,26 +54,11 @@ strregerror(int errcode, regex_t *preg)
 	static char *oe;
 	size_t s;
 
-	free(oe);
+	if (oe != NULL)
+		free(oe);
 	s = regerror(errcode, preg, NULL, 0);
 	if ((oe = malloc(s)) == NULL)
 		err(1, "malloc");
-	(void) regerror(errcode, preg, oe, s);
+	(void)regerror(errcode, preg, oe, s);
 	return (oe);
-}
-
-void
-fatal(const char *fmt, ...)
-{
-	va_list ap;
-
-	(void) fprintf(stderr, "%s: %lu: ", fname, linenum);
-
-	va_start(ap, fmt);
-	(void) vfprintf(stderr, fmt, ap);
-	va_end(ap);
-
-	(void) fputc('\n', stderr);
-
-	exit(1);
 }

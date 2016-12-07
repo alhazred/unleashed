@@ -1,5 +1,4 @@
-/*
- * Copyright 2010 Nexenta Systems, Inc.  All rights reserved.
+/*-
  * Copyright (c) 1992 Diomidis Spinellis.
  * Copyright (c) 1992, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -30,16 +29,16 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
+ *
+ *	@(#)extern.h	8.1 (Berkeley) 6/6/93
+ * $FreeBSD$
  */
-
-#ifndef	EXTERN_H
-#define	EXTERN_H
 
 extern struct s_command *prog;
 extern struct s_appends *appends;
 extern regmatch_t *match;
 extern size_t maxnsub;
-extern ulong_t linenum;
+extern u_long linenum;
 extern int appendnum;
 extern int aflag, eflag, nflag;
 extern const char *fname, *outfname;
@@ -55,13 +54,3 @@ int	 lastline(void);
 void	 process(void);
 void	 resetstate(void);
 char	*strregerror(int, regex_t *);
-/*PRINTFLIKE1*/
-void	fatal(const char *, ...);	/* output includes file and line # */
-
-#ifdef	lint
-#define	_(s)	s
-#else
-#define	_(s)	gettext(s)
-#endif
-
-#endif	/* EXTERN_H */
