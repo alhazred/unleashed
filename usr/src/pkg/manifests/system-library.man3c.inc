@@ -112,7 +112,6 @@ file path=usr/share/man/man3c/endian.3c
 file path=usr/share/man/man3c/epoll_create.3c
 file path=usr/share/man/man3c/epoll_ctl.3c
 file path=usr/share/man/man3c/epoll_wait.3c
-file path=usr/share/man/man3c/err.3c
 file path=usr/share/man/man3c/euclen.3c
 file path=usr/share/man/man3c/eventfd.3c
 file path=usr/share/man/man3c/exit.3c
