@@ -72,7 +72,7 @@ CPPFLAGS	+= -I$(CODEMGR_WS)/include
 CPPFLAGS	+= -I$(SRC)/common
 CPPFLAGS	+= -I$(SRC)/uts/common/fs/zfs
 
-CPPFLAGS	+= -I$(UTSBASE)/i86pc
+CPPFLAGS	+= -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

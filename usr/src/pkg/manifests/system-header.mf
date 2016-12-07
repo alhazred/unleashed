@@ -182,11 +182,6 @@ dir path=usr/share/man/man4
 dir path=usr/share/man/man5
 dir path=usr/share/man/man7i
 dir path=usr/share/src group=sys
-dir path=usr/share/src/uts
-$(i386_ONLY)dir path=usr/share/src/uts/i86pc
-$(i386_ONLY)dir path=usr/share/src/uts/i86xpv
-$(sparc_ONLY)dir path=usr/share/src/uts/sun4u
-$(sparc_ONLY)dir path=usr/share/src/uts/sun4v
 dir path=usr/xpg4
 dir path=usr/xpg4/include
 $(i386_ONLY)file path=usr/include/$(ARCH64)/sys/kdi_regs.h mode=0644
@@ -2082,19 +2077,3 @@ link path=usr/share/man/man3head/wchar.3head target=wchar.h.3head
 link path=usr/share/man/man3head/wctype.3head target=wctype.h.3head
 link path=usr/share/man/man3head/wordexp.3head target=wordexp.h.3head
 link path=usr/share/man/man3head/xlocale.3head target=xlocale.h.3head
-$(i386_ONLY)link path=usr/share/src/uts/i86pc/sys \
-    target=../../../../platform/i86pc/include/sys
-$(i386_ONLY)link path=usr/share/src/uts/i86pc/vm \
-    target=../../../../platform/i86pc/include/vm
-$(i386_ONLY)link path=usr/share/src/uts/i86xpv/sys \
-    target=../../../../platform/i86xpv/include/sys
-$(i386_ONLY)link path=usr/share/src/uts/i86xpv/vm \
-    target=../../../../platform/i86xpv/include/vm
-$(sparc_ONLY)link path=usr/share/src/uts/sun4u/sys \
-    target=../../../../platform/sun4u/include/sys
-$(sparc_ONLY)link path=usr/share/src/uts/sun4u/vm \
-    target=../../../../platform/sun4u/include/vm
-$(sparc_ONLY)link path=usr/share/src/uts/sun4v/sys \
-    target=../../../../platform/sun4v/include/sys
-$(sparc_ONLY)link path=usr/share/src/uts/sun4v/vm \
-    target=../../../../platform/sun4v/include/vm

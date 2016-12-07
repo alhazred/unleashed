@@ -79,7 +79,6 @@ $(XMODS):	FRC
 	fi
 
 install_h check:	FRC
-	@cd sys; pwd; $(MAKE) $(TARGET)
 
 #
 # Definitions for the /platform directory aliases.

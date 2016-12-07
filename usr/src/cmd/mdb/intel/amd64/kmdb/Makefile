@@ -55,7 +55,8 @@ include ../../../Makefile.kmdb
 STANDLIBS += $(ROOT)/usr/lib/amd64/libstanddisasm.so
 STANDLIBS += $(ROOT)/usr/lib/amd64/libstandsaveargs.so
 
-INCDIRS += $(SRC)/uts/i86pc $(SRC)/common/dis/i386
+INCDIRS += $(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
+INCDIRS += $(SRC)/common/dis/i386
 
 CPPFLAGS += -DDIS_TEXT
 

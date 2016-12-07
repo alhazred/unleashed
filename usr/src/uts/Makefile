@@ -153,7 +153,7 @@ DYNHDRDIRS =	common/gssapi \
 		common/rpcsvc
 
 sparc_HDRDIRS= sun/sys
-i386_HDRDIRS= i86pc/vm i86xpv/vm
+i386_HDRDIRS=
 
 HDRDIRS= $(COMMON_HDRDIRS) $($(MACH)_HDRDIRS)
 install_h check: $(HDRDIRS) $($(MACH)_ARCHITECTURES)

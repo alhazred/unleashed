@@ -39,7 +39,7 @@ MODULE		= pci_pci
 OBJECTS		= $(PCI_PCINEXUS_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 
-INC_PATH	+= -I$(UTSBASE)/i86pc
+INC_PATH	+= -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
 
 #
 #	Include common rules.
