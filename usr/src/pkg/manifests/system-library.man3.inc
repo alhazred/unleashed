@@ -18,9 +18,21 @@ file path=usr/share/man/man3/Intro.3
 file path=usr/share/man/man3/sockatmark.3
 file path=usr/share/man/man3/CMSG_DATA.3
 file path=usr/share/man/man3/readdir.3
+file path=usr/share/man/man3/err.3
 link path=usr/share/man/man3/intro.3 target=Intro.3
 link path=usr/share/man/man3/CMSG_FIRSTHDR.3 target=CMSG_DATA.3
 link path=usr/share/man/man3/CMSG_LEN.3 target=CMSG_DATA.3
 link path=usr/share/man/man3/CMSG_NEXTHDR.3 target=CMSG_DATA.3
 link path=usr/share/man/man3/CMSG_SPACE.3 target=CMSG_DATA.3
 link path=usr/share/man/man3/readdir_r.3 target=readdir.3
+link path=usr/share/man/man3/verr.3 target=err.3
+link path=usr/share/man/man3/errc.3 target=err.3
+link path=usr/share/man/man3/verrc.3 target=err.3
+link path=usr/share/man/man3/errx.3 target=err.3
+link path=usr/share/man/man3/verrx.3 target=err.3
+link path=usr/share/man/man3/warn.3 target=err.3
+link path=usr/share/man/man3/vwarn.3 target=err.3
+link path=usr/share/man/man3/warnc.3 target=err.3
+link path=usr/share/man/man3/vwarnc.3 target=err.3
+link path=usr/share/man/man3/warnx.3 target=err.3
+link path=usr/share/man/man3/vwarnx.3 target=err.3
