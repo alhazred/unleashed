@@ -1,4 +1,4 @@
-/*
+/*-
  * Copyright (c) 1992 Diomidis Spinellis.
  * Copyright (c) 1992, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -29,10 +29,10 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
+ *
+ *	@(#)defs.h	8.1 (Berkeley) 6/6/93
+ * $FreeBSD$
  */
-
-#ifndef DEFS_H
-#define	DEFS_H
 
 /*
  * Types of address specifications
@@ -41,7 +41,7 @@ enum e_atype {
 	AT_RE	    = 1,			/* Line that match RE */
 	AT_LINE,				/* Specific line */
 	AT_RELLINE,				/* Relative line */
-	AT_LAST					/* Last line */
+	AT_LAST,				/* Last line */
 };
 
 /*
@@ -50,7 +50,7 @@ enum e_atype {
 struct s_addr {
 	enum e_atype type;			/* Address type */
 	union {
-		ulong_t l;			/* Line number */
+		u_long l;			/* Line number */
 		regex_t *r;			/* Regular expression */
 	} u;
 };
@@ -66,7 +66,7 @@ struct s_subst {
 	int wfd;				/* Cached file descriptor */
 	regex_t *re;				/* Regular expression */
 	unsigned int maxbref;			/* Largest backreference. */
-	ulong_t linenum;				/* Line number. */
+	u_long linenum;				/* Line number. */
 	char *new;				/* Replacement text */
 };
 
@@ -92,7 +92,7 @@ struct s_tr {
 struct s_command {
 	struct s_command *next;			/* Pointer to next command */
 	struct s_addr *a1, *a2;			/* Start and end address */
-	ulong_t startline;			/* Start line number or zero */
+	u_long startline;			/* Start line number or zero */
 	char *t;				/* Text for : a c i r w */
 	union {
 		struct s_command *c;		/* Command(s) for b t { */
@@ -101,7 +101,7 @@ struct s_command {
 		int fd;				/* File descriptor for w */
 	} u;
 	char code;				/* Command code */
-	uint_t nonsel:1;				/* True if ! */
+	u_int nonsel:1;				/* True if ! */
 };
 
 /*
@@ -133,7 +133,7 @@ struct s_appends {
 
 enum e_spflag {
 	APPEND,					/* Append to the contents. */
-	REPLACE					/* Replace the contents. */
+	REPLACE,				/* Replace the contents. */
 };
 
 /*
@@ -143,8 +143,7 @@ typedef struct {
 	char *space;		/* Current space pointer. */
 	size_t len;		/* Current length. */
 	int deleted;		/* If deleted. */
+	int append_newline;	/* If originally terminated by \n. */
 	char *back;		/* Backing memory. */
 	size_t blen;		/* Backing memory length. */
 } SPACE;
-
-#endif	/* DEFS_H */

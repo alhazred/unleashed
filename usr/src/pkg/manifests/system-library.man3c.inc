@@ -770,7 +770,6 @@ link path=usr/share/man/man3c/epoll_create1.3c target=epoll_create.3c
 link path=usr/share/man/man3c/epoll_pwait.3c target=epoll_wait.3c
 link path=usr/share/man/man3c/erand48.3c target=drand48.3c
 link path=usr/share/man/man3c/errno.3c target=perror.3c
-link path=usr/share/man/man3c/errx.3c target=err.3c
 link path=usr/share/man/man3c/etext.3c target=end.3c
 link path=usr/share/man/man3c/euccol.3c target=euclen.3c
 link path=usr/share/man/man3c/eucscol.3c target=euclen.3c
@@ -1379,8 +1378,6 @@ link path=usr/share/man/man3c/utmpname.3c target=getutent.3c
 link path=usr/share/man/man3c/utmpxname.3c target=getutxent.3c
 link path=usr/share/man/man3c/valloc.3c target=malloc.3c
 link path=usr/share/man/man3c/vasprintf.3c target=vprintf.3c
-link path=usr/share/man/man3c/verr.3c target=err.3c
-link path=usr/share/man/man3c/verrx.3c target=err.3c
 link path=usr/share/man/man3c/vfprintf.3c target=vprintf.3c
 link path=usr/share/man/man3c/vfscanf.3c target=scanf.3c
 link path=usr/share/man/man3c/vfwscanf.3c target=fwscanf.3c
@@ -1390,13 +1387,9 @@ link path=usr/share/man/man3c/vsprintf.3c target=vprintf.3c
 link path=usr/share/man/man3c/vsscanf.3c target=scanf.3c
 link path=usr/share/man/man3c/vswprintf.3c target=vfwprintf.3c
 link path=usr/share/man/man3c/vswscanf.3c target=fwscanf.3c
-link path=usr/share/man/man3c/vwarn.3c target=err.3c
-link path=usr/share/man/man3c/vwarnx.3c target=err.3c
 link path=usr/share/man/man3c/vwprintf.3c target=vfwprintf.3c
 link path=usr/share/man/man3c/vwscanf.3c target=fwscanf.3c
 link path=usr/share/man/man3c/wait4.3c target=wait3.3c
-link path=usr/share/man/man3c/warn.3c target=err.3c
-link path=usr/share/man/man3c/warnx.3c target=err.3c
 link path=usr/share/man/man3c/watof.3c target=wcstod.3c
 link path=usr/share/man/man3c/watoi.3c target=wcstol.3c
 link path=usr/share/man/man3c/watol.3c target=wcstol.3c

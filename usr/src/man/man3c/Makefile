@@ -117,7 +117,6 @@ MANFILES= 	__fbufsize.3c					\
 	 	epoll_create.3c					\
 	 	epoll_ctl.3c					\
 	 	epoll_wait.3c					\
-	 	err.3c						\
 	 	euclen.3c					\
 		eventfd.3c					\
 	 	exit.3c						\
@@ -771,7 +770,6 @@ MANLINKS=	FD_CLR.3c				\
 	 	epoll_pwait.3c				\
 	 	erand48.3c				\
 	 	errno.3c				\
-	 	errx.3c					\
 	 	etext.3c				\
 	 	euccol.3c				\
 	 	eucscol.3c				\
@@ -1309,8 +1307,6 @@ MANLINKS=	FD_CLR.3c				\
 	 	utmpxname.3c				\
 	 	valloc.3c				\
 	 	vasprintf.3c				\
-	 	verr.3c					\
-	 	verrx.3c				\
 	 	vfprintf.3c				\
 	 	vfscanf.3c				\
 	 	vfwscanf.3c				\
@@ -1320,13 +1316,9 @@ MANLINKS=	FD_CLR.3c				\
 	 	vsscanf.3c				\
 	 	vswprintf.3c				\
 	 	vswscanf.3c				\
-	 	vwarn.3c				\
-	 	vwarnx.3c				\
 	 	vwprintf.3c				\
 	 	vwscanf.3c				\
 	 	wait4.3c				\
-	 	warn.3c					\
-	 	warnx.3c				\
 	 	watof.3c				\
 	 	watoi.3c				\
 	 	watol.3c				\
@@ -1673,14 +1665,6 @@ letoh64.3c				:= LINKSRC = endian.3c
 
 epoll_create1.3c			:= LINKSRC = epoll_create.3c
 epoll_pwait.3c				:= LINKSRC = epoll_wait.3c
-
-errx.3c					:= LINKSRC = err.3c
-verr.3c					:= LINKSRC = err.3c
-verrx.3c				:= LINKSRC = err.3c
-vwarn.3c				:= LINKSRC = err.3c
-vwarnx.3c				:= LINKSRC = err.3c
-warn.3c					:= LINKSRC = err.3c
-warnx.3c				:= LINKSRC = err.3c
 
 euccol.3c				:= LINKSRC = euclen.3c
 eucscol.3c				:= LINKSRC = euclen.3c
