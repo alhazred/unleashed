@@ -316,7 +316,6 @@ MANFILES=	acctcom.1			\
 	 	sar.1				\
 	 	script.1			\
 	 	sdiff.1				\
-	 	sed.1				\
 	 	set.1				\
 	 	setfacl.1			\
 	 	setlabel.1			\

@@ -1,3 +1,3 @@
-SUBDIR=	bmake dis localedef uname xinstall
+SUBDIR=	bmake dis localedef sed uname xinstall
 
 .include <bsd.subdir.mk>
