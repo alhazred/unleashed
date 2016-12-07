@@ -127,9 +127,8 @@ vwarnx(const char *fmt, va_list args)
 }
 
 void
-_vwarnfp(FILE *fp, const char *fmt, va_list args)
+_vwarnfp(FILE *fp, int code, const char *fmt, va_list args)
 {
-	int tmperr = errno;	/* Capture errno now. */
 	rmutex_t *lk;
 
 	lk = warncore(fp, fmt, args);
@@ -137,14 +136,14 @@ _vwarnfp(FILE *fp, const char *fmt, va_list args)
 		(void) fputc(':', fp);
 		(void) fputc(' ', fp);
 	}
-	(void) fputs(strerror(tmperr), fp);
+	(void) fputs(strerror(code), fp);
 	warnfinish(fp, lk);
 }
 
 void
 vwarn(const char *fmt, va_list args)
 {
-	_vwarnfp(stderr, fmt, args);
+	_vwarnfp(stderr, errno, fmt, args);
 }
 
 /* PRINTFLIKE1 */
@@ -164,7 +163,7 @@ _warnfp(FILE *fp, const char *fmt, ...)
 	va_list args;
 
 	va_start(args, fmt);
-	_vwarnfp(fp, fmt, args);
+	_vwarnfp(fp, errno, fmt, args);
 	va_end(args);
 }
 
@@ -189,6 +188,21 @@ warn(const char *fmt, ...)
 	va_end(args);
 }
 
+void
+warnc(int code, const char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vwarnc(code, fmt, args);
+	va_end(args);
+}
+
+void
+vwarnc(int code, const char *fmt, va_list args)
+{
+	_vwarnfp(stderr, code, fmt, args);
+}
+
 /* PRINTFLIKE2 */
 void
 err(int status, const char *fmt, ...)
@@ -202,12 +216,29 @@ err(int status, const char *fmt, ...)
 }
 
 void
+errc(int status, int code, const char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vwarnc(code, fmt, args);
+	va_end(args);
+	exit(status);
+}
+
+void
+verrc(int status, int code, const char *fmt, va_list args)
+{
+	vwarnc(code, fmt, args);
+	exit(status);
+}
+
+void
 _errfp(FILE *fp, int status, const char *fmt, ...)
 {
 	va_list args;
 
 	va_start(args, fmt);
-	_vwarnfp(fp, fmt, args);
+	_vwarnfp(fp, errno, fmt, args);
 	va_end(args);
 	exit(status);
 }
@@ -219,10 +250,11 @@ verr(int status, const char *fmt, va_list args)
 	exit(status);
 }
 
+
 void
 _verrfp(FILE *fp, int status, const char *fmt, va_list args)
 {
-	_vwarnfp(fp, fmt, args);
+	_vwarnfp(fp, errno, fmt, args);
 	exit(status);
 }
 
