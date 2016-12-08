@@ -37,14 +37,14 @@ set name=info.classification \
     value=org.opensolaris.category.2008:Development/System
 set name=variant.arch value=i386
 dir path=platform group=sys
-dir path=platform/i86xpv group=sys
-dir path=platform/i86xpv/kernel group=sys
-dir path=platform/i86xpv/kernel/drv group=sys
-dir path=platform/i86xpv/kernel/drv/$(ARCH64) group=sys
-driver name=xdt
-file path=platform/i86xpv/kernel/drv/$(ARCH64)/xdt group=sys
-file path=platform/i86xpv/kernel/drv/xdt group=sys
-file path=platform/i86xpv/kernel/drv/xdt.conf group=sys
+$(i86xpv_ONLY)dir path=platform/i86xpv group=sys
+$(i86xpv_ONLY)dir path=platform/i86xpv/kernel group=sys
+$(i86xpv_ONLY)dir path=platform/i86xpv/kernel/drv group=sys
+$(i86xpv_ONLY)dir path=platform/i86xpv/kernel/drv/$(ARCH64) group=sys
+$(i86xpv_ONLY)driver name=xdt
+$(i86xpv_ONLY)file path=platform/i86xpv/kernel/drv/$(ARCH64)/xdt group=sys
+$(i86xpv_ONLY)file path=platform/i86xpv/kernel/drv/xdt group=sys
+$(i86xpv_ONLY)file path=platform/i86xpv/kernel/drv/xdt.conf group=sys
 legacy pkg=SUNWxdt \
     desc="DTrace provider for tracing events in the xVM hypervisor" \
     name="xVM Hypervisor Dynamic Tracing (DTrace) Provider"

@@ -1,5 +1,4 @@
-SUBDIR=	../platform/i86pc/include \
-	../platform/i86xpv/include \
+SUBDIR=	../platform/${CONFIG_PLATFORM}/include \
 	sys
 
 .include <subdir.mk>

@@ -35,9 +35,9 @@ include ../Makefile.master
 # the parallel build to work. The i386_PREREQ and sparc_PREREQ variables tell
 # which platform directory to enter to start making prerequisite dependencies.
 #
-sparc_ARCHITECTURES = sun4v sun4u sparc
+sparc_ARCHITECTURES = $(CONFIG_PLATFORM) sparc
 
-i386_ARCHITECTURES = i86pc i86xpv intel
+i386_ARCHITECTURES = $(CONFIG_PLATFORM) intel
 
 #
 # For i386 all architectures can be compiled in parallel.

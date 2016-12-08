@@ -33,26 +33,11 @@ dir path=kernel group=sys
 dir path=kernel/kmdb group=sys
 dir path=kernel/kmdb/$(ARCH64) group=sys
 dir path=platform group=sys variant.opensolaris.zone=global
-$(i386_ONLY)dir path=platform/i86pc group=sys variant.opensolaris.zone=global
-$(i386_ONLY)dir path=platform/i86pc/kernel group=sys \
+dir path=platform/$(CONFIG_PLATFORM) group=sys variant.opensolaris.zone=global
+dir path=platform/$(CONFIG_PLATFORM)/kernel group=sys \
     variant.opensolaris.zone=global
-$(i386_ONLY)dir path=platform/i86pc/kernel/kmdb group=sys
-$(i386_ONLY)dir path=platform/i86pc/kernel/kmdb/$(ARCH64) group=sys
-$(i386_ONLY)dir path=platform/i86xpv group=sys variant.opensolaris.zone=global
-$(i386_ONLY)dir path=platform/i86xpv/kernel group=sys \
-    variant.opensolaris.zone=global
-$(i386_ONLY)dir path=platform/i86xpv/kernel/kmdb group=sys
-$(i386_ONLY)dir path=platform/i86xpv/kernel/kmdb/$(ARCH64) group=sys
-$(sparc_ONLY)dir path=platform/sun4u group=sys variant.opensolaris.zone=global
-$(sparc_ONLY)dir path=platform/sun4u/kernel group=sys \
-    variant.opensolaris.zone=global
-$(sparc_ONLY)dir path=platform/sun4u/kernel/kmdb group=sys
-$(sparc_ONLY)dir path=platform/sun4u/kernel/kmdb/$(ARCH64) group=sys
-$(sparc_ONLY)dir path=platform/sun4v group=sys variant.opensolaris.zone=global
-$(sparc_ONLY)dir path=platform/sun4v/kernel group=sys \
-    variant.opensolaris.zone=global
-$(sparc_ONLY)dir path=platform/sun4v/kernel/kmdb group=sys
-$(sparc_ONLY)dir path=platform/sun4v/kernel/kmdb/$(ARCH64) group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel/kmdb group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64) group=sys
 dir path=usr group=sys
 dir path=usr/bin
 dir path=usr/bin/$(ARCH32)
@@ -68,26 +53,11 @@ $(sparc_ONLY)dir path=usr/lib/mdb/proc/$(ARCH64) group=sys
 $(i386_ONLY)dir path=usr/lib/mdb/proc/$(ARCH64)
 dir path=usr/lib/mdb/raw group=sys
 dir path=usr/platform group=sys
-$(i386_ONLY)dir path=usr/platform/i86pc group=sys
-$(i386_ONLY)dir path=usr/platform/i86pc/lib
-$(i386_ONLY)dir path=usr/platform/i86pc/lib/mdb group=sys
-$(i386_ONLY)dir path=usr/platform/i86pc/lib/mdb/kvm group=sys
-$(i386_ONLY)dir path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64) group=sys
-$(i386_ONLY)dir path=usr/platform/i86xpv group=sys
-$(i386_ONLY)dir path=usr/platform/i86xpv/lib
-$(i386_ONLY)dir path=usr/platform/i86xpv/lib/mdb group=sys
-$(i386_ONLY)dir path=usr/platform/i86xpv/lib/mdb/kvm group=sys
-$(i386_ONLY)dir path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64) group=sys
-$(sparc_ONLY)dir path=usr/platform/sun4u group=sys
-$(sparc_ONLY)dir path=usr/platform/sun4u/lib
-$(sparc_ONLY)dir path=usr/platform/sun4u/lib/mdb group=sys
-$(sparc_ONLY)dir path=usr/platform/sun4u/lib/mdb/kvm group=sys
-$(sparc_ONLY)dir path=usr/platform/sun4u/lib/mdb/kvm/$(ARCH64) group=sys
-$(sparc_ONLY)dir path=usr/platform/sun4v group=sys
-$(sparc_ONLY)dir path=usr/platform/sun4v/lib
-$(sparc_ONLY)dir path=usr/platform/sun4v/lib/mdb group=sys
-$(sparc_ONLY)dir path=usr/platform/sun4v/lib/mdb/kvm group=sys
-$(sparc_ONLY)dir path=usr/platform/sun4v/lib/mdb/kvm/$(ARCH64) group=sys
+dir path=usr/platform/$(CONFIG_PLATFORM) group=sys
+dir path=usr/platform/$(CONFIG_PLATFORM)/lib
+dir path=usr/platform/$(CONFIG_PLATFORM)/lib/mdb group=sys
+dir path=usr/platform/$(CONFIG_PLATFORM)/lib/mdb/kvm group=sys
+dir path=usr/platform/$(CONFIG_PLATFORM)/lib/mdb/kvm/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man1
 file path=kernel/kmdb/$(ARCH64)/arp group=sys mode=0555
@@ -163,27 +133,33 @@ $(i386_ONLY)file path=kernel/kmdb/sppp group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/ufs group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/uhci group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/usba group=sys mode=0555
-$(i386_ONLY)file path=platform/i86pc/kernel/kmdb/$(ARCH64)/apix group=sys \
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/apix \
+    group=sys mode=0555
+$(i386_ONLY)file \
+    path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/pcplusmp group=sys \
     mode=0555
-$(i386_ONLY)file path=platform/i86pc/kernel/kmdb/$(ARCH64)/pcplusmp group=sys \
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/unix \
+    group=sys mode=0555
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/uppc \
+    group=sys mode=0555
+$(i86xpv_ONLY)file \
+    path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/xpv_psm group=sys \
     mode=0555
-$(i386_ONLY)file path=platform/i86pc/kernel/kmdb/$(ARCH64)/unix group=sys \
+$(i86xpv_ONLY)file \
+    path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/xpv_uppc group=sys \
     mode=0555
-$(i386_ONLY)file path=platform/i86pc/kernel/kmdb/$(ARCH64)/uppc group=sys \
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/apix group=sys \
     mode=0555
-$(i386_ONLY)file path=platform/i86pc/kernel/kmdb/apix group=sys mode=0555
-$(i386_ONLY)file path=platform/i86pc/kernel/kmdb/pcplusmp group=sys mode=0555
-$(i386_ONLY)file path=platform/i86pc/kernel/kmdb/unix group=sys mode=0555
-$(i386_ONLY)file path=platform/i86pc/kernel/kmdb/uppc group=sys mode=0555
-$(i386_ONLY)file path=platform/i86xpv/kernel/kmdb/$(ARCH64)/unix group=sys \
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/pcplusmp \
+    group=sys mode=0555
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/unix group=sys \
     mode=0555
-$(i386_ONLY)file path=platform/i86xpv/kernel/kmdb/$(ARCH64)/xpv_psm group=sys \
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/uppc group=sys \
     mode=0555
-$(i386_ONLY)file path=platform/i86xpv/kernel/kmdb/$(ARCH64)/xpv_uppc group=sys \
-    mode=0555
-$(i386_ONLY)file path=platform/i86xpv/kernel/kmdb/unix group=sys mode=0555
-$(i386_ONLY)file path=platform/i86xpv/kernel/kmdb/xpv_psm group=sys mode=0555
-$(i386_ONLY)file path=platform/i86xpv/kernel/kmdb/xpv_uppc group=sys mode=0555
+$(i86xpv_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/xpv_psm \
+    group=sys mode=0555
+$(i86xpv_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/xpv_uppc \
+    group=sys mode=0555
 $(sparc_ONLY)file path=platform/sun4u/kernel/kmdb/$(ARCH64)/oplhwd group=sys \
     mode=0555
 $(sparc_ONLY)file path=platform/sun4u/kernel/kmdb/$(ARCH64)/sgenv group=sys \
@@ -327,21 +303,21 @@ $(i386_ONLY)file path=usr/platform/i86pc/lib/mdb/kvm/unix.so group=sys \
     mode=0555
 $(i386_ONLY)file path=usr/platform/i86pc/lib/mdb/kvm/uppc.so group=sys \
     mode=0555
-$(i386_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/unix.so \
+$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/unix.so \
     group=sys mode=0555
-$(i386_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/xpv.so \
+$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/xpv.so \
     group=sys mode=0555
-$(i386_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/xpv_psm.so \
+$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/xpv_psm.so \
     group=sys mode=0555
-$(i386_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/xpv_uppc.so \
+$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/xpv_uppc.so \
     group=sys mode=0555
-$(i386_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/unix.so group=sys \
+$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/unix.so group=sys \
     mode=0555
-$(i386_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/xpv.so group=sys \
+$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/xpv.so group=sys \
     mode=0555
-$(i386_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/xpv_psm.so group=sys \
+$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/xpv_psm.so group=sys \
     mode=0555
-$(i386_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/xpv_uppc.so group=sys \
+$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/xpv_uppc.so group=sys \
     mode=0555
 $(sparc_ONLY)file path=usr/platform/sun4u/lib/mdb/kvm/$(ARCH64)/oplhwd.so \
     group=sys mode=0555

@@ -39,14 +39,10 @@ dir path=kernel group=sys
 dir path=kernel/drv group=sys
 dir path=kernel/drv/$(ARCH64) group=sys
 dir path=platform group=sys
-dir path=platform/i86pc group=sys
-dir path=platform/i86pc/kernel group=sys
-dir path=platform/i86pc/kernel/drv group=sys
-dir path=platform/i86pc/kernel/drv/$(ARCH64) group=sys
-dir path=platform/i86xpv group=sys
-dir path=platform/i86xpv/kernel group=sys
-dir path=platform/i86xpv/kernel/drv group=sys
-dir path=platform/i86xpv/kernel/drv/$(ARCH64) group=sys
+dir path=platform/$(CONFIG_PLATFORM) group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel/drv group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel/drv/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
 driver name=ata alias=ide class=dada class=scsi
@@ -54,12 +50,9 @@ driver name=pci-ide
 file path=kernel/drv/$(ARCH64)/ata group=sys
 file path=kernel/drv/ata group=sys
 file path=kernel/drv/ata.conf group=sys preserve=true
-file path=platform/i86pc/kernel/drv/$(ARCH64)/pci-ide group=sys
-file path=platform/i86pc/kernel/drv/pci-ide group=sys
-file path=platform/i86pc/kernel/drv/pci-ide.conf group=sys
-file path=platform/i86xpv/kernel/drv/$(ARCH64)/pci-ide group=sys
-file path=platform/i86xpv/kernel/drv/pci-ide group=sys
-file path=platform/i86xpv/kernel/drv/pci-ide.conf group=sys
+file path=platform/$(CONFIG_PLATFORM)/kernel/drv/$(ARCH64)/pci-ide group=sys
+file path=platform/$(CONFIG_PLATFORM)/kernel/drv/pci-ide group=sys
+file path=platform/$(CONFIG_PLATFORM)/kernel/drv/pci-ide.conf group=sys
 file path=usr/share/man/man7d/ata.7d
 legacy pkg=SUNWpsdir desc="Platform Support, ISA Bus Device Drivers, (Root)" \
     name="Platform Support, ISA Bus Device Drivers, (Root)"

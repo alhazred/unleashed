@@ -33,6 +33,7 @@ $(sparc_ONLY)dir path=etc group=sys
 $(sparc_ONLY)dir path=etc/flash group=sys
 $(sparc_ONLY)dir path=etc/flash/postdeployment group=sys
 dir path=platform group=sys
+dir path=platform/$(CONFIG_PLATFORM) group=sys
 $(sparc_ONLY)dir path=platform/SUNW,Netra-CP3060 group=sys
 $(sparc_ONLY)dir path=platform/SUNW,Netra-CP3060/kernel group=sys
 $(sparc_ONLY)dir path=platform/SUNW,Netra-CP3060/kernel/misc group=sys
@@ -53,16 +54,12 @@ $(sparc_ONLY)dir path=platform/SUNW,Sun-Fire-V440 group=sys
 $(sparc_ONLY)dir path=platform/SUNW,Ultra-2 group=sys
 $(sparc_ONLY)dir path=platform/SUNW,Ultra-30 group=sys
 $(sparc_ONLY)dir path=platform/SUNW,Ultra-60 group=sys
-$(i386_ONLY)dir path=platform/i86pc group=sys
-$(i386_ONLY)dir path=platform/i86xpv group=sys
-$(sparc_ONLY)dir path=platform/sun4u group=sys
 $(sparc_ONLY)dir path=platform/sun4u/lib
 $(sparc_ONLY)dir path=platform/sun4u/lib/$(ARCH64)
 $(sparc_ONLY)dir path=platform/sun4u/lib/fs
 $(sparc_ONLY)dir path=platform/sun4u/lib/fs/hsfs
 $(sparc_ONLY)dir path=platform/sun4u/lib/fs/ufs
 $(sparc_ONLY)dir path=platform/sun4u/lib/fs/zfs
-$(sparc_ONLY)dir path=platform/sun4v group=sys
 $(sparc_ONLY)dir path=platform/sun4v/lib
 $(sparc_ONLY)dir path=platform/sun4v/lib/$(ARCH64)
 $(sparc_ONLY)dir path=platform/sun4v/lib/fs

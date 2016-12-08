@@ -31,8 +31,8 @@ include $(SRC)/Makefile.master
 sparc_MACHDIR = sparc
 i386_MACHDIR = intel
 
-sparc_SUBDIRS = sparc sun4u sun4v
-i386_SUBDIRS = intel i86pc i86xpv
+sparc_SUBDIRS = sparc $(CONFIG_PLATFORM)
+i386_SUBDIRS = intel $(CONFIG_PLATFORM)
 
 MACHDIR = $($(MACH)_MACHDIR)
 SUBDIRS = tools $($(MACH)_SUBDIRS) demo
