@@ -197,7 +197,6 @@ i386_MANFILES=	ahci.7d		\
 		audiosolo.7d	\
 		audiovia823x.7d \
 		audiovia97.7d	\
-		bcm_sata.7d	\
 		bfe.7d		\
 		cmdk.7d		\
 		cpqary3.7d	\
