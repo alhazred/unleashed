@@ -247,7 +247,6 @@ dir path=usr/share/man/man4
 dir path=usr/share/man/man5
 dir path=usr/share/man/man7d
 dir path=usr/share/man/man7fs
-dir path=usr/share/src group=sys
 dir path=var group=sys
 dir path=var/adm group=sys mode=0775
 dir path=var/adm/exacct group=adm owner=adm
@@ -1763,7 +1762,6 @@ link path=usr/sbin/ufsdump target=../lib/fs/ufs/ufsdump
 link path=usr/sbin/ufsrestore target=../lib/fs/ufs/ufsrestore
 link path=usr/sbin/umount target=../../sbin/umount
 link path=usr/spool target=../var/spool
-link path=usr/src target=./share/src
 link path=usr/tmp target=../var/tmp
 link path=var/ld/32 target=.
 link path=var/ld/64 target=$(ARCH64)

@@ -86,7 +86,7 @@ do
 	if adbgen1 $flag $mflag < $file.adb > $file.adb.c
 	then
 		if ${CC:-cc} -w -D${ARCH:-`uname -m`} $cflags \
-			-I/usr/share/src/uts/${ARCH:-`uname -m`} \
+			-I/usr/platform/${ARCH:-`uname -m`}/include \
 			-o $file.run $file.adb.c $ADBDIR/$subdir/adbsub.o
 		then
 			$file.run | adbgen3 | adbgen4 > $file

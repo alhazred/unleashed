@@ -307,7 +307,6 @@ DIRS= \
 	/usr/share/lib/xml \
 	/usr/share/lib/xml/dtd \
 	/usr/share/man \
-	/usr/share/src \
 	/usr/xpg4 \
 	/usr/xpg4/bin \
 	/usr/xpg4/include \
@@ -476,7 +475,6 @@ SYM.DIRS= \
 	/usr/mail \
 	/usr/man \
 	/usr/pub \
-	/usr/src \
 	/usr/tmp \
 	/var/ld/32
 
@@ -567,7 +565,6 @@ $(ROOT)/dev/stdout:=			LINKDEST=fd/1
 $(ROOT)/dev/stderr:=			LINKDEST=fd/2
 $(ROOT)/usr/pub:=			LINKDEST=share/lib/pub
 $(ROOT)/usr/man:=			LINKDEST=share/man
-$(ROOT)/usr/src:=			LINKDEST=share/src
 $(ROOT)/usr/adm:=			LINKDEST=../var/adm
 $(ROOT)/etc/lib/ld.so.1:=		LINKDEST=../../lib/ld.so.1
 $(ROOT)/etc/lib/libdl.so.1:=		LINKDEST=../../lib/libdl.so.1
