@@ -39,6 +39,7 @@
 ./usr/kernel/drv/sparcv9/llc2
 ./usr/kernel/drv/llc2.conf
 ./usr/kernel/drv/llc2
+./usr/lib/fwflash
 ./usr/lib/llc2
 ./usr/lib/llc2/llc2_config
 ./usr/lib/llc2/llc2_loop3
