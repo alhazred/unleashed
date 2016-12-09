@@ -43,7 +43,7 @@
 #include <sys/tnf.h>
 #include <sys/tnf_probe.h>
 
-#include "reloc.h"
+#include <krtld/reloc.h>
 
 
 /*
@@ -62,20 +62,18 @@ extern int tnf_splice_probes(int, tnf_probe_control_t *, tnf_tag_data_t *);
  * 1 to show that we can't resolve it, either.
  */
 static int
-tnf_reloc_resolve(char *symname, Addr *value_p,
-    Elf64_Sxword *addend_p,
-    long offset,
-    tnf_probe_control_t **probelist,
-    tnf_tag_data_t **taglist)
+tnf_reloc_resolve(char *symname,
+	Addr *value_p,
+	long offset,
+	tnf_probe_control_t **probelist,
+	tnf_tag_data_t **taglist)
 {
 	if (strcmp(symname, PROBE_MARKER_SYMBOL) == 0) {
-		*addend_p = 0;
 		((tnf_probe_control_t *)offset)->next = *probelist;
 		*probelist = (tnf_probe_control_t *)offset;
 		return (0);
 	}
 	if (strcmp(symname, TAG_MARKER_SYMBOL) == 0) {
-		*addend_p = 0;
 		*value_p = (Addr)*taglist;
 		*taglist = (tnf_tag_data_t *)offset;
 		return (0);
@@ -128,20 +126,19 @@ do_relocate(struct module *mp, char *reltbl, Word relshtype, int nreloc,
 	unsigned long off;	/* can't be register for tnf_reloc_resolve() */
 	register unsigned long reladdr, rend;
 	register unsigned int rtype;
-	unsigned long value;
-	Elf64_Sxword addend;
+	long value;
 	Sym *symref;
 	int err = 0;
 	tnf_probe_control_t *probelist = NULL;
 	tnf_tag_data_t *taglist = NULL;
 	int symnum;
+
 	reladdr = (unsigned long)reltbl;
 	rend = reladdr + nreloc * relocsize;
 
 #ifdef	KOBJ_DEBUG
 	if (kobj_debug & D_RELOCATIONS) {
-		_kobj_printf(ops, "krtld:\ttype\t\t\toffset\t   addend"
-		    "      symbol\n");
+		_kobj_printf(ops, "krtld:\ttype\t\t\toffset      symbol\n");
 		_kobj_printf(ops, "krtld:\t\t\t\t\t   value\n");
 	}
 #endif
@@ -150,15 +147,15 @@ do_relocate(struct module *mp, char *reltbl, Word relshtype, int nreloc,
 	/* loop through relocations */
 	while (reladdr < rend) {
 		symnum++;
-		rtype = ELF_R_TYPE(((Rela *)reladdr)->r_info);
-		off = ((Rela *)reladdr)->r_offset;
-		stndx = ELF_R_SYM(((Rela *)reladdr)->r_info);
+		rtype = ELF32_R_TYPE(((Rel *)reladdr)->r_info);
+		off = ((Rel *)reladdr)->r_offset;
+		stndx = ELF32_R_SYM(((Rel *)reladdr)->r_info);
 		if (stndx >= mp->nsyms) {
 			_kobj_printf(ops, "do_relocate: bad strndx %d\n",
 			    symnum);
 			return (-1);
 		}
-		if ((rtype > R_AMD64_NUM) || IS_TLS_INS(rtype)) {
+		if ((rtype > R_386_NUM) || IS_TLS_INS(rtype)) {
 			_kobj_printf(ops, "krtld: invalid relocation type %d",
 			    rtype);
 			_kobj_printf(ops, " at 0x%llx:", off);
@@ -168,11 +165,10 @@ do_relocate(struct module *mp, char *reltbl, Word relshtype, int nreloc,
 		}
 
 
-		addend = (long)(((Rela *)reladdr)->r_addend);
 		reladdr += relocsize;
 
 
-		if (rtype == R_AMD64_NONE)
+		if (rtype == R_386_NONE)
 			continue;
 
 #ifdef	KOBJ_DEBUG
@@ -181,9 +177,8 @@ do_relocate(struct module *mp, char *reltbl, Word relshtype, int nreloc,
 			symp = (Sym *)
 			    (mp->symtbl+(stndx * mp->symhdr->sh_entsize));
 			_kobj_printf(ops, "krtld:\t%s",
-			    conv_reloc_amd64_type(rtype));
-			_kobj_printf(ops, "\t0x%8llx", off);
-			_kobj_printf(ops, " 0x%8llx", addend);
+			    conv_reloc_386_type(rtype));
+			_kobj_printf(ops, "\t0x%8x", off);
 			_kobj_printf(ops, "  %s\n",
 			    (const char *)mp->strings + symp->st_name);
 		}
@@ -193,11 +188,11 @@ do_relocate(struct module *mp, char *reltbl, Word relshtype, int nreloc,
 			off += baseaddr;
 
 		/*
-		 * if R_AMD64_RELATIVE, simply add base addr
+		 * if R_386_RELATIVE, simply add base addr
 		 * to reloc location
 		 */
 
-		if (rtype == R_AMD64_RELATIVE) {
+		if (rtype == R_386_RELATIVE) {
 			value = baseaddr;
 		} else {
 			/*
@@ -207,7 +202,7 @@ do_relocate(struct module *mp, char *reltbl, Word relshtype, int nreloc,
 			symref = (Sym *)
 			    (mp->symtbl+(stndx * mp->symhdr->sh_entsize));
 
-			if (ELF_ST_BIND(symref->st_info) == STB_LOCAL) {
+			if (ELF32_ST_BIND(symref->st_info) == STB_LOCAL) {
 				/* *** this is different for .o and .so */
 				value = symref->st_value;
 			} else {
@@ -225,8 +220,8 @@ do_relocate(struct module *mp, char *reltbl, Word relshtype, int nreloc,
 				if (symref->st_shndx == SHN_UNDEF &&
 				    tnf_reloc_resolve(mp->strings +
 				    symref->st_name, &symref->st_value,
-				    &addend, off, &probelist, &taglist) != 0) {
-					if (ELF_ST_BIND(symref->st_info)
+				    off, &probelist, &taglist) != 0) {
+					if (ELF32_ST_BIND(symref->st_info)
 					    != STB_WEAK) {
 						_kobj_printf(ops,
 						    "not found: %s\n",
@@ -245,9 +240,8 @@ do_relocate(struct module *mp, char *reltbl, Word relshtype, int nreloc,
 
 				} /* end else symbol found */
 			} /* end global or weak */
-		} /* end not R_AMD64_RELATIVE */
+		} /* end not R_386_RELATIVE */
 
-		value += addend;
 		/*
 		 * calculate final value -
 		 * if PC-relative, subtract ref addr
@@ -257,12 +251,12 @@ do_relocate(struct module *mp, char *reltbl, Word relshtype, int nreloc,
 
 #ifdef	KOBJ_DEBUG
 		if (kobj_debug & D_RELOCATIONS) {
-			_kobj_printf(ops, "krtld:\t\t\t\t0x%8llx", off);
-			_kobj_printf(ops, " 0x%8llx\n", value);
+			_kobj_printf(ops, "krtld:\t\t\t\t0x%8x", off);
+			_kobj_printf(ops, " 0x%8x\n", value);
 		}
 #endif
 
-		if (do_reloc_krtld(rtype, (unsigned char *)off, &value,
+		if (do_reloc_krtld(rtype, (unsigned char *)off, (Word *)&value,
 		    (const char *)mp->strings + symref->st_name,
 		    mp->filename) == 0)
 			err = 1;
@@ -288,12 +282,12 @@ do_relocations(struct module *mp)
 	for (shn = 1; shn < mp->hdr.e_shnum; shn++) {
 		rshp = (Shdr *)
 		    (mp->shdrs + shn * mp->hdr.e_shentsize);
-		if (rshp->sh_type == SHT_REL) {
-			_kobj_printf(ops, "%s can't process type SHT_REL\n",
+		if (rshp->sh_type == SHT_RELA) {
+			_kobj_printf(ops, "%s can't process type SHT_RELA\n",
 			    mp->filename);
 			return (-1);
 		}
-		if (rshp->sh_type != SHT_RELA)
+		if (rshp->sh_type != SHT_REL)
 			continue;
 		if (rshp->sh_link != mp->symtbl_section) {
 			_kobj_printf(ops, "%s reloc for non-default symtab\n",

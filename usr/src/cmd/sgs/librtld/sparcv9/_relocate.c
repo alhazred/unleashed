@@ -26,7 +26,7 @@
 
 #include	<string.h>
 #include	"machdep.h"
-#include	"reloc.h"
+#include	<krtld/reloc.h>
 #include	"_librtld.h"
 #include	"_elf.h"
 

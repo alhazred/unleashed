@@ -38,7 +38,7 @@
 #include <debug.h>
 #include <conv.h>
 #include <msg.h>
-#include <reloc_defs.h>
+#include <krtld/reloc_defs.h>
 
 #ifdef	__cplusplus
 extern "C" {

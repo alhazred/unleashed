@@ -26,7 +26,7 @@
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include	<sys/types.h>
-#include	"reloc.h"
+#include	<krtld/reloc.h>
 
 static const char	*rels[R_386_NUM] = {
 	"R_386_NONE",			"R_386_32",

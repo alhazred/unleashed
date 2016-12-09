@@ -34,7 +34,7 @@
 #include	<stdio.h>
 #include	<sys/elf_386.h>
 #include	<debug.h>
-#include	<reloc.h>
+#include	<krtld/reloc.h>
 #include	<i386/machdep_x86.h>
 #include	"msg.h"
 #include	"_libld.h"

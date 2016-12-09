@@ -25,7 +25,7 @@
 
 #if	defined(_KERNEL)
 #include	<sys/types.h>
-#include	"krtld/reloc.h"
+#include	<krtld/reloc.h>
 #else
 #define	ELF_TARGET_SPARC
 #if defined(DO_RELOC_LIBLD)
@@ -36,7 +36,7 @@
 #include	"sgs.h"
 #include	"machdep.h"
 #include	"libld.h"
-#include	"reloc.h"
+#include	<krtld/reloc.h>
 #include	"conv.h"
 #include	"msg.h"
 #endif

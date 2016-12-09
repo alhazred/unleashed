@@ -95,8 +95,8 @@ CERRWARN += -Wno-type-limits
 
 # Location of the shared relocation engines maintained under usr/src/uts.
 #
-KRTLD_I386 = $(SRCBASE)/uts/$(VAR_PLAT_i386)/krtld
-KRTLD_AMD64 = $(SRCBASE)/uts/$(VAR_PLAT_amd64)/krtld
+KRTLD_I386 = $(CODEMGR_WS)/kernel/arch/x86/krtld/32
+KRTLD_AMD64 = $(CODEMGR_WS)/kernel/arch/x86/krtld/64
 KRTLD_SPARC = $(SRCBASE)/uts/$(VAR_PLAT_sparc)/krtld
 
 
@@ -129,7 +129,7 @@ SGSMSGALL =	$(SGSMSGCOM) $(SGSMSGSPARC) $(SGSMSGINTEL)
 SGSMSGFLAGS1 =	$(SGSMSGFLAGS) -m $(BLTMESG)
 SGSMSGFLAGS2 =	$(SGSMSGFLAGS) -h $(BLTDEFS) -d $(BLTDATA) -n libld_msg
 
-CHKSRCS =	$(SRCBASE)/uts/common/krtld/reloc.h \
+CHKSRCS =	$(CODEMGR_WS)/include/krtld/reloc.h \
 		$(COMOBJS32:%32.o=../common/%.c) \
 		$(L_MACHOBJS32:%32.o=../common/%.c) \
 		$(L_MACHOBJS64:%64.o=../common/%.c) \

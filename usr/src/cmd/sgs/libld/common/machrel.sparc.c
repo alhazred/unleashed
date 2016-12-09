@@ -33,7 +33,7 @@
 #include	<stdio.h>
 #include	<sys/elf_SPARC.h>
 #include	<debug.h>
-#include	<reloc.h>
+#include	<krtld/reloc.h>
 #include	<sparc/machdep_sparc.h>
 #include	"msg.h"
 #include	"_libld.h"

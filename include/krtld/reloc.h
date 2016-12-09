@@ -35,7 +35,7 @@
 #include <conv.h>
 #endif /* _KERNEL */
 
-#include "reloc_defs.h"
+#include <krtld/reloc_defs.h>
 
 #ifdef	__cplusplus
 extern "C" {

@@ -40,7 +40,7 @@
 #include	<synch.h>
 #include	<string.h>
 #include	<debug.h>
-#include	<reloc.h>
+#include	<krtld/reloc.h>
 #include	<conv.h>
 #include	"_rtld.h"
 #include	"_audit.h"

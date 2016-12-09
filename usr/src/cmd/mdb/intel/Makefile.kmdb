@@ -68,6 +68,6 @@ MAPFILE_SOURCES = \
 	../../kmdb/kmdb_dpi_isadep.h \
 	$(MAPFILE_SOURCES_$(MACH))
 
-%.o: ../../../../../uts/intel/promif/%.c
+%.o: $(CODEMGR_WS)/kernel/arch/x86/promif/%.c
 	$(COMPILE.c) $<
 	$(CTFCONVERT_O)

@@ -24,6 +24,7 @@
 #
 
 BASEPLAT =	i386
+BITS = 32
 
 # Object lists are organized into primary (most frequently used code) and
 # secondary lists (less frequently used code, ie. profiling support).

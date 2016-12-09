@@ -36,8 +36,8 @@
 #include "boot_vga.h"
 
 #if defined(_BOOT)
-#include "../dboot/dboot_asm.h"
-#include "../dboot/dboot_xboot.h"
+#include <dboot_asm.h>
+#include <dboot_xboot.h>
 #endif
 
 #define	VGA_COLOR_CRTC_INDEX	0x3d4

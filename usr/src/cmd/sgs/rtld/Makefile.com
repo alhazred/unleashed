@@ -74,7 +74,7 @@ ROOTDYNLIB64=	$(RTLD:%=$(ROOTFS_LIBDIR64)/%)
 FILEMODE =	755
 
 CPPFLAGS +=	-I$(SRCBASE)/lib/libc/inc \
-		-I$(SRCBASE)/uts/common/krtld \
+		-I$(CODEMGR_WS)/include \
 		-I$(SRCBASE)/uts/$(PLAT) \
 		-I$(SRCBASE)/uts/$(PLAT)/krtld \
 		-I$(SRC)/common/sgsrtcid \
@@ -140,7 +140,7 @@ SRCS=		$(AVLOBJ:%.o=$(VAR_AVLDIR)/%.c) \
 		$(DTROBJ:%.o=$(VAR_DTRDIR)/%.c) \
 		$(TOOLOBJS:%.o=$(SGSTOOLS)/common/%.c) \
 		$(COMOBJS:%.o=../common/%.c)  $(MACHOBJS:%.o=%.c) $(BLTDATA) \
-		$(G_MACHOBJS:%.o=$(SRCBASE)/uts/$(PLAT)/krtld/%.c) \
+		$(G_MACHOBJS:%.o=$(CODEMGR_WS)/kernel/arch/x86/krtld/$(BITS)/%.c) \
 		$(CP_MACHOBJS:%.o=../$(MACH)/%.c) \
 		$(ASOBJS:%.o=%.s)
 

@@ -27,7 +27,7 @@
 #include	<libelf.h>
 #include	<dlfcn.h>
 #include	"machdep.h"
-#include	"reloc.h"
+#include	<krtld/reloc.h>
 #include	"msg.h"
 #include	"_librtld.h"
 #include	"alist.h"

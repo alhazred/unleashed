@@ -24,6 +24,7 @@
 #
 
 BASEPLAT =	amd64
+BITS = 64
 
 # Object lists are organized into primary (most frequently used code) and
 # secondary lists (less frequently used code, ie. a.out support).
