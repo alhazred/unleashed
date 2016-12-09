@@ -4112,6 +4112,12 @@ $endif
 	yp_match_rsvdport;
 	__yp_rel_binding;
 # End libnsl/libsocket symbols
+# FIXME: new symbols for our OS, but here pending a name.
+	errc;
+	verrc;
+	warnc;
+	vwarnc;
+    
 
     local:
 	__imax_lldiv				{ FLAGS = NODYNSORT };
