@@ -79,8 +79,6 @@ _MANFILES=	Intro.4				\
 		hosts_access.4			\
 		hosts_options.4			\
 		ib.4				\
-		ike.config.4			\
-		ike.preshared.4			\
 		ipf.4				\
 		ipmon.4				\
 		ipnat.4				\

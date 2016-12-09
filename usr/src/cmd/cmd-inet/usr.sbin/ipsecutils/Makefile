@@ -23,10 +23,10 @@
 # Use is subject to license terms.
 #
 
-PROG=		ikeadm ipsecalgs ipsecconf ipseckey ikecert
+PROG=		ipsecalgs ipsecconf ipseckey
 SOCKETPROG=	ipsecalgs ipsecconf ipseckey 
 TSOLPROG=	ipseckey
-SRCS=           ikeadm.c ipsecalgs.c ipsecconf.c ipseckey.c
+SRCS=           ipsecalgs.c ipsecconf.c ipseckey.c
 
 include ../../../Makefile.cmd
 
@@ -42,7 +42,7 @@ SRCS+=		$(COMMONSRCS)
 #
 # Message catalog
 #
-POFILES=	ikeadm.po ipsecalgs.po ipsecconf.po ipseckey.po
+POFILES=	ipsecalgs.po ipsecconf.po ipseckey.po
 POFILE=		ipsecutils.po
 
 all:=		TARGET= all

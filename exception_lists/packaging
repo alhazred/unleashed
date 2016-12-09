@@ -129,9 +129,6 @@ usr/include/libsocket_priv.h
 usr/include/errfp.h
 usr/include/ikedoor.h
 usr/include/ipsec_util.h
-usr/lib/libike.so
-usr/lib/amd64/libike.so			i386
-usr/lib/sparcv9/libike.so		sparc
 usr/lib/libipsecutil.so
 usr/lib/amd64/libipsecutil.so		i386
 usr/lib/sparcv9/libipsecutil.so		sparc
@@ -708,15 +705,6 @@ usr/bin/printenv
 usr/share/man/man1/printenv.1
 usr/bin/users
 usr/share/man/man1/users.1
-
-#
-# Lint garbage - to be removed when we stop building lint libs
-#
-# Pre-existing entries:
-usr/lib/llib-like
-usr/lib/llib-like.ln
-usr/lib/amd64/llib-like.ln		i386
-usr/lib/sparcv9/llib-like.ln		sparc
 
 #
 # TNF headers we need to build stuff with, but don't want to ship.

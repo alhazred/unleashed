@@ -48,9 +48,6 @@ _msg:=		TARGET= _msg
 all clean clobber: $(SUBDIRS)
 
 install: $(SUBDIRS)
-	-$(RM) $(ROOTLIBINET)/in.iked
-	-$(LN) $(ISAEXEC) $(ROOTLIBINET)/in.iked
-
 
 _msg: $(MSGSUBDIRS)
 

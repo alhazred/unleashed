@@ -166,15 +166,12 @@ _MANFILES=	6to4relay.1m		\
 		if_mpadm.1m		\
 		ifconfig.1m		\
 		ifparse.1m		\
-		ikeadm.1m		\
-		ikecert.1m		\
 		in.chargend.1m		\
 		in.comsat.1m		\
 		in.daytimed.1m		\
 		in.discardd.1m		\
 		in.echod.1m		\
 		in.fingerd.1m		\
-		in.iked.1m		\
 		in.mpathd.1m		\
 		in.ndpd.1m		\
 		in.rarpd.1m		\
