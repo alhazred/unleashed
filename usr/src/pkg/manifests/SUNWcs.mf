@@ -196,14 +196,6 @@ dir path=usr/lib/iconv
 dir path=usr/lib/inet
 dir path=usr/lib/inet/$(ARCH32)
 dir path=usr/lib/inet/$(ARCH64)
-dir path=usr/lib/locale
-dir path=usr/lib/locale/C
-dir path=usr/lib/locale/C/LC_COLLATE
-dir path=usr/lib/locale/C/LC_CTYPE
-dir path=usr/lib/locale/C/LC_MESSAGES
-dir path=usr/lib/locale/C/LC_MONETARY
-dir path=usr/lib/locale/C/LC_NUMERIC
-dir path=usr/lib/locale/C/LC_TIME
 dir path=usr/lib/netsvc group=sys
 dir path=usr/lib/pci
 dir path=usr/lib/rcm
@@ -1701,7 +1693,6 @@ link path=usr/lib/fs/hsfs/mount target=../../../../etc/fs/hsfs/mount
 link path=usr/lib/fs/ufs/mount target=../../../../etc/fs/ufs/mount
 link path=usr/lib/inet/in.mpathd target=../../../lib/inet/in.mpathd
 link path=usr/lib/ld.so.1 target=../../lib/ld.so.1
-link path=usr/lib/locale/POSIX target=./C
 link path=usr/lib/rsh target=../bin/ksh93
 link path=usr/lib/secure/32 target=.
 link path=usr/lib/secure/64 target=$(ARCH64)
