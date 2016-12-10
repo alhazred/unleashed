@@ -205,11 +205,6 @@
  *	This indicates whether or not the implementation uses /etc/rtc_config
  *	to configure the real-time clock in the kernel.
  *
- * _UNIX_KRTLD
- *	This indicates that the implementation uses a dynamically
- *	linked unix + krtld to form the core kernel image at boot
- *	time, or (in the absence of this symbol) a prelinked kernel image.
- *
  * _OBP
  *	This indicates the firmware interface is OBP.
  *

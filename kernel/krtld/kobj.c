@@ -424,16 +424,15 @@ kobj_init(
 		boot_prop_finish();
 	}
 
-#if !defined(_UNIX_KRTLD)
 	/*
-	 * 'unix' is linked together with 'krtld' into one executable and
-	 * the early boot code does -not- hand us any of the dynamic metadata
-	 * about the executable. In particular, it does not read in, map or
-	 * otherwise look at the program headers. We fake all that up now.
+	 * The early boot code does -not- hand us any of the dynamic
+	 * metadata about the executable.  In particular, it does not read
+	 * in, map or otherwise look at the program headers.  We fake all
+	 * that up now.
 	 *
-	 * We do this early as DTrace static probes and tnf probes both call
-	 * undefined references.  We have to process those relocations before
-	 * calling any of them.
+	 * We do this early as DTrace static probes probes both call
+	 * undefined references.  We have to process those relocations
+	 * before calling any of them.
 	 *
 	 * OBP tells kobj_start() where the ELF image is in memory, so it
 	 * synthesized bootaux before kobj_init() was called
@@ -441,7 +440,6 @@ kobj_init(
 	if (bootaux[BA_PHDR].ba_ptr == NULL)
 		synthetic_bootaux(filename, bootaux);
 
-#endif	/* !_UNIX_KRTLD */
 #endif	/* _OBP */
 
 	/*
@@ -552,8 +550,6 @@ kobj_init(
 fail:
 
 	_kobj_printf(ops, "krtld: error during initial load/link phase\n");
-
-#if !defined(_UNIX_KRTLD)
 	_kobj_printf(ops, "\n");
 	_kobj_printf(ops, "krtld could neither locate nor resolve symbols"
 	    " for:\n");
@@ -561,20 +557,13 @@ fail:
 	_kobj_printf(ops, "in the boot archive. Please verify that this"
 	    " file\n");
 	_kobj_printf(ops, "matches what is found in the boot archive.\n");
-	_kobj_printf(ops, "You may need to boot using the Solaris failsafe to"
-	    " fix this.\n");
 	bop_panic("Unable to boot");
-#endif
 }
 
-#if !defined(_UNIX_KRTLD) && !defined(_OBP)
+#if !defined(_OBP)
 /*
- * Synthesize additional metadata that describes the executable if
+ * Synthesize additional metadata that describes the executable as
  * krtld's caller didn't do it.
- *
- * (When the dynamic executable has an interpreter, the boot program
- * does all this for us.  Where we don't have an interpreter, (or a
- * even a boot program, perhaps) we have to do this for ourselves.)
  */
 static void
 synthetic_bootaux(char *filename, val_t *bootaux)
@@ -632,7 +621,7 @@ synthetic_bootaux(char *filename, val_t *bootaux)
 	}
 	KOBJ_MARK("synthetic_bootaux() done");
 }
-#endif	/* !_UNIX_KRTLD && !_OBP */
+#endif	/* !_OBP */
 
 /*
  * Set up any global information derived
