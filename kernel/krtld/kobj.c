@@ -430,9 +430,9 @@ kobj_init(
 	 * in, map or otherwise look at the program headers.  We fake all
 	 * that up now.
 	 *
-	 * We do this early as DTrace static probes probes both call
-	 * undefined references.  We have to process those relocations
-	 * before calling any of them.
+	 * We do this early as DTrace static probes both call undefined
+	 * references.  We have to process those relocations before calling
+	 * any of them.
 	 *
 	 * OBP tells kobj_start() where the ELF image is in memory, so it
 	 * synthesized bootaux before kobj_init() was called
