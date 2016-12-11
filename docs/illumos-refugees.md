@@ -9,11 +9,7 @@ guide only highlights the differences between the two communities.
 Repository
 ----------
 
-* The source tree layout is different.  It attempts to be wider (rather than
-  deep) and better subdivided.  It is loosly based on the Linux kernel and
-  BSD repositories.  The description of the repository layout can be found
-  in `docs/repo-layout.md`.
-* Sun Studio and lint are *not* supported
+* Building with Sun Studio and lint is *not* supported
 * `nightly`
   - `nightly` is not shipped, just use `usr/src/tools/scripts/nightly.sh`
     directly
@@ -21,6 +17,24 @@ Repository
   - support for multi-proto and multiple builds was removed
 * `bldenv` is not shipped, just use `usr/src/tools/scripts/bldenv.sh`
   directly
+
+### illumos-gate to unleashed directory mapping
+
+The source tree layout is different.  It attempts to be wider (rather than
+deep) and better subdivided.  It is loosly based on the Linux kernel and
+BSD repositories.  The description of the repository layout can be found in
+`docs/repo-layout.md`.
+
+The following are *rough* mappings between the two repositories to give you
+a vague idea where files ended up.
+
+* `usr/src/cmd` -> `bin`
+* `usr/src/lib` -> `lib`
+* `usr/src/head` -> `include`
+* `usr/src/uts/common/os` -> `kernel/os`
+* `usr/src/uts/common/vm` -> `kernel/vm`
+* `usr/src/uts/common/sys` -> `include/sys`
+* `usr/src/uts/intel` -> `arch/x86`
 
 Contribution Process
 --------------------
