@@ -159,10 +159,7 @@ closedbins: bldtools $(ROOTDIRS) FRC
 	$(ECHO) "Copying closed binaries from $$CLOSED_ROOT"; \
 	(cd $$CLOSED_ROOT; \
 	    $(TAR) cfX - $(CODEMGR_WS)/exception_lists/closed-bins .) | \
-	    (cd $(ROOT); $(TAR) xBpf -); \
-	( cd $(ROOT); $(CTFSTRIP) $$(cd $$CLOSED_ROOT; $(FIND) \
-	    ./kernel ./usr/kernel ./platform/*/kernel -type f -a -perm -u+x | \
-	    $(EGREP) -vf $(CODEMGR_WS)/exception_lists/closed-bins) )
+	    (cd $(ROOT); $(TAR) xBpf -)
 
 #
 # Declare what parts can be built in parallel

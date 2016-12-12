@@ -196,14 +196,6 @@ dir path=usr/lib/iconv
 dir path=usr/lib/inet
 dir path=usr/lib/inet/$(ARCH32)
 dir path=usr/lib/inet/$(ARCH64)
-dir path=usr/lib/locale
-dir path=usr/lib/locale/C
-dir path=usr/lib/locale/C/LC_COLLATE
-dir path=usr/lib/locale/C/LC_CTYPE
-dir path=usr/lib/locale/C/LC_MESSAGES
-dir path=usr/lib/locale/C/LC_MONETARY
-dir path=usr/lib/locale/C/LC_NUMERIC
-dir path=usr/lib/locale/C/LC_TIME
 dir path=usr/lib/netsvc group=sys
 dir path=usr/lib/pci
 dir path=usr/lib/rcm
@@ -487,7 +479,6 @@ file path=lib/svc/manifest/network/dns/install.xml group=sys mode=0444
 file path=lib/svc/manifest/network/forwarding.xml group=sys mode=0444
 file path=lib/svc/manifest/network/inetd-upgrade.xml group=sys mode=0444
 file path=lib/svc/manifest/network/inetd.xml group=sys mode=0444
-file path=lib/svc/manifest/network/ipsec/ike.xml group=sys mode=0444
 file path=lib/svc/manifest/network/ipsec/ipsecalgs.xml group=sys mode=0444
 file path=lib/svc/manifest/network/ipsec/manual-key.xml group=sys mode=0444
 file path=lib/svc/manifest/network/ipsec/policy.xml group=sys mode=0444
@@ -1164,11 +1155,6 @@ file path=usr/lib/iconv/8859.646it.t mode=0444
 file path=usr/lib/iconv/8859.646sv.t mode=0444
 file path=usr/lib/iconv/iconv_data mode=0444
 file path=usr/lib/idmapd mode=0555
-file path=usr/lib/inet/$(ARCH32)/in.iked mode=0555
-file path=usr/lib/inet/$(ARCH64)/in.iked mode=0555
-file path=usr/lib/inet/certdb mode=0555
-file path=usr/lib/inet/certlocal mode=0555
-file path=usr/lib/inet/certrldb mode=0555
 file path=usr/lib/inet/inetd mode=0555
 file path=usr/lib/intrd mode=0555
 file path=usr/lib/isaexec mode=0555
@@ -1289,8 +1275,6 @@ file path=usr/sbin/halt mode=0755
 file path=usr/sbin/hotplug mode=0555
 file path=usr/sbin/idmap mode=0555
 file path=usr/sbin/if_mpadm mode=0555
-file path=usr/sbin/ikeadm mode=0555
-file path=usr/sbin/ikecert mode=0555
 file path=usr/sbin/inetadm mode=0555
 file path=usr/sbin/inetconv mode=0555
 file path=usr/sbin/installboot group=sys mode=0555
@@ -1510,7 +1494,6 @@ hardlink path=usr/lib/fs/ufs/dcopy target=../../../../usr/lib/fs/ufs/clri
 hardlink path=usr/lib/fs/ufs/fstyp target=../../../sbin/fstyp
 hardlink path=usr/lib/fs/ufs/quotaon \
     target=../../../../usr/lib/fs/ufs/quotaoff
-hardlink path=usr/lib/inet/in.iked target=../../../usr/lib/isaexec
 hardlink path=usr/sadm/bin/dispgid target=../../../usr/bin/ckgid
 hardlink path=usr/sadm/bin/dispuid target=../../../usr/bin/ckuid
 hardlink path=usr/sadm/bin/errange target=../../../usr/bin/ckrange
@@ -1709,7 +1692,6 @@ link path=usr/lib/fs/hsfs/mount target=../../../../etc/fs/hsfs/mount
 link path=usr/lib/fs/ufs/mount target=../../../../etc/fs/ufs/mount
 link path=usr/lib/inet/in.mpathd target=../../../lib/inet/in.mpathd
 link path=usr/lib/ld.so.1 target=../../lib/ld.so.1
-link path=usr/lib/locale/POSIX target=./C
 link path=usr/lib/rsh target=../bin/ksh93
 link path=usr/lib/secure/32 target=.
 link path=usr/lib/secure/64 target=$(ARCH64)

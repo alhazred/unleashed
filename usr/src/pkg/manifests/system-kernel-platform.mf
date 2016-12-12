@@ -796,9 +796,6 @@ $(i386_ONLY)file \
     mode=0755
 $(i386_ONLY)file path=platform/i86pc/kernel/cpu/$(ARCH64)/cpu_ms.GenuineIntel \
     group=sys mode=0755
-$(i386_ONLY)file \
-    path=platform/i86pc/kernel/cpu/$(ARCH64)/cpu_ms.GenuineIntel.6.46 \
-    group=sys mode=0755
 $(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu.generic group=sys \
     mode=0755
 $(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD group=sys \
@@ -807,8 +804,6 @@ $(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD.15 \
     group=sys mode=0755
 $(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.GenuineIntel group=sys \
     mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.GenuineIntel.6.46 \
-    group=sys mode=0755
 $(i386_ONLY)file path=platform/i86pc/kernel/dacf/$(ARCH64)/consconfig_dacf \
     group=sys mode=0755
 $(i386_ONLY)file path=platform/i86pc/kernel/dacf/consconfig_dacf group=sys \
@@ -1152,11 +1147,6 @@ $(sparc_ONLY)file path=usr/share/man/man7d/tsalarm.7d
 $(sparc_ONLY)file path=usr/share/man/man7d/zs.7d
 $(sparc_ONLY)file path=usr/share/man/man7d/zsh.7d
 $(sparc_ONLY)file path=usr/share/man/man7m/kb.7m
-$(i386_ONLY)hardlink \
-    path=platform/i86pc/kernel/cpu/$(ARCH64)/cpu_ms.GenuineIntel.6.47 \
-    target=cpu_ms.GenuineIntel.6.46
-$(i386_ONLY)hardlink path=platform/i86pc/kernel/cpu/cpu_ms.GenuineIntel.6.47 \
-    target=cpu_ms.GenuineIntel.6.46
 $(sparc_ONLY)hardlink path=platform/sun4u/kernel/misc/$(ARCH64)/md5 \
     target=../../../kernel/crypto/$(ARCH64)/md5
 $(sparc_ONLY)hardlink path=platform/sun4u/kernel/misc/$(ARCH64)/sha1 \

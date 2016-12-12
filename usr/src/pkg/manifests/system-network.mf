@@ -33,11 +33,7 @@ dir path=etc group=sys
 dir path=etc/default group=sys
 dir path=etc/dladm group=netadm owner=dladm
 dir path=etc/inet group=sys
-dir path=etc/inet/ike group=sys
-dir path=etc/inet/ike/crls group=sys
-dir path=etc/inet/ike/publickeys group=sys
 dir path=etc/inet/secret group=sys mode=0700
-dir path=etc/inet/secret/ike.privatekeys group=sys mode=0700
 dir path=etc/ipadm group=netadm owner=netadm
 dir path=etc/nwam group=netadm owner=netadm
 dir path=etc/nwam/loc group=netadm owner=netadm
@@ -55,10 +51,8 @@ file path=etc/dladm/flowprop.conf group=netadm owner=dladm preserve=true
 file path=etc/dladm/secobj.conf group=netadm mode=0660 owner=dladm \
     preserve=true
 file path=etc/inet/datemsk.ndpd group=sys mode=0444
-file path=etc/inet/ike/config.sample group=sys mode=0444
 file path=etc/inet/ipsecalgs group=sys preserve=true
 file path=etc/inet/ipsecinit.sample group=sys mode=0444
-file path=etc/inet/secret/ike.preshared group=sys mode=0600 preserve=true
 file path=etc/inet/secret/ipseckeys.sample group=sys mode=0600
 file path=etc/ipadm/ipadm.conf group=netadm owner=netadm preserve=true
 file path=etc/nwam/loc/NoNet/ipf.conf.dfl group=netadm owner=netadm \

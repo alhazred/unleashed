@@ -157,7 +157,6 @@ $(i386_ONLY)driver name=intel_nb5000 \
 $(i386_ONLY)driver name=intel_nhm \
     alias=pci8086,3423 \
     alias=pci8086,372a
-$(i386_ONLY)driver name=intel_nhmex alias=pci8086,3438
 driver name=ip perms="ip 0666 root sys" \
     policy="read_priv_set=net_rawaccess write_priv_set=net_rawaccess"
 driver name=ip6 perms="ip6 0666 root sys" \
@@ -189,16 +188,6 @@ driver name=mm perms="allkmem 0600 root sys" perms="kmem 0640 root sys" \
     policy="kmem read_priv_set=none write_priv_set=all" \
     policy="mem read_priv_set=none write_priv_set=all"
 driver name=mouse8042 alias=pnpPNP,f03
-$(i386_ONLY)driver name=mpt class=scsi \
-    alias=pci1000,30 \
-    alias=pci1000,50 \
-    alias=pci1000,54 \
-    alias=pci1000,56 \
-    alias=pci1000,58 \
-    alias=pci1000,62 \
-    alias=pciex1000,56 \
-    alias=pciex1000,58 \
-    alias=pciex1000,62
 driver name=nulldriver \
     alias=scsa,nodev \
     alias=scsa,probe
@@ -334,7 +323,6 @@ $(sparc_ONLY)file path=kernel/dacf/$(ARCH64)/consconfig_dacf group=sys \
 file path=kernel/dacf/$(ARCH64)/net_dacf group=sys mode=0755
 $(i386_ONLY)file path=kernel/dacf/net_dacf group=sys mode=0755
 $(i386_ONLY)file path=kernel/drv/$(ARCH64)/acpi_drv group=sys
-$(i386_ONLY)file path=kernel/drv/$(ARCH64)/acpi_toshiba group=sys
 file path=kernel/drv/$(ARCH64)/aggr group=sys
 file path=kernel/drv/$(ARCH64)/arp group=sys
 file path=kernel/drv/$(ARCH64)/bl group=sys
@@ -358,7 +346,6 @@ file path=kernel/drv/$(ARCH64)/icmp group=sys
 file path=kernel/drv/$(ARCH64)/icmp6 group=sys
 $(i386_ONLY)file path=kernel/drv/$(ARCH64)/intel_nb5000 group=sys
 $(i386_ONLY)file path=kernel/drv/$(ARCH64)/intel_nhm group=sys
-$(i386_ONLY)file path=kernel/drv/$(ARCH64)/intel_nhmex group=sys
 file path=kernel/drv/$(ARCH64)/ip group=sys
 file path=kernel/drv/$(ARCH64)/ip6 group=sys
 file path=kernel/drv/$(ARCH64)/ipnet group=sys
@@ -376,7 +363,6 @@ file path=kernel/drv/$(ARCH64)/log group=sys
 $(i386_ONLY)file path=kernel/drv/$(ARCH64)/mc-amd group=sys
 file path=kernel/drv/$(ARCH64)/mm group=sys
 file path=kernel/drv/$(ARCH64)/mouse8042 group=sys
-$(i386_ONLY)file path=kernel/drv/$(ARCH64)/mpt group=sys
 file path=kernel/drv/$(ARCH64)/nulldriver group=sys
 file path=kernel/drv/$(ARCH64)/openeepr group=sys
 file path=kernel/drv/$(ARCH64)/options group=sys
@@ -418,7 +404,6 @@ file path=kernel/drv/$(ARCH64)/vnic group=sys
 file path=kernel/drv/$(ARCH64)/wc group=sys
 $(i386_ONLY)file path=kernel/drv/acpi_drv group=sys
 $(i386_ONLY)file path=kernel/drv/acpi_drv.conf group=sys
-$(i386_ONLY)file path=kernel/drv/acpi_toshiba group=sys
 $(i386_ONLY)file path=kernel/drv/aggr group=sys
 file path=kernel/drv/aggr.conf group=sys
 $(i386_ONLY)file path=kernel/drv/arp group=sys
@@ -462,8 +447,6 @@ $(i386_ONLY)file path=kernel/drv/intel_nb5000 group=sys
 $(i386_ONLY)file path=kernel/drv/intel_nb5000.conf group=sys
 $(i386_ONLY)file path=kernel/drv/intel_nhm group=sys
 $(i386_ONLY)file path=kernel/drv/intel_nhm.conf group=sys
-$(i386_ONLY)file path=kernel/drv/intel_nhmex group=sys
-$(i386_ONLY)file path=kernel/drv/intel_nhmex.conf group=sys
 $(i386_ONLY)file path=kernel/drv/ip group=sys
 file path=kernel/drv/ip.conf group=sys
 $(i386_ONLY)file path=kernel/drv/ip6 group=sys
@@ -496,8 +479,6 @@ $(i386_ONLY)file path=kernel/drv/mc-amd.conf group=sys
 $(i386_ONLY)file path=kernel/drv/mm group=sys
 file path=kernel/drv/mm.conf group=sys
 $(i386_ONLY)file path=kernel/drv/mouse8042 group=sys
-$(i386_ONLY)file path=kernel/drv/mpt group=sys
-$(i386_ONLY)file path=kernel/drv/mpt.conf group=sys preserve=true
 $(i386_ONLY)file path=kernel/drv/nulldriver group=sys
 $(i386_ONLY)file path=kernel/drv/openeepr group=sys
 file path=kernel/drv/openeepr.conf group=sys
@@ -703,30 +684,18 @@ $(i386_ONLY)file path=kernel/misc/pcihp group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/rpcsec group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/sata group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/scsi group=sys mode=0755
-file path=kernel/misc/scsi_vhci/$(ARCH64)/scsi_vhci_f_asym_emc group=sys \
-    mode=0755
-file path=kernel/misc/scsi_vhci/$(ARCH64)/scsi_vhci_f_asym_lsi group=sys \
-    mode=0755
 file path=kernel/misc/scsi_vhci/$(ARCH64)/scsi_vhci_f_asym_sun group=sys \
     mode=0755
 file path=kernel/misc/scsi_vhci/$(ARCH64)/scsi_vhci_f_sym group=sys mode=0755
-file path=kernel/misc/scsi_vhci/$(ARCH64)/scsi_vhci_f_sym_emc group=sys \
-    mode=0755
 file path=kernel/misc/scsi_vhci/$(ARCH64)/scsi_vhci_f_sym_hds group=sys \
     mode=0755
 file path=kernel/misc/scsi_vhci/$(ARCH64)/scsi_vhci_f_tape group=sys mode=0755
 file path=kernel/misc/scsi_vhci/$(ARCH64)/scsi_vhci_f_tpgs group=sys mode=0755
 file path=kernel/misc/scsi_vhci/$(ARCH64)/scsi_vhci_f_tpgs_tape group=sys \
     mode=0755
-$(i386_ONLY)file path=kernel/misc/scsi_vhci/scsi_vhci_f_asym_emc group=sys \
-    mode=0755
-$(i386_ONLY)file path=kernel/misc/scsi_vhci/scsi_vhci_f_asym_lsi group=sys \
-    mode=0755
 $(i386_ONLY)file path=kernel/misc/scsi_vhci/scsi_vhci_f_asym_sun group=sys \
     mode=0755
 $(i386_ONLY)file path=kernel/misc/scsi_vhci/scsi_vhci_f_sym group=sys \
-    mode=0755
-$(i386_ONLY)file path=kernel/misc/scsi_vhci/scsi_vhci_f_sym_emc group=sys \
     mode=0755
 $(i386_ONLY)file path=kernel/misc/scsi_vhci/scsi_vhci_f_sym_hds group=sys \
     mode=0755
