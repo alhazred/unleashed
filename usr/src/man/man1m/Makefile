@@ -33,12 +33,10 @@ _MANFILES=	6to4relay.1m		\
 		acctprc.1m		\
 		acctsh.1m		\
 		adbgen.1m		\
-		add_allocatable.1m	\
 		add_drv.1m		\
 		addbadsec.1m		\
 		arcstat.1m		\
 		arp.1m			\
-		atohexlabel.1m		\
 		audit.1m		\
 		audit_warn.1m		\
 		auditconfig.1m		\
@@ -157,7 +155,6 @@ _MANFILES=	6to4relay.1m		\
 		hal-get-property.1m	\
 		hald.1m			\
 		halt.1m			\
-		hextoalabel.1m		\
 		hostconfig.1m		\
 		id.1m			\
 		idmap.1m		\
@@ -363,7 +360,6 @@ _MANFILES=	6to4relay.1m		\
 		rdate.1m		\
 		reboot.1m		\
 		rem_drv.1m		\
-		remove_allocatable.1m	\
 		removef.1m		\
 		repquota.1m		\
 		rmmount.1m		\
@@ -413,9 +409,6 @@ _MANFILES=	6to4relay.1m		\
 		smbiod.1m		\
 		smbios.1m		\
 		smbstat.1m		\
-		smtnrhdb.1m		\
-		smtnrhtp.1m		\
-		smtnzonecfg.1m		\
 		snoop.1m		\
 		soconfig.1m		\
 		sppptun.1m		\
@@ -451,17 +444,12 @@ _MANFILES=	6to4relay.1m		\
 		th_define.1m		\
 		th_manage.1m		\
 		tic.1m			\
-		tnchkdb.1m		\
-		tnctl.1m		\
-		tnd.1m			\
-		tninfo.1m		\
 		tpmadm.1m		\
 		traceroute.1m		\
 		trapstat.1m		\
 		ttyadm.1m		\
 		ttymon.1m		\
 		tunefs.1m		\
-		txzonemgr.1m		\
 		tzselect.1m		\
 		uadmin.1m		\
 		ucodeadm.1m		\
@@ -470,7 +458,6 @@ _MANFILES=	6to4relay.1m		\
 		unshare.1m		\
 		unshare_nfs.1m		\
 		update_drv.1m		\
-		updatehome.1m		\
 		useradd.1m		\
 		userdel.1m		\
 		usermod.1m		\

@@ -42,10 +42,7 @@ FILES =				\
 		fatcourier.ps	\
 		forms.ps	\
 		postprint.ps	\
-		ps.requests	\
-		tsol_banner.ps	\
-		tsol_separator.ps	\
-		tsol_trailer.ps
+		ps.requests
 
 ROOTPOSTFILES=	$(FILES:%=$(ROOTLIBLPPOST)/%)
 

@@ -51,7 +51,6 @@
 #include <sys/vfs.h>		/* for sonode */
 #include <sys/socketvar.h>	/* for sonode */
 #include <sys/zone.h>
-#include <sys/tsol/label.h>
 
 /*
  * These are the control tokens
@@ -1181,27 +1180,4 @@ au_to_secflags(const char *which, secflagset_t set)
 	(void) au_append_rec(token, m, AU_PACK);
 
 	return (token);
-}
-
-/*
- * au_to_label
- * returns:
- *	pointer to au_membuf chain containing a label token.
- */
-token_t *
-au_to_label(bslabel_t *label)
-{
-	token_t *m;			/* local au_membuf */
-	adr_t adr;			/* adr memory stream header */
-	char data_header = AUT_LABEL;	/* header for this token */
-
-	m = au_getclr();
-
-	adr_start(&adr, memtod(m, char *));
-	adr_char(&adr, &data_header, 1);
-	adr_char(&adr, (char *)label, sizeof (_mac_label_impl_t));
-
-	m->len = adr_count(&adr);
-
-	return (m);
 }

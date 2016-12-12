@@ -619,21 +619,6 @@ msg_extractcred(mblk_t *mp, pid_t *cpidp)
 	}
 	return (NULL);
 }
-/*
- * Get the label for a message. Uses the first mblk in the message
- * which has a non-NULL db_credp.
- * Returns NULL if there is no credp.
- */
-extern struct ts_label_s *
-msg_getlabel(const mblk_t *mp)
-{
-	cred_t *cr = msg_getcred(mp, NULL);
-
-	if (cr == NULL)
-		return (NULL);
-
-	return (crgetlabel(cr));
-}
 
 void
 freeb(mblk_t *mp)

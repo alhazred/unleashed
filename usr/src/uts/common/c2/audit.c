@@ -472,7 +472,6 @@ audit_attributes(struct vnode *vp)
 			tad->tad_ctrl |= TAD_NOAUDIT;
 		} else {
 			au_uwrite(au_to_attr(&attr));
-			audit_sec_attributes(&(u_ad), vp);
 		}
 	}
 }
@@ -803,7 +802,6 @@ audit_closef(struct file *fp)
 
 	if (audit_attr) {
 		au_write((caddr_t *)&(ad), au_to_attr(&attr));
-		audit_sec_attributes((caddr_t *)&(ad), vp);
 	}
 
 	/* Add subject information */
@@ -2142,35 +2140,3 @@ audit_pf_policy(int cmd, cred_t *cred, netstack_t *ns, char *tun,
 	tad->tad_evmod = 0;
 	tad->tad_ctrl  = 0;
 }
-
-/*
- * ROUTINE:	AUDIT_SEC_ATTRIBUTES
- * PURPOSE:	Add security attributes
- * CALLBY:	AUDIT_ATTRIBUTES
- *		AUDIT_CLOSEF
- *		AUS_CLOSE
- * NOTE:
- * TODO:
- * QUESTION:
- */
-
-void
-audit_sec_attributes(caddr_t *ad, struct vnode *vp)
-{
-	/* Dump the SL */
-	if (is_system_labeled()) {
-		ts_label_t	*tsl;
-		bslabel_t	*bsl;
-
-		tsl = getflabel(vp);
-		if (tsl == NULL)
-			return;			/* nothing else to do */
-
-		bsl = label2bslabel(tsl);
-		if (bsl == NULL)
-			return;			/* nothing else to do */
-		au_write(ad, au_to_label(bsl));
-		label_rele(tsl);
-	}
-
-}	/* AUDIT_SEC_ATTRIBUTES */

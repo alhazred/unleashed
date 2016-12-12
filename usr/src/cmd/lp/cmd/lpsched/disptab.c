@@ -135,7 +135,6 @@ static DISPATCH			dispatch_table[] = {
 /* R_PAPER_CHANGED		*/	0,			D_BADMSG,
 /* S_PAPER_ALLOWED		*/	s_paper_allowed,	0,
 /* R_PAPER_ALLOWED		*/	0,	D_BADMSG,
-/* S_PASS_PEER_CONNECTION	*/  s_pass_peer_connection,	0,
 /* R_PASS_PEER_CONNECTION	*/  0,			D_BADMSG,
 };
 

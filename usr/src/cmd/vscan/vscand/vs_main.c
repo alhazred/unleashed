@@ -35,7 +35,6 @@
 #include <sys/ioctl.h>
 #include <sys/param.h>
 #include <zone.h>
-#include <tsol/label.h>
 #include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -162,12 +161,6 @@ main(int argc, char **argv)
 	/* check if running in global zone; other zones not supported */
 	if (getzoneid() != GLOBAL_ZONEID) {
 		vscand_error(gettext("non-global zone not supported"));
-		exit(SMF_EXIT_ERR_FATAL);
-	}
-
-	/* check for a Trusted Solaris environment; not supported */
-	if (is_system_labeled()) {
-		vscand_error(gettext("Trusted Extensions not supported"));
 		exit(SMF_EXIT_ERR_FATAL);
 	}
 

@@ -2108,12 +2108,7 @@ snf_async_read(snf_req_t *sr)
 		    so->so_filter_active > 0 && maxblk != INFPSZ)
 			iosize = (int)MIN(iosize, maxblk);
 
-		if (is_system_labeled()) {
-			mp = allocb_cred(iosize + extra, CRED(),
-			    curproc->p_pid);
-		} else {
-			mp = allocb(iosize + extra, BPRI_MED);
-		}
+		mp = allocb(iosize + extra, BPRI_MED);
 		if (mp == NULL) {
 			error = EAGAIN;
 			break;
@@ -2715,12 +2710,7 @@ snf_cache(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t size,
 		    so->so_filter_active > 0 && maxblk != INFPSZ)
 			iosize = (int)MIN(iosize, maxblk);
 
-		if (is_system_labeled()) {
-			mp = allocb_cred(iosize + extra, CRED(),
-			    curproc->p_pid);
-		} else {
-			mp = allocb(iosize + extra, BPRI_MED);
-		}
+		mp = allocb(iosize + extra, BPRI_MED);
 		if (mp == NULL) {
 			error = EAGAIN;
 			break;

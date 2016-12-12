@@ -66,13 +66,6 @@ eventq_queue_in
 eventq_queue_nic
 eventq_queue_out
 fsw
-gcdb_hash
-gcdb_hash_size
-gcdb_lock
-gcgrp4_hash
-gcgrp6_hash
-gcgrp_hash_size
-gcgrp_lock
 icmp_fallback_sock_winit
 icmp_frag_size_table
 icmp_g_t_info_ack
@@ -108,7 +101,6 @@ ill_no_arena
 inet_dev_info
 inet_devops
 ip6_ftable_hash_size
-ip6opt_ls
 ip_cgtp_filter_rev
 ip_conn_cache
 ip_dce_hash_size
@@ -183,7 +175,6 @@ ipv6_unspecified_group
 ipv6info
 ipwinit
 ire_cache
-ire_gw_secattr_cache
 ire_null
 ire_nv_arr
 ire_nv_tbl
@@ -301,7 +292,6 @@ tcp_winit
 tcpinfov4
 tcpinfov6
 tli_errs
-tsol_strict_error
 tun_spd_hashsize
 udp_bind_fanout_size
 udp_conn_cache

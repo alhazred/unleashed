@@ -42,7 +42,6 @@
 #include <string.h>
 #include <ucred.h>
 #include <zone.h>
-#include <sys/tsol/label.h>
 
 #define	NGROUPS		16	/* XXX - temporary */
 
@@ -1447,52 +1446,6 @@ au_to_xclient(uint32_t client)
 	return (token);
 }
 
-/*
- * au_to_label
- * return s:
- *	pointer to a label token.
- */
-token_t *
-au_to_label(m_label_t *label)
-{
-	token_t *token;			/* local token */
-	adr_t adr;			/* adr memory stream header */
-	char data_header = AUT_LABEL;	/* header for this token */
-	size32_t llen = blabel_size();
-
-	token = get_token(sizeof (char) + llen);
-	if (token == NULL) {
-		return (NULL);
-	} else if (label == NULL) {
-		free(token);
-		return (NULL);
-	}
-	adr_start(&adr, token->tt_data);
-	adr_char(&adr, &data_header, 1);
-	adr_char(&adr, (char *)label, llen);
-
-	return (token);
-}
-
-/*
- * au_to_mylabel
- * return s:
- *	pointer to a label token.
- */
-token_t *
-au_to_mylabel(void)
-{
-	ucred_t		*uc;
-	token_t		*token;
-
-	if ((uc = ucred_get(P_MYID)) == NULL) {
-		return (NULL);
-	}
-
-	token = au_to_label(ucred_getlabel(uc));
-	ucred_free(uc);
-	return (token);
-}
 
 /*
  * au_to_zonename

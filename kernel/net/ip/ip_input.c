@@ -118,9 +118,6 @@
 #include <inet/udp_impl.h>
 #include <sys/sunddi.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
-
 #include <sys/clock_impl.h>	/* For LBOLT_FASTPATH{,64} */
 
 #ifdef	DEBUG
@@ -351,7 +348,6 @@ ip_input_common_v4(ill_t *ill, ill_rx_ring_t *ip_ring, mblk_t *mp_chain,
 		iras.ira_free_flags = 0;
 		iras.ira_cred = NULL;
 		iras.ira_cpid = NOPID;
-		iras.ira_tsl = NULL;
 		iras.ira_zoneid = ALL_ZONES;	/* Default for forwarding */
 
 		/*
@@ -374,7 +370,7 @@ ip_input_common_v4(ill_t *ill, ill_rx_ring_t *ip_ring, mblk_t *mp_chain,
 		(*ill->ill_inputfn)(mp, ipha, &ipha->ipha_dst, &iras, &rtc);
 
 		/* Any references to clean up? No hold on ira_ill */
-		if (iras.ira_flags & (IRAF_IPSEC_SECURE|IRAF_SYSTEM_LABELED))
+		if (iras.ira_flags & (IRAF_IPSEC_SECURE))
 			ira_cleanup(&iras, B_FALSE);
 
 		if (iras.ira_target_sqp_mp != NULL) {
@@ -416,7 +412,6 @@ ip_input_common_v4(ill_t *ill, ill_rx_ring_t *ip_ring, mblk_t *mp_chain,
 
 /*
  * This input function is used when
- *  - is_system_labeled()
  *  - CGTP filtering
  *  - DHCP unicast before we have an IP address configured
  *  - there is an listener for IPPROTO_RSVP
@@ -430,31 +425,6 @@ ill_input_full_v4(mblk_t *mp, void *iph_arg, void *nexthop_arg,
 	ill_t		*ill = ira->ira_ill;
 	ip_stack_t	*ipst = ill->ill_ipst;
 	int		cgtp_flt_pkt;
-
-	ASSERT(ira->ira_tsl == NULL);
-
-	/*
-	 * Attach any necessary label information to
-	 * this packet
-	 */
-	if (is_system_labeled()) {
-		ira->ira_flags |= IRAF_SYSTEM_LABELED;
-
-		/*
-		 * This updates ira_cred, ira_tsl and ira_free_flags based
-		 * on the label.
-		 */
-		if (!tsol_get_pkt_label(mp, IPV4_VERSION, ira)) {
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsInDiscards);
-			ip_drop_input("ipIfStatsInDiscards", mp, ill);
-			freemsg(mp);
-			return;
-		}
-		/* Note that ira_tsl can be NULL here. */
-
-		/* tsol_get_pkt_label sometimes does pullupmsg */
-		ipha = (ipha_t *)mp->b_rptr;
-	}
 
 	/*
 	 * Invoke the CGTP (multirouting) filtering module to process
@@ -777,24 +747,7 @@ after_ilb:
 	else
 		irr_flags = IRR_NONE;
 
-	/* Can not use route cache with TX since the labels can differ */
-	if (ira->ira_flags & IRAF_SYSTEM_LABELED) {
-		if (CLASSD(nexthop)) {
-			ire = ire_multicast(ill);
-		} else {
-			/* Match destination and label */
-			ire = ire_route_recursive_v4(nexthop, 0, NULL,
-			    ALL_ZONES, ira->ira_tsl, MATCH_IRE_SECATTR,
-			    irr_flags, ira->ira_xmit_hint, ipst, NULL, NULL,
-			    NULL);
-		}
-		/* Update the route cache so we do the ire_refrele */
-		ASSERT(ire != NULL);
-		if (rtc->rtc_ire != NULL)
-			ire_refrele(rtc->rtc_ire);
-		rtc->rtc_ire = ire;
-		rtc->rtc_ipaddr = nexthop;
-	} else if (nexthop == rtc->rtc_ipaddr && rtc->rtc_ire != NULL) {
+	if (nexthop == rtc->rtc_ipaddr && rtc->rtc_ire != NULL) {
 		/* Use the route cache */
 		ire = rtc->rtc_ire;
 	} else {
@@ -943,10 +896,9 @@ ire_recv_forward_v4(ire_t *ire, mblk_t *mp, void *iph_arg, ip_recv_attr_t *ira)
 			dst = ip_input_options(ipha, dst, mp, ira, &error);
 			ASSERT(error == 0);	/* ip_input checked */
 		}
-		ire = ire_route_recursive_v4(dst, 0, NULL, GLOBAL_ZONEID,
-		    ira->ira_tsl, MATCH_IRE_SECATTR,
+		ire = ire_route_recursive_v4(dst, 0, NULL, GLOBAL_ZONEID, 0,
 		    (ill->ill_flags & ILLF_ROUTER) ? IRR_ALLOCATE : IRR_NONE,
-		    ira->ira_xmit_hint, ipst, NULL, NULL, NULL);
+		    ira->ira_xmit_hint, ipst, NULL, NULL);
 		ire->ire_ib_pkt_count++;
 		(*ire->ire_recvfn)(ire, mp, ipha, ira);
 		ire_refrele(ire);
@@ -1056,49 +1008,6 @@ ire_recv_forward_v4(ire_t *ire, mblk_t *mp, void *iph_arg, ip_recv_attr_t *ira)
 	}
 
 	added_tx_len = 0;
-	if (ira->ira_flags & IRAF_SYSTEM_LABELED) {
-		mblk_t		*mp1;
-		uint32_t	old_pkt_len = ira->ira_pktlen;
-
-		/* Verify IP header checksum before adding/removing options */
-		if ((ira->ira_flags & IRAF_VERIFY_IP_CKSUM) &&
-		    ip_csum_hdr(ipha)) {
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsInCksumErrs);
-			ip_drop_input("ipIfStatsInCksumErrs", mp, ill);
-			freemsg(mp);
-			nce_refrele(nce);
-			return;
-		}
-		ira->ira_flags &= ~IRAF_VERIFY_IP_CKSUM;
-
-		/*
-		 * Check if it can be forwarded and add/remove
-		 * CIPSO options as needed.
-		 */
-		if ((mp1 = tsol_ip_forward(ire, mp, ira)) == NULL) {
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsForwProhibits);
-			ip_drop_input("tsol_ip_forward", mp, ill);
-			freemsg(mp);
-			nce_refrele(nce);
-			return;
-		}
-		/*
-		 * Size may have changed. Remember amount added in case
-		 * IP needs to send an ICMP too big.
-		 */
-		mp = mp1;
-		ipha = (ipha_t *)mp->b_rptr;
-		ira->ira_pktlen = ntohs(ipha->ipha_length);
-		ira->ira_ip_hdr_length = IPH_HDR_LENGTH(ipha);
-		if (ira->ira_pktlen > old_pkt_len)
-			added_tx_len = ira->ira_pktlen - old_pkt_len;
-
-		/* Options can have been added or removed */
-		if (ira->ira_ip_hdr_length != IP_SIMPLE_HDR_LENGTH)
-			ira->ira_flags |= IRAF_IPV4_OPTIONS;
-		else
-			ira->ira_flags &= ~IRAF_IPV4_OPTIONS;
-	}
 
 	mtu = dst_ill->ill_mtu;
 	if ((iremtu = ire->ire_metrics.iulp_mtu) != 0 && iremtu < mtu)
@@ -1190,18 +1099,6 @@ ip_forward_xmit_v4(nce_t *nce, ill_t *ill, mblk_t *mp, ipha_t *ipha,
 		if (ipha->ipha_fragment_offset_and_flags & IPH_DF_HTONS) {
 			BUMP_MIB(dst_ill->ill_ip_mib, ipIfStatsOutFragFails);
 			ip_drop_output("ipIfStatsOutFragFails", mp, dst_ill);
-			if (iraflags & IRAF_SYSTEM_LABELED) {
-				/*
-				 * Remove any CIPSO option added by
-				 * tsol_ip_forward, and make sure we report
-				 * a path MTU so that there
-				 * is room to add such a CIPSO option for future
-				 * packets.
-				 */
-				mtu = tsol_pmtu_adjust(mp, mtu, added_tx_len,
-				    AF_INET);
-			}
-
 			icmp_frag_needed(mp, mtu, ira);
 			return;
 		}
@@ -1373,8 +1270,7 @@ ire_recv_broadcast_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
 	ipha_dst = ((ira->ira_flags & IRAF_DHCP_UNICAST) ? INADDR_BROADCAST :
 	    ipha->ipha_dst);
 	alt_ire = ire_ftable_lookup_v4(ipha_dst, 0, 0, IRE_BROADCAST, ill,
-	    ALL_ZONES, ira->ira_tsl,
-	    MATCH_IRE_TYPE|MATCH_IRE_ILL|MATCH_IRE_SECATTR, 0, ipst, NULL);
+	    ALL_ZONES, MATCH_IRE_TYPE|MATCH_IRE_ILL, 0, ipst, NULL);
 	if (alt_ire != NULL) {
 		/* Not a directed broadcast */
 		/*
@@ -2002,78 +1898,6 @@ ip_input_multicast_v4(ire_t *ire, mblk_t *mp, ipha_t *ipha, ip_recv_attr_t *ira)
 	}
 }
 
-
-/*
- * Determine the zoneid and IRAF_TX_* flags if trusted extensions
- * is in use. Updates ira_zoneid and ira_flags as a result.
- */
-static void
-ip_fanout_tx_v4(mblk_t *mp, ipha_t *ipha, uint8_t protocol,
-    uint_t ip_hdr_length, ip_recv_attr_t *ira)
-{
-	uint16_t	*up;
-	uint16_t	lport;
-	zoneid_t	zoneid;
-
-	ASSERT(ira->ira_flags & IRAF_SYSTEM_LABELED);
-
-	/*
-	 * If the packet is unlabeled we might allow read-down
-	 * for MAC_EXEMPT. Below we clear this if it is a multi-level
-	 * port (MLP).
-	 * Note that ira_tsl can be NULL here.
-	 */
-	if (ira->ira_tsl != NULL && ira->ira_tsl->tsl_flags & TSLF_UNLABELED)
-		ira->ira_flags |= IRAF_TX_MAC_EXEMPTABLE;
-
-	if (ira->ira_zoneid != ALL_ZONES)
-		return;
-
-	ira->ira_flags |= IRAF_TX_SHARED_ADDR;
-
-	up = (uint16_t *)((uchar_t *)ipha + ip_hdr_length);
-	switch (protocol) {
-	case IPPROTO_TCP:
-	case IPPROTO_SCTP:
-	case IPPROTO_UDP:
-		/* Caller ensures this */
-		ASSERT(((uchar_t *)ipha) + ip_hdr_length +4 <= mp->b_wptr);
-
-		/*
-		 * Only these transports support MLP.
-		 * We know their destination port numbers is in
-		 * the same place in the header.
-		 */
-		lport = up[1];
-
-		/*
-		 * No need to handle exclusive-stack zones
-		 * since ALL_ZONES only applies to the shared IP instance.
-		 */
-		zoneid = tsol_mlp_findzone(protocol, lport);
-		/*
-		 * If no shared MLP is found, tsol_mlp_findzone returns
-		 * ALL_ZONES.  In that case, we assume it's SLP, and
-		 * search for the zone based on the packet label.
-		 *
-		 * If there is such a zone, we prefer to find a
-		 * connection in it.  Otherwise, we look for a
-		 * MAC-exempt connection in any zone whose label
-		 * dominates the default label on the packet.
-		 */
-		if (zoneid == ALL_ZONES)
-			zoneid = tsol_attr_to_zoneid(ira);
-		else
-			ira->ira_flags &= ~IRAF_TX_MAC_EXEMPTABLE;
-		break;
-	default:
-		/* Handle shared address for other protocols */
-		zoneid = tsol_attr_to_zoneid(ira);
-		break;
-	}
-	ira->ira_zoneid = zoneid;
-}
-
 /*
  * Increment checksum failure statistics
  */
@@ -2410,17 +2234,6 @@ ip_fanout_v4(mblk_t *mp, ipha_t *ipha, ip_recv_attr_t *ira)
 		len = mp->b_wptr - rptr;
 	}
 
-	/*
-	 * If trusted extensions then determine the zoneid and TX specific
-	 * ira_flags.
-	 */
-	if (iraflags & IRAF_SYSTEM_LABELED) {
-		/* This can update ira->ira_flags and ira->ira_zoneid */
-		ip_fanout_tx_v4(mp, ipha, protocol, ip_hdr_length, ira);
-		iraflags = ira->ira_flags;
-	}
-
-
 	/* Verify ULP checksum. Handles TCP, UDP, and SCTP */
 	if (iraflags & IRAF_VERIFY_ULP_CKSUM) {
 		if (!ip_input_cksum_v4(iraflags, mp, ipha, ira)) {
@@ -2746,19 +2559,6 @@ ip_fanout_v4(mblk_t *mp, ipha_t *ipha, ip_recv_attr_t *ira)
 		}
 
 		/*
-		 * On a labeled system, we have to check whether the zone
-		 * itself is permitted to receive raw traffic.
-		 */
-		if (ira->ira_flags & IRAF_SYSTEM_LABELED) {
-			if (!tsol_can_accept_raw(mp, ira, B_FALSE)) {
-				BUMP_MIB(&ipst->ips_icmp_mib, icmpInErrors);
-				ip_drop_input("tsol_can_accept_raw", mp, ill);
-				freemsg(mp);
-				return;
-			}
-		}
-
-		/*
 		 * ICMP header checksum, including checksum field,
 		 * should be zero.
 		 */
@@ -2787,13 +2587,6 @@ ip_fanout_v4(mblk_t *mp, ipha_t *ipha, ip_recv_attr_t *ira)
 			if (mp == NULL)
 				return;
 		}
-		if ((ira->ira_flags & IRAF_SYSTEM_LABELED) &&
-		    !tsol_can_accept_raw(mp, ira, B_TRUE)) {
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsInDiscards);
-			ip_drop_input("ipIfStatsInDiscards", mp, ill);
-			freemsg(mp);
-			return;
-		}
 		/*
 		 * Validate checksum
 		 */
@@ -2821,13 +2614,6 @@ ip_fanout_v4(mblk_t *mp, ipha_t *ipha, ip_recv_attr_t *ira)
 			    ipha, NULL, ira, ns);
 			if (mp == NULL)
 				return;
-		}
-		if ((ira->ira_flags & IRAF_SYSTEM_LABELED) &&
-		    !tsol_can_accept_raw(mp, ira, B_TRUE)) {
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsInDiscards);
-			ip_drop_input("ipIfStatsInDiscards", mp, ill);
-			freemsg(mp);
-			return;
 		}
 		BUMP_MIB(ill->ill_ip_mib, ipIfStatsHCInDelivers);
 
@@ -3058,7 +2844,6 @@ ip_fanout_v4(mblk_t *mp, ipha_t *ipha, ip_recv_attr_t *ira)
 
 	iptun:	/* IPPROTO_ENCAPS that is not self-encapsulated */
 	case IPPROTO_IPV6:
-		/* iptun will verify trusted label */
 		connp = ipcl_classify_v4(mp, protocol, ip_hdr_length,
 		    ira, ipst);
 		if (connp != NULL) {
@@ -3069,20 +2854,6 @@ ip_fanout_v4(mblk_t *mp, ipha_t *ipha, ip_recv_attr_t *ira)
 			ira->ira_ill = ill;
 			ira->ira_rill = rill;
 			return;
-		}
-		/* FALLTHRU */
-	default:
-		/*
-		 * On a labeled system, we have to check whether the zone
-		 * itself is permitted to receive raw traffic.
-		 */
-		if (ira->ira_flags & IRAF_SYSTEM_LABELED) {
-			if (!tsol_can_accept_raw(mp, ira, B_FALSE)) {
-				BUMP_MIB(ill->ill_ip_mib, ipIfStatsInDiscards);
-				ip_drop_input("ipIfStatsInDiscards", mp, ill);
-				freemsg(mp);
-				return;
-			}
 		}
 		break;
 	}

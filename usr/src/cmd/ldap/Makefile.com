@@ -48,7 +48,7 @@ LDAPLISTOBJS=	$(LDAPLISTSRCS:%.c=%.o)
 
 # ldapaddent command
 LDAPADDENTPROG=	ldapaddent
-LDAPADDENTSRCS=	ldapaddent.c ldapaddrbac.c ldapaddtsol.c standalone.c
+LDAPADDENTSRCS=	ldapaddent.c ldapaddrbac.c standalone.c
 LDAPADDENTOBJS=	$(LDAPADDENTSRCS:%.c=%.o)
 
 # ldapclient command
@@ -106,7 +106,7 @@ ldapsearch :=	LDLIBS += -lldap
 ldapdelete :=	LDLIBS += -lldap
 ldapmodify :=	LDLIBS += -lldap
 ldaplist :=	LDLIBS += -lsldap
-ldapaddent :=	LDLIBS += -lsldap -lsecdb
+ldapaddent :=	LDLIBS += -lsldap
 ldapclient :=	LDLIBS += -lsldap -lscf
 
 ldaplist :=	C99MODE = $(C99_ENABLE)

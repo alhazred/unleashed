@@ -141,7 +141,7 @@ _make_db()
 	case -1:
 		return (1);
 	case 0:
-		if (execl(MKDEVALLOC, MKDEVALLOC, DA_IS_LABELED, NULL) == -1)
+		if (execl(MKDEVALLOC, MKDEVALLOC, NULL) == -1)
 			exit((errno == ENOENT) ? 0 : 1);
 	default:
 		for (;;) {

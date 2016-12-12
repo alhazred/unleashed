@@ -123,12 +123,6 @@ main(int argc, char *argv[])
 	struct rlimit rlset;
 	char *defval;
 
-	/*
-	 * There is no check for non-global zone and Trusted Extensions.
-	 * Reparsed works in both of these environments as long as the
-	 * services that use reparsed are supported.
-	 */
-
 	MyName = argv[0];
 	if (geteuid() != 0) {
 		syslog(LOG_ERR, "%s must be run as root", MyName);

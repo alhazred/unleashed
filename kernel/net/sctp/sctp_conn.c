@@ -33,7 +33,6 @@
 #include <sys/stropts.h>
 #include <sys/strsubr.h>
 #include <sys/socket.h>
-#include <sys/tsol/tndb.h>
 
 #include <netinet/in.h>
 #include <netinet/ip6.h>
@@ -238,39 +237,6 @@ sctp_conn_request(sctp_t *sctp, mblk_t *mp, uint_t ifindex, uint_t ip_hdr_len,
 	cr = ira->ira_cred;
 	cpid = ira->ira_cpid;
 
-	if (is_system_labeled()) {
-		ip_xmit_attr_t *ixa = econnp->conn_ixa;
-
-		ASSERT(ira->ira_tsl != NULL);
-
-		/* Discard any old label */
-		if (ixa->ixa_free_flags & IXA_FREE_TSL) {
-			ASSERT(ixa->ixa_tsl != NULL);
-			label_rele(ixa->ixa_tsl);
-			ixa->ixa_free_flags &= ~IXA_FREE_TSL;
-			ixa->ixa_tsl = NULL;
-		}
-
-		if ((connp->conn_mlp_type != mlptSingle ||
-		    connp->conn_mac_mode != CONN_MAC_DEFAULT) &&
-		    ira->ira_tsl != NULL) {
-			/*
-			 * If this is an MLP connection or a MAC-Exempt
-			 * connection with an unlabeled node, packets are to be
-			 * exchanged using the security label of the received
-			 * Cookie packet instead of the server application's
-			 * label.
-			 * tsol_check_dest called from ip_set_destination
-			 * might later update TSF_UNLABELED by replacing
-			 * ixa_tsl with a new label.
-			 */
-			label_hold(ira->ira_tsl);
-			ip_xmit_attr_replace_tsl(ixa, ira->ira_tsl);
-		} else {
-			ixa->ixa_tsl = crgetlabel(econnp->conn_cred);
-		}
-	}
-
 	err = sctp_accept_comm(sctp, eager, mp, ip_hdr_len, iack);
 	if (err != 0) {
 		sctp_close_eager(eager);
@@ -465,10 +431,6 @@ sctp_connect(sctp_t *sctp, const struct sockaddr *dst, uint32_t addrlen,
 	ASSERT(!(ixa->ixa_free_flags & IXA_FREE_CRED));
 	ixa->ixa_cred = cr;
 	ixa->ixa_cpid = pid;
-	if (is_system_labeled()) {
-		/* We need to restart with a label based on the cred */
-		ip_xmit_attr_restore_tsl(ixa, ixa->ixa_cred);
-	}
 
 	switch (sctp->sctp_state) {
 	case SCTPS_IDLE: {

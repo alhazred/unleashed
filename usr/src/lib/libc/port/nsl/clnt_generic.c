@@ -397,8 +397,6 @@ clnt_create_service_timed(const char *host, const char *service,
 
 		RPC_RAISEFD(fd);
 
-		__rpc_set_mac_options(fd, nconf, prog);
-
 		/* LINTED pointer cast */
 		if ((tbind = (struct t_bind *)t_alloc(fd, T_BIND, T_ADDR))
 		    == NULL) {
@@ -613,7 +611,6 @@ _clnt_tli_create_timed(int fd, const struct netconfig *nconf,
 			goto err;
 		RPC_RAISEFD(fd);
 		madefd = TRUE;
-		__rpc_set_mac_options(fd, nconf, prog);
 		if (t_bind(fd, NULL, NULL) == -1)
 			goto err;
 		switch (nconf->nc_semantics) {

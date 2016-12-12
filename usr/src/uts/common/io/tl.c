@@ -5377,16 +5377,6 @@ tl_sock_find_peer(tl_endpt_t *tep, soux_addr_t *ux_addr)
 		/* Don't attempt to use closing peer. */
 		if (peer_tep->te_closing)
 			goto errout;
-
-		/*
-		 * Cross-zone unix sockets are permitted, but for Trusted
-		 * Extensions only, the "server" for these must be in the
-		 * global zone.
-		 */
-		if ((peer_tep->te_zoneid != tep->te_zoneid) &&
-		    is_system_labeled() &&
-		    (peer_tep->te_zoneid != GLOBAL_ZONEID))
-			goto errout;
 	}
 
 	return (peer_tep);

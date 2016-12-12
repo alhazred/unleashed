@@ -39,7 +39,6 @@
 #include <pwd.h>
 #include <auth_attr.h>
 #include <auth_list.h>
-#include <tsol/label.h>
 
 /**
  ** is_user_admin() - CHECK IF CURRENT USER IS AN ADMINISTRATOR
@@ -54,15 +53,7 @@ is_user_admin (
 is_user_admin ()
 #endif
 {
-	/* For a labeled system, tsol_check_admin_auth is called
-	 * instead of using Access.
-	 */
-	if (is_system_labeled()) {
-		/* Check that user has print admin authorization */
-		return (tsol_check_admin_auth(getuid()));
-	} else {
-		return (Access(Lp_A, W_OK) == -1? 0 : 1);
-	}
+	return (Access(Lp_A, W_OK) == -1? 0 : 1);
 }
 
 /**
@@ -197,23 +188,4 @@ allowed (item, allow, deny)
 	}
 
 	return (0);
-}
-
-/*
- * Check to see if the specified user has the administer the printing
- * system authorization.
- */
-int
-tsol_check_admin_auth(uid_t uid)
-{
-	struct passwd *p;
-	char *name;
-
-	p = getpwuid(uid);
-	if (p != NULL && p->pw_name != NULL)
-		name = p->pw_name;
-	else
-		name = "";
-
-	return (chkauthattr(PRINT_ADMIN_AUTH, name));
 }

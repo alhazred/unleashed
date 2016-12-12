@@ -295,7 +295,7 @@ static zone_key_t zsd_keyval = 0;
 static list_t zsd_registered_keys;
 
 int zone_hash_size = 256;
-static mod_hash_t *zonehashbyname, *zonehashbyid, *zonehashbylabel;
+static mod_hash_t *zonehashbyname, *zonehashbyid;
 static kmutex_t zonehash_lock;
 static uint_t zonecount;
 static id_space_t *zoneid_space;
@@ -2126,51 +2126,6 @@ zone_zsd_init(void)
 }
 
 /*
- * Compute a hash value based on the contents of the label and the DOI.  The
- * hash algorithm is somewhat arbitrary, but is based on the observation that
- * humans will likely pick labels that differ by amounts that work out to be
- * multiples of the number of hash chains, and thus stirring in some primes
- * should help.
- */
-static uint_t
-hash_bylabel(void *hdata, mod_hash_key_t key)
-{
-	const ts_label_t *lab = (ts_label_t *)key;
-	const uint32_t *up, *ue;
-	uint_t hash;
-	int i;
-
-	_NOTE(ARGUNUSED(hdata));
-
-	hash = lab->tsl_doi + (lab->tsl_doi << 1);
-	/* we depend on alignment of label, but not representation */
-	up = (const uint32_t *)&lab->tsl_label;
-	ue = up + sizeof (lab->tsl_label) / sizeof (*up);
-	i = 1;
-	while (up < ue) {
-		/* using 2^n + 1, 1 <= n <= 16 as source of many primes */
-		hash += *up + (*up << ((i % 16) + 1));
-		up++;
-		i++;
-	}
-	return (hash);
-}
-
-/*
- * All that mod_hash cares about here is zero (equal) versus non-zero (not
- * equal).  This may need to be changed if less than / greater than is ever
- * needed.
- */
-static int
-hash_labelkey_cmp(mod_hash_key_t key1, mod_hash_key_t key2)
-{
-	ts_label_t *lab1 = (ts_label_t *)key1;
-	ts_label_t *lab2 = (ts_label_t *)key2;
-
-	return (label_equal(lab1, lab2) ? 0 : 1);
-}
-
-/*
  * Called by main() to initialize the zones framework.
  */
 void
@@ -2290,14 +2245,6 @@ zone_init(void)
 	zone_kstat_create(&zone0);
 
 	/*
-	 * Initialize zone label.
-	 * mlp are initialized when tnzonecfg is loaded.
-	 */
-	zone0.zone_slabel = l_admin_low;
-	rw_init(&zone0.zone_mlps.mlpl_rwlock, NULL, RW_DEFAULT, NULL);
-	label_hold(l_admin_low);
-
-	/*
 	 * Initialise the lock for the database structure used by mntfs.
 	 */
 	rw_init(&zone0.zone_mntfs_db_lock, NULL, RW_DEFAULT, NULL);
@@ -2310,25 +2257,12 @@ zone_init(void)
 	    mod_hash_null_valdtor);
 	zonehashbyname = mod_hash_create_strhash("zone_by_name",
 	    zone_hash_size, mod_hash_null_valdtor);
-	/*
-	 * maintain zonehashbylabel only for labeled systems
-	 */
-	if (is_system_labeled())
-		zonehashbylabel = mod_hash_create_extended("zone_by_label",
-		    zone_hash_size, mod_hash_null_keydtor,
-		    mod_hash_null_valdtor, hash_bylabel, NULL,
-		    hash_labelkey_cmp, KM_SLEEP);
 	zonecount = 1;
 
 	(void) mod_hash_insert(zonehashbyid, (mod_hash_key_t)GLOBAL_ZONEID,
 	    (mod_hash_val_t)&zone0);
 	(void) mod_hash_insert(zonehashbyname, (mod_hash_key_t)zone0.zone_name,
 	    (mod_hash_val_t)&zone0);
-	if (is_system_labeled()) {
-		zone0.zone_flags |= ZF_HASHED_LABEL;
-		(void) mod_hash_insert(zonehashbylabel,
-		    (mod_hash_key_t)zone0.zone_slabel, (mod_hash_val_t)&zone0);
-	}
 	mutex_exit(&zonehash_lock);
 
 	/*
@@ -2392,8 +2326,6 @@ zone_free(zone_t *zone)
 		kmem_free(zone->zone_rootpath, zone->zone_rootpathlen);
 	if (zone->zone_name != NULL)
 		kmem_free(zone->zone_name, ZONENAME_MAX);
-	if (zone->zone_slabel != NULL)
-		label_rele(zone->zone_slabel);
 	if (zone->zone_nodename != NULL)
 		kmem_free(zone->zone_nodename, _SYS_NMLN);
 	if (zone->zone_domain != NULL)
@@ -2413,7 +2345,6 @@ zone_free(zone_t *zone)
 	id_free(zoneid_space, zone->zone_id);
 	mutex_destroy(&zone->zone_lock);
 	cv_destroy(&zone->zone_cv);
-	rw_destroy(&zone->zone_mlps.mlpl_rwlock);
 	rw_destroy(&zone->zone_mntfs_db_lock);
 	kmem_free(zone, sizeof (zone_t));
 }
@@ -3031,24 +2962,6 @@ zone_find_all_by_id(zoneid_t zoneid)
 }
 
 static zone_t *
-zone_find_all_by_label(const ts_label_t *label)
-{
-	mod_hash_val_t hv;
-	zone_t *zone = NULL;
-
-	ASSERT(MUTEX_HELD(&zonehash_lock));
-
-	/*
-	 * zonehashbylabel is not maintained for unlabeled systems
-	 */
-	if (!is_system_labeled())
-		return (NULL);
-	if (mod_hash_find(zonehashbylabel, (mod_hash_key_t)label, &hv) == 0)
-		zone = (zone_t *)hv;
-	return (zone);
-}
-
-static zone_t *
 zone_find_all_by_name(char *name)
 {
 	mod_hash_val_t hv;
@@ -3082,34 +2995,6 @@ zone_find_by_id(zoneid_t zoneid)
 	}
 	status = zone_status_get(zone);
 	if (status < ZONE_IS_READY || status > ZONE_IS_DOWN) {
-		/*
-		 * For all practical purposes the zone doesn't exist.
-		 */
-		mutex_exit(&zonehash_lock);
-		return (NULL);
-	}
-	zone_hold(zone);
-	mutex_exit(&zonehash_lock);
-	return (zone);
-}
-
-/*
- * Similar to zone_find_by_id, but using zone label as the key.
- */
-zone_t *
-zone_find_by_label(const ts_label_t *label)
-{
-	zone_t *zone;
-	zone_status_t status;
-
-	mutex_enter(&zonehash_lock);
-	if ((zone = zone_find_all_by_label(label)) == NULL) {
-		mutex_exit(&zonehash_lock);
-		return (NULL);
-	}
-
-	status = zone_status_get(zone);
-	if (status > ZONE_IS_DOWN) {
 		/*
 		 * For all practical purposes the zone doesn't exist.
 		 */
@@ -4309,23 +4194,6 @@ zone_create_error(int er_error, int er_ext, int *er_out)
 	return (set_errno(er_error));
 }
 
-static int
-zone_set_label(zone_t *zone, const bslabel_t *lab, uint32_t doi)
-{
-	ts_label_t *tsl;
-	bslabel_t blab;
-
-	/* Get label from user */
-	if (copyin(lab, &blab, sizeof (blab)) != 0)
-		return (EFAULT);
-	tsl = labelalloc(&blab, doi, KM_NOSLEEP);
-	if (tsl == NULL)
-		return (ENOMEM);
-
-	zone->zone_slabel = tsl;
-	return (0);
-}
-
 /*
  * Parses a comma-separated list of ZFS datasets into a per-zone dictionary.
  */
@@ -4378,8 +4246,7 @@ parse_zfs(zone_t *zone, caddr_t ubuf, size_t buflen)
 /*
  * System call to create/initialize a new zone named 'zone_name', rooted
  * at 'zone_root', with a zone-wide privilege limit set of 'zone_privs',
- * and initialized with the zone-wide rctls described in 'rctlbuf', and
- * with labeling set by 'match', 'doi', and 'label'.
+ * and initialized with the zone-wide rctls described in 'rctlbuf'.
  *
  * If extended error is non-null, we may use it to return more detailed
  * error information.
@@ -4389,7 +4256,6 @@ zone_create(const char *zone_name, const char *zone_root,
     const priv_set_t *zone_privs, size_t zone_privssz,
     caddr_t rctlbuf, size_t rctlbufsz,
     caddr_t zfsbuf, size_t zfsbufsz, int *extended_error,
-    int match, uint32_t doi, const bslabel_t *label,
     int flags)
 {
 	struct zsched_arg zarg;
@@ -4401,7 +4267,6 @@ zone_create(const char *zone_name, const char *zone_root,
 	int error2 = 0;
 	char *str;
 	cred_t *zkcr;
-	boolean_t insert_label_hash;
 
 	if (secpolicy_zone_config(CRED()) != 0)
 		return (set_errno(EPERM));
@@ -4483,7 +4348,6 @@ zone_create(const char *zone_name, const char *zone_root,
 	    offsetof(zone_dataset_t, zd_linkage));
 	list_create(&zone->zone_dl_list, sizeof (zone_dl_t),
 	    offsetof(zone_dl_t, zdl_linkage));
-	rw_init(&zone->zone_mlps.mlpl_rwlock, NULL, RW_DEFAULT, NULL);
 	rw_init(&zone->zone_mntfs_db_lock, NULL, RW_DEFAULT, NULL);
 
 	if (flags & ZCF_NET_EXCL) {
@@ -4557,31 +4421,6 @@ zone_create(const char *zone_name, const char *zone_root,
 	}
 
 	/*
-	 * Read in the trusted system parameters:
-	 * match flag and sensitivity label.
-	 */
-	zone->zone_match = match;
-	if (is_system_labeled() && !(zone->zone_flags & ZF_IS_SCRATCH)) {
-		/* Fail if requested to set doi to anything but system's doi */
-		if (doi != 0 && doi != default_doi) {
-			zone_free(zone);
-			return (set_errno(EINVAL));
-		}
-		/* Always apply system's doi to the zone */
-		error = zone_set_label(zone, label, default_doi);
-		if (error != 0) {
-			zone_free(zone);
-			return (set_errno(error));
-		}
-		insert_label_hash = B_TRUE;
-	} else {
-		/* all zones get an admin_low label if system is not labeled */
-		zone->zone_slabel = l_admin_low;
-		label_hold(l_admin_low);
-		insert_label_hash = B_FALSE;
-	}
-
-	/*
 	 * Stop all lwps since that's what normally happens as part of fork().
 	 * This needs to happen before we grab any locks to avoid deadlock
 	 * (another lwp in the process could be waiting for the held lock).
@@ -4617,13 +4456,8 @@ zone_create(const char *zone_name, const char *zone_root,
 	mutex_enter(&zonehash_lock);
 	/*
 	 * Make sure zone doesn't already exist.
-	 *
-	 * If the system and zone are labeled,
-	 * make sure no other zone exists that has the same label.
 	 */
-	if ((ztmp = zone_find_all_by_name(zone->zone_name)) != NULL ||
-	    (insert_label_hash &&
-	    (ztmp = zone_find_all_by_label(zone->zone_slabel)) != NULL)) {
+	if ((ztmp = zone_find_all_by_name(zone->zone_name)) != NULL) {
 		zone_status_t status;
 
 		status = zone_status_get(ztmp);
@@ -4631,9 +4465,6 @@ zone_create(const char *zone_name, const char *zone_root,
 			error = EEXIST;
 		else
 			error = EBUSY;
-
-		if (insert_label_hash)
-			error2 = ZE_LABELINUSE;
 
 		goto errout;
 	}
@@ -4674,11 +4505,6 @@ zone_create(const char *zone_name, const char *zone_root,
 	(void) strcpy(str, zone->zone_name);
 	(void) mod_hash_insert(zonehashbyname, (mod_hash_key_t)str,
 	    (mod_hash_val_t)(uintptr_t)zone);
-	if (insert_label_hash) {
-		(void) mod_hash_insert(zonehashbylabel,
-		    (mod_hash_key_t)zone->zone_slabel, (mod_hash_val_t)zone);
-		zone->zone_flags |= ZF_HASHED_LABEL;
-	}
 
 	/*
 	 * Insert into active list.  At this point there are no 'hold's
@@ -4704,11 +4530,6 @@ zone_create(const char *zone_name, const char *zone_root,
 		 */
 		mutex_enter(&zonehash_lock);
 		list_remove(&zone_active, zone);
-		if (zone->zone_flags & ZF_HASHED_LABEL) {
-			ASSERT(zone->zone_slabel != NULL);
-			(void) mod_hash_destroy(zonehashbylabel,
-			    (mod_hash_key_t)zone->zone_slabel);
-		}
 		(void) mod_hash_destroy(zonehashbyname,
 		    (mod_hash_key_t)(uintptr_t)zone->zone_name);
 		(void) mod_hash_destroy(zonehashbyid,
@@ -4855,13 +4676,8 @@ zone_empty(zone_t *zone)
 }
 
 /*
- * This function implements the policy for zone visibility.
- *
- * In standard Solaris, a non-global zone can only see itself.
- *
- * In Trusted Extensions, a labeled zone can lookup any zone whose label
- * it dominates. For this test, the label of the global zone is treated as
- * admin_high so it is special-cased instead of being checked for dominance.
+ * This function implements the policy for zone visibility. A non-global zone
+ * can only see itself.
  *
  * Returns true if zone attributes are viewable, false otherwise.
  */
@@ -4872,19 +4688,6 @@ zone_list_access(zone_t *zone)
 	if (curproc->p_zone == global_zone ||
 	    curproc->p_zone == zone) {
 		return (B_TRUE);
-	} else if (is_system_labeled() && !(zone->zone_flags & ZF_IS_SCRATCH)) {
-		bslabel_t *curproc_label;
-		bslabel_t *zone_label;
-
-		curproc_label = label2bslabel(curproc->p_zone->zone_slabel);
-		zone_label = label2bslabel(zone->zone_slabel);
-
-		if (zone->zone_id != GLOBAL_ZONEID &&
-		    bldominates(curproc_label, zone_label)) {
-			return (B_TRUE);
-		} else {
-			return (B_FALSE);
-		}
 	} else {
 		return (B_FALSE);
 	}
@@ -5348,9 +5151,6 @@ zone_destroy(zoneid_t zoneid)
 	    (mod_hash_key_t)zone->zone_name);
 	(void) mod_hash_destroy(zonehashbyid,
 	    (mod_hash_key_t)(uintptr_t)zone->zone_id);
-	if (zone->zone_flags & ZF_HASHED_LABEL)
-		(void) mod_hash_destroy(zonehashbylabel,
-		    (mod_hash_key_t)zone->zone_slabel);
 	mutex_exit(&zonehash_lock);
 
 	/*
@@ -5407,9 +5207,7 @@ zone_getattr(zoneid_t zoneid, int attr, void *buf, size_t bufsize)
 	mutex_exit(&zonehash_lock);
 
 	/*
-	 * If not in the global zone, don't show information about other zones,
-	 * unless the system is labeled and the local zone's label dominates
-	 * the other zone.
+	 * If not in the global zone, don't show information about other zones.
 	 */
 	if (!zone_list_access(zone)) {
 		zone_rele(zone);
@@ -5431,12 +5229,11 @@ zone_getattr(zoneid_t zoneid, int attr, void *buf, size_t bufsize)
 			bcopy(zone->zone_rootpath, zonepath, size);
 			zonepath[size - 1] = '\0';
 		} else {
-			if (inzone || !is_system_labeled()) {
+			if (inzone) {
 				/*
-				 * Caller is not in the global zone.
-				 * if the query is on the current zone
-				 * or the system is not labeled,
-				 * just return faked-up path for current zone.
+				 * Caller is not in the global zone.  if the
+				 * query is on the current zone just return
+				 * faked-up path for current zone.
 				 */
 				zonepath = "/";
 				size = 2;
@@ -5462,7 +5259,7 @@ zone_getattr(zoneid_t zoneid, int attr, void *buf, size_t bufsize)
 			if (err != 0 && err != ENAMETOOLONG)
 				error = EFAULT;
 		}
-		if (global || (is_system_labeled() && !inzone))
+		if (global)
 			kmem_free(zonepath, size);
 		break;
 
@@ -5533,17 +5330,6 @@ zone_getattr(zoneid_t zoneid, int attr, void *buf, size_t bufsize)
 			if (buf != NULL && copyout(&poolid, buf, size) != 0)
 				error = EFAULT;
 		}
-		break;
-	case ZONE_ATTR_SLBL:
-		size = sizeof (bslabel_t);
-		if (bufsize > size)
-			bufsize = size;
-		if (zone->zone_slabel == NULL)
-			error = EINVAL;
-		else if (buf != NULL &&
-		    copyout(label2bslabel(zone->zone_slabel), buf,
-		    bufsize) != 0)
-			error = EFAULT;
 		break;
 	case ZONE_ATTR_INITPID:
 		size = sizeof (initpid);
@@ -6287,7 +6073,6 @@ out:
  * Systemcall entry point for zone_list(2).
  *
  * Processes running in a (non-global) zone only see themselves.
- * On labeled systems, they see all zones whose label they dominate.
  */
 static int
 zone_list(zoneid_t *zoneidlist, uint_t *numzones)
@@ -6303,44 +6088,10 @@ zone_list(zoneid_t *zoneidlist, uint_t *numzones)
 
 	myzone = curproc->p_zone;
 	if (myzone != global_zone) {
-		bslabel_t *mybslab;
-
-		if (!is_system_labeled()) {
-			/* just return current zone */
-			real_nzones = domi_nzones = 1;
-			zoneids = kmem_alloc(sizeof (zoneid_t), KM_SLEEP);
-			zoneids[0] = myzone->zone_id;
-		} else {
-			/* return all zones that are dominated */
-			mutex_enter(&zonehash_lock);
-			real_nzones = zonecount;
-			domi_nzones = 0;
-			if (real_nzones > 0) {
-				zoneids = kmem_alloc(real_nzones *
-				    sizeof (zoneid_t), KM_SLEEP);
-				mybslab = label2bslabel(myzone->zone_slabel);
-				for (zone = list_head(&zone_active);
-				    zone != NULL;
-				    zone = list_next(&zone_active, zone)) {
-					if (zone->zone_id == GLOBAL_ZONEID)
-						continue;
-					if (zone != myzone &&
-					    (zone->zone_flags & ZF_IS_SCRATCH))
-						continue;
-					/*
-					 * Note that a label always dominates
-					 * itself, so myzone is always included
-					 * in the list.
-					 */
-					if (bldominates(mybslab,
-					    label2bslabel(zone->zone_slabel))) {
-						zoneids[domi_nzones++] =
-						    zone->zone_id;
-					}
-				}
-			}
-			mutex_exit(&zonehash_lock);
-		}
+		/* just return current zone */
+		real_nzones = domi_nzones = 1;
+		zoneids = kmem_alloc(sizeof (zoneid_t), KM_SLEEP);
+		zoneids[0] = myzone->zone_id;
 	} else {
 		mutex_enter(&zonehash_lock);
 		real_nzones = zonecount;
@@ -6384,8 +6135,7 @@ zone_list(zoneid_t *zoneidlist, uint_t *numzones)
 /*
  * Systemcall entry point for zone_lookup(2).
  *
- * Non-global zones are only able to see themselves and (on labeled systems)
- * the zones they dominate.
+ * Non-global zones are only able to see themselves.
  */
 static zoneid_t
 zone_lookup(const char *zone_name)
@@ -6409,10 +6159,7 @@ zone_lookup(const char *zone_name)
 	mutex_enter(&zonehash_lock);
 	zone = zone_find_all_by_name(kname);
 	kmem_free(kname, ZONENAME_MAX);
-	/*
-	 * In a non-global zone, can only lookup global and own name.
-	 * In Trusted Extensions zone label dominance rules apply.
-	 */
+	/* In a non-global zone, can only lookup global and own name. */
 	if (zone == NULL ||
 	    zone_status_get(zone) < ZONE_IS_READY ||
 	    !zone_list_access(zone)) {
@@ -6469,9 +6216,6 @@ zone(int cmd, void *arg1, void *arg2, void *arg3, void *arg4)
 			zs.zfsbufsz = zs32.zfsbufsz;
 			zs.extended_error =
 			    (int *)(unsigned long)zs32.extended_error;
-			zs.match = zs32.match;
-			zs.doi = zs32.doi;
-			zs.label = (const bslabel_t *)(uintptr_t)zs32.label;
 			zs.flags = zs32.flags;
 #else
 			panic("get_udatamodel() returned bogus result\n");
@@ -6482,8 +6226,7 @@ zone(int cmd, void *arg1, void *arg2, void *arg3, void *arg4)
 		    zs.zone_privs, zs.zone_privssz,
 		    (caddr_t)zs.rctlbuf, zs.rctlbufsz,
 		    (caddr_t)zs.zfsbuf, zs.zfsbufsz,
-		    zs.extended_error, zs.match, zs.doi,
-		    zs.label, zs.flags));
+		    zs.extended_error, zs.flags));
 	case ZONE_BOOT:
 		return (zone_boot((zoneid_t)(uintptr_t)arg1));
 	case ZONE_DESTROY:

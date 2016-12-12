@@ -37,7 +37,6 @@
 
 #include "lp.h"
 #include "secure.h"
-#include <tsol/label.h>
 
 /**
  ** getsecure() - EXTRACT SECURE REQUEST STRUCTURE FROM DISK FILE
@@ -105,9 +104,6 @@ getsecure(char *file)
 			secp->date = (time_t)atol(buf);
 			break;
 
-		case SC_SLABEL:
-			secp->slabel = Strdup(buf);
-			break;
 		}
 	}
 	if (errno != 0 || fld != SC_MAX) {
@@ -197,30 +193,6 @@ putsecure(char *file, SECURE *secbufp)
 
 		case SC_DATE:
 			(void)fdprintf(fd, "%ld\n", secbufp->date);
-			break;
-
-		case SC_SLABEL:
-			if (secbufp->slabel == NULL) {
-				if (is_system_labeled()) {
-					m_label_t *sl;
-
-					sl = m_label_alloc(MAC_LABEL);
-					(void) getplabel(sl);
-					if (label_to_str(sl, &(secbufp->slabel),
-					    M_INTERNAL, DEF_NAMES) != 0) {
-						perror("label_to_str");
-						secbufp->slabel =
-						    strdup("bad_label");
-					}
-					m_label_free(sl);
-					(void) fdprintf(fd, "%s\n",
-					    secbufp->slabel);
-				} else {
-					(void) fdprintf(fd, "none\n");
-				}
-			} else {
-				(void) fdprintf(fd, "%s\n", secbufp->slabel);
-			}
 			break;
 		}
 	close(fd);

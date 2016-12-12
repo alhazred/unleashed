@@ -31,7 +31,6 @@
 #include <sys/priv.h>
 #include <priv_private.h>
 #include <zone.h>
-#include <sys/tsol/label.h>
 #include <dlfcn.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -39,7 +38,7 @@
 zoneid_t
 zone_create(const char *name, const char *root, const struct priv_set *privs,
     const char *rctls, size_t rctlsz, const char *zfs, size_t zfssz,
-    int *extended_error, int match, int doi, const bslabel_t *label, int flags)
+    int *extended_error, int flags)
 {
 	zone_def  zd;
 	priv_data_t *d;
@@ -55,9 +54,6 @@ zone_create(const char *name, const char *root, const struct priv_set *privs,
 	zd.zfsbuf = zfs;
 	zd.zfsbufsz = zfssz;
 	zd.extended_error = extended_error;
-	zd.match = match;
-	zd.doi = doi;
-	zd.label = label;
 	zd.flags = flags;
 
 	return ((zoneid_t)syscall(SYS_zone, ZONE_CREATE, &zd));

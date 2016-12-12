@@ -66,14 +66,6 @@ solaris.jobs.admin:::Manage All Jobs::help=AuthJobsAdmin.html
 solaris.jobs.grant:::Delegate Cron & At Administration::help=JobsGrant.html
 solaris.jobs.user:::Manage Owned Jobs::help=AuthJobsUser.html
 #
-solaris.label.:::Label Management::help=LabelHeader.html
-solaris.label.file.downgrade:::Downgrade File Label::help=LabelFileDowngrade.html
-solaris.label.file.upgrade:::Upgrade File Label::help=LabelFileUpgrade.html
-solaris.label.print:::View Printer Queue at All Labels::help=LabelPrint.html
-solaris.label.range:::Set Label Outside User Accred Range::help=LabelRange.html
-solaris.label.win.downgrade:::Downgrade DragNDrop or CutPaste Info::help=LabelWinDowngrade.html
-solaris.label.win.noview:::DragNDrop or CutPaste without viewing contents::help=LabelWinNoView.html
-solaris.label.win.upgrade:::Upgrade DragNDrop or CutPaste Info::help=LabelWinUpgrade.html
 #
 solaris.login.:::Login Control::help=LoginHeader.html
 solaris.login.enable:::Enable Logins::help=LoginEnable.html
@@ -99,7 +91,6 @@ solaris.print.cancel:::Cancel Print Job::help=PrintCancel.html
 solaris.print.list:::List Jobs in Printer Queue::help=PrintList.html
 solaris.print.nobanner:::Print without Banner::help=PrintNoBanner.html
 solaris.print.ps:::Print Postscript::help=PrintPs.html
-solaris.print.unlabeled:::Print without Label::help=PrintUnlabeled.html
 #
 solaris.profmgr.:::Rights::help=ProfmgrHeader.html
 solaris.profmgr.assign:::Assign All Rights::help=AuthProfmgrAssign.html
@@ -136,7 +127,6 @@ solaris.smf.manage.idmap:::Manage Identity Mapping Service States::help=SmfIdmap
 solaris.smf.manage.ilb:::Manage Integrated Load Balancer Service States::help=SmfILBStates.html
 solaris.smf.manage.inetd:::Manage inetd and inetd managed services States::help=SmfIntedStates.html
 solaris.smf.manage.ipsec:::Manage IPsec Service States::help=SmfIPsecStates.html
-solaris.smf.manage.labels:::Manage label server::help=LabelServer.html
 solaris.smf.manage.location:::Manage Network Location Service States::help=SmfLocationStates.html
 solaris.smf.manage.mdns:::Manage Multicast DNS Service States::help=SmfMDNSStates.html
 solaris.smf.manage.name-service-cache:::Manage Name Service Cache Daemon Service States::help=SmfNscdStates.html
@@ -154,8 +144,6 @@ solaris.smf.manage.snmp-notify:::Manage SNMP Event Notification Agent::
 solaris.smf.manage.ssh:::Manage Secure Shell Service States::help=SmfSshStates.html
 solaris.smf.manage.stmf:::Manage STMF Service States::help=SmfSTMFStates.html
 solaris.smf.manage.system-log:::Manage Syslog Service States::help=SmfSyslogStates.html
-solaris.smf.manage.tnctl:::Manage Refresh of Trusted Network Parameters::help=TNctl.html
-solaris.smf.manage.tnd:::Manage Trusted Network Daemon::help=TNDaemon.html
 solaris.smf.manage.vrrp:::Manage VRRP Service States::help=SmfVRRPStates.html
 solaris.smf.manage.vscan:::Manage VSCAN Service States::help=SmfVscanStates.html
 solaris.smf.manage.vt:::Manage Virtual Console Service States::help=SmfVtStates.html
@@ -181,7 +169,6 @@ solaris.smf.value.smtp-notify:::Change values of Email Event Notification Agent 
 solaris.smf.value.snmp-notify:::Change values of SNMP Event Notification Agent properties::
 solaris.smf.read.stmf:::Read STMF Provider Private Data::help=SmfSTMFRead.html
 solaris.smf.value.routing:::Change Values of SMF Routing Properties::help=SmfValueRouting.html
-solaris.smf.value.tnd:::Change Trusted Network Daemon Service Property Values::help=ValueTND.html
 solaris.smf.value.vscan:::Change Values of VSCAN Properties::help=SmfValueVscan.html
 solaris.smf.value.vt:::Change Values of Virtual Console Service Properties::help=SmfValueVt.html
 solaris.smf.value.ndmp:::Change Values of SMF NDMP Service Properties::help=SmfValueNDMP.html

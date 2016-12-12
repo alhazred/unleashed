@@ -150,7 +150,6 @@ main(int ac, char *av[])
 	NETSELDECL(df_proto) = NULL;
 	NETSELPDECL(providerp);
 	char *defval;
-	boolean_t can_do_mlp;
 	uint_t dss_npaths = 0;
 	char **dss_pathnames = NULL;
 	sigset_t sgset;
@@ -167,10 +166,8 @@ main(int ac, char *av[])
 	(void) _create_daemon_lock(NFSD, DAEMON_UID, DAEMON_GID);
 	svcsetprio();
 
-	can_do_mlp = priv_ineffect(PRIV_NET_BINDMLP);
 	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET,
-	    DAEMON_UID, DAEMON_GID, PRIV_SYS_NFS,
-	    can_do_mlp ? PRIV_NET_BINDMLP : NULL, NULL) == -1) {
+	    DAEMON_UID, DAEMON_GID, PRIV_SYS_NFS, NULL) == -1) {
 		(void) fprintf(stderr, "%s should be run with"
 		    " sufficient privileges\n", av[0]);
 		exit(1);

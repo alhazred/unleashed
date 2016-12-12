@@ -37,7 +37,6 @@
 #include <syslog.h>
 #include <pwd.h>
 #include <netinet/in.h>
-#include <tsol/label.h>
 #include <locale.h>
 #include "generic.h"
 
@@ -202,9 +201,6 @@ audit_rexd_fail(msg, hostname, user, uid, gid, shell, cmd)
 	(void) au_write(rd,
 		au_to_subject_ex(uid, uid, gid, uid, gid, pid, pid,
 			&info.ai_termid));
-	if (is_system_labeled())
-		(void) au_write(rd, au_to_mylabel());
-
 	/* add reason for failure */
 	(void) au_write(rd, au_to_text(msg));
 
@@ -328,9 +324,6 @@ char	**cmd;		/* argv to be executed locally, may be NULL */
 	(void) au_write(rd,
 		au_to_subject_ex(uid, uid, gid, uid, gid, pid, pid,
 			&info.ai_termid));
-	if (is_system_labeled())
-		(void) au_write(rd, au_to_mylabel());
-
 	/* add hostname of machine requesting service */
 
 	(void) snprintf(buf, sizeof (buf), dgettext(bsm_dom,

@@ -99,8 +99,6 @@ extern int	__getpublickey_cached(char *, char *, int *);
 extern void	__getpublickey_flush(const char *);
 extern int	__can_use_af(sa_family_t);
 extern int	__rpc_raise_fd(int);
-extern void	__rpc_set_mac_options(int, const struct netconfig *,
-	rpcprog_t);
 extern void	__tli_sys_strerror(char *, size_t, int, int);
 
 #ifdef	__cplusplus

@@ -171,9 +171,7 @@ char *cache_name[CACHE_CTX_COUNT] = {
 	NSS_DBNAM_SERVICES,
 	NSS_DBNAM_NETMASKS,
 	NSS_DBNAM_PRINTERS,
-	NSS_DBNAM_PROJECT,
-	NSS_DBNAM_TSOL_TP,
-	NSS_DBNAM_TSOL_RH
+	NSS_DBNAM_PROJECT
 };
 
 typedef void (*cache_init_ctx_t)(nsc_ctx_t *);
@@ -195,8 +193,6 @@ static cache_init_ctx_t cache_init_ctx[CACHE_CTX_COUNT] = {
 	netmask_init_ctx,
 	printer_init_ctx,
 	project_init_ctx,
-	tnrhtp_init_ctx,
-	tnrhdb_init_ctx
 };
 
 nsc_ctx_t *cache_ctx_p[CACHE_CTX_COUNT] = { 0 };

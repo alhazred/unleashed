@@ -142,13 +142,11 @@ MANFILES=	acctcom.1			\
 	 	genmsg.1			\
 	 	getconf.1			\
 	 	getfacl.1			\
-	 	getlabel.1			\
 	 	getopt.1			\
 	 	getoptcvt.1			\
 	 	getopts.1			\
 	 	gettext.1			\
 	 	gettxt.1			\
-	 	getzonepath.1			\
 	 	glob.1				\
 	 	gprof.1				\
 	 	grep.1				\
@@ -267,7 +265,6 @@ MANFILES=	acctcom.1			\
 	 	pkgproto.1			\
 	 	pkgtrans.1			\
 	 	pktool.1			\
-	 	plabel.1			\
 	 	plgrp.1				\
 	 	plimit.1			\
 	 	pmadvise.1			\
@@ -318,7 +315,6 @@ MANFILES=	acctcom.1			\
 	 	sdiff.1				\
 	 	set.1				\
 	 	setfacl.1			\
-	 	setlabel.1			\
 	 	setpgrp.1			\
 	 	shcomp.1			\
 	 	shell_builtins.1		\

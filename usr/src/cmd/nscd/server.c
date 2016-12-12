@@ -34,7 +34,6 @@
 #include <stdarg.h>
 #include <locale.h>
 #include <sys/stat.h>
-#include <tsol/label.h>
 #include <zone.h>
 #include <signal.h>
 #include <sys/resource.h>
@@ -126,22 +125,6 @@ main(int argc, char ** argv)
 	ret_textdomain = textdomain(TEXT_DOMAIN);
 	if (ret_textdomain == NULL)
 		(void) fprintf(stderr, gettext("Unable to set textdomain\n"));
-
-	/*
-	 * The admin model for TX is that labeled zones are managed
-	 * in global zone where most trusted configuration database
-	 * resides. However, nscd will run in any labeled zone if
-	 * file /var/tsol/doors/nscd_per_label exists.
-	 */
-	if (is_system_labeled() && (getzoneid() != GLOBAL_ZONEID)) {
-		struct stat sbuf;
-		if (stat(TSOL_NSCD_PER_LABEL_FILE, &sbuf) < 0) {
-			(void) fprintf(stderr,
-			gettext("With Trusted Extensions nscd runs only in the "
-			    "global zone (if nscd_per_label flag not set)\n"));
-			exit(1);
-		}
-	}
 
 	/*
 	 *  Special case non-root user here - he can just print stats
@@ -510,7 +493,7 @@ usage(char *s)
 	(void) fprintf(stderr,
 	    "	  networks, passwd, printers, prof_attr, project\n");
 	(void) fprintf(stderr,
-	    "	  protocols, rpc, services, tnrhtp, tnrhdb\n");
+	    "	  protocols, rpc, services\n");
 	(void) fprintf(stderr,
 	    "	  user_attr\n");
 	exit(1);

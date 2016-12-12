@@ -54,6 +54,7 @@ extern "C" {
 #define	WIFI_CONFIG_AUTH	"solaris.network.wifi.config"
 #define	WIFI_WEP_AUTH		"solaris.network.wifi.wep"
 #define	HP_MODIFY_AUTH		"solaris.hotplug.modify"
+#define	MAINTENANCE_AUTH	"solaris.system.maintenance"
 
 /*
  * The following authorizations can be qualified by appending <zonename>
@@ -64,29 +65,6 @@ extern "C" {
 
 #define	ZONE_AUTH_PREFIX	"solaris.zone."
 
-/*
- * Authorizations used by Trusted Extensions.
- */
-#define	BYPASS_FILE_VIEW_AUTH	"solaris.label.win.noview"
-#define	DEVICE_CONFIG_AUTH	"solaris.device.config"
-#define	FILE_CHOWN_AUTH		"solaris.file.chown"
-#define	FILE_DOWNGRADE_SL_AUTH	"solaris.label.file.downgrade"
-#define	FILE_OWNER_AUTH		"solaris.file.owner"
-#define	FILE_UPGRADE_SL_AUTH	"solaris.label.file.upgrade"
-#define	MAINTENANCE_AUTH	"solaris.system.maintenance"
-#define	PRINT_ADMIN_AUTH	"solaris.print.admin"
-#define	PRINT_CANCEL_AUTH	"solaris.print.cancel"
-#define	PRINT_LIST_AUTH		"solaris.print.list"
-#define	PRINT_MAC_AUTH		"solaris.label.print"
-#define	PRINT_NOBANNER_AUTH	"solaris.print.nobanner"
-#define	PRINT_POSTSCRIPT_AUTH	"solaris.print.ps"
-#define	PRINT_UNLABELED_AUTH	"solaris.print.unlabeled"
-#define	SHUTDOWN_AUTH		"solaris.system.shutdown"
-#define	SYS_ACCRED_SET_AUTH	"solaris.label.range"
-#define	SYSEVENT_READ_AUTH	"solaris.system.sysevent.read"
-#define	SYSEVENT_WRITE_AUTH	"solaris.system.sysevent.write"
-#define	WIN_DOWNGRADE_SL_AUTH	"solaris.label.win.downgrade"
-#define	WIN_UPGRADE_SL_AUTH	"solaris.label.win.upgrade"
 
 #ifdef	__cplusplus
 }

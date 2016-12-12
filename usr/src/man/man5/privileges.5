@@ -179,20 +179,6 @@ files owned by UID 0 in the absence of an effective UID of 0.
 .sp
 .ne 2
 .na
-\fB\fBPRIV_FILE_DOWNGRADE_SL\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to set the sensitivity label of a file or directory to a
-sensitivity label that does not dominate the existing sensitivity label.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBPRIV_FILE_FLAG_SET\fR\fR
 .ad
 .sp .6
@@ -254,20 +240,6 @@ effective group or one of the process's supplemental groups. Allow a process to
 set the set-user-ID bit on a file with different ownership in the presence of
 \fBPRIV_FILE_OWNER\fR. Additional restrictions apply when creating or modifying
 a setuid 0 file.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_FILE_UPGRADE_SL\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to set the sensitivity label of a file or directory to a
-sensitivity label that dominates the existing sensitivity label.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
 .RE
 
 .sp
@@ -356,61 +328,11 @@ opened before dropping the \fBPRIV_NET_ACCESS\fR privilege.
 .sp
 .ne 2
 .na
-\fB\fBPRIV_NET_BINDMLP\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to bind to a port that is configured as a multi-level port
-(MLP) for the process's zone. This privilege applies to both shared address and
-zone-specific address MLPs. See \fBtnzonecfg\fR(\fB4\fR) from the Trusted
-Extensions manual pages for information on configuring MLP ports.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBPRIV_NET_ICMPACCESS\fR\fR
 .ad
 .sp .6
 .RS 4n
 Allow a process to send and receive ICMP packets.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_NET_MAC_AWARE\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to set the \fBNET_MAC_AWARE\fR process flag by using
-\fBsetpflags\fR(2). This privilege also allows a process to set the
-\fBSO_MAC_EXEMPT\fR socket option by using \fBsetsockopt\fR(3SOCKET). The
-\fBNET_MAC_AWARE\fR process flag and the \fBSO_MAC_EXEMPT\fR socket option both
-allow a local process to communicate with an unlabeled peer if the local
-process's label dominates the peer's default label, or if the local process
-runs in the global zone.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_NET_MAC_IMPLICIT\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to set \fBSO_MAC_IMPLICIT\fR option by using
-\fBsetsockopt\fR(3SOCKET).  This allows a privileged process to transmit
-implicitly-labeled packets to a peer.
-.sp
-This privilege is interpreted only if the system is configured with
-Trusted Extensions.
 .RE
 
 .sp
@@ -862,211 +784,11 @@ calls: \fBstime\fR(2), \fBadjtime\fR(2), and \fBntp_adjtime\fR(2).
 .sp
 .ne 2
 .na
-\fB\fBPRIV_SYS_TRANS_LABEL\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to translate labels that are not dominated by the process's
-sensitivity label to and from an external string form.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBPRIV_VIRT_MANAGE\fR\fR
 .ad
 .sp .6
 .RS 4n
 Allows a process to manage virtualized environments such as \fBxVM\fR(5).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_COLORMAP\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to override colormap restrictions.
-.sp
-Allow a process to install or remove colormaps.
-.sp
-Allow a process to retrieve colormap cell entries allocated by other processes.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_CONFIG\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to configure or destroy resources that are permanently retained
-by the X server.
-.sp
-Allow a process to use SetScreenSaver to set the screen saver timeout value
-.sp
-Allow a process to use ChangeHosts to modify the display access control list.
-.sp
-Allow a process to use GrabServer.
-.sp
-Allow a process to use the SetCloseDownMode request that can retain window,
-pixmap, colormap, property, cursor, font, or graphic context resources.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_DAC_READ\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to read from a window resource that it does not own (has a
-different user ID).
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_DAC_WRITE\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to write to or create a window resource that it does not own
-(has a different user ID). A newly created window property is created with the
-window's user ID.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_DEVICES\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to perform operations on window input devices.
-.sp
-Allow a process to get and set keyboard and pointer controls.
-.sp
-Allow a process to modify pointer button and key mappings.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_DGA\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to use the direct graphics access (DGA) X protocol extensions.
-Direct process access to the frame buffer is still required. Thus the process
-must have MAC and DAC privileges that allow access to the frame buffer, or the
-frame buffer must be allocated to the process.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_DOWNGRADE_SL\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to set the sensitivity label of a window resource to a
-sensitivity label that does not dominate the existing sensitivity label.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_FONTPATH\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to set a font path.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_MAC_READ\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to read from a window resource whose sensitivity label is not
-equal to the process sensitivity label.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_MAC_WRITE\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to create a window resource whose sensitivity label is not
-equal to the process sensitivity label. A newly created window property is
-created with the window's sensitivity label.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_SELECTION\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to request inter-window data moves without the intervention of
-the selection confirmer.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBPRIV_WIN_UPGRADE_SL\fR\fR
-.ad
-.sp .6
-.RS 4n
-Allow a process to set the sensitivity label of a window resource to a
-sensitivity label that dominates the existing sensitivity label.
-.sp
-This privilege is interpreted only if the system is configured with Trusted
-Extensions.
 .RE
 
 .sp

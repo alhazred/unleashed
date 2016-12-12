@@ -205,7 +205,6 @@ file path=usr/share/man/man3c/imaxdiv.3c
 file path=usr/share/man/man3c/index.3c
 file path=usr/share/man/man3c/initgroups.3c
 file path=usr/share/man/man3c/insque.3c
-file path=usr/share/man/man3c/is_system_labeled.3c
 file path=usr/share/man/man3c/isaexec.3c
 file path=usr/share/man/man3c/isastream.3c
 file path=usr/share/man/man3c/isatty.3c
@@ -405,7 +404,6 @@ file path=usr/share/man/man3c/setcat.3c
 file path=usr/share/man/man3c/setenv.3c
 file path=usr/share/man/man3c/setjmp.3c
 file path=usr/share/man/man3c/setkey.3c
-file path=usr/share/man/man3c/setlabel.3c
 file path=usr/share/man/man3c/setlocale.3c
 file path=usr/share/man/man3c/shm_open.3c
 file path=usr/share/man/man3c/shm_unlink.3c
@@ -1357,7 +1355,6 @@ link path=usr/share/man/man3c/ucred_get.3c target=ucred.3c
 link path=usr/share/man/man3c/ucred_getegid.3c target=ucred.3c
 link path=usr/share/man/man3c/ucred_geteuid.3c target=ucred.3c
 link path=usr/share/man/man3c/ucred_getgroups.3c target=ucred.3c
-link path=usr/share/man/man3c/ucred_getlabel.3c target=ucred.3c
 link path=usr/share/man/man3c/ucred_getpflags.3c target=ucred.3c
 link path=usr/share/man/man3c/ucred_getpid.3c target=ucred.3c
 link path=usr/share/man/man3c/ucred_getprivset.3c target=ucred.3c

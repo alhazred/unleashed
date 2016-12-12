@@ -718,7 +718,6 @@ static void
 set_statmon_owner(void)
 {
 	int i;
-	boolean_t can_do_mlp;
 
 	/*
 	 * Recursively chown/chgrp /var/statmon and the alternate paths,
@@ -732,9 +731,7 @@ set_statmon_owner(void)
 		one_statmon_owner(alt_path);
 	}
 
-	can_do_mlp = priv_ineffect(PRIV_NET_BINDMLP);
-	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET,
-	    daemon_uid, daemon_gid, can_do_mlp ? PRIV_NET_BINDMLP : NULL,
+	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET, daemon_uid,
 	    NULL) == -1) {
 		syslog(LOG_ERR, "can't run unprivileged: %m");
 		exit(1);

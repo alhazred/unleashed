@@ -120,8 +120,6 @@ typedef struct keysock_s {
 
 #define	KEYSOCK_NOLOOP	0x1	/* Don't loopback messages (no replies). */
 #define	KEYSOCK_PROMISC	0x2	/* Give me all outbound messages. */
-				/* DANGER:	Setting this requires EXTRA */
-				/* 		privilege on an MLS box. */
 #define	KEYSOCK_EXTENDED 0x4	/* Extended REGISTER received. */
 
 /* My apologies for the ugliness of this macro.  And using constants. */

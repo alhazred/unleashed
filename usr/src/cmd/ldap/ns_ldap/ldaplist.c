@@ -67,8 +67,6 @@ static struct database_t {
 	{ NS_LDAP_TYPE_EXECATTR, "cn" },
 	{ NS_LDAP_TYPE_AUTHATTR, "cn" },
 	{ NS_LDAP_TYPE_AUUSER, "uid" },
-	{ NS_LDAP_TYPE_TNRHDB, "ipTnetNumber" },
-	{ NS_LDAP_TYPE_TNRHTP, "ipTnetTemplateName" },
 	{ NS_LDAP_TYPE_PROJECT, "SolarisProjectName" },
 	{ 0, 0 }
 };

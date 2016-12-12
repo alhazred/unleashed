@@ -314,8 +314,6 @@ typedef struct ipsa_s {
 	uint32_t	ipsa_otherspi;
 	netstack_t	*ipsa_netstack;	/* Does not have a netstack_hold */
 
-	ts_label_t *ipsa_tsl;			/* MLS: label attributes */
-	ts_label_t *ipsa_otsl;			/* MLS: outer label */
 	uint8_t	ipsa_mac_exempt;		/* MLS: mac exempt flag */
 	uchar_t	ipsa_opt_storage[IP_MAX_OPT_LENGTH];
 } ipsa_t;
@@ -527,8 +525,6 @@ typedef struct ipsacq_s {
 	uint8_t	ipsacq_icmp_type;
 	uint8_t ipsacq_icmp_code;
 
-	/* label associated with triggering packet */
-	ts_label_t	*ipsacq_tsl;
 } ipsacq_t;
 
 /*
@@ -724,7 +720,7 @@ boolean_t sadb_match_query(ipsa_query_t *q, ipsa_t *sa);
 ipsa_t *ipsec_getassocbyspi(isaf_t *, uint32_t, uint32_t *, uint32_t *,
     sa_family_t);
 ipsa_t *ipsec_getassocbyconn(isaf_t *, ip_xmit_attr_t *, uint32_t *, uint32_t *,
-    sa_family_t, uint8_t, ts_label_t *);
+    sa_family_t, uint8_t);
 
 /* SA insertion. */
 int sadb_insertassoc(ipsa_t *, isaf_t *);
@@ -741,7 +737,6 @@ void sadb_unlinkassoc(ipsa_t *);
 /* Support routines to interface a keysock consumer to PF_KEY. */
 mblk_t *sadb_keysock_out(minor_t);
 int sadb_hardsoftchk(sadb_lifetime_t *, sadb_lifetime_t *, sadb_lifetime_t *);
-int sadb_labelchk(struct keysock_in_s *);
 void sadb_pfkey_echo(queue_t *, mblk_t *, sadb_msg_t *, struct keysock_in_s *,
     ipsa_t *);
 void sadb_pfkey_error(queue_t *, mblk_t *, int, int, uint_t);
@@ -899,9 +894,6 @@ extern void alg_flag_check(ipsec_alginfo_t *);
 extern void ipsec_alg_free(ipsec_alginfo_t *);
 extern void ipsec_register_prov_update(void);
 extern void sadb_alg_update(ipsec_algtype_t, uint8_t, boolean_t, netstack_t *);
-
-extern int sadb_sens_len_from_label(ts_label_t *);
-extern void sadb_sens_from_label(sadb_sens_t *, int, ts_label_t *, int);
 
 /*
  * Context templates management.

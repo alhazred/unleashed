@@ -47,8 +47,6 @@
 #include <sys/types.h>
 #include <sys/vnode.h>
 
-#include <tsol/label.h>
-
 #ifdef	C2_DEBUG
 #define	DPRINTF(x) { (void) printf x; }
 #define	DFLUSH (void) fflush(stdout);
@@ -56,20 +54,6 @@
 /* 0x + Classification + Compartments + end of string */
 #define	HEX_SIZE 2 + 2*2 + 2*32 + 1
 
-static char *
-dprt_label(m_label_t *label)
-{
-	static char	hex[HEX_SIZE];
-	char		*direct = NULL;
-
-	if (label_to_str(label, &direct, M_INTERNAL, DEF_NAMES) != 0) {
-		adt_write_syslog("label_to_str(M_INTERNAL)", errno);
-		return ("hex label failed");
-	}
-	(void) strlcpy(hex, direct, sizeof (hex));
-	free(direct);
-	return (hex);
-}
 #else	/* !C2_DEBUG */
 #define	DPRINTF(x)
 #define	DFLUSH
@@ -296,31 +280,6 @@ adt_to_frmi(datadef *def, void *p_data, int required,
 	}
 	DPRINTF(("  fmri=%s\n", fmri));
 	(void) au_write(event->ae_event_handle, au_to_fmri(fmri));
-}
-
-/*
- * au_to_label takes an m_label_t * that is the label.
- */
-/* ARGSUSED */
-static void
-adt_to_label(datadef *def, void *p_data, int required,
-    struct adt_event_state *event, char *notUsed)
-{
-	m_label_t	*label;
-
-	DPRINTF(("  adt_to_label dd_datatype=%d\n", def->dd_datatype));
-
-	label = ((union convert *)p_data)->tm_label;
-
-	if (label != NULL) {
-		DPRINTF(("  label=%s\n", dprt_label(label)));
-		DFLUSH
-		(void) au_write(event->ae_event_handle, au_to_label(label));
-	} else {
-		DPRINTF(("  Null label\n"));
-		if (required)
-			adt_write_syslog("adt_to_label no required label", 0);
-	}
 }
 
 /*
@@ -561,7 +520,6 @@ adt_to_process(datadef *def, void *p_data, int required,
 
 /*
  * Generate subject information.
- * If labels are present, generate the subject label token.
  * If the group audit policy is set, generate the subject group token.
  *
  * The required flag does not apply here.
@@ -588,14 +546,9 @@ adt_to_subject(datadef *def, void *p_data, int required,
 	    sp->as_euid, sp->as_egid, sp->as_ruid, sp->as_rgid,
 	    sp->as_pid, sp->as_info.ai_asid,
 	    &(sp->as_info.ai_termid)));
-	if (is_system_labeled()) {
-		(void) au_write(event->ae_event_handle,
-		    au_to_label(sp->as_label));
-	}
 	/*
 	 * Add optional tokens if in the process model.
-	 * In a session model, the groups list is undefined and label
-	 * is in the state.
+	 * In a session model, the groups list is undefined.
 	 */
 	if (sp->as_session_model == ADT_PROCESS_MODEL) {
 		if (sp->as_kernel_audit_policy & AUDIT_GROUP) {
@@ -1033,7 +986,6 @@ static struct token_jmp token_table[MAX_TOKEN_JMP] =
 	{ADT_IN_PEER, adt_to_in_peer},
 	{ADT_IN_REMOTE, adt_to_in_remote},
 	{AUT_IPORT, adt_to_iport},
-	{AUT_LABEL, adt_to_label},
 	{AUT_NEWGROUPS, adt_to_newgroups},
 	{AUT_PATH, adt_to_path},
 	{-AUT_PATH, adt_to_pathlist},	/* private extension of token values */

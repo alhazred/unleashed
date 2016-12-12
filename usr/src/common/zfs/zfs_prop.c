@@ -340,9 +340,6 @@ zfs_prop_init(void)
 	zprop_register_string(ZFS_PROP_SHARESMB, "sharesmb", "off",
 	    PROP_INHERIT, ZFS_TYPE_FILESYSTEM,
 	    "on | off | sharemgr(1M) options", "SHARESMB");
-	zprop_register_string(ZFS_PROP_MLSLABEL, "mlslabel",
-	    ZFS_MLSLABEL_DEFAULT, PROP_INHERIT, ZFS_TYPE_DATASET,
-	    "<sensitivity label>", "MLSLABEL");
 	zprop_register_string(ZFS_PROP_RECEIVE_RESUME_TOKEN,
 	    "receive_resume_token",
 	    NULL, PROP_READONLY, ZFS_TYPE_FILESYSTEM | ZFS_TYPE_VOLUME,
@@ -452,11 +449,6 @@ boolean_t
 zfs_prop_delegatable(zfs_prop_t prop)
 {
 	zprop_desc_t *pd = &zfs_prop_table[prop];
-
-	/* The mlslabel property is never delegatable. */
-	if (prop == ZFS_PROP_MLSLABEL)
-		return (B_FALSE);
-
 	return (pd->pd_attr != PROP_READONLY);
 }
 

@@ -5651,10 +5651,6 @@ zone_get_brand(char *zone_name, char *brandname, size_t rp_sz)
 	 * have to ask the kernel for the information.
 	 */
 	if (myzoneid != GLOBAL_ZONEID) {
-		if (is_system_labeled()) {
-			(void) strlcpy(brandname, NATIVE_BRAND_NAME, rp_sz);
-			return (Z_OK);
-		}
 		if (zone_getattr(myzoneid, ZONE_ATTR_NAME, myzone,
 		    sizeof (myzone)) < 0)
 			return (Z_NO_ZONE);

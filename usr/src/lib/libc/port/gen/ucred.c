@@ -42,7 +42,6 @@
 #pragma weak _ucred_getauid = ucred_getauid
 #pragma weak _ucred_getasid = ucred_getasid
 #pragma weak _ucred_getatid = ucred_getatid
-#pragma weak _ucred_getlabel = ucred_getlabel
 #pragma weak _ucred_getamask = ucred_getamask
 #pragma weak _ucred_size = ucred_size
 
@@ -66,7 +65,6 @@
 #include <sys/procfs.h>
 #include <sys/sysmacros.h>
 #include <sys/zone.h>
-#include <tsol/label.h>
 
 ucred_t *
 _ucred_alloc(void)
@@ -259,20 +257,6 @@ ucred_getzoneid(const ucred_t *uc)
 	}
 
 	return (uc->uc_zoneid);
-}
-
-bslabel_t *
-ucred_getlabel(const ucred_t *uc)
-{
-	/* LINTED: alignment */
-	bslabel_t *slabel = UCLABEL(uc);
-
-	if (!is_system_labeled() || slabel == NULL) {
-		errno = EINVAL;
-		return (NULL);
-	}
-
-	return (slabel);
 }
 
 /*

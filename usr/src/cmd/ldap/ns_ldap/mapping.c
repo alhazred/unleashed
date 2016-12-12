@@ -27,7 +27,6 @@
 #include <libintl.h>
 #include <strings.h>
 #include <stdio.h>
-#include <tsol/label.h>
 #include "../../../lib/libsldap/common/ns_sldap.h"
 
 
@@ -65,15 +64,11 @@ static struct mapping maplist[] = {
 	{"prof_attr", "cn", "SolarisProfAttr", NULL},
 	{"exec_attr", "cn", "SolarisExecAttr", NULL},
 	{"user_attr", "uid", "SolarisUserAttr", NULL},
-	{"tnrhtp", "ipTnetTemplateName", "ipTnetTemplate", NULL},
-	{"tnrhdb", "ipTnetNumber", "ipTnetHost", NULL},
 	{NULL, NULL, NULL, NULL}
 };
 
 #define	PROF_ATTR_FILTER \
 	"(&(objectclass=SolarisProfAttr)(!(SolarisKernelSecurityPolicy=*))%s)"
-#define	TNRHTP_FILTER \
-	"(&(objectclass=ipTnetTemplate)(!(objectclass=ipTnetHost))%s)"
 #define	OC_FILTER	"objectclass=%s"
 #define	OC_FLEN		15
 #define	OC_FILTER2	"(&(objectclass=%s)%s)"
@@ -123,15 +118,6 @@ printMapping()
 		/* skip printing shadow */
 		if (strcasecmp(maplist[i].database, "shadow") == 0)
 			continue;
-		if (!is_system_labeled()) {
-			/*
-			 * do not print tnrhdb and tnrhtp if system is
-			 * not configured with Trusted Extensions
-			 */
-			if ((strcasecmp(maplist[i].database, "tnrhdb") == 0) ||
-			    (strcasecmp(maplist[i].database, "tnrhtp") == 0))
-				continue;
-		}
 		(void) fprintf(stdout, "%-15s%-20s%s\n", maplist[i].database,
 		    maplist[i].def_type, maplist[i].objectclass);
 	}
@@ -378,7 +364,7 @@ set_filter(char **key, char *database, char **udata)
 	char		*keyfilter;
 	int		i, filterlen, udatalen;
 	int		rc, v2 = 1;
-	int		dbpf, dbtp;
+	int		dbpf;
 	void		**paramVal = NULL;
 	ns_ldap_error_t	*errorp = NULL;
 	short		nomem;
@@ -416,11 +402,9 @@ set_filter(char **key, char *database, char **udata)
 	 */
 	for (i = 2; maplist[i].database != NULL; i++) {
 		if (strcasecmp(database, maplist[i].database) == SAME) {
-			dbpf = 0, dbtp = 0;
+			dbpf = 0;
 			if (strcasecmp(database, "prof_attr") == 0)
 				dbpf = 1;
-			else if (strcasecmp(database, "tnrhtp") == 0)
-				dbtp = 1;
 			if ((keyfilter = set_keys(key, maplist[i].def_type))
 			    == NULL) {
 				filterlen = strlen(maplist[i].objectclass);
@@ -428,8 +412,6 @@ set_filter(char **key, char *database, char **udata)
 				if (dbpf)
 					filterlen += strlen(PROF_ATTR_FILTER)
 					    + 1;
-				else if (dbtp)
-					filterlen += strlen(TNRHTP_FILTER) + 1;
 				else
 					filterlen += OC_FLEN;
 
@@ -440,9 +422,6 @@ set_filter(char **key, char *database, char **udata)
 				if (dbpf)
 					(void) snprintf(filter, filterlen,
 					    PROF_ATTR_FILTER, "");
-				else if (dbtp)
-					(void) snprintf(filter, filterlen,
-					    TNRHTP_FILTER, "");
 				else
 					(void) snprintf(filter, filterlen,
 					    OC_FILTER,
@@ -455,8 +434,6 @@ set_filter(char **key, char *database, char **udata)
 				if (dbpf)
 					filterlen += strlen(PROF_ATTR_FILTER)
 					    + 1;
-				else if (dbtp)
-					filterlen += strlen(TNRHTP_FILTER) + 1;
 				else
 					filterlen += OC_FLEN2;
 
@@ -468,9 +445,6 @@ set_filter(char **key, char *database, char **udata)
 				if (dbpf)
 					(void) snprintf(filter, filterlen,
 					    PROF_ATTR_FILTER, keyfilter);
-				else if (dbtp)
-					(void) snprintf(filter, filterlen,
-					    TNRHTP_FILTER, keyfilter);
 				else
 					(void) snprintf(filter, filterlen,
 					    OC_FILTER2,

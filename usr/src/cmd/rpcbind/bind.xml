@@ -86,7 +86,7 @@
 			<method_credential
 				user='root'
 				group='root'
-				privileges='basic,file_chown,file_chown_self,file_owner,net_privaddr,proc_setid,sys_nfs,net_bindmlp'
+				privileges='basic,file_chown,file_chown_self,file_owner,net_privaddr,proc_setid,sys_nfs'
 				/>
 		</method_context>
 	</exec_method>

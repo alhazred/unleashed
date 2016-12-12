@@ -39,7 +39,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <tsol/label.h>
 #include <zone.h>
 #include <bsm/devalloc.h>
 #include "allocate.h"
@@ -55,73 +54,38 @@
 extern void audit_allocate_argv(int, int, char *[]);
 extern int audit_allocate_record(int);
 
-int system_labeled = 0;
 static int windowing = 0;
 static int wdwmsg(char *name, char *msg);
 
 static void
 usage(int func)
 {
-	if (system_labeled) {
-		char *use[6];
+	char *use[5];
 
-		use[0] = gettext("allocate [-s] [-w] [-U uname] [-z zonename] "
-		    "[-F] device|-g dev-type");
-		use[1] = gettext("deallocate [-s] [-w] [-z zonename] "
-		    "[-F] device|-c dev-class|-g dev-type");
-		use[2] = gettext("deallocate [-s] [-w] [-z zonename] -I");
-		use[3] = gettext("list_devices [-s] [-U uid] [-z zonename] "
-		    "[-a [-w]] -l|-n|-u [device]");
-		use[4] = gettext("list_devices [-s] [-U uid] [-z zonename] "
-		    "[-a [-w]] [-l|-n|-u] -c dev-class");
-		use[5] = gettext("list_devices [-s] -d [dev-type]");
+	use[0] = gettext("allocate "
+	    "[-s] [-U uname] [-F] device|-g dev-type");
+	use[1] = gettext("deallocate [-s] [-F] device|-c dev-class");
+	use[2] = gettext("deallocate [-s] -I");
+	use[3] = gettext("list_devices "
+	    "[-s] [-U uid] -l|-n|-u [device]");
+	use[4] = gettext("list_devices "
+	    "[-s] [-U uid] [-l|-n|-u] -c dev-class");
 
-		switch (func) {
-			case 0:
-				(void) fprintf(stderr, "%s\n", use[0]);
-				break;
-			case 1:
-				(void) fprintf(stderr, "%s\n%s\n",
-				    use[1], use[2]);
-				break;
-			case 2:
-				(void) fprintf(stderr, "%s\n%s\n%s\n",
-				    use[3], use[4], use[5]);
-				break;
-			default:
-				(void) fprintf(stderr,
-				    "%s\n%s\n%s\n%s\n%s\n%s\n",
-				    use[0], use[1], use[2], use[3], use[4],
-				    use[5]);
-		}
-	} else {
-		char *use[5];
-
-		use[0] = gettext("allocate "
-		    "[-s] [-U uname] [-F] device|-g dev-type");
-		use[1] = gettext("deallocate [-s] [-F] device|-c dev-class");
-		use[2] = gettext("deallocate [-s] -I");
-		use[3] = gettext("list_devices "
-		    "[-s] [-U uid] -l|-n|-u [device]");
-		use[4] = gettext("list_devices "
-		    "[-s] [-U uid] [-l|-n|-u] -c dev-class");
-
-		switch (func) {
-			case 0:
-				(void) fprintf(stderr, "%s\n", use[0]);
-				break;
-			case 1:
-				(void) fprintf(stderr, "%s\n%s\n",
-				    use[1], use[2]);
-				break;
-			case 2:
-				(void) fprintf(stderr, "%s\n%s\n",
-				    use[3], use[4]);
-				break;
-			default:
-				(void) fprintf(stderr, "%s\n%s\n%s\n%s\n%s\n",
-				    use[0], use[1], use[2], use[3], use[4]);
-		}
+	switch (func) {
+	case 0:
+		(void) fprintf(stderr, "%s\n", use[0]);
+		break;
+	case 1:
+		(void) fprintf(stderr, "%s\n%s\n",
+		    use[1], use[2]);
+		break;
+	case 2:
+		(void) fprintf(stderr, "%s\n%s\n",
+		    use[3], use[4]);
+		break;
+	default:
+		(void) fprintf(stderr, "%s\n%s\n%s\n%s\n%s\n",
+		    use[0], use[1], use[2], use[3], use[4]);
 	}
 	exit(1);
 }
@@ -188,10 +152,6 @@ print_error(int error, char *name)
 	case DSPMISSERR:
 		msg = gettext(
 		    "Device special file(s) missing for specified device.");
-		break;
-	case LABELRNGERR:
-		msg = gettext(
-		    "Operation inconsistent with device's label range.");
 		break;
 	case LOGINDEVPERMERR:
 		msg = gettext("Device controlled by logindevperm(4)");
@@ -269,17 +229,6 @@ main(int argc, char *argv[], char *envp[])
 	(void) setlocale(LC_ALL, "");
 	(void) textdomain(TEXT_DOMAIN);
 
-	system_labeled = is_system_labeled();
-
-	/* test hook: see also mkdevalloc.c and devfsadm.c */
-	if (!system_labeled) {
-		system_labeled = is_system_labeled_debug(&statbuf);
-		if (system_labeled) {
-			fprintf(stderr, "/ALLOCATE_FORCE_LABEL is set,\n"
-			    "forcing system label on for testing...\n");
-		}
-	}
-
 	/*
 	 * get all enviroment variables
 	 * which affect on internationalization.
@@ -322,28 +271,8 @@ main(int argc, char *argv[], char *envp[])
 
 	audit_allocate_argv(func, argc, argv);
 
-	if (system_labeled) {
-		/*
-		 * allocate, deallocate, list_devices run in
-		 * global zone only.
-		 */
-		zoneid = getzoneid();
-		if (zoneid != GLOBAL_ZONEID)
-			exit(GLOBALERR);
-		zname = GLOBAL_ZONENAME;
-		/*
-		 * check if device allocation is activated.
-		 */
-		if (da_is_on() == 0) {
-			(void) fprintf(stderr, "%s%s",
-			    gettext("Turn device allocation on"),
-			    gettext(" to use this feature.\n"));
-			exit(DAOFFERR);
-		}
-	}
-
 	if (func == 0) {	/* allocate */
-		while ((c = getopt(argc, argv, "g:swz:FU:")) != -1) {
+		while ((c = getopt(argc, argv, "g:sFU:")) != -1) {
 			switch (c) {
 			case 'g':
 				optflg |= TYPE;
@@ -351,22 +280,6 @@ main(int argc, char *argv[], char *envp[])
 				break;
 			case 's':
 				optflg |= SILENT;
-				break;
-			case 'w':
-				if (system_labeled) {
-					optflg |= WINDOWING;
-					windowing = 1;
-				} else {
-					usage(func);
-				}
-				break;
-			case 'z':
-				if (system_labeled) {
-					optflg |= ZONENAME;
-					zonename = optarg;
-				} else {
-					usage(func);
-				}
 				break;
 			case 'F':
 				optflg |= FORCE;
@@ -394,7 +307,7 @@ main(int argc, char *argv[], char *envp[])
 	}
 
 	else if (func == 1) {	/* deallocate */
-		while ((c = getopt(argc, argv, "c:g:swz:FI")) != -1) {
+		while ((c = getopt(argc, argv, "c:sFI")) != -1) {
 			switch (c) {
 			case 'c':
 				if (optflg & (TYPE | FORCE_ALL))
@@ -402,34 +315,8 @@ main(int argc, char *argv[], char *envp[])
 				optflg |= CLASS;
 				device = optarg;
 				break;
-			case 'g':
-				if (system_labeled) {
-					if (optflg & (CLASS | FORCE_ALL))
-						usage(func);
-					optflg |= TYPE;
-					device = optarg;
-				} else {
-					usage(func);
-				}
-				break;
 			case 's':
 				optflg |= SILENT;
-				break;
-			case 'w':
-				if (system_labeled) {
-					optflg |= WINDOWING;
-					windowing = 1;
-				} else {
-					usage(func);
-				}
-				break;
-			case 'z':
-				if (system_labeled) {
-					optflg |= ZONENAME;
-					zonename = optarg;
-				} else {
-					usage(func);
-				}
 				break;
 			case 'F':
 				if (optflg & FORCE_ALL)
@@ -462,40 +349,11 @@ main(int argc, char *argv[], char *envp[])
 	}
 
 	else if (func == 2) {	/* list_devices */
-		while ((c = getopt(argc, argv, "ac:dlnsuwz:U:")) != -1) {
+		while ((c = getopt(argc, argv, "c:lnsuU:")) != -1) {
 			switch (c) {
-			case 'a':
-				if (system_labeled) {
-					/*
-					 * list auths, cleaning programs,
-					 * labels.
-					 */
-					if (optflg & LISTDEFS)
-						usage(func);
-					optflg |= LISTATTRS;
-				} else {
-					usage(func);
-				}
-				break;
 			case 'c':
 				optflg |= CLASS;
 				device = optarg;
-				break;
-			case 'd':
-				if (system_labeled) {
-					/*
-					 * List devalloc_defaults
-					 * This cannot used with anything other
-					 * than -s.
-					 */
-					if (optflg & (LISTATTRS | CLASS |
-					    LISTALL | LISTFREE | LISTALLOC |
-					    WINDOWING | ZONENAME | USERID))
-						usage(func);
-					optflg |= LISTDEFS;
-				} else {
-					usage(func);
-				}
 				break;
 			case 'l':
 				if (optflg & (LISTFREE | LISTALLOC | LISTDEFS))
@@ -515,25 +373,6 @@ main(int argc, char *argv[], char *envp[])
 					usage(func);
 				optflg |= LISTALLOC;
 				break;
-			case 'w':
-				if (system_labeled) {
-					if (optflg & LISTDEFS)
-						usage(func);
-					optflg |= WINDOWING;
-				} else {
-					usage(func);
-				}
-				break;
-			case 'z':
-				if (system_labeled) {
-					if (optflg & LISTDEFS)
-						usage(func);
-					optflg |= ZONENAME;
-					zonename = optarg;
-				} else {
-					usage(func);
-				}
-				break;
 			case 'U':
 				if (optflg & LISTDEFS)
 					usage(func);
@@ -546,13 +385,7 @@ main(int argc, char *argv[], char *envp[])
 			}
 		}
 
-		if (system_labeled) {
-			if (!(optflg & (LISTALL | LISTFREE | LISTALLOC |
-			    LISTDEFS | WINDOWING))) {
-				if (!(optflg & CLASS))
-					usage(func);
-			}
-		} else if (!(optflg & (LISTALL | LISTFREE | LISTALLOC))) {
+		if (!(optflg & (LISTALL | LISTFREE | LISTALLOC))) {
 			if (!(optflg & CLASS))
 				usage(func);
 		}

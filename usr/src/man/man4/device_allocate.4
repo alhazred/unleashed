@@ -55,75 +55,7 @@ drives), \fBrmdisk\fR (removable media devices).
 .sp
 .ne 2
 .na
-\fB\fBreserved1\fR\fR
-.ad
-.sp .6
-.RS 4n
-On systems configured with Trusted Extensions, this field stores a
-colon-separated (\fB:\fR) list of key-value pairs that describe device
-allocation attributes used in Trusted Extensions. Zero or more keys can be
-specified. The following keys are currently interpreted by Trusted Extensions
-systems:
-.sp
-.ne 2
-.na
-\fB\fBminlabel\fR\fR
-.ad
-.sp .6
-.RS 4n
-Specifies the minimum label at which device can be allocated. Default value is
-\fBadmin_low\fR.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBmaxlabel\fR\fR
-.ad
-.sp .6
-.RS 4n
-Specifies the maximum label at which device can be allocated. Default value is
-\fBadmin_high\fR.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBzone\fR\fR
-.ad
-.sp .6
-.RS 4n
-Specifies the name of the zone in which device is currently allocated.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBclass\fR\fR
-.ad
-.sp .6
-.RS 4n
-Specifies  a  logical grouping of devices. For example, all Sun Ray devices of
-all device types. There is no default  class.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBxdpy\fR\fR
-.ad
-.sp .6
-.RS 4n
-Specifies the X display name. This is used to identify devices associated with
-that X session. There is no default \fBxdpy\fR value.
-.RE
-
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBreserved2\fR\fR
+\fB\fBreserved1\fR\fR, \fB\fBreserved2\fR\fR
 .ad
 .sp .6
 .RS 4n
@@ -271,8 +203,3 @@ Interface Stability	Uncommitted
 .LP
 The functionality described in this man page is available only if  Solaris
 Auditing has been enabled. See \fBbsmconv\fR(1M) for more information.
-.sp
-.LP
-On systems configured with Trusted Extensions, the functionality is enabled by
-default. On such systems, the \fBdevice_allocate\fR file is updated
-automatically by the system.

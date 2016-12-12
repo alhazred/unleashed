@@ -77,12 +77,7 @@ release should use \fBsuser\fR.
 \fB\fItype\fR\fR
 .ad
 .RS 10n
-The type of object defined in the profile. There are two valid types: \fBcmd\fR
-and \fBact\fR. The \fBcmd\fR type specifies that the \fBID\fR field is a
-command that would be executed by a shell. The \fBact\fR type is available only
-if the system is configured with Trusted Extensions. It specifies that the
-\fBID\fR field is a \fBCDE\fR action that should be executed by the Trusted
-Extensions \fBCDE\fR action mechanism.
+The type of object defined in the profile. There is one valid type: \fBcmd\fR.
 .RE
 
 .sp
@@ -129,53 +124,6 @@ can start the script with the \fB-p\fR option.
 .fi
 .in -2
 .sp
-
-If the Trusted Extensions feature is configured and the profile entry type is
-\fBact\fR, the \fBid\fR is either the fully qualified name of a \fBCDE\fR
-action, or an asterisk (\fB*\fR) representing a wildcard. A fully qualified
-\fBCDE\fR action is specified using the action name and four additional
-semicolon-separated fields. These fields can be empty but the semicolons are
-required. The fields in a \fBCDE\fR action are as follows:
-.sp
-.ne 2
-.na
-\fB\fIargclass\fR\fR
-.ad
-.RS 12n
-Specifies the argument class (for example, \fBFILE\fR or \fBSESSION\fR.)
-Corresponds to \fBARG_CLASS\fR for \fBCDE\fR actions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fIargtype\fR\fR
-.ad
-.RS 12n
-Specifies the data type for the argument. Corresponds to \fBARG_TYPE\fR for
-\fBCDE\fR actions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fIargmode\fR\fR
-.ad
-.RS 12n
-Specifies the read or write mode for the argument. Corresponds to
-\fBARG_MODE\fR for \fBCDE\fR actions.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fIargcount\fR\fR
-.ad
-.RS 12n
-Specifies the number of arguments that the action can accept. Corresponds to
-\fBARG_COUNT\fR for \fBCDE\fR actions.
-.RE
-
 .RE
 
 .sp

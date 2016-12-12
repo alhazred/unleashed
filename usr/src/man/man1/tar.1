@@ -17,33 +17,33 @@ tar \- create tape archives and add or extract files
 .SH SYNOPSIS
 .LP
 .nf
-\fBtar\fR c[BDeEFhilnopPTvw@/[0-7]][bf][X...][a|j|J|z|Z] [\fIblocksize\fR]
+\fBtar\fR c[BDeEFhilnopPvw@/[0-7]][bf][X...][a|j|J|z|Z] [\fIblocksize\fR]
      [\fItarfile\fR] [\fIsize\fR] [\fIexclude-file\fR]...
      {\fIfile\fR | \(miI \fIinclude-file\fR | \(miC \fIdirectory\fR \fIfile\fR}...
 .fi
 
 .LP
 .nf
-\fBtar\fR r[BDeEFhilnTvw@/[0-7]][bf][j|J|z|Z] [\fIblocksize\fR] [\fItarfile\fR]
+\fBtar\fR r[BDeEFhilnvw@/[0-7]][bf][j|J|z|Z] [\fIblocksize\fR] [\fItarfile\fR]
      [\fIsize\fR]
      {\fIfile\fR | \(miI \fIinclude-file\fR | \(miC \fIdirectory\fR \fIfile\fR}...
 .fi
 
 .LP
 .nf
-\fBtar\fR t[BeFhilnTv[0-7]][f][X...][j|J|z|Z] [\fItarfile\fR] [\fIsize\fR]
+\fBtar\fR t[BeFhilnv[0-7]][f][X...][j|J|z|Z] [\fItarfile\fR] [\fIsize\fR]
      [\fIexclude-file\fR]... {\fIfile\fR | \(miI \fIinclude-file\fR}...
 .fi
 
 .LP
 .nf
-\fBtar\fR u[BDeEFhilnTvw@/[0-7]][bf][j|J|z|Z] [\fIblocksize\fR] [\fItarfile\fR]
+\fBtar\fR u[BDeEFhilnvw@/[0-7]][bf][j|J|z|Z] [\fIblocksize\fR] [\fItarfile\fR]
      [\fIsize\fR] \fIfile\fR...
 .fi
 
 .LP
 .nf
-\fBtar\fR x[BeFhilmnopTvw@/[0-7]][f][X...][j|J|z|Z] [\fItarfile\fR] [\fIsize\fR]
+\fBtar\fR x[BeFhilmnopvw@/[0-7]][f][X...][j|J|z|Z] [\fItarfile\fR] [\fIsize\fR]
      [\fIexclude-file\fR]... [\(miC \fIdirectory\fR] [\fIfile\fR]...
 .fi
 
@@ -498,43 +498,6 @@ tarfile with \fBACL\fRs is extracted by previous versions of \fBtar\fR.
 .RS 4n
 Suppress the addition of a trailing "\fB/\fR" on directory entries in the
 archive.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBT\fR\fR
-.ad
-.sp .6
-.RS 4n
-This modifier is only available if the system is configured with Trusted
-Extensions.
-.sp
-When this modifier is used with the function letter \fBc\fR, \fBr,\fR or
-\fBu\fR for creating, replacing or updating a tarfile, the sensitivity label
-associated with each archived file and directory is stored in the tarfile.
-.sp
-Specifying \fBT\fR implies the function modifier \fBp\fR.
-.sp
-When used with the function letter \fBx\fR for extracting a tarfile, the tar
-program verifies that the file's sensitivity label specified in the archive
-equals the sensitivity label of the destination directory. If not, the file is
-not restored. This operation must be invoked from the global zone. If the
-archived file has a relative pathname, it is restored to the corresponding
-directory with the same label, if available. This is done by prepending to the
-current destination directory the root pathname of the zone whose label equals
-the file. If no such zone exists, the file is not restored.
-.sp
-Limited support is provided for extracting labeled archives from Trusted
-Solaris 8. Only sensitivity labels, and multi-level directory specifications
-are interpreted. Privilege specifications and audit attribute flags are
-silently ignored. Multilevel directory specifications including symbolic links
-to single level directories are are mapped into zone-relative pathnames if a
-zone with the same label is available. This support is intended to facilitate
-migration of home directories. Architectural differences preclude the
-extraction of arbitrarily labeled files from Trusted Solaris 8 into identical
-pathnames in Trusted Extensions. Files cannot be extracted unless their
-archived label matches the destination label.
 .RE
 
 .sp

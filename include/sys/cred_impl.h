@@ -62,7 +62,6 @@ extern "C" {
 #if defined(_KERNEL) || defined(_KMEMUSER)
 
 struct zone;		/* forward reference */
-struct ts_label_s;	/* forward reference */
 struct credklpd;	/* forward reference */
 
 /* Supplemental groups list. */
@@ -83,7 +82,6 @@ struct cred {
 	cred_priv_t	cr_priv;	/* privileges */
 	projid_t	cr_projid;	/* project */
 	struct zone	*cr_zone;	/* pointer to per-zone structure */
-	struct ts_label_s *cr_label;	/* pointer to the effective label */
 	struct credklpd *cr_klpd;	/* pointer to the cred's klpd */
 	credsid_t	*cr_ksid;	/* pointer to SIDs */
 	credgrp_t	*cr_grps;	/* supplemental groups */

@@ -57,9 +57,7 @@ OBJECTS=	adr.o \
 		generic.o \
 		getauditflags.o \
 		getdaent.o \
-		getdevicerange.o \
 		getdment.o \
-		getdadefs.o \
 		devalloc.o \
 		getfaudflgs.o
 
@@ -75,7 +73,7 @@ SRCDIR =	../common
 
 LIBS =	 	$(DYNLIB)
 
-LDLIBS +=	 -lmd -lc -lsecdb -ltsol -linetutil -lscf
+LDLIBS +=	 -lmd -lc -lsecdb -linetutil -lscf
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized

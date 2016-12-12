@@ -59,7 +59,6 @@ extern int rmm_debug;
 extern boolean_t rmm_vold_actions_enabled;
 extern boolean_t rmm_vold_mountpoints_enabled;
 
-void vold_init(int argc, char **argv);
 int vold_postprocess(LibHalContext *hal_ctx, const char *udi,
     struct action_arg *aap);
 int vold_rmmount(int argc, char **argv);

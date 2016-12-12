@@ -302,7 +302,7 @@ typedef struct nsc_lookup_args {
 	size_t		bufsize;
 } nsc_lookup_args_t;
 
-#define	CACHE_CTX_COUNT	19
+#define	CACHE_CTX_COUNT	17
 
 /* Context initialization */
 extern void passwd_init_ctx(nsc_ctx_t *);
@@ -322,8 +322,6 @@ extern void serv_init_ctx(nsc_ctx_t *);
 extern void netmask_init_ctx(nsc_ctx_t *);
 extern void printer_init_ctx(nsc_ctx_t *);
 extern void project_init_ctx(nsc_ctx_t *);
-extern void tnrhtp_init_ctx(nsc_ctx_t *);
-extern void tnrhdb_init_ctx(nsc_ctx_t *);
 
 /* Functions used to throttle threads */
 extern int nscd_wait(nsc_ctx_t *, nsc_db_t *, nsc_entry_t *);

@@ -214,12 +214,6 @@ brand_register_zone(struct brand_attr *attr)
 	char *modname;
 	int err = 0;
 
-	if (is_system_labeled()) {
-		cmn_err(CE_WARN,
-		    "Branded zones are not allowed on labeled systems.");
-		return (NULL);
-	}
-
 	/*
 	 * We make at most two passes through this loop.  The first time
 	 * through, we're looking to see if this is a new user of an

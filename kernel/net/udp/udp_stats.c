@@ -26,7 +26,6 @@
 #include <sys/types.h>
 #include <sys/tihdr.h>
 #include <sys/policy.h>
-#include <sys/tsol/tnet.h>
 
 #include <inet/common.h>
 #include <inet/kstatcom.h>
@@ -52,17 +51,12 @@ udp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 {
 	mblk_t			*mpdata;
 	mblk_t			*mp_conn_ctl;
-	mblk_t			*mp_attr_ctl;
 	mblk_t			*mp6_conn_ctl;
-	mblk_t			*mp6_attr_ctl;
 	mblk_t			*mp_conn_tail;
-	mblk_t			*mp_attr_tail;
 	mblk_t			*mp6_conn_tail;
-	mblk_t			*mp6_attr_tail;
 	struct opthdr		*optp;
 	mib2_udpEntry_t		ude;
 	mib2_udp6Entry_t	ude6;
-	mib2_transportMLPEntry_t mlp;
 	int			state;
 	zoneid_t		zoneid;
 	int			i;
@@ -70,7 +64,6 @@ udp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 	conn_t			*connp = Q_TO_CONN(q);
 	int			v4_conn_idx;
 	int			v6_conn_idx;
-	boolean_t		needattr;
 	udp_t			*udp;
 	ip_stack_t		*ipst = connp->conn_netstack->netstack_ip;
 	udp_stack_t		*us = connp->conn_netstack->netstack_udp;
@@ -84,15 +77,12 @@ udp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 	 */
 	mp2ctl = copymsg(mpctl);
 
-	mp_conn_ctl = mp_attr_ctl = mp6_conn_ctl = NULL;
+	mp_conn_ctl = mp6_conn_ctl = NULL;
 	if (mpctl == NULL ||
 	    (mpdata = mpctl->b_cont) == NULL ||
 	    (mp_conn_ctl = copymsg(mpctl)) == NULL ||
-	    (mp_attr_ctl = copymsg(mpctl)) == NULL ||
-	    (mp6_conn_ctl = copymsg(mpctl)) == NULL ||
-	    (mp6_attr_ctl = copymsg(mpctl)) == NULL) {
+	    (mp6_conn_ctl = copymsg(mpctl)) == NULL) {
 		freemsg(mp_conn_ctl);
-		freemsg(mp_attr_ctl);
 		freemsg(mp6_conn_ctl);
 		freemsg(mpctl);
 		freemsg(mp2ctl);
@@ -134,7 +124,7 @@ udp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 	optp->len = msgdsize(mpdata);
 	qreply(q, mpctl);
 
-	mp_conn_tail = mp_attr_tail = mp6_conn_tail = mp6_attr_tail = NULL;
+	mp_conn_tail = mp6_conn_tail = NULL;
 	v4_conn_idx = v6_conn_idx = 0;
 
 	for (i = 0; i < CONN_G_HASH_SIZE; i++) {
@@ -160,46 +150,6 @@ udp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 				state = MIB2_UDP_connected;
 			else
 				state = MIB2_UDP_unknown;
-
-			needattr = B_FALSE;
-			bzero(&mlp, sizeof (mlp));
-			if (connp->conn_mlp_type != mlptSingle) {
-				if (connp->conn_mlp_type == mlptShared ||
-				    connp->conn_mlp_type == mlptBoth)
-					mlp.tme_flags |= MIB2_TMEF_SHARED;
-				if (connp->conn_mlp_type == mlptPrivate ||
-				    connp->conn_mlp_type == mlptBoth)
-					mlp.tme_flags |= MIB2_TMEF_PRIVATE;
-				needattr = B_TRUE;
-			}
-			if (connp->conn_anon_mlp) {
-				mlp.tme_flags |= MIB2_TMEF_ANONMLP;
-				needattr = B_TRUE;
-			}
-			switch (connp->conn_mac_mode) {
-			case CONN_MAC_DEFAULT:
-				break;
-			case CONN_MAC_AWARE:
-				mlp.tme_flags |= MIB2_TMEF_MACEXEMPT;
-				needattr = B_TRUE;
-				break;
-			case CONN_MAC_IMPLICIT:
-				mlp.tme_flags |= MIB2_TMEF_MACIMPLICIT;
-				needattr = B_TRUE;
-				break;
-			}
-			mutex_enter(&connp->conn_lock);
-			if (udp->udp_state == TS_DATA_XFER &&
-			    connp->conn_ixa->ixa_tsl != NULL) {
-				ts_label_t *tsl;
-
-				tsl = connp->conn_ixa->ixa_tsl;
-				mlp.tme_flags |= MIB2_TMEF_IS_LABELED;
-				mlp.tme_doi = label2doi(tsl);
-				mlp.tme_label = *label2bslabel(tsl);
-				needattr = B_TRUE;
-			}
-			mutex_exit(&connp->conn_lock);
 
 			/*
 			 * Create an IPv4 table entry for IPv4 entries and also
@@ -249,11 +199,6 @@ udp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 
 				(void) snmp_append_data2(mp_conn_ctl->b_cont,
 				    &mp_conn_tail, (char *)&ude, ude_size);
-				mlp.tme_connidx = v4_conn_idx++;
-				if (needattr)
-					(void) snmp_append_data2(
-					    mp_attr_ctl->b_cont, &mp_attr_tail,
-					    (char *)&mlp, sizeof (mlp));
 			}
 			if (connp->conn_ipversion == IPV6_VERSION) {
 				ude6.udp6EntryInfo.ue_state  = state;
@@ -292,12 +237,6 @@ udp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 
 				(void) snmp_append_data2(mp6_conn_ctl->b_cont,
 				    &mp6_conn_tail, (char *)&ude6, ude6_size);
-				mlp.tme_connidx = v6_conn_idx++;
-				if (needattr)
-					(void) snmp_append_data2(
-					    mp6_attr_ctl->b_cont,
-					    &mp6_attr_tail, (char *)&mlp,
-					    sizeof (mlp));
 			}
 		}
 	}
@@ -310,17 +249,6 @@ udp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 	optp->len = msgdsize(mp_conn_ctl->b_cont);
 	qreply(q, mp_conn_ctl);
 
-	/* table of MLP attributes... */
-	optp = (struct opthdr *)&mp_attr_ctl->b_rptr[
-	    sizeof (struct T_optmgmt_ack)];
-	optp->level = MIB2_UDP;
-	optp->name = EXPER_XPORT_MLP;
-	optp->len = msgdsize(mp_attr_ctl->b_cont);
-	if (optp->len == 0)
-		freemsg(mp_attr_ctl);
-	else
-		qreply(q, mp_attr_ctl);
-
 	/* IPv6 UDP endpoints */
 	optp = (struct opthdr *)&mp6_conn_ctl->b_rptr[
 	    sizeof (struct T_optmgmt_ack)];
@@ -328,17 +256,6 @@ udp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 	optp->name = MIB2_UDP6_ENTRY;
 	optp->len = msgdsize(mp6_conn_ctl->b_cont);
 	qreply(q, mp6_conn_ctl);
-
-	/* table of MLP attributes... */
-	optp = (struct opthdr *)&mp6_attr_ctl->b_rptr[
-	    sizeof (struct T_optmgmt_ack)];
-	optp->level = MIB2_UDP6;
-	optp->name = EXPER_XPORT_MLP;
-	optp->len = msgdsize(mp6_attr_ctl->b_cont);
-	if (optp->len == 0)
-		freemsg(mp6_attr_ctl);
-	else
-		qreply(q, mp6_attr_ctl);
 
 	return (mp2ctl);
 }

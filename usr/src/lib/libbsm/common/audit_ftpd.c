@@ -34,7 +34,6 @@
 #include <sys/socket.h>
 #include <sys/sockio.h>
 #include <netinet/in.h>
-#include <tsol/label.h>
 
 #include <bsm/audit.h>
 #include <bsm/audit_record.h>
@@ -177,9 +176,6 @@ generate_record(
 	(void) au_write(rd, au_to_subject_ex(uid, uid, gid,
 	    ruid, rgid, pid, pid, &info.ai_termid));
 
-	if (is_system_labeled())
-		(void) au_write(rd, au_to_mylabel());
-
 	/* add return token */
 	errno = 0;
 	if (err) {
@@ -282,9 +278,6 @@ audit_ftpd_logout(void)
 	/* add subject token */
 	(void) au_write(rd, au_to_subject_ex(info.ai_auid, euid,
 	    egid, uid, gid, pid, pid, &info.ai_termid));
-
-	if (is_system_labeled())
-		(void) au_write(rd, au_to_mylabel());
 
 	/* add return token */
 	errno = 0;

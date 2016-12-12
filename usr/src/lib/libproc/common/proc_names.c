@@ -297,7 +297,7 @@ static const char *const systable[] = {
 	"rusagesys",		/* 181 */
 	"portfs",		/* 182 */
 	"pollsys",		/* 183 */
-	"labelsys",		/* 184 */
+	NULL,			/* 184 */
 	"acl",			/* 185 */
 	"auditsys",		/* 186 */
 	"processor_bind",	/* 187 */

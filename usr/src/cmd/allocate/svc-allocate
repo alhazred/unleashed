@@ -66,25 +66,12 @@ fi
 
 # Initialize device allocation
 
-
-# Need to determine if Trusted Extensions is enabled.
-# Check the setting in etc/system (other methods won't work 
-# because TX is likely not yet fully active.)
-#
-grep "^[ 	]*set[ 	][ 	]*sys_labeling[ 	]*=[ 	]*1" \
-    /etc/system > /dev/null 2>&1
-
-if [ $? = 0 ]; then
-	# Trusted Extensions is enabled (but possibly not yet booted).
-	${DEVFSADM} -e
-else
-	if [ ! -f ${DEVALLOC} ]; then
-		echo "DEVICE_ALLOCATION=ON" > $DEVALLOC
-		${MKDEVALLOC} >> $DEVALLOC
-	fi
-	if [ ! -f ${DEVMAPS} ]; then
-		${MKDEVMAPS} > $DEVMAPS
-	fi
+if [ ! -f ${DEVALLOC} ]; then
+    echo "DEVICE_ALLOCATION=ON" > $DEVALLOC
+    ${MKDEVALLOC} >> $DEVALLOC
+fi
+if [ ! -f ${DEVMAPS} ]; then
+    ${MKDEVMAPS} > $DEVMAPS
 fi
 }
 

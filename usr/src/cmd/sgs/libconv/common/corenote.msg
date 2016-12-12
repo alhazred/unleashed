@@ -933,8 +933,7 @@
 @ MSG_SYS_PORT_ALT			"port"
 @ MSG_SYS_POLLSYS			"[ pollsys ]"			# 183
 @ MSG_SYS_POLLSYS_ALT			"pollsys"
-@ MSG_SYS_LABELSYS			"[ labelsys ]"			# 184
-@ MSG_SYS_LABELSYS_ALT			"labelsys"
+@ MSG_SYS_184				"184"				# 184(u)
 @ MSG_SYS_ACL				"[ acl ]"			# 185
 @ MSG_SYS_ACL_ALT			"acl"
 @ MSG_SYS_AUDITSYS			"[ auditsys ]"			# 186

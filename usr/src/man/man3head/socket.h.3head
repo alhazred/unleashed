@@ -251,9 +251,6 @@ Socket type.
 Request the reception of user credential ancillary data. This is a
 Sun-specific, Evolving interface. See
 .Xr ucred_get 3C .
-.It Dv SO_MAC_EXEMPT
-Mandatory Access Control (MAC) exemption for unlabeled peers. This option is
-available only if the system is configured with Trusted Extensions.
 .It Dv SO_ALLZONES
 Bypass zone boundaries (privileged).
 .El

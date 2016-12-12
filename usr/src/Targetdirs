@@ -120,7 +120,6 @@ DIRS= \
 	/etc/security/auth_attr.d \
 	/etc/security/exec_attr.d \
 	/etc/security/prof_attr.d \
-	/etc/security/tsol	\
 	/etc/gss	\
 	/etc/pam.d	\
 	/etc/init.d  \
@@ -224,13 +223,11 @@ DIRS= \
 	/usr/include/scsi \
 	/usr/include/security \
 	/usr/include/sys/crypto \
-	/usr/include/tsol \
 	/usr/kernel  \
 	/usr/lib \
 	/usr/lib/abi \
 	/usr/lib/brand \
 	/usr/lib/brand/ipkg \
-	/usr/lib/brand/labeled \
 	/usr/lib/brand/shared \
 	/usr/lib/brand/sn1 \
 	/usr/lib/brand/solaris10 \
@@ -389,9 +386,7 @@ DIRS= \
 	/var/svc/manifest/site \
 	/var/svc/profile \
 	/var/uucp \
-	/var/tmp \
-	/var/tsol \
-	/var/tsol/doors
+	/var/tmp
 
 sparcv9_DIRS64= \
 	/platform/sun4u \
@@ -829,10 +824,6 @@ $(ROOT)/usr/lib/libthread.so.1:=	REALPATH=../../lib/libthread.so.1
 $(ROOT)/usr/lib/libthread.so:=		REALPATH=../../lib/libthread.so.1
 $(ROOT)/usr/lib/libthread_db.so.1:=	REALPATH=../../lib/libc_db.so.1
 $(ROOT)/usr/lib/libthread_db.so:=	REALPATH=../../lib/libc_db.so.1
-$(ROOT)/usr/lib/libtsnet.so.1:=		REALPATH=../../lib/libtsnet.so.1
-$(ROOT)/usr/lib/libtsnet.so:=		REALPATH=../../lib/libtsnet.so.1
-$(ROOT)/usr/lib/libtsol.so.2:=		REALPATH=../../lib/libtsol.so.2
-$(ROOT)/usr/lib/libtsol.so:=		REALPATH=../../lib/libtsol.so.2
 $(ROOT)/usr/lib/libumem.so.1:=		REALPATH=../../lib/libumem.so.1
 $(ROOT)/usr/lib/libumem.so:=		REALPATH=../../lib/libumem.so.1
 $(ROOT)/usr/lib/libuuid.so.1:=		REALPATH=../../lib/libuuid.so.1
@@ -1075,14 +1066,6 @@ $(ROOT)/usr/lib/$(MACH64)/libthread_db.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libc_db.so.1
 $(ROOT)/usr/lib/$(MACH64)/libthread_db.so:= \
 	REALPATH=../../../lib/$(MACH64)/libc_db.so.1
-$(ROOT)/usr/lib/$(MACH64)/libtsnet.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libtsnet.so.1
-$(ROOT)/usr/lib/$(MACH64)/libtsnet.so:= \
-	REALPATH=../../../lib/$(MACH64)/libtsnet.so.1
-$(ROOT)/usr/lib/$(MACH64)/libtsol.so.2:= \
-	REALPATH=../../../lib/$(MACH64)/libtsol.so.2
-$(ROOT)/usr/lib/$(MACH64)/libtsol.so:= \
-	REALPATH=../../../lib/$(MACH64)/libtsol.so.2
 $(ROOT)/usr/lib/$(MACH64)/libumem.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libumem.so.1
 $(ROOT)/usr/lib/$(MACH64)/libumem.so:= \
@@ -1250,10 +1233,6 @@ SYM.USRLIB= \
 	/usr/lib/libthread.so.1 \
 	/usr/lib/libthread_db.so \
 	/usr/lib/libthread_db.so.1 \
-	/usr/lib/libtsnet.so \
-	/usr/lib/libtsnet.so.1 \
-	/usr/lib/libtsol.so \
-	/usr/lib/libtsol.so.2 \
 	/usr/lib/libumem.so \
 	/usr/lib/libumem.so.1 \
 	/usr/lib/libuuid.so \
@@ -1395,10 +1374,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libthread.so.1 \
 	/usr/lib/$(MACH64)/libthread_db.so \
 	/usr/lib/$(MACH64)/libthread_db.so.1 \
-	/usr/lib/$(MACH64)/libtsnet.so \
-	/usr/lib/$(MACH64)/libtsnet.so.1 \
-	/usr/lib/$(MACH64)/libtsol.so \
-	/usr/lib/$(MACH64)/libtsol.so.2 \
 	/usr/lib/$(MACH64)/libumem.so \
 	/usr/lib/$(MACH64)/libumem.so.1 \
 	/usr/lib/$(MACH64)/libuuid.so \

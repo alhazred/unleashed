@@ -78,8 +78,6 @@
 #include <inet/ipnet.h>
 #include <sys/ethernet.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
 #include <rpc/pmap_prot.h>
 
 #include <inet/udp_impl.h>
@@ -348,12 +346,6 @@ typedef union T_primitives *t_primp_t;
 /*
  * Return the next anonymous port in the privileged port range for
  * bind checking.
- *
- * Trusted Extension (TX) notes: TX allows administrator to mark or
- * reserve ports as Multilevel ports (MLP). MLP has special function
- * on TX systems. Once a port is made MLP, it's not available as
- * ordinary port. This creates "holes" in the port name space. It
- * may be necessary to skip the "holes" find a suitable anon port.
  */
 static in_port_t
 udp_get_next_priv_port(udp_t *udp)
@@ -370,13 +362,6 @@ retry:
 		if (restart)
 			return (0);
 		restart = B_TRUE;
-	}
-
-	if (is_system_labeled() &&
-	    (nextport = tsol_next_port(crgetzone(udp->udp_connp->conn_cred),
-	    next_priv_port, IPPROTO_UDP, B_FALSE)) != 0) {
-		next_priv_port = nextport;
-		goto retry;
 	}
 
 	return (next_priv_port--);
@@ -1640,52 +1625,8 @@ udp_do_opt_set(conn_opt_arg_t *coa, int level, int name,
 			}
 			break;
 
-		case SCM_UCRED: {
-			struct ucred_s *ucr;
-			cred_t *newcr;
-			ts_label_t *tsl;
-
-			/*
-			 * Only sockets that have proper privileges and are
-			 * bound to MLPs will have any other value here, so
-			 * this implicitly tests for privilege to set label.
-			 */
-			if (connp->conn_mlp_type == mlptSingle)
-				break;
-
-			ucr = (struct ucred_s *)invalp;
-			if (inlen < sizeof (*ucr) + sizeof (bslabel_t) ||
-			    ucr->uc_labeloff < sizeof (*ucr) ||
-			    ucr->uc_labeloff + sizeof (bslabel_t) > inlen)
-				return (EINVAL);
-			if (!checkonly) {
-				/*
-				 * Set ixa_tsl to the new label.
-				 * We assume that crgetzoneid doesn't change
-				 * as part of the SCM_UCRED.
-				 */
-				ASSERT(cr != NULL);
-				if ((tsl = crgetlabel(cr)) == NULL)
-					return (EINVAL);
-				newcr = copycred_from_bslabel(cr, UCLABEL(ucr),
-				    tsl->tsl_doi, KM_NOSLEEP);
-				if (newcr == NULL)
-					return (ENOSR);
-				ASSERT(newcr->cr_label != NULL);
-				/*
-				 * Move the hold on the cr_label to ixa_tsl by
-				 * setting cr_label to NULL. Then release newcr.
-				 */
-				ip_xmit_attr_replace_tsl(ixa, newcr->cr_label);
-				ixa->ixa_flags |= IXAF_UCRED_TSL;
-				newcr->cr_label = NULL;
-				crfree(newcr);
-				coa->coa_changed |= COA_HEADER_CHANGED;
-				coa->coa_changed |= COA_WROFF_CHANGED;
-			}
-			/* Fully handled this option. */
-			return (0);
-		}
+		case SCM_UCRED: 
+			return (EINVAL);
 		}
 		break;
 	case IPPROTO_UDP:
@@ -1885,8 +1826,6 @@ errout:
 	/*
 	 * If this was not ancillary data, then we rebuild the headers,
 	 * update the IRE/NCE, and IPsec as needed.
-	 * Since the label depends on the destination we go through
-	 * ip_set_destination first.
 	 */
 	if (coa->coa_ancillary) {
 		return (0);
@@ -2166,18 +2105,8 @@ udp_ulp_recv(conn_t *connp, mblk_t *mp, uint_t len, ip_recv_attr_t *ira)
 			}
 		}
 		ASSERT(MUTEX_NOT_HELD(&udp->udp_recv_lock));
-	} else {
-		if (is_system_labeled()) {
-			ASSERT(ira->ira_cred != NULL);
-			/*
-			 * Provide for protocols above UDP such as RPC
-			 * NOPID leaves db_cpid unchanged.
-			 */
-			mblk_setcred(mp, ira->ira_cred, NOPID);
-		}
-
+	} else
 		putnext(connp->conn_rq, mp);
-	}
 }
 
 /*
@@ -2292,7 +2221,7 @@ udp_input(void *arg1, mblk_t *mp, void *arg2, ip_recv_attr_t *ira)
 			ip6h = (ip6_t *)rptr;
 
 			/* We don't care about the length, but need the ipp */
-			hdr_length = ip_find_hdr_v6(mp, ip6h, B_TRUE, &ipps,
+			hdr_length = ip_find_hdr_v6(mp, ip6h, &ipps,
 			    &nexthdrp);
 			ASSERT(hdr_length == ira->ira_ip_hdr_length);
 			/* Restore */
@@ -2580,13 +2509,6 @@ retry:
 		}
 	}
 
-	if (is_system_labeled() &&
-	    (nextport = tsol_next_port(crgetzone(udp->udp_connp->conn_cred),
-	    port, IPPROTO_UDP, B_TRUE)) != 0) {
-		port = nextport;
-		goto retry;
-	}
-
 	return (port);
 }
 
@@ -2634,10 +2556,6 @@ udp_output_ancillary(conn_t *connp, sin_t *sin, sin6_t *sin6, mblk_t *mp,
 	ASSERT(!(ixa->ixa_free_flags & IXA_FREE_CRED));
 	ixa->ixa_cred = cr;
 	ixa->ixa_cpid = pid;
-	if (is_system_labeled()) {
-		/* We need to restart with a label based on the cred */
-		ip_xmit_attr_restore_tsl(ixa, ixa->ixa_cred);
-	}
 
 	/* In case previous destination was multicast or multirt */
 	ip_attr_newdst(ixa);
@@ -2664,8 +2582,6 @@ udp_output_ancillary(conn_t *connp, sin_t *sin, sin6_t *sin6, mblk_t *mp,
 
 	/*
 	 * Parse the options and update ixa and ipp as a result.
-	 * Note that ixa_tsl can be updated if SCM_UCRED.
-	 * ixa_refrele/ixa_inactivate will release any reference on ixa_tsl.
 	 */
 
 	coa = &coas;
@@ -2801,42 +2717,6 @@ udp_output_ancillary(conn_t *connp, sin_t *sin, sin6_t *sin6, mblk_t *mp,
 		goto done;
 	}
 
-	/*
-	 * We might be going to a different destination than last time,
-	 * thus check that TX allows the communication and compute any
-	 * needed label.
-	 *
-	 * TSOL Note: We have an exclusive ipp and ixa for this thread so we
-	 * don't have to worry about concurrent threads.
-	 */
-	if (is_system_labeled()) {
-		/* Using UDP MLP requires SCM_UCRED from user */
-		if (connp->conn_mlp_type != mlptSingle &&
-		    !((ixa->ixa_flags & IXAF_UCRED_TSL))) {
-			UDPS_BUMP_MIB(us, udpOutErrors);
-			error = ECONNREFUSED;
-			freemsg(mp);
-			goto done;
-		}
-		/*
-		 * Check whether Trusted Solaris policy allows communication
-		 * with this host, and pretend that the destination is
-		 * unreachable if not.
-		 * Compute any needed label and place it in ipp_label_v4/v6.
-		 *
-		 * Later conn_build_hdr_template/conn_prepend_hdr takes
-		 * ipp_label_v4/v6 to form the packet.
-		 *
-		 * Tsol note: We have ipp structure local to this thread so
-		 * no locking is needed.
-		 */
-		error = conn_update_label(connp, ixa, &v6dst, ipp);
-		if (error != 0) {
-			freemsg(mp);
-			UDPS_BUMP_MIB(us, udpOutErrors);
-			goto done;
-		}
-	}
 	mp = udp_prepend_hdr(connp, ixa, ipp, &v6src, &v6dst, dstport,
 	    flowinfo, mp, &error);
 	if (mp == NULL) {
@@ -3699,10 +3579,6 @@ udp_output_newdst(conn_t *connp, mblk_t *data_mp, sin_t *sin, sin6_t *sin6,
 	ASSERT(!(ixa->ixa_free_flags & IXA_FREE_CRED));
 	ixa->ixa_cred = cr;
 	ixa->ixa_cpid = pid;
-	if (is_system_labeled()) {
-		/* We need to restart with a label based on the cred */
-		ip_xmit_attr_restore_tsl(ixa, ixa->ixa_cred);
-	}
 
 	/*
 	 * If we are connected then the destination needs to be the
@@ -3844,8 +3720,6 @@ udp_output_newdst(conn_t *connp, mblk_t *data_mp, sin_t *sin, sin6_t *sin6,
 
 	/*
 	 * We need to rebuild the headers if
-	 *  - we are labeling packets (could be different for different
-	 *    destinations)
 	 *  - we have a source route (or routing header) since we need to
 	 *    massage that to get the pseudo-header checksum
 	 *  - the IP version is different than the last time
@@ -3855,39 +3729,7 @@ udp_output_newdst(conn_t *connp, mblk_t *data_mp, sin_t *sin, sin6_t *sin6,
 	 * Otherwise the prepend function will just update the src, dst,
 	 * dstport, and flow label.
 	 */
-	if (is_system_labeled()) {
-		/* TX MLP requires SCM_UCRED and don't have that here */
-		if (connp->conn_mlp_type != mlptSingle) {
-			mutex_exit(&connp->conn_lock);
-			error = ECONNREFUSED;
-			goto ud_error;
-		}
-		/*
-		 * Check whether Trusted Solaris policy allows communication
-		 * with this host, and pretend that the destination is
-		 * unreachable if not.
-		 * Compute any needed label and place it in ipp_label_v4/v6.
-		 *
-		 * Later conn_build_hdr_template/conn_prepend_hdr takes
-		 * ipp_label_v4/v6 to form the packet.
-		 *
-		 * Tsol note: Since we hold conn_lock we know no other
-		 * thread manipulates conn_xmit_ipp.
-		 */
-		error = conn_update_label(connp, ixa, &v6dst,
-		    &connp->conn_xmit_ipp);
-		if (error != 0) {
-			mutex_exit(&connp->conn_lock);
-			goto ud_error;
-		}
-		/* Rebuild the header template */
-		error = udp_build_hdr_template(connp, &v6src, &v6dst, dstport,
-		    flowinfo);
-		if (error != 0) {
-			mutex_exit(&connp->conn_lock);
-			goto ud_error;
-		}
-	} else if ((connp->conn_xmit_ipp.ipp_fields &
+	if ((connp->conn_xmit_ipp.ipp_fields &
 	    (IPPF_IPV4_OPTIONS|IPPF_RTHDR)) ||
 	    ipversion != connp->conn_lastipversion ||
 	    IN6_IS_ADDR_UNSPECIFIED(&connp->conn_v6lastdst)) {
@@ -4611,13 +4453,6 @@ udp_do_open(cred_t *credp, boolean_t isv6, int flags, int *errorp)
 
 	connp->conn_zoneid = zoneid;
 
-	/*
-	 * If the caller has the process-wide flag set, then default to MAC
-	 * exempt mode.  This allows read-down to unlabeled hosts.
-	 */
-	if (getpflags(NET_MAC_AWARE, credp) != 0)
-		connp->conn_mac_mode = CONN_MAC_AWARE;
-
 	connp->conn_zone_is_global = (crgetzoneid(credp) == GLOBAL_ZONEID);
 
 	udp->udp_us = us;
@@ -4640,8 +4475,6 @@ udp_do_open(cred_t *credp, boolean_t isv6, int flags, int *errorp)
 	ASSERT(!(connp->conn_ixa->ixa_free_flags & IXA_FREE_CRED));
 	connp->conn_ixa->ixa_cred = connp->conn_cred;
 	connp->conn_ixa->ixa_cpid = connp->conn_cpid;
-	if (is_system_labeled())
-		connp->conn_ixa->ixa_tsl = crgetlabel(connp->conn_cred);
 
 	*((sin6_t *)&udp->udp_delayed_addr) = sin6_null;
 
@@ -4829,7 +4662,6 @@ udp_do_bind(conn_t *connp, struct sockaddr *sa, socklen_t len, cred_t *cr,
 	zoneid_t	zoneid = IPCL_ZONEID(connp);
 	ip_stack_t	*ipst = connp->conn_netstack->netstack_ip;
 	boolean_t	is_inaddr_any;
-	mlp_type_t	addrtype, mlptype;
 	udp_stack_t	*us = udp->udp_us;
 
 	switch (len) {
@@ -5032,12 +4864,6 @@ udp_do_bind(conn_t *connp, struct sockaddr *sa, socklen_t len, cred_t *cr,
 			if (lport != connp1->conn_lport)
 				continue;
 
-			/*
-			 * On a labeled system, we must treat bindings to ports
-			 * on shared IP addresses by sockets with MAC exemption
-			 * privilege as being in all zones, as there's
-			 * otherwise no way to identify the right receiver.
-			 */
 			if (!IPCL_BIND_ZONE_MATCH(connp1, connp))
 				continue;
 
@@ -5056,12 +4882,8 @@ udp_do_bind(conn_t *connp, struct sockaddr *sa, socklen_t len, cred_t *cr,
 			 * unspec	spec		no
 			 * spec		unspec		no
 			 * spec		spec		yes if A
-			 *
-			 * For labeled systems, SO_MAC_EXEMPT behaves the same
-			 * as UDP_EXCLBIND, except that zoneid is ignored.
 			 */
-			if (connp1->conn_exclbind || connp->conn_exclbind ||
-			    IPCL_CONNS_MAC(udp1->udp_connp, connp)) {
+			if (connp1->conn_exclbind || connp->conn_exclbind) {
 				if (V6_OR_V4_INADDR_ANY(
 				    connp1->conn_bound_addr_v6) ||
 				    is_inaddr_any ||
@@ -5243,102 +5065,7 @@ udp_do_bind(conn_t *connp, struct sockaddr *sa, socklen_t len, cred_t *cr,
 	}
 
 	mutex_enter(&connp->conn_lock);
-	connp->conn_anon_port = (is_system_labeled() && requested_port == 0);
-	if (is_system_labeled() && (!connp->conn_anon_port ||
-	    connp->conn_anon_mlp)) {
-		uint16_t mlpport;
-		zone_t *zone;
-
-		zone = crgetzone(cr);
-		connp->conn_mlp_type =
-		    connp->conn_recv_ancillary.crb_recvucred ? mlptBoth :
-		    mlptSingle;
-		addrtype = tsol_mlp_addr_type(
-		    connp->conn_allzones ? ALL_ZONES : zone->zone_id,
-		    IPV6_VERSION, &v6src, us->us_netstack->netstack_ip);
-		if (addrtype == mlptSingle) {
-			error = -TNOADDR;
-			mutex_exit(&connp->conn_lock);
-			goto late_error;
-		}
-		mlpport = connp->conn_anon_port ? PMAPPORT : port;
-		mlptype = tsol_mlp_port_type(zone, IPPROTO_UDP, mlpport,
-		    addrtype);
-
-		/*
-		 * It is a coding error to attempt to bind an MLP port
-		 * without first setting SOL_SOCKET/SCM_UCRED.
-		 */
-		if (mlptype != mlptSingle &&
-		    connp->conn_mlp_type == mlptSingle) {
-			error = EINVAL;
-			mutex_exit(&connp->conn_lock);
-			goto late_error;
-		}
-
-		/*
-		 * It is an access violation to attempt to bind an MLP port
-		 * without NET_BINDMLP privilege.
-		 */
-		if (mlptype != mlptSingle &&
-		    secpolicy_net_bindmlp(cr) != 0) {
-			if (connp->conn_debug) {
-				(void) strlog(UDP_MOD_ID, 0, 1,
-				    SL_ERROR|SL_TRACE,
-				    "udp_bind: no priv for multilevel port %d",
-				    mlpport);
-			}
-			error = -TACCES;
-			mutex_exit(&connp->conn_lock);
-			goto late_error;
-		}
-
-		/*
-		 * If we're specifically binding a shared IP address and the
-		 * port is MLP on shared addresses, then check to see if this
-		 * zone actually owns the MLP.  Reject if not.
-		 */
-		if (mlptype == mlptShared && addrtype == mlptShared) {
-			/*
-			 * No need to handle exclusive-stack zones since
-			 * ALL_ZONES only applies to the shared stack.
-			 */
-			zoneid_t mlpzone;
-
-			mlpzone = tsol_mlp_findzone(IPPROTO_UDP,
-			    htons(mlpport));
-			if (connp->conn_zoneid != mlpzone) {
-				if (connp->conn_debug) {
-					(void) strlog(UDP_MOD_ID, 0, 1,
-					    SL_ERROR|SL_TRACE,
-					    "udp_bind: attempt to bind port "
-					    "%d on shared addr in zone %d "
-					    "(should be %d)",
-					    mlpport, connp->conn_zoneid,
-					    mlpzone);
-				}
-				error = -TACCES;
-				mutex_exit(&connp->conn_lock);
-				goto late_error;
-			}
-		}
-		if (connp->conn_anon_port) {
-			error = tsol_mlp_anon(zone, mlptype, connp->conn_proto,
-			    port, B_TRUE);
-			if (error != 0) {
-				if (connp->conn_debug) {
-					(void) strlog(UDP_MOD_ID, 0, 1,
-					    SL_ERROR|SL_TRACE,
-					    "udp_bind: cannot establish anon "
-					    "MLP for port %d", port);
-				}
-				error = -TACCES;
-				mutex_exit(&connp->conn_lock);
-				goto late_error;
-			}
-		}
-		connp->conn_mlp_type = mlptype;
-	}
+	connp->conn_anon_port = B_FALSE;
 
 	/*
 	 * We create an initial header template here to make a subsequent
@@ -5385,7 +5112,6 @@ late_error:
 	connp->conn_lport = 0;
 	mutex_exit(&udpf->uf_lock);
 	connp->conn_anon_port = B_FALSE;
-	connp->conn_mlp_type = mlptSingle;
 
 	connp->conn_v6lastdst = ipv6_all_zeros;
 
@@ -5698,10 +5424,6 @@ udp_do_connect(conn_t *connp, const struct sockaddr *sa, socklen_t len,
 	ASSERT(!(ixa->ixa_free_flags & IXA_FREE_CRED));
 	ixa->ixa_cred = cr;
 	ixa->ixa_cpid = pid;
-	if (is_system_labeled()) {
-		/* We need to restart with a label based on the cred */
-		ip_xmit_attr_restore_tsl(ixa, ixa->ixa_cred);
-	}
 
 	if (scopeid != 0) {
 		ixa->ixa_flags |= IXAF_SCOPEID_SET;

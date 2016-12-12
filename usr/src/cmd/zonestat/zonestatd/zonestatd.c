@@ -41,6 +41,7 @@
 #include <limits.h>
 #include <pool.h>
 #include <procfs.h>
+#include <priv.h>
 #include <rctl.h>
 #include <thread.h>
 #include <signal.h>

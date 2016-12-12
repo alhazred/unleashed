@@ -60,8 +60,6 @@
 #endif
 
 
-extern int system_labeled;
-
 static int disk_callback_chan(di_minor_t minor, di_node_t node);
 static int disk_callback_nchan(di_minor_t minor, di_node_t node);
 static int disk_callback_blkdev(di_minor_t minor, di_node_t node);
@@ -511,7 +509,6 @@ disk_common(di_minor_t minor, di_node_t node, char *disk, int flags)
 	char slice[4];
 	char *mn;
 	char *ctrl;
-	char *nt = NULL;
 	int *int_prop;
 	int  nflags = 0;
 #if defined(__i386) || defined(__amd64)
@@ -568,16 +565,6 @@ disk_common(di_minor_t minor, di_node_t node, char *disk, int flags)
 #endif
 
 	nflags = 0;
-	if (system_labeled) {
-		nt = di_minor_nodetype(minor);
-		if ((nt != NULL) &&
-		    ((strcmp(nt, DDI_NT_CD) == 0) ||
-		    (strcmp(nt, DDI_NT_CD_CHAN) == 0) ||
-		    (strcmp(nt, DDI_NT_BLOCK_CHAN) == 0))) {
-			nflags = DA_ADD|DA_CD;
-		}
-	}
-
 	if (reserved_links_exist(node, minor, nflags) == DEVFSADM_SUCCESS) {
 		devfsadm_print(disk_mid, "Reserved link exists. Not "
 		    "creating links for slice %s\n", slice);

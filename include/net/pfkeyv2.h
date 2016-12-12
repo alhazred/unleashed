@@ -186,44 +186,6 @@ typedef struct sadb_ident {
 } sadb_ident_t;
 
 /*
- * SA sensitivity information.  This is mostly useful on MLS systems.
- */
-
-typedef struct sadb_sens {
-	/* Union is for guaranteeing 64-bit alignment. */
-	union {
-		struct {
-			uint16_t sadb_x_sens_ulen;
-			uint16_t sadb_x_sens_uexttype;	/* SENSITIVITY */
-			uint32_t sadb_x_sens_udpd;	/* Protection domain */
-		} sadb_x_sens_actual;
-		uint64_t sadb_x_sens_alignment;
-	} sadb_x_sens_u;
-#define	sadb_sens_len sadb_x_sens_u.sadb_x_sens_actual.sadb_x_sens_ulen
-#define	sadb_sens_exttype sadb_x_sens_u.sadb_x_sens_actual.sadb_x_sens_uexttype
-#define	sadb_sens_dpd sadb_x_sens_u.sadb_x_sens_actual.sadb_x_sens_udpd
-	uint8_t sadb_sens_sens_level;
-	uint8_t sadb_sens_sens_len;		/* 64-bit words */
-	uint8_t sadb_sens_integ_level;
-	uint8_t sadb_sens_integ_len;		/* 64-bit words */
-	uint32_t sadb_x_sens_flags;
-	/*
-	 * followed by two uint64_t arrays
-	 * uint64_t sadb_sens_bitmap[sens_bitmap_len];
-	 * uint64_t sadb_integ_bitmap[integ_bitmap_len];
-	 */
-} sadb_sens_t;
-
-/*
- * We recycled the formerly reserved word for flags.
- */
-
-#define	sadb_sens_reserved sadb_x_sens_flags
-
-#define	SADB_X_SENS_IMPLICIT 0x1	 /* implicit labelling */
-#define	SADB_X_SENS_UNLABELED 0x2	 /* peer is unlabeled */
-
-/*
  * a proposal extension.  This is found in an ACQUIRE message, and it
  * proposes what sort of SA the kernel would like to ACQUIRE.
  */

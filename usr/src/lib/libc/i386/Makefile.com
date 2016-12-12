@@ -961,7 +961,6 @@ PORTSYS=			\
 	getpeerucred.o		\
 	inst_sync.o		\
 	issetugid.o		\
-	label.o			\
 	link.o			\
 	lockf.o			\
 	lwp.o			\

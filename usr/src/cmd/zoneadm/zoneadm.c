@@ -477,7 +477,7 @@ zone_print(zone_entry_t *zent, boolean_t verbose, boolean_t parsable)
 static int
 lookup_zone_info(const char *zone_name, zoneid_t zid, zone_entry_t *zent)
 {
-	char root[MAXPATHLEN], *cp;
+	char root[MAXPATHLEN];
 	int err;
 	uuid_t uuid;
 	zone_dochandle_t handle;
@@ -495,33 +495,14 @@ lookup_zone_info(const char *zone_name, zoneid_t zid, zone_entry_t *zent)
 	else
 		zent->zuuid[0] = '\0';
 
-	/*
-	 * For labeled zones which query the zone path of lower-level
-	 * zones, the path needs to be adjusted to drop the final
-	 * "/root" component. This adjusted path is then useful
-	 * for reading down any exported directories from the
-	 * lower-level zone.
-	 */
-	if (is_system_labeled() && zent->zid != ZONE_ID_UNDEFINED) {
-		if (zone_getattr(zent->zid, ZONE_ATTR_ROOT, zent->zroot,
-		    sizeof (zent->zroot)) == -1) {
-			zperror2(zent->zname,
-			    gettext("could not get zone path."));
-			return (Z_ERR);
-		}
-		cp = zent->zroot + strlen(zent->zroot) - 5;
-		if (cp > zent->zroot && strcmp(cp, "/root") == 0)
-			*cp = 0;
-	} else {
-		if ((err = zone_get_zonepath(zent->zname, root,
-		    sizeof (root))) != Z_OK) {
-			errno = err;
-			zperror2(zent->zname,
-			    gettext("could not get zone path."));
-			return (Z_ERR);
-		}
-		(void) strlcpy(zent->zroot, root, sizeof (zent->zroot));
+	if ((err = zone_get_zonepath(zent->zname, root,
+	    sizeof (root))) != Z_OK) {
+		errno = err;
+		zperror2(zent->zname,
+		    gettext("could not get zone path."));
+		return (Z_ERR);
 	}
+	(void) strlcpy(zent->zroot, root, sizeof (zent->zroot));
 
 	if ((err = zone_get_state(zent->zname, &zent->zstate_num)) != Z_OK) {
 		errno = err;
@@ -530,18 +511,7 @@ lookup_zone_info(const char *zone_name, zoneid_t zid, zone_entry_t *zent)
 	}
 	zent->zstate_str = zone_state_str(zent->zstate_num);
 
-	/*
-	 * A zone's brand is only available in the .xml file describing it,
-	 * which is only visible to the global zone.  This causes
-	 * zone_get_brand() to fail when called from within a non-global
-	 * zone.  Fortunately we only do this on labeled systems, where we
-	 * know all zones are native.
-	 */
-	if (getzoneid() != GLOBAL_ZONEID) {
-		assert(is_system_labeled() != 0);
-		(void) strlcpy(zent->zbrand, default_brand,
-		    sizeof (zent->zbrand));
-	} else if (zone_get_brand(zent->zname, zent->zbrand,
+	if (zone_get_brand(zent->zname, zent->zbrand,
 	    sizeof (zent->zbrand)) != Z_OK) {
 		zperror2(zent->zname, gettext("could not get brand name"));
 		return (Z_ERR);
@@ -1340,16 +1310,9 @@ fake_up_local_zone(zoneid_t zid, zone_entry_t *zeptr)
 		zonecfg_close_scratch(fp);
 	}
 
-	if (is_system_labeled()) {
-		(void) zone_getattr(zid, ZONE_ATTR_ROOT, zeptr->zroot,
-		    sizeof (zeptr->zroot));
-		(void) strlcpy(zeptr->zbrand, NATIVE_BRAND_NAME,
-		    sizeof (zeptr->zbrand));
-	} else {
-		(void) strlcpy(zeptr->zroot, "/", sizeof (zeptr->zroot));
-		(void) zone_getattr(zid, ZONE_ATTR_BRAND, zeptr->zbrand,
-		    sizeof (zeptr->zbrand));
-	}
+	(void) strlcpy(zeptr->zroot, "/", sizeof (zeptr->zroot));
+	(void) zone_getattr(zid, ZONE_ATTR_BRAND, zeptr->zbrand,
+	    sizeof (zeptr->zbrand));
 
 	zeptr->zstate_str = "running";
 	if (zonecfg_get_uuid(zeptr->zname, uuid) == Z_OK &&
@@ -1415,7 +1378,7 @@ list_func(int argc, char *argv[])
 			    cmd_to_str(CMD_LIST));
 			return (Z_ERR);
 		}
-		if (zone_id == GLOBAL_ZONEID || is_system_labeled()) {
+		if (zone_id == GLOBAL_ZONEID) {
 			retv = zone_print_list(min_state, verbose, parsable);
 		} else {
 			fake_up_local_zone(zone_id, &zent);
@@ -1454,7 +1417,7 @@ list_func(int argc, char *argv[])
 		sub_usage(SHELP_LIST, CMD_LIST);
 		return (Z_USAGE);
 	}
-	if (zone_id != GLOBAL_ZONEID && !is_system_labeled()) {
+	if (zone_id != GLOBAL_ZONEID) {
 		fake_up_local_zone(zone_id, &zent);
 		/*
 		 * main() will issue a Z_NO_ZONE error if it cannot get an

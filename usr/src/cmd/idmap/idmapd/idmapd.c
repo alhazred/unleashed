@@ -49,7 +49,6 @@
 #include <zone.h>
 #include <door.h>
 #include <port.h>
-#include <tsol/label.h>
 #include <sys/resource.h>
 #include <sys/sid.h>
 #include <sys/idmap.h>
@@ -284,13 +283,6 @@ main(int argc, char **argv)
 
 	idmap_set_logger(idmapdlog);
 	adutils_set_logger(idmapdlog);
-
-	if (is_system_labeled() && getzoneid() != GLOBAL_ZONEID) {
-		idmapdlog(LOG_ERR,
-		    "with Trusted Extensions idmapd runs only in the "
-		    "global zone");
-		exit(1);
-	}
 
 	/*
 	 * Raise the fd limit to max

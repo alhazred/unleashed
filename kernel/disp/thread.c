@@ -64,8 +64,6 @@
 #include <sys/brand.h>
 #include <sys/pool.h>
 #include <sys/zone.h>
-#include <sys/tsol/label.h>
-#include <sys/tsol/tndb.h>
 #include <sys/cpc_impl.h>
 #include <sys/sdt.h>
 #include <sys/reboot.h>
@@ -210,7 +208,6 @@ thread_init(void)
 	    sizeof (turnstile_t), 0,
 	    turnstile_constructor, turnstile_destructor, NULL, NULL, NULL, 0);
 
-	label_init();
 	cred_init();
 
 	/*
@@ -227,7 +224,6 @@ thread_init(void)
 	brand_init();
 	kiconv_init();
 	task_init();
-	tcache_init();
 	pool_init();
 
 	curthread->t_ts = kmem_cache_alloc(turnstile_cache, KM_SLEEP);

@@ -2506,8 +2506,7 @@ register_mforward(mblk_t *mp, ip_recv_attr_t *ira)
 
 	if (!CLASSD(ipha->ipha_dst)) {
 		ire = ire_route_recursive_v4(ipha->ipha_dst, 0, NULL, ALL_ZONES,
-		    ira->ira_tsl, MATCH_IRE_SECATTR, IRR_ALLOCATE, 0, ipst,
-		    NULL, NULL, NULL);
+		    0, IRR_ALLOCATE, 0, ipst, NULL, NULL);
 	} else {
 		ire = ire_multicast(ill);
 	}
@@ -2719,8 +2718,8 @@ ip_mroute_decap(mblk_t *mp, ip_recv_attr_t *ira)
 	if (ipha_encap->ipha_protocol == IPPROTO_RSVP &&
 	    ipst->ips_ipcl_proto_fanout_v4[IPPROTO_RSVP].connf_head != NULL) {
 		ire = ire_route_recursive_v4(INADDR_BROADCAST, 0, ill,
-		    ALL_ZONES, ira->ira_tsl, MATCH_IRE_ILL|MATCH_IRE_SECATTR,
-		    IRR_ALLOCATE, 0, ipst, NULL, NULL, NULL);
+		    ALL_ZONES, MATCH_IRE_ILL, IRR_ALLOCATE, 0, ipst, NULL,
+		    NULL);
 	} else {
 		ire = ire_multicast(ill);
 	}
@@ -3119,7 +3118,6 @@ tbf_send_packet(struct vif *vifp, mblk_t *mp)
 		ixas.ixa_ifindex = 0;
 		ixas.ixa_cred = kcred;
 		ixas.ixa_cpid = NOPID;
-		ixas.ixa_tsl = NULL;
 		ixas.ixa_zoneid = GLOBAL_ZONEID; /* Multicast router in GZ */
 		ixas.ixa_pktlen = ntohs(ipha->ipha_length);
 		ixas.ixa_ip_hdr_length = IPH_HDR_LENGTH(ipha);

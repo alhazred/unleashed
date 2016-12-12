@@ -170,8 +170,6 @@ nscd_cfg_id_t _nscd_cfg_nsw_db[] = {
 	{	18,	NSS_DBNAM_PROJECT	},
 	{	19,	NSS_DBNAM_SHADOW	},
 	{	20,	NSS_DBNAM_AUDITUSER	},
-	{	21,	NSS_DBNAM_TSOL_TP	},
-	{	22,	NSS_DBNAM_TSOL_RH	},
 	/* pseudo-databases for the compat backend */
 	{	23,	NSS_DBNAM_PASSWD_COMPAT },
 	{	24,	NSS_DBNAM_GROUP_COMPAT  },

@@ -31,8 +31,6 @@
  * under license from the Regents of the University of California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/param.h>
 #include <sys/types.h>
 #include <rpc/types.h>
@@ -131,14 +129,6 @@ clnt_tli_kcreate(
 		break;
 	case NC_TPI_RDMA:
 		RPCLOG0(8, "clnt_tli_kcreate: RDMA selected\n");
-		/*
-		 * RDMA doesn't support TSOL. It's better to
-		 * disallow it here.
-		 */
-		if (is_system_labeled()) {
-			RPCLOG0(1, "clnt_tli_kcreate: tsol not supported\n");
-			return (EPROTONOSUPPORT);
-		}
 
 		if (strcmp(config->knc_protofmly, NC_INET) == 0)
 			family = AF_INET;

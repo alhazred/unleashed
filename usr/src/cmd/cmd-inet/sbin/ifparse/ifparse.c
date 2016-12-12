@@ -214,7 +214,6 @@ struct	cmd {
 	{ "destination",	NEXTARG,	AF_ANY, 0 },
 	{ "zone",		NEXTARG,	AF_ANY, 0 },
 	{ "-zone",		0,		AF_ANY, 0 },
-	{ "all-zones",		0,		AF_ANY, 0 },
 	{ "ether",		OPTARG,		AF_ANY, PARSENOW },
 	{ "usesrc",		NEXTARG,	AF_ANY, PARSENOW },
 	{ 0 /* ether addr */,	0,		AF_UNSPEC, PARSELOG0 },

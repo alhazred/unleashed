@@ -66,9 +66,6 @@
 #include <inet/ipclassifier.h>
 #include <inet/sctp_ip.h>
 
-#include <sys/tsol/tndb.h>
-#include <sys/tsol/tnet.h>
-
 static in6_addr_t	ipv6_ll_template =
 			{(uint32_t)V6_LINKLOCAL, 0x0, 0x0, 0x0};
 
@@ -306,13 +303,6 @@ repeat:
 				zoneid = ipif->ipif_zoneid;
 				mutex_exit(&ill->ill_lock);
 				rw_exit(&ipst->ips_ill_g_lock);
-				/*
-				 * If ipif_zoneid was ALL_ZONES then we have
-				 * a trusted extensions shared IP address.
-				 * In that case GLOBAL_ZONEID works to send.
-				 */
-				if (zoneid == ALL_ZONES)
-					zoneid = GLOBAL_ZONEID;
 				return (zoneid);
 			}
 		}
@@ -392,17 +382,13 @@ ip_remote_addr_ok_v6(const in6_addr_t *addr, const in6_addr_t *subnet_mask)
 int
 ip_rt_add_v6(const in6_addr_t *dst_addr, const in6_addr_t *mask,
     const in6_addr_t *gw_addr, const in6_addr_t *src_addr, int flags,
-    ill_t *ill, ire_t **ire_arg, struct rtsa_s *sp, ip_stack_t *ipst,
-    zoneid_t zoneid)
+    ill_t *ill, ire_t **ire_arg, ip_stack_t *ipst, zoneid_t zoneid)
 {
 	ire_t	*ire, *nire;
 	ire_t	*gw_ire = NULL;
 	ipif_t	*ipif;
 	uint_t	type;
 	int	match_flags = MATCH_IRE_TYPE;
-	tsol_gc_t *gc = NULL;
-	tsol_gcgrp_t *gcgrp = NULL;
-	boolean_t gcgrp_xtraref = B_FALSE;
 	boolean_t unbound = B_FALSE;
 
 	if (ire_arg != NULL)
@@ -452,8 +438,7 @@ ip_rt_add_v6(const in6_addr_t *dst_addr, const in6_addr_t *mask,
 		    IN6_ARE_ADDR_EQUAL(dst_addr, &ipv6_loopback) &&
 		    IN6_ARE_ADDR_EQUAL(mask, &ipv6_all_ones)) {
 			ire = ire_ftable_lookup_v6(dst_addr, 0, 0, IRE_LOOPBACK,
-			    NULL, ALL_ZONES, NULL, MATCH_IRE_TYPE, 0, ipst,
-			    NULL);
+			    NULL, ALL_ZONES, MATCH_IRE_TYPE, 0, ipst, NULL);
 			if (ire != NULL) {
 				ire_refrele(ire);
 				ipif_refrele(ipif);
@@ -471,7 +456,6 @@ ip_rt_add_v6(const in6_addr_t *dst_addr, const in6_addr_t *mask,
 			    ipif->ipif_ill,
 			    zoneid,
 			    (ipif->ipif_flags & IPIF_PRIVATE) ? RTF_PRIVATE : 0,
-			    NULL,
 			    ipst);
 
 			if (ire == NULL) {
@@ -568,14 +552,6 @@ ip_rt_add_v6(const in6_addr_t *dst_addr, const in6_addr_t *mask,
 
 	/* RTF_GATEWAY not set */
 	if (!(flags & RTF_GATEWAY)) {
-		if (sp != NULL) {
-			ip2dbg(("ip_rt_add_v6: gateway security attributes "
-			    "cannot be set with interface route\n"));
-			if (ipif != NULL)
-				ipif_refrele(ipif);
-			return (EINVAL);
-		}
-
 		/*
 		 * Whether or not ill (RTA_IFP) is set, we require that
 		 * the gateway is one of our local addresses.
@@ -605,8 +581,7 @@ ip_rt_add_v6(const in6_addr_t *dst_addr, const in6_addr_t *mask,
 		 */
 		match_flags |= MATCH_IRE_MASK;
 		ire = ire_ftable_lookup_v6(dst_addr, mask, gw_addr,
-		    IRE_INTERFACE, ill, ALL_ZONES, NULL, match_flags, 0, ipst,
-		    NULL);
+		    IRE_INTERFACE, ill, ALL_ZONES, match_flags, 0, ipst, NULL);
 		if (ire != NULL) {
 			ire_refrele(ire);
 			ipif_refrele(ipif);
@@ -648,7 +623,6 @@ ip_rt_add_v6(const in6_addr_t *dst_addr, const in6_addr_t *mask,
 		    ill,
 		    zoneid,
 		    flags,
-		    NULL,
 		    ipst);
 		if (ire == NULL) {
 			ipif_refrele(ipif);
@@ -702,7 +676,7 @@ again:
 		type |= IRE_OFFLINK;
 
 	gw_ire = ire_ftable_lookup_v6(gw_addr, 0, 0, type, ill,
-	    ALL_ZONES, NULL, match_flags, 0, ipst, NULL);
+	    ALL_ZONES, match_flags, 0, ipst, NULL);
 	if (gw_ire == NULL) {
 		/*
 		 * With IPMP, we allow host routes to influence in.mpathd's
@@ -748,49 +722,14 @@ again:
 
 	/* check for a duplicate entry */
 	ire = ire_ftable_lookup_v6(dst_addr, mask, gw_addr, type, ill,
-	    ALL_ZONES, NULL,
-	    match_flags | MATCH_IRE_MASK | MATCH_IRE_GW, 0, ipst, NULL);
+	    ALL_ZONES, match_flags | MATCH_IRE_MASK | MATCH_IRE_GW, 0, ipst,
+	    NULL);
 	if (ire != NULL) {
 		if (ipif != NULL)
 			ipif_refrele(ipif);
 		ire_refrele(gw_ire);
 		ire_refrele(ire);
 		return (EEXIST);
-	}
-
-	/* Security attribute exists */
-	if (sp != NULL) {
-		tsol_gcgrp_addr_t ga;
-
-		/* find or create the gateway credentials group */
-		ga.ga_af = AF_INET6;
-		ga.ga_addr = *gw_addr;
-
-		/* we hold reference to it upon success */
-		gcgrp = gcgrp_lookup(&ga, B_TRUE);
-		if (gcgrp == NULL) {
-			if (ipif != NULL)
-				ipif_refrele(ipif);
-			ire_refrele(gw_ire);
-			return (ENOMEM);
-		}
-
-		/*
-		 * Create and add the security attribute to the group; a
-		 * reference to the group is made upon allocating a new
-		 * entry successfully.  If it finds an already-existing
-		 * entry for the security attribute in the group, it simply
-		 * returns it and no new reference is made to the group.
-		 */
-		gc = gc_create(sp, gcgrp, &gcgrp_xtraref);
-		if (gc == NULL) {
-			/* release reference held by gcgrp_lookup */
-			GCGRP_REFRELE(gcgrp);
-			if (ipif != NULL)
-				ipif_refrele(ipif);
-			ire_refrele(gw_ire);
-			return (ENOMEM);
-		}
 	}
 
 	/* Create the IRE. */
@@ -802,19 +741,9 @@ again:
 	    ill,
 	    zoneid,
 	    flags,
-	    gc,					/* security attribute */
 	    ipst);
 
-	/*
-	 * The ire holds a reference to the 'gc' and the 'gc' holds a
-	 * reference to the 'gcgrp'. We can now release the extra reference
-	 * the 'gcgrp' acquired in the gcgrp_lookup, if it was not used.
-	 */
-	if (gcgrp_xtraref)
-		GCGRP_REFRELE(gcgrp);
 	if (ire == NULL) {
-		if (gc != NULL)
-			GC_REFRELE(gc);
 		if (ipif != NULL)
 			ipif_refrele(ipif);
 		ire_refrele(gw_ire);
@@ -993,13 +922,13 @@ ip_rt_delete_v6(const in6_addr_t *dst_addr, const in6_addr_t *mask,
 		match_flags |= MATCH_IRE_ILL;
 		if (ipif->ipif_ire_type == IRE_LOOPBACK) {
 			ire = ire_ftable_lookup_v6(dst_addr, mask, 0,
-			    IRE_LOOPBACK, ill_match, ALL_ZONES, NULL,
+			    IRE_LOOPBACK, ill_match, ALL_ZONES,
 			    match_flags, 0, ipst, NULL);
 		}
 		if (ire == NULL) {
 			match_flags |= MATCH_IRE_GW;
 			ire = ire_ftable_lookup_v6(dst_addr, mask, gw_addr,
-			    IRE_INTERFACE, ill_match, ALL_ZONES, NULL,
+			    IRE_INTERFACE, ill_match, ALL_ZONES,
 			    match_flags, 0, ipst, NULL);
 		}
 		/* Avoid deleting routes created by kernel from an ipif */
@@ -1032,7 +961,7 @@ ip_rt_delete_v6(const in6_addr_t *dst_addr, const in6_addr_t *mask,
 		else
 			type = IRE_PREFIX;
 		ire = ire_ftable_lookup_v6(dst_addr, mask, gw_addr, type,
-		    ill, ALL_ZONES, NULL, match_flags, 0, ipst, NULL);
+		    ill, ALL_ZONES, match_flags, 0, ipst, NULL);
 	}
 
 	if (ipif != NULL) {
@@ -1877,7 +1806,6 @@ ipif_select_source_v6(ill_t *dstill, const in6_addr_t *dst,
 	uint_t		index;
 	boolean_t	first_candidate = B_TRUE;
 	rule_res_t	rule_result;
-	tsol_tpc_t	*src_rhtp, *dst_rhtp;
 	ip_stack_t	*ipst = dstill->ill_ipst;
 
 	/*
@@ -1931,26 +1859,6 @@ ipif_select_source_v6(ill_t *dstill, const in6_addr_t *dst,
 			return (NULL);
 	} else {
 		dstinfo.dst_ill = dstill;
-	}
-
-	/*
-	 * If we're dealing with an unlabeled destination on a labeled system,
-	 * make sure that we ignore source addresses that are incompatible with
-	 * the destination's default label.  That destination's default label
-	 * must dominate the minimum label on the source address.
-	 *
-	 * (Note that this has to do with Trusted Solaris.  It's not related to
-	 * the labels described by ip6_asp_lookup.)
-	 */
-	dst_rhtp = NULL;
-	if (is_system_labeled()) {
-		dst_rhtp = find_tpc(dst, IPV6_VERSION, B_FALSE);
-		if (dst_rhtp == NULL)
-			return (NULL);
-		if (dst_rhtp->tpc_tp.host_type != UNLABELED) {
-			TPC_RELE(dst_rhtp);
-			dst_rhtp = NULL;
-		}
 	}
 
 	dstinfo.dst_addr = dst;
@@ -2027,32 +1935,6 @@ ipif_select_source_v6(ill_t *dstill, const in6_addr_t *dst,
 			    ipif->ipif_zoneid != zoneid &&
 			    ipif->ipif_zoneid != ALL_ZONES)
 				continue;
-
-			/*
-			 * Check compatibility of local address for
-			 * destination's default label if we're on a labeled
-			 * system.  Incompatible addresses can't be used at
-			 * all and must be skipped over.
-			 */
-			if (dst_rhtp != NULL) {
-				boolean_t incompat;
-
-				src_rhtp = find_tpc(&ipif->ipif_v6lcl_addr,
-				    IPV6_VERSION, B_FALSE);
-				if (src_rhtp == NULL)
-					continue;
-				incompat =
-				    src_rhtp->tpc_tp.host_type != SUN_CIPSO ||
-				    src_rhtp->tpc_tp.tp_doi !=
-				    dst_rhtp->tpc_tp.tp_doi ||
-				    (!_blinrange(&dst_rhtp->tpc_tp.tp_def_label,
-				    &src_rhtp->tpc_tp.tp_sl_range_cipso) &&
-				    !blinlset(&dst_rhtp->tpc_tp.tp_def_label,
-				    src_rhtp->tpc_tp.tp_sl_set_cipso));
-				TPC_RELE(src_rhtp);
-				if (incompat)
-					continue;
-			}
 
 			if (first_candidate) {
 				/*
@@ -2142,9 +2024,6 @@ ipif_select_source_v6(ill_t *dstill, const in6_addr_t *dst,
 
 	if (ipmp_ill != NULL)
 		ill_refrele(ipmp_ill);
-
-	if (dst_rhtp != NULL)
-		TPC_RELE(dst_rhtp);
 
 	if (ipif == NULL) {
 		rw_exit(&ipst->ips_ill_g_lock);
@@ -2534,21 +2413,6 @@ ipif_add_ires_v6(ipif_t *ipif, boolean_t loopback)
 	if (!IN6_IS_ADDR_UNSPECIFIED(&ipif->ipif_v6lcl_addr) &&
 	    !(ipif->ipif_flags & IPIF_NOLOCAL)) {
 
-		/*
-		 * If we're on a labeled system then make sure that zone-
-		 * private addresses have proper remote host database entries.
-		 */
-		if (is_system_labeled() &&
-		    ipif->ipif_ire_type != IRE_LOOPBACK) {
-			if (ip6opt_ls == 0) {
-				cmn_err(CE_WARN, "IPv6 not enabled "
-				    "via /etc/system");
-				return (EINVAL);
-			}
-			if (!tsol_check_interface_address(ipif))
-				return (EINVAL);
-		}
-
 		if (loopback)
 			gw = &ipif->ipif_v6lcl_addr;
 		else
@@ -2579,7 +2443,6 @@ ipif_add_ires_v6(ipif_t *ipif, boolean_t loopback)
 		    ipif->ipif_zoneid,
 		    ((ipif->ipif_flags & IPIF_PRIVATE) ?
 		    RTF_PRIVATE : 0) | RTF_KERNEL,
-		    NULL,
 		    ipst);
 		if (ire_local == NULL) {
 			ip1dbg(("ipif_up_done_v6: NULL ire_local\n"));
@@ -2614,7 +2477,6 @@ ipif_add_ires_v6(ipif_t *ipif, boolean_t loopback)
 		    ipif->ipif_zoneid,
 		    ((ipif->ipif_flags & IPIF_PRIVATE) ?
 		    RTF_PRIVATE : 0) | RTF_KERNEL,
-		    NULL,
 		    ipst);
 		if (ire_if == NULL) {
 			ip1dbg(("ipif_up_done: NULL ire_if\n"));
@@ -2879,8 +2741,8 @@ ip_siocsetndp_v6(ipif_t *ipif, sin_t *dummy_sin, queue_t *q, mblk_t *mp,
 
 	if (IS_IPMP(ill)) {
 		ire = ire_ftable_lookup_v6(&sin6->sin6_addr, NULL, NULL,
-		    IRE_LOCAL, ill, ALL_ZONES, NULL,
-		    MATCH_IRE_TYPE | MATCH_IRE_ILL, 0, ill->ill_ipst, NULL);
+		    IRE_LOCAL, ill, ALL_ZONES, MATCH_IRE_TYPE | MATCH_IRE_ILL,
+		    0, ill->ill_ipst, NULL);
 		if (ire != NULL) {
 			ire_refrele(ire);
 			return (EPERM);

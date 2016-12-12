@@ -33,8 +33,6 @@
 #include <sys/procfs.h>
 #include <sys/cred.h>
 #include <sys/priv.h>
-#include <sys/tsol/label.h>
-#include <sys/tsol/label_macro.h>
 
 #ifdef _KERNEL
 #include <c2/audit.h>
@@ -66,7 +64,6 @@ struct ucred_s {
 	uint32_t	uc_audoff;	/* Audit info offset: 0 - no aud */
 	zoneid_t	uc_zoneid;	/* Zone id */
 	projid_t	uc_projid;	/* Project id */
-	uint32_t	uc_labeloff;	/* label offset: 0 - no label */
 					/* The rest goes here */
 };
 
@@ -82,10 +79,6 @@ struct ucred_s {
 #define	UCAUD(uc)	(auditinfo64_addr_t *)(((uc)->uc_audoff == 0) ? NULL : \
 				((char *)(uc)) + (uc)->uc_audoff)
 
-/* Get peer security label info */
-#define	UCLABEL(uc)	(bslabel_t *)(((uc)->uc_labeloff == 0) ? NULL : \
-				((char *)(uc)) + (uc)->uc_labeloff)
-
 #endif /* _KERNEL || _STRUCTURED_PROC != 0 */
 
 /*
@@ -100,11 +93,8 @@ extern uint32_t ucredminsize(const cred_t *);
 
 #define	UCRED_PRIV_OFF	(sizeof (struct ucred_s))
 #define	UCRED_AUD_OFF	(UCRED_PRIV_OFF + priv_prgetprivsize(NULL))
-#define	UCRED_LABEL_OFF	(UCRED_AUD_OFF + get_audit_ucrsize())
-
 /* The prcred_t has a variable size; it should be last. */
-#define	UCRED_CRED_OFF	(UCRED_LABEL_OFF + \
-			    (is_system_labeled() ? sizeof (bslabel_t) : 0))
+#define	UCRED_CRED_OFF	(UCRED_AUD_OFF + get_audit_ucrsize())
 
 #define	UCRED_SIZE	(UCRED_CRED_OFF + sizeof (prcred_t) + \
 			    (ngroups_max - 1) * sizeof (gid_t))
@@ -127,8 +117,7 @@ extern int get_audit_ucrsize(void);
 			sizeof (priv_chunk_t) * \
 			((ip)->priv_setsize * (ip)->priv_nsets - 1) + \
 			(ip)->priv_infosize + \
-			sizeof (auditinfo64_addr_t) + \
-			sizeof (bslabel_t))
+			sizeof (auditinfo64_addr_t))
 #endif
 
 extern struct ucred_s *_ucred_alloc(void);

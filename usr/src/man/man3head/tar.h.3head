@@ -96,30 +96,6 @@ c c c
 l l l .
 Name	Value	Description
 \fBACL_HDR\fR	\&'A'	Access Control List
-\fBLBL_TYPE\fR	\&'L'	Trusted Extensions file label
-\fBDIR_TYPE\fR	\&'D'	Trusted Extensions directory label
-.TE
-
-.sp
-.LP
-Attribute types used in Trusted Solaris ancillary files that are interpreted by
-Trusted Extensions for backward compatibility:
-.sp
-
-.sp
-.TS
-c c c
-l l l .
-Name	Value	Description
-\fBSLD_TYPE\fR	\&'S'	Single-level directory component
-\fBPATH_TYPE\fR	\&'P'	Path component
-\fBMLD_TYPE\fR	\&'M'	Multi-level directory component
-\fBFILE_TYPE\fR	\&'F'	Must handle files differently
-\fBAPRIV_TYPE\fR	\&'P'	Allowed privileges data type in file
-\fBFPRIV_TYPE\fR	\&'p'	Forced privileges data type in file
-\fBCOMP_TYPE\fR	\&'C'	Path components, use for MLD
-\fBATTR_FLAG_TYPE\fR	\&'F'	File attribute flag bytes data type
-\fBLK_COMP_TYPE\fR	\&'K'	Link data path component
 .TE
 
 .SH ATTRIBUTES
@@ -142,8 +118,7 @@ Interface Stability	See below.
 .LP
 The general definitions, the \fBtypeflag\fR field definitions, and the
 \fBmode\fR field bit definitions are Standard. The types used in ancillary
-files and the attribute types used in Trusted Solaris ancillary files are
-Evolving.
+files are Evolving.
 .SH SEE ALSO
 .sp
 .LP

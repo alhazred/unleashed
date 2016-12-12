@@ -27,8 +27,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #if	!defined(_LP_SECURE_H)
 #define _LP_SECURE_H
 
@@ -48,7 +46,6 @@
 # define SC_GID		3	/* Originator's group ID */
 # define SC_SIZE	4	/* Total size of the request data */
 # define SC_DATE	5	/* Date submitted (in seconds) */
-# define SC_SLABEL	6	/* Sensitivity Label */
 
 /**
  ** The internal copy of a request as seen by the rest of the world:
@@ -61,7 +58,6 @@ typedef struct SECURE {
     time_t	date;
     char	*user;
     char	*req_id;
-    char	*slabel;
 }			SECURE;
 
 /**

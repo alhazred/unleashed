@@ -210,7 +210,6 @@ MANFILES= 	__fbufsize.3c					\
 	 	index.3c					\
 	 	initgroups.3c					\
 	 	insque.3c					\
-	 	is_system_labeled.3c				\
 	 	isaexec.3c					\
 	 	isastream.3c					\
 	 	isatty.3c					\
@@ -410,7 +409,6 @@ MANFILES= 	__fbufsize.3c					\
 	 	setenv.3c					\
 	 	setjmp.3c					\
 	 	setkey.3c					\
-	 	setlabel.3c					\
 	 	setlocale.3c					\
 	 	shm_open.3c					\
 	 	shm_unlink.3c					\
@@ -1287,7 +1285,6 @@ MANLINKS=	FD_CLR.3c				\
 	 	ucred_getegid.3c			\
 	 	ucred_geteuid.3c			\
 	 	ucred_getgroups.3c			\
-	 	ucred_getlabel.3c			\
 	 	ucred_getpflags.3c			\
 	 	ucred_getpid.3c				\
 	 	ucred_getprivset.3c			\
@@ -2365,7 +2362,6 @@ ucred_get.3c				:= LINKSRC = ucred.3c
 ucred_getegid.3c			:= LINKSRC = ucred.3c
 ucred_geteuid.3c			:= LINKSRC = ucred.3c
 ucred_getgroups.3c			:= LINKSRC = ucred.3c
-ucred_getlabel.3c			:= LINKSRC = ucred.3c
 ucred_getpflags.3c			:= LINKSRC = ucred.3c
 ucred_getpid.3c				:= LINKSRC = ucred.3c
 ucred_getprivset.3c			:= LINKSRC = ucred.3c

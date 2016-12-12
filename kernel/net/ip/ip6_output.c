@@ -93,9 +93,6 @@
 #include <inet/udp_impl.h>
 #include <sys/sunddi.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
-
 #ifdef	DEBUG
 extern boolean_t skip_sctp_cksum;
 #endif
@@ -500,27 +497,6 @@ ire_send_local_v6(ire_t *ire, mblk_t *mp, void *iph_arg,
 
 	/* Destined to ire_zoneid - use that for fanout */
 	iras.ira_zoneid = ire->ire_zoneid;
-
-	if (is_system_labeled()) {
-		iras.ira_flags |= IRAF_SYSTEM_LABELED;
-
-		/*
-		 * This updates ira_cred, ira_tsl and ira_free_flags based
-		 * on the label. We don't expect this to ever fail for
-		 * loopback packets, so we silently drop the packet should it
-		 * fail.
-		 */
-		if (!tsol_get_pkt_label(mp, IPV6_VERSION, &iras)) {
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsInDiscards);
-			ip_drop_input("tsol_get_pkt_label", mp, ill);
-			freemsg(mp);
-			return (0);
-		}
-		ASSERT(iras.ira_tsl != NULL);
-
-		/* tsol_get_pkt_label sometimes does pullupmsg */
-		ip6h = (ip6_t *)mp->b_rptr;
-	}
 
 	ip_fanout_v6(mp, ip6h, &iras);
 
@@ -985,28 +961,6 @@ ire_send_wire_v6(ire_t *ire, mblk_t *mp, void *iph_arg,
 	}
 
 	/*
-	 * To handle IPsec/iptun's labeling needs we need to tag packets
-	 * while we still have ixa_tsl
-	 */
-	if (is_system_labeled() && ixa->ixa_tsl != NULL &&
-	    (ill->ill_mactype == DL_6TO4 || ill->ill_mactype == DL_IPV4 ||
-	    ill->ill_mactype == DL_IPV6)) {
-		cred_t *newcr;
-
-		newcr = copycred_from_tslabel(ixa->ixa_cred, ixa->ixa_tsl,
-		    KM_NOSLEEP);
-		if (newcr == NULL) {
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsOutDiscards);
-			ip_drop_output("ipIfStatsOutDiscards - newcr",
-			    mp, ill);
-			freemsg(mp);
-			return (ENOBUFS);
-		}
-		mblk_setcred(mp, newcr, NOPID);
-		crfree(newcr);	/* mblk_setcred did its own crhold */
-	}
-
-	/*
 	 * IXAF_IPV6_ADD_FRAGHDR is set for CGTP so that we will add a
 	 * fragment header without fragmenting. CGTP on the receiver will
 	 * filter duplicates on the ident field.
@@ -1180,16 +1134,16 @@ ip_postfrag_multirt_v6(mblk_t *mp, nce_t *nce, iaflags_t ixaflags,
 	 * Use the nce (nexthop) and ip6_dst to find the ire.
 	 *
 	 * MULTIRT is not designed to work with shared-IP zones thus we don't
-	 * need to pass a zoneid or a label to the IRE lookup.
+	 * need to pass a zoneid to the IRE lookup.
 	 */
 	if (IN6_ARE_ADDR_EQUAL(&nce->nce_addr, &ip6h->ip6_dst)) {
 		/* Broadcast and multicast case */
 		ire = ire_ftable_lookup_v6(&ip6h->ip6_dst, 0, 0, 0, NULL,
-		    ALL_ZONES, NULL, MATCH_IRE_DSTONLY, 0, ipst, NULL);
+		    ALL_ZONES, MATCH_IRE_DSTONLY, 0, ipst, NULL);
 	} else {
 		/* Unicast case */
 		ire = ire_ftable_lookup_v6(&ip6h->ip6_dst, 0, &nce->nce_addr,
-		    0, NULL, ALL_ZONES, NULL, MATCH_IRE_GW, 0, ipst, NULL);
+		    0, NULL, ALL_ZONES, MATCH_IRE_GW, 0, ipst, NULL);
 	}
 
 	if (ire == NULL ||
@@ -1234,8 +1188,8 @@ ip_postfrag_multirt_v6(mblk_t *mp, nce_t *nce, iaflags_t ixaflags,
 				match_flags |= MATCH_IRE_ILL;
 			ire2 = ire_route_recursive_impl_v6(ire1,
 			    &ire1->ire_addr_v6, ire1->ire_type, ire1->ire_ill,
-			    ire1->ire_zoneid, NULL, match_flags,
-			    IRR_ALLOCATE, 0, ipst, NULL, NULL, NULL);
+			    ire1->ire_zoneid, match_flags, IRR_ALLOCATE, 0,
+			    ipst, NULL, NULL);
 			if (ire2 != NULL)
 				ire_refrele(ire2);
 			ill1 = ire_nexthop_ill(ire1);

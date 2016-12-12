@@ -23,9 +23,6 @@
 #ifndef	_NETINET_IP_H
 #define	_NETINET_IP_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-/* ip.h 1.13 88/08/19 SMI; from UCB 7.6.1.1 3/15/88	*/
-
 #include <sys/isa_defs.h>
 
 #ifdef	__cplusplus
@@ -104,8 +101,6 @@ struct ip {
 #define	IPOPT_TS		0x44		/* timestamp */
 #define	IPOPT_SECURITY		0x82		/* provide s,c,h,tcc */
 #define	IPOPT_LSRR		0x83		/* loose source route */
-#define	IPOPT_EXTSEC		0x85
-#define	IPOPT_COMSEC		0x86
 #define	IPOPT_SATID		0x88		/* satnet id */
 #define	IPOPT_SSRR		0x89		/* strict source route */
 #define	IPOPT_RA		0x94

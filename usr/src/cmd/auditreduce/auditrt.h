@@ -125,7 +125,6 @@ typedef struct audit_pcb audit_pcb_t;
 #define	M_USERA		0x0100	/* 'u' audit user */
 #define	M_USERE		0x0200	/* 'e' effective user */
 #define	M_USERR		0x0400	/* 'r' real user */
-#define	M_LABEL		0x0800	/* 'l' mandatory label range */
 #define	M_ZONENAME	0x1000	/* 'z' zone name */
 #define	M_SID		0x2000	/* 's' session ID */
 #define	M_SORF		0x4000	/* success or failure of event */
@@ -174,7 +173,6 @@ extern time_t	m_before;	/* 'b' before a time */
 extern audit_state_t mask;	/* used with m_class */
 extern char	*zonename;	/* 'z' zonename */
 
-extern m_range_t *m_label;	/* 'l' mandatory label range */
 extern int	flags;
 extern int	checkflags;
 extern int	socket_flag;

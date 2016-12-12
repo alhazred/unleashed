@@ -1126,7 +1126,6 @@ idm_so_tgt_svc_online(idm_svc_t *is)
 	idm_svc_req_t		*sr = &is->is_svc_req;
 	struct sockaddr_in6	sin6_ip;
 	const uint32_t		on = 1;
-	const uint32_t		off = 0;
 
 	mutex_enter(&is->is_mutex);
 	so_svc = (idm_so_svc_t *)is->is_so_svc;
@@ -1145,11 +1144,6 @@ idm_so_tgt_svc_online(idm_svc_t *is)
 
 		(void) ksocket_setsockopt(so_svc->is_so, SOL_SOCKET,
 		    SO_REUSEADDR, (char *)&on, sizeof (on), CRED());
-		/*
-		 * Turn off SO_MAC_EXEMPT so future sobinds succeed
-		 */
-		(void) ksocket_setsockopt(so_svc->is_so, SOL_SOCKET,
-		    SO_MAC_EXEMPT, (char *)&off, sizeof (off), CRED());
 
 		if (ksocket_bind(so_svc->is_so, (struct sockaddr *)&sin6_ip,
 		    sizeof (sin6_ip), CRED()) != 0) {
@@ -1225,7 +1219,6 @@ idm_so_svc_port_watcher(void *arg)
 	idm_status_t		idmrc;
 	idm_so_svc_t		*so_svc;
 	int			rc;
-	const uint32_t		off = 0;
 	struct sockaddr_in6 	t_addr;
 	socklen_t		t_addrlen;
 
@@ -1259,12 +1252,6 @@ idm_so_svc_port_watcher(void *arg)
 			 */
 			continue;
 		}
-		/*
-		 * Turn off SO_MAC_EXEMPT so future sobinds succeed
-		 */
-		(void) ksocket_setsockopt(new_so, SOL_SOCKET, SO_MAC_EXEMPT,
-		    (char *)&off, sizeof (off), CRED());
-
 		idmrc = idm_svc_conn_create(svc, IDM_TRANSPORT_TYPE_SOCKETS,
 		    &ic);
 		if (idmrc != IDM_STATUS_SUCCESS) {

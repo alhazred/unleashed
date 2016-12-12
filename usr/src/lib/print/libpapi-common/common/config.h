@@ -61,9 +61,6 @@ extern "C" {
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
-/* Define to 1 if you have the `is_system_labeled' function. */
-#define HAVE_IS_SYSTEM_LABELED 1
-
 /* Define to 1 if you have the `localtime' function. */
 #define HAVE_LOCALTIME 1
 

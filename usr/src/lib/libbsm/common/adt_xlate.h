@@ -28,11 +28,9 @@
 #ifndef _BSM_XLATE_H
 #define	_BSM_XLATE_H
 
+#include <sys/types32.h>
 #include <priv.h>
-
 #include <bsm/libbsm.h>
-
-#include <tsol/label.h>
 
 #include "adt_event.h"
 
@@ -115,7 +113,6 @@ enum datatype {ADT_UNDEFINED = 0,
     ADT_PID,
     ADT_PRIVSTAR,
     ADT_TERMIDSTAR,
-    ADT_MLABELSTAR,
     ADT_FD
 };
 typedef enum datatype datatype_t;
@@ -143,7 +140,6 @@ union convert {
     char		**tchar2star;
     au_tid_addr_t 	*ttermid;
     priv_set_t		*tprivstar;
-    m_label_t		*tm_label;
     fd_t		tfd;
 };
 
@@ -209,7 +205,6 @@ struct adt_internal_state {
 	int			as_session_model;
 	adt_session_flags_t	as_flags;
 	pid_t			as_pid;
-	m_label_t		*as_label;	/* if is_system_labeled */
 	adt_translation_t	**as_xlate;
 	void (*as_preload)(au_event_t, adt_event_data_t *);
 };
@@ -243,8 +238,6 @@ struct adt_export_v2 {
 	uint32_t	ax_asid;
 	int		ax_audit_state;
 	pid_t		ax_pid;
-	size32_t	ax_label_len;	/* 0, unlabeled */
-/*	char		ax_label[ax_label_len];	if, is_system_labeled */
 };
 struct adt_export_v1 {
 	int32_t		ax_euid;
@@ -259,7 +252,6 @@ struct adt_export_v1 {
 	uint32_t	ax_addr[4];
 	uint32_t	ax_asid;
 	int		ax_audit_state;
-	uint32_t	ax_size_of_tsol_data;	/* zero for non-TSOL systems */
 };
 struct export_link {
 	int32_t		ax_version;
@@ -300,7 +292,6 @@ struct entry {
 	struct entry	*en_next_token;	/* linked list pointer */
 	size_t		en_offset;	/* offset into structure for input */
 	int		en_required;	/* if 1, always output a token */
-	int		en_tsol;	/* if 1, reserved if for TX */
 	char		*en_msg_format;	/* pointer to sprintf format string */
 };
 

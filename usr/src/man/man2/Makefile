@@ -58,7 +58,6 @@ MANFILES=	Intro.2			\
 	 	getgroups.2		\
 	 	getisax.2		\
 	 	getitimer.2		\
-	 	getlabel.2		\
 	 	getmsg.2		\
 	 	getpflags.2		\
 	 	getpid.2		\
@@ -188,7 +187,6 @@ MANLINKS=	_Exit.2				\
 	 	fchown.2			\
 	 	fchownat.2			\
 	 	fchroot.2			\
-	 	fgetlabel.2			\
 	 	fork1.2				\
 	 	forkall.2			\
 	 	forkallx.2			\
@@ -321,8 +319,6 @@ setcontext.2			:= LINKSRC = getcontext.2
 setgroups.2			:= LINKSRC = getgroups.2
 
 setitimer.2			:= LINKSRC = getitimer.2
-
-fgetlabel.2			:= LINKSRC = getlabel.2
 
 getpmsg.2			:= LINKSRC = getmsg.2
 

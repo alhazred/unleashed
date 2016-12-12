@@ -1243,13 +1243,6 @@ nfs4_rfscall(mntinfo4_t *mi, rpcproc_t which, xdrproc_t xdrargs, caddr_t argsp,
 	}
 	mutex_exit(&mi->mi_lock);
 
-	/* For TSOL, use a new cred which has net_mac_aware flag */
-	if (!cred_cloned && is_system_labeled()) {
-		cred_cloned = TRUE;
-		cr = crdup(icr);
-		(void) setpflags(NET_MAC_AWARE, 1, cr);
-	}
-
 	/*
 	 * clget() calls clnt_tli_kinit() which clears the xid, so we
 	 * are guaranteed to reprocess the retry as a new request.

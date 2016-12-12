@@ -28,6 +28,7 @@
 #include <sys/systm.h>
 #include <sys/cred_impl.h>
 #include <sys/errno.h>
+#include <sys/pathname.h>
 #include <sys/klpd.h>
 #include <sys/proc.h>
 #include <sys/priv_impl.h>
@@ -250,7 +251,6 @@ setpflags(uint_t flag, uint_t val, cred_t *tcr)
 	boolean_t use_curcred = (tcr == NULL);
 
 	if (val > 1 || (flag != PRIV_DEBUG && flag != PRIV_AWARE &&
-	    flag != NET_MAC_AWARE && flag != NET_MAC_AWARE_INHERIT &&
 	    flag != __PROC_PROTECT && flag != PRIV_XPOLICY &&
 	    flag != PRIV_AWARE_RESET && flag != PRIV_PFEXEC)) {
 		return (EINVAL);
@@ -291,27 +291,6 @@ setpflags(uint_t flag, uint_t val, cred_t *tcr)
 			crfree(cr);
 		}
 		return (0);
-	}
-
-	/*
-	 * Setting either the NET_MAC_AWARE or NET_MAC_AWARE_INHERIT
-	 * flags is a restricted operation.
-	 *
-	 * When invoked via the PRIVSYS_SETPFLAGS syscall
-	 * we require that the current cred has the net_mac_aware
-	 * privilege in its effective set.
-	 *
-	 * When called from within the kernel by label-aware
-	 * services such as NFS, we don't require a privilege check.
-	 *
-	 */
-	if ((flag == NET_MAC_AWARE || flag == NET_MAC_AWARE_INHERIT) &&
-	    (val == 1) && use_curcred) {
-		if (secpolicy_net_mac_aware(pcr) != 0) {
-			mutex_exit(&p->p_crlock);
-			crfree(cr);
-			return (EPERM);
-		}
 	}
 
 	/* Trying to unset PA; if we can't, return an error */
@@ -358,7 +337,6 @@ uint_t
 getpflags(uint_t flag, const cred_t *cr)
 {
 	if (flag != PRIV_DEBUG && flag != PRIV_AWARE &&
-	    flag != NET_MAC_AWARE && flag != NET_MAC_AWARE_INHERIT &&
 	    flag != PRIV_XPOLICY && flag != PRIV_PFEXEC &&
 	    flag != PRIV_AWARE_RESET)
 		return ((uint_t)-1);

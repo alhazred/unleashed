@@ -73,31 +73,6 @@ is set does the current process have privilege debugging enabled. Processes can
 set and unset this flag at will.
 .RE
 
-.sp
-.ne 2
-.na
-\fB\fBNET_MAC_AWARE\fR\fR
-.ad
-.br
-.na
-\fB\fBNET_MAC_AWARE_INHERIT\fR\fR
-.ad
-.sp .6
-.RS 4n
-These flags are available only if the system is configured with Trusted
-Extensions. These one bit flags each take the value of 0 (unset) or 1 (set). If
-the \fBNET_MAC_AWARE\fR flag is set then the current process is allowed to
-communicate with peers at labels that are different than its own, subject to
-MAC policy.
-.sp
-The \fBNET_MAC_AWARE_INHERIT\fR flag controls the propagation of the
-\fBNET_MAC_AWARE\fR flag. When a process performs one of the \fBexec\fR(2)
-functions, the \fBNET_MAC_AWARE\fR flag is unset unless the
-\fBNET_MAC_AWARE_INHERIT\fR is set. \fBNET_MAC_AWARE_INHERIT\fR is always unset
-on one of the \fBexec\fR functions. The \fBPRIV_NET_MAC_AWARE\fR privilege is
-required to set either of these flags.
-.RE
-
 .SH RETURN VALUES
 .sp
 .LP

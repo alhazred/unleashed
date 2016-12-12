@@ -83,7 +83,6 @@
 #define	PRIV_SETID		0x02	/* needs to change uids */
 #define	PRIV_SETUGID		0x04	/* is setuid/setgid/forced privs */
 #define	PRIV_INCREASE		0x08	/* child runs with more privs */
-#define	MAC_FLAGS		0x10	/* need to adjust MAC flags */
 #define	PRIV_FORCED		0x20	/* has forced privileges */
 
 static int execsetid(struct vnode *, struct vattr *, uid_t *, uid_t *,
@@ -637,12 +636,6 @@ gexec(
 			cred->cr_sgid = gid;
 		}
 
-		if (privflags & MAC_FLAGS) {
-			if (!(CR_FLAGS(cred) & NET_MAC_AWARE_INHERIT))
-				CR_FLAGS(cred) &= ~NET_MAC_AWARE;
-			CR_FLAGS(cred) &= ~NET_MAC_AWARE_INHERIT;
-		}
-
 		/*
 		 * Implement the privilege updates:
 		 *
@@ -1105,10 +1098,6 @@ execsetid(struct vnode *vp, struct vattr *vattrp, uid_t *uidp, uid_t *gidp,
 	if (!priv_issubset(&CR_IPRIV(cr), &CR_PPRIV(cr)))
 		privflags |= PRIV_INCREASE;
 
-	/* If MAC-aware flag(s) are on, need to update cred to remove. */
-	if ((CR_FLAGS(cr) & NET_MAC_AWARE) ||
-	    (CR_FLAGS(cr) & NET_MAC_AWARE_INHERIT))
-		privflags |= MAC_FLAGS;
 	/*
 	 * Set setuid/setgid protections if no ptrace() compatibility.
 	 * For privileged processes, honor setuid/setgid even in

@@ -603,7 +603,6 @@ sub generateTableC {
 	#	  'ipc'         	=> 'AUT_IPC',		# not defined
 	#	  'ipc_perm'    	=> 'AUT_IPC_PERM',	# not defined
 		  'iport'		=> 'AUT_IPORT',
-		  'label'		=> 'AUT_LABEL',
 		  'newgroups'   	=> 'AUT_NEWGROUPS',
 	#	  'opaque'      	=> 'AUT_OPAQUE',	# not defined
 		  'path'        	=> 'AUT_PATH',
@@ -710,7 +709,7 @@ sub generateTableC {
 	  $tokenId = 'error';
 	}
 	my ($xlate, $jni) =
-	  formatTableEntry ('', $tokenId, $eventId, '', 0, 0,
+	  formatTableEntry ('', $tokenId, $eventId, '', 0,
 			    $tokenOrder[$sequence], 'NULL', '', $omit);
 	push (@xlateEntryList, $xlate);
       }
@@ -725,7 +724,6 @@ sub generateTableC {
 	    $enumGroup = "${pfx_adt}_" . $enumGroup;
 	}
 	my $required = ($opt eq 'required') ? 1 : 0;
-	my $tsol = 0;
 	my $tokenId = $intEntry->getAttr('token');
 	my $token;
 	my $tokenName;
@@ -738,7 +736,6 @@ sub generateTableC {
 	}
 	
 	if (defined ($token = $doc->getToken($tokenId))) {
-	  $tsol = (lc $token->getUsage() eq 'tsol') ? 1 : 0;
 	  if (defined ($tokenType{$tokenId})) {
 	    $tokenName = $tokenType{$tokenId};
 	  }
@@ -753,7 +750,7 @@ sub generateTableC {
 	}
 	my ($xlate, $jni) =
 	  formatTableEntry($entryId, $tokenName, $eventId, $dataType, $required,
-			   $tsol, $tokenOrder[$sequence], $tokenFormat,
+			   $tokenOrder[$sequence], $tokenFormat,
 			   $enumGroup, $omit);
 	push (@xlateEntryList, $xlate);
       }
@@ -764,7 +761,7 @@ sub generateTableC {
 }
 
 sub formatTableEntry {
-    my ($id, $token, $eventId, $type, $required, $tsol, $sequence, $format,
+    my ($id, $token, $eventId, $type, $required, $sequence, $format,
 	$enumGroup, $omitEntry) = @_;
 
 
@@ -792,7 +789,6 @@ sub formatTableEntry {
 		     'uint32_t[]'	=> ['ADT_UINT32ARRAY',  ''],
 		     'uint64_t'		=> ['ADT_UINT64',	''],
 		     'uint64_t*'	=> ['ADT_UINT64STAR',	''],
-		     'm_label_t*'	=> ['ADT_MLABELSTAR',	''],
 		     'fd_t'		=> ['ADT_FD',		'-1'],
 		    );
     my $xlateLabel = $uniLabel.$xlateUniLabelInc;
@@ -862,7 +858,7 @@ sub formatTableEntry {
 
       # "EOL" is where a comma should go unless end of list
       $xlateLine = "{$token,\t1,\t$xlateLabelRef,\t$sequence,\n" .
-	  "\t\t0,\t$required,\t$tsol,\t$format}EOL";
+	  "\t\t0,\t$required,\t$format}EOL";
       
       if (uc $omitEntry ne 'ALWAYS' && ${$entryDef{$type}}[1]) {
 	  my @list = ();
@@ -935,7 +931,7 @@ sub formatTableEntry {
       }
       $xlateLine =
 	"{$token,\t$typeCount,\t&$xlateLabel\[0\],\t$sequence,\n" .
-        "\t\t0,\t$required,\t$tsol,\t$format}EOL";
+        "\t\t0,\t$required,\t$format}EOL";
       if (@default) {
 	  my @list = ();
 	  if ($xlateDefault{$eventId}) {
@@ -980,10 +976,6 @@ sub generateAPIFile {
 	my $option = $extEntry->getAttr('opt');
 	next if ($option eq 'none');
 
-	if (defined (my $token = $doc->getToken($tokenId))) {
-	  $option = 'Trusted Solaris only'
-	    if (lc $token->getUsage() eq 'tsol') ? 1 : 0;
-	}
 	$option .= " (format: $format)" if $format;
 
 	my $dataType = $extEntry->getAttr('type');

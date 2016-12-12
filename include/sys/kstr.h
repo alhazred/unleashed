@@ -27,9 +27,8 @@
 #ifndef	_SYS_KSTR_H
 #define	_SYS_KSTR_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/stream.h>
+#include <sys/vnode.h>
 
 #ifdef	__cplusplus
 extern "C" {

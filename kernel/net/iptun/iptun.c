@@ -69,15 +69,12 @@
 #include <sys/mac_ipv4.h>
 #include <sys/mac_ipv6.h>
 #include <sys/mac_6to4.h>
-#include <sys/tsol/tnet.h>
 #include <sys/sunldi.h>
 #include <netinet/in.h>
 #include <netinet/ip6.h>
 #include <inet/ip.h>
 #include <inet/ip_ire.h>
 #include <inet/ipsec_impl.h>
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
 #include <inet/iptun.h>
 #include <inet/iptun/iptun_impl.h>
 
@@ -1262,8 +1259,6 @@ iptun_conn_create(iptun_t *iptun, netstack_t *ns, cred_t *credp)
 	ASSERT(!(connp->conn_ixa->ixa_free_flags & IXA_FREE_CRED));
 	connp->conn_ixa->ixa_cred = connp->conn_cred;
 	connp->conn_ixa->ixa_cpid = connp->conn_cpid;
-	if (is_system_labeled())
-		connp->conn_ixa->ixa_tsl = crgetlabel(connp->conn_cred);
 
 	/*
 	 * Have conn_ip_output drop packets should our outer source
@@ -1995,8 +1990,6 @@ iptun_get_maxmtu(iptun_t *iptun, ip_xmit_attr_t *ixa, uint32_t new_pmtu)
 		switch (iptun->iptun_typeinfo->iti_ipvers) {
 		case IPV4_VERSION:
 			header_size = sizeof (ipha_t);
-			if (is_system_labeled())
-				header_size += IP_MAX_OPT_LENGTH;
 			break;
 		case IPV6_VERSION:
 			header_size = sizeof (iptun_ipv6hdrs_t);
@@ -2090,8 +2083,7 @@ iptun_build_icmperr(size_t hdrs_size, mblk_t *orig_pkt)
  * the ICMP error.
  */
 static void
-iptun_sendicmp_v4(iptun_t *iptun, icmph_t *icmp, ipha_t *orig_ipha, mblk_t *mp,
-    ts_label_t *tsl)
+iptun_sendicmp_v4(iptun_t *iptun, icmph_t *icmp, ipha_t *orig_ipha, mblk_t *mp)
 {
 	size_t	orig_pktsize, hdrs_size;
 	mblk_t	*icmperr_mp;
@@ -2136,8 +2128,6 @@ iptun_sendicmp_v4(iptun_t *iptun, icmph_t *icmp, ipha_t *orig_ipha, mblk_t *mp,
 	ixas.ixa_ipst = connp->conn_netstack->netstack_ip;
 	ixas.ixa_cred = connp->conn_cred;
 	ixas.ixa_cpid = NOPID;
-	if (is_system_labeled())
-		ixas.ixa_tsl = tsl;
 
 	ixas.ixa_ifindex = 0;
 	ixas.ixa_multicast_ttl = IP_DEFAULT_MULTICAST_TTL;
@@ -2147,8 +2137,7 @@ iptun_sendicmp_v4(iptun_t *iptun, icmph_t *icmp, ipha_t *orig_ipha, mblk_t *mp,
 }
 
 static void
-iptun_sendicmp_v6(iptun_t *iptun, icmp6_t *icmp6, ip6_t *orig_ip6h, mblk_t *mp,
-    ts_label_t *tsl)
+iptun_sendicmp_v6(iptun_t *iptun, icmp6_t *icmp6, ip6_t *orig_ip6h, mblk_t *mp)
 {
 	size_t	orig_pktsize, hdrs_size;
 	mblk_t	*icmp6err_mp;
@@ -2189,8 +2178,6 @@ iptun_sendicmp_v6(iptun_t *iptun, icmp6_t *icmp6, ip6_t *orig_ip6h, mblk_t *mp,
 	ixas.ixa_ipst = connp->conn_netstack->netstack_ip;
 	ixas.ixa_cred = connp->conn_cred;
 	ixas.ixa_cpid = NOPID;
-	if (is_system_labeled())
-		ixas.ixa_tsl = tsl;
 
 	ixas.ixa_ifindex = 0;
 	ixas.ixa_multicast_ttl = IP_DEFAULT_MULTICAST_TTL;
@@ -2201,7 +2188,7 @@ iptun_sendicmp_v6(iptun_t *iptun, icmp6_t *icmp6, ip6_t *orig_ip6h, mblk_t *mp,
 
 static void
 iptun_icmp_error_v4(iptun_t *iptun, ipha_t *orig_ipha, mblk_t *mp,
-    uint8_t type, uint8_t code, ts_label_t *tsl)
+    uint8_t type, uint8_t code)
 {
 	icmph_t icmp;
 
@@ -2209,12 +2196,12 @@ iptun_icmp_error_v4(iptun_t *iptun, ipha_t *orig_ipha, mblk_t *mp,
 	icmp.icmph_type = type;
 	icmp.icmph_code = code;
 
-	iptun_sendicmp_v4(iptun, &icmp, orig_ipha, mp, tsl);
+	iptun_sendicmp_v4(iptun, &icmp, orig_ipha, mp);
 }
 
 static void
 iptun_icmp_fragneeded_v4(iptun_t *iptun, uint32_t newmtu, ipha_t *orig_ipha,
-    mblk_t *mp, ts_label_t *tsl)
+    mblk_t *mp)
 {
 	icmph_t	icmp;
 
@@ -2223,12 +2210,12 @@ iptun_icmp_fragneeded_v4(iptun_t *iptun, uint32_t newmtu, ipha_t *orig_ipha,
 	icmp.icmph_du_zero = 0;
 	icmp.icmph_du_mtu = htons(newmtu);
 
-	iptun_sendicmp_v4(iptun, &icmp, orig_ipha, mp, tsl);
+	iptun_sendicmp_v4(iptun, &icmp, orig_ipha, mp);
 }
 
 static void
 iptun_icmp_error_v6(iptun_t *iptun, ip6_t *orig_ip6h, mblk_t *mp,
-    uint8_t type, uint8_t code, uint32_t offset, ts_label_t *tsl)
+    uint8_t type, uint8_t code, uint32_t offset)
 {
 	icmp6_t icmp6;
 
@@ -2238,12 +2225,12 @@ iptun_icmp_error_v6(iptun_t *iptun, ip6_t *orig_ip6h, mblk_t *mp,
 	if (type == ICMP6_PARAM_PROB)
 		icmp6.icmp6_pptr = htonl(offset);
 
-	iptun_sendicmp_v6(iptun, &icmp6, orig_ip6h, mp, tsl);
+	iptun_sendicmp_v6(iptun, &icmp6, orig_ip6h, mp);
 }
 
 static void
 iptun_icmp_toobig_v6(iptun_t *iptun, uint32_t newmtu, ip6_t *orig_ip6h,
-    mblk_t *mp, ts_label_t *tsl)
+    mblk_t *mp)
 {
 	icmp6_t icmp6;
 
@@ -2251,7 +2238,7 @@ iptun_icmp_toobig_v6(iptun_t *iptun, uint32_t newmtu, ip6_t *orig_ip6h,
 	icmp6.icmp6_code = 0;
 	icmp6.icmp6_mtu = htonl(newmtu);
 
-	iptun_sendicmp_v6(iptun, &icmp6, orig_ip6h, mp, tsl);
+	iptun_sendicmp_v6(iptun, &icmp6, orig_ip6h, mp);
 }
 
 /*
@@ -2458,10 +2445,10 @@ iptun_input_icmp_v4(iptun_t *iptun, mblk_t *data_mp, icmph_t *icmph,
 
 			if (inner4 != NULL) {
 				iptun_icmp_fragneeded_v4(iptun, newmtu, inner4,
-				    data_mp, ira->ira_tsl);
+				    data_mp);
 			} else {
 				iptun_icmp_toobig_v6(iptun, newmtu, inner6,
-				    data_mp, ira->ira_tsl);
+				    data_mp);
 			}
 			return;
 		}
@@ -2495,11 +2482,9 @@ iptun_input_icmp_v4(iptun_t *iptun, mblk_t *data_mp, icmph_t *icmph,
 	}
 
 	if (inner4 != NULL) {
-		iptun_icmp_error_v4(iptun, inner4, data_mp, type, code,
-		    ira->ira_tsl);
+		iptun_icmp_error_v4(iptun, inner4, data_mp, type, code);
 	} else {
-		iptun_icmp_error_v6(iptun, inner6, data_mp, type, code, 0,
-		    ira->ira_tsl);
+		iptun_icmp_error_v6(iptun, inner6, data_mp, type, code, 0);
 	}
 }
 
@@ -2517,7 +2502,7 @@ iptun_find_encaplimit(mblk_t *mp, ip6_t *ip6h, uint8_t **encaplim_ptr)
 	struct ip6_opt	*optp;
 
 	pkt.ipp_fields = 0; /* must be initialized */
-	(void) ip_find_hdr_v6(mp, ip6h, B_FALSE, &pkt, NULL);
+	(void) ip_find_hdr_v6(mp, ip6h, &pkt, NULL);
 	if ((pkt.ipp_fields & IPPF_DSTOPTS) != 0) {
 		destp = pkt.ipp_dstopts;
 	} else if ((pkt.ipp_fields & IPPF_RTHDRDSTOPTS) != 0) {
@@ -2651,10 +2636,9 @@ iptun_input_icmp_v6(iptun_t *iptun, mblk_t *data_mp, icmp6_t *icmp6h,
 
 		if (inner4 != NULL) {
 			iptun_icmp_fragneeded_v4(iptun, newmtu, inner4,
-			    data_mp, ira->ira_tsl);
+			    data_mp);
 		} else {
-			iptun_icmp_toobig_v6(iptun, newmtu, inner6, data_mp,
-			    ira->ira_tsl);
+			iptun_icmp_toobig_v6(iptun, newmtu, inner6, data_mp);
 		}
 		return;
 	}
@@ -2664,11 +2648,9 @@ iptun_input_icmp_v6(iptun_t *iptun, mblk_t *data_mp, icmp6_t *icmp6h,
 	}
 
 	if (inner4 != NULL) {
-		iptun_icmp_error_v4(iptun, inner4, data_mp, type, code,
-		    ira->ira_tsl);
+		iptun_icmp_error_v4(iptun, inner4, data_mp, type, code);
 	} else {
-		iptun_icmp_error_v6(iptun, inner6, data_mp, type, code, 0,
-		    ira->ira_tsl);
+		iptun_icmp_error_v6(iptun, inner6, data_mp, type, code, 0);
 	}
 }
 
@@ -2785,23 +2767,6 @@ iptun_input(void *arg, mblk_t *data_mp, void *arg2, ip_recv_attr_t *ira)
 	    &outer4, &inner4, &outer6, &inner6);
 	if (outer_hlen == 0)
 		goto drop;
-
-	/*
-	 * If the system is labeled, we call tsol_check_dest() on the packet
-	 * destination (our local tunnel address) to ensure that the packet as
-	 * labeled should be allowed to be sent to us.  We don't need to call
-	 * the more involved tsol_receive_local() since the tunnel link itself
-	 * cannot be assigned to shared-stack non-global zones.
-	 */
-	if (ira->ira_flags & IRAF_SYSTEM_LABELED) {
-		if (ira->ira_tsl == NULL)
-			goto drop;
-		if (tsol_check_dest(ira->ira_tsl, (outer4 != NULL ?
-		    (void *)&outer4->ipha_dst : (void *)&outer6->ip6_dst),
-		    (outer4 != NULL ? IPV4_VERSION : IPV6_VERSION),
-		    CONN_MAC_DEFAULT, B_FALSE, NULL) != 0)
-			goto drop;
-	}
 
 	data_mp = ipsec_tun_inbound(ira, data_mp, iptun->iptun_itp,
 	    inner4, inner6, outer4, outer6, outer_hlen, iptun->iptun_ns);
@@ -3048,7 +3013,7 @@ iptun_out_process_ipv6(iptun_t *iptun, mblk_t *mp, ip6_t *outer6,
 			mp->b_rptr = (uint8_t *)inner6;
 			offset = limit - mp->b_rptr;
 			iptun_icmp_error_v6(iptun, inner6, mp, ICMP6_PARAM_PROB,
-			    0, offset, ixa->ixa_tsl);
+			    0, offset);
 			atomic_inc_64(&iptun->iptun_noxmtbuf);
 			return (NULL);
 		}
@@ -3125,20 +3090,12 @@ iptun_output(iptun_t *iptun, mblk_t *mp)
 		return;
 	}
 
-	if (is_system_labeled()) {
-		/*
-		 * Since the label can be different meaning a potentially
-		 * different IRE,we always use a unique ip_xmit_attr_t.
-		 */
-		ixa = conn_get_ixa_exclusive(connp);
-	} else {
-		/*
-		 * If no other thread is using conn_ixa this just gets a
-		 * reference to conn_ixa. Otherwise we get a safe copy of
-		 * conn_ixa.
-		 */
-		ixa = conn_get_ixa(connp, B_FALSE);
-	}
+	/*
+	 * If no other thread is using conn_ixa this just gets a
+	 * reference to conn_ixa. Otherwise we get a safe copy of
+	 * conn_ixa.
+	 */
+	ixa = conn_get_ixa(connp, B_FALSE);
 	if (ixa == NULL) {
 		iptun_drop_pkt(mp, &iptun->iptun_oerrors);
 		return;
@@ -3198,20 +3155,12 @@ iptun_output_6to4(iptun_t *iptun, mblk_t *mp)
 		return;
 	}
 
-	if (is_system_labeled()) {
-		/*
-		 * Since the label can be different meaning a potentially
-		 * different IRE,we always use a unique ip_xmit_attr_t.
-		 */
-		ixa = conn_get_ixa_exclusive(connp);
-	} else {
-		/*
-		 * If no other thread is using conn_ixa this just gets a
-		 * reference to conn_ixa. Otherwise we get a safe copy of
-		 * conn_ixa.
-		 */
-		ixa = conn_get_ixa(connp, B_FALSE);
-	}
+	/*
+	 * If no other thread is using conn_ixa this just gets a
+	 * reference to conn_ixa. Otherwise we get a safe copy of
+	 * conn_ixa.
+	 */
+	ixa = conn_get_ixa(connp, B_FALSE);
 	if (ixa == NULL) {
 		iptun_drop_pkt(mp, &iptun->iptun_oerrors);
 		return;
@@ -3277,77 +3226,6 @@ iptun_output_6to4(iptun_t *iptun, mblk_t *mp)
 		ixa_refrele(oldixa);
 }
 
-/*
- * Check the destination/label. Modifies *mpp by adding/removing CIPSO.
- *
- * We get the label from the message in order to honor the
- * ULPs/IPs choice of label. This will be NULL for forwarded
- * packets, neighbor discovery packets and some others.
- */
-static int
-iptun_output_check_label(mblk_t **mpp, ip_xmit_attr_t *ixa)
-{
-	cred_t	*cr;
-	int	adjust;
-	int	iplen;
-	int	err;
-	ts_label_t *effective_tsl = NULL;
-
-
-	ASSERT(is_system_labeled());
-
-	cr = msg_getcred(*mpp, NULL);
-	if (cr == NULL)
-		return (0);
-
-	/*
-	 * We need to start with a label based on the IP/ULP above us
-	 */
-	ip_xmit_attr_restore_tsl(ixa, cr);
-
-	/*
-	 * Need to update packet with any CIPSO option since
-	 * conn_ip_output doesn't do that.
-	 */
-	if (ixa->ixa_flags & IXAF_IS_IPV4) {
-		ipha_t *ipha;
-
-		ipha = (ipha_t *)(*mpp)->b_rptr;
-		iplen = ntohs(ipha->ipha_length);
-		err = tsol_check_label_v4(ixa->ixa_tsl,
-		    ixa->ixa_zoneid, mpp, CONN_MAC_DEFAULT, B_FALSE,
-		    ixa->ixa_ipst, &effective_tsl);
-		if (err != 0)
-			return (err);
-
-		ipha = (ipha_t *)(*mpp)->b_rptr;
-		adjust = (int)ntohs(ipha->ipha_length) - iplen;
-	} else {
-		ip6_t *ip6h;
-
-		ip6h = (ip6_t *)(*mpp)->b_rptr;
-		iplen = ntohs(ip6h->ip6_plen);
-
-		err = tsol_check_label_v6(ixa->ixa_tsl,
-		    ixa->ixa_zoneid, mpp, CONN_MAC_DEFAULT, B_FALSE,
-		    ixa->ixa_ipst, &effective_tsl);
-		if (err != 0)
-			return (err);
-
-		ip6h = (ip6_t *)(*mpp)->b_rptr;
-		adjust = (int)ntohs(ip6h->ip6_plen) - iplen;
-	}
-
-	if (effective_tsl != NULL) {
-		/* Update the label */
-		ip_xmit_attr_replace_tsl(ixa, effective_tsl);
-	}
-	ixa->ixa_pktlen += adjust;
-	ixa->ixa_ip_hdr_length += adjust;
-	return (0);
-}
-
-
 static void
 iptun_output_common(iptun_t *iptun, ip_xmit_attr_t *ixa, mblk_t *mp)
 {
@@ -3392,19 +3270,6 @@ iptun_output_common(iptun_t *iptun, ip_xmit_attr_t *ixa, mblk_t *mp)
 		if (mp == NULL) {
 			atomic_inc_64(&iptun->iptun_oerrors);
 			return;
-		}
-		if (is_system_labeled()) {
-			/*
-			 * Might change the packet by adding/removing CIPSO.
-			 * After this caller inner* and outer* and outer_hlen
-			 * might be invalid.
-			 */
-			error = iptun_output_check_label(&mp, ixa);
-			if (error != 0) {
-				ip2dbg(("label check failed (%d)\n", error));
-				iptun_drop_pkt(mp, &iptun->iptun_oerrors);
-				return;
-			}
 		}
 
 		/*
@@ -3467,19 +3332,6 @@ iptun_output_common(iptun_t *iptun, ip_xmit_attr_t *ixa, mblk_t *mp)
 		if (mp == NULL) {
 			atomic_inc_64(&iptun->iptun_oerrors);
 			return;
-		}
-		if (is_system_labeled()) {
-			/*
-			 * Might change the packet by adding/removing CIPSO.
-			 * After this caller inner* and outer* and outer_hlen
-			 * might be invalid.
-			 */
-			error = iptun_output_check_label(&mp, ixa);
-			if (error != 0) {
-				ip2dbg(("label check failed (%d)\n", error));
-				iptun_drop_pkt(mp, &iptun->iptun_oerrors);
-				return;
-			}
 		}
 
 		atomic_inc_64(&iptun->iptun_opackets);

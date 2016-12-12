@@ -26,8 +26,6 @@
 #ifndef _AUDITR_H
 #define	_AUDITR_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -61,8 +59,6 @@ extern "C" {
 #include <bsm/audit.h>
 #include <bsm/audit_record.h>
 #include <bsm/libbsm.h>
-
-#include <tsol/label.h>
 
 #include "auditrt.h"
 

@@ -125,11 +125,6 @@ extern void		do_fault(),
 			startup(),
 			usage();
 
-/* Routines/variables needed for labeled systems */
-extern void		update_dev_dbs(char *, char *, char *);
-extern int		system_labeled;
-
-
 #if	defined(__STDC__)
 void			send_message( int , ... );
 extern char ** pick_opts(char *, char **);

@@ -61,7 +61,6 @@
 #include <locale.h>
 #include <fslib.h>
 #include <priv.h>
-#include <tsol/label.h>
 #include "replica.h"
 
 #define	RET_OK	0
@@ -125,13 +124,6 @@ main(int argc, char *argv[])
 		pr_err(gettext("insufficient privileges\n"));
 		exit(RET_ERR);
 	}
-
-	/*
-	 * On a labeled system, a MAC flag may be needed if the mount is
-	 * read-down, so attempt to assert it but ignore errors in any case.
-	 */
-	if (is_system_labeled())
-		(void) setpflags(NET_MAC_AWARE, 1);
 
 	/*
 	 * exit, really

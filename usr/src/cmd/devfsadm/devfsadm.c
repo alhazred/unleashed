@@ -36,7 +36,6 @@
 
 #include <string.h>
 #include <deflt.h>
-#include <tsol/label.h>
 #include <bsm/devices.h>
 #include <bsm/devalloc.h>
 #include <utime.h>
@@ -59,17 +58,11 @@ static int cleanup = FALSE;
 /* devlinks -d compatibility */
 static int devlinks_debug = FALSE;
 
-/* flag to check if system is labeled */
-int system_labeled = FALSE;
-
 /* flag to enable/disable device allocation with -e/-d */
 static int devalloc_flag = 0;
 
 /* flag that indicates if device allocation is on or not */
 static int devalloc_is_on = 0;
-
-/* flag to update device allocation database for this device type */
-static int update_devdb = 0;
 
 /*
  * devices to be deallocated with -d :
@@ -303,35 +296,10 @@ main(int argc, char *argv[])
 
 	(void) umask(0);
 
-	system_labeled = is_system_labeled();
-	if (system_labeled == FALSE) {
-		/*
-		 * is_system_labeled() will return false in case we are
-		 * starting before the first reboot after Trusted Extensions
-		 * is enabled.  Check the setting in /etc/system to see if
-		 * TX is enabled (even if not yet booted).
-		 */
-		if (defopen("/etc/system") == 0) {
-			if (defread("set sys_labeling=1") != NULL)
-				system_labeled = TRUE;
-
-			/* close defaults file */
-			(void) defopen(NULL);
-		}
-	}
 	/*
 	 * Check if device allocation is enabled.
 	 */
 	devalloc_is_on = (da_is_on() == 1) ? 1 : 0;
-
-#ifdef DEBUG
-	if (system_labeled == FALSE) {
-		struct stat tx_stat;
-
-		/* test hook: see also mkdevalloc.c and allocate.c */
-		system_labeled = is_system_labeled_debug(&tx_stat);
-	}
-#endif
 
 	parse_args(argc, argv);
 
@@ -1039,12 +1007,6 @@ devi_tree_walk(struct dca_impl *dcip, int flags, char *ev_subclass)
 	if (ev_subclass)
 		build_and_enq_event(EC_DEV_ADD, ev_subclass, dcip->dci_root,
 		    node, dcip->dci_minor);
-
-	/* Add new device to device allocation database */
-	if (system_labeled && update_devdb) {
-		_update_devalloc_db(&devlist, 0, DA_ADD, NULL, root_dir);
-		update_devdb = 0;
-	}
 
 	devi_root_node = DI_NODE_NIL;	/* protected by lock_dev() */
 	di_fini(node);
@@ -2561,25 +2523,6 @@ devfsadm_mklink(char *link, di_node_t node, di_minor_t minor, int flags)
 		/* Link exists or was just created */
 		(void) di_devlink_add_link(devlink_cache, link, rcontents,
 		    DI_PRIMARY_LINK);
-
-		if (system_labeled && (flags & DA_ADD)) {
-			/*
-			 * Add this to the list of allocatable devices. If this
-			 * is a hotplugged, removable disk, add it as rmdisk.
-			 */
-			int instance = di_instance(node);
-
-			if ((flags & DA_CD) &&
-			    (_da_check_for_usb(devlink, root_dir) == 1)) {
-				(void) da_add_list(&devlist, devlink, instance,
-				    DA_ADD|DA_RMDISK);
-				update_devdb = DA_RMDISK;
-			} else if (linknew == TRUE) {
-				(void) da_add_list(&devlist, devlink, instance,
-				    flags);
-				update_devdb = flags;
-			}
-		}
 	}
 
 	return (rv);
@@ -2650,19 +2593,6 @@ devfsadm_secondary_link(char *link, char *primary_link, int flags)
 		 */
 		add_link_to_cache(link, lphy_path);
 		linknew = TRUE;
-		if (system_labeled &&
-		    ((flags & DA_AUDIO) && (flags & DA_ADD))) {
-			/*
-			 * Add this device to the list of allocatable devices.
-			 */
-			int	instance = 0;
-
-			op = strrchr(contents, '/');
-			op++;
-			(void) sscanf(op, "%d", &instance);
-			(void) da_add_list(&devlist, devlink, instance, flags);
-			update_devdb = flags;
-		}
 	} else {
 		linknew = FALSE;
 	}
@@ -4321,27 +4251,6 @@ hot_cleanup(char *node_path, char *minor_name, char *ev_subclass,
 	nfphash_destroy();
 	(void) mutex_unlock(&nfp_mutex);
 
-	/* update device allocation database */
-	if (system_labeled) {
-		int	devtype = 0;
-
-		if (strstr(path, DA_SOUND_NAME))
-			devtype = DA_AUDIO;
-		else if (strstr(path, "storage"))
-			devtype = DA_RMDISK;
-		else if (strstr(path, "disk"))
-			devtype = DA_RMDISK;
-		else if (strstr(path, "floppy"))
-			/* TODO: detect usb cds and floppies at insert time */
-			devtype = DA_RMDISK;
-		else
-			goto out;
-
-		(void) _update_devalloc_db(&devlist, devtype, DA_REMOVE,
-		    node_path, root_dir);
-	}
-
-out:
 	/* now log an event */
 	if (nvl) {
 		log_event(EC_DEV_REMOVE, ev_subclass, nvl);
@@ -4496,7 +4405,6 @@ devfsadm_link_valid(di_node_t anynode, char *link)
 	struct stat sb;
 	char devlink[PATH_MAX + 1], *contents, *raw_contents;
 	int rv, type;
-	int instance = 0;
 
 	/* prepend link with dev_dir contents */
 	(void) strcpy(devlink, dev_dir);
@@ -4528,13 +4436,6 @@ devfsadm_link_valid(di_node_t anynode, char *link)
 	 * The link exists. Add it to the database
 	 */
 	(void) di_devlink_add_link(devlink_cache, link, contents, type);
-	if (system_labeled && (rv == DEVFSADM_TRUE) &&
-	    strstr(devlink, DA_AUDIO_NAME) && contents) {
-		(void) sscanf(contents, "%*[a-z]%d", &instance);
-		(void) da_add_list(&devlist, devlink, instance,
-		    DA_ADD|DA_AUDIO);
-		_update_devalloc_db(&devlist, 0, DA_ADD, NULL, root_dir);
-	}
 	free(contents);
 
 	return (rv);

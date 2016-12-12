@@ -36,12 +36,6 @@ with \fIdevice\fR to the \fBuid\fR of the current process.
 .LP
 Only authorized users may allocate a device. The required authorizations are
 specified in \fBdevice_allocate\fR(4).
-.sp
-.LP
-When the system is configured with Trusted Extensions, \fBallocate\fR runs the
-clean program for the device before it grants access to the caller to that
-device. For devices with removable media that have a mountable file system,
-\fBallocate\fR mounts the media if the caller chooses.
 .SH OPTIONS
 .sp
 .LP
@@ -86,29 +80,6 @@ Silent. Suppresses any diagnostic output.
 Uses the user ID \fIuname\fR instead of the user ID of the current process when
 performing the allocate operation. Only a user with the
 \fBsolaris.device.revoke\fR authorization is permitted to use this option.
-.RE
-
-.sp
-.LP
-The following options are supported with Trusted Extensions:
-.sp
-.ne 2
-.na
-\fB\fB-w\fR\fR
-.ad
-.RS 15n
-Runs the device cleaning program in a windowing environment. If a windowing
-version of the program exists, it is used. Otherwise, the standard version is
-run in a terminal window.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-z\fR \fIzonename\fR\fR
-.ad
-.RS 15n
-Allocates device to the zone specified by \fIzonename\fR.
 .RE
 
 .SH OPERANDS
@@ -202,10 +173,6 @@ Not-an-Interface.
 .LP
 The functionality described in this man page is available only if  Solaris
 Auditing has been enabled. See \fBbsmconv\fR(1M) for more information.
-.sp
-.LP
-On systems configured with Trusted Extensions, the functionality is enabled by
-default.
 .sp
 .LP
 \fB/etc/security/dev\fR, \fBmkdevalloc\fR(1M), and \fBmkdevmaps\fR(1M) might

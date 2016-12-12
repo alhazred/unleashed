@@ -86,9 +86,6 @@
 #include <dhcpagent_util.h>
 #include <compat.h>
 
-#include <libtsnet.h>
-#include <tsol/label.h>
-
 #include "statcommon.h"
 
 extern void	unixpr(kstat_ctl_t *kc);
@@ -168,10 +165,8 @@ static char		*fmodestr(uint_t fmode);
 static char		*portname(uint_t port, char *proto,
 			    char *dst, uint_t dstlen);
 
-static const char	*mitcp_state(int code,
-			    const mib2_transportMLPEntry_t *attr);
-static const char	*miudp_state(int code,
-			    const mib2_transportMLPEntry_t *attr);
+static const char	*mitcp_state(int code);
+static const char	*miudp_state(int code);
 
 static void		stat_report(mib_item_t *item);
 static void		mrt_stat_report(mib_item_t *item);
@@ -238,7 +233,6 @@ static	boolean_t	Iflag = B_FALSE;	/* IP Traffic Interfaces */
 static	boolean_t	Mflag = B_FALSE;	/* STREAMS Memory Statistics */
 static	boolean_t	Nflag = B_FALSE;	/* Numeric Network Addresses */
 static	boolean_t	Rflag = B_FALSE;	/* Routing Tables */
-static	boolean_t	RSECflag = B_FALSE;	/* Security attributes */
 static	boolean_t	Sflag = B_FALSE;	/* Per-protocol Statistics */
 static	boolean_t	Vflag = B_FALSE;	/* Verbose */
 static	boolean_t	Pflag = B_FALSE;	/* Net to Media Tables */
@@ -262,7 +256,6 @@ static int ipRouteEntrySize;
 static int ipNetToMediaEntrySize;
 static int ipMemberEntrySize;
 static int ipGroupSourceEntrySize;
-static int ipRouteAttributeSize;
 static int vifctlSize;
 static int mfcctlSize;
 
@@ -276,7 +269,6 @@ static int ipv6GroupSourceEntrySize;
 
 static int ipDestEntrySize;
 
-static int transportMLPSize;
 static int tcpConnEntrySize;
 static int tcp6ConnEntrySize;
 static int udpEntrySize;
@@ -293,8 +285,6 @@ enum { FK_AF = 0, FK_OUTIF, FK_DST, FK_FLAGS, NFILTERKEYS };
 static const char *filter_keys[NFILTERKEYS] = {
 	"af", "outif", "dst", "flags"
 };
-
-static m_label_t *zone_security_label = NULL;
 
 /* Flags on routes */
 #define	FLF_A		0x00000001
@@ -385,7 +375,7 @@ main(int argc, char **argv)
 	(void) setlocale(LC_ALL, "");
 	(void) textdomain(TEXT_DOMAIN);
 
-	while ((c = getopt(argc, argv, "adimnrspMgvxf:P:I:DRT:")) != -1) {
+	while ((c = getopt(argc, argv, "adimnrspMgvxf:P:I:DT:")) != -1) {
 		switch ((char)c) {
 		case 'a':		/* all connections */
 			Aflag = B_TRUE;
@@ -412,11 +402,6 @@ main(int argc, char **argv)
 
 		case 'r':		/* route tables */
 			Rflag = B_TRUE;
-			IFLAGMOD(Iflag_only, 1, 0); /* see macro def'n */
-			break;
-
-		case 'R':		/* security attributes */
-			RSECflag = B_TRUE;
 			IFLAGMOD(Iflag_only, 1, 0); /* see macro def'n */
 			break;
 
@@ -513,14 +498,6 @@ main(int argc, char **argv)
 	}
 
 	/*
-	 * Make sure -R option is set only on a labeled system.
-	 */
-	if (RSECflag && !is_system_labeled()) {
-		(void) fprintf(stderr, "-R set but labeling is not enabled\n");
-		usage(name);
-	}
-
-	/*
 	 * Handle other arguments: find interval, count; the
 	 * flags that accept 'interval' and 'count' are OR'd
 	 * in the outermost 'if'; more flags may be added as
@@ -561,18 +538,6 @@ main(int argc, char **argv)
 	if (DHCPflag) {
 		dhcp_report(Iflag ? ifname : NULL);
 		exit(0);
-	}
-
-	/*
-	 * Get this process's security label if the -R switch is set.
-	 * We use this label as the current zone's security label.
-	 */
-	if (RSECflag) {
-		zone_security_label = m_label_alloc(MAC_LABEL);
-		if (zone_security_label == NULL)
-			fatal(errno, "m_label_alloc() failed");
-		if (getplabel(zone_security_label) < 0)
-			fatal(errno, "getplabel() failed");
 	}
 
 	/* Get data structures: priming before iteration */
@@ -686,9 +651,6 @@ main(int argc, char **argv)
 	} /* 'for' loop 1 ends */
 	mibfree(item);
 	(void) close(sd);
-	if (zone_security_label != NULL)
-		m_label_free(zone_security_label);
-
 	return (0);
 }
 
@@ -1582,7 +1544,7 @@ octetstr(const Octet_t *op, int code, char *dst, uint_t dstlen)
 }
 
 static const char *
-mitcp_state(int state, const mib2_transportMLPEntry_t *attr)
+mitcp_state(int state)
 {
 	static char tcpsbuf[50];
 	const char *cp;
@@ -1634,22 +1596,11 @@ mitcp_state(int state, const mib2_transportMLPEntry_t *attr)
 		break;
 	}
 
-	if (RSECflag && attr != NULL && attr->tme_flags != 0) {
-		if (cp != tcpsbuf) {
-			(void) strlcpy(tcpsbuf, cp, sizeof (tcpsbuf));
-			cp = tcpsbuf;
-		}
-		if (attr->tme_flags & MIB2_TMEF_PRIVATE)
-			(void) strlcat(tcpsbuf, " P", sizeof (tcpsbuf));
-		if (attr->tme_flags & MIB2_TMEF_SHARED)
-			(void) strlcat(tcpsbuf, " S", sizeof (tcpsbuf));
-	}
-
 	return (cp);
 }
 
 static const char *
-miudp_state(int state, const mib2_transportMLPEntry_t *attr)
+miudp_state(int state)
 {
 	static char udpsbuf[50];
 	const char *cp;
@@ -1669,17 +1620,6 @@ miudp_state(int state, const mib2_transportMLPEntry_t *attr)
 		    "Unknown State(%d)", state);
 		cp = udpsbuf;
 		break;
-	}
-
-	if (RSECflag && attr != NULL && attr->tme_flags != 0) {
-		if (cp != udpsbuf) {
-			(void) strlcpy(udpsbuf, cp, sizeof (udpsbuf));
-			cp = udpsbuf;
-		}
-		if (attr->tme_flags & MIB2_TMEF_PRIVATE)
-			(void) strlcat(udpsbuf, " P", sizeof (udpsbuf));
-		if (attr->tme_flags & MIB2_TMEF_SHARED)
-			(void) strlcat(udpsbuf, " S", sizeof (udpsbuf));
 	}
 
 	return (cp);
@@ -1763,8 +1703,6 @@ mib_get_constants(mib_item_t *item)
 			ipNetToMediaEntrySize = ip->ipNetToMediaEntrySize;
 			ipMemberEntrySize = ip->ipMemberEntrySize;
 			ipGroupSourceEntrySize = ip->ipGroupSourceEntrySize;
-			ipRouteAttributeSize = ip->ipRouteAttributeSize;
-			transportMLPSize = ip->transportMLPSize;
 			ipDestEntrySize = ip->ipDestEntrySize;
 			assert(IS_P2ALIGNED(ipAddrEntrySize,
 			    sizeof (mib2_ipAddrEntry_t *)));
@@ -1776,10 +1714,6 @@ mib_get_constants(mib_item_t *item)
 			    sizeof (ip_member_t *)));
 			assert(IS_P2ALIGNED(ipGroupSourceEntrySize,
 			    sizeof (ip_grpsrc_t *)));
-			assert(IS_P2ALIGNED(ipRouteAttributeSize,
-			    sizeof (mib2_ipAttributeEntry_t *)));
-			assert(IS_P2ALIGNED(transportMLPSize,
-			    sizeof (mib2_transportMLPEntry_t *)));
 			break;
 		}
 		case EXPER_DVMRP: {
@@ -1871,8 +1805,6 @@ mib_get_constants(mib_item_t *item)
 		(void) printf("\tipNetToMediaEntrySize %d\n",
 		    ipNetToMediaEntrySize);
 		(void) printf("\tipMemberEntrySize %d\n", ipMemberEntrySize);
-		(void) printf("\tipRouteAttributeSize %d\n",
-		    ipRouteAttributeSize);
 		(void) printf("\tvifctlSize %d\n", vifctlSize);
 		(void) printf("\tmfcctlSize %d\n", mfcctlSize);
 
@@ -1885,7 +1817,6 @@ mib_get_constants(mib_item_t *item)
 		(void) printf("\tipv6IfIcmpEntrySize %d\n",
 		    ipv6IfIcmpEntrySize);
 		(void) printf("\tipDestEntrySize %d\n", ipDestEntrySize);
-		(void) printf("\ttransportMLPSize %d\n", transportMLPSize);
 		(void) printf("\ttcpConnEntrySize %d\n", tcpConnEntrySize);
 		(void) printf("\ttcp6ConnEntrySize %d\n", tcp6ConnEntrySize);
 		(void) printf("\tudpEntrySize %d\n", udpEntrySize);
@@ -4011,16 +3942,8 @@ ndp_report(mib_item_t *item)
 
 /* ------------------------- ire_report (netstat -r) ------------------------ */
 
-typedef struct sec_attr_list_s {
-	struct sec_attr_list_s *sal_next;
-	const mib2_ipAttributeEntry_t *sal_attr;
-} sec_attr_list_t;
-
-static boolean_t ire_report_item_v4(const mib2_ipRouteEntry_t *, boolean_t,
-    const sec_attr_list_t *);
-static boolean_t ire_report_item_v6(const mib2_ipv6RouteEntry_t *, boolean_t,
-    const sec_attr_list_t *);
-static const char *pr_secattr(const sec_attr_list_t *);
+static boolean_t ire_report_item_v4(const mib2_ipRouteEntry_t *, boolean_t);
+static boolean_t ire_report_item_v6(const mib2_ipv6RouteEntry_t *, boolean_t);
 
 static void
 ire_report(const mib_item_t *item)
@@ -4030,80 +3953,7 @@ ire_report(const mib_item_t *item)
 	boolean_t		print_hdr_once_v6 = B_TRUE;
 	mib2_ipRouteEntry_t	*rp;
 	mib2_ipv6RouteEntry_t	*rp6;
-	sec_attr_list_t		**v4_attrs, **v4a;
-	sec_attr_list_t		**v6_attrs, **v6a;
-	sec_attr_list_t		*all_attrs, *aptr;
-	const mib_item_t	*iptr;
-	int			ipv4_route_count, ipv6_route_count;
-	int			route_attrs_count;
 
-	/*
-	 * Preparation pass: the kernel returns separate entries for IP routing
-	 * table entries and security attributes.  We loop through the
-	 * attributes first and link them into lists.
-	 */
-	ipv4_route_count = ipv6_route_count = route_attrs_count = 0;
-	for (iptr = item; iptr != NULL; iptr = iptr->next_item) {
-		if (iptr->group == MIB2_IP6 && iptr->mib_id == MIB2_IP6_ROUTE)
-			ipv6_route_count += iptr->length / ipv6RouteEntrySize;
-		if (iptr->group == MIB2_IP && iptr->mib_id == MIB2_IP_ROUTE)
-			ipv4_route_count += iptr->length / ipRouteEntrySize;
-		if ((iptr->group == MIB2_IP || iptr->group == MIB2_IP6) &&
-		    iptr->mib_id == EXPER_IP_RTATTR)
-			route_attrs_count += iptr->length /
-			    ipRouteAttributeSize;
-	}
-	v4_attrs = v6_attrs = NULL;
-	all_attrs = NULL;
-	if (family_selected(AF_INET) && ipv4_route_count > 0) {
-		v4_attrs = calloc(ipv4_route_count, sizeof (*v4_attrs));
-		if (v4_attrs == NULL) {
-			perror("ire_report calloc v4_attrs failed");
-			return;
-		}
-	}
-	if (family_selected(AF_INET6) && ipv6_route_count > 0) {
-		v6_attrs = calloc(ipv6_route_count, sizeof (*v6_attrs));
-		if (v6_attrs == NULL) {
-			perror("ire_report calloc v6_attrs failed");
-			goto ire_report_done;
-		}
-	}
-	if (route_attrs_count > 0) {
-		all_attrs = malloc(route_attrs_count * sizeof (*all_attrs));
-		if (all_attrs == NULL) {
-			perror("ire_report malloc all_attrs failed");
-			goto ire_report_done;
-		}
-	}
-	aptr = all_attrs;
-	for (iptr = item; iptr != NULL; iptr = iptr->next_item) {
-		mib2_ipAttributeEntry_t *iae;
-		sec_attr_list_t **alp;
-
-		if (v4_attrs != NULL && iptr->group == MIB2_IP &&
-		    iptr->mib_id == EXPER_IP_RTATTR) {
-			alp = v4_attrs;
-		} else if (v6_attrs != NULL && iptr->group == MIB2_IP6 &&
-		    iptr->mib_id == EXPER_IP_RTATTR) {
-			alp = v6_attrs;
-		} else {
-			continue;
-		}
-		for (iae = iptr->valp;
-		    (char *)iae < (char *)iptr->valp + iptr->length;
-		    /* LINTED: (note 1) */
-		    iae = (mib2_ipAttributeEntry_t *)((char *)iae +
-		    ipRouteAttributeSize)) {
-			aptr->sal_next = alp[iae->iae_routeidx];
-			aptr->sal_attr = iae;
-			alp[iae->iae_routeidx] = aptr++;
-		}
-	}
-
-	/* 'for' loop 1: */
-	v4a = v4_attrs;
-	v6a = v6_attrs;
 	for (; item != NULL; item = item->next_item) {
 		if (Xflag) {
 			(void) printf("\n--- Entry %d ---\n", ++jtemp);
@@ -4142,9 +3992,8 @@ ire_report(const mib_item_t *item)
 			    /* LINTED: (note 1) */
 			    rp = (mib2_ipRouteEntry_t *)((char *)rp +
 			    ipRouteEntrySize)) {
-				aptr = v4a == NULL ? NULL : *v4a++;
 				print_hdr_once_v4 = ire_report_item_v4(rp,
-				    print_hdr_once_v4, aptr);
+				    print_hdr_once_v4);
 			}
 		} else {
 			for (rp6 = (mib2_ipv6RouteEntry_t *)item->valp;
@@ -4152,17 +4001,12 @@ ire_report(const mib_item_t *item)
 			    /* LINTED: (note 1) */
 			    rp6 = (mib2_ipv6RouteEntry_t *)((char *)rp6 +
 			    ipv6RouteEntrySize)) {
-				aptr = v6a == NULL ? NULL : *v6a++;
 				print_hdr_once_v6 = ire_report_item_v6(rp6,
-				    print_hdr_once_v6, aptr);
+				    print_hdr_once_v6);
 			}
 		}
 	} /* 'for' loop 1 ends */
 	(void) fflush(stdout);
-ire_report_done:
-	free(v4_attrs);
-	free(v6_attrs);
-	free(all_attrs);
 }
 
 /*
@@ -4347,18 +4191,17 @@ static const char ire_hdr_v4_compat[] =
 "\n%s Table:\n";
 static const char ire_hdr_v4_verbose[] =
 "  Destination             Mask           Gateway          Device "
-" MTU  Ref Flg  Out  In/Fwd %s\n"
+" MTU  Ref Flg  Out  In/Fwd\n"
 "-------------------- --------------- -------------------- ------ "
-"----- --- --- ----- ------ %s\n";
+"----- --- --- ----- ------\n";
 
 static const char ire_hdr_v4_normal[] =
 "  Destination           Gateway           Flags  Ref     Use     Interface"
-" %s\n-------------------- -------------------- ----- ----- ---------- "
-"--------- %s\n";
+"\n-------------------- -------------------- ----- ----- ---------- "
+"---------\n";
 
 static boolean_t
-ire_report_item_v4(const mib2_ipRouteEntry_t *rp, boolean_t first,
-    const sec_attr_list_t *attrs)
+ire_report_item_v4(const mib2_ipRouteEntry_t *rp, boolean_t first)
 {
 	char			dstbuf[MAXHOSTNAMELEN + 1];
 	char			maskbuf[MAXHOSTNAMELEN + 1];
@@ -4383,9 +4226,7 @@ ire_report_item_v4(const mib2_ipRouteEntry_t *rp, boolean_t first,
 	if (first) {
 		(void) printf(v4compat ? ire_hdr_v4_compat : ire_hdr_v4,
 		    Vflag ? "IRE" : "Routing");
-		(void) printf(Vflag ? ire_hdr_v4_verbose : ire_hdr_v4_normal,
-		    RSECflag ? "  Gateway security attributes  " : "",
-		    RSECflag ? "-------------------------------" : "");
+		(void) printf(Vflag ? ire_hdr_v4_verbose : ire_hdr_v4_normal);
 		first = B_FALSE;
 	}
 
@@ -4397,7 +4238,7 @@ ire_report_item_v4(const mib2_ipRouteEntry_t *rp, boolean_t first,
 	}
 	if (Vflag) {
 		(void) printf("%-20s %-15s %-20s %-6s %5u %3u "
-		    "%-4s%6u %6u %s\n",
+		    "%-4s%6u %6u\n",
 		    dstbuf,
 		    pr_mask(rp->ipRouteMask, maskbuf, sizeof (maskbuf)),
 		    pr_addrnz(rp->ipRouteNextHop, gwbuf, sizeof (gwbuf)),
@@ -4406,18 +4247,16 @@ ire_report_item_v4(const mib2_ipRouteEntry_t *rp, boolean_t first,
 		    rp->ipRouteInfo.re_ref,
 		    flags,
 		    rp->ipRouteInfo.re_obpkt,
-		    rp->ipRouteInfo.re_ibpkt,
-		    pr_secattr(attrs));
+		    rp->ipRouteInfo.re_ibpkt);
 	} else {
-		(void) printf("%-20s %-20s %-5s  %4u %10u %-9s %s\n",
+		(void) printf("%-20s %-20s %-5s  %4u %10u %-9s\n",
 		    dstbuf,
 		    pr_addrnz(rp->ipRouteNextHop, gwbuf, sizeof (gwbuf)),
 		    flags,
 		    rp->ipRouteInfo.re_ref,
 		    rp->ipRouteInfo.re_obpkt + rp->ipRouteInfo.re_ibpkt,
 		    octetstr(&rp->ipRouteIfIndex, 'a',
-		    ifname, sizeof (ifname)),
-		    pr_secattr(attrs));
+		    ifname, sizeof (ifname)));
 	}
 	return (first);
 }
@@ -4596,18 +4435,17 @@ static const char ire_hdr_v6[] =
 "\n%s Table: IPv6\n";
 static const char ire_hdr_v6_verbose[] =
 "  Destination/Mask            Gateway                    If    MTU  "
-"Ref Flags  Out   In/Fwd %s\n"
+"Ref Flags  Out   In/Fwd\n"
 "--------------------------- --------------------------- ----- ----- "
-"--- ----- ------ ------ %s\n";
+"--- ----- ------ ------\n";
 static const char ire_hdr_v6_normal[] =
-"  Destination/Mask            Gateway                   Flags Ref   Use  "
-"  If   %s\n"
+"  Destination/Mask            Gateway                   Flags Ref   Use   "
+" If  \n"
 "--------------------------- --------------------------- ----- --- ------- "
-"----- %s\n";
+"-----\n";
 
 static boolean_t
-ire_report_item_v6(const mib2_ipv6RouteEntry_t *rp6, boolean_t first,
-    const sec_attr_list_t *attrs)
+ire_report_item_v6(const mib2_ipv6RouteEntry_t *rp6, boolean_t first)
 {
 	char			dstbuf[MAXHOSTNAMELEN + 1];
 	char			gwbuf[MAXHOSTNAMELEN + 1];
@@ -4629,15 +4467,13 @@ ire_report_item_v6(const mib2_ipv6RouteEntry_t *rp6, boolean_t first,
 
 	if (first) {
 		(void) printf(ire_hdr_v6, Vflag ? "IRE" : "Routing");
-		(void) printf(Vflag ? ire_hdr_v6_verbose : ire_hdr_v6_normal,
-		    RSECflag ? "  Gateway security attributes  " : "",
-		    RSECflag ? "-------------------------------" : "");
+		(void) printf(Vflag ? ire_hdr_v6_verbose : ire_hdr_v6_normal);
 		first = B_FALSE;
 	}
 
 	if (Vflag) {
 		(void) printf("%-27s %-27s %-5s %5u %3u "
-		    "%-5s %6u %6u %s\n",
+		    "%-5s %6u %6u\n",
 		    pr_prefix6(&rp6->ipv6RouteDest,
 		    rp6->ipv6RoutePfxLength, dstbuf, sizeof (dstbuf)),
 		    IN6_IS_ADDR_UNSPECIFIED(&rp6->ipv6RouteNextHop) ?
@@ -4649,10 +4485,9 @@ ire_report_item_v6(const mib2_ipv6RouteEntry_t *rp6, boolean_t first,
 		    rp6->ipv6RouteInfo.re_ref,
 		    flags,
 		    rp6->ipv6RouteInfo.re_obpkt,
-		    rp6->ipv6RouteInfo.re_ibpkt,
-		    pr_secattr(attrs));
+		    rp6->ipv6RouteInfo.re_ibpkt);
 	} else {
-		(void) printf("%-27s %-27s %-5s %3u %7u %-5s %s\n",
+		(void) printf("%-27s %-27s %-5s %3u %7u %-5s\n",
 		    pr_prefix6(&rp6->ipv6RouteDest,
 		    rp6->ipv6RoutePfxLength, dstbuf, sizeof (dstbuf)),
 		    IN6_IS_ADDR_UNSPECIFIED(&rp6->ipv6RouteNextHop) ?
@@ -4662,63 +4497,9 @@ ire_report_item_v6(const mib2_ipv6RouteEntry_t *rp6, boolean_t first,
 		    rp6->ipv6RouteInfo.re_ref,
 		    rp6->ipv6RouteInfo.re_obpkt + rp6->ipv6RouteInfo.re_ibpkt,
 		    octetstr(&rp6->ipv6RouteIfIndex, 'a',
-		    ifname, sizeof (ifname)),
-		    pr_secattr(attrs));
+		    ifname, sizeof (ifname)));
 	}
 	return (first);
-}
-
-/*
- * Common attribute-gathering routine for all transports.
- */
-static mib2_transportMLPEntry_t **
-gather_attrs(const mib_item_t *item, int group, int mib_id, int esize)
-{
-	int transport_count = 0;
-	const mib_item_t *iptr;
-	mib2_transportMLPEntry_t **attrs, *tme;
-
-	for (iptr = item; iptr != NULL; iptr = iptr->next_item) {
-		if (iptr->group == group && iptr->mib_id == mib_id)
-			transport_count += iptr->length / esize;
-	}
-	if (transport_count <= 0)
-		return (NULL);
-	attrs = calloc(transport_count, sizeof (*attrs));
-	if (attrs == NULL) {
-		perror("gather_attrs calloc failed");
-		return (NULL);
-	}
-	for (iptr = item; iptr != NULL; iptr = iptr->next_item) {
-		if (iptr->group == group && iptr->mib_id == EXPER_XPORT_MLP) {
-			for (tme = iptr->valp;
-			    (char *)tme < (char *)iptr->valp + iptr->length;
-			    /* LINTED: (note 1) */
-			    tme = (mib2_transportMLPEntry_t *)((char *)tme +
-			    transportMLPSize)) {
-				attrs[tme->tme_connidx] = tme;
-			}
-		}
-	}
-	return (attrs);
-}
-
-static void
-print_transport_label(const mib2_transportMLPEntry_t *attr)
-{
-	if (!RSECflag || attr == NULL ||
-	    !(attr->tme_flags & MIB2_TMEF_IS_LABELED))
-		return;
-
-	if (bisinvalid(&attr->tme_label)) {
-		(void) printf("   INVALID\n");
-	} else if (!blequal(&attr->tme_label, zone_security_label)) {
-		char *sl_str;
-
-		sl_str = sl_to_str(&attr->tme_label);
-		(void) printf("   %s\n", sl_str);
-		free(sl_str);
-	}
 }
 
 /* ------------------------------ TCP_REPORT------------------------------- */
@@ -4752,9 +4533,9 @@ static const char tcp_hdr_v6_normal[] =
 "----- ------ ----- ------ ----------- -----\n";
 
 static boolean_t tcp_report_item_v4(const mib2_tcpConnEntry_t *,
-    boolean_t first, const mib2_transportMLPEntry_t *);
+    boolean_t first);
 static boolean_t tcp_report_item_v6(const mib2_tcp6ConnEntry_t *,
-    boolean_t first, const mib2_transportMLPEntry_t *);
+    boolean_t first);
 
 static void
 tcp_report(const mib_item_t *item)
@@ -4764,29 +4545,10 @@ tcp_report(const mib_item_t *item)
 	boolean_t		print_hdr_once_v6 = B_TRUE;
 	mib2_tcpConnEntry_t	*tp;
 	mib2_tcp6ConnEntry_t	*tp6;
-	mib2_transportMLPEntry_t **v4_attrs, **v6_attrs;
-	mib2_transportMLPEntry_t **v4a, **v6a;
-	mib2_transportMLPEntry_t *aptr;
 
 	if (!protocol_selected(IPPROTO_TCP))
 		return;
 
-	/*
-	 * Preparation pass: the kernel returns separate entries for TCP
-	 * connection table entries and Multilevel Port attributes.  We loop
-	 * through the attributes first and set up an array for each address
-	 * family.
-	 */
-	v4_attrs = family_selected(AF_INET) && RSECflag ?
-	    gather_attrs(item, MIB2_TCP, MIB2_TCP_CONN, tcpConnEntrySize) :
-	    NULL;
-	v6_attrs = family_selected(AF_INET6) && RSECflag ?
-	    gather_attrs(item, MIB2_TCP6, MIB2_TCP6_CONN, tcp6ConnEntrySize) :
-	    NULL;
-
-	/* 'for' loop 1: */
-	v4a = v4_attrs;
-	v6a = v6_attrs;
 	for (; item != NULL; item = item->next_item) {
 		if (Xflag) {
 			(void) printf("\n--- Entry %d ---\n", ++jtemp);
@@ -4813,9 +4575,8 @@ tcp_report(const mib_item_t *item)
 			    /* LINTED: (note 1) */
 			    tp = (mib2_tcpConnEntry_t *)((char *)tp +
 			    tcpConnEntrySize)) {
-				aptr = v4a == NULL ? NULL : *v4a++;
 				print_hdr_once_v4 = tcp_report_item_v4(tp,
-				    print_hdr_once_v4, aptr);
+				    print_hdr_once_v4);
 			}
 		} else {
 			for (tp6 = (mib2_tcp6ConnEntry_t *)item->valp;
@@ -4823,21 +4584,17 @@ tcp_report(const mib_item_t *item)
 			    /* LINTED: (note 1) */
 			    tp6 = (mib2_tcp6ConnEntry_t *)((char *)tp6 +
 			    tcp6ConnEntrySize)) {
-				aptr = v6a == NULL ? NULL : *v6a++;
 				print_hdr_once_v6 = tcp_report_item_v6(tp6,
-				    print_hdr_once_v6, aptr);
+				    print_hdr_once_v6);
 			}
 		}
 	} /* 'for' loop 1 ends */
 	(void) fflush(stdout);
 
-	free(v4_attrs);
-	free(v6_attrs);
 }
 
 static boolean_t
-tcp_report_item_v4(const mib2_tcpConnEntry_t *tp, boolean_t first,
-    const mib2_transportMLPEntry_t *attr)
+tcp_report_item_v4(const mib2_tcpConnEntry_t *tp, boolean_t first)
 {
 	/*
 	 * lname and fname below are for the hostname as well as the portname
@@ -4857,7 +4614,7 @@ tcp_report_item_v4(const mib2_tcpConnEntry_t *tp, boolean_t first,
 
 	if (Vflag) {
 		(void) printf("%-20s\n%-20s %5u %08x %08x %5u %08x %08x "
-		    "%5u %5u %s\n",
+		    "%5u %5u\n",
 		    pr_ap(tp->tcpConnLocalAddress,
 		    tp->tcpConnLocalPort, "tcp", lname, sizeof (lname)),
 		    pr_ap(tp->tcpConnRemAddress,
@@ -4870,14 +4627,14 @@ tcp_report_item_v4(const mib2_tcpConnEntry_t *tp, boolean_t first,
 		    tp->tcpConnEntryInfo.ce_rack,
 		    tp->tcpConnEntryInfo.ce_rto,
 		    tp->tcpConnEntryInfo.ce_mss,
-		    mitcp_state(tp->tcpConnEntryInfo.ce_state, attr));
+		    mitcp_state(tp->tcpConnEntryInfo.ce_state));
 	} else {
 		int sq = (int)tp->tcpConnEntryInfo.ce_snxt -
 		    (int)tp->tcpConnEntryInfo.ce_suna - 1;
 		int rq = (int)tp->tcpConnEntryInfo.ce_rnxt -
 		    (int)tp->tcpConnEntryInfo.ce_rack;
 
-		(void) printf("%-20s %-20s %5u %6d %5u %6d %s\n",
+		(void) printf("%-20s %-20s %5u %6d %5u %6d\n",
 		    pr_ap(tp->tcpConnLocalAddress,
 		    tp->tcpConnLocalPort, "tcp", lname, sizeof (lname)),
 		    pr_ap(tp->tcpConnRemAddress,
@@ -4886,17 +4643,14 @@ tcp_report_item_v4(const mib2_tcpConnEntry_t *tp, boolean_t first,
 		    (sq >= 0) ? sq : 0,
 		    tp->tcpConnEntryInfo.ce_rwnd,
 		    (rq >= 0) ? rq : 0,
-		    mitcp_state(tp->tcpConnEntryInfo.ce_state, attr));
+		    mitcp_state(tp->tcpConnEntryInfo.ce_state));
 	}
-
-	print_transport_label(attr);
 
 	return (B_FALSE);
 }
 
 static boolean_t
-tcp_report_item_v6(const mib2_tcp6ConnEntry_t *tp6, boolean_t first,
-    const mib2_transportMLPEntry_t *attr)
+tcp_report_item_v6(const mib2_tcp6ConnEntry_t *tp6, boolean_t first)
 {
 	/*
 	 * lname and fname below are for the hostname as well as the portname
@@ -4936,7 +4690,7 @@ tcp_report_item_v6(const mib2_tcp6ConnEntry_t *tp6, boolean_t first,
 		    tp6->tcp6ConnEntryInfo.ce_rack,
 		    tp6->tcp6ConnEntryInfo.ce_rto,
 		    tp6->tcp6ConnEntryInfo.ce_mss,
-		    mitcp_state(tp6->tcp6ConnEntryInfo.ce_state, attr),
+		    mitcp_state(tp6->tcp6ConnEntryInfo.ce_state),
 		    ifnamep);
 	} else {
 		int sq = (int)tp6->tcp6ConnEntryInfo.ce_snxt -
@@ -4953,11 +4707,9 @@ tcp_report_item_v6(const mib2_tcp6ConnEntry_t *tp6, boolean_t first,
 		    (sq >= 0) ? sq : 0,
 		    tp6->tcp6ConnEntryInfo.ce_rwnd,
 		    (rq >= 0) ? rq : 0,
-		    mitcp_state(tp6->tcp6ConnEntryInfo.ce_state, attr),
+		    mitcp_state(tp6->tcp6ConnEntryInfo.ce_state),
 		    ifnamep);
 	}
-
-	print_transport_label(attr);
 
 	return (B_FALSE);
 }
@@ -4965,9 +4717,9 @@ tcp_report_item_v6(const mib2_tcp6ConnEntry_t *tp6, boolean_t first,
 /* ------------------------------- UDP_REPORT------------------------------- */
 
 static boolean_t udp_report_item_v4(const mib2_udpEntry_t *ude,
-    boolean_t first, const mib2_transportMLPEntry_t *attr);
+    boolean_t first);
 static boolean_t udp_report_item_v6(const mib2_udp6Entry_t *ude6,
-    boolean_t first, const mib2_transportMLPEntry_t *attr);
+    boolean_t first);
 
 static const char udp_hdr_v4[] =
 "   Local Address        Remote Address      State\n"
@@ -4987,27 +4739,10 @@ udp_report(const mib_item_t *item)
 	boolean_t		print_hdr_once_v6 = B_TRUE;
 	mib2_udpEntry_t		*ude;
 	mib2_udp6Entry_t	*ude6;
-	mib2_transportMLPEntry_t **v4_attrs, **v6_attrs;
-	mib2_transportMLPEntry_t **v4a, **v6a;
-	mib2_transportMLPEntry_t *aptr;
 
 	if (!protocol_selected(IPPROTO_UDP))
 		return;
 
-	/*
-	 * Preparation pass: the kernel returns separate entries for UDP
-	 * connection table entries and Multilevel Port attributes.  We loop
-	 * through the attributes first and set up an array for each address
-	 * family.
-	 */
-	v4_attrs = family_selected(AF_INET) && RSECflag ?
-	    gather_attrs(item, MIB2_UDP, MIB2_UDP_ENTRY, udpEntrySize) : NULL;
-	v6_attrs = family_selected(AF_INET6) && RSECflag ?
-	    gather_attrs(item, MIB2_UDP6, MIB2_UDP6_ENTRY, udp6EntrySize) :
-	    NULL;
-
-	v4a = v4_attrs;
-	v6a = v6_attrs;
 	/* 'for' loop 1: */
 	for (; item; item = item->next_item) {
 		if (Xflag) {
@@ -5035,9 +4770,8 @@ udp_report(const mib_item_t *item)
 			    /* LINTED: (note 1) */
 			    ude = (mib2_udpEntry_t *)((char *)ude +
 			    udpEntrySize)) {
-				aptr = v4a == NULL ? NULL : *v4a++;
 				print_hdr_once_v4 = udp_report_item_v4(ude,
-				    print_hdr_once_v4, aptr);
+				    print_hdr_once_v4);
 			}
 		} else {
 			for (ude6 = (mib2_udp6Entry_t *)item->valp;
@@ -5045,21 +4779,16 @@ udp_report(const mib_item_t *item)
 			    /* LINTED: (note 1) */
 			    ude6 = (mib2_udp6Entry_t *)((char *)ude6 +
 			    udp6EntrySize)) {
-				aptr = v6a == NULL ? NULL : *v6a++;
 				print_hdr_once_v6 = udp_report_item_v6(ude6,
-				    print_hdr_once_v6, aptr);
+				    print_hdr_once_v6);
 			}
 		}
 	} /* 'for' loop 1 ends */
 	(void) fflush(stdout);
-
-	free(v4_attrs);
-	free(v6_attrs);
 }
 
 static boolean_t
-udp_report_item_v4(const mib2_udpEntry_t *ude, boolean_t first,
-    const mib2_transportMLPEntry_t *attr)
+udp_report_item_v4(const mib2_udpEntry_t *ude, boolean_t first)
 {
 	char	lname[MAXHOSTNAMELEN + MAXHOSTNAMELEN + 1];
 			/* hostname + portname */
@@ -5081,16 +4810,13 @@ udp_report_item_v4(const mib2_udpEntry_t *ude, boolean_t first,
 	    pr_ap(ude->udpEntryInfo.ue_RemoteAddress,
 	    ude->udpEntryInfo.ue_RemotePort, "udp", lname, sizeof (lname)) :
 	    "",
-	    miudp_state(ude->udpEntryInfo.ue_state, attr));
-
-	print_transport_label(attr);
+	    miudp_state(ude->udpEntryInfo.ue_state));
 
 	return (first);
 }
 
 static boolean_t
-udp_report_item_v6(const mib2_udp6Entry_t *ude6, boolean_t first,
-    const mib2_transportMLPEntry_t *attr)
+udp_report_item_v6(const mib2_udp6Entry_t *ude6, boolean_t first)
 {
 	char	lname[MAXHOSTNAMELEN + MAXHOSTNAMELEN + 1];
 			/* hostname + portname */
@@ -5117,10 +4843,8 @@ udp_report_item_v6(const mib2_udp6Entry_t *ude6, boolean_t first,
 	    pr_ap6(&ude6->udp6EntryInfo.ue_RemoteAddress,
 	    ude6->udp6EntryInfo.ue_RemotePort, "udp", lname, sizeof (lname)) :
 	    "",
-	    miudp_state(ude6->udp6EntryInfo.ue_state, attr),
+	    miudp_state(ude6->udp6EntryInfo.ue_state),
 	    ifnamep == NULL ? "" : ifnamep);
-
-	print_transport_label(attr);
 
 	return (first);
 }
@@ -5136,7 +4860,7 @@ static const char sctp_hdr_normal[] =
 "------ ------ ------ ------ ------- -----------";
 
 static const char *
-nssctp_state(int state, const mib2_transportMLPEntry_t *attr)
+nssctp_state(int state)
 {
 	static char sctpsbuf[50];
 	const char *cp;
@@ -5174,17 +4898,6 @@ nssctp_state(int state, const mib2_transportMLPEntry_t *attr)
 		    "UNKNOWN STATE(%d)", state);
 		cp = sctpsbuf;
 		break;
-	}
-
-	if (RSECflag && attr != NULL && attr->tme_flags != 0) {
-		if (cp != sctpsbuf) {
-			(void) strlcpy(sctpsbuf, cp, sizeof (sctpsbuf));
-			cp = sctpsbuf;
-		}
-		if (attr->tme_flags & MIB2_TMEF_PRIVATE)
-			(void) strlcat(sctpsbuf, " P", sizeof (sctpsbuf));
-		if (attr->tme_flags & MIB2_TMEF_SHARED)
-			(void) strlcat(sctpsbuf, " S", sizeof (sctpsbuf));
 	}
 
 	return (cp);
@@ -5301,8 +5014,7 @@ sctp_pr_addr(int type, char *name, int namelen, const in6_addr_t *addr,
 }
 
 static void
-sctp_conn_report_item(const mib_item_t *head, const mib2_sctpConnEntry_t *sp,
-    const mib2_transportMLPEntry_t *attr)
+sctp_conn_report_item(const mib_item_t *head, const mib2_sctpConnEntry_t *sp)
 {
 	char		lname[MAXHOSTNAMELEN + MAXHOSTNAMELEN + 1];
 	char		fname[MAXHOSTNAMELEN + MAXHOSTNAMELEN + 1];
@@ -5325,9 +5037,7 @@ sctp_conn_report_item(const mib_item_t *head, const mib2_sctpConnEntry_t *sp,
 	    sp->sctpConnEntryInfo.ce_rwnd,
 	    sp->sctpConnEntryInfo.ce_recvq,
 	    sp->sctpAssocInStreams, sp->sctpAssocOutStreams,
-	    nssctp_state(sp->sctpAssocState, attr));
-
-	print_transport_label(attr);
+	    nssctp_state(sp->sctpAssocState));
 
 	if (!Vflag) {
 		return;
@@ -5381,20 +5091,7 @@ sctp_report(const mib_item_t *item)
 	const mib_item_t		*head;
 	const mib2_sctpConnEntry_t	*sp;
 	boolean_t		first = B_TRUE;
-	mib2_transportMLPEntry_t **attrs, **aptr;
-	mib2_transportMLPEntry_t *attr;
 
-	/*
-	 * Preparation pass: the kernel returns separate entries for SCTP
-	 * connection table entries and Multilevel Port attributes.  We loop
-	 * through the attributes first and set up an array for each address
-	 * family.
-	 */
-	attrs = RSECflag ?
-	    gather_attrs(item, MIB2_SCTP, MIB2_SCTP_CONN, sctpEntrySize) :
-	    NULL;
-
-	aptr = attrs;
 	head = item;
 	for (; item != NULL; item = item->next_item) {
 
@@ -5406,7 +5103,6 @@ sctp_report(const mib_item_t *item)
 		    (char *)sp < (char *)item->valp + item->length;
 		    /* LINTED: (note 1) */
 		    sp = (mib2_sctpConnEntry_t *)((char *)sp + sctpEntrySize)) {
-			attr = aptr == NULL ? NULL : *aptr++;
 			if (Aflag ||
 			    sp->sctpAssocState >= MIB2_SCTP_established) {
 				if (first == B_TRUE) {
@@ -5414,11 +5110,10 @@ sctp_report(const mib_item_t *item)
 					(void) puts(sctp_hdr_normal);
 					first = B_FALSE;
 				}
-				sctp_conn_report_item(head, sp, attr);
+				sctp_conn_report_item(head, sp);
 			}
 		}
 	}
-	free(attrs);
 }
 
 static char *
@@ -6068,51 +5763,6 @@ fmodestr(uint_t fmode)
 }
 
 #define	MAX_STRING_SIZE	256
-
-static const char *
-pr_secattr(const sec_attr_list_t *attrs)
-{
-	int i;
-	char buf[MAX_STRING_SIZE + 1], *cp;
-	static char *sbuf;
-	static size_t sbuf_len;
-	struct rtsa_s rtsa;
-	const sec_attr_list_t *aptr;
-
-	if (!RSECflag || attrs == NULL)
-		return ("");
-
-	for (aptr = attrs, i = 1; aptr != NULL; aptr = aptr->sal_next)
-		i += MAX_STRING_SIZE;
-	if (i > sbuf_len) {
-		cp = realloc(sbuf, i);
-		if (cp == NULL) {
-			perror("realloc security attribute buffer");
-			return ("");
-		}
-		sbuf_len = i;
-		sbuf = cp;
-	}
-
-	cp = sbuf;
-	while (attrs != NULL) {
-		const mib2_ipAttributeEntry_t *iae = attrs->sal_attr;
-
-		/* note: effectively hard-coded in rtsa_keyword */
-		rtsa.rtsa_mask = RTSA_CIPSO | RTSA_SLRANGE | RTSA_DOI;
-		rtsa.rtsa_slrange = iae->iae_slrange;
-		rtsa.rtsa_doi = iae->iae_doi;
-
-		(void) snprintf(cp, MAX_STRING_SIZE,
-		    "<%s>%s ", rtsa_to_str(&rtsa, buf, sizeof (buf)),
-		    attrs->sal_next == NULL ? "" : ",");
-		cp += strlen(cp);
-		attrs = attrs->sal_next;
-	}
-	*cp = '\0';
-
-	return (sbuf);
-}
 
 /*
  * Pretty print a port number. If the Nflag was

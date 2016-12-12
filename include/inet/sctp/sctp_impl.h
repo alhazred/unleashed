@@ -915,8 +915,6 @@ typedef struct sctp_s {
 	uint64_t	sctp_msgcount;
 	uint64_t	sctp_prsctpdrop;
 
-	uint_t		sctp_v4label_len;	/* length of cached v4 label */
-	uint_t		sctp_v6label_len;	/* length of cached v6 label */
 	uint32_t	sctp_rxt_nxttsn;	/* Next TSN to be rexmitted */
 	uint32_t	sctp_rxt_maxtsn;	/* Max TSN sent at time out */
 

@@ -36,7 +36,6 @@
 #include <unistd.h>
 #include <alloca.h>
 #include <stdlib.h>
-#include <tsol/label.h>
 #include <bsm/audit.h>
 #include <bsm/libbsm.h>
 #include <bsm/audit_uevents.h>
@@ -412,8 +411,6 @@ aug_audit(void)
 
 	(void) au_write(ad, au_to_subject_ex(aug_auid, aug_euid, aug_egid,
 	    aug_uid, aug_gid, aug_pid, aug_asid, &aug_tid));
-	if (is_system_labeled())
-		(void) au_write(ad, au_to_mylabel());
 	if (aug_policy & AUDIT_GROUP) {
 		int ng;
 		int maxgrp = getgroups(0, NULL);

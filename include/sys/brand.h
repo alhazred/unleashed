@@ -64,9 +64,6 @@ struct brand_attr {
 /* What we call the native brand. */
 #define	NATIVE_BRAND_NAME	"native"
 
-/* What we call the labeled brand. */
-#define	LABELED_BRAND_NAME	"labeled"
-
 /*
  * Aux vector containing lddata pointer of brand library linkmap.
  * Used by common {brand}_librtld_db.

@@ -33,8 +33,6 @@
 #include <libintl.h>
 #include <papi_impl.h>
 
-#include <tsol/label.h>
-
 papi_status_t
 papiServiceCreate(papi_service_t *handle, char *service_name,
 		char *user_name, char *password,
@@ -87,38 +85,6 @@ papiServiceDestroy(papi_service_t handle)
 		papiAttributeListFree(svc->attributes);
 		free(svc);
 	}
-}
-
-/*
- * interface for passing a peer's connection to gather sensitivity labeling
- * from for Trusted Solaris.
- */
-papi_status_t
-papiServiceSetPeer(papi_service_t handle, int peerfd)
-{
-	papi_status_t result = PAPI_OK;
-	service_t *svc = handle;
-
-	if (svc == NULL)
-		return (PAPI_BAD_ARGUMENT);
-
-	if (is_system_labeled()) {
-		short status;
-
-		if ((snd_msg(svc, S_PASS_PEER_CONNECTION) < 0) ||
-		    (ioctl(svc->md->writefd, I_SENDFD, peerfd) < 0) ||
-		    (rcv_msg(svc, R_PASS_PEER_CONNECTION, &status) < 0))
-			status = MTRANSMITERR;
-
-		if (status != MOK) {
-			detailed_error(svc,
-				gettext("failed to send peer connection: %s"),
-				lpsched_status_string(status));
-			result = lpsched_status_to_papi_status(status);
-		}
-	}
-
-	return (result);
 }
 
 papi_status_t

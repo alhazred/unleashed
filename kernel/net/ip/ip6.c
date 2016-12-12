@@ -96,9 +96,6 @@
 #include <sys/squeue_impl.h>
 #include <sys/squeue.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
-
 /* Temporary; for CR 6451644 work-around */
 #include <sys/ethernet.h>
 
@@ -118,14 +115,6 @@
  *	IPv6 defined constants should start with IPV6_
  *		(but then there are NDP_DEFAULT_VERS_PRI_AND_FLOW, etc)
  */
-
-/*
- * ip6opt_ls is used to enable IPv6 (via /etc/system on TX systems).
- * We need to do this because we didn't obtain the IP6OPT_LS (0x0a)
- * from IANA. This mechanism will remain in effect until an official
- * number is obtained.
- */
-uchar_t ip6opt_ls;
 
 const in6_addr_t ipv6_all_ones =
 	{ 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU };
@@ -479,7 +468,6 @@ icmp_send_reply_v6(mblk_t *mp, ip6_t *ip6h, icmp6_t *icmp6,
 	ixas.ixa_zoneid = ira->ira_zoneid;
 	ixas.ixa_cred = kcred;
 	ixas.ixa_cpid = NOPID;
-	ixas.ixa_tsl = ira->ira_tsl;	/* Behave as a multi-level responder */
 	ixas.ixa_ifindex = 0;
 	ixas.ixa_ipst = ipst;
 	ixas.ixa_multicast_ttl = IP_DEFAULT_MULTICAST_TTL;
@@ -1098,7 +1086,7 @@ icmp_redirect_v6(mblk_t *mp, ip6_t *ip6h, nd_redirect_t *rd,
 	 * We do longest match and then compare ire_gateway_addr_v6 below.
 	 */
 	prev_ire = ire_ftable_lookup_v6(dst, 0, 0, 0, rill,
-	    ALL_ZONES, NULL, MATCH_IRE_ILL, 0, ipst, NULL);
+	    ALL_ZONES, MATCH_IRE_ILL, 0, ipst, NULL);
 
 	/*
 	 * Check that
@@ -1159,7 +1147,6 @@ icmp_redirect_v6(mblk_t *mp, ip6_t *ip6h, nd_redirect_t *rd,
 		    prev_ire->ire_ill,
 		    ALL_ZONES,
 		    (RTF_DYNAMIC | RTF_GATEWAY | RTF_HOST),
-		    NULL,
 		    ipst);
 	} else {
 		ipif_t *ipif;
@@ -1192,7 +1179,6 @@ icmp_redirect_v6(mblk_t *mp, ip6_t *ip6h, nd_redirect_t *rd,
 		    prev_ire->ire_ill,
 		    ALL_ZONES,
 		    (RTF_DYNAMIC | RTF_HOST),
-		    NULL,
 		    ipst);
 	}
 
@@ -1225,7 +1211,7 @@ icmp_redirect_v6(mblk_t *mp, ip6_t *ip6h, nd_redirect_t *rd,
 		 * modifying an existing redirect.
 		 */
 		redir_ire = ire_ftable_lookup_v6(dst, 0, src, IRE_HOST,
-		    prev_ire->ire_ill, ALL_ZONES, NULL,
+		    prev_ire->ire_ill, ALL_ZONES,
 		    (MATCH_IRE_GW | MATCH_IRE_TYPE | MATCH_IRE_ILL), 0, ipst,
 		    NULL);
 
@@ -1281,7 +1267,6 @@ icmp_pkt_v6(mblk_t *mp, void *stuff, size_t len,
 	ixas.ixa_ipst = ipst;
 	ixas.ixa_cred = kcred;
 	ixas.ixa_cpid = NOPID;
-	ixas.ixa_tsl = ira->ira_tsl;	/* Behave as a multi-level responder */
 	ixas.ixa_multicast_ttl = IP_DEFAULT_MULTICAST_TTL;
 
 	/*
@@ -1335,7 +1320,7 @@ icmp_pkt_v6(mblk_t *mp, void *stuff, size_t len,
 			match_flags |= MATCH_IRE_ILL;
 
 		ire = ire_ftable_lookup_v6(&ip6h->ip6_dst, 0, 0,
-		    (IRE_LOCAL|IRE_LOOPBACK), ill, ira->ira_zoneid, NULL,
+		    (IRE_LOCAL|IRE_LOOPBACK), ill, ira->ira_zoneid,
 		    match_flags, 0, ipst, NULL);
 		if (ire != NULL) {
 			v6src = ip6h->ip6_dst;
@@ -1536,15 +1521,6 @@ icmp_pkt_err_ok_v6(mblk_t *mp, boolean_t mcast_ok, ip_recv_attr_t *ira)
 		freemsg(mp);
 		return (NULL);
 	}
-	/*
-	 * If this is a labeled system, then check to see if we're allowed to
-	 * send a response to this particular sender.  If not, then just drop.
-	 */
-	if (is_system_labeled() && !tsol_can_reply_error(mp, ira)) {
-		BUMP_MIB(ill->ill_icmp6_mib, ipv6IfIcmpOutErrors);
-		freemsg(mp);
-		return (NULL);
-	}
 
 	if (icmp_err_rate_limit(ipst)) {
 		/*
@@ -1603,7 +1579,7 @@ ip_send_potential_redirect_v6(mblk_t *mp, ip6_t *ip6h, ire_t *ire,
 		v6targ = &nhop_ire->ire_addr_v6;
 	}
 	src_ire_v6 = ire_ftable_lookup_v6(&ip6h->ip6_src,
-	    NULL, NULL, IRE_INTERFACE, ire->ire_ill, ALL_ZONES, NULL,
+	    NULL, NULL, IRE_INTERFACE, ire->ire_ill, ALL_ZONES,
 	    MATCH_IRE_ILL | MATCH_IRE_TYPE, 0, ipst, NULL);
 
 	if (src_ire_v6 == NULL) {
@@ -1884,7 +1860,7 @@ ip_laddr_verify_v6(const in6_addr_t *v6src, zoneid_t zoneid,
 	}
 
 	src_ire = ire_ftable_lookup_v6(v6src, NULL, NULL, 0,
-	    ill, zoneid, NULL, match_flags, 0, ipst, NULL);
+	    ill, zoneid, match_flags, 0, ipst, NULL);
 	if (ill != NULL)
 		ill_refrele(ill);
 
@@ -1951,22 +1927,19 @@ ip_laddr_verify_v6(const in6_addr_t *v6src, zoneid_t zoneid,
  * IPDF_ALLOW_MCBC is set.
  * first_hop and dst_addr are normally the same, but if source routing
  * they will differ; in that case the first_hop is what we'll use for the
- * routing lookup but the dce and label checks will be done on dst_addr,
+ * routing lookup but the dce checks will be done on dst_addr,
  *
  * If uinfo is set, then we fill in the best available information
  * we have for the destination. This is based on (in priority order) any
  * metrics and path MTU stored in a dce_t, route metrics, and finally the
  * ill_mtu/ill_mc_mtu.
  *
- * Tsol note: If we have a source route then dst_addr != firsthop. But we
- * always do the label check on dst_addr.
- *
  * Assumes that the caller has set ixa_scopeid for link-local communication.
  */
 int
 ip_set_destination_v6(in6_addr_t *src_addrp, const in6_addr_t *dst_addr,
     const in6_addr_t *firsthop, ip_xmit_attr_t *ixa, iulp_t *uinfo,
-    uint32_t flags, uint_t mac_mode)
+    uint32_t flags)
 {
 	ire_t		*ire;
 	int		error = 0;
@@ -1991,19 +1964,6 @@ ip_set_destination_v6(in6_addr_t *src_addrp, const in6_addr_t *dst_addr,
 	 * places.
 	 */
 	ASSERT(!IN6_IS_ADDR_UNSPECIFIED(dst_addr));
-
-	if (is_system_labeled()) {
-		ts_label_t *tsl = NULL;
-
-		error = tsol_check_dest(ixa->ixa_tsl, dst_addr, IPV6_VERSION,
-		    mac_mode, (flags & IPDF_ZONE_IS_GLOBAL) != 0, &tsl);
-		if (error != 0)
-			return (error);
-		if (tsl != NULL) {
-			/* Update the label */
-			ip_xmit_attr_replace_tsl(ixa, tsl);
-		}
-	}
 
 	setsrc = ipv6_all_zeros;
 	/*
@@ -2310,9 +2270,7 @@ ip_fanout_proto_v6(mblk_t *mp, ip6_t *ip6h, ip_recv_attr_t *ira)
 	for (connp = connfp->connf_head; connp != NULL;
 	    connp = connp->conn_next) {
 		/* Note: IPCL_PROTO_MATCH_V6 includes conn_wantpacket */
-		if (IPCL_PROTO_MATCH_V6(connp, ira, ip6h) &&
-		    (!(ira->ira_flags & IRAF_SYSTEM_LABELED) ||
-		    tsol_receive_local(mp, &laddr, IPV6_VERSION, ira, connp)))
+		if (IPCL_PROTO_MATCH_V6(connp, ira, ip6h))
 			break;
 	}
 
@@ -2341,10 +2299,7 @@ ip_fanout_proto_v6(mblk_t *mp, ip6_t *ip6h, ip_recv_attr_t *ira)
 	for (;;) {
 		while (connp != NULL) {
 			/* Note: IPCL_PROTO_MATCH_V6 includes conn_wantpacket */
-			if (IPCL_PROTO_MATCH_V6(connp, ira, ip6h) &&
-			    (!(ira->ira_flags & IRAF_SYSTEM_LABELED) ||
-			    tsol_receive_local(mp, &laddr, IPV6_VERSION,
-			    ira, connp)))
+			if (IPCL_PROTO_MATCH_V6(connp, ira, ip6h))
 				break;
 			connp = connp->conn_next;
 		}
@@ -2499,9 +2454,7 @@ ip_fanout_udp_multi_v6(mblk_t *mp, ip6_t *ip6h, uint16_t lport, uint16_t fport,
 	connp = connfp->connf_head;
 	while (connp != NULL) {
 		if ((IPCL_UDP_MATCH_V6(connp, lport, laddr, fport, faddr)) &&
-		    conn_wantpacket_v6(connp, ira, ip6h) &&
-		    (!(ira->ira_flags & IRAF_SYSTEM_LABELED) ||
-		    tsol_receive_local(mp, &laddr, IPV6_VERSION, ira, connp)))
+		    conn_wantpacket_v6(connp, ira, ip6h))
 			break;
 		connp = connp->conn_next;
 	}
@@ -2521,10 +2474,7 @@ ip_fanout_udp_multi_v6(mblk_t *mp, ip6_t *ip6h, uint16_t lport, uint16_t fport,
 			while (connp != NULL) {
 				if (IPCL_UDP_MATCH_V6(connp, lport, laddr,
 				    fport, faddr) &&
-				    conn_wantpacket_v6(connp, ira, ip6h) &&
-				    (!(ira->ira_flags & IRAF_SYSTEM_LABELED) ||
-				    tsol_receive_local(mp, &laddr, IPV6_VERSION,
-				    ira, connp)))
+				    conn_wantpacket_v6(connp, ira, ip6h))
 					break;
 				connp = connp->conn_next;
 			}
@@ -2591,9 +2541,6 @@ notfound:
  * - Return a pointer to the last nexthdr value
  *
  * The caller must initialize ipp_fields.
- * The upper layer protocols normally set label_separate which makes the
- * routine put the TX label in ipp_label_v6. If this is not set then
- * the hop-by-hop options including the label are placed in ipp_hopopts.
  *
  * NOTE: If multiple extension headers of the same type are present,
  * ip_find_hdr_v6() will set the respective extension header pointers
@@ -2603,8 +2550,7 @@ notfound:
  * malformed part.
  */
 int
-ip_find_hdr_v6(mblk_t *mp, ip6_t *ip6h, boolean_t label_separate, ip_pkt_t *ipp,
-    uint8_t *nexthdrp)
+ip_find_hdr_v6(mblk_t *mp, ip6_t *ip6h, ip_pkt_t *ipp, uint8_t *nexthdrp)
 {
 	uint_t	length, ehdrlen;
 	uint8_t nexthdr;
@@ -2631,44 +2577,17 @@ ip_find_hdr_v6(mblk_t *mp, ip6_t *ip6h, boolean_t label_separate, ip_pkt_t *ipp,
 
 		switch (nexthdr) {
 		case IPPROTO_HOPOPTS: {
-			/* We check for any CIPSO */
-			uchar_t *secopt;
-			boolean_t hbh_needed;
-			uchar_t *after_secopt;
-
 			tmphopopts = (ip6_hbh_t *)whereptr;
 			ehdrlen = 8 * (tmphopopts->ip6h_len + 1);
 			if ((uchar_t *)tmphopopts +  ehdrlen > endptr)
 				goto done;
 			nexthdr = tmphopopts->ip6h_nxt;
 
-			if (!label_separate) {
-				secopt = NULL;
-				after_secopt = whereptr;
-			} else {
-				/*
-				 * We have dropped packets with bad options in
-				 * ip6_input. No need to check return value
-				 * here.
-				 */
-				(void) tsol_find_secopt_v6(whereptr, ehdrlen,
-				    &secopt, &after_secopt, &hbh_needed);
-			}
-			if (secopt != NULL && after_secopt - whereptr > 0) {
-				ipp->ipp_fields |= IPPF_LABEL_V6;
-				ipp->ipp_label_v6 = secopt;
-				ipp->ipp_label_len_v6 = after_secopt - whereptr;
-			} else {
-				ipp->ipp_label_len_v6 = 0;
-				after_secopt = whereptr;
-				hbh_needed = B_TRUE;
-			}
 			/* return only 1st hbh */
-			if (hbh_needed && !(ipp->ipp_fields & IPPF_HOPOPTS)) {
+			if (!(ipp->ipp_fields & IPPF_HOPOPTS)) {
 				ipp->ipp_fields |= IPPF_HOPOPTS;
-				ipp->ipp_hopopts = (ip6_hbh_t *)after_secopt;
-				ipp->ipp_hopoptslen = ehdrlen -
-				    ipp->ipp_label_len_v6;
+				ipp->ipp_hopopts = (ip6_hbh_t *)whereptr;
+				ipp->ipp_hopoptslen = ehdrlen;
 			}
 			break;
 		}
@@ -2883,11 +2802,7 @@ ip_process_options_v6(mblk_t *mp, ip6_t *ip6h,
 			if (optlen < 2)
 				goto bad_opt;
 			errtype = "malformed";
-			if (opt_type == ip6opt_ls) {
-				optused = 2 + optptr[1];
-				if (optused > optlen)
-					goto bad_opt;
-			} else switch (opt_type) {
+			switch (opt_type) {
 			case IP6OPT_PADN:
 				/*
 				 * Note:We don't verify that (N-2) pad octets
@@ -4512,22 +4427,7 @@ ip_total_hdrs_len_v6(const ip_pkt_t *ipp)
 
 	len = IPV6_HDR_LEN;
 
-	/*
-	 * If there's a security label here, then we ignore any hop-by-hop
-	 * options the user may try to set.
-	 */
-	if (ipp->ipp_fields & IPPF_LABEL_V6) {
-		uint_t hopoptslen;
-		/*
-		 * Note that ipp_label_len_v6 is just the option - not
-		 * the hopopts extension header. It also needs to be padded
-		 * to a multiple of 8 bytes.
-		 */
-		ASSERT(ipp->ipp_label_len_v6 != 0);
-		hopoptslen = ipp->ipp_label_len_v6 + sizeof (ip6_hbh_t);
-		hopoptslen = (hopoptslen + 7)/8 * 8;
-		len += hopoptslen;
-	} else if (ipp->ipp_fields & IPPF_HOPOPTS) {
+	if (ipp->ipp_fields & IPPF_HOPOPTS) {
 		ASSERT(ipp->ipp_hopoptslen != 0);
 		len += ipp->ipp_hopoptslen;
 	}
@@ -4597,47 +4497,7 @@ ip_build_hdrs_v6(uchar_t *buf, uint_t buf_len, const ip_pkt_t *ipp,
 	 * any extension headers in the right order:
 	 * Hop-by-hop, destination, routing, and final destination opts.
 	 */
-	/*
-	 * If there's a security label here, then we ignore any hop-by-hop
-	 * options the user may try to set.
-	 */
-	if (ipp->ipp_fields & IPPF_LABEL_V6) {
-		/*
-		 * Hop-by-hop options with the label.
-		 * Note that ipp_label_v6 is just the option - not
-		 * the hopopts extension header. It also needs to be padded
-		 * to a multiple of 8 bytes.
-		 */
-		ip6_hbh_t *hbh = (ip6_hbh_t *)cp;
-		uint_t hopoptslen;
-		uint_t padlen;
-
-		padlen = ipp->ipp_label_len_v6 + sizeof (ip6_hbh_t);
-		hopoptslen = (padlen + 7)/8 * 8;
-		padlen = hopoptslen - padlen;
-
-		*nxthdr_ptr = IPPROTO_HOPOPTS;
-		nxthdr_ptr = &hbh->ip6h_nxt;
-		hbh->ip6h_len = hopoptslen/8 - 1;
-		cp += sizeof (ip6_hbh_t);
-		bcopy(ipp->ipp_label_v6, cp, ipp->ipp_label_len_v6);
-		cp += ipp->ipp_label_len_v6;
-
-		ASSERT(padlen <= 7);
-		switch (padlen) {
-		case 0:
-			break;
-		case 1:
-			cp[0] = IP6OPT_PAD1;
-			break;
-		default:
-			cp[0] = IP6OPT_PADN;
-			cp[1] = padlen - 2;
-			bzero(&cp[2], padlen - 2);
-			break;
-		}
-		cp += padlen;
-	} else if (ipp->ipp_fields & IPPF_HOPOPTS) {
+	if (ipp->ipp_fields & IPPF_HOPOPTS) {
 		/* Hop-by-hop options */
 		ip6_hbh_t *hbh = (ip6_hbh_t *)cp;
 

@@ -79,9 +79,6 @@
 #include <assert.h>
 #include <strings.h>
 
-#include <libtsnet.h>
-#include <tsol/label.h>
-
 static struct keytab {
 	char	*kt_cp;
 	int	kt_i;
@@ -170,8 +167,6 @@ static struct keytab {
 	{"setsrc",	K_SETSRC},
 #define	K_SHOW		43
 	{"show",	K_SHOW},
-#define	K_SECATTR	43
-	{"secattr",	K_SECATTR},
 #define	K_INDIRECT	44
 	{"indirect",	K_INDIRECT},
 	{0, 0}
@@ -212,8 +207,6 @@ typedef struct rtcmd_irep {
 	su_t ri_ifa;
 	su_t ri_ifp;
 	char *ri_ifp_str;
-	int ri_rtsa_cnt;	/* number of gateway security attributes */
-	struct rtsa_s ri_rtsa;	/* enough space for one attribute */
 } rtcmd_irep_t;
 
 typedef struct	mib_item_s {
@@ -291,7 +284,6 @@ static void		syntax_bad_keyword(char *keyword);
 static void		syntax_error(char *err, ...);
 static void		usage(char *cp);
 static void		write_to_rtfile(FILE *fp, int argc, char **argv);
-static void		pmsg_secattr(const char *, size_t, const char *);
 
 static pid_t		pid;
 static int		s;
@@ -1375,35 +1367,6 @@ args_to_rtcmd(rtcmd_irep_t *rcip, char **argv, char *cmd_string)
 			}
 			rcip->ri_flags |= RTF_SETSRC;
 			break;
-		case K_SECATTR:
-			if (!NEXTTOKEN) {
-				syntax_arg_missing(keyword_str);
-				return (B_FALSE);
-			}
-			if (is_system_labeled()) {
-				int err;
-
-				if (rcip->ri_rtsa_cnt >= 1) {
-					syntax_error(gettext("route: can't "
-					    "specify more than one security "
-					    "attribute\n"));
-					return (B_FALSE);
-				}
-				if (!rtsa_keyword(tok, &rcip->ri_rtsa, &err,
-				    NULL)) {
-					syntax_error(gettext("route: "
-					    "bad security attribute: %s\n"),
-					    tsol_strerror(err, errno));
-					return (B_FALSE);
-				}
-				rcip->ri_rtsa_cnt++;
-			} else {
-				syntax_error(gettext("route: "
-				    "system is not labeled; cannot specify "
-				    "security attributes.\n"));
-				return (B_FALSE);
-			}
-			break;
 		case K_INDIRECT:
 			rcip->ri_flags |= RTF_INDIRECT;
 			break;
@@ -2478,22 +2441,6 @@ rtmsg(rtcmd_irep_t *newrt)
 	NEXTADDR(RTA_SRC, newrt->ri_src);
 #undef	NEXTADDR
 
-	if (newrt->ri_rtsa_cnt > 0) {
-		/* LINTED: aligned */
-		rtm_ext_t *rtm_ext = (rtm_ext_t *)cp;
-		tsol_rtsecattr_t *rtsecattr;
-
-		rtm_ext->rtmex_type = RTMEX_GATEWAY_SECATTR;
-		rtm_ext->rtmex_len = TSOL_RTSECATTR_SIZE(1);
-
-		rtsecattr = (tsol_rtsecattr_t *)(rtm_ext + 1);
-		rtsecattr->rtsa_cnt = 1;
-
-		bcopy(&newrt->ri_rtsa, rtsecattr->rtsa_attr,
-		    sizeof (newrt->ri_rtsa));
-		cp = (char *)(rtsecattr->rtsa_attr + 1);
-	}
-
 	rtm.rtm_msglen = l = cp - (char *)&m_rtmsg;
 
 	if (verbose)
@@ -2769,8 +2716,6 @@ print_getmsg(rtcmd_irep_t *req_rt, struct rt_msghdr *rtm, int msglen)
 			sa = (const struct sockaddr *)sptr;
 			ADVANCE(sptr, sa);
 		}
-		if (addrs == 0)
-			pmsg_secattr(sptr, endptr - sptr, "    secattr: ");
 		(void) putchar('\n');
 	}
 #undef	RTA_IGN
@@ -2812,7 +2757,6 @@ pmsg_addrs(const char *cp, size_t msglen, uint_t addrs)
 		else
 			msglen = maxptr - cp;
 	}
-	pmsg_secattr(cp, msglen, "secattr: ");
 	(void) putchar('\n');
 	(void) fflush(stdout);
 }
@@ -3197,58 +3141,4 @@ mibget(int sd)
 		free(last_item);
 	}
 	return (NULL);
-}
-
-/*
- * print label security attributes for gateways.
- */
-static void
-pmsg_secattr(const char *sptr, size_t msglen, const char *labelstr)
-{
-	rtm_ext_t rtm_ext;
-	tsol_rtsecattr_t sp;
-	struct rtsa_s *rtsa = &sp.rtsa_attr[0];
-	const char *endptr;
-	char buf[256];
-	int i;
-
-	if (!is_system_labeled())
-		return;
-
-	endptr = sptr + msglen;
-
-	for (;;) {
-		if (sptr + sizeof (rtm_ext_t) + sizeof (sp) > endptr)
-			return;
-
-		bcopy(sptr, &rtm_ext, sizeof (rtm_ext));
-		sptr += sizeof (rtm_ext);
-		if (rtm_ext.rtmex_type == RTMEX_GATEWAY_SECATTR)
-			break;
-		sptr += rtm_ext.rtmex_len;
-	}
-
-	/* bail if this entry is corrupt or overruns buffer length */
-	if (rtm_ext.rtmex_len < sizeof (sp) ||
-	    sptr + rtm_ext.rtmex_len > endptr)
-		return;
-
-	/* run up just to the end of this extension */
-	endptr = sptr + rtm_ext.rtmex_len;
-
-	bcopy(sptr, &sp, sizeof (sp));
-	sptr += sizeof (sp);
-
-	if (sptr + (sp.rtsa_cnt - 1) * sizeof (*rtsa) != endptr)
-		return;
-
-	for (i = 0; i < sp.rtsa_cnt; i++) {
-		if (i > 0) {
-			/* first element is part of sp initalized above */
-			bcopy(sptr, rtsa, sizeof (*rtsa));
-			sptr += sizeof (*rtsa);
-		}
-		(void) printf("\n%s%s", labelstr, rtsa_to_str(rtsa, buf,
-		    sizeof (buf)));
-	}
 }

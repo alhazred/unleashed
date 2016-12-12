@@ -119,9 +119,6 @@
 #include <inet/rawip_impl.h>
 #include <inet/rts_impl.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
-
 #include <sys/squeue_impl.h>
 #include <inet/ip_arp.h>
 
@@ -173,7 +170,6 @@ typedef struct iproutedata_s {
 	uint_t		ird_flags;	/* see below */
 	listptr_t	ird_route;	/* ipRouteEntryTable */
 	listptr_t	ird_netmedia;	/* ipNetToMediaEntryTable */
-	listptr_t	ird_attrs;	/* ipRouteAttributeTable */
 } iproutedata_t;
 
 /* Include ire_testhidden and IRE_IF_CLONE routes */
@@ -368,13 +364,6 @@ void (*cl_inet_idlesa)(netstackid_t, uint8_t, uint32_t, sa_family_t,
  *
  * ipsa_lock -> ill_g_lock -> ill_lock
  * ill_g_usesrc_lock -> ill_g_lock -> ill_lock
- *
- * Trusted Solaris scenarios
- *
- * igsa_lock -> gcgrp_rwlock -> gcgrp_lock
- * igsa_lock -> gcdb_lock
- * gcgrp_rwlock -> ire_lock
- * gcgrp_rwlock -> gcdb_lock
  *
  * squeue(sq_lock), flow related (ft_lock, fe_lock) locking
  *
@@ -1699,7 +1688,6 @@ icmp_send_reply_v4(mblk_t *mp, ipha_t *ipha, icmph_t *icmph,
 	ixas.ixa_zoneid = ira->ira_zoneid;
 	ixas.ixa_cred = kcred;
 	ixas.ixa_cpid = NOPID;
-	ixas.ixa_tsl = ira->ira_tsl;	/* Behave as a multi-level responder */
 	ixas.ixa_ifindex = 0;
 	ixas.ixa_ipst = ipst;
 	ixas.ixa_multicast_ttl = IP_DEFAULT_MULTICAST_TTL;
@@ -2639,7 +2627,7 @@ icmp_redirect_v4(mblk_t *mp, ipha_t *ipha, icmph_t *icmph, ip_recv_attr_t *ira)
 	gateway = icmph->icmph_rd_gateway;
 	/* Make sure the new gateway is reachable somehow. */
 	ire = ire_ftable_lookup_v4(gateway, 0, 0, IRE_ONLINK, NULL,
-	    ALL_ZONES, NULL, MATCH_IRE_TYPE, 0, ipst, NULL);
+	    ALL_ZONES, MATCH_IRE_TYPE, 0, ipst, NULL);
 	/*
 	 * Make sure we had a route for the dest in question and that
 	 * that route was pointing to the old gateway (the source of the
@@ -2647,7 +2635,7 @@ icmp_redirect_v4(mblk_t *mp, ipha_t *ipha, icmph_t *icmph, ip_recv_attr_t *ira)
 	 * We do longest match and then compare ire_gateway_addr below.
 	 */
 	prev_ire = ire_ftable_lookup_v4(dst, 0, 0, 0, NULL, ALL_ZONES,
-	    NULL, MATCH_IRE_DSTONLY, 0, ipst, NULL);
+	    MATCH_IRE_DSTONLY, 0, ipst, NULL);
 	/*
 	 * Check that
 	 *	the redirect was not from ourselves
@@ -2700,7 +2688,6 @@ icmp_redirect_v4(mblk_t *mp, ipha_t *ipha, icmph_t *icmph, ip_recv_attr_t *ira)
 	    NULL,				/* ill */
 	    ALL_ZONES,
 	    (RTF_DYNAMIC | RTF_GATEWAY | RTF_HOST),
-	    NULL,				/* tsol_gc_t */
 	    ipst);
 
 	if (ire == NULL) {
@@ -2731,7 +2718,7 @@ icmp_redirect_v4(mblk_t *mp, ipha_t *ipha, icmph_t *icmph, ip_recv_attr_t *ira)
 	 * modifying an existing redirect.
 	 */
 	prev_ire = ire_ftable_lookup_v4(dst, 0, src, IRE_HOST, NULL,
-	    ALL_ZONES, NULL, (MATCH_IRE_GW | MATCH_IRE_TYPE), 0, ipst, NULL);
+	    ALL_ZONES, (MATCH_IRE_GW | MATCH_IRE_TYPE), 0, ipst, NULL);
 	if (prev_ire != NULL) {
 		if (prev_ire ->ire_flags & RTF_DYNAMIC)
 			ire_delete(prev_ire);
@@ -2795,7 +2782,6 @@ icmp_pkt(mblk_t *mp, void *stuff, size_t len, ip_recv_attr_t *ira)
 	ixas.ixa_ipst = ipst;
 	ixas.ixa_cred = kcred;
 	ixas.ixa_cpid = NOPID;
-	ixas.ixa_tsl = ira->ira_tsl;	/* Behave as a multi-level responder */
 	ixas.ixa_multicast_ttl = IP_DEFAULT_MULTICAST_TTL;
 
 	if (ira->ira_flags & IRAF_IPSEC_SECURE) {
@@ -2829,7 +2815,7 @@ icmp_pkt(mblk_t *mp, void *stuff, size_t len, ip_recv_attr_t *ira)
 	 * have ip_output_simple pick the source address.
 	 */
 	ire = ire_ftable_lookup_v4(ipha->ipha_dst, 0, 0,
-	    (IRE_LOCAL|IRE_LOOPBACK), NULL, ira->ira_zoneid, NULL,
+	    (IRE_LOCAL|IRE_LOOPBACK), NULL, ira->ira_zoneid,
 	    MATCH_IRE_TYPE|MATCH_IRE_ZONEONLY, 0, ipst, NULL);
 	if (ire != NULL) {
 		ire_refrele(ire);
@@ -3026,16 +3012,6 @@ icmp_pkt_err_ok(mblk_t *mp, ip_recv_attr_t *ira)
 		default:
 			break;
 		}
-	}
-	/*
-	 * If this is a labeled system, then check to see if we're allowed to
-	 * send a response to this particular sender.  If not, then just drop.
-	 */
-	if (is_system_labeled() && !tsol_can_reply_error(mp, ira)) {
-		ip2dbg(("icmp_pkt_err_ok: can't respond to packet\n"));
-		BUMP_MIB(&ipst->ips_icmp_mib, icmpOutDrops);
-		freemsg(mp);
-		return (NULL);
 	}
 	if (icmp_err_rate_limit(ipst)) {
 		/*
@@ -3250,7 +3226,7 @@ ip_laddr_verify_v4(ipaddr_t src_addr, zoneid_t zoneid,
 	ASSERT(src_addr != INADDR_ANY);
 
 	src_ire = ire_ftable_lookup_v4(src_addr, 0, 0, 0,
-	    NULL, zoneid, NULL, MATCH_IRE_ZONEONLY, 0, ipst, NULL);
+	    NULL, zoneid, MATCH_IRE_ZONEONLY, 0, ipst, NULL);
 
 	/*
 	 * If an address other than in6addr_any is requested,
@@ -3326,16 +3302,7 @@ ip_laddr_fanout_insert(conn_t *connp)
 	 */
 	connp->conn_policy_cached = B_FALSE;
 
-	error = ipcl_bind_insert(connp);
-	if (error != 0) {
-		if (connp->conn_anon_port) {
-			(void) tsol_mlp_anon(crgetzone(connp->conn_cred),
-			    connp->conn_mlp_type, connp->conn_proto,
-			    ntohs(connp->conn_lport), B_FALSE);
-		}
-		connp->conn_mlp_type = mlptSingle;
-	}
-	return (error);
+	return (ipcl_bind_insert(connp));
 }
 
 /*
@@ -3350,19 +3317,16 @@ ip_laddr_fanout_insert(conn_t *connp)
  * IPDF_ALLOW_MCBC is set.
  * first_hop and dst_addr are normally the same, but if source routing
  * they will differ; in that case the first_hop is what we'll use for the
- * routing lookup but the dce and label checks will be done on dst_addr,
+ * routing lookup but the dce checks will be done on dst_addr,
  *
  * If uinfo is set, then we fill in the best available information
  * we have for the destination. This is based on (in priority order) any
  * metrics and path MTU stored in a dce_t, route metrics, and finally the
  * ill_mtu/ill_mc_mtu.
- *
- * Tsol note: If we have a source route then dst_addr != firsthop. But we
- * always do the label check on dst_addr.
  */
 int
 ip_set_destination_v4(ipaddr_t *src_addrp, ipaddr_t dst_addr, ipaddr_t firsthop,
-    ip_xmit_attr_t *ixa, iulp_t *uinfo, uint32_t flags, uint_t mac_mode)
+    ip_xmit_attr_t *ixa, iulp_t *uinfo, uint32_t flags)
 {
 	ire_t		*ire = NULL;
 	int		error = 0;
@@ -3384,19 +3348,6 @@ ip_set_destination_v4(ipaddr_t *src_addrp, ipaddr_t dst_addr, ipaddr_t firsthop,
 	 * places.
 	 */
 	ASSERT(dst_addr != INADDR_ANY);
-
-	if (is_system_labeled()) {
-		ts_label_t *tsl = NULL;
-
-		error = tsol_check_dest(ixa->ixa_tsl, &dst_addr, IPV4_VERSION,
-		    mac_mode, (flags & IPDF_ZONE_IS_GLOBAL) != 0, &tsl);
-		if (error != 0)
-			return (error);
-		if (tsl != NULL) {
-			/* Update the label */
-			ip_xmit_attr_replace_tsl(ixa, tsl);
-		}
-	}
 
 	setsrc = INADDR_ANY;
 	/*
@@ -4187,14 +4138,6 @@ ip_quiesce_conn(conn_t *connp)
 	if (conn_ioctl_cleanup_reqd)
 		conn_ioctl_cleanup(connp);
 
-	if (is_system_labeled() && connp->conn_anon_port) {
-		(void) tsol_mlp_anon(crgetzone(connp->conn_cred),
-		    connp->conn_mlp_type, connp->conn_proto,
-		    ntohs(connp->conn_lport), B_FALSE);
-		connp->conn_anon_port = 0;
-	}
-	connp->conn_mlp_type = mlptSingle;
-
 	/*
 	 * Remove this conn from any fanout list it is on.
 	 * and then wait for any threads currently operating
@@ -4307,8 +4250,6 @@ ip_ddi_destroy(void)
 	mutex_enter(&cpu_lock);
 	unregister_cpu_setup_func(ip_tp_cpu_update, NULL);
 	mutex_exit(&cpu_lock);
-
-	tnet_fini();
 
 	icmp_ddi_g_destroy();
 	rts_ddi_g_destroy();
@@ -4590,8 +4531,6 @@ ip_ddi_init(void)
 	 */
 	netstack_register(NS_IP, ip_stack_init, ip_stack_shutdown,
 	    ip_stack_fini);
-
-	tnet_init();
 
 	udp_ddi_g_init();
 	rts_ddi_g_init();
@@ -5024,15 +4963,6 @@ ip_fanout_proto_v4(mblk_t *mp, ipha_t *ipha, ip_recv_attr_t *ira)
 	connfp = &ipst->ips_ipcl_proto_fanout_v4[ira->ira_protocol];
 	mutex_enter(&connfp->connf_lock);
 	connp = connfp->connf_head;
-	for (connp = connfp->connf_head; connp != NULL;
-	    connp = connp->conn_next) {
-		/* Note: IPCL_PROTO_MATCH includes conn_wantpacket */
-		if (IPCL_PROTO_MATCH(connp, ira, ipha) &&
-		    (!(ira->ira_flags & IRAF_SYSTEM_LABELED) ||
-		    tsol_receive_local(mp, &laddr, IPV4_VERSION, ira, connp))) {
-			break;
-		}
-	}
 
 	if (connp == NULL) {
 		/*
@@ -5055,10 +4985,7 @@ ip_fanout_proto_v4(mblk_t *mp, ipha_t *ipha, ip_recv_attr_t *ira)
 	for (;;) {
 		while (connp != NULL) {
 			/* Note: IPCL_PROTO_MATCH includes conn_wantpacket */
-			if (IPCL_PROTO_MATCH(connp, ira, ipha) &&
-			    (!(ira->ira_flags & IRAF_SYSTEM_LABELED) ||
-			    tsol_receive_local(mp, &laddr, IPV4_VERSION,
-			    ira, connp)))
+			if (IPCL_PROTO_MATCH(connp, ira, ipha))
 				break;
 			connp = connp->conn_next;
 		}
@@ -5297,9 +5224,7 @@ ip_fanout_udp_multi_v4(mblk_t *mp, ipha_t *ipha, uint16_t lport, uint16_t fport,
 	 */
 	while (connp != NULL) {
 		if ((IPCL_UDP_MATCH(connp, lport, laddr, fport, faddr)) &&
-		    conn_wantpacket(connp, ira, ipha) &&
-		    (!(ira->ira_flags & IRAF_SYSTEM_LABELED) ||
-		    tsol_receive_local(mp, &laddr, IPV4_VERSION, ira, connp)))
+		    conn_wantpacket(connp, ira, ipha))
 			break;
 		connp = connp->conn_next;
 	}
@@ -5319,10 +5244,7 @@ ip_fanout_udp_multi_v4(mblk_t *mp, ipha_t *ipha, uint16_t lport, uint16_t fport,
 			while (connp != NULL) {
 				if (IPCL_UDP_MATCH(connp, lport, laddr,
 				    fport, faddr) &&
-				    conn_wantpacket(connp, ira, ipha) &&
-				    (!(ira->ira_flags & IRAF_SYSTEM_LABELED) ||
-				    tsol_receive_local(mp, &laddr, IPV4_VERSION,
-				    ira, connp)))
+				    conn_wantpacket(connp, ira, ipha))
 					break;
 				connp = connp->conn_next;
 			}
@@ -5385,9 +5307,7 @@ notfound:
 	while (connp != NULL) {
 		if (IPCL_UDP_MATCH_V6(connp, lport, ipv6_all_zeros,
 		    fport, v6faddr) &&
-		    conn_wantpacket(connp, ira, ipha) &&
-		    (!(ira->ira_flags & IRAF_SYSTEM_LABELED) ||
-		    tsol_receive_local(mp, &laddr, IPV4_VERSION, ira, connp)))
+		    conn_wantpacket(connp, ira, ipha))
 			break;
 		connp = connp->conn_next;
 	}
@@ -5434,10 +5354,7 @@ notfound:
 			while (connp != NULL) {
 				if (IPCL_UDP_MATCH_V6(connp, lport,
 				    ipv6_all_zeros, fport, v6faddr) &&
-				    conn_wantpacket(connp, ira, ipha) &&
-				    (!(ira->ira_flags & IRAF_SYSTEM_LABELED) ||
-				    tsol_receive_local(mp, &laddr, IPV4_VERSION,
-				    ira, connp)))
+				    conn_wantpacket(connp, ira, ipha))
 					break;
 				connp = connp->conn_next;
 			}
@@ -5476,9 +5393,9 @@ notfound:
 }
 
 /*
- * Split an incoming packet's IPv4 options into the label and the other options.
+ * Split an incoming packet's IPv4 options into options.
  * If 'allocate' is set it does memory allocation for the ip_pkt_t, including
- * clearing out any leftover label or options.
+ * clearing out any leftover options.
  * Otherwise it just makes ipp point into the packet.
  *
  * Returns zero if ok; ENOMEM if the buffer couldn't be allocated.
@@ -5514,112 +5431,44 @@ ip_find_hdr_v4(ipha_t *ipha, ip_pkt_t *ipp, boolean_t allocate)
 			ipp->ipp_ipv4_options_len = 0;
 			ipp->ipp_fields &= ~IPPF_IPV4_OPTIONS;
 		}
-		if (ipp->ipp_fields & IPPF_LABEL_V4) {
-			kmem_free(ipp->ipp_label_v4, ipp->ipp_label_len_v4);
-			ipp->ipp_label_v4 = NULL;
-			ipp->ipp_label_len_v4 = 0;
-			ipp->ipp_fields &= ~IPPF_LABEL_V4;
-		}
 		return (0);
 	}
 
 	totallen <<= 2;
 	opt = (uchar_t *)&ipha[1];
-	if (!is_system_labeled()) {
 
-	copyall:
-		if (!allocate) {
-			if (totallen != 0) {
-				ipp->ipp_ipv4_options = opt;
-				ipp->ipp_ipv4_options_len = totallen;
-				ipp->ipp_fields |= IPPF_IPV4_OPTIONS;
-			}
-			return (0);
+copyall:
+	if (!allocate) {
+		if (totallen != 0) {
+			ipp->ipp_ipv4_options = opt;
+			ipp->ipp_ipv4_options_len = totallen;
+			ipp->ipp_fields |= IPPF_IPV4_OPTIONS;
 		}
-		/* Just copy all of options */
-		if (ipp->ipp_fields & IPPF_IPV4_OPTIONS) {
-			if (totallen == ipp->ipp_ipv4_options_len) {
-				bcopy(opt, ipp->ipp_ipv4_options, totallen);
-				return (0);
-			}
-			kmem_free(ipp->ipp_ipv4_options,
-			    ipp->ipp_ipv4_options_len);
-			ipp->ipp_ipv4_options = NULL;
-			ipp->ipp_ipv4_options_len = 0;
-			ipp->ipp_fields &= ~IPPF_IPV4_OPTIONS;
-		}
-		if (totallen == 0)
-			return (0);
-
-		ipp->ipp_ipv4_options = kmem_alloc(totallen, KM_NOSLEEP);
-		if (ipp->ipp_ipv4_options == NULL)
-			return (ENOMEM);
-		ipp->ipp_ipv4_options_len = totallen;
-		ipp->ipp_fields |= IPPF_IPV4_OPTIONS;
-		bcopy(opt, ipp->ipp_ipv4_options, totallen);
 		return (0);
 	}
-
-	if (allocate && (ipp->ipp_fields & IPPF_LABEL_V4)) {
-		kmem_free(ipp->ipp_label_v4, ipp->ipp_label_len_v4);
-		ipp->ipp_label_v4 = NULL;
-		ipp->ipp_label_len_v4 = 0;
-		ipp->ipp_fields &= ~IPPF_LABEL_V4;
-	}
-
-	/*
-	 * Search for CIPSO option.
-	 * We assume CIPSO is first in options if it is present.
-	 * If it isn't, then ipp_opt_ipv4_options will not include the options
-	 * prior to the CIPSO option.
-	 */
-	while (totallen != 0) {
-		switch (optval = opt[IPOPT_OPTVAL]) {
-		case IPOPT_EOL:
+	/* Just copy all of options */
+	if (ipp->ipp_fields & IPPF_IPV4_OPTIONS) {
+		if (totallen == ipp->ipp_ipv4_options_len) {
+			bcopy(opt, ipp->ipp_ipv4_options, totallen);
 			return (0);
-		case IPOPT_NOP:
-			optlen = 1;
-			break;
-		default:
-			if (totallen <= IPOPT_OLEN)
-				return (EINVAL);
-			optlen = opt[IPOPT_OLEN];
-			if (optlen < 2)
-				return (EINVAL);
 		}
-		if (optlen > totallen)
-			return (EINVAL);
-
-		switch (optval) {
-		case IPOPT_COMSEC:
-			if (!allocate) {
-				ipp->ipp_label_v4 = opt;
-				ipp->ipp_label_len_v4 = optlen;
-				ipp->ipp_fields |= IPPF_LABEL_V4;
-			} else {
-				ipp->ipp_label_v4 = kmem_alloc(optlen,
-				    KM_NOSLEEP);
-				if (ipp->ipp_label_v4 == NULL)
-					return (ENOMEM);
-				ipp->ipp_label_len_v4 = optlen;
-				ipp->ipp_fields |= IPPF_LABEL_V4;
-				bcopy(opt, ipp->ipp_label_v4, optlen);
-			}
-			totallen -= optlen;
-			opt += optlen;
-
-			/* Skip padding bytes until we get to a multiple of 4 */
-			while ((totallen & 3) != 0 && opt[0] == IPOPT_NOP) {
-				totallen--;
-				opt++;
-			}
-			/* Remaining as ipp_ipv4_options */
-			goto copyall;
-		}
-		totallen -= optlen;
-		opt += optlen;
+		kmem_free(ipp->ipp_ipv4_options,
+		    ipp->ipp_ipv4_options_len);
+		ipp->ipp_ipv4_options = NULL;
+		ipp->ipp_ipv4_options_len = 0;
+		ipp->ipp_fields &= ~IPPF_IPV4_OPTIONS;
 	}
-	/* No CIPSO found; return everything as ipp_ipv4_options */
+	if (totallen == 0)
+		return (0);
+
+	ipp->ipp_ipv4_options = kmem_alloc(totallen, KM_NOSLEEP);
+	if (ipp->ipp_ipv4_options == NULL)
+		return (ENOMEM);
+	ipp->ipp_ipv4_options_len = totallen;
+	ipp->ipp_fields |= IPPF_IPV4_OPTIONS;
+	bcopy(opt, ipp->ipp_ipv4_options, totallen);
+	return (0);
+
 	totallen = ipha->ipha_version_and_hdr_length -
 	    (uint8_t)((IP_VERSION << 4) + IP_SIMPLE_HDR_LENGTH_IN_WORDS);
 	totallen <<= 2;
@@ -6065,8 +5914,6 @@ ip_open(queue_t *q, dev_t *devp, int flag, int sflag, cred_t *credp,
 	ASSERT(!(connp->conn_ixa->ixa_free_flags & IXA_FREE_CRED));
 	connp->conn_ixa->ixa_cred = connp->conn_cred;
 	connp->conn_ixa->ixa_cpid = connp->conn_cpid;
-	if (is_system_labeled())
-		connp->conn_ixa->ixa_tsl = crgetlabel(connp->conn_cred);
 
 	/*
 	 * Handle IP_IOC_RTS_REQUEST and other ioctls which use conn_recv
@@ -6075,13 +5922,6 @@ ip_open(queue_t *q, dev_t *devp, int flag, int sflag, cred_t *credp,
 	connp->conn_recvicmp = ip_conn_input_icmp;
 
 	crhold(connp->conn_cred);
-
-	/*
-	 * If the caller has the process-wide flag set, then default to MAC
-	 * exempt mode.  This allows read-down to unlabeled hosts.
-	 */
-	if (getpflags(NET_MAC_AWARE, credp) != 0)
-		connp->conn_mac_mode = CONN_MAC_AWARE;
 
 	connp->conn_zone_is_global = (crgetzoneid(credp) == GLOBAL_ZONEID);
 
@@ -6389,11 +6229,11 @@ ip_opt_set_multicast_group(conn_t *connp, t_scalar_t name,
 		IN6_V4MAPPED_TO_IPADDR(&v6group, group);
 
 		ire = ire_ftable_lookup_v4(group, IP_HOST_MASK, 0,
-		    IRE_HOST | IRE_INTERFACE, NULL, ALL_ZONES, NULL,
+		    IRE_HOST | IRE_INTERFACE, NULL, ALL_ZONES,
 		    MATCH_IRE_MASK | MATCH_IRE_TYPE, 0, ipst, NULL);
 	} else {
 		ire = ire_ftable_lookup_v6(&v6group, &ipv6_all_ones, 0,
-		    IRE_HOST | IRE_INTERFACE, NULL, ALL_ZONES, NULL,
+		    IRE_HOST | IRE_INTERFACE, NULL, ALL_ZONES,
 		    MATCH_IRE_MASK | MATCH_IRE_TYPE, 0, ipst, NULL);
 	}
 	if (ire != NULL) {
@@ -6519,11 +6359,11 @@ ip_opt_set_multicast_sources(conn_t *connp, t_scalar_t name,
 		IN6_V4MAPPED_TO_IPADDR(&v6group, group);
 
 		ire = ire_ftable_lookup_v4(group, IP_HOST_MASK, 0,
-		    IRE_HOST | IRE_INTERFACE, NULL, ALL_ZONES, NULL,
+		    IRE_HOST | IRE_INTERFACE, NULL, ALL_ZONES,
 		    MATCH_IRE_MASK | MATCH_IRE_TYPE, 0, ipst, NULL);
 	} else {
 		ire = ire_ftable_lookup_v6(&v6group, &ipv6_all_ones, 0,
-		    IRE_HOST | IRE_INTERFACE, NULL, ALL_ZONES, NULL,
+		    IRE_HOST | IRE_INTERFACE, NULL, ALL_ZONES,
 		    MATCH_IRE_MASK | MATCH_IRE_TYPE, 0, ipst, NULL);
 	}
 	if (ire != NULL) {
@@ -6610,12 +6450,12 @@ ip_ire_unbind_walker(ire_t *ire, void *notused)
 	if (ire->ire_ipversion == IPV6_VERSION) {
 		new_ire = ire_create_v6(&ire->ire_addr_v6, &ire->ire_mask_v6,
 		    &ire->ire_gateway_addr_v6, ire->ire_type, NULL,
-		    ire->ire_zoneid, ire->ire_flags, NULL, ire->ire_ipst);
+		    ire->ire_zoneid, ire->ire_flags, ire->ire_ipst);
 	} else {
 		new_ire = ire_create((uchar_t *)&ire->ire_addr,
 		    (uchar_t *)&ire->ire_mask,
 		    (uchar_t *)&ire->ire_gateway_addr, ire->ire_type, NULL,
-		    ire->ire_zoneid, ire->ire_flags, NULL, ire->ire_ipst);
+		    ire->ire_zoneid, ire->ire_flags, ire->ire_ipst);
 	}
 	if (new_ire == NULL)
 		return;
@@ -7716,14 +7556,14 @@ ip_check_multihome(void *addr, ire_t *ire, ill_t *ill)
 		if (ipst->ips_ip_strict_dst_multihoming)
 			strict_check = B_TRUE;
 		new_ire = ire_ftable_lookup_v4(*((ipaddr_t *)addr), 0, 0,
-		    IRE_LOCAL, ill, ALL_ZONES, NULL,
+		    IRE_LOCAL, ill, ALL_ZONES,
 		    (MATCH_IRE_TYPE|MATCH_IRE_ILL), 0, ipst, NULL);
 	} else {
 		ASSERT(!IN6_IS_ADDR_MULTICAST((in6_addr_t *)addr));
 		if (ipst->ips_ipv6_strict_dst_multihoming)
 			strict_check = B_TRUE;
 		new_ire = ire_ftable_lookup_v6((in6_addr_t *)addr, NULL, NULL,
-		    IRE_LOCAL, ill, ALL_ZONES, NULL,
+		    IRE_LOCAL, ill, ALL_ZONES,
 		    (MATCH_IRE_TYPE|MATCH_IRE_ILL), 0, ipst, NULL);
 	}
 	/*
@@ -9478,9 +9318,7 @@ ip_input_options(ipha_t *ipha, ipaddr_t dst, mblk_t *mp,
 			if (optval == IPOPT_SSRR) {
 				ire = ire_ftable_lookup_v4(dst, 0, 0,
 				    IRE_INTERFACE, NULL, ALL_ZONES,
-				    ira->ira_tsl,
-				    MATCH_IRE_TYPE | MATCH_IRE_SECATTR, 0, ipst,
-				    NULL);
+				    MATCH_IRE_TYPE, 0, ipst, NULL);
 				if (ire == NULL) {
 					ip1dbg(("ip_input_options: SSRR not "
 					    "directly reachable: 0x%x\n",
@@ -9577,7 +9415,6 @@ bad_src_route:
  *  - ipAddrEntryTable (ip 20)		all IPv4 ipifs
  *  - ipRouteEntryTable (ip 21)		all IPv4 IREs
  *  - ipNetToMediaEntryTable (ip 22)	all IPv4 Neighbor Cache entries
- *  - ipRouteAttributeTable (ip 102)	labeled routes
  *  - ip multicast membership (ip_member_t)
  *  - ip multicast source filtering (ip_grpsrc_t)
  *  - igmp fixed part (struct igmpstat)
@@ -9589,7 +9426,6 @@ bad_src_route:
  *  - icmp6 fixed part (mib2_ipv6IfIcmpEntry_t)
  *					One per ill plus one generic
  *  - ipv6RouteEntry			all IPv6 IREs
- *  - ipv6RouteAttributeTable (ip6 102)	labeled routes
  *  - ipv6NetToMediaEntry		all IPv6 Neighbor Cache entries
  *  - ipv6AddrEntry			all IPv6 ipifs
  *  - ipv6 multicast membership (ipv6_member_t)
@@ -9759,9 +9595,6 @@ ip_snmp_get_mib2_ip(queue_t *q, mblk_t *mpctl, mib2_ipIfStatsEntry_t *ipmib,
 	    sizeof (mib2_ipNetToMediaEntry_t));
 	SET_MIB(old_ip_mib.ipMemberEntrySize, sizeof (ip_member_t));
 	SET_MIB(old_ip_mib.ipGroupSourceEntrySize, sizeof (ip_grpsrc_t));
-	SET_MIB(old_ip_mib.ipRouteAttributeSize,
-	    sizeof (mib2_ipAttributeEntry_t));
-	SET_MIB(old_ip_mib.transportMLPSize, sizeof (mib2_transportMLPEntry_t));
 	SET_MIB(old_ip_mib.ipDestEntrySize, sizeof (dest_cache_entry_t));
 
 	/*
@@ -10553,8 +10386,7 @@ ip_snmp_get_mib2_multi_rtable(queue_t *q, mblk_t *mpctl, ip_stack_t *ipst)
 }
 
 /*
- * Return ipRouteEntryTable, ipNetToMediaEntryTable, and ipRouteAttributeTable
- * in one IRE walk.
+ * Return ipRouteEntryTable and ipNetToMediaEntryTable in one IRE walk.
  */
 static mblk_t *
 ip_snmp_get_mib2_ip_route_media(queue_t *q, mblk_t *mpctl, int level,
@@ -10563,7 +10395,6 @@ ip_snmp_get_mib2_ip_route_media(queue_t *q, mblk_t *mpctl, int level,
 	struct opthdr	*optp;
 	mblk_t		*mp2ctl;	/* Returned */
 	mblk_t		*mp3ctl;	/* nettomedia */
-	mblk_t		*mp4ctl;	/* routeattrs */
 	iproutedata_t	ird;
 	zoneid_t	zoneid;
 
@@ -10572,13 +10403,10 @@ ip_snmp_get_mib2_ip_route_media(queue_t *q, mblk_t *mpctl, int level,
 	 *	- mp2ctl is returned unchanged to the caller for his use
 	 *	- mpctl is sent upstream as ipRouteEntryTable
 	 *	- mp3ctl is sent upstream as ipNetToMediaEntryTable
-	 *	- mp4ctl is sent upstream as ipRouteAttributeTable
 	 */
 	mp2ctl = copymsg(mpctl);
 	mp3ctl = copymsg(mpctl);
-	mp4ctl = copymsg(mpctl);
-	if (mp3ctl == NULL || mp4ctl == NULL) {
-		freemsg(mp4ctl);
+	if (mp3ctl == NULL) {
 		freemsg(mp3ctl);
 		freemsg(mp2ctl);
 		freemsg(mpctl);
@@ -10589,7 +10417,6 @@ ip_snmp_get_mib2_ip_route_media(queue_t *q, mblk_t *mpctl, int level,
 
 	ird.ird_route.lp_head = mpctl->b_cont;
 	ird.ird_netmedia.lp_head = mp3ctl->b_cont;
-	ird.ird_attrs.lp_head = mp4ctl->b_cont;
 	/*
 	 * If the level has been set the special EXPER_IP_AND_ALL_IRES value,
 	 * then also include ire_testhidden IREs and IRE_IF_CLONE.  This is
@@ -10622,24 +10449,12 @@ ip_snmp_get_mib2_ip_route_media(queue_t *q, mblk_t *mpctl, int level,
 	    (int)optp->level, (int)optp->name, (int)optp->len));
 	qreply(q, mp3ctl);
 
-	/* ipRouteAttributeTable in mp4ctl */
-	optp = (struct opthdr *)&mp4ctl->b_rptr[sizeof (struct T_optmgmt_ack)];
-	optp->level = MIB2_IP;
-	optp->name = EXPER_IP_RTATTR;
-	optp->len = msgdsize(ird.ird_attrs.lp_head);
-	ip3dbg(("ip_snmp_get_mib2_ip_route_media: level %d, name %d, len %d\n",
-	    (int)optp->level, (int)optp->name, (int)optp->len));
-	if (optp->len == 0)
-		freemsg(mp4ctl);
-	else
-		qreply(q, mp4ctl);
-
 	return (mp2ctl);
 }
 
 /*
- * Return ipv6RouteEntryTable and ipv6RouteAttributeTable in one IRE walk, and
- * ipv6NetToMediaEntryTable in an NDP walk.
+ * Return ipv6RouteEntryTable in one IRE walk, and ipv6NetToMediaEntryTable in
+ * an NDP walk.
  */
 static mblk_t *
 ip_snmp_get_mib2_ip6_route_media(queue_t *q, mblk_t *mpctl, int level,
@@ -10648,7 +10463,6 @@ ip_snmp_get_mib2_ip6_route_media(queue_t *q, mblk_t *mpctl, int level,
 	struct opthdr	*optp;
 	mblk_t		*mp2ctl;	/* Returned */
 	mblk_t		*mp3ctl;	/* nettomedia */
-	mblk_t		*mp4ctl;	/* routeattrs */
 	iproutedata_t	ird;
 	zoneid_t	zoneid;
 
@@ -10657,13 +10471,10 @@ ip_snmp_get_mib2_ip6_route_media(queue_t *q, mblk_t *mpctl, int level,
 	 *	- mp2ctl is returned unchanged to the caller for his use
 	 *	- mpctl is sent upstream as ipv6RouteEntryTable
 	 *	- mp3ctl is sent upstream as ipv6NetToMediaEntryTable
-	 *	- mp4ctl is sent upstream as ipv6RouteAttributeTable
 	 */
 	mp2ctl = copymsg(mpctl);
 	mp3ctl = copymsg(mpctl);
-	mp4ctl = copymsg(mpctl);
-	if (mp3ctl == NULL || mp4ctl == NULL) {
-		freemsg(mp4ctl);
+	if (mp3ctl == NULL) {
 		freemsg(mp3ctl);
 		freemsg(mp2ctl);
 		freemsg(mpctl);
@@ -10674,7 +10485,6 @@ ip_snmp_get_mib2_ip6_route_media(queue_t *q, mblk_t *mpctl, int level,
 
 	ird.ird_route.lp_head = mpctl->b_cont;
 	ird.ird_netmedia.lp_head = mp3ctl->b_cont;
-	ird.ird_attrs.lp_head = mp4ctl->b_cont;
 	/*
 	 * If the level has been set the special EXPER_IP_AND_ALL_IRES value,
 	 * then also include ire_testhidden IREs and IRE_IF_CLONE.  This is
@@ -10705,18 +10515,6 @@ ip_snmp_get_mib2_ip6_route_media(queue_t *q, mblk_t *mpctl, int level,
 	ip3dbg(("ip_snmp_get_mib2_ip6_route_media: level %d, name %d, len %d\n",
 	    (int)optp->level, (int)optp->name, (int)optp->len));
 	qreply(q, mp3ctl);
-
-	/* ipv6RouteAttributeTable in mp4ctl */
-	optp = (struct opthdr *)&mp4ctl->b_rptr[sizeof (struct T_optmgmt_ack)];
-	optp->level = MIB2_IP6;
-	optp->name = EXPER_IP_RTATTR;
-	optp->len = msgdsize(ird.ird_attrs.lp_head);
-	ip3dbg(("ip_snmp_get_mib2_ip6_route_media: level %d, name %d, len %d\n",
-	    (int)optp->level, (int)optp->name, (int)optp->len));
-	if (optp->len == 0)
-		freemsg(mp4ctl);
-	else
-		qreply(q, mp4ctl);
 
 	return (mp2ctl);
 }
@@ -10908,18 +10706,13 @@ ip_snmp_get_mib2_icmp6(queue_t *q, mblk_t *mpctl, ip_stack_t *ipst)
 }
 
 /*
- * ire_walk routine to create both ipRouteEntryTable and
- * ipRouteAttributeTable in one IRE walk
+ * ire_walk routine to create ipRouteEntryTable in one IRE walk
  */
 static void
 ip_snmp_get2_v4(ire_t *ire, iproutedata_t *ird)
 {
 	ill_t				*ill;
 	mib2_ipRouteEntry_t		*re;
-	mib2_ipAttributeEntry_t		iaes;
-	tsol_ire_gw_secattr_t		*attrp;
-	tsol_gc_t			*gc = NULL;
-	tsol_gcgrp_t			*gcgrp = NULL;
 	ip_stack_t			*ipst = ire->ire_ipst;
 
 	ASSERT(ire->ire_ipversion == IPV4_VERSION);
@@ -10934,15 +10727,6 @@ ip_snmp_get2_v4(ire_t *ire, iproutedata_t *ird)
 	if ((re = kmem_zalloc(sizeof (*re), KM_NOSLEEP)) == NULL)
 		return;
 
-	if ((attrp = ire->ire_gw_secattr) != NULL) {
-		mutex_enter(&attrp->igsa_lock);
-		if ((gc = attrp->igsa_gc) != NULL) {
-			gcgrp = gc->gc_grp;
-			ASSERT(gcgrp != NULL);
-			rw_enter(&gcgrp->gcgrp_rwlock, RW_READER);
-		}
-		mutex_exit(&attrp->igsa_lock);
-	}
 	/*
 	 * Return all IRE types for route table... let caller pick and choose
 	 */
@@ -11010,24 +10794,10 @@ ip_snmp_get2_v4(ire_t *ire, iproutedata_t *ird)
 		    (uint_t)sizeof (*re)));
 	}
 
-	if (gc != NULL) {
-		iaes.iae_routeidx = ird->ird_idx;
-		iaes.iae_doi = gc->gc_db->gcdb_doi;
-		iaes.iae_slrange = gc->gc_db->gcdb_slrange;
-
-		if (!snmp_append_data2(ird->ird_attrs.lp_head,
-		    &ird->ird_attrs.lp_tail, (char *)&iaes, sizeof (iaes))) {
-			ip1dbg(("ip_snmp_get2_v4: failed to allocate %u "
-			    "bytes\n", (uint_t)sizeof (iaes)));
-		}
-	}
-
 	/* bump route index for next pass */
 	ird->ird_idx++;
 
 	kmem_free(re, sizeof (*re));
-	if (gcgrp != NULL)
-		rw_exit(&gcgrp->gcgrp_rwlock);
 }
 
 /*
@@ -11038,10 +10808,6 @@ ip_snmp_get2_v6_route(ire_t *ire, iproutedata_t *ird)
 {
 	ill_t				*ill;
 	mib2_ipv6RouteEntry_t		*re;
-	mib2_ipAttributeEntry_t		iaes;
-	tsol_ire_gw_secattr_t		*attrp;
-	tsol_gc_t			*gc = NULL;
-	tsol_gcgrp_t			*gcgrp = NULL;
 	ip_stack_t			*ipst = ire->ire_ipst;
 
 	ASSERT(ire->ire_ipversion == IPV6_VERSION);
@@ -11056,15 +10822,6 @@ ip_snmp_get2_v6_route(ire_t *ire, iproutedata_t *ird)
 	if ((re = kmem_zalloc(sizeof (*re), KM_NOSLEEP)) == NULL)
 		return;
 
-	if ((attrp = ire->ire_gw_secattr) != NULL) {
-		mutex_enter(&attrp->igsa_lock);
-		if ((gc = attrp->igsa_gc) != NULL) {
-			gcgrp = gc->gc_grp;
-			ASSERT(gcgrp != NULL);
-			rw_enter(&gcgrp->gcgrp_rwlock, RW_READER);
-		}
-		mutex_exit(&attrp->igsa_lock);
-	}
 	/*
 	 * Return all IRE types for route table... let caller pick and choose
 	 */
@@ -11136,24 +10893,10 @@ ip_snmp_get2_v6_route(ire_t *ire, iproutedata_t *ird)
 		    (uint_t)sizeof (*re)));
 	}
 
-	if (gc != NULL) {
-		iaes.iae_routeidx = ird->ird_idx;
-		iaes.iae_doi = gc->gc_db->gcdb_doi;
-		iaes.iae_slrange = gc->gc_db->gcdb_slrange;
-
-		if (!snmp_append_data2(ird->ird_attrs.lp_head,
-		    &ird->ird_attrs.lp_tail, (char *)&iaes, sizeof (iaes))) {
-			ip1dbg(("ip_snmp_get2_v6: failed to allocate %u "
-			    "bytes\n", (uint_t)sizeof (iaes)));
-		}
-	}
-
 	/* bump route index for next pass */
 	ird->ird_idx++;
 
 	kmem_free(re, sizeof (*re));
-	if (gcgrp != NULL)
-		rw_exit(&gcgrp->gcgrp_rwlock);
 }
 
 /*
@@ -11513,14 +11256,6 @@ ip_unbind(conn_t *connp)
 {
 
 	ASSERT(!MUTEX_HELD(&connp->conn_lock));
-
-	if (is_system_labeled() && connp->conn_anon_port) {
-		(void) tsol_mlp_anon(crgetzone(connp->conn_cred),
-		    connp->conn_mlp_type, connp->conn_proto,
-		    ntohs(connp->conn_lport), B_FALSE);
-		connp->conn_anon_port = 0;
-	}
-	connp->conn_mlp_type = mlptSingle;
 
 	ipcl_hash_remove(connp);
 }
@@ -13014,9 +12749,7 @@ ip_output_options(mblk_t *mp, ipha_t *ipha, ip_xmit_attr_t *ixa, ill_t *ill)
 			if (optval == IPOPT_SSRR) {
 				ire = ire_ftable_lookup_v4(dst, 0, 0,
 				    IRE_INTERFACE, NULL, ALL_ZONES,
-				    ixa->ixa_tsl,
-				    MATCH_IRE_TYPE | MATCH_IRE_SECATTR, 0, ipst,
-				    NULL);
+				    MATCH_IRE_TYPE, 0, ipst, NULL);
 				if (ire == NULL) {
 					ip1dbg(("ip_output_options: SSRR not"
 					    " directly reachable: 0x%x\n",
@@ -13528,9 +13261,8 @@ conn_clrqfull(conn_t *connp, boolean_t *flow_stopped)
 }
 
 /*
- * Return the length in bytes of the IPv4 headers (base header, label, and
- * other IP options) that will be needed based on the
- * ip_pkt_t structure passed by the caller.
+ * Return the length in bytes of the IPv4 headers (base header and IP options)
+ * that will be needed based on the ip_pkt_t structure passed by the caller.
  *
  * The returned length does not include the length of the upper level
  * protocol (ULP) header.
@@ -13542,11 +13274,6 @@ ip_total_hdrs_len_v4(const ip_pkt_t *ipp)
 	int len;
 
 	len = IP_SIMPLE_HDR_LENGTH;
-	if (ipp->ipp_fields & IPPF_LABEL_V4) {
-		ASSERT(ipp->ipp_label_len_v4 != 0);
-		/* We need to round up here */
-		len += (ipp->ipp_label_len_v4 + 3) & ~3;
-	}
 
 	if (ipp->ipp_fields & IPPF_IPV4_OPTIONS) {
 		ASSERT(ipp->ipp_ipv4_options_len != 0);
@@ -13585,15 +13312,6 @@ ip_build_hdrs_v4(uchar_t *buf, uint_t buf_len, const ip_pkt_t *ipp,
 		ipha->ipha_src = ipp->ipp_addr_v4;
 
 	cp = (uint8_t *)&ipha[1];
-	if (ipp->ipp_fields & IPPF_LABEL_V4) {
-		ASSERT(ipp->ipp_label_len_v4 != 0);
-		bcopy(ipp->ipp_label_v4, cp, ipp->ipp_label_len_v4);
-		cp += ipp->ipp_label_len_v4;
-		/* We need to round up here */
-		while ((uintptr_t)cp & 0x3) {
-			*cp++ = IPOPT_NOP;
-		}
-	}
 
 	if (ipp->ipp_fields & IPPF_IPV4_OPTIONS) {
 		ASSERT(ipp->ipp_ipv4_options_len != 0);
@@ -13755,14 +13473,14 @@ ip_multirt_apply_membership(int (*fn)(conn_t *, boolean_t,
 				continue;
 
 			ire_gw = ire_ftable_lookup_v6(&ire->ire_gateway_addr_v6,
-			    0, 0, IRE_INTERFACE, ire->ire_ill, ALL_ZONES, NULL,
+			    0, 0, IRE_INTERFACE, ire->ire_ill, ALL_ZONES,
 			    match_flags, 0, ipst, NULL);
 		} else {
 			if (ire->ire_addr != group)
 				continue;
 
 			ire_gw = ire_ftable_lookup_v4(ire->ire_gateway_addr,
-			    0, 0, IRE_INTERFACE, ire->ire_ill, ALL_ZONES, NULL,
+			    0, 0, IRE_INTERFACE, ire->ire_ill, ALL_ZONES,
 			    match_flags, 0, ipst, NULL);
 		}
 		/* No interface route exists for the gateway; skip this ire. */
@@ -14842,18 +14560,8 @@ ip_pkt_free(ip_pkt_t *ipp)
 		ipp->ipp_ipv4_options = NULL;
 		ipp->ipp_ipv4_options_len = 0;
 	}
-	if (fields & IPPF_LABEL_V4) {
-		kmem_free(ipp->ipp_label_v4, ipp->ipp_label_len_v4);
-		ipp->ipp_label_v4 = NULL;
-		ipp->ipp_label_len_v4 = 0;
-	}
-	if (fields & IPPF_LABEL_V6) {
-		kmem_free(ipp->ipp_label_v6, ipp->ipp_label_len_v6);
-		ipp->ipp_label_v6 = NULL;
-		ipp->ipp_label_len_v6 = 0;
-	}
 	ipp->ipp_fields &= ~(IPPF_HOPOPTS | IPPF_RTHDRDSTOPTS | IPPF_DSTOPTS |
-	    IPPF_RTHDR | IPPF_IPV4_OPTIONS | IPPF_LABEL_V4 | IPPF_LABEL_V6);
+	    IPPF_RTHDR | IPPF_IPV4_OPTIONS);
 }
 
 /*
@@ -14870,7 +14578,7 @@ ip_pkt_copy(ip_pkt_t *src, ip_pkt_t *dst, int kmflag)
 	/* Start with fields that don't require memory allocation */
 	dst->ipp_fields = fields &
 	    ~(IPPF_HOPOPTS | IPPF_RTHDRDSTOPTS | IPPF_DSTOPTS |
-	    IPPF_RTHDR | IPPF_IPV4_OPTIONS | IPPF_LABEL_V4 | IPPF_LABEL_V6);
+	    IPPF_RTHDR | IPPF_IPV4_OPTIONS);
 
 	dst->ipp_addr = src->ipp_addr;
 	dst->ipp_unicast_hops = src->ipp_unicast_hops;
@@ -14879,7 +14587,7 @@ ip_pkt_copy(ip_pkt_t *src, ip_pkt_t *dst, int kmflag)
 	dst->ipp_type_of_service = src->ipp_type_of_service;
 
 	if (!(fields & (IPPF_HOPOPTS | IPPF_RTHDRDSTOPTS | IPPF_DSTOPTS |
-	    IPPF_RTHDR | IPPF_IPV4_OPTIONS | IPPF_LABEL_V4 | IPPF_LABEL_V6)))
+	    IPPF_RTHDR | IPPF_IPV4_OPTIONS)))
 		return (0);
 
 	if (fields & IPPF_HOPOPTS) {
@@ -14938,28 +14646,6 @@ ip_pkt_copy(ip_pkt_t *src, ip_pkt_t *dst, int kmflag)
 		bcopy(src->ipp_ipv4_options, dst->ipp_ipv4_options,
 		    src->ipp_ipv4_options_len);
 		dst->ipp_ipv4_options_len = src->ipp_ipv4_options_len;
-	}
-	if (fields & IPPF_LABEL_V4) {
-		dst->ipp_label_v4 = kmem_alloc(src->ipp_label_len_v4, kmflag);
-		if (dst->ipp_label_v4 == NULL) {
-			ip_pkt_free(dst);
-			return (ENOMEM);
-		}
-		dst->ipp_fields |= IPPF_LABEL_V4;
-		bcopy(src->ipp_label_v4, dst->ipp_label_v4,
-		    src->ipp_label_len_v4);
-		dst->ipp_label_len_v4 = src->ipp_label_len_v4;
-	}
-	if (fields & IPPF_LABEL_V6) {
-		dst->ipp_label_v6 = kmem_alloc(src->ipp_label_len_v6, kmflag);
-		if (dst->ipp_label_v6 == NULL) {
-			ip_pkt_free(dst);
-			return (ENOMEM);
-		}
-		dst->ipp_fields |= IPPF_LABEL_V6;
-		bcopy(src->ipp_label_v6, dst->ipp_label_v6,
-		    src->ipp_label_len_v6);
-		dst->ipp_label_len_v6 = src->ipp_label_len_v6;
 	}
 	if (fields & IPPF_FRAGHDR) {
 		dst->ipp_fraghdr = kmem_alloc(src->ipp_fraghdrlen, kmflag);
@@ -15101,13 +14787,10 @@ ip_get_zoneid_v4(ipaddr_t addr, mblk_t *mp, ip_recv_attr_t *ira,
 	int		ire_flags = MATCH_IRE_TYPE;
 	zoneid_t	zoneid = ALL_ZONES;
 
-	if (is_system_labeled() && !tsol_can_accept_raw(mp, ira, B_FALSE))
-		return (ALL_ZONES);
-
 	if (lookup_zoneid != ALL_ZONES)
 		ire_flags |= MATCH_IRE_ZONEONLY;
 	ire = ire_ftable_lookup_v4(addr, NULL, NULL, IRE_LOCAL | IRE_LOOPBACK,
-	    NULL, lookup_zoneid, NULL, ire_flags, 0, ipst, NULL);
+	    NULL, lookup_zoneid, ire_flags, 0, ipst, NULL);
 	if (ire != NULL) {
 		zoneid = IP_REAL_ZONEID(ire->ire_zoneid, ipst);
 		ire_refrele(ire);
@@ -15124,16 +14807,13 @@ ip_get_zoneid_v6(in6_addr_t *addr, mblk_t *mp, const ill_t *ill,
 	int		ire_flags = MATCH_IRE_TYPE;
 	zoneid_t	zoneid = ALL_ZONES;
 
-	if (is_system_labeled() && !tsol_can_accept_raw(mp, ira, B_FALSE))
-		return (ALL_ZONES);
-
 	if (IN6_IS_ADDR_LINKLOCAL(addr))
 		ire_flags |= MATCH_IRE_ILL;
 
 	if (lookup_zoneid != ALL_ZONES)
 		ire_flags |= MATCH_IRE_ZONEONLY;
 	ire = ire_ftable_lookup_v6(addr, NULL, NULL, IRE_LOCAL | IRE_LOOPBACK,
-	    ill, lookup_zoneid, NULL, ire_flags, 0, ipst, NULL);
+	    ill, lookup_zoneid, ire_flags, 0, ipst, NULL);
 	if (ire != NULL) {
 		zoneid = IP_REAL_ZONEID(ire->ire_zoneid, ipst);
 		ire_refrele(ire);

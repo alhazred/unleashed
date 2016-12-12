@@ -126,11 +126,6 @@ main(int argc, char *argv[])
 #endif	/* FKSMBD */
 	}
 
-	if (is_system_labeled()) {
-		smbd_report("Trusted Extensions not supported");
-		return (SMF_EXIT_ERR_FATAL);
-	}
-
 	if (smbd_already_running())
 		return (SMF_EXIT_OK);
 
@@ -399,7 +394,6 @@ smbd_daemonize_fini(int fd, int exit_status)
 	priv_basicset(pset);
 
 	/* list of privileges for smbd */
-	(void) priv_addset(pset, PRIV_NET_MAC_AWARE);
 	(void) priv_addset(pset, PRIV_NET_PRIVADDR);
 	(void) priv_addset(pset, PRIV_PROC_AUDIT);
 	(void) priv_addset(pset, PRIV_SYS_DEVICES);

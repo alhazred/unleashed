@@ -79,7 +79,6 @@
 #include <sys/utrap.h>
 #include <sys/lgrp_user.h>
 #include <sys/door.h>
-#include <sys/tsol/tndb.h>
 #include <sys/rctl.h>
 #include <sys/rctl_impl.h>
 #include <sys/fork.h>
@@ -1930,10 +1929,7 @@ sol_optname(private_t *pri, long val)
 		case SO_ERROR:		return ("SO_ERROR");
 		case SO_TYPE:		return ("SO_TYPE");
 		case SO_PROTOTYPE:	return ("SO_PROTOTYPE");
-		case SO_ANON_MLP:	return ("SO_ANON_MLP");
-		case SO_MAC_EXEMPT:	return ("SO_MAC_EXEMPT");
 		case SO_ALLZONES:	return ("SO_ALLZONES");
-		case SO_MAC_IMPLICIT:	return ("SO_MAC_IMPLICIT");
 		case SO_VRRP:		return ("SO_VRRP");
 		case SO_EXCLBIND:	return ("SO_EXCLBIND");
 		case SO_DOMAIN:		return ("SO_DOMAIN");
@@ -2446,10 +2442,6 @@ prt_pfl(private_t *pri, int raw, long val)
 		case PRIV_XPOLICY:	s = "PRIV_XPOLICY";	break;
 		case PRIV_AWARE_RESET:  s = "PRIV_AWARE_RESET"; break;
 		case PRIV_PFEXEC:	s = "PRIV_PFEXEC";	break;
-		case NET_MAC_AWARE:	s =  "NET_MAC_AWARE";	break;
-		case NET_MAC_AWARE_INHERIT:
-			s = "NET_MAC_AWARE_INHERIT";
-			break;
 		}
 	}
 
@@ -2516,7 +2508,6 @@ prt_zga(private_t *pri, int raw, long val)
 		case ZONE_ATTR_UNIQID:	s = "ZONE_ATTR_UNIQID"; break;
 		case ZONE_ATTR_POOLID:	s = "ZONE_ATTR_POOLID"; break;
 		case ZONE_ATTR_INITPID:	s = "ZONE_ATTR_INITPID"; break;
-		case ZONE_ATTR_SLBL:	s = "ZONE_ATTR_SLBL"; break;
 		case ZONE_ATTR_INITNAME:	s = "ZONE_ATTR_INITNAME"; break;
 		case ZONE_ATTR_BOOTARGS:	s = "ZONE_ATTR_BOOTARGS"; break;
 		case ZONE_ATTR_BRAND:	s = "ZONE_ATTR_BRAND"; break;
@@ -2545,30 +2536,6 @@ prt_atc(private_t *pri, int raw, long val)
 	} else {
 		prt_dec(pri, 0, val);
 	}
-}
-
-/*
- * Print Trusted Networking database operation codes (labelsys; tn*)
- */
-static void
-prt_tnd(private_t *pri, int raw, long val)
-{
-	const char *s = NULL;
-
-	if (!raw) {
-		switch ((tsol_dbops_t)val) {
-		case TNDB_NOOP:		s = "TNDB_NOOP";	break;
-		case TNDB_LOAD:		s = "TNDB_LOAD";	break;
-		case TNDB_DELETE:	s = "TNDB_DELETE";	break;
-		case TNDB_FLUSH:	s = "TNDB_FLUSH";	break;
-		case TNDB_GET:		s = "TNDB_GET";		break;
-		}
-	}
-
-	if (s == NULL)
-		prt_dec(pri, 0, val);
-	else
-		outstring(pri, s);
 }
 
 /*
@@ -2934,7 +2901,6 @@ void (* const Print[])() = {
 	prt_lio,	/* LIO -- print LIO_XX flags */
 	prt_dfl,	/* DFL -- print door_create() flags */
 	prt_dpm,	/* DPM -- print DOOR_PARAM_XX flags */
-	prt_tnd,	/* TND -- print trusted network data base opcode */
 	prt_rsc,	/* RSC -- print rctlsys() subcodes */
 	prt_rgf,	/* RGF -- print getrctl() flags */
 	prt_rsf,	/* RSF -- print setrctl() flags */

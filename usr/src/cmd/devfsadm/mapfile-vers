@@ -60,5 +60,4 @@ SYMBOL_SCOPE {
 		devfsadm_secondary_link		{ FLAGS = EXTERN };
 		disk_enumerate_int		{ FLAGS = EXTERN };
 		s_strdup			{ FLAGS = EXTERN };
-		system_labeled			{ FLAGS = EXTERN };
 };

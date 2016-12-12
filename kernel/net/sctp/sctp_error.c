@@ -29,7 +29,6 @@
 #include <sys/cmn_err.h>
 #include <sys/ddi.h>
 #include <sys/strsubr.h>
-#include <sys/tsol/tnet.h>
 
 #include <netinet/in.h>
 #include <netinet/ip6.h>
@@ -194,13 +193,6 @@ sctp_send_abort(sctp_t *sctp, uint32_t vtag, uint16_t serror, char *details,
 		ahlen = sctp->sctp_hdr6_len;
 	}
 
-	/*
-	 * If this is a labeled system, then check to see if we're allowed to
-	 * send a response to this particular sender.  If not, then just drop.
-	 */
-	if (is_system_labeled() && !tsol_can_reply_error(inmp, ira))
-		return;
-
 	hmp = allocb(sctps->sctps_wroff_xtra + ahlen, BPRI_MED);
 	if (hmp == NULL) {
 		/* XXX no resources */
@@ -284,12 +276,6 @@ sctp_send_abort(sctp_t *sctp, uint32_t vtag, uint16_t serror, char *details,
 	SCTPS_BUMP_MIB(sctps, sctpAborted);
 	BUMP_LOCAL(sctp->sctp_obchunks);
 
-	if (is_system_labeled() && ixa->ixa_tsl != NULL) {
-		ASSERT(ira->ira_tsl != NULL);
-
-		ixa->ixa_tsl = ira->ira_tsl;	/* A multi-level responder */
-	}
-
 	if (ira->ira_flags & IRAF_IPSEC_SECURE) {
 		/*
 		 * Apply IPsec based on how IPsec was applied to
@@ -342,13 +328,6 @@ sctp_ootb_send_abort(uint32_t vtag, uint16_t serror, char *details,
 	isv4 = (IPH_HDR_VERSION(inmp->b_rptr) == IPV4_VERSION);
 	ip_hdr_len = ira->ira_ip_hdr_length;
 	ahlen = ip_hdr_len + sizeof (sctp_hdr_t);
-
-	/*
-	 * If this is a labeled system, then check to see if we're allowed to
-	 * send a response to this particular sender.  If not, then just drop.
-	 */
-	if (is_system_labeled() && !tsol_can_reply_error(inmp, ira))
-		return;
 
 	mp = allocb(ahlen + sctps->sctps_wroff_xtra, BPRI_MED);
 	if (mp == NULL) {
@@ -435,12 +414,6 @@ sctp_ootb_send_abort(uint32_t vtag, uint16_t serror, char *details,
 	ixas.ixa_ifindex = 0;
 
 	SCTPS_BUMP_MIB(sctps, sctpAborted);
-
-	if (is_system_labeled()) {
-		ASSERT(ira->ira_tsl != NULL);
-
-		ixas.ixa_tsl = ira->ira_tsl;	/* A multi-level responder */
-	}
 
 	if (ira->ira_flags & IRAF_IPSEC_SECURE) {
 		/*

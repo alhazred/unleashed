@@ -967,14 +967,6 @@ tcp_accept_swap(tcp_t *listener, tcp_t *acceptor, tcp_t *eager)
 	ASSERT(!TCP_IS_SOCKET(eager));
 	ASSERT(!TCP_IS_SOCKET(listener));
 
-	/*
-	 * Trusted Extensions may need to use a security label that is
-	 * different from the acceptor's label on MLP and MAC-Exempt
-	 * sockets. If this is the case, the required security label
-	 * already exists in econnp->conn_ixa->ixa_tsl. Since we make the
-	 * acceptor stream refer to econnp we atomatically get that label.
-	 */
-
 	acceptor->tcp_detached = B_TRUE;
 	/*
 	 * To permit stream re-use by TLI/XTI, the eager needs a copy of
@@ -1029,9 +1021,7 @@ tcp_accept_swap(tcp_t *listener, tcp_t *acceptor, tcp_t *eager)
 	econnp->conn_allzones = aconnp->conn_allzones;
 	econnp->conn_ixa->ixa_zoneid = aconnp->conn_ixa->ixa_zoneid;
 
-	econnp->conn_mac_mode = aconnp->conn_mac_mode;
 	econnp->conn_zone_is_global = aconnp->conn_zone_is_global;
-	aconnp->conn_mac_mode = CONN_MAC_DEFAULT;
 
 	/* Do the IPC initialization */
 	CONN_INC_REF(econnp);

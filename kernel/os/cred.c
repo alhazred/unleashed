@@ -59,7 +59,6 @@
 #include <sys/door.h>
 #include <c2/audit.h>
 #include <sys/zone.h>
-#include <sys/tsol/label.h>
 #include <sys/sid.h>
 #include <sys/idmap.h>
 #include <sys/klpd.h>
@@ -227,8 +226,6 @@ cred_init(void)
 
 	CR_EPRIV(kcred) = CR_PPRIV(kcred) = CR_IPRIV(kcred);
 
-	CR_FLAGS(kcred) = NET_MAC_AWARE;
-
 	/*
 	 * Set up credentials of p0.
 	 */
@@ -254,7 +251,6 @@ cralloc_flags(int flgs)
 
 	cr->cr_ref = 1;		/* So we can crfree() */
 	cr->cr_zone = NULL;
-	cr->cr_label = NULL;
 	cr->cr_ksid = NULL;
 	cr->cr_klpd = NULL;
 	cr->cr_grps = NULL;
@@ -291,8 +287,6 @@ crget(void)
 	bcopy(kcred, cr, crsize);
 	cr->cr_ref = 1;
 	zone_cred_hold(cr->cr_zone);
-	if (cr->cr_label)
-		label_hold(cr->cr_label);
 	ASSERT(cr->cr_klpd == NULL);
 	ASSERT(cr->cr_grps == NULL);
 	return (cr);
@@ -351,7 +345,6 @@ crhold(cred_t *cr)
 
 /*
  * Release previous hold on a cred structure.  Free it if refcnt == 0.
- * If cred uses label different from zone label, free it.
  */
 void
 crfree(cred_t *cr)
@@ -359,8 +352,6 @@ crfree(cred_t *cr)
 	ASSERT(cr->cr_ref != 0xdeadbeef && cr->cr_ref != 0);
 	if (atomic_dec_32_nv(&cr->cr_ref) == 0) {
 		ASSERT(cr != kcred);
-		if (cr->cr_label)
-			label_rele(cr->cr_label);
 		if (cr->cr_klpd)
 			crklpd_rele(cr->cr_klpd);
 		if (cr->cr_zone)
@@ -388,8 +379,6 @@ crcopy(cred_t *cr)
 	bcopy(cr, newcr, crsize);
 	if (newcr->cr_zone)
 		zone_cred_hold(newcr->cr_zone);
-	if (newcr->cr_label)
-		label_hold(newcr->cr_label);
 	if (newcr->cr_ksid)
 		kcrsid_hold(newcr->cr_ksid);
 	if (newcr->cr_klpd)
@@ -416,8 +405,6 @@ crcopy_to(cred_t *oldcr, cred_t *newcr)
 	bcopy(oldcr, newcr, crsize);
 	if (newcr->cr_zone)
 		zone_cred_hold(newcr->cr_zone);
-	if (newcr->cr_label)
-		label_hold(newcr->cr_label);
 	if (newcr->cr_klpd)
 		crklpd_hold(newcr->cr_klpd);
 	if (newcr->cr_grps)
@@ -448,8 +435,6 @@ crdup_flags(const cred_t *cr, int flgs)
 	bcopy(cr, newcr, crsize);
 	if (newcr->cr_zone)
 		zone_cred_hold(newcr->cr_zone);
-	if (newcr->cr_label)
-		label_hold(newcr->cr_label);
 	if (newcr->cr_klpd)
 		crklpd_hold(newcr->cr_klpd);
 	if (newcr->cr_ksid)
@@ -480,8 +465,6 @@ crdup_to(cred_t *oldcr, cred_t *newcr)
 	bcopy(oldcr, newcr, crsize);
 	if (newcr->cr_zone)
 		zone_cred_hold(newcr->cr_zone);
-	if (newcr->cr_label)
-		label_hold(newcr->cr_label);
 	if (newcr->cr_klpd)
 		crklpd_hold(newcr->cr_klpd);
 	if (newcr->cr_grps)
@@ -741,14 +724,6 @@ crgetzone(const cred_t *cr)
 	return (cr->cr_zone);
 }
 
-struct ts_label_s *
-crgetlabel(const cred_t *cr)
-{
-	return (cr->cr_label ?
-	    cr->cr_label :
-	    (cr->cr_zone ? cr->cr_zone->zone_slabel : NULL));
-}
-
 boolean_t
 crisremote(const cred_t *cr)
 {
@@ -919,15 +894,6 @@ cred2ucaud(const cred_t *cr, auditinfo64_addr_t *ainfo, const cred_t *rcr)
 	return (0);
 }
 
-void
-cred2uclabel(const cred_t *cr, bslabel_t *labelp)
-{
-	ts_label_t	*tslp;
-
-	if ((tslp = crgetlabel(cr)) != NULL)
-		bcopy(&tslp->tsl_label, labelp, sizeof (bslabel_t));
-}
-
 /*
  * Convert a credential into a "ucred".  Allow the caller to specify
  * and aligned buffer, e.g., in an mblk, so we don't have to allocate
@@ -942,7 +908,6 @@ cred2ucred(const cred_t *cr, pid_t pid, void *buf, const cred_t *rcr)
 {
 	struct ucred_s *uc;
 	uint32_t realsz = ucredminsize(cr);
-	ts_label_t *tslp = is_system_labeled() ? crgetlabel(cr) : NULL;
 
 	/* The structure isn't always completely filled in, so zero it */
 	if (buf == NULL) {
@@ -956,20 +921,10 @@ cred2ucred(const cred_t *cr, pid_t pid, void *buf, const cred_t *rcr)
 	uc->uc_projid = cr->cr_projid;
 	uc->uc_zoneid = crgetzoneid(cr);
 
-	if (REMOTE_PEER_CRED(cr)) {
-		/*
-		 * Other than label, the rest of cred info about a
-		 * remote peer isn't available. Copy the label directly
-		 * after the header where we generally copy the prcred.
-		 * That's why we use sizeof (struct ucred_s).  The other
-		 * offset fields are initialized to 0.
-		 */
-		uc->uc_labeloff = tslp == NULL ? 0 : sizeof (struct ucred_s);
-	} else {
+	if (!REMOTE_PEER_CRED(cr)) {
 		uc->uc_credoff = UCRED_CRED_OFF;
 		uc->uc_privoff = UCRED_PRIV_OFF;
 		uc->uc_audoff = UCRED_AUD_OFF;
-		uc->uc_labeloff = tslp == NULL ? 0 : UCRED_LABEL_OFF;
 
 		cred2prcred(cr, UCCRED(uc));
 		cred2prpriv(cr, UCPRIV(uc));
@@ -977,8 +932,6 @@ cred2ucred(const cred_t *cr, pid_t pid, void *buf, const cred_t *rcr)
 		if (audoff == 0 || cred2ucaud(cr, UCAUD(uc), rcr) != 0)
 			uc->uc_audoff = 0;
 	}
-	if (tslp != NULL)
-		bcopy(&tslp->tsl_label, UCLABEL(uc), sizeof (bslabel_t));
 
 	return (uc);
 }
@@ -997,10 +950,7 @@ ucredminsize(const cred_t *cr)
 		return (ucredsize);
 
 	if (REMOTE_PEER_CRED(cr)) {
-		if (is_system_labeled())
-			return (sizeof (struct ucred_s) + sizeof (bslabel_t));
-		else
-			return (sizeof (struct ucred_s));
+		return (sizeof (struct ucred_s));
 	}
 
 	if (cr->cr_grps == NULL)
@@ -1097,64 +1047,6 @@ crsetzone(cred_t *cr, zone_t *zptr)
 	zone_cred_hold(zptr);
 	if (oldzptr)
 		zone_cred_rele(oldzptr);
-}
-
-/*
- * Create a new cred based on the supplied label
- */
-cred_t *
-newcred_from_bslabel(bslabel_t *blabel, uint32_t doi, int flags)
-{
-	ts_label_t *lbl = labelalloc(blabel, doi, flags);
-	cred_t *cr = NULL;
-
-	if (lbl != NULL) {
-		if ((cr = crdup_flags(dummycr, flags)) != NULL) {
-			cr->cr_label = lbl;
-		} else {
-			label_rele(lbl);
-		}
-	}
-
-	return (cr);
-}
-
-/*
- * Derive a new cred from the existing cred, but with a different label.
- * To be used when a cred is being shared, but the label needs to be changed
- * by a caller without affecting other users
- */
-cred_t *
-copycred_from_tslabel(const cred_t *cr, ts_label_t *label, int flags)
-{
-	cred_t *newcr = NULL;
-
-	if ((newcr = crdup_flags(cr, flags)) != NULL) {
-		if (newcr->cr_label != NULL)
-			label_rele(newcr->cr_label);
-		label_hold(label);
-		newcr->cr_label = label;
-	}
-
-	return (newcr);
-}
-
-/*
- * Derive a new cred from the existing cred, but with a different label.
- */
-cred_t *
-copycred_from_bslabel(const cred_t *cr, bslabel_t *blabel,
-    uint32_t doi, int flags)
-{
-	ts_label_t *lbl = labelalloc(blabel, doi, flags);
-	cred_t  *newcr = NULL;
-
-	if (lbl != NULL) {
-		newcr = copycred_from_tslabel(cr, lbl, flags);
-		label_rele(lbl);
-	}
-
-	return (newcr);
 }
 
 /*

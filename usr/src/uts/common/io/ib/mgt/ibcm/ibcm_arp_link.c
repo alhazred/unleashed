@@ -134,8 +134,8 @@ ibcm_resolver_pr_lookup(ibcm_arp_streams_t *ib_s, ibt_ip_addr_t *dst_addr,
 		 */
 		setsrcv4 = INADDR_ANY;
 		ire = ire_route_recursive_v4(dst_addr->un.ip4addr, 0, NULL,
-		    myzoneid, NULL, MATCH_IRE_DSTONLY, B_TRUE, 0, ipst,
-		    &setsrcv4, NULL, NULL);
+		    myzoneid, MATCH_IRE_DSTONLY, B_TRUE, 0, ipst,
+		    &setsrcv4, NULL);
 
 		ASSERT(ire != NULL);
 		if (ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)) {
@@ -174,8 +174,8 @@ ibcm_resolver_pr_lookup(ibcm_arp_streams_t *ib_s, ibt_ip_addr_t *dst_addr,
 		 */
 		setsrcv6 = ipv6_all_zeros;
 		ire = ire_route_recursive_v6(&dst_addr->un.ip6addr, 0, NULL,
-		    myzoneid, NULL, MATCH_IRE_DSTONLY, B_TRUE, 0, ipst,
-		    &setsrcv6, NULL, NULL);
+		    myzoneid, MATCH_IRE_DSTONLY, B_TRUE, 0, ipst,
+		    &setsrcv6, NULL);
 
 		ASSERT(ire != NULL);
 		if (ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)) {

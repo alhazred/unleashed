@@ -27,7 +27,6 @@
 #include <sys/types.h>
 #include <sys/tihdr.h>
 #include <sys/policy.h>
-#include <sys/tsol/tnet.h>
 #include <sys/kstat.h>
 
 #include <inet/common.h>
@@ -95,16 +94,11 @@ tcp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 	mblk_t			*mpdata;
 	mblk_t			*mp_conn_ctl = NULL;
 	mblk_t			*mp_conn_tail;
-	mblk_t			*mp_attr_ctl = NULL;
-	mblk_t			*mp_attr_tail;
 	mblk_t			*mp6_conn_ctl = NULL;
 	mblk_t			*mp6_conn_tail;
-	mblk_t			*mp6_attr_ctl = NULL;
-	mblk_t			*mp6_attr_tail;
 	struct opthdr		*optp;
 	mib2_tcpConnEntry_t	tce;
 	mib2_tcp6ConnEntry_t	tce6;
-	mib2_transportMLPEntry_t mlp;
 	connf_t			*connfp;
 	int			i;
 	boolean_t 		ispriv;
@@ -126,13 +120,9 @@ tcp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 	if (mpctl == NULL ||
 	    (mpdata = mpctl->b_cont) == NULL ||
 	    (mp_conn_ctl = copymsg(mpctl)) == NULL ||
-	    (mp_attr_ctl = copymsg(mpctl)) == NULL ||
-	    (mp6_conn_ctl = copymsg(mpctl)) == NULL ||
-	    (mp6_attr_ctl = copymsg(mpctl)) == NULL) {
+	    (mp6_conn_ctl = copymsg(mpctl)) == NULL) {
 		freemsg(mp_conn_ctl);
-		freemsg(mp_attr_ctl);
 		freemsg(mp6_conn_ctl);
-		freemsg(mp6_attr_ctl);
 		freemsg(mpctl);
 		freemsg(mp2ctl);
 		return (NULL);
@@ -165,7 +155,7 @@ tcp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 	zoneid = Q_TO_CONN(q)->conn_zoneid;
 
 	v4_conn_idx = v6_conn_idx = 0;
-	mp_conn_tail = mp_attr_tail = mp6_conn_tail = mp6_attr_tail = NULL;
+	mp_conn_tail = mp6_conn_tail = NULL;
 
 	for (i = 0; i < CONN_G_HASH_SIZE; i++) {
 		ipst = tcps->tcps_netstack->netstack_ip;
@@ -177,7 +167,6 @@ tcp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 		while ((connp =
 		    ipcl_get_next_conn(connfp, connp, IPCL_TCPCONN)) != NULL) {
 			tcp_t *tcp;
-			boolean_t needattr;
 
 			if (connp->conn_zoneid != zoneid)
 				continue;	/* not in this zone */
@@ -193,43 +182,6 @@ tcp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 			if (tce.tcpConnState == MIB2_TCP_established ||
 			    tce.tcpConnState == MIB2_TCP_closeWait)
 				BUMP_MIB(&tcp_mib, tcpCurrEstab);
-
-			needattr = B_FALSE;
-			bzero(&mlp, sizeof (mlp));
-			if (connp->conn_mlp_type != mlptSingle) {
-				if (connp->conn_mlp_type == mlptShared ||
-				    connp->conn_mlp_type == mlptBoth)
-					mlp.tme_flags |= MIB2_TMEF_SHARED;
-				if (connp->conn_mlp_type == mlptPrivate ||
-				    connp->conn_mlp_type == mlptBoth)
-					mlp.tme_flags |= MIB2_TMEF_PRIVATE;
-				needattr = B_TRUE;
-			}
-			if (connp->conn_anon_mlp) {
-				mlp.tme_flags |= MIB2_TMEF_ANONMLP;
-				needattr = B_TRUE;
-			}
-			switch (connp->conn_mac_mode) {
-			case CONN_MAC_DEFAULT:
-				break;
-			case CONN_MAC_AWARE:
-				mlp.tme_flags |= MIB2_TMEF_MACEXEMPT;
-				needattr = B_TRUE;
-				break;
-			case CONN_MAC_IMPLICIT:
-				mlp.tme_flags |= MIB2_TMEF_MACIMPLICIT;
-				needattr = B_TRUE;
-				break;
-			}
-			if (connp->conn_ixa->ixa_tsl != NULL) {
-				ts_label_t *tsl;
-
-				tsl = connp->conn_ixa->ixa_tsl;
-				mlp.tme_flags |= MIB2_TMEF_IS_LABELED;
-				mlp.tme_doi = label2doi(tsl);
-				mlp.tme_label = *label2bslabel(tsl);
-				needattr = B_TRUE;
-			}
 
 			/* Create a message to report on IPv6 entries */
 			if (connp->conn_ipversion == IPV6_VERSION) {
@@ -281,10 +233,6 @@ tcp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 			(void) snmp_append_data2(mp6_conn_ctl->b_cont,
 			    &mp6_conn_tail, (char *)&tce6, tce6_size);
 
-			mlp.tme_connidx = v6_conn_idx++;
-			if (needattr)
-				(void) snmp_append_data2(mp6_attr_ctl->b_cont,
-				    &mp6_attr_tail, (char *)&mlp, sizeof (mlp));
 			}
 			/*
 			 * Create an IPv4 table entry for IPv4 entries and also
@@ -347,13 +295,6 @@ tcp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 
 				(void) snmp_append_data2(mp_conn_ctl->b_cont,
 				    &mp_conn_tail, (char *)&tce, tce_size);
-
-				mlp.tme_connidx = v4_conn_idx++;
-				if (needattr)
-					(void) snmp_append_data2(
-					    mp_attr_ctl->b_cont,
-					    &mp_attr_tail, (char *)&mlp,
-					    sizeof (mlp));
 			}
 		}
 	}
@@ -388,17 +329,6 @@ tcp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 	optp->len = msgdsize(mp_conn_ctl->b_cont);
 	qreply(q, mp_conn_ctl);
 
-	/* table of MLP attributes... */
-	optp = (struct opthdr *)&mp_attr_ctl->b_rptr[
-	    sizeof (struct T_optmgmt_ack)];
-	optp->level = MIB2_TCP;
-	optp->name = EXPER_XPORT_MLP;
-	optp->len = msgdsize(mp_attr_ctl->b_cont);
-	if (optp->len == 0)
-		freemsg(mp_attr_ctl);
-	else
-		qreply(q, mp_attr_ctl);
-
 	/* table of IPv6 connections... */
 	optp = (struct opthdr *)&mp6_conn_ctl->b_rptr[
 	    sizeof (struct T_optmgmt_ack)];
@@ -407,16 +337,6 @@ tcp_snmp_get(queue_t *q, mblk_t *mpctl, boolean_t legacy_req)
 	optp->len = msgdsize(mp6_conn_ctl->b_cont);
 	qreply(q, mp6_conn_ctl);
 
-	/* table of IPv6 MLP attributes... */
-	optp = (struct opthdr *)&mp6_attr_ctl->b_rptr[
-	    sizeof (struct T_optmgmt_ack)];
-	optp->level = MIB2_TCP6;
-	optp->name = EXPER_XPORT_MLP;
-	optp->len = msgdsize(mp6_attr_ctl->b_cont);
-	if (optp->len == 0)
-		freemsg(mp6_attr_ctl);
-	else
-		qreply(q, mp6_attr_ctl);
 	return (mp2ctl);
 }
 

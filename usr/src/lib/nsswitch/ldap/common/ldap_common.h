@@ -64,8 +64,6 @@ extern "C" {
 #define	_SERVICES		"services"
 #define	_SHADOW			"shadow"
 #define	_USERATTR		"user_attr"
-#define	_TNRHDB			"tnrhdb"
-#define	_TNRHTP			"tnrhtp"
 
 #define	NSS_STR_PARSE_NO_ADDR	(NSS_STR_PARSE_ERANGE + 100)
 #define	NSS_STR_PARSE_NO_RESULT	(NSS_STR_PARSE_ERANGE + 101)

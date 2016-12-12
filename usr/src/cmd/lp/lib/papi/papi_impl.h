@@ -81,7 +81,7 @@ extern void lpsched_read_job_configuration(service_t *svc, job_t *j,
 extern void lpsched_request_to_job(REQUEST *r, job_t *j);
 
 extern void job_status_to_attributes(job_t *job, char *req_id, char *user,
-				char *slabel, size_t size, time_t date,
+				size_t size, time_t date,
 				short state, char *destination, char *form,
 				char *charset, short rank, char *file);
 extern papi_status_t addLPString(papi_attribute_t ***list,

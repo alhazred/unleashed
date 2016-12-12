@@ -2437,19 +2437,6 @@ function ds_is_snapshot
 	return 1
 }
 
-#
-# Check if Trusted Extensions are installed and enabled
-#
-function is_te_enabled
-{
-	svcs -H -o state labeld 2>/dev/null | grep "enabled"
-	if (($? != 0)); then
-		return 1
-	else
-		return 0
-	fi
-}
-
 # Utility function to determine if a system has multiple cpus.
 function is_mp
 {

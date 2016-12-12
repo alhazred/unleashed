@@ -51,7 +51,6 @@
 
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <tsol/label.h>
 
 #define	NB_NEEDRESOLVER
 #include <netsmb/netbios.h>
@@ -521,9 +520,6 @@ nbns_rq_opensocket(struct nbns_rq *rqp)
 		    sizeof (opt)) < 0)
 			return (errno);
 	}
-	if (is_system_labeled())
-		(void) setsockopt(s, SOL_SOCKET, SO_MAC_EXEMPT, &opt,
-		    sizeof (opt));
 	bzero(&locaddr, sizeof (locaddr));
 	locaddr.sin_family = AF_INET;
 	/* locaddr.sin_len = sizeof (locaddr); */

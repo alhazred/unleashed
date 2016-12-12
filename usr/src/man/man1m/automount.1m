@@ -100,57 +100,6 @@ mounts from the master map. Subsequently, it may be run to install
 .Nm autofs
 mounts for new entries in the master map or the direct map, or to perform
 unmounts for entries that have been removed from these maps.
-.Ss Automount with Solaris Trusted Extensions
-If a system is configured with Solaris Trusted Extensions, additional
-processing is performed to facilitate multilevel home directory access. A list
-of zones whose labels are dominated by the current zone is generated and
-default
-.Sy auto_home
-automount maps are generated if they do not currently exist. These automount
-maps are named
-.Sy auto_home_ Ns Ar zonename ,
-where
-.Ar zonename
-is the name of each zone's lower-level zone. An
-.Nm autofs
-mount of each such
-.Sy auto_home
-map is then performed, regardless of whether it is explicitly or implicitly
-listed in the master map. Instead of
-.Nm autofs
-mounting the standard
-.Sy auto_home
-map, the zone uses an
-.Pa auto_home
-file appended with its own zone name. Each zone's
-.Sy auto_home
-map is uniquely named so that it can be maintained and shared by all zones using
-a common name server.
-.Pp
-By default, the home directories of lower-level zones are mounted read-only
-under
-.Pa /zone/ Ns Ar zonename Ns Pa /export/home
-when each zone is booted. The default
-.Sy auto_home_ Ns Ar zonename
-automount map specifies that path as the source directory for an
-.Nm lofs
-remount onto
-.Pa /zone/ Ns Ar zonename Ns Pa /home/ Ns Ar username .
-For example, the file
-.Pa auto_home_public ,
-as generated from a higher level zone would contain:
-.Bd -literal -offset indent
-+auto_home_public
-*	-fstype=lofs	:/zone/public/export/home/&
-.Ed
-.Pp
-When a home directory is referenced and the name does not match any other keys
-in the
-.Sy auto_home_public
-map, it will match this loopback mount specification. If this loopback match
-occurs and the name corresponds to a valid user whose home directory does not
-exist in the public zone, the directory is automatically created on behalf of
-the user.
 .Sh OPTIONS
 The following options are supported:
 .Bl -tag -width Ds

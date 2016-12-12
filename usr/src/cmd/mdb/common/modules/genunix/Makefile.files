@@ -78,6 +78,5 @@ GENUNIX_SRCS =		\
 	taskq.c		\
 	thread.c	\
 	tsd.c		\
-	tsol.c		\
 	vfs.c		\
 	zone.c

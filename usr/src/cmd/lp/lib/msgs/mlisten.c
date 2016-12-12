@@ -27,7 +27,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"	/* SVr4.0 1.9	*/
 # include	<unistd.h>
 # include	<stdlib.h>
 # include	<string.h>
@@ -343,8 +342,6 @@ mlisten()
 				md->admin = chkauthattr("solaris.print.admin",
 							pw->pw_name);
 		}
-	
-		get_peer_label(md->readfd, &md->slabel);
 
 		if (mlistenadd(md, POLLIN) != 0)
 		    return(NULL);

@@ -110,7 +110,6 @@ GENUNIX_OBJS +=	\
 		bdev_dsort.o	\
 		bio.o		\
 		bitmap.o	\
-		blabel.o	\
 		brandsys.o	\
 		bz2blocksort.o	\
 		bz2compress.o	\
@@ -215,7 +214,6 @@ GENUNIX_OBJS +=	\
 		kmem.o		\
 		ksyms_snapshot.o	\
 		l_strplumb.o	\
-		labelsys.o	\
 		link.o		\
 		list.o		\
 		lockstat_subr.o	\
@@ -223,7 +221,6 @@ GENUNIX_OBJS +=	\
 		logsubr.o	\
 		lookup.o	\
 		lseek.o		\
-		ltos.o		\
 		lwp.o		\
 		lwp_create.o	\
 		lwp_info.o	\
@@ -331,7 +328,6 @@ GENUNIX_OBJS +=	\
 		stat.o		\
 		statfs.o	\
 		statvfs.o	\
-		stol.o		\
 		str_conf.o	\
 		strcalls.o	\
 		stream.o	\
@@ -364,7 +360,6 @@ GENUNIX_OBJS +=	\
 		times.o		\
 		timers.o	\
 		thread.o	\
-		tlabel.o	\
 		tnf_res.o	\
 		turnstile.o	\
 		tty_common.o	\
@@ -550,8 +545,7 @@ IP_SCTP_OBJS =	sctp.o sctp_opt_data.o sctp_output.o \
 		sctp_tunables.o sctp_shutdown.o sctp_common.o \
 		sctp_timer.o sctp_heartbeat.o sctp_hash.o \
 		sctp_bind.o sctp_notify.o sctp_asconf.o \
-		sctp_addr.o tn_ipopt.o tnet.o ip_netinfo.o \
-		sctp_misc.o
+		sctp_addr.o ip_netinfo.o sctp_misc.o
 IP_ILB_OBJS =	ilb.o ilb_nat.o ilb_conn.o ilb_alg_hash.o ilb_alg_rr.o
 
 IP_OBJS +=	igmp.o ipmp.o ip.o ip6.o ip6_asp.o ip6_if.o ip6_ire.o \

@@ -49,7 +49,6 @@
 #include <libintl.h>
 #include <zone.h>
 #include <libscf_priv.h>
-#include <tsol/label.h>
 #include <bsm/libbsm.h>
 #include <audit_policy.h>
 #include <audit_scf.h>
@@ -1173,16 +1172,6 @@ do_audit(char *event, char sorf, int retval, char *audit_str)
 		if (au_write(rd, tokp) == -1) {
 			exit_error(gettext("Could not construct subject token "
 			    "of audit record\n"));
-		}
-		if (is_system_labeled()) {
-			if ((tokp = au_to_mylabel()) == NULL) {
-				exit_error(gettext(
-				    "Could not allocate label token\n"));
-			}
-			if (au_write(rd, tokp) == -1) {
-				exit_error(gettext("Could not "
-				    "construct label token of audit record\n"));
-			}
 		}
 
 		if ((tokp = au_to_text(audit_str)) == NULL)

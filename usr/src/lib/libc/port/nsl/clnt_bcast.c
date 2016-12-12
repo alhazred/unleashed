@@ -179,7 +179,6 @@ rpc_broadcast_exp(const rpcprog_t prog, const rpcvers_t vers,
 			stat = RPC_CANTSEND;
 			continue;
 		}
-		__rpc_set_mac_options(fd, nconf, prog);
 		if (t_bind(fd, NULL, NULL) == -1) {
 			(void) t_close(fd);
 			stat = RPC_CANTSEND;

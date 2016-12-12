@@ -40,9 +40,6 @@
 #include <syslog.h>
 #include <bsm/devices.h>
 #include <bsm/devalloc.h>
-#include <tsol/label.h>
-
-#define	DA_DEFS	"/etc/security/tsol/devalloc_defaults"
 
 extern int _readbufline(char *, int, char *, int, int *);
 extern char *strtok_r(char *, const char *, char **);
@@ -470,101 +467,6 @@ _da2strentry(da_args *dargs, devalloc_t *dap)
 }
 
 /*
- * _def2str
- *	converts da_defs_t into a printable string.
- *	returns 0 on success, -1 on error.
- */
-static int
-_def2str(da_defs_t *da_defs, char *buf, int size, const char *sep)
-{
-	int length;
-
-	length = snprintf(buf, size, "%s%s", da_defs->devtype, sep);
-	if (length >= size)
-		return (-1);
-	if (da_defs->devopts) {
-		if (_kva2str(da_defs->devopts, buf + length, size - length,
-		    KV_ASSIGN, KV_DELIMITER) != 0)
-			return (-1);
-		length = strlen(buf);
-	}
-	if (length >= size)
-		return (-1);
-
-	return (0);
-}
-
-/*
- * _def2strentry
- *	calls _def2str to break given da_defs_t into printable entry.
- *	returns pointer decoded entry, NULL on error.
- */
-static strentry_t *
-_def2strentry(da_defs_t *da_defs)
-{
-	strentry_t	*sep;
-
-	if ((sep = (strentry_t *)malloc(sizeof (strentry_t))) == NULL)
-		return (NULL);
-	if (_def2str(da_defs, sep->se_str, sizeof (sep->se_str),
-	    KV_TOKEN_DELIMIT) != 0) {
-		free(sep);
-		return (NULL);
-	}
-
-	return (sep);
-}
-
-/*
- * _build_defattrs
- *	cycles through all defattr entries, stores them in memory. removes
- *	entries with the given search_key (device type).
- *	returns 0 if given entry not found, 1 if given entry removed, 2 on
- *	error.
- */
-static int
-_build_defattrs(da_args *dargs, strentry_t **head_defent)
-{
-	int		rc = 0;
-	da_defs_t	*da_defs;
-	strentry_t	*tail_str, *tmp_str;
-
-	setdadefent();
-	while ((da_defs = getdadefent()) != NULL) {
-		rc = !(strcmp(da_defs->devtype, dargs->devinfo->devtype));
-		if (rc && dargs->optflag & DA_ADD &&
-		    !(dargs->optflag & DA_FORCE)) {
-			/*
-			 * During DA_ADD, we keep an existing entry unless
-			 * we have DA_FORCE set to override that entry.
-			 */
-			dargs->optflag |= DA_NO_OVERRIDE;
-			rc = 0;
-		}
-		if (rc == 0) {
-			tmp_str = _def2strentry(da_defs);
-			if (tmp_str == NULL) {
-				freedadefent(da_defs);
-				enddadefent();
-				return (2);
-			}
-			/* retaining defattr entry: tmp_str->se_str */
-			tmp_str->se_next = NULL;
-			if (*head_defent == NULL) {
-				*head_defent = tail_str = tmp_str;
-			} else {
-				tail_str->se_next = tmp_str;
-				tail_str = tmp_str;
-			}
-		}
-		freedadefent(da_defs);
-	}
-	enddadefent();
-
-	return (rc);
-}
-
-/*
  * We have to handle the "standard" types in devlist differently than
  * other devices, which are not covered by our auto-naming conventions.
  *
@@ -574,34 +476,21 @@ int
 da_std_type(da_args *dargs, char *namebuf)
 {
 	char *type = dargs->devinfo->devtype;
-	int system_labeled;
-
-	system_labeled = is_system_labeled();
-
 	/* check safely for sizes */
 	if (strcmp(DA_AUDIO_TYPE, type) == 0) {
 		(void) strlcpy(namebuf, DA_AUDIO_NAME, DA_MAXNAME);
 		return (1);
 	}
 	if (strcmp(DA_CD_TYPE, type) == 0) {
-		if (system_labeled)
-			(void) strlcpy(namebuf, DA_CD_NAME, DA_MAXNAME);
-		else
-			(void) strlcpy(namebuf, DA_CD_TYPE, DA_MAXNAME);
+		(void) strlcpy(namebuf, DA_CD_TYPE, DA_MAXNAME);
 		return (1);
 	}
 	if (strcmp(DA_FLOPPY_TYPE, type) == 0) {
-		if (system_labeled)
-			(void) strlcpy(namebuf, DA_FLOPPY_NAME, DA_MAXNAME);
-		else
-			(void) strlcpy(namebuf, DA_FLOPPY_TYPE, DA_MAXNAME);
+		(void) strlcpy(namebuf, DA_FLOPPY_TYPE, DA_MAXNAME);
 		return (1);
 	}
 	if (strcmp(DA_TAPE_TYPE, type) == 0) {
-		if (system_labeled)
-			(void) strlcpy(namebuf, DA_TAPE_NAME, DA_MAXNAME);
-		else
-			(void) strlcpy(namebuf, DA_TAPE_TYPE, DA_MAXNAME);
+		(void) strlcpy(namebuf, DA_TAPE_TYPE, DA_MAXNAME);
 		return (1);
 	}
 	if (strcmp(DA_RMDISK_TYPE, type) == 0) {
@@ -819,8 +708,8 @@ _rebuild_lists(da_args *dargs, strentry_t **head_devallocp,
 
 		/*
 		 * Let the caller choose the name unless BOTH the name and
-		 * device type one of: cdrom, floppy, audio, rmdisk, or tape.
-		 * (or sr, fd for unlabeled)
+		 * device type one of: cdrom, floppy, audio, rmdisk, tape,
+		 * sr, or fd.
 		 */
 		len = strlen(defname);
 		if (stdtype &&
@@ -971,23 +860,6 @@ dmap_only:
 }
 
 /*
- * _write_defattrs
- *	writes current entries to devalloc_defaults.
- */
-static void
-_write_defattrs(FILE *fp, strentry_t *head_defent)
-{
-	strentry_t *tmp_str;
-
-	for (tmp_str = head_defent; tmp_str != NULL;
-	    tmp_str = tmp_str->se_next) {
-		(void) fputs(tmp_str->se_str, fp);
-		(void) fputs("\n", fp);
-	}
-
-}
-
-/*
  * _write_device_allocate -
  *	writes current entries in the list to device_allocate.
  *	frees the strings
@@ -1044,44 +916,6 @@ _write_device_maps(FILE *dmfp, strentry_t *head_devmapp)
 		tmp_str = tmp_str->se_next;
 		free(old_str);
 	}
-}
-
-/*
- * _write_new_defattrs
- *	writes the new entry to devalloc_defaults.
- *	returns 0 on success, -1 on error.
- */
-static int
-_write_new_defattrs(FILE *fp, da_args *dargs)
-{
-	int		count;
-	char		*tok = NULL, *tokp = NULL;
-	char		*lasts;
-	devinfo_t	*devinfo = dargs->devinfo;
-
-	if (fseek(fp, (off_t)0, SEEK_END) == (off_t)-1)
-		return (-1);
-	if (!devinfo->devopts)
-		return (0);
-	(void) fprintf(fp, "%s%s", (devinfo->devtype ? devinfo->devtype : ""),
-	    KV_TOKEN_DELIMIT);
-	if ((tokp = (char *)malloc(strlen(devinfo->devopts) +1)) != NULL) {
-		(void) strcpy(tokp, devinfo->devopts);
-		if ((tok = strtok_r(tokp, KV_DELIMITER, &lasts)) != NULL) {
-			(void) fprintf(fp, "%s", tok);
-			count = 1;
-		}
-		while ((tok = strtok_r(NULL, KV_DELIMITER, &lasts)) != NULL) {
-			if (count)
-				(void) fprintf(fp, "%s", KV_DELIMITER);
-			(void) fprintf(fp, "%s", tok);
-			count++;
-		}
-	} else {
-		(void) fprintf(fp, "%s", devinfo->devopts);
-	}
-
-	return (0);
 }
 
 /*
@@ -1424,71 +1258,6 @@ _record_on_off(da_args *dargs, FILE *tafp, FILE *dafp)
 }
 
 /*
- * da_update_defattrs -
- *	writes default attributes to devalloc_defaults
- *	returns 0 on success, -1 on error.
- */
-int
-da_update_defattrs(da_args *dargs)
-{
-	int		rc = 0, lockfd = 0, tmpfd = 0;
-	char		*defpath = DEFATTRS;
-	char		*tmpdefpath = TMPATTRS;
-	FILE		*tmpfp = NULL;
-	struct stat	dstat;
-	strentry_t	*head_defent = NULL;
-
-	if (dargs == NULL)
-		return (0);
-	if ((lockfd = _da_lock_devdb(NULL)) == -1)
-		return (-1);
-	if ((tmpfd = open(tmpdefpath, O_RDWR|O_CREAT, DA_DBMODE)) == -1) {
-		(void) close(lockfd);
-		return (-1);
-	}
-	(void) fchown(tmpfd, DA_UID, DA_GID);
-	if ((tmpfp = fdopen(tmpfd, "r+")) == NULL) {
-		(void) close(tmpfd);
-		(void) unlink(tmpdefpath);
-		(void) close(lockfd);
-		return (-1);
-	}
-	/*
-	 * examine all entries, remove an old one if required, check
-	 * if a new one needs to be added.
-	 */
-	if (stat(defpath, &dstat) == 0) {
-		if ((rc = _build_defattrs(dargs, &head_defent)) != 0) {
-			if (rc == 1) {
-				(void) close(tmpfd);
-				(void) unlink(tmpdefpath);
-				(void) close(lockfd);
-				return (rc);
-			}
-		}
-	}
-	/*
-	 * write back any existing entries.
-	 */
-	_write_defattrs(tmpfp, head_defent);
-
-	if (dargs->optflag & DA_ADD && !(dargs->optflag & DA_NO_OVERRIDE)) {
-		/* add new entries */
-		rc = _write_new_defattrs(tmpfp, dargs);
-		(void) fclose(tmpfp);
-	} else {
-		(void) fclose(tmpfp);
-	}
-	if (rename(tmpdefpath, defpath) != 0) {
-		rc = -1;
-		(void) unlink(tmpdefpath);
-	}
-	(void) close(lockfd);
-
-	return (rc);
-}
-
-/*
  * da_update_device -
  *	Writes existing entries and the SINGLE change requested by da_args,
  *	to device_allocate and device_maps.
@@ -1742,11 +1511,8 @@ da_add_list(devlist_t *dlist, char *link, int new_instance, int flag)
 	int		nlen, plen;
 	int		new_entry = 0;
 	char		*dtype, *dexec, *tname, *kval;
-	char		*minstr = NULL, *maxstr = NULL;
 	char		dname[DA_MAXNAME + 1];
-	kva_t		*kva;
 	deventry_t	*dentry = NULL, *nentry = NULL, *pentry = NULL;
-	da_defs_t	*da_defs;
 
 	if (dlist == NULL || link == NULL)
 		return (-1);
@@ -1813,37 +1579,12 @@ da_add_list(devlist_t *dlist, char *link, int new_instance, int flag)
 		nentry->devinfo.devauths = DEFAULT_DEV_ALLOC_AUTH;
 		nentry->devinfo.devexec = dexec;
 		nentry->devinfo.instance = new_instance;
-		/*
-		 * Look for default label range, authorizations and cleaning
-		 * program in devalloc_defaults. If label range is not
-		 * specified in devalloc_defaults, assume it to be admin_low
-		 * to admin_high.
-		 */
-		minstr = DA_DEFAULT_MIN;
-		maxstr = DA_DEFAULT_MAX;
-		setdadefent();
-		if (da_defs = getdadeftype(nentry->devinfo.devtype)) {
-			kva = da_defs->devopts;
-			if ((kval = kva_match(kva, DAOPT_MINLABEL)) != NULL)
-				minstr = strdup(kval);
-			if ((kval = kva_match(kva, DAOPT_MAXLABEL)) != NULL)
-				maxstr = strdup(kval);
-			if ((kval = kva_match(kva, DAOPT_AUTHS)) != NULL)
-				nentry->devinfo.devauths = strdup(kval);
-			if ((kval = kva_match(kva, DAOPT_CSCRIPT)) != NULL)
-				nentry->devinfo.devexec = strdup(kval);
-			freedadefent(da_defs);
-		}
-		enddadefent();
 		kval = NULL;
-		nlen = strlen(DAOPT_MINLABEL) + strlen(KV_ASSIGN) +
-		    strlen(minstr) + strlen(KV_TOKEN_DELIMIT) +
-		    strlen(DAOPT_MAXLABEL) + strlen(KV_ASSIGN) + strlen(maxstr)
-		    + 1;			/* +1 for terminator */
+		nlen = strlen(KV_ASSIGN) + strlen(KV_TOKEN_DELIMIT) +
+		    strlen(KV_ASSIGN);
 		if (kval = (char *)malloc(nlen))
-			(void) snprintf(kval, nlen, "%s%s%s%s%s%s%s",
-			    DAOPT_MINLABEL, KV_ASSIGN, minstr, KV_TOKEN_DELIMIT,
-			    DAOPT_MAXLABEL, KV_ASSIGN, maxstr);
+			(void) snprintf(kval, nlen, "%s%s%s", KV_ASSIGN,
+			    KV_TOKEN_DELIMIT, KV_ASSIGN);
 		nentry->devinfo.devopts = kval;
 
 		nentry->devinfo.devlist = NULL;

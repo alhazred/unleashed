@@ -35,7 +35,6 @@
 #include <string.h>
 #include <syslog.h>
 #include <netinet/in.h>
-#include <tsol/label.h>
 #include <locale.h>
 #include <unistd.h>
 #include <generic.h>
@@ -133,8 +132,6 @@ generate_record(char *remuser,	/* username at machine requesting service */
 
 	(void) au_write(rd, au_to_subject_ex(uid, uid, gid, uid, gid, pid, pid,
 	    &info.ai_termid));
-	if (is_system_labeled())
-		(void) au_write(rd, au_to_mylabel());
 
 	gtxt = dgettext(bsm_dom, "cmd %s");
 	tlen = strlen(gtxt) + strlen(cmdbuf) + 1;

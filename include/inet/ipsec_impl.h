@@ -920,12 +920,6 @@ extern int ipsec_set_req(cred_t *, conn_t *, ipsec_req_t *);
 extern void ipsec_insert_always(avl_tree_t *tree, void *new_node);
 
 extern int32_t ipsec_act_ovhd(const ipsec_act_t *act);
-extern mblk_t *sadb_whack_label(mblk_t *, ipsa_t *, ip_xmit_attr_t *,
-    kstat_named_t *, ipdropper_t *);
-extern mblk_t *sadb_whack_label_v4(mblk_t *, ipsa_t *, kstat_named_t *,
-    ipdropper_t *);
-extern mblk_t *sadb_whack_label_v6(mblk_t *, ipsa_t *, kstat_named_t *,
-    ipdropper_t *);
 extern boolean_t update_iv(uint8_t *, queue_t *, ipsa_t *, ipsecesp_stack_t *);
 
 /*
@@ -1015,7 +1009,6 @@ void ip_drop_destroy(ipsec_stack_t *);
  * Common functions
  */
 extern boolean_t ip_addr_match(uint8_t *, int, in6_addr_t *);
-extern boolean_t ipsec_label_match(ts_label_t *, ts_label_t *);
 
 /*
  * AH and ESP counters types.

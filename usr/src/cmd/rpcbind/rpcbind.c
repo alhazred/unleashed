@@ -143,7 +143,6 @@ static int check_netconfig(void);
 
 static boolean_t check_hostserv(struct netconfig *, const char *, const char *);
 static int setopt_reuseaddr(int);
-static int setopt_anon_mlp(int);
 static int setup_callit(int);
 
 static void rpcb_check_init(void);
@@ -216,7 +215,6 @@ main(int argc, char *argv[])
 	int rpc_svc_fdunlim = 1;
 	int rpc_svc_mode = RPC_SVC_MT_AUTO;
 	int maxrecsz = RPC_MAXDATASIZE;
-	boolean_t can_do_mlp;
 
 	block_signals();
 
@@ -247,10 +245,8 @@ main(int argc, char *argv[])
 	 * These privileges are required for the t_bind check rpcbind uses
 	 * to determine whether a service is still live or not.
 	 */
-	can_do_mlp = priv_ineffect(PRIV_NET_BINDMLP);
 	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET, DAEMON_UID,
-	    DAEMON_GID, PRIV_NET_PRIVADDR, PRIV_SYS_NFS,
-	    can_do_mlp ? PRIV_NET_BINDMLP : NULL, NULL) == -1) {
+	    DAEMON_GID, PRIV_NET_PRIVADDR, PRIV_SYS_NFS, NULL) == -1) {
 		fprintf(stderr, "Insufficient privileges\n");
 		exit(1);
 	}
@@ -518,14 +514,6 @@ init_transport(struct netconfig *nconf)
 		syslog(LOG_ERR, "%s: cannot open connection: %s",
 		    nconf->nc_netid, t_errlist[t_errno]);
 		return (1);
-	}
-
-	if (is_system_labeled() &&
-	    (strcmp(nconf->nc_protofmly, NC_INET) == 0 ||
-	    strcmp(nconf->nc_protofmly, NC_INET6) == 0) &&
-	    setopt_anon_mlp(fd) == -1) {
-		syslog(LOG_ERR, "%s: couldn't set SO_ANON_MLP option",
-		    nconf->nc_netid);
 	}
 
 	/*
@@ -925,12 +913,6 @@ static int
 setopt_reuseaddr(int fd)
 {
 	return (setopt_int(fd, SOL_SOCKET, SO_REUSEADDR, 1));
-}
-
-static int
-setopt_anon_mlp(int fd)
-{
-	return (setopt_int(fd, SOL_SOCKET, SO_ANON_MLP, 1));
 }
 
 static int

@@ -63,8 +63,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 		_nss_files_services_constr;
 		_nss_files_shadow_constr;
 		_nss_files_user_attr_constr;
-		_nss_files_tnrhdb_constr;
-		_nss_files_tnrhtp_constr;
 	local:
 		*;
 };

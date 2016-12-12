@@ -78,9 +78,6 @@
 #include <inet/ip.h>
 #include <inet/ip6.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tndb.h>
-
 #define	RFS4_MAXLOCK_TRIES 4	/* Try to get the lock this many times */
 static int rfs4_maxlock_tries = RFS4_MAXLOCK_TRIES;
 #define	RFS4_LOCK_DELAY 10	/* Milliseconds */
@@ -1245,9 +1242,6 @@ rfs4_op_access(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	struct vattr va;
 	int checkwriteperm;
 	cred_t *cr = cs->cr;
-	bslabel_t *clabel, *slabel;
-	ts_label_t *tslabel;
-	boolean_t admin_low_client;
 
 	DTRACE_NFSV4_2(op__access__start, struct compound_state *, cs,
 	    ACCESS4args *, args);
@@ -1295,48 +1289,22 @@ rfs4_op_access(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	resp->access = 0;
 	resp->supported = 0;
 
-	if (is_system_labeled()) {
-		ASSERT(req->rq_label != NULL);
-		clabel = req->rq_label;
-		DTRACE_PROBE2(tx__rfs4__log__info__opaccess__clabel, char *,
-		    "got client label from request(1)",
-		    struct svc_req *, req);
-		if (!blequal(&l_admin_low->tsl_label, clabel)) {
-			if ((tslabel = nfs_getflabel(vp, cs->exi)) == NULL) {
-				*cs->statusp = resp->status = puterrno4(EACCES);
-				goto out;
-			}
-			slabel = label2bslabel(tslabel);
-			DTRACE_PROBE3(tx__rfs4__log__info__opaccess__slabel,
-			    char *, "got server label(1) for vp(2)",
-			    bslabel_t *, slabel, vnode_t *, vp);
-
-			admin_low_client = B_FALSE;
-		} else
-			admin_low_client = B_TRUE;
-	}
-
 	if (args->access & ACCESS4_READ) {
 		error = VOP_ACCESS(vp, VREAD, 0, cr, NULL);
-		if (!error && !MANDLOCK(vp, va.va_mode) &&
-		    (!is_system_labeled() || admin_low_client ||
-		    bldominates(clabel, slabel)))
+		if (!error && !MANDLOCK(vp, va.va_mode))
 			resp->access |= ACCESS4_READ;
 		resp->supported |= ACCESS4_READ;
 	}
 	if ((args->access & ACCESS4_LOOKUP) && vp->v_type == VDIR) {
 		error = VOP_ACCESS(vp, VEXEC, 0, cr, NULL);
-		if (!error && (!is_system_labeled() || admin_low_client ||
-		    bldominates(clabel, slabel)))
+		if (!error)
 			resp->access |= ACCESS4_LOOKUP;
 		resp->supported |= ACCESS4_LOOKUP;
 	}
 	if (checkwriteperm &&
 	    (args->access & (ACCESS4_MODIFY|ACCESS4_EXTEND))) {
 		error = VOP_ACCESS(vp, VWRITE, 0, cr, NULL);
-		if (!error && !MANDLOCK(vp, va.va_mode) &&
-		    (!is_system_labeled() || admin_low_client ||
-		    blequal(clabel, slabel)))
+		if (!error && !MANDLOCK(vp, va.va_mode))
 			resp->access |=
 			    (args->access & (ACCESS4_MODIFY | ACCESS4_EXTEND));
 		resp->supported |=
@@ -1346,22 +1314,16 @@ rfs4_op_access(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	if (checkwriteperm &&
 	    (args->access & ACCESS4_DELETE) && vp->v_type == VDIR) {
 		error = VOP_ACCESS(vp, VWRITE, 0, cr, NULL);
-		if (!error && (!is_system_labeled() || admin_low_client ||
-		    blequal(clabel, slabel)))
+		if (!error)
 			resp->access |= ACCESS4_DELETE;
 		resp->supported |= ACCESS4_DELETE;
 	}
 	if (args->access & ACCESS4_EXECUTE && vp->v_type != VDIR) {
 		error = VOP_ACCESS(vp, VEXEC, 0, cr, NULL);
-		if (!error && !MANDLOCK(vp, va.va_mode) &&
-		    (!is_system_labeled() || admin_low_client ||
-		    bldominates(clabel, slabel)))
+		if (!error && !MANDLOCK(vp, va.va_mode))
 			resp->access |= ACCESS4_EXECUTE;
 		resp->supported |= ACCESS4_EXECUTE;
 	}
-
-	if (is_system_labeled() && !admin_low_client)
-		label_rele(tslabel);
 
 	*cs->statusp = resp->status = NFS4_OK;
 out:
@@ -2792,63 +2754,6 @@ do_rfs4_op_lookup(char *nm, struct svc_req *req, struct compound_state *cs)
 		}
 	}
 
-	/*
-	 * After various NFS checks, do a label check on the path
-	 * component. The label on this path should either be the
-	 * global zone's label or a zone's label. We are only
-	 * interested in the zone's label because exported files
-	 * in global zone is accessible (though read-only) to
-	 * clients. The exportability/visibility check is already
-	 * done before reaching this code.
-	 */
-	if (is_system_labeled()) {
-		bslabel_t *clabel;
-
-		ASSERT(req->rq_label != NULL);
-		clabel = req->rq_label;
-		DTRACE_PROBE2(tx__rfs4__log__info__oplookup__clabel, char *,
-		    "got client label from request(1)", struct svc_req *, req);
-
-		if (!blequal(&l_admin_low->tsl_label, clabel)) {
-			if (!do_rfs_label_check(clabel, vp, DOMINANCE_CHECK,
-			    cs->exi)) {
-				error = EACCES;
-				goto err_out;
-			}
-		} else {
-			/*
-			 * We grant access to admin_low label clients
-			 * only if the client is trusted, i.e. also
-			 * running Solaris Trusted Extension.
-			 */
-			struct sockaddr	*ca;
-			int		addr_type;
-			void		*ipaddr;
-			tsol_tpc_t	*tp;
-
-			ca = (struct sockaddr *)svc_getrpccaller(
-			    req->rq_xprt)->buf;
-			if (ca->sa_family == AF_INET) {
-				addr_type = IPV4_VERSION;
-				ipaddr = &((struct sockaddr_in *)ca)->sin_addr;
-			} else if (ca->sa_family == AF_INET6) {
-				addr_type = IPV6_VERSION;
-				ipaddr = &((struct sockaddr_in6 *)
-				    ca)->sin6_addr;
-			}
-			tp = find_tpc(ipaddr, addr_type, B_FALSE);
-			if (tp == NULL || tp->tpc_tp.tp_doi !=
-			    l_admin_low->tsl_doi || tp->tpc_tp.host_type !=
-			    SUN_CIPSO) {
-				if (tp != NULL)
-					TPC_RELE(tp);
-				error = EACCES;
-				goto err_out;
-			}
-			TPC_RELE(tp);
-		}
-	}
-
 	error = makefh4(&cs->fh, vp, cs->exi);
 
 err_out:
@@ -3457,24 +3362,6 @@ rfs4_op_putpubfh(nfs_argop4 *args, nfs_resop4 *resop, struct svc_req *req,
 		cs->exi = exi_public;
 	}
 
-	if (is_system_labeled()) {
-		bslabel_t *clabel;
-
-		ASSERT(req->rq_label != NULL);
-		clabel = req->rq_label;
-		DTRACE_PROBE2(tx__rfs4__log__info__opputpubfh__clabel, char *,
-		    "got client label from request(1)",
-		    struct svc_req *, req);
-		if (!blequal(&l_admin_low->tsl_label, clabel)) {
-			if (!do_rfs_label_check(clabel, vp, DOMINANCE_CHECK,
-			    cs->exi)) {
-				*cs->statusp = resp->status =
-				    NFS4ERR_SERVERFAULT;
-				goto out;
-			}
-		}
-	}
-
 	VN_HOLD(vp);
 	cs->vp = vp;
 
@@ -4068,7 +3955,6 @@ rfs4_op_remove(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	uint_t len;
 	rfs4_file_t *fp;
 	int in_crit = 0;
-	bslabel_t *clabel;
 	struct sockaddr *ca;
 	char *name = NULL;
 	nfsstat4 status;
@@ -4183,32 +4069,6 @@ rfs4_op_remove(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 				rfs4_file_rele(fp);
 			}
 			goto out;
-		}
-	}
-
-	/* check label before allowing removal */
-	if (is_system_labeled()) {
-		ASSERT(req->rq_label != NULL);
-		clabel = req->rq_label;
-		DTRACE_PROBE2(tx__rfs4__log__info__opremove__clabel, char *,
-		    "got client label from request(1)",
-		    struct svc_req *, req);
-		if (!blequal(&l_admin_low->tsl_label, clabel)) {
-			if (!do_rfs_label_check(clabel, vp, EQUALITY_CHECK,
-			    cs->exi)) {
-				*cs->statusp = resp->status = NFS4ERR_ACCESS;
-				if (name != nm)
-					kmem_free(name, MAXPATHLEN + 1);
-				kmem_free(nm, len);
-				if (in_crit)
-					nbl_end_crit(vp);
-				VN_RELE(vp);
-				if (fp) {
-					rfs4_clear_dont_grant(fp);
-					rfs4_file_rele(fp);
-				}
-				goto out;
-			}
 		}
 	}
 
@@ -4366,7 +4226,6 @@ rfs4_op_rename(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	rfs4_file_t *fp, *sfp;
 	int in_crit_src, in_crit_targ;
 	int fp_rele_grant_hold, sfp_rele_grant_hold;
-	bslabel_t *clabel;
 	struct sockaddr *ca;
 	char *converted_onm = NULL;
 	char *converted_nnm = NULL;
@@ -4494,22 +4353,6 @@ rfs4_op_rename(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 			kmem_free(converted_nnm, MAXPATHLEN + 1);
 		kmem_free(nnm, nlen);
 		goto out;
-	}
-
-	/* check label of the target dir */
-	if (is_system_labeled()) {
-		ASSERT(req->rq_label != NULL);
-		clabel = req->rq_label;
-		DTRACE_PROBE2(tx__rfs4__log__info__oprename__clabel, char *,
-		    "got client label from request(1)",
-		    struct svc_req *, req);
-		if (!blequal(&l_admin_low->tsl_label, clabel)) {
-			if (!do_rfs_label_check(clabel, ndvp,
-			    EQUALITY_CHECK, cs->exi)) {
-				*cs->statusp = resp->status = NFS4ERR_ACCESS;
-				goto err_out;
-			}
-		}
 	}
 
 	/*
@@ -5357,7 +5200,6 @@ rfs4_op_setattr(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 {
 	SETATTR4args *args = &argop->nfs_argop4_u.opsetattr;
 	SETATTR4res *resp = &resop->nfs_resop4_u.opsetattr;
-	bslabel_t *clabel;
 
 	DTRACE_NFSV4_2(op__setattr__start, struct compound_state *, cs,
 	    SETATTR4args *, args);
@@ -5381,22 +5223,6 @@ rfs4_op_setattr(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	if (rdonly4(req, cs)) {
 		*cs->statusp = resp->status = NFS4ERR_ROFS;
 		goto out;
-	}
-
-	/* check label before setting attributes */
-	if (is_system_labeled()) {
-		ASSERT(req->rq_label != NULL);
-		clabel = req->rq_label;
-		DTRACE_PROBE2(tx__rfs4__log__info__opsetattr__clabel, char *,
-		    "got client label from request(1)",
-		    struct svc_req *, req);
-		if (!blequal(&l_admin_low->tsl_label, clabel)) {
-			if (!do_rfs_label_check(clabel, cs->vp,
-			    EQUALITY_CHECK, cs->exi)) {
-				*cs->statusp = resp->status = NFS4ERR_ACCESS;
-				goto out;
-			}
-		}
 	}
 
 	*cs->statusp = resp->status =
@@ -5905,14 +5731,6 @@ rfs4_compound(COMPOUND4args *args, COMPOUND4res *resp, struct exportinfo *exi,
 		crfree(cs.basecr);
 	if (cs.cr)
 		crfree(cs.cr);
-	/*
-	 * done with this compound request, free the label
-	 */
-
-	if (req->rq_label != NULL) {
-		kmem_free(req->rq_label, sizeof (bslabel_t));
-		req->rq_label = NULL;
-	}
 }
 
 /*
@@ -6318,7 +6136,6 @@ rfs4_createfile(OPEN4args *args, struct svc_req *req, struct compound_state *cs,
 	bool_t trunc;
 	caller_context_t ct;
 	component4 *component;
-	bslabel_t *clabel;
 	struct sockaddr *ca;
 	char *name = NULL;
 
@@ -6330,21 +6147,6 @@ rfs4_createfile(OPEN4args *args, struct svc_req *req, struct compound_state *cs,
 	/* Check if the file system is read only */
 	if (rdonly4(req, cs))
 		return (NFS4ERR_ROFS);
-
-	/* check the label of including directory */
-	if (is_system_labeled()) {
-		ASSERT(req->rq_label != NULL);
-		clabel = req->rq_label;
-		DTRACE_PROBE2(tx__rfs4__log__info__opremove__clabel, char *,
-		    "got client label from request(1)",
-		    struct svc_req *, req);
-		if (!blequal(&l_admin_low->tsl_label, clabel)) {
-			if (!do_rfs_label_check(clabel, dvp, EQUALITY_CHECK,
-			    cs->exi)) {
-				return (NFS4ERR_ACCESS);
-			}
-		}
-	}
 
 	/*
 	 * Get the last component of path name in nm. cs will reference

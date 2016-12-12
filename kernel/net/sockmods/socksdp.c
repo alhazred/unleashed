@@ -48,8 +48,6 @@
 #include <sys/socketvar.h>
 #include <sys/strsun.h>
 
-#include <sys/tsol/label.h>
-
 #include <inet/sdp_itf.h>
 #include "socksdp.h"
 #include <../../../../kernel/fs/sockfs/sockcommon.h>

@@ -100,7 +100,7 @@ extern "C" {
  */
 typedef struct execstr_s {
 	char   *name;		/* profile name */
-	char   *policy;		/* suser/rbac/tsol */
+	char   *policy;		/* suser/rbac */
 	char   *type;		/* cmd/act */
 	char   *res1;		/* reserved for future use */
 	char   *res2;		/* reserved for future use */
@@ -111,7 +111,7 @@ typedef struct execstr_s {
 
 typedef struct execattr_s {
 	char   *name;		/* profile name */
-	char   *policy;		/* suser/rbac/tsol */
+	char   *policy;		/* suser/rbac */
 	char   *type;		/* cmd/act */
 	char   *res1;		/* reserved for future use */
 	char   *res2;		/* reserved for future use */

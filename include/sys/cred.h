@@ -152,13 +152,6 @@ extern cred_t *crnetadjust(cred_t *);
 extern void cred2prcred(const cred_t *, struct prcred *);
 
 /*
- * Private interfaces for Rampart Trusted Solaris.
- */
-struct ts_label_s;
-extern struct ts_label_s *crgetlabel(const cred_t *);
-extern boolean_t crisremote(const cred_t *);
-
-/*
  * Private interfaces for ephemeral uids.
  */
 #define	VALID_UID(id, zn)					\

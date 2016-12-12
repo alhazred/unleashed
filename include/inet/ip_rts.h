@@ -31,13 +31,6 @@ extern "C" {
 #endif
 
 /*
- * Maximum number of route security attributes that can be
- * configured per route destination through the routing
- * socket message.
- */
-#define	TSOL_RTSA_REQUEST_MAX	1	/* one per route destination */
-
-/*
  * Flags for RTS queuing operations.
  */
 #define	RTSQ_UNDER_IPMP	0x01	/* send only on RTAW_UNDER_IPMP queues */
@@ -69,14 +62,14 @@ extern	void	ip_rts_rtmsg(int, ire_t *, int, ip_stack_t *);
 
 extern	void	ip_rts_unregister(conn_t *);
 
-extern	mblk_t	*rts_alloc_msg(int, int, sa_family_t, uint_t);
+extern	mblk_t	*rts_alloc_msg(int, int, sa_family_t);
 
-extern	size_t	rts_data_msg_size(int, sa_family_t, uint_t);
+extern	size_t	rts_data_msg_size(int, sa_family_t);
 
 extern	void	rts_fill_msg_v6(int, int, const in6_addr_t *,
     const in6_addr_t *, const in6_addr_t *, const in6_addr_t *,
     const in6_addr_t *, const in6_addr_t *, const in6_addr_t *,
-    const ill_t *, mblk_t *, const tsol_gc_t *);
+    const ill_t *, mblk_t *);
 
 extern	size_t	rts_header_msg_size(int);
 

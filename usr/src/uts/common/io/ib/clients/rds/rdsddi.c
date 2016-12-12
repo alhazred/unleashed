@@ -175,13 +175,6 @@ rds_open(queue_t *q, dev_t *devp, int flag, int sflag, cred_t *credp)
 	rds_t	*rds;
 	int	ret;
 
-	if (is_system_labeled()) {
-		/*
-		 * RDS socket is not supported on labeled systems
-		 */
-		return (ESOCKTNOSUPPORT);
-	}
-
 	/* Open the transport driver if IB HW is present */
 	rw_enter(&rds_transport_lock, RW_READER);
 	if (rds_transport_handle == NULL) {

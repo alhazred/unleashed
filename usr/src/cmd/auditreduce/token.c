@@ -1955,51 +1955,6 @@ secflags_token(adr_t *adr)
 }
 
 /*
- * Format of label token:
- *      label ID                1 byte
- *      compartment length      1 byte
- *      classification          2 bytes
- *      compartment words       <compartment length> * 4 bytes
- */
-int
-label_token(adr_t *adr)
-{
-	static m_label_t *label = NULL;
-	static size32_t l_size;
-	int len;
-
-	if (label == NULL) {
-		label = m_label_alloc(MAC_LABEL);
-		l_size = blabel_size() - 4;
-	}
-
-	if (label == NULL) {
-		/* out of memory, should never happen; skip label */
-		char	l;	/* length */
-
-		adr->adr_now += sizeof (char);
-		adrm_char(adr, (char *)&l, 1);
-		adr->adr_now += sizeof (short) + (4 * l);
-		return (-1);
-	}
-
-	adrm_char(adr, (char *)label, 4);
-	len = (int)(((char *)label)[1] * 4);
-	if (len > l_size) {
-		return (-1);
-	}
-	adrm_char(adr, &((char *)label)[4], len);
-
-	if (flags & M_LABEL) {
-		if (blinrange(label, m_label))
-			checkflags = checkflags | M_LABEL;
-	}
-
-	return (-1);
-}
-
-
-/*
  * Format of useofpriv token:
  *	success/failure		adr_char
  *	privilege(s)		adr_string

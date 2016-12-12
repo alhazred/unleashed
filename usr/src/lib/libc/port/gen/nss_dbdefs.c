@@ -288,9 +288,6 @@ static getXbyY_to_dbop_t getXbyY_to_dbop[] = {
 	NSS_MK_GETXYDBOPC(SERVICES, BYPORT, "services", "str2servent", "S"),
 	NSS_MK_GETXYDBOPB(SHADOW, PASSWD, PASSWD_BYNAME, "shadow",
 				"str2spwd", "n"),
-	NSS_MK_GETXYDBOPC(TSOL_RH, BYADDR, "tsol_rh", "str_to_rhstr", "h"),
-	NSS_MK_GETXYDBOPC(TSOL_TP, BYNAME, "tsol_tp", "str_to_tpstr", "n"),
-	NSS_MK_GETXYDBOPC(TSOL_ZC, BYNAME, "tsol_zc", "str_to_zcstr", "n"),
 	NSS_MK_GETXYDBOP(USERATTR, BYNAME, "userattr", "n"),
 };
 

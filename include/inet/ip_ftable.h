@@ -74,7 +74,6 @@ int rtfunc(struct radix_node *, void *);
 typedef struct rt_entry rt_t;
 typedef struct rtfuncarg rtf_t;
 
-struct ts_label_s;
 extern	void ire_delete_host_redirects(ipaddr_t, ip_stack_t *);
 extern irb_t	*ire_get_bucket(ire_t *);
 extern uint_t ifindex_lookup(const struct sockaddr *, zoneid_t);

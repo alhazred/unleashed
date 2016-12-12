@@ -387,8 +387,7 @@ sctp_input_add_ancillary(sctp_t *sctp, mblk_t **mp, sctp_data_hdr_t *dcp,
 	    ip_cmpbuf(sctp->sctp_hopopts, sctp->sctp_hopoptslen,
 	    (ipp->ipp_fields & IPPF_HOPOPTS),
 	    ipp->ipp_hopopts, ipp->ipp_hopoptslen)) {
-		optlen += sizeof (*cmsg) + ipp->ipp_hopoptslen -
-		    sctp->sctp_v6label_len;
+		optlen += sizeof (*cmsg) + ipp->ipp_hopoptslen;
 		if (hdrlen == 0)
 			hdrlen = sizeof (struct T_unitdata_ind);
 		addflag.crb_ipv6_recvhopopts = 1;
@@ -3665,7 +3664,7 @@ sctp_input_data(sctp_t *sctp, mblk_t *mp, ip_recv_attr_t *ira)
 			 */
 			ASSERT(connp->conn_family == AF_INET6);
 
-			(void) ip_find_hdr_v6(mp, (ip6_t *)rptr, B_TRUE, &ipp,
+			(void) ip_find_hdr_v6(mp, (ip6_t *)rptr, &ipp,
 			    &nexthdrp);
 			ASSERT(nexthdrp == IPPROTO_SCTP);
 

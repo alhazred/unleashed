@@ -456,7 +456,6 @@ papiPrinterListJobs(papi_service_t handle, char *name,
 		    *req_id = NULL,
 		    *charset = NULL,
 		    *owner = NULL,
-		    *slabel = NULL,
 		    *file = NULL;
 		char request_file[128];
 		time_t date = 0;
@@ -464,7 +463,7 @@ papiPrinterListJobs(papi_service_t handle, char *name,
 		short  rank = 0, state = 0;
 
 		if (rcv_msg(svc, R_INQUIRE_REQUEST_RANK, &rc, &req_id,
-		    &owner, &slabel, &size, &date, &state, &dest,
+		    &owner, &size, &date, &state, &dest,
 		    &form, &charset, &rank, &file) < 0)
 			return (PAPI_SERVICE_UNAVAILABLE);
 
@@ -491,7 +490,7 @@ papiPrinterListJobs(papi_service_t handle, char *name,
 
 		lpsched_read_job_configuration(svc, job, request_file);
 
-		job_status_to_attributes(job, req_id, owner, slabel, size,
+		job_status_to_attributes(job, req_id, owner, size,
 		    date, state, dest, form, charset, rank, file);
 
 		list_append(jobs, job);

@@ -35,6 +35,7 @@
 #include <door.h>
 #include <zone.h>
 #include <resolv.h>
+#include <priv.h>
 #include <sys/socket.h>
 #include <net/route.h>
 #include <string.h>
@@ -1179,36 +1180,7 @@ _nscd_setup_server(char *execname, char **argv)
 		return (fd);
 
 	/* bind to file system */
-	if (is_system_labeled() && (getzoneid() == GLOBAL_ZONEID)) {
-		if (stat(TSOL_NAME_SERVICE_DOOR, &buf) < 0) {
-			int	newfd;
-
-			/* make sure the door will be readable by all */
-			old_mask = umask(0);
-			if ((newfd = creat(TSOL_NAME_SERVICE_DOOR, 0444)) < 0) {
-				errnum = errno;
-				_NSCD_LOG(NSCD_LOG_FRONT_END,
-				    NSCD_LOG_LEVEL_ERROR)
-				(me, "Cannot create %s: %s\n",
-				    TSOL_NAME_SERVICE_DOOR,
-				    strerror(errnum));
-				bind_failed = 1;
-			}
-			/* rstore the old file mode creation mask */
-			(void) umask(old_mask);
-			(void) close(newfd);
-		}
-		if (symlink(TSOL_NAME_SERVICE_DOOR, NAME_SERVICE_DOOR) != 0) {
-			if (errno != EEXIST) {
-				errnum = errno;
-				_NSCD_LOG(NSCD_LOG_FRONT_END,
-				    NSCD_LOG_LEVEL_ERROR)
-				(me, "Cannot symlink %s: %s\n",
-				    NAME_SERVICE_DOOR, strerror(errnum));
-				bind_failed = 1;
-			}
-		}
-	} else if (stat(NAME_SERVICE_DOOR, &buf) < 0) {
+	if (stat(NAME_SERVICE_DOOR, &buf) < 0) {
 		int	newfd;
 
 		/* make sure the door will be readable by all */

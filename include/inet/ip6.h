@@ -33,6 +33,7 @@ extern "C" {
 #endif
 
 #include <sys/isa_defs.h>
+#include <inet/ip.h>
 
 #ifdef	_KERNEL
 /* icmp6_t is used in the prototype of icmp_inbound_error_fanout_v6() */
@@ -249,8 +250,7 @@ extern void	ip_fanout_udp_multi_v6(mblk_t *, ip6_t *, uint16_t, uint16_t,
 extern void	ip_fanout_send_icmp_v6(mblk_t *, uint_t, uint8_t,
     ip_recv_attr_t *);
 extern void	ip_fanout_proto_v6(mblk_t *, ip6_t *, ip_recv_attr_t *);
-extern int	ip_find_hdr_v6(mblk_t *, ip6_t *, boolean_t, ip_pkt_t *,
-    uint8_t *);
+extern int	ip_find_hdr_v6(mblk_t *, ip6_t *, ip_pkt_t *, uint8_t *);
 extern in6_addr_t ip_get_dst_v6(ip6_t *, const mblk_t *, boolean_t *);
 extern ip6_rthdr_t	*ip_find_rthdr_v6(ip6_t *, uint8_t *);
 extern boolean_t	ip_hdr_length_nexthdr_v6(mblk_t *, ip6_t *,

@@ -30,7 +30,6 @@
 
 #include <sys/types.h>
 #include <sys/priv.h>
-#include <sys/tsol/label.h>
 
 #ifdef	__cplusplus
 extern "C" {
@@ -64,8 +63,6 @@ extern size_t ucred_size(void);
 extern int getpeerucred(int, ucred_t **);
 
 extern zoneid_t ucred_getzoneid(const ucred_t *);
-
-extern bslabel_t *ucred_getlabel(const ucred_t *);
 
 extern projid_t ucred_getprojid(const ucred_t *);
 

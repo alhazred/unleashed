@@ -211,7 +211,6 @@ SYMBOL_VERSION SUNW_1.0 {
 
 SYMBOL_VERSION SUNWprivate_1.0 {
     global:
-	papiServiceSetPeer;	# used by to pass peer connection
         papiJobCreate;
         papiJobStreamAdd;
         papiJobCommit;

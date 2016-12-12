@@ -258,8 +258,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	au_to_header;
 	au_to_header_ex;
 	au_to_in_addr_ex;
-	au_to_label;
-	au_to_mylabel;
 	au_to_privset;
 	au_to_seq;
 	au_to_trailer;
@@ -288,7 +286,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	da_print_device;
 	da_remove_list;
 	da_rm_list_entry;
-	da_update_defattrs;
 	da_update_device;
 	do_getflags_scf;
 	do_getnaflags_scf;
@@ -308,20 +305,15 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	do_setqdelay_scf;
 	do_setqhiwater_scf;
 	do_setqlowater_scf;
-	enddadefent;
 	enddaent;
 	enddmapent;
-	freedadefent;
 	freedaent;
 	freedmapent;
 	free_static_att_kva;
-	getdadefent;
-	getdadeftype;
 	getdadmline;
 	getdaent;
 	getdanam;
 	getdatype;
-	getdevicerange;
 	getdmapdev;
 	getdmapdfield;
 	getdmapent;
@@ -333,7 +325,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	plugin_avail_scf;
 	plugin_kva_ll_free;
 	prt_error_va;
-	setdadefent;
 	setdaent;
 	setdafile;
 	setdmapent;

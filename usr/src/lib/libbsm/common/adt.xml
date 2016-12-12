@@ -143,7 +143,6 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 				uint_t, int, int32_t, uid_t, gid_t
 				uid_t *, gid_t *
 				long, ulong_t
-				m_label_t *
 				pid_t
 				priv_set_t *
 				uint16_t, unit32_t, uint64_t
@@ -185,9 +184,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 			- id is the name of token; this name is used
 			as an <internal> id.
 			- a token id name may not end in digits.
-			- usage is an optional value.  At present, only
-			  "TSOL" is defined; it means that this data is
-			  to be used only in Trusted Solaris implementations.
+			- usage is an optional value.
 			See also example above for "token" tag relation to 
 			the auditrecord(1M) output.
 
@@ -1076,81 +1073,6 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 	<title>delete wifi security object</title>
 	<program>/usr/sbin/dladm</program>
 	<see>dladm(1M)</see>
-    </event>
-
-<!-- Trusted eXtensions (TX) events -->
-
-    <!-- labeld events -->
-    <event id="AUE_file_relabel" header="0" idNo="49" omit="JNI">
-    	<title>relabel file from one zone to another</title>
-	<program>setlabel(1)</program>
-	<see>setflabel(3TSOL)</see>
-	<entry id="subject">
-	    <internal token="subject"/>
-	    <external opt="none"/>
-	</entry>
-	<entry id="auth_used">
-	    <internal token="uauth"/>
-	    <external opt="required" type="char *"/>
-	    <comment>authorization used</comment>
-	</entry>
-	<entry id="file">
-	    <internal token="path"/>
-	    <external opt="required" type="char *"/>
-	    <comment>file relabeled</comment>
-	</entry>
-	<entry id="src_label">
-	    <internal token="label"/>
-	    <external opt="required" type="m_label_t *"/>
-	    <comment>original label</comment>
-	</entry>
-	<entry id="dst_label">
-	    <internal token="label"/>
-	    <external opt="required" type="m_label_t *"/>
-	    <comment>new label</comment>
-	</entry>
-	<entry id="return">
-	    <internal token="return"/>
-	    <external opt="none"/>
-	</entry>
-    </event>
-
-    <event id="AUE_file_copy" header="0" idNo="50" omit="JNI">
-    	<title>copy file to another zone</title>
-	<program>dtfile(1X)</program>
-	<entry id="subject">
-	    <internal token="subject"/>
-	    <external opt="none"/>
-	</entry>
-	<entry id="auth_used">
-	    <internal token="uauth"/>
-	    <external opt="required" type="char *"/>
-	    <comment>authorization used</comment>
-	</entry>
-	<entry id="src_file">
-	    <internal token="path"/>
-	    <external opt="required" type="char *"/>
-	    <comment>source file</comment>
-	</entry>
-	<entry id="src_label">
-	    <internal token="label"/>
-	    <external opt="required" type="m_label_t *"/>
-	    <comment>source label</comment>
-	</entry>
-	<entry id="dst_file">
-	    <internal token="path"/>
-	    <external opt="required" type="char *"/>
-	    <comment>destination directory</comment>
-	</entry>
-	<entry id="dst_label">
-	    <internal token="label"/>
-	    <external opt="required" type="m_label_t *"/>
-	    <comment>destination label</comment>
-	</entry>
-	<entry id="return">
-	    <internal token="return"/>
-	    <external opt="none"/>
-	</entry>
     </event>
 
     <!-- uadmin(1m) events -->
@@ -2630,8 +2552,6 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     <token id="ipc">
     </token>
     <token id="ipc_perm">
-    </token>
-    <token id="label">
     </token>
     <token id="newgroups">
     </token>

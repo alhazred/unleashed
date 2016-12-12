@@ -79,8 +79,6 @@ static ns_service_map ns_def_map[] = {
 	{ "profile",	"ou=profile,",		NULL },
 	{ "printers",	"ou=printers,",		NULL },
 	{ "automount",	"",			NULL },
-	{ "tnrhtp",	"ou=ipTnet,",		NULL },
-	{ "tnrhdb",	"ou=ipTnet,",		"tnrhtp" },
 	{ NULL, NULL, NULL }
 };
 

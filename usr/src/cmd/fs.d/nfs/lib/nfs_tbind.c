@@ -54,7 +54,6 @@
 #include <nfs/nfs4.h>
 #include <zone.h>
 #include <sys/socket.h>
-#include <tsol/label.h>
 
 /*
  * Determine valid semantics for most applications.
@@ -103,7 +102,6 @@ struct conn_entry {
 static	int	nofile_increase(int);
 static	int	reuseaddr(int);
 static	int	recvucred(int);
-static  int	anonmlp(int);
 static	void	add_to_poll_list(int, struct netconfig *);
 static	char	*serv_name_to_port_name(char *);
 static	int	bind_to_proto(char *, char *, struct netbuf **,
@@ -340,23 +338,6 @@ nfslib_bindit(struct netconfig *nconf, struct netbuf **addr,
 		}
 	}
 
-	/*
-	 * Make non global zone nfs4_callback port MLP
-	 */
-	if (use_any && is_system_labeled() && !gzone) {
-		if (anonmlp(fd) == -1) {
-			/*
-			 * failing to set this option means nfs4_callback
-			 * could fail silently later. So fail it with
-			 * with an error message now.
-			 */
-			syslog(LOG_ERR,
-			    "couldn't set SO_ANON_MLP option on transport");
-			(void) t_close(fd);
-			return (-1);
-		}
-	}
-
 	if (nconf->nc_semantics == NC_TPI_CLTS)
 		tb.qlen = 0;
 	else
@@ -516,12 +497,6 @@ static int
 recvucred(int fd)
 {
 	return (setopt(fd, SOL_SOCKET, SO_RECVUCRED, 1));
-}
-
-static int
-anonmlp(int fd)
-{
-	return (setopt(fd, SOL_SOCKET, SO_ANON_MLP, 1));
 }
 
 void

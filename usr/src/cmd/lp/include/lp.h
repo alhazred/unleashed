@@ -591,14 +591,6 @@ extern int chownmod(char *path, uid_t owner, gid_t group, mode_t mode);
 
 char *		next_x  ( char * , long * , unsigned int );
 
-/*
- * Stuff needed for Trusted Extensions
- */
-
-extern	char	*get_labeled_zonename(char *);
-extern int	get_peer_label(int fd, char **slabel);
-
-
 #ifdef __cplusplus
 }
 #endif

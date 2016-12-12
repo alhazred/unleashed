@@ -99,8 +99,6 @@
 #include <inet/ip_netinfo.h>
 #include <sys/squeue_impl.h>
 #include <sys/squeue.h>
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
 #include <rpc/pmap_prot.h>
 #include <sys/callo.h>
 
@@ -2429,8 +2427,6 @@ tcp_init_values(tcp_t *tcp, tcp_t *parent)
 
 	/* We rebuild the header template on the next connect/conn_request */
 
-	connp->conn_mlp_type = mlptSingle;
-
 	/*
 	 * Init the window scale to the max so tcp_rwnd_set() won't pare
 	 * down tcp_rwnd. tcp_set_destination() will set the right value later.
@@ -2701,16 +2697,8 @@ tcp_create_common(cred_t *credp, boolean_t isv6, boolean_t issocket,
 	connp->conn_zoneid = zoneid;
 	/* conn_allzones can not be set this early, hence no IPCL_ZONEID */
 	connp->conn_ixa->ixa_zoneid = zoneid;
-	connp->conn_mlp_type = mlptSingle;
 	ASSERT(connp->conn_netstack == tcps->tcps_netstack);
 	ASSERT(tcp->tcp_tcps == tcps);
-
-	/*
-	 * If the caller has the process-wide flag set, then default to MAC
-	 * exempt mode.  This allows read-down to unlabeled hosts.
-	 */
-	if (getpflags(NET_MAC_AWARE, credp) != 0)
-		connp->conn_mac_mode = CONN_MAC_AWARE;
 
 	connp->conn_zone_is_global = (crgetzoneid(credp) == GLOBAL_ZONEID);
 
@@ -4168,10 +4156,6 @@ tcp_do_connect(conn_t *connp, const struct sockaddr *sa, socklen_t len,
 	ASSERT(!(ixa->ixa_free_flags & IXA_FREE_CRED));
 	ixa->ixa_cred = cr;
 	ixa->ixa_cpid = pid;
-	if (is_system_labeled()) {
-		/* We need to restart with a label based on the cred */
-		ip_xmit_attr_restore_tsl(ixa, ixa->ixa_cred);
-	}
 
 	if (connp->conn_family == AF_INET6) {
 		if (!IN6_IS_ADDR_V4MAPPED(&sin6->sin6_addr)) {
@@ -4420,16 +4404,6 @@ do_listen:
 		connp->conn_laddr_v6 = ipv6_all_zeros;
 		connp->conn_saddr_v6 = ipv6_all_zeros;
 		connp->conn_ports = 0;
-
-		if (connp->conn_anon_port) {
-			zone_t		*zone;
-
-			zone = crgetzone(cr);
-			connp->conn_anon_port = B_FALSE;
-			(void) tsol_mlp_anon(zone, connp->conn_mlp_type,
-			    connp->conn_proto, connp->conn_lport, B_FALSE);
-		}
-		connp->conn_mlp_type = mlptSingle;
 
 		tcp_bind_hash_remove(tcp);
 		return (error);

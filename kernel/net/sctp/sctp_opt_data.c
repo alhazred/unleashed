@@ -628,10 +628,6 @@ opdes_t	sctp_opt_arr[] = {
 { SO_DGRAM_ERRIND, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int), 0
 	},
 { SO_SND_COPYAVOID, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int), 0 },
-{ SO_ANON_MLP, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int),
-	0 },
-{ SO_MAC_EXEMPT, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int),
-	0 },
 { SO_ALLZONES, SOL_SOCKET, OA_R, OA_RW, OP_CONFIG, 0, sizeof (int),
 	0 },
 { SO_EXCLBIND, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int), 0 },
@@ -1133,12 +1129,6 @@ sctp_set_opt(sctp_t *sctp, int level, int name, const void *invalp,
 			 */
 			goto done;
 		case SO_ALLZONES:
-			if (sctp->sctp_state >= SCTPS_BOUND) {
-				retval = EINVAL;
-				goto done;
-			}
-			break;
-		case SO_MAC_EXEMPT:
 			if (sctp->sctp_state >= SCTPS_BOUND) {
 				retval = EINVAL;
 				goto done;

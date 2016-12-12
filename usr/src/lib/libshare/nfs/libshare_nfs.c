@@ -37,6 +37,7 @@
 #include <locale.h>
 #include <signal.h>
 #include <strings.h>
+#include <priv.h>
 #include "libshare.h"
 #include "libshare_impl.h"
 #include <nfs/export.h>

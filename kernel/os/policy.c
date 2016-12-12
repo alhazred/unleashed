@@ -627,34 +627,6 @@ secpolicy_net_privaddr(const cred_t *cr, in_port_t port, int proto)
 }
 
 /*
- * Binding to a multilevel port on a trusted (labeled) system.
- */
-int
-secpolicy_net_bindmlp(const cred_t *cr)
-{
-	return (PRIV_POLICY(cr, PRIV_NET_BINDMLP, B_FALSE, EACCES, NULL));
-}
-
-/*
- * Allow a communication between a zone and an unlabeled host when their
- * labels don't match.
- */
-int
-secpolicy_net_mac_aware(const cred_t *cr)
-{
-	return (PRIV_POLICY(cr, PRIV_NET_MAC_AWARE, B_FALSE, EACCES, NULL));
-}
-
-/*
- * Allow a privileged process to transmit traffic without explicit labels
- */
-int
-secpolicy_net_mac_implicit(const cred_t *cr)
-{
-	return (PRIV_POLICY(cr, PRIV_NET_MAC_IMPLICIT, B_FALSE, EACCES, NULL));
-}
-
-/*
  * Common routine which determines whether a given credential can
  * act on a given mount.
  * When called through mount, the parameter needoptcheck is a pointer

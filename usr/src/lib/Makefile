@@ -210,8 +210,6 @@ SUBDIRS +=				\
 	libtecla	\
 	libtermcap	\
 	libthread	\
-	libtsnet	\
-	libtsol		\
 	libumem		\
 	libuuid		\
 	libuutil	\
@@ -324,7 +322,6 @@ MSGSUBDIRS=		\
 	libsmbfs	\
 	libsmedia	\
 	libsum		\
-	libtsol		\
 	libuutil	\
 	libvrrpadm	\
 	libvscan	\
@@ -438,8 +435,6 @@ HDRSUBDIRS=				\
 	libsysevent	\
 	libtecla	\
 	libtermcap	\
-	libtsnet	\
-	libtsol		\
 	libumem		\
 	libuutil	\
 	libvolmgt	\
@@ -536,6 +531,7 @@ brand:		libzonecfg libmapmalloc
 cfgadm_plugins:	libdevice libdevinfo libhotplug librcm hbaapi libkstat libscf
 fm:		libexacct libipmi libzfs scsi libdevinfo libdevid libcfgadm \
 		libcontract libsysevent ../cmd/sgs/libelf
+hal:		libbsm
 $(SPARC_BLD)fm:	libpri
 gss_mechs/mech_dh: libgss
 gss_mechs/mech_dummy: libgss
@@ -544,7 +540,7 @@ gss_mechs/mech_spnego: gss_mechs/mech_krb5
 krb5:		gss_mechs/mech_krb5 libtecla libldap5
 libadutils:	libldap5 libresolv2
 libbe:		libzfs libinstzones libuuid libgen libdevinfo libefi libficl
-libbsm:		libinetutil libscf libsecdb libtsol
+libbsm:		libinetutil libscf libsecdb
 libcfgadm:	libdevinfo
 libcmd:		libsum libast
 libcmdutils:	libavl
@@ -577,7 +573,7 @@ libinetsvc:	libscf
 libinstzones:	libzonecfg libcontract
 libipadm:	libinetutil libdlpi libdhcpagent libdladm libsecdb
 libipmp:	libinetutil
-libipsecutil:	libtecla libtsol
+libipsecutil:	libtecla
 libiscsit:	libstmf libuuid
 libkmf:		libcryptoutil pkcs11
 libkvm:		../cmd/sgs/libelf
@@ -616,15 +612,13 @@ libsysevent:	libsecdb
 libtecla:	libcurses
 libtermcap:	libcurses
 libtsalarm:	libpcp
-libtsnet:	libtsol libsecdb
-libtsol:	libsecdb
 libuuid:	libdlpi
 libv12n:	libds libuuid
 libvolmgt:	libadm
 libvrrpadm:	libdladm libscf
 libvscan:	libscf libsecdb
 libzfs:		libdevid libgen libuutil libadm libavl libefi libidmap \
-		libumem libtsol libzfs_core
+		libumem libzfs_core
 libzonecfg:	libuuid libsysevent libsec libbrand libpool libscf libproc \
 		libuutil libbsm libsecdb
 libzonestat:	libcmdutils libumem
@@ -633,7 +627,7 @@ madv:		libgen
 mpapi:		libpthread libdevinfo libsysevent
 mpss:		libgen
 nsswitch:	libadutils libidmap libdns_sd libscf libldap5 libsldap
-pam_modules:	libproject passwdutil smbsrv libtsnet libpam libbsm libsecdb
+pam_modules:	libproject passwdutil smbsrv libpam libbsm libsecdb
 passwdutil:	libsldap
 pkcs11:		libcryptoutil libgen libuuid
 policykit:	libsecdb

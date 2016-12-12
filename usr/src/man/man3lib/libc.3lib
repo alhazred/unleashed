@@ -339,7 +339,6 @@ l l .
 \fBindex\fR	\fBinitgroups\fR
 \fBinitstate\fR	\fBinnetgr\fR
 \fBinsque\fR	\fBioctl\fR
-\fBis_system_labeled\fR	
 \fBisaexec\fR
 \fBisalnum\fR	\fBisalnum_l\fR
 \fBisalpha\fR	\fBisalpha_l\fR
@@ -633,7 +632,7 @@ l l .
 \fBsetgid\fR	\fBsetgrent\fR
 \fBsetgroups\fR	\fBsethostname\fR
 \fBsetitimer\fR	\fBsetjmp\fR
-\fBsetkey\fR	\fBsetlabel\fR
+\fBsetkey\fR
 \fBsetlinebuf\fR	\fBsetlocale\fR
 \fBsetlogmask\fR	\fBsetnetgrent\fR
 \fBsetpflags\fR	\fBsetpgid\fR

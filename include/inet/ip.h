@@ -1304,9 +1304,6 @@ typedef struct ip_recv_attr_s ip_recv_attr_t;
 struct ip_xmit_attr_s;
 typedef struct ip_xmit_attr_s ip_xmit_attr_t;
 
-struct tsol_ire_gw_secattr_s;
-typedef struct tsol_ire_gw_secattr_s tsol_ire_gw_secattr_t;
-
 /*
  * This is a structure for a one-element route cache that is passed
  * by reference between ip_input and ill_inputfn.
@@ -2180,7 +2177,6 @@ struct ip_xmit_attr_s {
 	uint_t		ixa_ifindex;	/* Assumed always set */
 	uint16_t	ixa_ip_hdr_length; /* Points to ULP header */
 	uint8_t		ixa_protocol;	/* Protocol number for ULP cksum */
-	ts_label_t	*ixa_tsl;	/* Always set. NULL if not TX */
 	ip_stack_t	*ixa_ipst;	/* Always set */
 	uint32_t	ixa_extra_ident; /* Set if LSO */
 	cred_t		*ixa_cred;	/* For getpeerucred */
@@ -2218,7 +2214,6 @@ struct ip_xmit_attr_s {
 #define	IXAF_MULTICAST_LOOP	0x00000080	/* IP_MULTICAST_LOOP */
 
 #define	IXAF_IPSEC_SECURE	0x00000100	/* Need IPsec processing */
-#define	IXAF_UCRED_TSL		0x00000200	/* ixa_tsl from SCM_UCRED */
 #define	IXAF_DONTROUTE		0x00000400	/* SO_DONTROUTE */
 #define	IXAF_NO_IPSEC		0x00000800	/* Ignore policy */
 
@@ -2268,7 +2263,6 @@ struct ip_xmit_attr_s {
  * released on cleanup.
  */
 #define	IXA_FREE_CRED		0x00000001	/* ixa_cred needs to be rele */
-#define	IXA_FREE_TSL		0x00000002	/* ixa_tsl needs to be rele */
 
 /*
  * Trivial state machine used to synchronize IXA cleanup for TCP connections.
@@ -2334,7 +2328,6 @@ struct ip_recv_attr_s {
 	uint8_t		ira_protocol;	/* Protocol number for ULP cksum */
 	uint_t		ira_rifindex;	/* Received ifindex */
 	uint_t		ira_ruifindex;	/* Received upper ifindex */
-	ts_label_t	*ira_tsl;	/* Always set. NULL if not TX */
 	/*
 	 * ira_rill and ira_ill is set inside IP, but not when conn_recv is
 	 * called; ULPs should use ira_ruifindex instead.
@@ -2379,7 +2372,6 @@ struct ip_recv_attr_s {
 /*
  * Flags to indicate which receive attributes are set.
  */
-#define	IRAF_SYSTEM_LABELED	0x00000001	/* is_system_labeled() */
 #define	IRAF_IPV4_OPTIONS	0x00000002	/* Performance */
 #define	IRAF_MULTICAST		0x00000004	/* Was multicast at L3 */
 #define	IRAF_BROADCAST		0x00000008	/* Was broadcast at L3 */
@@ -2428,7 +2420,6 @@ struct ip_recv_attr_s {
  * released on cleanup.
  */
 #define	IRA_FREE_CRED		0x00000001	/* ira_cred needs to be rele */
-#define	IRA_FREE_TSL		0x00000002	/* ira_tsl needs to be rele */
 
 /*
  * Optional destination cache entry for path MTU information,
@@ -2488,103 +2479,6 @@ struct dce_s {
  */
 #define	SRC_GENERATION_VERIFY		0
 #define	SRC_GENERATION_INITIAL		1
-
-/*
- * The kernel stores security attributes of all gateways in a database made
- * up of one or more tsol_gcdb_t elements.  Each tsol_gcdb_t contains the
- * security-related credentials of the gateway.  More than one gateways may
- * share entries in the database.
- *
- * The tsol_gc_t structure represents the gateway to credential association,
- * and refers to an entry in the database.  One or more tsol_gc_t entities are
- * grouped together to form one or more tsol_gcgrp_t, each representing the
- * list of security attributes specific to the gateway.  A gateway may be
- * associated with at most one credentials group.
- */
-struct tsol_gcgrp_s;
-
-extern uchar_t	ip6opt_ls;	/* TX IPv6 enabler */
-
-/*
- * Gateway security credential record.
- */
-typedef struct tsol_gcdb_s {
-	uint_t		gcdb_refcnt;	/* reference count */
-	struct rtsa_s	gcdb_attr;	/* security attributes */
-#define	gcdb_mask	gcdb_attr.rtsa_mask
-#define	gcdb_doi	gcdb_attr.rtsa_doi
-#define	gcdb_slrange	gcdb_attr.rtsa_slrange
-} tsol_gcdb_t;
-
-/*
- * Gateway to credential association.
- */
-typedef struct tsol_gc_s {
-	uint_t		gc_refcnt;	/* reference count */
-	struct tsol_gcgrp_s *gc_grp;	/* pointer to group */
-	struct tsol_gc_s *gc_prev;	/* previous in list */
-	struct tsol_gc_s *gc_next;	/* next in list */
-	tsol_gcdb_t	*gc_db;		/* pointer to actual credentials */
-} tsol_gc_t;
-
-/*
- * Gateway credentials group address.
- */
-typedef struct tsol_gcgrp_addr_s {
-	int		ga_af;		/* address family */
-	in6_addr_t	ga_addr;	/* IPv4 mapped or IPv6 address */
-} tsol_gcgrp_addr_t;
-
-/*
- * Gateway credentials group.
- */
-typedef struct tsol_gcgrp_s {
-	uint_t		gcgrp_refcnt;	/* reference count */
-	krwlock_t	gcgrp_rwlock;	/* lock to protect following */
-	uint_t		gcgrp_count;	/* number of credentials */
-	tsol_gc_t	*gcgrp_head;	/* first credential in list */
-	tsol_gc_t	*gcgrp_tail;	/* last credential in list */
-	tsol_gcgrp_addr_t gcgrp_addr;	/* next-hop gateway address */
-} tsol_gcgrp_t;
-
-extern kmutex_t gcgrp_lock;
-
-#define	GC_REFRELE(p) {				\
-	ASSERT((p)->gc_grp != NULL);		\
-	rw_enter(&(p)->gc_grp->gcgrp_rwlock, RW_WRITER); \
-	ASSERT((p)->gc_refcnt > 0);		\
-	if (--((p)->gc_refcnt) == 0)		\
-		gc_inactive(p);			\
-	else					\
-		rw_exit(&(p)->gc_grp->gcgrp_rwlock); \
-}
-
-#define	GCGRP_REFHOLD(p) {			\
-	mutex_enter(&gcgrp_lock);		\
-	++((p)->gcgrp_refcnt);			\
-	ASSERT((p)->gcgrp_refcnt != 0);		\
-	mutex_exit(&gcgrp_lock);		\
-}
-
-#define	GCGRP_REFRELE(p) {			\
-	mutex_enter(&gcgrp_lock);		\
-	ASSERT((p)->gcgrp_refcnt > 0);		\
-	if (--((p)->gcgrp_refcnt) == 0)		\
-		gcgrp_inactive(p);		\
-	ASSERT(MUTEX_HELD(&gcgrp_lock));	\
-	mutex_exit(&gcgrp_lock);		\
-}
-
-/*
- * IRE gateway security attributes structure, pointed to by tsol_ire_gw_secattr
- */
-struct tsol_tnrhc;
-
-struct tsol_ire_gw_secattr_s {
-	kmutex_t	igsa_lock;	/* lock to protect following */
-	struct tsol_tnrhc *igsa_rhc;	/* host entry for gateway */
-	tsol_gc_t	*igsa_gc;	/* for prefix IREs */
-};
 
 void irb_refrele_ftable(irb_t *);
 
@@ -2648,7 +2542,6 @@ struct ire_s {
 	irb_t		*ire_bucket;	/* Hash bucket when ire_ptphn is set */
 	kmutex_t	ire_lock;
 	clock_t		ire_last_used_time;	/* For IRE_LOCAL reception */
-	tsol_ire_gw_secattr_t *ire_gw_secattr; /* gateway security attributes */
 	zoneid_t	ire_zoneid;
 
 	/*
@@ -2798,10 +2691,6 @@ struct ip_pkt_s {
 	uint8_t		ipp_type_of_service;	/* IP_TOS */
 	uint_t		ipp_ipv4_options_len;	/* Len of IPv4 options */
 	uint8_t		*ipp_ipv4_options;	/* Ptr to IPv4 options */
-	uint_t		ipp_label_len_v4;	/* Len of TX label for IPv4 */
-	uint8_t		*ipp_label_v4;		/* TX label for IPv4 */
-	uint_t		ipp_label_len_v6;	/* Len of TX label for IPv6 */
-	uint8_t		*ipp_label_v6;		/* TX label for IPv6 */
 };
 typedef struct ip_pkt_s ip_pkt_t;
 
@@ -2822,8 +2711,6 @@ extern void ip_pkt_source_route_reverse_v4(ip_pkt_t *);
 #define	IPPF_DSTOPTS		0x0080	/* ipp_dstopts set */
 
 #define	IPPF_IPV4_OPTIONS	0x0100	/* ipp_ipv4_options set */
-#define	IPPF_LABEL_V4		0x0200	/* ipp_label_v4 set */
-#define	IPPF_LABEL_V6		0x0400	/* ipp_label_v6 set */
 
 #define	IPPF_FRAGHDR		0x0800	/* Used for IPsec receive side */
 
@@ -3301,9 +3188,9 @@ extern ire_t	*ip_check_multihome(void *, ire_t *, ill_t *);
 extern void	ip_send_potential_redirect_v4(mblk_t *, ipha_t *, ire_t *,
     ip_recv_attr_t *);
 extern int	ip_set_destination_v4(ipaddr_t *, ipaddr_t, ipaddr_t,
-    ip_xmit_attr_t *, iulp_t *, uint32_t, uint_t);
+    ip_xmit_attr_t *, iulp_t *, uint32_t);
 extern int	ip_set_destination_v6(in6_addr_t *, const in6_addr_t *,
-    const in6_addr_t *, ip_xmit_attr_t *, iulp_t *, uint32_t, uint_t);
+    const in6_addr_t *, ip_xmit_attr_t *, iulp_t *, uint32_t);
 
 extern int	ip_output_simple(mblk_t *, ip_xmit_attr_t *);
 extern int	ip_output_simple_v4(mblk_t *, ip_xmit_attr_t *);
@@ -3317,9 +3204,6 @@ extern ip_xmit_attr_t *conn_get_ixa_tryhard(conn_t *, boolean_t);
 extern ip_xmit_attr_t *conn_replace_ixa(conn_t *, ip_xmit_attr_t *);
 extern ip_xmit_attr_t *conn_get_ixa_exclusive(conn_t *);
 extern ip_xmit_attr_t *ip_xmit_attr_duplicate(ip_xmit_attr_t *);
-extern void	ip_xmit_attr_replace_tsl(ip_xmit_attr_t *, ts_label_t *);
-extern void	ip_xmit_attr_restore_tsl(ip_xmit_attr_t *, cred_t *);
-boolean_t	ip_recv_attr_replace_label(ip_recv_attr_t *, ts_label_t *);
 extern void	ixa_inactive(ip_xmit_attr_t *);
 extern void	ixa_refrele(ip_xmit_attr_t *);
 extern boolean_t ixa_check_drain_insert(conn_t *, ip_xmit_attr_t *);
@@ -3338,8 +3222,6 @@ extern int	conn_opt_set(conn_opt_arg_t *, t_scalar_t, t_scalar_t, uint_t,
     uchar_t *, boolean_t, cred_t *);
 extern boolean_t	conn_same_as_last_v4(conn_t *, sin_t *);
 extern boolean_t	conn_same_as_last_v6(conn_t *, sin6_t *);
-extern int	conn_update_label(const conn_t *, const ip_xmit_attr_t *,
-    const in6_addr_t *, ip_pkt_t *);
 
 extern int	ip_opt_set_multicast_group(conn_t *, t_scalar_t,
     uchar_t *, boolean_t, boolean_t);

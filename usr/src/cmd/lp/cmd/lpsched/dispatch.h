@@ -79,7 +79,6 @@ void		s_mount_tray ( char *, MESG * );
 void		s_unmount_tray ( char *, MESG *);
 void		s_paper_changed ( char *, MESG *);
 void		s_paper_allowed ( char *, MESG *);
-void		s_pass_peer_connection ( char * , MESG * );
 	
 /**
  ** dispatch_table[]

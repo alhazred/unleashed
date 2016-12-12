@@ -54,9 +54,9 @@ LDFLAGS +=	$(MAPFILE.NGB:%=-Wl,-M%)
 # conditional assignments
 #
 lpfilter:=	LDLIBS += $(LIBFLT) $(LIBMSG) $(LIBACC) $(LIBOAM) $(LIBLP) \
-			-lgen -lsecdb
+			-lgen
 lpforms:=	LDLIBS += $(LIBFRM) $(LIBMSG) $(LIBREQ) $(LIBOAM) \
-			$(LIBACC) $(LIBLP) -lsecdb
+			$(LIBACC) $(LIBLP)
 lpshut:=	LDLIBS += $(LIBMSG) $(LIBOAM) $(LIBLP)
 lpusers:=	LDLIBS += $(LIBMSG) $(LIBACC) $(LIBOAM) $(LIBUSR) $(LIBLP)
 

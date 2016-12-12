@@ -75,9 +75,6 @@
 #include <sharefs/sharetab.h>
 #include "../lib/sharetab.h"
 #include "mountd.h"
-#include <tsol/label.h>
-#include <sys/tsol/label_macro.h>
-#include <libtsnet.h>
 #include <sys/sdt.h>
 #include <libscf.h>
 #include <limits.h>
@@ -115,7 +112,6 @@ static void sh_free(struct sh_list *);
 static void umount(struct svc_req *);
 static void umountall(struct svc_req *);
 static int newopts(char *);
-static tsol_tpent_t *get_client_template(struct sockaddr *);
 
 static int verbose;
 static int rejecting;
@@ -371,7 +367,6 @@ main(int argc, char *argv[])
 	int	rpc_svc_mode = RPC_SVC_MT_AUTO;
 	int	maxrecsz = RPC_MAXDATASIZE;
 	bool_t	exclbind = TRUE;
-	bool_t	can_do_mlp;
 	long	thr_flags = (THR_NEW_LWP|THR_DAEMON);
 	char defval[4];
 	int defvers, ret, bufsz;
@@ -392,13 +387,9 @@ main(int argc, char *argv[])
 	 *		auditing
 	 *		nfs syscall
 	 *		file dac search (so it can stat all files)
-	 *	Optional privileges:
-	 *		MLP
 	 */
-	can_do_mlp = priv_ineffect(PRIV_NET_BINDMLP);
 	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET, -1, -1,
-	    PRIV_SYS_NFS, PRIV_PROC_AUDIT, PRIV_FILE_DAC_SEARCH,
-	    can_do_mlp ? PRIV_NET_BINDMLP : NULL, NULL) == -1) {
+	    PRIV_SYS_NFS, PRIV_PROC_AUDIT, PRIV_FILE_DAC_SEARCH, NULL) == -1) {
 		(void) fprintf(stderr,
 		    "%s: must be run with sufficient privileges\n",
 		    argv[0]);
@@ -1267,22 +1258,6 @@ mount(struct svc_req *rqstp)
 	}
 
 	/*
-	 * Trusted Extension doesn't support nfsv2. nfsv2 client
-	 * uses MOUNT protocol v1 and v2. To prevent circumventing
-	 * TX label policy via using nfsv2 client, reject a mount
-	 * request with version less than 3 and log an error.
-	 */
-	if (is_system_labeled()) {
-		if (version < 3) {
-			if (verbose)
-				syslog(LOG_ERR,
-				    "Rejected mount: TX doesn't support NFSv2");
-			error = EACCES;
-			goto reply;
-		}
-	}
-
-	/*
 	 * Get the real path (no symbolic links in it)
 	 */
 	if (realpath(path, rpath) == NULL) {
@@ -1319,74 +1294,6 @@ mount(struct svc_req *rqstp)
 	if (flavor_count == 0) {
 		error = EACCES;
 		goto reply;
-	}
-
-	/*
-	 * Check MAC policy here. The server side policy should be
-	 * consistent with client side mount policy, i.e.
-	 * - we disallow an admin_low unlabeled client to mount
-	 * - we disallow mount from a lower labeled client.
-	 */
-	if (is_system_labeled()) {
-		m_label_t *clabel = NULL;
-		m_label_t *slabel = NULL;
-		m_label_t admin_low;
-
-		if (svc_getcallerucred(rqstp->rq_xprt, &uc) != 0) {
-			syslog(LOG_ERR,
-			    "mount request: Failed to get caller's ucred : %m");
-			error = EACCES;
-			goto reply;
-		}
-		if ((clabel = ucred_getlabel(uc)) == NULL) {
-			syslog(LOG_ERR,
-			    "mount request: can't get client label from ucred");
-			error = EACCES;
-			goto reply;
-		}
-
-		bsllow(&admin_low);
-		if (blequal(&admin_low, clabel)) {
-			struct sockaddr *ca;
-			tsol_tpent_t	*tp;
-
-			ca = (struct sockaddr *)(void *)svc_getrpccaller(
-			    rqstp->rq_xprt)->buf;
-			if (ca == NULL) {
-				error = EACCES;
-				goto reply;
-			}
-			/*
-			 * get trusted network template associated
-			 * with the client.
-			 */
-			tp = get_client_template(ca);
-			if (tp == NULL || tp->host_type != SUN_CIPSO) {
-				if (tp != NULL)
-					tsol_freetpent(tp);
-				error = EACCES;
-				goto reply;
-			}
-			tsol_freetpent(tp);
-		} else {
-			if ((slabel = m_label_alloc(MAC_LABEL)) == NULL) {
-				error = EACCES;
-				goto reply;
-			}
-
-			if (getlabel(rpath, slabel) != 0) {
-				m_label_free(slabel);
-				error = EACCES;
-				goto reply;
-			}
-
-			if (!bldominates(clabel, slabel)) {
-				m_label_free(slabel);
-				error = EACCES;
-				goto reply;
-			}
-			m_label_free(slabel);
-		}
 	}
 
 	/*
@@ -3216,45 +3123,4 @@ exmalloc(size_t size)
 		exit(1);
 	}
 	return (ret);
-}
-
-static tsol_tpent_t *
-get_client_template(struct sockaddr *sock)
-{
-	in_addr_t	v4client;
-	in6_addr_t	v6client;
-	char		v4_addr[INET_ADDRSTRLEN];
-	char		v6_addr[INET6_ADDRSTRLEN];
-	tsol_rhent_t	*rh;
-	tsol_tpent_t	*tp;
-
-	switch (sock->sa_family) {
-	case AF_INET:
-		v4client = ((struct sockaddr_in *)(void *)sock)->
-		    sin_addr.s_addr;
-		if (inet_ntop(AF_INET, &v4client, v4_addr, INET_ADDRSTRLEN) ==
-		    NULL)
-			return (NULL);
-		rh = tsol_getrhbyaddr(v4_addr, sizeof (v4_addr), AF_INET);
-		if (rh == NULL)
-			return (NULL);
-		tp = tsol_gettpbyname(rh->rh_template);
-		tsol_freerhent(rh);
-		return (tp);
-		break;
-	case AF_INET6:
-		v6client = ((struct sockaddr_in6 *)(void *)sock)->sin6_addr;
-		if (inet_ntop(AF_INET6, &v6client, v6_addr, INET6_ADDRSTRLEN) ==
-		    NULL)
-			return (NULL);
-		rh = tsol_getrhbyaddr(v6_addr, sizeof (v6_addr), AF_INET6);
-		if (rh == NULL)
-			return (NULL);
-		tp = tsol_gettpbyname(rh->rh_template);
-		tsol_freerhent(rh);
-		return (tp);
-		break;
-	default:
-		return (NULL);
-	}
 }

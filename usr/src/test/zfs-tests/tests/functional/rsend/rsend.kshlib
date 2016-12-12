@@ -343,13 +343,10 @@ function fs_inherit_prop
 	if is_global_zone ; then
 		fs_prop=$(zfs inherit 2>&1 | \
 		    awk '$2=="YES" && $3=="YES" {print $1}')
-		if ! is_te_enabled ; then
-		        fs_prop=$(echo $fs_prop | grep -v "mlslabel")
-		fi
 	else
 		fs_prop=$(zfs inherit 2>&1 | \
 		    awk '$2=="YES" && $3=="YES" {print $1}'|
-		    egrep -v "devices|mlslabel|sharenfs|sharesmb|zoned")
+		    egrep -v "devices|sharenfs|sharesmb|zoned")
 	fi
 
 	echo $fs_prop

@@ -96,7 +96,6 @@ MANFILES=	Intro.5			\
 		pam_smb_passwd.5	\
 		pam_smbfs_login.5	\
 		pam_timestamp.5		\
-		pam_tsol_account.5	\
 		pam_unix_account.5	\
 		pam_unix_auth.5		\
 		pam_unix_cred.5		\
@@ -124,7 +123,6 @@ MANFILES=	Intro.5			\
 		term.5			\
 		threads.5		\
 		timerfd.5		\
-		trusted_extensions.5	\
 		vgrindefs.5		\
 		zones.5			\
 		zpool-features.5

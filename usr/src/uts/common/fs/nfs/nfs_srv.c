@@ -348,16 +348,6 @@ rfs_lookup(struct nfsdiropargs *da, struct nfsdiropres *dr,
 	struct sockaddr *ca;
 
 	/*
-	 * Trusted Extension doesn't support NFSv2. MOUNT
-	 * will reject v2 clients. Need to prevent v2 client
-	 * access via WebNFS here.
-	 */
-	if (is_system_labeled() && req->rq_vers == 2) {
-		dr->dr_status = NFSERR_ACCES;
-		return;
-	}
-
-	/*
 	 * Disallow NULL paths
 	 */
 	if (da->da_name == NULL || *da->da_name == '\0') {

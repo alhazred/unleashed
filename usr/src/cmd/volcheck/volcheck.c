@@ -62,8 +62,6 @@ main(int argc, char **argv)
 	rmm_error_t	rmm_error;
 	int		ret = 0;
 
-	vold_init(argc, argv);
-
 	while ((c = getopt(argc, argv, opts)) != EOF) {
 		switch (c) {
 		case 'i':

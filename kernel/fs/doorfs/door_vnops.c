@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/types.h>
 #include <sys/vnode.h>
 #include <sys/vfs_opreg.h>
@@ -35,7 +33,6 @@
 #include <sys/cmn_err.h>
 #include <sys/fs_subr.h>
 #include <sys/zone.h>
-#include <sys/tsol/label.h>
 
 kmutex_t	door_knob;
 static int	door_open(struct vnode **vpp, int flag, struct cred *cr,
@@ -74,27 +71,6 @@ const fs_operation_def_t door_vnodeops_template[] = {
 static int
 door_open(struct vnode **vpp, int flag, struct cred *cr, caller_context_t *ct)
 {
-	/*
-	 * MAC policy for doors.  Restrict cross-zone open()s so that only
-	 * door servers in the global zone can have clients from other zones.
-	 * For other zones, client must be within the same zone as server.
-	 */
-	if (is_system_labeled()) {
-		zone_t		*server_zone, *client_zone;
-		door_node_t	*dp = VTOD((*vpp));
-
-		mutex_enter(&door_knob);
-		if (DOOR_INVALID(dp)) {
-			mutex_exit(&door_knob);
-			return (0);
-		}
-		client_zone = curproc->p_zone;
-		server_zone = dp->door_target->p_zone;
-		mutex_exit(&door_knob);
-		if (server_zone != global_zone &&
-		    server_zone != client_zone)
-			return (EACCES);
-	}
 	return (0);
 }
 

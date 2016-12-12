@@ -116,8 +116,6 @@ init_tokens(void)
 	table_init(AUT_ATTR, "attribute", attribute_token, T_ENCLOSED);
 	table_init(AUT_IPC_PERM, "IPC_perm", s5_IPC_perm_token, T_ENCLOSED);
 	table_init(AUT_GROUPS, "group", group_token, T_ELEMENT);
-	table_initx(AUT_LABEL, "sensitivity label", "sensitivity_label",
-	    label_token, T_ELEMENT);
 	table_init(AUT_PRIV, "privilege", privilege_token, T_EXTENDED);
 	table_init(AUT_SECFLAGS, "secflags", secflags_token, T_EXTENDED);
 	table_initx(AUT_UPRIV, "use of privilege", "use_of_privilege",

@@ -337,9 +337,6 @@ extern "C" {
 #define	AUE_PF_POLICY_FLUSH	299	/* =as Flush IPsec policy rules */
 #define	AUE_PF_POLICY_ALGS	300	/* =as Update IPsec algorithms */
 #define	AUE_PORTFS		301	/* =no portfs(2) - place holder */
-#define	AUE_LABELSYS_TNRH	302	/* =as tnrh(2) */
-#define	AUE_LABELSYS_TNRHTP	303	/* =as tnrhtp(2) */
-#define	AUE_LABELSYS_TNMLP	304	/* =as tnmlp(2) */
 #define	AUE_PORTFS_ASSOCIATE	305	/* =fa portfs(2) - port associate */
 #define	AUE_PORTFS_DISSOCIATE	306	/* =fa portfs(2) - port disassociate */
 #define	AUE_SETSID		307	/* =pm setsid(2) */

@@ -157,7 +157,6 @@ _MANFILES=	Intro.4				\
 		sasl_appname.conf.4		\
 		scsi.4				\
 		securenets.4			\
-		sel_config.4			\
 		service_bundle.4		\
 		service_provider.conf.4		\
 		services.4			\

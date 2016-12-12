@@ -38,7 +38,6 @@
 #include "wait.h"
 #include "lpsched.h"
 #include <syslog.h>
-#include "tsol/label.h"
 
 #define Done(EC,ERRNO)	done(((EC) << 8),ERRNO)
 
@@ -308,7 +307,6 @@ exec(int type, ...)
 	char **envp = NULL;
 	int ac = 0;
 	char	*mail_zonename = NULL;
-	char	*slabel = NULL;
 	int	setid = 1;
 	char	*ridno = NULL, *tmprid = NULL;
 
@@ -686,14 +684,6 @@ exec(int type, ...)
 
 		if (request->fast)
 			addenv(&envp, "FILTER", request->fast);
-
-		/*
-		 * Add the sensitivity label to the environment for
-		 * banner page and header/footer processing
-		 */
-
-		if (is_system_labeled() && request->secure->slabel != NULL)
-			addenv(&envp, "SLABEL", request->secure->slabel);
 
 		/*
 		 * Add the system name to the user name (ala system!user)
@@ -1090,7 +1080,6 @@ exec(int type, ...)
 		} else {
 			char *user = strdup(request->request->user);
 			clean_string(user);
-			slabel = request->secure->slabel;
 
 			if (request->request->actions & ACT_WRITE) {
 				av[ac++] = arg_string(TRUSTED, "%s", BINWRITE);
@@ -1102,23 +1091,6 @@ exec(int type, ...)
 				av[ac++] = arg_string(TRUSTED, "/bin/sh");
 				av[ac++] = arg_string(TRUSTED, "-c");
 				av[ac++] = arg_string(TRUSTED, "%s", argbuf);
-			} else if ((getzoneid() == GLOBAL_ZONEID) &&
-				   is_system_labeled() && (slabel != NULL)) {
-				/*
-				 * If in the global zone and the system is
-				 * labeled, mail is handled via a local
-				 * labeled zone that is the same label as
-				 * the request.
-				 */
-				if ((mail_zonename =
-				    get_labeled_zonename(slabel)) ==
-				    (char *)-1) {
-					/*
-					 * Cannot find labeled zone, just
-					 * return 0.
-					 */
-					return(0);
-				}
 			}
 			if (mail_zonename == NULL) {
 				procuid = Lp_Uid;

@@ -100,7 +100,7 @@ LPLIBS =			\
 		$(LIBLP)	\
 		$(LIBSEC)
 
-SYSLIBS=	-lcurses -lgen -lcurses -ltsol -lsecdb -lbsm
+SYSLIBS=	-lcurses -lgen -lcurses -lsecdb
 
 LDLIBS +=	$(LPLIBS) $(SYSLIBS)
 
