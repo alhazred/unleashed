@@ -70,5 +70,5 @@ uname(struct utsname *buf)
 	if (copyout(utsname.machine, buf->machine, strlen(utsname.machine)+1)) {
 		return (set_errno(EFAULT));
 	}
-	return (1);	/* XXX why 1 and not 0? 1003.1 says "non-negative" */
+	return (0);
 }
