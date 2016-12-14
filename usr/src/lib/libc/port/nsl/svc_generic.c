@@ -49,7 +49,6 @@
 #include <malloc.h>
 #include <string.h>
 #include <stropts.h>
-#include <tsol/label.h>
 #include <nfs/nfs.h>
 #include <nfs/nfs_acl.h>
 #include <rpcsvc/mount.h>
@@ -85,20 +84,7 @@ SVCXPRT_LIST *_svc_xprtlist = NULL;
 extern mutex_t xprtlist_lock;
 
 static SVCXPRT * svc_tli_create_common(int, const struct netconfig *,
-    const struct t_bind *, uint_t, uint_t, boolean_t);
-
-boolean_t
-is_multilevel(rpcprog_t prognum)
-{
-	/* This is a list of identified multilevel service provider */
-	if ((prognum == MOUNTPROG) || (prognum == NFS_PROGRAM) ||
-	    (prognum == NFS_ACL_PROGRAM) || (prognum == NLM_PROG) ||
-	    (prognum == NSM_ADDR_PROGRAM) || (prognum == RQUOTAPROG) ||
-	    (prognum == SM_PROG))
-		return (B_TRUE);
-
-	return (B_FALSE);
-}
+    const struct t_bind *, uint_t, uint_t);
 
 void
 __svc_free_xprtlist(void)
@@ -183,7 +169,6 @@ svc_tp_create(void (*dispatch)(), const rpcprog_t prognum,
 			const rpcvers_t versnum, const struct netconfig *nconf)
 {
 	SVCXPRT *xprt;
-	boolean_t anon_mlp = B_FALSE;
 
 	if (nconf == NULL) {
 		(void) syslog(LOG_ERR, "svc_tp_create: invalid netconfig "
@@ -191,10 +176,7 @@ svc_tp_create(void (*dispatch)(), const rpcprog_t prognum,
 		return (NULL);
 	}
 
-	/* Some programs need to allocate MLP for multilevel services */
-	if (is_system_labeled() && is_multilevel(prognum))
-		anon_mlp = B_TRUE;
-	xprt = svc_tli_create_common(RPC_ANYFD, nconf, NULL, 0, 0, anon_mlp);
+	xprt = svc_tli_create_common(RPC_ANYFD, nconf, NULL, 0, 0);
 	if (xprt == NULL)
 		return (NULL);
 
@@ -213,7 +195,7 @@ SVCXPRT *
 svc_tli_create(const int fd, const struct netconfig *nconf,
     const struct t_bind *bindaddr, const uint_t sendsz, const uint_t recvsz)
 {
-	return (svc_tli_create_common(fd, nconf, bindaddr, sendsz, recvsz, 0));
+	return (svc_tli_create_common(fd, nconf, bindaddr, sendsz, recvsz));
 }
 
 /*
@@ -228,7 +210,7 @@ svc_tli_create(const int fd, const struct netconfig *nconf,
 SVCXPRT *
 svc_tli_create_common(const int ofd, const struct netconfig *nconf,
 	const struct t_bind *bindaddr, const uint_t sendsz,
-	const uint_t recvsz, boolean_t mlp_flag)
+	const uint_t recvsz)
 {
 	SVCXPRT *xprt = NULL;		/* service handle */
 	struct t_info tinfo;		/* transport info */
@@ -326,17 +308,6 @@ svc_tli_create_common(const int ofd, const struct netconfig *nconf,
 	switch (state) {
 		bool_t tcp, exclbind;
 	case T_UNBND:
-		/* If this is a labeled system, then ask for an MLP */
-		if (is_system_labeled() &&
-		    (strcmp(nconf->nc_protofmly, NC_INET) == 0 ||
-		    strcmp(nconf->nc_protofmly, NC_INET6) == 0)) {
-			(void) __rpc_tli_set_options(fd, SOL_SOCKET,
-			    SO_RECVUCRED, 1);
-			if (mlp_flag)
-				(void) __rpc_tli_set_options(fd, SOL_SOCKET,
-				    SO_ANON_MLP, 1);
-		}
-
 		/*
 		 * SO_EXCLBIND has the following properties
 		 *    - an fd bound to port P via IPv4 will prevent an IPv6

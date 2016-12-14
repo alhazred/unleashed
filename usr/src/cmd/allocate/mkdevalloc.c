@@ -71,7 +71,6 @@
 #include <auth_list.h>
 #include <bsm/devices.h>
 #include <bsm/devalloc.h>
-#include <tsol/label.h>
 
 #ifndef TEXT_DOMAIN
 #define	TEXT_DOMAIN	"SUNW_OST_OSCMD"
@@ -146,12 +145,10 @@ static void dotape();
 static void doaudio();
 static void dofloppy();
 static int docd();
-static void dormdisk(int);
 static void initmem();
 static int  expandmem(int, void **, int);
 static void no_memory(void);
 
-int		system_labeled = 0;
 int		do_devalloc = 0;
 int		do_devmaps = 0;
 int		do_files = 0;
@@ -177,53 +174,11 @@ main(int argc, char **argv)
 	else
 		exit(1);
 
-	system_labeled = is_system_labeled();
-
-	if (!system_labeled) {
-		/*
-		 * is_system_labeled() will return false in case we are
-		 * starting before the first reboot after Trusted Extensions
-		 * is enabled.  Check the setting in /etc/system to see if
-		 * TX is enabled (even if not yet booted).
-		 */
-		if (defopen("/etc/system") == 0) {
-			if (defread("set sys_labeling=1") != NULL)
-				system_labeled = 1;
-
-			/* close defaults file */
-			(void) defopen(NULL);
-		}
-	}
-
-#ifdef DEBUG
-	/* test hook: see also devfsadm.c and allocate.c */
-	if (!system_labeled) {
-		struct stat	tx_stat;
-
-		system_labeled = is_system_labeled_debug(&tx_stat);
-		if (system_labeled) {
-			fprintf(stderr, "/ALLOCATE_FORCE_LABEL is set,\n"
-			    "forcing system label on for testing...\n");
-		}
-	}
-#endif
-
-	if (system_labeled && do_devalloc && (argc == 2) &&
-	    (strcmp(argv[1], DA_IS_LABELED) == 0)) {
-		/*
-		 * write device entries to device_allocate and device_maps.
-		 * default is to print them on stdout.
-		 */
-		do_files = 1;
-	}
-
 	initmem();		/* initialize memory */
 	dotape();
 	doaudio();
 	dofloppy();
 	cd_count = docd();
-	if (system_labeled)
-		dormdisk(cd_count);
 
 	return (0);
 }
@@ -362,15 +317,9 @@ dotape()
 		}
 	}
 
-	if (system_labeled) {
-		dname = DA_TAPE_NAME;
-		dtype = DA_TAPE_TYPE;
-		dclean = DA_DEFAULT_TAPE_CLEAN;
-	} else {
-		dname = "st";
-		dtype = "st";
-		dclean = TAPE_CLEAN;
-	}
+	dname = "st";
+	dtype = "st";
+	dclean = TAPE_CLEAN;
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < tape_count; j++) {
 			if (tape[j].number != i)
@@ -380,44 +329,21 @@ dotape()
 				    DA_TAPE);
 			} else if (do_devalloc) {
 				/* print device_allocate for tape devices */
-				if (system_labeled) {
-					(void) printf("%s%d%s\\\n",
-					    dname, i, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_TAPE_TYPE, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_RESERVED, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_RESERVED, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DEFAULT_DEV_ALLOC_AUTH,
-					    KV_DELIMITER);
-					(void) printf("\t%s\n\n", dclean);
-				} else {
-					(void) printf(
-					    "st%d;st;reserved;reserved;%s;",
-					    i, DEFAULT_DEV_ALLOC_AUTH);
-					(void) printf("%s%s\n", SECLIB,
-					    "/st_clean");
-				}
+				(void) printf(
+				    "st%d;st;reserved;reserved;%s;",
+				    i, DEFAULT_DEV_ALLOC_AUTH);
+				(void) printf("%s%s\n", SECLIB,
+				    "/st_clean");
 				break;
 			} else if (do_devmaps) {
 				/* print device_maps for tape devices */
 				if (first) {
 					(void) printf(" ");
 				} else {
-					if (system_labeled) {
-						(void) printf("%s%d%s\\\n",
-						    dname, i, KV_TOKEN_DELIMIT);
-						(void) printf("\t%s%s\\\n",
-						    dtype, KV_TOKEN_DELIMIT);
-						(void) printf("\t");
-					} else {
-						(void) printf("st%d:\\\n", i);
-						(void) printf("\trmt:\\\n");
-						(void) printf("\t");
-					}
-						first++;
+					(void) printf("st%d:\\\n", i);
+					(void) printf("\trmt:\\\n");
+					(void) printf("\t");
+					first++;
 				}
 				(void) printf("%s", tape[j].name);
 			}
@@ -570,56 +496,30 @@ skip:
 	(void) strcpy(dname, DA_AUDIO_NAME);
 	slen = strlen(DA_AUDIO_NAME);
 	len = sizeof (dname) - slen;
-	dclean = system_labeled ? DA_DEFAULT_AUDIO_CLEAN : AUDIO_CLEAN;
+	dclean = AUDIO_CLEAN;
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < audio_count; j++) {
 			if (audio[j].number != i)
 				continue;
-			if (system_labeled)
-				(void) snprintf(dname+slen, len, "%d", i);
 			if (do_files) {
 				(void) da_add_list(&devlist, audio[j].name,
 				    i, DA_AUDIO);
 			} else if (do_devalloc) {
 				/* print device_allocate for audio devices */
-				if (system_labeled) {
-					(void) printf("%s%s\\\n",
-					    dname, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_AUDIO_TYPE, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_RESERVED, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_RESERVED, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DEFAULT_DEV_ALLOC_AUTH,
-					    KV_DELIMITER);
-					(void) printf("\t%s\n\n", dclean);
-				} else {
-					(void) printf("audio;audio;");
-					(void) printf("reserved;reserved;%s;",
-					    DEFAULT_DEV_ALLOC_AUTH);
-					(void) printf("%s%s\n", SECLIB,
-					    "/audio_clean");
-				}
+				(void) printf("audio;audio;");
+				(void) printf("reserved;reserved;%s;",
+				    DEFAULT_DEV_ALLOC_AUTH);
+				(void) printf("%s%s\n", SECLIB,
+				    "/audio_clean");
 				break;
 			} else if (do_devmaps) {
 				/* print device_maps for audio devices */
 				if (first) {
 					(void) printf(" ");
 				} else {
-					if (system_labeled) {
-						(void) printf("%s%s\\\n",
-						    dname, KV_TOKEN_DELIMIT);
-						(void) printf("\t%s%s\\\n",
-						    DA_AUDIO_TYPE,
-						    KV_TOKEN_DELIMIT);
-						(void) printf("\t");
-					} else {
-						(void) printf("audio:\\\n");
-						(void) printf("\taudio:\\\n");
-						(void) printf("\t");
-					}
+					(void) printf("audio:\\\n");
+					(void) printf("\taudio:\\\n");
+					(void) printf("\t");
 					first++;
 				}
 				(void) printf("%s", audio[j].name);
@@ -728,13 +628,8 @@ dofloppy()
 	floppy_count = i;
 
 	/* print out device_allocate entries for floppy devices */
-	if (system_labeled) {
-		dname = DA_FLOPPY_NAME;
-		dclean = DA_DEFAULT_DISK_CLEAN;
-	} else {
-		dname = "fd";
-		dclean = FLOPPY_CLEAN;
-	}
+	dname = "fd";
+	dclean = FLOPPY_CLEAN;
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < floppy_count; j++) {
 			if (fp[j].number != i)
@@ -744,44 +639,20 @@ dofloppy()
 				    DA_FLOPPY);
 			} else if (do_devalloc) {
 				/* print device_allocate for floppy devices */
-				if (system_labeled) {
-					(void) printf("%s%d%s\\\n",
-					    dname, i, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_FLOPPY_TYPE, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_RESERVED, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_RESERVED, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DEFAULT_DEV_ALLOC_AUTH,
-					    KV_DELIMITER);
-					(void) printf("\t%s\n\n", dclean);
-				} else {
-					(void) printf(
-					    "fd%d;fd;reserved;reserved;%s;",
-					    i, DEFAULT_DEV_ALLOC_AUTH);
-					(void) printf("%s%s\n", SECLIB,
-					    "/fd_clean");
-				}
+				(void) printf(
+				    "fd%d;fd;reserved;reserved;%s;",
+				    i, DEFAULT_DEV_ALLOC_AUTH);
+				(void) printf("%s%s\n", SECLIB,
+				    "/fd_clean");
 				break;
 			} else if (do_devmaps) {
 				/* print device_maps for floppy devices */
 				if (first) {
 					(void) printf(" ");
 				} else {
-					if (system_labeled) {
-						(void) printf("%s%d%s\\\n",
-						    dname, i, KV_TOKEN_DELIMIT);
-						(void) printf("\t%s%s\\\n",
-						    DA_FLOPPY_TYPE,
-						    KV_TOKEN_DELIMIT);
-						(void) printf("\t");
-					} else {
-						(void) printf("fd%d:\\\n", i);
-						(void) printf("\tfd:\\\n");
-						(void) printf("\t");
-					}
+					(void) printf("fd%d:\\\n", i);
+					(void) printf("\tfd:\\\n");
+					(void) printf("\t");
 					if (i == 0) {
 						(void) printf("/dev/diskette ");
 						(void) printf(
@@ -998,13 +869,8 @@ found1:
 
 	cd_count = i;
 
-	if (system_labeled) {
-		dname = DA_CD_NAME;
-		dclean = DA_DEFAULT_DISK_CLEAN;
-	} else {
-		dname = "sr";
-		dclean = CD_CLEAN;
-	}
+	dname = "sr";
+	dclean = CD_CLEAN;
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < cd_count; j++) {
 			if (cd[j].id != i)
@@ -1014,44 +880,20 @@ found1:
 				    DA_CD);
 			} else if (do_devalloc) {
 				/* print device_allocate for cd devices */
-				if (system_labeled) {
-					(void) printf("%s%d%s\\\n",
-					    dname, i, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_CD_TYPE, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_RESERVED, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DA_RESERVED, KV_DELIMITER);
-					(void) printf("\t%s%s\\\n",
-					    DEFAULT_DEV_ALLOC_AUTH,
-					    KV_DELIMITER);
-					(void) printf("\t%s\n\n", dclean);
-				} else {
-					(void) printf(
-					    "sr%d;sr;reserved;reserved;%s;",
-					    i, DEFAULT_DEV_ALLOC_AUTH);
-					(void) printf("%s%s\n", SECLIB,
-					    "/sr_clean");
-				}
+				(void) printf(
+				    "sr%d;sr;reserved;reserved;%s;",
+				    i, DEFAULT_DEV_ALLOC_AUTH);
+				(void) printf("%s%s\n", SECLIB,
+				    "/sr_clean");
 				break;
 			} else if (do_devmaps) {
 				/* print device_maps for cd devices */
 				if (first) {
 					(void) printf(" ");
 				} else {
-					if (system_labeled) {
-						(void) printf("%s%d%s\\\n",
-						    dname, i, KV_TOKEN_DELIMIT);
-						(void) printf("\t%s%s\\\n",
-						    DA_CD_TYPE,
-						    KV_TOKEN_DELIMIT);
-						(void) printf("\t");
-					} else {
-						(void) printf("sr%d:\\\n", i);
-						(void) printf("\tsr:\\\n");
-						(void) printf("\t");
-					}
+					(void) printf("sr%d:\\\n", i);
+					(void) printf("\tsr:\\\n");
+					(void) printf("\t");
 					first++;
 				}
 				(void) printf("%s", cd[j].name);
@@ -1075,183 +917,6 @@ found1:
 	return (cd_count);
 }
 
-static void
-dormdisk(int cd_count)
-{
-	DIR *dirp;
-	struct dirent *dep;	/* directory entry pointer */
-	int	i, j;
-	char	*nm;		/* name/device of special device */
-	int	id;		/* disk id */
-	int	ctrl;		/* disk controller */
-	int	nrmdisk;	/* max array size */
-	int	fd = -1;
-	int	rmdisk_count;
-	int	first = 0;
-	int	is_cd;
-	int	checked;
-	int	removable;
-	char	path[MAXPATHLEN];
-	da_args	dargs;
-	deventry_t *entry;
-
-	nrmdisk = DFLT_RMDISK;
-	i = rmdisk_count = 0;
-
-	/*
-	 * scan /dev/dsk for rmdisk devices
-	 */
-	if ((dirp = opendir("/dev/dsk")) == NULL) {
-		perror("gettext(open /dev/dsk failure)");
-		exit(1);
-	}
-
-	while (dep = readdir(dirp)) {
-		is_cd = 0;
-		checked = 0;
-		removable = 0;
-		/* skip . .. etc... */
-		if (strncmp(dep->d_name, ".", 1) == NULL)
-			continue;
-
-		/* get device # (disk #) */
-		if (sscanf(dep->d_name, "c%dt%d", &ctrl, &id) != 2)
-			continue;
-
-		/* see if we've already examined this device */
-		for (j = 0; j < i; j++) {
-			if (id == rmdisk[j].id &&
-			    ctrl == rmdisk[j].controller &&
-			    (strcmp(dep->d_name, rmdisk[j].name) == 0)) {
-				checked = 1;
-				break;
-			}
-			if (id == rmdisk[j].id && ctrl != rmdisk[j].controller)
-				/*
-				 * c2t0d0s0 is a different rmdisk than c3t0d0s0.
-				 */
-				id = rmdisk[j].id + 1;
-		}
-		if (checked)
-			continue;
-
-		/* ignore if this is a cd */
-		for (j = 0; j < cd_count; j++) {
-			if (id == cd[j].id && ctrl == cd[j].controller) {
-				is_cd = 1;
-				break;
-			}
-		}
-		if (is_cd)
-			continue;
-
-		/* see if device is removable */
-		(void) snprintf(path, sizeof (path), "%s%s", "/dev/rdsk/",
-		    dep->d_name);
-		if ((fd = open(path, O_RDONLY | O_NONBLOCK)) < 0)
-			continue;
-		(void) ioctl(fd, DKIOCREMOVABLE, &removable);
-		(void) close(fd);
-		if (removable == 0)
-			continue;
-
-		/*
-		 * add new entry to table (/dev/dsk + / + d_name + \0)
-		 * if array full, then expand it
-		 */
-		if (i == nrmdisk) {
-			/* will exit(1) if insufficient memory */
-			nrmdisk = expandmem(i, (void **)&rmdisk,
-			    sizeof (struct rmdisk));
-			/* When we expand rmdisk, need to expand rmdisk_r */
-			(void) expandmem(i, (void **)&rmdisk_r,
-			    sizeof (struct rmdisk));
-		}
-		nm = (char *)malloc(SIZE_OF_DSK + 1 + strlen(dep->d_name) + 1);
-		if (nm == NULL)
-			no_memory();
-		(void) strcpy(nm, "/dev/dsk/");
-		(void) strcat(nm, dep->d_name);
-		rmdisk[i].name = nm;
-		rmdisk[i].id = id;
-		rmdisk[i].controller = ctrl;
-		rmdisk[i].device = "";
-		rmdisk[i].number = id;
-		rmdisk_r[i].name = strdup(path);
-		i++;
-	}
-
-	rmdisk_count = i;
-	(void) closedir(dirp);
-
-	for (i = 0, j = rmdisk_count; i < rmdisk_count; i++, j++) {
-		if (j == nrmdisk) {
-			/* will exit(1) if insufficient memory */
-			nrmdisk = expandmem(j, (void **)&rmdisk,
-			    sizeof (struct rmdisk));
-		}
-		rmdisk[j].name = rmdisk_r[i].name;
-		rmdisk[j].id = rmdisk[i].id;
-		rmdisk[j].controller = rmdisk[i].controller;
-		rmdisk[j].device = rmdisk[i].device;
-		rmdisk[j].number = rmdisk[i].number;
-	}
-	rmdisk_count = j;
-
-	for (i = 0; i < 8; i++) {
-		for (j = 0; j < rmdisk_count; j++) {
-			if (rmdisk[j].id != i)
-				continue;
-			if (do_files) {
-				(void) da_add_list(&devlist, rmdisk[j].name, i,
-				    DA_RMDISK);
-			} else if (do_devalloc) {
-				/* print device_allocate for rmdisk devices */
-				(void) printf("%s%d%s\\\n",
-				    DA_RMDISK_NAME, i, KV_DELIMITER);
-				(void) printf("\t%s%s\\\n",
-				    DA_RMDISK_TYPE, KV_DELIMITER);
-				(void) printf("\t%s%s\\\n",
-				    DA_RESERVED, KV_DELIMITER);
-				(void) printf("\t%s%s\\\n",
-				    DA_RESERVED, KV_DELIMITER);
-				(void) printf("\t%s%s\\\n",
-				    DEFAULT_DEV_ALLOC_AUTH, KV_DELIMITER);
-				(void) printf("\t%s\n", DA_DEFAULT_DISK_CLEAN);
-				break;
-			} else if (do_devmaps) {
-				/* print device_maps for rmdisk devices */
-				if (first) {
-					(void) printf(" ");
-				} else {
-					(void) printf("%s%d%s\\\n",
-					    DA_RMDISK_NAME, i,
-					    KV_TOKEN_DELIMIT);
-					(void) printf("\t%s%s\\\n",
-					    DA_RMDISK_TYPE, KV_TOKEN_DELIMIT);
-					(void) printf("\t");
-					first++;
-				}
-				(void) printf("%s", rmdisk[j].name);
-			}
-		}
-		if (do_devmaps && first) {
-			(void) printf("\n\n");
-			first = 0;
-		}
-	}
-	if (do_files && rmdisk_count) {
-		dargs.rootdir = NULL;
-		dargs.devnames = NULL;
-		dargs.optflag = DA_ADD;
-		for (entry = devlist.rmdisk; entry != NULL;
-		    entry = entry->next) {
-			dargs.devinfo = &(entry->devinfo);
-			(void) da_update_device(&dargs);
-		}
-	}
-}
-
 /* set default array sizes */
 static void
 initmem()
@@ -1260,16 +925,6 @@ initmem()
 	audio = (struct audio *)calloc(DFLT_NAUDIO, sizeof (struct audio));
 	cd    = (struct cd *)calloc(DFLT_NCD, sizeof (struct cd));
 	fp    = (struct fp *)calloc(DFLT_NFP, sizeof (struct fp));
-	if (system_labeled) {
-		rmdisk = (struct rmdisk *)calloc(DFLT_RMDISK,
-		    sizeof (struct rmdisk));
-		if (rmdisk == NULL)
-			no_memory();
-		rmdisk_r = (struct rmdisk *)calloc(DFLT_RMDISK,
-		    sizeof (struct rmdisk));
-		if (rmdisk_r == NULL)
-			no_memory();
-	}
 
 	if (tape == NULL || audio == NULL || cd == NULL || fp == NULL)
 		no_memory();

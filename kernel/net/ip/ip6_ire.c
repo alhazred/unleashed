@@ -55,9 +55,6 @@
 #include <sys/kmem.h>
 #include <sys/zone.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
-
 #define	IS_DEFAULT_ROUTE_V6(ire)	\
 	(((ire)->ire_type & IRE_DEFAULT) || \
 	    (((ire)->ire_type & IRE_INTERFACE) && \
@@ -68,8 +65,7 @@ static	ire_t	ire_null;
 static ire_t *
 ire_ftable_lookup_impl_v6(const in6_addr_t *addr, const in6_addr_t *mask,
     const in6_addr_t *gateway, int type, const ill_t *ill,
-    zoneid_t zoneid, const ts_label_t *tsl, int flags,
-    ip_stack_t *ipst);
+    zoneid_t zoneid, int flags, ip_stack_t *ipst);
 
 /*
  * Initialize the ire that is specific to IPv6 part and call
@@ -79,16 +75,9 @@ ire_ftable_lookup_impl_v6(const in6_addr_t *addr, const in6_addr_t *mask,
 int
 ire_init_v6(ire_t *ire, const in6_addr_t *v6addr, const in6_addr_t *v6mask,
     const in6_addr_t *v6gateway, ushort_t type, ill_t *ill,
-    zoneid_t zoneid, uint_t flags, tsol_gc_t *gc, ip_stack_t *ipst)
+    zoneid_t zoneid, uint_t flags, ip_stack_t *ipst)
 {
 	int error;
-
-	/*
-	 * Reject IRE security attmakeribute creation/initialization
-	 * if system is not running in Trusted mode.
-	 */
-	if (gc != NULL && !is_system_labeled())
-		return (EINVAL);
 
 	BUMP_IRE_STATS(ipst->ips_ire_stats_v6, ire_stats_alloced);
 	if (v6addr != NULL)
@@ -125,7 +114,7 @@ ire_init_v6(ire_t *ire, const in6_addr_t *v6addr, const in6_addr_t *v6mask,
 	}
 
 	error = ire_init_common(ire, type, ill, zoneid, flags, IPV6_VERSION,
-	    gc, ipst);
+	    ipst);
 	if (error != NULL)
 		return (error);
 
@@ -180,7 +169,7 @@ ire_init_v6(ire_t *ire, const in6_addr_t *v6addr, const in6_addr_t *v6mask,
 ire_t *
 ire_create_v6(const in6_addr_t *v6addr, const in6_addr_t *v6mask,
     const in6_addr_t *v6gateway, ushort_t type, ill_t *ill, zoneid_t zoneid,
-    uint_t flags, tsol_gc_t *gc, ip_stack_t *ipst)
+    uint_t flags, ip_stack_t *ipst)
 {
 	ire_t	*ire;
 	int	error;
@@ -195,7 +184,7 @@ ire_create_v6(const in6_addr_t *v6addr, const in6_addr_t *v6mask,
 	*ire = ire_null;
 
 	error = ire_init_v6(ire, v6addr, v6mask, v6gateway,
-	    type, ill, zoneid, flags, gc, ipst);
+	    type, ill, zoneid, flags, ipst);
 
 	if (error != 0) {
 		DTRACE_PROBE2(ire__init__v6, ire_t *, ire, int, error);
@@ -230,8 +219,8 @@ ire_lookup_multi_ill_v6(const in6_addr_t *group, zoneid_t zoneid,
 	ire_t	*ire;
 	ill_t	*ill;
 
-	ire = ire_route_recursive_v6(group, 0, NULL, zoneid, NULL,
-	    MATCH_IRE_DSTONLY, IRR_NONE, 0, ipst, setsrcp, NULL, NULL);
+	ire = ire_route_recursive_v6(group, 0, NULL, zoneid,
+	    MATCH_IRE_DSTONLY, IRR_NONE, 0, ipst, setsrcp, NULL);
 	ASSERT(ire != NULL);
 
 	if (ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)) {
@@ -405,7 +394,7 @@ ire_add_v6(ire_t *ire)
 		 */
 		if (ire_match_args_v6(ire1, &ire->ire_addr_v6,
 		    &ire->ire_mask_v6, &ire->ire_gateway_addr_v6,
-		    ire->ire_type, ire->ire_ill, ire->ire_zoneid, NULL,
+		    ire->ire_type, ire->ire_ill, ire->ire_zoneid,
 		    match_flags)) {
 			/*
 			 * Return the old ire after doing a REFHOLD.
@@ -658,7 +647,7 @@ ire_flush_cache_v6(ire_t *ire, int flag)
 		masklen = ip_mask_to_plen_v6(&mask);
 
 		ire = ire_ftable_lookup_impl_v6(&addr, &mask, NULL, 0, NULL,
-		    ALL_ZONES, NULL, MATCH_IRE_SHORTERMASK, ipst);
+		    ALL_ZONES, MATCH_IRE_SHORTERMASK, ipst);
 		while (ire != NULL) {
 			/* We need to handle all in the same bucket */
 			irb_increment_generation(ire->ire_bucket);
@@ -668,7 +657,7 @@ ire_flush_cache_v6(ire_t *ire, int flag)
 			masklen = ip_mask_to_plen_v6(&mask);
 			ire_refrele(ire);
 			ire = ire_ftable_lookup_impl_v6(&addr, &mask, NULL, 0,
-			    NULL, ALL_ZONES, NULL, MATCH_IRE_SHORTERMASK, ipst);
+			    NULL, ALL_ZONES, MATCH_IRE_SHORTERMASK, ipst);
 		}
 		}
 		break;
@@ -685,7 +674,7 @@ ire_flush_cache_v6(ire_t *ire, int flag)
 boolean_t
 ire_match_args_v6(ire_t *ire, const in6_addr_t *addr, const in6_addr_t *mask,
     const in6_addr_t *gateway, int type, const ill_t *ill, zoneid_t zoneid,
-    const ts_label_t *tsl, int match_flags)
+    int match_flags)
 {
 	in6_addr_t masked_addr;
 	in6_addr_t gw_addr_v6;
@@ -859,10 +848,7 @@ matchit:
 	    ((!(match_flags & MATCH_IRE_TYPE)) || (ire->ire_type & type)) &&
 	    ((!(match_flags & MATCH_IRE_TESTHIDDEN)) || ire->ire_testhidden) &&
 	    ((!(match_flags & MATCH_IRE_MASK)) ||
-	    (IN6_ARE_ADDR_EQUAL(&ire->ire_mask_v6, mask))) &&
-	    ((!(match_flags & MATCH_IRE_SECATTR)) ||
-	    (!is_system_labeled()) ||
-	    (tsol_ire_match_gwattr(ire, tsl) == 0))) {
+	    (IN6_ARE_ADDR_EQUAL(&ire->ire_mask_v6, mask)))) {
 		/* We found the matched IRE */
 		return (B_TRUE);
 	}
@@ -876,7 +862,7 @@ matchit:
  */
 boolean_t
 ire_gateway_ok_zone_v6(const in6_addr_t *gateway, zoneid_t zoneid, ill_t *ill,
-    const ts_label_t *tsl, ip_stack_t *ipst, boolean_t lock_held)
+    ip_stack_t *ipst, boolean_t lock_held)
 {
 	ire_t	*ire;
 	uint_t	match_flags;
@@ -886,12 +872,12 @@ ire_gateway_ok_zone_v6(const in6_addr_t *gateway, zoneid_t zoneid, ill_t *ill,
 	else
 		rw_enter(&ipst->ips_ip6_ire_head_lock, RW_READER);
 
-	match_flags = MATCH_IRE_TYPE | MATCH_IRE_SECATTR;
+	match_flags = MATCH_IRE_TYPE;
 	if (ill != NULL)
 		match_flags |= MATCH_IRE_ILL;
 
 	ire = ire_ftable_lookup_impl_v6(gateway, &ipv6_all_zeros,
-	    &ipv6_all_zeros, IRE_INTERFACE, ill, zoneid, tsl, match_flags,
+	    &ipv6_all_zeros, IRE_INTERFACE, ill, zoneid, match_flags,
 	    ipst);
 
 	if (!lock_held)
@@ -915,8 +901,8 @@ ire_gateway_ok_zone_v6(const in6_addr_t *gateway, zoneid_t zoneid, ill_t *ill,
 ire_t *
 ire_ftable_lookup_v6(const in6_addr_t *addr, const in6_addr_t *mask,
     const in6_addr_t *gateway, int type, const ill_t *ill,
-    zoneid_t zoneid, const ts_label_t *tsl, int flags,
-    uint32_t xmit_hint, ip_stack_t *ipst, uint_t *generationp)
+    zoneid_t zoneid, int flags, uint32_t xmit_hint, ip_stack_t *ipst,
+    uint_t *generationp)
 {
 	ire_t *ire = NULL;
 
@@ -936,7 +922,7 @@ ire_ftable_lookup_v6(const in6_addr_t *addr, const in6_addr_t *mask,
 
 	rw_enter(&ipst->ips_ip6_ire_head_lock, RW_READER);
 	ire = ire_ftable_lookup_impl_v6(addr, mask, gateway, type, ill, zoneid,
-	    tsl, flags, ipst);
+	    flags, ipst);
 	if (ire == NULL) {
 		rw_exit(&ipst->ips_ip6_ire_head_lock);
 		return (NULL);
@@ -969,7 +955,6 @@ ire_ftable_lookup_v6(const in6_addr_t *addr, const in6_addr_t *mask,
 			margs.ift_type = type;
 			margs.ift_ill = ill;
 			margs.ift_zoneid = zoneid;
-			margs.ift_tsl = tsl;
 			margs.ift_flags = flags;
 
 			next_ire = ire_round_robin(ire->ire_bucket, &margs,
@@ -1004,7 +989,7 @@ done:
 	if ((ire->ire_type & IRE_LOCAL) && zoneid != ALL_ZONES &&
 	    ire->ire_zoneid != zoneid && ire->ire_zoneid != ALL_ZONES &&
 	    ipst->ips_ip_restrict_interzone_loopback) {
-		ire = ire_alt_local(ire, zoneid, tsl, ill, generationp);
+		ire = ire_alt_local(ire, zoneid, ill, generationp);
 		ASSERT(ire != NULL);
 	}
 
@@ -1017,8 +1002,7 @@ done:
 ire_t *
 ire_ftable_lookup_impl_v6(const in6_addr_t *addr, const in6_addr_t *mask,
     const in6_addr_t *gateway, int type, const ill_t *ill,
-    zoneid_t zoneid, const ts_label_t *tsl, int flags,
-    ip_stack_t *ipst)
+    zoneid_t zoneid, int flags, ip_stack_t *ipst)
 {
 	irb_t *irb_ptr;
 	ire_t *ire = NULL;
@@ -1047,7 +1031,7 @@ ire_ftable_lookup_impl_v6(const in6_addr_t *addr, const in6_addr_t *mask,
 			if (IRE_IS_CONDEMNED(ire))
 				continue;
 			if (ire_match_args_v6(ire, addr, mask, gateway, type,
-			    ill, zoneid, tsl, flags))
+			    ill, zoneid, flags))
 				goto found_ire;
 		}
 		rw_exit(&irb_ptr->irb_lock);
@@ -1085,7 +1069,7 @@ ire_ftable_lookup_impl_v6(const in6_addr_t *addr, const in6_addr_t *mask,
 					continue;
 				if (ire_match_args_v6(ire, addr,
 				    &ire->ire_mask_v6, gateway, type, ill,
-				    zoneid, tsl, flags))
+				    zoneid, flags))
 					goto found_ire;
 			}
 			rw_exit(&irb_ptr->irb_lock);
@@ -1120,7 +1104,7 @@ ire_ftable_lookup_simple_v6(const in6_addr_t *addr, uint32_t xmit_hint,
 {
 	ire_t	*ire;
 
-	ire = ire_ftable_lookup_v6(addr, NULL, NULL, 0, NULL, ALL_ZONES, NULL,
+	ire = ire_ftable_lookup_v6(addr, NULL, NULL, 0, NULL, ALL_ZONES,
 	    MATCH_IRE_DSTONLY, xmit_hint, ipst, generationp);
 	if (ire == NULL) {
 		ire = ire_reject(ipst, B_TRUE);
@@ -1144,7 +1128,7 @@ ip_select_route_v6(const in6_addr_t *dst, const in6_addr_t src,
 
 /*
  * Recursively look for a route to the destination. Can also match on
- * the zoneid, ill, and label. Used for the data paths. See also
+ * the zoneid and ill. Used for the data paths. See also
  * ire_route_recursive_dstonly.
  *
  * If IRR_ALLOCATE is not set then we will only inspect the existing IREs; never
@@ -1163,9 +1147,9 @@ ip_select_route_v6(const in6_addr_t *dst, const in6_addr_t src,
 ire_t *
 ire_route_recursive_impl_v6(ire_t *ire,
     const in6_addr_t *nexthop, uint_t ire_type, const ill_t *ill_arg,
-    zoneid_t zoneid, const ts_label_t *tsl, uint_t match_args,
+    zoneid_t zoneid, uint_t match_args,
     uint_t irr_flags, uint32_t xmit_hint, ip_stack_t *ipst,
-    in6_addr_t *setsrcp, tsol_ire_gw_secattr_t **gwattrp, uint_t *generationp)
+    in6_addr_t *setsrcp, uint_t *generationp)
 {
 	int		i, j;
 	in6_addr_t	v6nexthop = *nexthop;
@@ -1179,8 +1163,6 @@ ire_route_recursive_impl_v6(ire_t *ire,
 
 	if (setsrcp != NULL)
 		ASSERT(IN6_IS_ADDR_UNSPECIFIED(setsrcp));
-	if (gwattrp != NULL)
-		ASSERT(*gwattrp == NULL);
 
 	/*
 	 * We iterate up to three times to resolve a route, even though
@@ -1192,8 +1174,8 @@ ire_route_recursive_impl_v6(ire_t *ire,
 		/* ire_ftable_lookup handles round-robin/ECMP */
 		if (ire == NULL) {
 			ire = ire_ftable_lookup_v6(&v6nexthop, 0, 0, ire_type,
-			    (ill != NULL ? ill : ill_arg), zoneid, tsl,
-			    match_args, xmit_hint, ipst, &generation);
+			    (ill != NULL ? ill : ill_arg), zoneid, match_args,
+			    xmit_hint, ipst, &generation);
 		} else {
 			/* Caller passed it; extra hold since we will rele */
 			ire_refhold(ire);
@@ -1258,11 +1240,6 @@ ire_route_recursive_impl_v6(ire_t *ire,
 			    &ire->ire_setsrc_addr_v6));
 			*setsrcp = ire->ire_setsrc_addr_v6;
 		}
-
-		/* The first ire_gw_secattr is passed back if gwattrp */
-		if (ire->ire_gw_secattr != NULL &&
-		    gwattrp != NULL && *gwattrp == NULL)
-			*gwattrp = ire->ire_gw_secattr;
 
 		/*
 		 * Check if we have a short-cut pointer to an IRE for this
@@ -1451,13 +1428,13 @@ done:
 
 ire_t *
 ire_route_recursive_v6(const in6_addr_t *nexthop, uint_t ire_type,
-    const ill_t *ill, zoneid_t zoneid, const ts_label_t *tsl, uint_t match_args,
-    uint_t irr_flags, uint32_t xmit_hint, ip_stack_t *ipst,
-    in6_addr_t *setsrcp, tsol_ire_gw_secattr_t **gwattrp, uint_t *generationp)
+    const ill_t *ill, zoneid_t zoneid, uint_t match_args, uint_t irr_flags,
+    uint32_t xmit_hint, ip_stack_t *ipst, in6_addr_t *setsrcp,
+    uint_t *generationp)
 {
 	return (ire_route_recursive_impl_v6(NULL, nexthop, ire_type, ill,
-	    zoneid, tsl, match_args, irr_flags, xmit_hint, ipst, setsrcp,
-	    gwattrp, generationp));
+	    zoneid, match_args, irr_flags, xmit_hint, ipst, setsrcp,
+	    generationp));
 }
 
 /*
@@ -1514,8 +1491,7 @@ ire_route_recursive_dstonly_v6(const in6_addr_t *nexthop, uint_t irr_flags,
 	 * we found. Normally this would return the same ire.
 	 */
 	ire1 = ire_route_recursive_impl_v6(ire, nexthop, 0, NULL, ALL_ZONES,
-	    NULL, MATCH_IRE_DSTONLY, irr_flags, xmit_hint, ipst, NULL, NULL,
-	    &generation);
+	    MATCH_IRE_DSTONLY, irr_flags, xmit_hint, ipst, NULL, &generation);
 	ire_refrele(ire);
 	return (ire1);
 }

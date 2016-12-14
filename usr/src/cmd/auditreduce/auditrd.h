@@ -48,7 +48,6 @@ time_t	m_after;		/* 'a' after a time */
 time_t	m_before;		/* 'b' before a time */
 audit_state_t mask;		/* used with m_class */
 char	*zonename;		/* 'z' zonename */
-m_range_t *m_label;		/* 'l' mandatory label range */
 int	flags;
 int	checkflags;
 int	socket_flag;

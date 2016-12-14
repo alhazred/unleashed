@@ -193,66 +193,6 @@ user equals or exceeds the allowed number of retries as defined by
 accounts.
 .RE
 
-The following keys are available only if the system is configured with the
-Trusted Extensions feature:
-.sp
-.ne 2
-.na
-\fB\fBidletime\fR\fR
-.ad
-.sp .6
-.RS 4n
-Contains a number representing the maximum number of minutes a workstation can
-remain idle before the Trusted Extensions \fBCDE\fR window manager attempts the
-task specified in \fBidlecmd\fR. A zero in this field specifies that the
-\fBidlecmd\fR command is never executed. If unspecified, the default
-\fBidletime\fR of 30 minutes is in effect.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBidlecmd\fR\fR
-.ad
-.sp .6
-.RS 4n
-Contains one of two keywords that the Trusted Extensions \fBCDE\fR window
-manager interprets when a workstation is idle for too long. The keyword
-\fBlock\fR specifies that the workstation is to be locked (thus requiring the
-user to re-authenticate to resume the session). The keyword \fBlogout\fR
-specifies that session is to be terminated (thus, killing the user's processes
-launched in the current session). If unspecified, the default value,
-\fBlock\fR, is in effect.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBclearance\fR\fR
-.ad
-.sp .6
-.RS 4n
-Contains the maximum label at which the user can operate. If unspecified, in
-the Defense Intelligence Agency (\fBDIA\fR) encodings scheme, the default is
-specified in \fBlabel_encodings\fR(4) (see \fBlabel_encodings\fR(4) and
-\fBlabels\fR(5) in the \fISolaris Trusted Extensions Reference Manual\fR).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBmin_label\fR\fR
-.ad
-.sp .6
-.RS 4n
-Contains the minimum label at which the user can log in. If unspecified, in the
-\fBDIA\fR encodings scheme, the default is specified in
-\fBlabel_encodings\fR(4) (see \fBlabel_encodings\fR(4) and \fBlabels\fR(5) in
-the \fISolaris Trusted Extensions Reference Manual\fR).
-.RE
-
-.RE
-
 .sp
 .LP
 Except for the \fBtype\fR key, the \fB\fIkey\fR=\fIvalue\fR\fR fields in
@@ -356,10 +296,6 @@ The command-line syntax is Committed. The output is Uncommitted.
 \fBgetuserattr\fR(3SECDB), \fBauth_attr\fR(4), \fBexec_attr\fR(4),
 \fBnsswitch.conf\fR(4), \fBpasswd\fR(4), \fBpolicy.conf\fR(4),
 \fBprof_attr\fR(4), \fBproject\fR(4), \fBattributes\fR(5), \fBprivileges\fR(5)
-.sp
-.LP
-See the \fBdtstyle\fR(1X), \fBlabel_encodings\fR(4), and \fBlabels\fR(5) man
-pages in the \fISolaris Trusted Extensions Reference Manual\fR.
 .sp
 .LP
 \fISystem Administration Guide: Security Services\fR

@@ -32,8 +32,6 @@
 #include <sys/kmem.h>
 #include <sys/socket.h>
 #include <sys/random.h>
-#include <sys/tsol/tndb.h>
-#include <sys/tsol/tnet.h>
 
 #include <netinet/in.h>
 #include <netinet/ip6.h>
@@ -450,12 +448,10 @@ sctp_compare_faddrsets(sctp_faddr_t *a1, sctp_faddr_t *a2)
 
 /*
  * Returns 0 on success, ENOMEM on memory allocation failure, EHOSTUNREACH
- * if the connection credentials fail remote host accreditation or
- * if the new destination does not support the previously established
- * connection security label. If sleep is true, this function should
- * never fail for a memory allocation failure. The boolean parameter
- * "first" decides whether the newly created faddr structure should be
- * added at the beginning of the list or at the end.
+ * if the connection credentials fail remote host accreditation.
+ * If sleep is true, this function should never fail for a memory allocation
+ * failure. The boolean parameter "first" decides whether the newly created
+ * faddr structure should be added at the beginning of the list or at the end.
  *
  * Note: caller must hold conn fanout lock.
  */
@@ -466,47 +462,6 @@ sctp_add_faddr(sctp_t *sctp, in6_addr_t *addr, int sleep, boolean_t first)
 	mblk_t		*timer_mp;
 	int		err;
 	conn_t		*connp = sctp->sctp_connp;
-
-	if (is_system_labeled()) {
-		ip_xmit_attr_t	*ixa = connp->conn_ixa;
-		ts_label_t	*effective_tsl = NULL;
-
-		ASSERT(ixa->ixa_tsl != NULL);
-
-		/*
-		 * Verify the destination is allowed to receive packets
-		 * at the security label of the connection we are initiating.
-		 *
-		 * tsol_check_dest() will create a new effective label for
-		 * this connection with a modified label or label flags only
-		 * if there are changes from the original label.
-		 *
-		 * Accept whatever label we get if this is the first
-		 * destination address for this connection. The security
-		 * label and label flags must match any previuous settings
-		 * for all subsequent destination addresses.
-		 */
-		if (IN6_IS_ADDR_V4MAPPED(addr)) {
-			uint32_t dst;
-			IN6_V4MAPPED_TO_IPADDR(addr, dst);
-			err = tsol_check_dest(ixa->ixa_tsl,
-			    &dst, IPV4_VERSION, connp->conn_mac_mode,
-			    connp->conn_zone_is_global, &effective_tsl);
-		} else {
-			err = tsol_check_dest(ixa->ixa_tsl,
-			    addr, IPV6_VERSION, connp->conn_mac_mode,
-			    connp->conn_zone_is_global, &effective_tsl);
-		}
-		if (err != 0)
-			return (err);
-
-		if (sctp->sctp_faddrs == NULL && effective_tsl != NULL) {
-			ip_xmit_attr_replace_tsl(ixa, effective_tsl);
-		} else if (effective_tsl != NULL) {
-			label_rele(effective_tsl);
-			return (EHOSTUNREACH);
-		}
-	}
 
 	if ((faddr = kmem_cache_alloc(sctp_kmem_faddr_cache, sleep)) == NULL)
 		return (ENOMEM);
@@ -905,10 +860,6 @@ sctp_zap_addrs(sctp_t *sctp)
  * for a routing header for sctp.
  *
  * Caller needs to update conn_wroff if desired.
- *
- * TSol notes: This assumes that a SCTP association has a single peer label
- * since we only track a single pair of ipp_label_v4/v6 and not a separate one
- * for each faddr.
  */
 int
 sctp_build_hdrs(sctp_t *sctp, int sleep)
@@ -933,7 +884,7 @@ sctp_build_hdrs(sctp_t *sctp, int sleep)
 	/* First do IPv4 header */
 	ip_hdr_length = ip_total_hdrs_len_v4(ipp);
 
-	/* In case of TX label and IP options it can be too much */
+	/* In case of IP options it can be too much */
 	if (ip_hdr_length > IP_MAX_HDR_LENGTH) {
 		/* Preserves existing TX errno for this */
 		return (EHOSTUNREACH);
@@ -1035,33 +986,8 @@ sctp_build_hdrs(sctp_t *sctp, int sleep)
 	return (0);
 }
 
-static int
-sctp_v4_label(sctp_t *sctp, sctp_faddr_t *fp)
-{
-	conn_t *connp = sctp->sctp_connp;
-
-	ASSERT(fp->sf_ixa->ixa_flags & IXAF_IS_IPV4);
-	return (conn_update_label(connp, fp->sf_ixa, &fp->sf_faddr,
-	    &connp->conn_xmit_ipp));
-}
-
-static int
-sctp_v6_label(sctp_t *sctp, sctp_faddr_t *fp)
-{
-	conn_t *connp = sctp->sctp_connp;
-
-	ASSERT(!(fp->sf_ixa->ixa_flags & IXAF_IS_IPV4));
-	return (conn_update_label(connp, fp->sf_ixa, &fp->sf_faddr,
-	    &connp->conn_xmit_ipp));
-}
-
 /*
  * XXX implement more sophisticated logic
- *
- * Tsol note: We have already verified the addresses using tsol_check_dest
- * in sctp_add_faddr, thus no need to redo that here.
- * We do setup ipp_label_v4 and ipp_label_v6 based on which addresses
- * we have.
  */
 int
 sctp_set_hdraddrs(sctp_t *sctp)
@@ -1080,36 +1006,24 @@ sctp_set_hdraddrs(sctp_t *sctp)
 	connp->conn_saddr_v6 = sctp->sctp_primary->sf_saddr;
 	connp->conn_laddr_v6 = connp->conn_saddr_v6;
 	if (IN6_IS_ADDR_V4MAPPED(&sctp->sctp_primary->sf_faddr)) {
-		if (!is_system_labeled() ||
-		    sctp_v4_label(sctp, sctp->sctp_primary) == 0) {
-			gotv4 = 1;
-			if (connp->conn_family == AF_INET) {
-				goto done;
-			}
+		gotv4 = 1;
+		if (connp->conn_family == AF_INET) {
+			goto done;
 		}
 	} else {
-		if (!is_system_labeled() ||
-		    sctp_v6_label(sctp, sctp->sctp_primary) == 0) {
-			gotv6 = 1;
-		}
+		gotv6 = 1;
 	}
 
 	for (fp = sctp->sctp_faddrs; fp; fp = fp->sf_next) {
 		if (!gotv4 && IN6_IS_ADDR_V4MAPPED(&fp->sf_faddr)) {
-			if (!is_system_labeled() ||
-			    sctp_v4_label(sctp, fp) == 0) {
-				gotv4 = 1;
-				if (connp->conn_family == AF_INET || gotv6) {
-					break;
-				}
+			gotv4 = 1;
+			if (connp->conn_family == AF_INET || gotv6) {
+				break;
 			}
 		} else if (!gotv6 && !IN6_IS_ADDR_V4MAPPED(&fp->sf_faddr)) {
-			if (!is_system_labeled() ||
-			    sctp_v6_label(sctp, fp) == 0) {
-				gotv6 = 1;
-				if (gotv4)
-					break;
-			}
+			gotv6 = 1;
+			if (gotv4)
+				break;
 		}
 	}
 

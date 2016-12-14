@@ -31,8 +31,6 @@
 #include <limits.h>
 #include <bsm/devalloc.h>
 
-extern int system_labeled;
-
 static int tape_process(di_minor_t minor, di_node_t node);
 
 static devfsadm_create_t tape_cbt[] = {
@@ -99,9 +97,6 @@ tape_process(di_minor_t minor, di_node_t node)
 	(void) strcat(l_path, buf);
 	(void) strcat(l_path, mn);
 	free(buf);
-
-	if (system_labeled)
-		flags = DA_ADD|DA_TAPE;
 
 	(void) devfsadm_mklink(l_path, node, minor, flags);
 

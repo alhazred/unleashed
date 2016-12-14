@@ -52,8 +52,6 @@ OBJECTS =	getauthattr.o	\
 		getservent.o	\
 		getspent.o	\
 		getuserattr.o	\
-		tsol_getrhent.o	\
-		tsol_gettpent.o	\
 		ldap_common.o	\
 		ldap_utils.o
 

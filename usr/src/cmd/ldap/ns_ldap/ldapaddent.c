@@ -4072,10 +4072,6 @@ static struct ttypelist_t ttypelist[] = {
 		filedbmline_comment, "SolarisExecAttr", "cn" },
 	{ NS_LDAP_TYPE_AUTHATTR, genent_auth_attr, dump_auth_attr,
 		filedbmline_comment, "SolarisAuthAttr", "cn" },
-	{ NS_LDAP_TYPE_TNRHDB, genent_tnrhdb, dump_tnrhdb,
-		filedbmline_comment, "ipTnetHost", "ipTnetNumber" },
-	{ NS_LDAP_TYPE_TNRHTP, genent_tnrhtp, dump_tnrhtp,
-		filedbmline_comment, "ipTnetTemplate", "ipTnetTemplateName" },
 	{ NS_LDAP_TYPE_PROJECT, genent_project, dump_project,
 		filedbmline_comment, "SolarisProject", "SolarisProjectName" },
 	{ 0, 0, 0, 0, 0, 0 }
@@ -4144,13 +4140,6 @@ dumptable(char *service)
 		 */
 		(void) snprintf(filter, sizeof (filter),
 		    "(&(objectclass=%s)(!(objectclass=SolarisExecAttr)))",
-		    tt->objclass);
-	} else if (strcmp(tt->ttype, NS_LDAP_TYPE_TNRHDB) == 0) {
-		/*
-		 * tnrhtp entries are ipTnet entries with SolarisAttrKeyValue
-		 */
-		(void) snprintf(filter, sizeof (filter),
-		    "(&(objectclass=%s)(SolarisAttrKeyValue=*)))",
 		    tt->objclass);
 	} else {
 		(void) snprintf(filter, sizeof (filter),

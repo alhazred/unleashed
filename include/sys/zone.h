@@ -34,7 +34,6 @@
 #include <sys/rctl.h>
 #include <sys/ipc_rctl.h>
 #include <sys/pset.h>
-#include <sys/tsol/label.h>
 #include <sys/cred.h>
 #include <sys/netstack.h>
 #include <sys/uadmin.h>
@@ -94,7 +93,6 @@ extern "C" {
 #define	ZONE_ATTR_UNIQID	5
 #define	ZONE_ATTR_POOLID	6
 #define	ZONE_ATTR_INITPID	7
-#define	ZONE_ATTR_SLBL		8
 #define	ZONE_ATTR_INITNAME	9
 #define	ZONE_ATTR_BOOTARGS	10
 #define	ZONE_ATTR_BRAND		11
@@ -182,9 +180,6 @@ typedef struct {
 	caddr32_t extended_error;
 	caddr32_t zfsbuf;
 	size32_t  zfsbufsz;
-	int match;			/* match level */
-	uint32_t doi;			/* DOI for label */
-	caddr32_t label;		/* label associated with zone */
 	int flags;
 } zone_def32;
 #endif
@@ -198,9 +193,6 @@ typedef struct {
 	int *extended_error;
 	const char *zfsbuf;
 	size_t zfsbufsz;
-	int match;			/* match level */
-	uint32_t doi;			/* DOI for label */
-	const bslabel_t *label;		/* label associated with zone */
 	int flags;
 } zone_def;
 
@@ -208,7 +200,6 @@ typedef struct {
 #define	ZE_UNKNOWN	0	/* No extended error info */
 #define	ZE_CHROOTED	1	/* tried to zone_create from chroot */
 #define	ZE_AREMOUNTS	2	/* there are mounts within the zone */
-#define	ZE_LABELINUSE	3	/* label is already in use by some other zone */
 
 /*
  * zone_status values
@@ -296,7 +287,6 @@ typedef struct zone_cmd_rval {
  * The following threads are set when the zone is created and never changed.
  * Threads that test for these flags don't have to hold zone_lock.
  */
-#define	ZF_HASHED_LABEL		0x2	/* zone has a unique label */
 #define	ZF_IS_SCRATCH		0x4	/* scratch zone */
 #define	ZF_NET_EXCL		0x8	/* Zone has an exclusive IP stack */
 
@@ -537,10 +527,6 @@ typedef struct zone {
 	 */
 	list_t		zone_datasets;	/* list of datasets */
 
-	ts_label_t	*zone_slabel;	/* zone sensitivity label */
-	int		zone_match;	/* require label match for packets */
-	tsol_mlp_list_t zone_mlps;	/* MLPs on zone-private addresses */
-
 	boolean_t	zone_restart_init;	/* Restart init if it dies? */
 	struct brand	*zone_brand;		/* zone's brand */
 	void 		*zone_brand_data;	/* store brand specific data */
@@ -657,7 +643,6 @@ extern void zone_cred_rele(zone_t *);
 extern void zone_task_hold(zone_t *);
 extern void zone_task_rele(zone_t *);
 extern zone_t *zone_find_by_id(zoneid_t);
-extern zone_t *zone_find_by_label(const ts_label_t *);
 extern zone_t *zone_find_by_name(char *);
 extern zone_t *zone_find_by_any_path(const char *, boolean_t);
 extern zone_t *zone_find_by_path(const char *);

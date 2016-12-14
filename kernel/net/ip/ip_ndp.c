@@ -843,7 +843,7 @@ ncec_router_to_host(ncec_t *ncec)
 	mutex_exit(&ncec->ncec_lock);
 
 	ire = ire_ftable_lookup_v6(&ipv6_all_zeros, &ipv6_all_zeros,
-	    &ncec->ncec_addr, IRE_DEFAULT, ncec->ncec_ill, ALL_ZONES, NULL,
+	    &ncec->ncec_addr, IRE_DEFAULT, ncec->ncec_ill, ALL_ZONES,
 	    MATCH_IRE_ILL | MATCH_IRE_TYPE | MATCH_IRE_GW, 0, ipst, NULL);
 	if (ire != NULL) {
 		ip_rts_rtmsg(RTM_DELETE, ire, 0, ipst);
@@ -2205,7 +2205,6 @@ ndp_xmit(ill_t *ill, uint32_t operation, uint8_t *hw_addr, uint_t hw_addr_len,
 	ixas.ixa_ipst = ipst;
 	ixas.ixa_cred = kcred;
 	ixas.ixa_cpid = NOPID;
-	ixas.ixa_tsl = NULL;
 	ixas.ixa_zoneid = zoneid;
 
 	ip6h = (ip6_t *)mp->b_rptr;

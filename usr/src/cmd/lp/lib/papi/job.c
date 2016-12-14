@@ -945,7 +945,6 @@ papiJobQuery(papi_service_t handle, char *printer, int32_t job_id,
 	    *request_id = NULL,
 	    *charset = NULL,
 	    *user = NULL,
-	    *slabel = NULL,
 	    *file = NULL;
 	time_t date = 0;
 	size_t size = 0;
@@ -964,7 +963,7 @@ papiJobQuery(papi_service_t handle, char *printer, int32_t job_id,
 		return (PAPI_SERVICE_UNAVAILABLE);
 
 	if (rcv_msg(svc, R_INQUIRE_REQUEST_RANK, &rc, &request_id,
-	    &user, &slabel, &size, &date, &state, &dest, &form,
+	    &user, &size, &date, &state, &dest, &form,
 	    &charset, &rank, &file) < 0) {
 		detailed_error(svc,
 		    gettext("failed to read response from scheduler"));
@@ -980,7 +979,7 @@ papiJobQuery(papi_service_t handle, char *printer, int32_t job_id,
 	snprintf(req_id, sizeof (req_id), "%d-0", job_id);
 	lpsched_read_job_configuration(svc, j, req_id);
 
-	job_status_to_attributes(j, request_id, user, slabel, size, date, state,
+	job_status_to_attributes(j, request_id, user, size, date, state,
 	    dest, form, charset, rank, file);
 
 	return (PAPI_OK);

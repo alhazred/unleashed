@@ -27,8 +27,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 # include	<sys/types.h>
 # include	<poll.h>
 # include	<stdarg.h>
@@ -323,7 +321,6 @@ typedef struct
     MQUE *	mque;			/* backlogged message ptr */
     uid_t	uid;			/* Clients UID */
     gid_t	gid;			/* Clients GID */
-    char *	slabel;			/* Clients SLABEL */
     void	(**on_discon)();	/* Clean up functions */
 } MESG;
 

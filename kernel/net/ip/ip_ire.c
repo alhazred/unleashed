@@ -65,9 +65,6 @@
 #include <sys/zone.h>
 #include <sys/cpuvar.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
-
 struct kmem_cache *rt_entry_cache;
 
 typedef struct nce_clookup_s {
@@ -465,13 +462,13 @@ ip_ire_delete(queue_t *q, mblk_t *mp, cred_t *ioc_cr)
 		bcopy(addr_ucp, &v4addr, IP_ADDR_LEN);
 
 		ire = ire_ftable_lookup_v4(v4addr, 0, 0, 0, NULL,
-		    zoneid, NULL, MATCH_IRE_DSTONLY, 0, ipst, NULL);
+		    zoneid, MATCH_IRE_DSTONLY, 0, ipst, NULL);
 	} else {
 		/* Extract the destination address. */
 		bcopy(addr_ucp, &v6addr, IPV6_ADDR_LEN);
 
 		ire = ire_ftable_lookup_v6(&v6addr, NULL, NULL, 0, NULL,
-		    zoneid, NULL, MATCH_IRE_DSTONLY, 0, ipst, NULL);
+		    zoneid, MATCH_IRE_DSTONLY, 0, ipst, NULL);
 	}
 	if (ire != NULL) {
 		if (ipversion == IPV4_VERSION) {
@@ -495,16 +492,9 @@ ip_ire_delete(queue_t *q, mblk_t *mp, cred_t *ioc_cr)
 int
 ire_init_v4(ire_t *ire, uchar_t *addr, uchar_t *mask, uchar_t *gateway,
     ushort_t type, ill_t *ill, zoneid_t zoneid, uint_t flags,
-    tsol_gc_t *gc, ip_stack_t *ipst)
+    ip_stack_t *ipst)
 {
 	int error;
-
-	/*
-	 * Reject IRE security attribute creation/initialization
-	 * if system is not running in Trusted mode.
-	 */
-	if (gc != NULL && !is_system_labeled())
-		return (EINVAL);
 
 	BUMP_IRE_STATS(ipst->ips_ire_stats_v4, ire_stats_alloced);
 
@@ -542,7 +532,7 @@ ire_init_v4(ire_t *ire, uchar_t *addr, uchar_t *mask, uchar_t *gateway,
 	}
 
 	error = ire_init_common(ire, type, ill, zoneid, flags, IPV4_VERSION,
-	    gc, ipst);
+	    ipst);
 	if (error != NULL)
 		return (error);
 
@@ -624,7 +614,7 @@ ire_determine_nce_capable(ire_t *ire)
  */
 ire_t *
 ire_create(uchar_t *addr, uchar_t *mask, uchar_t *gateway,
-    ushort_t type, ill_t *ill, zoneid_t zoneid, uint_t flags, tsol_gc_t *gc,
+    ushort_t type, ill_t *ill, zoneid_t zoneid, uint_t flags,
     ip_stack_t *ipst)
 {
 	ire_t	*ire;
@@ -638,7 +628,7 @@ ire_create(uchar_t *addr, uchar_t *mask, uchar_t *gateway,
 	*ire = ire_null;
 
 	error = ire_init_v4(ire, addr, mask, gateway, type, ill, zoneid, flags,
-	    gc, ipst);
+	    ipst);
 	if (error != 0) {
 		DTRACE_PROBE2(ire__init, ire_t *, ire, int, error);
 		kmem_cache_free(ire_cache, ire);
@@ -653,7 +643,7 @@ ire_create(uchar_t *addr, uchar_t *mask, uchar_t *gateway,
  */
 int
 ire_init_common(ire_t *ire, ushort_t type, ill_t *ill, zoneid_t zoneid,
-    uint_t flags, uchar_t ipversion, tsol_gc_t *gc, ip_stack_t *ipst)
+    uint_t flags, uchar_t ipversion, ip_stack_t *ipst)
 {
 	int error;
 
@@ -665,26 +655,6 @@ ire_init_common(ire_t *ire, ushort_t type, ill_t *ill, zoneid_t zoneid,
 			ASSERT(ipversion == IPV4_VERSION);
 	}
 #endif /* DEBUG */
-
-	/*
-	 * Create/initialize IRE security attribute only in Trusted mode;
-	 * if the passed in gc is non-NULL, we expect that the caller
-	 * has held a reference to it and will release it when this routine
-	 * returns a failure, otherwise we own the reference.  We do this
-	 * prior to initializing the rest IRE fields.
-	 */
-	if (is_system_labeled()) {
-		if ((type & (IRE_LOCAL | IRE_LOOPBACK | IRE_BROADCAST |
-		    IRE_IF_ALL | IRE_MULTICAST | IRE_NOROUTE)) != 0) {
-			/* release references on behalf of caller */
-			if (gc != NULL)
-				GC_REFRELE(gc);
-		} else {
-			error = tsol_ire_init_gwattr(ire, ipversion, gc);
-			if (error != 0)
-				return (error);
-		}
-	}
 
 	ire->ire_type = type;
 	ire->ire_flags = RTF_UP | flags;
@@ -735,7 +705,6 @@ ire_create_bcast(ill_t *ill, ipaddr_t addr, zoneid_t zoneid, ire_t **irep)
 	    ill,
 	    zoneid,
 	    RTF_KERNEL,
-	    NULL,
 	    ipst);
 
 	return (irep);
@@ -764,7 +733,6 @@ ire_lookup_bcast(ill_t *ill, ipaddr_t addr, zoneid_t zoneid)
 	    IRE_BROADCAST,
 	    ill,
 	    zoneid,
-	    NULL,
 	    match_args,
 	    0,
 	    ill->ill_ipst,
@@ -928,7 +896,7 @@ ire_walk_ill_match(uint_t match_flags, uint_t ire_type, ire_t *ire,
 
 		if (ire->ire_ipversion == IPV4_VERSION) {
 			reach = ire_gateway_ok_zone_v4(ire->ire_gateway_addr,
-			    zoneid, dst_ill, NULL, ipst, B_FALSE);
+			    zoneid, dst_ill, ipst, B_FALSE);
 		} else {
 			ASSERT(ire->ire_ipversion == IPV6_VERSION);
 			mutex_enter(&ire->ire_lock);
@@ -936,7 +904,7 @@ ire_walk_ill_match(uint_t match_flags, uint_t ire_type, ire_t *ire,
 			mutex_exit(&ire->ire_lock);
 
 			reach = ire_gateway_ok_zone_v6(&gw_addr_v6, zoneid,
-			    dst_ill, NULL, ipst, B_FALSE);
+			    dst_ill, ipst, B_FALSE);
 		}
 		if (!reach) {
 			if (zoneid != GLOBAL_ZONEID)
@@ -949,10 +917,10 @@ ire_walk_ill_match(uint_t match_flags, uint_t ire_type, ire_t *ire,
 			if (ire->ire_ipversion == IPV4_VERSION) {
 				reach = ire_gateway_ok_zone_v4(
 				    ire->ire_gateway_addr, ALL_ZONES,
-				    dst_ill, NULL, ipst, B_FALSE);
+				    dst_ill, ipst, B_FALSE);
 			} else {
 				reach = ire_gateway_ok_zone_v6(&gw_addr_v6,
-				    ALL_ZONES, dst_ill, NULL, ipst, B_FALSE);
+				    ALL_ZONES, dst_ill, ipst, B_FALSE);
 			}
 			if (reach) {
 				/*
@@ -1259,7 +1227,7 @@ ire_add_v4(ire_t *ire)
 		 */
 		if (ire_match_args(ire1, ire->ire_addr, ire->ire_mask,
 		    ire->ire_gateway_addr, ire->ire_type, ire->ire_ill,
-		    ire->ire_zoneid, NULL, match_flags)) {
+		    ire->ire_zoneid, match_flags)) {
 			/*
 			 * Return the old ire after doing a REFHOLD.
 			 * As most of the callers continue to use the IRE
@@ -1653,11 +1621,6 @@ ire_inactive(ire_t *ire)
 	ASSERT(IRE_IS_CONDEMNED(ire));
 	atomic_add_32(&ipst->ips_num_ire_condemned, -1);
 
-	if (ire->ire_gw_secattr != NULL) {
-		ire_gw_secattr_free(ire->ire_gw_secattr);
-		ire->ire_gw_secattr = NULL;
-	}
-
 	/*
 	 * ire_nce_cache is cleared in ire_delete, and we make sure we don't
 	 * set it once the ire is marked condemned.
@@ -1858,8 +1821,7 @@ ire_flush_cache_v4(ire_t *ire, int flag)
  */
 boolean_t
 ire_match_args(ire_t *ire, ipaddr_t addr, ipaddr_t mask, ipaddr_t gateway,
-    int type, const ill_t *ill, zoneid_t zoneid,
-    const ts_label_t *tsl, int match_flags)
+    int type, const ill_t *ill, zoneid_t zoneid, int match_flags)
 {
 	ill_t *ire_ill = NULL, *dst_ill;
 	ip_stack_t *ipst = ire->ire_ipst;
@@ -2019,10 +1981,7 @@ matchit:
 	    !(ire->ire_flags & RTF_INDIRECT)) &&
 	    ((!(match_flags & MATCH_IRE_TYPE)) || (ire->ire_type & type)) &&
 	    ((!(match_flags & MATCH_IRE_TESTHIDDEN)) || ire->ire_testhidden) &&
-	    ((!(match_flags & MATCH_IRE_MASK)) || (ire->ire_mask == mask)) &&
-	    ((!(match_flags & MATCH_IRE_SECATTR)) ||
-	    (!is_system_labeled()) ||
-	    (tsol_ire_match_gwattr(ire, tsl) == 0))) {
+	    ((!(match_flags & MATCH_IRE_MASK)) || (ire->ire_mask == mask))) {
 		/* We found the matched IRE */
 		return (B_TRUE);
 	}
@@ -2036,8 +1995,8 @@ matchit:
  * We always return an IRE; will be RTF_REJECT if no route available.
  */
 ire_t *
-ire_alt_local(ire_t *ire, zoneid_t zoneid, const ts_label_t *tsl,
-    const ill_t *ill, uint_t *generationp)
+ire_alt_local(ire_t *ire, zoneid_t zoneid, const ill_t *ill,
+    uint_t *generationp)
 {
 	ip_stack_t	*ipst = ire->ire_ipst;
 	ire_t		*alt_ire;
@@ -2056,18 +2015,18 @@ ire_alt_local(ire_t *ire, zoneid_t zoneid, const ts_label_t *tsl,
 	 * to make sure the IRE_LOCAL is always found first.
 	 */
 	ire_type = (IRE_ONLINK | IRE_OFFLINK) & ~(IRE_LOCAL|IRE_LOOPBACK);
-	match_flags = MATCH_IRE_TYPE | MATCH_IRE_SECATTR;
+	match_flags = MATCH_IRE_TYPE;
 	if (ill != NULL)
 		match_flags |= MATCH_IRE_ILL;
 
 	if (ire->ire_ipversion == IPV4_VERSION) {
 		alt_ire = ire_route_recursive_v4(ire->ire_addr, ire_type,
-		    ill, zoneid, tsl, match_flags, IRR_ALLOCATE, 0, ipst, NULL,
-		    NULL, &generation);
+		    ill, zoneid, match_flags, IRR_ALLOCATE, 0, ipst, NULL,
+		    &generation);
 	} else {
 		alt_ire = ire_route_recursive_v6(&ire->ire_addr_v6, ire_type,
-		    ill, zoneid, tsl, match_flags, IRR_ALLOCATE, 0, ipst, NULL,
-		    NULL, &generation);
+		    ill, zoneid, match_flags, IRR_ALLOCATE, 0, ipst, NULL,
+		    &generation);
 	}
 	ASSERT(alt_ire != NULL);
 
@@ -2114,10 +2073,6 @@ ire_find_zoneid(struct radix_node *rn, void *arg)
 		if (margs->ift_ill != NULL && margs->ift_ill != ire->ire_ill)
 			continue;
 
-		if (is_system_labeled() &&
-		    tsol_ire_match_gwattr(ire, margs->ift_tsl) != 0)
-			continue;
-
 		rw_exit(&irb->irb_lock);
 		return (B_TRUE);
 	}
@@ -2132,7 +2087,7 @@ ire_find_zoneid(struct radix_node *rn, void *arg)
  */
 boolean_t
 ire_gateway_ok_zone_v4(ipaddr_t gateway, zoneid_t zoneid, ill_t *ill,
-    const ts_label_t *tsl, ip_stack_t *ipst, boolean_t lock_held)
+    ip_stack_t *ipst, boolean_t lock_held)
 {
 	struct rt_sockaddr rdst;
 	struct rt_entry *rt;
@@ -2149,14 +2104,10 @@ ire_gateway_ok_zone_v4(ipaddr_t gateway, zoneid_t zoneid, ill_t *ill,
 	rdst.rt_sin_family = AF_INET;
 	rdst.rt_sin_addr.s_addr = gateway;
 
-	/*
-	 * We only use margs for ill, zoneid, and tsl matching in
-	 * ire_find_zoneid
-	 */
+	/* We only use margs for ill and zoneidmatching in ire_find_zoneid */
 	bzero(&margs, sizeof (margs));
 	margs.ift_ill = ill;
 	margs.ift_zoneid = zoneid;
-	margs.ift_tsl = tsl;
 	rt = (struct rt_entry *)ipst->ips_ip_ftable->rnh_matchaddr_args(&rdst,
 	    ipst->ips_ip_ftable, ire_find_zoneid, (void *)&margs);
 
@@ -2315,28 +2266,28 @@ ip_ire_init(ip_stack_t *ipst)
 	ire = kmem_cache_alloc(ire_cache, KM_SLEEP);
 	*ire = ire_null;
 	error = ire_init_v4(ire, 0, 0, 0, IRE_NOROUTE, NULL, ALL_ZONES,
-	    RTF_REJECT|RTF_UP, NULL, ipst);
+	    RTF_REJECT|RTF_UP, ipst);
 	ASSERT(error == 0);
 	ipst->ips_ire_reject_v4 = ire;
 
 	ire = kmem_cache_alloc(ire_cache, KM_SLEEP);
 	*ire = ire_null;
 	error = ire_init_v6(ire, 0, 0, 0, IRE_NOROUTE, NULL, ALL_ZONES,
-	    RTF_REJECT|RTF_UP, NULL, ipst);
+	    RTF_REJECT|RTF_UP, ipst);
 	ASSERT(error == 0);
 	ipst->ips_ire_reject_v6 = ire;
 
 	ire = kmem_cache_alloc(ire_cache, KM_SLEEP);
 	*ire = ire_null;
 	error = ire_init_v4(ire, 0, 0, 0, IRE_NOROUTE, NULL, ALL_ZONES,
-	    RTF_BLACKHOLE|RTF_UP, NULL, ipst);
+	    RTF_BLACKHOLE|RTF_UP, ipst);
 	ASSERT(error == 0);
 	ipst->ips_ire_blackhole_v4 = ire;
 
 	ire = kmem_cache_alloc(ire_cache, KM_SLEEP);
 	*ire = ire_null;
 	error = ire_init_v6(ire, 0, 0, 0, IRE_NOROUTE, NULL, ALL_ZONES,
-	    RTF_BLACKHOLE|RTF_UP, NULL, ipst);
+	    RTF_BLACKHOLE|RTF_UP, ipst);
 	ASSERT(error == 0);
 	ipst->ips_ire_blackhole_v6 = ire;
 
@@ -3497,7 +3448,6 @@ ire_create_if_clone(ire_t *ire_if, const in6_addr_t *addr, uint_t *generationp)
 		    ire_if->ire_ill,
 		    ire_if->ire_zoneid,
 		    ire_if->ire_flags | RTF_HOST,
-		    NULL,		/* No security attr for IRE_IF_ALL */
 		    ire_if->ire_ipst);
 	} else {
 		ASSERT(!IN6_IS_ADDR_V4MAPPED(addr));
@@ -3509,7 +3459,6 @@ ire_create_if_clone(ire_t *ire_if, const in6_addr_t *addr, uint_t *generationp)
 		    ire_if->ire_ill,
 		    ire_if->ire_zoneid,
 		    ire_if->ire_flags | RTF_HOST,
-		    NULL,		/* No security attr for IRE_IF_ALL */
 		    ire_if->ire_ipst);
 	}
 	if (ire == NULL)
@@ -3591,12 +3540,12 @@ ire_rebind(ire_t *ire)
 again:
 	if (isv6) {
 		gw_ire = ire_ftable_lookup_v6(&ire->ire_gateway_addr_v6, 0, 0,
-		    IRE_INTERFACE, NULL, ALL_ZONES, NULL, match_flags, 0,
-		    ipst, NULL);
+		    IRE_INTERFACE, NULL, ALL_ZONES, match_flags, 0, ipst,
+		    NULL);
 	} else {
 		gw_ire = ire_ftable_lookup_v4(ire->ire_gateway_addr, 0, 0,
-		    IRE_INTERFACE, NULL, ALL_ZONES, NULL, match_flags, 0,
-		    ipst, NULL);
+		    IRE_INTERFACE, NULL, ALL_ZONES, match_flags, 0, ipst,
+		    NULL);
 	}
 	if (gw_ire == NULL) {
 		/* see comments in ip_rt_add[_v6]() for IPMP */
@@ -3610,12 +3559,12 @@ again:
 	if (isv6) {
 		new_ire = ire_create_v6(&ire->ire_addr_v6, &ire->ire_mask_v6,
 		    &ire->ire_gateway_addr_v6, ire->ire_type, gw_ill,
-		    ire->ire_zoneid, ire->ire_flags, NULL, ipst);
+		    ire->ire_zoneid, ire->ire_flags, ipst);
 	} else {
 		new_ire = ire_create((uchar_t *)&ire->ire_addr,
 		    (uchar_t *)&ire->ire_mask,
 		    (uchar_t *)&ire->ire_gateway_addr, ire->ire_type, gw_ill,
-		    ire->ire_zoneid, ire->ire_flags, NULL, ipst);
+		    ire->ire_zoneid, ire->ire_flags, ipst);
 	}
 	ire_refrele(gw_ire);
 	if (new_ire == NULL)

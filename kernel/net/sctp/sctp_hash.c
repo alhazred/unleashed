@@ -27,8 +27,6 @@
 #include <sys/socket.h>
 #include <sys/ddi.h>
 #include <sys/sunddi.h>
-#include <sys/tsol/tndb.h>
-#include <sys/tsol/tnet.h>
 
 #include <netinet/in.h>
 #include <netinet/ip6.h>
@@ -249,10 +247,7 @@ sctp_conn_match(in6_addr_t **faddrpp, uint32_t nfaddr, in6_addr_t *laddr,
 		if (ports != connp->conn_ports)
 			continue;
 		if (!(connp->conn_zoneid == zoneid ||
-		    connp->conn_allzones ||
-		    ((connp->conn_mac_mode != CONN_MAC_DEFAULT) &&
-		    (iraflags & IRAF_TX_MAC_EXEMPTABLE) &&
-		    (iraflags & IRAF_TX_SHARED_ADDR))))
+		    connp->conn_allzones))
 			continue;
 
 		/* check for faddr match */
@@ -298,10 +293,7 @@ listen_match(in6_addr_t *laddr, uint32_t ports, zoneid_t zoneid,
 			continue;
 
 		if (!(connp->conn_zoneid == zoneid ||
-		    connp->conn_allzones ||
-		    ((connp->conn_mac_mode != CONN_MAC_DEFAULT) &&
-		    (iraflags & IRAF_TX_MAC_EXEMPTABLE) &&
-		    (iraflags & IRAF_TX_SHARED_ADDR))))
+		    connp->conn_allzones))
 			continue;
 
 		if (sctp_saddr_lookup(sctp, laddr, 0) != NULL) {
@@ -495,23 +487,6 @@ sctp_fanout(in6_addr_t *src, in6_addr_t *dst, uint32_t ports,
 		sctp = listen_match(dst, ports, zoneid, iraflags, sctps);
 		if (sctp == NULL)
 			return (NULL);
-		/*
-		 * On systems running trusted extensions, check if dst
-		 * should accept the packet. "IPV6_VERSION" indicates
-		 * that dst is in 16 byte AF_INET6 format. IPv4-mapped
-		 * IPv6 addresses are supported.
-		 */
-		if ((iraflags & IRAF_SYSTEM_LABELED) &&
-		    !tsol_receive_local(mp, dst, IPV6_VERSION, ira,
-		    sctp->sctp_connp)) {
-			DTRACE_PROBE3(
-			    tx__ip__log__info__classify__sctp,
-			    char *,
-			    "connp(1) could not receive mp(2)",
-			    conn_t *, sctp->sctp_connp, mblk_t *, mp);
-			SCTP_REFRELE(sctp);
-			return (NULL);
-		}
 	}
 	/*
 	 * For labeled systems, there's no need to check the

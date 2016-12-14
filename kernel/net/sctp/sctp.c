@@ -764,9 +764,6 @@ sctp_free(conn_t *connp)
 	sctp->sctp_autoclose = 0;
 	sctp->sctp_tx_adaptation_code = 0;
 
-	sctp->sctp_v6label_len = 0;
-	sctp->sctp_v4label_len = 0;
-
 	sctp->sctp_sctps = NULL;
 
 	sctp_conn_clear(connp);
@@ -1452,13 +1449,6 @@ sctp_create(void *ulpd, sctp_t *parent, int family, int type, int flags,
 		connp->conn_cred = credp;
 		crhold(credp);
 		connp->conn_cpid = curproc->p_pid;
-
-		/*
-		 * If the caller has the process-wide flag set, then default to
-		 * MAC exempt mode.  This allows read-down to unlabeled hosts.
-		 */
-		if (getpflags(NET_MAC_AWARE, credp) != 0)
-			connp->conn_mac_mode = CONN_MAC_AWARE;
 
 		connp->conn_zone_is_global =
 		    (crgetzoneid(credp) == GLOBAL_ZONEID);

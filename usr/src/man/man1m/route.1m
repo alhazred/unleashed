@@ -556,46 +556,6 @@ Send pipe size in bytes.
 Send pipe size threshold in bytes.
 .RE
 
-.sp
-.ne 2
-.na
-\fB\fB-secattr\fR\fR
-.ad
-.RS 13n
-Security attributes of the route. This modifier is available only if the system
-is configured with the Solaris Trusted Extensions feature.
-.sp
-The \fB-secattr\fR modifier has the following format:
-.sp
-.in +2
-.nf
-min_sl=\fIval\fR,max_sl=\fIval\fR,doi=\fIval\fR,cipso
-.fi
-.in -2
-
-or:
-.sp
-.in +2
-.nf
-sl=VAL,doi=VAL,cipso
-.fi
-.in -2
-
-In the first form, above, the \fIval\fR for \fBmin_sl\fR and \fBmax_sl\fR is a
-sensitivity label in either hex or string form. The \fIval\fR for \fBdoi\fR is
-a non-negative integer. The route will apply only for packets with the same
-domain of interpretation as defined by the \fBdoi\fR value and within the
-accreditation range defined by the \fBmin_sl\fR and \fBmax_sl\fR values. The
-\fBcipso\fR keyword is optional and set by default. Valid \fBmin_sl\fR,
-\fBmax_sl\fR and \fBdoi\fR keyword/value pairs are mandatory. Note that if
-\fIval\fR contains a space, it must be protected by double quotes.
-.sp
-The second form, above, is equivalent to specifying the first form with the
-same \fBVAL\fR for \fBmin_sl\fR and \fBmax_sl\fR. The second form should be
-used for the \fBget\fR command, because \fBget\fR uses only a single
-sensitivity label.
-.RE
-
 .SS "Compatibility"
 .LP
 The modifiers \fBhost\fR and \fBnet\fR are taken to be equivalent to

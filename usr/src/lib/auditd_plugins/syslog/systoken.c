@@ -45,7 +45,6 @@
 #include <string.h>
 #include <sys/types.h>
 #include <bsm/libbsm.h>
-#include <sys/tsol/label.h>
 #include "toktable.h"	/* ../praudit */
 #include "sysplugin.h"
 #include "systoken.h"

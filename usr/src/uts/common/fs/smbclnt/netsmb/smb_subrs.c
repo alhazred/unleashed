@@ -97,12 +97,7 @@ smb_credinit(struct smb_cred *scred, cred_t *cr)
 	/* cr arg is optional */
 	if (cr == NULL)
 		cr = ddi_get_cred();
-	if (is_system_labeled()) {
-		cr = crdup(cr);
-		(void) setpflags(NET_MAC_AWARE, 1, cr);
-	} else {
-		crhold(cr);
-	}
+	crhold(cr);
 	scred->scr_cred = cr;
 }
 

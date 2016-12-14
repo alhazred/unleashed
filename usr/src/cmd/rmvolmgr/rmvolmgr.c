@@ -596,7 +596,5 @@ rmm_unmount_all()
 int
 main(int argc, char **argv)
 {
-	vold_init(argc, argv);
-
 	return (rmvolmgr(argc, argv));
 }

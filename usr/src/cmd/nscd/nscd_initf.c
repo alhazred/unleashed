@@ -196,20 +196,6 @@ _nss_initf_group_compat(nss_db_params_t *p)
 	p->default_config = NSS_DEFCONF_GROUP_COMPAT;
 }
 
-void
-_nss_initf_tsol_rh(nss_db_params_t *p)
-{
-	p->name = NSS_DBNAM_TSOL_RH;
-	p->default_config = NSS_DEFCONF_TSOL_RH;
-}
-
-void
-_nss_initf_tsol_tp(nss_db_params_t *p)
-{
-	p->name = NSS_DBNAM_TSOL_TP;
-	p->default_config = NSS_DEFCONF_TSOL_TP;
-}
-
 nss_db_initf_t	nscd_nss_db_initf[] = {
 	_nss_initf_passwd,
 	_nss_initf_hosts,
@@ -232,8 +218,6 @@ nss_db_initf_t	nscd_nss_db_initf[] = {
 	_nss_initf_project,
 	_nss_initf_shadow,
 	_nss_initf_auuser,
-	_nss_initf_tsol_rh,
-	_nss_initf_tsol_tp,
 	_nss_initf_passwd_compat,
 	_nss_initf_group_compat,
 	/*

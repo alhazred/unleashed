@@ -26,8 +26,6 @@
 #define	_INET_MIB2_H
 
 #include <netinet/in.h>	/* For in6_addr_t */
-#include <sys/tsol/label.h> /* For brange_t */
-#include <sys/tsol/label_macro.h> /* For brange_t */
 
 #ifdef	__cplusplus
 extern "C" {
@@ -178,13 +176,7 @@ typedef uint32_t	DeviceIndex;	/* Interface index */
 #define	EXPER_IP6_GROUP_MEMBERSHIP	101
 #define	EXPER_IP_GROUP_SOURCES		102
 #define	EXPER_IP6_GROUP_SOURCES		103
-#define	EXPER_IP_RTATTR			104
 #define	EXPER_IP_DCE			105
-
-/*
- * There can be one of each of these tables per transport (MIB2_* above).
- */
-#define	EXPER_XPORT_MLP		105	/* transportMLPEntry */
 
 /* Old names retained for compatibility */
 #define	MIB2_IP_20	MIB2_IP_ADDR
@@ -281,8 +273,6 @@ typedef struct mib2_ip {
 	Counter ipOutIPv6;		/* No longer used */
 	Counter ipOutSwitchIPv6;	/* No longer used */
 
-	int	ipRouteAttributeSize;	/* Size of mib2_ipAttributeEntry_t */
-	int	transportMLPSize;	/* Size of mib2_transportMLPEntry_t */
 	int	ipDestEntrySize;	/* Size of dest_cache_entry_t */
 } mib2_ip_t;
 
@@ -802,45 +792,6 @@ typedef struct mib2_ipv6RouteEntry {
 } mib2_ipv6RouteEntry_t;
 
 /*
- * The IPv4 and IPv6 routing table entries on a trusted system also have
- * security attributes in the form of label ranges.  This experimental
- * interface provides information about these labels.
- *
- * Each entry in this table contains a label range and an index that refers
- * back to the entry in the routing table to which it applies.  There may be 0,
- * 1, or many label ranges for each routing table entry.
- *
- * (opthdr.level is set to MIB2_IP for IPv4 entries and MIB2_IP6 for IPv6.
- * opthdr.name is set to EXPER_IP_GWATTR.)
- *
- *	ipRouteAttributeTable OBJECT-TYPE
- *		SYNTAX  SEQUENCE OF IpAttributeEntry
- *		ACCESS  not-accessible
- *		STATUS  current
- *		DESCRIPTION
- *			"IPv4 routing attributes table.  This table contains
- *			an entry for each valid trusted label attached to a
- *			route in the system."
- *		::= { ip 102 }
- *
- *	ipv6RouteAttributeTable OBJECT-TYPE
- *		SYNTAX  SEQUENCE OF IpAttributeEntry
- *		ACCESS  not-accessible
- *		STATUS  current
- *		DESCRIPTION
- *			"IPv6 routing attributes table.  This table contains
- *			an entry for each valid trusted label attached to a
- *			route in the system."
- *		::= { ip6 102 }
- */
-
-typedef struct mib2_ipAttributeEntry {
-	uint_t		iae_routeidx;
-	int		iae_doi;
-	brange_t	iae_slrange;
-} mib2_ipAttributeEntry_t;
-
-/*
  * The IP address translation table contain the IpAddress to
  * `physical' address equivalences.  Some interfaces do not
  * use translation tables for determining address
@@ -947,30 +898,6 @@ typedef struct ipv6_member {
 	int		ipv6GroupMemberFilterMode;
 } ipv6_member_t;
 
-/*
- * This is used to mark transport layer entities (e.g., TCP connections) that
- * are capable of receiving packets from a range of labels.  'level' is set to
- * the protocol of interest (e.g., MIB2_TCP), and 'name' is set to
- * EXPER_XPORT_MLP.  The tme_connidx refers back to the entry in MIB2_TCP_CONN,
- * MIB2_TCP6_CONN, or MIB2_SCTP_CONN.
- *
- * It is also used to report connections that receive packets at a single label
- * that's other than the zone's label.  This is the case when a TCP connection
- * is accepted from a particular peer using an MLP listener.
- */
-typedef struct mib2_transportMLPEntry {
-	uint_t		tme_connidx;
-	uint_t		tme_flags;
-	int		tme_doi;
-	bslabel_t	tme_label;
-} mib2_transportMLPEntry_t;
-
-#define	MIB2_TMEF_PRIVATE	0x00000001	/* MLP on private addresses */
-#define	MIB2_TMEF_SHARED	0x00000002	/* MLP on shared addresses */
-#define	MIB2_TMEF_ANONMLP	0x00000004	/* Anonymous MLP port */
-#define	MIB2_TMEF_MACEXEMPT	0x00000008	/* MAC-Exempt port */
-#define	MIB2_TMEF_IS_LABELED	0x00000010	/* tme_doi & tme_label exists */
-#define	MIB2_TMEF_MACIMPLICIT	0x00000020	/* MAC-Implicit */
 /*
  * List of IPv4 source addresses being filtered per interface
  */

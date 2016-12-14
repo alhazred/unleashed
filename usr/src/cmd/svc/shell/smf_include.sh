@@ -106,17 +106,6 @@ smf_dont_configure_vt() {
 	return $?
 }
 
-# smf_is_system_labeled
-#
-#  Returns zero (success) if system is labeled (aka Trusted Extensions).
-#  1 otherwise.
-#
-smf_is_system_labeled() {
-	[ ! -x /bin/plabel ] && return 1
-	/bin/plabel > /dev/null 2>&1
-	return $?
-}
-
 # smf_netstrategy
 #   -> (_INIT_NET_IF, _INIT_NET_STRATEGY)
 #

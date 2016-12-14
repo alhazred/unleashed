@@ -39,6 +39,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <syslog.h>
+#include <priv.h>
 #include "libshare.h"
 #include "libshare_impl.h"
 #include <pwd.h>
@@ -391,15 +392,6 @@ smb_enable_share(sa_share_t share)
 	int err = SA_OK;
 	priv_set_t *priv_effective;
 	boolean_t online;
-
-	/*
-	 * Don't support Trusted Extensions.
-	 */
-	if (is_system_labeled()) {
-		(void) printf(dgettext(TEXT_DOMAIN,
-		    "SMB: service not supported with Trusted Extensions\n"));
-		return (SA_NOT_SUPPORTED);
-	}
 
 	priv_effective = priv_allocset();
 	(void) getppriv(PRIV_EFFECTIVE, priv_effective);

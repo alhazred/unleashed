@@ -103,7 +103,6 @@
 #include "taskq.h"
 #include "thread.h"
 #include "tsd.h"
-#include "tsol.h"
 #include "typegraph.h"
 #include "vfs.h"
 #include "zone.h"
@@ -4649,12 +4648,6 @@ static const mdb_walker_t walkers[] = {
 	/* from tsd.c */
 	{ "tsd", "walk list of thread-specific data",
 		tsd_walk_init, tsd_walk_step, tsd_walk_fini },
-
-	/* from tsol.c */
-	{ "tnrh", "walk remote host cache structures",
-	    tnrh_walk_init, tnrh_walk_step, tnrh_walk_fini },
-	{ "tnrhtp", "walk remote host template structures",
-	    tnrhtp_walk_init, tnrhtp_walk_step, tnrhtp_walk_fini },
 
 	/*
 	 * typegraph does not work under kmdb, as it requires too much memory

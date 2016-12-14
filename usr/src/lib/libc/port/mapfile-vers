@@ -592,10 +592,6 @@ SYMBOL_VERSION SUNW_1.22.3 {	# SunOS 5.10 (Solaris 10) patch additions
 } SUNW_1.22.2;
 
 SYMBOL_VERSION SUNW_1.22.2 {	# SunOS 5.10 (Solaris 10) patch additions
-    protected:
-	is_system_labeled;
-	ucred_getlabel;
-	_ucred_getlabel;
 } SUNW_1.22.1;
 
 SYMBOL_VERSION SUNW_1.22.1 {	# SunOS 5.10 (Solaris 10) patch additions

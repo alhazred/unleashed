@@ -35,8 +35,6 @@
 #include <sys/socket.h>
 #include <sys/acl.h>
 
-#include <sys/tsol/label.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -108,7 +106,6 @@ extern "C" {
 #define	AUT_ACL			((char)0x30)
 #define	AUT_ATTR		((char)0x31)
 #define	AUT_IPC_PERM		((char)0x32)
-#define	AUT_LABEL		((char)0x33)
 #define	AUT_GROUPS		((char)0x34)
 #define	AUT_ACE			((char)0x35)
 	/* 0x37 unused */
@@ -297,7 +294,6 @@ token_t *au_to_socket_ex(short, short, char *, char *);
 token_t *au_to_sock_inet(struct sockaddr_in *);
 token_t *au_to_exec_args(const char *, ssize_t);
 token_t *au_to_exec_env(const char *, ssize_t);
-token_t	*au_to_label(bslabel_t *);
 token_t	*au_to_privset(const char *, const priv_set_t *, char, int);
 token_t *au_to_secflags(const char *, secflagset_t);
 
@@ -409,7 +405,6 @@ extern token_t *au_to_ipc(char, int);
 extern token_t *au_to_ipc_perm(struct ipc_perm *);
 extern token_t *au_to_iport(ushort_t);
 extern token_t *au_to_me(void);
-extern token_t *au_to_mylabel(void);
 extern token_t *au_to_opaque(char *, short);
 extern token_t *au_to_path(char *);
 extern token_t *au_to_privset(const char *, const priv_set_t *);
@@ -420,7 +415,6 @@ extern token_t *au_to_process_ex(au_id_t, uid_t, gid_t, uid_t, gid_t,
 extern token_t *au_to_return32(char, uint32_t);
 extern token_t *au_to_return64(char, uint64_t);
 extern token_t *au_to_seq(int);
-extern token_t *au_to_label(m_label_t *);
 extern token_t *au_to_socket(struct oldsocket *);
 extern token_t *au_to_subject(au_id_t, uid_t, gid_t, uid_t, gid_t,
 				pid_t, au_asid_t, au_tid_t *);

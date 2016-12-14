@@ -35,8 +35,6 @@
 #include <sys/taskq.h>
 #include <sys/zone.h>
 
-#include <sys/tsol/label.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -390,8 +388,6 @@ au_buff_t *au_get_buff(void), *au_free_buff(au_buff_t *);
 	    crgetgid(c), crgetruid(c), crgetrgid(c),	\
 	    p, (a)->ai_auid, (a)->ai_asid,		\
 	    &((a)->ai_termid))));			\
-	((is_system_labeled()) ?  au_write((u),		\
-	    au_to_label(CR_SL((c)))) : (void) 0);	\
 	(((k)->auk_policy & AUDIT_GROUP) ? au_write((u),\
 	    au_to_groups(crgetgroups(c),		\
 	    crgetngroups(c))) : (void) 0)

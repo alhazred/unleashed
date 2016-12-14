@@ -92,9 +92,6 @@
 #include <inet/udp_impl.h>
 #include <sys/sunddi.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
-
 #include <sys/clock_impl.h>	/* For LBOLT_FASTPATH{,64} */
 
 #ifdef	DEBUG
@@ -152,11 +149,6 @@ conn_ip_output(mblk_t *mp, ip_xmit_attr_t *ixa)
 	ASSERT(ixa->ixa_curthread == NULL);
 	ixa->ixa_curthread = curthread;
 #endif
-
-	/*
-	 * Even on labeled systems we can have a NULL ixa_tsl e.g.,
-	 * for IGMP/MLD traffic.
-	 */
 
 	ire = ixa->ixa_ire;
 
@@ -739,7 +731,7 @@ ip_verify_zcopy(ill_t *ill, ip_xmit_attr_t *ixa)
  * the hold on the ire. Ditto for the nce and dce.
  *
  * This assumes that the caller has set the following in ip_xmit_attr_t:
- *	ixa_tsl, ixa_zoneid, and ixa_ipst must always be set.
+ *	ixa_zoneid, and ixa_ipst must always be set.
  *	If ixa_ifindex is non-zero it means send out that ill. (If it is
  *	an upper IPMP ill we load balance across the group; if a lower we send
  *	on that lower ill without load balancing.)
@@ -762,36 +754,9 @@ ip_verify_zcopy(ill_t *ill, ip_xmit_attr_t *ixa)
 int
 ip_output_simple(mblk_t *mp, ip_xmit_attr_t *ixa)
 {
-	ts_label_t	*effective_tsl = NULL;
 	int		err;
 
 	ASSERT(ixa->ixa_ipst != NULL);
-
-	if (is_system_labeled()) {
-		ip_stack_t *ipst = ixa->ixa_ipst;
-
-		if (ixa->ixa_flags & IXAF_IS_IPV4) {
-			err = tsol_check_label_v4(ixa->ixa_tsl, ixa->ixa_zoneid,
-			    &mp, CONN_MAC_DEFAULT, B_FALSE, ixa->ixa_ipst,
-			    &effective_tsl);
-		} else {
-			err = tsol_check_label_v6(ixa->ixa_tsl, ixa->ixa_zoneid,
-			    &mp, CONN_MAC_DEFAULT, B_FALSE, ixa->ixa_ipst,
-			    &effective_tsl);
-		}
-		if (err != 0) {
-			ip2dbg(("tsol_check: label check failed (%d)\n", err));
-			BUMP_MIB(&ipst->ips_ip_mib, ipIfStatsHCOutRequests);
-			BUMP_MIB(&ipst->ips_ip_mib, ipIfStatsOutDiscards);
-			ip_drop_output("tsol_check_label", mp, NULL);
-			freemsg(mp);
-			return (err);
-		}
-		if (effective_tsl != NULL) {
-			/* Update the label */
-			ip_xmit_attr_replace_tsl(ixa, effective_tsl);
-		}
-	}
 
 	if (ixa->ixa_flags & IXAF_IS_IPV4)
 		return (ip_output_simple_v4(mp, ixa));
@@ -819,11 +784,6 @@ ip_output_simple_v4(mblk_t *mp, ip_xmit_attr_t *ixa)
 
 	ipha = (ipha_t *)mp->b_rptr;
 	ASSERT(IPH_HDR_VERSION(ipha) == IPV4_VERSION);
-
-	/*
-	 * Even on labeled systems we can have a NULL ixa_tsl e.g.,
-	 * for IGMP/MLD traffic.
-	 */
 
 	/* Caller already set flags */
 	ASSERT(ixa->ixa_flags & IXAF_IS_IPV4);
@@ -1189,27 +1149,6 @@ ire_send_local_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
 	/* Destined to ire_zoneid - use that for fanout */
 	iras.ira_zoneid = ire->ire_zoneid;
 
-	if (is_system_labeled()) {
-		iras.ira_flags |= IRAF_SYSTEM_LABELED;
-
-		/*
-		 * This updates ira_cred, ira_tsl and ira_free_flags based
-		 * on the label. We don't expect this to ever fail for
-		 * loopback packets, so we silently drop the packet should it
-		 * fail.
-		 */
-		if (!tsol_get_pkt_label(mp, IPV4_VERSION, &iras)) {
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsInDiscards);
-			ip_drop_input("tsol_get_pkt_label", mp, ill);
-			freemsg(mp);
-			return (0);
-		}
-		ASSERT(iras.ira_tsl != NULL);
-
-		/* tsol_get_pkt_label sometimes does pullupmsg */
-		ipha = (ipha_t *)mp->b_rptr;
-	}
-
 	ip_fanout_v4(mp, ipha, &iras);
 
 	/* We moved any IPsec refs from ixa to iras */
@@ -1415,7 +1354,6 @@ ip_output_simple_broadcast(ip_xmit_attr_t *ixa, mblk_t *mp)
 	ixas.ixa_ipst = ixa->ixa_ipst;
 	ixas.ixa_cred = ixa->ixa_cred;
 	ixas.ixa_cpid = ixa->ixa_cpid;
-	ixas.ixa_tsl = ixa->ixa_tsl;
 	ixas.ixa_multicast_ttl = IP_DEFAULT_MULTICAST_TTL;
 
 	(void) ip_output_simple(mp, &ixas);
@@ -1927,28 +1865,6 @@ ire_send_wire_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
 		}
 	}
 
-	/*
-	 * To handle IPsec/iptun's labeling needs we need to tag packets
-	 * while we still have ixa_tsl
-	 */
-	if (is_system_labeled() && ixa->ixa_tsl != NULL &&
-	    (ill->ill_mactype == DL_6TO4 || ill->ill_mactype == DL_IPV4 ||
-	    ill->ill_mactype == DL_IPV6)) {
-		cred_t *newcr;
-
-		newcr = copycred_from_tslabel(ixa->ixa_cred, ixa->ixa_tsl,
-		    KM_NOSLEEP);
-		if (newcr == NULL) {
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsOutDiscards);
-			ip_drop_output("ipIfStatsOutDiscards - newcr",
-			    mp, ill);
-			freemsg(mp);
-			return (ENOBUFS);
-		}
-		mblk_setcred(mp, newcr, NOPID);
-		crfree(newcr);	/* mblk_setcred did its own crhold */
-	}
-
 	if (ixa->ixa_pktlen > ixa->ixa_fragsize ||
 	    (ixaflags & IXAF_IPSEC_SECURE)) {
 		uint32_t pktlen;
@@ -2067,7 +1983,6 @@ ip_postfrag_loopback(mblk_t *mp, nce_t *nce, iaflags_t ixaflags,
 	iras.ira_free_flags = 0;
 	iras.ira_cred = NULL;
 	iras.ira_cpid = NOPID;
-	iras.ira_tsl = NULL;
 	iras.ira_zoneid = ALL_ZONES;
 	iras.ira_pktlen = pkt_len;
 	UPDATE_MIB(ill->ill_ip_mib, ipIfStatsHCInOctets, iras.ira_pktlen);
@@ -2110,7 +2025,7 @@ ip_postfrag_loopback(mblk_t *mp, nce_t *nce, iaflags_t ixaflags,
 		}
 	}
 	/* Any references to clean up? No hold on ira */
-	if (iras.ira_flags & (IRAF_IPSEC_SECURE|IRAF_SYSTEM_LABELED))
+	if (iras.ira_flags & (IRAF_IPSEC_SECURE))
 		ira_cleanup(&iras, B_FALSE);
 }
 
@@ -2242,18 +2157,18 @@ ip_postfrag_multirt_v4(mblk_t *mp, nce_t *nce, iaflags_t ixaflags,
 	 * Use the nce (nexthop) and ipha_dst to find the ire.
 	 *
 	 * MULTIRT is not designed to work with shared-IP zones thus we don't
-	 * need to pass a zoneid or a label to the IRE lookup.
+	 * need to pass a zoneid to the IRE lookup.
 	 */
 	if (V4_PART_OF_V6(nce->nce_addr) == ipha->ipha_dst) {
 		/* Broadcast and multicast case */
 		ire = ire_ftable_lookup_v4(ipha->ipha_dst, 0, 0, 0,
-		    NULL, ALL_ZONES, NULL, MATCH_IRE_DSTONLY, 0, ipst, NULL);
+		    NULL, ALL_ZONES, MATCH_IRE_DSTONLY, 0, ipst, NULL);
 	} else {
 		ipaddr_t v4addr = V4_PART_OF_V6(nce->nce_addr);
 
 		/* Unicast case */
 		ire = ire_ftable_lookup_v4(ipha->ipha_dst, 0, v4addr, 0,
-		    NULL, ALL_ZONES, NULL, MATCH_IRE_GW, 0, ipst, NULL);
+		    NULL, ALL_ZONES, MATCH_IRE_GW, 0, ipst, NULL);
 	}
 
 	if (ire == NULL ||
@@ -2301,8 +2216,8 @@ ip_postfrag_multirt_v4(mblk_t *mp, nce_t *nce, iaflags_t ixaflags,
 				match_flags |= MATCH_IRE_ILL;
 			ire2 = ire_route_recursive_impl_v4(ire1,
 			    ire1->ire_addr, ire1->ire_type, ire1->ire_ill,
-			    ire1->ire_zoneid, NULL, match_flags,
-			    IRR_ALLOCATE, 0, ipst, NULL, NULL, NULL);
+			    ire1->ire_zoneid, match_flags, IRR_ALLOCATE, 0,
+			    ipst, NULL, NULL);
 			if (ire2 != NULL)
 				ire_refrele(ire2);
 			ill1 = ire_nexthop_ill(ire1);

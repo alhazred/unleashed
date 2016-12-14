@@ -71,8 +71,6 @@
 #include <sys/kstat.h>
 #include <sys/strsubr.h>
 
-#include <sys/tsol/tnet.h>
-
 /*
  * Table of ND variables supported by ipsecah. These are loaded into
  * ipsecah_g_nd in ipsecah_init_nd.
@@ -547,24 +545,13 @@ ah_register_out(uint32_t sequence, uint32_t pid, uint_t serial,
 	ipsec_alginfo_t **authalgs;
 	uint_t num_aalgs;
 	ipsec_stack_t	*ipss = ahstack->ipsecah_netstack->netstack_ipsec;
-	sadb_sens_t *sens;
-	size_t sens_len = 0;
 	sadb_ext_t *nextext;
-	ts_label_t *sens_tsl = NULL;
 
 	/* Allocate the KEYSOCK_OUT. */
 	mp = sadb_keysock_out(serial);
 	if (mp == NULL) {
 		ah0dbg(("ah_register_out: couldn't allocate mblk.\n"));
 		return (B_FALSE);
-	}
-
-	if (is_system_labeled() && (cr != NULL)) {
-		sens_tsl = crgetlabel(cr);
-		if (sens_tsl != NULL) {
-			sens_len = sadb_sens_len_from_label(sens_tsl);
-			allocsize += sens_len;
-		}
 	}
 
 	/*
@@ -643,14 +630,6 @@ ah_register_out(uint32_t sequence, uint32_t pid, uint_t serial,
 	}
 
 	mutex_exit(&ipss->ipsec_alg_lock);
-
-	if (sens_tsl != NULL) {
-		sens = (sadb_sens_t *)nextext;
-		sadb_sens_from_label(sens, SADB_EXT_SENSITIVITY,
-		    sens_tsl, sens_len);
-
-		nextext = (sadb_ext_t *)(((uint8_t *)sens) + sens_len);
-	}
 
 	/* Now fill the restof the SADB_REGISTER message. */
 
@@ -1108,13 +1087,11 @@ ah_add_sa(mblk_t *mp, keysock_in_t *ksi, int *diagnostic, netstack_t *ns)
 		return (EOPNOTSUPP);
 
 	if (ksi->ks_in_extv[SADB_EXT_SENSITIVITY] != NULL) {
-		if (!is_system_labeled())
-			return (EOPNOTSUPP);
+		return (EOPNOTSUPP);
 	}
 
 	if (ksi->ks_in_extv[SADB_X_EXT_OUTER_SENS] != NULL) {
-		if (!is_system_labeled())
-			return (EOPNOTSUPP);
+		return (EOPNOTSUPP);
 	}
 	/*
 	 * XXX Policy : I'm not checking identities at this time, but
@@ -3281,8 +3258,6 @@ ah_process_ip_options_v4(mblk_t *mp, ipsa_t *assoc, int *length_to_skip,
 		optptr = opts.ipoptp_cur;
 		optlen = opts.ipoptp_len;
 		switch (optval) {
-		case IPOPT_EXTSEC:
-		case IPOPT_COMSEC:
 		case IPOPT_RA:
 		case IPOPT_SDMDD:
 		case IPOPT_SECURITY:
@@ -3405,37 +3380,6 @@ ah_outbound(mblk_t *data_mp, ip_xmit_attr_t *ixa)
 	assoc = ixa->ixa_ipsec_ah_sa;
 	ASSERT(assoc != NULL);
 
-
-	/*
-	 * Get the outer IP header in shape to escape this system..
-	 */
-	if (is_system_labeled() && (assoc->ipsa_otsl != NULL)) {
-		/*
-		 * Need to update packet with any CIPSO option and update
-		 * ixa_tsl to capture the new label.
-		 * We allocate a separate ixa for that purpose.
-		 */
-		ixa = ip_xmit_attr_duplicate(ixa);
-		if (ixa == NULL) {
-			ip_drop_packet(data_mp, B_FALSE, ill,
-			    DROPPER(ipss, ipds_ah_nomem),
-			    &ahstack->ah_dropper);
-			return (NULL);
-		}
-		need_refrele = B_TRUE;
-
-		label_hold(assoc->ipsa_otsl);
-		ip_xmit_attr_replace_tsl(ixa, assoc->ipsa_otsl);
-
-		data_mp = sadb_whack_label(data_mp, assoc, ixa,
-		    DROPPER(ipss, ipds_ah_nomem), &ahstack->ah_dropper);
-		if (data_mp == NULL) {
-			/* Packet dropped by sadb_whack_label */
-			ixa_refrele(ixa);
-			return (NULL);
-		}
-	}
-
 	/*
 	 * Age SA according to number of bytes that will be sent after
 	 * adding the AH header, ICV, and padding to the packet.
@@ -3468,11 +3412,6 @@ ah_outbound(mblk_t *data_mp, ip_xmit_attr_t *ixa)
 			ixa_refrele(ixa);
 		return (NULL);
 	}
-
-	/*
-	 * XXX We need to have fixed up the outer label before we get here.
-	 * (AH is computing the checksum over the outer label).
-	 */
 
 	/*
 	 * Insert pseudo header:
@@ -3825,18 +3764,6 @@ ah_auth_in_done(mblk_t *phdr_mp, ip_recv_attr_t *ira, ipsec_crypto_t *ic)
 			*dest = *(dest - newpos);
 	}
 	freeb(phdr_mp);
-
-	/*
-	 * If SA is labelled, use its label, else inherit the label
-	 */
-	if (is_system_labeled() && (assoc->ipsa_tsl != NULL)) {
-		if (!ip_recv_attr_replace_label(ira, assoc->ipsa_tsl)) {
-			ip_drop_packet(mp, B_TRUE, ira->ira_ill,
-			    DROPPER(ipss, ipds_ah_nomem), &ahstack->ah_dropper);
-			BUMP_MIB(ira->ira_ill->ill_ip_mib, ipIfStatsInDiscards);
-			return (NULL);
-		}
-	}
 
 	if (assoc->ipsa_state == IPSA_STATE_IDLE) {
 		/*

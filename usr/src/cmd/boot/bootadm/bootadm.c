@@ -2404,9 +2404,7 @@ delete_stale(char *file, int what)
 
 /*
  * Checks if a file in the current (old) archive has
- * been deleted from the root filesystem. This is needed for
- * software like Trusted Extensions (TX) that switch early
- * in boot based on presence/absence of a kernel module.
+ * been deleted from the root filesystem.
  */
 static void
 check4stale(char *root)

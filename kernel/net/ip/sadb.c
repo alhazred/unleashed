@@ -65,7 +65,6 @@
 #include <inet/ipdrop.h>
 #include <inet/ipclassifier.h>
 #include <inet/sctp_ip.h>
-#include <sys/tsol/tnet.h>
 
 /*
  * This source file contains Security Association Database (SADB) common
@@ -74,15 +73,12 @@
  */
 
 static mblk_t *sadb_extended_acquire(ipsec_selector_t *, ipsec_policy_t *,
-    ipsec_action_t *, boolean_t, uint32_t, uint32_t, sadb_sens_t *,
-    netstack_t *);
+    ipsec_action_t *, boolean_t, uint32_t, uint32_t, netstack_t *);
 static ipsa_t *sadb_torch_assoc(isaf_t *, ipsa_t *);
 static void sadb_destroy_acqlist(iacqf_t **, uint_t, boolean_t,
 			    netstack_t *);
 static void sadb_destroy(sadb_t *, netstack_t *);
 static mblk_t *sadb_sa2msg(ipsa_t *, sadb_msg_t *);
-static ts_label_t *sadb_label_from_sens(sadb_sens_t *, uint64_t *);
-static sadb_sens_t *sadb_make_sens_ext(ts_label_t *tsl, int *len);
 
 static time_t sadb_add_time(time_t, uint64_t);
 static void lifetime_fuzz(ipsa_t *);
@@ -277,16 +273,6 @@ sadb_freeassoc(ipsa_t *ipsa)
 		    &ipss->ipsec_sadb_dropper);
 	}
 	mutex_enter(&ipsa->ipsa_lock);
-
-	if (ipsa->ipsa_tsl != NULL) {
-		label_rele(ipsa->ipsa_tsl);
-		ipsa->ipsa_tsl = NULL;
-	}
-
-	if (ipsa->ipsa_otsl != NULL) {
-		label_rele(ipsa->ipsa_otsl);
-		ipsa->ipsa_otsl = NULL;
-	}
 
 	ipsec_destroy_ctx_tmpl(ipsa, IPSEC_ALG_AUTH);
 	ipsec_destroy_ctx_tmpl(ipsa, IPSEC_ALG_ENCR);
@@ -864,25 +850,6 @@ sadb_hardsoftchk(sadb_lifetime_t *hard, sadb_lifetime_t *soft,
 }
 
 /*
- * Sanity check sensitivity labels.
- *
- * For now, just reject labels on unlabeled systems.
- */
-int
-sadb_labelchk(keysock_in_t *ksi)
-{
-	if (!is_system_labeled()) {
-		if (ksi->ks_in_extv[SADB_EXT_SENSITIVITY] != NULL)
-			return (SADB_X_DIAGNOSTIC_BAD_LABEL);
-
-		if (ksi->ks_in_extv[SADB_X_EXT_OUTER_SENS] != NULL)
-			return (SADB_X_DIAGNOSTIC_BAD_LABEL);
-	}
-
-	return (0);
-}
-
-/*
  * Clone a security association for the purposes of inserting a single SA
  * into inbound and outbound tables respectively. This function should only
  * be called from sadb_common_add().
@@ -904,12 +871,6 @@ sadb_cloneassoc(ipsa_t *ipsa)
 
 	/* bzero and initialize locks, in case *_init() allocates... */
 	mutex_init(&newbie->ipsa_lock, NULL, MUTEX_DEFAULT, NULL);
-
-	if (newbie->ipsa_tsl != NULL)
-		label_hold(newbie->ipsa_tsl);
-
-	if (newbie->ipsa_otsl != NULL)
-		label_hold(newbie->ipsa_otsl);
 
 	/*
 	 * While somewhat dain-bramaged, the most graceful way to
@@ -1073,7 +1034,7 @@ static mblk_t *
 sadb_sa2msg(ipsa_t *ipsa, sadb_msg_t *samsg)
 {
 	int alloclen, addrsize, paddrsize, authsize, encrsize;
-	int srcidsize, dstidsize, senslen, osenslen;
+	int srcidsize, dstidsize;
 	sa_family_t fam, pfam;	/* Address family for SADB_EXT_ADDRESS */
 				/* src/dst and proxy sockaddrs. */
 	/*
@@ -1085,7 +1046,6 @@ sadb_sa2msg(ipsa_t *ipsa, sadb_msg_t *samsg)
 	sadb_lifetime_t *lt;
 	sadb_key_t *key;
 	sadb_ident_t *ident;
-	sadb_sens_t *sens;
 	sadb_ext_t *walker;	/* For when we need a generic ext. pointer. */
 	sadb_x_replay_ctr_t *repl_ctr;
 	sadb_x_pair_t *pair_ext;
@@ -1096,7 +1056,6 @@ sadb_sa2msg(ipsa_t *ipsa, sadb_msg_t *samsg)
 	boolean_t soft = B_FALSE, hard = B_FALSE;
 	boolean_t isrc = B_FALSE, idst = B_FALSE;
 	boolean_t auth = B_FALSE, encr = B_FALSE;
-	boolean_t sensinteg = B_FALSE, osensinteg = B_FALSE;
 	boolean_t srcid = B_FALSE, dstid = B_FALSE;
 	boolean_t idle;
 	boolean_t paired;
@@ -1198,18 +1157,6 @@ sadb_sa2msg(ipsa_t *ipsa, sadb_msg_t *samsg)
 		encr = B_TRUE;
 	} else {
 		encr = B_FALSE;
-	}
-
-	if (ipsa->ipsa_tsl != NULL) {
-		senslen = sadb_sens_len_from_label(ipsa->ipsa_tsl);
-		alloclen += senslen;
-		sensinteg = B_TRUE;
-	}
-
-	if (ipsa->ipsa_otsl != NULL) {
-		osenslen = sadb_sens_len_from_label(ipsa->ipsa_otsl);
-		alloclen += osenslen;
-		osensinteg = B_TRUE;
 	}
 
 	/*
@@ -1432,27 +1379,6 @@ sadb_sa2msg(ipsa_t *ipsa, sadb_msg_t *samsg)
 		ident->sadb_ident_reserved = 0;
 		(void) strcpy((char *)(ident + 1),
 		    ipsa->ipsa_dst_cid->ipsid_cid);
-		walker = (sadb_ext_t *)((uint64_t *)walker +
-		    walker->sadb_ext_len);
-	}
-
-	if (sensinteg) {
-		sens = (sadb_sens_t *)walker;
-		sadb_sens_from_label(sens, SADB_EXT_SENSITIVITY,
-		    ipsa->ipsa_tsl, senslen);
-
-		walker = (sadb_ext_t *)((uint64_t *)walker +
-		    walker->sadb_ext_len);
-	}
-
-	if (osensinteg) {
-		sens = (sadb_sens_t *)walker;
-
-		sadb_sens_from_label(sens, SADB_X_EXT_OUTER_SENS,
-		    ipsa->ipsa_otsl, osenslen);
-		if (ipsa->ipsa_mac_exempt)
-			sens->sadb_x_sens_flags = SADB_X_SENS_IMPLICIT;
-
 		walker = (sadb_ext_t *)((uint64_t *)walker +
 		    walker->sadb_ext_len);
 	}
@@ -2143,7 +2069,7 @@ sadb_addrset(ire_t *ire)
  * Match primitives..
  * !!! TODO: short term: inner selectors
  *		ipv6 scope id (ifindex)
- * longer term:  zone id.  sensitivity label. uid.
+ * longer term:  zone id.  uid.
  */
 boolean_t
 sadb_match_spi(ipsa_query_t *sq, ipsa_t *sa)
@@ -2907,10 +2833,6 @@ sadb_common_add(queue_t *pfkey_q, mblk_t *mp, sadb_msg_t *samsg,
 	    (sadb_x_kmc_t *)ksi->ks_in_extv[SADB_X_EXT_KM_COOKIE];
 	sadb_key_t *akey = (sadb_key_t *)ksi->ks_in_extv[SADB_EXT_KEY_AUTH];
 	sadb_key_t *ekey = (sadb_key_t *)ksi->ks_in_extv[SADB_EXT_KEY_ENCRYPT];
-	sadb_sens_t *sens =
-	    (sadb_sens_t *)ksi->ks_in_extv[SADB_EXT_SENSITIVITY];
-	sadb_sens_t *osens =
-	    (sadb_sens_t *)ksi->ks_in_extv[SADB_X_EXT_OUTER_SENS];
 	sadb_x_pair_t *pair_ext =
 	    (sadb_x_pair_t *)ksi->ks_in_extv[SADB_X_EXT_PAIR];
 	sadb_x_replay_ctr_t *replayext =
@@ -2932,7 +2854,6 @@ sadb_common_add(queue_t *pfkey_q, mblk_t *mp, sadb_msg_t *samsg,
 	boolean_t isupdate = (newbie != NULL);
 	uint32_t *src_addr_ptr, *dst_addr_ptr, *isrc_addr_ptr, *idst_addr_ptr;
 	ipsec_stack_t	*ipss = ns->netstack_ipsec;
-	ip_stack_t 	*ipst = ns->netstack_ip;
 	ipsec_alginfo_t *alg;
 	int		rcode;
 	boolean_t	async = B_FALSE;
@@ -3433,79 +3354,6 @@ sadb_common_add(queue_t *pfkey_q, mblk_t *mp, sadb_msg_t *samsg,
 			goto error;
 		}
 	}
-
-	/*
-	 * sensitivity label handling code:
-	 * Convert sens + bitmap into cred_t, and associate it
-	 * with the new SA.
-	 */
-	if (sens != NULL) {
-		uint64_t *bitmap = (uint64_t *)(sens + 1);
-
-		newbie->ipsa_tsl = sadb_label_from_sens(sens, bitmap);
-	}
-
-	/*
-	 * Likewise for outer sensitivity.
-	 */
-	if (osens != NULL) {
-		uint64_t *bitmap = (uint64_t *)(osens + 1);
-		ts_label_t *tsl, *effective_tsl;
-		uint32_t *peer_addr_ptr;
-		zoneid_t zoneid = GLOBAL_ZONEID;
-		zone_t *zone;
-
-		peer_addr_ptr = is_inbound ? src_addr_ptr : dst_addr_ptr;
-
-		tsl = sadb_label_from_sens(osens, bitmap);
-		newbie->ipsa_mac_exempt = CONN_MAC_DEFAULT;
-
-		if (osens->sadb_x_sens_flags & SADB_X_SENS_IMPLICIT) {
-			newbie->ipsa_mac_exempt = CONN_MAC_IMPLICIT;
-		}
-
-		error = tsol_check_dest(tsl, peer_addr_ptr,
-		    (af == AF_INET6)?IPV6_VERSION:IPV4_VERSION,
-		    newbie->ipsa_mac_exempt, B_TRUE, &effective_tsl);
-		if (error != 0) {
-			label_rele(tsl);
-			mutex_exit(&newbie->ipsa_lock);
-			goto error;
-		}
-
-		if (effective_tsl != NULL) {
-			label_rele(tsl);
-			tsl = effective_tsl;
-		}
-
-		newbie->ipsa_otsl = tsl;
-
-		zone = zone_find_by_label(tsl);
-		if (zone != NULL) {
-			zoneid = zone->zone_id;
-			zone_rele(zone);
-		}
-		/*
-		 * For exclusive stacks we set the zoneid to zero to operate
-		 * as if in the global zone for tsol_compute_label_v4/v6
-		 */
-		if (ipst->ips_netstack->netstack_stackid != GLOBAL_NETSTACKID)
-			zoneid = GLOBAL_ZONEID;
-
-		if (af == AF_INET6) {
-			error = tsol_compute_label_v6(tsl, zoneid,
-			    (in6_addr_t *)peer_addr_ptr,
-			    newbie->ipsa_opt_storage, ipst);
-		} else {
-			error = tsol_compute_label_v4(tsl, zoneid,
-			    *peer_addr_ptr, newbie->ipsa_opt_storage, ipst);
-		}
-		if (error != 0) {
-			mutex_exit(&newbie->ipsa_lock);
-			goto error;
-		}
-	}
-
 
 	if (replayext != NULL) {
 		if ((replayext->sadb_x_rc_replay32 == 0) &&
@@ -4610,9 +4458,6 @@ sadb_update_sa(mblk_t *mp, keysock_in_t *ksi, mblk_t **ipkt_lst,
 		goto bail;
 	}
 
-	if ((*diagnostic = sadb_labelchk(ksi)) != 0)
-		return (EINVAL);
-
 	error = sadb_check_kmc(&sq, ipsapp.ipsap_sa_ptr, diagnostic);
 	if (error != 0)
 		goto bail;
@@ -4804,7 +4649,7 @@ update_pairing(ipsap_t *ipsapp, ipsa_query_t *sq, keysock_in_t *ksi,
 static ipsacq_t *
 sadb_checkacquire(iacqf_t *bucket, ipsec_action_t *ap, ipsec_policy_t *pp,
     uint32_t *src, uint32_t *dst, uint32_t *isrc, uint32_t *idst,
-    uint64_t unique_id, ts_label_t *tsl)
+    uint64_t unique_id)
 {
 	ipsacq_t *walker;
 	sa_family_t fam;
@@ -4833,8 +4678,7 @@ sadb_checkacquire(iacqf_t *bucket, ipsec_action_t *ap, ipsec_policy_t *pp,
 		    (ap == walker->ipsacq_act) &&
 		    (pp == walker->ipsacq_policy) &&
 		    /* XXX do deep compares of ap/pp? */
-		    (unique_id == walker->ipsacq_unique_id) &&
-		    (ipsec_label_match(tsl, walker->ipsacq_tsl)))
+		    (unique_id == walker->ipsacq_unique_id))
 			break;			/* everything matched */
 		mutex_exit(&walker->ipsacq_lock);
 	}
@@ -4873,11 +4717,8 @@ sadb_acquire(mblk_t *datamp, ip_xmit_attr_t *ixa, boolean_t need_ah,
 	uint64_t unique_id = 0;
 	ipsec_selector_t sel;
 	boolean_t tunnel_mode = (ixa->ixa_flags & IXAF_IPSEC_TUNNEL) != 0;
-	ts_label_t 	*tsl = NULL;
 	netstack_t	*ns = ixa->ixa_ipst->ips_netstack;
 	ipsec_stack_t	*ipss = ns->netstack_ipsec;
-	sadb_sens_t 	*sens = NULL;
-	int 		sens_len;
 
 	ASSERT((pp != NULL) || (ap != NULL));
 
@@ -4894,9 +4735,6 @@ sadb_acquire(mblk_t *datamp, ip_xmit_attr_t *ixa, boolean_t need_ah,
 		spp = &ahstack->ah_sadb;
 	}
 	sp = (ixa->ixa_flags & IXAF_IS_IPV4) ? &spp->s_v4 : &spp->s_v6;
-
-	if (is_system_labeled())
-		tsl = ixa->ixa_tsl;
 
 	if (ap == NULL)
 		ap = pp->ipsp_act;
@@ -4958,7 +4796,7 @@ sadb_acquire(mblk_t *datamp, ip_xmit_attr_t *ixa, boolean_t need_ah,
 	bucket = &(sp->sdb_acq[hashoffset]);
 	mutex_enter(&bucket->iacqf_lock);
 	newbie = sadb_checkacquire(bucket, ap, pp, src, dst, isrc, idst,
-	    unique_id, tsl);
+	    unique_id);
 
 	if (newbie == NULL) {
 		/*
@@ -5062,10 +4900,6 @@ sadb_acquire(mblk_t *datamp, ip_xmit_attr_t *ixa, boolean_t need_ah,
 		}
 		newbie->ipsacq_unique_id = unique_id;
 
-		if (ixa->ixa_tsl != NULL) {
-			label_hold(ixa->ixa_tsl);
-			newbie->ipsacq_tsl = ixa->ixa_tsl;
-		}
 	} else {
 		/* Scan to the end of the list & insert. */
 		mblk_t *lastone = newbie->ipsacq_mp;
@@ -5140,25 +4974,8 @@ sadb_acquire(mblk_t *datamp, ip_xmit_attr_t *ixa, boolean_t need_ah,
 	if (extended == NULL)
 		goto punt_extended;
 
-	if (ixa->ixa_tsl != NULL) {
-		/*
-		 * XXX MLS correct condition here?
-		 * XXX MLS other credential attributes in acquire?
-		 * XXX malloc failure?  don't fall back to original?
-		 */
-		sens = sadb_make_sens_ext(ixa->ixa_tsl, &sens_len);
-
-		if (sens == NULL) {
-			freeb(extended);
-			goto punt_extended;
-		}
-	}
-
 	extended->b_cont = sadb_extended_acquire(&sel, pp, ap, tunnel_mode,
-	    seq, 0, sens, ns);
-
-	if (sens != NULL)
-		kmem_free(sens, sens_len);
+	    seq, 0, ns);
 
 	if (extended->b_cont == NULL) {
 		freeb(extended);
@@ -5199,11 +5016,6 @@ sadb_destroy_acquire(ipsacq_t *acqrec, netstack_t *ns)
 	*(acqrec->ipsacq_ptpn) = acqrec->ipsacq_next;
 	if (acqrec->ipsacq_next != NULL)
 		acqrec->ipsacq_next->ipsacq_ptpn = acqrec->ipsacq_ptpn;
-
-	if (acqrec->ipsacq_tsl != NULL) {
-		label_rele(acqrec->ipsacq_tsl);
-		acqrec->ipsacq_tsl = NULL;
-	}
 
 	/*
 	 * Free hanging mp's.
@@ -5384,100 +5196,6 @@ sadb_action_to_ecomb(uint8_t *start, uint8_t *limit, ipsec_action_t *act,
 	return (cur);
 }
 
-#include <sys/tsol/label_macro.h> /* XXX should not need this */
-
-/*
- * From a cred_t, construct a sensitivity label extension
- *
- * We send up a fixed-size sensitivity label bitmap, and are perhaps
- * overly chummy with the underlying data structures here.
- */
-
-/* ARGSUSED */
-int
-sadb_sens_len_from_label(ts_label_t *tsl)
-{
-	int baselen = sizeof (sadb_sens_t) + _C_LEN * 4;
-	return (roundup(baselen, sizeof (uint64_t)));
-}
-
-void
-sadb_sens_from_label(sadb_sens_t *sens, int exttype, ts_label_t *tsl,
-    int senslen)
-{
-	uint8_t *bitmap;
-	bslabel_t *sl;
-
-	/* LINTED */
-	ASSERT((_C_LEN & 1) == 0);
-	ASSERT((senslen & 7) == 0);
-
-	sl = label2bslabel(tsl);
-
-	sens->sadb_sens_exttype = exttype;
-	sens->sadb_sens_len = SADB_8TO64(senslen);
-
-	sens->sadb_sens_dpd = tsl->tsl_doi;
-	sens->sadb_sens_sens_level = LCLASS(sl);
-	sens->sadb_sens_integ_level = 0; /* TBD */
-	sens->sadb_sens_sens_len = _C_LEN >> 1;
-	sens->sadb_sens_integ_len = 0; /* TBD */
-	sens->sadb_x_sens_flags = 0;
-
-	bitmap = (uint8_t *)(sens + 1);
-	bcopy(&(((_bslabel_impl_t *)sl)->compartments), bitmap, _C_LEN * 4);
-}
-
-static sadb_sens_t *
-sadb_make_sens_ext(ts_label_t *tsl, int *len)
-{
-	/* XXX allocation failure? */
-	int sens_len = sadb_sens_len_from_label(tsl);
-
-	sadb_sens_t *sens = kmem_alloc(sens_len, KM_SLEEP);
-
-	sadb_sens_from_label(sens, SADB_EXT_SENSITIVITY, tsl, sens_len);
-
-	*len = sens_len;
-
-	return (sens);
-}
-
-/*
- * Okay, how do we report errors/invalid labels from this?
- * With a special designated "not a label" cred_t ?
- */
-/* ARGSUSED */
-ts_label_t *
-sadb_label_from_sens(sadb_sens_t *sens, uint64_t *bitmap)
-{
-	int bitmap_len = SADB_64TO8(sens->sadb_sens_sens_len);
-	bslabel_t sl;
-	ts_label_t *tsl;
-
-	if (sens->sadb_sens_integ_level != 0)
-		return (NULL);
-	if (sens->sadb_sens_integ_len != 0)
-		return (NULL);
-	if (bitmap_len > _C_LEN * 4)
-		return (NULL);
-
-	bsllow(&sl);
-	LCLASS_SET((_bslabel_impl_t *)&sl, sens->sadb_sens_sens_level);
-	bcopy(bitmap, &((_bslabel_impl_t *)&sl)->compartments,
-	    bitmap_len);
-
-	tsl = labelalloc(&sl, sens->sadb_sens_dpd, KM_NOSLEEP);
-	if (tsl == NULL)
-		return (NULL);
-
-	if (sens->sadb_x_sens_flags & SADB_X_SENS_UNLABELED)
-		tsl->tsl_flags |= TSLF_UNLABELED;
-	return (tsl);
-}
-
-/* End XXX label-library-leakage */
-
 /*
  * Construct an extended ACQUIRE message based on a selector and the resulting
  * IPsec action.
@@ -5489,7 +5207,7 @@ sadb_label_from_sens(sadb_sens_t *sens, uint64_t *bitmap)
 static mblk_t *
 sadb_extended_acquire(ipsec_selector_t *sel, ipsec_policy_t *pol,
     ipsec_action_t *act, boolean_t tunnel_mode, uint32_t seq, uint32_t pid,
-    sadb_sens_t *sens, netstack_t *ns)
+    netstack_t *ns)
 {
 	mblk_t *mp;
 	sadb_msg_t *samsg;
@@ -5652,18 +5370,6 @@ sadb_extended_acquire(ipsec_selector_t *sel, ipsec_policy_t *pol,
 	if (cur == NULL) {
 		freeb(mp);
 		return (NULL);
-	}
-
-	if (sens != NULL) {
-		uint8_t *sensext = cur;
-		int senslen = SADB_64TO8(sens->sadb_sens_len);
-
-		cur += senslen;
-		if (cur > end) {
-			freeb(mp);
-			return (NULL);
-		}
-		bcopy(sens, sensext, senslen);
 	}
 
 	/*
@@ -5853,8 +5559,6 @@ sadb_setup_acquire(ipsacq_t *acqrec, uint8_t satype, ipsec_stack_t *ipss)
 	}
 
 	/* XXX Insert identity information here. */
-
-	/* XXXMLS Insert sensitivity information here. */
 
 	if (cur != NULL)
 		samsg->sadb_msg_len = SADB_8TO64(cur - msgmp->b_rptr);
@@ -6465,11 +6169,6 @@ ipsec_sctp_pol(ipsec_selector_t *sel, ipsec_policy_t **ppp,
 	pptr[0] = sel->ips_remote_port;
 	pptr[1] = sel->ips_local_port;
 
-	/*
-	 * For labeled systems, there's no need to check the
-	 * label here.  It's known to be good as we checked
-	 * before allowing the connection to become bound.
-	 */
 	if (sel->ips_isv4) {
 		in6_addr_t	src, dst;
 
@@ -6696,9 +6395,6 @@ ipsec_oth_pol(ipsec_selector_t *sel, ipsec_policy_t **ppp,
  * in this function so the caller can extract them where appropriately.
  *
  * The SRC address is the local one - just like an outbound ACQUIRE message.
- *
- * XXX MLS: key management supplies a label which we just reflect back up
- * again.  clearly we need to involve the label in the rest of the checks.
  */
 mblk_t *
 ipsec_construct_inverse_acquire(sadb_msg_t *samsg, sadb_ext_t *extv[],
@@ -6710,7 +6406,6 @@ ipsec_construct_inverse_acquire(sadb_msg_t *samsg, sadb_ext_t *extv[],
 	    *dstext = (sadb_address_t *)extv[SADB_EXT_ADDRESS_DST],
 	    *innsrcext = (sadb_address_t *)extv[SADB_X_EXT_ADDRESS_INNER_SRC],
 	    *inndstext = (sadb_address_t *)extv[SADB_X_EXT_ADDRESS_INNER_DST];
-	sadb_sens_t *sens = (sadb_sens_t *)extv[SADB_EXT_SENSITIVITY];
 	struct sockaddr_in6 *src, *dst;
 	struct sockaddr_in6 *isrc, *idst;
 	ipsec_tun_pol_t *itp = NULL;
@@ -6862,7 +6557,7 @@ ipsec_construct_inverse_acquire(sadb_msg_t *samsg, sadb_ext_t *extv[],
 	 */
 	retmp = sadb_extended_acquire(&sel, pp, NULL,
 	    (itp != NULL && (itp->itp_flags & ITPF_P_TUNNEL)),
-	    samsg->sadb_msg_seq, samsg->sadb_msg_pid, sens, ns);
+	    samsg->sadb_msg_seq, samsg->sadb_msg_pid, ns);
 	if (pp != NULL) {
 		IPPOL_REFRELE(pp);
 	}
@@ -7312,219 +7007,6 @@ ipsec_check_key(crypto_mech_type_t mech_type, sadb_key_t *sadb_key,
 	}
 
 	return (-1);
-}
-
-/*
- * Whack options in the outer IP header when ipsec changes the outer label
- *
- * This is inelegant and really could use refactoring.
- */
-mblk_t *
-sadb_whack_label_v4(mblk_t *mp, ipsa_t *assoc, kstat_named_t *counter,
-    ipdropper_t *dropper)
-{
-	int delta;
-	int plen;
-	dblk_t *db;
-	int hlen;
-	uint8_t *opt_storage = assoc->ipsa_opt_storage;
-	ipha_t *ipha = (ipha_t *)mp->b_rptr;
-
-	plen = ntohs(ipha->ipha_length);
-
-	delta = tsol_remove_secopt(ipha, MBLKL(mp));
-	mp->b_wptr += delta;
-	plen += delta;
-
-	/* XXX XXX code copied from tsol_check_label */
-
-	/* Make sure we have room for the worst-case addition */
-	hlen = IPH_HDR_LENGTH(ipha) + opt_storage[IPOPT_OLEN];
-	hlen = (hlen + 3) & ~3;
-	if (hlen > IP_MAX_HDR_LENGTH)
-		hlen = IP_MAX_HDR_LENGTH;
-	hlen -= IPH_HDR_LENGTH(ipha);
-
-	db = mp->b_datap;
-	if ((db->db_ref != 1) || (mp->b_wptr + hlen > db->db_lim)) {
-		int copylen;
-		mblk_t *new_mp;
-
-		/* allocate enough to be meaningful, but not *too* much */
-		copylen = MBLKL(mp);
-		if (copylen > 256)
-			copylen = 256;
-		new_mp = allocb_tmpl(hlen + copylen +
-		    (mp->b_rptr - mp->b_datap->db_base), mp);
-
-		if (new_mp == NULL) {
-			ip_drop_packet(mp, B_FALSE, NULL, counter,  dropper);
-			return (NULL);
-		}
-
-		/* keep the bias */
-		new_mp->b_rptr += mp->b_rptr - mp->b_datap->db_base;
-		new_mp->b_wptr = new_mp->b_rptr + copylen;
-		bcopy(mp->b_rptr, new_mp->b_rptr, copylen);
-		new_mp->b_cont = mp;
-		if ((mp->b_rptr += copylen) >= mp->b_wptr) {
-			new_mp->b_cont = mp->b_cont;
-			freeb(mp);
-		}
-		mp = new_mp;
-		ipha = (ipha_t *)mp->b_rptr;
-	}
-
-	delta = tsol_prepend_option(assoc->ipsa_opt_storage, ipha, MBLKL(mp));
-
-	ASSERT(delta != -1);
-
-	plen += delta;
-	mp->b_wptr += delta;
-
-	/*
-	 * Paranoia
-	 */
-	db = mp->b_datap;
-
-	ASSERT3P(mp->b_wptr, <=, db->db_lim);
-	ASSERT3P(mp->b_rptr, <=, db->db_lim);
-
-	ASSERT3P(mp->b_wptr, >=, db->db_base);
-	ASSERT3P(mp->b_rptr, >=, db->db_base);
-	/* End paranoia */
-
-	ipha->ipha_length = htons(plen);
-
-	return (mp);
-}
-
-mblk_t *
-sadb_whack_label_v6(mblk_t *mp, ipsa_t *assoc, kstat_named_t *counter,
-    ipdropper_t *dropper)
-{
-	int delta;
-	int plen;
-	dblk_t *db;
-	int hlen;
-	uint8_t *opt_storage = assoc->ipsa_opt_storage;
-	uint_t sec_opt_len; /* label option length not including type, len */
-	ip6_t *ip6h = (ip6_t *)mp->b_rptr;
-
-	plen = ntohs(ip6h->ip6_plen);
-
-	delta = tsol_remove_secopt_v6(ip6h, MBLKL(mp));
-	mp->b_wptr += delta;
-	plen += delta;
-
-	/* XXX XXX code copied from tsol_check_label_v6 */
-	/*
-	 * Make sure we have room for the worst-case addition. Add 2 bytes for
-	 * the hop-by-hop ext header's next header and length fields. Add
-	 * another 2 bytes for the label option type, len and then round
-	 * up to the next 8-byte multiple.
-	 */
-	sec_opt_len = opt_storage[1];
-
-	db = mp->b_datap;
-	hlen = (4 + sec_opt_len + 7) & ~7;
-
-	if ((db->db_ref != 1) || (mp->b_wptr + hlen > db->db_lim)) {
-		int copylen;
-		mblk_t *new_mp;
-		uint16_t hdr_len;
-
-		hdr_len = ip_hdr_length_v6(mp, ip6h);
-		/*
-		 * Allocate enough to be meaningful, but not *too* much.
-		 * Also all the IPv6 extension headers must be in the same mblk
-		 */
-		copylen = MBLKL(mp);
-		if (copylen > 256)
-			copylen = 256;
-		if (copylen < hdr_len)
-			copylen = hdr_len;
-		new_mp = allocb_tmpl(hlen + copylen +
-		    (mp->b_rptr - mp->b_datap->db_base), mp);
-		if (new_mp == NULL) {
-			ip_drop_packet(mp, B_FALSE, NULL, counter,  dropper);
-			return (NULL);
-		}
-
-		/* keep the bias */
-		new_mp->b_rptr += mp->b_rptr - mp->b_datap->db_base;
-		new_mp->b_wptr = new_mp->b_rptr + copylen;
-		bcopy(mp->b_rptr, new_mp->b_rptr, copylen);
-		new_mp->b_cont = mp;
-		if ((mp->b_rptr += copylen) >= mp->b_wptr) {
-			new_mp->b_cont = mp->b_cont;
-			freeb(mp);
-		}
-		mp = new_mp;
-		ip6h = (ip6_t *)mp->b_rptr;
-	}
-
-	delta = tsol_prepend_option_v6(assoc->ipsa_opt_storage,
-	    ip6h, MBLKL(mp));
-
-	ASSERT(delta != -1);
-
-	plen += delta;
-	mp->b_wptr += delta;
-
-	/*
-	 * Paranoia
-	 */
-	db = mp->b_datap;
-
-	ASSERT3P(mp->b_wptr, <=, db->db_lim);
-	ASSERT3P(mp->b_rptr, <=, db->db_lim);
-
-	ASSERT3P(mp->b_wptr, >=, db->db_base);
-	ASSERT3P(mp->b_rptr, >=, db->db_base);
-	/* End paranoia */
-
-	ip6h->ip6_plen = htons(plen);
-
-	return (mp);
-}
-
-/* Whack the labels and update ip_xmit_attr_t as needed */
-mblk_t *
-sadb_whack_label(mblk_t *mp, ipsa_t *assoc, ip_xmit_attr_t *ixa,
-    kstat_named_t *counter, ipdropper_t *dropper)
-{
-	int adjust;
-	int iplen;
-
-	if (ixa->ixa_flags & IXAF_IS_IPV4) {
-		ipha_t		*ipha = (ipha_t *)mp->b_rptr;
-
-		ASSERT(IPH_HDR_VERSION(ipha) == IPV4_VERSION);
-		iplen = ntohs(ipha->ipha_length);
-		mp = sadb_whack_label_v4(mp, assoc, counter, dropper);
-		if (mp == NULL)
-			return (NULL);
-
-		ipha = (ipha_t *)mp->b_rptr;
-		ASSERT(IPH_HDR_VERSION(ipha) == IPV4_VERSION);
-		adjust = (int)ntohs(ipha->ipha_length) - iplen;
-	} else {
-		ip6_t		*ip6h = (ip6_t *)mp->b_rptr;
-
-		ASSERT(IPH_HDR_VERSION(ip6h) == IPV6_VERSION);
-		iplen = ntohs(ip6h->ip6_plen);
-		mp = sadb_whack_label_v6(mp, assoc, counter, dropper);
-		if (mp == NULL)
-			return (NULL);
-
-		ip6h = (ip6_t *)mp->b_rptr;
-		ASSERT(IPH_HDR_VERSION(ip6h) == IPV6_VERSION);
-		adjust = (int)ntohs(ip6h->ip6_plen) - iplen;
-	}
-	ixa->ixa_pktlen += adjust;
-	ixa->ixa_ip_hdr_length += adjust;
-	return (mp);
 }
 
 /*

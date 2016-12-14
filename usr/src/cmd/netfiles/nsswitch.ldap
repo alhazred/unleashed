@@ -65,6 +65,3 @@ auth_attr:  files ldap
 prof_attr:  files ldap
 
 project:    files ldap
-
-tnrhtp:     files ldap
-tnrhdb:     files ldap

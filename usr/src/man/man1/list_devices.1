@@ -101,136 +101,9 @@ current process when performing the \fBlist_devices\fR operation. Only a user
 with the \fBsolaris.device.revoke\fR authorization can use this option.
 .RE
 
-.sp
-.LP
-The following options are supported when the system is configured with Trusted
-Extensions:
-.sp
-.ne 2
-.na
-\fB\fB-a\fR\fR
-.ad
-.RS 15n
-Lists attributes like authorizations, cleaning programs and labels associated
-with a device.
-.sp
-The list is a single line of semicolon (\fB;\fR) separated
-\fIkey\fR\fB=\fR\fIvalue\fR pairs for each device in the format:
-.sp
-.in +2
-.nf
-device=\fIdevice-name\fR;type=\fIdevice-type\fR;\e
-auths=\fIauths\fR;clean=\fIdevice-exec\fR;\e
-\fIdevice-attributes\fR;\e
-files=\fIdevice-list\fR
-.fi
-.in -2
-.sp
-
-where \fIdevice-attributes\fR is the contents of the \fBreserved1\fR field of
-\fBdevice_allocate\fR(4). The field is colon (\fB:\fR) separated.)
-.sp
-See \fBdevice_allocate\fR(4) for a description of these attributes and their
-format.
-.sp
-The \fB-a\fR output has the following keys:
-.sp
-.ne 2
-.na
-\fB\fBauths\fR\fR
-.ad
-.RS 10n
-Specifies the list of authorizations. The value is \fBauths\fR is described in
-\fBdevice_allocate\fR(4).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBclean\fR\fR
-.ad
-.RS 10n
-Specifies the device cleaning script. The value is \fBdevice-exec\fR as
-described in \fBdevice_allocate\fR(4).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBdevice\fR\fR
-.ad
-.RS 10n
-Specifies the device name. The value is \fBdevice-name\fR as described in
-\fBdevice_allocate\fR(4).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBfiles\fR\fR
-.ad
-.RS 10n
-Specifies the device file paths. The value is \fBdevice-list\fR as described in
-\fBdevice_maps\fR(4).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBtype\fR\fR
-.ad
-.RS 10n
-Specifies the device type. The value is \fBdevice-type\fR as described in
-\fBdevice_allocate\fR(4).
-.RE
-
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-d\fR\fR
-.ad
-.RS 15n
-Displays the system-supplied default attributes for the device types managed by
-device allocation. If \fIdev-type\fR is specified, it lists the default
-attributes for only that device type.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-w\fR\fR
-.ad
-.RS 15n
-This option can be used with \fB-a\fR to list the current owner of the device
-as the key value pair \fIowner\fR\fB=\fR\fIvalue\fR. \fIvalue\fR is the
-\fBuid\fR of the current owner of the device. If the device is unallocated,
-value is \fB/FREE\fR. If the device is in error state, value is \fB/ERROR\fR.
-This option also suppresses any diagnostic output.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-z\fR \fIzonename\fR\fR
-.ad
-.RS 15n
-When specified with the \fB-l\fR option, lists only those non-allocated devices
-whose label range includes the label of the zonename, and of the allocated
-devices, only those that are allocated at the same label as that of
-\fIzonename\fR.
-.sp
-When specified with the \fB-n\fR option, lists only those non-allocated devices
-whose label range includes the label of the \fIzonename\fR.
-.sp
-When specified with the \fB-u\fR option, lists only those devices that are
-allocated at the same label as that of \fIzonename\fR.
-.RE
-
 .SH EXAMPLES
 .LP
-\fBExample 1 \fRListing All Devices
+Listing All Devices
 .sp
 .LP
 The following example lists all devices available to the caller for allocation:
@@ -241,46 +114,6 @@ The following example lists all devices available to the caller for allocation:
 % list_devices -l
 device: audio type: audio \e
 files: /dev/audio /dev/audioctl /dev/sound/0 /dev/sound/0ctl
-.fi
-.in -2
-.sp
-
-.LP
-\fBExample 2 \fRListing Attributes of All Devices
-.sp
-.LP
-On a system configured with Trusted Extensions, the following example lists
-attributes of all devices available to the caller for allocation:
-
-.sp
-.in +2
-.nf
-% list_devices -al
-device=audio1;type=audio;\e
-auths=solaris.device.allocate;\e
-clean=/etc/security/lib/audio_clean;\e
-minlabel=admin_low:maxlabel=admin_high;\e
-files=/dev/audio1 /dev/audio1ctl /dev/sound/1 /dev/sound/1ctl
-.fi
-.in -2
-.sp
-
-.LP
-\fBExample 3 \fRListing Attributes Including the Device Owner
-.sp
-.LP
-On a system configured with Trusted Extensions, the following example lists
-attributes including the device owner of all devices allocated to the user:
-
-.sp
-.in +2
-.nf
-% list_devices -auw
-device=audio2;type=audio;auths=solaris.device.allocate;\e
-clean=/etc/security/lib/audio_clean;\e
-minlabel=admin_low:maxlabel=admin_high:zone=public;\e
-owner=1234;\e
-files=/dev/audio2 /dev/audio2ctl /dev/sound/2 /dev/sound/2ctl
 .fi
 .in -2
 .sp
@@ -364,10 +197,6 @@ Not-an-Interface.
 .LP
 The functionality described in this man page is available only if  Solaris
 Auditing has been enabled. See \fBbsmconv\fR(1M) for more information.
-.sp
-.LP
-On systems configured with Trusted Extensions, the functionality is enabled by
-default.
 .sp
 .LP
 \fB/etc/security/dev\fR, \fBmkdevalloc\fR(1M), and \fBmkdevmaps\fR(1M) might

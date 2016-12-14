@@ -37,7 +37,6 @@
 #include <sys/policy.h>
 #include <sys/squeue_impl.h>
 #include <sys/squeue.h>
-#include <sys/tsol/tnet.h>
 
 #include <rpc/pmap_prot.h>
 
@@ -265,12 +264,6 @@ retry:
 			goto retry;
 		}
 	}
-	if (is_system_labeled() &&
-	    (i = tsol_next_port(crgetzone(tcp->tcp_connp->conn_cred), port,
-	    IPPROTO_TCP, B_TRUE)) != 0) {
-		port = i;
-		goto retry;
-	}
 	return (port);
 }
 
@@ -297,12 +290,6 @@ retry:
 			return (0);
 		restart = B_TRUE;
 	}
-	if (is_system_labeled() &&
-	    (nextport = tsol_next_port(crgetzone(tcp->tcp_connp->conn_cred),
-	    next_priv_port, IPPROTO_TCP, B_FALSE)) != 0) {
-		next_priv_port = nextport;
-		goto retry;
-	}
 	return (next_priv_port--);
 }
 
@@ -310,8 +297,6 @@ static int
 tcp_bind_select_lport(tcp_t *tcp, in_port_t *requested_port_ptr,
     boolean_t bind_to_req_port_only, cred_t *cr)
 {
-	in_port_t	mlp_port;
-	mlp_type_t 	addrtype, mlptype;
 	boolean_t	user_specified;
 	in_port_t	allocated_port;
 	in_port_t	requested_port = *requested_port_ptr;
@@ -337,8 +322,6 @@ tcp_bind_select_lport(tcp_t *tcp, in_port_t *requested_port_ptr,
 	 * still check for ports only in the range > tcp_smallest_non_priv_port,
 	 * unless TCP_ANONPRIVBIND option is set.
 	 */
-	mlptype = mlptSingle;
-	mlp_port = requested_port;
 	if (requested_port == 0) {
 		requested_port = connp->conn_anon_priv_bind ?
 		    tcp_get_next_priv_port(tcp) :
@@ -348,25 +331,6 @@ tcp_bind_select_lport(tcp_t *tcp, in_port_t *requested_port_ptr,
 			return (-TNOADDR);
 		}
 		user_specified = B_FALSE;
-
-		/*
-		 * If the user went through one of the RPC interfaces to create
-		 * this socket and RPC is MLP in this zone, then give him an
-		 * anonymous MLP.
-		 */
-		if (connp->conn_anon_mlp && is_system_labeled()) {
-			zone = crgetzone(cr);
-			addrtype = tsol_mlp_addr_type(
-			    connp->conn_allzones ? ALL_ZONES : zone->zone_id,
-			    IPV6_VERSION, &v6addr,
-			    tcps->tcps_netstack->netstack_ip);
-			if (addrtype == mlptSingle) {
-				return (-TNOADDR);
-			}
-			mlptype = tsol_mlp_port_type(zone, IPPROTO_TCP,
-			    PMAPPORT, addrtype);
-			mlp_port = PMAPPORT;
-		}
 	} else {
 		int i;
 		boolean_t priv = B_FALSE;
@@ -406,76 +370,6 @@ tcp_bind_select_lport(tcp_t *tcp, in_port_t *requested_port_ptr,
 		user_specified = B_TRUE;
 
 		connp = tcp->tcp_connp;
-		if (is_system_labeled()) {
-			zone = crgetzone(cr);
-			addrtype = tsol_mlp_addr_type(
-			    connp->conn_allzones ? ALL_ZONES : zone->zone_id,
-			    IPV6_VERSION, &v6addr,
-			    tcps->tcps_netstack->netstack_ip);
-			if (addrtype == mlptSingle) {
-				return (-TNOADDR);
-			}
-			mlptype = tsol_mlp_port_type(zone, IPPROTO_TCP,
-			    requested_port, addrtype);
-		}
-	}
-
-	if (mlptype != mlptSingle) {
-		if (secpolicy_net_bindmlp(cr) != 0) {
-			if (connp->conn_debug) {
-				(void) strlog(TCP_MOD_ID, 0, 1,
-				    SL_ERROR|SL_TRACE,
-				    "tcp_bind: no priv for multilevel port %d",
-				    requested_port);
-			}
-			return (-TACCES);
-		}
-
-		/*
-		 * If we're specifically binding a shared IP address and the
-		 * port is MLP on shared addresses, then check to see if this
-		 * zone actually owns the MLP.  Reject if not.
-		 */
-		if (mlptype == mlptShared && addrtype == mlptShared) {
-			/*
-			 * No need to handle exclusive-stack zones since
-			 * ALL_ZONES only applies to the shared stack.
-			 */
-			zoneid_t mlpzone;
-
-			mlpzone = tsol_mlp_findzone(IPPROTO_TCP,
-			    htons(mlp_port));
-			if (connp->conn_zoneid != mlpzone) {
-				if (connp->conn_debug) {
-					(void) strlog(TCP_MOD_ID, 0, 1,
-					    SL_ERROR|SL_TRACE,
-					    "tcp_bind: attempt to bind port "
-					    "%d on shared addr in zone %d "
-					    "(should be %d)",
-					    mlp_port, connp->conn_zoneid,
-					    mlpzone);
-				}
-				return (-TACCES);
-			}
-		}
-
-		if (!user_specified) {
-			int err;
-			err = tsol_mlp_anon(zone, mlptype, connp->conn_proto,
-			    requested_port, B_TRUE);
-			if (err != 0) {
-				if (connp->conn_debug) {
-					(void) strlog(TCP_MOD_ID, 0, 1,
-					    SL_ERROR|SL_TRACE,
-					    "tcp_bind: cannot establish anon "
-					    "MLP for port %d",
-					    requested_port);
-				}
-				return (err);
-			}
-			connp->conn_anon_port = B_TRUE;
-		}
-		connp->conn_mlp_type = mlptype;
 	}
 
 	allocated_port = tcp_bindi(tcp, requested_port, &v6addr,
@@ -483,12 +377,6 @@ tcp_bind_select_lport(tcp_t *tcp, in_port_t *requested_port_ptr,
 	    user_specified);
 
 	if (allocated_port == 0) {
-		connp->conn_mlp_type = mlptSingle;
-		if (connp->conn_anon_port) {
-			connp->conn_anon_port = B_FALSE;
-			(void) tsol_mlp_anon(zone, mlptype, connp->conn_proto,
-			    requested_port, B_FALSE);
-		}
 		if (bind_to_req_port_only) {
 			if (connp->conn_debug) {
 				(void) strlog(TCP_MOD_ID, 0, 1,
@@ -727,12 +615,6 @@ tcp_bindi(tcp_t *tcp, in_port_t port, const in6_addr_t *laddr,
 
 			lconnp = ltcp->tcp_connp;
 
-			/*
-			 * On a labeled system, we must treat bindings to ports
-			 * on shared IP addresses by sockets with MAC exemption
-			 * privilege as being in all zones, as there's
-			 * otherwise no way to identify the right receiver.
-			 */
 			if (!IPCL_BIND_ZONE_MATCH(lconnp, connp))
 				continue;
 
@@ -751,9 +633,6 @@ tcp_bindi(tcp_t *tcp, in_port_t port, const in6_addr_t *laddr,
 			 * unspec	spec		no
 			 * spec		unspec		no
 			 * spec		spec		yes if A
-			 *
-			 * For labeled systems, SO_MAC_EXEMPT behaves the same
-			 * as TCP_EXCLBIND, except that zoneid is ignored.
 			 *
 			 * Note:
 			 *
@@ -788,9 +667,7 @@ tcp_bindi(tcp_t *tcp, in_port_t port, const in6_addr_t *laddr,
 			exclbind = lconnp->conn_exclbind ||
 			    connp->conn_exclbind;
 
-			if ((lconnp->conn_mac_mode != CONN_MAC_DEFAULT) ||
-			    (connp->conn_mac_mode != CONN_MAC_DEFAULT) ||
-			    (exclbind && (not_socket ||
+			if ((exclbind && (not_socket ||
 			    ltcp->tcp_state <= TCPS_ESTABLISHED))) {
 				if (V6_OR_V4_INADDR_ANY(
 				    lconnp->conn_bound_addr_v6) ||

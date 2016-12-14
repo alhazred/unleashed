@@ -69,7 +69,6 @@ OBJECTS =	Syscalls.o	\
 		strip.o		\
 		syntax.o	\
 		tidbit.o	\
-		tx.o		\
 		wherelist.o	\
 		which.o
 

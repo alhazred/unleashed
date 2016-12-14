@@ -8,7 +8,7 @@ netstat \- show network status
 .SH SYNOPSIS
 .LP
 .nf
-\fBnetstat\fR [\fB-anvR\fR] [\fB-f\fR \fIaddress_family\fR] [\fB-P\fR \fIprotocol\fR]
+\fBnetstat\fR [\fB-anv\fR] [\fB-f\fR \fIaddress_family\fR] [\fB-P\fR \fIprotocol\fR]
 .fi
 
 .LP
@@ -40,7 +40,7 @@ netstat \- show network status
 
 .LP
 .nf
-\fBnetstat\fR \fB-r\fR [\fB-anvR\fR] [\fB-f\fR \fIaddress_family\fR | \fIfilter\fR]
+\fBnetstat\fR \fB-r\fR [\fB-anv\fR] [\fB-f\fR \fIaddress_family\fR | \fIfilter\fR]
 .fi
 
 .LP
@@ -395,53 +395,6 @@ accepts protocol options only as all lowercase.
 Show the status of \fBDHCP\fR configured interfaces.
 .RE
 
-.sp
-.ne 2
-.na
-\fB\fB-R\fR\fR
-.ad
-.sp .6
-.RS 4n
-This modifier displays extended security attributes for sockets and routing
-table entries. The \fB-R\fR modifier is available only if the system is
-configured with the Solaris Trusted Extensions feature.
-.sp
-With \fB-r\fR only, this option displays the routing entries' gateway security
-attributes. See \fBroute\fR(1M) for more information on security attributes.
-.sp
-When displaying socket information using the first form of the command, this
-option displays additional information for Multi-Level Port(MLP) sockets. This
-includes:
-.RS +4
-.TP
-.ie t \(bu
-.el o
-The label for the peer if the socket is connected.
-.RE
-.RS +4
-.TP
-.ie t \(bu
-.el o
-The following flags can be appended to the socket's "State" output:
-.RS
-
-.sp
-.ne 2
-.na
-\fB\fBP\fR\fR
-.ad
-.RS 5n
-The socket is a MLP on zone-private IP addresses.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBS\fR\fR
-.ad
-.RS 5n
-The socket is a MLP on IP addresses shared between zones.
-.RE
 .SH OPERANDS
 .ne 2
 .na

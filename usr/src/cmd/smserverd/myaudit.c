@@ -38,7 +38,6 @@
 #include <stdlib.h>
 #include <alloca.h>
 #include <sys/smedia.h>
-#include <tsol/label.h>
 #include "smserver.h"
 #include <bsm/audit.h>
 #include <bsm/libbsm.h>
@@ -210,8 +209,6 @@ audit_audit(door_data_t *door_dp)
 	    door_dp->audit_egid,
 	    door_dp->audit_uid, door_dp->audit_gid, door_dp->audit_pid,
 	    door_dp->audit_asid, &door_dp->audit_tid));
-	if (is_system_labeled())
-		(void) au_write(ad, au_to_mylabel());
 	if (door_dp->audit_policy & AUDIT_GROUP) {
 
 		int ng;

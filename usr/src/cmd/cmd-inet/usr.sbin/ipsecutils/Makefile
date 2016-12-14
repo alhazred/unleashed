@@ -24,8 +24,7 @@
 #
 
 PROG=		ipsecalgs ipsecconf ipseckey
-SOCKETPROG=	ipsecalgs ipsecconf ipseckey 
-TSOLPROG=	ipseckey
+SOCKETPROG=	ipsecalgs ipsecconf ipseckey
 SRCS=           ipsecalgs.c ipsecconf.c ipseckey.c
 
 include ../../../Makefile.cmd
@@ -59,10 +58,6 @@ CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-switch
 
 LDLIBS += -lipsecutil
-
-LAZYLIBS = $(ZLAZYLOAD) -ltsol $(ZNOLAZYLOAD)
-
-$(TSOLPROG)	:=	LDLIBS += $(LAZYLIBS)
 
 .KEEP_STATE:
 

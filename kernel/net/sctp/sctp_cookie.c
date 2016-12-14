@@ -31,7 +31,6 @@
 #include <sys/kmem.h>
 #include <sys/strsubr.h>
 #include <sys/random.h>
-#include <sys/tsol/tnet.h>
 
 #include <netinet/in.h>
 #include <netinet/ip6.h>
@@ -617,44 +616,6 @@ sctp_send_initack(sctp_t *sctp, sctp_hdr_t *initsh, sctp_chunk_hdr_t *ch,
 	else
 		ixa->ixa_flags &= ~IXAF_IS_IPV4;
 
-	/*
-	 * If the listen socket is bound to a trusted extensions multi-label
-	 * port, a MAC-Exempt connection with an unlabeled node, we use the
-	 * the security label of the received INIT packet.
-	 * If not a multi-label port, attach the unmodified
-	 * listener's label directly.
-	 *
-	 * We expect Sun developed kernel modules to properly set
-	 * cred labels for sctp connections. We can't be so sure this
-	 * will be done correctly when 3rd party kernel modules
-	 * directly use sctp. We check for a NULL ira_tsl to cover this
-	 * possibility.
-	 */
-	if (is_system_labeled()) {
-		/* Discard any old label */
-		if (ixa->ixa_free_flags & IXA_FREE_TSL) {
-			ASSERT(ixa->ixa_tsl != NULL);
-			label_rele(ixa->ixa_tsl);
-			ixa->ixa_free_flags &= ~IXA_FREE_TSL;
-			ixa->ixa_tsl = NULL;
-		}
-
-		if (connp->conn_mlp_type != mlptSingle ||
-		    connp->conn_mac_mode != CONN_MAC_DEFAULT) {
-			if (ira->ira_tsl == NULL) {
-				sctp_send_abort(sctp, sctp_init2vtag(ch),
-				    SCTP_ERR_UNKNOWN, NULL, 0, initmp, 0,
-				    B_FALSE, ira);
-				ixa_refrele(ixa);
-				return;
-			}
-			label_hold(ira->ira_tsl);
-			ip_xmit_attr_replace_tsl(ixa, ira->ira_tsl);
-		} else {
-			ixa->ixa_tsl = crgetlabel(connp->conn_cred);
-		}
-	}
-
 	iackmp = allocb(ipsctplen + sctps->sctps_wroff_xtra, BPRI_MED);
 	if (iackmp == NULL) {
 		sctp_send_abort(sctp, sctp_init2vtag(ch),
@@ -821,53 +782,6 @@ sctp_send_initack(sctp_t *sctp, sctp_hdr_t *initsh, sctp_chunk_hdr_t *ch,
 		bzero((iackmp->b_wptr - pad), pad);
 
 	iackmp->b_cont = errmp;		/*  OK if NULL */
-
-	if (is_system_labeled()) {
-		ts_label_t *effective_tsl = NULL;
-
-		ASSERT(ira->ira_tsl != NULL);
-
-		/* Discard any old label */
-		if (ixa->ixa_free_flags & IXA_FREE_TSL) {
-			ASSERT(ixa->ixa_tsl != NULL);
-			label_rele(ixa->ixa_tsl);
-			ixa->ixa_free_flags &= ~IXA_FREE_TSL;
-		}
-		ixa->ixa_tsl = ira->ira_tsl;	/* A multi-level responder */
-
-		/*
-		 * We need to check for label-related failures which implies
-		 * an extra call to tsol_check_dest (as ip_output_simple
-		 * also does a tsol_check_dest as part of computing the
-		 * label for the packet, but ip_output_simple doesn't return
-		 * a specific errno for that case so we can't rely on its
-		 * check.)
-		 */
-		if (isv4) {
-			err = tsol_check_dest(ixa->ixa_tsl, &iackiph->ipha_dst,
-			    IPV4_VERSION, connp->conn_mac_mode,
-			    connp->conn_zone_is_global, &effective_tsl);
-		} else {
-			err = tsol_check_dest(ixa->ixa_tsl, &iackip6h->ip6_dst,
-			    IPV6_VERSION, connp->conn_mac_mode,
-			    connp->conn_zone_is_global, &effective_tsl);
-		}
-		if (err != 0) {
-			sctp_send_abort(sctp, sctp_init2vtag(ch),
-			    SCTP_ERR_AUTH_ERR, NULL, 0, initmp, 0, B_FALSE,
-			    ira);
-			ixa_refrele(ixa);
-			freemsg(iackmp);
-			return;
-		}
-		if (effective_tsl != NULL) {
-			/*
-			 * Since ip_output_simple will redo the
-			 * tsol_check_dest, we just drop the ref.
-			 */
-			label_rele(effective_tsl);
-		}
-	}
 
 	BUMP_LOCAL(sctp->sctp_opkts);
 	BUMP_LOCAL(sctp->sctp_obchunks);
@@ -1477,10 +1391,6 @@ sctp_addrlist2sctp(mblk_t *mp, sctp_hdr_t *sctph, sctp_chunk_hdr_t *ich,
 		/*
 		 * params have been verified in sctp_check_input(),
 		 * so no need to do it again here.
-		 *
-		 * For labeled systems, there's no need to check the
-		 * label here.  It's known to be good as we checked
-		 * before allowing the connection to become bound.
 		 *
 		 * According to RFC4960 :
 		 * All integer fields in an SCTP packet MUST be transmitted

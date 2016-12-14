@@ -8,7 +8,7 @@
 ucred, ucred_get, ucred_free, ucred_geteuid, ucred_getruid, ucred_getsuid,
 ucred_getegid, ucred_getrgid, ucred_getsgid, ucred_getgroups, ucred_getprivset,
 ucred_getpid, ucred_getprojid, ucred_getzoneid, ucred_getpflags,
-ucred_getlabel, ucred_size \- user credential functions
+ucred_size \- user credential functions
 .SH SYNOPSIS
 .LP
 .nf
@@ -85,11 +85,6 @@ ucred_getlabel, ucred_size \- user credential functions
 
 .LP
 .nf
-\fBm_label_t *\fR\fBucred_getlabel\fR(\fBconst ucred_t *\fR\fIuc\fR);
-.fi
-
-.LP
-.nf
 \fBsize_t\fR \fBucred_size\fR(\fBvoid\fR);
 .fi
 
@@ -150,12 +145,6 @@ credential.
 The \fBucred_getpflags()\fR function returns the value of the specified
 privilege flags from the \fBucred\fR structure, or (\fBuint_t\fR)-1 if none was
 present.
-.sp
-.LP
-The \fBucred_getlabel()\fR function returns the value of the label, or
-\fINULL\fR if the label is not available. The returned label is valid until
-\fBucred_free()\fR is called on the specified user credential. This function is
-available only if the system is configured with Trusted Extensions.
 .sp
 .LP
 The \fBucred_free()\fR function frees the memory allocated for the specified

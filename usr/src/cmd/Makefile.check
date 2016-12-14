@@ -125,10 +125,6 @@ MANIFEST_SUBDIRS=			\
 	smbsrv/smbd			\
 	ssh				\
 	svc/milestone			\
-	tsol/labeld			\
-	tsol/tnctl			\
-	tsol/tnd			\
-	tsol/tsol-zones			\
 	vscan/vscand			\
 	xvm/ipagent			\
 	ypcmd/yppasswd			\

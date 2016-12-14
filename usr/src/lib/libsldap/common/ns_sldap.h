@@ -482,8 +482,6 @@ typedef struct _ns_automount {
 #define	NS_LDAP_TYPE_AUUSER	"audit_user"
 #define	NS_LDAP_TYPE_BOOTPARAMS "bootparams"
 #define	NS_LDAP_TYPE_AUTOMOUNT  "auto_"
-#define	NS_LDAP_TYPE_TNRHDB	"tnrhdb"
-#define	NS_LDAP_TYPE_TNRHTP	"tnrhtp"
 
 /*
  * service descriptor/attribute mapping structure

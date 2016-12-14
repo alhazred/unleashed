@@ -368,8 +368,6 @@ rts_open(int flag, cred_t *credp)
 	ASSERT(!(connp->conn_ixa->ixa_free_flags & IXA_FREE_CRED));
 	connp->conn_ixa->ixa_cred = connp->conn_cred;
 	connp->conn_ixa->ixa_cpid = connp->conn_cpid;
-	if (is_system_labeled())
-		connp->conn_ixa->ixa_tsl = crgetlabel(connp->conn_cred);
 
 	/*
 	 * rts sockets start out as bound and connected

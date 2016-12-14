@@ -54,7 +54,6 @@
 #include <sys/class.h>
 #include <sys/socket.h>
 #include <sys/netconfig.h>
-#include <sys/tsol/tnet.h>
 
 #include <rpc/types.h>
 #include <rpc/auth.h>
@@ -918,19 +917,6 @@ more:
 		if (mntzone != zone) {
 			error = EBUSY;
 			goto errout;
-		}
-	}
-
-	if (is_system_labeled()) {
-		error = nfs_mount_label_policy(vfsp, &svp->sv_addr,
-		    svp->sv_knconf, cr);
-
-		if (error > 0)
-			goto errout;
-
-		if (error == -1) {
-			/* change mount to read-only to prevent write-down */
-			vfs_setmntopt(vfsp, MNTOPT_RO, NULL, 0);
 		}
 	}
 

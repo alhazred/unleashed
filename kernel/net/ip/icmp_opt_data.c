@@ -77,10 +77,6 @@ opdes_t	icmp_opt_arr[] = {
 	0 },
 { SO_TIMESTAMP, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int), 0
 	},
-{ SO_MAC_EXEMPT, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int),
-	0 },
-{ SO_MAC_IMPLICIT, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int),
-	0 },
 
 { SO_ALLZONES, SOL_SOCKET, OA_R, OA_RW, OP_CONFIG, 0, sizeof (int),
 	0 },

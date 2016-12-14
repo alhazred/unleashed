@@ -65,8 +65,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 		_nss_ldap_shadow_constr;
 		_nss_ldap_publickey_constr;
 		_nss_ldap_user_attr_constr;
-		_nss_ldap_tnrhdb_constr;
-		_nss_ldap_tnrhtp_constr;
 	local:
 		*;
 };

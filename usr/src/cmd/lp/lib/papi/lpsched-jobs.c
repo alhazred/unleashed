@@ -465,7 +465,7 @@ lpsched_request_to_job_attributes(REQUEST *r, job_t *j)
  * Convert R_REQUEST_* results to the equivalent PAPI attribute representation.
  */
 void
-job_status_to_attributes(job_t *job, char *req_id, char *user, char *slabel,
+job_status_to_attributes(job_t *job, char *req_id, char *user,
 		size_t size, time_t date, short state, char *destination,
 		char *form, char *charset, short rank, char *file)
 {
@@ -514,8 +514,6 @@ job_status_to_attributes(job_t *job, char *req_id, char *user, char *slabel,
 	    "lpsched-file", file);
 	papiAttributeListAddLPString(&job->attributes, PAPI_ATTR_EXCL,
 	    "job-name", file);
-	papiAttributeListAddLPString(&job->attributes, PAPI_ATTR_EXCL,
-	    "tsol-sensitivity-label", slabel);
 }
 
 void

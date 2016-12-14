@@ -58,8 +58,6 @@
 #include <sys/vfs_opreg.h>
 #include <sys/mntent.h>
 #include <sys/priv.h>
-#include <sys/tsol/label.h>
-#include <sys/tsol/tndb.h>
 #include <inet/ip.h>
 
 #include <netsmb/smb_osdep.h>
@@ -77,7 +75,6 @@
  */
 int		smbfsinit(int fstyp, char *name);
 void		smbfsfini();
-static int	smbfs_mount_label_policy(vfs_t *, void *, int, cred_t *);
 
 /*
  * SMBFS Mount options table for MS_OPTIONSTR
@@ -438,28 +435,6 @@ smbfs_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 	if (zone_status_get(mntzone) >= ZONE_IS_SHUTTING_DOWN) {
 		error = EBUSY;
 		goto errout;
-	}
-
-	/*
-	 * On a Trusted Extensions client, we may have to force read-only
-	 * for read-down mounts.
-	 */
-	if (is_system_labeled()) {
-		void *addr;
-		int ipvers = 0;
-		struct smb_vc *vcp;
-
-		vcp = SSTOVC(ssp);
-		addr = smb_vc_getipaddr(vcp, &ipvers);
-		error = smbfs_mount_label_policy(vfsp, addr, ipvers, cr);
-
-		if (error > 0)
-			goto errout;
-
-		if (error == -1) {
-			/* change mount to read-only to prevent write-down */
-			vfs_setmntopt(vfsp, MNTOPT_RO, NULL, 0);
-		}
 	}
 
 	/* Prevent unload. */
@@ -928,95 +903,4 @@ smbfs_freevfs(vfs_t *vfsp)
 	 * Allow _fini() to succeed now, if so desired.
 	 */
 	atomic_dec_32(&smbfs_mountcount);
-}
-
-/*
- * smbfs_mount_label_policy:
- *	Determine whether the mount is allowed according to MAC check,
- *	by comparing (where appropriate) label of the remote server
- *	against the label of the zone being mounted into.
- *
- *	Returns:
- *		 0 :	access allowed
- *		-1 :	read-only access allowed (i.e., read-down)
- *		>0 :	error code, such as EACCES
- *
- * NB:
- * NFS supports Cipso labels by parsing the vfs_resource
- * to see what the Solaris server global zone has shared.
- * We can't support that for CIFS since resource names
- * contain share names, not paths.
- */
-static int
-smbfs_mount_label_policy(vfs_t *vfsp, void *ipaddr, int addr_type, cred_t *cr)
-{
-	bslabel_t	*server_sl, *mntlabel;
-	zone_t		*mntzone = NULL;
-	ts_label_t	*zlabel;
-	tsol_tpc_t	*tp;
-	ts_label_t	*tsl = NULL;
-	int		retv;
-
-	/*
-	 * Get the zone's label.  Each zone on a labeled system has a label.
-	 */
-	mntzone = zone_find_by_any_path(refstr_value(vfsp->vfs_mntpt), B_FALSE);
-	zlabel = mntzone->zone_slabel;
-	ASSERT(zlabel != NULL);
-	label_hold(zlabel);
-
-	retv = EACCES;				/* assume the worst */
-
-	/*
-	 * Next, get the assigned label of the remote server.
-	 */
-	tp = find_tpc(ipaddr, addr_type, B_FALSE);
-	if (tp == NULL)
-		goto out;			/* error getting host entry */
-
-	if (tp->tpc_tp.tp_doi != zlabel->tsl_doi)
-		goto rel_tpc;			/* invalid domain */
-	if ((tp->tpc_tp.host_type != UNLABELED))
-		goto rel_tpc;			/* invalid hosttype */
-
-	server_sl = &tp->tpc_tp.tp_def_label;
-	mntlabel = label2bslabel(zlabel);
-
-	/*
-	 * Now compare labels to complete the MAC check.  If the labels
-	 * are equal or if the requestor is in the global zone and has
-	 * NET_MAC_AWARE, then allow read-write access.   (Except for
-	 * mounts into the global zone itself; restrict these to
-	 * read-only.)
-	 *
-	 * If the requestor is in some other zone, but his label
-	 * dominates the server, then allow read-down.
-	 *
-	 * Otherwise, access is denied.
-	 */
-	if (blequal(mntlabel, server_sl) ||
-	    (crgetzoneid(cr) == GLOBAL_ZONEID &&
-	    getpflags(NET_MAC_AWARE, cr) != 0)) {
-		if ((mntzone == global_zone) ||
-		    !blequal(mntlabel, server_sl))
-			retv = -1;		/* read-only */
-		else
-			retv = 0;		/* access OK */
-	} else if (bldominates(mntlabel, server_sl)) {
-		retv = -1;			/* read-only */
-	} else {
-		retv = EACCES;
-	}
-
-	if (tsl != NULL)
-		label_rele(tsl);
-
-rel_tpc:
-	/*LINTED*/
-	TPC_RELE(tp);
-out:
-	if (mntzone)
-		zone_rele(mntzone);
-	label_rele(zlabel);
-	return (retv);
 }

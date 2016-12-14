@@ -163,7 +163,6 @@ static int	set_tun_encap_limit(char *arg, int64_t param);
 static int	clr_tun_encap_limit(char *arg, int64_t param);
 static int	set_tun_hop_limit(char *arg, int64_t param);
 static int	setzone(char *arg, int64_t param);
-static int	setallzones(char *arg, int64_t param);
 static int	setifsrc(char *arg, int64_t param);
 static int	lifnum(const char *ifname);
 static void	plumball(int, char **, int64_t, int64_t, int64_t);
@@ -302,7 +301,6 @@ struct	cmd {
 	{ "destination", NEXTARG,	setifdstaddr,	0,	AF_ANY },
 	{ "zone",	NEXTARG,	setzone,	0,	AF_ANY },
 	{ "-zone",	0,		setzone,	0,	AF_ANY },
-	{ "all-zones",	0,		setallzones,	0,	AF_ANY },
 	{ "ether",	OPTARG,		setifether,	0,	AF_ANY },
 	{ "usesrc",	NEXTARG,	setifsrc,	0,	AF_ANY },
 
@@ -2766,18 +2764,6 @@ setzone(char *arg, int64_t param)
 	return (0);
 }
 
-/* Put interface into all zones */
-/* ARGSUSED */
-static int
-setallzones(char *arg, int64_t param)
-{
-	(void) strlcpy(lifr.lifr_name, name, sizeof (lifr.lifr_name));
-	lifr.lifr_zoneid = ALL_ZONES;
-	if (ioctl(s, SIOCSLIFZONE, (caddr_t)&lifr) == -1)
-		Perror0_exit("SIOCSLIFZONE");
-	return (0);
-}
-
 /* Set source address to use */
 /* ARGSUSED */
 static int
@@ -2881,9 +2867,7 @@ ifstatus(const char *ifname)
 		    lifr.lifr_zoneid != GLOBAL_ZONEID) {
 			char zone_name[ZONENAME_MAX];
 
-			if (lifr.lifr_zoneid == ALL_ZONES) {
-				(void) printf("\n\tall-zones");
-			} else if (getzonenamebyid(lifr.lifr_zoneid, zone_name,
+			if (getzonenamebyid(lifr.lifr_zoneid, zone_name,
 			    sizeof (zone_name)) < 0) {
 				(void) printf("\n\tzone %d", lifr.lifr_zoneid);
 			} else {
@@ -4465,8 +4449,7 @@ usage(void)
 	    "\t[ standby | -standby ]\n"
 	    "\t[ failover | -failover ]\n"
 	    "\t[ zone <zonename> | -zone ]\n"
-	    "\t[ usesrc <interface> ]\n"
-	    "\t[ all-zones ]\n");
+	    "\t[ usesrc <interface> ]\n");
 
 	(void) fprintf(stderr, "or\n");
 	(void) fprintf(stderr,

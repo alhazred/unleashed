@@ -91,9 +91,6 @@
 #include <inet/udp_impl.h>
 #include <sys/sunddi.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
-
 /*
  * Release a reference on ip_xmit_attr.
  * The reference is acquired by conn_get_ixa()
@@ -142,8 +139,6 @@ typedef struct ixamblk_s {
 	uint64_t	ixm_conn_id;		/* Used by DTrace */
 	cred_t		*ixm_cred;	/* For getpeerucred - refhold if set */
 	pid_t		ixm_cpid;	/* For getpeerucred */
-
-	ts_label_t	*ixm_tsl;	/* Refhold if set. */
 
 	/*
 	 * When the pointers below are set they have a refhold on the struct.
@@ -205,8 +200,6 @@ typedef struct iramblk_s {
 	cred_t		*irm_cred;	/* For getpeerucred - refhold if set */
 	pid_t		irm_cpid;	/* For getpeerucred */
 
-	ts_label_t	*irm_tsl;	/* Refhold if set. */
-
 	/*
 	 * When set these correspond to a refhold on the object.
 	 */
@@ -256,10 +249,6 @@ ip_xmit_attr_to_mblk(ip_xmit_attr_t *ixa)
 	ixm->ixm_ident = ixa->ixa_ident;
 	ixm->ixm_xmit_hint = ixa->ixa_xmit_hint;
 
-	if (ixa->ixa_tsl != NULL) {
-		ixm->ixm_tsl = ixa->ixa_tsl;
-		label_hold(ixm->ixm_tsl);
-	}
 	if (ixa->ixa_cred != NULL) {
 		ixm->ixm_cred = ixa->ixa_cred;
 		crhold(ixa->ixa_cred);
@@ -394,11 +383,6 @@ ip_xmit_attr_from_mblk(mblk_t *ixamp, ip_xmit_attr_t *ixa)
 	ixa->ixa_ident = ixm->ixm_ident;
 	ixa->ixa_xmit_hint = ixm->ixm_xmit_hint;
 
-	if (ixm->ixm_tsl != NULL) {
-		ixa->ixa_tsl = ixm->ixm_tsl;
-		ixa->ixa_free_flags |= IXA_FREE_TSL;
-		ixm->ixm_tsl = NULL;
-	}
 	if (ixm->ixm_cred != NULL) {
 		ixa->ixa_cred = ixm->ixm_cred;
 		ixa->ixa_free_flags |= IXA_FREE_CRED;
@@ -474,10 +458,6 @@ ip_xmit_attr_free_mblk(mblk_t *ixamp)
 		ixm->ixm_ipsec_latch = NULL;
 	}
 
-	if (ixm->ixm_tsl != NULL) {
-		label_rele(ixm->ixm_tsl);
-		ixm->ixm_tsl = NULL;
-	}
 	if (ixm->ixm_cred != NULL) {
 		crfree(ixm->ixm_cred);
 		ixm->ixm_cred = NULL;
@@ -538,10 +518,6 @@ ip_recv_attr_to_mblk(ip_recv_attr_t *ira)
 	irm->irm_no_loop_zoneid = ira->ira_no_loop_zoneid;
 	irm->irm_esp_udp_ports = ira->ira_esp_udp_ports;
 
-	if (ira->ira_tsl != NULL) {
-		irm->irm_tsl = ira->ira_tsl;
-		label_hold(irm->irm_tsl);
-	}
 	if (ira->ira_cred != NULL) {
 		irm->irm_cred = ira->ira_cred;
 		crhold(ira->ira_cred);
@@ -650,11 +626,6 @@ ip_recv_attr_from_mblk(mblk_t *iramp, ip_recv_attr_t *ira)
 	ira->ira_no_loop_zoneid = irm->irm_no_loop_zoneid;
 	ira->ira_esp_udp_ports = irm->irm_esp_udp_ports;
 
-	if (irm->irm_tsl != NULL) {
-		ira->ira_tsl = irm->irm_tsl;
-		ira->ira_free_flags |= IRA_FREE_TSL;
-		irm->irm_tsl = NULL;
-	}
 	if (irm->irm_cred != NULL) {
 		ira->ira_cred = irm->irm_cred;
 		ira->ira_free_flags |= IRA_FREE_CRED;
@@ -701,10 +672,6 @@ ip_recv_attr_free_mblk(mblk_t *iramp)
 	if (irm->irm_ipsec_action != NULL) {
 		IPACT_REFRELE(irm->irm_ipsec_action);
 		irm->irm_ipsec_action = NULL;
-	}
-	if (irm->irm_tsl != NULL) {
-		label_rele(irm->irm_tsl);
-		irm->irm_tsl = NULL;
 	}
 	if (irm->irm_cred != NULL) {
 		crfree(irm->irm_cred);
@@ -897,13 +864,6 @@ ixa_safe_copy(ip_xmit_attr_t *src, ip_xmit_attr_t *ixa)
 	ixa->ixa_ipsec_action = NULL;
 
 	/*
-	 * We leave ixa_tsl unchanged, but if it has a refhold we need
-	 * to get an extra refhold.
-	 */
-	if (ixa->ixa_free_flags & IXA_FREE_TSL)
-		label_hold(ixa->ixa_tsl);
-
-	/*
 	 * We leave ixa_cred unchanged, but if it has a refhold we need
 	 * to get an extra refhold.
 	 */
@@ -949,93 +909,11 @@ ip_xmit_attr_duplicate(ip_xmit_attr_t *src_ixa)
 	if (ixa->ixa_ipsec_action != NULL)
 		IPACT_REFHOLD(ixa->ixa_ipsec_action);
 
-	if (ixa->ixa_tsl != NULL) {
-		label_hold(ixa->ixa_tsl);
-		ixa->ixa_free_flags |= IXA_FREE_TSL;
-	}
 	if (ixa->ixa_cred != NULL) {
 		crhold(ixa->ixa_cred);
 		ixa->ixa_free_flags |= IXA_FREE_CRED;
 	}
 	return (ixa);
-}
-
-/*
- * Used to replace the ixa_label field.
- * The caller should have a reference on the label, which we transfer to
- * the attributes so that when the attribute is freed/cleaned up
- * we will release that reference.
- */
-void
-ip_xmit_attr_replace_tsl(ip_xmit_attr_t *ixa, ts_label_t *tsl)
-{
-	ASSERT(tsl != NULL);
-
-	if (ixa->ixa_free_flags & IXA_FREE_TSL) {
-		ASSERT(ixa->ixa_tsl != NULL);
-		label_rele(ixa->ixa_tsl);
-	} else {
-		ixa->ixa_free_flags |= IXA_FREE_TSL;
-	}
-	ixa->ixa_tsl = tsl;
-}
-
-/*
- * Replace the ip_recv_attr_t's label.
- * Due to kernel RPC's use of db_credp we also need to replace ira_cred;
- * TCP/UDP uses ira_cred to set db_credp for non-socket users.
- * This can fail (and return B_FALSE) due to lack of memory.
- */
-boolean_t
-ip_recv_attr_replace_label(ip_recv_attr_t *ira, ts_label_t *tsl)
-{
-	cred_t	*newcr;
-
-	if (ira->ira_free_flags & IRA_FREE_TSL) {
-		ASSERT(ira->ira_tsl != NULL);
-		label_rele(ira->ira_tsl);
-	}
-	label_hold(tsl);
-	ira->ira_tsl = tsl;
-	ira->ira_free_flags |= IRA_FREE_TSL;
-
-	/*
-	 * Reset zoneid if we have a shared address. That allows
-	 * ip_fanout_tx_v4/v6 to determine the zoneid again.
-	 */
-	if (ira->ira_flags & IRAF_TX_SHARED_ADDR)
-		ira->ira_zoneid = ALL_ZONES;
-
-	/* We update ira_cred for RPC */
-	newcr = copycred_from_tslabel(ira->ira_cred, ira->ira_tsl, KM_NOSLEEP);
-	if (newcr == NULL)
-		return (B_FALSE);
-	if (ira->ira_free_flags & IRA_FREE_CRED)
-		crfree(ira->ira_cred);
-	ira->ira_cred = newcr;
-	ira->ira_free_flags |= IRA_FREE_CRED;
-	return (B_TRUE);
-}
-
-/*
- * This needs to be called after ip_set_destination/tsol_check_dest might
- * have changed ixa_tsl to be specific for a destination, and we now want to
- * send to a different destination.
- * We have to restart with crgetlabel() since ip_set_destination/
- * tsol_check_dest will start with ixa_tsl.
- */
-void
-ip_xmit_attr_restore_tsl(ip_xmit_attr_t *ixa, cred_t *cr)
-{
-	if (!is_system_labeled())
-		return;
-
-	if (ixa->ixa_free_flags & IXA_FREE_TSL) {
-		ASSERT(ixa->ixa_tsl != NULL);
-		label_rele(ixa->ixa_tsl);
-		ixa->ixa_free_flags &= ~IXA_FREE_TSL;
-	}
-	ixa->ixa_tsl = crgetlabel(cr);
 }
 
 void
@@ -1077,12 +955,6 @@ ixa_cleanup(ip_xmit_attr_t *ixa)
 	if (ixa->ixa_flags & IXAF_IPSEC_SECURE) {
 		ipsec_out_release_refs(ixa);
 	}
-	if (ixa->ixa_free_flags & IXA_FREE_TSL) {
-		ASSERT(ixa->ixa_tsl != NULL);
-		label_rele(ixa->ixa_tsl);
-		ixa->ixa_free_flags &= ~IXA_FREE_TSL;
-	}
-	ixa->ixa_tsl = NULL;
 	if (ixa->ixa_free_flags & IXA_FREE_CRED) {
 		ASSERT(ixa->ixa_cred != NULL);
 		crfree(ixa->ixa_cred);
@@ -1114,12 +986,6 @@ ira_cleanup(ip_recv_attr_t *ira, boolean_t refrele_ill)
 	if (ira->ira_flags & IRAF_IPSEC_SECURE) {
 		ipsec_in_release_refs(ira);
 	}
-	if (ira->ira_free_flags & IRA_FREE_TSL) {
-		ASSERT(ira->ira_tsl != NULL);
-		label_rele(ira->ira_tsl);
-		ira->ira_free_flags &= ~IRA_FREE_TSL;
-	}
-	ira->ira_tsl = NULL;
 	if (ira->ira_free_flags & IRA_FREE_CRED) {
 		ASSERT(ira->ira_cred != NULL);
 		crfree(ira->ira_cred);

@@ -2735,13 +2735,12 @@ ipsec_init_inbound_sel(ipsec_selector_t *sel, mblk_t *mp, ipha_t *ipha,
 			}
 			/* Repopulate now that we have the whole packet */
 			ip6h = (ip6_t *)(spare_mp->b_rptr + outer_hdr_len);
-			(void) ip_find_hdr_v6(spare_mp, ip6h, B_FALSE, &ipp,
-			    NULL);
+			(void) ip_find_hdr_v6(spare_mp, ip6h, &ipp, NULL);
 			nexthdr = *nexthdrp;
 			/* We can just extract based on hdr_len now. */
 			break;
 		default:
-			(void) ip_find_hdr_v6(mp, ip6h, B_FALSE, &ipp, NULL);
+			(void) ip_find_hdr_v6(mp, ip6h, &ipp, NULL);
 			hdr_len = IPV6_HDR_LEN;
 			break;
 		}
@@ -4146,7 +4145,6 @@ ipsec_out_to_in(ip_xmit_attr_t *ixa, ill_t *ill, ip_recv_attr_t *ira)
 	ira->ira_zoneid = ixa->ixa_zoneid;
 	ira->ira_cred = ixa->ixa_cred;
 	ira->ira_cpid = ixa->ixa_cpid;
-	ira->ira_tsl = ixa->ixa_tsl;
 	ira->ira_ill = ira->ira_rill = ill;
 	ira->ira_flags = ixa->ixa_flags & IAF_MASK;
 	ira->ira_no_loop_zoneid = ixa->ixa_no_loop_zoneid;
@@ -6323,7 +6321,7 @@ ipsec_fragcache_add(ipsec_fragcache_t *frag, mblk_t *iramp, mblk_t *mp,
 
 
 		bzero(&ipp, sizeof (ipp));
-		(void) ip_find_hdr_v6(mp, ip6h, B_FALSE, &ipp, NULL);
+		(void) ip_find_hdr_v6(mp, ip6h, &ipp, NULL);
 		if (!(ipp.ipp_fields & IPPF_FRAGHDR)) {
 			/*
 			 * We think this is a fragment, but didn't find
@@ -6536,8 +6534,7 @@ ipsec_fragcache_add(ipsec_fragcache_t *frag, mblk_t *iramp, mblk_t *mp,
 				return (NULL);
 			}
 			bzero(&nipp, sizeof (nipp));
-			(void) ip_find_hdr_v6(ndata_mp, nip6h, B_FALSE, &nipp,
-			    NULL);
+			(void) ip_find_hdr_v6(ndata_mp, nip6h, &nipp, NULL);
 			nfraghdr = nipp.ipp_fraghdr;
 			nfirstbyte = ntohs(nfraghdr->ip6f_offlg &
 			    IP6F_OFF_MASK);
@@ -6740,8 +6737,7 @@ ipsec_fragcache_add(ipsec_fragcache_t *frag, mblk_t *iramp, mblk_t *mp,
 			}
 			v6_proto = *v6_proto_p;
 			bzero(&ipp, sizeof (ipp));
-			(void) ip_find_hdr_v6(data_mp, ip6h, B_FALSE, &ipp,
-			    NULL);
+			(void) ip_find_hdr_v6(data_mp, ip6h, &ipp, NULL);
 			fraghdr = ipp.ipp_fraghdr;
 			firstbyte = ntohs(fraghdr->ip6f_offlg &
 			    IP6F_OFF_MASK);

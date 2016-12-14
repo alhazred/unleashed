@@ -31,7 +31,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <libtsnet.h>
 #include <nfs/nfssys.h>
 #include <nfs/export.h>
 #include <nfs/nfs_cmd.h>

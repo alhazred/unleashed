@@ -63,7 +63,6 @@ static boolean_t	exec = B_FALSE;
 static boolean_t	Don = B_FALSE;
 static boolean_t	Doff = B_FALSE;
 static boolean_t	list = B_FALSE;
-static boolean_t	mac_aware = B_FALSE;
 static boolean_t	pfexec = B_FALSE;
 static boolean_t	xpol = B_FALSE;
 static int		mode = PRIV_STR_PORT;
@@ -83,7 +82,7 @@ main(int argc, char **argv)
 	else
 		command = argv[0];
 
-	while ((opt = getopt(argc, argv, "lDMNPevs:xS")) != EOF) {
+	while ((opt = getopt(argc, argv, "lDNPevs:xS")) != EOF) {
 		switch (opt) {
 		case 'l':
 			list = B_TRUE;
@@ -91,9 +90,6 @@ main(int argc, char **argv)
 		case 'D':
 			set = B_TRUE;
 			Don = B_TRUE;
-			break;
-		case 'M':
-			mac_aware = B_TRUE;
 			break;
 		case 'N':
 			set = B_TRUE;
@@ -131,8 +127,7 @@ main(int argc, char **argv)
 	argc -= optind;
 	argv += optind;
 
-	if ((argc < 1 && !list) || Doff && Don || list && (set || exec) ||
-	    (mac_aware && !exec))
+	if ((argc < 1 && !list) || Doff && Don || list && (set || exec))
 		usage();
 
 	/*
@@ -544,12 +539,6 @@ privupdate_self(void)
 {
 	int set;
 
-	if (mac_aware) {
-		if (setpflags(NET_MAC_AWARE, 1) != 0)
-			fatal("setpflags(NET_MAC_AWARE)");
-		if (setpflags(NET_MAC_AWARE_INHERIT, 1) != 0)
-			fatal("setpflags(NET_MAC_AWARE_INHERIT)");
-	}
 	if (pfexec) {
 		if (setpflags(PRIV_PFEXEC, 1) != 0)
 			fatal("setpflags(PRIV_PFEXEC)");
@@ -654,8 +643,6 @@ static struct {
 	{ PRIV_AWARE_RESET, "PRIV_AWARE_RESET" },
 	{ PRIV_XPOLICY, "PRIV_XPOLICY" },
 	{ PRIV_PFEXEC, "PRIV_PFEXEC" },
-	{ NET_MAC_AWARE, "NET_MAC_AWARE" },
-	{ NET_MAC_AWARE_INHERIT, "NET_MAC_AWARE_INHERIT" },
 };
 
 /*

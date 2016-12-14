@@ -73,39 +73,6 @@ option should only be used at system initialization.
 Silent. Suppresses any diagnostic output.
 .RE
 
-.sp
-.LP
-The following options are supported when the system is configured with Trusted
-Extensions:
-.sp
-.ne 2
-.na
-\fB\fB-g\fR \fIdev-type\fR\fR
-.ad
-.RS 15n
-Deallocates a device of device type matching \fIdev-type\fR.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-w\fR\fR
-.ad
-.RS 15n
-Runs the device cleaning program in a windowing environment. If a windowing
-version of the program exists, it is used. Otherwise, the standard version is
-run in a terminal window.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-z\fR \fIzonename\fR\fR
-.ad
-.RS 15n
-Deallocates device from the zone specified by \fIzonename\fR.
-.RE
-
 .SH OPERANDS
 .sp
 .LP
@@ -197,10 +164,6 @@ Not-an-Interface.
 .LP
 The functionality described in this man page is available only if  Solaris
 Auditing has been enabled. See \fBbsmconv\fR(1M) for more information.
-.sp
-.LP
-On systems configured with Trusted Extensions, the functionality is enabled by
-default.
 .sp
 .LP
 \fB/etc/security/dev\fR, \fBmkdevalloc\fR(1M), and \fBmkdevmaps\fR(1M) might

@@ -39,11 +39,6 @@ extern "C" {
 #include <alloca.h>
 #include <nss_dbdefs.h>
 
-/* door for Trusted Extensions */
-#define	TSOL_NAME_SERVICE_DOOR	"/var/tsol/doors/name_service_door"
-/* TX per label nscd indication file */
-#define	TSOL_NSCD_PER_LABEL_FILE "/var/tsol/doors/nscd_per_label"
-
 /* nscd v2 nscd -> nscd call numbers */
 #define	NSCD_PING	(NSCD_CALLCAT_N2N|0x01)
 #define	NSCD_GETADMIN	(NSCD_CALLCAT_N2N|0x02)

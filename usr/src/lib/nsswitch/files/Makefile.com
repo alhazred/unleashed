@@ -47,9 +47,7 @@ OBJECTS =	bootparams_getbyname.o	\
 		getexecattr.o		\
 		getuserattr.o		\
 		getauuser.o		\
-		netmasks.o		\
-		tsol_getrhent.o		\
-		tsol_gettpent.o
+		netmasks.o
 
 # include common nsswitch library definitions.
 include		../../Makefile.com

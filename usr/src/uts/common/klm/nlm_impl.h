@@ -45,6 +45,7 @@
 #include <sys/queue.h>
 #include <sys/modhash.h>
 #include <sys/avl.h>
+#include <sys/vnode.h>
 
 #define	RPC_MSGOUT(args...)	cmn_err(CE_NOTE, args)
 #define	NLM_ERR(...)		cmn_err(CE_NOTE, __VA_ARGS__)

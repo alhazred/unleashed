@@ -60,7 +60,6 @@
 <include system-library.man3secdb.inc>
 <include system-library.man3sip.inc>
 <include system-library.man3socket.inc>
-<include system-library.man3tsol.inc>
 <include system-library.man3uuid.inc>
 <include system-library.man3volmgt.inc>
 <include system-library.man3xcurses.inc>
@@ -155,7 +154,6 @@ dir path=usr/share/man/man3sec
 dir path=usr/share/man/man3secdb
 dir path=usr/share/man/man3sip
 dir path=usr/share/man/man3socket
-dir path=usr/share/man/man3tsol
 dir path=usr/share/man/man3uuid
 dir path=usr/share/man/man3volmgt
 dir path=usr/share/man/man3xcurses
@@ -222,8 +220,6 @@ file path=lib/$(ARCH64)/libsocket.so.1
 file path=lib/$(ARCH64)/libsysevent.so.1
 file path=lib/$(ARCH64)/libtermcap.so.1
 file path=lib/$(ARCH64)/libthread.so.1
-file path=lib/$(ARCH64)/libtsnet.so.1
-file path=lib/$(ARCH64)/libtsol.so.2
 file path=lib/$(ARCH64)/libumem.so.1
 file path=lib/$(ARCH64)/libuuid.so.1
 file path=lib/$(ARCH64)/libuutil.so.1
@@ -307,8 +303,6 @@ file path=lib/libsqlite-sys.so.2.8.15
 file path=lib/libsysevent.so.1
 file path=lib/libtermcap.so.1
 file path=lib/libthread.so.1
-file path=lib/libtsnet.so.1
-file path=lib/libtsol.so.2
 file path=lib/libumem.so.1
 file path=lib/libuuid.so.1
 file path=lib/libuutil.so.1
@@ -488,7 +482,6 @@ file path=usr/lib/security/$(ARCH64)/pam_rhosts_auth.so.1
 file path=usr/lib/security/$(ARCH64)/pam_roles.so.1
 file path=usr/lib/security/$(ARCH64)/pam_sample.so.1
 file path=usr/lib/security/$(ARCH64)/pam_timestamp.so.1
-file path=usr/lib/security/$(ARCH64)/pam_tsol_account.so.1
 file path=usr/lib/security/$(ARCH64)/pam_unix_account.so.1
 file path=usr/lib/security/$(ARCH64)/pam_unix_auth.so.1
 file path=usr/lib/security/$(ARCH64)/pam_unix_cred.so.1
@@ -518,7 +511,6 @@ file path=usr/lib/security/pam_rhosts_auth.so.1
 file path=usr/lib/security/pam_roles.so.1
 file path=usr/lib/security/pam_sample.so.1
 file path=usr/lib/security/pam_timestamp.so.1
-file path=usr/lib/security/pam_tsol_account.so.1
 file path=usr/lib/security/pam_unix_account.so.1
 file path=usr/lib/security/pam_unix_auth.so.1
 file path=usr/lib/security/pam_unix_cred.so.1
@@ -651,8 +643,6 @@ link path=lib/$(ARCH64)/libtermlib.so.1 target=libcurses.so.1
 link path=lib/$(ARCH64)/libthread.so target=libthread.so.1
 link path=lib/$(ARCH64)/libthread_db.so target=libc_db.so.1
 link path=lib/$(ARCH64)/libthread_db.so.1 target=libc_db.so.1
-link path=lib/$(ARCH64)/libtsnet.so target=libtsnet.so.1
-link path=lib/$(ARCH64)/libtsol.so target=libtsol.so.2
 link path=lib/$(ARCH64)/libumem.so target=libumem.so.1
 link path=lib/$(ARCH64)/libuuid.so target=libuuid.so.1
 link path=lib/$(ARCH64)/libuutil.so target=libuutil.so.1
@@ -717,7 +707,6 @@ link path=lib/libtermlib.so.1 target=libcurses.so.1
 link path=lib/libthread.so target=libthread.so.1
 link path=lib/libthread_db.so target=libc_db.so.1
 link path=lib/libthread_db.so.1 target=libc_db.so.1
-link path=lib/libtsol.so target=libtsol.so.2
 link path=lib/libumem.so target=libumem.so.1
 link path=lib/libuuid.so target=libuuid.so.1
 link path=lib/libw.so target=libw.so.1
@@ -984,14 +973,6 @@ link path=usr/lib/$(ARCH64)/libthread_db.so \
     target=../../../lib/$(ARCH64)/libc_db.so.1
 link path=usr/lib/$(ARCH64)/libthread_db.so.1 \
     target=../../../lib/$(ARCH64)/libc_db.so.1
-link path=usr/lib/$(ARCH64)/libtsnet.so \
-    target=../../../lib/$(ARCH64)/libtsnet.so.1
-link path=usr/lib/$(ARCH64)/libtsnet.so.1 \
-    target=../../../lib/$(ARCH64)/libtsnet.so.1
-link path=usr/lib/$(ARCH64)/libtsol.so \
-    target=../../../lib/$(ARCH64)/libtsol.so.2
-link path=usr/lib/$(ARCH64)/libtsol.so.2 \
-    target=../../../lib/$(ARCH64)/libtsol.so.2
 link path=usr/lib/$(ARCH64)/libumem.so \
     target=../../../lib/$(ARCH64)/libumem.so.1
 link path=usr/lib/$(ARCH64)/libumem.so.1 \
@@ -1182,10 +1163,6 @@ link path=usr/lib/libthread.so target=../../lib/libthread.so.1
 link path=usr/lib/libthread.so.1 target=../../lib/libthread.so.1
 link path=usr/lib/libthread_db.so target=../../lib/libc_db.so.1
 link path=usr/lib/libthread_db.so.1 target=../../lib/libc_db.so.1
-link path=usr/lib/libtsnet.so target=../../lib/libtsnet.so.1
-link path=usr/lib/libtsnet.so.1 target=../../lib/libtsnet.so.1
-link path=usr/lib/libtsol.so target=../../lib/libtsol.so.2
-link path=usr/lib/libtsol.so.2 target=../../lib/libtsol.so.2
 link path=usr/lib/libumem.so target=../../lib/libumem.so.1
 link path=usr/lib/libumem.so.1 target=../../lib/libumem.so.1
 link path=usr/lib/libuuid.so target=../../lib/libuuid.so.1
@@ -1250,8 +1227,6 @@ link path=usr/lib/security/$(ARCH64)/pam_roles.so target=./pam_roles.so.1
 link path=usr/lib/security/$(ARCH64)/pam_sample.so target=./pam_sample.so.1
 link path=usr/lib/security/$(ARCH64)/pam_timestamp.so \
     target=./pam_timestamp.so.1
-link path=usr/lib/security/$(ARCH64)/pam_tsol_account.so \
-    target=./pam_tsol_account.so.1
 link path=usr/lib/security/$(ARCH64)/pam_unix_account.so \
     target=./pam_unix_account.so.1
 link path=usr/lib/security/$(ARCH64)/pam_unix_auth.so \
@@ -1290,7 +1265,6 @@ link path=usr/lib/security/pam_rhosts_auth.so target=./pam_rhosts_auth.so.1
 link path=usr/lib/security/pam_roles.so target=./pam_roles.so.1
 link path=usr/lib/security/pam_sample.so target=./pam_sample.so.1
 link path=usr/lib/security/pam_timestamp.so target=./pam_timestamp.so.1
-link path=usr/lib/security/pam_tsol_account.so target=./pam_tsol_account.so.1
 link path=usr/lib/security/pam_unix_account.so target=./pam_unix_account.so.1
 link path=usr/lib/security/pam_unix_auth.so target=./pam_unix_auth.so.1
 link path=usr/lib/security/pam_unix_cred.so target=./pam_unix_cred.so.1

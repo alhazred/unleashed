@@ -38,8 +38,6 @@
 #define	MAX_AUDIO_LINK 100
 #define	RE_SIZE 64
 
-extern int system_labeled;
-
 static void check_audio_link(di_node_t anynode, char *secondary_link,
     const char *primary_link_format);
 
@@ -191,9 +189,6 @@ audio_process(di_minor_t minor, di_node_t node)
 	int i;
 	char *driver;
 
-	if (system_labeled)
-		flags = DA_ADD|DA_AUDIO;
-
 	anynode = node;
 	mn = di_minor_name(minor);
 
@@ -321,9 +316,6 @@ check_audio_link(di_node_t anynode, char *secondary, const char *primary_format)
 	if (devfsadm_link_valid(anynode, secondary) == DEVFSADM_TRUE) {
 		return;
 	}
-
-	if (system_labeled)
-		flags = DA_ADD|DA_AUDIO;
 
 	for (i = 0; i < MAX_AUDIO_LINK; i++) {
 		(void) sprintf(primary, primary_format, i);

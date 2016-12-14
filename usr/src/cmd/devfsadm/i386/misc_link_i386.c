@@ -34,8 +34,6 @@
 #include <sys/mc_amd.h>
 #include <bsm/devalloc.h>
 
-extern int system_labeled;
-
 static int lp(di_minor_t minor, di_node_t node);
 static int serial_dialout(di_minor_t minor, di_node_t node);
 static int serial(di_minor_t minor, di_node_t node);
@@ -150,9 +148,6 @@ diskette(di_minor_t minor, di_node_t node)
 	char link[PATH_MAX];
 	char *addr = di_bus_addr(node);
 	char *mn = di_minor_name(minor);
-
-	if (system_labeled)
-		flags = DA_ADD|DA_FLOPPY;
 
 	if (strcmp(addr, "0,0") == 0) {
 		if (strcmp(mn, "c") == 0) {

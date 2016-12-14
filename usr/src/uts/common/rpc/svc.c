@@ -205,7 +205,6 @@
 #include <sys/vtrace.h>
 #include <sys/zone.h>
 #include <nfs/nfs.h>
-#include <sys/tsol/label_macro.h>
 
 #define	RQCRED_SIZE	400	/* this size is excessive */
 
@@ -1296,9 +1295,6 @@ svc_getreq(
 	    "svc_getreq_start:");
 
 	ASSERT(clone_xprt->xp_master != NULL);
-	ASSERT(!is_system_labeled() || msg_getcred(mp, NULL) != NULL ||
-	    mp->b_datap->db_type != M_DATA);
-
 	/*
 	 * Firstly, allocate the authentication parameters' storage
 	 */
@@ -1317,24 +1313,6 @@ svc_getreq(
 	msg.rm_call.cb_cred.oa_base = cred_area;
 	msg.rm_call.cb_verf.oa_base = &(cred_area[MAX_AUTH_BYTES]);
 	r.rq_clntcred = &(cred_area[2 * MAX_AUTH_BYTES]);
-
-	/*
-	 * underlying transport recv routine may modify mblk data
-	 * and make it difficult to extract label afterwards. So
-	 * get the label from the raw mblk data now.
-	 */
-	if (is_system_labeled()) {
-		cred_t *cr;
-
-		r.rq_label = kmem_alloc(sizeof (bslabel_t), KM_SLEEP);
-		cr = msg_getcred(mp, NULL);
-		ASSERT(cr != NULL);
-
-		bcopy(label2bslabel(crgetlabel(cr)), r.rq_label,
-		    sizeof (bslabel_t));
-	} else {
-		r.rq_label = NULL;
-	}
 
 	/*
 	 * Now receive a message from the transport.
@@ -1420,9 +1398,6 @@ svc_getreq(
 				rpc_gss_cleanup(clone_xprt);
 		}
 	}
-
-	if (r.rq_label != NULL)
-		kmem_free(r.rq_label, sizeof (bslabel_t));
 
 	/*
 	 * Free authentication parameters' storage
@@ -2522,9 +2497,6 @@ svc_queuereq(queue_t *q, mblk_t *mp, bool_t flowcontrol)
 	size_t size;
 
 	TRACE_0(TR_FAC_KRPC, TR_SVC_QUEUEREQ_START, "svc_queuereq_start");
-
-	ASSERT(!is_system_labeled() || msg_getcred(mp, NULL) != NULL ||
-	    mp->b_datap->db_type != M_DATA);
 
 	/*
 	 * Step 1.

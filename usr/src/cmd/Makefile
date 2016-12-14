@@ -410,7 +410,6 @@ COMMON_SUBDIRS=		\
 	troff		\
 	true		\
 	truss		\
-	tsol		\
 	tty		\
 	ttymon		\
 	tzreload	\
@@ -688,7 +687,6 @@ MSGSUBDIRS=		\
 	touch		\
 	tput		\
 	troff		\
-	tsol		\
 	tty		\
 	ttymon		\
 	tzreload	\

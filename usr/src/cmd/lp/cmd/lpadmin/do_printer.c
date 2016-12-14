@@ -37,7 +37,6 @@
 #include <sys/zone.h>
 #include <stdlib.h>
 #include <libintl.h>
-#include <sys/tsol/label_macro.h>
 #include <bsm/devices.h>
 #include "lp.h"
 #include "class.h"
@@ -637,10 +636,6 @@ static void		configure_printer (list)
 			done(1);
 		}
 
-		if ((getzoneid() == GLOBAL_ZONEID) && system_labeled &&
-		    (prbufp->device != NULL))
-			update_dev_dbs(p, prbufp->device, "ADD");
-
 	END_CRITICAL
 
 	return;
@@ -693,61 +688,6 @@ char			*nameit (cmd)
 	(void) strcat (copy, " ");
 	(void) strcat (copy, nm);
 	return (copy);
-}
-
-/*
- * update_dev_dbs - ADD/REMOVE ENTRIES FOR THE PRINTER IN DEVICE
- * 			ALLOCATION FILES
- *
- * We intentionally ignore errors, since we don't want the printer
- * installation to be viewed as failing just because we didn't add
- * the device_allocate entry.
- *
- *	Input:
- *		prtname - printer name
- *		devname - device associated w/ this printer
- *		func - [ADD|REMOVE] entries in /etc/security/device_allocate
- *			and /etc/security/device_maps
- *
- *	Return:
- *		Always 'quiet' return.  Failures are ignored.
- */
-void
-update_dev_dbs(char *prtname, char *devname, char *func)
-{
-	int		fd, status;
-	pid_t		pid;
-
-	pid = fork();
-	switch (pid) {
-	case -1:
-		/* fork failed, just return quietly */
-		return;
-	case 0:
-		/* child */
-		/* redirect to /dev/null */
-		(void) close(1);
-		(void) close(2);
-		fd = open("/dev/null", O_WRONLY);
-		fd = dup(fd);
-
-		if (strcmp(func, "ADD") == 0) {
-			execl("/usr/sbin/add_allocatable", "add_allocatable",
-			    "-n", prtname, "-t", "lp", "-l", devname,
-			    "-o", "minlabel=admin_low:maxlabel=admin_high",
-			    "-a", "*", "-c", "/bin/true", NULL);
-		} else {
-			if (strcmp(func, "REMOVE") == 0) {
-				execl("/usr/sbin/remove_allocatable",
-				    "remove_allocatable", "-n", prtname, NULL);
-			}
-		}
-		_exit(1);
-		/* NOT REACHED */
-	default:
-		waitpid(pid, &status, 0);
-		return;
-	}
 }
 
 /*

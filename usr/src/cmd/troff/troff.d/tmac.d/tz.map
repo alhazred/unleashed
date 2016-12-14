@@ -225,20 +225,6 @@
 .if '\\$1'RMDRSTARFIRE' .ds Tz "Sun Enterprise 10000 Dynamic Reconfiguration Reference Manual
 .if '\\$1'UGALTPATH' .ds Tz "Sun Enterprise Server Alternate Pathing User's Guide
 .if '\\$1'RMALPATH' .ds Tz "Sun Enterprise Server Alternate Pathing Reference Manual
-.	# Trusted Solaris
-.if '\\$1'TSOLADMIN' .ds Tz "Trusted Solaris administrator's document set
-.if '\\$1'TSOLADMINOV' .ds Tz "Trusted Solaris Administration Overview
-.if '\\$1'TSOLADMINTASK' .ds Tz "Trusted Solaris Administrator's Procedures
-.if '\\$1'TSOLLABELS' .ds Tz "Trusted Solaris Label Administration
-.if '\\$1'TSOLAU' .ds Tz "Trusted Solaris Audit Administration Manual
-.if '\\$1'TSOLDG' .ds Tz "Trusted Solaris Developer's Guide
-.if '\\$1'TSOLDR' .ds Tz "Trusted Solaris Documentation Roadmap
-.if '\\$1'TSOLGI' .ds Tz "Trusted Solaris Global Index
-.if '\\$1'TSOLPG' .ds Tz "Trusted Solaris Developer's Guide
-.if '\\$1'TSOLUG' .ds Tz "Trusted Solaris User's Guide
-.if '\\$1'TSOLUSER' .ds Tz "Trusted Solaris user's document set
-.if '\\$1'TSOLRM' .ds Tz "Trusted Solaris Reference Manual
-.if '\\$1'TSOLREFMAN' .ds Tz "Trusted Solaris Reference Manual
 .	# RAID
 .if '\\$1'RM6INSTALL' .ds Tz "Platform Notes: RAID Manager User's Guide
 .if '\\$1'RSMARRAYUG' .ds Tz "RAID Manager User's Guide

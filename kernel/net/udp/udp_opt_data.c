@@ -78,12 +78,6 @@ opdes_t	udp_opt_arr[] = {
 { SO_VRRP, SOL_SOCKET, OA_RW, OA_RW, OP_CONFIG, 0, sizeof (int), 0 },
 { SO_TIMESTAMP, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int), 0
 	},
-{ SO_ANON_MLP, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int),
-    0 },
-{ SO_MAC_EXEMPT, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int),
-    0 },
-{ SO_MAC_IMPLICIT, SOL_SOCKET, OA_RW, OA_RW, OP_NP, 0, sizeof (int),
-    0 },
 /*
  * The maximum size reported here depends on the maximum value for
  * ucredsize; unfortunately, we can't add ucredsize here so we need

@@ -1,18 +1,4 @@
-./etc/certs
-./etc/init.d/llc2
-./etc/rc1.d
-./etc/rc1.d/K52llc2
-./etc/rc0.d
-./etc/rc0.d/K52llc2
-./etc/rcS.d
-./etc/rcS.d/K52llc2
-./etc/llc2
-./etc/llc2/llc2_start.default
-./etc/rc2.d/S40llc2
-./etc/snmp
-./etc/snmp/conf
-./etc/snmp/conf/mibiisa.reg
-./etc/snmp/conf/snmp.conf
+./etc
 ./kernel
 ./lib
 ./platform
@@ -33,6 +19,7 @@
 ./usr/kernel/drv/llc2
 ./usr/lib/amd64
 ./usr/lib/fwflash
+./usr/lib/labeld
 ./usr/lib/libike.so
 ./usr/lib/libike.so.1
 ./usr/lib/llib-like
@@ -72,6 +59,7 @@
 ./usr/bin/tail
 ./usr/platform/i86pc
 ./usr/platform/i86pc/lib
+./usr/sbin
 ./usr/xpg4/bin/alias
 ./usr/xpg4/bin/bg
 ./usr/xpg4/bin/cd

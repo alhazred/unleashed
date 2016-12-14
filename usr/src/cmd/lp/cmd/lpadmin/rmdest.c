@@ -107,9 +107,6 @@ void			rmdest (aclass, dest)
 		if (STREQU(getdflt(), dest))
 			newdflt (NAME_NONE);
 
-		if (system_labeled) {
-			update_dev_dbs(dest, NULL, "REMOVE");
-		}
 		break;
 
 	case MBUSY:

@@ -1077,12 +1077,12 @@ ip_routeto_impl(struct sockaddr *address, struct sockaddr *nexthop,
 
 	if (address->sa_family == AF_INET6) {
 		ire = ire_route_recursive_v6(&sin6->sin6_addr, 0, NULL,
-		    zoneid, NULL, MATCH_IRE_DSTONLY, IRR_ALLOCATE, 0, ipst,
-		    NULL, NULL, NULL);
+		    zoneid, MATCH_IRE_DSTONLY, IRR_ALLOCATE, 0, ipst, NULL,
+		    NULL);
 	} else {
 		ire = ire_route_recursive_v4(sin->sin_addr.s_addr, 0, NULL,
-		    zoneid, NULL, MATCH_IRE_DSTONLY, IRR_ALLOCATE, 0, ipst,
-		    NULL, NULL, NULL);
+		    zoneid, MATCH_IRE_DSTONLY, IRR_ALLOCATE, 0, ipst, NULL,
+		    NULL);
 	}
 	ASSERT(ire != NULL);
 	/*

@@ -34,8 +34,6 @@
 #include <sys/socket.h>
 #include <sys/random.h>
 #include <sys/policy.h>
-#include <sys/tsol/tndb.h>
-#include <sys/tsol/tnet.h>
 
 #include <netinet/in.h>
 #include <netinet/ip6.h>
@@ -158,8 +156,6 @@ sctp_listen(sctp_t *sctp)
 	ASSERT(!(connp->conn_ixa->ixa_free_flags & IXA_FREE_CRED));
 	connp->conn_ixa->ixa_cred = connp->conn_cred;
 	connp->conn_ixa->ixa_cpid = connp->conn_cpid;
-	if (is_system_labeled())
-		connp->conn_ixa->ixa_tsl = crgetlabel(connp->conn_cred);
 
 	sctp->sctp_state = SCTPS_LISTEN;
 	(void) random_get_pseudo_bytes(sctp->sctp_secret, SCTP_SECRET_LEN);
@@ -601,15 +597,7 @@ sctp_bindi(sctp_t *sctp, in_port_t port, boolean_t bind_to_req_port_only,
 			    lsctp->sctp_state < SCTPS_BOUND)
 				continue;
 
-			/*
-			 * On a labeled system, we must treat bindings to ports
-			 * on shared IP addresses by sockets with MAC exemption
-			 * privilege as being in all zones, as there's
-			 * otherwise no way to identify the right receiver.
-			 */
-			if (lconnp->conn_zoneid != zoneid &&
-			    lconnp->conn_mac_mode == CONN_MAC_DEFAULT &&
-			    connp->conn_mac_mode == CONN_MAC_DEFAULT)
+			if (lconnp->conn_zoneid != zoneid)
 				continue;
 
 			addrcmp = sctp_compare_saddrs(sctp, lsctp);
@@ -636,72 +624,6 @@ sctp_bindi(sctp_t *sctp, in_port_t port, boolean_t bind_to_req_port_only,
 			/* The port number is busy */
 			mutex_exit(&tbf->tf_lock);
 		} else {
-			if (is_system_labeled()) {
-				mlp_type_t addrtype, mlptype;
-				uint_t ipversion;
-
-				/*
-				 * On a labeled system we must check the type
-				 * of the binding requested by the user (either
-				 * MLP or SLP on shared and private addresses),
-				 * and that the user's requested binding
-				 * is permitted.
-				 */
-				if (connp->conn_family == AF_INET)
-					ipversion = IPV4_VERSION;
-				else
-					ipversion = IPV6_VERSION;
-
-				addrtype = tsol_mlp_addr_type(
-				    connp->conn_allzones ? ALL_ZONES :
-				    zone->zone_id,
-				    ipversion,
-				    connp->conn_family == AF_INET ?
-				    (void *)&sctp->sctp_ipha->ipha_src :
-				    (void *)&sctp->sctp_ip6h->ip6_src,
-				    sctps->sctps_netstack->netstack_ip);
-
-				/*
-				 * tsol_mlp_addr_type returns the possibilities
-				 * for the selected address.  Since all local
-				 * addresses are either private or shared, the
-				 * return value mlptSingle means "local address
-				 * not valid (interface not present)."
-				 */
-				if (addrtype == mlptSingle) {
-					mutex_exit(&tbf->tf_lock);
-					return (EADDRNOTAVAIL);
-				}
-				mlptype = tsol_mlp_port_type(zone, IPPROTO_SCTP,
-				    port, addrtype);
-				if (mlptype != mlptSingle) {
-					if (secpolicy_net_bindmlp(connp->
-					    conn_cred) != 0) {
-						mutex_exit(&tbf->tf_lock);
-						return (EACCES);
-					}
-					/*
-					 * If we're binding a shared MLP, then
-					 * make sure that this zone is the one
-					 * that owns that MLP.  Shared MLPs can
-					 * be owned by at most one zone.
-					 *
-					 * No need to handle exclusive-stack
-					 * zones since ALL_ZONES only applies
-					 * to the shared stack.
-					 */
-
-					if (mlptype == mlptShared &&
-					    addrtype == mlptShared &&
-					    connp->conn_zoneid !=
-					    tsol_mlp_findzone(IPPROTO_SCTP,
-					    lport)) {
-						mutex_exit(&tbf->tf_lock);
-						return (EACCES);
-					}
-					connp->conn_mlp_type = mlptype;
-				}
-			}
 			/*
 			 * This port is ours. Insert in fanout and mark as
 			 * bound to prevent others from getting the port
@@ -801,12 +723,6 @@ retry:
 			 */
 			goto retry;
 		}
-	}
-
-	if (is_system_labeled() &&
-	    (i = tsol_next_port(zone, port, IPPROTO_SCTP, B_TRUE)) != 0) {
-		port = i;
-		goto retry;
 	}
 
 	return (port);

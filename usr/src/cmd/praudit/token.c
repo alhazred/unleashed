@@ -63,8 +63,6 @@
 #include <bsm/audit_record.h>
 #include <bsm/libbsm.h>
 
-#include <tsol/label.h>
-
 #include "praudit.h"
 #include "toktable.h"
 
@@ -2196,64 +2194,6 @@ int
 xclient_token(pr_context_t *context)
 {
 	return (pa_adr_int32(context, 0, 1));
-}
-
-/*
- * -----------------------------------------------------------------------
- * label_token() 	: Process label token and display contents
- * return codes 	: -1 - error
- *			: 0 - successful
- * NOTE: At the time of call, the label token id has been retrieved
- *
- * Format of label token:
- *	label token id			adr_char
- *      label ID                	adr_char
- *      label compartment length	adr_char
- *      label classification		adr_short
- *      label compartment words		<compartment length> * 4 adr_char
- * -----------------------------------------------------------------------
- */
-/*ARGSUSED*/
-int
-label_token(pr_context_t *context)
-{
-	static m_label_t *label = NULL;
-	static size32_t l_size;
-	int	len;
-	int	returnstat;
-	uval_t	uval;
-
-	if (label == NULL) {
-		if ((label = m_label_alloc(MAC_LABEL)) == NULL) {
-			return (-1);
-		}
-		l_size = blabel_size() - 4;
-	}
-	if ((returnstat = pr_adr_char(context, (char *)label, 4)) == 0) {
-		len = (int)(((char *)label)[1] * 4);
-		if ((len > l_size) ||
-		    (pr_adr_char(context, &((char *)label)[4], len) != 0)) {
-			return (-1);
-		}
-		uval.uvaltype = PRA_STRING;
-		if (!(context->format & PRF_RAWM)) {
-			/* print in ASCII form */
-			if (label_to_str(label, &uval.string_val, M_LABEL,
-			    DEF_NAMES) == 0) {
-				returnstat = pa_print(context, &uval, 1);
-			} else /* cannot convert to string */
-				returnstat = 1;
-		}
-		/* print in hexadecimal form */
-		if ((context->format & PRF_RAWM) || (returnstat == 1)) {
-			uval.string_val = hexconvert((char *)label, len, len);
-			if (uval.string_val) {
-				returnstat = pa_print(context, &uval, 1);
-			}
-		}
-		free(uval.string_val);
-	}
-	return (returnstat);
 }
 
 /*

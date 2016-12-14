@@ -375,10 +375,6 @@ usr/lib/libstanddisasm.so
 usr/lib/amd64/libstanddisasm.so		i386
 usr/lib/sparcv9/libstanddisasm.so	sparc
 #
-# TSol: tsol doesn't ship lint source, and tsnet isn't for customers at all.
-#
-lib/libtsnet.so
-#
 # nss interfaces shared between libnsl and other ON libraries.
 #
 usr/include/nss.h

@@ -140,25 +140,12 @@ HTMLENTS = \
 	FileChown.html \
 	FileHeader.html \
 	FileOwner.html \
-	LabelFileDowngrade.html \
-	LabelFileUpgrade.html \
-	LabelHeader.html \
-	LabelPrint.html \
-	LabelRange.html \
-	LabelServer.html \
-	LabelWinDowngrade.html \
-	LabelWinNoView.html \
-	LabelWinUpgrade.html \
 	PrintAdmin.html \
 	PrintCancel.html \
 	PrintHeader.html \
 	PrintList.html \
 	PrintNoBanner.html \
 	PrintPs.html \
-	PrintUnlabeled.html \
-	TNDaemon.html \
-	TNctl.html \
-	ValueTND.html \
 	SysPowerMgmtHeader.html \
 	SysPowerMgmtSuspend.html \
 	SysPowerMgmtSuspendtoDisk.html \

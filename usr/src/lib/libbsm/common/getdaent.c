@@ -28,7 +28,6 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-#include <tsol/label.h>
 #include <bsm/devices.h>
 #include <bsm/devalloc.h>
 
@@ -49,8 +48,6 @@ static devalloc_t	*da_interpret(char *);
 
 int da_matchname(devalloc_t *, char *);
 int da_matchtype(devalloc_t *, char *);
-
-static int system_labeled = 0;
 
 /*
  * trim_white -
@@ -184,7 +181,6 @@ _daalloc(void)
 		DEVALLOC_FILE = "/etc/security/device_allocate";
 		daf = NULL;
 		__dabuff = _da;
-		system_labeled = is_system_labeled();
 	}
 
 	return (__dabuff);
@@ -499,52 +495,5 @@ da_interpret(char *val)
 		}
 	}
 
-	if (system_labeled) {
-		/* if label range is not defined, use the default range. */
-		int		i = 0, nlen = 0;
-		char		*minstr = NULL, *maxstr = NULL;
-		kva_t		*nkvap = NULL;
-		kv_t		*ndata = NULL, *odata = NULL;
-
-		if (kvap == NULL) {
-			nlen = 2;	/* minlabel, maxlabel */
-		} else {
-			nlen += kvap->length;
-			if ((minstr = kva_match(kvap, DAOPT_MINLABEL)) == NULL)
-				nlen++;
-			if ((maxstr = kva_match(kvap, DAOPT_MAXLABEL)) == NULL)
-				nlen++;
-		}
-		if ((minstr != NULL) && (maxstr != NULL))
-			/*
-			 * label range provided; we don't need to construct
-			 * default range.
-			 */
-			goto out;
-		nkvap = _new_kva(nlen);
-		ndata = nkvap->data;
-		if (kvap != NULL) {
-			for (i = 0; i < kvap->length; i++) {
-				odata = kvap->data;
-				ndata[i].key = _strdup_null(odata[i].key);
-				ndata[i].value = _strdup_null(odata[i].value);
-				nkvap->length++;
-			}
-		}
-		if (minstr == NULL) {
-			ndata[i].key = strdup(DAOPT_MINLABEL);
-			ndata[i].value = strdup(DA_DEFAULT_MIN);
-			nkvap->length++;
-			i++;
-		}
-		if (maxstr == NULL) {
-			ndata[i].key = strdup(DAOPT_MAXLABEL);
-			ndata[i].value = strdup(DA_DEFAULT_MAX);
-			nkvap->length++;
-		}
-		interpdevalloc.da_devopts = nkvap;
-	}
-
-out:
 	return (&interpdevalloc);
 }

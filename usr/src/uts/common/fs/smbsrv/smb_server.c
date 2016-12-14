@@ -1521,7 +1521,6 @@ smb_server_listener_start(smb_listener_daemon_t *ld)
 {
 	int		rc;
 	uint32_t	on;
-	uint32_t	off;
 
 	SMB_LISTENER_VALID(ld);
 
@@ -1533,10 +1532,6 @@ smb_server_listener_start(smb_listener_daemon_t *ld)
 		cmn_err(CE_WARN, "port %d: socket create failed", ld->ld_port);
 		return (ENOMEM);
 	}
-
-	off = 0;
-	(void) ksocket_setsockopt(ld->ld_so, SOL_SOCKET,
-	    SO_MAC_EXEMPT, &off, sizeof (off), CRED());
 
 	on = 1;
 	(void) ksocket_setsockopt(ld->ld_so, SOL_SOCKET,

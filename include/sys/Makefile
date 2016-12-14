@@ -671,7 +671,6 @@ SUBDIR=	1394 \
 	scsi \
 	sdcard \
 	sysevent \
-	tsol \
 	usb
 
 .include <prog.mk>

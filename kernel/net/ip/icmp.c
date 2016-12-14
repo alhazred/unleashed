@@ -76,9 +76,6 @@
 #include <inet/kstatcom.h>
 #include <inet/ipclassifier.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
-
 #include <inet/rawip_impl.h>
 
 #include <sys/disp.h>
@@ -861,10 +858,6 @@ rawip_do_connect(conn_t *connp, const struct sockaddr *sa, socklen_t len,
 	ASSERT(!(ixa->ixa_free_flags & IXA_FREE_CRED));
 	ixa->ixa_cred = cr;
 	ixa->ixa_cpid = pid;
-	if (is_system_labeled()) {
-		/* We need to restart with a label based on the cred */
-		ip_xmit_attr_restore_tsl(ixa, ixa->ixa_cred);
-	}
 
 	if (scopeid != 0) {
 		ixa->ixa_flags |= IXAF_SCOPEID_SET;
@@ -1752,13 +1745,6 @@ rawip_do_open(int family, cred_t *credp, int *err, int flags)
 
 	connp->conn_zoneid = zoneid;
 
-	/*
-	 * If the caller has the process-wide flag set, then default to MAC
-	 * exempt mode.  This allows read-down to unlabeled hosts.
-	 */
-	if (getpflags(NET_MAC_AWARE, credp) != 0)
-		connp->conn_mac_mode = CONN_MAC_AWARE;
-
 	connp->conn_zone_is_global = (crgetzoneid(credp) == GLOBAL_ZONEID);
 
 	icmp->icmp_is = is;
@@ -1781,8 +1767,6 @@ rawip_do_open(int family, cred_t *credp, int *err, int flags)
 	ASSERT(!(connp->conn_ixa->ixa_free_flags & IXA_FREE_CRED));
 	connp->conn_ixa->ixa_cred = connp->conn_cred;
 	connp->conn_ixa->ixa_cpid = connp->conn_cpid;
-	if (is_system_labeled())
-		connp->conn_ixa->ixa_tsl = crgetlabel(connp->conn_cred);
 
 	connp->conn_flow_cntrld = B_FALSE;
 
@@ -2720,7 +2704,7 @@ icmp_input(void *arg1, mblk_t *mp, void *arg2, ip_recv_attr_t *ira)
 		uint8_t		nexthdr;
 
 		/* We don't care about the length or nextheader. */
-		(void) ip_find_hdr_v6(mp, ip6h, B_TRUE, &ipps, &nexthdr);
+		(void) ip_find_hdr_v6(mp, ip6h, &ipps, &nexthdr);
 
 		/*
 		 * We do not pass up hop-by-hop options or any other
@@ -2728,10 +2712,6 @@ icmp_input(void *arg1, mblk_t *mp, void *arg2, ip_recv_attr_t *ira)
 		 * that want to see them have to specify IPV6_RECV* socket
 		 * options. And conn_recvancillary_size/add explicitly
 		 * drops the TX option from IPV6_HOPOPTS as it does for UDP.
-		 *
-		 * If we had multilevel ICMP sockets, then we'd want to
-		 * modify conn_recvancillary_size/add to
-		 * allow the user to see the label.
 		 */
 	}
 
@@ -3006,8 +2986,8 @@ icmp_tpi_unbind(queue_t *q, mblk_t *mp)
  * In this case we ignore the address and any options in the T_UNITDATA_REQ.
  *
  * The packet is assumed to have a base (20 byte) IP header followed
- * by the upper-layer protocol. We include any IP_OPTIONS including a
- * CIPSO label but otherwise preserve the base IP header.
+ * by the upper-layer protocol. We include any IP_OPTIONS but otherwise
+ * preserve the base IP header.
  */
 static int
 icmp_output_hdrincl(conn_t *connp, mblk_t *mp, cred_t *cr, pid_t pid)
@@ -3046,10 +3026,6 @@ icmp_output_hdrincl(conn_t *connp, mblk_t *mp, cred_t *cr, pid_t pid)
 	ASSERT(!(ixa->ixa_free_flags & IXA_FREE_CRED));
 	ixa->ixa_cred = cr;
 	ixa->ixa_cpid = pid;
-	if (is_system_labeled()) {
-		/* We need to restart with a label based on the cred */
-		ip_xmit_attr_restore_tsl(ixa, ixa->ixa_cred);
-	}
 
 	/* In case previous destination was multicast or multirt */
 	ip_attr_newdst(ixa);
@@ -3163,35 +3139,6 @@ icmp_output_hdrincl(conn_t *connp, mblk_t *mp, cred_t *cr, pid_t pid)
 	}
 	if (ipha->ipha_src == INADDR_ANY)
 		IN6_V4MAPPED_TO_IPADDR(&v6src, ipha->ipha_src);
-
-	/*
-	 * We might be going to a different destination than last time,
-	 * thus check that TX allows the communication and compute any
-	 * needed label.
-	 *
-	 * TSOL Note: We have an exclusive ipp and ixa for this thread so we
-	 * don't have to worry about concurrent threads.
-	 */
-	if (is_system_labeled()) {
-		/*
-		 * Check whether Trusted Solaris policy allows communication
-		 * with this host, and pretend that the destination is
-		 * unreachable if not.
-		 * Compute any needed label and place it in ipp_label_v4/v6.
-		 *
-		 * Later conn_build_hdr_template/conn_prepend_hdr takes
-		 * ipp_label_v4/v6 to form the packet.
-		 *
-		 * Tsol note: We have ipp structure local to this thread so
-		 * no locking is needed.
-		 */
-		error = conn_update_label(connp, ixa, &v6dst, ipp);
-		if (error != 0) {
-			freemsg(mp);
-			BUMP_MIB(&is->is_rawip_mib, rawipOutErrors);
-			goto done;
-		}
-	}
 
 	/*
 	 * Save away a copy of the IPv4 header the application passed down
@@ -3364,10 +3311,6 @@ icmp_output_ancillary(conn_t *connp, sin_t *sin, sin6_t *sin6, mblk_t *mp,
 	ASSERT(!(ixa->ixa_free_flags & IXA_FREE_CRED));
 	ixa->ixa_cred = cr;
 	ixa->ixa_cpid = pid;
-	if (is_system_labeled()) {
-		/* We need to restart with a label based on the cred */
-		ip_xmit_attr_restore_tsl(ixa, ixa->ixa_cred);
-	}
 
 	/* In case previous destination was multicast or multirt */
 	ip_attr_newdst(ixa);
@@ -3548,34 +3491,6 @@ icmp_output_ancillary(conn_t *connp, sin_t *sin, sin6_t *sin6, mblk_t *mp,
 		goto done;
 	}
 
-	/*
-	 * We might be going to a different destination than last time,
-	 * thus check that TX allows the communication and compute any
-	 * needed label.
-	 *
-	 * TSOL Note: We have an exclusive ipp and ixa for this thread so we
-	 * don't have to worry about concurrent threads.
-	 */
-	if (is_system_labeled()) {
-		/*
-		 * Check whether Trusted Solaris policy allows communication
-		 * with this host, and pretend that the destination is
-		 * unreachable if not.
-		 * Compute any needed label and place it in ipp_label_v4/v6.
-		 *
-		 * Later conn_build_hdr_template/conn_prepend_hdr takes
-		 * ipp_label_v4/v6 to form the packet.
-		 *
-		 * Tsol note: We have ipp structure local to this thread so
-		 * no locking is needed.
-		 */
-		error = conn_update_label(connp, ixa, &v6dst, ipp);
-		if (error != 0) {
-			freemsg(mp);
-			BUMP_MIB(&is->is_rawip_mib, rawipOutErrors);
-			goto done;
-		}
-	}
 	mp = icmp_prepend_hdr(connp, ixa, ipp, &v6src, &v6dst, flowinfo, mp,
 	    &error);
 	if (mp == NULL) {
@@ -4400,10 +4315,7 @@ icmp_output_newdst(conn_t *connp, mblk_t *data_mp, sin_t *sin, sin6_t *sin6,
 	ASSERT(!(ixa->ixa_free_flags & IXA_FREE_CRED));
 	ixa->ixa_cred = cr;
 	ixa->ixa_cpid = pid;
-	if (is_system_labeled()) {
-		/* We need to restart with a label based on the cred */
-		ip_xmit_attr_restore_tsl(ixa, ixa->ixa_cred);
-	}
+
 	/*
 	 * If we are connected then the destination needs to be the
 	 * same as the connected one, which is not the case here since we
@@ -4542,8 +4454,6 @@ icmp_output_newdst(conn_t *connp, mblk_t *data_mp, sin_t *sin, sin6_t *sin6,
 
 	/*
 	 * We need to rebuild the headers if
-	 *  - we are labeling packets (could be different for different
-	 *    destinations)
 	 *  - we have a source route (or routing header) since we need to
 	 *    massage that to get the pseudo-header checksum
 	 *  - a socket option with COA_HEADER_CHANGED has been set which
@@ -4552,39 +4462,7 @@ icmp_output_newdst(conn_t *connp, mblk_t *data_mp, sin_t *sin, sin6_t *sin6,
 	 * Otherwise the prepend function will just update the src, dst,
 	 * and flow label.
 	 */
-	if (is_system_labeled()) {
-		/* TX MLP requires SCM_UCRED and don't have that here */
-		if (connp->conn_mlp_type != mlptSingle) {
-			mutex_exit(&connp->conn_lock);
-			error = ECONNREFUSED;
-			goto ud_error;
-		}
-		/*
-		 * Check whether Trusted Solaris policy allows communication
-		 * with this host, and pretend that the destination is
-		 * unreachable if not.
-		 * Compute any needed label and place it in ipp_label_v4/v6.
-		 *
-		 * Later conn_build_hdr_template/conn_prepend_hdr takes
-		 * ipp_label_v4/v6 to form the packet.
-		 *
-		 * Tsol note: Since we hold conn_lock we know no other
-		 * thread manipulates conn_xmit_ipp.
-		 */
-		error = conn_update_label(connp, ixa, &v6dst,
-		    &connp->conn_xmit_ipp);
-		if (error != 0) {
-			mutex_exit(&connp->conn_lock);
-			goto ud_error;
-		}
-		/* Rebuild the header template */
-		error = icmp_build_hdr_template(connp, &v6src, &v6dst,
-		    flowinfo);
-		if (error != 0) {
-			mutex_exit(&connp->conn_lock);
-			goto ud_error;
-		}
-	} else if (connp->conn_xmit_ipp.ipp_fields &
+	if (connp->conn_xmit_ipp.ipp_fields &
 	    (IPPF_IPV4_OPTIONS|IPPF_RTHDR) ||
 	    IN6_IS_ADDR_UNSPECIFIED(&connp->conn_v6lastdst)) {
 		/* Rebuild the header template */

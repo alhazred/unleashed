@@ -854,8 +854,6 @@ nfs4_trigger_mount(vnode_t *vp, cred_t *cr, vnode_t **newvpp)
 	}
 
 	crset_zone_privall(mcred);
-	if (is_system_labeled())
-		(void) setpflags(NET_MAC_AWARE, 1, mcred);
 
 	error = nfs4_trigger_domount(vp, dma, &vfsp, mcred, newvpp);
 	nfs4_trigger_domount_args_destroy(dma, vp);

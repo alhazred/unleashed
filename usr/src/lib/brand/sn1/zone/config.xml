@@ -64,9 +64,7 @@
 	<privilege set="default" name="ipc_dac_read" />
 	<privilege set="default" name="ipc_dac_write" />
 	<privilege set="default" name="ipc_owner" />
-	<privilege set="default" name="net_bindmlp" />
 	<privilege set="default" name="net_icmpaccess" />
-	<privilege set="default" name="net_mac_aware" />
 	<privilege set="default" name="net_observability" />
 	<privilege set="default" name="net_privaddr" />
 	<privilege set="default" name="net_rawaccess" ip-type="exclusive" />

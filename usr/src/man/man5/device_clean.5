@@ -20,11 +20,6 @@ as well as the cleaning program and the authorizations that are associated with
 each device.
 .sp
 .LP
-On a system configured with Trusted Extensions, device clean programs are also
-invoked by \fBallocate\fR(1), in which case the program can optionally mount
-appropriate media for the caller.
-.sp
-.LP
 The following device clean programs reside in \fB/etc/security/lib\fR.
 .sp
 .ne 2
@@ -60,47 +55,6 @@ tape devices
 .ad
 .RS 15n
 CD-ROM devices
-.RE
-
-.sp
-.LP
-On a system configured with Trusted Extensions, the following additional
-cleaning programs and wrappers are available.
-.sp
-.ne 2
-.na
-\fB\fBdisk_clean\fR\fR
-.ad
-.RS 23n
-floppy, CD-ROM, and other removable media devices. This program mounts the
-device during the execution of \fBallocate\fR, if required.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBaudio_clean_wrapper\fR\fR
-.ad
-.RS 23n
-wrapper to make audio_clean work with CDE
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBwdwwrapper\fR\fR
-.ad
-.RS 23n
-wrapper to make other cleaning programs work with CDE
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBwdwmsg\fR\fR
-.ad
-.RS 23n
-CDE dialog boxes for cleaning programs
 .RE
 
 .sp
@@ -165,50 +119,6 @@ Invoke standard cleanup by the user.
 Same as \fB-i\fR, with no error or warning.
 .RE
 
-.sp
-.LP
-The following options are supported only when the system is configured with
-Trusted Extensions.
-.sp
-.ne 2
-.na
-\fB\fB-m\fR \fImode\fR\fR
-.ad
-.RS 16n
-Specify the mode in which the clean program is invoked. Valid values are allo-
-cate and deallocate. The default mode is allocate.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-u\fR \fIuser-name\fR\fR
-.ad
-.RS 16n
-Specify the name of user who executes the device clean program. The default
-user is the caller.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-z\fR \fIzone-name\fR\fR
-.ad
-.RS 16n
-Specify the name of the zone in which the device is to be allocated or
-deallocated. The default zone is the global zone.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-p\fR \fIzone-path\fR\fR
-.ad
-.RS 16n
-Establish the root path of the zone that is specified by \fIzone-name\fR.
-Default is "/".
-.RE
-
 .SH EXIT STATUS
 .sp
 .LP
@@ -241,30 +151,6 @@ An error. Caller can place device in error state.
 .sp .6
 .RS 4n
 A system error. Caller can place device in error state.
-.RE
-
-.sp
-.LP
-On a system configured with Trusted Extensions, the following additional exit
-values are returned:
-.sp
-.ne 2
-.na
-\fB\fB3\fR\fR
-.ad
-.sp .6
-.RS 4n
-Mounting of device failed. Caller shall not place device in error state.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB4\fR\fR
-.ad
-.sp .6
-.RS 4n
-Mounting of device succeeded.
 .RE
 
 .SH FILES

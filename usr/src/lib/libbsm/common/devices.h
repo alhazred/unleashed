@@ -39,8 +39,6 @@ extern "C" {
 #define	DAOPT_AUTHS	"auths"
 #define	DAOPT_CLASS	"class"
 #define	DAOPT_CSCRIPT	"cleanscript"
-#define	DAOPT_MINLABEL	"minlabel"
-#define	DAOPT_MAXLABEL	"maxlabel"
 #define	DAOPT_XDISPLAY	"xdpy"
 #define	DAOPT_ZONE	"zone"
 #define	DA_RESERVED	"reserved"

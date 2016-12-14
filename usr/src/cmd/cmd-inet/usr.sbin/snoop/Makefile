@@ -49,7 +49,7 @@ include	../../../Makefile.cmd
 CPPFLAGS += -I. -I$(SRC)/common/net/dhcp \
 	    -I$(CODEMGR_WS)/include \
 	-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-LDLIBS += -ldhcputil -ldlpi -ltsol
+LDLIBS += -ldhcputil -ldlpi
 LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
 CERRWARN += -Wno-switch
 CERRWARN += -Wno-implicit-function-declaration

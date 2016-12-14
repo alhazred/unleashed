@@ -32,9 +32,6 @@
 #include <sys/mkdev.h>
 #include <bsm/devalloc.h>
 
-extern int system_labeled;
-
-
 static int ddi_other(di_minor_t minor, di_node_t node);
 static int diskette(di_minor_t minor, di_node_t node);
 static int ecpp_create(di_minor_t minor, di_node_t node);
@@ -105,9 +102,6 @@ diskette(di_minor_t minor, di_node_t node)
 {
 	int	flags = 0;
 	char	*mn = di_minor_name(minor);
-
-	if (system_labeled)
-		flags = DA_ADD|DA_FLOPPY;
 
 	if (strcmp(mn, "c") == 0) {
 		(void) devfsadm_mklink("diskette", node, minor, flags);

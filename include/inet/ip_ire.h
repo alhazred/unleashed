@@ -90,7 +90,6 @@ extern "C" {
 #define	MATCH_IRE_ZONEONLY	0x0020	/* Match IREs in specified zone, ie */
 					/* don't match IRE_LOCALs from other */
 					/* zones or shared IREs */
-#define	MATCH_IRE_SECATTR	0x0040	/* Match gateway security attributes */
 #define	MATCH_IRE_TESTHIDDEN 	0x0080	/* Match ire_testhidden IREs */
 #define	MATCH_IRE_SRC_ILL	0x0100	/* ire_ill uses a src address on ill */
 #define	MATCH_IRE_DIRECT	0x0200	/* Don't match indirect routes */
@@ -105,7 +104,6 @@ extern "C" {
 #define	BUMP_IRE_STATS(ire_stats, x) atomic_inc_64(&(ire_stats).x)
 
 #ifdef _KERNEL
-struct ts_label_s;
 struct nce_s;
 /*
  * structure for passing args between ire_ftable_lookup and ire_find_best_route
@@ -120,7 +118,6 @@ typedef struct ire_ftable_args_s {
 	int			ift_type;
 	const ill_t		*ift_ill;
 	zoneid_t		ift_zoneid;
-	const ts_label_t	*ift_tsl;
 	int			ift_flags;
 	ire_t			*ift_best_ire;
 } ire_ftable_args_t;
@@ -141,23 +138,23 @@ extern	int	ire_atomic_start(irb_t *irb_ptr, ire_t *ire);
 extern	void	ire_atomic_end(irb_t *irb_ptr, ire_t *ire);
 
 extern	ire_t	*ire_create(uchar_t *, uchar_t *, uchar_t *,
-    ushort_t, ill_t *, zoneid_t, uint_t, tsol_gc_t *, ip_stack_t *);
+    ushort_t, ill_t *, zoneid_t, uint_t, ip_stack_t *);
 
 extern	ire_t	**ire_create_bcast(ill_t *, ipaddr_t, zoneid_t, ire_t **);
 extern	ire_t	*ire_create_if_clone(ire_t *, const in6_addr_t *, uint_t *);
 extern	ire_t	*ire_lookup_bcast(ill_t *, ipaddr_t, zoneid_t);
 extern	int	ire_init_v4(ire_t *, uchar_t *, uchar_t *, uchar_t *,
-    ushort_t, ill_t *, zoneid_t, uint_t, tsol_gc_t *, ip_stack_t *);
+    ushort_t, ill_t *, zoneid_t, uint_t, ip_stack_t *);
 extern	int	ire_init_v6(ire_t *, const in6_addr_t *, const in6_addr_t *,
-    const in6_addr_t *, ushort_t, ill_t *, zoneid_t, uint_t, tsol_gc_t *,
+    const in6_addr_t *, ushort_t, ill_t *, zoneid_t, uint_t,
     ip_stack_t *);
 
 extern	int	ire_init_common(ire_t *, ushort_t, ill_t *, zoneid_t, uint_t,
-    uchar_t, tsol_gc_t *, ip_stack_t *);
+    uchar_t, ip_stack_t *);
 
 extern	ire_t	*ire_create_v6(const in6_addr_t *, const in6_addr_t *,
     const in6_addr_t *, ushort_t, ill_t *, zoneid_t, uint_t,
-    tsol_gc_t *, ip_stack_t *);
+    ip_stack_t *);
 
 extern	void	ire_delete(ire_t *);
 extern	void	ire_delete_v6(ire_t *);
@@ -175,11 +172,10 @@ extern	void	ire_flush_cache_v4(ire_t *, int);
 extern	void	ire_flush_cache_v6(ire_t *, int);
 
 extern	ire_t	*ire_ftable_lookup_v4(ipaddr_t, ipaddr_t, ipaddr_t, int,
-    const ill_t *, zoneid_t, const struct ts_label_s *, int, uint32_t,
-    ip_stack_t *, uint_t *);
+    const ill_t *, zoneid_t, int, uint32_t, ip_stack_t *, uint_t *);
 extern	ire_t	*ire_ftable_lookup_v6(const in6_addr_t *, const in6_addr_t *,
-    const in6_addr_t *, int, const ill_t *, zoneid_t,
-    const struct ts_label_s *, int, uint32_t, ip_stack_t *, uint_t *);
+    const in6_addr_t *, int, const ill_t *, zoneid_t, int, uint32_t,
+    ip_stack_t *, uint_t *);
 
 extern	ire_t	*ire_ftable_lookup_simple_v4(ipaddr_t, uint32_t, ip_stack_t *,
     uint_t *);
@@ -187,12 +183,11 @@ extern	ire_t	*ire_ftable_lookup_simple_v6(const in6_addr_t *, uint32_t,
     ip_stack_t *, uint_t *);
 
 extern boolean_t ire_gateway_ok_zone_v4(ipaddr_t, zoneid_t, ill_t *,
-    const ts_label_t *, ip_stack_t *, boolean_t);
+    ip_stack_t *, boolean_t);
 extern boolean_t ire_gateway_ok_zone_v6(const in6_addr_t *, zoneid_t, ill_t *,
-    const ts_label_t *, ip_stack_t *, boolean_t);
+    ip_stack_t *, boolean_t);
 
-extern ire_t	*ire_alt_local(ire_t *, zoneid_t, const ts_label_t *,
-    const ill_t *, uint_t *);
+extern ire_t	*ire_alt_local(ire_t *, zoneid_t, const ill_t *, uint_t *);
 
 extern  ill_t	*ire_lookup_multi_ill_v4(ipaddr_t, zoneid_t, ip_stack_t *,
     boolean_t *, ipaddr_t *);
@@ -258,21 +253,20 @@ extern ire_t   	*ire_round_robin(irb_t *, ire_ftable_args_t *, uint_t,
     ire_t *, ip_stack_t *);
 
 extern ire_t	*ire_route_recursive_v4(ipaddr_t, uint_t, const ill_t *,
-    zoneid_t, const ts_label_t *, uint_t, uint_t, uint32_t, ip_stack_t *,
-    ipaddr_t *, tsol_ire_gw_secattr_t **, uint_t *);
+    zoneid_t, uint_t, uint_t, uint32_t, ip_stack_t *, ipaddr_t *, uint_t *);
 extern ire_t	*ire_route_recursive_v6(const in6_addr_t *, uint_t,
-    const ill_t *, zoneid_t, const ts_label_t *, uint_t, uint_t, uint32_t,
-    ip_stack_t *, in6_addr_t *, tsol_ire_gw_secattr_t **, uint_t *);
+    const ill_t *, zoneid_t, uint_t, uint_t, uint32_t, ip_stack_t *,
+    in6_addr_t *, uint_t *);
 extern ire_t	*ire_route_recursive_dstonly_v4(ipaddr_t, uint_t,
     uint32_t, ip_stack_t *);
 extern ire_t	*ire_route_recursive_dstonly_v6(const in6_addr_t *, uint_t,
     uint32_t, ip_stack_t *);
 extern ire_t	*ire_route_recursive_impl_v4(ire_t *ire, ipaddr_t, uint_t,
-    const ill_t *, zoneid_t, const ts_label_t *, uint_t, uint_t, uint32_t,
-    ip_stack_t *, ipaddr_t *, tsol_ire_gw_secattr_t **, uint_t *);
+    const ill_t *, zoneid_t, uint_t, uint_t, uint32_t, ip_stack_t *,
+    ipaddr_t *, uint_t *);
 extern ire_t	*ire_route_recursive_impl_v6(ire_t *ire, const in6_addr_t *,
-    uint_t, const ill_t *, zoneid_t, const ts_label_t *, uint_t, uint_t,
-    uint32_t, ip_stack_t *, in6_addr_t *, tsol_ire_gw_secattr_t **, uint_t *);
+    uint_t, const ill_t *, zoneid_t, uint_t, uint_t, uint32_t, ip_stack_t *,
+    in6_addr_t *, uint_t *);
 
 /* The different ire_sendfn functions */
 extern int	ire_send_local_v4(ire_t *, mblk_t *, void *,
@@ -334,10 +328,10 @@ extern  void	ire_walk_ill_tables(uint_t match_flags, uint_t ire_type,
 extern	void	ire_walk_v6(pfv_t, void *, zoneid_t, ip_stack_t *);
 
 extern boolean_t	ire_match_args(ire_t *, ipaddr_t, ipaddr_t, ipaddr_t,
-    int, const ill_t *, zoneid_t, const struct ts_label_s *, int);
+    int, const ill_t *, zoneid_t, int);
 extern boolean_t	ire_match_args_v6(ire_t *, const in6_addr_t *,
     const in6_addr_t *, const in6_addr_t *, int, const ill_t *, zoneid_t,
-    const ts_label_t *, int);
+    int);
 
 extern  struct nce_s	*arp_nce_init(ill_t *, in_addr_t, int);
 extern  boolean_t	ire_walk_ill_match(uint_t, uint_t, ire_t *, ill_t *,

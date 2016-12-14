@@ -89,7 +89,6 @@ static int	proc_group(char *, gid_t *);
 static int	proc_id(char *, int);
 static int	proc_object(char *);
 static void	proc_pcb(audit_pcb_t *, char *, int);
-static int	proc_label(char *);
 static int	proc_subject(char *);
 static int	proc_sid(char *);
 static int	proc_type(char *);
@@ -120,7 +119,7 @@ process_options(int argc, char **argv)
 	extern char	*optarg;	/* in getopt() - holds arg to flag */
 
 	static char	*options = "ACD:M:NQR:S:VO:"
-	    "a:b:c:d:e:g:j:l:m:o:r:s:t:u:z:";
+	    "a:b:c:d:e:g:j:m:o:r:s:t:u:z:";
 
 	error_str = gettext("general error");
 
@@ -194,16 +193,6 @@ start_over:
 		case 'f':		/* form effective group */
 		case 'g':		/* form real group */
 			if (proc_id(optarg, opt))
-				error = TRUE;
-			break;
-		case 'l':		/* TX label range */
-			if (!is_system_labeled()) {
-				(void) fprintf(stderr,
-				    gettext("%s option 'l' requires "
-				    "Trusted Extensions.\n"), ar);
-				return (-1);
-			}
-			if (proc_label(optarg))
 				error = TRUE;
 			break;
 		case 's':		/* session ID */
@@ -1124,117 +1113,6 @@ proc_pcb(audit_pcb_t *pcb, char *suffix, int i)
 	pcb->pcb_time = -1;
 	pcb->pcb_flags |= PF_USEFILE;	/* note this one controls files */
 	pcb->pcb_procno = i;	/* save index into audit_pcbs [] for id */
-}
-
-
-/*
- * .func	proc_label - process label range argument.
- * .desc	Parse label range lower-bound[;upper-bound]
- * .call	ret = proc_label(optstr).
- * .arg	opstr	- ptr to label range string
- * .ret 0	- no errors detected.
- * .ret -1	- errors detected (error_str set).
- */
-
-int
-proc_label(char *optstr)
-{
-	char	*p;
-	int	error;
-
-	if (flags & M_LABEL) {
-		error_str = gettext("'l' option specified multiple times");
-		return (-1);
-	}
-	flags |= M_LABEL;
-
-	if ((m_label = malloc(sizeof (m_range_t))) == NULL) {
-		return (-1);
-	}
-	m_label->lower_bound = NULL;
-	m_label->upper_bound = NULL;
-
-	p = strchr(optstr, ';');
-	if (p == NULL) {
-		/* exact label match, lower and upper range bounds the same */
-		if (str_to_label(optstr, &m_label->lower_bound, MAC_LABEL,
-		    L_NO_CORRECTION, &error) == -1) {
-			(void) sprintf(errbuf,
-			    gettext("invalid sensitivity label (%s) err %d"),
-			    optstr, error);
-			error_str = errbuf;
-			goto errout;
-		}
-		m_label->upper_bound = m_label->lower_bound;
-		return (0);
-	}
-	if (p == optstr) {
-		/* lower bound is not specified .. default is admin_low */
-		if (str_to_label(ADMIN_LOW, &m_label->lower_bound, MAC_LABEL,
-		    L_NO_CORRECTION, &error) == -1) {
-			goto errout;
-		}
-
-		p++;
-		if (*p == '\0') {
-			/* upper bound not specified .. default is admin_high */
-			if (str_to_label(ADMIN_HIGH, &m_label->upper_bound,
-			    MAC_LABEL, L_NO_CORRECTION, &error) == -1) {
-				goto errout;
-			}
-		} else {
-			if (str_to_label(p, &m_label->upper_bound, MAC_LABEL,
-			    L_NO_CORRECTION, &error) == -1) {
-				(void) sprintf(errbuf, gettext(
-				    "invalid sensitivity label (%s) err %d"),
-				    p, error);
-				error_str = errbuf;
-				goto errout;
-			}
-		}
-		return (0);
-	}
-	*p++ = '\0';
-	if (str_to_label(optstr, &m_label->lower_bound, MAC_LABEL,
-	    L_NO_CORRECTION, &error) == -1) {
-		(void) sprintf(errbuf,
-		    gettext("invalid sensitivity label (%s) err %d"), optstr,
-		    error);
-		error_str = errbuf;
-		goto errout;
-	}
-	if (*p == '\0') {
-		/* upper bound is not specified .. default is admin_high */
-		if (str_to_label(ADMIN_HIGH, &m_label->upper_bound,
-		    MAC_LABEL, L_NO_CORRECTION, &error) == -1) {
-			goto errout;
-		}
-	} else {
-		if (str_to_label(p, &m_label->upper_bound, MAC_LABEL,
-		    L_NO_CORRECTION, &error) == -1) {
-			(void) sprintf(errbuf,
-			    gettext("invalid sensitivity label (%s) err %d"),
-			    p, error);
-			error_str = errbuf;
-			goto errout;
-		}
-	}
-	/* make sure that upper bound dominates the lower bound */
-	if (!bldominates(m_label->upper_bound, m_label->lower_bound)) {
-		*--p = ';';
-		(void) sprintf(errbuf,
-		    gettext("invalid sensitivity label range (%s)"), optstr);
-		error_str = errbuf;
-		goto errout;
-	}
-	return (0);
-
-errout:
-	m_label_free(m_label->upper_bound);
-	m_label_free(m_label->lower_bound);
-	free(m_label);
-
-	return (-1);
 }
 
 /*

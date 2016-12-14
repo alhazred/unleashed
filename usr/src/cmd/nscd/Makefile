@@ -43,8 +43,7 @@ OBJS=	server.o getpw.o getgr.o gethost.o getnode.o \
 	nscd_log.o nscd_nswconfig.o nscd_nswstate.o nscd_nswcfgst.o \
 	nscd_seqnum.o nscd_smfmonitor.o \
 	nscd_switch.o nscd_nswparse.o nscd_initf.o nscd_selfcred.o \
-	nscd_frontend.o nscd_admin.o nscd_door.o \
-	gettnrhtp.o gettnrhdb.o
+	nscd_frontend.o nscd_admin.o nscd_door.o
 
 CLOBBERFILES=	nscd
 

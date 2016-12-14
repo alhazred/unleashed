@@ -93,7 +93,6 @@ int	hrtsys(struct hrtsysa *, rval_t *);
 #endif /* __i386 || __amd64 */
 int	ioctl(int, int, intptr_t);
 int	kill();
-int	labelsys(int, void *, void *, void *, void *, void *);
 int	link(char *, char *);
 int	linkat(int, char *, int, char *, int);
 off32_t	lseek32(int32_t, off32_t, int32_t);
@@ -654,7 +653,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 181 */ SYSENT_CI("rusagesys",	rusagesys, 	5),
 	/* 182 */ SYSENT_LOADABLE(),		/* portfs */
 	/* 183 */ SYSENT_CI("pollsys",		pollsys,	4),
-	/* 184 */ SYSENT_CI("labelsys",		labelsys,	5),
+	/* 184 */ SYSENT_LOADABLE(),		/* (was labelsys) */
 	/* 185 */ SYSENT_CI("acl",		acl,		4),
 	/* 186 */ SYSENT_AP("auditsys",		auditsys,	6),
 	/* 187 */ SYSENT_CI("processor_bind",	processor_bind,	4),
@@ -1009,7 +1008,7 @@ struct sysent sysent32[NSYSCALL] =
 	/* 181 */ SYSENT_CI("rusagesys",	rusagesys,	5),
 	/* 182 */ SYSENT_LOADABLE32(),		/* portfs */
 	/* 183 */ SYSENT_CI("pollsys",		pollsys,	4),
-	/* 184 */ SYSENT_CI("labelsys",		labelsys,	5),
+	/* 184 */ SYSENT_LOADABLE(),		/* (was labelsys) */
 	/* 185 */ SYSENT_CI("acl",		acl,		4),
 	/* 186 */ SYSENT_AP("auditsys",		auditsys,	6),
 	/* 187 */ SYSENT_CI("processor_bind",	processor_bind,	4),

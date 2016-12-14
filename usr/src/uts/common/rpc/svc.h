@@ -41,7 +41,6 @@
 #include <rpc/rpc_msg.h>
 #include <sys/tihdr.h>
 #include <sys/poll.h>
-#include <sys/tsol/label.h>
 
 #ifdef	_KERNEL
 #include <rpc/svc_auth.h>
@@ -108,7 +107,6 @@ struct svc_req {
 	struct opaque_auth rq_cred;	/* raw creds from the wire */
 	caddr_t		rq_clntcred;	/* read only cooked cred */
 	SVCXPRT		*rq_xprt;	/* associated transport */
-	bslabel_t	*rq_label;	/* TSOL label of the request */
 };
 
 #ifdef _KERNEL

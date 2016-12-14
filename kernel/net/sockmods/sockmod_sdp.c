@@ -81,10 +81,6 @@ socksdp_create(struct sockparams *sp, int family, int type, int protocol, int
 	    family, protocol, type));
 
 	*errorp = 0;
-	if (is_system_labeled()) {
-		*errorp = EOPNOTSUPP;
-		return (NULL);
-	}
 
 	/*
 	 * We only support one type of SDP socket.  Let sotpi_create()

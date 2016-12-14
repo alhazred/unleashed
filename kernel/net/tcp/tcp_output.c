@@ -41,7 +41,6 @@
 #include <sys/squeue_impl.h>
 #include <sys/squeue.h>
 #include <sys/sockio.h>
-#include <sys/tsol/tnet.h>
 
 #include <inet/common.h>
 #include <inet/ip.h>
@@ -2624,14 +2623,6 @@ tcp_xmit_early_reset(char *str, mblk_t *mp, uint32_t seq, uint32_t ack, int ctl,
 		TCPS_BUMP_MIB(tcps, tcpOutControl);
 	}
 
-	/* Discard any old label */
-	if (ixa->ixa_free_flags & IXA_FREE_TSL) {
-		ASSERT(ixa->ixa_tsl != NULL);
-		label_rele(ixa->ixa_tsl);
-		ixa->ixa_free_flags &= ~IXA_FREE_TSL;
-	}
-	ixa->ixa_tsl = ira->ira_tsl;	/* Behave as a multi-level responder */
-
 	if (ira->ira_flags & IRAF_IPSEC_SECURE) {
 		/*
 		 * Apply IPsec based on how IPsec was applied to
@@ -2724,16 +2715,6 @@ tcp_xmit_listeners_reset(mblk_t *mp, ip_recv_attr_t *ira, ip_stack_t *ipst,
 		if (mp == NULL)
 			return;
 	}
-	if (is_system_labeled() && !tsol_can_reply_error(mp, ira)) {
-		DTRACE_PROBE2(
-		    tx__ip__log__error__nolistener__tcp,
-		    char *, "Could not reply with RST to mp(1)",
-		    mblk_t *, mp);
-		ip2dbg(("tcp_xmit_listeners_reset: not permitted to reply\n"));
-		freemsg(mp);
-		return;
-	}
-
 	rptr = mp->b_rptr;
 
 	tcpha = (tcpha_t *)&rptr[ip_hdr_len];

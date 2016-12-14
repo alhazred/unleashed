@@ -253,8 +253,6 @@ main(int argc, char **argv)
 {
 	int ret = 1;
 
-	vold_init(argc, argv);
-
 	progname = get_progname(argv[0]);
 
 	if (strcmp(progname, "rmmount") == 0) {

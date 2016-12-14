@@ -76,7 +76,6 @@ extern "C" {
 #define	DEVZONEERR		15
 #define	DSPMISSERR		16
 #define	GLOBALERR		17
-#define	LABELRNGERR		18
 #define	LOGINDEVPERMERR		19
 #define	NODAERR			20
 #define	NODMAPERR		21

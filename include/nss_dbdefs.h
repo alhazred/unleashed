@@ -82,10 +82,6 @@ extern "C" {
 #define	NSS_DBNAM_PROFATTR	"prof_attr"
 #define	NSS_DBNAM_USERATTR	"user_attr"
 
-#define	NSS_DBNAM_TSOL_TP	"tnrhtp"
-#define	NSS_DBNAM_TSOL_RH	"tnrhdb"
-#define	NSS_DBNAM_TSOL_ZC	"tnzonecfg"
-
 /* getspnam() et al use the "passwd" config entry but the "shadow" backend */
 #define	NSS_DBNAM_SHADOW	"shadow"
 
@@ -103,7 +99,6 @@ extern "C" {
 #define	NSS_FILES_NS		"files nis"
 #define	NSS_NS_FALLBACK		"nis [NOTFOUND=return] files"
 #define	NSS_NS_ONLY		"nis"
-#define	NSS_TSOL_FALLBACK	"files ldap"
 
 #define	NSS_DEFCONF_ALIASES	NSS_FILES_NS
 #define	NSS_DEFCONF_AUTOMOUNT	NSS_FILES_NS
@@ -133,10 +128,6 @@ extern "C" {
 #define	NSS_DEFCONF_AUTHATTR	NSS_DEFCONF_ATTRDB
 #define	NSS_DEFCONF_PROFATTR	NSS_DEFCONF_ATTRDB
 #define	NSS_DEFCONF_EXECATTR	NSS_DEFCONF_PROFATTR
-
-#define	NSS_DEFCONF_TSOL_TP	NSS_TSOL_FALLBACK
-#define	NSS_DEFCONF_TSOL_RH	NSS_TSOL_FALLBACK
-#define	NSS_DEFCONF_TSOL_ZC	NSS_TSOL_FALLBACK
 
 /*
  * Line-lengths that the "files" and "compat" backends will try to support.
@@ -171,12 +162,6 @@ extern "C" {
 
 #define	NSS_MMAPLEN_EXECATTR	NSS_LINELEN_EXECATTR * 8
 
-#define	NSS_LINELEN_TSOL	NSS_BUFSIZ
-
-#define	NSS_LINELEN_TSOL_TP	NSS_LINELEN_TSOL
-#define	NSS_LINELEN_TSOL_RH	NSS_LINELEN_TSOL
-#define	NSS_LINELEN_TSOL_ZC	NSS_LINELEN_TSOL
-
 /*
  * Reasonable defaults for 'buflen' values passed to _r functions.  The BSD
  * and SunOS 4.x implementations of the getXXXbyYYY() functions used hard-
@@ -209,11 +194,6 @@ extern "C" {
 #define	NSS_BUFLEN_EXECATTR	NSS_BUFLEN_ATTRDB
 #define	NSS_BUFLEN_PROFATTR	NSS_BUFLEN_ATTRDB
 #define	NSS_BUFLEN_USERATTR	((NSS_BUFLEN_ATTRDB) * 8)
-
-#define	NSS_BUFLEN_TSOL		NSS_LINELEN_TSOL
-#define	NSS_BUFLEN_TSOL_TP	NSS_BUFLEN_TSOL
-#define	NSS_BUFLEN_TSOL_RH	NSS_BUFLEN_TSOL
-#define	NSS_BUFLEN_TSOL_ZC	NSS_BUFLEN_TSOL
 
 /*
  * Default cache door buffer size (2x largest buffer)
@@ -803,10 +783,6 @@ extern nss_status_t	nss_packed_getkey(void *, size_t, char **, int *,
 #define	NSS_DBOP_EXECATTR_BYNAMEID	(NSS_DBOP_EXECATTR_BYID + 1)
 #define	NSS_DBOP_PROFATTR_BYNAME	NSS_DBOP_ATTRDB_BYNAME
 #define	NSS_DBOP_USERATTR_BYNAME	NSS_DBOP_ATTRDB_BYNAME
-
-#define	NSS_DBOP_TSOL_TP_BYNAME		(NSS_DBOP_next_iter)
-#define	NSS_DBOP_TSOL_RH_BYADDR		(NSS_DBOP_next_iter)
-#define	NSS_DBOP_TSOL_ZC_BYNAME		(NSS_DBOP_next_iter)
 
 /*
  * Used all over in the switch code. The best home for it I can think of.

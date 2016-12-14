@@ -50,13 +50,9 @@ extern "C" {
 #define	DA_DEV_LOCK		"/etc/security/.da_dev_lock"
 #define	DEVALLOC		"/etc/security/device_allocate"
 #define	DEVMAP			"/etc/security/device_maps"
-#define	DEFATTRS		"/etc/security/tsol/devalloc_defaults"
 #define	TMPALLOC		"/etc/security/.device_allocate"
 #define	TMPMAP			"/etc/security/.device_maps"
-#define	TMPATTRS		"/etc/security/tsol/.devalloc_defaults"
 
-#define	DA_DEFAULT_MIN		"admin_low"
-#define	DA_DEFAULT_MAX		"admin_high"
 #define	DA_DEFAULT_CLEAN	"/bin/true"
 #define	DA_DEFAULT_AUDIO_CLEAN	"/etc/security/lib/audio_clean_wrapper"
 #define	DA_DEFAULT_DISK_CLEAN	"/etc/security/lib/disk_clean"
@@ -64,7 +60,6 @@ extern "C" {
 
 #define	DA_ON_STR		"DEVICE_ALLOCATION=ON\n"
 #define	DA_OFF_STR		"DEVICE_ALLOCATION=OFF\n"
-#define	DA_IS_LABELED		"system_labeled"
 #define	DA_DBMODE		0644
 #define	DA_COUNT		5	/* allocatable devices suppported */
 					/* audio, cd, floppy, rmdisk, tape */
@@ -154,21 +149,10 @@ typedef struct _da_optargs {
 	devinfo_t	*devinfo;
 } da_args;
 
-typedef struct _da_defs {
-	char		*devtype;
-	kva_t		*devopts;
-} da_defs_t;
-
-da_defs_t *getdadefent(void);
-da_defs_t *getdadeftype(char *);
-void freedadefent(da_defs_t *);
-void setdadefent(void);
-void enddadefent(void);
 int da_is_on(void);
 int da_check_logindevperm(char *);
 int da_open_devdb(char *, FILE **, FILE **, int);
 int da_update_device(da_args *);
-int da_update_defattrs(da_args *);
 int da_add_list(devlist_t *, char *, int, int);
 int da_remove_list(devlist_t *, char *, int, char *, int);
 int da_rm_list_entry(devlist_t *, char *, int, char *);

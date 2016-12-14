@@ -42,7 +42,6 @@
 #include <sys/systm.h>
 #include <sys/cmn_err.h>
 #include <sys/policy.h>
-#include <sys/tsol/label.h>
 #include "sys/fs_subr.h"
 
 /*
@@ -190,91 +189,6 @@ lo_mount(struct vfs *vfsp,
 	if (error = lookupname(uap->spec, (uap->flags & MS_SYSSPACE) ?
 	    UIO_SYSSPACE : UIO_USERSPACE, FOLLOW, NULLVPP, &realrootvp))
 		return (error);
-
-	/*
-	 * Enforce MAC policy if needed.
-	 *
-	 * Loopback mounts must not allow writing up. The dominance test
-	 * is intended to prevent a global zone caller from accidentally
-	 * creating write-up conditions between two labeled zones.
-	 * Local zones can't violate MAC on their own without help from
-	 * the global zone because they can't name a pathname that
-	 * they don't already have.
-	 *
-	 * The special case check for the NET_MAC_AWARE process flag is
-	 * to support the case of the automounter in the global zone. We
-	 * permit automounting of local zone directories such as home
-	 * directories, into the global zone as required by setlabel,
-	 * zonecopy, and saving of desktop sessions. Such mounts are
-	 * trusted not to expose the contents of one zone's directories
-	 * to another by leaking them through the global zone.
-	 */
-	if (is_system_labeled() && crgetzoneid(cr) == GLOBAL_ZONEID) {
-		char	specname[MAXPATHLEN];
-		zone_t	*from_zptr;
-		zone_t	*to_zptr;
-
-		if (vnodetopath(NULL, realrootvp, specname,
-		    sizeof (specname), CRED()) != 0) {
-			VN_RELE(realrootvp);
-			return (EACCES);
-		}
-
-		from_zptr = zone_find_by_path(specname);
-		to_zptr = zone_find_by_path(refstr_value(vfsp->vfs_mntpt));
-
-		/*
-		 * Special case for scratch zones used for Live Upgrade:
-		 * this is used to mount the zone's root from /root to /a in
-		 * the scratch zone.  As with the other special case, this
-		 * appears to be outside of the zone because it's not under
-		 * the zone rootpath, which is $ZONEPATH/lu in the scratch
-		 * zone case.
-		 */
-
-		if (from_zptr != to_zptr &&
-		    !(to_zptr->zone_flags & ZF_IS_SCRATCH)) {
-			/*
-			 * We know at this point that the labels aren't equal
-			 * because the zone pointers aren't equal, and zones
-			 * can't share a label.
-			 *
-			 * If the source is the global zone then making
-			 * it available to a local zone must be done in
-			 * read-only mode as the label will become admin_low.
-			 *
-			 * If it is a mount between local zones then if
-			 * the current process is in the global zone and has
-			 * the NET_MAC_AWARE flag, then regular read-write
-			 * access is allowed.  If it's in some other zone, but
-			 * the label on the mount point dominates the original
-			 * source, then allow the mount as read-only
-			 * ("read-down").
-			 */
-			if (from_zptr->zone_id == GLOBAL_ZONEID) {
-				/* make the mount read-only */
-				vfs_setmntopt(vfsp, MNTOPT_RO, NULL, 0);
-			} else { /* cross-zone mount */
-				if (to_zptr->zone_id == GLOBAL_ZONEID &&
-				    /* LINTED: no consequent */
-				    getpflags(NET_MAC_AWARE, cr) != 0) {
-					/* Allow the mount as read-write */
-				} else if (bldominates(
-				    label2bslabel(to_zptr->zone_slabel),
-				    label2bslabel(from_zptr->zone_slabel))) {
-					/* make the mount read-only */
-					vfs_setmntopt(vfsp, MNTOPT_RO, NULL, 0);
-				} else {
-					VN_RELE(realrootvp);
-					zone_rele(to_zptr);
-					zone_rele(from_zptr);
-					return (EACCES);
-				}
-			}
-		}
-		zone_rele(to_zptr);
-		zone_rele(from_zptr);
-	}
 
 	/*
 	 * realrootvp may be an AUTOFS node, in which case we perform a

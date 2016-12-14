@@ -82,7 +82,6 @@
 #include <rpcsvc/daemon_utils.h>
 #include <pwd.h>
 #include <strings.h>
-#include <tsol/label.h>
 #include <zone.h>
 #include <limits.h>
 #include <libscf.h>
@@ -2044,19 +2043,7 @@ try_mnt_slash:
 			} /* syncaddr */
 		} /* AUTH_DH */
 
-		/*
-		 * TSOL notes: automountd in tsol extension
-		 * has "read down" capability, i.e. we allow
-		 * a user to trigger an nfs mount into a lower
-		 * labeled zone. We achieve this by always having
-		 * root issue the mount request so that the
-		 * lookup ops can go past /zone/<zone_name>
-		 * on the server side.
-		 */
-		if (is_system_labeled())
-			nfs_sec.sc_uid = (uid_t)0;
-		else
-			nfs_sec.sc_uid = uid;
+		nfs_sec.sc_uid = uid;
 		/*
 		 * If AUTH_DH is a chosen flavor now, its data will be stored
 		 * in the sec_data structure via nfs_clnt_secdata().
@@ -3507,13 +3494,6 @@ loopbackmount(fsname, dir, mntopts, overlay)
 		trace_prt(1,
 			"  loopbackmount: fsname=%s, dir=%s, flags=%d\n",
 			fsname, dir, flags);
-
-	if (is_system_labeled()) {
-		if (create_homedir((const char *)fsname,
-		    (const char *)dir) == 0) {
-			return (NFSERR_NOENT);
-		}
-	}
 
 	if (mount(fsname, dir, flags | MS_DATA | MS_OPTIONSTR, fstype,
 	    NULL, 0, optbuf, sizeof (optbuf)) < 0) {

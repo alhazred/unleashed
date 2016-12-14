@@ -69,8 +69,6 @@
 #include <inet/ipclassifier.h>
 #include <sys/zone.h>
 #include <net/radix.h>
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
 
 #define	IS_DEFAULT_ROUTE(ire)	\
 	(((ire)->ire_type & IRE_DEFAULT) || \
@@ -93,8 +91,8 @@ static boolean_t ire_find_best_route(struct radix_node *, void *);
  */
 ire_t *
 ire_ftable_lookup_v4(ipaddr_t addr, ipaddr_t mask, ipaddr_t gateway,
-    int type, const ill_t *ill, zoneid_t zoneid, const ts_label_t *tsl,
-    int flags, uint32_t xmit_hint, ip_stack_t *ipst, uint_t *generationp)
+    int type, const ill_t *ill, zoneid_t zoneid, int flags, uint32_t xmit_hint,
+    ip_stack_t *ipst, uint_t *generationp)
 {
 	ire_t *ire;
 	struct rt_sockaddr rdst, rmask;
@@ -127,7 +125,6 @@ ire_ftable_lookup_v4(ipaddr_t addr, ipaddr_t mask, ipaddr_t gateway,
 	margs.ift_type = type;
 	margs.ift_ill = ill;
 	margs.ift_zoneid = zoneid;
-	margs.ift_tsl = tsl;
 	margs.ift_flags = flags;
 
 	/*
@@ -200,7 +197,7 @@ done:
 	if ((ire->ire_type & IRE_LOCAL) && zoneid != ALL_ZONES &&
 	    ire->ire_zoneid != zoneid && ire->ire_zoneid != ALL_ZONES &&
 	    ipst->ips_ip_restrict_interzone_loopback) {
-		ire = ire_alt_local(ire, zoneid, tsl, ill, generationp);
+		ire = ire_alt_local(ire, zoneid, ill, generationp);
 		ASSERT(ire != NULL);
 	}
 	return (ire);
@@ -344,8 +341,8 @@ ire_lookup_multi_ill_v4(ipaddr_t group, zoneid_t zoneid, ip_stack_t *ipst,
 	ire_t	*ire;
 	ill_t	*ill;
 
-	ire = ire_route_recursive_v4(group, 0, NULL, zoneid, NULL,
-	    MATCH_IRE_DSTONLY, IRR_NONE, 0, ipst, setsrcp, NULL, NULL);
+	ire = ire_route_recursive_v4(group, 0, NULL, zoneid, MATCH_IRE_DSTONLY,
+	    IRR_NONE, 0, ipst, setsrcp, NULL);
 	ASSERT(ire != NULL);
 	if (ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)) {
 		ire_refrele(ire);
@@ -522,18 +519,14 @@ route_to_dst(const struct sockaddr *dst_addr, zoneid_t zoneid, ip_stack_t *ipst)
 
 	match_flags = MATCH_IRE_DSTONLY;
 
-	/* XXX pass NULL tsl for now */
-
 	if (dst_addr->sa_family == AF_INET) {
 		ire = ire_route_recursive_v4(
 		    ((struct sockaddr_in *)dst_addr)->sin_addr.s_addr, 0, NULL,
-		    zoneid, NULL, match_flags, IRR_ALLOCATE, 0, ipst, NULL,
-		    NULL, NULL);
+		    zoneid, match_flags, IRR_ALLOCATE, 0, ipst, NULL, NULL);
 	} else {
 		ire = ire_route_recursive_v6(
 		    &((struct sockaddr_in6 *)dst_addr)->sin6_addr, 0, NULL,
-		    zoneid, NULL, match_flags, IRR_ALLOCATE, 0, ipst, NULL,
-		    NULL, NULL);
+		    zoneid, match_flags, IRR_ALLOCATE, 0, ipst, NULL, NULL);
 	}
 	ASSERT(ire != NULL);
 	if (ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)) {
@@ -606,7 +599,6 @@ ipfil_sendpkt(const struct sockaddr *dst_addr, mblk_t *mp, uint_t ifindex,
 	ixas.ixa_flags = IXAF_NO_IPSEC | IXAF_DONTFRAG | IXAF_NO_PFHOOK;
 	ixas.ixa_cred = kcred;
 	ixas.ixa_cpid = NOPID;
-	ixas.ixa_tsl = NULL;
 	ixas.ixa_ipst = ipst;
 	ixas.ixa_ifindex = ifindex;
 
@@ -684,8 +676,7 @@ ire_find_best_route(struct radix_node *rn, void *arg)
 
 		if (ire_match_args(ire, margs->ift_addr, match_mask,
 		    margs->ift_gateway, margs->ift_type, margs->ift_ill,
-		    margs->ift_zoneid, margs->ift_tsl,
-		    margs->ift_flags)) {
+		    margs->ift_zoneid, margs->ift_flags)) {
 			ire_refhold(ire);
 			rw_exit(&irb_ptr->irb_lock);
 			margs->ift_best_ire = ire;
@@ -872,11 +863,11 @@ ire_round_robin(irb_t *irb_ptr, ire_ftable_args_t *margs, uint_t hash,
 		    !ire_match_args(ire, margs->ift_addr,
 		    ire->ire_mask, margs->ift_gateway,
 		    margs->ift_type, margs->ift_ill, margs->ift_zoneid,
-		    margs->ift_tsl, margs->ift_flags) :
+		    margs->ift_flags) :
 		    !ire_match_args_v6(ire, &margs->ift_addr_v6,
 		    &ire->ire_mask_v6, &margs->ift_gateway_v6,
 		    margs->ift_type, margs->ift_ill, margs->ift_zoneid,
-		    margs->ift_tsl, margs->ift_flags))
+		    margs->ift_flags))
 			goto next_ire;
 
 		if (margs->ift_zoneid != ALL_ZONES &&
@@ -889,14 +880,13 @@ ire_round_robin(irb_t *irb_ptr, ire_ftable_args_t *margs, uint_t hash,
 			if (ire->ire_ipversion == IPV4_VERSION) {
 				if (!ire_gateway_ok_zone_v4(
 				    ire->ire_gateway_addr, margs->ift_zoneid,
-				    ire->ire_ill, margs->ift_tsl, ipst,
-				    B_TRUE))
+				    ire->ire_ill, ipst, B_TRUE))
 					goto next_ire;
 			} else {
 				if (!ire_gateway_ok_zone_v6(
 				    &ire->ire_gateway_addr_v6,
 				    margs->ift_zoneid, ire->ire_ill,
-				    margs->ift_tsl, ipst, B_TRUE))
+				    ipst, B_TRUE))
 					goto next_ire;
 			}
 		}
@@ -1084,7 +1074,7 @@ ip_select_route(const in6_addr_t *v6dst, const in6_addr_t v6src,
 	verify_src = (!V6_OR_V4_INADDR_ANY(v6src) &&
 	    (ixa->ixa_flags & IXAF_VERIFY_SOURCE));
 
-	match_args = MATCH_IRE_SECATTR;
+	match_args = 0;
 	IN6_V4MAPPED_TO_IPADDR(v6dst, v4dst);
 	if (setsrcp != NULL)
 		ASSERT(IN6_IS_ADDR_UNSPECIFIED(setsrcp));
@@ -1277,14 +1267,14 @@ retry:
 
 		IN6_V4MAPPED_TO_IPADDR(&v6nexthop, v4nexthop);
 		ire = ire_route_recursive_v4(v4nexthop, ire_type, ill,
-		    ixa->ixa_zoneid, ixa->ixa_tsl, match_args, IRR_ALLOCATE,
-		    ixa->ixa_xmit_hint, ipst, &v4setsrc, NULL, generationp);
+		    ixa->ixa_zoneid, match_args, IRR_ALLOCATE,
+		    ixa->ixa_xmit_hint, ipst, &v4setsrc, generationp);
 		if (setsrcp != NULL)
 			IN6_IPADDR_TO_V4MAPPED(v4setsrc, setsrcp);
 	} else {
 		ire = ire_route_recursive_v6(&v6nexthop, ire_type, ill,
-		    ixa->ixa_zoneid, ixa->ixa_tsl, match_args, IRR_ALLOCATE,
-		    ixa->ixa_xmit_hint, ipst, setsrcp, NULL, generationp);
+		    ixa->ixa_zoneid, match_args, IRR_ALLOCATE,
+		    ixa->ixa_xmit_hint, ipst, setsrcp, generationp);
 	}
 
 #ifdef DEBUG
@@ -1378,7 +1368,7 @@ ip_select_route_v4(ipaddr_t dst, ipaddr_t src, ip_xmit_attr_t *ixa,
 
 /*
  * Recursively look for a route to the destination. Can also match on
- * the zoneid, ill, and label. Used for the data paths. See also
+ * the zoneid and ill. Used for the data paths. See also
  * ire_route_recursive.
  *
  * If IRR_ALLOCATE is not set then we will only inspect the existing IREs; never
@@ -1397,9 +1387,8 @@ ip_select_route_v4(ipaddr_t dst, ipaddr_t src, ip_xmit_attr_t *ixa,
 ire_t *
 ire_route_recursive_impl_v4(ire_t *ire,
     ipaddr_t nexthop, uint_t ire_type, const ill_t *ill_arg,
-    zoneid_t zoneid, const ts_label_t *tsl, uint_t match_args,
-    uint_t irr_flags, uint32_t xmit_hint, ip_stack_t *ipst, ipaddr_t *setsrcp,
-    tsol_ire_gw_secattr_t **gwattrp, uint_t *generationp)
+    zoneid_t zoneid, uint_t match_args, uint_t irr_flags, uint32_t xmit_hint,
+    ip_stack_t *ipst, ipaddr_t *setsrcp, uint_t *generationp)
 {
 	int		i, j;
 	ire_t		*ires[MAX_IRE_RECURSION];
@@ -1412,8 +1401,6 @@ ire_route_recursive_impl_v4(ire_t *ire,
 
 	if (setsrcp != NULL)
 		ASSERT(*setsrcp == INADDR_ANY);
-	if (gwattrp != NULL)
-		ASSERT(*gwattrp == NULL);
 
 	/*
 	 * We iterate up to three times to resolve a route, even though
@@ -1425,8 +1412,8 @@ ire_route_recursive_impl_v4(ire_t *ire,
 		/* ire_ftable_lookup handles round-robin/ECMP */
 		if (ire == NULL) {
 			ire = ire_ftable_lookup_v4(nexthop, 0, 0, ire_type,
-			    (ill != NULL? ill : ill_arg), zoneid, tsl,
-			    match_args, xmit_hint, ipst, &generation);
+			    (ill != NULL? ill : ill_arg), zoneid, match_args,
+			    xmit_hint, ipst, &generation);
 		} else {
 			/* Caller passed it; extra hold since we will rele */
 			ire_refhold(ire);
@@ -1495,11 +1482,6 @@ ire_route_recursive_impl_v4(ire_t *ire,
 			ASSERT(ire->ire_setsrc_addr != INADDR_ANY);
 			*setsrcp = ire->ire_setsrc_addr;
 		}
-
-		/* The first ire_gw_secattr is passed back if gwattrp */
-		if (ire->ire_gw_secattr != NULL &&
-		    gwattrp != NULL && *gwattrp == NULL)
-			*gwattrp = ire->ire_gw_secattr;
 
 		/*
 		 * Check if we have a short-cut pointer to an IRE for this
@@ -1693,13 +1675,12 @@ done:
 
 ire_t *
 ire_route_recursive_v4(ipaddr_t nexthop, uint_t ire_type, const ill_t *ill,
-    zoneid_t zoneid, const ts_label_t *tsl, uint_t match_args,
-    uint_t irr_flags, uint32_t xmit_hint, ip_stack_t *ipst, ipaddr_t *setsrcp,
-    tsol_ire_gw_secattr_t **gwattrp, uint_t *generationp)
+    zoneid_t zoneid, uint_t match_args, uint_t irr_flags, uint32_t xmit_hint,
+    ip_stack_t *ipst, ipaddr_t *setsrcp, uint_t *generationp)
 {
 	return (ire_route_recursive_impl_v4(NULL, nexthop, ire_type, ill,
-	    zoneid, tsl, match_args, irr_flags, xmit_hint, ipst, setsrcp,
-	    gwattrp, generationp));
+	    zoneid, match_args, irr_flags, xmit_hint, ipst, setsrcp,
+	    generationp));
 }
 
 /*
@@ -1755,8 +1736,7 @@ ire_route_recursive_dstonly_v4(ipaddr_t nexthop, uint_t irr_flags,
 	 * we found. Normally this would return the same ire.
 	 */
 	ire1 = ire_route_recursive_impl_v4(ire, nexthop, 0, NULL, ALL_ZONES,
-	    NULL, MATCH_IRE_DSTONLY, irr_flags, xmit_hint, ipst, NULL, NULL,
-	    &generation);
+	    MATCH_IRE_DSTONLY, irr_flags, xmit_hint, ipst, NULL, &generation);
 	ire_refrele(ire);
 	return (ire1);
 }

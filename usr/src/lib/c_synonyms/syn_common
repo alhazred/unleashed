@@ -422,7 +422,6 @@ initgroups
 insque
 inst_sync
 ioctl
-is_system_labeled
 isascii
 isastream
 isatty
@@ -940,7 +939,6 @@ ucred_getauid
 ucred_getegid
 ucred_geteuid
 ucred_getgroups
-ucred_getlabel
 ucred_getpflags
 ucred_getpid
 ucred_getprivset

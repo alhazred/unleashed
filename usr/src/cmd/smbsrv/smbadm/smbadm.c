@@ -1513,12 +1513,6 @@ main(int argc, char **argv)
 
 	progname = basename(argv[0]);
 
-	if (is_system_labeled()) {
-		(void) fprintf(stderr,
-		    gettext("Trusted Extensions not supported\n"));
-		return (1);
-	}
-
 	if (argc < 2) {
 		(void) fprintf(stderr, gettext("missing command\n"));
 		smbadm_usage(B_FALSE);

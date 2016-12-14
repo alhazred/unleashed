@@ -312,13 +312,6 @@ main(int argc, char *argv[])
 	(void) setlocale(LC_ALL, "");
 	(void) textdomain(TEXT_DOMAIN);
 
-	if (is_system_labeled()) {
-		(void) fprintf(stderr,
-		    gettext("%s: Trusted Extensions not supported.\n"),
-		    argv[0]);
-		return (1);
-	}
-
 	while ((c = getopt(argc, argv, "achnrtuz")) != EOF) {
 		switch (c) {
 		case 'a':

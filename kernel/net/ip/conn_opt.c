@@ -97,9 +97,6 @@
 #include <inet/udp_impl.h>
 #include <sys/sunddi.h>
 
-#include <sys/tsol/label.h>
-#include <sys/tsol/tnet.h>
-
 /*
  * Return how much size is needed for the different ancillary data items
  */
@@ -659,15 +656,6 @@ conn_opt_get(conn_opt_arg_t *coa, t_scalar_t level, t_scalar_t name,
 		case SO_VRRP:
 			*i1 = connp->conn_isvrrp;
 			break;	/* goto sizeof (int) option return */
-		case SO_ANON_MLP:
-			*i1 = connp->conn_anon_mlp;
-			break;	/* goto sizeof (int) option return */
-		case SO_MAC_EXEMPT:
-			*i1 = (connp->conn_mac_mode == CONN_MAC_AWARE);
-			break;	/* goto sizeof (int) option return */
-		case SO_MAC_IMPLICIT:
-			*i1 = (connp->conn_mac_mode == CONN_MAC_IMPLICIT);
-			break;	/* goto sizeof (int) option return */
 		case SO_ALLZONES:
 			*i1 = connp->conn_allzones;
 			break;	/* goto sizeof (int) option return */
@@ -1058,16 +1046,6 @@ conn_opt_set_socket(conn_opt_arg_t *coa, t_scalar_t name, uint_t inlen,
 		if (secpolicy_ip_config(cr, checkonly) != 0)
 			return (EACCES);
 		break;
-	case SO_MAC_EXEMPT:
-		if (secpolicy_net_mac_aware(cr) != 0)
-			return (EACCES);
-		if (IPCL_IS_BOUND(connp))
-			return (EINVAL);
-		break;
-	case SO_MAC_IMPLICIT:
-		if (secpolicy_net_mac_implicit(cr) != 0)
-			return (EACCES);
-		break;
 	}
 	if (checkonly)
 		return (0);
@@ -1150,17 +1128,6 @@ conn_opt_set_socket(conn_opt_arg_t *coa, t_scalar_t name, uint_t inlen,
 	case SO_VRRP:
 		connp->conn_isvrrp = onoff;
 		break;
-	case SO_ANON_MLP:
-		connp->conn_anon_mlp = onoff;
-		break;
-	case SO_MAC_EXEMPT:
-		connp->conn_mac_mode = onoff ?
-		    CONN_MAC_AWARE : CONN_MAC_DEFAULT;
-		break;
-	case SO_MAC_IMPLICIT:
-		connp->conn_mac_mode = onoff ?
-		    CONN_MAC_IMPLICIT : CONN_MAC_DEFAULT;
-		break;
 	case SO_EXCLBIND:
 		connp->conn_exclbind = onoff;
 		break;
@@ -1221,25 +1188,17 @@ conn_opt_set_ip(conn_opt_arg_t *coa, t_scalar_t name, uint_t inlen,
 		}
 		/* Verify that the next-hop is on-link */
 		ire = ire_ftable_lookup_v4(addr, 0, 0, IRE_ONLINK, NULL, zoneid,
-		    NULL, MATCH_IRE_TYPE, 0, ipst, NULL);
+		    MATCH_IRE_TYPE, 0, ipst, NULL);
 		if (ire == NULL)
 			return (EHOSTUNREACH);
 		ire_refrele(ire);
 		break;
 	}
 	case IP_OPTIONS:
-	case T_IP_OPTIONS: {
-		uint_t newlen;
-
-		if (ipp->ipp_fields & IPPF_LABEL_V4)
-			newlen = inlen + (ipp->ipp_label_len_v4 + 3) & ~3;
-		else
-			newlen = inlen;
-		if ((inlen & 0x3) || newlen > IP_MAX_OPT_LENGTH) {
+	case T_IP_OPTIONS:
+		if ((inlen & 0x3) || inlen > IP_MAX_OPT_LENGTH)
 			return (EINVAL);
-		}
 		break;
-	}
 	case IP_PKTINFO: {
 		struct in_pktinfo *pktinfo;
 
@@ -1637,7 +1596,7 @@ conn_opt_set_ipv6(conn_opt_arg_t *coa, t_scalar_t name, uint_t inlen,
 			/* Verify that the next-hop is on-link */
 			ire = ire_ftable_lookup_v6(&sin6->sin6_addr,
 			    0, 0, IRE_ONLINK, NULL, zoneid,
-			    NULL, MATCH_IRE_TYPE, 0, ipst, NULL);
+			    MATCH_IRE_TYPE, 0, ipst, NULL);
 			if (ire == NULL)
 				return (EHOSTUNREACH);
 			ire_refrele(ire);
@@ -2486,11 +2445,6 @@ ip_attr_nexthop(const ip_pkt_t *ipp, const ip_xmit_attr_t *ixa,
  * causing the squeue to run doing ipcl_walk grabbing conn_lock.)
  *
  * Updates laddrp and uinfo if they are non-NULL.
- *
- * TSOL notes: The callers if ip_attr_connect must check if the destination
- * is different than before and in that case redo conn_update_label.
- * The callers of conn_connect do not need that since conn_connect
- * performs the conn_update_label.
  */
 int
 ip_attr_connect(const conn_t *connp, ip_xmit_attr_t *ixa,
@@ -2527,7 +2481,7 @@ ip_attr_connect(const conn_t *connp, ip_xmit_attr_t *ixa,
 			flags |= IPDF_SELECT_SRC;
 
 		error = ip_set_destination_v4(&v4src, v4dst, v4nexthop, ixa,
-		    uinfo, flags, connp->conn_mac_mode);
+		    uinfo, flags);
 		IN6_IPADDR_TO_V4MAPPED(v4src, &laddr);
 	} else {
 		if (connp->conn_unspec_src || !IN6_IS_ADDR_UNSPECIFIED(v6src))
@@ -2536,7 +2490,7 @@ ip_attr_connect(const conn_t *connp, ip_xmit_attr_t *ixa,
 			flags |= IPDF_SELECT_SRC;
 
 		error = ip_set_destination_v6(&laddr, v6dst, v6nexthop, ixa,
-		    uinfo, flags, connp->conn_mac_mode);
+		    uinfo, flags);
 	}
 	/* Pass out some address even if we hit a RTF_REJECT etc */
 	if (laddrp != NULL)
@@ -2609,32 +2563,6 @@ conn_connect(conn_t *connp, iulp_t *uinfo, uint32_t flags)
 	connp->conn_saddr_v6 = saddr;
 	if (error != 0)
 		return (error);
-
-	/*
-	 * Check whether Trusted Solaris policy allows communication with this
-	 * host, and pretend that the destination is unreachable if not.
-	 * Compute any needed label and place it in ipp_label_v4/v6.
-	 *
-	 * Later conn_build_hdr_template() takes ipp_label_v4/v6 to form
-	 * the packet.
-	 *
-	 * TSOL Note: Any concurrent threads would pick a different ixa
-	 * (and ipp if they are to change the ipp)  so we
-	 * don't have to worry about concurrent threads.
-	 */
-	if (is_system_labeled()) {
-		if (connp->conn_mlp_type != mlptSingle)
-			return (ECONNREFUSED);
-
-		/*
-		 * conn_update_label will set ipp_label* which will later
-		 * be used by conn_build_hdr_template.
-		 */
-		error = conn_update_label(connp, ixa,
-		    &connp->conn_faddr_v6, &connp->conn_xmit_ipp);
-		if (error != 0)
-			return (error);
-	}
 
 	/*
 	 * Ensure that we match on the selected local address.
@@ -2742,82 +2670,6 @@ conn_same_as_last_v6(conn_t *connp, sin6_t *sin6)
 }
 
 /*
- * Compute a label and place it in the ip_packet_t.
- * Handles IPv4 and IPv6.
- * The caller should have a correct ixa_tsl and ixa_zoneid and have
- * already called conn_connect or ip_attr_connect to ensure that tsol_check_dest
- * has been called.
- */
-int
-conn_update_label(const conn_t *connp, const ip_xmit_attr_t *ixa,
-    const in6_addr_t *v6dst, ip_pkt_t *ipp)
-{
-	int		err;
-	ipaddr_t	v4dst;
-
-	if (IN6_IS_ADDR_V4MAPPED(v6dst)) {
-		uchar_t		opt_storage[IP_MAX_OPT_LENGTH];
-
-		IN6_V4MAPPED_TO_IPADDR(v6dst, v4dst);
-
-		err = tsol_compute_label_v4(ixa->ixa_tsl, ixa->ixa_zoneid,
-		    v4dst, opt_storage, ixa->ixa_ipst);
-		if (err == 0) {
-			/* Length contained in opt_storage[IPOPT_OLEN] */
-			err = optcom_pkt_set(opt_storage,
-			    opt_storage[IPOPT_OLEN],
-			    (uchar_t **)&ipp->ipp_label_v4,
-			    &ipp->ipp_label_len_v4);
-		}
-		if (err != 0) {
-			DTRACE_PROBE4(tx__ip__log__info__updatelabel,
-			    char *, "conn(1) failed to update options(2) "
-			    "on ixa(3)",
-			    conn_t *, connp, char *, opt_storage,
-			    ip_xmit_attr_t *, ixa);
-		}
-		if (ipp->ipp_label_len_v4 != 0)
-			ipp->ipp_fields |= IPPF_LABEL_V4;
-		else
-			ipp->ipp_fields &= ~IPPF_LABEL_V4;
-	} else {
-		uchar_t		opt_storage[TSOL_MAX_IPV6_OPTION];
-		uint_t		optlen;
-
-		err = tsol_compute_label_v6(ixa->ixa_tsl, ixa->ixa_zoneid,
-		    v6dst, opt_storage, ixa->ixa_ipst);
-		if (err == 0) {
-			/*
-			 * Note that ipp_label_v6 is just the option - not
-			 * the hopopts extension header.
-			 *
-			 * Length contained in opt_storage[IPOPT_OLEN], but
-			 * that doesn't include the two byte options header.
-			 */
-			optlen = opt_storage[IPOPT_OLEN];
-			if (optlen != 0)
-				optlen += 2;
-
-			err = optcom_pkt_set(opt_storage, optlen,
-			    (uchar_t **)&ipp->ipp_label_v6,
-			    &ipp->ipp_label_len_v6);
-		}
-		if (err != 0) {
-			DTRACE_PROBE4(tx__ip__log__info__updatelabel,
-			    char *, "conn(1) failed to update options(2) "
-			    "on ixa(3)",
-			    conn_t *, connp, char *, opt_storage,
-			    ip_xmit_attr_t *, ixa);
-		}
-		if (ipp->ipp_label_len_v6 != 0)
-			ipp->ipp_fields |= IPPF_LABEL_V6;
-		else
-			ipp->ipp_fields &= ~IPPF_LABEL_V6;
-	}
-	return (err);
-}
-
-/*
  * Inherit all options settings from the parent/listener to the eager.
  * Returns zero on success; ENOMEM if memory allocation failed.
  *
@@ -2874,10 +2726,6 @@ conn_inherit_parent(conn_t *lconnp, conn_t *econnp)
 
 	econnp->conn_default_ttl = lconnp->conn_default_ttl;
 
-	/*
-	 * TSOL: tsol_input_proc() needs the eager's cred before the
-	 * eager is accepted
-	 */
 	ASSERT(lconnp->conn_cred != NULL);
 	econnp->conn_cred = credp = lconnp->conn_cred;
 	crhold(credp);
@@ -2891,15 +2739,6 @@ conn_inherit_parent(conn_t *lconnp, conn_t *econnp)
 	ASSERT(!(econnp->conn_ixa->ixa_free_flags & IXA_FREE_CRED));
 	econnp->conn_ixa->ixa_cred = econnp->conn_cred;
 	econnp->conn_ixa->ixa_cpid = econnp->conn_cpid;
-	if (is_system_labeled())
-		econnp->conn_ixa->ixa_tsl = crgetlabel(econnp->conn_cred);
-
-	/*
-	 * If the caller has the process-wide flag set, then default to MAC
-	 * exempt mode.  This allows read-down to unlabeled hosts.
-	 */
-	if (getpflags(NET_MAC_AWARE, credp) != 0)
-		econnp->conn_mac_mode = CONN_MAC_AWARE;
 
 	econnp->conn_zone_is_global = lconnp->conn_zone_is_global;
 

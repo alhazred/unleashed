@@ -75,7 +75,6 @@
 #include <nfs/nfs_sec.h>
 #include <rpcsvc/daemon_utils.h>
 #include <priv.h>
-#include <tsol/label.h>
 #include "nfs_subr.h"
 #include "webnfs.h"
 #include <rpcsvc/nfs4_prot.h>
@@ -310,14 +309,6 @@ main(int argc, char *argv[])
 		pr_err(gettext("insufficient privileges\n"));
 		exit(RET_ERR);
 	}
-
-	/*
-	 * On a labeled system, allow read-down nfs mounts if privileged
-	 * (PRIV_NET_MAC_AWARE) to do so.  Otherwise, ignore the error
-	 * and "mount equal label only" behavior will result.
-	 */
-	if (is_system_labeled())
-		(void) setpflags(NET_MAC_AWARE, 1);
 
 	/*
 	 * Read the NFS SMF defaults to see if the min/max versions have

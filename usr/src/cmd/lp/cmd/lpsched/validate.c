@@ -37,7 +37,6 @@
 #include <syslog.h>
 #include <errno.h>
 #include <deflt.h>
-#include <tsol/label.h>
 #include <auth_list.h>
 
 #define register auto
@@ -52,14 +51,10 @@ char *			o_width		= 0;
 char *			o_length	= 0;
 
 static int		wants_nobanner	= 0;
-static int		wants_nolabels	= 0;
 static int		lp_or_root	= 0;
 
 static int		_chkopts ( RSTATUS *, CANDIDATE * , FSTATUS * );
 static void		free_candidate ( CANDIDATE * );
-static int		tsol_check_printer_label_range(char *, const char *);
-static int		tsol_lpauth(char *, char *);
-static int		secpolicy_chkpolicy(char *policyp);
 
 /**
  ** _validate() - FIND A PRINTER TO HANDLE A REQUEST
@@ -90,23 +85,6 @@ _validate(RSTATUS *prs, PSTATUS *pps, PSTATUS *stop_pps, char **prefixp,
 	wants_nobanner = 0;
 	memset (&single, 0, sizeof(single));
 
-	wants_nolabels = 0;
-	/*
-	 * If the system is labeled, the printing of postscript files
-	 * is restricted.  All users can print postscript files if the
-	 * file /etc/default/print contains "PRINT_POSTSCRIPT=1".
-	 * (this is checked by secpolicy_chkpolicy).  Otherwise the
-	 * user must have PRINT_POSTSCRIPT_AUTH to print postscript files.
-	 */
-	if ((is_system_labeled() &&
-	    strcmp(prs->request->input_type, "postscript") == 0) &&
-	    (secpolicy_chkpolicy("PRINT_POSTSCRIPT=") == 0)) {
-		if (tsol_lpauth(PRINT_POSTSCRIPT_AUTH, prs->secure->user)
-		    == 0) {
-			ret = MDENYDEST;
-			goto Return;
-		}
-	}
 	lp_or_root = 0;
 
 	if (bangequ(prs->secure->user, "root") ||
@@ -192,8 +170,6 @@ _validate(RSTATUS *prs, PSTATUS *pps, PSTATUS *stop_pps, char **prefixp,
 					o_length = Strdup(*pl + 7);
 				else if (STREQU(*pl, "nobanner"))
 					wants_nobanner = 1;
-				else if (STREQU(*pl, "nolabels"))
-					wants_nolabels = 1;
 			freelist (list);
 		}
 	}
@@ -322,16 +298,6 @@ _validate(RSTATUS *prs, PSTATUS *pps, PSTATUS *stop_pps, char **prefixp,
 		if (!CHKU(prs, pps)) {
 			ret = MDENYDEST;
 			goto Return;
-		}
-
-		/* Check printer label range */
-		if (is_system_labeled() && prs->secure->slabel != NULL) {
-			if (tsol_check_printer_label_range(
-			    prs->secure->slabel,
-			    pps->printer->name) == 0) {
-				ret = MDENYDEST;
-				goto Return;
-			}
 		}
 
 		/* Does the printer allow the form? */
@@ -597,21 +563,9 @@ _validate(RSTATUS *prs, PSTATUS *pps, PSTATUS *stop_pps, char **prefixp,
 	}
 	/*
 	 * Clean out local printers
-	 * where the request is outside the printer label range.
 	 */
 	{
 		register CANDIDATE	*pcend2 = pcend;
-
-		if (is_system_labeled()) {
-			for (pcend2 = pc = arena; pc < pcend; pc++) {
-				if (tsol_check_printer_label_range(
-				    prs->secure->slabel,
-				    pps->printer->name) == 1)
-					*pcend2++ = *pc;
-				else
-					free_candidate(pc);
-			}
-		}
 
 		if (pcend2 == arena) {
 			ret = MDENYDEST;
@@ -901,43 +855,11 @@ _chkopts(RSTATUS *prs, CANDIDATE *pc, FSTATUS *pfs)
 	if (!pc->printer_types)
 		ret |= chk;
 
-	/*
-	 * If the sytem is labeled, then user who wants 'nolabels' must
-	 * have PRINT_UNLABELED_AUTH authorizations to allow it.
-	 */
-	if (is_system_labeled() && (wants_nolabels == 1)) {
-		if (!tsol_lpauth(PRINT_UNLABELED_AUTH, prs->secure->user)) {
-			/* if not authorized, remove "nolabels" from options */
-			register char		**list;
-			if (prs->request->options &&
-			    (list = dashos(prs->request->options))) {
-				dellist(&list, "nolabels");
-				free(prs->request->options);
-				prs->request->options = sprintlist(list);
-			}
-		}
-	}
-
-
 	if (pc->pps->printer->banner == BAN_ALWAYS) {
 		/* delete "nobanner" */
 		char **list;
 
-		/*
-		 * If the system is labeled, users must have
-		 * PRINT_NOBANNER_AUTH authorization to print
-		 * without a banner.
-		 */
-		if (is_system_labeled()) {
-			if (wants_nobanner == 1) {
-				if (tsol_lpauth(PRINT_NOBANNER_AUTH,
-					prs->secure->user) == 0) {
-					nobanner_not_allowed = 1;
-				}
-			}
-
-		}
-		else if ((wants_nobanner == 1) && (lp_or_root != 1)) {
+		if ((wants_nobanner == 1) && (lp_or_root != 1)) {
 			nobanner_not_allowed = 1;
 		}
 		if (nobanner_not_allowed == 1) {
@@ -989,86 +911,4 @@ free_candidate(CANDIDATE *pc)
 	if (pc->output_type)
 		unload_str (&(pc->output_type));
 	return;
-}
-
-static int
-tsol_check_printer_label_range(char *slabel, const char *printer)
-{
-	int			in_range = 0;
-	int			err = 0;
-	m_range_t		*range;
-	m_label_t	*sl = NULL;
-
-	if (slabel == NULL)
-		return (0);
-
-	if ((err =
-	    (str_to_label(slabel, &sl, USER_CLEAR, L_NO_CORRECTION, &in_range)))
-	    == -1) {
-		/* stobsl error on printer max label */
-		return (0);
-	}
-	if ((range = getdevicerange(printer)) == NULL) {
-		m_label_free(sl);
-		return (0);
-	}
-
-	/* blinrange returns true (1) if in range, false (0) if not */
-	in_range = blinrange(sl, range);
-
-	m_label_free(sl);
-	m_label_free(range->lower_bound);
-	m_label_free(range->upper_bound);
-	free(range);
-
-	return (in_range);
-}
-
-/*
- * Given a character string with a "username" or "system!username"
- * this function returns a pointer to "username"
- */
-static int
-tsol_lpauth(char *auth, char *in_name)
-{
-	char *cp;
-	int res;
-
-	if ((cp = strchr(in_name, '@')) != NULL) {
-		/* user@system */
-		*cp = '\0';
-		res = chkauthattr(auth, in_name);
-		*cp = '@';
-	} else if ((cp = strchr(in_name, '!')) != NULL)
-		/* system!user */
-		res = chkauthattr(auth, cp+1);
-	else
-		/* user */
-		res = chkauthattr(auth, in_name);
-
-	return (res);
-}
-
-#define	POLICY_FILE	"/etc/default/print"
-
-int
-secpolicy_chkpolicy(char *policyp)
-{
-	char *option;
-	int opt_val;
-
-	if (policyp == NULL)
-		return (0);
-	opt_val = 0;
-	if (defopen(POLICY_FILE) == 0) {
-
-		defcntl(DC_SETFLAGS, DC_STD & ~DC_CASE); /* ignore case */
-
-		if ((option = defread(policyp)) != NULL)
-			opt_val = atoi(option);
-	}
-	(void) defopen((char *)NULL);
-	syslog(LOG_DEBUG, "--- Policy %s, opt_val==%d",
-	    policyp ? policyp : "NULL", opt_val);
-	return (opt_val);
 }

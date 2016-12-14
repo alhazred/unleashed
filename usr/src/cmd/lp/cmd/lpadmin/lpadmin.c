@@ -59,8 +59,6 @@ extern void		chkopts(),
 			chkopts3(),
 			exit();
 
-int			system_labeled = 0;
-
 int			scheduler_active = 0;
 
 char			*label = 0;
@@ -93,8 +91,6 @@ main(int argc, char *argv[])
 		done (1);
 		/*NOTREACHED*/
 	}
-
-	system_labeled = is_system_labeled();
 
 	uname(&un);
 	Local_System = strdup(un.nodename);

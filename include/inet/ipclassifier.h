@@ -148,21 +148,6 @@ typedef struct ip_helper_stream_info_s {
 } ip_helper_stream_info_t;
 
 /*
- * Mandatory Access Control mode, in conn_t's conn_mac_mode field.
- * 	CONN_MAC_DEFAULT: strict enforcement of MAC.
- * 	CONN_MAC_AWARE:   allows communications between unlabeled systems
- *			  and privileged daemons
- *	CONN_MAC_IMPLICIT: allows communications without explicit labels
- *		           on the wire with privileged daemons.
- *
- * CONN_MAC_IMPLICIT is intended specifically for labeled IPsec key management
- * in networks which don't pass CIPSO-labeled packets.
- */
-#define	CONN_MAC_DEFAULT 0
-#define	CONN_MAC_AWARE 1
-#define	CONN_MAC_IMPLICIT 2
-
-/*
  * conn receive ancillary definition.
  *
  * These are the set of socket options that make the receive side
@@ -366,11 +351,8 @@ struct conn_s {
 	sock_upper_handle_t conn_upper_handle;	/* Upper handle: sonode * */
 
 	unsigned int
-		conn_mlp_type : 2,		/* mlp_type_t; tsol/tndb.h */
-		conn_anon_mlp : 1,		/* user wants anon MLP */
 		conn_anon_port : 1,		/* user bound anonymously */
 
-		conn_mac_mode : 2,		/* normal/loose/implicit MAC */
 		conn_anon_priv_bind : 1,	/* *_ANON_PRIV_BIND state */
 		conn_zone_is_global : 1,	/* GLOBAL_ZONEID */
 		conn_isvrrp : 1,		/* VRRP control socket */
@@ -519,20 +501,8 @@ struct connf_s {
 	    ((zoneid) == ALL_ZONES) ||					\
 	    (connp)->conn_zoneid == (zoneid))
 
-/*
- * On a labeled system, we must treat bindings to ports
- * on shared IP addresses by sockets with MAC exemption
- * privilege as being in all zones, as there's
- * otherwise no way to identify the right receiver.
- */
-
-#define	IPCL_CONNS_MAC(conn1, conn2)					\
-	(((conn1)->conn_mac_mode != CONN_MAC_DEFAULT) ||		\
-	((conn2)->conn_mac_mode != CONN_MAC_DEFAULT))
-
 #define	IPCL_BIND_ZONE_MATCH(conn1, conn2)				\
-	(IPCL_CONNS_MAC(conn1, conn2) ||				\
-	IPCL_ZONE_MATCH(conn1, conn2->conn_zoneid) ||			\
+	(IPCL_ZONE_MATCH(conn1, conn2->conn_zoneid) ||			\
 	IPCL_ZONE_MATCH(conn2, conn1->conn_zoneid))
 
 

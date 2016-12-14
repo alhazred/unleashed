@@ -132,15 +132,12 @@ typedef struct priv_impl_info {
 #define	PRIV_AWARE			0x0002		/* Is privilege aware */
 #define	PRIV_AWARE_INHERIT		0x0004		/* Inherit awareness */
 #define	__PROC_PROTECT			0x0008		/* Private */
-#define	NET_MAC_AWARE			0x0010		/* Is MAC aware */
-#define	NET_MAC_AWARE_INHERIT		0x0020		/* Inherit MAC aware */
 #define	PRIV_AWARE_RESET		0x0040		/* Reset on setuid() */
 #define	PRIV_XPOLICY			0x0080		/* Extended policy */
 #define	PRIV_PFEXEC			0x0100		/* As if pfexec'ed */
 
 /* user-settable flags: */
-#define	PRIV_USER	(PRIV_DEBUG | NET_MAC_AWARE | NET_MAC_AWARE_INHERIT |\
-			    PRIV_XPOLICY | PRIV_AWARE_RESET | PRIV_PFEXEC)
+#define	PRIV_USER (PRIV_DEBUG | PRIV_XPOLICY | PRIV_AWARE_RESET | PRIV_PFEXEC)
 
 /*
  * Header of the privilege info data structure; multiple structures can

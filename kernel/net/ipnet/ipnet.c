@@ -513,13 +513,6 @@ ipnet_open(queue_t *rq, dev_t *dev, int oflag, int sflag, cred_t *crp)
 	int		err = 0;
 	zoneid_t	zoneid = crgetzoneid(crp);
 
-	/*
-	 * If the system is labeled, only the global zone is allowed to open
-	 * IP observability nodes.
-	 */
-	if (is_system_labeled() && zoneid != GLOBAL_ZONEID)
-		return (EACCES);
-
 	/* We don't support open as a module */
 	if (sflag & MODOPEN)
 		return (ENOTSUP);
@@ -1627,8 +1620,6 @@ ipnet_if_getdev(char *name, zoneid_t zoneid)
 	ipnetif_t	*ipnetif;
 	dev_t		dev = (dev_t)-1;
 
-	if (is_system_labeled() && zoneid != GLOBAL_ZONEID)
-		return (dev);
 	if ((ns = netstack_find_by_zoneid(zoneid)) == NULL)
 		return (dev);
 
@@ -1827,13 +1818,6 @@ ipnet_walk_if(ipnet_walkfunc_t *cb, void *arg, zoneid_t zoneid)
 	ipnetif_cbdata_t	*cbnode;
 	netstack_t		*ns;
 	ipnet_stack_t		*ips;
-
-	/*
-	 * On labeled systems, non-global zones shouldn't see anything
-	 * in /dev/ipnet.
-	 */
-	if (is_system_labeled() && zoneid != GLOBAL_ZONEID)
-		return;
 
 	if ((ns = netstack_find_by_zoneid(zoneid)) == NULL)
 		return;

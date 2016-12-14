@@ -70,8 +70,6 @@
 #include <inet/ip_ire.h>
 #include <inet/ip_rts.h>
 #include <inet/ip_multi.h>
-#include <sys/tsol/tndb.h>
-#include <sys/tsol/tnet.h>
 
 /*
  * Fills the message with the given info.
@@ -81,7 +79,7 @@ rts_fill_msg_v6(int type, int rtm_addrs, const in6_addr_t *dst,
     const in6_addr_t *mask, const in6_addr_t *gateway,
     const in6_addr_t *src_addr, const in6_addr_t *brd_addr,
     const in6_addr_t *author, const in6_addr_t *ifaddr, const ill_t *ill,
-    mblk_t *mp, const tsol_gc_t *gc)
+    mblk_t *mp)
 {
 	rt_msghdr_t	*rtm;
 	sin6_t		*sin6;
@@ -99,7 +97,7 @@ rts_fill_msg_v6(int type, int rtm_addrs, const in6_addr_t *dst,
 	 * Now find the size of the data
 	 * that follows the message header.
 	 */
-	data_size = rts_data_msg_size(rtm_addrs, AF_INET6, gc != NULL ? 1 : 0);
+	data_size = rts_data_msg_size(rtm_addrs, AF_INET6);
 
 	rtm = (rt_msghdr_t *)mp->b_rptr;
 	mp->b_wptr = &mp->b_rptr[header_size];
@@ -153,27 +151,6 @@ rts_fill_msg_v6(int type, int rtm_addrs, const in6_addr_t *dst,
 		}
 	}
 
-	if (gc != NULL) {
-		rtm_ext_t *rtm_ext;
-		struct rtsa_s *rp_dst;
-		tsol_rtsecattr_t *rsap;
-
-		ASSERT(gc->gc_grp != NULL);
-		ASSERT(RW_LOCK_HELD(&gc->gc_grp->gcgrp_rwlock));
-
-		rtm_ext = (rtm_ext_t *)cp;
-		rtm_ext->rtmex_type = RTMEX_GATEWAY_SECATTR;
-		rtm_ext->rtmex_len = TSOL_RTSECATTR_SIZE(1);
-
-		rsap = (tsol_rtsecattr_t *)(rtm_ext + 1);
-		rsap->rtsa_cnt = 1;
-		rp_dst = rsap->rtsa_attr;
-
-		ASSERT(gc->gc_db != NULL);
-		bcopy(&gc->gc_db->gcdb_attr, rp_dst, sizeof (*rp_dst));
-		cp = (uchar_t *)rp_dst;
-	}
-
 	mp->b_wptr = cp;
 	mp->b_cont = NULL;
 	/*
@@ -203,11 +180,11 @@ ip_rts_change_v6(int type, const in6_addr_t *dst_addr,
 
 	if (rtm_addrs == 0)
 		return;
-	mp = rts_alloc_msg(type, rtm_addrs, AF_INET6, 0);
+	mp = rts_alloc_msg(type, rtm_addrs, AF_INET6);
 	if (mp == NULL)
 		return;
 	rts_fill_msg_v6(type, rtm_addrs, dst_addr, net_mask, gw_addr, source,
-	    &ipv6_all_zeros, &ipv6_all_zeros, author, NULL, mp, NULL);
+	    &ipv6_all_zeros, &ipv6_all_zeros, author, NULL, mp);
 	rtm = (rt_msghdr_t *)mp->b_rptr;
 	rtm->rtm_flags = flags;
 	rtm->rtm_errno = error;

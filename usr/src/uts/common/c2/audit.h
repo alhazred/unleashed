@@ -597,7 +597,6 @@ void	audit_devpolicy(int, const struct devplcysys *);
 void	audit_update_context(proc_t *, cred_t *);
 void	audit_pf_policy(int, cred_t *, netstack_t *, char *, boolean_t, int,
     pid_t);
-void	audit_sec_attributes(caddr_t *, struct vnode *);
 
 #endif
 

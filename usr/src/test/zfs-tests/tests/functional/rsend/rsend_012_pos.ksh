@@ -66,10 +66,6 @@ function edited_prop
 				awk '$2=="YES" {print $1}' | \
 				egrep -v "^vol|\.\.\.$")
 			for item in $props ; do
-				if [[ $item == "mlslabel" ]] && \
-					! is_te_enabled ; then
-					continue
-				fi
 				zfs get -H -o property,value $item $ds >> \
 					$backfile
 				if (($? != 0)); then

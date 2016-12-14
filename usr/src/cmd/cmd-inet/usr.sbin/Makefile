@@ -48,7 +48,6 @@ NSLPROG=	6to4relay arp hostconfig in.comsat in.rarpd \
 		in.tftpd ipaddrsel ndp route
 CMDPROG=	in.telnetd
 K5PROGS=	in.telnetd
-TSNETPROG=	route
 DLADMPROG=	6to4relay
 DEFAULTFILES=	telnetd.dfl
 
@@ -118,7 +117,6 @@ $(K5PROGS)		:=	CPPFLAGS += -I$(CODEMGR_WS)/include \
 				-I$(SRC)/lib/gss_mechs/mech_krb5/include \
 				-I$(SRC)/lib/pam_modules/krb5
 LDLIBS +=	$(K5LIBS)
-$(TSNETPROG)		:=	LDLIBS += -ltsnet
 $(DLADMPROG)		:=	LDLIBS += -ldladm
 
 in.rarpd		:=	LDLIBS += -linetutil -ldlpi

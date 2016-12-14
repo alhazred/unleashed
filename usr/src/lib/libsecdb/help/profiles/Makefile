@@ -88,9 +88,6 @@ HTMLENTS = \
 	RtZFSStorageMngmnt.html \
 	RtZoneMngmnt.html \
 	RtZoneSecurity.html \
-	RtInfoSec.html \
-	RtObjectLabelMngmnt.html \
-	RtOutsideAccred.html \
 	RtDefault.html \
 	RtIdmapMngmnt.html \
 	RtIdmapNameRulesMngmnt.html \

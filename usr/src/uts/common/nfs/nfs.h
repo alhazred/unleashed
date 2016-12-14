@@ -45,7 +45,6 @@
 #include <sys/kstat.h>
 #include <sys/dirent.h>
 #include <sys/zone.h>
-#include <sys/tsol/label.h>
 #include <sys/nvpair.h>
 #include <nfs/mount.h>
 #include <sys/vfs_opreg.h>
@@ -943,8 +942,6 @@ extern int	nfsauth_access(struct exportinfo *, struct svc_req *, cred_t *,
 extern void	nfsauth_init(void);
 extern void	nfsauth_fini(void);
 extern int	nfs_setopts(vnode_t *, model_t, struct nfs_args *);
-extern int	nfs_mount_label_policy(vfs_t *, struct netbuf *,
-    struct knetconfig *, cred_t *);
 extern boolean_t nfs_has_ctty(void);
 extern void	nfs_srv_stop_all(void);
 extern void	nfs_srv_quiesce_all(void);
@@ -2314,10 +2311,6 @@ extern void	rfs4_hold_deleg_policy(void);
 extern void	rfs4_rele_deleg_policy(void);
 
 extern int	do_xattr_exists_check(vnode_t *, ulong_t *, cred_t *);
-
-extern ts_label_t *nfs_getflabel(vnode_t *, struct exportinfo *);
-extern boolean_t do_rfs_label_check(bslabel_t *, vnode_t *, int,
-    struct exportinfo *);
 
 /*
  * Copy Reduction support.

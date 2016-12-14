@@ -52,7 +52,6 @@ file path=usr/share/man/man5/pam_rhosts_auth.5
 file path=usr/share/man/man5/pam_roles.5
 file path=usr/share/man/man5/pam_sample.5
 file path=usr/share/man/man5/pam_timestamp.5
-file path=usr/share/man/man5/pam_tsol_account.5
 file path=usr/share/man/man5/pam_unix_account.5
 file path=usr/share/man/man5/pam_unix_auth.5
 file path=usr/share/man/man5/pam_unix_cred.5

@@ -69,8 +69,6 @@
 #include <sys/taskq.h>
 #include <sys/note.h>
 
-#include <sys/tsol/tnet.h>
-
 /*
  * Table of ND variables supported by ipsecesp. These are loaded into
  * ipsecesp_g_nd in ipsecesp_init_nd.
@@ -873,8 +871,7 @@ esp_strip_header(mblk_t *data_mp, boolean_t isv4, uint32_t ivlen,
 			ip_pkt_t ipp;
 
 			bzero(&ipp, sizeof (ipp));
-			(void) ip_find_hdr_v6(data_mp, ip6h, B_FALSE, &ipp,
-			    NULL);
+			(void) ip_find_hdr_v6(data_mp, ip6h, &ipp, NULL);
 			if (ipp.ipp_dstopts != NULL) {
 				ipp.ipp_dstopts->ip6d_nxt = nexthdr;
 			} else if (ipp.ipp_rthdr != NULL) {
@@ -1744,16 +1741,6 @@ esp_in_done(mblk_t *data_mp, ip_recv_attr_t *ira, ipsec_crypto_t *ic)
 	if (esp_strip_header(data_mp, (ira->ira_flags & IRAF_IS_IPV4),
 	    ivlen, &counter, espstack)) {
 
-		if (is_system_labeled() && assoc->ipsa_tsl != NULL) {
-			if (!ip_recv_attr_replace_label(ira, assoc->ipsa_tsl)) {
-				ip_drop_packet(data_mp, B_TRUE, ira->ira_ill,
-				    DROPPER(ipss, ipds_ah_nomem),
-				    &espstack->esp_dropper);
-				BUMP_MIB(ira->ira_ill->ill_ip_mib,
-				    ipIfStatsInDiscards);
-				return (NULL);
-			}
-		}
 		if (is_natt)
 			return (esp_fix_natt_checksums(data_mp, assoc));
 
@@ -2317,7 +2304,6 @@ actually_send_keepalive(void *arg)
 	ixas.ixa_zoneid = ALL_ZONES;
 	ixas.ixa_cred = kcred;
 	ixas.ixa_cpid = NOPID;
-	ixas.ixa_tsl = NULL;
 	ixas.ixa_ipst = ns->netstack_ip;
 	/* No ULP checksum; done by esp_prepare_udp */
 	ixas.ixa_flags = (IXAF_IS_IPV4 | IXAF_NO_IPSEC | IXAF_VERIFY_SOURCE);
@@ -2652,36 +2638,6 @@ esp_outbound(mblk_t *data_mp, ip_xmit_attr_t *ixa)
 	ASSERT(assoc != NULL);
 
 	/*
-	 * Get the outer IP header in shape to escape this system..
-	 */
-	if (is_system_labeled() && (assoc->ipsa_otsl != NULL)) {
-		/*
-		 * Need to update packet with any CIPSO option and update
-		 * ixa_tsl to capture the new label.
-		 * We allocate a separate ixa for that purpose.
-		 */
-		ixa = ip_xmit_attr_duplicate(ixa);
-		if (ixa == NULL) {
-			ip_drop_packet(data_mp, B_FALSE, ill,
-			    DROPPER(ipss, ipds_esp_nomem),
-			    &espstack->esp_dropper);
-			return (NULL);
-		}
-		need_refrele = B_TRUE;
-
-		label_hold(assoc->ipsa_otsl);
-		ip_xmit_attr_replace_tsl(ixa, assoc->ipsa_otsl);
-
-		data_mp = sadb_whack_label(data_mp, assoc, ixa,
-		    DROPPER(ipss, ipds_esp_nomem), &espstack->esp_dropper);
-		if (data_mp == NULL) {
-			/* Packet dropped by sadb_whack_label */
-			ixa_refrele(ixa);
-			return (NULL);
-		}
-	}
-
-	/*
 	 * Reality check....
 	 */
 	ipha = (ipha_t *)data_mp->b_rptr;  /* So we can call esp_acquire(). */
@@ -2701,7 +2657,7 @@ esp_outbound(mblk_t *data_mp, ip_xmit_attr_t *ixa)
 		af = AF_INET6;
 		ip6h = (ip6_t *)ipha;
 		bzero(&ipp, sizeof (ipp));
-		divpoint = ip_find_hdr_v6(data_mp, ip6h, B_FALSE, &ipp, NULL);
+		divpoint = ip_find_hdr_v6(data_mp, ip6h, &ipp, NULL);
 		if (ipp.ipp_dstopts != NULL &&
 		    ipp.ipp_dstopts->ip6d_nxt != IPPROTO_ROUTING) {
 			/*
@@ -3019,24 +2975,13 @@ esp_register_out(uint32_t sequence, uint32_t pid, uint_t serial,
 	ipsec_alginfo_t **encralgs;
 	uint_t num_ealgs;
 	ipsec_stack_t	*ipss = espstack->ipsecesp_netstack->netstack_ipsec;
-	sadb_sens_t *sens;
-	size_t sens_len = 0;
 	sadb_ext_t *nextext;
-	ts_label_t *sens_tsl = NULL;
 
 	/* Allocate the KEYSOCK_OUT. */
 	keysock_out_mp = sadb_keysock_out(serial);
 	if (keysock_out_mp == NULL) {
 		esp0dbg(("esp_register_out: couldn't allocate mblk.\n"));
 		return (B_FALSE);
-	}
-
-	if (is_system_labeled() && (cr != NULL)) {
-		sens_tsl = crgetlabel(cr);
-		if (sens_tsl != NULL) {
-			sens_len = sadb_sens_len_from_label(sens_tsl);
-			allocsize += sens_len;
-		}
 	}
 
 	/*
@@ -3167,14 +3112,6 @@ esp_register_out(uint32_t sequence, uint32_t pid, uint_t serial,
 	current_ealgs = num_ealgs;
 
 	mutex_exit(&ipss->ipsec_alg_lock);
-
-	if (sens_tsl != NULL) {
-		sens = (sadb_sens_t *)nextext;
-		sadb_sens_from_label(sens, SADB_EXT_SENSITIVITY,
-		    sens_tsl, sens_len);
-
-		nextext = (sadb_ext_t *)(((uint8_t *)sens) + sens_len);
-	}
 
 	/* Now fill the rest of the SADB_REGISTER message. */
 
@@ -3681,9 +3618,6 @@ esp_add_sa(mblk_t *mp, keysock_in_t *ksi, int *diagnostic, netstack_t *ns)
 	/* Stuff I don't support, for now.  XXX Diagnostic? */
 	if (ksi->ks_in_extv[SADB_EXT_LIFETIME_CURRENT] != NULL)
 		return (EOPNOTSUPP);
-
-	if ((*diagnostic = sadb_labelchk(ksi)) != 0)
-		return (EINVAL);
 
 	/*
 	 * XXX Policy :  I'm not checking identities at this time,

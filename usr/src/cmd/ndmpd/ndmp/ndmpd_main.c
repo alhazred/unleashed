@@ -45,7 +45,6 @@
 #include <libintl.h>
 #include <sys/wait.h>
 #include <zone.h>
-#include <tsol/label.h>
 #include <dlfcn.h>
 #include "ndmpd.h"
 #include "ndmpd_common.h"
@@ -218,12 +217,6 @@ main(int argc, char *argv[])
 	/* Global zone check */
 	if (getzoneid() != GLOBAL_ZONEID) {
 		(void) fprintf(stderr, "Non-global zone not supported.\n");
-		exit(SMF_EXIT_ERR_FATAL);
-	}
-
-	/* Trusted Solaris check */
-	if (is_system_labeled()) {
-		(void) fprintf(stderr, "Trusted Solaris not supported.\n");
 		exit(SMF_EXIT_ERR_FATAL);
 	}
 

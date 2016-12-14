@@ -153,8 +153,6 @@ struct	ip6_opt {
 #define	IP6OPT_HOME_ADDRESS		0xc9	/* 11 0 01001 */
 #define	IP6OPT_EID			0x8a	/* 10 0 01010 */
 
-#define	IP6OPT_LS			0x0a	/* 00 0 01010 */
-
 #define	IP6_MAX_OPT_LENGTH	255
 
 /* Jumbo Payload Option */

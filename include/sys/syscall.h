@@ -390,7 +390,6 @@ extern "C" {
 	 *	port_dispatch(...) :: portfs(PORT_DISPATCH, ...)
 	 */
 #define	SYS_pollsys		183
-#define	SYS_labelsys		184
 #define	SYS_acl			185
 #define	SYS_auditsys		186
 #define	SYS_processor_bind	187

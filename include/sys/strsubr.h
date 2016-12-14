@@ -1216,7 +1216,6 @@ extern mblk_t *allocb_tryhard(size_t);
 extern void mblk_copycred(mblk_t *, const mblk_t *);
 extern void mblk_setcred(mblk_t *, cred_t *, pid_t);
 extern cred_t *msg_getcred(const mblk_t *, pid_t *);
-extern struct ts_label_s *msg_getlabel(const mblk_t *);
 extern cred_t *msg_extractcred(mblk_t *, pid_t *);
 extern void strpollwakeup(vnode_t *, short);
 extern int putnextctl_wait(queue_t *, int);

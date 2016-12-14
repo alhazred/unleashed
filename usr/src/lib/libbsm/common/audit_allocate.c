@@ -24,7 +24,6 @@
  */
 
 #include <sys/types.h>
-#include <tsol/label.h>
 #include <bsm/audit.h>
 #include <bsm/libbsm.h>
 #include <bsm/audit_private.h>
@@ -124,9 +123,6 @@ audit_allocate_record(status)
 		return (0);
 
 	(void) au_write(ad, au_to_me());	/* add subject token */
-	if (is_system_labeled())
-		(void) au_write(ad, au_to_mylabel());
-
 	if (policy & AUDIT_GROUP) {	/* add optional group token */
 		gid_t	*grplst;
 		int	maxgrp = getgroups(0, NULL);

@@ -48,7 +48,6 @@ SUBDIRS = \
 	smb		\
 	smbfs		\
 	timestamp	\
-	tsol_acct	\
 	unix_auth	\
 	unix_account	\
 	unix_cred	\

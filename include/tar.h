@@ -77,21 +77,6 @@ extern "C" {
  *      Types used in ancillary files
  */
 #define	ACL_HDR		'A'	/* Access Control List */
-#define	LBL_TYPE	'L'	/* Trusted Extensions file label */
-#define	DIR_TYPE	'D'	/* Trusted Extensions directory label */
-/*
- * Attribute types used in Trusted Solaris ancillary files
- * that are interpreted for backward compatibility
- */
-#define	SLD_TYPE	'S'	/* single-level directory component */
-#define	PATH_TYPE	'P'	/* Path component */
-#define	MLD_TYPE	'M'	/* multi-level directory component */
-#define	FILE_TYPE	'F'	/* Have to handle files differently */
-#define	APRIV_TYPE	'P'	/* allowed privileges data type in file */
-#define	FPRIV_TYPE	'p'	/* forced privileges data type in file */
-#define	COMP_TYPE	'C'	/* path components, use for MLD */
-#define	ATTR_FLAG_TYPE	'F'	/* file attribute flag bytes data type */
-#define	LK_COMP_TYPE	'K'	/* link data path component */
 #endif
 
 #ifdef	__cplusplus

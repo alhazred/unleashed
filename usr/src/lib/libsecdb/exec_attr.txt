@@ -289,7 +289,6 @@ User Security:suser:cmd:::/usr/sbin/pwconv:euid=0
 DAT Administration:solaris:cmd:::/usr/sbin/datadm:euid=0
 ZFS File System Management:solaris:cmd:::/sbin/zfs:euid=0
 ZFS Storage Management:solaris:cmd:::/sbin/zpool:uid=0
-Zone Security:solaris:cmd:::/usr/sbin/txzonemgr:uid=0
 Zone Security:solaris:cmd:::/usr/sbin/zonecfg:uid=0
 Zone Management:solaris:cmd:::/usr/sbin/zoneadm:euid=0
 Zone Management:solaris:cmd:::/usr/sbin/zlogin:euid=0

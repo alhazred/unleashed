@@ -52,9 +52,6 @@
 #define	_F_GETSPENT		"(objectclass=shadowAccount)"
 #define	_F_GETUSERNAME		"(objectClass=SolarisUserAttr)"
 #define	_F_GETPROJENT		"(objectClass=SolarisProject)"
-#define	_F_GETTNRHDB		"(objectClass=ipTnetHost)"
-#define	_F_GETTNRHTP		"(&(objectClass=ipTnetTemplate)"\
-				"(SolarisAttrKeyValue=*))"
 #define	_F_GETENT_SSD		"(%s)"
 
 /* getent sort attributes */
@@ -63,8 +60,6 @@
 #define	_A_CN			"cn"
 #define	_A_IPNETWORKNUM		"ipnetworknumber"
 #define	_A_PROJECTNAM		"SolarisProjectName"
-#define	_A_IPTNETNUM		"ipTnetNumber"
-#define	_A_IPTNETTMPLNAM	"ipTnetTemplateName"
 
 static struct gettablefilter {
 	char *tablename;
@@ -89,9 +84,6 @@ static struct gettablefilter {
 	{(char *)_USERATTR,	(char *)_F_GETUSERNAME,	(char *)_A_UID},
 	{(char *)_PROJECT,	(char *)_F_GETPROJENT,	(char *)_A_PROJECTNAM},
 	{(char *)_PRINTERS,	(char *)_F_GETPRINTERENT, (char *)_A_CN},
-	{(char *)_TNRHDB,	(char *)_F_GETTNRHDB,	(char *)_A_IPTNETNUM},
-	{(char *)_TNRHTP,	(char *)_F_GETTNRHTP,
-						(char *)_A_IPTNETTMPLNAM},
 	{(char *)NULL,		(char *)NULL,		(char *)NULL}
 };
 

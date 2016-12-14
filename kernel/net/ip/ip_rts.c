@@ -71,35 +71,29 @@
 
 #include <inet/ipclassifier.h>
 
-#include <sys/tsol/tndb.h>
-#include <sys/tsol/tnet.h>
-
-#define	RTS_MSG_SIZE(type, rtm_addrs, af, sacnt) \
-	(rts_data_msg_size(rtm_addrs, af, sacnt) + rts_header_msg_size(type))
+#define	RTS_MSG_SIZE(type, rtm_addrs, af) \
+	(rts_data_msg_size(rtm_addrs, af) + rts_header_msg_size(type))
 
 static size_t	rts_copyfromsockaddr(struct sockaddr *sa, in6_addr_t *addrp);
 static void	rts_fill_msg(int type, int rtm_addrs, ipaddr_t dst,
     ipaddr_t mask, ipaddr_t gateway, ipaddr_t src_addr, ipaddr_t brd_addr,
-    ipaddr_t author, ipaddr_t ifaddr, const ill_t *ill, mblk_t *mp,
-    const tsol_gc_t *);
+    ipaddr_t author, ipaddr_t ifaddr, const ill_t *ill, mblk_t *mp);
 static int	rts_getaddrs(rt_msghdr_t *rtm, in6_addr_t *dst_addrp,
     in6_addr_t *gw_addrp, in6_addr_t *net_maskp, in6_addr_t *authorp,
     in6_addr_t *if_addrp, in6_addr_t *src_addrp, ushort_t *indexp,
-    sa_family_t *afp, tsol_rtsecattr_t *rtsecattr, int *error);
+    sa_family_t *afp, int *error);
 static void	rts_getifdata(if_data_t *if_data, const ipif_t *ipif);
 static int	rts_getmetrics(ire_t *ire, ill_t *ill, rt_metrics_t *metrics);
 static mblk_t	*rts_rtmget(mblk_t *mp, ire_t *ire, ire_t *ifire,
-    const in6_addr_t *setsrc, tsol_ire_gw_secattr_t *attrp, sa_family_t af);
+    const in6_addr_t *setsrc, sa_family_t af);
 static void	rts_setmetrics(ire_t *ire, uint_t which, rt_metrics_t *metrics);
 static ire_t	*ire_lookup_v4(ipaddr_t dst_addr, ipaddr_t net_mask,
-    ipaddr_t gw_addr, const ill_t *ill, zoneid_t zoneid,
-    const ts_label_t *tsl, int match_flags, ip_stack_t *ipst, ire_t **pifire,
-    ipaddr_t *v4setsrcp, tsol_ire_gw_secattr_t **gwattrp);
+    ipaddr_t gw_addr, const ill_t *ill, zoneid_t zoneid, int match_flags,
+    ip_stack_t *ipst, ire_t **pifire, ipaddr_t *v4setsrcp);
 static ire_t	*ire_lookup_v6(const in6_addr_t *dst_addr_v6,
     const in6_addr_t *net_mask_v6, const in6_addr_t *gw_addr_v6,
-    const ill_t *ill, zoneid_t zoneid, const ts_label_t *tsl, int match_flags,
-    ip_stack_t *ipst, ire_t **pifire,
-    in6_addr_t *v6setsrcp, tsol_ire_gw_secattr_t **gwattrp);
+    const ill_t *ill, zoneid_t zoneid, int match_flags, ip_stack_t *ipst, ire_t
+    **pifire, in6_addr_t *v6setsrcp);
 
 /*
  * Send `mp' to all eligible routing queues.  A queue is ineligible if:
@@ -206,16 +200,16 @@ ip_rts_rtmsg(int type, ire_t *ire, int error, ip_stack_t *ipst)
 	switch (ire->ire_ipversion) {
 	case IPV4_VERSION:
 		af = AF_INET;
-		mp = rts_alloc_msg(type, rtm_addrs, af, 0);
+		mp = rts_alloc_msg(type, rtm_addrs, af);
 		if (mp == NULL)
 			return;
 		rts_fill_msg(type, rtm_addrs, ire->ire_addr, ire->ire_mask,
 		    ire->ire_gateway_addr, ire->ire_setsrc_addr, 0, 0, 0, NULL,
-		    mp, NULL);
+		    mp);
 		break;
 	case IPV6_VERSION:
 		af = AF_INET6;
-		mp = rts_alloc_msg(type, rtm_addrs, af, 0);
+		mp = rts_alloc_msg(type, rtm_addrs, af);
 		if (mp == NULL)
 			return;
 		mutex_enter(&ire->ire_lock);
@@ -224,7 +218,7 @@ ip_rts_rtmsg(int type, ire_t *ire, int error, ip_stack_t *ipst)
 		rts_fill_msg_v6(type, rtm_addrs, &ire->ire_addr_v6,
 		    &ire->ire_mask_v6, &gw_addr_v6,
 		    &ire->ire_setsrc_addr_v6, &ipv6_all_zeros, &ipv6_all_zeros,
-		    &ipv6_all_zeros, NULL, mp, NULL);
+		    &ipv6_all_zeros, NULL, mp);
 		break;
 	}
 	rtm = (rt_msghdr_t *)mp->b_rptr;
@@ -286,7 +280,6 @@ ip_rts_request_common(mblk_t *mp, conn_t *connp, cred_t *ioc_cr)
 	ire_t		*ifire = NULL;
 	ipaddr_t	v4setsrc;
 	in6_addr_t	v6setsrc = ipv6_all_zeros;
-	tsol_ire_gw_secattr_t *gwattr = NULL;
 	int		error = 0;
 	int		match_flags = MATCH_IRE_DSTONLY;
 	int		match_flags_local = MATCH_IRE_TYPE | MATCH_IRE_GW;
@@ -297,13 +290,6 @@ ip_rts_request_common(mblk_t *mp, conn_t *connp, cred_t *ioc_cr)
 	ipaddr_t	src_addr;
 	ipaddr_t	net_mask;
 	ushort_t	index;
-	boolean_t	gcgrp_xtraref = B_FALSE;
-	tsol_gcgrp_addr_t ga;
-	tsol_rtsecattr_t rtsecattr;
-	struct rtsa_s	*rtsap = NULL;
-	tsol_gcgrp_t	*gcgrp = NULL;
-	tsol_gc_t	*gc = NULL;
-	ts_label_t	*tsl = NULL;
 	zoneid_t	zoneid;
 	ip_stack_t	*ipst;
 	ill_t   	*ill = NULL;
@@ -349,8 +335,7 @@ ip_rts_request_common(mblk_t *mp, conn_t *connp, cred_t *ioc_cr)
 	}
 
 	found_addrs = rts_getaddrs(rtm, &dst_addr_v6, &gw_addr_v6, &net_mask_v6,
-	    &author_v6, &if_addr_v6, &src_addr_v6, &index, &af, &rtsecattr,
-	    &error);
+	    &author_v6, &if_addr_v6, &src_addr_v6, &index, &af, &error);
 
 	if (error != 0)
 		goto done;
@@ -463,18 +448,6 @@ lookup:
 	if ((found_addrs & RTA_NETMASK) != 0)
 		match_flags |= MATCH_IRE_MASK;
 
-	/*
-	 * We only process any passed-in route security attributes for
-	 * either RTM_ADD or RTM_CHANGE message; We overload them
-	 * to do an RTM_GET as a different label; ignore otherwise.
-	 */
-	if (rtm->rtm_type == RTM_ADD || rtm->rtm_type == RTM_CHANGE ||
-	    rtm->rtm_type == RTM_GET) {
-		ASSERT(rtsecattr.rtsa_cnt <= TSOL_RTSA_REQUEST_MAX);
-		if (rtsecattr.rtsa_cnt > 0)
-			rtsap = &rtsecattr.rtsa_attr[0];
-	}
-
 	switch (rtm->rtm_type) {
 	case RTM_ADD:
 		/* if we are adding a route, gateway is a must */
@@ -540,8 +513,7 @@ lookup:
 			}
 
 			error = ip_rt_add(dst_addr, net_mask, gw_addr, src_addr,
-			    rtm->rtm_flags, ill, &ire, B_FALSE,
-			    rtsap, ipst, zoneid);
+			    rtm->rtm_flags, ill, &ire, B_FALSE, ipst, zoneid);
 			if (ill != NULL)
 				ASSERT(!MUTEX_HELD(&ill->ill_lock));
 			break;
@@ -570,7 +542,7 @@ lookup:
 
 				error = ip_rt_add_v6(&dst_addr_v6, &net_mask_v6,
 				    &gw_addr_v6, &src_addr_v6, rtm->rtm_flags,
-				    ill, &ire, rtsap, ipst, zoneid);
+				    ill, &ire, ipst, zoneid);
 				break;
 			}
 			/*
@@ -583,7 +555,7 @@ lookup:
 			}
 			error = ip_rt_add_v6(&dst_addr_v6, &net_mask_v6,
 			    &gw_addr_v6, NULL, rtm->rtm_flags,
-			    ill, &ire, rtsap, ipst, zoneid);
+			    ill, &ire, ipst, zoneid);
 			if (ill != NULL)
 				ASSERT(!MUTEX_HELD(&ill->ill_lock));
 			break;
@@ -650,29 +622,8 @@ lookup:
 		}
 
 		if (rtm->rtm_type == RTM_GET) {
-			match_flags |= MATCH_IRE_SECATTR;
-			match_flags_local |= MATCH_IRE_SECATTR;
 			if ((found_addrs & RTA_GATEWAY) != 0)
 				match_flags |= MATCH_IRE_GW;
-			if (ioc_cr)
-				tsl = crgetlabel(ioc_cr);
-			if (rtsap != NULL) {
-				if (rtsa_validate(rtsap) != 0) {
-					error = EINVAL;
-					goto done;
-				}
-				if (tsl != NULL &&
-				    crgetzoneid(ioc_cr) != GLOBAL_ZONEID &&
-				    (tsl->tsl_doi != rtsap->rtsa_doi ||
-				    !bldominates(&tsl->tsl_label,
-				    &rtsap->rtsa_slrange.lower_bound))) {
-					error = EPERM;
-					goto done;
-				}
-				tsl = labelalloc(
-				    &rtsap->rtsa_slrange.lower_bound,
-				    rtsap->rtsa_doi, KM_NOSLEEP);
-			}
 		}
 		if (rtm->rtm_type == RTM_CHANGE) {
 			if ((found_addrs & RTA_GATEWAY) &&
@@ -698,12 +649,12 @@ lookup:
 			if (net_mask == IP_HOST_MASK) {
 				ire = ire_ftable_lookup_v4(dst_addr, 0, gw_addr,
 				    IRE_LOCAL | IRE_LOOPBACK, NULL, zoneid,
-				    tsl, match_flags_local, 0, ipst, NULL);
+				    match_flags_local, 0, ipst, NULL);
 			}
 			if (ire == NULL) {
 				ire = ire_lookup_v4(dst_addr, net_mask,
-				    gw_addr, ill, zoneid, tsl, match_flags,
-				    ipst, &ifire, &v4setsrc, &gwattr);
+				    gw_addr, ill, zoneid, match_flags,
+				    ipst, &ifire, &v4setsrc);
 				IN6_IPADDR_TO_V4MAPPED(v4setsrc, &v6setsrc);
 			}
 			break;
@@ -711,19 +662,15 @@ lookup:
 			if (IN6_ARE_ADDR_EQUAL(&net_mask_v6, &ipv6_all_ones)) {
 				ire = ire_ftable_lookup_v6(&dst_addr_v6, NULL,
 				    &gw_addr_v6, IRE_LOCAL | IRE_LOOPBACK, NULL,
-				    zoneid, tsl, match_flags_local, 0, ipst,
-				    NULL);
+				    zoneid, match_flags_local, 0, ipst, NULL);
 			}
 			if (ire == NULL) {
 				ire = ire_lookup_v6(&dst_addr_v6,
 				    &net_mask_v6, &gw_addr_v6, ill, zoneid,
-				    tsl, match_flags, ipst, &ifire, &v6setsrc,
-				    &gwattr);
+				    match_flags, ipst, &ifire, &v6setsrc);
 			}
 			break;
 		}
-		if (tsl != NULL && tsl != crgetlabel(ioc_cr))
-			label_rele(tsl);
 
 		if (ire == NULL) {
 			error = ESRCH;
@@ -743,7 +690,7 @@ lookup:
 		/* we know the IRE before we come here */
 		switch (rtm->rtm_type) {
 		case RTM_GET:
-			mp1 = rts_rtmget(mp, ire, ifire, &v6setsrc, gwattr, af);
+			mp1 = rts_rtmget(mp, ire, ifire, &v6setsrc, af);
 			if (mp1 == NULL) {
 				error = ENOBUFS;
 				goto done;
@@ -776,18 +723,6 @@ lookup:
 				if ((found_addrs & RTA_GATEWAY) != 0 &&
 				    (ire->ire_gateway_addr != gw_addr)) {
 					ire->ire_gateway_addr = gw_addr;
-				}
-
-				if (rtsap != NULL) {
-					ga.ga_af = AF_INET;
-					IN6_IPADDR_TO_V4MAPPED(
-					    ire->ire_gateway_addr, &ga.ga_addr);
-
-					gcgrp = gcgrp_lookup(&ga, B_TRUE);
-					if (gcgrp == NULL) {
-						error = ENOMEM;
-						goto done;
-					}
 				}
 
 				if ((found_addrs & RTA_SRC) != 0 &&
@@ -846,19 +781,6 @@ lookup:
 				}
 				mutex_exit(&ire->ire_lock);
 
-				if (rtsap != NULL) {
-					ga.ga_af = AF_INET6;
-					mutex_enter(&ire->ire_lock);
-					ga.ga_addr = ire->ire_gateway_addr_v6;
-					mutex_exit(&ire->ire_lock);
-
-					gcgrp = gcgrp_lookup(&ga, B_TRUE);
-					if (gcgrp == NULL) {
-						error = ENOMEM;
-						goto done;
-					}
-				}
-
 				if ((found_addrs & RTA_SRC) != 0 &&
 				    (rtm->rtm_flags & RTF_SETSRC) != 0 &&
 				    !IN6_ARE_ADDR_EQUAL(
@@ -914,30 +836,6 @@ lookup:
 				break;
 			}
 
-			if (rtsap != NULL) {
-				ASSERT(gcgrp != NULL);
-
-				/*
-				 * Create and add the security attribute to
-				 * prefix IRE; it will add a reference to the
-				 * group upon allocating a new entry.  If it
-				 * finds an already-existing entry for the
-				 * security attribute, it simply returns it
-				 * and no new group reference is made.
-				 */
-				gc = gc_create(rtsap, gcgrp, &gcgrp_xtraref);
-				if (gc == NULL ||
-				    (error = tsol_ire_init_gwattr(ire,
-				    ire->ire_ipversion, gc)) != 0) {
-					if (gc != NULL) {
-						GC_REFRELE(gc);
-					} else {
-						/* gc_create failed */
-						error = ENOMEM;
-					}
-					goto done;
-				}
-			}
 			rts_setmetrics(ire, rtm->rtm_inits, &rtm->rtm_rmx);
 			break;
 		}
@@ -953,9 +851,6 @@ done:
 		ire_refrele(ifire);
 	if (ill != NULL)
 		ill_refrele(ill);
-
-	if (gcgrp_xtraref)
-		GCGRP_REFRELE(gcgrp);
 
 	if (rtm != NULL) {
 		ASSERT(mp->b_wptr <= mp->b_datap->db_lim);
@@ -979,9 +874,8 @@ done:
  */
 static ire_t *
 ire_lookup_v4(ipaddr_t dst_addr, ipaddr_t net_mask, ipaddr_t gw_addr,
-    const ill_t *ill, zoneid_t zoneid, const ts_label_t *tsl,
-    int match_flags, ip_stack_t *ipst, ire_t **pifire, ipaddr_t *v4setsrcp,
-    tsol_ire_gw_secattr_t **gwattrp)
+    const ill_t *ill, zoneid_t zoneid, int match_flags, ip_stack_t *ipst,
+    ire_t **pifire, ipaddr_t *v4setsrcp)
 {
 	ire_t		*ire;
 	ire_t		*ifire = NULL;
@@ -989,7 +883,6 @@ ire_lookup_v4(ipaddr_t dst_addr, ipaddr_t net_mask, ipaddr_t gw_addr,
 
 	*pifire = NULL;
 	*v4setsrcp = INADDR_ANY;
-	*gwattrp = NULL;
 
 	/* Skip IRE_IF_CLONE */
 	match_flags |= MATCH_IRE_TYPE;
@@ -1001,7 +894,7 @@ ire_lookup_v4(ipaddr_t dst_addr, ipaddr_t net_mask, ipaddr_t gw_addr,
 	 */
 	if (match_flags & (MATCH_IRE_GW|MATCH_IRE_MASK)) {
 		ire = ire_ftable_lookup_v4(dst_addr, net_mask, gw_addr,
-		    ire_type, ill, zoneid, tsl, match_flags, 0, ipst, NULL);
+		    ire_type, ill, zoneid, match_flags, 0, ipst, NULL);
 
 		if (ire == NULL ||(ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)))
 			return (ire);
@@ -1013,12 +906,6 @@ ire_lookup_v4(ipaddr_t dst_addr, ipaddr_t net_mask, ipaddr_t gw_addr,
 			ASSERT(ire->ire_setsrc_addr != INADDR_ANY);
 			*v4setsrcp = ire->ire_setsrc_addr;
 			v4setsrcp = NULL;
-		}
-
-		/* The first ire_gw_secattr is passed back */
-		if (ire->ire_gw_secattr != NULL) {
-			*gwattrp = ire->ire_gw_secattr;
-			gwattrp = NULL;
 		}
 
 		/* Look for an interface ire recursively based on the gateway */
@@ -1049,12 +936,12 @@ ire_lookup_v4(ipaddr_t dst_addr, ipaddr_t net_mask, ipaddr_t gw_addr,
 		match_flags |= MATCH_IRE_TYPE;
 
 		ifire = ire_route_recursive_v4(dst_addr, ire_type, ill, zoneid,
-		    tsl, match_flags, IRR_INCOMPLETE, 0, ipst, v4setsrcp,
-		    gwattrp, NULL);
+		    match_flags, IRR_INCOMPLETE, 0, ipst, v4setsrcp,
+		    NULL);
 	} else {
 		ire = ire_route_recursive_v4(dst_addr, ire_type, ill, zoneid,
-		    tsl, match_flags, IRR_INCOMPLETE, 0, ipst, v4setsrcp,
-		    gwattrp, NULL);
+		    match_flags, IRR_INCOMPLETE, 0, ipst, v4setsrcp,
+		    NULL);
 	}
 	*pifire = ifire;
 	return (ire);
@@ -1063,9 +950,8 @@ ire_lookup_v4(ipaddr_t dst_addr, ipaddr_t net_mask, ipaddr_t gw_addr,
 static ire_t *
 ire_lookup_v6(const in6_addr_t *dst_addr_v6,
     const in6_addr_t *net_mask_v6, const in6_addr_t *gw_addr_v6,
-    const ill_t *ill, zoneid_t zoneid, const ts_label_t *tsl, int match_flags,
-    ip_stack_t *ipst, ire_t **pifire,
-    in6_addr_t *v6setsrcp, tsol_ire_gw_secattr_t **gwattrp)
+    const ill_t *ill, zoneid_t zoneid, int match_flags, ip_stack_t *ipst,
+    ire_t **pifire, in6_addr_t *v6setsrcp)
 {
 	ire_t		*ire;
 	ire_t		*ifire = NULL;
@@ -1073,7 +959,6 @@ ire_lookup_v6(const in6_addr_t *dst_addr_v6,
 
 	*pifire = NULL;
 	*v6setsrcp = ipv6_all_zeros;
-	*gwattrp = NULL;
 
 	/* Skip IRE_IF_CLONE */
 	match_flags |= MATCH_IRE_TYPE;
@@ -1087,7 +972,7 @@ ire_lookup_v6(const in6_addr_t *dst_addr_v6,
 		in6_addr_t dst;
 
 		ire = ire_ftable_lookup_v6(dst_addr_v6, net_mask_v6,
-		    gw_addr_v6, ire_type, ill, zoneid, tsl, match_flags, 0,
+		    gw_addr_v6, ire_type, ill, zoneid, match_flags, 0,
 		    ipst, NULL);
 
 		if (ire == NULL ||(ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)))
@@ -1101,12 +986,6 @@ ire_lookup_v6(const in6_addr_t *dst_addr_v6,
 			    &ire->ire_setsrc_addr_v6));
 			*v6setsrcp = ire->ire_setsrc_addr_v6;
 			v6setsrcp = NULL;
-		}
-
-		/* The first ire_gw_secattr is passed back */
-		if (ire->ire_gw_secattr != NULL) {
-			*gwattrp = ire->ire_gw_secattr;
-			gwattrp = NULL;
 		}
 
 		mutex_enter(&ire->ire_lock);
@@ -1137,13 +1016,11 @@ ire_lookup_v6(const in6_addr_t *dst_addr_v6,
 		}
 		match_flags |= MATCH_IRE_TYPE;
 
-		ifire = ire_route_recursive_v6(&dst, ire_type, ill, zoneid, tsl,
-		    match_flags, IRR_INCOMPLETE, 0, ipst, v6setsrcp, gwattrp,
-		    NULL);
+		ifire = ire_route_recursive_v6(&dst, ire_type, ill, zoneid,
+		    match_flags, IRR_INCOMPLETE, 0, ipst, v6setsrcp, NULL);
 	} else {
 		ire = ire_route_recursive_v6(dst_addr_v6, ire_type, ill, zoneid,
-		    tsl, match_flags, IRR_INCOMPLETE, 0, ipst, v6setsrcp,
-		    gwattrp, NULL);
+		    match_flags, IRR_INCOMPLETE, 0, ipst, v6setsrcp, NULL);
 	}
 	*pifire = ifire;
 	return (ire);
@@ -1221,15 +1098,13 @@ done:
  */
 static mblk_t *
 rts_rtmget(mblk_t *mp, ire_t *ire, ire_t *ifire, const in6_addr_t *setsrc,
-    tsol_ire_gw_secattr_t *attrp, sa_family_t af)
+    sa_family_t af)
 {
 	rt_msghdr_t	*rtm;
 	rt_msghdr_t	*new_rtm;
 	mblk_t		*new_mp;
 	int		rtm_addrs;
 	int		rtm_flags;
-	tsol_gc_t	*gc = NULL;
-	tsol_gcgrp_t	*gcgrp = NULL;
 	ill_t		*ill;
 	ipif_t		*ipif = NULL;
 	ipaddr_t	brdaddr;	/* IFF_POINTOPOINT destination */
@@ -1248,16 +1123,6 @@ rts_rtmget(mblk_t *mp, ire_t *ire, ire_t *ifire, const in6_addr_t *setsrc,
 		ill = ire_nexthop_ill(ifire);
 	else
 		ill = ire_nexthop_ill(ire);
-
-	if (attrp != NULL) {
-		mutex_enter(&attrp->igsa_lock);
-		if ((gc = attrp->igsa_gc) != NULL) {
-			gcgrp = gc->gc_grp;
-			ASSERT(gcgrp != NULL);
-			rw_enter(&gcgrp->gcgrp_rwlock, RW_READER);
-		}
-		mutex_exit(&attrp->igsa_lock);
-	}
 
 	/*
 	 * Always return RTA_DST, RTA_GATEWAY and RTA_NETMASK.
@@ -1292,10 +1157,8 @@ rts_rtmget(mblk_t *mp, ire_t *ire, ire_t *ifire, const in6_addr_t *setsrc,
 		}
 	}
 
-	new_mp = rts_alloc_msg(RTM_GET, rtm_addrs, af, gc != NULL ? 1 : 0);
+	new_mp = rts_alloc_msg(RTM_GET, rtm_addrs, af);
 	if (new_mp == NULL) {
-		if (gcgrp != NULL)
-			rw_exit(&gcgrp->gcgrp_rwlock);
 		if (ill != NULL)
 			ill_refrele(ill);
 		return (NULL);
@@ -1320,7 +1183,7 @@ rts_rtmget(mblk_t *mp, ire_t *ire, ire_t *ifire, const in6_addr_t *setsrc,
 		rtm_flags = ire->ire_flags;
 		rts_fill_msg(RTM_GET, rtm_addrs, ire->ire_addr,
 		    ire->ire_mask, ire->ire_gateway_addr, v4setsrc,
-		    brdaddr, 0, ifaddr, ill, new_mp, gc);
+		    brdaddr, 0, ifaddr, ill, new_mp);
 		break;
 	case AF_INET6:
 		if (!IN6_IS_ADDR_UNSPECIFIED(setsrc))
@@ -1330,12 +1193,9 @@ rts_rtmget(mblk_t *mp, ire_t *ire, ire_t *ifire, const in6_addr_t *setsrc,
 		rts_fill_msg_v6(RTM_GET, rtm_addrs, &ire->ire_addr_v6,
 		    &ire->ire_mask_v6, &ire->ire_gateway_addr_v6,
 		    setsrc, &brdaddr6, &ipv6_all_zeros,
-		    &ifaddr6, ill, new_mp, gc);
+		    &ifaddr6, ill, new_mp);
 		break;
 	}
-
-	if (gcgrp != NULL)
-		rw_exit(&gcgrp->gcgrp_rwlock);
 
 	new_rtm = (rt_msghdr_t *)new_mp->b_rptr;
 
@@ -1599,8 +1459,7 @@ rts_merge_metrics(iulp_t *dst, const iulp_t *src)
 static int
 rts_getaddrs(rt_msghdr_t *rtm, in6_addr_t *dst_addrp, in6_addr_t *gw_addrp,
     in6_addr_t *net_maskp, in6_addr_t *authorp, in6_addr_t *if_addrp,
-    in6_addr_t *in_src_addrp, ushort_t *indexp, sa_family_t *afp,
-    tsol_rtsecattr_t *rtsecattr, int *error)
+    in6_addr_t *in_src_addrp, ushort_t *indexp, sa_family_t *afp, int *error)
 {
 	struct sockaddr *sa;
 	int	i;
@@ -1619,7 +1478,6 @@ rts_getaddrs(rt_msghdr_t *rtm, in6_addr_t *dst_addrp, in6_addr_t *gw_addrp,
 	*in_src_addrp = ipv6_all_zeros;
 	*indexp = 0;
 	*afp = AF_UNSPEC;
-	rtsecattr->rtsa_cnt = 0;
 	*error = 0;
 
 	/*
@@ -1693,17 +1551,6 @@ rts_getaddrs(rt_msghdr_t *rtm, in6_addr_t *dst_addrp, in6_addr_t *gw_addrp,
 		found_addrs |= addr_bits;
 	}
 
-	/*
-	 * Parse the routing message and look for any security-
-	 * related attributes for the route.  For each valid
-	 * attribute, allocate/obtain the corresponding kernel
-	 * route security attributes.
-	 */
-	if (((cp - (caddr_t)rtm) < length) && is_system_labeled()) {
-		*error = tsol_rtsa_init(rtm, rtsecattr, cp);
-		ASSERT(rtsecattr->rtsa_cnt <= TSOL_RTSA_REQUEST_MAX);
-	}
-
 	return (found_addrs);
 }
 
@@ -1713,8 +1560,7 @@ rts_getaddrs(rt_msghdr_t *rtm, in6_addr_t *dst_addrp, in6_addr_t *gw_addrp,
 static void
 rts_fill_msg(int type, int rtm_addrs, ipaddr_t dst, ipaddr_t mask,
     ipaddr_t gateway, ipaddr_t src_addr, ipaddr_t brd_addr, ipaddr_t author,
-    ipaddr_t ifaddr, const ill_t *ill, mblk_t *mp,
-    const tsol_gc_t *gc)
+    ipaddr_t ifaddr, const ill_t *ill, mblk_t *mp)
 {
 	rt_msghdr_t	*rtm;
 	sin_t		*sin;
@@ -1732,7 +1578,7 @@ rts_fill_msg(int type, int rtm_addrs, ipaddr_t dst, ipaddr_t mask,
 	 * Now find the size of the data
 	 * that follows the message header.
 	 */
-	data_size = rts_data_msg_size(rtm_addrs, AF_INET, gc != NULL ? 1 : 0);
+	data_size = rts_data_msg_size(rtm_addrs, AF_INET);
 
 	rtm = (rt_msghdr_t *)mp->b_rptr;
 	mp->b_wptr = &mp->b_rptr[header_size];
@@ -1786,27 +1632,6 @@ rts_fill_msg(int type, int rtm_addrs, ipaddr_t dst, ipaddr_t mask,
 		}
 	}
 
-	if (gc != NULL) {
-		rtm_ext_t *rtm_ext;
-		struct rtsa_s *rp_dst;
-		tsol_rtsecattr_t *rsap;
-
-		ASSERT(gc->gc_grp != NULL);
-		ASSERT(RW_LOCK_HELD(&gc->gc_grp->gcgrp_rwlock));
-
-		rtm_ext = (rtm_ext_t *)cp;
-		rtm_ext->rtmex_type = RTMEX_GATEWAY_SECATTR;
-		rtm_ext->rtmex_len = TSOL_RTSECATTR_SIZE(1);
-
-		rsap = (tsol_rtsecattr_t *)(rtm_ext + 1);
-		rsap->rtsa_cnt = 1;
-		rp_dst = rsap->rtsa_attr;
-
-		ASSERT(gc->gc_db != NULL);
-		bcopy(&gc->gc_db->gcdb_attr, rp_dst, sizeof (*rp_dst));
-		cp = (uchar_t *)rp_dst;
-	}
-
 	mp->b_wptr = cp;
 	mp->b_cont = NULL;
 	/*
@@ -1820,15 +1645,14 @@ rts_fill_msg(int type, int rtm_addrs, ipaddr_t dst, ipaddr_t mask,
 
 /*
  * Allocates and initializes a routing socket message.
- * Note that sacnt is either zero or one.
  */
 mblk_t *
-rts_alloc_msg(int type, int rtm_addrs, sa_family_t af, uint_t sacnt)
+rts_alloc_msg(int type, int rtm_addrs, sa_family_t af)
 {
 	size_t	length;
 	mblk_t	*mp;
 
-	length = RTS_MSG_SIZE(type, rtm_addrs, af, sacnt);
+	length = RTS_MSG_SIZE(type, rtm_addrs, af);
 	mp = allocb(length, BPRI_MED);
 	if (mp == NULL)
 		return (mp);
@@ -1863,7 +1687,7 @@ rts_header_msg_size(int type)
  * of the same family (currently either AF_INET or AF_INET6).
  */
 size_t
-rts_data_msg_size(int rtm_addrs, sa_family_t af, uint_t sacnt)
+rts_data_msg_size(int rtm_addrs, sa_family_t af)
 {
 	int	i;
 	size_t	length = 0;
@@ -1892,8 +1716,6 @@ rts_data_msg_size(int rtm_addrs, sa_family_t af, uint_t sacnt)
 			break;
 		}
 	}
-	if (sacnt > 0)
-		length += sizeof (rtm_ext_t) + TSOL_RTSECATTR_SIZE(sacnt);
 
 	return (length);
 }
@@ -1915,11 +1737,11 @@ ip_rts_change(int type, ipaddr_t dst_addr, ipaddr_t gw_addr, ipaddr_t net_mask,
 
 	if (rtm_addrs == 0)
 		return;
-	mp = rts_alloc_msg(type, rtm_addrs, AF_INET, 0);
+	mp = rts_alloc_msg(type, rtm_addrs, AF_INET);
 	if (mp == NULL)
 		return;
 	rts_fill_msg(type, rtm_addrs, dst_addr, net_mask, gw_addr, source, 0,
-	    author, 0, NULL, mp, NULL);
+	    author, 0, NULL, mp);
 	rtm = (rt_msghdr_t *)mp->b_rptr;
 	rtm->rtm_flags = flags;
 	rtm->rtm_errno = error;
@@ -1956,20 +1778,20 @@ ip_rts_xifmsg(const ipif_t *ipif, uint64_t set, uint64_t clear, uint_t flags)
 		return;
 	if (ipif->ipif_isv6) {
 		af = AF_INET6;
-		mp = rts_alloc_msg(RTM_IFINFO, RTA_IFP, af, 0);
+		mp = rts_alloc_msg(RTM_IFINFO, RTA_IFP, af);
 		if (mp == NULL)
 			return;
 		rts_fill_msg_v6(RTM_IFINFO, RTA_IFP, &ipv6_all_zeros,
 		    &ipv6_all_zeros, &ipv6_all_zeros, &ipv6_all_zeros,
 		    &ipv6_all_zeros, &ipv6_all_zeros, &ipv6_all_zeros,
-		    ipif->ipif_ill, mp, NULL);
+		    ipif->ipif_ill, mp);
 	} else {
 		af = AF_INET;
-		mp = rts_alloc_msg(RTM_IFINFO, RTA_IFP, af, 0);
+		mp = rts_alloc_msg(RTM_IFINFO, RTA_IFP, af);
 		if (mp == NULL)
 			return;
 		rts_fill_msg(RTM_IFINFO, RTA_IFP, 0, 0, 0, 0, 0, 0, 0,
-		    ipif->ipif_ill, mp, NULL);
+		    ipif->ipif_ill, mp);
 	}
 	ifm = (if_msghdr_t *)mp->b_rptr;
 	ifm->ifm_index = ipif->ipif_ill->ill_phyint->phyint_ifindex;
@@ -2029,7 +1851,7 @@ rts_new_rtsmsg(int cmd, int error, const ipif_t *ipif, uint_t flags)
 	else
 		rtm_addrs = (RTA_IFA | RTA_NETMASK | RTA_BRD | RTA_IFP);
 
-	mp = rts_alloc_msg(cmd, rtm_addrs, af, 0);
+	mp = rts_alloc_msg(cmd, rtm_addrs, af);
 	if (mp == NULL)
 		return;
 
@@ -2040,7 +1862,7 @@ rts_new_rtsmsg(int cmd, int error, const ipif_t *ipif, uint_t flags)
 			    ipif->ipif_net_mask, 0, ipif->ipif_lcl_addr,
 			    ipif->ipif_pp_dst_addr, 0,
 			    ipif->ipif_lcl_addr, ipif->ipif_ill,
-			    mp, NULL);
+			    mp);
 			break;
 		case AF_INET6:
 			rts_fill_msg_v6(cmd, rtm_addrs,
@@ -2048,7 +1870,7 @@ rts_new_rtsmsg(int cmd, int error, const ipif_t *ipif, uint_t flags)
 			    &ipv6_all_zeros, &ipif->ipif_v6lcl_addr,
 			    &ipif->ipif_v6pp_dst_addr, &ipv6_all_zeros,
 			    &ipif->ipif_v6lcl_addr, ipif->ipif_ill,
-			    mp, NULL);
+			    mp);
 			break;
 		}
 		ifam = (ifa_msghdr_t *)mp->b_rptr;
@@ -2062,7 +1884,7 @@ rts_new_rtsmsg(int cmd, int error, const ipif_t *ipif, uint_t flags)
 		case AF_INET:
 			rts_fill_msg(cmd, rtm_addrs,
 			    ipif->ipif_lcl_addr, ipif->ipif_net_mask, 0,
-			    0, 0, 0, 0, NULL, mp, NULL);
+			    0, 0, 0, 0, NULL, mp);
 			break;
 		case AF_INET6:
 			rts_fill_msg_v6(cmd, rtm_addrs,
@@ -2070,7 +1892,7 @@ rts_new_rtsmsg(int cmd, int error, const ipif_t *ipif, uint_t flags)
 			    &ipif->ipif_v6net_mask, &ipv6_all_zeros,
 			    &ipv6_all_zeros, &ipv6_all_zeros,
 			    &ipv6_all_zeros, &ipv6_all_zeros,
-			    NULL, mp, NULL);
+			    NULL, mp);
 			break;
 		}
 		rtm = (rt_msghdr_t *)mp->b_rptr;

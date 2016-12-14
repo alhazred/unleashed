@@ -59,8 +59,6 @@
 #include <prof_attr.h>
 #include <user_attr.h>
 #include <bsm/libbsm.h>
-#include <sys/tsol/tndb.h>
-#include <tsol/label.h>
 
 static int send_to_cachemgr(const char *,
     ns_ldap_attr_t **, ns_ldap_error_t **);
@@ -3600,138 +3598,7 @@ __s_cvt_audituser(const void *data, char **rdn,
 
 	return (NS_LDAP_SUCCESS);
 }
-/*
- * Conversion:			tnrhtp
- * Input format:		tsol_tpstr_t
- * Exported objectclass:	ipTnetTemplate
- */
-static int
-__s_cvt_tnrhtp(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
-{
-	ns_ldap_entry_t	*e;
-	int		rc;
-	char		trdn[RDNSIZE];
-	char		esc_str[RDNSIZE];
-	/* routine specific */
-	int		max_attr = 2;
-	tsol_tpstr_t	*ptr;
-	static		char *oclist[] = {
-			"ipTnetTemplate",
-			"top",
-			NULL
-			};
 
-	if (data == NULL || rdn == NULL || entry == NULL || errorp == NULL)
-		return (NS_LDAP_OP_FAILED);
-
-	*entry = e = __s_mk_entry(oclist, max_attr);
-	if (e == NULL)
-		return (NS_LDAP_MEMORY);
-
-	/* Convert the structure */
-	ptr = (tsol_tpstr_t *)data;
-
-	if (ptr->template == NULL || *ptr->template == '\0') {
-		__ns_ldap_freeEntry(e);
-		*entry = NULL;
-		return (NS_LDAP_INVALID_PARAM);
-	}
-
-	/*
-	 * Escape special characters in Template name.
-	 */
-	if (escape_str(esc_str, ptr->template) != 0) {
-		__ns_ldap_freeEntry(e);
-		*entry = NULL;
-		return (NS_LDAP_INVALID_PARAM);
-	}
-
-	/* Create an appropriate rdn */
-	(void) snprintf(trdn, RDNSIZE, "ipTnetTemplateName=%s", esc_str);
-	*rdn = strdup(trdn);
-	if (*rdn == NULL) {
-		__ns_ldap_freeEntry(e);
-		*entry = NULL;
-		return (NS_LDAP_MEMORY);
-	}
-
-	rc = __s_add_attr(e, "ipTnetTemplateName", ptr->template);
-	if (rc != NS_LDAP_SUCCESS) {
-		__s_cvt_freeEntryRdn(entry, rdn);
-		return (rc);
-	}
-
-	rc = __s_add_attr(e, "SolarisAttrKeyValue", ptr->attrs);
-	if (rc != NS_LDAP_SUCCESS) {
-		__s_cvt_freeEntryRdn(entry, rdn);
-		return (rc);
-	}
-
-	return (NS_LDAP_SUCCESS);
-}
-/*
- * Conversion:			tnrhdb
- * Input format:		tsol_rhstr_t
- * Exported objectclass:	ipTnetHost
- */
-static int
-__s_cvt_tnrhdb(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
-{
-	ns_ldap_entry_t	*e;
-	int		rc;
-	char		trdn[RDNSIZE];
-	/* routine specific */
-	tsol_rhstr_t	*ptr;
-	int		max_attr = 2;
-	static		char *oclist[] = {
-			"ipTnetHost",
-			"ipTnetTemplate",
-			"top",
-			NULL
-			};
-
-	if (data == NULL || rdn == NULL || entry == NULL || errorp == NULL)
-		return (NS_LDAP_OP_FAILED);
-
-	*entry = e = __s_mk_entry(oclist, max_attr);
-	if (e == NULL)
-		return (NS_LDAP_MEMORY);
-
-	/* Convert the structure */
-	ptr = (tsol_rhstr_t *)data;
-
-	if (ptr->address == NULL || *ptr->address == '\0' ||
-	    ptr->template == NULL || *ptr->template == '\0') {
-		__ns_ldap_freeEntry(e);
-		*entry = NULL;
-		return (NS_LDAP_INVALID_PARAM);
-	}
-
-	/* Create an appropriate rdn */
-	(void) snprintf(trdn, RDNSIZE, "ipTnetNumber=%s", ptr->address);
-	*rdn = strdup(trdn);
-	if (*rdn == NULL) {
-		__ns_ldap_freeEntry(e);
-		*entry = NULL;
-		return (NS_LDAP_MEMORY);
-	}
-
-	rc = __s_add_attr(e, "ipTnetNumber", ptr->address);
-	if (rc != NS_LDAP_SUCCESS) {
-		__s_cvt_freeEntryRdn(entry, rdn);
-		return (rc);
-	}
-
-	rc = __s_add_attr(e, "ipTnetTemplateName", ptr->template);
-	if (rc != NS_LDAP_SUCCESS) {
-		__s_cvt_freeEntryRdn(entry, rdn);
-		return (rc);
-	}
-
-	return (NS_LDAP_SUCCESS);
-}
 /*
  * Add Typed Entry Conversion data structures
  */
@@ -3768,8 +3635,6 @@ static __ns_cvt_type_t __s_cvtlist[] = {
 	{ NS_LDAP_TYPE_AUTOMOUNT,	0, __s_cvt_auto_mount },
 	{ NS_LDAP_TYPE_PUBLICKEY,	AE, __s_cvt_publickey },
 	{ NS_LDAP_TYPE_AUUSER,		AE, __s_cvt_audituser },
-	{ NS_LDAP_TYPE_TNRHTP,		0,  __s_cvt_tnrhtp },
-	{ NS_LDAP_TYPE_TNRHDB,		0,  __s_cvt_tnrhdb },
 	{ NS_LDAP_TYPE_PROJECT,		0,  __s_cvt_project },
 	{ NULL,				0, NULL },
 };

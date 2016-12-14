@@ -38,7 +38,6 @@
 #include <ctype.h>
 #include <nss.h>
 #include <bsm/libbsm.h>
-#include <tsol/label.h>
 #include "funcs.h"
 #include "messages.h"
 #undef	GROUP
@@ -72,9 +71,6 @@ static const char *check_proj(const char *);
 static const char *check_privset(const char *);
 static const char *check_type(const char *);
 static const char *check_lock_after_retries(const char *);
-static const char *check_label(const char *);
-static const char *check_idlecmd(const char *);
-static const char *check_idletime(const char *);
 static const char *check_auditflags(const char *);
 
 int nkeys;
@@ -89,10 +85,6 @@ static ua_key_t keys[] = {
 	{ USERATTR_LIMPRIV_KW,	check_privset,	priv },
 	{ USERATTR_DFLTPRIV_KW,	check_privset,	priv },
 	{ USERATTR_LOCK_AFTER_RETRIES_KW, check_lock_after_retries,  lock },
-	{ USERATTR_CLEARANCE,	check_label,	label },
-	{ USERATTR_MINLABEL,	check_label,	label },
-	{ USERATTR_IDLECMD_KW,	check_idlecmd,	idlecmd },
-	{ USERATTR_IDLETIME_KW,	check_idletime,	idletime },
 	{ USERATTR_AUDIT_FLAGS_KW, check_auditflags, auditflags },
 };
 
@@ -426,51 +418,6 @@ check_lock_after_retries(const char *keyval)
 			return (keyval);
 		}
 	}
-	return (NULL);
-}
-
-static const char *
-check_label(const char *labelstr)
-{
-	int	err;
-	m_label_t *lbl = NULL;
-
-	if (!is_system_labeled())
-		return (NULL);
-
-	err = str_to_label(labelstr, &lbl, MAC_LABEL, L_NO_CORRECTION, NULL);
-	m_label_free(lbl);
-
-	if (err == -1)
-		return (labelstr);
-
-	return (NULL);
-}
-
-static const char *
-check_idlecmd(const char *cmd)
-{
-	if ((strcmp(cmd, USERATTR_IDLECMD_LOCK_KW) != 0) &&
-	    (strcmp(cmd, USERATTR_IDLECMD_LOGOUT_KW) != 0)) {
-		return (cmd);
-	}
-
-	return (NULL);
-}
-
-static const char *
-check_idletime(const char *time)
-{
-	int		c;
-	unsigned char	*up = (unsigned char *)time;
-
-	c = *up;
-	while (c != '\0') {
-		if (!isdigit(c))
-			return (time);
-		c = *++up;
-	}
-
 	return (NULL);
 }
 

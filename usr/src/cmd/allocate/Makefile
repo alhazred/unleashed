@@ -23,8 +23,6 @@
 # Copyright (c) 1992, 2010, Oracle and/or its affiliates. All rights reserved.
 #
 
-ETCTSOLFILES =	devalloc_defaults
-
 include		../Makefile.cmd
 
 CERRWARN +=	-Wno-unused-value
@@ -35,8 +33,7 @@ CERRWARN +=	-Wno-clobbered
 ROOTSEC =	$(ROOTETC)/security
 ROOTSECDEV =	$(ROOTSEC)/dev
 ROOTSECLIB =	$(ROOTSEC)/lib
-ROOTSECAUD =	$(ROOTSEC)/audio
-ROOTDIRS =	$(ROOTSECDEV) $(ROOTSECLIB) $(ROOTSECAUD)
+ROOTDIRS =	$(ROOTSECDEV) $(ROOTSECLIB)
 
 ROOTMANIFESTDIR=	$(ROOTSVCSYSTEMDEVICE)
 SVCMETHOD =	svc-allocate	
@@ -47,23 +44,17 @@ CLEANfd =	fd_clean
 CLEANsr =	sr_clean
 CLEANst =	st_clean
 CLEANaudio =	audio_clean
-CLEANdisk =	disk_clean
-CLEAN_SCRIPTS =	$(CLEANfd) $(CLEANsr) $(CLEANst) $(CLEANaudio) $(CLEANdisk)
-WDW_SCRIPTS =	wdwmsg wdwwrapper
-WDW_LINKS =	$(CLEANaudio) $(CLEANdisk) $(CLEANst)
-SCRIPTS =	$(CLEAN_SCRIPTS) $(WDW_SCRIPTS)
+CLEAN_SCRIPTS =	$(CLEANfd) $(CLEANsr) $(CLEANst) $(CLEANaudio)
+SCRIPTS =	$(CLEAN_SCRIPTS)
 ALLSCRIPTS =	allscripts.sh
 
 PROGalloc =	allocate
 PROGmkdevalloc =	mkdevalloc
 PROGdminfo =	dminfo
-PROGaddalloc =	add_allocatable
-PROG =		$(PROGalloc) $(PROGmkdevalloc) $(PROGdminfo) \
-	$(PROGaddalloc)
+PROG =		$(PROGalloc) $(PROGmkdevalloc) $(PROGdminfo)
 
 LINKPROGalloc =	deallocate list_devices
 LINKPROGmkdevalloc = mkdevmaps
-LINKPROGaddalloc = remove_allocatable
 
 POFILE =	allocate_all.po
 POFILES =	$(OBJS:%.o=%.po) $(ALLSCRIPTS:%.sh=%.po)
@@ -73,7 +64,6 @@ CPPFLAGS +=	$(DFLAGS)
 
 ROOTLOCKS =	$(RTLCKS:%=$(ROOTSECDEV)/%)
 ROOTSCRIPTS =	$(SCRIPTS:%=$(ROOTSECLIB)/%)
-ROOTWDWLINKS =	$(WDW_LINKS:%=$(ROOTSECLIB)/%.windowing)
 
 ROOTPROG =	$(PROGallocate:%=$(ROOTUSRSBIN)/%) \
 		$(PROGmkdevalloc:%=$(ROOTUSRSBIN)/%) \
@@ -81,18 +71,15 @@ ROOTPROG =	$(PROGallocate:%=$(ROOTUSRSBIN)/%) \
 		$(PROGaddaloc:%=$(ROOTUSRSBIN)/%)
 ROOTLINKalloc =	$(LINKPROGalloc:%=$(ROOTUSRSBIN)/%)
 ROOTLINKmkdevalloc = $(LINKPROGmkdevalloc:%=$(ROOTUSRSBIN)/%)
-ROOTLINKaddalloc = $(LINKPROGaddalloc:%=$(ROOTUSRSBIN)/%)
-ROOTLINKS =	$(ROOTLINKalloc) $(ROOTLINKmkdevalloc) $(ROOTLINKaddalloc)
+ROOTLINKS =	$(ROOTLINKalloc) $(ROOTLINKmkdevalloc)
 
 PROGallocOBJS =		allocate.o allocate3.o
 PROGmkdevallocOBJS =	mkdevalloc.o
 PROGdminfoOBJS =	dminfo.o
-PROGaddallocOBJS =	add_allocatable.o
 
 OBJS =		$(PROGallocOBJS) \
 		$(PROGmkdevallocOBJS) \
-		$(PROGdminfoOBJS) \
-		$(PROGaddallocOBJS)
+		$(PROGdminfoOBJS)
 
 SRCS =		$(OBJS:%.o=%.c)
 
@@ -102,10 +89,9 @@ $(ROOTSECDEV)/% :=	FILEMODE = 0400
 $(ROOTSECLIB)/% :=	FILEMODE = 0555
 
 
-$(PROGalloc) :=		LDLIBS += -lbsm -lsec -lsecdb -ldevinfo -ltsol
+$(PROGalloc) :=		LDLIBS += -lbsm -lsec -lsecdb
 $(PROGmkdevalloc) :=	LDLIBS += -lbsm
 $(PROGdminfo) :=	LDLIBS += -lbsm
-$(PROGaddalloc) :=	LDLIBS += -lbsm -lsecdb -ltsol
 
 CLOBBERFILES +=	$(SCRIPTS)
 
@@ -114,8 +100,7 @@ CLOBBERFILES +=	$(SCRIPTS)
 all :		$(PROG) $(RTLCKS) $(SCRIPTS)
 
 install :	$(PROG) $(ROOTDIRS) $(ROOTPROG) $(ROOTLOCKS) \
-		$(ROOTSCRIPTS) $(ROOTLINKS) $(ROOTWDWLINKS) \
-		$(ROOTETCTSOLFILES) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
+		$(ROOTSCRIPTS) $(ROOTLINKS) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
 $(RTLCKS):
 		$(TOUCH) $@
 
@@ -124,10 +109,6 @@ $(ROOTSECLIB)/%: %.sh
 
 $(PROGalloc) :	$(PROGallocOBJS)
 		$(LINK.c) $(PROGallocOBJS) -o $@ $(LDLIBS)
-		$(POST_PROCESS)
-
-$(PROGaddalloc) :	$(PROGaddallocOBJS)
-		$(LINK.c) $(PROGaddallocOBJS) -o $@ $(LDLIBS)
 		$(POST_PROCESS)
 
 $(PROGmkdevalloc) :	$(PROGmkdevallocOBJS)
@@ -151,10 +132,6 @@ $(ROOTSECLIB)/%: %
 $(ROOTLINKalloc) :	$(PROGalloc:%=$(ROOTUSRSBIN)/%)
 			$(RM) $@
 			$(LN) $(PROGalloc:%=$(ROOTUSRSBIN)/%) $@
-
-$(ROOTLINKaddalloc) :	$(PROGaddalloc:%=$(ROOTUSRSBIN)/%)
-			$(RM) $@
-			$(LN) $(PROGaddalloc:%=$(ROOTUSRSBIN)/%) $@
 
 $(ROOTLINKmkdevalloc) :	$(PROGmkdevalloc:%=$(ROOTUSRSBIN)/%)
 			$(RM) $@

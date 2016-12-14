@@ -319,10 +319,10 @@ extern	void	ip_ll_subnet_defaults(ill_t *, mblk_t *);
 extern	void	ill_capability_send(ill_t *, mblk_t *);
 
 extern	int	ip_rt_add(ipaddr_t, ipaddr_t, ipaddr_t, ipaddr_t, int,
-    ill_t *, ire_t **, boolean_t, struct rtsa_s *, ip_stack_t *, zoneid_t);
+    ill_t *, ire_t **, boolean_t, ip_stack_t *, zoneid_t);
 extern	int	ip_rt_add_v6(const in6_addr_t *, const in6_addr_t *,
     const in6_addr_t *, const in6_addr_t *, int, ill_t *, ire_t **,
-    struct rtsa_s *, ip_stack_t *, zoneid_t);
+    ip_stack_t *, zoneid_t);
 extern	int	ip_rt_delete(ipaddr_t, ipaddr_t, ipaddr_t, uint_t, int,
     ill_t *, boolean_t, ip_stack_t *, zoneid_t);
 extern	int	ip_rt_delete_v6(const in6_addr_t *, const in6_addr_t *,

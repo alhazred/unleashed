@@ -40,7 +40,6 @@
 #include <sys/xti_inet.h>
 #include <sys/squeue_impl.h>
 #include <sys/squeue.h>
-#include <sys/tsol/tnet.h>
 
 #include <inet/common.h>
 #include <inet/ip.h>
@@ -167,7 +166,6 @@ static mblk_t	*tcp_reass(tcp_t *, mblk_t *, uint32_t);
 static void	tcp_reass_elim_overlap(tcp_t *, mblk_t *);
 static void	tcp_rsrv_input(void *, mblk_t *, void *, ip_recv_attr_t *);
 static void	tcp_set_rto(tcp_t *, time_t);
-static void	tcp_setcred_data(mblk_t *, ip_recv_attr_t *);
 
 /*
  * Set the MSS associated with a particular tcp based on its current value,
@@ -1488,8 +1486,8 @@ tcp_input_listener(void *arg, mblk_t *mp, void *arg2, ip_recv_attr_t *ira)
 	ASSERT(eager->tcp_conn.tcp_eager_conn_ind == NULL);
 	ASSERT(!eager->tcp_tconnind_started);
 	/*
-	 * If the SYN came with a credential, it's a loopback packet or a
-	 * labeled packet; attach the credential to the TPI message.
+	 * If the SYN came with a credential, it's a loopback packet; attach
+	 * the credential to the TPI message.
 	 */
 	if (ira->ira_cred != NULL)
 		mblk_setcred(tpi_mp, ira->ira_cred, ira->ira_cpid);
@@ -1536,51 +1534,6 @@ tcp_input_listener(void *arg, mblk_t *mp, void *arg2, ip_recv_attr_t *ira)
 	 * to the listener's receive window later in this function.
 	 */
 	eager->tcp_rwnd = 0;
-
-	if (is_system_labeled()) {
-		ip_xmit_attr_t *ixa = econnp->conn_ixa;
-
-		ASSERT(ira->ira_tsl != NULL);
-		/* Discard any old label */
-		if (ixa->ixa_free_flags & IXA_FREE_TSL) {
-			ASSERT(ixa->ixa_tsl != NULL);
-			label_rele(ixa->ixa_tsl);
-			ixa->ixa_free_flags &= ~IXA_FREE_TSL;
-			ixa->ixa_tsl = NULL;
-		}
-		if ((lconnp->conn_mlp_type != mlptSingle ||
-		    lconnp->conn_mac_mode != CONN_MAC_DEFAULT) &&
-		    ira->ira_tsl != NULL) {
-			/*
-			 * If this is an MLP connection or a MAC-Exempt
-			 * connection with an unlabeled node, packets are to be
-			 * exchanged using the security label of the received
-			 * SYN packet instead of the server application's label.
-			 * tsol_check_dest called from ip_set_destination
-			 * might later update TSF_UNLABELED by replacing
-			 * ixa_tsl with a new label.
-			 */
-			label_hold(ira->ira_tsl);
-			ip_xmit_attr_replace_tsl(ixa, ira->ira_tsl);
-			DTRACE_PROBE2(mlp_syn_accept, conn_t *,
-			    econnp, ts_label_t *, ixa->ixa_tsl)
-		} else {
-			ixa->ixa_tsl = crgetlabel(econnp->conn_cred);
-			DTRACE_PROBE2(syn_accept, conn_t *,
-			    econnp, ts_label_t *, ixa->ixa_tsl)
-		}
-		/*
-		 * conn_connect() called from tcp_set_destination will verify
-		 * the destination is allowed to receive packets at the
-		 * security label of the SYN-ACK we are generating. As part of
-		 * that, tsol_check_dest() may create a new effective label for
-		 * this connection.
-		 * Finally conn_connect() will call conn_update_label.
-		 * All that remains for TCP to do is to call
-		 * conn_build_hdr_template which is done as part of
-		 * tcp_set_destination.
-		 */
-	}
 
 	/*
 	 * Since we will clear tcp_listener before we clear tcp_detached
@@ -1997,17 +1950,6 @@ tcp_rcv_enqueue(tcp_t *tcp, mblk_t *mp, uint_t seg_len, cred_t *cr)
 	ASSERT(seg_len == msgdsize(mp));
 	ASSERT(tcp->tcp_rcv_list == NULL || tcp->tcp_rcv_last_head != NULL);
 
-	if (is_system_labeled()) {
-		ASSERT(cr != NULL || msg_getcred(mp, NULL) != NULL);
-		/*
-		 * Provide for protocols above TCP such as RPC. NOPID leaves
-		 * db_cpid unchanged.
-		 * The cred could have already been set.
-		 */
-		if (cr != NULL)
-			mblk_setcred(mp, cr, NOPID);
-	}
-
 	if (tcp->tcp_rcv_list == NULL) {
 		ASSERT(tcp->tcp_rcv_last_head == NULL);
 		tcp->tcp_rcv_list = mp;
@@ -2364,7 +2306,7 @@ tcp_input_data(void *arg, mblk_t *mp, void *arg2, ip_recv_attr_t *ira)
 			 */
 			ASSERT(connp->conn_family == AF_INET6);
 
-			(void) ip_find_hdr_v6(mp, (ip6_t *)rptr, B_TRUE, &ipp,
+			(void) ip_find_hdr_v6(mp, (ip6_t *)rptr, &ipp,
 			    &nexthdrp);
 			ASSERT(nexthdrp == IPPROTO_TCP);
 
@@ -4749,9 +4691,6 @@ update_ack:
 				flags &= ~TH_MARKNEXT_NEEDED;
 			}
 
-			if (is_system_labeled())
-				tcp_setcred_data(mp, ira);
-
 			putnext(connp->conn_rq, mp);
 			if (!canputnext(connp->conn_rq))
 				tcp->tcp_rwnd -= seg_len;
@@ -4775,9 +4714,6 @@ update_ack:
 				    ira->ira_cred);
 				flags |= tcp_rcv_drain(tcp);
 			} else {
-				if (is_system_labeled())
-					tcp_setcred_data(mp, ira);
-
 				putnext(connp->conn_rq, mp);
 				if (!canputnext(connp->conn_rq))
 					tcp->tcp_rwnd -= seg_len;
@@ -4889,8 +4825,6 @@ ack_check:
 		ASSERT(tcp->tcp_rcv_list == NULL || tcp->tcp_fused_sigurg);
 		mp1 = tcp->tcp_urp_mark_mp;
 		tcp->tcp_urp_mark_mp = NULL;
-		if (is_system_labeled())
-			tcp_setcred_data(mp1, ira);
 
 		putnext(connp->conn_rq, mp1);
 #ifdef DEBUG
@@ -5010,9 +4944,6 @@ tcp_input_add_ancillary(tcp_t *tcp, mblk_t *mp, ip_pkt_t *ipp,
 	}
 	/*
 	 * If app asked for hopbyhop headers and it has changed ...
-	 * For security labels, note that (1) security labels can't change on
-	 * a connected socket at all, (2) we're connected to at most one peer,
-	 * (3) if anything changes, then it must be some other extra option.
 	 */
 	if (connp->conn_recv_ancillary.crb_ipv6_recvhopopts &&
 	    ip_cmpbuf(tcp->tcp_hopopts, tcp->tcp_hopoptslen,
@@ -5297,22 +5228,6 @@ tcp_set_rto(tcp_t *tcp, clock_t rtt)
 
 	/* Now, we can reset tcp_timer_backoff to use the new RTO... */
 	tcp->tcp_timer_backoff = 0;
-}
-
-/*
- * On a labeled system we have some protocols above TCP, such as RPC, which
- * appear to assume that every mblk in a chain has a db_credp.
- */
-static void
-tcp_setcred_data(mblk_t *mp, ip_recv_attr_t *ira)
-{
-	ASSERT(is_system_labeled());
-	ASSERT(ira->ira_cred != NULL);
-
-	while (mp != NULL) {
-		mblk_setcred(mp, ira->ira_cred, NOPID);
-		mp = mp->b_cont;
-	}
 }
 
 uint_t
