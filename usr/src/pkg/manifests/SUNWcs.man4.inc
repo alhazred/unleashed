@@ -58,7 +58,6 @@ file path=usr/share/man/man4/issue.4
 file path=usr/share/man/man4/logadm.conf.4
 file path=usr/share/man/man4/logindevperm.4
 file path=usr/share/man/man4/loginlog.4
-file path=usr/share/man/man4/magic.4
 file path=usr/share/man/man4/mnttab.4
 file path=usr/share/man/man4/ndpd.conf.4
 file path=usr/share/man/man4/netconfig.4

@@ -76,7 +76,6 @@ file path=usr/share/man/man1/exit.1
 file path=usr/share/man/man1/expr.1
 file path=usr/share/man/man1/fdformat.1
 file path=usr/share/man/man1/fgrep.1
-file path=usr/share/man/man1/file.1
 file path=usr/share/man/man1/find.1
 file path=usr/share/man/man1/fmt.1
 file path=usr/share/man/man1/fmtmsg.1
