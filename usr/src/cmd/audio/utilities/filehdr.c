@@ -275,7 +275,7 @@ audio_rewrite_filesize(int fd, int file_type, unsigned int size,
 		perror("fcntl");
 		exit(1);
 	} else if ((lseek(fd, (off_t)0, SEEK_SET) < 0) ||
-		    (fcntl_err & FAPPEND)) {
+		    (fcntl_err & O_APPEND)) {
 		return (AUDIO_ERR_NOEFFECT);
 	}
 

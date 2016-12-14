@@ -212,7 +212,7 @@ ssc050_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->oflag == FEXCL) {
 			error = EBUSY;
 		} else {
-			unitp->oflag = FOPEN;
+			unitp->oflag = FREAD|FWRITE;
 		}
 	}
 

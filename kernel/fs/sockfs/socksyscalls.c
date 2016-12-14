@@ -736,7 +736,7 @@ accept(int sock, struct sockaddr *name, socklen_t *namelenp, int flags)
 			error = 0;
 		} else {
 			mutex_enter(&nfp->f_tlock);
-			nfp->f_flag &= ~FMASK | (FREAD|FWRITE);
+			nfp->f_flag &= ~FCNTLFLAGS;
 			nfp->f_flag |= arg;
 			mutex_exit(&nfp->f_tlock);
 		}

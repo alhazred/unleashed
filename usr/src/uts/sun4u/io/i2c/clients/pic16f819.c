@@ -235,7 +235,7 @@ pic16f819_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->pic16f819_oflag == FEXCL) {
 			error = EBUSY;
 		} else {
-			unitp->pic16f819_oflag = FOPEN;
+			unitp->pic16f819_oflag = FREAD|FWRITE;
 		}
 	}
 

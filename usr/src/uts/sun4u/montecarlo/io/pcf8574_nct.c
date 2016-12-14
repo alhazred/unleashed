@@ -247,7 +247,7 @@ pcf8574_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->pcf8574_oflag == FEXCL) {
 			err = EBUSY;
 		} else {
-			unitp->pcf8574_oflag = FOPEN;
+			unitp->pcf8574_oflag = FREAD|FWRITE;
 		}
 	}
 

@@ -759,7 +759,7 @@ fdatasync(int fildes)
 	extern int __fdsync(int, int);
 	int rv;
 
-	PERFORM(__fdsync(fildes, FDSYNC))
+	PERFORM(__fdsync(fildes, O_DSYNC))
 }
 
 int
@@ -768,7 +768,7 @@ fsync(int fildes)
 	extern int __fdsync(int, int);
 	int rv;
 
-	PERFORM(__fdsync(fildes, FSYNC))
+	PERFORM(__fdsync(fildes, O_SYNC))
 }
 
 int

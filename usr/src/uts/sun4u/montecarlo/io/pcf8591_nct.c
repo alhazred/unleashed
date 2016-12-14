@@ -243,7 +243,7 @@ pcf8591_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->pcf8591_oflag[channel] == FEXCL) {
 			err = EBUSY;
 		} else {
-			unitp->pcf8591_oflag[channel] = FOPEN;
+			unitp->pcf8591_oflag[channel] = FREAD|FWRITE;
 		}
 	}
 

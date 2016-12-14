@@ -209,7 +209,7 @@ ics951601_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 			err = DDI_SUCCESS;
 		}
 	} else if (icsp->ics951601_oflag != FEXCL) {
-		icsp->ics951601_oflag = (uint16_t)FOPEN;
+		icsp->ics951601_oflag = (uint16_t)(FREAD|FWRITE);
 		err = DDI_SUCCESS;
 	}
 	mutex_exit(&icsp->ics951601_mutex);

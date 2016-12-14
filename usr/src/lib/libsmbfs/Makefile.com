@@ -123,4 +123,6 @@ objs/%.o pics/%.o: $(CMNDIR)/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
+pics/file.o := CPPFLAGS += -D__UNLEASHED_VISIBLE
+
 .KEEP_STATE:

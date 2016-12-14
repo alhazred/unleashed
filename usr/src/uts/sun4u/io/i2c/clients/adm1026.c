@@ -216,7 +216,7 @@ adm1026_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->adm1026_oflag == FEXCL) {
 			error = EBUSY;
 		} else {
-			unitp->adm1026_oflag = FOPEN;
+			unitp->adm1026_oflag = FREAD|FWRITE;
 		}
 	}
 

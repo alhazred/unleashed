@@ -51,41 +51,92 @@ extern "C" {
 #endif
 
 /*
- * Flag values accessible to open(2) and fcntl(2)
- * The first five can only be set (exclusively) by open(2).
+ * File status flags: these are used by open(2), fcntl(2).
+ * They are also used (indirectly) in the kernel file structure f_flag,
+ * which is a superset of the open/fcntl flags.  Open flags and f_flag
+ * are inter-convertible using OFLAGS(fflags) and FFLAGS(oflags).
+ * Open/fcntl flags begin with O_; kernel-internal flags begin with F.
  */
-#define	O_RDONLY	0
-#define	O_WRONLY	1
-#define	O_RDWR		2
-#define	O_SEARCH	0x200000
-#define	O_EXEC		0x400000
-#if defined(__EXTENSIONS__) || !defined(_POSIX_C_SOURCE)
-#define	O_NDELAY	0x04	/* non-blocking I/O */
-#endif /* defined(__EXTENSIONS__) || !defined(_POSIX_C_SOURCE) */
-#define	O_APPEND	0x08	/* append (writes guaranteed at the end) */
-#if defined(__EXTENSIONS__) || !defined(_POSIX_C_SOURCE) || \
-	(_POSIX_C_SOURCE > 2) || defined(_XOPEN_SOURCE)
-#define	O_SYNC		0x10	/* synchronized file update option */
-#define	O_DSYNC		0x40	/* synchronized data update option */
-#define	O_RSYNC		0x8000	/* synchronized file update option */
-				/* defines read/write file integrity */
-#endif /* defined(__EXTENSIONS__) || !defined(_POSIX_C_SOURCE) ... */
-#define	O_NONBLOCK	0x80	/* non-blocking I/O (POSIX) */
-#ifdef	_LARGEFILE_SOURCE
-#define	O_LARGEFILE	0x2000
-#endif
-
+/* open(2)-only flags -- exactly one must be set */
+#define	O_RDONLY	0x00000000
+#define	O_WRONLY	0x00000001
+#define	O_RDWR		0x00000002
+#define	O_SEARCH	0x00200000
+#define	O_EXEC		0x00400000
 /*
- * Flag values accessible only to open(2).
+ * Kernel encoding of open mode; separate read and write bits that are
+ * independently testable: 1 greater than the above.
+ * FREAD and FWRITE are excluded from the #ifdef _KERNEL so that TIOCFLUSH,
+ * which was documented to use FREAD/FWRITE, continues to work.
  */
-#define	O_CREAT		0x100	/* open with file create (uses third arg) */
-#define	O_TRUNC		0x200	/* open with truncation */
-#define	O_EXCL		0x400	/* exclusive open */
-#define	O_NOCTTY	0x800	/* don't allocate controlling tty (POSIX) */
-#define	O_XATTR		0x4000	/* extended attribute */
-#define	O_NOFOLLOW	0x20000	/* don't follow symlinks */
-#define	O_NOLINKS	0x40000	/* don't allow multiple hard links */
-#define	O_CLOEXEC	0x800000	/* set the close-on-exec flag */
+#define	FREAD		(O_RDONLY + 1)
+#define	FWRITE		(O_WRONLY + 1)
+#if defined(_KERNEL) || defined(__UNLEASHED_VISIBLE)
+#define	FSEARCH		O_SEARCH
+#define	FEXEC		O_EXEC
+/* convert from open() flags to/from fflags; convert O_RD/WR to FREAD/FWRITE */
+#define FFLAGS(oflags)  ((oflags) & (O_EXEC|O_SEARCH) ? (oflags) : (oflags) + 1)
+#define OFLAGS(fflags)  ((fflags) & (FEXEC|FSEARCH) ? (fflags) : (fflags) - 1)
+#endif /* _KERNEL || __UNLEASHED_VISIBLE */
+
+#if defined(__EXTENSIONS__) || !defined(_POSIX_C_SOURCE)
+#define	O_NDELAY	0x00000004	/* non-blocking I/O */
+#endif /* defined(__EXTENSIONS__) || !defined(_POSIX_C_SOURCE) */
+#define	O_APPEND	0x00000008	/* append (writes guaranteed at the end) */
+#define	O_SYNC		0x00000010	/* synchronized file update option */
+#define	O_DSYNC		0x00000040	/* synchronized data update option */
+#define	O_NONBLOCK	0x00000080	/* non-blocking I/O (POSIX) */
+#define	O_CREAT		0x00000100	/* open with file create (uses third arg) */
+#define	O_TRUNC		0x00000200	/* open with truncation */
+#define	O_EXCL		0x00000400	/* exclusive open */
+#define	O_NOCTTY	0x00000800	/* don't allocate controlling tty (POSIX) */
+#define	O_ASYNC		0x00001000
+#ifdef	_LARGEFILE_SOURCE
+#define	O_LARGEFILE	0x00002000
+#endif
+#define	O_XATTR		0x00004000	/* extended attribute */
+#define	O_RSYNC		0x00008000	/* synchronized file update option
+					   defines read/write file integrity */
+#define	O_NOFOLLOW	0x00020000	/* don't follow symlinks */
+#define	O_NOLINKS	0x00040000	/* don't allow multiple hard links */
+#define	O_CLOEXEC	0x00800000	/* set the close-on-exec flag */
+
+#if defined(_KERNEL) || defined(__UNLEASHED_VISIBLE)
+#define	FNDELAY		O_NDELAY
+#define	FAPPEND		O_APPEND
+#define	FSYNC		O_SYNC		/* file (data+inode) integrity while writing */
+#define	FDSYNC		O_DSYNC		/* file data only integrity while writing */
+#define	FNONBLOCK	O_NONBLOCK
+
+#define	FCREAT		O_CREAT
+#define	FTRUNC		O_TRUNC
+#define	FEXCL		O_EXCL
+#define	FASYNC		O_ASYNC		/* asyncio in progress pseudo flag */
+#define	FNOCTTY		O_NOCTTY
+#define	FXATTR		O_XATTR		/* open as extended attribute */
+#define	FRSYNC		O_RSYNC		/* sync read operations at same level
+					   of integrity as specified for writes
+					   by  FSYNC and FDSYNC flags */
+#define	FNOFOLLOW	O_NOFOLLOW	/* don't follow symlinks */
+#define	FNOLINKS	O_NOLINKS	/* don't allow multiple hard links */
+#define	FCLOEXEC	O_CLOEXEC
+
+/* Flags modifiable by F_SETFL. Must only contain flags for which O_foo and
+ * Ffoo are equal -- ie. access mode flags don't belong here. */
+#define	FCNTLFLAGS	(O_APPEND|O_NDELAY|O_NONBLOCK|O_SYNC|O_DSYNC|O_RSYNC)
+
+#define	FREVOKED	0x00000020	/* Object reuse Revoked file */
+#define	FOFFMAX		0x00002000	/* large file */
+#define	FNODSYNC	0x00010000	/* fsync pseudo flag */
+#define	FIGNORECASE	0x00080000	/* request case-insensitive lookups */
+#define	FXATTRDIROPEN	0x00100000	/* only opening hidden attribute directory */
+#define	FEPOLLED	0x02000000	/* never user-visible */
+/* flags originally from flock.h, but since they are ORed with and otherwise
+ * conflated with f_flag all over vfs, put them here and give them distinct
+ * values */
+#define	F_REMOTELOCK	0x04000000	/* Set if NLM lock */
+#define	F_PXFSLOCK	0x08000000	/* Clustering: set if PXFS lock */
+#endif /* _KERNEL || __UNLEASHED_VISIBLE */
 
 /*
  * fcntl(2) requests

@@ -382,7 +382,7 @@ tda8444_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->tda8444_oflag[channel] == FEXCL) {
 			err = EBUSY;
 		} else {
-			unitp->tda8444_oflag[channel] = (uint16_t)FOPEN;
+			unitp->tda8444_oflag[channel] = (uint16_t)(FREAD|FWRITE);
 		}
 	}
 

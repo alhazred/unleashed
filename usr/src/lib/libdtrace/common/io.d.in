@@ -153,6 +153,8 @@ inline int O_WRONLY = @O_WRONLY@;
 #pragma D binding "1.1" O_WRONLY
 inline int O_RDWR = @O_RDWR@;
 #pragma D binding "1.1" O_RDWR
+inline int O_EXEC = @O_EXEC@;
+inline int O_SEARCH = @O_SEARCH@;
 
 inline int O_APPEND = @O_APPEND@;
 #pragma D binding "1.1" O_APPEND
@@ -196,7 +198,9 @@ translator fileinfo_t < struct file *F > {
 	    F->f_vnode->v_vfsp->vfs_vnodecovered == NULL ? "/" :
 	    F->f_vnode->v_vfsp->vfs_vnodecovered->v_path == NULL ? "<unknown>" :
 	    cleanpath(F->f_vnode->v_vfsp->vfs_vnodecovered->v_path);
-	fi_oflags = F == NULL ? 0 : F->f_flag + (int)@FOPEN@;
+        /* This is OFLAGS() from fcntl.h, but we can't use that macro here. */
+        fi_oflags = F == NULL ? 0 : (F->f_flag & (O_EXEC|O_SEARCH) ? F->f_flag
+          : F->f_flag - 1);
 };
 
 inline fileinfo_t fds[int fd] = xlate <fileinfo_t> (getf(fd));

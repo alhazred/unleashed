@@ -178,7 +178,7 @@ lm75_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->lm75_oflag == FEXCL) {
 			error = EBUSY;
 		} else {
-			unitp->lm75_oflag = FOPEN;
+			unitp->lm75_oflag = FREAD|FWRITE;
 		}
 	}
 

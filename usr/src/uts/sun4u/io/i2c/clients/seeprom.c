@@ -324,7 +324,7 @@ seeprom_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->seeprom_oflag == FEXCL) {
 			err = EBUSY;
 		} else {
-			unitp->seeprom_oflag = FOPEN;
+			unitp->seeprom_oflag = FREAD|FWRITE;
 		}
 	}
 

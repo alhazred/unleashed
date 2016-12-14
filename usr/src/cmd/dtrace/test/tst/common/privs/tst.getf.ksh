@@ -36,7 +36,6 @@ ppriv -s A=basic,dtrace_proc,dtrace_user $$
 	    printf("\nable to successfully read field!"); exit(1); }
 
 CANREAD(f_flag)
-CANREAD(f_flag2)
 CANREAD(f_vnode)
 CANREAD(f_offset)
 CANREAD(f_cred)

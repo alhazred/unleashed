@@ -808,9 +808,9 @@ aio_fsync(int op, aiocb_t *aiocbp)
 	 */
 	if (__rw_workerscnt == 0) {
 		if (op == O_DSYNC)
-			return (__fdsync(aiocbp->aio_fildes, FDSYNC));
+			return (__fdsync(aiocbp->aio_fildes, O_DSYNC));
 		else
-			return (__fdsync(aiocbp->aio_fildes, FSYNC));
+			return (__fdsync(aiocbp->aio_fildes, O_SYNC));
 	}
 
 	/*
@@ -1666,9 +1666,9 @@ aio_fsync64(int op, aiocb64_t *aiocbp)
 	 */
 	if (__rw_workerscnt == 0) {
 		if (op == O_DSYNC)
-			return (__fdsync(aiocbp->aio_fildes, FDSYNC));
+			return (__fdsync(aiocbp->aio_fildes, O_DSYNC));
 		else
-			return (__fdsync(aiocbp->aio_fildes, FSYNC));
+			return (__fdsync(aiocbp->aio_fildes, O_SYNC));
 	}
 
 	/*

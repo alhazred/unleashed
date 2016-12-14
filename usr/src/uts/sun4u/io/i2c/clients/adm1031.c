@@ -575,7 +575,7 @@ adm1031_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 			err = 0;
 		}
 	} else if (admp->adm1031_oflag != FEXCL) {
-		admp->adm1031_oflag = FOPEN;
+		admp->adm1031_oflag = FREAD|FWRITE;
 		err = 0;
 	}
 	mutex_exit(&admp->adm1031_mutex);

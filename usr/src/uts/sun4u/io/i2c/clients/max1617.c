@@ -484,7 +484,7 @@ max1617_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->max1617_oflag == FEXCL) {
 			err = EBUSY;
 		} else {
-			unitp->max1617_oflag = (uint16_t)FOPEN;
+			unitp->max1617_oflag = (uint16_t)(FREAD|FWRITE);
 		}
 	}
 

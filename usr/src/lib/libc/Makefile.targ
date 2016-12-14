@@ -323,6 +323,8 @@ pics/%.o: $(LIBCBASE)/../port/threads/%.d $(THREADSOBJS:%=pics/%)
 	$(COMPILE.d) -C -xlazyload -s $< -o $@ $(THREADSOBJS:%=pics/%)
 	$(POST_PROCESS_O)
 
+pics/attrat.o pics/mqueue.o := CPPFLAGS += -D__UNLEASHED_VISIBLE
+
 include $(SRC)/lib/Makefile.targ
 
 # rpcgen'd stuff originally from libnsl

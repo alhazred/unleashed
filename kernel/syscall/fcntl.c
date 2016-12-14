@@ -112,19 +112,14 @@ fcntl(int fdes, int cmd, intptr_t arg)
 
 	case F_GETFL:
 		if ((error = f_getfl(fdes, &flag)) == 0) {
-			retval = (flag & (FMASK | FASYNC));
-			if ((flag & (FSEARCH | FEXEC)) == 0)
-				retval += FOPEN;
-			else
-				retval |= (flag & (FSEARCH | FEXEC));
+			retval = OFLAGS(flag) & (FCNTLFLAGS | O_ASYNC |
+			    O_ACCMODE);
 		}
 		goto out;
 
 	case F_GETXFL:
 		if ((error = f_getfl(fdes, &flag)) == 0) {
-			retval = flag;
-			if ((flag & (FSEARCH | FEXEC)) == 0)
-				retval += FOPEN;
+			retval = OFLAGS(flag);
 		}
 		goto out;
 
@@ -237,14 +232,15 @@ fcntl(int fdes, int cmd, intptr_t arg)
 	case F_SETFL:
 		vp = fp->f_vnode;
 		flag = fp->f_flag;
+		iarg = FFLAGS(iarg);
 		if ((iarg & (FNONBLOCK|FNDELAY)) == (FNONBLOCK|FNDELAY))
 			iarg &= ~FNDELAY;
 		if ((error = VOP_SETFL(vp, flag, iarg, fp->f_cred, NULL)) ==
 		    0) {
-			iarg &= FMASK;
+			iarg &= FCNTLFLAGS;
 			mutex_enter(&fp->f_tlock);
-			fp->f_flag &= ~FMASK | (FREAD|FWRITE);
-			fp->f_flag |= (iarg - FOPEN) & ~(FREAD|FWRITE);
+			fp->f_flag &= ~FCNTLFLAGS;
+			fp->f_flag |= iarg;
 			mutex_exit(&fp->f_tlock);
 		}
 		retval = 0;

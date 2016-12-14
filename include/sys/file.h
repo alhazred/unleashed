@@ -33,6 +33,7 @@
 #define	_SYS_FILE_H
 
 #include <sys/t_lock.h>
+#include <sys/fcntl.h>
 #ifdef _KERNEL
 #include <sys/model.h>
 #include <sys/user.h>
@@ -60,8 +61,7 @@ extern "C" {
  */
 typedef struct file {
 	kmutex_t	f_tlock;	/* short term lock */
-	ushort_t	f_flag;
-	ushort_t	f_flag2;	/* extra flags (FSEARCH, FEXEC) */
+	uint32_t	f_flag;
 	struct vnode	*f_vnode;	/* pointer to vnode structure */
 	offset_t	f_offset;	/* read/write character pointer */
 	struct cred	*f_cred;	/* credentials of user who opened it */
@@ -78,53 +78,8 @@ typedef struct fpollinfo {
 	struct fpollinfo	*fp_next;
 } fpollinfo_t;
 
-/* f_flag */
-
-#define	FOPEN		0xffffffff
-#define	FREAD		0x01	/* <sys/aiocb.h> LIO_READ must be identical */
-#define	FWRITE		0x02	/* <sys/aiocb.h> LIO_WRITE must be identical */
-#define	FNDELAY		0x04
-#define	FAPPEND		0x08
-#define	FSYNC		0x10	/* file (data+inode) integrity while writing */
-#define	FREVOKED	0x20	/* Object reuse Revoked file */
-#define	FDSYNC		0x40	/* file data only integrity while writing */
-#define	FNONBLOCK	0x80
-
-#define	FMASK		0xa0ff	/* all flags that can be changed by F_SETFL */
-
-/* open-only modes */
-
-#define	FCREAT		0x0100
-#define	FTRUNC		0x0200
-#define	FEXCL		0x0400
-#define	FASYNC		0x1000	/* asyncio in progress pseudo flag */
-#define	FOFFMAX		0x2000	/* large file */
-#define	FXATTR		0x4000	/* open as extended attribute */
-#define	FNOCTTY		0x0800
-#define	FRSYNC		0x8000	/* sync read operations at same level of */
-				/* integrity as specified for writes by */
-				/* FSYNC and FDSYNC flags */
-
-#define	FNODSYNC	0x10000 /* fsync pseudo flag */
-
-#define	FNOFOLLOW	0x20000	/* don't follow symlinks */
-#define	FNOLINKS	0x40000	/* don't allow multiple hard links */
-#define	FIGNORECASE	0x80000 /* request case-insensitive lookups */
-#define	FXATTRDIROPEN	0x100000  /* only opening hidden attribute directory */
-
-/* f_flag2 (open-only) */
-
-#define	FSEARCH		0x200000	/* O_SEARCH = 0x200000 */
-#define	FEXEC		0x400000	/* O_EXEC = 0x400000 */
-
-#define	FCLOEXEC	0x800000	/* O_CLOEXEC = 0x800000 */
 
 #ifdef _KERNEL
-
-/*
- * This is a flag that is set on f_flag2, but is never user-visible
- */
-#define	FEPOLLED	0x8000
 
 /*
  * Fake flags for driver ioctl calls to inform them of the originating

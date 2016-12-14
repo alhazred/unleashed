@@ -55,15 +55,6 @@ extern "C" {
  */
 
 /*
- * The flag passed to fs_frlock() may be ORed together with either
- * `F_REMOTELOCK' or `F_PXFSLOCK'.  Since this flag is initialized using the
- * `f_flag' field in the `file' structure, and that field is an unsigned short,
- * we do not use the first 2 bytes.
- */
-#define	F_REMOTELOCK	(0x01 << 16) /* Set if NLM lock */
-#define	F_PXFSLOCK	(0x02 << 16) /* Clustering: set if PXFS lock */
-
-/*
  * The command passed to reclock() is made by ORing together one or more of
  * the following values.
  */

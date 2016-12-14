@@ -297,7 +297,7 @@ hpc3130_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->hpc3130_oflag == FEXCL) {
 			error = EBUSY;
 		} else {
-			unitp->hpc3130_oflag = FOPEN;
+			unitp->hpc3130_oflag = FREAD|FWRITE;
 		}
 	}
 

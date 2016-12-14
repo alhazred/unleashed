@@ -203,7 +203,7 @@ LDLIBS +=	$(MACH_LDLIBS)
 LDLIBS +=	-lfakekernel -lidmap -lcmdutils
 LDLIBS +=	-lavl -lnvpair -lpkcs11 -lreparse -lc
 
-CPPFLAGS += $(INCS) -D_REENTRANT -D_FAKE_KERNEL
+CPPFLAGS += $(INCS) -D_REENTRANT -D_FAKE_KERNEL -D__UNLEASHED_VISIBLE
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 # Always want DEBUG here
 CPPFLAGS += -DDEBUG

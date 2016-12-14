@@ -760,7 +760,7 @@ port_create(int *fdp)
 	mutex_exit(&p->p_lock);
 
 	/* allocate a new user file descriptor and a file structure */
-	if (falloc(vp, 0, &fp, fdp)) {
+	if (falloc(vp, FREAD|FWRITE, &fp, fdp)) {
 		/*
 		 * If the file table is full, free allocated resources.
 		 */

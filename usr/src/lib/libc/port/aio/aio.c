@@ -1179,10 +1179,10 @@ top:
 			if (reqp->req_state == AIO_REQ_CANCELED) {
 				/* EMPTY */;
 			} else if (arg->offset == O_SYNC) {
-				if ((retval = __fdsync(arg->fd, FSYNC)) == -1)
+				if ((retval = __fdsync(arg->fd, O_SYNC)) == -1)
 					error = errno;
 			} else {
-				if ((retval = __fdsync(arg->fd, FDSYNC)) == -1)
+				if ((retval = __fdsync(arg->fd, O_DSYNC)) == -1)
 					error = errno;
 			}
 			if (_aio_hash_insert(reqp->req_resultp, reqp) != 0)

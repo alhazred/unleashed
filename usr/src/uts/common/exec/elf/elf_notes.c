@@ -363,11 +363,7 @@ write_elfnotes(proc_t *p, int sig, vnode_t *vp, offset_t offset,
 
 		fdinfo.pr_fd = fd;
 		fdinfo.pr_fdflags = ufp->uf_flag;
-		fdinfo.pr_fileflags = fp->f_flag2;
-		fdinfo.pr_fileflags <<= 16;
-		fdinfo.pr_fileflags |= fp->f_flag;
-		if ((fdinfo.pr_fileflags & (FSEARCH | FEXEC)) == 0)
-			fdinfo.pr_fileflags += FOPEN;
+		fdinfo.pr_fileflags = OFLAGS(fp->f_flag);
 		fdinfo.pr_offset = fp->f_offset;
 
 

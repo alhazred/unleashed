@@ -182,7 +182,7 @@ pcf8591_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->pcf8591_oflag == FEXCL) {
 			error = EBUSY;
 		} else {
-			unitp->pcf8591_oflag = FOPEN;
+			unitp->pcf8591_oflag = FREAD_FWRITE;
 		}
 	}
 

@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "lint.h"
 #include "mtlib.h"
 #define	_KMEMUSER
@@ -518,12 +516,8 @@ mq_open(const char *path, int oflag, /* mode_t mode, mq_attr *attr */ ...)
 	(void) __close_nc(fd);
 	cr_flag &= ~DFILE_OPEN;
 
-	/*
-	 * we follow the same strategy as filesystem open() routine,
-	 * where fcntl.h flags are changed to flags defined in file.h.
-	 */
-	mqdp->mqd_flags = (oflag - FOPEN) & (FREAD|FWRITE);
-	mqdnp->mqdn_flags = (oflag - FOPEN) & (FNONBLOCK);
+	mqdp->mqd_flags = FFLAGS(oflag) & (FREAD|FWRITE);
+	mqdnp->mqdn_flags = FFLAGS(oflag) & (FNONBLOCK);
 
 	/* new message queue requires initialization */
 	if ((cr_flag & DFILE_CREATE) != 0) {

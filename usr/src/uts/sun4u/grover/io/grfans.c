@@ -340,7 +340,7 @@ grfans_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->oflag[channel] == FEXCL)
 			err = EBUSY;
 		else
-			unitp->oflag[channel] = (uint16_t)FOPEN;
+			unitp->oflag[channel] = (uint16_t)(FREAD|FWRITE);
 	}
 
 	mutex_exit(&unitp->mutex);

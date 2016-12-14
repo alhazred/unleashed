@@ -1102,8 +1102,7 @@ falloc(vnode_t *vp, int flag, file_t **fpp, int *fdp)
 	 */
 	mutex_enter(&fp->f_tlock);
 	fp->f_count = 1;
-	fp->f_flag = (ushort_t)flag;
-	fp->f_flag2 = (flag & (FSEARCH|FEXEC)) >> 16;
+	fp->f_flag = (uint32_t)flag;
 	fp->f_vnode = vp;
 	fp->f_offset = 0;
 	fp->f_audit_data = 0;
@@ -1212,8 +1211,8 @@ f_getfl(int fd, int *flagp)
 			error = EBADF;
 		else {
 			vnode_t *vp = fp->f_vnode;
-			int flag = fp->f_flag |
-			    ((fp->f_flag2 & ~FEPOLLED) << 16);
+			int flag = (fp->f_flag & ~FEPOLLED);
+			ASSERT((flag & (FREAD|FWRITE|FSEARCH|FEXEC)) != 0);
 
 			/*
 			 * BSD fcntl() FASYNC compatibility.

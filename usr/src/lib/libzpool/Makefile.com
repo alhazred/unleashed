@@ -59,7 +59,7 @@ C99MODE=	$(C99_ENABLE)
 CFLAGS +=	-g
 CFLAGS64 +=	-g
 LDLIBS +=	-lcmdutils -lumem -lavl -lnvpair -lz -lc -lsysevent -lmd
-CPPFLAGS +=	$(INCS)	-DDEBUG
+CPPFLAGS +=	$(INCS)	-DDEBUG -D__UNLEASHED_VISIBLE
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-switch

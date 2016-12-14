@@ -563,7 +563,7 @@ pca9556_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 			err = DDI_SUCCESS;
 		}
 	} else if (pcap->pca9556_oflag != FEXCL) {
-		pcap->pca9556_oflag = (uint16_t)FOPEN;
+		pcap->pca9556_oflag = (uint16_t)(FREAD|FWRITE);
 		err = DDI_SUCCESS;
 	}
 	mutex_exit(&pcap->pca9556_mutex);

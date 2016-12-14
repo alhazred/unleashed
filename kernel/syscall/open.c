@@ -279,28 +279,19 @@ out:
 	return (set_errno(error));
 }
 
-#define	OPENMODE32(fmode)	(((fmode) & (FSEARCH | FEXEC))? \
-				    (fmode) : (fmode) - FOPEN)
-#define	OPENMODE64(fmode)	(OPENMODE32(fmode) | FOFFMAX)
-#ifdef _LP64
-#define	OPENMODE(fmode)		OPENMODE64(fmode)
-#else
-#define	OPENMODE(fmode)		OPENMODE32(fmode)
-#endif
-
 /*
  * Open a file.
  */
 int
-openat(int fd, char *path, int fmode, int cmode)
+openat(int fd, char *path, int omode, int cmode)
 {
-	return (copen(fd, path, OPENMODE(fmode), cmode));
+	return (copen(fd, path, FFLAGS(omode), cmode));
 }
 
 int
-open(char *path, int fmode, int cmode)
+open(char *path, int omode, int cmode)
 {
-	return (openat(AT_FDCWD, path, fmode, cmode));
+	return (openat(AT_FDCWD, path, omode, cmode));
 }
 
 #if defined(_ILP32) || defined(_SYSCALL32_IMPL)
@@ -308,15 +299,15 @@ open(char *path, int fmode, int cmode)
  * Open for large files in 32-bit environment. Sets the FOFFMAX flag.
  */
 int
-openat64(int fd, char *path, int fmode, int cmode)
+openat64(int fd, char *path, int omode, int cmode)
 {
-	return (copen(fd, path, OPENMODE64(fmode), cmode));
+	return (copen(fd, path, FFLAGS(omode) | FOFFMAX, cmode));
 }
 
 int
-open64(char *path, int fmode, int cmode)
+open64(char *path, int omode, int cmode)
 {
-	return (openat64(AT_FDCWD, path, fmode, cmode));
+	return (openat64(AT_FDCWD, path, omode, cmode));
 }
 
 #endif	/* _ILP32 || _SYSCALL32_IMPL */
@@ -326,15 +317,15 @@ open64(char *path, int fmode, int cmode)
  * Open for 32-bit compatibility on 64-bit kernel
  */
 int
-openat32(int fd, char *path, int fmode, int cmode)
+openat32(int fd, char *path, int omode, int cmode)
 {
-	return (copen(fd, path, OPENMODE32(fmode), cmode));
+	return (copen(fd, path, FFLAGS(omode), cmode));
 }
 
 int
-open32(char *path, int fmode, int cmode)
+open32(char *path, int omode, int cmode)
 {
-	return (openat32(AT_FDCWD, path, fmode, cmode));
+	return (openat32(AT_FDCWD, path, omode, cmode));
 }
 
 #endif	/* _SYSCALL32_IMPL */

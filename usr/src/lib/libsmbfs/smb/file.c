@@ -146,11 +146,7 @@ smb_fh_open(struct smb_ctx *ctx, const char *path, int oflag)
 		if (*p == '/')
 			*p = '\\';
 
-	/*
-	 * Map O_RDONLY, O_WRONLY, O_RDWR
-	 * to FREAD, FWRITE
-	 */
-	mode = (oflag & 3) + 1;
+	mode = FFLAGS(oflag) & (FREAD|FWRITE);
 
 	/*
 	 * Compute requested access, share access.
@@ -178,18 +174,18 @@ smb_fh_open(struct smb_ctx *ctx, const char *path, int oflag)
 	/*
 	 * Compute open disposition
 	 */
-	if (oflag & FCREAT) {
+	if (oflag & O_CREAT) {
 		/* Creat if necessary. */
-		if (oflag & FEXCL) {
+		if (oflag & O_EXCL) {
 			/* exclusive */
 			open_disp = NTCREATEX_DISP_CREATE;
-		} else if (oflag & FTRUNC)
+		} else if (oflag & O_TRUNC)
 			open_disp = NTCREATEX_DISP_OVERWRITE_IF;
 		else
 			open_disp = NTCREATEX_DISP_OPEN_IF;
 	} else {
 		/* Not creating. */
-		if (oflag & FTRUNC)
+		if (oflag & O_TRUNC)
 			open_disp = NTCREATEX_DISP_OVERWRITE;
 		else
 			open_disp = NTCREATEX_DISP_OPEN;

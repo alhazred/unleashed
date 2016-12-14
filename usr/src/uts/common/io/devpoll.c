@@ -833,7 +833,7 @@ dpwrite(dev_t dev, struct uio *uiop, cred_t *credp)
 					if (pdp->pd_fp != NULL &&
 					    (fp = getf(fd)) != NULL &&
 					    fp == pdp->pd_fp &&
-					    (fp->f_flag2 & FEPOLLED)) {
+					    (fp->f_flag & FEPOLLED)) {
 						error = EEXIST;
 						releasef(fd);
 						break;
@@ -885,7 +885,7 @@ dpwrite(dev_t dev, struct uio *uiop, cred_t *credp)
 			 * regardless of epoll compatibility mode, as the flag
 			 * is harmless if not in epoll compatibility mode.
 			 */
-			fp->f_flag2 |= FEPOLLED;
+			fp->f_flag |= FEPOLLED;
 
 			/*
 			 * Don't do VOP_POLL for an already cached fd with

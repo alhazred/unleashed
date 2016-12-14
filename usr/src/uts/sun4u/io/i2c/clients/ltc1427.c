@@ -178,7 +178,7 @@ ltc1427_open(dev_t *devp, int flags, int otyp, cred_t *credp)
 		if (unitp->ltc1427_oflag == FEXCL) {
 			error = EBUSY;
 		} else {
-			unitp->ltc1427_oflag = FOPEN;
+			unitp->ltc1427_oflag = FREAD|FWRITE;
 		}
 	}
 
