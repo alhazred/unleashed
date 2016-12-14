@@ -732,7 +732,7 @@ set_statmon_owner(void)
 	}
 
 	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET, daemon_uid,
-	    NULL) == -1) {
+	    daemon_gid, NULL) == -1) {
 		syslog(LOG_ERR, "can't run unprivileged: %m");
 		exit(1);
 	}
