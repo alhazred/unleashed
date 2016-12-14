@@ -1,6 +1,4 @@
 #
-# Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
-#
 # CDDL HEADER START
 #
 # The contents of this file are subject to the terms of the
@@ -21,8 +19,26 @@
 # CDDL HEADER END
 #
 
-$mapfile_version 2
+#
+# Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+#
+TRG_PLATFORM =	i386
 
-CAPABILITY {
-	hw += fpu cmov sep mmx;
-};
+include ../Makefile.com
+
+# We do indeed need the rest of the directory structure to make the pattern rules work :(
+
+OBJECTS =	memset.o memcpy.o
+
+include		$(SRC)/lib/Makefile.lib
+
+MAPFILE-CAP =  ../common/mapfile-cap
+
+ASFLAGS += -P
+AS_CPPFLAGS += -D_ASM -D_SSE_INSN -D_SSE2_INSN
+
+.KEEP_STATE:
+
+all install:	$(SYMCAP)
+
+include	../../Makefile.targ

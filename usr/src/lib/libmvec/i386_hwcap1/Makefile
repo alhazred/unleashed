@@ -22,7 +22,7 @@ OBJECTS=	$(mvecOBJS)
 
 include ../Makefile.com
 
-CPPFLAGS	+= -D_CMOV_INSN -D_SSE_INSN -D_SSE2_INSN
+CPPFLAGS	+=  -D_SSE_INSN -D_SSE2_INSN
 MAPFILES	+= mapfile
 CFLAGS		+= -march=pentiumpro -msse2 -mfpmath=sse
 

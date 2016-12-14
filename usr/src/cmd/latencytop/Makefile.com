@@ -38,7 +38,6 @@ C99MODE = $(C99_ENABLE)
 LDLIBS += -lcurses -ldtrace
 all install	:= LDLIBS += -lglib-2.0
 
-
 FILEMODE = 0555
 
 ELFWRAP = elfwrap

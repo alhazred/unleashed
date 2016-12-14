@@ -2490,7 +2490,7 @@ struct proto_option_defs {
 } proto_options[] = {
 #define	PROTO_OPT_NFSD_SERVERS			0
 	{"nfsd_servers",
-	    "servers", PROTO_OPT_NFSD_SERVERS, OPT_TYPE_NUMBER, 16, SVC_NFSD,
+	    "servers", PROTO_OPT_NFSD_SERVERS, OPT_TYPE_NUMBER, 1024, SVC_NFSD,
 	    1, INT32_MAX},
 #define	PROTO_OPT_LOCKD_LISTEN_BACKLOG		1
 	{"lockd_listen_backlog",
@@ -2498,7 +2498,7 @@ struct proto_option_defs {
 	    OPT_TYPE_NUMBER, 32, SVC_LOCKD, 32, INT32_MAX},
 #define	PROTO_OPT_LOCKD_SERVERS			2
 	{"lockd_servers",
-	    "lockd_servers", PROTO_OPT_LOCKD_SERVERS, OPT_TYPE_NUMBER, 20,
+	    "lockd_servers", PROTO_OPT_LOCKD_SERVERS, OPT_TYPE_NUMBER, 256,
 	    SVC_LOCKD, 1, INT32_MAX},
 #define	PROTO_OPT_LOCKD_RETRANSMIT_TIMEOUT	3
 	{"lockd_retransmit_timeout",

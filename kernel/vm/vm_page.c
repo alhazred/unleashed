@@ -21,7 +21,7 @@
 /*
  * Copyright (c) 1986, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright (c) 2015, Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
- * Copyright (c) 2015 by Delphix. All rights reserved.
+ * Copyright (c) 2015, 2016 by Delphix. All rights reserved.
  */
 
 /*	Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1989  AT&T	*/
@@ -4239,8 +4239,6 @@ retry:
 	return (pp);
 }
 
-#define	SYNC_PROGRESS_NPAGES	1000
-
 /*
  * Returns a count of dirty pages that are in the process
  * of being written out.  If 'cleanit' is set, try to push the page.
@@ -4251,21 +4249,10 @@ page_busy(int cleanit)
 	page_t *page0 = page_first();
 	page_t *pp = page0;
 	pgcnt_t nppbusy = 0;
-	int counter = 0;
 	u_offset_t off;
 
 	do {
 		vnode_t *vp = pp->p_vnode;
-
-		/*
-		 * Reset the sync timeout. The page list is very long
-		 * on large memory systems.
-		 */
-		if (++counter > SYNC_PROGRESS_NPAGES) {
-			counter = 0;
-			vfs_syncprogress();
-		}
-
 		/*
 		 * A page is a candidate for syncing if it is:
 		 *
@@ -4305,7 +4292,6 @@ page_busy(int cleanit)
 		}
 	} while ((pp = page_next(pp)) != page0);
 
-	vfs_syncprogress();
 	return (nppbusy);
 }
 

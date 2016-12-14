@@ -1,4 +1,6 @@
 #
+# Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+#
 # CDDL HEADER START
 #
 # The contents of this file are subject to the terms of the
@@ -18,31 +20,21 @@
 #
 # CDDL HEADER END
 #
-#
-# Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
-# Use is subject to license terms.
-#
-# ident	"%Z%%M%	%I%	%E% SMI"
-#
-# lib/libc/i386_hwcap3/Makefile
-#
 
-LIBCBASE=	../i386
+$mapfile_version 2
 
-LIBRARY=	libc_hwcap3.a
+CAPABILITY i386-sse2 {
+	hw += cmov sse sse2;
+};
 
-EXTN_CPPFLAGS=	-D_CMOV_INSN -D_SSE_INSN -D_MMX_INSN
-EXTN_CFLAGS=	-march=pentiumpro
-EXTN_DYNFLAGS=	-M mapfile
-
-# Defining this means build targets will first try to use source from this
-# directory before falling back to unoptimized i386 source.
-#
-# Currently, the only differences between hwcap3 and hwcap1 is the kernel entry
-# method (hwcap1 uses "sysenter" and hwcap2 uses "syscall" while hwcap3 uses
-# "int 0x91".  So for now, build libc_hwcap3 with the optimized sources for
-# libc_hwcap1.
-#
-OPTIMIZED_LIBCBASE=../i386_hwcap1
-
-include ../i386/Makefile.com
+SYMBOL_SCOPE {
+	global:
+		_memcpy;
+		_memmove;
+		_memset;
+		memcpy;
+		memmove;
+		memset;
+	local:
+		*;
+};

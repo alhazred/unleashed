@@ -1,6 +1,4 @@
 #
-# Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
-#
 # CDDL HEADER START
 #
 # The contents of this file are subject to the terms of the
@@ -21,8 +19,27 @@
 # CDDL HEADER END
 #
 
-$mapfile_version 2
+#
+# Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+#
 
-CAPABILITY {
-	hw += fpu cmov mmx sse;
-};
+include		$(SRC)/lib/Makefile.lib
+
+SUBDIRS =	$(MACH)
+
+all :=		TARGET= all
+clean :=	TARGET= clean
+clobber :=	TARGET= clobber
+install :=	TARGET= install
+
+.KEEP_STATE:
+
+.PARALLEL:	$(SUBDIRS)
+
+all clean clobber install: \
+		$(SUBDIRS)
+
+$(SUBDIRS):	FRC
+		@cd $@; pwd; $(MAKE) $(TARGET)
+
+FRC:

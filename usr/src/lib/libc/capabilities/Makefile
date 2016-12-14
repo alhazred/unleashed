@@ -33,7 +33,8 @@ $(SPARC_BLD)SUBDIRS = \
 		sun4u-us3-hwcap2 \
 		sun4v-hwcap1 \
 		sun4v-hwcap2
-$(INTEL_BLD)SUBDIRS =
+$(INTEL_BLD)SUBDIRS = i386-sse \
+		i386-sse2
 
 all :=		TARGET= all
 clean :=	TARGET= clean
