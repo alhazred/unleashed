@@ -103,7 +103,6 @@ f none $SGSDIR/usr/include/sys/machelf.h=usr/include/sys/machelf.h 644 root bin
 f none $SGSDIR/usr/include/sys/link.h=usr/include/sys/link.h 644 root bin
 d none $SGSDIR/usr/lib 755 root bin
 s none $SGSDIR/usr/lib/32=.
-f none $SGSDIR/usr/lib/0@0.so.1=usr/lib/0@0.so.1 755 root bin
 f none $SGSDIR/usr/lib/lddstub=usr/lib/lddstub 555 root bin
 f none $SGSDIR/usr/lib/libcrle.so.1=usr/lib/libcrle.so.1 755 root bin
 f none $SGSDIR/usr/lib/libldstab.so.1=usr/lib/libldstab.so.1 755 root bin

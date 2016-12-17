@@ -716,16 +716,6 @@ Alternate interpreter for \fBSVID ABI\fR compatibility.
 .sp
 .ne 2
 .na
-\fB\fB/usr/lib/0@0.so.1\fR\fR
-.ad
-.sp .6
-.RS 4n
-A compatibility library to support null character pointers. See NOTES.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fB/lib/secure\fR and \fB/usr/lib/secure\fR\fR
 .ad
 .sp .6
@@ -751,16 +741,6 @@ A compatibility library to support null character pointers. See NOTES.
 .sp .6
 .RS 4n
 Default runtime linker for 64-bit applications.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB/usr/lib/64/0@0.so.1\fR\fR
-.ad
-.sp .6
-.RS 4n
-A 64-bit compatibility library to support null character pointers. See NOTES.
 .RE
 
 .sp
@@ -805,21 +785,3 @@ profiling information. To reduce this likelihood, the runtime linker's profile
 implementation determines if the process is being monitored at startup. If so,
 profiling of the process is silently disabled. However, this mechanism can not
 catch monitoring processes that attach to the process during its execution.
-.sp
-.LP
-The user compatibility library \fB/usr/lib/0@0.so.1\fR provides a mechanism
-that establishes a value of \fB0\fR at location 0. Some applications exist that
-erroneously assume a null character pointer should be treated the same as a
-pointer to a null string. A segmentation violation occurs in these applications
-when a null character pointer is accessed. If this library is added to such an
-application at runtime using \fBLD_PRELOAD\fR, the library provides an
-environment that is sympathetic to this errant behavior. However, the user
-compatibility library is intended neither to enable the generation of such
-applications, nor to endorse this particular programming practice.
-.sp
-.LP
-In many cases, the presence of \fB/usr/lib/0@0.so.1\fR is benign, and it can be
-pre-loaded into programs that do not require it. However, there are exceptions.
-Some applications, such as the JVM (Java Virtual Machine), require that a
-segmentation violation be generated from a null pointer access. Applications
-such as the JVM should not preload \fB/usr/lib/0@0.so\fR.

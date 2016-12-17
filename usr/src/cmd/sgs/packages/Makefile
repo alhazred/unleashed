@@ -56,7 +56,6 @@ SUBDIRS2 =	../rtld \
 		../ldprof \
 		../lddstub \
 		$(LDMAKEDIRS) \
-		../0@0 \
 		../tools \
 		$(RDBDIRS)
 

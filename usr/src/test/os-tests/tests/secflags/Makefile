@@ -30,6 +30,8 @@ PROG =	secflags_aslr		\
 
 PROG += addrs-32 addrs-64 stacky
 
+PROG += 0sleep-32 0sleep-64
+
 ROOTOPTPKG = $(ROOT)/opt/os-tests
 TESTDIR = $(ROOTOPTPKG)/tests/secflags
 
@@ -47,6 +49,14 @@ addrs-64: addrs.c
 stacky := MAPFILE.NES=			# Will foil the test, clearly
 stacky: stacky.o
 	$(LINK.c) stacky.o -o $@ $(LDLIBS)
+	$(POST_PROCESS)
+
+0sleep-32: 0sleep.c
+	$(LINK.c) 0sleep.c -o $@ $(LDLIBS)
+	$(POST_PROCESS)
+
+0sleep-64: 0sleep.c
+	$(LINK64.c) 0sleep.c -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
 secflags_syscall: secflags_syscall.c

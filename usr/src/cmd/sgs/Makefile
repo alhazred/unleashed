@@ -44,7 +44,6 @@ SUBDIRS=	libconv		\
 		librtld		\
 		libcrle		\
 		.WAIT		\
-		0@0		\
 		ld		\
 		ldd		\
 		lddstub		\
