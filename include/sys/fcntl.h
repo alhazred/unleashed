@@ -100,6 +100,7 @@ extern "C" {
 #define	O_NOFOLLOW	0x00020000	/* don't follow symlinks */
 #define	O_NOLINKS	0x00040000	/* don't allow multiple hard links */
 #define	O_CLOEXEC	0x00800000	/* set the close-on-exec flag */
+#define	O_DIRECTORY	0x01000000
 
 #if defined(_KERNEL) || defined(__UNLEASHED_VISIBLE)
 #define	FNDELAY		O_NDELAY
@@ -120,6 +121,7 @@ extern "C" {
 #define	FNOFOLLOW	O_NOFOLLOW	/* don't follow symlinks */
 #define	FNOLINKS	O_NOLINKS	/* don't allow multiple hard links */
 #define	FCLOEXEC	O_CLOEXEC
+#define	FDIRECTORY	O_DIRECTORY
 
 /* Flags modifiable by F_SETFL. Must only contain flags for which O_foo and
  * Ffoo are equal -- ie. access mode flags don't belong here. */

@@ -72,17 +72,27 @@ copen(int startfd, char *fname, int filemode, int createmode)
 	uint32_t auditing = AU_AUDITING();
 	char startchar;
 
-	if (filemode & (FSEARCH|FEXEC)) {
-		/*
-		 * Must be one or the other and neither FREAD nor FWRITE
-		 * Must not be any of FAPPEND FCREAT FTRUNC FXATTR FXATTRDIROPEN
-		 * XXX: Should these just be silently ignored?
-		 */
-		if ((filemode & (FREAD|FWRITE)) ||
-		    (filemode & (FSEARCH|FEXEC)) == (FSEARCH|FEXEC) ||
-		    (filemode & (FAPPEND|FCREAT|FTRUNC|FXATTR|FXATTRDIROPEN)))
+	switch (filemode & (FEXEC|FSEARCH|FREAD|FWRITE)) {
+	case FEXEC:
+	case FSEARCH:
+		if (filemode & (FAPPEND|FCREAT|FTRUNC|FXATTR|FXATTRDIROPEN))
 			return (set_errno(EINVAL));
+		break;
+	case FREAD:
+	case FWRITE:
+	case (FREAD|FWRITE):
+		break;
+	default:
+		return (set_errno(EINVAL));
 	}
+
+	/*
+	 * O_CREAT|O_DIRECTORY is a valid corner-case, because O_CREAT is a
+	 * no-op if the file exists; however, since O_DIRECTORY will never
+	 * create files, O_EXCL in addition is an invalid combination.
+	 */
+	if ((filemode & (FCREAT|FDIRECTORY|FEXCL)) == (FCREAT|FDIRECTORY|FEXCL))
+		return (set_errno(EINVAL));
 
 	if (startfd == AT_FDCWD) {
 		/*

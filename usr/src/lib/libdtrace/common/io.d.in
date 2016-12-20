@@ -180,6 +180,7 @@ inline int O_TRUNC = @O_TRUNC@;
 #pragma D binding "1.1" O_TRUNC
 inline int O_XATTR = @O_XATTR@;
 #pragma D binding "1.1" O_XATTR
+inline int O_DIRECTORY = @O_DIRECTORY@;
 
 #pragma D binding "1.1" translator
 translator fileinfo_t < struct file *F > {

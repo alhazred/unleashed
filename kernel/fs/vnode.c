@@ -962,6 +962,9 @@ vn_openat(
 	struct shrlock shr;
 	struct shr_locowner shr_own;
 
+	if (filemode & FSEARCH)
+		filemode |= FDIRECTORY;
+
 	mode = 0;
 	accessflags = 0;
 	if (filemode & FREAD)
@@ -981,12 +984,10 @@ vn_openat(
 		accessflags |= V_APPEND;
 
 top:
-	if (filemode & FCREAT) {
+	if (filemode & FCREAT && !(filemode & FDIRECTORY)) {
 		enum vcexcl excl;
 
-		/*
-		 * Wish to create a file.
-		 */
+		/* Wish to create a file. */
 		vattr.va_type = VREG;
 		vattr.va_mode = createmode;
 		vattr.va_mask = AT_TYPE|AT_MODE;
@@ -1004,9 +1005,7 @@ top:
 		    (filemode & ~(FTRUNC|FEXCL)), umask, startvp))
 			return (error);
 	} else {
-		/*
-		 * Wish to open a file.  Just look it up.
-		 */
+		/* Wish to open a file.  Just look it up. */
 		if (error = lookupnameat(pnamep, seg, follow,
 		    NULLVPP, &vp, startvp)) {
 			if ((error == ESTALE) &&
@@ -1079,10 +1078,10 @@ top:
 		if (error = VOP_ACCESS(vp, mode, accessflags, CRED(), NULL))
 			goto out;
 		/*
-		 * Require FSEARCH to return a directory.
+		 * Require FDIRECTORY to return a directory.
 		 * Require FEXEC to return a regular file.
 		 */
-		if ((filemode & FSEARCH) && vp->v_type != VDIR) {
+		if ((filemode & FDIRECTORY) && vp->v_type != VDIR) {
 			error = ENOTDIR;
 			goto out;
 		}
