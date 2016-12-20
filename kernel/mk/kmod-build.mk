@@ -76,13 +76,13 @@ clean cleandir:
 
 .include <links.mk>
 
-install: $(MODULE)
+install:
 .if !empty(BITS) && ${BITS} == 32
 	$(INS) -d -m 755 "$(DESTDIR)/kernel/${MODULE_TYPE}"
-	$(INS) -m 755 ${.ALLSRC} "$(DESTDIR)/kernel/${MODULE_TYPE}/${MODULE}"
+	$(INS) -m 755 ${MODULE} "$(DESTDIR)/kernel/${MODULE_TYPE}/${MODULE}"
 .else
 	$(INS) -d -m 755 "$(DESTDIR)/kernel/${MODULE_TYPE}/${CONFIG_MACH64}"
-	$(INS) -m 755 ${.ALLSRC} "$(DESTDIR)/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}"
+	$(INS) -m 755 ${MODULE} "$(DESTDIR)/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}"
 .endif
 .if !empty(LINKS)
 	@set ${LINKS}; ${_LINKS_SCRIPT}
