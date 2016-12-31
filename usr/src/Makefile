@@ -37,7 +37,7 @@ include Makefile.master
 # it defines TARGETDIRS and ROOTDIRS.
 include Targetdirs
 
-COMMON_SUBDIRS=	uts lib cmd psm man test
+COMMON_SUBDIRS=	uts lib cmd psm test
 sparc_SUBDIRS= stand
 i386_SUBDIRS= boot
 
@@ -63,13 +63,10 @@ PARALLEL_HEADERS = sysheaders libheaders cmdheaders
 #
 # Directories that can be built in parallel
 #
-PARALLEL_DIRS = uts lib man
+PARALLEL_DIRS = uts lib
 
 # The check target also causes smf(5) service manifests to be validated.
 CHKMFSTSUBDIRS=	cmd
-
-# And man page formats
-CHKMANSUBDIRS = man
 
 MSGSUBDIRS=	cmd lib
 DOMAINS= \
@@ -208,6 +205,6 @@ cmdheaders: FRC
 	@cd cmd/fm; pwd; $(MAKE) install_h
 	@cd cmd/mdb; pwd; $(MAKE) install_h
 
-check:	$(CHKHDRSUBDIRS) $(CHKMFSTSUBDIRS) $(CHKMANSUBDIRS)
+check:	$(CHKHDRSUBDIRS) $(CHKMFSTSUBDIRS)
 
 FRC:

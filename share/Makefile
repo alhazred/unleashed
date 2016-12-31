@@ -1,2 +1,3 @@
-SUBDIR=	locale
+SUBDIR=	locale \
+	man
 .include <subdir.mk>

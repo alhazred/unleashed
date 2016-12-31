@@ -534,6 +534,10 @@ license include/sys/THIRDPARTYLICENSE.unicode \
 license lic_CDDL license=lic_CDDL
 license lic_OSBL license=lic_OSBL
 license lic_OSBL_preamble license=lic_OSBL_preamble
+license share/man/man3c/THIRDPARTYLICENSE.arc4random \
+    license=share/man/man3c/THIRDPARTYLICENSE.arc4random
+license share/man/man3c/THIRDPARTYLICENSE.getentropy \
+    license=share/man/man3c/THIRDPARTYLICENSE.getentropy
 # libwrap is part of tcp wrappers along with tcpd
 license usr/src/cmd/tcpd/THIRDPARTYLICENSE \
     license=usr/src/cmd/tcpd/THIRDPARTYLICENSE
@@ -583,10 +587,6 @@ license usr/src/lib/passwdutil/THIRDPARTYLICENSE \
     license=usr/src/lib/passwdutil/THIRDPARTYLICENSE
 license usr/src/lib/pkcs11/pkcs11_tpm/THIRDPARTYLICENSE \
     license=usr/src/lib/pkcs11/pkcs11_tpm/THIRDPARTYLICENSE
-license usr/src/man/man3c/THIRDPARTYLICENSE.arc4random \
-    license=usr/src/man/man3c/THIRDPARTYLICENSE.arc4random
-license usr/src/man/man3c/THIRDPARTYLICENSE.getentropy \
-    license=usr/src/man/man3c/THIRDPARTYLICENSE.getentropy
 link path=lib/$(ARCH64)/libadm.so target=libadm.so.1
 link path=lib/$(ARCH64)/libaio.so target=libaio.so.1
 link path=lib/$(ARCH64)/libavl.so target=libavl.so.1
