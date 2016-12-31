@@ -93,7 +93,7 @@ maninstall:
 	@for page in ${MANALL:T}; do \
 		test -s ${_mfromdir}/$$page || continue; \
 		dir=${_mandir}; \
-		test -d $$dir || ${INSTALL} -d ${MAN_INSTALL_OWN} -m 775 $$dir; \
+		test -d $$dir || ${INSTALL} -d ${MAN_INSTALL_OWN} -m 755 $$dir; \
 		instpage=$${dir}${MANSUBDIR}/${_minstpage}${MCOMPRESSSUFFIX}; \
 		if [ X"${MCOMPRESS}" = X ]; then \
 			echo ${MINSTALL} ${_mfromdir}/$$page $$instpage; \
