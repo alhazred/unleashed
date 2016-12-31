@@ -29,8 +29,10 @@
 #  include <stdlib.h>
 #endif
 
+#if 0
 #ifdef Z_SOLO
    typedef long ptrdiff_t;  /* guess -- will be caught if guess is wrong */
+#endif
 #endif
 
 #ifndef local

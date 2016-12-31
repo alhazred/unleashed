@@ -26,6 +26,7 @@
 
 #include <sys/modctl.h>
 #include <sys/zmod.h>
+#include <strings.h>
 
 #include "zlib.h"
 #include "zutil.h"

@@ -147,6 +147,7 @@ const char * ZEXPORT zError(err)
     int errno = 0;
 #endif
 
+#if 0
 #ifndef HAVE_MEMCPY
 
 void ZLIB_INTERNAL zmemcpy(dest, source, len)
@@ -182,6 +183,7 @@ void ZLIB_INTERNAL zmemzero(dest, len)
         *dest++ = 0;  /* ??? to be unrolled */
     } while (--len != 0);
 }
+#endif
 #endif
 
 #ifndef Z_SOLO
