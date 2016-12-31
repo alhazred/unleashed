@@ -143,6 +143,7 @@ MAN = 6to4relay.1m \
       groupadd.1m \
       groupdel.1m \
       groupmod.1m \
+      growfs.1m \
       gsscred.1m \
       gssd.1m \
       hal-device.1m \
