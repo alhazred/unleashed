@@ -19,7 +19,6 @@
  * CDDL HEADER END
  */
 /*
- * Copyright 2016 Nexenta Systems, Inc.  All rights reserved.
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
@@ -187,7 +186,6 @@ find_ctrlr(di_node_t node, di_minor_t minor)
 	char path[PATH_MAX + 1];
 	char *devfspath;
 	char *buf, *mn;
-	boolean_t is_vhci;
 
 	devfsadm_enumerate_t rules[3] = {
 	    {"^r?dsk$/^c([0-9]+)", 1, MATCH_PARENT},
@@ -208,10 +206,9 @@ find_ctrlr(di_node_t node, di_minor_t minor)
 	/*
 	 * Use controller (parent) component of device path
 	 */
-	is_vhci = (strncmp(path, "/scsi_vhci/", 11) == 0);
-
-	if (ctrl_enumerate_int(path, RULE_INDEX, &buf, rules, 3, 1, is_vhci) ==
+	if (disk_enumerate_int(path, RULE_INDEX, &buf, rules, 3) ==
 	    DEVFSADM_MULTIPLE) {
+
 		/*
 		 * We failed because there are multiple logical controller
 		 * numbers for a single physical controller.  If we use node
@@ -225,8 +222,7 @@ find_ctrlr(di_node_t node, di_minor_t minor)
 		 */
 		rules[0].flags = MATCH_NODE | MATCH_UNCACHED; /* disks */
 		rules[2].flags = MATCH_NODE | MATCH_UNCACHED; /* generic scsi */
-		if (ctrl_enumerate_int(path, RULE_INDEX, &buf, rules, 3, 0,
-		    is_vhci)) {
+		if (devfsadm_enumerate_int(path, RULE_INDEX, &buf, rules, 3)) {
 			return (NULL);
 		}
 	}

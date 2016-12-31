@@ -20,7 +20,6 @@
  */
 
 /*
- * Copyright 2016 Nexenta Systems, Inc.  All rights reserved.
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
@@ -178,7 +177,7 @@ scsi_cfg_creat_cb(di_minor_t minor, di_node_t node)
 	(void) strcat(path, mn);
 	di_devfs_path_free(devfs_path);
 
-	if (ctrl_enumerate_int(path, 1, &c_num, rules, 3, 0, B_FALSE)
+	if (devfsadm_enumerate_int(path, 1, &c_num, rules, 3)
 	    == DEVFSADM_FAILURE) {
 		/*
 		 * Unlike the disks module we don't retry on failure.
@@ -227,7 +226,7 @@ usb_cfg_creat_cb(di_minor_t minor, di_node_t node)
 	(void) snprintf(path, sizeof (path), "%s:%s", cp, di_minor_name(minor));
 	di_devfs_path_free(cp);
 
-	if (ctrl_enumerate_int(path, 0, &cp, rules, 1, 0, B_FALSE)) {
+	if (devfsadm_enumerate_int(path, 0, &cp, rules, 1)) {
 		return (DEVFSADM_CONTINUE);
 	}
 
@@ -264,7 +263,7 @@ sata_cfg_creat_cb(di_minor_t minor, di_node_t node)
 	di_devfs_path_free(devfspath);
 
 	/* build the physical path from the components */
-	if (ctrl_enumerate_int(path, 0, &buf, rules, 1, 0, B_FALSE) ==
+	if (devfsadm_enumerate_int(path, 0, &buf, rules, 1) ==
 	    DEVFSADM_FAILURE) {
 		return (DEVFSADM_CONTINUE);
 	}
@@ -298,7 +297,7 @@ sdcard_cfg_creat_cb(di_minor_t minor, di_node_t node)
 	di_devfs_path_free(devfspath);
 
 	/* build the physical path from the components */
-	if (ctrl_enumerate_int(path, 0, &buf, rules, 1, 0, B_FALSE) ==
+	if (devfsadm_enumerate_int(path, 0, &buf, rules, 1) ==
 	    DEVFSADM_FAILURE) {
 		return (DEVFSADM_CONTINUE);
 	}
