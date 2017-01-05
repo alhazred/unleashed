@@ -33,7 +33,7 @@
 #include <sys/vnode.h>
 #include <sys/bootvfs.h>
 #include <sys/filep.h>
-#include <zlib.h>
+#include <zmod/zlib.h>
 
 #ifdef	_BOOT
 #include "../common/util.h"

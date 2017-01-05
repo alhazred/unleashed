@@ -1263,12 +1263,8 @@ $(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/vm/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/contrib/zlib/%.c
-	$(COMPILE.c) -I$(CODEMGR_WS)/contrib/zlib -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/zmod/%.c
-	$(COMPILE.c) -I$(CODEMGR_WS)/contrib/zlib -o $@ $<
+	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/zlib_obj.o:		$(ZLIB_OBJS:%=$(OBJS_DIR)/%)

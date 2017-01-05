@@ -111,8 +111,6 @@ CLOBBERFILES	= $(CLEANFILES) $(UNIX_BIN)
 $(OBJS_DIR)/instr_size.o :=	EXTRA_OPTIONS	= -I$(SRC)/common/dis/i386
 $(OBJS_DIR)/instr_size.ln :=	EXTRA_OPTIONS	= -I$(SRC)/common/dis/i386
 
-$(OBJS_DIR)/decompress.o :=	EXTRA_OPTIONS	= -I$(CODEMGR_WS)/contrib/zlib
-
 CFLAGS += -DDIS_MEM
 
 #
