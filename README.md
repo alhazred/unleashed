@@ -1,5 +1,3 @@
-illumos-unleashed
-
 We think that operating systems are very exciting to work on; In particular,
 we enjoy working with descendants of OpenSolaris.  Unfortunately, we feel
 that the major OpenSolaris fork - illumos - has adopted a contribution
