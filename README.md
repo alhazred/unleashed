@@ -54,7 +54,7 @@ Commits
 -------
 
 Commits are cheap.  Modern revision control systems (e.g., git) handle large
-numbers of commits very well.  Therefore small changes that are encouraged
+numbers of commits very well.  Therefore small changes are encouraged
 (instead of "mega commits" that seem to touch half the code base).  Smaller
 commits make it easier to search through commit history to see what other
 parts of the repository were changed as part of the change.
