@@ -371,13 +371,16 @@ main(int argc, char *argv[])
 	else
 		progname++;
 
-	if (argc < 2)
-		usage();
-
 	status = ipadm_open(&iph, 0);
 	if (status != IPADM_SUCCESS) {
 		die("Could not open handle to library - %s",
 		    ipadm_status2str(status));
+	}
+
+	if (argc < 2) {
+		char *args = "show-addr";
+		do_show_addr(1, &args, "show-addr");
+		return (0);
 	}
 
 	for (i = 0; i < sizeof (cmds) / sizeof (cmds[0]); i++) {
