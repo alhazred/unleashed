@@ -379,7 +379,8 @@ main(int argc, char *argv[])
 
 	if (argc < 2) {
 		char *args = "show-addr";
-		do_show_addr(1, &args, "show-addr");
+		do_show_addr(1, &args, args);
+		ipadm_close(iph);
 		return (0);
 	}
 

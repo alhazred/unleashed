@@ -1474,20 +1474,23 @@ main(int argc, char *argv[])
 
 	progname = argv[0];
 
-	if (argc < 2)
-		usage();
+	/* Open the libdladm handle */
+	if ((status = dladm_open(&handle)) != DLADM_STATUS_OK) {
+		die_dlerr(status,
+		    "could not open /dev/dld");
+	}
+
+	if (argc < 2) {
+		char *args = "show-link";
+		do_show_link(1, &args, args);
+		dladm_close(handle);
+		return (0);
+	}
 
 	for (i = 0; i < sizeof (cmds) / sizeof (cmds[0]); i++) {
 		cmdp = &cmds[i];
 		if (strcmp(argv[1], cmdp->c_name) == 0) {
-			/* Open the libdladm handle */
-			if ((status = dladm_open(&handle)) != DLADM_STATUS_OK) {
-				die_dlerr(status,
-				    "could not open /dev/dld");
-			}
-
 			cmdp->c_fn(argc - 1, &argv[1], cmdp->c_usage);
-
 			dladm_close(handle);
 			return (EXIT_SUCCESS);
 		}
