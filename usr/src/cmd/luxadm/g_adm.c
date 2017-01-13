@@ -6410,11 +6410,7 @@ fc_port_dev_t hba_port;
 	 * so handle them via FC4 device map
 	 */
 	if (path_type & FC4_XPORT_MASK) {
-		if ((err = get_FC4_host_controller_pwwn(hba_path, pwwn)) != 0) {
-			return (err);
-		} else {
-			return (0);
-		}
+		return (get_FC4_host_controller_pwwn(hba_path, pwwn));
 	/* For Leadville path get the port wwn through g_get_host param. */
 	} else if ((path_type & FC_GEN_XPORT) &&
 		((path_type & FC_FCA_MASK) == FC_FCA_MASK)) {
