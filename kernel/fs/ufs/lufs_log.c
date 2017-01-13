@@ -509,8 +509,7 @@ alloc_rdbuf(cirbuf_t *cb, size_t bufsize, size_t blksize)
 	while ((nb = bufsize) != 0) {
 		if (nb > blksize)
 			nb = blksize;
-		bp = kmem_alloc(sizeof (buf_t), KM_SLEEP);
-		bzero(bp, sizeof (buf_t));
+		bp = kmem_zalloc(sizeof (buf_t), KM_SLEEP);
 		sema_init(&bp->b_sem, 1, NULL, SEMA_DEFAULT, NULL);
 		sema_init(&bp->b_io, 0, NULL, SEMA_DEFAULT, NULL);
 		bp->b_un.b_addr = va;
