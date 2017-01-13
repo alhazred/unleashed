@@ -53,13 +53,7 @@ static struct modlinkage modlinkage = {
 int
 _init()
 {
-	int error;
-
-	if ((error = mod_install(&modlinkage)) == 0) {
-		return (0);
-	} else {
-		return (error);
-	}
+	return (mod_install(&modlinkage));
 }
 
 int
