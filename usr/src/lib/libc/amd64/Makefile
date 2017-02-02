@@ -117,6 +117,7 @@ GENOBJS=			\
 	ecvt.o			\
 	endian.o		\
 	errlst.o		\
+	fts.o			\
 	amd64_data.o		\
 	ldivide.o		\
 	lock.o			\

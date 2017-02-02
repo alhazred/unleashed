@@ -364,6 +364,7 @@ file path=usr/include/float.h
 file path=usr/include/fmtmsg.h
 file path=usr/include/fnmatch.h
 file path=usr/include/form.h mode=0644
+file path=usr/include/fts.h
 file path=usr/include/ftw.h
 file path=usr/include/gelf.h
 file path=usr/include/getopt.h

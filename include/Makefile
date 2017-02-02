@@ -47,6 +47,7 @@ INCS=	$($(CONFIG_MACH)_INCS) \
 	floatingpoint.h	\
 	fmtmsg.h	\
 	fnmatch.h	\
+	fts.h		\
 	ftw.h		\
 	gelf.h		\
 	getopt.h	\

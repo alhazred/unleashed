@@ -132,6 +132,7 @@ GENOBJS=			\
 	ecvt.o			\
 	endian.o		\
 	errlst.o		\
+	fts.o			\
 	i386_data.o		\
 	ladd.o			\
 	ldivide.o		\

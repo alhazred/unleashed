@@ -4113,6 +4113,11 @@ $endif
 	verrc;
 	warnc;
 	vwarnc;
+	fts_close;
+	fts_children;
+	fts_open;
+	fts_read;
+	fts_set;
     
 
     local:
