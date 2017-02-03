@@ -4119,7 +4119,11 @@ $endif
 	fts_read;
 	fts_set;
 	reallocarray;
-    
+	vis;
+	strvis;
+	strnvis;
+	strvisx;
+	stravis;	
 
     local:
 	__imax_lldiv				{ FLAGS = NODYNSORT };

@@ -175,6 +175,7 @@ INCS=	$($(CONFIG_MACH)_INCS) \
 	valtools.h	\
 	values.h	\
 	varargs.h	\
+	vis.h		\
 	wait.h		\
 	wchar.h		\
 	wchar_impl.h	\

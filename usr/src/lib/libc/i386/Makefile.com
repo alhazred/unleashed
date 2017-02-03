@@ -162,7 +162,8 @@ GENOBJS=			\
 	strncpy.o		\
 	strnlen.o		\
 	strrchr.o		\
-	sync_instruction_memory.o
+	sync_instruction_memory.o\
+	vis.o
 
 # sysobjs that contain large-file interfaces
 COMSYSOBJS64=			\

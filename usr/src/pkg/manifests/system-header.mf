@@ -1591,6 +1591,7 @@ $(sparc_ONLY)file path=usr/include/v9/sys/vis_simulator.h
 file path=usr/include/valtools.h
 file path=usr/include/values.h
 file path=usr/include/varargs.h
+file path=usr/include/vis.h
 file path=usr/include/vm/anon.h
 file path=usr/include/vm/as.h
 file path=usr/include/vm/faultcode.h
