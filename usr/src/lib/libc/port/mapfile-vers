@@ -4118,6 +4118,7 @@ $endif
 	fts_open;
 	fts_read;
 	fts_set;
+	reallocarray;
     
 
     local:

@@ -130,6 +130,7 @@ GENOBJS=			\
 	new_list.o		\
 	proc64_id.o		\
 	proc64_support.o	\
+	reallocarray.o		\
 	setjmp.o		\
 	siginfolst.o		\
 	siglongjmp.o		\

@@ -221,7 +221,6 @@ file path=usr/share/man/man3c/lsearch.3c
 file path=usr/share/man/man3c/madvise.3c
 file path=usr/share/man/man3c/makecontext.3c
 file path=usr/share/man/man3c/makedev.3c
-file path=usr/share/man/man3c/malloc.3c
 file path=usr/share/man/man3c/mblen.3c
 file path=usr/share/man/man3c/mbrlen.3c
 file path=usr/share/man/man3c/mbrtowc.3c
@@ -266,7 +265,6 @@ file path=usr/share/man/man3c/port_send.3c
 file path=usr/share/man/man3c/posix_fadvise.3c
 file path=usr/share/man/man3c/posix_fallocate.3c
 file path=usr/share/man/man3c/posix_madvise.3c
-file path=usr/share/man/man3c/posix_memalign.3c
 file path=usr/share/man/man3c/posix_openpt.3c
 file path=usr/share/man/man3c/posix_spawn.3c
 file path=usr/share/man/man3c/posix_spawn_file_actions_addclose.3c
@@ -565,7 +563,6 @@ link path=usr/share/man/man3c/_flushlbf.3c target=__fbufsize.3c
 link path=usr/share/man/man3c/_setjmp.3c target=_longjmp.3c
 link path=usr/share/man/man3c/addrtosymstr.3c target=walkcontext.3c
 link path=usr/share/man/man3c/aiowrite.3c target=aioread.3c
-link path=usr/share/man/man3c/alloca.3c target=malloc.3c
 link path=usr/share/man/man3c/alphasort.3c target=scandir.3c
 link path=usr/share/man/man3c/arc4random_buf.3c target=arc4random.3c
 link path=usr/share/man/man3c/arc4random_uniform.3c target=arc4random.3c
@@ -699,7 +696,6 @@ link path=usr/share/man/man3c/bind_textdomain_codeset.3c target=gettext.3c
 link path=usr/share/man/man3c/bindtextdomain.3c target=gettext.3c
 link path=usr/share/man/man3c/btowc_l.3c target=btowc.3c
 link path=usr/share/man/man3c/bzero.3c target=bstring.3c
-link path=usr/share/man/man3c/calloc.3c target=malloc.3c
 link path=usr/share/man/man3c/canonicalize_file_name.3c target=realpath.3c
 link path=usr/share/man/man3c/catclose.3c target=catopen.3c
 link path=usr/share/man/man3c/cfgetospeed.3c target=cfgetispeed.3c
@@ -803,7 +799,6 @@ link path=usr/share/man/man3c/fpsetmask.3c target=fpgetround.3c
 link path=usr/share/man/man3c/fpsetround.3c target=fpgetround.3c
 link path=usr/share/man/man3c/fpsetsticky.3c target=fpgetround.3c
 link path=usr/share/man/man3c/fputs.3c target=puts.3c
-link path=usr/share/man/man3c/free.3c target=malloc.3c
 link path=usr/share/man/man3c/freelocale.3c target=newlocale.3c
 link path=usr/share/man/man3c/fscanf.3c target=scanf.3c
 link path=usr/share/man/man3c/fseeko.3c target=fseek.3c
@@ -967,7 +962,6 @@ link path=usr/share/man/man3c/mbsrtowcs_l.3c target=mbsrtowcs.3c
 link path=usr/share/man/man3c/mbstowcs.3c target=mbsrtowcs.3c
 link path=usr/share/man/man3c/mbstowcs_l.3c target=mbsrtowcs.3c
 link path=usr/share/man/man3c/mbtowc_l.3c target=mbtowc.3c
-link path=usr/share/man/man3c/memalign.3c target=malloc.3c
 link path=usr/share/man/man3c/membar_consumer.3c target=membar_ops.3c
 link path=usr/share/man/man3c/membar_enter.3c target=membar_ops.3c
 link path=usr/share/man/man3c/membar_exit.3c target=membar_ops.3c
@@ -1189,7 +1183,6 @@ link path=usr/share/man/man3c/rctlblk_set_recipient_pid.3c \
     target=rctlblk_set_value.3c
 link path=usr/share/man/man3c/rctlblk_size.3c target=rctlblk_set_value.3c
 link path=usr/share/man/man3c/re_exec.3c target=re_comp.3c
-link path=usr/share/man/man3c/realloc.3c target=malloc.3c
 link path=usr/share/man/man3c/regerror.3c target=regcomp.3c
 link path=usr/share/man/man3c/regex.3c target=regcmp.3c
 link path=usr/share/man/man3c/regexec.3c target=regcomp.3c
@@ -1372,7 +1365,6 @@ link path=usr/share/man/man3c/updwtmp.3c target=getutxent.3c
 link path=usr/share/man/man3c/updwtmpx.3c target=getutxent.3c
 link path=usr/share/man/man3c/utmpname.3c target=getutent.3c
 link path=usr/share/man/man3c/utmpxname.3c target=getutxent.3c
-link path=usr/share/man/man3c/valloc.3c target=malloc.3c
 link path=usr/share/man/man3c/vasprintf.3c target=vprintf.3c
 link path=usr/share/man/man3c/vfprintf.3c target=vprintf.3c
 link path=usr/share/man/man3c/vfscanf.3c target=scanf.3c

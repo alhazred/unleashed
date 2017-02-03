@@ -293,6 +293,7 @@ extern uint32_t arc4random_uniform(uint32_t);
 
 #endif	/* !_STRICT_SYBMOLS */
 
+void *reallocarray(void *, size_t, size_t);
 
 #ifdef	__cplusplus
 }

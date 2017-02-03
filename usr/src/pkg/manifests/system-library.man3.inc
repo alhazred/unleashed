@@ -20,6 +20,10 @@ file path=usr/share/man/man3/CMSG_DATA.3
 file path=usr/share/man/man3/readdir.3
 file path=usr/share/man/man3/err.3
 file path=usr/share/man/man3/fts.3
+file path=usr/share/man/man3/alloca.3
+file path=usr/share/man/man3/malloc.3
+file path=usr/share/man/man3/posix_memalign.3
+file path=usr/share/man/man3/valloc.3
 link path=usr/share/man/man3/intro.3 target=Intro.3
 link path=usr/share/man/man3/CMSG_FIRSTHDR.3 target=CMSG_DATA.3
 link path=usr/share/man/man3/CMSG_LEN.3 target=CMSG_DATA.3
@@ -42,3 +46,8 @@ link path=usr/share/man/man3/fts_close.3 target=fts.3
 link path=usr/share/man/man3/fts_open.3 target=fts.3
 link path=usr/share/man/man3/fts_read.3 target=fts.3
 link path=usr/share/man/man3/fts_set.3 target=fts.3
+link path=usr/share/man/man3/calloc.3 target=malloc.3
+link path=usr/share/man/man3/realloc.3 target=malloc.3
+link path=usr/share/man/man3/reallocarray.3 target=malloc.3
+link path=usr/share/man/man3/free.3 target=malloc.3
+link path=usr/share/man/man3/memalign.3 target=posix_memalign.3

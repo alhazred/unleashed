@@ -72,22 +72,6 @@ static int	 fts_safe_changedir(FTS *, FTSENT *, int, char *);
 #define	BNAMES		2		/* fts_children, names only */
 #define	BREAD		3		/* fts_read */
 
-/*
- * This is sqrt(SIZE_MAX+1), as s1*s2 <= SIZE_MAX
- * if both s1 < MUL_NO_OVERFLOW and s2 < MUL_NO_OVERFLOW
- */
-#define MUL_NO_OVERFLOW	((size_t)1 << (sizeof(size_t) * 4))
-static void *
-reallocarray(void *optr, size_t nmemb, size_t size)
-{
-	if ((nmemb >= MUL_NO_OVERFLOW || size >= MUL_NO_OVERFLOW) &&
-	    nmemb > 0 && SIZE_MAX / nmemb < size) {
-		errno = ENOMEM;
-		return NULL;
-	}
-	return realloc(optr, size * nmemb);
-}
-
 FTS *
 fts_open(char * const *argv, int options,
     int (*compar)(const FTSENT **, const FTSENT **))

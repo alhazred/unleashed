@@ -162,6 +162,7 @@ GENOBJS=			\
 	memchr.o		\
 	memcmp.o		\
 	new_list.o		\
+	reallocarray.o		\
 	setjmp.o		\
 	siginfolst.o		\
 	siglongjmp.o		\

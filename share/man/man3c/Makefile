@@ -203,7 +203,6 @@ MAN = __fbufsize.3c \
       madvise.3c \
       makecontext.3c \
       makedev.3c \
-      malloc.3c \
       mblen.3c \
       mbrlen.3c \
       mbrtowc.3c \
@@ -248,7 +247,6 @@ MAN = __fbufsize.3c \
       posix_fadvise.3c \
       posix_fallocate.3c \
       posix_madvise.3c \
-      posix_memalign.3c \
       posix_openpt.3c \
       posix_spawn.3c \
       posix_spawn_file_actions_addclose.3c \
@@ -948,12 +946,6 @@ MLINKS+=	lsearch.3c lfind.3c
 MLINKS+=	makecontext.3c swapcontext.3c
 MLINKS+=	makedev.3c major.3c
 MLINKS+=	makedev.3c minor.3c
-MLINKS+=	malloc.3c alloca.3c
-MLINKS+=	malloc.3c calloc.3c
-MLINKS+=	malloc.3c free.3c
-MLINKS+=	malloc.3c memalign.3c
-MLINKS+=	malloc.3c realloc.3c
-MLINKS+=	malloc.3c valloc.3c
 MLINKS+=	mblen.3c mblen_l.3c
 MLINKS+=	mbrlen.3c mbrlen_l.3c
 MLINKS+=	mbrtowc.3c mbrtowc_l.3c
