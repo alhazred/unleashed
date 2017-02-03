@@ -46,11 +46,6 @@
 #include <thread.h>
 #include <pthread.h>
 
-#ifndef _REENTRANT
-static char *bsplitchar = "\t\n";	/* characters that separate fields */
-#endif
-
-#ifdef _REENTRANT
 static char **
 _get_bsplitchar(thread_key_t *keyp)
 {
@@ -72,16 +67,13 @@ _get_bsplitchar(thread_key_t *keyp)
 	}
 	return (strp);
 }
-#endif /* _REENTRANT */
 
 size_t
 bufsplit(char *buf, size_t dim, char **array)
 {
-#ifdef _REENTRANT
 	static thread_key_t key = THR_ONCE_KEY;
 	char  **bsplitchar = _get_bsplitchar(&key);
 #define	bsplitchar (*bsplitchar)
-#endif /* _REENTRANT */
 
 	unsigned numsplit;
 	int	i;

@@ -312,14 +312,8 @@ union res_sockaddr_union {
 /*			0x00010000	*/
 
 /* Things involving an internal (static) resolver context. */
-#ifdef _REENTRANT
 extern struct __res_state *__res_state(void);
 #define	_res (*__res_state())
-#else
-#ifndef __BIND_NOSTATIC
-extern struct __res_state _res;
-#endif
-#endif
 
 #ifndef __BIND_NOSTATIC
 void		fp_nquery __P((const uchar_t *, int, FILE *));

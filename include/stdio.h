@@ -262,11 +262,7 @@ typedef int	ssize_t;	/* (historical version) */
 #endif
 #endif	/* !_SSIZE_T */
 
-#if defined(__EXTENSIONS__) || \
-	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
-	defined(_REENTRANT)
 extern char	*tmpnam_r(char *);
-#endif
 
 #if defined(__EXTENSIONS__) || \
 	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX))
@@ -303,8 +299,6 @@ extern int	fileno(FILE *);
 /*
  * The following are known to POSIX.1c, but not to ANSI-C or XOPEN.
  */
-#if defined(__EXTENSIONS__) || defined(_REENTRANT) || \
-	(_POSIX_C_SOURCE - 0 >= 199506L)
 extern void	flockfile(FILE *);
 extern int	ftrylockfile(FILE *);
 extern void	funlockfile(FILE *);
@@ -312,8 +306,6 @@ extern int	getc_unlocked(FILE *);
 extern int	getchar_unlocked(void);
 extern int	putc_unlocked(int, FILE *);
 extern int	putchar_unlocked(int);
-
-#endif	/* defined(__EXTENSIONS__) || defined(_REENTRANT).. */
 
 /*
  * The following are known to XOPEN, but not to ANSI-C or POSIX.
@@ -362,10 +354,6 @@ extern int	fseeko64(FILE *, off64_t, int);
 extern off64_t	ftello64(FILE *);
 #endif
 
-#if !defined(__lint)
-
-#if defined(__EXTENSIONS__) || defined(_REENTRANT) || \
-	    (_POSIX_C_SOURCE - 0 >= 199506L)
 #ifndef	_LP64
 #define	getc_unlocked(p)	(--(p)->_cnt < 0 \
 					? __filbuf(p) \
@@ -377,9 +365,6 @@ extern off64_t	ftello64(FILE *);
 #endif	/* _LP64 */
 #define	getchar_unlocked()	getc_unlocked(stdin)
 #define	putchar_unlocked(x)	putc_unlocked((x), stdout)
-#endif	/* defined(__EXTENSIONS__) || defined(_REENTRANT).. */
-
-#endif	/* !defined(__lint) */
 
 #ifdef	__cplusplus
 }

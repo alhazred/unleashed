@@ -20,7 +20,7 @@ static const char rcsid[] = "$Id: getnetent_r.c,v 1.6 2005/09/03 12:41:38 marka 
 #endif /* LIBC_SCCS and not lint */
 
 #include <port_before.h>
-#if !defined(_REENTRANT) || !defined(DO_PTHREADS)
+#if !defined(DO_PTHREADS)
 	static int getnetent_r_not_required = 0;
 #else
 #include <errno.h>
@@ -230,5 +230,5 @@ copy_netent(struct netent *ne, struct netent *nptr, NET_R_COPY_ARGS) {
 #else /* NET_R_RETURN */
 	static int getnetent_r_unknown_system = 0;
 #endif /* NET_R_RETURN */
-#endif /* !defined(_REENTRANT) || !defined(DO_PTHREADS) */
+#endif /* !defined(DO_PTHREADS) */
 /*! \file */

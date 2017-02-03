@@ -20,7 +20,7 @@ static const char rcsid[] = "$Id: getprotoent_r.c,v 1.6 2006/08/01 01:14:16 mark
 #endif /* LIBC_SCCS and not lint */
 
 #include <port_before.h>
-#if !defined(_REENTRANT) || !defined(DO_PTHREADS)
+#if !defined(DO_PTHREADS)
 	static int getprotoent_r_not_required = 0;
 #else
 #include <errno.h>
@@ -219,5 +219,5 @@ copy_protoent(struct protoent *pe, struct protoent *pptr, PROTO_R_COPY_ARGS) {
 #else /* PROTO_R_RETURN */
 	static int getprotoent_r_unknown_system = 0;
 #endif /* PROTO_R_RETURN */
-#endif /* !defined(_REENTRANT) || !defined(DO_PTHREADS) */
+#endif /* !defined(DO_PTHREADS) */
 /*! \file */

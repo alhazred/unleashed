@@ -973,12 +973,8 @@ struct rpc_createerr {
 	struct rpc_err cf_error; /* useful when cf_stat == RPC_PMAPFAILURE */
 };
 
-#ifdef	_REENTRANT
 extern struct rpc_createerr	*__rpc_createerr();
 #define	rpc_createerr	(*(__rpc_createerr()))
-#else
-extern struct rpc_createerr rpc_createerr;
-#endif	/* _REENTRANT */
 
 /*
  * The simplified interface:
@@ -1001,12 +997,8 @@ extern enum clnt_stat rpc_call(const char *, const rpcprog_t, const rpcvers_t,
 extern enum clnt_stat rpc_call();
 #endif
 
-#ifdef	_REENTRANT
 extern struct rpc_err	*__rpc_callerr();
 #define	rpc_callerr	(*(__rpc_callerr()))
-#else
-extern struct rpc_err rpc_callerr;
-#endif	/* _REENTRANT */
 
 /*
  * RPC broadcast interface

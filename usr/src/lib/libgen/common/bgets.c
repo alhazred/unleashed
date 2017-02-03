@@ -46,13 +46,8 @@
 
 #define	CHARS	256
 
-#ifdef _REENTRANT
 #define	getc(f) getc_unlocked(f)
-#else /* _REENTRANT */
-static char	*stop = NULL;
-#endif /* _REENTRANT */
 
-#ifdef _REENTRANT
 static char *
 _get_stop(thread_key_t *keyp)
 {
@@ -71,7 +66,6 @@ _get_stop(thread_key_t *keyp)
 	}
 	return (str);
 }
-#endif /* _REENTRANT */
 
 char *
 bgets(char *buf, size_t count, FILE *fp, char *stopstr)
@@ -79,14 +73,8 @@ bgets(char *buf, size_t count, FILE *fp, char *stopstr)
 	char	*cp;
 	int	c;
 	size_t	i;
-#ifdef _REENTRANT
 	static thread_key_t key = THR_ONCE_KEY;
 	char  *stop  = _get_stop(&key);
-#else /* _REENTRANT */
-	if (!stop)
-		stop = (char *)calloc(CHARS, sizeof (char));
-	else
-#endif /* _REENTRANT */
 	if (stopstr) 	/* reset stopstr array */
 		(void) memset(stop, 0, CHARS);
 	if (stopstr)

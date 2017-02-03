@@ -123,11 +123,7 @@ typedef	unsigned int	uid_t;		/* UID type		*/
 
 #endif	/* _LP64 && _LARGEFILE64_SOURCE */
 
-#if defined(__EXTENSIONS__) || \
-	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
-	(_POSIX_C_SOURCE - 0 >= 199506L) || defined(_REENTRANT)
 extern int rand_r(unsigned int *);
-#endif
 
 extern void _exithandle(void);
 

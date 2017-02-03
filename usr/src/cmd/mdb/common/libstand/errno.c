@@ -22,11 +22,19 @@
 /*
  * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ * Copyright 2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  */
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <sys/salib.h>
 #include <errno.h>
 
-int	errno;
+/*
+ * Standalone is single-threaded, so we just use a static errno exposed
+ * through the expected wrapper.
+ */
+int *___errno(void)
+{
+	static int real_errno;
+
+	return &real_errno;
+}

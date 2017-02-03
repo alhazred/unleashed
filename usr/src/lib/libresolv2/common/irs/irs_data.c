@@ -202,7 +202,6 @@ net_data_minimize(struct net_data *net_data) {
 	res_nclose(net_data->res);
 }
 
-#ifdef _REENTRANT
 struct __res_state *
 __res_state(void) {
 	/* NULL param here means use the default config file. */
@@ -212,14 +211,6 @@ __res_state(void) {
 
 	return (&_res);
 }
-#else
-#ifdef __linux
-struct __res_state *
-__res_state(void) {
-	return (&_res);
-}
-#endif
-#endif
 
 int *
 __h_errno(void) {

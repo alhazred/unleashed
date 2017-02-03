@@ -251,7 +251,6 @@ extern void sysvconfig(void);
 extern int yp_getalias(char *key, char *key_alias, int maxlen);
 extern int getdomainname(char *, int);
 
-extern struct rpc_createerr rpc_createerr;
 extern CLIENT *__yp_clnt_create_rsvdport();
 
 int

@@ -71,12 +71,8 @@ struct nd_mergearg {
 /*
  * _nderror is a private variable to the netdir system.
  */
-#ifdef _REENTRANT
 extern int	*__nderror();
 #define	_nderror	(*(__nderror()))
-#else
-extern int _nderror;
-#endif  /* _REENTRANT */
 
 
 int netdir_options(struct netconfig *, int option, int fd, char *par);

@@ -139,26 +139,8 @@ extern int	alphasort64(const struct dirent64 **, const struct dirent64 **);
 /*
  * readdir_r() prototype is defined here.
  *
- * There are several variations, depending on whether compatibility with old
- * POSIX draft specifications or the final specification is desired and on
- * whether the large file compilation environment is active.  To combat a
- * combinatorial explosion, enabling large files implies using the final
- * specification (since the definition of the large file environment
- * considerably postdates that of the final readdir_r specification).
- *
- * In the LP64 compilation environment, all APIs are already large file,
- * and since there are no 64-bit applications that can have seen the
- * draft implementation, again, we use the final POSIX specification.
+ * In the LP64 compilation environment, all APIs are already large file.
  */
-
-#if	defined(__EXTENSIONS__) || defined(_REENTRANT) || \
-	!defined(__XOPEN_OR_POSIX) || (_POSIX_C_SOURCE - 0 >= 199506L) || \
-	defined(_POSIX_PTHREAD_SEMANTICS)
-
-#if	!defined(_LP64) && _FILE_OFFSET_BITS == 32
-extern int readdir_r(DIR *_RESTRICT_KYWD, struct dirent *_RESTRICT_KYWD,
-		struct dirent **_RESTRICT_KYWD);
-#else	/* !_LP64 && _FILE_OFFSET_BITS == 32 */
 
 #if defined(_LP64)
 #ifdef	__PRAGMA_REDEFINE_EXTNAME
@@ -166,17 +148,16 @@ extern int readdir_r(DIR *_RESTRICT_KYWD, struct dirent *_RESTRICT_KYWD,
 #else
 #define	readdir64_r		readdir_r
 #endif
-#else	/* _LP64 */
+#elif	_FILE_OFFSET_BITS != 32
 #ifdef	__PRAGMA_REDEFINE_EXTNAME
 #pragma	redefine_extname readdir_r	readdir64_r
 #else
 #define	readdir_r		readdir64_r
 #endif
-#endif	/* _LP64 */
+#endif
+
 extern int readdir_r(DIR *_RESTRICT_KYWD, struct dirent *_RESTRICT_KYWD,
 	struct dirent **_RESTRICT_KYWD);
-
-#endif	/* !_LP64 && _FILE_OFFSET_BITS == 32 */
 
 #if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
 	    !defined(__PRAGMA_REDEFINE_EXTNAME))
@@ -184,8 +165,6 @@ extern int readdir_r(DIR *_RESTRICT_KYWD, struct dirent *_RESTRICT_KYWD,
 extern int readdir64_r(DIR *_RESTRICT_KYWD, struct dirent64 *_RESTRICT_KYWD,
 	struct dirent64 **_RESTRICT_KYWD);
 #endif
-
-#endif /* defined(__EXTENSIONS__) || defined(_REENTRANT)... */
 
 #ifdef	__cplusplus
 }

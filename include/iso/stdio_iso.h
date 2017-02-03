@@ -222,16 +222,10 @@ extern int	fgetc(FILE *);
 extern char	*fgets(char *_RESTRICT_KYWD, int, FILE *_RESTRICT_KYWD);
 extern int	fputc(int, FILE *);
 extern int	fputs(const char *_RESTRICT_KYWD, FILE *_RESTRICT_KYWD);
-#if (__cplusplus >= 199711L && (defined(_LP64) || defined(_REENTRANT))) || \
-	__cplusplus < 199711L
 extern int	getc(FILE *);
 extern int	putc(int, FILE *);
-#endif
-#if (__cplusplus >= 199711L && defined(_REENTRANT)) || \
-	__cplusplus < 199711L
 extern int	getchar(void);
 extern int	putchar(int);
-#endif
 
 /*
  * ISO/IEC C11 removed gets from the standard library. Therefore if a strict C11
@@ -253,12 +247,9 @@ extern int	fsetpos(FILE *, const fpos_t *);
 extern int	fseek(FILE *, long, int);
 extern long	ftell(FILE *);
 extern void	rewind(FILE *);
-#if (__cplusplus >= 199711L && (defined(_LP64) || defined(_REENTRANT))) || \
-	__cplusplus < 199711L
 extern void	clearerr(FILE *);
 extern int	feof(FILE *);
 extern int	ferror(FILE *);
-#endif
 extern void	perror(const char *);
 
 #ifndef	_LP64
@@ -269,56 +260,6 @@ extern int	__flsbuf(int, FILE *);
 #if __cplusplus >= 199711L
 }
 #endif /* end of namespace std */
-
-#if !defined(__lint)
-
-#if	!defined(_REENTRANT) && !defined(_LP64)
-
-#if __cplusplus >= 199711L
-namespace std {
-inline int getc(FILE *_p) {
-	return (--_p->_cnt < 0 ? __filbuf(_p) : (int)*_p->_ptr++); }
-inline int putc(int _x, FILE *_p) {
-	return (--_p->_cnt < 0 ? __flsbuf(_x, _p)
-		: (int)(*_p->_ptr++ = (unsigned char) _x)); }
-}
-#else /* __cplusplus >= 199711L */
-#define	getc(p)		(--(p)->_cnt < 0 ? __filbuf(p) : (int)*(p)->_ptr++)
-#define	putc(x, p)	(--(p)->_cnt < 0 ? __flsbuf((x), (p)) \
-				: (int)(*(p)->_ptr++ = (unsigned char) (x)))
-#endif /* __cplusplus >= 199711L */
-
-#endif /* !defined(_REENTRANT) && !defined(_LP64) */
-
-#ifndef	_REENTRANT
-
-#if __cplusplus >= 199711L
-namespace std {
-inline int getchar() { return getc(stdin); }
-inline int putchar(int _x) { return putc(_x, stdout); }
-}
-#else
-#define	getchar()	getc(stdin)
-#define	putchar(x)	putc((x), stdout)
-#endif /* __cplusplus >= 199711L */
-
-#ifndef	_LP64
-#if __cplusplus >= 199711L
-namespace std {
-inline void clearerr(FILE *_p) { _p->_flag &= ~(_IOERR | _IOEOF); }
-inline int feof(FILE *_p) { return _p->_flag & _IOEOF; }
-inline int ferror(FILE *_p) { return _p->_flag & _IOERR; }
-}
-#else /* __cplusplus >= 199711L */
-#define	clearerr(p)	((void)((p)->_flag &= ~(_IOERR | _IOEOF)))
-#define	feof(p)		((p)->_flag & _IOEOF)
-#define	ferror(p)	((p)->_flag & _IOERR)
-#endif /* __cplusplus >= 199711L */
-#endif	/* _LP64 */
-
-#endif	/* _REENTRANT */
-
-#endif	/* !defined(__lint) */
 
 #ifdef	__cplusplus
 }

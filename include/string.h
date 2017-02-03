@@ -66,18 +66,10 @@ using std::strxfrm;
 extern "C" {
 #endif
 
-#if defined(__EXTENSIONS__) || \
-	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
-	defined(_XPG6) || defined(_REENTRANT)
 extern int strerror_r(int, char *, size_t);
-#endif
 
-#if defined(__EXTENSIONS__) || \
-	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
-	(_POSIX_C_SOURCE - 0 >= 199506L) || defined(_REENTRANT)
 extern char *strtok_r(char *_RESTRICT_KYWD, const char *_RESTRICT_KYWD,
 	char **_RESTRICT_KYWD);
-#endif
 
 #if defined(__EXTENSIONS__) || !defined(_STRICT_STDC) || \
 	defined(__XOPEN_OR_POSIX)

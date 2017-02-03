@@ -20,11 +20,6 @@
 #define	SUNW_OVERRIDE_RETRY	/* Allow NS switch to override res->retry */
 #define	SUNW_LIBMD5	/* Use md5(3EXT) instead of internal implementation */
 
-/* If compiling an MT warm libresolv, we also need reentrancy */
-#if	defined(SUNW_MT_RESOLVER) && !defined(_REENTRANT)
-#define	_REENTRANT
-#endif
-
 /* End additions for Solaris 2 */
 
 #endif /* _SUNOPTIONS_H */

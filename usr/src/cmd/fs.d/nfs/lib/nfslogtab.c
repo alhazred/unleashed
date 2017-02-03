@@ -28,10 +28,6 @@
  * Manipulates the nfslogtab
  */
 
-#ifndef _REENTRANT
-#define	_REENTRANT
-#endif
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>

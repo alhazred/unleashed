@@ -57,12 +57,8 @@ extern char *regcmp(const char *, ...);
 extern char *regex(const char *, const char *, ...);
 #endif
 
-#ifdef _REENTRANT
 extern char **____loc1(void);
 #define	__loc1 (*(____loc1()))
-#elif !defined(_XPG6) || defined(__EXTENSIONS__)
-extern char *__loc1;	/* Marked LEGACY in XPG5 and removed in XPG6 */
-#endif /* _REENTRANT */
 
 #if !defined(_XPG4_2) || defined(__EXTENSIONS__)
 
@@ -98,12 +94,6 @@ extern int mkdirp(const char *, mode_t);
 extern int p2open(const char *, FILE *[2]);
 extern int p2close(FILE *[2]);
 extern char *pathfind(const char *, const char *, const char *);
-
-#ifdef _REENTRANT
-#define	__i_size (*(___i_size()))
-#else
-extern int __i_size;
-#endif
 
 extern int rmdirp(char *, char *);
 extern char *strcadd(char *, const char *);

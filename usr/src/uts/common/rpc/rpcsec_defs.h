@@ -152,12 +152,8 @@ typedef struct _rpc_gss_name {
 	rpc_gss_OID type;
 } rpc_gss_name;
 
-#ifdef	_REENTRANT
 extern rpc_gss_error_t	*__rpc_gss_err();
 #define	rpc_gss_err	(*(__rpc_gss_err()))
-#else
-extern rpc_gss_error_t rpc_gss_err;
-#endif	/* _REENTRANT */
 
 /*
  * Private interfaces in user space.

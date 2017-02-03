@@ -39,13 +39,8 @@
 extern "C" {
 #endif
 
-#if defined(_REENTRANT) || defined(_TS_ERRNO) || \
-	_POSIX_C_SOURCE - 0 >= 199506L
 extern int	*__t_errno(void);
 #define	t_errno	(*(__t_errno()))
-#else
-extern int t_errno;
-#endif	/* defined(_REENTRANT) || defined(_TS_ERRNO) */
 
 #ifdef	__cplusplus
 }

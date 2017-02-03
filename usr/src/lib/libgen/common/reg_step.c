@@ -49,14 +49,12 @@ char	*loc1 = (char *)0, *loc2 = (char *)0, *locs = (char *)0;
 char	*braslist[_NBRA] = { (char *)0};
 char	*braelist[_NBRA] = { (char *)0};
 
-#ifdef  _REENTRANT
 static thread_key_t key = THR_ONCE_KEY;
 typedef struct _vars_storage {
 	char	*loc1, *loc2, *locs;
 	char    *braslist[_NBRA];
 	char    *braelist[_NBRA];
 } vars_storage;
-#endif
 
 static unsigned char _bittab[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
 static void getrnge(char *);
@@ -66,7 +64,6 @@ static int	size;
 static int _advance(char *, char *);
 static char *start;
 
-#ifdef _REENTRANT
 static mutex_t lock = DEFAULTMUTEX;
 
 static vars_storage *
@@ -153,8 +150,6 @@ ___locs(void)
 #define	loc2 (*(___loc2()))
 #undef locs
 #define	locs (*(___locs()))
-
-#endif	/* _REENTRANT */
 
 int
 step(char *p1, char *p2)

@@ -49,9 +49,6 @@ SRCS += \
 	strtol.c \
 	strtoul.c
 
-# We don't want thread-specific errno's in kmdb, as we're single-threaded.
-DTS_ERRNO=
-
 INCDIRS = \
 	../../../common/libstand \
 	../../libstand \

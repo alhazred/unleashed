@@ -81,14 +81,10 @@ typedef int	clockid_t;
 typedef int	timer_t;
 #endif
 
-#if defined(__EXTENSIONS__) || \
-	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
-	(_POSIX_C_SOURCE - 0 >= 199506L) || defined(_REENTRANT)
 extern struct tm *gmtime_r(const time_t *_RESTRICT_KYWD,
 			struct tm *_RESTRICT_KYWD);
 extern struct tm *localtime_r(const time_t *_RESTRICT_KYWD,
 			struct tm *_RESTRICT_KYWD);
-#endif
 
 #if (!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
 	defined(_XPG4) || defined(__EXTENSIONS__)
@@ -191,13 +187,9 @@ extern long altzone;
 #if (!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
 	defined(_XPG4_2) || defined(__EXTENSIONS__)
 extern struct tm *getdate(const char *);
-#ifdef	_REENTRANT
 #undef getdate_err
 #define	getdate_err *(int *)_getdate_err_addr()
 extern int *_getdate_err_addr(void);
-#else
-extern int getdate_err;
-#endif /* _REENTRANT */
 #endif /* (!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX))... */
 
 /*
@@ -236,10 +228,6 @@ extern int getdate_err;
  * only.  New applications/libraries should use the standard definitions.
  */
 
-#if	defined(__EXTENSIONS__) || defined(_REENTRANT) || \
-	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
-	(_POSIX_C_SOURCE - 0 >= 199506L) || defined(_POSIX_PTHREAD_SEMANTICS)
-
 #if	(_POSIX_C_SOURCE - 0 >= 199506L) || defined(_POSIX_PTHREAD_SEMANTICS)
 
 #ifdef __PRAGMA_REDEFINE_EXTNAME
@@ -253,13 +241,6 @@ extern char *__posix_asctime_r(const struct tm *_RESTRICT_KYWD,
     char *_RESTRICT_KYWD);
 extern char *__posix_ctime_r(const time_t *, char *);
 
-#ifdef	__lint
-
-#define	ctime_r __posix_ctime_r
-#define	asctime_r __posix_asctime_r
-
-#else	/* !__lint */
-
 static char *
 asctime_r(const struct tm *_RESTRICT_KYWD __tm, char *_RESTRICT_KYWD __buf)
 {
@@ -272,7 +253,6 @@ ctime_r(const time_t *__time, char *__buf)
 	return (__posix_ctime_r(__time, __buf));
 }
 
-#endif /* !__lint */
 #endif /* __PRAGMA_REDEFINE_EXTNAME */
 
 #else  /* (_POSIX_C_SOURCE - 0 >= 199506L) || ... */
@@ -281,8 +261,6 @@ extern char *asctime_r(const struct tm *, char *, int);
 extern char *ctime_r(const time_t *, char *, int);
 
 #endif  /* (_POSIX_C_SOURCE - 0 >= 199506L) || ... */
-
-#endif /* defined(__EXTENSIONS__) || defined(_REENTRANT)... */
 
 
 #if defined(_XPG7) || !defined(_STRICT_SYMBOLS)

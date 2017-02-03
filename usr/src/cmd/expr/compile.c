@@ -51,18 +51,6 @@
 #include <unistd.h>
 #include <regexpr.h>
 
-/*
- * psuedo compile/step/advance global variables
- */
-extern int nbra;
-extern char *locs; 		/* for stopping execess recursion */
-extern char *loc1;  		/* 1st character which matched RE */
-extern char *loc2; 		/* char after lst char in matched RE */
-extern char *braslist[]; 	/* start of nbra subexp  */
-extern char *braelist[]; 	/* end of nbra subexp    */
-extern int regerrno;
-extern int reglength;
-
 int regcomp_flags;		/* interface to specify cflags for regcomp */
 
 void regex_comp_free(void *a);

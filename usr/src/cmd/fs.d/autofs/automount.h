@@ -49,11 +49,6 @@
 extern "C" {
 #endif
 
-#ifndef _REENTRANT
-#define	fork1			vfork
-#define	rpc_control(a, b)	1
-#endif
-
 #define	DOMOUNT_USER	1
 #define	DOMOUNT_KERNEL	2
 

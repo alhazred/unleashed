@@ -22,6 +22,7 @@
 /*
  * Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2014 Garrett D'Amore <garrett@damore.org>
+ * Copyright 2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  */
 
 /*
@@ -30,8 +31,7 @@
  *
  * There is a special rule for generating the mapfile. If the symbol
  * is not a function then the symbol, in the mapfile, must have the
- * the token "variable" as the third symbol on the line - see the
- * entries for __ctype and errno below.
+ * the token "variable" as the third symbol on the line.
  */
 
 $mapfile_version 2
@@ -46,7 +46,7 @@ SYMBOL_SCOPE {
 		 */
 
 		/* There should be only one - ours */
-		errno;		/* variable */
+		___errno;
 		isprint;
 		isalnum;
 		isalpha;

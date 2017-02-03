@@ -24,7 +24,7 @@
 #define	HAS_PTHREADS
 #endif
 
-#if defined(HAS_PTHREADS) && defined(_REENTRANT)
+#if defined(HAS_PTHREADS)
 #define DO_PTHREADS
 #endif
 

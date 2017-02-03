@@ -35,10 +35,8 @@
  * file isn't found, return NULL.
  */
 
-#ifdef _REENTRANT
 #include <thread.h>
 #include <pthread.h>
-#endif /* _REENTRANT */
 #include <sys/types.h>
 #include <libgen.h>
 #include <stdlib.h>
@@ -75,7 +73,6 @@
 
 static int fullck(char *, mode_t, int);
 
-#ifdef _REENTRANT
 static char *
 _get_cpath(thread_key_t *keyp)
 {
@@ -94,17 +91,12 @@ _get_cpath(thread_key_t *keyp)
 	}
 	return (str);
 }
-#endif /* _REENTRANT */
 
 char *
 pathfind(const char *path, const char *name, const char *mode)
 {
-#ifdef _REENTRANT
 	static thread_key_t key = THR_ONCE_KEY;
 	char *cpath = _get_cpath(&key);
-#else /* _REENTRANT */
-	static char cpath[PATH_MAX];
-#endif /* _REENTRANT */
 	char *cp;
 	mode_t imode;
 	int nzflag;

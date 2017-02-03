@@ -262,9 +262,7 @@ extern char *crypt(const char *, const char *);
 	defined(__EXTENSIONS__)
 extern char *ctermid(char *);
 #endif /* (!defined(_POSIX_C_SOURCE) ... */
-#if !defined(__XOPEN_OR_POSIX) || defined(_REENTRANT) || defined(__EXTENSIONS__)
 extern char *ctermid_r(char *);
-#endif /* !defined(__XOPEN_OR_POSIX) || defined(_REENTRANT) ... */
 /* Marked as LEGACY in SUSv2 and removed in SUSv3 */
 #if !defined(_XPG6) || defined(__EXTENSIONS__)
 extern char *cuserid(char *);
@@ -631,10 +629,6 @@ extern int	lockf64(int, int, off64_t);
  * only.  New applications/libraries should use the standard definitions.
  */
 
-#if	defined(__EXTENSIONS__) || defined(_REENTRANT) || \
-	!defined(__XOPEN_OR_POSIX) || (_POSIX_C_SOURCE - 0 >= 199506L) || \
-	defined(_POSIX_PTHREAD_SEMANTICS)
-
 #if	(_POSIX_C_SOURCE - 0 >= 199506L) || defined(_POSIX_PTHREAD_SEMANTICS)
 
 #ifndef	__USE_LEGACY_LOGNAME__
@@ -652,19 +646,12 @@ extern int getlogin_r(char *, int);
 #else  /* __PRAGMA_REDEFINE_EXTNAME */
 extern int __posix_getlogin_r(char *, int);
 
-#ifdef __lint
-
-#define	getlogin_r	__posix_getlogin_r
-
-#else /* !__lint */
-
 static int
 getlogin_r(char *__name, int __len)
 {
 	return (__posix_getlogin_r(__name, __len));
 }
 
-#endif /* !__lint */
 #endif /* __PRAGMA_REDEFINE_EXTNAME */
 #endif	/* __USE_LEGACY_LOGNAME__ */
 
@@ -674,19 +661,12 @@ extern int ttyname_r(int, char *, size_t);
 #else  /* __PRAGMA_REDEFINE_EXTNAME */
 extern int __posix_ttyname_r(int, char *, size_t);
 
-#ifdef __lint
-
-#define	ttyname_r	__posix_ttyname_r
-
-#else /* !__lint */
-
 static int
 ttyname_r(int __fildes, char *__buf, size_t __size)
 {
 	return (__posix_ttyname_r(__fildes, __buf, __size));
 }
 
-#endif /* !__lint */
 #endif /* __PRAGMA_REDEFINE_EXTNAME */
 
 #else  /* (_POSIX_C_SOURCE - 0 >= 199506L) || ... */
@@ -704,8 +684,6 @@ extern char *getlogin_r(char *, int);
 extern char *ttyname_r(int, char *, int);
 
 #endif /* (_POSIX_C_SOURCE - 0 >= 199506L) || ... */
-
-#endif /* defined(__EXTENSIONS__) || defined(_REENTRANT)... */
 
 #if !defined(_STRICT_SYMBOLS)
 extern int getentropy(void *, size_t);

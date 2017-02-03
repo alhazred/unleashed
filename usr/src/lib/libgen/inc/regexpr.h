@@ -33,7 +33,6 @@ extern "C" {
 #endif
 
 #define	NBRA 9
-#ifdef	_REENTRANT
 extern char **___braslist();
 #define	braslist (___braslist())
 extern char **___braelist();
@@ -50,12 +49,7 @@ extern char **___loc2();
 #define	loc2 (*(___loc2()))
 extern char **___locs();
 #define	locs (*(___locs()))
-#else
-extern char	*braslist[NBRA];
-extern char	*braelist[NBRA];
-extern int nbra, regerrno, reglength;
-extern char *loc1, *loc2, *locs;
-#endif
+
 #ifdef	__STDC__
 extern int step(const char *string, const char *expbuf);
 extern int advance(const char *string, const char *expbuf);

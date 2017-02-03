@@ -87,8 +87,7 @@ static int add_single_char_expr(char *compilep, wchar_t wchar);
 \
 	va_end(arg_listp); \
 	lmutex_unlock(mutex_lockp); \
-	if ((compile_startp) != (char *)0) \
-		free((void *)compile_startp); \
+	free((void *)compile_startp); \
 	return ((char *)0)
 
 static int get_count(int *countp, const char *regexp);

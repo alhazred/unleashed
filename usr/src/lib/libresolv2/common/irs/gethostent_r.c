@@ -20,7 +20,7 @@ static const char rcsid[] = "$Id: gethostent_r.c,v 1.9 2005/09/03 12:41:37 marka
 #endif /* LIBC_SCCS and not lint */
 
 #include <port_before.h>
-#if !defined(_REENTRANT) || !defined(DO_PTHREADS)
+#if !defined(DO_PTHREADS)
 	static int gethostent_r_not_required = 0;
 #else
 #include <errno.h>
@@ -271,5 +271,5 @@ copy_hostent(struct hostent *he, struct hostent *hptr, HOST_R_COPY_ARGS) {
 #else /* HOST_R_RETURN */
 	static int gethostent_r_unknown_system = 0;
 #endif /* HOST_R_RETURN */
-#endif /* !defined(_REENTRANT) || !defined(DO_PTHREADS) */
+#endif /* !defined(DO_PTHREADS) */
 /*! \file */

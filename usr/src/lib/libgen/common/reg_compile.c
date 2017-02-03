@@ -62,7 +62,6 @@ int	nbra = 0, regerrno = 0, reglength = 0;
 
 static unsigned char	_bittab[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
 
-#ifdef  _REENTRANT
 typedef struct _vars_storage {
 	int	nbra, regerrno, reglength;
 } vars_storage;
@@ -127,8 +126,6 @@ ___reglength(void)
 #define	regerrno (*(___regerrno()))
 #undef reglength
 #define	reglength (*(___reglength()))
-
-#endif	/* _REENTRANT */
 
 char *_compile(const char *, char *, char *, int);
 

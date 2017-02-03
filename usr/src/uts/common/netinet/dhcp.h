@@ -37,9 +37,9 @@
 extern "C" {
 #endif
 
-#ifdef  _REENTRANT
+#ifndef	_KERNEL
 #include <thread.h>
-#endif  /* _REENTRANT */
+#endif
 
 /*
  * DHCP option codes.

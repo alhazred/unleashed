@@ -124,12 +124,8 @@ extern "C" {
 /*
  * XTI error return
  */
-#if defined(_REENTRANT) || defined(_TS_ERRNO)
 extern int	*__t_errno();
 #define	t_errno (*(__t_errno()))
-#else
-extern int t_errno;
-#endif	/* defined(_REENTRANT) || defined(_TS_ERRNO) */
 
 
 /*

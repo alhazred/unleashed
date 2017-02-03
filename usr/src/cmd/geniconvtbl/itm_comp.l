@@ -387,8 +387,6 @@ filename_lineno(void)
 	static char	restr[] =
 			"^#[ \t]*\\([0-9]\\{1,\\}\\)[ \t]*\"\\(.*\\)\".*";
 	int		match;
-	extern char	*braslist[];
-	extern char	*braelist[];
 	static char	*filename;
 	int		len;
 	int		lineno;

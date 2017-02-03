@@ -49,16 +49,8 @@ extern "C" {
  */
 #endif /* _LP64 */
 
-#if defined(_REENTRANT) || defined(_TS_ERRNO) || _POSIX_C_SOURCE - 0 >= 199506L
 extern int *___errno();
 #define	errno (*(___errno()))
-#else
-extern int errno;
-/* ANSI C++ requires that errno be a macro */
-#if __cplusplus >= 199711L
-#define	errno errno
-#endif
-#endif	/* defined(_REENTRANT) || defined(_TS_ERRNO) */
 
 #ifdef	__cplusplus
 }

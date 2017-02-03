@@ -374,7 +374,6 @@ int vers;
 	struct ypbind_resp *response;
 	struct ypbind_domain ypbd;
 	char errstring[256];
-	extern struct rpc_createerr rpc_createerr;
 	int yperr = 0;
 	struct utsname utsname;
 	const char *str;
@@ -557,7 +556,6 @@ static int old_call_binder(vers)
 	enum clnt_stat rpc_stat;
 	struct old_ypbind_resp response;
 	char errstring[256];
-	extern struct rpc_createerr rpc_createerr;
 	struct in_addr *server;
 
 	if ((client = clnt_create(host, YPBINDPROG, vers, "udp")) == NULL) {

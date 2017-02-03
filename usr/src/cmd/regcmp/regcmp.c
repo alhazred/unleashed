@@ -38,6 +38,14 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+/*
+ * Note: First of all, this used to live in libgen.h.  Second, this is not
+ * reentrant.  The code that was there that checked for _REENTRANT made
+ * __i_size defined as a macro to an undefined function so a reentrant
+ * version never worked anyway.
+ */
+extern int __i_size;
+
 FILE *iobuf;
 int gotflg;
 char ofile[64];

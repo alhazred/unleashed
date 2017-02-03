@@ -365,14 +365,12 @@ void freeipsecalgent(struct ipsecalgent *ptr);
 
 extern  int h_errno;
 
-#ifdef	_REENTRANT
 extern int	*__h_errno(void);
 
 /* Only #define h_errno if there is no conflict with other use */
 #ifdef	H_ERRNO_IS_FUNCTION
 #define	h_errno	(*__h_errno())
 #endif	/* NO_H_ERRNO_DEFINE */
-#endif	/* _REENTRANT */
 
 /*
  * Error return codes from gethostbyname() and gethostbyaddr()
