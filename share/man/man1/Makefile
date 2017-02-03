@@ -233,7 +233,6 @@ MAN = acctcom.1 \
       passwd.1 \
       paste.1 \
       pathchk.1 \
-      pax.1 \
       pfexec.1 \
       pg.1 \
       pgrep.1 \

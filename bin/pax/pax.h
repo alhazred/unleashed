@@ -36,6 +36,9 @@
  *	@(#)pax.h	8.2 (Berkeley) 4/18/94
  */
 
+#include <sys/mkdev.h>
+#include "compat.h"
+
 /*
  * BSD PAX global data structures and constants.
  */

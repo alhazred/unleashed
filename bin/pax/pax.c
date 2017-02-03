@@ -257,23 +257,6 @@ main(int argc, char **argv)
 		return(exit_val);
 
 	/*
-	 * pmode needs to restore setugid bits when extracting or copying,
-	 * so can't pledge at all then.
-	 */
-	if (pmode == 0 || (act != EXTRACT && act != COPY)) {
-		if (pledge("stdio rpath wpath cpath fattr dpath getpw proc exec ioctl",
-		    NULL) == -1)
-			err(1, "pledge");
-
-		/* Copy mode, or no gzip -- don't need to fork/exec. */
-		if (gzip_program == NULL || act == COPY) {
-			if (pledge("stdio rpath wpath cpath fattr dpath getpw ioctl",
-			    NULL) == -1)
-				err(1, "pledge");
-		}
-	}
-
-	/*
 	 * select a primary operation mode
 	 */
 	switch (act) {
@@ -390,14 +373,6 @@ gen_init(void)
 	if (getrlimit(RLIMIT_STACK , &reslimit) == 0){
 		reslimit.rlim_cur = reslimit.rlim_max;
 		(void)setrlimit(RLIMIT_STACK , &reslimit);
-	}
-
-	/*
-	 * not really needed, but doesn't hurt
-	 */
-	if (getrlimit(RLIMIT_RSS , &reslimit) == 0){
-		reslimit.rlim_cur = reslimit.rlim_max;
-		(void)setrlimit(RLIMIT_RSS , &reslimit);
 	}
 
 	/*

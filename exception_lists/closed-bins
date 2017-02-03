@@ -53,6 +53,7 @@
 ./usr/bin/kbdcomp
 ./usr/bin/localedef
 ./usr/bin/od
+./usr/bin/pax
 ./usr/bin/printf
 ./usr/bin/sed
 ./usr/bin/tr
