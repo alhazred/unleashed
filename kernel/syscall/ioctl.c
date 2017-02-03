@@ -124,8 +124,16 @@ ioctl(int fdes, int cmd, intptr_t arg)
 
 	/*
 	 * ioctl() now passes in the model information in some high bits.
+	 *
+	 * FIXME: This is a terrible hack to preserve the original behavior
+	 * before we combined f_flag and f_flag2 into a single field.  The
+	 * proper fix would be to pass the file_t pointer to the fop_ioctl
+	 * function instead of the vnode.  The data model could be passed in
+	 * by itself.  (get_udatamodel uses curproc so we can't push it into
+	 * the individual ioctl functions or we'd break kernel-issued
+	 * ioctls.)
 	 */
-	flag = fp->f_flag | get_udatamodel();
+	flag = (fp->f_flag & 0xffff) | get_udatamodel();
 	error = VOP_IOCTL(fp->f_vnode, cmd, arg, flag, CRED(), &rv, NULL);
 	if (error != 0) {
 		releasef(fdes);
