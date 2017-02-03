@@ -4124,6 +4124,9 @@ $endif
 	strnvis;
 	strvisx;
 	stravis;	
+	unvis;
+	strunvis;
+	strnunvis;
 
     local:
 	__imax_lldiv				{ FLAGS = NODYNSORT };

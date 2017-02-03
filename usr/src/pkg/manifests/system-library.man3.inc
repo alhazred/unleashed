@@ -23,6 +23,7 @@ file path=usr/share/man/man3/fts.3
 file path=usr/share/man/man3/alloca.3
 file path=usr/share/man/man3/malloc.3
 file path=usr/share/man/man3/posix_memalign.3
+file path=usr/share/man/man3/unvis.3
 file path=usr/share/man/man3/valloc.3
 file path=usr/share/man/man3/vis.3
 link path=usr/share/man/man3/intro.3 target=Intro.3
@@ -54,5 +55,7 @@ link path=usr/share/man/man3/free.3 target=malloc.3
 link path=usr/share/man/man3/memalign.3 target=posix_memalign.3
 link path=usr/share/man/man3/stravis.3 target=vis.3
 link path=usr/share/man/man3/strnvis.3 target=vis.3
+link path=usr/share/man/man3/strnunvis.3 target=unvis.3
+link path=usr/share/man/man3/strunvis.3 target=unvis.3
 link path=usr/share/man/man3/strvis.3 target=vis.3
 link path=usr/share/man/man3/strvisx.3 target=vis.3
