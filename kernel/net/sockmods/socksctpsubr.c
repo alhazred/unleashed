@@ -215,7 +215,7 @@ sosctp_assoc_free(struct sctp_sonode *ss, struct sctp_soassoc *ssa)
  * not need this routine.
  */
 void
-sosctp_pack_cmsg(const uchar_t *opt, struct nmsghdr *msg, int len)
+sosctp_pack_cmsg(const uchar_t *opt, struct msghdr *msg, int len)
 {
 	struct cmsghdr	*ocmsg;
 	struct cmsghdr	*cmsg;

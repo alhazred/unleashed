@@ -171,7 +171,7 @@ socket_vop_read(struct vnode *vp, struct uio *uiop, int ioflag, struct cred *cr,
     caller_context_t *ct)
 {
 	struct sonode *so = VTOSO(vp);
-	struct nmsghdr lmsg;
+	struct msghdr lmsg;
 
 	ASSERT(vp->v_type == VSOCK);
 	bzero((void *)&lmsg, sizeof (lmsg));
@@ -185,7 +185,7 @@ socket_vop_write(struct vnode *vp, struct uio *uiop, int ioflag,
     struct cred *cr, caller_context_t *ct)
 {
 	struct sonode *so = VTOSO(vp);
-	struct nmsghdr lmsg;
+	struct msghdr lmsg;
 
 	ASSERT(vp->v_type == VSOCK);
 	bzero((void *)&lmsg, sizeof (lmsg));

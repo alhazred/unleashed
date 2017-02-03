@@ -302,7 +302,7 @@ smb_opipe_close(smb_ofile_t *of)
 int
 smb_opipe_write(smb_request_t *sr, struct uio *uio)
 {
-	struct nmsghdr msghdr;
+	struct msghdr msghdr;
 	smb_ofile_t *ofile;
 	smb_opipe_t *opipe;
 	ksocket_t sock;
@@ -352,7 +352,7 @@ smb_opipe_write(smb_request_t *sr, struct uio *uio)
 int
 smb_opipe_read(smb_request_t *sr, struct uio *uio)
 {
-	struct nmsghdr msghdr;
+	struct msghdr msghdr;
 	smb_ofile_t *ofile;
 	smb_opipe_t *opipe;
 	ksocket_t sock;

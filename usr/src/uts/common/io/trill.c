@@ -1541,7 +1541,7 @@ trill_bind(sock_lower_handle_t proto_handle, struct sockaddr *sa,
 
 /* ARGSUSED */
 static int
-trill_send(sock_lower_handle_t proto_handle, mblk_t *mp, struct nmsghdr *msg,
+trill_send(sock_lower_handle_t proto_handle, mblk_t *mp, struct msghdr *msg,
     cred_t *cr)
 {
 	trill_sock_t *tsock = (trill_sock_t *)proto_handle;

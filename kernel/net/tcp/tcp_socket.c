@@ -62,7 +62,7 @@ static int	tcp_getsockopt(sock_lower_handle_t, int, int, void *,
 		    socklen_t *, cred_t *);
 static int	tcp_setsockopt(sock_lower_handle_t, int, int, const void *,
 		    socklen_t, cred_t *);
-static int	tcp_sendmsg(sock_lower_handle_t, mblk_t *, struct nmsghdr *,
+static int	tcp_sendmsg(sock_lower_handle_t, mblk_t *, struct msghdr *,
 		    cred_t *);
 static int	tcp_shutdown(sock_lower_handle_t, int, cred_t *);
 static void	tcp_clr_flowctrl(sock_lower_handle_t);
@@ -478,7 +478,7 @@ tcp_setsockopt(sock_lower_handle_t proto_handle, int level, int option_name,
 
 /* ARGSUSED */
 static int
-tcp_sendmsg(sock_lower_handle_t proto_handle, mblk_t *mp, struct nmsghdr *msg,
+tcp_sendmsg(sock_lower_handle_t proto_handle, mblk_t *mp, struct msghdr *msg,
     cred_t *cr)
 {
 	tcp_t		*tcp;

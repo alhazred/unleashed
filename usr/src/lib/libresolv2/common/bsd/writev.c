@@ -36,8 +36,6 @@ __writev(int fd, struct iovec *iov, int iovlen)
 		mesg.msg_namelen = 0;
 		mesg.msg_iov = iov;
 		mesg.msg_iovlen = iovlen;
-		mesg.msg_accrights = 0;
-		mesg.msg_accrightslen = 0;
 		return (sendmsg(fd, &mesg, 0));
 	} else {
 		struct iovec *tv;

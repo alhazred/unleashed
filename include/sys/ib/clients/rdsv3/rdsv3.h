@@ -611,7 +611,7 @@ int rdsv3_page_remainder_alloc(struct rdsv3_scatterlist *scat,
     unsigned long bytes, int gfp);
 
 /* send.c */
-int rdsv3_sendmsg(struct rdsv3_sock *rs, uio_t *uio, struct nmsghdr *msg,
+int rdsv3_sendmsg(struct rdsv3_sock *rs, uio_t *uio, struct msghdr *msg,
     size_t payload_len);
 void rdsv3_send_reset(struct rdsv3_connection *conn);
 int rdsv3_send_xmit(struct rdsv3_connection *conn);

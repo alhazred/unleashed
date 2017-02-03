@@ -1092,7 +1092,7 @@ rdsv3_trans_init()
 }
 
 int
-rdsv3_put_cmsg(struct nmsghdr *msg, int level, int type, size_t size,
+rdsv3_put_cmsg(struct msghdr *msg, int level, int type, size_t size,
 	void *payload)
 {
 	struct cmsghdr *cp;

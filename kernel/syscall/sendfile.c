@@ -416,7 +416,7 @@ sendvec_small_chunk(file_t *fp, u_offset_t *fileoff, struct sendfilevec *sfv,
 	size_t  size = total_size;
 	size_t  extra;
 	int tail_len;
-	struct nmsghdr msg;
+	struct msghdr msg;
 
 	fflag = fp->f_flag;
 	vp = fp->f_vnode;
@@ -704,7 +704,7 @@ sendvec_chunk(file_t *fp, u_offset_t *fileoff, struct sendfilevec *sfv,
 	int maxblk, wroff, tail_len;
 	struct sonode *so;
 	stdata_t *stp;
-	struct nmsghdr msg;
+	struct msghdr msg;
 
 	fflag = fp->f_flag;
 	vp = fp->f_vnode;

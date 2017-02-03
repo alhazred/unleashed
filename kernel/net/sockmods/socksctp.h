@@ -95,7 +95,7 @@ extern void sosctp_aid_reserve(struct sctp_sonode *ss, sctp_assoc_t id,
     int incr);
 extern struct cmsghdr *sosctp_find_cmsg(const uchar_t *control, socklen_t clen,
     int type);
-extern void sosctp_pack_cmsg(const uchar_t *, struct nmsghdr *, int);
+extern void sosctp_pack_cmsg(const uchar_t *, struct msghdr *, int);
 
 extern int sosctp_assoc(struct sctp_sonode *ss, sctp_assoc_t id,
     struct sctp_soassoc **ssa);

@@ -300,7 +300,7 @@ socket_setsockopt(struct sonode *so, int level, int option_name,
 }
 
 int
-socket_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+socket_sendmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     cred_t *cr)
 {
 	int error = 0;
@@ -336,7 +336,7 @@ socket_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
 }
 
 int
-socket_sendmblk(struct sonode *so, struct nmsghdr *msg, int fflag,
+socket_sendmblk(struct sonode *so, struct msghdr *msg, int fflag,
     struct cred *cr, mblk_t **mpp)
 {
 	int error = 0;
@@ -349,7 +349,7 @@ socket_sendmblk(struct sonode *so, struct nmsghdr *msg, int fflag,
 }
 
 int
-socket_recvmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+socket_recvmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     cred_t *cr)
 {
 	int error;

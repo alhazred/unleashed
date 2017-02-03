@@ -81,7 +81,7 @@ typedef mblk_t 		*(*sof_data_in_fn_t)(sof_handle_t, void *, mblk_t *,
 typedef mblk_t		*(*sof_data_in_proc_fn_t)(sof_handle_t, void *,
     mblk_t *, cred_t *, size_t *);
 typedef mblk_t		*(*sof_data_out_fn_t)(sof_handle_t, void *, mblk_t *,
-    struct nmsghdr *, cred_t *, sof_rval_t *);
+    struct msghdr *, cred_t *, sof_rval_t *);
 typedef sof_rval_t	(*sof_bind_fn_t)(sof_handle_t, void *,
     struct sockaddr *, socklen_t *, cred_t *);
 typedef sof_rval_t	(*sof_listen_fn_t)(sof_handle_t, void *, int *,
@@ -136,7 +136,7 @@ extern void	sof_newconn_ready(sof_handle_t);
 extern void	sof_bypass(sof_handle_t);
 extern void	*sof_get_cookie(sof_handle_t);
 extern void 	*sof_cas_cookie(sof_handle_t, void *, void *);
-extern int	sof_inject_data_out(sof_handle_t, mblk_t *, struct nmsghdr *,
+extern int	sof_inject_data_out(sof_handle_t, mblk_t *, struct msghdr *,
     boolean_t *);
 extern int	sof_inject_data_in(sof_handle_t, mblk_t *, size_t, int,
     boolean_t *);

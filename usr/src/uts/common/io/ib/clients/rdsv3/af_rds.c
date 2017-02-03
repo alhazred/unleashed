@@ -688,7 +688,7 @@ rdsv3_activate(sock_lower_handle_t proto_handle,
 /* ARGSUSED */
 int
 rdsv3_send_uio(sock_lower_handle_t proto_handle, uio_t *uio,
-    struct nmsghdr *msg, cred_t *cr)
+    struct msghdr *msg, cred_t *cr)
 {
 	struct rsock *sk = (struct rsock *)proto_handle;
 	struct rdsv3_sock *rs = rdsv3_sk_to_rs(sk);
@@ -708,7 +708,7 @@ rdsv3_send_uio(sock_lower_handle_t proto_handle, uio_t *uio,
 /* ARGSUSED */
 int
 rdsv3_recv_uio(sock_lower_handle_t proto_handle, uio_t *uio,
-    struct nmsghdr *msg, cred_t *cr)
+    struct msghdr *msg, cred_t *cr)
 {
 	struct rsock *sk = (struct rsock *)proto_handle;
 	struct rdsv3_sock *rs = rdsv3_sk_to_rs(sk);

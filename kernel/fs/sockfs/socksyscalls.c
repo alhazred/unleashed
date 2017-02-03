@@ -803,7 +803,7 @@ shutdown(int sock, int how)
  */
 static ssize_t
 recvit(int sock,
-	struct nmsghdr *msg,
+	struct msghdr *msg,
 	struct uio *uiop,
 	int flags,
 	socklen_t *namelenp,
@@ -910,7 +910,7 @@ err:
 ssize_t
 recv(int sock, void *buffer, size_t len, int flags)
 {
-	struct nmsghdr lmsg;
+	struct msghdr lmsg;
 	struct uio auio;
 	struct iovec aiov[1];
 
@@ -940,7 +940,7 @@ ssize_t
 recvfrom(int sock, void *buffer, size_t len, int flags,
 	struct sockaddr *name, socklen_t *namelenp)
 {
-	struct nmsghdr lmsg;
+	struct msghdr lmsg;
 	struct uio auio;
 	struct iovec aiov[1];
 
@@ -975,11 +975,11 @@ recvfrom(int sock, void *buffer, size_t len, int flags,
 }
 
 ssize_t
-recvmsg(int sock, struct nmsghdr *msg, int flags)
+recvmsg(int sock, struct msghdr *msg, int flags)
 {
-	STRUCT_DECL(nmsghdr, u_lmsg);
-	STRUCT_HANDLE(nmsghdr, umsgptr);
-	struct nmsghdr lmsg;
+	STRUCT_DECL(msghdr, u_lmsg);
+	STRUCT_HANDLE(msghdr, umsgptr);
+	struct msghdr lmsg;
 	struct uio auio;
 	struct iovec buf[IOV_MAX_STACK], *aiov = buf;
 	ssize_t iovsize = 0;
@@ -1118,7 +1118,7 @@ recvmsg(int sock, struct nmsghdr *msg, int flags)
  * Common send function.
  */
 static ssize_t
-sendit(int sock, struct nmsghdr *msg, struct uio *uiop, int flags)
+sendit(int sock, struct msghdr *msg, struct uio *uiop, int flags)
 {
 	struct sonode *so;
 	file_t *fp;
@@ -1207,7 +1207,7 @@ done3:
 ssize_t
 send(int sock, void *buffer, size_t len, int flags)
 {
-	struct nmsghdr lmsg;
+	struct msghdr lmsg;
 	struct uio auio;
 	struct iovec aiov[1];
 
@@ -1233,10 +1233,10 @@ send(int sock, void *buffer, size_t len, int flags)
 }
 
 ssize_t
-sendmsg(int sock, struct nmsghdr *msg, int flags)
+sendmsg(int sock, struct msghdr *msg, int flags)
 {
-	struct nmsghdr lmsg;
-	STRUCT_DECL(nmsghdr, u_lmsg);
+	struct msghdr lmsg;
+	STRUCT_DECL(msghdr, u_lmsg);
 	struct uio auio;
 	struct iovec buf[IOV_MAX_STACK], *aiov = buf;
 	ssize_t iovsize = 0;
@@ -1362,7 +1362,7 @@ ssize_t
 sendto(int sock, void *buffer, size_t len, int flags,
     struct sockaddr *name, socklen_t namelen)
 {
-	struct nmsghdr lmsg;
+	struct msghdr lmsg;
 	struct uio auio;
 	struct iovec aiov[1];
 
@@ -2244,7 +2244,7 @@ snf_direct_io(file_t *fp, file_t *rfp, u_offset_t fileoff, u_offset_t size,
 	short fflag;
 	struct vnode *vp;
 	int ksize;
-	struct nmsghdr msg;
+	struct msghdr msg;
 
 	ksize = 0;
 	*count = 0;
@@ -2407,7 +2407,7 @@ snf_segmap(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t total_size,
 	int ksize;
 	struct vattr va;
 	boolean_t dowait = B_FALSE;
-	struct nmsghdr msg;
+	struct msghdr msg;
 
 	vp = fp->f_vnode;
 	fflag = fp->f_flag;
@@ -2660,7 +2660,7 @@ snf_cache(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t size,
 	int maxblk = 0;
 	int wroff = 0;
 	struct sonode *so;
-	struct nmsghdr msg;
+	struct msghdr msg;
 
 	vp = fp->f_vnode;
 	if (vp->v_type == VSOCK) {
@@ -2961,13 +2961,13 @@ soconnect(struct sonode *so, struct sockaddr *name, socklen_t namelen,
 }
 
 int
-sorecvmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop)
+sorecvmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop)
 {
 	return (socket_recvmsg(so, msg, uiop, CRED()));
 }
 
 int
-sosendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop)
+sosendmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop)
 {
 	return (socket_sendmsg(so, msg, uiop, CRED()));
 }

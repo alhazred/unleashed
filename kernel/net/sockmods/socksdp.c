@@ -62,9 +62,9 @@ static int sosdp_bind(struct sonode *, struct sockaddr *, socklen_t, int,
 static int sosdp_listen(struct sonode *, int, struct cred *);
 static int sosdp_connect(struct sonode *, struct sockaddr *, socklen_t,
     int, int, struct cred *);
-static int sosdp_recvmsg(struct sonode *, struct nmsghdr *, struct uio *,
+static int sosdp_recvmsg(struct sonode *, struct msghdr *, struct uio *,
     struct cred *);
-static int sosdp_sendmsg(struct sonode *, struct nmsghdr *, struct uio *,
+static int sosdp_sendmsg(struct sonode *, struct msghdr *, struct uio *,
     struct cred *);
 static int sosdp_getpeername(struct sonode *, struct sockaddr *, socklen_t *,
     boolean_t, struct cred *);
@@ -412,7 +412,7 @@ done:
  */
 /* ARGSUSED */
 int
-sosdp_recvmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+sosdp_recvmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     struct cred *cr)
 {
 	int flags, error = 0;
@@ -478,7 +478,7 @@ done:
  */
 /* ARGSUSED */
 static int
-sosdp_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+sosdp_sendmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     struct cred *cr)
 {
 	int flags;

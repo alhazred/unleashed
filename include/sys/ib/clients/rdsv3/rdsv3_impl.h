@@ -364,7 +364,7 @@ void rdsv3_conn_destructor(void *buf, void *arg);
 int rdsv3_conn_compare(const void *conn1, const void *conn2);
 void rdsv3_loop_init();
 int rdsv3_mr_compare(const void *mr1, const void *mr2);
-int rdsv3_put_cmsg(struct nmsghdr *msg, int level, int type, size_t size,
+int rdsv3_put_cmsg(struct msghdr *msg, int level, int type, size_t size,
     void *payload);
 int rdsv3_verify_bind_address(ipaddr_t addr);
 uint16_t rdsv3_ip_fast_csum(void *buffer, size_t length);

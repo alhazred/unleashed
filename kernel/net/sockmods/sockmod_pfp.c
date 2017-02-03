@@ -86,7 +86,7 @@ static int sdpfp_getsockopt(sock_lower_handle_t, int, int, void *,
     socklen_t *, struct cred *);
 static int sdpfp_ioctl(sock_lower_handle_t, int, intptr_t, int, int32_t *,
     struct cred *);
-static int sdpfp_senduio(sock_lower_handle_t, struct uio *, struct nmsghdr *,
+static int sdpfp_senduio(sock_lower_handle_t, struct uio *, struct msghdr *,
     struct cred *);
 static int sdpfp_setsockopt(sock_lower_handle_t, int, int, const void *,
     socklen_t, struct cred *);
@@ -733,7 +733,7 @@ sdpfp_setsockopt(sock_lower_handle_t handle, int level, int option_name,
 /* ARGSUSED */
 static int
 sdpfp_senduio(sock_lower_handle_t handle, struct uio *uiop,
-    struct nmsghdr *msg, struct cred *cred)
+    struct msghdr *msg, struct cred *cred)
 {
 	struct sockaddr_ll *sol;
 	mac_client_handle_t mch;

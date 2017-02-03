@@ -64,11 +64,11 @@ extern int socket_getsockopt(struct sonode *, int, int, void *, socklen_t *,
     int, struct cred *);
 extern int socket_setsockopt(struct sonode *, int, int, const void *,
     socklen_t, struct cred *);
-extern int socket_recvmsg(struct sonode *, struct nmsghdr *, struct uio *,
+extern int socket_recvmsg(struct sonode *, struct msghdr *, struct uio *,
     struct cred *);
-extern int socket_sendmsg(struct sonode *, struct nmsghdr *, struct uio *,
+extern int socket_sendmsg(struct sonode *, struct msghdr *, struct uio *,
     struct cred *);
-extern int socket_sendmblk(struct sonode *, struct nmsghdr *, int,
+extern int socket_sendmblk(struct sonode *, struct msghdr *, int,
     struct cred *, mblk_t **);
 extern int socket_ioctl(struct sonode *, int, intptr_t, int, struct cred *,
     int32_t *);
@@ -110,7 +110,7 @@ extern int so_accept_notsupp(struct sonode *, int, struct cred *,
 extern int so_getpeername_notsupp(struct sonode *, struct sockaddr *,
     socklen_t *, boolean_t, struct cred *);
 extern int so_shutdown_notsupp(struct sonode *, int, struct cred *);
-extern int so_sendmblk_notsupp(struct sonode *, struct nmsghdr *,
+extern int so_sendmblk_notsupp(struct sonode *, struct msghdr *,
     int, struct cred *, mblk_t **);
 
 /* Common sonode ops */
@@ -133,13 +133,13 @@ extern int so_ioctl(struct sonode *, int, intptr_t, int, struct cred *,
     int32_t *);
 extern int so_poll(struct sonode *, short, int, short *,
     struct pollhead **);
-extern int so_sendmsg(struct sonode *, struct nmsghdr *, struct uio *,
+extern int so_sendmsg(struct sonode *, struct msghdr *, struct uio *,
     struct cred *);
-extern int so_sendmblk_impl(struct sonode *, struct nmsghdr *, int,
+extern int so_sendmblk_impl(struct sonode *, struct msghdr *, int,
     struct cred *, mblk_t **, struct sof_instance *, boolean_t);
-extern int so_sendmblk(struct sonode *, struct nmsghdr *, int,
+extern int so_sendmblk(struct sonode *, struct msghdr *, int,
     struct cred *, mblk_t **);
-extern int so_recvmsg(struct sonode *, struct nmsghdr *, struct uio *,
+extern int so_recvmsg(struct sonode *, struct msghdr *, struct uio *,
     struct cred *);
 extern int so_shutdown(struct sonode *, int, struct cred *);
 extern int so_close(struct sonode *, int, struct cred *);
@@ -193,7 +193,7 @@ extern mblk_t 	*socopyoutuio(mblk_t *, struct uio *, ssize_t, int *);
 
 extern boolean_t somsghasdata(mblk_t *);
 extern void	so_rcv_flush(struct sonode *);
-extern int	sorecvoob(struct sonode *, struct nmsghdr *, struct uio *,
+extern int	sorecvoob(struct sonode *, struct msghdr *, struct uio *,
 		    int, boolean_t);
 
 extern void	so_timer_callback(void *);

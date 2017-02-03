@@ -921,8 +921,8 @@ extern int	sobind(struct sonode *, struct sockaddr *, socklen_t,
 extern int	solisten(struct sonode *, int);
 extern int	soconnect(struct sonode *, struct sockaddr *, socklen_t,
 		    int, int);
-extern int	sorecvmsg(struct sonode *, struct nmsghdr *, struct uio *);
-extern int	sosendmsg(struct sonode *, struct nmsghdr *, struct uio *);
+extern int	sorecvmsg(struct sonode *, struct msghdr *, struct uio *);
+extern int	sosendmsg(struct sonode *, struct msghdr *, struct uio *);
 extern int	soshutdown(struct sonode *, int);
 extern int	sogetsockopt(struct sonode *, int, int, void *, socklen_t *,
 		    int);

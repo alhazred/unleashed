@@ -221,15 +221,6 @@ which no network interface exists.
 .sp
 .ne 2
 .na
-\fB\fBEINVAL\fR\fR
-.ad
-.RS 17n
-A \fBsendmsg()\fR operation with a non-NULL \fBmsg_accrights\fR was attempted.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBEACCES\fR\fR
 .ad
 .RS 17n

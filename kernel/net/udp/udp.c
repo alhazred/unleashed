@@ -2521,7 +2521,7 @@ retry:
  */
 static int
 udp_output_ancillary(conn_t *connp, sin_t *sin, sin6_t *sin6, mblk_t *mp,
-    mblk_t *tudr_mp, struct nmsghdr *msg, cred_t *cr, pid_t pid)
+    mblk_t *tudr_mp, struct msghdr *msg, cred_t *cr, pid_t pid)
 {
 	udp_t		*udp = connp->conn_udp;
 	udp_stack_t	*us = udp->udp_us;
@@ -5619,7 +5619,7 @@ done:
 }
 
 int
-udp_send(sock_lower_handle_t proto_handle, mblk_t *mp, struct nmsghdr *msg,
+udp_send(sock_lower_handle_t proto_handle, mblk_t *mp, struct msghdr *msg,
     cred_t *cr)
 {
 	sin6_t		*sin6;

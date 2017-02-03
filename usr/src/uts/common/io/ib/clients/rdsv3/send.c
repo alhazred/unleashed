@@ -931,7 +931,7 @@ rdsv3_cmsg_send(struct rdsv3_sock *rs, struct rdsv3_message *rm,
 extern unsigned long rdsv3_max_bcopy_size;
 
 int
-rdsv3_sendmsg(struct rdsv3_sock *rs, uio_t *uio, struct nmsghdr *msg,
+rdsv3_sendmsg(struct rdsv3_sock *rs, uio_t *uio, struct msghdr *msg,
     size_t payload_len)
 {
 	struct rsock *sk = rdsv3_rs_to_sk(rs);

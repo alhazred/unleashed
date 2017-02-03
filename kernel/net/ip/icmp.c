@@ -3277,7 +3277,7 @@ icmp_output_attach_policy(mblk_t *mp, conn_t *connp, ip_xmit_attr_t *ixa)
  */
 static int
 icmp_output_ancillary(conn_t *connp, sin_t *sin, sin6_t *sin6, mblk_t *mp,
-    mblk_t *tudr_mp, struct nmsghdr *msg, cred_t *cr, pid_t pid)
+    mblk_t *tudr_mp, struct msghdr *msg, cred_t *cr, pid_t pid)
 {
 	icmp_t		*icmp = connp->conn_icmp;
 	icmp_stack_t	*is = icmp->icmp_is;
@@ -5498,7 +5498,7 @@ rawip_ioctl(sock_lower_handle_t proto_handle, int cmd, intptr_t arg,
 }
 
 int
-rawip_send(sock_lower_handle_t proto_handle, mblk_t *mp, struct nmsghdr *msg,
+rawip_send(sock_lower_handle_t proto_handle, mblk_t *mp, struct msghdr *msg,
     cred_t *cr)
 {
 	sin6_t		*sin6;

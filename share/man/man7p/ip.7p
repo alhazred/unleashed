@@ -698,15 +698,6 @@ this machine.
 \fB\fBEINVAL\fR\fR
 .ad
 .RS 17n
-A \fBsendmsg()\fR operation with a non-NULL \fBmsg_accrights\fR was attempted.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBEINVAL\fR\fR
-.ad
-.RS 17n
 A \fBgetsockopt()\fR or \fBsetsockopt()\fR operation with an unknown socket
 option name was given.
 .RE

@@ -453,7 +453,7 @@ rdsv3_cmsg_recv(struct rdsv3_incoming *inc, struct msghdr *msg)
 
 int
 rdsv3_recvmsg(struct rdsv3_sock *rs, uio_t *uio,
-    struct nmsghdr *msg, size_t size, int msg_flags)
+    struct msghdr *msg, size_t size, int msg_flags)
 {
 	struct rsock *sk = rdsv3_rs_to_sk(rs);
 	long timeo;

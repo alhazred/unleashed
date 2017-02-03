@@ -209,11 +209,11 @@ static int	sotpi_bind(struct sonode *, struct sockaddr *, socklen_t,
 static int	sotpi_listen(struct sonode *, int, struct cred *);
 static int	sotpi_connect(struct sonode *, struct sockaddr *,
 		    socklen_t, int, int, struct cred *);
-extern int	sotpi_recvmsg(struct sonode *, struct nmsghdr *,
+extern int	sotpi_recvmsg(struct sonode *, struct msghdr *,
 		    struct uio *, struct cred *);
-static int	sotpi_sendmsg(struct sonode *, struct nmsghdr *,
+static int	sotpi_sendmsg(struct sonode *, struct msghdr *,
 		    struct uio *, struct cred *);
-static int	sotpi_sendmblk(struct sonode *, struct nmsghdr *, int,
+static int	sotpi_sendmblk(struct sonode *, struct msghdr *, int,
 		    struct cred *, mblk_t **);
 static int	sosend_dgramcmsg(struct sonode *, struct sockaddr *, socklen_t,
 		    struct uio *, void *, t_uscalar_t, int);
@@ -2844,7 +2844,7 @@ sorecv_update_oobstate(struct sonode *so)
  */
 /* ARGSUSED */
 int
-sotpi_recvmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+sotpi_recvmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     struct cred *cr)
 {
 	union T_primitives	*tpr;
@@ -3929,7 +3929,7 @@ sosend_svc(struct sonode *so, struct uio *uiop, t_scalar_t prim, int more,
  * after sending the message.
  */
 static int
-sotpi_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+sotpi_sendmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     struct cred *cr)
 {
 	int		so_state;
@@ -4296,7 +4296,7 @@ kstrwritemp(struct vnode *vp, mblk_t *mp, ushort_t fmode)
 
 /* ARGSUSED */
 static int
-sotpi_sendmblk(struct sonode *so, struct nmsghdr *msg, int fflag,
+sotpi_sendmblk(struct sonode *so, struct msghdr *msg, int fflag,
     struct cred *cr, mblk_t **mpp)
 {
 	int error;

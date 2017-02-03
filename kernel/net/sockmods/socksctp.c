@@ -65,9 +65,9 @@ static int sosctp_bind(struct sonode *, struct sockaddr *, socklen_t, int,
 static int sosctp_listen(struct sonode *, int, struct cred *);
 static int sosctp_connect(struct sonode *, struct sockaddr *, socklen_t,
     int, int, struct cred *);
-static int sosctp_recvmsg(struct sonode *, struct nmsghdr *, struct uio *,
+static int sosctp_recvmsg(struct sonode *, struct msghdr *, struct uio *,
     struct cred *);
-static int sosctp_sendmsg(struct sonode *, struct nmsghdr *, struct uio *,
+static int sosctp_sendmsg(struct sonode *, struct msghdr *, struct uio *,
     struct cred *);
 static int sosctp_getpeername(struct sonode *, struct sockaddr *, socklen_t *,
     boolean_t, struct cred *);
@@ -88,7 +88,7 @@ void sosctp_fini(struct sonode *, struct cred *);
  */
 static int sosctp_seq_connect(struct sonode *, struct sockaddr *,
     socklen_t, int, int, struct cred *);
-static int sosctp_seq_sendmsg(struct sonode *, struct nmsghdr *, struct uio *,
+static int sosctp_seq_sendmsg(struct sonode *, struct msghdr *, struct uio *,
     struct cred *);
 
 /*
@@ -472,7 +472,7 @@ done:
  */
 /* ARGSUSED */
 static int
-sosctp_recvmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+sosctp_recvmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     struct cred *cr)
 {
 	struct sctp_sonode *ss = SOTOSSO(so);
@@ -717,7 +717,7 @@ sosctp_uiomove(mblk_t *hdr_mp, ssize_t count, ssize_t blk_size, int wroff,
  * Send message.
  */
 static int
-sosctp_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+sosctp_sendmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     struct cred *cr)
 {
 	mblk_t *mctl;
@@ -915,7 +915,7 @@ error_nofree:
  * no association.
  */
 static int
-sosctp_seq_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+sosctp_seq_sendmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     struct cred *cr)
 {
 	struct sctp_sonode *ss;

@@ -1267,7 +1267,7 @@ sof_rval2errno(sof_rval_t rval)
  */
 mblk_t *
 sof_filter_data_out_from(struct sonode *so, sof_instance_t *start,
-    mblk_t *mp, struct nmsghdr *msg, cred_t *cr, int *errp)
+    mblk_t *mp, struct msghdr *msg, cred_t *cr, int *errp)
 {
 	sof_instance_t *inst;
 	sof_rval_t rval;
@@ -1701,7 +1701,7 @@ sof_cas_cookie(sof_handle_t handle, void *old, void *new)
  * before it is transmitted and may end up modifying or freeing the data.
  */
 int
-sof_inject_data_out(sof_handle_t handle, mblk_t *mp, struct nmsghdr *msg,
+sof_inject_data_out(sof_handle_t handle, mblk_t *mp, struct msghdr *msg,
     boolean_t *flowctrld)
 {
 	sof_instance_t *inst = (sof_instance_t *)handle;

@@ -315,32 +315,7 @@ struct msghdr {
 
 #if	defined(_KERNEL) || defined(_FAKE_KERNEL)
 
-/*
- *	N.B.:  we assume that omsghdr and nmsghdr are isomorphic, with
- *	the sole exception that nmsghdr has the additional msg_flags
- *	field at the end.
- */
-struct omsghdr {
-	void		*msg_name;	/* optional address */
-	socklen_t	msg_namelen;	/* size of address */
-	struct	iovec	*msg_iov;	/* scatter/gather array */
-	int		msg_iovlen;	/* # elements in msg_iov */
-	caddr_t		msg_accrights;	/* access rights sent/received */
-	int		msg_accrightslen;
-};
-
-#define	nmsghdr		msghdr
-
 #if defined(_SYSCALL32)
-
-struct omsghdr32 {
-	caddr32_t	msg_name;	/* optional address */
-	uint32_t	msg_namelen;	/* size of address */
-	caddr32_t	msg_iov;	/* scatter/gather array */
-	int32_t		msg_iovlen;	/* # elements in msg_iov */
-	caddr32_t	msg_accrights;	/* access rights sent/received */
-	uint32_t	msg_accrightslen;
-};
 
 struct msghdr32 {
 	caddr32_t	msg_name;	/* optional address */
@@ -351,8 +326,6 @@ struct msghdr32 {
 	uint32_t	msg_controllen;	/* ancillary data buffer len */
 	int32_t		msg_flags;	/* flags on received message */
 };
-
-#define	nmsghdr32	msghdr32
 
 #endif	/* _SYSCALL32 */
 #endif	/* _KERNEL */

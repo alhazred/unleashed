@@ -112,11 +112,11 @@ struct sock_downcalls_s {
 		    socklen_t *, cred_t *);
 	int	(*sd_setsockopt)(sock_lower_handle_t, int, int, const void *,
 		    socklen_t, cred_t *);
-	int	(*sd_send)(sock_lower_handle_t, mblk_t *, struct nmsghdr *,
+	int	(*sd_send)(sock_lower_handle_t, mblk_t *, struct msghdr *,
 		    cred_t *);
-	int	(*sd_send_uio)(sock_lower_handle_t, uio_t *, struct nmsghdr *,
+	int	(*sd_send_uio)(sock_lower_handle_t, uio_t *, struct msghdr *,
 		    cred_t *);
-	int	(*sd_recv_uio)(sock_lower_handle_t, uio_t *, struct nmsghdr *,
+	int	(*sd_recv_uio)(sock_lower_handle_t, uio_t *, struct msghdr *,
 		    cred_t *);
 	short	(*sd_poll)(sock_lower_handle_t, short, int, cred_t *);
 	int	(*sd_shutdown)(sock_lower_handle_t, int, cred_t *);
@@ -159,11 +159,11 @@ extern int sock_getsockopt_notsupp(sock_lower_handle_t, int, int, void *,
 extern int sock_setsockopt_notsupp(sock_lower_handle_t, int, int,
     const void *, socklen_t, cred_t *);
 extern int sock_send_notsupp(sock_lower_handle_t, mblk_t *,
-    struct nmsghdr *, cred_t *);
+    struct msghdr *, cred_t *);
 extern int sock_send_uio_notsupp(sock_lower_handle_t, uio_t *,
-    struct nmsghdr *, cred_t *);
+    struct msghdr *, cred_t *);
 extern int sock_recv_uio_notsupp(sock_lower_handle_t, uio_t *,
-    struct nmsghdr *, cred_t *);
+    struct msghdr *, cred_t *);
 extern short sock_poll_notsupp(sock_lower_handle_t, short, int, cred_t *);
 extern int sock_shutdown_notsupp(sock_lower_handle_t, int, cred_t *);
 extern void sock_clr_flowctrl_notsupp(sock_lower_handle_t);

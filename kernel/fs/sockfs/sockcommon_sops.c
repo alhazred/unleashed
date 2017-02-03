@@ -328,7 +328,7 @@ so_accept(struct sonode *so, int fflag, struct cred *cr, struct sonode **nsop)
 }
 
 int
-so_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+so_sendmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     struct cred *cr)
 {
 	int error, flags;
@@ -436,7 +436,7 @@ so_sendmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
 }
 
 int
-so_sendmblk_impl(struct sonode *so, struct nmsghdr *msg, int fflag,
+so_sendmblk_impl(struct sonode *so, struct msghdr *msg, int fflag,
     struct cred *cr, mblk_t **mpp, sof_instance_t *fil,
     boolean_t fil_inject)
 {
@@ -534,7 +534,7 @@ so_sendmblk_impl(struct sonode *so, struct nmsghdr *msg, int fflag,
 #pragma inline(so_sendmblk_impl)
 
 int
-so_sendmblk(struct sonode *so, struct nmsghdr *msg, int fflag,
+so_sendmblk(struct sonode *so, struct msghdr *msg, int fflag,
     struct cred *cr, mblk_t **mpp)
 {
 	int error;
@@ -1526,7 +1526,7 @@ so_set_error(sock_upper_handle_t sock_handle, int error)
  * whether the protocol has a sd_recv_uio down call.
  */
 int
-so_recvmsg(struct sonode *so, struct nmsghdr *msg, struct uio *uiop,
+so_recvmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
     struct cred *cr)
 {
 	rval_t 		rval;

@@ -108,7 +108,7 @@ sock_send_notsupp(sock_lower_handle_t handle, mblk_t *mp,
 /*ARGSUSED*/
 int
 sock_senduio_notsupp(sock_lower_handle_t handle, struct uio *uiop,
-    struct nmsghdr *msg, struct cred *cr)
+    struct msghdr *msg, struct cred *cr)
 {
 	return (EOPNOTSUPP);
 }
@@ -116,7 +116,7 @@ sock_senduio_notsupp(sock_lower_handle_t handle, struct uio *uiop,
 /*ARGSUSED*/
 int
 sock_recvuio_notsupp(sock_lower_handle_t handle, struct uio *uiop,
-    struct nmsghdr *msg, struct cred *cr)
+    struct msghdr *msg, struct cred *cr)
 {
 	return (EOPNOTSUPP);
 }

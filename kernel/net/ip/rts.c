@@ -1417,7 +1417,7 @@ rts_setsockopt(sock_lower_handle_t proto_handle, int level, int option_name,
 /* ARGSUSED */
 static int
 rts_send(sock_lower_handle_t proto_handle, mblk_t *mp,
-    struct nmsghdr *msg, cred_t *cr)
+    struct msghdr *msg, cred_t *cr)
 {
 	conn_t  *connp = (conn_t *)proto_handle;
 	rt_msghdr_t	*rtm;

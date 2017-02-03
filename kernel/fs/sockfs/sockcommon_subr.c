@@ -1125,7 +1125,7 @@ so_rcv_flush(struct sonode *so)
  * Handle recv* calls that set MSG_OOB or MSG_OOB together with MSG_PEEK.
  */
 int
-sorecvoob(struct sonode *so, struct nmsghdr *msg, struct uio *uiop, int flags,
+sorecvoob(struct sonode *so, struct msghdr *msg, struct uio *uiop, int flags,
     boolean_t oob_inline)
 {
 	mblk_t		*mp, *nmp;

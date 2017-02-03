@@ -177,7 +177,7 @@ iscsit_rcv_radius_response(ksocket_t socket, uint8_t *shared_secret,
 	size_t			received_len = 0;
 
 	struct iovec		iov[1];
-	struct nmsghdr		msg;
+	struct msghdr		msg;
 
 	tmp_data = kmem_zalloc(MAX_RAD_PACKET_LEN, KM_SLEEP);
 	iov[0].iov_base = (char *)tmp_data;

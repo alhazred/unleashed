@@ -56,7 +56,7 @@ snd_radius_request(void *socket, iscsi_ipaddr_t rsvr_ip_addr,
 		struct sockaddr_in s_in4;
 		struct sockaddr_in6 s_in6;
 	} sa_rsvr;			/* Socket address of the server */
-	struct nmsghdr	msg;
+	struct msghdr	msg;
 	struct iovec	iov[1];
 
 	/*
@@ -171,7 +171,7 @@ rcv_radius_response(void *socket, uint8_t *shared_secret,
 	uint8_t			md5_digest[16]; /* MD5 Digest Length 16 */
 	uint16_t		declared_len = 0;
 	ushort_t		len;
-	struct nmsghdr		msg;
+	struct msghdr		msg;
 	struct iovec		iov[1];
 
 	tmp_data = kmem_zalloc(MAX_RAD_PACKET_LEN, KM_SLEEP);

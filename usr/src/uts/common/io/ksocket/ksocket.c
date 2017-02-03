@@ -182,7 +182,7 @@ ksocket_send(ksocket_t ks, void *msg, size_t msglen, int flags,
     size_t *sent, struct cred *cr)
 {
 	int error;
-	struct nmsghdr msghdr;
+	struct msghdr msghdr;
 	struct uio auio;
 	struct iovec iov;
 
@@ -234,7 +234,7 @@ ksocket_sendto(ksocket_t ks, void *msg, size_t msglen, int flags,
     struct sockaddr *name, socklen_t namelen, size_t *sent, struct cred *cr)
 {
 	int error;
-	struct nmsghdr msghdr;
+	struct msghdr msghdr;
 	struct uio auio;
 	struct iovec iov;
 
@@ -283,7 +283,7 @@ ksocket_sendto(ksocket_t ks, void *msg, size_t msglen, int flags,
 }
 
 int
-ksocket_sendmsg(ksocket_t ks, struct nmsghdr *msg, int flags,
+ksocket_sendmsg(ksocket_t ks, struct msghdr *msg, int flags,
     size_t *sent, struct cred *cr)
 {
 	int error;
@@ -341,7 +341,7 @@ ksocket_recv(ksocket_t ks, void *msg, size_t msglen, int flags,
     size_t *recv, struct cred *cr)
 {
 	int error;
-	struct nmsghdr msghdr;
+	struct msghdr msghdr;
 	struct uio auio;
 	struct iovec iov;
 
@@ -394,7 +394,7 @@ ksocket_recvfrom(ksocket_t ks, void *msg, size_t msglen, int flags,
     struct sockaddr *name, socklen_t *namelen, size_t *recv, struct cred *cr)
 {
 	int error;
-	struct nmsghdr msghdr;
+	struct msghdr msghdr;
 	struct uio auio;
 	struct iovec iov;
 
@@ -445,7 +445,7 @@ ksocket_recvfrom(ksocket_t ks, void *msg, size_t msglen, int flags,
 }
 
 int
-ksocket_recvmsg(ksocket_t ks, struct nmsghdr *msg, int flags, size_t *recv,
+ksocket_recvmsg(ksocket_t ks, struct msghdr *msg, int flags, size_t *recv,
     struct cred *cr)
 {
 	int error;
@@ -855,7 +855,7 @@ out:
 }
 
 int
-ksocket_sendmblk(ksocket_t ks, struct nmsghdr *msg, int flags,
+ksocket_sendmblk(ksocket_t ks, struct msghdr *msg, int flags,
     mblk_t **mpp, cred_t *cr)
 {
 	struct		sonode *so;

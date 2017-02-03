@@ -180,7 +180,7 @@ extern int	sof_rval2errno(sof_rval_t);
 	return (-1);
 
 extern mblk_t	*sof_filter_data_out_from(struct sonode *so,
-    sof_instance_t *, mblk_t *, struct nmsghdr *, cred_t *, int *);
+    sof_instance_t *, mblk_t *, struct msghdr *, cred_t *, int *);
 extern mblk_t	*sof_filter_data_in_proc(struct sonode *so,
     mblk_t *, mblk_t **);
 extern int	sof_filter_bind(struct sonode *, struct sockaddr *,

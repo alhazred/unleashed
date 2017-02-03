@@ -33,7 +33,7 @@ extern "C" {
 
 /* Opaque kernel socket type */
 typedef struct __ksocket *ksocket_t;
-struct nmsghdr;
+struct msghdr;
 
 /* flag bit for each Callback Event */
 #define	KSOCKET_CB_CONNECTED		0x00000001
@@ -95,15 +95,15 @@ extern int 	ksocket_send(ksocket_t, void *, size_t, int, size_t *,
 		    struct cred *);
 extern int	ksocket_sendto(ksocket_t, void *, size_t, int,
 		    struct sockaddr *, socklen_t, size_t *, struct cred *);
-extern int 	ksocket_sendmsg(ksocket_t, struct nmsghdr *, int, size_t *,
+extern int 	ksocket_sendmsg(ksocket_t, struct msghdr *, int, size_t *,
 		    struct cred *);
-extern int	ksocket_sendmblk(ksocket_t, struct nmsghdr *, int, mblk_t **,
+extern int	ksocket_sendmblk(ksocket_t, struct msghdr *, int, mblk_t **,
 		    struct cred *);
 extern int 	ksocket_recv(ksocket_t, void *, size_t, int, size_t *,
 		    struct cred *);
 extern int	ksocket_recvfrom(ksocket_t, void *, size_t, int,
 		    struct sockaddr *, socklen_t *, size_t *, struct cred *);
-extern int	ksocket_recvmsg(ksocket_t, struct nmsghdr *, int, size_t *,
+extern int	ksocket_recvmsg(ksocket_t, struct msghdr *, int, size_t *,
 		    struct cred *);
 extern int	ksocket_shutdown(ksocket_t, int, struct cred *);
 extern int 	ksocket_setsockopt(ksocket_t, int, int, const void *, int,

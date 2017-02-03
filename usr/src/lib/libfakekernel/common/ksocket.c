@@ -291,7 +291,7 @@ ksocket_sendto(ksocket_t ks, void *msg, size_t msglen, int flags,
 }
 
 int
-ksocket_sendmsg(ksocket_t ks, struct nmsghdr *msg, int flags,
+ksocket_sendmsg(ksocket_t ks, struct msghdr *msg, int flags,
     size_t *sent, struct cred *cr)
 {
 	uio_t uio;
@@ -393,7 +393,7 @@ ksocket_recvfrom(ksocket_t ks, void *msg, size_t msglen, int flags,
 }
 
 int
-ksocket_recvmsg(ksocket_t ks, struct nmsghdr *msg, int flags, size_t *recvd,
+ksocket_recvmsg(ksocket_t ks, struct msghdr *msg, int flags, size_t *recvd,
     struct cred *cr)
 {
 	ssize_t error;
