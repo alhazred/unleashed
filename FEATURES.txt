@@ -10,4 +10,32 @@ changed.
 <next> release
 --------------
  - Trusted Solaris aka. Trusted Extensions
+ - closed source components were removed, including:
+   - in.iked(1M) and related utilities
+   - kmdb modules: mpt and nfs
+   - kernel drivers: atiatom, bnx, ixgb, sdpib, usbser_edge, glm, mpt, adpu320,
+     bcm_sata, lsimega, marvel88sx, acpi_toshiba, intel_nhmex
+ - avs ("Sun StorageTek Availability Suite")
+ - /usr/ucb and libbc ("SunOS/BSD Compatibility Package")
+ - rdist(1), rcp(1), rlogin(1), rlogind(1m), rsh(1), rshd(1m)
+ - libslp, slpd ("Service Location Protocol daemon")
+ - Java bits: poold(1M), libzfs_jni, libadt_jni, libdtrace_jni,  DTrace Java
+   support, parts of libdns_sd
+ + bmake(1)
+ + socket interfaces are now in libc. libsocket, libxnet and libnsl remain as
+   filter libraries.
+ + socket implementation was modified to be more reasonable by default, and it
+   is no longer possible to choose an alternate socket implementation.
+   msg_accrights was removed and msg_control members are now always visible in
+   struct msghdr.
+   Documentation was updated and moved to section 2: accept(2), bind(2),
+   connect(2), getpeername(2), getsockname(2), getsockopt(2), listen(2),
+   recv(2), send(2), shutdown(2), socket(2), socketpair(2), and the new
+   sockatmark(2) and CMSG_DATA(3)
+ + errc(3), warnc(3) were added to libc
+ + process security flags (psecflags) 
  * readdir_r is now POSIX-only version
+ * sed(1) replaced with a version imported from FreeBSD
+ * locale data has been updated to CLDR v28; tools to generate it were imported
+   from FreeBSD. This fixes many character classification errors.
+ * install(1m) was replaced by install(1) from OpenBSD.
