@@ -196,7 +196,6 @@ MAN = acctcom.1 \
       mail.1 \
       mailx.1 \
       man.1 \
-      mandoc.1 \
       mcs.1 \
       mdb.1 \
       mesg.1 \

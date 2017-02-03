@@ -249,7 +249,6 @@ COMMON_SUBDIRS=		\
 	mailx		\
 	make		\
 	man		\
-	mandoc		\
 	mdb		\
 	mesg		\
 	mkdir		\
