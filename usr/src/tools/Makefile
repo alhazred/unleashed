@@ -29,7 +29,6 @@ include ../Makefile.master
 
 COMMON_SUBDIRS= \
 	codereview \
-	cscope-fast \
 	ctf \
 	depcheck \
 	env \

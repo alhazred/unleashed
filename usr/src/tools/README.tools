@@ -98,11 +98,6 @@ copyrightchk
 	Checks that files have appropriate SMI copyright notices.
 	Primarily used by wx
 
-cscope-fast
-	The fast version of cscope that we use internally. Seems to work,
-	but may need more testing before it's placed in the gate. The source
-	just really needs to be here.
-	
 cstyle
 	checks C source for compliance with OS/Net guidelines.
 

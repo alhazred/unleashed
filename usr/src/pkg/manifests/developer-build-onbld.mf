@@ -59,7 +59,6 @@ dir path=opt/onbld/man/man1onbld
 $(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/btxld mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/chk4ubin mode=0555
 file path=opt/onbld/bin/$(ARCH)/codereview mode=0555
-file path=opt/onbld/bin/$(ARCH)/cscope-fast mode=0555
 file path=opt/onbld/bin/$(ARCH)/ctfconvert mode=0555
 file path=opt/onbld/bin/$(ARCH)/ctfdiff mode=0555
 file path=opt/onbld/bin/$(ARCH)/ctfdump mode=0555
