@@ -22,6 +22,7 @@ changed.
  - libslp, slpd ("Service Location Protocol daemon")
  - Java bits: poold(1M), libzfs_jni, libadt_jni, libdtrace_jni,  DTrace Java
    support, parts of libdns_sd
+ - Sun Studio and lint build support
  + bmake(1)
  + socket interfaces are now in libc. libsocket, libxnet and libnsl remain as
    filter libraries.
@@ -40,3 +41,4 @@ changed.
  * locale data has been updated to CLDR v28; tools to generate it were imported
    from FreeBSD. This fixes many character classification errors.
  * install(1m) was replaced by install(1) from OpenBSD.
+ * all process security flags are on by default
