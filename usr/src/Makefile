@@ -95,7 +95,7 @@ check :=		TARGET= check
 #	cd pkg and do a 'make install'
 #
 
-all: mapfiles closedbins sgs .WAIT $(SUBDIRS) pkg
+all: mapfiles sgs .WAIT $(SUBDIRS) pkg
 
 #
 # The _msg build is a two-step process.  First, the _msg dependency
@@ -116,7 +116,7 @@ install: install1 install2 _msg stage-licenses
 stage-licenses: install2
 	@cd pkg; pwd; $(MAKE) stage-licenses
 
-install1: mapfiles closedbins sgs
+install1: mapfiles sgs
 
 install2: install1 $(SUBDIRS)
 
@@ -135,29 +135,6 @@ clobber_local:
 	@cd common/mapfiles; pwd; $(MAKE) clobber
 	@cd msg; pwd; $(MAKE) clobber
 
-# If the tarballs are included inside ON_CLOSED_BINS, use those to extract and
-# preserve the permissions (in case a distro ships them).
-
-closedbins: bldtools $(ROOTDIRS) FRC
-	@CLOSED_ROOT="$$ON_CLOSED_BINS/root_$(MACH)$${RELEASE_BUILD+-nd}"; \
-	if [ -f "$$ON_CLOSED_BINS/on-closed-bins$${RELEASE_BUILD+-nd}.$(MACH).tar.bz2" ]; then \
-		$(ECHO) "Extracting tarball $$ON_CLOSED_BINS/on-closed-bins$${RELEASE_BUILD+-nd}.$(MACH).tar.bz2"; \
-		(cd $(CODEMGR_WS); \
-		   $(TAR) xjpf $$ON_CLOSED_BINS/on-closed-bins$${RELEASE_BUILD+-nd}.$(MACH).tar.bz2); \
-		CLOSED_ROOT="$(CODEMGR_WS)/closed/root_$(MACH)$${RELEASE_BUILD+-nd}"; \
-	fi; \
-	if [ ! -d "$$CLOSED_ROOT" ]; then \
-		$(ECHO) "Error: ON_CLOSED_BINS must point to closed" \
-		    "binaries."; \
-		$(ECHO) "root_$(MACH)$${RELEASE_BUILD+-nd} is not" \
-		    "present in $$ON_CLOSED_BINS."; \
-		exit 1; \
-	fi; \
-	$(ECHO) "Copying closed binaries from $$CLOSED_ROOT"; \
-	(cd $$CLOSED_ROOT; \
-	    $(TAR) cfX - $(CODEMGR_WS)/exception_lists/closed-bins .) | \
-	    (cd $(ROOT); $(TAR) xBpf -)
-
 #
 # Declare what parts can be built in parallel
 # DUMMY at the end is used in case macro expansion produces an empty string to
@@ -174,13 +151,11 @@ sgs: rootdirs .WAIT sysheaders .WAIT \
 
 #
 # Top-level setup target to setup the development environment that includes
-# headers, tools and generated mapfiles.  For open-only builds (i.e.: source
-# trees w/o usr/closed), this also depends on the closedbins target (above)
-# in order to properly seed the proto area.  Note, although the tools are
+# headers, tools and generated mapfiles.  Note, although the tools are
 # dependent on a number of constant mapfiles, the tools themselves are
 # required to build the generated mapfiles.
 #
-setup: closedbins bldtools sgs mapfiles
+setup: bldtools sgs mapfiles
 
 bldtools:
 	@cd tools; pwd; $(MAKE) install

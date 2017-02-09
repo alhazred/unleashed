@@ -26,7 +26,6 @@
 #
 
 syntax: glob
-exception_lists/closed-bins
 exception_lists/copyright
 exception_lists/cstyle
 exception_lists/hdrchk

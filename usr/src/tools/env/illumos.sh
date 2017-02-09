@@ -102,14 +102,6 @@ export ATLOG="$CODEMGR_WS/log"
 export LOGFILE="$ATLOG/nightly.log"
 export MACH="$(uname -p)"
 
-#
-#  The following macro points to the closed binaries.  Once illumos has
-#  totally freed itself, we can remove this reference.
-#
-# Location of encumbered binaries.
-export ON_CLOSED_BINS="$CODEMGR_WS/closed"
-
-
 export ROOT="$CODEMGR_WS/proto/root_${MACH}"
 export SRC="$CODEMGR_WS/usr/src"
 

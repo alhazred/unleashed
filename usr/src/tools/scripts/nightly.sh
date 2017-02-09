@@ -400,17 +400,6 @@ function use_tools {
 }
 
 #
-# Verify that the closed bins are present
-#
-function check_closed_bins {
-	if [[ -n "$ON_CLOSED_BINS" && ! -d "$ON_CLOSED_BINS" ]]; then
-		echo "ON_CLOSED_BINS must point to the closed binaries tree."
-		build_ok=n
-		exit 1
-	fi
-}
-
-#
 # wrapper over wsdiff.
 # usage: do_wsdiff LABEL OLDPROTO NEWPROTO
 #
@@ -639,8 +628,6 @@ ps -o project= -p $$ | read build_project
 if [ "$NIGHTLY_OPTIONS" = "" ]; then
 	NIGHTLY_OPTIONS="-aBm"
 fi
-
-check_closed_bins
 
 #
 # Note: changes to the option letters here should also be applied to the

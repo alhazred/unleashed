@@ -310,16 +310,6 @@ The gate-defined default location of things formerly in /opt; e.g.,
 /ws/onnv-tools.  This is used by nightly, but not the makefiles.
 .RE
 .LP
-.B ON_CLOSED_BINS
-.RS 5
-OpenSolaris builds do not contain the closed source tree.  Instead,
-the developer downloads a closed binaries tree and unpacks it.
-.B ON_CLOSED_BINS
-tells nightly
-where to find these closed binaries, so that it can add them into the
-build.
-.RE
-.LP
 .B CHECK_PATHS
 .RS 5
 Normally, nightly runs the 'checkpaths' script to check for

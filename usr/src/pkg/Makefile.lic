@@ -45,12 +45,3 @@ $(LICROOT)/usr/src/%: $(CODEMGR_WS)/usr/src/%
 $(LICROOT)/%: $(CODEMGR_WS)/%
 	$(PKGDEBUG)if [ ! -d $(@D) ]; then mkdir -p $(@D); fi
 	$(PKGDEBUG)$(INS.file)
-
-#
-# A build without closed source relies on closed-bins extraction to stage
-# the license file and does nothing here.
-#
-$(LICROOT)/usr/closed/%:
-	if [ ! -d $(@D) ]; then \
-		mkdir -p $(@D); \
-	fi; \
