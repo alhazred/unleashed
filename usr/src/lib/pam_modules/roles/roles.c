@@ -98,10 +98,11 @@ pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 
 	/* stop masquerades by mapping username to uid to username */
 
-	if ((pw_entry = getpwnam_r(username, &pwd, buf, sizeof (buf))) == NULL)
+	getpwnam_r(username, &pwd, buf, sizeof (buf), &pw_entry);
+	if (!pw_entry)
 		return (PAM_USER_UNKNOWN);
-	if ((pw_entry = getpwuid_r(pw_entry->pw_uid, &pwd, buf,
-	    sizeof (buf))) == NULL)
+	getpwuid_r(pw_entry->pw_uid, &pwd, buf, sizeof (buf), &pw_entry);
+	if (!pw_entry)
 		return (PAM_USER_UNKNOWN);
 	/*
 	 * If there's no user_attr entry for the primary user or it's not a
@@ -144,10 +145,9 @@ pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 			 */
 			user_entry = NULL;
 		} else {
-			if ((pw_entry = getpwuid_r(uid, &pwd, buf,
-			    sizeof (buf))) == NULL) {
+			getpwuid_r(uid, &pwd, buf, sizeof (buf), &pw_entry);
+			if (!pw_entry)
 				return (PAM_USER_UNKNOWN);
-			}
 			user_entry = getusernam(pw_entry->pw_name);
 		}
 	}

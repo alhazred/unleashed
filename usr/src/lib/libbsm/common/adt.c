@@ -183,6 +183,7 @@ adt_get_mask_from_user(uid_t uid, au_mask_t *mask)
 	struct passwd	pwd;
 	long		buff_sz;
 	char		*pwd_buff;
+	struct passwd	*result;
 
 
 	if (auditstate & AUC_DISABLED) {
@@ -198,7 +199,8 @@ adt_get_mask_from_user(uid_t uid, au_mask_t *mask)
 		if ((pwd_buff = calloc(1, (size_t)++buff_sz)) == NULL) {
 			return (-1);
 		}
-		if (getpwuid_r(uid, &pwd, pwd_buff, (int)buff_sz) == NULL) {
+		getpwuid_r(uid, &pwd, pwd_buff, (int)buff_sz, &result);
+		if (!result) {
 			errno = EINVAL;	/* user doesn't exist */
 			free(pwd_buff);
 			return (-1);

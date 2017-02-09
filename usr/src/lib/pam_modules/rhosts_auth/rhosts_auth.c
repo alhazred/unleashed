@@ -53,6 +53,7 @@ pam_sm_authenticate(
 {
 	char *host = NULL, *lusername = NULL;
 	struct passwd pwd;
+	struct passwd *pwdp;
 	char pwd_buffer[1024];
 	int	is_superuser;
 	char	*rusername;
@@ -86,8 +87,8 @@ pam_sm_authenticate(
 			lusername, host);
 	}
 
-	if (getpwnam_r(lusername, &pwd, pwd_buffer, sizeof (pwd_buffer))
-								== NULL)
+	getpwnam_r(lusername, &pwd, pwd_buffer, sizeof (pwd_buffer), &pwdp);
+	if (!pwdp)
 		return (PAM_USER_UNKNOWN);
 
 	if (pwd.pw_uid == 0)

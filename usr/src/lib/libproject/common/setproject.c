@@ -602,14 +602,16 @@ setproject_proc(const char *project_name, const char *user_name, int flags,
 		 * exists and is a member of the specified project.
 		 */
 		if (proj == NULL) {
+			struct passwd *result;
 			if ((proj = getprojbyname(project_name, &local_proj,
 			    prbuf, PROJECT_BUFSZ)) == NULL) {
 				errno = ESRCH;
 				return (SETPROJ_ERR_TASK);
 			}
 
-			if (getpwnam_r(user_name, &pwd,
-			    pwdbuf, NSS_BUFLEN_PASSWD) == NULL) {
+			getpwnam_r(user_name, &pwd, pwdbuf, NSS_BUFLEN_PASSWD,
+			    &result);
+			if (!result) {
 				errno = ESRCH;
 				return (SETPROJ_ERR_TASK);
 			}

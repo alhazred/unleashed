@@ -93,6 +93,8 @@ audit_cron_getinfo(char *fname, char *fname_aux, struct auditinfo_addr *info)
 	au_mask_t mask;
 	struct passwd	pwd;
 	char		pwd_buff[1024];
+	struct passwd	*result;
+	int		ret;
 	static char	*msg =
 	    "Used defaults instead of ancilary audit file";
 
@@ -158,13 +160,15 @@ make_it_up:
 	info->ai_mask.am_failure = 0;
 
 	if (strstr(fname, "crontabs") != NULL) {
-		if (getpwnam_r(basename(fname), &pwd, pwd_buff,
-		    sizeof (pwd_buff)) == NULL)
-			return (-1); /* getpwnam_r sets errno */
+		ret = getpwnam_r(basename(fname), &pwd, pwd_buff, sizeof
+		    (pwd_buff), &result);
+		if (!result)
+			return (ret);
 	} else {
-		if (getpwuid_r(st.st_uid, &pwd, pwd_buff, sizeof (pwd_buff)) ==
-		    NULL)
-			return (-1); /* getpwuid_r sets errno */
+		ret = getpwuid_r(st.st_uid, &pwd, pwd_buff, sizeof (pwd_buff),
+		    &result);
+		if (!result)
+			return (ret);
 	}
 
 	info->ai_auid = pwd.pw_uid;

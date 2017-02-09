@@ -27,8 +27,6 @@
 /*	Copyright (c) 1988 AT&T	*/
 /*	All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #pragma weak _getpwnam = getpwnam
 #pragma weak _getpwuid = getpwuid
 
@@ -41,65 +39,53 @@
 
 #ifdef	NSS_INCLUDE_UNSAFE
 
-/*
- * Ye olde non-reentrant interface (MT-unsafe, caveat utor)
- */
+void _nss_initf_passwd(nss_db_params_t *p);
+void _nss_XbyY_fgets(FILE *, nss_XbyY_args_t *);
+int str2passwd(const char *, int, void *, char *, int);
 
-static void
-free_pwbuf(void *arg)
-{
-	nss_XbyY_buf_t **buffer = arg;
-
-	NSS_XbyY_FREE(buffer);
-}
-
-static nss_XbyY_buf_t *
-get_pwbuf()
-{
-	nss_XbyY_buf_t **buffer =
-	    tsdalloc(_T_PWBUF, sizeof (nss_XbyY_buf_t *), free_pwbuf);
-	nss_XbyY_buf_t *b;
-
-	if (buffer == NULL)
-		return (NULL);
-	b = NSS_XbyY_ALLOC(buffer, sizeof (struct passwd), NSS_BUFLEN_PASSWD);
-	return (b);
-}
+static struct passwd _pw_passwd;
+static char _pw_buf[NSS_BUFLEN_PASSWD];
+static DEFINE_NSS_DB_ROOT(db_root);
+static DEFINE_NSS_GETENT(context);
 
 struct passwd *
 getpwuid(uid_t uid)
 {
-	nss_XbyY_buf_t *b = get_pwbuf();
-
-	return (b == NULL ? NULL :
-	    getpwuid_r(uid, b->result, b->buffer, b->buflen));
+	struct passwd *result;
+	int ret;
+	if ((ret = getpwuid_r(uid, &_pw_passwd, _pw_buf, sizeof (_pw_buf),
+	    &result)) != 0)
+		errno = ret;
+	return (result);
 }
 
 struct passwd *
 getpwnam(const char *nam)
 {
-	nss_XbyY_buf_t *b = get_pwbuf();
-
-	return (b == NULL ? NULL :
-	    getpwnam_r(nam, b->result, b->buffer, b->buflen));
+	struct passwd *result;
+	int ret;
+	if ((ret = getpwnam_r(nam, &_pw_passwd, _pw_buf, sizeof (_pw_buf),
+	    &result)) != 0)
+		errno = ret;
+	return (result);
 }
 
 struct passwd *
 getpwent(void)
 {
-	nss_XbyY_buf_t *b = get_pwbuf();
-
-	return (b == NULL ? NULL :
-	    getpwent_r(b->result, b->buffer, b->buflen));
+	nss_XbyY_args_t arg;
+	NSS_XbyY_INIT(&arg, &_pw_passwd, _pw_buf, sizeof(_pw_buf), str2passwd);
+	(void) nss_getent(&db_root, _nss_initf_passwd, &context, &arg);
+	return (NSS_XbyY_FINI(&arg));
 }
 
 struct passwd *
 fgetpwent(FILE *f)
 {
-	nss_XbyY_buf_t *b = get_pwbuf();
-
-	return (b == NULL ? NULL :
-	    fgetpwent_r(f, b->result, b->buffer, b->buflen));
+	nss_XbyY_args_t arg;
+	NSS_XbyY_INIT(&arg, &_pw_passwd, _pw_buf, sizeof(_pw_buf), str2passwd);
+	(void) _nss_XbyY_fgets(f, &arg);
+	return (NSS_XbyY_FINI(&arg));
 }
 
 #endif	/* NSS_INCLUDE_UNSAFE */

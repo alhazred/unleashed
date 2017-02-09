@@ -36,8 +36,17 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-int str2passwd(const char *, int, void *,
-	char *, int);
+/*
+ * Compatibility aliases; Solaris/illumos default to the POSIX.1c Draft 6
+ * versions of these functions and use __posix_*_r for the standard versions.
+ * Our unadorned symbols are the standard versions, but we allow previously
+ * compiled binaries that are using the POSIX version to work with these
+ * aliases.
+ */
+#pragma weak __posix_getpwuid_r = getpwuid_r
+#pragma weak __posix_getpwnam_r = getpwnam_r
+
+int str2passwd(const char *, int, void *, char *, int);
 
 static DEFINE_NSS_DB_ROOT(db_root);
 static DEFINE_NSS_GETENT(context);
@@ -51,116 +60,67 @@ _nss_initf_passwd(nss_db_params_t *p)
 
 #include <getxby_door.h>
 
-struct passwd *
-_uncached_getpwuid_r(uid_t uid, struct passwd *result, char *buffer,
-	int buflen);
-
-struct passwd *
-_uncached_getpwnam_r(const char *name, struct passwd *result, char *buffer,
-    int buflen);
-
-/*
- * POSIX.1c Draft-6 version of the function getpwnam_r.
- * It was implemented by Solaris 2.3.
- */
-struct passwd *
-getpwnam_r(const char *name, struct passwd *result, char *buffer, int buflen)
+int
+getpwnam_r(const char *name, struct passwd *pwd, char *buffer, size_t bufsize,
+    struct passwd **result)
 {
 	nss_XbyY_args_t arg;
 
-	if (name == (const char *)NULL) {
+	if (!name) {
 		errno = ERANGE;
-		return (NULL);
+		return (errno);
 	}
-	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2passwd);
+	NSS_XbyY_INIT(&arg, pwd, buffer, bufsize, str2passwd);
+	arg.key.name = name;
+	(void) nss_search(&db_root, _nss_initf_passwd, NSS_DBOP_PASSWD_BYNAME,
+	    &arg);
+	*result = ((struct passwd *)NSS_XbyY_FINI(&arg));
+	if (!*result)
+		return (errno);
+	return (0);
+}
+
+
+int
+getpwuid_r(uid_t uid, struct passwd *pwd, char *buffer, size_t bufsize,
+    struct passwd **result)
+{
+	nss_XbyY_args_t arg;
+
+	NSS_XbyY_INIT(&arg, pwd, buffer, bufsize, str2passwd);
+	arg.key.uid = uid;
+	(void) nss_search(&db_root, _nss_initf_passwd, NSS_DBOP_PASSWD_BYUID,
+	    &arg);
+	*result = ((struct passwd *)NSS_XbyY_FINI(&arg));
+	if (!*result)
+		return (errno);
+	return (0);
+}
+
+struct passwd *
+_uncached_getpwnam_r(const char *name, struct passwd *pwd, char *buffer,
+	int buflen)
+{
+	nss_XbyY_args_t arg;
+
+	NSS_XbyY_INIT(&arg, pwd, buffer, buflen, str2passwd);
 	arg.key.name = name;
 	(void) nss_search(&db_root, _nss_initf_passwd, NSS_DBOP_PASSWD_BYNAME,
 	    &arg);
 	return ((struct passwd *)NSS_XbyY_FINI(&arg));
 }
 
-/*
- * POSIX.1c Draft-6 version of the function getpwuid_r.
- * It was implemented by Solaris 2.3.
- */
 struct passwd *
-getpwuid_r(uid_t uid, struct passwd *result, char *buffer, int buflen)
-{
-	nss_XbyY_args_t arg;
-
-	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2passwd);
-	arg.key.uid = uid;
-	(void) nss_search(&db_root, _nss_initf_passwd, NSS_DBOP_PASSWD_BYUID,
-	    &arg);
-	return ((struct passwd *)NSS_XbyY_FINI(&arg));
-}
-
-
-struct passwd *
-_uncached_getpwuid_r(uid_t uid, struct passwd *result, char *buffer,
+_uncached_getpwuid_r(uid_t uid, struct passwd *pwd, char *buffer,
 	int buflen)
 {
 	nss_XbyY_args_t arg;
 
-	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2passwd);
+	NSS_XbyY_INIT(&arg, pwd, buffer, buflen, str2passwd);
 	arg.key.uid = uid;
 	(void) nss_search(&db_root, _nss_initf_passwd, NSS_DBOP_PASSWD_BYUID,
 	    &arg);
 	return ((struct passwd *)NSS_XbyY_FINI(&arg));
-}
-
-
-/*
- * POSIX.1c standard version of the function getpwuid_r.
- * User gets it via static getpwuid_r from the header file.
- */
-int
-__posix_getpwuid_r(uid_t uid, struct passwd *pwd, char *buffer,
-    size_t bufsize, struct passwd **result)
-{
-	int nerrno = 0;
-	int oerrno = errno;
-
-	errno = 0;
-	if ((*result = getpwuid_r(uid, pwd, buffer, (uintptr_t)bufsize))
-	    == NULL) {
-			nerrno = errno;
-	}
-	errno = oerrno;
-	return (nerrno);
-}
-
-struct passwd *
-_uncached_getpwnam_r(const char *name, struct passwd *result, char *buffer,
-	int buflen)
-{
-	nss_XbyY_args_t arg;
-
-	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2passwd);
-	arg.key.name = name;
-	(void) nss_search(&db_root, _nss_initf_passwd, NSS_DBOP_PASSWD_BYNAME,
-	    &arg);
-	return ((struct passwd *)NSS_XbyY_FINI(&arg));
-}
-
-/*
- * POSIX.1c standard version of the function getpwnam_r.
- * User gets it via static getpwnam_r from the header file.
- */
-int
-__posix_getpwnam_r(const char *name, struct passwd *pwd, char *buffer,
-    size_t bufsize, struct passwd **result)
-{
-	int nerrno = 0;
-	int oerrno = errno;
-
-	errno = 0;
-	if ((*result = getpwnam_r(name, pwd, buffer, (uintptr_t)bufsize))
-	    == NULL) {
-			nerrno = errno;
-	}
-	errno = oerrno;
-	return (nerrno);
 }
 
 void
@@ -174,39 +134,6 @@ endpwent(void)
 {
 	nss_endent(&db_root, _nss_initf_passwd, &context);
 	nss_delete(&db_root);
-}
-
-struct passwd *
-getpwent_r(struct passwd *result, char *buffer, int buflen)
-{
-	nss_XbyY_args_t arg;
-	char		*nam;
-
-	/* In getXXent_r(), protect the unsuspecting caller from +/- entries */
-
-	do {
-		NSS_XbyY_INIT(&arg, result, buffer, buflen, str2passwd);
-		/* No key to fill in */
-		(void) nss_getent(&db_root, _nss_initf_passwd, &context, &arg);
-	} while (arg.returnval != 0 &&
-	    (nam = ((struct passwd *)arg.returnval)->pw_name) != 0 &&
-	    (*nam == '+' || *nam == '-'));
-
-	return ((struct passwd *)NSS_XbyY_FINI(&arg));
-}
-
-struct passwd *
-fgetpwent_r(FILE *f, struct passwd *result, char *buffer, int buflen)
-{
-	extern void	_nss_XbyY_fgets(FILE *, nss_XbyY_args_t *);
-	nss_XbyY_args_t	arg;
-
-	/* ... but in fgetXXent_r, the caller deserves any +/- entry he gets */
-
-	/* No key to fill in */
-	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2passwd);
-	_nss_XbyY_fgets(f, &arg);
-	return ((struct passwd *)NSS_XbyY_FINI(&arg));
 }
 
 static char *

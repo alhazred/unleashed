@@ -23,6 +23,14 @@ changed.
  - Java bits: poold(1M), libzfs_jni, libadt_jni, libdtrace_jni,  DTrace Java
    support, parts of libdns_sd
  - Sun Studio and lint build support
+ - getpwent_r(3c), fgetpwent_r(3c), which are non-standard and were different
+   from other OSes
+ - POSIX.1c Draft versions of several reentrant functions were removed.
+   Applications using the draft versions have to be modified; users of the
+   standard versions are unaffected.
+    - readdir_r
+    - getpwuid_r
+    - getpwnam_r
  + bmake(1)
  + socket interfaces are now in libc. libsocket, libxnet and libnsl remain as
    filter libraries.
@@ -36,7 +44,6 @@ changed.
    sockatmark(2) and CMSG_DATA(3)
  + errc(3), warnc(3) were added to libc
  + process security flags (psecflags) 
- * readdir_r is now POSIX-only version
  * sed(1) replaced with a version imported from FreeBSD
  * locale data has been updated to CLDR v28; tools to generate it were imported
    from FreeBSD. This fixes many character classification errors.

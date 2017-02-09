@@ -60,8 +60,8 @@ extern "C" {
  *
  *    -	a "frontend" for each database, which provides a programming
  *	interface for that database [for example, the "passwd" frontend
- *	consists of getpwnam_r(), getpwuid_r(), getpwent_r(), setpwent(),
- *	endpwent(), and the old MT-unsafe routines getpwnam() and getpwuid()]
+ *	consists of getpwnam_r(), getpwuid_r(), and the old MT-unsafe routines
+ *	setpwent(), getpwent(), endpwent(), getpwnam() and getpwuid()]
  *	and is implemented by calls to...
  *
  *    -	the common core of the switch (called the "switch" or "policy" engine);
@@ -98,7 +98,7 @@ extern "C" {
  * Frontends may call the following routines in the switch engine:
  *
  *	nss_search() does getXXXbyYYY,	e.g. getpwnam_r(), getpwuid_r()
- *	nss_getent() does getXXXent,	e.g. getpwent_r()
+ *	nss_getent() does getXXXent,	e.g. getpwent()
  *	nss_setent() does setXXXent,	e.g. setpwent()
  *	nss_endent() does endXXXent,	e.g. endpwent()
  *	nss_delete() releases resources, in the style of endpwent().

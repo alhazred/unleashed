@@ -404,15 +404,18 @@ main(int argc, char *argv[], char *envp[])
 	}
 
 	if (optflg & USERNAME) {
-		if (getpwnam_r(uname, &pw_ent, pw_buf, sizeof (pw_buf)) ==
-		    NULL) {
+		struct passwd *result;
+		getpwnam_r(uname, &pw_ent, pw_buf, sizeof (pw_buf), &result);
+		if (!result) {
 			(void) fprintf(stderr,
 			    gettext("Invalid user name -- %s -- \n"), uname);
 			exit(1);
 		}
 		uid = pw_ent.pw_uid;
 	} else if (optflg & USERID) {
-		if (getpwuid_r(uid, &pw_ent, pw_buf, sizeof (pw_buf)) == NULL) {
+		struct passwd *result;
+		getpwuid_r(uid, &pw_ent, pw_buf, sizeof (pw_buf), &result);
+		if (!result) {
 			(void) fprintf(stderr,
 			    gettext("Invalid user ID -- %d -- \n"), uid);
 			exit(1);

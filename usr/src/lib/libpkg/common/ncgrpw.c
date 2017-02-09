@@ -53,6 +53,8 @@
 #define	ERR_NOINIT	"%s: init_cache() failed.\n"
 #define	ERR_MALLOC	"%s: malloc(%d) failed for %s.\n"
 
+struct passwd *fgetpwent(FILE *);
+
 static Cache *pwnam_cache = (Cache *) NULL;
 static Cache *grnam_cache = (Cache *) NULL;
 static Cache *pwuid_cache = (Cache *) NULL;

@@ -313,6 +313,7 @@ netname2user_ldap(int *err, char *netname, struct netid_userdata *argp)
 	int ngroups = 0;
 	int count;
 	char pwbuf[NSS_LINELEN_PASSWD];
+	struct passwd *result;
 	int maxgrp = sysconf(_SC_NGROUPS_MAX);
 	gid_t *groups = alloca(maxgrp * sizeof (gid_t));
 
@@ -336,7 +337,8 @@ netname2user_ldap(int *err, char *netname, struct netid_userdata *argp)
 	 * check out the primary group and crosscheck the uid
 	 * with the passwd data
 	 */
-	if ((getpwuid_r(uidnu, &pw, pwbuf, sizeof (pwbuf))) == NULL) {
+	(void) getpwuid_r(uidnu, &pw, pwbuf, sizeof (pwbuf), &result);
+	if (result == NULL) {
 		*err = __NSW_UNAVAIL;
 		return (0);
 	}

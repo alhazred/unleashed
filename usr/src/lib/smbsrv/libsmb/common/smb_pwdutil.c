@@ -541,7 +541,9 @@ smb_pwd_update(const char *name, const char *password, int control)
 	}
 
 	if (newent) {
-		if (getpwnam_r(name, &uxpw, uxbuf, sizeof (uxbuf))) {
+		struct passwd *pwdp;
+		getpwnam_r(name, &uxpw, uxbuf, sizeof (uxbuf), &pwdp);
+		if (pwdp) {
 			bzero(&smbpw, sizeof (smb_passwd_t));
 			(void) strlcpy(smbpw.pw_name, uxpw.pw_name,
 			    sizeof (smbpw.pw_name));

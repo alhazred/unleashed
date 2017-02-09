@@ -198,6 +198,7 @@ do_username_nametype(OM_uint32 *minor, char *uname, gss_name_t *output)
 	char netname[MAXNETNAMELEN+1];
 	char *user, *node, *domain;
 	struct passwd pwd;
+	struct passwd *result;
 	char buff[1024];
 
 	/* Set outputs to sane values */
@@ -275,7 +276,8 @@ do_username_nametype(OM_uint32 *minor, char *uname, gss_name_t *output)
 	 * We use getpwnam_r to convert the name to uid.  Note it is
 	 * important to use getpwnam_r to preserve MT safty.
 	 */
-	if (getpwnam_r(user, &pwd, buff, sizeof (buff)) == NULL) {
+	getpwnam_r(user, &pwd, buff, sizeof (buff), &result);
+	if (!result) {
 		*minor = DH_NO_SUCH_USER;
 		free(user);
 		return (GSS_S_FAILURE);

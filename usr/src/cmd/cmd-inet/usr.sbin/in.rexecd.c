@@ -270,7 +270,7 @@ doit(int f, struct sockaddr_storage *fromp)
 	getstr(pass, sizeof (pass), "password");
 	getstr(cmdbuf, sizeof (cmdbuf), "command");
 
-	pwd = getpwnam_r(user, &pw_data, pwdbuf, sizeof (pwdbuf));
+	getpwnam_r(user, &pw_data, pwdbuf, sizeof (pwdbuf), &pwd);
 	if (pwd == NULL) {
 		(void) audit_rexecd_fail("Login incorrect", hostname, user,
 		    cmdbuf);	    /* BSM */

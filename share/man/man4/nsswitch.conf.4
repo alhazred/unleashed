@@ -678,11 +678,7 @@ beginning with SunOS 5.3) share the same enumeration position; if they
 interleave calls, they enumerate disjoint subsets of the same database.
 .sp
 .LP
-In general, the use of the enumeration functions is deprecated. In the case of
-\fBpasswd\fR, \fBshadow\fR, and \fBgroup\fR, it might sometimes be appropriate
-to use \fBfgetgrent()\fR, \fBfgetpwent()\fR, and \fBfgetspent()\fR (see
-\fBgetgrnam\fR(3C), \fBgetpwnam\fR(3C), and \fBgetspnam\fR(3C), respectively),
-which use only the \fBfiles\fR source.
+The use of the enumeration functions is deprecated.
 .SH FILES
 .sp
 .LP
@@ -885,5 +881,5 @@ Misspelled names of sources and databases are treated as legitimate names of
 .sp
 .LP
 The following functions do \fBnot\fR use the switch: \fBfgetgrent\fR(3C),
-\fBfgetprojent\fR(3PROJECT), \fBfgetpwent\fR(3C), \fBfgetspent\fR(3C),
+\fBfgetprojent\fR(3PROJECT), \fBfgetspent\fR(3C),
 \fBgetpw\fR(3C), \fBputpwent\fR(3C), \fBshadow\fR(4).

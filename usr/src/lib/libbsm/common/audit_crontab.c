@@ -261,9 +261,11 @@ audit_crontab_not_allowed(uid_t ruid, char *user) {
 	struct passwd		pwd;
 	char			buffer[PWD_BUFFER_SIZE];
 	int			rc = 0;		/* 0 == allow */
+	struct passwd		*result;
 
 	if (!cannot_audit(0)) {			/* allow access if audit off */
-		if (getpwnam_r(user, &pwd, buffer, PWD_BUFFER_SIZE) == NULL) {
+		getpwnam_r(user, &pwd, buffer, PWD_BUFFER_SIZE, &result);
+		if (!result) {
 			rc = 1;			/* deny access if invalid */
 		} else if (ruid == pwd.pw_uid)
 			rc = 0;			/* editing his own crontab */

@@ -66,6 +66,8 @@ char pwdflr[]	= "x";				/* password filler */
 char *prognamp;
 void f_err(void), f_miss(void), f_bdshw(void);
 
+struct passwd *fgetpwent(FILE *);
+
 /*
  * getspnan routine that ONLY looks at the local shadow file
  */

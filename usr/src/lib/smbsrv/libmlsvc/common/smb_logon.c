@@ -622,6 +622,7 @@ smb_token_setup_local(smb_passwd_t *smbpw, smb_token_t *token)
 	smb_idmap_batch_t sib;
 	smb_idmap_t *umap, *gmap;
 	struct passwd pw;
+	struct passwd *pwp;
 	char pwbuf[1024];
 	char nbname[NETBIOS_NAME_SZ];
 
@@ -633,7 +634,8 @@ smb_token_setup_local(smb_passwd_t *smbpw, smb_token_t *token)
 	    token->tkn_domain_name == NULL)
 		return (NT_STATUS_NO_MEMORY);
 
-	if (getpwuid_r(smbpw->pw_uid, &pw, pwbuf, sizeof (pwbuf)) == NULL)
+	getpwuid_r(smbpw->pw_uid, &pw, pwbuf, sizeof (pwbuf), &pwp);
+	if (!pwp)
 		return (NT_STATUS_NO_SUCH_USER);
 
 	/* Get the SID for user's uid & gid */
@@ -923,6 +925,7 @@ smb_guest_account(char *guest, size_t buflen)
 	idmap_stat stat;
 	uid_t guest_uid;
 	struct passwd pw;
+	struct passwd *pwp;
 	char pwbuf[1024];
 	int idtype;
 
@@ -941,7 +944,8 @@ smb_guest_account(char *guest, size_t buflen)
 	if (IDMAP_ID_IS_EPHEMERAL(guest_uid))
 		return;
 
-	if (getpwuid_r(guest_uid, &pw, pwbuf, sizeof (pwbuf)) == NULL)
+	getpwuid_r(guest_uid, &pw, pwbuf, sizeof (pwbuf), &pwp);
+	if (!pwp)
 		return;
 
 	(void) strlcpy(guest, pw.pw_name, buflen);

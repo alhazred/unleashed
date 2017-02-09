@@ -956,15 +956,17 @@ past_proto_processing:
 	if (prop[PT_USER_INDEX].ip_error != IVE_UNSET) {
 		char		pw_buf[NSS_BUFLEN_PASSWD];
 		struct passwd	pw;
+		struct passwd	*result;
 
-		if (getpwnam_r(prop[PT_USER_INDEX].ip_value.iv_string, &pw,
-		    pw_buf, NSS_BUFLEN_PASSWD) == NULL) {
+		getpwnam_r(prop[PT_USER_INDEX].ip_value.iv_string, &pw,
+		    pw_buf, NSS_BUFLEN_PASSWD, &result);
+		if (!result) {
 			errno = 0;
 			uidl = strtol(prop[PT_USER_INDEX].ip_value.iv_string,
 			    &bufp, 10);
 			if ((errno != 0) || (*bufp != '\0') ||
-			    (getpwuid_r(uidl, &pw, pw_buf,
-			    NSS_BUFLEN_PASSWD) == NULL))
+			    (getpwuid_r(uidl, &pw, pw_buf, NSS_BUFLEN_PASSWD,
+			    &result) != 0 || !result))
 				prop[PT_USER_INDEX].ip_error = IVE_INVALID;
 		}
 	}

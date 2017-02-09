@@ -191,6 +191,7 @@ pam_sm_setcred(pam_handle_t *pamh, int flags, int argc, const char **argv)
 	char		*projname;
 	char		*kvs;
 	struct passwd	pwd;
+	struct passwd	*pwdp;
 	char		pwbuf[NSS_BUFLEN_PASSWD];
 	deflim_t	deflim;
 
@@ -267,7 +268,8 @@ pam_sm_setcred(pam_handle_t *pamh, int flags, int argc, const char **argv)
 		    "pam_unix_cred: state = %d, auid = %d", auditstate,
 		    auid);
 	}
-	if (getpwnam_r(user, &pwd, pwbuf, sizeof (pwbuf)) == NULL) {
+	getpwnam_r(user, &pwd, pwbuf, sizeof (pwbuf), &pwdp);
+	if (!pwdp) {
 		syslog(LOG_AUTH | LOG_ERR,
 		    "pam_unix_cred: cannot get passwd entry for user = %s",
 		    user);
@@ -324,7 +326,7 @@ pam_sm_setcred(pam_handle_t *pamh, int flags, int argc, const char **argv)
 adt_setuser:
 		if ((auser != NULL) && (*auser != '\0') &&
 		    (getpwnam_r(auser, &apwd, apwbuf,
-		    sizeof (apwbuf)) != NULL)) {
+		    sizeof (apwbuf), &pwdp) == 0 && pwdp != NULL)) {
 			/*
 			 * set up the initial audit for user coming
 			 * from another user

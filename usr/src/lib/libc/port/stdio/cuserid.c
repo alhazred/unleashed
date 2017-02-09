@@ -61,7 +61,8 @@ cuserid(char *s)
 		s = res;
 	if ((p = getlogin_r(utname, L_cuserid)) != NULL) {
 		(void) strlcpy(s, p, L_cuserid);
-	} else if ((pw = getpwuid_r(getuid(), &pwd, buffer, BUFSIZ)) != NULL) {
+	} else if (getpwuid_r(getuid(), &pwd, buffer, BUFSIZ, &pw) == 0 &&
+	    pw != NULL) {
 		(void) strlcpy(s, pw->pw_name, L_cuserid);
 	} else {
 		*s = '\0';

@@ -12,8 +12,8 @@
 .\" the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
 .TH GETPWNAM 3C "Apr 5, 2004"
 .SH NAME
-getpwnam, getpwnam_r, getpwent, getpwent_r, getpwuid, getpwuid_r, setpwent,
-endpwent, fgetpwent, fgetpwent_r \- get password entry
+getpwnam, getpwnam_r, getpwent, getpwuid, getpwuid_r, setpwent,
+endpwent \- get password entry
 .SH SYNOPSIS
 .LP
 .nf
@@ -24,8 +24,8 @@ endpwent, fgetpwent, fgetpwent_r \- get password entry
 
 .LP
 .nf
-\fBstruct passwd *\fR\fBgetpwnam_r\fR(\fBconst char *\fR\fIname\fR, \fBstruct passwd *\fR\fIpwd\fR,
-     \fBchar *\fR\fIbuffer\fR, \fBint\fR \fIbuflen\fR);
+\fBint\fR \fBgetpwnam_r\fR(\fBconst char *\fR\fIname\fR, \fBstruct passwd *\fR\fIpwd\fR, \fBchar *\fR\fIbuffer\fR,
+     \fBsize_t\fR \fIbufsize\fR, \fBstruct passwd **\fR\fIresult\fR);
 .fi
 
 .LP
@@ -35,19 +35,13 @@ endpwent, fgetpwent, fgetpwent_r \- get password entry
 
 .LP
 .nf
-\fBstruct passwd *\fR\fBgetpwent_r\fR(\fBstruct passwd *\fR\fIpwd\fR, \fBchar *\fR\fIbuffer\fR,
-     \fBint\fR \fIbuflen\fR);
-.fi
-
-.LP
-.nf
 \fBstruct passwd *\fR\fBgetpwuid\fR(\fBuid_t\fR \fIuid\fR);
 .fi
 
 .LP
 .nf
-\fBstruct passwd *\fR\fBgetpwuid_r\fR(\fBuid_t\fR \fIuid\fR, \fBstruct passwd *\fR\fIpwd\fR,
-    \fBchar *\fR\fIbuffer\fR, \fBint\fR  \fIbuflen\fR);
+\fBint\fR \fBgetpwuid_r\fR(\fBuid_t\fR \fIuid\fR, \fBstruct passwd *\fR\fIpwd\fR, \fBchar *\fR\fIbuffer\fR,
+     \fBsize_t\fR \fIbufsize\fR, \fBstruct passwd **\fR\fIresult\fR);
 .fi
 
 .LP
@@ -58,32 +52,6 @@ endpwent, fgetpwent, fgetpwent_r \- get password entry
 .LP
 .nf
 \fBvoid\fR \fBendpwent\fR(\fBvoid\fR);
-.fi
-
-.LP
-.nf
-\fBstruct passwd *\fR\fBfgetpwent\fR(\fBFILE *\fR\fIf\fR);
-.fi
-
-.LP
-.nf
-\fBstruct passwd *\fR\fBfgetpwent_r\fR(\fBFILE *\fR\fIf\fR, \fBstruct passwd *\fR\fIpwd\fR,
-     \fBchar *\fR\fIbuffer\fR, \fBint\fR \fIbuflen\fR);
-.fi
-
-.SS "Standard conforming"
-.LP
-.nf
-cc [ \fIflag\fR...] \fIfile\fR... \fB-D_POSIX_PTHREAD_SEMANTICS\fR [ \fIlibrary\fR... ]
-
-\fBint\fR \fBgetpwnam_r\fR(\fBconst char *\fR\fIname\fR, \fBstruct passwd *\fR\fIpwd\fR, \fBchar *\fR\fIbuffer\fR,
-     \fBsize_t\fR \fIbufsize\fR, \fBstruct passwd **\fR\fIresult\fR);
-.fi
-
-.LP
-.nf
-\fBint\fR \fBgetpwuid_r\fR(\fBuid_t\fR \fIuid\fR, \fBstruct passwd *\fR\fIpwd\fR, \fBchar *\fR\fIbuffer\fR,
-     \fBsize_t\fR \fIbufsize\fR, \fBstruct passwd **\fR\fIresult\fR);
 .fi
 
 .SH DESCRIPTION
@@ -117,24 +85,15 @@ to do no further password retrieval operations; the system may then  close the
 password file, deallocate resources it was using, and so forth.  It is still
 allowed, but possibly less efficient, for the process to call more password
 functions after calling \fBendpwent()\fR.
-.sp
-.LP
-The \fBfgetpwent()\fR function, unlike the other functions above, does not use
-\fBnsswitch.conf\fR but reads and parses the next line from the stream \fIf\fR,
-which is assumed to have the format of the \fBpasswd\fR file.  See
-\fBpasswd\fR(4).
 .SS "Reentrant Interfaces"
 .sp
 .LP
-The \fBgetpwnam()\fR, \fBgetpwuid()\fR, \fBgetpwent()\fR, and \fBfgetpwent()\fR
-functions use thread-specific data storage that is reused in each call to one
-of these functions by the same thread, making them safe to use but not
-recommended for multithreaded applications.
+The \fBgetpwnam()\fR, \fBgetpwuid()\fR, and \fBgetpwent()\fR functions are not
+safe to use in multithreaded applications.
 .sp
 .LP
-The parallel functions \fBgetpwnam_r()\fR, \fBgetpwuid_r()\fR,
-\fBgetpwent_r()\fR, and \fBfgetpwent_r()\fR provide reentrant interfaces for
-these operations.
+The parallel functions \fBgetpwnam_r()\fR and \fBgetpwuid_r()\fR,
+provide reentrant interfaces for these operations.
 .sp
 .LP
 Each reentrant interface performs the same operation as its non-reentrant
@@ -161,14 +120,6 @@ standard-conforming versions place a pointer to the modified \fIpwd\fR
 structure in the \fIresult\fR parameter, instead of returning a pointer to this
 structure. A null pointer is returned at the location pointed to by
 \fIresult\fR on error or if the requested entry is not found.
-.sp
-.LP
-For enumeration in multithreaded applications, the position within the
-enumeration is a process-wide property shared by all threads. The
-\fBsetpwent()\fR function can be used in a multithreaded application but resets
-the enumeration position for all threads.  If multiple threads interleave calls
-to \fBgetpwent_r()\fR, the threads will enumerate disjoint subsets of the
-password database.
 .sp
 .LP
 Like their non-reentrant counterparts, \fBgetpwnam_r()\fR and
@@ -212,9 +163,8 @@ to indicate the error.
 .LP
 Applications wishing to check for error situations should set \fBerrno\fR to 0
 before calling \fBgetpwnam()\fR, \fBgetpwnam_r()\fR, \fBgetpwuid()\fR,
-\fBgetpwuid_r()\fR, \fBgetpwent()\fR, \fBgetpwent_r()\fR, \fBfgetpwent()\fR,
-and \fBfgetpwent_r()\fR. If these non-reentrant functions return a null pointer
-and \fBerrno\fR is non-zero, an error occurred.
+\fBgetpwuid_r()\fR and \fBgetpwent()\fR. If these non-reentrant functions
+return a null pointer and \fBerrno\fR is non-zero, an error occurred.
 .sp
 .LP
 The standard-conforming functions \fBgetpwnam_r()\fR and \fBgetpwuid_r()\fR can
@@ -224,9 +174,8 @@ the \fIpwd\fR pointer is non-null. Otherwise, an error value is returned to
 indicate the error.
 .sp
 .LP
-The \fBgetpwent()\fR, \fBgetpwent_r()\fR, \fBfgetpwent()\fR, and
-\fBfgetpwent_r()\fR functions each return a pointer to a \fBstruct passwd\fR if
-they successfully enumerate an entry; otherwise they return a null pointer on
+The \fBgetpwent()\fR function returns a pointer to a \fBstruct passwd\fR if it
+successfully enumerates an entry; otherwise it returns a null pointer on
 end-of-file or error. On error, \fBerrno\fR is set to indicate the error.
 .sp
 .LP
@@ -234,60 +183,15 @@ See \fBIntro\fR(2) for the proper usage and interpretation of \fBerrno\fR in
 multithreaded applications.
 .sp
 .LP
-The \fBgetpwnam()\fR, \fBgetpwuid()\fR, \fBgetpwent()\fR, and \fBfgetpwent()\fR
-functions use thread-specific data storage, so returned data must be copied
-before a subsequent call to any of these functions if the data is to be saved.
+The \fBgetpwnam()\fR, \fBgetpwuid()\fR, and \fBgetpwent()\fR functions use a
+shared buffer, so returned data must be copied before a subsequent call to any
+of these functions if the data is to be saved.
 .sp
 .LP
-When the pointer returned by the reentrant functions \fBgetpwnam_r()\fR,
-\fBgetpwuid_r()\fR, \fBgetpwent_r()\fR, and \fBfgetpwent_r()\fR is non-null, it
-is always equal to the \fIpwd\fR pointer that was supplied by the caller.
+When the pointer returned by the reentrant functions \fBgetpwnam_r()\fR or
+\fBgetpwuid_r()\fR is non-null, it is always equal to the \fIpwd\fR pointer
+that was supplied by the caller.
 .SH ERRORS
-.sp
-.LP
-The \fBgetpwent_r()\fR, \fBfgetpwent()\fR, and \fBfgetpwent_r()\fR functions
-will fail if:
-.sp
-.ne 2
-.na
-\fB\fBEIO\fR\fR
-.ad
-.RS 10n
-An I/O error has occurred.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBERANGE\fR\fR
-.ad
-.RS 10n
-Insufficient storage was supplied by \fIbuffer\fR and \fIbufsize\fR to contain
-the data to be referenced by the resulting \fBpasswd\fR structure.
-.RE
-
-.sp
-.LP
-The \fBgetpwent_r()\fR function will fail if:
-.sp
-.ne 2
-.na
-\fB\fBEMFILE\fR\fR
-.ad
-.RS 10n
-There are {\fBOPEN_MAX\fR} file descriptors currently open in the calling
-process.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBENFILE\fR\fR
-.ad
-.RS 10n
-The maximum allowable number of files is currently open in the system.
-.RE
-
 .sp
 .LP
 The \fBgetpwnam()\fR, \fBgetpwnam_r()\fR, \fBgetpwuid()\fR, \fBgetpwuid_r()\fR,
@@ -396,11 +300,10 @@ see \fBstandards\fR(5).
 When compiling multithreaded programs, see \fBIntro\fR(3).
 .sp
 .LP
-Use of the enumeration interfaces \fBgetpwent()\fR and \fBgetpwent_r()\fR is
-discouraged; enumeration is supported for the \fBpasswd\fR file, \fBNIS,\fR and
-\fBNIS+,\fR but in general is not efficient and might not be supported for all
-database sources.  The semantics of enumeration are discussed further in
-\fBnsswitch.conf\fR(4).
+Use of the enumeration interface \fBgetpwent()\fR is discouraged; enumeration
+is supported for the \fBpasswd\fR file, \fBNIS,\fR and \fBNIS+,\fR but in
+general is not efficient and might not be supported for all database sources.
+The semantics of enumeration are discussed further in \fBnsswitch.conf\fR(4).
 .sp
 .LP
 Previous releases allowed the use of `+' and `-' entries in \fB/etc/passwd\fR

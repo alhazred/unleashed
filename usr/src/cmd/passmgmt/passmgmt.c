@@ -114,7 +114,7 @@ struct uid_blk {
 };
 
 extern userattr_t *fgetuserattr(FILE *);
-
+extern struct passwd *fgetpwent(FILE *);
 
 /*
  * Declare all functions that do not return integers.  This is here

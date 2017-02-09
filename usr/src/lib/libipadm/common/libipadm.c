@@ -287,9 +287,11 @@ ipadm_check_auth(void)
 {
 	struct passwd	pwd;
 	char		buf[NSS_BUFLEN_PASSWD];
+	struct passwd	*result;
 
 	/* get the password entry for the given user ID */
-	if (getpwuid_r(getuid(), &pwd, buf, sizeof (buf)) == NULL)
+	getpwuid_r(getuid(), &pwd, buf, sizeof (buf), &result);
+	if (!result)
 		return (B_FALSE);
 
 	/* check for presence of given authorization */

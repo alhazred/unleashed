@@ -885,9 +885,11 @@ smb_parse_owner(char *pair, uid_t *uid, gid_t *gid)
 		}
 	}
 	if (*pair) {
-		if (getpwnam_r(pair, &pw, buf, sizeof (buf)) != NULL) {
+		struct passwd *result;
+		getpwnam_r(pair, &pw, buf, sizeof (buf), &result);
+		if (!result)
 			*uid = pw.pw_uid;
-		} else
+		else
 			smb_error(dgettext(TEXT_DOMAIN,
 			    "Invalid user name %s, ignored"), 0, pair);
 	}
@@ -1498,6 +1500,7 @@ smb_ctx_readrc(struct smb_ctx *ctx)
 	char *sname = NULL;
 	int sname_max;
 	int err = 0;
+	struct passwd *result;
 
 	/*
 	 * If the user name is not specified some other way,
@@ -1505,7 +1508,8 @@ smb_ctx_readrc(struct smb_ctx *ctx)
 	 * NB: ct_home=NULL is allowed, and we don't want to
 	 * bail out with an error for a missing ct_home.
 	 */
-	if (getpwuid_r(getuid(), &pw, pwbuf, sizeof (pwbuf)) != NULL) {
+	getpwuid_r(getuid(), &pw, pwbuf, sizeof (pwbuf), &result);
+	if (result) {
 		if (ctx->ct_user[0] == 0)
 			(void) smb_ctx_setuser(ctx, pw.pw_name, B_FALSE);
 		if (ctx->ct_home == NULL)

@@ -131,6 +131,7 @@ _is_authorized(char *auths, uid_t uid)
 	char		*dcp, *authlist, *lasts;
 	char		pw_buf[NSS_BUFLEN_PASSWD];
 	struct passwd	pw_ent;
+	struct passwd	*result;
 
 	/*
 	 * first, the easy cases
@@ -139,7 +140,8 @@ _is_authorized(char *auths, uid_t uid)
 		return (1);
 	if (strcmp(auths, "*") == 0)
 		return (ALLOC_BY_NONE);
-	if (getpwuid_r(uid, &pw_ent, pw_buf, sizeof (pw_buf)) == NULL)
+	getpwuid_r(uid, &pw_ent, pw_buf, sizeof (pw_buf), &result);
+	if (!result)
 		return (0);
 	if (strpbrk(auths, DEVICE_AUTH_SEPARATOR) == NULL)
 		return (chkauthattr(auths, pw_ent.pw_name));
@@ -707,9 +709,11 @@ exec_clean(int optflag, char *devname, char *path, uid_t uid, char *zonename,
 	char		zonepath[MAXPATHLEN];
 	char		pw_buf[NSS_BUFLEN_PASSWD];
 	struct passwd	pw_ent;
+	struct passwd	*result;
 
 	zonepath[0] = '\0';
-	if (getpwuid_r(uid, &pw_ent, pw_buf, sizeof (pw_buf)) == NULL)
+	getpwuid_r(uid, &pw_ent, pw_buf, sizeof (pw_buf), &result);
+	if (!result)
 		return (-1);
 	if (optflag & FORCE_ALL)
 		mode = "-I";

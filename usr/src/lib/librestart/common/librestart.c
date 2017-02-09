@@ -2034,6 +2034,7 @@ static int
 lookup_pwd(struct method_context *mcp)
 {
 	struct passwd *pwdp;
+	int ret;
 
 	if (mcp->pwbuf != NULL && mcp->pwd.pw_uid == mcp->uid)
 		return (0);
@@ -2047,10 +2048,9 @@ lookup_pwd(struct method_context *mcp)
 	}
 
 	do {
-		errno = 0;
-		pwdp = getpwuid_r(mcp->uid, &mcp->pwd, mcp->pwbuf,
-		    mcp->pwbufsz);
-	} while (pwdp == NULL && errno == EINTR);
+		ret = getpwuid_r(mcp->uid, &mcp->pwd, mcp->pwbuf, mcp->pwbufsz,
+		    &pwdp);
+	} while (pwdp == NULL && ret == EINTR);
 	if (pwdp != NULL)
 		return (0);
 
@@ -2114,6 +2114,7 @@ get_uid(const char *str, struct method_context *ci, uid_t *uidp)
 		return (0);
 	} else {
 		struct passwd *pwdp;
+		int ret;
 
 		if (ci->pwbuf == NULL) {
 			ci->pwbufsz = sysconf(_SC_GETPW_R_SIZE_MAX);
@@ -2123,10 +2124,9 @@ get_uid(const char *str, struct method_context *ci, uid_t *uidp)
 		}
 
 		do {
-			errno = 0;
-			pwdp =
-			    getpwnam_r(str, &ci->pwd, ci->pwbuf, ci->pwbufsz);
-		} while (pwdp == NULL && errno == EINTR);
+			ret = getpwnam_r(str, &ci->pwd, ci->pwbuf,
+			    ci->pwbufsz, &pwdp);
+		} while (pwdp == NULL && ret == EINTR);
 
 		if (pwdp != NULL) {
 			*uidp = ci->pwd.pw_uid;

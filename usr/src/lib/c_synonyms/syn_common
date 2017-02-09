@@ -290,8 +290,6 @@ fdwalk
 ffs
 fgetgrent
 fgetgrent_r
-fgetpwent
-fgetpwent_r
 fgetspent
 fgetspent_r
 file_to_decimal
@@ -373,7 +371,6 @@ getprivimplinfo
 getprojid
 getpw
 getpwent
-getpwent_r
 getpwnam
 getpwnam_r
 getpwuid

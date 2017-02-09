@@ -57,6 +57,7 @@ extern bool_t validloginshell(char *sh, char *arg, int);
 extern int    validstr(char *str, size_t size);
 extern int yplckpwdf();
 extern int ypulckpwdf();
+extern struct passwd *fgetpwent(FILE *);
 
 static char *
 cryptoldpasswd(char *oldpass, char *salt, char *acctname)

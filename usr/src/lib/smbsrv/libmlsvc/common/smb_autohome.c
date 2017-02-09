@@ -93,7 +93,9 @@ smb_autohome_add(const smb_token_t *token)
 		username = token->tkn_account_name;
 		assert(username);
 	} else {
-		if (getpwuid_r(uid, &pw, buf, sizeof (buf)) == NULL) {
+		struct passwd *pwdp;
+		getpwuid_r(uid, &pw, buf, sizeof (buf), &pwdp);
+		if (!pwdp) {
 			syslog(LOG_ERR, "unable to determine name for " \
 			    "UID: %u\n", uid);
 			return;

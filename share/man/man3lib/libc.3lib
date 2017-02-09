@@ -41,7 +41,6 @@ l l .
 \fB__nsw_getconfig\fR	\fB__posix_asctime_r\fR
 \fB__posix_ctime_r\fR	\fB__posix_getgrgid_r\fR
 \fB__posix_getgrnam_r\fR	\fB__posix_getlogin_r\fR
-\fB__posix_getpwnam_r\fR	\fB__posix_getpwuid_r\fR
 \fB__posix_sigwait\fR	\fB__posix_ttyname_r\fR
 \fB__priocntl\fR	\fB__priocntlset\fR
 \fB__pthread_cleanup_pop\fR	\fB__pthread_cleanup_push\fR
@@ -237,8 +236,7 @@ l l .
 \fBflsl\fR	\fBflsll\fR
 \fBfgetattr\fR	\fBfgetc\fR	
 \fBfgetgrent\fR	\fBfgetgrent_r\fR
-\fBfgetpos\fR	\fBfgetpwent\fR
-\fBfgetpwent_r\fR	\fBfgets\fR
+\fBfgetpos\fR	\fBfgets\fR
 \fBfgetspent\fR	\fBfgetspent_r\fR
 \fBfgetwc\fR	\fBfgetwc_l\fR
 \fBfgetws\fR
@@ -305,7 +303,7 @@ l l .
 \fBgetpriority\fR	\fbgetprogname\fR
 \fBgetprojid\fR
 \fBgetpw\fR	\fBgetpwent\fR
-\fBgetpwent_r\fR	\fBgetpwnam\fR
+\fBgetpwnam\fR
 \fBgetpwnam_r\fR	\fBgetpwuid\fR
 \fBgetpwuid_r\fR	\fBgetrctl\fR
 \fBgetrlimit\fR	\fBgetrusage\fR

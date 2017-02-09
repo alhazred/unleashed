@@ -1537,6 +1537,7 @@ perm_granted(permcheck_t *pcp)
 	uid_t uid;
 	struct passwd pw;
 	char pwbuf[1024];	/* XXX should be NSS_BUFLEN_PASSWD */
+	struct passwd *result;
 
 	/* Get the uid */
 	if ((uc = get_ucred()) == NULL) {
@@ -1562,7 +1563,8 @@ perm_granted(permcheck_t *pcp)
 	uid = ucred_geteuid(uc);
 	assert(uid != (uid_t)-1);
 
-	if (getpwuid_r(uid, &pw, pwbuf, sizeof (pwbuf)) == NULL) {
+	getpwuid_r(uid, &pw, pwbuf, sizeof (pwbuf), &result);
+	if (!result) {
 		return (PERM_FAIL);
 	}
 

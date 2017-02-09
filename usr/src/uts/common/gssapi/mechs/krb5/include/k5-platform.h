@@ -522,10 +522,10 @@ load_64_le (unsigned char *p)
 /* SUNW15resync - just have Solaris relevant ones */
 
 #define k5_getpwnam_r(NAME, REC, BUF, BUFSIZE, OUT)  \
-         (*(OUT) = getpwnam_r(NAME,REC,BUF,BUFSIZE), *(OUT) == NULL ? -1 : 0)
+         getpwnam_r(NAME,REC,BUF,BUFSIZE,OUT)
 
 #define k5_getpwuid_r(UID, REC, BUF, BUFSIZE, OUT)  \
-        (*(OUT) = getpwuid_r(UID,REC,BUF,BUFSIZE), *(OUT) == NULL ? -1 : 0)
+        getpwuid_r(UID,REC,BUF,BUFSIZE,OUT)
 
 /* Return true if the snprintf return value RESULT reflects a buffer
    overflow for the buffer size SIZE.

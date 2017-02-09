@@ -878,6 +878,7 @@ verify_rules_auth(struct svc_req *rqstp)
 	uid_t		uid;
 	char		buf[1024];
 	struct passwd	pwd;
+	struct passwd	*result;
 
 	if (svc_getcallerucred(rqstp->rq_xprt, &uc) != 0) {
 		idmapdlog(LOG_ERR, "svc_getcallerucred failed during "
@@ -893,7 +894,8 @@ verify_rules_auth(struct svc_req *rqstp)
 		return (-1);
 	}
 
-	if (getpwuid_r(uid, &pwd, buf, sizeof (buf)) == NULL) {
+	getpwuid_r(uid, &pwd, buf, sizeof (buf), &result);
+	if (!result) {
 		idmapdlog(LOG_ERR, "getpwuid_r(%u) failed during "
 		    "authorization (%s)", uid, strerror(errno));
 		ucred_free(uc);

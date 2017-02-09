@@ -71,6 +71,7 @@ static void charge(char *);
 #ifdef DEBUG
 static void pdisk(void);
 #endif
+struct passwd *fgetpwent(FILE *);
 
 int
 main(int argc, char **argv)
@@ -241,17 +242,14 @@ charge(char *n)
 		statb.st_blocks = 0;
 
 	/*
-	 * If -p is given, we've all loaded the passwd entries.
-	 * Files with unknown uid should go into nchrg. Otherwise
-	 * (without -p), we try creating new entry for the uid.
+	 * Files with unknown uid should go into nchrg. Otherwise, we try
+	 * creating new entry for the uid.
 	 */
 	if ((entry = hash_find(statb.st_uid)) == NULL) {
-		if (pfile == NULL) {
-			pw = getpwuid(statb.st_uid);
-			entry = hash_insert(statb.st_uid);
-			if (pw != NULL) {
-				validate_entry(entry, pw);
-			}
+		pw = getpwuid(statb.st_uid);
+		entry = hash_insert(statb.st_uid);
+		if (pw != NULL) {
+			validate_entry(entry, pw);
 		}
 	}
 
