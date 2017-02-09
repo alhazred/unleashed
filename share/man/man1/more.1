@@ -13,26 +13,14 @@ more, page \- browse or page through a text file
 .SH SYNOPSIS
 .LP
 .nf
-\fB/usr/bin/more\fR [\fB-cdflrsuw\fR] [\fB-lines\fR] [+ \fIlinenumber\fR]
+\fBmore\fR [\fB-cdflrsuw\fR] [\fB-lines\fR] [+ \fIlinenumber\fR]
      [+/ \fIpattern\fR] [\fIfile\fR]...
 .fi
 
 .LP
 .nf
-\fB/usr/bin/page\fR [\fB-cdflrsuw\fR] [\fB-lines\fR] [+ \fIlinenumber\fR]
+\fBpage\fR [\fB-cdflrsuw\fR] [\fB-lines\fR] [+ \fIlinenumber\fR]
      [+/ \fIpattern\fR] [\fIfile\fR]...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/more\fR [\fB-cdeisu\fR] [\fB-n\fR \fInumber\fR] [\fB-p\fR \fIcommand\fR]
-     [\fB-t\fR \fItagstring\fR] [\fIfile\fR]...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/more\fR [\fB-cdeisu\fR] [\fB-n\fR \fInumber\fR] [+ \fIcommand\fR]
-     [\fB-t\fR \fItagstring\fR] [\fIfile\fR]...
 .fi
 
 .SH DESCRIPTION
@@ -40,8 +28,8 @@ more, page \- browse or page through a text file
 .LP
 The \fBmore\fR utility is a filter that displays the contents of a text file on
 the terminal, one screenful at a time.  It normally pauses after each
-screenful. \fB/usr/bin/more\fR then prints \fB--More--\fR and
-\fB/usr/xpg4/bin/more\fR then prints \fIfile\fR at the bottom of the screen. If
+screenful. \fBmore\fR then prints \fB--More--\fR
+at the bottom of the screen. If
 \fBmore\fR is reading from a file rather than a pipe, the percentage of
 characters displayed so far is also shown.
 .sp
@@ -60,9 +48,7 @@ output can be continuous. Commands that you type do not normally show up on
 your terminal, except for the \fB/\fR and \fB!\fR commands.
 .sp
 .LP
-The \fB/usr/bin/more\fR utility exits after displaying the last specified file.
-\fB/usr/xpg4/bin/more\fR prompts for a command at the last line of the last
-specified file.
+The \fBmore\fR utility exits after displaying the last specified file.
 .sp
 .LP
 If the standard output is not a terminal, \fBmore\fR acts just like
@@ -70,8 +56,7 @@ If the standard output is not a terminal, \fBmore\fR acts just like
 .SH OPTIONS
 .sp
 .LP
-The following options are supported for both \fB/usr/bin/more\fR and
-\fB/usr/xpg4/bin/more\fR:
+The following options are supported:
 .sp
 .ne 2
 .na
@@ -103,16 +88,12 @@ Squeeze.  Replaces multiple blank lines with a single blank line. This is
 helpful when viewing \fBnroff\fR(1) output on the screen.
 .RE
 
-.SS "/usr/bin/more"
-.sp
-.LP
-The following options are supported for \fB/usr/bin/more\fR only:
 .sp
 .ne 2
 .na
 \fB\fB-f\fR \fR
 .ad
-.RS 15n
+.RS 7n
 Does not fold long lines. This is useful when lines contain nonprinting
 characters or escape sequences, such as those generated when \fBnroff\fR(1)
 output is piped through \fBul\fR(1).
@@ -123,7 +104,7 @@ output is piped through \fBul\fR(1).
 .na
 \fB\fB-l\fR \fR
 .ad
-.RS 15n
+.RS 7n
 Does not treat \fBFORMFEED\fR characters (Control-l) as page breaks. If
 \fB-l\fR is not used, \fBmore\fR pauses to accept commands after any line
 containing a \fB^L\fR character (Control-l). Also, if a file begins with a
@@ -135,7 +116,7 @@ containing a \fB^L\fR character (Control-l). Also, if a file begins with a
 .na
 \fB\fB-r\fR \fR
 .ad
-.RS 15n
+.RS 7n
 Normally, \fBmore\fR ignores control characters that it does not interpret in
 some way. The \fB-r\fR option causes these to be displayed as \fB^\fR\fIC\fR
 where \fIC\fR stands for any such control character.
@@ -146,7 +127,7 @@ where \fIC\fR stands for any such control character.
 .na
 \fB\fB-u\fR \fR
 .ad
-.RS 15n
+.RS 7n
 Suppresses generation of underlining escape sequences. Normally, \fBmore\fR
 handles underlining, such as that produced by \fBnroff\fR(1), in a manner
 appropriate to the terminal. If the terminal can perform underlining or has a
@@ -159,7 +140,7 @@ in the text file.
 .na
 \fB\fB-w\fR \fR
 .ad
-.RS 15n
+.RS 7n
 Normally, \fBmore\fR exits when it comes to the end of its input. With
 \fB-w\fR, however, \fBmore\fR prompts and waits for any key to be struck before
 exiting.
@@ -170,7 +151,7 @@ exiting.
 .na
 \fB\fB-\fR\fIlines\fR\fR
 .ad
-.RS 15n
+.RS 7n
 Displays the indicated number of \fIlines\fR in each screenful, rather than the
 default (the number of lines in the terminal screen less two).
 .RE
@@ -180,7 +161,7 @@ default (the number of lines in the terminal screen less two).
 .na
 \fB\fB+\fR\fIlinenumber\fR\fR
 .ad
-.RS 15n
+.RS 7n
 Start up at \fIlinenumber\fR.
 .RE
 
@@ -189,104 +170,13 @@ Start up at \fIlinenumber\fR.
 .na
 \fB\fB+/\fR\fIpattern\fR\fR
 .ad
-.RS 15n
+.RS 7n
 Start up two lines above the line containing the regular expression
 \fIpattern\fR. \fBNote:\fR Unlike editors, this construct should \fInot\fR end
 with a `\fB/\fR.' If it does, then the trailing slash is taken as a character
 in the search pattern.
 .RE
 
-.SS "/usr/xpg4/bin/more"
-.sp
-.LP
-The following options are supported for \fB/usr/xpg4/bin/more\fR only:
-.sp
-.ne 2
-.na
-\fB\fB-e\fR \fR
-.ad
-.RS 17n
-Exits immediately after writing the last line of the last file in the argument
-list.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-i\fR \fR
-.ad
-.RS 17n
-Performs pattern matching in searches without regard to case.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-n\fR \fInumber\fR \fR
-.ad
-.RS 17n
-Specifies the number of lines per screenful. The \fInumber\fR argument is a
-positive decimal integer. The \fB-n\fR option overrides any values obtained
-from the environment.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-p\fR \fIcommand\fR \fR
-.ad
-.br
-.na
-\fB\fB+\fR\fIcommand\fR \fR
-.ad
-.RS 17n
-For each file examined, initially executes the \fBmore\fR command in the
-\fIcommand\fR argument. If the command is a positioning command, such as a line
-number or a regular expression search, set the current position to represent
-the final results of the command, without writing any intermediate lines of the
-file. For example, the two commands:
-.sp
-.in +2
-.nf
-\fBmore -p 1000j file
-more -p 1000G file\fR
-.fi
-.in -2
-.sp
-
-are equivalent and start the display with the current position at line 1000,
-bypassing the lines that \fBj\fR would write and scroll off the screen if it
-had been issued during the file examination. If the positioning command is
-unsuccessful, the first line in the file will be the current position.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-t\fR \fItagstring\fR \fR
-.ad
-.RS 17n
-Writes the screenful of the file containing the tag named by the
-\fItagstring\fR argument. See the \fBctags\fR(1) utility.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-u\fR\fR
-.ad
-.RS 17n
-Treats a backspace character as a printable control character, displayed as a
-^H (Control-h), suppressing backspacing and the special handling that produces
-underlined or standout-mode text on some terminal types.  Also, does not ignore
-a carriage-return character at the end of a line.
-.RE
-
-.sp
-.LP
-If both the \fB-t\fR\fI tagstring\fR and \fB-p\fR\fI command\fR (or the
-obsolescent \fI+command\fR) options are given, the \fB-t\fR\fI tagstring\fR is
-processed first.
 .SH USAGE
 .SS "Environment"
 .sp
@@ -516,10 +406,6 @@ reading from a pipe, \fBmore\fR simply rings the terminal bell.
 Exit from \fBmore\fR (same as \fBq\fR or \fBQ\fR).
 .RE
 
-.SS "/usr/bin/more"
-.sp
-.LP
-The following commands are available only in \fB/usr/bin/more\fR:
 .sp
 .ne 2
 .na
@@ -549,196 +435,6 @@ Halt a partial display of text. \fBmore\fR stops sending output, and displays
 the usual \fB--More--\fR prompt. Some output is lost as a result.
 .RE
 
-.SS "/usr/xpg4/bin/more"
-.sp
-.LP
-The following commands are available only in \fB/usr/xpg4/bin/more\fR:
-.sp
-.ne 2
-.na
-\fB\fIi\fR\fB^F\fR\fR
-.ad
-.RS 17n
-(Control-f) Skip \fIi\fR screens full and print a screenful. (Same as
-\fIi\fR\fBf\fR.)
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB^G\fR\fR
-.ad
-.RS 17n
-(Control-g) Display the current line number (same as \fB=\fR).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fIi\fR\fBg\fR\fR
-.ad
-.RS 17n
-Go to line number \fIi\fR with the default of the first line in the file.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fIi\fR\fBG\fR\fR
-.ad
-.RS 17n
-Go to line number \fIi\fR with the default of the Last line in the file.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fIi\fR\fBj\fR\fR
-.ad
-.RS 17n
-Display another line, or \fIi\fR more lines, if specified. (Same as
-\fIi\fRRETURN.)
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fIi\fR\fBk\fR\fR
-.ad
-.RS 17n
-Scroll backwards one or \fIi\fR lines, if specified.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBm\fR\fIletter\fR \fR
-.ad
-.RS 17n
-Mark the current position with the name \fIletter\fR.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBN\fR \fR
-.ad
-.RS 17n
-Reverse direction of search.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBr\fR \fR
-.ad
-.RS 17n
-Refresh the screen.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBR\fR \fR
-.ad
-.RS 17n
-Refresh the screen, discarding any buffered input.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fIi\fR\fBu\fR\fR
-.ad
-.br
-.na
-\fB\fIi\fR\fB^U\fR\fR
-.ad
-.RS 17n
-(Control-u) Scroll backwards one half a screen of \fIi\fR lines, if specified.
-If \fIi\fR is specified, the count becomes the new default for subsequent
-\fBd\fR and \fBu\fR commands.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBZZ\fR \fR
-.ad
-.RS 17n
-Exit from \fBmore\fR (same as \fBq\fR).
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB:e\fR \fIfile\fR \fR
-.ad
-.RS 17n
-Examine (display) a new file. If no \fIfile\fR is specified, the current file
-is redisplayed.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB:t\fR \fItagstring\fR \fR
-.ad
-.RS 17n
-Go to the tag named by the \fItagstring\fR argument and scroll/rewrite the
-screen with the tagged line in the current position. See the \fBctags\fR
-utility.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB\&'\fR\fIletter\fR \fR
-.ad
-.RS 17n
-Return to the position that was previously marked with the name \fIletter\fR.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB\&''\fR \fR
-.ad
-.RS 17n
-Return to the position from which the last move of more than a screenful was
-made. Defaults to the beginning of the file.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fIi\fR\fB?\fR[\fI!\fR]\fIpattern\fR\fR
-.ad
-.RS 17n
-Search backward in the file for the \fIi\fRth line containing the
-\fIpattern\fR. The \fI!\fR specifies to search backward for the \fIi\fRth line
-that does not contain the \fIpattern\fR.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fIi\fR\fB/\fR\fB!\fR\fIpattern\fR\fR
-.ad
-.RS 17n
-Search forward in the file for the \fIi\fRth line that does not contain the
-pattern.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB!\fR[\fIcommand\fR]\fR
-.ad
-.RS 17n
-Invoke a shell or the specified command.
-.RE
-
 .SS "Large File Behavior"
 .sp
 .LP
@@ -750,53 +446,8 @@ bytes).
 .LP
 See \fBenviron\fR(5) for descriptions of the following environment variables
 that affect the execution of \fBmore\fR: \fBLANG\fR, \fBLC_ALL\fR,
-\fBLC_COLLATE\fR (\fB/usr/xpg4/bin/more\fR only), \fBLC_CTYPE\fR,
+\fBLC_CTYPE\fR,
 \fBLC_MESSAGES\fR, \fBNLSPATH\fR, and \fBTERM\fR.
-.SS "/usr/xpg4/bin/more"
-.sp
-.LP
-The following environment variables also affect the execution of
-\fB/usr/xpg4/bin/more\fR:
-.sp
-.ne 2
-.na
-\fB\fBCOLUMNS\fR \fR
-.ad
-.RS 12n
-Overrides the system selected horizontal screen size.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBEDITOR\fR \fR
-.ad
-.RS 12n
-Used by the \fBv\fR command to select an editor.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBLINES\fR \fR
-.ad
-.RS 12n
-Overrides the system selected vertical screen size. The \fB-n\fR option has
-precedence over \fBLINES\fR in determining the number of lines in a screen.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBMORE\fR \fR
-.ad
-.RS 12n
-A string specifying options as described in the OPTIONS section, above. As in a
-command line, The options must be separated by blank characters and each option
-specification must start with a \(mi. Any command line options are processed
-after those specified in \fBMORE\fR as though the command line were: \fBmore
-$MORE\fR \fIoptions operands\fR
-.RE
 
 .SH EXIT STATUS
 .sp
@@ -827,15 +478,13 @@ An error occurred.
 \fB\fB/usr/lib/more.help\fR\fR
 .ad
 .RS 22n
-help file for \fB/usr/bin/more\fR and  \fB/usr/bin/page\fR only.
+help file for \fBmore\fR and \fBpage\fR.
 .RE
 
 .SH ATTRIBUTES
 .sp
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
-.SS "/usr/bin/more /usr/bin/page"
-.sp
 
 .sp
 .TS
@@ -847,41 +496,13 @@ _
 CSI	Not enabled
 .TE
 
-.SS "/usr/xpg4/bin/more"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
-_
-Interface Stability	Standard
-.TE
-
 .SH SEE ALSO
 .sp
 .LP
 \fBcat\fR(1), \fBcsh\fR(1), \fBctags\fR(1), \fBman\fR(1), \fBnroff\fR(1),
 \fBscript\fR(1), \fBsh\fR(1), \fBul\fR(1), \fBterminfo\fR(4),
-\fBattributes\fR(5), \fBenviron\fR(5), \fBlargefile\fR(5), \fBstandards\fR(5)
-.SS "/usr/bin/more /usr/bin/page"
-.sp
-.LP
-\fBregcomp\fR(3C)
-.SS "/usr/xpg4/bin/more"
-.sp
-.LP
-\fBregex\fR(5)
+\fBattributes\fR(5), \fBenviron\fR(5), \fBlargefile\fR(5), \fBstandards\fR(5),
+\fBregcomp(3C)
 .SH NOTES
-.SS "/usr/bin/more"
-.sp
 .LP
 Skipping backwards is too slow on large files.
-.SS "/usr/xpg4/bin/more"
-.sp
-.LP
-This utility will not behave correctly if the terminal is not set up properly.
