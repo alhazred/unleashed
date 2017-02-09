@@ -33,6 +33,7 @@
 
 extern char *bcrypt_gensalt(uint8_t);
 extern char *bcrypt(const char *, const char *);
+extern int _bcrypt_autorounds(void);
 
 /*ARGSUSED2*/
 char *
@@ -42,7 +43,7 @@ crypt_gensalt_impl(char *gsbuffer,
 	    const struct passwd *userinfo,
 	    const char **params)
 {
-	int logr = 4;	/* Default from pwd_gensalt.c on OpenBSD */
+	int logr = _bcrypt_autorounds();
 
 	if (params != NULL) {
 		logr = atoi(params[0]);

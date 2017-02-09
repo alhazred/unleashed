@@ -31,7 +31,7 @@ VERS= 		.1
 OBJECTS=	bsdbf.o \
 		bcrypt.o \
 		blowfish.o \
-		arc4random.o
+		timingsafe_bcmp.o
 
 include		../../Makefile.crypt_modules
 
