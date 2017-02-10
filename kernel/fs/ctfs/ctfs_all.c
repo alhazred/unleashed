@@ -68,7 +68,7 @@ ctfs_create_adirnode(vnode_t *pvp)
 }
 
 /*
- * ctfs_adir_getattr - VOP_GETATTR entry point
+ * ctfs_adir_getattr - fop_getattr entry point
  */
 /* ARGSUSED */
 static int

@@ -63,7 +63,7 @@ getpeerucred(int fd, void *buf)
 	switch (vp->v_type) {
 	case VFIFO:
 	case VSOCK:
-		err = VOP_IOCTL(vp, _I_GETPEERCRED, (intptr_t)&kpc,
+		err = fop_ioctl(vp, _I_GETPEERCRED, (intptr_t)&kpc,
 		    FKIOCTL, CRED(), &rval, NULL);
 		break;
 	case VCHR: {

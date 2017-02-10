@@ -429,7 +429,7 @@ devlookup_done:
 		goto out;
 	}
 
-	if ((error = VOP_ACCESS(svp, aflag, 0, cr, NULL)) != 0)
+	if ((error = fop_access(svp, aflag, 0, cr, NULL)) != 0)
 		goto out;
 
 out:
@@ -716,7 +716,7 @@ pcfs_mount(
 		VN_RELE(devvp);
 		return (EBUSY);
 	}
-	error = VOP_OPEN(&devvp,
+	error = fop_open(&devvp,
 	    (vfsp->vfs_flag & VFS_RDONLY) ? FREAD : FREAD | FWRITE, cr, NULL);
 	if (error) {
 		VN_RELE(devvp);
@@ -795,7 +795,7 @@ pcfs_mount(
 	return (0);
 
 errout:
-	(void) VOP_CLOSE(devvp,
+	(void) fop_close(devvp,
 	    vfsp->vfs_flag & VFS_RDONLY ? FREAD : FREAD | FWRITE,
 	    1, (offset_t)0, cr, NULL);
 	VN_RELE(devvp);
@@ -1125,7 +1125,7 @@ pc_invalfat(struct pcfs *fsp)
 	/*
 	 * close mounted device
 	 */
-	(void) VOP_CLOSE(fsp->pcfs_devvp,
+	(void) fop_close(fsp->pcfs_devvp,
 	    (PCFSTOVFS(fsp)->vfs_flag & VFS_RDONLY) ? FREAD : FREAD|FWRITE,
 	    1, (offset_t)0, CRED(), NULL);
 }
@@ -2317,7 +2317,7 @@ pcfs_device_getinfo(struct pcfs *fsp)
 
 	/*
 	 * Not sure if this could possibly happen. It'd be a bit like
-	 * VOP_OPEN() changing the passed-in vnode ptr. We're just not
+	 * fop_open() changing the passed-in vnode ptr. We're just not
 	 * expecting it, needs some thought if triggered ...
 	 */
 	ASSERT(fsp->pcfs_xdev == rdev);

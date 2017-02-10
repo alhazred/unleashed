@@ -755,9 +755,9 @@ ksocket_spoll(ksocket_t ks, int timo, short events, short *revents,
 	 * XXX - pollrelock() logic needs to know which
 	 * which pollcache lock to grab. It'd be a
 	 * cleaner solution if we could pass pcp as
-	 * an arguement in VOP_POLL interface instead
+	 * an arguement in fop_poll interface instead
 	 * of implicitly passing it using thread_t
-	 * struct. On the other hand, changing VOP_POLL
+	 * struct. On the other hand, changing fop_poll
 	 * interface will require all driver/file system
 	 * poll routine to change. May want to revisit
 	 * the tradeoff later.

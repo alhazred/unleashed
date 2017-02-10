@@ -210,10 +210,10 @@ checkforroot:
 			/*
 			 * Crossing mount points. For eg: We are doing
 			 * a lookup of ".." for file systems root vnode
-			 * mounted here, and VOP_LOOKUP() (with covered vnode)
+			 * mounted here, and fop_lookup() (with covered vnode)
 			 * will be on underlying file systems mount point
 			 * vnode. Set retry_with_kcred flag as we might end
-			 * up doing VOP_LOOKUP() with kcred if required.
+			 * up doing fop_lookup() with kcred if required.
 			 */
 			retry_with_kcred = B_TRUE;
 			goto checkforroot;
@@ -223,16 +223,16 @@ checkforroot:
 	/*
 	 * Perform a lookup in the current directory.
 	 */
-	error = VOP_LOOKUP(vp, component, &tvp, pnp, lookup_flags,
+	error = fop_lookup(vp, component, &tvp, pnp, lookup_flags,
 	    rootvp, cr, NULL, NULL, pp);
 
 	/*
 	 * Retry with kcred - If crossing mount points & error is EACCES.
 	 *
 	 * If we are crossing mount points here and doing ".." lookup,
-	 * VOP_LOOKUP() might fail if the underlying file systems
+	 * fop_lookup() might fail if the underlying file systems
 	 * mount point has no execute permission. In cases like these,
-	 * we retry VOP_LOOKUP() by giving as much privilage as possible
+	 * we retry fop_lookup() by giving as much privilage as possible
 	 * by passing kcred credentials.
 	 *
 	 * In case of hierarchical file systems, passing kcred still may
@@ -241,7 +241,7 @@ checkforroot:
 	 *			directory inside NFS FS.
 	 */
 	if ((error == EACCES) && retry_with_kcred)
-		error = VOP_LOOKUP(vp, component, &tvp, pnp, lookup_flags,
+		error = fop_lookup(vp, component, &tvp, pnp, lookup_flags,
 		    rootvp, zone_kcred(), NULL, NULL, pp);
 
 	cvp = tvp;

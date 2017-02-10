@@ -32,7 +32,7 @@
  */
 
 /*
- * Client-side support for (NFS) VOP_FRLOCK, VOP_SHRLOCK.
+ * Client-side support for (NFS) fop_frlock, fop_shrlock.
  * (called via klmops.c: lm_frlock, lm4_frlock)
  *
  * Source code derived from FreeBSD nlm_advlock.c
@@ -283,7 +283,7 @@ nlm_frlock(struct vnode *vp, int cmd, struct flock64 *flkp,
 
 	/*
 	 * Purge cached attributes in order to make sure that
-	 * future calls of convoff()/VOP_GETATTR() will get the
+	 * future calls of convoff()/fop_getattr() will get the
 	 * latest data.
 	 */
 	if (flkp->l_whence == SEEK_END)
@@ -535,7 +535,7 @@ nlm_safelock(vnode_t *vp, const struct flock64 *fl, cred_t *cr)
 		return (0);
 
 	va.va_mask = AT_MODE;
-	err = VOP_GETATTR(vp, &va, 0, cr, NULL);
+	err = fop_getattr(vp, &va, 0, cr, NULL);
 	if (err != 0)
 		return (0);
 

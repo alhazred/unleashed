@@ -459,7 +459,7 @@ log_file_create(caddr_t origname, struct log_file **lfpp)
 	rfsl_log_file++;
 
 	va.va_mask = AT_SIZE;
-	error = VOP_GETATTR(vp, &va, 0, CRED(), NULL);
+	error = fop_getattr(vp, &va, 0, CRED(), NULL);
 	if (error) {
 		nfs_cmn_err(error, CE_WARN,
 		    "log_file_create: Can not stat %s - error = %m",  name);
@@ -507,7 +507,7 @@ log_file_create(caddr_t origname, struct log_file **lfpp)
 out:
 	if (vp != NULL) {
 		int error1;
-		error1 = VOP_CLOSE(vp, FCREAT|FWRITE|FOFFMAX, 1, (offset_t)0,
+		error1 = fop_close(vp, FCREAT|FWRITE|FOFFMAX, 1, (offset_t)0,
 		    CRED(), NULL);
 		if (error1) {
 			nfs_cmn_err(error1, CE_WARN,
@@ -559,7 +559,7 @@ log_file_rele(struct log_file *lfp)
 	ASSERT(lfp->lf_flags == 0);
 	ASSERT(lfp->lf_writers == 0);
 
-	if (error = VOP_CLOSE(lfp->lf_vp, FCREAT|FWRITE|FOFFMAX, 1, (offset_t)0,
+	if (error = fop_close(lfp->lf_vp, FCREAT|FWRITE|FOFFMAX, 1, (offset_t)0,
 	    CRED(), NULL)) {
 		nfs_cmn_err(error, CE_WARN,
 		    "NFS: Could not close log buffer %s - error = %m",
@@ -764,7 +764,7 @@ nfslog_records_flush_to_disk_nolock(struct log_buffer *lbp)
 
 /*
  * Take care of writing the provided log record(s) to the log file.
- * We group the log records with an iovec and use VOP_WRITE to append
+ * We group the log records with an iovec and use fop_write to append
  * them to the end of the log file.
  */
 static int
@@ -823,17 +823,17 @@ nfslog_write_logrecords(struct log_file *lfp,
 	 */
 	va.va_mask = AT_SIZE;
 
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_TRUE, NULL);  /* UIO_WRITE */
-	if ((error = VOP_GETATTR(vp, &va, 0, CRED(), NULL)) == 0) {
+	(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);  /* UIO_WRITE */
+	if ((error = fop_getattr(vp, &va, 0, CRED(), NULL)) == 0) {
 		if ((len + va.va_size) < (MAXOFF32_T)) {
-			error = VOP_WRITE(vp, &uio, ioflag, CRED(), NULL);
-			VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+			error = fop_write(vp, &uio, ioflag, CRED(), NULL);
+			fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 			if (uio.uio_resid)
 				error = ENOSPC;
 			if (error)
-				(void) VOP_SETATTR(vp, &va, 0, CRED(), NULL);
+				(void) fop_setattr(vp, &va, 0, CRED(), NULL);
 		} else {
-			VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+			fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 			if (!(lfp->lf_flags & L_PRINTED)) {
 				cmn_err(CE_WARN,
 				    "NFS Logging: buffer file %s exceeds 2GB; "
@@ -842,7 +842,7 @@ nfslog_write_logrecords(struct log_file *lfp,
 			error = ENOSPC;
 		}
 	} else {
-		VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+		fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 	}
 
 	kmem_free(iovp, size_iovecs);

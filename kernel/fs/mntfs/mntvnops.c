@@ -1007,7 +1007,7 @@ mntgetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 
 	/* AT_MODE, AT_UID and AT_GID are derived from the underlying file. */
 	if (mask & AT_MODE|AT_UID|AT_GID) {
-		if (error = VOP_GETATTR(mnp->mnt_mountvp, vap, flags, cr, ct))
+		if (error = fop_getattr(mnp->mnt_mountvp, vap, flags, cr, ct))
 			return (error);
 	}
 
@@ -1123,7 +1123,7 @@ mntaccess(vnode_t *vp, int mode, int flags, cred_t *cr,
 	/*
 	 * Do access check on the underlying directory vnode.
 	 */
-	return (VOP_ACCESS(mnp->mnt_mountvp, mode, flags, cr, ct));
+	return (fop_access(mnp->mnt_mountvp, mode, flags, cr, ct));
 }
 
 
@@ -1308,7 +1308,7 @@ mntfs_special_info_string(char *path, uint_t *major, uint_t *minor, cred_t *cr)
 		return (0);
 
 	vattr.va_mask = AT_TYPE | AT_RDEV;
-	error = VOP_GETATTR(vp, &vattr, ATTR_REAL, cr, NULL);
+	error = fop_getattr(vp, &vattr, ATTR_REAL, cr, NULL);
 	VN_RELE(vp);
 
 	if (error == 0 && ((type = vattr.va_type) == VBLK || type == VCHR)) {

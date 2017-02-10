@@ -55,7 +55,7 @@
  * Get directory entries in a file system-independent format.
  *
  * The 32-bit version of this function now allocates a buffer to grab the
- * directory entries in dirent64 formats from VOP_READDIR routines.
+ * directory entries in dirent64 formats from fop_readdir routines.
  * The dirent64 structures are converted to dirent32 structures and
  * copied to the user space.
  *
@@ -117,9 +117,9 @@ getdents32(int fd, void *buf, size_t count)
 	auio.uio_resid = count;
 	auio.uio_fmode = 0;
 	auio.uio_extflg = UIO_COPY_CACHED;
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_FALSE, NULL);
-	error = VOP_READDIR(vp, &auio, fp->f_cred, &sink, NULL, 0);
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, NULL);
+	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, NULL);
+	error = fop_readdir(vp, &auio, fp->f_cred, &sink, NULL, 0);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
 	if (error)
 		goto out;
 	count = count - auio.uio_resid;
@@ -224,9 +224,9 @@ getdents64(int fd, void *buf, size_t count)
 	auio.uio_resid = count;
 	auio.uio_fmode = 0;
 	auio.uio_extflg = UIO_COPY_CACHED;
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_FALSE, NULL);
-	error = VOP_READDIR(vp, &auio, fp->f_cred, &sink, NULL, 0);
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, NULL);
+	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, NULL);
+	error = fop_readdir(vp, &auio, fp->f_cred, &sink, NULL, 0);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
 	if (error) {
 		releasef(fd);
 		return (set_errno(error));

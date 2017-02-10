@@ -150,7 +150,7 @@ fs_sync(struct vfs *vfspp, short flag, cred_t *cr)
 }
 
 /*
- * Does nothing but VOP_FSYNC must not fail.
+ * Does nothing but fop_fsync must not fail.
  */
 /* ARGSUSED */
 int
@@ -160,7 +160,7 @@ fs_fsync(vnode_t *vp, int syncflag, cred_t *cr, caller_context_t *ct)
 }
 
 /*
- * Does nothing but VOP_PUTPAGE must not fail.
+ * Does nothing but fop_putpage must not fail.
  */
 /* ARGSUSED */
 int
@@ -171,7 +171,7 @@ fs_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
 }
 
 /*
- * Does nothing but VOP_IOCTL must not fail.
+ * Does nothing but fop_ioctl must not fail.
  */
 /* ARGSUSED */
 int
@@ -579,7 +579,7 @@ fs_fab_acl(vnode_t *vp, vsecattr_t *vsecattr, int flag, cred_t *cr,
 	vsecattr->vsa_dfaclentp	= NULL;
 
 	vattr.va_mask = AT_MODE | AT_UID | AT_GID;
-	if (error = VOP_GETATTR(vp, &vattr, 0, cr, ct))
+	if (error = fop_getattr(vp, &vattr, 0, cr, ct))
 		return (error);
 
 	if (vsecattr->vsa_mask & (VSA_ACLCNT | VSA_ACL)) {
@@ -705,8 +705,8 @@ fs_vnevent_support(vnode_t *vp, vnevent_t e, vnode_t *dvp, char *fnm,
 /*
  * return 1 for non-trivial ACL.
  *
- * NB: It is not necessary for the caller to VOP_RWLOCK since
- *	we only issue VOP_GETSECATTR.
+ * NB: It is not necessary for the caller to fop_rwlock since
+ *	we only issue fop_getsecattr.
  *
  * Returns 0 == trivial
  *         1 == NOT Trivial
@@ -722,7 +722,7 @@ fs_acl_nontrivial(vnode_t *vp, cred_t *cr)
 	int		isnontrivial;
 
 	/* determine the forms of ACLs maintained */
-	error = VOP_PATHCONF(vp, _PC_ACL_ENABLED, &acl_styles, cr, NULL);
+	error = fop_pathconf(vp, _PC_ACL_ENABLED, &acl_styles, cr, NULL);
 
 	/* clear bits we don't understand and establish default acl_style */
 	acl_styles &= (_ACL_ACLENT_ENABLED | _ACL_ACE_ENABLED);
@@ -746,7 +746,7 @@ fs_acl_nontrivial(vnode_t *vp, cred_t *cr)
 		}
 
 		ASSERT(vsecattr.vsa_mask && acl_flavor);
-		error = VOP_GETSECATTR(vp, &vsecattr, 0, cr, NULL);
+		error = fop_getsecattr(vp, &vsecattr, 0, cr, NULL);
 		if (error == 0)
 			break;
 
@@ -855,7 +855,7 @@ reparse_vnode_parse(vnode_t *vp, nvlist_t *nvl)
 	uio.uio_loffset = (offset_t)0;
 	uio.uio_resid = MAXREPARSELEN;
 
-	if ((err = VOP_READLINK(vp, &uio, kcred, NULL)) == 0) {
+	if ((err = fop_readlink(vp, &uio, kcred, NULL)) == 0) {
 		*(lkdata + MAXREPARSELEN - uio.uio_resid) = '\0';
 		err = reparse_parse(lkdata, nvl);
 	}

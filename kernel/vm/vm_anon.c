@@ -1547,7 +1547,7 @@ anon_fill_cow_holes(
 				page_t *pl[1 + 1];
 				page_t *pp;
 
-				err = VOP_GETPAGE(vp, vp_off, PAGESIZE, NULL,
+				err = fop_getpage(vp, vp_off, PAGESIZE, NULL,
 				    pl, PAGESIZE, seg, addr, S_READ, cred,
 				    NULL);
 				if (err) {
@@ -1917,7 +1917,7 @@ anon_getpage(
 	/*
 	 * Lookup the page. If page is being paged in,
 	 * wait for it to finish as we must return a list of
-	 * pages since this routine acts like the VOP_GETPAGE
+	 * pages since this routine acts like the fop_getpage
 	 * routine does.
 	 */
 	if (pl != NULL && (pp = page_lookup(vp, (u_offset_t)off, SE_SHARED))) {
@@ -1937,7 +1937,7 @@ anon_getpage(
 	 * Simply treat it as a vnode fault on the anon vp.
 	 */
 
-	err = VOP_GETPAGE(vp, (u_offset_t)off, PAGESIZE, protp, pl, plsz,
+	err = fop_getpage(vp, (u_offset_t)off, PAGESIZE, protp, pl, plsz,
 	    seg, addr, rw, cred, NULL);
 
 	if (err == 0 && pl != NULL) {
@@ -2200,11 +2200,11 @@ top:
 		}
 
 		/*
-		 * If we decided to preallocate but VOP_GETPAGE
+		 * If we decided to preallocate but fop_getpage
 		 * found a page in the system that satisfies our
 		 * request then free up our preallocated large page
 		 * and continue looping accross the existing large
-		 * page via VOP_GETPAGE.
+		 * page via fop_getpage.
 		 */
 		if (prealloc && pp != ppa[pg_idx]) {
 			VM_STAT_ADD(anonvmstats.getpages[15]);
@@ -2426,13 +2426,13 @@ anon_private(
 	}
 
 	/*
-	 * Call the VOP_GETPAGE routine to create the page, thereby
+	 * Call the fop_getpage routine to create the page, thereby
 	 * enabling the vnode driver to allocate any filesystem
 	 * space (e.g., disk block allocation for UFS).  This also
 	 * prevents more than one page from being added to the
 	 * vnode at the same time.
 	 */
-	err = VOP_GETPAGE(vp, (u_offset_t)off, PAGESIZE, NULL,
+	err = fop_getpage(vp, (u_offset_t)off, PAGESIZE, NULL,
 	    anon_pl, PAGESIZE, seg, addr, S_CREATE, cred, NULL);
 	if (err)
 		goto out;
@@ -2571,7 +2571,7 @@ anon_map_privatepages(
 
 	/*
 	 * Now try and allocate the large page. If we fail then just
-	 * let VOP_GETPAGE give us PAGESIZE pages. Normally we let
+	 * let fop_getpage give us PAGESIZE pages. Normally we let
 	 * the caller make this decision but to avoid added complexity
 	 * it's simplier to handle that case here.
 	 */
@@ -2696,7 +2696,7 @@ anon_map_privatepages(
 		 * Impossible to fail this is S_CREATE.
 		 */
 		if (err)
-			panic("anon_map_privatepages: VOP_GETPAGE failed");
+			panic("anon_map_privatepages: fop_getpage failed");
 
 		ASSERT(prealloc ? pp == pl[0] : pl[0]->p_szc == 0);
 		ASSERT(prealloc == 0 || nreloc == 1);
@@ -2792,13 +2792,13 @@ anon_zero(struct seg *seg, caddr_t addr, struct anon **app, struct cred *cred)
 	swap_xlate(ap, &vp, &off);
 
 	/*
-	 * Call the VOP_GETPAGE routine to create the page, thereby
+	 * Call the fop_getpage routine to create the page, thereby
 	 * enabling the vnode driver to allocate any filesystem
 	 * dependent structures (e.g., disk block allocation for UFS).
 	 * This also prevents more than on page from being added to
 	 * the vnode at the same time since it is locked.
 	 */
-	err = VOP_GETPAGE(vp, off, PAGESIZE, NULL,
+	err = fop_getpage(vp, off, PAGESIZE, NULL,
 	    anon_pl, PAGESIZE, seg, addr, S_CREATE, cred, NULL);
 	if (err) {
 		*app = NULL;

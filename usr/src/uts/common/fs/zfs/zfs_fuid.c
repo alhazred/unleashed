@@ -648,7 +648,7 @@ zfs_fuid_destroy(zfsvfs_t *zfsvfs)
 
 /*
  * Allocate zfs_fuid_info for tracking FUIDs created during
- * zfs_mknode, VOP_SETATTR() or VOP_SETSECATTR()
+ * zfs_mknode, fop_setattr() or fop_setsecattr()
  */
 zfs_fuid_info_t *
 zfs_fuid_info_alloc(void)

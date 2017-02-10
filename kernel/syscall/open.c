@@ -179,14 +179,14 @@ copen(int startfd, char *fname, int filemode, int createmode)
 		 * user must be able to stat() the file
 		 */
 		vattr.va_mask = AT_ALL;
-		if (error = VOP_GETATTR(startvp, &vattr, 0, CRED(), NULL)) {
+		if (error = fop_getattr(startvp, &vattr, 0, CRED(), NULL)) {
 			pn_free(&pn);
 			goto out;
 		}
 
 		if ((startvp->v_vfsp->vfs_flag & VFS_XATTR) != 0 ||
 		    vfs_has_feature(startvp->v_vfsp, VFSFT_SYSATTR_VIEWS)) {
-			error = VOP_LOOKUP(startvp, "", &sdvp, &pn,
+			error = fop_lookup(startvp, "", &sdvp, &pn,
 			    (filemode & FXATTRDIROPEN) ? LOOKUP_XATTR :
 			    LOOKUP_XATTR|CREATE_XATTR_DIR, rootvp, CRED(),
 			    NULL, NULL, NULL);

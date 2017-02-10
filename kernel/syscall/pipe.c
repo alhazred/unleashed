@@ -145,7 +145,7 @@ pipe(intptr_t arg, int flags)
 		goto out;
 
 	if (error = fifo_stropen(&vp2, FWRITE|FREAD, fp2->f_cred, 0, 0)) {
-		(void) VOP_CLOSE(vp1, FWRITE|FREAD, 1, (offset_t)0,
+		(void) fop_close(vp1, FWRITE|FREAD, 1, (offset_t)0,
 		    fp1->f_cred, NULL);
 		goto out;
 	}
@@ -162,12 +162,12 @@ pipe(intptr_t arg, int flags)
 		flag2 = fp2->f_flag;
 		iflags = flags & FNONBLOCK;
 
-		if (error = VOP_SETFL(vp1, flag1, iflags, fp1->f_cred, NULL)) {
+		if (error = fop_setfl(vp1, flag1, iflags, fp1->f_cred, NULL)) {
 			goto out_vop_close;
 		}
 		fp1->f_flag |= iflags;
 
-		if (error = VOP_SETFL(vp2, flag2, iflags, fp2->f_cred, NULL)) {
+		if (error = fop_setfl(vp2, flag2, iflags, fp2->f_cred, NULL)) {
 			goto out_vop_close;
 		}
 		fp2->f_flag |= iflags;
@@ -202,8 +202,8 @@ pipe(intptr_t arg, int flags)
 
 	return (0);
 out_vop_close:
-	(void) VOP_CLOSE(vp1, FWRITE|FREAD, 1, (offset_t)0, fp1->f_cred, NULL);
-	(void) VOP_CLOSE(vp2, FWRITE|FREAD, 1, (offset_t)0, fp2->f_cred, NULL);
+	(void) fop_close(vp1, FWRITE|FREAD, 1, (offset_t)0, fp1->f_cred, NULL);
+	(void) fop_close(vp2, FWRITE|FREAD, 1, (offset_t)0, fp2->f_cred, NULL);
 out:
 	setf(fd2, NULL);
 	unfalloc(fp2);

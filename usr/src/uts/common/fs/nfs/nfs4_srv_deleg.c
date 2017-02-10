@@ -798,7 +798,7 @@ retry:
 /*
  * Used by the NFSv4 server to get attributes for a file while
  * handling the case where a file has been write delegated.  For the
- * time being, VOP_GETATTR() is called and CB_GETATTR processing is
+ * time being, fop_getattr() is called and CB_GETATTR processing is
  * not undertaken.  This call site is maintained in case the server is
  * updated in the future to handle write delegation space guarantees.
  */
@@ -808,21 +808,21 @@ rfs4_vop_getattr(vnode_t *vp, vattr_t *vap, int flag, cred_t *cr)
 
 	int error;
 
-	error = VOP_GETATTR(vp, vap, flag, cr, NULL);
+	error = fop_getattr(vp, vap, flag, cr, NULL);
 	return (puterrno4(error));
 }
 
 /*
  * This is used everywhere in the v2/v3 server to allow the
  * integration of all NFS versions and the support of delegation.  For
- * now, just call the VOP_GETATTR().  If the NFSv4 server is enhanced
+ * now, just call the fop_getattr().  If the NFSv4 server is enhanced
  * in the future to provide space guarantees for write delegations
  * then this call site should be expanded to interact with the client.
  */
 int
 rfs4_delegated_getattr(vnode_t *vp, vattr_t *vap, int flag, cred_t *cr)
 {
-	return (VOP_GETATTR(vp, vap, flag, cr, NULL));
+	return (fop_getattr(vp, vap, flag, cr, NULL));
 }
 
 /*

@@ -34,7 +34,7 @@
 #define	PSEUDOFS_SUFFIX		" (pseudo)"
 
 /*
- * A version of VOP_FID that deals with a remote VOP_FID for nfs.
+ * A version of fop_fid that deals with a remote fop_fid for nfs.
  * If vp is an nfs node, nfs4_fid() returns EREMOTE, nfs3_fid() and nfs_fid()
  * returns the filehandle of vp as its fid. When nfs uses fid to set the
  * exportinfo filehandle template, a remote nfs filehandle would be too big for
@@ -54,7 +54,7 @@ vop_fid_pseudo(vnode_t *vp, fid_t *fidp)
 	struct vattr va;
 	int error;
 
-	error = VOP_FID(vp, fidp, NULL);
+	error = fop_fid(vp, fidp, NULL);
 
 	/*
 	 * XXX nfs4_fid() does nothing and returns EREMOTE.
@@ -69,7 +69,7 @@ vop_fid_pseudo(vnode_t *vp, fid_t *fidp)
 	    (error == 0 && fidp->fid_len > NFS_FH4MAXDATA)) {
 
 		va.va_mask = AT_NODEID;
-		error = VOP_GETATTR(vp, &va, 0, CRED(), NULL);
+		error = fop_getattr(vp, &va, 0, CRED(), NULL);
 		if (error)
 			return (error);
 
@@ -711,7 +711,7 @@ treeclimb_export(struct exportinfo *exip)
 		 * for this vnode.
 		 */
 		va.va_mask = AT_NODEID;
-		error = VOP_GETATTR(vp, &va, 0, CRED(), NULL);
+		error = fop_getattr(vp, &va, 0, CRED(), NULL);
 		if (error)
 			break;
 
@@ -743,7 +743,7 @@ treeclimb_export(struct exportinfo *exip)
 		/*
 		 * Now, do a ".." to find parent dir of vp.
 		 */
-		error = VOP_LOOKUP(vp, "..", &dvp, NULL, 0, NULL, CRED(),
+		error = fop_lookup(vp, "..", &dvp, NULL, 0, NULL, CRED(),
 		    NULL, NULL, NULL);
 
 		if (error == ENOTDIR && exportdir) {
@@ -766,8 +766,8 @@ treeclimb_export(struct exportinfo *exip)
 	/*
 	 * We can have set error due to error in:
 	 * 1. vop_fid_pseudo()
-	 * 2. VOP_GETATTR()
-	 * 3. VOP_LOOKUP()
+	 * 2. fop_getattr()
+	 * 3. fop_lookup()
 	 * We must free pseudo exportinfos, visibles and treenodes.
 	 * Visibles are referenced from treenode_t::tree_vis and
 	 * exportinfo_t::exi_visible. To avoid double freeing, only
@@ -1047,7 +1047,7 @@ nfs_visible(struct exportinfo *exi, vnode_t *vp, int *expseudo)
 
 	/*
 	 * We can't trust VN_CMP() above because of LOFS.
-	 * Even though VOP_CMP will do the right thing for LOFS
+	 * Even though fop_cmp will do the right thing for LOFS
 	 * objects, VN_CMP will short circuit out early when the
 	 * vnode ops ptrs are different.  Just in case we're dealing
 	 * with LOFS, compare exi_fid/fsid here.
@@ -1192,7 +1192,7 @@ nfs_visible_change(struct exportinfo *exi, vnode_t *vp, timespec_t *change)
 
 	/*
 	 * We can't trust VN_CMP() above because of LOFS.
-	 * Even though VOP_CMP will do the right thing for LOFS
+	 * Even though fop_cmp will do the right thing for LOFS
 	 * objects, VN_CMP will short circuit out early when the
 	 * vnode ops ptrs are different.  Just in case we're dealing
 	 * with LOFS, compare exi_fid/fsid here.

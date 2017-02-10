@@ -229,7 +229,7 @@ nfs_purge_caches(vnode_t *vp, int purge_dnlc, cred_t *cr)
 	 * Flush the page cache.
 	 */
 	if (vn_has_cached_data(vp)) {
-		error = VOP_PUTPAGE(vp, (u_offset_t)0, 0, B_INVAL, cr, NULL);
+		error = fop_putpage(vp, (u_offset_t)0, 0, B_INVAL, cr, NULL);
 		if (error && (error == ENOSPC || error == EDQUOT)) {
 			mutex_enter(&rp->r_statelock);
 			if (!rp->r_error)
@@ -1210,7 +1210,7 @@ free_async_args(struct nfs_async_reqs *args)
 /*
  * Cross-zone thread creation and NFS access is disallowed, yet fsflush() and
  * pageout(), running in the global zone, have legitimate reasons to do
- * VOP_PUTPAGE(B_ASYNC) on other zones' NFS mounts.  We avoid the problem by
+ * fop_putpage(B_ASYNC) on other zones' NFS mounts.  We avoid the problem by
  * use of a a per-mount "asynchronous requests manager thread" which is
  * signaled by the various asynchronous work routines when there is
  * asynchronous work to be done.  It is responsible for creating new
@@ -1964,7 +1964,7 @@ nfs_async_inactive(vnode_t *vp, cred_t *cr,
 		/*
 		 * No need to explicitly throw away any cached pages.  The
 		 * eventual rinactive() will attempt a synchronous
-		 * VOP_PUTPAGE() which will immediately fail since the request
+		 * fop_putpage() which will immediately fail since the request
 		 * is coming from the wrong zone, and then will proceed to call
 		 * nfs_invalidate_pages() which will clean things up for us.
 		 */
@@ -2889,12 +2889,12 @@ nfs_lockrelease(vnode_t *vp, int flag, offset_t offset, cred_t *cr)
 		ld.l_whence = 0;	/* unlock from start of file */
 		ld.l_start = 0;
 		ld.l_len = 0;		/* do entire file */
-		ret = VOP_FRLOCK(vp, F_SETLK, &ld, flag, offset, NULL, cr,
+		ret = fop_frlock(vp, F_SETLK, &ld, flag, offset, NULL, cr,
 		    NULL);
 
 		if (ret != 0) {
 			/*
-			 * If VOP_FRLOCK fails, make sure we unregister
+			 * If fop_frlock fails, make sure we unregister
 			 * local locks before we continue.
 			 */
 			ld.l_pid = ttoproc(curthread)->p_pid;
@@ -2907,7 +2907,7 @@ nfs_lockrelease(vnode_t *vp, int flag, offset_t offset, cred_t *cr)
 		}
 
 		/*
-		 * The call to VOP_FRLOCK may put the pid back on the
+		 * The call to fop_frlock may put the pid back on the
 		 * list.  We need to remove it.
 		 */
 		(void) nfs_remove_locking_id(vp, RLMPL_PID,
@@ -2930,7 +2930,7 @@ nfs_lockrelease(vnode_t *vp, int flag, offset_t offset, cred_t *cr)
 		shr.s_sysid = 0;
 		shr.s_pid = curproc->p_pid;
 
-		ret = VOP_SHRLOCK(vp, F_UNSHARE, &shr, flag, cr, NULL);
+		ret = fop_shrlock(vp, F_UNSHARE, &shr, flag, cr, NULL);
 #ifdef DEBUG
 		if (ret != 0) {
 			nfs_perror(ret,

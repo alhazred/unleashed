@@ -217,7 +217,7 @@ syopen(dev_t *devp, int flag, int otyp, struct cred *cr)
 	 * The multi-open, single-clone means that no cloning
 	 * can happen via this open, hence the assertion.
 	 */
-	error = VOP_OPEN(&ttyvp, FNOCTTY | flag, cr, NULL);
+	error = fop_open(&ttyvp, FNOCTTY | flag, cr, NULL);
 	if (error == 0) {
 		struct snode *csp;
 
@@ -270,7 +270,7 @@ syread(dev_t dev, struct uio *uiop, struct cred *cr)
 		return (ENXIO);
 	}
 
-	error = VOP_READ(sp->s_vp, uiop, 0, cr, NULL);
+	error = fop_read(sp->s_vp, uiop, 0, cr, NULL);
 
 	tty_rele(sp);
 	return (error);
@@ -291,7 +291,7 @@ sywrite(dev_t dev, struct uio *uiop, struct cred *cr)
 		return (ENXIO);
 	}
 
-	error = VOP_WRITE(sp->s_vp, uiop, 0, cr, NULL);
+	error = fop_write(sp->s_vp, uiop, 0, cr, NULL);
 
 	tty_rele(sp);
 	return (error);
@@ -326,7 +326,7 @@ syioctl(dev_t dev, int cmd, intptr_t arg, int mode, struct cred *cr,
 		return (ENXIO);
 	}
 
-	error = VOP_IOCTL(sp->s_vp, cmd, arg, mode, cr, rvalp, NULL);
+	error = fop_ioctl(sp->s_vp, cmd, arg, mode, cr, rvalp, NULL);
 
 	tty_rele(sp);
 	return (error);
@@ -350,7 +350,7 @@ sypoll(dev_t dev, short events, int anyyet, short *reventsp,
 		return (ENXIO);
 	}
 
-	error = VOP_POLL(sp->s_vp, events, anyyet, reventsp, phpp, NULL);
+	error = fop_poll(sp->s_vp, events, anyyet, reventsp, phpp, NULL);
 
 	tty_rele(sp);
 	return (error);

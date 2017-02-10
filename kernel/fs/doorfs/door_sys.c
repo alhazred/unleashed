@@ -1785,7 +1785,7 @@ door_insert(struct file *fp, door_desc_t *dp)
 	dp->d_data.d_desc.d_descriptor = fd;
 
 	/* Fill in the attributes */
-	if (VOP_REALVP(fp->f_vnode, &vp, NULL))
+	if (fop_realvp(fp->f_vnode, &vp, NULL))
 		vp = fp->f_vnode;
 	if (vp && vp->v_type == VDOOR) {
 		if (VTOD(vp)->door_target == curproc)
@@ -1964,7 +1964,7 @@ door_lookup(int did, file_t **fpp)
 	/*
 	 * Use the underlying vnode (we may be namefs mounted)
 	 */
-	if (VOP_REALVP(fp->f_vnode, &vp, NULL))
+	if (fop_realvp(fp->f_vnode, &vp, NULL))
 		vp = fp->f_vnode;
 
 	if (vp == NULL || vp->v_type != VDOOR) {
@@ -2627,7 +2627,7 @@ door_translate_in(void)
 					(void) closeandsetf(fd, NULL);
 				}
 
-				if (VOP_REALVP(fp->f_vnode, &vp, NULL))
+				if (fop_realvp(fp->f_vnode, &vp, NULL))
 					vp = fp->f_vnode;
 
 				/* Set attributes */
@@ -3320,7 +3320,7 @@ shuttle_return:
 			struct file *fp;
 
 			fp = *fpp;
-			if (VOP_REALVP(fp->f_vnode, &vp, NULL))
+			if (fop_realvp(fp->f_vnode, &vp, NULL))
 				vp = fp->f_vnode;
 
 			didpp->d_attributes = DOOR_HANDLE |
@@ -3419,7 +3419,7 @@ door_ki_upcall_limited(door_handle_t dh, door_arg_t *param, struct cred *cred,
 	file_t *fp = DHTOF(dh);
 	vnode_t *realvp;
 
-	if (VOP_REALVP(fp->f_vnode, &realvp, NULL))
+	if (fop_realvp(fp->f_vnode, &realvp, NULL))
 		realvp = fp->f_vnode;
 	return (door_upcall(realvp, param, cred, max_data, max_desc));
 }
@@ -3487,7 +3487,7 @@ door_ki_open(char *pathname, door_handle_t *dhp)
 
 	if ((err = lookupname(pathname, UIO_SYSSPACE, FOLLOW, NULL, &vp)) != 0)
 		return (err);
-	if (err = VOP_OPEN(&vp, FREAD, kcred, NULL)) {
+	if (err = fop_open(&vp, FREAD, kcred, NULL)) {
 		VN_RELE(vp);
 		return (err);
 	}
@@ -3511,7 +3511,7 @@ door_ki_info(door_handle_t dh, struct door_info *dip)
 	file_t *fp = DHTOF(dh);
 	vnode_t *vp;
 
-	if (VOP_REALVP(fp->f_vnode, &vp, NULL))
+	if (fop_realvp(fp->f_vnode, &vp, NULL))
 		vp = fp->f_vnode;
 	if (vp->v_type != VDOOR)
 		return (EINVAL);
@@ -3541,7 +3541,7 @@ door_ki_setparam(door_handle_t dh, int type, size_t val)
 	file_t *fp = DHTOF(dh);
 	vnode_t *vp;
 
-	if (VOP_REALVP(fp->f_vnode, &vp, NULL))
+	if (fop_realvp(fp->f_vnode, &vp, NULL))
 		vp = fp->f_vnode;
 	if (vp->v_type != VDOOR)
 		return (EINVAL);
@@ -3554,7 +3554,7 @@ door_ki_getparam(door_handle_t dh, int type, size_t *out)
 	file_t *fp = DHTOF(dh);
 	vnode_t *vp;
 
-	if (VOP_REALVP(fp->f_vnode, &vp, NULL))
+	if (fop_realvp(fp->f_vnode, &vp, NULL))
 		vp = fp->f_vnode;
 	if (vp->v_type != VDOOR)
 		return (EINVAL);

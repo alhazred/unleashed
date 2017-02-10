@@ -138,7 +138,7 @@ spec_sync(struct vfs *vfsp,
 			if (vp->v_type == VBLK && vn_has_cached_data(vp)) {
 				/*
 				 * Prevent vp from going away before we
-				 * we get a chance to do a VOP_PUTPAGE
+				 * we get a chance to do a fop_putpage
 				 * via sync_list processing
 				 */
 				VN_HOLD(vp);
@@ -154,7 +154,7 @@ spec_sync(struct vfs *vfsp,
 	for (sp = sync_list; sp != NULL; sp = spnext) {
 		spnext = sp->s_list;
 		vp = STOV(sp);
-		(void) VOP_PUTPAGE(vp, (offset_t)0, (uint_t)0, B_ASYNC, cr,
+		(void) fop_putpage(vp, (offset_t)0, (uint_t)0, B_ASYNC, cr,
 		    NULL);
 		VN_RELE(vp);		/* Release our hold on vnode */
 	}

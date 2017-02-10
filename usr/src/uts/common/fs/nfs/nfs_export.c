@@ -1100,17 +1100,17 @@ exportfs(struct exportfs_args *args, model_t model, cred_t *cr)
 
 	/*
 	 * 'vp' may be an AUTOFS node, so we perform a
-	 * VOP_ACCESS() to trigger the mount of the
+	 * fop_access() to trigger the mount of the
 	 * intended filesystem, so we can share the intended
 	 * filesystem instead of the AUTOFS filesystem.
 	 */
-	(void) VOP_ACCESS(vp, 0, 0, cr, NULL);
+	(void) fop_access(vp, 0, 0, cr, NULL);
 
 	/*
 	 * We're interested in the top most filesystem.
 	 * This is specially important when uap->dname is a trigger
 	 * AUTOFS node, since we're really interested in sharing the
-	 * filesystem AUTOFS mounted as result of the VOP_ACCESS()
+	 * filesystem AUTOFS mounted as result of the fop_access()
 	 * call not the AUTOFS node itself.
 	 */
 	if (vn_mountedvfs(vp) != NULL) {
@@ -1142,7 +1142,7 @@ exportfs(struct exportfs_args *args, model_t model, cred_t *cr)
 	 */
 	bzero(&fid, sizeof (fid));
 	fid.fid_len = MAXFIDSZ;
-	error = VOP_FID(vp, &fid, NULL);
+	error = fop_fid(vp, &fid, NULL);
 	fsid = vp->v_vfsp->vfs_fsid;
 
 	if (error) {
@@ -1150,7 +1150,7 @@ exportfs(struct exportfs_args *args, model_t model, cred_t *cr)
 		if (dvp != NULL)
 			VN_RELE(dvp);
 		/*
-		 * If VOP_FID returns ENOSPC then the fid supplied
+		 * If fop_fid returns ENOSPC then the fid supplied
 		 * is too small.  For now we simply return EREMOTE.
 		 */
 		if (error == ENOSPC)
@@ -1773,17 +1773,17 @@ nfs_getfh(struct nfs_getfh_args *args, model_t model, cred_t *cr)
 
 	/*
 	 * 'vp' may be an AUTOFS node, so we perform a
-	 * VOP_ACCESS() to trigger the mount of the
+	 * fop_access() to trigger the mount of the
 	 * intended filesystem, so we can share the intended
 	 * filesystem instead of the AUTOFS filesystem.
 	 */
-	(void) VOP_ACCESS(vp, 0, 0, cr, NULL);
+	(void) fop_access(vp, 0, 0, cr, NULL);
 
 	/*
 	 * We're interested in the top most filesystem.
 	 * This is specially important when uap->dname is a trigger
 	 * AUTOFS node, since we're really interested in sharing the
-	 * filesystem AUTOFS mounted as result of the VOP_ACCESS()
+	 * filesystem AUTOFS mounted as result of the fop_access()
 	 * call not the AUTOFS node itself.
 	 */
 	if (vn_mountedvfs(vp) != NULL) {
@@ -1956,7 +1956,7 @@ nfs_vptoexi(vnode_t *dvp, vnode_t *vp, cred_t *cr, int *walk,
 		 * otherwise, look it up.
 		 */
 		if (dvp == NULL) {
-			error = VOP_LOOKUP(vp, "..", &dvp, NULL, 0, NULL, cr,
+			error = fop_lookup(vp, "..", &dvp, NULL, 0, NULL, cr,
 			    NULL, NULL, NULL);
 			if (error)
 				break;
@@ -2007,7 +2007,7 @@ makefh(fhandle_t *fh, vnode_t *vp, exportinfo_t *exi)
 
 	*fh = exi->exi_fh;	/* struct copy */
 
-	error = VOP_FID(vp, (fid_t *)&fh->fh_len, NULL);
+	error = fop_fid(vp, (fid_t *)&fh->fh_len, NULL);
 	if (error) {
 		/*
 		 * Should be something other than EREMOTE
@@ -2111,7 +2111,7 @@ makefh3(nfs_fh3 *fh, vnode_t *vp, struct exportinfo *exi)
 
 	bzero(&fid, sizeof (fid));
 	fid.fid_len = sizeof (fh->fh3_data);
-	error = VOP_FID(vp, &fid, NULL);
+	error = fop_fid(vp, &fid, NULL);
 	if (error)
 		return (EREMOTE);
 
@@ -2218,7 +2218,7 @@ makefh4(nfs_fh4 *fh, vnode_t *vp, struct exportinfo *exi)
 	fid.fid_len = MAXFIDSZ;
 	/*
 	 * vop_fid_pseudo() is used to set up NFSv4 namespace, so
-	 * use vop_fid_pseudo() here to get the fid instead of VOP_FID.
+	 * use vop_fid_pseudo() here to get the fid instead of fop_fid.
 	 */
 	error = vop_fid_pseudo(vp, &fid);
 	if (error)
@@ -2501,7 +2501,7 @@ checkexport4(fsid_t *fsid, fid_t *fid, vnode_t *vp)
 			 * If vp is given, check if vp is the
 			 * same vnode as the exported node.
 			 *
-			 * Since VOP_FID of a lofs node returns the
+			 * Since fop_fid of a lofs node returns the
 			 * fid of its real node (ufs), the exported
 			 * node for lofs and (pseudo) ufs may have
 			 * the same fsid and fid.

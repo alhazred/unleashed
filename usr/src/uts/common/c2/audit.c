@@ -110,7 +110,7 @@ audit_savepath(
 		struct vattr attr;
 
 		attr.va_mask = AT_ALL;
-		if (VOP_GETATTR(pvp, &attr, 0, CRED(), NULL) == 0) {
+		if (fop_getattr(pvp, &attr, 0, CRED(), NULL) == 0) {
 			if (object_is_public(&attr)) {
 				tad->tad_ctrl |= TAD_NOAUDIT;
 			}
@@ -457,7 +457,7 @@ audit_attributes(struct vnode *vp)
 
 	if (vp) {
 		attr.va_mask = AT_ALL;
-		if (VOP_GETATTR(vp, &attr, 0, CRED(), NULL) != 0)
+		if (fop_getattr(vp, &attr, 0, CRED(), NULL) != 0)
 			return;
 
 		if (object_is_public(&attr) &&
@@ -774,7 +774,7 @@ audit_closef(struct file *fp)
 	 */
 	if ((vp = fp->f_vnode) != NULL) {
 		attr.va_mask = AT_ALL;
-		if (VOP_GETATTR(vp, &attr, 0, CRED(), NULL) == 0) {
+		if (fop_getattr(vp, &attr, 0, CRED(), NULL) == 0) {
 			if ((fp->f_flag & FWRITE) == 0 &&
 			    object_is_public(&attr)) {
 				/*
@@ -1119,7 +1119,7 @@ audit_symlink_create(vnode_t *dvp, char *sname, char *target, int error)
 	if (error)
 		return;
 
-	error = VOP_LOOKUP(dvp, sname, &vp, NULL, 0, NULL, CRED(),
+	error = fop_lookup(dvp, sname, &vp, NULL, 0, NULL, CRED(),
 	    NULL, NULL, NULL);
 	if (error == 0) {
 		audit_attributes(vp);

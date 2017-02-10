@@ -637,11 +637,11 @@ int dopageout = 1;	/* must be non-zero to turn page stealing on */
  *
  * There are 2 threads that act on behalf of the pageout process.
  * One thread scans pages (pageout_scanner) and frees them up if
- * they don't require any VOP_PUTPAGE operation. If a page must be
+ * they don't require any fop_putpage operation. If a page must be
  * written back to its backing store, the request is put on a list
  * and the other (pageout) thread is signaled. The pageout thread
- * grabs VOP_PUTPAGE requests from the list, and processes them.
- * Some filesystems may require resources for the VOP_PUTPAGE
+ * grabs fop_putpage requests from the list, and processes them.
+ * Some filesystems may require resources for the fop_putpage
  * operations (like memory) and hence can block the pageout
  * thread, but the scanner thread can still operate. There is still
  * no guarantee that memory deadlocks cannot occur.
@@ -720,7 +720,7 @@ pageout()
 		arg->a_next = NULL;
 		mutex_exit(&push_lock);
 
-		if (VOP_PUTPAGE(arg->a_vp, (offset_t)arg->a_off,
+		if (fop_putpage(arg->a_vp, (offset_t)arg->a_off,
 		    arg->a_len, arg->a_flags, arg->a_cred, NULL) == 0) {
 			pushes++;
 		}

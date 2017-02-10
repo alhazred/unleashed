@@ -143,7 +143,7 @@ nbl_svmand(vnode_t *vp, cred_t *cr, int *svp)
 	int error;
 
 	va.va_mask = AT_MODE;
-	error = VOP_GETATTR(vp, &va, 0, cr, NULL);
+	error = fop_getattr(vp, &va, 0, cr, NULL);
 	if (error != 0)
 		return (error);
 

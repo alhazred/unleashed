@@ -92,7 +92,7 @@ int swap_maxcontig;	/* set by anon_init() to 1 Mb */
 
 /*
  * XXX - this lock is a kludge. It serializes some aspects of swapadd() and
- * swapdel() (namely VOP_OPEN, VOP_CLOSE, VN_RELE).  It protects against
+ * swapdel() (namely fop_open, fop_close, VN_RELE).  It protects against
  * somebody swapadd'ing and getting swap slots from a vnode, while someone
  * else is in the process of closing or rele'ing it.
  */
@@ -744,7 +744,7 @@ lout:
 		if (vp->v_vfsp && vn_is_readonly(vp))
 			error = EROFS;
 		else
-			error = VOP_ACCESS(vp, VREAD|VWRITE, 0, CRED(), NULL);
+			error = fop_access(vp, VREAD|VWRITE, 0, CRED(), NULL);
 		break;
 
 	case VDIR:
@@ -1039,7 +1039,7 @@ lout:
 		if (vp->v_vfsp && vn_is_readonly(vp))
 			error = EROFS;
 		else
-			error = VOP_ACCESS(vp, VREAD|VWRITE, 0, CRED(), NULL);
+			error = fop_access(vp, VREAD|VWRITE, 0, CRED(), NULL);
 		break;
 
 	case VDIR:
@@ -1099,7 +1099,7 @@ swapadd(struct vnode *vp, ulong_t lowblk, ulong_t nblks, char *swapname)
 	mutex_exit(&cvp->v_lock);
 
 	mutex_enter(&swap_lock);
-	if (error = VOP_OPEN(&cvp, FREAD|FWRITE, CRED(), NULL)) {
+	if (error = fop_open(&cvp, FREAD|FWRITE, CRED(), NULL)) {
 		mutex_exit(&swap_lock);
 		/* restore state of v_flag */
 		if (!wasswap) {
@@ -1120,7 +1120,7 @@ swapadd(struct vnode *vp, ulong_t lowblk, ulong_t nblks, char *swapname)
 	 * on a machine with a different size swap partition.
 	 */
 	vattr.va_mask = AT_SIZE;
-	if (error = VOP_GETATTR(cvp, &vattr, ATTR_COMM, CRED(), NULL))
+	if (error = fop_getattr(cvp, &vattr, ATTR_COMM, CRED(), NULL))
 		goto out;
 
 	/*
@@ -1150,11 +1150,11 @@ swapadd(struct vnode *vp, ulong_t lowblk, ulong_t nblks, char *swapname)
 
 	/* Fail if file not writeable (try to set size to current size) */
 	vattr.va_mask = AT_SIZE;
-	if (error = VOP_SETATTR(cvp, &vattr, 0, CRED(), NULL))
+	if (error = fop_setattr(cvp, &vattr, 0, CRED(), NULL))
 		goto out;
 
-	/* Fail if fs does not support VOP_PAGEIO */
-	error = VOP_PAGEIO(cvp, (page_t *)NULL, (u_offset_t)0, 0, 0, CRED(),
+	/* Fail if fs does not support fop_pageio */
+	error = fop_pageio(cvp, (page_t *)NULL, (u_offset_t)0, 0, 0, CRED(),
 	    NULL);
 
 	if (error == ENOSYS)
@@ -1347,7 +1347,7 @@ out:
 			kmem_free(nsip, sizeof (*nsip));
 		}
 		mutex_enter(&swap_lock);
-		(void) VOP_CLOSE(cvp, FREAD|FWRITE, 1, (offset_t)0, CRED(),
+		(void) fop_close(cvp, FREAD|FWRITE, 1, (offset_t)0, CRED(),
 		    NULL);
 		mutex_exit(&swap_lock);
 	}
@@ -1545,7 +1545,7 @@ top:
 	/* Release the vnode */
 
 	mutex_enter(&swap_lock);
-	(void) VOP_CLOSE(cvp, FREAD|FWRITE, 1, (offset_t)0, CRED(), NULL);
+	(void) fop_close(cvp, FREAD|FWRITE, 1, (offset_t)0, CRED(), NULL);
 	mutex_enter(&cvp->v_lock);
 	cvp->v_flag &= ~VISSWAP;
 	mutex_exit(&cvp->v_lock);
@@ -1593,7 +1593,7 @@ again:
 			return (0);
 		}
 
-		error = VOP_PAGEIO(pvp, pp, poff, PAGESIZE, B_READ,
+		error = fop_pageio(pvp, pp, poff, PAGESIZE, B_READ,
 		    CRED(), NULL);
 		if (error) {
 			page_io_unlock(pp);

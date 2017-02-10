@@ -259,10 +259,10 @@ propen(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 			error = EACCES;
 		else {
 			/*
-			 * Need to hold rvp since VOP_OPEN() may release it.
+			 * Need to hold rvp since fop_open() may release it.
 			 */
 			VN_HOLD(rvp);
-			error = VOP_OPEN(&rvp, flag, cr, ct);
+			error = fop_open(&rvp, flag, cr, ct);
 			if (error) {
 				VN_RELE(rvp);
 			} else {
@@ -327,7 +327,7 @@ propen(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 		pcp->prc_writers++;
 		/*
 		 * The vnode may have become invalid between the
-		 * VOP_LOOKUP() of the /proc vnode and the VOP_OPEN().
+		 * fop_lookup() of the /proc vnode and the fop_open().
 		 * If so, do now what prinvalidate() should have done.
 		 */
 		if ((pnp->pr_flags & PR_INVAL) ||
@@ -2852,7 +2852,7 @@ prgetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	case PR_OBJECT:
 	case PR_FD:
 		rvp = pnp->pr_realvp;
-		error = VOP_GETATTR(rvp, vap, flags, cr, ct);
+		error = fop_getattr(rvp, vap, flags, cr, ct);
 		if (error)
 			return (error);
 		if (type == PR_FD) {
@@ -2877,7 +2877,7 @@ prgetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	/*
 	 * Large Files: Internally proc now uses VPROC to indicate
 	 * a proc file. Since we have been returning VREG through
-	 * VOP_GETATTR() until now, we continue to do this so as
+	 * fop_getattr() until now, we continue to do this so as
 	 * not to break apps depending on this return value.
 	 */
 	vap->va_type = (vp->v_type == VPROC) ? VREG : vp->v_type;
@@ -3160,9 +3160,9 @@ prgetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 
 		/*
 		 * If there is no lwp then just make the size zero.
-		 * This can happen if the lwp exits between the VOP_LOOKUP()
+		 * This can happen if the lwp exits between the fop_lookup()
 		 * of the /proc/<pid>/lwp/<lwpid>/gwindows file and the
-		 * VOP_GETATTR() of the resulting vnode.
+		 * fop_getattr() of the resulting vnode.
 		 */
 		if ((t = pcp->prc_thread) == NULL) {
 			vap->va_size = 0;
@@ -3238,7 +3238,7 @@ praccess(vnode_t *vp, int mode, int flags, cred_t *cr, caller_context_t *ct)
 		    (type == PR_FD && (vmode & mode) != mode &&
 		    secpolicy_proc_access(cr) != 0))
 			return (EACCES);
-		return (VOP_ACCESS(rvp, mode, flags, cr, ct));
+		return (fop_access(rvp, mode, flags, cr, ct));
 
 	case PR_PSINFO:		/* these files can be read by anyone */
 	case PR_LPSINFO:
@@ -3279,7 +3279,7 @@ praccess(vnode_t *vp, int mode, int flags, cred_t *cr, caller_context_t *ct)
 			VN_HOLD(xvp);
 			prunlock(pnp);
 			if (secpolicy_proc_access(cr) != 0)
-				error = VOP_ACCESS(xvp, VREAD, 0, cr, ct);
+				error = fop_access(xvp, VREAD, 0, cr, ct);
 			VN_RELE(xvp);
 		}
 		if (error)
@@ -3291,7 +3291,7 @@ praccess(vnode_t *vp, int mode, int flags, cred_t *cr, caller_context_t *ct)
 		/*
 		 * Final access check on the underlying directory vnode.
 		 */
-		return (VOP_ACCESS(pnp->pr_realvp, mode, flags, cr, ct));
+		return (fop_access(pnp->pr_realvp, mode, flags, cr, ct));
 	}
 
 	/*
@@ -3402,7 +3402,7 @@ prlookup(vnode_t *dp, char *comp, vnode_t **vpp, pathname_t *pathp,
 		/* FALLTHROUGH */
 	case PR_FD:
 		dp = pnp->pr_realvp;
-		return (VOP_LOOKUP(dp, comp, vpp, pathp, flags, rdir, cr, ct,
+		return (fop_lookup(dp, comp, vpp, pathp, flags, rdir, cr, ct,
 		    direntflags, realpnp));
 	default:
 		break;
@@ -3459,7 +3459,7 @@ prcreate(vnode_t *dp, char *comp, vattr_t *vap, vcexcl_t excl,
 				vp = VTOP(vp)->pr_realvp;
 				mask = vap->va_mask;
 				vap->va_mask = AT_SIZE;
-				error = VOP_SETATTR(vp, vap, 0, cr, ct);
+				error = fop_setattr(vp, vap, 0, cr, ct);
 				vap->va_mask = mask;
 			}
 		}
@@ -3751,7 +3751,7 @@ pr_lookup_objectdir(vnode_t *dp, char *comp)
 		if (seg->s_ops == &segvn_ops &&
 		    segop_getvp(seg, seg->s_base, &vp) == 0 &&
 		    vp != NULL && vp->v_type == VREG &&
-		    VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) == 0) {
+		    fop_getattr(vp, &vattr, 0, CRED(), NULL) == 0) {
 			char name[64];
 
 			if (vp == p->p_exec)	/* "a.out" */
@@ -4203,7 +4203,7 @@ pr_lookup_pathdir(vnode_t *dp, char *comp)
 					    segop_getvp(seg, seg->s_base, &vp)
 					    == 0 &&
 					    vp != NULL && vp->v_type == VREG &&
-					    VOP_GETATTR(vp, &vattr, 0, CRED(),
+					    fop_getattr(vp, &vattr, 0, CRED(),
 					    NULL) == 0) {
 						char name[64];
 
@@ -4904,7 +4904,7 @@ rebuild_objdir(struct as *as)
 		if (seg->s_ops == &segvn_ops &&
 		    segop_getvp(seg, seg->s_base, &vp) == 0 &&
 		    vp != NULL && vp->v_type == VREG &&
-		    VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) == 0) {
+		    fop_getattr(vp, &vattr, 0, CRED(), NULL) == 0) {
 			for (i = 0; i < nentries; i++)
 				if (vp == dir[i])
 					break;
@@ -5060,7 +5060,7 @@ pr_readdir_objectdir(prnode_t *pnp, uio_t *uiop, int *eofp)
 		 */
 		vattr.va_mask = AT_FSID | AT_NODEID;
 		while (n < objdirsize && (((vp = obj_entry(as, n)) == NULL) ||
-		    (VOP_GETATTR(vp, &vattr, 0, CRED(), NULL)
+		    (fop_getattr(vp, &vattr, 0, CRED(), NULL)
 		    != 0))) {
 			vattr.va_mask = AT_FSID | AT_NODEID;
 			n++;
@@ -5417,7 +5417,7 @@ pr_readdir_pathdir(prnode_t *pnp, uio_t *uiop, int *eofp)
 			if ((vp = obj_entry(as, obj)) == NULL)
 				continue;
 			vattr.va_mask = AT_FSID|AT_NODEID;
-			if (VOP_GETATTR(vp, &vattr, 0, CRED(), NULL) != 0)
+			if (fop_getattr(vp, &vattr, 0, CRED(), NULL) != 0)
 				continue;
 			if (vp == p->p_exec)
 				(void) strcpy(dirent->d_name, "a.out");
@@ -5932,7 +5932,7 @@ prrealvp(vnode_t *vp, vnode_t **vpp, caller_context_t *ct)
 
 	if ((rvp = VTOP(vp)->pr_realvp) != NULL) {
 		vp = rvp;
-		if (VOP_REALVP(vp, &rvp, ct) == 0)
+		if (fop_realvp(vp, &rvp, ct) == 0)
 			vp = rvp;
 	}
 

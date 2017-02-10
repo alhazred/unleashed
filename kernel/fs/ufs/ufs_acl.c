@@ -726,7 +726,7 @@ ufs_acl_get(struct inode *ip, vsecattr_t *vsap, int flag, cred_t *cr)
 	 * If no ACLs are present, fabricate one from the mode bits.
 	 * This code is almost identical to fs_fab_acl(), but we
 	 * already have the mode bits handy, so we'll avoid going
-	 * through VOP_GETATTR() again.
+	 * through fop_getattr() again.
 	 */
 
 	vsap->vsa_aclcnt    = 0;

@@ -85,10 +85,10 @@ zut_open_dir(char *path, vnode_t *startvp, cred_t *cr, int flags,
 	 */
 	if (!error) {
 		if (vfs_has_feature((*dvn)->v_vfsp, VFSFT_ACEMASKONACCESS)) {
-			error = VOP_ACCESS(*dvn, ACE_LIST_DIRECTORY,
+			error = fop_access(*dvn, ACE_LIST_DIRECTORY,
 			    V_ACE_MASK, cr, NULL);
 		} else {
-			error = VOP_ACCESS(*dvn, VREAD, 0, cr, NULL);
+			error = fop_access(*dvn, VREAD, 0, cr, NULL);
 		}
 	}
 
@@ -123,7 +123,7 @@ zut_readdir(intptr_t arg, cred_t *cr, int iflag, int *rvalp)
 	if (zr->zr_reqflags & ZUT_XATTR) {
 		vattr_t vattr;
 
-		zr->zr_retcode = VOP_LOOKUP(dvn, zr->zr_file, &fvn,
+		zr->zr_retcode = fop_lookup(dvn, zr->zr_file, &fvn,
 		    NULL, flags, NULL, cr, NULL, NULL, NULL);
 		VN_RELE(dvn);
 		dvn = NULL;
@@ -136,20 +136,20 @@ zut_readdir(intptr_t arg, cred_t *cr, int iflag, int *rvalp)
 		 * to stat() the file
 		 */
 		if (vfs_has_feature(fvn->v_vfsp, VFSFT_ACEMASKONACCESS)) {
-			zr->zr_retcode = VOP_ACCESS(fvn, ACE_READ_NAMED_ATTRS,
+			zr->zr_retcode = fop_access(fvn, ACE_READ_NAMED_ATTRS,
 			    V_ACE_MASK, cr, NULL);
 		} else {
-			zr->zr_retcode = VOP_ACCESS(fvn, VREAD, 0, cr, NULL);
+			zr->zr_retcode = fop_access(fvn, VREAD, 0, cr, NULL);
 		}
 		if (zr->zr_retcode)
 			goto zutr_done;
 
 		vattr.va_mask = AT_ALL;
-		zr->zr_retcode = VOP_GETATTR(fvn, &vattr, 0, cr, NULL);
+		zr->zr_retcode = fop_getattr(fvn, &vattr, 0, cr, NULL);
 		if (zr->zr_retcode)
 			goto zutr_done;
 
-		zr->zr_retcode = VOP_LOOKUP(fvn, "", &dvn, NULL,
+		zr->zr_retcode = fop_lookup(fvn, "", &dvn, NULL,
 		    flags | LOOKUP_XATTR, NULL, cr, NULL, NULL, NULL);
 		VN_RELE(fvn);
 		if (zr->zr_retcode)
@@ -171,10 +171,10 @@ zut_readdir(intptr_t arg, cred_t *cr, int iflag, int *rvalp)
 	if (zr->zr_reqflags & ZUT_ACCFILTER)
 		flags |= V_RDDIR_ACCFILTER;
 
-	(void) VOP_RWLOCK(dvn, V_WRITELOCK_FALSE, NULL);
-	zr->zr_retcode = VOP_READDIR(dvn, &auio, cr, &zr->zr_eof,
+	(void) fop_rwlock(dvn, V_WRITELOCK_FALSE, NULL);
+	zr->zr_retcode = fop_readdir(dvn, &auio, cr, &zr->zr_eof,
 	    NULL, flags);
-	VOP_RWUNLOCK(dvn, V_WRITELOCK_FALSE, NULL);
+	fop_rwunlock(dvn, V_WRITELOCK_FALSE, NULL);
 	VN_RELE(dvn);
 
 	zr->zr_bytes = aiov.iov_base - kbuf;
@@ -221,7 +221,7 @@ zut_stat64(vnode_t *vp, struct stat64 *sb, uint64_t *xvs, int flag, cred_t *cr)
 	XVA_SET_REQ(&xv, XAT_SPARSE);
 
 	xv.xva_vattr.va_mask |= AT_STAT | AT_NBLOCKS | AT_BLKSIZE | AT_SIZE;
-	if (error = VOP_GETATTR(vp, &xv.xva_vattr, flag, cr, NULL))
+	if (error = fop_getattr(vp, &xv.xva_vattr, flag, cr, NULL))
 		return (error);
 
 	bzero(sb, sizeof (sb));
@@ -305,7 +305,7 @@ zut_lookup(intptr_t arg, cred_t *cr, int iflag, int *rvalp)
 	if (zl->zl_reqflags & ZUT_IGNORECASE)
 		flags |= FIGNORECASE;
 
-	zl->zl_retcode = VOP_LOOKUP(dvn, zl->zl_file, &fvn, NULL, flags, NULL,
+	zl->zl_retcode = fop_lookup(dvn, zl->zl_file, &fvn, NULL, flags, NULL,
 	    cr, NULL, &zl->zl_deflags, &rpn);
 	if (zl->zl_retcode)
 		goto zutl_done;
@@ -321,27 +321,27 @@ zut_lookup(intptr_t arg, cred_t *cr, int iflag, int *rvalp)
 		 * to stat() the file
 		 */
 		if (vfs_has_feature(fvn->v_vfsp, VFSFT_ACEMASKONACCESS)) {
-			zl->zl_retcode = VOP_ACCESS(fvn, ACE_READ_NAMED_ATTRS,
+			zl->zl_retcode = fop_access(fvn, ACE_READ_NAMED_ATTRS,
 			    V_ACE_MASK, cr, NULL);
 		} else {
-			zl->zl_retcode = VOP_ACCESS(fvn, VREAD, 0, cr, NULL);
+			zl->zl_retcode = fop_access(fvn, VREAD, 0, cr, NULL);
 		}
 		if (zl->zl_retcode)
 			goto zutl_done;
 
 		vattr.va_mask = AT_ALL;
-		zl->zl_retcode = VOP_GETATTR(fvn, &vattr, 0, cr, NULL);
+		zl->zl_retcode = fop_getattr(fvn, &vattr, 0, cr, NULL);
 		if (zl->zl_retcode)
 			goto zutl_done;
 
-		zl->zl_retcode = VOP_LOOKUP(fvn, "", &xdvn, NULL,
+		zl->zl_retcode = fop_lookup(fvn, "", &xdvn, NULL,
 		    flags | LOOKUP_XATTR, NULL, cr, NULL, NULL, NULL);
 		if (zl->zl_retcode)
 			goto zutl_done;
 		VN_RELE(fvn);
 		release = xdvn;
 
-		zl->zl_retcode = VOP_LOOKUP(xdvn, zl->zl_xfile, &xfvn,
+		zl->zl_retcode = fop_lookup(xdvn, zl->zl_xfile, &xfvn,
 		    NULL, flags, NULL, cr, NULL, &zl->zl_deflags, &rpn);
 		if (zl->zl_retcode)
 			goto zutl_done;

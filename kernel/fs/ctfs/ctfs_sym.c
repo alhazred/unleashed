@@ -77,7 +77,7 @@ ctfs_create_symnode(vnode_t *pvp, contract_t *ct)
 }
 
 /*
- * ctfs_sym_getattr - VOP_GETATTR entry point
+ * ctfs_sym_getattr - fop_getattr entry point
  */
 /* ARGSUSED */
 static int
@@ -102,7 +102,7 @@ ctfs_sym_getattr(
 }
 
 /*
- * ctfs_sym_readlink - VOP_READLINK entry point
+ * ctfs_sym_readlink - fop_readlink entry point
  *
  * Since we built the symlink string in ctfs_create_symnode, this is
  * just a uiomove.
@@ -118,7 +118,7 @@ ctfs_sym_readlink(vnode_t *vp, uio_t *uiop, cred_t *cr, caller_context_t *ct)
 }
 
 /*
- * ctfs_sym_inactive - VOP_INACTIVE entry point
+ * ctfs_sym_inactive - fop_inactive entry point
  */
 /* ARGSUSED */
 static void

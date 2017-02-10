@@ -1386,7 +1386,7 @@ fifo_strioctl(vnode_t *vp, int cmd, intptr_t arg, int mode,
 }
 
 /*
- * If shadowing a vnode (FIFOs), apply the VOP_GETATTR to the shadowed
+ * If shadowing a vnode (FIFOs), apply the fop_getattr to the shadowed
  * vnode to Obtain the node information. If not shadowing (pipes), obtain
  * the node information from the credentials structure.
  */
@@ -1404,7 +1404,7 @@ fifo_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 		/*
 		 * for FIFOs or mounted pipes
 		 */
-		if (error = VOP_GETATTR(fnp->fn_realvp, vap, flags, crp, ct))
+		if (error = fop_getattr(fnp->fn_realvp, vap, flags, crp, ct))
 			return (error);
 		mutex_enter(&fn_lock->flk_lock);
 		/* set current times from fnode, even if older than vnode */
@@ -1464,7 +1464,7 @@ fifo_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 }
 
 /*
- * If shadowing a vnode, apply the VOP_SETATTR to it, and to the fnode.
+ * If shadowing a vnode, apply the fop_setattr to it, and to the fnode.
  * Otherwise, set the time and return 0.
  */
 int
@@ -1480,7 +1480,7 @@ fifo_setattr(
 	fifolock_t	*fn_lock;
 
 	if (fnp->fn_realvp)
-		error = VOP_SETATTR(fnp->fn_realvp, vap, flags, crp, ctp);
+		error = fop_setattr(fnp->fn_realvp, vap, flags, crp, ctp);
 	if (error == 0) {
 		fn_lock = fnp->fn_lock;
 		mutex_enter(&fn_lock->flk_lock);
@@ -1495,14 +1495,14 @@ fifo_setattr(
 }
 
 /*
- * If shadowing a vnode, apply VOP_ACCESS to it.
+ * If shadowing a vnode, apply fop_access to it.
  * Otherwise, return 0 (allow all access).
  */
 int
 fifo_access(vnode_t *vp, int mode, int flags, cred_t *crp, caller_context_t *ct)
 {
 	if (VTOF(vp)->fn_realvp)
-		return (VOP_ACCESS(VTOF(vp)->fn_realvp, mode, flags, crp, ct));
+		return (fop_access(VTOF(vp)->fn_realvp, mode, flags, crp, ct));
 	else
 		return (0);
 }
@@ -1530,7 +1530,7 @@ fifo_create(struct vnode *dvp, char *name, vattr_t *vap, enum vcexcl excl,
 }
 
 /*
- * If shadowing a vnode, apply the VOP_FSYNC to it.
+ * If shadowing a vnode, apply the fop_fsync to it.
  * Otherwise, return 0.
  */
 int
@@ -1544,7 +1544,7 @@ fifo_fsync(vnode_t *vp, int syncflag, cred_t *crp, caller_context_t *ct)
 
 	bzero((caddr_t)&va, sizeof (va));
 	va.va_mask = AT_MTIME | AT_ATIME;
-	if (VOP_GETATTR(fnp->fn_realvp, &va, 0, crp, ct) == 0) {
+	if (fop_getattr(fnp->fn_realvp, &va, 0, crp, ct) == 0) {
 		va.va_mask = 0;
 		if (fnp->fn_mtime > va.va_mtime.tv_sec) {
 			va.va_mtime.tv_sec = fnp->fn_mtime;
@@ -1555,9 +1555,9 @@ fifo_fsync(vnode_t *vp, int syncflag, cred_t *crp, caller_context_t *ct)
 			va.va_mask |= AT_ATIME;
 		}
 		if (va.va_mask != 0)
-			(void) VOP_SETATTR(fnp->fn_realvp, &va, 0, crp, ct);
+			(void) fop_setattr(fnp->fn_realvp, &va, 0, crp, ct);
 	}
-	return (VOP_FSYNC(fnp->fn_realvp, syncflag, crp, ct));
+	return (fop_fsync(fnp->fn_realvp, syncflag, crp, ct));
 }
 
 /*
@@ -1646,14 +1646,14 @@ fifo_inactive(vnode_t *vp, cred_t *crp, caller_context_t *ct)
 }
 
 /*
- * If shadowing a vnode, apply the VOP_FID to it.
+ * If shadowing a vnode, apply the fop_fid to it.
  * Otherwise, return EINVAL.
  */
 int
 fifo_fid(vnode_t *vp, fid_t *fidfnp, caller_context_t *ct)
 {
 	if (VTOF(vp)->fn_realvp)
-		return (VOP_FID(VTOF(vp)->fn_realvp, fidfnp, ct));
+		return (fop_fid(VTOF(vp)->fn_realvp, fidfnp, ct));
 	else
 		return (EINVAL);
 }
@@ -1697,7 +1697,7 @@ fifo_realvp(vnode_t *vp, vnode_t **vpp, caller_context_t *ct)
 
 	if ((rvp = VTOF(vp)->fn_realvp) != NULL) {
 		vp = rvp;
-		if (VOP_REALVP(vp, &rvp, ct) == 0)
+		if (fop_realvp(vp, &rvp, ct) == 0)
 			vp = rvp;
 	}
 
@@ -1880,7 +1880,7 @@ fifo_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
 
 	default:
 		if (VTOF(vp)->fn_realvp)
-			error = VOP_PATHCONF(VTOF(vp)->fn_realvp, cmd,
+			error = fop_pathconf(VTOF(vp)->fn_realvp, cmd,
 			    &val, cr, ct);
 		else
 			error = EINVAL;
@@ -1893,7 +1893,7 @@ fifo_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
 }
 
 /*
- * If shadowing a vnode, apply VOP_SETSECATTR to it.
+ * If shadowing a vnode, apply fop_setsecattr to it.
  * Otherwise, return NOSYS.
  */
 int
@@ -1905,20 +1905,20 @@ fifo_setsecattr(struct vnode *vp, vsecattr_t *vsap, int flag, struct cred *crp,
 	/*
 	 * The acl(2) system call tries to grab the write lock on the
 	 * file when setting an ACL, but fifofs does not implement
-	 * VOP_RWLOCK or VOP_RWUNLOCK, so we do it here instead.
+	 * fop_rwlock or fop_rwunlock, so we do it here instead.
 	 */
 	if (VTOF(vp)->fn_realvp) {
-		(void) VOP_RWLOCK(VTOF(vp)->fn_realvp, V_WRITELOCK_TRUE, ct);
-		error = VOP_SETSECATTR(VTOF(vp)->fn_realvp, vsap, flag,
+		(void) fop_rwlock(VTOF(vp)->fn_realvp, V_WRITELOCK_TRUE, ct);
+		error = fop_setsecattr(VTOF(vp)->fn_realvp, vsap, flag,
 		    crp, ct);
-		VOP_RWUNLOCK(VTOF(vp)->fn_realvp, V_WRITELOCK_TRUE, ct);
+		fop_rwunlock(VTOF(vp)->fn_realvp, V_WRITELOCK_TRUE, ct);
 		return (error);
 	} else
 		return (fs_nosys());
 }
 
 /*
- * If shadowing a vnode, apply VOP_GETSECATTR to it. Otherwise, fabricate
+ * If shadowing a vnode, apply fop_getsecattr to it. Otherwise, fabricate
  * an ACL from the permission bits that fifo_getattr() makes up.
  */
 int
@@ -1926,7 +1926,7 @@ fifo_getsecattr(struct vnode *vp, vsecattr_t *vsap, int flag, struct cred *crp,
 	caller_context_t *ct)
 {
 	if (VTOF(vp)->fn_realvp)
-		return (VOP_GETSECATTR(VTOF(vp)->fn_realvp, vsap, flag,
+		return (fop_getsecattr(VTOF(vp)->fn_realvp, vsap, flag,
 		    crp, ct));
 	else
 		return (fs_fab_acl(vp, vsap, flag, crp, ct));

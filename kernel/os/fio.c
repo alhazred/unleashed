@@ -946,7 +946,7 @@ closef(file_t *fp)
 
 	vp = fp->f_vnode;
 
-	error = VOP_CLOSE(vp, flag, count, offset, fp->f_cred, NULL);
+	error = fop_close(vp, flag, count, offset, fp->f_cred, NULL);
 
 	if (count > 1) {
 		mutex_exit(&fp->f_tlock);
@@ -1380,7 +1380,7 @@ fassign(vnode_t **vpp, int mode, int *fdp)
 
 	if (error = falloc((vnode_t *)NULL, mode, &fp, &fd))
 		return (error);
-	if (error = VOP_OPEN(vpp, mode, fp->f_cred, NULL)) {
+	if (error = fop_open(vpp, mode, fp->f_cred, NULL)) {
 		setf(fd, NULL);
 		unfalloc(fp);
 		return (error);
@@ -1572,7 +1572,7 @@ fsetattrat(int fd, char *path, int flags, struct vattr *vap)
 	if (vn_is_readonly(vp)) {
 		error = EROFS;
 	} else {
-		error = VOP_SETATTR(vp, vap, 0, CRED(), NULL);
+		error = fop_setattr(vp, vap, 0, CRED(), NULL);
 	}
 
 	if (startvp != NULL)

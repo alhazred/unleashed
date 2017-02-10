@@ -178,7 +178,7 @@ again:
 		 * In very rare instances, a segkp page may have been
 		 * relocated outside of the kernel by the kernel cage
 		 * due to the window between page_unlock() and
-		 * VOP_PUTPAGE() in segkp_unlock().  Due to the
+		 * fop_putpage() in segkp_unlock().  Due to the
 		 * rareness of these occurances, the solution is to
 		 * relocate the page to a P_NORELOC page.
 		 */
@@ -228,7 +228,7 @@ again:
 				kmutex_t *ahm;
 
 				flags = (pl == NULL ? B_ASYNC|B_READ : B_READ);
-				err = VOP_PAGEIO(pvp, pp, poff,
+				err = fop_pageio(pvp, pp, poff,
 				    PAGESIZE, flags, cr, NULL);
 
 				if (!err) {
@@ -260,7 +260,7 @@ again:
 				 * If it's a fault ahead, release page_io_lock
 				 * and SE_EXCL we grabbed in page_create_va
 				 *
-				 * If we are here, we haven't called VOP_PAGEIO
+				 * If we are here, we haven't called fop_pageio
 				 * and thus calling pvn_read_done(pp, B_READ)
 				 * below may mislead that we tried i/o. Besides,
 				 * in case of async, pvn_read_done() should
@@ -271,7 +271,7 @@ again:
 					 * swap_getphysname can return error
 					 * only when we are getting called from
 					 * swapslot_free which passes non-NULL
-					 * pl to VOP_GETPAGE.
+					 * pl to fop_getpage.
 					 */
 					ASSERT(err == 0);
 					page_io_unlock(pp);
@@ -407,7 +407,7 @@ swap_getconpage(
 		}
 
 		if (pvp != NULL) {
-			err = VOP_PAGEIO(pvp, pp, poff, PAGESIZE, B_READ,
+			err = fop_pageio(pvp, pp, poff, PAGESIZE, B_READ,
 			    cr, NULL);
 			if (err == 0) {
 				struct anon *ap;
@@ -589,7 +589,7 @@ swap_putpage(
 /*
  * Write out a single page.
  * For swapfs this means choose a physical swap slot and write the page
- * out using VOP_PAGEIO.
+ * out using fop_pageio.
  * In the (B_ASYNC | B_FREE) case we try to find a bunch of other dirty
  * swapfs pages, a bunch of contiguous swap slots and then write them
  * all out in one clustered i/o.
@@ -727,7 +727,7 @@ swap_putapage(
 		}
 	}
 
-	err = VOP_PAGEIO(klvp, pplist, klstart, klsz,
+	err = fop_pageio(klvp, pplist, klstart, klsz,
 	    B_WRITE | flags, cr, NULL);
 
 	if ((flags & B_ASYNC) == 0)
@@ -776,7 +776,7 @@ swap_dispose(
 
 	err = swap_getphysname(vp, off, &pvp, &poff);
 	if (!err && pvp != NULL)
-		VOP_DISPOSE(pvp, pp, fl, dn, cr, ct);
+		fop_dispose(pvp, pp, fl, dn, cr, ct);
 	else
 		fs_dispose(vp, pp, fl, dn, cr, ct);
 }

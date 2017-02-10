@@ -558,9 +558,9 @@ vscan_drv_read(dev_t dev, struct uio *uiop, cred_t *credp)
 	if ((vp = vscan_svc_get_vnode(inst)) == NULL)
 		return (EINVAL);
 
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_FALSE, NULL);
-	rc = VOP_READ(vp, uiop, 0, kcred, NULL);
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, NULL);
+	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, NULL);
+	rc = fop_read(vp, uiop, 0, kcred, NULL);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
 
 	mutex_enter(&vscan_drv_mutex);
 	if (vscan_drv_inst_state[inst] == VS_DRV_INST_READING)

@@ -1166,7 +1166,7 @@ nlm_do_share(nlm4_shareargs *argp, nlm4_shareres *resp, struct svc_req *sr)
 
 	/* Convert to local form. */
 	nlm_init_shrlock(&shr, &argp->share, host);
-	error = VOP_SHRLOCK(nvp->nv_vp, F_SHARE, &shr,
+	error = fop_shrlock(nvp->nv_vp, F_SHARE, &shr,
 	    FREAD | FWRITE, CRED(), NULL);
 
 	if (error == 0) {
@@ -1228,7 +1228,7 @@ nlm_do_unshare(nlm4_shareargs *argp, nlm4_shareres *resp, struct svc_req *sr)
 
 	/* Convert to local form. */
 	nlm_init_shrlock(&shr, &argp->share, host);
-	error = VOP_SHRLOCK(vp, F_UNSHARE, &shr,
+	error = fop_shrlock(vp, F_UNSHARE, &shr,
 	    FREAD | FWRITE, CRED(), NULL);
 
 	(void) error;
@@ -1245,7 +1245,7 @@ out:
 }
 
 /*
- * NLM wrapper to VOP_FRLOCK that checks the validity of the lock before
+ * NLM wrapper to fop_frlock that checks the validity of the lock before
  * invoking the vnode operation.
  */
 static int
@@ -1256,5 +1256,5 @@ nlm_vop_frlock(vnode_t *vp, int cmd, flock64_t *bfp, int flag, offset_t offset,
 		return (EOVERFLOW);
 	}
 
-	return (VOP_FRLOCK(vp, cmd, bfp, flag, offset, flk_cbp, cr, ct));
+	return (fop_frlock(vp, cmd, bfp, flag, offset, flk_cbp, cr, ct));
 }

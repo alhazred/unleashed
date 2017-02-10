@@ -137,9 +137,9 @@ auto_open(vnode_t **vpp, int flag, cred_t *cred, caller_context_t *ct)
 		 */
 		VN_RELE(*vpp);
 		*vpp = newvp;
-		error = VOP_ACCESS(*vpp, VREAD, 0, cred, ct);
+		error = fop_access(*vpp, VREAD, 0, cred, ct);
 		if (!error)
-			error = VOP_OPEN(vpp, flag, cred, ct);
+			error = fop_open(vpp, flag, cred, ct);
 	}
 
 done:
@@ -232,7 +232,7 @@ auto_getattr(
 			fnp->fn_thread = curthread;
 			fnp->fn_seen = newvp;
 			mutex_exit(&fnp->fn_lock);
-			error = VOP_GETATTR(newvp, vap, flags, cred, ct);
+			error = fop_getattr(newvp, vap, flags, cred, ct);
 			VN_RELE(newvp);
 			mutex_enter(&fnp->fn_lock);
 			fnp->fn_seen = 0;
@@ -293,7 +293,7 @@ auto_setattr(
 		if (vn_is_readonly(newvp))
 			error = EROFS;
 		else
-			error = VOP_SETATTR(newvp, vap, flags, cred, ct);
+			error = fop_setattr(newvp, vap, flags, cred, ct);
 		VN_RELE(newvp);
 	} else
 		error = ENOSYS;
@@ -325,7 +325,7 @@ auto_access(
 		/*
 		 * Node is mounted on.
 		 */
-		error = VOP_ACCESS(newvp, mode, 0, cred, ct);
+		error = fop_access(newvp, mode, 0, cred, ct);
 		VN_RELE(newvp);
 	} else {
 		int shift = 0;
@@ -381,7 +381,7 @@ auto_lookup(
 		return (0);
 	}
 
-	if (error = VOP_ACCESS(dvp, VEXEC, 0, cred, ct))
+	if (error = fop_access(dvp, VEXEC, 0, cred, ct))
 		return (error);
 
 	if (nm[0] == '.' && nm[1] == 0) {
@@ -414,7 +414,7 @@ auto_lookup(
 			vp = dvp->v_vfsp->vfs_vnodecovered;
 			VN_HOLD(vp);
 			vfs_unlock(dvp->v_vfsp);
-			error = VOP_LOOKUP(vp, nm, vpp, pnp, flags, rdir, cred,
+			error = fop_lookup(vp, nm, vpp, pnp, flags, rdir, cred,
 			    ct, direntflags, realpnp);
 			VN_RELE(vp);
 			return (error);
@@ -461,7 +461,7 @@ top:
 		error = VFS_ROOT(vfsp, &newvp);
 		vn_vfsunlock(dvp);
 		if (!error) {
-			error = VOP_LOOKUP(newvp, nm, vpp, pnp,
+			error = fop_lookup(newvp, nm, vpp, pnp,
 			    flags, rdir, cred, ct, direntflags, realpnp);
 			VN_RELE(newvp);
 		}
@@ -687,7 +687,7 @@ auto_create(
 		if (vn_is_readonly(newvp))
 			error = EROFS;
 		else
-			error = VOP_CREATE(newvp, nm, va, excl,
+			error = fop_create(newvp, nm, va, excl,
 			    mode, vpp, cred, flag, ct, vsecp);
 		VN_RELE(newvp);
 	} else
@@ -721,7 +721,7 @@ auto_remove(
 		if (vn_is_readonly(newvp))
 			error = EROFS;
 		else
-			error = VOP_REMOVE(newvp, nm, cred, ct, flags);
+			error = fop_remove(newvp, nm, cred, ct, flags);
 		VN_RELE(newvp);
 	} else
 		error = ENOSYS;
@@ -772,7 +772,7 @@ auto_link(
 		goto done;
 	}
 
-	error = VOP_LINK(newvp, svp, nm, cred, ct, flags);
+	error = fop_link(newvp, svp, nm, cred, ct, flags);
 	VN_RELE(newvp);
 
 done:
@@ -849,7 +849,7 @@ auto_rename(
 		goto done;
 	}
 
-	error = VOP_RENAME(o_newvp, onm, n_newvp, nnm, cr, ct, flags);
+	error = fop_rename(o_newvp, onm, n_newvp, nnm, cr, ct, flags);
 	VN_RELE(o_newvp);
 	if (n_newvp != ndvp)
 		VN_RELE(n_newvp);
@@ -885,7 +885,7 @@ auto_mkdir(
 		if (vn_is_readonly(newvp))
 			error = EROFS;
 		else
-			error = VOP_MKDIR(newvp, nm, va, vpp, cred, ct,
+			error = fop_mkdir(newvp, nm, va, vpp, cred, ct,
 			    flags, vsecp);
 		VN_RELE(newvp);
 	} else
@@ -920,7 +920,7 @@ auto_rmdir(
 		if (vn_is_readonly(newvp))
 			error = EROFS;
 		else
-			error = VOP_RMDIR(newvp, nm, cdir, cred, ct, flags);
+			error = fop_rmdir(newvp, nm, cdir, cred, ct, flags);
 		VN_RELE(newvp);
 	} else
 		error = ENOSYS;
@@ -983,7 +983,7 @@ auto_readdir(
 	dp = outbuf = kmem_zalloc(alloc_count, KM_SLEEP);
 
 	/*
-	 * Held when getdents calls VOP_RWLOCK....
+	 * Held when getdents calls fop_rwlock....
 	 */
 	ASSERT(RW_READ_HELD(&fnp->fn_rwlock));
 	if (uiop->uio_offset >= AUTOFS_DAEMONCOOKIE) {
@@ -1251,7 +1251,7 @@ auto_symlink(
 		if (vn_is_readonly(newvp))
 			error = EROFS;
 		else
-			error = VOP_SYMLINK(newvp, lnknm, tva, tnm, cred,
+			error = fop_symlink(newvp, lnknm, tva, tnm, cred,
 			    ct, flags);
 		VN_RELE(newvp);
 	} else

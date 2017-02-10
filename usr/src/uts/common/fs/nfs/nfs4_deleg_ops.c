@@ -105,7 +105,7 @@ deleg_rd_open(femarg_t *arg, int mode, cred_t *cr, caller_context_t *ct)
 	rfs4_file_t *fp;
 
 	/*
-	 * Now that the NFSv4 server calls VOP_OPEN, we need to check to
+	 * Now that the NFSv4 server calls fop_open, we need to check to
 	 * to make sure it is not us calling open (like for DELEG_CUR) or
 	 * we will end up panicing the system.
 	 * Since this monitor is for a read delegated file, we know that
@@ -130,7 +130,7 @@ deleg_wr_open(femarg_t *arg, int mode, cred_t *cr, caller_context_t *ct)
 	rfs4_file_t *fp;
 
 	/*
-	 * Now that the NFSv4 server calls VOP_OPEN, we need to check to
+	 * Now that the NFSv4 server calls fop_open, we need to check to
 	 * to make sure it is not us calling open (like for DELEG_CUR) or
 	 * we will end up panicing the system.
 	 * Since this monitor is for a write delegated file, we know that

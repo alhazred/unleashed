@@ -275,16 +275,16 @@ devpts_prunedir(struct sdev_node *ddv)
  * owner. To prevent this we don't allow fattach() on top of a pts
  * node. This is done by a modification in the namefs filesystem
  * where we check if the underlying node has the /dev/pts vnodeops.
- * We do this via VOP_REALVP() on the underlying specfs node.
+ * We do this via fop_realvp() on the underlying specfs node.
  * sdev_nodes currently don't have a realvp. If a realvp is ever
- * created for sdev_nodes, then VOP_REALVP() will return the
+ * created for sdev_nodes, then fop_realvp() will return the
  * actual realvp (possibly a ufs vnode). This will defeat the check
- * in namefs code which checks if VOP_REALVP() returns a devpts
+ * in namefs code which checks if fop_realvp() returns a devpts
  * node. We add an ASSERT here in /dev/pts lookup() to check for
- * this condition. If sdev_nodes ever get a VOP_REALVP() entry point,
+ * this condition. If sdev_nodes ever get a fop_realvp() entry point,
  * change the code in the namefs filesystem code (in nm_mount()) to
  * access the realvp of the specfs node directly instead of using
- * VOP_REALVP().
+ * fop_realvp().
  */
 /*ARGSUSED3*/
 static int
@@ -304,7 +304,7 @@ devpts_lookup(struct vnode *dvp, char *nm, struct vnode **vpp,
 		switch ((*vpp)->v_type) {
 		case VCHR:
 			dv = VTOSDEV(VTOS(*vpp)->s_realvp);
-			ASSERT(VOP_REALVP(SDEVTOV(dv), &rvp, NULL) == ENOSYS);
+			ASSERT(fop_realvp(SDEVTOV(dv), &rvp, NULL) == ENOSYS);
 			break;
 		case VDIR:
 			dv = VTOSDEV(*vpp);
@@ -345,7 +345,7 @@ devpts_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 		else if (vp->v_type == VDIR && (mode & VWRITE))
 			error = EISDIR;
 		else
-			error = VOP_ACCESS(vp, mode, 0, cred, ct);
+			error = fop_access(vp, mode, 0, cred, ct);
 
 		if (error) {
 			VN_RELE(vp);

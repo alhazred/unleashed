@@ -1566,7 +1566,7 @@ nfs4_resend_delegreturn(nfs4_lost_rqst_t *lorp, nfs4_error_t *ep,
  * nfs4delegreturn - general function to return a delegation.
  *
  * NFS4_DR_FORCE - return the delegation even if start_op fails
- * NFS4_DR_PUSH - push modified data back to the server via VOP_PUTPAGE
+ * NFS4_DR_PUSH - push modified data back to the server via fop_putpage
  * NFS4_DR_DISCARD - discard the delegation w/o delegreturn
  * NFS4_DR_DID_OP - calling function already did nfs4_start_op
  * NFS4_DR_RECALL - delegreturned initiated via CB_RECALL
@@ -1628,7 +1628,7 @@ nfs4delegreturn_impl(rnode4_t *rp, int flags, struct nfs4_callback_globals *ncg)
 	 * before doing DELEGRETURN.
 	 */
 	if (flags & NFS4_DR_PUSH)
-		(void) VOP_PUTPAGE(vp, 0, 0, 0, cr, NULL);
+		(void) fop_putpage(vp, 0, 0, 0, cr, NULL);
 
 	/*
 	 * Take r_deleg_recall_lock in WRITE mode, this will prevent
@@ -2097,11 +2097,11 @@ nfs4delegreturn_thread(struct cb_recall_pass *args)
 		mutex_exit(&rp->r_statelock);
 
 		if (rdirty) {
-			error = VOP_PUTPAGE(vp, 0, 0, 0, cr, NULL);
+			error = fop_putpage(vp, 0, 0, 0, cr, NULL);
 
 			if (error)
 				CB_WARN1("nfs4delegreturn_thread:"
-				" VOP_PUTPAGE: %d\n", error);
+				" fop_putpage: %d\n", error);
 		}
 		/* turn off NFS4_DR_PUSH because we just did that above. */
 		flags &= ~NFS4_DR_PUSH;
@@ -2115,10 +2115,10 @@ nfs4delegreturn_thread(struct cb_recall_pass *args)
 
 	if (rip) {
 
-		error = VOP_PUTPAGE(vp, 0, 0, B_INVAL, cr, NULL);
+		error = fop_putpage(vp, 0, 0, B_INVAL, cr, NULL);
 
 		if (error)
-			CB_WARN1("nfs4delegreturn_thread: VOP_PUTPAGE: %d\n",
+			CB_WARN1("nfs4delegreturn_thread: fop_putpage: %d\n",
 			    error);
 	}
 
@@ -2304,7 +2304,7 @@ nfs4_delegation_accept(rnode4_t *rp, open_claim_type4 claim, OPEN4res *res,
 		if (recov) {
 			/*
 			 * We cannot call delegreturn from inside
-			 * of recovery or VOP_PUTPAGE will hang
+			 * of recovery or fop_putpage will hang
 			 * due to nfs4_start_fop call in
 			 * nfs4write.  Use dlistadd to add the
 			 * rnode to the list of rnodes needing

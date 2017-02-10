@@ -441,7 +441,7 @@ smb_fem_oplock_open(
 
 /*
  * Should normally be hit only via NFSv2/v3.  All other accesses
- * (CIFS/NFS/local) should call VOP_OPEN first.
+ * (CIFS/NFS/local) should call fop_open first.
  */
 
 static int
@@ -466,7 +466,7 @@ smb_fem_oplock_read(
 
 /*
  * Should normally be hit only via NFSv2/v3.  All other accesses
- * (CIFS/NFS/local) should call VOP_OPEN first.
+ * (CIFS/NFS/local) should call fop_open first.
  */
 
 static int

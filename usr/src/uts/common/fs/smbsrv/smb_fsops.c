@@ -71,7 +71,7 @@ static int smb_fsop_sdinherit(smb_request_t *, smb_node_t *, smb_fssd_t *);
  * smb_fsop_amask_to_omode
  *
  * Convert the access mask to the open mode (for use
- * with the VOP_OPEN call).
+ * with the fop_open call).
  *
  * Note that opening a file for attribute only access
  * will also translate into an FREAD or FWRITE open mode
@@ -106,7 +106,7 @@ smb_fsop_open(smb_node_t *node, int mode, cred_t *cred)
 	/*
 	 * Assuming that the same vnode is returned as we had before.
 	 * (I.e., with certain types of files or file systems, a
-	 * different vnode might be returned by VOP_OPEN)
+	 * different vnode might be returned by fop_open)
 	 */
 	return (smb_vop_open(&node->vp, mode, cred));
 }
@@ -1102,7 +1102,7 @@ smb_fsop_rename(
 	 * because we are using the on-disk name from an earlier lookup.
 	 * If a mangled name was passed in by the caller (denoting a
 	 * deterministic lookup), then the exact file must be renamed
-	 * (i.e. SMB_IGNORE_CASE must not be passed to VOP_RENAME, or
+	 * (i.e. SMB_IGNORE_CASE must not be passed to fop_rename, or
 	 * else the underlying file system might return a "first-match"
 	 * on this on-disk name, possibly resulting in the wrong file).
 	 */
@@ -2336,8 +2336,8 @@ smb_fsop_sdmerge(smb_request_t *sr, smb_node_t *snode, smb_fssd_t *fs_sd)
  *
  * A SMB security descriptor could contain owner, primary group,
  * DACL and SACL. Setting an SD should be atomic but here it has to
- * be done via two separate FS operations: VOP_SETATTR and
- * VOP_SETSECATTR. Therefore, this function has to simulate the
+ * be done via two separate FS operations: fop_setattr and
+ * fop_setsecattr. Therefore, this function has to simulate the
  * atomicity as well as it can.
  *
  * Get the current uid, gid before setting the new uid/gid
@@ -2573,7 +2573,7 @@ smb_fsop_eaccess(smb_request_t *sr, cred_t *cr, smb_node_t *snode,
  * when the nbmand (non-blocking mandatory) mount option is set
  * (i.e. nbl_need_crit() is true) and nbmand critical regions are used.
  * This provides synchronization with NFS and local processes.  The
- * critical regions are entered in VOP_SHRLOCK()/fs_shrlock() (called
+ * critical regions are entered in fop_shrlock()/fs_shrlock() (called
  * from smb_open_subr()/smb_fsop_shrlock()/smb_vop_shrlock()) as well
  * as the CIFS rename and delete paths.
  *
@@ -2623,7 +2623,7 @@ smb_fsop_frlock(smb_node_t *node, smb_lock_t *lock, boolean_t unlock,
 	int flag = F_REMOTELOCK;
 
 	/*
-	 * VOP_FRLOCK() will not be called if:
+	 * fop_frlock() will not be called if:
 	 *
 	 * 1) The lock has a range of zero bytes. The semantics of Windows and
 	 *    POSIX are different. In the case of POSIX it asks for the locking

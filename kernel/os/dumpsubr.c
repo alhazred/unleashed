@@ -413,11 +413,11 @@ dumpinit(vnode_t *vp, char *name, int justchecking)
 	 * (1) a real device that's not mounted and has a cb_dump routine, or
 	 * (2) a swapfile on some filesystem that has a vop_dump routine.
 	 */
-	if ((error = VOP_OPEN(&cvp, FREAD | FWRITE, kcred, NULL)) != 0)
+	if ((error = fop_open(&cvp, FREAD | FWRITE, kcred, NULL)) != 0)
 		return (error);
 
 	vattr.va_mask = AT_SIZE | AT_TYPE | AT_RDEV;
-	if ((error = VOP_GETATTR(cvp, &vattr, 0, kcred, NULL)) == 0) {
+	if ((error = fop_getattr(cvp, &vattr, 0, kcred, NULL)) == 0) {
 		if (vattr.va_type == VBLK || vattr.va_type == VCHR) {
 			if (devopsp[getmajor(vattr.va_rdev)]->
 			    devo_cb_ops->cb_dump == nodev)
@@ -439,7 +439,7 @@ dumpinit(vnode_t *vp, char *name, int justchecking)
 		error = ENOSPC;
 
 	if (error || justchecking) {
-		(void) VOP_CLOSE(cvp, FREAD | FWRITE, 1, (offset_t)0,
+		(void) fop_close(cvp, FREAD | FWRITE, 1, (offset_t)0,
 		    kcred, NULL);
 		return (error);
 	}
@@ -464,19 +464,19 @@ dumpinit(vnode_t *vp, char *name, int justchecking)
 	 */
 	if (cvp->v_type == VBLK &&
 	    (cdev_vp = makespecvp(VTOS(cvp)->s_dev, VCHR)) != NULL) {
-		if (VOP_OPEN(&cdev_vp, FREAD | FWRITE, kcred, NULL) == 0) {
+		if (fop_open(&cdev_vp, FREAD | FWRITE, kcred, NULL) == 0) {
 			size_t blk_size;
 			struct dk_cinfo dki;
 			struct dk_minfo minf;
 
-			if (VOP_IOCTL(cdev_vp, DKIOCGMEDIAINFO,
+			if (fop_ioctl(cdev_vp, DKIOCGMEDIAINFO,
 			    (intptr_t)&minf, FKIOCTL, kcred, NULL, NULL)
 			    == 0 && minf.dki_lbsize != 0)
 				blk_size = minf.dki_lbsize;
 			else
 				blk_size = DEV_BSIZE;
 
-			if (VOP_IOCTL(cdev_vp, DKIOCINFO, (intptr_t)&dki,
+			if (fop_ioctl(cdev_vp, DKIOCINFO, (intptr_t)&dki,
 			    FKIOCTL, kcred, NULL, NULL) == 0) {
 				dumpcfg.buf.iosize = dki.dki_maxtransfer * blk_size;
 				dumpbuf_resize();
@@ -488,13 +488,13 @@ dumpinit(vnode_t *vp, char *name, int justchecking)
 			if (strcmp(dki.dki_dname, ZVOL_DRIVER) == 0) {
 				if (IS_SWAPVP(common_specvp(cvp)))
 					error = EBUSY;
-				else if ((error = VOP_IOCTL(cdev_vp,
+				else if ((error = fop_ioctl(cdev_vp,
 				    DKIOCDUMPINIT, NULL, FKIOCTL, kcred,
 				    NULL, NULL)) != 0)
 					dumpfini();
 			}
 
-			(void) VOP_CLOSE(cdev_vp, FREAD | FWRITE, 1, 0,
+			(void) fop_close(cdev_vp, FREAD | FWRITE, 1, 0,
 			    kcred, NULL);
 		}
 
@@ -522,7 +522,7 @@ dumpfini(void)
 	 * Determine if we are using zvols for our dump device
 	 */
 	vattr.va_mask = AT_RDEV;
-	if (VOP_GETATTR(dumpvp, &vattr, 0, kcred, NULL) == 0) {
+	if (fop_getattr(dumpvp, &vattr, 0, kcred, NULL) == 0) {
 		is_zfs = (getmajor(vattr.va_rdev) ==
 		    ddi_name_to_major(ZFS_DRIVER)) ? B_TRUE : B_FALSE;
 	}
@@ -533,16 +533,16 @@ dumpfini(void)
 	 */
 	if (is_zfs &&
 	    (cdev_vp = makespecvp(VTOS(dumpvp)->s_dev, VCHR)) != NULL) {
-		if (VOP_OPEN(&cdev_vp, FREAD | FWRITE, kcred, NULL) == 0) {
-			(void) VOP_IOCTL(cdev_vp, DKIOCDUMPFINI, NULL, FKIOCTL,
+		if (fop_open(&cdev_vp, FREAD | FWRITE, kcred, NULL) == 0) {
+			(void) fop_ioctl(cdev_vp, DKIOCDUMPFINI, NULL, FKIOCTL,
 			    kcred, NULL, NULL);
-			(void) VOP_CLOSE(cdev_vp, FREAD | FWRITE, 1, 0,
+			(void) fop_close(cdev_vp, FREAD | FWRITE, 1, 0,
 			    kcred, NULL);
 		}
 		VN_RELE(cdev_vp);
 	}
 
-	(void) VOP_CLOSE(dumpvp, FREAD | FWRITE, 1, (offset_t)0, kcred, NULL);
+	(void) fop_close(dumpvp, FREAD | FWRITE, 1, (offset_t)0, kcred, NULL);
 
 	VN_RELE(dumpvp);
 
@@ -565,7 +565,7 @@ dumpvp_flush(void)
 		iotime = gethrtime();
 		dumpcfg.iowait += iotime - dumpcfg.iowaitts;
 		if (panicstr)
-			err = VOP_DUMP(dumpvp, dumpcfg.buf.start,
+			err = fop_dump(dumpvp, dumpcfg.buf.start,
 			    lbtodb(dumpcfg.buf.vp_off), btod(size), NULL);
 		else
 			err = vn_rdwr(UIO_WRITE, dumpcfg.buf.cdev_vp != NULL ?
@@ -766,7 +766,7 @@ dump_ereports(void)
 	(void) dumpvp_flush();
 
 	if (!panicstr) {
-		(void) VOP_PUTPAGE(dumpvp, dumpvp_start,
+		(void) fop_putpage(dumpvp, dumpvp_start,
 		    (size_t)(dumpcfg.buf.vp_off - dumpvp_start),
 		    B_INVAL | B_FORCE, kcred, NULL);
 	}
@@ -809,7 +809,7 @@ dump_messages(void)
 	dumpvp_write(&ld, sizeof (ld));
 	(void) dumpvp_flush();
 	if (!panicstr) {
-		(void) VOP_PUTPAGE(dumpvp, dumpvp_start,
+		(void) fop_putpage(dumpvp, dumpvp_start,
 		    (size_t)(dumpcfg.buf.vp_off - dumpvp_start),
 		    B_INVAL | B_FORCE, kcred, NULL);
 	}
@@ -969,8 +969,8 @@ dumpsys(void)
 
 	if (panicstr) {
 		dumphdr->dump_flags &= ~DF_LIVE;
-		(void) VOP_DUMPCTL(dumpvp, DUMP_FREE, NULL, NULL);
-		(void) VOP_DUMPCTL(dumpvp, DUMP_ALLOC, NULL, NULL);
+		(void) fop_dumpctl(dumpvp, DUMP_FREE, NULL, NULL);
+		(void) fop_dumpctl(dumpvp, DUMP_ALLOC, NULL, NULL);
 		(void) vsnprintf(dumphdr->dump_panicstring, DUMP_PANICSIZE,
 		    panicstr, panicargs);
 	}
@@ -999,7 +999,7 @@ dumpsys(void)
 		cdev_vp = makespecvp(VTOS(dumpvp)->s_dev, VCHR);
 		if (cdev_vp != NULL) {
 			cmn_cdev_vp = common_specvp(cdev_vp);
-			if (VOP_OPEN(&cmn_cdev_vp, FREAD | FWRITE, kcred, NULL)
+			if (fop_open(&cmn_cdev_vp, FREAD | FWRITE, kcred, NULL)
 			    == 0) {
 				if (vn_has_cached_data(dumpvp))
 					(void) pvn_vplist_dirty(dumpvp, 0, NULL,
@@ -1294,7 +1294,7 @@ dumpsys(void)
 	if (!panicstr) {
 		/* release any VCHR open of the dump device */
 		if (dumpcfg.buf.cdev_vp != NULL) {
-			(void) VOP_CLOSE(dumpcfg.buf.cdev_vp, FREAD | FWRITE, 1, 0,
+			(void) fop_close(dumpcfg.buf.cdev_vp, FREAD | FWRITE, 1, 0,
 			    kcred, NULL);
 			VN_RELE(dumpcfg.buf.cdev_vp);
 			dumpcfg.buf.cdev_vp = NULL;
@@ -1328,7 +1328,7 @@ dumpvp_resize()
 
 	mutex_enter(&dump_lock);
 	vattr.va_mask = AT_SIZE;
-	if ((error = VOP_GETATTR(dumpvp, &vattr, 0, kcred, NULL)) != 0) {
+	if ((error = fop_getattr(dumpvp, &vattr, 0, kcred, NULL)) != 0) {
 		mutex_exit(&dump_lock);
 		return (error);
 	}

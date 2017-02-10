@@ -74,7 +74,7 @@ reparse_vnode_parse(vnode_t *vp, nvlist_t *nvl)
 	uio.uio_loffset = (offset_t)0;
 	uio.uio_resid = MAXREPARSELEN;
 
-	if ((err = VOP_READLINK(vp, &uio, zone_kcred(), NULL)) == 0) {
+	if ((err = fop_readlink(vp, &uio, zone_kcred(), NULL)) == 0) {
 		*(lkdata + MAXREPARSELEN - uio.uio_resid) = '\0';
 		err = reparse_parse(lkdata, nvl);
 	}

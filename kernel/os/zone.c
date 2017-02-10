@@ -3325,12 +3325,12 @@ zone_set_root(zone_t *zone, const char *upath)
 
 		if ((error = lookuppn(&upn, &pn, FOLLOW, NULLVPP, &vp)) == 0) {
 			/*
-			 * VOP_ACCESS() may cover 'vp' with a new
+			 * fop_access() may cover 'vp' with a new
 			 * filesystem, if 'vp' is an autoFS vnode.
 			 * Get the new 'vp' if so.
 			 */
 			if ((error =
-			    VOP_ACCESS(vp, VEXEC, 0, CRED(), NULL)) == 0 &&
+			    fop_access(vp, VEXEC, 0, CRED(), NULL)) == 0 &&
 			    (!vn_ismntpt(vp) ||
 			    (error = traverse(&vp)) == 0)) {
 				pathlen = pn.pn_pathlen + 2;

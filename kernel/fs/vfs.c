@@ -2864,9 +2864,9 @@ vfs_mnttab_rwop(int rw)
 	uio.uio_segflg = UIO_SYSSPACE;
 	uio.uio_resid = 0;
 	if (rw) {
-		(void) VOP_WRITE(vfs_mntdummyvp, &uio, 0, kcred, NULL);
+		(void) fop_write(vfs_mntdummyvp, &uio, 0, kcred, NULL);
 	} else {
-		(void) VOP_READ(vfs_mntdummyvp, &uio, 0, kcred, NULL);
+		(void) fop_read(vfs_mntdummyvp, &uio, 0, kcred, NULL);
 	}
 }
 

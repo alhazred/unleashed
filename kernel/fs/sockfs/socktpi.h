@@ -59,7 +59,7 @@ struct sonode;
  * transport provider (e.g. /dev/tcp). This information is retrieved
  * from the kernel socket configuration table and accessible via
  * so_sockparams->sp_sdev_info.  sockfs uses this to perform
- * VOP_ACCESS checks before allowing an open of the transport
+ * fop_access checks before allowing an open of the transport
  * provider.
  *
  * AF_UNIX Sockets

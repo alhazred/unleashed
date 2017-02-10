@@ -201,7 +201,7 @@ devvt_lookup(struct vnode *dvp, char *nm, struct vnode **vpp,
 		switch ((*vpp)->v_type) {
 		case VCHR:
 			dv = VTOSDEV(VTOS(*vpp)->s_realvp);
-			ASSERT(VOP_REALVP(SDEVTOV(dv), &rvp, NULL) == ENOSYS);
+			ASSERT(fop_realvp(SDEVTOV(dv), &rvp, NULL) == ENOSYS);
 			break;
 		case VDIR:
 		case VLNK:
@@ -456,7 +456,7 @@ devvt_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 	else if (vp->v_type == VDIR && (mode & VWRITE))
 		error = EISDIR;
 	else
-		error = VOP_ACCESS(vp, mode, 0, cred, ct);
+		error = fop_access(vp, mode, 0, cred, ct);
 
 	if (error) {
 		VN_RELE(vp);

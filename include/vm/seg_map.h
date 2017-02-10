@@ -226,11 +226,11 @@ struct segmapcnt {
  *   for zeroout operations needed on newly created pages.
  *
  * . segmap_fault() must follow when a error could be expected in
- *   the VOP_GETPAGE. In segkpm mode this error is recognized in
+ *   the fop_getpage. In segkpm mode this error is recognized in
  *   segmap_getmapflt and returned from the following segmap_fault()
- *   call. The "hole" optimization (read only after first VOP_GETPAGE
+ *   call. The "hole" optimization (read only after first fop_getpage
  *   mapping in segmap_getmapflt followed by a trap driven protection
- *   fault and a second VOP_GETPAGE via segmap_fault) cannot be used.
+ *   fault and a second fop_getpage via segmap_fault) cannot be used.
  *
  * . segmap_fault(F_SOFTUNLOCK) must follow when segmap_getmapflt was
  *   called w/ (SM_LOCKPROTO, S_OTHER). S_WRITE has to be applied, when

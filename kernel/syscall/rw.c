@@ -105,7 +105,7 @@ read(int fdes, void *cbuf, size_t count)
 	aiov.iov_len = cnt;
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with write() calls.
 	 */
 	if (nbl_need_check(vp)) {
@@ -123,10 +123,10 @@ read(int fdes, void *cbuf, size_t count)
 		}
 	}
 
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 
 	/*
-	 * We do the following checks inside VOP_RWLOCK so as to
+	 * We do the following checks inside fop_rwlock so as to
 	 * prevent file size from changing while these checks are
 	 * being done. Also, we load fp's offset to the local
 	 * variable fileoff because we can have a parallel lseek
@@ -140,17 +140,17 @@ read(int fdes, void *cbuf, size_t count)
 	if (fileoff >= OFFSET_MAX(fp) && (vp->v_type == VREG)) {
 		struct vattr va;
 		va.va_mask = AT_SIZE;
-		if ((error = VOP_GETATTR(vp, &va, 0, fp->f_cred, NULL)))  {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+		if ((error = fop_getattr(vp, &va, 0, fp->f_cred, NULL)))  {
+			fop_rwunlock(vp, rwflag, NULL);
 			goto out;
 		}
 		if (fileoff >= va.va_size) {
 			cnt = 0;
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			goto out;
 		} else {
 			error = EOVERFLOW;
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			goto out;
 		}
 	}
@@ -178,7 +178,7 @@ read(int fdes, void *cbuf, size_t count)
 	/* If read sync is not asked for, filter sync flags */
 	if ((ioflag & FRSYNC) == 0)
 		ioflag &= ~(FSYNC|FDSYNC);
-	error = VOP_READ(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_read(vp, &auio, ioflag, fp->f_cred, NULL);
 	cnt -= auio.uio_resid;
 	CPU_STATS_ENTER_K();
 	cp = CPU;
@@ -192,7 +192,7 @@ read(int fdes, void *cbuf, size_t count)
 	else if (((fp->f_flag & FAPPEND) == 0) ||
 	    (vp->v_type != VREG) || (bcount != 0))	/* POSIX */
 		fp->f_offset = auio.uio_loffset;
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && cnt != 0)
 		error = 0;
@@ -241,7 +241,7 @@ write(int fdes, void *cbuf, size_t count)
 	aiov.iov_len = cnt;
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -259,7 +259,7 @@ write(int fdes, void *cbuf, size_t count)
 		}
 	}
 
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 
 	fileoff = fp->f_offset;
 	if (vp->v_type == VREG) {
@@ -269,7 +269,7 @@ write(int fdes, void *cbuf, size_t count)
 		 * it to exceed the ulimit.
 		 */
 		if (fileoff >= curproc->p_fsz_ctl) {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 
 			mutex_enter(&curproc->p_lock);
 			(void) rctl_action(rctlproc_legacy[RLIMIT_FSIZE],
@@ -285,7 +285,7 @@ write(int fdes, void *cbuf, size_t count)
 		 */
 
 		if (fileoff >= OFFSET_MAX(fp)) {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			error = EFBIG;
 			goto out;
 		}
@@ -307,7 +307,7 @@ write(int fdes, void *cbuf, size_t count)
 
 	ioflag = auio.uio_fmode & (FAPPEND|FSYNC|FDSYNC|FRSYNC);
 
-	error = VOP_WRITE(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_write(vp, &auio, ioflag, fp->f_cred, NULL);
 	cnt -= auio.uio_resid;
 	CPU_STATS_ENTER_K();
 	cp = CPU;
@@ -321,7 +321,7 @@ write(int fdes, void *cbuf, size_t count)
 	else if (((fp->f_flag & FAPPEND) == 0) ||
 	    (vp->v_type != VREG) || (bcount != 0))	/* POSIX */
 		fp->f_offset = auio.uio_loffset;
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && cnt != 0)
 		error = 0;
@@ -394,7 +394,7 @@ pread(int fdes, void *cbuf, size_t count, off_t offset)
 	}
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -414,15 +414,15 @@ pread(int fdes, void *cbuf, size_t count, off_t offset)
 
 	aiov.iov_base = cbuf;
 	aiov.iov_len = bcount;
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 	if (vp->v_type == VREG && fileoff == (u_offset_t)maxoff) {
 		struct vattr va;
 		va.va_mask = AT_SIZE;
-		if ((error = VOP_GETATTR(vp, &va, 0, fp->f_cred, NULL))) {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+		if ((error = fop_getattr(vp, &va, 0, fp->f_cred, NULL))) {
+			fop_rwunlock(vp, rwflag, NULL);
 			goto out;
 		}
-		VOP_RWUNLOCK(vp, rwflag, NULL);
+		fop_rwunlock(vp, rwflag, NULL);
 
 		/*
 		 * We have to return EOF if fileoff is >= file size.
@@ -453,7 +453,7 @@ pread(int fdes, void *cbuf, size_t count, off_t offset)
 	/* If read sync is not asked for, filter sync flags */
 	if ((ioflag & FRSYNC) == 0)
 		ioflag &= ~(FSYNC|FDSYNC);
-	error = VOP_READ(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_read(vp, &auio, ioflag, fp->f_cred, NULL);
 	bcount -= auio.uio_resid;
 	CPU_STATS_ENTER_K();
 	cp = CPU;
@@ -461,7 +461,7 @@ pread(int fdes, void *cbuf, size_t count, off_t offset)
 	CPU_STATS_ADDQ(cp, sys, readch, (ulong_t)bcount);
 	CPU_STATS_EXIT_K();
 	ttolwp(curthread)->lwp_ru.ioch += (ulong_t)bcount;
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && bcount != 0)
 		error = 0;
@@ -548,7 +548,7 @@ pwrite(int fdes, void *cbuf, size_t count, off_t offset)
 	}
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -568,7 +568,7 @@ pwrite(int fdes, void *cbuf, size_t count, off_t offset)
 
 	aiov.iov_base = cbuf;
 	aiov.iov_len = bcount;
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 	auio.uio_loffset = fileoff;
 	auio.uio_iov = &aiov;
 	auio.uio_iovcnt = 1;
@@ -587,7 +587,7 @@ pwrite(int fdes, void *cbuf, size_t count, off_t offset)
 	 */
 	ioflag = auio.uio_fmode & (FSYNC|FDSYNC|FRSYNC);
 
-	error = VOP_WRITE(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_write(vp, &auio, ioflag, fp->f_cred, NULL);
 	bcount -= auio.uio_resid;
 	CPU_STATS_ENTER_K();
 	cp = CPU;
@@ -595,7 +595,7 @@ pwrite(int fdes, void *cbuf, size_t count, off_t offset)
 	CPU_STATS_ADDQ(cp, sys, writech, (ulong_t)bcount);
 	CPU_STATS_EXIT_K();
 	ttolwp(curthread)->lwp_ru.ioch += (ulong_t)bcount;
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && bcount != 0)
 		error = 0;
@@ -708,7 +708,7 @@ readv(int fdes, struct iovec *iovp, int iovcnt)
 	rwflag = 0;
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -726,7 +726,7 @@ readv(int fdes, struct iovec *iovp, int iovcnt)
 		}
 	}
 
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 	fileoff = fp->f_offset;
 
 	/*
@@ -736,16 +736,16 @@ readv(int fdes, struct iovec *iovp, int iovcnt)
 	if ((vp->v_type == VREG) && (fileoff >= OFFSET_MAX(fp))) {
 		struct vattr va;
 		va.va_mask = AT_SIZE;
-		if ((error = VOP_GETATTR(vp, &va, 0, fp->f_cred, NULL)))  {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+		if ((error = fop_getattr(vp, &va, 0, fp->f_cred, NULL)))  {
+			fop_rwunlock(vp, rwflag, NULL);
 			goto out;
 		}
 		if (fileoff >= va.va_size) {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			count = 0;
 			goto out;
 		} else {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			error = EOVERFLOW;
 			goto out;
 		}
@@ -771,7 +771,7 @@ readv(int fdes, struct iovec *iovp, int iovcnt)
 	/* If read sync is not asked for, filter sync flags */
 	if ((ioflag & FRSYNC) == 0)
 		ioflag &= ~(FSYNC|FDSYNC);
-	error = VOP_READ(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_read(vp, &auio, ioflag, fp->f_cred, NULL);
 	count -= auio.uio_resid;
 	CPU_STATS_ENTER_K();
 	cp = CPU;
@@ -786,7 +786,7 @@ readv(int fdes, struct iovec *iovp, int iovcnt)
 	    (vp->v_type != VREG) || (bcount != 0))	/* POSIX */
 		fp->f_offset = auio.uio_loffset;
 
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && count != 0)
 		error = 0;
@@ -900,7 +900,7 @@ writev(int fdes, struct iovec *iovp, int iovcnt)
 	rwflag = 1;
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -918,7 +918,7 @@ writev(int fdes, struct iovec *iovp, int iovcnt)
 		}
 	}
 
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 
 	fileoff = fp->f_offset;
 
@@ -928,7 +928,7 @@ writev(int fdes, struct iovec *iovp, int iovcnt)
 
 	if (vp->v_type == VREG) {
 		if (fileoff >= curproc->p_fsz_ctl) {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			mutex_enter(&curproc->p_lock);
 			(void) rctl_action(rctlproc_legacy[RLIMIT_FSIZE],
 			    curproc->p_rctls, curproc, RCA_UNSAFE_SIGINFO);
@@ -937,7 +937,7 @@ writev(int fdes, struct iovec *iovp, int iovcnt)
 			goto out;
 		}
 		if (fileoff >= OFFSET_MAX(fp)) {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			error = EFBIG;
 			goto out;
 		}
@@ -955,7 +955,7 @@ writev(int fdes, struct iovec *iovp, int iovcnt)
 
 	ioflag = auio.uio_fmode & (FAPPEND|FSYNC|FDSYNC|FRSYNC);
 
-	error = VOP_WRITE(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_write(vp, &auio, ioflag, fp->f_cred, NULL);
 	count -= auio.uio_resid;
 	CPU_STATS_ENTER_K();
 	cp = CPU;
@@ -969,7 +969,7 @@ writev(int fdes, struct iovec *iovp, int iovcnt)
 	else if (((fp->f_flag & FAPPEND) == 0) ||
 	    (vp->v_type != VREG) || (bcount != 0))	/* POSIX */
 		fp->f_offset = auio.uio_loffset;
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && count != 0)
 		error = 0;
@@ -1119,7 +1119,7 @@ preadv(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 		goto out;
 	}
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -1137,7 +1137,7 @@ preadv(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 		}
 	}
 
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 
 	/*
 	 * Behaviour is same as read(2). Please see comments in
@@ -1148,16 +1148,16 @@ preadv(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 		struct vattr va;
 		va.va_mask = AT_SIZE;
 		if ((error =
-		    VOP_GETATTR(vp, &va, 0, fp->f_cred, NULL)))  {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+		    fop_getattr(vp, &va, 0, fp->f_cred, NULL)))  {
+			fop_rwunlock(vp, rwflag, NULL);
 			goto out;
 		}
 		if (fileoff >= va.va_size) {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			count = 0;
 			goto out;
 		} else {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			error = EOVERFLOW;
 			goto out;
 		}
@@ -1179,7 +1179,7 @@ preadv(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 		auio.uio_extflg = UIO_COPY_DEFAULT;
 
 	ioflag = auio.uio_fmode & (FAPPEND|FSYNC|FDSYNC|FRSYNC);
-	error = VOP_READ(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_read(vp, &auio, ioflag, fp->f_cred, NULL);
 	count -= auio.uio_resid;
 	CPU_STATS_ENTER_K();
 	cp = CPU;
@@ -1188,7 +1188,7 @@ preadv(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 	CPU_STATS_EXIT_K();
 	ttolwp(curthread)->lwp_ru.ioch += (ulong_t)count;
 
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && count != 0)
 		error = 0;
@@ -1368,7 +1368,7 @@ pwritev(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 		goto out;
 	}
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -1386,7 +1386,7 @@ pwritev(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 		}
 	}
 
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 
 
 	/*
@@ -1396,7 +1396,7 @@ pwritev(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 
 	if (vp->v_type == VREG) {
 		if (fileoff >= curproc->p_fsz_ctl) {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			mutex_enter(&curproc->p_lock);
 			/* see above rctl_action comment */
 			(void) rctl_action(
@@ -1408,7 +1408,7 @@ pwritev(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 			goto out;
 		}
 		if (fileoff >= OFFSET_MAX(fp)) {
-			VOP_RWUNLOCK(vp, rwflag, NULL);
+			fop_rwunlock(vp, rwflag, NULL);
 			error = EFBIG;
 			goto out;
 		}
@@ -1425,7 +1425,7 @@ pwritev(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 	auio.uio_fmode = fflag;
 	auio.uio_extflg = UIO_COPY_CACHED;
 	ioflag = auio.uio_fmode & (FSYNC|FDSYNC|FRSYNC);
-	error = VOP_WRITE(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_write(vp, &auio, ioflag, fp->f_cred, NULL);
 	count -= auio.uio_resid;
 	CPU_STATS_ENTER_K();
 	cp = CPU;
@@ -1434,7 +1434,7 @@ pwritev(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 	CPU_STATS_EXIT_K();
 	ttolwp(curthread)->lwp_ru.ioch += (ulong_t)count;
 
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && count != 0)
 		error = 0;
@@ -1509,7 +1509,7 @@ pread64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 	}
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -1529,14 +1529,14 @@ pread64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 
 	aiov.iov_base = cbuf;
 	aiov.iov_len = bcount;
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 	auio.uio_loffset = fileoff;
 
 	/*
 	 * Note: File size can never be greater than MAXOFFSET_T.
 	 * If ever we start supporting 128 bit files the code
 	 * similar to the one in pread at this place should be here.
-	 * Here we avoid the unnecessary VOP_GETATTR() when we
+	 * Here we avoid the unnecessary fop_getattr() when we
 	 * know that fileoff == MAXOFFSET_T implies that it is always
 	 * greater than or equal to file size.
 	 */
@@ -1553,7 +1553,7 @@ pread64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 	/* If read sync is not asked for, filter sync flags */
 	if ((ioflag & FRSYNC) == 0)
 		ioflag &= ~(FSYNC|FDSYNC);
-	error = VOP_READ(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_read(vp, &auio, ioflag, fp->f_cred, NULL);
 	bcount -= auio.uio_resid;
 	CPU_STATS_ENTER_K();
 	cp = CPU;
@@ -1561,7 +1561,7 @@ pread64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 	CPU_STATS_ADDQ(cp, sys, readch, (ulong_t)bcount);
 	CPU_STATS_EXIT_K();
 	ttolwp(curthread)->lwp_ru.ioch += (ulong_t)bcount;
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && bcount != 0)
 		error = 0;
@@ -1642,7 +1642,7 @@ pwrite64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 	}
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -1662,7 +1662,7 @@ pwrite64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 
 	aiov.iov_base = cbuf;
 	aiov.iov_len = bcount;
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 	auio.uio_loffset = fileoff;
 	auio.uio_iov = &aiov;
 	auio.uio_iovcnt = 1;
@@ -1681,7 +1681,7 @@ pwrite64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 	 */
 	ioflag = auio.uio_fmode & (FSYNC|FDSYNC|FRSYNC);
 
-	error = VOP_WRITE(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_write(vp, &auio, ioflag, fp->f_cred, NULL);
 	bcount -= auio.uio_resid;
 	CPU_STATS_ENTER_K();
 	cp = CPU;
@@ -1689,7 +1689,7 @@ pwrite64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 	CPU_STATS_ADDQ(cp, sys, writech, (ulong_t)bcount);
 	CPU_STATS_EXIT_K();
 	ttolwp(curthread)->lwp_ru.ioch += (ulong_t)bcount;
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && bcount != 0)
 		error = 0;

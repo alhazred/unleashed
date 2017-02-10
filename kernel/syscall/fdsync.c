@@ -64,7 +64,7 @@ fdsync(int fd, int flag)
 		 */
 		syncflag = flag & (FSYNC|FDSYNC);
 
-		if (error = VOP_FSYNC(fp->f_vnode, syncflag, fp->f_cred, NULL))
+		if (error = fop_fsync(fp->f_vnode, syncflag, fp->f_cred, NULL))
 			(void) set_errno(error);
 		releasef(fd);
 	} else

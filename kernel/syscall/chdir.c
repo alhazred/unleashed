@@ -172,11 +172,11 @@ chdirec(vnode_t *vp, int ischroot, int do_traverse)
 		error = ENOTDIR;
 		goto bad;
 	}
-	if (error = VOP_ACCESS(vp, VEXEC, 0, CRED(), NULL))
+	if (error = fop_access(vp, VEXEC, 0, CRED(), NULL))
 		goto bad;
 
 	/*
-	 * The VOP_ACCESS() may have covered 'vp' with a new filesystem,
+	 * The fop_access() may have covered 'vp' with a new filesystem,
 	 * if 'vp' is an autoFS vnode. Traverse the mountpoint so
 	 * that we don't end up with a covered current directory.
 	 */
@@ -197,11 +197,11 @@ chdirec(vnode_t *vp, int ischroot, int do_traverse)
 		vnode_t *zonevp = curproc->p_zone->zone_rootvp;
 
 		tattr.va_mask = AT_FSID|AT_NODEID;
-		if (error = VOP_GETATTR(vp, &tattr, 0, CRED(), NULL))
+		if (error = fop_getattr(vp, &tattr, 0, CRED(), NULL))
 			goto bad;
 
 		rattr.va_mask = AT_FSID|AT_NODEID;
-		if (error = VOP_GETATTR(zonevp, &rattr, 0, CRED(), NULL))
+		if (error = fop_getattr(zonevp, &rattr, 0, CRED(), NULL))
 			goto bad;
 
 		if ((tattr.va_fsid != rattr.va_fsid ||

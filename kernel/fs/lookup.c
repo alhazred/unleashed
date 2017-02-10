@@ -349,10 +349,10 @@ checkforroot:
 			/*
 			 * Crossing mount points. For eg: We are doing
 			 * a lookup of ".." for file systems root vnode
-			 * mounted here, and VOP_LOOKUP() (with covered vnode)
+			 * mounted here, and fop_lookup() (with covered vnode)
 			 * will be on underlying file systems mount point
 			 * vnode. Set retry_with_kcred flag as we might end
-			 * up doing VOP_LOOKUP() with kcred if required.
+			 * up doing fop_lookup() with kcred if required.
 			 */
 			retry_with_kcred = B_TRUE;
 			goto checkforroot;
@@ -367,22 +367,22 @@ checkforroot:
 	 * be found.
 	 */
 	if ((flags & LOOKUP_CHECKREAD) &&
-	    (error = VOP_ACCESS(vp, VREAD, 0, cr, NULL)) != 0)
+	    (error = fop_access(vp, VREAD, 0, cr, NULL)) != 0)
 		goto bad;
 
 	/*
 	 * Perform a lookup in the current directory.
 	 */
-	error = VOP_LOOKUP(vp, component, &cvp, pnp, lookup_flags,
+	error = fop_lookup(vp, component, &cvp, pnp, lookup_flags,
 	    rootvp, cr, NULL, NULL, pp);
 
 	/*
 	 * Retry with kcred - If crossing mount points & error is EACCES.
 	 *
 	 * If we are crossing mount points here and doing ".." lookup,
-	 * VOP_LOOKUP() might fail if the underlying file systems
+	 * fop_lookup() might fail if the underlying file systems
 	 * mount point has no execute permission. In cases like these,
-	 * we retry VOP_LOOKUP() by giving as much privilage as possible
+	 * we retry fop_lookup() by giving as much privilage as possible
 	 * by passing kcred credentials.
 	 *
 	 * In case of hierarchical file systems, passing kcred still may
@@ -391,7 +391,7 @@ checkforroot:
 	 *			directory inside NFS FS.
 	 */
 	if ((error == EACCES) && retry_with_kcred)
-		error = VOP_LOOKUP(vp, component, &cvp, pnp, lookup_flags,
+		error = fop_lookup(vp, component, &cvp, pnp, lookup_flags,
 		    rootvp, zone_kcred(), NULL, NULL, pp);
 
 	if (error) {
@@ -787,15 +787,15 @@ vnode_match(vnode_t *v1, vnode_t *v2, cred_t *cr)
 	 * are currently in '/proc/self/fd', then '/proc/self/cwd' will compare
 	 * as the same vnode.
 	 */
-	if (VOP_GETATTR(v1, &v1attr, 0, cr, NULL) != 0 ||
-	    VOP_GETATTR(v2, &v2attr, 0, cr, NULL) != 0 ||
+	if (fop_getattr(v1, &v1attr, 0, cr, NULL) != 0 ||
+	    fop_getattr(v2, &v2attr, 0, cr, NULL) != 0 ||
 	    v1attr.va_type == VLNK || v2attr.va_type == VLNK)
 		return (0);
 
 	v1attr.va_mask = v2attr.va_mask = AT_TYPE | AT_FSID | AT_NODEID;
 
-	if (VOP_GETATTR(v1, &v1attr, ATTR_REAL, cr, NULL) != 0 ||
-	    VOP_GETATTR(v2, &v2attr, ATTR_REAL, cr, NULL) != 0)
+	if (fop_getattr(v1, &v1attr, ATTR_REAL, cr, NULL) != 0 ||
+	    fop_getattr(v2, &v2attr, ATTR_REAL, cr, NULL) != 0)
 		return (0);
 
 	return (v1attr.va_fsid == v2attr.va_fsid &&
@@ -822,7 +822,7 @@ dirfindvp(vnode_t *vrootp, vnode_t *dvp, vnode_t *tvp, cred_t *cr, char *dbuf,
 	ASSERT(dvp->v_type == VDIR);
 
 	/*
-	 * This is necessary because of the strange semantics of VOP_LOOKUP().
+	 * This is necessary because of the strange semantics of fop_lookup().
 	 */
 	bzero(&pnp, sizeof (pnp));
 
@@ -835,7 +835,7 @@ dirfindvp(vnode_t *vrootp, vnode_t *dvp, vnode_t *tvp, cred_t *cr, char *dbuf,
 	uio.uio_extflg = UIO_COPY_CACHED;
 	uio.uio_loffset = 0;
 
-	if ((error = VOP_ACCESS(dvp, VREAD, 0, cr, NULL)) != 0)
+	if ((error = fop_access(dvp, VREAD, 0, cr, NULL)) != 0)
 		return (error);
 
 	while (!eof) {
@@ -843,9 +843,9 @@ dirfindvp(vnode_t *vrootp, vnode_t *dvp, vnode_t *tvp, cred_t *cr, char *dbuf,
 		iov.iov_base = dbuf;
 		iov.iov_len = dlen;
 
-		(void) VOP_RWLOCK(dvp, V_WRITELOCK_FALSE, NULL);
-		error = VOP_READDIR(dvp, &uio, cr, &eof, NULL, 0);
-		VOP_RWUNLOCK(dvp, V_WRITELOCK_FALSE, NULL);
+		(void) fop_rwlock(dvp, V_WRITELOCK_FALSE, NULL);
+		error = fop_readdir(dvp, &uio, cr, &eof, NULL, 0);
+		fop_rwunlock(dvp, V_WRITELOCK_FALSE, NULL);
 
 		dbuflen = dlen - uio.uio_resid;
 
@@ -864,7 +864,7 @@ dirfindvp(vnode_t *vrootp, vnode_t *dvp, vnode_t *tvp, cred_t *cr, char *dbuf,
 				continue;
 			}
 
-			error = VOP_LOOKUP(dvp, dp->d_name, &cmpvp, &pnp, 0,
+			error = fop_lookup(dvp, dp->d_name, &cmpvp, &pnp, 0,
 			    vrootp, cr, NULL, NULL, NULL);
 
 			/*
@@ -896,7 +896,7 @@ dirfindvp(vnode_t *vrootp, vnode_t *dvp, vnode_t *tvp, cred_t *cr, char *dbuf,
 	 * rare conditions (races and the special .zfs directory).
 	 */
 	if (error == 0) {
-		error = VOP_LOOKUP(dvp, ".zfs", &cmpvp, &pnp, 0, vrootp, cr,
+		error = fop_lookup(dvp, ".zfs", &cmpvp, &pnp, 0, vrootp, cr,
 		    NULL, NULL, NULL);
 		if (error == 0) {
 			if (vnode_match(tvp, cmpvp, cr)) {
@@ -955,7 +955,7 @@ localpath(char *path, struct vnode *vrootp, cred_t *cr)
 		if (pn_getcomponent(&pn, component) != 0)
 			break;
 
-		if (VOP_LOOKUP(vp, component, &cvp, &pn, 0, rootdir, cr,
+		if (fop_lookup(vp, component, &cvp, &pn, 0, rootdir, cr,
 		    NULL, NULL, NULL) != 0)
 			break;
 		VN_RELE(vp);
@@ -1133,7 +1133,7 @@ dirtopath(vnode_t *vrootp, vnode_t *vp, char *buf, size_t buflen, int flags,
 		 */
 		if (vp->v_flag & VROOT)
 			vp = vn_under(vp);
-		if ((err = VOP_LOOKUP(vp, "..", &pvp, &emptypn, 0, vrootp, cr,
+		if ((err = fop_lookup(vp, "..", &pvp, &emptypn, 0, vrootp, cr,
 		    NULL, NULL, NULL)) != 0)
 			goto out;
 
@@ -1161,7 +1161,7 @@ dirtopath(vnode_t *vrootp, vnode_t *vp, char *buf, size_t buflen, int flags,
 		 * we can lookup the path in the directory
 		 */
 		vprivs = (flags & LOOKUP_CHECKREAD) ? VREAD | VEXEC : VEXEC;
-		if ((err = VOP_ACCESS(pvp, vprivs, 0, cr, NULL)) != 0) {
+		if ((err = fop_access(pvp, vprivs, 0, cr, NULL)) != 0) {
 			goto out;
 		}
 
@@ -1293,14 +1293,14 @@ vnodetopath_common(vnode_t *vrootp, vnode_t *vp, char *buf, size_t buflen,
 	 * This is to get around an annoying artifact of the /proc filesystem,
 	 * which is the behavior of {cwd/root}.  Trying to resolve this path
 	 * will result in /proc/pid/cwd instead of whatever the real working
-	 * directory is.  We can't rely on VOP_REALVP(), since that will break
+	 * directory is.  We can't rely on fop_realvp(), since that will break
 	 * lofs.  The only difference between procfs and lofs is that opening
 	 * the file will return the underling vnode in the case of procfs.
 	 */
-	if (vp->v_type == VDIR && VOP_REALVP(vp, &realvp, NULL) == 0 &&
+	if (vp->v_type == VDIR && fop_realvp(vp, &realvp, NULL) == 0 &&
 	    realvp != vp) {
 		VN_HOLD(vp);
-		if (VOP_OPEN(&vp, FREAD, cr, NULL) == 0)
+		if (fop_open(&vp, FREAD, cr, NULL) == 0)
 			doclose = 1;
 		else
 			VN_RELE(vp);
@@ -1394,7 +1394,7 @@ vnodetopath_common(vnode_t *vrootp, vnode_t *vp, char *buf, size_t buflen,
 			pn_free(&rpn);
 			VN_RELE(vrootp);
 			if (doclose) {
-				(void) VOP_CLOSE(vp, FREAD, 1, 0, cr, NULL);
+				(void) fop_close(vp, FREAD, 1, 0, cr, NULL);
 				VN_RELE(vp);
 			}
 			return (0);
@@ -1421,7 +1421,7 @@ notcached:
 			 */
 			ret = 0;
 			if ((flags & LOOKUP_CHECKREAD)) {
-				ret = VOP_ACCESS(pvp, VREAD, 0, cr, NULL);
+				ret = fop_access(pvp, VREAD, 0, cr, NULL);
 			}
 			if (ret == 0) {
 				ret = dirtopath(vrootp, pvp, buf, buflen,
@@ -1447,7 +1447,7 @@ notcached:
 
 	VN_RELE(vrootp);
 	if (doclose) {
-		(void) VOP_CLOSE(vp, FREAD, 1, 0, cr, NULL);
+		(void) fop_close(vp, FREAD, 1, 0, cr, NULL);
 		VN_RELE(vp);
 	}
 
@@ -1485,7 +1485,7 @@ dogetcwd(char *buf, size_t buflen)
 	/*
 	 * Make sure we have permission to access the current directory.
 	 */
-	if ((ret = VOP_ACCESS(vp, VEXEC, 0, CRED(), NULL)) != 0) {
+	if ((ret = fop_access(vp, VEXEC, 0, CRED(), NULL)) != 0) {
 		if (cwd != NULL)
 			refstr_rele(cwd);
 		VN_RELE(vp);

@@ -616,7 +616,7 @@ kfclose(kfile_t *fp)
 	KFDEBUG((CE_CONT, "close: %s\n", fp->kf_fname));
 
 	if ((fp->kf_vnflags & FWRITE) && fp->kf_state == 0) {
-		rval = VOP_FSYNC(fp->kf_vp, FSYNC, kcred, NULL);
+		rval = fop_fsync(fp->kf_vp, FSYNC, kcred, NULL);
 		if (rval != 0) {
 			nvf_error("%s: sync error %d\n",
 			    fp->kf_fname, rval);
@@ -624,7 +624,7 @@ kfclose(kfile_t *fp)
 		KFDEBUG((CE_CONT, "%s: sync ok\n", fp->kf_fname));
 	}
 
-	rval = VOP_CLOSE(fp->kf_vp, fp->kf_vnflags, 1,
+	rval = fop_close(fp->kf_vp, fp->kf_vnflags, 1,
 	    (offset_t)0, kcred, NULL);
 	if (rval != 0) {
 		if (fp->kf_state == 0) {

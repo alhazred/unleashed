@@ -231,7 +231,7 @@ devfs_mount(struct vfs *vfsp, struct vnode *mvp, struct mounta *uap,
 	va.va_mask = AT_ATIME|AT_MTIME;
 	gethrestime(&va.va_atime);
 	gethrestime(&va.va_mtime);
-	(void) VOP_SETATTR(DVTOV(dv), &va, 0, cr, NULL);
+	(void) fop_setattr(DVTOV(dv), &va, 0, cr, NULL);
 	return (0);
 }
 
@@ -554,7 +554,7 @@ devfs_devpolicy(vnode_t *vp, devplcy_t **dpp)
 	if (devfs_mntinfo == NULL)
 		return (rval);
 
-	if (VOP_REALVP(vp, &rvp, NULL) == 0 && vn_matchops(rvp, dv_vnodeops)) {
+	if (fop_realvp(vp, &rvp, NULL) == 0 && vn_matchops(rvp, dv_vnodeops)) {
 		dvp = VTODV(rvp);
 		rw_enter(&dvp->dv_contents, RW_READER);
 		if (dvp->dv_priv) {

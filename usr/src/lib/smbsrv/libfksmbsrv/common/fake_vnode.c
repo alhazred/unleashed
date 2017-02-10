@@ -42,9 +42,9 @@ vn_compare(vnode_t *vp1, vnode_t *vp2)
 {
 	vnode_t *realvp;
 
-	if (vp1 != NULL && VOP_REALVP(vp1, &realvp, NULL) == 0)
+	if (vp1 != NULL && fop_realvp(vp1, &realvp, NULL) == 0)
 		vp1 = realvp;
-	if (vp2 != NULL && VOP_REALVP(vp2, &realvp, NULL) == 0)
+	if (vp2 != NULL && fop_realvp(vp2, &realvp, NULL) == 0)
 		vp2 = realvp;
 	return (VN_CMP(vp1, vp2));
 }

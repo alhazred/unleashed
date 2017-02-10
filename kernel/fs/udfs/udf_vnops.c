@@ -868,7 +868,7 @@ udf_link(
 	struct ud_inode *tdp;
 
 	ud_printf("udf_link\n");
-	if (VOP_REALVP(svp, &realvp, ct) == 0) {
+	if (fop_realvp(svp, &realvp, ct) == 0) {
 		svp = realvp;
 	}
 
@@ -920,7 +920,7 @@ udf_rename(
 
 	ud_printf("udf_rename\n");
 
-	if (VOP_REALVP(tdvp, &realvp, ct) == 0) {
+	if (fop_realvp(tdvp, &realvp, ct) == 0) {
 		tdvp = realvp;
 	}
 

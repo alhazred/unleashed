@@ -177,10 +177,10 @@ spa_config_write(spa_config_dirent_t *dp, nvlist_t *nvl)
 		err = vn_rdwr(UIO_WRITE, vp, buf, buflen, 0, UIO_SYSSPACE,
 		    0, RLIM64_INFINITY, kcred, NULL);
 		if (err == 0)
-			err = VOP_FSYNC(vp, FSYNC, kcred, NULL);
+			err = fop_fsync(vp, FSYNC, kcred, NULL);
 		if (err == 0)
 			err = vn_rename(temp, dp->scd_path, UIO_SYSSPACE);
-		(void) VOP_CLOSE(vp, oflags, 1, 0, kcred, NULL);
+		(void) fop_close(vp, oflags, 1, 0, kcred, NULL);
 		VN_RELE(vp);
 	}
 

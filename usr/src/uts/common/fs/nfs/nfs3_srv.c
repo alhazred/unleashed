@@ -181,7 +181,7 @@ rfs3_setattr(SETATTR3args *args, SETATTR3res *resp, struct exportinfo *exi,
 	/*
 	 * We need to specially handle size changes because of
 	 * possible conflicting NBMAND locks. Get into critical
-	 * region before VOP_GETATTR, so the size attribute is
+	 * region before fop_getattr, so the size attribute is
 	 * valid when checking conflicts.
 	 *
 	 * Also, check to see if the v4 side of the server has
@@ -243,12 +243,12 @@ rfs3_setattr(SETATTR3args *args, SETATTR3res *resp, struct exportinfo *exi,
 	 * which indicate read-only, but with the file opened for
 	 * writing.  If the client then tries to set the size of
 	 * the file, then the normal access checking done in
-	 * VOP_SETATTR would prevent the client from doing so,
+	 * fop_setattr would prevent the client from doing so,
 	 * although it should be legal for it to do so.  To get
 	 * around this, we do the access checking for ourselves
-	 * and then use VOP_SPACE which doesn't do the access
-	 * checking which VOP_SETATTR does. VOP_SPACE can only
-	 * operate on VREG files, let VOP_SETATTR handle the other
+	 * and then use fop_space which doesn't do the access
+	 * checking which fop_setattr does. fop_space can only
+	 * operate on VREG files, let fop_setattr handle the other
 	 * extremely rare cases.
 	 * Also the client should not be allowed to change the
 	 * size of the file if there is a conflicting non-blocking
@@ -281,13 +281,13 @@ rfs3_setattr(SETATTR3args *args, SETATTR3res *resp, struct exportinfo *exi,
 			bf.l_len = 0;
 			bf.l_sysid = 0;
 			bf.l_pid = 0;
-			error = VOP_SPACE(vp, F_FREESP, &bf, FWRITE,
+			error = fop_space(vp, F_FREESP, &bf, FWRITE,
 			    (offset_t)ava.va_size, cr, &ct);
 		}
 	}
 
 	if (!error && ava.va_mask)
-		error = VOP_SETATTR(vp, &ava, flag, cr, &ct);
+		error = fop_setattr(vp, &ava, flag, cr, &ct);
 
 	/* check if a monitor detected a delegation conflict */
 	if (error == EAGAIN && (ct.cc_flags & CC_WOULDBLOCK)) {
@@ -301,7 +301,7 @@ rfs3_setattr(SETATTR3args *args, SETATTR3res *resp, struct exportinfo *exi,
 	/*
 	 * Force modified metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, FNODSYNC, cr, &ct);
+	(void) fop_fsync(vp, FNODSYNC, cr, &ct);
 
 	if (error)
 		goto out;
@@ -387,7 +387,7 @@ rfs3_lookup(LOOKUP3args *args, LOOKUP3res *resp, struct exportinfo *exi,
 	}
 
 	dva.va_mask = AT_ALL;
-	dvap = VOP_GETATTR(dvp, &dva, 0, cr, NULL) ? NULL : &dva;
+	dvap = fop_getattr(dvp, &dva, 0, cr, NULL) ? NULL : &dva;
 
 	if (args->what.name == nfs3nametoolong) {
 		resp->status = NFS3ERR_NAMETOOLONG;
@@ -426,7 +426,7 @@ rfs3_lookup(LOOKUP3args *args, LOOKUP3res *resp, struct exportinfo *exi,
 		if (error && exi != NULL)
 			exi_rele(exi); /* See comment below Re: publicfh_flag */
 	} else {
-		error = VOP_LOOKUP(dvp, name, &vp,
+		error = fop_lookup(dvp, name, &vp,
 		    NULL, 0, NULL, cr, NULL, NULL, NULL);
 	}
 
@@ -434,7 +434,7 @@ rfs3_lookup(LOOKUP3args *args, LOOKUP3res *resp, struct exportinfo *exi,
 		kmem_free(name, MAXPATHLEN + 1);
 
 	dva.va_mask = AT_ALL;
-	dvap = VOP_GETATTR(dvp, &dva, 0, cr, NULL) ? NULL : &dva;
+	dvap = fop_getattr(dvp, &dva, 0, cr, NULL) ? NULL : &dva;
 
 	if (error)
 		goto out;
@@ -548,7 +548,7 @@ rfs3_access(ACCESS3args *args, ACCESS3res *resp, struct exportinfo *exi,
 	 * as well be reflected to the server during the open.
 	 */
 	va.va_mask = AT_MODE;
-	error = VOP_GETATTR(vp, &va, 0, cr, NULL);
+	error = fop_getattr(vp, &va, 0, cr, NULL);
 	if (error)
 		goto out;
 
@@ -558,7 +558,7 @@ rfs3_access(ACCESS3args *args, ACCESS3res *resp, struct exportinfo *exi,
 
 
 	if (args->access & ACCESS3_READ) {
-		error = VOP_ACCESS(vp, VREAD, 0, cr, NULL);
+		error = fop_access(vp, VREAD, 0, cr, NULL);
 		if (error) {
 			if (curthread->t_flag & T_WOULDBLOCK)
 				goto out;
@@ -566,7 +566,7 @@ rfs3_access(ACCESS3args *args, ACCESS3res *resp, struct exportinfo *exi,
 			resp->resok.access |= ACCESS3_READ;
 	}
 	if ((args->access & ACCESS3_LOOKUP) && vp->v_type == VDIR) {
-		error = VOP_ACCESS(vp, VEXEC, 0, cr, NULL);
+		error = fop_access(vp, VEXEC, 0, cr, NULL);
 		if (error) {
 			if (curthread->t_flag & T_WOULDBLOCK)
 				goto out;
@@ -575,7 +575,7 @@ rfs3_access(ACCESS3args *args, ACCESS3res *resp, struct exportinfo *exi,
 	}
 	if (checkwriteperm &&
 	    (args->access & (ACCESS3_MODIFY|ACCESS3_EXTEND))) {
-		error = VOP_ACCESS(vp, VWRITE, 0, cr, NULL);
+		error = fop_access(vp, VWRITE, 0, cr, NULL);
 		if (error) {
 			if (curthread->t_flag & T_WOULDBLOCK)
 				goto out;
@@ -585,7 +585,7 @@ rfs3_access(ACCESS3args *args, ACCESS3res *resp, struct exportinfo *exi,
 	}
 	if (checkwriteperm &&
 	    (args->access & ACCESS3_DELETE) && vp->v_type == VDIR) {
-		error = VOP_ACCESS(vp, VWRITE, 0, cr, NULL);
+		error = fop_access(vp, VWRITE, 0, cr, NULL);
 		if (error) {
 			if (curthread->t_flag & T_WOULDBLOCK)
 				goto out;
@@ -593,7 +593,7 @@ rfs3_access(ACCESS3args *args, ACCESS3res *resp, struct exportinfo *exi,
 			resp->resok.access |= ACCESS3_DELETE;
 	}
 	if (args->access & ACCESS3_EXECUTE) {
-		error = VOP_ACCESS(vp, VEXEC, 0, cr, NULL);
+		error = fop_access(vp, VEXEC, 0, cr, NULL);
 		if (error) {
 			if (curthread->t_flag & T_WOULDBLOCK)
 				goto out;
@@ -663,7 +663,7 @@ rfs3_readlink(READLINK3args *args, READLINK3res *resp, struct exportinfo *exi,
 	}
 
 	va.va_mask = AT_ALL;
-	error = VOP_GETATTR(vp, &va, 0, cr, NULL);
+	error = fop_getattr(vp, &va, 0, cr, NULL);
 	if (error)
 		goto out;
 
@@ -713,14 +713,14 @@ rfs3_readlink(READLINK3args *args, READLINK3res *resp, struct exportinfo *exi,
 		uio.uio_loffset = 0;
 		uio.uio_resid = MAXPATHLEN;
 
-		error = VOP_READLINK(vp, &uio, cr, NULL);
+		error = fop_readlink(vp, &uio, cr, NULL);
 
 		if (!error)
 			*(data + MAXPATHLEN - uio.uio_resid) = '\0';
 	}
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	/* Lie about object type again just to be consistent */
 	if (is_referral && vap != NULL)
@@ -735,7 +735,7 @@ rfs3_readlink(READLINK3args *args, READLINK3res *resp, struct exportinfo *exi,
 	/*
 	 * Force modified metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, FNODSYNC, cr, NULL);
+	(void) fop_fsync(vp, FNODSYNC, cr, NULL);
 #endif
 
 	if (error) {
@@ -851,7 +851,7 @@ rfs3_read(READ3args *args, READ3res *resp, struct exportinfo *exi,
 	ct.cc_flags = CC_DONTBLOCK;
 
 	/*
-	 * Enter the critical region before calling VOP_RWLOCK
+	 * Enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with write requests.
 	 */
 	if (nbl_need_check(vp)) {
@@ -864,7 +864,7 @@ rfs3_read(READ3args *args, READ3res *resp, struct exportinfo *exi,
 		}
 	}
 
-	error = VOP_RWLOCK(vp, V_WRITELOCK_FALSE, &ct);
+	error = fop_rwlock(vp, V_WRITELOCK_FALSE, &ct);
 
 	/* check if a monitor detected a delegation conflict */
 	if (error == EAGAIN && (ct.cc_flags & CC_WOULDBLOCK)) {
@@ -875,7 +875,7 @@ rfs3_read(READ3args *args, READ3res *resp, struct exportinfo *exi,
 	need_rwunlock = 1;
 
 	va.va_mask = AT_ALL;
-	error = VOP_GETATTR(vp, &va, 0, cr, &ct);
+	error = fop_getattr(vp, &va, 0, cr, &ct);
 
 	/*
 	 * If we can't get the attributes, then we can't do the
@@ -892,11 +892,11 @@ rfs3_read(READ3args *args, READ3res *resp, struct exportinfo *exi,
 	}
 
 	if (crgetuid(cr) != va.va_uid) {
-		error = VOP_ACCESS(vp, VREAD, 0, cr, &ct);
+		error = fop_access(vp, VREAD, 0, cr, &ct);
 		if (error) {
 			if (curthread->t_flag & T_WOULDBLOCK)
 				goto out;
-			error = VOP_ACCESS(vp, VEXEC, 0, cr, &ct);
+			error = fop_access(vp, VEXEC, 0, cr, &ct);
 			if (error)
 				goto out;
 		}
@@ -909,7 +909,7 @@ rfs3_read(READ3args *args, READ3res *resp, struct exportinfo *exi,
 
 	offset = args->offset;
 	if (offset >= va.va_size) {
-		VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &ct);
+		fop_rwunlock(vp, V_WRITELOCK_FALSE, &ct);
 		if (in_crit)
 			nbl_end_crit(vp);
 		resp->status = NFS3_OK;
@@ -928,7 +928,7 @@ rfs3_read(READ3args *args, READ3res *resp, struct exportinfo *exi,
 	}
 
 	if (args->count == 0) {
-		VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &ct);
+		fop_rwunlock(vp, V_WRITELOCK_FALSE, &ct);
 		if (in_crit)
 			nbl_end_crit(vp);
 		resp->status = NFS3_OK;
@@ -961,9 +961,9 @@ rfs3_read(READ3args *args, READ3res *resp, struct exportinfo *exi,
 		uiop->uio_resid = args->count;
 
 		/* Jump to do the read if successful */
-		if (VOP_REQZCBUF(vp, UIO_READ, (xuio_t *)uiop, cr, &ct) == 0) {
+		if (fop_reqzcbuf(vp, UIO_READ, (xuio_t *)uiop, cr, &ct) == 0) {
 			/*
-			 * Need to hold the vnode until after VOP_RETZCBUF()
+			 * Need to hold the vnode until after fop_retzcbuf()
 			 * is called.
 			 */
 			VN_HOLD(vp);
@@ -1008,7 +1008,7 @@ rfs3_read(READ3args *args, READ3res *resp, struct exportinfo *exi,
 	uiop = &uio;
 
 doio_read:
-	error = VOP_READ(vp, uiop, 0, cr, &ct);
+	error = fop_read(vp, uiop, 0, cr, &ct);
 
 	if (error) {
 		if (mp)
@@ -1028,14 +1028,14 @@ doio_read:
 	}
 
 	va.va_mask = AT_ALL;
-	error = VOP_GETATTR(vp, &va, 0, cr, &ct);
+	error = fop_getattr(vp, &va, 0, cr, &ct);
 
 	if (error)
 		vap = NULL;
 	else
 		vap = &va;
 
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &ct);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, &ct);
 
 	if (in_crit)
 		nbl_end_crit(vp);
@@ -1088,7 +1088,7 @@ out1:
 
 	if (vp != NULL) {
 		if (need_rwunlock)
-			VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &ct);
+			fop_rwunlock(vp, V_WRITELOCK_FALSE, &ct);
 		if (in_crit)
 			nbl_end_crit(vp);
 		VN_RELE(vp);
@@ -1163,7 +1163,7 @@ rfs3_write(WRITE3args *args, WRITE3res *resp, struct exportinfo *exi,
 	ct.cc_flags = CC_DONTBLOCK;
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -1176,7 +1176,7 @@ rfs3_write(WRITE3args *args, WRITE3res *resp, struct exportinfo *exi,
 		}
 	}
 
-	rwlock_ret = VOP_RWLOCK(vp, V_WRITELOCK_TRUE, &ct);
+	rwlock_ret = fop_rwlock(vp, V_WRITELOCK_TRUE, &ct);
 
 	/* check if a monitor detected a delegation conflict */
 	if (rwlock_ret == EAGAIN && (ct.cc_flags & CC_WOULDBLOCK)) {
@@ -1187,7 +1187,7 @@ rfs3_write(WRITE3args *args, WRITE3res *resp, struct exportinfo *exi,
 
 
 	bva.va_mask = AT_ALL;
-	error = VOP_GETATTR(vp, &bva, 0, cr, &ct);
+	error = fop_getattr(vp, &bva, 0, cr, &ct);
 
 	/*
 	 * If we can't get the attributes, then we can't do the
@@ -1215,7 +1215,7 @@ rfs3_write(WRITE3args *args, WRITE3res *resp, struct exportinfo *exi,
 	}
 
 	if (crgetuid(cr) != bva.va_uid &&
-	    (error = VOP_ACCESS(vp, VWRITE, 0, cr, &ct)))
+	    (error = fop_access(vp, VWRITE, 0, cr, &ct)))
 		goto err;
 
 	if (MANDLOCK(vp, bva.va_mode)) {
@@ -1293,7 +1293,7 @@ rfs3_write(WRITE3args *args, WRITE3res *resp, struct exportinfo *exi,
 	 */
 	savecred = curthread->t_cred;
 	curthread->t_cred = cr;
-	error = VOP_WRITE(vp, &uio, ioflag, cr, &ct);
+	error = fop_write(vp, &uio, ioflag, cr, &ct);
 	curthread->t_cred = savecred;
 
 	if (iovp != iov)
@@ -1306,7 +1306,7 @@ rfs3_write(WRITE3args *args, WRITE3res *resp, struct exportinfo *exi,
 	}
 
 	ava.va_mask = AT_ALL;
-	avap = VOP_GETATTR(vp, &ava, 0, cr, &ct) ? NULL : &ava;
+	avap = fop_getattr(vp, &ava, 0, cr, &ct) ? NULL : &ava;
 
 	if (error)
 		goto err;
@@ -1347,7 +1347,7 @@ out:
 
 	if (vp != NULL) {
 		if (rwlock_ret != -1)
-			VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, &ct);
+			fop_rwunlock(vp, V_WRITELOCK_TRUE, &ct);
 		if (in_crit)
 			nbl_end_crit(vp);
 		VN_RELE(vp);
@@ -1397,7 +1397,7 @@ rfs3_create(CREATE3args *args, CREATE3res *resp, struct exportinfo *exi,
 	}
 
 	dbva.va_mask = AT_ALL;
-	dbvap = VOP_GETATTR(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
+	dbvap = fop_getattr(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
 	davap = dbvap;
 
 	if (args->where.name == nfs3nametoolong) {
@@ -1462,7 +1462,7 @@ rfs3_create(CREATE3args *args, CREATE3res *resp, struct exportinfo *exi,
 				/*
 				 * Does file already exist?
 				 */
-				error = VOP_LOOKUP(dvp, name, &tvp,
+				error = fop_lookup(dvp, name, &tvp,
 				    NULL, 0, NULL, cr, NULL, NULL, NULL);
 
 				/*
@@ -1490,7 +1490,7 @@ rfs3_create(CREATE3args *args, CREATE3res *resp, struct exportinfo *exi,
 					in_crit = 1;
 
 					tva.va_mask = AT_SIZE;
-					error = VOP_GETATTR(tvp, &tva, 0, cr,
+					error = fop_getattr(tvp, &tva, 0, cr,
 					    NULL);
 					/*
 					 * Can't check for conflicts, so return
@@ -1541,11 +1541,11 @@ tryagain:
 	 * itself.  It would have been nice to have the file open mode
 	 * passed as part of the arguments.
 	 */
-	error = VOP_CREATE(dvp, name, &va, excl, VWRITE,
+	error = fop_create(dvp, name, &va, excl, VWRITE,
 	    &vp, cr, 0, NULL, NULL);
 
 	dava.va_mask = AT_ALL;
-	davap = VOP_GETATTR(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
+	davap = fop_getattr(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
 
 	if (error) {
 		/*
@@ -1564,7 +1564,7 @@ tryagain:
 		/*
 		 * Lookup the file so that we can get a vnode for it.
 		 */
-		error = VOP_LOOKUP(dvp, name, &vp, NULL, 0,
+		error = fop_lookup(dvp, name, &vp, NULL, 0,
 		    NULL, cr, NULL, NULL, NULL);
 		if (error) {
 			/*
@@ -1590,7 +1590,7 @@ tryagain:
 		}
 
 		va.va_mask = AT_ALL;
-		vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+		vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 		mtime = (nfstime3 *)&args->how.createhow3_u.verf;
 		/* % with INT32_MAX to prevent overflows */
@@ -1619,7 +1619,7 @@ tryagain:
 		}
 
 		va.va_mask = AT_ALL;
-		vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+		vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 		/*
 		 * We need to check to make sure that the file got
@@ -1640,9 +1640,9 @@ tryagain:
 		    vap->va_size != reqsize) {
 			va.va_mask = AT_SIZE;
 			va.va_size = reqsize;
-			(void) VOP_SETATTR(vp, &va, 0, cr, NULL);
+			(void) fop_setattr(vp, &va, 0, cr, NULL);
 			va.va_mask = AT_ALL;
-			vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+			vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 		}
 	}
 
@@ -1658,8 +1658,8 @@ tryagain:
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, FNODSYNC, cr, NULL);
-	(void) VOP_FSYNC(dvp, 0, cr, NULL);
+	(void) fop_fsync(vp, FNODSYNC, cr, NULL);
+	(void) fop_fsync(dvp, 0, cr, NULL);
 
 	VN_RELE(vp);
 	if (tvp != NULL) {
@@ -1738,7 +1738,7 @@ rfs3_mkdir(MKDIR3args *args, MKDIR3res *resp, struct exportinfo *exi,
 	}
 
 	dbva.va_mask = AT_ALL;
-	dbvap = VOP_GETATTR(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
+	dbvap = fop_getattr(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
 	davap = dbvap;
 
 	if (args->where.name == nfs3nametoolong) {
@@ -1777,18 +1777,18 @@ rfs3_mkdir(MKDIR3args *args, MKDIR3res *resp, struct exportinfo *exi,
 	va.va_mask |= AT_TYPE;
 	va.va_type = VDIR;
 
-	error = VOP_MKDIR(dvp, name, &va, &vp, cr, NULL, 0, NULL);
+	error = fop_mkdir(dvp, name, &va, &vp, cr, NULL, 0, NULL);
 
 	if (name != args->where.name)
 		kmem_free(name, MAXPATHLEN + 1);
 
 	dava.va_mask = AT_ALL;
-	davap = VOP_GETATTR(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
+	davap = fop_getattr(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(dvp, 0, cr, NULL);
+	(void) fop_fsync(dvp, 0, cr, NULL);
 
 	if (error)
 		goto out;
@@ -1800,12 +1800,12 @@ rfs3_mkdir(MKDIR3args *args, MKDIR3res *resp, struct exportinfo *exi,
 		resp->resok.obj.handle_follows = TRUE;
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, 0, cr, NULL);
+	(void) fop_fsync(vp, 0, cr, NULL);
 
 	VN_RELE(vp);
 
@@ -1871,7 +1871,7 @@ rfs3_symlink(SYMLINK3args *args, SYMLINK3res *resp, struct exportinfo *exi,
 	}
 
 	dbva.va_mask = AT_ALL;
-	dbvap = VOP_GETATTR(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
+	dbvap = fop_getattr(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
 	davap = dbvap;
 
 	if (args->where.name == nfs3nametoolong) {
@@ -1925,21 +1925,21 @@ rfs3_symlink(SYMLINK3args *args, SYMLINK3res *resp, struct exportinfo *exi,
 	va.va_mask |= AT_TYPE;
 	va.va_type = VLNK;
 
-	error = VOP_SYMLINK(dvp, name, &va, symdata, cr, NULL, 0);
+	error = fop_symlink(dvp, name, &va, symdata, cr, NULL, 0);
 
 	dava.va_mask = AT_ALL;
-	davap = VOP_GETATTR(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
+	davap = fop_getattr(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
 
 	if (error)
 		goto err;
 
-	error = VOP_LOOKUP(dvp, name, &vp, NULL, 0, NULL, cr,
+	error = fop_lookup(dvp, name, &vp, NULL, 0, NULL, cr,
 	    NULL, NULL, NULL);
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(dvp, 0, cr, NULL);
+	(void) fop_fsync(dvp, 0, cr, NULL);
 
 
 	resp->status = NFS3_OK;
@@ -1957,12 +1957,12 @@ rfs3_symlink(SYMLINK3args *args, SYMLINK3res *resp, struct exportinfo *exi,
 		resp->resok.obj.handle_follows = TRUE;
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, 0, cr, NULL);
+	(void) fop_fsync(vp, 0, cr, NULL);
 
 	VN_RELE(vp);
 
@@ -2031,7 +2031,7 @@ rfs3_mknod(MKNOD3args *args, MKNOD3res *resp, struct exportinfo *exi,
 	}
 
 	dbva.va_mask = AT_ALL;
-	dbvap = VOP_GETATTR(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
+	dbvap = fop_getattr(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
 	davap = dbvap;
 
 	if (args->where.name == nfs3nametoolong) {
@@ -2111,19 +2111,19 @@ rfs3_mknod(MKNOD3args *args, MKNOD3res *resp, struct exportinfo *exi,
 
 	mode = 0;
 
-	error = VOP_CREATE(dvp, name, &va, excl, mode,
+	error = fop_create(dvp, name, &va, excl, mode,
 	    &vp, cr, 0, NULL, NULL);
 
 	if (name != args->where.name)
 		kmem_free(name, MAXPATHLEN + 1);
 
 	dava.va_mask = AT_ALL;
-	davap = VOP_GETATTR(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
+	davap = fop_getattr(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(dvp, 0, cr, NULL);
+	(void) fop_fsync(dvp, 0, cr, NULL);
 
 	if (error)
 		goto out;
@@ -2137,17 +2137,17 @@ rfs3_mknod(MKNOD3args *args, MKNOD3res *resp, struct exportinfo *exi,
 		resp->resok.obj.handle_follows = TRUE;
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	/*
 	 * Force modified metadata out to stable storage.
 	 *
-	 * if a underlying vp exists, pass it to VOP_FSYNC
+	 * if a underlying vp exists, pass it to fop_fsync
 	 */
-	if (VOP_REALVP(vp, &realvp, NULL) == 0)
-		(void) VOP_FSYNC(realvp, FNODSYNC, cr, NULL);
+	if (fop_realvp(vp, &realvp, NULL) == 0)
+		(void) fop_fsync(realvp, FNODSYNC, cr, NULL);
 	else
-		(void) VOP_FSYNC(vp, FNODSYNC, cr, NULL);
+		(void) fop_fsync(vp, FNODSYNC, cr, NULL);
 
 	VN_RELE(vp);
 
@@ -2207,7 +2207,7 @@ rfs3_remove(REMOVE3args *args, REMOVE3res *resp, struct exportinfo *exi,
 	}
 
 	bva.va_mask = AT_ALL;
-	bvap = VOP_GETATTR(vp, &bva, 0, cr, NULL) ? NULL : &bva;
+	bvap = fop_getattr(vp, &bva, 0, cr, NULL) ? NULL : &bva;
 	avap = bvap;
 
 	if (vp->v_type != VDIR) {
@@ -2243,7 +2243,7 @@ rfs3_remove(REMOVE3args *args, REMOVE3res *resp, struct exportinfo *exi,
 	 * Check for a conflict with a non-blocking mandatory share
 	 * reservation and V4 delegations
 	 */
-	error = VOP_LOOKUP(vp, name, &targvp, NULL, 0,
+	error = fop_lookup(vp, name, &targvp, NULL, 0,
 	    NULL, cr, NULL, NULL, NULL);
 	if (error != 0)
 		goto err;
@@ -2254,13 +2254,13 @@ rfs3_remove(REMOVE3args *args, REMOVE3res *resp, struct exportinfo *exi,
 	}
 
 	if (!nbl_need_check(targvp)) {
-		error = VOP_REMOVE(vp, name, cr, NULL, 0);
+		error = fop_remove(vp, name, cr, NULL, 0);
 	} else {
 		nbl_start_crit(targvp, RW_READER);
 		if (nbl_conflict(targvp, NBL_REMOVE, 0, 0, 0, NULL)) {
 			error = EACCES;
 		} else {
-			error = VOP_REMOVE(vp, name, cr, NULL, 0);
+			error = fop_remove(vp, name, cr, NULL, 0);
 		}
 		nbl_end_crit(targvp);
 	}
@@ -2268,12 +2268,12 @@ rfs3_remove(REMOVE3args *args, REMOVE3res *resp, struct exportinfo *exi,
 	targvp = NULL;
 
 	ava.va_mask = AT_ALL;
-	avap = VOP_GETATTR(vp, &ava, 0, cr, NULL) ? NULL : &ava;
+	avap = fop_getattr(vp, &ava, 0, cr, NULL) ? NULL : &ava;
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, 0, cr, NULL);
+	(void) fop_fsync(vp, 0, cr, NULL);
 
 	if (error)
 		goto err;
@@ -2335,7 +2335,7 @@ rfs3_rmdir(RMDIR3args *args, RMDIR3res *resp, struct exportinfo *exi,
 	}
 
 	bva.va_mask = AT_ALL;
-	bvap = VOP_GETATTR(vp, &bva, 0, cr, NULL) ? NULL : &bva;
+	bvap = fop_getattr(vp, &bva, 0, cr, NULL) ? NULL : &bva;
 	avap = bvap;
 
 	if (vp->v_type != VDIR) {
@@ -2367,18 +2367,18 @@ rfs3_rmdir(RMDIR3args *args, RMDIR3res *resp, struct exportinfo *exi,
 		goto err1;
 	}
 
-	error = VOP_RMDIR(vp, name, rootdir, cr, NULL, 0);
+	error = fop_rmdir(vp, name, rootdir, cr, NULL, 0);
 
 	if (name != args->object.name)
 		kmem_free(name, MAXPATHLEN + 1);
 
 	ava.va_mask = AT_ALL;
-	avap = VOP_GETATTR(vp, &ava, 0, cr, NULL) ? NULL : &ava;
+	avap = fop_getattr(vp, &ava, 0, cr, NULL) ? NULL : &ava;
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, 0, cr, NULL);
+	(void) fop_fsync(vp, 0, cr, NULL);
 
 	if (error) {
 		/*
@@ -2459,7 +2459,7 @@ rfs3_rename(RENAME3args *args, RENAME3res *resp, struct exportinfo *exi,
 	}
 
 	fbva.va_mask = AT_ALL;
-	fbvap = VOP_GETATTR(fvp, &fbva, 0, cr, NULL) ? NULL : &fbva;
+	fbvap = fop_getattr(fvp, &fbva, 0, cr, NULL) ? NULL : &fbva;
 	favap = fbvap;
 
 	fh3 = &args->to.dir;
@@ -2482,7 +2482,7 @@ rfs3_rename(RENAME3args *args, RENAME3res *resp, struct exportinfo *exi,
 	}
 
 	tbva.va_mask = AT_ALL;
-	tbvap = VOP_GETATTR(tvp, &tbva, 0, cr, NULL) ? NULL : &tbva;
+	tbvap = fop_getattr(tvp, &tbva, 0, cr, NULL) ? NULL : &tbva;
 	tavap = tbvap;
 
 	if (fvp->v_type != VDIR || tvp->v_type != VDIR) {
@@ -2527,7 +2527,7 @@ rfs3_rename(RENAME3args *args, RENAME3res *resp, struct exportinfo *exi,
 	 * Check for a conflict with a non-blocking mandatory share
 	 * reservation or V4 delegations.
 	 */
-	error = VOP_LOOKUP(fvp, name, &srcvp, NULL, 0,
+	error = fop_lookup(fvp, name, &srcvp, NULL, 0,
 	    NULL, cr, NULL, NULL, NULL);
 	if (error != 0)
 		goto err;
@@ -2544,10 +2544,10 @@ rfs3_rename(RENAME3args *args, RENAME3res *resp, struct exportinfo *exi,
 
 	/*
 	 * Check for renaming over a delegated file.  Check rfs4_deleg_policy
-	 * first to avoid VOP_LOOKUP if possible.
+	 * first to avoid fop_lookup if possible.
 	 */
 	if (rfs4_deleg_policy != SRV_NEVER_DELEGATE &&
-	    VOP_LOOKUP(tvp, toname, &targvp, NULL, 0, NULL, cr,
+	    fop_lookup(tvp, toname, &targvp, NULL, 0, NULL, cr,
 	    NULL, NULL, NULL) == 0) {
 
 		if (rfs4_check_delegated(FWRITE, targvp, TRUE)) {
@@ -2559,13 +2559,13 @@ rfs3_rename(RENAME3args *args, RENAME3res *resp, struct exportinfo *exi,
 	}
 
 	if (!nbl_need_check(srcvp)) {
-		error = VOP_RENAME(fvp, name, tvp, toname, cr, NULL, 0);
+		error = fop_rename(fvp, name, tvp, toname, cr, NULL, 0);
 	} else {
 		nbl_start_crit(srcvp, RW_READER);
 		if (nbl_conflict(srcvp, NBL_RENAME, 0, 0, 0, NULL))
 			error = EACCES;
 		else
-			error = VOP_RENAME(fvp, name, tvp, toname, cr, NULL, 0);
+			error = fop_rename(fvp, name, tvp, toname, cr, NULL, 0);
 		nbl_end_crit(srcvp);
 	}
 	if (error == 0)
@@ -2575,15 +2575,15 @@ rfs3_rename(RENAME3args *args, RENAME3res *resp, struct exportinfo *exi,
 	srcvp = NULL;
 
 	fava.va_mask = AT_ALL;
-	favap = VOP_GETATTR(fvp, &fava, 0, cr, NULL) ? NULL : &fava;
+	favap = fop_getattr(fvp, &fava, 0, cr, NULL) ? NULL : &fava;
 	tava.va_mask = AT_ALL;
-	tavap = VOP_GETATTR(tvp, &tava, 0, cr, NULL) ? NULL : &tava;
+	tavap = fop_getattr(tvp, &tava, 0, cr, NULL) ? NULL : &tava;
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(fvp, 0, cr, NULL);
-	(void) VOP_FSYNC(tvp, 0, cr, NULL);
+	(void) fop_fsync(fvp, 0, cr, NULL);
+	(void) fop_fsync(tvp, 0, cr, NULL);
 
 	if (error)
 		goto err;
@@ -2659,7 +2659,7 @@ rfs3_link(LINK3args *args, LINK3res *resp, struct exportinfo *exi,
 	}
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	fh3 = &args->link.dir;
 	to_exi = checkexport(&fh3->fh3_fsid, FH3TOXFIDP(fh3));
@@ -2681,7 +2681,7 @@ rfs3_link(LINK3args *args, LINK3res *resp, struct exportinfo *exi,
 	}
 
 	bva.va_mask = AT_ALL;
-	bvap = VOP_GETATTR(dvp, &bva, 0, cr, NULL) ? NULL : &bva;
+	bvap = fop_getattr(dvp, &bva, 0, cr, NULL) ? NULL : &bva;
 
 	if (dvp->v_type != VDIR) {
 		resp->status = NFS3ERR_NOTDIR;
@@ -2712,18 +2712,18 @@ rfs3_link(LINK3args *args, LINK3res *resp, struct exportinfo *exi,
 		goto out1;
 	}
 
-	error = VOP_LINK(dvp, vp, name, cr, NULL, 0);
+	error = fop_link(dvp, vp, name, cr, NULL, 0);
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 	ava.va_mask = AT_ALL;
-	avap = VOP_GETATTR(dvp, &ava, 0, cr, NULL) ? NULL : &ava;
+	avap = fop_getattr(dvp, &ava, 0, cr, NULL) ? NULL : &ava;
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, FNODSYNC, cr, NULL);
-	(void) VOP_FSYNC(dvp, 0, cr, NULL);
+	(void) fop_fsync(vp, FNODSYNC, cr, NULL);
+	(void) fop_fsync(dvp, 0, cr, NULL);
 
 	if (error)
 		goto out;
@@ -2828,17 +2828,17 @@ rfs3_readdir(READDIR3args *args, READDIR3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_FALSE, NULL);
+	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, NULL);
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	if (vp->v_type != VDIR) {
 		resp->status = NFS3ERR_NOTDIR;
 		goto out1;
 	}
 
-	error = VOP_ACCESS(vp, VREAD, 0, cr, NULL);
+	error = fop_access(vp, VREAD, 0, cr, NULL);
 	if (error)
 		goto out;
 
@@ -2869,10 +2869,10 @@ rfs3_readdir(READDIR3args *args, READDIR3res *resp, struct exportinfo *exi,
 	uio.uio_loffset = (offset_t)args->cookie;
 	uio.uio_resid = count;
 
-	error = VOP_READDIR(vp, &uio, cr, &iseof, NULL, 0);
+	error = fop_readdir(vp, &uio, cr, &iseof, NULL, 0);
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	if (error) {
 		kmem_free(data, count);
@@ -2946,7 +2946,7 @@ rfs3_readdir(READDIR3args *args, READDIR3res *resp, struct exportinfo *exi,
 	data = nfscmd_convdirent(ca, exi, data, count, &resp->status);
 
 
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, NULL);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
 
 #if 0 /* notyet */
 	/*
@@ -2957,7 +2957,7 @@ rfs3_readdir(READDIR3args *args, READDIR3res *resp, struct exportinfo *exi,
 	/*
 	 * Force modified metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, FNODSYNC, cr, NULL);
+	(void) fop_fsync(vp, FNODSYNC, cr, NULL);
 #endif
 
 	resp->status = NFS3_OK;
@@ -2987,7 +2987,7 @@ out1:
 	    cred_t *, cr, vnode_t *, vp, READDIR3res *, resp);
 
 	if (vp != NULL) {
-		VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, NULL);
+		fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
 		VN_RELE(vp);
 	}
 	vattr_to_post_op_attr(vap, &resp->resfail.dir_attributes);
@@ -3083,17 +3083,17 @@ rfs3_readdirplus(READDIRPLUS3args *args, READDIRPLUS3res *resp,
 		goto out;
 	}
 
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_FALSE, NULL);
+	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, NULL);
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	if (vp->v_type != VDIR) {
 		error = ENOTDIR;
 		goto out;
 	}
 
-	error = VOP_ACCESS(vp, VREAD, 0, cr, NULL);
+	error = fop_access(vp, VREAD, 0, cr, NULL);
 	if (error)
 		goto out;
 
@@ -3162,7 +3162,7 @@ getmoredents:
 	uio.uio_resid = rd_unit;
 	prev_len = rd_unit;
 
-	error = VOP_READDIR(vp, &uio, cr, &iseof, NULL, 0);
+	error = fop_readdir(vp, &uio, cr, &iseof, NULL, 0);
 
 	if (error) {
 		kmem_free(data, args->dircount);
@@ -3247,9 +3247,9 @@ getmoredents:
 	}
 good:
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, NULL);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
 
 	infop = kmem_alloc(nents * sizeof (struct entryplus3_info), KM_SLEEP);
 	resp->resok.infop = infop;
@@ -3266,7 +3266,7 @@ good:
 
 		infop[i].namelen = namlen[i];
 
-		error = VOP_LOOKUP(vp, dp->d_name, &nvp, NULL, 0, NULL, cr,
+		error = fop_lookup(vp, dp->d_name, &nvp, NULL, 0, NULL, cr,
 		    NULL, NULL, NULL);
 		if (error) {
 			infop[i].attr.attributes = FALSE;
@@ -3322,7 +3322,7 @@ good:
 	/*
 	 * Force modified metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, FNODSYNC, cr, NULL);
+	(void) fop_fsync(vp, FNODSYNC, cr, NULL);
 #endif
 
 	kmem_free(namlen, args->dircount);
@@ -3358,7 +3358,7 @@ out1:
 	    cred_t *, cr, vnode_t *, vp, READDIRPLUS3res *, resp);
 
 	if (vp != NULL) {
-		VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, NULL);
+		fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
 		VN_RELE(vp);
 	}
 
@@ -3412,7 +3412,7 @@ rfs3_fsstat(FSSTAT3args *args, FSSTAT3res *resp, struct exportinfo *exi,
 	error = VFS_STATVFS(vp->v_vfsp, &sb);
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	if (error)
 		goto out;
@@ -3492,7 +3492,7 @@ rfs3_fsinfo(FSINFO3args *args, FSINFO3res *resp, struct exportinfo *exi,
 	}
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	resp->status = NFS3_OK;
 	vattr_to_post_op_attr(vap, &resp->resok.obj_attributes);
@@ -3509,7 +3509,7 @@ rfs3_fsinfo(FSINFO3args *args, FSINFO3res *resp, struct exportinfo *exi,
 	 * Large file spec: want maxfilesize based on limit of
 	 * underlying filesystem.  We can guess 2^31-1 if need be.
 	 */
-	error = VOP_PATHCONF(vp, _PC_FILESIZEBITS, &l, cr, NULL);
+	error = fop_pathconf(vp, _PC_FILESIZEBITS, &l, cr, NULL);
 	if (error) {
 		resp->status = puterrno3(error);
 		goto out;
@@ -3517,7 +3517,7 @@ rfs3_fsinfo(FSINFO3args *args, FSINFO3res *resp, struct exportinfo *exi,
 
 	/*
 	 * If the underlying file system does not support _PC_FILESIZEBITS,
-	 * return a reasonable default. Note that error code on VOP_PATHCONF
+	 * return a reasonable default. Note that error code on fop_pathconf
 	 * will be 0, even if the underlying file system does not support
 	 * _PC_FILESIZEBITS.
 	 */
@@ -3579,19 +3579,19 @@ rfs3_pathconf(PATHCONF3args *args, PATHCONF3res *resp, struct exportinfo *exi,
 	}
 
 	va.va_mask = AT_ALL;
-	vap = VOP_GETATTR(vp, &va, 0, cr, NULL) ? NULL : &va;
+	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
-	error = VOP_PATHCONF(vp, _PC_LINK_MAX, &val, cr, NULL);
+	error = fop_pathconf(vp, _PC_LINK_MAX, &val, cr, NULL);
 	if (error)
 		goto out;
 	resp->resok.info.link_max = (uint32)val;
 
-	error = VOP_PATHCONF(vp, _PC_NAME_MAX, &val, cr, NULL);
+	error = fop_pathconf(vp, _PC_NAME_MAX, &val, cr, NULL);
 	if (error)
 		goto out;
 	resp->resok.info.name_max = (uint32)val;
 
-	error = VOP_PATHCONF(vp, _PC_NO_TRUNC, &val, cr, NULL);
+	error = fop_pathconf(vp, _PC_NO_TRUNC, &val, cr, NULL);
 	if (error)
 		goto out;
 	if (val == 1)
@@ -3599,7 +3599,7 @@ rfs3_pathconf(PATHCONF3args *args, PATHCONF3res *resp, struct exportinfo *exi,
 	else
 		resp->resok.info.no_trunc = FALSE;
 
-	error = VOP_PATHCONF(vp, _PC_CHOWN_RESTRICTED, &val, cr, NULL);
+	error = fop_pathconf(vp, _PC_CHOWN_RESTRICTED, &val, cr, NULL);
 	if (error)
 		goto out;
 	if (val == 1)
@@ -3662,7 +3662,7 @@ rfs3_commit(COMMIT3args *args, COMMIT3res *resp, struct exportinfo *exi,
 	}
 
 	bva.va_mask = AT_ALL;
-	error = VOP_GETATTR(vp, &bva, 0, cr, NULL);
+	error = fop_getattr(vp, &bva, 0, cr, NULL);
 
 	/*
 	 * If we can't get the attributes, then we can't do the
@@ -3684,13 +3684,13 @@ rfs3_commit(COMMIT3args *args, COMMIT3res *resp, struct exportinfo *exi,
 	}
 
 	if (crgetuid(cr) != bva.va_uid &&
-	    (error = VOP_ACCESS(vp, VWRITE, 0, cr, NULL)))
+	    (error = fop_access(vp, VWRITE, 0, cr, NULL)))
 		goto out;
 
-	error = VOP_FSYNC(vp, FSYNC, cr, NULL);
+	error = fop_fsync(vp, FSYNC, cr, NULL);
 
 	ava.va_mask = AT_ALL;
-	avap = VOP_GETATTR(vp, &ava, 0, cr, NULL) ? NULL : &ava;
+	avap = fop_getattr(vp, &ava, 0, cr, NULL) ? NULL : &ava;
 
 	if (error)
 		goto out;

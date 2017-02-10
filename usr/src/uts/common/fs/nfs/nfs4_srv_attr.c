@@ -188,7 +188,7 @@ rfs4_attr_init()
  * almost everything that can be returned by getattr into known structs
  * (like vfsstat64 or vattr_t), that is, both read only and read/write attrs.
  * The function will return -1 if it found that the arguments don't match.
- * This applies to system-wide values that don't require a VOP_GETATTR
+ * This applies to system-wide values that don't require a fop_getattr
  * or other further checks to verify. It will return no error if they
  * either match or were retrieved successfully for later checking.
  *
@@ -447,7 +447,7 @@ rfs4_fattr4_change(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		break;
 	case NFS4ATTR_VERIT:
 		mask = vap->va_mask;
-		vap->va_mask &= ~AT_CTIME;	/* force a VOP_GETATTR */
+		vap->va_mask &= ~AT_CTIME;	/* force a fop_getattr */
 		error = fattr4_get_change(sarg, &change);
 		vap->va_mask = mask;
 		if (!error && (na->change != change))
@@ -593,11 +593,11 @@ rfs4_fattr4_named_attr(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		 */
 
 		val = 0;
-		error = VOP_PATHCONF(sarg->cs->vp, _PC_SATTR_EXISTS,
+		error = fop_pathconf(sarg->cs->vp, _PC_SATTR_EXISTS,
 		    &val, sarg->cs->cr, NULL);
 		if ((error || val == 0) &&
 		    sarg->cs->vp->v_vfsp->vfs_flag & VFS_XATTR) {
-			error = VOP_PATHCONF(sarg->cs->vp,
+			error = fop_pathconf(sarg->cs->vp,
 			    _PC_XATTR_EXISTS, &val, sarg->cs->cr, NULL);
 			if (error)
 				break;
@@ -613,10 +613,10 @@ rfs4_fattr4_named_attr(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 	case NFS4ATTR_VERIT:
 		ASSERT(sarg->cs->vp != NULL);
 		if (sarg->cs->vp->v_vfsp->vfs_flag & VFS_XATTR) {
-			error = VOP_PATHCONF(sarg->cs->vp, _PC_SATTR_EXISTS,
+			error = fop_pathconf(sarg->cs->vp, _PC_SATTR_EXISTS,
 			    &val, sarg->cs->cr, NULL);
 			if (error || val == 0)
-				error = VOP_PATHCONF(sarg->cs->vp,
+				error = fop_pathconf(sarg->cs->vp,
 				    _PC_XATTR_EXISTS, &val,
 				    sarg->cs->cr, NULL);
 			if (error)
@@ -895,7 +895,7 @@ rfs4_fattr4_acl(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		bzero(&vs_native, sizeof (vs_native));
 
 		/* see which ACLs fs supports */
-		error = VOP_PATHCONF(vp, _PC_ACL_ENABLED, &whichacl,
+		error = fop_pathconf(vp, _PC_ACL_ENABLED, &whichacl,
 		    sarg->cs->cr, NULL);
 		if (error != 0) {
 			/*
@@ -914,11 +914,11 @@ rfs4_fattr4_acl(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			 * If the file system supports neither ACE nor
 			 * ACLENT ACLs we will fall back to UFS-style ACLs
 			 * like we did above if there was an error upon
-			 * calling VOP_PATHCONF.
+			 * calling fop_pathconf.
 			 *
 			 * ACE and ACLENT type ACLs are the only interfaces
 			 * supported thus far.  If any other bits are set on
-			 * 'whichacl' upon return from VOP_PATHCONF, we will
+			 * 'whichacl' upon return from fop_pathconf, we will
 			 * ignore them.
 			 */
 			whichacl = _ACL_ACLENT_ENABLED;
@@ -934,7 +934,7 @@ rfs4_fattr4_acl(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			break;
 
 		/* get the ACL, and translate it into nfsace4 style */
-		error = VOP_GETSECATTR(vp, &vs_native,
+		error = fop_getsecattr(vp, &vs_native,
 		    0, sarg->cs->cr, NULL);
 		if (error != 0)
 			break;
@@ -988,7 +988,7 @@ rfs4_fattr4_acl(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		}
 
 		/* see which ACLs the fs supports */
-		error = VOP_PATHCONF(vp, _PC_ACL_ENABLED, &whichacl,
+		error = fop_pathconf(vp, _PC_ACL_ENABLED, &whichacl,
 		    sarg->cs->cr, NULL);
 		if (error != 0) {
 			/*
@@ -1007,11 +1007,11 @@ rfs4_fattr4_acl(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			 * If the file system supports neither ACE nor
 			 * ACLENT ACLs we will fall back to UFS-style ACLs
 			 * like we did above if there was an error upon
-			 * calling VOP_PATHCONF.
+			 * calling fop_pathconf.
 			 *
 			 * ACE and ACLENT type ACLs are the only interfaces
 			 * supported thus far.  If any other bits are set on
-			 * 'whichacl' upon return from VOP_PATHCONF, we will
+			 * 'whichacl' upon return from fop_pathconf, we will
 			 * ignore them.
 			 */
 			whichacl = _ACL_ACLENT_ENABLED;
@@ -1022,20 +1022,20 @@ rfs4_fattr4_acl(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			    vap->va_uid, vap->va_gid, TRUE);
 			if (error != 0)
 				break;
-			(void) VOP_RWLOCK(vp, V_WRITELOCK_TRUE, NULL);
-			error = VOP_SETSECATTR(vp, &vs_native,
+			(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);
+			error = fop_setsecattr(vp, &vs_native,
 			    0, sarg->cs->cr, NULL);
-			VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+			fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 			vs_acet_destroy(&vs_native);
 		} else if (whichacl & _ACL_ACLENT_ENABLED) {
 			error = vs_ace4_to_aent(&vs_ace4, &vs_native,
 			    vap->va_uid, vap->va_gid, vp->v_type == VDIR, TRUE);
 			if (error != 0)
 				break;
-			(void) VOP_RWLOCK(vp, V_WRITELOCK_TRUE, NULL);
-			error = VOP_SETSECATTR(vp, &vs_native,
+			(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);
+			error = fop_setsecattr(vp, &vs_native,
 			    0, sarg->cs->cr, NULL);
-			VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+			fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 			vs_aent_destroy(&vs_native);
 		}
 		break;
@@ -1222,7 +1222,7 @@ rfs4_fattr4_chown_restricted(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			break;
 		}
 		ASSERT(sarg->cs->vp != NULL);
-		error = VOP_PATHCONF(sarg->cs->vp,
+		error = fop_pathconf(sarg->cs->vp,
 		    _PC_CHOWN_RESTRICTED, &val, sarg->cs->cr, NULL);
 		if (error)
 			break;
@@ -1237,7 +1237,7 @@ rfs4_fattr4_chown_restricted(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		break;
 	case NFS4ATTR_VERIT:
 		ASSERT(sarg->cs->vp != NULL);
-		error = VOP_PATHCONF(sarg->cs->vp,
+		error = fop_pathconf(sarg->cs->vp,
 		    _PC_CHOWN_RESTRICTED, &val, sarg->cs->cr, NULL);
 		if (error)
 			break;
@@ -1688,7 +1688,7 @@ rfs4_fattr4_maxfilesize(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			break;
 		}
 		ASSERT(sarg->cs->vp != NULL);
-		error = VOP_PATHCONF(sarg->cs->vp, _PC_FILESIZEBITS, &val,
+		error = fop_pathconf(sarg->cs->vp, _PC_FILESIZEBITS, &val,
 		    sarg->cs->cr, NULL);
 		if (error)
 			break;
@@ -1696,7 +1696,7 @@ rfs4_fattr4_maxfilesize(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		/*
 		 * If the underlying file system does not support
 		 * _PC_FILESIZEBITS, return a reasonable default. Note that
-		 * error code on VOP_PATHCONF will be 0, even if the underlying
+		 * error code on fop_pathconf will be 0, even if the underlying
 		 * file system does not support _PC_FILESIZEBITS.
 		 */
 		if (val == (ulong_t)-1) {
@@ -1716,14 +1716,14 @@ rfs4_fattr4_maxfilesize(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		break;
 	case NFS4ATTR_VERIT:
 		ASSERT(sarg->cs->vp != NULL);
-		error = VOP_PATHCONF(sarg->cs->vp, _PC_FILESIZEBITS, &val,
+		error = fop_pathconf(sarg->cs->vp, _PC_FILESIZEBITS, &val,
 		    sarg->cs->cr, NULL);
 		if (error)
 			break;
 		/*
 		 * If the underlying file system does not support
 		 * _PC_FILESIZEBITS, return a reasonable default. Note that
-		 * error code on VOP_PATHCONF will be 0, even if the underlying
+		 * error code on fop_pathconf will be 0, even if the underlying
 		 * file system does not support _PC_FILESIZEBITS.
 		 */
 		if (val == (ulong_t)-1) {
@@ -1765,7 +1765,7 @@ rfs4_fattr4_maxlink(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			break;
 		}
 		ASSERT(sarg->cs->vp != NULL);
-		error = VOP_PATHCONF(sarg->cs->vp, _PC_LINK_MAX, &val,
+		error = fop_pathconf(sarg->cs->vp, _PC_LINK_MAX, &val,
 		    sarg->cs->cr, NULL);
 		if (error == 0) {
 			na->maxlink = val;
@@ -1779,7 +1779,7 @@ rfs4_fattr4_maxlink(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		break;
 	case NFS4ATTR_VERIT:
 		ASSERT(sarg->cs->vp != NULL);
-		error = VOP_PATHCONF(sarg->cs->vp, _PC_LINK_MAX, &val,
+		error = fop_pathconf(sarg->cs->vp, _PC_LINK_MAX, &val,
 		    sarg->cs->cr, NULL);
 		if (!error && (na->maxlink != (uint32_t)val))
 			error = -1;	/* no match */
@@ -1812,7 +1812,7 @@ rfs4_fattr4_maxname(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			break;
 		}
 		ASSERT(sarg->cs->vp != NULL);
-		error = VOP_PATHCONF(sarg->cs->vp, _PC_NAME_MAX, &val,
+		error = fop_pathconf(sarg->cs->vp, _PC_NAME_MAX, &val,
 		    sarg->cs->cr, NULL);
 		if (error == 0) {
 			na->maxname = val;
@@ -1826,7 +1826,7 @@ rfs4_fattr4_maxname(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		break;
 	case NFS4ATTR_VERIT:
 		ASSERT(sarg->cs->vp != NULL);
-		error = VOP_PATHCONF(sarg->cs->vp, _PC_NAME_MAX, &val,
+		error = fop_pathconf(sarg->cs->vp, _PC_NAME_MAX, &val,
 		    sarg->cs->cr, NULL);
 		if (!error && (na->maxname != val))
 			error = -1;	/* no match */

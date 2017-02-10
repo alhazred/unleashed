@@ -1006,7 +1006,7 @@ cpr_write(vnode_t *vp, caddr_t buffer, size_t size)
 		}
 
 		do_polled_io = 1;
-		error = VOP_DUMP(vp, cpr_buf, cpr_file_bn, cpr_buf_blocks,
+		error = fop_dump(vp, cpr_buf, cpr_file_bn, cpr_buf_blocks,
 		    NULL);
 		do_polled_io = 0;
 		CPR_DEBUG(CPR_DEBUG3, "done\n");
@@ -1037,7 +1037,7 @@ cpr_flush_write(vnode_t *vp)
 	nblk = btod(cpr_wptr - cpr_buf);
 
 	do_polled_io = 1;
-	error = VOP_DUMP(vp, (caddr_t)cpr_buf, cpr_file_bn, nblk, NULL);
+	error = fop_dump(vp, (caddr_t)cpr_buf, cpr_file_bn, nblk, NULL);
 	do_polled_io = 0;
 
 	cpr_file_bn += nblk;

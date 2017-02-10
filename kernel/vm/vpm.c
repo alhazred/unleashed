@@ -869,9 +869,9 @@ vpm_map_pages(
 
 		/*
 		 * If we did not find the page or if this page was not
-		 * in vpm cache(p_vpmref == 0), then let VOP_GETPAGE get
+		 * in vpm cache(p_vpmref == 0), then let fop_getpage get
 		 * all the pages.
-		 * We need to call VOP_GETPAGE so that filesytems can do some
+		 * We need to call fop_getpage so that filesytems can do some
 		 * (un)necessary tracking for sequential access.
 		 */
 
@@ -884,7 +884,7 @@ vpm_map_pages(
 			}
 			/*
 			 * If we did not find the desired set of pages,
-			 * from the page cache, just call VOP_GETPAGE to get
+			 * from the page cache, just call fop_getpage to get
 			 * all the pages.
 			 */
 			for (j = 0; j < i; j++) {
@@ -900,7 +900,7 @@ vpm_map_pages(
 			 */
 			base = segkpm_create_va(baseoff);
 
-			error = VOP_GETPAGE(vp, baseoff, tlen, &prot, pplist,
+			error = fop_getpage(vp, baseoff, tlen, &prot, pplist,
 			    tlen, segkmap, base, rw, CRED(), NULL);
 			if (error) {
 				VPM_DEBUG(vpmd_getpagefailed);
@@ -1003,7 +1003,7 @@ vpm_unmap_pages(vmap_t vml[], enum seg_rw rw)
  * the rest of the page is zeroed out. It also zeros the beginning of
  * the first page till the start offset if requested(zerostart).
  * If pages are to be fetched, it will call the filesystem's getpage
- * function (VOP_GETPAGE) to get them, otherwise they will be created if
+ * function (fop_getpage) to get them, otherwise they will be created if
  * not already present in the page cache.
  */
 int
@@ -1106,7 +1106,7 @@ vpm_sync_pages(struct vnode *vp,
 		if (flags & SM_DONTNEED)
 			bflags |= B_DONTNEED;
 
-		error = VOP_PUTPAGE(vp, off, psize, bflags, CRED(), NULL);
+		error = fop_putpage(vp, off, psize, bflags, CRED(), NULL);
 	}
 
 	return (error);

@@ -59,7 +59,7 @@
 
 /*
  * smbfs_getsd() is a common function used by both
- * smbfs_ioctl SMBFSIO_GETSD and VOP_GETSECATTR.
+ * smbfs_ioctl SMBFSIO_GETSD and fop_getsecattr.
  * Handles required rights, tmpopen/tmpclose.
  *
  * Note: smbfs_getsd allocates and returns an mblk chain,
@@ -129,7 +129,7 @@ out:
 
 /*
  * smbfs_setsd() is a common function used by both
- * smbfs_ioctl SMBFSIO_SETSD and VOP_SETSECATTR.
+ * smbfs_ioctl SMBFSIO_SETSD and fop_setsecattr.
  * Handles required rights, tmpopen/tmpclose.
  *
  * Note: smbfs_setsd _consumes_ the passed *mp and
@@ -201,7 +201,7 @@ out:
 }
 
 /*
- * Helper for VOP_IOCTL: SMBFSIO_GETSD
+ * Helper for fop_ioctl: SMBFSIO_GETSD
  */
 int
 smbfs_acl_iocget(vnode_t *vp, intptr_t arg, int flag, cred_t *cr)
@@ -262,7 +262,7 @@ out:
 }
 
 /*
- * Helper for VOP_IOCTL: SMBFSIO_SETSD
+ * Helper for fop_ioctl: SMBFSIO_SETSD
  */
 int
 smbfs_acl_iocset(vnode_t *vp, intptr_t arg, int flag, cred_t *cr)
@@ -429,7 +429,7 @@ smbfs_acl_getids(vnode_t *vp, cred_t *cr)
 }
 
 /*
- * Helper for VOP_GETSECATTR
+ * Helper for fop_getsecattr
  *
  * Refresh the ACL cache if needed, then
  * duplicate the requested parts of the vsecattr.
@@ -563,7 +563,7 @@ smbfs_acl_setids(vnode_t *vp, vattr_t *vap, cred_t *cr)
 }
 
 /*
- * Helper for VOP_SETSECATTR
+ * Helper for fop_setsecattr
  * Convert ZFS to NT form, call smbfs_setsd.
  */
 /* ARGSUSED */

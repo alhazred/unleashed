@@ -512,7 +512,7 @@ segvn_setvnode_mpss(vnode_t *vp)
 
 	if (vp->v_mpssdata == NULL) {
 		if (vn_vmpss_usepageio(vp)) {
-			err = VOP_PAGEIO(vp, (page_t *)NULL,
+			err = fop_pageio(vp, (page_t *)NULL,
 			    (u_offset_t)0, 0, 0, CRED(), NULL);
 		} else {
 			err = ENOSYS;
@@ -638,7 +638,7 @@ segvn_create(struct seg *seg, void *argsp)
 
 	/* Inform the vnode of the new mapping */
 	if (a->vp != NULL) {
-		error = VOP_ADDMAP(a->vp, a->offset & PAGEMASK,
+		error = fop_addmap(a->vp, a->offset & PAGEMASK,
 		    seg->s_as, seg->s_base, seg->s_size, a->prot,
 		    a->maxprot, a->type, cred, NULL);
 		if (error) {
@@ -1749,7 +1749,7 @@ retry:
 
 	/* Inform the vnode of the new mapping */
 	if (newsvd->vp != NULL) {
-		error = VOP_ADDMAP(newsvd->vp, (offset_t)newsvd->offset,
+		error = fop_addmap(newsvd->vp, (offset_t)newsvd->offset,
 		    newseg->s_as, newseg->s_base, newseg->s_size, newsvd->prot,
 		    newsvd->maxprot, newsvd->type, newsvd->cred, NULL);
 	}
@@ -1939,7 +1939,7 @@ retry:
 	if (svd->vp) {
 		int error;
 
-		error = VOP_DELMAP(svd->vp,
+		error = fop_delmap(svd->vp,
 		    (offset_t)svd->offset + (uintptr_t)(addr - seg->s_base),
 		    seg->s_as, addr, len, svd->prot, svd->maxprot,
 		    svd->type, svd->cred, NULL);
@@ -3324,7 +3324,7 @@ segvn_full_szcpages(page_t **ppa, uint_t szc, int *upgrdfail, uint_t *pszc)
  *
  * If physically contiguous pages already exist for this range return 1 without
  * filling ppa array. Caller initializes ppa[0] as NULL to detect that ppa
- * array wasn't filled. In this case caller fills ppa array via VOP_GETPAGE().
+ * array wasn't filled. In this case caller fills ppa array via fop_getpage().
  */
 
 static int
@@ -3451,7 +3451,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, u_offset_t off,
 			io_len = off - io_off;
 			/*
 			 * Some file systems like NFS don't check EOF
-			 * conditions in VOP_PAGEIO(). Check it here
+			 * conditions in fop_pageio(). Check it here
 			 * now that pages are locked SE_EXCL. Any file
 			 * truncation will wait until the pages are
 			 * unlocked so no need to worry that file will
@@ -3459,7 +3459,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, u_offset_t off,
 			 * XXX fix NFS to remove this check.
 			 */
 			va.va_mask = AT_SIZE;
-			if (VOP_GETATTR(vp, &va, ATTR_HINT, svd->cred, NULL)) {
+			if (fop_getattr(vp, &va, ATTR_HINT, svd->cred, NULL)) {
 				VM_STAT_ADD(segvnvmstats.fill_vp_pages[6]);
 				page_unlock(targpp);
 				goto out;
@@ -3471,7 +3471,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, u_offset_t off,
 				page_unlock(targpp);
 				goto out;
 			}
-			io_err = VOP_PAGEIO(vp, io_pplist, io_off, io_len,
+			io_err = fop_pageio(vp, io_pplist, io_off, io_len,
 				B_READ, svd->cred, NULL);
 			if (io_err) {
 				VM_STAT_ADD(segvnvmstats.fill_vp_pages[8]);
@@ -3529,7 +3529,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, u_offset_t off,
 		VM_STAT_ADD(segvnvmstats.fill_vp_pages[12]);
 		io_len = eoff - io_off;
 		va.va_mask = AT_SIZE;
-		if (VOP_GETATTR(vp, &va, ATTR_HINT, svd->cred, NULL) != 0) {
+		if (fop_getattr(vp, &va, ATTR_HINT, svd->cred, NULL) != 0) {
 			VM_STAT_ADD(segvnvmstats.fill_vp_pages[13]);
 			goto out;
 		}
@@ -3539,7 +3539,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, u_offset_t off,
 			*ret_pszc = 0;
 			goto out;
 		}
-		io_err = VOP_PAGEIO(vp, io_pplist, io_off, io_len,
+		io_err = fop_pageio(vp, io_pplist, io_off, io_len,
 		    B_READ, svd->cred, NULL);
 		if (io_err) {
 			VM_STAT_ADD(segvnvmstats.fill_vp_pages[15]);
@@ -3619,9 +3619,9 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, u_offset_t off,
 	} else {
 		VM_STAT_ADD(segvnvmstats.fill_vp_pages[19]);
 		/*
-		 * the caller will still call VOP_GETPAGE() for shared segments
+		 * the caller will still call fop_getpage() for shared segments
 		 * to check FS write permissions. For private segments we map
-		 * file read only anyway.  so no VOP_GETPAGE is needed.
+		 * file read only anyway.  so no fop_getpage is needed.
 		 */
 		for (i = 0; i < pages; i++) {
 			ASSERT(ppa[i] != NULL);
@@ -4003,7 +4003,7 @@ segvn_fault_vnodepages(struct hat *hat, struct seg *seg, caddr_t lpgaddr,
 			if (!physcontig) {
 				SEGVN_VMSTAT_FLTVNPAGES(14);
 				ppa[0] = NULL;
-				ierr = VOP_GETPAGE(vp, (offset_t)off, pgsz,
+				ierr = fop_getpage(vp, (offset_t)off, pgsz,
 				    &vpprot, ppa, pgsz, seg, a, arw,
 				    svd->cred, NULL);
 #ifdef DEBUG
@@ -4042,7 +4042,7 @@ segvn_fault_vnodepages(struct hat *hat, struct seg *seg, caddr_t lpgaddr,
 					goto out;
 				}
 				va.va_mask = AT_SIZE;
-				if (VOP_GETATTR(vp, &va, 0, svd->cred, NULL)) {
+				if (fop_getattr(vp, &va, 0, svd->cred, NULL)) {
 					SEGVN_VMSTAT_FLTVNPAGES(20);
 					err = FC_MAKE_ERR(EIO);
 					goto out;
@@ -4875,7 +4875,7 @@ int fltadvice = 1;	/* set to free behind pages for sequential access */
  *	endif
  *	Checking and set up work
  *	If we will need some non-anonymous pages
- *		Call VOP_GETPAGE over the range of non-anonymous pages
+ *		Call fop_getpage over the range of non-anonymous pages
  *	endif
  *	Loop over all addresses requested
  *		Call segvn_faultpage passing in page list
@@ -5029,7 +5029,7 @@ top:
 	 *
 	 * Another deadlock between SOFTLOCK and file truncation can happen
 	 * because segvn_fault_vnodepages() calls the FS one pagesize at
-	 * a time. A second VOP_GETPAGE() call by segvn_fault_vnodepages()
+	 * a time. A second fop_getpage() call by segvn_fault_vnodepages()
 	 * can cause a deadlock because the first set of page_t's remain
 	 * locked SE_SHARED.  To avoid this, we demote segments on a first
 	 * SOFTLOCK if they have a length greater than the segment's
@@ -5257,7 +5257,7 @@ slow:
 				 * as this is only advisory; even if we
 				 * acquire it someone might race in and lock
 				 * the page after we unlock and before the
-				 * PUTPAGE, then VOP_PUTPAGE will do nothing.
+				 * PUTPAGE, then fop_putpage will do nothing.
 				 */
 				if (pp->p_lckcnt == 0 && pp->p_cowcnt == 0) {
 					/*
@@ -5272,7 +5272,7 @@ slow:
 					 * We should build a page list
 					 * to kluster putpages XXX
 					 */
-					(void) VOP_PUTPAGE(fvp,
+					(void) fop_putpage(fvp,
 					    (offset_t)fpgoff, PAGESIZE,
 					    (B_DONTNEED|B_FREE|B_ASYNC),
 					    svd->cred, NULL);
@@ -5296,7 +5296,7 @@ slow:
 	pl_alloc_sz = 0;
 
 	/*
-	 * See if we need to call VOP_GETPAGE for
+	 * See if we need to call fop_getpage for
 	 * *any* of the range being faulted on.
 	 * We can skip all of this work if there
 	 * was no original vnode.
@@ -5350,7 +5350,7 @@ slow:
 			    (size_t)(seg->s_base + seg->s_size)) &&
 			    hat_probe(as->a_hat, addr + PAGESIZE))) {
 				/*
-				 * Ask VOP_GETPAGE to return the exact number
+				 * Ask fop_getpage to return the exact number
 				 * of pages if
 				 * (a) this is a COW fault, or
 				 * (b) this is a software fault, or
@@ -5359,7 +5359,7 @@ slow:
 				plsz = len;
 			} else {
 				/*
-				 * Ask VOP_GETPAGE to return adjacent pages
+				 * Ask fop_getpage to return adjacent pages
 				 * within the segment.
 				 */
 				plsz = MIN((size_t)PVN_GETPAGE_SZ, (size_t)
@@ -5386,7 +5386,7 @@ slow:
 				arw = rw;
 			}
 			vp = svd->vp;
-			err = VOP_GETPAGE(vp, (offset_t)vp_off, vp_len,
+			err = fop_getpage(vp, (offset_t)vp_off, vp_len,
 			    &vpprot, plp, plsz, seg, addr + (vp_off - off), arw,
 			    svd->cred, NULL);
 			if (err) {
@@ -5477,7 +5477,7 @@ slow:
 	 * If the page can be used, load up the translations now.
 	 * Note that the for loop will only be entered if "plp"
 	 * is pointing to a non-NULL page pointer which means that
-	 * VOP_GETPAGE() was called and vpprot has been initialized.
+	 * fop_getpage() was called and vpprot has been initialized.
 	 */
 	if (svd->pageprot == 0)
 		prot = svd->prot & vpprot;
@@ -5615,7 +5615,7 @@ segvn_faulta(struct seg *seg, caddr_t addr)
 	}
 
 	vp = svd->vp;
-	err = VOP_GETPAGE(vp,
+	err = fop_getpage(vp,
 	    (offset_t)(svd->offset + (uintptr_t)(addr - seg->s_base)),
 	    PAGESIZE, NULL, NULL, 0, seg, addr,
 	    S_OTHER, svd->cred, NULL);
@@ -6266,7 +6266,7 @@ segvn_setpagesize(struct seg *seg, caddr_t addr, size_t len, uint_t szc)
 		va.va_mask = AT_SIZE;
 		eoffpage += seg->s_size;
 		eoffpage = btopr(eoffpage);
-		if (VOP_GETATTR(svd->vp, &va, 0, svd->cred, NULL) != 0) {
+		if (fop_getattr(svd->vp, &va, 0, svd->cred, NULL) != 0) {
 			segvn_setpgsz_getattr_err++;
 			return (EINVAL);
 		}
@@ -6276,9 +6276,9 @@ segvn_setpagesize(struct seg *seg, caddr_t addr, size_t len, uint_t szc)
 		}
 		if (amp != NULL) {
 			/*
-			 * anon_fill_cow_holes() may call VOP_GETPAGE().
+			 * anon_fill_cow_holes() may call fop_getpage().
 			 * don't take anon map lock here to avoid holding it
-			 * across VOP_GETPAGE() calls that may call back into
+			 * across fop_getpage() calls that may call back into
 			 * segvn for klsutering checks. We don't really need
 			 * anon map lock here since it's a private segment and
 			 * we hold as level lock as writers.
@@ -7004,7 +7004,7 @@ segvn_kluster(struct seg *seg, caddr_t addr, ssize_t delta)
 	swap_xlate(oap, &vp2, &off2);
 
 
-	if (!VOP_CMP(vp1, vp2, NULL) || off1 - off2 != delta)
+	if (!fop_cmp(vp1, vp2, NULL) || off1 - off2 != delta)
 		return (-1);
 	return (0);
 }
@@ -7115,7 +7115,7 @@ segvn_sync(struct seg *seg, caddr_t addr, size_t len, int attr, uint_t flags)
 		 * No attributes, no anonymous pages and MS_INVALIDATE flag
 		 * is not on, just use one big request.
 		 */
-		err = VOP_PUTPAGE(svd->vp, (offset_t)offset, len,
+		err = fop_putpage(svd->vp, (offset_t)offset, len,
 		    bflags, svd->cred, NULL);
 		SEGVN_LOCK_EXIT(seg->s_as, &svd->lock);
 		return (err);
@@ -7221,10 +7221,10 @@ segvn_sync(struct seg *seg, caddr_t addr, size_t len, int attr, uint_t flags)
 		}
 		/*
 		 * XXX - Should ultimately try to kluster
-		 * calls to VOP_PUTPAGE() for performance.
+		 * calls to fop_putpage() for performance.
 		 */
 		VN_HOLD(vp);
-		err = VOP_PUTPAGE(vp, (offset_t)off, PAGESIZE,
+		err = fop_putpage(vp, (offset_t)off, PAGESIZE,
 		    (bflags | (IS_SWAPFSVP(vp) ? B_PAGE_NOWAIT : 0)),
 		    svd->cred, NULL);
 
@@ -7650,7 +7650,7 @@ segvn_lockop(struct seg *seg, caddr_t addr, size_t len,
 			 * may simply mean that a page we locked got
 			 * truncated out of existence after we locked it.
 			 *
-			 * Invoke VOP_GETPAGE() to obtain the page struct
+			 * Invoke fop_getpage() to obtain the page struct
 			 * since we may need to read it from disk if its
 			 * been paged out.
 			 */
@@ -7662,7 +7662,7 @@ segvn_lockop(struct seg *seg, caddr_t addr, size_t len,
 
 				ASSERT(vp != NULL);
 
-				error = VOP_GETPAGE(vp, (offset_t)off, PAGESIZE,
+				error = fop_getpage(vp, (offset_t)off, PAGESIZE,
 				    (uint_t *)NULL, pl, PAGESIZE, seg, addr,
 				    S_OTHER, svd->cred, NULL);
 
@@ -7693,7 +7693,7 @@ segvn_lockop(struct seg *seg, caddr_t addr, size_t len,
 				 */
 				if (error && svd->vp) {
 					va.va_mask = AT_SIZE;
-					if (VOP_GETATTR(svd->vp, &va, 0,
+					if (fop_getattr(svd->vp, &va, 0,
 					    svd->cred, NULL) != 0) {
 						err = EIO;
 						goto out;
@@ -9528,10 +9528,10 @@ segvn_textrepl(struct seg *seg)
 
 	/*
 	 * Avoid creating anon maps with size bigger than the file size.
-	 * If VOP_GETATTR() call fails bail out.
+	 * If fop_getattr() call fails bail out.
 	 */
 	va.va_mask = AT_SIZE | AT_MTIME | AT_CTIME;
-	if (VOP_GETATTR(vp, &va, 0, svd->cred, NULL) != 0) {
+	if (fop_getattr(vp, &va, 0, svd->cred, NULL) != 0) {
 		svd->tr_state = SEGVN_TR_OFF;
 		SEGVN_TR_ADDSTAT(gaerr);
 		return;

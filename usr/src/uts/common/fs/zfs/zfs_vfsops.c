@@ -1462,12 +1462,12 @@ zfs_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 
 			vattr.va_mask = AT_UID;
 
-			if (VOP_GETATTR(mvp, &vattr, 0, cr, NULL)) {
+			if (fop_getattr(mvp, &vattr, 0, cr, NULL)) {
 				goto out;
 			}
 
 			if (secpolicy_vnode_owner(cr, vattr.va_uid) != 0 &&
-			    VOP_ACCESS(mvp, VWRITE, 0, cr, NULL) != 0) {
+			    fop_access(mvp, VWRITE, 0, cr, NULL) != 0) {
 				goto out;
 			}
 			secpolicy_fs_mount_clearopts(cr, vfsp);

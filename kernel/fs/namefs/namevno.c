@@ -62,7 +62,7 @@
 
 /*
  * Create a reference to the vnode representing the file descriptor.
- * Then, apply the VOP_OPEN operation to that vnode.
+ * Then, apply the fop_open operation to that vnode.
  *
  * The vnode for the file descriptor may be switched under you.
  * If it is, search the hash list for an nodep - nodep->nm_filevp
@@ -92,7 +92,7 @@ nm_open(vnode_t **vpp, int flag, cred_t *crp, caller_context_t *ct)
 	infilevp = outfilevp = nodep->nm_filevp;
 	VN_HOLD(outfilevp);
 
-	if ((error = VOP_OPEN(&outfilevp, flag, crp, ct)) != 0) {
+	if ((error = fop_open(&outfilevp, flag, crp, ct)) != 0) {
 		VN_RELE(outfilevp);
 		return (error);
 	}
@@ -156,7 +156,7 @@ gotit:
 
 /*
  * Close a mounted file descriptor.
- * Remove any locks and apply the VOP_CLOSE operation to the vnode for
+ * Remove any locks and apply the fop_close operation to the vnode for
  * the file descriptor.
  */
 static int
@@ -168,9 +168,9 @@ nm_close(vnode_t *vp, int flag, int count, offset_t offset, cred_t *crp,
 
 	(void) cleanlocks(vp, ttoproc(curthread)->p_pid, 0);
 	cleanshares(vp, ttoproc(curthread)->p_pid);
-	error = VOP_CLOSE(nodep->nm_filevp, flag, count, offset, crp, ct);
+	error = fop_close(nodep->nm_filevp, flag, count, offset, crp, ct);
 	if (count == 1) {
-		(void) VOP_FSYNC(nodep->nm_filevp, FSYNC, crp, ct);
+		(void) fop_fsync(nodep->nm_filevp, FSYNC, crp, ct);
 		/*
 		 * Before VN_RELE() we need to remove the vnode from
 		 * the hash table.  We should only do so in the  NMNMNT case.
@@ -192,21 +192,21 @@ static int
 nm_read(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *crp,
 	caller_context_t *ct)
 {
-	return (VOP_READ(VTONM(vp)->nm_filevp, uiop, ioflag, crp, ct));
+	return (fop_read(VTONM(vp)->nm_filevp, uiop, ioflag, crp, ct));
 }
 
 static int
 nm_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *crp,
 	caller_context_t *ct)
 {
-	return (VOP_WRITE(VTONM(vp)->nm_filevp, uiop, ioflag, crp, ct));
+	return (fop_write(VTONM(vp)->nm_filevp, uiop, ioflag, crp, ct));
 }
 
 static int
 nm_ioctl(vnode_t *vp, int cmd, intptr_t arg, int mode, cred_t *cr, int *rvalp,
 	caller_context_t *ct)
 {
-	return (VOP_IOCTL(VTONM(vp)->nm_filevp, cmd, arg, mode, cr, rvalp, ct));
+	return (fop_ioctl(VTONM(vp)->nm_filevp, cmd, arg, mode, cr, rvalp, ct));
 }
 
 /*
@@ -227,7 +227,7 @@ nm_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 	mutex_exit(&nodep->nm_lock);
 
 	if ((va.va_mask = vap->va_mask & AT_SIZE) != 0) {
-		if (error = VOP_GETATTR(nodep->nm_filevp, &va, flags, crp, ct))
+		if (error = fop_getattr(nodep->nm_filevp, &va, flags, crp, ct))
 			return (error);
 		vap->va_size = va.va_size;
 	}
@@ -278,7 +278,7 @@ nm_setattr(
 	if (mask & (AT_NOSET|AT_SIZE))
 		return (EINVAL);
 
-	(void) VOP_RWLOCK(nodep->nm_filevp, V_WRITELOCK_TRUE, ctp);
+	(void) fop_rwlock(nodep->nm_filevp, V_WRITELOCK_TRUE, ctp);
 	mutex_enter(&nodep->nm_lock);
 
 	/*
@@ -322,7 +322,7 @@ nm_setattr(
 	}
 out:
 	mutex_exit(&nodep->nm_lock);
-	VOP_RWUNLOCK(nodep->nm_filevp, V_WRITELOCK_TRUE, ctp);
+	fop_rwunlock(nodep->nm_filevp, V_WRITELOCK_TRUE, ctp);
 	return (error);
 }
 
@@ -343,7 +343,7 @@ nm_access(vnode_t *vp, int mode, int flags, cred_t *crp,
 	error = nm_access_unlocked(nodep, mode, crp);
 	mutex_exit(&nodep->nm_lock);
 	if (error == 0)
-		return (VOP_ACCESS(nodep->nm_filevp, mode, flags, crp, ct));
+		return (fop_access(nodep->nm_filevp, mode, flags, crp, ct));
 	else
 		return (error);
 }
@@ -385,7 +385,7 @@ nm_link(vnode_t *tdvp, vnode_t *vp, char *tnm, cred_t *crp,
 static int
 nm_fsync(vnode_t *vp, int syncflag, cred_t *crp, caller_context_t *ct)
 {
-	return (VOP_FSYNC(VTONM(vp)->nm_filevp, syncflag, crp, ct));
+	return (fop_fsync(VTONM(vp)->nm_filevp, syncflag, crp, ct));
 }
 
 /* Free the namenode */
@@ -418,25 +418,25 @@ nm_inactive(vnode_t *vp, cred_t *crp, caller_context_t *ct)
 static int
 nm_fid(vnode_t *vp, struct fid *fidnodep, caller_context_t *ct)
 {
-	return (VOP_FID(VTONM(vp)->nm_filevp, fidnodep, ct));
+	return (fop_fid(VTONM(vp)->nm_filevp, fidnodep, ct));
 }
 
 static int
 nm_rwlock(vnode_t *vp, int write, caller_context_t *ctp)
 {
-	return (VOP_RWLOCK(VTONM(vp)->nm_filevp, write, ctp));
+	return (fop_rwlock(VTONM(vp)->nm_filevp, write, ctp));
 }
 
 static void
 nm_rwunlock(vnode_t *vp, int write, caller_context_t *ctp)
 {
-	VOP_RWUNLOCK(VTONM(vp)->nm_filevp, write, ctp);
+	fop_rwunlock(VTONM(vp)->nm_filevp, write, ctp);
 }
 
 static int
 nm_seek(vnode_t *vp, offset_t ooff, offset_t *noffp, caller_context_t *ct)
 {
-	return (VOP_SEEK(VTONM(vp)->nm_filevp, ooff, noffp, ct));
+	return (fop_seek(VTONM(vp)->nm_filevp, ooff, noffp, ct));
 }
 
 /*
@@ -448,7 +448,7 @@ nm_realvp(vnode_t *vp, vnode_t **vpp, caller_context_t *ct)
 	struct vnode *rvp;
 
 	vp = VTONM(vp)->nm_filevp;
-	if (VOP_REALVP(vp, &rvp, ct) == 0)
+	if (fop_realvp(vp, &rvp, ct) == 0)
 		vp = rvp;
 	*vpp = vp;
 	return (0);
@@ -458,7 +458,7 @@ static int
 nm_poll(vnode_t *vp, short events, int anyyet, short *reventsp,
 	pollhead_t **phpp, caller_context_t *ct)
 {
-	return (VOP_POLL(VTONM(vp)->nm_filevp, events, anyyet, reventsp,
+	return (fop_poll(VTONM(vp)->nm_filevp, events, anyyet, reventsp,
 	    phpp, ct));
 }
 

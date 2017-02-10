@@ -2575,7 +2575,7 @@ nfs4rootvp(vnode_t **rtvpp, vfs_t *vfsp, struct servinfo4 *svp_head,
 
 	/*
 	 * Create the thread that handles over-the-wire calls for
-	 * VOP_INACTIVE.
+	 * fop_inactive.
 	 * This needs to happen after the manager thread is created.
 	 */
 	MI4_HOLD(mi);
@@ -2882,7 +2882,7 @@ nfs4_sync(vfs_t *vfsp, short flag, cred_t *cr)
 {
 	/*
 	 * Cross-zone calls are OK here, since this translates to a
-	 * VOP_PUTPAGE(B_ASYNC), which gets picked up by the right zone.
+	 * fop_putpage(B_ASYNC), which gets picked up by the right zone.
 	 */
 	if (!(flag & SYNC_ATTR) && mutex_tryenter(&nfs4_syncbusy) != 0) {
 		r4flush(vfsp, cr);

@@ -89,7 +89,7 @@ ioctl(int fdes, int cmd, intptr_t arg)
 			int32_t offset;
 
 			vattr.va_mask = AT_SIZE;
-			error = VOP_GETATTR(vp, &vattr, 0, fp->f_cred, NULL);
+			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error) {
 				releasef(fdes);
 				return (set_errno(error));
@@ -134,7 +134,7 @@ ioctl(int fdes, int cmd, intptr_t arg)
 	 * ioctls.)
 	 */
 	flag = (fp->f_flag & 0xffff) | get_udatamodel();
-	error = VOP_IOCTL(fp->f_vnode, cmd, arg, flag, CRED(), &rv, NULL);
+	error = fop_ioctl(fp->f_vnode, cmd, arg, flag, CRED(), &rv, NULL);
 	if (error != 0) {
 		releasef(fdes);
 		return (set_errno(error));

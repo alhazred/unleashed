@@ -1687,7 +1687,7 @@ hsfs_putapage(
  *	   which translates to an MC_SYNC with the MS_INVALIDATE flag.
  *
  * The B_FREE (as well as the B_DONTNEED) flag is set when the
- * MADV_SEQUENTIAL advice has been used. VOP_PUTPAGE is invoked
+ * MADV_SEQUENTIAL advice has been used. fop_putpage is invoked
  * from SEGVN to release pages behind a pagefault.
  */
 /*ARGSUSED*/

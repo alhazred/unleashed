@@ -309,7 +309,7 @@ zfs_replay_create_acl(zfsvfs_t *zfsvfs,
 	/*
 	 * All forms of zfs create (create, mkdir, mkxattrdir, symlink)
 	 * eventually end up in zfs_mknode(), which assigns the object's
-	 * creation time and generation number.  The generic VOP_CREATE()
+	 * creation time and generation number.  The generic fop_create()
 	 * doesn't have either concept, so we smuggle the values inside
 	 * the vattr's otherwise unused va_ctime and va_nblocks fields.
 	 */
@@ -352,7 +352,7 @@ zfs_replay_create_acl(zfsvfs_t *zfsvfs,
 			    lr->lr_uid, lr->lr_gid);
 		}
 
-		error = VOP_CREATE(ZTOV(dzp), name, &xva.xva_vattr,
+		error = fop_create(ZTOV(dzp), name, &xva.xva_vattr,
 		    0, 0, &vp, kcred, vflg, NULL, &vsec);
 		break;
 	case TX_MKDIR_ACL:
@@ -382,7 +382,7 @@ zfs_replay_create_acl(zfsvfs_t *zfsvfs,
 			    (void *)&name, lracl->lr_fuidcnt, lracl->lr_domcnt,
 			    lr->lr_uid, lr->lr_gid);
 		}
-		error = VOP_MKDIR(ZTOV(dzp), name, &xva.xva_vattr,
+		error = fop_mkdir(ZTOV(dzp), name, &xva.xva_vattr,
 		    &vp, kcred, NULL, vflg, &vsec);
 		break;
 	default:
@@ -436,7 +436,7 @@ zfs_replay_create(zfsvfs_t *zfsvfs, lr_create_t *lr, boolean_t byteswap)
 	/*
 	 * All forms of zfs create (create, mkdir, mkxattrdir, symlink)
 	 * eventually end up in zfs_mknode(), which assigns the object's
-	 * creation time and generation number.  The generic VOP_CREATE()
+	 * creation time and generation number.  The generic fop_create()
 	 * doesn't have either concept, so we smuggle the values inside
 	 * the vattr's otherwise unused va_ctime and va_nblocks fields.
 	 */
@@ -481,7 +481,7 @@ zfs_replay_create(zfsvfs_t *zfsvfs, lr_create_t *lr, boolean_t byteswap)
 		if (name == NULL)
 			name = (char *)start;
 
-		error = VOP_CREATE(ZTOV(dzp), name, &xva.xva_vattr,
+		error = fop_create(ZTOV(dzp), name, &xva.xva_vattr,
 		    0, 0, &vp, kcred, vflg, NULL, NULL);
 		break;
 	case TX_MKDIR_ATTR:
@@ -499,7 +499,7 @@ zfs_replay_create(zfsvfs_t *zfsvfs, lr_create_t *lr, boolean_t byteswap)
 		if (name == NULL)
 			name = (char *)(lr + 1);
 
-		error = VOP_MKDIR(ZTOV(dzp), name, &xva.xva_vattr,
+		error = fop_mkdir(ZTOV(dzp), name, &xva.xva_vattr,
 		    &vp, kcred, NULL, vflg, NULL);
 		break;
 	case TX_MKXATTR:
@@ -508,7 +508,7 @@ zfs_replay_create(zfsvfs_t *zfsvfs, lr_create_t *lr, boolean_t byteswap)
 	case TX_SYMLINK:
 		name = (char *)(lr + 1);
 		link = name + strlen(name) + 1;
-		error = VOP_SYMLINK(ZTOV(dzp), name, &xva.xva_vattr,
+		error = fop_symlink(ZTOV(dzp), name, &xva.xva_vattr,
 		    link, kcred, NULL, vflg);
 		break;
 	default:
@@ -546,10 +546,10 @@ zfs_replay_remove(zfsvfs_t *zfsvfs, lr_remove_t *lr, boolean_t byteswap)
 
 	switch ((int)lr->lr_common.lrc_txtype) {
 	case TX_REMOVE:
-		error = VOP_REMOVE(ZTOV(dzp), name, kcred, NULL, vflg);
+		error = fop_remove(ZTOV(dzp), name, kcred, NULL, vflg);
 		break;
 	case TX_RMDIR:
-		error = VOP_RMDIR(ZTOV(dzp), name, NULL, kcred, NULL, vflg);
+		error = fop_rmdir(ZTOV(dzp), name, NULL, kcred, NULL, vflg);
 		break;
 	default:
 		error = SET_ERROR(ENOTSUP);
@@ -582,7 +582,7 @@ zfs_replay_link(zfsvfs_t *zfsvfs, lr_link_t *lr, boolean_t byteswap)
 	if (lr->lr_common.lrc_txtype & TX_CI)
 		vflg |= FIGNORECASE;
 
-	error = VOP_LINK(ZTOV(dzp), ZTOV(zp), name, kcred, NULL, vflg);
+	error = fop_link(ZTOV(dzp), ZTOV(zp), name, kcred, NULL, vflg);
 
 	VN_RELE(ZTOV(zp));
 	VN_RELE(ZTOV(dzp));
@@ -613,7 +613,7 @@ zfs_replay_rename(zfsvfs_t *zfsvfs, lr_rename_t *lr, boolean_t byteswap)
 	if (lr->lr_common.lrc_txtype & TX_CI)
 		vflg |= FIGNORECASE;
 
-	error = VOP_RENAME(ZTOV(sdzp), sname, ZTOV(tdzp), tname, kcred,
+	error = fop_rename(ZTOV(sdzp), sname, ZTOV(tdzp), tname, kcred,
 	    NULL, vflg);
 
 	VN_RELE(ZTOV(tdzp));
@@ -752,7 +752,7 @@ zfs_replay_truncate(zfsvfs_t *zfsvfs, lr_truncate_t *lr, boolean_t byteswap)
 	fl.l_start = lr->lr_offset;
 	fl.l_len = lr->lr_length;
 
-	error = VOP_SPACE(ZTOV(zp), F_FREESP, &fl, FWRITE | FOFFMAX,
+	error = fop_space(ZTOV(zp), F_FREESP, &fl, FWRITE | FOFFMAX,
 	    lr->lr_offset, kcred, NULL);
 
 	VN_RELE(ZTOV(zp));
@@ -803,7 +803,7 @@ zfs_replay_setattr(zfsvfs_t *zfsvfs, lr_setattr_t *lr, boolean_t byteswap)
 	zfsvfs->z_fuid_replay = zfs_replay_fuid_domain(start, &start,
 	    lr->lr_uid, lr->lr_gid);
 
-	error = VOP_SETATTR(ZTOV(zp), vap, 0, kcred, NULL);
+	error = fop_setattr(ZTOV(zp), vap, 0, kcred, NULL);
 
 	zfs_fuid_info_free(zfsvfs->z_fuid_replay);
 	zfsvfs->z_fuid_replay = NULL;
@@ -835,7 +835,7 @@ zfs_replay_acl_v0(zfsvfs_t *zfsvfs, lr_acl_v0_t *lr, boolean_t byteswap)
 	vsa.vsa_aclflags = 0;
 	vsa.vsa_aclentp = ace;
 
-	error = VOP_SETSECATTR(ZTOV(zp), &vsa, 0, kcred, NULL);
+	error = fop_setsecattr(ZTOV(zp), &vsa, 0, kcred, NULL);
 
 	VN_RELE(ZTOV(zp));
 
@@ -893,7 +893,7 @@ zfs_replay_acl(zfsvfs_t *zfsvfs, lr_acl_t *lr, boolean_t byteswap)
 		    lr->lr_fuidcnt, lr->lr_domcnt, 0, 0);
 	}
 
-	error = VOP_SETSECATTR(ZTOV(zp), &vsa, 0, kcred, NULL);
+	error = fop_setsecattr(ZTOV(zp), &vsa, 0, kcred, NULL);
 
 	if (zfsvfs->z_fuid_replay)
 		zfs_fuid_info_free(zfsvfs->z_fuid_replay);

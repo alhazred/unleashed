@@ -3164,7 +3164,7 @@ propenm(prnode_t *pnp, caddr_t cmaddr, caddr_t va, int *rvalp, cred_t *cr)
 	prunlock(pnp);
 
 	if (error == 0) {
-		if ((error = VOP_ACCESS(xvp, VREAD, 0, cr, NULL)) == 0)
+		if ((error = fop_access(xvp, VREAD, 0, cr, NULL)) == 0)
 			error = fassign(&xvp, FREAD, &n);
 		if (error) {
 			VN_RELE(xvp);

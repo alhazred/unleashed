@@ -89,7 +89,7 @@ ctfs_latest_nested_open(vnode_t *vp, cred_t *cr)
 }
 
 /*
- * ctfs_latest_access - VOP_ACCESS entry point
+ * ctfs_latest_access - fop_access entry point
  *
  * Fails if there isn't a latest contract.
  */
@@ -116,7 +116,7 @@ ctfs_latest_access(
 }
 
 /*
- * ctfs_latest_open - VOP_OPEN entry point
+ * ctfs_latest_open - fop_open entry point
  *
  * After checking the mode bits, opens and returns the status file for
  * the LWP's latest contract.
@@ -132,16 +132,16 @@ ctfs_latest_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 	if (nvp = ctfs_latest_nested_open(*vpp, cr)) {
 		VN_RELE(*vpp);
 		*vpp = nvp;
-		return (VOP_OPEN(vpp, flag, cr, ct));
+		return (fop_open(vpp, flag, cr, ct));
 	}
 
 	return (ESRCH);
 }
 
 /*
- * ctfs_latest_getattr - the VOP_GETATTR entry point
+ * ctfs_latest_getattr - the fop_getattr entry point
  *
- * Fetches and calls VOP_GETATTR on the status file for the LWP's
+ * Fetches and calls fop_getattr on the status file for the LWP's
  * latest contract.  Otherwise it fakes up something bland.
  */
 static int
@@ -155,7 +155,7 @@ ctfs_latest_getattr(
 	vnode_t *nvp;
 
 	if (nvp = ctfs_latest_nested_open(vp, cr)) {
-		int res = VOP_GETATTR(nvp, vap, flags, cr, ct);
+		int res = fop_getattr(nvp, vap, flags, cr, ct);
 		VN_RELE(nvp);
 		return (res);
 	}

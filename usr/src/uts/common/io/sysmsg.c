@@ -338,7 +338,7 @@ bind_consadm_conf(char *path)
 	if (vn_open(path, UIO_SYSSPACE, FREAD, 0, &vp, 0, 0) != 0)
 		return;
 	vattr.va_mask = AT_SIZE;
-	if ((err = VOP_GETATTR(vp, &vattr, 0, kcred, NULL)) != 0) {
+	if ((err = fop_getattr(vp, &vattr, 0, kcred, NULL)) != 0) {
 		cmn_err(CE_WARN, "sysmsg: getattr: '%s': error %d",
 		    path, err);
 		goto closevp;
@@ -357,7 +357,7 @@ bind_consadm_conf(char *path)
 
 	kmem_free(buf, size);
 closevp:
-	(void) VOP_CLOSE(vp, FREAD, 1, (offset_t)0, kcred, NULL);
+	(void) fop_close(vp, FREAD, 1, (offset_t)0, kcred, NULL);
 	VN_RELE(vp);
 }
 
@@ -445,7 +445,7 @@ sysmclose(dev_t dev, int flag, int state, cred_t *cred)
 		return (0);
 	}
 
-	(void) VOP_CLOSE(dcvp, FWRITE, 1, (offset_t)0, kcred, NULL);
+	(void) fop_close(dcvp, FWRITE, 1, (offset_t)0, kcred, NULL);
 	VN_RELE(dcvp);
 	dcvp = NULL;
 	mutex_exit(&dcvp_mutex);
@@ -457,7 +457,7 @@ sysmclose(dev_t dev, int flag, int state, cred_t *cred)
 	for (i = 0; i < MAXDEVS; i++) {
 		rw_enter(&sysmcache[i].dca_lock, RW_WRITER);
 		if (sysmcache[i].dca_vp != NULL) {
-			(void) VOP_CLOSE(sysmcache[i].dca_vp, flag,
+			(void) fop_close(sysmcache[i].dca_vp, flag,
 			    1, (offset_t)0, cred, NULL);
 			VN_RELE(sysmcache[i].dca_vp);
 			sysmcache[i].dca_vp = NULL;
@@ -475,7 +475,7 @@ static int
 sysmread(dev_t dev, struct uio *uio, cred_t *cred)
 {
 	ASSERT(dcvp != NULL);
-	return (VOP_READ(dcvp, uio, 0, cred, NULL));
+	return (fop_read(dcvp, uio, 0, cred, NULL));
 }
 
 /* ARGSUSED */
@@ -496,12 +496,12 @@ sysmwrite(dev_t dev, struct uio *uio, cred_t *cred)
 			tuio = *uio;
 			uio_iov = *(uio->uio_iov);
 			tuio.uio_iov = &uio_iov;
-			(void) VOP_WRITE(sysmcache[i].dca_vp, &tuio, 0, cred,
+			(void) fop_write(sysmcache[i].dca_vp, &tuio, 0, cred,
 			    NULL);
 		}
 		rw_exit(&sysmcache[i].dca_lock);
 	}
-	return (VOP_WRITE(dcvp, uio, 0, cred, NULL));
+	return (fop_write(dcvp, uio, 0, cred, NULL));
 }
 
 /* ARGSUSED */
@@ -564,7 +564,7 @@ sysmioctl(dev_t dev, int cmd, intptr_t arg, int flag, cred_t *cred, int *rvalp)
 	}
 	default:
 		/* everything else is sent to the console device */
-		return (VOP_IOCTL(dcvp, cmd, arg, flag, cred, rvalp, NULL));
+		return (fop_ioctl(dcvp, cmd, arg, flag, cred, rvalp, NULL));
 	}
 
 	if ((rval = secpolicy_console(cred)) != 0)
@@ -693,7 +693,7 @@ static int
 sysmpoll(dev_t dev, short events, int anyyet, short *reventsp,
 	struct pollhead **phpp)
 {
-	return (VOP_POLL(dcvp, events, anyyet, reventsp, phpp, NULL));
+	return (fop_poll(dcvp, events, anyyet, reventsp, phpp, NULL));
 }
 
 /* Sanity check that the device is good */

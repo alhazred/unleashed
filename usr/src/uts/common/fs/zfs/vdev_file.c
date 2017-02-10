@@ -109,7 +109,7 @@ skip_open:
 	 * Determine the physical size of the file.
 	 */
 	vattr.va_mask = AT_SIZE;
-	error = VOP_GETATTR(vf->vf_vnode, &vattr, 0, kcred, NULL);
+	error = fop_getattr(vf->vf_vnode, &vattr, 0, kcred, NULL);
 	if (error) {
 		vd->vdev_stat.vs_aux = VDEV_AUX_OPEN_FAILED;
 		return (error);
@@ -130,8 +130,8 @@ vdev_file_close(vdev_t *vd)
 		return;
 
 	if (vf->vf_vnode != NULL) {
-		(void) VOP_PUTPAGE(vf->vf_vnode, 0, 0, B_INVAL, kcred, NULL);
-		(void) VOP_CLOSE(vf->vf_vnode, spa_mode(vd->vdev_spa), 1, 0,
+		(void) fop_putpage(vf->vf_vnode, 0, 0, B_INVAL, kcred, NULL);
+		(void) fop_close(vf->vf_vnode, spa_mode(vd->vdev_spa), 1, 0,
 		    kcred, NULL);
 		VN_RELE(vf->vf_vnode);
 	}
@@ -200,7 +200,7 @@ vdev_file_io_start(zio_t *zio)
 
 		switch (zio->io_cmd) {
 		case DKIOCFLUSHWRITECACHE:
-			zio->io_error = VOP_FSYNC(vf->vf_vnode, FSYNC | FDSYNC,
+			zio->io_error = fop_fsync(vf->vf_vnode, FSYNC | FDSYNC,
 			    kcred, NULL);
 			break;
 		default:

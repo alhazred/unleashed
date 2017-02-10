@@ -2301,9 +2301,9 @@ extern void	nfs4_clnt_fini(void);
  */
 extern bool_t	rfs4_check_delegated(int mode, vnode_t *, bool_t trunc);
 /*
- * VOP_GETATTR call. If a NFS4 delegation is present on the supplied vnode
+ * fop_getattr call. If a NFS4 delegation is present on the supplied vnode
  * call back to the delegated client to get attributes for AT_MTIME and
- * AT_SIZE. Invoke VOP_GETATTR to get all other attributes or all attributes
+ * AT_SIZE. Invoke fop_getattr to get all other attributes or all attributes
  * if no delegation is present.
  */
 extern int	rfs4_delegated_getattr(vnode_t *, vattr_t *, int, cred_t *);

@@ -196,7 +196,7 @@ namefind(vnode_t *vp, vnode_t *mnt)
  * At the start of this routine, the reference count for vp is
  * incremented to protect the vnode from being released in the
  * event the mount was the only thing keeping the vnode active.
- * If that is the case, the VOP_CLOSE operation is applied to
+ * If that is the case, the fop_close operation is applied to
  * the vnode, prior to it being released.
  */
 static int
@@ -358,7 +358,7 @@ nm_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *crp)
 	 */
 	rvp = NULLVP;
 	if (vn_matchops(mvp, spec_getvnodeops()) &&
-	    VOP_REALVP(mvp, &rvp, NULL) == 0 && rvp &&
+	    fop_realvp(mvp, &rvp, NULL) == 0 && rvp &&
 	    (vn_matchops(rvp, devpts_getvnodeops()) ||
 	    vn_matchops(rvp, devvt_getvnodeops()))) {
 		releasef(namefdp.fd);
@@ -399,11 +399,11 @@ nm_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *crp)
 	mutex_init(&nodep->nm_lock, NULL, MUTEX_DEFAULT, NULL);
 	vattrp = &nodep->nm_vattr;
 	vattrp->va_mask = AT_ALL;
-	if (error = VOP_GETATTR(mvp, vattrp, 0, crp, NULL))
+	if (error = fop_getattr(mvp, vattrp, 0, crp, NULL))
 		goto out;
 
 	filevattr.va_mask = AT_ALL;
-	if (error = VOP_GETATTR(filevp, &filevattr, 0, crp, NULL))
+	if (error = fop_getattr(filevp, &filevattr, 0, crp, NULL))
 		goto out;
 	/*
 	 * Make sure the user is the owner of the mount point
@@ -451,7 +451,7 @@ nm_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *crp)
 
 	/*
 	 * The attributes for the mounted file descriptor were initialized
-	 * above by applying VOP_GETATTR to the mount point.  Some of
+	 * above by applying fop_getattr to the mount point.  Some of
 	 * the fields of the attributes structure will be overwritten
 	 * by the attributes from the file descriptor.
 	 */
@@ -497,7 +497,7 @@ nm_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *crp)
 	 * Set the name we mounted from.
 	 */
 	switch (filevp->v_type) {
-	case VPROC:	/* VOP_GETATTR() translates this to VREG */
+	case VPROC:	/* fop_getattr() translates this to VREG */
 	case VREG:	resource_nodetype = "file"; break;
 	case VDIR:	resource_nodetype = "directory"; break;
 	case VBLK:	resource_nodetype = "device"; break;
@@ -641,7 +641,7 @@ nm_statvfs(vfs_t *vfsp, struct statvfs64 *sp)
 
 /*
  * Since this file system has no disk blocks of its own, apply
- * the VOP_FSYNC operation on the mounted file descriptor.
+ * the fop_fsync operation on the mounted file descriptor.
  */
 static int
 nm_sync(vfs_t *vfsp, short flag, cred_t *crp)
@@ -655,7 +655,7 @@ nm_sync(vfs_t *vfsp, short flag, cred_t *crp)
 	if (flag & SYNC_CLOSE)
 		return (nm_umountall(nodep->nm_filevp, crp));
 
-	return (VOP_FSYNC(nodep->nm_filevp, FSYNC, crp, NULL));
+	return (fop_fsync(nodep->nm_filevp, FSYNC, crp, NULL));
 }
 
 /*

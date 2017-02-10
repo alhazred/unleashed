@@ -449,7 +449,7 @@ so_ux_lookup(struct sonode *so, struct sockaddr_un *soun, vnode_t **vpp)
 	/*
 	 * Traverse lofs mounts get the real vnode
 	 */
-	if (VOP_REALVP(vp, &rvp, NULL) == 0) {
+	if (fop_realvp(vp, &rvp, NULL) == 0) {
 		VN_HOLD(rvp);		/* hold the real vnode */
 		VN_RELE(vp);		/* release hold from lookup */
 		vp = rvp;
@@ -465,7 +465,7 @@ so_ux_lookup(struct sonode *so, struct sockaddr_un *soun, vnode_t **vpp)
 	 * Check that we have permissions to access the destination
 	 * vnode.
 	 */
-	if (error = VOP_ACCESS(vp, VREAD|VWRITE, 0, CRED(), NULL)) {
+	if (error = fop_access(vp, VREAD|VWRITE, 0, CRED(), NULL)) {
 		eprintsoline(so, error);
 		goto done2;
 	}
@@ -1834,7 +1834,7 @@ soreadfile(file_t *fp, uchar_t *buf, u_offset_t fileoff, int *err, size_t size)
 	aiov[0].iov_len = size;
 	iovcnt = 1;
 	cnt = (ssize_t)size;
-	(void) VOP_RWLOCK(vp, rwflag, NULL);
+	(void) fop_rwlock(vp, rwflag, NULL);
 
 	auio.uio_loffset = fileoff;
 	auio.uio_iov = aiov;
@@ -1850,10 +1850,10 @@ soreadfile(file_t *fp, uchar_t *buf, u_offset_t fileoff, int *err, size_t size)
 	/* If read sync is not asked for, filter sync flags */
 	if ((ioflag & FRSYNC) == 0)
 		ioflag &= ~(FSYNC|FDSYNC);
-	error = VOP_READ(vp, &auio, ioflag, fp->f_cred, NULL);
+	error = fop_read(vp, &auio, ioflag, fp->f_cred, NULL);
 	cnt -= auio.uio_resid;
 
-	VOP_RWUNLOCK(vp, rwflag, NULL);
+	fop_rwunlock(vp, rwflag, NULL);
 
 	if (error == EINTR && cnt != 0)
 		error = 0;

@@ -167,7 +167,7 @@ javaexec(vnode_t *vp, struct execa *uap, struct uarg *args,
 		 * Close this Java executable as the interpreter
 		 * will open and close it later on.
 		 */
-		(void) VOP_CLOSE(vp, FREAD, 1, (offset_t)0, cred, NULL);
+		(void) fop_close(vp, FREAD, 1, (offset_t)0, cred, NULL);
 	}
 
 	VN_RELE(nvp);

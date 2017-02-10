@@ -216,12 +216,12 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 	 * which indicate read-only, but with the file opened for
 	 * writing.  If the client then tries to set the size of
 	 * the file, then the normal access checking done in
-	 * VOP_SETATTR would prevent the client from doing so,
+	 * fop_setattr would prevent the client from doing so,
 	 * although it should be legal for it to do so.  To get
 	 * around this, we do the access checking for ourselves
-	 * and then use VOP_SPACE which doesn't do the access
-	 * checking which VOP_SETATTR does. VOP_SPACE can only
-	 * operate on VREG files, let VOP_SETATTR handle the other
+	 * and then use fop_space which doesn't do the access
+	 * checking which fop_setattr does. fop_space can only
+	 * operate on VREG files, let fop_setattr handle the other
 	 * extremely rare cases.
 	 * Also the client should not be allowed to change the
 	 * size of the file if there is a conflicting non-blocking
@@ -235,7 +235,7 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 
 		bva.va_mask = AT_UID | AT_SIZE;
 
-		error = VOP_GETATTR(vp, &bva, 0, cr, &ct);
+		error = fop_getattr(vp, &bva, 0, cr, &ct);
 
 		if (error) {
 			if (in_crit)
@@ -272,7 +272,7 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 			bf.l_sysid = 0;
 			bf.l_pid = 0;
 
-			error = VOP_SPACE(vp, F_FREESP, &bf, FWRITE,
+			error = fop_space(vp, F_FREESP, &bf, FWRITE,
 			    (offset_t)va.va_size, cr, &ct);
 		}
 		if (in_crit)
@@ -284,7 +284,7 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 	 * Do the setattr.
 	 */
 	if (!error && va.va_mask) {
-		error = VOP_SETATTR(vp, &va, flag, cr, &ct);
+		error = fop_setattr(vp, &va, flag, cr, &ct);
 	}
 
 	/*
@@ -316,7 +316,7 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 	/*
 	 * Force modified metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, FNODSYNC, cr, &ct);
+	(void) fop_fsync(vp, FNODSYNC, cr, &ct);
 
 	VN_RELE(vp);
 
@@ -408,7 +408,7 @@ rfs_lookup(struct nfsdiropargs *da, struct nfsdiropres *dr,
 		/*
 		 * Do a normal single component lookup.
 		 */
-		error = VOP_LOOKUP(dvp, name, &vp, NULL, 0, NULL, cr,
+		error = fop_lookup(dvp, name, &vp, NULL, 0, NULL, cr,
 		    NULL, NULL, NULL);
 	}
 
@@ -495,7 +495,7 @@ rfs_readlink(fhandle_t *fhp, struct nfsrdlnres *rl, struct exportinfo *exi,
 
 	va.va_mask = AT_MODE;
 
-	error = VOP_GETATTR(vp, &va, 0, cr, NULL);
+	error = fop_getattr(vp, &va, 0, cr, NULL);
 
 	if (error) {
 		VN_RELE(vp);
@@ -566,7 +566,7 @@ rfs_readlink(fhandle_t *fhp, struct nfsrdlnres *rl, struct exportinfo *exi,
 		/*
 		 * Do the readlink.
 		 */
-		error = VOP_READLINK(vp, &uio, cr, NULL);
+		error = fop_readlink(vp, &uio, cr, NULL);
 
 		rl->rl_count = (uint32_t)(NFS_MAXPATHLEN - uio.uio_resid);
 
@@ -654,7 +654,7 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 	ct.cc_flags = CC_DONTBLOCK;
 
 	/*
-	 * Enter the critical region before calling VOP_RWLOCK
+	 * Enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with write requests.
 	 */
 	if (nbl_need_check(vp)) {
@@ -670,7 +670,7 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 		in_crit = 1;
 	}
 
-	error = VOP_RWLOCK(vp, V_WRITELOCK_FALSE, &ct);
+	error = fop_rwlock(vp, V_WRITELOCK_FALSE, &ct);
 
 	/* check if a monitor detected a delegation conflict */
 	if (error == EAGAIN && (ct.cc_flags & CC_WOULDBLOCK)) {
@@ -684,10 +684,10 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 
 	va.va_mask = AT_ALL;
 
-	error = VOP_GETATTR(vp, &va, 0, cr, &ct);
+	error = fop_getattr(vp, &va, 0, cr, &ct);
 
 	if (error) {
-		VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &ct);
+		fop_rwunlock(vp, V_WRITELOCK_FALSE, &ct);
 		if (in_crit)
 			nbl_end_crit(vp);
 
@@ -704,17 +704,17 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 	 * is always allowed to read it.
 	 */
 	if (crgetuid(cr) != va.va_uid) {
-		error = VOP_ACCESS(vp, VREAD, 0, cr, &ct);
+		error = fop_access(vp, VREAD, 0, cr, &ct);
 
 		if (error) {
 			/*
 			 * Exec is the same as read over the net because
 			 * of demand loading.
 			 */
-			error = VOP_ACCESS(vp, VEXEC, 0, cr, &ct);
+			error = fop_access(vp, VEXEC, 0, cr, &ct);
 		}
 		if (error) {
-			VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &ct);
+			fop_rwunlock(vp, V_WRITELOCK_FALSE, &ct);
 			if (in_crit)
 				nbl_end_crit(vp);
 			VN_RELE(vp);
@@ -726,7 +726,7 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 	}
 
 	if (MANDLOCK(vp, va.va_mode)) {
-		VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &ct);
+		fop_rwunlock(vp, V_WRITELOCK_FALSE, &ct);
 		if (in_crit)
 			nbl_end_crit(vp);
 
@@ -792,7 +792,7 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 	uio.uio_loffset = (offset_t)ra->ra_offset;
 	uio.uio_resid = ra->ra_count;
 
-	error = VOP_READ(vp, &uio, 0, cr, &ct);
+	error = fop_read(vp, &uio, 0, cr, &ct);
 
 	if (error) {
 		if (mp)
@@ -807,7 +807,7 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 		else
 			rr->rr_status = puterrno(error);
 
-		VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &ct);
+		fop_rwunlock(vp, V_WRITELOCK_FALSE, &ct);
 		if (in_crit)
 			nbl_end_crit(vp);
 
@@ -823,13 +823,13 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 	 */
 	va.va_mask = AT_ALL;
 
-	error = VOP_GETATTR(vp, &va, 0, cr, &ct);
+	error = fop_getattr(vp, &va, 0, cr, &ct);
 
 	if (error) {
 		if (mp)
 			freeb(mp);
 
-		VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &ct);
+		fop_rwunlock(vp, V_WRITELOCK_FALSE, &ct);
 		if (in_crit)
 			nbl_end_crit(vp);
 
@@ -854,7 +854,7 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 		}
 	}
 done:
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &ct);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, &ct);
 	if (in_crit)
 		nbl_end_crit(vp);
 
@@ -946,7 +946,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 
 	va.va_mask = AT_UID|AT_MODE;
 
-	error = VOP_GETATTR(vp, &va, 0, cr, &ct);
+	error = fop_getattr(vp, &va, 0, cr, &ct);
 
 	if (error) {
 		VN_RELE(vp);
@@ -961,7 +961,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 		 * with read only permission.  The owner of the file
 		 * is always allowed to write it.
 		 */
-		error = VOP_ACCESS(vp, VWRITE, 0, cr, &ct);
+		error = fop_access(vp, VWRITE, 0, cr, &ct);
 
 		if (error) {
 			VN_RELE(vp);
@@ -982,7 +982,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	}
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -995,7 +995,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 		}
 	}
 
-	error = VOP_RWLOCK(vp, V_WRITELOCK_TRUE, &ct);
+	error = fop_rwlock(vp, V_WRITELOCK_TRUE, &ct);
 
 	/* check if a monitor detected a delegation conflict */
 	if (error == EAGAIN && (ct.cc_flags & CC_WOULDBLOCK)) {
@@ -1039,7 +1039,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 		 */
 		savecred = curthread->t_cred;
 		curthread->t_cred = cr;
-		error = VOP_WRITE(vp, &uio, FSYNC, cr, &ct);
+		error = fop_write(vp, &uio, FSYNC, cr, &ct);
 		curthread->t_cred = savecred;
 	} else {
 		iovcnt = 0;
@@ -1082,14 +1082,14 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 		 */
 		savecred = curthread->t_cred;
 		curthread->t_cred = cr;
-		error = VOP_WRITE(vp, &uio, FSYNC, cr, &ct);
+		error = fop_write(vp, &uio, FSYNC, cr, &ct);
 		curthread->t_cred = savecred;
 
 		if (iovp != iov)
 			kmem_free(iovp, sizeof (*iovp) * iovcnt);
 	}
 
-	VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, &ct);
+	fop_rwunlock(vp, V_WRITELOCK_TRUE, &ct);
 
 	if (!error) {
 		/*
@@ -1098,7 +1098,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 		 */
 		va.va_mask = AT_ALL;	/* now we want everything */
 
-		error = VOP_GETATTR(vp, &va, 0, cr, &ct);
+		error = fop_getattr(vp, &va, 0, cr, &ct);
 
 		/* check for overflows */
 		if (!error) {
@@ -1317,7 +1317,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	}
 
 	/*
-	 * Enter the critical region before calling VOP_RWLOCK, to avoid a
+	 * Enter the critical region before calling fop_rwlock, to avoid a
 	 * deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -1334,7 +1334,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	 * Lock the file for writing.  This operation provides
 	 * the delay which allows clusters to grow.
 	 */
-	error = VOP_RWLOCK(vp, V_WRITELOCK_TRUE, &ct);
+	error = fop_rwlock(vp, V_WRITELOCK_TRUE, &ct);
 
 	/* check if a monitor detected a delegation conflict */
 	if (error == EAGAIN && (ct.cc_flags & CC_WOULDBLOCK)) {
@@ -1376,7 +1376,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	 * vnode pointer, and then lock the file for writing.
 	 * This request is not likely to be clustered with
 	 * any others.  However, the next request will create
-	 * a new cluster and be blocked in VOP_RWLOCK while
+	 * a new cluster and be blocked in fop_rwlock while
 	 * the first request is being processed.  This delay
 	 * will allow more requests to be clustered in this
 	 * second cluster.
@@ -1416,7 +1416,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 
 		va.va_mask = AT_UID|AT_MODE;
 
-		error = VOP_GETATTR(vp, &va, 0, rp->cr, &ct);
+		error = fop_getattr(vp, &va, 0, rp->cr, &ct);
 
 		if (!error) {
 			if (crgetuid(rp->cr) != va.va_uid) {
@@ -1426,7 +1426,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 				 * owner of the file is always allowed to
 				 * write it.
 				 */
-				error = VOP_ACCESS(vp, VWRITE, 0, rp->cr, &ct);
+				error = fop_access(vp, VWRITE, 0, rp->cr, &ct);
 			}
 			if (!error && MANDLOCK(vp, va.va_mode))
 				error = EACCES;
@@ -1453,8 +1453,8 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	/*
 	 * Step through the cluster attempting to gather as many
 	 * requests which are contiguous as possible.  These
-	 * contiguous requests are handled via one call to VOP_WRITE
-	 * instead of different calls to VOP_WRITE.  We also keep
+	 * contiguous requests are handled via one call to fop_write
+	 * instead of different calls to fop_write.  We also keep
 	 * track of the fact that any data was written.
 	 */
 	rp = nlp->list;
@@ -1573,7 +1573,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 		 */
 		savecred = curthread->t_cred;
 		curthread->t_cred = cr;
-		error = VOP_WRITE(vp, &uio, 0, rp->cr, &ct);
+		error = fop_write(vp, &uio, 0, rp->cr, &ct);
 		curthread->t_cred = savecred;
 
 		/* check if a monitor detected a delegation conflict */
@@ -1592,7 +1592,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 			 */
 			va.va_mask = AT_ALL;	/* now we want everything */
 
-			error = VOP_GETATTR(vp, &va, 0, rp->cr, &ct);
+			error = fop_getattr(vp, &va, 0, rp->cr, &ct);
 
 			if (!error)
 				acl_perm(vp, exi, &va, rp->cr);
@@ -1621,14 +1621,14 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	 * the data and metadata to stable storage.
 	 */
 	if (data_written) {
-		error = VOP_PUTPAGE(vp, (u_offset_t)off, len, 0, cr, &ct);
+		error = fop_putpage(vp, (u_offset_t)off, len, 0, cr, &ct);
 
 		if (!error) {
-			error = VOP_FSYNC(vp, FNODSYNC, cr, &ct);
+			error = fop_fsync(vp, FNODSYNC, cr, &ct);
 		}
 	}
 
-	VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, &ct);
+	fop_rwunlock(vp, V_WRITELOCK_TRUE, &ct);
 
 	if (in_crit)
 		nbl_end_crit(vp);
@@ -1755,7 +1755,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 
 	/*
 	 * Why was the choice made to use VWRITE as the mode to the
-	 * call to VOP_CREATE ? This results in a bug.  When a client
+	 * call to fop_create ? This results in a bug.  When a client
 	 * opens a file that already exists and is RDONLY, the second
 	 * open fails with an EACESS because of the mode.
 	 * bug ID 1054648.
@@ -1763,14 +1763,14 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 	lookup_ok = 0;
 	mode = VWRITE;
 	if (!(va.va_mask & AT_SIZE) || va.va_type != VREG) {
-		error = VOP_LOOKUP(dvp, name, &tvp, NULL, 0, NULL, cr,
+		error = fop_lookup(dvp, name, &tvp, NULL, 0, NULL, cr,
 		    NULL, NULL, NULL);
 		if (!error) {
 			struct vattr at;
 
 			lookup_ok = 1;
 			at.va_mask = AT_MODE;
-			error = VOP_GETATTR(tvp, &at, 0, cr, NULL);
+			error = fop_getattr(tvp, &at, 0, cr, NULL);
 			if (!error)
 				mode = (at.va_mode & S_IWUSR) ? VWRITE : VREAD;
 			VN_RELE(tvp);
@@ -1796,7 +1796,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 	 * are conflicting locks.
 	 */
 	if (!error && (va.va_type == VREG) && (va.va_mask & AT_SIZE)) {
-		lookuperr = VOP_LOOKUP(dvp, name, &tvp, NULL, 0, NULL, cr,
+		lookuperr = fop_lookup(dvp, name, &tvp, NULL, 0, NULL, cr,
 		    NULL, NULL, NULL);
 
 		if (!lookuperr &&
@@ -1820,7 +1820,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 			in_crit = 1;
 
 			bva.va_mask = AT_SIZE;
-			error = VOP_GETATTR(tvp, &bva, 0, cr, NULL);
+			error = fop_getattr(tvp, &bva, 0, cr, NULL);
 			if (!error) {
 				if (va.va_size < bva.va_size) {
 					offset = va.va_size;
@@ -1855,7 +1855,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 		    exi->exi_export.ex_flags & EX_NOSUID)
 			va.va_mode &= ~(VSUID | VSGID);
 
-		error = VOP_CREATE(dvp, name, &va, NONEXCL, mode, &vp, cr, 0,
+		error = fop_create(dvp, name, &va, NONEXCL, mode, &vp, cr, 0,
 		    NULL, NULL);
 
 		if (!error) {
@@ -1872,7 +1872,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 			}
 			va.va_mask = AT_ALL;
 
-			error = VOP_GETATTR(vp, &va, 0, cr, NULL);
+			error = fop_getattr(vp, &va, 0, cr, NULL);
 
 			/* check for overflows */
 			if (!error) {
@@ -1886,12 +1886,12 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 			/*
 			 * Force modified metadata out to stable storage.
 			 *
-			 * if a underlying vp exists, pass it to VOP_FSYNC
+			 * if a underlying vp exists, pass it to fop_fsync
 			 */
-			if (VOP_REALVP(vp, &realvp, NULL) == 0)
-				(void) VOP_FSYNC(realvp, FNODSYNC, cr, NULL);
+			if (fop_realvp(vp, &realvp, NULL) == 0)
+				(void) fop_fsync(realvp, FNODSYNC, cr, NULL);
 			else
-				(void) VOP_FSYNC(vp, FNODSYNC, cr, NULL);
+				(void) fop_fsync(vp, FNODSYNC, cr, NULL);
 			VN_RELE(vp);
 		}
 
@@ -1904,7 +1904,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(dvp, 0, cr, NULL);
+	(void) fop_fsync(dvp, 0, cr, NULL);
 
 out:
 
@@ -1958,7 +1958,7 @@ rfs_remove(struct nfsdiropargs *da, enum nfsstat *status,
 	/*
 	 * Check for a conflict with a non-blocking mandatory share reservation.
 	 */
-	error = VOP_LOOKUP(vp, da->da_name, &targvp, NULL, 0,
+	error = fop_lookup(vp, da->da_name, &targvp, NULL, 0,
 	    NULL, cr, NULL, NULL, NULL);
 	if (error != 0) {
 		VN_RELE(vp);
@@ -1990,12 +1990,12 @@ rfs_remove(struct nfsdiropargs *da, enum nfsstat *status,
 		}
 	}
 
-	error = VOP_REMOVE(vp, da->da_name, cr, NULL, 0);
+	error = fop_remove(vp, da->da_name, cr, NULL, 0);
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, 0, cr, NULL);
+	(void) fop_fsync(vp, 0, cr, NULL);
 
 out:
 	if (in_crit)
@@ -2087,7 +2087,7 @@ rfs_rename(struct nfsrnmargs *args, enum nfsstat *status,
 	/*
 	 * Check for a conflict with a non-blocking mandatory share reservation.
 	 */
-	error = VOP_LOOKUP(fromvp, args->rna_from.da_name, &srcvp, NULL, 0,
+	error = fop_lookup(fromvp, args->rna_from.da_name, &srcvp, NULL, 0,
 	    NULL, cr, NULL, NULL, NULL);
 	if (error != 0) {
 		VN_RELE(tovp);
@@ -2109,7 +2109,7 @@ rfs_rename(struct nfsrnmargs *args, enum nfsstat *status,
 	/* Check for delegation on the file being renamed over, if it exists */
 
 	if (rfs4_deleg_policy != SRV_NEVER_DELEGATE &&
-	    VOP_LOOKUP(tovp, args->rna_to.da_name, &targvp, NULL, 0, NULL, cr,
+	    fop_lookup(tovp, args->rna_to.da_name, &targvp, NULL, 0, NULL, cr,
 	    NULL, NULL, NULL) == 0) {
 
 		if (rfs4_check_delegated(FWRITE, targvp, TRUE)) {
@@ -2133,7 +2133,7 @@ rfs_rename(struct nfsrnmargs *args, enum nfsstat *status,
 		}
 	}
 
-	error = VOP_RENAME(fromvp, args->rna_from.da_name,
+	error = fop_rename(fromvp, args->rna_from.da_name,
 	    tovp, args->rna_to.da_name, cr, NULL, 0);
 
 	if (error == 0)
@@ -2143,8 +2143,8 @@ rfs_rename(struct nfsrnmargs *args, enum nfsstat *status,
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(tovp, 0, cr, NULL);
-	(void) VOP_FSYNC(fromvp, 0, cr, NULL);
+	(void) fop_fsync(tovp, 0, cr, NULL);
+	(void) fop_fsync(fromvp, 0, cr, NULL);
 
 out:
 	if (in_crit)
@@ -2228,13 +2228,13 @@ rfs_link(struct nfslinkargs *args, enum nfsstat *status,
 		return;
 	}
 
-	error = VOP_LINK(tovp, fromvp, args->la_to.da_name, cr, NULL, 0);
+	error = fop_link(tovp, fromvp, args->la_to.da_name, cr, NULL, 0);
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(tovp, 0, cr, NULL);
-	(void) VOP_FSYNC(fromvp, FNODSYNC, cr, NULL);
+	(void) fop_fsync(tovp, 0, cr, NULL);
+	(void) fop_fsync(fromvp, FNODSYNC, cr, NULL);
 
 	VN_RELE(tovp);
 	VN_RELE(fromvp);
@@ -2310,23 +2310,23 @@ rfs_symlink(struct nfsslargs *args, enum nfsstat *status,
 	va.va_type = VLNK;
 	va.va_mask |= AT_TYPE;
 
-	error = VOP_SYMLINK(vp, args->sla_from.da_name, &va, name, cr, NULL, 0);
+	error = fop_symlink(vp, args->sla_from.da_name, &va, name, cr, NULL, 0);
 
 	/*
 	 * Force new data and metadata out to stable storage.
 	 */
-	lerror = VOP_LOOKUP(vp, args->sla_from.da_name, &svp, NULL, 0,
+	lerror = fop_lookup(vp, args->sla_from.da_name, &svp, NULL, 0,
 	    NULL, cr, NULL, NULL, NULL);
 
 	if (!lerror) {
-		(void) VOP_FSYNC(svp, 0, cr, NULL);
+		(void) fop_fsync(svp, 0, cr, NULL);
 		VN_RELE(svp);
 	}
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, 0, cr, NULL);
+	(void) fop_fsync(vp, 0, cr, NULL);
 
 	VN_RELE(vp);
 
@@ -2393,7 +2393,7 @@ rfs_mkdir(struct nfscreatargs *args, struct nfsdiropres *dr,
 	va.va_type = VDIR;
 	va.va_mask |= AT_TYPE;
 
-	error = VOP_MKDIR(vp, name, &va, &dvp, cr, NULL, 0, NULL);
+	error = fop_mkdir(vp, name, &va, &dvp, cr, NULL, 0, NULL);
 
 	if (!error) {
 		/*
@@ -2401,7 +2401,7 @@ rfs_mkdir(struct nfscreatargs *args, struct nfsdiropres *dr,
 		 * be returned to the client.
 		 */
 		va.va_mask = AT_ALL; /* We want everything */
-		error = VOP_GETATTR(dvp, &va, 0, cr, NULL);
+		error = fop_getattr(dvp, &va, 0, cr, NULL);
 
 		/* check for overflows */
 		if (!error) {
@@ -2414,14 +2414,14 @@ rfs_mkdir(struct nfscreatargs *args, struct nfsdiropres *dr,
 		/*
 		 * Force new data and metadata out to stable storage.
 		 */
-		(void) VOP_FSYNC(dvp, 0, cr, NULL);
+		(void) fop_fsync(dvp, 0, cr, NULL);
 		VN_RELE(dvp);
 	}
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, 0, cr, NULL);
+	(void) fop_fsync(vp, 0, cr, NULL);
 
 	VN_RELE(vp);
 
@@ -2467,7 +2467,7 @@ rfs_rmdir(struct nfsdiropargs *da, enum nfsstat *status,
 	}
 
 	/*
-	 * VOP_RMDIR takes a third argument (the current
+	 * fop_rmdir takes a third argument (the current
 	 * directory of the process).  That's because someone
 	 * wants to return EINVAL if one tries to remove ".".
 	 * Of course, NFS servers have no idea what their
@@ -2475,12 +2475,12 @@ rfs_rmdir(struct nfsdiropargs *da, enum nfsstat *status,
 	 * supplying a vnode known to exist and illegal to
 	 * remove.
 	 */
-	error = VOP_RMDIR(vp, da->da_name, rootdir, cr, NULL, 0);
+	error = fop_rmdir(vp, da->da_name, rootdir, cr, NULL, 0);
 
 	/*
 	 * Force modified data and metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, 0, cr, NULL);
+	(void) fop_fsync(vp, 0, cr, NULL);
 
 	VN_RELE(vp);
 
@@ -2531,9 +2531,9 @@ rfs_readdir(struct nfsrddirargs *rda, struct nfsrddirres *rd,
 		return;
 	}
 
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_FALSE, NULL);
+	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, NULL);
 
-	error = VOP_ACCESS(vp, VREAD, 0, cr, NULL);
+	error = fop_access(vp, VREAD, 0, cr, NULL);
 
 	if (error) {
 		rd->rd_entries = NULL;
@@ -2570,7 +2570,7 @@ rfs_readdir(struct nfsrddirargs *rda, struct nfsrddirres *rd,
 	/*
 	 * read directory
 	 */
-	error = VOP_READDIR(vp, &uio, cr, &iseof, NULL, 0);
+	error = fop_readdir(vp, &uio, cr, &iseof, NULL, 0);
 
 	/*
 	 * Clean up
@@ -2616,7 +2616,7 @@ rfs_readdir(struct nfsrddirargs *rda, struct nfsrddirres *rd,
 	}
 
 bad:
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, NULL);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
 
 #if 0 /* notyet */
 	/*
@@ -2627,7 +2627,7 @@ bad:
 	/*
 	 * Force modified metadata out to stable storage.
 	 */
-	(void) VOP_FSYNC(vp, FNODSYNC, cr, NULL);
+	(void) fop_fsync(vp, FNODSYNC, cr, NULL);
 #endif
 
 	VN_RELE(vp);
@@ -2883,7 +2883,7 @@ acl_perm(struct vnode *vp, struct exportinfo *exi, struct vattr *va, cred_t *cr)
 
 	/* dont care default acl */
 	vsa.vsa_mask = (VSA_ACL | VSA_ACLCNT);
-	error = VOP_GETSECATTR(vp, &vsa, 0, cr, NULL);
+	error = fop_getsecattr(vp, &vsa, 0, cr, NULL);
 
 	if (!error) {
 		aclcnt = vsa.vsa_aclcnt;

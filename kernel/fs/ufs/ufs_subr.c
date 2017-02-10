@@ -468,7 +468,7 @@ ufs_syncip(struct inode *ip, int flags, int waitfor, top_t topid)
 	if (ufsvfsp == NULL)
 		return (EIO);
 	/*
-	 * don't need to VOP_PUTPAGE if there are no pages
+	 * don't need to fop_putpage if there are no pages
 	 */
 	if (!vn_has_cached_data(vp) || vp->v_type == VCHR) {
 		error = 0;
@@ -486,7 +486,7 @@ ufs_syncip(struct inode *ip, int flags, int waitfor, top_t topid)
 			TRANS_BEGIN_ASYNC(ufsvfsp, TOP_PUTPAGE,
 			    TOP_PUTPAGE_SIZE(ip));
 		}
-		error = VOP_PUTPAGE(vp, (offset_t)0, (size_t)0,
+		error = fop_putpage(vp, (offset_t)0, (size_t)0,
 		    flags, CRED(), NULL);
 		if (dotrans) {
 			TRANS_END_ASYNC(ufsvfsp, TOP_PUTPAGE,

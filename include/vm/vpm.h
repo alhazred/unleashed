@@ -86,7 +86,7 @@ extern "C" {
  * The 'vmlsz' is the size(# elements) of the 'vml' array.
  *
  * When the 'fetchpage' flag is set, the vnode(file) pages will be fetched
- * (calls VOP_GETPAGE) from the backing store(disk) if not found in the
+ * (calls fop_getpage) from the backing store(disk) if not found in the
  * system page cache. If 'fetchpage == 0', the vnode(file) pages for the
  * given offset will be just created if they are not already present in the
  * system page cache. The 'newpagecreated' flag is set on return if new pages
@@ -168,7 +168,7 @@ extern "C" {
  *					 size_t len, uint_t flags)
  *
  * This function can be called to flush or sync the vnode(file) pages that
- * have been accessed. It will call VOP_PUTPAGE().
+ * have been accessed. It will call fop_putpage().
  *
  * For the given vnode, off and len the pages covering the range
  * [off, off + len) are flushed. Currently it uses the same flags that

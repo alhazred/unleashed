@@ -380,7 +380,7 @@ write_elfnotes(proc_t *p, int sig, vnode_t *vp, offset_t offset,
 		(void) vnodetopath(vroot, fvp, fdinfo.pr_path,
 		    sizeof (fdinfo.pr_path), credp);
 
-		if (VOP_GETATTR(fvp, &vattr, 0, credp, NULL) != 0) {
+		if (fop_getattr(fvp, &vattr, 0, credp, NULL) != 0) {
 			/*
 			 * Try to write at least a subset of information
 			 */

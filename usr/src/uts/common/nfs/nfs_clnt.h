@@ -168,7 +168,7 @@ struct nfs_async_reqs {
 /*
  * Due to the way the address space callbacks are used to execute a delmap,
  * we must keep track of how many times the same thread has called
- * VOP_DELMAP()->nfs_delmap()/nfs3_delmap().  This is done by having a list of
+ * fop_delmap()->nfs_delmap()/nfs3_delmap().  This is done by having a list of
  * nfs_delmapcall_t's associated with each rnode_t.  This list is protected
  * by the rnode_t's r_statelock.  The individual elements do not need to be
  * protected as they will only ever be created, modified and destroyed by

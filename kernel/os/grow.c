@@ -674,7 +674,7 @@ smmap_common(caddr_t *addrp, size_t len,
 	}
 	/*
 	 * Check for bad lengths and file position.
-	 * We let the VOP_MAP routine check for negative lengths
+	 * We let the fop_map routine check for negative lengths
 	 * since on some vnode types this might be appropriate.
 	 */
 	if (len == 0 || (pos & (u_offset_t)PAGEOFFSET) != 0)
@@ -805,7 +805,7 @@ smmap_common(caddr_t *addrp, size_t len,
 	/*
 	 * Ok, now let the vnode map routine do its thing to set things up.
 	 */
-	error = VOP_MAP(vp, pos, as,
+	error = fop_map(vp, pos, as,
 	    addrp, len, uprot, maxprot, flags, fp->f_cred, NULL);
 
 	if (error == 0) {

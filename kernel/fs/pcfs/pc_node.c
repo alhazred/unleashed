@@ -204,7 +204,7 @@ syncpcp(struct pcnode *pcp, int flags)
 	if (!vn_has_cached_data(PCTOV(pcp)))
 		err = 0;
 	else
-		err = VOP_PUTPAGE(PCTOV(pcp), 0, 0, flags,
+		err = fop_putpage(PCTOV(pcp), 0, 0, flags,
 		    kcred, NULL);
 
 	return (err);

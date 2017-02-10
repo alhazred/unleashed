@@ -1353,7 +1353,7 @@ nvf_close(int fdes)
 		return (-1);
 	vp = fp->f_vnode;
 
-	(void) VOP_CLOSE(vp, fp->f_flag, 1, 0, kcred, NULL);
+	(void) fop_close(vp, fp->f_flag, 1, 0, kcred, NULL);
 	VN_RELE(vp);
 	/*
 	 * unfalloc which is called from here will do a mutex_exit

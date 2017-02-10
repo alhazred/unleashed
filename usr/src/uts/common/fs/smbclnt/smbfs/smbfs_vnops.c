@@ -1394,7 +1394,7 @@ smbfs_inactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 	 * Defend against the possibility that higher-level callers
 	 * might not correctly balance open and close calls.  If we
 	 * get here with open references remaining, it means there
-	 * was a missing VOP_CLOSE somewhere.  If that happens, do
+	 * was a missing fop_close somewhere.  If that happens, do
 	 * the close here so we don't "leak" FIDs on the server.
 	 *
 	 * Exclusive lock for modifying n_fid stuff.
@@ -2847,15 +2847,15 @@ out:
 
 
 /*
- * The pair of functions VOP_RWLOCK, VOP_RWUNLOCK
+ * The pair of functions fop_rwlock, fop_rwunlock
  * are optional functions that are called by:
- *    getdents, before/after VOP_READDIR
- *    pread, before/after ... VOP_READ
- *    pwrite, before/after ... VOP_WRITE
+ *    getdents, before/after fop_readdir
+ *    pread, before/after ... fop_read
+ *    pwrite, before/after ... fop_write
  *    (other places)
  *
  * Careful here: None of the above check for any
- * error returns from VOP_RWLOCK / VOP_RWUNLOCK!
+ * error returns from fop_rwlock / fop_rwunlock!
  * In fact, the return value from _rwlock is NOT
  * an error code, but V_WRITELOCK_TRUE / _FALSE.
  *

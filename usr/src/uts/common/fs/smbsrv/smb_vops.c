@@ -172,7 +172,7 @@ smb_vop_init(void)
 	 * The caller_context will be used primarily for range locking.
 	 * Since the CIFS server is mapping its locks to POSIX locks,
 	 * only one pid is used for operations originating from the
-	 * CIFS server (to represent CIFS in the VOP_FRLOCK routines).
+	 * CIFS server (to represent CIFS in the fop_frlock routines).
 	 *
 	 * XXX: Should smb_ct be per-zone?
 	 */
@@ -211,18 +211,18 @@ smb_vop_fini(void)
  * The smb_ct will be used primarily for range locking.
  * Since the CIFS server is mapping its locks to POSIX locks,
  * only one pid is used for operations originating from the
- * CIFS server (to represent CIFS in the VOP_FRLOCK routines).
+ * CIFS server (to represent CIFS in the fop_frlock routines).
  */
 int
 smb_vop_open(vnode_t **vpp, int mode, cred_t *cred)
 {
-	return (VOP_OPEN(vpp, mode, cred, &smb_ct));
+	return (fop_open(vpp, mode, cred, &smb_ct));
 }
 
 void
 smb_vop_close(vnode_t *vp, int mode, cred_t *cred)
 {
-	(void) VOP_CLOSE(vp, mode, 1, (offset_t)0, cred, &smb_ct);
+	(void) fop_close(vp, mode, 1, (offset_t)0, cred, &smb_ct);
 }
 
 int
@@ -254,9 +254,9 @@ smb_vop_read(vnode_t *vp, uio_t *uiop, cred_t *cr)
 {
 	int error;
 
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_FALSE, &smb_ct);
-	error = VOP_READ(vp, uiop, 0, cr, &smb_ct);
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &smb_ct);
+	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, &smb_ct);
+	error = fop_read(vp, uiop, 0, cr, &smb_ct);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, &smb_ct);
 	return (error);
 }
 
@@ -270,9 +270,9 @@ smb_vop_write(vnode_t *vp, uio_t *uiop, int ioflag, uint32_t *lcount,
 
 	uiop->uio_llimit = MAXOFFSET_T;
 
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_TRUE, &smb_ct);
-	error = VOP_WRITE(vp, uiop, ioflag, cr, &smb_ct);
-	VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, &smb_ct);
+	(void) fop_rwlock(vp, V_WRITELOCK_TRUE, &smb_ct);
+	error = fop_write(vp, uiop, ioflag, cr, &smb_ct);
+	fop_rwunlock(vp, V_WRITELOCK_TRUE, &smb_ct);
 
 	*lcount -= uiop->uio_resid;
 
@@ -283,7 +283,7 @@ smb_vop_write(vnode_t *vp, uio_t *uiop, int ioflag, uint32_t *lcount,
  * smb_vop_getattr()
  *
  * smb_fsop_getattr()/smb_vop_getattr() should always be called from the CIFS
- * service (instead of calling VOP_GETATTR directly) to retrieve attributes
+ * service (instead of calling fop_getattr directly) to retrieve attributes
  * due to special processing needed for streams files.
  *
  * All attributes are retrieved.
@@ -298,7 +298,7 @@ smb_vop_write(vnode_t *vp, uio_t *uiop, int ioflag, uint32_t *lcount,
  *
  * File systems without VFSFT_XVATTR do not support DOS attributes or create
  * time (crtime). In this case the mtime is used as the crtime.
- * Likewise if VOP_GETATTR doesn't return any system attributes the dosattr
+ * Likewise if fop_getattr doesn't return any system attributes the dosattr
  * is 0 and the mtime is used as the crtime.
  */
 int
@@ -333,7 +333,7 @@ smb_vop_getattr(vnode_t *vp, vnode_t *unnamed_vp, smb_attr_t *ret_attr,
 		XVA_SET_REQ(&tmp_xvattr, XAT_OFFLINE);
 		XVA_SET_REQ(&tmp_xvattr, XAT_SPARSE);
 
-		error = VOP_GETATTR(use_vp, &tmp_xvattr.xva_vattr, flags,
+		error = fop_getattr(use_vp, &tmp_xvattr.xva_vattr, flags,
 		    cr, &smb_ct);
 		if (error != 0)
 			return (error);
@@ -393,7 +393,7 @@ smb_vop_getattr(vnode_t *vp, vnode_t *unnamed_vp, smb_attr_t *ret_attr,
 		smb_sa_to_va_mask(ret_attr->sa_mask,
 		    &ret_attr->sa_vattr.va_mask);
 
-		error = VOP_GETATTR(use_vp, &ret_attr->sa_vattr,
+		error = fop_getattr(use_vp, &ret_attr->sa_vattr,
 		    flags, cr, &smb_ct);
 		if (error != 0)
 			return (error);
@@ -408,7 +408,7 @@ smb_vop_getattr(vnode_t *vp, vnode_t *unnamed_vp, smb_attr_t *ret_attr,
 		if (ret_attr->sa_mask & (SMB_AT_SIZE | SMB_AT_NBLOCKS)) {
 			tmp_attr.sa_vattr.va_mask = AT_SIZE | AT_NBLOCKS;
 
-			error = VOP_GETATTR(vp, &tmp_attr.sa_vattr,
+			error = fop_getattr(vp, &tmp_attr.sa_vattr,
 			    flags, cr, &smb_ct);
 			if (error != 0)
 				return (error);
@@ -429,7 +429,7 @@ smb_vop_getattr(vnode_t *vp, vnode_t *unnamed_vp, smb_attr_t *ret_attr,
  * smb_vop_setattr()
  *
  * smb_fsop_setattr()/smb_vop_setattr() should always be used instead of
- * VOP_SETATTR() when calling from the CIFS service, due to special processing
+ * fop_setattr() when calling from the CIFS service, due to special processing
  * for streams files.
  *
  * Streams have a size but otherwise do not have separate attributes from
@@ -487,12 +487,12 @@ smb_vop_setattr(vnode_t *vp, vnode_t *unnamed_vp, smb_attr_t *attr,
 		vap = &attr->sa_vattr;
 	}
 
-	if ((error = VOP_SETATTR(use_vp, vap, flags, cr, &smb_ct)) != 0)
+	if ((error = fop_setattr(use_vp, vap, flags, cr, &smb_ct)) != 0)
 		return (error);
 
 	if (at_size) {
 		attr->sa_vattr.va_mask = AT_SIZE;
-		error = VOP_SETATTR(vp, &attr->sa_vattr, flags,
+		error = fop_setattr(vp, &attr->sa_vattr, flags,
 		    zone_kcred(), &smb_ct);
 	}
 
@@ -505,7 +505,7 @@ smb_vop_space(vnode_t *vp, int cmd, flock64_t *bfp, int flags,
 {
 	int error;
 
-	error = VOP_SPACE(vp, cmd, bfp, flags, offset, cr, &smb_ct);
+	error = fop_space(vp, cmd, bfp, flags, offset, cr, &smb_ct);
 
 	return (error);
 }
@@ -513,7 +513,7 @@ smb_vop_space(vnode_t *vp, int cmd, flock64_t *bfp, int flags,
 /*
  * smb_vop_access
  *
- * This is a wrapper round VOP_ACCESS. VOP_ACCESS checks the given mode
+ * This is a wrapper round fop_access. fop_access checks the given mode
  * against file's ACL or Unix permissions. CIFS on the other hand needs to
  * know if the requested operation can succeed for the given object, this
  * requires more checks in case of DELETE bit since permissions on the parent
@@ -531,7 +531,7 @@ smb_vop_access(vnode_t *vp, int mode, int flags, vnode_t *dir_vp, cred_t *cr)
 
 	if ((flags == V_ACE_MASK) && (mode & ACE_DELETE)) {
 		if (dir_vp) {
-			error = VOP_ACCESS(dir_vp, ACE_DELETE_CHILD, flags,
+			error = fop_access(dir_vp, ACE_DELETE_CHILD, flags,
 			    cr, NULL);
 
 			if (error == 0)
@@ -540,7 +540,7 @@ smb_vop_access(vnode_t *vp, int mode, int flags, vnode_t *dir_vp, cred_t *cr)
 	}
 
 	if (mode) {
-		error = VOP_ACCESS(vp, mode, flags, cr, NULL);
+		error = fop_access(vp, mode, flags, cr, NULL);
 	}
 
 	return (error);
@@ -558,7 +558,7 @@ smb_vop_access(vnode_t *vp, int mode, int flags, vnode_t *dir_vp, cred_t *cr)
  * rootvp:	vnode of the tree root (in)
  *		This parameter is always passed in non-NULL except at the time
  *		of share set up.
- * direntflags:	dirent flags returned from VOP_LOOKUP
+ * direntflags:	dirent flags returned from fop_lookup
  */
 int
 smb_vop_lookup(
@@ -620,7 +620,7 @@ smb_vop_lookup(
 
 	pn_alloc(&rpn);
 
-	error = VOP_LOOKUP(dvp, np, vpp, NULL, option_flags, NULL, cr,
+	error = fop_lookup(dvp, np, vpp, NULL, option_flags, NULL, cr,
 	    &smb_ct, direntflags, &rpn);
 
 	if (error == 0) {
@@ -675,7 +675,7 @@ smb_vop_create(vnode_t *dvp, char *name, smb_attr_t *attr, vnode_t **vpp,
 			return (EILSEQ);
 	}
 
-	error = VOP_CREATE(dvp, np, vap, EXCL, attr->sa_vattr.va_mode,
+	error = fop_create(dvp, np, vap, EXCL, attr->sa_vattr.va_mode,
 	    vpp, cr, option_flags, &smb_ct, vsap);
 
 	return (error);
@@ -695,7 +695,7 @@ smb_vop_remove(vnode_t *dvp, char *name, int flags, cred_t *cr)
 	if (flags & SMB_CATIA)
 		np = smb_vop_catia_v5tov4(name, namebuf, sizeof (namebuf));
 
-	error = VOP_REMOVE(dvp, np, cr, &smb_ct, option_flags);
+	error = fop_remove(dvp, np, cr, &smb_ct, option_flags);
 
 	return (error);
 }
@@ -724,12 +724,12 @@ smb_vop_link(vnode_t *to_dvp, vnode_t *from_vp, char *to_name,
 			return (EILSEQ);
 		}
 
-		rc = VOP_LINK(to_dvp, from_vp, np, cr, &smb_ct, option_flags);
+		rc = fop_link(to_dvp, from_vp, np, cr, &smb_ct, option_flags);
 		kmem_free(buf, MAXNAMELEN);
 		return (rc);
 	}
 
-	rc = VOP_LINK(to_dvp, from_vp, to_name, cr, &smb_ct, option_flags);
+	rc = fop_link(to_dvp, from_vp, to_name, cr, &smb_ct, option_flags);
 	return (rc);
 }
 
@@ -760,7 +760,7 @@ smb_vop_rename(vnode_t *from_dvp, char *from_name, vnode_t *to_dvp,
 		fbuf = kmem_zalloc(MAXNAMELEN, KM_SLEEP);
 		from = smb_vop_catia_v5tov4(from_name, fbuf, MAXNAMELEN);
 
-		error = VOP_RENAME(from_dvp, from, to_dvp, to, cr,
+		error = fop_rename(from_dvp, from, to_dvp, to, cr,
 		    &smb_ct, option_flags);
 
 		kmem_free(tbuf, MAXNAMELEN);
@@ -768,7 +768,7 @@ smb_vop_rename(vnode_t *from_dvp, char *from_name, vnode_t *to_dvp,
 		return (error);
 	}
 
-	error = VOP_RENAME(from_dvp, from_name, to_dvp, to_name, cr,
+	error = fop_rename(from_dvp, from_name, to_dvp, to_name, cr,
 	    &smb_ct, option_flags);
 
 	return (error);
@@ -804,7 +804,7 @@ smb_vop_mkdir(vnode_t *dvp, char *name, smb_attr_t *attr, vnode_t **vpp,
 			return (EILSEQ);
 	}
 
-	error = VOP_MKDIR(dvp, np, vap, vpp, cr, &smb_ct, option_flags, vsap);
+	error = fop_mkdir(dvp, np, vap, vpp, cr, &smb_ct, option_flags, vsap);
 
 	return (error);
 }
@@ -815,7 +815,7 @@ smb_vop_mkdir(vnode_t *dvp, char *name, smb_attr_t *attr, vnode_t **vpp,
  * Only simple rmdir supported, consistent with NT semantics
  * (can only remove an empty directory).
  *
- * The third argument to VOP_RMDIR  is the current directory of
+ * The third argument to fop_rmdir  is the current directory of
  * the process.  It allows rmdir wants to EINVAL if one tries to
  * remove ".".  Since SMB servers do not know what their clients'
  * current directories are, we fake it by supplying a vnode known
@@ -835,14 +835,14 @@ smb_vop_rmdir(vnode_t *dvp, char *name, int flags, cred_t *cr)
 	if (flags & SMB_CATIA)
 		np = smb_vop_catia_v5tov4(name, namebuf, sizeof (namebuf));
 
-	error = VOP_RMDIR(dvp, np, rootdir, cr, &smb_ct, option_flags);
+	error = fop_rmdir(dvp, np, rootdir, cr, &smb_ct, option_flags);
 	return (error);
 }
 
 int
 smb_vop_commit(vnode_t *vp, cred_t *cr)
 {
-	return (VOP_FSYNC(vp, 1, cr, &smb_ct));
+	return (fop_fsync(vp, 1, cr, &smb_ct));
 }
 
 /*
@@ -993,9 +993,9 @@ smb_vop_readdir(vnode_t *vp, uint32_t offset,
 	auio.uio_resid = *count;
 	auio.uio_fmode = 0;
 
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_FALSE, &smb_ct);
-	error = VOP_READDIR(vp, &auio, cr, eof, &smb_ct, flags);
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, &smb_ct);
+	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, &smb_ct);
+	error = fop_readdir(vp, &auio, cr, eof, &smb_ct, flags);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, &smb_ct);
 
 	if (error == 0)
 		*count = *count - auio.uio_resid;
@@ -1142,7 +1142,7 @@ smb_vop_lookup_xattrdir(vnode_t *fvp, vnode_t **xattrdirvpp, int flags,
 {
 	int error;
 
-	error = VOP_LOOKUP(fvp, "", xattrdirvpp, NULL, flags, NULL, cr,
+	error = fop_lookup(fvp, "", xattrdirvpp, NULL, flags, NULL, cr,
 	    &smb_ct, NULL, NULL);
 	return (error);
 }
@@ -1218,7 +1218,7 @@ smb_vop_acl_read(vnode_t *vp, acl_t **aclp, int flags, acl_type_t acl_type,
 		return (EINVAL);
 	}
 
-	if (error = VOP_GETSECATTR(vp, &vsecattr, flags, cr, &smb_ct))
+	if (error = fop_getsecattr(vp, &vsecattr, flags, cr, &smb_ct))
 		return (error);
 
 	*aclp = smb_fsacl_from_vsa(&vsecattr, acl_type);
@@ -1246,9 +1246,9 @@ smb_vop_acl_write(vnode_t *vp, acl_t *aclp, int flags, cred_t *cr)
 	error = smb_fsacl_to_vsa(aclp, &vsecattr, &aclbsize);
 
 	if (error == 0) {
-		(void) VOP_RWLOCK(vp, V_WRITELOCK_TRUE, &smb_ct);
-		error = VOP_SETSECATTR(vp, &vsecattr, flags, cr, &smb_ct);
-		VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, &smb_ct);
+		(void) fop_rwlock(vp, V_WRITELOCK_TRUE, &smb_ct);
+		error = fop_setsecattr(vp, &vsecattr, flags, cr, &smb_ct);
+		fop_rwunlock(vp, V_WRITELOCK_TRUE, &smb_ct);
 	}
 
 	if (aclbsize && vsecattr.vsa_aclentp)
@@ -1269,7 +1269,7 @@ smb_vop_acl_type(vnode_t *vp)
 	int error;
 	ulong_t whichacl;
 
-	error = VOP_PATHCONF(vp, _PC_ACL_ENABLED, &whichacl,
+	error = fop_pathconf(vp, _PC_ACL_ENABLED, &whichacl,
 	    zone_kcred(), NULL);
 	if (error != 0) {
 		/*
@@ -1286,11 +1286,11 @@ smb_vop_acl_type(vnode_t *vp)
 		 * If the file system supports neither ACE nor
 		 * ACLENT ACLs we will fall back to UFS-style ACLs
 		 * like we did above if there was an error upon
-		 * calling VOP_PATHCONF.
+		 * calling fop_pathconf.
 		 *
 		 * ACE and ACLENT type ACLs are the only interfaces
 		 * supported thus far.  If any other bits are set on
-		 * 'whichacl' upon return from VOP_PATHCONF, we will
+		 * 'whichacl' upon return from fop_pathconf, we will
 		 * ignore them.
 		 */
 		whichacl = _ACL_ACLENT_ENABLED;
@@ -1416,7 +1416,7 @@ smb_vop_shrlock(vnode_t *vp, uint32_t uniq_fid, uint32_t desired_access,
 	shr_own.sl_id = shr.s_sysid;
 	shr_own.sl_pid = shr.s_pid;
 
-	return (VOP_SHRLOCK(vp, cmd, &shr, flag, cr, NULL));
+	return (fop_shrlock(vp, cmd, &shr, flag, cr, NULL));
 }
 
 int
@@ -1445,7 +1445,7 @@ smb_vop_unshrlock(vnode_t *vp, uint32_t uniq_fid, cred_t *cr)
 	shr_own.sl_id = shr.s_sysid;
 	shr_own.sl_pid = shr.s_pid;
 
-	return (VOP_SHRLOCK(vp, F_UNSHARE, &shr, 0, cr, NULL));
+	return (fop_shrlock(vp, F_UNSHARE, &shr, 0, cr, NULL));
 }
 
 int
@@ -1456,7 +1456,7 @@ smb_vop_frlock(vnode_t *vp, cred_t *cr, int flag, flock64_t *bf)
 
 	flk_init_callback(&flk_cb, smb_lock_frlock_callback, NULL);
 
-	return (VOP_FRLOCK(vp, cmd, bf, flag, 0, &flk_cb, cr, &smb_ct));
+	return (fop_frlock(vp, cmd, bf, flag, 0, &flk_cb, cr, &smb_ct));
 }
 
 static callb_cpr_t *

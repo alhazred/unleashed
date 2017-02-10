@@ -761,7 +761,7 @@ ldi_open_by_vp(vnode_t **vpp, int flag, cred_t *cr,
 		return (ENXIO);
 
 	/* open the device */
-	if ((err = VOP_OPEN(&vp, flag | FKLYR, cr, NULL)) != 0)
+	if ((err = fop_open(&vp, flag | FKLYR, cr, NULL)) != 0)
 		return (err);
 
 	/* possible clone open, make sure that we still have a spec node */
@@ -1713,7 +1713,7 @@ ldi_close(ldi_handle_t lh, int flag, cred_t *cr)
 #endif
 
 	/* do a layered close on the device */
-	err = VOP_CLOSE(handlep->lh_vp, flag | FKLYR, 1, (offset_t)0, cr, NULL);
+	err = fop_close(handlep->lh_vp, flag | FKLYR, 1, (offset_t)0, cr, NULL);
 
 	LDI_OPENCLOSE((CE_WARN, "%s: lh=0x%p", "ldi close", (void *)lh));
 

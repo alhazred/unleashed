@@ -135,7 +135,7 @@ segmf_create(struct seg *seg, void *args)
 		data->map[i].t_type = SEGMF_MAP_EMPTY;
 	}
 
-	error = VOP_ADDMAP(VTOCVP(data->vp), 0, as, seg->s_base, seg->s_size,
+	error = fop_addmap(VTOCVP(data->vp), 0, as, seg->s_base, seg->s_size,
 	    data->prot, data->maxprot, MAP_SHARED, CRED(), NULL);
 
 	if (error != 0)
@@ -167,7 +167,7 @@ segmf_dup(struct seg *seg, struct seg *newseg)
 	ndata->map = kmem_alloc(sz, KM_SLEEP);
 	bcopy(data->map, ndata->map, sz);
 
-	return (VOP_ADDMAP(VTOCVP(ndata->vp), 0, newseg->s_as,
+	return (fop_addmap(VTOCVP(ndata->vp), 0, newseg->s_as,
 	    newseg->s_base, newseg->s_size, ndata->prot, ndata->maxprot,
 	    MAP_SHARED, CRED(), NULL));
 }
@@ -196,7 +196,7 @@ segmf_unmap(struct seg *seg, caddr_t addr, size_t len)
 
 	ASSERT(data->vp != NULL);
 
-	(void) VOP_DELMAP(VTOCVP(data->vp), off, seg->s_as, addr, len,
+	(void) fop_delmap(VTOCVP(data->vp), off, seg->s_as, addr, len,
 	    data->prot, data->maxprot, MAP_SHARED, CRED(), NULL);
 
 	seg_free(seg);

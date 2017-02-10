@@ -136,7 +136,7 @@ smbfs_purge_caches(struct vnode *vp)
 	 * Flush the page cache.
 	 */
 	if (vn_has_cached_data(vp)) {
-		(void) VOP_PUTPAGE(vp, (u_offset_t)0, 0, B_INVAL, cr, NULL);
+		(void) fop_putpage(vp, (u_offset_t)0, 0, B_INVAL, cr, NULL);
 	}
 #endif	/* not yet */
 }

@@ -53,7 +53,7 @@
 /*
  * ctfs_endpoint_open
  *
- * Called by the VOP_OPEN entry points to perform some common checks
+ * Called by the fop_open entry points to perform some common checks
  * and set up the endpoint listener, if not already done.
  */
 static int
@@ -77,7 +77,7 @@ ctfs_endpoint_open(ctfs_endpoint_t *endpt, ct_equeue_t *q, int flag)
 /*
  * ctfs_endpoint inactive
  *
- * Called by the VOP_INACTIVE entry points to perform common listener
+ * Called by the fop_inactive entry points to perform common listener
  * cleanup.
  */
 static void
@@ -94,7 +94,7 @@ ctfs_endpoint_inactive(ctfs_endpoint_t *endpt)
 /*
  * ctfs_endpoint_ioctl
  *
- * Implements the common VOP_IOCTL handling for the event endpoints.
+ * Implements the common fop_ioctl handling for the event endpoints.
  * rprivchk, if true, indicates that event receive requests should
  * check the provided credentials.  This distinction exists because
  * contract endpoints perform their privilege checks at open-time, and
@@ -142,7 +142,7 @@ ctfs_endpoint_ioctl(ctfs_endpoint_t *endpt, int cmd, intptr_t arg, cred_t *cr,
 /*
  * ctfs_endpoint_poll
  *
- * Called by the VOP_POLL entry points.
+ * Called by the fop_poll entry points.
  */
 static int
 ctfs_endpoint_poll(ctfs_endpoint_t *endpt, short events, int anyyet,
@@ -184,7 +184,7 @@ ctfs_create_evnode(vnode_t *pvp)
 }
 
 /*
- * ctfs_ev_access - VOP_ACCESS entry point
+ * ctfs_ev_access - fop_access entry point
  *
  * You only get to access event files for contracts you or your
  * effective user id owns, unless you have a privilege.
@@ -212,7 +212,7 @@ ctfs_ev_access(
 }
 
 /*
- * ctfs_ev_open - VOP_OPEN entry point
+ * ctfs_ev_open - fop_open entry point
  *
  * Performs the same privilege checks as ctfs_ev_access, and then calls
  * ctfs_endpoint_open to perform the common endpoint initialization.
@@ -236,7 +236,7 @@ ctfs_ev_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *cct)
 }
 
 /*
- * ctfs_ev_inactive - VOP_INACTIVE entry point
+ * ctfs_ev_inactive - fop_inactive entry point
  */
 /* ARGSUSED */
 static void
@@ -259,7 +259,7 @@ ctfs_ev_inactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 }
 
 /*
- * ctfs_ev_getattr - VOP_GETATTR entry point
+ * ctfs_ev_getattr - fop_getattr entry point
  */
 /* ARGSUSED */
 static int
@@ -287,7 +287,7 @@ ctfs_ev_getattr(
 }
 
 /*
- * ctfs_ev_ioctl - VOP_IOCTL entry point
+ * ctfs_ev_ioctl - fop_ioctl entry point
  */
 /* ARGSUSED */
 static int
@@ -307,7 +307,7 @@ ctfs_ev_ioctl(
 }
 
 /*
- * ctfs_ev_poll - VOP_POLL entry point
+ * ctfs_ev_poll - fop_poll entry point
  */
 /*ARGSUSED*/
 static int
@@ -379,7 +379,7 @@ ctfs_create_bundle(vnode_t *pvp)
 }
 
 /*
- * ctfs_bu_open - VOP_OPEN entry point
+ * ctfs_bu_open - fop_open entry point
  */
 /* ARGSUSED */
 static int
@@ -389,7 +389,7 @@ ctfs_bu_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 
 	/*
 	 * This assumes we are only ever called immediately after a
-	 * VOP_LOOKUP.  We could clone ourselves here, but doing so
+	 * fop_lookup.  We could clone ourselves here, but doing so
 	 * would make /proc/pid/fd accesses less useful.
 	 */
 	return (ctfs_endpoint_open(&bunode->ctfs_bu_listener,
@@ -397,7 +397,7 @@ ctfs_bu_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 }
 
 /*
- * ctfs_bu_inactive - VOP_INACTIVE entry point
+ * ctfs_bu_inactive - fop_inactive entry point
  */
 /* ARGSUSED */
 static void
@@ -418,7 +418,7 @@ ctfs_bu_inactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 }
 
 /*
- * ctfs_bu_getattr - VOP_GETATTR entry point
+ * ctfs_bu_getattr - fop_getattr entry point
  */
 /* ARGSUSED */
 static int
@@ -447,7 +447,7 @@ ctfs_bu_getattr(
 }
 
 /*
- * ctfs_bu_ioctl - VOP_IOCTL entry point
+ * ctfs_bu_ioctl - fop_ioctl entry point
  */
 /* ARGSUSED */
 static int
@@ -467,7 +467,7 @@ ctfs_bu_ioctl(
 }
 
 /*
- * ctfs_bu_poll - VOP_POLL entry point
+ * ctfs_bu_poll - fop_poll entry point
  */
 /*ARGSUSED*/
 static int

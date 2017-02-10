@@ -1893,7 +1893,7 @@ vd_flush_write(vd_t *vd)
 	int status, rval;
 
 	if (vd->file) {
-		status = VOP_FSYNC(vd->file_vnode, FSYNC, kcred, NULL);
+		status = fop_fsync(vd->file_vnode, FSYNC, kcred, NULL);
 	} else {
 		status = ldi_ioctl(vd->ldi_handle[0], DKIOCFLUSHWRITECACHE,
 		    NULL, vd->open_flags | FKIOCTL, kcred, &rval);
@@ -6364,9 +6364,9 @@ vd_backend_check_size(vd_t *vd)
 
 		/* file (slice or full disk) */
 		vattr.va_mask = AT_SIZE;
-		rv = VOP_GETATTR(vd->file_vnode, &vattr, 0, kcred, NULL);
+		rv = fop_getattr(vd->file_vnode, &vattr, 0, kcred, NULL);
 		if (rv != 0) {
-			PR0("VOP_GETATTR(%s) = errno %d", vd->device_path, rv);
+			PR0("fop_getattr(%s) = errno %d", vd->device_path, rv);
 			return (rv);
 		}
 		backend_size = vattr.va_size;
@@ -6963,7 +6963,7 @@ vds_destroy_vd(void *arg)
 
 	if (vd->file) {
 		/* Close file */
-		(void) VOP_CLOSE(vd->file_vnode, vd->open_flags, 1,
+		(void) fop_close(vd->file_vnode, vd->open_flags, 1,
 		    0, kcred, NULL);
 		VN_RELE(vd->file_vnode);
 	} else {

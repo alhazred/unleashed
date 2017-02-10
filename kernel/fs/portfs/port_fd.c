@@ -163,14 +163,14 @@ port_cache_lookup_fp(port_fdcache_t *pcp, int fd, file_t *fp)
  * The reactivation also updates the events types to be checked and the
  * attached user pointer.
  * Per port a cache is used to store associated file descriptors.
- * Internally the VOP_POLL interface is used to poll for existing events.
- * The VOP_POLL interface can also deliver a pointer to a pollhead_t structure
+ * Internally the fop_poll interface is used to poll for existing events.
+ * The fop_poll interface can also deliver a pointer to a pollhead_t structure
  * which is used to enqueue polldat_t structures with pending events.
- * If VOP_POLL immediately returns valid events (revents) then those events
+ * If fop_poll immediately returns valid events (revents) then those events
  * will be submitted to the event port with port_send_event().
- * Otherwise VOP_POLL does not return events but it delivers a pointer to a
+ * Otherwise fop_poll does not return events but it delivers a pointer to a
  * pollhead_t structure. In such a case the corresponding file system behind
- * VOP_POLL will use the pollwakeup() function to notify about existing
+ * fop_poll will use the pollwakeup() function to notify about existing
  * events.
  */
 int
@@ -303,23 +303,23 @@ port_associate_fd(port_t *pp, int source, uintptr_t object, int events,
 	mutex_exit(&pkevp->portkev_lock);
 
 	/*
-	 * do VOP_POLL and cache this poll fd.
+	 * do fop_poll and cache this poll fd.
 	 *
 	 * XXX - pollrelock() logic needs to know
 	 * which pollcache lock to grab. It'd be a
 	 * cleaner solution if we could pass pcp as
-	 * an arguement in VOP_POLL interface instead
+	 * an arguement in fop_poll interface instead
 	 * of implicitly passing it using thread_t
-	 * struct. On the other hand, changing VOP_POLL
+	 * struct. On the other hand, changing fop_poll
 	 * interface will require all driver/file system
 	 * poll routine to change.
 	 */
 	curthread->t_pollcache = (pollcache_t *)pcp;
-	error = VOP_POLL(fp->f_vnode, events, 0, &revents, &php, NULL);
+	error = fop_poll(fp->f_vnode, events, 0, &revents, &php, NULL);
 	curthread->t_pollcache = NULL;
 
 	/*
-	 * The pc_lock can get dropped and reaquired in VOP_POLL.
+	 * The pc_lock can get dropped and reaquired in fop_poll.
 	 * In the window pc_lock is dropped another thread in
 	 * port_dissociate can remove the pfd from the port cache
 	 * and free the pfd.
@@ -338,9 +338,9 @@ port_associate_fd(port_t *pp, int source, uintptr_t object, int events,
 	}
 
 	/*
-	 * To keep synchronization between VOP_POLL above and
+	 * To keep synchronization between fop_poll above and
 	 * pollhead_insert below, it is necessary to
-	 * call VOP_POLL() again (see port_bind_pollhead()).
+	 * call fop_poll() again (see port_bind_pollhead()).
 	 */
 	if (error) {
 		goto errout;
@@ -355,7 +355,7 @@ port_associate_fd(port_t *pp, int source, uintptr_t object, int events,
 		 */
 		error = port_bind_pollhead(&php, pdp, &revents);
 		/*
-		 * The pc_lock can get dropped and reaquired in VOP_POLL.
+		 * The pc_lock can get dropped and reaquired in fop_poll.
 		 * In the window pc_lock is dropped another thread in
 		 * port_dissociate can remove the pfd from the port cache
 		 * and free the pfd.
@@ -380,7 +380,7 @@ port_associate_fd(port_t *pp, int source, uintptr_t object, int events,
 
 	/*
 	 * Check if new events where detected and no events have been
-	 * delivered. The revents was already set after the VOP_POLL
+	 * delivered. The revents was already set after the fop_poll
 	 * above or it was updated in port_bind_pollhead().
 	 */
 	mutex_enter(&pkevp->portkev_lock);
@@ -539,12 +539,12 @@ port_bind_pollhead(pollhead_t **php, polldat_t *pdp, short *revents)
 
 	/*
 	 * From now on event notification can be detected in pollwakeup(),
-	 * Use VOP_POLL() again to check the current status of the event.
+	 * Use fop_poll() again to check the current status of the event.
 	 */
 	pdp->pd_php = *php;
 	fp = pdp->pd_fp;
 	curthread->t_pollcache = (pollcache_t *)pdp->pd_pcache;
-	error = VOP_POLL(fp->f_vnode, pdp->pd_events, 0, revents, php, NULL);
+	error = fop_poll(fp->f_vnode, pdp->pd_events, 0, revents, php, NULL);
 	curthread->t_pollcache = NULL;
 	return (error);
 }

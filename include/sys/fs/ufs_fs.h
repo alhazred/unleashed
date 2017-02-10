@@ -745,7 +745,7 @@ struct	ocg {
  * Macros to test and acquire i_rwlock:
  * some vnops hold the target directory's i_rwlock after calling
  * ufs_lockfs_begin but in many other operations (like ufs_readdir)
- * VOP_RWLOCK is explicitly called by the filesystem independent code before
+ * fop_rwlock is explicitly called by the filesystem independent code before
  * calling the file system operation. In these cases the order is reversed
  * (i.e i_rwlock is taken first and then ufs_lockfs_begin is called). This
  * is fine as long as ufs_lockfs_begin acts as a VOP counter but with

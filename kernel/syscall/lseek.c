@@ -112,7 +112,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 
 	case SEEK_END:
 		vattr.va_mask = AT_SIZE;
-		if (error = VOP_GETATTR(vp, &vattr, 0, fp->f_cred, NULL)) {
+		if (error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL)) {
 			goto out;
 		}
 		if (reg && (off  > (max - (offset_t)vattr.va_size))) {
@@ -132,7 +132,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 		 * data past "off"
 		 */
 		noff = (u_offset_t)off;
-		error = VOP_IOCTL(vp, _FIO_SEEK_DATA, (intptr_t)(&noff),
+		error = fop_ioctl(vp, _FIO_SEEK_DATA, (intptr_t)(&noff),
 		    FKIOCTL, kcred, NULL, NULL);
 		if (error) {
 			if (error != ENOTTY)
@@ -142,7 +142,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 			 * "off" is not past the end of file
 			 */
 			vattr.va_mask = AT_SIZE;
-			error = VOP_GETATTR(vp, &vattr, 0, fp->f_cred, NULL);
+			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error)
 				return (error);
 			if (noff >= (u_offset_t)vattr.va_size)
@@ -161,7 +161,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 		 * hole past "off"
 		 */
 		noff = (u_offset_t)off;
-		error = VOP_IOCTL(vp, _FIO_SEEK_HOLE, (intptr_t)(&noff),
+		error = fop_ioctl(vp, _FIO_SEEK_HOLE, (intptr_t)(&noff),
 		    FKIOCTL, kcred, NULL, NULL);
 		if (error) {
 			if (error != ENOTTY)
@@ -171,7 +171,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 			 * the "virtual hole" at the end of the file.
 			 */
 			vattr.va_mask = AT_SIZE;
-			error = VOP_GETATTR(vp, &vattr, 0, fp->f_cred, NULL);
+			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error)
 				return (error);
 			if (off < (offset_t)vattr.va_size)
@@ -193,7 +193,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 
 	ASSERT((reg && noff <= max) || !reg);
 	newoff = (offset_t)noff;
-	if ((error = VOP_SEEK(vp, curoff, &newoff, NULL)) == 0) {
+	if ((error = fop_seek(vp, curoff, &newoff, NULL)) == 0) {
 		fp->f_offset = newoff;
 		(*retoff) = newoff;
 		return (0);
@@ -293,7 +293,7 @@ lseek64(int fdes, off_t off, int stype)
 
 	case SEEK_END:
 		vattr.va_mask = AT_SIZE;
-		if ((error = VOP_GETATTR(vp, &vattr, 0, fp->f_cred, NULL)) != 0)
+		if ((error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL)) != 0)
 			goto lseek64error;
 		new_off += vattr.va_size;
 		break;
@@ -307,7 +307,7 @@ lseek64(int fdes, off_t off, int stype)
 		 * data past "off"
 		 */
 		new_off = (offset_t)off;
-		error = VOP_IOCTL(vp, _FIO_SEEK_DATA, (intptr_t)(&new_off),
+		error = fop_ioctl(vp, _FIO_SEEK_DATA, (intptr_t)(&new_off),
 		    FKIOCTL, kcred, NULL, NULL);
 		if (error) {
 			if (error != ENOTTY) {
@@ -318,7 +318,7 @@ lseek64(int fdes, off_t off, int stype)
 			 * is not past end of file
 			 */
 			vattr.va_mask = AT_SIZE;
-			error = VOP_GETATTR(vp, &vattr, 0, fp->f_cred, NULL);
+			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error)
 				goto lseek64error;
 			if (new_off >= (offset_t)vattr.va_size) {
@@ -336,7 +336,7 @@ lseek64(int fdes, off_t off, int stype)
 		 * hole past "off"
 		 */
 		new_off = off;
-		error = VOP_IOCTL(vp, _FIO_SEEK_HOLE, (intptr_t)(&new_off),
+		error = fop_ioctl(vp, _FIO_SEEK_HOLE, (intptr_t)(&new_off),
 		    FKIOCTL, kcred, NULL, NULL);
 		if (error) {
 			if (error != ENOTTY)
@@ -346,7 +346,7 @@ lseek64(int fdes, off_t off, int stype)
 			 * the "virtual hole" at the end of the file.
 			 */
 			vattr.va_mask = AT_SIZE;
-			error = VOP_GETATTR(vp, &vattr, 0, fp->f_cred, NULL);
+			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error)
 				goto lseek64error;
 			if (off < (offset_t)vattr.va_size) {
@@ -366,7 +366,7 @@ lseek64(int fdes, off_t off, int stype)
 	}
 
 	old_off = fp->f_offset;
-	if ((error = VOP_SEEK(vp, old_off, &new_off, NULL)) == 0) {
+	if ((error = fop_seek(vp, old_off, &new_off, NULL)) == 0) {
 		fp->f_offset = new_off;
 		releasef(fdes);
 		return (new_off);

@@ -917,7 +917,7 @@ sotpi_bindlisten(struct sonode *so, struct sockaddr *name,
 			 * node and the socket node.
 			 */
 
-			if ((VOP_REALVP(vp, &rvp, NULL) == 0) && (vp != rvp)) {
+			if ((fop_realvp(vp, &rvp, NULL) == 0) && (vp != rvp)) {
 				VN_HOLD(rvp);
 				VN_RELE(vp);
 				vp = rvp;
@@ -2001,7 +2001,7 @@ e_disc_unl:
 pr_disc_vp_unl:
 	eprintsoline(so, error);
 disconnect_vp_unlocked:
-	(void) VOP_CLOSE(nvp, 0, 1, 0, cr, NULL);
+	(void) fop_close(nvp, 0, 1, 0, cr, NULL);
 	VN_RELE(nvp);
 disconnect_unlocked:
 	(void) sodisconnect(so, SEQ_number, 0);
@@ -2013,7 +2013,7 @@ disconnect_vp:
 	(void) sodisconnect(so, SEQ_number, _SODISCONNECT_LOCK_HELD);
 	so_unlock_single(so, SOLOCKED);
 	mutex_exit(&so->so_lock);
-	(void) VOP_CLOSE(nvp, 0, 1, 0, cr, NULL);
+	(void) fop_close(nvp, 0, 1, 0, cr, NULL);
 	VN_RELE(nvp);
 	return (error);
 
@@ -5893,14 +5893,14 @@ socktpi_plumbioctl(struct vnode *vp, int cmd, intptr_t arg, int mode,
  * stream head there can never be a deadlock due to holding so_lock across
  * pollwakeup and acquiring so_lock in this routine.
  *
- * However, since the performance of VOP_POLL is critical we avoid
+ * However, since the performance of fop_poll is critical we avoid
  * acquiring so_lock here. This is based on two assumptions:
- *  - The poll implementation holds locks to serialize the VOP_POLL call
+ *  - The poll implementation holds locks to serialize the fop_poll call
  *    and a pollwakeup for the same pollhead. This ensures that should
  *    e.g. so_state change during a socktpi_poll call the pollwakeup
  *    (which strsock_* and strrput conspire to issue) is issued after
- *    the state change. Thus the pollwakeup will block until VOP_POLL has
- *    returned and then wake up poll and have it call VOP_POLL again.
+ *    the state change. Thus the pollwakeup will block until fop_poll has
+ *    returned and then wake up poll and have it call fop_poll again.
  *  - The reading of so_state without holding so_lock does not result in
  *    stale data that is older than the latest state change that has dropped
  *    so_lock. This is ensured by the mutex_exit issuing the appropriate

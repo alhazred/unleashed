@@ -327,7 +327,7 @@ spec_size(struct snode *csp)
 		return (csp->s_size);
 	}
 
-	/* VOP_GETATTR of mknod has not had devcnt restriction applied */
+	/* fop_getattr of mknod has not had devcnt restriction applied */
 	dev = cvp->v_rdev;
 	maj = getmajor(dev);
 	if (maj >= devcnt) {
@@ -713,7 +713,7 @@ not_streams:
 
 			/*
 			 * Invalidate possible cached "unknown" size
-			 * established by a VOP_GETATTR while open was in
+			 * established by a fop_getattr while open was in
 			 * progress, and the driver might fail prop_op(9E).
 			 */
 			if (((cvp->v_type == VCHR) && (csp->s_size == 0)) ||
@@ -1349,7 +1349,7 @@ spec_getattr(
 		 */
 		vap->va_nblocks = 0;
 	} else {
-		error = VOP_GETATTR(realvp, vap, flags, cr, ct);
+		error = fop_getattr(realvp, vap, flags, cr, ct);
 		if (error != 0)
 			return (error);
 	}
@@ -1400,7 +1400,7 @@ spec_setattr(
 	if ((realvp = sp->s_realvp) == NULL)
 		error = 0;	/* no real vnode to update */
 	else
-		error = VOP_SETATTR(realvp, vap, flags, cr, ct);
+		error = fop_setattr(realvp, vap, flags, cr, ct);
 	if (error == 0) {
 		/*
 		 * If times were changed, update snode.
@@ -1433,7 +1433,7 @@ spec_access(
 		return (ENXIO);
 
 	if ((realvp = sp->s_realvp) != NULL)
-		return (VOP_ACCESS(realvp, mode, flags, cr, ct));
+		return (fop_access(realvp, mode, flags, cr, ct));
 	else
 		return (0);	/* Allow all access. */
 }
@@ -1505,7 +1505,7 @@ spec_fsync(
 
 	if (vp->v_type == VBLK && cvp != vp && vn_has_cached_data(cvp) &&
 	    (cvp->v_flag & VISSWAP) == 0)
-		(void) VOP_PUTPAGE(cvp, (offset_t)0, 0, 0, cr, ct);
+		(void) fop_putpage(cvp, (offset_t)0, 0, 0, cr, ct);
 
 	/*
 	 * For devices that support it, force write cache to stable storage.
@@ -1538,7 +1538,7 @@ spec_fsync(
 		return (0);
 
 	vatmp.va_mask = AT_ATIME|AT_MTIME;
-	if (VOP_GETATTR(realvp, &vatmp, 0, cr, ct) == 0) {
+	if (fop_getattr(realvp, &vatmp, 0, cr, ct) == 0) {
 
 		mutex_enter(&sp->s_lock);
 		if (vatmp.va_atime.tv_sec > sp->s_atime)
@@ -1556,9 +1556,9 @@ spec_fsync(
 		mutex_exit(&sp->s_lock);
 
 		va.va_mask = AT_ATIME|AT_MTIME;
-		(void) VOP_SETATTR(realvp, &va, 0, cr, ct);
+		(void) fop_setattr(realvp, &va, 0, cr, ct);
 	}
-	(void) VOP_FSYNC(realvp, syncflag, cr, ct);
+	(void) fop_fsync(realvp, syncflag, cr, ct);
 	return (0);
 }
 
@@ -1615,7 +1615,7 @@ spec_inactive(struct vnode *vp, struct cred *cr, caller_context_t *ct)
 			 * The user may not own the device, but we
 			 * want to update the attributes anyway.
 			 */
-			if (VOP_GETATTR(rvp, &vatmp, 0, kcred, ct) == 0) {
+			if (fop_getattr(rvp, &vatmp, 0, kcred, ct) == 0) {
 				if (vatmp.va_atime.tv_sec > sp->s_atime)
 					va.va_atime = vatmp.va_atime;
 				else {
@@ -1630,7 +1630,7 @@ spec_inactive(struct vnode *vp, struct cred *cr, caller_context_t *ct)
 				}
 
 				va.va_mask = AT_ATIME|AT_MTIME;
-				(void) VOP_SETATTR(rvp, &va, 0, kcred, ct);
+				(void) fop_setattr(rvp, &va, 0, kcred, ct);
 			}
 		}
 	}
@@ -1690,7 +1690,7 @@ spec_fid(struct vnode *vp, struct fid *fidp, caller_context_t *ct)
 	struct snode *sp = VTOS(vp);
 
 	if ((realvp = sp->s_realvp) != NULL)
-		return (VOP_FID(realvp, fidp, ct));
+		return (fop_fid(realvp, fidp, ct));
 	else
 		return (EINVAL);
 }
@@ -1742,7 +1742,7 @@ spec_realvp(struct vnode *vp, struct vnode **vpp, caller_context_t *ct)
 
 	if ((rvp = VTOS(vp)->s_realvp) != NULL) {
 		vp = rvp;
-		if (VOP_REALVP(vp, &rvp, ct) == 0)
+		if (fop_realvp(vp, &rvp, ct) == 0)
 			vp = rvp;
 	}
 
@@ -2626,16 +2626,16 @@ spec_setsecattr(
 		return (ENXIO);
 
 	/*
-	 * The acl(2) system calls VOP_RWLOCK on the file before setting an
+	 * The acl(2) system calls fop_rwlock on the file before setting an
 	 * ACL, but since specfs does not serialize reads and writes, this
 	 * VOP does not do anything.  However, some backing file systems may
 	 * expect the lock to be held before setting an ACL, so it is taken
 	 * here privately to avoid serializing specfs reads and writes.
 	 */
 	if ((realvp = sp->s_realvp) != NULL) {
-		(void) VOP_RWLOCK(realvp, V_WRITELOCK_TRUE, ct);
-		error = VOP_SETSECATTR(realvp, vsap, flag, cr, ct);
-		(void) VOP_RWUNLOCK(realvp, V_WRITELOCK_TRUE, ct);
+		(void) fop_rwlock(realvp, V_WRITELOCK_TRUE, ct);
+		error = fop_setsecattr(realvp, vsap, flag, cr, ct);
+		(void) fop_rwunlock(realvp, V_WRITELOCK_TRUE, ct);
 		return (error);
 	} else
 		return (fs_nosys());
@@ -2661,7 +2661,7 @@ spec_getsecattr(
 		return (ENXIO);
 
 	if ((realvp = sp->s_realvp) != NULL)
-		return (VOP_GETSECATTR(realvp, vsap, flag, cr, ct));
+		return (fop_getsecattr(realvp, vsap, flag, cr, ct));
 	else
 		return (fs_fab_acl(vp, vsap, flag, cr, ct));
 }
@@ -2682,7 +2682,7 @@ spec_pathconf(
 		return (ENXIO);
 
 	if ((realvp = sp->s_realvp) != NULL)
-		return (VOP_PATHCONF(realvp, cmd, valp, cr, ct));
+		return (fop_pathconf(realvp, cmd, valp, cr, ct));
 	else
 		return (fs_pathconf(vp, cmd, valp, cr, ct));
 }

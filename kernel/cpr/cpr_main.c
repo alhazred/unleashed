@@ -256,7 +256,7 @@ cpr_log_status(int enable, int *svstat, vnode_t *vp)
 	 * when disabling, first get and save logging status (0 or 1)
 	 */
 	if (enable == 0) {
-		if (error = VOP_IOCTL(vp, _FIOISLOG,
+		if (error = fop_ioctl(vp, _FIOISLOG,
 		    (uintptr_t)&status, FKIOCTL, CRED(), NULL, NULL)) {
 			mntpt = vfs_getmntpoint(vp->v_vfsp);
 			prom_printf("%s: \"%s\", cant get logging "
@@ -284,7 +284,7 @@ cpr_log_status(int enable, int *svstat, vnode_t *vp)
 	 * disable or re-enable logging when the saved status is 1
 	 */
 	if (*svstat == 1) {
-		error = VOP_IOCTL(vp, cmd, (uintptr_t)&fl,
+		error = fop_ioctl(vp, cmd, (uintptr_t)&fl,
 		    FKIOCTL, CRED(), NULL, NULL);
 		if (error) {
 			mntpt = vfs_getmntpoint(vp->v_vfsp);
@@ -336,13 +336,13 @@ cpr_ufs_logging(int enable)
 		return (error);
 	vfsp = vp->v_vfsp;
 	if (!cpr_is_ufs(vfsp)) {
-		(void) VOP_CLOSE(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
 		VN_RELE(vp);
 		return (0);
 	}
 
 	cpr_log_status(enable, &def_status, vp);
-	(void) VOP_CLOSE(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+	(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
 	VN_RELE(vp);
 
 	fname = cpr_build_statefile_path();
@@ -361,7 +361,7 @@ cpr_ufs_logging(int enable)
 	 */
 	if (vp->v_vfsp != vfsp && vp->v_type == VREG)
 		cpr_log_status(enable, &sf_status, vp);
-	(void) VOP_CLOSE(vp, FWRITE, 1, (offset_t)0, CRED(), NULL);
+	(void) fop_close(vp, FWRITE, 1, (offset_t)0, CRED(), NULL);
 	VN_RELE(vp);
 
 	return (0);

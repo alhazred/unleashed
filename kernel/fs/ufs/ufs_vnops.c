@@ -259,7 +259,7 @@ static struct dump *dump_info = NULL;
  * by doing an atomic check of size and truncate if file is opened with
  * FTRUNC flag set but traditionally this is being done by the vfs/vnode
  * layers. So taking care of truncation here is a change in the existing
- * semantics of VOP_OPEN and therefore we chose not to implement any thing
+ * semantics of fop_open and therefore we chose not to implement any thing
  * here. The check for the size of the file > 2GB is being done at the
  * vfs layer in routine vn_open().
  */
@@ -2584,7 +2584,7 @@ again:
 				/*
 				 * free page
 				 */
-				(void) VOP_PUTPAGE(ITOV(ip),
+				(void) fop_putpage(ITOV(ip),
 				    (offset_t)0, PAGESIZE,
 				    (B_DONTNEED | B_FREE | B_FORCE | B_ASYNC),
 				    cr, ct);
@@ -2634,7 +2634,7 @@ ufs_fsync(struct vnode *vp, int syncflag, struct cred *cr,
 		 */
 		if (vn_has_cached_data(vp) && !(syncflag & FNODSYNC) &&
 		    (vp->v_type != VCHR) && !(IS_SWAPVP(vp))) {
-			error = VOP_PUTPAGE(vp, (offset_t)0, (size_t)0,
+			error = fop_putpage(vp, (offset_t)0, (size_t)0,
 			    0, CRED(), ct);
 			if (error)
 				goto out;
@@ -3031,7 +3031,7 @@ again:
 		/*
 		 * If the error EEXIST was set, then i_seq can not
 		 * have been updated. The sequence number interface
-		 * is defined such that a non-error VOP_CREATE must
+		 * is defined such that a non-error fop_create must
 		 * increase the dir va_seq it by at least one. If we
 		 * have cleared the error, increase i_seq. Note that
 		 * we are increasing the dir i_seq and in rare cases
@@ -3281,7 +3281,7 @@ retry_link:
 		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_LINK,
 		    trans_size = (int)TOP_LINK_SIZE(VTOI(tdvp)));
 
-	if (VOP_REALVP(svp, &realvp, ct) == 0)
+	if (fop_realvp(svp, &realvp, ct) == 0)
 		svp = realvp;
 
 	/*
@@ -3386,7 +3386,7 @@ ufs_rename(
 	slot.fbp = NULL;
 	ufsvfsp = sdp->i_ufsvfs;
 
-	if (VOP_REALVP(tdvp, &realvp, ct) == 0)
+	if (fop_realvp(tdvp, &realvp, ct) == 0)
 		tdvp = realvp;
 
 	/* Must do this before taking locks in case of DNLC miss */
@@ -3420,7 +3420,7 @@ retry_rename:
 		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_RENAME,
 		    trans_size = (int)TOP_RENAME_SIZE(sdp));
 
-	if (VOP_REALVP(tdvp, &realvp, ct) == 0)
+	if (fop_realvp(tdvp, &realvp, ct) == 0)
 		tdvp = realvp;
 
 	tdp = VTOI(tdvp);
@@ -3473,7 +3473,7 @@ retry_rename:
 	 *
 	 * We hold the target directory's i_rwlock after calling
 	 * ufs_lockfs_begin but in many other operations (like ufs_readdir)
-	 * VOP_RWLOCK is explicitly called by the filesystem independent code
+	 * fop_rwlock is explicitly called by the filesystem independent code
 	 * before calling the file system operation. In these cases the order
 	 * is reversed (i.e i_rwlock is taken first and then ufs_lockfs_begin
 	 * is called). This is fine as long as ufs_lockfs_begin acts as a VOP
@@ -5520,7 +5520,7 @@ ufs_putapage(
 	 *	ufs_rdwri()
 	 *	wrip()
 	 *	segmap_release()
-	 *	VOP_PUTPAGE()
+	 *	fop_putpage()
 	 * Here, fsflush can pick up the dirty page before segmap_release()
 	 * forces it out. If that happens, there's no transaction.
 	 * We therefore need to test whether a transaction exists, and if not
@@ -6001,13 +6001,13 @@ ufs_pageio(struct vnode *vp, page_t *pp, u_offset_t io_off, size_t io_len,
 
 	if (dolock) {
 		/*
-		 * segvn may call VOP_PAGEIO() instead of VOP_GETPAGE() to
+		 * segvn may call fop_pageio() instead of fop_getpage() to
 		 * handle a fault against a segment that maps vnode pages with
 		 * large mappings.  Segvn creates pages and holds them locked
-		 * SE_EXCL during VOP_PAGEIO() call. In this case we have to
+		 * SE_EXCL during fop_pageio() call. In this case we have to
 		 * use rw_tryenter() to avoid a potential deadlock since in
 		 * lock order i_contents needs to be taken first.
-		 * Segvn will retry via VOP_GETPAGE() if VOP_PAGEIO() fails.
+		 * Segvn will retry via fop_getpage() if fop_pageio() fails.
 		 */
 		if (!vmpss) {
 			rw_enter(&ip->i_contents, RW_READER);
@@ -6234,7 +6234,7 @@ ufs_dump(vnode_t *vp, caddr_t addr, offset_t ldbn, offset_t dblks,
  * action = DUMP_SCAN:
  * Scan dump_info for *blkp DEV_BSIZE blocks of contig fs space;
  * if found, the starting file-relative DEV_BSIZE lbn is written
- * to *bklp; that lbn is intended for use with VOP_DUMP()
+ * to *bklp; that lbn is intended for use with fop_dump()
  */
 /*ARGSUSED*/
 static int

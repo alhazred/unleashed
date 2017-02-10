@@ -1977,7 +1977,7 @@ aus_close(struct t_audit_data *tad)
 		au_uwrite(au_to_path(fad->fad_aupath));
 		if ((vp = fp->f_vnode) != NULL) {
 			attr.va_mask = AT_ALL;
-			if (VOP_GETATTR(vp, &attr, 0, CRED(), NULL) == 0) {
+			if (fop_getattr(vp, &attr, 0, CRED(), NULL) == 0) {
 				/*
 				 * When write was not used and the file can be
 				 * considered public, skip the audit.
@@ -5005,7 +5005,7 @@ au_door_lookup(int did)
 	/*
 	 * Use the underlying vnode (we may be namefs mounted)
 	 */
-	if (VOP_REALVP(fp->f_vnode, &vp, NULL))
+	if (fop_realvp(fp->f_vnode, &vp, NULL))
 		vp = fp->f_vnode;
 
 	if (vp == NULL || vp->v_type != VDOOR) {

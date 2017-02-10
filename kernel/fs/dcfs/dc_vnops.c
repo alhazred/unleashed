@@ -312,7 +312,7 @@ dc_getattr(struct vnode *vp, struct vattr *vap, int flags,
 	struct vnode *subvp = dp->dc_subvp;
 	int error;
 
-	error = VOP_GETATTR(subvp, vap, flags, cred, ctp);
+	error = fop_getattr(subvp, vap, flags, cred, ctp);
 
 	/* substitute uncompressed size */
 	vap->va_size = dp->dc_hdr->ch_fsize;
@@ -326,7 +326,7 @@ dc_setattr(struct vnode *vp, struct vattr *vap, int flags, cred_t *cred,
 	struct dcnode *dp = VTODC(vp);
 	struct vnode *subvp = dp->dc_subvp;
 
-	return (VOP_SETATTR(subvp, vap, flags, cred, ctp));
+	return (fop_setattr(subvp, vap, flags, cred, ctp));
 }
 
 static int
@@ -336,7 +336,7 @@ dc_access(struct vnode *vp, int mode, int flags,
 	struct dcnode *dp = VTODC(vp);
 	struct vnode *subvp = dp->dc_subvp;
 
-	return (VOP_ACCESS(subvp, mode, flags, cred, ctp));
+	return (fop_access(subvp, mode, flags, cred, ctp));
 }
 
 /*ARGSUSED*/
@@ -377,7 +377,7 @@ dc_fid(struct vnode *vp, struct fid *fidp, caller_context_t *ctp)
 	struct dcnode *dp = VTODC(vp);
 	struct vnode *subvp = dp->dc_subvp;
 
-	return (VOP_FID(subvp, fidp, ctp));
+	return (fop_fid(subvp, fidp, ctp));
 }
 
 static int
@@ -386,7 +386,7 @@ dc_seek(struct vnode *vp, offset_t oof, offset_t *noffp, caller_context_t *ctp)
 	struct dcnode *dp = VTODC(vp);
 	struct vnode *subvp = dp->dc_subvp;
 
-	return (VOP_SEEK(subvp, oof, noffp, ctp));
+	return (fop_seek(subvp, oof, noffp, ctp));
 }
 
 static int
@@ -402,7 +402,7 @@ dc_frlock(struct vnode *vp, int cmd, struct flock64 *bfp, int flag,
 	 * If file is being mapped, disallow frlock.
 	 */
 	vattr.va_mask = AT_MODE;
-	if (error = VOP_GETATTR(dp->dc_subvp, &vattr, 0, cr, ctp))
+	if (error = fop_getattr(dp->dc_subvp, &vattr, 0, cr, ctp))
 		return (error);
 	if (dp->dc_mapcnt > 0 && MANDLOCK(vp, vattr.va_mode))
 		return (EAGAIN);
@@ -524,7 +524,7 @@ dc_realvp(vnode_t *vp, vnode_t **vpp, caller_context_t *ct)
 	struct vnode *rvp;
 
 	vp = VTODC(vp)->dc_subvp;
-	if (VOP_REALVP(vp, &rvp, ct) == 0)
+	if (fop_realvp(vp, &rvp, ct) == 0)
 		vp = rvp;
 	*vpp = vp;
 	return (0);
@@ -607,7 +607,7 @@ dc_putapage(struct vnode *vp, struct page *pp, u_offset_t *offp, size_t *lenp,
  *	   which translates to an MC_SYNC with the MS_INVALIDATE flag.
  *
  * The B_FREE (as well as the B_DONTNEED) flag is set when the
- * MADV_SEQUENTIAL advice has been used. VOP_PUTPAGE is invoked
+ * MADV_SEQUENTIAL advice has been used. fop_putpage is invoked
  * from SEGVN to release pages behind a pagefault.
  */
 /*ARGSUSED5*/
@@ -687,7 +687,7 @@ dc_map(struct vnode *vp, offset_t off, struct as *as, caddr_t *addrp,
 	/*
 	 * If file is being locked, disallow mapping.
 	 */
-	if (error = VOP_GETATTR(VTODC(vp)->dc_subvp, &vattr, 0, cred, ctp))
+	if (error = fop_getattr(VTODC(vp)->dc_subvp, &vattr, 0, cred, ctp))
 		return (error);
 	if (vn_has_mandatory_locks(vp, vattr.va_mode))
 		return (EAGAIN);
@@ -952,7 +952,7 @@ decompvp(struct vnode *vp, cred_t *cred, caller_context_t *ctp)
 		return (NULL);
 
 	/* get underlying file size */
-	if (VOP_GETATTR(vp, &vattr, 0, cred, ctp) != 0)
+	if (fop_getattr(vp, &vattr, 0, cred, ctp) != 0)
 		return (NULL);
 
 	/*
