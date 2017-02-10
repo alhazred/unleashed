@@ -1153,21 +1153,6 @@ $(sparc_ONLY)hardlink path=platform/sun4u/kernel/misc/$(ARCH64)/sha1 \
     target=../../../kernel/crypto/$(ARCH64)/sha1
 $(sparc_ONLY)hardlink path=platform/sun4v/kernel/misc/$(ARCH64)/md5 \
     target=../../../kernel/crypto/$(ARCH64)/md5
-$(i386_ONLY)legacy pkg=SUNWcakr.i arch=$(ARCH).i86pc \
-    desc="core kernel software for a specific hardware platform group" \
-    name="Core Solaris Kernel Architecture (Root)"
-$(sparc_ONLY)legacy pkg=SUNWcakr.u arch=$(ARCH).sun4u \
-    desc="core kernel software for a specific hardware platform group" \
-    name="Core Solaris Kernel Architecture (Root)"
-$(sparc_ONLY)legacy pkg=SUNWcakr.v arch=$(ARCH).sun4v \
-    desc="core kernel software for a specific hardware platform group" \
-    name="Core Solaris Kernel Architecture (Root)"
-$(sparc_ONLY)legacy pkg=SUNWcakrnt2000.v arch=$(ARCH).sun4v \
-    desc="driver software for the Netra-T2000 hardware platform" \
-    name="Platform Specific Drivers for Netra-T2000, (Root)"
-$(i386_ONLY)legacy pkg=SUNWcakrx.i arch=$(ARCH).i86pc \
-    desc="core kernel software for the i86xpv virtual hardware platform" \
-    name="Core Kernel Architecture i86xpv, (Root)"
 license cr_Sun license=cr_Sun
 license include/sys/THIRDPARTYLICENSE.unicode \
     license=include/sys/THIRDPARTYLICENSE.unicode

@@ -2745,9 +2745,6 @@ hardlink path=usr/share/lib/terminfo/z/zenith39-ansi target=../z/z39-a
 hardlink path=usr/share/lib/terminfo/z/zt-1 target=../z/ztx
 hardlink path=usr/share/lib/terminfo/z/ztx-1-a target=../z/ztx
 hardlink path=usr/share/lib/terminfo/z/ztx11 target=../z/ztx
-legacy pkg=SUNWter \
-    desc="extensive terminfo database entries describing capabilities of terminals and pseudoterminals" \
-    name="Terminal Information"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/terminfo/THIRDPARTYLICENSE \

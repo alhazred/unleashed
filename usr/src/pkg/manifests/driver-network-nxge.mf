@@ -68,11 +68,5 @@ $(sparc_ONLY)file path=platform/sun4v/kernel/drv/$(ARCH64)/nxge group=sys
 $(sparc_ONLY)file path=platform/sun4v/kernel/drv/nxge.conf group=sys \
     preserve=renamenew
 file path=usr/share/man/man7d/nxge.7d
-$(i386_ONLY)legacy pkg=SUNWnxge desc="Sun NIU 10Gb/1Gb leaf driver" \
-    name="Sun NIU leaf driver"
-$(sparc_ONLY)legacy pkg=SUNWnxge.u arch=$(ARCH).sun4u \
-    desc="Sun NIU 10Gb/1Gb driver" name="Sun NIU leaf driver"
-$(sparc_ONLY)legacy pkg=SUNWnxge.v arch=$(ARCH).sun4v \
-    desc="Sun NIU leaf driver" name="Sun NIU leaf driver"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

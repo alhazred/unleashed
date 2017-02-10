@@ -151,11 +151,6 @@ file path=usr/share/man/man3stmf/stmfSetLuProp.3stmf
 file path=usr/share/man/man3stmf/stmfSetPersistMethod.3stmf
 file path=usr/share/man/man3stmf/stmfSetProviderData.3stmf
 file path=usr/share/man/man3stmf/stmfSetProviderDataProt.3stmf
-legacy pkg=SUNWstmf desc="Sun Common Multiprotocol SCSI Target device drivers" \
-    name="Sun Common Multiprotocol SCSI Target"
-legacy pkg=SUNWstmfu \
-    desc="Sun Common Multiprotocol SCSI Target Libraries and Tools" \
-    name="Sun Common Multiprotocol SCSI Target Libraries and Tools"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/$(ARCH64)/libstmf.so target=libstmf.so.1

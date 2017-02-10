@@ -67,12 +67,6 @@ file path=platform/sun4v/kernel/drv/$(ARCH64)/n2piupc group=sys
 file path=platform/sun4v/kernel/drv/fpc.conf group=sys
 file path=platform/sun4v/kernel/drv/iospc.conf group=sys
 file path=platform/sun4v/kernel/drv/n2piupc.conf group=sys
-legacy pkg=SUNWiopc.u arch=$(ARCH).sun4u \
-    desc="Kernel support for IO chip performance counters" \
-    name="sun4u IO chip performance counter modules"
-legacy pkg=SUNWiopc.v arch=$(ARCH).sun4v \
-    desc="Kernel support for IO chip performance counters" \
-    name="sun4v IO chip performance counter modules"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=platform/SUNW,Sun-Fire-V215/kernel/drv/$(ARCH64)/fpc \

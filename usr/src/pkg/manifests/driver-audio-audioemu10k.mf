@@ -50,8 +50,5 @@ driver name=audioemu10k \
 file path=kernel/drv/$(ARCH64)/audioemu10k group=sys
 file path=kernel/drv/audioemu10k group=sys
 file path=usr/share/man/man7d/audioemu10k.7d
-legacy pkg=SUNWaudioemu10k \
-    desc="SunOS audio device driver for Creative EMU10K" \
-    name="Creative EMU10K Audio Driver"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

@@ -59,9 +59,6 @@ file path=usr/share/man/man1m/accept.1m
 file path=usr/share/man/man1m/lpadmin.1m
 file path=usr/share/man/man1m/lpmove.1m
 file path=usr/share/man/man1m/print-service.1m
-legacy pkg=SUNWpcu \
-    desc="client configuration files and utilities for the print service" \
-    name="Solaris Print - Client, (usr)" version=13.1,REV=2009.11.11
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/bin/cancel target=../sbin/print-service

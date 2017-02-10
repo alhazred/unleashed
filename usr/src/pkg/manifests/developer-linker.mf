@@ -111,9 +111,6 @@ hardlink path=usr/bin/gcore target=../../usr/lib/isaexec
 hardlink path=usr/bin/plimit target=../../usr/lib/isaexec
 hardlink path=usr/bin/strings target=../../usr/lib/isaexec
 hardlink path=usr/bin/truss target=../../usr/lib/isaexec
-legacy pkg=SUNWtoo \
-    desc="utilities for software development, including ld, ldd, od, and truss" \
-    name="Programming Tools"
 license cr_ATT license=cr_ATT
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

@@ -49,8 +49,6 @@ file path=usr/share/man/man1/msgcpp.1
 file path=usr/share/man/man1/msgcvt.1
 file path=usr/share/man/man1/msggen.1
 file path=usr/share/man/man1/msgget.1
-legacy pkg=SUNWastdev desc="AT&T AST development utilities" \
-    name="AT&T AST development utilities"
 license cr_Sun license=cr_Sun
 license usr/src/cmd/ast/THIRDPARTYLICENSE \
     license=usr/src/cmd/ast/THIRDPARTYLICENSE

@@ -57,10 +57,6 @@ file path=usr/share/man/man1/volcheck.1
 file path=usr/share/man/man1/volrmmount.1
 file path=usr/share/man/man1m/rmmount.1m
 file path=usr/share/man/man1m/rmvolmgr.1m
-legacy pkg=SUNWrmvolmgr desc="Non-graphical removable volume manager" \
-    name="Removable volume manager"
-legacy pkg=SUNWrmvolmgrr desc="Non-graphical removable volume manager (Root)" \
-    name="Removable volume manager (Root)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/bin/rmumount target=./rmmount

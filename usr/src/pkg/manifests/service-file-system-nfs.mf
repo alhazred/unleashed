@@ -78,13 +78,6 @@ file path=usr/share/man/man1m/rquotad.1m
 file path=usr/share/man/man4/nfslog.conf.4
 file path=usr/share/man/man4/rmtab.4
 file path=usr/share/man/man5/nfssec.5
-legacy pkg=SUNWnfsskr \
-    desc="Network File System (NFS) server kernel support (Root)" \
-    name="Network File System (NFS) server kernel support (Root)"
-legacy pkg=SUNWnfssr desc="Network File System (NFS) server support (Root)" \
-    name="Network File System (NFS) server support (Root)"
-legacy pkg=SUNWnfssu desc="Network File System (NFS) server support (Usr)" \
-    name="Network File System (NFS) server support (Usr)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/reparse/$(ARCH64)/libnfs_basic.so target=./libnfs_basic.so.1

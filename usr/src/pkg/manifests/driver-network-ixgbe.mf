@@ -82,8 +82,6 @@ file path=kernel/drv/$(ARCH64)/ixgbe group=sys
 $(i386_ONLY)file path=kernel/drv/ixgbe group=sys
 file path=kernel/drv/ixgbe.conf group=sys preserve=renamenew
 file path=usr/share/man/man7d/ixgbe.7d
-legacy pkg=SUNWixgbe desc="Intel 10GbE PCIE NIC Driver" \
-    name="Intel 10GbE PCIE NIC Driver"
 license cr_Sun license=cr_Sun
 license kernel/drivers/net/ixgbe/core/THIRDPARTYLICENSE \
     license=kernel/drivers/net/ixgbe/core/THIRDPARTYLICENSE

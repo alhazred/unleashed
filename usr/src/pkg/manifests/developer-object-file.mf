@@ -115,9 +115,6 @@ file path=usr/share/man/man1/unifdef.1
 file path=usr/share/man/man1/yacc.1
 hardlink path=usr/bin/$(ARCH64)/strip target=../../bin/$(ARCH64)/mcs
 hardlink path=usr/bin/strip target=../bin/mcs
-legacy pkg=SUNWbtool \
-    desc="software development utilities, including ar, dis, dump, elfdump, elfedit, lex, lorder, mcs, nm, prof, ranlib, rpcgen, size, strip, tsort, and yacc" \
-    name="CCS tools bundled with SunOS"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/backup/dump/THIRDPARTYLICENSE \

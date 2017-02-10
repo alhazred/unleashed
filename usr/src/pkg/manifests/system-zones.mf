@@ -103,10 +103,6 @@ file path=usr/share/man/man1m/zonecfg.1m
 file path=usr/share/man/man5/brands.5
 file path=usr/share/man/man5/zones.5
 file path=usr/share/man/man7d/zcons.7d
-legacy pkg=SUNWzoner desc="Solaris Zones Configuration Files" \
-    name="Solaris Zones (Root)"
-legacy pkg=SUNWzoneu desc="Solaris Zones Configuration and Administration" \
-    name="Solaris Zones (Usr)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/bin/zonename target=../../sbin/zonename

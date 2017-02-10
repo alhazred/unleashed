@@ -172,8 +172,6 @@ file path=usr/share/man/man9s/usb_isoc_request.9s
 file path=usr/share/man/man9s/usb_other_speed_cfg_descr.9s
 file path=usr/share/man/man9s/usb_request_attributes.9s
 file path=usr/share/man/man9s/usb_string_descr.9s
-legacy pkg=SUNWusb desc="USBA (USB framework) and USB Device Drivers" \
-    name="USB Device Drivers"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license license_in_headers license=license_in_headers

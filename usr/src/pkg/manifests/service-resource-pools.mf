@@ -89,10 +89,6 @@ file path=usr/share/man/man3pool/pool_get_property.3pool
 file path=usr/share/man/man3pool/pool_resource_create.3pool
 file path=usr/share/man/man3pool/pool_value_alloc.3pool
 file path=usr/share/man/man3pool/pool_walk_components.3pool
-legacy pkg=SUNWpool desc="core software for resource pools" \
-    name="Resource Pools"
-legacy pkg=SUNWpoolr desc="core software for resource pools (Root)" \
-    name="Resource Pools (Root)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/$(ARCH64)/libpool.so target=libpool.so.1

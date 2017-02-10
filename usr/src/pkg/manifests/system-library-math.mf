@@ -59,14 +59,6 @@ file path=usr/include/iso/math_iso.h
 file path=usr/include/math.h
 file path=usr/include/sys/ieeefp.h
 file path=usr/include/tgmath.h
-legacy pkg=SUNWlibms desc="Math Libraries (Usr)" \
-    hotline="Please contact your local service provider" \
-    name="Math Libraries (Usr)" vendor="Sun Microsystems, Inc." \
-    version=5.11,REV=2009.08.04
-legacy pkg=SUNWlibmsr desc="Math Libraries (Root)" \
-    hotline="Please contact your local service provider" \
-    name="Math Libraries (Root)" vendor="Sun Microsystems, Inc." \
-    version=5.11,REV=2009.08.04
 link path=lib/$(ARCH64)/libm.so target=libm.so.2
 link path=lib/$(ARCH64)/libmvec.so target=libmvec.so.1
 link path=lib/libm.so target=libm.so.2

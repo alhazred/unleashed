@@ -36,6 +36,5 @@ dir path=usr/include/sys/usb
 dir path=usr/include/sys/usb/clients
 dir path=usr/include/sys/usb/clients/ugen
 file path=usr/include/sys/usb/clients/ugen/usb_ugen.h
-legacy pkg=SUNWugenu desc="UGEN Headers" name="UGEN Headers"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

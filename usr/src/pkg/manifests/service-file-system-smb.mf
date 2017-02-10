@@ -101,12 +101,6 @@ file path=usr/share/man/man4/smbautohome.4
 file path=usr/share/man/man5/pam_smb_passwd.5
 file path=var/smb/cvol/windows/system32/eventlog.dll mode=0755
 file path=var/smb/smbpasswd group=sys mode=0400 preserve=true
-legacy pkg=SUNWsmbskr desc="SMB Server kernel root components" \
-    name="SMB Server (Kernel)"
-legacy pkg=SUNWsmbsr desc="SMB Server root components" \
-    name="SMB Server (Root)"
-legacy pkg=SUNWsmbsu desc="SMB Server libraries and commands" \
-    name="SMB Server (Usr)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/reparse/libreparse_smb.so target=libreparse_smb.so.1

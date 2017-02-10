@@ -46,9 +46,6 @@ file path=usr/share/man/man3papi/papiLibrarySupportedCall.3papi
 file path=usr/share/man/man3papi/papiPrintersList.3papi
 file path=usr/share/man/man3papi/papiServiceCreate.3papi
 file path=usr/share/man/man3papi/papiStatusString.3papi
-legacy pkg=SUNWpapi desc="Free Standards Group Open Printing API, Draft v0.9" \
-    name="Free Standards Group Open Printing API" \
-    version=11.11.0,REV=2009.11.11
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/libpapi-common.so target=./libpapi-common.so.0

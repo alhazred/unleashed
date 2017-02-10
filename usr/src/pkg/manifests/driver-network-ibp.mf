@@ -57,7 +57,5 @@ file path=sbin/ibd_delete_link mode=0555
 file path=sbin/ibd_upgrade mode=0555
 # XXX: Should rename to deal with ibd -> ibp?
 file path=usr/share/man/man7d/ibd.7d
-legacy pkg=SUNWipoib desc="Sun IP over InfiniBand" \
-    name="Sun IP over InfiniBand"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

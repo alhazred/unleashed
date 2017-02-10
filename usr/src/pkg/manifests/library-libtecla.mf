@@ -62,8 +62,6 @@ file path=usr/share/man/man3tecla/gl_io_mode.3tecla
 file path=usr/share/man/man3tecla/libtecla_version.3tecla
 file path=usr/share/man/man3tecla/pca_lookup_file.3tecla
 file path=usr/share/man/man5/tecla.5
-legacy pkg=SUNWtecla desc="Tecla command-line editing library" \
-    name="Tecla command-line editing library"
 license usr/src/lib/libtecla/THIRDPARTYLICENSE \
     license=usr/src/lib/libtecla/THIRDPARTYLICENSE
 link path=usr/lib/$(ARCH64)/libtecla.so target=libtecla.so.1

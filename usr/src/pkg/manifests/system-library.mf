@@ -522,12 +522,6 @@ file path=usr/xpg4/lib/$(ARCH64)/libcurses.so.1
 file path=usr/xpg4/lib/$(ARCH64)/libcurses.so.2
 file path=usr/xpg4/lib/libcurses.so.1
 file path=usr/xpg4/lib/libcurses.so.2
-legacy pkg=SUNWcsl \
-    desc="core shared libraries for a specific instruction-set architecture" \
-    name="Core Solaris, (Shared Libs)"
-legacy pkg=SUNWcslr \
-    desc="core software for a specific instruction-set architecture" \
-    name="Core Solaris Libraries (Root)"
 license cr_Sun license=cr_Sun
 license include/sys/THIRDPARTYLICENSE.unicode \
     license=include/sys/THIRDPARTYLICENSE.unicode

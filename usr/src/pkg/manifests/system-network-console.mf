@@ -73,9 +73,5 @@ file path=platform/SUNW,Ultra-Enterprise-10000/lib/cvcd group=sys mode=0700
 file path=usr/share/man/man1m/cvcd.1m
 file path=usr/share/man/man7d/cvc.7d
 file path=usr/share/man/man7d/cvcredir.7d
-legacy pkg=SUNWcvc.u arch=$(ARCH).sun4u desc="Network Console" \
-    name="Network Console"
-legacy pkg=SUNWcvcr.u arch=$(ARCH).sun4u desc="Network Console daemon" \
-    name="Network Console daemon"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

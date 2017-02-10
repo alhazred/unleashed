@@ -45,8 +45,5 @@ $(i86xpv_ONLY)driver name=xdt
 $(i86xpv_ONLY)file path=platform/i86xpv/kernel/drv/$(ARCH64)/xdt group=sys
 $(i86xpv_ONLY)file path=platform/i86xpv/kernel/drv/xdt group=sys
 $(i86xpv_ONLY)file path=platform/i86xpv/kernel/drv/xdt.conf group=sys
-legacy pkg=SUNWxdt \
-    desc="DTrace provider for tracing events in the xVM hypervisor" \
-    name="xVM Hypervisor Dynamic Tracing (DTrace) Provider"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

@@ -45,8 +45,5 @@ file path=kernel/misc/$(ARCH64)/kgssapi group=sys mode=0755
 file path=kernel/misc/kgss/$(ARCH64)/kmech_krb5 group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/kgss/kmech_krb5 group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/kgssapi group=sys mode=0755
-legacy pkg=SUNWgssk \
-    desc="Generic Security Service Application Program Interface, Version 2 - kernel" \
-    name="kernel GSSAPI V2"
 license usr/src/uts/common/gssapi/mechs/krb5/THIRDPARTYLICENSE \
     license=usr/src/uts/common/gssapi/mechs/krb5/THIRDPARTYLICENSE

@@ -72,9 +72,5 @@ file path=usr/share/man/man1m/pmconfig.1m
 file path=usr/share/man/man1m/powerd.1m
 file path=usr/share/man/man4/power.conf.4
 file path=usr/share/man/man7d/pm.7d
-legacy pkg=SUNWpmr desc="Power Management config file and rc script" \
-    name="Power Management config file and rc script"
-legacy pkg=SUNWpmu desc="Power Management binaries" \
-    name="Power Management binaries"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

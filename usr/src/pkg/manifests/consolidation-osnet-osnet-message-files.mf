@@ -292,8 +292,5 @@ file path=usr/lib/locale/C/LC_MESSAGES/more.help group=sys mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/priv_names group=sys mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/uxlibc.src group=sys mode=0644
 file path=usr/lib/locale/C/LC_TIME/SUNW_OST_OSCMD.po group=sys mode=0644
-legacy pkg=SUNW0on arch=all \
-    desc="localizable message files for the OS-Networking consolidation" \
-    name="Localizable ON message files" version=11.11,REV=2009.11.10
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

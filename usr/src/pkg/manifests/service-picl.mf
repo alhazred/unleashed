@@ -693,11 +693,6 @@ file path=usr/share/man/man3picltree/ptree_register_handler.3picltree
 file path=usr/share/man/man3picltree/ptree_unregister_handler.3picltree
 file path=usr/share/man/man3picltree/ptree_update_propval.3picltree
 file path=usr/share/man/man3picltree/ptree_walk_tree_by_class.3picltree
-legacy pkg=SUNWpiclr desc="PICL Framework init scripts" \
-    name="PICL Framework (Root)"
-legacy pkg=SUNWpiclu \
-    desc="PICL Daemon, Libraries, prtpicl client and plug-in modules" \
-    name="PICL Libraries, and Plugin Modules (Usr)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/$(ARCH64)/libpicl.so target=./libpicl.so.1

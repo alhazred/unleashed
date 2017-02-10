@@ -81,7 +81,5 @@ file path=kernel/drv/$(ARCH64)/igb group=sys
 $(i386_ONLY)file path=kernel/drv/igb group=sys
 file path=kernel/drv/igb.conf group=sys preserve=renamenew
 file path=usr/share/man/man7d/igb.7d
-legacy pkg=SUNWigb desc="Intel 82575 1Gb PCI Express NIC Driver" \
-    name="Intel 82575 1Gb PCI Express NIC Driver"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

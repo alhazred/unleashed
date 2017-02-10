@@ -47,8 +47,5 @@ driver name=audioixp \
 file path=kernel/drv/$(ARCH64)/audioixp group=sys
 file path=kernel/drv/audioixp group=sys
 file path=usr/share/man/man7d/audioixp.7d
-legacy pkg=SUNWadixp \
-    desc="SunOS audio device driver for ATI IXP integrated audio hardware" \
-    name="SUNW Audio Driver for ATI IXP"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

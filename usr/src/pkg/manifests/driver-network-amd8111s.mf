@@ -44,8 +44,6 @@ driver name=amd8111s alias=pci1022,7462
 file path=kernel/drv/$(ARCH64)/amd8111s group=sys
 file path=kernel/drv/amd8111s group=sys
 file path=usr/share/man/man7d/amd8111s.7d
-legacy pkg=SUNWamd8111s desc="AMD8111 FAST Ethernet Network Adapter Driver" \
-    name="AMD8111 Fast Ethernet Driver"
 license cr_Sun license=cr_Sun
 license usr/src/uts/intel/io/amd8111s/THIRDPARTYLICENSE.amd8111s \
     license=usr/src/uts/intel/io/amd8111s/THIRDPARTYLICENSE.amd8111s

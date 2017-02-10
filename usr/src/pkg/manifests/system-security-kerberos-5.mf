@@ -105,10 +105,6 @@ file path=usr/share/man/man4/warn.conf.4
 file path=usr/share/man/man5/kerberos.5
 file path=usr/share/man/man5/krb5_auth_rules.5
 file path=usr/share/man/man5/krb5envvar.5
-legacy pkg=SUNWkdcr desc="Kerberos V5 KDC (root)" \
-    name="Kerberos V5 KDC (root)"
-legacy pkg=SUNWkdcu desc=" Kerberos V5 Master KDC (user)" \
-    name="Kerberos V5 Master KDC (user)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/lib/krb5/THIRDPARTYLICENSE \

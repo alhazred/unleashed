@@ -43,9 +43,6 @@ file path=usr/share/man/man3fcoe/FCOE_CreatePort.3fcoe
 file path=usr/share/man/man3fcoe/FCOE_DeletePort.3fcoe
 file path=usr/share/man/man3fcoe/FCOE_GetPortList.3fcoe
 file path=usr/share/man/man3lib/libfcoe.3lib
-legacy pkg=SUNWfcoeu \
-    desc="Sun FCoE (Fibre Channel over Ethernet) Port Management Library" \
-    name="Sun FCoE Port Management Library"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/$(ARCH64)/libfcoe.so target=libfcoe.so.1

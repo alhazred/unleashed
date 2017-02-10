@@ -855,9 +855,6 @@ hardlink path=kernel/sys/$(ARCH64)/rpcmod \
     target=../../../kernel/strmod/$(ARCH64)/rpcmod
 $(i386_ONLY)hardlink path=kernel/sys/autofs target=../../kernel/fs/autofs
 $(i386_ONLY)hardlink path=kernel/sys/rpcmod target=../../kernel/strmod/rpcmod
-legacy pkg=SUNWckr \
-    desc="core kernel software for a specific instruction-set architecture" \
-    name="Core Solaris Kernel (Root)"
 license cr_Sun license=cr_Sun
 license include/sys/THIRDPARTYLICENSE.firmload \
     license=include/sys/THIRDPARTYLICENSE.firmload

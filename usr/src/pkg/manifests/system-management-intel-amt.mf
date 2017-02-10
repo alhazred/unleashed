@@ -65,12 +65,6 @@ file path=lib/svc/method/svc-lms mode=0555
 file path=usr/lib/lms mode=0555
 file path=usr/share/man/man1m/lms.1m
 file path=usr/share/man/man7d/heci.7d
-legacy pkg=SUNWamt \
-    desc="Solaris support for Intel Active Management Technology" \
-    name="Solaris support for Intel AMT"
-legacy pkg=SUNWamt-lms \
-    desc="Solaris support for Intel Active Management Technology - LMS daemon" \
-    name="Solaris support for Intel AMT - LMS daemon"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/lms/THIRDPARTYLICENSE \

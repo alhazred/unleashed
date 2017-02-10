@@ -85,10 +85,6 @@ file path=usr/share/man/man4/yppasswdd.4
 file path=usr/share/man/man4/ypserv.4
 file path=var/yp/Makefile mode=0555 preserve=renamenew
 file path=var/yp/updaters mode=0500
-legacy pkg=SUNWypr desc="NIS Server for Solaris 2.6 and up" \
-    name="NIS Server for Solaris (root)"
-legacy pkg=SUNWypu desc="NIS Server for Solaris 2.6 and up" \
-    name="NIS Server for Solaris (usr)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/share/man/man1m/rexd.1m target=rpc.rexd.1m

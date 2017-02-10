@@ -57,7 +57,6 @@ file path=usr/include/sys/usb/hubd/hub.h
 file path=usr/include/sys/usb/usba.h
 file path=usr/include/sys/usb/usbai.h
 file path=usr/include/sys/usb/usbdevs.h
-legacy pkg=SUNWusbu desc="USB Headers" name="USB Headers"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license license_in_headers license=license_in_headers

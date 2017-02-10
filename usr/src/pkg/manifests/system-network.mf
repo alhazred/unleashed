@@ -71,9 +71,6 @@ file path=usr/share/man/man1m/dladm.1m
 file path=usr/share/man/man1m/flowadm.1m
 file path=usr/share/man/man1m/ipadm.1m
 group groupname=netadm gid=65
-legacy pkg=SUNWcnetr \
-    desc="core software for network infrastructure configuration" \
-    name="Core Solaris Network Infrastructure (Root)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 user username=dladm ftpuser=false gcos-field="Datalink Admin" group=netadm \

@@ -46,8 +46,5 @@ driver name=sf
 file path=platform/sun4u/kernel/drv/$(ARCH64)/sf group=sys
 file path=platform/sun4u/kernel/drv/sf.conf group=sys
 file path=usr/share/man/man7d/sf.7d
-legacy pkg=SUNWluxd.u arch=$(ARCH).sun4u \
-    desc="Sun Enterprise Network Array sf Device Driver" \
-    name="Sun Enterprise Network Array sf Device Driver"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

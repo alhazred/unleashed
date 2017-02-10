@@ -60,8 +60,5 @@ file path=usr/lib/scsi/sestopo mode=0555
 file path=usr/lib/scsi/smp mode=0555
 file path=usr/sbin/devctl mode=0555
 file path=usr/sbin/emul64ioctl mode=0555
-legacy pkg=SUNWioth desc="I/O Test Header Files" name="I/O Test Header Files"
-legacy pkg=SUNWiotu desc="I/O test utilities and drivers" \
-    name="I/O test utilities and drivers, (Usr)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

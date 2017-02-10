@@ -57,9 +57,6 @@ file path=usr/share/man/man1m/rsh.1m
 file path=usr/share/man/man1m/rwall.1m
 file path=usr/share/man/man1m/snoop.1m
 file path=usr/share/man/man1m/spray.1m
-legacy pkg=SUNWrcmdc \
-    desc="Remote Network Client Commands (filesync, rdate, rup, ruptime ...)" \
-    name="Remote Network Client Commands"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/cmd-inet/usr.bin/THIRDPARTYLICENSE.whois \

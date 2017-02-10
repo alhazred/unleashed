@@ -122,9 +122,6 @@ file path=usr/share/man/man3sasl/sasl_utf8verify.3sasl
 file path=usr/share/man/man3sasl/sasl_verifyfile_t.3sasl
 file path=usr/share/man/man3sasl/sasl_version.3sasl
 file path=usr/share/man/man4/sasl_appname.conf.4
-legacy pkg=SUNWlibsasl \
-    desc="Simple Authentication and Security Layer (SASL) v2 shared library and plugins" \
-    name="Simple Authentication and Security Layer (SASL) v2 shared library and plugins"
 license cr_Sun license=cr_Sun
 license usr/src/lib/libsasl/THIRDPARTYLICENSE \
     license=usr/src/lib/libsasl/THIRDPARTYLICENSE

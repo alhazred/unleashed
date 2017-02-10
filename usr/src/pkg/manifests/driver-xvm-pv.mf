@@ -68,7 +68,5 @@ file path=platform/$(ARCH32)hvm/kernel/misc/$(ARCH64)/hvm_sd group=sys \
 file path=platform/$(ARCH32)hvm/kernel/misc/hvm_bootstrap group=sys mode=0755
 file path=platform/$(ARCH32)hvm/kernel/misc/hvm_cmdk group=sys mode=0755
 file path=platform/$(ARCH32)hvm/kernel/misc/hvm_sd group=sys mode=0755
-legacy pkg=SUNWxvmpv desc="xVM Paravirtualized Drivers" \
-    name="xVM Paravirtualized Drivers"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

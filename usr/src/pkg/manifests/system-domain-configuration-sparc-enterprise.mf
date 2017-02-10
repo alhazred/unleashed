@@ -56,9 +56,5 @@ file path=usr/lib/dcs mode=0755
 file path=usr/platform/SUNW,SPARC-Enterprise/lib/$(ARCH64)/oplhpd mode=0755
 file path=usr/share/man/man1m/dcs.1m
 file path=usr/share/man/man1m/oplhpd.1m
-legacy pkg=SUNWdcsr desc="Domain Configuration Server, (Root)" \
-    name="Domain Configuration Server, (Root)"
-legacy pkg=SUNWdcsu desc="Domain Configuration Server" \
-    name="Domain Configuration Server"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

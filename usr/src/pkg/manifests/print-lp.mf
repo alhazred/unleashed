@@ -123,12 +123,6 @@ file path=usr/share/man/man1m/lpusers.1m
 file path=usr/share/man/man4/printers.4
 file path=usr/share/man/man4/printers.conf.4
 file path=var/spool/cron/crontabs/lp group=root mode=0400 preserve=true
-legacy pkg=SUNWpsr \
-    desc="configuration and start-up files for the print service" \
-    name="Solaris Print - LP Server, (root)" version=13.1,REV=2009.11.11
-legacy pkg=SUNWpsu \
-    desc="client configuration files and utilities for the print service" \
-    name="Solaris Print - LP Server, (usr)" version=13.1,REV=2009.11.11
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=etc/lp/logs target=../../var/lp/logs

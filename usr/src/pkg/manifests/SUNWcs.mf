@@ -1548,14 +1548,6 @@ hardlink path=usr/sbin/tapes target=./devfsadm
 hardlink path=usr/sbin/unshare target=../../usr/sbin/sharemgr
 hardlink path=usr/sbin/update_drv target=../../usr/lib/isaexec
 hardlink path=usr/sbin/whodo target=../../usr/lib/isaexec
-legacy pkg=SUNWcsr \
-    desc="core software for a specific instruction-set architecture" \
-    name="Core Solaris, (Root)"
-legacy pkg=SUNWcsu \
-    desc="core software for a specific instruction-set architecture" \
-    name="Core Solaris, (Usr)"
-legacy pkg=SUNWftpr desc="FTP Server Configuration Files" \
-    name="FTP Server, (Root)"
 license cr_ATT license=cr_ATT
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

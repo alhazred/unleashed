@@ -46,8 +46,5 @@ driver name=ahci alias=pciclass,010601 class=scsi-self-identifying \
 file path=kernel/drv/$(ARCH64)/ahci group=sys
 file path=kernel/drv/ahci group=sys
 file path=usr/share/man/man7d/ahci.7d
-legacy pkg=SUNWahci \
-    desc="Advanced Host Controller Interface (AHCI) SATA HBA Driver" \
-    name="Advanced Host Controller Interface (AHCI) SATA HBA Driver"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

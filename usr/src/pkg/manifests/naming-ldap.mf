@@ -49,9 +49,6 @@ file path=usr/share/man/man4/ldapfilter.conf.4
 file path=usr/share/man/man4/ldapsearchprefs.conf.4
 file path=usr/share/man/man4/ldaptemplates.conf.4
 hardlink path=usr/bin/ldapadd target=./ldapmodify
-legacy pkg=SUNWlldap \
-    desc="Ldap libraries in for software development of dynamically linked executables" \
-    name="LDAP Libraries"
 license cr_Sun license=cr_Sun
 license usr/src/cmd/ldap/THIRDPARTYLICENSE \
     license=usr/src/cmd/ldap/THIRDPARTYLICENSE

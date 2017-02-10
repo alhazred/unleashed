@@ -94,11 +94,6 @@ file path=usr/share/man/man3mpapi/MP_SetProprietaryProperties.3mpapi
 file path=usr/share/man/man3mpapi/MP_SetTPGAccess.3mpapi
 file path=usr/share/man/man3mpapi/Sun_MP_SendScsiCmd.3mpapi
 file path=usr/share/man/man4/mpapi.conf.4
-legacy pkg=SUNWmpapi desc="Common Library based on SNIA MP API specification" \
-    name="SNIA Multipath Management API Common Library"
-legacy pkg=SUNWmpapir \
-    desc="Common Library based on SNIA MP API specification (Root)" \
-    name="SNIA Multipath Management API Common Library (Root)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/lib/mpapi/libmpapi/THIRDPARTYLICENSE \

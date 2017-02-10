@@ -172,11 +172,6 @@ file path=usr/share/man/man1m/hal-get-property.1m
 file path=usr/share/man/man1m/hald.1m
 file path=usr/share/man/man4/fdi.4
 file path=usr/share/man/man5/hal.5
-legacy pkg=SUNWhal desc="Hardware Abstraction Layer, HAL (freedesktop.org)" \
-    name="Hardware Abstraction Layer"
-legacy pkg=SUNWhalr \
-    desc="Hardware Abstraction Layer, HAL (freedesktop.org) (Root)" \
-    name="Hardware Abstraction Layer (Root)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/hal/LICENSE license=usr/src/cmd/hal/LICENSE

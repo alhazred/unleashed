@@ -89,9 +89,6 @@ file path=usr/share/man/man3gss/gss_verify_mic.3gss
 file path=usr/share/man/man3gss/gss_wrap.3gss
 file path=usr/share/man/man3gss/gss_wrap_size_limit.3gss
 file path=usr/share/man/man3lib/libgss.3lib
-legacy pkg=SUNWgss \
-    desc="Generic Security Service Application Program Interface, Version 2 - user" \
-    name="GSSAPI V2"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/lib/libgss/THIRDPARTYLICENSE \

@@ -53,9 +53,6 @@ driver name=rum clone_perms="rum 0666 root sys" perms="* 0666 root sys" \
 file path=kernel/drv/$(ARCH64)/rum group=sys
 file path=kernel/drv/rum group=sys
 file path=usr/share/man/man7d/rum.7d
-legacy pkg=SUNWrum \
-    desc="Ralink RT2501/RT2601/RT73USB 802.11b/g Wireless Driver" \
-    name="Ralink RT2501/RT2601/RT73USB 802.11b/g Wireless Driver"
 license cr_Sun license=cr_Sun
 license usr/src/uts/common/io/rum/THIRDPARTYLICENSE \
     license=usr/src/uts/common/io/rum/THIRDPARTYLICENSE

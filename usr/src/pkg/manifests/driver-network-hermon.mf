@@ -50,6 +50,5 @@ file path=kernel/drv/$(ARCH64)/hermon group=sys
 $(i386_ONLY)file path=kernel/drv/hermon group=sys
 file path=kernel/drv/hermon.conf group=sys
 file path=usr/share/man/man7d/hermon.7d
-legacy pkg=SUNWhermon desc="Hermon HCA driver" name="Sun IB Hermon HCA driver"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

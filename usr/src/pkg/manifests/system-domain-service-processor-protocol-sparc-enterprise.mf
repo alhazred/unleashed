@@ -72,12 +72,6 @@ file path=usr/platform/SUNW,SPARC-Enterprise/sbin/prtdscp mode=0755
 file path=usr/share/man/man1m/prtdscp.1m
 file path=usr/share/man/man7d/dm2s.7d
 file path=usr/share/man/man7d/oplkmdrv.7d
-legacy pkg=SUNWdscpr.u arch=$(ARCH).sun4u \
-    desc="Domain to Service Processor Communications Protocol (Root)" \
-    name="Domain to Service Processor Communications Protocol (Root)"
-legacy pkg=SUNWdscpu.u arch=$(ARCH).sun4u \
-    desc="Domain to Service Processor Communications Protocol (Kvm)" \
-    name="Domain to Service Processor Communications Protocol (Kvm)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/platform/SUNW,SPARC-Enterprise/lib/libdscp.so \

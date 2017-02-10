@@ -46,8 +46,5 @@ file path=kernel/drv/$(ARCH64)/fcoe group=sys
 $(i386_ONLY)file path=kernel/drv/fcoe group=sys
 file path=kernel/drv/fcoe.conf group=sys
 file path=usr/share/man/man7d/fcoe.7d
-legacy pkg=SUNWfcoe \
-    desc="Sun FCoE (Fibre Channel over Ethernet) Transport Driver" \
-    name="Sun FCoE Transport Driver"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

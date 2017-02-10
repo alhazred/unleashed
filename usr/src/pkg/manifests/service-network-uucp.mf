@@ -116,10 +116,6 @@ file path=usr/share/man/man1m/uucleanup.1m
 file path=usr/share/man/man1m/uusched.1m
 file path=usr/share/man/man1m/uuxqt.1m
 hardlink path=etc/rc2.d/S70uucp target=../../etc/init.d/uucp
-legacy pkg=SUNWbnur desc="configuration and start-up files for UUCP utilities" \
-    name="Networking UUCP Utilities, (Root)"
-legacy pkg=SUNWbnuu desc="UUCP utilities and daemon" \
-    name="Networking UUCP Utilities, (Usr)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/bnu/THIRDPARTYLICENSE \

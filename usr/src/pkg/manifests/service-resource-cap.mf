@@ -50,9 +50,5 @@ file path=usr/share/man/man1/rcapstat.1
 file path=usr/share/man/man1m/rcapadm.1m
 file path=usr/share/man/man1m/rcapd.1m
 hardlink path=usr/lib/rcap/rcapd target=../isaexec
-legacy pkg=SUNWrcapr desc="Solaris Resource Capping Daemon (Root)" \
-    name="Solaris Resource Capping Daemon (Root)"
-legacy pkg=SUNWrcapu desc="Solaris Resource Capping Daemon (Usr)" \
-    name="Solaris Resource Capping Daemon (Usr)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

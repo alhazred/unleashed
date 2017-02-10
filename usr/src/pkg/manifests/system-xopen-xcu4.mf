@@ -67,9 +67,6 @@ hardlink path=usr/xpg4/bin/egrep target=../../../usr/xpg4/bin/grep
 hardlink path=usr/xpg4/bin/fgrep target=../../../usr/xpg4/bin/grep
 hardlink path=usr/xpg4/bin/ln target=../../../usr/xpg4/bin/cp
 hardlink path=usr/xpg4/bin/mv target=../../../usr/xpg4/bin/cp
-legacy pkg=SUNWxcu4 \
-    desc="utilities providing conformance with XCU4 specifications" \
-    name="XCU4 Utilities"
 license cr_ATT license=cr_ATT
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

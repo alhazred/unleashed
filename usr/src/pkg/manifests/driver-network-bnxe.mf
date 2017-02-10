@@ -62,8 +62,4 @@ file path=kernel/drv/$(ARCH64)/bnxe group=sys
 $(i386_ONLY)file path=kernel/drv/bnxe group=sys
 file path=kernel/drv/bnxe.conf group=sys preserve=renameold
 file path=usr/share/man/man7d/bnxe.7d
-legacy pkg=BRCMbnxe \
-    desc="Broadcom NetXtreme II 10 Gigabit Ethernet PCI-X/PCIE Adapter Driver" \
-    name="Broadcom NetXtreme II 10GbE NIC Driver" \
-    vendor="Broadcom Corporation, Inc."
 license cr_Sun license=cr_Sun

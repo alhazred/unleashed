@@ -82,17 +82,6 @@ file path=usr/lib/efcode/$(ARCH64)/lfc_upa.so
 file path=usr/lib/efcode/$(ARCH64)/lfc_upa_pci.so
 file path=usr/lib/efcode/efcode.sh mode=0555
 file path=usr/share/man/man1m/efdaemon.1m
-legacy pkg=SUNWefc.u arch=$(ARCH).sun4u \
-    desc="Embedded FCode Interpreter Drivers" \
-    name="Embedded FCode Interpreter Drivers"
-legacy pkg=SUNWefck desc="Embedded FCode Interpreter" \
-    name="Embedded FCode Interpreter Drivers"
-legacy pkg=SUNWefcl desc="Embedded FCode Libraries" \
-    name="Embedded FCode Libraries"
-legacy pkg=SUNWefcr desc="Embedded FCode Interpreter" \
-    name="Embedded FCode Interpreter (Root)"
-legacy pkg=SUNWefcu desc="Embedded FCode Interpreter" \
-    name="Embedded FCode Interpreter"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/efcode/$(ARCH64)/lfc_gptwo_gptwo.so target=lfc_gptwo.so

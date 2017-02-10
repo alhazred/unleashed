@@ -53,10 +53,6 @@ file path=usr/share/man/man1m/mkfs_udfs.1m
 file path=usr/share/man/man1m/mount_udfs.1m
 file path=usr/share/man/man7fs/udfs.7fs
 hardlink path=usr/lib/fs/udfs/fstyp target=../../../sbin/fstyp
-legacy pkg=SUNWudf desc="Universal Disk Format 1.50 File System, (Usr)" \
-    name="Universal Disk Format 1.50, (Usr)"
-legacy pkg=SUNWudfr desc="Universal Disk Format 1.50 File System" \
-    name="Universal Disk Format 1.50"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/fs.d/udfs/fsck/THIRDPARTYLICENSE \

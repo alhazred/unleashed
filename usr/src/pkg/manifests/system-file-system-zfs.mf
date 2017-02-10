@@ -134,10 +134,6 @@ hardlink path=kernel/fs/$(ARCH64)/zfs target=../../../kernel/drv/$(ARCH64)/zfs
 $(i386_ONLY)hardlink path=kernel/fs/zfs target=../../kernel/drv/zfs
 hardlink path=usr/lib/fs/zfs/fstyp target=../../../sbin/fstyp
 hardlink path=usr/sbin/zdb target=../../usr/lib/isaexec
-legacy pkg=SUNWzfskr desc="ZFS kernel root components" \
-    name="ZFS Kernel (Root)"
-legacy pkg=SUNWzfsr desc="ZFS root components" name="ZFS (Root)"
-legacy pkg=SUNWzfsu desc="ZFS libraries and commands" name="ZFS (Usr)"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/uts/common/fs/zfs/THIRDPARTYLICENSE.lz4 \

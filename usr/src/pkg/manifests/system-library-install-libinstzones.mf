@@ -35,8 +35,6 @@ dir path=usr/include
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
 file path=usr/include/instzones_api.h
-legacy pkg=SUNWinstallint desc="Solaris Install internal files" \
-    name="Solaris Install Internal Files"
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/$(ARCH64)/libinstzones.so target=./libinstzones.so.1

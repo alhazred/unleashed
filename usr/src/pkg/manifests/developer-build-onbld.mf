@@ -212,8 +212,6 @@ file path=opt/onbld/man/man1onbld/webrev.1onbld
 file path=opt/onbld/man/man1onbld/which_scm.1onbld
 file path=opt/onbld/man/man1onbld/ws.1onbld
 file path=opt/onbld/man/man1onbld/wsdiff.1onbld
-legacy pkg=SUNWonbld desc="tools used to build the OS-Net consolidation" \
-    name="OS-Net Build Tools" version=11.11,REV=2009.10.22
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/lib/libdwarf/THIRDPARTYLICENSE \
