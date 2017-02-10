@@ -186,7 +186,6 @@ MAN = 6to4relay.1m \
       init.1m \
       inityp2l.1m \
       installboot.1m \
-      installf.1m \
       intrd.1m \
       intrstat.1m \
       iostat.1m \
@@ -306,11 +305,6 @@ MAN = 6to4relay.1m \
       pbind.1m \
       picld.1m \
       ping.1m \
-      pkgadd.1m \
-      pkgadm.1m \
-      pkgask.1m \
-      pkgchk.1m \
-      pkgrm.1m \
       plockstat.1m \
       pmadm.1m \
       pmconfig.1m \
@@ -357,7 +351,6 @@ MAN = 6to4relay.1m \
       rdate.1m \
       reboot.1m \
       rem_drv.1m \
-      removef.1m \
       repquota.1m \
       rmmount.1m \
       rmt.1m \

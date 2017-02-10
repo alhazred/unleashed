@@ -236,11 +236,6 @@ MAN = acctcom.1 \
       pfexec.1 \
       pg.1 \
       pgrep.1 \
-      pkginfo.1 \
-      pkgmk.1 \
-      pkgparam.1 \
-      pkgproto.1 \
-      pkgtrans.1 \
       pktool.1 \
       plgrp.1 \
       plimit.1 \

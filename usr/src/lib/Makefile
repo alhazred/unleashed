@@ -167,7 +167,6 @@ SUBDIRS +=				\
 	libpctx		\
 	libpicl		\
 	libpicltree	\
-	libpkg		\
 	libpool		\
 	libpp		\
 	libproc		\
@@ -308,7 +307,6 @@ MSGSUBDIRS=		\
 	libnwam		\
 	libpam		\
 	libpicl		\
-	libpkg		\
 	libpool		\
 	libpp		\
 	libreparse	\
@@ -581,7 +579,6 @@ libnisdb:	libldap5
 libnwam:	libscf libbsm libdladm
 libpcp:		libumem libdevinfo
 libpctx:	libproc
-libpkg:		libscf libadm
 libpool:	libscf libexacct
 libpp:		libast
 libproc:	../cmd/sgs/librtld_db ../cmd/sgs/libelf libctf

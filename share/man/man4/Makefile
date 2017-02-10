@@ -7,7 +7,6 @@ MAN_i386 = sysbus.4
 MAN = Intro.4 \
       NISLDAPmapping.4 \
       a.out.4 \
-      admin.4 \
       au.4 \
       audit.log.4 \
       audit_class.4 \
@@ -19,10 +18,7 @@ MAN = Intro.4 \
       bart_manifest.4 \
       bart_rules.4 \
       bootparams.4 \
-      compver.4 \
-      contents.4 \
       contract.4 \
-      copyright.4 \
       core.4 \
       crypt.conf.4 \
       crypto_certs.4 \
@@ -33,7 +29,6 @@ MAN = Intro.4 \
       default_fs.4 \
       defaultdomain.4 \
       defaultrouter.4 \
-      depend.4 \
       device_allocate.4 \
       device_contract.4 \
       device_maps.4 \
@@ -113,8 +108,6 @@ MAN = Intro.4 \
       path_to_inst.4 \
       pci.4 \
       phones.4 \
-      pkginfo.4 \
-      pkgmap.4 \
       policy.conf.4 \
       power.conf.4 \
       printers.4 \
@@ -126,7 +119,6 @@ MAN = Intro.4 \
       profile.4 \
       project.4 \
       protocols.4 \
-      prototype.4 \
       pseudo.4 \
       publickey.4 \
       queuedefs.4 \
@@ -149,7 +141,6 @@ MAN = Intro.4 \
       smbautohome.4 \
       smhba.conf.4 \
       sock2path.d.4 \
-      space.4 \
       sulog.4 \
       syslog.conf.4 \
       system.4 \

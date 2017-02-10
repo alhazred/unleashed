@@ -10,6 +10,7 @@ changed.
 <next> release
 --------------
  - Trusted Solaris aka. Trusted Extensions
+ - SVR4 pkg support & code
  - GRUB
  - closed source components were removed, including:
    - in.iked(1M) and related utilities

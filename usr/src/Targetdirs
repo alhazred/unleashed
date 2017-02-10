@@ -285,7 +285,6 @@ DIRS= \
 	/usr/proc/bin \
 	/usr/sadm \
 	/usr/sadm/install \
-	/usr/sadm/install/bin \
 	/usr/sadm/install/scripts \
 	/usr/sbin \
 	/usr/sbin/$(MACH32) \
@@ -336,12 +335,6 @@ DIRS= \
 	/var/preserve \
 	/var/run \
 	/var/saf \
-	/var/sadm \
-	/var/sadm/install \
-	/var/sadm/install/admin \
-	/var/sadm/install/logs \
-	/var/sadm/pkg \
-	/var/sadm/security \
 	/var/smb \
 	/var/smb/cvol \
 	/var/smb/cvol/windows \
@@ -352,7 +345,6 @@ DIRS= \
 	/var/spool/cron/atjobs \
 	/var/spool/cron/crontabs \
 	/var/spool/lp \
-	/var/spool/pkg \
 	/var/spool/uucp \
 	/var/spool/uucppublic \
 	/var/svc \
