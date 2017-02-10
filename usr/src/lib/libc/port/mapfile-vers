@@ -4118,7 +4118,6 @@ $endif
 	fts_open;
 	fts_read;
 	fts_set;
-	reallocarray;
 	vis;
 	strvis;
 	strnvis;
@@ -4127,6 +4126,10 @@ $endif
 	unvis;
 	strunvis;
 	strnunvis;
+
+    global:
+# FIXME: new symbols for our OS, but here pending a name.
+	reallocarray		{ FLAGS = NODIRECT };
 
     local:
 	__imax_lldiv				{ FLAGS = NODYNSORT };
