@@ -68,6 +68,7 @@ namespace std {
 void *malloc(size_t);
 void free(void *);
 void *realloc(void *, size_t);
+void *reallocarray(void *, size_t, size_t);
 void *calloc(size_t, size_t);
 
 #if __cplusplus >= 199711L
