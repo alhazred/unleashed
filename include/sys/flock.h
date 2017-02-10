@@ -196,7 +196,7 @@ typedef enum {
     FLK_LOCKMGR_DOWN
 } flk_lockmgr_status_t;
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 /*
  * The following structure is used to hold a list of locks returned

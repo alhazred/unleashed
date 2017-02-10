@@ -706,7 +706,7 @@ typedef struct kstat_timer {
 
 #define	KSTAT_TIMER_PTR(kptr)	((kstat_timer_t *)(kptr)->ks_data)
 
-#if	defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if	defined(_KERNEL)
 
 #include <sys/t_lock.h>
 

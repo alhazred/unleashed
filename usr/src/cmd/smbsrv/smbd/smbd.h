@@ -146,10 +146,6 @@ void *smbd_door_dispatch_op(void *);
 int smbd_authsvc_start(void);
 void smbd_authsvc_stop(void);
 
-/* For fksmbd */
-void fksmbd_init(void);
-int fksmbd_door_dispatch(smb_doorarg_t *);
-
 #ifdef __cplusplus
 }
 #endif

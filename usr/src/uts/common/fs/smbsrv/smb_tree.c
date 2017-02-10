@@ -1104,10 +1104,6 @@ smb_tree_getattr(const smb_kshare_t *si, smb_node_t *node, smb_tree_t *tree)
 static void
 smb_tree_get_volname(vfs_t *vfsp, smb_tree_t *tree)
 {
-#ifdef	_FAKE_KERNEL
-	_NOTE(ARGUNUSED(vfsp))
-	(void) strlcpy(tree->t_volume, "fake", SMB_VOLNAMELEN);
-#else	/* _FAKE_KERNEL */
 	refstr_t *vfs_mntpoint;
 	const char *s;
 	char *name;
@@ -1122,7 +1118,6 @@ smb_tree_get_volname(vfs_t *vfsp, smb_tree_t *tree)
 
 	name = tree->t_volume;
 	(void) strsep((char **)&name, "/");
-#endif	/* _FAKE_KERNEL */
 }
 
 /*

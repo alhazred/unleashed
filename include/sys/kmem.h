@@ -52,7 +52,7 @@ extern "C" {
 
 #define	KM_FLAGS	0xffff	/* all settable kmem flags */
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 extern void *kmem_alloc(size_t size, int kmflags);
 extern void *kmem_zalloc(size_t size, int kmflags);
@@ -95,7 +95,7 @@ typedef enum kmem_cbrc {
 	KMEM_CBRC_DONT_KNOW
 } kmem_cbrc_t;
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 /*
  * Helps clients implementing the move() callback to recognize known objects by

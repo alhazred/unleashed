@@ -198,7 +198,7 @@ struct XDR;
 int smb_logon_xdr(struct XDR *, smb_logon_t *);
 int smb_token_xdr(struct XDR *, smb_token_t *);
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 void smb_token_free(smb_token_t *);
 #else /* _KERNEL */
 smb_token_t *smb_logon(smb_logon_t *);

@@ -424,7 +424,7 @@ enum {
  */
 #define	VFSSP_VERBATIM	0x1	/* do not prefix the supplied path */
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 /*
  * Private vfs data, NOT to be used by a file system implementation.

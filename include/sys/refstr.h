@@ -40,7 +40,7 @@ extern "C" {
 
 typedef struct refstr refstr_t;
 
-#if	defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if	defined(_KERNEL)
 
 refstr_t	*refstr_alloc(const char *);
 const char	*refstr_value(refstr_t *);

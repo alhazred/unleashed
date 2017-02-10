@@ -27,7 +27,7 @@
 #include <sys/stat.h>
 #include <sys/errno.h>
 #include <sys/avl.h>
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 #include <sys/debug.h>
 #include <sys/kmem.h>
 #include <sys/systm.h>
@@ -224,7 +224,7 @@ cmp2acls(void *a, void *b)
 static void *
 cacl_realloc(void *ptr, size_t size, size_t new_size)
 {
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 	void *tmp;
 
 	tmp = kmem_alloc(new_size, KM_SLEEP);
@@ -239,7 +239,7 @@ cacl_realloc(void *ptr, size_t size, size_t new_size)
 static int
 cacl_malloc(void **ptr, size_t size)
 {
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 	*ptr = kmem_zalloc(size, KM_SLEEP);
 	return (0);
 #else
@@ -255,7 +255,7 @@ cacl_malloc(void **ptr, size_t size)
 static void
 cacl_free(void *ptr, size_t size)
 {
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 	kmem_free(ptr, size);
 #else
 	free(ptr);
@@ -1556,7 +1556,7 @@ acl_translate(acl_t *aclp, int target_flavor, boolean_t isdir, uid_t owner,
 
 out:
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 	return (error);
 #else
 	errno = error;

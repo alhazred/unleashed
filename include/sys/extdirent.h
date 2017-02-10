@@ -34,7 +34,7 @@ extern "C" {
 
 #include <sys/types.h>
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 /*
  * Extended file-system independent directory entry.  This style of

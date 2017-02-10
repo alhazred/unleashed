@@ -28,7 +28,7 @@
 #ifndef _SMB_IDMAP_H
 #define	_SMB_IDMAP_H
 
-#if defined(_KERNEL) /* intentionally not || defined(_FAKE_KERNEL) */
+#if defined(_KERNEL)
 #include <sys/kidmap.h>
 #else
 #include <idmap.h>

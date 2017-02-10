@@ -104,9 +104,6 @@ main(int argc, char *argv[])
 	struct rlimit		rl;
 	int			orig_limit;
 
-#ifdef	FKSMBD
-	fksmbd_init();
-#endif
 	smbd.s_pname = basename(argv[0]);
 	openlog(smbd.s_pname, LOG_PID | LOG_NOWAIT, LOG_DAEMON);
 
@@ -114,16 +111,8 @@ main(int argc, char *argv[])
 		return (SMF_EXIT_ERR_FATAL);
 
 	if ((uid = getuid()) != smbd.s_uid) {
-#ifdef	FKSMBD
-		/* Can't manipulate privileges in daemonize. */
-		if (smbd.s_fg == 0) {
-			smbd.s_fg = 1;
-			smbd_report("user %d (forced -f)", uid);
-		}
-#else	/* FKSMBD */
 		smbd_report("user %d: %s", uid, strerror(EPERM));
 		return (SMF_EXIT_ERR_FATAL);
-#endif	/* FKSMBD */
 	}
 
 	if (smbd_already_running())
@@ -467,10 +456,8 @@ smbd_service_init(void)
 		return (-1);
 	}
 
-#ifndef	FKSMBD
 	/* Upgrade SMF settings, if necessary. */
 	smb_config_upgrade();
-#endif
 
 	smb_codepage_init();
 

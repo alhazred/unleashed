@@ -34,7 +34,7 @@
 #include <smbsrv/wintypes.h>
 #include <smb/lmerr.h>
 
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 #include <libshare.h>
 #endif
 
@@ -232,7 +232,7 @@ typedef struct smb_shr_execinfo {
  * will return -1.
  */
 
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 
 /*
  * CIFS share management functions exported by libmlsvc

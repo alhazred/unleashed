@@ -103,7 +103,6 @@ for lib in \
   libcmdutils \
   libcryptoutil \
   libdevid \
-  libfakekernel	\
   libgss \
   libkrb5 \
   libidmap \
@@ -160,7 +159,6 @@ done
 do_lib2() {
 
 for lib in \
-  libfakekernel \
   libads \
   libsmbfs
 do
@@ -213,8 +211,6 @@ do
   (cd $SRC/cmd/mdb/$x/$a/smbfs &&
 	$make $1 KMDB_LINKTEST_ENABLE= )
   (cd $SRC/cmd/mdb/$x/$a/smbsrv &&
-	$make $1 KMDB_LINKTEST_ENABLE= )
-  (cd $SRC/cmd/mdb/$x/$a/libfksmbsrv &&
 	$make $1 KMDB_LINKTEST_ENABLE= )
 
 # We build these libraries (to the proto area), so we need to

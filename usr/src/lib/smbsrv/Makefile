@@ -27,7 +27,6 @@
 include ../Makefile.lib
 
 SUBDIRS = \
-	libfksmbsrv \
 	libmlsvc \
 	libmlrpc \
 	libsmb \
@@ -37,6 +36,5 @@ SUBDIRS = \
 libmlrpc: libsmb
 libsmbns: libsmb
 libmlsvc: libsmb libmlrpc libsmbns
-libfksmbsrv: libsmb
 
 include ./Makefile.subdirs

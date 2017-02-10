@@ -42,11 +42,6 @@
 extern "C" {
 #endif
 
-/*
- * The ifdef's for these two accomodate duplicate definitions in
- * lib/smbsrv/libfksmbsrv/common/sys/kidmap.h  See notes there.
- */
-
 /* Status */
 #ifndef	_IDMAP_STAT_TYPE
 #define	_IDMAP_STAT_TYPE

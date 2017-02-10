@@ -1053,7 +1053,6 @@ SMBSRV_SHARED_OBJS += \
 		smb_utf8.o \
 		smb_xdr.o
 
-# See also: $SRC/lib/smbsrv/libfksmbsrv/Makefile.com
 SMBSRV_OBJS +=	$(SMBSRV_SHARED_OBJS)			\
 		smb_acl.o				\
 		smb_alloc.o				\

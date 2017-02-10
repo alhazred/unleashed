@@ -24,7 +24,7 @@
  */
 
 #include <sys/sunddi.h>
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 #include <string.h>
 #include <strings.h>
 #include <stddef.h>

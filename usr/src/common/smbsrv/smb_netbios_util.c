@@ -25,7 +25,7 @@
  * Copyright 2014 Nexenta Systems, Inc.  All rights reserved.
  */
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 #include <sys/types.h>
 #include <sys/sunddi.h>
 #else

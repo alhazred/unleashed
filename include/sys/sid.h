@@ -31,7 +31,7 @@
 
 #include <sys/types.h>
 #include <sys/avl.h>
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 #include <sys/zone.h>
 #endif
 
@@ -55,7 +55,7 @@ extern "C" {
 #define	SIDSYS_SID2ID	0
 #define	SIDSYS_ID2SID	1
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 #define	KSIDLIST_MEM(n)	(sizeof (ksidlist_t) + ((n) - 1) * sizeof (ksid_t))
 
 /* Domains are stored in AVL trees so we can share them among SIDs */

@@ -27,9 +27,8 @@
  * SMB server interface to idmap
  * (smb_idmap_get..., smb_idmap_batch_...)
  *
- * There are three implementations of this interface:
+ * There are two implementations of this interface:
  *	uts/common/fs/smbsrv/smb_idmap.c (smbsrv kmod)
- *	lib/smbsrv/libfksmbsrv/common/fksmb_idmap.c (libfksmbsrv)
  *	lib/smbsrv/libsmb/common/smb_idmap.c (libsmb)
  *
  * There are enough differences (relative to the code size)

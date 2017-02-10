@@ -16,10 +16,6 @@
 /*
  * Helper functions for SMB signing using the
  * Kernel Cryptographic Framework (KCF)
- *
- * There are two implementations of these functions:
- * This one (for kernel) and another for user space:
- * See: lib/smbsrv/libfksmbsrv/common/fksmb_sign_pkcs.c
  */
 
 #include <sys/types.h>

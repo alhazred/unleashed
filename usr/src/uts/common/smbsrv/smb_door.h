@@ -97,18 +97,12 @@ typedef struct smb_doorarg {
 #define	SMB_DOP_ENCODE_ERROR		3
 #define	SMB_DOP_EMPTYBUF		4
 
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 char *smb_common_encode(void *, xdrproc_t, size_t *);
 int smb_common_decode(char *, size_t, xdrproc_t, void *);
 char *smb_string_encode(char *, size_t *);
 int smb_string_decode(smb_string_t *, char *, size_t);
 #endif /* !_KERNEL */
-
-/* libfksmbsrv "kdoor" callback to smbd-d */
-typedef int fksmb_kdoor_disp_func_t(smb_doorarg_t *);
-
-/* libfksmbsrv "opipe" callback to smbd-d */
-typedef int fksmb_opipe_disp_func_t(door_arg_t *);
 
 /*
  * Legacy door interface

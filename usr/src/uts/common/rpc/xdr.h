@@ -45,7 +45,7 @@
 
 #include <sys/byteorder.h>	/* For all ntoh* and hton*() kind of macros */
 #include <rpc/types.h>	/* For all ntoh* and hton*() kind of macros */
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 #include <stdio.h> /* defines FILE *, used in ANSI C function prototypes */
 #else	/* _KERNEL */
 #include <sys/stream.h>
@@ -562,7 +562,7 @@ typedef struct xdr_bytesrec xdr_bytesrec;
  * These are the public routines for the various implementations of
  * xdr streams.
  */
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 #ifdef __STDC__
 extern void   xdrmem_create(XDR *, const caddr_t, const uint_t, const enum
 xdr_op);

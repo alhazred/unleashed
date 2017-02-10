@@ -612,7 +612,6 @@ smb_server_start(smb_ioc_start_t *ioc)
 			break;
 		}
 
-#ifdef	_KERNEL
 		ASSERT(sv->sv_lmshrd == NULL);
 		sv->sv_lmshrd = smb_kshare_door_init(ioc->lmshrd);
 		if (sv->sv_lmshrd == NULL)
@@ -621,10 +620,6 @@ smb_server_start(smb_ioc_start_t *ioc)
 			cmn_err(CE_WARN, "Cannot open smbd door");
 			break;
 		}
-#else	/* _KERNEL */
-		/* Fake kernel does not use the kshare_door */
-		fksmb_kdoor_open(sv, ioc->udoor_func);
-#endif	/* _KERNEL */
 
 		if (rc = smb_thread_start(&sv->si_thread_timers))
 			break;

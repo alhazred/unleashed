@@ -42,11 +42,7 @@
 #include <sys/sid.h>
 #include <sys/priv_names.h>
 
-#ifdef	_FAKE_KERNEL
-#define	THR_TO_DID(t)	((kt_did_t)(uintptr_t)t)
-#else
 #define	THR_TO_DID(t)	(t->t_did)
-#endif
 
 static boolean_t smb_thread_continue_timedwait_locked(smb_thread_t *, int);
 

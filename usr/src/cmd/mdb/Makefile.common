@@ -35,7 +35,6 @@ COMMON_MODULES_PROC = \
 	libavl \
 	libc \
 	libcmdutils \
-	libfksmbsrv \
 	libnvpair \
 	libproc \
 	libpython \

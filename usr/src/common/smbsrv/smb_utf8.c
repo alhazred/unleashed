@@ -50,7 +50,7 @@
  * October 1996
  */
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 #include <sys/types.h>
 #include <sys/sunddi.h>
 #else

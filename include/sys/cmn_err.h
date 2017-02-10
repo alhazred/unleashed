@@ -33,7 +33,7 @@
 #ifndef _SYS_CMN_ERR_H
 #define	_SYS_CMN_ERR_H
 
-#if !defined(_ASM) && (defined(_KERNEL) || defined(_FAKE_KERNEL))
+#if !defined(_ASM) && defined(_KERNEL)
 #include <sys/va_list.h>
 #endif
 
@@ -51,7 +51,7 @@ extern "C" {
 #define	CE_PANIC	3	/* panic		*/
 #define	CE_IGNORE	4	/* print nothing	*/
 
-#if !defined(_ASM) && (defined(_KERNEL) || defined(_FAKE_KERNEL))
+#if !defined(_ASM) && defined(_KERNEL)
 
 /*PRINTFLIKE2*/
 extern void cmn_err(int, const char *, ...)

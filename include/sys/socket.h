@@ -176,7 +176,7 @@ struct fil_info {
 #define	FILF_AUTO	0x2		/* automatic attach */
 #define	FILF_BYPASS	0x4		/* filter is not active */
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 /*
  * new socket open flags to identify socket and acceptor streams
  */
@@ -313,7 +313,7 @@ struct msghdr {
 	int		msg_flags;		/* flags on received message */
 };
 
-#if	defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if	defined(_KERNEL)
 
 #if defined(_SYSCALL32)
 

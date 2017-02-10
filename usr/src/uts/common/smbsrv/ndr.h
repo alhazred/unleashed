@@ -40,7 +40,7 @@
  * ogspecs@opengroup.org
  */
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 #error "not used in kernel code"
 #else /* _KERNEL */
 #include <sys/types.h>

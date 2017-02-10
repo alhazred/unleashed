@@ -32,7 +32,7 @@
 #ifndef _SYS_MODE_H
 #define	_SYS_MODE_H
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 #include <sys/stat.h>
 #include <sys/vnode.h>

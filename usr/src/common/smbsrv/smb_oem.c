@@ -29,7 +29,7 @@
  * Support for oem <-> unicode translations.
  */
 
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 #include <stdlib.h>
 #include <thread.h>
 #include <synch.h>
@@ -308,7 +308,7 @@ oem_get_ucspage(uint32_t cpid)
 static void
 oem_codepage_init(uint32_t cpid)
 {
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 	static mutex_t mutex;
 
 	(void) mutex_lock(&mutex);

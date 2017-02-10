@@ -120,7 +120,6 @@ SUBDIRS +=				\
 	libeti		\
 	libexacct	\
 	libexacct/demo	\
-	libfakekernel	\
 	libfcoe		\
 	libficl		\
 	libfru		\
@@ -373,7 +372,6 @@ HDRSUBDIRS=				\
 	libdtrace	\
 	libelfsign	\
 	libeti		\
-	libfakekernel	\
 	libfcoe		\
 	libfru		\
 	libfstyp	\
@@ -563,7 +561,6 @@ libefi:		libuuid
 libelfsign:	libcryptoutil libkmf ../cmd/sgs/libelf
 libeti:		libcurses
 libexacct/demo:	libexacct libproject
-libfakekernel:	libumem libcryptoutil
 libfcoe:	libdladm
 libficl:	libuuid libumem
 libfru:		libfruutils
@@ -641,7 +638,7 @@ sasl_plugins:	pkcs11 libgss libsasl
 scsi:		libfru libumem libdevid libdevinfo
 smbsrv:		libxnet libpthread librt libshare libidmap pkcs11 libsqlite \
 		libcryptoutil libreparse libcmdutils libresolv2 libsmbfs \
-		libuuid libfakekernel libads libgss libldap5 krb5
+		libuuid libads libgss libldap5 krb5
 storage:	libdevice libdevinfo libdevid
 sun_fc:		libdevinfo libsysevent
 sun_sas:	libdevinfo libsysevent libkstat libdevid

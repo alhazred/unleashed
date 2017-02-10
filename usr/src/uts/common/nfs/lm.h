@@ -44,7 +44,7 @@ extern "C" {
 #include <sys/vnode.h>
 #include <rpc/xdr.h>
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 /*
  * Common interfaces.

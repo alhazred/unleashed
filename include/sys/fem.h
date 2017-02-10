@@ -42,7 +42,7 @@
 extern "C" {
 #endif
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 struct fs_operation_def;	/* from vfs.h */
 

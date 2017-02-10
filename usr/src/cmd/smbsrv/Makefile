@@ -25,7 +25,7 @@
 # Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
 #
 
-SUBDIRS = smbadm smbd smbstat dtrace fksmbd bind-helper
+SUBDIRS = smbadm smbd smbstat dtrace bind-helper
 MSGSUBDIRS = smbadm smbstat
 
 include ../Makefile.cmd

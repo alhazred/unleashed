@@ -46,7 +46,7 @@
 
 #include <sys/feature_tests.h>
 
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 #if !defined(__XOPEN_OR_POSIX) || defined(_XPG6) || defined(__EXTENSIONS__)
 #include <sys/time_impl.h>
 #endif
@@ -149,13 +149,13 @@ typedef	struct __fd_set {
 #define	FD_ISSET(__n, __p)	(((__p)->fds_bits[(__n)/FD_NFDBITS] & \
 				    (1ul << ((__n) % FD_NFDBITS))) != 0l)
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 #define	FD_ZERO(p)	bzero((p), sizeof (*(p)))
 #else
 #define	FD_ZERO(__p)    (void) memset((__p), 0, sizeof (*(__p)))
 #endif /* _KERNEL */
 
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 extern int select(int, fd_set *_RESTRICT_KYWD, fd_set *_RESTRICT_KYWD,
 	fd_set *_RESTRICT_KYWD, struct timeval *_RESTRICT_KYWD);
 

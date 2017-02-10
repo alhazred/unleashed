@@ -79,7 +79,7 @@ typedef struct _disp {
 	hrtime_t	disp_steal;	/* time when threads become stealable */
 } disp_t;
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 #define	MAXCLSYSPRI	99
 #define	MINCLSYSPRI	60
@@ -95,9 +95,6 @@ extern int	nswapped;	/* number of swapped threads */
 extern	pri_t	minclsyspri;	/* minimum level of any system class */
 extern	pri_t	maxclsyspri;	/* maximum level of any system class */
 extern	pri_t	intr_pri;	/* interrupt thread priority base level */
-
-#endif	/* _KERNEL || _FAKE_KERNEL */
-#if defined(_KERNEL)
 
 /*
  * Minimum amount of time that a thread can remain runnable before it can

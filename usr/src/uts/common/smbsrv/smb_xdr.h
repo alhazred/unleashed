@@ -43,7 +43,7 @@ extern "C" {
 #include <smbsrv/smb_dfs.h>
 #include <smbsrv/wintypes.h>
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 #include <sys/sysmacros.h>
 #define	xdr_int8_t	xdr_char
 #define	xdr_uint8_t	xdr_u_char
@@ -93,7 +93,6 @@ typedef struct smb_pipehdr {
 #define	SMB_DF_ASYNC		0x00000001	/* Asynchronous call */
 #define	SMB_DF_SYSSPACE		0x00000002	/* Called from the kernel */
 #define	SMB_DF_USERSPACE	0x00000004	/* Called from user space */
-#define	SMB_DF_FAKE_KERNEL	0x00000008	/* Called from fake kernel */
 
 /*
  * Header for door calls.  The op codes and return codes are defined

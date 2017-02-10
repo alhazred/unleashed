@@ -22,18 +22,12 @@
 #include <syslog.h>
 #include <smbsrv/libsmb.h>
 
-/*
- * This is exported NODIRECT so that smbd can provide it's own.
- */
 void
 smb_vsyslog(int pri, const char *fmt, va_list ap)
 {
 	vsyslog(pri, fmt, ap);
 }
 
-/*
- * This is exported NODIRECT so that fksmbd can provide it's own.
- */
 void
 smb_syslog(int pri, const char *fmt, ...)
 {

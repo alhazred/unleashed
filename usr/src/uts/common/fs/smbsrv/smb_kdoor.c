@@ -32,10 +32,6 @@
 #include <smbsrv/smb_kproto.h>
 #include <smbsrv/smb_door.h>
 
-#ifdef	_FAKE_KERNEL
-#error	"See libfksmbsrv"
-#endif	/* _FAKE_KERNEL */
-
 static int smb_kdoor_send(smb_server_t *, smb_doorarg_t *);
 static int smb_kdoor_receive(smb_server_t *, smb_doorarg_t *);
 static int smb_kdoor_upcall_private(smb_server_t *, smb_doorarg_t *);

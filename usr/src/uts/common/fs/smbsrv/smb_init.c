@@ -35,10 +35,6 @@
 #include <smbsrv/smb_kproto.h>
 #include <smbsrv/smb_ioctl.h>
 
-#ifdef	_FAKE_KERNEL
-#error	"See libfksmbsrv"
-#endif	/* _FAKE_KERNEL */
-
 static int smb_drv_open(dev_t *, int, int, cred_t *);
 static int smb_drv_close(dev_t, int, int, cred_t *);
 static int smb_drv_ioctl(dev_t, int, intptr_t, int, cred_t *, int *);

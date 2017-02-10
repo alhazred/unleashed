@@ -329,7 +329,7 @@ extern unsigned char bcd_to_byte[256];
 #endif  /* _BIT_FIELDS_LTOH */
 
 /* avoid any possibility of clashing with <stddef.h> version */
-#if (defined(_KERNEL) || defined(_FAKE_KERNEL)) && !defined(_KMEMUSER)
+#if defined(_KERNEL) && !defined(_KMEMUSER)
 
 #if !defined(offsetof)
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)

@@ -32,11 +32,7 @@
 #include <smbsrv/smb.h>
 #include <smbsrv/smb_ktypes.h>
 
-#ifdef _KERNEL
 #define	SMBSRV_OBJNAME	"smbsrv"
-#else
-#define	SMBSRV_OBJNAME	"libfksmbsrv.so.1"
-#endif
 
 #define	SMB_DCMD_INDENT		2
 #define	ACE_TYPE_TABLEN		(ACE_ALL_TYPES + 1)

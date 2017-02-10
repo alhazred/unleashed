@@ -54,7 +54,7 @@ typedef struct swrand_stats {
 					/* the pool */
 } swrand_stats_t;
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 #define	BUMP_CPU_RND_STATS(rm, x, v)    (((rm)->rm_mag.rm_stats).x += (v))
 #define	BUMP_RND_STATS(x, v)	atomic_add_64(&(rnd_stats).x, (v))

@@ -229,7 +229,7 @@ struct itimerval32 {
  */
 typedef	longlong_t	hrtime_t;
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 #include <sys/time_impl.h>
 #include <sys/mutex.h>
@@ -424,7 +424,7 @@ int gettimeofday(struct timeval *_RESTRICT_KYWD, void *_RESTRICT_KYWD);
  * non-X/Open applications, including this header will still make
  * visible these definitions.
  */
-#if !defined(_BOOT) && !defined(_KERNEL) && !defined(_FAKE_KERNEL) && \
+#if !defined(_BOOT) && !defined(_KERNEL) && \
 	!defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 #include <time.h>
 #endif
@@ -436,7 +436,7 @@ int gettimeofday(struct timeval *_RESTRICT_KYWD, void *_RESTRICT_KYWD);
  * beginning with XSH4v2.  Placement required after definition
  * for itimerval.
  */
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL) && \
+#if !defined(_KERNEL) && \
 	!defined(__XOPEN_OR_POSIX) || \
 	defined(_XPG4_2) || defined(__EXTENSIONS__)
 #include <sys/select.h>

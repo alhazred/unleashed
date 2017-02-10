@@ -29,7 +29,7 @@
  * This file was originally generated using rpcgen.
  */
 
-#if !defined(_KERNEL) && !defined(_FAKE_KERNEL)
+#if !defined(_KERNEL)
 #include <stdlib.h>
 #endif /* !_KERNEL */
 #include <smbsrv/wintypes.h>

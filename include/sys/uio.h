@@ -237,7 +237,7 @@ typedef struct uioasync_s {
 
 #endif /* !defined(_XPG4_2) || defined(__EXTENSIONS__) */
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 int	uiomove(void *, size_t, enum uio_rw, uio_t *);
 void	uio_prefaultpages(ssize_t, uio_t *);

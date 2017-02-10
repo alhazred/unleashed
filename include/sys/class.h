@@ -115,7 +115,7 @@ typedef struct sclass {
 #define	SCHED_INSTALLED(s)	((s)->cl_funcs != NULL)
 #define	ALLOCATED_SCHED(s)	((s)->cl_lock != NULL)
 
-#if defined(_KERNEL) || defined(_FAKE_KERNEL)
+#if defined(_KERNEL)
 
 #define	CLASS_KERNEL(cid)	((cid) == syscid || (cid) == sysdccid)
 

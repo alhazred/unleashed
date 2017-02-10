@@ -55,52 +55,6 @@ extern "C" {
 #include <smbsrv/smb_ktypes.h>
 #include <smbsrv/smb_ioctl.h>
 
-/*
- * DTrace SDT probes have different signatures in userland than they do in
- * kernel.  If we're compiling for user mode (libfksmbsrv) define them as
- * either no-op (for the SMB dtrace provider) or libfksmbsrv functions for
- * the other SDT probe sites.
- */
-#ifndef	_KERNEL
-
-extern void smb_dtrace1(const char *f, const char *n,
-			const char *t1, long v1);
-extern void smb_dtrace2(const char *f, const char *n,
-			const char *t1, long v1,
-			const char *t2, long v2);
-extern void smb_dtrace3(const char *f, const char *n,
-			const char *t1, long v1,
-			const char *t2, long v2,
-			const char *t3, long v3);
-
-/*
- * These are for the SMB dtrace proivder, which for a user-mode build
- * are largely redundant with the fbt probes so make these no-ops.
- */
-#undef	DTRACE_SMB_1
-#define	DTRACE_SMB_1(n, a, b)			((void)b)
-#undef	DTRACE_SMB_2
-#define	DTRACE_SMB_2(n, a, b, c, d)		((void)b, (void)d)
-
-/*
- * These are for the other (specialized) dtrace SDT probes sprinkled
- * through the smbsrv code.  In libfksmbsrv map these to functions.
- */
-
-#undef	DTRACE_PROBE1
-#define	DTRACE_PROBE1(n, a, b) \
-	smb_dtrace1(__func__, #n, #a, (long)b)
-
-#undef	DTRACE_PROBE2
-#define	DTRACE_PROBE2(n, a, b, c, d) \
-	smb_dtrace2(__func__, #n, #a, (long)b, #c, (long)d)
-
-#undef	DTRACE_PROBE3
-#define	DTRACE_PROBE3(n, a, b, c, d, e, f) \
-	smb_dtrace3(__func__, #n, #a, (long)b, #c, (long)d, #e, (long)f)
-
-#endif	/* _KERNEL */
-
 extern	int smb_maxbufsize;
 extern	int smb_flush_required;
 extern	int smb_dirsymlink_enable;
@@ -453,7 +407,6 @@ int smb_kdoor_open(smb_server_t *, int);
 void smb_kdoor_close(smb_server_t *);
 int smb_kdoor_upcall(smb_server_t *, uint32_t,
 	void *, xdrproc_t, void *, xdrproc_t);
-void fksmb_kdoor_open(smb_server_t *, void *);
 
 /*
  * SMB server functions (file smb_server.c)
