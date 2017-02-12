@@ -320,9 +320,6 @@ s1394_create_devinfo(s1394_hal_t *hal, s1394_node_t *node, uint32_t *unit_dir,
 		return (NULL);
 	}
 
-	for (j = 0; j < i; j++) {
-	}
-
 	/* GUID,ADDR */
 	reg[0] = node->node_guid_hi;
 	reg[1] = node->node_guid_lo;
@@ -406,9 +403,6 @@ s1394_devi_find(dev_info_t *pdip, char *name, char *caddr)
 			ASSERT(strcmp(ddi_node_name(cdip), name) == 0);
 			break;
 		}
-	}
-
-	if (cdip == NULL) {
 	}
 
 	return (cdip);
@@ -963,9 +957,6 @@ s1394_remove_target_from_node(s1394_target_t *target)
 
 	/* target_list_rwlock should be held in write mode */
 	ASSERT(rw_read_locked(&target->on_hal->target_list_rwlock) == 0);
-
-	if (target->on_node == NULL) {
-	}
 
 	t = target->target_list;
 	t1 = NULL;
