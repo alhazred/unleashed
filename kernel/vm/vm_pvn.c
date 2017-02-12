@@ -344,7 +344,7 @@ pgcnt_t	pages_before_pager = 200;	/* LMXXX */
 
 /*
  * Routine to be called when page-out's complete.
- * The caller, typically VOP_PUTPAGE, has to explicity call this routine
+ * The caller, typically fop_putpage, has to explicity call this routine
  * after waiting for i/o to complete (biowait) to free the list of
  * pages associated with the buffer.  These pages must be locked
  * before i/o is initiated.
@@ -636,7 +636,7 @@ pvn_getdirty(page_t *pp, int flags)
 		} else {
 			/*
 			 * This is advisory path for the callers
-			 * of VOP_PUTPAGE() who prefer freeing the
+			 * of fop_putpage() who prefer freeing the
 			 * page _only_ if no one else is accessing it.
 			 * E.g. segmap_release()
 			 *
@@ -1069,7 +1069,7 @@ pvn_vpzero(struct vnode *vp, u_offset_t vplen, size_t zbytes)
 }
 
 /*
- * Handles common work of the VOP_GETPAGE routines by iterating page by page
+ * Handles common work of the fop_getpage routines by iterating page by page
  * calling the getpage helper for each.
  */
 int

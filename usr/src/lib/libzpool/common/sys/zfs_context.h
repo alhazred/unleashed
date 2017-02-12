@@ -473,13 +473,13 @@ typedef struct vsecattr {
 
 #define	CRCREAT		0
 
-extern int fop_getattr(vnode_t *vp, vattr_t *vap);
+extern int fop_getattr_real(vnode_t *vp, vattr_t *vap);
 
-#define	VOP_CLOSE(vp, f, c, o, cr, ct)	0
-#define	VOP_PUTPAGE(vp, of, sz, fl, cr, ct)	0
-#define	VOP_GETATTR(vp, vap, fl, cr, ct)  fop_getattr((vp), (vap));
+#define	fop_close(vp, f, c, o, cr, ct)	0
+#define	fop_putpage(vp, of, sz, fl, cr, ct)	0
+#define	fop_getattr(vp, vap, fl, cr, ct)  fop_getattr_real((vp), (vap))
 
-#define	VOP_FSYNC(vp, f, cr, ct)	fsync((vp)->v_fd)
+#define	fop_fsync(vp, f, cr, ct)	fsync((vp)->v_fd)
 
 #define	VN_RELE(vp)	vn_close(vp)
 

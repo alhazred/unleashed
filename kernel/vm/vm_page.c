@@ -4286,7 +4286,7 @@ page_busy(int cleanit)
 			off = pp->p_offset;
 			VN_HOLD(vp);
 			page_unlock(pp);
-			(void) VOP_PUTPAGE(vp, off, PAGESIZE,
+			(void) fop_putpage(vp, off, PAGESIZE,
 			    B_ASYNC | B_FREE, kcred, NULL);
 			VN_RELE(vp);
 		}
@@ -4410,7 +4410,7 @@ top:
 			 * cpr deals with the dirty pages at the dump time
 			 * if this putpage fails.
 			 */
-			(void) VOP_PUTPAGE(vp, offset, PAGESIZE, B_INVAL,
+			(void) fop_putpage(vp, offset, PAGESIZE, B_INVAL,
 			    kcred, NULL);
 			VN_RELE(vp);
 		} else {

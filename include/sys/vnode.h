@@ -72,55 +72,55 @@ extern "C" {
 #define	VOPSTATS_STR	"vopstats_"	/* Initial string for vopstat kstats */
 
 typedef struct vopstats {
-	kstat_named_t	nopen;		/* VOP_OPEN */
-	kstat_named_t	nclose;		/* VOP_CLOSE */
-	kstat_named_t	nread;		/* VOP_READ */
+	kstat_named_t	nopen;		/* fop_open */
+	kstat_named_t	nclose;		/* fop_close */
+	kstat_named_t	nread;		/* fop_read */
 	kstat_named_t	read_bytes;
-	kstat_named_t	nwrite;		/* VOP_WRITE */
+	kstat_named_t	nwrite;		/* fop_write */
 	kstat_named_t	write_bytes;
-	kstat_named_t	nioctl;		/* VOP_IOCTL */
-	kstat_named_t	nsetfl;		/* VOP_SETFL */
-	kstat_named_t	ngetattr;	/* VOP_GETATTR */
-	kstat_named_t	nsetattr;	/* VOP_SETATTR */
-	kstat_named_t	naccess;	/* VOP_ACCESS */
-	kstat_named_t	nlookup;	/* VOP_LOOKUP */
-	kstat_named_t	ncreate;	/* VOP_CREATE */
-	kstat_named_t	nremove;	/* VOP_REMOVE */
-	kstat_named_t	nlink;		/* VOP_LINK */
-	kstat_named_t	nrename;	/* VOP_RENAME */
-	kstat_named_t	nmkdir;		/* VOP_MKDIR */
-	kstat_named_t	nrmdir;		/* VOP_RMDIR */
-	kstat_named_t	nreaddir;	/* VOP_READDIR */
+	kstat_named_t	nioctl;		/* fop_ioctl */
+	kstat_named_t	nsetfl;		/* fop_setfl */
+	kstat_named_t	ngetattr;	/* fop_getattr */
+	kstat_named_t	nsetattr;	/* fop_setattr */
+	kstat_named_t	naccess;	/* fop_access */
+	kstat_named_t	nlookup;	/* fop_lookup */
+	kstat_named_t	ncreate;	/* fop_create */
+	kstat_named_t	nremove;	/* fop_remove */
+	kstat_named_t	nlink;		/* fop_link */
+	kstat_named_t	nrename;	/* fop_rename */
+	kstat_named_t	nmkdir;		/* fop_mkdir */
+	kstat_named_t	nrmdir;		/* fop_rmdir */
+	kstat_named_t	nreaddir;	/* fop_readdir */
 	kstat_named_t	readdir_bytes;
-	kstat_named_t	nsymlink;	/* VOP_SYMLINK */
-	kstat_named_t	nreadlink;	/* VOP_READLINK */
-	kstat_named_t	nfsync;		/* VOP_FSYNC */
-	kstat_named_t	ninactive;	/* VOP_INACTIVE */
-	kstat_named_t	nfid;		/* VOP_FID */
-	kstat_named_t	nrwlock;	/* VOP_RWLOCK */
-	kstat_named_t	nrwunlock;	/* VOP_RWUNLOCK */
-	kstat_named_t	nseek;		/* VOP_SEEK */
-	kstat_named_t	ncmp;		/* VOP_CMP */
-	kstat_named_t	nfrlock;	/* VOP_FRLOCK */
-	kstat_named_t	nspace;		/* VOP_SPACE */
-	kstat_named_t	nrealvp;	/* VOP_REALVP */
-	kstat_named_t	ngetpage;	/* VOP_GETPAGE */
-	kstat_named_t	nputpage;	/* VOP_PUTPAGE */
-	kstat_named_t	nmap;		/* VOP_MAP */
-	kstat_named_t	naddmap;	/* VOP_ADDMAP */
-	kstat_named_t	ndelmap;	/* VOP_DELMAP */
-	kstat_named_t	npoll;		/* VOP_POLL */
-	kstat_named_t	ndump;		/* VOP_DUMP */
-	kstat_named_t	npathconf;	/* VOP_PATHCONF */
-	kstat_named_t	npageio;	/* VOP_PAGEIO */
-	kstat_named_t	ndumpctl;	/* VOP_DUMPCTL */
-	kstat_named_t	ndispose;	/* VOP_DISPOSE */
-	kstat_named_t	nsetsecattr;	/* VOP_SETSECATTR */
-	kstat_named_t	ngetsecattr;	/* VOP_GETSECATTR */
-	kstat_named_t	nshrlock;	/* VOP_SHRLOCK */
-	kstat_named_t	nvnevent;	/* VOP_VNEVENT */
-	kstat_named_t	nreqzcbuf;	/* VOP_REQZCBUF */
-	kstat_named_t	nretzcbuf;	/* VOP_RETZCBUF */
+	kstat_named_t	nsymlink;	/* fop_symlink */
+	kstat_named_t	nreadlink;	/* fop_readlink */
+	kstat_named_t	nfsync;		/* fop_fsync */
+	kstat_named_t	ninactive;	/* fop_inactive */
+	kstat_named_t	nfid;		/* fop_fid */
+	kstat_named_t	nrwlock;	/* fop_rwlock */
+	kstat_named_t	nrwunlock;	/* fop_rwunlock */
+	kstat_named_t	nseek;		/* fop_seek */
+	kstat_named_t	ncmp;		/* fop_cmp */
+	kstat_named_t	nfrlock;	/* fop_frlock */
+	kstat_named_t	nspace;		/* fop_space */
+	kstat_named_t	nrealvp;	/* fop_realvp */
+	kstat_named_t	ngetpage;	/* fop_getpage */
+	kstat_named_t	nputpage;	/* fop_putpage */
+	kstat_named_t	nmap;		/* fop_map */
+	kstat_named_t	naddmap;	/* fop_addmap */
+	kstat_named_t	ndelmap;	/* fop_delmap */
+	kstat_named_t	npoll;		/* fop_poll */
+	kstat_named_t	ndump;		/* fop_dump */
+	kstat_named_t	npathconf;	/* fop_pathconf */
+	kstat_named_t	npageio;	/* fop_pageio */
+	kstat_named_t	ndumpctl;	/* fop_dumpctl */
+	kstat_named_t	ndispose;	/* fop_dispose */
+	kstat_named_t	nsetsecattr;	/* fop_setsecattr */
+	kstat_named_t	ngetsecattr;	/* fop_getsecattr */
+	kstat_named_t	nshrlock;	/* fop_shrlock */
+	kstat_named_t	nvnevent;	/* fop_vnevent */
+	kstat_named_t	nreqzcbuf;	/* fop_reqzcbuf */
+	kstat_named_t	nretzcbuf;	/* fop_retzcbuf */
 } vopstats_t;
 
 /*
@@ -308,7 +308,7 @@ typedef struct vn_vfslocks_entry {
 
 /*
  * Tell vn_open() not to fail a directory open for writing but
- * to go ahead and call VOP_OPEN() to let the filesystem check.
+ * to go ahead and call fop_open() to let the filesystem check.
  */
 #define	VDIROPEN	0x800
 
@@ -701,7 +701,7 @@ typedef vattr_t		vattr32_t;
 #define	PERMMASK	00777		/* permission bits */
 
 /*
- * VOP_ACCESS flags
+ * fop_access flags
  */
 #define	V_ACE_MASK	0x1	/* mask represents  NFSv4 ACE permissions */
 #define	V_APPEND	0x2	/* want to do append only check */
@@ -727,7 +727,7 @@ typedef enum vcexcl	vcexcl_t;
 typedef enum create	create_t;
 
 /*
- * Vnode Events - Used by VOP_VNEVENT
+ * Vnode Events - Used by fop_vnevent
  * The VE_PRE_RENAME_* events fire before the rename operation and are
  * primarily used for specialized applications, such as NFSv4 delegation, which
  * need to know about rename before it occurs.
@@ -759,7 +759,7 @@ typedef enum v_mode v_mode_t;
 #define	V_FALSE	0
 
 /*
- * Structure used on VOP_GETSECATTR and VOP_SETSECATTR operations
+ * Structure used on fop_getsecattr and fop_setsecattr operations
  */
 
 typedef struct vsecattr {
@@ -1038,99 +1038,6 @@ extern int	fop_retzcbuf(vnode_t *, xuio_t *, cred_t *, caller_context_t *);
 
 #endif	/* _KERNEL */
 
-#define	VOP_OPEN(vpp, mode, cr, ct) \
-	fop_open(vpp, mode, cr, ct)
-#define	VOP_CLOSE(vp, f, c, o, cr, ct) \
-	fop_close(vp, f, c, o, cr, ct)
-#define	VOP_READ(vp, uiop, iof, cr, ct) \
-	fop_read(vp, uiop, iof, cr, ct)
-#define	VOP_WRITE(vp, uiop, iof, cr, ct) \
-	fop_write(vp, uiop, iof, cr, ct)
-#define	VOP_IOCTL(vp, cmd, a, f, cr, rvp, ct) \
-	fop_ioctl(vp, cmd, a, f, cr, rvp, ct)
-#define	VOP_SETFL(vp, f, a, cr, ct) \
-	fop_setfl(vp, f, a, cr, ct)
-#define	VOP_GETATTR(vp, vap, f, cr, ct) \
-	fop_getattr(vp, vap, f, cr, ct)
-#define	VOP_SETATTR(vp, vap, f, cr, ct) \
-	fop_setattr(vp, vap, f, cr, ct)
-#define	VOP_ACCESS(vp, mode, f, cr, ct) \
-	fop_access(vp, mode, f, cr, ct)
-#define	VOP_LOOKUP(vp, cp, vpp, pnp, f, rdir, cr, ct, defp, rpnp) \
-	fop_lookup(vp, cp, vpp, pnp, f, rdir, cr, ct, defp, rpnp)
-#define	VOP_CREATE(dvp, p, vap, ex, mode, vpp, cr, flag, ct, vsap) \
-	fop_create(dvp, p, vap, ex, mode, vpp, cr, flag, ct, vsap)
-#define	VOP_REMOVE(dvp, p, cr, ct, f) \
-	fop_remove(dvp, p, cr, ct, f)
-#define	VOP_LINK(tdvp, fvp, p, cr, ct, f) \
-	fop_link(tdvp, fvp, p, cr, ct, f)
-#define	VOP_RENAME(fvp, fnm, tdvp, tnm, cr, ct, f) \
-	fop_rename(fvp, fnm, tdvp, tnm, cr, ct, f)
-#define	VOP_MKDIR(dp, p, vap, vpp, cr, ct, f, vsap) \
-	fop_mkdir(dp, p, vap, vpp, cr, ct, f, vsap)
-#define	VOP_RMDIR(dp, p, cdir, cr, ct, f) \
-	fop_rmdir(dp, p, cdir, cr, ct, f)
-#define	VOP_READDIR(vp, uiop, cr, eofp, ct, f) \
-	fop_readdir(vp, uiop, cr, eofp, ct, f)
-#define	VOP_SYMLINK(dvp, lnm, vap, tnm, cr, ct, f) \
-	fop_symlink(dvp, lnm, vap, tnm, cr, ct, f)
-#define	VOP_READLINK(vp, uiop, cr, ct) \
-	fop_readlink(vp, uiop, cr, ct)
-#define	VOP_FSYNC(vp, syncflag, cr, ct) \
-	fop_fsync(vp, syncflag, cr, ct)
-#define	VOP_INACTIVE(vp, cr, ct) \
-	fop_inactive(vp, cr, ct)
-#define	VOP_FID(vp, fidp, ct) \
-	fop_fid(vp, fidp, ct)
-#define	VOP_RWLOCK(vp, w, ct) \
-	fop_rwlock(vp, w, ct)
-#define	VOP_RWUNLOCK(vp, w, ct) \
-	fop_rwunlock(vp, w, ct)
-#define	VOP_SEEK(vp, ooff, noffp, ct) \
-	fop_seek(vp, ooff, noffp, ct)
-#define	VOP_CMP(vp1, vp2, ct) \
-	fop_cmp(vp1, vp2, ct)
-#define	VOP_FRLOCK(vp, cmd, a, f, o, cb, cr, ct) \
-	fop_frlock(vp, cmd, a, f, o, cb, cr, ct)
-#define	VOP_SPACE(vp, cmd, a, f, o, cr, ct) \
-	fop_space(vp, cmd, a, f, o, cr, ct)
-#define	VOP_REALVP(vp1, vp2, ct) \
-	fop_realvp(vp1, vp2, ct)
-#define	VOP_GETPAGE(vp, of, sz, pr, pl, ps, sg, a, rw, cr, ct) \
-	fop_getpage(vp, of, sz, pr, pl, ps, sg, a, rw, cr, ct)
-#define	VOP_PUTPAGE(vp, of, sz, fl, cr, ct) \
-	fop_putpage(vp, of, sz, fl, cr, ct)
-#define	VOP_MAP(vp, of, as, a, sz, p, mp, fl, cr, ct) \
-	fop_map(vp, of, as, a, sz, p, mp, fl, cr, ct)
-#define	VOP_ADDMAP(vp, of, as, a, sz, p, mp, fl, cr, ct) \
-	fop_addmap(vp, of, as, a, sz, p, mp, fl, cr, ct)
-#define	VOP_DELMAP(vp, of, as, a, sz, p, mp, fl, cr, ct) \
-	fop_delmap(vp, of, as, a, sz, p, mp, fl, cr, ct)
-#define	VOP_POLL(vp, events, anyyet, reventsp, phpp, ct) \
-	fop_poll(vp, events, anyyet, reventsp, phpp, ct)
-#define	VOP_DUMP(vp, addr, bn, count, ct) \
-	fop_dump(vp, addr, bn, count, ct)
-#define	VOP_PATHCONF(vp, cmd, valp, cr, ct) \
-	fop_pathconf(vp, cmd, valp, cr, ct)
-#define	VOP_PAGEIO(vp, pp, io_off, io_len, flags, cr, ct) \
-	fop_pageio(vp, pp, io_off, io_len, flags, cr, ct)
-#define	VOP_DUMPCTL(vp, action, blkp, ct) \
-	fop_dumpctl(vp, action, blkp, ct)
-#define	VOP_DISPOSE(vp, pp, flag, dn, cr, ct) \
-	fop_dispose(vp, pp, flag, dn, cr, ct)
-#define	VOP_GETSECATTR(vp, vsap, f, cr, ct) \
-	fop_getsecattr(vp, vsap, f, cr, ct)
-#define	VOP_SETSECATTR(vp, vsap, f, cr, ct) \
-	fop_setsecattr(vp, vsap, f, cr, ct)
-#define	VOP_SHRLOCK(vp, cmd, shr, f, cr, ct) \
-	fop_shrlock(vp, cmd, shr, f, cr, ct)
-#define	VOP_VNEVENT(vp, vnevent, dvp, fnm, ct) \
-	fop_vnevent(vp, vnevent, dvp, fnm, ct)
-#define	VOP_REQZCBUF(vp, rwflag, xuiop, cr, ct) \
-	fop_reqzcbuf(vp, rwflag, xuiop, cr, ct)
-#define	VOP_RETZCBUF(vp, xuiop, cr, ct) \
-	fop_retzcbuf(vp, xuiop, cr, ct)
-
 #define	VOPNAME_OPEN		"open"
 #define	VOPNAME_CLOSE		"close"
 #define	VOPNAME_READ		"read"
@@ -1179,7 +1086,7 @@ extern int	fop_retzcbuf(vnode_t *, xuio_t *, cred_t *, caller_context_t *);
 #define	VOPNAME_RETZCBUF	"retzcbuf"
 
 /*
- * Flags for VOP_LOOKUP
+ * Flags for fop_lookup
  *
  * Defined in file.h, but also possible, FIGNORECASE and FSEARCH
  *
@@ -1190,20 +1097,20 @@ extern int	fop_retzcbuf(vnode_t *, xuio_t *, cred_t *, caller_context_t *);
 #define	LOOKUP_HAVE_SYSATTR_DIR	0x08	/* Already created virtual GFS dir */
 
 /*
- * Flags for VOP_READDIR
+ * Flags for fop_readdir
  */
 #define	V_RDDIR_ENTFLAGS	0x01	/* request dirent flags */
 #define	V_RDDIR_ACCFILTER	0x02	/* filter out inaccessible dirents */
 
 /*
- * Flags for VOP_RWLOCK/VOP_RWUNLOCK
- * VOP_RWLOCK will return the flag that was actually set, or -1 if none.
+ * Flags for fop_rwlock/fop_rwunlock
+ * fop_rwlock will return the flag that was actually set, or -1 if none.
  */
 #define	V_WRITELOCK_TRUE	(1)	/* Request write-lock on the vnode */
 #define	V_WRITELOCK_FALSE	(0)	/* Request read-lock on the vnode */
 
 /*
- * Flags for VOP_DUMPCTL
+ * Flags for fop_dumpctl
  */
 #define	DUMP_ALLOC	0
 #define	DUMP_FREE	1
@@ -1366,11 +1273,11 @@ extern uint_t pvn_vmodsort_supported;
 
 /*
  * Compare two vnodes for equality.  In general this macro should be used
- * in preference to calling VOP_CMP directly.
+ * in preference to calling fop_cmp directly.
  */
 #define	VN_CMP(VP1, VP2)	((VP1) == (VP2) ? 1 : 	\
 	((VP1) && (VP2) && (vn_getops(VP1) == vn_getops(VP2)) ? \
-	VOP_CMP(VP1, VP2, NULL) : 0))
+	fop_cmp(VP1, VP2, NULL) : 0))
 
 /*
  * Some well-known global vnodes used by the VM system to name pages.
@@ -1392,7 +1299,7 @@ typedef enum {
 #endif	/* _KERNEL */
 
 /*
- * Flags to VOP_SETATTR/VOP_GETATTR.
+ * Flags to fop_setattr/fop_getattr.
  */
 #define	ATTR_UTIME	0x01	/* non-default utime(2) request */
 #define	ATTR_EXEC	0x02	/* invocation from exec(2) */
@@ -1414,7 +1321,7 @@ typedef enum {
 #ifdef	_KERNEL
 
 /*
- * Structure used while handling asynchronous VOP_PUTPAGE operations.
+ * Structure used while handling asynchronous fop_putpage operations.
  */
 struct async_reqs {
 	struct async_reqs *a_next;	/* pointer to next arg struct */
@@ -1427,14 +1334,14 @@ struct async_reqs {
 };
 
 /*
- * VN_DISPOSE() -- given a page pointer, safely invoke VOP_DISPOSE().
+ * VN_DISPOSE() -- given a page pointer, safely invoke fop_dispose().
  * Note that there is no guarantee that the page passed in will be
  * freed.  If that is required, then a check after calling VN_DISPOSE would
  * be necessary to ensure the page was freed.
  */
 #define	VN_DISPOSE(pp, flag, dn, cr)	{ \
 	if ((pp)->p_vnode != NULL && !VN_ISKAS((pp)->p_vnode)) \
-		VOP_DISPOSE((pp)->p_vnode, (pp), (flag), (dn), (cr), NULL); \
+		fop_dispose((pp)->p_vnode, (pp), (flag), (dn), (cr), NULL); \
 	else if ((flag) == B_FREE) \
 		page_free((pp), (dn)); \
 	else \

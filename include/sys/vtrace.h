@@ -809,40 +809,40 @@ extern "C" {
 #define	TR_FHTOVP_START		2
 #define	TR_FHTOVP_END		3
 
-#define	TR_VOP_GETATTR_START	100
-#define	TR_VOP_GETATTR_END	101
-#define	TR_VOP_SETATTR_START	102
-#define	TR_VOP_SETATTR_END	103
-#define	TR_VOP_LOOKUP_START	104
-#define	TR_VOP_LOOKUP_END	105
-#define	TR_VOP_READLINK_START	106
-#define	TR_VOP_READLINK_END	107
-#define	TR_VOP_RWLOCK_START	108
-#define	TR_VOP_RWLOCK_END	109
-#define	TR_VOP_ACCESS_START	110
-#define	TR_VOP_ACCESS_END	111
-#define	TR_VOP_READ_START	114
-#define	TR_VOP_READ_END		115
-#define	TR_VOP_RWUNLOCK_START	118
-#define	TR_VOP_RWUNLOCK_END	119
-#define	TR_VOP_WRITE_START	120
-#define	TR_VOP_WRITE_END	121
-#define	TR_VOP_CREATE_START	122
-#define	TR_VOP_CREATE_END	123
-#define	TR_VOP_REMOVE_START	124
-#define	TR_VOP_REMOVE_END	125
-#define	TR_VOP_RENAME_START	126
-#define	TR_VOP_RENAME_END	127
-#define	TR_VOP_LINK_START	128
-#define	TR_VOP_LINK_END		129
-#define	TR_VOP_SYMLINK_START	130
-#define	TR_VOP_SYMLINK_END	131
-#define	TR_VOP_MKDIR_START	132
-#define	TR_VOP_MKDIR_END	133
-#define	TR_VOP_RMDIR_START	134
-#define	TR_VOP_RMDIR_END	135
-#define	TR_VOP_READDIR_START	136
-#define	TR_VOP_READDIR_END	137
+#define	TR_fop_getattr_START	100
+#define	TR_fop_getattr_END	101
+#define	TR_fop_setattr_START	102
+#define	TR_fop_setattr_END	103
+#define	TR_fop_lookup_START	104
+#define	TR_fop_lookup_END	105
+#define	TR_fop_readlink_START	106
+#define	TR_fop_readlink_END	107
+#define	TR_fop_rwlock_START	108
+#define	TR_fop_rwlock_END	109
+#define	TR_fop_access_START	110
+#define	TR_fop_access_END	111
+#define	TR_fop_read_START	114
+#define	TR_fop_read_END		115
+#define	TR_fop_rwunlock_START	118
+#define	TR_fop_rwunlock_END	119
+#define	TR_fop_write_START	120
+#define	TR_fop_write_END	121
+#define	TR_fop_create_START	122
+#define	TR_fop_create_END	123
+#define	TR_fop_remove_START	124
+#define	TR_fop_remove_END	125
+#define	TR_fop_rename_START	126
+#define	TR_fop_rename_END	127
+#define	TR_fop_link_START	128
+#define	TR_fop_link_END		129
+#define	TR_fop_symlink_START	130
+#define	TR_fop_symlink_END	131
+#define	TR_fop_mkdir_START	132
+#define	TR_fop_mkdir_END	133
+#define	TR_fop_rmdir_START	134
+#define	TR_fop_rmdir_END	135
+#define	TR_fop_readdir_START	136
+#define	TR_fop_readdir_END	137
 #define	TR_RFS_GETATTR_START	142
 #define	TR_RFS_GETATTR_END	143
 #define	TR_RFS_SETATTR_START	144
@@ -877,10 +877,10 @@ extern "C" {
 #define	TR_SVC_SENDREPLY_END	179
 
 /* More VOP calls */
-#define	TR_VOP_FSYNC_START	180
-#define	TR_VOP_FSYNC_END	181
-#define	TR_VOP_PUTPAGE_START	182
-#define	TR_VOP_PUTPAGE_END	183
+#define	TR_fop_fsync_START	180
+#define	TR_fop_fsync_END	181
+#define	TR_fop_putpage_START	182
+#define	TR_fop_putpage_END	183
 #define	TR_SVC_GETARGS_START	186
 #define	TR_SVC_GETARGS_END	187
 #define	TR_CHECKEXPORT_START	188
@@ -907,8 +907,8 @@ extern "C" {
 #define	TR_CMN_DISPATCH_END	227
 
 /* More VOP calls */
-#define	TR_VOP_SPACE_START	228
-#define	TR_VOP_SPACE_END	229
+#define	TR_fop_space_START	228
+#define	TR_fop_space_END	229
 
 /*
  * TR_FAC_KRPC tags

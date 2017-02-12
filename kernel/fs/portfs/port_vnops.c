@@ -274,7 +274,7 @@ port_close(struct vnode *vp, int flag, int count, offset_t offset, cred_t *cr,
 }
 
 /*
- * The port_poll() function is the VOP_POLL() entry of event ports.
+ * The port_poll() function is the fop_poll() entry of event ports.
  * Event ports return:
  * POLLIN  : events are available in the event queue
  * POLLOUT : event queue can still accept events

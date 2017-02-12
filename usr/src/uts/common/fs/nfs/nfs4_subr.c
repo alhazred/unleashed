@@ -2868,7 +2868,7 @@ nfs4_subr_fini(void)
 }
 /*
  * Set or Clear direct I/O flag
- * VOP_RWLOCK() is held for write access to prevent a race condition
+ * fop_rwlock() is held for write access to prevent a race condition
  * which would occur if a process is in the middle of a write when
  * directio flag gets set. It is possible that all pages may not get flushed.
  *
@@ -2893,16 +2893,16 @@ nfs4_directio(vnode_t *vp, int cmd, cred_t *cr)
 		 * Flush the page cache.
 		 */
 
-		(void) VOP_RWLOCK(vp, V_WRITELOCK_TRUE, NULL);
+		(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);
 
 		if (rp->r_flags & R4DIRECTIO) {
-			VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+			fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 			return (0);
 		}
 
 		if (nfs4_has_pages(vp) &&
 		    ((rp->r_flags & R4DIRTY) || rp->r_awcount > 0)) {
-			error = VOP_PUTPAGE(vp, (offset_t)0, (uint_t)0,
+			error = fop_putpage(vp, (offset_t)0, (uint_t)0,
 			    B_INVAL, cr, NULL);
 			if (error) {
 				if (error == ENOSPC || error == EDQUOT) {
@@ -2911,7 +2911,7 @@ nfs4_directio(vnode_t *vp, int cmd, cred_t *cr)
 						rp->r_error = error;
 					mutex_exit(&rp->r_statelock);
 				}
-				VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+				fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 				return (error);
 			}
 		}
@@ -2919,7 +2919,7 @@ nfs4_directio(vnode_t *vp, int cmd, cred_t *cr)
 		mutex_enter(&rp->r_statelock);
 		rp->r_flags |= R4DIRECTIO;
 		mutex_exit(&rp->r_statelock);
-		VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+		fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 		return (0);
 	}
 

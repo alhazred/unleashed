@@ -692,7 +692,7 @@ secpolicy_fs_common(cred_t *cr, vnode_t *mvp, const vfs_t *vfsp,
 		int err;
 
 		va.va_mask = AT_UID|AT_MODE;
-		err = VOP_GETATTR(mvp, &va, 0, cr, NULL);
+		err = fop_getattr(mvp, &va, 0, cr, NULL);
 		if (err != 0)
 			return (err);
 

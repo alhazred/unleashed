@@ -148,7 +148,7 @@
  * thru the VOP_** interfaces. If the file system does not implement vnode
  * notifications, watching for file events on such file systems is not
  * supported. The vnode event notifications support is determined by the call
- * vnevent_support(vp) (VOP_VNEVENT(vp, VE_SUPPORT)), which the file system
+ * vnevent_support(vp) (fop_vnevent(vp, VE_SUPPORT)), which the file system
  * has to implement.
  *
  *
@@ -833,7 +833,7 @@ port_check_timestamp(portfop_cache_t *pfcp, vnode_t *vp, vnode_t *dvp,
 		if (fobj->fo_atime.tv_sec || fobj->fo_atime.tv_nsec ||
 		    fobj->fo_mtime.tv_sec || fobj->fo_mtime.tv_nsec ||
 		    fobj->fo_ctime.tv_sec || fobj->fo_ctime.tv_nsec) {
-			if (VOP_GETATTR(vp, &vatt, 0, CRED(), NULL)) {
+			if (fop_getattr(vp, &vatt, 0, CRED(), NULL)) {
 				return;
 			}
 		} else {
@@ -849,7 +849,7 @@ port_check_timestamp(portfop_cache_t *pfcp, vnode_t *vp, vnode_t *dvp,
 		if (fobj32->fo_atime.tv_sec || fobj32->fo_atime.tv_nsec ||
 		    fobj32->fo_mtime.tv_sec || fobj32->fo_mtime.tv_nsec ||
 		    fobj32->fo_ctime.tv_sec || fobj32->fo_ctime.tv_nsec) {
-			if (VOP_GETATTR(vp, &vatt, 0, CRED(), NULL)) {
+			if (fop_getattr(vp, &vatt, 0, CRED(), NULL)) {
 				return;
 			}
 		} else {
@@ -1233,7 +1233,7 @@ port_resolve_vp(vnode_t *vp)
 	 * This should take care of lofs mounted fs systems and nfs4
 	 * hardlinks.
 	 */
-	if ((VOP_REALVP(vp, &rvp, NULL) == 0) && vp != rvp) {
+	if ((fop_realvp(vp, &rvp, NULL) == 0) && vp != rvp) {
 		VN_HOLD(rvp);
 		VN_RELE(vp);
 		vp = rvp;
@@ -2096,7 +2096,7 @@ port_fop_unmount(fsemarg_t *vf, int flag, cred_t *cr)
 
 /*
  * ------------------------------file op hooks--------------------------
- * The O_TRUNC operation is caught with the VOP_SETATTR(AT_SIZE) call.
+ * The O_TRUNC operation is caught with the fop_setattr(AT_SIZE) call.
  */
 static int
 port_fop_open(femarg_t *vf, int mode, cred_t *cr, caller_context_t *ct)
@@ -2191,14 +2191,14 @@ port_fop_create(femarg_t *vf, char *name, vattr_t *vap, vcexcl_t excl,
 	 * file was actually created.
 	 */
 	vatt.va_mask = AT_ATIME|AT_MTIME|AT_CTIME;
-	if (VOP_GETATTR(vp, &vatt, 0, CRED(), ct)) {
+	if (fop_getattr(vp, &vatt, 0, CRED(), ct)) {
 		got = 0;
 	}
 	retval = vnext_create(vf, name, vap, excl, mode, vpp, cr,
 	    flag, ct, vsecp);
 
 	vatt1.va_mask = AT_ATIME|AT_MTIME|AT_CTIME;
-	if (got && !VOP_GETATTR(vp, &vatt1, 0, CRED(), ct)) {
+	if (got && !fop_getattr(vp, &vatt1, 0, CRED(), ct)) {
 		if ((vatt1.va_mtime.tv_sec > vatt.va_mtime.tv_sec ||
 		    (vatt1.va_mtime.tv_sec = vatt.va_mtime.tv_sec &&
 		    vatt1.va_mtime.tv_nsec > vatt.va_mtime.tv_nsec))) {

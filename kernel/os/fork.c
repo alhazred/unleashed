@@ -1032,11 +1032,11 @@ getproc(proc_t **cpp, pid_t pid, uint_t flags)
 	if (cp->p_exec) {
 		VN_HOLD(cp->p_exec);
 		/*
-		 * Each VOP_OPEN() must be paired with a corresponding
-		 * VOP_CLOSE(). In this case, the executable will be
+		 * Each fop_open() must be paired with a corresponding
+		 * fop_close(). In this case, the executable will be
 		 * closed for the child in either proc_exit() or gexec().
 		 */
-		if (VOP_OPEN(&cp->p_exec, FREAD, CRED(), NULL) != 0) {
+		if (fop_open(&cp->p_exec, FREAD, CRED(), NULL) != 0) {
 			VN_RELE(cp->p_exec);
 			cp->p_exec = NULLVP;
 			cp->p_execdir = NULLVP;

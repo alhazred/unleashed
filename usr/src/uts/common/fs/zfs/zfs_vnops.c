@@ -2464,7 +2464,7 @@ zfs_fsync(vnode_t *vp, int syncflag, cred_t *cr, caller_context_t *ct)
 	 */
 	if (vn_has_cached_data(vp) && !(syncflag & FNODSYNC) &&
 	    (vp->v_type == VREG) && !(IS_SWAPVP(vp)))
-		(void) VOP_PUTPAGE(vp, (offset_t)0, (size_t)0, B_ASYNC, cr, ct);
+		(void) fop_putpage(vp, (offset_t)0, (size_t)0, B_ASYNC, cr, ct);
 
 	(void) tsd_set(zfs_fsyncer_key, (void *)zfs_fsync_sync_cnt);
 
@@ -3459,7 +3459,7 @@ zfs_rename(vnode_t *sdvp, char *snm, vnode_t *tdvp, char *tnm, cred_t *cr,
 	/*
 	 * Make sure we have the real vp for the target directory.
 	 */
-	if (VOP_REALVP(tdvp, &realvp, ct) == 0)
+	if (fop_realvp(tdvp, &realvp, ct) == 0)
 		tdvp = realvp;
 
 	tdzp = VTOZ(tdvp);
@@ -4020,7 +4020,7 @@ zfs_link(vnode_t *tdvp, vnode_t *svp, char *name, cred_t *cr,
 	ZFS_VERIFY_ZP(dzp);
 	zilog = zfsvfs->z_log;
 
-	if (VOP_REALVP(svp, &realvp, ct) == 0)
+	if (fop_realvp(svp, &realvp, ct) == 0)
 		svp = realvp;
 
 	/*
@@ -4666,9 +4666,9 @@ out:
  * with common code and the VM system as follows:
  *
  * - common code calls mmap(), which ends up in smmap_common()
- * - this calls VOP_MAP(), which takes you into (say) zfs
+ * - this calls fop_map(), which takes you into (say) zfs
  * - zfs_map() calls as_map(), passing segvn_create() as the callback
- * - segvn_create() creates the new segment and calls VOP_ADDMAP()
+ * - segvn_create() creates the new segment and calls fop_addmap()
  * - zfs_addmap() updates z_mapcnt
  */
 /*ARGSUSED*/
@@ -4792,7 +4792,7 @@ zfs_delmap(vnode_t *vp, offset_t off, struct as *as, caddr_t addr,
 
 	if ((flags & MAP_SHARED) && (prot & PROT_WRITE) &&
 	    vn_has_cached_data(vp))
-		(void) VOP_PUTPAGE(vp, off, len, B_ASYNC, cr, ct);
+		(void) fop_putpage(vp, off, len, B_ASYNC, cr, ct);
 
 	return (0);
 }
@@ -5323,8 +5323,8 @@ const fs_operation_def_t zfs_sharevnodeops_template[] = {
  *
  * This template is identical to the directory vnodes
  * operation template except for restricted operations:
- *	VOP_MKDIR()
- *	VOP_SYMLINK()
+ *	fop_mkdir()
+ *	fop_symlink()
  *
  * Note that there are other restrictions embedded in:
  *	zfs_create()	- restrict type to VREG

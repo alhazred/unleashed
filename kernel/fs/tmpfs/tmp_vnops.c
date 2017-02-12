@@ -681,7 +681,7 @@ tmp_getattr(
 			mutex_exit(&tp->tn_tlock);
 			bzero(&va, sizeof (struct vattr));
 			va.va_mask = AT_UID|AT_GID;
-			attrs = VOP_GETATTR(mvp, &va, 0, cred, ct);
+			attrs = fop_getattr(mvp, &va, 0, cred, ct);
 		} else {
 			mutex_exit(&tp->tn_tlock);
 		}
@@ -1130,7 +1130,7 @@ tmp_link(
 	struct tmpnode *found = NULL;
 	struct vnode *realvp;
 
-	if (VOP_REALVP(srcvp, &realvp, ct) == 0)
+	if (fop_realvp(srcvp, &realvp, ct) == 0)
 		srcvp = realvp;
 
 	parent = (struct tmpnode *)VTOTN(dvp);
@@ -1187,7 +1187,7 @@ tmp_rename(
 	int samedir = 0;	/* set if odvp == ndvp */
 	struct vnode *realvp;
 
-	if (VOP_REALVP(ndvp, &realvp, ct) == 0)
+	if (fop_realvp(ndvp, &realvp, ct) == 0)
 		ndvp = realvp;
 
 	fromparent = (struct tmpnode *)VTOTN(odvp);
@@ -1889,7 +1889,7 @@ again:
 		}
 		if (pvp) {
 			flags = (pl == NULL ? B_ASYNC|B_READ : B_READ);
-			err = VOP_PAGEIO(pvp, pp, (u_offset_t)poff, PAGESIZE,
+			err = fop_pageio(pvp, pp, (u_offset_t)poff, PAGESIZE,
 			    flags, cr, NULL);
 			if (flags & B_ASYNC)
 				pp = NULL;
@@ -2049,7 +2049,7 @@ long tmp_putpagecnt, tmp_pagespushed;
 /*
  * Write out a single page.
  * For tmpfs this means choose a physical swap slot and write the page
- * out using VOP_PAGEIO. For performance, we attempt to kluster; i.e.,
+ * out using fop_pageio. For performance, we attempt to kluster; i.e.,
  * we try to find a bunch of other dirty pages adjacent in the file
  * and a bunch of contiguous swap slots, and then write all the pages
  * out in a single i/o.
@@ -2139,7 +2139,7 @@ tmp_putapage(
 	ASSERT(btopr(io_len) <= btopr(kllen));
 
 	/* Do i/o on the remaining kluster */
-	err = VOP_PAGEIO(pvp, pplist, (u_offset_t)pstart, io_len,
+	err = fop_pageio(pvp, pplist, (u_offset_t)pstart, io_len,
 	    B_WRITE | flags, cr, NULL);
 
 	if ((flags & B_ASYNC) == 0) {

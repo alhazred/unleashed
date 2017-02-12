@@ -337,7 +337,7 @@ sdev_mount(struct vfs *vfsp, struct vnode *mvp, struct mounta *uap,
 	sdev_data->sdev_mountargs = args;
 
 	/* get acl flavor from attribute dir */
-	if (VOP_PATHCONF(avp, _PC_ACL_ENABLED, &sdev_data->sdev_acl_flavor,
+	if (fop_pathconf(avp, _PC_ACL_ENABLED, &sdev_data->sdev_acl_flavor,
 	    kcred, NULL) != 0 || sdev_data->sdev_acl_flavor == 0)
 		sdev_data->sdev_acl_flavor = _ACL_ACLENT_ENABLED;
 

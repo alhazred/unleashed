@@ -141,7 +141,7 @@ extern "C" {
 /*
  * Due to the way the address space callbacks are used to execute a delmap,
  * we must keep track of how many times the same thread has called
- * VOP_DELMAP()->nfs4_delmap().  This is done by having a list of
+ * fop_delmap()->nfs4_delmap().  This is done by having a list of
  * nfs4_delmapcall_t's associated with each rnode4_t.  This list is protected
  * by the rnode4_t's r_statelock.  The individual elements do not need to be
  * protected as they will only ever be created, modified and destroyed by
@@ -993,7 +993,7 @@ typedef struct mntinfo4 {
 	 *	mi_threads[NFS4_ASYNC_PGOPS_QUEUE].
 	 *
 	 * In addition to above two pools, there is always one thread that
-	 * handles over-the-wire requests for VOP_INACTIVE.
+	 * handles over-the-wire requests for fop_inactive.
 	 */
 	struct nfs4_async_reqs *mi_async_reqs[NFS4_ASYNC_TYPES];
 	struct nfs4_async_reqs *mi_async_tail[NFS4_ASYNC_TYPES];
@@ -1008,7 +1008,7 @@ typedef struct mntinfo4 {
 	ushort_t	mi_max_threads;	/* max number of async threads */
 	kthread_t	*mi_manager_thread; /* async manager thread id */
 	kthread_t	*mi_inactive_thread; /* inactive thread id */
-	kcondvar_t	mi_inact_req_cv; /* notify VOP_INACTIVE thread */
+	kcondvar_t	mi_inact_req_cv; /* notify fop_inactive thread */
 	kcondvar_t	mi_async_work_cv[NFS4_MAX_ASYNC_QUEUES];
 					/* tell workers to work */
 	kcondvar_t	mi_async_cv;	/* all pool threads exited */
@@ -1612,9 +1612,9 @@ extern clock_t nfs_write_error_interval;
  * if it is then don't return it in find_open_stream().
  *
  * 'os_final_close' is set when a CLOSE OTW was attempted.  This is needed
- * so we can properly count the os_open_ref_count in cases where we VOP_CLOSE
- * without a VOP_OPEN, and have nfs4_inactive() drive the OTW CLOSE.  It
- * also helps differentiate the VOP_OPEN/VN_RELE case from the VOP_CLOSE
+ * so we can properly count the os_open_ref_count in cases where we fop_close
+ * without a fop_open, and have nfs4_inactive() drive the OTW CLOSE.  It
+ * also helps differentiate the fop_open/VN_RELE case from the fop_close
  * that tried to close OTW but failed, and left the state cleanup to
  * nfs4_inactive/CLOSE_FORCE.
  *

@@ -1419,7 +1419,7 @@ i_cpr_reusefini(void)
 		}
 	}
 
-	(void) VOP_CLOSE(vp, FREAD|FWRITE, 1, (offset_t)0, CRED(), NULL);
+	(void) fop_close(vp, FREAD|FWRITE, 1, (offset_t)0, CRED(), NULL);
 	VN_RELE(vp);
 	kmem_free(cdef, sizeof (*cdef));
 
@@ -1471,7 +1471,7 @@ i_cpr_check_cprinfo(void)
 	}
 
 	rc = cpr_rdwr(UIO_READ, vp, &mini, sizeof (mini));
-	(void) VOP_CLOSE(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+	(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
 	VN_RELE(vp);
 
 	if (rc) {
@@ -1911,7 +1911,7 @@ i_cpr_bitmap_cleanup(void)
  * A "regular" and "volatile" bitmap are created for each range of
  * physical memory.  The volatile maps are used to count and track pages
  * susceptible to heap corruption - caused by drivers that allocate mem
- * during VOP_DUMP(); the regular maps are used for all the other non-
+ * during fop_dump(); the regular maps are used for all the other non-
  * susceptible pages.  Before writing the bitmaps to the statefile,
  * each bitmap pair gets merged to simplify handling within cprboot.
  */

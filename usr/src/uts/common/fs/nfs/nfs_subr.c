@@ -2083,7 +2083,7 @@ setdirgid(vnode_t *dvp, gid_t *gidp, cred_t *cr)
 	struct vattr va;
 
 	va.va_mask = AT_MODE | AT_GID;
-	error = VOP_GETATTR(dvp, &va, 0, cr, NULL);
+	error = fop_getattr(dvp, &va, 0, cr, NULL);
 	if (error)
 		return (error);
 
@@ -2111,7 +2111,7 @@ setdirmode(vnode_t *dvp, mode_t *omp, cred_t *cr)
 	struct vattr va;
 
 	va.va_mask = AT_MODE;
-	error = VOP_GETATTR(dvp, &va, 0, cr, NULL);
+	error = fop_getattr(dvp, &va, 0, cr, NULL);
 	if (error)
 		return (error);
 
@@ -2177,7 +2177,7 @@ rinactive(rnode_t *rp, cred_t *cr)
 	if (vn_has_cached_data(vp)) {
 		ASSERT(vp->v_type != VCHR);
 		if ((rp->r_flags & RDIRTY) && !rp->r_error) {
-			error = VOP_PUTPAGE(vp, (u_offset_t)0, 0, 0, cr, NULL);
+			error = fop_putpage(vp, (u_offset_t)0, 0, 0, cr, NULL);
 			if (error && (error == ENOSPC || error == EDQUOT)) {
 				mutex_enter(&rp->r_statelock);
 				if (!rp->r_error)
@@ -2693,7 +2693,7 @@ rp_addfree(rnode_t *rp, cred_t *cr)
 		 * acquired while we were not holding v_lock.  The
 		 * rnode is not in the rnode hash queues, so the
 		 * only way for a reference to have been acquired
-		 * is for a VOP_PUTPAGE because the rnode was marked
+		 * is for a fop_putpage because the rnode was marked
 		 * with RDIRTY or for a modified page.  This
 		 * reference may have been acquired before our call
 		 * to rinactive.  The i/o may have been completed,
@@ -3087,7 +3087,7 @@ toomany:
 	 */
 	while (cnt-- > 0) {
 		vp = vplist[cnt];
-		(void) VOP_PUTPAGE(vp, (u_offset_t)0, 0, B_ASYNC, cr, NULL);
+		(void) fop_putpage(vp, (u_offset_t)0, 0, B_ASYNC, cr, NULL);
 		VN_RELE(vp);
 	}
 
@@ -5066,9 +5066,9 @@ do_xattr_exists_check(vnode_t *vp, ulong_t *valp, cred_t *cr)
 	uio.uio_resid = dlen;
 	iov.iov_base = dbuf;
 	iov.iov_len = dlen;
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_FALSE, NULL);
-	error = VOP_READDIR(vp, &uio, cr, &eof, NULL, 0);
-	VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, NULL);
+	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, NULL);
+	error = fop_readdir(vp, &uio, cr, &eof, NULL, 0);
+	fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
 
 	dbuflen = dlen - uio.uio_resid;
 

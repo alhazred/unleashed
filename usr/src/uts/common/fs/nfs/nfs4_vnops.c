@@ -1307,7 +1307,7 @@ recov_retry:
 	/*
 	 * The open stateid has been updated on the server but not
 	 * on the client yet.  There is a path: makenfs4node->nfs4_attr_cache->
-	 * flush_pages->VOP_PUTPAGE->...->nfs4write where we will issue an OTW
+	 * flush_pages->fop_putpage->...->nfs4write where we will issue an OTW
 	 * WRITE call.  That, however, will use the old stateid, so go ahead
 	 * and upate the open stateid now, before any call to makenfs4node.
 	 */
@@ -4697,7 +4697,7 @@ nfs4_inactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 
 	/*
 	 * Some of the cleanup steps might require over-the-wire
-	 * operations.  Since VOP_INACTIVE can get called as a result of
+	 * operations.  Since fop_inactive can get called as a result of
 	 * other over-the-wire operations (e.g., an attribute cache update
 	 * can lead to a DNLC purge), doing those steps now would lead to a
 	 * nested call to the recovery framework, which can deadlock.  So
@@ -4982,7 +4982,7 @@ nfs4_lookup(vnode_t *dvp, char *nm, vnode_t **vpp, struct pathname *pnp,
 		 * the caller will RELE the original dvp -- not
 		 * the attrdir.  So, set vpp and return.
 		 * Currently, when the LOOKUP_XATTR flag is
-		 * passed to VOP_LOOKUP, the name is always empty, and
+		 * passed to fop_lookup, the name is always empty, and
 		 * shortcircuiting here avoids 3 unneeded lock/unlock
 		 * pairs.
 		 *
@@ -6613,7 +6613,7 @@ top:
 			vp = specvp(vp, vp->v_rdev, vp->v_type, cr);
 			VN_RELE(tempvp);
 		}
-		if (!(error = VOP_ACCESS(vp, mode, 0, cr, ct))) {
+		if (!(error = fop_access(vp, mode, 0, cr, ct))) {
 			if ((vattr.va_mask & AT_SIZE) &&
 			    vp->v_type == VREG) {
 				rp = VTOR4(vp);
@@ -6851,7 +6851,7 @@ call_nfs4_create_req(vnode_t *dvp, char *nm, void *data, struct vattr *va,
 
 		va->va_mode &= ~VSGID;
 		dva.va_mask = AT_MODE | AT_GID;
-		if (VOP_GETATTR(dvp, &dva, 0, cr, NULL) == 0) {
+		if (fop_getattr(dvp, &dva, 0, cr, NULL) == 0) {
 
 			/*
 			 * If the parent's directory has the setgid bit set
@@ -7491,7 +7491,7 @@ nfs4_link(vnode_t *tdvp, vnode_t *svp, char *tnm, cred_t *cr,
 
 	if (nfs_zone() != VTOMI4(tdvp)->mi_zone)
 		return (EPERM);
-	if (VOP_REALVP(svp, &realvp, ct) == 0) {
+	if (fop_realvp(svp, &realvp, ct) == 0) {
 		svp = realvp;
 		ASSERT(nfs4_consistent_type(svp));
 	}
@@ -7693,7 +7693,7 @@ nfs4_rename(vnode_t *odvp, char *onm, vnode_t *ndvp, char *nnm, cred_t *cr,
 
 	if (nfs_zone() != VTOMI4(odvp)->mi_zone)
 		return (EPERM);
-	if (VOP_REALVP(ndvp, &realvp, ct) == 0)
+	if (fop_realvp(ndvp, &realvp, ct) == 0)
 		ndvp = realvp;
 
 	return (nfs4rename(odvp, onm, ndvp, nnm, cr, ct));
@@ -9406,14 +9406,14 @@ recov_retry:
 	 *
 	 * One example where PUTFH+READDIR ops would succeed but
 	 * LOOKUPP+GETATTR would fail would be a dir that has r perm
-	 * but lacks x.  In this case, a POSIX server's VOP_READDIR
-	 * would succeed; however, VOP_LOOKUP(..) would fail since no
+	 * but lacks x.  In this case, a POSIX server's fop_readdir
+	 * would succeed; however, fop_lookup(..) would fail since no
 	 * x perm.  We need to come up with a non-vendor-specific way
 	 * for a POSIX server to return d_ino from dotdot's dirent if
 	 * client only requests mounted_on_fileid, and just say the
 	 * LOOKUPP succeeded and fill out the GETATTR.  However, if
 	 * client requested any mandatory attrs, server would be required
-	 * to fail the GETATTR op because it can't call VOP_LOOKUP+VOP_GETATTR
+	 * to fail the GETATTR op because it can't call fop_lookup+fop_getattr
 	 * for dotdot.
 	 */
 
@@ -10317,13 +10317,13 @@ nfs4_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp, size_t *lenp,
 	 * in the write through nfs4_bio() being dropped.
 	 *
 	 * More precisely, there is a window between the time the uiomove()
-	 * completes and the time the r_size is updated. If a VOP_PUTPAGE()
+	 * completes and the time the r_size is updated. If a fop_putpage()
 	 * operation intervenes in this window, the page will be picked up,
 	 * because it is dirty (it will be unlocked, unless it was
 	 * pagecreate'd). When the page is picked up as dirty, the dirty
 	 * bit is reset (pvn_getdirty()). In nfs4write(), r_size is
 	 * checked. This will still be the old size. Therefore the page will
-	 * not be written out. When segmap_release() calls VOP_PUTPAGE(),
+	 * not be written out. When segmap_release() calls fop_putpage(),
 	 * the page will be found to be clean and the write will be dropped.
 	 */
 	if (rp->r_flags & R4MODINPROGRESS) {
@@ -10480,7 +10480,7 @@ nfs4_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 
 	/*
 	 * Check to see if the vnode is currently marked as not cachable.
-	 * This means portions of the file are locked (through VOP_FRLOCK).
+	 * This means portions of the file are locked (through fop_frlock).
 	 * In this case the map request must be refused.  We use
 	 * rp->r_lkserlock to avoid a race with concurrent lock requests.
 	 *
@@ -10620,14 +10620,14 @@ done:
  * officially OPEN the file to create the necessary client state
  * for bookkeeping of os_mmap_read/write counts.
  *
- * Since VOP_MAP only passes in a pointer to the vnode rather than
+ * Since fop_map only passes in a pointer to the vnode rather than
  * a double pointer, we can't handle the case where nfs4open_otw()
- * returns a different vnode than the one passed into VOP_MAP (since
- * VOP_DELMAP will not see the vnode nfs4open_otw used).  In this case,
+ * returns a different vnode than the one passed into fop_map (since
+ * fop_delmap will not see the vnode nfs4open_otw used).  In this case,
  * we return NULL and let nfs4_map() fail.  Note: the only case where
  * this should happen is if the file got removed and replaced with the
  * same name on the server (in addition to the fact that we're trying
- * to VOP_MAP withouth VOP_OPENing the file in the first place).
+ * to fop_map withouth fop_opening the file in the first place).
  */
 static int
 open_and_get_osp(vnode_t *map_vp, cred_t *cr, nfs4_open_stream_t **ospp)
@@ -10697,7 +10697,7 @@ open_and_get_osp(vnode_t *map_vp, cred_t *cr, nfs4_open_stream_t **ospp)
 		    "open returned a different vnode"));
 		/*
 		 * If there's an error, ignore it,
-		 * and let VOP_INACTIVE handle it.
+		 * and let fop_inactive handle it.
 		 */
 		(void) nfs4close_one(open_vp, NULL, cr, FREAD, NULL, &e,
 		    CLOSE_NORM, 0, 0, 0);
@@ -10715,7 +10715,7 @@ open_and_get_osp(vnode_t *map_vp, cred_t *cr, nfs4_open_stream_t **ospp)
 		    "no open owner"));
 		/*
 		 * If there's an error, ignore it,
-		 * and let VOP_INACTIVE handle it.
+		 * and let fop_inactive handle it.
 		 */
 		(void) nfs4close_one(open_vp, NULL, cr, FREAD, NULL, &e,
 		    CLOSE_NORM, 0, 0, 0);
@@ -11073,8 +11073,8 @@ nfs4_delmap(vnode_t *vp, offset_t off, struct as *as, caddr_t addr,
 	/*
 	 * The way that the address space of this process deletes its mapping
 	 * of this file is via the following call chains:
-	 * - as_free()->segop_unmap()/segvn_unmap()->VOP_DELMAP()/nfs4_delmap()
-	 * - as_unmap()->segop_unmap()/segvn_unmap()->VOP_DELMAP()/nfs4_delmap()
+	 * - as_free()->segop_unmap()/segvn_unmap()->fop_delmap()/nfs4_delmap()
+	 * - as_unmap()->segop_unmap()/segvn_unmap()->fop_delmap()/nfs4_delmap()
 	 *
 	 * With the use of address space callbacks we are allowed to drop the
 	 * address space lock, a_lock, while executing the NFS operations that
@@ -14061,7 +14061,7 @@ nfs4frlock_final_cleanup(nfs4_lock_call_type_t ctype, COMPOUND4args_clnt *argsp,
 		 * want to be sure that the read operation gets the newest data.
 		 * N.B.
 		 * We used to do this in nfs4frlock_results_ok but that doesn't
-		 * work since VOP_PUTPAGE can call nfs4_commit which calls
+		 * work since fop_putpage can call nfs4_commit which calls
 		 * nfs4_start_fop. We flush the pages below after calling
 		 * nfs4_end_fop above
 		 * The flush of the page cache must be done after
@@ -14551,7 +14551,7 @@ nfs4_safelock(vnode_t *vp, const struct flock64 *bfp, cred_t *cr)
 
 	/* mandatory locking and mapping don't mix */
 	va.va_mask = AT_MODE;
-	error = VOP_GETATTR(vp, &va, 0, cr, NULL);
+	error = fop_getattr(vp, &va, 0, cr, NULL);
 	if (error != 0) {
 		NFS4_DEBUG(nfs4_client_lock_debug, (CE_NOTE, "nfs4_safelock: "
 		    "getattr error %d", error));
@@ -14708,12 +14708,12 @@ nfs4_lockrelease(vnode_t *vp, int flag, offset_t offset, cred_t *cr)
 		ld.l_start = 0;
 		ld.l_len = 0;		/* do entire file */
 
-		ret = VOP_FRLOCK(vp, F_SETLK, &ld, flag, offset, NULL,
+		ret = fop_frlock(vp, F_SETLK, &ld, flag, offset, NULL,
 		    cr, NULL);
 
 		if (ret != 0) {
 			/*
-			 * If VOP_FRLOCK fails, make sure we unregister
+			 * If fop_frlock fails, make sure we unregister
 			 * local locks before we continue.
 			 */
 			ld.l_pid = ttoproc(curthread)->p_pid;
@@ -14977,7 +14977,7 @@ nfs4close_notw(vnode_t *vp, nfs4_open_stream_t *osp, int *have_lockp)
  * Close all remaining open streams on the rnode.  These open streams
  * could be here because:
  * - The close attempted at either close or delmap failed
- * - Some kernel entity did VOP_OPEN but never did VOP_CLOSE
+ * - Some kernel entity did fop_open but never did fop_close
  * - Someone did mknod on a regular file but never opened it
  */
 int
@@ -15084,9 +15084,9 @@ nfs4close_all(vnode_t *vp, cred_t *cr)
  * nfs4close_one - close one open stream for a file if needed.
  *
  * "close_type" indicates which close path this is:
- * CLOSE_NORM: close initiated via VOP_CLOSE.
- * CLOSE_DELMAP: close initiated via VOP_DELMAP.
- * CLOSE_FORCE: close initiated via VOP_INACTIVE.  This path forces
+ * CLOSE_NORM: close initiated via fop_close.
+ * CLOSE_DELMAP: close initiated via fop_delmap.
+ * CLOSE_FORCE: close initiated via fop_inactive.  This path forces
  *	the close and release of client state for this open stream
  *	(unless someone else has the open stream open).
  * CLOSE_RESEND: indicates the request is a replay of an earlier request
@@ -15278,7 +15278,7 @@ recov_retry:
 
 		/*
 		 * We can't depend on os_open_ref_count being 0 due to the
-		 * way executables are opened (VN_RELE to match a VOP_OPEN).
+		 * way executables are opened (VN_RELE to match a fop_open).
 		 */
 #ifdef	NOTYET
 		ASSERT(osp->os_open_ref_count == 0);

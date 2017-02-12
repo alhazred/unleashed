@@ -235,7 +235,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 		iarg = FFLAGS(iarg);
 		if ((iarg & (FNONBLOCK|FNDELAY)) == (FNONBLOCK|FNDELAY))
 			iarg &= ~FNDELAY;
-		if ((error = VOP_SETFL(vp, flag, iarg, fp->f_cred, NULL)) ==
+		if ((error = fop_setfl(vp, flag, iarg, fp->f_cred, NULL)) ==
 		    0) {
 			iarg &= FCNTLFLAGS;
 			mutex_enter(&fp->f_tlock);
@@ -386,7 +386,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 		 * the unsupported remote file systems, such as NFS, detect and
 		 * reject the OFD-style cmd argument.
 		 */
-		if ((error = VOP_FRLOCK(vp, (cmd == F_O_GETLK) ? F_GETLK : cmd,
+		if ((error = fop_frlock(vp, (cmd == F_O_GETLK) ? F_GETLK : cmd,
 		    &bf, flag, offset, NULL, fp->f_cred, NULL)) != 0)
 			break;
 
@@ -396,7 +396,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 			 * This is an OFD-style lock so we need to handle it
 			 * here. Because OFD-style locks are associated with
 			 * the file_t we didn't have enough info down the
-			 * VOP_FRLOCK path immediately above.
+			 * fop_frlock path immediately above.
 			 */
 			if ((error = ofdlock(fp, cmd, &bf, flag, offset)) != 0)
 				break;
@@ -613,7 +613,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 			nbl_start_crit(vp, RW_READER);
 			in_crit = 1;
 			vattr.va_mask = AT_SIZE;
-			if ((error = VOP_GETATTR(vp, &vattr, 0, CRED(), NULL))
+			if ((error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			    != 0)
 				break;
 			begin = start > vattr.va_size ? vattr.va_size : start;
@@ -631,7 +631,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 		else if (cmd == F_FREESP64)
 			cmd = F_FREESP;
 
-		error = VOP_SPACE(vp, cmd, &bf, flag, offset, fp->f_cred, NULL);
+		error = fop_space(vp, cmd, &bf, flag, offset, fp->f_cred, NULL);
 
 		break;
 
@@ -734,7 +734,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 		 * the unsupported remote file systems, such as NFS, detect and
 		 * reject the OFD-style cmd argument.
 		 */
-		if ((error = VOP_FRLOCK(vp, cmd, &bf, flag, offset,
+		if ((error = fop_frlock(vp, cmd, &bf, flag, offset,
 		    NULL, fp->f_cred, NULL)) != 0)
 			break;
 
@@ -744,7 +744,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 			 * This is an OFD-style lock so we need to handle it
 			 * here. Because OFD-style locks are associated with
 			 * the file_t we didn't have enough info down the
-			 * VOP_FRLOCK path immediately above.
+			 * fop_frlock path immediately above.
 			 */
 			if ((error = ofdlock(fp, cmd, &bf, flag, offset)) != 0)
 				break;
@@ -805,7 +805,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 		shr_own.sl_id = fsh.f_id;
 		shr.s_own_len = sizeof (shr_own);
 		shr.s_owner = (caddr_t)&shr_own;
-		error = VOP_SHRLOCK(vp, cmd, &shr, flag, fp->f_cred, NULL);
+		error = fop_shrlock(vp, cmd, &shr, flag, fp->f_cred, NULL);
 		break;
 
 	default:
@@ -849,7 +849,7 @@ flock_check(vnode_t *vp, flock64_t *flp, offset_t offset, offset_t max)
 		break;
 	case 2:		/* SEEK_END */
 		vattr.va_mask = AT_SIZE;
-		if (error = VOP_GETATTR(vp, &vattr, 0, CRED(), NULL))
+		if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			return (error);
 		if (flp->l_start > (max - (offset_t)vattr.va_size))
 			return (EOVERFLOW);
@@ -913,7 +913,7 @@ flock_get_start(vnode_t *vp, flock64_t *flp, offset_t offset, u_offset_t *start)
 		break;
 	case 2:		/* SEEK_END */
 		vattr.va_mask = AT_SIZE;
-		if (error = VOP_GETATTR(vp, &vattr, 0, CRED(), NULL))
+		if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			return (error);
 		*start = (u_offset_t)(flp->l_start + (offset_t)vattr.va_size);
 		break;

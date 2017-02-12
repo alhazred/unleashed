@@ -297,7 +297,7 @@ udf_mount(struct vfs *vfsp, struct vnode *mvp,
 	    (error = secpolicy_spec_open(cr, svp, oflag)) != 0)
 		goto out;
 
-	if ((error = VOP_ACCESS(svp, aflag, 0, cr, NULL)) != 0)
+	if ((error = fop_access(svp, aflag, 0, cr, NULL)) != 0)
 		goto out;
 
 	/*
@@ -379,8 +379,8 @@ udf_unmount(struct vfs *vfsp, int fflag, struct cred *cr)
 
 	ud_destroy_fsp(udf_vfsp);
 
-	(void) VOP_PUTPAGE(bvp, (offset_t)0, (uint32_t)0, B_INVAL, cr, NULL);
-	(void) VOP_CLOSE(bvp, flag, 1, (offset_t)0, cr, NULL);
+	(void) fop_putpage(bvp, (offset_t)0, (uint32_t)0, B_INVAL, cr, NULL);
+	(void) fop_close(bvp, flag, 1, (offset_t)0, cr, NULL);
 
 	(void) bfinval(vfsp->vfs_dev, 1);
 	VN_RELE(bvp);
@@ -566,7 +566,7 @@ udf_mountroot(struct vfs *vfsp, enum whymountroot why)
 		vp = ((struct udf_vfs *)vfsp->vfs_data)->udf_devvp;
 		(void) dnlc_purge_vfsp(vfsp, 0);
 		vp = common_specvp(vp);
-		(void) VOP_PUTPAGE(vp, (offset_t)0,
+		(void) fop_putpage(vp, (offset_t)0,
 		    (uint32_t)0, B_INVAL, CRED(), NULL);
 		binval(vfsp->vfs_dev);
 
@@ -577,7 +577,7 @@ udf_mountroot(struct vfs *vfsp, enum whymountroot why)
 	} else if (why == ROOT_UNMOUNT) {
 		ud_update(0);
 		vp = ((struct udf_vfs *)vfsp->vfs_data)->udf_devvp;
-		(void) VOP_CLOSE(vp, FREAD|FWRITE, 1,
+		(void) fop_close(vp, FREAD|FWRITE, 1,
 		    (offset_t)0, CRED(), NULL);
 		return (0);
 	}
@@ -641,7 +641,7 @@ ud_mountfs(struct vfs *vfsp,
 		 * When bio is fixed for vnodes this can all be vnode
 		 * operations.
 		 */
-		error = VOP_OPEN(&devvp,
+		error = fop_open(&devvp,
 		    (vfsp->vfs_flag & VFS_RDONLY) ? FREAD : FREAD|FWRITE,
 		    cr, NULL);
 		if (error) {
@@ -689,7 +689,7 @@ ud_mountfs(struct vfs *vfsp,
 		 */
 		if (udf_vfsp->udf_flags & UDF_FL_RDONLY) {
 			(void) dnlc_purge_vfsp(vfsp, 0);
-			(void) VOP_PUTPAGE(devvp, (offset_t)0, (uint_t)0,
+			(void) fop_putpage(devvp, (offset_t)0, (uint_t)0,
 			    B_INVAL, CRED(), NULL);
 			(void) ud_iflush(vfsp);
 			bflush(dev);
@@ -781,7 +781,7 @@ remountout:
 	 * cache if someone is trying to use block devices when
 	 * they really should be using the raw device.
 	 */
-	(void) VOP_PUTPAGE(common_specvp(devvp), (offset_t)0,
+	(void) fop_putpage(common_specvp(devvp), (offset_t)0,
 	    (uint32_t)0, B_INVAL, cr, NULL);
 
 
@@ -948,7 +948,7 @@ remountout:
 out:
 	ud_destroy_fsp(udf_vfsp);
 	if (needclose) {
-		(void) VOP_CLOSE(devvp, (vfsp->vfs_flag & VFS_RDONLY) ?
+		(void) fop_close(devvp, (vfsp->vfs_flag & VFS_RDONLY) ?
 		    FREAD : FREAD|FWRITE, 1, (offset_t)0, cr, NULL);
 		bflush(dev);
 		binval(dev);

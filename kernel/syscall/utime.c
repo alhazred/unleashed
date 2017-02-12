@@ -104,7 +104,7 @@ cfutimesat(int fd, char *fname, int nmflag, vattr_t *vap, int flags, int follow)
 	if (vn_is_readonly(vp)) {
 		error = EROFS;
 	} else {
-		error = VOP_SETATTR(vp, vap, flags, CRED(), NULL);
+		error = fop_setattr(vp, vap, flags, CRED(), NULL);
 	}
 
 	VN_RELE(vp);

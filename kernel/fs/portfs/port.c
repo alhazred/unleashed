@@ -153,7 +153,7 @@
  * 	events argument of port_associate() the type of events which it is
  * 	interested on.
  * 	The internal pollwakeup() function is used by all the file
- * 	systems --which are supporting the VOP_POLL() interface- to notify
+ * 	systems --which are supporting the fop_poll() interface- to notify
  * 	the upper layer (poll(2), devpoll(7d) and now event ports) about
  * 	the event triggered (see valid events in poll(2)).
  * 	The pollwakeup() function forwards the event to the layer registered
@@ -262,7 +262,7 @@
  * The portfs node is represented by the port_t structure.
  * The port_t structure manages all port specific tasks:
  * - management of resource control values
- * - port VOP_POLL interface
+ * - port fop_poll interface
  * - creation time
  * - uid and gid of the port
  *

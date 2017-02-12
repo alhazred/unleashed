@@ -312,13 +312,13 @@ rsm_get_controller(const char *name, uint_t number,
 		if (p_ctrl == NULL) {
 			/*
 			 * controller is not registered.
-			 * try to do a VOP_OPEN to force it to get registered
+			 * try to do a fop_open to force it to get registered
 			 */
 			mutex_exit(&rsmops_lock);
 			vp = rsmops_device_open(name, number);
 			mutex_enter(&rsmops_lock);
 			if (vp != NULL) {
-				(void) VOP_CLOSE(vp, FREAD|FWRITE, 0, 0,
+				(void) fop_close(vp, FREAD|FWRITE, 0, 0,
 				    CRED(), NULL);
 				VN_RELE(vp);
 			}
@@ -531,7 +531,7 @@ rsmops_device_open(const char *major_name, const minor_t minor_num)
 
 	vp = makespecvp(makedevice(maj, minor_num), VCHR);
 
-	ret = VOP_OPEN(&vp, FREAD|FWRITE, CRED(), NULL);
+	ret = fop_open(&vp, FREAD|FWRITE, CRED(), NULL);
 	if (ret == 0) {
 		return (vp);
 	} else {

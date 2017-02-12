@@ -97,7 +97,7 @@ door_close(
 	/*
 	 * Deliver an unref if needed.
 	 *
-	 * If the count is equal to 2, it means that I'm doing a VOP_CLOSE
+	 * If the count is equal to 2, it means that I'm doing a fop_close
 	 * on the next to last reference for *this* file struct. There may
 	 * be multiple files pointing to this vnode in which case the v_count
 	 * will be > 1.

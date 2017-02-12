@@ -407,7 +407,7 @@ segdev_create(struct seg *seg, void *argsp)
 	 * It is ok to use pass sdp->maxprot to ADDMAP rather than to use
 	 * dhp specific maxprot because spec_addmap does not use maxprot.
 	 */
-	error = VOP_ADDMAP(VTOCVP(sdp->vp), sdp->offset,
+	error = fop_addmap(VTOCVP(sdp->vp), sdp->offset,
 	    seg->s_as, seg->s_base, seg->s_size,
 	    sdp->prot, sdp->maxprot, sdp->type, CRED(), NULL);
 
@@ -509,7 +509,7 @@ segdev_dup(struct seg *seg, struct seg *newseg)
 	/*
 	 * Inform the common vnode of the new mapping.
 	 */
-	return (VOP_ADDMAP(VTOCVP(newsdp->vp),
+	return (fop_addmap(VTOCVP(newsdp->vp),
 	    newsdp->offset, newseg->s_as,
 	    newseg->s_base, newseg->s_size, newsdp->prot,
 	    newsdp->maxprot, sdp->type, CRED(), NULL));
@@ -690,7 +690,7 @@ segdev_unmap(struct seg *seg, caddr_t addr, size_t len)
 	 * Inform the vnode of the unmapping.
 	 */
 	ASSERT(sdp->vp != NULL);
-	(void) VOP_DELMAP(VTOCVP(sdp->vp), off, seg->s_as, addr, len,
+	(void) fop_delmap(VTOCVP(sdp->vp), off, seg->s_as, addr, len,
 	    sdp->prot, sdp->maxprot, sdp->type, CRED(), NULL);
 
 	/*

@@ -351,7 +351,7 @@ tmp_mount(
 	 * Get the mode, uid, and gid from the underlying mount point.
 	 */
 	rattr.va_mask = AT_MODE|AT_UID|AT_GID;	/* Hint to getattr */
-	got_attrs = VOP_GETATTR(mvp, &rattr, 0, cr, NULL);
+	got_attrs = fop_getattr(mvp, &rattr, 0, cr, NULL);
 
 	rw_enter(&tp->tn_rwlock, RW_WRITER);
 	TNTOV(tp)->v_flag |= VROOT;

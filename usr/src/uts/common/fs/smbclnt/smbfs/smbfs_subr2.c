@@ -555,7 +555,7 @@ smbfs_addfree(smbnode_t *np)
 		 * acquired while we were not holding v_lock.  The
 		 * smbnode is not in the smbnode "hash" AVL tree, so
 		 * the only way for a reference to have been acquired
-		 * is for a VOP_PUTPAGE because the smbnode was marked
+		 * is for a fop_putpage because the smbnode was marked
 		 * with RDIRTY or for a modified page.  This vnode
 		 * reference may have been acquired before our call
 		 * to sn_inactive.  The i/o may have been completed,

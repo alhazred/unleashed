@@ -4222,7 +4222,7 @@ zfs_ioc_recv(zfs_cmd_t *zc)
 	}
 
 	zc->zc_cookie = off - fp->f_offset;
-	if (VOP_SEEK(fp->f_vnode, fp->f_offset, &off, NULL) == 0)
+	if (fop_seek(fp->f_vnode, fp->f_offset, &off, NULL) == 0)
 		fp->f_offset = off;
 
 #ifdef	DEBUG
@@ -4367,7 +4367,7 @@ zfs_ioc_send(zfs_cmd_t *zc)
 		    zc->zc_fromobj, embedok, large_block_ok, compressok,
 		    zc->zc_cookie, fp->f_vnode, &off);
 
-		if (VOP_SEEK(fp->f_vnode, fp->f_offset, &off, NULL) == 0)
+		if (fop_seek(fp->f_vnode, fp->f_offset, &off, NULL) == 0)
 			fp->f_offset = off;
 		releasef(zc->zc_cookie);
 	}
@@ -4952,7 +4952,7 @@ zfs_ioc_diff(zfs_cmd_t *zc)
 
 	error = dmu_diff(zc->zc_name, zc->zc_value, fp->f_vnode, &off);
 
-	if (VOP_SEEK(fp->f_vnode, fp->f_offset, &off, NULL) == 0)
+	if (fop_seek(fp->f_vnode, fp->f_offset, &off, NULL) == 0)
 		fp->f_offset = off;
 	releasef(zc->zc_cookie);
 
@@ -4973,7 +4973,7 @@ zfs_smb_acl_purge(znode_t *dzp)
 	for (zap_cursor_init(&zc, zfsvfs->z_os, dzp->z_id);
 	    (error = zap_cursor_retrieve(&zc, &zap)) == 0;
 	    zap_cursor_advance(&zc)) {
-		if ((error = VOP_REMOVE(ZTOV(dzp), zap.za_name, kcred,
+		if ((error = fop_remove(ZTOV(dzp), zap.za_name, kcred,
 		    NULL, 0)) != 0)
 			break;
 	}
@@ -5059,14 +5059,14 @@ zfs_ioc_smb_acl(zfs_cmd_t *zc)
 		vsec.vsa_aclentsz = sizeof (full_access);
 		vsec.vsa_aclcnt = 1;
 
-		error = VOP_CREATE(ZTOV(sharedir), zc->zc_string,
+		error = fop_create(ZTOV(sharedir), zc->zc_string,
 		    &vattr, EXCL, 0, &resourcevp, kcred, 0, NULL, &vsec);
 		if (resourcevp)
 			VN_RELE(resourcevp);
 		break;
 
 	case ZFS_SMB_ACL_REMOVE:
-		error = VOP_REMOVE(ZTOV(sharedir), zc->zc_string, kcred,
+		error = fop_remove(ZTOV(sharedir), zc->zc_string, kcred,
 		    NULL, 0);
 		break;
 
@@ -5087,7 +5087,7 @@ zfs_ioc_smb_acl(zfs_cmd_t *zc)
 			nvlist_free(nvlist);
 			return (error);
 		}
-		error = VOP_RENAME(ZTOV(sharedir), src, ZTOV(sharedir), target,
+		error = fop_rename(ZTOV(sharedir), src, ZTOV(sharedir), target,
 		    kcred, NULL, 0);
 		nvlist_free(nvlist);
 		break;
@@ -5340,7 +5340,7 @@ zfs_ioc_send_new(const char *snapname, nvlist_t *innvl, nvlist_t *outnvl)
 	error = dmu_send(snapname, fromname, embedok, largeblockok, compressok,
 	    fd, resumeobj, resumeoff, fp->f_vnode, &off);
 
-	if (VOP_SEEK(fp->f_vnode, fp->f_offset, &off, NULL) == 0)
+	if (fop_seek(fp->f_vnode, fp->f_offset, &off, NULL) == 0)
 		fp->f_offset = off;
 	releasef(fd);
 	return (error);

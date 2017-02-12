@@ -2035,7 +2035,7 @@ nfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 				vp = specvp(vp, vp->v_rdev, vp->v_type, cr);
 				VN_RELE(tempvp);
 			}
-			if (!(error = VOP_ACCESS(vp, mode, 0, cr, ct))) {
+			if (!(error = fop_access(vp, mode, 0, cr, ct))) {
 				if ((vattr.va_mask & AT_SIZE) &&
 				    vp->v_type == VREG) {
 					vattr.va_mask = AT_SIZE;
@@ -2362,7 +2362,7 @@ nfs_link(vnode_t *tdvp, vnode_t *svp, char *tnm, cred_t *cr,
 
 	if (nfs_zone() != VTOMI(tdvp)->mi_zone)
 		return (EPERM);
-	if (VOP_REALVP(svp, &realvp, ct) == 0)
+	if (fop_realvp(svp, &realvp, ct) == 0)
 		svp = realvp;
 
 	args.la_from = VTOFH(svp);
@@ -2412,7 +2412,7 @@ nfs_rename(vnode_t *odvp, char *onm, vnode_t *ndvp, char *nnm, cred_t *cr,
 
 	if (nfs_zone() != VTOMI(odvp)->mi_zone)
 		return (EPERM);
-	if (VOP_REALVP(ndvp, &realvp, ct) == 0)
+	if (fop_realvp(ndvp, &realvp, ct) == 0)
 		ndvp = realvp;
 
 	return (nfsrename(odvp, onm, ndvp, nnm, cr, ct));
@@ -4179,13 +4179,13 @@ nfs_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp, size_t *lenp,
 	 * in the write through nfs(3)_bio() being dropped.
 	 *
 	 * More precisely, there is a window between the time the uiomove()
-	 * completes and the time the r_size is updated. If a VOP_PUTPAGE()
+	 * completes and the time the r_size is updated. If a fop_putpage()
 	 * operation intervenes in this window, the page will be picked up,
 	 * because it is dirty (it will be unlocked, unless it was
 	 * pagecreate'd). When the page is picked up as dirty, the dirty
 	 * bit is reset (pvn_getdirty()). In nfs(3)write(), r_size is
 	 * checked. This will still be the old size. Therefore the page will
-	 * not be written out. When segmap_release() calls VOP_PUTPAGE(),
+	 * not be written out. When segmap_release() calls fop_putpage(),
 	 * the page will be found to be clean and the write will be dropped.
 	 */
 	if (rp->r_flags & RMODINPROGRESS) {
@@ -4340,7 +4340,7 @@ nfs_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 
 	/*
 	 * Check to see if the vnode is currently marked as not cachable.
-	 * This means portions of the file are locked (through VOP_FRLOCK).
+	 * This means portions of the file are locked (through fop_frlock).
 	 * In this case the map request must be refused.  We use
 	 * rp->r_lkserlock to avoid a race with concurrent lock requests.
 	 */
@@ -4672,8 +4672,8 @@ nfs_delmap(vnode_t *vp, offset_t off, struct as *as, caddr_t addr,
 	/*
 	 * The way that the address space of this process deletes its mapping
 	 * of this file is via the following call chains:
-	 * - as_free()->segop_unmap()/segvn_unmap()->VOP_DELMAP()/nfs_delmap()
-	 * - as_unmap()->segop_unmap()/segvn_unmap()->VOP_DELMAP()/nfs_delmap()
+	 * - as_free()->segop_unmap()/segvn_unmap()->fop_delmap()/nfs_delmap()
+	 * - as_unmap()->segop_unmap()/segvn_unmap()->fop_delmap()/nfs_delmap()
 	 *
 	 * With the use of address space callbacks we are allowed to drop the
 	 * address space lock, a_lock, while executing the NFS operations that

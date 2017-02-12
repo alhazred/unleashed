@@ -851,7 +851,7 @@ smbfs_sync(vfs_t *vfsp, short flag, cred_t *cr)
 {
 	/*
 	 * Cross-zone calls are OK here, since this translates to a
-	 * VOP_PUTPAGE(B_ASYNC), which gets picked up by the right zone.
+	 * fop_putpage(B_ASYNC), which gets picked up by the right zone.
 	 */
 	if (!(flag & SYNC_ATTR) && mutex_tryenter(&smbfs_syncbusy) != 0) {
 		smbfs_rflush(vfsp, cr);

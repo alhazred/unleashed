@@ -685,7 +685,7 @@ segmap_fault(
 		return (0);
 	}
 
-	err = VOP_GETPAGE(vp, (offset_t)off, len, &prot, pl, MAXBSIZE,
+	err = fop_getpage(vp, (offset_t)off, len, &prot, pl, MAXBSIZE,
 	    seg, addr, rw, CRED(), NULL);
 
 	if (err)
@@ -696,7 +696,7 @@ segmap_fault(
 	/*
 	 * Handle all pages returned in the pl[] array.
 	 * This loop is coded on the assumption that if
-	 * there was no error from the VOP_GETPAGE routine,
+	 * there was no error from the fop_getpage routine,
 	 * that the page list returned will contain all the
 	 * needed pages for the vp from [off..off + len].
 	 */
@@ -800,7 +800,7 @@ segmap_faulta(struct seg *seg, caddr_t addr)
 		return (FC_MAKE_ERR(EIO));
 	}
 
-	err = VOP_GETPAGE(vp, (offset_t)(off + ((offset_t)((uintptr_t)addr
+	err = fop_getpage(vp, (offset_t)(off + ((offset_t)((uintptr_t)addr
 	    & MAXBOFFSET))), PAGESIZE, (uint_t *)NULL, (page_t **)NULL, 0,
 	    seg, addr, S_READ, CRED(), NULL);
 
@@ -1342,7 +1342,7 @@ next_smap:
  */
 
 /*
- * Create pages (without using VOP_GETPAGE) and load up translations to them.
+ * Create pages (without using fop_getpage) and load up translations to them.
  * If softlock is TRUE, then set things up so that it looks like a call
  * to segmap_fault with F_SOFTLOCK.
  *
@@ -1868,7 +1868,7 @@ vrfy_smp:
 	}
 
 	base = segkpm_create_va(baseoff);
-	error = VOP_GETPAGE(vp, (offset_t)baseoff, len, &prot, pl, MAXBSIZE,
+	error = fop_getpage(vp, (offset_t)baseoff, len, &prot, pl, MAXBSIZE,
 	    seg, base, rw, CRED(), NULL);
 
 	pp = pl[0];
@@ -1916,7 +1916,7 @@ vrfy_smp:
 		baseaddr = hat_kpm_mapin(pp, kpme);
 	} else {
 		panic("segmap_getmapflt: stale kpme page after "
-		    "VOP_GETPAGE, kpme %p", (void *)kpme);
+		    "fop_getpage, kpme %p", (void *)kpme);
 		/*NOTREACHED*/
 	}
 
@@ -2002,7 +2002,7 @@ segmap_release(struct seg *seg, caddr_t addr, uint_t flags)
 	ASSERT(smp->sm_refcnt > 0);
 
 	/*
-	 * Need to call VOP_PUTPAGE() if any flags (except SM_DONTNEED)
+	 * Need to call fop_putpage() if any flags (except SM_DONTNEED)
 	 * are set.
 	 */
 	if ((flags & ~SM_DONTNEED) != 0) {
@@ -2073,11 +2073,11 @@ segmap_release(struct seg *seg, caddr_t addr, uint_t flags)
 	if (is_kpm)
 		page_unlock(pp);
 	/*
-	 * Now invoke VOP_PUTPAGE() if any flags (except SM_DONTNEED)
+	 * Now invoke fop_putpage() if any flags (except SM_DONTNEED)
 	 * are set.
 	 */
 	if ((flags & ~SM_DONTNEED) != 0) {
-		error = VOP_PUTPAGE(vp, offset, MAXBSIZE,
+		error = fop_putpage(vp, offset, MAXBSIZE,
 		    bflags, CRED(), NULL);
 	} else {
 		error = 0;

@@ -1121,7 +1121,7 @@ struct nfs4_svgetit_arg {
 	nfs4_attr_cmd_t op;		/* getit or setit */
 	struct compound_state *cs;
 	struct statvfs64 *sbp;
-	uint_t 		flag;		/* VOP_GETATTR/VOP_SETATTR flag */
+	uint_t 		flag;		/* fop_getattr/fop_setattr flag */
 	uint_t 		xattr;		/* object is xattr */
 	bool_t 		rdattr_error_req; /* if readdir & client wants */
 						/* rdattr_error */

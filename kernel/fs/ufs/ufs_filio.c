@@ -87,7 +87,7 @@ int
 ufs_fioio(
 	struct vnode	*vp,		/* any file on the fs */
 	struct fioio	*fiou,		/* fioio struct in userland */
-	int		flag,		/* flag from VOP_IOCTL() */
+	int		flag,		/* flag from fop_ioctl() */
 	struct cred	*cr)		/* credentials from ufs_ioctl */
 {
 	int		error	= 0;
@@ -167,10 +167,10 @@ ufs_fioio(
 	 *	Adapted from vn_open: check access and then open the file
 	 */
 	vpio = ITOV(ipio);
-	if (error = VOP_ACCESS(vpio, VREAD, 0, cr, NULL))
+	if (error = fop_access(vpio, VREAD, 0, cr, NULL))
 		goto errout;
 
-	if (error = VOP_OPEN(&vpio, FREAD, cr, NULL))
+	if (error = fop_open(&vpio, FREAD, cr, NULL))
 		goto errout;
 
 	/*
@@ -214,7 +214,7 @@ int
 ufs_fiosatime(
 	struct vnode	*vp,		/* file's vnode */
 	struct timeval	*tvu,		/* struct timeval in userland */
-	int		flag,		/* flag from VOP_IOCTL() */
+	int		flag,		/* flag from fop_ioctl() */
 	struct cred	*cr)		/* credentials from ufs_ioctl */
 {
 	struct inode	*ip;		/* inode for vp */

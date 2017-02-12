@@ -74,7 +74,7 @@ ctfs_create_ctlnode(vnode_t *pvp)
 }
 
 /*
- * ctfs_ctl_access - VOP_ACCESS entry point
+ * ctfs_ctl_access - fop_access entry point
  *
  * You only get to access ctl files for contracts you own or were
  * abandoned and inherited by your containing process contract.
@@ -107,7 +107,7 @@ ctfs_ctl_access(
 }
 
 /*
- * ctfs_ctl_open - VOP_OPEN entry point
+ * ctfs_ctl_open - fop_open entry point
  *
  * Just checks to make sure the mode bits are set, and that the
  * constraints imposed by ctfs_ctl_access are met.
@@ -123,7 +123,7 @@ ctfs_ctl_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 
 /*
  * ctfs_ctl_common_getattr
- * Implements functionality common to ctl and status ctfs VOP_GETATTR
+ * Implements functionality common to ctl and status ctfs fop_getattr
  * entry points. It assumes vp->v_data is set
  */
 static int
@@ -145,7 +145,7 @@ ctfs_ctl_common_getattr(vnode_t *vp, vattr_t *vap)
 }
 
 /*
- * ctfs_ctl_getattr - VOP_GETATTR entry point
+ * ctfs_ctl_getattr - fop_getattr entry point
  */
 /* ARGSUSED */
 static int
@@ -158,7 +158,7 @@ ctfs_ctl_getattr(vnode_t *vp, vattr_t *vap, int flags,
 }
 
 /*
- * ctfs_stat_getattr - VOP_GETATTR entry point
+ * ctfs_stat_getattr - fop_getattr entry point
  */
 /* ARGSUSED */
 static int
@@ -171,7 +171,7 @@ ctfs_stat_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 }
 
 /*
- * ctfs_ctl_ioctl - VOP_IOCTL entry point
+ * ctfs_ctl_ioctl - fop_ioctl entry point
  *
  * All the ct_ctl_*(3contract) interfaces point here.
  */
@@ -264,7 +264,7 @@ ctfs_create_statnode(vnode_t *pvp)
 }
 
 /*
- * ctfs_stat_ioctl - VOP_IOCTL entry point
+ * ctfs_stat_ioctl - fop_ioctl entry point
  *
  * The kernel half of ct_status_read(3contract).
  */

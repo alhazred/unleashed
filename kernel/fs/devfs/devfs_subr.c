@@ -719,11 +719,11 @@ dv_shadow_node(
 	create_tried = 0;
 lookup:
 	if (rdvp && (dv->dv_flags & DV_NO_FSPERM) == 0) {
-		error = VOP_LOOKUP(rdvp, nm, &rvp, pnp, LOOKUP_DIR, rdir, cred,
+		error = fop_lookup(rdvp, nm, &rvp, pnp, LOOKUP_DIR, rdir, cred,
 		    NULL, NULL, NULL);
 
 		/* factor out the snode since we only want the attribute node */
-		if ((error == 0) && (VOP_REALVP(rvp, &rrvp, NULL) == 0)) {
+		if ((error == 0) && (fop_realvp(rvp, &rrvp, NULL) == 0)) {
 			VN_HOLD(rrvp);
 			VN_RELE(rvp);
 			rvp = rrvp;
@@ -745,8 +745,8 @@ lookup:
 
 		/*
 		 * Determine if we have non-trivial ACLs on this node.
-		 * It is not necessary to VOP_RWLOCK since fs_acl_nontrivial
-		 * only does VOP_GETSECATTR.
+		 * It is not necessary to fop_rwlock since fs_acl_nontrivial
+		 * only does fop_getsecattr.
 		 */
 		dv->dv_flags &= ~DV_ACL;
 
@@ -786,7 +786,7 @@ lookup:
 	if ((error == ENOENT) && !create_tried) {
 		switch (vp->v_type) {
 		case VDIR:
-			error = VOP_MKDIR(rdvp, nm, &vattr, &rvp, kcred,
+			error = fop_mkdir(rdvp, nm, &vattr, &rvp, kcred,
 			    NULL, 0, NULL);
 			dsysdebug(error, ("vop_mkdir %s %s %d\n",
 			    VTODV(dvp)->dv_name, nm, error));
@@ -799,7 +799,7 @@ lookup:
 			 * Shadow nodes are only created on demand
 			 */
 			if (flags & DV_SHADOW_CREATE) {
-				error = VOP_CREATE(rdvp, nm, &vattr, NONEXCL,
+				error = fop_create(rdvp, nm, &vattr, NONEXCL,
 				    VREAD|VWRITE, &rvp, kcred, 0, NULL, NULL);
 				dsysdebug(error, ("vop_create %s %s %d\n",
 				    VTODV(dvp)->dv_name, nm, error));
@@ -1654,9 +1654,9 @@ devfs_remdrv_rmdir(vnode_t *dirvp, const char *dir, vnode_t *rvp)
 		iov.iov_base = (char *)dbuf;
 		iov.iov_len = dlen;
 
-		(void) VOP_RWLOCK(dirvp, V_WRITELOCK_FALSE, NULL);
-		error = VOP_READDIR(dirvp, &uio, kcred, &eof, NULL, 0);
-		VOP_RWUNLOCK(dirvp, V_WRITELOCK_FALSE, NULL);
+		(void) fop_rwlock(dirvp, V_WRITELOCK_FALSE, NULL);
+		error = fop_readdir(dirvp, &uio, kcred, &eof, NULL, 0);
+		fop_rwunlock(dirvp, V_WRITELOCK_FALSE, NULL);
 
 		dbuflen = dlen - uio.uio_resid;
 
@@ -1671,7 +1671,7 @@ devfs_remdrv_rmdir(vnode_t *dirvp, const char *dir, vnode_t *rvp)
 			if (strcmp(nm, ".") == 0 || strcmp(nm, "..") == 0)
 				continue;
 
-			error = VOP_LOOKUP(dirvp, nm,
+			error = fop_lookup(dirvp, nm,
 			    &vp, NULL, 0, NULL, kcred, NULL, NULL, NULL);
 
 			dsysdebug(error,
@@ -1687,14 +1687,14 @@ devfs_remdrv_rmdir(vnode_t *dirvp, const char *dir, vnode_t *rvp)
 			if (vp->v_type == VDIR) {
 				error = devfs_remdrv_rmdir(vp, nm, rvp);
 				if (error == 0) {
-					error = VOP_RMDIR(dirvp,
+					error = fop_rmdir(dirvp,
 					    (char *)nm, rvp, kcred, NULL, 0);
 					dsysdebug(error,
 					    ("rem_drv %s/%s rmdir (%d)\n",
 					    dir, nm, error));
 				}
 			} else {
-				error = VOP_REMOVE(dirvp, (char *)nm, kcred,
+				error = fop_remove(dirvp, (char *)nm, kcred,
 				    NULL, 0);
 				dsysdebug(error,
 				    ("rem_drv %s/%s remove (%d)\n",
@@ -1753,7 +1753,7 @@ devfs_remdrv_cleanup(const char *dir, const char *nodename)
 		ASSERT(dirvp->v_type == VDIR);
 		(void) pn_getcomponent(&pn, nm);
 		ASSERT((strcmp(nm, ".") != 0) && (strcmp(nm, "..") != 0));
-		error = VOP_LOOKUP(dirvp, nm, &vp, NULL, 0, rvp, kcred,
+		error = fop_lookup(dirvp, nm, &vp, NULL, 0, rvp, kcred,
 		    NULL, NULL, NULL);
 		if (error) {
 			dcmn_err5(("remdrv_cleanup %s lookup error %d\n",
@@ -1794,9 +1794,9 @@ devfs_remdrv_cleanup(const char *dir, const char *nodename)
 		iov.iov_base = (char *)dbuf;
 		iov.iov_len = dlen;
 
-		(void) VOP_RWLOCK(dirvp, V_WRITELOCK_FALSE, NULL);
-		error = VOP_READDIR(dirvp, &uio, kcred, &eof, NULL, 0);
-		VOP_RWUNLOCK(dirvp, V_WRITELOCK_FALSE, NULL);
+		(void) fop_rwlock(dirvp, V_WRITELOCK_FALSE, NULL);
+		error = fop_readdir(dirvp, &uio, kcred, &eof, NULL, 0);
+		fop_rwunlock(dirvp, V_WRITELOCK_FALSE, NULL);
 
 		dbuflen = dlen - uio.uio_resid;
 
@@ -1814,7 +1814,7 @@ devfs_remdrv_cleanup(const char *dir, const char *nodename)
 			if (strncmp(nm, nodename, nodenamelen) != 0)
 				continue;
 
-			error = VOP_LOOKUP(dirvp, nm, &vp,
+			error = fop_lookup(dirvp, nm, &vp,
 			    NULL, 0, NULL, kcred, NULL, NULL, NULL);
 
 			dsysdebug(error,
@@ -1830,14 +1830,14 @@ devfs_remdrv_cleanup(const char *dir, const char *nodename)
 			if (vp->v_type == VDIR) {
 				error = devfs_remdrv_rmdir(vp, nm, rvp);
 				if (error == 0) {
-					error = VOP_RMDIR(dirvp, (char *)nm,
+					error = fop_rmdir(dirvp, (char *)nm,
 					    rvp, kcred, NULL, 0);
 					dsysdebug(error,
 					    ("rem_drv %s/%s rmdir (%d)\n",
 					    dir, nm, error));
 				}
 			} else {
-				error = VOP_REMOVE(dirvp, (char *)nm, kcred,
+				error = fop_remove(dirvp, (char *)nm, kcred,
 				    NULL, 0);
 				dsysdebug(error,
 				    ("rem_drv %s/%s remove (%d)\n",

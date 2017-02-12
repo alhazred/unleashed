@@ -122,7 +122,7 @@ static int plist_chkdupfd(file_t *, polldat_t *, pollstate_t *, pollfd_t *, int,
  *	per fd
  *
  * This conglomerate of data structures interact with
- *	the pollhead which is used by VOP_POLL and pollwakeup
+ *	the pollhead which is used by fop_poll and pollwakeup
  *	(protected by the PHLOCK, cached array of plocks), and
  *	the fpollinfo list hanging off the fi_list which is used to notify
  *	poll when a cached fd is closed. This is protected by uf_lock.
@@ -218,13 +218,13 @@ static int plist_chkdupfd(file_t *, polldat_t *, pollstate_t *, pollfd_t *, int,
  *	but drops the locks and reacquire them in reverse order to avoid
  *	deadlock.
  *
- * Note also that there is deadlock avoidance support for VOP_POLL routines
+ * Note also that there is deadlock avoidance support for fop_poll routines
  * and pollwakeup involving a file system or driver lock.
  * See below.
  */
 
 /*
- * Deadlock avoidance support for VOP_POLL() routines.  This is
+ * Deadlock avoidance support for fop_poll() routines.  This is
  * sometimes necessary to prevent deadlock between polling threads
  * (which hold poll locks on entry to xx_poll(), then acquire foo)
  * and pollwakeup() threads (which hold foo, then acquire poll locks).
@@ -239,7 +239,7 @@ static int plist_chkdupfd(file_t *, polldat_t *, pollstate_t *, pollfd_t *, int,
  *
  * If polllock() or pollunlock() return non-zero, it indicates that a recursive
  * /dev/poll is in progress and pollcache locks cannot be dropped.  Callers
- * must handle this by indicating a POLLNVAL in the revents of the VOP_POLL.
+ * must handle this by indicating a POLLNVAL in the revents of the fop_poll.
  */
 int
 pollunlock(int *lockstate)
@@ -558,7 +558,7 @@ poll_common(pollfd_t *fds, nfds_t nfds, timespec_t *tsp, k_sigset_t *ksetp)
 		/*
 		 * If PC_POLLWAKE is set, a pollwakeup() was performed on
 		 * one of the file descriptors.  This can happen only if
-		 * one of the VOP_POLL() functions dropped pcp->pc_lock.
+		 * one of the fop_poll() functions dropped pcp->pc_lock.
 		 * The only current cases of this is in procfs (prpoll())
 		 * and STREAMS (strpoll()).
 		 */
@@ -1266,18 +1266,18 @@ pcache_insert(pollstate_t *ps, file_t *fp, pollfd_t *pollfdp, int *fdcntp,
 
 	ASSERT(MUTEX_HELD(&ps->ps_lock));
 	/*
-	 * The poll caching uses the existing VOP_POLL interface. If there
+	 * The poll caching uses the existing fop_poll interface. If there
 	 * is no polled events, we want the polled device to set its "some
 	 * one is sleeping in poll" flag. When the polled events happen
 	 * later, the driver will call pollwakeup(). We achieve this by
 	 * always passing 0 in the third parameter ("anyyet") when calling
-	 * VOP_POLL. This parameter is not looked at by drivers when the
+	 * fop_poll. This parameter is not looked at by drivers when the
 	 * polled events exist. If a driver chooses to ignore this parameter
 	 * and call pollwakeup whenever the polled events happen, that will
 	 * be OK too.
 	 */
 	ASSERT(curthread->t_pollcache == NULL);
-	error = VOP_POLL(fp->f_vnode, pollfdp->events, 0, &pollfdp->revents,
+	error = fop_poll(fp->f_vnode, pollfdp->events, 0, &pollfdp->revents,
 	    &memphp, NULL);
 	if (error) {
 		return (error);
@@ -1343,7 +1343,7 @@ pcache_insert(pollstate_t *ps, file_t *fp, pollfd_t *pollfdp, int *fdcntp,
 	 * There is not much special handling for multiple appearances of
 	 * same fd other than xf_position always recording the first
 	 * appearance in poll list. If this is called from pcacheset_cache_list,
-	 * a VOP_POLL is called on every pollfd entry; therefore each
+	 * a fop_poll is called on every pollfd entry; therefore each
 	 * revents and fdcnt should be set correctly. If this is called from
 	 * pcacheset_resolve, we don't care about fdcnt here. Pollreadmap will
 	 * pick up the right count and handle revents field of each pollfd
@@ -1390,10 +1390,10 @@ pcache_insert(pollstate_t *ps, file_t *fp, pollfd_t *pollfdp, int *fdcntp,
 		}
 	}
 	/*
-	 * Since there is a considerable window between VOP_POLL and when
+	 * Since there is a considerable window between fop_poll and when
 	 * we actually put the polldat struct on the pollhead list, we could
 	 * miss a pollwakeup. In the case of polling additional events, we
-	 * don't update the events until after VOP_POLL. So we could miss
+	 * don't update the events until after fop_poll. So we could miss
 	 * pollwakeup there too. So we always set the bit here just to be
 	 * safe. The real performance gain is in subsequent pcache_poll.
 	 */
@@ -1814,7 +1814,7 @@ pcacheset_resolve(pollstate_t *ps, nfds_t nfds, int *fdcntp, int which)
 	 * By now for every fd in pollfdp, one of the following should be
 	 * true. Otherwise we will miss a polled event.
 	 *
-	 * 1. the bit corresponding to the fd in bitmap is set. So VOP_POLL
+	 * 1. the bit corresponding to the fd in bitmap is set. So fop_poll
 	 *    will be called on this fd in next poll.
 	 * 2. the fd is cached in the pcache (i.e. pd_php is set). So
 	 *    pollnotify will happen.
@@ -1905,7 +1905,7 @@ retry:
 			}
 			/*
 			 * A bitmap caches poll state information of
-			 * multiple poll lists. Call VOP_POLL only if
+			 * multiple poll lists. Call fop_poll only if
 			 * the bit corresponds to an fd in this poll
 			 * list.
 			 */
@@ -1973,7 +1973,7 @@ retry:
 			ASSERT(infpollinfo(fd));
 			/*
 			 * Since we no longer hold poll head lock across
-			 * VOP_POLL, pollunlock logic can be simplifed.
+			 * fop_poll, pollunlock logic can be simplifed.
 			 */
 			ASSERT(pdp->pd_php == NULL ||
 			    MUTEX_NOT_HELD(PHLOCK(pdp->pd_php)));
@@ -1992,7 +1992,7 @@ retry:
 			 * flag.
 			 */
 			ASSERT(curthread->t_pollcache == NULL);
-			error = VOP_POLL(fp->f_vnode, pollfdp[entry].events, 0,
+			error = fop_poll(fp->f_vnode, pollfdp[entry].events, 0,
 			    &pollfdp[entry].revents, &php, NULL);
 			/*
 			 * releasef after completely done with this cached
@@ -2046,11 +2046,11 @@ retry:
 				releasef(fd);
 			} else {
 				/*
-				 * VOP_POLL didn't return any revents. We can
+				 * fop_poll didn't return any revents. We can
 				 * clear the bit in bitmap only if we have the
 				 * pollhead ptr cached and no other cached
 				 * entry is polling different events on this fd.
-				 * VOP_POLL may have dropped the ps_lock. Make
+				 * fop_poll may have dropped the ps_lock. Make
 				 * sure pollwakeup has not happened before clear
 				 * the bit.
 				 */
@@ -2449,7 +2449,7 @@ pollstate_enter(pollcache_t *pcp)
 
 	if (ps == NULL) {
 		/*
-		 * The thread pollstate may not be initialized if VOP_POLL is
+		 * The thread pollstate may not be initialized if fop_poll is
 		 * called on a recursion-enabled /dev/poll handle from outside
 		 * the poll() or /dev/poll codepaths.
 		 */
@@ -2990,11 +2990,11 @@ pcacheset_destroy(pollcacheset_t *pcsp, int nsets)
 
 /*
  * Check each duplicated poll fd in the poll list. It may be necessary to
- * VOP_POLL the same fd again using different poll events. getf() has been
+ * fop_poll the same fd again using different poll events. getf() has been
  * done by caller. This routine returns 0 if it can sucessfully process the
  * entire poll fd list. It returns -1 if underlying vnode has changed during
- * a VOP_POLL, in which case the caller has to repoll. It returns a positive
- * value if VOP_POLL failed.
+ * a fop_poll, in which case the caller has to repoll. It returns a positive
+ * value if fop_poll failed.
  */
 static int
 plist_chkdupfd(file_t *fp, polldat_t *pdp, pollstate_t *psp, pollfd_t *pollfdp,
@@ -3019,12 +3019,12 @@ plist_chkdupfd(file_t *fp, polldat_t *pdp, pollstate_t *psp, pollfd_t *pollfdp,
 				pollcache_t *pcp = psp->ps_pcache;
 
 				/*
-				 * the events are different. VOP_POLL on this
+				 * the events are different. fop_poll on this
 				 * fd so that we don't miss any revents.
 				 */
 				php = NULL;
 				ASSERT(curthread->t_pollcache == NULL);
-				error = VOP_POLL(fp->f_vnode,
+				error = fop_poll(fp->f_vnode,
 				    pollfdp[i].events, 0,
 				    &pollfdp[i].revents, &php, NULL);
 				if (error) {

@@ -270,7 +270,7 @@ opendq(
 				cmn_err(CE_WARN, "opendq failed to remove frags"
 				    " from quota file\n");
 			rw_exit(&qip->i_contents);
-			(void) VOP_PUTPAGE(vp, (offset_t)0, (size_t)qip->i_size,
+			(void) fop_putpage(vp, (offset_t)0, (size_t)qip->i_size,
 			    B_INVAL, kcred, NULL);
 		} else {
 			rw_exit(&qip->i_contents);
@@ -641,7 +641,7 @@ setquota(int cmd, uid_t uid, struct ufsvfs *ufsvfsp,
 	    (int *)NULL, kcred);
 	rw_exit(&qip->i_contents);
 
-	(void) VOP_PUTPAGE(ITOV(qip), dqoff(dqp->dq_uid) & ~qip->i_fs->fs_bmask,
+	(void) fop_putpage(ITOV(qip), dqoff(dqp->dq_uid) & ~qip->i_fs->fs_bmask,
 	    qip->i_fs->fs_bsize, B_INVAL, kcred, NULL);
 
 	/*

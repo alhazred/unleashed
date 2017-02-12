@@ -241,7 +241,7 @@ vnodeops_t *nfs4_trigger_vnodeops;
  * for various reasons. This will result in the VFS default function being
  * used:
  *
- * - These VOPs require a previous VOP_OPEN to have occurred. That will have
+ * - These VOPs require a previous fop_open to have occurred. That will have
  *   lost the reference to the stub vnode, meaning these should not be called:
  *       close, read, write, ioctl, readdir, seek.
  *
@@ -380,7 +380,7 @@ nfs4_trigger_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 	*vpp = newvp;
 
 	/* return with VN_HELD(newvp) */
-	return (VOP_OPEN(vpp, flag, cr, ct));
+	return (fop_open(vpp, flag, cr, ct));
 }
 
 void
@@ -437,7 +437,7 @@ nfs4_trigger_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 		if (error)
 			return (error);
 
-		error = VOP_GETATTR(newvp, vap, flags, cr, ct);
+		error = fop_getattr(newvp, vap, flags, cr, ct);
 		VN_RELE(newvp);
 
 	} else if (RP_ISSTUB_MIRRORMOUNT(VTOR4(vp))) {
@@ -464,7 +464,7 @@ nfs4_trigger_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	if (error)
 		return (error);
 
-	error = VOP_SETATTR(newvp, vap, flags, cr, ct);
+	error = fop_setattr(newvp, vap, flags, cr, ct);
 	VN_RELE(newvp);
 
 	return (error);
@@ -481,7 +481,7 @@ nfs4_trigger_access(vnode_t *vp, int mode, int flags, cred_t *cr,
 	if (error)
 		return (error);
 
-	error = VOP_ACCESS(newvp, mode, flags, cr, ct);
+	error = fop_access(newvp, mode, flags, cr, ct);
 	VN_RELE(newvp);
 
 	return (error);
@@ -516,7 +516,7 @@ nfs4_trigger_lookup(vnode_t *dvp, char *nm, vnode_t **vpp,
 	if (error)
 		return (error);
 
-	error = VOP_LOOKUP(newdvp, nm, vpp, pnp, flags, rdir, cr, ct,
+	error = fop_lookup(newdvp, nm, vpp, pnp, flags, rdir, cr, ct,
 	    deflags, rpnp);
 	VN_RELE(newdvp);
 
@@ -535,7 +535,7 @@ nfs4_trigger_create(vnode_t *dvp, char *nm, struct vattr *va,
 	if (error)
 		return (error);
 
-	error = VOP_CREATE(newdvp, nm, va, exclusive, mode, vpp, cr,
+	error = fop_create(newdvp, nm, va, exclusive, mode, vpp, cr,
 	    flags, ct, vsecp);
 	VN_RELE(newdvp);
 
@@ -553,7 +553,7 @@ nfs4_trigger_remove(vnode_t *dvp, char *nm, cred_t *cr, caller_context_t *ct,
 	if (error)
 		return (error);
 
-	error = VOP_REMOVE(newdvp, nm, cr, ct, flags);
+	error = fop_remove(newdvp, nm, cr, ct, flags);
 	VN_RELE(newdvp);
 
 	return (error);
@@ -574,7 +574,7 @@ nfs4_trigger_link(vnode_t *tdvp, vnode_t *svp, char *tnm, cred_t *cr,
 	 * We don't check whether svp is a stub. Let the NFSv4 code
 	 * detect that error, and return accordingly.
 	 */
-	error = VOP_LINK(newtdvp, svp, tnm, cr, ct, flags);
+	error = fop_link(newtdvp, svp, tnm, cr, ct, flags);
 	VN_RELE(newtdvp);
 
 	return (error);
@@ -611,7 +611,7 @@ nfs4_trigger_rename(vnode_t *sdvp, char *snm, vnode_t *tdvp, char *tnm,
 	if (error)
 		return (error);
 
-	error = VOP_RENAME(newsdvp, snm, tdvp, tnm, cr, ct, flags);
+	error = fop_rename(newsdvp, snm, tdvp, tnm, cr, ct, flags);
 
 	VN_RELE(newsdvp);
 
@@ -630,7 +630,7 @@ nfs4_trigger_mkdir(vnode_t *dvp, char *nm, struct vattr *va, vnode_t **vpp,
 	if (error)
 		return (error);
 
-	error = VOP_MKDIR(newdvp, nm, va, vpp, cr, ct, flags, vsecp);
+	error = fop_mkdir(newdvp, nm, va, vpp, cr, ct, flags, vsecp);
 	VN_RELE(newdvp);
 
 	return (error);
@@ -647,7 +647,7 @@ nfs4_trigger_rmdir(vnode_t *dvp, char *nm, vnode_t *cdir, cred_t *cr,
 	if (error)
 		return (error);
 
-	error = VOP_RMDIR(newdvp, nm, cdir, cr, ct, flags);
+	error = fop_rmdir(newdvp, nm, cdir, cr, ct, flags);
 	VN_RELE(newdvp);
 
 	return (error);
@@ -664,7 +664,7 @@ nfs4_trigger_symlink(vnode_t *dvp, char *lnm, struct vattr *tva, char *tnm,
 	if (error)
 		return (error);
 
-	error = VOP_SYMLINK(newdvp, lnm, tva, tnm, cr, ct, flags);
+	error = fop_symlink(newdvp, lnm, tva, tnm, cr, ct, flags);
 	VN_RELE(newdvp);
 
 	return (error);
@@ -681,7 +681,7 @@ nfs4_trigger_readlink(vnode_t *vp, struct uio *uiop, cred_t *cr,
 	if (error)
 		return (error);
 
-	error = VOP_READLINK(newvp, uiop, cr, ct);
+	error = fop_readlink(newvp, uiop, cr, ct);
 	VN_RELE(newvp);
 
 	return (error);

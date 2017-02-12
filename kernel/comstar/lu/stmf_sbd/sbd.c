@@ -1507,7 +1507,7 @@ sbd_open_data_file(sbd_lu_t *sl, uint32_t *err_ret, int lu_size_valid,
 	}
 odf_over_open:
 	vattr.va_mask = AT_SIZE;
-	if ((ret = VOP_GETATTR(sl->sl_data_vp, &vattr, 0, CRED(), NULL)) != 0) {
+	if ((ret = fop_getattr(sl->sl_data_vp, &vattr, 0, CRED(), NULL)) != 0) {
 		*err_ret = SBD_RET_DATA_FILE_GETATTR_FAILED;
 		goto odf_close_data_and_exit;
 	}
@@ -1523,7 +1523,7 @@ odf_over_open:
 	/* sl_data_readable size includes any metadata. */
 	sl->sl_data_readable_size = vattr.va_size;
 
-	if (VOP_PATHCONF(sl->sl_data_vp, _PC_FILESIZEBITS, &nbits,
+	if (fop_pathconf(sl->sl_data_vp, _PC_FILESIZEBITS, &nbits,
 	    CRED(), NULL) != 0) {
 		nbits = 0;
 	}
@@ -1576,7 +1576,7 @@ odf_over_open:
 	 * Get the minor device for direct zvol access
 	 */
 	if (sl->sl_flags & SL_ZFS_META) {
-		if ((ret = VOP_IOCTL(sl->sl_data_vp, DKIOCINFO, (intptr_t)&dki,
+		if ((ret = fop_ioctl(sl->sl_data_vp, DKIOCINFO, (intptr_t)&dki,
 		    FKIOCTL, kcred, &unused, NULL)) != 0) {
 			cmn_err(CE_WARN, "ioctl(DKIOCINFO) failed %d", ret);
 			/* zvol reserves 0, so this would fail later */
@@ -1593,7 +1593,7 @@ odf_over_open:
 
 odf_close_data_and_exit:
 	if (!keep_open) {
-		(void) VOP_CLOSE(sl->sl_data_vp, flag, 1, 0, CRED(), NULL);
+		(void) fop_close(sl->sl_data_vp, flag, 1, 0, CRED(), NULL);
 		VN_RELE(sl->sl_data_vp);
 	}
 	mutex_exit(&sl->sl_lock);
@@ -1615,7 +1615,7 @@ sbd_close_lu(sbd_lu_t *sl)
 			}
 		} else {
 			flag = FREAD | FWRITE | FOFFMAX | FEXCL;
-			(void) VOP_CLOSE(sl->sl_meta_vp, flag, 1, 0,
+			(void) fop_close(sl->sl_meta_vp, flag, 1, 0,
 			    CRED(), NULL);
 			VN_RELE(sl->sl_meta_vp);
 		}
@@ -1627,7 +1627,7 @@ sbd_close_lu(sbd_lu_t *sl)
 		} else {
 			flag = FREAD | FWRITE | FOFFMAX | FEXCL;
 		}
-		(void) VOP_CLOSE(sl->sl_data_vp, flag, 1, 0, CRED(), NULL);
+		(void) fop_close(sl->sl_data_vp, flag, 1, 0, CRED(), NULL);
 		VN_RELE(sl->sl_data_vp);
 		sl->sl_flags &= ~SL_MEDIA_LOADED;
 		if (sl->sl_flags & SL_SHARED_META) {
@@ -3544,7 +3544,7 @@ sbd_wcd_set(int wcd, sbd_lu_t *sl)
 		goto done;
 	}
 
-	ret = VOP_IOCTL(sl->sl_data_vp, DKIOCSETWCE, (intptr_t)&wce, FKIOCTL,
+	ret = fop_ioctl(sl->sl_data_vp, DKIOCSETWCE, (intptr_t)&wce, FKIOCTL,
 	    kcred, NULL, NULL);
 	if (ret == 0) {
 		sl->sl_flags &= ~SL_WRITEBACK_CACHE_SET_UNSUPPORTED;
@@ -3576,7 +3576,7 @@ sbd_wcd_get(int *wcd, sbd_lu_t *sl)
 		return;
 	}
 
-	ret = VOP_IOCTL(sl->sl_data_vp, DKIOCGETWCE, (intptr_t)&wce, FKIOCTL,
+	ret = fop_ioctl(sl->sl_data_vp, DKIOCGETWCE, (intptr_t)&wce, FKIOCTL,
 	    kcred, NULL, NULL);
 	/* if write cache get failed, assume disabled */
 	if (ret) {
@@ -3713,6 +3713,6 @@ sbd_unmap(sbd_lu_t *sl, uint64_t offset, uint64_t length)
 		return (EIO);
 	}
 
-	return (VOP_IOCTL(vp, DKIOCFREE, (intptr_t)(&df), FKIOCTL, kcred,
+	return (fop_ioctl(vp, DKIOCFREE, (intptr_t)(&df), FKIOCTL, kcred,
 	    &unused, NULL));
 }

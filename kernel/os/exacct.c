@@ -167,15 +167,15 @@ exacct_vn_write_impl(ac_info_t *info, void *buf, ssize_t bufsize)
 	 * the present accounting file.
 	 */
 	va.va_mask = AT_SIZE;
-	error = VOP_GETATTR(info->ac_vnode, &va, 0, kcred, NULL);
+	error = fop_getattr(info->ac_vnode, &va, 0, kcred, NULL);
 	if (error == 0) {
 		error = vn_rdwr(UIO_WRITE, info->ac_vnode, (caddr_t)buf,
 		    bufsize, 0LL, UIO_SYSSPACE, FAPPEND, (rlim64_t)MAXOFFSET_T,
 		    kcred, &resid);
 		if (error) {
-			(void) VOP_SETATTR(info->ac_vnode, &va, 0, kcred, NULL);
+			(void) fop_setattr(info->ac_vnode, &va, 0, kcred, NULL);
 		} else if (resid != 0) {
-			(void) VOP_SETATTR(info->ac_vnode, &va, 0, kcred, NULL);
+			(void) fop_setattr(info->ac_vnode, &va, 0, kcred, NULL);
 			error = ENOSPC;
 		}
 	}

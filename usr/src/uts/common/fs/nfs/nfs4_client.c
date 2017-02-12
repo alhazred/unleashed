@@ -346,7 +346,7 @@ nfs4_flush_pages(vnode_t *vp, cred_t *cr)
 	int error;
 	rnode4_t *rp = VTOR4(vp);
 
-	error = VOP_PUTPAGE(vp, (u_offset_t)0, 0, B_INVAL, cr, NULL);
+	error = fop_putpage(vp, (u_offset_t)0, 0, B_INVAL, cr, NULL);
 	if (error == ENOSPC || error == EDQUOT) {
 		mutex_enter(&rp->r_statelock);
 		if (!rp->r_error)
@@ -1101,7 +1101,7 @@ free_async_args4(struct nfs4_async_reqs *args)
 /*
  * Cross-zone thread creation and NFS access is disallowed, yet fsflush() and
  * pageout(), running in the global zone, have legitimate reasons to do
- * VOP_PUTPAGE(B_ASYNC) on other zones' NFS mounts.  We avoid the problem by
+ * fop_putpage(B_ASYNC) on other zones' NFS mounts.  We avoid the problem by
  * use of a a per-mount "asynchronous requests manager thread" which is
  * signaled by the various asynchronous work routines when there is
  * asynchronous work to be done.  It is responsible for creating new
@@ -1544,7 +1544,7 @@ nfs4_async_common_start(struct vfs *vfsp, int async_queue)
 
 /*
  * nfs4_inactive_thread - look for vnodes that need over-the-wire calls as
- * part of VOP_INACTIVE.
+ * part of fop_inactive.
  */
 
 void
@@ -2141,7 +2141,7 @@ noasync:
 }
 
 /*
- * nfs4_async_inactive - hand off a VOP_INACTIVE call to a thread.  The
+ * nfs4_async_inactive - hand off a fop_inactive call to a thread.  The
  * reference to the vnode is handed over to the thread; the caller should
  * no longer refer to the vnode.
  *
@@ -2206,7 +2206,7 @@ nfs4_async_inactive(vnode_t *vp, cred_t *cr)
 		/*
 		 * No need to explicitly throw away any cached pages.  The
 		 * eventual r4inactive() will attempt a synchronous
-		 * VOP_PUTPAGE() which will immediately fail since the request
+		 * fop_putpage() which will immediately fail since the request
 		 * is coming from the wrong zone, and then will proceed to call
 		 * nfs4_invalidate_pages() which will clean things up for us.
 		 *
@@ -2806,7 +2806,7 @@ nfs4_map_lost_lock_conflict(vnode_t *vp)
 		if (lrp->lr_op != OP_LOCK && lrp->lr_op != OP_LOCKU)
 			continue;
 		ASSERT(lrp->lr_vp != NULL);
-		if (!VOP_CMP(lrp->lr_vp, vp, NULL))
+		if (!fop_cmp(lrp->lr_vp, vp, NULL))
 			continue;	/* different file */
 		if (!SAFE_LOCK(*lrp->lr_flk)) {
 			conflict = TRUE;
@@ -3199,7 +3199,7 @@ nfs4_clnt_init(void)
 
 	/*
 	 * Initialise the reference count of the notsupp xattr cache vnode to 1
-	 * so that it never goes away (VOP_INACTIVE isn't called on it).
+	 * so that it never goes away (fop_inactive isn't called on it).
 	 */
 	nfs4_xattr_notsupp_vnode.v_count = 1;
 }

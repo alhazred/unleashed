@@ -217,7 +217,7 @@ r4flushpages(rnode4_t *rp, cred_t *cr)
 	if (nfs4_has_pages(vp)) {
 		ASSERT(vp->v_type != VCHR);
 		if ((rp->r_flags & R4DIRTY) && !rp->r_error) {
-			error = VOP_PUTPAGE(vp, (u_offset_t)0, 0, 0, cr, NULL);
+			error = fop_putpage(vp, (u_offset_t)0, 0, 0, cr, NULL);
 			if (error && (error == ENOSPC || error == EDQUOT)) {
 				mutex_enter(&rp->r_statelock);
 				if (!rp->r_error)
@@ -812,7 +812,7 @@ rp4_addfree(rnode4_t *rp, cred_t *cr)
 		 * acquired while we were not holding v_lock.  The
 		 * rnode is not in the rnode hash queues; one
 		 * way for a reference to have been acquired
-		 * is for a VOP_PUTPAGE because the rnode was marked
+		 * is for a fop_putpage because the rnode was marked
 		 * with R4DIRTY or for a modified page.  This
 		 * reference may have been acquired before our call
 		 * to r4inactive.  The i/o may have been completed,
@@ -1340,7 +1340,7 @@ toomany:
 	 */
 	while (cnt-- > 0) {
 		vp = vplist[cnt];
-		(void) VOP_PUTPAGE(vp, (u_offset_t)0, 0, B_ASYNC, cr, NULL);
+		(void) fop_putpage(vp, (u_offset_t)0, 0, B_ASYNC, cr, NULL);
 		VN_RELE(vp);
 	}
 

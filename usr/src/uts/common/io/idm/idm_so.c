@@ -2900,14 +2900,14 @@ tx_bail:
 static void
 idm_so_socket_set_nonblock(struct sonode *node)
 {
-	(void) VOP_SETFL(node->so_vnode, node->so_flag,
+	(void) fop_setfl(node->so_vnode, node->so_flag,
 	    (node->so_state | FNONBLOCK), CRED(), NULL);
 }
 
 static void
 idm_so_socket_set_block(struct sonode *node)
 {
-	(void) VOP_SETFL(node->so_vnode, node->so_flag,
+	(void) fop_setfl(node->so_vnode, node->so_flag,
 	    (node->so_state & (~FNONBLOCK)), CRED(), NULL);
 }
 

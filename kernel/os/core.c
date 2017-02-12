@@ -158,7 +158,7 @@ remove_core_file(char *fp, enum core_types core_type)
 	else if ((dvfsp = dvp->v_vfsp) != NULL &&
 	    (dvfsp->vfs_flag & VFS_RDONLY))
 		error = EROFS;
-	else if ((error = VOP_ACCESS(vp, VWRITE, 0, CRED(), NULL)) == 0) {
+	else if ((error = fop_access(vp, VWRITE, 0, CRED(), NULL)) == 0) {
 		if (nbl_need_check(vp)) {
 			nbl_start_crit(vp, RW_READER);
 			in_crit = 1;
@@ -167,7 +167,7 @@ remove_core_file(char *fp, enum core_types core_type)
 			}
 		}
 		if (!error) {
-			error = VOP_REMOVE(dvp, pn.pn_path, CRED(), NULL, 0);
+			error = fop_remove(dvp, pn.pn_path, CRED(), NULL, 0);
 		}
 	}
 
@@ -265,9 +265,9 @@ create_core_file(char *fp, enum core_types core_type, vnode_t **vpp)
 	 */
 	vattr.va_mask = AT_UID;
 	if (error == 0 &&
-	    (VOP_GETATTR(vp, &vattr, 0, credp, NULL) != 0 ||
+	    (fop_getattr(vp, &vattr, 0, credp, NULL) != 0 ||
 	    vattr.va_uid != crgetuid(credp))) {
-		(void) VOP_CLOSE(vp, FWRITE, 1, (offset_t)0,
+		(void) fop_close(vp, FWRITE, 1, (offset_t)0,
 		    credp, NULL);
 		VN_RELE(vp);
 		(void) remove_core_file(fp, core_type);
@@ -445,7 +445,7 @@ do_core(char *fp, int sig, enum core_types core_type, struct core_globals *cg)
 			rw_exit(eswp->exec_lock);
 		}
 
-		closerr = VOP_CLOSE(vp, FWRITE, 1, (offset_t)0, credp, NULL);
+		closerr = fop_close(vp, FWRITE, 1, (offset_t)0, credp, NULL);
 		VN_RELE(vp);
 		if (error == 0)
 			error = closerr;

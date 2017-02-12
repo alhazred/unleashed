@@ -85,7 +85,7 @@ lookup:
 		 * object to look like a symlink at user-level.
 		 */
 		vattr.va_mask = AT_TYPE;
-		error = VOP_GETATTR(vp, &vattr, 0, CRED(), NULL);
+		error = fop_getattr(vp, &vattr, 0, CRED(), NULL);
 		if (error || vattr.va_type != VLNK) {
 			VN_RELE(vp);
 			if ((error == ESTALE) &&
@@ -103,7 +103,7 @@ lookup:
 	auio.uio_segflg = UIO_USERSPACE;
 	auio.uio_extflg = UIO_COPY_CACHED;
 	auio.uio_resid = cnt;
-	error = VOP_READLINK(vp, &auio, CRED(), NULL);
+	error = fop_readlink(vp, &auio, CRED(), NULL);
 	VN_RELE(vp);
 	if (error == ESTALE && fs_need_estale_retry(estale_retry++))
 		goto lookup;

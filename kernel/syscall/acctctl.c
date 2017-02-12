@@ -162,7 +162,7 @@ ac_file_set(ac_info_t *info, void *ubuf, size_t bufsz)
 		 * Closing accounting file
 		 */
 		if (info->ac_vnode != NULL) {
-			error = VOP_CLOSE(info->ac_vnode, FWRITE, 1, 0,
+			error = fop_close(info->ac_vnode, FWRITE, 1, 0,
 			    CRED(), NULL);
 			if (error) {
 				mutex_exit(&info->ac_lock);
@@ -277,7 +277,7 @@ ac_file_set(ac_info_t *info, void *ubuf, size_t bufsz)
 		/*
 		 * We still need to close the old file.
 		 */
-		if ((error = VOP_CLOSE(vp, FWRITE, 1, 0, CRED(), NULL)) != 0) {
+		if ((error = fop_close(vp, FWRITE, 1, 0, CRED(), NULL)) != 0) {
 			VN_RELE(vp);
 			mutex_exit(&info->ac_lock);
 			kmem_free(namebuf, namelen);
@@ -296,7 +296,7 @@ ac_file_set(ac_info_t *info, void *ubuf, size_t bufsz)
 	/*
 	 * Write the exacct header only if the file is empty.
 	 */
-	error = VOP_GETATTR(info->ac_vnode, &va, AT_SIZE, CRED(), NULL);
+	error = fop_getattr(info->ac_vnode, &va, AT_SIZE, CRED(), NULL);
 	if (error == 0 && va.va_size == 0)
 		error = exacct_write_header(info, hdr, hdrsize);
 
@@ -564,7 +564,7 @@ exacct_free_info(ac_info_t *info)
 {
 	mutex_enter(&info->ac_lock);
 	if (info->ac_vnode) {
-		(void) VOP_CLOSE(info->ac_vnode, FWRITE, 1, 0, kcred, NULL);
+		(void) fop_close(info->ac_vnode, FWRITE, 1, 0, kcred, NULL);
 		VN_RELE(info->ac_vnode);
 		kmem_free(info->ac_file, strlen(info->ac_file) + 1);
 	}

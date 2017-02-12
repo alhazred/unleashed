@@ -989,7 +989,7 @@ zfs_make_xattrdir(znode_t *zp, vattr_t *vap, vnode_t **xvpp, cred_t *cr)
  *
  *	IN:	zp	- znode to obtain attribute directory from
  *		cr	- credentials of caller
- *		flags	- flags from the VOP_LOOKUP call
+ *		flags	- flags from the fop_lookup call
  *
  *	OUT:	xzpp	- pointer to extended attribute znode
  *

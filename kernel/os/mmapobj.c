@@ -917,7 +917,7 @@ mmapobj_map_flat(vnode_t *vp, mmapobj_result_t *mrp, size_t padding,
 	}
 
 	vattr.va_mask = AT_SIZE;
-	error = VOP_GETATTR(vp, &vattr, 0, fcred, NULL);
+	error = fop_getattr(vp, &vattr, 0, fcred, NULL);
 	if (error) {
 		return (error);
 	}
@@ -927,7 +927,7 @@ mmapobj_map_flat(vnode_t *vp, mmapobj_result_t *mrp, size_t padding,
 	ma_flags |= MAP_PRIVATE;
 	if (padding == 0) {
 		MOBJ_STAT_ADD(map_flat_no_padding);
-		error = VOP_MAP(vp, 0, as, &addr, len, prot, PROT_ALL,
+		error = fop_map(vp, 0, as, &addr, len, prot, PROT_ALL,
 		    ma_flags, fcred, NULL);
 		if (error == 0) {
 			mrp[0].mr_addr = addr;
@@ -960,7 +960,7 @@ mmapobj_map_flat(vnode_t *vp, mmapobj_result_t *mrp, size_t padding,
 	start_addr = addr;
 	addr += padding;
 	ma_flags |= MAP_FIXED;
-	error = VOP_MAP(vp, 0, as, &addr, len, prot, PROT_ALL, ma_flags,
+	error = fop_map(vp, 0, as, &addr, len, prot, PROT_ALL, ma_flags,
 	    fcred, NULL);
 	if (error == 0) {
 		mrp[0].mr_addr = start_addr;
@@ -1052,7 +1052,7 @@ mmapobj_map_ptload(struct vnode *vp, caddr_t addr, size_t len, size_t zfodlen,
 			 * maxprot is passed as PROT_ALL so that mdb can
 			 * write to this segment.
 			 */
-			if (error = VOP_MAP(vp, (offset_t)offset, as, &addr,
+			if (error = fop_map(vp, (offset_t)offset, as, &addr,
 			    len, prot, PROT_ALL, mflag, fcred, NULL)) {
 				return (error);
 			}
@@ -1088,7 +1088,7 @@ mmapobj_map_ptload(struct vnode *vp, caddr_t addr, size_t len, size_t zfodlen,
 		} else {
 			/*
 			 * addr and offset were not aligned such that we could
-			 * use VOP_MAP, thus we need to as_map the memory we
+			 * use fop_map, thus we need to as_map the memory we
 			 * need and then read the data in from disk.
 			 * This code path is a corner case which should never
 			 * be taken, but hand crafted binaries could trigger
@@ -1601,7 +1601,7 @@ process_phdrs(Ehdr *ehdrp, caddr_t phdrbase, int nphdrs, mmapobj_result_t *mrp,
 	}
 	if (e_type == ET_DYN) {
 		vattr.va_mask = AT_FSID | AT_NODEID | AT_CTIME | AT_MTIME;
-		error = VOP_GETATTR(vp, &vattr, 0, fcred, NULL);
+		error = fop_getattr(vp, &vattr, 0, fcred, NULL);
 		if (error) {
 			return (error);
 		}
@@ -2087,7 +2087,7 @@ mmapobj_map_interpret(vnode_t *vp, mmapobj_result_t *mrp,
 	caddr_t header = (caddr_t)&lheader;
 
 	vattr.va_mask = AT_FSID | AT_NODEID | AT_CTIME | AT_MTIME | AT_SIZE;
-	error = VOP_GETATTR(vp, &vattr, 0, fcred, NULL);
+	error = fop_getattr(vp, &vattr, 0, fcred, NULL);
 	if (error) {
 		return (error);
 	}

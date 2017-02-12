@@ -1900,7 +1900,7 @@ ud_iflush(struct vfs *vfsp)
 			ip->i_back = ip;
 			/*
 			 * Hold the vnode since its not done
-			 * in VOP_PUTPAGE anymore.
+			 * in fop_putpage anymore.
 			 */
 			VN_HOLD(vp);
 			/*

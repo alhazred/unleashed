@@ -85,13 +85,13 @@
  * eligible to be persisted.
  *
  * When the sdev_node is created and the lookup is done, we grab a hold on the
- * underlying vnode as part of the call to VOP_LOOKUP. That reference is held
+ * underlying vnode as part of the call to fop_lookup. That reference is held
  * until the sdev_node becomes inactive. Once its reference count reaches one
- * and the VOP_INACTIVE callback fires leading to the destruction of the node,
+ * and the fop_inactive callback fires leading to the destruction of the node,
  * the reference on the underlying vnode will be released.
  *
  * The backing store node will be deleted only when the node itself is deleted
- * through the means of a VOP_REMOVE, VOP_RMDIR, or similar call.
+ * through the means of a fop_remove, fop_rmdir, or similar call.
  *
  * Not everything can be persisted, see The Rules section for more details.
  *
@@ -263,10 +263,10 @@
  *   o Write lock must be held on the node
  *   o Remove the sdev_node_t from its parent cache
  *   o Remove the corresponding backing store node, if it exists, eg. use
- *     VOP_REMOVE or VOP_RMDIR.
+ *     fop_remove or fop_rmdir.
  *   o You must NOT make any change in the vnode reference count! Nodes should
- *     only be cleaned up through VOP_INACTIVE callbacks.
- *   o VOP_INACTIVE is the only one responsible for doing the final vn_rele of
+ *     only be cleaned up through fop_inactive callbacks.
+ *   o fop_inactive is the only one responsible for doing the final vn_rele of
  *     the backing store vnode that was grabbed during lookup.
  *
  * - Set 5: What Nodes may be Persisted
@@ -340,7 +340,7 @@ sdev_open(struct vnode **vpp, int flag, struct cred *cred, caller_context_t *ct)
 		rw_exit(&ddv->sdev_contents);
 		return (ENOENT);
 	}
-	error = VOP_OPEN(&(dv->sdev_attrvp), flag, cred, ct);
+	error = fop_open(&(dv->sdev_attrvp), flag, cred, ct);
 	rw_exit(&ddv->sdev_contents);
 	return (error);
 }
@@ -366,7 +366,7 @@ sdev_close(struct vnode *vp, int flag, int count,
 		return (ENOTSUP);
 
 	ASSERT(dv->sdev_attrvp);
-	return (VOP_CLOSE(dv->sdev_attrvp, flag, count, offset, cred, ct));
+	return (fop_close(dv->sdev_attrvp, flag, count, offset, cred, ct));
 }
 
 /*ARGSUSED*/
@@ -390,9 +390,9 @@ sdev_read(struct vnode *vp, struct uio *uio, int ioflag, struct cred *cred,
 
 	ASSERT(RW_READ_HELD(&VTOSDEV(vp)->sdev_contents));
 	ASSERT(dv->sdev_attrvp);
-	(void) VOP_RWLOCK(dv->sdev_attrvp, 0, ct);
-	error = VOP_READ(dv->sdev_attrvp, uio, ioflag, cred, ct);
-	VOP_RWUNLOCK(dv->sdev_attrvp, 0, ct);
+	(void) fop_rwlock(dv->sdev_attrvp, 0, ct);
+	error = fop_read(dv->sdev_attrvp, uio, ioflag, cred, ct);
+	fop_rwunlock(dv->sdev_attrvp, 0, ct);
 	return (error);
 }
 
@@ -417,9 +417,9 @@ sdev_write(struct vnode *vp, struct uio *uio, int ioflag, struct cred *cred,
 
 	ASSERT(dv->sdev_attrvp);
 
-	(void) VOP_RWLOCK(dv->sdev_attrvp, 1, ct);
-	error = VOP_WRITE(dv->sdev_attrvp, uio, ioflag, cred, ct);
-	VOP_RWUNLOCK(dv->sdev_attrvp, 1, ct);
+	(void) fop_rwlock(dv->sdev_attrvp, 1, ct);
+	error = fop_write(dv->sdev_attrvp, uio, ioflag, cred, ct);
+	fop_rwunlock(dv->sdev_attrvp, 1, ct);
 	if (error == 0) {
 		sdev_update_timestamps(dv->sdev_attrvp, kcred,
 		    AT_MTIME);
@@ -442,7 +442,7 @@ sdev_ioctl(struct vnode *vp, int cmd, intptr_t arg, int flag,
 		return (EINVAL);
 
 	ASSERT(dv->sdev_attrvp);
-	return (VOP_IOCTL(dv->sdev_attrvp, cmd, arg, flag, cred, rvalp, ct));
+	return (fop_ioctl(dv->sdev_attrvp, cmd, arg, flag, cred, rvalp, ct));
 }
 
 static int
@@ -465,7 +465,7 @@ sdev_getattr(struct vnode *vp, struct vattr *vap, int flags,
 	 */
 	if (dv->sdev_attrvp) {
 		rw_exit(&parent->sdev_contents);
-		error = VOP_GETATTR(dv->sdev_attrvp, vap, flags, cr, ct);
+		error = fop_getattr(dv->sdev_attrvp, vap, flags, cr, ct);
 		sdev_vattr_merge(dv, vap);
 	} else {
 		ASSERT(dv->sdev_attr);
@@ -504,9 +504,9 @@ sdev_getsecattr(struct vnode *vp, struct vsecattr *vsap, int flags,
 		return (ENOSYS);
 	}
 
-	(void) VOP_RWLOCK(avp, 1, ct);
-	error = VOP_GETSECATTR(avp, vsap, flags, cr, ct);
-	VOP_RWUNLOCK(avp, 1, ct);
+	(void) fop_rwlock(avp, 1, ct);
+	error = fop_getsecattr(avp, vsap, flags, cr, ct);
+	fop_rwunlock(avp, 1, ct);
 	return (error);
 }
 
@@ -527,7 +527,7 @@ sdev_setsecattr(struct vnode *vp, struct vsecattr *vsap, int flags,
 		ASSERT(dv->sdev_attr);
 		/*
 		 * if coming in directly, the acl system call will
-		 * have held the read-write lock via VOP_RWLOCK()
+		 * have held the read-write lock via fop_rwlock()
 		 * If coming in via specfs, specfs will have
 		 * held the rw lock on the realvp i.e. us.
 		 */
@@ -548,9 +548,9 @@ sdev_setsecattr(struct vnode *vp, struct vsecattr *vsap, int flags,
 	}
 	ASSERT(avp);
 
-	(void) VOP_RWLOCK(avp, V_WRITELOCK_TRUE, ct);
-	error = VOP_SETSECATTR(avp, vsap, flags, cr, ct);
-	VOP_RWUNLOCK(avp, V_WRITELOCK_TRUE, ct);
+	(void) fop_rwlock(avp, V_WRITELOCK_TRUE, ct);
+	error = fop_setsecattr(avp, vsap, flags, cr, ct);
+	fop_rwunlock(avp, V_WRITELOCK_TRUE, ct);
 	return (error);
 }
 
@@ -584,7 +584,7 @@ sdev_self_access(sdev_node_t *dv, int mode, int flags, struct cred *cr,
 
 	ASSERT(dv->sdev_attr || dv->sdev_attrvp);
 	if (dv->sdev_attrvp) {
-		ret = VOP_ACCESS(dv->sdev_attrvp, mode, flags, cr, ct);
+		ret = fop_access(dv->sdev_attrvp, mode, flags, cr, ct);
 	} else if (dv->sdev_attr) {
 		ret = sdev_unlocked_access(dv, mode, cr);
 		if (ret)
@@ -624,7 +624,7 @@ sdev_lookup(struct vnode *dvp, char *nm, struct vnode **vpp,
 	ASSERT(parent);
 
 	/* execute access is required to search the directory */
-	if ((error = VOP_ACCESS(dvp, VEXEC, 0, cred, ct)) != 0)
+	if ((error = fop_access(dvp, VEXEC, 0, cred, ct)) != 0)
 		return (error);
 
 	if (!SDEV_IS_GLOBAL(parent))
@@ -668,12 +668,12 @@ sdev_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 	rw_exit(&parent->sdev_dotdot->sdev_contents);
 
 	/* execute access is required to search the directory */
-	if ((error = VOP_ACCESS(dvp, VEXEC, 0, cred, ct)) != 0)
+	if ((error = fop_access(dvp, VEXEC, 0, cred, ct)) != 0)
 		return (error);
 
 	/* check existing name */
-/* XXXci - We may need to translate the C-I flags on VOP_LOOKUP */
-	error = VOP_LOOKUP(dvp, nm, &vp, NULL, 0, NULL, cred, ct, NULL, NULL);
+/* XXXci - We may need to translate the C-I flags on fop_lookup */
+	error = fop_lookup(dvp, nm, &vp, NULL, 0, NULL, cred, ct, NULL, NULL);
 
 	/* name found */
 	if (error == 0) {
@@ -684,7 +684,7 @@ sdev_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 			/* allowing create/read-only an existing directory */
 			error = EISDIR;
 		} else {
-			error = VOP_ACCESS(vp, mode, 0, cred, ct);
+			error = fop_access(vp, mode, 0, cred, ct);
 		}
 
 		if (error) {
@@ -696,7 +696,7 @@ sdev_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 		if ((vp->v_type == VREG) && (vap->va_mask & AT_SIZE) &&
 		    (vap->va_size == 0)) {
 			ASSERT(parent->sdev_attrvp);
-			error = VOP_CREATE(parent->sdev_attrvp,
+			error = fop_create(parent->sdev_attrvp,
 			    nm, vap, excl, mode, &avp, cred, flag, ct, vsecp);
 
 			if (error) {
@@ -716,7 +716,7 @@ sdev_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 		return (error);
 
 	/* verify write access - compliance specifies ENXIO */
-	if ((error = VOP_ACCESS(dvp, VEXEC|VWRITE, 0, cred, ct)) != 0) {
+	if ((error = fop_access(dvp, VEXEC|VWRITE, 0, cred, ct)) != 0) {
 		if (error == EACCES)
 			error = ENXIO;
 		return (error);
@@ -725,7 +725,7 @@ sdev_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 	/*
 	 * For memory-based (ROFS) directory:
 	 * 	- either disallow node creation;
-	 *	- or implement VOP_CREATE of its own
+	 *	- or implement fop_create of its own
 	 */
 	rw_enter(&parent->sdev_contents, RW_WRITER);
 	if (!SDEV_IS_PERSIST(parent)) {
@@ -849,7 +849,7 @@ sdev_remove(struct vnode *dvp, char *nm, struct cred *cred,
 	 */
 	if (bkstore) {
 		ASSERT(parent->sdev_attrvp);
-		error = VOP_REMOVE(parent->sdev_attrvp, nm, cred,
+		error = fop_remove(parent->sdev_attrvp, nm, cred,
 		    ct, flags);
 		/*
 		 * do not report BUSY error
@@ -930,8 +930,8 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
 	mutex_enter(&sdev_lock);
 
 	/* check existence of the source node */
-/* XXXci - We may need to translate the C-I flags on VOP_LOOKUP */
-	error = VOP_LOOKUP(odvp, onm, &ovp, NULL, 0, NULL, cred, ct,
+/* XXXci - We may need to translate the C-I flags on fop_lookup */
+	error = fop_lookup(odvp, onm, &ovp, NULL, 0, NULL, cred, ct,
 	    NULL, NULL);
 	if (error) {
 		sdcmn_err2(("sdev_rename: the source node %s exists\n",
@@ -940,15 +940,15 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
 		return (error);
 	}
 
-	if (VOP_REALVP(ovp, &realvp, ct) == 0) {
+	if (fop_realvp(ovp, &realvp, ct) == 0) {
 		VN_HOLD(realvp);
 		VN_RELE(ovp);
 		ovp = realvp;
 	}
 
 	/* check existence of destination */
-/* XXXci - We may need to translate the C-I flags on VOP_LOOKUP */
-	error = VOP_LOOKUP(ndvp, nnm, &nvp, NULL, 0, NULL, cred, ct,
+/* XXXci - We may need to translate the C-I flags on fop_lookup */
+	error = fop_lookup(ndvp, nnm, &nvp, NULL, 0, NULL, cred, ct,
 	    NULL, NULL);
 	if (error && (error != ENOENT)) {
 		mutex_exit(&sdev_lock);
@@ -956,7 +956,7 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
 		return (error);
 	}
 
-	if (nvp && (VOP_REALVP(nvp, &realvp, ct) == 0)) {
+	if (nvp && (fop_realvp(nvp, &realvp, ct) == 0)) {
 		VN_HOLD(realvp);
 		VN_RELE(nvp);
 		nvp = realvp;
@@ -968,7 +968,7 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
 	 */
 	if (odvp != ndvp) {
 		vattr.va_mask = AT_FSID;
-		if (error = VOP_GETATTR(odvp, &vattr, 0, cred, ct)) {
+		if (error = fop_getattr(odvp, &vattr, 0, cred, ct)) {
 			mutex_exit(&sdev_lock);
 			VN_RELE(ovp);
 			if (nvp != NULL)
@@ -977,7 +977,7 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
 		}
 		fsid = vattr.va_fsid;
 		vattr.va_mask = AT_FSID;
-		if (error = VOP_GETATTR(ndvp, &vattr, 0, cred, ct)) {
+		if (error = fop_getattr(ndvp, &vattr, 0, cred, ct)) {
 			mutex_exit(&sdev_lock);
 			VN_RELE(ovp);
 			if (nvp != NULL)
@@ -994,7 +994,7 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
 	}
 
 	/* make sure the old entry can be deleted */
-	error = VOP_ACCESS(odvp, VWRITE, 0, cred, ct);
+	error = fop_access(odvp, VWRITE, 0, cred, ct);
 	if (error) {
 		mutex_exit(&sdev_lock);
 		VN_RELE(ovp);
@@ -1006,7 +1006,7 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
 	/* make sure the destination allows creation */
 	samedir = (fromparent == toparent);
 	if (!samedir) {
-		error = VOP_ACCESS(ndvp, VEXEC|VWRITE, 0, cred, ct);
+		error = fop_access(ndvp, VEXEC|VWRITE, 0, cred, ct);
 		if (error) {
 			mutex_exit(&sdev_lock);
 			VN_RELE(ovp);
@@ -1094,12 +1094,12 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
 	if (bkstore) {
 		ASSERT(fromparent->sdev_attrvp);
 		if (type != VDIR) {
-/* XXXci - We may need to translate the C-I flags on VOP_REMOVE */
-			error = VOP_REMOVE(fromparent->sdev_attrvp,
+/* XXXci - We may need to translate the C-I flags on fop_remove */
+			error = fop_remove(fromparent->sdev_attrvp,
 			    onm, kcred, ct, 0);
 		} else {
-/* XXXci - We may need to translate the C-I flags on VOP_RMDIR */
-			error = VOP_RMDIR(fromparent->sdev_attrvp,
+/* XXXci - We may need to translate the C-I flags on fop_rmdir */
+			error = fop_rmdir(fromparent->sdev_attrvp,
 			    onm, fromparent->sdev_attrvp, kcred, ct, 0);
 		}
 
@@ -1148,12 +1148,12 @@ sdev_symlink(struct vnode *dvp, char *lnm, struct vattr *tva,
 	rw_exit(&parent->sdev_dotdot->sdev_contents);
 
 	/* execute access is required to search a directory */
-	if ((error = VOP_ACCESS(dvp, VEXEC, 0, cred, ct)) != 0)
+	if ((error = fop_access(dvp, VEXEC, 0, cred, ct)) != 0)
 		return (error);
 
 	/* find existing name */
 /* XXXci - We may need to translate the C-I flags here */
-	error = VOP_LOOKUP(dvp, lnm, &vp, NULL, 0, NULL, cred, ct, NULL, NULL);
+	error = fop_lookup(dvp, lnm, &vp, NULL, 0, NULL, cred, ct, NULL, NULL);
 	if (error == 0) {
 		ASSERT(vp);
 		VN_RELE(vp);
@@ -1164,7 +1164,7 @@ sdev_symlink(struct vnode *dvp, char *lnm, struct vattr *tva,
 		return (error);
 
 	/* write access is required to create a symlink */
-	if ((error = VOP_ACCESS(dvp, VWRITE, 0, cred, ct)) != 0)
+	if ((error = fop_access(dvp, VWRITE, 0, cred, ct)) != 0)
 		return (error);
 
 	/* put it into memory cache */
@@ -1222,13 +1222,13 @@ sdev_mkdir(struct vnode *dvp, char *nm, struct vattr *va, struct vnode **vpp,
 	rw_exit(&parent->sdev_dotdot->sdev_contents);
 
 	/* execute access is required to search the directory */
-	if ((error = VOP_ACCESS(dvp, VEXEC, 0, cred, ct)) != 0) {
+	if ((error = fop_access(dvp, VEXEC, 0, cred, ct)) != 0) {
 		return (error);
 	}
 
 	/* find existing name */
-/* XXXci - We may need to translate the C-I flags on VOP_LOOKUP */
-	error = VOP_LOOKUP(dvp, nm, &vp, NULL, 0, NULL, cred, ct, NULL, NULL);
+/* XXXci - We may need to translate the C-I flags on fop_lookup */
+	error = fop_lookup(dvp, nm, &vp, NULL, 0, NULL, cred, ct, NULL, NULL);
 	if (error == 0) {
 		VN_RELE(vp);
 		return (EEXIST);
@@ -1237,7 +1237,7 @@ sdev_mkdir(struct vnode *dvp, char *nm, struct vattr *va, struct vnode **vpp,
 		return (error);
 
 	/* require write access to create a directory */
-	if ((error = VOP_ACCESS(dvp, VWRITE, 0, cred, ct)) != 0) {
+	if ((error = fop_access(dvp, VWRITE, 0, cred, ct)) != 0) {
 		return (error);
 	}
 
@@ -1298,7 +1298,7 @@ sdev_rmdir(struct vnode *dvp, char *nm, struct vnode *cdir, struct cred *cred,
 	rw_exit(&parent->sdev_dotdot->sdev_contents);
 
 	/* execute access is required to search the directory */
-	if ((error = VOP_ACCESS(dvp, VEXEC|VWRITE, 0, cred, ct)) != 0)
+	if ((error = fop_access(dvp, VEXEC|VWRITE, 0, cred, ct)) != 0)
 		return (error);
 
 	/* check existing name */
@@ -1364,7 +1364,7 @@ sdev_rmdir(struct vnode *dvp, char *nm, struct vnode *cdir, struct cred *cred,
 	/* best effort to clean up the backing store */
 	if (SDEV_IS_PERSIST(parent)) {
 		ASSERT(parent->sdev_attrvp);
-		error = VOP_RMDIR(parent->sdev_attrvp, nm,
+		error = fop_rmdir(parent->sdev_attrvp, nm,
 		    parent->sdev_attrvp, kcred, ct, flags);
 
 		if (error)
@@ -1394,7 +1394,7 @@ sdev_readlink(struct vnode *vp, struct uio *uiop, struct cred *cred,
 
 	if (dv->sdev_attrvp) {
 		/* non-NULL attrvp implys a persisted node at READY state */
-		return (VOP_READLINK(dv->sdev_attrvp, uiop, cred, ct));
+		return (fop_readlink(dv->sdev_attrvp, uiop, cred, ct));
 	} else if (dv->sdev_symlink != NULL) {
 		/* memory nodes, e.g. local nodes */
 		rw_enter(&dv->sdev_contents, RW_READER);
@@ -1419,7 +1419,7 @@ sdev_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred, int *eofp,
 	/*
 	 * We must check that we have execute access to search the directory --
 	 * but because our sdev_contents lock is already held as a reader (the
-	 * caller must have done a VOP_RWLOCK()), we call directly into the
+	 * caller must have done a fop_rwlock()), we call directly into the
 	 * underlying access routine if sdev_attr is non-NULL.
 	 */
 	if (parent->sdev_attr != NULL) {
@@ -1428,7 +1428,7 @@ sdev_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred, int *eofp,
 		if (sdev_unlocked_access(parent, VEXEC, cred) != 0)
 			return (EACCES);
 	} else {
-		if ((error = VOP_ACCESS(dvp, VEXEC, 0, cred, ct)) != 0)
+		if ((error = fop_access(dvp, VEXEC, 0, cred, ct)) != 0)
 			return (error);
 	}
 
@@ -1467,8 +1467,8 @@ sdev_fid(struct vnode *vp, struct fid *fidp, caller_context_t *ct)
 }
 
 /*
- * This pair of routines bracket all VOP_READ, VOP_WRITE
- * and VOP_READDIR requests.  The contents lock stops things
+ * This pair of routines bracket all fop_read, fop_write
+ * and fop_readdir requests.  The contents lock stops things
  * moving around while we're looking at them.
  */
 /*ARGSUSED2*/
@@ -1501,7 +1501,7 @@ sdev_seek(struct vnode *vp, offset_t ooff, offset_t *noffp,
 		return (fs_seek(vp, ooff, noffp, ct));
 
 	ASSERT(attrvp);
-	return (VOP_SEEK(attrvp, ooff, noffp, ct));
+	return (fop_seek(attrvp, ooff, noffp, ct));
 }
 
 /*ARGSUSED1*/
@@ -1515,7 +1515,7 @@ sdev_frlock(struct vnode *vp, int cmd, struct flock64 *bfp, int flag,
 
 	ASSERT(dv);
 	ASSERT(dv->sdev_attrvp);
-	error = VOP_FRLOCK(dv->sdev_attrvp, cmd, bfp, flag, offset,
+	error = fop_frlock(dv->sdev_attrvp, cmd, bfp, flag, offset,
 	    flk_cbp, cr, ct);
 
 	return (error);

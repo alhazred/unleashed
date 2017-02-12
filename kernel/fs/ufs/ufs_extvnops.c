@@ -496,12 +496,12 @@ ufs_alloc_data(
 	 *
 	 * XXX - There should be no pages involved, since the I/O was performed
 	 * through the device strategy routine and the page cache was bypassed.
-	 * However, testing has demonstrated that this VOP_PUTPAGE is
+	 * However, testing has demonstrated that this fop_putpage is
 	 * necessary. Without this, data might not always be read back as it
 	 * was written.
 	 *
 	 */
-	(void) VOP_PUTPAGE(vnodep, 0, 0, B_INVAL, credp, NULL);
+	(void) fop_putpage(vnodep, 0, 0, B_INVAL, credp, NULL);
 
 	rw_exit(&ip->i_contents);
 	rw_exit(&ip->i_ufsvfs->vfs_dqrwlock);

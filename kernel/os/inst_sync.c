@@ -235,7 +235,7 @@ in_fclose(File *fp)
 {
 	int error;
 
-	error = VOP_CLOSE(fp->vp, FCREAT, 1, (offset_t)0, CRED(), NULL);
+	error = fop_close(fp->vp, FCREAT, 1, (offset_t)0, CRED(), NULL);
 	VN_RELE(fp->vp);
 	kmem_free(fp, sizeof (File));
 	return (error);
@@ -249,7 +249,7 @@ in_fflush(File *fp)
 	if (fp->count)
 		error = in_write(fp->vp, &fp->voffset, fp->buf, fp->count);
 	if (error == 0)
-		error = VOP_FSYNC(fp->vp, FSYNC, CRED(), NULL);
+		error = fop_fsync(fp->vp, FSYNC, CRED(), NULL);
 	return (error);
 }
 

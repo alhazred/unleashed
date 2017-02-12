@@ -121,14 +121,14 @@ t_kopen(file_t *fp, dev_t rdev, int flags, TIUSER **tiptr, cred_t *cr)
 		 * might fail due to temporarely out of memory.
 		 */
 		do {
-			if ((error = VOP_OPEN(&vp, flags, cr, NULL))
+			if ((error = fop_open(&vp, flags, cr, NULL))
 			    == EAGAIN) {
 				(void) delay(hz);
 			}
 		} while (error == EAGAIN && ++rtries < 5);
 
 		if (error) {
-			KTLILOG(1, "t_kopen: VOP_OPEN: %d\n", error);
+			KTLILOG(1, "t_kopen: fop_open: %d\n", error);
 			unfalloc(fp);
 			VN_RELE(vp);
 			return (error);

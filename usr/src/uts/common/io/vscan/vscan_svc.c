@@ -869,7 +869,7 @@ vscan_svc_process_scan_result(int idx)
 		vp = node->vsn_req->vsr_vp;
 		mtime = &(node->vsn_mtime);
 		attr.va_mask = AT_MTIME;
-		if ((VOP_GETATTR(vp, &attr, 0, kcred, NULL) != 0) ||
+		if ((fop_getattr(vp, &attr, 0, kcred, NULL) != 0) ||
 		    (mtime->tv_sec != attr.va_mtime.tv_sec) ||
 		    (mtime->tv_nsec != attr.va_mtime.tv_nsec)) {
 			DTRACE_PROBE1(vscan__mtime__changed, vscan_svc_node_t *,
@@ -936,7 +936,7 @@ vscan_svc_getattr(int idx)
 	XVA_SET_REQ(&xvattr, XAT_AV_QUARANTINED);
 	XVA_SET_REQ(&xvattr, XAT_AV_SCANSTAMP);
 
-	if (VOP_GETATTR(vp, (vattr_t *)&xvattr, 0, kcred, NULL) != 0)
+	if (fop_getattr(vp, (vattr_t *)&xvattr, 0, kcred, NULL) != 0)
 		return (-1);
 
 	if ((xoap = xva_getxoptattr(&xvattr)) == NULL) {
@@ -1015,7 +1015,7 @@ vscan_svc_setattr(int idx, int which)
 		gethrestime(&xvattr.xva_vattr.va_mtime);
 	}
 
-	if (VOP_SETATTR(vp, (vattr_t *)&xvattr, 0, kcred, NULL) != 0)
+	if (fop_setattr(vp, (vattr_t *)&xvattr, 0, kcred, NULL) != 0)
 		return (-1);
 
 	DTRACE_PROBE2(vscan__setattr,
@@ -1084,7 +1084,7 @@ vscan_svc_exempt_file(vnode_t *vp, boolean_t *allow)
 
 	attr.va_mask = AT_SIZE;
 
-	if (VOP_GETATTR(vp, &attr, 0, kcred, NULL) != 0) {
+	if (fop_getattr(vp, &attr, 0, kcred, NULL) != 0) {
 		*allow = B_FALSE;
 		return (0);
 	}

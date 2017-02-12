@@ -371,7 +371,7 @@ static const fs_operation_def_t ctfs_vfstops[] = {
 /*
  * ctfs_common_getattr
  *
- * Implements functionality common to all ctfs VOP_GETATTR entry
+ * Implements functionality common to all ctfs fop_getattr entry
  * points.  It assumes vap->va_size is set.
  */
 void
@@ -388,7 +388,7 @@ ctfs_common_getattr(vnode_t *vp, vattr_t *vap)
 }
 
 /*
- * ctfs_open - common VOP_OPEN entry point
+ * ctfs_open - common fop_open entry point
  *
  * Used by all ctfs directories; just verifies we are using large-file
  * aware interfaces and we aren't trying to open the directories
@@ -405,7 +405,7 @@ ctfs_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 }
 
 /*
- * ctfs_close - common VOP_CLOSE entry point
+ * ctfs_close - common fop_close entry point
  *
  * For all ctfs vnode types which have no close-time clean-up to do.
  */
@@ -423,7 +423,7 @@ ctfs_close(
 }
 
 /*
- * ctfs_access_dir - common VOP_ACCESS entry point for directories
+ * ctfs_access_dir - common fop_access entry point for directories
  */
 /* ARGSUSED */
 int
@@ -441,7 +441,7 @@ ctfs_access_dir(
 }
 
 /*
- * ctfs_access_dir - common VOP_ACCESS entry point for read-only files
+ * ctfs_access_dir - common fop_access entry point for read-only files
  */
 /* ARGSUSED */
 int
@@ -459,7 +459,7 @@ ctfs_access_readonly(
 }
 
 /*
- * ctfs_access_dir - common VOP_ACCESS entry point for read-write files
+ * ctfs_access_dir - common fop_access entry point for read-write files
  */
 /* ARGSUSED */
 int
@@ -477,7 +477,7 @@ ctfs_access_readwrite(
 }
 
 /*
- * ctfs_root_getattr - VOP_GETATTR entry point
+ * ctfs_root_getattr - fop_getattr entry point
  */
 /* ARGSUSED */
 static int

@@ -193,7 +193,7 @@ xattr_common_fid(vnode_t *vp, fid_t *fidp, caller_context_t *ct)
 	orig_len = fidp->fid_len;
 	fidp->fid_len = sizeof (xfidp->parent_fid);
 
-	error = VOP_FID(pvp, fidp, ct);
+	error = fop_fid(pvp, fidp, ct);
 	if (error) {
 		fidp->fid_len = orig_len;
 		return (error);
@@ -310,7 +310,7 @@ xattr_fill_nvlist(vnode_t *vp, xattr_view_t xattr_view, nvlist_t *nvlp,
 		}
 	}
 
-	error = VOP_GETATTR(ppvp, &xvattr.xva_vattr, 0, cr, ct);
+	error = fop_getattr(ppvp, &xvattr.xva_vattr, 0, cr, ct);
 	if (error)
 		return (error);
 
@@ -452,7 +452,7 @@ xattr_fill_nvlist(vnode_t *vp, xattr_view_t xattr_view, nvlist_t *nvlp,
  * The size of a sysattr file is the size of the nvlist that will be
  * returned by xattr_file_read().  A call to xattr_file_write() could
  * change the size of that nvlist.  That size is not stored persistently
- * so xattr_fill_nvlist() calls VOP_GETATTR so that it can be calculated.
+ * so xattr_fill_nvlist() calls fop_getattr so that it can be calculated.
  */
 static int
 xattr_file_size(vnode_t *vp, xattr_view_t xattr_view, size_t *size,
@@ -494,7 +494,7 @@ xattr_file_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	pvp = gfs_file_parent(vp);
 	(void) memset(&pvattr, 0, sizeof (pvattr));
 	pvattr.va_mask = AT_CTIME|AT_MTIME;
-	error = VOP_GETATTR(pvp, &pvattr, flags, cr, ct);
+	error = fop_getattr(pvp, &pvattr, flags, cr, ct);
 	if (error) {
 		return (error);
 	}
@@ -798,7 +798,7 @@ xattr_file_write(vnode_t *vp, uio_t *uiop, int ioflag, cred_t *cr,
 	}
 
 	ppvp = gfs_file_parent(gfs_file_parent(vp));
-	error = VOP_SETATTR(ppvp, &xvattr.xva_vattr, 0, cr, ct);
+	error = fop_setattr(ppvp, &xvattr.xva_vattr, 0, cr, ct);
 	if (error)
 		uiop->uio_resid = size;
 
@@ -937,12 +937,12 @@ xattr_copy(vnode_t *sdvp, char *snm, vnode_t *tdvp, char *tnm,
 	XVA_SET_REQ(&xvattr, XAT_SPARSE);
 
 	pdvp = gfs_file_parent(sdvp);
-	error = VOP_GETATTR(pdvp, &xvattr.xva_vattr, 0, cr, ct);
+	error = fop_getattr(pdvp, &xvattr.xva_vattr, 0, cr, ct);
 	if (error)
 		return (error);
 
 	pdvp = gfs_file_parent(tdvp);
-	error = VOP_SETATTR(pdvp, &xvattr.xva_vattr, 0, cr, ct);
+	error = fop_setattr(pdvp, &xvattr.xva_vattr, 0, cr, ct);
 	return (error);
 }
 
@@ -987,7 +987,7 @@ xattr_dir_realdir(vnode_t *gfs_dvp, vnode_t **ret_vpp, int flags,
 	error = pn_get(nm, UIO_SYSSPACE, &pn);
 	if (error != 0)
 		return (error);
-	error = VOP_LOOKUP(gfs_file_parent(gfs_dvp), nm, &realvp, &pn,
+	error = fop_lookup(gfs_file_parent(gfs_dvp), nm, &realvp, &pn,
 	    flags | LOOKUP_HAVE_SYSATTR_DIR, rootvp, cr, ct, NULL, NULL);
 	pn_free(&pn);
 	if (error != 0)
@@ -1001,7 +1001,7 @@ xattr_dir_realdir(vnode_t *gfs_dvp, vnode_t **ret_vpp, int flags,
 	xattr_dir = gfs_dvp->v_data;
 	if (xattr_dir->xattr_realvp == NULL) {
 		/*
-		 * Note that the hold taken by the VOP_LOOKUP above is
+		 * Note that the hold taken by the fop_lookup above is
 		 * retained from here until xattr_dir_inactive.
 		 */
 		xattr_dir->xattr_realvp = realvp;
@@ -1029,12 +1029,12 @@ xattr_dir_open(vnode_t **vpp, int flags, cred_t *cr, caller_context_t *ct)
 
 	/*
 	 * If there is a real extended attribute directory,
-	 * let the underlying FS see the VOP_OPEN call;
+	 * let the underlying FS see the fop_open call;
 	 * otherwise just return zero.
 	 */
 	error = xattr_dir_realdir(*vpp, &realvp, LOOKUP_XATTR, cr, ct);
 	if (error == 0) {
-		error = VOP_OPEN(&realvp, flags, cr, ct);
+		error = fop_open(&realvp, flags, cr, ct);
 	} else {
 		error = 0;
 	}
@@ -1052,12 +1052,12 @@ xattr_dir_close(vnode_t *vp, int flags, int count, offset_t off, cred_t *cr,
 
 	/*
 	 * If there is a real extended attribute directory,
-	 * let the underlying FS see the VOP_CLOSE call;
+	 * let the underlying FS see the fop_close call;
 	 * otherwise just return zero.
 	 */
 	error = xattr_dir_realdir(vp, &realvp, LOOKUP_XATTR, cr, ct);
 	if (error == 0) {
-		error = VOP_CLOSE(realvp, flags, count, off, cr, ct);
+		error = fop_close(realvp, flags, count, off, cr, ct);
 	} else {
 		error = 0;
 	}
@@ -1069,7 +1069,7 @@ xattr_dir_close(vnode_t *vp, int flags, int count, offset_t off, cred_t *cr,
  * Retrieve the attributes on an xattr directory.  If there is a "real"
  * xattr directory, use that.  Otherwise, get the attributes (represented
  * by PARENT_ATTRMASK) from the "parent" node and fill in the rest.  Note
- * that VOP_GETATTR() could turn off bits in the va_mask.
+ * that fop_getattr() could turn off bits in the va_mask.
  */
 
 #define	PARENT_ATTRMASK	(AT_UID|AT_GID|AT_RDEV|AT_CTIME|AT_MTIME)
@@ -1085,7 +1085,7 @@ xattr_dir_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 
 	error = xattr_dir_realdir(vp, &pvp, LOOKUP_XATTR, cr, ct);
 	if (error == 0) {
-		error = VOP_GETATTR(pvp, vap, 0, cr, ct);
+		error = fop_getattr(pvp, vap, 0, cr, ct);
 		if (error) {
 			return (error);
 		}
@@ -1106,13 +1106,13 @@ xattr_dir_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 		pvp = gfs_file_parent(vp);
 		(void) memset(&pvattr, 0, sizeof (pvattr));
 		pvattr.va_mask = PARENT_ATTRMASK;
-		error = VOP_GETATTR(pvp, &pvattr, 0, cr, ct);
+		error = fop_getattr(pvp, &pvattr, 0, cr, ct);
 		if (error) {
 			return (error);
 		}
 
 		/*
-		 * VOP_GETATTR() might have turned off some bits in
+		 * fop_getattr() might have turned off some bits in
 		 * pvattr.va_mask.  This means that the underlying
 		 * file system couldn't process those attributes.
 		 * We need to make sure those bits get turned off
@@ -1154,7 +1154,7 @@ xattr_dir_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	 */
 	error = xattr_dir_realdir(vp, &realvp, LOOKUP_XATTR, cr, ct);
 	if (error == 0) {
-		error = VOP_SETATTR(realvp, vap, flags, cr, ct);
+		error = fop_setattr(realvp, vap, flags, cr, ct);
 	}
 	if (error == ENOENT) {
 		error = 0;
@@ -1180,7 +1180,7 @@ xattr_dir_access(vnode_t *vp, int mode, int flags, cred_t *cr,
 	 */
 	error = xattr_dir_realdir(vp, &realvp, LOOKUP_XATTR, cr, ct);
 	if (error == 0) {
-		error = VOP_ACCESS(realvp, mode, flags, cr, ct);
+		error = fop_access(realvp, mode, flags, cr, ct);
 	} else {
 		error = 0;
 	}
@@ -1208,7 +1208,7 @@ xattr_dir_create(vnode_t *dvp, char *name, vattr_t *vap, vcexcl_t excl,
 	error = xattr_dir_realdir(dvp, &pvp, LOOKUP_XATTR|CREATE_XATTR_DIR,
 	    cr, ct);
 	if (error == 0) {
-		error = VOP_CREATE(pvp, name, vap, excl, mode, vpp, cr, flag,
+		error = fop_create(pvp, name, vap, excl, mode, vpp, cr, flag,
 		    ct, vsecp);
 	}
 	return (error);
@@ -1227,7 +1227,7 @@ xattr_dir_remove(vnode_t *dvp, char *name, cred_t *cr, caller_context_t *ct,
 
 	error = xattr_dir_realdir(dvp, &pvp, LOOKUP_XATTR, cr, ct);
 	if (error == 0) {
-		error = VOP_REMOVE(pvp, name, cr, ct, flags);
+		error = fop_remove(pvp, name, cr, ct, flags);
 	}
 	return (error);
 }
@@ -1245,7 +1245,7 @@ xattr_dir_link(vnode_t *tdvp, vnode_t *svp, char *name, cred_t *cr,
 
 	error = xattr_dir_realdir(tdvp, &pvp, LOOKUP_XATTR, cr, ct);
 	if (error == 0) {
-		error = VOP_LINK(pvp, svp, name, cr, ct, flags);
+		error = fop_link(pvp, svp, name, cr, ct, flags);
 	}
 	return (error);
 }
@@ -1290,7 +1290,7 @@ xattr_dir_rename(vnode_t *sdvp, char *snm, vnode_t *tdvp, char *tnm,
 		tpvp = tdvp;
 	}
 
-	error = VOP_RENAME(spvp, snm, tpvp, tnm, cr, ct, flags);
+	error = fop_rename(spvp, snm, tpvp, tnm, cr, ct, flags);
 
 	return (error);
 }
@@ -1311,7 +1311,7 @@ readdir_xattr_casecmp(vnode_t *dvp, char *nm, cred_t *cr, caller_context_t *ct,
 
 	error = pn_get(nm, UIO_SYSSPACE, &pn);
 	if (error == 0) {
-		error = VOP_LOOKUP(dvp, nm, &vp, &pn,
+		error = fop_lookup(dvp, nm, &vp, &pn,
 		    FIGNORECASE, rootvp, cr, ct, NULL, NULL);
 		if (error == 0) {
 			*eflags = ED_CASE_CONFLICT;
@@ -1429,9 +1429,9 @@ xattr_dir_readdir(vnode_t *dvp, uio_t *uiop, cred_t *cr, int *eofp,
 	if (reset_off) {
 		uiop->uio_loffset = 0;
 	}
-	(void) VOP_RWLOCK(pvp, V_WRITELOCK_FALSE, NULL);
-	error = VOP_READDIR(pvp, uiop, cr, eofp, ct, flags);
-	VOP_RWUNLOCK(pvp, V_WRITELOCK_FALSE, NULL);
+	(void) fop_rwlock(pvp, V_WRITELOCK_FALSE, NULL);
+	error = fop_readdir(pvp, uiop, cr, eofp, ct, flags);
+	fop_rwunlock(pvp, V_WRITELOCK_FALSE, NULL);
 
 	return (error);
 }
@@ -1549,7 +1549,7 @@ xattr_lookup_cb(vnode_t *vp, const char *nm, vnode_t **vpp, ino64_t *inop,
 
 	error = pn_get((char *)nm, UIO_SYSSPACE, &pn);
 	if (error == 0) {
-		error = VOP_LOOKUP(pvp, (char *)nm, vpp, &pn, flags, rootvp,
+		error = fop_lookup(pvp, (char *)nm, vpp, &pn, flags, rootvp,
 		    cr, NULL, deflags, rpnp);
 		pn_free(&pn);
 	}
@@ -1622,7 +1622,7 @@ xattr_dir_lookup(vnode_t *dvp, vnode_t **vpp, int flags, cred_t *cr)
 		 * use the vfs feature mask here because _PC_SATTR_ENABLED
 		 * has vnode-level granularity (e.g. .zfs).
 		 */
-		error = VOP_PATHCONF(dvp, _PC_SATTR_ENABLED, &val, cr, NULL);
+		error = fop_pathconf(dvp, _PC_SATTR_ENABLED, &val, cr, NULL);
 		if (error != 0 || val == 0)
 			sysattrs_allowed = 0;
 
@@ -1636,7 +1636,7 @@ xattr_dir_lookup(vnode_t *dvp, vnode_t **vpp, int flags, cred_t *cr)
 			error = pn_get(nm, UIO_SYSSPACE, &pn);
 			if (error)
 				return (error);
-			error = VOP_LOOKUP(dvp, nm, vpp, &pn,
+			error = fop_lookup(dvp, nm, vpp, &pn,
 			    flags|LOOKUP_HAVE_SYSATTR_DIR, rootvp, cr, NULL,
 			    NULL, NULL);
 			pn_free(&pn);
@@ -1713,7 +1713,7 @@ xattr_dir_vget(vfs_t *vfsp, vnode_t **vpp, fid_t *fidp)
 
 	/*
 	 * Start by getting the GFS sysattr directory.	We might need
-	 * to recreate it during the VOP_LOOKUP.
+	 * to recreate it during the fop_lookup.
 	 */
 	nm = "";
 	error = pn_get(nm, UIO_SYSSPACE, &pn);
@@ -1722,7 +1722,7 @@ xattr_dir_vget(vfs_t *vfsp, vnode_t **vpp, fid_t *fidp)
 		return (EINVAL);
 	}
 
-	error = VOP_LOOKUP(pvp, nm, &dvp, &pn, LOOKUP_XATTR|CREATE_XATTR_DIR,
+	error = fop_lookup(pvp, nm, &dvp, &pn, LOOKUP_XATTR|CREATE_XATTR_DIR,
 	    rootvp, CRED(), NULL, NULL, NULL);
 	pn_free(&pn);
 	VN_RELE(pvp);
@@ -1750,7 +1750,7 @@ xattr_dir_vget(vfs_t *vfsp, vnode_t **vpp, fid_t *fidp)
 		return (EINVAL);
 	}
 
-	error = VOP_LOOKUP(dvp, nm, vpp, &pn, 0, rootvp, CRED(), NULL,
+	error = fop_lookup(dvp, nm, vpp, &pn, 0, rootvp, CRED(), NULL,
 	    NULL, NULL);
 
 	pn_free(&pn);

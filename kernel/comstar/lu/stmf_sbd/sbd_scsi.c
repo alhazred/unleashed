@@ -3679,13 +3679,13 @@ sbd_flush_data_cache(sbd_lu_t *sl, int fsync_done)
 	if (fsync_done)
 		goto over_fsync;
 	if ((sl->sl_data_vtype == VREG) || (sl->sl_data_vtype == VBLK)) {
-		if (VOP_FSYNC(sl->sl_data_vp, FSYNC, kcred, NULL))
+		if (fop_fsync(sl->sl_data_vp, FSYNC, kcred, NULL))
 			return (SBD_FAILURE);
 	}
 over_fsync:
 	if (((sl->sl_data_vtype == VCHR) || (sl->sl_data_vtype == VBLK)) &&
 	    ((sl->sl_flags & SL_NO_DATA_DKIOFLUSH) == 0)) {
-		ret = VOP_IOCTL(sl->sl_data_vp, DKIOCFLUSHWRITECACHE, NULL,
+		ret = fop_ioctl(sl->sl_data_vp, DKIOCFLUSHWRITECACHE, NULL,
 		    FKIOCTL, kcred, &r, NULL);
 		if ((ret == ENOTTY) || (ret == ENOTSUP)) {
 			mutex_enter(&sl->sl_lock);

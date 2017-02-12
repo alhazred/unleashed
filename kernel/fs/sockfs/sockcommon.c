@@ -112,7 +112,7 @@ socket_create(int family, int type, int protocol, char *devpath, char *mod,
 	} else {
 		if ((*errorp = SOP_INIT(so, NULL, cr, flags)) == 0) {
 			/* Cannot fail, only bumps so_count */
-			(void) VOP_OPEN(&SOTOV(so), FREAD|FWRITE, cr, NULL);
+			(void) fop_open(&SOTOV(so), FREAD|FWRITE, cr, NULL);
 		} else {
 			if (saved_error && (*errorp == EPROTONOSUPPORT ||
 			    *errorp == EPROTOTYPE || *errorp == ENOPROTOOPT))
@@ -152,7 +152,7 @@ socket_newconn(struct sonode *parent, sock_lower_handle_t lh,
 		 */
 		if ((*errorp = SOP_INIT(so, parent, cr, flags)) == 0) {
 			/* Cannot fail, only bumps so_count */
-			(void) VOP_OPEN(&SOTOV(so), FREAD|FWRITE, cr, NULL);
+			(void) fop_open(&SOTOV(so), FREAD|FWRITE, cr, NULL);
 		} else  {
 			socket_destroy(so);
 			so = NULL;
@@ -394,7 +394,7 @@ socket_poll(struct sonode *so, short events, int anyyet, short *reventsp,
 int
 socket_close(struct sonode *so, int flag, struct cred *cr)
 {
-	return (VOP_CLOSE(SOTOV(so), flag, 1, 0, cr, NULL));
+	return (fop_close(SOTOV(so), flag, 1, 0, cr, NULL));
 }
 
 int

@@ -213,7 +213,7 @@ typedef struct svntr_bucket {
 } svntr_bucket_t;
 
 typedef struct svntr_stats {
-	ulong_t		tr_stat_gaerr;   /* VOP_GETATTR() failures */
+	ulong_t		tr_stat_gaerr;   /* fop_getattr() failures */
 	ulong_t		tr_stat_overmap; /* no TR due to beyond EOF mappings */
 	ulong_t		tr_stat_wrcnt;	 /* no TR due to writtable mappings */
 	ulong_t		tr_stat_stale;	 /* TR entry is stale */

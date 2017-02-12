@@ -29,7 +29,7 @@
  * first because dv_find always performs leaf vnode substitution, returning
  * a specfs vnode with an s_realvp pointing to the devfs leaf vnode. This
  * means that the only leaf special file VOP operations that devfs will see
- * after VOP_LOOKUP are the ones that specfs forwards.
+ * after fop_lookup are the ones that specfs forwards.
  */
 
 #include <sys/types.h>
@@ -189,7 +189,7 @@ devfs_getattr(struct vnode *vp, struct vattr *vap, int flags, struct cred *cr,
 		vap->va_mask = mask;
 	} else {
 		/* obtain from attribute store and merge */
-		error = VOP_GETATTR(dv->dv_attrvp, vap, flags, cr, ct);
+		error = fop_getattr(dv->dv_attrvp, vap, flags, cr, ct);
 		dsysdebug(error, ("vop_getattr %s %d\n", dv->dv_name, error));
 		dv_vattr_merge(dv, vap);
 	}
@@ -279,7 +279,7 @@ again:	if (dv->dv_attr) {
 		 */
 		if (vap->va_mask & (AT_MODE|AT_UID|AT_GID|AT_ATIME|AT_MTIME)) {
 			/* Set the attributes */
-			error = VOP_SETATTR(dv->dv_attrvp,
+			error = fop_setattr(dv->dv_attrvp,
 			    vap, flags, cr, NULL);
 			dsysdebug(error,
 			    ("vop_setattr %s %d\n", dv->dv_name, error));
@@ -297,7 +297,7 @@ again:	if (dv->dv_attr) {
 				 * read/write.
 				 */
 				vattr = dv_vattr_dir;
-				if (VOP_GETATTR(dv->dv_attrvp,
+				if (fop_getattr(dv->dv_attrvp,
 				    &vattr, flags, cr, NULL) == 0) {
 					dv->dv_attr = kmem_alloc(
 					    sizeof (struct vattr), KM_SLEEP);
@@ -457,7 +457,7 @@ devfs_setattr(
 		ASSERT(dv->dv_attrvp);
 		ASSERT(vp->v_type != VDIR);
 		*vattrp = dv_vattr_file;
-		error = VOP_GETATTR(dv->dv_attrvp, vattrp, 0, cr, ct);
+		error = fop_getattr(dv->dv_attrvp, vattrp, 0, cr, ct);
 		dsysdebug(error, ("vop_getattr %s %d\n", dv->dv_name, error));
 		if (error)
 			goto out;
@@ -513,7 +513,7 @@ devfs_setattr(
 			if (dv->dv_attrvp) {
 				ddv = dv->dv_dotdot;
 				ASSERT(ddv->dv_attrvp);
-				error = VOP_REMOVE(ddv->dv_attrvp,
+				error = fop_remove(ddv->dv_attrvp,
 				    dv->dv_name, cr, ct, 0);
 				dsysdebug(error,
 				    ("vop_remove %s %s %d\n",
@@ -548,11 +548,11 @@ devfs_setattr(
 					mask = map->va_mask;
 					map->va_mask =
 					    vap->va_mask | AT_ATIME | AT_MTIME;
-					error = VOP_SETATTR(dv->dv_attrvp, map,
+					error = fop_setattr(dv->dv_attrvp, map,
 					    flags, cr, NULL);
 					map->va_mask = mask;
 				} else {
-					error = VOP_SETATTR(dv->dv_attrvp,
+					error = fop_setattr(dv->dv_attrvp,
 					    vap, flags, cr, NULL);
 				}
 				dsysdebug(error, ("vop_setattr %s %d\n",
@@ -598,7 +598,7 @@ devfs_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
 		 */
 		ASSERT(dvroot);
 		ASSERT(dvroot->dv_attrvp);
-		return (VOP_PATHCONF(dvroot->dv_attrvp, cmd, valp, cr, ct));
+		return (fop_pathconf(dvroot->dv_attrvp, cmd, valp, cr, ct));
 		/*NOTREACHED*/
 	}
 
@@ -630,7 +630,7 @@ devfs_getsecattr(struct vnode *vp, struct vsecattr *vsap, int flags,
 		return (error);
 	}
 
-	error = VOP_GETSECATTR(avp, vsap, flags, cr, ct);
+	error = fop_getsecattr(avp, vsap, flags, cr, ct);
 	dsysdebug(error, ("vop_getsecattr %s %d\n", VTODV(vp)->dv_name, error));
 	rw_exit(&dv->dv_contents);
 	return (error);
@@ -640,7 +640,7 @@ devfs_getsecattr(struct vnode *vp, struct vsecattr *vsap, int flags,
  * Set security attributes (acl's)
  *
  * Note that the dv_contents lock has already been acquired
- * by the caller's VOP_RWLOCK.
+ * by the caller's fop_rwlock.
  */
 static int
 devfs_setsecattr(struct vnode *vp, struct vsecattr *vsap, int flags,
@@ -677,20 +677,20 @@ devfs_setsecattr(struct vnode *vp, struct vsecattr *vsap, int flags,
 	}
 
 	/*
-	 * The acl(2) system call issues a VOP_RWLOCK before setting an ACL.
+	 * The acl(2) system call issues a fop_rwlock before setting an ACL.
 	 * Since backing file systems expect the lock to be held before seeing
-	 * a VOP_SETSECATTR ACL, we need to issue the VOP_RWLOCK to the backing
+	 * a fop_setsecattr ACL, we need to issue the fop_rwlock to the backing
 	 * store before forwarding the ACL.
 	 */
-	(void) VOP_RWLOCK(avp, V_WRITELOCK_TRUE, NULL);
-	error = VOP_SETSECATTR(avp, vsap, flags, cr, ct);
+	(void) fop_rwlock(avp, V_WRITELOCK_TRUE, NULL);
+	error = fop_setsecattr(avp, vsap, flags, cr, ct);
 	dsysdebug(error, ("vop_setsecattr %s %d\n", VTODV(vp)->dv_name, error));
-	VOP_RWUNLOCK(avp, V_WRITELOCK_TRUE, NULL);
+	fop_rwunlock(avp, V_WRITELOCK_TRUE, NULL);
 
 	/*
 	 * Set DV_ACL if we have a non-trivial set of ACLs.  It is not
-	 * necessary to hold VOP_RWLOCK since fs_acl_nontrivial only does
-	 * VOP_GETSECATTR calls.
+	 * necessary to hold fop_rwlock since fs_acl_nontrivial only does
+	 * fop_getsecattr calls.
 	 */
 	if (fs_acl_nontrivial(avp, cr))
 		dv->dv_flags |= DV_ACL;
@@ -741,7 +741,7 @@ devfs_access(struct vnode *vp, int mode, int flags, struct cred *cr,
 	if (dv->dv_attr && ((dv->dv_flags & DV_ACL) == 0)) {
 		res = devfs_unlocked_access(dv, mode, cr);
 	} else {
-		res = VOP_ACCESS(dv->dv_attrvp, mode, flags, cr, ct);
+		res = fop_access(dv->dv_attrvp, mode, flags, cr, ct);
 	}
 	rw_exit(&dv->dv_contents);
 	return (res);
@@ -840,7 +840,7 @@ devfs_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 		else if (vp->v_type == VDIR && (mode & VWRITE))
 			error = EISDIR;
 		else
-			error = VOP_ACCESS(vp, mode, 0, cred, ct);
+			error = fop_access(vp, mode, 0, cred, ct);
 
 		if (error) {
 			VN_RELE(vp);
@@ -1088,8 +1088,8 @@ devfs_fid(struct vnode *vp, struct fid *fidp, caller_context_t *ct)
 }
 
 /*
- * This pair of routines bracket all VOP_READ, VOP_WRITE
- * and VOP_READDIR requests.  The contents lock stops things
+ * This pair of routines bracket all fop_read, fop_write
+ * and fop_readdir requests.  The contents lock stops things
  * moving around while we're looking at them.
  *
  * Also used by file and record locking.

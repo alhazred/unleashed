@@ -91,7 +91,7 @@ top:
 			vattr.va_type = VLNK;
 			vattr.va_mode = 0777;
 			vattr.va_mask = AT_TYPE|AT_MODE;
-			error = VOP_SYMLINK(dvp, lpn.pn_path, &vattr,
+			error = fop_symlink(dvp, lpn.pn_path, &vattr,
 			    tbuf, CRED(), NULL, 0);
 			if (auditing)
 				audit_symlink_create(dvp, lpn.pn_path,

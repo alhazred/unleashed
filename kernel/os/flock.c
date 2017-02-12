@@ -691,7 +691,7 @@ reclock(vnode_t *vp, flock64_t *lckdat, int cmd, int flag, u_offset_t offset,
 	 */
 
 	if (IS_IO_LOCK(lock_request)) {
-		VOP_RWUNLOCK(vp,
+		fop_rwunlock(vp,
 		    (lock_request->l_type == F_RDLCK) ?
 		    V_WRITELOCK_FALSE : V_WRITELOCK_TRUE, NULL);
 	}
@@ -767,7 +767,7 @@ reclock(vnode_t *vp, flock64_t *lckdat, int cmd, int flag, u_offset_t offset,
 	 */
 
 	if (IS_IO_LOCK(lock_request)) {
-		(void) VOP_RWLOCK(vp,
+		(void) fop_rwlock(vp,
 		    (lock_request->l_type == F_RDLCK) ?
 		    V_WRITELOCK_FALSE : V_WRITELOCK_TRUE, NULL);
 		if (!error) {
@@ -821,7 +821,7 @@ done:
  * while it is sleeping.  There should be at most one callb_cpr_t for the
  * thread.
  * XXX This is unnecessarily complicated.  The CPR information should just
- * get passed in directly through VOP_FRLOCK and reclock, rather than
+ * get passed in directly through fop_frlock and reclock, rather than
  * sneaking it in via a callback.
  */
 
@@ -3030,7 +3030,7 @@ convoff(struct vnode *vp, struct flock64 *lckdat, int whence, offset_t offset)
 
 	if ((lckdat->l_whence == 2) || (whence == 2)) {
 		vattr.va_mask = AT_SIZE;
-		if (error = VOP_GETATTR(vp, &vattr, 0, CRED(), NULL))
+		if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			return (error);
 	}
 
@@ -4139,7 +4139,7 @@ flk_convert_lock_data(vnode_t *vp, flock64_t *flp,
 		break;
 	case 2:		/* SEEK_END */
 		vattr.va_mask = AT_SIZE;
-		if (error = VOP_GETATTR(vp, &vattr, 0, CRED(), NULL))
+		if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			return (error);
 		*start = (u_offset_t)(flp->l_start + vattr.va_size);
 		break;

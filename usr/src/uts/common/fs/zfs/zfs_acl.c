@@ -2245,7 +2245,7 @@ zfs_zaccess_common(znode_t *zp, uint32_t v4_mode, uint32_t *working_mode,
 
 	/*
 	 * The caller requested that the ACL check be skipped.  This
-	 * would only happen if the caller checked VOP_ACCESS() with a
+	 * would only happen if the caller checked fop_access() with a
 	 * 32 bit ACE mask and already had the appropriate permissions.
 	 */
 	if (skipaclchk) {

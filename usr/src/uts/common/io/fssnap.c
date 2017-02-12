@@ -1036,7 +1036,7 @@ int *rvalp)
 		releasef(fc.rootfiledesc);
 
 		/* pass ioctl request to file system */
-		error = VOP_IOCTL(vp, cmd, arg, 0, credp, rvalp, NULL);
+		error = fop_ioctl(vp, cmd, arg, 0, credp, rvalp, NULL);
 		VN_RELE(vp);
 		break;
 	}
@@ -1059,7 +1059,7 @@ int *rvalp)
 		releasef(fc.rootfiledesc);
 
 		/* pass ioctl request to file system */
-		error = VOP_IOCTL(vp, cmd, arg, 0, credp, rvalp, NULL);
+		error = fop_ioctl(vp, cmd, arg, 0, credp, rvalp, NULL);
 		VN_RELE(vp);
 		break;
 	}
@@ -1150,7 +1150,7 @@ int *rvalp)
 		 * until IOCTL complete to prohibit a mount sneaking
 		 * in
 		 */
-		error = VOP_IOCTL(vp, cmd, arg, 0, credp, rvalp, NULL);
+		error = fop_ioctl(vp, cmd, arg, 0, credp, rvalp, NULL);
 		vfs_delmip(vfsp);
 		VFS_RELE(vfsp);
 		VN_RELE(vp);

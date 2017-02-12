@@ -223,7 +223,7 @@ segkpm_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t len,
  * page_create_va. Goal is to utilize the cache hierarchy (round
  * robin bins) and to select the right color for virtual indexed
  * caches. It isn't exact since we also increment the bin counter
- * when the caller uses VOP_GETPAGE and gets a hit in the page
+ * when the caller uses fop_getpage and gets a hit in the page
  * cache, but we keep the bins turning for cache distribution
  * (see also segkpm_create block comment).
  */

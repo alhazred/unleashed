@@ -148,7 +148,7 @@ cacl(int cmd, int nentries, void *aclbufp, vnode_t *vp, int *rv)
 			entry_size = sizeof (ace_t);
 			vsecattr.vsa_mask = VSA_ACECNT;
 		}
-		if (error = VOP_GETSECATTR(vp, &vsecattr, 0, CRED(), NULL))
+		if (error = fop_getsecattr(vp, &vsecattr, 0, CRED(), NULL))
 			return (error);
 		*rv = vsecattr.vsa_aclcnt + vsecattr.vsa_dfaclcnt;
 		if (vsecattr.vsa_aclcnt && vsecattr.vsa_aclentp) {
@@ -174,7 +174,7 @@ cacl(int cmd, int nentries, void *aclbufp, vnode_t *vp, int *rv)
 			return (EFAULT);
 		vsecattr.vsa_mask = VSA_ACL | VSA_ACLCNT | VSA_DFACL |
 		    VSA_DFACLCNT;
-		if (error = VOP_GETSECATTR(vp, &vsecattr, 0, CRED(), NULL))
+		if (error = fop_getsecattr(vp, &vsecattr, 0, CRED(), NULL))
 			return (error);
 		/* Check user's buffer is big enough */
 		numacls = vsecattr.vsa_aclcnt + vsecattr.vsa_dfaclcnt;
@@ -224,7 +224,7 @@ cacl(int cmd, int nentries, void *aclbufp, vnode_t *vp, int *rv)
 			return (EFAULT);
 
 		vsecattr.vsa_mask = VSA_ACE | VSA_ACECNT;
-		if (error = VOP_GETSECATTR(vp, &vsecattr, 0, CRED(), NULL))
+		if (error = fop_getsecattr(vp, &vsecattr, 0, CRED(), NULL))
 			return (error);
 
 		aclbsize = vsecattr.vsa_aclcnt * sizeof (ace_t);
@@ -300,10 +300,10 @@ cacl(int cmd, int nentries, void *aclbufp, vnode_t *vp, int *rv)
 			kmem_free(aaclp, aclbsize);
 			return (ENOTDIR);
 		}
-		(void) VOP_RWLOCK(vp, V_WRITELOCK_TRUE, NULL);
-		if (error = VOP_SETSECATTR(vp, &vsecattr, 0, CRED(), NULL)) {
+		(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);
+		if (error = fop_setsecattr(vp, &vsecattr, 0, CRED(), NULL)) {
 			kmem_free(aaclp, aclbsize);
-			VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+			fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 			return (error);
 		}
 
@@ -313,7 +313,7 @@ cacl(int cmd, int nentries, void *aclbufp, vnode_t *vp, int *rv)
 		 */
 		*rv = 0;
 		kmem_free(aaclp, aclbsize);
-		VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+		fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 		break;
 
 	case ACE_SETACL:
@@ -334,15 +334,15 @@ cacl(int cmd, int nentries, void *aclbufp, vnode_t *vp, int *rv)
 			kmem_free(aaclp, aclbsize);
 			return (EFAULT);
 		}
-		(void) VOP_RWLOCK(vp, V_WRITELOCK_TRUE, NULL);
-		if (error = VOP_SETSECATTR(vp, &vsecattr, 0, CRED(), NULL)) {
+		(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);
+		if (error = fop_setsecattr(vp, &vsecattr, 0, CRED(), NULL)) {
 			kmem_free(aaclp, aclbsize);
-			VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+			fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 			return (error);
 		}
 		*rv = 0;
 		kmem_free(aaclp, aclbsize);
-		VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+		fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 		break;
 
 	default:

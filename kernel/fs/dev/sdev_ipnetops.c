@@ -118,7 +118,7 @@ devipnet_lookup(struct vnode *dvp, char *nm, struct vnode **vpp,
 		switch ((*vpp)->v_type) {
 		case VCHR:
 			dv = VTOSDEV(VTOS(*vpp)->s_realvp);
-			ASSERT(VOP_REALVP(SDEVTOV(dv), &rvp, NULL) == ENOSYS);
+			ASSERT(fop_realvp(SDEVTOV(dv), &rvp, NULL) == ENOSYS);
 			break;
 		case VDIR:
 			dv = VTOSDEV(*vpp);

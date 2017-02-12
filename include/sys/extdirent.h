@@ -40,7 +40,7 @@ extern "C" {
  * Extended file-system independent directory entry.  This style of
  * dirent provides additional informational flag bits for each
  * directory entry.  This dirent will be returned instead of the
- * standard dirent if a VOP_READDIR() requests dirent flags via
+ * standard dirent if a fop_readdir() requests dirent flags via
  * V_RDDIR_ENTFLAGS, and if the file system supports the flags.
  */
 typedef struct edirent {

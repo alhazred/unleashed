@@ -173,7 +173,7 @@ gfs_get_parent_ino(vnode_t *dvp, cred_t *cr, caller_context_t *ct,
 		vattr_t va;
 
 		va.va_mask = AT_NODEID;
-		error = VOP_GETATTR(parent, &va, 0, cr, ct);
+		error = fop_getattr(parent, &va, 0, cr, ct);
 		if (error)
 			return (error);
 		*pino = va.va_nodeid;
@@ -192,11 +192,11 @@ gfs_get_parent_ino(vnode_t *dvp, cred_t *cr, caller_context_t *ct,
  *   uiop	- the uiop passed to readdir
  *   parent	- the parent directory's inode
  *   self	- this directory's inode
- *   flags	- flags from VOP_READDIR
+ *   flags	- flags from fop_readdir
  *
  * Returns 0 or a non-zero errno.
  *
- * Typical VOP_READDIR usage of gfs_readdir_*:
+ * Typical fop_readdir usage of gfs_readdir_*:
  *
  *	if ((error = gfs_readdir_init(...)) != 0)
  *		return (error);
@@ -593,7 +593,7 @@ gfs_root_create_file(size_t size, vfs_t *vfsp, vnodeops_t *ops, ino64_t ino)
 /*
  * gfs_file_inactive()
  *
- * Called from the VOP_INACTIVE() routine.  If necessary, this routine will
+ * Called from the fop_inactive() routine.  If necessary, this routine will
  * remove the given vnode from the parent directory and clean up any references
  * in the VFS layer.
  *
@@ -963,7 +963,7 @@ out:
  * supply two callbacks in order to get full compatibility.
  *
  * If the directory contains static entries, an inode callback must be
- * specified.  This avoids having to create every vnode and call VOP_GETATTR()
+ * specified.  This avoids having to create every vnode and call fop_getattr()
  * when reading the directory.  This function has the following arguments:
  *
  *	ino_t gfs_inode_cb(vnode_t *vp, int index);
@@ -975,7 +975,7 @@ out:
  *
  * For directories with dynamic entries, a readdir callback must be provided.
  * This is significantly more complex, thanks to the particulars of
- * VOP_READDIR().
+ * fop_readdir().
  *
  *	int gfs_readdir_cb(vnode_t *vp, void *dp, int *eofp,
  *	    offset_t *off, offset_t *nextoff, void *data, int flags)
@@ -993,7 +993,7 @@ out:
  *	nextoff	- callback must set to offset of next entry.  Typically
  *		  (off + 1)
  *	data	- caller-supplied data
- *	flags	- VOP_READDIR flags
+ *	flags	- fop_readdir flags
  *
  *	Return 0 on success, or error on failure.
  */
@@ -1054,7 +1054,7 @@ gfs_dir_readdir(vnode_t *dvp, uio_t *uiop, int *eofp, void *data, cred_t *cr,
 
 
 /*
- * gfs_vop_lookup: VOP_LOOKUP() entry point
+ * gfs_vop_lookup: fop_lookup() entry point
  *
  * For use directly in vnode ops table.  Given a GFS directory, calls
  * gfs_dir_lookup() as necessary.
@@ -1069,7 +1069,7 @@ gfs_vop_lookup(vnode_t *dvp, char *nm, vnode_t **vpp, pathname_t *pnp,
 }
 
 /*
- * gfs_vop_readdir: VOP_READDIR() entry point
+ * gfs_vop_readdir: fop_readdir() entry point
  *
  * For use directly in vnode ops table.  Given a GFS directory, calls
  * gfs_dir_readdir() as necessary.
@@ -1084,7 +1084,7 @@ gfs_vop_readdir(vnode_t *vp, uio_t *uiop, cred_t *cr, int *eofp,
 
 
 /*
- * gfs_vop_map: VOP_MAP() entry point
+ * gfs_vop_map: fop_map() entry point
  *
  * Convenient routine for handling pseudo-files that wish to allow mmap() calls.
  * This function only works for readonly files, and uses the read function for
@@ -1156,7 +1156,7 @@ gfs_vop_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 }
 
 /*
- * gfs_vop_inactive: VOP_INACTIVE() entry point
+ * gfs_vop_inactive: fop_inactive() entry point
  *
  * Given a vnode that is a GFS file or directory, call gfs_file_inactive() or
  * gfs_dir_inactive() as necessary, and kmem_free()s associated private data.

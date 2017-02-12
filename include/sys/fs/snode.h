@@ -224,7 +224,7 @@ extern kmutex_t	stable_lock;
 extern kmutex_t	spec_syncbusy;
 
 /*
- * Variables used by during asynchronous VOP_PUTPAGE operations.
+ * Variables used by during asynchronous fop_putpage operations.
  */
 extern struct async_reqs *spec_async_reqs;	/* async request list */
 extern kmutex_t spec_async_lock;		/* lock to protect async list */

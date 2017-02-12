@@ -134,7 +134,7 @@ typedef struct gfs_readdir_state {
 	ssize_t		grd_oresid;	/* original uio_resid */
 	ino64_t		grd_parent;	/* inode of parent */
 	ino64_t		grd_self;	/* inode of self */
-	int		grd_flags;	/* flags from VOP_READDIR */
+	int		grd_flags;	/* flags from fop_readdir */
 } gfs_readdir_state_t;
 
 extern int gfs_readdir_init(gfs_readdir_state_t *, int, int, uio_t *, ino64_t,

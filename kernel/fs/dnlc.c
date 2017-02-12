@@ -107,7 +107,7 @@ int nc_hashavelen = NC_HASHAVELEN_DEFAULT;
  * vnodes. This array is used rather than calling VN_RELE() inline because
  * all dnlc locks must be dropped by that time in order to avoid a
  * possible deadlock. This deadlock occurs when the dnlc holds the last
- * reference to the vnode and so the VOP_INACTIVE vector is called which
+ * reference to the vnode and so the fop_inactive vector is called which
  * can in turn call back into the dnlc. A global array was used but had
  * many problems:
  *	1) Actually doesn't have an upper bound on the array size as
@@ -405,7 +405,7 @@ dnlc_init()
 
 	/*
 	 * Initialise the reference count of the negative cache vnode to 1
-	 * so that it never goes away (VOP_INACTIVE isn't called on it).
+	 * so that it never goes away (fop_inactive isn't called on it).
 	 */
 	negative_cache_vnode.v_count = 1;
 	negative_cache_vnode.v_count_dnlc = 0;

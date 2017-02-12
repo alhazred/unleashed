@@ -728,9 +728,9 @@ accept(int sock, struct sockaddr *name, socklen_t *namelenp, int flags)
 
 		/*
 		 * This code is a simplification of the F_SETFL code in fcntl()
-		 * Ignore any errors from VOP_SETFL.
+		 * Ignore any errors from fop_setfl.
 		 */
-		if ((error = VOP_SETFL(nvp, oflag, arg, nfp->f_cred, NULL))
+		if ((error = fop_setfl(nvp, oflag, arg, nfp->f_cred, NULL))
 		    != 0) {
 			eprintsoline(so, error);
 			error = 0;
@@ -1934,7 +1934,7 @@ sockconfig(int cmd, void *arg1, void *arg2, void *arg3, void *arg4)
  * with the data, the mapping will be released through segmap_release()
  * called by the call-back routine.
  *
- * If zero-copy is not allowed by the transport, we simply call VOP_READ()
+ * If zero-copy is not allowed by the transport, we simply call fop_read()
  * to copy the data from the filesystem into our temporary network buffer.
  *
  * To disable caching, set sendfile_max_size to 0.
@@ -2072,7 +2072,7 @@ snf_async_read(snf_req_t *sr)
 	/*
 	 * Ignore the error for filesystems that doesn't support DIRECTIO.
 	 */
-	(void) VOP_IOCTL(fp->f_vnode, _FIODIRECTIO, DIRECTIO_ON, 0,
+	(void) fop_ioctl(fp->f_vnode, _FIODIRECTIO, DIRECTIO_ON, 0,
 	    kcred, NULL, NULL);
 
 	vp = sr->sr_vp;
@@ -2129,7 +2129,7 @@ snf_async_read(snf_req_t *sr)
 		size -= ret_size;
 		fileoff += ret_size;
 	}
-	(void) VOP_IOCTL(fp->f_vnode, _FIODIRECTIO, DIRECTIO_OFF, 0,
+	(void) fop_ioctl(fp->f_vnode, _FIODIRECTIO, DIRECTIO_OFF, 0,
 	    kcred, NULL, NULL);
 	mutex_enter(&sr->sr_lock);
 	sr->sr_read_error = error;
@@ -2587,7 +2587,7 @@ snf_segmap(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t total_size,
 			dowait = B_TRUE;
 			mp->b_datap->db_struioflag |= STRUIO_ZCNOTIFY;
 		}
-		VOP_RWUNLOCK(fvp, V_WRITELOCK_FALSE, NULL);
+		fop_rwunlock(fvp, V_WRITELOCK_FALSE, NULL);
 		error = socket_sendmblk(VTOSO(vp), &msg, fflag, CRED(), &mp);
 		if (error != 0) {
 			/*
@@ -2603,9 +2603,9 @@ snf_segmap(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t total_size,
 		if (total_size == 0)
 			goto done;
 
-		(void) VOP_RWLOCK(fvp, V_WRITELOCK_FALSE, NULL);
+		(void) fop_rwlock(fvp, V_WRITELOCK_FALSE, NULL);
 		va.va_mask = AT_SIZE;
-		error = VOP_GETATTR(fvp, &va, 0, kcred, NULL);
+		error = fop_getattr(fvp, &va, 0, kcred, NULL);
 		if (error)
 			break;
 		/* Read as much as possible. */
@@ -2615,7 +2615,7 @@ snf_segmap(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t total_size,
 			total_size = va.va_size - fileoff;
 	}
 out:
-	VOP_RWUNLOCK(fvp, V_WRITELOCK_FALSE, NULL);
+	fop_rwunlock(fvp, V_WRITELOCK_FALSE, NULL);
 done:
 	*count = ksize;
 	if (dowait) {
@@ -2723,7 +2723,7 @@ snf_cache(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t size,
 		auio.uio_loffset = fileoff;
 		auio.uio_resid = iosize;
 
-		error = VOP_READ(fvp, &auio, ioflag, fp->f_cred, NULL);
+		error = fop_read(fvp, &auio, ioflag, fp->f_cred, NULL);
 		iosize -= auio.uio_resid;
 
 		if (error == EINTR && iosize != 0)
@@ -2735,7 +2735,7 @@ snf_cache(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t size,
 		}
 		mp->b_wptr = mp->b_rptr + iosize;
 
-		VOP_RWUNLOCK(fvp, V_WRITELOCK_FALSE, NULL);
+		fop_rwunlock(fvp, V_WRITELOCK_FALSE, NULL);
 
 		error = socket_sendmblk(VTOSO(vp), &msg, fflag, CRED(), &mp);
 
@@ -2751,9 +2751,9 @@ snf_cache(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t size,
 			goto done;
 
 		fileoff += iosize;
-		(void) VOP_RWLOCK(fvp, V_WRITELOCK_FALSE, NULL);
+		(void) fop_rwlock(fvp, V_WRITELOCK_FALSE, NULL);
 		va.va_mask = AT_SIZE;
-		error = VOP_GETATTR(fvp, &va, 0, kcred, NULL);
+		error = fop_getattr(fvp, &va, 0, kcred, NULL);
 		if (error)
 			break;
 		/* Read as much as possible. */
@@ -2762,7 +2762,7 @@ snf_cache(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t size,
 		else if (size + fileoff > va.va_size)
 			size = va.va_size - fileoff;
 	}
-	VOP_RWUNLOCK(fvp, V_WRITELOCK_FALSE, NULL);
+	fop_rwunlock(fvp, V_WRITELOCK_FALSE, NULL);
 done:
 	*count = ksize;
 	return (error);
@@ -2818,18 +2818,18 @@ sosendfile64(file_t *fp, file_t *rfp, const struct ksendfilevec64 *sfv,
 		goto out;
 	}
 	fvp = rfp->f_vnode;
-	if (VOP_REALVP(fvp, &realvp, NULL) == 0)
+	if (fop_realvp(fvp, &realvp, NULL) == 0)
 		fvp = realvp;
 	/*
 	 * Grab the lock as a reader to prevent the file size
 	 * from changing underneath.
 	 */
-	(void) VOP_RWLOCK(fvp, V_WRITELOCK_FALSE, NULL);
+	(void) fop_rwlock(fvp, V_WRITELOCK_FALSE, NULL);
 	va.va_mask = AT_SIZE;
-	error = VOP_GETATTR(fvp, &va, 0, kcred, NULL);
+	error = fop_getattr(fvp, &va, 0, kcred, NULL);
 	va_size = va.va_size;
 	if ((error != 0) || (va_size == 0) || (sfv_off >= va_size)) {
-		VOP_RWUNLOCK(fvp, V_WRITELOCK_FALSE, NULL);
+		fop_rwunlock(fvp, V_WRITELOCK_FALSE, NULL);
 		goto out;
 	}
 	/* Read as much as possible. */
@@ -3013,7 +3013,7 @@ socreate(struct sockparams *sp, int family, int type, int protocol,
 	} else {
 		if ((*errorp = SOP_INIT(so, NULL, CRED(), SOCKET_SLEEP)) == 0) {
 			/* Cannot fail, only bumps so_count */
-			(void) VOP_OPEN(&SOTOV(so), FREAD|FWRITE, CRED(), NULL);
+			(void) fop_open(&SOTOV(so), FREAD|FWRITE, CRED(), NULL);
 		} else {
 			socket_destroy(so);
 			so = NULL;

@@ -552,8 +552,8 @@ lofi_destroy(struct lofi_state *lsp, cred_t *credp)
 	}
 
 	if (lsp->ls_vp != NULL) {
-		(void) VOP_PUTPAGE(lsp->ls_vp, 0, 0, B_INVAL, credp, NULL);
-		(void) VOP_CLOSE(lsp->ls_vp, lsp->ls_openflag,
+		(void) fop_putpage(lsp->ls_vp, 0, 0, B_INVAL, credp, NULL);
+		(void) fop_close(lsp->ls_vp, lsp->ls_openflag,
 		    1, 0, credp, NULL);
 		VN_RELE(lsp->ls_vp);
 	}
@@ -1123,7 +1123,7 @@ lofi_mapped_rdwr(caddr_t bufaddr, offset_t offset, struct buf *bp,
 			/*
 			 * Write back good pages, it is okay to
 			 * always release asynchronous here as we'll
-			 * follow with VOP_FSYNC for B_SYNC buffers.
+			 * follow with fop_fsync for B_SYNC buffers.
 			 */
 			if (error == 0)
 				smflags |= SM_WRITE | SM_ASYNC;
@@ -1325,7 +1325,7 @@ lofi_strategy_task(void *arg)
 
 	/*
 	 * If we're writing and the buffer was not B_ASYNC
-	 * we'll follow up with a VOP_FSYNC() to force any
+	 * we'll follow up with a fop_fsync() to force any
 	 * asynchronous I/O to stable storage.
 	 */
 	if (!(bp->b_flags & B_READ) && !(bp->b_flags & B_ASYNC))
@@ -1604,7 +1604,7 @@ done:
 	} /* end of handling compressed files */
 
 	if ((error == 0) && (syncflag != 0))
-		error = VOP_FSYNC(lsp->ls_vp, syncflag, kcred, NULL);
+		error = fop_fsync(lsp->ls_vp, syncflag, kcred, NULL);
 
 errout:
 	if (bufinited && lsp->ls_kstat) {
@@ -2133,7 +2133,7 @@ file_to_lofi_nocheck(char *filename, boolean_t readonly,
 
 	if (vp->v_type == VREG) {
 		vnode_t *realvp;
-		if (VOP_REALVP(vp, &realvp, NULL) == 0) {
+		if (fop_realvp(vp, &realvp, NULL) == 0) {
 			VN_HOLD(realvp);
 			VN_RELE(vp);
 			vp = realvp;
@@ -2813,7 +2813,7 @@ lofi_map_file(dev_t dev, struct lofi_ioctl *ulip, int pickminor,
 	}
 
 	vattr.va_mask = AT_SIZE;
-	error = VOP_GETATTR(vp, &vattr, 0, credp, NULL);
+	error = fop_getattr(vp, &vattr, 0, credp, NULL);
 	if (error)
 		goto err;
 
@@ -2861,7 +2861,7 @@ lofi_map_file(dev_t dev, struct lofi_ioctl *ulip, int pickminor,
 	if (vp->v_type == VREG) {
 		vnode_t *realvp;
 
-		if (VOP_REALVP(vp, &realvp, NULL) == 0) {
+		if (fop_realvp(vp, &realvp, NULL) == 0) {
 			/*
 			 * We need to use the realvp for uniqueness
 			 * checking, but keep the stacked vp for
@@ -2933,8 +2933,8 @@ err:
 		lofi_destroy(lsp, credp);
 	} else {
 		if (vp != NULL) {
-			(void) VOP_PUTPAGE(vp, 0, 0, B_INVAL, credp, NULL);
-			(void) VOP_CLOSE(vp, flag, 1, 0, credp, NULL);
+			(void) fop_putpage(vp, 0, 0, B_INVAL, credp, NULL);
+			(void) fop_close(vp, flag, 1, 0, credp, NULL);
 			VN_RELE(vp);
 		}
 	}

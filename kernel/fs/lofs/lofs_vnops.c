@@ -62,11 +62,11 @@ lo_open(vnode_t **vpp, int flag, struct cred *cr, caller_context_t *ct)
 	oldvp = vp;
 	vp = rvp = realvp(vp);
 	/*
-	 * Need to hold new reference to vp since VOP_OPEN() may
+	 * Need to hold new reference to vp since fop_open() may
 	 * decide to release it.
 	 */
 	VN_HOLD(vp);
-	error = VOP_OPEN(&rvp, flag, cr, ct);
+	error = fop_open(&rvp, flag, cr, ct);
 
 	if (!error && rvp != vp) {
 		/*
@@ -112,7 +112,7 @@ lo_close(
 	lo_dprint(4, "lo_close vp %p realvp %p\n", vp, realvp(vp));
 #endif
 	vp = realvp(vp);
-	return (VOP_CLOSE(vp, flag, count, offset, cr, ct));
+	return (fop_close(vp, flag, count, offset, cr, ct));
 }
 
 static int
@@ -123,7 +123,7 @@ lo_read(vnode_t *vp, struct uio *uiop, int ioflag, struct cred *cr,
 	lo_dprint(4, "lo_read vp %p realvp %p\n", vp, realvp(vp));
 #endif
 	vp = realvp(vp);
-	return (VOP_READ(vp, uiop, ioflag, cr, ct));
+	return (fop_read(vp, uiop, ioflag, cr, ct));
 }
 
 static int
@@ -134,7 +134,7 @@ lo_write(vnode_t *vp, struct uio *uiop, int ioflag, struct cred *cr,
 	lo_dprint(4, "lo_write vp %p realvp %p\n", vp, realvp(vp));
 #endif
 	vp = realvp(vp);
-	return (VOP_WRITE(vp, uiop, ioflag, cr, ct));
+	return (fop_write(vp, uiop, ioflag, cr, ct));
 }
 
 static int
@@ -151,14 +151,14 @@ lo_ioctl(
 	lo_dprint(4, "lo_ioctl vp %p realvp %p\n", vp, realvp(vp));
 #endif
 	vp = realvp(vp);
-	return (VOP_IOCTL(vp, cmd, arg, flag, cr, rvalp, ct));
+	return (fop_ioctl(vp, cmd, arg, flag, cr, rvalp, ct));
 }
 
 static int
 lo_setfl(vnode_t *vp, int oflags, int nflags, cred_t *cr, caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_SETFL(vp, oflags, nflags, cr, ct));
+	return (fop_setfl(vp, oflags, nflags, cr, ct));
 }
 
 static int
@@ -174,7 +174,7 @@ lo_getattr(
 #ifdef LODEBUG
 	lo_dprint(4, "lo_getattr vp %p realvp %p\n", vp, realvp(vp));
 #endif
-	if (error = VOP_GETATTR(realvp(vp), vap, flags, cr, ct))
+	if (error = fop_getattr(realvp(vp), vap, flags, cr, ct))
 		return (error);
 
 	return (0);
@@ -192,7 +192,7 @@ lo_setattr(
 	lo_dprint(4, "lo_setattr vp %p realvp %p\n", vp, realvp(vp));
 #endif
 	vp = realvp(vp);
-	return (VOP_SETATTR(vp, vap, flags, cr, ct));
+	return (fop_setattr(vp, vap, flags, cr, ct));
 }
 
 static int
@@ -211,7 +211,7 @@ lo_access(
 			return (EROFS);
 	}
 	vp = realvp(vp);
-	return (VOP_ACCESS(vp, mode, flags, cr, ct));
+	return (fop_access(vp, mode, flags, cr, ct));
 }
 
 static int
@@ -221,7 +221,7 @@ lo_fsync(vnode_t *vp, int syncflag, struct cred *cr, caller_context_t *ct)
 	lo_dprint(4, "lo_fsync vp %p realvp %p\n", vp, realvp(vp));
 #endif
 	vp = realvp(vp);
-	return (VOP_FSYNC(vp, syncflag, cr, ct));
+	return (fop_fsync(vp, syncflag, cr, ct));
 }
 
 /*ARGSUSED*/
@@ -242,7 +242,7 @@ lo_fid(vnode_t *vp, struct fid *fidp, caller_context_t *ct)
 	lo_dprint(4, "lo_fid %p, realvp %p\n", vp, realvp(vp));
 #endif
 	vp = realvp(vp);
-	return (VOP_FID(vp, fidp, ct));
+	return (fop_fid(vp, fidp, ct));
 }
 
 /*
@@ -313,7 +313,7 @@ lo_lookup(
 	/*
 	 * If name is empty and no XATTR flags are set, then return
 	 * dvp (empty name == lookup ".").  If an XATTR flag is set
-	 * then we need to call VOP_LOOKUP to get the xattr dir.
+	 * then we need to call fop_lookup to get the xattr dir.
 	 */
 	if (nm[0] == '\0' && ! (flags & (CREATE_XATTR_DIR|LOOKUP_XATTR))) {
 		VN_HOLD(dvp);
@@ -337,7 +337,7 @@ lo_lookup(
 	/*
 	 * Do the normal lookup
 	 */
-	if (error = VOP_LOOKUP(realdvp, nm, &vp, pnp, flags, rdir, cr,
+	if (error = fop_lookup(realdvp, nm, &vp, pnp, flags, rdir, cr,
 	    ct, direntflags, realpnp)) {
 		vp = NULL;
 		goto out;
@@ -683,7 +683,7 @@ lo_create(
 		vp = realvp(*vpp);
 	}
 
-	error = VOP_CREATE(realvp(dvp), nm, va, exclusive, mode, &vp, cr, flag,
+	error = fop_create(realvp(dvp), nm, va, exclusive, mode, &vp, cr, flag,
 	    ct, vsecp);
 	if (!error) {
 		*vpp = makelonode(vp, vtoli(dvp->v_vfsp), 0);
@@ -709,7 +709,7 @@ lo_create(
 		 * the vop_create entry because zfs_create doesn't work
 		 * properly for this case).
 		 */
-		if ((error = VOP_ACCESS(dvp, mode, 0, cr, NULL)) == 0) {
+		if ((error = fop_access(dvp, mode, 0, cr, NULL)) == 0) {
 			/*
 			 * Since we already know the vnode for the existing
 			 * file we can handle create as a no-op, as expected,
@@ -721,7 +721,7 @@ lo_create(
 			vattr.va_mask = AT_SIZE;
 
 			if ((va->va_mask & AT_SIZE) != 0 && va->va_size == 0 &&
-			    VOP_SETATTR(dvp, &vattr, 0, CRED(), NULL) != 0)
+			    fop_setattr(dvp, &vattr, 0, CRED(), NULL) != 0)
 				return (error);
 
 			/*
@@ -753,7 +753,7 @@ lo_remove(
 	lo_dprint(4, "lo_remove vp %p realvp %p\n", dvp, realvp(dvp));
 #endif
 	dvp = realvp(dvp);
-	return (VOP_REMOVE(dvp, nm, cr, ct, flags));
+	return (fop_remove(dvp, nm, cr, ct, flags));
 }
 
 static int
@@ -800,9 +800,9 @@ lo_link(
 	 * filesystem (such as specfs), the loop above will
 	 * terminate before finding the true underlying vnode.
 	 *
-	 * We use VOP_REALVP here to continue the search.
+	 * We use fop_realvp here to continue the search.
 	 */
-	if (VOP_REALVP(vp, &realvp, ct) == 0)
+	if (fop_realvp(vp, &realvp, ct) == 0)
 		vp = realvp;
 
 	while (vn_matchops(tdvp, lo_vnodeops)) {
@@ -810,7 +810,7 @@ lo_link(
 	}
 	if (vp->v_vfsp != tdvp->v_vfsp)
 		return (EXDEV);
-	return (VOP_LINK(tdvp, vp, tnm, cr, ct, flags));
+	return (fop_link(tdvp, vp, tnm, cr, ct, flags));
 }
 
 static int
@@ -861,7 +861,7 @@ lo_rename(
 	 * XXXci - Once case-insensitive behavior is implemented, it should
 	 * be added here.
 	 */
-	if (VOP_LOOKUP(ndvp, nnm, &tnvp, NULL, 0, NULL, cr,
+	if (fop_lookup(ndvp, nnm, &tnvp, NULL, 0, NULL, cr,
 	    ct, NULL, NULL) != 0)
 		goto rename;
 	if (tnvp->v_type != VDIR) {
@@ -879,9 +879,9 @@ rename:
 	 * the stack of lofs filesystems, we need to recurse down the stack,
 	 * checking to see if there are any instances of a filesystem mounted on
 	 * top of lofs. In order to keep on using the lofs version of
-	 * VOP_RENAME(), we make sure that while the target directory is of type
+	 * fop_rename(), we make sure that while the target directory is of type
 	 * lofs, the source directory (the one used for getting the fs-specific
-	 * version of VOP_RENAME()) is also of type lofs.
+	 * version of fop_rename()) is also of type lofs.
 	 */
 	if (vn_matchops(ndvp, lo_vnodeops)) {
 		ndvp = realvp(ndvp);	/* Check the next layer */
@@ -895,7 +895,7 @@ rename:
 		if (odvp->v_vfsp != ndvp->v_vfsp)
 			return (EXDEV);
 	}
-	return (VOP_RENAME(odvp, onm, ndvp, nnm, cr, ct, flags));
+	return (fop_rename(odvp, onm, ndvp, nnm, cr, ct, flags));
 }
 
 static int
@@ -914,7 +914,7 @@ lo_mkdir(
 #ifdef LODEBUG
 	lo_dprint(4, "lo_mkdir vp %p realvp %p\n", dvp, realvp(dvp));
 #endif
-	error = VOP_MKDIR(realvp(dvp), nm, va, vpp, cr, ct, flags, vsecp);
+	error = fop_mkdir(realvp(dvp), nm, va, vpp, cr, ct, flags, vsecp);
 	if (!error)
 		*vpp = makelonode(*vpp, vtoli(dvp->v_vfsp), 0);
 	return (error);
@@ -929,7 +929,7 @@ lo_realvp(vnode_t *vp, vnode_t **vpp, caller_context_t *ct)
 	while (vn_matchops(vp, lo_vnodeops))
 		vp = realvp(vp);
 
-	if (VOP_REALVP(vp, vpp, ct) != 0)
+	if (fop_realvp(vp, vpp, ct) != 0)
 		*vpp = vp;
 	return (0);
 }
@@ -952,7 +952,7 @@ lo_rmdir(
 	if (vn_matchops(dvp, vn_getops(rvp)))
 		(void) lo_realvp(cdir, &rvp, ct);
 	dvp = realvp(dvp);
-	return (VOP_RMDIR(dvp, nm, rvp, cr, ct, flags));
+	return (fop_rmdir(dvp, nm, rvp, cr, ct, flags));
 }
 
 static int
@@ -969,7 +969,7 @@ lo_symlink(
 	lo_dprint(4, "lo_symlink vp %p realvp %p\n", dvp, realvp(dvp));
 #endif
 	dvp = realvp(dvp);
-	return (VOP_SYMLINK(dvp, lnm, tva, tnm, cr, ct, flags));
+	return (fop_symlink(dvp, lnm, tva, tnm, cr, ct, flags));
 }
 
 static int
@@ -980,7 +980,7 @@ lo_readlink(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_READLINK(vp, uiop, cr, ct));
+	return (fop_readlink(vp, uiop, cr, ct));
 }
 
 static int
@@ -996,28 +996,28 @@ lo_readdir(
 	lo_dprint(4, "lo_readdir vp %p realvp %p\n", vp, realvp(vp));
 #endif
 	vp = realvp(vp);
-	return (VOP_READDIR(vp, uiop, cr, eofp, ct, flags));
+	return (fop_readdir(vp, uiop, cr, eofp, ct, flags));
 }
 
 static int
 lo_rwlock(vnode_t *vp, int write_lock, caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_RWLOCK(vp, write_lock, ct));
+	return (fop_rwlock(vp, write_lock, ct));
 }
 
 static void
 lo_rwunlock(vnode_t *vp, int write_lock, caller_context_t *ct)
 {
 	vp = realvp(vp);
-	VOP_RWUNLOCK(vp, write_lock, ct);
+	fop_rwunlock(vp, write_lock, ct);
 }
 
 static int
 lo_seek(vnode_t *vp, offset_t ooff, offset_t *noffp, caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_SEEK(vp, ooff, noffp, ct));
+	return (fop_seek(vp, ooff, noffp, ct));
 }
 
 static int
@@ -1027,7 +1027,7 @@ lo_cmp(vnode_t *vp1, vnode_t *vp2, caller_context_t *ct)
 		vp1 = realvp(vp1);
 	while (vn_matchops(vp2, lo_vnodeops))
 		vp2 = realvp(vp2);
-	return (VOP_CMP(vp1, vp2, ct));
+	return (fop_cmp(vp1, vp2, ct));
 }
 
 static int
@@ -1042,7 +1042,7 @@ lo_frlock(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_FRLOCK(vp, cmd, bfp, flag, offset, flk_cbp, cr, ct));
+	return (fop_frlock(vp, cmd, bfp, flag, offset, flk_cbp, cr, ct));
 }
 
 static int
@@ -1056,7 +1056,7 @@ lo_space(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_SPACE(vp, cmd, bfp, flag, offset, cr, ct));
+	return (fop_space(vp, cmd, bfp, flag, offset, cr, ct));
 }
 
 static int
@@ -1074,7 +1074,7 @@ lo_getpage(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_GETPAGE(vp, off, len, prot, parr, psz, seg, addr, rw, cr,
+	return (fop_getpage(vp, off, len, prot, parr, psz, seg, addr, rw, cr,
 	    ct));
 }
 
@@ -1088,7 +1088,7 @@ lo_putpage(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_PUTPAGE(vp, off, len, flags, cr, ct));
+	return (fop_putpage(vp, off, len, flags, cr, ct));
 }
 
 static int
@@ -1105,7 +1105,7 @@ lo_map(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_MAP(vp, off, as, addrp, len, prot, maxprot, flags, cr, ct));
+	return (fop_map(vp, off, as, addrp, len, prot, maxprot, flags, cr, ct));
 }
 
 static int
@@ -1122,7 +1122,7 @@ lo_addmap(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_ADDMAP(vp, off, as, addr, len, prot, maxprot, flags, cr,
+	return (fop_addmap(vp, off, as, addr, len, prot, maxprot, flags, cr,
 	    ct));
 }
 
@@ -1140,7 +1140,7 @@ lo_delmap(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_DELMAP(vp, off, as, addr, len, prot, maxprot, flags, cr,
+	return (fop_delmap(vp, off, as, addr, len, prot, maxprot, flags, cr,
 	    ct));
 }
 
@@ -1154,7 +1154,7 @@ lo_poll(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_POLL(vp, events, anyyet, reventsp, phpp, ct));
+	return (fop_poll(vp, events, anyyet, reventsp, phpp, ct));
 }
 
 static int
@@ -1162,7 +1162,7 @@ lo_dump(vnode_t *vp, caddr_t addr, offset_t bn, offset_t count,
     caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_DUMP(vp, addr, bn, count, ct));
+	return (fop_dump(vp, addr, bn, count, ct));
 }
 
 static int
@@ -1174,7 +1174,7 @@ lo_pathconf(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_PATHCONF(vp, cmd, valp, cr, ct));
+	return (fop_pathconf(vp, cmd, valp, cr, ct));
 }
 
 static int
@@ -1188,7 +1188,7 @@ lo_pageio(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_PAGEIO(vp, pp, io_off, io_len, flags, cr, ct));
+	return (fop_pageio(vp, pp, io_off, io_len, flags, cr, ct));
 }
 
 static void
@@ -1202,7 +1202,7 @@ lo_dispose(
 {
 	vp = realvp(vp);
 	if (vp != NULL && !VN_ISKAS(vp))
-		VOP_DISPOSE(vp, pp, fl, dn, cr, ct);
+		fop_dispose(vp, pp, fl, dn, cr, ct);
 }
 
 static int
@@ -1216,7 +1216,7 @@ lo_setsecattr(
 	if (vn_is_readonly(vp))
 		return (EROFS);
 	vp = realvp(vp);
-	return (VOP_SETSECATTR(vp, secattr, flags, cr, ct));
+	return (fop_setsecattr(vp, secattr, flags, cr, ct));
 }
 
 static int
@@ -1228,7 +1228,7 @@ lo_getsecattr(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_GETSECATTR(vp, secattr, flags, cr, ct));
+	return (fop_getsecattr(vp, secattr, flags, cr, ct));
 }
 
 static int
@@ -1241,7 +1241,7 @@ lo_shrlock(
 	caller_context_t *ct)
 {
 	vp = realvp(vp);
-	return (VOP_SHRLOCK(vp, cmd, shr, flag, cr, ct));
+	return (fop_shrlock(vp, cmd, shr, flag, cr, ct));
 }
 
 /*

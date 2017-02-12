@@ -438,101 +438,101 @@ create_vopstats_template()
 	vsp = kmem_alloc(sizeof (vopstats_t), KM_SLEEP);
 	bzero(vsp, sizeof (*vsp));	/* Start fresh */
 
-	/* VOP_OPEN */
+	/* fop_open */
 	kstat_named_init(&vsp->nopen, "nopen", KSTAT_DATA_UINT64);
-	/* VOP_CLOSE */
+	/* fop_close */
 	kstat_named_init(&vsp->nclose, "nclose", KSTAT_DATA_UINT64);
-	/* VOP_READ I/O */
+	/* fop_read I/O */
 	kstat_named_init(&vsp->nread, "nread", KSTAT_DATA_UINT64);
 	kstat_named_init(&vsp->read_bytes, "read_bytes", KSTAT_DATA_UINT64);
-	/* VOP_WRITE I/O */
+	/* fop_write I/O */
 	kstat_named_init(&vsp->nwrite, "nwrite", KSTAT_DATA_UINT64);
 	kstat_named_init(&vsp->write_bytes, "write_bytes", KSTAT_DATA_UINT64);
-	/* VOP_IOCTL */
+	/* fop_ioctl */
 	kstat_named_init(&vsp->nioctl, "nioctl", KSTAT_DATA_UINT64);
-	/* VOP_SETFL */
+	/* fop_setfl */
 	kstat_named_init(&vsp->nsetfl, "nsetfl", KSTAT_DATA_UINT64);
-	/* VOP_GETATTR */
+	/* fop_getattr */
 	kstat_named_init(&vsp->ngetattr, "ngetattr", KSTAT_DATA_UINT64);
-	/* VOP_SETATTR */
+	/* fop_setattr */
 	kstat_named_init(&vsp->nsetattr, "nsetattr", KSTAT_DATA_UINT64);
-	/* VOP_ACCESS */
+	/* fop_access */
 	kstat_named_init(&vsp->naccess, "naccess", KSTAT_DATA_UINT64);
-	/* VOP_LOOKUP */
+	/* fop_lookup */
 	kstat_named_init(&vsp->nlookup, "nlookup", KSTAT_DATA_UINT64);
-	/* VOP_CREATE */
+	/* fop_create */
 	kstat_named_init(&vsp->ncreate, "ncreate", KSTAT_DATA_UINT64);
-	/* VOP_REMOVE */
+	/* fop_remove */
 	kstat_named_init(&vsp->nremove, "nremove", KSTAT_DATA_UINT64);
-	/* VOP_LINK */
+	/* fop_link */
 	kstat_named_init(&vsp->nlink, "nlink", KSTAT_DATA_UINT64);
-	/* VOP_RENAME */
+	/* fop_rename */
 	kstat_named_init(&vsp->nrename, "nrename", KSTAT_DATA_UINT64);
-	/* VOP_MKDIR */
+	/* fop_mkdir */
 	kstat_named_init(&vsp->nmkdir, "nmkdir", KSTAT_DATA_UINT64);
-	/* VOP_RMDIR */
+	/* fop_rmdir */
 	kstat_named_init(&vsp->nrmdir, "nrmdir", KSTAT_DATA_UINT64);
-	/* VOP_READDIR I/O */
+	/* fop_readdir I/O */
 	kstat_named_init(&vsp->nreaddir, "nreaddir", KSTAT_DATA_UINT64);
 	kstat_named_init(&vsp->readdir_bytes, "readdir_bytes",
 	    KSTAT_DATA_UINT64);
-	/* VOP_SYMLINK */
+	/* fop_symlink */
 	kstat_named_init(&vsp->nsymlink, "nsymlink", KSTAT_DATA_UINT64);
-	/* VOP_READLINK */
+	/* fop_readlink */
 	kstat_named_init(&vsp->nreadlink, "nreadlink", KSTAT_DATA_UINT64);
-	/* VOP_FSYNC */
+	/* fop_fsync */
 	kstat_named_init(&vsp->nfsync, "nfsync", KSTAT_DATA_UINT64);
-	/* VOP_INACTIVE */
+	/* fop_inactive */
 	kstat_named_init(&vsp->ninactive, "ninactive", KSTAT_DATA_UINT64);
-	/* VOP_FID */
+	/* fop_fid */
 	kstat_named_init(&vsp->nfid, "nfid", KSTAT_DATA_UINT64);
-	/* VOP_RWLOCK */
+	/* fop_rwlock */
 	kstat_named_init(&vsp->nrwlock, "nrwlock", KSTAT_DATA_UINT64);
-	/* VOP_RWUNLOCK */
+	/* fop_rwunlock */
 	kstat_named_init(&vsp->nrwunlock, "nrwunlock", KSTAT_DATA_UINT64);
-	/* VOP_SEEK */
+	/* fop_seek */
 	kstat_named_init(&vsp->nseek, "nseek", KSTAT_DATA_UINT64);
-	/* VOP_CMP */
+	/* fop_cmp */
 	kstat_named_init(&vsp->ncmp, "ncmp", KSTAT_DATA_UINT64);
-	/* VOP_FRLOCK */
+	/* fop_frlock */
 	kstat_named_init(&vsp->nfrlock, "nfrlock", KSTAT_DATA_UINT64);
-	/* VOP_SPACE */
+	/* fop_space */
 	kstat_named_init(&vsp->nspace, "nspace", KSTAT_DATA_UINT64);
-	/* VOP_REALVP */
+	/* fop_realvp */
 	kstat_named_init(&vsp->nrealvp, "nrealvp", KSTAT_DATA_UINT64);
-	/* VOP_GETPAGE */
+	/* fop_getpage */
 	kstat_named_init(&vsp->ngetpage, "ngetpage", KSTAT_DATA_UINT64);
-	/* VOP_PUTPAGE */
+	/* fop_putpage */
 	kstat_named_init(&vsp->nputpage, "nputpage", KSTAT_DATA_UINT64);
-	/* VOP_MAP */
+	/* fop_map */
 	kstat_named_init(&vsp->nmap, "nmap", KSTAT_DATA_UINT64);
-	/* VOP_ADDMAP */
+	/* fop_addmap */
 	kstat_named_init(&vsp->naddmap, "naddmap", KSTAT_DATA_UINT64);
-	/* VOP_DELMAP */
+	/* fop_delmap */
 	kstat_named_init(&vsp->ndelmap, "ndelmap", KSTAT_DATA_UINT64);
-	/* VOP_POLL */
+	/* fop_poll */
 	kstat_named_init(&vsp->npoll, "npoll", KSTAT_DATA_UINT64);
-	/* VOP_DUMP */
+	/* fop_dump */
 	kstat_named_init(&vsp->ndump, "ndump", KSTAT_DATA_UINT64);
-	/* VOP_PATHCONF */
+	/* fop_pathconf */
 	kstat_named_init(&vsp->npathconf, "npathconf", KSTAT_DATA_UINT64);
-	/* VOP_PAGEIO */
+	/* fop_pageio */
 	kstat_named_init(&vsp->npageio, "npageio", KSTAT_DATA_UINT64);
-	/* VOP_DUMPCTL */
+	/* fop_dumpctl */
 	kstat_named_init(&vsp->ndumpctl, "ndumpctl", KSTAT_DATA_UINT64);
-	/* VOP_DISPOSE */
+	/* fop_dispose */
 	kstat_named_init(&vsp->ndispose, "ndispose", KSTAT_DATA_UINT64);
-	/* VOP_SETSECATTR */
+	/* fop_setsecattr */
 	kstat_named_init(&vsp->nsetsecattr, "nsetsecattr", KSTAT_DATA_UINT64);
-	/* VOP_GETSECATTR */
+	/* fop_getsecattr */
 	kstat_named_init(&vsp->ngetsecattr, "ngetsecattr", KSTAT_DATA_UINT64);
-	/* VOP_SHRLOCK */
+	/* fop_shrlock */
 	kstat_named_init(&vsp->nshrlock, "nshrlock", KSTAT_DATA_UINT64);
-	/* VOP_VNEVENT */
+	/* fop_vnevent */
 	kstat_named_init(&vsp->nvnevent, "nvnevent", KSTAT_DATA_UINT64);
-	/* VOP_REQZCBUF */
+	/* fop_reqzcbuf */
 	kstat_named_init(&vsp->nreqzcbuf, "nreqzcbuf", KSTAT_DATA_UINT64);
-	/* VOP_RETZCBUF */
+	/* fop_retzcbuf */
 	kstat_named_init(&vsp->nretzcbuf, "nretzcbuf", KSTAT_DATA_UINT64);
 
 	return (vsp);
@@ -774,7 +774,7 @@ vn_rdwr(
 	uio.uio_llimit = ulimit;
 
 	/*
-	 * We have to enter the critical region before calling VOP_RWLOCK
+	 * We have to enter the critical region before calling fop_rwlock
 	 * to avoid a deadlock with ufs.
 	 */
 	if (nbl_need_check(vp)) {
@@ -792,18 +792,18 @@ vn_rdwr(
 		}
 	}
 
-	(void) VOP_RWLOCK(vp,
+	(void) fop_rwlock(vp,
 	    rw == UIO_WRITE ? V_WRITELOCK_TRUE : V_WRITELOCK_FALSE, NULL);
 	if (rw == UIO_WRITE) {
 		uio.uio_fmode = FWRITE;
 		uio.uio_extflg = UIO_COPY_DEFAULT;
-		error = VOP_WRITE(vp, &uio, ioflag, cr, NULL);
+		error = fop_write(vp, &uio, ioflag, cr, NULL);
 	} else {
 		uio.uio_fmode = FREAD;
 		uio.uio_extflg = UIO_COPY_CACHED;
-		error = VOP_READ(vp, &uio, ioflag, cr, NULL);
+		error = fop_read(vp, &uio, ioflag, cr, NULL);
 	}
-	VOP_RWUNLOCK(vp,
+	fop_rwunlock(vp,
 	    rw == UIO_WRITE ? V_WRITELOCK_TRUE : V_WRITELOCK_FALSE, NULL);
 	if (residp)
 		*residp = uio.uio_resid;
@@ -817,14 +817,14 @@ done:
 }
 
 /*
- * Release a vnode.  Call VOP_INACTIVE on last reference or
+ * Release a vnode.  Call fop_inactive on last reference or
  * decrement reference count.
  *
  * To avoid race conditions, the v_count is left at 1 for
- * the call to VOP_INACTIVE. This prevents another thread
+ * the call to fop_inactive. This prevents another thread
  * from reclaiming and releasing the vnode *before* the
- * VOP_INACTIVE routine has a chance to destroy the vnode.
- * We can't have more than 1 thread calling VOP_INACTIVE
+ * fop_inactive routine has a chance to destroy the vnode.
+ * We can't have more than 1 thread calling fop_inactive
  * on a vnode.
  */
 void
@@ -834,7 +834,7 @@ vn_rele(vnode_t *vp)
 	mutex_enter(&vp->v_lock);
 	if (vp->v_count == 1) {
 		mutex_exit(&vp->v_lock);
-		VOP_INACTIVE(vp, CRED(), NULL);
+		fop_inactive(vp, CRED(), NULL);
 		return;
 	}
 	vp->v_count--;
@@ -855,7 +855,7 @@ vn_rele_dnlc(vnode_t *vp)
 	if (--vp->v_count_dnlc == 0) {
 		if (vp->v_count == 1) {
 			mutex_exit(&vp->v_lock);
-			VOP_INACTIVE(vp, CRED(), NULL);
+			fop_inactive(vp, CRED(), NULL);
 			return;
 		}
 		vp->v_count--;
@@ -878,7 +878,7 @@ vn_rele_stream(vnode_t *vp)
 	vp->v_stream = NULL;
 	if (vp->v_count == 1) {
 		mutex_exit(&vp->v_lock);
-		VOP_INACTIVE(vp, CRED(), NULL);
+		fop_inactive(vp, CRED(), NULL);
 		return;
 	}
 	vp->v_count--;
@@ -888,11 +888,11 @@ vn_rele_stream(vnode_t *vp)
 static void
 vn_rele_inactive(vnode_t *vp)
 {
-	VOP_INACTIVE(vp, CRED(), NULL);
+	fop_inactive(vp, CRED(), NULL);
 }
 
 /*
- * Like vn_rele() except if we are going to call VOP_INACTIVE() then do it
+ * Like vn_rele() except if we are going to call fop_inactive() then do it
  * asynchronously using a taskq. This can avoid deadlocks caused by re-entering
  * the file system as a result of releasing the vnode. Note, file systems
  * already have to handle the race where the vnode is incremented before the
@@ -1022,7 +1022,7 @@ top:
 
 		if (!(filemode & FOFFMAX) && (vp->v_type == VREG)) {
 			vattr.va_mask = AT_SIZE;
-			if ((error = VOP_GETATTR(vp, &vattr, 0,
+			if ((error = fop_getattr(vp, &vattr, 0,
 			    CRED(), NULL))) {
 				goto out;
 			}
@@ -1059,11 +1059,11 @@ top:
 			if (filemode & FTRUNC) {
 				vnode_t *rvp;
 
-				if (VOP_REALVP(vp, &rvp, NULL) != 0)
+				if (fop_realvp(vp, &rvp, NULL) != 0)
 					rvp = vp;
 				if (rvp->v_filocks != NULL) {
 					vattr.va_mask = AT_MODE;
-					if ((error = VOP_GETATTR(vp,
+					if ((error = fop_getattr(vp,
 					    &vattr, 0, CRED(), NULL)) == 0 &&
 					    MANDLOCK(vp, vattr.va_mode))
 						error = EAGAIN;
@@ -1075,7 +1075,7 @@ top:
 		/*
 		 * Check permissions.
 		 */
-		if (error = VOP_ACCESS(vp, mode, accessflags, CRED(), NULL))
+		if (error = fop_access(vp, mode, accessflags, CRED(), NULL))
 			goto out;
 		/*
 		 * Require FDIRECTORY to return a directory.
@@ -1100,7 +1100,7 @@ top:
 	}
 	if (filemode & FNOLINKS) {
 		vattr.va_mask = AT_NLINK;
-		if ((error = VOP_GETATTR(vp, &vattr, 0, CRED(), NULL))) {
+		if ((error = fop_getattr(vp, &vattr, 0, CRED(), NULL))) {
 			goto out;
 		}
 		if (vattr.va_nlink != 1) {
@@ -1115,16 +1115,16 @@ top:
 	 * However, VSOCK nodes in namefs are supported in order
 	 * to make fattach work for sockets.
 	 *
-	 * XXX This uses VOP_REALVP to distinguish between
-	 * an unopened namefs node (where VOP_REALVP returns a
+	 * XXX This uses fop_realvp to distinguish between
+	 * an unopened namefs node (where fop_realvp returns a
 	 * different VSOCK vnode) and a VSOCK created by vn_create
-	 * in some file system (where VOP_REALVP would never return
+	 * in some file system (where fop_realvp would never return
 	 * a different vnode).
 	 */
 	if (vp->v_type == VSOCK) {
 		struct vnode *nvp;
 
-		error = VOP_REALVP(vp, &nvp, NULL);
+		error = fop_realvp(vp, &nvp, NULL);
 		if (error != 0 || nvp == NULL || nvp == vp ||
 		    nvp->v_type != VSOCK) {
 			error = EOPNOTSUPP;
@@ -1146,7 +1146,7 @@ top:
 		shr_own.sl_id = fd;
 		shr.s_own_len = sizeof (shr_own);
 		shr.s_owner = (caddr_t)&shr_own;
-		error = VOP_SHRLOCK(vp, F_SHARE_NBMAND, &shr, filemode, CRED(),
+		error = fop_shrlock(vp, F_SHARE_NBMAND, &shr, filemode, CRED(),
 		    NULL);
 		if (error)
 			goto out;
@@ -1158,7 +1158,7 @@ top:
 			in_crit = 1;
 
 			vattr.va_mask = AT_SIZE;
-			if (error = VOP_GETATTR(vp, &vattr, 0, CRED(), NULL))
+			if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 				goto out;
 			if (nbl_conflict(vp, NBL_WRITE, 0, vattr.va_size, 0,
 			    NULL)) {
@@ -1171,7 +1171,7 @@ top:
 	/*
 	 * Do opening protocol.
 	 */
-	error = VOP_OPEN(&vp, filemode, CRED(), NULL);
+	error = fop_open(&vp, filemode, CRED(), NULL);
 	if (error)
 		goto out;
 	open_done = 1;
@@ -1182,7 +1182,7 @@ top:
 	if ((filemode & FTRUNC) && !(filemode & FCREAT)) {
 		vattr.va_size = 0;
 		vattr.va_mask = AT_SIZE;
-		if ((error = VOP_SETATTR(vp, &vattr, 0, CRED(), NULL)) != 0)
+		if ((error = fop_setattr(vp, &vattr, 0, CRED(), NULL)) != 0)
 			goto out;
 	}
 out:
@@ -1194,13 +1194,13 @@ out:
 	}
 	if (error) {
 		if (open_done) {
-			(void) VOP_CLOSE(vp, filemode, 1, (offset_t)0, CRED(),
+			(void) fop_close(vp, filemode, 1, (offset_t)0, CRED(),
 			    NULL);
 			open_done = 0;
 			shrlock_done = 0;
 		}
 		if (shrlock_done) {
-			(void) VOP_SHRLOCK(vp, F_UNSHARE, &shr, 0, CRED(),
+			(void) fop_shrlock(vp, F_UNSHARE, &shr, 0, CRED(),
 			    NULL);
 			shrlock_done = 0;
 		}
@@ -1227,7 +1227,7 @@ out:
 
 /*
  * The following two accessor functions are for the NFSv4 server.  Since there
- * is no VOP_OPEN_UP/DOWNGRADE we need a way for the NFS server to keep the
+ * is no fop_open_UP/DOWNGRADE we need a way for the NFS server to keep the
  * vnode open counts correct when a client "upgrades" an open or does an
  * open_downgrade.  In NFS, an upgrade or downgrade can not only change the
  * open mode (add or subtract read or write), but also change the share/deny
@@ -1370,7 +1370,7 @@ top:
 		vsec.vsa_dfaclcnt = 0;
 		vsec.vsa_dfaclentp = NULL;
 		vsec.vsa_mask = VSA_DFACLCNT;
-		error = VOP_GETSECATTR(dvp, &vsec, 0, CRED(), NULL);
+		error = fop_getsecattr(dvp, &vsec, 0, CRED(), NULL);
 		/*
 		 * If error is ENOSYS then treat it as no error
 		 * Don't want to force all file systems to support
@@ -1390,7 +1390,7 @@ top:
 				vap->va_mode &= ~umask;
 
 			/*
-			 * VOP_GETSECATTR() may have allocated memory for
+			 * fop_getsecattr() may have allocated memory for
 			 * ACLs we didn't request, so double-check and
 			 * free it if necessary.
 			 */
@@ -1429,7 +1429,7 @@ top:
 		 * applied, return error.
 		 */
 		vp = *vpp;
-		if (VOP_REALVP(vp, &rvp, NULL) != 0)
+		if (fop_realvp(vp, &rvp, NULL) != 0)
 			rvp = vp;
 		if ((vap->va_mask & AT_SIZE) && nbl_need_check(vp)) {
 			nbl_start_crit(vp, RW_READER);
@@ -1437,7 +1437,7 @@ top:
 		}
 		if (rvp->v_filocks != NULL || rvp->v_shrlocks != NULL) {
 			vattr.va_mask = AT_MODE|AT_SIZE;
-			if (error = VOP_GETATTR(vp, &vattr, 0, CRED(), NULL)) {
+			if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL)) {
 				goto out;
 			}
 			if (MANDLOCK(vp, vattr.va_mode)) {
@@ -1469,12 +1469,12 @@ top:
 		 * If the file is the root of a VFS, we've crossed a
 		 * mount point and the "containing" directory that we
 		 * acquired above (dvp) is irrelevant because it's in
-		 * a different file system.  We apply VOP_CREATE to the
+		 * a different file system.  We apply fop_create to the
 		 * target itself instead of to the containing directory
 		 * and supply a null path name to indicate (conventionally)
 		 * the node itself as the "component" of interest.
 		 *
-		 * The call to VOP_CREATE() is necessary to ensure
+		 * The call to fop_create() is necessary to ensure
 		 * that the appropriate permission checks are made,
 		 * i.e. EISDIR, EACCES, etc.  We already know that vpp
 		 * exists since we are in the else condition where this
@@ -1482,7 +1482,7 @@ top:
 		 */
 		if (vp->v_flag & VROOT) {
 			ASSERT(why != CRMKDIR);
-			error = VOP_CREATE(vp, "", vap, excl, mode, vpp,
+			error = fop_create(vp, "", vap, excl, mode, vpp,
 			    CRED(), flag, NULL, NULL);
 			/*
 			 * If the create succeeded, it will have created a
@@ -1501,7 +1501,7 @@ top:
 		    !(flag & FOFFMAX) &&
 		    (vp->v_type == VREG)) {
 			vattr.va_mask = AT_SIZE;
-			if ((error = VOP_GETATTR(vp, &vattr, 0,
+			if ((error = fop_getattr(vp, &vattr, 0,
 			    CRED(), NULL))) {
 				goto out;
 			}
@@ -1522,13 +1522,13 @@ top:
 			/*
 			 * N.B., if vn_createat() ever requests
 			 * case-insensitive behavior then it will need
-			 * to be passed to VOP_MKDIR().  VOP_CREATE()
+			 * to be passed to fop_mkdir().  fop_create()
 			 * will already get it via "flag"
 			 */
-			error = VOP_MKDIR(dvp, pn.pn_path, vap, vpp, CRED(),
+			error = fop_mkdir(dvp, pn.pn_path, vap, vpp, CRED(),
 			    NULL, 0, NULL);
 		else if (!must_be_dir)
-			error = VOP_CREATE(dvp, pn.pn_path, vap,
+			error = fop_create(dvp, pn.pn_path, vap,
 			    excl, mode, vpp, CRED(), flag, NULL, NULL);
 		else
 			error = ENOTDIR;
@@ -1601,11 +1601,11 @@ top:
 	 * in the same vfs and that it is writeable.
 	 */
 	vattr.va_mask = AT_FSID;
-	if (error = VOP_GETATTR(fvp, &vattr, 0, CRED(), NULL))
+	if (error = fop_getattr(fvp, &vattr, 0, CRED(), NULL))
 		goto out;
 	fsid = vattr.va_fsid;
 	vattr.va_mask = AT_FSID;
-	if (error = VOP_GETATTR(tdvp, &vattr, 0, CRED(), NULL))
+	if (error = fop_getattr(tdvp, &vattr, 0, CRED(), NULL))
 		goto out;
 	if (fsid != vattr.va_fsid) {
 		error = EXDEV;
@@ -1619,7 +1619,7 @@ top:
 	 * Do the link.
 	 */
 	(void) pn_fixslash(&pn);
-	error = VOP_LINK(tdvp, fvp, pn.pn_path, CRED(), NULL, 0);
+	error = fop_link(tdvp, fvp, pn.pn_path, CRED(), NULL, 0);
 out:
 	pn_free(&pn);
 	if (fvp)
@@ -1704,11 +1704,11 @@ top:
 	 */
 	if (fromvp != tovp) {
 		vattr.va_mask = AT_FSID;
-		if (error = VOP_GETATTR(fromvp, &vattr, 0, CRED(), NULL))
+		if (error = fop_getattr(fromvp, &vattr, 0, CRED(), NULL))
 			goto out;
 		fsid = vattr.va_fsid;
 		vattr.va_mask = AT_FSID;
-		if (error = VOP_GETATTR(tovp, &vattr, 0, CRED(), NULL))
+		if (error = fop_getattr(tovp, &vattr, 0, CRED(), NULL))
 			goto out;
 		if (fsid != vattr.va_fsid) {
 			error = EXDEV;
@@ -1754,7 +1754,7 @@ top:
 	 * Do the rename.
 	 */
 	(void) pn_fixslash(&tpn);
-	error = VOP_RENAME(fromvp, fpn.pn_path, tovp, tpn.pn_path, CRED(),
+	error = fop_rename(fromvp, fpn.pn_path, tovp, tpn.pn_path, CRED(),
 	    NULL, 0);
 
 out:
@@ -1914,7 +1914,7 @@ top:
 	 * If there is the possibility of an nbmand share reservation, make
 	 * sure it's okay to remove the file.  Keep a reference to the
 	 * vnode, so that we can exit the nbl critical region after
-	 * calling VOP_REMOVE.
+	 * calling fop_remove.
 	 * If there is no possibility of an nbmand share reservation,
 	 * release the vnode reference now.  Filesystems like NFS may
 	 * behave differently if there is an extra reference, so get rid of
@@ -1948,7 +1948,7 @@ top:
 			cwd = PTOU(pp)->u_cdir;
 			VN_HOLD(cwd);
 			mutex_exit(&pp->p_lock);
-			error = VOP_RMDIR(dvp, pn.pn_path, cwd, CRED(),
+			error = fop_rmdir(dvp, pn.pn_path, cwd, CRED(),
 			    NULL, 0);
 			VN_RELE(cwd);
 		}
@@ -1956,7 +1956,7 @@ top:
 		/*
 		 * Unlink(2) can be applied to anything.
 		 */
-		error = VOP_REMOVE(dvp, pn.pn_path, CRED(), NULL, 0);
+		error = fop_remove(dvp, pn.pn_path, CRED(), NULL, 0);
 	}
 
 out:
@@ -1984,9 +1984,9 @@ vn_compare(vnode_t *vp1, vnode_t *vp2)
 {
 	vnode_t *realvp;
 
-	if (vp1 != NULL && VOP_REALVP(vp1, &realvp, NULL) == 0)
+	if (vp1 != NULL && fop_realvp(vp1, &realvp, NULL) == 0)
 		vp1 = realvp;
-	if (vp2 != NULL && VOP_REALVP(vp2, &realvp, NULL) == 0)
+	if (vp2 != NULL && fop_realvp(vp2, &realvp, NULL) == 0)
 		vp2 = realvp;
 	return (VN_CMP(vp1, vp2));
 }
@@ -2518,7 +2518,7 @@ vnevent_support(vnode_t *vp, caller_context_t *ct)
 	if (vp == NULL)
 		return (EINVAL);
 
-	return (VOP_VNEVENT(vp, VE_SUPPORT, NULL, NULL, ct));
+	return (fop_vnevent(vp, VE_SUPPORT, NULL, NULL, ct));
 }
 
 void
@@ -2527,7 +2527,7 @@ vnevent_rename_src(vnode_t *vp, vnode_t *dvp, char *name, caller_context_t *ct)
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_RENAME_SRC, dvp, name, ct);
+	(void) fop_vnevent(vp, VE_RENAME_SRC, dvp, name, ct);
 }
 
 void
@@ -2537,7 +2537,7 @@ vnevent_rename_dest(vnode_t *vp, vnode_t *dvp, char *name,
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_RENAME_DEST, dvp, name, ct);
+	(void) fop_vnevent(vp, VE_RENAME_DEST, dvp, name, ct);
 }
 
 void
@@ -2546,7 +2546,7 @@ vnevent_rename_dest_dir(vnode_t *vp, caller_context_t *ct)
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_RENAME_DEST_DIR, NULL, NULL, ct);
+	(void) fop_vnevent(vp, VE_RENAME_DEST_DIR, NULL, NULL, ct);
 }
 
 void
@@ -2555,7 +2555,7 @@ vnevent_remove(vnode_t *vp, vnode_t *dvp, char *name, caller_context_t *ct)
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_REMOVE, dvp, name, ct);
+	(void) fop_vnevent(vp, VE_REMOVE, dvp, name, ct);
 }
 
 void
@@ -2564,7 +2564,7 @@ vnevent_rmdir(vnode_t *vp, vnode_t *dvp, char *name, caller_context_t *ct)
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_RMDIR, dvp, name, ct);
+	(void) fop_vnevent(vp, VE_RMDIR, dvp, name, ct);
 }
 
 void
@@ -2574,7 +2574,7 @@ vnevent_pre_rename_src(vnode_t *vp, vnode_t *dvp, char *name,
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_PRE_RENAME_SRC, dvp, name, ct);
+	(void) fop_vnevent(vp, VE_PRE_RENAME_SRC, dvp, name, ct);
 }
 
 void
@@ -2584,7 +2584,7 @@ vnevent_pre_rename_dest(vnode_t *vp, vnode_t *dvp, char *name,
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_PRE_RENAME_DEST, dvp, name, ct);
+	(void) fop_vnevent(vp, VE_PRE_RENAME_DEST, dvp, name, ct);
 }
 
 void
@@ -2594,7 +2594,7 @@ vnevent_pre_rename_dest_dir(vnode_t *vp, vnode_t *nvp, char *name,
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_PRE_RENAME_DEST_DIR, nvp, name, ct);
+	(void) fop_vnevent(vp, VE_PRE_RENAME_DEST_DIR, nvp, name, ct);
 }
 
 void
@@ -2603,7 +2603,7 @@ vnevent_create(vnode_t *vp, caller_context_t *ct)
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_CREATE, NULL, NULL, ct);
+	(void) fop_vnevent(vp, VE_CREATE, NULL, NULL, ct);
 }
 
 void
@@ -2612,7 +2612,7 @@ vnevent_link(vnode_t *vp, caller_context_t *ct)
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_LINK, NULL, NULL, ct);
+	(void) fop_vnevent(vp, VE_LINK, NULL, NULL, ct);
 }
 
 void
@@ -2621,7 +2621,7 @@ vnevent_mountedover(vnode_t *vp, caller_context_t *ct)
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_MOUNTEDOVER, NULL, NULL, ct);
+	(void) fop_vnevent(vp, VE_MOUNTEDOVER, NULL, NULL, ct);
 }
 
 void
@@ -2630,7 +2630,7 @@ vnevent_truncate(vnode_t *vp, caller_context_t *ct)
 	if (vp == NULL || vp->v_femhead == NULL) {
 		return;
 	}
-	(void) VOP_VNEVENT(vp, VE_TRUNCATE, NULL, NULL, ct);
+	(void) fop_vnevent(vp, VE_TRUNCATE, NULL, NULL, ct);
 }
 
 /*
@@ -2678,7 +2678,7 @@ vn_can_change_zones(vnode_t *vp)
 	/*
 	 * We always want to look at the underlying vnode if there is one.
 	 */
-	if (VOP_REALVP(vp, &rvp, NULL) != 0)
+	if (fop_realvp(vp, &rvp, NULL) != 0)
 		rvp = vp;
 	/*
 	 * Some pseudo filesystems (including doorfs) don't actually register
@@ -2722,7 +2722,7 @@ vn_in_dnlc(vnode_t *vp)
 /*
  * vn_has_other_opens() checks whether a particular file is opened by more than
  * just the caller and whether the open is for read and/or write.
- * This routine is for calling after the caller has already called VOP_OPEN()
+ * This routine is for calling after the caller has already called fop_open()
  * and the caller wishes to know if they are the only one with it open for
  * the mode(s) specified.
  *
@@ -3127,18 +3127,18 @@ vn_copypath(struct vnode *src, struct vnode *dst)
  * XXX Private interface for segvn routines that handle vnode
  * large page segments.
  *
- * return 1 if vp's file system VOP_PAGEIO() implementation
- * can be safely used instead of VOP_GETPAGE() for handling
- * pagefaults against regular non swap files. VOP_PAGEIO()
+ * return 1 if vp's file system fop_pageio() implementation
+ * can be safely used instead of fop_getpage() for handling
+ * pagefaults against regular non swap files. fop_pageio()
  * interface is considered safe here if its implementation
- * is very close to VOP_GETPAGE() implementation.
+ * is very close to fop_getpage() implementation.
  * e.g. It zero's out the part of the page beyond EOF. Doesn't
  * panic if there're file holes but instead returns an error.
  * Doesn't assume file won't be changed by user writes, etc.
  *
  * return 0 otherwise.
  *
- * For now allow segvn to only use VOP_PAGEIO() with ufs and nfs.
+ * For now allow segvn to only use fop_pageio() with ufs and nfs.
  */
 int
 vn_vmpss_usepageio(vnode_t *vp)
@@ -3360,7 +3360,7 @@ fop_getattr(
 
 	/*
 	 * We're only allowed to skip the ACL check iff we used a 32 bit
-	 * ACE mask with VOP_ACCESS() to determine permissions.
+	 * ACE mask with fop_access() to determine permissions.
 	 */
 	if ((flags & ATTR_NOACLCHECK) &&
 	    vfs_has_feature(vp->v_vfsp, VFSFT_ACEMASKONACCESS) == 0) {
@@ -3393,7 +3393,7 @@ fop_setattr(
 
 	/*
 	 * We're only allowed to skip the ACL check iff we used a 32 bit
-	 * ACE mask with VOP_ACCESS() to determine permissions.
+	 * ACE mask with fop_access() to determine permissions.
 	 */
 	if ((flags & ATTR_NOACLCHECK) &&
 	    vfs_has_feature(vp->v_vfsp, VFSFT_ACEMASKONACCESS) == 0) {
@@ -4176,7 +4176,7 @@ fop_setsecattr(
 
 	/*
 	 * We're only allowed to skip the ACL check iff we used a 32 bit
-	 * ACE mask with VOP_ACCESS() to determine permissions.
+	 * ACE mask with fop_access() to determine permissions.
 	 */
 	if ((flag & ATTR_NOACLCHECK) &&
 	    vfs_has_feature(vp->v_vfsp, VFSFT_ACEMASKONACCESS) == 0) {
@@ -4199,7 +4199,7 @@ fop_getsecattr(
 
 	/*
 	 * We're only allowed to skip the ACL check iff we used a 32 bit
-	 * ACE mask with VOP_ACCESS() to determine permissions.
+	 * ACE mask with fop_access() to determine permissions.
 	 */
 	if ((flag & ATTR_NOACLCHECK) &&
 	    vfs_has_feature(vp->v_vfsp, VFSFT_ACEMASKONACCESS) == 0) {
@@ -4577,7 +4577,7 @@ vn_is_reparse(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 	ASSERT(xoap);
 	XVA_SET_REQ(&xvattr, XAT_REPARSE);
 
-	if (VOP_GETATTR(vp, &xvattr.xva_vattr, 0, cr, ct))
+	if (fop_getattr(vp, &xvattr.xva_vattr, 0, cr, ct))
 		return (B_FALSE);
 
 	if ((!(xvattr.xva_vattr.va_mask & AT_XVATTR)) ||

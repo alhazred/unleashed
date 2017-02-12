@@ -212,7 +212,7 @@ pn_getsymlink(vnode_t *vp, struct pathname *pnp, cred_t *crp)
 	auio.uio_segflg = UIO_SYSSPACE;
 	auio.uio_extflg = UIO_COPY_CACHED;
 	auio.uio_resid = pnp->pn_bufsize;
-	if ((error = VOP_READLINK(vp, &auio, crp, NULL)) == 0) {
+	if ((error = fop_readlink(vp, &auio, crp, NULL)) == 0) {
 		pnp->pn_pathlen = pnp->pn_bufsize - auio.uio_resid;
 		if (pnp->pn_pathlen == pnp->pn_bufsize)
 			error = ENAMETOOLONG;

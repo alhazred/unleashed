@@ -289,7 +289,7 @@ cnopen(dev_t *dev, int flag, int state, struct cred *cred)
 	 * Enable virtual console I/O for console logging if needed.
 	 */
 	if (vsconsvp != NULL && vsconsvp->v_stream == NULL) {
-		if (VOP_OPEN(&vsconsvp, FREAD | FWRITE, cred, NULL) != 0) {
+		if (fop_open(&vsconsvp, FREAD | FWRITE, cred, NULL) != 0) {
 			cmn_err(CE_WARN, "cnopen: failed to open vsconsvp "
 			    "for virtual console logging");
 		}
@@ -322,7 +322,7 @@ cnopen(dev_t *dev, int flag, int state, struct cred *cred)
 			    LOG_HIWAT / LOG_MSGSIZE, TASKQ_PREPOPULATE);
 	}
 
-	if ((err = VOP_OPEN(&vp, flag, cred, NULL)) != 0)
+	if ((err = fop_open(&vp, flag, cred, NULL)) != 0)
 		return (err);
 
 	/*
@@ -335,7 +335,7 @@ cnopen(dev_t *dev, int flag, int state, struct cred *cred)
 		 * whilst we were in the middle of the open.
 		 */
 		if (rconsvp == NULL) {
-			(void) VOP_CLOSE(vp, flag, 1, (offset_t)0, cred, NULL);
+			(void) fop_close(vp, flag, 1, (offset_t)0, cred, NULL);
 			return (0);
 		}
 		cmn_err(CE_PANIC, "cnopen: cloned open");
@@ -366,7 +366,7 @@ cnclose(dev_t dev, int flag, int state, struct cred *cred)
 		return (0);
 
 	while ((rconsopen != 0) && ((vp = rconsvp) != NULL)) {
-		err = VOP_CLOSE(vp, flag, 1, (offset_t)0, cred, NULL);
+		err = fop_close(vp, flag, 1, (offset_t)0, cred, NULL);
 		if (!err) {
 			rconsopen--;
 		}

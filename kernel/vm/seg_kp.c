@@ -516,7 +516,7 @@ segkp_get_internal(
 			 * Create a page with the specified identity.  The
 			 * page is returned with the "shared" lock held.
 			 */
-			err = VOP_GETPAGE(vp, (offset_t)off, PAGESIZE,
+			err = fop_getpage(vp, (offset_t)off, PAGESIZE,
 			    NULL, pl, PAGESIZE, seg, va, S_CREATE,
 			    kcred, NULL);
 			if (err) {
@@ -1109,7 +1109,7 @@ segkp_load(
 		 * The returned page list will have exactly one entry,
 		 * which is returned to us already kept.
 		 */
-		err = VOP_GETPAGE(vp, (offset_t)off, PAGESIZE, NULL,
+		err = fop_getpage(vp, (offset_t)off, PAGESIZE, NULL,
 		    pl, PAGESIZE, seg, va, S_READ, kcred, NULL);
 
 		if (err) {
@@ -1219,7 +1219,7 @@ segkp_unlock(
 			 * Want most powerful credentials we can get so
 			 * use kcred.
 			 */
-			(void) VOP_PUTPAGE(vp, (offset_t)off, PAGESIZE,
+			(void) fop_putpage(vp, (offset_t)off, PAGESIZE,
 			    B_ASYNC | B_FREE, kcred, NULL);
 			VN_RELE(vp);
 		} else {

@@ -398,7 +398,7 @@ socket_vop_access(struct vnode *vp, int mode, int flags, struct cred *cr,
 
 	if (!SOCK_IS_NONSTR(so)) {
 		ASSERT(so->so_sockparams->sp_sdev_info.sd_vnode != NULL);
-		return (VOP_ACCESS(so->so_sockparams->sp_sdev_info.sd_vnode,
+		return (fop_access(so->so_sockparams->sp_sdev_info.sd_vnode,
 		    mode, flags, cr, NULL));
 	}
 	return (0);

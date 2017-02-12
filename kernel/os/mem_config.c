@@ -2095,7 +2095,7 @@ delete_memory_thread(caddr_t amhp)
 				offset = pp->p_offset;
 				VN_HOLD(vp);
 				page_unlock(pp);
-				(void) VOP_PUTPAGE(vp, offset, PAGESIZE,
+				(void) fop_putpage(vp, offset, PAGESIZE,
 				    B_INVAL|B_FORCE, kcred, NULL);
 				VN_RELE(vp);
 #ifdef MEM_DEL_STATS

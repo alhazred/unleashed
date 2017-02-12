@@ -68,7 +68,7 @@ ctfs_create_tmplnode(vnode_t *pvp)
 }
 
 /*
- * ctfs_tmpl_open - VOP_OPEN entry point
+ * ctfs_tmpl_open - fop_open entry point
  *
  * Just ensures the right mode bits are set.
  */
@@ -83,7 +83,7 @@ ctfs_tmpl_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 }
 
 /*
- * ctfs_tmpl_getattr - VOP_GETATTR entry point
+ * ctfs_tmpl_getattr - fop_getattr entry point
  */
 /* ARGSUSED */
 static int
@@ -107,7 +107,7 @@ ctfs_tmpl_getattr(
 }
 
 /*
- * ctfs_tmpl_ioctl - VOP_IOCTL entry point
+ * ctfs_tmpl_ioctl - fop_ioctl entry point
  *
  * All the ct_tmpl_*(3contract) interfaces point here.
  */
@@ -172,7 +172,7 @@ ctfs_tmpl_ioctl(
 }
 
 /*
- * ctfs_tmpl_inactive - VOP_INACTIVE entry point
+ * ctfs_tmpl_inactive - fop_inactive entry point
  */
 /* ARGSUSED */
 static void

@@ -143,7 +143,7 @@ specvp(
 	 * been required if the snode is in the cache.
 	 */
 	va.va_mask = AT_FSID | AT_TIMES;
-	rc = VOP_GETATTR(vp, &va, 0, cr, NULL);	/* XXX may block! */
+	rc = fop_getattr(vp, &va, 0, cr, NULL);	/* XXX may block! */
 
 	mutex_enter(&stable_lock);
 	if ((sp = sfind(dev, type, vp)) == NULL) {

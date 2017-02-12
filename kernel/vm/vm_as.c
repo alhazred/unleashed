@@ -1572,7 +1572,7 @@ again:
 	}
 
 	va.va_mask = AT_SIZE;
-	if (VOP_GETATTR(vn_a->vp, &va, ATTR_HINT, vn_a->cred, NULL) != 0) {
+	if (fop_getattr(vn_a->vp, &va, ATTR_HINT, vn_a->cred, NULL) != 0) {
 		szcvec = 0;
 		goto again;
 	}

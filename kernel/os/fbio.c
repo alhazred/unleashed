@@ -105,7 +105,7 @@ fbread(vnode_t *vp, offset_t off, uint_t len, enum seg_rw rw,
 
 /*
  * Similar to fbread() but we call segmap_pagecreate instead of using
- * segmap_fault for SOFTLOCK to create the pages without using VOP_GETPAGE
+ * segmap_fault for SOFTLOCK to create the pages without using fop_getpage
  * and then we zero up to the length rounded to a page boundary.
  * XXX - this won't work right when bsize < PAGESIZE!!!
  */

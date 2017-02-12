@@ -2721,11 +2721,11 @@ rfs_publicfh_mclookup(char *p, vnode_t *dvp, cred_t *cr, vnode_t **vpp,
 		do {
 			/*
 			 * *vpp may be an AutoFS node, so we perform
-			 * a VOP_ACCESS() to trigger the mount of the intended
+			 * a fop_access() to trigger the mount of the intended
 			 * filesystem, so we can perform the lookup in the
 			 * intended filesystem.
 			 */
-			(void) VOP_ACCESS(*vpp, 0, 0, cr, NULL);
+			(void) fop_access(*vpp, 0, 0, cr, NULL);
 
 			/*
 			 * If vnode is covered, get the
@@ -2739,7 +2739,7 @@ rfs_publicfh_mclookup(char *p, vnode_t *dvp, cred_t *cr, vnode_t **vpp,
 				}
 			}
 
-			if (VOP_REALVP(*vpp, &realvp, NULL) == 0 &&
+			if (fop_realvp(*vpp, &realvp, NULL) == 0 &&
 			    realvp != *vpp) {
 				/*
 				 * If realvp is different from *vpp
@@ -2775,7 +2775,7 @@ rfs_publicfh_mclookup(char *p, vnode_t *dvp, cred_t *cr, vnode_t **vpp,
 			}
 		}
 
-		if (VOP_REALVP(mc_dvp, &realvp, NULL) == 0 &&
+		if (fop_realvp(mc_dvp, &realvp, NULL) == 0 &&
 		    realvp != mc_dvp) {
 			/*
 			 * *vpp is a file, obtain realvp of the parent
@@ -3193,7 +3193,7 @@ hanfsv4_failover(void)
 
 /*
  * Callback function to return the loaned buffers.
- * Calls VOP_RETZCBUF() only after all uio_iov[]
+ * Calls fop_retzcbuf() only after all uio_iov[]
  * buffers are returned. nu_ref maintains the count.
  */
 void
@@ -3205,14 +3205,14 @@ rfs_free_xuio(void *free_arg)
 	ref = atomic_dec_uint_nv(&nfsuiop->nu_ref);
 
 	/*
-	 * Call VOP_RETZCBUF() only when all the iov buffers
+	 * Call fop_retzcbuf() only when all the iov buffers
 	 * are sent OTW.
 	 */
 	if (ref != 0)
 		return;
 
 	if (((uio_t *)nfsuiop)->uio_extflg & UIO_XUIO) {
-		(void) VOP_RETZCBUF(nfsuiop->nu_vp, (xuio_t *)free_arg, NULL,
+		(void) fop_retzcbuf(nfsuiop->nu_vp, (xuio_t *)free_arg, NULL,
 		    NULL);
 		VN_RELE(nfsuiop->nu_vp);
 	}

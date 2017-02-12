@@ -91,7 +91,7 @@ ctfs_create_cdirnode(vnode_t *pvp, contract_t *ct)
 }
 
 /*
- * ctfs_cdir_getattr - VOP_GETATTR entry point
+ * ctfs_cdir_getattr - fop_getattr entry point
  */
 /* ARGSUSED */
 static int
@@ -130,7 +130,7 @@ ctfs_cdir_do_inode(vnode_t *vp, int index)
 }
 
 /*
- * ctfs_cdir_inactive - VOP_INACTIVE entry point
+ * ctfs_cdir_inactive - fop_inactive entry point
  */
 /* ARGSUSED */
 static void

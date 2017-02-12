@@ -3661,7 +3661,7 @@ kobj_close(intptr_t descr)
 
 	if (_modrootloaded) {
 		struct vnode *vp = (struct vnode *)descr;
-		(void) VOP_CLOSE(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
 		VN_RELE(vp);
 	} else
 		(void) kobj_boot_close((int)descr);
@@ -3676,7 +3676,7 @@ kobj_fstat(intptr_t descr, struct bootstat *buf)
 	if (_modrootloaded) {
 		vattr_t vattr;
 		struct vnode *vp = (struct vnode *)descr;
-		if (VOP_GETATTR(vp, &vattr, 0, kcred, NULL) != 0)
+		if (fop_getattr(vp, &vattr, 0, kcred, NULL) != 0)
 			return (-1);
 
 		/*
@@ -3823,7 +3823,7 @@ kobj_read_file(struct _buf *file, char *buf, uint_t size, uint_t off)
 		ssize_t resid;
 		int err = 0;
 
-		if (VOP_GETATTR(vp, &vattr, 0, kcred, NULL) != 0)
+		if (fop_getattr(vp, &vattr, 0, kcred, NULL) != 0)
 			return (-1);
 
 		file->_dbuf = kobj_alloc(vattr.va_size, KM_WAIT|KM_TMP);

@@ -301,7 +301,7 @@ fsflush_do_pages()
 
 			page_unlock(pp);
 
-			(void) VOP_PUTPAGE(vp, offset, PAGESIZE, B_ASYNC,
+			(void) fop_putpage(vp, offset, PAGESIZE, B_ASYNC,
 			    kcred, NULL);
 
 			VN_RELE(vp);

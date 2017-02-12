@@ -405,7 +405,7 @@ hsfs_unmount(
 	mutex_exit(&hs_mounttab_lock);
 
 	hsfs_fini_kstats(fsp);
-	(void) VOP_CLOSE(fsp->hsfs_devvp, FREAD, 1, (offset_t)0, cr, NULL);
+	(void) fop_close(fsp->hsfs_devvp, FREAD, 1, (offset_t)0, cr, NULL);
 	VN_RELE(fsp->hsfs_devvp);
 	/* free path table space */
 	if (fsp->hsfs_ptbl != NULL)
@@ -624,7 +624,7 @@ hs_mountfs(
 	/*
 	 * Open the target device (file) for read only.
 	 */
-	if (error = VOP_OPEN(&devvp, FREAD, cr, NULL)) {
+	if (error = fop_open(&devvp, FREAD, cr, NULL)) {
 		VN_RELE(devvp);
 		return (error);
 	}
@@ -639,7 +639,7 @@ hs_mountfs(
 	}
 
 	vap.va_mask = AT_SIZE;
-	if ((error = VOP_GETATTR(devvp, &vap, ATTR_COMM, cr, NULL)) != 0) {
+	if ((error = fop_getattr(devvp, &vap, ATTR_COMM, cr, NULL)) != 0) {
 		cmn_err(CE_NOTE, "Cannot get attributes of the CD-ROM driver");
 		goto cleanup;
 	}
@@ -935,7 +935,7 @@ hs_mountfs(
 	return (0);
 
 cleanup:
-	(void) VOP_CLOSE(devvp, FREAD, 1, (offset_t)0, cr, NULL);
+	(void) fop_close(devvp, FREAD, 1, (offset_t)0, cr, NULL);
 	VN_RELE(devvp);
 	if (fsp)
 		kmem_free(fsp, sizeof (*fsp));
@@ -1381,11 +1381,11 @@ hs_getmdev(struct vfs *vfsp, char *fspec, int flags, dev_t *pdev, mode_t *mode,
 	/*
 	 * Can we read from the device/file ?
 	 */
-	if ((error = VOP_ACCESS(svp, VREAD, 0, cr, NULL)) != 0)
+	if ((error = fop_access(svp, VREAD, 0, cr, NULL)) != 0)
 		goto out;
 
 	vap.va_mask = AT_MODE;		/* get protection mode */
-	(void) VOP_GETATTR(bvp, &vap, 0, CRED(), NULL);
+	(void) fop_getattr(bvp, &vap, 0, CRED(), NULL);
 	*mode = vap.va_mode;
 
 	dev = *pdev = bvp->v_rdev;

@@ -428,7 +428,7 @@ fifovp(vnode_t *vp, cred_t *crp)
 	 * can use realvp for communication.
 	 */
 
-	if (VOP_REALVP(vp, &rvp, NULL) == 0)
+	if (fop_realvp(vp, &rvp, NULL) == 0)
 			vp = rvp;
 
 	fnp->fn_realvp	= vp;
@@ -449,7 +449,7 @@ fifovp(vnode_t *vp, cred_t *crp)
 	 * initialize the times from vp.
 	 */
 	va.va_mask = AT_TIMES;
-	if (VOP_GETATTR(vp, &va, 0, crp, NULL) == 0) {
+	if (fop_getattr(vp, &va, 0, crp, NULL) == 0) {
 		fnp->fn_atime = va.va_atime.tv_sec;
 		fnp->fn_mtime = va.va_mtime.tv_sec;
 		fnp->fn_ctime = va.va_ctime.tv_sec;

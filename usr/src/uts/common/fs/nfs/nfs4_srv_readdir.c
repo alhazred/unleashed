@@ -77,12 +77,12 @@
  *	sizeof eof bool  (4 bytes)
  *
  * RFS4_MINLEN_RDDIR_BUF: minimum length of buffer server will provide to
- *	VOP_READDIR.  Its value is the size of the maximum possible dirent
+ *	fop_readdir.  Its value is the size of the maximum possible dirent
  *	for solaris.  The DIRENT64_RECLEN macro returns	the size of dirent
  *	required for a given name length.  MAXNAMELEN is the maximum
  *	filename length allowed in Solaris.  The first two DIRENT64_RECLEN()
  *	macros are to allow for . and .. entries -- just a minor tweak to try
- *	and guarantee that buffer we give to VOP_READDIR will be large enough
+ *	and guarantee that buffer we give to fop_readdir will be large enough
  *	to hold ., .., and the largest possible solaris dirent64.
  */
 #define	RFS4_MINLEN_ENTRY4 36
@@ -117,7 +117,7 @@ nfs4_readdir_getvp(vnode_t *dvp, char *d_name, vnode_t **vpp,
 
 	*vpp = vp = NULL;
 
-	if (error = VOP_LOOKUP(dvp, d_name, &vp, NULL, 0, NULL, cs->cr,
+	if (error = fop_lookup(dvp, d_name, &vp, NULL, 0, NULL, cs->cr,
 	    NULL, NULL, NULL))
 		return (error);
 
@@ -171,11 +171,11 @@ nfs4_readdir_getvp(vnode_t *dvp, char *d_name, vnode_t **vpp,
 	fid.fid_len = MAXFIDSZ;
 
 	/*
-	 * If VOP_FID not supported by underlying fs (mntfs, procfs,
+	 * If fop_fid not supported by underlying fs (mntfs, procfs,
 	 * etc.), then return attrs for stub instead of VROOT object.
 	 * If it fails for any other reason, then return the error.
 	 */
-	if (error = VOP_FID(vp, &fid, NULL)) {
+	if (error = fop_fid(vp, &fid, NULL)) {
 		if (ismntpt == 0) {
 			VN_RELE(vp);
 			return (error);
@@ -255,14 +255,14 @@ rfs4_get_pc_encode(vnode_t *vp, rfs4_pc_encode_t *pce, bitmap4 ar, cred_t *cr)
 
 	if (ar & FATTR4_MAXFILESIZE_MASK) {
 		/* Maximum File Size */
-		error = VOP_PATHCONF(vp, _PC_FILESIZEBITS, &pc_val, cr, NULL);
+		error = fop_pathconf(vp, _PC_FILESIZEBITS, &pc_val, cr, NULL);
 		if (error)
 			return (error);
 
 		/*
 		 * If the underlying file system does not support
 		 * _PC_FILESIZEBITS, return a reasonable default. Note that
-		 * error code on VOP_PATHCONF will be 0, even if the underlying
+		 * error code on fop_pathconf will be 0, even if the underlying
 		 * file system does not support _PC_FILESIZEBITS.
 		 */
 		if (pc_val == (ulong_t)-1) {
@@ -277,7 +277,7 @@ rfs4_get_pc_encode(vnode_t *vp, rfs4_pc_encode_t *pce, bitmap4 ar, cred_t *cr)
 
 	if (ar & FATTR4_MAXLINK_MASK) {
 		/* Maximum Link Count */
-		error = VOP_PATHCONF(vp, _PC_LINK_MAX, &pc_val, cr, NULL);
+		error = fop_pathconf(vp, _PC_LINK_MAX, &pc_val, cr, NULL);
 		if (error)
 			return (error);
 
@@ -286,7 +286,7 @@ rfs4_get_pc_encode(vnode_t *vp, rfs4_pc_encode_t *pce, bitmap4 ar, cred_t *cr)
 
 	if (ar & FATTR4_MAXNAME_MASK) {
 		/* Maximum Name Length */
-		error = VOP_PATHCONF(vp, _PC_NAME_MAX, &pc_val, cr, NULL);
+		error = fop_pathconf(vp, _PC_NAME_MAX, &pc_val, cr, NULL);
 		if (error)
 			return (error);
 
@@ -482,7 +482,7 @@ rfs4_op_readdir(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 		goto out;
 	}
 
-	error = VOP_ACCESS(dvp, VREAD, 0, cs->cr, NULL);
+	error = fop_access(dvp, VREAD, 0, cs->cr, NULL);
 	if (error) {
 		*cs->statusp = resp->status = puterrno4(error);
 		goto out;
@@ -651,11 +651,11 @@ readagain:
 	uio.uio_loffset = rddir_next_offset;
 	uio.uio_resid = rddir_data_len;
 
-	(void) VOP_RWLOCK(dvp, V_WRITELOCK_FALSE, NULL);
+	(void) fop_rwlock(dvp, V_WRITELOCK_FALSE, NULL);
 
-	error = VOP_READDIR(dvp, &uio, cs->cr, &iseofdir, NULL, 0);
+	error = fop_readdir(dvp, &uio, cs->cr, &iseofdir, NULL, 0);
 
-	VOP_RWUNLOCK(dvp, V_WRITELOCK_FALSE, NULL);
+	fop_rwunlock(dvp, V_WRITELOCK_FALSE, NULL);
 
 	if (error) {
 		kmem_free((caddr_t)rddir_data, rddir_data_len);
@@ -714,7 +714,7 @@ readagain:
 
 		/*
 		 * Only if the client requested attributes...
-		 * If the VOP_LOOKUP fails ENOENT, then skip this entry
+		 * If the fop_lookup fails ENOENT, then skip this entry
 		 * for the readdir response.  If there was another error,
 		 * then set the rddirattr_error and the error will be
 		 * encoded later in the "attributes" section.
@@ -826,12 +826,12 @@ reencode_attrs:
 
 		/*
 		 * Attributes requested?
-		 * Gather up the attribute info and the previous VOP_LOOKUP()
-		 * succeeded; if an error occurs on the VOP_GETATTR() then
+		 * Gather up the attribute info and the previous fop_lookup()
+		 * succeeded; if an error occurs on the fop_getattr() then
 		 * return just the error (again if it is requested).
-		 * Note that the previous VOP_LOOKUP() could have failed
+		 * Note that the previous fop_lookup() could have failed
 		 * itself which leaves this code without anything for
-		 * a VOP_GETATTR().
+		 * a fop_getattr().
 		 * Also note that the readdir_attr_error is left in the
 		 * encoding mask if requested and so is the mounted_on_fileid.
 		 */
@@ -842,7 +842,7 @@ reencode_attrs:
 			} else {
 				va.va_mask = AT_ALL;
 				rddirattr_error =
-				    VOP_GETATTR(vp, &va, 0, cs->cr, NULL);
+				    fop_getattr(vp, &va, 0, cs->cr, NULL);
 				if (rddirattr_error) {
 					ae = ar & (FATTR4_RDATTR_ERROR_MASK |
 					    FATTR4_MOUNTED_ON_FILEID_MASK);
@@ -946,11 +946,11 @@ reencode_attrs:
 					    VFS_XATTR)) {
 						isit = FALSE;
 					} else {
-						sattr_error = VOP_PATHCONF(vp,
+						sattr_error = fop_pathconf(vp,
 						    _PC_SATTR_EXISTS,
 						    &pc_val, cs->cr, NULL);
 						if (sattr_error || pc_val == 0)
-							(void) VOP_PATHCONF(vp,
+							(void) fop_pathconf(vp,
 							    _PC_XATTR_EXISTS,
 							    &pc_val,
 							    cs->cr, NULL);
@@ -1039,7 +1039,7 @@ reencode_attrs:
 				if (ae & FATTR4_CHOWN_RESTRICTED_MASK) {
 					uint_t isit;
 					pc_val = FALSE;
-					(void) VOP_PATHCONF(vp,
+					(void) fop_pathconf(vp,
 					    _PC_CHOWN_RESTRICTED,
 					    &pc_val, cs->cr, NULL);
 					isit = (pc_val ? TRUE : FALSE);
@@ -1499,7 +1499,7 @@ reencode_attrs:
 	}
 
 	/*
-	 * Check for the case that another VOP_READDIR() has to be done.
+	 * Check for the case that another fop_readdir() has to be done.
 	 * - no space encoding error
 	 * - no entry successfully encoded
 	 * - still more directory to read

@@ -2033,7 +2033,7 @@ pcfs_space(
 			return (EINVAL);
 		vattr.va_mask = AT_SIZE;
 		vattr.va_size = bfp->l_start;
-		error = VOP_SETATTR(vp, (vattr_t *)&vattr, 0, cr, ct);
+		error = fop_setattr(vp, (vattr_t *)&vattr, 0, cr, ct);
 	}
 	return (error);
 }

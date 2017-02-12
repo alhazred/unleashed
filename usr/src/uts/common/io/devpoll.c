@@ -386,15 +386,15 @@ repoll:
 			 * XXX - pollrelock() logic needs to know which
 			 * which pollcache lock to grab. It'd be a
 			 * cleaner solution if we could pass pcp as
-			 * an arguement in VOP_POLL interface instead
+			 * an arguement in fop_poll interface instead
 			 * of implicitly passing it using thread_t
-			 * struct. On the other hand, changing VOP_POLL
+			 * struct. On the other hand, changing fop_poll
 			 * interface will require all driver/file system
 			 * poll routine to change. May want to revisit
 			 * the tradeoff later.
 			 */
 			curthread->t_pollcache = pcp;
-			error = VOP_POLL(fp->f_vnode, pdp->pd_events, 0,
+			error = fop_poll(fp->f_vnode, pdp->pd_events, 0,
 			    &revent, &php, NULL);
 			curthread->t_pollcache = NULL;
 			releasef(fd);
@@ -471,7 +471,7 @@ repoll:
 
 					/*
 					 * If a call to pollunlock() fails
-					 * during VOP_POLL, skip over the fd
+					 * during fop_poll, skip over the fd
 					 * and continue polling.
 					 *
 					 * Otherwise, report that there is an
@@ -534,7 +534,7 @@ repoll:
 					pdp->pd_php = php;
 					/*
 					 * An event of interest may have
-					 * arrived between the VOP_POLL() and
+					 * arrived between the fop_poll() and
 					 * the pollhead_insert(); check again.
 					 */
 					goto repoll;
@@ -888,7 +888,7 @@ dpwrite(dev_t dev, struct uio *uiop, cred_t *credp)
 			fp->f_flag |= FEPOLLED;
 
 			/*
-			 * Don't do VOP_POLL for an already cached fd with
+			 * Don't do fop_poll for an already cached fd with
 			 * same poll events.
 			 */
 			if ((pdp->pd_events == pfdp->events) &&
@@ -901,21 +901,21 @@ dpwrite(dev_t dev, struct uio *uiop, cred_t *credp)
 			}
 
 			/*
-			 * do VOP_POLL and cache this poll fd.
+			 * do fop_poll and cache this poll fd.
 			 */
 			/*
 			 * XXX - pollrelock() logic needs to know which
 			 * which pollcache lock to grab. It'd be a
 			 * cleaner solution if we could pass pcp as
-			 * an arguement in VOP_POLL interface instead
+			 * an arguement in fop_poll interface instead
 			 * of implicitly passing it using thread_t
-			 * struct. On the other hand, changing VOP_POLL
+			 * struct. On the other hand, changing fop_poll
 			 * interface will require all driver/file system
 			 * poll routine to change. May want to revisit
 			 * the tradeoff later.
 			 */
 			curthread->t_pollcache = pcp;
-			error = VOP_POLL(fp->f_vnode, pfdp->events, 0,
+			error = fop_poll(fp->f_vnode, pfdp->events, 0,
 			    &pfdp->revents, &php, NULL);
 			curthread->t_pollcache = NULL;
 			/*
@@ -1373,14 +1373,14 @@ dpioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp, int *rvalp)
  * been placed in epoll mode via the DP_EPOLLCOMPAT ioctl.  Recursion depth is
  * limited to 5 in order to be consistent with Linux epoll.
  *
- * Extending dppoll() for VOP_POLL:
+ * Extending dppoll() for fop_poll:
  *
  * The recursive /dev/poll implementation begins by extending dppoll() to
  * report when resources contained in the pollcache have relevant event state.
  * At the highest level, it means calling dp_pcache_poll() so it indicates if
  * fd events are present without consuming them or altering the pollcache
  * bitmap.  This ensures that a subsequent DP_POLL operation on the bitmap will
- * yield the initiating event.  Additionally, the VOP_POLL should return in
+ * yield the initiating event.  Additionally, the fop_poll should return in
  * such a way that dp_pcache_poll() does not clear the parent bitmap entry
  * which corresponds to the child /dev/poll fd.  This means that child
  * pollcaches will be checked during every poll which facilitates wake-up

@@ -93,14 +93,14 @@ acl2_getacl(GETACL2args *args, GETACL2res *resp, struct exportinfo *exi,
 
 	resp->resok.acl.vsa_mask = args->mask;
 
-	error = VOP_GETSECATTR(vp, &resp->resok.acl, 0, cr, NULL);
+	error = fop_getsecattr(vp, &resp->resok.acl, 0, cr, NULL);
 
 	if ((error == ENOSYS) && !(exi->exi_export.ex_flags & EX_NOACLFAB)) {
 		/*
 		 * If the underlying file system doesn't support
 		 * aclent_t type acls, fabricate an acl.  This is
 		 * required in order to to support existing clients
-		 * that require the call to VOP_GETSECATTR to
+		 * that require the call to fop_getsecattr to
 		 * succeed while making the assumption that all
 		 * file systems support aclent_t type acls.  This
 		 * causes problems for servers exporting ZFS file
@@ -209,10 +209,10 @@ acl2_setacl(SETACL2args *args, SETACL2res *resp, struct exportinfo *exi,
 		return;
 	}
 
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_TRUE, NULL);
-	error = VOP_SETSECATTR(vp, &args->acl, 0, cr, NULL);
+	(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);
+	error = fop_setsecattr(vp, &args->acl, 0, cr, NULL);
 	if (error) {
-		VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+		fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 		VN_RELE(vp);
 		resp->status = puterrno(error);
 		return;
@@ -221,7 +221,7 @@ acl2_setacl(SETACL2args *args, SETACL2res *resp, struct exportinfo *exi,
 	va.va_mask = AT_ALL;
 	error = rfs4_delegated_getattr(vp, &va, 0, cr);
 
-	VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+	fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 	VN_RELE(vp);
 
 	/* check for overflowed values */
@@ -316,7 +316,7 @@ acl2_access(ACCESS2args *args, ACCESS2res *resp, struct exportinfo *exi,
 	 * as well be reflected to the server during the open.
 	 */
 	va.va_mask = AT_MODE;
-	error = VOP_GETATTR(vp, &va, 0, cr, NULL);
+	error = fop_getattr(vp, &va, 0, cr, NULL);
 	if (error) {
 		VN_RELE(vp);
 		resp->status = puterrno(error);
@@ -326,30 +326,30 @@ acl2_access(ACCESS2args *args, ACCESS2res *resp, struct exportinfo *exi,
 	resp->resok.access = 0;
 
 	if (args->access & ACCESS2_READ) {
-		error = VOP_ACCESS(vp, VREAD, 0, cr, NULL);
+		error = fop_access(vp, VREAD, 0, cr, NULL);
 		if (!error && !MANDLOCK(vp, va.va_mode))
 			resp->resok.access |= ACCESS2_READ;
 	}
 	if ((args->access & ACCESS2_LOOKUP) && vp->v_type == VDIR) {
-		error = VOP_ACCESS(vp, VEXEC, 0, cr, NULL);
+		error = fop_access(vp, VEXEC, 0, cr, NULL);
 		if (!error)
 			resp->resok.access |= ACCESS2_LOOKUP;
 	}
 	if (checkwriteperm &&
 	    (args->access & (ACCESS2_MODIFY|ACCESS2_EXTEND))) {
-		error = VOP_ACCESS(vp, VWRITE, 0, cr, NULL);
+		error = fop_access(vp, VWRITE, 0, cr, NULL);
 		if (!error && !MANDLOCK(vp, va.va_mode))
 			resp->resok.access |=
 			    (args->access & (ACCESS2_MODIFY|ACCESS2_EXTEND));
 	}
 	if (checkwriteperm &&
 	    (args->access & ACCESS2_DELETE) && (vp->v_type == VDIR)) {
-		error = VOP_ACCESS(vp, VWRITE, 0, cr, NULL);
+		error = fop_access(vp, VWRITE, 0, cr, NULL);
 		if (!error)
 			resp->resok.access |= ACCESS2_DELETE;
 	}
 	if (args->access & ACCESS2_EXECUTE) {
-		error = VOP_ACCESS(vp, VEXEC, 0, cr, NULL);
+		error = fop_access(vp, VEXEC, 0, cr, NULL);
 		if (!error && !MANDLOCK(vp, va.va_mode))
 			resp->resok.access |= ACCESS2_EXECUTE;
 	}
@@ -398,9 +398,9 @@ acl2_getxattrdir(GETXATTRDIR2args *args, GETXATTRDIR2res *resp,
 		flags |= CREATE_XATTR_DIR;
 	else {
 		ulong_t val = 0;
-		error = VOP_PATHCONF(vp, _PC_SATTR_EXISTS, &val, cr, NULL);
+		error = fop_pathconf(vp, _PC_SATTR_EXISTS, &val, cr, NULL);
 		if (!error && val == 0) {
-			error = VOP_PATHCONF(vp, _PC_XATTR_EXISTS,
+			error = fop_pathconf(vp, _PC_XATTR_EXISTS,
 			    &val, cr, NULL);
 			if (!error && val == 0) {
 				VN_RELE(vp);
@@ -410,7 +410,7 @@ acl2_getxattrdir(GETXATTRDIR2args *args, GETXATTRDIR2res *resp,
 		}
 	}
 
-	error = VOP_LOOKUP(vp, "", &avp, NULL, flags, NULL, cr,
+	error = fop_lookup(vp, "", &avp, NULL, flags, NULL, cr,
 	    NULL, NULL, NULL);
 	if (!error && avp == vp) {	/* lookup of "" on old FS? */
 		error = EINVAL;
@@ -468,14 +468,14 @@ acl3_getacl(GETACL3args *args, GETACL3res *resp, struct exportinfo *exi,
 
 	resp->resok.acl.vsa_mask = args->mask;
 
-	error = VOP_GETSECATTR(vp, &resp->resok.acl, 0, cr, NULL);
+	error = fop_getsecattr(vp, &resp->resok.acl, 0, cr, NULL);
 
 	if ((error == ENOSYS) && !(exi->exi_export.ex_flags & EX_NOACLFAB)) {
 		/*
 		 * If the underlying file system doesn't support
 		 * aclent_t type acls, fabricate an acl.  This is
 		 * required in order to to support existing clients
-		 * that require the call to VOP_GETSECATTR to
+		 * that require the call to fop_getsecattr to
 		 * succeed while making the assumption that all
 		 * file systems support aclent_t type acls.  This
 		 * causes problems for servers exporting ZFS file
@@ -572,7 +572,7 @@ acl3_setacl(SETACL3args *args, SETACL3res *resp, struct exportinfo *exi,
 		goto out1;
 	}
 
-	(void) VOP_RWLOCK(vp, V_WRITELOCK_TRUE, NULL);
+	(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);
 
 	va.va_mask = AT_ALL;
 	vap = rfs4_delegated_getattr(vp, &va, 0, cr) ? NULL : &va;
@@ -582,7 +582,7 @@ acl3_setacl(SETACL3args *args, SETACL3res *resp, struct exportinfo *exi,
 		goto out1;
 	}
 
-	error = VOP_SETSECATTR(vp, &args->acl, 0, cr, NULL);
+	error = fop_setsecattr(vp, &args->acl, 0, cr, NULL);
 
 	va.va_mask = AT_ALL;
 	vap = rfs4_delegated_getattr(vp, &va, 0, cr) ? NULL : &va;
@@ -590,7 +590,7 @@ acl3_setacl(SETACL3args *args, SETACL3res *resp, struct exportinfo *exi,
 	if (error)
 		goto out;
 
-	VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+	fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 	VN_RELE(vp);
 
 	resp->status = NFS3_OK;
@@ -605,7 +605,7 @@ out:
 		resp->status = puterrno3(error);
 out1:
 	if (vp != NULL) {
-		VOP_RWUNLOCK(vp, V_WRITELOCK_TRUE, NULL);
+		fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 		VN_RELE(vp);
 	}
 	vattr_to_post_op_attr(vap, &resp->resfail.attr);
@@ -639,9 +639,9 @@ acl3_getxattrdir(GETXATTRDIR3args *args, GETXATTRDIR3res *resp,
 	else {
 		ulong_t val = 0;
 
-		error = VOP_PATHCONF(vp, _PC_SATTR_EXISTS, &val, cr, NULL);
+		error = fop_pathconf(vp, _PC_SATTR_EXISTS, &val, cr, NULL);
 		if (!error && val == 0) {
-			error = VOP_PATHCONF(vp, _PC_XATTR_EXISTS,
+			error = fop_pathconf(vp, _PC_XATTR_EXISTS,
 			    &val, cr, NULL);
 			if (!error && val == 0) {
 				VN_RELE(vp);
@@ -651,7 +651,7 @@ acl3_getxattrdir(GETXATTRDIR3args *args, GETXATTRDIR3res *resp,
 		}
 	}
 
-	error = VOP_LOOKUP(vp, "", &avp, NULL, flags, NULL, cr,
+	error = fop_lookup(vp, "", &avp, NULL, flags, NULL, cr,
 	    NULL, NULL, NULL);
 	if (!error && avp == vp) {	/* lookup of "" on old FS? */
 		error = EINVAL;

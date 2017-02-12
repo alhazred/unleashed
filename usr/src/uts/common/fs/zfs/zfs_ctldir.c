@@ -400,7 +400,7 @@ zfsctl_shares_fid(vnode_t *vp, fid_t *fidp, caller_context_t *ct)
 	}
 
 	if ((error = zfs_zget(zfsvfs, zfsvfs->z_shares_dir, &dzp)) == 0) {
-		error = VOP_FID(ZTOV(dzp), fidp, ct);
+		error = fop_fid(ZTOV(dzp), fidp, ct);
 		VN_RELE(ZTOV(dzp));
 	}
 
@@ -968,7 +968,7 @@ zfsctl_shares_lookup(vnode_t *dvp, char *nm, vnode_t **vpp, pathname_t *pnp,
 		return (SET_ERROR(ENOTSUP));
 	}
 	if ((error = zfs_zget(zfsvfs, zfsvfs->z_shares_dir, &dzp)) == 0) {
-		error = VOP_LOOKUP(ZTOV(dzp), nm, vpp, pnp,
+		error = fop_lookup(ZTOV(dzp), nm, vpp, pnp,
 		    flags, rdir, cr, ct, direntflags, realpnp);
 		VN_RELE(ZTOV(dzp));
 	}
@@ -1040,7 +1040,7 @@ zfsctl_shares_readdir(vnode_t *vp, uio_t *uiop, cred_t *cr, int *eofp,
 		return (SET_ERROR(ENOTSUP));
 	}
 	if ((error = zfs_zget(zfsvfs, zfsvfs->z_shares_dir, &dzp)) == 0) {
-		error = VOP_READDIR(ZTOV(dzp), uiop, cr, eofp, ct, flags);
+		error = fop_readdir(ZTOV(dzp), uiop, cr, eofp, ct, flags);
 		VN_RELE(ZTOV(dzp));
 	} else {
 		*eofp = 1;
@@ -1107,7 +1107,7 @@ zfsctl_shares_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 		return (SET_ERROR(ENOTSUP));
 	}
 	if ((error = zfs_zget(zfsvfs, zfsvfs->z_shares_dir, &dzp)) == 0) {
-		error = VOP_GETATTR(ZTOV(dzp), vap, flags, cr, ct);
+		error = fop_getattr(ZTOV(dzp), vap, flags, cr, ct);
 		VN_RELE(ZTOV(dzp));
 	}
 	ZFS_EXIT(zfsvfs);

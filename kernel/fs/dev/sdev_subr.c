@@ -708,7 +708,7 @@ sdev_getlink(struct vnode *linkvp, char **link)
 	uio.uio_segflg = UIO_SYSSPACE;
 	uio.uio_llimit = MAXOFFSET_T;
 
-	err = VOP_READLINK(linkvp, &uio, kcred, NULL);
+	err = fop_readlink(linkvp, &uio, kcred, NULL);
 	if (err) {
 		cmn_err(CE_WARN, "readlink %s failed in dev\n", buf);
 		kmem_free(buf, MAXPATHLEN);
@@ -901,7 +901,7 @@ sdev_update_timestamps(struct vnode *vp, cred_t *cred, uint_t mask)
 		attr.va_atime = now;
 
 	attr.va_mask = (mask & AT_TIMES);
-	err = VOP_SETATTR(vp, &attr, 0, cred, NULL);
+	err = fop_setattr(vp, &attr, 0, cred, NULL);
 	if (err && (err != EROFS)) {
 		sdcmn_err(("update timestamps error %d\n", err));
 	}
@@ -1129,7 +1129,7 @@ sdev_rnmnode(struct sdev_node *oddv, struct sdev_node *odv,
 	timestruc_t now;
 
 	vattr.va_mask = AT_TYPE|AT_MODE|AT_UID|AT_GID;
-	error = VOP_GETATTR(ovp, &vattr, 0, cred, NULL);
+	error = fop_getattr(ovp, &vattr, 0, cred, NULL);
 	if (error)
 		return (error);
 
@@ -1178,7 +1178,7 @@ sdev_rnmnode(struct sdev_node *oddv, struct sdev_node *odv,
 				sdev_dirdelete(oddv, odv);
 				if (bkstore) {
 					ASSERT(nddv->sdev_attrvp);
-					error = VOP_REMOVE(nddv->sdev_attrvp,
+					error = fop_remove(nddv->sdev_attrvp,
 					    nnm, cred, NULL, 0);
 					if (error)
 						goto err_out;
@@ -1235,7 +1235,7 @@ sdev_rnmnode(struct sdev_node *oddv, struct sdev_node *odv,
 			sdev_dirdelete(nddv, *ndvp);
 			*ndvp = NULL;
 			ASSERT(nddv->sdev_attrvp);
-			error = VOP_RMDIR(nddv->sdev_attrvp, nnm,
+			error = fop_rmdir(nddv->sdev_attrvp, nnm,
 			    nddv->sdev_attrvp, cred, NULL, 0);
 			if (error)
 				goto err_out;
@@ -1258,7 +1258,7 @@ sdev_rnmnode(struct sdev_node *oddv, struct sdev_node *odv,
 			*ndvp = NULL;
 			if (bkstore) {
 				ASSERT(nddv->sdev_attrvp);
-				error = VOP_REMOVE(nddv->sdev_attrvp,
+				error = fop_remove(nddv->sdev_attrvp,
 				    nnm, cred, NULL, 0);
 				if (error)
 					goto err_out;
@@ -1420,7 +1420,7 @@ devname_backstore_lookup(struct sdev_node *ddv, char *nm, struct vnode **rvp)
 
 	ASSERT(rdvp);
 
-	rval = VOP_LOOKUP(rdvp, nm, rvp, NULL, 0, NULL, kcred, NULL, NULL,
+	rval = fop_lookup(rdvp, nm, rvp, NULL, 0, NULL, kcred, NULL, NULL,
 	    NULL);
 	return (rval);
 }
@@ -1465,9 +1465,9 @@ sdev_filldir_from_store(struct sdev_node *ddv, int dlen, struct cred *cred)
 		uio.uio_resid = dlen;
 		iov.iov_base = (char *)dbuf;
 		iov.iov_len = dlen;
-		(void) VOP_RWLOCK(dirvp, V_WRITELOCK_FALSE, NULL);
-		error = VOP_READDIR(dirvp, &uio, kcred, &eof, NULL, 0);
-		VOP_RWUNLOCK(dirvp, V_WRITELOCK_FALSE, NULL);
+		(void) fop_rwlock(dirvp, V_WRITELOCK_FALSE, NULL);
+		error = fop_readdir(dirvp, &uio, kcred, &eof, NULL, 0);
+		fop_rwunlock(dirvp, V_WRITELOCK_FALSE, NULL);
 
 		dbuflen = dlen - uio.uio_resid;
 		if (error || dbuflen == 0)
@@ -1499,7 +1499,7 @@ sdev_filldir_from_store(struct sdev_node *ddv, int dlen, struct cred *cred)
 				continue;
 
 			vattr.va_mask = AT_TYPE|AT_MODE|AT_UID|AT_GID;
-			error = VOP_GETATTR(vp, &vattr, 0, cred, NULL);
+			error = fop_getattr(vp, &vattr, 0, cred, NULL);
 			if (error)
 				continue;
 
@@ -1607,10 +1607,10 @@ sdev_shadow_node(struct sdev_node *dv, struct cred *cred)
 
 lookup:
 	/* try to find it in the backing store */
-	error = VOP_LOOKUP(rdvp, nm, rvp, NULL, 0, NULL, cred, NULL, NULL,
+	error = fop_lookup(rdvp, nm, rvp, NULL, 0, NULL, cred, NULL, NULL,
 	    NULL);
 	if (error == 0) {
-		if (VOP_REALVP(*rvp, &rrvp, NULL) == 0) {
+		if (fop_realvp(*rvp, &rrvp, NULL) == 0) {
 			VN_HOLD(rrvp);
 			VN_RELE(*rvp);
 			*rvp = rrvp;
@@ -1629,7 +1629,7 @@ lookup:
 	vap->va_mask |= AT_TYPE|AT_MODE;
 	switch (vap->va_type) {
 	case VDIR:
-		error = VOP_MKDIR(rdvp, nm, vap, rvp, cred, NULL, 0, NULL);
+		error = fop_mkdir(rdvp, nm, vap, rvp, cred, NULL, 0, NULL);
 		sdcmn_err9(("sdev_shadow_node: mkdir vp %p error %d\n",
 		    (void *)(*rvp), error));
 		if (!error)
@@ -1639,7 +1639,7 @@ lookup:
 	case VBLK:
 	case VREG:
 	case VDOOR:
-		error = VOP_CREATE(rdvp, nm, vap, NONEXCL, VREAD|VWRITE,
+		error = fop_create(rdvp, nm, vap, NONEXCL, VREAD|VWRITE,
 		    rvp, cred, 0, NULL, NULL);
 		sdcmn_err9(("sdev_shadow_node: create vp %p, error %d\n",
 		    (void *)(*rvp), error));
@@ -1648,7 +1648,7 @@ lookup:
 		break;
 	case VLNK:
 		ASSERT(dv->sdev_symlink);
-		error = VOP_SYMLINK(rdvp, nm, vap, dv->sdev_symlink, cred,
+		error = fop_symlink(rdvp, nm, vap, dv->sdev_symlink, cred,
 		    NULL, 0);
 		sdcmn_err9(("sdev_shadow_node: create symlink error %d\n",
 		    error));
@@ -1997,7 +1997,7 @@ tryagain:
 		if (!error) {
 
 			vattr.va_mask = AT_TYPE|AT_MODE|AT_UID|AT_GID;
-			error = VOP_GETATTR(rvp, &vattr, 0, cred, NULL);
+			error = fop_getattr(rvp, &vattr, 0, cred, NULL);
 			if (error) {
 				rw_exit(&ddv->sdev_contents);
 				if (dv)
@@ -2338,10 +2338,10 @@ sdev_cleandir(struct sdev_node *ddv, char *expr, uint_t flags)
 			ASSERT(ddv->sdev_attrvp);
 
 			if (bkstore == 1) {
-				error = VOP_REMOVE(ddv->sdev_attrvp,
+				error = fop_remove(ddv->sdev_attrvp,
 				    bks_name, kcred, NULL, 0);
 			} else if (bkstore == 2) {
-				error = VOP_RMDIR(ddv->sdev_attrvp,
+				error = fop_rmdir(ddv->sdev_attrvp,
 				    bks_name, ddv->sdev_attrvp, kcred, NULL, 0);
 			}
 
@@ -2650,7 +2650,7 @@ full:
 		attr.va_atime = now;
 		attr.va_mask = AT_CTIME|AT_ATIME;
 
-		(void) VOP_SETATTR(ddv->sdev_attrvp, &attr, 0, kcred, NULL);
+		(void) fop_setattr(ddv->sdev_attrvp, &attr, 0, kcred, NULL);
 	}
 done:
 	kmem_free(outbuf, alloc_count);
@@ -2711,7 +2711,7 @@ checkforroot:
 			}
 		}
 
-		error = VOP_LOOKUP(vp, nm, &cvp, NULL, 0, NULL, kcred, NULL,
+		error = fop_lookup(vp, nm, &cvp, NULL, 0, NULL, kcred, NULL,
 		    NULL, NULL);
 		if (error) {
 			VN_RELE(vp);
@@ -2856,9 +2856,9 @@ sdev_modctl_readdir(const char *dir, char ***dirlistp,
 		iov.iov_base = (char *)dbuf;
 		iov.iov_len = dlen;
 
-		(void) VOP_RWLOCK(vp, V_WRITELOCK_FALSE, NULL);
-		error = VOP_READDIR(vp, &uio, kcred, &eof, NULL, 0);
-		VOP_RWUNLOCK(vp, V_WRITELOCK_FALSE, NULL);
+		(void) fop_rwlock(vp, V_WRITELOCK_FALSE, NULL);
+		error = fop_readdir(vp, &uio, kcred, &eof, NULL, 0);
+		fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
 
 		dbuflen = dlen - uio.uio_resid;
 
@@ -3022,7 +3022,7 @@ devname_setattr_func(struct vnode *vp, struct vattr *vap, int flags,
 	/* If backing store exists, just set it. */
 	if (dv->sdev_attrvp) {
 		rw_exit(&parent->sdev_contents);
-		return (VOP_SETATTR(dv->sdev_attrvp, vap, flags, cred, NULL));
+		return (fop_setattr(dv->sdev_attrvp, vap, flags, cred, NULL));
 	}
 
 	/*
@@ -3039,7 +3039,7 @@ devname_setattr_func(struct vnode *vp, struct vattr *vap, int flags,
 
 		if (error)
 			return (error);
-		return (VOP_SETATTR(dv->sdev_attrvp, vap, flags, cred, NULL));
+		return (fop_setattr(dv->sdev_attrvp, vap, flags, cred, NULL));
 	}
 
 

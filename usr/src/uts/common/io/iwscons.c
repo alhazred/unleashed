@@ -319,7 +319,7 @@ iwscnpoll(dev_t dev, short events, int anyyet, short *reventsp,
 	ASSERT(getminor(dev) == 0);
 
 	lp = srhold();
-	error = VOP_POLL(lp->wl_vp, events, anyyet, reventsp, phpp, NULL);
+	error = fop_poll(lp->wl_vp, events, anyyet, reventsp, phpp, NULL);
 	srrele(lp);
 
 	return (error);
@@ -447,7 +447,7 @@ iwscnioctl(dev_t dev, int cmd, intptr_t arg, int flag,
 		}
 
 		/* Process the ioctl normally */
-		error = VOP_IOCTL(lp->wl_vp, cmd, arg, flag, cred, rvalp, NULL);
+		error = fop_ioctl(lp->wl_vp, cmd, arg, flag, cred, rvalp, NULL);
 
 		srrele(lp);
 		mutex_exit(&iwscn_redirect_lock);
@@ -456,7 +456,7 @@ iwscnioctl(dev_t dev, int cmd, intptr_t arg, int flag,
 
 	/* Process the ioctl normally */
 	lp = srhold();
-	error = VOP_IOCTL(lp->wl_vp, cmd, arg, flag, cred, rvalp, NULL);
+	error = fop_ioctl(lp->wl_vp, cmd, arg, flag, cred, rvalp, NULL);
 	srrele(lp);
 	return (error);
 }
@@ -490,14 +490,14 @@ iwscnopen(dev_t *devp, int flag, int state, cred_t *cred)
 	if ((iwscn_list == NULL) || (iwscn_list->wl_vp == str_vp(vp))) {
 		int		error = 0;
 
-		/* Don't hold the list lock across an VOP_OPEN */
+		/* Don't hold the list lock across an fop_open */
 		mutex_exit(&iwscn_list_lock);
 
 		/*
 		 * There is currently no redirection going on.
 		 * pass this open request onto the console driver
 		 */
-		error = VOP_OPEN(&vp, flag, cred, NULL);
+		error = fop_open(&vp, flag, cred, NULL);
 		if (error != 0)
 			return (error);
 
@@ -512,7 +512,7 @@ iwscnopen(dev_t *devp, int flag, int state, cred_t *cred)
 			 * In this case there must already be a copy of
 			 * this vnode on the list, so we can free up this one.
 			 */
-			(void) VOP_CLOSE(vp, flag, 1, (offset_t)0, cred, NULL);
+			(void) fop_close(vp, flag, 1, (offset_t)0, cred, NULL);
 		}
 	}
 
@@ -587,7 +587,7 @@ iwscnclose(dev_t dev, int flag, int state, cred_t *cred)
 
 		if (lp->wl_is_console == B_TRUE)
 			/* Close the underlying console device. */
-			(void) VOP_CLOSE(lp->wl_vp, 0, 1, (offset_t)0, kcred,
+			(void) fop_close(lp->wl_vp, 0, 1, (offset_t)0, kcred,
 			    NULL);
 
 		kmem_free(lp, sizeof (*lp));

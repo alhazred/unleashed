@@ -470,7 +470,7 @@ devzvol_create_pool_dirs(struct vnode *dvp)
 	while ((elem = nvlist_next_nvpair(nv, elem)) != NULL) {
 		struct vnode *vp;
 		ASSERT(dvp->v_count > 0);
-		rc = VOP_LOOKUP(dvp, nvpair_name(elem), &vp, NULL, 0,
+		rc = fop_lookup(dvp, nvpair_name(elem), &vp, NULL, 0,
 		    NULL, kcred, NULL, 0, NULL);
 		/* should either work, or not be visible from a zone */
 		ASSERT(rc == 0 || rc == ENOENT);
@@ -703,7 +703,7 @@ devzvol_lookup(struct vnode *dvp, char *nm, struct vnode **vpp,
 	sdcmn_err13(("devzvol_lookup '%s' '%s'", parent->sdev_path, nm));
 	*vpp = NULL;
 	/* execute access is required to search the directory */
-	if ((error = VOP_ACCESS(dvp, VEXEC, 0, cred, ct)) != 0)
+	if ((error = fop_access(dvp, VEXEC, 0, cred, ct)) != 0)
 		return (error);
 
 	rw_enter(&parent->sdev_contents, RW_READER);
@@ -829,7 +829,7 @@ devzvol_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 		else if (vp->v_type == VDIR && (mode & VWRITE))
 			error = EISDIR;
 		else
-			error = VOP_ACCESS(vp, mode, 0, cred, ct);
+			error = fop_access(vp, mode, 0, cred, ct);
 
 		if (error) {
 			VN_RELE(vp);
