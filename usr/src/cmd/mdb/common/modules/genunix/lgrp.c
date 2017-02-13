@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "lgrp.h"
 
 #include <mdb/mdb_modapi.h>
@@ -143,7 +141,7 @@ lgrp_cpulist_walk_step(mdb_walk_state_t *wsp)
 	addr = (uintptr_t)cpu.cpu_next_lgrp;
 	wsp->walk_addr = addr;
 
-	if (lcw->lcw_cpusleft == NULL && addr != lcw->lcw_firstcpu) {
+	if (lcw->lcw_cpusleft == 0 && addr != lcw->lcw_firstcpu) {
 		mdb_warn("number of cpus in lgroup cpu != lgroup cpucnt\n");
 		return (WALK_ERR);
 	}
@@ -480,7 +478,7 @@ lgrp_walk_step_common(mdb_walk_state_t *wsp)
 {
 	lgrp_t lgrp;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&lgrp, sizeof (lgrp_t), wsp->walk_addr) == -1) {
@@ -509,7 +507,7 @@ lgrp_walk_step(mdb_walk_state_t *wsp)
 		} else {
 			wsp->walk_addr = lwd->lwd_lgrp_tbl[lwd->lwd_iter];
 
-			if (wsp->walk_addr == NULL) {
+			if (wsp->walk_addr == (uintptr_t)NULL) {
 				mdb_warn("NULL lgrp pointer in lgrp_table[%d]",
 				    lwd->lwd_iter);
 				return (WALK_ERR);
@@ -540,7 +538,7 @@ lgrp_parents_walk_step(mdb_walk_state_t *wsp)
 	lgrp_t lgrp;
 	int status;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&lgrp, sizeof (struct lgrp), wsp->walk_addr) == -1) {
@@ -640,7 +638,7 @@ lgrp_set_walk_init(mdb_walk_state_t *wsp, klgrpset_t set)
 	lwsd->lswd_nlgrps = nlgrps;
 
 	if (mdb_readsym(lwsd->lwsd_lgrp_tbl, nlgrps * sizeof (lgrp_t *),
-		"lgrp_table") == -1) {
+	    "lgrp_table") == -1) {
 		mdb_warn("unable to read lgrp_table");
 		return (WALK_ERR);
 	}

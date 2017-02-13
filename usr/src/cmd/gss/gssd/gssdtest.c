@@ -1931,7 +1931,7 @@ char **argv;
 	else
 		mechType = gss_str2oid((char *)GSS_KRB5_MECH_OID);
 
-	if (mechType == NULL || mechType->length == NULL) {
+	if (mechType == NULL || mechType->length == 0) {
 		FREE(nameType->elements, nameType->length);
 		FREE(nameType, sizeof (gss_OID_desc));
 		printf(gettext("improperly formated mech OID\n"));

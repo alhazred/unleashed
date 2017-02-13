@@ -115,7 +115,7 @@ each_file(char *cur_file, Cmd_Info *cmd_info)
 			artmpfile.tmp_name = tempnam(TMPDIR, "mcs2");
 			if ((fdartmp = open(artmpfile.tmp_name,
 			    O_WRONLY | O_APPEND | O_CREAT,
-			    (mode_t)0666)) == NULL) {
+			    (mode_t)0666)) == -1) {
 				error_message(OPEN_TEMP_ERROR,
 				    SYSTEM_ERROR, strerror(errno),
 				    prog, artmpfile);
@@ -710,7 +710,7 @@ build_file(Elf *src_elf, GElf_Ehdr *src_ehdr, Cmd_Info *cmd_info,
 		return (FAILURE);
 	}
 
-	if (gelf_newehdr(dst_elf, gelf_getclass(src_elf)) == NULL) {
+	if (gelf_newehdr(dst_elf, gelf_getclass(src_elf)) == 0) {
 		error_message(LIBELF_ERROR, LIBelf_ERROR, elf_errmsg(-1), prog);
 		return (FAILURE);
 	}
@@ -737,7 +737,7 @@ build_file(Elf *src_elf, GElf_Ehdr *src_ehdr, Cmd_Info *cmd_info,
 	if (src_ehdr->e_phnum != 0) {
 		(void) elf_flagelf(dst_elf, ELF_C_SET, ELF_F_LAYOUT);
 
-		if (gelf_newphdr(dst_elf, src_ehdr->e_phnum) == NULL) {
+		if (gelf_newphdr(dst_elf, src_ehdr->e_phnum) == 0) {
 			error_message(LIBELF_ERROR, LIBelf_ERROR,
 			    elf_errmsg(-1), prog);
 			return (FAILURE);
@@ -1035,7 +1035,7 @@ build_file(Elf *src_elf, GElf_Ehdr *src_ehdr, Cmd_Info *cmd_info,
 		dst_shdr.sh_type = SHT_PROGBITS;
 		dst_shdr.sh_flags = 0;
 		dst_shdr.sh_addr = 0;
-		if (src_ehdr->e_phnum != NULL)
+		if (src_ehdr->e_phnum != 0)
 			dst_shdr.sh_offset = new_offset;
 		else
 			dst_shdr.sh_offset = 0;

@@ -189,7 +189,7 @@ edit_power_conf_file(pconf_edit_type pc_edit_type,
 		}
 		break;
 	case CPU_PERFORMANCE:
-		if (pc_edit_type.cpu_th == NULL) {
+		if (pc_edit_type.cpu_th == 0) {
 			HAL_INFO ((" CPU Threshold is not valid."));
 			res = EINVAL;
 			goto out;

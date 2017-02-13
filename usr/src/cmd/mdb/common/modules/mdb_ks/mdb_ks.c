@@ -507,7 +507,7 @@ mdb_vnode2path(uintptr_t addr, char *buf, size_t buflen)
 
 	bzero(&path, sizeof (mdb_path_t));
 again:
-	if ((addr == NULL) && (path.mdp_nelem == 0)) {
+	if ((addr == (uintptr_t)NULL) && (path.mdp_nelem == 0)) {
 		/*
 		 * 0 elems && complete tells sprintpath to just print "/"
 		 */
@@ -557,30 +557,30 @@ mdb_pid2proc(pid_t pid, proc_t *proc)
 	struct pid pidp;
 
 	if (mdb_readvar(&pidhash, "pidhash") == -1)
-		return (NULL);
+		return ((uintptr_t)NULL);
 
 	if (mdb_readvar(&pid_hashsz, "pid_hashsz") == -1)
-		return (NULL);
+		return ((uintptr_t)NULL);
 
 	if (mdb_readvar(&procdir, "procdir") == -1)
-		return (NULL);
+		return ((uintptr_t)NULL);
 
 	hash = pid & (pid_hashsz - 1);
 
 	if (mdb_vread(&paddr, sizeof (paddr),
 	    pidhash + (hash * sizeof (paddr))) == -1)
-		return (NULL);
+		return ((uintptr_t)NULL);
 
-	while (paddr != 0) {
+	while (paddr != (uintptr_t)NULL) {
 		if (mdb_vread(&pidp, sizeof (pidp), paddr) == -1)
-			return (NULL);
+			return ((uintptr_t)NULL);
 
 		if (pidp.pid_id == pid) {
 			uintptr_t procp;
 
 			if (mdb_vread(&procp, sizeof (procp), procdir +
 			    (pidp.pid_prslot * sizeof (procp))) == -1)
-				return (NULL);
+				return ((uintptr_t)NULL);
 
 			if (proc != NULL)
 				(void) mdb_vread(proc, sizeof (proc_t), procp);
@@ -589,7 +589,7 @@ mdb_pid2proc(pid_t pid, proc_t *proc)
 		}
 		paddr = (uintptr_t)pidp.pid_link;
 	}
-	return (NULL);
+	return ((uintptr_t)NULL);
 }
 
 int
@@ -665,7 +665,7 @@ mdb_page_lookup(uintptr_t vp, u_offset_t offset)
 	uintptr_t page_hash_entry, pp;
 
 	if (!page_hash_loaded && !page_hash_load()) {
-		return (NULL);
+		return ((uintptr_t)NULL);
 	}
 
 	ndx = PAGE_HASH_FUNC(vp, offset);
@@ -674,16 +674,16 @@ mdb_page_lookup(uintptr_t vp, u_offset_t offset)
 	if (mdb_vread(&pp, sizeof (pp), page_hash_entry) < 0) {
 		mdb_warn("unable to read page_hash[%ld] (%p)", ndx,
 		    page_hash_entry);
-		return (NULL);
+		return ((uintptr_t)NULL);
 	}
 
-	while (pp != NULL) {
+	while (pp != (uintptr_t)NULL) {
 		page_t page;
 		long nndx;
 
 		if (mdb_vread(&page, sizeof (page), pp) < 0) {
 			mdb_warn("unable to read page_t at %p", pp);
-			return (NULL);
+			return ((uintptr_t)NULL);
 		}
 
 		if ((uintptr_t)page.p_vnode == vp &&
@@ -703,13 +703,13 @@ mdb_page_lookup(uintptr_t vp, u_offset_t offset)
 			mdb_warn("mdb_page_lookup: mdb_ks PAGE_HASH_FUNC() "
 			    "mismatch: in bucket %ld, but page %p hashes to "
 			    "bucket %ld\n", ndx, pp, nndx);
-			return (NULL);
+			return ((uintptr_t)NULL);
 		}
 
 		pp = (uintptr_t)page.p_hash;
 	}
 
-	return (NULL);
+	return ((uintptr_t)NULL);
 }
 
 char
@@ -836,7 +836,7 @@ mdb_addr2modctl(uintptr_t addr)
 	a2m_query_t a2m;
 
 	a2m.a2m_addr = addr;
-	a2m.a2m_where = NULL;
+	a2m.a2m_where = (uintptr_t)NULL;
 
 	(void) mdb_walk("modctl", (mdb_walk_cb_t)a2m_walk_modctl, &a2m);
 	return (a2m.a2m_where);
@@ -937,7 +937,7 @@ mdb_qrnext(const queue_t *q)
 	if (qip != NULL)
 		return (qip->qi_ops->q_rnext(q));
 
-	return (NULL);
+	return ((uintptr_t)NULL);
 }
 
 uintptr_t
@@ -948,7 +948,7 @@ mdb_qwnext(const queue_t *q)
 	if (qip != NULL)
 		return (qip->qi_ops->q_wnext(q));
 
-	return (NULL);
+	return ((uintptr_t)NULL);
 }
 
 uintptr_t
@@ -991,13 +991,13 @@ find_mbind(const char *name, uintptr_t *hashtab)
 	while (mb) {
 		if (mdb_vread(&mb_local, sizeof (mb_local), mb) == -1) {
 			mdb_warn("failed to read struct bind at %p", mb);
-			return (NULL);
+			return ((uintptr_t)NULL);
 		}
 		if (mdb_readstr(node_name, sizeof (node_name),
 		    (uintptr_t)mb_local.b_name) == -1) {
 			mdb_warn("failed to read node name string at %p",
 			    mb_local.b_name);
-			return (NULL);
+			return ((uintptr_t)NULL);
 		}
 
 		if (strcmp(name, node_name) == 0)
@@ -1021,7 +1021,7 @@ mdb_name_to_major(const char *name, major_t *major)
 		return (-1);
 	}
 
-	if ((mbind = find_mbind(name, mb_hashtab)) != NULL) {
+	if ((mbind = find_mbind(name, mb_hashtab)) != (uintptr_t)NULL) {
 		if (mdb_vread(&mbind_local, sizeof (mbind_local), mbind) ==
 		    -1) {
 			mdb_warn("failed to read mbind struct at %p", mbind);
@@ -1275,7 +1275,7 @@ mdb_kproc_as(uintptr_t proc_addr)
 	if (mdb_vread(&p, sizeof (p), proc_addr) == sizeof (p))
 		return ((uintptr_t)p.p_as);
 
-	return (NULL);
+	return ((uintptr_t)NULL);
 }
 
 /*
@@ -1430,11 +1430,12 @@ mdb_dump_print_content(dumphdr_t *dh, pid_t content)
 	if (!(expcont & DF_CURPROC))
 		return;
 
-	if (mdb_readvar(&pt, "panic_thread") != sizeof (pt) || pt == NULL)
+	if (mdb_readvar(&pt, "panic_thread") != sizeof (pt) ||
+	    pt == (uintptr_t)NULL)
 		goto kthreadpanic_err;
 
 	if (mdb_vread(&procp, sizeof (procp), pt + OFFSETOF(kthread_t,
-	    t_procp)) == -1 || procp == NULL)
+	    t_procp)) == -1 || procp == (uintptr_t)NULL)
 		goto kthreadpanic_err;
 
 	if (mdb_lookup_by_name("p0", &sym) != 0)
@@ -1489,7 +1490,7 @@ mdb_ddi_root_node(void)
 	/* return (top_devinfo);   */
 	if (mdb_readvar(&top_devinfo_addr, "top_devinfo") == -1) {
 		mdb_warn("failed to read top_devinfo");
-		return (NULL);
+		return ((uintptr_t)NULL);
 	}
 	return (top_devinfo_addr);
 }
@@ -1544,7 +1545,7 @@ mdb_ddi_deviname(uintptr_t dip_addr, char *name, size_t name_size)
 	local_name_size -= length;
 	addrname = (uintptr_t)local_dip.devi_addr;
 
-	if (addrname != NULL) {
+	if (addrname != (uintptr_t)NULL) {
 
 		if (local_name_size < 2) {
 			mdb_warn("not enough room for node address string");

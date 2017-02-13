@@ -371,7 +371,7 @@ getbymember(ldap_backend_ptr be, void *a)
 					member_str = membervalue[j];
 				}
 				if (member_str &&
-				    strcmp(member_str, username) == NULL) {
+				    strcmp(member_str, username) == 0) {
 					groupvalue = __ns_ldap_getAttr(curEntry,
 					    "gidnumber");
 					gid = (gid_t)strtol(groupvalue[0],

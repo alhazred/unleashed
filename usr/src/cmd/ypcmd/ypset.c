@@ -32,8 +32,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This is a user command which issues a "Set domain binding" command to a
  * YP binder (ypbind) process
@@ -50,11 +48,6 @@
 #include "yp_b.h"
 #include <sys/utsname.h>
 extern CLIENT *__clnt_create_loopback();
-
-#ifdef NULL
-#undef NULL
-#endif
-#define	NULL 0
 
 #define	TIMEOUT 30			/* Total seconds for timeout */
 
@@ -282,7 +275,7 @@ send_message()
 		}
 	} else {
 		client = clnt_create(host, YPBINDPROG,
-			YPBINDVERS, "datagram_n");
+		    YPBINDVERS, "datagram_n");
 		if (client == (CLIENT *)NULL) {
 			clnt_pcreateerror("ypset: clnt_create");
 			exit(1);
@@ -306,10 +299,10 @@ send_message()
 	if (clnt_stat != RPC_SUCCESS) {
 		if (clnt_stat == RPC_PROGUNAVAIL)
 			(void) fprintf(stderr,
-	err_access_failure, host ? host : "localhost");
+			    err_access_failure, host ? host : "localhost");
 		else
 			(void) fprintf(stderr,
-	err_rpc_failure, host ? host : "localhost");
+			    err_rpc_failure, host ? host : "localhost");
 		exit(1);
 	}
 	if (!host)

@@ -77,11 +77,11 @@ create_actual_mechs(mechs_array, count)
 static OM_uint32
 val_acq_cred_args(
     OM_uint32 *minor_status,
-    /*LINTED*/
+	/*LINTED*/
     gss_name_t desired_name,
-    /*LINTED*/
+	/*LINTED*/
     OM_uint32 time_req,
-    /*LINTED*/
+	/*LINTED*/
     gss_OID_set desired_mechs,
     int cred_usage,
     gss_cred_id_t *output_cred_handle,
@@ -89,39 +89,39 @@ val_acq_cred_args(
     OM_uint32 *time_rec)
 {
 
-   /* Initialize outputs. */
+	/* Initialize outputs. */
 
-    if (minor_status != NULL)
-        *minor_status = 0;
+	if (minor_status != NULL)
+		*minor_status = 0;
 
-    if (output_cred_handle != NULL)
-        *output_cred_handle = GSS_C_NO_CREDENTIAL;
+	if (output_cred_handle != NULL)
+		*output_cred_handle = GSS_C_NO_CREDENTIAL;
 
-    if (actual_mechs != NULL)
-        *actual_mechs = GSS_C_NULL_OID_SET;
+	if (actual_mechs != NULL)
+		*actual_mechs = GSS_C_NULL_OID_SET;
 
-    if (time_rec != NULL)
-        *time_rec = 0;
+	if (time_rec != NULL)
+		*time_rec = 0;
 
-    /* Validate arguments. */
+	/* Validate arguments. */
 
-    if (minor_status == NULL)
-        return (GSS_S_CALL_INACCESSIBLE_WRITE);
+	if (minor_status == NULL)
+		return (GSS_S_CALL_INACCESSIBLE_WRITE);
 
-    if (output_cred_handle == NULL)
-        return (GSS_S_CALL_INACCESSIBLE_WRITE);
+	if (output_cred_handle == NULL)
+		return (GSS_S_CALL_INACCESSIBLE_WRITE);
 
-    if (cred_usage != GSS_C_ACCEPT
-        && cred_usage != GSS_C_INITIATE
-        && cred_usage != GSS_C_BOTH) {
-        if (minor_status) {
-            *minor_status = EINVAL;
-            map_errcode(minor_status);
-        }
-        return GSS_S_FAILURE;
-    }
+	if (cred_usage != GSS_C_ACCEPT &&
+	    cred_usage != GSS_C_INITIATE &&
+	    cred_usage != GSS_C_BOTH) {
+		if (minor_status) {
+			*minor_status = EINVAL;
+			map_errcode(minor_status);
+		}
+		return (GSS_S_FAILURE);
+	}
 
-    return (GSS_S_COMPLETE);
+	return (GSS_S_COMPLETE);
 }
 
 OM_uint32
@@ -186,7 +186,7 @@ OM_uint32 *		time_rec;
 	} else
 		mechs = desired_mechs;
 
-	if (mechs->count == NULL)
+	if (mechs->count == 0)
 		return (GSS_S_BAD_MECH);
 
 	/* allocate the output credential structure */
@@ -299,14 +299,14 @@ val_add_cred_args(
 	    output_cred_handle == NULL)
 		return (GSS_S_CALL_INACCESSIBLE_WRITE | GSS_S_NO_CRED);
 
-	if (cred_usage != GSS_C_ACCEPT
-	    && cred_usage != GSS_C_INITIATE
-	    && cred_usage != GSS_C_BOTH) {
+	if (cred_usage != GSS_C_ACCEPT &&
+	    cred_usage != GSS_C_INITIATE &&
+	    cred_usage != GSS_C_BOTH) {
 		if (minor_status) {
 			*minor_status = EINVAL;
 			map_errcode(minor_status);
 		}
-		return GSS_S_FAILURE;
+		return (GSS_S_FAILURE);
 	}
 
 	return (GSS_S_COMPLETE);

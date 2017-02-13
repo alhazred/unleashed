@@ -1492,7 +1492,7 @@ find_file(Lm_list *lml, Rt_map *clmp, uint_t flags, Fdesc *fdp, Rej_desc *rej,
 		 * If we found a directory search for the file.
 		 */
 		if (dobj->co_id != 0) {
-			if (*strhash == NULL)
+			if (*strhash == 0)
 				*strhash = (Word)elf_hash(oname);
 			fobj = elf_config_ent(oname, *strhash,
 			    dobj->co_id, &aname);
@@ -2719,7 +2719,7 @@ lookup_sym_interpose(Slookup *slp, Sresult *srp, uint_t *binfo, int *in_nfavl)
 	}
 
 	if ((lml->lm_flags & LML_FLG_INTRPOSE) == 0)
-		return (NULL);
+		return (0);
 
 	/*
 	 * Traverse the list of known interposers to determine whether any
@@ -3131,7 +3131,7 @@ _lookup_sym(Slookup *slp, Sresult *srp, uint_t *binfo, int *in_nfavl)
 
 		lml = LIST(lmp);
 		if ((sl.sl_flags & LKUP_WEAK) || (lml->lm_lazy == 0))
-			return (NULL);
+			return (0);
 
 		DBG_CALL(Dbg_syms_lazy_rescan(lml, name));
 

@@ -2608,7 +2608,7 @@ check_allowedips(dladm_handle_t handle, prop_desc_t *pdp,
 fail:
 	for (i = 0; i < val_cnt; i++) {
 		free((void *)vdp[i].vd_val);
-		vdp[i].vd_val = NULL;
+		vdp[i].vd_val = (uintptr_t)NULL;
 	}
 	return (status);
 }
@@ -2946,7 +2946,7 @@ check_allowedcids(dladm_handle_t handle, prop_desc_t *pdp,
 fail:
 	for (i = 0; i < val_cnt; i++) {
 		free((void *)vdp[i].vd_val);
-		vdp[i].vd_val = NULL;
+		vdp[i].vd_val = (uintptr_t)NULL;
 	}
 	return (status);
 }
@@ -3014,7 +3014,7 @@ check_secondary_macs(dladm_handle_t handle, prop_desc_t *pdp,
 fail:
 	for (i = 0; i < val_cnt; i++) {
 		free((void *)vdp[i].vd_val);
-		vdp[i].vd_val = NULL;
+		vdp[i].vd_val = (uintptr_t)NULL;
 	}
 	return (status);
 }

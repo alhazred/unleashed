@@ -1342,7 +1342,7 @@ scf_general_pg_setup(const char *fmri, const char *pg_name)
 	}
 
 	if (scf_handle_decode_fmri(ret->h, fmri, NULL, NULL, ret->inst,
-	    NULL, NULL, NULL) == -1) {
+	    NULL, NULL, 0) == -1) {
 		goto out;
 	}
 

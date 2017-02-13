@@ -69,7 +69,7 @@ trwalk_init(mdb_walk_state_t *wsp)
 	fmd_thread_t thr;
 	fmd_t F;
 
-	if (wsp->walk_addr != NULL) {
+	if (wsp->walk_addr != (uintptr_t)NULL) {
 		mdb_warn("fmd_trace only supports global walks\n");
 		return (WALK_ERR);
 	}
@@ -79,7 +79,7 @@ trwalk_init(mdb_walk_state_t *wsp)
 		return (WALK_ERR);
 	}
 
-	for (addr = (uintptr_t)F.d_thr_list.l_next; addr != NULL;
+	for (addr = (uintptr_t)F.d_thr_list.l_next; addr != (uintptr_t)NULL;
 	    addr = (uintptr_t)thr.thr_list.l_next) {
 
 		size_t len, ptr_off, end_off;
@@ -335,7 +335,7 @@ hash_walk_step(mdb_walk_state_t *wsp)
 	hashwalk_data_t *hwp = wsp->walk_data;
 	int rv;
 
-	while (wsp->walk_addr == NULL) {
+	while (wsp->walk_addr == (uintptr_t)NULL) {
 		if (++hwp->hw_hashidx < hwp->hw_hashlen)
 			wsp->walk_addr = hwp->hw_hash[hwp->hw_hashidx];
 		else
@@ -384,7 +384,7 @@ ustat_walk_step(mdb_walk_state_t *wsp)
 	fmd_ustat_elem_t ue;
 	fmd_stat_t s;
 
-	while (wsp->walk_addr == NULL) {
+	while (wsp->walk_addr == (uintptr_t)NULL) {
 		if (++hwp->hw_hashidx < hwp->hw_hashlen)
 			wsp->walk_addr = hwp->hw_hash[hwp->hw_hashidx];
 		else
@@ -680,7 +680,7 @@ thread_walk_step(mdb_walk_state_t *wsp)
 	uintptr_t addr = wsp->walk_addr;
 	fmd_thread_t t;
 
-	if (addr == NULL)
+	if (addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&t, sizeof (t), addr) != sizeof (t)) {
@@ -739,7 +739,7 @@ mod_walk_step(mdb_walk_state_t *wsp)
 	uintptr_t addr = wsp->walk_addr;
 	fmd_module_t m;
 
-	if (addr == NULL)
+	if (addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&m, sizeof (m), addr) != sizeof (m)) {
@@ -789,7 +789,7 @@ case_walk_init(mdb_walk_state_t *wsp)
 	fmd_case_hash_t ch;
 	fmd_t F;
 
-	if (wsp->walk_addr != NULL) {
+	if (wsp->walk_addr != (uintptr_t)NULL) {
 		if (mdb_vread(&mod, sizeof (mod), wsp->walk_addr) == -1) {
 			mdb_warn("failed to read module at %p", wsp->walk_addr);
 			return (WALK_ERR);
@@ -819,7 +819,7 @@ case_walk_step(mdb_walk_state_t *wsp)
 	if (wsp->walk_data != NULL)
 		return (hash_walk_step(wsp));
 
-	if (addr == NULL)
+	if (addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&ci, sizeof (ci), addr) != sizeof (ci)) {
@@ -1009,12 +1009,13 @@ asru_walk_init(mdb_walk_state_t *wsp)
 	fmd_asru_hash_t ah;
 	fmd_t F;
 
-	if (wsp->walk_addr == NULL && mdb_readvar(&F, "fmd") != sizeof (F)) {
+	if (wsp->walk_addr == (uintptr_t)NULL &&
+	    mdb_readvar(&F, "fmd") != sizeof (F)) {
 		mdb_warn("failed to read fmd meta-data");
 		return (WALK_ERR);
 	}
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		wsp->walk_addr = (uintptr_t)F.d_asrus;
 
 	if (mdb_vread(&ah, sizeof (ah), wsp->walk_addr) != sizeof (ah)) {
@@ -1063,12 +1064,13 @@ al_walk_init(mdb_walk_state_t *wsp)
 	fmd_asru_hash_t ah;
 	fmd_t F;
 
-	if (wsp->walk_addr == NULL && mdb_readvar(&F, "fmd") != sizeof (F)) {
+	if (wsp->walk_addr == (uintptr_t)NULL &&
+	    mdb_readvar(&F, "fmd") != sizeof (F)) {
 		mdb_warn("failed to read fmd meta-data");
 		return (WALK_ERR);
 	}
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		wsp->walk_addr = (uintptr_t)F.d_asrus;
 
 	if (mdb_vread(&ah, sizeof (ah), wsp->walk_addr) != sizeof (ah)) {
@@ -1124,7 +1126,7 @@ fcf_hdr(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 		return (DCMD_USAGE);
 
 	if (!(flags & DCMD_ADDRSPEC))
-		addr = 0; /* assume base of file in file target */
+		addr = (uintptr_t)NULL; /* assume base of file in file target */
 
 	if (mdb_vread(&h, sizeof (h), addr) != sizeof (h)) {
 		mdb_warn("failed to read header at %p", addr);
@@ -1364,12 +1366,13 @@ tmq_walk_init(mdb_walk_state_t *wsp)
 	fmd_timerq_t tmq;
 	fmd_t F;
 
-	if (wsp->walk_addr == NULL && mdb_readvar(&F, "fmd") != sizeof (F)) {
+	if (wsp->walk_addr == (uintptr_t)NULL &&
+	    mdb_readvar(&F, "fmd") != sizeof (F)) {
 		mdb_warn("failed to read fmd meta-data");
 		return (WALK_ERR);
 	}
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		wsp->walk_addr = (uintptr_t)F.d_timers;
 
 	if (mdb_vread(&tmq, sizeof (tmq), wsp->walk_addr) != sizeof (tmq)) {
@@ -1387,7 +1390,7 @@ tmq_walk_step(mdb_walk_state_t *wsp)
 	uintptr_t addr = wsp->walk_addr;
 	fmd_timer_t tmr;
 
-	if (addr == NULL)
+	if (addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&tmr, sizeof (tmr), addr) != sizeof (tmr)) {
@@ -1441,7 +1444,7 @@ xprt_walk_init(mdb_walk_state_t *wsp)
 {
 	fmd_module_t m;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("transport walker requires fmd_module_t address\n");
 		return (WALK_ERR);
 	}
@@ -1461,7 +1464,7 @@ xprt_walk_step(mdb_walk_state_t *wsp)
 	uintptr_t addr = wsp->walk_addr;
 	fmd_xprt_impl_t xi;
 
-	if (addr == NULL)
+	if (addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&xi, sizeof (xi), addr) != sizeof (xi)) {
@@ -1587,7 +1590,7 @@ tsnap_walk_step(mdb_walk_state_t *wsp)
 	uintptr_t addr = wsp->walk_addr;
 	fmd_topo_t ftp;
 
-	if (addr == NULL)
+	if (addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&ftp, sizeof (ftp), addr) != sizeof (ftp)) {
@@ -1605,7 +1608,7 @@ mq_walk_init(mdb_walk_state_t *wsp)
 	fmd_module_t m;
 	struct fmd_eventq eq;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("NULL fmd_module_t passed in");
 		return (WALK_ERR);
 	}
@@ -1631,7 +1634,7 @@ mq_walk_step(mdb_walk_state_t *wsp)
 	uintptr_t addr = wsp->walk_addr;
 	fmd_eventqelem_t eqe;
 
-	if (addr == NULL)
+	if (addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&eqe, sizeof (eqe), addr) != sizeof (eqe)) {

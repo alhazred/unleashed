@@ -914,7 +914,7 @@ print_inq_data(char *arg_path, char *path, L_inquiry inq, uchar_t *serial,
 	(void) fprintf(stdout, ")\n");
 
 	(void) fprintf(stdout, "%s", *p++);
-	if (inq.inq_rmb != NULL) {
+	if (inq.inq_rmb != 0) {
 		(void) fprintf(stdout, MSGSTR(40, "yes"));
 	} else {
 		(void) fprintf(stdout, MSGSTR(45, "no"));
@@ -923,7 +923,7 @@ print_inq_data(char *arg_path, char *path, L_inquiry inq, uchar_t *serial,
 
 	if (scsi_3) {
 		(void) fprintf(stdout, "%s", *p++);
-		if (inq.inq_mchngr != NULL) {
+		if (inq.inq_mchngr != 0) {
 			(void) fprintf(stdout, MSGSTR(40, "yes"));
 		} else {
 			(void) fprintf(stdout, MSGSTR(45, "no"));
@@ -950,7 +950,7 @@ print_inq_data(char *arg_path, char *path, L_inquiry inq, uchar_t *serial,
 	}
 	if (scsi_3) {
 		(void) fprintf(stdout, "%s", *p++);
-		if (inq.inq_normaca != NULL) {
+		if (inq.inq_normaca != 0) {
 			(void) fprintf(stdout, MSGSTR(40, "yes"));
 		} else {
 			(void) fprintf(stdout, MSGSTR(45, "no"));
@@ -968,7 +968,7 @@ print_inq_data(char *arg_path, char *path, L_inquiry inq, uchar_t *serial,
 	(void) fprintf(stdout, "%s0x%x\n", *p++, inq.inq_len);
 	if (scsi_3) {
 		if (inq.inq_dual_p) {
-			if (inq.inq_port != NULL) {
+			if (inq.inq_port != 0) {
 				(void) fprintf(stdout, MSGSTR(2187,
 				    "%sa\n"), *p++);
 			} else {
@@ -1029,7 +1029,7 @@ print_inq_data(char *arg_path, char *path, L_inquiry inq, uchar_t *serial,
 
 	if (scsi_3) {
 		(void) fprintf(stdout, "%s", *p++);
-		if (inq.ui.inq_3.inq_trandis != NULL) {
+		if (inq.ui.inq_3.inq_trandis != 0) {
 			(void) fprintf(stdout, MSGSTR(40, "yes"));
 		} else {
 			(void) fprintf(stdout, MSGSTR(45, "no"));
@@ -1368,13 +1368,13 @@ get_scsi_vhci_pathinfo(char *dev_path, sv_iocdata_t *ioc, int *path_count)
 	int 	prop_buf_size;
 	int	pathlist_retry_count = 0;
 
-	if (strncmp(dev_path, SCSI_VHCI, strlen(SCSI_VHCI)) != NULL) {
+	if (strncmp(dev_path, SCSI_VHCI, strlen(SCSI_VHCI)) != 0) {
 		if ((physical_path = get_slash_devices_from_osDevName(
 		    dev_path, STANDARD_DEVNAME_HANDLING)) == NULL) {
 			return (L_INVALID_PATH);
 		}
 		if (strncmp(physical_path, SCSI_VHCI,
-		    strlen(SCSI_VHCI)) != NULL) {
+		    strlen(SCSI_VHCI)) != 0) {
 			free(physical_path);
 			return (L_INVALID_PATH);
 		}
@@ -1392,7 +1392,7 @@ get_scsi_vhci_pathinfo(char *dev_path, sv_iocdata_t *ioc, int *path_count)
 	delimiter = strrchr(physical_path, ':');
 	/* if we didn't find the ':' fine, else truncate */
 	if (delimiter != NULL) {
-		*delimiter = NULL;
+		*delimiter = 0;
 	}
 
 	/*

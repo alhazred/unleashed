@@ -72,7 +72,8 @@ subCommandProps_t subcommands[] = {
 		OPERAND_NONE, NULL, NULL},
 	{"enable", enableAluaFunc, NULL, NULL, NULL,
 		OPERAND_MANDATORY_SINGLE, OPERANDSTRING_NODE_ID, NULL},
-	{NULL, 0, NULL, NULL, 0, NULL, 0, NULL, NULL}
+	{NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL}
+
 };
 
 /* globals */

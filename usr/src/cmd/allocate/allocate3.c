@@ -622,13 +622,13 @@ mk_revoke(int optflag, char *file)
 					continue;
 				}
 				(void) close(fp);
-				if (strcmp(info.pr_fname, "vold") == NULL) {
+				if (strcmp(info.pr_fname, "vold") == 0) {
 					dprintf("%d matched vold name\n",
 					    fuserpid);
 					continue;
 				}
 				if (strcmp(info.pr_fname, "deallocate")
-				    == NULL) {
+				    == 0) {
 					dprintf("%d matched deallocate name\n",
 					    fuserpid);
 					continue;

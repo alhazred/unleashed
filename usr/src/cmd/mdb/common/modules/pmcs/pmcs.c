@@ -228,7 +228,7 @@ display_iport_damap(dev_info_t *pdip)
 	mdb_vread(&dam1, sizeof (dam1),
 	    (uintptr_t)(sizeof (dam0) + tmd_offset + (char *)sht.tran_tgtmap));
 
-	if (dam0 != NULL) {
+	if (dam0 != (uintptr_t)NULL) {
 		rval = mdb_call_dcmd("damap", dam0, DCMD_ADDRSPEC, 0, NULL);
 		mdb_printf("\n");
 		if (rval != DCMD_OK) {
@@ -236,7 +236,7 @@ display_iport_damap(dev_info_t *pdip)
 		}
 	}
 
-	if (dam1 != NULL) {
+	if (dam1 != (uintptr_t)NULL) {
 		rval = mdb_call_dcmd("damap", dam1, DCMD_ADDRSPEC, 0, NULL);
 		mdb_printf("\n");
 	}
@@ -1545,7 +1545,7 @@ get_devid_from_ob_iomb(struct pmcs_hw ss, uint32_t *qentryp, uint16_t opcode)
 		/*
 		 * If we have a PHY, read it in and get it's handle
 		 */
-		if (_phy != NULL) {
+		if (_phy != (uintptr_t)NULL) {
 			if (MDB_RD(phy, sizeof (*phy), _phy) == -1) {
 				NOREAD(pmcs_phy_t, phy);
 			} else {
@@ -1741,7 +1741,7 @@ display_outbound_queues(struct pmcs_hw ss, uint64_t devid_filter,
 	for (qidx = 0; qidx < PMCS_NOQ; qidx++) {
 		obqp = (uintptr_t)ss.oqp[qidx];
 
-		if (obqp == NULL) {
+		if (obqp == (uintptr_t)NULL) {
 			mdb_printf("No outbound queue ptr for queue #%d\n",
 			    qidx);
 			continue;
@@ -1873,7 +1873,7 @@ display_inbound_queues(struct pmcs_hw ss, uint64_t devid_filter, uint_t verbose)
 	for (qidx = 0; qidx < PMCS_NIQ; qidx++) {
 		ibqp = (uintptr_t)ss.iqp[qidx];
 
-		if (ibqp == NULL) {
+		if (ibqp == (uintptr_t)NULL) {
 			mdb_printf("No inbound queue ptr for queue #%d\n",
 			    qidx);
 			continue;
@@ -2367,7 +2367,7 @@ pmcs_dump_tracelog(boolean_t filter, int instance, uint64_t tail_lines,
 static int
 targets_walk_i(mdb_walk_state_t *wsp)
 {
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("Can not perform global walk\n");
 		return (WALK_ERR);
 	}
@@ -2418,7 +2418,8 @@ targets_walk_s(mdb_walk_state_t *wsp)
 
 	do {
 		wsp->walk_addr = (uintptr_t)(targets[++target_idx]);
-	} while ((wsp->walk_addr == NULL) && (target_idx < ss.max_dev));
+	} while ((wsp->walk_addr == (uintptr_t)NULL) &&
+	    (target_idx < ss.max_dev));
 
 	if (target_idx == ss.max_dev) {
 		return (WALK_DONE);
@@ -2478,7 +2479,7 @@ pmcs_next_sibling(pmcs_phy_t *phyp)
 static int
 phy_walk_i(mdb_walk_state_t *wsp)
 {
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("Can not perform global walk\n");
 		return (WALK_ERR);
 	}
@@ -2522,7 +2523,7 @@ phy_walk_s(mdb_walk_state_t *wsp)
 		wsp->walk_addr = (uintptr_t)(phyp->sibling);
 	}
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		/*
 		 * We reached the end of this sibling list.  Trudge back up
 		 * to the parent and find the next sibling after the expander

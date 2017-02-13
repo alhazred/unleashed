@@ -2764,7 +2764,7 @@ print_mask(char *desc, au_mask_t *pmp)
 {
 	char auflags[512];
 
-	if (getauditflagschar(auflags, pmp, NULL) < 0)
+	if (getauditflagschar(auflags, pmp, 0) < 0)
 		(void) strlcpy(auflags, gettext("unknown"), sizeof (auflags));
 
 	(void) printf("%s = %s(0x%x,0x%x)\n",

@@ -240,7 +240,7 @@ collect(struct header *hp)
 			hdrs = 0;
 			continue;
 		}
-		if ((nread = getaline(linebuf,LINESIZE,stdin,&hasnulls)) == NULL) {
+		if ((nread = getaline(linebuf,LINESIZE,stdin,&hasnulls)) == 0) {
 			if (intty && value("ignoreeof") != NOSTR) {
 				if (++eof > 35)
 					break;
@@ -1088,18 +1088,18 @@ forward(char ms[], FILE *obuf, int f)
 		return(0);
 	if (getmsglist(ms, msgvec, 0) < 0)
 		return(0);
-	if (*msgvec == NULL) {
+	if (*msgvec == 0) {
 		*msgvec = first(0, MMNORM);
-		if (*msgvec == NULL) {
+		if (*msgvec == 0) {
 			printf(gettext("No appropriate messages\n"));
 			return(0);
 		}
-		msgvec[1] = NULL;
+		msgvec[1] = 0;
 	}
 	if (tolower(f) == 'm')
 		indentprefix = value("indentprefix");
 	printf(gettext("Interpolating:"));
-	for (ip = msgvec; *ip != NULL; ip++) {
+	for (ip = msgvec; *ip != 0; ip++) {
 		touch(*ip);
 		printf(" %d", *ip);
 		if (msend(&message[*ip-1], obuf, islower(f) ? M_IGNORE : 0,

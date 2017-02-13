@@ -132,7 +132,7 @@ iscsi_base64_str_to_binary(char *hstr, int hstr_len,
 	*out_len = 0;
 	iptr = hstr;
 
-	while (((curchr = *(iptr++)) != NULL) &&
+	while (((curchr = *(iptr++)) != '\0') &&
 	    (((uintptr_t)iptr - (uintptr_t)hstr) <= hstr_len)) {
 		/* decode chars */
 		if (curchr == '=') /* if end */

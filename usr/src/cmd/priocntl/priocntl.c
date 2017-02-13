@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
 /*	  All Rights Reserved  	*/
 
@@ -1076,7 +1074,7 @@ char	**argv, *opts;
 		if (prio_optind >= argc ||
 		    argv[prio_optind][0] != '-' || argv[prio_optind][1] == '\0')
 			return (EOF);
-		else if (strcmp(argv[prio_optind], "--") == NULL) {
+		else if (strcmp(argv[prio_optind], "--") == 0) {
 			prio_optind++;
 			return (EOF);
 		}

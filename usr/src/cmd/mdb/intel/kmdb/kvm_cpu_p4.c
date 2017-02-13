@@ -170,7 +170,7 @@ static const kdi_msr_t kmt_p4orig_msrs[] = {
 	{ MSR_P4_LBSTK_1,	KDI_MSR_READ },
 	{ MSR_P4_LBSTK_2,	KDI_MSR_READ },
 	{ MSR_P4_LBSTK_3,	KDI_MSR_READ },
-	{ NULL }
+	{ 0 }
 };
 
 static const kmt_p4_flavor_t kmt_p4_original = {
@@ -191,7 +191,7 @@ static const kdi_msr_t kmt_p6m_msrs[] = {
 	{ MSR_P6M_LBSTK_5,	KDI_MSR_READ },
 	{ MSR_P6M_LBSTK_6,	KDI_MSR_READ },
 	{ MSR_P6M_LBSTK_7,	KDI_MSR_READ },
-	{ NULL }
+	{ 0 }
 };
 
 static const kmt_p4_flavor_t kmt_p6_m = {
@@ -237,7 +237,7 @@ static const kdi_msr_t kmt_prp4_msrs[] = {
 	{ MSR_PRP4_LBSTK_TO_13,	KDI_MSR_READ },
 	{ MSR_PRP4_LBSTK_TO_14,	KDI_MSR_READ },
 	{ MSR_PRP4_LBSTK_TO_15,	KDI_MSR_READ },
-	{ NULL }
+	{ 0 }
 };
 
 static const kmt_p4_flavor_t kmt_p4_prescott = {
@@ -249,7 +249,7 @@ static const kmt_p4_flavor_t kmt_p4_prescott = {
 static const kdi_msr_t kmt_p4unk_msrs[] = {
 	{ MSR_DEBUGCTL,		KDI_MSR_CLEARENTRY },
 	{ MSR_DEBUGCTL,		KDI_MSR_WRITEDELAY, &kmt_cpu_p4.p4_debugctl },
-	{ NULL }
+	{ 0 }
 };
 
 static const kmt_p4_flavor_t kmt_p4_unknown = {

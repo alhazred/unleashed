@@ -867,11 +867,11 @@ ip_timeout(fmd_hdl_t *hdl, id_t id, void *arg) {
 			cinfo->ipc_timer = fmd_timer_install(
 				hdl, cinfo, NULL, ip_sleep);
 		else
-			cinfo->ipc_timer = NULL;
+			cinfo->ipc_timer = 0;
 	} else {
 		ipx = arg;
 		if (ipx->ipx_flags & FMD_XPRT_SUSPENDED) {
-			ipx->ipx_spnd_timer = NULL;
+			ipx->ipx_spnd_timer = 0;
 			ip_debug(IP_DEBUG_FINE, "timer %d waking ipx %p",
 				(int)id, arg);
 			ipx->ipx_flags &= ~FMD_XPRT_SUSPENDED;
@@ -887,7 +887,7 @@ ip_timeout(fmd_hdl_t *hdl, id_t id, void *arg) {
 				cinfo->ipc_timer = fmd_timer_install(
 					hdl, cinfo, NULL, ip_sleep);
 			else
-				cinfo->ipc_timer = NULL;
+				cinfo->ipc_timer = 0;
 		}
 	}
 }

@@ -1159,7 +1159,7 @@ kmt_mapping_iter(mdb_tgt_t *t, mdb_tgt_map_f *func, void *private)
 	m.map_cb = func;
 	m.map_data = private;
 
-	if ((kas = kmt_read_kas(t)) == NULL)
+	if ((kas = kmt_read_kas(t)) == (uintptr_t)NULL)
 		return (-1); /* errno is set for us */
 
 	return (mdb_pwalk("seg", (mdb_walk_cb_t)kmt_mapping_walk, &m, kas));
@@ -1700,7 +1700,8 @@ static char *
 kmt_brkpt_info(mdb_tgt_t *t, mdb_sespec_t *sep, mdb_vespec_t *vep,
     mdb_tgt_spec_desc_t *sp, char *buf, size_t nbytes)
 {
-	uintptr_t addr = NULL;
+	uintptr_t addr = (uintptr_t)NULL;
+
 
 	if (vep != NULL) {
 		kmt_bparg_t *ka = vep->ve_args;
@@ -2231,7 +2232,7 @@ kmt_add_sbrkpt(mdb_tgt_t *t, const char *fullname,
 
 	ka = mdb_alloc(sizeof (kmt_bparg_t), UM_SLEEP);
 	ka->ka_symbol = strdup(fullname);
-	ka->ka_addr = NULL;
+	ka->ka_addr = (uintptr_t)NULL;
 	ka->ka_defbp = dbp;
 
 	return (mdb_tgt_vespec_insert(t, &kmt_brkpt_ops, spec_flags,

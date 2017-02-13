@@ -908,7 +908,7 @@ print_line(char *label, char *buf)
 	while (c) {
 		i = lsz;
 		wp = NULL;
-		while ((c = *ep) != NULL && (wp == NULL || i < 80)) {
+		while ((c = *ep) != '\0' && (wp == NULL || i < 80)) {
 			if (c == ' ')
 				wp = ep;
 			else if (c == '\n') {
@@ -916,7 +916,7 @@ print_line(char *label, char *buf)
 				*ep = 0;
 				do {
 					ep++;
-				} while ((c = *ep) != NULL && c == ' ');
+				} while ((c = *ep) != '\0' && c == ' ');
 				break;
 			}
 			ep++;

@@ -38,8 +38,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "rcv.h"
 #include <locale.h>
 
@@ -468,7 +466,7 @@ preserve(int *msgvec)
 		printf(gettext("Cannot \"preserve\" in edit mode\n"));
 		return(1);
 	}
-	for (ip = msgvec; *ip != NULL; ip++) {
+	for (ip = msgvec; *ip != 0; ip++) {
 		mesg = *ip;
 		mp = &message[mesg-1];
 		mp->m_flag |= MPRESERVE;
@@ -486,7 +484,7 @@ unread(int msgvec[])
 {
 	register int *ip;
 
-	for (ip = msgvec; *ip != NULL; ip++) {
+	for (ip = msgvec; *ip != 0; ip++) {
 		dot = &message[*ip-1];
 		dot->m_flag &= ~(MREAD|MTOUCH);
 		dot->m_flag |= MSTATUS;
@@ -504,7 +502,7 @@ messize(int *msgvec)
 	register struct message *mp;
 	register int *ip, mesg;
 
-	for (ip = msgvec; *ip != NULL; ip++) {
+	for (ip = msgvec; *ip != 0; ip++) {
 		mesg = *ip;
 		mp = &message[mesg-1];
 		dot = mp;

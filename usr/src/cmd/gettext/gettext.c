@@ -32,8 +32,6 @@
  * under license from the Regents of the University of California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -53,7 +51,7 @@ expand_metas(char *in)	/* walk thru string interpreting \n etc. */
 {
 	register char *out, *cp;
 
-	for (cp = out = in; *in != NULL; out++, in++) {
+	for (cp = out = in; *in != '\0'; out++, in++) {
 		if (*in == '\\') {
 			switch (*++in) {
 			case 'b' :
@@ -81,7 +79,7 @@ expand_metas(char *in)	/* walk thru string interpreting \n etc. */
 		} else
 			*out = *in;
 	}
-	*out = NULL;
+	*out = '\0';
 	return (cp);
 }
 
@@ -228,7 +226,7 @@ loop:
 		}
 		msgid = expand_metas(*argv);
 		(void) fputs(dgettext(domain, msgid), stdout);
-		exit(*domain == NULL);
+		exit(*domain == '\0');
 	}
 	/* echo mode */
 	if (!domain) {
@@ -243,7 +241,7 @@ loop:
 		else
 			msgid = *argv++;
 		(void) fputs(domain ? dgettext(domain, msgid) : msgid,
-			stdout);
+		    stdout);
 
 		if (argc > 0)
 			(void) fputc(' ', stdout);
@@ -251,5 +249,5 @@ loop:
 	if (!no_newline)
 		(void) fputc('\n', stdout);
 
-	return ((domain == NULL) || (*domain == NULL));
+	return ((domain == NULL) || (*domain == '\0'));
 }

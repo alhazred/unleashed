@@ -27,8 +27,6 @@
 /*	Copyright (c) 1988 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  *  NAME
  *	captoinfo - convert a termcap description to a terminfo description
@@ -958,7 +956,7 @@ adddefaults(void)
 
 	/* the rs string was renamed r2 (info rs2) */
 	if ((ostrval[uselevel][cap_rs] != NULL) &&
-	    (ostrval[uselevel][cap_rs][0] != NULL))
+	    (ostrval[uselevel][cap_rs][0] != '\0'))
 		putstr("rs2", ostrval[uselevel][cap_rs]);
 
 	handleko();

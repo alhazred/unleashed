@@ -36,8 +36,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Quota report
  */
@@ -452,7 +450,7 @@ quotactl(int cmd, char *special, uid_t uid, caddr_t addr)
 			exit(31+1);
 		}
 		fd = -1;
-		while ((status = getmntent(fstab, &mntp)) == NULL) {
+		while ((status = getmntent(fstab, &mntp)) == 0) {
 
 			if (strcmp(mntp.mnt_fstype, MNTTYPE_UFS) != 0 ||
 			    hasmntopt(&mntp, MNTOPT_RO))

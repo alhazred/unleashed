@@ -359,7 +359,7 @@ fgetnetconfig(FILE *fp, char *netid)
 	netconfigp->nc_netid = entnetid;
 	if (((tok1 = gettoken(NULL, FALSE)) == NULL) ||
 	    ((netconfigp->nc_semantics =
-		getvalue(tok1, nc_semantics)) == FAILURE) ||
+	    getvalue(tok1, nc_semantics)) == FAILURE) ||
 	    ((tok2 = gettoken(NULL, FALSE)) == NULL) ||
 	    ((netconfigp->nc_flag = getflag(tok2)) == FAILURE) ||
 	    ((netconfigp->nc_protofmly = gettoken(NULL, FALSE)) == NULL) ||
@@ -367,7 +367,7 @@ fgetnetconfig(FILE *fp, char *netid)
 	    ((netconfigp->nc_device = gettoken(NULL, FALSE)) == NULL) ||
 	    ((tok3 = gettoken(NULL, TRUE)) == NULL) ||
 	    (((netconfigp->nc_nlookups = getnlookups(tok3)) != 0) &&
-		((netconfigp->nc_lookups = getlookups(tok3)) == NULL))) {
+	    ((netconfigp->nc_lookups = getlookups(tok3)) == NULL))) {
 		netconfig_free(netconfigp);
 		nc_error = NC_BADLINE;
 		netconfigp = NULL;
@@ -461,7 +461,7 @@ setnetpath(void)
 			/* Skip all leading ':'s */
 			while (*tp && *tp == ':')
 				tp++;
-			if (*tp == NULL)
+			if (*tp == '\0')
 				break;  /* last one */
 			netid = tp;
 			while (*tp && *tp != ':')
@@ -472,7 +472,7 @@ setnetpath(void)
 			for (tpp = netpp; *tpp; tpp++) {
 				if (strcmp(netid, (*tpp)->nc_netid) == 0) {
 					(void) strcat(valid_netpath,
-						(*tpp)->nc_netid);
+					    (*tpp)->nc_netid);
 					(void) strcat(valid_netpath, ":");
 					count++;
 					break;
@@ -815,8 +815,7 @@ nc_sperror(void)
 	static char buf_main[BUFSIZ];
 	static pthread_key_t perror_key = PTHREAD_ONCE_KEY_NP;
 	char *retstr = thr_main()?
-		buf_main :
-		thr_get_storage(&perror_key, BUFSIZ, free);
+	    buf_main : thr_get_storage(&perror_key, BUFSIZ, free);
 
 	if (retstr == NULL) {
 		syslog(LOG_WARNING,
@@ -839,23 +838,23 @@ nc_sperror(void)
 		break;
 	case NC_OPENFAIL:
 		(void) strlcpy(retstr,
-			dgettext(__nsl_dom, "cannot open /etc/netconfig"),
-			BUFSIZ);
+		    dgettext(__nsl_dom, "cannot open /etc/netconfig"),
+		    BUFSIZ);
 		break;
 	case NC_BADLINE:
 		(void) snprintf(retstr, BUFSIZ, dgettext(__nsl_dom,
-			"error in /etc/netconfig: field %d of line %d\n"),
-				fieldnum, linenum);
+		    "error in /etc/netconfig: field %d of line %d\n"),
+		    fieldnum, linenum);
 		break;
 	case NC_NOTFOUND:
 		(void) snprintf(retstr, BUFSIZ,
-			dgettext(__nsl_dom,
-				"netid not found in /etc/netconfig"));
+		    dgettext(__nsl_dom,
+		    "netid not found in /etc/netconfig"));
 		break;
 	case NC_NOMOREENTRIES:
 		(void) snprintf(retstr, BUFSIZ,
-			dgettext(__nsl_dom,
-				"no more entries in /etc/netconfig"));
+		    dgettext(__nsl_dom,
+		    "no more entries in /etc/netconfig"));
 		break;
 	default:
 		(void) strlcpy(retstr, dgettext(__nsl_dom, "unknown error"),
@@ -920,10 +919,10 @@ netconfig_dup(struct netconfig *netconfigp)
 	nconf->nc_proto = strdup(netconfigp->nc_proto);
 	nconf->nc_device = strdup(netconfigp->nc_device);
 	nconf->nc_lookups = malloc((netconfigp->nc_nlookups + 1)
-					* sizeof (char *));
+	    * sizeof (char *));
 	if (!(nconf->nc_lookups && nconf->nc_netid &&
-		nconf->nc_protofmly && nconf->nc_proto &&
-		nconf->nc_device)) {
+	    nconf->nc_protofmly && nconf->nc_proto &&
+	    nconf->nc_device)) {
 		nc_error = NC_NOMEM;
 		netconfig_free(nconf);
 		return (NULL);

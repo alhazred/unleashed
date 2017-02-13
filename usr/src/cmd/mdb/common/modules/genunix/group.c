@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Display group information and walk all elements of a group
  */
@@ -50,9 +48,8 @@ group(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 	if (!(flags & DCMD_ADDRSPEC))
 		return (DCMD_USAGE);
 
-	if (mdb_getopts(argc, argv,
-	    'q', MDB_OPT_SETBITS, TRUE, &opt_q,
-		NULL) != argc)
+	if (mdb_getopts(argc, argv, 'q', MDB_OPT_SETBITS, TRUE, &opt_q,
+	    NULL) != argc)
 		return (DCMD_USAGE);
 
 	if (flags & DCMD_PIPE_OUT)
@@ -160,10 +157,9 @@ group_walk_step(mdb_walk_state_t *wsp)
 	/*
 	 * Print non-NULL elements
 	 */
-	status = wsp->walk_addr == NULL ?
-	    WALK_NEXT :
+	status = wsp->walk_addr == (uintptr_t)NULL ?  WALK_NEXT :
 	    wsp->walk_callback(wsp->walk_addr, wsp->walk_data,
-		wsp->walk_cbdata);
+	    wsp->walk_cbdata);
 
 	/*
 	 * Adjust walk_addr to point to the next element

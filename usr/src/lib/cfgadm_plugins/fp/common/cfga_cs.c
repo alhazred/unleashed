@@ -64,14 +64,14 @@ static fpcfga_ret_t handle_devs(cfga_cmd_t, apid_t *, cfga_flags_t,
  */
 static fpcfga_ret_t
 do_devctl_dev_create(apid_t *apidt, char *dev_path, int pathlen,
-					uchar_t dev_dtype, char **errstring)
+    uchar_t dev_dtype, char **errstring)
 {
 	devctl_ddef_t	ddef_hdl;
 	devctl_hdl_t	bus_hdl, dev_hdl;
 	char		*drvr_name = "dummy";
 	la_wwn_t	pwwn;
 
-	*dev_path = NULL;
+	*dev_path = '\0';
 	if ((ddef_hdl = devctl_ddef_alloc(drvr_name, 0)) == NULL) {
 		cfga_err(errstring, errno, ERRARG_DC_DDEF_ALLOC, drvr_name, 0);
 		return (FPCFGA_LIB_ERR);
@@ -84,17 +84,17 @@ do_devctl_dev_create(apid_t *apidt, char *dev_path, int pathlen,
 	}
 
 	if (devctl_ddef_byte_array(ddef_hdl, PORT_WWN_PROP, FC_WWN_SIZE,
-							pwwn.raw_wwn) == -1) {
+	    pwwn.raw_wwn) == -1) {
 		devctl_ddef_free(ddef_hdl);
 		cfga_err(errstring, errno, ERRARG_DC_BYTE_ARRAY,
-							PORT_WWN_PROP, 0);
+		    PORT_WWN_PROP, 0);
 		return (FPCFGA_LIB_ERR);
 	}
 
 	if ((bus_hdl = devctl_bus_acquire(apidt->xport_phys, 0)) == NULL) {
 		devctl_ddef_free(ddef_hdl);
 		cfga_err(errstring, errno, ERRARG_DC_BUS_ACQUIRE,
-							apidt->xport_phys, 0);
+		    apidt->xport_phys, 0);
 		return (FPCFGA_LIB_ERR);
 	}
 
@@ -158,11 +158,11 @@ dev_rcm_online(apid_t *apidt, int count, cfga_flags_t flags, char **errstring)
 	lunlistp = apidt->lunlist;
 
 	for (lunlistp = apidt->lunlist; lunlistp != NULL;
-					i++, lunlistp = lunlistp->next) {
+	    i++, lunlistp = lunlistp->next) {
 		if ((count >= 0) && (i >= count))
 			break;
 		if (fp_rcm_online(lunlistp->path, errstring, flags) !=
-								FPCFGA_OK) {
+		    FPCFGA_OK) {
 			ret++;
 		}
 	}
@@ -223,14 +223,14 @@ dev_rcm_offline(apid_t *apidt, cfga_flags_t flags, char **errstring)
 	}
 
 	for (lunlistp = apidt->lunlist; lunlistp != NULL;
-						lunlistp = lunlistp->next) {
+	    lunlistp = lunlistp->next) {
 		if ((lunlistp->lun_flag & FLAG_SKIP_RCMOFFLINE) != 0) {
 			continue;
 		}
 		if ((apidt->flags & FLAG_REMOVE_UNUSABLE_FCP_DEV) ==
 		    FLAG_REMOVE_UNUSABLE_FCP_DEV) {
 			int ret = strncmp(lunlistp->path, SCSI_VHCI_ROOT,
-				strlen(SCSI_VHCI_ROOT));
+			    strlen(SCSI_VHCI_ROOT));
 
 			if (((ret == 0) &&
 			    (lunlistp->node_state == DI_PATH_STATE_OFFLINE)) ||
@@ -239,13 +239,13 @@ dev_rcm_offline(apid_t *apidt, cfga_flags_t flags, char **errstring)
 			    DI_DEVICE_OFFLINE))) {
 				/* Offline the device through RCM */
 				if (fp_rcm_offline(lunlistp->path, errstring,
-					    flags) != 0) {
+				    flags) != 0) {
 					/*
 					 * Bring everything back online in
 					 * rcm and return
 					 */
 					(void) dev_rcm_online(apidt, count,
-								flags, NULL);
+					    flags, NULL);
 					return (FPCFGA_LIB_ERR);
 				}
 				count++;
@@ -253,13 +253,13 @@ dev_rcm_offline(apid_t *apidt, cfga_flags_t flags, char **errstring)
 		} else {
 			/* Offline the device through RCM */
 			if (fp_rcm_offline(lunlistp->path, errstring,
-				    flags) != 0) {
+			    flags) != 0) {
 				/*
 				 * Bring everything back online in
 				 * rcm and return
 				 */
 				(void) dev_rcm_online(apidt, count, flags,
-									NULL);
+				    NULL);
 				return (FPCFGA_LIB_ERR);
 			}
 			count++;
@@ -293,13 +293,13 @@ dev_rcm_remove(apid_t *apidt, cfga_flags_t flags, char **errstring)
 	}
 
 	for (lunlistp = apidt->lunlist; lunlistp != NULL;
-						lunlistp = lunlistp->next) {
+	    lunlistp = lunlistp->next) {
 		if ((lunlistp->lun_flag & FLAG_SKIP_RCMREMOVE) != 0)
 			continue;
 		if ((apidt->flags & FLAG_REMOVE_UNUSABLE_FCP_DEV) ==
 		    FLAG_REMOVE_UNUSABLE_FCP_DEV) {
 			int ret = strncmp(lunlistp->path, SCSI_VHCI_ROOT,
-				strlen(SCSI_VHCI_ROOT));
+			    strlen(SCSI_VHCI_ROOT));
 
 			if (((ret == 0) &&
 			    (lunlistp->node_state == DI_PATH_STATE_OFFLINE)) ||
@@ -308,13 +308,13 @@ dev_rcm_remove(apid_t *apidt, cfga_flags_t flags, char **errstring)
 			    DI_DEVICE_OFFLINE))) {
 				/* remove the device through RCM */
 				if (fp_rcm_remove(lunlistp->path, errstring,
-					    flags) != 0) {
+				    flags) != 0) {
 					/*
 					 * Bring everything back online in
 					 * rcm and return
 					 */
 					(void) dev_rcm_online(apidt, count,
-								flags, NULL);
+					    flags, NULL);
 					return (FPCFGA_LIB_ERR);
 				}
 				count++;
@@ -322,13 +322,13 @@ dev_rcm_remove(apid_t *apidt, cfga_flags_t flags, char **errstring)
 		} else {
 			/* remove the device through RCM */
 			if (fp_rcm_remove(lunlistp->path, errstring,
-				flags) != 0) {
+			    flags) != 0) {
 				/*
 				 * Bring everything back online in rcm and
 				 * return
 				 */
 				(void) dev_rcm_online(apidt, count, flags,
-									NULL);
+				    NULL);
 				return (FPCFGA_LIB_ERR);
 			}
 			count++;
@@ -339,7 +339,7 @@ dev_rcm_remove(apid_t *apidt, cfga_flags_t flags, char **errstring)
 
 static fpcfga_ret_t
 lun_unconf(char *path, int lunnum, char *xport_phys, char *dyncomp,
-						char **errstring)
+    char **errstring)
 {
 	devctl_hdl_t	hdl;
 	char		*ptr;		/* To use as scratch/temp pointer */
@@ -392,14 +392,14 @@ lun_unconf(char *path, int lunnum, char *xport_phys, char *dyncomp,
 		if ((ptr = strrchr(pathname, '@')) == NULL) {
 			/* This shouldn't happen, but anyways ... */
 			cfga_err(errstring, 0, ERRARG_INVALID_PATH,
-						pathname, 0);
+			    pathname, 0);
 			return (FPCFGA_LIB_ERR);
 		}
 		*ptr = '\0';
 
 		/* Now, concoct the path */
 		sprintf(&pathname[strlen(pathname)], "@w%s,%x",
-							dyncomp, lunnum);
+		    dyncomp, lunnum);
 		ptr = pathname;
 	} else {
 		/*
@@ -439,45 +439,47 @@ dev_unconf(apid_t *apidt, char **errstring, uchar_t *flag)
 		 * vHCI path
 		 */
 		if ((apidt->flags & FLAG_REMOVE_UNUSABLE_FCP_DEV) ==
-			FLAG_REMOVE_UNUSABLE_FCP_DEV) {
-		    if (strncmp(lunlistp->path, SCSI_VHCI_ROOT,
-			strlen(SCSI_VHCI_ROOT)) == 0) {
-			if (lunlistp->node_state ==
-				DI_PATH_STATE_OFFLINE) {
-			    unusable_lun_cnt++;
-			    if ((ret = lun_unconf(lunlistp->path,
-				lunlistp->lunnum, apidt->xport_phys,
-				apidt->dyncomp, errstring)) != FPCFGA_OK) {
-				return (ret);
-			    }
+		    FLAG_REMOVE_UNUSABLE_FCP_DEV) {
+			if (strncmp(lunlistp->path, SCSI_VHCI_ROOT,
+			    strlen(SCSI_VHCI_ROOT)) == 0) {
+				if (lunlistp->node_state ==
+				    DI_PATH_STATE_OFFLINE) {
+					unusable_lun_cnt++;
+					if ((ret = lun_unconf(lunlistp->path,
+					    lunlistp->lunnum, apidt->xport_phys,
+					    apidt->dyncomp, errstring)) !=
+					    FPCFGA_OK) {
+						return (ret);
+					}
+				}
+			} else {
+				if ((lunlistp->node_state &
+				    DI_DEVICE_OFFLINE) == DI_DEVICE_OFFLINE) {
+					unusable_lun_cnt++;
+					if ((ret = lun_unconf(lunlistp->path,
+					    lunlistp->lunnum, apidt->xport_phys,
+					    apidt->dyncomp, errstring)) !=
+					    FPCFGA_OK) {
+						return (ret);
+					}
+				}
 			}
-		    } else {
-			if ((lunlistp->node_state & DI_DEVICE_OFFLINE) ==
-				DI_DEVICE_OFFLINE) {
-			    unusable_lun_cnt++;
-			    if ((ret = lun_unconf(lunlistp->path,
-				lunlistp->lunnum, apidt->xport_phys,
-				apidt->dyncomp, errstring)) != FPCFGA_OK) {
-				return (ret);
-			    }
-			}
-		    }
 		} else {
 		/*
 		 * Unconfigure each LUN.
 		 * Note that for MPXIO devices, lunlistp->path will be a
 		 * vHCI path
 		 */
-		    if ((ret = lun_unconf(lunlistp->path, lunlistp->lunnum,
-				apidt->xport_phys, apidt->dyncomp,
-				errstring)) != FPCFGA_OK) {
-			return (ret);
-		    }
+			if ((ret = lun_unconf(lunlistp->path, lunlistp->lunnum,
+			    apidt->xport_phys, apidt->dyncomp,
+			    errstring)) != FPCFGA_OK) {
+				return (ret);
+			}
 		}
 	}
 
 	if ((apidt->flags & FLAG_REMOVE_UNUSABLE_FCP_DEV) ==
-			FLAG_REMOVE_UNUSABLE_FCP_DEV) {
+	    FLAG_REMOVE_UNUSABLE_FCP_DEV) {
 		/*
 		 * when all luns are unconfigured
 		 * indicate to remove repository entry.
@@ -532,8 +534,8 @@ is_xport_phys_in_pathlist(apid_t *apidt, char **errstring)
 		non_operational_path_count = 0;
 
 		if (xport_phys == NULL || vhci_path == NULL) {
-		    cfga_err(errstring, 0, ERRARG_XPORT_NOT_IN_PHCI_LIST,
-		    xport_phys, 0);
+			cfga_err(errstring, 0, ERRARG_XPORT_NOT_IN_PHCI_LIST,
+			    xport_phys, 0);
 			return (FPCFGA_LIB_ERR);
 		}
 
@@ -675,8 +677,8 @@ is_xport_phys_in_pathlist(apid_t *apidt, char **errstring)
  */
 fpcfga_ret_t
 dev_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt, la_wwn_t *pwwn,
-		cfga_flags_t flags, char **errstring, HBA_HANDLE handle,
-		HBA_PORTATTRIBUTES portAttrs)
+    cfga_flags_t flags, char **errstring, HBA_HANDLE handle,
+    HBA_PORTATTRIBUTES portAttrs)
 {
 	char			dev_path[MAXPATHLEN];
 	char			*update_str, *t_apid;
@@ -692,7 +694,7 @@ dev_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt, la_wwn_t *pwwn,
 	struct scsi_extended_sense sense;
 	HBA_UINT8		scsiStatus;
 	uint32_t		inquirySize = sizeof (inq),
-				senseSize = sizeof (sense);
+	    senseSize = sizeof (sense);
 	report_lun_resp_t	*resp_buf;
 	int			i, l_errno, num_luns = 0;
 	uchar_t			*lun_string;
@@ -707,7 +709,7 @@ dev_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt, la_wwn_t *pwwn,
 
 	/* Now construct the string we are going to put in the repository */
 	if ((update_str = calloc(1, (strlen(apidt->xport_phys) +
-		strlen(DYN_SEP) + strlen(apidt->dyncomp) + 1))) == NULL) {
+	    strlen(DYN_SEP) + strlen(apidt->dyncomp) + 1))) == NULL) {
 		cfga_err(errstring, errno, ERR_MEM_ALLOC, 0);
 		return (FPCFGA_LIB_ERR);
 	}
@@ -719,14 +721,14 @@ dev_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt, la_wwn_t *pwwn,
 	if (optflag & FLAG_FORCE_UPDATE_REP) {
 		/* Ignore any failure in rep update */
 		(void) update_fabric_wwn_list(
-			((state_change_cmd == CFGA_CMD_CONFIGURE) ?
-			ADD_ENTRY : REMOVE_ENTRY),
-			update_str, errstring);
+		    ((state_change_cmd == CFGA_CMD_CONFIGURE) ?
+		    ADD_ENTRY : REMOVE_ENTRY),
+		    update_str, errstring);
 	}
 
 	memset(&sense, 0, sizeof (sense));
 	if ((ret = get_report_lun_data(apidt->xport_phys, apidt->dyncomp,
-		&num_luns, &resp_buf, &sense, &l_errno)) != FPCFGA_OK) {
+	    &num_luns, &resp_buf, &sense, &l_errno)) != FPCFGA_OK) {
 		/*
 		 * Checking the sense key data as well as the additional
 		 * sense key.  The SES Node is not required to repond
@@ -843,14 +845,14 @@ dev_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt, la_wwn_t *pwwn,
 	}
 	switch (state_change_cmd) {
 	case CFGA_CMD_CONFIGURE:
-	    if (portAttrs.PortType != HBA_PORTTYPE_NLPORT &&
-		portAttrs.PortType != HBA_PORTTYPE_NPORT) {
-		free(update_str);
-		return (FPCFGA_OK);
-	    }
+		if (portAttrs.PortType != HBA_PORTTYPE_NLPORT &&
+		    portAttrs.PortType != HBA_PORTTYPE_NPORT) {
+			free(update_str);
+			return (FPCFGA_OK);
+		}
 
-	    if (((inq.inq_dtype & DTYPE_MASK) == DTYPE_UNKNOWN) &&
-		((flags & CFGA_FLAG_FORCE) == 0)) {
+		if (((inq.inq_dtype & DTYPE_MASK) == DTYPE_UNKNOWN) &&
+		    ((flags & CFGA_FLAG_FORCE) == 0)) {
 		/*
 		 * We assume all DTYPE_UNKNOWNs are HBAs and we wont
 		 * waste time trying to config them. If they are not
@@ -862,43 +864,43 @@ dev_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt, la_wwn_t *pwwn,
 		 *
 		 * In this path, however, the force flag is not set.
 		 */
-		free(update_str);
-		return (FPCFGA_OK);
-	    }
+			free(update_str);
+			return (FPCFGA_OK);
+		}
 
-	    errno = 0;
+		errno = 0;
 		/*
 		 * We'll issue the devctl_bus_dev_create() call even if the
 		 * path exists in the devinfo tree. This is to take care of
 		 * the situation where the device may be in a state other
 		 * than the online and attached state.
 		 */
-	    if ((ret = do_devctl_dev_create(apidt, dev_path, MAXPATHLEN,
-			inq.inq_dtype, errstring)) != FPCFGA_OK) {
+		if ((ret = do_devctl_dev_create(apidt, dev_path, MAXPATHLEN,
+		    inq.inq_dtype, errstring)) != FPCFGA_OK) {
 		/*
 		 * Could not configure device. To provide a more
 		 * meaningful error message, first see if the supplied port
 		 * WWN is there on the fabric. Otherwise print the error
 		 * message using the information received from the driver
 		 */
-		status = getPortAttrsByWWN(handle, *((HBA_WWN *)(pwwn)),
-		    &discPortAttrs);
-		S_FREE(update_str);
-		if (status == HBA_STATUS_ERROR_ILLEGAL_WWN) {
-			return (FPCFGA_APID_NOEXIST);
-		} else {
-			return (FPCFGA_LIB_ERR);
+			status = getPortAttrsByWWN(handle, *((HBA_WWN *)(pwwn)),
+			    &discPortAttrs);
+			S_FREE(update_str);
+			if (status == HBA_STATUS_ERROR_ILLEGAL_WWN) {
+				return (FPCFGA_APID_NOEXIST);
+			} else {
+				return (FPCFGA_LIB_ERR);
+			}
 		}
-	    }
 
-	    if (((optflag & (FLAG_FORCE_UPDATE_REP|FLAG_NO_UPDATE_REP)) == 0) &&
-		update_fabric_wwn_list(ADD_ENTRY, update_str, errstring)) {
-		    cfga_err(errstring, 0, ERR_CONF_OK_UPD_REP, 0);
-	    }
+		if (!(optflag & (FLAG_FORCE_UPDATE_REP|FLAG_NO_UPDATE_REP)) &&
+		    update_fabric_wwn_list(ADD_ENTRY, update_str, errstring)) {
+			cfga_err(errstring, 0, ERR_CONF_OK_UPD_REP, 0);
+		}
 
-	    S_FREE(update_str);
+		S_FREE(update_str);
 
-	    if ((apidt->flags & FLAG_DISABLE_RCM) == 0) {
+		if ((apidt->flags & FLAG_DISABLE_RCM) == 0) {
 		/*
 		 * There may be multiple LUNs associated with the
 		 * WWN we created nodes for. So, we'll call
@@ -906,33 +908,33 @@ dev_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt, la_wwn_t *pwwn,
 		 * all the LUNs for this WWN using the devinfo tree.
 		 * We will then online all those devices in RCM
 		 */
-		    if ((t_apid = calloc(1, strlen(apidt->xport_phys) +
-					strlen(DYN_SEP) +
-					strlen(apidt->dyncomp) + 1)) == NULL) {
-			    cfga_err(errstring, errno, ERR_MEM_ALLOC, 0);
-			    return (FPCFGA_LIB_ERR);
-		    }
-		    sprintf(t_apid, "%s%s%s", apidt->xport_phys, DYN_SEP,
-			apidt->dyncomp);
-		    if ((ret = apidt_create(t_apid, &my_apidt,
-					errstring)) != FPCFGA_OK) {
-			    free(t_apid);
-			    return (ret);
-		    }
+			if ((t_apid = calloc(1, strlen(apidt->xport_phys) +
+			    strlen(DYN_SEP) +
+			    strlen(apidt->dyncomp) + 1)) == NULL) {
+				cfga_err(errstring, errno, ERR_MEM_ALLOC, 0);
+				return (FPCFGA_LIB_ERR);
+			}
+			sprintf(t_apid, "%s%s%s", apidt->xport_phys, DYN_SEP,
+			    apidt->dyncomp);
+			if ((ret = apidt_create(t_apid, &my_apidt,
+			    errstring)) != FPCFGA_OK) {
+				free(t_apid);
+				return (ret);
+			}
 
-		    my_apidt.flags = apidt->flags;
-		    if ((ret = dev_rcm_online(&my_apidt, -1, flags,
-					NULL)) != FPCFGA_OK) {
-			    cfga_err(errstring, 0, ERRARG_RCM_ONLINE,
-				apidt->lunlist->path, 0);
-			    apidt_free(&my_apidt);
-			    free(t_apid);
-			    return (ret);
-		    }
-		    S_FREE(t_apid);
-		    apidt_free(&my_apidt);
-	    }
-	    return (FPCFGA_OK);
+			my_apidt.flags = apidt->flags;
+			if ((ret = dev_rcm_online(&my_apidt, -1, flags,
+			    NULL)) != FPCFGA_OK) {
+				cfga_err(errstring, 0, ERRARG_RCM_ONLINE,
+				    apidt->lunlist->path, 0);
+				apidt_free(&my_apidt);
+				free(t_apid);
+				return (ret);
+			}
+			S_FREE(t_apid);
+			apidt_free(&my_apidt);
+		}
+		return (FPCFGA_OK);
 
 	case CFGA_CMD_UNCONFIGURE:
 		if (portAttrs.PortType != HBA_PORTTYPE_NLPORT &&
@@ -951,14 +953,14 @@ dev_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt, la_wwn_t *pwwn,
 			 * the no-update flag is not set.
 			 */
 			if ((optflag &
-			(FLAG_FORCE_UPDATE_REP|FLAG_NO_UPDATE_REP)) == 0) {
+			    (FLAG_FORCE_UPDATE_REP|FLAG_NO_UPDATE_REP)) == 0) {
 				if (update_fabric_wwn_list(REMOVE_ENTRY,
-						update_str, errstring)) {
+				    update_str, errstring)) {
 					free(update_str);
 					cfga_err(errstring, 0,
-						ERR_UNCONF_OK_UPD_REP, 0);
+					    ERR_UNCONF_OK_UPD_REP, 0);
 					return
-					(FPCFGA_UNCONF_OK_UPD_REP_FAILED);
+					    (FPCFGA_UNCONF_OK_UPD_REP_FAILED);
 				}
 			}
 			S_FREE(update_str);
@@ -989,18 +991,18 @@ dev_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt, la_wwn_t *pwwn,
 		if ((ret = dev_unconf(apidt, errstring, &unconf_flag)) !=
 		    FPCFGA_OK) {
 			/* when inq failed don't attempt to reconfigure */
-		    if (!no_config_attempt) {
-			(void) do_devctl_dev_create(apidt, dev_path, MAXPATHLEN,
-				inq.inq_dtype, NULL);
-			(void) dev_rcm_online(apidt, -1, flags, NULL);
-		    }
-		    free(update_str);
-		    return (ret);
+			if (!no_config_attempt) {
+				(void) do_devctl_dev_create(apidt, dev_path,
+				    MAXPATHLEN, inq.inq_dtype, NULL);
+				(void) dev_rcm_online(apidt, -1, flags, NULL);
+			}
+			free(update_str);
+			return (ret);
 		}
 		if ((ret = dev_rcm_remove(apidt, flags, errstring)) !=
 		    FPCFGA_OK) {
 			(void) do_devctl_dev_create(apidt, dev_path, MAXPATHLEN,
-				inq.inq_dtype, NULL);
+			    inq.inq_dtype, NULL);
 			(void) dev_rcm_online(apidt, -1, flags, NULL);
 			free(update_str);
 			return (ret);
@@ -1014,18 +1016,19 @@ dev_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt, la_wwn_t *pwwn,
 
 		/* Update the repository if we havent already done it */
 		if ((optflag &
-			(FLAG_FORCE_UPDATE_REP|FLAG_NO_UPDATE_REP)) == 0) {
+		    (FLAG_FORCE_UPDATE_REP|FLAG_NO_UPDATE_REP)) == 0) {
 			if (((optflag & FLAG_REMOVE_UNUSABLE_FCP_DEV) !=
-				    FLAG_REMOVE_UNUSABLE_FCP_DEV) ||
+			    FLAG_REMOVE_UNUSABLE_FCP_DEV) ||
 			    (((optflag & FLAG_REMOVE_UNUSABLE_FCP_DEV) ==
-				FLAG_REMOVE_UNUSABLE_FCP_DEV) &&
+			    FLAG_REMOVE_UNUSABLE_FCP_DEV) &&
 			    (unconf_flag == ALL_APID_LUNS_UNUSABLE))) {
 				if (update_fabric_wwn_list(REMOVE_ENTRY,
-					    update_str, errstring)) {
-				    free(update_str);
-				    cfga_err(errstring, errno,
-					ERR_UNCONF_OK_UPD_REP, 0);
-				    return (FPCFGA_UNCONF_OK_UPD_REP_FAILED);
+				    update_str, errstring)) {
+					free(update_str);
+					cfga_err(errstring, errno,
+					    ERR_UNCONF_OK_UPD_REP, 0);
+					return
+					    (FPCFGA_UNCONF_OK_UPD_REP_FAILED);
 				}
 			}
 		}
@@ -1052,15 +1055,15 @@ copy_pwwn_data_to_str(char *to_ptr, const uchar_t *from_ptr)
 		return;
 
 	(void) sprintf(to_ptr, "%1.2x%1.2x%1.2x%1.2x%1.2x%1.2x%1.2x%1.2x",
-	from_ptr[0], from_ptr[1], from_ptr[2], from_ptr[3],
-	from_ptr[4], from_ptr[5], from_ptr[6], from_ptr[7]);
+	    from_ptr[0], from_ptr[1], from_ptr[2], from_ptr[3],
+	    from_ptr[4], from_ptr[5], from_ptr[6], from_ptr[7]);
 }
 
 static fpcfga_ret_t
 unconf_vhci_nodes(di_path_t pnode, di_node_t fp_node, char *xport_phys,
-	char *dyncomp, int unusable_flag,
-	int *num_devs, int *failure_count, char **errstring,
-	cfga_flags_t flags)
+    char *dyncomp, int unusable_flag,
+    int *num_devs, int *failure_count, char **errstring,
+    cfga_flags_t flags)
 {
 	int		iret1, iret2, *lunnump;
 	char		*ptr;		/* scratch pad */
@@ -1076,20 +1079,20 @@ unconf_vhci_nodes(di_path_t pnode, di_node_t fp_node, char *xport_phys,
 
 		if ((node_path = di_devfs_path(fp_node)) == NULL) {
 			cfga_err(errstring, 0, ERRARG_DEVINFO,
-							xport_phys, 0);
+			    xport_phys, 0);
 			(*failure_count)++;
 			pnode = di_path_next_client(fp_node, pnode);
 			continue;
 		}
 
 		iret1 = di_path_prop_lookup_bytes(pnode, PORT_WWN_PROP,
-			&port_wwn_data);
+		    &port_wwn_data);
 
 		iret2 = di_path_prop_lookup_ints(pnode, LUN_PROP, &lunnump);
 
 		if ((iret1 == -1) || (iret2 == -1)) {
 			cfga_err(errstring, 0, ERRARG_DI_GET_PROP,
-								node_path, 0);
+			    node_path, 0);
 			di_devfs_path_free(node_path);
 			node_path = NULL;
 			(*failure_count)++;
@@ -1099,8 +1102,7 @@ unconf_vhci_nodes(di_path_t pnode, di_node_t fp_node, char *xport_phys,
 
 		copy_pwwn_data_to_str(port_wwn, port_wwn_data);
 
-		if ((client_node = di_path_client_node(pnode)) ==
-								DI_NODE_NIL) {
+		if ((client_node = di_path_client_node(pnode)) == DI_NODE_NIL) {
 			(*failure_count)++;
 			di_devfs_path_free(node_path);
 			node_path = NULL;
@@ -1129,7 +1131,7 @@ unconf_vhci_nodes(di_path_t pnode, di_node_t fp_node, char *xport_phys,
 		}
 
 		sprintf(pathname, "%s%s/%s@w%s,%x", DEVICES_DIR, node_path,
-					++ptr, port_wwn, *lunnump);
+		    ++ptr, port_wwn, *lunnump);
 
 		di_devfs_path_free(node_path);
 		di_devfs_path_free(vhci_path);
@@ -1155,7 +1157,7 @@ unconf_vhci_nodes(di_path_t pnode, di_node_t fp_node, char *xport_phys,
 					    pnode);
 					continue;
 				} else if (lun_unconf(pathname, *lunnump,
-				    xport_phys,dyncomp, errstring)
+				    xport_phys, dyncomp, errstring)
 				    != FPCFGA_OK) {
 					(void) fp_rcm_online(pathname,
 					    NULL, flags);
@@ -1206,8 +1208,7 @@ unconf_vhci_nodes(di_path_t pnode, di_node_t fp_node, char *xport_phys,
 
 		/* Update the repository only on a successful unconfigure */
 		if ((update_str = calloc(1, strlen(xport_phys) +
-					strlen(DYN_SEP) +
-					strlen(port_wwn) + 1)) == NULL) {
+		    strlen(DYN_SEP) + strlen(port_wwn) + 1)) == NULL) {
 			cfga_err(errstring, errno, ERR_UNCONF_OK_UPD_REP, 0);
 			(*failure_count)++;
 			pnode = di_path_next_client(fp_node, pnode);
@@ -1218,10 +1219,10 @@ unconf_vhci_nodes(di_path_t pnode, di_node_t fp_node, char *xport_phys,
 		sprintf(update_str, "%s%s%s", xport_phys, DYN_SEP, port_wwn);
 
 		if (update_fabric_wwn_list(REMOVE_ENTRY, update_str,
-								errstring)) {
+		    errstring)) {
 			S_FREE(update_str);
 			cfga_err(errstring, errno,
-					ERR_UNCONF_OK_UPD_REP, 0);
+			    ERR_UNCONF_OK_UPD_REP, 0);
 			(*failure_count)++;
 			/* Cleanup and continue from here just for clarity */
 			pnode = di_path_next_client(fp_node, pnode);
@@ -1237,8 +1238,8 @@ unconf_vhci_nodes(di_path_t pnode, di_node_t fp_node, char *xport_phys,
 
 static fpcfga_ret_t
 unconf_non_vhci_nodes(di_node_t dnode, char *xport_phys, char *dyncomp,
-	int unusable_flag, int *num_devs, int *failure_count,
-	char **errstring, cfga_flags_t flags)
+    int unusable_flag, int *num_devs, int *failure_count,
+    char **errstring, cfga_flags_t flags)
 {
 	int	ret1, ret2, *lunnump;
 	char	pathname[MAXPATHLEN];
@@ -1265,11 +1266,11 @@ unconf_non_vhci_nodes(di_node_t dnode, char *xport_phys, char *dyncomp,
 
 		/* Now get the LUN # of this device thru the property */
 		ret1 = di_prop_lookup_ints(DDI_DEV_T_ANY, dnode,
-							LUN_PROP, &lunnump);
+		    LUN_PROP, &lunnump);
 
 		/* Next get the port WWN of the device */
 		ret2 = di_prop_lookup_bytes(DDI_DEV_T_ANY, dnode,
-						PORT_WWN_PROP, &port_wwn_data);
+		    PORT_WWN_PROP, &port_wwn_data);
 
 		/* A failure in any of the above is not good */
 		if ((ret1 == -1) || (ret2 == -1)) {
@@ -1279,7 +1280,7 @@ unconf_non_vhci_nodes(di_node_t dnode, char *xport_phys, char *dyncomp,
 			 * the next node.
 			 */
 			cfga_err(errstring, 0,
-					ERRARG_DI_GET_PROP, node_path, 0);
+			    ERRARG_DI_GET_PROP, node_path, 0);
 			di_devfs_path_free(node_path);
 			node_path = NULL;
 			(*failure_count)++;
@@ -1300,7 +1301,7 @@ unconf_non_vhci_nodes(di_node_t dnode, char *xport_phys, char *dyncomp,
 			 * may be missing and so we'll manually construct it
 			 */
 			sprintf(&pathname[strlen(pathname)], "@w%s,%x",
-							port_wwn, *lunnump);
+			    port_wwn, *lunnump);
 		}
 
 		/*
@@ -1323,7 +1324,7 @@ unconf_non_vhci_nodes(di_node_t dnode, char *xport_phys, char *dyncomp,
 					dnode = di_sibling_node(dnode);
 					continue;
 				} else if (lun_unconf(pathname, *lunnump,
-				    xport_phys,dyncomp, errstring)
+				    xport_phys, dyncomp, errstring)
 				    != FPCFGA_OK) {
 					(void) fp_rcm_online(pathname,
 					    NULL, flags);
@@ -1372,8 +1373,8 @@ unconf_non_vhci_nodes(di_node_t dnode, char *xport_phys, char *dyncomp,
 
 		/* Update the repository only on a successful unconfigure */
 		if ((update_str = calloc(1, strlen(xport_phys) +
-					strlen(DYN_SEP) +
-					strlen(port_wwn) + 1)) == NULL) {
+		    strlen(DYN_SEP) +
+		    strlen(port_wwn) + 1)) == NULL) {
 			cfga_err(errstring, errno, ERR_UNCONF_OK_UPD_REP, 0);
 			(*failure_count)++;
 			dnode = di_sibling_node(dnode);
@@ -1384,7 +1385,7 @@ unconf_non_vhci_nodes(di_node_t dnode, char *xport_phys, char *dyncomp,
 		sprintf(update_str, "%s%s%s", xport_phys, DYN_SEP, port_wwn);
 
 		if (update_fabric_wwn_list(REMOVE_ENTRY, update_str,
-								errstring)) {
+		    errstring)) {
 			S_FREE(update_str);
 			cfga_err(errstring, errno, ERR_UNCONF_OK_UPD_REP, 0);
 			(*failure_count)++;
@@ -1418,7 +1419,7 @@ unconf_non_vhci_nodes(di_node_t dnode, char *xport_phys, char *dyncomp,
  */
 static fpcfga_ret_t
 unconf_any_devinfo_nodes(apid_t *apidt, cfga_flags_t flags, char **errstring,
-				int *num_devs, int *failure_count)
+    int *num_devs, int *failure_count)
 {
 	char		*node_path = NULL;
 	char		pathname[MAXPATHLEN], *ptr;	/* scratch pad */
@@ -1442,15 +1443,15 @@ unconf_any_devinfo_nodes(apid_t *apidt, cfga_flags_t flags, char **errstring,
 	}
 
 	if ((root_node = di_init("/", DINFOCPYALL | DINFOPATH)) ==
-								DI_NODE_NIL) {
+	    DI_NODE_NIL) {
 		cfga_err(errstring, errno, ERRARG_DEVINFO,
-							apidt->xport_phys, 0);
+		    apidt->xport_phys, 0);
 		return (FPCFGA_LIB_ERR);
 	}
 
 	if ((fp_node = di_drv_first_node("fp", root_node)) == DI_NODE_NIL) {
 		cfga_err(errstring, errno, ERRARG_DEVINFO,
-							apidt->xport_phys, 0);
+		    apidt->xport_phys, 0);
 		di_fini(root_node);
 		return (FPCFGA_LIB_ERR);
 	}
@@ -1477,7 +1478,7 @@ unconf_any_devinfo_nodes(apid_t *apidt, cfga_flags_t flags, char **errstring,
 
 	if (fp_node == DI_NODE_NIL) {
 		cfga_err(errstring, 0, ERRARG_NOT_IN_DEVINFO,
-							apidt->xport_phys, 0);
+		    apidt->xport_phys, 0);
 		di_fini(root_node);
 		return (FPCFGA_LIB_ERR);
 	}
@@ -1537,8 +1538,8 @@ unconf_any_devinfo_nodes(apid_t *apidt, cfga_flags_t flags, char **errstring,
  */
 static fpcfga_ret_t
 handle_devs(cfga_cmd_t cmd, apid_t *apidt, cfga_flags_t flags,
-	char **errstring, HBA_HANDLE handle, int portIndex,
-	HBA_PORTATTRIBUTES portAttrs)
+    char **errstring, HBA_HANDLE handle, int portIndex,
+    HBA_PORTATTRIBUTES portAttrs)
 {
 	int		num_devs = 0, dev_cs_failed = 0;
 	char		port_wwn[WWN_S_LEN];
@@ -1550,43 +1551,43 @@ handle_devs(cfga_cmd_t cmd, apid_t *apidt, cfga_flags_t flags,
 	fpcfga_ret_t		rval = FPCFGA_OK;
 
 	if ((my_apid = calloc(
-		1, strlen(apidt->xport_phys) + strlen(DYN_SEP) +
-		(2 * FC_WWN_SIZE) + 1)) == NULL) {
+	    1, strlen(apidt->xport_phys) + strlen(DYN_SEP) +
+	    (2 * FC_WWN_SIZE) + 1)) == NULL) {
 		cfga_err(errstring, errno, ERR_MEM_ALLOC, 0);
 		return (FPCFGA_LIB_ERR);
 	}
 
 	num_devs = portAttrs.NumberofDiscoveredPorts;
 	for (discIndex = 0; discIndex < portAttrs.NumberofDiscoveredPorts;
-		discIndex++) {
-	    if (getDiscPortAttrs(handle, portIndex,
-		discIndex, &discPortAttrs)) {
-		dev_cs_failed++;
-		/* Move on to the next target */
-		continue;
-	    }
-	    (void) sprintf(port_wwn, "%016llx",
-		wwnConversion(discPortAttrs.PortWWN.wwn));
+	    discIndex++) {
+		if (getDiscPortAttrs(handle, portIndex,
+		    discIndex, &discPortAttrs)) {
+			dev_cs_failed++;
+			/* Move on to the next target */
+			continue;
+		}
+		(void) sprintf(port_wwn, "%016llx",
+		    wwnConversion(discPortAttrs.PortWWN.wwn));
 		/*
 		 * Construct a fake apid string similar to the one the
 		 * plugin gets from the framework and have apidt_create()
 		 * fill in the apid_t structure.
 		 */
-	    strcpy(my_apid, apidt->xport_phys);
-	    strcat(my_apid, DYN_SEP);
-	    strcat(my_apid, port_wwn);
-	    if (apidt_create(my_apid, &my_apidt, errstring) != FPCFGA_OK) {
-		dev_cs_failed++;
-		continue;
-	    }
-	    my_apidt.flags = apidt->flags;
+		strcpy(my_apid, apidt->xport_phys);
+		strcat(my_apid, DYN_SEP);
+		strcat(my_apid, port_wwn);
+		if (apidt_create(my_apid, &my_apidt, errstring) != FPCFGA_OK) {
+			dev_cs_failed++;
+			continue;
+		}
+		my_apidt.flags = apidt->flags;
 
-	    memcpy(&pwwn, &(discPortAttrs.PortWWN), sizeof (la_wwn_t));
-	    if (dev_change_state(cmd, &my_apidt, &pwwn,
-		flags, errstring, handle, portAttrs) != FPCFGA_OK) {
-		dev_cs_failed++;
-	    }
-	    apidt_free(&my_apidt);
+		memcpy(&pwwn, &(discPortAttrs.PortWWN), sizeof (la_wwn_t));
+		if (dev_change_state(cmd, &my_apidt, &pwwn,
+		    flags, errstring, handle, portAttrs) != FPCFGA_OK) {
+			dev_cs_failed++;
+		}
+		apidt_free(&my_apidt);
 	}
 
 	S_FREE(my_apid);
@@ -1619,8 +1620,8 @@ handle_devs(cfga_cmd_t cmd, apid_t *apidt, cfga_flags_t flags,
 		if (dev_cs_failed == num_devs) {
 			/* Failed on all devices seen through this FCA port */
 			cfga_err(errstring, 0,
-			((cmd == CFGA_CMD_CONFIGURE) ?
-				ERR_FCA_CONFIGURE : ERR_FCA_UNCONFIGURE), 0);
+			    ((cmd == CFGA_CMD_CONFIGURE) ?
+			    ERR_FCA_CONFIGURE : ERR_FCA_UNCONFIGURE), 0);
 			return (FPCFGA_LIB_ERR);
 		} else {
 			/* Failed only on some of the devices */
@@ -1631,8 +1632,8 @@ handle_devs(cfga_cmd_t cmd, apid_t *apidt, cfga_flags_t flags,
 		if (dev_cs_failed == num_devs) {
 			/* Failed on all devices seen through this FCA port */
 			cfga_err(errstring, 0,
-			((cmd == CFGA_CMD_CONFIGURE) ?
-				ERR_FCA_CONFIGURE : ERR_FCA_UNCONFIGURE), 0);
+			    ((cmd == CFGA_CMD_CONFIGURE) ?
+			    ERR_FCA_CONFIGURE : ERR_FCA_UNCONFIGURE), 0);
 			return (FPCFGA_LIB_ERR);
 		} else {
 			/* Failed only on some of the devices */
@@ -1648,7 +1649,7 @@ handle_devs(cfga_cmd_t cmd, apid_t *apidt, cfga_flags_t flags,
 
 fpcfga_ret_t
 fca_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt,
-		cfga_flags_t flags, char **errstring)
+    cfga_flags_t flags, char **errstring)
 {
 	fpcfga_ret_t	ret;
 	HBA_HANDLE	handle;
@@ -1665,22 +1666,22 @@ fca_change_state(cfga_cmd_t state_change_cmd, apid_t *apidt,
 	 */
 	switch (state_change_cmd) {
 	case CFGA_CMD_CONFIGURE:
-	    if (portAttrs.PortType != HBA_PORTTYPE_NLPORT &&
-		portAttrs.PortType != HBA_PORTTYPE_NPORT) {
+		if (portAttrs.PortType != HBA_PORTTYPE_NLPORT &&
+		    portAttrs.PortType != HBA_PORTTYPE_NPORT) {
 			HBA_CloseAdapter(handle);
 			HBA_FreeLibrary();
 			return (FPCFGA_OK);
-	    }
-	    break;
+		}
+		break;
 
 	case CFGA_CMD_UNCONFIGURE:
-	    if (portAttrs.PortType != HBA_PORTTYPE_NLPORT &&
-		portAttrs.PortType != HBA_PORTTYPE_NPORT) {
-		HBA_CloseAdapter(handle);
-		HBA_FreeLibrary();
-		return (FPCFGA_OPNOTSUPP);
-	    }
-	    break;
+		if (portAttrs.PortType != HBA_PORTTYPE_NLPORT &&
+		    portAttrs.PortType != HBA_PORTTYPE_NPORT) {
+			HBA_CloseAdapter(handle);
+			HBA_FreeLibrary();
+			return (FPCFGA_OPNOTSUPP);
+		}
+		break;
 	default:
 		HBA_CloseAdapter(handle);
 		HBA_FreeLibrary();

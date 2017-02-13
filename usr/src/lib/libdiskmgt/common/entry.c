@@ -69,7 +69,7 @@ dm_free_descriptor(dm_descriptor_t desc)
 {
 	descriptor_t	*dp;
 
-	if (desc == NULL) {
+	if (desc == (uintptr_t)NULL) {
 		return;
 	}
 	dp = (descriptor_t *)(uintptr_t)desc;
@@ -253,7 +253,7 @@ dm_get_attributes(dm_descriptor_t desc, int *errp)
 dm_descriptor_t
 dm_get_descriptor_by_name(dm_desc_type_t desc_type, char *name, int *errp)
 {
-	dm_descriptor_t desc = NULL;
+	dm_descriptor_t desc = (uintptr_t)NULL;
 
 
 	cache_wlock();
@@ -516,7 +516,7 @@ dm_get_slices(char *drive, dm_descriptor_t **slices, int *errp)
 	 * values will be NULL if an error occured in these calls.
 	 */
 
-	if (alias != NULL) {
+	if (alias != (uintptr_t)NULL) {
 		disk = dm_get_associated_descriptors(alias, DM_DRIVE, errp);
 		dm_free_descriptor(alias);
 		if (disk != NULL) {
@@ -551,7 +551,7 @@ dm_get_slice_stats(char *slice, nvlist_t **dev_stats, int *errp)
 	 * values will be NULL if an error occured in these calls.
 	 */
 	devp = dm_get_descriptor_by_name(DM_SLICE, slice, errp);
-	if (devp != NULL) {
+	if (devp != (uintptr_t)NULL) {
 		*dev_stats = dm_get_stats(devp, DM_SLICE_STAT_USE,
 		    errp);
 		dm_free_descriptor(devp);
@@ -566,7 +566,7 @@ dm_get_slice_stats(char *slice, nvlist_t **dev_stats, int *errp)
 int
 dm_isoverlapping(char *slicename, char **overlaps_with, int *errp)
 {
-	dm_descriptor_t slice = NULL;
+	dm_descriptor_t slice = (uintptr_t)NULL;
 	dm_descriptor_t *media = NULL;
 	dm_descriptor_t *slices = NULL;
 	int 		i = 0;
@@ -580,7 +580,7 @@ dm_isoverlapping(char *slicename, char **overlaps_with, int *errp)
 	int		ret = 0;
 
 	slice = dm_get_descriptor_by_name(DM_SLICE, slicename, errp);
-	if (slice == NULL)
+	if (slice == (uintptr_t)NULL)
 		goto out;
 
 	/*
@@ -588,11 +588,11 @@ dm_isoverlapping(char *slicename, char **overlaps_with, int *errp)
 	 * associated slices.
 	 */
 	media = dm_get_associated_descriptors(slice, DM_MEDIA, errp);
-	if (media == NULL || *media == NULL || *errp != 0)
+	if (media == NULL || *media == (uintptr_t)NULL || *errp != 0)
 		goto out;
 
 	slices = dm_get_associated_descriptors(*media, DM_SLICE, errp);
-	if (slices == NULL || *slices == NULL || *errp != 0)
+	if (slices == NULL || *slices == (uintptr_t)NULL || *errp != 0)
 		goto out;
 
 	media_attrs = dm_get_attributes(*media, errp);

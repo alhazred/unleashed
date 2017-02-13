@@ -28,7 +28,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include "uucp.h"
 
@@ -67,24 +66,24 @@ gturnon()
 {
 	struct pack *pkopen();
 	if (setjmp(Gfailbuf))
-		return(FAIL);
-	gsig=signal(SIGALRM, galarm);
+		return (FAIL);
+	gsig = signal(SIGALRM, galarm);
 	if (Debug > 4)
 		pkdebug = 1;
 	Pk = pkopen(Ifn, Ofn);
-	if ((int) Pk == NULL)
-		return(FAIL);
-	return(0);
+	if (Pk == NULL)
+		return (FAIL);
+	return (0);
 }
 
 int
 gturnoff()
 {
-	if(setjmp(Gfailbuf))
-		return(FAIL);
+	if (setjmp(Gfailbuf))
+		return (FAIL);
 	pkclose();
 	(void) signal(SIGALRM, gsig);
-	return(0);
+	return (0);
 }
 
 /*ARGSUSED*/
@@ -95,8 +94,8 @@ char type, *str;
 	char bufr[BUFSIZ], *s;
 	int len, i;
 
-	if(setjmp(Gfailbuf))
-		return(FAIL);
+	if (setjmp(Gfailbuf))
+		return (FAIL);
 	bufr[0] = type;
 	s = &bufr[1];
 	while (*str)
@@ -110,7 +109,7 @@ char type, *str;
 		bufr[len - 1] = '\0';
 	}
 	gwrblk(bufr, len);
-	return(0);
+	return (0);
 }
 
 
@@ -121,8 +120,8 @@ char *str;
 {
 	unsigned len;
 
-	if(setjmp(Gfailbuf))
-		return(FAIL);
+	if (setjmp(Gfailbuf))
+		return (FAIL);
 	for (;;) {
 		len = pkread(str, packsize);
 		if (len == 0)
@@ -131,7 +130,7 @@ char *str;
 		if (*(str - 1) == '\0')
 			break;
 	}
-	return(0);
+	return (0);
 }
 
 
@@ -146,22 +145,22 @@ FILE *fp1;
 	int ret;
 	unsigned long bytes;
 
-	if(setjmp(Gfailbuf))
-		return(FAIL);
+	if (setjmp(Gfailbuf))
+		return (FAIL);
 	bytes = 0L;
-	fd1 = fileno( fp1 );
-	while ((len = read( fd1, bufr, BUFSIZ )) > 0) {
+	fd1 = fileno(fp1);
+	while ((len = read(fd1, bufr, BUFSIZ)) > 0) {
 		bytes += len;
 		putfilesize(bytes);
 		ret = gwrblk(bufr, len);
 		if (ret != len) {
-			return(FAIL);
+			return (FAIL);
 		}
 		if (len != BUFSIZ)
 			break;
 	}
 	ret = gwrblk(bufr, 0);
-	return(0);
+	return (0);
 }
 
 /*ARGSUSED*/
@@ -175,25 +174,27 @@ FILE *fp2;
 	char bufr[BUFSIZ];
 	unsigned long bytes;
 
-	if(setjmp(Gfailbuf))
-		return(FAIL);
+	if (setjmp(Gfailbuf))
+		return (FAIL);
 	bytes = 0L;
-	fd2 = fileno( fp2 );
+	fd2 = fileno(fp2);
 	for (;;) {
 		len = grdblk(bufr, BUFSIZ);
 		if (len < 0) {
-			return(FAIL);
+			return (FAIL);
 		}
 		bytes += len;
 		putfilesize(bytes);
-		if ( ret == SUCCESS && write( fd2, bufr, len ) != len) {
+		if (ret == SUCCESS && write(fd2, bufr, len) != len) {
 			ret = errno;
-			DEBUG(7, "grddata: write to file failed, errno %d\n", errno);
+			DEBUG(7,
+			    "grddata: write to file failed, errno %d\n",
+			    errno);
 		}
 		if (len < BUFSIZ)
 			break;
 	}
-	return(ret);
+	return (ret);
 }
 
 
@@ -207,12 +208,12 @@ char *blk;
 	for (i = 0; i < len; i += ret) {
 		ret = pkread(blk, len - i);
 		if (ret < 0)
-			return(FAIL);
+			return (FAIL);
 		blk += ret;
 		if (ret == 0)
-			return(i);
+			return (i);
 	}
-	return(i);
+	return (i);
 }
 
 
@@ -220,5 +221,5 @@ static int
 gwrblk(blk, len)
 char *blk;
 {
-	return(pkwrite(blk, len));
+	return (pkwrite(blk, len));
 }

@@ -86,7 +86,7 @@ cache_init(
 	/*
 	 * initialize global cache rwlock.
 	 */
-	(void) rwlock_init(&imc->l, NULL, NULL);
+	(void) rwlock_init(&imc->l, 0, NULL);
 
 	/*
 	 * inintialize global cache functions.

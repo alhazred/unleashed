@@ -21,6 +21,8 @@
 /*
  * Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ *
+ * Copyright 2016 PALO, Richard.
  */
 
 #include <sys/types.h>
@@ -40,10 +42,7 @@ static int f_audit;	/* failure audit event */
 static int ad;		/* audit descriptor */
 
 void
-audit_allocate_argv(flg, argc, argv)
-	int   flg;
-	int   argc;
-	char *argv[];
+audit_allocate_argv(int flg, int argc, char *argv[])
 {
 	int i;
 
@@ -73,8 +72,7 @@ audit_allocate_argv(flg, argc, argv)
 }
 
 void
-audit_allocate_device(path)
-	char *path;
+audit_allocate_device(char *path)
 {
 	if (cannot_audit(0)) {
 		return;
@@ -83,8 +81,7 @@ audit_allocate_device(path)
 }
 
 int
-audit_allocate_record(status)
-	char	status;		/* success failure of operation */
+audit_allocate_record(int status)	/* success failure of operation */
 {
 	auditinfo_addr_t mask;		/* audit ID */
 	au_event_t	event;		/* audit event number */
@@ -118,8 +115,7 @@ audit_allocate_record(status)
 	else
 		event = s_audit;
 
-	if (au_preselect(event, &mask.ai_mask, AU_PRS_BOTH, AU_PRS_REREAD)
-		== NULL)
+	if (au_preselect(event, &mask.ai_mask, AU_PRS_BOTH, AU_PRS_REREAD) == 0)
 		return (0);
 
 	(void) au_write(ad, au_to_me());	/* add subject token */
@@ -154,8 +150,7 @@ audit_allocate_record(status)
 }
 
 void
-audit_allocate_list(list)
-	char *list;
+audit_allocate_list(char *list)
 {
 	char *buf;
 	char *file;

@@ -27,8 +27,6 @@
 /*	Copyright (c) 1988 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"	/* SVr4.0 1.2	*/
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -52,11 +50,6 @@ static int		nmalloc, nrealloc, nfree;
 #define	ASSERT(p)	((void)0)
 #define	COUNT(n)	((void)0)
 #endif /* DEBUG */
-
-/* for conveniences */
-#ifndef NULL
-#define	NULL		(0)
-#endif
 
 #define	WORDSIZE	(sizeof (WORD))
 #define	MINSIZE		(sizeof (TREE) - sizeof (WORD))

@@ -64,7 +64,7 @@ freadline(FILE *fp, char *buf, int buflen)
 			continue;
 		} else {
 			if ((*s == '#') || (*s == '\n')) {
-				*s = NULL;
+				*s = '\0';
 				break;
 			}
 
@@ -273,7 +273,7 @@ nis_put_printer(const ns_printer_t *printer)
 
 	if (((tmp = strrchr(rfile, '.')) != NULL) &&
 	    (strcmp(tmp, ".byname") == 0))
-		*tmp = NULL;	/* strip the .byname */
+		*tmp = '\0';	/* strip the .byname */
 
 	/* copy it local */
 	if (snprintf(cmd, sizeof (cmd), "rcp %s %s >/dev/null 2>&1",

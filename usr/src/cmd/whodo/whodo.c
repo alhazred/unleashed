@@ -825,10 +825,10 @@ clnarglist(char *arglist)
 	int	err = 0;
 
 	/* get rid of unsavory characters */
-	for (c = arglist; *c == NULL; c++) {
+	for (c = arglist; *c == '\0'; c++) {
 		if ((*c < ' ') || (*c > 0176)) {
 			if (err++ > 5) {
-				*arglist = NULL;
+				*arglist = '\0';
 				break;
 			}
 			*c = '?';

@@ -1078,7 +1078,7 @@ elfedit_init(elfedit_module_version_t version)
 {
 	/* Multiple commands accept a standard set of options */
 	static elfedit_cmd_optarg_t opt_std[] = {
-		{ ELFEDIT_STDOA_OPT_O, NULL,
+		{ ELFEDIT_STDOA_OPT_O, (uintptr_t)NULL,
 		    ELFEDIT_CMDOA_F_INHERIT, 0, 0 },
 		{ MSG_ORIG(MSG_STR_MINUS_PHNDX),
 		    /* MSG_INTL(MSG_OPTDESC_PHNDX) */
@@ -1203,17 +1203,17 @@ elfedit_init(elfedit_module_version_t version)
 	static const char *name_p_flags[] = {
 	    MSG_ORIG(MSG_CMD_P_FLAGS), NULL };
 	static elfedit_cmd_optarg_t opt_p_flags[] = {
-		{ ELFEDIT_STDOA_OPT_AND, NULL,
+		{ ELFEDIT_STDOA_OPT_AND, (uintptr_t)NULL,
 		    ELFEDIT_CMDOA_F_INHERIT, PHDR_OPT_F_AND, PHDR_OPT_F_OR },
-		{ ELFEDIT_STDOA_OPT_CMP, NULL,
+		{ ELFEDIT_STDOA_OPT_CMP, (uintptr_t)NULL,
 		    ELFEDIT_CMDOA_F_INHERIT, PHDR_OPT_F_CMP, 0 },
 		{ MSG_ORIG(MSG_STR_MINUS_PHNDX),
 		    /* MSG_INTL(MSG_OPTDESC_PHNDX) */
 		    ELFEDIT_I18NHDL(MSG_OPTDESC_PHNDX), 0,
 		    PHDR_OPT_F_PHNDX, 0 },
-		{ ELFEDIT_STDOA_OPT_O, NULL,
+		{ ELFEDIT_STDOA_OPT_O, (uintptr_t)NULL,
 		    ELFEDIT_CMDOA_F_INHERIT, 0, 0 },
-		{ ELFEDIT_STDOA_OPT_OR, NULL,
+		{ ELFEDIT_STDOA_OPT_OR, (uintptr_t)NULL,
 		    ELFEDIT_CMDOA_F_INHERIT, PHDR_OPT_F_OR, PHDR_OPT_F_AND },
 		{ NULL }
 	};
@@ -1247,7 +1247,7 @@ elfedit_init(elfedit_module_version_t version)
 	/* phdr:interp */
 	static const char *name_interp[] = { MSG_ORIG(MSG_CMD_INTERP), NULL };
 	static elfedit_cmd_optarg_t opt_interp[] = {
-		{ ELFEDIT_STDOA_OPT_O, NULL,
+		{ ELFEDIT_STDOA_OPT_O, (uintptr_t)NULL,
 		    ELFEDIT_CMDOA_F_INHERIT, 0, 0 },
 		{ NULL }
 	};

@@ -383,7 +383,7 @@ lpd_add_svr4_attributes(service_t *svc, papi_attribute_t **attributes,
 
 	/* Pages */
 	s = NULL;
-	memset(tmp, NULL, sizeof (tmp));
+	memset(tmp, 0, sizeof (tmp));
 	tmp[0] = papiAttributeListFind(attributes, "page-ranges");
 	if (tmp[0] != NULL) {
 		char buf[BUFSIZ];

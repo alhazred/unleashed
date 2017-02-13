@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -997,7 +995,7 @@ eval_cond_tbl(
 			retval = 0;
 			eth = ADDR(cond->operand.place);
 			eh = (itm_escapeseq_hdr_t *)(eth + 1);
-			if (NULL == ist->default_action.itm_ptr) {
+			if (ist->default_action.itm_ptr == (uintptr_t)NULL) {
 				ist->default_action = direc->action;
 				TRACE_MESSAGE('E',
 				    ("escape seq (default action=%6p, "

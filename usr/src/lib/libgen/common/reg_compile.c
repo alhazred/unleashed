@@ -27,8 +27,6 @@
 /*	Copyright (c) 1988 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/types.h>
 #include <ctype.h>
 #include <limits.h>
@@ -176,7 +174,7 @@ _compile(const char *sp, char *ep, char *endbuf, int viflag)
 		/* malloc space */
 		const char *startsp = oldsp;
 		n = 0;
-		while ((d = *startsp++) != NULL) {
+		while ((d = *startsp++) != '\0') {
 			if (d == '[')
 				n += 33; /* add room for bitmaps */
 		}

@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <mdb/mdb_modapi.h>
 #include <mdb/mdb_ks.h>
 
@@ -142,7 +140,7 @@ ptms(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 	}
 
 	if (pt.pt_pid != 0) {
-		if (mdb_pid2proc(pt.pt_pid, &p) == NULL)
+		if (mdb_pid2proc(pt.pt_pid, &p) == (uintptr_t)NULL)
 			(void) strcpy(c, "<defunct>");
 		else
 			(void) strcpy(c, p.p_user.u_comm);
@@ -184,7 +182,7 @@ ptms_qinfo(const queue_t *q, char *buf, size_t nbytes, int ismaster)
 	(void) mdb_vread(&pt, sizeof (pt), (uintptr_t)q->q_ptr);
 
 	if (pt.pt_pid != 0) {
-		if (mdb_pid2proc(pt.pt_pid, &p) == NULL)
+		if (mdb_pid2proc(pt.pt_pid, &p) == (uintptr_t)NULL)
 			(void) strcpy(c, "<defunct>");
 		else
 			(void) strcpy(c, p.p_user.u_comm);
@@ -214,7 +212,7 @@ ptms_walk_init(mdb_walk_state_t *wsp)
 {
 	size_t nslots;
 
-	if (wsp->walk_addr != NULL) {
+	if (wsp->walk_addr != (uintptr_t)NULL) {
 		mdb_warn("ptms supports only global walks");
 		return (WALK_ERR);
 	}
@@ -254,7 +252,7 @@ ptms_walk_step(mdb_walk_state_t *wsp)
 		return (WALK_DONE);
 	}
 
-	if (ptr == NULL) {
+	if (ptr == (uintptr_t)NULL) {
 		wsp->walk_addr += sizeof (uintptr_t);
 		return (WALK_NEXT);
 	}

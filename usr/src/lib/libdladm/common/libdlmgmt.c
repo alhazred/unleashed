@@ -514,7 +514,7 @@ dladm_getnext_conf_linkprop(dladm_handle_t handle, dladm_conf_t conf,
 		return (DLADM_STATUS_NOTFOUND);
 
 	if ((err = nvpair_value_byte_array(nvp, (uchar_t **)&oattrval,
-	    &oattrsz)) != NULL) {
+	    &oattrsz)) != 0) {
 		return (dladm_errno2status(err));
 	}
 

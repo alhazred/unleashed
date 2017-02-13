@@ -360,7 +360,7 @@ leaky_kludge(void)
 
 	for (idx = 0; idx < ncounters; idx++) {
 		uintptr_t addr = counters[idx];
-		if (addr != 0)
+		if (addr != (uintptr_t)NULL)
 			leaky_grep(addr, hwpm_size * max_mem_nodes);
 	}
 }
@@ -382,7 +382,7 @@ leaky_subr_estimate(size_t *estp)
 		return (DCMD_ERR);
 	}
 
-	if (state != MDB_STATE_STOPPED && panicstr == NULL) {
+	if (state != MDB_STATE_STOPPED && panicstr == (uintptr_t)NULL) {
 		mdb_warn("findleaks: cannot be run on a live dump.\n");
 		return (DCMD_ERR);
 	}
@@ -453,7 +453,8 @@ leaky_subr_run(void)
 	 * If kmdb is loaded, we need to walk it's module list, since kmdb
 	 * modctl structures can reference kmem allocations.
 	 */
-	if ((mdb_readvar(&dmods, "kdi_dmods") != -1) && (dmods != NULL))
+	if ((mdb_readvar(&dmods, "kdi_dmods") != -1) &&
+	    (dmods != (uintptr_t)NULL))
 		(void) mdb_pwalk("modctl", (mdb_walk_cb_t)leaky_modctl,
 		    NULL, dmods);
 

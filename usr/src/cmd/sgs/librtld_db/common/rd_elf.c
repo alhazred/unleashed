@@ -704,7 +704,7 @@ _rd_loadobj_iter32_native(rd_agent_t *rap, rl_iter_f *cb, void *client_data,
 		return (RD_DBERR);
 	}
 
-	if (db_priv.rtd_dynlmlst == NULL) {
+	if (db_priv.rtd_dynlmlst == 0) {
 		LOG(ps_plog(MSG_ORIG(MSG_DB_LKMAPNOINIT),
 		    EC_ADDR((uintptr_t)db_priv.rtd_dynlmlst)));
 		return (RD_NOMAPS);
@@ -717,7 +717,7 @@ _rd_loadobj_iter32_native(rd_agent_t *rap, rl_iter_f *cb, void *client_data,
 		return (RD_DBERR);
 	}
 
-	if (addr == NULL) {
+	if (addr == 0) {
 		LOG(ps_plog(MSG_ORIG(MSG_DB_LKMAPNOINIT_1),
 		    EC_ADDR((uintptr_t)db_priv.rtd_dynlmlst)));
 		return (RD_NOMAPS);

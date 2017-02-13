@@ -1402,7 +1402,7 @@ db_dictionary::open_log()
 		return (0);
 	}
 
-	if ((logfile->open()) == NULL) {
+	if ((logfile->open()) == 0) {
 		WARNING_M("db_dictionary::open_log: could not open log file: ");
 		delete logfile;
 		logfile = NULL;

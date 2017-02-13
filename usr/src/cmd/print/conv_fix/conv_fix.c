@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -64,7 +62,7 @@ _file_getline(FILE *fp)
 			continue;
 		} else {
 			if ((*tmp == '#') || (*tmp == '\n')) {
-				*tmp = NULL;
+				*tmp = '\0';
 				break;
 			}
 
@@ -111,8 +109,7 @@ main(int ac, char *av[])
 			break;
 		default:
 			(void) fprintf(stderr, gettext(
-				"Usage: %s [-f file] [-o output file]\n"),
-				av[0]);
+			    "Usage: %s [-f file] [-o output file]\n"), av[0]);
 			return (1);
 		}
 

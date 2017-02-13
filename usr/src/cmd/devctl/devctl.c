@@ -548,7 +548,7 @@ run_list_ctlrs(void)
 		    progname);
 		exit(-1);
 	}
-	(void) di_walk_minor(dinode, DDI_NT_NEXUS, NULL, 0, &nexif);
+	(void) di_walk_minor(dinode, DDI_NT_NEXUS, 0, 0, &nexif);
 	di_fini(dinode);
 	exit(0);
 }

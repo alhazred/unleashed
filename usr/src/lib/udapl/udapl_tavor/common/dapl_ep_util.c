@@ -137,7 +137,7 @@ dapl_ep_alloc(
 	ep_ptr->qp_handle	= IB_INVALID_HANDLE;
 	ep_ptr->qpn		= 0;
 	ep_ptr->qp_state	= DAPL_QP_STATE_UNATTACHED;
-	ep_ptr->cm_handle	= IB_INVALID_HANDLE;
+	ep_ptr->cm_handle	= (uintptr_t)IB_INVALID_HANDLE;
 
 	ep_ptr->req_count = 0;
 	ep_ptr->recv_count = 0;

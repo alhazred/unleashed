@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/machelf.h>
 #include <sys/modctl.h>
 #include <sys/kobj.h>
@@ -45,9 +43,10 @@ modctl_walk_init(mdb_walk_state_t *wsp)
 	struct modctl_walk_data *mwd = mdb_alloc(
 	    sizeof (struct modctl_walk_data), UM_SLEEP);
 
-	mwd->mwd_head = (wsp->walk_addr == NULL ? module_head : wsp->walk_addr);
+	mwd->mwd_head = (wsp->walk_addr == (uintptr_t)NULL ?
+	    module_head : wsp->walk_addr);
 	wsp->walk_data = mwd;
-	wsp->walk_addr = NULL;
+	wsp->walk_addr = (uintptr_t)NULL;
 
 	return (WALK_NEXT);
 }
@@ -61,7 +60,7 @@ modctl_walk_step(mdb_walk_state_t *wsp)
 	if (wsp->walk_addr == mwd->mwd_head)
 		return (WALK_DONE);
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		wsp->walk_addr = mwd->mwd_head;
 
 	if (mdb_vread(&mwd->mwd_modctl, sizeof (struct modctl),

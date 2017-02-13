@@ -138,7 +138,7 @@ lzc_ioctl(zfs_ioc_t ioc, const char *name,
 		zc.zc_nvlist_dst_size = MAX(size * 2, 128 * 1024);
 		zc.zc_nvlist_dst = (uint64_t)(uintptr_t)
 		    malloc(zc.zc_nvlist_dst_size);
-		if (zc.zc_nvlist_dst == NULL) {
+		if (zc.zc_nvlist_dst == (uintptr_t)NULL) {
 			error = ENOMEM;
 			goto out;
 		}
@@ -150,7 +150,7 @@ lzc_ioctl(zfs_ioc_t ioc, const char *name,
 			zc.zc_nvlist_dst_size *= 2;
 			zc.zc_nvlist_dst = (uint64_t)(uintptr_t)
 			    malloc(zc.zc_nvlist_dst_size);
-			if (zc.zc_nvlist_dst == NULL) {
+			if (zc.zc_nvlist_dst == (uintptr_t)NULL) {
 				error = ENOMEM;
 				goto out;
 			}

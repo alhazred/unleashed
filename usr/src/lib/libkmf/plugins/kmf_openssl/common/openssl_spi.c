@@ -800,7 +800,7 @@ readAltFormatPrivateKey(KMF_DATA *filedata, EVP_PKEY **pkey)
 	KMF_RAW_RSA_KEY rsa;
 	BerElement *asn1 = NULL;
 	BerValue filebuf;
-	BerValue OID = { NULL, 0 };
+	BerValue OID = { 0, NULL };
 	BerValue *Mod = NULL, *PubExp = NULL;
 	BerValue *PriExp = NULL, *Prime1 = NULL, *Prime2 = NULL;
 	BerValue *Coef = NULL;
@@ -2574,7 +2574,7 @@ check_response_signature(KMF_HANDLE_T handle, OCSP_BASICRESP *bs,
 			goto end;
 		}
 
-		if (sk_X509_push(cert_stack, issuer) == NULL) {
+		if (sk_X509_push(cert_stack, issuer) == 0) {
 			ret = KMF_ERR_INTERNAL;
 			goto end;
 		}
@@ -3517,7 +3517,7 @@ OpenSSL_ExportPK12(KMF_HANDLE_T handle, int numattr, KMF_ATTRIBUTE *attrlist)
 		}
 
 		(void) memset(&certdata, 0, sizeof (certdata));
-		rv = kmf_load_cert(kmfh, NULL, NULL, NULL, NULL,
+		rv = kmf_load_cert(kmfh, NULL, NULL, NULL, KMF_ALL_CERTS,
 		    fullpath, &certdata.certificate);
 		if (rv != KMF_OK)
 			goto end;
@@ -3768,7 +3768,7 @@ set_pkey_attrib(EVP_PKEY *pkey, ASN1_TYPE *attrib, int nid)
 				return (KMF_OK);
 			}
 		}
-		if (sk_X509_ATTRIBUTE_push(pkey->attributes, attr) == NULL) {
+		if (sk_X509_ATTRIBUTE_push(pkey->attributes, attr) == 0) {
 			X509_ATTRIBUTE_free(attr);
 			return (KMF_ERR_MEMORY);
 		}
@@ -3838,7 +3838,7 @@ openssl_parse_bag(PKCS12_SAFEBAG *bag, char *pass, int passlen,
 				    fname->value.asn1_string);
 				if (len > 0 && data != NULL) {
 					r = X509_alias_set1(xcert, data, len);
-					if (r == NULL) {
+					if (r == 0) {
 						ret = KMF_ERR_PKCS12_FORMAT;
 						goto end;
 					}
@@ -3923,7 +3923,7 @@ openssl_pkcs12_parse(PKCS12 *p12, char *pin,
 	if (p12 == NULL || (keys == NULL && certs == NULL))
 		return (KMF_ERR_BAD_PARAMETER);
 
-	if (pin == NULL || *pin == NULL) {
+	if (pin == NULL || *pin == '\0') {
 		if (PKCS12_verify_mac(p12, NULL, 0)) {
 			pin = NULL;
 		} else if (PKCS12_verify_mac(p12, "", 0)) {

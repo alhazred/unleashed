@@ -872,7 +872,7 @@ ignore(char *opts)
 	char *saveptr, *my_opts;
 	int rval = 0;
 
-	if (opts == NULL || *opts == NULL)
+	if (opts == NULL || *opts == '\0')
 		return (0);
 
 	/*

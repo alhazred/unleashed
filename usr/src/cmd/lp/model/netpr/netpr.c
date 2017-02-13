@@ -23,7 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -91,7 +90,7 @@ net_open(char *host, int timeout)
 		return (-1);
 	}
 
-	(void) memset((char *)&sin, NULL, sizeof (sin));
+	(void) memset((char *)&sin, 0, sizeof (sin));
 	if ((hp = getipnodebyname(host, AF_INET6, AI_DEFAULT,
 		    &error_num)) == NULL) {
 		syslog(LOG_DEBUG|LOG_ERR, "unknown host %s "

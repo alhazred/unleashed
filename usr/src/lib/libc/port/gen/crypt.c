@@ -695,7 +695,7 @@ free_crypt_alg(struct crypt_alg_s *alg)
 	if (alg->a_libhandle != NULL) {
 		(void) dlclose(alg->a_libhandle);
 	}
-	if (alg->a_nparams != NULL) {
+	if (alg->a_nparams != 0) {
 		free(alg->a_params);
 	}
 	free(alg);

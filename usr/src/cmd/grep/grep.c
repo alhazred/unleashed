@@ -196,7 +196,7 @@ main(int argc, char **argv)
 		regerr(41);
 
 	if (iflag) {
-		for (arg = *argv; *arg != NULL; ++arg)
+		for (arg = *argv; *arg != '\0'; ++arg)
 			*arg = (char)tolower((int)((unsigned char)*arg));
 	}
 

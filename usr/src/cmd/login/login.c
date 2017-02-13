@@ -870,7 +870,7 @@ login_conv(int num_msg, struct pam_message **msg,
 
 				(void) strncpy(r->resp, inputline,
 				    PAM_MAX_RESP_SIZE-1);
-				r->resp[PAM_MAX_RESP_SIZE-1] = NULL;
+				r->resp[PAM_MAX_RESP_SIZE-1] = 0;
 				len = strlen(r->resp);
 				if (r->resp[len-1] == '\n')
 					r->resp[len-1] = '\0';

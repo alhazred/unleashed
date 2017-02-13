@@ -12,8 +12,6 @@
  * specifies the terms and conditions for redistribution.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "refer..c"
 #include <locale.h>
 #define	NFLD 30
@@ -49,7 +47,7 @@ doref(char *line1)
 	int stat, nf, nr, query = 0, alph, digs;
 
 again:
-	buff[0] = dbuff[0] = NULL;
+	buff[0] = dbuff[0] = '\0';
 	if (biblio && Iline == 1 && line1[0] == '%')
 		strcat(dbuff, line1);
 	while (input(line)) {		/* get query */

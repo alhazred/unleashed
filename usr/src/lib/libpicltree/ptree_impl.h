@@ -27,8 +27,6 @@
 #ifndef	_PTREE_IMPL_H
 #define	_PTREE_IMPL_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -52,7 +50,7 @@ typedef uint64_t picl_hdl_t;
 /*
  * Is the object PICLized?
  */
-#define	IS_PICLIZED(x)		((x)->picl_hdl != NULL)
+#define	IS_PICLIZED(x)		((x)->picl_hdl != 0)
 
 /*
  * A handle is a 64-bit quantity with the daemon's pid value in top 32 bits

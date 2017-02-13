@@ -178,7 +178,7 @@ rcm_mod_init(void)
 	aggr_head.da_prev = NULL;
 	aggr_tail.da_prev = &aggr_head;
 	aggr_tail.da_next = NULL;
-	(void) mutex_init(&aggr_list_lock, NULL, NULL);
+	(void) mutex_init(&aggr_list_lock, 0, NULL);
 
 	if ((status = dladm_open(&dld_handle)) != DLADM_STATUS_OK) {
 		rcm_log_message(RCM_WARNING,

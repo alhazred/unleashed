@@ -2425,7 +2425,7 @@ execute_shell(s, buff_size)
 
 	tty_flag = -1;
 
-	if (*s == NULL) {
+	if (*s == '\0') {
 		shell_name = getenv("SHELL");
 
 		if (shell_name == NULL) {

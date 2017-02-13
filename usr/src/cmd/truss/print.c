@@ -1491,7 +1491,7 @@ print_pck(private_t *pri, int raw, long val)
 		return;
 	}
 
-	if (pri->sys_args[3] == NULL) {
+	if (pri->sys_args[3] == 0) {
 		if (val == PC_KY_CLNAME) {
 			s = "PC_KY_CLNAME";
 			outstring(pri, s);

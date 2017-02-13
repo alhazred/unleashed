@@ -614,7 +614,7 @@ Paddr_to_text_map(struct ps_prochandle *P, uintptr_t addr)
 		 * section.
 		 */
 		if (fptr != NULL && fptr->file_lo != NULL &&
-		    (fptr->file_lo->rl_data_base == NULL ||
+		    (fptr->file_lo->rl_data_base == 0 ||
 		    pmp->pr_vaddr + pmp->pr_size <=
 		    fptr->file_lo->rl_data_base))
 			return (pmp);
@@ -3154,7 +3154,7 @@ Penv_iter(struct ps_prochandle *P, proc_env_f *func, void *data)
 			nenv = 0;
 		}
 
-		if ((envoff = envp[nenv++]) == NULL)
+		if ((envoff = envp[nenv++]) == (uintptr_t)NULL)
 			break;
 
 		/*

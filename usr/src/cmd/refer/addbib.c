@@ -12,8 +12,6 @@
  * specifies the terms and conditions for redistribution.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 
 #include <locale.h>
 #include <stdio.h>
@@ -134,7 +132,7 @@ addbib(FILE *fp, char *argv)	/* add entries to a bibliographic database */
 			} else if (line[strlen(line)-2] == '\\') {
 				if (line[0] != '\\') {
 					line[strlen(line)-2] = '\n';
-					line[strlen(line)-1] = NULL;
+					line[strlen(line)-1] = '\0';
 					trim(line);
 					fprintf(fp, "%s %s",
 					    bibskel[i].keylet, line);
@@ -144,7 +142,7 @@ addbib(FILE *fp, char *argv)	/* add entries to a bibliographic database */
 				fgets(line, BUFSIZ, stdin);
 				if (line[strlen(line)-2] == '\\') {
 					line[strlen(line)-2] = '\n';
-					line[strlen(line)-1] = NULL;
+					line[strlen(line)-1] = '\0';
 					trim(line);
 					fputs(line, fp);
 					printf("> ");
@@ -197,7 +195,7 @@ trim(char line[])		/* trim line of trailing white space */
 			break;
 	}
 	line[++n] = '\n';
-	line[++n] = NULL;
+	line[++n] = '\0';
 }
 
 void
@@ -208,7 +206,7 @@ bibedit(FILE *fp, char *cmd, char *arg)	/* edit database with edit, ex, or vi */
 	fclose(fp);
 	while (!isspace(cmd[i]))
 		i++;
-	cmd[i] = NULL;
+	cmd[i] = '\0';
 	if (fork() == 0) {
 		if (cmd[0] == 'v' && cmd[1] == 'i')
 			execlp(cmd, cmd, "+$", arg, NULL);
@@ -261,7 +259,7 @@ rd_skel(char *arg)		/* redo bibskel from user-supplied file */
 	for (entry = 0; fgets(str, BUFSIZ, pfp); entry++) {
 		for (i = 0; str[i] != '\t' && str[i] != '\n'; i++)
 			bibskel[entry].prompt[i] = str[i];
-		bibskel[entry].prompt[i] = NULL;
+		bibskel[entry].prompt[i] = '\0';
 		if (str[i] == '\n') {
 			fprintf(stderr, gettext(
 			    "No tabs between promptfile fields.\n"));
@@ -271,7 +269,7 @@ rd_skel(char *arg)		/* redo bibskel from user-supplied file */
 		}
 		for (i++, j = 0; str[i] != '\n'; i++, j++)
 			bibskel[entry].keylet[j] = str[i];
-		bibskel[entry].keylet[j] = NULL;
+		bibskel[entry].keylet[j] = '\0';
 
 		if (entry >= MAXENT) {
 			fprintf(stderr, gettext(

@@ -126,6 +126,21 @@ void dequeue(struct use_item *);
 void init_structure(short Booleans[], short Numbers[], short Strings[]);
 void dump_structure(short Booleans[], short Numbers[], short Strings[]);
 
+void err_abort(char *fmt, ...);
+void syserr_abort(char *fmt, ...);
+void warning(char *fmt, ...);
+int get_token();
+int do_entry(struct use_item *item_ptr);
+int read_entry(char *filename, struct _bool_struct *bptr,
+    struct _num_struct *nptr, struct _str_struct *sptr);
+void reset_input(void);
+int save_str(char *string);
+int handle_use(struct use_item *item_ptr, long entry_offset, short Booleans[],
+    short Numbers[], short Strings[]);
+void panic_mode(int ch);
+void check_dir(char dirletter);
+int write_object(FILE *fp, short Booleans[], short Numbers[], short Strings[]);
+int must_swap(void);
 /*
  *  The use_list is a doubly-linked list with NULLs terminating the lists:
  *
@@ -296,6 +311,7 @@ struct use_item	*item_ptr;
 	for (token_type = get_token();
 				token_type != EOF && token_type != NAMES;
 				token_type = get_token()) {
+		/* LINTED E_NOP_IF_STMT */
 		if (found_forward_use)
 			/* do nothing */;
 		else if (strcmp(curr_token.tk_name, "use") == 0) {
@@ -524,14 +540,13 @@ void
 dump_structure(short Booleans[], short Numbers[], short Strings[])
 {
 	struct stat64	statbuf;
-	FILE		*fp;
+	FILE		*fp = NULL;
 	char		name_list[1024];
 	char		*first_name, *other_names, *cur_name;
 	char		filename[128 + 2 + 1];
 	char		linkname[128 + 2 + 1];
 	int		len;
 	int		alphastart = 0;
-	extern char	*strchr(), *strrchr();
 
 	strcpy(name_list, term_names + string_table);
 	DEBUG(7, "Name list = '%s'\n", name_list);
@@ -849,7 +864,7 @@ short		Strings[];
 						curr_token.tk_valstring);
 
 	if (stat64(filename, &statbuf) < 0 ||
-				part2 == 0 && statbuf.st_mtime < start_time) {
+	    (part2 == 0 && statbuf.st_mtime < start_time)) {
 		DEBUG(2, "Forward USE to %s", curr_token.tk_valstring);
 
 		if (item_ptr == NULL) {
@@ -865,11 +880,12 @@ short		Strings[];
 								filename);
 
 		for (i = 0; i < BoolCount; i++) {
-			if (Booleans[i] == FALSE)
+			if (Booleans[i] == FALSE) {
 				if (UB[i] == TRUE)		/* now true */
 					Booleans[i] = TRUE;
 				else if (UB[i] > TRUE)	/* cancelled */
 					Booleans[i] = -2;
+			}
 		}
 
 		for (i = 0; i < NumCount; i++) {
@@ -878,11 +894,12 @@ short		Strings[];
 		}
 
 		for (i = 0; i < StrCount; i++) {
-			if (Strings[i] == -1)
+			if (Strings[i] == -1) {
 				if (US[i] == (char *)-1)
 					Strings[i] = -2;
 				else if (US[i] != (char *)0)
 					Strings[i] = save_str(US[i]);
+			}
 		}
 
 	}

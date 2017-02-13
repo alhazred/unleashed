@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Overview of poolcfg(1)
  *
@@ -1494,7 +1492,7 @@ get_cpu(const char *name)
 		return (NULL);
 	}
 
-	for (c = name; *c != NULL; c++) {
+	for (c = name; *c != '\0'; c++) {
 		if (!isdigit(*c)){
 			pool_value_free(vals[0]);
 			pool_value_free(vals[1]);

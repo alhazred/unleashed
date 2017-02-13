@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <ctype.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -65,7 +63,7 @@ int
 sip_parse_acpt_encode_header(_sip_header_t *sip_header,
 	sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -79,7 +77,7 @@ sip_parse_acpt_lang_header(_sip_header_t *sip_header,
 {
 	if (sip_is_empty_hdr(sip_header))
 		return (sip_parse_hdr_empty(sip_header, header));
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -132,8 +130,8 @@ sip_parse_allow_header(_sip_header_t *hdr, sip_parsed_header_t **phdr)
 		value->sip_value_start = hdr->sip_hdr_current;
 		value->sip_value_header = parsed_header;
 
-		if (sip_find_separator(hdr, SIP_COMMA, (char)NULL,
-		    (char)NULL, B_FALSE) == 0) {
+		if (sip_find_separator(hdr, SIP_COMMA, SIP_NUL,
+		    SIP_NUL, B_FALSE) == 0) {
 			multi_value = B_TRUE;
 		}
 
@@ -196,7 +194,7 @@ int
 sip_parse_contentdis_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -207,7 +205,7 @@ int
 sip_parse_contentencode_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -221,7 +219,7 @@ int
 sip_parse_contentlang_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -355,7 +353,7 @@ int
 sip_parse_inreplyto_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -449,7 +447,7 @@ int
 sip_parse_privacy_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 
@@ -460,7 +458,7 @@ int
 sip_parse_require_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -570,7 +568,7 @@ sip_parse_support_header(_sip_header_t *sip_header,
 {
 	if (sip_is_empty_hdr(sip_header))
 		return (sip_parse_hdr_empty(sip_header, header));
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -654,7 +652,7 @@ int
 sip_parse_usupport_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -877,7 +875,7 @@ int
 sip_parse_allow_events_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -893,7 +891,7 @@ sip_parse_allow_events_header(_sip_header_t *sip_header,
 int
 sip_parse_event_header(_sip_header_t *sip_header, sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -919,7 +917,7 @@ int
 sip_parse_substate_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -972,7 +970,7 @@ int
 sip_parse_ainfo_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -1026,7 +1024,7 @@ int
 sip_parse_preq_header(_sip_header_t *sip_header,
     sip_parsed_header_t **header)
 {
-	return (sip_parse_hdr_parser1(sip_header, header, (char)NULL));
+	return (sip_parse_hdr_parser1(sip_header, header, SIP_NUL));
 }
 
 /*
@@ -1581,8 +1579,8 @@ sip_parse_cftr_header(_sip_header_t *sip_header, sip_parsed_header_t **header)
 
 		tmp_ptr = sip_header->sip_hdr_current;
 
-		if (sip_find_separator(sip_header, SIP_RAQUOT, (char)NULL,
-		    (char)NULL, B_FALSE)) {
+		if (sip_find_separator(sip_header, SIP_RAQUOT, SIP_NUL,
+		    SIP_NUL, B_FALSE)) {
 			if (sip_goto_next_value(sip_header) != 0) {
 				sip_free_cftr_header(parsed_header);
 				return (EPROTO);

@@ -32,7 +32,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
  * Miscl routines for RPC.
@@ -168,7 +167,7 @@ getnettype(const char *nettype)
 {
 	int i;
 
-	if ((nettype == NULL) || (nettype[0] == NULL))
+	if ((nettype == NULL) || (nettype[0] == '\0'))
 		return (_RPC_NETPATH);	/* Default */
 
 	for (i = 0; _rpctypelist[i].name; i++)
@@ -214,31 +213,31 @@ __rpc_getconfip(char *nettype)
 					netid_tcp = strdup(nconf->nc_netid);
 					if (netid_tcp == NULL) {
 						syslog(LOG_ERR,
-							"__rpc_getconfip : "
-							"strdup failed");
+						    "__rpc_getconfip : "
+						    "strdup failed");
 						return (NULL);
 					}
 					if (main_thread)
 						netid_tcp_main = netid_tcp;
 					else
 						(void) pthread_setspecific(
-							tcp_key,
-							(void *)netid_tcp);
+						    tcp_key,
+						    (void *)netid_tcp);
 				} else
 				if (strcmp(nconf->nc_proto, NC_UDP) == 0) {
 					netid_udp = strdup(nconf->nc_netid);
 					if (netid_udp == NULL) {
 						syslog(LOG_ERR,
-							"__rpc_getconfip : "
-							"strdup failed");
+						    "__rpc_getconfip : "
+						    "strdup failed");
 						return (NULL);
 					}
 					if (main_thread)
 						netid_udp_main = netid_udp;
 					else
 						(void) pthread_setspecific(
-							udp_key,
-							(void *)netid_udp);
+						    udp_key,
+						    (void *)netid_udp);
 				}
 			}
 		}
@@ -250,7 +249,7 @@ __rpc_getconfip(char *nettype)
 		netid = netid_tcp;
 	else
 		return (NULL);
-	if ((netid == NULL) || (netid[0] == NULL))
+	if ((netid == NULL) || (netid[0] == '\0'))
 		return (NULL);
 	return (getnetconfigent(netid));
 }
@@ -404,7 +403,7 @@ rpc_nullproc(CLIENT *clnt)
 	struct timeval TIMEOUT = {25, 0};
 
 	if (clnt_call(clnt, NULLPROC, (xdrproc_t)xdr_void, NULL,
-			(xdrproc_t)xdr_void, NULL, TIMEOUT) != RPC_SUCCESS)
+	    (xdrproc_t)xdr_void, NULL, TIMEOUT) != RPC_SUCCESS)
 		return (NULL);
 	return ((void *)clnt);
 }
@@ -433,10 +432,10 @@ __rpcfd_to_nconf(int fd, int servtype)
 			char errorstr[100];
 
 			__tli_sys_strerror(errorstr, sizeof (errorstr),
-					t_errno, errno);
+			    t_errno, errno);
 			(void) syslog(LOG_ERR, "__rpcfd_to_nconf : %s : %s",
-					"could not get transport information",
-					errorstr);
+			    "could not get transport information",
+			    errorstr);
 			return (NULL);
 		}
 		servtype = tinfo.servtype;
@@ -512,9 +511,9 @@ __rpc_is_local_host(const char *host)
 	char	buf[MAXHOSTNAMELEN + 1];
 
 	if (host == NULL || strcmp(host, "localhost") == 0 ||
-			strcmp(host, HOST_SELF) == 0 ||
-			strcmp(host, HOST_SELF_CONNECT) == 0 ||
-			strlen(host) == 0)
+	    strcmp(host, HOST_SELF) == 0 ||
+	    strcmp(host, HOST_SELF_CONNECT) == 0 ||
+	    strlen(host) == 0)
 		return (TRUE);
 	if (sysinfo(SI_HOSTNAME, buf, sizeof (buf)) < 0)
 		return (FALSE);

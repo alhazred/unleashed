@@ -36,8 +36,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Disk quota editor.
  */
@@ -841,7 +839,7 @@ quotactl(int cmd, char *special, uid_t uid, caddr_t addr)
 		exit(31+1);
 	}
 	qfile[0] = '\0';
-	while ((status = getmntent(fstab, &mntp)) == NULL) {
+	while ((status = getmntent(fstab, &mntp)) == 0) {
 		/*
 		 * check that it is a ufs file system
 		 * for all quotactl()s except Q_ALLSYNC check that

@@ -142,7 +142,7 @@ _nscd_init_smf_monitor() {
 	/*
 	 * start a thread to check the state of the client services
 	 */
-	if (thr_create(NULL, NULL, set_smf_state,
+	if (thr_create(NULL, 0, set_smf_state,
 		NULL, THR_DETACHED, NULL) != 0) {
 		errnum = errno;
 		_NSCD_LOG(NSCD_LOG_SMF_MONITOR, NSCD_LOG_LEVEL_ERROR)

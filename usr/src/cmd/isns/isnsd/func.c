@@ -641,7 +641,7 @@ dev_attr_reg(
 	isns_obj_t *obj;	/* child object */
 	isns_type_t ctype;	/* child object type */
 	uint32_t uid;		/* child object uid */
-	isns_attr_t pgt[3] = { NULL };
+	isns_attr_t pgt[3] = { 0 };
 
 	void const **vpp = NULL;
 	int i = 0;
@@ -672,13 +672,11 @@ dev_attr_reg(
 				}
 			/* validate for the source attribute before */
 			/* update or replace the network entity object */
-			} else if (ctrl == 0 &&
 #ifndef SKIP_SRC_AUTH
+			} else if (ctrl == 0 &&
 			    reg_auth_src(lc.type, uid, iscsi_name) == 0) {
-#else
-			    0) {
-#endif
 				ec = ISNS_RSP_SRC_UNAUTHORIZED;
+#endif
 			/* de-register the network entity if replace is true */
 			} else if (replace != 0) {
 				UPDATE_LCP_UID(&lc, uid);
@@ -742,14 +740,12 @@ dev_attr_reg(
 				/* to child info array of the parent object */
 				ec = buff_child_obj(ptype, ctype, obj, child);
 			} else {
-				if (ctrl == 0 &&
 #ifndef SKIP_SRC_AUTH
+				if (ctrl == 0 &&
 				    puid != get_parent_uid(obj)) {
-#else
-				    0) {
-#endif
 					ec = ISNS_RSP_SRC_UNAUTHORIZED;
 				}
+#endif
 				/* it was for updating an existing object */
 				free_one_object(obj);
 			}
@@ -1222,15 +1218,13 @@ dev_dereg(
 		}
 		if (ec == 0 &&
 		    (ec = dereg_object(&lc, 0)) == 0) {
-			if (ctrl == 0 &&
 #ifndef SKIP_SRC_AUTH
+			if (ctrl == 0 &&
 			    lc.curr_uid != 0 &&
 			    puid != lc.curr_uid) {
-#else
-			    0) {
-#endif
 				ec = ISNS_RSP_SRC_UNAUTHORIZED;
 			} else {
+#endif
 				NEXT_TLV(op, op_len);
 			}
 		}

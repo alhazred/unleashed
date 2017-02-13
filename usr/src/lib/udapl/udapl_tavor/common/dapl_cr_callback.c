@@ -255,7 +255,7 @@ dapls_cr_callback(
 		 */
 		dapl_os_lock(&ep_ptr->header.lock);
 		ep_ptr->param.ep_state  = DAT_EP_STATE_DISCONNECTED;
-		ep_ptr->cm_handle = IB_INVALID_HANDLE;
+		ep_ptr->cm_handle = (uintptr_t)IB_INVALID_HANDLE;
 		dapls_ib_disconnect_clean(ep_ptr, DAT_FALSE, ib_cm_event);
 		dapl_os_unlock(&ep_ptr->header.lock);
 		dat_status = dapls_evd_post_connection_event(

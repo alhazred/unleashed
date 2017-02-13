@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "misc.h"
 #include <ucontext.h>
 #include <sys/frame.h>
@@ -148,7 +146,7 @@ getpcstack(uintptr_t *pcstack, int pcstack_limit, int check_signal)
 			break;
 		else if (nextfp <= minfp || (tmp - base) >= size) {
 #ifndef UMEM_STANDALONE
-			if (tmp == NULL || !on_altstack)
+			if (tmp == (uintptr_t)NULL || !on_altstack)
 				break;
 			/*
 			 * If we're on an alternate signal stack, try jumping

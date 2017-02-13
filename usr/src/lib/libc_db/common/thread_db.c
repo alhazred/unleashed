@@ -218,7 +218,7 @@ td_read_uberdata(td_thragent_t *ta_p)
 	if (ta_p->hash_size != 1) {	/* multi-threaded */
 		ta_p->initialized = 2;
 		ta_p->single_lwpid = 0;
-		ta_p->single_ulwp_addr = NULL;
+		ta_p->single_ulwp_addr = 0;
 	} else {			/* single-threaded */
 		ta_p->initialized = 1;
 		/*
@@ -232,7 +232,7 @@ td_read_uberdata(td_thragent_t *ta_p)
 			if (ps_pdread(ph_p, ta_p->hash_table_addr,
 			    &head, sizeof (head)) != PS_OK)
 				return (TD_DBERR);
-			if ((psaddr_t)head.hash_bucket == NULL)
+			if ((psaddr_t)head.hash_bucket == 0)
 				ta_p->initialized = 0;
 			else if (ps_pdread(ph_p, (psaddr_t)head.hash_bucket +
 			    offsetof(ulwp_t, ul_lwpid),
@@ -248,7 +248,7 @@ td_read_uberdata(td_thragent_t *ta_p)
 			if (ps_pdread(ph_p, ta_p->hash_table_addr,
 			    &head, sizeof (head)) != PS_OK)
 				return (TD_DBERR);
-			if ((psaddr_t)head.hash_bucket == NULL)
+			if ((psaddr_t)head.hash_bucket == 0)
 				ta_p->initialized = 0;
 			else if (ps_pdread(ph_p, (psaddr_t)head.hash_bucket +
 			    offsetof(ulwp32_t, ul_lwpid),
@@ -319,14 +319,14 @@ td_read_bootstrap_data(td_thragent_t *ta_p)
 		if (ps_pdread(ph_p, bootstrap_addr,
 		    &psaddr, sizeof (psaddr)) != PS_OK)
 			return (TD_DBERR);
-		if ((ta_p->bootstrap_addr = psaddr) == NULL)
+		if ((ta_p->bootstrap_addr = psaddr) == 0)
 			psaddr = uberdata_addr;
 		else if (ps_pdread(ph_p, psaddr,
 		    &psaddr, sizeof (psaddr)) != PS_OK)
 			return (TD_DBERR);
-		if (psaddr == NULL) {
+		if (psaddr == 0) {
 			/* primary linkmap in the tgt is not initialized */
-			ta_p->bootstrap_addr = NULL;
+			ta_p->bootstrap_addr = 0;
 			psaddr = uberdata_addr;
 		}
 		ta_p->uberdata_addr = psaddr;
@@ -336,14 +336,14 @@ td_read_bootstrap_data(td_thragent_t *ta_p)
 		if (ps_pdread(ph_p, bootstrap_addr,
 		    &psaddr, sizeof (psaddr)) != PS_OK)
 			return (TD_DBERR);
-		if ((ta_p->bootstrap_addr = (psaddr_t)psaddr) == NULL)
+		if ((ta_p->bootstrap_addr = (psaddr_t)psaddr) == 0)
 			psaddr = (caddr32_t)uberdata_addr;
 		else if (ps_pdread(ph_p, (psaddr_t)psaddr,
 		    &psaddr, sizeof (psaddr)) != PS_OK)
 			return (TD_DBERR);
-		if (psaddr == NULL) {
+		if (psaddr == 0) {
 			/* primary linkmap in the tgt is not initialized */
-			ta_p->bootstrap_addr = NULL;
+			ta_p->bootstrap_addr = 0;
 			psaddr = (caddr32_t)uberdata_addr;
 		}
 		ta_p->uberdata_addr = (psaddr_t)psaddr;
@@ -354,7 +354,7 @@ td_read_bootstrap_data(td_thragent_t *ta_p)
 
 	if ((return_val = td_read_uberdata(ta_p)) != TD_OK)
 		return (return_val);
-	if (ta_p->bootstrap_addr == NULL)
+	if (ta_p->bootstrap_addr == 0)
 		ta_p->initialized = 0;
 	return (TD_OK);
 }
@@ -483,7 +483,7 @@ ph_lock_ta(td_thragent_t *ta_p, td_err_e *err)
 static struct ps_prochandle *
 ph_lock_th(const td_thrhandle_t *th_p, td_err_e *err)
 {
-	if (th_p == NULL || th_p->th_unique == NULL) {
+	if (th_p == NULL || th_p->th_unique == 0) {
 		*err = TD_BADTH;
 		return (NULL);
 	}
@@ -498,7 +498,7 @@ ph_lock_th(const td_thrhandle_t *th_p, td_err_e *err)
 static struct ps_prochandle *
 ph_lock_sh(const td_synchandle_t *sh_p, td_err_e *err)
 {
-	if (sh_p == NULL || sh_p->sh_unique == NULL) {
+	if (sh_p == NULL || sh_p->sh_unique == 0) {
 		*err = TD_BADSH;
 		return (NULL);
 	}
@@ -733,7 +733,7 @@ __td_ta_map_addr2sync(td_thragent_t *ta_p, psaddr_t addr, td_synchandle_t *sh_p)
 
 	if (sh_p == NULL)
 		return (TD_BADSH);
-	if (addr == NULL)
+	if (addr == 0)
 		return (TD_ERR);
 	if ((ph_p = ph_lock_ta(ta_p, &return_val)) == NULL)
 		return (return_val);
@@ -981,7 +981,7 @@ __td_ta_thr_iter(td_thragent_t *ta_p, td_thr_iter_f *cb,
 	 * exited.  Return TD_NOTHR and all will be well.
 	 */
 	if (db_return == PS_OK &&
-	    first_lwp_addr == NULL && first_zombie_addr == NULL) {
+	    first_lwp_addr == 0 && first_zombie_addr == 0) {
 		(void) ps_pcontinue(ph_p);
 		ph_unlock(ta_p);
 		return (TD_NOTHR);
@@ -995,7 +995,7 @@ __td_ta_thr_iter(td_thragent_t *ta_p, td_thr_iter_f *cb,
 	/*
 	 * Run down the lists of all living and dead lwps.
 	 */
-	if (first_lwp_addr == NULL)
+	if (first_lwp_addr == 0)
 		first_lwp_addr = first_zombie_addr;
 	curr_lwp_addr = first_lwp_addr;
 	for (;;) {
@@ -1095,7 +1095,7 @@ advance:
 			 * or we have already been doing the zombie list,
 			 * in which case terminate the loop.
 			 */
-			if (first_zombie_addr == NULL ||
+			if (first_zombie_addr == 0 ||
 			    first_lwp_addr == first_zombie_addr)
 				break;
 			curr_lwp_addr = first_lwp_addr = first_zombie_addr;
@@ -1219,7 +1219,7 @@ __td_ta_sync_iter(td_thragent_t *ta_p, td_sync_iter_f *cb, void *cbdata)
 #endif /* _SYSCALL32 */
 	}
 
-	if (psaddr == NULL)
+	if (psaddr == 0)
 		goto out;
 	if (ps_pdread(ph_p, psaddr, sync_addr_hash,
 	    TDB_HASH_SIZE * sizeof (uint64_t)) != PS_OK) {
@@ -1232,7 +1232,7 @@ __td_ta_sync_iter(td_thragent_t *ta_p, td_sync_iter_f *cb, void *cbdata)
 	 */
 	for (i = 0; i < TDB_HASH_SIZE; i++) {
 		for (next_desc = (psaddr_t)sync_addr_hash[i];
-		    next_desc != NULL;
+		    next_desc != 0;
 		    next_desc = (psaddr_t)sync_stats.next) {
 			if (ps_pdread(ph_p, next_desc,
 			    &sync_stats, sizeof (sync_stats)) != PS_OK) {
@@ -1398,7 +1398,7 @@ __td_thr_get_info(td_thrhandle_t *th_p, td_thrinfo_t *ti_p)
 
 	if (ti_p == NULL)
 		return (TD_ERR);
-	(void) memset(ti_p, NULL, sizeof (*ti_p));
+	(void) memset(ti_p, 0, sizeof (*ti_p));
 
 	if ((ph_p = ph_lock_th(th_p, &return_val)) == NULL)
 		return (return_val);
@@ -1687,7 +1687,7 @@ __td_thr_event_getmsg(td_thrhandle_t *th_p, td_event_msg_t *msg)
 			msg->msg.data = (uintptr_t)evbuf.eventdata;
 			/* "Consume" the message */
 			evbuf.eventnum = TD_EVENT_NONE;
-			evbuf.eventdata = NULL;
+			evbuf.eventdata = 0;
 			if (ps_pdwrite(ph_p, psaddr, &evbuf, sizeof (evbuf))
 			    != PS_OK)
 				return_val = TD_DBERR;
@@ -1708,7 +1708,7 @@ __td_thr_event_getmsg(td_thrhandle_t *th_p, td_event_msg_t *msg)
 			msg->msg.data = (uintptr_t)evbuf.eventdata;
 			/* "Consume" the message */
 			evbuf.eventnum = TD_EVENT_NONE;
-			evbuf.eventdata = NULL;
+			evbuf.eventdata = (uintptr_t)NULL;
 			if (ps_pdwrite(ph_p, psaddr, &evbuf, sizeof (evbuf))
 			    != PS_OK)
 				return_val = TD_DBERR;
@@ -2109,7 +2109,7 @@ __td_thr_validate(const td_thrhandle_t *th_p)
 
 	if (th_p == NULL)
 		return (TD_BADTH);
-	if (th_p->th_unique == NULL || th_p->th_ta_p == NULL)
+	if (th_p->th_unique == 0 || th_p->th_ta_p == NULL)
 		return (TD_BADTH);
 
 	/*
@@ -2170,12 +2170,12 @@ __td_thr_tsd(td_thrhandle_t *th_p, thread_key_t key, void **data_pp)
 		else if (ps_pdread(ph_p, (psaddr_t)&ulwp->ul_stsd,
 		    &tsd_paddr, sizeof (tsd_paddr)) != PS_OK)
 			return_val = TD_DBERR;
-		else if (tsd_paddr != NULL &&
+		else if (tsd_paddr != 0 &&
 		    ps_pdread(ph_p, tsd_paddr, &stsd, sizeof (stsd)) != PS_OK)
 			return_val = TD_DBERR;
 		else {
 			maxkey = tsdm.tsdm_nused;
-			nkey = tsd_paddr == NULL ? TSD_NFAST : stsd.tsd_nalloc;
+			nkey = tsd_paddr == 0 ? TSD_NFAST : stsd.tsd_nalloc;
 
 			if (key < TSD_NFAST)
 				tsd_paddr = (psaddr_t)&ulwp->ul_ftsd[0];
@@ -2194,12 +2194,12 @@ __td_thr_tsd(td_thrhandle_t *th_p, thread_key_t key, void **data_pp)
 		else if (ps_pdread(ph_p, (psaddr_t)&ulwp->ul_stsd,
 		    &addr, sizeof (addr)) != PS_OK)
 			return_val = TD_DBERR;
-		else if (addr != NULL &&
+		else if (addr != 0 &&
 		    ps_pdread(ph_p, addr, &stsd, sizeof (stsd)) != PS_OK)
 			return_val = TD_DBERR;
 		else {
 			maxkey = tsdm.tsdm_nused;
-			nkey = addr == NULL ? TSD_NFAST : stsd.tsd_nalloc;
+			nkey = addr == 0 ? TSD_NFAST : stsd.tsd_nalloc;
 
 			if (key < TSD_NFAST) {
 				tsd_paddr = (psaddr_t)&ulwp->ul_ftsd[0];
@@ -2263,7 +2263,7 @@ __td_thr_tlsbase(td_thrhandle_t *th_p, ulong_t moduleid, psaddr_t *base)
 
 	if (base == NULL)
 		return (TD_ERR);
-	*base = NULL;
+	*base = 0;
 	if ((ph_p = ph_lock_th(th_p, &return_val)) == NULL)
 		return (return_val);
 	ta_p = th_p->th_ta_p;
@@ -2467,9 +2467,9 @@ __td_thr_sleepinfo(const td_thrhandle_t *th_p, td_synchandle_t *sh_p)
 #endif	/* _SYSCALL32 */
 	}
 
-	if (return_val != TD_OK || wchan == NULL) {
+	if (return_val != TD_OK || wchan == 0) {
 		sh_p->sh_ta_p = NULL;
-		sh_p->sh_unique = NULL;
+		sh_p->sh_unique = 0;
 		if (return_val == TD_OK)
 			return_val = TD_ERR;
 	} else {
@@ -2674,7 +2674,7 @@ read_sync_stats(td_thragent_t *ta_p, psaddr_t hash_table,
 	/*
 	 * Search the linked list for an entry for the synch object..
 	 */
-	for (next_desc = (psaddr_t)first; next_desc != NULL;
+	for (next_desc = (psaddr_t)first; next_desc != 0;
 	    next_desc = (psaddr_t)sync_stats->next) {
 		if (ps_pdread(ta_p->ph_p, next_desc,
 		    sync_stats, sizeof (*sync_stats)) != PS_OK)

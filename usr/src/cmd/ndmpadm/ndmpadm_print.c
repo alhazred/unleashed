@@ -104,7 +104,7 @@ ndmp_print_env(ndmp_session_info_t *si)
 	for (i = 0; ep && i < n; i++, ep++) {
 		(void) fprintf(stdout, gettext("\tdata.env[%d]:\t%s: "),
 		    i, ep->np_name);
-		if ((ep->np_value != NULL) && (*ep->np_value != NULL))
+		if ((ep->np_value != NULL) && (*ep->np_value != '\0'))
 			(void) fprintf(stdout, "\"%s\"\n", ep->np_value);
 	}
 }

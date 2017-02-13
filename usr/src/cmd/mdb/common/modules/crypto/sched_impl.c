@@ -251,7 +251,7 @@ areq_walk_init_common(mdb_walk_state_t *wsp, boolean_t use_first)
 		return (WALK_ERR);
 	}
 	if ((wsp->walk_addr = (use_first ? (uintptr_t)gswq_copy.gs_first :
-	    (uintptr_t)gswq_copy.gs_last)) == NULL) {
+	    (uintptr_t)gswq_copy.gs_last)) == (uintptr_t)NULL) {
 		mdb_printf("Global swq is empty\n");
 		return (WALK_DONE);
 	}
@@ -282,7 +282,7 @@ an_id_walk_init(mdb_walk_state_t *wsp, idwalk_type_t type)
 {
 	kcf_areq_node_t *adn;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("must give kcf_areq_node address\n");
 		return (WALK_ERR);
 	}
@@ -334,7 +334,7 @@ an_id_walk_step(mdb_walk_state_t *wsp, idwalk_type_t type)
 	int status;
 	kcf_areq_node_t *ptr;
 
-	if (wsp->walk_addr == NULL)	/* then we're done */
+	if (wsp->walk_addr == (uintptr_t)NULL)	/* then we're done */
 		return (WALK_DONE);
 
 	ptr = wsp->walk_data;
@@ -351,19 +351,20 @@ an_id_walk_step(mdb_walk_state_t *wsp, idwalk_type_t type)
 	switch (type) {
 		case IDNEXT:
 			if ((wsp->walk_addr =
-			    (uintptr_t)ptr->an_idnext) == NULL)
+			    (uintptr_t)ptr->an_idnext) == (uintptr_t)NULL)
 				return (WALK_DONE);
 			break;
 
 		case IDPREV:
 			if ((wsp->walk_addr =
-			    (uintptr_t)ptr->an_idprev) == NULL)
+			    (uintptr_t)ptr->an_idprev) == (uintptr_t)NULL)
 				return (WALK_DONE);
 			break;
 
 		case CTXCHAIN:
 			if ((wsp->walk_addr =
-			    (uintptr_t)ptr->an_ctxchain_next) == NULL)
+			    (uintptr_t)ptr->an_ctxchain_next) ==
+			    (uintptr_t)NULL)
 				return (WALK_DONE);
 			break;
 
@@ -425,7 +426,7 @@ an_walk_step_common(mdb_walk_state_t *wsp, boolean_t use_next)
 	    wsp->walk_cbdata);
 
 	if ((wsp->walk_addr = (use_next ? (uintptr_t)ptr->an_next :
-	    (uintptr_t)ptr->an_prev)) == NULL)
+	    (uintptr_t)ptr->an_prev)) == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	return (status);
@@ -556,7 +557,7 @@ crypto_pr_reqid(uintptr_t addr, reqid_data_t *data, reqid_cb_data_t *cbdata)
 	int i;
 	int needhdr = TRUE;
 
-	if (addr == NULL) {
+	if (addr == (uintptr_t)NULL) {
 		mdb_printf("kcf_reqid_table[%d] = NULL\n", data->rd_cur_index);
 		return (WALK_NEXT);
 	}
@@ -570,85 +571,93 @@ crypto_pr_reqid(uintptr_t addr, reqid_data_t *data, reqid_cb_data_t *cbdata)
 
 	/* Loop over all rt_idhash's */
 	for (i = 0; i < REQID_BUCKETS; i++) {
-	    uint_t number_in_chain = 0;
-	    uintptr_t node_addr;
+		uint_t number_in_chain = 0;
+		uintptr_t node_addr;
 
-	    /* follow the an_idnext chains for each bucket */
-	    do {
-		/* read kcf_areq_node */
-		if (number_in_chain == 0)
-		    node_addr = (uintptr_t)data->rd_table.rt_idhash[i];
-		else
-		    /*LINTED*/
-		    node_addr = (uintptr_t)node.an_idnext;
+		/* follow the an_idnext chains for each bucket */
+		do {
+			/* read kcf_areq_node */
+			if (number_in_chain == 0)
+				node_addr =
+				    (uintptr_t)data->rd_table.rt_idhash[i];
+			else
+				/*LINTED*/
+				node_addr = (uintptr_t)node.an_idnext;
 #ifdef DEBUG
-		mdb_printf("DEBUG: node_addr = %p\n", node_addr);
+			mdb_printf("DEBUG: node_addr = %p\n", node_addr);
 #endif
 
-		if (node_addr == NULL)
-			break;  /* skip */
+			if (node_addr == (uintptr_t)NULL)
+				break;  /* skip */
 
-		if (mdb_vread(&node, sizeof (kcf_areq_node_t), node_addr)
-		    == -1) {
-			if (cbdata->verbose == TRUE)
-			    mdb_printf(
-				"cannot read rt_idhash %d an_idnext %d\n",
-				i, number_in_chain);
-			break;
-		}
-		/* see if we want to print it */
-		if ((cbdata->cb_reqid == 0) ||
-		    (node.an_reqarg.cr_reqid == cbdata->cb_reqid)) {
-			cbdata->found = TRUE;  /* printed if false || reqid */
-			/* is this the first rd_idhash found for this table? */
-			if (needhdr == TRUE) {
-			    /* print both indices in bold */
-			    mdb_printf("%<b>kcf_reqid_table[%lu] at %p:%</b>\n",
-				data->rd_cur_index, addr);
-			    mdb_printf("\trt_lock:  %p\trt_curid: %llx\n",
-				data->rd_table.rt_lock,
-				data->rd_table.rt_curid);
-			    needhdr = FALSE;
+			if (mdb_vread(&node, sizeof (kcf_areq_node_t),
+			    node_addr) == -1) {
+				if (cbdata->verbose == TRUE)
+					mdb_printf(
+					    "cannot read rt_idhash %d"
+					    " an_idnext %d\n",
+					    i, number_in_chain);
+				break;
 			}
-			/* print kcf_areq_node */
-			if (number_in_chain < 1)
-			    mdb_printf(
-				"    %<b>rt_idhash[%lu%]%</b> = %<b>%p:%</b>\n",
-				i, node_addr);
-			else
-			    mdb_printf(
-				"    rt_idhash[%lu%]"
-					" an_idnext %d  = %<b>%p:%</b>\n",
-					i, number_in_chain, node_addr);
-			mdb_inc_indent(8);
+			/* see if we want to print it */
+			if ((cbdata->cb_reqid == 0) ||
+			    (node.an_reqarg.cr_reqid == cbdata->cb_reqid)) {
+				/* printed if false || reqid */
+				cbdata->found = TRUE;
+				/* first rd_idhash found for this table? */
+				if (needhdr == TRUE) {
+					/* print both indices in bold */
+					mdb_printf("%<b>kcf_reqid_table[%lu]"
+					    " at %p:%</b>\n",
+					    data->rd_cur_index, addr);
+					mdb_printf("\trt_lock:  %p\trt_curid:"
+					    " %llx\n",
+					    data->rd_table.rt_lock,
+					    data->rd_table.rt_curid);
+					needhdr = FALSE;
+				}
+				/* print kcf_areq_node */
+				if (number_in_chain < 1)
+					mdb_printf(
+					    "    %<b>rt_idhash[%lu%]%</b>"
+					    " = %<b>%p:%</b>\n",
+					    i, node_addr);
+				else
+					mdb_printf(
+					    "    rt_idhash[%lu%]"
+					    " an_idnext %d  = %<b>%p:%</b>\n",
+					    i, number_in_chain, node_addr);
+				mdb_inc_indent(8);
 
-			/* if we're looking for one and only one reqid */
-			/* do it REALLY verbose */
-			if ((node.an_reqarg.cr_reqid == cbdata->cb_reqid) &&
-			    (cbdata->cb_reqid != 0))
-				v_kcf_areq_node(&node);
-			else if (cbdata->verbose == TRUE)
-			/*
-			 * verbose for this walker means non-verbose for
-			 * the kcf_areq_node details
-			 */
-			    kcf_areq_node_simple(&node);
-			mdb_dec_indent(8);
-		}
-		/* if we only wanted one reqid, quit now */
-		if (node.an_reqarg.cr_reqid == cbdata->cb_reqid) {
-			return (WALK_DONE);
-		}
+				/* if looking for one and only one reqid */
+				/* do it REALLY verbose */
+				if ((node.an_reqarg.cr_reqid ==
+				    cbdata->cb_reqid) &&
+				    (cbdata->cb_reqid != 0))
+					v_kcf_areq_node(&node);
+				else if (cbdata->verbose == TRUE)
+					/*
+					 * verbose for this walker
+					 * means non-verbose for
+					 * the kcf_areq_node details
+					 */
+					kcf_areq_node_simple(&node);
+				mdb_dec_indent(8);
+			}
+			/* if we only wanted one reqid, quit now */
+			if (node.an_reqarg.cr_reqid == cbdata->cb_reqid) {
+				return (WALK_DONE);
+			}
 
-		number_in_chain++;
+			number_in_chain++;
 
-	    } while (node.an_idnext != NULL); /* follow chain in same bucket */
+		} while (node.an_idnext != NULL); /* follow chain... */
 
 	}  /* for each REQID_BUCKETS */
 
 	if ((needhdr == TRUE) && (cbdata->cb_reqid == 0)) {
-	    mdb_printf("%kcf_reqid_table[%lu]: %p\n",
-		data->rd_cur_index, addr);
+		mdb_printf("%kcf_reqid_table[%lu]: %p\n",
+		    data->rd_cur_index, addr);
 	}
 	return (WALK_NEXT);
 }

@@ -1675,7 +1675,8 @@ validate_optarg(elfedit_cmd_optarg_t *optarg, int isopt, MODLIST_T *moddef,
 				/* MSG_INTL(MSG_ERR_CMDOA_VALNAM) */
 				FAIL(MSG_ERR_CMDOA_VALNAM);
 			}
-			if ((oa1->oa_help != NULL) || (oa1->oa_flags != 0) ||
+			if ((oa1->oa_help != (elfedit_i18nhdl_t)NULL) ||
+			    (oa1->oa_flags != 0) ||
 			    (oa1->oa_idmask != 0) || (oa1->oa_excmask != 0)) {
 				/* MSG_INTL(MSG_ERR_CMDOA_VALNOT0) */
 				FAIL(MSG_ERR_CMDOA_VALNOT0);
@@ -3224,7 +3225,7 @@ cmd_match_fcn(WordCompletion *cpl, void *data, const char *line, int word_end)
 		}
 		skip_one = 0;
 		ostyle_ndx = -1;
-		if ((strcmp(argv[i], MSG_ORIG(MSG_STR_MINUS_MINUS)) == NULL) ||
+		if ((strcmp(argv[i], MSG_ORIG(MSG_STR_MINUS_MINUS)) == 0) ||
 		    (*argv[i] != '-')) {
 			opt_term_seen = 1;
 			continue;

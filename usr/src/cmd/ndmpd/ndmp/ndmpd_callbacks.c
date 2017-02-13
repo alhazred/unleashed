@@ -859,7 +859,7 @@ ndmpd_api_find_env(void *cookie, char *name)
 
 	envp = session->ns_data.dd_env;
 	for (i = 0; envp && i < session->ns_data.dd_env_len; envp++, i++)
-		if (strcmp(name, envp->name) == NULL)
+		if (strcmp(name, envp->name) == 0)
 			return (envp);
 
 	return (NULL);

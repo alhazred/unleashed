@@ -1174,7 +1174,7 @@ main(int argc, char **argv)
 	/*
 	 * Initialize the PICL Tree
 	 */
-	if (xptree_initialize(NULL) != PICL_SUCCESS) {
+	if (xptree_initialize(0) != PICL_SUCCESS) {
 		syslog(LOG_CRIT, INIT_FAILED);
 		exit(1);
 	}

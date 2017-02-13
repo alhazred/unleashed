@@ -1126,7 +1126,7 @@ start_threads(nsc_ctx_t *ctx)
 	 *  kick off the revalidate thread (if necessary)
 	 */
 	if (ctx->revalidate_on != nscd_true) {
-		if (thr_create(NULL, NULL, (void *(*)(void *))revalidate,
+		if (thr_create(NULL, 0, (void *(*)(void *))revalidate,
 		    ctx, 0, NULL) != 0) {
 			errnum = errno;
 			_NSCD_LOG(NSCD_LOG_CACHE, NSCD_LOG_LEVEL_ERROR)
@@ -1141,7 +1141,7 @@ start_threads(nsc_ctx_t *ctx)
 	 *  kick off the reaper thread (if necessary)
 	 */
 	if (ctx->reaper_on != nscd_true) {
-		if (thr_create(NULL, NULL, (void *(*)(void *))reaper,
+		if (thr_create(NULL, 0, (void *(*)(void *))reaper,
 		    ctx, 0, NULL) != 0) {
 			errnum = errno;
 			_NSCD_LOG(NSCD_LOG_CACHE, NSCD_LOG_LEVEL_ERROR)
@@ -1938,7 +1938,7 @@ launch_update(nsc_lookup_args_t *in)
 	char	*me = "launch_update";
 	int	errnum;
 
-	errnum = thr_create(NULL, NULL, (void *(*)(void*))do_update,
+	errnum = thr_create(NULL, 0, (void *(*)(void*))do_update,
 	    in, 0|THR_DETACHED, NULL);
 	if (errnum != 0) {
 		_NSCD_LOG(NSCD_LOG_CACHE, NSCD_LOG_LEVEL_ERROR)

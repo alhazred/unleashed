@@ -1941,7 +1941,7 @@ kmf_set_cert_validity(KMF_X509_CERTIFICATE *CertData,
 		return (KMF_ERR_BAD_PARAMETER);
 
 	/* Set up validity fields */
-	if (notBefore == NULL)
+	if (notBefore == 0)
 		clock = time(NULL);
 	else
 		clock = notBefore;
@@ -2000,7 +2000,7 @@ set_integer(KMF_DATA *data, void *value, int length)
 static KMF_RETURN
 set_bigint(KMF_BIGINT *data, KMF_BIGINT *bigint)
 {
-	if (data == NULL || bigint == NULL || bigint->len == NULL)
+	if (data == NULL || bigint == NULL || bigint->len == 0)
 		return (KMF_ERR_BAD_PARAMETER);
 
 	data->val = malloc(bigint->len);

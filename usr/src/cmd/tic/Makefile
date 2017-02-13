@@ -44,9 +44,6 @@ MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
 LDFLAGS += $(MAPFILES:%=-Wl,-M%)
 
 CERRWARN += -Wno-char-subscripts
-CERRWARN += -Wno-implicit-function-declaration
-CERRWARN += -Wno-parentheses
-CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 

@@ -364,7 +364,7 @@ writeCachedCluster(int fd, CachedCluster *clustInfo)
 		    gettext("Allocation unit %d modified.\n"),
 		    clustInfo->clusterNum);
 
-	if (seekCluster(fd, clustInfo->clusterNum) == NULL)
+	if (seekCluster(fd, clustInfo->clusterNum) == 0)
 		return;
 
 	if ((bytesWritten = write(fd, clustInfo->clusterData.bytes,

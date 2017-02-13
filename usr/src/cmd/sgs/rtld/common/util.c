@@ -1323,7 +1323,7 @@ create_cntl(Lm_list *lml, int dlopen)
 
 		if ((lmc = alist_append(&lml->lm_lists, NULL, sizeof (Lm_cntl),
 		    AL_CNT_LMLISTS)) == NULL)
-			return (NULL);
+			return (0);
 
 		return ((Aliste)((char *)lmc - (char *)lml->lm_lists));
 	}

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (C) 2004-2008 Intel Corp. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,22 +26,21 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
+ */
 
-//////////////////////////////////////////////////////////////////////////
+//
 // ThreadLinux.cpp
 //
 // This file contains the linux implementation of the Thread class
-///////////////////////////////////////////////////////////////////////////
+//
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include "Thread.h"
-#include <pthread.h>
 #include <sys/time.h>
 #include <cerrno>
 #include <cstdio>
-
+#include "Thread.h"
+#include <pthread.h>
 
 class OSThread
 {
@@ -58,16 +57,16 @@ void *OSThread::threadFunc(void *thread_p)
 {
 	if (thread_p) {
 		Thread *t = (Thread*)thread_p;
-		//printf("@@@@ OSThread::threadFunc (%p)\n", t->_osThread);
+		// printf("@@@@ OSThread::threadFunc (%p)\n", t->_osThread);
 		t->run();
-		//printf("@@@@ OSThread::threadFunc (%p) after run\n", t->_osThread);
+	// printf("@@@@ OSThread::threadFunc (%p) after run\n", t->_osThread);
 		pthread_mutex_lock(&t->_osThread->_mut);
 		t->_osThread->_running = false;
-		//printf("@@@@ OSThread::threadFunc setting signal\n");
+		// printf("@@@@ OSThread::threadFunc setting signal\n");
 		pthread_cond_signal(&t->_osThread->_cond);
 		pthread_mutex_unlock(&t->_osThread->_mut);
 	}
-	return (void *)0;
+	return ((void *)0);
 }
 
 Thread::Thread(CallbackFunction func_p, void* param_p)
@@ -90,7 +89,7 @@ Thread::~Thread()
 
 unsigned long Thread::currentThread()
 {
-	return pthread_self();
+	return (pthread_self());
 }
 
 bool Thread::wait(unsigned long msecs_p) const
@@ -109,25 +108,27 @@ bool Thread::wait(unsigned long msecs_p) const
 
 		pthread_mutex_lock(&_osThread->_mut);
 		if (_osThread->_running) {
-			retcode = pthread_cond_timedwait(&_osThread->_cond, &_osThread->_mut, &timeout);
+			retcode = pthread_cond_timedwait(&_osThread->_cond,
+			    &_osThread->_mut, &timeout);
 		}
 		pthread_mutex_unlock(&_osThread->_mut);
 
 		if (retcode == ETIMEDOUT) {
-			return false;
+			return (false);
 		} else {
-			return true;
+			return (true);
 		}
 	} else {
 		pthread_mutex_lock(&_osThread->_mut);
-		//printf("@@@@ Thread wait (%p), running: %d\n", _osThread, _osThread->_running);
+		// printf("@@@@ Thread wait (%p), running: %d\n",
+		// _osThread, _osThread->_running);
 		if (_osThread->_running) {
 			pthread_cond_wait(&_osThread->_cond, &_osThread->_mut);
 			_osThread->_running = false;
 		}
-		//printf("@@@@ Thread after wait\n");
+		// printf("@@@@ Thread after wait\n");
 		pthread_mutex_unlock(&_osThread->_mut);
-		return true;
+		return (true);
 	}
 }
 
@@ -140,12 +141,13 @@ bool Thread::start()
 		gettimeofday(&now, &tz);
 		_startTime = now.tv_sec;
 		_osThread->_running = true;
-		if (pthread_create(&_osThread->_handle, NULL, OSThread::threadFunc, this) != 0) {
-			return false;
+		if (pthread_create(&_osThread->_handle, NULL,
+		    OSThread::threadFunc, this) != 0) {
+			return (false);
 		}
 	}
 
-	return true;
+	return (true);
 }
 
 bool Thread::running() const
@@ -188,4 +190,3 @@ long Thread::elapsedTime() const
 	gettimeofday(&now, &tz);
 	return ((now.tv_sec - _startTime)*1000);
 }
-

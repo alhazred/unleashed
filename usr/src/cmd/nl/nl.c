@@ -28,8 +28,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <locale.h>
 #include <regexpr.h>
 #include <stdio.h>
@@ -574,7 +572,7 @@ for (j = 1; j < argc; j++) {
 	if (p[0] != '\n') {
 		lnt = strlen(p);
 		if (p[lnt-1] == '\n')
-			p[lnt-1] = NULL;
+			p[lnt-1] = 0;
 	}
 
 	if (swtch == 'y') {
@@ -666,7 +664,7 @@ int c;
 static void
 pnum(n, sep)
 int	n;
-char *	sep;
+char *sep;
 {
 	register int	i;
 
@@ -755,7 +753,7 @@ char *argv;
 static void
 npad(width, sep)
 	int	width;
-	char *	sep;
+	char *sep;
 {
 	register int i;
 
@@ -764,7 +762,7 @@ npad(width, sep)
 		nbuf[i] = pad;
 	(void) printf("%s", nbuf);
 
-	for (i = 0; i < (int) strlen(sep); i++)
+	for (i = 0; i < (int)strlen(sep); i++)
 		(void) printf(" ");
 }
 

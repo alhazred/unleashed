@@ -376,7 +376,7 @@ main(int32_t argc, int8_t *argv[])
 		 */
 		if ((special != NULL) && (*special != '\0')) {
 			mnttab = fopen(MNTTAB, "r");
-			while ((getmntent(mnttab, &mntp)) == NULL) {
+			while ((getmntent(mnttab, &mntp)) == 0) {
 				if (strcmp(special, mntp.mnt_special) == 0) {
 					(void) fprintf(stdout,
 						gettext("%s is mounted,"

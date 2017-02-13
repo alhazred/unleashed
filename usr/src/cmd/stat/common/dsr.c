@@ -508,7 +508,7 @@ again:
 	if (*cp == ',') {
 		cp++;
 		while (*cp != ':') {
-			if (*cp == NULL)
+			if (*cp == '\0')
 				return (NULL);
 			cp++;
 		}
@@ -520,7 +520,7 @@ again:
 	 */
 	while (*cp) {
 		if (isspace(*cp) || *cp == ',') {
-			*cp = NULL;
+			*cp = '\0';
 			return (path);
 		}
 		cp++;

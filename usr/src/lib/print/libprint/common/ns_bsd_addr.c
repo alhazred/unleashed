@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*LINTLIBRARY*/
 
 #include <stdio.h>
@@ -199,7 +197,7 @@ string_to_value(const char *key, char *string)
 {
 	void *value = NULL;
 
-	if ((key != NULL) && (string != NULL) && (string[0] != NULL)) {
+	if ((key != NULL) && (string != NULL) && (string[0] != '\0')) {
 		if (strcmp(key, NS_KEY_BSDADDR) == 0) {
 			value = (void *)string_to_bsd_addr(string);
 		} else if ((strcmp(key, NS_KEY_ALL) == 0) ||
@@ -279,7 +277,7 @@ posix_name(const char *name)
 				(extension != NULL ? extension : ""));
 
 		/* build the structure here */
-		if (buf[0] != NULL) {
+		if (buf[0] != '\0') {
 			ns_kvp_t **list, *kvp;
 
 			kvp = ns_kvp_create(NS_KEY_BSDADDR, buf);

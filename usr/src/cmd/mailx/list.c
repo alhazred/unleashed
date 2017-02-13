@@ -36,8 +36,6 @@
  * software developed by the University of California, Berkeley, and its
  * contributors.
  */
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "rcv.h"
 #include <locale.h>
 #include <stdlib.h>
@@ -104,7 +102,7 @@ getmessage(char *buf, int *vector, int flags)
 		if (mp->m_flag & MMARK)
 			*ip++ = mp - &message[0] + 1;
 	}
-	*ip = NULL;
+	*ip = 0;
 	return (ip - vector);
 }
 
@@ -155,7 +153,7 @@ getmsglist(char *buf, int *vector, int flags)
 	for (mp = &message[0]; mp < &message[msgCount]; mp++)
 		if (mp->m_flag & MMARK)
 			*ip++ = mp - &message[0] + 1;
-	*ip = NULL;
+	*ip = 0;
 	return (ip - vector);
 }
 
@@ -666,7 +664,7 @@ first(int f, int m)
 			return (mesg);
 		mesg--;
 	}
-	return (NULL);
+	return (0);
 }
 
 /*

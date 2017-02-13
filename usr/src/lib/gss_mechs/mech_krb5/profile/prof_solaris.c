@@ -812,7 +812,7 @@ __profile_validate(profile_t profile, int *val_err, char **val)
 	if (code == 0 && default_realm != NULL) {
 		tr = default_realm;
 
-		while ((c = *tr++) != NULL) {
+		while ((c = *tr++) != '\0') {
 			if (islower(c)) {
 				*val_err = 1;
 				*val = strdup(default_realm);
@@ -832,7 +832,7 @@ __profile_validate(profile_t profile, int *val_err, char **val)
 		for (trealms = realms; *trealms; trealms++) {
 
 			tr = *trealms;
-			while ((c = *tr++) != NULL) {
+			while ((c = *tr++) != '\0') {
 				if (islower(c)) {
 					*val_err = 2;
 					*val = strdup(*trealms);

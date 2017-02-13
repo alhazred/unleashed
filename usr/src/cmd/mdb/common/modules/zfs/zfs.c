@@ -182,7 +182,7 @@ static int verbose;
 static int
 freelist_walk_init(mdb_walk_state_t *wsp)
 {
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("must supply starting address\n");
 		return (WALK_ERR);
 	}
@@ -1363,7 +1363,7 @@ metaslab_stats(uintptr_t addr, int spa_flags)
 		    (uintptr_t)vdev_ms[m], 0) == -1)
 			return (DCMD_ERR);
 
-		if (ms.ms_sm != NULL &&
+		if (ms.ms_sm != (uintptr_t)NULL &&
 		    mdb_ctf_vread(&sm, "space_map_t", "mdb_space_map_t",
 		    ms.ms_sm, 0) == -1)
 			return (DCMD_ERR);
@@ -1377,10 +1377,10 @@ metaslab_stats(uintptr_t addr, int spa_flags)
 		else
 			mdb_printf("%9llu%%\n", ms.ms_fragmentation);
 
-		if ((spa_flags & SPA_FLAG_HISTOGRAMS) && ms.ms_sm != NULL) {
+		if ((spa_flags & SPA_FLAG_HISTOGRAMS) && ms.ms_sm != 0) {
 			mdb_space_map_phys_t smp;
 
-			if (sm.sm_phys == NULL)
+			if (sm.sm_phys == (uintptr_t)NULL)
 				continue;
 
 			(void) mdb_ctf_vread(&smp, "space_map_phys_t",
@@ -1869,7 +1869,7 @@ metaslab_walk_init(mdb_walk_state_t *wsp)
 	uintptr_t root_vdevp;
 	uintptr_t childp;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("must supply address of spa_t\n");
 		return (WALK_ERR);
 	}
@@ -1964,12 +1964,12 @@ space_cb(uintptr_t addr, const void *unknown, void *arg)
 		return (WALK_ERR);
 	sd->ms_tree += rt.rt_space;
 
-	if (ms.ms_sm != NULL &&
+	if (ms.ms_sm != (uintptr_t)NULL &&
 	    mdb_ctf_vread(&sm, "space_map_t",
 	    "mdb_space_map_t", ms.ms_sm, 0) == -1)
 		return (WALK_ERR);
 
-	if (sm.sm_phys != NULL) {
+	if (sm.sm_phys != (uintptr_t)NULL) {
 		(void) mdb_ctf_vread(&smp, "space_map_phys_t",
 		    "mdb_space_map_phys_t", sm.sm_phys, 0);
 	}
@@ -2159,7 +2159,7 @@ spa_vdevs(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 	/*
 	 * Unitialized spa_t structures can have a NULL root vdev.
 	 */
-	if (spa.spa_root_vdev == NULL) {
+	if (spa.spa_root_vdev == (uintptr_t)NULL) {
 		mdb_printf("no associated vdevs\n");
 		return (DCMD_OK);
 	}
@@ -2534,12 +2534,13 @@ txg_list_walk_step(mdb_walk_state_t *wsp)
 	txg_node_t *node;
 	int status;
 
-	while (wsp->walk_addr == NULL && lwd->lw_txgoff < lwd->lw_maxoff) {
+	while (wsp->walk_addr == (uintptr_t)NULL &&
+	    lwd->lw_txgoff < lwd->lw_maxoff) {
 		lwd->lw_txgoff++;
 		wsp->walk_addr = lwd->lw_head[lwd->lw_txgoff];
 	}
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	addr = wsp->walk_addr - lwd->lw_offset;
@@ -2568,7 +2569,7 @@ spa_walk_init(mdb_walk_state_t *wsp)
 {
 	GElf_Sym sym;
 
-	if (wsp->walk_addr != NULL) {
+	if (wsp->walk_addr != (uintptr_t)NULL) {
 		mdb_warn("spa walk only supports global walks\n");
 		return (WALK_ERR);
 	}
@@ -3015,7 +3016,7 @@ sa_attr_print(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 	}
 
 	if (bonus_tab && !TOC_ATTR_PRESENT(offset_tab[attr_id]) &&
-	    spill_tab == NULL) {
+	    spill_tab == (uintptr_t)NULL) {
 		mdb_printf("Attribute does not exist\n");
 		return (DCMD_ERR);
 	} else if (!TOC_ATTR_PRESENT(offset_tab[attr_id]) && spill_tab) {
@@ -3329,7 +3330,7 @@ zfs_acl_dump(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 static int
 zfs_acl_node_walk_init(mdb_walk_state_t *wsp)
 {
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("must supply address of zfs_acl_node_t\n");
 		return (WALK_ERR);
 	}
@@ -3370,7 +3371,7 @@ zfs_aces_walk_init_common(mdb_walk_state_t *wsp, int version,
 {
 	ace_walk_data_t *ace_walk_data;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("must supply address of zfs_acl_node_t\n");
 		return (WALK_ERR);
 	}

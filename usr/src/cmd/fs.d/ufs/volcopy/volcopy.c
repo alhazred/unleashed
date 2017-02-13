@@ -36,8 +36,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/param.h>
 #include <signal.h>
 #include <sys/types.h>
@@ -1245,7 +1243,7 @@ tapeck(struct file_info *f_p, int dir)
 			perror("output tape");
 	}
 	alarm(0);
-	if (V_labl.v_reel == (char)NULL && dir == INPUT)
+	if (V_labl.v_reel == '\0' && dir == INPUT)
 		perr(9, "Input tape is empty\n");
 	else {
 		old_style = strncmp(V_labl.v_magic, "Volcopy", 7) == 0;

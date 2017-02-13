@@ -34,8 +34,6 @@
 #ifndef	__YPSYM_H
 #define	__YPSYM_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -72,11 +70,6 @@ typedef unsigned short int (*PFUSI)();
 #ifndef FALSE
 #define	FALSE 0
 #endif
-
-#ifdef NULL
-#undef NULL
-#endif
-#define	NULL 0
 
 /*
  * Size of lock hash table

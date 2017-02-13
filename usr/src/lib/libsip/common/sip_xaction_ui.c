@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdlib.h>
 #include <assert.h>
 #include <errno.h>
@@ -186,7 +184,7 @@ sip_get_trans_branchid(sip_transaction_t trans, int *error)
 	}
 	(void) strncpy(bid, xaction->sip_xaction_branch_id,
 	    strlen(xaction->sip_xaction_branch_id));
-	bid[strlen(xaction->sip_xaction_branch_id)] = '\0';
+	bid[strlen(xaction->sip_xaction_branch_id)] = SIP_NUL;
 	return (bid);
 }
 
@@ -203,7 +201,7 @@ sip_get_trans_state(sip_transaction_t trans, int *error)
 	if (xaction == NULL) {
 		if (error != NULL)
 			*error = EINVAL;
-		return (NULL);
+		return (0);
 	}
 	return (xaction->sip_xaction_state);
 }

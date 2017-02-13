@@ -32,8 +32,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This is a user command which dumps each entry in a yp data base.  It gets
  * the stuff using the normal ypclnt package; the user doesn't get to choose
@@ -47,10 +45,6 @@
  * nicknames.
  *
  */
-#ifdef NULL
-#undef NULL
-#endif
-#define	NULL 0
 #include <stdio.h>
 #include <rpc/rpc.h>
 #include <rpcsvc/ypclnt.h>
@@ -120,7 +114,7 @@ main(int argc, char ** argv)
 	}
 
 	if (translate && (strchr(map, '.') == NULL) &&
-		(getmapname(map, nm))) {
+	    (getmapname(map, nm))) {
 		map = nm;
 	}
 

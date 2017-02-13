@@ -28,8 +28,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <ctype.h>
 #include <sys/types.h>
@@ -76,25 +74,25 @@ main(int argc, char *argv[])
 
 	while ((ch = getopt(argc, argv, "erd")) != -1)
 		switch (ch) {
-		    case 'e':
+		case 'e':
 			if (rflg)
 				errflg++;
 			else
 				eflg++;
 			continue;
-		    case 'r':
+		case 'r':
 			if (eflg)
 				errflg++;
 			else
 				rflg++;
 			continue;
-		    case 'd':
+		case 'd':
 			if (eflg)
 				errflg++;
 			else
 				dflg++;
 			continue;
-		    default:
+		default:
 			errflg++;
 		}
 	if (optind ==  argc || errflg)
@@ -286,7 +284,7 @@ char	*name;
 			badformat(curline);
 		*repbufp++ = '\0';
 		/* verify that string belongs to the input C source file */
-		if (strcmp(repbuf, name) != NULL)
+		if (strcmp(repbuf, name) != 0)
 			continue;
 		repstr = strchr(repbufp, ':');
 		if (repstr == (char *)NULL)

@@ -559,7 +559,7 @@ dladm_wlan_connect(dladm_handle_t handle, datalink_id_t linkid,
 {
 	int			i;
 	char 			buf[WLDP_BUFSIZE];
-	connect_state_t		state = {0, NULL, NULL};
+	connect_state_t		state = {NULL, 0, NULL};
 	attr_node_t		*nodep = NULL;
 	boolean_t		create_ibss, set_authmode;
 	dladm_wlan_attr_t	**wl_list = NULL;

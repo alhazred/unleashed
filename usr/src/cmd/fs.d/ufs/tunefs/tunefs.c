@@ -36,8 +36,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * tunefs: change layout parameters to an existing file system.
  */
@@ -108,7 +106,7 @@ searchvfstab(char **specialp)
 		fprintf(stderr, "%s: ", VFSTAB);
 		perror("open");
 	}
-	while (getvfsent(vfstab, &vfsbuf) == NULL)
+	while (getvfsent(vfstab, &vfsbuf) == 0)
 		if (strcmp(vfsbuf.vfs_fstype, MNTTYPE_UFS) == 0)
 			if ((strcmp(vfsbuf.vfs_mountp, *specialp) == 0) ||
 			    (strcmp(vfsbuf.vfs_special, *specialp) == 0) ||
@@ -133,7 +131,7 @@ searchmnttab(char **specialp, char **mountpointp)
 
 	if ((mnttab = fopen(MNTTAB, "r")) == NULL)
 		return;
-	while (getmntent(mnttab, &mntbuf) == NULL)
+	while (getmntent(mnttab, &mntbuf) == 0)
 		if (strcmp(mntbuf.mnt_fstype, MNTTYPE_UFS) == 0)
 			if ((strcmp(mntbuf.mnt_mountp, *specialp) == 0) ||
 			    (strcmp(mntbuf.mnt_special, blockspecial) == 0) ||

@@ -963,7 +963,7 @@ put_automountd_env(void)
 	    SCF_TYPE_ASTRING, AUTOMOUNTD, &bufsz);
 	if (ret == SA_OK) {
 		a = c = defval;
-		if (*a == NULL)
+		if (*a == '\0')
 			return;
 		/*
 		 * Environment variables can have more than one value
@@ -982,7 +982,7 @@ put_automountd_env(void)
 				putenv(strdup(a));
 			a = c = p + 1;
 		}
-		if (*a != NULL) {
+		if (*a != '\0') {
 			if ((c = strchr(a, '=')) != NULL)
 				putenv(strdup(a));
 		}

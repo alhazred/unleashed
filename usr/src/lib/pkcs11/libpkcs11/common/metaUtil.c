@@ -976,7 +976,7 @@ meta_generate_keys(meta_session_t *session, CK_MECHANISM *pMechanism,
 	}
 
 	if (meta_freeobject_check(session, key1, pMechanism, k1Template,
-	    k1AttrCount, NULL)) {
+	    k1AttrCount, 0)) {
 
 		if ((key1->isPrivate || (doKeyPair && key2->isPrivate)) &&
 		    !metaslot_logged_in())
@@ -1494,7 +1494,7 @@ meta_derive_key(meta_session_t *session, CK_MECHANISM *pMechanism,
 	}
 
 	if (meta_freeobject_check(session, newKey1, pMechanism, pTemplate,
-	    ulAttributeCount, NULL)) {
+	    ulAttributeCount, 0)) {
 
 		if (newKey1->isPrivate && !metaslot_logged_in())
 			return (CKR_USER_NOT_LOGGED_IN);

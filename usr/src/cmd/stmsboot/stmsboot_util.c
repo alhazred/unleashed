@@ -411,10 +411,10 @@ parse_args(int argc, char *argv[])
 			}
 			bcopy(optarg, drvlimit, strlen(optarg));
 			/* update this if adding support for a new driver */
-			if ((strncmp(drvlimit, "fp", 2) == NULL) &&
-			    (strncmp(drvlimit, "mpt", 3) == NULL) &&
-			    (strncmp(drvlimit, "mpt_sas", 7) == NULL) &&
-			    (strncmp(drvlimit, "pmcs", 4) == NULL)) {
+			if ((strncmp(drvlimit, "fp", 2) == 0) &&
+			    (strncmp(drvlimit, "mpt", 3) == 0) &&
+			    (strncmp(drvlimit, "mpt_sas", 7) == 0) &&
+			    (strncmp(drvlimit, "pmcs", 4) == 0)) {
 				logmsg(MSG_ERROR,
 				    gettext("invalid parent driver (%s) "
 				    "specified"), drvlimit);

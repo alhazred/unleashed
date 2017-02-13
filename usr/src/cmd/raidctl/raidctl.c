@@ -248,7 +248,7 @@ main(int argc, char **argv)
 	 * use default yes expression.
 	 */
 	status = regcomp(&re, yesexpr, REG_EXTENDED | REG_NOSUB);
-	if ((*yesexpr == (char)NULL) || (status != 0)) {
+	if ((*yesexpr == '\0') || (status != 0)) {
 		SET_DEFAULT_STRS;
 		if (regcomp(&re, default_yesexpr,
 		    REG_EXTENDED | REG_NOSUB) != 0) {

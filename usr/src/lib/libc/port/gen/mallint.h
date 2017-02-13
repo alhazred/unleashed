@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*	Copyright (c) 1988 AT&T	*/
 /*	  All Rights Reserved  	*/
 
@@ -53,11 +51,6 @@ static int		nmalloc, nrealloc, nfree;
 
 /* function to copy data from one area to another */
 #define	MEMCOPY(to, fr, n)	((void) memcpy(to, fr, n))
-
-/* for conveniences */
-#ifndef NULL
-#define	NULL		(0)
-#endif
 
 #define	WORDSIZE	(sizeof (WORD))
 #define	MINSIZE		(sizeof (TREE) - sizeof (WORD))

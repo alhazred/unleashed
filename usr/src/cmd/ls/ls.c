@@ -2623,7 +2623,7 @@ set_sysattrtm_display(char *name, struct lbuf *rep)
 	size_t		len;
 
 	if (nvpair_value_uint64_array(pair, &value, &nelem) == 0) {
-		if (*value != NULL) {
+		if (*value != (uintptr_t)NULL) {
 			len = strlen(name);
 			i = 0;
 			while (rep->extm[i].stm != 0 && i < sacnt)

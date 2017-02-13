@@ -353,7 +353,7 @@ checkdevinuse(char *cur_disk_path, diskaddr_t start, diskaddr_t end, int print,
 	if (slices == NULL)
 		return (found);
 
-	for (i = 0; slices[i] != NULL; i++) {
+	for (i = 0; slices[i] != (uintptr_t)NULL; i++) {
 		/*
 		 * If we are checking the whole disk
 		 * then any and all in use data is

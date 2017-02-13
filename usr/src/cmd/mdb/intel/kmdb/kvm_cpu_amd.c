@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Debugging functionality unique to 64-bit AMD processors.
  */
@@ -78,7 +76,7 @@ static const kdi_msr_t kmt_amd_msrs[] = {
 	{ MSR_LBR_FROM,	KDI_MSR_READ },
 	{ MSR_LEX_TO,	KDI_MSR_READ },
 	{ MSR_LEX_FROM,	KDI_MSR_READ },
-	{ NULL }
+	{ 0 }
 };
 
 /*
@@ -87,7 +85,7 @@ static const kdi_msr_t kmt_amd_msrs[] = {
 static const kdi_msr_t kmt_amdunk_msrs[] = {
 	{ MSR_DEBUGCTL,	KDI_MSR_CLEARENTRY },
 	{ MSR_DEBUGCTL,	KDI_MSR_WRITEDELAY, &kmt_cpu_amd.amd_debugctl },
-	{ NULL }
+	{ 0 }
 };
 
 /*ARGSUSED*/

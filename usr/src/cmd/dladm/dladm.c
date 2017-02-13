@@ -571,7 +571,7 @@ static const struct option bridge_lopts[] = {
 	{ "link",		required_argument,	0, 'l'	},
 	{ "max-age",		required_argument,	0, 'm'	},
 	{ "priority",		required_argument,	0, 'p'	},
-	{ NULL, NULL, 0, 0 }
+	{ 0, 0, 0, 0 }
 };
 
 static const struct option bridge_show_lopts[] = {
@@ -836,7 +836,7 @@ static const ofmt_field_t phys_fields[] = {
 	offsetof(link_fields_buf_t, link_phys_device), print_default_cb},
 { "FLAGS",	7,
 	offsetof(link_fields_buf_t, link_flags), print_default_cb},
-{ NULL,		0, NULL, 0}}
+{ NULL,		0, 0, NULL}}
 ;
 
 /*
@@ -6185,7 +6185,7 @@ parse_wlan_keys(char *str, dladm_wlan_key_t **keys, uint_t *key_countp)
 	char			*field, *token, *lasts = NULL, c;
 
 	token = str;
-	while ((c = *token++) != NULL) {
+	while ((c = *token++) != '\0') {
 		if (c == ',')
 			nfields++;
 	}
@@ -7370,7 +7370,7 @@ do_delete_secobj(int argc, char **argv, const char *use)
 		die("secure object name required");
 
 	token = argv[optind];
-	while ((c = *token++) != NULL) {
+	while ((c = *token++) != '\0') {
 		if (c == ',')
 			nfields++;
 	}
@@ -7523,7 +7523,7 @@ do_show_secobj(int argc, char **argv, const char *use)
 		token = argv[optind];
 		if (token == NULL)
 			die("secure object name required");
-		while ((c = *token++) != NULL) {
+		while ((c = *token++) != '\0') {
 			if (c == ',')
 				obj_fields++;
 		}

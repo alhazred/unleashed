@@ -661,7 +661,7 @@ db_table::add_entry(entry_object *obj, int initialLoad) {
 	 */
 	ASSERTWHELD(table);
 	entryp where = freelist.pop();
-	if (where == NULL) {				/* empty freelist */
+	if (where == 0) {				/* empty freelist */
 		if (last_used >= (table_size-1))	/* full (> is for 0) */
 			grow();
 		where = ++last_used;

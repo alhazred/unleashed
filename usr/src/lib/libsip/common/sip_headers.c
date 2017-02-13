@@ -724,8 +724,8 @@ _sip_get_header_functions(sip_header_function_t *sip_header_function_table,
 			return (NULL);
 		}
 		header_name = sip_header->sip_hdr_current;
-		if (sip_find_separator(sip_header, SIP_HCOLON, (char)NULL,
-		    (char)NULL, B_FALSE) != 0) {
+		if (sip_find_separator(sip_header, SIP_HCOLON, SIP_NUL,
+		    SIP_NUL, B_FALSE) != 0) {
 			return (NULL);
 		}
 		len = sip_header->sip_hdr_current - header_name;
@@ -920,7 +920,7 @@ _sip_startline_to_str(_sip_msg_t *sip_msg, int *error)
 	}
 	(void) strncpy(slstr, sip_msg->sip_msg_start_line->sip_hdr_start, len);
 	(void) pthread_mutex_unlock(&sip_msg->sip_msg_mutex);
-	slstr[len] = '\0';
+	slstr[len] = SIP_NUL;
 	return (slstr);
 }
 
@@ -986,7 +986,7 @@ sip_hdr_to_str(sip_header_t sip_header, int *error)
 			return (NULL);
 		}
 	}
-	*tmpptr = '\0';
+	*tmpptr = SIP_NUL;
 	return (hdrstr);
 }
 

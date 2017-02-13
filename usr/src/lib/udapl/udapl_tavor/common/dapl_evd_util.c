@@ -1549,7 +1549,7 @@ dapls_evd_copy_events(
 			    "dapls_evd_copy_event: Active Conn Event %d\n",
 			    evpp_start[i].ibe_ce.ibce_event);
 			dapl_evd_connection_callback((ib_cm_handle_t)
-			    IB_INVALID_HANDLE,
+			    (uintptr_t)IB_INVALID_HANDLE,
 			    evpp_start[i].ibe_ce.ibce_event,
 			    evpp_start[i].ibe_ce.ibce_priv_data_ptr, (void *)
 			    (uintptr_t)evpp_start[i].ibe_ce.ibce_cookie);

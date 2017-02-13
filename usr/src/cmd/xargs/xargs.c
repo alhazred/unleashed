@@ -960,7 +960,7 @@ parseargs(int ac, char **av)
 		/*
 		 * if we're doing special processing, and we've got a flag
 		 */
-		else if ((av[i][0] == '-') && (av[i][1] != NULL)) {
+		else if ((av[i][0] == '-') && (av[i][1] != '\0')) {
 			char	*def;
 
 			switch (av[i][1]) {
@@ -979,11 +979,11 @@ process_special:
 				 * be able to distinguish between a valid
 				 * suboption, and a command name.
 				 */
-				if (av[i][2] == NULL) {
+				if (av[i][2] == '\0') {
 					mav[++mac] = strdup(def);
 				} else {
 					/* clear out our version: */
-					mav[mac][2] = NULL;
+					mav[mac][2] = '\0';
 					mav[++mac] = strdup(&av[i][2]);
 				}
 				if (mav[mac] == NULL) {
@@ -1016,9 +1016,9 @@ process_special:
 				 * we move the subargument into our
 				 * mod'd argument list.
 				 */
-				if (av[i][2] != NULL) {
+				if (av[i][2] != '\0') {
 					/* first clean things up:	*/
-					mav[mac][2] = NULL;
+					mav[mac][2] = '\0';
 
 					/* now add the separation:	*/
 					++mac;	/* inc to next mod'd arg */

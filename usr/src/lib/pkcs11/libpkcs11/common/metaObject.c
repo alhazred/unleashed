@@ -180,7 +180,7 @@ meta_CreateObject(CK_SESSION_HANDLE hSession, CK_ATTRIBUTE_PTR pTemplate,
 	 */
 
 	if (meta_freeobject_check(session, object, NULL, pTemplate, ulCount,
-	    NULL)) {
+	    0)) {
 		/*
 		 * Make sure we are logged into the keystore if this is a
 		 * private freetoken object.

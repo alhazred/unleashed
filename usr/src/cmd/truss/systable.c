@@ -1345,7 +1345,7 @@ getsubcode(private_t *pri)
 				    Lsp->pr_sysarg[3] == 0)? 1 : 0;
 			break;
 		case SYS_fchmodat:
-			if (nsysarg > 1 && Lsp->pr_sysarg[1] == NULL) {
+			if (nsysarg > 1 && Lsp->pr_sysarg[1] == 0) {
 				subcode = 3;
 				break;
 			}
@@ -1359,7 +1359,7 @@ getsubcode(private_t *pri)
 				    2 : 0;
 			break;
 		case SYS_fchownat:
-			if (nsysarg > 1 && Lsp->pr_sysarg[1] == NULL) {
+			if (nsysarg > 1 && Lsp->pr_sysarg[1] == 0) {
 				subcode = 3;
 				break;
 			}
@@ -1404,7 +1404,7 @@ getsubcode(private_t *pri)
 			break;
 		case SYS_fstatat:
 		case SYS_fstatat64:
-			if (nsysarg > 1 && Lsp->pr_sysarg[1] == NULL) {
+			if (nsysarg > 1 && Lsp->pr_sysarg[1] == 0) {
 				subcode = 3;
 				break;
 			}

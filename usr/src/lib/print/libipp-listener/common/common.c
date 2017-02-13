@@ -27,8 +27,6 @@
 
 /* $Id: common.c 155 2006-04-26 02:34:54Z ktou $ */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -250,7 +248,7 @@ add_supported_locales(papi_attribute_t ***attributes)
 
 			name = strtok(buf, " \t\n");
 
-			for (i = 0; ((passed == 1) && (name[i] != NULL)); i++)
+			for (i = 0; ((passed == 1) && (name[i] != '\0')); i++)
 				if (isalpha(name[i]) != 0)
 					name[i] = tolower(name[i]);
 				else if ((name[i] == '_') || (name[i] == '-'))

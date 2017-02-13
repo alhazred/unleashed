@@ -200,7 +200,7 @@ py_walk_step(mdb_walk_state_t *wsp)
 
 	addr = pydb_iter_next(pdi);
 
-	if (addr == NULL) {
+	if (addr == (uintptr_t)NULL) {
 		return (WALK_DONE);
 	}
 

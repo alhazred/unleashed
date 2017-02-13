@@ -53,7 +53,7 @@
 int
 vfs_walk_init(mdb_walk_state_t *wsp)
 {
-	if (wsp->walk_addr == NULL &&
+	if (wsp->walk_addr == (uintptr_t)NULL &&
 	    mdb_readvar(&wsp->walk_addr, "rootvfs") == -1) {
 		mdb_warn("failed to read 'rootvfs'");
 		return (WALK_ERR);
@@ -373,7 +373,7 @@ next_realvp(uintptr_t invp, struct vnode *outvn, uintptr_t *outvp)
 		*outvp = (uintptr_t)stream.sd_vnode;
 	}
 
-	if (*outvp == invp || *outvp == NULL)
+	if (*outvp == invp || *outvp == (uintptr_t)NULL)
 		return (REALVP_DONE);
 
 	return (REALVP_CONTINUE);
@@ -499,7 +499,7 @@ pfiles_dig_pathname(uintptr_t vp, char *path)
 				vp = (uintptr_t)
 				    sockparams.sp_sdev_info.sd_vnode;
 			} else {
-				vp = NULL;
+				vp = (uintptr_t)NULL;
 			}
 		}
 	}
@@ -935,7 +935,7 @@ pfile_callback(uintptr_t addr, const struct file *f, struct pfiles_cbdata *cb)
 
 	cb->fd++;
 
-	if (addr == NULL) {
+	if (addr == (uintptr_t)NULL) {
 		return (WALK_NEXT);
 	}
 
@@ -958,7 +958,7 @@ pfile_callback(uintptr_t addr, const struct file *f, struct pfiles_cbdata *cb)
 		uintptr_t next_realvpp;
 
 		err = next_realvp(realvpp, &layer_vn, &next_realvpp);
-		if (next_realvpp != NULL)
+		if (next_realvpp != (uintptr_t)NULL)
 			realvpp = next_realvpp;
 
 	} while (err == REALVP_CONTINUE);
@@ -1118,7 +1118,7 @@ file_t_callback(uintptr_t addr, const struct file *f, struct pfiles_cbdata *cb)
 
 	cb->fd++;
 
-	if (addr == NULL) {
+	if (addr == (uintptr_t)NULL) {
 		return (WALK_NEXT);
 	}
 

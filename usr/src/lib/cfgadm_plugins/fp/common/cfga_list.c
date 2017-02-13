@@ -203,8 +203,8 @@ do_list(
 
 	if ((ret = findMatchingAdapterPort(larg.apidp->xport_phys, &handle,
 	    &portIndex, &portAttrs, errstring)) != FPCFGA_OK) {
-	    S_FREE(larg.xport_logp);
-	    return (ret);
+		S_FREE(larg.xport_logp);
+		return (ret);
 	}
 
 	/*
@@ -224,7 +224,7 @@ do_list(
 
 	/* For all list commands, the fca port needs to be stat'ed */
 	if ((ret = do_stat_fca_xport(&larg, limited_stat,
-		portAttrs)) != FPCFGA_OK) {
+	    portAttrs)) != FPCFGA_OK) {
 		cfga_err(errstring, larg.l_errno, ERR_LIST, 0);
 		list_free(&larg.listp);
 		S_FREE(larg.xport_logp);
@@ -264,14 +264,14 @@ do_list(
 		 */
 		retry = 0;
 		do {
-		    status = getPortAttrsByWWN(handle,
-			*((HBA_WWN *)(&pwwn)), &discPortAttrs);
-		    if (status == HBA_STATUS_ERROR_STALE_DATA) {
+			status = getPortAttrsByWWN(handle,
+			    *((HBA_WWN *)(&pwwn)), &discPortAttrs);
+			if (status == HBA_STATUS_ERROR_STALE_DATA) {
 			/* get Port Attributes again after refresh. */
-			HBA_RefreshInformation(handle);
-		    } else {
-			break; /* either okay or some other error */
-		    }
+				HBA_RefreshInformation(handle);
+			} else {
+				break; /* either okay or some other error */
+			}
 		} while (retry++ < HBA_MAX_RETRIES);
 
 		if (status == HBA_STATUS_OK) {
@@ -291,9 +291,9 @@ do_list(
 			    apidp->dyncomp, handle, &portAttrs, &discPortAttrs);
 
 			if (init_ldata_for_accessible_dev(apidp->dyncomp,
-				inq_dtype, &larg) != FPCFGA_OK) {
+			    inq_dtype, &larg) != FPCFGA_OK) {
 				cfga_err(errstring, larg.l_errno,
-					ERR_LIST, 0);
+				    ERR_LIST, 0);
 				list_free(&larg.listp);
 				S_FREE(larg.xport_logp);
 				HBA_CloseAdapter(handle);
@@ -303,11 +303,11 @@ do_list(
 			if (apidp->lunlist == NULL) {
 				n = 0;
 				if (postprocess_list_data(
-					larg.listp, cmd,
-					larg.chld_config, &n, NO_FLAG) !=
-					FPCFGA_OK) {
+				    larg.listp, cmd,
+				    larg.chld_config, &n, NO_FLAG) !=
+				    FPCFGA_OK) {
 					cfga_err(errstring,
-					larg.l_errno, ERR_LIST, 0);
+					    larg.l_errno, ERR_LIST, 0);
 					list_free(&larg.listp);
 					S_FREE(larg.xport_logp);
 					HBA_CloseAdapter(handle);
@@ -360,37 +360,38 @@ do_list(
 		 * to see if any node exist on the fca port.
 		 */
 		for (discIndex = 0;
-			discIndex < portAttrs.NumberofDiscoveredPorts;
-			discIndex++) {
-		    if (getDiscPortAttrs(handle, portIndex,
-			discIndex, &discPortAttrs)) {
-			/* Move on to the next target */
-			continue;
-		    }
-		    memcpy(&pwwn, &discPortAttrs.PortWWN, sizeof (la_wwn_t));
-		    cvt_lawwn_to_dyncomp(&pwwn, &dyncomp, &l_errno);
-		    if (dyncomp == NULL) {
-			cfga_err(errstring, l_errno, ERR_LIST, 0);
-			list_free(&larg.listp);
-			S_FREE(larg.xport_logp);
-			HBA_CloseAdapter(handle);
-			HBA_FreeLibrary();
-			return (FPCFGA_LIB_ERR);
-		    }
-		    inq_dtype = get_inq_dtype(apidp->xport_phys, dyncomp,
-			handle, &portAttrs, &discPortAttrs);
-
-		    if ((ret = init_ldata_for_accessible_dev(
-			    dyncomp, inq_dtype, &larg)) != FPCFGA_OK) {
-			S_FREE(dyncomp);
-			cfga_err(errstring, larg.l_errno, ERR_LIST, 0);
+		    discIndex < portAttrs.NumberofDiscoveredPorts;
+		    discIndex++) {
+			if (getDiscPortAttrs(handle, portIndex,
+			    discIndex, &discPortAttrs)) {
+				/* Move on to the next target */
+				continue;
+			}
+			memcpy(&pwwn, &discPortAttrs.PortWWN,
+			    sizeof (la_wwn_t));
+			cvt_lawwn_to_dyncomp(&pwwn, &dyncomp, &l_errno);
+			if (dyncomp == NULL) {
+				cfga_err(errstring, l_errno, ERR_LIST, 0);
 				list_free(&larg.listp);
-			S_FREE(larg.xport_logp);
-			HBA_CloseAdapter(handle);
-			HBA_FreeLibrary();
-			return (FPCFGA_LIB_ERR);
-		    }
-		    S_FREE(dyncomp);
+				S_FREE(larg.xport_logp);
+				HBA_CloseAdapter(handle);
+				HBA_FreeLibrary();
+				return (FPCFGA_LIB_ERR);
+			}
+			inq_dtype = get_inq_dtype(apidp->xport_phys, dyncomp,
+			    handle, &portAttrs, &discPortAttrs);
+
+			if ((ret = init_ldata_for_accessible_dev(
+			    dyncomp, inq_dtype, &larg)) != FPCFGA_OK) {
+				S_FREE(dyncomp);
+				cfga_err(errstring, larg.l_errno, ERR_LIST, 0);
+				list_free(&larg.listp);
+				S_FREE(larg.xport_logp);
+				HBA_CloseAdapter(handle);
+				HBA_FreeLibrary();
+				return (FPCFGA_LIB_ERR);
+			}
+			S_FREE(dyncomp);
 		}
 		break;
 	default:
@@ -418,7 +419,7 @@ do_list(
 	 * the whole device tree is required with DINFOCPYALL | DINFOPATH flag.
 	 */
 	ret = walk_tree(apidp->xport_phys, &larg, DINFOCPYALL | DINFOPATH,
-			&walkarg, FPCFGA_WALK_NODE, &larg.l_errno);
+	    &walkarg, FPCFGA_WALK_NODE, &larg.l_errno);
 
 	/*
 	 * ret from walk_tree is either FPCFGA_OK or FPCFGA_ERR.
@@ -437,7 +438,7 @@ do_list(
 
 	n = 0;
 	ret = postprocess_list_data(larg.listp, cmd, larg.chld_config, &n,
-		NO_FLAG);
+	    NO_FLAG);
 	if (ret != FPCFGA_OK) {
 		cfga_err(errstring, 0, ERR_LIST, 0);
 		ret = FPCFGA_LIB_ERR;
@@ -489,7 +490,7 @@ do_list_FCP_dev(
 	fpcfga_ret_t	ret;
 	la_wwn_t	pwwn;
 	char		*xport_phys = NULL, *dyn = NULL, *dyncomp = NULL,
-			*lun_dyn = NULL;
+	    *lun_dyn = NULL;
 	apid_t		apid_con = {NULL};
 	HBA_HANDLE	handle;
 	HBA_PORTATTRIBUTES	portAttrs;
@@ -502,7 +503,7 @@ do_list_FCP_dev(
 	struct scsi_extended_sense sense;
 	HBA_UINT8		scsiStatus;
 	uint32_t		inquirySize = sizeof (inq),
-				senseSize = sizeof (sense);
+	    senseSize = sizeof (sense);
 
 	if (*llpp != NULL || *nelemp != 0) {
 		return (FPCFGA_ERR);
@@ -540,7 +541,7 @@ do_list_FCP_dev(
 
 	/* Create the hba logid (also base component of logical ap_id) */
 	ret = make_xport_logid(larg.apidp->xport_phys, &larg.xport_logp,
-		&l_errno);
+	    &l_errno);
 	if (ret != FPCFGA_OK) {
 		cfga_err(errstring, l_errno, ERR_LIST, 0);
 		S_FREE(larg.apidp->xport_phys);
@@ -555,9 +556,9 @@ do_list_FCP_dev(
 
 	if ((ret = findMatchingAdapterPort(larg.apidp->xport_phys, &handle,
 	    &portIndex, &portAttrs, errstring)) != FPCFGA_OK) {
-	    S_FREE(larg.xport_logp);
-	    S_FREE(larg.apidp->dyncomp);
-	    return (ret);
+		S_FREE(larg.xport_logp);
+		S_FREE(larg.apidp->dyncomp);
+		return (ret);
 	}
 
 	/*
@@ -577,7 +578,7 @@ do_list_FCP_dev(
 
 	/* For all list commands, the fca port needs to be stat'ed */
 	if ((ret = do_stat_fca_xport(&larg, limited_stat,
-		portAttrs)) != FPCFGA_OK) {
+	    portAttrs)) != FPCFGA_OK) {
 		cfga_err(errstring, larg.l_errno, ERR_LIST, 0);
 		list_free(&larg.listp);
 		S_FREE(larg.xport_logp);
@@ -614,14 +615,14 @@ do_list_FCP_dev(
 		 */
 		retry = 0;
 		do {
-		    status = getPortAttrsByWWN(handle,
-			*((HBA_WWN *)(&pwwn)), &discPortAttrs);
-		    if (status == HBA_STATUS_ERROR_STALE_DATA) {
+			status = getPortAttrsByWWN(handle,
+			    *((HBA_WWN *)(&pwwn)), &discPortAttrs);
+			if (status == HBA_STATUS_ERROR_STALE_DATA) {
 			/* get Port Attributes again after refresh. */
-			HBA_RefreshInformation(handle);
-		    } else {
-			break; /* either okay or some other error */
-		    }
+				HBA_RefreshInformation(handle);
+			} else {
+				break; /* either okay or some other error */
+			}
 		} while (retry++ < HBA_MAX_RETRIES);
 
 		if (status == HBA_STATUS_OK) {
@@ -638,21 +639,21 @@ do_list_FCP_dev(
 			 * operations like uscsi_inq so take care of it here.
 			 */
 			status = HBA_ScsiInquiryV2(handle, portAttrs.PortWWN,
-				    discPortAttrs.PortWWN, lun, 0, 0,
-				    &inq, &inquirySize, &scsiStatus,
-				    &sense, &senseSize);
+			    discPortAttrs.PortWWN, lun, 0, 0,
+			    &inq, &inquirySize, &scsiStatus,
+			    &sense, &senseSize);
 			if (status == HBA_STATUS_OK) {
 				inq.inq_dtype = inq.inq_dtype & DTYPE_MASK;
 			} else if (status == HBA_STATUS_ERROR_NOT_A_TARGET) {
 				inq.inq_dtype = DTYPE_UNKNOWN;
 			} else {
-			    inq.inq_dtype = ERR_INQ_DTYPE;
+				inq.inq_dtype = ERR_INQ_DTYPE;
 			}
 
 			if (init_ldata_for_accessible_dev(larg.apidp->dyncomp,
-				inq.inq_dtype, &larg) != FPCFGA_OK) {
+			    inq.inq_dtype, &larg) != FPCFGA_OK) {
 				cfga_err(errstring, larg.l_errno,
-					ERR_LIST, 0);
+				    ERR_LIST, 0);
 				list_free(&larg.listp);
 				S_FREE(larg.xport_logp);
 				S_FREE(larg.apidp->xport_phys);
@@ -662,8 +663,8 @@ do_list_FCP_dev(
 				return (FPCFGA_LIB_ERR);
 			}
 			if ((ret = get_accessible_FCP_dev_ldata(
-					larg.apidp->dyncomp, &larg, &l_errno))
-					!= FPCFGA_OK) {
+			    larg.apidp->dyncomp, &larg, &l_errno))
+			    != FPCFGA_OK) {
 				cfga_err(errstring, larg.l_errno, ERR_LIST, 0);
 				list_free(&larg.listp);
 				S_FREE(larg.xport_logp);
@@ -705,61 +706,62 @@ do_list_FCP_dev(
 		 * to see if any node exist on the fca port.
 		 */
 		for (discIndex = 0;
-			discIndex < portAttrs.NumberofDiscoveredPorts;
-			discIndex++) {
-		    if (getDiscPortAttrs(handle, portIndex,
-			discIndex, &discPortAttrs)) {
-			/* Move on to the next target */
-			continue;
-		    }
-		    memcpy(&pwwn, &discPortAttrs.PortWWN, sizeof (la_wwn_t));
-		    cvt_lawwn_to_dyncomp(&pwwn, &dyncomp, &l_errno);
-		    if (dyncomp == NULL) {
-			cfga_err(errstring, l_errno, ERR_LIST, 0);
-			list_free(&larg.listp);
-			S_FREE(larg.xport_logp);
-			S_FREE(larg.apidp->xport_phys);
-			S_FREE(larg.apidp->dyncomp);
-			HBA_CloseAdapter(handle);
-			HBA_FreeLibrary();
-			return (FPCFGA_LIB_ERR);
-		    }
-		    status = HBA_ScsiInquiryV2(handle, portAttrs.PortWWN,
+		    discIndex < portAttrs.NumberofDiscoveredPorts;
+		    discIndex++) {
+			if (getDiscPortAttrs(handle, portIndex,
+			    discIndex, &discPortAttrs)) {
+				/* Move on to the next target */
+				continue;
+			}
+			memcpy(&pwwn, &discPortAttrs.PortWWN,
+			    sizeof (la_wwn_t));
+			cvt_lawwn_to_dyncomp(&pwwn, &dyncomp, &l_errno);
+			if (dyncomp == NULL) {
+				cfga_err(errstring, l_errno, ERR_LIST, 0);
+				list_free(&larg.listp);
+				S_FREE(larg.xport_logp);
+				S_FREE(larg.apidp->xport_phys);
+				S_FREE(larg.apidp->dyncomp);
+				HBA_CloseAdapter(handle);
+				HBA_FreeLibrary();
+				return (FPCFGA_LIB_ERR);
+			}
+			status = HBA_ScsiInquiryV2(handle, portAttrs.PortWWN,
 			    discPortAttrs.PortWWN, lun, 0, 0,
 			    &inq, &inquirySize, &scsiStatus,
 			    &sense, &senseSize);
-		    if (status == HBA_STATUS_OK) {
-			    inq.inq_dtype = inq.inq_dtype & DTYPE_MASK;
-		    } else if (status == HBA_STATUS_ERROR_NOT_A_TARGET) {
-			    inq.inq_dtype = DTYPE_UNKNOWN;
-		    } else {
-			    inq.inq_dtype = ERR_INQ_DTYPE;
-		    }
-		    if ((ret = init_ldata_for_accessible_dev(
+			if (status == HBA_STATUS_OK) {
+				inq.inq_dtype = inq.inq_dtype & DTYPE_MASK;
+			} else if (status == HBA_STATUS_ERROR_NOT_A_TARGET) {
+				inq.inq_dtype = DTYPE_UNKNOWN;
+			} else {
+				inq.inq_dtype = ERR_INQ_DTYPE;
+			}
+			if ((ret = init_ldata_for_accessible_dev(
 			    dyncomp, inq.inq_dtype, &larg)) != FPCFGA_OK) {
+				S_FREE(dyncomp);
+				cfga_err(errstring, larg.l_errno, ERR_LIST, 0);
+				list_free(&larg.listp);
+				S_FREE(larg.xport_logp);
+				S_FREE(larg.apidp->xport_phys);
+				S_FREE(larg.apidp->dyncomp);
+				HBA_CloseAdapter(handle);
+				HBA_FreeLibrary();
+				return (FPCFGA_LIB_ERR);
+			}
+			if ((ret = get_accessible_FCP_dev_ldata(
+			    dyncomp, &larg, &l_errno)) != FPCFGA_OK) {
+				S_FREE(dyncomp);
+				cfga_err(errstring, larg.l_errno, ERR_LIST, 0);
+				list_free(&larg.listp);
+				S_FREE(larg.xport_logp);
+				S_FREE(larg.apidp->xport_phys);
+				S_FREE(larg.apidp->dyncomp);
+				HBA_CloseAdapter(handle);
+				HBA_FreeLibrary();
+				return (ret);
+			}
 			S_FREE(dyncomp);
-			cfga_err(errstring, larg.l_errno, ERR_LIST, 0);
-			list_free(&larg.listp);
-			S_FREE(larg.xport_logp);
-			S_FREE(larg.apidp->xport_phys);
-			S_FREE(larg.apidp->dyncomp);
-			HBA_CloseAdapter(handle);
-			HBA_FreeLibrary();
-			return (FPCFGA_LIB_ERR);
-		    }
-		    if ((ret = get_accessible_FCP_dev_ldata(
-			dyncomp, &larg, &l_errno)) != FPCFGA_OK) {
-			S_FREE(dyncomp);
-			cfga_err(errstring, larg.l_errno, ERR_LIST, 0);
-			list_free(&larg.listp);
-			S_FREE(larg.xport_logp);
-			S_FREE(larg.apidp->xport_phys);
-			S_FREE(larg.apidp->dyncomp);
-			HBA_CloseAdapter(handle);
-			HBA_FreeLibrary();
-			return (ret);
-		    }
-		    S_FREE(dyncomp);
 		}
 		break;
 	/* default: continue */
@@ -786,7 +788,7 @@ do_list_FCP_dev(
 	 * the whole device tree is required with DINFOCPYALL | DINFOPATH flag.
 	 */
 	ret = walk_tree(larg.apidp->xport_phys, &larg, DINFOCPYALL | DINFOPATH,
-			&walkarg, FPCFGA_WALK_NODE, &larg.l_errno);
+	    &walkarg, FPCFGA_WALK_NODE, &larg.l_errno);
 
 	/*
 	 * ret from walk_tree is either FPCFGA_OK or FPCFGA_ERR.
@@ -811,7 +813,7 @@ do_list_FCP_dev(
 
 	n = 0;
 	ret = postprocess_list_data(larg.listp, cmd, larg.chld_config, &n,
-			flags);
+	    flags);
 	if (ret != FPCFGA_OK) {
 		cfga_err(errstring, 0, ERR_LIST, 0);
 		list_free(&larg.listp);
@@ -888,7 +890,7 @@ issue_fcp_scsi_cmd(
 	fcp_fd = open(FCP_PATH, O_RDONLY | O_NDELAY);
 	retry = 0;
 	while (fcp_fd < 0 && retry++ < OPEN_RETRY_COUNT && (
-		errno == EBUSY || errno == EAGAIN)) {
+	    errno == EBUSY || errno == EAGAIN)) {
 		(void) usleep(OPEN_RETRY_INTERVAL);
 		fcp_fd = open(FCP_PATH, O_RDONLY|O_NDELAY);
 	}
@@ -900,10 +902,10 @@ issue_fcp_scsi_cmd(
 	rv = ioctl(fcp_fd, FCP_TGT_SEND_SCSI, fscsi);
 	retry = 0;
 	while ((rv != 0 && retry++ < IOCTL_RETRY_COUNT &&
-			(errno == EBUSY || errno == EAGAIN)) ||
-			(retry++ < IOCTL_RETRY_COUNT &&
-			((uchar_t)fscsi->scsi_bufstatus & STATUS_MASK)
-			== STATUS_BUSY)) {
+	    (errno == EBUSY || errno == EAGAIN)) ||
+	    (retry++ < IOCTL_RETRY_COUNT &&
+	    ((uchar_t)fscsi->scsi_bufstatus & STATUS_MASK)
+	    == STATUS_BUSY)) {
 		(void) usleep(IOCTL_RETRY_INTERVAL);
 		rv = ioctl(fcp_fd, FCP_TGT_SEND_SCSI, fscsi);
 	}
@@ -953,13 +955,13 @@ get_standard_inq_data(
 	}
 
 	init_fcp_scsi_cmd(&fscsi, lun_num, &pwwn, &scsi_inq_req,
-		sizeof (scsi_inq_req), *inq_buf, alloc_len, &sensebuf,
-		sizeof (struct scsi_extended_sense));
+	    sizeof (scsi_inq_req), *inq_buf, alloc_len, &sensebuf,
+	    sizeof (struct scsi_extended_sense));
 	scsi_inq_req.scc_cmd = SCMD_INQUIRY;
 	scsi_inq_req.g0_count0 = sizeof (struct scsi_inquiry);
 
 	if ((ret = issue_fcp_scsi_cmd(xport_phys, &fscsi, l_errnop))
-			!= FPCFGA_OK) {
+	    != FPCFGA_OK) {
 		S_FREE(*inq_buf);
 		return (ret);
 	}
@@ -1011,13 +1013,13 @@ get_report_lun_data(
 	FORMG5COUNT(&scsi_rl_req, alloc_len);
 
 	if ((ret = issue_fcp_scsi_cmd(xport_phys, &fscsi, l_errnop))
-			!= FPCFGA_OK) {
+	    != FPCFGA_OK) {
 		S_FREE(*resp_buf);
 		return (ret);
 	}
 
 	if (ntohl((*resp_buf)->num_lun) >
-		(sizeof (struct report_lun_resp) - REPORT_LUN_HDR_SIZE)) {
+	    (sizeof (struct report_lun_resp) - REPORT_LUN_HDR_SIZE)) {
 		alloc_len = (*resp_buf)->num_lun + REPORT_LUN_HDR_SIZE;
 		S_FREE(*resp_buf);
 		if ((*resp_buf = (report_lun_resp_t *)calloc(1, alloc_len))
@@ -1070,7 +1072,7 @@ get_accessible_FCP_dev_ldata(
 
 	memset(&sense, 0, sizeof (sense));
 	if ((ret = get_report_lun_data(lap->apidp->xport_phys, dyncomp,
-		&num_luns, &resp_buf, &sense, l_errnop)) != FPCFGA_OK) {
+	    &num_luns, &resp_buf, &sense, l_errnop)) != FPCFGA_OK) {
 		/*
 		 * when report lun data fails then return FPCFGA_OK thus
 		 * keep the ldata for the target which is acquired previously.
@@ -1087,7 +1089,7 @@ get_accessible_FCP_dev_ldata(
 
 	if (num_luns > 0) {
 		ret = init_ldata_for_accessible_FCP_dev(
-			dyncomp, num_luns, resp_buf, lap, l_errnop);
+		    dyncomp, num_luns, resp_buf, lap, l_errnop);
 	} else {
 		/*
 		 * proceed with to stat if no lun found.
@@ -1245,11 +1247,11 @@ stat_fc_dev(di_node_t node, void *arg)
 	if (lap->cmd == FPCFGA_STAT_FC_DEV) {
 		/* checks port wwn property to find a match */
 		while ((prop = di_prop_next(node, prop))
-					!= DI_PROP_NIL) {
+		    != DI_PROP_NIL) {
 			if ((strcmp(PORT_WWN_PROP,
-				di_prop_name(prop)) == 0) &&
-				(di_prop_type(prop) ==
-					DI_PROP_TYPE_BYTE)) {
+			    di_prop_name(prop)) == 0) &&
+			    (di_prop_type(prop) ==
+			    DI_PROP_TYPE_BYTE)) {
 				break;
 			}
 		}
@@ -1262,13 +1264,13 @@ stat_fc_dev(di_node_t node, void *arg)
 				goto out;
 			}
 			(void) sprintf(port_wwn, "%016llx",
-				(wwnConversion(port_wwn_data)));
+			    (wwnConversion(port_wwn_data)));
 			/*
 			 * port wwn doesn't match contine to walk
 			 * if match call do_stat_fc_dev.
 			 */
 			if (strncmp(port_wwn, lap->apidp->dyncomp,
-					WWN_SIZE*2)) {
+			    WWN_SIZE*2)) {
 				rv = DI_WALK_CONTINUE;
 				goto out;
 			}
@@ -1374,19 +1376,19 @@ stat_FCP_dev(di_node_t node, void *arg)
 	if (lap->cmd == FPCFGA_STAT_FC_DEV) {
 		/* checks port wwn property to find a match */
 		di_ret = di_prop_lookup_bytes(DDI_DEV_T_ANY, node,
-			PORT_WWN_PROP, &port_wwn_data);
+		    PORT_WWN_PROP, &port_wwn_data);
 		if (di_ret == -1) {
 			rv = DI_WALK_CONTINUE;
 			goto out;
 		} else {
 			(void) sprintf(port_wwn, "%016llx",
-				(wwnConversion(port_wwn_data)));
+			    (wwnConversion(port_wwn_data)));
 			/*
 			 * port wwn doesn't match contine to walk
 			 * if match call do_stat_FCP_dev.
 			 */
 			if (strncmp(port_wwn, lap->apidp->dyncomp,
-					WWN_SIZE*2)) {
+			    WWN_SIZE*2)) {
 				rv = DI_WALK_CONTINUE;
 				goto out;
 			}
@@ -1428,7 +1430,7 @@ out:
 
 static fpcfga_ret_t
 do_stat_fca_xport(fpcfga_list_t *lap, int limited_stat,
-	HBA_PORTATTRIBUTES portAttrs)
+    HBA_PORTATTRIBUTES portAttrs)
 {
 	cfga_list_data_t *clp = NULL;
 	ldata_list_t *listp = NULL;
@@ -1450,7 +1452,7 @@ do_stat_fca_xport(fpcfga_list_t *lap, int limited_stat,
 	walkarg.walkmode.node_args.fcn = get_xport_state;
 
 	ret = walk_tree(lap->apidp->xport_phys, &devinfo_state,
-		DINFOCPYALL | DINFOPATH, &walkarg, FPCFGA_WALK_NODE, &l_errno);
+	    DINFOCPYALL | DINFOPATH, &walkarg, FPCFGA_WALK_NODE, &l_errno);
 	if (ret == FPCFGA_OK) {
 		lap->xport_rstate = xport_devinfo_to_recep_state(devinfo_state);
 	} else {
@@ -1466,37 +1468,37 @@ do_stat_fca_xport(fpcfga_list_t *lap, int limited_stat,
 	switch (portAttrs.PortType) {
 		case HBA_PORTTYPE_NLPORT:
 			(void) snprintf(lap->xport_type,
-				sizeof (lap->xport_type), "%s",
-				FP_FC_PUBLIC_PORT_TYPE);
+			    sizeof (lap->xport_type), "%s",
+			    FP_FC_PUBLIC_PORT_TYPE);
 			break;
 		case HBA_PORTTYPE_NPORT:
 			(void) snprintf(lap->xport_type,
-				sizeof (lap->xport_type), "%s",
-				FP_FC_FABRIC_PORT_TYPE);
+			    sizeof (lap->xport_type), "%s",
+			    FP_FC_FABRIC_PORT_TYPE);
 			break;
 		case HBA_PORTTYPE_LPORT:
 			(void) snprintf(lap->xport_type,
-				sizeof (lap->xport_type), "%s",
-				FP_FC_PRIVATE_PORT_TYPE);
+			    sizeof (lap->xport_type), "%s",
+			    FP_FC_PRIVATE_PORT_TYPE);
 			break;
 		case HBA_PORTTYPE_PTP:
 			(void) snprintf(lap->xport_type,
-				sizeof (lap->xport_type), "%s",
-				FP_FC_PT_TO_PT_PORT_TYPE);
+			    sizeof (lap->xport_type), "%s",
+			    FP_FC_PT_TO_PT_PORT_TYPE);
 			break;
 		/*
 		 * HBA_PORTTYPE_UNKNOWN means nothing is connected
 		 */
 		case HBA_PORTTYPE_UNKNOWN:
 			(void) snprintf(lap->xport_type,
-				sizeof (lap->xport_type), "%s",
-				FP_FC_PORT_TYPE);
+			    sizeof (lap->xport_type), "%s",
+			    FP_FC_PORT_TYPE);
 			break;
 		/* NOT_PRESENT, OTHER, FPORT, FLPORT */
 		default:
 			(void) snprintf(lap->xport_type,
-				sizeof (lap->xport_type), "%s",
-				FP_FC_PORT_TYPE);
+			    sizeof (lap->xport_type), "%s",
+			    FP_FC_PORT_TYPE);
 			cond = CFGA_COND_FAILED;
 			break;
 	}
@@ -1606,7 +1608,7 @@ do_stat_fc_dev(
 	/* We only want to know device config state */
 	if (limited_stat) {
 		if (((strcmp(lap->xport_type, FP_FC_FABRIC_PORT_TYPE) == 0) ||
-			strcmp(lap->xport_type, FP_FC_PUBLIC_PORT_TYPE) == 0)) {
+		    strcmp(lap->xport_type, FP_FC_PUBLIC_PORT_TYPE) == 0)) {
 			lap->chld_config = CFGA_STAT_CONFIGURED;
 		} else {
 			if (ostate != CFGA_STAT_UNCONFIGURED) {
@@ -1664,10 +1666,10 @@ do_stat_fc_dev(
 			 * configured.
 			 */
 			if (((strcmp(lap->xport_type,
-				FP_FC_PUBLIC_PORT_TYPE) == 0) ||
-				(strcmp(lap->xport_type,
-				FP_FC_FABRIC_PORT_TYPE) == 0)) ||
-				(lap->ret == FPCFGA_ACCESS_OK)) {
+			    FP_FC_PUBLIC_PORT_TYPE) == 0) ||
+			    (strcmp(lap->xport_type,
+			    FP_FC_FABRIC_PORT_TYPE) == 0)) ||
+			    (lap->ret == FPCFGA_ACCESS_OK)) {
 				lap->chld_config = CFGA_STAT_CONFIGURED;
 			} else {
 				lap->ret = FPCFGA_APID_NOEXIST;
@@ -1702,17 +1704,17 @@ do_stat_fc_dev(
 	if (lap->cmd == FPCFGA_STAT_ALL) {
 		if (lap->listp != NULL) {
 			if ((ret = make_dyncomp_from_dinode(node,
-					&dyncomp, &l_errno)) != FPCFGA_OK) {
+			    &dyncomp, &l_errno)) != FPCFGA_OK) {
 				return (ret);
 			}
 			ret = is_dyn_ap_on_ldata_list(dyncomp, lap->listp,
-					&matchldp, &l_errno);
+			    &matchldp, &l_errno);
 			switch (ret) {
 			case FPCFGA_ACCESS_OK:
 				/* node exists so set ostate to configured. */
 				lap->chld_config = CFGA_STAT_CONFIGURED;
 				matchldp->ldata.ap_o_state =
-					CFGA_STAT_CONFIGURED;
+				    CFGA_STAT_CONFIGURED;
 				matchldp->ldata.ap_busy = busy;
 				clp = &matchldp->ldata;
 				switch (ostate) {
@@ -1742,9 +1744,9 @@ do_stat_fc_dev(
 					 * was failed so don't update again.
 					 */
 					if (matchldp->ldata.ap_cond ==
-						CFGA_COND_UNKNOWN) {
+					    CFGA_COND_UNKNOWN) {
 						matchldp->ldata.ap_cond =
-						CFGA_COND_UNUSABLE;
+						    CFGA_COND_UNUSABLE;
 					}
 					break;
 				default:
@@ -1779,11 +1781,11 @@ do_stat_fc_dev(
 					 */
 					cond = CFGA_COND_UNUSABLE;
 					if ((strcmp(lap->xport_type,
-						FP_FC_PUBLIC_PORT_TYPE) == 0) ||
-						(strcmp(lap->xport_type,
-						FP_FC_FABRIC_PORT_TYPE) == 0)) {
+					    FP_FC_PUBLIC_PORT_TYPE) == 0) ||
+					    (strcmp(lap->xport_type,
+					    FP_FC_FABRIC_PORT_TYPE) == 0)) {
 						lap->chld_config =
-						CFGA_STAT_CONFIGURED;
+						    CFGA_STAT_CONFIGURED;
 					} else {
 						lap->ret = FPCFGA_OK;
 						S_FREE(dyncomp);
@@ -1824,11 +1826,11 @@ do_stat_fc_dev(
 				 * existing node.
 				 */
 				if ((strcmp(lap->xport_type,
-					FP_FC_PUBLIC_PORT_TYPE) == 0) ||
-					(strcmp(lap->xport_type,
-					FP_FC_FABRIC_PORT_TYPE) == 0)) {
+				    FP_FC_PUBLIC_PORT_TYPE) == 0) ||
+				    (strcmp(lap->xport_type,
+				    FP_FC_FABRIC_PORT_TYPE) == 0)) {
 					lap->chld_config =
-					CFGA_STAT_CONFIGURED;
+					    CFGA_STAT_CONFIGURED;
 				} else {
 					lap->ret = FPCFGA_OK;
 					S_FREE(dyncomp);
@@ -1955,7 +1957,7 @@ stat_path_info_fc_dev(
 	 * then just return ok.
 	 */
 	if ((lap->cmd == FPCFGA_STAT_FCA_PORT) &&
-				(lap->chld_config == CFGA_STAT_CONFIGURED)) {
+	    (lap->chld_config == CFGA_STAT_CONFIGURED)) {
 		return (FPCFGA_OK);
 	}
 
@@ -1977,12 +1979,12 @@ stat_path_info_fc_dev(
 	/* if stat on fca port return. */
 	if (lap->cmd == FPCFGA_STAT_FCA_PORT) {
 		if (((strcmp(lap->xport_type, FP_FC_FABRIC_PORT_TYPE) == 0) ||
-			strcmp(lap->xport_type, FP_FC_PUBLIC_PORT_TYPE) == 0)) {
+		    strcmp(lap->xport_type, FP_FC_PUBLIC_PORT_TYPE) == 0)) {
 			lap->chld_config = CFGA_STAT_CONFIGURED;
 			return (FPCFGA_OK);
 		} else {
 			if ((pstate = di_path_state(path)) !=
-				DI_PATH_STATE_OFFLINE) {
+			    DI_PATH_STATE_OFFLINE) {
 				lap->chld_config = CFGA_STAT_CONFIGURED;
 				return (FPCFGA_OK);
 			}
@@ -1993,49 +1995,51 @@ stat_path_info_fc_dev(
 	 */
 	do {
 		count = di_path_prop_lookup_bytes(path, PORT_WWN_PROP,
-			&port_wwn_data);
+		    &port_wwn_data);
 		if (count != WWN_SIZE) {
 			ret = FPCFGA_LIB_ERR;
 			break;
 		}
 
 		(void) sprintf(port_wwn, "%016llx",
-			(wwnConversion(port_wwn_data)));
+		    (wwnConversion(port_wwn_data)));
 		switch (lap->cmd) {
 		case FPCFGA_STAT_FC_DEV:
 			/* if no match contine to the next path info node. */
 			if (strncmp(port_wwn, lap->apidp->dyncomp,
-					WWN_SIZE*2)) {
+			    WWN_SIZE*2)) {
 				break;
 			}
 			/* if device in dev_list, ldata already created. */
 			if (lap->ret == FPCFGA_ACCESS_OK) {
 				lap->listp->ldata.ap_o_state =
-					CFGA_STAT_CONFIGURED;
+				    CFGA_STAT_CONFIGURED;
 				if (((pstate = di_path_state(path)) ==
-					DI_PATH_STATE_OFFLINE) ||
-					(pstate == DI_PATH_STATE_FAULT)) {
+				    DI_PATH_STATE_OFFLINE) ||
+				    (pstate == DI_PATH_STATE_FAULT)) {
 					lap->listp->ldata.ap_cond =
-							CFGA_COND_UNUSABLE;
+					    CFGA_COND_UNUSABLE;
 				}
 				lap->ret = FPCFGA_OK;
 				return (FPCFGA_OK);
 			} else {
 				if ((strcmp(lap->xport_type,
-					FP_FC_PUBLIC_PORT_TYPE) == 0) ||
-					(strcmp(lap->xport_type,
-					FP_FC_FABRIC_PORT_TYPE) == 0)) {
+				    FP_FC_PUBLIC_PORT_TYPE) == 0) ||
+				    (strcmp(lap->xport_type,
+				    FP_FC_FABRIC_PORT_TYPE) == 0)) {
 					lap->chld_config = CFGA_STAT_CONFIGURED;
 					return (init_ldata_for_mpath_dev(
-						path, port_wwn, l_errnop, lap));
+					    path, port_wwn, l_errnop, lap));
 				} else {
 					if ((di_path_state(path)) !=
-						DI_PATH_STATE_OFFLINE) {
-					    return (init_ldata_for_mpath_dev(
-						path, port_wwn, l_errnop, lap));
+					    DI_PATH_STATE_OFFLINE) {
+						return
+						    (init_ldata_for_mpath_dev(
+						    path, port_wwn, l_errnop,
+						    lap));
 					} else {
-					    lap->ret = FPCFGA_APID_NOEXIST;
-					    return (FPCFGA_OK);
+						lap->ret = FPCFGA_APID_NOEXIST;
+						return (FPCFGA_OK);
 					}
 				}
 			}
@@ -2043,22 +2047,22 @@ stat_path_info_fc_dev(
 			/* check if there is list data. */
 			if (lap->listp != NULL) {
 				ret = is_dyn_ap_on_ldata_list(port_wwn,
-					lap->listp, &matchldp, l_errnop);
+				    lap->listp, &matchldp, l_errnop);
 				if (ret == FPCFGA_ACCESS_OK) {
 					lap->chld_config = CFGA_STAT_CONFIGURED;
 					matchldp->ldata.ap_o_state =
-							CFGA_STAT_CONFIGURED;
+					    CFGA_STAT_CONFIGURED;
 					/*
 					 * Update the condition as unusable
 					 * if the pathinfo state is failed
 					 * or offline.
 					 */
 					if (((pstate = di_path_state(path)) ==
-						DI_PATH_STATE_OFFLINE) ||
-						(pstate ==
-							DI_PATH_STATE_FAULT)) {
+					    DI_PATH_STATE_OFFLINE) ||
+					    (pstate ==
+					    DI_PATH_STATE_FAULT)) {
 						matchldp->ldata.ap_cond =
-							CFGA_COND_UNUSABLE;
+						    CFGA_COND_UNUSABLE;
 					}
 					break;
 				} else if (ret == FPCFGA_LIB_ERR) {
@@ -2072,14 +2076,14 @@ stat_path_info_fc_dev(
 			 * in offline state don't include to ldata list.
 			 */
 			if (((strcmp(lap->xport_type,
-				FP_FC_PUBLIC_PORT_TYPE) == 0) ||
-				(strcmp(lap->xport_type,
-					FP_FC_FABRIC_PORT_TYPE) == 0)) ||
-				(di_path_state(path) !=
-					DI_PATH_STATE_OFFLINE)) {
+			    FP_FC_PUBLIC_PORT_TYPE) == 0) ||
+			    (strcmp(lap->xport_type,
+			    FP_FC_FABRIC_PORT_TYPE) == 0)) ||
+			    (di_path_state(path) !=
+			    DI_PATH_STATE_OFFLINE)) {
 				lap->chld_config = CFGA_STAT_CONFIGURED;
 				ret = init_ldata_for_mpath_dev(
-					path, port_wwn, l_errnop, lap);
+				    path, port_wwn, l_errnop, lap);
 				if (ret != FPCFGA_OK) {
 					return (ret);
 				}
@@ -2143,7 +2147,7 @@ stat_path_info_FCP_dev(
 	 * then just return ok.
 	 */
 	if ((lap->cmd == FPCFGA_STAT_FCA_PORT) &&
-				(lap->chld_config == CFGA_STAT_CONFIGURED)) {
+	    (lap->chld_config == CFGA_STAT_CONFIGURED)) {
 		return (FPCFGA_OK);
 	}
 	/*
@@ -2167,12 +2171,12 @@ stat_path_info_FCP_dev(
 	 */
 	if (lap->cmd == FPCFGA_STAT_FCA_PORT) {
 		if (((strcmp(lap->xport_type, FP_FC_FABRIC_PORT_TYPE) == 0) ||
-			strcmp(lap->xport_type, FP_FC_PUBLIC_PORT_TYPE) == 0)) {
+		    strcmp(lap->xport_type, FP_FC_PUBLIC_PORT_TYPE) == 0)) {
 			lap->chld_config = CFGA_STAT_CONFIGURED;
 			return (FPCFGA_OK);
 		} else {
 			if ((pstate = di_path_state(path)) !=
-				DI_PATH_STATE_OFFLINE) {
+			    DI_PATH_STATE_OFFLINE) {
 				lap->chld_config = CFGA_STAT_CONFIGURED;
 				return (FPCFGA_OK);
 			}
@@ -2185,13 +2189,13 @@ stat_path_info_FCP_dev(
 		switch (lap->cmd) {
 		case FPCFGA_STAT_FC_DEV:
 			if ((make_portwwn_luncomp_from_pinode(path, &port_wwn,
-				&lun_nump, l_errnop)) != FPCFGA_OK) {
+			    &lun_nump, l_errnop)) != FPCFGA_OK) {
 				return (FPCFGA_LIB_ERR);
 			}
 
 			if ((ldata_ret = is_FCP_dev_ap_on_ldata_list(port_wwn,
-				*lun_nump, lap->listp, &matchldp))
-				== FPCFGA_LIB_ERR) {
+			    *lun_nump, lap->listp, &matchldp))
+			    == FPCFGA_LIB_ERR) {
 				S_FREE(port_wwn);
 				return (ldata_ret);
 			}
@@ -2199,24 +2203,24 @@ stat_path_info_FCP_dev(
 			if (ldata_ret == FPCFGA_ACCESS_OK) {
 				lap->chld_config = CFGA_STAT_CONFIGURED;
 				matchldp->ldata.ap_o_state =
-						CFGA_STAT_CONFIGURED;
+				    CFGA_STAT_CONFIGURED;
 				/*
 				 * Update the condition as unusable
 				 * if the pathinfo state is failed
 				 * or offline.
 				 */
 				if (((pstate = di_path_state(path)) ==
-					DI_PATH_STATE_OFFLINE) ||
-					(pstate == DI_PATH_STATE_FAULT)) {
+				    DI_PATH_STATE_OFFLINE) ||
+				    (pstate == DI_PATH_STATE_FAULT)) {
 					matchldp->ldata.ap_cond =
-							CFGA_COND_UNUSABLE;
+					    CFGA_COND_UNUSABLE;
 				}
 				lap->ret = FPCFGA_OK;
 				break;
 			}
 
 			if (strncmp(port_wwn, lap->apidp->dyncomp, WWN_SIZE*2)
-					!= 0) {
+			    != 0) {
 				break;
 			}
 			/*
@@ -2225,45 +2229,44 @@ stat_path_info_FCP_dev(
 			 * in offline state don't include to ldata list.
 			 */
 			if (((strcmp(lap->xport_type,
-				FP_FC_PUBLIC_PORT_TYPE) == 0) ||
-				(strcmp(lap->xport_type,
-					FP_FC_FABRIC_PORT_TYPE) == 0)) ||
-				(di_path_state(path) !=
-					DI_PATH_STATE_OFFLINE)) {
-			    lap->chld_config = CFGA_STAT_CONFIGURED;
+			    FP_FC_PUBLIC_PORT_TYPE) == 0) ||
+			    (strcmp(lap->xport_type,
+			    FP_FC_FABRIC_PORT_TYPE) == 0)) ||
+			    (di_path_state(path) != DI_PATH_STATE_OFFLINE)) {
+				lap->chld_config = CFGA_STAT_CONFIGURED;
 				/* create ldata for this pi node. */
-			    client_node = di_path_client_node(path);
-			    if (client_node == DI_NODE_NIL) {
-				*l_errnop = errno;
-				S_FREE(port_wwn);
-				return (FPCFGA_LIB_ERR);
-			    }
-			    if ((construct_nodepath_from_dinode(
-				client_node, &nodepath, l_errnop))
-					!= FPCFGA_OK) {
-				S_FREE(port_wwn);
-				return (FPCFGA_LIB_ERR);
-			    }
+				client_node = di_path_client_node(path);
+				if (client_node == DI_NODE_NIL) {
+					*l_errnop = errno;
+					S_FREE(port_wwn);
+					return (FPCFGA_LIB_ERR);
+				}
+				if ((construct_nodepath_from_dinode(
+				    client_node, &nodepath, l_errnop))
+				    != FPCFGA_OK) {
+					S_FREE(port_wwn);
+					return (FPCFGA_LIB_ERR);
+				}
 
-			    listp = calloc(1, sizeof (ldata_list_t));
-			    if (listp == NULL) {
-				S_FREE(port_wwn);
-				S_FREE(nodepath);
-				lap->l_errno = errno;
-				return (FPCFGA_LIB_ERR);
-			    }
+				listp = calloc(1, sizeof (ldata_list_t));
+				if (listp == NULL) {
+					S_FREE(port_wwn);
+					S_FREE(nodepath);
+					lap->l_errno = errno;
+					return (FPCFGA_LIB_ERR);
+				}
 
-			    clp = &listp->ldata;
+				clp = &listp->ldata;
 
-			    /* Create logical and physical ap_id */
-			    (void) snprintf(clp->ap_log_id,
-				sizeof (clp->ap_log_id), "%s%s%s%s%d",
-				lap->xport_logp, DYN_SEP, port_wwn,
-				LUN_COMP_SEP, *lun_nump);
-			    (void) snprintf(clp->ap_phys_id,
-				sizeof (clp->ap_phys_id), "%s%s%s%s%d",
-				lap->apidp->xport_phys, DYN_SEP, port_wwn,
-				LUN_COMP_SEP, *lun_nump);
+				/* Create logical and physical ap_id */
+				(void) snprintf(clp->ap_log_id,
+				    sizeof (clp->ap_log_id), "%s%s%s%s%d",
+				    lap->xport_logp, DYN_SEP, port_wwn,
+				    LUN_COMP_SEP, *lun_nump);
+				(void) snprintf(clp->ap_phys_id,
+				    sizeof (clp->ap_phys_id), "%s%s%s%s%d",
+				    lap->apidp->xport_phys, DYN_SEP, port_wwn,
+				    LUN_COMP_SEP, *lun_nump);
 				/*
 				 * We reached here since FCP dev is not found
 				 * in ldata list but path info node exists.
@@ -2274,42 +2277,43 @@ stat_path_info_FCP_dev(
 				 * if the pathinfo state is failed
 				 * or offline.
 				 */
-			    clp->ap_class[0] = '\0'; /* Filled by libcfgadm */
-			    clp->ap_o_state = CFGA_STAT_CONFIGURED;
-			    if (((pstate = di_path_state(path))
-					== DI_PATH_STATE_OFFLINE) ||
-				(pstate == DI_PATH_STATE_FAULT)) {
-				clp->ap_cond = CFGA_COND_UNUSABLE;
-			    } else {
-				clp->ap_cond = CFGA_COND_FAILING;
-			    }
-			    clp->ap_r_state = lap->xport_rstate;
-			    clp->ap_info[0] = '\0';
+				/* Filled by libcfgadm */
+				clp->ap_class[0] = '\0';
+				clp->ap_o_state = CFGA_STAT_CONFIGURED;
+				if (((pstate = di_path_state(path))
+				    == DI_PATH_STATE_OFFLINE) ||
+				    (pstate == DI_PATH_STATE_FAULT)) {
+					clp->ap_cond = CFGA_COND_UNUSABLE;
+				} else {
+					clp->ap_cond = CFGA_COND_FAILING;
+				}
+				clp->ap_r_state = lap->xport_rstate;
+				clp->ap_info[0] = '\0';
 				/* update ap_type and ap_info */
-			    get_hw_info(client_node, clp);
-			    if (devctl_cmd(nodepath, FPCFGA_DEV_GETSTATE,
-				&dctl_state, l_errnop) == FPCFGA_OK) {
-				busy = ((dctl_state & DEVICE_BUSY)
-					== DEVICE_BUSY) ? 1 : 0;
-			    } else {
-				busy = 0;
-			    }
-			    clp->ap_busy = busy;
-			    clp->ap_status_time = (time_t)-1;
+				get_hw_info(client_node, clp);
+				if (devctl_cmd(nodepath, FPCFGA_DEV_GETSTATE,
+				    &dctl_state, l_errnop) == FPCFGA_OK) {
+					busy = ((dctl_state & DEVICE_BUSY)
+					    == DEVICE_BUSY) ? 1 : 0;
+				} else {
+					busy = 0;
+				}
+				clp->ap_busy = busy;
+				clp->ap_status_time = (time_t)-1;
 
-			    (void) insert_ldata_to_ldatalist(port_wwn,
-				lun_nump, listp, &(lap->listp));
+				(void) insert_ldata_to_ldatalist(port_wwn,
+				    lun_nump, listp, &(lap->listp));
 			}
 			break;
 		case FPCFGA_STAT_ALL:
 			if ((make_portwwn_luncomp_from_pinode(path, &port_wwn,
-				&lun_nump, l_errnop)) != FPCFGA_OK) {
+			    &lun_nump, l_errnop)) != FPCFGA_OK) {
 				return (FPCFGA_LIB_ERR);
 			}
 
 			if ((ldata_ret = is_FCP_dev_ap_on_ldata_list(port_wwn,
-				*lun_nump, lap->listp, &matchldp))
-				== FPCFGA_LIB_ERR) {
+			    *lun_nump, lap->listp, &matchldp))
+			    == FPCFGA_LIB_ERR) {
 				S_FREE(port_wwn);
 				return (ldata_ret);
 			}
@@ -2317,17 +2321,17 @@ stat_path_info_FCP_dev(
 			if (ldata_ret == FPCFGA_ACCESS_OK) {
 				lap->chld_config = CFGA_STAT_CONFIGURED;
 				matchldp->ldata.ap_o_state =
-						CFGA_STAT_CONFIGURED;
+				    CFGA_STAT_CONFIGURED;
 				/*
 				 * Update the condition as unusable
 				 * if the pathinfo state is failed
 				 * or offline.
 				 */
 				if (((pstate = di_path_state(path)) ==
-					DI_PATH_STATE_OFFLINE) ||
-					(pstate == DI_PATH_STATE_FAULT)) {
+				    DI_PATH_STATE_OFFLINE) ||
+				    (pstate == DI_PATH_STATE_FAULT)) {
 					matchldp->ldata.ap_cond =
-							CFGA_COND_UNUSABLE;
+					    CFGA_COND_UNUSABLE;
 				}
 				break;
 			}
@@ -2337,45 +2341,45 @@ stat_path_info_FCP_dev(
 			 * in offline state don't include to ldata list.
 			 */
 			if (((strcmp(lap->xport_type,
-				FP_FC_PUBLIC_PORT_TYPE) == 0) ||
-				(strcmp(lap->xport_type,
-					FP_FC_FABRIC_PORT_TYPE) == 0)) ||
-				(di_path_state(path) !=
-					DI_PATH_STATE_OFFLINE)) {
-			    lap->chld_config = CFGA_STAT_CONFIGURED;
+			    FP_FC_PUBLIC_PORT_TYPE) == 0) ||
+			    (strcmp(lap->xport_type,
+			    FP_FC_FABRIC_PORT_TYPE) == 0)) ||
+			    (di_path_state(path) !=
+			    DI_PATH_STATE_OFFLINE)) {
+				lap->chld_config = CFGA_STAT_CONFIGURED;
 				/* create ldata for this pi node. */
-			    client_node = di_path_client_node(path);
-			    if (client_node == DI_NODE_NIL) {
-				*l_errnop = errno;
-				S_FREE(port_wwn);
-				return (FPCFGA_LIB_ERR);
-			    }
-			    if ((construct_nodepath_from_dinode(
-				client_node, &nodepath, l_errnop))
-					!= FPCFGA_OK) {
-				S_FREE(port_wwn);
-				return (FPCFGA_LIB_ERR);
-			    }
+				client_node = di_path_client_node(path);
+				if (client_node == DI_NODE_NIL) {
+					*l_errnop = errno;
+					S_FREE(port_wwn);
+					return (FPCFGA_LIB_ERR);
+				}
+				if ((construct_nodepath_from_dinode(
+				    client_node, &nodepath, l_errnop))
+				    != FPCFGA_OK) {
+					S_FREE(port_wwn);
+					return (FPCFGA_LIB_ERR);
+				}
 
-			    listp = calloc(1, sizeof (ldata_list_t));
-			    if (listp == NULL) {
-				S_FREE(port_wwn);
-				S_FREE(nodepath);
-				lap->l_errno = errno;
-				return (FPCFGA_LIB_ERR);
-			    }
+				listp = calloc(1, sizeof (ldata_list_t));
+				if (listp == NULL) {
+					S_FREE(port_wwn);
+					S_FREE(nodepath);
+					lap->l_errno = errno;
+					return (FPCFGA_LIB_ERR);
+				}
 
-			    clp = &listp->ldata;
+				clp = &listp->ldata;
 
-			    /* Create logical and physical ap_id */
-			    (void) snprintf(clp->ap_log_id,
-				sizeof (clp->ap_log_id), "%s%s%s%s%d",
-				lap->xport_logp, DYN_SEP, port_wwn,
-				LUN_COMP_SEP, *lun_nump);
-			    (void) snprintf(clp->ap_phys_id,
-				sizeof (clp->ap_phys_id), "%s%s%s%s%d",
-				lap->apidp->xport_phys, DYN_SEP, port_wwn,
-				LUN_COMP_SEP, *lun_nump);
+				/* Create logical and physical ap_id */
+				(void) snprintf(clp->ap_log_id,
+				    sizeof (clp->ap_log_id), "%s%s%s%s%d",
+				    lap->xport_logp, DYN_SEP, port_wwn,
+				    LUN_COMP_SEP, *lun_nump);
+				(void) snprintf(clp->ap_phys_id,
+				    sizeof (clp->ap_phys_id), "%s%s%s%s%d",
+				    lap->apidp->xport_phys, DYN_SEP, port_wwn,
+				    LUN_COMP_SEP, *lun_nump);
 				/*
 				 * We reached here since FCP dev is not found
 				 * in ldata list but path info node exists.
@@ -2386,31 +2390,32 @@ stat_path_info_FCP_dev(
 				 * if the pathinfo state is failed
 				 * or offline.
 				 */
-			    clp->ap_class[0] = '\0'; /* Filled by libcfgadm */
-			    clp->ap_o_state = CFGA_STAT_CONFIGURED;
-			    if (((pstate = di_path_state(path))
-					== DI_PATH_STATE_OFFLINE) ||
-				(pstate == DI_PATH_STATE_FAULT)) {
-				clp->ap_cond = CFGA_COND_UNUSABLE;
-			    } else {
-				clp->ap_cond = CFGA_COND_FAILING;
-			    }
-			    clp->ap_r_state = lap->xport_rstate;
-			    clp->ap_info[0] = '\0';
+				/* Filled by libcfgadm */
+				clp->ap_class[0] = '\0';
+				clp->ap_o_state = CFGA_STAT_CONFIGURED;
+				if (((pstate = di_path_state(path))
+				    == DI_PATH_STATE_OFFLINE) ||
+				    (pstate == DI_PATH_STATE_FAULT)) {
+					clp->ap_cond = CFGA_COND_UNUSABLE;
+				} else {
+					clp->ap_cond = CFGA_COND_FAILING;
+				}
+				clp->ap_r_state = lap->xport_rstate;
+				clp->ap_info[0] = '\0';
 				/* update ap_type and ap_info */
-			    get_hw_info(client_node, clp);
-			    if (devctl_cmd(nodepath, FPCFGA_DEV_GETSTATE,
-				&dctl_state, l_errnop) == FPCFGA_OK) {
-				busy = ((dctl_state & DEVICE_BUSY)
-					== DEVICE_BUSY) ? 1 : 0;
-			    } else {
-				busy = 0;
-			    }
-			    clp->ap_busy = busy;
-			    clp->ap_status_time = (time_t)-1;
+				get_hw_info(client_node, clp);
+				if (devctl_cmd(nodepath, FPCFGA_DEV_GETSTATE,
+				    &dctl_state, l_errnop) == FPCFGA_OK) {
+					busy = ((dctl_state & DEVICE_BUSY)
+					    == DEVICE_BUSY) ? 1 : 0;
+				} else {
+					busy = 0;
+				}
+				clp->ap_busy = busy;
+				clp->ap_status_time = (time_t)-1;
 
-			    (void) insert_ldata_to_ldatalist(port_wwn,
-				lun_nump, listp, &(lap->listp));
+				(void) insert_ldata_to_ldatalist(port_wwn,
+				    lun_nump, listp, &(lap->listp));
 			}
 			break;
 		case FPCFGA_STAT_FCA_PORT:
@@ -2493,7 +2498,7 @@ do_stat_FCP_dev(
 	/* We only want to know device config state */
 	if (limited_stat) {
 		if (((strcmp(lap->xport_type, FP_FC_FABRIC_PORT_TYPE) == 0) ||
-			strcmp(lap->xport_type, FP_FC_PUBLIC_PORT_TYPE) == 0)) {
+		    strcmp(lap->xport_type, FP_FC_PUBLIC_PORT_TYPE) == 0)) {
 			lap->chld_config = CFGA_STAT_CONFIGURED;
 		} else {
 			if (ostate != CFGA_STAT_UNCONFIGURED) {
@@ -2508,13 +2513,13 @@ do_stat_FCP_dev(
 	 * for FPCFGA_STAT_FC_DEV cmd.
 	 */
 	if ((make_portwwn_luncomp_from_dinode(node, &port_wwn, &lun_nump,
-			&l_errno)) != FPCFGA_OK) {
+	    &l_errno)) != FPCFGA_OK) {
 		lap->l_errno = l_errno;
 		return (FPCFGA_LIB_ERR);
 	}
 
 	if ((ldata_ret = is_FCP_dev_ap_on_ldata_list(port_wwn, *lun_nump,
-			lap->listp, &matchldp)) == FPCFGA_LIB_ERR) {
+	    lap->listp, &matchldp)) == FPCFGA_LIB_ERR) {
 		lap->l_errno = l_errno;
 		S_FREE(port_wwn);
 		return (ldata_ret);
@@ -2564,10 +2569,10 @@ do_stat_FCP_dev(
 			 * configured.
 			 */
 			if (((strcmp(lap->xport_type,
-				FP_FC_PUBLIC_PORT_TYPE) == 0) ||
-				(strcmp(lap->xport_type,
-				FP_FC_FABRIC_PORT_TYPE) == 0)) ||
-				(lap->ret == FPCFGA_ACCESS_OK)) {
+			    FP_FC_PUBLIC_PORT_TYPE) == 0) ||
+			    (strcmp(lap->xport_type,
+			    FP_FC_FABRIC_PORT_TYPE) == 0)) ||
+			    (lap->ret == FPCFGA_ACCESS_OK)) {
 				lap->chld_config = CFGA_STAT_CONFIGURED;
 			} else {
 				/*
@@ -2620,7 +2625,7 @@ do_stat_FCP_dev(
 			/* node exists so set ostate to configured. */
 			lap->chld_config = CFGA_STAT_CONFIGURED;
 			matchldp->ldata.ap_o_state =
-				CFGA_STAT_CONFIGURED;
+			    CFGA_STAT_CONFIGURED;
 			matchldp->ldata.ap_busy = busy;
 			clp = &matchldp->ldata;
 			switch (ostate) {
@@ -2648,9 +2653,9 @@ do_stat_FCP_dev(
 				 * so don't update again.
 				 */
 				if (matchldp->ldata.ap_cond ==
-					CFGA_COND_UNKNOWN) {
+				    CFGA_COND_UNKNOWN) {
 					matchldp->ldata.ap_cond =
-					CFGA_COND_UNUSABLE;
+					    CFGA_COND_UNUSABLE;
 				}
 				break;
 			default:
@@ -2681,11 +2686,11 @@ do_stat_FCP_dev(
 				 */
 				cond = CFGA_COND_UNUSABLE;
 				if ((strcmp(lap->xport_type,
-					FP_FC_PUBLIC_PORT_TYPE) == 0) ||
-					(strcmp(lap->xport_type,
-					FP_FC_FABRIC_PORT_TYPE) == 0)) {
+				    FP_FC_PUBLIC_PORT_TYPE) == 0) ||
+				    (strcmp(lap->xport_type,
+				    FP_FC_FABRIC_PORT_TYPE) == 0)) {
 					lap->chld_config =
-					CFGA_STAT_CONFIGURED;
+					    CFGA_STAT_CONFIGURED;
 				} else {
 					lap->ret = FPCFGA_OK;
 					S_FREE(port_wwn);
@@ -2715,11 +2720,11 @@ do_stat_FCP_dev(
 
 	/* Create logical and physical ap_id */
 	(void) snprintf(clp->ap_log_id, sizeof (clp->ap_log_id),
-		"%s%s%s%s%d", lap->xport_logp, DYN_SEP, port_wwn,
-		LUN_COMP_SEP, *lun_nump);
+	    "%s%s%s%s%d", lap->xport_logp, DYN_SEP, port_wwn,
+	    LUN_COMP_SEP, *lun_nump);
 	(void) snprintf(clp->ap_phys_id, sizeof (clp->ap_phys_id),
-		"%s%s%s%s%d", lap->apidp->xport_phys, DYN_SEP, port_wwn,
-		LUN_COMP_SEP, *lun_nump);
+	    "%s%s%s%s%d", lap->apidp->xport_phys, DYN_SEP, port_wwn,
+	    LUN_COMP_SEP, *lun_nump);
 	clp->ap_class[0] = '\0'; /* Filled in by libcfgadm */
 	clp->ap_r_state = lap->xport_rstate;
 	clp->ap_o_state = CFGA_STAT_CONFIGURED;
@@ -2731,7 +2736,7 @@ do_stat_FCP_dev(
 	get_hw_info(node, clp);
 
 	(void) insert_ldata_to_ldatalist(port_wwn, lun_nump, listp,
-		&(lap->listp));
+	    &(lap->listp));
 
 	lap->ret = FPCFGA_OK;
 	S_FREE(port_wwn);
@@ -2747,7 +2752,7 @@ do_stat_FCP_dev(
  */
 static fpcfga_ret_t
 is_dyn_ap_on_ldata_list(const char *port_wwn, const ldata_list_t *listp,
-			ldata_list_t **matchldpp, int *l_errnop)
+    ldata_list_t **matchldpp, int *l_errnop)
 {
 	char		*dyn = NULL, *dyncomp = NULL;
 	int		len;
@@ -2791,8 +2796,8 @@ is_dyn_ap_on_ldata_list(const char *port_wwn, const ldata_list_t *listp,
  */
 static fpcfga_ret_t
 is_FCP_dev_ap_on_ldata_list(const char *port_wwn, const int lun_num,
-			ldata_list_t *ldatap,
-			ldata_list_t **matchldpp)
+    ldata_list_t *ldatap,
+    ldata_list_t **matchldpp)
 {
 	ldata_list_t *curlp = NULL;
 	char *dyn = NULL, *dyncomp = NULL;
@@ -2813,7 +2818,7 @@ is_FCP_dev_ap_on_ldata_list(const char *port_wwn, const int lun_num,
 	dyn = GET_DYN(ldatap->ldata.ap_phys_id);
 	if (dyn != NULL) dyncomp = DYN_TO_DYNCOMP(dyn);
 	if ((dyncomp != NULL) &&
-			(strncmp(dyncomp, port_wwn, WWN_SIZE*2) == 0)) {
+	    (strncmp(dyncomp, port_wwn, WWN_SIZE*2) == 0)) {
 		lun_dyn = GET_LUN_DYN(dyncomp);
 		if (lun_dyn != NULL) {
 			lunp = LUN_DYN_TO_LUNCOMP(lun_dyn);
@@ -2839,7 +2844,7 @@ is_FCP_dev_ap_on_ldata_list(const char *port_wwn, const int lun_num,
 		dyn = GET_DYN(curlp->ldata.ap_phys_id);
 		if (dyn != NULL) dyncomp = DYN_TO_DYNCOMP(dyn);
 		if ((dyncomp != NULL) &&
-				(strncmp(dyncomp, port_wwn, WWN_SIZE*2) == 0)) {
+		    (strncmp(dyncomp, port_wwn, WWN_SIZE*2) == 0)) {
 			lun_dyn = GET_LUN_DYN(dyncomp);
 			if (lun_dyn != NULL) {
 				lunp = LUN_DYN_TO_LUNCOMP(lun_dyn);
@@ -2871,7 +2876,7 @@ is_FCP_dev_ap_on_ldata_list(const char *port_wwn, const int lun_num,
  */
 static fpcfga_ret_t
 init_ldata_for_mpath_dev(di_path_t path, char *pwwn, int *l_errnop,
-	fpcfga_list_t *lap)
+    fpcfga_list_t *lap)
 {
 	ldata_list_t *listp = NULL;
 	cfga_list_data_t *clp = NULL;
@@ -2916,9 +2921,9 @@ init_ldata_for_mpath_dev(di_path_t path, char *pwwn, int *l_errnop,
 
 	/* Create logical and physical ap_id */
 	(void) snprintf(clp->ap_log_id, sizeof (clp->ap_log_id), "%s%s%s",
-			lap->xport_logp, DYN_SEP, pwwn);
+	    lap->xport_logp, DYN_SEP, pwwn);
 	(void) snprintf(clp->ap_phys_id, sizeof (clp->ap_phys_id), "%s%s%s",
-			lap->apidp->xport_phys, DYN_SEP, pwwn);
+	    lap->apidp->xport_phys, DYN_SEP, pwwn);
 
 	/* Filled in by libcfgadm */
 	clp->ap_class[0] = '\0'; /* Filled by libcfgadm */
@@ -2934,7 +2939,7 @@ init_ldata_for_mpath_dev(di_path_t path, char *pwwn, int *l_errnop,
 	 * or offline.
 	 */
 	if (((pstate = di_path_state(path)) == DI_PATH_STATE_OFFLINE) ||
-			(pstate == DI_PATH_STATE_FAULT)) {
+	    (pstate == DI_PATH_STATE_FAULT)) {
 		clp->ap_cond = CFGA_COND_UNUSABLE;
 	} else {
 		clp->ap_cond = CFGA_COND_FAILING;
@@ -2944,7 +2949,7 @@ init_ldata_for_mpath_dev(di_path_t path, char *pwwn, int *l_errnop,
 	get_hw_info(client_node, clp);
 
 	if (devctl_cmd(devpath, FPCFGA_DEV_GETSTATE,
-		&dctl_state, l_errnop) == FPCFGA_OK) {
+	    &dctl_state, l_errnop) == FPCFGA_OK) {
 		busy = ((dctl_state & DEVICE_BUSY) == DEVICE_BUSY) ? 1 : 0;
 	} else {
 		busy = 0;
@@ -2972,7 +2977,7 @@ init_ldata_for_mpath_dev(di_path_t path, char *pwwn, int *l_errnop,
  */
 static fpcfga_ret_t
 init_ldata_for_accessible_dev(const char *dyncomp, uchar_t inq_type,
-							fpcfga_list_t *lap)
+    fpcfga_list_t *lap)
 {
 	ldata_list_t *listp = NULL;
 	cfga_list_data_t *clp = NULL;
@@ -2990,10 +2995,10 @@ init_ldata_for_accessible_dev(const char *dyncomp, uchar_t inq_type,
 
 	/* Create logical and physical ap_id */
 	(void) snprintf(clp->ap_log_id, sizeof (clp->ap_log_id), "%s%s%s",
-		lap->xport_logp, DYN_SEP, dyncomp);
+	    lap->xport_logp, DYN_SEP, dyncomp);
 
 	(void) snprintf(clp->ap_phys_id, sizeof (clp->ap_phys_id), "%s%s%s",
-		lap->apidp->xport_phys, DYN_SEP, dyncomp);
+	    lap->apidp->xport_phys, DYN_SEP, dyncomp);
 
 	clp->ap_class[0] = '\0'; /* Filled in by libcfgadm */
 	clp->ap_r_state = lap->xport_rstate;
@@ -3016,7 +3021,7 @@ init_ldata_for_accessible_dev(const char *dyncomp, uchar_t inq_type,
 			    (char *)GET_MSG_STR(ERR_UNAVAILABLE));
 		} else {
 			(void) snprintf(clp->ap_type, sizeof (clp->ap_type),
-				"%s", "unknown");
+			    "%s", "unknown");
 		}
 	}
 
@@ -3043,8 +3048,8 @@ init_ldata_for_accessible_FCP_dev(
 	int *l_errnop)
 {
 	ldata_list_t *listp = NULL, *listp_start = NULL, *listp_end = NULL,
-		*prevlp = NULL, *curlp = NULL, *matchp_start = NULL,
-		*matchp_end = NULL;
+	    *prevlp = NULL, *curlp = NULL, *matchp_start = NULL,
+	    *matchp_end = NULL;
 	cfga_list_data_t *clp = NULL;
 	char *dyn = NULL, *dyncomp = NULL;
 	uchar_t *lun_string;
@@ -3063,45 +3068,47 @@ init_ldata_for_accessible_FCP_dev(
 	}
 
 	for (i = 0; i < num_luns; i++) {
-	    lun_string = (uchar_t *)&(resp_buf->lun_string[i]);
-	    memcpy(lun_num_raw, lun_string, sizeof (lun_num_raw));
-	    if ((ret = get_standard_inq_data(lap->apidp->xport_phys, port_wwn,
-		lun_num_raw, &inq_buf, l_errnop))
-		!= FPCFGA_OK) {
-		if (ret == FPCFGA_FCP_TGT_SEND_SCSI_FAILED) {
-			(void) strlcpy(dtype,
-			(char *)GET_MSG_STR(ERR_UNAVAILABLE), CFGA_TYPE_LEN);
-			cond = CFGA_COND_FAILED;
+		lun_string = (uchar_t *)&(resp_buf->lun_string[i]);
+		memcpy(lun_num_raw, lun_string, sizeof (lun_num_raw));
+		if ((ret = get_standard_inq_data(lap->apidp->xport_phys,
+		    port_wwn, lun_num_raw, &inq_buf, l_errnop)) != FPCFGA_OK) {
+			if (ret == FPCFGA_FCP_TGT_SEND_SCSI_FAILED) {
+				(void) strlcpy(dtype,
+				    (char *)GET_MSG_STR(ERR_UNAVAILABLE),
+				    CFGA_TYPE_LEN);
+				cond = CFGA_COND_FAILED;
+			} else {
+				S_FREE(inq_buf);
+				return (FPCFGA_LIB_ERR);
+			}
 		} else {
-			S_FREE(inq_buf);
-			return (FPCFGA_LIB_ERR);
-		}
-	    } else {
-		peri_qual = inq_buf->inq_dtype & FP_PERI_QUAL_MASK;
+			peri_qual = inq_buf->inq_dtype & FP_PERI_QUAL_MASK;
 		/*
 		 * peripheral qualifier is not 0 so the device node should not
 		 * included in the ldata list. There should not be a device
 		 * node for the lun either.
 		 */
-		if (peri_qual != DPQ_POSSIBLE) {
-			S_FREE(inq_buf);
-			continue;
+			if (peri_qual != DPQ_POSSIBLE) {
+				S_FREE(inq_buf);
+				continue;
+			}
+			*dtype = '\0';
+			for (j = 0; j < N_DEVICE_TYPES; j++) {
+				if ((inq_buf->inq_dtype & DTYPE_MASK)
+				    == device_list[j].itype) {
+					(void) strlcpy(dtype,
+					    (char *)device_list[j].name,
+					    CFGA_TYPE_LEN);
+					break;
+				}
+			}
+			if (*dtype == '\0') {
+				(void) strlcpy(dtype,
+				    (char *)device_list[DTYPE_UNKNOWN_INDEX]
+				    .name,
+				    CFGA_TYPE_LEN);
+			}
 		}
-		*dtype = NULL;
-		for (j = 0; j < N_DEVICE_TYPES; j++) {
-		    if ((inq_buf->inq_dtype & DTYPE_MASK)
-				== device_list[j].itype) {
-			(void) strlcpy(dtype, (char *)device_list[j].name,
-					CFGA_TYPE_LEN);
-			break;
-		    }
-		}
-		if (*dtype == NULL) {
-			(void) strlcpy(dtype,
-				(char *)device_list[DTYPE_UNKNOWN_INDEX].name,
-				CFGA_TYPE_LEN);
-		}
-	    }
 		/*
 		 * Followed FCP driver for getting lun number from report
 		 * lun data.
@@ -3119,42 +3126,42 @@ init_ldata_for_accessible_FCP_dev(
 		 * the menthod below is used by FCP when (lun_string[0] & 0xC0)
 		 * is either SSFCP_LUN_ADDRESSING or SSFCP_PD_ADDRESSING mode.
 		 */
-	    lun_num = ((lun_string[0] & 0x3F) << 8) | lun_string[1];
-	    listp = calloc(1, sizeof (ldata_list_t));
-	    if (listp == NULL) {
-		*l_errnop = errno;
-		list_free(&listp_start);
-		return (FPCFGA_LIB_ERR);
-	    }
-
-	    clp = &listp->ldata;
-		/* Create logical and physical ap_id */
-	    (void) snprintf(clp->ap_log_id, sizeof (clp->ap_log_id),
-		"%s%s%s%s%d", lap->xport_logp, DYN_SEP, port_wwn,
-		LUN_COMP_SEP, lun_num);
-	    (void) snprintf(clp->ap_phys_id, sizeof (clp->ap_phys_id),
-		"%s%s%s%s%d", lap->apidp->xport_phys, DYN_SEP, port_wwn,
-		LUN_COMP_SEP, lun_num);
-	    (void) strncpy(clp->ap_type, dtype, strlen(dtype));
-	    clp->ap_class[0] = '\0'; /* Filled in by libcfgadm */
-	    clp->ap_r_state = lap->xport_rstate;
-	    clp->ap_o_state = CFGA_STAT_UNCONFIGURED;
-	    clp->ap_cond = cond;
-	    clp->ap_busy = 0;
-	    clp->ap_status_time = (time_t)-1;
-	    clp->ap_info[0] = '\0';
-	    if (listp_start == NULL) {
-		listp_start = listp;
-	    } else {
-		if ((ret = insert_FCP_dev_ldata(
-			port_wwn, lun_num, listp,
-			&listp_start)) != FPCFGA_OK) {
+		lun_num = ((lun_string[0] & 0x3F) << 8) | lun_string[1];
+		listp = calloc(1, sizeof (ldata_list_t));
+		if (listp == NULL) {
+			*l_errnop = errno;
 			list_free(&listp_start);
-			return (ret);
+			return (FPCFGA_LIB_ERR);
 		}
-	    }
-	    listp = NULL;
-	    S_FREE(inq_buf);
+
+		clp = &listp->ldata;
+		/* Create logical and physical ap_id */
+		(void) snprintf(clp->ap_log_id, sizeof (clp->ap_log_id),
+		    "%s%s%s%s%d", lap->xport_logp, DYN_SEP, port_wwn,
+		    LUN_COMP_SEP, lun_num);
+		(void) snprintf(clp->ap_phys_id, sizeof (clp->ap_phys_id),
+		    "%s%s%s%s%d", lap->apidp->xport_phys, DYN_SEP, port_wwn,
+		    LUN_COMP_SEP, lun_num);
+		(void) strncpy(clp->ap_type, dtype, strlen(dtype));
+		clp->ap_class[0] = '\0'; /* Filled in by libcfgadm */
+		clp->ap_r_state = lap->xport_rstate;
+		clp->ap_o_state = CFGA_STAT_UNCONFIGURED;
+		clp->ap_cond = cond;
+		clp->ap_busy = 0;
+		clp->ap_status_time = (time_t)-1;
+		clp->ap_info[0] = '\0';
+		if (listp_start == NULL) {
+			listp_start = listp;
+		} else {
+			if ((ret = insert_FCP_dev_ldata(
+			    port_wwn, lun_num, listp,
+			    &listp_start)) != FPCFGA_OK) {
+				list_free(&listp_start);
+				return (ret);
+			}
+		}
+		listp = NULL;
+		S_FREE(inq_buf);
 	}
 
 	/*
@@ -3194,11 +3201,11 @@ init_ldata_for_accessible_FCP_dev(
 			matchp_start = matchp_end = lap->listp;
 			while (matchp_end->next != NULL) {
 				dyn = GET_DYN(
-					matchp_end->next->ldata.ap_phys_id);
+				    matchp_end->next->ldata.ap_phys_id);
 				if ((dyn != NULL) &&
-				((dyncomp = DYN_TO_DYNCOMP(dyn)) != NULL)) {
+				    ((dyncomp = DYN_TO_DYNCOMP(dyn)) != NULL)) {
 					if ((str_ret = strncmp(dyncomp,
-						port_wwn, WWN_SIZE*2)) == 0) {
+					    port_wwn, WWN_SIZE*2)) == 0) {
 						matchp_end = matchp_end->next;
 					} else {
 						break;
@@ -3209,9 +3216,9 @@ init_ldata_for_accessible_FCP_dev(
 			}
 			/* fillup inqdtype */
 			for (listp = listp_start; listp != NULL;
-					listp = listp->next) {
+			    listp = listp->next) {
 				listp->ldata.ap_cond =
-					lap->listp->ldata.ap_cond;
+				    lap->listp->ldata.ap_cond;
 			}
 			/* link the new elem of lap->listp. */
 			listp_end->next = matchp_end->next;
@@ -3223,7 +3230,7 @@ init_ldata_for_accessible_FCP_dev(
 			return (FPCFGA_OK);
 		} else if (str_ret > 0) {
 			for (listp = listp_start; listp != NULL;
-					listp = listp->next) {
+			    listp = listp->next) {
 				listp->ldata.ap_cond = CFGA_COND_FAILING;
 			}
 			listp_end->next = lap->listp->next;
@@ -3239,21 +3246,21 @@ init_ldata_for_accessible_FCP_dev(
 	while (curlp != NULL) {
 		dyn = GET_DYN(curlp->ldata.ap_phys_id);
 		if ((dyn != NULL) &&
-			((dyncomp = DYN_TO_DYNCOMP(dyn)) != NULL)) {
+		    ((dyncomp = DYN_TO_DYNCOMP(dyn)) != NULL)) {
 			if ((str_ret = strncmp(dyncomp, port_wwn,
-					WWN_SIZE*2)) == 0) {
+			    WWN_SIZE*2)) == 0) {
 				matchp_start = matchp_end = curlp;
 				while (matchp_end->next != NULL) {
 					dyn = GET_DYN(
-					matchp_end->next->ldata.ap_phys_id);
+					    matchp_end->next->ldata.ap_phys_id);
 					if ((dyn != NULL) &&
-						((dyncomp = DYN_TO_DYNCOMP(dyn))
-						!= NULL)) {
+					    ((dyncomp = DYN_TO_DYNCOMP(dyn))
+					    != NULL)) {
 						if ((str_ret = strncmp(dyncomp,
-							port_wwn, WWN_SIZE*2))
-							== 0) {
+						    port_wwn, WWN_SIZE*2))
+						    == 0) {
 							matchp_end =
-							matchp_end->next;
+							    matchp_end->next;
 						} else {
 							break;
 						}
@@ -3262,8 +3269,9 @@ init_ldata_for_accessible_FCP_dev(
 					}
 				}
 				for (listp = listp_start; listp != NULL;
-						listp = listp->next) {
-				    listp->ldata.ap_cond = curlp->ldata.ap_cond;
+				    listp = listp->next) {
+					listp->ldata.ap_cond =
+					    curlp->ldata.ap_cond;
 				}
 				/* link the next elem to listp_end. */
 				listp_end->next = matchp_end->next;
@@ -3275,14 +3283,15 @@ init_ldata_for_accessible_FCP_dev(
 				return (FPCFGA_OK);
 			} else if (str_ret > 0) {
 				for (listp = listp_start; listp != NULL;
-						listp = listp->next) {
+				    listp = listp->next) {
 					/*
 					 * Dev not found from accessible
 					 * fc dev list but the node should
 					 * exist. Set to failing cond now
 					 * and check the node state later.
 					 */
-				    listp->ldata.ap_cond = CFGA_COND_FAILING;
+					listp->ldata.ap_cond =
+					    CFGA_COND_FAILING;
 				}
 				/* keep the cur elem by linking to list_end. */
 				listp_end->next = curlp;
@@ -3328,27 +3337,28 @@ get_hw_info(di_node_t node, cfga_list_data_t *clp)
 		 *	It is added in to the device list table to provide
 		 *	constant string of "unknown".
 		 */
-	    for (i = 0; i < (N_DEVICE_TYPES -1); i++) {
-		if (strncmp((char *)clp->ap_type, (char *)device_list[i].name,
-			sizeof (clp->ap_type)) == 0) {
-			break;
+		for (i = 0; i < (N_DEVICE_TYPES -1); i++) {
+			if (strncmp((char *)clp->ap_type,
+			    (char *)device_list[i].name,
+			    sizeof (clp->ap_type)) == 0) {
+				break;
+			}
 		}
-	    }
-	    if (i == (N_DEVICE_TYPES - 1)) {
-		cp = (char *)get_device_type(node);
-		if (cp == NULL) {
-			cp = (char *)GET_MSG_STR(ERR_UNAVAILABLE);
+		if (i == (N_DEVICE_TYPES - 1)) {
+			cp = (char *)get_device_type(node);
+			if (cp == NULL) {
+				cp = (char *)GET_MSG_STR(ERR_UNAVAILABLE);
+			}
+			(void) snprintf(clp->ap_type,
+			    sizeof (clp->ap_type), "%s", S_STR(cp));
 		}
-		(void) snprintf(clp->ap_type, sizeof (clp->ap_type), "%s",
-			S_STR(cp));
-	    }
 	} else {
 		cp = (char *)get_device_type(node);
 		if (cp == NULL) {
 			cp = (char *)GET_MSG_STR(ERR_UNAVAILABLE);
 		}
 		(void) snprintf(clp->ap_type, sizeof (clp->ap_type), "%s",
-			S_STR(cp));
+		    S_STR(cp));
 	}
 
 	/*
@@ -3533,7 +3543,7 @@ insert_ldata_to_ldatalist(
 		return (insert_fc_dev_ldata(port_wwn, listp, ldatapp));
 	} else {
 		return
-		(insert_FCP_dev_ldata(port_wwn, *lun_nump, listp, ldatapp));
+		    (insert_FCP_dev_ldata(port_wwn, *lun_nump, listp, ldatapp));
 	}
 }
 
@@ -3557,7 +3567,7 @@ insert_fc_dev_ldata(
 	dyn = GET_DYN((*ldatapp)->ldata.ap_phys_id);
 	if (dyn != NULL) dyncomp = DYN_TO_DYNCOMP(dyn);
 	if ((dyncomp != NULL) &&
-		(strncmp(dyncomp, port_wwn, WWN_SIZE*2) >= 0)) {
+	    (strncmp(dyncomp, port_wwn, WWN_SIZE*2) >= 0)) {
 			listp->next = *ldatapp;
 			*ldatapp = listp;
 			return (FPCFGA_OK);
@@ -3572,7 +3582,7 @@ insert_fc_dev_ldata(
 		dyn = GET_DYN(curlp->ldata.ap_phys_id);
 		if (dyn != NULL) dyncomp = DYN_TO_DYNCOMP(dyn);
 		if ((dyncomp != NULL) &&
-				(strncmp(dyncomp, port_wwn, WWN_SIZE*2) >= 0)) {
+		    (strncmp(dyncomp, port_wwn, WWN_SIZE*2) >= 0)) {
 			listp->next = prevlp->next;
 			prevlp->next = listp;
 			return (FPCFGA_OK);
@@ -3609,7 +3619,7 @@ insert_FCP_dev_ldata(
 	dyn = GET_DYN((*ldatapp)->ldata.ap_phys_id);
 	if (dyn != NULL) dyncomp = DYN_TO_DYNCOMP(dyn);
 	if ((dyncomp != NULL) &&
-		(strncmp(dyncomp, port_wwn, WWN_SIZE*2) == 0)) {
+	    (strncmp(dyncomp, port_wwn, WWN_SIZE*2) == 0)) {
 		lun_dyn = GET_LUN_DYN(dyncomp);
 		if (lun_dyn != NULL) {
 			lunp = LUN_DYN_TO_LUNCOMP(lun_dyn);
@@ -3620,7 +3630,7 @@ insert_FCP_dev_ldata(
 			}
 		}
 	} else if ((dyncomp != NULL) &&
-			(strncmp(dyncomp, port_wwn, WWN_SIZE*2) > 0)) {
+	    (strncmp(dyncomp, port_wwn, WWN_SIZE*2) > 0)) {
 		listp->next = *ldatapp;
 		*ldatapp = listp;
 		return (FPCFGA_OK);
@@ -3636,7 +3646,7 @@ insert_FCP_dev_ldata(
 		if (dyn != NULL) dyncomp = DYN_TO_DYNCOMP(dyn);
 
 		if ((dyncomp != NULL) &&
-				(strncmp(dyncomp, port_wwn, WWN_SIZE*2) == 0)) {
+		    (strncmp(dyncomp, port_wwn, WWN_SIZE*2) == 0)) {
 			lun_dyn = GET_LUN_DYN(dyncomp);
 			if (lun_dyn != NULL) {
 				lunp = LUN_DYN_TO_LUNCOMP(lun_dyn);
@@ -3648,7 +3658,7 @@ insert_FCP_dev_ldata(
 			}
 			/* else continue */
 		} else if ((dyncomp != NULL) &&
-				(strncmp(dyncomp, port_wwn, WWN_SIZE*2) > 0)) {
+		    (strncmp(dyncomp, port_wwn, WWN_SIZE*2) > 0)) {
 			listp->next = prevlp->next;
 			prevlp->next = listp;
 			return (FPCFGA_OK);
@@ -3681,7 +3691,8 @@ insert_FCP_dev_ldata(
  */
 static uchar_t
 get_inq_dtype(char *xport_phys, char *dyncomp, HBA_HANDLE handle,
-    HBA_PORTATTRIBUTES *portAttrs, HBA_PORTATTRIBUTES *discPortAttrs) {
+    HBA_PORTATTRIBUTES *portAttrs, HBA_PORTATTRIBUTES *discPortAttrs)
+{
 	HBA_STATUS		    status;
 	report_lun_resp_t	    *resp_buf;
 	int			    num_luns = 0, ret, l_errno;
@@ -3696,8 +3707,7 @@ get_inq_dtype(char *xport_phys, char *dyncomp, HBA_HANDLE handle,
 	memset(&inq, 0, sizeof (inq));
 	memset(&sense, 0, sizeof (sense));
 	if ((ret = get_report_lun_data(xport_phys, dyncomp,
-			    &num_luns, &resp_buf, &sense, &l_errno))
-	    != FPCFGA_OK) {
+	    &num_luns, &resp_buf, &sense, &l_errno)) != FPCFGA_OK) {
 		/*
 		 * Checking the sense key data as well as the additional
 		 * sense key.  The SES Node is not required to repond

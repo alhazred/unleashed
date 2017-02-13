@@ -467,7 +467,7 @@ di_drv_next_node(di_node_t node)
 
 	pa = (caddr_t)node - DI_NODE(node)->self;
 
-	if (DI_NODE(node)->next == NULL) {
+	if (DI_NODE(node)->next == 0) {
 		errno = ENXIO;
 		return (DI_NODE_NIL);
 	}
@@ -2376,7 +2376,7 @@ di_vhci_first_node(di_node_t root)
 	pa = (caddr_t)root - DI_NODE(root)->self;
 	dap = DI_ALL(pa);
 
-	if (dap->top_vhci_devinfo == NULL) {
+	if (dap->top_vhci_devinfo == 0) {
 		errno = ENXIO;
 		return (DI_NODE_NIL);
 	}
@@ -2397,7 +2397,7 @@ di_vhci_next_node(di_node_t node)
 	DPRINTF((DI_TRACE, "next vhci node on the snap shot:"
 	    " current=%s\n", di_node_name(node)));
 
-	if (DI_NODE(node)->next_vhci == NULL) {
+	if (DI_NODE(node)->next_vhci == 0) {
 		errno = ENXIO;
 		return (DI_NODE_NIL);
 	}
@@ -2425,7 +2425,7 @@ di_phci_first_node(di_node_t vhci_node)
 
 	pa = (caddr_t)vhci_node - DI_NODE(vhci_node)->self;
 
-	if (DI_NODE(vhci_node)->top_phci == NULL) {
+	if (DI_NODE(vhci_node)->top_phci == 0) {
 		errno = ENXIO;
 		return (DI_NODE_NIL);
 	}
@@ -2446,7 +2446,7 @@ di_phci_next_node(di_node_t node)
 	DPRINTF((DI_TRACE, "next phci node on the snap shot:"
 	    " current=%s\n", di_node_name(node)));
 
-	if (DI_NODE(node)->next_phci == NULL) {
+	if (DI_NODE(node)->next_phci == 0) {
 		errno = ENXIO;
 		return (DI_NODE_NIL);
 	}
@@ -3028,7 +3028,7 @@ di_prom_prop_data(di_prom_prop_t prom_prop, uchar_t **prom_prop_data)
 	 */
 	if (prom_prop == DI_PROM_PROP_NIL) {
 		errno = EINVAL;
-		return (NULL);
+		return (0);
 	}
 
 	*prom_prop_data = ((struct di_prom_prop *)prom_prop)->data;
@@ -3460,11 +3460,11 @@ di_lnode_next(di_node_t node, di_lnode_t lnode)
 	di_all = DI_ALL((caddr_t)node - DI_NODE(node)->self);
 
 	if (lnode == DI_NODE_NIL) {
-		if (DI_NODE(node)->lnodes != NULL)
+		if (DI_NODE(node)->lnodes != 0)
 			return (DI_LNODE((caddr_t)di_all +
 			    DI_NODE(node)->lnodes));
 	} else {
-		if (DI_LNODE(lnode)->node_next != NULL)
+		if (DI_LNODE(lnode)->node_next != 0)
 			return (DI_LNODE((caddr_t)di_all +
 			    DI_LNODE(lnode)->node_next));
 	}
@@ -3495,21 +3495,21 @@ di_link_next_by_node(di_node_t node, di_link_t link, uint_t endpoint)
 
 	if (endpoint == DI_LINK_SRC) {
 		if (link == DI_LINK_NIL) {
-			if (DI_NODE(node)->src_links != NULL)
+			if (DI_NODE(node)->src_links != 0)
 				return (DI_LINK((caddr_t)di_all +
 				    DI_NODE(node)->src_links));
 		} else {
-			if (DI_LINK(link)->src_node_next != NULL)
+			if (DI_LINK(link)->src_node_next != 0)
 				return (DI_LINK((caddr_t)di_all +
 				    DI_LINK(link)->src_node_next));
 		}
 	} else {
 		if (link == DI_LINK_NIL) {
-			if (DI_NODE(node)->tgt_links != NULL)
+			if (DI_NODE(node)->tgt_links != 0)
 				return (DI_LINK((caddr_t)di_all +
 				    DI_NODE(node)->tgt_links));
 		} else {
-			if (DI_LINK(link)->tgt_node_next != NULL)
+			if (DI_LINK(link)->tgt_node_next != 0)
 				return (DI_LINK((caddr_t)di_all +
 				    DI_LINK(link)->tgt_node_next));
 		}
@@ -3541,24 +3541,24 @@ di_link_next_by_lnode(di_lnode_t lnode, di_link_t link, uint_t endpoint)
 
 	if (endpoint == DI_LINK_SRC) {
 		if (link == DI_LINK_NIL) {
-			if (DI_LNODE(lnode)->link_out == NULL)
+			if (DI_LNODE(lnode)->link_out == 0)
 				return (DI_LINK_NIL);
 			return (DI_LINK((caddr_t)di_all +
 			    DI_LNODE(lnode)->link_out));
 		} else {
-			if (DI_LINK(link)->src_link_next == NULL)
+			if (DI_LINK(link)->src_link_next == 0)
 				return (DI_LINK_NIL);
 			return (DI_LINK((caddr_t)di_all +
 			    DI_LINK(link)->src_link_next));
 		}
 	} else {
 		if (link == DI_LINK_NIL) {
-			if (DI_LNODE(lnode)->link_in == NULL)
+			if (DI_LNODE(lnode)->link_in == 0)
 				return (DI_LINK_NIL);
 			return (DI_LINK((caddr_t)di_all +
 			    DI_LNODE(lnode)->link_in));
 		} else {
-			if (DI_LINK(link)->tgt_link_next == NULL)
+			if (DI_LINK(link)->tgt_link_next == 0)
 				return (DI_LINK_NIL);
 			return (DI_LINK((caddr_t)di_all +
 			    DI_LINK(link)->tgt_link_next));

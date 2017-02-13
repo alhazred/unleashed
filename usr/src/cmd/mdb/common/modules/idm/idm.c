@@ -667,7 +667,7 @@ iscsi_cmd(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 
 	if (!(flags & DCMD_ADDRSPEC)) {
 		if (mdb_pwalk("iscsi_ini_hba", iscsi_ini_hba_walk_cb,
-		    &idc, NULL) == -1) {
+		    &idc, (uintptr_t)NULL) == -1) {
 			mdb_warn("iscsi cmd hba list walk failed");
 			return (DCMD_ERR);
 		}
@@ -795,7 +795,7 @@ iscsi_walk_all_sess(iscsi_dcmd_ctrl_t *idc)
 		/* Always print hba info on this path */
 		idc->u.child.idc_hba = 1;
 		if (mdb_pwalk("iscsi_ini_hba", iscsi_ini_hba_walk_cb,
-		    idc, NULL) == -1) {
+		    idc, (uintptr_t)NULL) == -1) {
 			mdb_warn("iscsi cmd hba list walk failed");
 			return (DCMD_ERR);
 		}
@@ -1908,7 +1908,7 @@ iscsi_conn_impl(uintptr_t addr, iscsi_dcmd_ctrl_t *idc)
 				return (DCMD_ERR);
 			}
 
-			if (task_addr == NULL) {
+			if (task_addr == (uintptr_t)NULL) {
 				task_ptr += sizeof (uintptr_t);
 				task_idx++;
 				continue;
@@ -3225,7 +3225,7 @@ static int
 iscsi_ini_sess_walk_init(mdb_walk_state_t *wsp) {
 
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("<iscsi_sess_t addr>::walk iscsi_ini_sess");
 		return (WALK_ERR);
 	}
@@ -3243,7 +3243,7 @@ static int
 iscsi_ini_sess_step(mdb_walk_state_t *wsp) {
 	int status;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		return (WALK_DONE);
 	}
 
@@ -3265,7 +3265,7 @@ iscsi_ini_sess_step(mdb_walk_state_t *wsp) {
 static int
 iscsi_ini_conn_walk_init(mdb_walk_state_t *wsp) {
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("<iscsi_conn_t addr>::walk iscsi_ini_conn");
 		return (WALK_DONE);
 	}
@@ -3283,7 +3283,7 @@ static int
 iscsi_ini_conn_step(mdb_walk_state_t *wsp) {
 	int status;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		return (WALK_DONE);
 	}
 
@@ -3306,7 +3306,7 @@ iscsi_ini_conn_step(mdb_walk_state_t *wsp) {
 static int
 iscsi_ini_lun_walk_init(mdb_walk_state_t *wsp) {
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("<iscsi_lun_t addr>::walk iscsi_ini_lun");
 		return (WALK_DONE);
 	}
@@ -3323,7 +3323,7 @@ static int
 iscsi_ini_lun_step(mdb_walk_state_t *wsp) {
 	int status;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		return (WALK_DONE);
 	}
 
@@ -3345,7 +3345,7 @@ iscsi_ini_lun_step(mdb_walk_state_t *wsp) {
 static int
 iscsi_ini_cmd_walk_init(mdb_walk_state_t *wsp) {
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("<iscsi_cmd_t addr>::walk iscsi_ini_cmd");
 		return (WALK_DONE);
 	}
@@ -3362,7 +3362,7 @@ static int
 iscsi_ini_cmd_step(mdb_walk_state_t *wsp) {
 	int status;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		return (WALK_DONE);
 	}
 
@@ -3415,7 +3415,7 @@ iscsi_ini_hba_walk_init(mdb_walk_state_t *wsp) {
 		return (WALK_ERR);
 	}
 
-	if (wsp->walk_addr != NULL) {
+	if (wsp->walk_addr != (uintptr_t)NULL) {
 		mdb_warn("iscsi_ini_hba only supports global walk");
 		return (WALK_ERR);
 	} else {

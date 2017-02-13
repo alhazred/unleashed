@@ -252,7 +252,7 @@ kerberos5_send(Authenticator *ap)
 	}
 
 	if ((retval = krb5_cc_get_principal(telnet_context, ccache,
-		&creds.client)) != NULL) {
+		&creds.client)) != 0) {
 		if (auth_debug_mode) {
 			(void) printf(gettext(
 			    "telnet: Kerberos V5: failure on principal "
@@ -375,7 +375,7 @@ kerberos5_send(Authenticator *ap)
 	}
 
 	if ((auth_sendname((uchar_t *)UserNameRequested,
-		strlen(UserNameRequested))) == NULL) {
+		strlen(UserNameRequested))) == 0) {
 		if (auth_debug_mode)
 			(void) printf(gettext(
 				"telnet: Not enough room for user name\r\n"));

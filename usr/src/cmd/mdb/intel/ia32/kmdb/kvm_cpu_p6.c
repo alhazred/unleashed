@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This plugin supports debugging functionality unique to Intel processors based
  * on the P6 core (Pentium Pro, Pentium II, and Pentium III).  It does not
@@ -97,7 +95,7 @@ static const kdi_msr_t kmt_p6_msr[] = {
 	{ MSR_LBR_FROM,	KDI_MSR_READ },
 	{ MSR_LEX_TO,	KDI_MSR_READ },
 	{ MSR_LEX_FROM,	KDI_MSR_READ },
-	{ NULL }
+	{ 0 }
 };
 
 /*ARGSUSED*/

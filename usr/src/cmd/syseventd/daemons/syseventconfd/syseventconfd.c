@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * syseventconfd - The sysevent conf daemon
  *
@@ -183,8 +181,8 @@ main(int argc, char **argv)
 	(void) thr_sigsetmask(SIG_BLOCK, &set, NULL);
 
 	/* Create signal catching thread */
-	if (thr_create(NULL, NULL, (void *(*)(void *))sigwait_thr,
-		(void *)NULL, 0, NULL) < 0) {
+	if (thr_create(NULL, 0, (void *(*)(void *))sigwait_thr,
+	    (void *)NULL, 0, NULL) < 0) {
 		syserrmsg(INIT_THR_CREATE_ERR, strerror(errno));
 		exit(2);
 	}
@@ -341,7 +339,7 @@ exec_cmd(struct cmd *cmd)
 	if (debug_level >= DBG_EXEC_ARGS) {
 		for (i = 0; i < args->arg_nargs; i++) {
 			printmsg(DBG_EXEC_ARGS,
-				"arg[%d]: '%s'\n", i, args->arg_args[i]);
+			    "arg[%d]: '%s'\n", i, args->arg_args[i]);
 		}
 	}
 
@@ -379,7 +377,7 @@ again:
 			i = setuid(uid);
 		if (i != 0) {
 			syslog(LOG_ERR, SETUID_ERR,
-				file, line, user, strerror(errno));
+			    file, line, user, strerror(errno));
 			_exit(0);
 		}
 	}
@@ -391,7 +389,7 @@ again:
 
 	if (execv(path, args->arg_args) == -1) {
 		syslog(LOG_ERR, CANNOT_EXEC_ERR,
-			path, strerror(errno));
+		    path, strerror(errno));
 		_exit(0);
 	}
 }
@@ -457,13 +455,13 @@ reapchild(int sig)
 
 		if (debug_level >= DBG_CHILD) {
 			printmsg(DBG_CHILD, CHILD_EXIT_STATUS_ERR,
-				info.si_pid, info.si_status);
+			    info.si_pid, info.si_status);
 		}
 
 		if (info.si_status) {
 			if (info.si_code == CLD_EXITED) {
 				syserrmsg(CHILD_EXIT_STATUS_ERR,
-					info.si_pid, info.si_status);
+				    info.si_pid, info.si_status);
 			} else {
 				signam = strsignal(info.si_status);
 				if (signam == NULL)
@@ -544,9 +542,9 @@ add_arg(arg_t *arglist, char *arg)
 	if (arglist->arg_alloc < len) {
 		arglist->arg_alloc = len + arglist->arg_hint;
 		new_args = (arglist->arg_nargs == 0) ?
-			sc_malloc(arglist->arg_alloc * sizeof (char **)) :
-			sc_realloc(arglist->arg_args,
-				arglist->arg_alloc * sizeof (char **));
+		    sc_malloc(arglist->arg_alloc * sizeof (char **)) :
+		    sc_realloc(arglist->arg_args,
+		    arglist->arg_alloc * sizeof (char **));
 		if (new_args == NULL)
 			return (1);
 		arglist->arg_args = new_args;

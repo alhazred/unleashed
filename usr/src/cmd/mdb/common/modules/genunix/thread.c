@@ -55,7 +55,7 @@ thread_walk_init(mdb_walk_state_t *wsp)
 {
 	thread_walk_t *twp = mdb_alloc(sizeof (thread_walk_t), UM_SLEEP);
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		if (mdb_readvar(&wsp->walk_addr, "allthreads") == -1) {
 			mdb_warn("failed to read 'allthreads'");
 			mdb_free(twp, sizeof (thread_walk_t));
@@ -91,7 +91,7 @@ thread_walk_step(mdb_walk_state_t *wsp)
 	thread_walk_t *twp = (thread_walk_t *)wsp->walk_data;
 	int status;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE); /* Proc has 0 threads or allthreads = 0 */
 
 	if (twp->tw_step && wsp->walk_addr == twp->tw_last)
@@ -146,7 +146,7 @@ deathrow_walk_step(mdb_walk_state_t *wsp)
 	kthread_t t;
 	uintptr_t addr = wsp->walk_addr;
 
-	if (addr == NULL)
+	if (addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&t, sizeof (t), addr) == -1) {
@@ -197,7 +197,7 @@ cpu_dispq_walk_init(mdb_walk_state_t *wsp)
 	dispq_t dispq;
 	disp_t disp;
 
-	if (addr == NULL) {
+	if (addr == (uintptr_t)NULL) {
 		mdb_warn("cpu_dispq walk needs a cpu_t address\n");
 		return (WALK_ERR);
 	}
@@ -238,7 +238,7 @@ cpupart_dispq_walk_init(mdb_walk_state_t *wsp)
 	cpupart_t cpupart;
 	dispq_t dispq;
 
-	if (addr == NULL) {
+	if (addr == (uintptr_t)NULL) {
 		mdb_warn("cpupart_dispq walk needs a cpupart_t address\n");
 		return (WALK_ERR);
 	}
@@ -275,7 +275,7 @@ dispq_walk_step(mdb_walk_state_t *wsp)
 	dispq_t dispq;
 	kthread_t t;
 
-	while (addr == NULL) {
+	while (addr == (uintptr_t)NULL) {
 		if (--dw->dw_npri == 0)
 			return (WALK_DONE);
 
@@ -296,7 +296,7 @@ dispq_walk_step(mdb_walk_state_t *wsp)
 	}
 
 	if (addr == dw->dw_last)
-		wsp->walk_addr = NULL;
+		wsp->walk_addr = (uintptr_t)NULL;
 	else
 		wsp->walk_addr = (uintptr_t)t.t_link;
 
@@ -758,7 +758,7 @@ stackinfo(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 	if (mdb_readsym(&allthreads, sizeof (kthread_t *),
 	    "allthreads") == -1) {
 		mdb_warn("failed to read 'allthreads'\n");
-		allthreads = NULL;
+		allthreads = (uintptr_t)NULL;
 	}
 
 	if (history == TRUE) {
@@ -785,7 +785,7 @@ stackinfo(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 			mdb_warn("failed to read 'kmem_stkinfo_log'\n");
 			return (DCMD_ERR);
 		}
-		if (kaddr == NULL) {
+		if (kaddr == (uintptr_t)NULL) {
 			mdb_free((void *)log, usize);
 			return (DCMD_OK);
 		}

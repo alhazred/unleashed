@@ -107,8 +107,9 @@ pt_events_walk(const dtrace_aggdata_t *data, void *arg)
 		 * We have the address of the kernel callout.
 		 * Try to resolve it into a meaningful symbol
 		 */
-		if (offender_addr != NULL && dtrace_lookup_by_addr(dtp,
-		    offender_addr, &sym, &dts) == 0) {
+		if (offender_addr != (uintptr_t)NULL &&
+		    dtrace_lookup_by_addr(dtp, offender_addr, &sym, &dts)
+		    == 0) {
 			(void) snprintf((char *)(event->offense_name),
 			    EVENT_NAME_MAX, "%s`%s", dts.dts_object,
 			    dts.dts_name);
@@ -151,8 +152,9 @@ pt_events_walk(const dtrace_aggdata_t *data, void *arg)
 		/*
 		 * Try to resolve the address of the cross call function.
 		 */
-		if (offender_addr != NULL && dtrace_lookup_by_addr(dtp,
-		    offender_addr, &sym, &dts) == 0) {
+		if (offender_addr != (uintptr_t)NULL &&
+		    dtrace_lookup_by_addr(dtp, offender_addr, &sym, &dts)
+		    == 0) {
 			(void) snprintf((char *)(event->offense_name),
 			    EVENT_NAME_MAX, "<xcalls> %s`%s",
 			    dts.dts_object, dts.dts_name);
@@ -190,8 +192,9 @@ pt_events_walk(const dtrace_aggdata_t *data, void *arg)
 		/*
 		 * Try to resolve the address of the cross call function.
 		 */
-		if (offender_addr != NULL && dtrace_lookup_by_addr(dtp,
-		    offender_addr, &sym, &dts) == 0) {
+		if (offender_addr != (uintptr_t)NULL &&
+		    dtrace_lookup_by_addr(dtp, offender_addr, &sym, &dts)
+		    == 0) {
 			(void) snprintf((char *)(event->offense_name),
 			    EVENT_NAME_MAX, "<xcalls> %s`%s (CPU %d)",
 			    dts.dts_object, dts.dts_name, *offender_cpu);
