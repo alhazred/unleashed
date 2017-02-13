@@ -82,10 +82,10 @@ search_line(char *buf, int buflen, char *srch_str, int slen,
 	*bytes_left = buflen;
 	*write_offset = 0;
 
-	if (buf == NULL || *buf == NULL || buflen <= 0)
+	if (buf == NULL || *buf == '\0'|| buflen <= 0)
 		return (-2);	/* Arbitrary -ve val. srch_str not found */
 
-	if (srch_str == NULL || *srch_str == NULL || slen <= 0)
+	if (srch_str == NULL || *srch_str == '\0'|| slen <= 0)
 		return (0);	/* This says srch_str was found */
 
 	sol = cur_pos = buf;
@@ -99,7 +99,7 @@ search_line(char *buf, int buflen, char *srch_str, int slen,
 		if ((retval = strncmp(sol, srch_str, slen)) >= 0) {
 			/* strncmp will pass if srch_str is a substring */
 			if ((retval == 0) && (*bytes_left > slen) &&
-						(*(sol+slen) != '\n'))
+			    (*(sol+slen) != '\n'))
 				retval = 1;	/* Force it to be > 0 */
 			*write_offset = sol - buf;
 			return (retval);
@@ -238,10 +238,10 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 	 * We ignore errors in general here. But, just notice ENOENTs
 	 */
 	if ((chmod(FAB_REPOSITORY, S_IRUSR|S_IRGRP|S_IROTH) == -1) &&
-							(errno == ENOENT)) {
+	    (errno == ENOENT)) {
 		new_file_flag = 1;
 		mkdirp(FAB_REPOSITORY_DIR,
-				S_IRWXU|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH);
+		    S_IRWXU|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH);
 	}
 
 	/* Create the repository if its not there */
@@ -303,22 +303,22 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 
 	if (filesize > 0) {
 		if ((copy_rep = (char *)calloc(1, strlen(FAB_REPOSITORY) +
-				sizeof (COPY_EXT) + sizeof (pid_t))) == NULL) {
+		    sizeof (COPY_EXT) + sizeof (pid_t))) == NULL) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
 
 		(void) sprintf(copy_rep, "%s%s%ld", FAB_REPOSITORY, COPY_EXT,
-								getpid());
+		    getpid());
 
 		if ((copy_fd = open(copy_rep, O_RDWR | O_CREAT | O_TRUNC,
-						S_IRUSR | S_IWUSR)) < 0) {
+		    S_IRUSR | S_IWUSR)) < 0) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
 
 		if ((repbuf = (char *)mmap(0, filesize, PROT_READ,
-					MAP_SHARED, fd, 0)) == MAP_FAILED) {
+		    MAP_SHARED, fd, 0)) == MAP_FAILED) {
 			close(fd);
 			free(upd_str);
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
@@ -336,8 +336,8 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 		}
 
 		if ((c_repbuf = (char *)mmap(0, filesize,
-				PROT_READ | PROT_WRITE,
-				MAP_SHARED, copy_fd, 0)) == MAP_FAILED) {
+		    PROT_READ | PROT_WRITE,
+		    MAP_SHARED, copy_fd, 0)) == MAP_FAILED) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
@@ -358,7 +358,7 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 	 */
 	if (new_file_flag != 0 || filesize == 0 || filesize == sizeof_rep_hdr) {
 		if ((filesize != sizeof_rep_hdr) &&
-			(write(fd, HDR, sizeof_rep_hdr) != sizeof_rep_hdr)) {
+		    (write(fd, HDR, sizeof_rep_hdr) != sizeof_rep_hdr)) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
@@ -384,14 +384,14 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 				/* Now create the '.old' file */
 				if (msync(c_repbuf, filesize, MS_SYNC) == -1) {
 					cfga_err(errstring, errno,
-								ERR_UPD_REP, 0);
+					    ERR_UPD_REP, 0);
 					CLEANUP_N_RET(FPCFGA_LIB_ERR);
 				}
 
 				if (fchmod(copy_fd,
-					S_IRUSR | S_IRGRP | S_IROTH) < 0) {
+				    S_IRUSR | S_IRGRP | S_IROTH) < 0) {
 					cfga_err(errstring, errno,
-								ERR_UPD_REP, 0);
+					    ERR_UPD_REP, 0);
 					CLEANUP_N_RET(FPCFGA_LIB_ERR);
 				}
 				rename(copy_rep, OLD_FAB_REPOSITORY);
@@ -423,24 +423,24 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 		 * we dont expect upd_str to match anything in the header.
 		 */
 		if (search_line(c_repbuf, filesize, upd_str,
-				len - 1, &write_offset, &bytes_left) == 0) {
+		    len - 1, &write_offset, &bytes_left) == 0) {
 			/* line already exists in repository or len == 0 */
 			CLEANUP_N_RET(FPCFGA_OK); /* SUCCESS */
 		}
 
 		/* construct temp file name using pid. */
 		if ((tmp_rep = (char *)calloc(1, strlen(FAB_REPOSITORY) +
-				sizeof (TMP_EXT) + sizeof (pid_t))) == NULL) {
+		    sizeof (TMP_EXT) + sizeof (pid_t))) == NULL) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
 
 		(void) sprintf(tmp_rep, "%s%s%ld", FAB_REPOSITORY,
-							TMP_EXT, getpid());
+		    TMP_EXT, getpid());
 
 		/* Open tmp repository file in absolute mode */
 		if ((tmp_fd = open(tmp_rep, O_RDWR|O_CREAT|O_TRUNC,
-						S_IRUSR | S_IWUSR)) < 0) {
+		    S_IRUSR | S_IWUSR)) < 0) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
@@ -456,7 +456,7 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 		}
 
 		if ((t_repbuf = (char *)mmap(0, size, PROT_READ|PROT_WRITE,
-					MAP_SHARED, tmp_fd, 0)) == MAP_FAILED) {
+		    MAP_SHARED, tmp_fd, 0)) == MAP_FAILED) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
@@ -465,7 +465,7 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 		strncpy(t_repbuf + write_offset, upd_str, len);
 		if (write_offset != filesize) {
 			memcpy(t_repbuf + write_offset + len,
-					c_repbuf + write_offset, bytes_left);
+			    c_repbuf + write_offset, bytes_left);
 		}
 
 		/*
@@ -518,24 +518,24 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 		}
 
 		if (search_line(c_repbuf, filesize, upd_str, len - 1,
-					&write_offset, &bytes_left) != 0) {
+		    &write_offset, &bytes_left) != 0) {
 			/* this line does not exists - nothing to remove */
 			CLEANUP_N_RET(FPCFGA_OK); /* SUCCESS */
 		}
 
 		/* construct temp file name using pid. */
 		if ((tmp_rep = (char *)calloc(1, strlen(FAB_REPOSITORY) +
-				sizeof (TMP_EXT) + sizeof (pid_t))) == NULL) {
+		    sizeof (TMP_EXT) + sizeof (pid_t))) == NULL) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
 
 		(void) sprintf(tmp_rep, "%s%s%ld", FAB_REPOSITORY,
-							TMP_EXT, getpid());
+		    TMP_EXT, getpid());
 
 		/* Open tmp repository file in absolute mode */
 		if ((tmp_fd = open(tmp_rep, O_RDWR|O_CREAT|O_TRUNC,
-						S_IRUSR | S_IWUSR)) < 0) {
+		    S_IRUSR | S_IWUSR)) < 0) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
@@ -552,8 +552,8 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 			}
 
 			if ((t_repbuf = (char *)mmap(0, size,
-					PROT_READ|PROT_WRITE,
-					MAP_SHARED, tmp_fd, 0)) == MAP_FAILED) {
+			    PROT_READ|PROT_WRITE,
+			    MAP_SHARED, tmp_fd, 0)) == MAP_FAILED) {
 				cfga_err(errstring, errno, ERR_UPD_REP, 0);
 				CLEANUP_N_RET(FPCFGA_LIB_ERR);
 			}
@@ -561,8 +561,8 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 			memcpy(t_repbuf, c_repbuf, write_offset);
 			if ((bytes_left - len) > 0) {
 				memcpy(t_repbuf + write_offset,
-					c_repbuf + write_offset + len,
-							bytes_left - len);
+				    c_repbuf + write_offset + len,
+				    bytes_left - len);
 			}
 
 			if (msync(t_repbuf, size, MS_SYNC) == -1) {

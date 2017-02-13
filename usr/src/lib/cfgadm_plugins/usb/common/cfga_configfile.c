@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "cfga_usb.h"
 
 
@@ -125,7 +123,7 @@ get_string(u_longlong_t *llptr, char *tchar)
 	/* copy string */
 	cp = (char *)calloc(len + 1, sizeof (char));
 	if (cp == (char *)NULL) {
-		*llptr = NULL;
+		*llptr = 0;
 
 		return (0);
 	}
@@ -256,7 +254,7 @@ usb_get_var_type(char *str)
 
 	cfgvar = &usbcfg_varlist[0];
 	while (cfgvar->field != USB_NONE) {
-		if (strcasecmp(cfgvar->name, str) == NULL) {
+		if (strcasecmp(cfgvar->name, str) == 0) {
 			break;
 		} else {
 			cfgvar++;
@@ -276,7 +274,9 @@ lex(char *buf, char *val, char **errmsg)
 	token_t token;
 
 	cp = val;
-	while ((ch = GETC(buf, cntr)) == ' ' || ch == '\t');
+	do {
+		ch = GETC(buf, cntr);
+	} while (ch == ' ' || ch == '\t');
 
 	/*
 	 * Note the beginning of a token
@@ -679,8 +679,8 @@ usb_cmp_rec(usb_configrec_t *cfg_rec, usb_configrec_t *user_rec)
 				    cstr - cfg_rec->pathname)) == 0);
 				path = path && (*(user_rec->pathname +
 				    strlen(user_rec->pathname) -1) ==
-					*(cfg_rec->pathname +
-					strlen(cfg_rec->pathname) - 1));
+				    *(cfg_rec->pathname +
+				    strlen(cfg_rec->pathname) - 1));
 			} else {
 
 				return (B_FALSE);
