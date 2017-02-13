@@ -441,7 +441,6 @@ MAN = 6to4relay.1m \
       th_define.1m \
       th_manage.1m \
       tic.1m \
-      tpmadm.1m \
       traceroute.1m \
       trapstat.1m \
       ttyadm.1m \

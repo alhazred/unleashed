@@ -79,7 +79,6 @@ MAN = Intro.5 \
       pam_unix_session.5 \
       pkcs11_kernel.5 \
       pkcs11_softtoken.5 \
-      pkcs11_tpm.5 \
       privileges.5 \
       prof.5 \
       rbac.5 \
