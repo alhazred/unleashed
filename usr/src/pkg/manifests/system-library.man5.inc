@@ -58,7 +58,6 @@ file path=usr/share/man/man5/pam_unix_cred.5
 file path=usr/share/man/man5/pam_unix_session.5
 file path=usr/share/man/man5/pkcs11_kernel.5
 file path=usr/share/man/man5/pkcs11_softtoken.5
-file path=usr/share/man/man5/pkcs11_tpm.5
 file path=usr/share/man/man5/regex.5
 file path=usr/share/man/man5/regexp.5
 file path=usr/share/man/man5/timerfd.5
