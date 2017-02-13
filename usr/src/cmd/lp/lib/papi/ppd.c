@@ -23,7 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
  * This file contains an extremely rudimentary implementation of PPD file
@@ -55,7 +54,7 @@ process_line(char *line, char **key, char **value, char **comment)
 	 * or
 	 *    *key value/comment: data
 	 */
-	*ptr++ = NULL;
+	*ptr++ = '\0';
 	while (isspace(*ptr) != 0)
 		ptr++;
 
@@ -65,7 +64,7 @@ process_line(char *line, char **key, char **value, char **comment)
 		 * line is in the form:
 		 *    *key value/comment: data
 		 */
-		*ptr++ = NULL;
+		*ptr++ = '\0';
 		while (*ptr == ' ')
 			ptr++;
 	}
@@ -76,7 +75,7 @@ process_line(char *line, char **key, char **value, char **comment)
 	*value = ptr;
 
 	if ((ptr = strchr(ptr, '/')) != NULL) {
-		*ptr++ = NULL;
+		*ptr++ = '\0';
 		*comment = ptr;
 	}
 }
@@ -109,7 +108,7 @@ PPDFileToAttributesList(papi_attribute_t ***attributes, char *filename)
 			continue;
 
 		if ((text = strrchr(line, '\n')) != NULL)
-			*text = NULL;
+			*text = '\0';
 
 		process_line(line, &key, &value, &text);
 
