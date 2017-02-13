@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -379,7 +377,7 @@ bpanswer(res, nb)
 	}
 
 	if (multiple)
-		return (NULL);
+		return (0);
 
 	/* our job is done */
 	exit(0);
