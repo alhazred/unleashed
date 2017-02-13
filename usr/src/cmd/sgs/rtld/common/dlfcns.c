@@ -745,7 +745,7 @@ dlmopen_core(Lm_list *lml, Lm_list *olml, const char *path, int mode,
 	 * provides flexibility should we be able to support dlopening more
 	 * than one object in the future.
 	 */
-	if (LM_FIX_NAME(clmp)(path, clmp, &palp, AL_CNT_NEEDED, orig) == NULL)
+	if (LM_FIX_NAME(clmp)(path, clmp, &palp, AL_CNT_NEEDED, orig) == 0)
 		return (NULL);
 
 	if ((palp->al_arritems > 1) && ((mode & RTLD_FIRST) == 0)) {
@@ -758,7 +758,7 @@ dlmopen_core(Lm_list *lml, Lm_list *olml, const char *path, int mode,
 	 * Establish a link-map control list for this request, and load the
 	 * associated object.
 	 */
-	if ((nlmco = create_cntl(lml, 1)) == NULL) {
+	if ((nlmco = create_cntl(lml, 1)) == 0) {
 		remove_alist(&palp, 1);
 		return (NULL);
 	}

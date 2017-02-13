@@ -327,7 +327,7 @@ process_lmid(char *name, Dbg_desc *dbp)
 		{MSG_ORIG(MSG_TOK_LMID_ALL),	0,	DBG_E_LMID_ALL},
 		{MSG_ORIG(MSG_TOK_LMID_BASE),	0,	DBG_E_LMID_BASE},
 		{MSG_ORIG(MSG_TOK_LMID_LDSO),	0,	DBG_E_LMID_LDSO},
-		{NULL,				NULL},
+		{NULL, 0, 0},
 	};
 
 	Dbg_desc	tmp_db;

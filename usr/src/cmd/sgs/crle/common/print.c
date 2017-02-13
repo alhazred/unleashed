@@ -976,7 +976,7 @@ scanconfig(Crle_desc * crle, Addr addr, int c_class)
 		const char		*str;
 		Word			_ndx;
 
-		if (*hash == NULL)
+		if (*hash == 0)
 			continue;
 
 		obj = objtbl + *hash;

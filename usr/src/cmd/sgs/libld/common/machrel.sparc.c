@@ -1660,7 +1660,7 @@ ld_reloc_local(Rel_desc *rsp, Ofl_desc *ofl)
 	/*
 	 * Perform relocation.
 	 */
-	return (ld_add_actrel(NULL, rsp, ofl));
+	return (ld_add_actrel(0, rsp, ofl));
 }
 
 /*
@@ -1744,7 +1744,7 @@ ld_reloc_TLS(Boolean local, Rel_desc *rsp, Ofl_desc *ofl)
 
 				if (ld_assign_got_TLS(local, rsp, ofl, sdp,
 				    gnp, GOT_REF_TLSIE, FLG_REL_STLS,
-				    rtype, M_R_TPOFF, NULL) == S_ERROR)
+				    rtype, M_R_TPOFF, 0) == S_ERROR)
 					return (S_ERROR);
 			}
 

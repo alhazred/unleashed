@@ -370,7 +370,7 @@ get_lcinterface(Rt_map *lmp, Lc_interface *funcs)
 		 */
 		if ((lcp[CI_TLS_MODADD].lc_un.lc_func &&
 		    lcp[CI_TLS_MODREM].lc_un.lc_func &&
-		    lcp[CI_TLS_STATMOD].lc_un.lc_func) == NULL) {
+		    lcp[CI_TLS_STATMOD].lc_un.lc_func) == 0) {
 			lcp[CI_TLS_MODADD].lc_un.lc_func = NULL;
 			lcp[CI_TLS_MODREM].lc_un.lc_func = NULL;
 			lcp[CI_TLS_STATMOD].lc_un.lc_func = NULL;

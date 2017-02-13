@@ -26,8 +26,6 @@
 /*	Copyright (c) 1988 AT&T	*/
 /*	All Rights Reserved	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "ldefs.h"
 #include <limits.h>
 
@@ -488,7 +486,7 @@ cpycom(CHR *p)
 		 * FIX BUG #1058428, not parsing comments correctly
 		 * that span more than one line
 		 */
-		if (*t != NULL)
+		if (*t != '\0')
 			(void) putc(*t++, fout);
 	}
 	(void) putc('\n', fout);
