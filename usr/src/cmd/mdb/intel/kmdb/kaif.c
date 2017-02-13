@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * The debugger/"PROM" interface layer
  *
@@ -685,7 +683,7 @@ kaif_dump_crumbs(uintptr_t addr, int cpuid)
 {
 	int i;
 
-	if (addr != NULL) {
+	if (addr != (uintptr_t)NULL) {
 		/* dump_crumb will protect us against bogus addresses */
 		dump_crumb((kdi_crumb_t *)addr);
 

@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 
 #include <mdb/mdb_param.h>
 #include <mdb/mdb_modapi.h>
@@ -93,7 +91,7 @@ cpupart_disp_threads(disp_t *disp)
 	for (i = npri - 1; i >= 0; i--) {
 		uintptr_t taddr = (uintptr_t)dq[i].dq_first;
 
-		while (taddr != NULL) {
+		while (taddr != (uintptr_t)NULL) {
 			if (mdb_vread(&t, sizeof (t), taddr) == -1) {
 				mdb_warn("failed to read kthread_t at %p",
 				    taddr);

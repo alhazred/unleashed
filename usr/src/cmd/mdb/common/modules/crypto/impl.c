@@ -423,7 +423,7 @@ soft_conf_walk_step(mdb_walk_state_t *wsp)
 {
 	int status;
 
-	if (wsp->walk_addr == NULL)	/* then we're done */
+	if (wsp->walk_addr == (uintptr_t)NULL)	/* then we're done */
 		return (WALK_DONE);
 #ifdef DEBUG
 	else
@@ -467,7 +467,8 @@ kcf_soft_conf_entry(uintptr_t addr, uint_t flags, int argc,
 	kcf_soft_conf_entry_t *ptr;
 
 	if ((flags & DCMD_ADDRSPEC) == DCMD_ADDRSPEC) {
-		if (addr == NULL) 	/* not allowed with DCMD_ADDRSPEC */
+		/* not allowed with DCMD_ADDRSPEC */
+		if (addr == (uintptr_t)NULL)
 			return (DCMD_USAGE);
 		else
 			ptr = (kcf_soft_conf_entry_t *)addr;

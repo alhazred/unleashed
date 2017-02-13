@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/time.h>
 #include <ipp/ipp.h>
 #include <ipp/ipp_impl.h>
@@ -495,7 +493,7 @@ static int
 ref_walk_init(
 	mdb_walk_state_t *wsp)
 {
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	return (WALK_NEXT);
@@ -508,7 +506,7 @@ ref_walk_step(
 	ipp_ref_t	*rp;
 	int		status;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	rp = mdb_alloc(sizeof (ipp_ref_t), UM_SLEEP);

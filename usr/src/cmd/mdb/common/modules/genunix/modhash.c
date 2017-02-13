@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <string.h>
 #include <sys/modhash_impl.h>
 
@@ -118,7 +116,7 @@ modhash_walk_step(mdb_walk_state_t *wsp)
 	mod_hash_t mh;
 	int status;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&mh, sizeof (mh), wsp->walk_addr) == -1) {
@@ -143,7 +141,7 @@ modent_walk_init(mdb_walk_state_t *wsp)
 	hash_walk_t *hwp;
 	int retv;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("mod_hash_t address required\n");
 		return (WALK_ERR);
 	}
@@ -186,9 +184,9 @@ modent_walk_init(mdb_walk_state_t *wsp)
 
 	hwp->hwalk_msd.msd_hash_index = -1;
 	hwp->hwalk_msd.msd_position = 0;
-	hwp->hwalk_msd.msd_first_addr = NULL;
+	hwp->hwalk_msd.msd_first_addr = (uintptr_t)NULL;
 
-	wsp->walk_addr = NULL;
+	wsp->walk_addr = (uintptr_t)NULL;
 	wsp->walk_data = hwp;
 
 	return (WALK_NEXT);
@@ -203,7 +201,7 @@ modent_walk_step(mdb_walk_state_t *wsp)
 	hash_walk_t *hwp = wsp->walk_data;
 	int status;
 
-	while (wsp->walk_addr == NULL) {
+	while (wsp->walk_addr == (uintptr_t)NULL) {
 		hwp->hwalk_msd.msd_position = 0;
 		if (++hwp->hwalk_msd.msd_hash_index >=
 		    hwp->hwalk_hash.mh_nchains)
@@ -250,7 +248,7 @@ modchain_walk_step(mdb_walk_state_t *wsp)
 	struct mod_hash_entry mhe;
 	int status;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&mhe, sizeof (mhe), wsp->walk_addr) == -1) {

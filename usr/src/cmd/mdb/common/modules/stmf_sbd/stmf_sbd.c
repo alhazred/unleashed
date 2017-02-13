@@ -257,7 +257,7 @@ stmf_sbd_pgr_key_dcmd_help(void)
 static int
 stmf_sbd_lu_walk_init(mdb_walk_state_t *wsp)
 {
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		if (mdb_readvar(&wsp->walk_addr, "sbd_lu_list") == -1) {
 			mdb_warn("failed to read sbd_lu_list\n");
 			return (WALK_ERR);
@@ -272,7 +272,7 @@ stmf_sbd_lu_walk_step(mdb_walk_state_t *wsp)
 	uintptr_t	addr = wsp->walk_addr;
 	sbd_lu_t	slu;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&slu, sizeof (sbd_lu_t), addr) == -1) {
@@ -285,7 +285,8 @@ stmf_sbd_lu_walk_step(mdb_walk_state_t *wsp)
 
 char *
 stmf_sbd_getstr(uintptr_t addr, char *str) {
-	if ((addr == 0) || (mdb_readstr(str, STMF_SBD_STR_MAX, addr) == -1))
+	if ((addr == (uintptr_t)NULL) ||
+	    (mdb_readstr(str, STMF_SBD_STR_MAX, addr) == -1))
 		str = NULL;
 	return (str);
 }
@@ -326,7 +327,7 @@ stmf_sbd_lu_cb(uintptr_t addr, const sbd_lu_t *slu, stmf_sbd_cb_t *cb_st)
 static int
 stmf_sbd_pgr_key_walk_init(mdb_walk_state_t *wsp)
 {
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("<pgr_key_list addr>::walk stmf_sbd_pgr_key\n");
 		return (WALK_ERR);
 	}
@@ -339,7 +340,7 @@ stmf_sbd_pgr_key_walk_step(mdb_walk_state_t *wsp)
 	uintptr_t	addr = wsp->walk_addr;
 	sbd_pgr_key_t	key;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&key, sizeof (sbd_pgr_key_t), addr) == -1) {
@@ -383,7 +384,7 @@ stmf_sbd_pgr_key_cb(uintptr_t addr, const sbd_pgr_key_t *key,
 static int
 stmf_sbd_it_walk_init(mdb_walk_state_t *wsp)
 {
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("<sbd_it_list addr>::walk stmf_sbd_pgr_key\n");
 		return (WALK_ERR);
 	}
@@ -396,7 +397,7 @@ stmf_sbd_it_walk_step(mdb_walk_state_t *wsp)
 	uintptr_t	addr = wsp->walk_addr;
 	sbd_it_data_t	it;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&it, sizeof (sbd_it_data_t), addr) == -1) {

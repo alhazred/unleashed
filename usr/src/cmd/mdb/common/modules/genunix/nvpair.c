@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/sysinfo.h>
 #include <sys/nvpair.h>
 #include <sys/nvpair_impl.h>
@@ -47,7 +45,7 @@ nvpair_walk_init(mdb_walk_state_t *wsp)
 	nvpriv_t nvpriv;
 	i_nvp_t *tmp;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("nvpair does not support global walks\n");
 		return (WALK_ERR);
 	}
@@ -74,7 +72,7 @@ nvpair_walk_step(mdb_walk_state_t *wsp)
 	nvpair_t *nvpair;
 	i_nvp_t i_nvp, *tmp;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&i_nvp, sizeof (i_nvp), wsp->walk_addr) == -1) {

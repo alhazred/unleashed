@@ -320,7 +320,7 @@ taskq_ent_walk_init(mdb_walk_state_t *wsp)
 	taskq_t	tq_head;
 
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_warn("start address required\n");
 		return (WALK_ERR);
 	}
@@ -402,7 +402,7 @@ taskq_thread_walk_init(mdb_walk_state_t *wsp)
 	tti = wsp->walk_data = mdb_zalloc(sizeof (*tti), UM_SLEEP);
 	tti->tti_addr = wsp->walk_addr;
 
-	if (wsp->walk_addr != NULL &&
+	if (wsp->walk_addr != (uintptr_t)NULL &&
 	    mdb_vread(&tq, sizeof (tq), wsp->walk_addr) != -1 &&
 	    !(tq.tq_flags & TASKQ_DYNAMIC)) {
 
@@ -449,7 +449,7 @@ taskq_thread_walk_step(mdb_walk_state_t *wsp)
 		addr = tti->tti_tlist[tti->tti_idx];
 		tti->tti_idx++;
 
-		if (addr == NULL)
+		if (addr == (uintptr_t)NULL)
 			return (WALK_NEXT);
 
 		if (mdb_vread(&tti->tti_thread, sizeof (kthread_t),

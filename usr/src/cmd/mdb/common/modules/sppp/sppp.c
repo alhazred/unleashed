@@ -64,7 +64,7 @@ sppp_walk_step(mdb_walk_state_t *wsp)
 	spppstr_t sps;
 	int status;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&sps, sizeof (sps), wsp->walk_addr) == -1) {
@@ -110,7 +110,7 @@ sps_format(uintptr_t addr, const spppstr_t *sps, uint_t *qfmt)
 		upaddr = (uintptr_t)sps->sps_rq;
 		upq.q_ptr = NULL;
 		illaddr = 0;
-		while (upaddr != NULL) {
+		while (upaddr != (uintptr_t)NULL) {
 			if (mdb_vread(&upq, sizeof (upq), upaddr) == -1) {
 				upq.q_ptr = NULL;
 				break;
@@ -118,7 +118,7 @@ sps_format(uintptr_t addr, const spppstr_t *sps, uint_t *qfmt)
 			if ((upaddr = (uintptr_t)upq.q_next) != 0)
 				illaddr = (uintptr_t)upq.q_ptr;
 		}
-		if (illaddr != 0) {
+		if (illaddr != (uintptr_t)NULL) {
 			if (mdb_vread(&ill, sizeof (ill), illaddr) == -1 ||
 			    mdb_vread(&ipif, sizeof (ipif),
 			    (uintptr_t)ill.ill_ipif) == -1) {
@@ -131,7 +131,7 @@ sps_format(uintptr_t addr, const spppstr_t *sps, uint_t *qfmt)
 			mdb_printf("DLPI IPv4 ");
 			if (*qfmt) {
 				mdb_printf("\n");
-			} else if (illaddr == 0) {
+			} else if (illaddr == (uintptr_t)NULL) {
 				mdb_printf("(no addresses)\n");
 			} else {
 				/*
@@ -151,7 +151,7 @@ sps_format(uintptr_t addr, const spppstr_t *sps, uint_t *qfmt)
 				mdb_printf("\n");
 				break;
 			}
-			if (illaddr == 0) {
+			if (illaddr == (uintptr_t)NULL) {
 				mdb_printf("(no addresses)\n");
 				break;
 			}
@@ -219,7 +219,7 @@ sppa_walk_step(mdb_walk_state_t *wsp)
 	sppa_t ppa;
 	int status;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&ppa, sizeof (ppa), wsp->walk_addr) == -1) {
@@ -294,7 +294,7 @@ sppp_rnext(const queue_t *q)
 	if (mdb_vread(&sps, sizeof (sps), (uintptr_t)q->q_ptr) == sizeof (sps))
 		return ((uintptr_t)sps.sps_rq);
 
-	return (NULL);
+	return ((uintptr_t)NULL);
 }
 
 static uintptr_t
@@ -304,14 +304,14 @@ sppp_wnext(const queue_t *q)
 	sppa_t ppa;
 
 	if (mdb_vread(&sps, sizeof (sps), (uintptr_t)q->q_ptr) != sizeof (sps))
-		return (NULL);
+		return ((uintptr_t)NULL);
 
 	if (sps.sps_ppa != NULL &&
 	    mdb_vread(&ppa, sizeof (ppa), (uintptr_t)sps.sps_ppa) ==
 	    sizeof (ppa))
 		return ((uintptr_t)ppa.ppa_lower_wq);
 
-	return (NULL);
+	return ((uintptr_t)NULL);
 }
 
 /* ****************** sppptun ****************** */
@@ -327,7 +327,7 @@ tuncl_walk_fini(mdb_walk_state_t *wsp)
 {
 	struct tcl_walk_data *twd;
 
-	if (wsp != NULL && wsp->walk_addr != 0) {
+	if (wsp != NULL && wsp->walk_addr != (uintptr_t)NULL) {
 		twd = (struct tcl_walk_data *)wsp->walk_addr;
 		mdb_free(twd, sizeof (*twd) + ((twd->tcl_nslots - 1) *
 		    sizeof (twd->tcl_slots[0])));
@@ -345,7 +345,7 @@ tuncl_walk_init(mdb_walk_state_t *wsp)
 	if (wsp == NULL)
 		return (WALK_ERR);
 
-	if (wsp->walk_addr != 0)
+	if (wsp->walk_addr != (uintptr_t)NULL)
 		tuncl_walk_fini(wsp);
 
 	if (mdb_readvar(&tcl_nslots, "tcl_nslots") == -1) {
@@ -387,7 +387,7 @@ tuncl_walk_step(mdb_walk_state_t *wsp)
 	struct tcl_walk_data *twd;
 	uintptr_t addr;
 
-	if (wsp == NULL || wsp->walk_addr == NULL)
+	if (wsp == NULL || wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	twd = (struct tcl_walk_data *)wsp->walk_addr;
@@ -463,7 +463,7 @@ tunll_walk_fini(mdb_walk_state_t *wsp)
 {
 	struct tll_walk_data *twd;
 
-	if (wsp != NULL && wsp->walk_addr != 0) {
+	if (wsp != NULL && wsp->walk_addr != (uintptr_t)NULL) {
 		twd = (struct tll_walk_data *)wsp->walk_addr;
 		mdb_free(twd, sizeof (*twd));
 		wsp->walk_addr = 0;
@@ -477,7 +477,7 @@ tunll_walk_init(mdb_walk_state_t *wsp)
 	struct tll_walk_data *twd;
 	struct qelem tunll_list;
 
-	if (wsp->walk_addr != 0)
+	if (wsp->walk_addr != (uintptr_t)NULL)
 		tunll_walk_fini(wsp);
 
 	if (mdb_lookup_by_obj("sppptun", "tunll_list", &sym) != 0) {
@@ -510,7 +510,7 @@ tunll_walk_step(mdb_walk_state_t *wsp)
 	int status;
 	uintptr_t addr;
 
-	if (wsp == NULL || wsp->walk_addr == 0)
+	if (wsp == NULL || wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	twd = (struct tll_walk_data *)wsp->walk_addr;
@@ -627,7 +627,7 @@ sppptun_rnext(const queue_t *q)
 	union tun_state ts;
 
 	if (tun_state_read(q->q_ptr, &ts) == -1)
-		return (NULL);
+		return ((uintptr_t)NULL);
 
 	if (ts.tcl.tcl_flags & TCLF_ISCLIENT) {
 		return ((uintptr_t)ts.tcl.tcl_rq);
@@ -643,14 +643,14 @@ sppptun_wnext(const queue_t *q)
 	union tun_state ts;
 
 	if (tun_state_read(q->q_ptr, &ts) == -1)
-		return (NULL);
+		return ((uintptr_t)NULL);
 
 	if (ts.tcl.tcl_flags & TCLF_ISCLIENT) {
 		if (ts.tcl.tcl_data_tll == NULL)
-			return (NULL);
+			return ((uintptr_t)NULL);
 		if (mdb_vread(&ts.tll, sizeof (ts.tll),
 		    (uintptr_t)ts.tcl.tcl_data_tll) != sizeof (ts.tll)) {
-			return (NULL);
+			return ((uintptr_t)NULL);
 		}
 	}
 	return ((uintptr_t)ts.tll.tll_wq);

@@ -472,7 +472,7 @@ mac_common_walk_step(mdb_walk_state_t *wsp)
 {
 	int status;
 
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	status = wsp->walk_callback(wsp->walk_addr, wsp->walk_data,
@@ -1043,7 +1043,7 @@ mac_group_walk_init(mdb_walk_state_t *wsp)
 {
 	int ret;
 
-	if (wsp->walk_addr != NULL) {
+	if (wsp->walk_addr != (uintptr_t)NULL) {
 		mdb_warn("non-global walks are not supported\n");
 		return (WALK_ERR);
 	}
@@ -1069,7 +1069,7 @@ mac_group_walk_step(mdb_walk_state_t *wsp)
 	 * walkers are a bit unsporting, they don't actually read in the data
 	 * for us.
 	 */
-	if (wsp->walk_addr == NULL)
+	if (wsp->walk_addr == (uintptr_t)NULL)
 		return (WALK_DONE);
 
 	if (mdb_vread(&mi, sizeof (mac_impl_t), wsp->walk_addr) == -1) {
@@ -1081,7 +1081,7 @@ mac_group_walk_step(mdb_walk_state_t *wsp)
 	 * First go for rx groups, then tx groups.
 	 */
 	mgp = (uintptr_t)mi.mi_rx_groups;
-	while (mgp != NULL) {
+	while (mgp != (uintptr_t)NULL) {
 		if (mdb_vread(&mg, sizeof (mac_group_t), mgp) == -1) {
 			mdb_warn("failed to read mac_group_t at %p", mgp);
 			return (WALK_ERR);
@@ -1094,7 +1094,7 @@ mac_group_walk_step(mdb_walk_state_t *wsp)
 	}
 
 	mgp = (uintptr_t)mi.mi_tx_groups;
-	while (mgp != NULL) {
+	while (mgp != (uintptr_t)NULL) {
 		if (mdb_vread(&mg, sizeof (mac_group_t), mgp) == -1) {
 			mdb_warn("failed to read mac_group_t at %p", mgp);
 			return (WALK_ERR);
@@ -1115,7 +1115,7 @@ mac_group_count_clients(mac_group_t *mgp)
 	int clients = 0;
 	uintptr_t mcp = (uintptr_t)mgp->mrg_clients;
 
-	while (mcp != NULL) {
+	while (mcp != (uintptr_t)NULL) {
 		mac_grp_client_t c;
 
 		if (mdb_vread(&c, sizeof (c), mcp) == -1) {

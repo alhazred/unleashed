@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Libkvm Kernel Target Intel 32-bit component
  *
@@ -268,7 +266,8 @@ kt_ia32_init(mdb_tgt_t *t)
 	}
 
 	if (mdb_tgt_readsym(t, MDB_TGT_AS_VIRT, &addr, sizeof (addr),
-	    MDB_TGT_OBJ_EXEC, "panic_reg") == sizeof (addr) && addr != NULL &&
+	    MDB_TGT_OBJ_EXEC, "panic_reg") == sizeof (addr) &&
+	    addr != (uintptr_t)NULL &&
 	    mdb_tgt_vread(t, &regs, sizeof (regs), addr) == sizeof (regs)) {
 		kt_regs_to_kregs(&regs, kt->k_regs);
 		return;

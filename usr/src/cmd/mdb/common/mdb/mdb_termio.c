@@ -365,7 +365,7 @@ static const termio_attr_t termio_attrs[] = {
 	{ "cnorm", TIO_ATTR_STR, &termio_info.ti_cnorm },
 	{ "nel", TIO_ATTR_STR, &termio_info.ti_nel },
 	{ "cr", TIO_ATTR_STR, &termio_info.ti_cr },
-	{ NULL, NULL, NULL }
+	{ NULL, 0, NULL }
 };
 
 /*

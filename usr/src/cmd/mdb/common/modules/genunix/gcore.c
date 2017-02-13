@@ -165,7 +165,7 @@ gsvn_init(gcore_seg_t *gs)
 	struct vpage		*vpage = NULL;
 	size_t			nvpage = 0;
 
-	if (seg->s_data != NULL) {
+	if (seg->s_data != (uintptr_t)NULL) {
 		svd = mdb_alloc(sizeof (*svd), UM_SLEEP);
 		if (mdb_ctf_vread(svd, "segvn_data_t", "mdb_segvn_data_t",
 		    seg->s_data, 0) == -1) {
@@ -780,7 +780,7 @@ read_maps_cb(uintptr_t seg_addr, const void *aw_buff, void *arg)
 		if (seg->s_ops == gcore_segvn_ops) {
 			if (mdb_ctf_vread(&svd, "segvn_data_t",
 			    "mdb_segvn_data_t", seg->s_data, 0) == 0 &&
-			    svd.vp == NULL) {
+			    svd.vp == (uintptr_t)NULL) {
 				mp->pr_mflags |= MA_ANON;
 			}
 		}
@@ -875,25 +875,27 @@ gcore_prchoose(mdb_proc_t *p)
 	mdb_kthread_t	*t = &kthr;
 	ushort_t	t_istop_whystop = 0;
 	ushort_t	t_istop_whatstop = 0;
-	uintptr_t	t_addr = NULL;
-	uintptr_t	t_onproc = NULL; // running on processor
-	uintptr_t	t_run = NULL;	 // runnable, on disp queue
-	uintptr_t	t_sleep = NULL;	 // sleeping
-	uintptr_t	t_susp = NULL;	 // suspended stop
-	uintptr_t	t_jstop = NULL;	 // jobcontrol stop, w/o directed stop
-	uintptr_t	t_jdstop = NULL; // jobcontrol stop with directed stop
-	uintptr_t	t_req = NULL;	 // requested stop
-	uintptr_t	t_istop = NULL;	 // event-of-interest stop
-	uintptr_t	t_dtrace = NULL; // DTrace stop
+	uintptr_t	t_addr = (uintptr_t)NULL;
+	uintptr_t	t_onproc = (uintptr_t)NULL; // running on processor
+	uintptr_t	t_run = (uintptr_t)NULL; // runnable, on disp queue
+	uintptr_t	t_sleep = (uintptr_t)NULL; // sleeping
+	uintptr_t	t_susp = (uintptr_t)NULL; // suspended stop
+	// jobcontrol stop, w/o directed stop
+	uintptr_t	t_jstop = (uintptr_t)NULL;
+	// jobcontrol stop with directed stop
+	uintptr_t	t_jdstop = (uintptr_t)NULL;
+	uintptr_t	t_req = (uintptr_t)NULL; // requested stop
+	uintptr_t	t_istop = (uintptr_t)NULL; // event-of-interest stop
+	uintptr_t	t_dtrace = (uintptr_t)NULL; // DTrace stop
 
 	/*
 	 * If the agent lwp exists, it takes precedence over all others.
 	 */
-	if ((t_addr = p->p_agenttp) != NULL) {
+	if ((t_addr = p->p_agenttp) != (uintptr_t)NULL) {
 		return (t_addr);
 	}
-
-	if ((t_addr = p->p_tlist) == NULL) /* start at the head of the list */
+	/* start at the head of the list */
+	if ((t_addr = p->p_tlist) == (uintptr_t)NULL)
 		return (t_addr);
 	do {		/* for each lwp in the process */
 		if (mdb_ctf_vread(&kthr, "kthread_t", "mdb_kthread_t",
@@ -902,7 +904,7 @@ gcore_prchoose(mdb_proc_t *p)
 		}
 
 		if (VSTOPPED(t)) {	/* virtually stopped */
-			if (t_req == NULL)
+			if (t_req == (uintptr_t)NULL)
 				t_req = t_addr;
 			continue;
 		}
@@ -911,16 +913,16 @@ gcore_prchoose(mdb_proc_t *p)
 		default:
 			return (0);
 		case TS_SLEEP:
-			if (t_sleep == NULL)
+			if (t_sleep == (uintptr_t)NULL)
 				t_sleep = t_addr;
 			break;
 		case TS_RUN:
 		case TS_WAIT:
-			if (t_run == NULL)
+			if (t_run == (uintptr_t)NULL)
 				t_run = t_addr;
 			break;
 		case TS_ONPROC:
-			if (t_onproc == NULL)
+			if (t_onproc == (uintptr_t)NULL)
 				t_onproc = t_addr;
 			break;
 			/*
@@ -932,22 +934,23 @@ gcore_prchoose(mdb_proc_t *p)
 		case TS_STOPPED:
 			switch (t->t_whystop) {
 			case PR_SUSPENDED:
-				if (t_susp == NULL)
+				if (t_susp == (uintptr_t)NULL)
 					t_susp = t_addr;
 				break;
 			case PR_JOBCONTROL:
 				if (t->t_proc_flag & TP_PRSTOP) {
-					if (t_jdstop == NULL)
+					if (t_jdstop == (uintptr_t)NULL)
 						t_jdstop = t_addr;
 				} else {
-					if (t_jstop == NULL)
+					if (t_jstop == (uintptr_t)NULL)
 						t_jstop = t_addr;
 				}
 				break;
 			case PR_REQUESTED:
-				if (t->t_dtrace_stop && t_dtrace == NULL)
+				if (t->t_dtrace_stop && t_dtrace ==
+				    (uintptr_t)NULL)
 					t_dtrace = t_addr;
-				else if (t_req == NULL)
+				else if (t_req == (uintptr_t)NULL)
 					t_req = t_addr;
 				break;
 			case PR_SYSENTRY:
@@ -958,7 +961,7 @@ gcore_prchoose(mdb_proc_t *p)
 				 * Make an lwp calling exit() be the
 				 * last lwp seen in the process.
 				 */
-				if (t_istop == NULL ||
+				if (t_istop == (uintptr_t)NULL ||
 				    (t_istop_whystop == PR_SYSENTRY &&
 				    t_istop_whatstop == SYS_exit)) {
 					t_istop = t_addr;
@@ -1072,7 +1075,7 @@ gcore_lpsinfo_cb(mdb_proc_t *p, lwpent_t *lwent, void *data)
 	uintptr_t	t_addr = (uintptr_t)lwent->le_thread;
 	mdb_kthread_t	kthrd;
 
-	if (t_addr != 0) {
+	if (t_addr != (uintptr_t)NULL) {
 		if (mdb_ctf_vread(&kthrd, "kthread_t", "mdb_kthread_t", t_addr,
 		    0) == -1) {
 			return (-1);
@@ -1096,7 +1099,7 @@ gcore_schedctl_finish_sigblock(mdb_kthread_t *t)
 	mdb_sc_shared_t td;
 	mdb_sc_shared_t *tdp;
 
-	if (t->t_schedctl == NULL) {
+	if (t->t_schedctl == (uintptr_t)NULL) {
 		return;
 	}
 
@@ -1318,7 +1321,7 @@ gcore_lstatus_cb(mdb_proc_t *p, lwpent_t *lwent, void *data)
 	uintptr_t	t_addr = (uintptr_t)lwent->le_thread;
 	mdb_kthread_t	kthrd;
 
-	if (t_addr == NULL) {
+	if (t_addr == (uintptr_t)NULL) {
 		return (1);
 	}
 
@@ -1694,7 +1697,7 @@ Pstatus_gcore(struct ps_prochandle *P, pstatus_t *sp, void *data)
 	pcommon_t	pc;
 
 	t_addr = gcore_prchoose(p);
-	if (t_addr != NULL) {
+	if (t_addr != (uintptr_t)NULL) {
 		if (mdb_ctf_vread(&kthr, "kthread_t", "mdb_kthread_t", t_addr,
 		    0) == -1) {
 			return;
@@ -1760,7 +1763,7 @@ Ppsinfo_gcore(struct ps_prochandle *P, psinfo_t *psp, void *data)
 	uintptr_t	t_addr;
 	pcommon_t	pc;
 
-	if ((t_addr = gcore_prchoose(p)) == NULL) {
+	if ((t_addr = gcore_prchoose(p)) == (uintptr_t)NULL) {
 		bzero(psp, sizeof (*psp));
 	} else {
 		bzero(psp, sizeof (*psp) - sizeof (psp->pr_lwp));
@@ -1800,7 +1803,7 @@ Ppsinfo_gcore(struct ps_prochandle *P, psinfo_t *psp, void *data)
 	}
 	psp->pr_poolid = pool.pool_id;
 
-	if (t_addr == 0) {
+	if (t_addr == (uintptr_t)NULL) {
 		int wcode = p->p_wcode;
 
 		if (wcode)
@@ -1937,7 +1940,7 @@ Pldt_gcore(struct ps_prochandle *P, struct ssd *pldt, int nldt, void *data)
 	size_t		ldt_size;
 	int		i, limit;
 
-	if (p->p_ldt == NULL) {
+	if (p->p_ldt == (uintptr_t)NULL) {
 		return (0);
 	}
 

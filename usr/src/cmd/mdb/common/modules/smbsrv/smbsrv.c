@@ -1529,8 +1529,7 @@ smb_dcmd_vfs(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 static int
 smb_vfs_walk_init(mdb_walk_state_t *wsp)
 {
-
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_printf("require address of an smb_server_t\n");
 		return (WALK_ERR);
 	}
@@ -1781,7 +1780,7 @@ smb_node_walk_init(mdb_walk_state_t *wsp)
 	int		i;
 	uintptr_t	node_hash_table_addr;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		if (mdb_lookup_by_obj(SMBSRV_OBJNAME, "smb_node_hash_table",
 		    &sym) == -1) {
 			mdb_warn("failed to find 'smb_node_hash_table'");
@@ -2148,7 +2147,7 @@ smb_ace(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 static int
 smb_ace_walk_init(mdb_walk_state_t *wsp)
 {
-	if (wsp->walk_addr == 0) {
+	if (wsp->walk_addr == (uintptr_t)NULL) {
 		mdb_printf("smb_ace walk only supports local walks\n");
 		return (WALK_ERR);
 	}

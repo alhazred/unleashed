@@ -77,7 +77,7 @@ sobj_ops_to_text(uintptr_t addr, char *out, size_t sz)
 {
 	sobj_ops_t ops;
 
-	if (addr == 0) {
+	if (addr == (uintptr_t)NULL) {
 		mdb_snprintf(out, sz, "<none>");
 		return;
 	}
@@ -148,7 +148,7 @@ wchan_walk_init(mdb_walk_state_t *wsp)
 		return (WALK_ERR);
 	}
 
-	if ((ww->ww_compare = wsp->walk_addr) == NULL) {
+	if ((ww->ww_compare = wsp->walk_addr) == (uintptr_t)NULL) {
 		if (mdb_readvar(&ww->ww_seen_size, "nthread") == -1) {
 			mdb_warn("failed to read nthread");
 			mdb_free(ww, sizeof (wchan_walk_data_t));
@@ -180,7 +180,8 @@ again:
 	 * sleepq hash.  If ww_compare is set, ww_sleepq_ndx is already
 	 * set to the appropriate sleepq index for the desired cv.
 	 */
-	for (t = ww->ww_thr; t == NULL; ) {
+	t = ww->ww_thr;
+	while (t == (uintptr_t)NULL) {
 		if (ww->ww_sleepq_ndx == NSLEEPQ)
 			return (WALK_DONE);
 
@@ -191,7 +192,7 @@ again:
 		 * If we were looking for a specific cv and we're at the end
 		 * of its sleepq, we're done walking.
 		 */
-		if (t == NULL && ww->ww_compare != NULL)
+		if (t == (uintptr_t)NULL && ww->ww_compare != (uintptr_t)NULL)
 			return (WALK_DONE);
 	}
 
@@ -207,7 +208,7 @@ again:
 	}
 
 	if (thr.t_wchan == NULL) {
-		ww->ww_thr = NULL;
+		ww->ww_thr = (uintptr_t)NULL;
 		goto again;
 	}
 
@@ -220,11 +221,11 @@ again:
 	 * If we're walking a specific cv, invoke the callback if we've
 	 * found a match, or loop back to the top and read the next thread.
 	 */
-	if (ww->ww_compare != NULL) {
+	if (ww->ww_compare != (uintptr_t)NULL) {
 		if (ww->ww_compare == (uintptr_t)thr.t_wchan)
 			return (wsp->walk_callback(t, &thr, wsp->walk_cbdata));
 
-		if (ww->ww_thr == NULL)
+		if (ww->ww_thr == (uintptr_t)NULL)
 			return (WALK_DONE);
 
 		goto again;
@@ -245,7 +246,7 @@ again:
 	 * If we hit seen_size this is a live kernel and nthread is now larger,
 	 * cope by replacing the final element in our memory.
 	 */
-	if (ww->ww_thr != NULL) {
+	if (ww->ww_thr != (uintptr_t)NULL) {
 		if (ww->ww_seen_ndx < ww->ww_seen_size)
 			ww->ww_seen[ww->ww_seen_ndx++] = thr.t_wchan;
 		else
@@ -365,7 +366,7 @@ blocked_walk_init(mdb_walk_state_t *wsp)
 		return (WALK_ERR);
 	}
 
-	wsp->walk_addr = NULL;
+	wsp->walk_addr = (uintptr_t)NULL;
 
 	if (mdb_layered_walk("thread", wsp) == -1) {
 		mdb_warn("couldn't walk 'thread'");
@@ -494,7 +495,7 @@ rwlock(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 	rwlock_block_t *rw = NULL;
 	uintptr_t wwwh;
 
-	if (!(flags & DCMD_ADDRSPEC) || addr == NULL || argc != 0)
+	if (!(flags & DCMD_ADDRSPEC) || addr == (uintptr_t)NULL || argc != 0)
 		return (DCMD_USAGE);
 
 	if (mdb_vread(&lock, sizeof (lock), addr) == -1) {

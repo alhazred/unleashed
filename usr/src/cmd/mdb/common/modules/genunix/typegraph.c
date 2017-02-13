@@ -904,7 +904,7 @@ typegraph_couldbe(uintptr_t addr, mdb_ctf_id_t type)
 
 	rsize = mdb_ctf_type_size(rtype);
 
-	if (val == NULL || rsize == 0)
+	if (val == (uintptr_t)NULL || rsize == 0)
 		return (1);
 
 	/*
@@ -1209,7 +1209,7 @@ typegraph_build_anchored(uintptr_t addr, size_t size, mdb_ctf_id_t type)
 	ssize_t rval;
 	int mask = sizeof (uintptr_t) - 1;
 
-	if (addr == NULL || size < sizeof (uintptr_t))
+	if (addr == (uintptr_t)NULL || size < sizeof (uintptr_t))
 		return;
 
 	/*
@@ -2932,7 +2932,7 @@ findlocks_findmutex(const char *name, mdb_ctf_id_t type, ulong_t offs,
 
 	if (mdb_ctf_type_cmp(type, mutex) == 0) {
 		mdb_ctf_id_t ttype;
-		uintptr_t owner = NULL;
+		uintptr_t owner = (uintptr_t)NULL;
 		tg_node_t *node;
 
 		if (mdb_pwalk("mutex_owner",
@@ -2943,7 +2943,8 @@ findlocks_findmutex(const char *name, mdb_ctf_id_t type, ulong_t offs,
 		/*
 		 * Check to see if the owner is a thread.
 		 */
-		if (owner == NULL || (node = typegraph_search(owner)) == NULL)
+		if (owner == (uintptr_t)NULL ||
+		    (node = typegraph_search(owner)) == NULL)
 			return (0);
 
 		if (!mdb_ctf_type_valid(node->tgn_type))
@@ -2957,7 +2958,8 @@ findlocks_findmutex(const char *name, mdb_ctf_id_t type, ulong_t offs,
 		if (mdb_ctf_type_cmp(ttype, thread) != 0)
 			return (0);
 
-		if (fl->fl_thread != NULL && owner != fl->fl_thread)
+		if (fl->fl_thread != (uintptr_t)NULL &&
+		    owner != fl->fl_thread)
 			return (0);
 
 		if (fl->fl_ndx >= fl->fl_nlocks) {
@@ -3139,7 +3141,7 @@ findlocks(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 	mdb_printf("findlocks: nota bene: %slocks may be held",
 	    fl.fl_nlocks ? "other " : "");
 
-	if (addr == NULL) {
+	if (addr == (uintptr_t)NULL) {
 		mdb_printf("\n");
 	} else {
 		mdb_printf(" by %p\n", addr);
