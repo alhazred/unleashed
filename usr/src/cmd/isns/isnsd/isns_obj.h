@@ -124,7 +124,7 @@ uint32_t get_ref_n(isns_obj_t *, int);
 #endif
 uint32_t get_ref_t(isns_obj_t *, isns_type_t);
 
-uint32_t *const get_parent_p(const isns_obj_t *);
+uint32_t *get_parent_p(const isns_obj_t *);
 uint32_t get_parent_uid(const isns_obj_t *);
 uint32_t *get_child_t(isns_obj_t *, int);
 int is_obj_online(const isns_obj_t *);

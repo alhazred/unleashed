@@ -94,6 +94,9 @@
 static int	first_column;		/* See 'next_char()' below */
 
 static void backspace(void);
+void err_abort(char *fmt, ...);
+void syserr_abort(char *fmt, ...);
+void warning(char *fmt, ...);
 void reset_input(void);
 void panic_mode(int);
 
@@ -139,119 +142,138 @@ get_token()
 	register char	*ptr;
 	int		dot_flag = FALSE;
 
-	while ((ch = next_char()) == '\n' || (isascii(ch) && iswhite(ch)));
+	do {
+		ch = next_char();
+	} while (ch == '\n' || (isascii(ch) && iswhite(ch)));
 
 	if (ch == EOF)
-	    type = EOF;
+		type = EOF;
 	else {
-	    if (ch == '.') {
-		dot_flag = TRUE;
-
-		while ((ch = next_char()) == ' ' || ch == '\t');
-	    }
-
-	    if (! isascii(ch) || ! isalnum(ch)) {
-		warning("Illegal character - '%c'", ch);
-		panic_mode(',');
-	    }
-
-	    ptr = buffer;
-	    if (ch != '\n') *(ptr++) = ch;
-
-	    if (first_column) {
-		while ((ch = next_char()) != ',' && ch != '\n' && ch != EOF)
-		    *(ptr++) = ch;
-
-		if (ch == EOF)
-		    err_abort("Premature EOF");
-		else if (ch == '\n') {
-		    warning("Newline in middle of terminal name");
-		    panic_mode(',');
+		if (ch == '.') {
+			dot_flag = TRUE;
+			do {
+				ch = next_char();
+			} while (ch == ' ' || ch == '\t');
 		}
 
-		*ptr = '\0';
-		curr_token.tk_name = buffer;
-		type = NAMES;
-	    } else {
-		ch = next_char();
-		while (isascii(ch) && isalnum(ch)) {
-		    *(ptr++) = ch;
-		    ch = next_char();
-		}
-
-		*ptr++ = '\0';
-		switch (ch) {
-		    case ',':
-			curr_token.tk_name = buffer;
-			type = BOOLEAN;
-			break;
-
-		    case '@':
-			if (next_char() != ',')
-			    warning("Missing comma");
-			curr_token.tk_name = buffer;
-			type = CANCEL;
-			break;
-
-		    case '#':
-			number = 0;
-			if ((ch = next_char()) == ',')
-				warning("Missing numeric value");
-			backspace();
-			if ((ch = next_char()) == '0') {
-			    if ((ch = next_char()) == 'x' || ch == 'X') {
-				while (isascii(ch = next_char()) &&
-				    isxdigit(ch)) {
-				    number *= 16;
-				    if (isdigit(ch))
-					number += ch - '0';
-				    else if (ch >= 'a' && ch <= 'f')
-					number += 10 + ch - 'a';
-				    else
-					number += 10 + ch - 'A';
-				}
-			    } else {
-				backspace();
-				while ((ch = next_char()) >= '0' &&
-				    ch <= '7')
-				    number = number * 8 + ch - '0';
-				}
-			    } else {
-				    backspace();
-				    while (isascii(ch = next_char()) &&
-					isdigit(ch))
-					number = number * 10 + ch - '0';
-			    }
-			if (ch != ',')
-			    warning("Missing comma");
-			curr_token.tk_name = buffer;
-			curr_token.tk_valnumber = number;
-			type = NUMBER;
-			break;
-
-		    case '=':
-			ch = trans_string(ptr);
-			if (ch != NULL && ch != ',')
-			    warning("Missing comma");
-			if (ch == NULL)
-				warning("NULL string value");
-			curr_token.tk_name = buffer;
-			curr_token.tk_valstring = ptr;
-			type = STRING;
-			break;
-
-		    default:
+		if (! isascii(ch) || ! isalnum(ch)) {
 			warning("Illegal character - '%c'", ch);
+			panic_mode(',');
 		}
-	    } /* end else (first_column == FALSE) */
+
+		ptr = buffer;
+		if (ch != '\n')
+			*(ptr++) = ch;
+
+		if (first_column) {
+			ch = next_char();
+			while (ch != ',' && ch != '\n' && ch != EOF) {
+				*(ptr++) = ch;
+				ch = next_char();
+			}
+
+			if (ch == EOF)
+				err_abort("Premature EOF");
+			else if (ch == '\n') {
+				warning("Newline in middle of terminal name");
+				panic_mode(',');
+			}
+
+			*ptr = '\0';
+			curr_token.tk_name = buffer;
+			type = NAMES;
+		} else {
+			ch = next_char();
+			while (isascii(ch) && isalnum(ch)) {
+				*(ptr++) = ch;
+				ch = next_char();
+			}
+
+			*ptr++ = '\0';
+			switch (ch) {
+			case ',':
+				curr_token.tk_name = buffer;
+				type = BOOLEAN;
+				break;
+
+			case '@':
+				if (next_char() != ',')
+					warning("Missing comma");
+				curr_token.tk_name = buffer;
+				type = CANCEL;
+				break;
+
+			case '#':
+				number = 0;
+				if ((ch = next_char()) == ',')
+					warning("Missing numeric value");
+				backspace();
+				if ((ch = next_char()) == '0') {
+					if ((ch = next_char()) == 'x' ||
+					    ch == 'X') {
+						ch = next_char();
+						while (isascii(ch) &&
+						    isxdigit(ch)) {
+							number *= 16;
+							if (isdigit(ch))
+								number +=
+								    ch - '0';
+							else if (ch >= 'a' &&
+							    ch <= 'f')
+								number += 10 +
+								    ch - 'a';
+							else
+								number += 10 +
+								    ch - 'A';
+							ch = next_char();
+						}
+					} else {
+						backspace();
+						ch = next_char();
+						while (ch >= '0' && ch <= '7') {
+							number = number * 8
+							    + ch - '0';
+							ch = next_char();
+						}
+					}
+				} else {
+					backspace();
+					ch = next_char();
+					while (isascii(ch) && isdigit(ch)) {
+						number = number * 10 + ch - '0';
+						ch = next_char();
+					}
+				}
+				if (ch != ',')
+					warning("Missing comma");
+				curr_token.tk_name = buffer;
+				curr_token.tk_valnumber = number;
+				type = NUMBER;
+				break;
+
+			case '=':
+				ch = trans_string(ptr);
+				if (ch != '\0' && ch != ',')
+					warning("Missing comma");
+				if (ch == '\0')
+					warning("NULL string value");
+				curr_token.tk_name = buffer;
+				curr_token.tk_valstring = ptr;
+				type = STRING;
+				break;
+
+			default:
+				warning("Illegal character - '%c'", ch);
+			}
+		} /* end else (first_column == FALSE) */
 	} /* end else (ch != EOF) */
 
 	if (dot_flag == TRUE)
-	    DEBUG(8, "Commented out ", "");
+		DEBUG(8, "Commented out ", "");
 
 	if (debug_level >= 8) {
-	    fprintf(stderr, "Token: ");
-	    switch (type) {
+		fprintf(stderr, "Token: ");
+		switch (type) {
 		case BOOLEAN:
 			fprintf(stderr, "Boolean;  name='%s'\n",
 			    curr_token.tk_name);
@@ -270,7 +292,7 @@ get_token()
 		case CANCEL:
 			fprintf(stderr, "Cancel; name = '%s'\n",
 			    curr_token.tk_name);
-		    break;
+			break;
 
 		case NAMES:
 			fprintf(stderr, "Names; value = '%s'\n",
@@ -283,11 +305,11 @@ get_token()
 
 		default:
 			warning("Bad token type");
-	    }
+		}
 	}
 
 	if (dot_flag == TRUE)	/* if commented out, use the next one */
-	    type = get_token();
+		type = get_token();
 
 	return (type);
 }
@@ -313,13 +335,13 @@ char	line[1024];
 int
 next_char()
 {
+	/* LINTED E_FUNC_SET_NOT_USED */
 	char	*rtn_value;
-	long	ftell();
 	char	*p;
 
 	if (curr_column < 0 || curr_column > 1023 ||
 	    line[curr_column] == '\0') {
-	    do {
+		do {
 			curr_file_pos = ftell(stdin);
 
 			if ((rtn_value = fgets(line, 1024, stdin)) == NULL)
@@ -329,17 +351,17 @@ next_char()
 			while (*p && iswhite(*p)) {
 				p++;
 			}
-	    } while (*p == '#');
+		} while (*p == '#');
 
-	    curr_column = 0;
-	    while (isascii(line[curr_column]) && iswhite(line[curr_column]))
-		curr_column++;
+		curr_column = 0;
+		while (isascii(line[curr_column]) && iswhite(line[curr_column]))
+			curr_column++;
 	}
 
 	if (curr_column == 0 && line[0] != '\n')
-	    first_column = TRUE;
+		first_column = TRUE;
 	else
-	    first_column = FALSE;
+		first_column = FALSE;
 
 	return (line[curr_column++]);
 }
@@ -401,99 +423,100 @@ trans_string(char *ptr)
 	register int	ch;
 
 	while ((ch = next_char()) != ',' && ch != EOF && !first_column) {
-	    if (ch == '^') {
-		ch = next_char();
-		if (ch == EOF)
-		    err_abort("Premature EOF");
-
-		if (!isascii(ch) || ! isprint(ch)) {
-		    warning("Illegal ^ character - '%c'", ch);
-		}
-
-		if (ch == '@')
-		    *(ptr++) = 0200;
-		else
-		    *(ptr++) = ch & 037;
-	    } else if (ch == '\\') {
-		ch = next_char();
-		if (ch == EOF)
-		    err_abort("Premature EOF");
-
-		if (ch >= '0' && ch <= '7') {
-		    number = ch - '0';
-		    for (i = 0; i < 2; i++) {
+		if (ch == '^') {
 			ch = next_char();
 			if (ch == EOF)
-			    err_abort("Premature EOF");
+				err_abort("Premature EOF");
 
-			if (ch < '0' || ch > '7') {
-			    backspace();
-			    break;
+			if (!isascii(ch) || ! isprint(ch)) {
+				warning("Illegal ^ character - '%c'", ch);
 			}
 
-			number = number * 8 + ch - '0';
-		    }
+			if (ch == '@')
+				*(ptr++) = (char)0200;
+			else
+				*(ptr++) = ch & 037;
+		} else if (ch == '\\') {
+			ch = next_char();
+			if (ch == EOF)
+				err_abort("Premature EOF");
 
-		    if (number == 0)
-			number = 0200;
-		    *(ptr++) = (char)number;
-		} else {
-		    switch (ch) {
-			case 'E':
-			case 'e':	*(ptr++) = '\033';	break;
+			if (ch >= '0' && ch <= '7') {
+				number = ch - '0';
+				for (i = 0; i < 2; i++) {
+					ch = next_char();
+					if (ch == EOF)
+						err_abort("Premature EOF");
 
-			case 'l':
-			case 'n':	*(ptr++) = '\n';	break;
+					if (ch < '0' || ch > '7') {
+						backspace();
+						break;
+					}
 
-			case 'r':	*(ptr++) = '\r';	break;
+					number = number * 8 + ch - '0';
+				}
 
-			case 'b':	*(ptr++) = '\010';	break;
+				if (number == 0)
+					number = 0200;
+				*(ptr++) = (char)number;
+			} else {
+				switch (ch) {
+				case 'E':
+				case 'e':	*(ptr++) = '\033';	break;
 
-			case 's':	*(ptr++) = ' ';		break;
+				case 'l':
+				case 'n':	*(ptr++) = '\n';	break;
 
-			case 'f':	*(ptr++) = '\014';	break;
+				case 'r':	*(ptr++) = '\r';	break;
 
-			case 't':	*(ptr++) = '\t';	break;
+				case 'b':	*(ptr++) = '\010';	break;
 
-			case '\\':	*(ptr++) = '\\';	break;
+				case 's':	*(ptr++) = ' ';		break;
 
-			case '^':	*(ptr++) = '^';		break;
+				case 'f':	*(ptr++) = '\014';	break;
 
-			case ',':	*(ptr++) = ',';		break;
+				case 't':	*(ptr++) = '\t';	break;
 
-			case ':':	*(ptr++) = ':';		break;
+				case '\\':	*(ptr++) = '\\';	break;
 
-			default:
-			    warning("Illegal character in \\ sequence - '%c'",
-				ch);
-			    *(ptr++) = ch;
-		    } /* endswitch (ch) */
-		} /* endelse (ch < '0' ||  ch > '7') */
-	    } /* end else if (ch == '\\') */
-	    else {
-		if (ch != '\n') *(ptr++) = ch;
-	    }
+				case '^':	*(ptr++) = '^';		break;
 
-	    count ++;
+				case ',':	*(ptr++) = ',';		break;
 
-	    if (count > 1000)
-		warning("Very long string found.  Missing comma?");
+				case ':':	*(ptr++) = ':';		break;
+
+				default:
+					warning("Illegal character in \\"
+					    " sequence - '%c'",
+					    ch);
+					*(ptr++) = ch;
+				} /* endswitch (ch) */
+			} /* endelse (ch < '0' ||  ch > '7') */
+		} /* end else if (ch == '\\') */
+		else {
+			if (ch != '\n') *(ptr++) = ch;
+		}
+
+		count ++;
+
+		if (count > 1000)
+			warning("Very long string found.  Missing comma?");
 	} /* end while */
 
 	if (ch == EOF)
-	    warning("Premature EOF - missing comma?");
+		warning("Premature EOF - missing comma?");
 	/* start of new description */
 	else if (first_column) {
-	    backspace();
-	    warning("Missing comma?");
-	    /* pretend we did get a comma */
-	    ch = ',';
+		backspace();
+		warning("Missing comma?");
+		/* pretend we did get a comma */
+		ch = ',';
 	}
 
 	*ptr = '\0';
 
 	if (count == 0)
-		return (NULL);
+		return (0);
 	return (ch);
 }
 

@@ -38,8 +38,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * ********************************************************************
  *                         COPYRIGHT NOTICE                           *
@@ -91,7 +89,9 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "curses_inc.h"
 #include "object.h"
 
@@ -114,6 +114,7 @@
 static char	TermNames[128];	/* Buffer for terminal names for first term */
 static char	StringTable[2048];	/* String table for first terminal  */
 static int	beencalled = 0;	/* read_entry has been called before	    */
+int must_swap(void);
 
 int
 read_entry(filename, bptr, nptr, sptr)
@@ -138,7 +139,6 @@ struct _str_struct	*sptr;
 	extern int BoolCount;
 	extern int NumCount;
 	extern int StrCount;
-	extern long lseek();
 	unsigned char byte[OFFSET_BUFSIZE][2];
 	short number[OFFSET_BUFSIZE];
 
