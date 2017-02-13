@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #pragma weak _nss_ldap__printers_constr = _nss_ldap_printers_constr
 
 #include "ldap_common.h"
@@ -215,7 +213,7 @@ _nss_ldap_printers2str(ldap_backend_ptr be, nss_XbyY_args_t *argp)
 				 * be backslashed plus ending ':' or ','.
 				 */
 				k = 0;
-				for (kp = attr->attrvalue[j]; *kp != NULL; kp++)
+				for (kp = attr->attrvalue[j]; *kp != '\0'; kp++)
 					if (*kp == ':')
 						/* count ':' in value */
 						k++;
@@ -262,7 +260,7 @@ append_attr(char *buf, char *attr)
 	}
 	bp = buf;
 	cp = attr;
-	while (*cp != NULL) {
+	while (*cp != '\0') {
 		if (*cp == ':') {
 			*bp++ = '\\';
 		}

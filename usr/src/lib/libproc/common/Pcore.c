@@ -1899,7 +1899,7 @@ core_find_data(struct ps_prochandle *P, Elf *elf, rd_loadobj_t *rlp)
 	uint_t i, pagemask;
 	size_t nphdrs;
 
-	rlp->rl_data_base = NULL;
+	rlp->rl_data_base = 0;
 
 	/*
 	 * Find the first loadable, writeable Phdr and compute rl_data_base
@@ -1923,7 +1923,7 @@ core_find_data(struct ps_prochandle *P, Elf *elf, rd_loadobj_t *rlp)
 	 * If we didn't find an appropriate phdr or if the address we
 	 * computed has no mapping, return NULL.
 	 */
-	if (rlp->rl_data_base == NULL ||
+	if (rlp->rl_data_base == 0 ||
 	    (mp = Paddr2mptr(P, rlp->rl_data_base)) == NULL)
 		return (NULL);
 

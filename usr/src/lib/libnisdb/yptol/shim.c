@@ -151,7 +151,7 @@ shim_dbm_delete(DBM *db, datum key)
 datum
 shim_dbm_fetch(DBM *db, datum key)
 {
-	datum ret = {0, NULL};
+	datum ret = {NULL, 0};
 	map_ctrl *map;
 
 	/* Lock the map */
@@ -190,7 +190,7 @@ shim_dbm_fetch(DBM *db, datum key)
 datum
 shim_dbm_fetch_noupdate(DBM *db, datum key)
 {
-	datum ret = {0, NULL};
+	datum ret = {NULL, 0};
 	map_ctrl *map;
 
 	/* Get the map control block */
@@ -222,7 +222,7 @@ shim_dbm_firstkey(DBM *db)
 	int count;
 	bool_t wait_flag;
 
-	datum ret = {0, NULL};
+	datum ret = {NULL, 0};
 	map_ctrl *map;
 
 	/* Lock the map */
@@ -506,7 +506,7 @@ shim_dbm_store(DBM  *db,  datum  key,  datum  content, int store_mode)
 void
 shim_exit(int code)
 {
-	thr_join(NULL, NULL, NULL);
+	thr_join(0, NULL, NULL);
 	exit(code);
 }
 

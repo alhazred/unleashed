@@ -61,7 +61,7 @@ static fpd_setf_t	do_set_priority;
 static fpd_checkf_t	do_check_priority;
 
 static fprop_desc_t	prop_table[] = {
-	{ "maxbw",	{ "", NULL }, NULL, 0, B_FALSE,
+	{ "maxbw",	{ "", 0 }, NULL, 0, B_FALSE,
 	    do_set_maxbw, NULL,
 	    do_get_maxbw, do_check_maxbw},
 	{ "priority",	{ "", MPL_RESET }, NULL, 0, B_FALSE,

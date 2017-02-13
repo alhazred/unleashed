@@ -654,7 +654,7 @@ _process_value(char *string, char ***parts)
 		{ PAPI_RANGE,	   3, "^([[:digit:]]*)-([[:digit:]]*)$", 0 },
 		{ PAPI_RESOLUTION, 4, "^([[:digit:]]+)x([[:digit:]]+)dp(i|c)$",
 			0 },
-		NULL
+		0
 	};
 	regmatch_t matches[4];
 

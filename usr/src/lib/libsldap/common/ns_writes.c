@@ -1063,9 +1063,9 @@ write_state_machine(
 			err = strdup(errstr);
 			if (pwd_status != NS_PASSWD_GOOD) {
 				MKERROR_PWD_MGMT(*errorp, Errno, err,
-				    pwd_status, 0, NULL);
+				    pwd_status, 0, 0);
 			} else {
-				MKERROR(LOG_INFO, *errorp, Errno, err, NULL);
+				MKERROR(LOG_INFO, *errorp, Errno, err, 0);
 			}
 			if (conn_user != NULL &&
 			    (Errno == LDAP_SERVER_DOWN ||
@@ -1082,7 +1082,7 @@ write_state_machine(
 			    " (state = %d, rc = %d)."),
 			    err_state, return_rc);
 			err = strdup(errstr);
-			MKERROR(LOG_WARNING, *errorp, return_rc, err, NULL);
+			MKERROR(LOG_WARNING, *errorp, return_rc, err, 0);
 			new_state = W_EXIT;
 			break;
 		}
@@ -2853,7 +2853,7 @@ modify_ethers_bootp(
 
 	new_attrlist[0]->attrname = "objectclass";
 	new_attrlist[0]->value_count = 1;
-	if (strcasecmp(service, "ethers") == NULL) {
+	if (strcasecmp(service, "ethers") == 0) {
 		(void) snprintf(&filter[0], sizeof (filter),
 		    "(&(objectClass=ieee802Device)(%s))", rdn);
 		new_attrlist[0]->attrvalue[0] = "ieee802Device";
@@ -4002,7 +4002,7 @@ send_to_cachemgr(
 		    "ldap_cachemgr failed - error: %d"),
 		    space.s_d.ldap_ret.ldap_errno);
 		MKERROR(LOG_WARNING, *errorp, NS_CONFIG_CACHEMGR,
-		    strdup(errstr), NULL);
+		    strdup(errstr), 0);
 		return (NS_LDAP_OP_FAILED);
 	default:
 		return (NS_LDAP_OP_FAILED);

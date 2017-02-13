@@ -278,7 +278,7 @@ kvm_getcmd(kvm_t *kd,
 	 * may have p_usrstack set but a still zeroed uarea.
 	 * We wouldn't want to unecessarily allocate 4GB memory ...
 	 */
-	if (u->u_argv == NULL || u->u_envp == NULL)
+	if (u->u_argv == (uintptr_t)NULL || u->u_envp == (uintptr_t)NULL)
 		return (-1);
 
 	/*

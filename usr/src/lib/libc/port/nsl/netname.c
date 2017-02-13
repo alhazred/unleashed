@@ -304,7 +304,7 @@ host2netname(char netname[MAXNETNAMELEN + 1], const char *host,
 			}
 			(void) strcpy(domainname, p);
 		} else {
-			domainname[0] = NULL;
+			domainname[0] = '\0';
 			if (getdomainname(domainname, MAXHOSTNAMELEN) < 0)
 				return (0);
 		}

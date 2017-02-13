@@ -608,7 +608,7 @@ ds_getnextvol(char *device)
 	(void) sprintf(prompt,
 	    pkg_gt("Insert %%v %d of %d into %%p"),
 	    ds_volno, ds_volcnt);
-	if (n = getvol(device, NULL, NULL, prompt))
+	if (n = getvol(device, NULL, 0, prompt))
 		return (n);
 	if ((ds_fd = open(device, O_RDONLY)) < 0)
 		return (-1);

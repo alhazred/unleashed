@@ -408,7 +408,7 @@ remove_key(pam_handle_t *pamh, int flags, int debug)
 	pthread_t tid;
 
 	(void) pam_get_item(pamh, PAM_USER, (void **)&uname);
-	if (uname == NULL || *uname == NULL) {
+	if (uname == NULL || *uname == '\0') {
 		if (debug)
 			syslog(LOG_DEBUG,
 			    "pam_dhkeys: user NULL or empty in remove_key()");

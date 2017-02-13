@@ -123,7 +123,7 @@ read_file(ns_config_t *ptr, int cred_file, ns_ldap_error_t **error)
 		(void) snprintf(errstr, sizeof (errstr),
 		    gettext("Unable to open filename '%s' "
 		    "for reading (errno=%d)."), file, errno);
-		MKERROR(LOG_ERR, *error, NS_CONFIG_FILE, strdup(errstr), NULL);
+		MKERROR(LOG_ERR, *error, NS_CONFIG_FILE, strdup(errstr), 0);
 		return (NS_NOTFOUND);
 	}
 
@@ -149,7 +149,7 @@ read_file(ns_config_t *ptr, int cred_file, ns_ldap_error_t **error)
 			    gettext("Missing Name or Value on line %d."),
 			    lineno);
 			MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
-			    strdup(errstr), NULL);
+			    strdup(errstr), 0);
 			(void) fclose(fp);
 			return (NS_PARSE_ERR);
 		}
@@ -158,7 +158,7 @@ read_file(ns_config_t *ptr, int cred_file, ns_ldap_error_t **error)
 			    gettext("Illegal profile type on line %d."),
 			    lineno);
 			MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
-			    strdup(errstr), NULL);
+			    strdup(errstr), 0);
 			(void) fclose(fp);
 			return (NS_PARSE_ERR);
 		}
@@ -167,7 +167,7 @@ read_file(ns_config_t *ptr, int cred_file, ns_ldap_error_t **error)
 			    gettext("Illegal NS_LDAP_FILE_VERSION "
 			    "on line %d."), lineno);
 			MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
-			    strdup(errstr), NULL);
+			    strdup(errstr), 0);
 			(void) fclose(fp);
 			return (NS_PARSE_ERR);
 		}
@@ -187,7 +187,7 @@ read_file(ns_config_t *ptr, int cred_file, ns_ldap_error_t **error)
 				    gettext("Illegal entry in '%s' on "
 				    "line %d"), file, lineno);
 				MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
-				    strdup(errstr), NULL);
+				    strdup(errstr), 0);
 				(void) fclose(fp);
 				return (NS_PARSE_ERR);
 			}
@@ -207,7 +207,7 @@ read_file(ns_config_t *ptr, int cred_file, ns_ldap_error_t **error)
 				    gettext("Illegal entry in '%s' on "
 				    "line %d"), file, lineno);
 				MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX,
-				    strdup(errstr), NULL);
+				    strdup(errstr), 0);
 				(void) fclose(fp);
 				return (NS_PARSE_ERR);
 			}
@@ -219,7 +219,7 @@ read_file(ns_config_t *ptr, int cred_file, ns_ldap_error_t **error)
 		(void) snprintf(errstr, sizeof (errstr),
 		    gettext("Empty config file: '%s'"), file);
 		MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX, strdup(errstr),
-		    NULL);
+		    0);
 		return (NS_PARSE_ERR);
 	}
 	if (linelen == -2) {
@@ -227,7 +227,7 @@ read_file(ns_config_t *ptr, int cred_file, ns_ldap_error_t **error)
 		(void) snprintf(errstr, sizeof (errstr),
 		    gettext("Line too long in '%s'"), file);
 		MKERROR(LOG_ERR, *error, NS_CONFIG_SYNTAX, strdup(errstr),
-		    NULL);
+		    0);
 		return (NS_PARSE_ERR);
 	}
 	return (NS_SUCCESS);
@@ -265,7 +265,7 @@ set_attr(ns_config_t *config_struct,
 	    __s_api_get_versiontype(config_struct, attr_name, &idx) < 0) {
 		(void) snprintf(errmsg, sizeof (errmsg),
 		    gettext("Illegal DUAProfile property: <%s>."), attr_name);
-		MKERROR(LOG_ERR, *errorp, NS_LDAP_CONFIG, strdup(errmsg), NULL);
+		MKERROR(LOG_ERR, *errorp, NS_LDAP_CONFIG, strdup(errmsg), 0);
 		return (NS_LDAP_CONFIG);
 	}
 
@@ -1013,7 +1013,7 @@ __ns_ldap_download(const char *profile, char *addr, char *baseDN,
 		(void) snprintf(errstr, sizeof (errstr),
 		    gettext("No configuration information available."));
 		MKERROR(LOG_ERR, *errorp, NS_CONFIG_NOTLOADED, strdup(errstr),
-		    NULL);
+		    0);
 		return (NS_LDAP_CONFIG);
 	}
 
@@ -1047,7 +1047,7 @@ __ns_ldap_download(const char *profile, char *addr, char *baseDN,
 	if (rc != NS_LDAP_SUCCESS) {
 		__s_api_destroy_config(new_ptr);
 		MKERROR(LOG_ERR, *errorp, NS_CONFIG_NOTLOADED, strdup(errstr),
-		    NULL);
+		    0);
 		return (NS_LDAP_CONFIG);
 	}
 

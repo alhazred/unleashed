@@ -27,8 +27,6 @@
 #ifndef	_SIP_MISCDEFS_H
 #define	_SIP_MISCDEFS_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -38,6 +36,7 @@ extern "C" {
 #include <sys/time.h>
 #include <stdio.h>
 
+#define	SIP_NUL			'\0'
 #define	SIP_CR			'\r'
 #define	SIP_SP			' '
 #define	SIP_HCOLON		':'

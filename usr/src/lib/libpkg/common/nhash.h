@@ -32,10 +32,6 @@
 extern "C" {
 #endif
 
-#ifndef NULL
-#define	NULL	0
-#endif	/* NULL */
-
 typedef struct item_t {
     void *key;
     int	  keyl;

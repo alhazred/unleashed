@@ -764,7 +764,7 @@ subscriber_event_handler(sysevent_handle_t *shp)
 	sub_info = (subscriber_priv_t *)SH_PRIV_DATA(shp);
 
 	/* See hack alert in sysevent_bind_subscriber_cmn */
-	if (sub_info->sp_handler_tid == NULL)
+	if (sub_info->sp_handler_tid == 0)
 		sub_info->sp_handler_tid = thr_self();
 
 	(void) mutex_lock(&sub_info->sp_qlock);
@@ -2219,7 +2219,7 @@ sysevent_bind_subscriber_cmn(sysevent_handle_t *shp,
 
 	/* Create an event handler thread */
 	if (xsa == NULL || xsa->xs_thrcreate == NULL) {
-		created = thr_create(NULL, NULL,
+		created = thr_create(NULL, 0,
 		    (void *(*)(void *))subscriber_event_handler,
 		    shp, THR_BOUND, &sub_info->sp_handler_tid) == 0;
 	} else {
@@ -2508,7 +2508,7 @@ sysevent_unbind_subscriber(sysevent_handle_t *shp)
 	/* Signal event handler and drain the subscriber's event queue */
 	(void) cond_signal(&sub_info->sp_cv);
 	(void) mutex_unlock(&sub_info->sp_qlock);
-	if (sub_info->sp_handler_tid != NULL)
+	if (sub_info->sp_handler_tid != 0)
 		(void) thr_join(sub_info->sp_handler_tid, NULL, NULL);
 
 	(void) cond_destroy(&sub_info->sp_cv);

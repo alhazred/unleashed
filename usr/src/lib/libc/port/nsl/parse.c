@@ -25,7 +25,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include "mt.h"
 #include <stdio.h>
@@ -135,7 +134,7 @@ _unescape(char *s, char *esc)
 		else
 			tmp[j++] = s[i];
 	}
-	tmp[j] = NULL;
+	tmp[j] = '\0';
 	return (tmp);
 }
 
@@ -164,7 +163,7 @@ _readbufline(char *mapbuf,	/* input mmap buffer */
 		while (linelen < buflen - 1) {	/* "- 1" saves room for \n\0 */
 			if (*lastlen >= mapsize) {
 				if (linelen == 0 ||
-					buffer[linelen - 1] == '\\') {
+				    buffer[linelen - 1] == '\\') {
 						return (-1);
 					} else {
 						buffer[linelen] = '\n';

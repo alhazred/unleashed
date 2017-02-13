@@ -146,8 +146,8 @@ struct proto_option_defs {
 #define	PROTO_OPT_AUTOMOUNTD_ENV	5
 	{ "environment",
 	    "environment", PROTO_OPT_AUTOMOUNTD_ENV, SCF_TYPE_ASTRING,
-	    NULL, 0, 1024, strlen_validator},
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}
+	    0, 0, 1024, strlen_validator},
+	{NULL, NULL, 0, 0, 0, 0, 0, NULL}
 };
 
 #define	AUTOFS_PROP_MAX	(sizeof (proto_options) / sizeof (proto_options[0]))

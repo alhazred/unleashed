@@ -395,8 +395,8 @@ ckdate_val(char *fmt, char *input)
 		fmt++;
 	}	 /* end of while fmt and valid */
 
-	if ((*fmt == NULL) && ((input != NULL) && *input != 0)) {
-		if (*input != NULL)
+	if ((*fmt == '\0') && ((input != NULL) && *input != '\0')) {
+		if (*input != '\0')
 			valid = 0;
 	}
 	return ((valid == 0));

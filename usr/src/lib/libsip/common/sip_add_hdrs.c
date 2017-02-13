@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
@@ -582,7 +580,7 @@ sip_add_allow(sip_msg_t sip_msg, sip_method_t method)
 	if (method == 0 || method >= MAX_SIP_METHODS)
 		return (EINVAL);
 	ret = sip_add_str_to_msg(sip_msg, SIP_ALLOW, sip_methods[method].name,
-	    NULL, (char)NULL);
+	    NULL, SIP_NUL);
 	return (ret);
 }
 
@@ -649,7 +647,7 @@ sip_add_content_enc(sip_msg_t sip_msg, char *code)
 		return (EINVAL);
 
 	ret = sip_add_str_to_msg(sip_msg, SIP_CONTENT_ENCODE, code, NULL,
-	    (char)NULL);
+	    SIP_NUL);
 	return (ret);
 }
 
@@ -668,7 +666,7 @@ sip_add_content_lang(sip_msg_t sip_msg, char *lang)
 	if (lang == NULL)
 		return (EINVAL);
 	ret = sip_add_str_to_msg(sip_msg, SIP_CONTENT_LANG, lang, NULL,
-	    (char)NULL);
+	    SIP_NUL);
 	return (ret);
 }
 
@@ -693,7 +691,7 @@ sip_add_date(sip_msg_t sip_msg, char *date)
 
 	if (date == NULL)
 		return (EINVAL);
-	ret = sip_add_str_to_msg(sip_msg, SIP_DATE, date, NULL, (char)NULL);
+	ret = sip_add_str_to_msg(sip_msg, SIP_DATE, date, NULL, SIP_NUL);
 	return (ret);
 }
 
@@ -748,7 +746,7 @@ sip_add_in_reply_to(sip_msg_t sip_msg, char *reply_id)
 	if (reply_id == NULL)
 		return (EINVAL);
 	r = sip_add_str_to_msg(sip_msg, SIP_IN_REPLY_TO, reply_id, NULL,
-	    (char)NULL);
+	    SIP_NUL);
 	return (r);
 }
 
@@ -791,7 +789,7 @@ sip_add_mime_version(sip_msg_t sip_msg, char *version)
 	if (version == NULL)
 		return (EINVAL);
 	ret = sip_add_str_to_msg(sip_msg, SIP_MIME_VERSION, version, NULL,
-	    (char)NULL);
+	    SIP_NUL);
 	return (ret);
 }
 
@@ -807,7 +805,7 @@ sip_add_org(sip_msg_t sip_msg, char *org)
 		ret = sip_add_empty_hdr(sip_msg, SIP_ORGANIZATION);
 	} else {
 		ret = sip_add_str_to_msg(sip_msg, SIP_ORGANIZATION, org, NULL,
-		    (char)NULL);
+		    SIP_NUL);
 	}
 	return (ret);
 }
@@ -825,7 +823,7 @@ sip_add_priority(sip_msg_t sip_msg, char *prio)
 
 	if (prio == NULL)
 		return (EINVAL);
-	ret = sip_add_str_to_msg(sip_msg, SIP_PRIORITY, prio, NULL, (char)NULL);
+	ret = sip_add_str_to_msg(sip_msg, SIP_PRIORITY, prio, NULL, SIP_NUL);
 
 	return (ret);
 }
@@ -858,7 +856,7 @@ sip_add_privacy(sip_msg_t sip_msg, char *priv_val)
 	if (priv_val == NULL)
 		return (EINVAL);
 	ret = sip_add_str_to_msg(sip_msg, SIP_PRIVACY, priv_val, NULL,
-	    (char)NULL);
+	    SIP_NUL);
 	return (ret);
 }
 
@@ -873,7 +871,7 @@ sip_add_require(sip_msg_t sip_msg, char *req)
 
 	if (req == NULL)
 		return (EINVAL);
-	ret = sip_add_str_to_msg(sip_msg, SIP_REQUIRE, req, NULL, (char)NULL);
+	ret = sip_add_str_to_msg(sip_msg, SIP_REQUIRE, req, NULL, SIP_NUL);
 	return (ret);
 }
 
@@ -913,7 +911,7 @@ sip_add_server(sip_msg_t sip_msg, char *svr)
 
 	if (svr == NULL)
 		return (EINVAL);
-	ret = sip_add_str_to_msg(sip_msg, SIP_SERVER, svr, NULL, (char)NULL);
+	ret = sip_add_str_to_msg(sip_msg, SIP_SERVER, svr, NULL, SIP_NUL);
 	return (ret);
 }
 
@@ -929,7 +927,7 @@ sip_add_subject(sip_msg_t sip_msg, char *subject)
 		ret = sip_add_empty_hdr(sip_msg, SIP_SUBJECT);
 	} else {
 		ret = sip_add_str_to_msg(sip_msg, SIP_SUBJECT, subject, NULL,
-		    (char)NULL);
+		    SIP_NUL);
 	}
 	return (ret);
 }
@@ -947,7 +945,7 @@ sip_add_supported(sip_msg_t sip_msg, char *support)
 		ret = sip_add_empty_hdr(sip_msg, SIP_SUPPORT);
 	} else {
 		ret = sip_add_str_to_msg(sip_msg, SIP_SUPPORT, support, NULL,
-		    (char)NULL);
+		    SIP_NUL);
 	}
 	return (ret);
 }
@@ -964,7 +962,7 @@ sip_add_tstamp(sip_msg_t sip_msg, char *time, char *delay)
 
 	if (delay == NULL) {
 		ret = sip_add_str_to_msg(sip_msg, SIP_TIMESTAMP, time, NULL,
-		    (char)NULL);
+		    SIP_NUL);
 	} else {
 		ret = sip_add_2strs_to_msg(sip_msg, SIP_TIMESTAMP, time,
 		    B_FALSE, delay, NULL, ' ');
@@ -983,7 +981,7 @@ sip_add_unsupported(sip_msg_t sip_msg, char *unsupport)
 	if (unsupport == NULL)
 		return (EINVAL);
 	ret = sip_add_str_to_msg(sip_msg, SIP_UNSUPPORT, unsupport, NULL,
-	    (char)NULL);
+	    SIP_NUL);
 	return (ret);
 }
 
@@ -997,7 +995,7 @@ sip_add_user_agent(sip_msg_t sip_msg, char *usr)
 
 	if (usr == NULL)
 		return (EINVAL);
-	r = sip_add_str_to_msg(sip_msg, SIP_USER_AGENT, usr, NULL, (char)NULL);
+	r = sip_add_str_to_msg(sip_msg, SIP_USER_AGENT, usr, NULL, SIP_NUL);
 	return (r);
 }
 
@@ -1110,7 +1108,7 @@ int
 sip_add_allow_events(sip_msg_t sip_msg, char *t_event)
 {
 	return (sip_add_str_to_msg(sip_msg, SIP_ALLOW_EVENTS, t_event, NULL,
-	    (char)NULL));
+	    SIP_NUL));
 }
 
 /*
@@ -1204,7 +1202,7 @@ int
 sip_add_authen_info(sip_msg_t sip_msg, char *ainfo)
 {
 	return (sip_add_str_to_msg(sip_msg, SIP_AUTHEN_INFO, ainfo, NULL,
-	    (char)NULL));
+	    SIP_NUL));
 }
 
 /*
@@ -1257,7 +1255,7 @@ int
 sip_add_proxy_require(sip_msg_t sip_msg, char *opt)
 {
 	return (sip_add_str_to_msg(sip_msg, SIP_PROXY_REQ, opt, NULL,
-	    (char)NULL));
+	    SIP_NUL));
 }
 
 /*
@@ -1292,7 +1290,7 @@ sip_add_callid(sip_msg_t sip_msg, char *callid)
 		allocd = B_TRUE;
 	}
 	ret = sip_add_str_to_msg(sip_msg, SIP_CALL_ID, callid, NULL,
-	    (char)NULL);
+	    SIP_NUL);
 	if (allocd)
 		free(callid);
 	return (ret);

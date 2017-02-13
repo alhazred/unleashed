@@ -338,7 +338,7 @@ _argv_to_csl(char **strings)
 			(void) strcat(newstr, strings[i]);
 			(void) strcat(newstr, ",");
 		}
-		newstr[len-1] = NULL;
+		newstr[len-1] = '\0';
 		return (newstr);
 	} else
 		return (NULL);

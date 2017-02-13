@@ -26,8 +26,6 @@
 #ifndef	_POOL_INTERNAL_H
 #define	_POOL_INTERNAL_H
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <libnvpair.h>
 #include <stdarg.h>
 #include <sys/pool.h>
@@ -137,7 +135,7 @@ typedef struct char_buf
  * Initialize a pool_value_t
  */
 #define	POOL_VALUE_INITIALIZER	/* = DEFAULT POOL VALUE */	\
-	{POC_INVAL, NULL, NULL }
+	{POC_INVAL, NULL, 0 }
 
 struct pool_value {
 	pool_value_class_t	pv_class;		/* Value type */

@@ -106,7 +106,7 @@ pciex_process(topo_mod_t *mod, tnode_t *tn_hbr, di_node_t rcn,
 
 	if ((did = did_create(mod, rcn, topo_node_instance(tn_bb),
 	    topo_node_instance(tn_hbr), rci, TRUST_BDF)) == NULL)
-		return (NULL);
+		return (0);
 
 	did_markrc(did);
 

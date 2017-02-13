@@ -590,7 +590,7 @@ picl_hdl_error(picl_hdl_t hdl)
 	(void) pthread_mutex_lock(&piclhdl_lock);
 	err = PICL_STALEHANDLE;
 	if ((pid != picld_pid) || (hash_val >= picl_hdl_hi) ||
-	    (hash_val == NULL))
+	    (hash_val == 0))
 		err = PICL_INVALIDHANDLE;
 	(void) pthread_mutex_unlock(&piclhdl_lock);
 	return (err);
@@ -609,7 +609,7 @@ ptree_hdl_error(picl_hdl_t hdl)
 	(void) pthread_mutex_lock(&ptreehdl_lock);
 	err = PICL_STALEHANDLE;
 	if ((pid != picld_pid) || (hash_val >= ptree_hdl_hi) ||
-	    (hash_val == NULL))
+	    (hash_val == 0))
 		err = PICL_INVALIDHANDLE;
 	(void) pthread_mutex_unlock(&ptreehdl_lock);
 	return (err);

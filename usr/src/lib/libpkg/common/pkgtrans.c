@@ -253,7 +253,7 @@ _pkgtrans(char *device1, char *device2, char **pkg, int options)
 	/* check for datastream */
 	ids_name = NULL;
 	if (srcdev.bdevice) {
-		if (n = _getvol(srcdev.bdevice, NULL, NULL,
+		if (n = _getvol(srcdev.bdevice, NULL, 0,
 		    pkg_gt("Insert %v into %p."), srcdev.norewind)) {
 			cleanup();
 			if (n == 3)
@@ -354,7 +354,7 @@ _pkgtrans(char *device1, char *device2, char **pkg, int options)
 
 	if (ids_name) {
 		if (srcdev.cdevice && !srcdev.bdevice &&
-		(n = _getvol(srcdev.cdevice, NULL, NULL, NULL,
+		    (n = _getvol(srcdev.cdevice, NULL, 0, NULL,
 		    srcdev.norewind))) {
 			cleanup();
 			if (n == 3)
@@ -435,7 +435,6 @@ _pkgtrans(char *device1, char *device2, char **pkg, int options)
 			cleanup();
 			return (1);
 		}
-
 		/* write out header to stream */
 		if (wdsheader(hdr, ods_name, pkg)) {
 			cleanup();
@@ -709,7 +708,7 @@ genheader(char *src, char **pkg)
 
 		/* add pkg name, number of parts and the max part size */
 		if (snprintf(tmp_entry, ENTRY_MAX, "%s %d %d",
-				pkg[i], nparts, maxpsize) >= ENTRY_MAX) {
+		    pkg[i], nparts, maxpsize) >= ENTRY_MAX) {
 			progerr(pkg_gt(ERR_TRANSFER));
 			logerr(pkg_gt(ERR_MEM));
 			(void) fclose(fp);
@@ -811,7 +810,7 @@ wdsheader(struct dm_buf *hdr, char *device, char **pkg)
 	 * of each 512 bytes.
 	 */
 	for (block_cnt = 0; block_cnt < hdr->allocation;
-		block_cnt += BLK_SIZE) {
+	    block_cnt += BLK_SIZE) {
 		(void) write(ds_fd, (hdr->text_buffer + block_cnt), BLK_SIZE);
 	}
 
@@ -898,10 +897,10 @@ pkgxfer(char *srcinst, int options)
 	FILE	*fp, *pp;
 	char	*pt, *src, *dst;
 	char	dstdir[PATH_MAX],
-		temp[PATH_MAX],
-		srcdir[PATH_MAX],
-		cmd[CMDSIZE],
-		pkgname[NON_ABI_NAMELNGTH];
+	    temp[PATH_MAX],
+	    srcdir[PATH_MAX],
+	    cmd[CMDSIZE],
+	    pkgname[NON_ABI_NAMELNGTH];
 	int	i, n, part, nparts, maxpartsize, curpartcnt, iscomp;
 	char	volnos[128], tmpvol[128];
 	struct	statvfs64 svfsb;

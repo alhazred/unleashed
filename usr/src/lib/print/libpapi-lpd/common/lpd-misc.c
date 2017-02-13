@@ -83,7 +83,7 @@ recvfd(int sockfd)
 #if defined(sun) && defined(unix) && defined(I_RECVFD)
 	struct strrecvfd recv_fd;
 
-	memset(&recv_fd, NULL, sizeof (recv_fd));
+	memset(&recv_fd, 0, sizeof (recv_fd));
 	if (ioctl(sockfd, I_RECVFD, &recv_fd) == 0)
 		fd = recv_fd.fd;
 #else

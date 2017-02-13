@@ -1189,7 +1189,7 @@ raidcfg_unset_hsp(raidcfg_hsp_relation_t *hsp_relations,
 void
 raidcfg_init(void)
 {
-	(void) mutex_init(&raidcfg_mp, NULL, NULL);
+	(void) mutex_init(&raidcfg_mp, 0, NULL);
 	raid_plugin_init();
 	(void) raid_handle_init();
 	(void) obj_rescan(&raid_tab_sys);

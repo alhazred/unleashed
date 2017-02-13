@@ -484,7 +484,7 @@ devfs_bootdev_set_list(const char *dev_name, const uint_t options)
 			i++;
 		}
 		ptr--;
-		*ptr = NULL;
+		*ptr = '\0';
 
 		prom_list_free(prom_list);
 	}
@@ -1305,7 +1305,7 @@ devfs_dev_to_prom_names(char *dev_path, char *prom_path, size_t len)
 		i = len - opp->oprom_size;
 		if (i < 0) {
 			bcopy(opp->oprom_array, prom_path, len);
-			prom_path[len - 1] = NULL;
+			prom_path[len - 1] = '\0';
 			return (len);
 		} else {
 			bcopy(opp->oprom_array, prom_path, len);

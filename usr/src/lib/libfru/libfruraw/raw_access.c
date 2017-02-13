@@ -1098,7 +1098,7 @@ open_raw_data(raw_list_t *node)
 
 	cont_hash_obj = create_container_hash_object();
 	if (cont_hash_obj == NULL) {
-		return (NULL);
+		return ((uintptr_t)NULL);
 	}
 
 	add_hashobject_to_hashtable(cont_hash_obj);
@@ -1122,7 +1122,7 @@ open_raw_data(raw_list_t *node)
 	}
 
 	if (retval < 0) {
-		return (NULL);
+		return ((uintptr_t)NULL);
 	}
 
 	cont_hash_obj->u.cont_obj->num_of_section = cont_info.num_sections;
@@ -1131,7 +1131,7 @@ open_raw_data(raw_list_t *node)
 	for (count = 0; count < cont_info.num_sections; count++) {
 		sec_hash_obj = create_section_hash_object();
 		if (sec_hash_obj == NULL) {
-			return (NULL);
+			return ((uintptr_t)NULL);
 		}
 
 		add_hashobject_to_hashtable(sec_hash_obj);

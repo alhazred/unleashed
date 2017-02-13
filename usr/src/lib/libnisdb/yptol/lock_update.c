@@ -135,7 +135,7 @@ init_update_lock_map()
 				if (lf_size < sizeof (updatearray)) {
 					bzero(buff, sizeof (buff));
 					if ((write_cnt = write(lockfile, buff,
-					    sizeof (buff)) != sizeof (buff))) {
+					    sizeof (buff))) != sizeof (buff)) {
 						if (write_cnt < 0) {
 							logmsg(MSG_NOTIMECHECK,
 								LOG_ERR,
@@ -350,7 +350,7 @@ try_lock_map_update(map_ctrl *map)
 	 *
 	 * Keep trying until either lock is obtained or somebody else gets it.
 	 */
-	while (1) {
+	for (;;) {
 		rc = mutex_trylock(&(shmupdatearray->updatenode[hashval]));
 
 		switch (rc) {

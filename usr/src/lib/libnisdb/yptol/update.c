@@ -294,7 +294,7 @@ update_map_if_required(map_ctrl *map, bool_t wait)
 		flags |= THR_DETACHED;
 
 	/* Kick off update thread */
-	if (0 != thr_create(NULL, NULL, update_thread, new_map,
+	if (0 != thr_create(NULL, 0, update_thread, new_map,
 							flags, &tid)) {
 		logmsg(MSG_NOTIMECHECK, LOG_ERR,
 				"Could not create NIS update thread");

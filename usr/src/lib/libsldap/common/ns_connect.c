@@ -354,7 +354,7 @@ __s_api_requestServer(const char *request, const char *server,
 			(void) sprintf(errstr, gettext("No server FQDN format "
 			    "returned from ldap_cachemgr"));
 			MKERROR(LOG_WARNING, *error, NS_CONFIG_CACHEMGR,
-			    strdup(errstr), NULL);
+			    strdup(errstr), 0);
 			free(ret->server);
 			ret->server = NULL;
 			return (NS_LDAP_OP_FAILED);
@@ -1166,7 +1166,7 @@ process_pwd_mgmt(char *bind_type, int ldaprc,
 		if (pwd_status != NS_PASSWD_GOOD) {
 			MKERROR_PWD_MGMT(*errorp,
 			    ldaprc, strdup(errstr),
-			    pwd_status, 0, NULL);
+			    pwd_status, 0, 0);
 		} else {
 			MKERROR(LOG_ERR, *errorp, ldaprc, strdup(errstr),
 			    NS_LDAP_MEMORY);
@@ -1267,7 +1267,7 @@ process_pwd_mgmt(char *bind_type, int ldaprc,
 					    strdup(errstr),
 					    pwd_status,
 					    0,
-					    NULL);
+					    0);
 					exit_rc = NS_LDAP_INTERNAL;
 				} else {
 					MKERROR_PWD_MGMT(*errorp,
@@ -1275,7 +1275,7 @@ process_pwd_mgmt(char *bind_type, int ldaprc,
 					    NULL,
 					    pwd_status,
 					    0,
-					    NULL);
+					    0);
 					exit_rc =
 					    NS_LDAP_SUCCESS_WITH_INFO;
 				}
@@ -1296,7 +1296,7 @@ process_pwd_mgmt(char *bind_type, int ldaprc,
 				    NULL,
 				    pwd_status,
 				    sec_until_exp,
-				    NULL);
+				    0);
 				exit_rc =
 				    NS_LDAP_SUCCESS_WITH_INFO;
 				break;

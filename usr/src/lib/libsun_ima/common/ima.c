@@ -1330,7 +1330,7 @@ IMA_API IMA_STATUS IMA_AddStaticDiscoveryTarget(
 			return (IMA_ERROR_INVALID_PARAMETER);
 		}
 
-		*closeBracketPos = NULL;
+		*closeBracketPos = '\0';
 		(void) strlcpy(target_addr_str, &tmp_target_str[1],
 		    sizeof (target_addr_str));
 
@@ -1345,7 +1345,7 @@ IMA_API IMA_STATUS IMA_AddStaticDiscoveryTarget(
 		if (*closeBracketPos == ':') {
 			closeBracketPos++;
 
-			if (*closeBracketPos != NULL) {
+			if (*closeBracketPos != '\0') {
 				(void) strlcpy(target_port_str, closeBracketPos,
 				    sizeof (target_port_str));
 				target_port = atoi(target_port_str);
@@ -1366,12 +1366,12 @@ IMA_API IMA_STATUS IMA_AddStaticDiscoveryTarget(
 			(void) strlcpy(target_addr_str, tmp_target_str,
 			    sizeof (target_addr_str));
 		} else {
-			*colonPos = NULL;
+			*colonPos = '\0';
 			(void) strlcpy(target_addr_str, tmp_target_str,
 			    sizeof (target_addr_str));
 			/* Extract the port number */
 			colonPos++;
-			if (*colonPos != NULL) {
+			if (*colonPos != '\0') {
 				(void) strlcpy(target_port_str, colonPos,
 				    sizeof (target_port_str));
 				target_port = atoi(target_port_str);

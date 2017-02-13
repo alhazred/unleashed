@@ -32,7 +32,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
  * Simplified front end to client rpc.
@@ -115,7 +114,7 @@ rpc_call(const char *host, const rpcprog_t prognum, const rpcvers_t versnum,
 		return (rpc_createerr.cf_stat);
 	}
 
-	if ((nettype == NULL) || (nettype[0] == NULL))
+	if ((nettype == NULL) || (nettype[0] == '\0'))
 		nettype = "netpath";
 	if (!(rcp->valid &&
 	    rcp->pid == getpid() &&
@@ -143,7 +142,7 @@ rpc_call(const char *host, const rpcprog_t prognum, const rpcvers_t versnum,
 		timeout.tv_usec = 0;
 		timeout.tv_sec = 5;
 		(void) CLNT_CONTROL(rcp->client,
-				CLSET_RETRY_TIMEOUT, (char *)&timeout);
+		    CLSET_RETRY_TIMEOUT, (char *)&timeout);
 		if (CLNT_CONTROL(rcp->client, CLGET_FD, (char *)&fd))
 			(void) fcntl(fd, F_SETFD, 1);	/* close on exec */
 		rcp->prognum = prognum;
@@ -160,7 +159,7 @@ rpc_call(const char *host, const rpcprog_t prognum, const rpcvers_t versnum,
 	tottimeout.tv_sec = 25;
 	tottimeout.tv_usec = 0;
 	clnt_stat = CLNT_CALL(rcp->client, procnum, inproc, (char *)in,
-				outproc, out, tottimeout);
+	    outproc, out, tottimeout);
 	/*
 	 * if call failed, empty cache
 	 */

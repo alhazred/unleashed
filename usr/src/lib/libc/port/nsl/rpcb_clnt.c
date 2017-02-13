@@ -536,7 +536,7 @@ got_entry(rpcb_entry_list_ptr relp, struct netconfig *nconf)
 		if ((strcmp(nconf->nc_proto, rmap->r_nc_proto) == 0) &&
 		    (strcmp(nconf->nc_protofmly, rmap->r_nc_protofmly) == 0) &&
 		    (nconf->nc_semantics == rmap->r_nc_semantics) &&
-		    (rmap->r_maddr != NULL) && (rmap->r_maddr[0] != NULL)) {
+		    (rmap->r_maddr != NULL) && (rmap->r_maddr[0] != '\0')) {
 			na = uaddr2taddr(nconf, rmap->r_maddr);
 			break;
 		}
@@ -775,7 +775,6 @@ __rpcb_findaddr_timed(rpcprog_t program, rpcvers_t version,
 			clnt_geterr(client, &rpc_createerr.cf_error);
 			rpc_createerr.cf_stat = RPC_PMAPFAILURE;
 			goto error;
-			break;
 		}
 
 	} else {
@@ -868,7 +867,6 @@ __rpcb_findaddr_timed(rpcprog_t program, rpcvers_t version,
 			clnt_geterr(client, &rpc_createerr.cf_error);
 			rpc_createerr.cf_stat = RPC_PMAPFAILURE;
 			goto error;
-			break;
 		}
 	} /* End of version 3 */
 	/*
@@ -1202,7 +1200,7 @@ rpcb_gettime(const char *host, time_t *timep)
 	int vers;
 	enum clnt_stat st;
 
-	if ((host == NULL) || (host[0] == NULL)) {
+	if ((host == NULL) || (host[0] == '\0')) {
 		(void) time(timep);
 		return (TRUE);
 	}

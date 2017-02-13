@@ -88,7 +88,7 @@ ecleanup(void)
 {
 	if (errfile[0]) {
 		(void) unlink(errfile);
-		errfile[0] = NULL;
+		errfile[0] = '\0';
 	}
 }
 
@@ -218,7 +218,7 @@ epopen(char *cmd, char *mode)
 
 	if (strlcpy(errfile, perrfile, sizeof (errfile)) > sizeof (errfile)) {
 		progerr(pkg_gt("file name max length %d; name is too long: %s"),
-						sizeof (errfile), perrfile);
+		    sizeof (errfile), perrfile);
 		return ((FILE *)0);
 	}
 
@@ -237,7 +237,7 @@ epopen(char *cmd, char *mode)
 
 	if (alen > len) {
 		progerr(pkg_gt("command max length %d; cmd is too long: %s"),
-								len, cmd);
+		    len, cmd);
 		return ((FILE *)0);
 	}
 
@@ -427,7 +427,7 @@ e_ExecCmdArray(int *r_status, char **r_results,
 		/* read as much child data as there is available buffer space */
 
 		bytesRead = read(ipipe[0], buffer + bufferIndex,
-						bufferSize - bufferIndex);
+		    bufferSize - bufferIndex);
 
 		/* break out of read loop if end-of-file encountered */
 
@@ -459,9 +459,9 @@ e_ExecCmdArray(int *r_status, char **r_results,
 		bufferIndex += bytesRead;
 		if (bufferIndex >= bufferSize) {
 			buffer = realloc(buffer,
-					bufferSize += PIPE_BUFFER_INCREMENT);
+			    bufferSize += PIPE_BUFFER_INCREMENT);
 			(void) memset(buffer + bufferIndex, 0,
-				bufferSize - bufferIndex);
+			    bufferSize - bufferIndex);
 		}
 	}
 
@@ -570,5 +570,5 @@ e_ExecCmdList(int *r_status, char **r_results,
 
 	va_end(ap);
 	return (e_ExecCmdArray(r_status, r_results, a_inputFile,
-								a_cmd, array));
+	    a_cmd, array));
 }

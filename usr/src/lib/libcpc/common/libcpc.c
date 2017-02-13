@@ -202,7 +202,7 @@ cpc_set_create(cpc_t *cpc)
 	set->cs_fd	= -1;
 	set->cs_pctx	= NULL;
 	set->cs_id	= -1;
-	set->cs_thr	= NULL;
+	set->cs_thr	= 0;
 
 	sigblocked = cpc_lock(cpc);
 	set->cs_next = cpc->cpc_sets;
@@ -616,7 +616,7 @@ cpc_unbind(cpc_t *cpc, cpc_set_t *set)
 		break;
 	}
 
-	set->cs_thr = NULL;
+	set->cs_thr = 0;
 	set->cs_id = -1;
 	set->cs_state = CS_UNBOUND;
 	if (ret != 0)

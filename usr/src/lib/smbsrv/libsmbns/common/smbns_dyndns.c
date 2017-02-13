@@ -1696,7 +1696,7 @@ dyndns_search_entry(int update_zone, const char *hostname, const char *ip_addr,
 		hints.ai_family = family;
 		hints.ai_flags = AI_NUMERICHOST;
 		if (getaddrinfo(hostname, NULL, &hints, &res)) {
-			return (NULL);
+			return (0);
 		}
 		if (res) {
 			/*
@@ -1730,7 +1730,7 @@ dyndns_search_entry(int update_zone, const char *hostname, const char *ip_addr,
 		}
 	} else {
 		if (smb_getnameinfo(&ipaddr, dns_hostname, NI_MAXHOST, 0))
-			return (NULL);
+			return (0);
 
 		if (strncasecmp(dns_hostname, hostname,
 		    strlen(hostname)) == 0) {

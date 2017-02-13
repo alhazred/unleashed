@@ -226,7 +226,7 @@ int ss_listen (sci_idx)
      * Let libtecla deal with SIGINT when it's doing its own processing
      * otherwise the input line won't be cleared on SIGINT.
      */
-    if (gl_trap_signal(gl, SIGINT, GLS_DONT_FORWARD, GLS_ABORT, NULL)) {
+    if (gl_trap_signal(gl, SIGINT, GLS_DONT_FORWARD, GLS_ABORT, 0)) {
         ss_error(sci_idx, 0, dgettext(TEXT_DOMAIN,
             "Failed to trap SIGINT.\n"));
 	code = SS_ET_TECLA_ERR;

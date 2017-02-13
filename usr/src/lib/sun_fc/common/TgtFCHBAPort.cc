@@ -279,7 +279,8 @@ HBA_PORTATTRIBUTES TgtFCHBAPort::getPortAttributes(uint64_t &stateChange) {
 	attributes.PortFcId = attrs.PortFcId;
 	attributes.PortType = attrs.PortType;
 	attributes.PortState = attrs.PortState;
-	attributes.PortSupportedClassofService = attrs.PortSupportedClassofService;
+	attributes.PortSupportedClassofService =
+	    attrs.PortSupportedClassofService;
 	attributes.PortSupportedSpeed = attrs.PortSupportedSpeed;
 	attributes.PortSpeed = attrs.PortSpeed;
 	attributes.PortMaxFrameSize = attrs.PortMaxFrameSize;
@@ -287,7 +288,8 @@ HBA_PORTATTRIBUTES TgtFCHBAPort::getPortAttributes(uint64_t &stateChange) {
 	memcpy(&attributes.NodeWWN, &attrs.NodeWWN, 8);
 	memcpy(&attributes.PortWWN, &attrs.PortWWN, 8);
 	memcpy(&attributes.FabricName, &attrs.FabricName, 8);
-	memcpy(&attributes.PortSupportedFc4Types, &attrs.PortSupportedFc4Types, 32);
+	memcpy(&attributes.PortSupportedFc4Types,
+	    &attrs.PortSupportedFc4Types, 32);
 	memcpy(&attributes.PortActiveFc4Types, &attrs.PortActiveFc4Types, 32);
 	memcpy(&attributes.PortSymbolicName, &attrs.PortSymbolicName, 256);
 
@@ -335,7 +337,8 @@ HBA_PORTATTRIBUTES TgtFCHBAPort::getDiscoveredAttributes(
 	attributes.PortFcId = attrs.PortFcId;
 	attributes.PortType = attrs.PortType;
 	attributes.PortState = attrs.PortState;
-	attributes.PortSupportedClassofService = attrs.PortSupportedClassofService;
+	attributes.PortSupportedClassofService =
+	    attrs.PortSupportedClassofService;
 	attributes.PortSupportedSpeed = attrs.PortSupportedSpeed;
 	attributes.PortSpeed = attrs.PortSpeed;
 	attributes.PortMaxFrameSize = attrs.PortMaxFrameSize;
@@ -343,7 +346,8 @@ HBA_PORTATTRIBUTES TgtFCHBAPort::getDiscoveredAttributes(
 	memcpy(&attributes.NodeWWN, &attrs.NodeWWN, 8);
 	memcpy(&attributes.PortWWN, &attrs.PortWWN, 8);
 	memcpy(&attributes.FabricName, &attrs.FabricName, 8);
-	memcpy(&attributes.PortSupportedFc4Types, &attrs.PortSupportedFc4Types, 32);
+	memcpy(&attributes.PortSupportedFc4Types,
+	    &attrs.PortSupportedFc4Types, 32);
 	memcpy(&attributes.PortActiveFc4Types, &attrs.PortActiveFc4Types, 32);
 	memcpy(&attributes.PortSymbolicName, &attrs.PortSymbolicName, 256);
 
@@ -378,7 +382,8 @@ HBA_PORTATTRIBUTES TgtFCHBAPort::getDiscoveredAttributes(
 	attributes.PortFcId = attrs.PortFcId;
 	attributes.PortType = attrs.PortType;
 	attributes.PortState = attrs.PortState;
-	attributes.PortSupportedClassofService = attrs.PortSupportedClassofService;
+	attributes.PortSupportedClassofService =
+	    attrs.PortSupportedClassofService;
 	attributes.PortSupportedSpeed = attrs.PortSupportedSpeed;
 	attributes.PortSpeed = attrs.PortSpeed;
 	attributes.PortMaxFrameSize = attrs.PortMaxFrameSize;
@@ -386,7 +391,8 @@ HBA_PORTATTRIBUTES TgtFCHBAPort::getDiscoveredAttributes(
 	memcpy(&attributes.NodeWWN, &attrs.NodeWWN, 8);
 	memcpy(&attributes.PortWWN, &attrs.PortWWN, 8);
 	memcpy(&attributes.FabricName, &attrs.FabricName, 8);
-	memcpy(&attributes.PortSupportedFc4Types, &attrs.PortSupportedFc4Types, 32);
+	memcpy(&attributes.PortSupportedFc4Types,
+	    &attrs.PortSupportedFc4Types, 32);
 	memcpy(&attributes.PortActiveFc4Types, &attrs.PortActiveFc4Types, 32);
 	memcpy(&attributes.PortSymbolicName, &attrs.PortSymbolicName, 256);
 
@@ -433,24 +439,24 @@ void TgtFCHBAPort::sendRLS(uint64_t destWWN,
 	fctio.fctio_obuf = (uint64_t)(uintptr_t)new uchar_t[*pRspBufferSize];
 	fctio.fctio_olen = *pRspBufferSize;
 
-	if (fctio.fctio_obuf == NULL) {
+	if (fctio.fctio_obuf == (uintptr_t)NULL) {
 	    log.noMemory();
 	    throw InternalError();
 	}
 
 	fct_ioctl(FCTIO_CMD, &fctio);
-	memcpy(pRspBuffer, (uchar_t *)(uintptr_t)fctio.fctio_obuf, 
-	       *pRspBufferSize);
-	if (fctio.fctio_obuf != NULL) {
+	memcpy(pRspBuffer, (uchar_t *)(uintptr_t)fctio.fctio_obuf,
+	    *pRspBufferSize);
+	if (fctio.fctio_obuf != (uintptr_t)NULL) {
 	    delete((uchar_t *)(uintptr_t)fctio.fctio_obuf);
 	}
 }
 
-/**
+/*
  * @memo	    Validate that the port is still present in the system
  * @exception	    UnavailableException if the port is not present
  * @version	    1.7
- * 
+ *
  * @doc		    If the port is still present on the system, the routine
  *		    will return normally.  If the port is not present
  *		    an exception will be thrown.
