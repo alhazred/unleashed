@@ -278,10 +278,10 @@ quit(int retcode)
 		} else {
 			/* LINTED variable format specified */
 			(void) snprintf(exit_msg, sizeof (exit_msg),
-				qreason(1, retcode, installStarted,
-					includeZonename),
-					(pkginst ? pkginst : "unknown"),
-					zoneName);
+			    qreason(1, retcode, installStarted,
+			    includeZonename),
+			    (pkginst ? pkginst : "unknown"),
+			    zoneName);
 			set_dr_exitmsg(exit_msg);
 		}
 
@@ -289,12 +289,12 @@ quit(int retcode)
 		ptext(stderr, MSG_DRYRUN_DONE);
 		ptext(stderr, MSG_NOCHANGE);
 
-		if (tmpdir[0] != NULL)
+		if (tmpdir[0] != '\0')
 			(void) rrmdir(tmpdir);
 
 	} else {
 		/* fix bug #1082589 that deletes root file */
-		if (tmpdir[0] != NULL) {
+		if (tmpdir[0] != '\0') {
 			(void) rrmdir(tmpdir);
 		}
 
@@ -346,7 +346,7 @@ quit(int retcode)
 					(void) rrmdir(pkgloc);
 				if (rename(pkgloc_sav, pkgloc) == -1) {
 					progerr(ERR_PACKAGEBINREN,
-						pkgloc_sav, pkgloc);
+					    pkgloc_sav, pkgloc);
 				}
 			}
 		} else {
@@ -404,10 +404,10 @@ quitmsg(int retcode)
 	(void) putc('\n', stderr);
 	if (pkgaskFlag) {
 		ptext(stderr, qreason(0, retcode, installStarted,
-			includeZonename), zoneName);
+		    includeZonename), zoneName);
 	} else if (pkginst) {
 		ptext(stderr, qreason(1, retcode, installStarted,
-			includeZonename), pkginst, zoneName);
+		    includeZonename), pkginst, zoneName);
 	}
 
 	if (retcode && !installStarted) {
@@ -451,7 +451,7 @@ mailmsg(int retcode)
 	(void) uname(&utsbuf);
 
 	ptext(pp, qreason(2, retcode, installStarted, includeZonename),
-		pkgname, utsbuf.nodename, pkginst, zoneName);
+	    pkgname, utsbuf.nodename, pkginst, zoneName);
 
 	if (pclose(pp)) {
 		logerr(WRN_FLMAIL);

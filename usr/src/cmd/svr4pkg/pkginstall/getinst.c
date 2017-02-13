@@ -110,10 +110,10 @@ getinst(int *updatingExisting, struct pkginfo *info, int npkgs,
 	samearch = nsamearch = 0;
 	sameinst  = NULL;
 	for (i = 0; i < npkgs; i++) {
-		if (strcmp(info[i].arch, pkgarch) == NULL) {
+		if (strcmp(info[i].arch, pkgarch) == 0) {
 			samearch = i;
 			nsamearch++;
-			if (strcmp(info[i].version, pkgvers) == NULL) {
+			if (strcmp(info[i].version, pkgvers) == 0) {
 				sameinst = info[i].pkginst;
 			}
 		}
@@ -148,7 +148,7 @@ getinst(int *updatingExisting, struct pkginfo *info, int npkgs,
 				ptext(stderr, msgtext);
 			} else {
 				(void) fprintf(stdout,
-					"install-ovewrite=true\n");
+				    "install-ovewrite=true\n");
 				(void) fprintf(stdout, "ckinstance=4\n");
 			}
 			quit(4);
@@ -168,7 +168,7 @@ getinst(int *updatingExisting, struct pkginfo *info, int npkgs,
 				ptext(stderr, msgtext, pkgabrv);
 			} else {
 				(void) fprintf(stdout,
-					"install-too-many-instances=true\n");
+				    "install-too-many-instances=true\n");
 				(void) fprintf(stdout, "ckinstance=4\n");
 			}
 			quit(4);
@@ -189,7 +189,7 @@ getinst(int *updatingExisting, struct pkginfo *info, int npkgs,
 	}
 
 	inst = prompt(info, npkgs);
-	if (strcmp(inst, "new") == NULL) {
+	if (strcmp(inst, "new") == 0) {
 		inst = nextinst();
 		return (inst);
 	}
@@ -221,7 +221,7 @@ nextinst(void)
 	(void) strcpy(newinst, pkgabrv);
 	while (pkginfo(&info, newinst, NULL, NULL) == 0) {
 		(void) snprintf(newinst, sizeof (newinst),
-				"%s.%d", pkgabrv, n++);
+		    "%s.%d", pkgabrv, n++);
 	}
 	return (newinst);
 }
@@ -243,7 +243,7 @@ prompt(struct pkginfo *info, int npkgs)
 		 * instance of this package
 		 */
 		n = ckyorn(ans, NULL, NULL, MSG_GETINST_HELP1,
-			MSG_GETINST_PROMPT1);
+		    MSG_GETINST_PROMPT1);
 		if (n != 0) {
 			quit(n);
 		}
@@ -257,8 +257,8 @@ prompt(struct pkginfo *info, int npkgs)
 
 	for (i = 0; i < npkgs; i++) {
 		(void) snprintf(temp, sizeof (temp),
-				"%s %s\n(%s) %s", info[i].pkginst,
-			info[i].name, info[i].arch, info[i].version);
+		    "%s %s\n(%s) %s", info[i].pkginst,
+		    info[i].name, info[i].arch, info[i].version);
 		if (setitem(menup, temp)) {
 			progerr("no memory");
 			quit(99);

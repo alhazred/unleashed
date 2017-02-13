@@ -183,8 +183,7 @@ main(int argc, char *argv[])
 	char	buf[MAX_PKG_PARAM_LENGTH];
 	char	temp[MAX_PKG_PARAM_LENGTH];
 	char	param[MAX_PKG_PARAM_LENGTH];
-	char	*pt, *value, *pkginst, *tmpdir, *abi_sym_ptr,
-		**cmdparam;
+	char	*pt, *value, *pkginst, *tmpdir, *abi_sym_ptr, **cmdparam;
 	char	*pkgname;
 	char	*pkgvers;
 	char	*pkgarch;
@@ -225,27 +224,27 @@ main(int argc, char *argv[])
 	environ = NULL;
 	while ((c = getopt(argc, argv, "osnp:l:r:b:d:f:a:v:?")) != EOF) {
 		switch (c) {
-		    case 'n':
+		case 'n':
 			nflag++;
 			break;
 
-		    case 's':
+		case 's':
 			sflag++;
 			break;
 
-		    case 'o':
+		case 'o':
 			overwrite++;
 			break;
 
-		    case 'p':
+		case 'p':
 			putparam("PSTAMP", optarg);
 			break;
 
-		    case 'l':
+		case 'l':
 			llimit = strtoull(optarg, NULL, 10);
 			break;
 
-		    case 'r':
+		case 'r':
 			pt = strtok(optarg, " \t\n, ");
 			n = 0;
 			do {
@@ -258,27 +257,27 @@ main(int argc, char *argv[])
 			rootlist[n] = NULL;
 			break;
 
-		    case 'b':
+		case 'b':
 			basedir = optarg;
 			break;
 
-		    case 'f':
+		case 'f':
 			protofile = optarg;
 			break;
 
-		    case 'd':
+		case 'd':
 			device = flex_device(optarg, 1);
 			break;
 
-		    case 'a':
+		case 'a':
 			putparam("ARCH", optarg);
 			break;
 
-		    case 'v':
+		case 'v':
 			putparam("VERSION", optarg);
 			break;
 
-		    default:
+		default:
 			usage();
 			/*NOTREACHED*/
 			/*
@@ -427,7 +426,7 @@ main(int argc, char *argv[])
 
 	/* add command line variables */
 	while (*cmdparam && (value = strchr(*cmdparam, '=')) != NULL) {
-		*value = NULL;	/* terminate the parameter */
+		*value = '\0';	/* terminate the parameter */
 		value++;	/* value is now the value (not '=') */
 		putparam(*cmdparam++, value);  /* store it in environ */
 	}
@@ -465,7 +464,7 @@ main(int argc, char *argv[])
 		/* LINTED do not use cftime(); use strftime instead */
 		(void) cftime(buf, "\045m/\045d/\045Y", &clock);
 		(void) snprintf(temp, sizeof (temp),
-			gettext("Dev Release %s"), buf);
+		    gettext("Dev Release %s"), buf);
 		putparam("VERSION", temp);
 		pkgvers = getenv("VERSION");
 		logerr(gettext(WRN_SETPARAM), "VERSION", temp);
@@ -487,7 +486,7 @@ main(int argc, char *argv[])
 		(void) cftime(buf, "\045Y\045m\045d\045H\045M\045S", &clock);
 		(void) uname(&utsbuf);
 		(void) snprintf(temp, sizeof (temp), "%s%s",
-			utsbuf.nodename, buf);
+		    utsbuf.nodename, buf);
 		putparam("PSTAMP", temp);
 		logerr(gettext(WRN_SETPARAM), "PSTAMP", temp);
 	}
@@ -565,8 +564,8 @@ main(int argc, char *argv[])
 		 * to 512 byte blocks
 		 */
 		limit = (fsblkcnt_t)(((fsblkcnt_t)frsize > 0) ?
-			howmany(frsize, DEV_BSIZE) :
-			howmany(bsize, DEV_BSIZE)) * svfsb.f_bavail;
+		    howmany(frsize, DEV_BSIZE) :
+		    howmany(bsize, DEV_BSIZE)) * svfsb.f_bavail;
 
 	if (ilimit == 0) {
 		ilimit = (svfsb.f_favail > 0) ?
@@ -589,7 +588,7 @@ main(int argc, char *argv[])
 	}
 
 	(void) snprintf(pkgloc, sizeof (pkgloc), "%s/%s",
-			pkgdev.dirname, pkginst);
+	    pkgdev.dirname, pkginst);
 	if (!isdir(pkgloc) && !overwrite) {
 		progerr(gettext(ERR_OVERWRITE), pkgloc);
 		quit(1);
@@ -643,7 +642,7 @@ main(int argc, char *argv[])
 			svept->ftype = '?';
 			svept->ainfo.local = t_pkginfo;
 			(void) cverify(0, &svept->ftype, t_pkginfo,
-				&svept->cinfo, 1);
+			    &svept->cinfo, 1);
 			svept->ftype = 'i';
 			break;
 		}
@@ -676,7 +675,7 @@ main(int argc, char *argv[])
 
 			(void) fprintf(stderr, gettext(MSG_VALSCRIPTS));
 			(void) snprintf(inst_path, sizeof (inst_path),
-					"%s/install", pkgloc);
+			    "%s/install", pkgloc);
 			checkscripts(inst_path, 0);
 		}
 	}
@@ -695,7 +694,7 @@ trap(int n)
 		quit(3);
 	else {
 		(void) fprintf(stderr, gettext("%s terminated (signal %d).\n"),
-				get_prog_name(), n);
+		    get_prog_name(), n);
 		quit(99);
 	}
 }
@@ -746,8 +745,8 @@ outvol(struct cfent **eptlist, unsigned int eptnum, int part, int nparts)
 			if (eptlist[i] == svept)
 				continue; /* don't copy pkginfo file */
 			(void) snprintf(temp, sizeof (temp),
-				"%s/install/%s", pkgloc,
-				eptlist[i]->path);
+			    "%s/install/%s", pkgloc,
+			    eptlist[i]->path);
 			path = temp;
 		} else
 			path = srcpath(pkgloc, eptlist[i]->path, part, nparts);
@@ -755,7 +754,7 @@ outvol(struct cfent **eptlist, unsigned int eptnum, int part, int nparts)
 			if (slinkf(eptlist[i]->ainfo.local, path))
 				quit(1);
 		} else if (copyf(eptlist[i]->ainfo.local, path,
-				eptlist[i]->cinfo.modtime)) {
+		    eptlist[i]->cinfo.modtime)) {
 			quit(1);
 		}
 
@@ -804,7 +803,7 @@ ckmissing(char *path, char type)
 		dir[ndir] = path;
 		if ((++ndir % MALSIZ) == 0) {
 			dir = (char **)realloc((void *)dir,
-				(ndir+MALSIZ)*sizeof (char *));
+			    (ndir+MALSIZ)*sizeof (char *));
 			if (dir == NULL) {
 				progerr(gettext(ERR_MEMORY), errno);
 				quit(99);
@@ -921,16 +920,16 @@ valid_zone_attr(struct cfent **eptlist)
 
 	/* Determine "HOLLOW" setting for this package */
 	is_hollow = pkginfoParamTruth(pkginfoFP, PKG_HOLLOW_VARIABLE,
-			"true", B_FALSE);
+	    "true", B_FALSE);
 
 	/* Determine "ALLZONES" setting for this package */
 	all_zones = pkginfoParamTruth(pkginfoFP, PKG_ALLZONES_VARIABLE,
-			"true", B_FALSE);
+	    "true", B_FALSE);
 
 	/* Determine "THISZONE" setting for this package, if no request file */
 	if (!this_zone)
 		this_zone = pkginfoParamTruth(pkginfoFP, PKG_THISZONE_VARIABLE,
-			"true", B_FALSE);
+		    "true", B_FALSE);
 
 	/* Close pkginfo file */
 	(void) fclose(pkginfoFP);

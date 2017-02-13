@@ -118,7 +118,7 @@ pkgobjassign(struct cfent *ept, char **server_local, char **client_local,
 		if (ept->ainfo.local == NULL) {
 			source[0] = '~';
 			(void) strlcpy(&source[1], ept->path,
-						sizeof (source)-1);
+			    sizeof (source)-1);
 			ept->ainfo.local = pathdup(source);
 			*server_local = ept->ainfo.local;
 			*client_local = ept->ainfo.local;
@@ -227,7 +227,7 @@ seed_pkgobjmap(struct cfextra *ext_entry, char *path, char *local)
 
 	if (ext_ptr == NULL || *ext_ptr == NULL) {
 		progerr(gettext(ERR_MEMORY));
-		return (NULL);
+		return (0);
 	}
 
 	ext = *ext_ptr;
@@ -236,15 +236,15 @@ seed_pkgobjmap(struct cfextra *ext_entry, char *path, char *local)
 
 	/* Figure out all of the offsets. */
 	client_path_os = ((ptrdiff_t)ext->client_path -
-			(ptrdiff_t)ext->cf_ent.path);
+	    (ptrdiff_t)ext->cf_ent.path);
 	server_path_os = ((ptrdiff_t)ext->server_path -
-			(ptrdiff_t)ext->cf_ent.path);
+	    (ptrdiff_t)ext->cf_ent.path);
 	map_path_os = ((ptrdiff_t)ext->map_path -
-			(ptrdiff_t)ext->cf_ent.path);
+	    (ptrdiff_t)ext->cf_ent.path);
 	client_local_os = ((ptrdiff_t)ext->client_local -
-			(ptrdiff_t)ext->cf_ent.ainfo.local);
+	    (ptrdiff_t)ext->cf_ent.ainfo.local);
 	server_local_os = ((ptrdiff_t)ext->server_local -
-			(ptrdiff_t)ext->cf_ent.ainfo.local);
+	    (ptrdiff_t)ext->cf_ent.ainfo.local);
 
 	/* Allocate and store the path name. */
 	ext->cf_ent.path = pathdup(path);
@@ -625,14 +625,14 @@ ckdup(struct cfent *ept1, struct cfent *ept2)
 
 	if (strcmp(ept2->ainfo.owner, "?") == 0)
 		(void) strlcpy(ept2->ainfo.owner, ept1->ainfo.owner,
-			sizeof (ept2->ainfo.owner));
+		    sizeof (ept2->ainfo.owner));
 	if (strcmp(ept1->ainfo.owner, ept2->ainfo.owner) &&
 	    strcmp(ept1->ainfo.owner, "?"))
 		return (0);
 
 	if (strcmp(ept2->ainfo.group, "?") == 0)
 		(void) strlcpy(ept2->ainfo.group, ept1->ainfo.group,
-			sizeof (ept2->ainfo.group));
+		    sizeof (ept2->ainfo.group));
 	if (strcmp(ept1->ainfo.group, ept2->ainfo.group) &&
 	    strcmp(ept1->ainfo.group, "?"))
 		return (0);
@@ -712,7 +712,7 @@ cp_cfent(struct cfent *cf_ent, struct cfextra *el_ent)
 	tp->fsys_value = el_ent->fsys_value;
 	tp->cf_ent.volno = el_ent->cf_ent.volno;
 	(void) strlcpy(tp->cf_ent.pkg_class, el_ent->cf_ent.pkg_class,
-			sizeof (tp->cf_ent.pkg_class));
+	    sizeof (tp->cf_ent.pkg_class));
 	tp->cf_ent.pkg_class_idx = el_ent->cf_ent.pkg_class_idx;
 	tp->cf_ent.pinfo = cf_ent->pinfo;
 

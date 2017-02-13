@@ -28,7 +28,9 @@
 /* All Rights Reserved */
 
 
-#define	__EXTENTIONS__
+#ifndef __EXTENSIONS__
+#define	__EXTENSIONS__
+#endif
 
 #include <stdio.h>
 #include <limits.h>
@@ -176,42 +178,42 @@ main(int argc, char **argv)
 
 	while ((c = getopt(argc, argv, "LNR:xv:a:d:qrpilc:?")) != EOF) {
 		switch (c) {
-		    case 'v':
+		case 'v':
 			ckvers = optarg;
 			break;
 
-		    case 'a':
+		case 'a':
 			ckarch = optarg;
 			break;
 
-		    case 'd':
+		case 'd':
 			/* -d could specify stream or mountable device */
 			device = flex_device(optarg, 1);
 			break;
 
-		    case 'q':
+		case 'q':
 			qflag++;
 			break;
 
-		    case 'i':
+		case 'i':
 			iflag = 1;
 			if (pflag > 0)
 				usage();
 			pflag = 0;
 			break;
 
-		    case 'p':
+		case 'p':
 			pflag = 1;
 			if (iflag > 0)
 				usage();
 			iflag = 0;
 			break;
 
-		    case 'N':
+		case 'N':
 			Nflag++;
 			break;
 
-		    case 'L':
+		case 'L':
 			if (xflag || lflag || rflag) {
 				progerr(gettext(ERR_INCOMP0));
 				usage();
@@ -219,7 +221,7 @@ main(int argc, char **argv)
 			Lflag++;
 			break;
 
-		    case 'l':
+		case 'l':
 			if (xflag || rflag) {
 				progerr(gettext(ERR_INCOMP1));
 				usage();
@@ -227,7 +229,7 @@ main(int argc, char **argv)
 			lflag++;
 			break;
 
-		    case 'x':
+		case 'x':
 			/* bug # 1081606 */
 			if (lflag || rflag) {
 				progerr(gettext(ERR_INCOMP2));
@@ -236,7 +238,7 @@ main(int argc, char **argv)
 			xflag++;
 			break;
 
-		    case 'r':
+		case 'r':
 			if (lflag || xflag || Lflag) {
 				progerr(gettext(ERR_INCOMP0));
 				usage();
@@ -244,21 +246,21 @@ main(int argc, char **argv)
 			rflag++;
 			break;
 
-		    case 'c':
+		case 'c':
 			ckcatg[ncatg++] = strtok(optarg, " \t\n, ");
 			while (ckcatg[ncatg] = strtok(NULL, " \t\n, "))
 				ncatg++;
 			break;
 
 		/* added for newroot functions */
-		    case 'R':
+		case 'R':
 			if (!set_inst_root(optarg)) {
 				progerr(gettext(ERR_ROOT_CMD));
 				exit(1);
 			}
 			break;
 
-		    default:
+		default:
 			usage();
 		}
 	}
@@ -275,7 +277,7 @@ main(int argc, char **argv)
 	pkg = &argv[optind];
 	pkgcnt = (argc - optind);
 
-	if (pkg[0] && strcmp(pkg[0], "all") == NULL) {
+	if (pkg[0] && strcmp(pkg[0], "all") == 0) {
 		pkgcnt = 0;
 		pkg[0] = NULL;
 	}
@@ -354,10 +356,10 @@ report(void)
 		 * Confirm that the pkginfo file contains the
 		 * required information.
 		 */
-		if (info.name == NULL || *(info.name) == NULL ||
-		    info.arch == NULL || *(info.arch) == NULL ||
-		    info.version == NULL || *(info.version) == NULL ||
-		    info.catg == NULL || *(info.catg) == NULL) {
+		if (info.name == NULL || *(info.name) == '\0'||
+		    info.arch == NULL || *(info.arch) == '\0' ||
+		    info.version == NULL || *(info.version) == '\0' ||
+		    info.catg == NULL || *(info.catg) == '\0') {
 			progerr(gettext(ERR_BADINFO));
 			errflg++;
 			return;
@@ -370,9 +372,9 @@ report(void)
 		}
 
 		if (!pflag &&
-			/* don't include partially installed packages */
-			(choice->partial || (info.status == PI_PARTIAL) ||
-				(info.status == PI_UNKNOWN))) {
+		    /* don't include partially installed packages */
+		    (choice->partial || (info.status == PI_PARTIAL) ||
+		    (info.status == PI_UNKNOWN))) {
 			choice->installed = (-1);
 			continue;
 		}
@@ -540,7 +542,7 @@ fpkg(char *pkginst)
 	dp = data;
 	last = (struct cfstat *)0;
 	while (dp) {
-		if (strcmp(dp->pkginst, pkginst) == NULL)
+		if (strcmp(dp->pkginst, pkginst) == 0)
 			return (dp);
 		last = dp;
 		dp = dp->next;
@@ -694,7 +696,7 @@ getinfo(struct cfstat *dp)
 	VFP_T		*vfp;
 
 	(void) snprintf(pkgmap, sizeof (pkgmap),
-			"%s/%s/pkgmap", pkgdir, dp->pkginst);
+	    "%s/%s/pkgmap", pkgdir, dp->pkginst);
 
 	if (vfpOpen(&vfp, pkgmap, "r", VFP_NEEDNOW) != 0) {
 		progerr(gettext("unable open \"%s\" for reading"), pkgmap);
@@ -738,7 +740,7 @@ pkgusage(struct cfstat *dp, struct cfent *pentry)
 			if (pentry->ainfo.mode & 06000)
 				dp->setuid++;
 			if (!strchr("dxcbp", pentry->ftype) &&
-			(pentry->ainfo.mode & 0111))
+			    (pentry->ainfo.mode & 0111))
 				dp->exec++;
 		}
 	}

@@ -171,7 +171,9 @@ again:
 			c = getc(fp);
 
 		if (c == '#') {
-			do c = getc(fp); while ((c != EOF) && (c != '\n'));
+			do {
+				c = getc(fp);
+			} while ((c != EOF) && (c != '\n'));
 			continue;
 		}
 		if (c == EOF)
@@ -276,13 +278,13 @@ again:
 
 			if (strcmp(entry.ainfo.owner, NOOWNER) == 0) {
 				(void) strlcpy(entry.ainfo.owner, CUROWNER,
-						sizeof (entry.ainfo.owner));
+				    sizeof (entry.ainfo.owner));
 				dowarning = 1;
 			}
 
 			if (strcmp(entry.ainfo.group, NOGROUP) == 0) {
 				(void) strlcpy(entry.ainfo.group, CURGROUP,
-						sizeof (entry.ainfo.group));
+				    sizeof (entry.ainfo.group));
 				dowarning = 1;
 			}
 
@@ -290,16 +292,16 @@ again:
 			if (dowarning) {
 				if (hasbadmode)
 					logerr(gettext(WRN_BADATTRM),
-						"?",
+					    "?",
 					    entry.ainfo.owner,
 					    entry.ainfo.group,
 					    entry.path);
 				else
 					logerr(gettext(WRN_BADATTR),
-						(int)entry.ainfo.mode,
-						entry.ainfo.owner,
-						entry.ainfo.group,
-						entry.path);
+					    (int)entry.ainfo.mode,
+					    entry.ainfo.owner,
+					    entry.ainfo.group,
+					    entry.path);
 			}
 		}
 
@@ -309,7 +311,7 @@ again:
 		 */
 		if (strchr("ls", entry.ftype)) {
 			if (!RELATIVE(entry.ainfo.local) ||
-					PARAMETRIC(entry.ainfo.local)) {
+			    PARAMETRIC(entry.ainfo.local)) {
 				if (mappath(1, entry.ainfo.local)) {
 					error(1);
 					logerr(gettext(ERR_PATHVAR),
@@ -426,7 +428,7 @@ findfile(char *path, char *local)
 
 	for (i = 0; srchp[nfp][i]; i++) {
 		(void) snprintf(host, sizeof (host), "%s/%s",
-			srchp[nfp][i], basename);
+		    srchp[nfp][i], basename);
 		if ((stat(host, &statbuf) == 0) &&
 		    (statbuf.st_mode & S_IFREG)) {
 			return (host);
@@ -462,7 +464,7 @@ dosearch(void)
 			if (*pt != '/') {
 				/* make relative path an absolute directory */
 				(void) snprintf(temp, sizeof (temp),
-						"%s/%s", dname[nfp], pt);
+				    "%s/%s", dname[nfp], pt);
 				pt = temp;
 			}
 			canonize(pt);
@@ -490,7 +492,7 @@ dorsearch(void)
 		if (*pt != '/') {
 			/* make relative path an absolute directory */
 			(void) snprintf(temp, sizeof (temp),
-					"%s/%s", dname[nfp], pt);
+			    "%s/%s", dname[nfp], pt);
 			pt = temp;
 		}
 		canonize(pt);
@@ -598,7 +600,7 @@ doinclude(void)
 	translate(file, temp);
 	canonize(temp);
 
-	if (*temp == NULL)
+	if (*temp == '\0')
 		return;
 	else if (*temp != '/')
 		(void) snprintf(file, sizeof (file), "%s/%s", dname[nfp], temp);
@@ -703,7 +705,7 @@ pushenv(char *file)
 				quit(99);
 			}
 			(void) snprintf(topdir, sizeof (topdir),
-						"%s/%s", pt, file);
+			    "%s/%s", pt, file);
 		}
 		if (pt = strrchr(topdir, '/'))
 			*pt = '\0'; /* should always happen */

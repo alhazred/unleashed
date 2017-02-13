@@ -316,7 +316,7 @@ orig_path_ptr(char *path)
 		 */
 		else if (strncmp(path, install_root, install_root_len) == 0) {
 			retv = path + install_root_len;
-			if (*retv == NULL)
+			if (*retv == '\0')
 				retv = "/";
 
 			/*
@@ -847,7 +847,7 @@ eval_path(char **server_ptr, char **client_ptr, char **map_ptr, char *path)
 
 				/* LINTED warning: variable format specifier */
 				(void) snprintf(*server_ptr, path_size+1,
-					rel_fmt[base_sepr], basedir, path);
+				    rel_fmt[base_sepr], basedir, path);
 			} else {
 				ptext(stderr, gettext(ERR_RELINABS), path);
 				retcode = 0;
@@ -895,7 +895,7 @@ export_client_env(char *root_path)
 	key = (char *)malloc(PATH_MAX);
 
 	(void) snprintf(inst_release_path, len, "%s/%s", root_path,
-				INST_RELEASE);
+	    INST_RELEASE);
 
 	if ((inst_fp = fopen(inst_release_path, "r")) != NULL) {
 		while (value = fpkgparam(inst_fp, key)) {

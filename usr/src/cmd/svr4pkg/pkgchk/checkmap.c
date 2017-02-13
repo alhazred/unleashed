@@ -180,7 +180,7 @@ checkmap(int maptyp, int uninst, char *mapfile, char *envfile,
 			} else if (entry.ftype == 's' || entry.ftype == 'l') {
 				if (is_partial_path_in_DB(
 				/* LINTED warning: statement has no consequen */
-					entry.ainfo.local, path)) {
+				    entry.ainfo.local, path)) {
 					/* Check this entry */
 					;
 				} else {
@@ -307,44 +307,48 @@ selpkg(char *p)
 					root = get_inst_root();
 					if (root)
 						(void) snprintf(buf,
-						sizeof (buf),
-						"%s/var/sadm/pkg/%s/pkginfo",
-						root, pkg[i]);
+						    sizeof (buf),
+						    "%s/var/sadm/pkg/%s"
+						    "/pkginfo",
+						    root, pkg[i]);
 					else
 						(void) snprintf(buf,
-						sizeof (buf),
-						"/var/sadm/pkg/%s/pkginfo",
-						pkg[i]);
+						    sizeof (buf),
+						    "/var/sadm/pkg/%s"
+						    "/pkginfo",
+						    pkg[i]);
 
 					if (access(buf, F_OK))
 						logerr(gettext(WRN_NOPKG),
-							pkg[i]);
+						    pkg[i]);
 					else
 						logerr(gettext(EMPTY_PKG),
-							pkg[i]);
+						    pkg[i]);
 				}
 			}
 		} else {
 			for (i = 0; i < pkgcnt; ++i) {
-				if (selected[i] == NULL) {
+				if (selected[i] == '\0') {
 					root = get_inst_root();
 					if (root)
 						(void) snprintf(buf,
-						sizeof (buf),
-						"%s/var/sadm/pkg/%s/pkginfo",
-						root, pkg[i]);
+						    sizeof (buf),
+						    "%s/var/sadm/pkg/%s"
+						    "/pkginfo",
+						    root, pkg[i]);
 					else
 						(void) snprintf(buf,
-						sizeof (buf),
-						"/var/sadm/pkg/%s/pkginfo",
-						pkg[i]);
+						    sizeof (buf),
+						    "/var/sadm/pkg/%s"
+						    "/pkginfo",
+						    pkg[i]);
 
 					if (access(buf, F_OK))
 						logerr(gettext(WRN_NOPKG),
-							pkg[i]);
+						    pkg[i]);
 					else
 						logerr(gettext(EMPTY_PKG),
-							pkg[i]);
+						    pkg[i]);
 				}
 			}
 		}
@@ -383,8 +387,8 @@ selpath(char *path, int partial_path)
 		if (path == NULL) {
 			if (!used[n])
 				logerr(gettext(WRN_NOPATH),
-					partial_path ? ppathlist[n] :
-					pathlist[n]);
+				    partial_path ? ppathlist[n] :
+				    pathlist[n]);
 		} else if (partial_path) {
 			used[n] = 1;
 			return (1);
