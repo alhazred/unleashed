@@ -264,7 +264,7 @@ showquotas(uid_t uid, char *name)
 	if (vflag)
 		heading(uid, name);
 	mtab = fopen(MNTTAB, "r");
-	while (getmntent(mtab, &mnt) == NULL) {
+	while (getmntent(mtab, &mnt) == 0) {
 		if (strcmp(mnt.mnt_fstype, MNTTYPE_ZFS) == 0) {
 			bzero(&dqblk, sizeof (dqblk));
 			if (getzfsquota(name, mnt.mnt_special, &dqblk))
@@ -684,7 +684,7 @@ quotactl(int cmd, char *mountp, uid_t uid, caddr_t addr)
 			zexit(32);
 		}
 		fd = -1;
-		while ((status = getmntent(fstab, &mnt)) == NULL) {
+		while ((status = getmntent(fstab, &mnt)) == 0) {
 			if (strcmp(mnt.mnt_fstype, MNTTYPE_UFS) != 0 ||
 			    hasopt(MNTOPT_RO, mnt.mnt_mntopts))
 				continue;

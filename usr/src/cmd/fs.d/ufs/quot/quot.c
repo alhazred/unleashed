@@ -36,8 +36,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * quot
  */
@@ -200,7 +198,7 @@ quotall()
 		(void) fprintf(stderr, "quot: no %s file\n", MNTTAB);
 		exit(32);
 	}
-	while (getmntent(fstab, &mntp) == NULL) {
+	while (getmntent(fstab, &mntp) == 0) {
 		if (strcmp(mntp.mnt_fstype, MNTTYPE_UFS) != 0)
 			continue;
 
@@ -252,7 +250,7 @@ check(char *file, char *fsdir)
 			(void) fprintf(stderr, "quot: no %s file\n", MNTTAB);
 			exit(32);
 		}
-		while (getmntent(fstab, &mntp) == NULL) {
+		while (getmntent(fstab, &mntp) == 0) {
 			if (strcmp(mntp.mnt_fstype, MNTTYPE_UFS) != 0)
 				continue;
 			if (strcmp(mntp.mnt_special, file) == 0) {
@@ -489,7 +487,7 @@ getdev(char **devpp)
 		(void) fprintf(stderr, "quot: no %s file\n", MNTTAB);
 		exit(32);
 	}
-	while (getmntent(fstab, &mntp) == NULL) {
+	while (getmntent(fstab, &mntp) == 0) {
 		if (strcmp(mntp.mnt_mountp, *devpp) == 0) {
 			if (strcmp(mntp.mnt_fstype, MNTTYPE_UFS) != 0) {
 				(void) fprintf(stderr,

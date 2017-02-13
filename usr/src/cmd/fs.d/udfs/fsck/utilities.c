@@ -521,7 +521,7 @@ mounted(char *name)
 		return (0);
 	}
 	blkname = unrawname(name);
-	while ((getmntent(mnttab, &mnt)) == NULL) {
+	while ((getmntent(mnttab, &mnt)) == 0) {
 		if (strcmp(mnt.mnt_fstype, MNTTYPE_UDFS) != 0) {
 			continue;
 		}

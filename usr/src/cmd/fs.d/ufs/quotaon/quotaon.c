@@ -36,8 +36,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Turn quota on/off for a filesystem.
  */
@@ -166,7 +164,7 @@ main(int argc, char **argv)
 			exit(31+1);
 		}
 
-		while ((status = getvfsent(vfstab, &vfsbuf)) == NULL) {
+		while ((status = getvfsent(vfstab, &vfsbuf)) == 0) {
 			if (strcmp(vfsbuf.vfs_fstype, MNTTYPE_UFS) != 0 ||
 			    (vfsbuf.vfs_mntopts == 0) ||
 			    hasvfsopt(&vfsbuf, MNTOPT_RO) ||
@@ -222,7 +220,7 @@ main(int argc, char **argv)
 	 * Loop through mnttab, if a file system gets turned on or off
 	 * do the quota call.
 	 */
-	while ((status = getmntent(mtab, &mntp)) == NULL) {
+	while ((status = getmntent(mtab, &mntp)) == 0) {
 		if (strcmp(mntp.mnt_fstype, MNTTYPE_UFS) == 0 &&
 		    !hasmntopt(&mntp, MNTOPT_RO) &&
 		    (oneof(mntp.mnt_special, listp, listcnt) ||

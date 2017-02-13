@@ -1030,7 +1030,7 @@ mkmntlist()
 		exit(1);
 	}
 	resetmnttab(mounted);
-	while (getextmntent(mounted, &mnt, sizeof (struct extmnttab)) == NULL) {
+	while (getextmntent(mounted, &mnt, sizeof (struct extmnttab)) == 0) {
 		mntl = (struct mntlist *)xmalloc(sizeof (*mntl));
 		mntl->mntl_mnt = mntdup((struct mnttab *)(&mnt));
 		mntl->mntl_next = mntst;

@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This file contains functions that allow applications to roll the log.
  * It is intended for use by applications that open a raw device with the
@@ -208,7 +206,7 @@ is_mounted(log_info_t *lip, char *dev)
 	/* Search mnttab to see if it device is mounted. */
 	if ((mnttable = fopen(MNTTAB, "r")) == NULL)
 		return (rv);
-	while (getmntent(mnttable, &mntbuf) == NULL) {
+	while (getmntent(mnttable, &mntbuf) == 0) {
 		if (strcmp(mntbuf.mnt_fstype, MNTTYPE_UFS) == 0) {
 			/* Entry is UFS */
 			if ((strcmp(mntbuf.mnt_mountp, dev) == 0) ||

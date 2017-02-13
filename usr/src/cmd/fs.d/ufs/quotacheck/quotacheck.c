@@ -192,7 +192,7 @@ main(int argc, char **argv)
 			perror(VFSTAB);
 			exit(31+8);
 		}
-		while (getvfsent(vfstab, &vfsbuf) == NULL) {
+		while (getvfsent(vfstab, &vfsbuf) == 0) {
 			if (strcmp(vfsbuf.vfs_fstype, MNTTYPE_UFS) != 0 ||
 			    (vfsbuf.vfs_mntopts == 0) ||
 			    hasvfsopt(&vfsbuf, MNTOPT_RO) ||
@@ -231,7 +231,7 @@ main(int argc, char **argv)
 			perror(MNTTAB);
 			exit(31+8);
 		}
-		while (getmntent(mtab, &mntp) == NULL) {
+		while (getmntent(mtab, &mntp) == 0) {
 			if (strcmp(mntp.mnt_fstype, MNTTYPE_UFS) == 0 &&
 			    !hasmntopt(&mntp, MNTOPT_RO) &&
 			    (oneof(mntp.mnt_special, listp, listcnt) ||
@@ -717,7 +717,7 @@ quotactl(int cmd, char *mountp, uid_t uid, caddr_t addr)
 			exit(31+1);
 		}
 		fd = -1;
-		while ((status = getmntent(fstab, &mntp)) == NULL) {
+		while ((status = getmntent(fstab, &mntp)) == 0) {
 			if (strcmp(mntp.mnt_fstype, MNTTYPE_UFS) != 0 ||
 				hasmntopt(&mntp, MNTOPT_RO))
 				continue;

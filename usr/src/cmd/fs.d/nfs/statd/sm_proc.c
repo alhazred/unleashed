@@ -679,7 +679,7 @@ send_notice(char *mon_name, int state)
 				 * to notify.  If error, print out msg, free
 				 * resources and continue.
 				 */
-				if (thr_create(NULL, NULL, thr_send_notice,
+				if (thr_create(NULL, 0, thr_send_notice,
 				    minfop, THR_DETACHED, NULL)) {
 					syslog(LOG_ERR, "statd: unable to "
 					    "create thread to send_notice to "

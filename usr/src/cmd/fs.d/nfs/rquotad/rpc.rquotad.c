@@ -427,7 +427,7 @@ quotactl(cmd, mountp, uid, dqp)
 			return (-1);
 		}
 		fd = -1;
-		while ((status = getmntent(fstab, &mntp)) == NULL) {
+		while ((status = getmntent(fstab, &mntp)) == 0) {
 			if (strcmp(mntp.mnt_fstype, MNTTYPE_UFS) != 0 ||
 				!(hasmntopt(&mntp, MNTOPT_RQ) ||
 				hasmntopt(&mntp, MNTOPT_QUOTA)))

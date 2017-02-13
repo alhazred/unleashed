@@ -236,7 +236,7 @@ fsgetmlevel(char *cp)
 	int	mlevel;
 	char	*cp1;
 
-	if (cp == NULL || *cp == NULL || *cp != '/')
+	if (cp == NULL || *cp == '\0' || *cp != '/')
 		return (0);	/* this should never happen */
 
 	mlevel = 1;			/* root (/) is the minimal case */

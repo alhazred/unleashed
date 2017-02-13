@@ -166,7 +166,7 @@ main(int argc, char *argv[])
 	if (usr)
 		smb_ctx_setuser(ctx, usr, B_TRUE);
 	if (pw)
-		smb_ctx_setpassword(ctx, pw, NULL);
+		smb_ctx_setpassword(ctx, pw, 0);
 
 
 	/*

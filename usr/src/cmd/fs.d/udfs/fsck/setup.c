@@ -25,8 +25,6 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #define	DKTYPENAMES
 #include <stdio.h>
 #include <stdlib.h>
@@ -134,7 +132,7 @@ restat:
 			errexit(gettext("Can't open checklist file: %s\n"),
 				VFSTAB);
 		}
-		while (getvfsent(vfstab, &vfsbuf) == NULL) {
+		while (getvfsent(vfstab, &vfsbuf) == 0) {
 			if (strcmp(devstr, vfsbuf.vfs_mountp) == 0) {
 				if (strcmp(vfsbuf.vfs_fstype,
 				    MNTTYPE_UDFS) != 0) {
