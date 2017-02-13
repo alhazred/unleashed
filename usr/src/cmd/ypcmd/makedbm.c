@@ -392,7 +392,7 @@ main(argc, argv)
 		key.dptr = buf;
 		key.dsize = p - buf;
 		for (;;) {
-			if (p == NULL || *p == NULL) {
+			if (p == NULL || *p == '\0') {
 				fprintf(stderr,
 	"makedbm: source files is garbage!\n");
 				exit(1);

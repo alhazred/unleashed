@@ -37,8 +37,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "rcv.h"
 #include <locale.h>
 
@@ -585,13 +583,13 @@ execute(char linebuf[], int contxt)
 			break;
 		if (c  == 0)
 			if (msgCount == 0)
-				*msgvec = NULL;
+				*msgvec = 0;
 			else {
 				*msgvec = first(com->c_msgflag,
 					com->c_msgmask);
-				msgvec[1] = NULL;
+				msgvec[1] = 0;
 			}
-		if (*msgvec == NULL) {
+		if (*msgvec == 0) {
 			fprintf(stderr, gettext("No applicable messages\n"));
 			break;
 		}

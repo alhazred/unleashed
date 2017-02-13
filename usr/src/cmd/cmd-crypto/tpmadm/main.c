@@ -194,7 +194,7 @@ UINT32 secret_len, BYTE *secret)
 		unicode_prompt = Trspi_Native_To_UNICODE((BYTE *)prompt, &len);
 		ret = Tspi_SetAttribData(hPolicy,
 		    TSS_TSPATTRIB_POLICY_POPUPSTRING,
-		    NULL, len, unicode_prompt);
+		    0, len, unicode_prompt);
 		if (ret) {
 			print_error(ret, gettext("Set policy prompt"));
 			return (ERR_FAIL);

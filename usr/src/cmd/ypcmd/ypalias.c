@@ -32,8 +32,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
@@ -60,7 +58,7 @@ mkdomain_alias(name, result)
 char *name, *result;
 {
 	int retval;
-	char tmpbuf[MAXNAMLEN] = {NULL};
+	char tmpbuf[MAXNAMLEN] = {0};
 
 	retval = yp_getalias(name, result, NAME_MAX);
 	if (retval == -1) {
@@ -89,7 +87,7 @@ mkmap_alias(name, result)
 char *name, *result;
 {
 	int retval;
-	char tmpbuf[MAXNAMLEN] = {NULL};
+	char tmpbuf[MAXNAMLEN] = {0};
 
 	retval = yp_getalias(name, result, MAXALIASLEN);
 
@@ -124,7 +122,7 @@ int
 main(argc, argv)
 char **argv;
 {
-	char result[MAXNAMLEN] = {NULL};
+	char result[MAXNAMLEN] = {0};
 
 #ifdef SYSVCONFIG
 	sysvconfig();

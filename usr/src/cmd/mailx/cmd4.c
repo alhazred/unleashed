@@ -38,8 +38,6 @@
  * contributors.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "rcv.h"
 #include <locale.h>
 
@@ -85,11 +83,11 @@ dopipe(char str[])
 	}
 	if (!f) {
 		*msgvec = first(0, MMNORM);
-		if (*msgvec == NULL) {
+		if (*msgvec == 0) {
 			printf(gettext("No messages to pipe.\n"));
 			return(1);
 		}
-		msgvec[1] = NULL;
+		msgvec[1] = 0;
 	}
 	if (f && getmsglist(str, msgvec, 0) < 0)
 		return(1);
@@ -205,15 +203,15 @@ loadmsg(char str[])
 		return(1);
 	if (!f) {
 		*msgvec = first(0, MMNORM);
-		if (*msgvec == NULL) {
+		if (*msgvec == 0) {
 			printf(gettext("No message to load into.\n"));
 			return(1);
 		}
-		msgvec[1] = NULL;
+		msgvec[1] = 0;
 	}
 	if (f && getmsglist(str, msgvec, 0) < 0)
 		return(1);
-	if (msgvec[1] != NULL) {
+	if (msgvec[1] != 0) {
 		printf(gettext("Can only load into a single message.\n"));
 		return(1);
 	}
@@ -281,11 +279,11 @@ field(char str[])
 	}
 	if (!f) {
 		*msgvec = first(0, MMNORM);
-		if (*msgvec == NULL) {
+		if (*msgvec == 0) {
 			printf(gettext("No messages to display.\n"));
 			return(1);
 		}
-		msgvec[1] = NULL;
+		msgvec[1] = 0;
 	}
 	if (f && getmsglist(str, msgvec, 0) < 0)
 		return(1);

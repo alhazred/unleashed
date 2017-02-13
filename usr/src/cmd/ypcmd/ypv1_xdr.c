@@ -19,7 +19,6 @@
  *
  * CDDL HEADER END
  */
-#ident	"%Z%%M%	%I%	%E% SMI"
 /*
  *    Copyright (c) 1995  Sun Microsystems, Inc
  *      All rights reserved.
@@ -33,7 +32,6 @@
  * to support) and the current v2 protocol.
  */
 
-#define	NULL 0
 #include <rpc/rpc.h>
 #include <rpcsvc/yp_prot.h>
 #include "ypv1_prot.h"
@@ -62,12 +60,12 @@ _xdr_yprequest(XDR *xdrs, struct yprequest *ps)
 	yprequest_arms[0].proc = (xdrproc_t)xdr_ypreq_key;
 	yprequest_arms[1].proc = (xdrproc_t)xdr_ypreq_nokey;
 	yprequest_arms[2].proc = (xdrproc_t)xdr_ypmap_parms;
-	yprequest_arms[3].proc = (xdrproc_t)NULL;
+	yprequest_arms[3].proc = (xdrproc_t)0;
 
 	return (xdr_union(xdrs,
-				(int *) &ps->yp_reqtype,
-				(char *) &ps->yp_reqbody,
-				yprequest_arms, NULL));
+	    (int *)&ps->yp_reqtype,
+	    (char *)&ps->yp_reqbody,
+	    yprequest_arms, 0));
 }
 
 /*
@@ -85,12 +83,12 @@ _xdr_ypresponse(XDR *xdrs, struct ypresponse *ps)
 	ypresponse_arms[0].proc = (xdrproc_t)xdr_ypresp_val;
 	ypresponse_arms[1].proc = (xdrproc_t)xdr_ypresp_key_val;
 	ypresponse_arms[2].proc = (xdrproc_t)xdr_ypmap_parms;
-	ypresponse_arms[3].proc = (xdrproc_t)NULL;
+	ypresponse_arms[3].proc = (xdrproc_t)0;
 
 	return (xdr_union(xdrs,
-				(int *) &ps->yp_resptype,
-				(char *) &ps->yp_respbody,
-				ypresponse_arms, NULL));
+	    (int *)&ps->yp_resptype,
+	    (char *)&ps->yp_respbody,
+	    ypresponse_arms, 0));
 }
 
 /* XXX - Excess baggage? - georgn */
@@ -104,6 +102,6 @@ _xdr_ypbind_oldsetdom(XDR *xdrs, struct ypbind_setdom *ps)
 	char *domain = ps->ypsetdom_domain;
 
 	return (xdr_ypdomain_wrap_string(xdrs, &domain) &&
-		xdr_yp_binding(xdrs, &ps->ypsetdom_binding));
+	    xdr_yp_binding(xdrs, &ps->ypsetdom_binding));
 }
 #endif

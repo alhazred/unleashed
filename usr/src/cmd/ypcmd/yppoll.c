@@ -32,8 +32,6 @@
  * California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This is a user command which asks a particular ypserv which version of a
  * map it is using.  Usage is:
@@ -52,11 +50,6 @@
 #include <netdir.h>
 #include <arpa/inet.h>
 #include "yp_b.h"
-
-#ifdef NULL
-#undef NULL
-#endif
-#define	NULL 0
 
 #define	TIMEOUT 30			/* Total seconds for timeout */
 
@@ -272,20 +265,21 @@ getmapparms()
 	mresp.master = NULL;
 
 	if (clnt_call(map_clnt, YPPROC_MASTER,  (xdrproc_t)xdr_ypreq_nokey,
-		    (caddr_t)&req, (xdrproc_t)xdr_ypresp_master,
-		    (caddr_t)&mresp, timeout) == RPC_SUCCESS) {
+	    (caddr_t)&req, (xdrproc_t)xdr_ypresp_master,
+	    (caddr_t)&mresp, timeout) == RPC_SUCCESS) {
 		mresults = &mresp;
 		s = (enum clnt_stat) clnt_call(map_clnt, YPPROC_ORDER,
 		    (xdrproc_t)xdr_ypreq_nokey, (char *)&req,
-			(xdrproc_t)xdr_ypresp_order, (char *)&oresp, timeout);
+		    (xdrproc_t)xdr_ypresp_order, (char *)&oresp, timeout);
 
 		if (s == RPC_SUCCESS) {
 			oresults = &oresp;
 			newresults(mresults, oresults);
 		} else {
 			(void) fprintf(stderr,
-		"Can't make YPPROC_ORDER call to ypserv at %s.\n	",
-				host);
+			    "Can't make YPPROC_ORDER call to ypserv"
+			    " at %s.\n	",
+			    host);
 			clnt_perror(map_clnt, "Reason");
 			exit(1);
 		}

@@ -32,8 +32,6 @@
  * under license from the Regents of the University of California.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  *
  * This contains YP server code which supplies the set of functions
@@ -133,7 +131,7 @@ ypdomain(SVCXPRT *transp, bool always_respond)
 	memset(domain_name, 0, sizeof (domain_name));
 
 	if (!svc_getargs(transp, (xdrproc_t)xdr_ypdomain_wrap_string,
-				(caddr_t)&pdomain_name)) {
+	    (caddr_t)&pdomain_name)) {
 		svcerr_decode(transp);
 		return;
 	}
@@ -160,11 +158,11 @@ ypdomain(SVCXPRT *transp, bool always_respond)
 	if (isserved || always_respond) {
 
 		if (!svc_sendreply(transp, xdr_bool, (char *)&isserved)) {
-		    RESPOND_ERR;
+			RESPOND_ERR;
 		}
 		if (!isserved)
 			logprintf("Domain %s not supported\n",
-					domain_name);
+			    domain_name);
 
 	} else {
 		/*
@@ -183,7 +181,7 @@ ypdomain(SVCXPRT *transp, bool always_respond)
 
 		svcerr_decode(transp);
 		logprintf("Domain %s not supported (broadcast)\n",
-				domain_name);
+		    domain_name);
 	}
 }
 
@@ -212,8 +210,8 @@ ypmatch(SVCXPRT *transp, struct svc_req *rqstp)
 	 * also perform an access check...
 	 */
 	if ((fdb = ypset_current_map(req.map, req.domain,
-					&resp.status)) != NULL &&
-		yp_map_access(transp, &resp.status, fdb)) {
+	    &resp.status)) != NULL &&
+	    yp_map_access(transp, &resp.status, fdb)) {
 
 		/* Check with the DBM database */
 		resp.valdat = dbm_fetch(fdb, req.keydat);
@@ -221,7 +219,7 @@ ypmatch(SVCXPRT *transp, struct svc_req *rqstp)
 			resp.status = YP_TRUE;
 			if (!silent)
 				printf("%s: dbm: %40.40s\n",
-					fun, resp.valdat.dptr);
+				    fun, resp.valdat.dptr);
 			goto send_reply;
 		}
 
@@ -234,8 +232,10 @@ ypmatch(SVCXPRT *transp, struct svc_req *rqstp)
 		if (req.keydat.dsize == 0 ||
 		    req.keydat.dptr == NULL ||
 		    req.keydat.dptr[0] == '\0' ||
-	strncmp(req.keydat.dptr, yp_secure, req.keydat.dsize) == 0 ||
-	strncmp(req.keydat.dptr, yp_interdomain, req.keydat.dsize) == 0) {
+		    strncmp(req.keydat.dptr,
+		    yp_secure, req.keydat.dsize) == 0 ||
+		    strncmp(req.keydat.dptr, yp_interdomain,
+		    req.keydat.dsize) == 0) {
 			goto send_reply;
 		}
 
@@ -267,29 +267,29 @@ ypmatch(SVCXPRT *transp, struct svc_req *rqstp)
 		if (dnsforward) {
 			if (!resolv_pid || !resolv_client) {
 				setup_resolv(&dnsforward, &resolv_pid,
-						&resolv_client, resolv_tp, 0);
+				    &resolv_client, resolv_tp, 0);
 				if (resolv_client == NULL)
 					client_setup_failure = TRUE;
 			}
 
 			if (resolv_req(&dnsforward, &resolv_client,
-						&resolv_pid, resolv_tp,
-						rqstp->rq_xprt, &req,
-						req.map) == TRUE)
+			    &resolv_pid, resolv_tp,
+			    rqstp->rq_xprt, &req,
+			    req.map) == TRUE)
 				goto free_args;
 		}
 	}
 	send_reply:
 
 	if (!svc_sendreply(transp, (xdrproc_t)xdr_ypresp_val,
-				(caddr_t)&resp)) {
+	    (caddr_t)&resp)) {
 		RESPOND_ERR;
 	}
 
 	free_args:
 
 	if (!svc_freeargs(transp, (xdrproc_t)xdr_ypreq_key,
-				(char *)&req)) {
+	    (char *)&req)) {
 		FREE_ERR;
 	}
 }
@@ -310,27 +310,27 @@ ypfirst(SVCXPRT *transp)
 	memset(&resp, 0, sizeof (resp));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)xdr_ypreq_nokey,
-				(char *)&req)) {
+	    (xdrproc_t)xdr_ypreq_nokey,
+	    (char *)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
 
 	if ((fdb = ypset_current_map(req.map, req.domain,
-					&resp.status)) != NULL &&
-		yp_map_access(transp, &resp.status, fdb)) {
+	    &resp.status)) != NULL &&
+	    yp_map_access(transp, &resp.status, fdb)) {
 		ypfilter(fdb, NULL,
-			&resp.keydat, &resp.valdat, &resp.status, FALSE);
+		    &resp.keydat, &resp.valdat, &resp.status, FALSE);
 	}
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)xdr_ypresp_key_val,
-				(char *)&resp)) {
+	    (xdrproc_t)xdr_ypresp_key_val,
+	    (char *)&resp)) {
 		RESPOND_ERR;
 	}
 
 	if (!svc_freeargs(transp, (xdrproc_t)xdr_ypreq_nokey,
-				(char *)&req)) {
+	    (char *)&req)) {
 		FREE_ERR;
 	}
 }
@@ -355,21 +355,21 @@ ypnext(SVCXPRT *transp)
 	}
 
 	if ((fdb = ypset_current_map(req.map, req.domain,
-					&resp.status)) != NULL &&
-		yp_map_access(transp, &resp.status, fdb)) {
+	    &resp.status)) != NULL &&
+	    yp_map_access(transp, &resp.status, fdb)) {
 		ypfilter(fdb, &req.keydat,
-			&resp.keydat, &resp.valdat, &resp.status, FALSE);
+		    &resp.keydat, &resp.valdat, &resp.status, FALSE);
 	}
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)xdr_ypresp_key_val,
-				(char *)&resp)) {
+	    (xdrproc_t)xdr_ypresp_key_val,
+	    (char *)&resp)) {
 		RESPOND_ERR;
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)xdr_ypreq_key,
-				(char *)&req)) {
+	    (xdrproc_t)xdr_ypreq_key,
+	    (char *)&req)) {
 		FREE_ERR;
 	}
 }
@@ -397,28 +397,28 @@ ypxfr(SVCXPRT *transp, int prog)
 	if (prog == YPPROC_NEWXFR) {
 		memset(&newreq, 0, sizeof (newreq));
 		if (!svc_getargs(transp, (xdrproc_t)xdr_ypreq_newxfr,
-				(char *)&newreq)) {
+		    (char *)&newreq)) {
 			svcerr_decode(transp);
 			return;
 		}
 
 #ifdef OPCOM_DEBUG
 		fprintf(stderr, "newreq:\n"
-			"\tmap_parms:\n"
-			"\t\tdomain:    %s\n"
-			"\t\tmap:       %s\n"
-			"\t\tordernum:  %u\n"
-			"\t\towner:     %s\n"
-			"\ttransid:    %u\n"
-			"\tproto:      %u\n"
-			"\tname:       %s\n\n",
-			newreq.map_parms.domain,
-			newreq.map_parms.map,
-			newreq.map_parms.ordernum,
-			newreq.map_parms.owner,
-			newreq.transid,
-			newreq.proto,
-			newreq.name);
+		    "\tmap_parms:\n"
+		    "\t\tdomain:    %s\n"
+		    "\t\tmap:       %s\n"
+		    "\t\tordernum:  %u\n"
+		    "\t\towner:     %s\n"
+		    "\ttransid:    %u\n"
+		    "\tproto:      %u\n"
+		    "\tname:       %s\n\n",
+		    newreq.map_parms.domain,
+		    newreq.map_parms.map,
+		    newreq.map_parms.ordernum,
+		    newreq.map_parms.owner,
+		    newreq.transid,
+		    newreq.proto,
+		    newreq.name);
 #endif
 		sprintf(transid, "%u", newreq.transid);
 		sprintf(proto, "%u", newreq.proto);
@@ -428,29 +428,29 @@ ypxfr(SVCXPRT *transp, int prog)
 	} else if (prog == YPPROC_XFR) {
 		memset(&oldreq, 0, sizeof (oldreq));
 		if (!svc_getargs(transp,
-					(xdrproc_t)xdr_ypreq_xfr,
-					(char *)&oldreq)) {
-		    svcerr_decode(transp);
-		    return;
+		    (xdrproc_t)xdr_ypreq_xfr,
+		    (char *)&oldreq)) {
+			svcerr_decode(transp);
+			return;
 		}
 
 #ifdef OPCOM_DEBUG
 		fprintf(stderr, "oldreq:\n"
-			"\tmap_parms:\n"
-			"\t\tdomain:    %s\n"
-			"\t\tmap:       %s\n"
-			"\t\tordernum:  %u\n"
-			"\t\towner:     %s\n"
-			"\ttransid:    %u\n"
-			"\tproto:      %u\n"
-			"\tport:       %u\n\n",
-			oldreq.map_parms.domain,
-			oldreq.map_parms.map,
-			oldreq.map_parms.ordernum,
-			oldreq.map_parms.owner,
-			oldreq.transid,
-			oldreq.proto,
-			oldreq.port);
+		    "\tmap_parms:\n"
+		    "\t\tdomain:    %s\n"
+		    "\t\tmap:       %s\n"
+		    "\t\tordernum:  %u\n"
+		    "\t\towner:     %s\n"
+		    "\ttransid:    %u\n"
+		    "\tproto:      %u\n"
+		    "\tport:       %u\n\n",
+		    oldreq.map_parms.domain,
+		    oldreq.map_parms.map,
+		    oldreq.map_parms.ordernum,
+		    oldreq.map_parms.owner,
+		    oldreq.transid,
+		    oldreq.proto,
+		    oldreq.port);
 #endif
 
 		sprintf(transid, "%u", oldreq.transid);
@@ -464,27 +464,27 @@ ypxfr(SVCXPRT *transp, int prog)
 
 	/* Check that the map exists and is accessible */
 	if ((fdb = ypset_current_map(pmap, pdomain, &resp.status)) != NULL &&
-		yp_map_access(transp, &resp.status, fdb)) {
+	    yp_map_access(transp, &resp.status, fdb)) {
 
 		pid = vfork();
 		if (pid == -1) {
 			FORK_ERR;
 		} else if (pid == 0) {
-		    if (prog == YPPROC_NEWXFR || prog == YPPROC_XFR) {
+			if (prog == YPPROC_NEWXFR || prog == YPPROC_XFR) {
 #ifdef OPCOM_DEBUG
-			fprintf(stderr,
-				"EXECL: %s, -d, %s, -C, %s, %s, %s, %s\n",
-				ypxfr_proc, pdomain,
-				transid, proto, name, pmap);
+				fprintf(stderr,
+				    "EXECL: %s, -d, %s, -C, %s, %s, %s, %s\n",
+				    ypxfr_proc, pdomain,
+				    transid, proto, name, pmap);
 #endif
-			if (execl(ypxfr_proc, "ypxfr", "-d",
-					pdomain, "-C", transid, proto,
-					name, pmap, NULL))
-			    EXEC_ERR;
-		    } else {
-			VERS_ERR;
-		    }
-		    _exit(1);
+				if (execl(ypxfr_proc, "ypxfr", "-d",
+				    pdomain, "-C", transid, proto,
+				    name, pmap, NULL))
+					EXEC_ERR;
+			} else {
+				VERS_ERR;
+			}
+			_exit(1);
 		}
 
 	} else {
@@ -496,9 +496,9 @@ ypxfr(SVCXPRT *transp, int prog)
 
 	if (prog == YPPROC_NEWXFR) {
 		if (!svc_freeargs(transp,
-					(xdrproc_t)xdr_ypreq_newxfr,
-					(char *)&newreq)) {
-		    FREE_ERR;
+		    (xdrproc_t)xdr_ypreq_newxfr,
+		    (char *)&newreq)) {
+			FREE_ERR;
 		}
 	}
 }
@@ -520,8 +520,8 @@ ypall(SVCXPRT *transp)
 	memset((char *)&req, 0, sizeof (req));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)xdr_ypreq_nokey,
-				(char *)&req)) {
+	    (xdrproc_t)xdr_ypreq_nokey,
+	    (char *)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
@@ -535,8 +535,8 @@ ypall(SVCXPRT *transp)
 		}
 
 		if (!svc_freeargs(transp,
-					(xdrproc_t)xdr_ypreq_nokey,
-					(char *)&req)) {
+		    (xdrproc_t)xdr_ypreq_nokey,
+		    (char *)&req)) {
 			FREE_ERR;
 		}
 
@@ -548,8 +548,8 @@ ypall(SVCXPRT *transp)
 	 */
 	ypclr_current_map();
 	if ((fdb = ypset_current_map(req.map,
-		req.domain, &resp.status)) != NULL &&
-		!yp_map_access(transp, &resp.status, fdb)) {
+	    req.domain, &resp.status)) != NULL &&
+	    !yp_map_access(transp, &resp.status, fdb)) {
 
 		req.map[0] = '-';
 	}
@@ -561,14 +561,14 @@ ypall(SVCXPRT *transp)
 	 */
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)xdrypserv_ypall,
-				(char *)&req)) {
+	    (xdrproc_t)xdrypserv_ypall,
+	    (char *)&req)) {
 		RESPOND_ERR;
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)xdr_ypreq_nokey,
-				(char *)&req)) {
+	    (xdrproc_t)xdr_ypreq_nokey,
+	    (char *)&req)) {
 		FREE_ERR;
 	}
 
@@ -601,15 +601,15 @@ ypmaster(SVCXPRT *transp)
 	resp.status = YP_TRUE;
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)xdr_ypreq_nokey,
-				(char *)&req)) {
+	    (xdrproc_t)xdr_ypreq_nokey,
+	    (char *)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
 
 	if ((fdb = ypset_current_map(req.map,
-		req.domain, &resp.status)) != NULL &&
-		yp_map_access(transp, &resp.status, fdb)) {
+	    req.domain, &resp.status)) != NULL &&
+	    yp_map_access(transp, &resp.status, fdb)) {
 
 		if (!ypget_map_master(&resp.master, fdb)) {
 			resp.status = (unsigned)YP_BADDB;
@@ -617,14 +617,14 @@ ypmaster(SVCXPRT *transp)
 	}
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)xdr_ypresp_master,
-				(char *)&resp)) {
+	    (xdrproc_t)xdr_ypresp_master,
+	    (char *)&resp)) {
 		RESPOND_ERR;
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)xdr_ypreq_nokey,
-				(char *)&req)) {
+	    (xdrproc_t)xdr_ypreq_nokey,
+	    (char *)&req)) {
 		FREE_ERR;
 	}
 }
@@ -647,8 +647,8 @@ yporder(SVCXPRT *transp)
 	memset((char *)&req, 0, sizeof (req));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)xdr_ypreq_nokey,
-				(char *)&req)) {
+	    (xdrproc_t)xdr_ypreq_nokey,
+	    (char *)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
@@ -656,9 +656,9 @@ yporder(SVCXPRT *transp)
 	resp.ordernum = 0;
 
 	if ((fdb = ypset_current_map(req.map,
-					req.domain,
-					&resp.status)) != NULL &&
-		yp_map_access(transp, &resp.status, fdb)) {
+	    req.domain,
+	    &resp.status)) != NULL &&
+	    yp_map_access(transp, &resp.status, fdb)) {
 
 		if (!ypget_map_order(req.map, req.domain, &resp.ordernum)) {
 			resp.status = (unsigned)YP_BADDB;
@@ -666,14 +666,14 @@ yporder(SVCXPRT *transp)
 	}
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)xdr_ypresp_order,
-				(char *)&resp)) {
+	    (xdrproc_t)xdr_ypresp_order,
+	    (char *)&resp)) {
 		RESPOND_ERR;
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)xdr_ypreq_nokey,
-				(char *)&req)) {
+	    (xdrproc_t)xdr_ypreq_nokey,
+	    (char *)&req)) {
 		FREE_ERR;
 	}
 }
@@ -692,8 +692,8 @@ ypmaplist(SVCXPRT *transp)
 	memset(domain_name, 0, sizeof (domain_name));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)xdr_ypdomain_wrap_string,
-				(caddr_t)&pdomain)) {
+	    (xdrproc_t)xdr_ypdomain_wrap_string,
+	    (caddr_t)&pdomain)) {
 		svcerr_decode(transp);
 		return;
 	}
@@ -701,8 +701,8 @@ ypmaplist(SVCXPRT *transp)
 	maplist.status = yplist_maps(domain_name, &maplist.list);
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)xdr_ypresp_maplist,
-				(char *)&maplist)) {
+	    (xdrproc_t)xdr_ypresp_maplist,
+	    (char *)&maplist)) {
 		RESPOND_ERR;
 	}
 
@@ -726,9 +726,9 @@ static bool
 isypsym(datum *key)
 {
 	if ((key->dptr == NULL) ||
-		(key->dsize < yp_prefix_sz) ||
-		memcmp(yp_prefix, key->dptr, yp_prefix_sz) ||
-		(!memcmp(key->dptr, "YP_MULTI_", 9))) {
+	    (key->dsize < yp_prefix_sz) ||
+	    memcmp(yp_prefix, key->dptr, yp_prefix_sz) ||
+	    (!memcmp(key->dptr, "YP_MULTI_", 9))) {
 		return (FALSE);
 	}
 	return (TRUE);
@@ -798,9 +798,9 @@ xdrypserv_ypall(XDR *xdrs, struct ypreq_nokey *req)
 	resp.keydat.dsize = resp.valdat.dsize = 0;
 
 	if ((fdb = ypset_current_map(req->map, req->domain,
-					&resp.status)) != NULL) {
+	    &resp.status)) != NULL) {
 		ypfilter(fdb, (datum *) NULL, &resp.keydat, &resp.valdat,
-				&resp.status, FALSE);
+		    &resp.status, FALSE);
 
 		while (resp.status == YP_TRUE) {
 			if (!xdr_bool(xdrs, &more)) {
@@ -812,7 +812,7 @@ xdrypserv_ypall(XDR *xdrs, struct ypreq_nokey *req)
 			}
 
 			ypfilter(fdb, &resp.keydat, &resp.keydat, &resp.valdat,
-					&resp.status, FALSE);
+			    &resp.status, FALSE);
 		}
 	}
 
@@ -853,7 +853,7 @@ multihomed(struct ypreq_key req, struct ypresp_val *resp,
 	static char localbuf[_PBLKSIZ];	/* buffer for multihomed IPv6 addr */
 
 	if (strcmp(req.map, "hosts.byname") &&
-			strcmp(req.map, "ipnodes.byname"))
+	    strcmp(req.map, "ipnodes.byname"))
 		/* default status is YP_NOKEY */
 		return (0);
 
@@ -879,7 +879,7 @@ multihomed(struct ypreq_key req, struct ypresp_val *resp,
 		return (0);
 
 	strncpy(name, req.keydat.dptr, req.keydat.dsize);
-	name[req.keydat.dsize] = NULL;
+	name[req.keydat.dsize] = 0;
 
 	if (strcmp(req.map, "ipnodes.byname") == 0) {
 		/*
@@ -929,7 +929,7 @@ multihomed(struct ypreq_key req, struct ypresp_val *resp,
 		free(buf);
 		/* remove trailing newline */
 		if (resp->valdat.dsize &&
-			resp->valdat.dptr[resp->valdat.dsize-1] == '\n') {
+		    resp->valdat.dptr[resp->valdat.dsize-1] == '\n') {
 			resp->valdat.dptr[resp->valdat.dsize-1] = '\0';
 			resp->valdat.dsize -= 1;
 		}
@@ -991,8 +991,8 @@ ypoldmatch(SVCXPRT *transp, struct svc_req *rqstp)
 	memset((void *) &resp, 0, sizeof (resp));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
@@ -1003,23 +1003,23 @@ ypoldmatch(SVCXPRT *transp, struct svc_req *rqstp)
 	}
 
 	if (dbmop_ok &&
-		(((fdb = ypset_current_map(req.ypmatch_req_map,
-						req.ypmatch_req_domain,
-						&resp.ypmatch_resp_status))
-						!= NULL) &&
-						yp_map_access(transp,
-						&resp.ypmatch_resp_status,
-						fdb))) {
+	    (((fdb = ypset_current_map(req.ypmatch_req_map,
+	    req.ypmatch_req_domain,
+	    &resp.ypmatch_resp_status))
+	    != NULL) &&
+	    yp_map_access(transp,
+	    &resp.ypmatch_resp_status,
+	    fdb))) {
 
 		/* Check with the DBM database */
 		resp.ypmatch_resp_valdat = dbm_fetch(fdb,
-						req.ypmatch_req_keydat);
+		    req.ypmatch_req_keydat);
 
 		if (resp.ypmatch_resp_valptr != NULL) {
 			resp.ypmatch_resp_status = YP_TRUE;
 			if (!silent)
 				printf("%s: dbm: %s\n",
-					fun, resp.ypmatch_resp_valptr);
+				    fun, resp.ypmatch_resp_valptr);
 			goto send_oldreply;
 		}
 
@@ -1035,7 +1035,7 @@ ypoldmatch(SVCXPRT *transp, struct svc_req *rqstp)
 		    strncmp(req.ypmatch_req_keyptr, "YP_SECURE", 9) == 0 ||
 		    strncmp(req.ypmatch_req_keyptr, "YP_INTERDOMAIN", 14) == 0)
 
-		    goto send_oldreply;
+			goto send_oldreply;
 
 		/* Let's try the YP_MULTI_ hack... */
 #ifdef MINUS_C_OPTION
@@ -1058,32 +1058,34 @@ ypoldmatch(SVCXPRT *transp, struct svc_req *rqstp)
 		}
 
 		if (dnsforward) {
-		    if (!resolv_pid)
-			setup_resolv(&dnsforward, &resolv_pid, &resolv_client,
-					resolv_tp, 0);
+			if (!resolv_pid)
+				setup_resolv(&dnsforward, &resolv_pid,
+				    &resolv_client,
+				    resolv_tp, 0);
 
-		    if (req.yp_reqtype == YPREQ_KEY) {
-			nrq = req.yp_reqbody.yp_req_keytype;
+			if (req.yp_reqtype == YPREQ_KEY) {
+				nrq = req.yp_reqbody.yp_req_keytype;
 
-			resolv_req(&dnsforward, &resolv_client, &resolv_pid,
-					resolv_tp, rqstp->rq_xprt,
-					&nrq, nrq.map);
-		    }
-		    return;
+				resolv_req(&dnsforward, &resolv_client,
+				    &resolv_pid,
+				    resolv_tp, rqstp->rq_xprt,
+				    &nrq, nrq.map);
+			}
+			return;
 		}
 	}
 
 	send_oldreply:
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)_xdr_ypresponse,
-				(caddr_t)&resp)) {
+	    (xdrproc_t)_xdr_ypresponse,
+	    (caddr_t)&resp)) {
 		RESPOND_ERR;
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(char *)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (char *)&req)) {
 		FREE_ERR;
 	}
 }
@@ -1101,8 +1103,8 @@ ypoldfirst(SVCXPRT *transp)
 	memset((void *) &resp, 0, sizeof (resp));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
@@ -1113,19 +1115,19 @@ ypoldfirst(SVCXPRT *transp)
 	}
 
 	if (dbmop_ok &&
-		((fdb = ypset_current_map(req.ypfirst_req_map,
-						req.ypfirst_req_domain,
-						&resp.ypfirst_resp_status))
-						!= NULL) &&
-						yp_map_access(transp,
-						&resp.ypfirst_resp_status,
-						fdb)) {
+	    ((fdb = ypset_current_map(req.ypfirst_req_map,
+	    req.ypfirst_req_domain,
+	    &resp.ypfirst_resp_status))
+	    != NULL) &&
+	    yp_map_access(transp,
+	    &resp.ypfirst_resp_status,
+	    fdb)) {
 
 		resp.ypfirst_resp_keydat = dbm_firstkey(fdb);
 
 		if (resp.ypfirst_resp_keyptr != NULL) {
 			resp.ypfirst_resp_valdat =
-				dbm_fetch(fdb, resp.ypfirst_resp_keydat);
+			    dbm_fetch(fdb, resp.ypfirst_resp_keydat);
 
 			if (resp.ypfirst_resp_valptr != NULL) {
 				resp.ypfirst_resp_status = YP_TRUE;
@@ -1140,14 +1142,14 @@ ypoldfirst(SVCXPRT *transp)
 	resp.yp_resptype = YPFIRST_RESPTYPE;
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)_xdr_ypresponse,
-				(caddr_t)&resp)) {
+	    (xdrproc_t)_xdr_ypresponse,
+	    (caddr_t)&resp)) {
 		RESPOND_ERR;
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		FREE_ERR;
 	}
 }
@@ -1165,8 +1167,8 @@ ypoldnext(SVCXPRT *transp)
 	memset((void *) &resp, 0, sizeof (resp));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
@@ -1177,16 +1179,16 @@ ypoldnext(SVCXPRT *transp)
 	}
 
 	if (dbmop_ok &&
-		((fdb = ypset_current_map(req.ypnext_req_map,
-					req.ypnext_req_domain,
-					&resp.ypnext_resp_status)) != NULL &&
-		yp_map_access(transp, &resp.ypnext_resp_status, fdb))) {
+	    ((fdb = ypset_current_map(req.ypnext_req_map,
+	    req.ypnext_req_domain,
+	    &resp.ypnext_resp_status)) != NULL &&
+	    yp_map_access(transp, &resp.ypnext_resp_status, fdb))) {
 
 		resp.ypnext_resp_keydat = dbm_nextkey(fdb);
 
 		if (resp.ypnext_resp_keyptr != NULL) {
 			resp.ypnext_resp_valdat =
-			dbm_fetch(fdb, resp.ypnext_resp_keydat);
+			    dbm_fetch(fdb, resp.ypnext_resp_keydat);
 
 			if (resp.ypnext_resp_valptr != NULL) {
 				resp.ypnext_resp_status = YP_TRUE;
@@ -1201,14 +1203,14 @@ ypoldnext(SVCXPRT *transp)
 	resp.yp_resptype = YPNEXT_RESPTYPE;
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)_xdr_ypresponse,
-				(caddr_t)&resp)) {
+	    (xdrproc_t)_xdr_ypresponse,
+	    (caddr_t)&resp)) {
 		RESPOND_ERR;
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		FREE_ERR;
 	}
 }
@@ -1236,16 +1238,16 @@ ypoldpoll(SVCXPRT *transp)
 	memset((void *) &resp, 0, sizeof (resp));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
 
 	if (req.yp_reqtype == YPPOLL_REQTYPE) {
 		if (strcmp(req.yppoll_req_domain, "yp_private") == 0 ||
-			strcmp(req.yppoll_req_map, "ypdomains") == 0 ||
-			strcmp(req.yppoll_req_map, "ypmaps") == 0) {
+		    strcmp(req.yppoll_req_map, "ypdomains") == 0 ||
+		    strcmp(req.yppoll_req_map, "ypmaps") == 0) {
 
 			/*
 			 * Backward comatibility for 2.0 NIS servers
@@ -1253,12 +1255,12 @@ ypoldpoll(SVCXPRT *transp)
 			domain = req.yppoll_req_domain;
 			map = req.yppoll_req_map;
 		} else if ((fdb = ypset_current_map(req.yppoll_req_map,
-				req.yppoll_req_domain,
-				&error)) != NULL) {
+		    req.yppoll_req_domain,
+		    &error)) != NULL) {
 			domain = req.yppoll_req_domain;
 			map = req.yppoll_req_map;
 			ypget_map_order(map, domain,
-					&resp.yppoll_resp_ordernum);
+			    &resp.yppoll_resp_ordernum);
 			ypget_map_master(&owner, fdb);
 		} else {
 			switch ((int)error) {
@@ -1279,14 +1281,14 @@ ypoldpoll(SVCXPRT *transp)
 	resp.yppoll_resp_owner = owner;
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)_xdr_ypresponse,
-				(caddr_t)&resp)) {
+	    (xdrproc_t)_xdr_ypresponse,
+	    (caddr_t)&resp)) {
 		RESPOND_ERR;
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		FREE_ERR;
 	}
 }
@@ -1303,16 +1305,16 @@ ypoldpush(SVCXPRT *transp)
 	memset((void *) &req, 0, sizeof (req));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
 
 	if (((fdb = ypset_current_map(req.yppush_req_map,
-					req.yppush_req_domain,
-					&resp.status)) != NULL) &&
-		(yp_map_access(transp, &resp.status, fdb))) {
+	    req.yppush_req_domain,
+	    &resp.status)) != NULL) &&
+	    (yp_map_access(transp, &resp.status, fdb))) {
 
 		pid = vfork();
 	}
@@ -1323,21 +1325,21 @@ ypoldpush(SVCXPRT *transp)
 		ypclr_current_map();
 
 		if (execl(yppush_proc, "yppush", "-d", req.yppush_req_domain,
-				req.yppush_req_map, NULL)) {
+		    req.yppush_req_map, NULL)) {
 			EXEC_ERR;
 		}
 		_exit(1);
 	}
 
 	if (!svc_sendreply(transp,
-				(xdrproc_t)xdr_void,
-				(caddr_t)NULL)) {
+	    (xdrproc_t)xdr_void,
+	    (caddr_t)NULL)) {
 		RESPOND_ERR;
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		FREE_ERR;
 	}
 }
@@ -1354,8 +1356,8 @@ ypoldpull(SVCXPRT *transp)
 	memset((void *) &req, 0, sizeof (req));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
@@ -1363,9 +1365,9 @@ ypoldpull(SVCXPRT *transp)
 	if (req.yp_reqtype == YPPULL_REQTYPE) {
 
 		if (((fdb = ypset_current_map(req.yppull_req_map,
-						req.yppull_req_domain,
-						&resp.status)) == NULL) ||
-			(yp_map_access(transp, &resp.status, fdb))) {
+		    req.yppull_req_domain,
+		    &resp.status)) == NULL) ||
+		    (yp_map_access(transp, &resp.status, fdb))) {
 			pid = vfork();
 		}
 
@@ -1375,8 +1377,8 @@ ypoldpull(SVCXPRT *transp)
 			ypclr_current_map();
 
 			if (execl(ypxfr_proc, "ypxfr", "-d",
-					req.yppull_req_domain,
-					req.yppull_req_map, NULL)) {
+			    req.yppull_req_domain,
+			    req.yppull_req_map, NULL)) {
 				EXEC_ERR;
 			}
 			_exit(1);
@@ -1384,8 +1386,8 @@ ypoldpull(SVCXPRT *transp)
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		FREE_ERR;
 	}
 }
@@ -1402,8 +1404,8 @@ ypoldget(SVCXPRT *transp)
 	memset((void *) &req, 0, sizeof (req));
 
 	if (!svc_getargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		svcerr_decode(transp);
 		return;
 	}
@@ -1415,9 +1417,9 @@ ypoldget(SVCXPRT *transp)
 	if (req.yp_reqtype == YPGET_REQTYPE) {
 
 		if (((fdb = ypset_current_map(req.ypget_req_map,
-						req.ypget_req_domain,
-						&resp.status)) == NULL) ||
-			(yp_map_access(transp, &resp.status, fdb))) {
+		    req.ypget_req_domain,
+		    &resp.status)) == NULL) ||
+		    (yp_map_access(transp, &resp.status, fdb))) {
 
 			pid = vfork();
 		}
@@ -1429,9 +1431,9 @@ ypoldget(SVCXPRT *transp)
 			ypclr_current_map();
 
 			if (execl(ypxfr_proc, "ypxfr", "-d",
-					req.ypget_req_domain, "-h",
-					req.ypget_req_owner,
-					req.ypget_req_map, NULL)) {
+			    req.ypget_req_domain, "-h",
+			    req.ypget_req_owner,
+			    req.ypget_req_map, NULL)) {
 
 				EXEC_ERR;
 			}
@@ -1440,8 +1442,8 @@ ypoldget(SVCXPRT *transp)
 	}
 
 	if (!svc_freeargs(transp,
-				(xdrproc_t)_xdr_yprequest,
-				(caddr_t)&req)) {
+	    (xdrproc_t)_xdr_yprequest,
+	    (caddr_t)&req)) {
 		RESPOND_ERR;
 	}
 }
@@ -1463,13 +1465,13 @@ omultihomed(struct yprequest req,
 
 		strncpy(name, "YP_MULTI_", 9);
 		strncpy(name + 9, req.ypmatch_req_keyptr,
-			req.ypmatch_req_keysize);
+		    req.ypmatch_req_keysize);
 		tmpname.dsize = req.ypmatch_req_keysize + 9;
 		tmpname.dptr = name;
 		resp->ypmatch_resp_valdat = dbm_fetch(fdb, tmpname);
 	} else {
 		resp->ypmatch_resp_valdat =
-			dbm_fetch(fdb, req.ypmatch_req_keydat);
+		    dbm_fetch(fdb, req.ypmatch_req_keydat);
 		if (resp->ypmatch_resp_valptr != NULL)
 			return (1);
 	}
@@ -1478,7 +1480,7 @@ omultihomed(struct yprequest req,
 		return (0);
 
 	strncpy(name, req.ypmatch_req_keyptr, req.ypmatch_req_keysize);
-	name[req.ypmatch_req_keysize] = NULL;
+	name[req.ypmatch_req_keysize] = 0;
 
 	nbuf = svc_getrpccaller(xprt);
 
