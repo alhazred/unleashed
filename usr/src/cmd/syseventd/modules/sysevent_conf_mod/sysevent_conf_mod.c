@@ -345,8 +345,8 @@ strcopys(str_t *str, char *s)
 
 	if (str->s_alloc < len) {
 		new_str = (str->s_str == NULL) ?
-			sc_malloc(len+str->s_hint) :
-			sc_realloc(str->s_str, str->s_alloc, len+str->s_hint);
+		    sc_malloc(len+str->s_hint) :
+		    sc_realloc(str->s_str, str->s_alloc, len+str->s_hint);
 		if (new_str == NULL) {
 			return (1);
 		}
@@ -370,7 +370,7 @@ strcats(str_t *str, char *s)
 
 	if (str->s_alloc < len) {
 		new_str = (str->s_str == NULL) ? sc_malloc(len+str->s_hint) :
-			sc_realloc(str->s_str, str->s_alloc, len+str->s_hint);
+		    sc_realloc(str->s_str, str->s_alloc, len+str->s_hint);
 		if (new_str == NULL) {
 			return (1);
 		}
@@ -394,7 +394,7 @@ strcatc(str_t *str, int c)
 
 	if (str->s_alloc < len) {
 		new_str = (str->s_str == NULL) ? sc_malloc(len+str->s_hint) :
-			sc_realloc(str->s_str, str->s_alloc, len+str->s_hint);
+		    sc_realloc(str->s_str, str->s_alloc, len+str->s_hint);
 		if (new_str == NULL) {
 			return (1);
 		}
@@ -510,7 +510,7 @@ parse_conf_file(char *conf_file)
 	int	i, err;
 
 	(void) snprintf(conf_path, PATH_MAX, "%s/%s",
-		SYSEVENT_CONFIG_DIR, conf_file);
+	    SYSEVENT_CONFIG_DIR, conf_file);
 
 	syseventd_print(DBG_CONF_FILE, "%s: reading %s\n", whoami, conf_path);
 
@@ -529,7 +529,7 @@ parse_conf_file(char *conf_file)
 		*(lp + strlen(lp)-1) = 0;
 
 		syseventd_print(DBG_CONF_FILE, "[%d]: %s\n",
-			lineno, lp);
+		    lineno, lp);
 
 		if ((class = next_field(&lp)) == NULL)
 			goto mal_formed;
@@ -555,10 +555,10 @@ parse_conf_file(char *conf_file)
 		do_setuid = 0;
 		if ((strcmp(user, "-") != 0) && (strcmp(user, "root") != 0)) {
 			i = getpwnam_r(user, &pwd, pwdbuf,
-					sizeof (pwdbuf), &pwdp);
+			    sizeof (pwdbuf), &pwdp);
 			if (i != 0 || pwdp == NULL) {
 				syslog(LOG_ERR, NO_USER_ERR,
-					conf_file, lineno, user);
+				    conf_file, lineno, user);
 				continue;
 			}
 			do_setuid = 1;
@@ -569,12 +569,12 @@ parse_conf_file(char *conf_file)
 		 */
 		if (strcmp(reserved1, "-") != 0) {
 			syslog(LOG_ERR, RESERVED_FIELD_ERR,
-				conf_file, lineno, reserved1);
+			    conf_file, lineno, reserved1);
 			continue;
 		}
 		if (strcmp(reserved2, "-") != 0) {
 			syslog(LOG_ERR, RESERVED_FIELD_ERR,
-				conf_file, lineno, reserved2);
+			    conf_file, lineno, reserved2);
 			continue;
 		}
 
@@ -587,28 +587,28 @@ parse_conf_file(char *conf_file)
 			saved_gid = getgid();
 			if (setregid(pwdp->pw_gid, -1) == -1) {
 				syslog(LOG_ERR, SETREGID_ERR,
-					whoami, pwdp->pw_gid, strerror(errno));
+				    whoami, pwdp->pw_gid, strerror(errno));
 				err = -1;
 			}
 			if (setreuid(pwdp->pw_uid, -1) == -1) {
 				syslog(LOG_ERR, SETREUID_ERR,
-					whoami, pwdp->pw_uid, strerror(errno));
+				    whoami, pwdp->pw_uid, strerror(errno));
 				err = -1;
 			}
 		}
 		if ((i = access(path, X_OK)) == -1) {
 			syslog(LOG_ERR, CANNOT_EXECUTE_ERR,
-				conf_file, lineno, path, strerror(errno));
+			    conf_file, lineno, path, strerror(errno));
 		}
 		if (do_setuid) {
 			if (setreuid(saved_uid, -1) == -1) {
 				syslog(LOG_ERR, SETREUID_ERR,
-					whoami, saved_uid, strerror(errno));
+				    whoami, saved_uid, strerror(errno));
 				err = -1;
 			}
 			if (setregid(saved_gid, -1) == -1) {
 				syslog(LOG_ERR, SETREGID_ERR,
-					whoami, saved_gid, strerror(errno));
+				    whoami, saved_gid, strerror(errno));
 				err = -1;
 			}
 		}
@@ -675,25 +675,25 @@ parse_conf_file(char *conf_file)
 			syseventtab_t *sp;
 			for (sp = syseventtab; sp; sp = sp->se_next) {
 				syseventd_print(DBG_DETAILED,
-					"    vendor=%s\n", sp->se_vendor);
+				    "    vendor=%s\n", sp->se_vendor);
 				syseventd_print(DBG_DETAILED,
-					"    publisher=%s\n", sp->se_publisher);
+				    "    publisher=%s\n", sp->se_publisher);
 				syseventd_print(DBG_DETAILED,
-					"    class=%s\n", sp->se_class);
+				    "    class=%s\n", sp->se_class);
 				syseventd_print(DBG_DETAILED,
-					"    subclass=%s\n", sp->se_subclass);
+				    "    subclass=%s\n", sp->se_subclass);
 				syseventd_print(DBG_DETAILED,
-					"    user=%s uid=%d gid=%d\n",
-					sp->se_user, sp->se_uid, sp->se_gid);
+				    "    user=%s uid=%d gid=%d\n",
+				    sp->se_user, sp->se_uid, sp->se_gid);
 				syseventd_print(DBG_DETAILED,
-					"    reserved1=%s\n", sp->se_reserved1);
+				    "    reserved1=%s\n", sp->se_reserved1);
 				syseventd_print(DBG_DETAILED,
-					"    reserved2=%s\n", sp->se_reserved2);
+				    "    reserved2=%s\n", sp->se_reserved2);
 				syseventd_print(DBG_DETAILED,
-					"    path=%s\n", sp->se_path);
+				    "    path=%s\n", sp->se_path);
 				if (sp->se_args != NULL) {
 					syseventd_print(DBG_DETAILED,
-						"    args=%s\n", sp->se_args);
+					    "    args=%s\n", sp->se_args);
 				}
 			}
 		}
@@ -746,7 +746,7 @@ build_event_table()
 
 	if ((dir = opendir(SYSEVENT_CONFIG_DIR)) == NULL) {
 		syslog(LOG_ERR, CANNOT_OPEN_ERR,
-			SYSEVENT_CONFIG_DIR, strerror(errno));
+		    SYSEVENT_CONFIG_DIR, strerror(errno));
 		return;
 	}
 
@@ -764,7 +764,7 @@ build_event_table()
 		}
 		if (strcmp(str, "sysevent.conf") != 0) {
 			syseventd_print(DBG_CONF_FILE,
-				"%s: ignoring %s\n", whoami, str);
+			    "%s: ignoring %s\n", whoami, str);
 			continue;
 		}
 
@@ -796,7 +796,7 @@ err:
 		if (errno == EAGAIN)
 			goto err;
 		syslog(LOG_ERR, CLOSEDIR_ERR,
-			SYSEVENT_CONFIG_DIR, strerror(errno));
+		    SYSEVENT_CONFIG_DIR, strerror(errno));
 	}
 }
 
@@ -811,7 +811,7 @@ enter_lock(char *lock_file)
 	lock_fd = open(lock_file, O_CREAT|O_RDWR, 0644);
 	if (lock_fd < 0) {
 		syslog(LOG_ERR, MSG_LOCK_CREATE_ERR,
-			whoami, lock_file, strerror(errno));
+		    whoami, lock_file, strerror(errno));
 		return (-1);
 	}
 
@@ -826,7 +826,7 @@ retry:
 			goto retry;
 		(void) close(lock_fd);
 		syslog(LOG_ERR, MSG_LOCK_SET_ERR,
-			whoami, lock_file, strerror(errno));
+		    whoami, lock_file, strerror(errno));
 		return (-1);
 	}
 
@@ -846,12 +846,12 @@ exit_lock(int lock_fd, char *lock_file)
 
 	if (fcntl(lock_fd, F_SETLK, &lock) == -1) {
 		syslog(LOG_ERR, MSG_LOCK_CLR_ERR,
-			whoami, lock_file, strerror(errno));
+		    whoami, lock_file, strerror(errno));
 	}
 
 	if (close(lock_fd) == -1) {
 		syslog(LOG_ERR, MSG_LOCK_CLOSE_ERR,
-			whoami, lock_file, strerror(errno));
+		    whoami, lock_file, strerror(errno));
 	}
 }
 
@@ -1122,7 +1122,7 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 	    (strcmp(token, "timestamp") == 0)) {
 		if (strcmp(token, "sequence") == 0) {
 			(void) snprintf(num, sizeof (num),
-				"0x%llx", sysevent_get_seq(ev));
+			    "0x%llx", sysevent_get_seq(ev));
 		} else {
 			hrtime_t ts;
 			sysevent_get_time(ev, &ts);
@@ -1143,8 +1143,8 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 		while ((nvp = nvlist_next_nvpair(nvlist, nvp)) != NULL) {
 			if (debug_level >= DBG_DETAILED) {
 				syseventd_print(DBG_DETAILED,
-				"    attribute: %s %s\n", nvpair_name(nvp),
-				se_attr_type_to_str(nvpair_type(nvp)));
+				    "    attribute: %s %s\n", nvpair_name(nvp),
+				    se_attr_type_to_str(nvpair_type(nvp)));
 			}
 			if (strcmp(token, nvpair_name(nvp)) == 0) {
 				nmatches++;
@@ -1156,12 +1156,12 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 
 	if (nmatches == 0) {
 		syslog(LOG_ERR, MACRO_UNDEF_ERR,
-			sep->se_conf_file, sep->se_lineno, token);
+		    sep->se_conf_file, sep->se_lineno, token);
 		freestr(replacement);
 		return (NULL);
 	} else if (nmatches > 1) {
 		syslog(LOG_ERR, MACRO_MULT_DEF_ERR,
-			sep->se_conf_file, sep->se_lineno, token);
+		    sep->se_conf_file, sep->se_lineno, token);
 		freestr(replacement);
 		return (NULL);
 	}
@@ -1233,11 +1233,11 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 	case DATA_TYPE_BYTE_ARRAY: {
 			uchar_t	*p;
 			(void) nvpair_value_byte_array(nvp,
-				&x.x_byte_array, &nelems);
+			    &x.x_byte_array, &nelems);
 			p = x.x_byte_array;
 			for (i = 0; i < nelems; i++) {
 				(void) snprintf(num, sizeof (num),
-					"0x%x ", *p++ & 0xff);
+				    "0x%x ", *p++ & 0xff);
 				if (strcats(replacement, num)) {
 					freestr(replacement);
 					return (NULL);
@@ -1248,7 +1248,7 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 	case DATA_TYPE_INT16_ARRAY: {
 			int16_t *p;
 			(void) nvpair_value_int16_array(nvp,
-				&x.x_int16_array, &nelems);
+			    &x.x_int16_array, &nelems);
 			p = x.x_int16_array;
 			for (i = 0; i < nelems; i++) {
 				(void) snprintf(num, sizeof (num), "%d ", *p++);
@@ -1263,11 +1263,11 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 	case DATA_TYPE_UINT16_ARRAY: {
 			uint16_t *p;
 			(void) nvpair_value_uint16_array(nvp,
-				&x.x_uint16_array, &nelems);
+			    &x.x_uint16_array, &nelems);
 			p = x.x_uint16_array;
 			for (i = 0; i < nelems; i++) {
 				(void) snprintf(num, sizeof (num),
-					"0x%x ", *p++);
+				    "0x%x ", *p++);
 				if (strcats(replacement, num)) {
 					freestr(replacement);
 					return (NULL);
@@ -1279,7 +1279,7 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 	case DATA_TYPE_INT32_ARRAY: {
 			int32_t *p;
 			(void) nvpair_value_int32_array(nvp,
-				&x.x_int32_array, &nelems);
+			    &x.x_int32_array, &nelems);
 			p = x.x_int32_array;
 			for (i = 0; i < nelems; i++) {
 				(void) snprintf(num, sizeof (num), "%d ", *p++);
@@ -1294,11 +1294,11 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 	case DATA_TYPE_UINT32_ARRAY: {
 			uint32_t *p;
 			(void) nvpair_value_uint32_array(nvp,
-				&x.x_uint32_array, &nelems);
+			    &x.x_uint32_array, &nelems);
 			p = x.x_uint32_array;
 			for (i = 0; i < nelems; i++) {
 				(void) snprintf(num, sizeof (num),
-					"0x%x ", *p++);
+				    "0x%x ", *p++);
 				if (strcats(replacement, num)) {
 					freestr(replacement);
 					return (NULL);
@@ -1310,11 +1310,11 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 	case DATA_TYPE_INT64_ARRAY: {
 			int64_t *p;
 			(void) nvpair_value_int64_array(nvp,
-				&x.x_int64_array, &nelems);
+			    &x.x_int64_array, &nelems);
 			p = x.x_int64_array;
 			for (i = 0; i < nelems; i++) {
 				(void) snprintf(num, sizeof (num),
-					"%lld ", *p++);
+				    "%lld ", *p++);
 				if (strcats(replacement, num)) {
 					freestr(replacement);
 					return (NULL);
@@ -1326,11 +1326,11 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 	case DATA_TYPE_UINT64_ARRAY: {
 			uint64_t *p;
 			(void) nvpair_value_uint64_array(nvp,
-				&x.x_uint64_array, &nelems);
+			    &x.x_uint64_array, &nelems);
 			p = x.x_uint64_array;
 			for (i = 0; i < nelems; i++) {
 				(void) snprintf(num, sizeof (num),
-					"0x%llx ", *p++);
+				    "0x%llx ", *p++);
 				if (strcats(replacement, num)) {
 					freestr(replacement);
 					return (NULL);
@@ -1342,7 +1342,7 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 	case DATA_TYPE_STRING_ARRAY: {
 			char **p;
 			(void) nvpair_value_string_array(nvp,
-				&x.x_string_array, &nelems);
+			    &x.x_string_array, &nelems);
 			p = x.x_string_array;
 			for (i = 0; i < nelems; i++) {
 				if (strcats(replacement, *p++) ||
@@ -1364,8 +1364,8 @@ find_macro_definition(sysevent_t *ev, nvlist_t *nvlist, syseventtab_t *sep,
 		break;
 	default:
 		syslog(LOG_ERR, ATTR_UNSUPPORTED_ERR,
-			sep->se_conf_file, sep->se_lineno,
-			nvpair_type(nvp), token);
+		    sep->se_conf_file, sep->se_lineno,
+		    nvpair_type(nvp), token);
 		freestr(replacement);
 		return (NULL);
 	}
@@ -1459,15 +1459,15 @@ reset:
 				return (1);
 			}
 			replacement = find_macro_definition(ev, nvlist,
-				sep, token->s_str, hdr);
+			    sep, token->s_str, hdr);
 			if (replacement == NULL) {
 				freestr(token);
 				freestr(remainder);
 				return (1);
 			}
 			syseventd_print(DBG_MACRO,
-				"    '%s' expands to '%s'\n",
-				token->s_str, replacement->s_str);
+			    "    '%s' expands to '%s'\n",
+			    token->s_str, replacement->s_str);
 
 			strtrunc(line, dollar_position);
 			if (strcats(line, replacement->s_str)) {
@@ -1484,7 +1484,7 @@ reset:
 			}
 
 			syseventd_print(DBG_MACRO,
-				"    with macro expanded: '%s'\n", line->s_str);
+			    "    with macro expanded: '%s'\n", line->s_str);
 
 			freestr(token);
 			freestr(replacement);
@@ -1509,15 +1509,15 @@ start_syseventconfd()
 	int	err;
 
 	err = system1("/usr/lib/sysevent/syseventconfd",
-		"/usr/lib/sysevent/syseventconfd");
+	    "/usr/lib/sysevent/syseventconfd");
 
 	if (err != 0 && confd_err_msg_emitted == 0) {
 		if (confd_state == CONFD_STATE_NOT_RUNNING) {
 			syslog(LOG_ERR, SYSEVENTCONFD_START_ERR,
-				strerror(errno));
+			    strerror(errno));
 		} else {
 			syslog(LOG_ERR, SYSEVENTCONFD_RESTART_ERR,
-				strerror(errno));
+			    strerror(errno));
 		}
 	}
 }
@@ -1544,8 +1544,8 @@ system1(const char *s_path, const char *s)
 		return (-1);
 	}
 	if (((geteuid() == st.st_uid) && ((st.st_mode & S_IXUSR) == 0)) ||
-		((getegid() == st.st_gid) && ((st.st_mode & S_IXGRP) == 0)) ||
-		((st.st_mode & S_IXOTH) == 0)) {
+	    ((getegid() == st.st_gid) && ((st.st_mode & S_IXGRP) == 0)) ||
+	    ((st.st_mode & S_IXOTH) == 0)) {
 		errno = EPERM;
 		return (-1);
 	}
@@ -1688,8 +1688,8 @@ queue_event(sysevent_t *ev, syseventtab_t *sep, sysevent_hdr_info_t *hdr)
 
 		if (sysevent_get_attr_list(ev, &nvlist) != 0) {
 			syslog(LOG_ERR, GET_ATTR_LIST_ERR,
-				sep->se_conf_file, sep->se_lineno,
-				strerror(errno));
+			    sep->se_conf_file, sep->se_lineno,
+			    strerror(errno));
 			freestr(line);
 			return (1);
 		}
@@ -1703,7 +1703,7 @@ queue_event(sysevent_t *ev, syseventtab_t *sep, sysevent_hdr_info_t *hdr)
 
 	if (debug_level >= DBG_EXEC) {
 		syseventd_print(DBG_EXEC, "%s, line %d: path = %s\n",
-			sep->se_conf_file, sep->se_lineno, sep->se_path);
+		    sep->se_conf_file, sep->se_lineno, sep->se_path);
 		syseventd_print(DBG_EXEC, "    cmd = %s\n", line->s_str);
 	}
 
@@ -1711,8 +1711,8 @@ queue_event(sysevent_t *ev, syseventtab_t *sep, sysevent_hdr_info_t *hdr)
 	if ((errno = nvlist_alloc(&cmd_nvlist, NV_UNIQUE_NAME, 0)) != 0) {
 		freestr(line);
 		syslog(LOG_ERR, NVLIST_ALLOC_ERR,
-			sep->se_conf_file, sep->se_lineno,
-			strerror(errno));
+		    sep->se_conf_file, sep->se_lineno,
+		    strerror(errno));
 		return (1);
 	}
 
@@ -1738,11 +1738,11 @@ queue_event(sysevent_t *ev, syseventtab_t *sep, sysevent_hdr_info_t *hdr)
 	}
 
 	cmd_event = sysevent_alloc_event(hdr->class, hdr->subclass, hdr->vendor,
-		hdr->publisher, cmd_nvlist);
+	    hdr->publisher, cmd_nvlist);
 	if (cmd_event == NULL) {
 		syslog(LOG_ERR, SYSEVENT_ALLOC_ERR,
-			sep->se_conf_file, sep->se_lineno,
-			strerror(errno));
+		    sep->se_conf_file, sep->se_lineno,
+		    strerror(errno));
 		nvlist_free(cmd_nvlist);
 		freestr(line);
 		return (1);
@@ -1780,7 +1780,7 @@ queue_event(sysevent_t *ev, syseventtab_t *sep, sysevent_hdr_info_t *hdr)
 
 err:
 	syslog(LOG_ERR, NVLIST_BUILD_ERR,
-		sep->se_conf_file, sep->se_lineno, strerror(errno));
+	    sep->se_conf_file, sep->se_lineno, strerror(errno));
 	nvlist_free(cmd_nvlist);
 	freestr(line);
 	return (1);
@@ -1833,7 +1833,7 @@ transport_event(sysevent_t *event)
 			break;
 		default:
 			syslog(LOG_ERR, SYSEVENTCONFD_TRAN_ERR,
-				strerror(errno));
+			    strerror(errno));
 			rval = errno;
 			break;
 		}
@@ -2085,9 +2085,9 @@ sysevent_conf_event(sysevent_t *ev, int flag)
 	}
 
 	syseventd_print(DBG_EVENTS,
-		"%s event %lld: vendor='%s' publisher='%s' class='%s' "
-		"subclass='%s'\n", whoami, sysevent_get_seq(ev), vendor,
-		publisher, class, subclass);
+	    "%s event %lld: vendor='%s' publisher='%s' class='%s' "
+	    "subclass='%s'\n", whoami, sysevent_get_seq(ev), vendor,
+	    publisher, class, subclass);
 
 	for (sep = syseventtab; sep; sep = sep->se_next) {
 		if (strcmp(sep->se_vendor, "-") != 0) {
@@ -2107,7 +2107,7 @@ sysevent_conf_event(sysevent_t *ev, int flag)
 				continue;
 		}
 		syseventd_print(DBG_MATCHES, "    event match: %s, line %d\n",
-			sep->se_conf_file, sep->se_lineno);
+		    sep->se_conf_file, sep->se_lineno);
 		hdr.class = class;
 		hdr.subclass = subclass;
 		hdr.vendor = vendor;
@@ -2126,7 +2126,7 @@ sysevent_conf_event(sysevent_t *ev, int flag)
 		 */
 		if (ev_nretries == SE_MAX_RETRY_LIMIT) {
 			syslog(LOG_ERR, SYSEVENT_SEND_ERR,
-				sep->se_conf_file, sep->se_lineno, errno);
+			    sep->se_conf_file, sep->se_lineno, errno);
 		} else {
 			syseventd_print(DBG_TEST, "%s event %lld: "
 			    "'%s' '%s' '%s' '%s - errno %d, retry %d\n",
@@ -2206,7 +2206,7 @@ slm_init()
 	/*
 	 * Create thread to flush cmd queue
 	 */
-	if ((err = thr_create(NULL, NULL, (void *(*)(void*))queue_flush_thr,
+	if ((err = thr_create(NULL, 0, (void *(*)(void*))queue_flush_thr,
 	    (void *)NULL, 0, &cmdq_thr_id)) != 0) {
 		syslog(LOG_ERR, THR_CREATE_ERR, strerror(err));
 		sysevent_close_channel(confd_handle);

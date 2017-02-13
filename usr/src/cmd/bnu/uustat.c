@@ -27,7 +27,6 @@
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 #include <time.h>
 #include "uucp.h"
 
@@ -447,7 +446,7 @@ char **envp;
 	/* Make sure the overflow entry is null since it may be incorrect */
 	M[UUSTAT_TBL].mach[0] = NULLCHAR;
 	if (Summary) {
-	    for((sortcnt = 0, m = &M[0]);*(m->mach) != NULL;(sortcnt++,m++))
+	    for((sortcnt = 0, m = &M[0]);*(m->mach) != NULLCHAR;(sortcnt++,m++))
 			;
 	    qsort((char *)M, (unsigned int)sortcnt, sizeof(struct m), machcmp);
 	    for (m = M; m->mach[0] != NULLCHAR; m++)

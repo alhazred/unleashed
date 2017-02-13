@@ -89,7 +89,7 @@ graph_protocol_init()
 
 	(void) pthread_mutex_init(&graph_queue->gpeq_lock, &mutex_attrs);
 	graph_queue->gpeq_event_list = startd_list_create(
-	    graph_protocol_event_queue_pool, graph_queue, NULL);
+	    graph_protocol_event_queue_pool, graph_queue, 0);
 }
 
 /*
@@ -204,7 +204,7 @@ restarter_protocol_init()
 
 	(void) pthread_mutex_init(&restarter_queue->rpeq_lock, &mutex_attrs);
 	restarter_queue->rpeq_event_list = startd_list_create(
-	    restarter_protocol_event_queue_pool, restarter_queue, NULL);
+	    restarter_protocol_event_queue_pool, restarter_queue, 0);
 
 	log_framework(LOG_DEBUG, "Initialized restarter protocol\n");
 }

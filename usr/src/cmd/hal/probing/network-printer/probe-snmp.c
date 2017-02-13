@@ -5,8 +5,6 @@
  * Licensed under the Academic Free License version 2.1
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -41,7 +39,7 @@ hrDeviceDesc_to_info(char *string, char **manufacturer, char **model,
 		*description = strdup(string);
 		*manufacturer = strdup(string);
 		if ((s = strchr(*manufacturer, ' ')) != NULL) {
-			*s++ = NULL;
+			*s++ = '\0';
 			*model = strdup(s);
 		}
 	}

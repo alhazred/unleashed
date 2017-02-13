@@ -453,19 +453,19 @@ main(int argc, char **argv)
 		syseventd_exit(2);
 	}
 
-	if (thr_create(NULL, NULL, (void *(*)(void *))dispatch_message,
+	if (thr_create(NULL, 0, (void *(*)(void *))dispatch_message,
 	    (void *)0, 0, NULL) < 0) {
 		syseventd_err_print(INIT_THR_CREATE_ERR, strerror(errno));
 		syseventd_exit(2);
 	}
-	if (thr_create(NULL, NULL,
+	if (thr_create(NULL, 0,
 	    (void *(*)(void *))event_completion_thr, NULL,
 	    THR_BOUND, NULL) != 0) {
 		syseventd_err_print(INIT_THR_CREATE_ERR, strerror(errno));
 		syseventd_exit(2);
 	}
 	/* Create signal catching thread */
-	if (thr_create(NULL, NULL, (void *(*)(void *))sigwait_thr,
+	if (thr_create(NULL, 0, (void *(*)(void *))sigwait_thr,
 	    NULL, 0, NULL) < 0) {
 		syseventd_err_print(INIT_THR_CREATE_ERR, strerror(errno));
 		syseventd_exit(2);

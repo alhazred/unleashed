@@ -247,7 +247,7 @@ rcm_mod_init(void)
 	cache_head.ip_prev = NULL;
 	cache_tail.ip_prev = &cache_head;
 	cache_tail.ip_next = NULL;
-	(void) mutex_init(&cache_lock, NULL, NULL);
+	(void) mutex_init(&cache_lock, 0, NULL);
 
 	if ((status = dladm_open(&dld_handle)) != DLADM_STATUS_OK) {
 		rcm_log_message(RCM_WARNING,

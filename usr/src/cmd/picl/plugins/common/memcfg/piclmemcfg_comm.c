@@ -215,7 +215,7 @@ undo_phymem_tree(void)
 		/*
 		 * Delete nodes and properties of memory-module-group(s)
 		 */
-		if (mmghdl->mmgh == NULL)
+		if (mmghdl->mmgh == (uintptr_t)NULL)
 			continue;
 
 		(void) ptree_delete_node(mmghdl->mmgh);
@@ -225,7 +225,7 @@ undo_phymem_tree(void)
 		 * Clear out the saved node handle of memory module group
 		 * so that logic memory tree won't link to it.
 		 */
-		mmghdl->mch = mmghdl->mmgh = NULL;
+		mmghdl->mch = mmghdl->mmgh = (uintptr_t)NULL;
 		mmghdl = mmghdl->next;
 	}
 }
@@ -896,8 +896,8 @@ piclmemcfg_evhandler(const char *ename, const void *earg, size_t size,
 	int		old_nsegs;
 	nvlist_t	*nvlp;
 
-	memh = NULL;
-	if (nvlist_unpack((char *)earg, size, &nvlp, NULL))
+	memh = (uintptr_t)NULL;
+	if (nvlist_unpack((char *)earg, size, &nvlp, 0))
 		return;
 
 	if (nvlist_lookup_uint64(nvlp, PICLEVENTARG_NODEHANDLE, &nodeh)) {

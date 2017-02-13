@@ -281,11 +281,11 @@ mc_completion_handler(char *ename, void *earg, size_t size)
 	nvlist_t	*unpack_nvl;
 
 	if (strcmp(ename, PICLEVENT_MC_REMOVED) == 0 &&
-	    nvlist_unpack(earg, size, &unpack_nvl, NULL) == 0) {
-		mch = NULL;
+	    nvlist_unpack(earg, size, &unpack_nvl, 0) == 0) {
+		mch = (uintptr_t)NULL;
 		(void) nvlist_lookup_uint64(unpack_nvl,
 		    PICLEVENTARG_NODEHANDLE, &mch);
-		if (mch != NULL) {
+		if (mch != (uintptr_t)NULL) {
 			if (picldevtree_debug)
 				syslog(LOG_INFO,
 				    "picldevtree: destroying_node:%llx\n",
@@ -314,14 +314,14 @@ post_mc_event(char *ename, picl_nodehdl_t mch)
 	if (ev_name == NULL)
 		return (-1);
 
-	if (nvlist_alloc(&nvl, NV_UNIQUE_NAME_TYPE, NULL)) {
+	if (nvlist_alloc(&nvl, NV_UNIQUE_NAME_TYPE, 0)) {
 		free(ev_name);
 		return (-1);
 	}
 
 	pack_buf = NULL;
 	if (nvlist_add_uint64(nvl, PICLEVENTARG_NODEHANDLE, mch) ||
-	    nvlist_pack(nvl, &pack_buf, &nvl_size, NV_ENCODE_NATIVE, NULL)) {
+	    nvlist_pack(nvl, &pack_buf, &nvl_size, NV_ENCODE_NATIVE, 0)) {
 		free(ev_name);
 		nvlist_free(nvl);
 		return (-1);
@@ -3616,7 +3616,7 @@ picldevtree_evhandler(const char *ename, const void *earg, size_t size,
 	}
 
 	nvlp = NULL;
-	if (nvlist_unpack((char *)earg, size, &nvlp, NULL) ||
+	if (nvlist_unpack((char *)earg, size, &nvlp, 0) ||
 	    nvlist_lookup_string(nvlp, PICLEVENTARG_DEVFS_PATH, &devfs_path) ||
 	    strlen(devfs_path) > (PATH_MAX - sizeof (PLATFORM_PATH))) {
 		syslog(LOG_INFO, PICL_EVENT_DROPPED, ename);

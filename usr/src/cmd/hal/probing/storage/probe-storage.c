@@ -268,7 +268,7 @@ check_floppy(int fd, dbus_bool_t *wprot)
 	int	chg;
 
 	if ((ioctl(fd, FDGETCHANGE, &chg) == 0) && !(chg & FDGC_CURRENT)) {
-		*wprot = ((chg & FDGC_CURWPROT) != NULL);
+		*wprot = ((chg & FDGC_CURWPROT) != 0);
 		return (TRUE);
 	} else {
 		return (FALSE);
