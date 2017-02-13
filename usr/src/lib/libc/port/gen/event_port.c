@@ -24,7 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include "lint.h"
 #include <sys/types.h>
@@ -73,7 +72,8 @@ port_get(int port, port_event_t *pe, struct timespec *to)
 		r.r_vals = _portfs(PORT_GET, port, (uintptr_t)pe, to->tv_sec,
 		    to->tv_nsec, (uintptr_t)to);
 	else
-		r.r_vals = _portfs(PORT_GET, port, (uintptr_t)pe, 0, 0, NULL);
+		r.r_vals = _portfs(PORT_GET, port, (uintptr_t)pe, 0, 0,
+		    (uintptr_t)NULL);
 	return (r.r_val1);
 }
 
@@ -112,8 +112,9 @@ int
 port_send(int port, int events, void *user)
 {
 	rval_t	r;
-	r.r_vals = _portfs(PORT_SEND, port, events, (uintptr_t)user, NULL,
-	    NULL);
+	r.r_vals = _portfs(PORT_SEND, port, events, (uintptr_t)user,
+	    (uintptr_t)NULL, (uintptr_t)NULL);
+
 	return (r.r_val1);
 }
 
@@ -179,6 +180,6 @@ port_alert(int port, int flags, int events, void *user)
 {
 	rval_t	r;
 	r.r_vals = _portfs(PORT_ALERT, port, flags, events, (uintptr_t)user,
-	    NULL);
+	    (uintptr_t)NULL);
 	return (r.r_val1);
 }

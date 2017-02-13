@@ -24,7 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
  * This file contains most of the functionality
@@ -34,6 +33,7 @@
 #include "lint.h"
 #include "thr_uberdata.h"
 
+/* BEGIN CSTYLED */
 static void
 tdb_event_ready(void) {}
 
@@ -75,6 +75,7 @@ tdb_event_concurrency(void) {}
 
 static void
 tdb_event_timeout(void) {}
+/* END CSTYLED */
 
 /*
  * uberflags.uf_tdb_register_sync is set to REGISTER_SYNC_ENABLE by a debugger
@@ -368,7 +369,7 @@ tdb_sync_obj_deregister(void *addr)
 	 * (Once the hash table is allocated, it is never deallocated.)
 	 */
 	if (tdbp->tdb_sync_addr_hash == NULL ||
-	    tdbp->tdb_sync_addr_hash[hash = tdb_addr_hash(addr)] == NULL)
+	    tdbp->tdb_sync_addr_hash[hash = tdb_addr_hash(addr)] == 0)
 		return;
 
 	lmutex_lock(&udp->tdb_hash_lock);
@@ -379,8 +380,8 @@ tdb_sync_obj_deregister(void *addr)
 			*sapp = sap->next;
 			tdbp->tdb_register_count--;
 			/* clear it */
-			sap->next = (uintptr_t)0;
-			sap->sync_addr = (uintptr_t)0;
+			sap->next = (uintptr_t)NULL;
+			sap->sync_addr = (uintptr_t)NULL;
 			/* insert it on the tail of the free list */
 			if (tdbp->tdb_sync_addr_free == NULL) {
 				tdbp->tdb_sync_addr_free = sap;

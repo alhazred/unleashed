@@ -258,7 +258,7 @@ mq_getmsg(mqhdr_t *mqhp, char *msgp, uint_t *msg_prio)
 	MQ_ASSERT_PTR(mqhp, currentp);
 	curbuf = MQ_PTR(mqhp, currentp);
 
-	if ((*headpp = curbuf->msg_next) == NULL) {
+	if ((*headpp = curbuf->msg_next) == 0) {
 		/*
 		 * We just nuked the last message in this priority's queue.
 		 * Twiddle this priority's bit, and then find the next bit
@@ -273,7 +273,7 @@ mq_getmsg(mqhdr_t *mqhp, char *msgp, uint_t *msg_prio)
 				break;
 		mqhp->mq_curmaxprio = prio;
 
-		*tailpp = NULL;
+		*tailpp = 0;
 	}
 
 	/*
@@ -310,7 +310,7 @@ mq_putmsg(mqhdr_t *mqhp, const char *msgp, ssize_t len, uint_t prio)
 	 * Remove a message from the free list, and copy in the new contents.
 	 */
 	mqhp->mq_freep = curbuf->msg_next;
-	curbuf->msg_next = NULL;
+	curbuf->msg_next = 0;
 	(void) memcpy((char *)&curbuf[1], msgp, len);
 	curbuf->msg_len = len;
 
@@ -654,7 +654,7 @@ mq_unlink(const char *path)
 
 static int
 __mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len,
-	uint_t msg_prio, const timespec_t *timeout, int abs_rel)
+    uint_t msg_prio, const timespec_t *timeout, int abs_rel)
 {
 	mqdes_t *mqdp = (mqdes_t *)mqdes;
 	mqhdr_t *mqhp;
@@ -763,7 +763,7 @@ mq_send(mqd_t mqdes, const char *msg_ptr, size_t msg_len, uint_t msg_prio)
 
 int
 mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len,
-	uint_t msg_prio, const timespec_t *abs_timeout)
+    uint_t msg_prio, const timespec_t *abs_timeout)
 {
 	return (__mq_timedsend(mqdes, msg_ptr, msg_len, msg_prio,
 	    abs_timeout, ABS_TIME));
@@ -771,7 +771,7 @@ mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len,
 
 int
 mq_reltimedsend_np(mqd_t mqdes, const char *msg_ptr, size_t msg_len,
-	uint_t msg_prio, const timespec_t *rel_timeout)
+    uint_t msg_prio, const timespec_t *rel_timeout)
 {
 	return (__mq_timedsend(mqdes, msg_ptr, msg_len, msg_prio,
 	    rel_timeout, REL_TIME));
@@ -790,7 +790,7 @@ decrement_rblocked(mqhdr_t *mqhp)
 
 static ssize_t
 __mq_timedreceive(mqd_t mqdes, char *msg_ptr, size_t msg_len,
-	uint_t *msg_prio, const timespec_t *timeout, int abs_rel)
+    uint_t *msg_prio, const timespec_t *timeout, int abs_rel)
 {
 	mqdes_t *mqdp = (mqdes_t *)mqdes;
 	mqhdr_t *mqhp;
@@ -878,7 +878,7 @@ mq_receive(mqd_t mqdes, char *msg_ptr, size_t msg_len, uint_t *msg_prio)
 
 ssize_t
 mq_timedreceive(mqd_t mqdes, char *msg_ptr, size_t msg_len,
-	uint_t *msg_prio, const timespec_t *abs_timeout)
+    uint_t *msg_prio, const timespec_t *abs_timeout)
 {
 	return (__mq_timedreceive(mqdes, msg_ptr, msg_len, msg_prio,
 	    abs_timeout, ABS_TIME));
@@ -886,7 +886,7 @@ mq_timedreceive(mqd_t mqdes, char *msg_ptr, size_t msg_len,
 
 ssize_t
 mq_reltimedreceive_np(mqd_t mqdes, char *msg_ptr, size_t msg_len,
-	uint_t *msg_prio, const timespec_t *rel_timeout)
+    uint_t *msg_prio, const timespec_t *rel_timeout)
 {
 	return (__mq_timedreceive(mqdes, msg_ptr, msg_len, msg_prio,
 	    rel_timeout, REL_TIME));
@@ -899,7 +899,7 @@ mq_reltimedreceive_np(mqd_t mqdes, char *msg_ptr, size_t msg_len,
  */
 static int
 cancel_if_necessary(thread_communication_data_t *tcdp,
-	const struct sigevent *sigevp)
+    const struct sigevent *sigevp)
 {
 	int do_cancel = !pthread_attr_equal(tcdp->tcd_attrp,
 	    sigevp->sigev_notify_attributes);
