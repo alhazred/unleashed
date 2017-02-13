@@ -1791,8 +1791,6 @@ NTXN_OBJS =	unm_nic_init.o unm_gem.o unm_nic_hw.o unm_ndd.o	\
 #
 NULLDRIVER_OBJS =	nulldriver.o
 
-TPM_OBJS =	tpm.o tpm_hcall.o
-
 #
 # USB Fast ethernet drivers
 #

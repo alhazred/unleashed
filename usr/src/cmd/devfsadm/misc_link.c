@@ -201,9 +201,6 @@ static devfsadm_create_t misc_cbt[] = {
 	{ "pseudo", "ddi_pseudo", "smbsrv",
 	    TYPE_EXACT | DRV_EXACT, ILEVEL_1, minor_name,
 	},
-	{ "pseudo", "ddi_pseudo", "tpm",
-	    TYPE_EXACT | DRV_EXACT, ILEVEL_0, minor_name
-	},
 };
 
 DEVFSADM_CREATE_INIT_V0(misc_cbt);
@@ -235,9 +232,6 @@ static devfsadm_remove_t misc_remove_cbt[] = {
 		ILEVEL_0, devfsadm_rm_all
 	},
 	{ "pseudo", "^pfil$",
-	    RM_PRE | RM_ALWAYS, ILEVEL_0, devfsadm_rm_all
-	},
-	{ "pseudo", "^tpm$",
 	    RM_PRE | RM_ALWAYS, ILEVEL_0, devfsadm_rm_all
 	},
 	{ "pseudo", "^sctp|sctp6$",
