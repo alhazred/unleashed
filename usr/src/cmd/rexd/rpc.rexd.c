@@ -26,8 +26,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <errno.h>
 #include <netdb.h>
 #include <signal.h>
@@ -254,7 +252,7 @@ main(int argc, char **argv)
 		pmap_unset(REXPROG, REXVERS);
 
 		if (!svc_register(ListnerTransp, REXPROG, REXVERS,
-				dorex, IPPROTO_TCP)) {
+		    dorex, IPPROTO_TCP)) {
 			fprintf(stderr, "rexd: service rpc register: error\n");
 			exit(1);
 		}
@@ -267,8 +265,8 @@ main(int argc, char **argv)
 		if (errno != EEXIST) {
 			perror("rexd: mkdir");
 			fprintf(stderr,
-				"rexd: can't create temp directory %s\n",
-				TempDir);
+			    "rexd: can't create temp directory %s\n",
+			    TempDir);
 			exit(1);
 		}
 
@@ -312,7 +310,7 @@ main(int argc, char **argv)
 		 */
 		if (npollfds != svc_max_pollfd) {
 			pollset = realloc(pollset,
-					sizeof (pollfd_t) * svc_max_pollfd);
+			    sizeof (pollfd_t) * svc_max_pollfd);
 			npollfds = svc_max_pollfd;
 		}
 
@@ -320,7 +318,7 @@ main(int argc, char **argv)
 			break;	/* None waiting, hence return */
 
 		(void) memcpy(pollset, svc_pollfd,
-					sizeof (pollfd_t) * svc_max_pollfd);
+		    sizeof (pollfd_t) * svc_max_pollfd);
 
 		if (Debug)
 			printf("Before select readfds\n");
@@ -791,16 +789,16 @@ rex_cleanup()
 		if (child && !ChildDied) {
 
 			fprintf(stderr,
-				"rexd: child killed to unmount %s\r\n",
-				nfsdir);
+			    "rexd: child killed to unmount %s\r\n",
+			    nfsdir);
 			kill(child, SIGKILL);
 		}
 		chdir("/");
 
 		if (nfsdir[0] && umount_nfs(nfsdir, tmpdir))
 			fprintf(stderr, "rexd: couldn't umount %s from %s\r\n",
-				nfsdir,
-				tmpdir);
+			    nfsdir,
+			    tmpdir);
 		if (rmdir(tmpdir) < 0)
 			if (errno != EBUSY)
 				perror("rmdir");
@@ -1262,14 +1260,14 @@ struct sockaddr_in *calleraddr;
 
 	if (Debug)
 		for (len = 0; rst->rst_cmd[len] != (char *)NULL &&
-			*rst->rst_cmd[len] != NULL; len++)
+			*rst->rst_cmd[len] != '\0'; len++)
 			printf("cmds: %s (%d)\n", rst->rst_cmd[len], errno);
 
 
 	/*	XXX	*/
 	if (Debug)
 		for (len = 0; rst->rst_env[len] != (char *)NULL &&
-			*rst->rst_env[len] != NULL; len++)
+			*rst->rst_env[len] != '\0'; len++)
 			printf("envs: %s\n", rst->rst_env[len]);
 
 

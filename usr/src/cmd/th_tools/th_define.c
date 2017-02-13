@@ -1689,7 +1689,7 @@ walk_callback(di_node_t node, void *arg)
 
 	driver_name = di_driver_name(node);
 	if (driver_name != NULL) {
-		if (strcmp(driver_name, warg->name) == NULL &&
+		if (strcmp(driver_name, warg->name) == 0 &&
 		    di_instance(node) == warg->instance) {
 			path = di_devfs_path(node);
 			if (path == NULL)
@@ -2112,13 +2112,13 @@ main(int argc, char *argv[])
 
 			if (str != optarg)
 				errdef.acc_chk = tmpl;
-			else if (strcmp(optarg, "PIO") == NULL)
+			else if (strcmp(optarg, "PIO") == 0)
 				errdef.acc_chk = 1;
-			else if (strcmp(optarg, "DMA") == NULL)
+			else if (strcmp(optarg, "DMA") == 0)
 				errdef.acc_chk = 2;
-			else if (strcmp(optarg, "U4FT_ACC_NO_PIO") == NULL)
+			else if (strcmp(optarg, "U4FT_ACC_NO_PIO") == 0)
 				errdef.acc_chk = 1;
-			else if (strcmp(optarg, "U4FT_ACC_NO_DMA") == NULL)
+			else if (strcmp(optarg, "U4FT_ACC_NO_DMA") == 0)
 				errdef.acc_chk = 2;
 			else
 				err = EINVAL;

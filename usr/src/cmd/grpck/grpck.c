@@ -27,8 +27,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/param.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -128,7 +126,7 @@ main(int argc, char *argv[])
 
 	if ((fptr = fopen(argv[1], "r")) == NULL) {
 		fprintf(stderr, gettext("cannot open file %s: %s\n"), argv[1],
-			strerror(errno));
+		    strerror(errno));
 		exit(1);
 	}
 
@@ -143,7 +141,7 @@ main(int argc, char *argv[])
 			t->groups = NULL;
 		else {
 			t->groups = (struct group *)
-				emalloc(sizeof (struct group));
+			    emalloc(sizeof (struct group));
 			t->groups->grp = pwp->pw_gid;
 			t->groups->cnt = 1;
 			t->groups->nxt = NULL;
@@ -185,7 +183,7 @@ main(int argc, char *argv[])
 			code = 1;		/* exit with error code = 1 */
 			eflag = 0;	/* force print of "blank" line */
 			fprintf(stderr, "\n%s %d\n", gettext(BLANKLINE),
-				lineno);
+			    lineno);
 			continue;
 		}
 
@@ -227,7 +225,7 @@ main(int argc, char *argv[])
 
 		/*	Check number of fields	*/
 
-		for (i = 0; buf[i] != NULL; i++) {
+		for (i = 0; buf[i] != '\0'; i++) {
 			if (buf[i] == ':') {
 				delim[colons] = i;
 				if (++colons > NUM_COLONS)
@@ -286,8 +284,8 @@ main(int argc, char *argv[])
 		listlen = strlen(nptr) - 1;
 
 		while ((cptr = strchr(nptr, ',')) != NULL) {
-			*cptr = NULL;
-			if (*nptr == NULL) {
+			*cptr = '\0';
+			if (*nptr == '\0') {
 				if (listlen)
 					error(NULLNAME);
 				nptr++;
@@ -316,7 +314,7 @@ main(int argc, char *argv[])
 
 				/* Usrname found, so add entry to user-list */
 				t = (struct node *)
-					emalloc(sizeof (*t) + strlen(nptr));
+				    emalloc(sizeof (*t) + strlen(nptr));
 				t->next = root;
 				root = t;
 				strcpy(t->user, nptr);
@@ -325,7 +323,7 @@ main(int argc, char *argv[])
 					t->groups = NULL;
 				else {
 					t->groups = (struct group *)
-						emalloc(sizeof (struct group));
+					    emalloc(sizeof (struct group));
 					t->groups->grp = pwp->pw_gid;
 					t->groups->cnt = 1;
 					t->groups->nxt = NULL;
@@ -374,7 +372,7 @@ getnext:
 		for (t = root; t != NULL; t = t->next) {
 			if (t->ngroups > ngroups_max) {
 				fprintf(stderr, "\n\n%s%s (%d)\n",
-				NGROUPS, t->user, t->ngroups);
+				    NGROUPS, t->user, t->ngroups);
 				code = 1;
 			}
 		}

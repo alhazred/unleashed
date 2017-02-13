@@ -440,7 +440,7 @@ FILE *fp;
 			strncpy(buf, &line[cursor + strlen(ENV_TZ)],
 			    sizeof (buf));
 			if ((x = strchr(buf, '\n')) != NULL)
-				*x = NULL;
+				*x = '\0';
 
 			if (isvalid_tz(buf, NULL, _VTZ_ALL)) {
 				goto cont;
@@ -456,7 +456,7 @@ FILE *fp;
 			strncpy(buf, &line[cursor + strlen(ENV_SHELL)],
 			    sizeof (buf));
 			if ((x = strchr(buf, '\n')) != NULL)
-				*x = NULL;
+				*x = '\0';
 
 			if (isvalid_shell(buf)) {
 				goto cont;
@@ -472,7 +472,7 @@ FILE *fp;
 			strncpy(buf, &line[cursor + strlen(ENV_HOME)],
 			    sizeof (buf));
 			if ((x = strchr(buf, '\n')) != NULL)
-				*x = NULL;
+				*x = '\0';
 			if (chdir(buf) == 0) {
 				goto cont;
 			} else {

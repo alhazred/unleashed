@@ -5876,7 +5876,7 @@ static sa_command_t commands[] = {
 	{"stop", CMD_NODISPLAY, sa_stop_group, USAGE_STOP, SVC_SET|SVC_ACTION},
 	{"unset", 0, sa_unset, USAGE_UNSET, SVC_SET},
 	{"unshare", 0, sa_legacy_unshare, USAGE_UNSHARE, SVC_SET|SVC_ACTION},
-	{NULL, 0, NULL, NULL}
+	{NULL, 0, 0, 0}
 };
 
 static char *

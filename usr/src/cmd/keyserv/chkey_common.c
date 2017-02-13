@@ -681,11 +681,11 @@ update_ldap_attr(const char *dn,
 		if (add == TRUE)
 			ldaprc = __ns_ldap_addAttr("publickey", dn,
 			    (const ns_ldap_attr_t * const *)attrs,
-			    credp, NULL, &errorp);
+			    credp, 0, &errorp);
 		else
 			ldaprc = __ns_ldap_repAttr("publickey", dn,
 			    (const ns_ldap_attr_t * const *)attrs,
-			    credp, NULL, &errorp);
+			    credp, 0, &errorp);
 		if (ldaprc == NS_LDAP_SUCCESS) {
 			/* clean up ns_cred_t structure in memory */
 			if (credp != NULL)

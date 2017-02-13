@@ -486,7 +486,7 @@ main(int argc, char **argv)
 	}
 
 	/* build the filter */
-	if (database && (strcasecmp(database, "publickey") == NULL)) {
+	if (database && (strcasecmp(database, "publickey") == 0)) {
 		/* user publickey lookup */
 		char *err1 = NULL;
 		int  rc1;

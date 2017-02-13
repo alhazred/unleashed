@@ -144,7 +144,7 @@ again:
 		else
 			base = 8;
 	}
-	while ((c = *cp) != NULL) {
+	while ((c = *cp) != '\0') {
 		if (isdigit(c)) {
 			if ((c - '0') >= base)
 				break;

@@ -1795,7 +1795,7 @@ getldap_serverInfo_op(info_op_t op, char *input, char **output)
 		if (current_admin.debug_level >= DBG_SERVER_LIST_REFRESH) {
 			logit("operation is INFO_OP_REFRESH_WAIT...\n");
 		}
-		(void) cond_init(&info_cond, NULL, NULL);
+		(void) cond_init(&info_cond, 0, NULL);
 		(void) mutex_lock(&info_mutex);
 		err = 0;
 		while (err != ETIME) {
@@ -2147,7 +2147,7 @@ getldap_get_cacheStat(LineBuf *stat_info)
 		return;
 	}
 	/* get cache data statisitcs */
-	(void) getldap_cache_op(CACHE_OP_GETSTAT, NULL, NULL, &coutstr);
+	(void) getldap_cache_op(CACHE_OP_GETSTAT, 0, NULL, &coutstr);
 	if (coutstr == NULL) {
 		free(foutstr);
 		free(soutstr);
@@ -2557,7 +2557,7 @@ getldap_refresh()
 						first_time = 0;
 						(void) rw_unlock(&ldap_lock);
 						(void) cond_init(&cond,
-						    NULL, NULL);
+						    0, NULL);
 						(void) mutex_lock(&sighuplock);
 						timeout.tv_sec =
 						    CACHESLEEPTIME;
@@ -2615,7 +2615,7 @@ getldap_refresh()
 				logit("getldap_refresh: (2)about to sleep "
 				"for %d seconds\n", sleeptime);
 			}
-			(void) cond_init(&cond, NULL, NULL);
+			(void) cond_init(&cond, 0, NULL);
 			(void) mutex_lock(&sighuplock);
 			timeout.tv_sec = sleeptime;
 			timeout.tv_nsec = 0;

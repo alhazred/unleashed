@@ -770,7 +770,7 @@ parse_sample_rate(char *s, unsigned *rate)
 		 */
 		for (cp = s; *cp && (isdigit(*cp) || (*cp == '.')); cp++)
 			/* NOP */;
-		if (*cp != NULL) {
+		if (*cp != '\0') {
 			if ((*cp == 'k') || (*cp == 'K')) {
 				drate *= 1000.0;
 			} else if ((*cp != 'h') || (*cp != 'H')) {

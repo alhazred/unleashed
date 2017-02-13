@@ -201,7 +201,7 @@ main(
 	char *subopts;
 	char *subvalue;
 	char *const *ap_args = NULL;
-	cfga_cmd_t sc_opt = NULL;
+	cfga_cmd_t sc_opt = CFGA_CMD_NONE;
 	struct cfga_confirm confirm;
 	struct cfga_msg message;
 	int ret = CFGA_ERROR;

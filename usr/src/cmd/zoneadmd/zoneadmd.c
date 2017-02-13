@@ -521,7 +521,7 @@ notify_zonestatd(zoneid_t zoneid)
 	params.desc_ptr = NULL;
 	params.desc_num = 0;
 	params.rbuf = NULL;
-	params.rsize = NULL;
+	params.rsize = 0;
 	(void) door_call(fd, &params);
 	(void) close(fd);
 }

@@ -274,7 +274,7 @@ dotape()
 
 	while (dep = readdir(dirp)) {
 		/* skip . .. etc... */
-		if (strncmp(dep->d_name, ".", 1) == NULL)
+		if (strncmp(dep->d_name, ".", 1) == 0)
 			continue;
 
 		/* if array full, then expand it */
@@ -446,7 +446,7 @@ doaudio()
 
 	while (dep = readdir(dirp)) {
 		/* skip . .. etc... */
-		if (strncmp(dep->d_name, ".", 1) == NULL)
+		if (strncmp(dep->d_name, ".", 1) == 0)
 			continue;
 
 		/* if array full, then expand it */
@@ -774,7 +774,7 @@ docd()
 
 	while (dep = readdir(dirp)) {
 		/* skip . .. etc... */
-		if (strncmp(dep->d_name, ".", 1) == NULL)
+		if (strncmp(dep->d_name, ".", 1) == 0)
 			continue;
 
 		/* get device # (disk #) */
@@ -825,7 +825,7 @@ found:
 
 	while (dep = readdir(dirp)) {
 		/* skip . .. etc... */
-		if (strncmp(dep->d_name, ".", 1) == NULL)
+		if (strncmp(dep->d_name, ".", 1) == 0)
 			continue;
 
 		/* get device # (disk #) */

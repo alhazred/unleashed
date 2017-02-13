@@ -147,7 +147,7 @@ main(int argc, char **argv)
 			g_gui = B_FALSE;
 			dump_count = (int)strtod(optarg, &endptr);
 
-			if (dump_count <= 0 || *endptr != NULL) {
+			if (dump_count <= 0 || *endptr != '\0') {
 				pt_usage();
 				exit(EXIT_USAGE);
 			}
@@ -163,7 +163,7 @@ main(int argc, char **argv)
 			interval = interval_usr = (double)strtod(optarg,
 			    &endptr);
 
-			if (*endptr != NULL || interval < 1 ||
+			if (*endptr != '\0' || interval < 1 ||
 			    interval > INTERVAL_MAX) {
 				pt_usage();
 				exit(EXIT_USAGE);

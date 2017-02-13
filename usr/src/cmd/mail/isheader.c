@@ -23,7 +23,6 @@
 /*	  All Rights Reserved  	*/
 
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI" 	/* SVr4.0 1.	*/
 #include "mail.h"
 /*
  * isheader(lp, ctf) - check if lp is header line and return type
@@ -44,16 +43,16 @@ int	*ctfp;
 	register int	i;
 
 	p = lp;
-	while((*p) && (*p != '\n') && (isspace(*p))) {
+	while ((*p) && (*p != '\n') && (isspace(*p))) {
 		p++;
 	}
-	if((*p == NULL) || (*p == '\n')) {
+	if ((*p == '\0') || (*p == '\n')) {
 		/* blank line */
 		return (FALSE);
 	}
 
 	if ((*ctfp) && ((*lp == ' ') || (*lp == '\t'))) {
-		return(H_CONT);
+		return (H_CONT);
 	}
 
 	*ctfp = FALSE;
@@ -78,15 +77,15 @@ int	*ctfp;
 	}
 	/*
 	 * Check if name: value pair
- 	 */
-	if ((p = strpbrk(lp, ":")) != NULL ) {
-		for(q = lp; q < p; q++)  {
+	 */
+	if ((p = strpbrk(lp, ":")) != NULL) {
+		for (q = lp; q < p; q++)  {
 			if ((*q == ' ') || (!isprint(*q)))  {
-				return(FALSE);
+				return (FALSE);
 			}
 		}
 		*ctfp = TRUE;
-		return(H_NAMEVALUE);
+		return (H_NAMEVALUE);
 	}
-	return(FALSE);
+	return (FALSE);
 }

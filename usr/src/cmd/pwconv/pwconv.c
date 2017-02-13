@@ -27,8 +27,6 @@
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*  pwconv.c  */
 /*  Conversion aid to copy appropriate fields from the	*/
 /*  password file to the shadow file.			*/
@@ -130,7 +128,7 @@ main(int argc, char **argv)
 	if (argc > 1) {
 		(void) fprintf(stderr,
 		gettext("%s: Invalid command syntax.\n"),
-			prognamp);
+		    prognamp);
 		(void) fprintf(stderr, gettext("Usage: pwconv\n"));
 		exit(BADSYN);
 	}
@@ -138,8 +136,8 @@ main(int argc, char **argv)
 	/* lock file so that only one process can read or write at a time */
 	if (lckpwdf() < 0) {
 		(void) fprintf(stderr,
-		gettext("%s: Password file(s) busy.  Try again later.\n"),
-			prognamp);
+		    gettext("%s: Password file(s) busy.  Try again later.\n"),
+		    prognamp);
 		exit(FBUSY);
 	}
 
@@ -244,10 +242,11 @@ main(int argc, char **argv)
 				sp->sp_namp = pwdp->pw_name;
 				if (!pwdp->pw_passwd ||
 				    (pwdp->pw_passwd &&
-					*pwdp->pw_passwd == NULL)) {
+				    *pwdp->pw_passwd == '\0')) {
 					(void) fprintf(stderr,
-			gettext("%s: WARNING user %s has no password\n"),
-					prognamp, sp->sp_namp);
+					    gettext("%s: WARNING user %s"
+					    " has no password\n"),
+					    prognamp, sp->sp_namp);
 				}
 				/*
 				 * copy the password field in the password
@@ -261,7 +260,7 @@ main(int argc, char **argv)
 				 * into age, max and min
 				 * convert aging info from weeks to days
 				 */
-				if (pwdp->pw_age && *pwdp->pw_age != NULL) {
+				if (pwdp->pw_age && *pwdp->pw_age != '\0') {
 					when = (long)a64l(pwdp->pw_age);
 					maxweeks = when & 077;
 					minweeks = (when >> 6) & 077;
@@ -288,7 +287,7 @@ main(int argc, char **argv)
 					sp->sp_expire = -1;
 					sp->sp_flag = 0;
 				}
-	    } else {
+			} else {
 			/*
 			 * if the passwd field has a string other than 'x',
 			 * the entry will be written into the shadow file
@@ -302,17 +301,18 @@ main(int argc, char **argv)
 			 * black_magic from getpwnam_r.c
 			 */
 			black_magic = (*pwdp->pw_name == '+' ||
-					*pwdp->pw_name == '-');
+			    *pwdp->pw_name == '-');
 			/*
 			 * moan about absence of non "+/-" passwd
 			 * we could do more, but what?
 			 */
 			if ((!pwdp->pw_passwd ||
-			    (pwdp->pw_passwd && *pwdp->pw_passwd == NULL)) &&
+			    (pwdp->pw_passwd && *pwdp->pw_passwd == '\0')) &&
 			    !black_magic) {
 				(void) fprintf(stderr,
-			gettext("%s: WARNING user %s has no password\n"),
-					prognamp, sp->sp_namp);
+				    gettext("%s: WARNING user %s"
+				    " has no password\n"),
+				    prognamp, sp->sp_namp);
 			}
 			if (pwdp->pw_passwd && *pwdp->pw_passwd) {
 				if (strcmp(pwdp->pw_passwd, pwdflr)) {
@@ -320,7 +320,7 @@ main(int argc, char **argv)
 					pwdp->pw_passwd = pwdflr;
 					if (!pwdp->pw_age ||
 					    (pwdp->pw_age &&
-						*pwdp->pw_age == NULL)) {
+					    *pwdp->pw_age == '\0')) {
 						sp->sp_lstchg = DAY_NOW;
 						sp->sp_min =  -1;
 						sp->sp_max =  -1;
@@ -347,7 +347,7 @@ main(int argc, char **argv)
 			 * into age, max and min
 			 * convert aging info from weeks to days
 			 */
-			if (pwdp->pw_age && *pwdp->pw_age != NULL) {
+			if (pwdp->pw_age && *pwdp->pw_age != '\0') {
 				when = (long)a64l(pwdp->pw_age);
 				maxweeks = when & 077;
 				minweeks = (when >> 6) & 077;
@@ -374,18 +374,18 @@ main(int argc, char **argv)
 			(void) no_convert();
 			exit(FMERR);
 		}
-	    } else {
-		if (feof(pwf)) {
-			end_of_file = 1;
 		} else {
-			errno = 0;
-			pwerr = 1;
-			(void) fprintf(stderr,
-			    gettext("%s: ERROR: bad entry or blank "
-			    "line at line %d in /etc/passwd\n"),
-			    prognamp, count);
+			if (feof(pwf)) {
+				end_of_file = 1;
+			} else {
+				errno = 0;
+				pwerr = 1;
+				(void) fprintf(stderr,
+				    gettext("%s: ERROR: bad entry or blank "
+				    "line at line %d in /etc/passwd\n"),
+				    prognamp, count);
+			}
 		}
-	    }
 	} /* end of while */
 
 	(void) fclose(pwf);
@@ -490,8 +490,8 @@ void
 f_err(void)
 {
 	(void) fprintf(stderr,
-		gettext("%s: Unexpected failure. Conversion not done.\n"),
-			prognamp);
+	    gettext("%s: Unexpected failure. Conversion not done.\n"),
+	    prognamp);
 	(void) ulckpwdf();
 }
 
@@ -499,8 +499,8 @@ void
 f_miss(void)
 {
 	(void) fprintf(stderr,
-		gettext("%s: Unexpected failure. Password file(s) missing.\n"),
-			prognamp);
+	    gettext("%s: Unexpected failure. Password file(s) missing.\n"),
+	    prognamp);
 	(void) ulckpwdf();
 }
 
@@ -508,7 +508,7 @@ void
 f_bdshw(void)
 {
 	(void) fprintf(stderr,
-		gettext("%s: Bad entry in /etc/shadow. Conversion not done.\n"),
-			prognamp);
+	    gettext("%s: Bad entry in /etc/shadow. Conversion not done.\n"),
+	    prognamp);
 	(void) ulckpwdf();
 }

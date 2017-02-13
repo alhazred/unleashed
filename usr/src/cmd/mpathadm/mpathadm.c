@@ -188,7 +188,7 @@ objectRules_t objectRules[] = {
 	{PATH, 0, 0, ENABLE|DISABLE|OVERRIDE,
 	    SHOW|LIST|MODIFY|FAILOVER|ADD|REMOVE, 0,
 	    "initiator-port name"},
-	{0, 0, 0, 0, 0, NULL}
+	{0, 0, 0, 0, 0, 0, NULL}
 };
 
 /*

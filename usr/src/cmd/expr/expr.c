@@ -440,7 +440,7 @@ ematch(char *s, char *p)
 		}
 		memcpy(tmptr, s, nmatch);
 		*(tmptr + nmatch) = '\0';
-		if ((nmbchars = mbstowcs(NULL, tmptr, NULL)) == -1) {
+		if ((nmbchars = mbstowcs(NULL, tmptr, 0)) == -1) {
 			yyerror("invalid multibyte character encountered");
 			free(tmptr1);
 			return (0);

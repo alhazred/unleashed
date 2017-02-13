@@ -2656,7 +2656,7 @@ static int
 convtoreg(off_t size)
 {
 	if ((size > 0) && (dblock.dbuf.typeflag != '0') &&
-	    (dblock.dbuf.typeflag != NULL) && (dblock.dbuf.typeflag != '1') &&
+	    (dblock.dbuf.typeflag != '\0') && (dblock.dbuf.typeflag != '1') &&
 	    (dblock.dbuf.typeflag != '2') && (dblock.dbuf.typeflag != '3') &&
 	    (dblock.dbuf.typeflag != '4') && (dblock.dbuf.typeflag != '5') &&
 	    (dblock.dbuf.typeflag != '6') && (dblock.dbuf.typeflag != 'A') &&
@@ -3138,7 +3138,7 @@ doxtract(char *argv[])
 					(void) unlink(namep);
 			}
 			linkp = templink;
-			if (*linkp !=  NULL) {
+			if (*linkp !=  '\0') {
 				if (Aflag && *linkp == '/')
 					linkp++;
 				if (link(linkp, namep) < 0) {
@@ -3179,7 +3179,7 @@ doxtract(char *argv[])
 					(void) unlink(namep);
 			}
 			linkp = templink;
-			if (*linkp != NULL) {
+			if (*linkp != '\0') {
 				if (Aflag && *linkp == '/')
 					linkp++;
 				if (link(linkp, namep) < 0) {
@@ -3228,7 +3228,7 @@ doxtract(char *argv[])
 					(void) unlink(namep);
 			}
 			linkp = templink;
-			if (*linkp != NULL) {
+			if (*linkp != '\0') {
 				if (Aflag && *linkp == '/')
 					linkp++;
 				if (link(linkp, namep) < 0) {
@@ -3365,10 +3365,10 @@ doxtract(char *argv[])
 			}
 		}
 		if (dblock.dbuf.typeflag == '0' ||
-		    dblock.dbuf.typeflag == NULL || convflag) {
+		    dblock.dbuf.typeflag == '\0' || convflag) {
 			delete_target(dirfd, comp, namep);
 			linkp = templink;
-			if (*linkp != NULL) {
+			if (*linkp != '\0') {
 				if (Aflag && *linkp == '/')
 					linkp++;
 				if (link(linkp, comp) < 0) {
@@ -3565,7 +3565,7 @@ filedone:
 
 		if (pflag && newfile == TRUE && !dir &&
 		    (dblock.dbuf.typeflag == '0' ||
-		    dblock.dbuf.typeflag == NULL ||
+		    dblock.dbuf.typeflag == '\0' ||
 		    convflag || dblock.dbuf.typeflag == '1')) {
 			if (fstat(ofile, &xtractbuf) == -1)
 				(void) fprintf(stderr, gettext(
@@ -5405,7 +5405,7 @@ add_file_to_table(file_list_t *table[], char *str)
 
 	(void) strcpy(name, str);
 	while (name[strlen(name) - 1] == '/') {
-		name[strlen(name) - 1] = NULL;
+		name[strlen(name) - 1] = '\0';
 	}
 
 	h = hash(name);
@@ -5443,7 +5443,7 @@ is_in_table(file_list_t *table[], char *str)
 
 	(void) strcpy(name, str);
 	while (name[strlen(name) - 1] == '/') {
-		name[strlen(name) - 1] = NULL;
+		name[strlen(name) - 1] = '\0';
 	}
 
 	/*
@@ -5462,7 +5462,7 @@ is_in_table(file_list_t *table[], char *str)
 	 * check for any parent directories in the file list
 	 */
 	while ((ptr = strrchr(name, '/'))) {
-		*ptr = NULL;
+		*ptr = '\0';
 		h = hash(name);
 		exp = table[h];
 		while (exp != NULL) {
@@ -6540,7 +6540,7 @@ delete_target(int fd, char *comp, char *namep)
 					(void) unlinkat(fd, comp, 0);
 				} else if ((n = readlink(namep, buf,
 				    PATH_MAX)) != -1) {
-					buf[n] = (char)NULL;
+					buf[n] = '\0';
 					(void) unlinkat(fd, buf,
 					    AT_REMOVEDIR);
 					if (errno == ENOTDIR)

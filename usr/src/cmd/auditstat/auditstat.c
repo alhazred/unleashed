@@ -82,7 +82,7 @@ char	**argv;
 	parse_args(argc, argv);
 
 	if (!flags) {
-		eauditon(A_GETSTAT, (caddr_t)&s, NULL);
+		eauditon(A_GETSTAT, (caddr_t)&s, 0);
 		if (timestamp_fmt != NODATE)
 			print_timestamp(timestamp_fmt);
 		display_stats(&s, 0);
@@ -90,7 +90,7 @@ char	**argv;
 	}
 
 	if (flags & VFLG || flags & NFLG)
-		eauditon(A_GETSTAT, (caddr_t)&s, NULL);
+		eauditon(A_GETSTAT, (caddr_t)&s, 0);
 
 	if (flags & VFLG)
 		(void) printf("version = %d\n", s.as_version);
@@ -103,7 +103,7 @@ char	**argv;
 
 	/* CSTYLED */
 	for (i = 0;; i++) {
-		eauditon(A_GETSTAT, (caddr_t)&s, NULL);
+		eauditon(A_GETSTAT, (caddr_t)&s, 0);
 		if (timestamp_fmt != NODATE)
 			print_timestamp(timestamp_fmt);
 		display_stats(&s, i);

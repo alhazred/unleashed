@@ -12,8 +12,6 @@
  * specifies the terms and conditions for redistribution.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "restore.h"
 #include <ctype.h>
 #include <errno.h>
@@ -116,7 +114,7 @@ renameit(char *fp, char *tp)
 		tofd = fromfd;
 		if ((pathend = strrchr(from, '/')) != NULL) {
 			strncpy(tobuf, from, pathend - from + 1);
-			tobuf[pathend - from + 1] = NULL;
+			tobuf[pathend - from + 1] = '\0';
 			strlcat(tobuf, tp, sizeof (tobuf));
 			to = tobuf;
 		} else {

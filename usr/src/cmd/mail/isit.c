@@ -27,12 +27,10 @@
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include "mail.h"
 
 /*
- * isit(lp, type) --  match "name" portion of 
+ * isit(lp, type) --  match "name" portion of
  *		"name: value" pair
  *	lp	->	pointer to line to check
  *	type	->	type of header line to match
@@ -53,20 +51,20 @@ register int	type;
 	case H_FROM:
 		for (p = header[type].tag; *lp && *p; lp++, p++) {
 			if (*p != *lp)  {
-				return(FALSE);
+				return (FALSE);
 			}
 		}
 		break;
 	default:
 		for (p = header[type].tag; *lp && *p; lp++, p++) {
 			if (toupper(*p) != toupper(*lp))  {
-				return(FALSE);
+				return (FALSE);
 			}
 		}
 		break;
 	}
-	if (*p == NULL) {
-		return(TRUE);
+	if (*p == '\0') {
+		return (TRUE);
 	}
-	return(FALSE);
+	return (FALSE);
 }

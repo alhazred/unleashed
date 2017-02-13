@@ -193,7 +193,7 @@ check_disk(const char *name, dm_descriptor_t disk, int force, int isspare)
 	 * because we already have an alias handle open for the device.
 	 */
 	if ((drive = dm_get_associated_descriptors(disk, DM_DRIVE,
-	    &err)) == NULL || *drive == NULL) {
+	    &err)) == NULL || *drive == 0) {
 		if (err)
 			libdiskmgt_error(err);
 		return (0);
@@ -213,7 +213,7 @@ check_disk(const char *name, dm_descriptor_t disk, int force, int isspare)
 	 * It is possible that the user has specified a removable media drive,
 	 * and the media is not present.
 	 */
-	if (*media == NULL) {
+	if (*media == 0) {
 		dm_free_descriptors(media);
 		vdev_error(gettext("'%s' has no media in drive\n"), name);
 		return (-1);
@@ -235,7 +235,7 @@ check_disk(const char *name, dm_descriptor_t disk, int force, int isspare)
 	 * Iterate over all slices and report any errors.  We don't care about
 	 * overlapping slices because we are using the whole disk.
 	 */
-	for (i = 0; slice[i] != NULL; i++) {
+	for (i = 0; slice[i] != (uintptr_t)NULL; i++) {
 		char *name = dm_get_name(slice[i], &err);
 
 		if (check_slice(name, force, B_TRUE, isspare) != 0)
@@ -264,7 +264,8 @@ check_device(const char *path, boolean_t force, boolean_t isspare)
 	dev = strrchr(path, '/');
 	assert(dev != NULL);
 	dev++;
-	if ((desc = dm_get_descriptor_by_name(DM_ALIAS, dev, &err)) != NULL) {
+	if ((desc = dm_get_descriptor_by_name(DM_ALIAS, dev, &err))
+	    != (uintptr_t)NULL) {
 		err = check_disk(path, desc, force, isspare);
 		dm_free_descriptor(desc);
 		return (err);

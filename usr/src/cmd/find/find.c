@@ -158,7 +158,7 @@ static struct Args commands[] =
 	"-useracl",	F_USERACL,	Num,
 	"-xattr",	XATTR,		Unary,
 	"-xdev",	MOUNT,		Unary,
-	NULL,		0,		0
+	0,		0,		0
 };
 
 union Item
@@ -661,7 +661,7 @@ int *actionp;
 			if (*b == '-')
 				++b;
 
-			if (readmode(b) != NULL) {
+			if (readmode(b) != 0) {
 				(void) fprintf(stderr, gettext(
 				    "find: -perm: Bad permission string\n"));
 				usage();
@@ -1130,7 +1130,7 @@ struct FTW *state;
 			regmatch_t pmatch;
 
 			val = 0;
-			if (regexec(&preg[cnpreg], name, 1, &pmatch, NULL) == 0)
+			if (regexec(&preg[cnpreg], name, 1, &pmatch, 0) == 0)
 				val = ((pmatch.rm_so == 0) &&
 				    (pmatch.rm_eo == strlen(name)));
 			cnpreg++;
@@ -2070,7 +2070,7 @@ const char *ascmode;
 		break;
 	}
 	endp = pp;
-	return (NULL);
+	return (0);
 }
 
 /*

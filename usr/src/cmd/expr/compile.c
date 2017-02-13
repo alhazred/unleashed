@@ -40,8 +40,6 @@
  *
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <stdio.h>
 #include <widec.h>
 #include <sys/types.h>
@@ -72,7 +70,7 @@ static int dhl_step(const char *str, const char *ep);
 static int dhl_advance(const char *str, const char *ep);
 static int map_errnos(int);		/* Convert regcomp error */
 static int dhl_doit(const char *, const regex_t *, const int flags);
-static char * dhl_compile(const char *instr, char *ep, char *endbuf);
+static char *dhl_compile(const char *instr, char *ep, char *endbuf);
 
 /*
  * # of sub re's: NOTE: For now limit on bra list defined here
@@ -148,7 +146,7 @@ char *endbuf;			/* ending addr of expbuf		*/
 	char adv_instr[4096];	/* PLENTY big temp buffer */
 	char *instrp;		/* PLENTY big temp buffer */
 
-	if (*instr == (char) NULL) {
+	if (*instr == '\0') {
 		regerrno = 41;
 		return (NULL);
 	}
@@ -197,7 +195,7 @@ char *endbuf;			/* ending addr of expbuf		*/
 	 */
 
 	if (instr[0] == '^')
-		instrp = (char *) instr; /* String already has leading ^ */
+		instrp = (char *)instr; /* String already has leading ^ */
 	else {
 		adv_instr[0] = '^';
 		strncpy(&adv_instr[1], instr, 2048);
@@ -212,8 +210,8 @@ char *endbuf;			/* ending addr of expbuf		*/
 	/*
 	 * update global variables
 	 */
-	nbra = (int) reg_comp.r_adv.re_nsub > 0 ?
-	    (int) reg_comp.r_adv.re_nsub : 0;
+	nbra = (int)reg_comp.r_adv.re_nsub > 0 ?
+	    (int)reg_comp.r_adv.re_nsub : 0;
 	regerrno = 0;
 
 	/*
@@ -231,7 +229,7 @@ char *endbuf;			/* ending addr of expbuf		*/
 	/*
 	 * Copy our reg_comp structure to expbuf
 	 */
-	(void) memcpy(expbuf, (char *) &reg_comp, regexc_size);
+	(void) memcpy(expbuf, (char *)&reg_comp, regexc_size);
 
 out:
 	/*
@@ -272,7 +270,7 @@ const char *ep;			/* compiled RE from dhl_compile()	*/
 	/*
 	 * Call common routine with r_stp (step) structure
 	 */
-	return (dhl_doit(str, &(((struct regex_comp *) ep)->r_stp),
+	return (dhl_doit(str, &(((struct regex_comp *)ep)->r_stp),
 	    ((locs != NULL) ? REG_NOTBOL : 0)));
 }
 
@@ -295,7 +293,7 @@ const char *ep;			/* compiled RE from dhl_compile()	*/
 	/*
 	 * Call common routine with r_adv (advance) structure
 	 */
-	rv = dhl_doit(str, &(((struct regex_comp *) ep)->r_adv), 0);
+	rv = dhl_doit(str, &(((struct regex_comp *)ep)->r_adv), 0);
 	loc1 = NULL;		/* Clear it per the compile man page */
 	return (rv);
 }
@@ -486,7 +484,7 @@ regex_comp_free(void * a)
 	 * Free any data being held for previous search strings
 	 */
 
-	if (((struct regex_comp *) a) == NULL) {
+	if (((struct regex_comp *)a) == NULL) {
 		return;
 	}
 

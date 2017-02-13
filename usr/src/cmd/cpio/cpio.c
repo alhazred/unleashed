@@ -1295,7 +1295,7 @@ ckopts(long mask)
 	if (mask & OCH) {
 		t_p = Hdr_p;
 
-		while (*t_p != NULL) {
+		while (*t_p != '\0') {
 			if (isupper(*t_p)) {
 				*t_p = 'a' + (*t_p - 'A');
 			}
@@ -1892,7 +1892,7 @@ creat_spec(int dirfd)
 
 		curdir = strrchr(nam_p, '.');
 
-		if (curdir != NULL && curdir[1] == NULL) {
+		if (curdir != NULL && curdir[1] == '\0') {
 			lastslash = strrchr(nam_p, '/');
 
 			if (lastslash != NULL) {
@@ -4673,7 +4673,7 @@ gethdr(void)
 			return (0);
 		else {
 			preptr = &prebuf[0];
-			if (*preptr != NULL) {
+			if (*preptr != '\0') {
 				k = strlen(&prebuf[0]);
 				if (k < PRESIZ) {
 					(void) strcpy(&fullnam[0], &prebuf[0]);

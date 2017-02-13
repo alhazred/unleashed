@@ -726,7 +726,7 @@ pci_cfg_ap_path(di_minor_t minor, di_node_t node, di_prom_handle_t ph,
 			bufsz -= len - 1;
 
 			/* set chasflag when the leaf node is within an iob */
-			if ((curnode == node) != NULL)
+			if ((curnode == node) != 0)
 				chasflag = 1;
 		}
 		rv = pci_cfg_ap_node(pci_dev, curnode, ph, bufptr, bufsz, 0);

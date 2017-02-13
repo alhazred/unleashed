@@ -958,7 +958,7 @@ path_open(char *fname, int flags, mode_t mode, char *path)
 
 	for (path = buf; path && *path; ) {
 		if (cp = strchr(path, ':')) {
-			*cp++ = NULL; /* now pts to next path element */
+			*cp++ = '\0'; /* now pts to next path element */
 		}
 
 		/* the safest way to create the path string :-) */

@@ -26,7 +26,6 @@
  * Copyright 2005 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 /*
  *	acctwtmp reason /var/adm/wtmpx
  *	writes utmpx.h record (with current time) to specific file
@@ -49,10 +48,10 @@ main(int argc, char **argv)
 
 	if (argc < 3)
 		(void) fprintf(stderr, "Usage: %s reason wtmpx_file\n",
-			argv[0]), exit(1);
+		    argv[0]), exit(1);
 
 	(void) strncpy(wb.ut_line, argv[1], sizeof (wb.ut_line));
-	wb.ut_line[11] = NULL;
+	wb.ut_line[11] = '\0';
 	wb.ut_type = ACCOUNTING;
 	time(&wb.ut_xtime);
 	utmpxname(argv[2]);
