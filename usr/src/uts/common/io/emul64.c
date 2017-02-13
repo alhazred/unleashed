@@ -516,7 +516,7 @@ emul64_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 /*ARGSUSED*/
 static int
 emul64_tran_tgt_init(dev_info_t *hba_dip, dev_info_t *tgt_dip,
-	scsi_hba_tran_t *tran, struct scsi_device *sd)
+    scsi_hba_tran_t *tran, struct scsi_device *sd)
 {
 	struct emul64	*emul64;
 	emul64_tgt_t	*tgt;
@@ -807,8 +807,8 @@ emul64_scsi_setcap(struct scsi_address *ap, char *cap, int value, int whom)
 /* ARGSUSED */
 static struct scsi_pkt *
 emul64_scsi_init_pkt(struct scsi_address *ap, struct scsi_pkt *pkt,
-	struct buf *bp, int cmdlen, int statuslen, int tgtlen,
-	int flags, int (*callback)(), caddr_t arg)
+    struct buf *bp, int cmdlen, int statuslen, int tgtlen,
+    int flags, int (*callback)(), caddr_t arg)
 {
 	struct emul64		*emul64	= ADDR2EMUL64(ap);
 	struct emul64_cmd	*sp;
@@ -938,7 +938,7 @@ emul64_scsi_sync_pkt(struct scsi_address *ap, struct scsi_pkt *pkt)
  */
 static int
 emul64_scsi_reset_notify(struct scsi_address *ap, int flag,
-void (*callback)(caddr_t), caddr_t arg)
+    void (*callback)(caddr_t), caddr_t arg)
 {
 	struct emul64				*emul64 = ADDR2EMUL64(ap);
 	struct emul64_reset_notify_entry	*p, *beforep;
@@ -1029,7 +1029,7 @@ emul64_scsi_start(struct scsi_address *ap, struct scsi_pkt *pkt)
 	if ((emul64_usetaskq == 0) || (pkt->pkt_flags & FLAG_NOINTR) != 0) {
 		emul64_pkt_comp((caddr_t)pkt);
 	} else {
-		dispatched = NULL;
+		dispatched = (uintptr_t)NULL;
 		if (emul64_collect_stats) {
 			/*
 			 * If we are collecting statistics, call
@@ -1042,14 +1042,14 @@ emul64_scsi_start(struct scsi_address *ap, struct scsi_pkt *pkt)
 			 */
 			dispatched = taskq_dispatch(emul64->emul64_taskq,
 			    emul64_pkt_comp, (void *)pkt, TQ_NOSLEEP);
-			if (dispatched == NULL) {
+			if (dispatched == (uintptr_t)NULL) {
 				/* Queue was full.  dispatch failed. */
 				mutex_enter(&emul64_stats_mutex);
 				emul64_taskq_max++;
 				mutex_exit(&emul64_stats_mutex);
 			}
 		}
-		if (dispatched == NULL) {
+		if (dispatched == (uintptr_t)NULL) {
 			(void) taskq_dispatch(emul64->emul64_taskq,
 			    emul64_pkt_comp, (void *)pkt, TQ_SLEEP);
 		}
@@ -1151,7 +1151,7 @@ emul64_error_inject_req(struct emul64 *emul64, intptr_t arg)
 	struct emul64_error_inj_data error_inj_req;
 
 	/* Check args */
-	if (arg == NULL) {
+	if (arg == (intptr_t)NULL) {
 		return (EINVAL);
 	}
 
@@ -1369,9 +1369,9 @@ emul64_scsi_reset(struct scsi_address *ap, int level)
 
 static int
 emul64_get_tgtrange(struct emul64 *emul64,
-		    intptr_t arg,
-		    emul64_tgt_t **tgtp,
-		    emul64_tgt_range_t *tgtr)
+    intptr_t arg,
+    emul64_tgt_t **tgtp,
+    emul64_tgt_range_t *tgtr)
 {
 	if (ddi_copyin((void *)arg, tgtr, sizeof (*tgtr), 0) != 0) {
 		cmn_err(CE_WARN, "emul64: ioctl - copy in failed\n");
@@ -1391,11 +1391,11 @@ emul64_get_tgtrange(struct emul64 *emul64,
 
 static int
 emul64_ioctl(dev_t dev,
-	int cmd,
-	intptr_t arg,
-	int mode,
-	cred_t *credp,
-	int *rvalp)
+    int cmd,
+    intptr_t arg,
+    int mode,
+    cred_t *credp,
+    int *rvalp)
 {
 	struct emul64		*emul64;
 	int			instance;
@@ -1445,8 +1445,8 @@ emul64_ioctl(dev_t dev,
 /* ARGSUSED */
 static int
 emul64_write_off(struct emul64 *emul64,
-	emul64_tgt_t *tgt,
-	emul64_tgt_range_t *tgtr)
+    emul64_tgt_t *tgt,
+    emul64_tgt_range_t *tgtr)
 {
 	size_t			blkcnt = tgtr->emul64_blkrange.emul64_blkcnt;
 	emul64_nowrite_t	*cur;
@@ -1488,8 +1488,8 @@ emul64_write_off(struct emul64 *emul64,
 /* ARGSUSED */
 static int
 emul64_write_on(struct emul64 *emul64,
-		emul64_tgt_t *tgt,
-		emul64_tgt_range_t *tgtr)
+    emul64_tgt_t *tgt,
+    emul64_tgt_range_t *tgtr)
 {
 	size_t			blkcnt = tgtr->emul64_blkrange.emul64_blkcnt;
 	emul64_nowrite_t	*cur;
@@ -1535,10 +1535,10 @@ emul64_write_on(struct emul64 *emul64,
 
 static emul64_nowrite_t *
 emul64_find_nowrite(emul64_tgt_t *tgt,
-		    diskaddr_t sb,
-		    size_t blkcnt,
-		    emul64_rng_overlap_t *overlap,
-		    emul64_nowrite_t ***prevp)
+    diskaddr_t sb,
+    size_t blkcnt,
+    emul64_rng_overlap_t *overlap,
+    emul64_nowrite_t ***prevp)
 {
 	emul64_nowrite_t	*cur;
 	emul64_nowrite_t	**prev;

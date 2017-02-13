@@ -1408,7 +1408,7 @@ contig_free(void *addr, size_t size)
  */
 static void *
 kalloca(size_t size, size_t align, int cansleep, int physcontig,
-	ddi_dma_attr_t *attr)
+    ddi_dma_attr_t *attr)
 {
 	size_t *addr, *raddr, rsize;
 	size_t hdrsize = 4 * sizeof (size_t);	/* must be power of 2 */
@@ -1607,9 +1607,9 @@ i_ddi_cacheattr_to_hatacc(uint_t flags, uint_t *hataccp)
 /*ARGSUSED*/
 int
 i_ddi_mem_alloc(dev_info_t *dip, ddi_dma_attr_t *attr,
-	size_t length, int cansleep, int flags,
-	ddi_device_acc_attr_t *accattrp, caddr_t *kaddrp,
-	size_t *real_length, ddi_acc_hdl_t *ap)
+    size_t length, int cansleep, int flags,
+    ddi_device_acc_attr_t *accattrp, caddr_t *kaddrp,
+    size_t *real_length, ddi_acc_hdl_t *ap)
 {
 	caddr_t a;
 	int iomin;
@@ -1895,10 +1895,10 @@ get_boot_properties(void)
 		if (strcmp(name, "si-machine") == 0) {
 			(void) strncpy(utsname.machine, bop_staging_area,
 			    SYS_NMLN);
-			utsname.machine[SYS_NMLN - 1] = (char)NULL;
+			utsname.machine[SYS_NMLN - 1] = (char)0;
 		} else if (strcmp(name, "si-hw-provider") == 0) {
 			(void) strncpy(hw_provider, bop_staging_area, SYS_NMLN);
-			hw_provider[SYS_NMLN - 1] = (char)NULL;
+			hw_provider[SYS_NMLN - 1] = (char)0;
 		} else if (strcmp(name, "bios-boot-device") == 0) {
 			copy_boot_str(bop_staging_area, property_val, 50);
 			(void) ndi_prop_update_string(DDI_DEV_T_NONE, devi,
@@ -2432,10 +2432,10 @@ pci_peekpoke_check_nofma(void *arg, ddi_ctl_enum_t ctlop)
 
 int
 pci_peekpoke_check(dev_info_t *dip, dev_info_t *rdip,
-	ddi_ctl_enum_t ctlop, void *arg, void *result,
-	int (*handler)(dev_info_t *, dev_info_t *, ddi_ctl_enum_t, void *,
-	void *), kmutex_t *err_mutexp, kmutex_t *peek_poke_mutexp,
-	void (*scan)(dev_info_t *, ddi_fm_error_t *))
+    ddi_ctl_enum_t ctlop, void *arg, void *result,
+    int (*handler)(dev_info_t *, dev_info_t *, ddi_ctl_enum_t, void *,
+    void *), kmutex_t *err_mutexp, kmutex_t *peek_poke_mutexp,
+    void (*scan)(dev_info_t *, ddi_fm_error_t *))
 {
 	int rval;
 	peekpoke_ctlops_t *in_args = (peekpoke_ctlops_t *)arg;
@@ -2763,7 +2763,7 @@ i_ddi_caut_put64(ddi_acc_impl_t *hp, uint64_t *addr, uint64_t value)
 
 void
 i_ddi_caut_rep_get8(ddi_acc_impl_t *hp, uint8_t *host_addr, uint8_t *dev_addr,
-	size_t repcount, uint_t flags)
+    size_t repcount, uint_t flags)
 {
 	i_ddi_caut_getput_ctlops(hp, (uintptr_t)host_addr, (uintptr_t)dev_addr,
 	    sizeof (uint8_t), repcount, flags, DDI_CTLOPS_PEEK);
@@ -2795,7 +2795,7 @@ i_ddi_caut_rep_get64(ddi_acc_impl_t *hp, uint64_t *host_addr,
 
 void
 i_ddi_caut_rep_put8(ddi_acc_impl_t *hp, uint8_t *host_addr, uint8_t *dev_addr,
-	size_t repcount, uint_t flags)
+    size_t repcount, uint_t flags)
 {
 	i_ddi_caut_getput_ctlops(hp, (uintptr_t)host_addr, (uintptr_t)dev_addr,
 	    sizeof (uint8_t), repcount, flags, DDI_CTLOPS_POKE);

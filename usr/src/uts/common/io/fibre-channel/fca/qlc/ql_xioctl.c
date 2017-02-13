@@ -29,8 +29,6 @@
  * Copyright 2011 Nexenta Systems, Inc.  All rights reserved.
  */
 
-#pragma ident	"Copyright 2010 QLogic Corporation; ql_xioctl.c"
-
 /*
  * ISP2xxx Solaris Fibre Channel Adapter (FCA) driver source file.
  *
@@ -1888,7 +1886,7 @@ ql_enqueue_aen(ql_adapter_state_t *ha, uint16_t event_code, void *payload)
 	}
 	aen_queue = (EXT_ASYNC_EVENT *)xp->aen_tracking_queue;
 
-	if (aen_queue[xp->aen_q_tail].AsyncEventCode != NULL) {
+	if (aen_queue[xp->aen_q_tail].AsyncEventCode != 0) {
 		/* Need to change queue pointers to make room. */
 
 		/* Increment tail for adding new entry. */

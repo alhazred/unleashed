@@ -3442,7 +3442,7 @@ mac_tx_cookie_t
 mac_tx_srs_no_desc(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
     uint16_t flag, mblk_t **ret_mp)
 {
-	mac_tx_cookie_t cookie = NULL;
+	mac_tx_cookie_t cookie = (uintptr_t)NULL;
 	mac_srs_tx_t *srs_tx = &mac_srs->srs_tx;
 	boolean_t wakeup_worker = B_TRUE;
 	uint32_t tx_mode = srs_tx->st_mode;
@@ -3498,7 +3498,7 @@ static mac_tx_cookie_t
 mac_tx_srs_enqueue(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
     uint16_t flag, uintptr_t fanout_hint, mblk_t **ret_mp)
 {
-	mac_tx_cookie_t cookie = NULL;
+	mac_tx_cookie_t cookie = (uintptr_t)NULL;
 	int cnt, sz;
 	mblk_t *tail;
 	boolean_t wakeup_worker = B_TRUE;
@@ -3640,7 +3640,7 @@ mac_tx_single_ring_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
 {
 	mac_srs_tx_t		*srs_tx = &mac_srs->srs_tx;
 	mac_tx_stats_t		stats;
-	mac_tx_cookie_t		cookie = NULL;
+	mac_tx_cookie_t		cookie = (uintptr_t)NULL;
 
 	ASSERT(srs_tx->st_mode == SRS_TX_DEFAULT);
 
@@ -3689,7 +3689,7 @@ mac_tx_single_ring_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
 	}
 	SRS_TX_STATS_UPDATE(mac_srs, &stats);
 
-	return (NULL);
+	return ((uintptr_t)NULL);
 }
 
 /*
@@ -3706,7 +3706,7 @@ mac_tx_serializer_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
     uintptr_t fanout_hint, uint16_t flag, mblk_t **ret_mp)
 {
 	mac_tx_stats_t		stats;
-	mac_tx_cookie_t		cookie = NULL;
+	mac_tx_cookie_t		cookie = (uintptr_t)NULL;
 	mac_srs_tx_t		*srs_tx = &mac_srs->srs_tx;
 
 	/* Single ring, serialize below */
@@ -3722,7 +3722,7 @@ mac_tx_serializer_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
 		 * is set and return mblks after TX_HIWAT is set.
 		 */
 		cookie = mac_tx_srs_enqueue(mac_srs, mp_chain,
-		    flag, NULL, ret_mp);
+		    flag, 0, ret_mp);
 		mutex_exit(&mac_srs->srs_lock);
 		return (cookie);
 	}
@@ -3741,7 +3741,7 @@ mac_tx_serializer_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
 	mac_srs->srs_state &= ~SRS_PROC;
 	if (mp_chain != NULL) {
 		cookie = mac_tx_srs_enqueue(mac_srs,
-		    mp_chain, flag, NULL, ret_mp);
+		    mp_chain, flag, 0, ret_mp);
 	}
 	if (mac_srs->srs_first != NULL) {
 		/*
@@ -3753,7 +3753,7 @@ mac_tx_serializer_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
 	}
 	mutex_exit(&mac_srs->srs_lock);
 
-	if (cookie == NULL)
+	if (cookie == (uintptr_t)NULL)
 		SRS_TX_STATS_UPDATE(mac_srs, &stats);
 
 	return (cookie);
@@ -3785,7 +3785,7 @@ mac_tx_fanout_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
 	mac_soft_ring_t		*softring;
 	uint64_t		hash;
 	uint_t			index;
-	mac_tx_cookie_t		cookie = NULL;
+	mac_tx_cookie_t		cookie = (uintptr_t)NULL;
 
 	ASSERT(mac_srs->srs_tx.st_mode == SRS_TX_FANOUT ||
 	    mac_srs->srs_tx.st_mode == SRS_TX_BW_FANOUT);
@@ -3850,7 +3850,7 @@ mac_tx_fanout_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
 			MAC_TX_SOFT_RING_PROCESS(sub_chain);
 		}
 
-		cookie = NULL;
+		cookie = (uintptr_t)NULL;
 	}
 
 	return (cookie);
@@ -3870,7 +3870,7 @@ mac_tx_bw_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
 {
 	int			cnt, sz;
 	mblk_t			*tail;
-	mac_tx_cookie_t		cookie = NULL;
+	mac_tx_cookie_t		cookie = (uintptr_t)NULL;
 	mac_srs_tx_t		*srs_tx = &mac_srs->srs_tx;
 	clock_t			now;
 
@@ -3960,7 +3960,7 @@ mac_tx_bw_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
 		}
 		SRS_TX_STATS_UPDATE(mac_srs, &stats);
 
-		return (NULL);
+		return ((uintptr_t)NULL);
 	}
 }
 
@@ -3998,7 +3998,7 @@ mac_tx_aggr_mode(mac_soft_ring_set_t *mac_srs, mblk_t *mp_chain,
 	find_tx_ring_fn = srs_tx->st_capab_aggr.mca_find_tx_ring_fn;
 	arg = srs_tx->st_capab_aggr.mca_arg;
 	if (find_tx_ring_fn(arg, mp_chain, fanout_hint, &ring) == NULL)
-		return (NULL);
+		return ((uintptr_t)NULL);
 	sringp = srs_tx->st_soft_rings[((mac_ring_t *)ring)->mr_index];
 	return (mac_tx_soft_ring_process(sringp, mp_chain, flag, ret_mp));
 }
@@ -4812,7 +4812,7 @@ mac_tx_sring_enqueue(mac_soft_ring_t *ringp, mblk_t *mp_chain, uint16_t flag,
 	size_t sz;
 	mblk_t *tail;
 	mac_soft_ring_set_t *mac_srs = ringp->s_ring_set;
-	mac_tx_cookie_t cookie = NULL;
+	mac_tx_cookie_t cookie = (uintptr_t)NULL;
 	boolean_t wakeup_worker = B_TRUE;
 
 	ASSERT(MUTEX_HELD(&ringp->s_ring_lock));
@@ -4896,7 +4896,7 @@ mac_tx_soft_ring_process(mac_soft_ring_t *ringp, mblk_t *mp_chain,
 	int	cnt;
 	size_t	sz;
 	mblk_t	*tail;
-	mac_tx_cookie_t cookie = NULL;
+	mac_tx_cookie_t cookie = (uintptr_t)NULL;
 
 	ASSERT(ringp != NULL);
 	ASSERT(mp_chain != NULL);
@@ -4986,6 +4986,6 @@ mac_tx_soft_ring_process(mac_soft_ring_t *ringp, mblk_t *mp_chain,
 		SRS_TX_STATS_UPDATE(mac_srs, &stats);
 		SOFTRING_TX_STATS_UPDATE(ringp, &stats);
 
-		return (NULL);
+		return ((uintptr_t)NULL);
 	}
 }

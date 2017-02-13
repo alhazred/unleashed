@@ -925,7 +925,7 @@ audit_ipcget(int type, void *vp)
 		return;
 
 	switch (type) {
-	case NULL:
+	case 0:
 		au_uwrite(au_to_ipc_perm((struct kipc_perm *)vp));
 		break;
 	case AT_IPC_MSG:
@@ -1295,7 +1295,7 @@ audit_enterprom(int flg)
 	else
 		au_write((caddr_t *)&(rp), au_to_return32(ECANCELED, 0));
 
-	AUDIT_ASYNC_FINISH(rp, AUE_ENTERPROM, NULL, NULL);
+	AUDIT_ASYNC_FINISH(rp, AUE_ENTERPROM, 0, NULL);
 }
 
 
@@ -1328,7 +1328,7 @@ audit_exitprom(int flg)
 	else
 		au_write((caddr_t *)&(rp), au_to_return32(ECANCELED, 0));
 
-	AUDIT_ASYNC_FINISH(rp, AUE_EXITPROM, NULL, NULL);
+	AUDIT_ASYNC_FINISH(rp, AUE_EXITPROM, 0, NULL);
 }
 
 struct fcntla {

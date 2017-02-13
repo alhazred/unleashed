@@ -209,16 +209,16 @@ cn_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 		return (DDI_FAILURE);
 
 	if (ddi_create_minor_node(devi, "syscon", S_IFCHR,
-	    0, DDI_PSEUDO, NULL) == DDI_FAILURE) {
+	    0, DDI_PSEUDO, 0) == DDI_FAILURE) {
 		return (DDI_FAILURE);
 	}
 	if (ddi_create_minor_node(devi, "systty", S_IFCHR,
-	    0, DDI_PSEUDO, NULL) == DDI_FAILURE) {
+	    0, DDI_PSEUDO, 0) == DDI_FAILURE) {
 		ddi_remove_minor_node(devi, NULL);
 		return (DDI_FAILURE);
 	}
 	if (ddi_create_minor_node(devi, "console", S_IFCHR,
-	    0, DDI_PSEUDO, NULL) == DDI_FAILURE) {
+	    0, DDI_PSEUDO, 0) == DDI_FAILURE) {
 		ddi_remove_minor_node(devi, NULL);
 		return (DDI_FAILURE);
 	}
@@ -445,7 +445,7 @@ cnwrite(dev_t dev, struct uio *uio, struct cred *cred)
 /* ARGSUSED */
 static int
 cnprivateioc(dev_t dev, int cmd, intptr_t arg, int flag, struct cred *cred,
-	int *rvalp)
+    int *rvalp)
 {
 
 	/* currently we only support one ioctl */
@@ -470,7 +470,7 @@ cnprivateioc(dev_t dev, int cmd, intptr_t arg, int flag, struct cred *cred,
 /* ARGSUSED */
 static int
 cnioctl(dev_t dev, int cmd, intptr_t arg, int flag, struct cred *cred,
-	int *rvalp)
+    int *rvalp)
 {
 	if (rconsvp == NULL)
 		return (0);
@@ -498,7 +498,7 @@ cnioctl(dev_t dev, int cmd, intptr_t arg, int flag, struct cred *cred,
 /* ARGSUSED */
 static int
 cnpoll(dev_t dev, short events, int anyyet, short *reventsp,
-	struct pollhead **phpp)
+    struct pollhead **phpp)
 {
 	if (rconsvp == NULL)
 		return (nochpoll(dev, events, anyyet, reventsp, phpp));

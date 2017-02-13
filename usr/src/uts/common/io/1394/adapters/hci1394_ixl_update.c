@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * hci1394_ixl_update.c
  *    Isochronous IXL update routines.
@@ -645,7 +643,6 @@ hci1394_ixl_update_prep_set_skipmode(hci1394_ixl_update_vars_t *uvp)
 		    IXL1394_SKIP_TO_LABEL) ||
 		    (old_set_skipmode_ixlp->label ==
 		    new_set_skipmode_ixlp->label)) {
-
 			/* No change, return with done ok status */
 			return (IXL_PREP_SUCCESS);
 		}
@@ -724,7 +721,7 @@ hci1394_ixl_update_prep_set_skipmode(hci1394_ixl_update_vars_t *uvp)
 		/* verify label field is valid ixl label cmd */
 		if ((new_set_skipmode_ixlp->label == NULL) ||
 		    (new_set_skipmode_ixlp->label->ixl_opcode !=
-			IXL1394_OP_LABEL)) {
+		    IXL1394_OP_LABEL)) {
 
 			/* Error - not skipping to valid label */
 			uvp->upd_status = IXL1394_EBAD_SKIP_LABEL;
@@ -737,7 +734,7 @@ hci1394_ixl_update_prep_set_skipmode(hci1394_ixl_update_vars_t *uvp)
 		 * IXL command
 		 */
 		(void) hci1394_ixl_find_next_exec_xfer(
-			new_set_skipmode_ixlp->label, NULL, &ixlp);
+		    new_set_skipmode_ixlp->label, NULL, &ixlp);
 
 		/*
 		 * set skip destination IXL xfer command.
@@ -892,7 +889,7 @@ hci1394_ixl_update_prep_recv_pkt(hci1394_ixl_update_vars_t *uvp)
 	/* check if any change between new and old IXL xfer commands */
 	if ((new_xfer_pkt_ixlp->size == old_xfer_pkt_ixlp->size) &&
 	    (new_xfer_pkt_ixlp->ixl_buf.ixldmac_addr ==
-		old_xfer_pkt_ixlp->ixl_buf.ixldmac_addr) &&
+	    old_xfer_pkt_ixlp->ixl_buf.ixldmac_addr) &&
 	    (new_xfer_pkt_ixlp->mem_bufp == old_xfer_pkt_ixlp->mem_bufp)) {
 
 		/* no change. return with done ok status */
@@ -900,7 +897,7 @@ hci1394_ixl_update_prep_recv_pkt(hci1394_ixl_update_vars_t *uvp)
 	}
 
 	/* if new IXL buffer addrs are null, return error */
-	if ((new_xfer_pkt_ixlp->ixl_buf.ixldmac_addr == NULL) ||
+	if ((new_xfer_pkt_ixlp->ixl_buf.ixldmac_addr == (uintptr_t)NULL) ||
 	    (new_xfer_pkt_ixlp->mem_bufp == NULL)) {
 
 		uvp->upd_status = IXL1394_EXFER_BUF_MISSING;
@@ -1009,12 +1006,12 @@ hci1394_ixl_update_prep_recv_buf(hci1394_ixl_update_vars_t *uvp)
 	/* check if any change between new and old IXL xfer commands */
 	if ((new_xfer_buf_ixlp->size ==	old_xfer_buf_ixlp->size) &&
 	    (new_xfer_buf_ixlp->ixl_buf.ixldmac_addr ==
-		old_xfer_buf_ixlp->ixl_buf.ixldmac_addr) &&
+	    old_xfer_buf_ixlp->ixl_buf.ixldmac_addr) &&
 	    (new_xfer_buf_ixlp->mem_bufp == new_xfer_buf_ixlp->mem_bufp)) {
 
 		if (((uvp->ctxtp->ctxt_flags & HCI1394_ISO_CTXT_BFFILL) != 0) ||
 		    (new_xfer_buf_ixlp->pkt_size ==
-			old_xfer_buf_ixlp->pkt_size)) {
+		    old_xfer_buf_ixlp->pkt_size)) {
 
 			/* no change. return with done ok status */
 			return (IXL_PREP_SUCCESS);
@@ -1022,7 +1019,7 @@ hci1394_ixl_update_prep_recv_buf(hci1394_ixl_update_vars_t *uvp)
 	}
 
 	/* if new IXL buffer addrs are null, return error */
-	if ((new_xfer_buf_ixlp->ixl_buf.ixldmac_addr == NULL) ||
+	if ((new_xfer_buf_ixlp->ixl_buf.ixldmac_addr == (uintptr_t)NULL) ||
 	    (new_xfer_buf_ixlp->mem_bufp == NULL)) {
 
 		uvp->upd_status = IXL1394_EXFER_BUF_MISSING;
@@ -1108,7 +1105,7 @@ hci1394_ixl_update_prep_send_pkt(hci1394_ixl_update_vars_t *uvp)
 	/* check if any change between new and old IXL xfer commands */
 	if ((new_xfer_pkt_ixlp->size ==	old_xfer_pkt_ixlp->size) &&
 	    (new_xfer_pkt_ixlp->ixl_buf.ixldmac_addr ==
-		old_xfer_pkt_ixlp->ixl_buf.ixldmac_addr) &&
+	    old_xfer_pkt_ixlp->ixl_buf.ixldmac_addr) &&
 	    (new_xfer_pkt_ixlp->mem_bufp == old_xfer_pkt_ixlp->mem_bufp)) {
 
 		/* if none, return with done ok status */
@@ -1116,7 +1113,7 @@ hci1394_ixl_update_prep_send_pkt(hci1394_ixl_update_vars_t *uvp)
 	}
 
 	/* if new ixl buffer addrs are null, return error */
-	if ((new_xfer_pkt_ixlp->ixl_buf.ixldmac_addr == NULL) ||
+	if ((new_xfer_pkt_ixlp->ixl_buf.ixldmac_addr == (uintptr_t)NULL) ||
 	    (new_xfer_pkt_ixlp->mem_bufp == NULL)) {
 
 		uvp->upd_status = IXL1394_EXFER_BUF_MISSING;
@@ -1253,7 +1250,7 @@ hci1394_ixl_update_prep_send_buf(hci1394_ixl_update_vars_t *uvp)
 	if ((new_xfer_buf_ixlp->size == old_xfer_buf_ixlp->size) &&
 	    (new_xfer_buf_ixlp->pkt_size == old_xfer_buf_ixlp->pkt_size) &&
 	    (new_xfer_buf_ixlp->ixl_buf.ixldmac_addr ==
-		old_xfer_buf_ixlp->ixl_buf.ixldmac_addr) &&
+	    old_xfer_buf_ixlp->ixl_buf.ixldmac_addr) &&
 	    (new_xfer_buf_ixlp->mem_bufp == old_xfer_buf_ixlp->mem_bufp)) {
 
 		/* no change, return with done ok status */
@@ -1261,7 +1258,7 @@ hci1394_ixl_update_prep_send_buf(hci1394_ixl_update_vars_t *uvp)
 	}
 
 	/* if new IXL buffer addresses are null, return error */
-	if ((new_xfer_buf_ixlp->ixl_buf.ixldmac_addr == NULL) ||
+	if ((new_xfer_buf_ixlp->ixl_buf.ixldmac_addr == (uintptr_t)NULL) ||
 	    (new_xfer_buf_ixlp->mem_bufp == NULL)) {
 
 		uvp->upd_status = IXL1394_EXFER_BUF_MISSING;
@@ -1931,7 +1928,7 @@ hci1394_ixl_update_analysis(hci1394_ixl_update_vars_t *uvp)
 		if ((uvp->locn_info[ii].ixlp == uvp->ixlxferp) &&
 		    (uvp->locn_info[ii].ixldepth >= uvp->ixldepth) &&
 		    (uvp->locn_info[ii].ixldepth <
-			(uvp->ixldepth + uvp->ixlcount))) {
+		    (uvp->ixldepth + uvp->ixlcount))) {
 
 			uvp->upd_status = IXL1394_ERISK_PROHIBITS_UPD;
 

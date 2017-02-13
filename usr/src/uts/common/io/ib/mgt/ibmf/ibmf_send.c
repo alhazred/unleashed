@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * This file implements the MAD send logic in IBMF.
  */
@@ -249,7 +247,7 @@ ibmf_i_handle_send_completion(ibmf_ci_t *cip, ibt_wc_t *wcp)
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*send_wqep))
 
-	ASSERT(wcp->wc_id != NULL);
+	ASSERT(wcp->wc_id != (uintptr_t)NULL);
 
 	ASSERT(IBMF_IS_SEND_WR_ID(wcp->wc_id));
 

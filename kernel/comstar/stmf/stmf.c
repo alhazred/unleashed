@@ -470,7 +470,7 @@ stmf_close(dev_t dev, int flag, int otype, cred_t *credp)
 
 int
 stmf_copyin_iocdata(intptr_t data, int mode, stmf_iocdata_t **iocd,
-						void **ibuf, void **obuf)
+    void **ibuf, void **obuf)
 {
 	int ret;
 
@@ -529,7 +529,7 @@ stmf_copyout_iocdata(intptr_t data, int mode, stmf_iocdata_t *iocd, void *obuf)
 /* ARGSUSED */
 static int
 stmf_ioctl(dev_t dev, int cmd, intptr_t data, int mode,
-	cred_t *credp, int *rval)
+    cred_t *credp, int *rval)
 {
 	stmf_iocdata_t *iocd;
 	void *ibuf = NULL, *obuf = NULL;
@@ -2898,7 +2898,7 @@ stmf_create_kstat_lport(stmf_i_local_port_t *ilport)
 	len = ilport->ilport_lport->lport_id->ident_length;
 	bcopy(ilport->ilport_lport->lport_id->ident,
 	    ilport->ilport_kstat_tgt_name, len);
-	ilport->ilport_kstat_tgt_name[len + 1] = NULL;
+	ilport->ilport_kstat_tgt_name[len + 1] = '\0';
 	kstat_named_setstr(&ks_tgt->i_tgt_name,
 	    (const char *)ilport->ilport_kstat_tgt_name);
 	kstat_named_setstr(&ks_tgt->i_tgt_alias,
@@ -4011,7 +4011,7 @@ stmf_handle_to_buf(scsi_task_t *task, uint8_t h)
 /* ARGSUSED */
 struct scsi_task *
 stmf_task_alloc(struct stmf_local_port *lport, stmf_scsi_session_t *ss,
-			uint8_t *lun, uint16_t cdb_length_in, uint16_t ext_id)
+    uint8_t *lun, uint16_t cdb_length_in, uint16_t ext_id)
 {
 	stmf_lu_t *lu;
 	stmf_i_scsi_session_t *iss;
@@ -5499,7 +5499,7 @@ stmf_ctl_lock_exit:;
 /* ARGSUSED */
 stmf_status_t
 stmf_info_impl(uint32_t cmd, void *arg1, void *arg2, uint8_t *buf,
-						uint32_t *bufsizep)
+    uint32_t *bufsizep)
 {
 	return (STMF_NOT_SUPPORTED);
 }
@@ -5507,7 +5507,7 @@ stmf_info_impl(uint32_t cmd, void *arg1, void *arg2, uint8_t *buf,
 /* ARGSUSED */
 stmf_status_t
 stmf_info(uint32_t cmd, void *arg1, void *arg2, uint8_t *buf,
-						uint32_t *bufsizep)
+    uint32_t *bufsizep)
 {
 	uint32_t cl = SI_GET_CLASS(cmd);
 
@@ -7123,7 +7123,7 @@ stmf_generate_lu_event(stmf_i_lu_t *ilu, int eventid, void *arg, uint32_t flags)
 
 void
 stmf_generate_lport_event(stmf_i_local_port_t *ilport, int eventid, void *arg,
-				uint32_t flags)
+    uint32_t flags)
 {
 	if (STMF_EVENT_ENABLED(ilport->ilport_event_hdl, eventid) &&
 	    (ilport->ilport_lport->lport_event_handler != NULL)) {
@@ -7720,7 +7720,7 @@ stmf_base16_str_to_binary(char *c, int dplen, uint8_t *dp)
 
 boolean_t
 stmf_scsilib_tptid_validate(scsi_transport_id_t *tptid, uint32_t total_sz,
-				uint16_t *tptid_sz)
+    uint16_t *tptid_sz)
 {
 	uint16_t tpd_len = SCSI_TPTID_SIZE;
 
@@ -7803,7 +7803,7 @@ stmf_scsilib_tptid_validate(scsi_transport_id_t *tptid, uint32_t total_sz,
 
 boolean_t
 stmf_scsilib_tptid_compare(scsi_transport_id_t *tpd1,
-				scsi_transport_id_t *tpd2)
+    scsi_transport_id_t *tpd2)
 {
 	if ((tpd1->protocol_id != tpd2->protocol_id) ||
 	    (tpd1->format_code != tpd2->format_code))
@@ -7967,7 +7967,8 @@ devid_to_remote_port_fail:
 }
 
 stmf_remote_port_t *
-stmf_remote_port_alloc(uint16_t tptid_sz) {
+stmf_remote_port_alloc(uint16_t tptid_sz)
+{
 	stmf_remote_port_t *rpt;
 	rpt = (stmf_remote_port_t *)kmem_zalloc(
 	    sizeof (stmf_remote_port_t) + tptid_sz, KM_SLEEP);

@@ -642,7 +642,7 @@ loop:
 		notavail(bp);
 		mutex_exit(hmp);
 
-		ASSERT((bp->b_flags & B_NOCACHE) == NULL);
+		ASSERT((bp->b_flags & B_NOCACHE) == 0);
 
 		if (nbp == NULL) {
 			/*
@@ -716,7 +716,7 @@ loop:
 		nbp->b_vp = NULL;
 	}
 
-	ASSERT((nbp->b_flags & B_NOCACHE) == NULL);
+	ASSERT((nbp->b_flags & B_NOCACHE) == 0);
 
 	binshash(nbp, dp);
 	mutex_exit(hmp);

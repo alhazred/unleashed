@@ -1275,7 +1275,7 @@ idm_so_svc_port_watcher(void *arg)
 		 * Kick the state machine.  At CS_S3_XPT_UP the state machine
 		 * will notify the client (target) about the new connection.
 		 */
-		idm_conn_event(ic, CE_CONNECT_ACCEPT, NULL);
+		idm_conn_event(ic, CE_CONNECT_ACCEPT, (uintptr_t)NULL);
 
 		mutex_enter(&svc->is_mutex);
 	}
@@ -2482,7 +2482,7 @@ idm_so_send_rtt_data(idm_conn_t *ic, idm_task_t *idt, idm_buf_t *idb,
 		mutex_enter(&ic->ic_state_mutex);
 		if (ic->ic_ffp)
 			idm_conn_event_locked(ic, CE_TRANSPORT_FAIL,
-			    NULL, CT_NONE);
+			    (uintptr_t)NULL, CT_NONE);
 		mutex_exit(&ic->ic_state_mutex);
 		mutex_exit(&idt->idt_mutex);
 		return;

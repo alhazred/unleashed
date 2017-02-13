@@ -514,7 +514,7 @@ idm_tgt_conn_finish(idm_conn_t *ic)
 {
 	idm_status_t rc;
 
-	rc = idm_notify_client(ic, CN_CONNECT_ACCEPT, NULL);
+	rc = idm_notify_client(ic, CN_CONNECT_ACCEPT, (uintptr_t)NULL);
 	if (rc != IDM_STATUS_SUCCESS) {
 		return (IDM_STATUS_REJECT);
 	}
@@ -1170,7 +1170,8 @@ idm_wd_thread(void *arg)
 				    "conn %p idle for %d seconds, "
 				    "sending CE_TRANSPORT_FAIL",
 				    (void *)ic, (int)idle_time);
-				idm_conn_event(ic, CE_TRANSPORT_FAIL, NULL);
+				idm_conn_event(ic, CE_TRANSPORT_FAIL,
+				    (uintptr_t)NULL);
 				mutex_enter(&idm.idm_global_mutex);
 				mutex_enter(&ic->ic_state_mutex);
 			}

@@ -205,7 +205,7 @@ static crypto_provider_info_t aes_prov_info = {
 	aes_mech_info_tab
 };
 
-static crypto_kcf_provider_handle_t aes_prov_handle = NULL;
+static crypto_kcf_provider_handle_t aes_prov_handle = 0;
 static crypto_data_t null_crypto_data = { CRYPTO_DATA_RAW };
 
 int
@@ -229,11 +229,11 @@ int
 _fini(void)
 {
 	/* Unregister from KCF if module is registered */
-	if (aes_prov_handle != NULL) {
+	if (aes_prov_handle != 0) {
 		if (crypto_unregister_provider(aes_prov_handle))
 			return (EBUSY);
 
-		aes_prov_handle = NULL;
+		aes_prov_handle = 0;
 	}
 
 	return (mod_remove(&modlinkage));
@@ -336,14 +336,16 @@ aes_provider_status(crypto_provider_handle_t provider, uint_t *status)
 static int
 aes_encrypt_init(crypto_ctx_t *ctx, crypto_mechanism_t *mechanism,
     crypto_key_t *key, crypto_spi_ctx_template_t template,
-    crypto_req_handle_t req) {
+    crypto_req_handle_t req)
+{
 	return (aes_common_init(ctx, mechanism, key, template, req, B_TRUE));
 }
 
 static int
 aes_decrypt_init(crypto_ctx_t *ctx, crypto_mechanism_t *mechanism,
     crypto_key_t *key, crypto_spi_ctx_template_t template,
-    crypto_req_handle_t req) {
+    crypto_req_handle_t req)
+{
 	return (aes_common_init(ctx, mechanism, key, template, req, B_FALSE));
 }
 

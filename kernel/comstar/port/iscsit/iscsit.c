@@ -911,7 +911,7 @@ iscsit_rx_pdu(idm_conn_t *ic, idm_pdu_t *rx_pdu)
 		 * now we treat it as a protocol error.
 		 */
 		idm_pdu_complete(rx_pdu, IDM_STATUS_SUCCESS);
-		idm_conn_event(ic, CE_TRANSPORT_FAIL, NULL);
+		idm_conn_event(ic, CE_TRANSPORT_FAIL, (uintptr_t)NULL);
 		break;
 	case ISCSI_OP_SCSI_TASK_MGT_MSG:
 		if (iscsit_check_cmdsn_and_queue(rx_pdu)) {
@@ -932,7 +932,7 @@ iscsit_rx_pdu(idm_conn_t *ic, idm_pdu_t *rx_pdu)
 	default:
 		/* Protocol error */
 		idm_pdu_complete(rx_pdu, IDM_STATUS_SUCCESS);
-		idm_conn_event(ic, CE_TRANSPORT_FAIL, NULL);
+		idm_conn_event(ic, CE_TRANSPORT_FAIL, (uintptr_t)NULL);
 		break;
 	}
 }
@@ -1426,7 +1426,8 @@ iscsit_conn_logout(iscsit_conn_t *ict)
 	 */
 	mutex_enter(&ict->ict_mutex);
 	if (ict->ict_lost == B_FALSE && ict->ict_destroyed == B_FALSE) {
-		idm_conn_event(ict->ict_ic, CE_LOGOUT_SESSION_SUCCESS, NULL);
+		idm_conn_event(ict->ict_ic, CE_LOGOUT_SESSION_SUCCESS,
+		    (uintptr_t)NULL);
 	}
 	mutex_exit(&ict->ict_mutex);
 }
@@ -2709,7 +2710,7 @@ iscsit_send_async_event(iscsit_conn_t *ict, uint8_t event)
 	 */
 	abt = idm_pdu_alloc(sizeof (iscsi_hdr_t), 0);
 	if (abt == NULL) {
-		idm_conn_event(ict->ict_ic, CE_TRANSPORT_FAIL, NULL);
+		idm_conn_event(ict->ict_ic, CE_TRANSPORT_FAIL, (uintptr_t)NULL);
 		return;
 	}
 
@@ -2759,7 +2760,7 @@ iscsit_send_reject(iscsit_conn_t *ict, idm_pdu_t *rejected_pdu, uint8_t reason)
 	reject_pdu = idm_pdu_alloc(sizeof (iscsi_hdr_t),
 	    rejected_pdu->isp_hdrlen);
 	if (reject_pdu == NULL) {
-		idm_conn_event(ict->ict_ic, CE_TRANSPORT_FAIL, NULL);
+		idm_conn_event(ict->ict_ic, CE_TRANSPORT_FAIL, (uintptr_t)NULL);
 		return;
 	}
 	idm_pdu_init(reject_pdu, ict->ict_ic, NULL, NULL);

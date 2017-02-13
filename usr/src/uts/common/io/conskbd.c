@@ -316,7 +316,7 @@ static void conskbd_streams_setled(struct kbtrans_hardware *, int);
 static boolean_t conskbd_override_kbtrans(queue_t *, mblk_t *);
 static boolean_t
 conskbd_polled_keycheck(struct kbtrans_hardware *,
-		kbtrans_key_t *, enum keystate *);
+    kbtrans_key_t *, enum keystate *);
 
 /*
  * Callbacks needed by kbtrans
@@ -455,7 +455,7 @@ conskbd_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 
 	}
 	if ((ddi_create_minor_node(devi, "kbd", S_IFCHR,
-	    0, DDI_PSEUDO, NULL) == DDI_FAILURE) ||
+	    0, DDI_PSEUDO, 0) == DDI_FAILURE) ||
 	    (ddi_create_internal_pathname(devi, "conskbd", S_IFCHR,
 	    1) == DDI_FAILURE)) {
 		ddi_remove_minor_node(devi, NULL);
@@ -507,7 +507,7 @@ conskbd_detach(dev_info_t *devi, ddi_detach_cmd_t cmd)
 /* ARGSUSED */
 static int
 conskbd_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg,
-	void **result)
+    void **result)
 {
 	register int error;
 
@@ -1683,7 +1683,7 @@ conskbd_alloc_firm_event(ushort_t id, int value)
 		fe = (Firm_event *)mb->b_wptr;
 		fe->id = id;
 		fe->pair_type = FE_PAIR_NONE;
-		fe->pair = NULL;
+		fe->pair = 0;
 		fe->value = value;
 		mb->b_wptr += sizeof (Firm_event);
 	}
@@ -2180,7 +2180,7 @@ conskbd_polledio_setled(struct kbtrans_hardware *hw, int led_state)
 
 static boolean_t
 conskbd_polled_keycheck(struct kbtrans_hardware *hw,
-		kbtrans_key_t *keycode, enum keystate *state)
+    kbtrans_key_t *keycode, enum keystate *state)
 {
 	conskbd_state_t  *conskbdp = (conskbd_state_t *)hw;
 	struct cons_polledio 		*cb;

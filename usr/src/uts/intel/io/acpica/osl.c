@@ -23,6 +23,7 @@
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  * Copyright 2016 Joyent, Inc.
+ * Copyright 2016 PALO, Richard.
  */
 /*
  * Copyright (c) 2009-2010, Intel Corporation.
@@ -230,10 +231,11 @@ AcpiOsGetRootPointer()
 	 * in the acpi-root-tab property.
 	 */
 	Address = ddi_prop_get_int(DDI_DEV_T_ANY, ddi_root_node(),
-	    DDI_PROP_DONTPASS, "acpi-root-tab", NULL);
+	    DDI_PROP_DONTPASS, "acpi-root-tab", 0);
 
-	if ((Address == NULL) && ACPI_FAILURE(AcpiFindRootPointer(&Address)))
-		Address = NULL;
+	if ((Address == (uintptr_t)NULL) &&
+	    ACPI_FAILURE(AcpiFindRootPointer(&Address)))
+		Address = (uintptr_t)NULL;
 
 	return (Address);
 }
@@ -241,7 +243,7 @@ AcpiOsGetRootPointer()
 /*ARGSUSED*/
 ACPI_STATUS
 AcpiOsPredefinedOverride(const ACPI_PREDEFINED_NAMES *InitVal,
-				ACPI_STRING *NewVal)
+    ACPI_STRING *NewVal)
 {
 
 	*NewVal = 0;
@@ -260,7 +262,7 @@ acpica_strncpy(char *dest, const char *src, int len)
 
 ACPI_STATUS
 AcpiOsTableOverride(ACPI_TABLE_HEADER *ExistingTable,
-			ACPI_TABLE_HEADER **NewTable)
+    ACPI_TABLE_HEADER **NewTable)
 {
 	char signature[5];
 	char oemid[7];
@@ -418,7 +420,7 @@ acpi_sema_v(acpi_sema_t *sp, unsigned count)
 
 ACPI_STATUS
 AcpiOsCreateSemaphore(UINT32 MaxUnits, UINT32 InitialUnits,
-ACPI_HANDLE *OutHandle)
+    ACPI_HANDLE *OutHandle)
 {
 	acpi_sema_t *sp;
 
@@ -622,7 +624,7 @@ AcpiOsUnmapMemory(void *LogicalAddress, ACPI_SIZE Size)
 /*ARGSUSED*/
 ACPI_STATUS
 AcpiOsGetPhysicalAddress(void *LogicalAddress,
-			ACPI_PHYSICAL_ADDRESS *PhysicalAddress)
+    ACPI_PHYSICAL_ADDRESS *PhysicalAddress)
 {
 
 	/* UNIMPLEMENTED: not invoked by ACPI CA code */
@@ -653,8 +655,8 @@ static int acpi_intr_hooked = 0;
 
 ACPI_STATUS
 AcpiOsInstallInterruptHandler(UINT32 InterruptNumber,
-		ACPI_OSD_HANDLER ServiceRoutine,
-		void *Context)
+    ACPI_OSD_HANDLER ServiceRoutine,
+    void *Context)
 {
 	_NOTE(ARGUNUSED(InterruptNumber))
 
@@ -687,7 +689,7 @@ AcpiOsInstallInterruptHandler(UINT32 InterruptNumber,
 
 ACPI_STATUS
 AcpiOsRemoveInterruptHandler(UINT32 InterruptNumber,
-			ACPI_OSD_HANDLER ServiceRoutine)
+    ACPI_OSD_HANDLER ServiceRoutine)
 {
 	_NOTE(ARGUNUSED(ServiceRoutine))
 
@@ -930,16 +932,14 @@ osl_rw_memory(ACPI_PHYSICAL_ADDRESS Address, UINT64 *Value,
 }
 
 ACPI_STATUS
-AcpiOsReadMemory(ACPI_PHYSICAL_ADDRESS Address,
-		UINT64 *Value, UINT32 Width)
+AcpiOsReadMemory(ACPI_PHYSICAL_ADDRESS Address, UINT64 *Value, UINT32 Width)
 {
 	osl_rw_memory(Address, Value, Width, 0);
 	return (AE_OK);
 }
 
 ACPI_STATUS
-AcpiOsWriteMemory(ACPI_PHYSICAL_ADDRESS Address,
-		UINT64 Value, UINT32 Width)
+AcpiOsWriteMemory(ACPI_PHYSICAL_ADDRESS Address, UINT64 Value, UINT32 Width)
 {
 	osl_rw_memory(Address, &Value, Width, 1);
 	return (AE_OK);
@@ -948,7 +948,7 @@ AcpiOsWriteMemory(ACPI_PHYSICAL_ADDRESS Address,
 
 ACPI_STATUS
 AcpiOsReadPciConfiguration(ACPI_PCI_ID *PciId, UINT32 Reg,
-		UINT64 *Value, UINT32 Width)
+    UINT64 *Value, UINT32 Width)
 {
 
 	switch (Width) {
@@ -980,7 +980,7 @@ int acpica_write_pci_config_ok = 1;
 
 ACPI_STATUS
 AcpiOsWritePciConfiguration(ACPI_PCI_ID *PciId, UINT32 Reg,
-		UINT64 Value, UINT32 Width)
+    UINT64 Value, UINT32 Width)
 {
 
 	if (!acpica_write_pci_config_ok) {
@@ -1034,7 +1034,7 @@ AcpiOsWritePciConfiguration(ACPI_PCI_ID *PciId, UINT32 Reg,
  */
 void
 AcpiOsDerivePciId(ACPI_HANDLE rhandle, ACPI_HANDLE chandle,
-		ACPI_PCI_ID **PciId)
+    ACPI_PCI_ID **PciId)
 {
 	ACPI_HANDLE handle;
 	dev_info_t *dip;

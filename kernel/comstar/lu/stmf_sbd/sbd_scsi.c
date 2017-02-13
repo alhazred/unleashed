@@ -130,7 +130,7 @@ static void sbd_handle_write_same_xfer_completion(struct scsi_task *task,
 
 void
 sbd_do_read_xfer(struct scsi_task *task, sbd_cmd_t *scmd,
-					struct stmf_data_buf *dbuf)
+    struct stmf_data_buf *dbuf)
 {
 	sbd_lu_t *sl = (sbd_lu_t *)task->task_lu->lu_provider_private;
 	uint64_t laddr;
@@ -450,7 +450,7 @@ sbd_do_sgl_read_xfer(struct scsi_task *task, sbd_cmd_t *scmd, int first_xfer)
 
 void
 sbd_handle_read_xfer_completion(struct scsi_task *task, sbd_cmd_t *scmd,
-				struct stmf_data_buf *dbuf)
+    struct stmf_data_buf *dbuf)
 {
 	if (dbuf->db_xfer_status != STMF_SUCCESS) {
 		stmf_abort(STMF_QUEUE_TASK_ABORT, task,
@@ -503,7 +503,7 @@ sbd_handle_read_xfer_completion(struct scsi_task *task, sbd_cmd_t *scmd,
  */
 void
 sbd_handle_sgl_read_xfer_completion(struct scsi_task *task, sbd_cmd_t *scmd,
-				struct stmf_data_buf *dbuf)
+    struct stmf_data_buf *dbuf)
 {
 	sbd_lu_t *sl = (sbd_lu_t *)task->task_lu->lu_provider_private;
 	stmf_status_t xfer_status;
@@ -592,7 +592,7 @@ sbd_handle_sgl_read_xfer_completion(struct scsi_task *task, sbd_cmd_t *scmd,
 
 void
 sbd_handle_sgl_write_xfer_completion(struct scsi_task *task, sbd_cmd_t *scmd,
-				struct stmf_data_buf *dbuf)
+    struct stmf_data_buf *dbuf)
 {
 	sbd_zvol_io_t *zvio = dbuf->db_lu_private;
 	sbd_lu_t *sl = (sbd_lu_t *)task->task_lu->lu_provider_private;
@@ -1641,7 +1641,7 @@ sbd_handle_short_read_transfers(scsi_task_t *task, stmf_data_buf_t *dbuf,
 
 void
 sbd_handle_short_read_xfer_completion(struct scsi_task *task, sbd_cmd_t *scmd,
-				struct stmf_data_buf *dbuf)
+    struct stmf_data_buf *dbuf)
 {
 	if (dbuf->db_xfer_status != STMF_SUCCESS) {
 		stmf_abort(STMF_QUEUE_TASK_ABORT, task,
@@ -2189,7 +2189,8 @@ sbd_handle_identifying_info(struct scsi_task *task,
  *       and returns the length of the URL
  */
 uint16_t
-sbd_parse_mgmt_url(char **url_addr) {
+sbd_parse_mgmt_url(char **url_addr)
+{
 	uint16_t url_length = 0;
 	char *url;
 	url = *url_addr;
@@ -3685,8 +3686,8 @@ sbd_flush_data_cache(sbd_lu_t *sl, int fsync_done)
 over_fsync:
 	if (((sl->sl_data_vtype == VCHR) || (sl->sl_data_vtype == VBLK)) &&
 	    ((sl->sl_flags & SL_NO_DATA_DKIOFLUSH) == 0)) {
-		ret = fop_ioctl(sl->sl_data_vp, DKIOCFLUSHWRITECACHE, NULL,
-		    FKIOCTL, kcred, &r, NULL);
+		ret = fop_ioctl(sl->sl_data_vp, DKIOCFLUSHWRITECACHE,
+		    (intptr_t)NULL, FKIOCTL, kcred, &r, NULL);
 		if ((ret == ENOTTY) || (ret == ENOTSUP)) {
 			mutex_enter(&sl->sl_lock);
 			sl->sl_flags |= SL_NO_DATA_DKIOFLUSH;

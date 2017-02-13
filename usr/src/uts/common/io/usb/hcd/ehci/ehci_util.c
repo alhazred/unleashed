@@ -835,7 +835,7 @@ skip_intr:
  */
 static int
 ehci_add_intrs(ehci_state_t	*ehcip,
-		int		intr_type)
+    int		intr_type)
 {
 	int	actual, avail, intr_size, count = 0;
 	int	i, flag, ret;
@@ -1076,7 +1076,7 @@ ehci_init_hardware(ehci_state_t	*ehcip)
 			 * always keep a dummy QH on the list.
 			 */
 			ehci_qh_t *dummy_async_qh =
-			    ehci_alloc_qh(ehcip, NULL, NULL);
+			    ehci_alloc_qh(ehcip, NULL, 0);
 
 			Set_QH(dummy_async_qh->qh_link_ptr,
 			    ((ehci_qh_cpu_to_iommu(ehcip, dummy_async_qh) &
@@ -1233,7 +1233,7 @@ ehci_init_check_status(ehci_state_t	*ehcip)
  */
 int
 ehci_init_ctlr(ehci_state_t	*ehcip,
-		int		init_type)
+    int		init_type)
 {
 	USB_DPRINTF_L4(PRINT_MASK_ATTA, ehcip->ehci_log_hdl, "ehci_init_ctlr:");
 
@@ -2976,7 +2976,8 @@ ehci_lattice_parent(uint_t node)
  * Based on the "real" array leaf node and interval, get the periodic node.
  */
 static uint_t
-ehci_find_periodic_node(uint_t leaf, int interval) {
+ehci_find_periodic_node(uint_t leaf, int interval)
+{
 	uint_t	lattice_leaf;
 	uint_t	height = ehci_lattice_height(interval);
 	uint_t	pnode;

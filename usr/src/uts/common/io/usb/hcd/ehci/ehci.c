@@ -202,7 +202,7 @@ _fini(void)
  */
 static int
 ehci_attach(dev_info_t		*dip,
-	ddi_attach_cmd_t	cmd)
+    ddi_attach_cmd_t	cmd)
 {
 	int			instance;
 	ehci_state_t		*ehcip = NULL;
@@ -389,7 +389,7 @@ ehci_attach(dev_info_t		*dip,
  */
 int
 ehci_detach(dev_info_t		*dip,
-	ddi_detach_cmd_t	cmd)
+    ddi_detach_cmd_t	cmd)
 {
 	ehci_state_t		*ehcip = ehci_obtain_state(dip);
 
@@ -530,9 +530,9 @@ ehci_quiesce(dev_info_t *dip)
 /* ARGSUSED */
 static int
 ehci_info(dev_info_t		*dip,
-	ddi_info_cmd_t		infocmd,
-	void			*arg,
-	void			**result)
+    ddi_info_cmd_t		infocmd,
+    void			*arg,
+    void			**result)
 {
 	dev_t			dev;
 	ehci_state_t		*ehcip;
@@ -589,9 +589,9 @@ ehci_get_dip(dev_t	dev)
 
 static int
 ehci_open(dev_t		*devp,
-	int		flags,
-	int		otyp,
-	cred_t		*credp)
+    int		flags,
+    int		otyp,
+    cred_t		*credp)
 {
 	dev_info_t	*dip = ehci_get_dip(*devp);
 
@@ -601,9 +601,9 @@ ehci_open(dev_t		*devp,
 
 static int
 ehci_close(dev_t	dev,
-	int		flag,
-	int		otyp,
-	cred_t		*credp)
+    int		flag,
+    int		otyp,
+    cred_t		*credp)
 {
 	dev_info_t	*dip = ehci_get_dip(dev);
 
@@ -613,11 +613,11 @@ ehci_close(dev_t	dev,
 
 static int
 ehci_ioctl(dev_t	dev,
-	int		cmd,
-	intptr_t	arg,
-	int		mode,
-	cred_t		*credp,
-	int		*rvalp)
+    int		cmd,
+    intptr_t	arg,
+    int		mode,
+    cred_t		*credp,
+    int		*rvalp)
 {
 	dev_info_t	*dip = ehci_get_dip(dev);
 
@@ -942,7 +942,7 @@ ehci_hcdi_pipe_open(
 	mutex_exit(&ph->p_mutex);
 
 	/* Allocate the host controller endpoint descriptor */
-	pp->pp_qh = ehci_alloc_qh(ehcip, ph, NULL);
+	pp->pp_qh = ehci_alloc_qh(ehcip, ph, 0);
 
 	/* Initialize the halting flag */
 	pp->pp_halt_state = EHCI_HALT_STATE_FREE;

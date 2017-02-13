@@ -2394,7 +2394,7 @@ hxge_dma_mem_free(p_hxge_dma_common_t dma_p)
 	}
 
 	dma_p->kaddrp = NULL;
-	dma_p->alength = NULL;
+	dma_p->alength = 0;
 }
 
 /*

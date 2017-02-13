@@ -4075,7 +4075,7 @@ mptsas_cache_frames_destructor(void *buf, void *cdrarg)
 		(void) ddi_dma_unbind_handle(p->m_dma_hdl);
 		(void) ddi_dma_mem_free(&p->m_acc_hdl);
 		ddi_dma_free_handle(&p->m_dma_hdl);
-		p->m_phys_addr = NULL;
+		p->m_phys_addr = (uintptr_t)NULL;
 		p->m_frames_addr = NULL;
 		p->m_dma_hdl = NULL;
 		p->m_acc_hdl = NULL;
@@ -5677,7 +5677,7 @@ mptsas_check_scsi_io_error(mptsas_t *mpt, pMpi2SCSIIOReply_t reply,
 
 static void
 mptsas_check_task_mgt(mptsas_t *mpt, pMpi2SCSIManagementReply_t reply,
-	mptsas_cmd_t *cmd)
+    mptsas_cmd_t *cmd)
 {
 	uint8_t		task_type;
 	uint16_t	ioc_status;
@@ -6025,7 +6025,7 @@ mptsas_free_devhdl(mptsas_t *mpt, uint16_t devhdl)
 	req.DevHandle = LE_16(devhdl);
 
 	ret = mptsas_do_passthru(mpt, (uint8_t *)&req, (uint8_t *)&rep, NULL,
-	    sizeof (req), sizeof (rep), NULL, 0, NULL, 0, 60, FKIOCTL);
+	    sizeof (req), sizeof (rep), 0, 0, NULL, 0, 60, FKIOCTL);
 	if (ret != 0) {
 		cmn_err(CE_WARN, "mptsas_free_devhdl: passthru SAS IO Unit "
 		    "Control error %d", ret);
@@ -6110,7 +6110,8 @@ mptsas_update_phymask(mptsas_t *mpt)
  * 7. Physical disks are removed because of RAID creation.
  */
 static void
-mptsas_handle_dr(void *args) {
+mptsas_handle_dr(void *args)
+{
 	mptsas_topo_change_list_t	*topo_node = NULL;
 	mptsas_topo_change_list_t	*save_node = NULL;
 	mptsas_t			*mpt;
@@ -8967,7 +8968,7 @@ mptsas_do_scsi_reset(mptsas_t *mpt, uint16_t devhdl)
 
 static int
 mptsas_scsi_reset_notify(struct scsi_address *ap, int flag,
-	void (*callback)(caddr_t), caddr_t arg)
+    void (*callback)(caddr_t), caddr_t arg)
 {
 	mptsas_t	*mpt = ADDR2MPT(ap);
 
@@ -10379,7 +10380,7 @@ mptsas_start_passthru(mptsas_t *mpt, mptsas_cmd_t *cmd)
 	 */
 	(void) ddi_dma_sync(dma_hdl, 0, 0, DDI_DMA_SYNC_FORDEV);
 	request_desc |= (SMID << 16) + desc_type;
-	cmd->cmd_rfm = NULL;
+	cmd->cmd_rfm = 0;
 	MPTSAS_START_CMD(mpt, request_desc);
 	if ((mptsas_check_dma_handle(dma_hdl) != DDI_SUCCESS) ||
 	    (mptsas_check_acc_handle(acc_hdl) != DDI_SUCCESS)) {
@@ -11219,7 +11220,7 @@ mptsas_start_diag(mptsas_t *mpt, mptsas_cmd_t *cmd)
 	    DDI_DMA_SYNC_FORDEV);
 	request_desc = (cmd->cmd_slot << 16) +
 	    MPI2_REQ_DESCRIPT_FLAGS_DEFAULT_TYPE;
-	cmd->cmd_rfm = NULL;
+	cmd->cmd_rfm = 0;
 	MPTSAS_START_CMD(mpt, request_desc);
 	if ((mptsas_check_dma_handle(mpt->m_dma_req_frame_hdl) !=
 	    DDI_SUCCESS) ||
@@ -13528,7 +13529,7 @@ mptsas_get_target_device_info(mptsas_t *mpt, uint32_t page_address,
 
 	if ((dev_info & (MPI2_SAS_DEVICE_INFO_SSP_TARGET |
 	    MPI2_SAS_DEVICE_INFO_SATA_DEVICE |
-	    MPI2_SAS_DEVICE_INFO_ATAPI_DEVICE)) == NULL) {
+	    MPI2_SAS_DEVICE_INFO_ATAPI_DEVICE)) == 0) {
 		rval = DEV_INFO_WRONG_DEVICE_TYPE;
 		return (rval);
 	}
@@ -16435,7 +16436,7 @@ mptsas_send_sep(mptsas_t *mpt, mptsas_target_t *ptgt,
 		req.SlotStatus = LE_32(*status);
 	}
 	ret = mptsas_do_passthru(mpt, (uint8_t *)&req, (uint8_t *)&rep, NULL,
-	    sizeof (req), sizeof (rep), NULL, 0, NULL, 0, 60, FKIOCTL);
+	    sizeof (req), sizeof (rep), 0, 0, NULL, 0, 60, FKIOCTL);
 	if (ret != 0) {
 		mptsas_log(mpt, CE_NOTE, "mptsas_send_sep: passthru SEP "
 		    "Processor Request message error %d", ret);

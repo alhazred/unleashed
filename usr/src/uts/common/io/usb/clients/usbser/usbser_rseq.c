@@ -34,7 +34,8 @@
 #include <sys/debug.h>
 #include <sys/ddi.h>
 #include <sys/sunddi.h>
-static long rseq_random();
+/*LINTED E_STATIC_UNUSED*/
+static long rseq_random() __GNU_UNUSED;
 #define	random	rseq_random
 #else
 #include <assert.h>
@@ -46,7 +47,7 @@ static long rseq_random();
 /*ARGSUSED*/
 static int
 rseq_do_common(rseq_t *rseq, int num, uintptr_t arg, int flags, int fail_err,
-		uintptr_t fail_num)
+    uintptr_t fail_num)
 {
 	int		i;
 	rseq_step_t	*s;
@@ -76,7 +77,7 @@ rseq_do_common(rseq_t *rseq, int num, uintptr_t arg, int flags, int fail_err,
 /*ARGSUSED*/
 static int
 rseq_undo_common(rseq_t *rseq, int num, uintptr_t arg, int flags, int fail_err,
-		uintptr_t fail_num)
+    uintptr_t fail_num)
 {
 	int		i;
 	rseq_step_t	*s;
@@ -119,8 +120,8 @@ rseq_undo(rseq_t *rseq, int num, uintptr_t arg, int flags)
 
 static int
 rseq_debug(rseq_t *rseq, int num, uintptr_t arg, int flags, int scenario,
-		uintptr_t sarg1, uintptr_t sarg2,
-		int (*func)(rseq_t *, int, uintptr_t, int, int, uintptr_t))
+    uintptr_t sarg1, uintptr_t sarg2,
+    int (*func)(rseq_t *, int, uintptr_t, int, int, uintptr_t))
 {
 	int	rnd, rval = RSEQ_OK, i;
 
@@ -154,7 +155,7 @@ rseq_debug(rseq_t *rseq, int num, uintptr_t arg, int flags, int scenario,
 
 int
 rseq_do_debug(rseq_t *rseq, int num, uintptr_t arg, int flags, int scenario,
-		uintptr_t sarg1, uintptr_t sarg2)
+    uintptr_t sarg1, uintptr_t sarg2)
 {
 	return (rseq_debug(rseq, num, arg, flags, scenario, sarg1, sarg2,
 	    rseq_do_common));
@@ -163,11 +164,15 @@ rseq_do_debug(rseq_t *rseq, int num, uintptr_t arg, int flags, int scenario,
 
 int
 rseq_undo_debug(rseq_t *rseq, int num, uintptr_t arg, int flags, int scenario,
-		uintptr_t sarg1, uintptr_t sarg2)
+    uintptr_t sarg1, uintptr_t sarg2)
 {
 	return (rseq_debug(rseq, num, arg, flags, scenario, sarg1, sarg2,
 	    rseq_undo_common));
 }
+
+#endif /* __lock_lint */
+
+#endif /* DEBUG */
 
 #ifdef _KERNEL
 static long
@@ -176,7 +181,3 @@ rseq_random()
 	return (ddi_get_lbolt());
 }
 #endif /* _KERNEL */
-
-#endif /* __lock_lint */
-
-#endif /* DEBUG */

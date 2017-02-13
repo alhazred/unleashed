@@ -650,7 +650,7 @@ iscsit_tgt_dereg_retry(void *arg)
 	 * If it fails we'll setup another timeout and try again later.
 	 */
 	if (taskq_dispatch(iscsit_global.global_dispatch_taskq,
-	    iscsit_tgt_dereg_task, tgt, DDI_NOSLEEP) == NULL) {
+	    iscsit_tgt_dereg_task, tgt, DDI_NOSLEEP) == (uintptr_t)NULL) {
 		/* Dispatch failed, try again later */
 		(void) timeout(iscsit_tgt_dereg_retry, tgt,
 		    drv_usectohz(TGT_DEREG_RETRY_SECONDS * 1000000));
@@ -1224,7 +1224,7 @@ iscsit_tgt_lookup_sess(iscsit_tgt_t *tgt, char *initiator_name,
 	}
 
 	LOCK_FOR_SESS_LOOKUP(tgt);
-	if (avl_numnodes(sess_avl) == NULL) {
+	if (avl_numnodes(sess_avl) == 0) {
 		UNLOCK_FOR_SESS_LOOKUP(tgt);
 		return (NULL);
 	}

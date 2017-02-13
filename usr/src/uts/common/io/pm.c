@@ -703,7 +703,7 @@ pm_timeout_idledown(void)
 
 static int
 pm_chpoll(dev_t dev, short events, int anyyet, short *reventsp,
-	struct pollhead **phpp)
+    struct pollhead **phpp)
 {
 	extern struct pollhead pm_pollhead;	/* kernel/os/sunpm.c */
 	int	clone;
@@ -1085,7 +1085,7 @@ pm_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *cr, int *rval_p)
 			if (pcip->inargs & INDATASTRING) {
 				ASSERT(!(pcip->inargs & INDATAINT));
 				ASSERT(pcip->deptype == DEP);
-				if (req32.data != NULL) {
+				if (req32.data != (uintptr_t)NULL) {
 					if (copyinstr((void *)(uintptr_t)
 					    req32.data, dep, deplen, NULL)) {
 						PMD(PMD_ERROR, ("ioctl: %s: "

@@ -23,8 +23,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/systm.h>
@@ -290,7 +288,7 @@ int nfs4_no_diskless_root_support = 1;
 
 int
 mount_root(char *name, char *path, int version, struct nfs_args *args,
-							int *vfsflags)
+    int *vfsflags)
 {
 	int rc;
 	int proto;
@@ -400,7 +398,7 @@ errout:
  */
 static int
 mountnfs(struct netbuf *sa, char *server,
-	char *path, fhandle_t *fh, int *proto)
+    char *path, fhandle_t *fh, int *proto)
 {
 	struct fhstatus fhs;
 	enum clnt_stat stat;
@@ -479,8 +477,7 @@ mountnfs(struct netbuf *sa, char *server,
  * returned from the server.
  */
 static int
-mountnfs3(struct netbuf *sa, char *server,
-	char *path, nfs_fh3 *fh, int *proto)
+mountnfs3(struct netbuf *sa, char *server, char *path, nfs_fh3 *fh, int *proto)
 {
 	struct mountres3 mountres3;
 	enum clnt_stat stat;
@@ -579,7 +576,7 @@ out:
 
 static int
 ping_prog(struct netbuf *call_addr, uint_t prog, uint_t vers, int proto,
-		enum clnt_stat *statp)
+    enum clnt_stat *statp)
 {
 	struct knetconfig *knconf;
 	enum clnt_stat stat;
@@ -816,7 +813,7 @@ done:
  */
 static int
 getfile(char *fileid,
-	char *server_name, struct netbuf *server_address, char *server_path)
+    char *server_name, struct netbuf *server_address, char *server_path)
 {
 	struct bp_getfile_arg arg;
 	struct bp_getfile_res res;
@@ -1860,7 +1857,7 @@ myxdr_fhandle3(XDR *xdrs, struct fhandle3 *objp)
  */
 static enum clnt_stat
 pmap_kgetport(struct knetconfig *knconf, struct netbuf *call_addr,
-	rpcprog_t prog, rpcvers_t vers, rpcprot_t prot)
+    rpcprog_t prog, rpcvers_t vers, rpcprot_t prot)
 {
 	ushort_t port;
 	int tries;
@@ -1913,7 +1910,7 @@ pmap_kgetport(struct knetconfig *knconf, struct netbuf *call_addr,
 		}
 
 		if (stat == RPC_SUCCESS) {
-			if ((ua != NULL) && (ua[0] != NULL)) {
+			if ((ua != NULL) && (ua[0] != '\0')) {
 				port = rpc_uaddr2port(AF_INET, ua);
 			} else {
 				/* Address unknown */
@@ -1942,9 +1939,9 @@ pmap_kgetport(struct knetconfig *knconf, struct netbuf *call_addr,
  */
 static enum clnt_stat
 pmap_rmt_call(struct knetconfig *knconf, struct netbuf *call_addr,
-	bool_t bcast, rpcprog_t progn, rpcvers_t versn, rpcproc_t procn,
-	xdrproc_t xdrargs, caddr_t argsp, xdrproc_t xdrres, caddr_t resp,
-	struct timeval tout, struct netbuf *resp_addr)
+    bool_t bcast, rpcprog_t progn, rpcvers_t versn, rpcproc_t procn,
+    xdrproc_t xdrargs, caddr_t argsp, xdrproc_t xdrres, caddr_t resp,
+    struct timeval tout, struct netbuf *resp_addr)
 {
 	CLIENT *cl;
 	enum clnt_stat stat;
@@ -2094,9 +2091,9 @@ myxdr_pmap(XDR *xdrs, struct pmap *regs)
  */
 static enum clnt_stat
 mycallrpc(struct knetconfig *knconf, struct netbuf *call_addr,
-	rpcprog_t prognum, rpcvers_t versnum, rpcproc_t procnum,
-	xdrproc_t inproc, char *in, xdrproc_t outproc, char *out,
-	int timeo, int retries)
+    rpcprog_t prognum, rpcvers_t versnum, rpcproc_t procnum,
+    xdrproc_t inproc, char *in, xdrproc_t outproc, char *out,
+    int timeo, int retries)
 {
 	CLIENT *cl;
 	struct timeval tv;
@@ -2436,7 +2433,7 @@ int nfs_rootopts = NFSMNT_NOCTO|NFSMNT_LLOCK|NFSMNT_INT;
 
 static int
 init_mountopts(struct nfs_args *args, int version, struct knetconfig **dl_cf,
-						int *vfsflags)
+    int *vfsflags)
 {
 	char servername[SYS_NMLN];
 	static int first = 0;

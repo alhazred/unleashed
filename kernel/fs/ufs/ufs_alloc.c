@@ -576,7 +576,7 @@ blkpref(struct inode *ip, daddr_t lbn, int indx, daddr32_t *bap)
 				return (fs->fs_fpg * cg + fs->fs_frag);
 			}
 		mutex_exit(&ufsvfsp->vfs_lock);
-		return (NULL);
+		return (0);
 	}
 	/*
 	 * One or more previous blocks have been laid out. If less
@@ -881,7 +881,7 @@ hashalloc(struct inode *ip, int cg, long pref, int size, ulong_t (*allocator)())
 		if (cg == fs->fs_ncg)
 			cg = 0;
 	}
-	return (NULL);
+	return (0);
 }
 
 /*
@@ -903,12 +903,12 @@ fragextend(struct inode *ip, int cg, long bprev, int osize, int nsize)
 	int i, j;
 
 	if (fs->fs_cs(fs, cg).cs_nffree < numfrags(fs, nsize - osize))
-		return (NULL);
+		return (0);
 	frags = numfrags(fs, nsize);
 	bbase = (int)fragnum(fs, bprev);
 	if (bbase > fragnum(fs, (bprev + frags - 1))) {
 		/* cannot extend across a block boundary */
-		return (NULL);
+		return (0);
 	}
 
 	bp = UFS_BREAD(ufsvfsp, ip->i_dev, (daddr_t)fsbtodb(fs, cgtod(fs, cg)),
@@ -916,7 +916,7 @@ fragextend(struct inode *ip, int cg, long bprev, int osize, int nsize)
 	cgp = bp->b_un.b_cg;
 	if (bp->b_flags & B_ERROR || !cg_chkmagic(cgp)) {
 		brelse(bp);
-		return (NULL);
+		return (0);
 	}
 
 	blksfree = cg_blksfree(cgp);
@@ -926,13 +926,13 @@ fragextend(struct inode *ip, int cg, long bprev, int osize, int nsize)
 		if (isclr(blksfree, bno + i)) {
 			mutex_exit(&ufsvfsp->vfs_lock);
 			brelse(bp);
-			return (NULL);
+			return (0);
 		}
 		if ((TRANS_ISCANCEL(ufsvfsp, ldbtob(fsbtodb(fs, bprev + i)),
 		    fs->fs_fsize))) {
 			mutex_exit(&ufsvfsp->vfs_lock);
 			brelse(bp);
-			return (NULL);
+			return (0);
 		}
 	}
 
@@ -1381,7 +1381,7 @@ gotit:
  */
 static daddr_t
 mapsearch(struct ufsvfs *ufsvfsp, struct cg *cgp, daddr_t bpref,
-	int allocsiz)
+    int allocsiz)
 {
 	struct fs *fs	= ufsvfsp->vfs_fs;
 	daddr_t bno, cfrag;

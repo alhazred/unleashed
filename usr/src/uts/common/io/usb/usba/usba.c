@@ -171,10 +171,10 @@ usba_owns_ia(dev_info_t *dip)
  */
 int
 usba_bus_ctl(dev_info_t	*dip,
-	dev_info_t		*rdip,
-	ddi_ctl_enum_t		op,
-	void			*arg,
-	void			*result)
+    dev_info_t		*rdip,
+    ddi_ctl_enum_t		op,
+    void			*arg,
+    void			*result)
 {
 	dev_info_t		*child_dip = (dev_info_t *)arg;
 	usba_device_t		*usba_device;
@@ -826,12 +826,12 @@ usba_clear_data_toggle(usba_device_t *usba_device)
  */
 int
 usba_create_child_devi(dev_info_t	*dip,
-		char			*node_name,
-		usba_hcdi_ops_t		*usba_hcdi_ops,
-		dev_info_t		*usb_root_hub_dip,
-		usb_port_status_t	port_status,
-		usba_device_t		*usba_device,
-		dev_info_t		**child_dip)
+    char			*node_name,
+    usba_hcdi_ops_t		*usba_hcdi_ops,
+    dev_info_t		*usb_root_hub_dip,
+    usb_port_status_t	port_status,
+    usba_device_t		*usba_device,
+    dev_info_t		**child_dip)
 {
 	int rval = USB_FAILURE;
 	int usba_device_allocated = 0;
@@ -989,7 +989,7 @@ usba_destroy_child_devi(dev_info_t *dip, uint_t flag)
  */
 void
 usba_init_list(usba_list_entry_t *element, usb_opaque_t private,
-	ddi_iblock_cookie_t	iblock_cookie)
+    ddi_iblock_cookie_t	iblock_cookie)
 {
 	mutex_init(&element->list_mutex, NULL, MUTEX_DRIVER,
 	    iblock_cookie);
@@ -1227,7 +1227,7 @@ usba_rm_first_pvt_from_list(usba_list_entry_t *head)
  */
 void
 usba_move_list(usba_list_entry_t *head, usba_list_entry_t *new,
-	ddi_iblock_cookie_t iblock_cookie)
+    ddi_iblock_cookie_t iblock_cookie)
 {
 	usba_init_list(new, NULL, iblock_cookie);
 	mutex_enter(&head->list_mutex);
@@ -2281,8 +2281,8 @@ usba_ready_device_node(dev_info_t *child_dip)
 /*ARGSUSED*/
 dev_info_t *
 usba_ready_interface_association_node(dev_info_t	*dip,
-					uint_t		first_if,
-					uint_t		*if_count)
+    uint_t		first_if,
+    uint_t		*if_count)
 {
 	dev_info_t		*child_dip = NULL;
 	usba_device_t		*child_ud = usba_get_usba_device(dip);
@@ -3082,7 +3082,7 @@ usba_check_for_leaks(usba_device_t *usba_device)
 #ifndef DEBUG
 			usb_pipe_close(ph_impl->usba_ph_data->p_dip,
 			    (usb_pipe_handle_t)ph_impl, USB_FLAGS_SLEEP,
-			    NULL, NULL);
+			    (void (*)())NULL, NULL);
 #endif
 		}
 	}

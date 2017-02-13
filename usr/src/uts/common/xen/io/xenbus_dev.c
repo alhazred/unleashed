@@ -286,7 +286,7 @@ xenbusdrv_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	    NULL);
 
 	error = ddi_create_minor_node(dip, "xenbus", S_IFCHR, unit,
-	    DDI_PSEUDO, NULL);
+	    DDI_PSEUDO, 0);
 	if (error != DDI_SUCCESS)
 		goto fail;
 

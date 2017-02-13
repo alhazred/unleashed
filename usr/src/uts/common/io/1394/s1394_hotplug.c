@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * s1394_hotplug.c
  *    1394 Services Layer Hotplug Routines
@@ -322,9 +320,6 @@ s1394_create_devinfo(s1394_hal_t *hal, s1394_node_t *node, uint32_t *unit_dir,
 		return (NULL);
 	}
 
-	for (j = 0; j < i; j++) {
-	}
-
 	/* GUID,ADDR */
 	reg[0] = node->node_guid_hi;
 	reg[1] = node->node_guid_lo;
@@ -395,7 +390,8 @@ s1394_devi_find(dev_info_t *pdip, char *name, char *caddr)
 		 * GGGGGGGGGGGGGGGG[,AAAAAAAAAAAA], where GGGGGGGGGGGGGGGG is
 		 * the address and AAAAAAAAAAAA is the optional unit address)
 		 */
-		if (regptr[2] != NULL || regptr[3] != NULL) {
+		if (regptr[2] != (uintptr_t)NULL ||
+		    regptr[3] != (uintptr_t)NULL) {
 			(void) sprintf(addr, "%08x%08x,%04x%08x", regptr[0],
 			    regptr[1], regptr[2], regptr[3]);
 		} else {
@@ -407,9 +403,6 @@ s1394_devi_find(dev_info_t *pdip, char *name, char *caddr)
 			ASSERT(strcmp(ddi_node_name(cdip), name) == 0);
 			break;
 		}
-	}
-
-	if (cdip == NULL) {
 	}
 
 	return (cdip);
@@ -964,9 +957,6 @@ s1394_remove_target_from_node(s1394_target_t *target)
 
 	/* target_list_rwlock should be held in write mode */
 	ASSERT(rw_read_locked(&target->on_hal->target_list_rwlock) == 0);
-
-	if (target->on_node == NULL) {
-	}
 
 	t = target->target_list;
 	t1 = NULL;

@@ -1686,7 +1686,7 @@ vhci_get_prop_lb_list(struct scsi_vhci *vhci, mp_iocdata_t *mpioc,
 	int		rval = 0;
 	uint64_t	*oid_list = (uint64_t *)(output_data);
 
-	oid_list[0] = NULL;
+	oid_list[0] = (uintptr_t)NULL;
 
 	if (ddi_copyout(output_data, (void *)mpioc->mp_obuf,
 	    (sizeof (uint64_t)), mode) != 0) {
@@ -1898,7 +1898,7 @@ vhci_mpapi_hold_pip(struct scsi_vhci *vhci, mpapi_item_list_t *ilist, int flags)
  */
 static mp_uscsi_cmd_t *
 vhci_init_uscsi_cmd(struct scsi_vhci *vhci,
-	mp_iocdata_t *mpioc, uint64_t *oid, mpapi_item_list_t **list)
+    mp_iocdata_t *mpioc, uint64_t *oid, mpapi_item_list_t **list)
 {
 	int			arq_enabled;
 	mp_uscsi_cmd_t		*mp_uscmdp;
@@ -2149,7 +2149,7 @@ vhci_disable_path(struct scsi_vhci *vhci, mp_iocdata_t *mpioc,
 /* ARGSUSED */
 static int
 vhci_mpapi_ioctl(dev_t dev, struct scsi_vhci *vhci, void *udata,
-	mp_iocdata_t *mpioc, int mode, cred_t *credp)
+    mp_iocdata_t *mpioc, int mode, cred_t *credp)
 {
 	int		rval = 0;
 	uint64_t	oid;

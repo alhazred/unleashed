@@ -417,7 +417,7 @@ myri10ge_pull_jpool(struct myri10ge_slice_state *ss)
 	for (i = 0; i < MYRI10GE_MAX_CPUS; i++) {
 		/* take per-CPU free list */
 		putp = (void *)&jpool->cpu[i & MYRI10GE_MAX_CPU_MASK].head;
-		if (*putp == NULL)
+		if (*putp == (uintptr_t)NULL)
 			continue;
 		put = atomic_swap_ulong(putp, 0);
 		jfree = (struct myri10ge_jpool_entry *)put;
@@ -1209,7 +1209,7 @@ abort:
 
 int
 myri10ge_send_cmd(struct myri10ge_priv *mgp, uint32_t cmd,
-		myri10ge_cmd_t *data)
+    myri10ge_cmd_t *data)
 {
 	mcp_cmd_t *buf;
 	char buf_bytes[sizeof (*buf) + 8];
@@ -2917,7 +2917,7 @@ myri10ge_pullup(struct myri10ge_slice_state *ss, mblk_t *mp)
 		return (DDI_FAILURE);
 	}
 	MYRI10GE_ATOMIC_SLICE_STAT_INC(xmit_pullup);
-	mac_hcksum_set(mp, start, stuff, NULL, NULL, tx_offload_flags);
+	mac_hcksum_set(mp, start, stuff, 0, 0, tx_offload_flags);
 	if (tx_offload_flags & HW_LSO)
 		DB_LSOMSS(mp) = (uint16_t)mss;
 	lso_info_set(mp, mss, tx_offload_flags);
@@ -5004,7 +5004,6 @@ myri10ge_watchdog(void *arg)
 /*ARGSUSED*/
 static int
 myri10ge_get_coalesce(queue_t *q, mblk_t *mp, caddr_t cp, cred_t *credp)
-
 {
 	struct myri10ge_priv *mgp = (struct myri10ge_priv *)(void *)cp;
 	(void) mi_mpprintf(mp, "%d", mgp->intr_coal_delay);
@@ -5015,7 +5014,6 @@ myri10ge_get_coalesce(queue_t *q, mblk_t *mp, caddr_t cp, cred_t *credp)
 static int
 myri10ge_set_coalesce(queue_t *q, mblk_t *mp, char *value,
     caddr_t cp, cred_t *credp)
-
 {
 	struct myri10ge_priv *mgp = (struct myri10ge_priv *)(void *)cp;
 	char *end;
@@ -5035,7 +5033,6 @@ myri10ge_set_coalesce(queue_t *q, mblk_t *mp, char *value,
 /*ARGSUSED*/
 static int
 myri10ge_get_pauseparam(queue_t *q, mblk_t *mp, caddr_t cp, cred_t *credp)
-
 {
 	struct myri10ge_priv *mgp = (struct myri10ge_priv *)(void *)cp;
 	(void) mi_mpprintf(mp, "%d", mgp->pause);
@@ -5045,8 +5042,7 @@ myri10ge_get_pauseparam(queue_t *q, mblk_t *mp, caddr_t cp, cred_t *credp)
 /*ARGSUSED*/
 static int
 myri10ge_set_pauseparam(queue_t *q, mblk_t *mp, char *value,
-			caddr_t cp, cred_t *credp)
-
+    caddr_t cp, cred_t *credp)
 {
 	struct myri10ge_priv *mgp = (struct myri10ge_priv *)(void *)cp;
 	char *end;
@@ -5069,7 +5065,6 @@ myri10ge_set_pauseparam(queue_t *q, mblk_t *mp, char *value,
 /*ARGSUSED*/
 static int
 myri10ge_get_int(queue_t *q, mblk_t *mp, caddr_t cp, cred_t *credp)
-
 {
 	(void) mi_mpprintf(mp, "%d", *(int *)(void *)cp);
 	return (0);
@@ -5079,7 +5074,6 @@ myri10ge_get_int(queue_t *q, mblk_t *mp, caddr_t cp, cred_t *credp)
 static int
 myri10ge_set_int(queue_t *q, mblk_t *mp, char *value,
     caddr_t cp, cred_t *credp)
-
 {
 	char *end;
 	size_t new_value;

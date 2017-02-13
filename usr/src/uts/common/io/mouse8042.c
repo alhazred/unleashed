@@ -323,7 +323,7 @@ mouse8042_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	 *	internal node minor num == instance * 2 + 1
 	 */
 	rc = ddi_create_minor_node(dip, "mouse", S_IFCHR, instance * 2,
-	    DDI_NT_MOUSE, NULL);
+	    DDI_NT_MOUSE, 0);
 	if (rc != DDI_SUCCESS) {
 		goto fail_1;
 	}

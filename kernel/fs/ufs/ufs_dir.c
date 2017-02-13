@@ -1193,7 +1193,7 @@ ufs_dircheckforname(
 		break;
 	}
 	slotp->cached = 0;
-	caching = NULL;
+	caching = 0;
 	if (!noentry && tdp->i_size >= ufs_min_dir_cache) {
 		/*
 		 * if the directory caching disable time has expired

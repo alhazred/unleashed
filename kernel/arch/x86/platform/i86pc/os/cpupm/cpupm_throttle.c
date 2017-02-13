@@ -213,7 +213,7 @@ cpupm_throttle(cpuset_t set,  uint32_t throtl_lvl)
 		CPUSET_DEL(set, CPU->cpu_id);
 	}
 	if (!CPUSET_ISNULL(set)) {
-		xc_call((xc_arg_t)throtl_lvl, NULL, NULL,
+		xc_call((xc_arg_t)throtl_lvl, (uintptr_t)NULL, (uintptr_t)NULL,
 		    CPUSET2BV(set), (xc_func_t)cpupm_tstate_transition);
 	}
 	kpreempt_enable();

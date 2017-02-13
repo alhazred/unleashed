@@ -522,7 +522,7 @@ ibnex_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	 * power management of the phci and client
 	 */
 	if (ddi_prop_create(DDI_DEV_T_NONE, dip, DDI_PROP_CANSLEEP,
-	    "pm-want-child-notification?", NULL, NULL) != DDI_PROP_SUCCESS) {
+	    "pm-want-child-notification?", NULL, 0) != DDI_PROP_SUCCESS) {
 		IBTF_DPRINTF_L2("ibnex",
 		    "_attach: create pm-want-child-notification failed");
 		(void) ddi_remove_minor_node(dip, NULL);
@@ -3970,7 +3970,7 @@ ib_vhci_pi_uninit(dev_info_t *vdip, mdi_pathinfo_t *pip, int flag)
 /*ARGSUSED*/
 static int
 ib_vhci_pi_state_change(dev_info_t *vdip, mdi_pathinfo_t *pip,
-		mdi_pathinfo_state_t state, uint32_t arg1, int arg2)
+    mdi_pathinfo_state_t state, uint32_t arg1, int arg2)
 {
 	IBTF_DPRINTF_L4("ibnex",
 	    "\tpi_state_change: dip %p pip %p state %x", vdip, pip, state);

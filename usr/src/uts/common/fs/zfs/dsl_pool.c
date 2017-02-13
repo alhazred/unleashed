@@ -950,7 +950,7 @@ int
 dsl_pool_user_release(dsl_pool_t *dp, uint64_t dsobj, const char *tag,
     dmu_tx_t *tx)
 {
-	return (dsl_pool_user_hold_rele_impl(dp, dsobj, tag, NULL,
+	return (dsl_pool_user_hold_rele_impl(dp, dsobj, tag, (uintptr_t)NULL,
 	    tx, B_FALSE));
 }
 

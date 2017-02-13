@@ -1017,7 +1017,7 @@ hxge_classify_init_sw(p_hxge_t hxgep)
 	classify_ptr->tcam_size = TCAM_HXGE_TCAM_MAX_ENTRY;
 
 	alloc_size = sizeof (tcam_flow_spec_t) * classify_ptr->tcam_size;
-	classify_ptr->tcam_entries = KMEM_ZALLOC(alloc_size, NULL);
+	classify_ptr->tcam_entries = KMEM_ZALLOC(alloc_size, 0);
 	bzero(classify_ptr->class_usage, sizeof (classify_ptr->class_usage));
 
 	/* Start from the beginning of TCAM */
@@ -1044,7 +1044,7 @@ hxge_classify_exit_sw(p_hxge_t hxgep)
 		alloc_size = fsize * classify_ptr->tcam_size;
 		KMEM_FREE((void *) classify_ptr->tcam_entries, alloc_size);
 	}
-	hxgep->classifier.state = NULL;
+	hxgep->classifier.state = 0;
 
 	HXGE_DEBUG_MSG((hxgep, PFC_CTL, "<== hxge_classify_exit_sw"));
 

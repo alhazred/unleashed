@@ -299,7 +299,7 @@ e1000g_send(struct e1000g *Adapter, mblk_t *mp)
 			 * expect to bcopy into pre-allocated page-aligned
 			 * buffer
 			 */
-			new_mp = allocb(hdr_frag_len, NULL);
+			new_mp = allocb(hdr_frag_len, 0);
 			if (!new_mp)
 				return (B_FALSE);
 			bcopy(next_mp->b_rptr, new_mp->b_rptr, hdr_frag_len);

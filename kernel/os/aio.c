@@ -412,7 +412,7 @@ aionotify(void)
 
 static int
 timeval2reltime(struct timeval *timout, timestruc_t *rqtime,
-	timestruc_t **rqtp, int *blocking)
+    timestruc_t **rqtp, int *blocking)
 {
 #ifdef	_SYSCALL32_IMPL
 	struct timeval32 wait_time_32;
@@ -475,7 +475,7 @@ timeval2reltime(struct timeval *timout, timestruc_t *rqtime,
 
 static int
 timespec2reltime(timespec_t *timout, timestruc_t *rqtime,
-	timestruc_t **rqtp, int *blocking)
+    timestruc_t **rqtp, int *blocking)
 {
 #ifdef	_SYSCALL32_IMPL
 	timespec32_t wait_time_32;
@@ -1153,7 +1153,7 @@ aiostart(void)
 
 static int
 aio_req_assoc_port_rw(port_notify_t *pntfy, aiocb_t *cbp,
-	aio_req_t *reqp, int event)
+    aio_req_t *reqp, int event)
 {
 	port_kevent_t	*pkevp = NULL;
 	int		error;
@@ -1750,7 +1750,7 @@ alio_cleanup(aio_t *aiop, aiocb_t **cbp, int nent, int run_mode)
 			caddr32_t *cbp32;
 
 			cbp32 = (caddr32_t *)cbp;
-			if (cbp32[i] == NULL)
+			if (cbp32[i] == (uintptr_t)NULL)
 				continue;
 			if (run_mode == AIO_32) {
 				aiocb_32 = (aiocb32_t *)(uintptr_t)cbp32[i];

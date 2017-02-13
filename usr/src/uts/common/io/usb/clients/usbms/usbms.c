@@ -250,11 +250,10 @@ static uint16_t			usbms_buf_bytes = USBMS_BUF_BYTES;
 /*ARGSUSED*/
 static int
 usbms_open(queue_t			*q,
-	dev_t				*devp,
-	int				flag,
-	int				sflag,
-	cred_t				*credp)
-
+    dev_t				*devp,
+    int				flag,
+    int				sflag,
+    cred_t				*credp)
 {
 	register struct usbmousebuf	*mousebufp;
 	register struct ms_softc	*msd_soft;
@@ -304,15 +303,13 @@ usbms_open(queue_t			*q,
 	 * Allocate buffer and initialize data.
 	 */
 	msd_soft->ms_bufbytes = usbms_buf_bytes;
-	mousebufp = kmem_zalloc((uint_t)msd_soft->ms_bufbytes,
-				KM_SLEEP);
+	mousebufp = kmem_zalloc((uint_t)msd_soft->ms_bufbytes, KM_SLEEP);
 
 	/* Truncation  will happen */
 	mousebufp->mb_size = (uint16_t)((msd_soft->ms_bufbytes -
-				    sizeof (struct usbmousebuf)) /
-				    sizeof (struct usbmouseinfo));
+	    sizeof (struct usbmousebuf)) / sizeof (struct usbmouseinfo));
 	mousebufp->mb_info = (struct usbmouseinfo *)((char *)mousebufp +
-				    sizeof (struct usbmousebuf));
+	    sizeof (struct usbmousebuf));
 	usbmsp->usbms_buf = mousebufp;
 	msd_soft->ms_vuidaddr = VKEY_FIRST;
 	usbmsp->usbms_jittertimeout = JITTER_TIMEOUT;
@@ -351,32 +348,32 @@ usbms_open(queue_t			*q,
 
 	if (usbmsp->usbms_report_descr_handle != NULL) {
 		if (hidparser_get_usage_attribute(
-				usbmsp->usbms_report_descr_handle,
-				0,
-				HIDPARSER_ITEM_INPUT,
-				USBMS_USAGE_PAGE_BUTTON,
-				0,
-				HIDPARSER_ITEM_REPORT_COUNT,
-				(int32_t *)&usbmsp->usbms_num_buttons) ==
-				HIDPARSER_SUCCESS) {
+		    usbmsp->usbms_report_descr_handle,
+		    0,
+		    HIDPARSER_ITEM_INPUT,
+		    USBMS_USAGE_PAGE_BUTTON,
+		    0,
+		    HIDPARSER_ITEM_REPORT_COUNT,
+		    (int32_t *)&usbmsp->usbms_num_buttons) ==
+		    HIDPARSER_SUCCESS) {
 			if (usbmsp->usbms_num_buttons > USB_MS_MAX_BUTTON_NO)
 				usbmsp->usbms_num_buttons =
-					USB_MS_MAX_BUTTON_NO;
+				    USB_MS_MAX_BUTTON_NO;
 			USB_DPRINTF_L2(PRINT_MASK_ALL,
-				usbms_log_handle, "Num of buttons is : %d",
-				usbmsp->usbms_num_buttons);
+			    usbms_log_handle, "Num of buttons is : %d",
+			    usbmsp->usbms_num_buttons);
 		} else {
 			USB_DPRINTF_L3(PRINT_MASK_OPEN,
-				usbms_log_handle,
-				"hidparser_get_usage_attribute failed : "
-				"Set to default number of buttons(3).");
+			    usbms_log_handle,
+			    "hidparser_get_usage_attribute failed : "
+			    "Set to default number of buttons(3).");
 
 			usbmsp->usbms_num_buttons = USB_MS_DEFAULT_BUTTON_NO;
 		}
 	} else {
 		USB_DPRINTF_L1(PRINT_MASK_ALL,
-			usbms_log_handle, "Invalid HID "
-			"Descriptor Tree. Set to default value(3 buttons).");
+		    usbms_log_handle, "Invalid HID "
+		    "Descriptor Tree. Set to default value(3 buttons).");
 		usbmsp->usbms_num_buttons = USB_MS_DEFAULT_BUTTON_NO;
 	}
 
@@ -417,8 +414,8 @@ usbms_open(queue_t			*q,
 /*ARGSUSED*/
 static int
 usbms_close(queue_t			*q,
-	int 				flag,
-	cred_t 				*credp)
+    int 				flag,
+    cred_t 				*credp)
 {
 	usbms_state_t			*usbmsp = q->q_ptr;
 	register struct	ms_softc	*ms = &usbmsp->usbms_softc;
@@ -621,9 +618,9 @@ usbms_rserv(queue_t		*q)
  */
 static void
 usbms_rserv_vuid_event_wheel(queue_t		*q,
-			struct usbmouseinfo	*mi,
-			mblk_t			**bpaddr,
-			ushort_t 		id)
+    struct usbmouseinfo	*mi,
+    mblk_t		**bpaddr,
+    ushort_t 		id)
 {
 	Firm_event *fep;
 	mblk_t *tmp;
@@ -641,7 +638,7 @@ usbms_rserv_vuid_event_wheel(queue_t		*q,
 			fep->id = vuid_id_addr(vuid_first(VUID_WHEEL)) |
 			    vuid_id_offset(id);
 			fep->pair_type = FE_PAIR_NONE;
-			fep->pair = NULL;
+			fep->pair = 0;
 			fep->value = mi->mi_z;
 			fep->time = mi->mi_time;
 			*bpaddr = tmp;
@@ -671,9 +668,9 @@ usbms_rserv_vuid_event_wheel(queue_t		*q,
  *	Process a VUID button event
  */
 static void
-usbms_rserv_vuid_button(queue_t			*q,
-			struct usbmouseinfo	*mi,
-			mblk_t			**bpaddr)
+usbms_rserv_vuid_button(queue_t	*q,
+    struct usbmouseinfo	*mi,
+    mblk_t		**bpaddr)
 {
 	usbms_state_t		*usbmsp = q->q_ptr;
 	struct ms_softc	*ms;
@@ -782,9 +779,9 @@ usbms_rserv_vuid_button(queue_t			*q,
  *	Process a VUID y-event
  */
 static void
-usbms_rserv_vuid_event_y(register queue_t		*q,
-			register struct usbmouseinfo	*mi,
-			mblk_t				**bpaddr)
+usbms_rserv_vuid_event_y(register queue_t	*q,
+    register struct usbmouseinfo	*mi,
+    mblk_t				**bpaddr)
 {
 	usbms_state_t			*usbmsp = q->q_ptr;
 	register struct ms_softc	*ms;
@@ -873,9 +870,9 @@ usbms_rserv_vuid_event_y(register queue_t		*q,
  *	Process a VUID x-event
  */
 static void
-usbms_rserv_vuid_event_x(register queue_t		*q,
-			register struct usbmouseinfo	*mi,
-			mblk_t				**bpaddr)
+usbms_rserv_vuid_event_x(register queue_t	*q,
+    register struct usbmouseinfo	*mi,
+    mblk_t				**bpaddr)
 {
 	usbms_state_t			*usbmsp = q->q_ptr;
 	register struct ms_softc	*ms;
@@ -978,8 +975,8 @@ usbms_resched(void 	* usbmsp)
  *	Module below : hid, module above : consms
  */
 static int
-usbms_wput(queue_t		*q,
-	mblk_t			*mp)
+usbms_wput(queue_t	*q,
+    mblk_t		*mp)
 {
 	USB_DPRINTF_L3(PRINT_MASK_ALL, usbms_log_handle,
 	    "usbms_wput entering");
@@ -1021,8 +1018,8 @@ usbms_wput(queue_t		*q,
  *	Process ioctls we recognize and own.  Otherwise, NAK.
  */
 static void
-usbms_ioctl(register queue_t		*q,
-		register mblk_t		*mp)
+usbms_ioctl(register queue_t	*q,
+    register mblk_t		*mp)
 {
 	usbms_state_t *usbmsp = (usbms_state_t *)q->q_ptr;
 	register struct ms_softc 	*ms;
@@ -1330,8 +1327,8 @@ allocfailure:
  * VUIDGWHEELSTATE, VUIDSWHEELSTATE & MSIOSRESOLUTION.
  */
 static void
-usbms_miocdata(register 	queue_t *q,
-		register 	mblk_t  *mp)
+usbms_miocdata(register queue_t *q,
+    register 	mblk_t  *mp)
 {
 	struct copyresp *copyresp;
 	struct iocblk *iocbp;
@@ -1484,8 +1481,8 @@ usbms_reioctl(void	* usbms_addr)
  *	values.
  */
 static int
-usbms_getparms(register Ms_parms	*data,
-		usbms_state_t		*usbmsp)
+usbms_getparms(register Ms_parms *data,
+    usbms_state_t		*usbmsp)
 {
 	data->jitter_thresh = usbmsp->usbms_jitter_thresh;
 	data->speed_law = usbmsp->usbms_speedlaw;
@@ -1502,8 +1499,8 @@ usbms_getparms(register Ms_parms	*data,
  *	values.
  */
 static int
-usbms_setparms(register Ms_parms	*data,
-		usbms_state_t		*usbmsp)
+usbms_setparms(register Ms_parms *data,
+    usbms_state_t		*usbmsp)
 {
 	usbmsp->usbms_jitter_thresh = data->jitter_thresh;
 	usbmsp->usbms_speedlaw = data->speed_law;
@@ -1545,8 +1542,8 @@ usbms_flush(usbms_state_t		*usbmsp)
  *	Put procedure for input from driver end of stream (read queue).
  */
 static void
-usbms_rput(queue_t		*q,
-		mblk_t		*mp)
+usbms_rput(queue_t	*q,
+    mblk_t		*mp)
 {
 	usbms_state_t *usbmsp = q->q_ptr;
 	mblk_t	*tmp_mp;
@@ -1645,8 +1642,8 @@ usbms_rput(queue_t		*q,
  *	we don't understand the command, free message.
  */
 static void
-usbms_mctl_receive(register queue_t		*q,
-			register mblk_t		*mp)
+usbms_mctl_receive(register queue_t	*q,
+    register mblk_t		*mp)
 {
 	usbms_state_t *usbmsd = (usbms_state_t *)q->q_ptr;
 	struct iocblk				*iocp;
@@ -1703,8 +1700,8 @@ usbms_mctl_receive(register queue_t		*q,
  *	Watch out for overflow!
  */
 static void
-usbms_input(usbms_state_t		*usbmsp,
-		mblk_t			*mp)
+usbms_input(usbms_state_t	*usbmsp,
+    mblk_t			*mp)
 {
 	register struct usbmousebuf	*b;
 	register struct usbmouseinfo	*mi;
@@ -2024,11 +2021,11 @@ usbms_check_for_wheels(usbms_state_t *usbmsp)
  */
 static int
 usbms_make_copyreq(mblk_t 	*mp,
-		    uint_t 	pvtsize,
-		    uint_t 	state,
-		    uint_t 	reqsize,
-		    uint_t 	contsize,
-		    uint_t 	copytype)
+    uint_t 	pvtsize,
+    uint_t 	state,
+    uint_t 	reqsize,
+    uint_t 	contsize,
+    uint_t 	copytype)
 {
 
 	struct copyreq		*cq;
@@ -2126,8 +2123,8 @@ usbms_service_wheel_info(register queue_t *q, register mblk_t	*datap)
 
 static int
 usbms_service_wheel_state(register queue_t	*q,
-			    register mblk_t	*datap,
-			    register uint_t	cmd)
+    register mblk_t	*datap,
+    register uint_t	cmd)
 {
 
 	wheel_state	*ws;
@@ -2174,7 +2171,7 @@ usbms_service_wheel_state(register queue_t	*q,
  */
 static int
 usbms_get_screen_parms(register queue_t	*q,
-			    register mblk_t	*datap)
+    register mblk_t	*datap)
 {
 
 	usbms_state_t	*usbmsp = (usbms_state_t *)q->q_ptr;
@@ -2222,8 +2219,8 @@ usbms_setup_abs_mouse_event()
 		fep = (Firm_event *)mb->b_wptr;
 		fep->id = MOUSE_TYPE_ABSOLUTE;
 		fep->pair_type = FE_PAIR_NONE;
-		fep->pair = NULL;
-		fep->value = NULL;
+		fep->pair = 0;
+		fep->value = 0;
 		mb->b_wptr += sizeof (Firm_event);
 	} else {
 		USB_DPRINTF_L3(PRINT_MASK_ALL, usbms_log_handle,

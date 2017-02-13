@@ -1,6 +1,7 @@
 /*
  * Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ * Copyright 2016 PALO, Richard.
  */
 
 /*
@@ -509,6 +510,16 @@ ath_desc_alloc(dev_info_t *devinfo, ath_t *asc)
 	return (DDI_SUCCESS);
 }
 
+/*
+ * declare ath_print* as possibly unused for non-DEBUG builds
+ */
+static void
+ath_printrxbuf(struct ath_buf *bf, int32_t done) __GNU_UNUSED;
+
+static void
+ath_printtxbuf(struct ath_buf *bf, int done) __GNU_UNUSED;
+
+
 static void
 ath_printrxbuf(struct ath_buf *bf, int32_t done)
 {
@@ -549,7 +560,7 @@ ath_rx_handler(ath_t *asc)
 			mutex_exit(&asc->asc_rxbuflock);
 			break;
 		}
-		ASSERT(bf->bf_dma.cookie.dmac_address != NULL);
+		ASSERT(bf->bf_dma.cookie.dmac_address != (uintptr_t)NULL);
 		ds = bf->bf_desc;
 		if (ds->ds_link == bf->bf_daddr) {
 			/*

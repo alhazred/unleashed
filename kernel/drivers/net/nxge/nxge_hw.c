@@ -347,7 +347,7 @@ nxge_check_xaui_xfp(p_nxge_t nxgep)
 	}
 
 	if (status != NXGE_OK) {
-		NXGE_FM_REPORT_ERROR(nxgep, portn, NULL,
+		NXGE_FM_REPORT_ERROR(nxgep, portn, 0,
 		    NXGE_FM_EREPORT_XAUI_ERR);
 		if (DDI_FM_EREPORT_CAP(nxgep->fm_capabilities)) {
 			NXGE_ERROR_MSG((nxgep, NXGE_ERR_CTL,
@@ -651,7 +651,7 @@ nxge_hw_ioctl(p_nxge_t nxgep, queue_t *wq, mblk_t *mp, struct iocblk *iocp)
 /* ARGSUSED */
 void
 nxge_loopback_ioctl(p_nxge_t nxgep, queue_t *wq, mblk_t *mp,
-	struct iocblk *iocp)
+    struct iocblk *iocp)
 {
 	p_lb_property_t lb_props;
 
@@ -874,7 +874,7 @@ nxge_loopback_ioctl(p_nxge_t nxgep, queue_t *wq, mblk_t *mp,
 /* ARGSUSED */
 void
 nxge_rxdma_channel_put64(nxge_os_acc_handle_t handle, void *reg_addrp,
-	uint32_t reg_base, uint16_t channel, uint64_t reg_data)
+    uint32_t reg_base, uint16_t channel, uint64_t reg_data)
 {
 	uint64_t reg_offset;
 
@@ -895,7 +895,7 @@ nxge_rxdma_channel_put64(nxge_os_acc_handle_t handle, void *reg_addrp,
 /* ARGSUSED */
 uint64_t
 nxge_rxdma_channel_get64(nxge_os_acc_handle_t handle, void *reg_addrp,
-	uint32_t reg_base, uint16_t channel)
+    uint32_t reg_base, uint16_t channel)
 {
 	uint64_t reg_offset;
 
@@ -1242,7 +1242,7 @@ nxge_check_hw_state_exit:
 /*ARGSUSED*/
 static void
 nxge_rtrace_ioctl(p_nxge_t nxgep, queue_t *wq, mblk_t *mp,
-	struct iocblk *iocp)
+    struct iocblk *iocp)
 {
 	ssize_t size;
 	rtrace_t *rtp;

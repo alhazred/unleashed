@@ -117,7 +117,7 @@ fbt_invop(uintptr_t addr, uintptr_t *stack, uintptr_t rval)
 				dtrace_probe(fbt->fbtp_id, stack0, stack1,
 				    stack2, stack3, stack4);
 
-				CPU->cpu_dtrace_caller = NULL;
+				CPU->cpu_dtrace_caller = (uintptr_t)NULL;
 			} else {
 #ifdef __amd64
 				/*
@@ -134,7 +134,7 @@ fbt_invop(uintptr_t addr, uintptr_t *stack, uintptr_t rval)
 
 				dtrace_probe(fbt->fbtp_id, fbt->fbtp_roffset,
 				    rval, 0, 0, 0);
-				CPU->cpu_dtrace_caller = NULL;
+				CPU->cpu_dtrace_caller = (uintptr_t)NULL;
 			}
 
 			return (fbt->fbtp_rval);
@@ -183,7 +183,8 @@ fbt_provide_module(void *arg, struct modctl *ctl)
 	if (strcmp(modname, "kmdbmod") == 0)
 		return;
 
-	if (str == NULL || symhdr == NULL || symhdr->sh_addr == NULL) {
+	if (str == NULL || symhdr == NULL ||
+	    symhdr->sh_addr == (uintptr_t)NULL) {
 		/*
 		 * If this module doesn't (yet) have its string or symbol
 		 * table allocated, clear out.
@@ -731,7 +732,7 @@ fbt_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 	dtrace_invop_add(fbt_invop);
 
 	if (ddi_create_minor_node(devi, "fbt", S_IFCHR, 0,
-	    DDI_PSEUDO, NULL) == DDI_FAILURE ||
+	    DDI_PSEUDO, 0) == DDI_FAILURE ||
 	    dtrace_register("fbt", &fbt_attr, DTRACE_PRIV_KERNEL, NULL,
 	    &fbt_pops, NULL, &fbt_id) != 0) {
 		fbt_cleanup(devi);

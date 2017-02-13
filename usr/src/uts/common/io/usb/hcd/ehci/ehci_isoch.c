@@ -576,7 +576,7 @@ ehci_insert_itd_req(
 
 		itw->itw_itd_free_list = ehci_itd_iommu_to_cpu(ehcip,
 		    Get_ITD(new_itd->itd_link_ptr));
-		Set_ITD(new_itd->itd_link_ptr, NULL);
+		Set_ITD(new_itd->itd_link_ptr, 0);
 
 		bzero(buf, EHCI_ITD_BUFFER_LIST_SIZE * sizeof (uint32_t));
 
@@ -804,7 +804,7 @@ ehci_insert_sitd_req(
 
 		itw->itw_itd_free_list = ehci_itd_iommu_to_cpu(ehcip,
 		    Get_ITD(new_sitd->itd_link_ptr));
-		Set_ITD(new_sitd->itd_link_ptr, NULL);
+		Set_ITD(new_sitd->itd_link_ptr, 0);
 
 		/* Fill in the new sitd */
 		Set_ITD_BODY(new_sitd, EHCI_SITD_CTRL, ctrl);

@@ -549,7 +549,7 @@ mac_next_bind_cpu(cpupart_t *cpupart)
 
 	} while ((cp = cp->cpu_next_onln) != cp_start);
 
-	return (NULL);
+	return (0);
 }
 
 /* ARGSUSED */
@@ -2956,7 +2956,7 @@ mac_datapath_setup(mac_client_impl_t *mcip, flow_entry_t *flent,
 		if (rgroup != NULL) {
 			if (rgroup != default_rgroup &&
 			    MAC_GROUP_NO_CLIENT(rgroup) &&
-			    (rxhw || mcip->mci_share != NULL)) {
+			    (rxhw || mcip->mci_share != (uintptr_t)NULL)) {
 				MAC_RX_GRP_RESERVED(mip);
 				if (mip->mi_rx_group_type ==
 				    MAC_GROUP_TYPE_DYNAMIC) {
@@ -2982,7 +2982,7 @@ mac_datapath_setup(mac_client_impl_t *mcip, flow_entry_t *flent,
 		if (tgroup != NULL) {
 			if (tgroup != default_tgroup &&
 			    MAC_GROUP_NO_CLIENT(tgroup) &&
-			    (txhw || mcip->mci_share != NULL)) {
+			    (txhw || mcip->mci_share != (uintptr_t)NULL)) {
 				MAC_TX_GRP_RESERVED(mip);
 				if (mip->mi_tx_group_type ==
 				    MAC_GROUP_TYPE_DYNAMIC) {

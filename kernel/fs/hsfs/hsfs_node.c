@@ -20,6 +20,7 @@
  */
 /*
  * Copyright (c) 1990, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright 2016 PALO, Richard.
  */
 
 /*
@@ -1009,7 +1010,7 @@ hs_parsedir(
 			error = parse_sua((uchar_t *)dnp, dnlen,
 			    &name_change_flag, dirp, last_offset,
 			    hdp, fsp,
-			    (uchar_t *)NULL, NULL);
+			    (uchar_t *)NULL, 0);
 			if (error) {
 				if (hdp->sym_link) {
 					kmem_free(hdp->sym_link,
@@ -1468,8 +1469,6 @@ process_dirblock(
 	int 		did_fbrelse = 0;
 	char		uppercase_name[JOLIET_NAMELEN_MAX*3 + 1]; /* 331 */
 
-#define	PD_return(retval)	\
-	{ err = retval; goto do_ret; }		/* return after cleanup */
 #define	rel_offset(offset)	\
 	((offset) & MAXBOFFSET)			/* index into cur blk */
 #define	RESTORE_NM(tmp, orig)	\
@@ -1643,7 +1642,8 @@ process_dirblock(
 		if (strict_iso9660_ordering && !is_rrip &&
 		    !HSFS_HAVE_LOWER_CASE(fsp) && *nm < *dname) {
 			RESTORE_NM(rrip_tmp_name, nm);
-			PD_return(WENT_PAST)
+			err = WENT_PAST;
+			goto do_ret;
 		}
 
 		if (*nm != *dname || nmlen != dnamelen)
@@ -1672,23 +1672,27 @@ process_dirblock(
 				if (*vpp == NULL) {
 					*error = ENFILE;
 					RESTORE_NM(rrip_tmp_name, nm);
-					PD_return(FOUND_ENTRY)
+					err = FOUND_ENTRY;
+					goto do_ret;
 				}
 
 				dhp->hs_offset = *offset;
 				RESTORE_NM(rrip_tmp_name, nm);
-				PD_return(FOUND_ENTRY)
+				err = FOUND_ENTRY;
+				goto do_ret;
 			} else if (parsedir_res != EAGAIN) {
 				/* improper dir entry */
 				*error = parsedir_res;
 				RESTORE_NM(rrip_tmp_name, nm);
-				PD_return(FOUND_ENTRY)
+				err = FOUND_ENTRY;
+				goto do_ret;
 			}
 		} else if (strict_iso9660_ordering && !is_rrip &&
 		    !HSFS_HAVE_LOWER_CASE(fsp) && res < 0) {
 			/* name < dir entry */
 			RESTORE_NM(rrip_tmp_name, nm);
-			PD_return(WENT_PAST)
+			err = WENT_PAST;
+			goto do_ret;
 		}
 		/*
 		 * name > dir entry,
@@ -1698,8 +1702,7 @@ skip_rec:
 		*offset += hdlen;
 		RESTORE_NM(rrip_tmp_name, nm);
 	}
-	PD_return(HIT_END)
-
+	err = HIT_END;
 do_ret:
 	if (rrip_name_str)
 		kmem_free(rrip_name_str, rrip_name_size);
@@ -1708,7 +1711,6 @@ do_ret:
 	if (!did_fbrelse)
 		fbrelse(fbp, S_READ);
 	return (err);
-#undef PD_return
 #undef RESTORE_NM
 }
 

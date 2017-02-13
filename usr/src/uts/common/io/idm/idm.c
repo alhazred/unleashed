@@ -256,7 +256,7 @@ idm_ini_conn_destroy(idm_conn_t *ic)
 	mutex_exit(&idm.idm_global_mutex);
 
 	if (taskq_dispatch(idm.idm_global_taskq,
-	    &idm_ini_conn_destroy_task, ic, TQ_SLEEP) == NULL) {
+	    &idm_ini_conn_destroy_task, ic, TQ_SLEEP) == (uintptr_t)NULL) {
 		cmn_err(CE_WARN,
 		    "idm_ini_conn_destroy: Couldn't dispatch task");
 	}
@@ -293,7 +293,7 @@ idm_ini_conn_connect(idm_conn_t *ic)
 	idm_conn_hold(ic);
 
 	/* Kick state machine */
-	idm_conn_event(ic, CE_CONNECT_REQ, NULL);
+	idm_conn_event(ic, CE_CONNECT_REQ, (uintptr_t)NULL);
 
 	/* Wait for login flag */
 	mutex_enter(&ic->ic_state_mutex);
@@ -332,7 +332,7 @@ idm_ini_conn_connect(idm_conn_t *ic)
 void
 idm_ini_conn_disconnect(idm_conn_t *ic)
 {
-	idm_conn_event(ic, CE_TRANSPORT_FAIL, NULL);
+	idm_conn_event(ic, CE_TRANSPORT_FAIL, (uintptr_t)NULL);
 }
 
 /*
@@ -351,7 +351,8 @@ idm_ini_conn_disconnect_sync(idm_conn_t *ic)
 	mutex_enter(&ic->ic_state_mutex);
 	if ((ic->ic_state != CS_S9_INIT_ERROR) &&
 	    (ic->ic_state != CS_S11_COMPLETE)) {
-		idm_conn_event_locked(ic, CE_TRANSPORT_FAIL, NULL, CT_NONE);
+		idm_conn_event_locked(ic, CE_TRANSPORT_FAIL, (uintptr_t)NULL,
+		    CT_NONE);
 		while ((ic->ic_state != CS_S9_INIT_ERROR) &&
 		    (ic->ic_state != CS_S11_COMPLETE))
 			cv_wait(&ic->ic_state_cv, &ic->ic_state_mutex);
@@ -2180,7 +2181,8 @@ idm_refcnt_rele(idm_refcnt_t *refcnt)
 	if (refcnt->ir_refcnt == 0) {
 		if (refcnt->ir_waiting == REF_WAIT_ASYNC) {
 			if (taskq_dispatch(idm.idm_global_taskq,
-			    &idm_refcnt_unref_task, refcnt, TQ_SLEEP) == NULL) {
+			    &idm_refcnt_unref_task, refcnt, TQ_SLEEP)
+			    == (uintptr_t)NULL) {
 				cmn_err(CE_WARN,
 				    "idm_refcnt_rele: Couldn't dispatch task");
 			}
@@ -2208,7 +2210,8 @@ idm_refcnt_rele_and_destroy(idm_refcnt_t *refcnt, idm_refcnt_cb_t *cb_func)
 		refcnt->ir_cb = cb_func;
 		refcnt->ir_waiting = REF_WAIT_ASYNC;
 		if (taskq_dispatch(idm.idm_global_taskq,
-		    &idm_refcnt_unref_task, refcnt, TQ_SLEEP) == NULL) {
+		    &idm_refcnt_unref_task, refcnt, TQ_SLEEP)
+		    == (uintptr_t)NULL) {
 			cmn_err(CE_WARN,
 			    "idm_refcnt_rele: Couldn't dispatch task");
 		}
@@ -2241,7 +2244,8 @@ idm_refcnt_async_wait_ref(idm_refcnt_t *refcnt, idm_refcnt_cb_t *cb_func)
 	 */
 	if (refcnt->ir_refcnt == 0) {
 		if (taskq_dispatch(idm.idm_global_taskq,
-		    &idm_refcnt_unref_task, refcnt, TQ_SLEEP) == NULL) {
+		    &idm_refcnt_unref_task, refcnt, TQ_SLEEP)
+		    == (uintptr_t)NULL) {
 			cmn_err(CE_WARN,
 			    "idm_refcnt_async_wait_ref: "
 			    "Couldn't dispatch task");

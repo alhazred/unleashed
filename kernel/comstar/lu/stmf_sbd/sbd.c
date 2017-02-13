@@ -318,7 +318,7 @@ sbd_close(dev_t dev, int flag, int otype, cred_t *credp)
 /* ARGSUSED */
 static int
 stmf_sbd_ioctl(dev_t dev, int cmd, intptr_t data, int mode,
-	cred_t *credp, int *rval)
+    cred_t *credp, int *rval)
 {
 	stmf_iocdata_t		*iocd;
 	void			*ibuf	= NULL;
@@ -3502,7 +3502,7 @@ sbd_update_zfs_prop(sbd_lu_t *sl)
 		num = (*dp) & 0xF;
 		*ah_meta++ = (num < 10) ? (num + '0') : (num + ('a' - 10));
 	}
-	*ah_meta = NULL;
+	*ah_meta = '\0';
 	file = sbd_get_zvol_name(sl);
 	if (sbd_zvolset(file, (char *)ptr)) {
 		ret = SBD_META_CORRUPTED;

@@ -974,7 +974,7 @@ tl_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 		if (ddi_create_minor_node(devi,
 		    tl_transports[i].tr_name,
 		    S_IFCHR, tl_transports[i].tr_minor,
-		    DDI_PSEUDO, NULL) == DDI_FAILURE) {
+		    DDI_PSEUDO, 0) == DDI_FAILURE) {
 			ddi_remove_minor_node(devi, NULL);
 			return (DDI_FAILURE);
 		}

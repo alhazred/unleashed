@@ -287,7 +287,7 @@ __inet_pton(int af, char *inp, void *outp, int compat)
 			in6_addr_t v6addr_u;
 		} v6buf, *v6outp;
 		uint16_t	*dbl_col = NULL;
-		char lastbyte = NULL;
+		char lastbyte = '\0';
 
 		v6outp = (union v6buf_u *)outp;
 
@@ -335,7 +335,7 @@ __inet_pton(int af, char *inp, void *outp, int compat)
 			} else {
 				v6buf.v6words_u[i] = htons((uint16_t)byte);
 			}
-			if (*end == NULL || i == 7) {
+			if (*end == '\0' || i == 7) {
 				inp = end;
 				break;
 			}
@@ -351,7 +351,7 @@ __inet_pton(int af, char *inp, void *outp, int compat)
 					dbl_col = &v6buf.v6words_u[i];
 					if (i == 0)
 						inp++;
-				} else if (*inp == NULL || *inp == ' ' ||
+				} else if (*inp == '\0' || *inp == ' ' ||
 				    *inp == '\t') {
 					break;
 				} else {
@@ -364,12 +364,12 @@ __inet_pton(int af, char *inp, void *outp, int compat)
 				return (0);
 			}
 			inp++;
-			if (*inp == NULL || *inp == ' ' || *inp == '\t') {
+			if (*inp == '\0' || *inp == ' ' || *inp == '\t') {
 				break;
 			}
 			lastbyte = *inp;
 		}
-		if (*inp != NULL && *inp != ' ' && *inp != '\t') {
+		if (*inp != '\0' && *inp != ' ' && *inp != '\t') {
 			return (0);
 		}
 		/*

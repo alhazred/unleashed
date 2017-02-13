@@ -504,7 +504,7 @@ poll_common(pollfd_t *fds, nfds_t nfds, timespec_t *tsp, k_sigset_t *ksetp)
 			 * the special timeout case when nfds is 0 or it returns
 			 * failure directly).
 			 */
-			if (pcset[cacheindex].pcs_usradr == NULL) {
+			if (pcset[cacheindex].pcs_usradr == (uintptr_t)NULL) {
 				/*
 				 * found an unused entry. Use it to cache
 				 * this poll list.
@@ -2178,7 +2178,7 @@ pcacheset_cache_list(pollstate_t *ps, pollfd_t *fds, int *fdcntp, int which)
 			pcacheset_remove_list(ps, pollfdp, 0, i, which, 0);
 			kmem_free(newfdlist, ps->ps_nfds * sizeof (pollfd_t));
 			pcacheset[which].pcs_pollfd = NULL;
-			pcacheset[which].pcs_usradr = NULL;
+			pcacheset[which].pcs_usradr = (uintptr_t)NULL;
 			break;
 		}
 	}

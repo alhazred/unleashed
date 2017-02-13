@@ -826,7 +826,7 @@ rsm_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 	ASSERT(rnum == RSM_DRIVER_MINOR);
 
 	if (ddi_create_minor_node(devi, DRIVER_NAME, S_IFCHR,
-	    rnum, DDI_PSEUDO, NULL) == DDI_FAILURE) {
+	    rnum, DDI_PSEUDO, 0) == DDI_FAILURE) {
 		DBG_PRINTF((category, RSM_ERR,
 		    "rsm: rsm_attach - unable to allocate "
 		    "minor #\n"));
@@ -2420,7 +2420,6 @@ static void
 rsm_remap_local_importers(rsm_node_id_t src_nodeid,
     rsm_memseg_id_t ex_segid,
     ddi_umem_cookie_t cookie)
-
 {
 	rsmresource_t	*p = NULL;
 	rsmhash_table_t *rhash = &rsm_import_segs;
@@ -3646,7 +3645,6 @@ static void
 rsm_force_unload(rsm_node_id_t src_nodeid,
     rsm_memseg_id_t ex_segid,
     boolean_t disconnect_flag)
-
 {
 	rsmresource_t	*p = NULL;
 	rsmhash_table_t *rhash = &rsm_import_segs;
@@ -8287,7 +8285,7 @@ rsmmap_access(devmap_cookie_t dhp, void *pvt, offset_t offset, size_t len,
 
 static int
 rsmmap_dup(devmap_cookie_t dhp, void *oldpvt, devmap_cookie_t new_dhp,
-	void **newpvt)
+    void **newpvt)
 {
 	rsmseg_t	*seg = (rsmseg_t *)oldpvt;
 	rsmcookie_t	*p, *old;
@@ -8338,8 +8336,8 @@ rsmmap_dup(devmap_cookie_t dhp, void *oldpvt, devmap_cookie_t new_dhp,
 
 static void
 rsmmap_unmap(devmap_cookie_t dhp, void *pvtp, offset_t off, size_t len,
-	devmap_cookie_t new_dhp1, void **pvtp1,
-	devmap_cookie_t new_dhp2, void **pvtp2)
+    devmap_cookie_t new_dhp1, void **pvtp1,
+    devmap_cookie_t new_dhp2, void **pvtp2)
 {
 	/*
 	 * Remove pvtp structure from segment list.

@@ -1063,7 +1063,7 @@ ohci_polled_save_state(ohci_polled_t	*ohci_polledp)
 		/*
 		 * Reset the HCCA done head and ohci done head register.
 		 */
-		Set_HCCA(ohcip->ohci_hccap->HccaDoneHead, NULL);
+		Set_HCCA(ohcip->ohci_hccap->HccaDoneHead, 0);
 		Set_OpReg(hcr_done_head, (uint32_t)0x0);
 
 		/*
@@ -1362,7 +1362,7 @@ ohci_polled_restore_state(ohci_polled_t	*ohci_polledp)
 			td = next_td;
 		}
 		/* Reset the HCCA done head list to NULL */
-		Set_HCCA(ohcip->ohci_hccap->HccaDoneHead, NULL);
+		Set_HCCA(ohcip->ohci_hccap->HccaDoneHead, 0);
 
 		/*
 		 * Replace the hcr_done_head register field with the saved copy
@@ -1514,7 +1514,7 @@ ohci_polled_check_done_list(ohci_polled_t	*ohci_polledp)
 		}
 	} else {
 		/* Reset the done head to NULL */
-		Set_HCCA(ohcip->ohci_hccap->HccaDoneHead, NULL);
+		Set_HCCA(ohcip->ohci_hccap->HccaDoneHead, 0);
 	}
 
 	/* Sync ED and TD pool */
@@ -1996,7 +1996,7 @@ ohci_polled_insert_td_on_tw(
 		Set_TD(dummy->hctd_tw_next_td, ohci_td_cpu_to_iommu(ohcip, td));
 		tw->tw_hctd_tail = td;
 
-		ASSERT(Get_TD(td->hctd_tw_next_td) == NULL);
+		ASSERT(Get_TD(td->hctd_tw_next_td) == 0);
 	}
 }
 
@@ -2188,7 +2188,7 @@ ohci_polled_create_tw(
 	/* Get and Store 32bit ID */
 	tw->tw_id = OHCI_GET_ID((void *)tw);
 
-	ASSERT(tw->tw_id != NULL);
+	ASSERT(tw->tw_id != 0);
 
 	pipe_dir = ph->p_ep.bEndpointAddress & USB_EP_DIR_MASK;
 	tw->tw_direction = (pipe_dir == USB_EP_DIR_IN) ? HC_TD_IN : HC_TD_OUT;

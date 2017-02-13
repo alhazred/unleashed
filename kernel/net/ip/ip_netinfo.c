@@ -1092,7 +1092,7 @@ ip_routeto_impl(struct sockaddr *address, struct sockaddr *nexthop,
 	 */
 	if (ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)) {
 		ire_refrele(ire);
-		return (NULL);
+		return (0);
 	}
 
 	nexthop_ire = ire_nexthop(ire);

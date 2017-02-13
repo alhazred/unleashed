@@ -310,7 +310,7 @@ panicsys(const char *format, va_list alist, struct regs *rp, int on_panic_stack)
 		splx(ipltospl(CLOCK_LEVEL));
 		panic_quiesce_hw(pdp);
 		(void) FTRACE_STOP();
-		(void) callb_execute_class(CB_CL_PANIC, NULL);
+		(void) callb_execute_class(CB_CL_PANIC, 0);
 
 		if (log_intrq != NULL)
 			log_flushq(log_intrq);

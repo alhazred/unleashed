@@ -1007,7 +1007,7 @@ hermon_special_qp_alloc(hermon_state_t *state, hermon_qp_info_t *qpinfo,
 	qp->qp_wqinfo.qa_location = HERMON_QUEUE_LOCATION_NORMAL;
 
 	status = hermon_queue_alloc(state, &qp->qp_wqinfo, sleepflag);
-	if (status != NULL) {
+	if (status != 0) {
 		status = IBT_INSUFF_RESOURCE;
 		goto spec_qpalloc_fail5a;
 	}

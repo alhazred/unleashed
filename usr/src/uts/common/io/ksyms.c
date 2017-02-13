@@ -392,7 +392,7 @@ ksyms_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 {
 	if (cmd != DDI_ATTACH)
 		return (DDI_FAILURE);
-	if (ddi_create_minor_node(devi, "ksyms", S_IFCHR, 0, DDI_PSEUDO, NULL)
+	if (ddi_create_minor_node(devi, "ksyms", S_IFCHR, 0, DDI_PSEUDO, 0)
 	    == DDI_FAILURE) {
 		ddi_remove_minor_node(devi, NULL);
 		return (DDI_FAILURE);

@@ -1139,7 +1139,7 @@ st_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 		minor |= MTMINOR(instance);
 
 		if (ddi_create_minor_node(devi, name, S_IFCHR, minor,
-		    DDI_NT_TAPE, NULL) == DDI_SUCCESS) {
+		    DDI_NT_TAPE, 0) == DDI_SUCCESS) {
 			continue;
 		}
 
@@ -1663,7 +1663,7 @@ st_doattach(struct scsi_device *devp, int (*canwait)())
 	ASSERT(un->un_rqs->pkt_resid == 0);
 	devp->sd_sense =
 	    (struct scsi_extended_sense *)un->un_rqs_bp->b_un.b_addr;
-	ASSERT(geterror(un->un_rqs_bp) == NULL);
+	ASSERT(geterror(un->un_rqs_bp) == 0);
 
 	(void) scsi_setup_cdb((union scsi_cdb *)un->un_rqs->pkt_cdbp,
 	    SCMD_REQUEST_SENSE, 0, MAX_SENSE_LENGTH, 0);
@@ -10112,7 +10112,7 @@ reset_target:
  */
 static int
 st_handle_intr_busy(struct scsi_tape *un, struct buf *bp,
-	clock_t timeout_interval)
+    clock_t timeout_interval)
 {
 
 	int queued;
@@ -10387,8 +10387,8 @@ ret:
 
 static void
 st_update_error_stack(struct scsi_tape *un,
-			struct scsi_pkt *pkt,
-			struct scsi_arq_status *cmd)
+    struct scsi_pkt *pkt,
+    struct scsi_arq_status *cmd)
 {
 	struct mterror_entry_stack *err_entry_tmp;
 	uchar_t *cdbp = (uchar_t *)pkt->pkt_cdbp;
@@ -16359,7 +16359,7 @@ static const char *mode[] = {
 
 static void
 st_print_position(dev_info_t *dev, char *label, uint_t level,
-const char *comment, tapepos_t *pos)
+    const char *comment, tapepos_t *pos)
 {
 	ST_FUNC(dev, st_print_position);
 

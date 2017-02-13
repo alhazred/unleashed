@@ -468,8 +468,8 @@ usba_hcdi_destroy_stats(usba_hcdi_t *hcdi)
  */
 void
 usba_hcdi_cb(usba_pipe_handle_data_t *ph_data,
-	usb_opaque_t	req,
-	usb_cr_t	completion_reason)
+    usb_opaque_t	req,
+    usb_cr_t	completion_reason)
 {
 
 	usba_device_t		*usba_device = ph_data->p_usba_device;
@@ -550,7 +550,7 @@ usba_hcdi_cb(usba_pipe_handle_data_t *ph_data,
 		}
 		if (taskq_dispatch(usba_device->usb_shared_taskq[iface],
 		    hcdi_shared_cb_thread, req_wrp, TQ_NOSLEEP) ==
-		    NULL) {
+		    (uintptr_t)NULL) {
 			usba_req_exc_cb(req_wrp,
 			    USB_CR_NO_RESOURCES, USB_CB_ASYNC_REQ_FAILED);
 		}
@@ -954,7 +954,7 @@ usba_hcdi_get_req_private(usb_opaque_t req)
  */
 void
 usba_hcdi_set_req_private(usb_opaque_t req,
-			usb_opaque_t	hcd_private)
+    usb_opaque_t	hcd_private)
 {
 	usba_req_wrapper_t *wrp = USBA_REQ2WRP(req);
 

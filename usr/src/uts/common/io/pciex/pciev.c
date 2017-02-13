@@ -176,7 +176,7 @@ pcie_uncache_domain_info(pcie_bus_t *bus_p)
 
 	/* Clear the domain information */
 	if (domain_id) {
-		PCIE_DOMAIN_ID_SET(bus_p, NULL);
+		PCIE_DOMAIN_ID_SET(bus_p, 0);
 		PCIE_DOMAIN_ID_DECR_REF_COUNT(bus_p);
 	}
 

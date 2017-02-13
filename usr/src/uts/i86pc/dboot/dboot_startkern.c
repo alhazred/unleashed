@@ -735,7 +735,7 @@ init_mem_alloc(void)
 		bi->bi_modules = (native_ptr_t)modules;
 	} else {
 		bi->bi_module_cnt = 0;
-		bi->bi_modules = NULL;
+		bi->bi_modules = (native_ptr_t)NULL;
 	}
 	DBG(bi->bi_module_cnt);
 	DBG(bi->bi_modules);
@@ -873,7 +873,7 @@ check_images(void)
 		}
 
 		if (modules[i].bm_type == BMT_HASH ||
-		    modules[i].bm_hash == NULL) {
+		    modules[i].bm_hash == (uintptr_t)NULL) {
 			DBG_MSG("module has no hash; skipping check\n");
 			continue;
 		}
@@ -937,10 +937,10 @@ process_module(mb_module_t *mod)
 	modules[midx].bm_addr = mod->mod_start;
 	modules[midx].bm_size = mod->mod_end - mod->mod_start;
 	modules[midx].bm_name = mod->mod_name;
-	modules[midx].bm_hash = NULL;
+	modules[midx].bm_hash = (uintptr_t)NULL;
 	modules[midx].bm_type = BMT_FILE;
 
-	if (mod->mod_name == NULL) {
+	if (mod->mod_name == (uintptr_t)NULL) {
 		modules[midx].bm_name = (native_ptr_t)(uintptr_t)noname;
 		return;
 	}
@@ -1007,8 +1007,8 @@ fixup_modules(void)
 		return;
 	}
 
-	if (modules[0].bm_hash != NULL ||
-	    modules_used > 1 && modules[1].bm_hash != NULL) {
+	if (modules[0].bm_hash != (uintptr_t)NULL ||
+	    modules_used > 1 && modules[1].bm_hash != (uintptr_t)NULL) {
 		return;
 	}
 
@@ -1032,7 +1032,7 @@ assign_module_hashes(void)
 
 	for (i = 0; i < modules_used; i++) {
 		if (modules[i].bm_type == BMT_HASH ||
-		    modules[i].bm_hash != NULL) {
+		    modules[i].bm_hash != (uintptr_t)NULL) {
 			continue;
 		}
 

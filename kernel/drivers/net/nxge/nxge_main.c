@@ -2590,8 +2590,8 @@ nxge_free_rx_mem_pool(p_nxge_t nxgep)
 
 static nxge_status_t
 nxge_alloc_rx_buf_dma(p_nxge_t nxgep, uint16_t dma_channel,
-	p_nxge_dma_common_t *dmap,
-	size_t alloc_size, size_t block_size, uint32_t *num_chunks)
+    p_nxge_dma_common_t *dmap,
+    size_t alloc_size, size_t block_size, uint32_t *num_chunks)
 {
 	p_nxge_dma_common_t 	rx_dmap;
 	nxge_status_t		status = NXGE_OK;
@@ -3332,9 +3332,9 @@ nxge_free_tx_mem_pool(p_nxge_t nxgep)
 /*ARGSUSED*/
 static nxge_status_t
 nxge_dma_mem_alloc(p_nxge_t nxgep, dma_method_t method,
-	struct ddi_dma_attr *dma_attrp,
-	size_t length, ddi_device_acc_attr_t *acc_attr_p, uint_t xfer_flags,
-	p_nxge_dma_common_t dma_p)
+    struct ddi_dma_attr *dma_attrp,
+    size_t length, ddi_device_acc_attr_t *acc_attr_p, uint_t xfer_flags,
+    p_nxge_dma_common_t dma_p)
 {
 	caddr_t 		kaddrp;
 	int			ddi_status = DDI_SUCCESS;
@@ -3652,7 +3652,7 @@ nxge_dma_mem_free(p_nxge_dma_common_t dma_p)
 	}
 #endif
 	dma_p->kaddrp = NULL;
-	dma_p->alength = NULL;
+	dma_p->alength = 0;
 }
 
 static void
@@ -4136,7 +4136,7 @@ nxge_mmac_kstat_update(p_nxge_t nxgep, int slot, boolean_t factory)
  */
 static int
 nxge_altmac_set(p_nxge_t nxgep, uint8_t *maddr, int slot,
-	int rdctbl, boolean_t usetbl)
+    int rdctbl, boolean_t usetbl)
 {
 	uint8_t addrn;
 	uint8_t portn;
@@ -4201,7 +4201,7 @@ nxge_altmac_set(p_nxge_t nxgep, uint8_t *maddr, int slot,
  */
 int
 nxge_m_mmac_add_g(void *arg, const uint8_t *maddr, int rdctbl,
-	boolean_t usetbl)
+    boolean_t usetbl)
 {
 	p_nxge_t nxgep = arg;
 	int slot;

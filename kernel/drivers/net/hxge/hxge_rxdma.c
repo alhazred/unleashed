@@ -1900,7 +1900,7 @@ hxge_receive_packet(p_hxge_t hxgep, p_rx_rcr_ring_t rcr_p,
 		rdc_stats->ierrors++;
 		/* Update error stats */
 		rdc_stats->errlog.compl_err_type = error_type;
-		HXGE_FM_REPORT_ERROR(hxgep, NULL, HXGE_FM_EREPORT_RDMC_RCR_ERR);
+		HXGE_FM_REPORT_ERROR(hxgep, 0, HXGE_FM_EREPORT_RDMC_RCR_ERR);
 
 		if (error_type & RCR_CTRL_FIFO_DED) {
 			rdc_stats->ctrl_fifo_ecc_err++;
@@ -3535,7 +3535,7 @@ hxge_rxdma_handle_sys_errors(p_hxge_t hxgep)
 	if (stat.bits.rx_ctrl_fifo_ded) {
 		/* Global fatal error encountered */
 		statsp->ctrl_fifo_ded++;
-		HXGE_FM_REPORT_ERROR(hxgep, NULL,
+		HXGE_FM_REPORT_ERROR(hxgep, 0,
 		    HXGE_FM_EREPORT_RDMC_CTRL_FIFO_DED);
 		HXGE_ERROR_MSG((hxgep, HXGE_ERR_CTL,
 		    "==> hxge_rxdma_handle_sys_errors: "
@@ -3553,7 +3553,7 @@ hxge_rxdma_handle_sys_errors(p_hxge_t hxgep)
 	if (stat.bits.rx_data_fifo_ded) {
 		/* Global fatal error encountered */
 		statsp->data_fifo_ded++;
-		HXGE_FM_REPORT_ERROR(hxgep, NULL,
+		HXGE_FM_REPORT_ERROR(hxgep, 0,
 		    HXGE_FM_EREPORT_RDMC_DATA_FIFO_DED);
 		HXGE_ERROR_MSG((hxgep, HXGE_ERR_CTL,
 		    "==> hxge_rxdma_handle_sys_errors: "

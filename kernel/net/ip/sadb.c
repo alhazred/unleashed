@@ -2352,7 +2352,7 @@ sadb_purge_cb(isaf_t *head, ipsa_t *entry, void *cookie)
  */
 int
 sadb_purge_sa(mblk_t *mp, keysock_in_t *ksi, sadb_t *sp,
-	int *diagnostic, queue_t *pfkey_q)
+    int *diagnostic, queue_t *pfkey_q)
 {
 	struct sadb_purge_state ps;
 	int error = sadb_form_query(ksi, 0,
@@ -4722,7 +4722,7 @@ sadb_acquire(mblk_t *datamp, ip_xmit_attr_t *ixa, boolean_t need_ah,
 
 	ASSERT((pp != NULL) || (ap != NULL));
 
-	ASSERT(need_ah != NULL || need_esp != NULL);
+	ASSERT(need_ah != B_FALSE || need_esp != B_FALSE);
 
 	/* Assign sadb pointers */
 	if (need_esp) { /* ESP for AH+ESP */

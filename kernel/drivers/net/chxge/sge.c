@@ -30,8 +30,6 @@
  * Copyright (C) 2003-2005 Chelsio Communications.  All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/cmn_err.h>
@@ -301,7 +299,7 @@ uint32_t sge_cmdq_send_fail;
 
 int
 sge_data_out(pesge* sge, int qid, mblk_t *m0,
-			cmdQ_ce_t *cmp, int count, uint32_t flg)
+    cmdQ_ce_t *cmp, int count, uint32_t flg)
 {
 	struct cmdQ *Q = &sge->cmdQ[qid];
 	ddi_dma_handle_t dh = (ddi_dma_handle_t)sge->cmdQ[qid].cq_dh;
@@ -917,10 +915,12 @@ t1_sge_rx(pesge *sge, struct freelQ *Q, unsigned int len, unsigned int offload)
 			if (useit) {
 				if (sz == SGE_SM_BUF_SZ(adapter)) {
 					atomic_add(1,
-					&buffers_in_use[adapter->ch_sm_index]);
+					    &buffers_in_use
+					    [adapter->ch_sm_index]);
 				} else {
 					atomic_add(1,
-					&buffers_in_use[adapter->ch_big_index]);
+					    &buffers_in_use
+					    [adapter->ch_big_index]);
 				}
 			}
 			if (adapter->toe_rcv)
@@ -1185,7 +1185,7 @@ free_cmdQ_buffers(pesge *sge, struct cmdQ *Q, unsigned int credits_pend)
 				ce->ce_dh = NULL;	/* may not be needed */
 			}
 			skb = ce->ce_mp;
-			if (skb && ((ce->ce_flg & CH_ARP) == NULL)) {
+			if (skb && ((ce->ce_flg & CH_ARP) == 0)) {
 				freemsg(skb);
 			}
 			ce->ce_mp = NULL;

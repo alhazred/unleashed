@@ -949,7 +949,7 @@ str_sendsig(vnode_t *vp, int event, uchar_t band, int error)
  */
 static void
 dosendsig(proc_t *proc, int events, int sevent, k_siginfo_t *info,
-	uchar_t band, int error)
+    uchar_t band, int error)
 {
 	ASSERT(MUTEX_HELD(&proc->p_lock));
 
@@ -2349,7 +2349,7 @@ mux_rmvedge(stdata_t *upstp, int muxid, str_stack_t *ss)
  */
 int
 devflg_to_qflag(struct streamtab *stp, uint32_t devflag, uint32_t *qflagp,
-	uint32_t *sqtypep)
+    uint32_t *sqtypep)
 {
 	uint32_t qflag = 0;
 	uint32_t sqtype = 0;
@@ -4020,7 +4020,7 @@ esballoc_enqueue_mblk(mblk_t *mp)
 {
 
 	if (taskq_dispatch(system_taskq, (task_func_t *)esballoc_mblk_free, mp,
-	    TQ_NOSLEEP) == NULL) {
+	    TQ_NOSLEEP) == (uintptr_t)NULL) {
 		mblk_t *first_mp = mp;
 		/*
 		 * System is low on resources and can't perform a non-sleeping
@@ -8086,7 +8086,7 @@ strflushrq(vnode_t *vp, int flag)
 
 void
 strsetrputhooks(vnode_t *vp, uint_t flags,
-		msgfunc_t protofunc, msgfunc_t miscfunc)
+    msgfunc_t protofunc, msgfunc_t miscfunc)
 {
 	struct stdata *stp = vp->v_stream;
 
