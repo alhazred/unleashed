@@ -30,11 +30,7 @@ SUBDIRS = \
 	libprint \
 	libpapi-common \
 	libpapi-dynamic \
-	libpapi-lpd \
-	libipp-core \
-	libhttp-core \
-	libpapi-ipp \
-	libipp-listener
+	libpapi-lpd
 
 all :=                  TARGET = all
 clean :=                TARGET = clean
@@ -84,6 +80,3 @@ include $(SRC)/Makefile.msg.targ
 # Dependencies
 libpapi-dynamic:	libpapi-common
 libpapi-lpd:		libpapi-dynamic
-libipp-core:		libpapi-common
-libpapi-ipp:		libpapi-common libipp-core libhttp-core
-libipp-listener:	libpapi-dynamic libipp-core
