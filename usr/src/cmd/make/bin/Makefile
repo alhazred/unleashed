@@ -11,7 +11,7 @@
 
 # Copyright 2015, Richard Lowe.
 
-PROG=	make
+PROG=	dmake
 POFILE=	make.po
 OBJS=	ar.o		\
 	depvar.o	\
@@ -40,33 +40,18 @@ LDLIBS += ../lib/bsd/libbsd.a -lc -lumem
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
-ROOTLINKS = $(ROOTCCSBIN)/make $(ROOTXPG4BIN)/make $(ROOTBIN)/dmake $(ROOTCCSLIB)/svr4.make \
-	$(ROOTLIB)/svr4.make
-
 ROOTRULES = $(ROOTSHLIB)/make/make.rules $(ROOTSHLIB)/make/svr4.make.rules
 
 all:	$(PROG)
 
-install: all $(ROOTPROG) $(ROOTLINKS) $(ROOTRULES)
+install: all $(ROOTPROG) $(ROOTLIB)/svr4.make $(ROOTRULES)
 
 $(PROG):	$(OBJS)
 	$(LINK.cc) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-$(ROOTCCSBIN)/make:
-	-$(RM) $@; $(SYMLINK) ../../bin/make $@
-
-$(ROOTCCSLIB)/svr4.make:
-	-$(RM) $@; $(SYMLINK) ../../bin/make $@
-
 $(ROOTLIB)/svr4.make:
 	-$(RM) $@; $(SYMLINK) ../bin/make $@
-
-$(ROOTXPG4BIN)/make:
-	-$(RM) $@; $(SYMLINK) ../../bin/make $@
-
-$(ROOTBIN)/dmake:
-	-$(RM) $@; $(SYMLINK) ./make $@
 
 $(ROOTRULES) := FILEMODE = 0444
 
@@ -77,7 +62,6 @@ $(ROOTSHLIB)/make: FRC
 
 $(ROOTSHLIB)/make/%: %.file
 	$(INS.rename)
-
 
 clean:
 	$(RM) $(OBJS)

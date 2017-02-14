@@ -86,6 +86,7 @@ file path=usr/share/mk/target-flags.mk
 file path=usr/share/mk/warnings.mk
 file path=usr/share/mk/whats.mk
 file path=usr/share/mk/yacc.mk
+hardlink path=usr/bin/make target=bmake
 link path=usr/share/mk/bsd.dep.mk target=dep.mk
 link path=usr/share/mk/bsd.doc.mk target=doc.mk
 link path=usr/share/mk/bsd.init.mk target=init.mk

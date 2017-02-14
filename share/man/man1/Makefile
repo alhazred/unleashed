@@ -81,6 +81,7 @@ MAN = acctcom.1 \
       disown.1 \
       dispgid.1 \
       dispuid.1 \
+      dmake.1 \
       dos2unix.1 \
       download.1 \
       dpost.1 \
@@ -194,7 +195,6 @@ MAN = acctcom.1 \
       madv.so.1.1 \
       mail.1 \
       mailx.1 \
-      make.1 \
       man.1 \
       mandoc.1 \
       mcs.1 \
@@ -414,7 +414,6 @@ MLINKS+=	compress.1 zcat.1
 MLINKS+=	ed.1 red.1
 MLINKS+=	enable.1 disable.1
 MLINKS+=	encrypt.1 decrypt.1
-MLINKS+=	make.1 dmake.1
 MLINKS+=	eqn.1 checkeq.1
 MLINKS+=	eqn.1 neqn.1
 MLINKS+=	exec.1 eval.1
