@@ -32,7 +32,7 @@ changed.
     - readdir_r
     - getpwuid_r
     - getpwnam_r
- + bmake(1)
+ + bmake(1) provides make(1)
  + socket interfaces are now in libc. libsocket, libxnet and libnsl remain as
    filter libraries.
  + socket implementation was modified to be more reasonable by default, and it
