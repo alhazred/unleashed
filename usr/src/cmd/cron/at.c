@@ -803,7 +803,7 @@ list_jobs(int argc, char **argv, int qflag, int queue)
 	char buf_pwd[1024];
 	char job_file[PATH_MAX];
 
-	pwd = getpwuid_r(user, &pwds, buf_pwd, sizeof (buf_pwd));
+	getpwuid_r(user, &pwds, buf_pwd, sizeof (buf_pwd), &pwd);
 	if (pwd == NULL) {
 		atabort("Invalid user.\n");
 	}

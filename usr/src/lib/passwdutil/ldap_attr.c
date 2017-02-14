@@ -249,6 +249,7 @@ ldap_user_to_authenticate(char *user, pwu_repository_t *rep,
 	} else {
 		char pwd_buf[1024];
 		struct passwd pwr;
+		struct passwd *pwdp;
 
 		*privileged = 1;
 		/*
@@ -260,8 +261,9 @@ ldap_user_to_authenticate(char *user, pwu_repository_t *rep,
 		} else {
 			priviledged_uid = uid;
 		}
-		if (getpwuid_r(priviledged_uid, &pwr, pwd_buf,
-		    sizeof (pwd_buf)) != NULL) {
+		getpwuid_r(priviledged_uid, &pwr, pwd_buf,
+		    sizeof (pwd_buf), &pwdp);
+		if (pwdp) {
 			STRDUP_OR_ERR(*auth_user, pwr.pw_name, res);
 		} else {
 			/* hmm. can't find name of current user...??? */

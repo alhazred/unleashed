@@ -265,11 +265,13 @@ userprof(const char *username, const char *type, const char *id,
 	struct passwd	pwd;
 	call		call;
 	result		result;
+	struct passwd	*pwdp;
 
 	/*
 	 * Check if specified username is valid user
 	 */
-	if (getpwnam_r(username, &pwd, pwdb, sizeof (pwdb)) == NULL) {
+	getpwnam_r(username, &pwd, pwdb, sizeof (pwdb), &pwdp);
+	if (!pwdp) {
 		return (NULL);
 	}
 

@@ -434,9 +434,11 @@ getuname(uid_t uid, gid_t gid, char *p, size_t max, char *prefix,
 	HASH(hash_key, ix, UIDHASHSIZE);
 
 	if (uid != uidhash[ix].ht_key) {
+		struct passwd *result;
 		uidhash[ix].ht_key = uid;
 
-		if ((getpwuid_r(uid, &pw, pw_buf, GETPWUID_BUFF_LEN)) == NULL)
+		getpwuid_r(uid, &pw, pw_buf, GETPWUID_BUFF_LEN, &result);
+		if (!result)
 			l = snprintf(uidhash[ix].ht_value, USERNAMELEN,
 			    "%d", uid);
 		else

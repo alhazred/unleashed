@@ -2884,18 +2884,20 @@ ns_lookup_byname(const char *name, const char *lower_name, idmap_id *id)
 	char		*buf;
 	static size_t	pwdbufsiz = 0;
 	static size_t	grpbufsiz = 0;
+	int		ret;
 
 	switch (id->idtype) {
 	case IDMAP_UID:
 		if (pwdbufsiz == 0)
 			pwdbufsiz = sysconf(_SC_GETPW_R_SIZE_MAX);
 		buf = alloca(pwdbufsiz);
-		pwdp = getpwnam_r(name, &pwd, buf, pwdbufsiz);
-		if (pwdp == NULL && errno == 0 && lower_name != NULL &&
-		    name != lower_name && strcmp(name, lower_name) != 0)
-			pwdp = getpwnam_r(lower_name, &pwd, buf, pwdbufsiz);
+		ret = getpwnam_r(name, &pwd, buf, pwdbufsiz, &pwdp);
+		if (ret == 0 && pwdp == NULL && lower_name != NULL && name !=
+		    lower_name && strcmp(name, lower_name) != 0)
+			 ret = getpwnam_r(lower_name, &pwd, buf, pwdbufsiz,
+			     &pwdp);
 		if (pwdp == NULL) {
-			if (errno == 0)
+			if (ret == 0)
 				return (IDMAP_ERR_NOTFOUND);
 			else
 				return (IDMAP_ERR_INTERNAL);
@@ -2937,14 +2939,16 @@ ns_lookup_bypid(uid_t pid, int is_user, char **unixname)
 	char		*buf;
 	static size_t	pwdbufsiz = 0;
 	static size_t	grpbufsiz = 0;
+	int		ret;
+	struct passwd	*pwdp;
 
 	if (is_user) {
 		if (pwdbufsiz == 0)
 			pwdbufsiz = sysconf(_SC_GETPW_R_SIZE_MAX);
 		buf = alloca(pwdbufsiz);
-		errno = 0;
-		if (getpwuid_r(pid, &pwd, buf, pwdbufsiz) == NULL) {
-			if (errno == 0)
+		ret = getpwuid_r(pid, &pwd, buf, pwdbufsiz, &pwdp);
+		if (!pwdp) {
+			if (ret == 0)
 				return (IDMAP_ERR_NOTFOUND);
 			else
 				return (IDMAP_ERR_INTERNAL);

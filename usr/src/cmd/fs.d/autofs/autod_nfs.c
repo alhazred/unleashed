@@ -4125,8 +4125,8 @@ create_homedir(const char *src, const char *dst) {
 	dst_username = strrchr(dst, '/');
 	if (dst_username) {
 		dst_username++; /* Skip over slash */
-		pwd = getpwnam_r(dst_username, &pwds, buf_pwd,
-		    sizeof (buf_pwd));
+		getpwnam_r(dst_username, &pwds, buf_pwd, sizeof (buf_pwd),
+		    &pwd);
 		if (pwd == NULL) {
 			return (0);
 		}

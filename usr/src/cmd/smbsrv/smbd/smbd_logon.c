@@ -240,7 +240,9 @@ smbd_user_auth_logoff(uint32_t audit_sid)
 	if (IDMAP_ID_IS_EPHEMERAL(entry->sa_uid)) {
 		smb_autohome_remove(entry->sa_username);
 	} else {
-		if (getpwuid_r(entry->sa_uid, &pw, buf, sizeof (buf)) == NULL)
+		struct passwd *result;
+		getpwuid_r(entry->sa_uid, &pw, buf, sizeof (buf), &result);
+		if (!result)
 			return;
 
 		smb_autohome_remove(pw.pw_name);

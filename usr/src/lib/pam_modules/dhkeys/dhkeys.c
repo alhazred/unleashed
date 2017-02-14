@@ -204,6 +204,7 @@ establish_key(pam_handle_t *pamh, int flags, int debug, char *netname)
 	int	err;
 
 	struct passwd pw;	/* Needed to obtain uid */
+	struct passwd *pwp;
 	char	*scratch;
 	int	scratchlen;
 
@@ -228,7 +229,8 @@ establish_key(pam_handle_t *pamh, int flags, int debug, char *netname)
 	if ((scratch = malloc(scratchlen)) == NULL)
 		return (PAM_BUF_ERR);
 
-	if (getpwnam_r(user, &pw, scratch, scratchlen) == NULL) {
+	getpwnam_r(user, &pw, scratch, scratchlen, &pwp);
+	if (!pwp) {
 		result = PAM_USER_UNKNOWN;
 		goto out;
 	}

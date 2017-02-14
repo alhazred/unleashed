@@ -192,6 +192,7 @@ main(int argc, char **argv)
 	int idx = 0;
 #endif	/* DYNAMIC_SU */
 	int pw_change = PW_FALSE;
+	struct passwd *result;
 
 	(void) setlocale(LC_ALL, "");
 #if !defined(TEXT_DOMAIN)	/* Should be defined by cc -D */
@@ -284,7 +285,8 @@ main(int argc, char **argv)
 		exit(1);
 	if (pam_set_item(pamh, PAM_TTY, ttyn) != PAM_SUCCESS)
 		exit(1);
-	if (getpwuid_r(getuid(), &pwd, pwdbuf, sizeof (pwdbuf)) == NULL ||
+	getpwuid_r(getuid(), &pwd, pwdbuf, sizeof (pwdbuf), &result);
+	if (!result ||
 	    pam_set_item(pamh, PAM_AUSER, pwd.pw_name) != PAM_SUCCESS)
 		exit(1);
 #endif	/* DYNAMIC_SU */
@@ -318,8 +320,9 @@ main(int argc, char **argv)
 	(void) signal(SIGQUIT, SIG_IGN);
 	(void) signal(SIGINT, SIG_IGN);
 
-	/* call pam_authenticate() to authenticate the user through PAM */
-	if (getpwnam_r(nptr, &pwd, pwdbuf, sizeof (pwdbuf)) == NULL)
+	/* call pam authenticate() to authenticate the user through PAM */
+	getpwnam_r(nptr, &pwd, pwdbuf, sizeof (pwdbuf), &result);
+	if (!result)
 		retcode = PAM_USER_UNKNOWN;
 	else if ((flags = (getuid() != (uid_t)ROOT)) != 0) {
 		retcode = pam_authenticate(pamh, pam_flags);
@@ -381,7 +384,8 @@ main(int argc, char **argv)
 	(void) signal(SIGQUIT, SIG_DFL);
 	(void) signal(SIGINT, SIG_DFL);
 #else	/* !DYNAMIC_SU */
-	if ((getpwnam_r(nptr, &pwd, pwdbuf, sizeof (pwdbuf)) == NULL) ||
+	getpwnam_r(nptr, &pwd, pwdbuf, sizeof (pwdbuf), &result);
+	if (!result ||
 	    (getspnam_r(nptr, &sp, spbuf, sizeof (spbuf)) == NULL)) {
 		message(ERR, gettext("Unknown id: %s"), nptr);
 		audit_failure(PW_FALSE, NULL, nptr, PAM_USER_UNKNOWN);

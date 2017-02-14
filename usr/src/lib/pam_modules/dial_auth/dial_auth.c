@@ -60,6 +60,7 @@ pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **argv)
 	char	line[80];
 	char 	*p1 = NULL, *p2 = NULL;
 	struct passwd 	pwd;
+	struct passwd	*pwdp;
 	char	pwd_buffer[1024];
 	char	*password = NULL;
 	int	retcode;
@@ -95,7 +96,8 @@ pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **argv)
 		    pam_strerror(pamh, PAM_SERVICE_ERR));
 		return (PAM_SERVICE_ERR);
 	}
-	if (getpwnam_r(user, &pwd, pwd_buffer, sizeof (pwd_buffer)) == NULL)
+	getpwnam_r(user, &pwd, pwd_buffer, sizeof (pwd_buffer), &pwdp);
+	if (!pwdp)
 		return (PAM_USER_UNKNOWN);
 
 	if ((fp = fopen(DIAL_FILE, "rF")) == NULL)

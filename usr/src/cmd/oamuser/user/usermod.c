@@ -87,6 +87,7 @@ extern int **valid_lgroup(), isbusy(), get_default_zfs_flags();
 extern int valid_uid(), check_perm(), create_home(), move_dir();
 extern int valid_expire(), edit_group(), call_passmgmt();
 extern projid_t **valid_lproject();
+extern struct passwd *fgetpwent(FILE *);
 
 static uid_t uid;		/* new uid */
 static gid_t gid;			/* gid of new login */
@@ -344,8 +345,10 @@ char **argv;
 	if (pw == NULL) {
 		char		pwdb[NSS_BUFLEN_PASSWD];
 		struct passwd	pwd;
+		struct passwd	*result;
 
-		if (getpwnam_r(logname, &pwd, pwdb, sizeof (pwdb)) == NULL) {
+		getpwnam_r(logname, &pwd, pwdb, sizeof (pwdb), &result);
+		if (!result) {
 			/* This user does not exist. */
 			errmsg(M_EXIST, logname);
 			exit(EX_NAME_NOT_EXIST);

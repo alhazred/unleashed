@@ -203,13 +203,15 @@ _getdefaultproj(const char *user, struct project *result,
 	struct passwd p;
 	struct group g;
 	char *attrproj;
+	struct passwd *pwd;
 
 	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2project);
 
 	/*
 	 * Need user's default group ID for ismember() calls later
 	 */
-	if (getpwnam_r(user, &p, buffer, buflen) == NULL)
+	getpwnam_r(user, &p, buffer, buflen, &pwd);
+	if (!pwd)
 		return (NULL);
 
 	/*
@@ -268,13 +270,15 @@ _inproj(const char *user, const char *name, void *buffer, size_t buflen)
 	struct group grp;
 	char *attrproj;
 	gid_t gid;
+	struct passwd *result;
 
 	NSS_XbyY_INIT(&arg, &proj, buffer, buflen, str2project);
 
 	/*
 	 * 0. Sanity checks.
 	 */
-	if (getpwnam_r(user, &pwd, buffer, buflen) == NULL)
+	getpwnam_r(user, &pwd, buffer, buflen, &result);
+	if (!result)
 		return (0);		/* user does not exist */
 	gid = pwd.pw_gid;
 	if (getprojbyname(name, &proj, buffer, buflen) == NULL)

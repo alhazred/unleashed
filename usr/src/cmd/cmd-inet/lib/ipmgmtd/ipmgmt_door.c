@@ -117,6 +117,7 @@ ipmgmt_handler(void *cookie, char *argp, size_t argsz, door_desc_t *dp,
 		uid_t		uid;
 		struct passwd	pwd;
 		char		buf[1024];
+		struct passwd	*result;
 
 		if (door_ucred(&cred) != 0) {
 			err = errno;
@@ -129,8 +130,8 @@ ipmgmt_handler(void *cookie, char *argp, size_t argsz, door_desc_t *dp,
 			ipmgmt_log(LOG_ERR, "Could not get user id.");
 			goto fail;
 		}
-		if (getpwuid_r(uid, &pwd, buf, sizeof (buf)) ==
-		    NULL) {
+		getpwuid_r(uid, &pwd, buf, sizeof (buf), &result);
+		if (!result) {
 			err = errno;
 			ipmgmt_log(LOG_ERR, "Could not get password entry.");
 			goto fail;

@@ -401,6 +401,7 @@ is_cons_user(const char *user)
 	struct stat	cons;
 	struct passwd	pw;
 	char		pwbuf[NSS_BUFLEN_PASSWD];
+	struct passwd	*result;
 
 	if (user == NULL) {
 		return (0);
@@ -408,7 +409,8 @@ is_cons_user(const char *user)
 	if (stat(CONSOLE_USER_LINK, &cons) == -1) {
 		return (0);
 	}
-	if (getpwnam_r(user, &pw, pwbuf, sizeof (pwbuf)) == NULL) {
+	getpwnam_r(user, &pw, pwbuf, sizeof (pwbuf), &result);
+	if (!result) {
 		return (0);
 	}
 

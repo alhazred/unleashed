@@ -394,11 +394,7 @@ int _hd_scan_user_home_dirs(HomeDir *home, const char *prefix,
  * that start with the specified prefix, and adding them to the
  * list of matches.
  */
-#if defined __sun && defined __SVR4
-    while((pwd = getpwent_r(&pwd_buffer, home->buffer, home->buflen)) != NULL && !waserr) {
-#else
     while((pwd = getpwent()) != NULL && !waserr) {
-#endif
       if(strncmp(prefix, pwd->pw_name, prefix_len) == 0) {
 	waserr = callback_fn(data, pwd->pw_name, pwd->pw_dir,
 			     _err_get_msg(home->err), ERR_MSG_LEN);

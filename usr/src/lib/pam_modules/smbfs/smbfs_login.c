@@ -61,6 +61,7 @@ pam_sm_setcred(pam_handle_t *pamh, int flags, int argc, const char **argv)
 	char *pw;
 	char *service;
 	struct passwd pwbuf;
+	struct passwd *pwp;
 	char buf[NSS_BUFLEN_PASSWD];
 	char *home;
 	uid_t uid;
@@ -89,7 +90,8 @@ pam_sm_setcred(pam_handle_t *pamh, int flags, int argc, const char **argv)
 		    "pam_smbfs_login: username is empty");
 		return (PAM_IGNORE);
 	}
-	if (getpwnam_r(user, &pwbuf, buf, sizeof (buf)) == NULL) {
+	getpwnam_r(user, &pwbuf, buf, sizeof (buf), &pwp);
+	if (!pwp) {
 		__pam_log(LOG_AUTH | LOG_ERR,
 		    "pam_smbfs_login: username %s can't be found", user);
 		return (PAM_IGNORE);

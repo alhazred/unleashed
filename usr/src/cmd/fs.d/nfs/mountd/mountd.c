@@ -2098,8 +2098,10 @@ getusergroups(uid_t uid, uint_t *ngrps, gid_t **grps)
 	char *pwbuf = alloca(pw_size);
 	gid_t *tmpgrps = alloca(ngroups_max * sizeof (gid_t));
 	int tmpngrps;
+	struct passwd *result;
 
-	if (getpwuid_r(uid, &pwd, pwbuf, pw_size) == NULL)
+	getpwuid_r(uid, &pwd, pwbuf, pw_size, &result);
+	if (!result)
 		return (-1);
 
 	tmpgrps[0] = pwd.pw_gid;

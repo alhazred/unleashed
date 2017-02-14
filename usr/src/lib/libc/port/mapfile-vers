@@ -2018,7 +2018,6 @@ $endif
 	fgetgrent;
 	fgetgrent_r;
 	fgetpwent;
-	fgetpwent_r;
 	flockfile;
 	funlockfile;
 	getchar_unlocked;
@@ -2031,7 +2030,6 @@ $endif
 	_getitimer;
 	getlogin_r;
 	getpwent;
-	getpwent_r;
 	getpwnam_r;
 	getpwuid_r;
 	gettimeofday;

@@ -594,6 +594,7 @@ new_req(int ev_port, int listener, void *ev_obj)
 	ilbd_client_t	*cli = NULL;
 	int		res;
 	uid_t		uid;
+	struct passwd	*result;
 
 	sa_len = sizeof (sa);
 	if ((new_sd = accept(listener, &sa, &sa_len)) == -1) {
@@ -634,8 +635,9 @@ new_req(int ev_port, int listener, void *ev_obj)
 		logerr("new_req: malloc(cli_pw_buf)");
 		goto clean_up;
 	}
-	if (getpwuid_r(uid, &cli->cli_pw, cli->cli_pw_buf,
-	    cli->cli_pw_bufsz) == NULL) {
+	getpwuid_r(uid, &cli->cli_pw, cli->cli_pw_buf, cli->cli_pw_bufsz,
+	    &result);
+	if (!result) {
 		logperror("new_req: invalid user");
 		goto clean_up;
 	}

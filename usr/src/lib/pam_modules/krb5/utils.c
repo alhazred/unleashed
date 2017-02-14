@@ -53,10 +53,11 @@ get_pw_uid(char *user, uid_t *uid)
 {
 	struct passwd sp;
 	char buffer[1024];
+	struct passwd *result;
 
-	if (getpwnam_r(user, &sp, buffer, sizeof (buffer)) == NULL) {
+	getpwnam_r(user, &sp, buffer, sizeof (buffer), &result);
+	if (!result)
 		return (0);
-	}
 
 	*uid = sp.pw_uid;
 
@@ -73,10 +74,11 @@ get_pw_gid(char *user, gid_t *gid)
 {
 	struct passwd sp;
 	char buffer[1024];
+	struct passwd *result;
 
-	if (getpwnam_r(user, &sp, buffer, sizeof (buffer)) == NULL) {
+	getpwnam_r(user, &sp, buffer, sizeof (buffer), &result);
+	if (!result)
 		return (0);
-	}
 
 	*gid = sp.pw_gid;
 

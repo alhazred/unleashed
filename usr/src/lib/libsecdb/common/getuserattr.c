@@ -94,8 +94,10 @@ getuseruid(uid_t u)
 {
 	struct	passwd pwd;
 	char	buf[NSS_BUFLEN_PASSWD];
+	struct	passwd *result;
 
-	if (getpwuid_r(u, &pwd, buf, NSS_BUFLEN_PASSWD) == NULL)
+	getpwuid_r(u, &pwd, buf, NSS_BUFLEN_PASSWD, &result);
+	if (!result)
 		return ((userattr_t *)NULL);
 	return (getusernam(pwd.pw_name));
 }

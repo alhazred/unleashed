@@ -195,6 +195,7 @@ static pwu_repository_t	__REPFILES = { "files", NULL, 0 };
 extern	void		setusershell(void);
 extern	char		*getusershell(void);
 extern	void		endusershell(void);
+extern	struct passwd	*fgetpwent(FILE *);
 
 static	void		passwd_exit(int retcode) __NORETURN;
 static	void		rusage(void);

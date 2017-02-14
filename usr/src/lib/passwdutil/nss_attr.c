@@ -154,12 +154,14 @@ nss_getpwnam(char *name, attrlist *items, pwu_repository_t *rep, void **buf)
 	}
 
 	if (pwbuf->pwd) {
+		struct passwd *pwdp;
 		if ((pwbuf->pwd_scratch = malloc(PWD_SCRATCH_SIZE)) == NULL) {
 			err = PWU_NOMEM;
 			goto error;
 		}
-		if (getpwnam_r(name, pwbuf->pwd, pwbuf->pwd_scratch,
-		    PWD_SCRATCH_SIZE) == NULL) {
+		getpwnam_r(name, pwbuf->pwd, pwbuf->pwd_scratch,
+		    PWD_SCRATCH_SIZE, &pwdp);
+		if (!pwdp) {
 			err = PWU_NOT_FOUND;
 			goto error;
 		}

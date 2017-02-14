@@ -2683,13 +2683,14 @@ srvsvc_add_autohome(ndr_xa_t *mxa, smb_svcenum_t *se, void *infop)
 	smb_share_t si;
 	DWORD status;
 	struct passwd pw;
+	struct passwd *pwp;
 	char buf[NSS_LINELEN_PASSWD];
 
 	if (IDMAP_ID_IS_EPHEMERAL(user->ui_posix_uid)) {
 		username = user->ui_account;
 	} else {
-		if (getpwuid_r(user->ui_posix_uid, &pw, buf, sizeof (buf)) ==
-		    NULL)
+		getpwuid_r(user->ui_posix_uid, &pw, buf, sizeof (buf), &pwp);
+		if (!pwp)
 			return (B_FALSE);
 
 		username = pw.pw_name;

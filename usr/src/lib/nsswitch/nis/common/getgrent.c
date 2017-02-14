@@ -265,6 +265,7 @@ netid_lookup(struct nss_groupsbymem *argp)
 	int		vallen;
 	int		parse_res;
 	char		*lasts;
+	struct passwd	*result;
 
 	/*
 	 * Need to build up the netname for the user manually. Can't use
@@ -273,8 +274,8 @@ netid_lookup(struct nss_groupsbymem *argp)
 	 *
 	 * Note that "root" has no user netname so return in error.
 	 */
-	if ((getpwnam_r(argp->username, &pw, pwbuf, sizeof (pwbuf)) == NULL) ||
-	    (pw.pw_uid == 0)) {
+	getpwnam_r(argp->username, &pw, pwbuf, sizeof (pwbuf), &result);
+	if (!result || (pw.pw_uid == 0)) {
 		return (NSS_UNAVAIL);
 	}
 	if (snprintf(netname, MAXNETNAMELEN + 1, "unix.%d@%s",

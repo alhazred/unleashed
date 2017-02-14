@@ -269,11 +269,12 @@ check_auth(ucred_t *ucred, const char *auth)
 	struct passwd	pwd;
 	uid_t		euid;
 	char		buf[MAXPATHLEN];
+	struct passwd	*result;
 
 	euid = ucred_geteuid(ucred);
 
-	if ((getpwuid_r(euid, &pwd, buf, sizeof (buf)) == NULL) ||
-	    (chkauthattr(auth, pwd.pw_name) == 0)) {
+	getpwuid_r(euid, &pwd, buf, sizeof (buf), &result);
+	if (!result || (chkauthattr(auth, result->pw_name) == 0)) {
 		log_info("Unauthorized door call.\n");
 		return (-1);
 	}

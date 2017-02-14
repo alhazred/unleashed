@@ -778,8 +778,6 @@ link path=usr/share/man/man3c/ffsl.3c target=ffs.3c
 link path=usr/share/man/man3c/ffsll.3c target=ffs.3c
 link path=usr/share/man/man3c/fgetgrent.3c target=getgrnam.3c
 link path=usr/share/man/man3c/fgetgrent_r.3c target=getgrnam.3c
-link path=usr/share/man/man3c/fgetpwent.3c target=getpwnam.3c
-link path=usr/share/man/man3c/fgetpwent_r.3c target=getpwnam.3c
 link path=usr/share/man/man3c/fgets.3c target=gets.3c
 link path=usr/share/man/man3c/fgetspent.3c target=getspnam.3c
 link path=usr/share/man/man3c/fgetspent_r.3c target=getspnam.3c
@@ -830,7 +828,6 @@ link path=usr/share/man/man3c/getnetgrent_r.3c target=getnetgrent.3c
 link path=usr/share/man/man3c/get_nprocs_conf.3c target=get_nprocs.3c
 link path=usr/share/man/man3c/getpassphrase.3c target=getpass.3c
 link path=usr/share/man/man3c/getpwent.3c target=getpwnam.3c
-link path=usr/share/man/man3c/getpwent_r.3c target=getpwnam.3c
 link path=usr/share/man/man3c/getpwnam_r.3c target=getpwnam.3c
 link path=usr/share/man/man3c/getpwuid.3c target=getpwnam.3c
 link path=usr/share/man/man3c/getpwuid_r.3c target=getpwnam.3c

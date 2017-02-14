@@ -55,6 +55,20 @@ int files_user_to_authenticate(char *name, pwu_repository_t *rep,
 
 static int files_update_history(char *name, struct spwd *spwd);
 
+void     _nss_XbyY_fgets(FILE *, nss_XbyY_args_t *);
+int str2passwd(const char *, int, void *, char *, int);
+
+static struct passwd *
+fgetpwent_r(FILE *f, struct passwd *result, char *buffer, int buflen)
+{
+	nss_XbyY_args_t arg;
+
+	/* No key to fill in */
+	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2passwd);
+	_nss_XbyY_fgets(f, &arg);
+	return ((struct passwd *)NSS_XbyY_FINI(&arg));
+}
+
 /*
  * files function pointer table, used by passwdutil_init to initialize
  * the global Repository-OPerations table "rops"

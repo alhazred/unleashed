@@ -212,6 +212,7 @@ pam_sm_open_session(pam_handle_t *pamh, int flags, int argc,
 	struct lastlog	ll;
 	struct lastlog	*llp = NULL;
 	struct passwd pwd;
+	struct passwd *pwdp;
 	char    buffer[NSS_BUFLEN_PASSWD];
 	int	i;
 	int	debug = 0;
@@ -246,9 +247,9 @@ pam_sm_open_session(pam_handle_t *pamh, int flags, int argc,
 	if (ttyn == NULL)
 		return (PAM_SESSION_ERR);
 
-	if (getpwnam_r(user, &pwd, buffer, sizeof (buffer)) == NULL) {
+	getpwnam_r(user, &pwd, buffer, sizeof (buffer), &pwdp);
+	if (!pwdp)
 		return (PAM_USER_UNKNOWN);
-	}
 
 	ll.ll_time = 0;
 reopenll_ro:
