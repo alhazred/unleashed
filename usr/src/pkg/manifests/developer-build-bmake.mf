@@ -22,8 +22,8 @@ dir path=usr/share/man
 dir path=usr/share/man/man1
 dir path=usr/share/mk
 dir path=usr/share/mk/sys
-file path=usr/bin/bmake mode=0555
-file path=usr/share/man/man1/bmake.1
+file path=usr/bin/make mode=0555
+file path=usr/share/man/man1/make.1
 file path=usr/share/mk/auto.dep.mk
 file path=usr/share/mk/auto.obj.mk
 file path=usr/share/mk/autoconf.mk
@@ -69,8 +69,10 @@ file path=usr/share/mk/srctop.mk
 file path=usr/share/mk/stage-install.sh mode=0555
 file path=usr/share/mk/subdir.mk
 file path=usr/share/mk/sys.clean-env.mk
+file path=usr/share/mk/sys.debug.mk
 file path=usr/share/mk/sys.dependfile.mk
 file path=usr/share/mk/sys.mk
+file path=usr/share/mk/sys.vars.mk
 file path=usr/share/mk/sys/AIX.mk
 file path=usr/share/mk/sys/Darwin.mk
 file path=usr/share/mk/sys/Generic.mk
@@ -86,7 +88,8 @@ file path=usr/share/mk/target-flags.mk
 file path=usr/share/mk/warnings.mk
 file path=usr/share/mk/whats.mk
 file path=usr/share/mk/yacc.mk
-hardlink path=usr/bin/make target=bmake
+hardlink path=usr/bin/bmake target=make
+link path=usr/share/man/man1/bmake.1 target=make.1
 link path=usr/share/mk/bsd.dep.mk target=dep.mk
 link path=usr/share/mk/bsd.doc.mk target=doc.mk
 link path=usr/share/mk/bsd.init.mk target=init.mk
