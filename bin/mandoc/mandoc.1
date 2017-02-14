@@ -41,9 +41,9 @@ manual pages for display.
 By default,
 .Nm
 reads
-.Xr mdoc 5
+.Xr mdoc 7
 or
-.Xr man 5
+.Xr man 7
 text from stdin, implying
 .Fl m Ns Cm andoc ,
 and produces
@@ -79,10 +79,10 @@ options.
 Override the default operating system
 .Ar name
 for the
-.Xr mdoc 5
+.Xr mdoc 7
 .Sq \&Os
 and for the
-.Xr man 5
+.Xr man 7
 .Sq \&TH
 macro.
 .It Fl h
@@ -114,9 +114,22 @@ if the first non-ASCII byte in the file introduces a valid UTF-8 sequence
 .It Cm iso-8859-1
 otherwise
 .El
+.It Fl k
+A synonym for
+.Xr apropos 1 .
+This overrides any earlier
+.Fl f
+and
+.Fl l
+options.
 .It Fl l
 A synonym for
 .Fl a .
+Also reverts any earlier
+.Fl f
+and
+.Fl k
+options.
 .It Fl m Ns Ar format
 Input format.
 See
@@ -176,24 +189,36 @@ If multiple files are specified,
 .Nm
 will halt with the first failed parse.
 .El
+.Pp
+In
+.Fl f
+and
+.Fl k
+mode,
+.Nm
+also supports the options
+.Fl CMmOSsw
+described in the
+.Xr apropos 1
+manual.
 .Ss Input Formats
 The
 .Nm
 utility accepts
-.Xr mdoc 5
+.Xr mdoc 7
 and
-.Xr man 5
+.Xr man 7
 input with
 .Fl m Ns Cm doc
 and
 .Fl m Ns Cm an ,
 respectively.
 The
-.Xr mdoc 5
+.Xr mdoc 7
 format is
 .Em strongly
 recommended;
-.Xr man 5
+.Xr man 7
 should only be used for legacy manuals.
 .Pp
 A third option,
@@ -204,9 +229,9 @@ non-comment macro is
 or
 .Sq \&Dt ,
 the
-.Xr mdoc 5
+.Xr mdoc 7
 parser is used; otherwise, the
-.Xr man 5
+.Xr man 7
 parser is used.
 .Pp
 If multiple
@@ -234,7 +259,7 @@ See
 Produce HTML5, CSS1, and MathML output.
 See
 .Sx HTML Output .
-.It Fl T Ns Cm lint
+.It Fl T Cm lint
 Parse only: produce no output.
 Implies
 .Fl W Cm warning .
@@ -245,7 +270,7 @@ See
 .Sx Locale Output .
 .It Fl T Cm man
 Produce
-.Xr man 5
+.Xr man 7
 format output.
 See
 .Sx Man Output .
@@ -259,6 +284,8 @@ See
 .Sx PostScript Output .
 .It Fl T Cm tree
 Produce an indented parse tree.
+See
+.Sx Syntax tree output .
 .It Fl T Cm utf8
 Encode output in the UTF\-8 multi-byte format.
 See
@@ -274,7 +301,7 @@ corresponding filter in-order.
 Output produced by
 .Fl T Cm ascii
 is rendered in standard 7-bit ASCII documented in
-.Xr ascii 5 .
+.Xr ascii 7 .
 .Pp
 Font styles are applied by using back-spaced encoding such that an
 underlined character
@@ -288,7 +315,7 @@ Emboldened characters are rendered as
 .Sq c Ns \e[bs] Ns c .
 .Pp
 The special characters documented in
-.Xr mandoc_char 5
+.Xr mandoc_char 7
 are rendered best-effort in an ASCII equivalent.
 .Pp
 Output width is limited to 78 visible columns unless literal input lines
@@ -302,9 +329,9 @@ arguments are accepted:
 The left margin for normal text is set to
 .Ar indent
 blank characters instead of the default of five for
-.Xr mdoc 5
+.Xr mdoc 7
 and seven for
-.Xr man 5 .
+.Xr man 7 .
 Increasing this is not recommended; it may result in degraded formatting,
 for example overfull lines or ugly line breaks.
 .It Cm width Ns = Ns Ar width
@@ -318,7 +345,7 @@ Output produced by
 conforms to HTML5 using optional self-closing tags.
 Default styles use only CSS1.
 Equations rendered from
-.Xr eqn 5
+.Xr eqn 7
 blocks use MathML.
 .Pp
 The
@@ -384,23 +411,31 @@ relative URI.
 Locale-depending output encoding is triggered with
 .Fl T Cm locale .
 This is the default.
+.Pp
+This option is not available on all systems: systems without locale
+support, or those whose internal representation is not natively UCS-4,
+will fall back to
+.Fl T Cm ascii .
+See
+.Sx ASCII Output
+for font style specification and available command-line arguments.
 .Ss Man Output
 Translate input format into
-.Xr man 5
+.Xr man 7
 output format.
 This is useful for distributing manual sources to legacy systems
 lacking
-.Xr mdoc 5
+.Xr mdoc 7
 formatters.
 .Pp
 If
-.Xr mdoc 5
+.Xr mdoc 7
 is passed as input, it is translated into
-.Xr man 5 .
+.Xr man 7 .
 If the input format is
-.Xr man 5 ,
+.Xr man 7 ,
 the input is copied to the output, expanding any
-.Xr mandoc_roff 5
+.Xr roff 7
 .Sq so
 requests.
 The parser is also run, and as usual, the
@@ -470,10 +505,10 @@ The columns are:
 .Bl -enum -compact
 .It
 For macro nodes, the macro name; for text and
-.Xr tbl 5
+.Xr tbl 7
 nodes, the content.
 There is a special format for
-.Xr eqn 5
+.Xr eqn 7
 nodes.
 .It
 Node type (text, elem, block, head, body, body-end, tail, tbl, eqn).
@@ -495,6 +530,22 @@ A closing parenthesis if the node is a closing delimiter.
 .It
 A full stop if the node ends a sentence.
 .El
+.El
+.Sh ENVIRONMENT
+.Bl -tag -width MANPAGER
+.It Ev MANPAGER
+Any non-empty value of the environment variable
+.Ev MANPAGER
+will be used instead of the standard pagination program,
+.Xr more 1 .
+.It Ev PAGER
+Specifies the pagination program to use when
+.Ev MANPAGER
+is not defined.
+If neither PAGER nor MANPAGER is defined,
+.Xr more 1
+.Fl s
+will be used.
 .El
 .Sh EXIT STATUS
 The
@@ -547,13 +598,13 @@ output mode implies
 To page manuals to the terminal:
 .Pp
 .Dl $ mandoc \-W all,stop mandoc.1 2\*(Gt&1 | less
-.Dl $ mandoc mandoc.1 mdoc.3 mdoc.5 | less
+.Dl $ mandoc mandoc.1 mdoc.3 mdoc.7 | less
 .Pp
 To produce HTML manuals with
 .Pa mandoc.css
 as the style-sheet:
 .Pp
-.Dl $ mandoc \-T html -Ostyle=mandoc.css mdoc.5 \*(Gt mdoc.5.html
+.Dl $ mandoc \-T html -O style=mandoc.css mdoc.7 \*(Gt mdoc.7.html
 .Pp
 To check over a large set of manuals:
 .Pp
@@ -561,14 +612,14 @@ To check over a large set of manuals:
 .Pp
 To produce a series of PostScript manuals for A4 paper:
 .Pp
-.Dl $ mandoc \-T ps \-O paper=a4 mdoc.5 man.5 \*(Gt manuals.ps
+.Dl $ mandoc \-T ps \-O paper=a4 mdoc.7 man.7 \*(Gt manuals.ps
 .Pp
 Convert a modern
-.Xr mdoc 5
+.Xr mdoc 7
 manual to the older
-.Xr man 5
+.Xr man 7
 format, for use on systems lacking an
-.Xr mdoc 5
+.Xr mdoc 7
 parser:
 .Pp
 .Dl $ mandoc \-T man foo.mdoc \*(Gt foo.man
@@ -594,7 +645,7 @@ Message levels have the following meanings:
 .Bl -tag -width "warning"
 .It Cm unsupp
 An input file uses unsupported low-level
-.Xr mandoc_roff 5
+.Xr roff 7
 features.
 The output may be incomplete and/or misformatted,
 so using GNU troff instead of
@@ -676,14 +727,14 @@ line is invalid, but still used.
 .It Sy "missing date, using today's date"
 .Pq mdoc, man
 The document was parsed as
-.Xr mdoc 5
+.Xr mdoc 7
 and it has no
 .Ic \&Dd
 macro, or the
 .Ic \&Dd
 macro has no arguments or only empty arguments;
 or the document was parsed as
-.Xr man 5
+.Xr man 7
 and it has no
 .Ic \&TH
 macro, or the
@@ -825,7 +876,7 @@ Probably, there are author names lacking markup.
 .It Sy "obsolete macro"
 .Pq mdoc
 See the
-.Xr mdoc 5
+.Xr mdoc 7
 manual for replacements.
 .It Sy "macro neither callable nor escaped"
 .Pq mdoc
@@ -836,7 +887,7 @@ otherwise, escape it by prepending
 .Sq \e& .
 .It Sy "skipping paragraph macro"
 In
-.Xr mdoc 5
+.Xr mdoc 7
 documents, this happens
 .Bl -dash -compact
 .It
@@ -849,7 +900,7 @@ at the end of items in non-column, non-compact lists
 and for multiple consecutive paragraph macros.
 .El
 In
-.Xr man 5
+.Xr man 7
 documents, it happens
 .Bl -dash -compact
 .It
@@ -950,7 +1001,7 @@ The previous, interrupted macro is deleted from the parse tree.
 .Pq roff , eqn
 The macro name is missing from a macro definition request,
 or an
-.Xr eqn 5
+.Xr eqn 7
 control statement or operation keyword lacks its required argument.
 .It Sy "conditional request controls empty scope"
 .Pq roff
@@ -1017,7 +1068,7 @@ macro, at least one other argument precedes the type argument.
 The
 .Nm
 utility copes with any argument order, but some other
-.Xr mdoc 5
+.Xr mdoc 7
 implementations do not.
 .It Sy "missing -width in -tag list, using 8n"
 .Pq mdoc
@@ -1238,10 +1289,10 @@ empty, causing it to toggle the spacing mode.
 .It Sy "unknown font, skipping request"
 .Pq man , tbl
 A
-.Xr mandoc_roff 5
+.Xr roff 7
 .Ic \&ft
 request or a
-.Xr tbl 5
+.Xr tbl 7
 .Ic \&f
 layout modifier has an unknown
 .Ar font
@@ -1411,7 +1462,7 @@ some content, but the parser can continue.
 .It Sy "skipping bad character"
 .Pq mdoc , man , roff
 The input file contains a byte that is not a printable
-.Xr ascii 5
+.Xr ascii 7
 character.
 The message mentions the character number.
 The offending byte is replaced with a question mark
@@ -1421,11 +1472,11 @@ transliteration of the intended character.
 .It Sy "skipping unknown macro"
 .Pq mdoc , man , roff
 The first identifier on a request or macro line is neither recognized as a
-.Xr mandoc_roff 5
+.Xr roff 7
 request, nor as a user-defined macro, nor, respectively, as an
-.Xr mdoc 5
+.Xr mdoc 7
 or
-.Xr man 5
+.Xr man 7
 macro.
 It may be mistyped or unsupported.
 The request or macro is discarded including its arguments.
@@ -1441,7 +1492,7 @@ An
 macro occurs outside any
 .Ic \&Bl
 list, or an
-.Xr eqn 5
+.Xr eqn 7
 .Ic above
 delimiter occurs outside any pile.
 It is discarded including its arguments.
@@ -1458,16 +1509,16 @@ It is discarded including its arguments.
 Various syntax elements can only be used to explicitly close blocks
 that have previously been opened.
 An
-.Xr mdoc 5
+.Xr mdoc 7
 block closing macro, a
-.Xr man 5
+.Xr man 7
 .Ic \&RE
 or
 .Ic \&UE
 macro, an
-.Xr eqn 5
+.Xr eqn 7
 right delimiter or closing brace, or the end of an equation, table, or
-.Xr mandoc_roff 5
+.Xr roff 7
 conditional request is encountered but no matching block is open.
 The offending request or macro is discarded.
 .It Sy "fewer RS blocks open, skipping"
@@ -1483,7 +1534,7 @@ macro is discarded.
 .It Sy "inserting missing end of block"
 .Pq mdoc , tbl
 Various
-.Xr mdoc 5
+.Xr mdoc 7
 macros as well as tables require explicit closing by dedicated macros.
 A block that doesn't support bad nesting
 ends before all of its children are properly closed.
@@ -1491,15 +1542,15 @@ The open child nodes are closed implicitly.
 .It Sy "appending missing end of block"
 .Pq mdoc , man , eqn , tbl , roff
 At the end of the document, an explicit
-.Xr mdoc 5
+.Xr mdoc 7
 block, a
-.Xr man 5
+.Xr man 7
 next-line scope or
 .Ic \&RS
 or
 .Ic \&UR
 block, an equation, table, or
-.Xr mandoc_roff 5
+.Xr roff 7
 conditional or ignore block is still open.
 The open block is closed implicitly.
 .It Sy "escaped character not allowed in a name"
@@ -1589,7 +1640,7 @@ macro has an unknown argument and is discarded.
 An
 .Ic \&it
 request or an
-.Xr eqn 5
+.Xr eqn 7
 .Ic \&size
 or
 .Ic \&gsize
@@ -1621,7 +1672,7 @@ only shows the path as it appears behind
 .It Sy "skipping all arguments"
 .Pq mdoc , man , eqn , roff
 An
-.Xr mdoc 5
+.Xr mdoc 7
 .Ic \&Bt ,
 .Ic \&Ed ,
 .Ic \&Ef ,
@@ -1636,18 +1687,18 @@ or
 macro, an
 .Ic \&It
 macro in a list that don't support item heads, a
-.Xr man 5
+.Xr man 7
 .Ic \&LP ,
 .Ic \&P ,
 or
 .Ic \&PP
 macro, an
-.Xr eqn 5
+.Xr eqn 7
 .Ic \&EQ
 or
 .Ic \&EN
 macro, or a
-.Xr mandoc_roff 5
+.Xr roff 7
 .Ic \&br ,
 .Ic \&fi ,
 or
@@ -1711,7 +1762,7 @@ Parsing is aborted as soon as the condition is detected.
 .It Sy "unsupported control character"
 .Pq roff
 An ASCII control character supported by other
-.Xr mandoc_roff 5
+.Xr roff 7
 implementations but not by
 .Nm
 was found in an input file.
@@ -1719,7 +1770,7 @@ It is replaced by a question mark.
 .It Sy "unsupported roff request"
 .Pq roff
 An input file contains a
-.Xr mandoc_roff 5
+.Xr roff 7
 request supported by GNU troff or Heirloom troff but not by
 .Nm ,
 and it is likely that this will cause information loss
@@ -1737,20 +1788,22 @@ The modifier is discarded.
 .It Sy "ignoring macro in table"
 .Pq tbl , mdoc , man
 A table contains an invocation of an
-.Xr mdoc 5
+.Xr mdoc 7
 or
-.Xr man 5
+.Xr man 7
 macro or of an undefined macro.
 The macro is ignored, and its arguments are handled
 as if they were a text line.
 .El
 .Sh SEE ALSO
-.Xr eqn 5 ,
-.Xr man 5 ,
-.Xr mandoc_char 5 ,
-.Xr mandoc_roff 5 ,
-.Xr mdoc 5 ,
-.Xr tbl 5
+.Xr apropos 1 ,
+.Xr man 1 ,
+.Xr eqn 7 ,
+.Xr man 7 ,
+.Xr mandoc_char 7 ,
+.Xr mdoc 7 ,
+.Xr roff 7 ,
+.Xr tbl 7
 .Sh AUTHORS
 .An -nosplit
 The

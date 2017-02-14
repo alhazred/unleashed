@@ -16,7 +16,7 @@
 .\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 .\"
 .Dd $Mdocdate: March 30 2015 $
-.Dt EQN 5
+.Dt EQN 7
 .Os
 .Sh NAME
 .Nm eqn
@@ -26,9 +26,9 @@ The
 .Nm eqn
 language is an equation-formatting language.
 It is used within
-.Xr mdoc 5
+.Xr mdoc 7
 and
-.Xr man 5
+.Xr man 7
 .Ux
 manual pages.
 It describes the
@@ -45,9 +45,9 @@ specification (see
 for references).
 .Pp
 Equations within
-.Xr mdoc 5
+.Xr mdoc 7
 or
-.Xr man 5
+.Xr man 7
 documents are enclosed by the standalone
 .Sq \&.EQ
 and
@@ -63,7 +63,7 @@ and
 strings.
 .Em Note :
 these are not the same as
-.Xr mandoc_roff 5
+.Xr roff 7
 macros, and may only be invoked as
 .Sq \&.EQ .
 .Pp
@@ -129,7 +129,7 @@ partial (partial differential), inf (infinity), >> (much greater), <<
 (not equal), == (equivalence), <= (less-than-equal), and >=
 (more-than-equal).
 The character escape sequences documented in
-.Xr mandoc_char 5
+.Xr mandoc_char 7
 can be used, too.
 .Pp
 The following control statements are available:
@@ -460,10 +460,10 @@ commands are also ignored.
 .El
 .Sh SEE ALSO
 .Xr mandoc 1 ,
-.Xr man 5 ,
-.Xr mandoc_char 5 ,
-.Xr mandoc_roff 5 ,
-.Xr mdoc 5
+.Xr man 7 ,
+.Xr mandoc_char 7 ,
+.Xr mdoc 7 ,
+.Xr roff 7
 .Rs
 .%A Brian W. Kernighan
 .%A Lorinda L. Cherry

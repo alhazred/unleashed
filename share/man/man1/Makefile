@@ -6,7 +6,6 @@ MAN = acctcom.1 \
       amt.1 \
       appcert.1 \
       apptrace.1 \
-      apropos.1 \
       ar.1 \
       asa.1 \
       at.1 \
@@ -195,7 +194,6 @@ MAN = acctcom.1 \
       madv.so.1.1 \
       mail.1 \
       mailx.1 \
-      man.1 \
       mcs.1 \
       mdb.1 \
       mesg.1 \
@@ -369,7 +367,6 @@ MAN = acctcom.1 \
       zonename.1
 
 MLINKS+=	Intro.1 intro.1
-MLINKS+=	apropos.1 whatis.1
 MLINKS+=	alias.1 unalias.1
 MLINKS+=	at.1 batch.1
 MLINKS+=	awk.1 nawk.1

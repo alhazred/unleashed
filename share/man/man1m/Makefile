@@ -49,7 +49,6 @@ MAN = 6to4relay.1m \
       bootadm.1m \
       busstat.1m \
       captoinfo.1m \
-      catman.1m \
       cfgadm.1m \
       cfgadm_ac.1m \
       cfgadm_fp.1m \

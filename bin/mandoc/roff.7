@@ -16,7 +16,7 @@
 .\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 .\"
 .Dd $Mdocdate: September 24 2015 $
-.Dt MANDOC_ROFF 5
+.Dt ROFF 7
 .Os
 .Sh NAME
 .Nm roff
@@ -26,16 +26,16 @@ The
 .Nm roff
 language is a general purpose text formatting language.
 Since traditional implementations of the
-.Xr mdoc 5
+.Xr mdoc 7
 and
-.Xr man 5
+.Xr man 7
 manual formatting languages are based on it,
 many real-world manuals use small numbers of
 .Nm
 requests and escape sequences intermixed with their
-.Xr mdoc 5
+.Xr mdoc 7
 or
-.Xr man 5
+.Xr man 7
 code.
 To properly format such manuals, the
 .Xr mandoc 1
@@ -47,9 +47,9 @@ Only these requests and escapes supported by
 are documented in the present manual,
 together with the basic language syntax shared by
 .Nm ,
-.Xr mdoc 5 ,
+.Xr mdoc 7 ,
 and
-.Xr man 5 .
+.Xr man 7 .
 For complete
 .Nm
 manuals, consult the
@@ -80,7 +80,7 @@ Lines not beginning with control characters are called
 They provide free-form text to be printed; the formatting of the text
 depends on the respective processing context.
 .Sh LANGUAGE SYNTAX
-.Nm roff
+.Nm
 documents may contain only graphable 7-bit ASCII characters, the space
 character, and, in certain circumstances, the tab character.
 The backslash character
@@ -137,7 +137,7 @@ One-letter backslash escape.
 .El
 .Pp
 See
-.Xr mandoc_char 5
+.Xr mandoc_char 7
 for a complete list.
 .Ss Text Decoration
 Terms may be text-decorated using the
@@ -167,7 +167,7 @@ Write in \f(BIbold italic\fP, then return to previous font mode.
 Text decoration is
 .Em not
 recommended for
-.Xr mdoc 5 ,
+.Xr mdoc 7 ,
 which encourages semantic annotation.
 .Ss Predefined Strings
 Predefined strings, like
@@ -195,7 +195,7 @@ as they differ across implementations.
 Those supported by
 .Xr mandoc 1
 are listed in
-.Xr mandoc_char 5 .
+.Xr mandoc_char 7 .
 Manuals using these predefined strings are almost certainly not portable.
 .Ss Whitespace
 Whitespace consists of the space character.
@@ -280,10 +280,10 @@ Examples:
 .Bl -tag -width ".Bl -tag -width 2i" -offset indent -compact
 .It Li \&.Bl -tag -width 2i
 two-inch tagged list indentation in
-.Xr mdoc 5
+.Xr mdoc 7
 .It Li \&.HP 2i
 two-inch tagged list indentation in
-.Xr man 5
+.Xr man 7
 .It Li \&.sp 2v
 two vertical spaces
 .El
@@ -337,9 +337,9 @@ Thus, the following request lines are all equivalent:
 .Ed
 .Sh MACRO SYNTAX
 Macros are provided by the
-.Xr mdoc 5
+.Xr mdoc 7
 and
-.Xr man 5
+.Xr man 7
 languages and can be defined by the
 .Sx \&de
 request.
@@ -493,9 +493,9 @@ This is a Heirloom extension and currently unsupported.
 .Ss \&br
 Break the output line.
 See
-.Xr man 5
+.Xr man 7
 and
-.Xr mdoc 5 .
+.Xr mdoc 7 .
 .Ss \&break
 Break out of a
 .Sx \&while
@@ -616,9 +616,9 @@ characters terminating each line, optionally containing calls to
 requests,
 .Nm
 macros or high-level macros like
-.Xr man 5
+.Xr man 7
 or
-.Xr mdoc 5
+.Xr mdoc 7
 macros, whichever applies to the document in question.
 .Pp
 Specifying a custom
@@ -800,7 +800,7 @@ H SYNOPSIS
 invokes the
 .Cm SH
 macro when used in a
-.Xr man 5
+.Xr man 7
 document.
 Such abuse is of course strongly discouraged.
 .Ss \&ds1
@@ -860,7 +860,7 @@ This is a Heirloom extension and currently unsupported.
 .Ss \&EQ
 Begin an equation block.
 See
-.Xr eqn 5
+.Xr eqn 7
 for a description of the equation language.
 .Ss \&errprint
 Print a string like an error message.
@@ -899,9 +899,9 @@ This is a Heirloom extension and currently ignored.
 .Ss \&fi
 Switch to fill mode.
 See
-.Xr man 5 .
+.Xr man 7 .
 Ignored in
-.Xr mdoc 5 .
+.Xr mdoc 7 .
 .Ss \&fkern
 Control the use of kerning tables for a font.
 This is a Heirloom extension and currently ignored.
@@ -952,7 +952,7 @@ switches back to the previous font
 .Pp
 This request takes effect only locally, may be overridden by macros
 and escape sequences, and is only supported in
-.Xr man 5
+.Xr man 7
 for now.
 .Ss \&ftr
 Translate font name.
@@ -1191,9 +1191,9 @@ request are discarded.
 .Ss \&in
 Change indentation.
 See
-.Xr man 5 .
+.Xr man 7 .
 Ignored in
-.Xr mdoc 5 .
+.Xr mdoc 7 .
 .Ss \&index
 Find a substring in a string.
 This is a Heirloom extension and currently unsupported.
@@ -1273,7 +1273,7 @@ Its syntax is as follows:
 If the
 .Ar width
 argument is omitted, the line length is reset to its previous value.
-The default setting for terminal output is 58n.
+The default setting for terminal output is 78n.
 If a sign is given, the line length is added to or subtracted from;
 otherwise, it is set to the provided value.
 Using this request in new manuals is discouraged for several reasons,
@@ -1326,9 +1326,9 @@ Currently ignored.
 .Ss \&nf
 Switch to no-fill mode.
 See
-.Xr man 5 .
+.Xr man 7 .
 Ignored by
-.Xr mdoc 5 .
+.Xr mdoc 7 .
 .Ss \&nh
 Turn off automatic hyphenation mode.
 Currently ignored.
@@ -1366,7 +1366,7 @@ is handled specially:
 .Bl -tag -width Ds
 .It Cm nS
 If set to a positive integer value, certain
-.Xr mdoc 5
+.Xr mdoc 7
 macros will behave in the same way as in the
 .Em SYNOPSIS
 section.
@@ -1376,7 +1376,7 @@ section, even when called within the
 .Em SYNOPSIS
 section itself.
 Note that starting a new
-.Xr mdoc 5
+.Xr mdoc 7
 section with the
 .Cm \&Sh
 macro will reset this register.
@@ -1650,7 +1650,7 @@ This is a groff extension and currently ignored.
 .Ss \&TS
 Begin a table, which formats input in aligned rows and columns.
 See
-.Xr tbl 5
+.Xr tbl 7
 for a description of the tbl language.
 .Ss \&uf
 Globally set the underline font.
@@ -1729,7 +1729,7 @@ Each number may be followed by one optional scaling unit described below
 .Sx Scaling Widths .
 The following equations hold:
 .Bd -literal -offset indent
-1i = 6v = 6P = 10m = 10n = 52p = 1000M = 240u = 240
+1i = 6v = 6P = 10m = 10n = 72p = 1000M = 240u = 240
 254c = 100i = 24000u = 24000
 1f = 65536u = 65536
 .Ed
@@ -1792,9 +1792,9 @@ Note that the
 language defines more escape sequences not implemented in
 .Xr mandoc 1 .
 In
-.Xr mdoc 5
+.Xr mdoc 7
 and
-.Xr man 5
+.Xr man 7
 documents, using escape sequences is discouraged except for those
 described in the
 .Sx LANGUAGE SYNTAX
@@ -1827,7 +1827,7 @@ instead.
 .Ss \e( Ns Ar cc
 .Sx Special Characters
 with two-letter names, see
-.Xr mandoc_char 5 .
+.Xr mandoc_char 7 .
 .Ss \e*[ Ns Ar name ]
 Interpolate the string with the
 .Ar name ;
@@ -1851,7 +1851,7 @@ Right italic correction (groff extension); ignored by
 .Ss \e[ Ns Ar name ]
 .Sx Special Characters
 with names of arbitrary length, see
-.Xr mandoc_char 5 .
+.Xr mandoc_char 7 .
 .Ss \e^
 One-twelfth em half-narrow space character, effectively zero-width in
 .Xr mandoc 1 .
@@ -2099,15 +2099,15 @@ The special semantics of the
 number register is an idiosyncracy of
 .Ox
 manuals and not supported by other
-.Xr mdoc 5
+.Xr mdoc 7
 implementations.
 .Sh SEE ALSO
 .Xr mandoc 1 ,
-.Xr eqn 5 ,
-.Xr man 5 ,
-.Xr mandoc_char 5 ,
-.Xr mdoc 5 ,
-.Xr tbl 5
+.Xr eqn 7 ,
+.Xr man 7 ,
+.Xr mandoc_char 7 ,
+.Xr mdoc 7 ,
+.Xr tbl 7
 .Rs
 .%A Joseph F. Ossanna
 .%A Brian W. Kernighan
