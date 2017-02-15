@@ -16,7 +16,7 @@
 .\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 .\"
 .Dd $Mdocdate: January 29 2015 $
-.Dt TBL 5
+.Dt TBL 7
 .Os
 .Sh NAME
 .Nm tbl
@@ -26,9 +26,9 @@ The
 .Nm tbl
 language is a table-formatting language.
 It is used within
-.Xr mdoc 5
+.Xr mdoc 7
 and
-.Xr man 5
+.Xr man 7
 .Ux
 manual pages.
 This manual describes the subset of the
@@ -38,15 +38,15 @@ language accepted by the
 utility.
 .Pp
 Tables within
-.Xr mdoc 5
+.Xr mdoc 7
 or
-.Xr man 5
+.Xr man 7
 are enclosed by the
 .Sq TS
 and
 .Sq TE
 macro tags, whose precise syntax is documented in
-.Xr mandoc_roff 5 .
+.Xr roff 7 .
 Tables consist of a series of options on a single line, followed by the
 table layout, followed by data.
 .Pp
@@ -75,7 +75,7 @@ Tables are enclosed by the
 .Sq TS
 and
 .Sq TE
-.Xr mandoc_roff 5
+.Xr roff 7
 macros.
 A table consists of an optional single line of table
 .Sx Options
@@ -100,10 +100,10 @@ Table data is
 that is, data rows are parsed then inserted into the underlying stream
 of input data.
 This allows data rows to be interspersed by arbitrary
-.Xr mandoc_roff 5 ,
-.Xr mdoc 5 ,
+.Xr roff 7 ,
+.Xr mdoc 7 ,
 and
-.Xr man 5
+.Xr man 7
 macros such as
 .Bd -literal -offset indent
 \&.TS
@@ -117,7 +117,7 @@ c c c.
 .Ed
 .Pp
 in the case of
-.Xr mdoc 5
+.Xr mdoc 7
 or
 .Bd -literal -offset indent
 \&.TS
@@ -131,7 +131,7 @@ c c c.
 .Ed
 .Pp
 in the case of
-.Xr man 5 .
+.Xr man 7 .
 .Ss Options
 The first line of a table may contain options separated by spaces, tabs,
 or commas and terminated by a semicolon.
@@ -161,7 +161,7 @@ layout key.
 This is a GNU extension.
 .It Cm delim
 Use the two characters of the argument as
-.Xr eqn 5
+.Xr eqn 7
 delimiters.
 Currently unsupported.
 .It Cm doublebox
@@ -261,7 +261,7 @@ modifier.
 .It Cm f
 The next character selects the font to use for this column.
 See the
-.Xr mandoc_roff 5
+.Xr roff 7
 manual for supported one-character font names.
 .It Cm i
 Use an italic font for the contents of this column.
@@ -333,18 +333,18 @@ The
 implementation of
 .Nm
 doesn't support
-.Xr mdoc 5
+.Xr mdoc 7
 and
-.Xr man 5
+.Xr man 7
 macros and
-.Xr eqn 5
+.Xr eqn 7
 equations inside tables.
 .Sh SEE ALSO
 .Xr mandoc 1 ,
-.Xr man 5 ,
-.Xr mandoc_char 5 ,
-.Xr mandoc_roff 5 ,
-.Xr mdoc 5
+.Xr man 7 ,
+.Xr mandoc_char 7 ,
+.Xr mdoc 7 ,
+.Xr roff 7
 .Rs
 .%A M. E. Lesk
 .%T Tbl\(emA Program to Format Tables

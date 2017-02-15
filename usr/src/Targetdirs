@@ -460,7 +460,6 @@ SYM.DIRS= \
 	/usr/lib/link_audit/32 \
 	/usr/lib/secure/32 \
 	/usr/mail \
-	/usr/man \
 	/usr/pub \
 	/usr/tmp \
 	/var/ld/32
@@ -551,7 +550,6 @@ $(ROOT)/dev/stdin:=			LINKDEST=fd/0
 $(ROOT)/dev/stdout:=			LINKDEST=fd/1
 $(ROOT)/dev/stderr:=			LINKDEST=fd/2
 $(ROOT)/usr/pub:=			LINKDEST=share/lib/pub
-$(ROOT)/usr/man:=			LINKDEST=share/man
 $(ROOT)/usr/adm:=			LINKDEST=../var/adm
 $(ROOT)/etc/lib/ld.so.1:=		LINKDEST=../../lib/ld.so.1
 $(ROOT)/etc/lib/libdl.so.1:=		LINKDEST=../../lib/libdl.so.1

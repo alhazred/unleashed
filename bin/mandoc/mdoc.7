@@ -15,12 +15,8 @@
 .\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 .\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 .\"
-.\"
-.\" Copyright 2014 Garrett D'Amore <garrett@damore.org>
-.\" Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
-.\"
 .Dd $Mdocdate: November 5 2015 $
-.Dt MDOC 5
+.Dt MDOC 7
 .Os
 .Sh NAME
 .Nm mdoc
@@ -75,17 +71,17 @@ Text lines are interpreted within the current state.
 Many aspects of the basic syntax of the
 .Nm
 language are based on the
-.Xr mandoc_roff 5
+.Xr roff 7
 language; see the
 .Em LANGUAGE SYNTAX
 and
 .Em MACRO SYNTAX
 sections in the
-.Xr mandoc_roff 5
+.Xr roff 7
 manual for details, in particular regarding
 comments, escape sequences, whitespace, and quoting.
 However, using
-.Xr mandoc_roff 5
+.Xr roff 7
 requests in
 .Nm
 documents is discouraged;
@@ -122,7 +118,7 @@ The following is a well-formed skeleton
 file for a utility
 .Qq progname :
 .Bd -literal -offset indent
-\&.Dd Jan 1, 1970
+\&.Dd $\&Mdocdate$
 \&.Dt PROGNAME section
 \&.Os
 \&.Sh NAME
@@ -130,6 +126,7 @@ file for a utility
 \&.Nd one line about what it does
 \&.\e\(dq .Sh LIBRARY
 \&.\e\(dq For sections 2, 3, and 9 only.
+\&.\e\(dq Not used in OpenBSD.
 \&.Sh SYNOPSIS
 \&.Nm progname
 \&.Op Fl options
@@ -138,27 +135,22 @@ file for a utility
 The
 \&.Nm
 utility processes files ...
-\&.\e\(dq .Sh IMPLEMENTATION NOTES
-\&.\e\(dq .Sh RETURN VALUES
-\&.\e\(dq For sections 2, 3, and 9 only.
 \&.\e\(dq .Sh CONTEXT
 \&.\e\(dq For section 9 functions only.
+\&.\e\(dq .Sh IMPLEMENTATION NOTES
+\&.\e\(dq Not used in OpenBSD.
+\&.\e\(dq .Sh RETURN VALUES
+\&.\e\(dq For sections 2, 3, and 9 function return values only.
 \&.\e\(dq .Sh ENVIRONMENT
-\&.\e\(dq For sections 1, 1M, and 5.
+\&.\e\(dq For sections 1, 6, 7, and 8 only.
 \&.\e\(dq .Sh FILES
 \&.\e\(dq .Sh EXIT STATUS
-\&.\e\(dq For sections 1, 1M, and 5.
+\&.\e\(dq For sections 1, 6, and 8 only.
 \&.\e\(dq .Sh EXAMPLES
 \&.\e\(dq .Sh DIAGNOSTICS
+\&.\e\(dq For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
 \&.\e\(dq .Sh ERRORS
-\&.\e\(dq For sections 2, 3, and 9 only.
-\&.\e\(dq .Sh ARCHITECTURE
-\&.\e\(dq .Sh CODE SET INDEPENDENCE
-\&.\e\(dq For sections 1, 1M, and 3 only.
-\&.\e\(dq .Sh INTERFACE STABILITY
-\&.\e\(dq .Sh MT-LEVEL
-\&.\e\(dq For sections 2 and 3 only.
-\&.\e\(dq .Sh SECURITY
+\&.\e\(dq For sections 2, 3, 4, and 9 errno settings only.
 \&.\e\(dq .Sh SEE ALSO
 \&.\e\(dq .Xr foobar 1
 \&.\e\(dq .Sh STANDARDS
@@ -166,6 +158,8 @@ utility processes files ...
 \&.\e\(dq .Sh AUTHORS
 \&.\e\(dq .Sh CAVEATS
 \&.\e\(dq .Sh BUGS
+\&.\e\(dq .Sh SECURITY CONSIDERATIONS
+\&.\e\(dq Not used in OpenBSD.
 .Ed
 .Pp
 The sections in an
@@ -211,7 +205,7 @@ See
 Documents the utility invocation syntax, function call syntax, or device
 configuration.
 .Pp
-For the first, utilities (sections 1 and 1M), this is
+For the first, utilities (sections 1, 6, and 8), this is
 generally structured as follows:
 .Bd -literal -offset indent
 \&.Nm bar
@@ -226,7 +220,7 @@ generally structured as follows:
 .Pp
 Commands should be ordered alphabetically.
 .Pp
-For the second, function calls (sections 2, 3, 7I, 7P, 9):
+For the second, function calls (sections 2, 3, 9):
 .Bd -literal -offset indent
 \&.In header.h
 \&.Vt extern const char *global;
@@ -244,9 +238,10 @@ and
 .Sx \&Fo
 macros should follow C header-file conventions.
 .Pp
-And for the third, configurations (section 7D):
+And for the third, configurations (section 4):
 .Bd -literal -offset indent
-\&.Pa /dev/device_node
+\&.Cd \(dqit* at isa? port 0x2e\(dq
+\&.Cd \(dqit* at isa? port 0x4e\(dq
 .Ed
 .Pp
 Manuals not in these sections generally don't need a
@@ -330,6 +325,9 @@ macro followed by a non-standard section name, and each having
 several subsections, like in the present
 .Nm
 manual.
+.It Em CONTEXT
+This section lists the contexts in which functions can be called in section 9.
+The contexts are autoconf, process, or interrupt.
 .It Em IMPLEMENTATION NOTES
 Implementation-specific notes should be kept here.
 This is useful when implementing standard functions that may have side
@@ -340,14 +338,11 @@ return values of functions in sections 2, 3, and 9.
 .Pp
 See
 .Sx \&Rv .
-.It Em CONTEXT
-This section lists the contexts in which functions can be called in section 9.
-The contexts are user, kernel, or interrupt.
 .It Em ENVIRONMENT
 Lists the environment variables used by the utility,
 and explains the syntax and semantics of their values.
 The
-.Xr environ 5
+.Xr environ 7
 manual provides examples of typical content and formatting.
 .Pp
 See
@@ -361,7 +356,7 @@ See
 .Sx \&Pa .
 .It Em EXIT STATUS
 This section documents the
-command exit status for sections 1 and 1M.
+command exit status for section 1, 6, and 8 utilities.
 Historically, this information was described in
 .Em DIAGNOSTICS ,
 a practise that is now discouraged.
@@ -373,136 +368,27 @@ Example usages.
 This often contains snippets of well-formed, well-tested invocations.
 Make sure that examples work properly!
 .It Em DIAGNOSTICS
-Documents error and diagnostic messages displayed to the user or
-sent to logs. Note that exit
-status and return values should be documented in the
+Documents error messages.
+In section 4 and 9 manuals, these are usually messages printed by the
+kernel to the console and to the kernel log.
+In section 1, 6, 7, and 8, these are usually messages printed by
+userland programs to the standard error output.
+.Pp
+Historically, this section was used in place of
 .Em EXIT STATUS
-and
-.Em RETURN VALUES
-sections.
+for manuals in sections 1, 6, and 8; however, this practise is
+discouraged.
 .Pp
 See
 .Sx \&Bl
 .Fl diag .
 .It Em ERRORS
-Documents error handling in sections 2, 3, and 9.
+Documents
+.Xr errno 2
+settings in sections 2, 3, 4, and 9.
 .Pp
 See
 .Sx \&Er .
-.It Em ARCHITECTURE
-This section is usually absent, but will be present when the
-interface is specific to one or more architectures.
-.It Em CODE SET INDEPENDENCE
-Indicates whether the interface operates correctly with various different
-code sets.  True independent code sets will support not only ASCII and
-Extended UNIX Codesets (EUC), but also other multi-byte encodings such as
-UTF-8 and GB2312.
-.Pp
-Generally there will be some limitations that are fairly standard.  See
-.Xr standards 5 for more information about some of these.  Most interfaces
-should support at least UTF-8 in addition to ASCII.
-.It Em INTERFACE STABILITY
-Indicates the level of commitment to the interface. Interfaces can be described
-with in the following ways:
-.Bl -tag -width Ds
-.It Nm Standard
-Indicates that the interface is defined by one or more standards bodies.
-Generally, changes to the interface will be carefully managed to conform
-to the relevant standards.  These interfaces are generally the most suitable
-for use in portable programs.
-.It Nm Committed
-Indicates that the interface is intended to be preserved for the long-haul, and
-will rarely, if ever change, and never without notification (barring
-extraordinary and extenuating circumstances). These interfaces are
-preferred over other interfaces with the exeception of
-.Nm Standard
-interfaces.
-.It Nm Uncommitted
-Indicates that the interface may change.  Generally, changes to these interfaces
-should be infrequent, and some effort will be made to address compatibility
-considerations when changing or removing such interfaces.  However, there is
-no firm commitment to the preservation of the interface.  Most often this
-is applied to interfaces where operational experience with the interface
-is still limited and some need to change may be anticipated.
-.Pp
-Consumers should expect to revalidate any
-.Nm Uncommitted
-interfaces when crossing release boundaries.  Products intended for
-use on many releases or intended to support compatibility with future
-releases should avoid these interfaces.
-.It Nm Volatile
-The interface can change at any time for any reason. Often this relates to
-interfaces that are part of external software components that are still evolving
-rapidly.  Consumers should not expect that the interface (either binary or
-source level) will be unchanged from one release to the next.
-.It Nm Not-an-Interface
-Describes something that is specifically not intended for programmatic
-consumption.  For example, specific human-readable output, or the layout
-of graphical items on a user interface, may be described this way.  Generally
-programmatic alternatives to these will be available, and should be used
-when programmatic consumption is needed.
-.It Nm Private
-This is an internal interface.  Generally these interfaces should only be
-used within the project, and should not be used by other programs or modules.
-The interface can and will change without notice as the project needs, at
-any time.
-.Pp
-Most often, Private interfaces will lack any documentation whatsoever, and
-generally any undocumented interface can be assumed to be Private.
-.It Nm Obsolete
-The interface is not intended for use in new projects or programs, and may
-be removed at a future date.  The
-.Nm Obsolete
-word is a modifier that can
-be applied to other commitment levels. For example an
-.Nm Obsolete Committed
-interface is unlikely to be removed or changed, but nonetheless new use
-is discouraged (perhaps a better newer alternative is present).
-.El
-.It Em MT-LEVEL
-This section describes considerations for the interface when used within
-programs that use multiple threads.  More discussion of these considerations
-is made in the MT-Level section of
-.Xr attributes 5 .
-The interface can be described in the following ways.
-.Bl -tag -width Ds
-.It Nm Safe
-Indicates the interface is safe for use within multiple threads.  There
-may be additional caveats that apply, in which case those will be
-described.  Note that some interfaces have semantics which may affect
-other threads, but these should be an intrinsic part of the interface
-rather than an unexpected side effect.  For example, closing a file in
-one thread will cause that file to be closed in all threads.
-.It Nm Unsafe
-Indicates the interface is unsuitable for concurrent use within multiple
-threads.  A threaded application may still make use of the interface, but
-will be required to provide external synchronization means to ensure that
-only a single thread calls the interface at a time.
-.It Nm MT-Safe
-Indicates that the interface is not only safe for concurrent use, but is
-designed for such use.  For example, a
-.Nm Safe
-interface may make use of a global lock to provide safety, but at reduced
-internal concurrency, whereas an
-.Nm MT-Safe
-interface will be designed to be efficient even when used concurrently.
-.It Nm Async-Signal-Safe
-Indicates that the library is safe for use within a signal handler.  An
-.Nm MT-Safe
-interface can be made
-.Nm Async-Signal-Safe
-by ensuring that it blocks signals when acquiring locks.
-.It Nm Safe with Exceptions
-As for
-.Nm Safe
-but with specific exceptions noted.
-.It Nm MT-Safe with Exceptions
-As for
-.Nm MT-Safe
-but with specific exceptions noted.
-.El
-.It Em SECURITY
-Documents any security precautions that operators should consider.
 .It Em SEE ALSO
 References other manuals with related topics.
 This section should exist for most manuals.
@@ -540,6 +426,8 @@ in this section.
 .It Em BUGS
 Known bugs, limitations, and work-arounds should be described
 in this section.
+.It Em SECURITY CONSIDERATIONS
+Documents any security precautions that operators should consider.
 .El
 .Sh MACRO OVERVIEW
 This overview is sorted such that macros of similar purpose are listed
@@ -549,8 +437,8 @@ in the alphabetical
 .Sx MACRO REFERENCE .
 .Ss Document preamble and NAME section macros
 .Bl -column "Brq, Bro, Brc" description
-.It Sx \&Dd Ta document date: Ar month day , year
-.It Sx \&Dt Ta document title: Ar TITLE SECTION Op Ar arch
+.It Sx \&Dd Ta document date: Cm $\&Mdocdate$ | Ar month day , year
+.It Sx \&Dt Ta document title: Ar TITLE section Op Ar arch
 .It Sx \&Os Ta operating system version: Op Ar system Op Ar version
 .It Sx \&Nm Ta document name (one argument)
 .It Sx \&Nd Ta document description (one line)
@@ -949,7 +837,7 @@ which resolves to
 .Sy 6n .
 .It
 A scaling width as described in
-.Xr mandoc_roff 5 .
+.Xr roff 7 .
 .It
 An arbitrary string, which indents by the length of this string.
 .El
@@ -1058,7 +946,7 @@ arguments accept macro names as described for
 .Sx \&Bd
 .Fl offset ,
 scaling widths as described in
-.Xr mandoc_roff 5 ,
+.Xr roff 7 ,
 or use the length of the given string.
 The
 .Fl offset
@@ -1088,7 +976,7 @@ The
 .Fl width
 argument has no effect; instead, each argument specifies the width
 of one column, using either the scaling width syntax described in
-.Xr mandoc_roff 5
+.Xr roff 7
 or the string length of the argument.
 If the first line of the body of a
 .Fl column
@@ -1261,9 +1149,10 @@ See also
 and
 .Sx \&Ox .
 .Ss \&Cd
-Kernel configuration declaration.  It is found in pages for
-.Bx
-and not used here.
+Kernel configuration declaration.
+This denotes strings accepted by
+.Xr config 8 .
+It is most often used in section 4 manual pages.
 .Pp
 Examples:
 .Dl \&.Cd device le0 at scode?
@@ -1343,7 +1232,7 @@ the special string
 can be given as an argument.
 .It
 The traditional, purely numeric
-.Xr man 5
+.Xr man 7
 format
 .Ar year Ns \(en Ns Ar month Ns \(en Ns Ar day
 is accepted, too.
@@ -1369,7 +1258,7 @@ invocations.
 It is followed by a newline.
 .Pp
 Examples:
-.Dl \&.Dl % mandoc mdoc.5 \e(ba less
+.Dl \&.Dl % mandoc mdoc.7 \e(ba less
 .Pp
 See also
 .Sx \&Ql ,
@@ -1428,17 +1317,51 @@ The document's title (name), defaulting to
 if unspecified.
 To achieve a uniform appearance of page header lines,
 it should by convention be all caps.
-.It Ar SECTION
+.It Ar section
 The manual section.
+This may be one of
+.Cm 1
+.Pq General Commands ,
+.Cm 2
+.Pq System Calls ,
+.Cm 3
+.Pq Library Functions ,
+.Cm 3p
+.Pq Perl Library ,
+.Cm 4
+.Pq Device Drivers ,
+.Cm 5
+.Pq File Formats ,
+.Cm 6
+.Pq Games ,
+.Cm 7
+.Pq Miscellaneous Information ,
+.Cm 8
+.Pq System Manager's Manual ,
+or
+.Cm 9
+.Pq Kernel Developer's Manual .
 It should correspond to the manual's filename suffix and defaults to
 the empty string if unspecified.
-This field is optional.
-To achieve a uniform appearance of page header lines,
-it should by convention be all caps.
 .It Ar arch
 This specifies the machine architecture a manual page applies to,
-where relevant.
+where relevant, for example
+.Cm alpha ,
+.Cm amd64 ,
+.Cm i386 ,
+or
+.Cm sparc64 .
+The list of valid architectures varies by operating system.
 .El
+.Pp
+Examples:
+.Dl \&.Dt FOO 1
+.Dl \&.Dt FOO 9 i386
+.Pp
+See also
+.Sx \&Dd
+and
+.Sx \&Os .
 .Ss \&Dv
 Defined variables such as preprocessor constants, constant symbols,
 enumeration values, and so on.
@@ -1580,7 +1503,7 @@ It takes two arguments, defining the delimiters to be used by subsequent
 macros.
 .Ss \&Ev
 Environmental variables such as those specified in
-.Xr environ 5 .
+.Xr environ 7 .
 .Pp
 Examples:
 .Dl \&.Ev DISPLAY
@@ -1592,7 +1515,7 @@ for general constants.
 .Ss \&Ex
 Insert a standard sentence regarding command exit values of 0 on success
 and >0 on failure.
-This is most often used in section 1 and 1M manual pages.
+This is most often used in section 1, 6, and 8 manual pages.
 Its syntax is as follows:
 .Pp
 .D1 Pf \. Sx \&Ex Fl std Op Ar utility ...
@@ -1958,7 +1881,7 @@ section as described in
 .Pp
 Examples:
 .Dl \&.Lb libz
-.Dl \&.Lb mdoc
+.Dl \&.Lb libmandoc
 .Ss \&Li
 Denotes text that should be in a
 .Li literal
@@ -2033,8 +1956,8 @@ arguments and will display macros verbatim.
 See also
 .Sx \&Nm .
 .Ss \&Nm
-The name of the manual page, or \(em in particular in section 1
-pages \(em of an additional command or feature documented in
+The name of the manual page, or \(em in particular in section 1, 6,
+and 8 pages \(em of an additional command or feature documented in
 the manual page.
 When first invoked, the
 .Sx \&Nm
@@ -2150,7 +2073,7 @@ Optional part of a command line.
 Prints the argument(s) in brackets.
 This is most often used in the
 .Em SYNOPSIS
-section of section 1 and 1M manual pages.
+section of section 1 and 8 manual pages.
 .Pp
 Examples:
 .Dl \&.Op \&Fl a \&Ar b
@@ -2229,7 +2152,7 @@ is used as a default.
 .Pp
 Examples:
 .Dl \&.Pa /usr/bin/mandoc
-.Dl \&.Pa /usr/share/man/man5/mdoc.5
+.Dl \&.Pa /usr/share/man/man7/mdoc.7
 .Pp
 See also
 .Sx \&Lk .
@@ -2785,7 +2708,7 @@ macro or the body of a partial-implicit block macro
 beyond the end of the input line.
 This macro originally existed to work around the 9-argument limit
 of historic
-.Xr mandoc_roff 5 .
+.Xr roff 7 .
 .Ss \&Xr
 Link to another manual
 .Pq Qq cross-reference .
@@ -2823,7 +2746,7 @@ Its syntax is as follows:
 The
 .Ar height
 argument is a scaling width as described in
-.Xr mandoc_roff 5 .
+.Xr roff 7 .
 If unspecified,
 .Sx \&sp
 asserts a single vertical space.
@@ -3209,11 +3132,11 @@ macros.
 Whenever any
 .Nm
 macro switches the
-.Xr mandoc_roff 5
+.Xr roff 7
 font mode, it will automatically restore the previous font when exiting
 its scope.
 Manually switching the font using the
-.Xr mandoc_roff 5
+.Xr roff 7
 .Ql \ef
 font escape sequences is never required.
 .Sh COMPATIBILITY
@@ -3289,11 +3212,11 @@ but produces large indentations.
 .Sh SEE ALSO
 .Xr man 1 ,
 .Xr mandoc 1 ,
-.Xr eqn 5 ,
-.Xr man 5 ,
-.Xr mandoc_char 5 ,
-.Xr mandoc_roff 5 ,
-.Xr tbl 5
+.Xr eqn 7 ,
+.Xr man 7 ,
+.Xr mandoc_char 7 ,
+.Xr roff 7 ,
+.Xr tbl 7
 .Sh HISTORY
 The
 .Nm

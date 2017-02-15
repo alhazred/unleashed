@@ -40,12 +40,6 @@ COMMON_SUBDIRS= \
 	protolist \
 	scripts
 
-#
-#  special versions of commands for use only in build
-#
-UNSHIPPED_SUBDIRS = \
-	mandoc
-
 sparc_SUBDIRS= \
 	chk4ubin \
 	stabs \
@@ -58,8 +52,7 @@ i386_SUBDIRS=		\
 
 SUBDIRS= \
 	$($(MACH)_SUBDIRS) \
-	$(COMMON_SUBDIRS) \
-	$(UNSHIPPED_SUBDIRS)
+	$(COMMON_SUBDIRS)
 
 include Makefile.tools
 

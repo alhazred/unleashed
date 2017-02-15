@@ -21,7 +21,6 @@ MAN = Intro.5 \
       dhcp.5 \
       environ.5 \
       epoll.5 \
-      eqn.5 \
       eqnchar.5 \
       eventfd.5 \
       extendedFILE.5 \
@@ -45,10 +44,6 @@ MAN = Intro.5 \
       lfcompile.5 \
       lfcompile64.5 \
       locale.5 \
-      man.5 \
-      mandoc_char.5 \
-      mandoc_roff.5 \
-      mdoc.5 \
       me.5 \
       mech_spnego.5 \
       mm.5 \
@@ -94,7 +89,6 @@ MAN = Intro.5 \
       smf_template.5 \
       standards.5 \
       sticky.5 \
-      tbl.5 \
       tecla.5 \
       term.5 \
       threads.5 \
