@@ -161,8 +161,6 @@ static struct keytab {
 	{"static",	K_STATIC},
 #define	K_XRESOLVE	40
 	{"xresolve",	K_XRESOLVE},
-#define	K_MULTIRT	41
-	{"multirt",	K_MULTIRT},
 #define	K_SETSRC	42
 	{"setsrc",	K_SETSRC},
 #define	K_SHOW		43
@@ -1354,9 +1352,6 @@ args_to_rtcmd(rtcmd_irep_t *rcip, char **argv, char *cmd_string)
 		case K_PRIVATE:
 			rcip->ri_flags |= RTF_PRIVATE;
 			break;
-		case K_MULTIRT:
-			rcip->ri_flags |= RTF_MULTIRT;
-			break;
 		case K_SETSRC:
 			if (!NEXTTOKEN) {
 				syntax_arg_missing(keyword_str);
@@ -2513,7 +2508,7 @@ static char metricnames[] =
 static char routeflags[] =
 "\1UP\2GATEWAY\3HOST\4REJECT\5DYNAMIC\6MODIFIED\7DONE\010MASK_PRESENT"
 	"\011CLONING\012XRESOLVE\013LLINFO\014STATIC\015BLACKHOLE"
-	"\016PRIVATE\017PROTO2\020PROTO1\021MULTIRT\022SETSRC\023INDIRECT"
+	"\016PRIVATE\017PROTO2\020PROTO1\022SETSRC\023INDIRECT"
 	"\024KERNEL\025ZONE";
 static char ifnetflags[] =
 "\1UP\2BROADCAST\3DEBUG\4LOOPBACK\5PTP\6NOTRAILERS\7RUNNING\010NOARP"

@@ -211,9 +211,9 @@ extern	void	ill_downi(ire_t *, char *);
 extern	void	ill_downi_if_clone(ire_t *, char *);
 extern	boolean_t ill_down_start(queue_t *, mblk_t *);
 extern	ill_t	*ill_lookup_group_v4(ipaddr_t, zoneid_t,
-    ip_stack_t *, boolean_t *, ipaddr_t *);
+    ip_stack_t *, ipaddr_t *);
 extern	ill_t	*ill_lookup_group_v6(const in6_addr_t *, zoneid_t,
-    ip_stack_t *, boolean_t *, in6_addr_t *);
+    ip_stack_t *, in6_addr_t *);
 
 extern	void	ill_capability_ack(ill_t *, mblk_t *);
 extern	void	ill_capability_probe(ill_t *);

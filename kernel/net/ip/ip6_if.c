@@ -85,17 +85,14 @@ static int	ipif_add_ires_v6(ipif_t *, boolean_t);
  * multicast group (a /128 route) or anything in between.  If there is no
  * such multicast route, we just find any multicast capable interface and
  * return it.
- *
- * We support MULTIRT and RTF_SETSRC on the multicast routes added to the
- * unicast table. This is used by CGTP.
  */
 ill_t *
 ill_lookup_group_v6(const in6_addr_t *group, zoneid_t zoneid, ip_stack_t *ipst,
-    boolean_t *multirtp, in6_addr_t *setsrcp)
+    in6_addr_t *setsrcp)
 {
 	ill_t	*ill;
 
-	ill = ire_lookup_multi_ill_v6(group, zoneid, ipst, multirtp, setsrcp);
+	ill = ire_lookup_multi_ill_v6(group, zoneid, ipst, setsrcp);
 	if (ill != NULL)
 		return (ill);
 
@@ -494,15 +491,6 @@ ip_rt_add_v6(const in6_addr_t *dst_addr, const in6_addr_t *mask,
 	}
 
 	/*
-	 * The routes for multicast with CGTP are quite special in that
-	 * the gateway is the local interface address, yet RTF_GATEWAY
-	 * is set. We turn off RTF_GATEWAY to provide compatibility with
-	 * this undocumented and unusual use of multicast routes.
-	 */
-	if ((flags & RTF_MULTIRT) && ipif != NULL)
-		flags &= ~RTF_GATEWAY;
-
-	/*
 	 * Traditionally, interface routes are ones where RTF_GATEWAY isn't set
 	 * and the gateway address provided is one of the system's interface
 	 * addresses.  By using the routing socket interface and supplying an
@@ -789,47 +777,6 @@ again:
 	}
 	ire = nire;
 
-	if (flags & RTF_MULTIRT) {
-		/*
-		 * Invoke the CGTP (multirouting) filtering module
-		 * to add the dst address in the filtering database.
-		 * Replicated inbound packets coming from that address
-		 * will be filtered to discard the duplicates.
-		 * It is not necessary to call the CGTP filter hook
-		 * when the dst address is a multicast, because an
-		 * IP source address cannot be a multicast.
-		 */
-		if (ipst->ips_ip_cgtp_filter_ops != NULL &&
-		    !IN6_IS_ADDR_MULTICAST(&(ire->ire_addr_v6))) {
-			int res;
-			ipif_t *src_ipif;
-
-			/* Find the source address corresponding to gw_ire */
-			src_ipif = ipif_lookup_addr_v6(
-			    &gw_ire->ire_gateway_addr_v6, NULL, zoneid, ipst);
-			if (src_ipif != NULL) {
-				res = ipst->ips_ip_cgtp_filter_ops->
-				    cfo_add_dest_v6(
-				    ipst->ips_netstack->netstack_stackid,
-				    &ire->ire_addr_v6,
-				    &ire->ire_gateway_addr_v6,
-				    &ire->ire_setsrc_addr_v6,
-				    &src_ipif->ipif_v6lcl_addr);
-				ipif_refrele(src_ipif);
-			} else {
-				res = EADDRNOTAVAIL;
-			}
-			if (res != 0) {
-				if (ipif != NULL)
-					ipif_refrele(ipif);
-				ire_refrele(gw_ire);
-				ire_delete(ire);
-				ire_refrele(ire);	/* Held in ire_add */
-				return (res);
-			}
-		}
-	}
-
 save_ire:
 	if (gw_ire != NULL) {
 		ire_refrele(gw_ire);
@@ -970,20 +917,6 @@ ip_rt_delete_v6(const in6_addr_t *dst_addr, const in6_addr_t *mask,
 	}
 	if (ire == NULL)
 		return (ESRCH);
-
-	if (ire->ire_flags & RTF_MULTIRT) {
-		/*
-		 * Invoke the CGTP (multirouting) filtering module
-		 * to remove the dst address from the filtering database.
-		 * Packets coming from that address will no longer be
-		 * filtered to remove duplicates.
-		 */
-		if (ipst->ips_ip_cgtp_filter_ops != NULL) {
-			err = ipst->ips_ip_cgtp_filter_ops->cfo_del_dest_v6(
-			    ipst->ips_netstack->netstack_stackid,
-			    &ire->ire_addr_v6, &ire->ire_gateway_addr_v6);
-		}
-	}
 
 	ill = ire->ire_ill;
 	if (ill != NULL)

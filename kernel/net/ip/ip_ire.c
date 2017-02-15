@@ -573,12 +573,6 @@ ire_init_v4(ire_t *ire, uchar_t *addr, uchar_t *mask, uchar_t *gateway,
 	if (ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)) {
 		ire->ire_sendfn = ire_send_noroute_v4;
 		ire->ire_recvfn = ire_recv_noroute_v4;
-	} else if (ire->ire_flags & RTF_MULTIRT) {
-		ire->ire_postfragfn = ip_postfrag_multirt_v4;
-		ire->ire_sendfn = ire_send_multirt_v4;
-		/* Multirt receive of broadcast uses ire_recv_broadcast_v4 */
-		if (ire->ire_type != IRE_BROADCAST)
-			ire->ire_recvfn = ire_recv_multirt_v4;
 	}
 	ire->ire_nce_capable = ire_determine_nce_capable(ire);
 	return (0);
@@ -1254,20 +1248,14 @@ ire_add_v4(ire_t *ire)
 
 	/*
 	 * Normally we do head insertion since most things do not care about
-	 * the order of the IREs in the bucket. Note that ip_cgtp_bcast_add
-	 * assumes we at least do head insertion so that its IRE_BROADCAST
-	 * arrive ahead of existing IRE_HOST for the same address.
-	 * However, due to shared-IP zones (and restrict_interzone_loopback)
-	 * we can have an IRE_LOCAL as well as IRE_IF_CLONE for the same
-	 * address. For that reason we do tail insertion for IRE_IF_CLONE.
-	 * Due to the IRE_BROADCAST on cgtp0, which must be last in the bucket,
-	 * we do tail insertion of IRE_BROADCASTs that do not have RTF_MULTIRT
-	 * set.
+	 * the order of the IREs in the bucket.  However, due to shared-IP
+	 * zones (and restrict_interzone_loopback) we can have an IRE_LOCAL
+	 * as well as IRE_IF_CLONE for the same address. For that reason we
+	 * do tail insertion for IRE_IF_CLONE.  The IRE_BROADCAST case is a
+	 * bit of a mystery.
 	 */
 	irep = (ire_t **)irb_ptr;
-	if ((ire->ire_type & IRE_IF_CLONE) ||
-	    ((ire->ire_type & IRE_BROADCAST) &&
-	    !(ire->ire_flags & RTF_MULTIRT))) {
+	if ((ire->ire_type & IRE_IF_CLONE) || (ire->ire_type & IRE_BROADCAST)) {
 		while ((ire1 = *irep) != NULL)
 			irep = &ire1->ire_next;
 	}
@@ -3049,10 +3037,10 @@ ire_handle_condemned_nce(nce_t *nce, ire_t *ire, ipha_t *ipha, ip6_t *ip6h,
 }
 
 /*
- * The caller has found that the ire is bad, either due to a reference to an NCE
- * in ND_UNREACHABLE state, or a MULTIRT route whose gateway can't be resolved.
- * We update things so a subsequent attempt to send to the destination
- * is likely to find different IRE, or that a new NCE would be created.
+ * The caller has found that the ire is bad due to a reference to an NCE in
+ * ND_UNREACHABLE state.  We update things so a subsequent attempt to send
+ * to the destination is likely to find different IRE, or that a new NCE
+ * would be created.
  *
  * Returns B_TRUE if it is likely that a subsequent ire_ftable_lookup would
  * find a different route (either due to having deleted a redirect, or there

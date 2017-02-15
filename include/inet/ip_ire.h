@@ -190,9 +190,9 @@ extern boolean_t ire_gateway_ok_zone_v6(const in6_addr_t *, zoneid_t, ill_t *,
 extern ire_t	*ire_alt_local(ire_t *, zoneid_t, const ill_t *, uint_t *);
 
 extern  ill_t	*ire_lookup_multi_ill_v4(ipaddr_t, zoneid_t, ip_stack_t *,
-    boolean_t *, ipaddr_t *);
+    ipaddr_t *);
 extern  ill_t	*ire_lookup_multi_ill_v6(const in6_addr_t *, zoneid_t,
-    ip_stack_t *, boolean_t *, in6_addr_t *);
+    ip_stack_t *, in6_addr_t *);
 
 extern	ire_t	*ire_nexthop(ire_t *);
 extern	ill_t	*ire_nexthop_ill(ire_t *);
@@ -211,8 +211,6 @@ extern void	ire_recv_broadcast_v4(ire_t *, mblk_t *, void *,
     ip_recv_attr_t *);
 extern void	ire_recv_multicast_v4(ire_t *, mblk_t *, void *,
     ip_recv_attr_t *);
-extern void	ire_recv_multirt_v4(ire_t *, mblk_t *, void *,
-    ip_recv_attr_t *);
 extern void	ire_recv_loopback_v4(ire_t *, mblk_t *, void *,
     ip_recv_attr_t *);
 extern void	ire_recv_local_v4(ire_t *, mblk_t *, void *,
@@ -225,8 +223,6 @@ extern void	ire_recv_forward_v6(ire_t *, mblk_t *, void *,
 extern void	ire_recv_noroute_v6(ire_t *, mblk_t *, void *,
     ip_recv_attr_t *);
 extern void	ire_recv_multicast_v6(ire_t *, mblk_t *, void *,
-    ip_recv_attr_t *);
-extern void	ire_recv_multirt_v6(ire_t *, mblk_t *, void *,
     ip_recv_attr_t *);
 extern void	ire_recv_loopback_v6(ire_t *, mblk_t *, void *,
     ip_recv_attr_t *);
@@ -271,8 +267,6 @@ extern ire_t	*ire_route_recursive_impl_v6(ire_t *ire, const in6_addr_t *,
 /* The different ire_sendfn functions */
 extern int	ire_send_local_v4(ire_t *, mblk_t *, void *,
     ip_xmit_attr_t *, uint32_t *);
-extern int	ire_send_multirt_v4(ire_t *, mblk_t *, void *,
-    ip_xmit_attr_t *, uint32_t *);
 extern int	ire_send_noroute_v4(ire_t *, mblk_t *, void *,
     ip_xmit_attr_t *, uint32_t *);
 extern int	ire_send_multicast_v4(ire_t *, mblk_t *, void *,
@@ -282,8 +276,6 @@ extern int	ire_send_broadcast_v4(ire_t *, mblk_t *, void *,
 extern int	ire_send_wire_v4(ire_t *, mblk_t *, void *,
     ip_xmit_attr_t *, uint32_t *);
 extern int	ire_send_local_v6(ire_t *, mblk_t *, void *,
-    ip_xmit_attr_t *, uint32_t *);
-extern int	ire_send_multirt_v6(ire_t *, mblk_t *, void *,
     ip_xmit_attr_t *, uint32_t *);
 extern int	ire_send_noroute_v6(ire_t *, mblk_t *, void *,
     ip_xmit_attr_t *, uint32_t *);
@@ -300,23 +292,19 @@ extern int	ip_xmit(mblk_t *, struct nce_s *,
     iaflags_t, uint_t, uint32_t, zoneid_t, zoneid_t, uintptr_t *);
 extern int	ip_postfrag_loopcheck(mblk_t *, struct nce_s *,
     iaflags_t, uint_t, uint32_t, zoneid_t, zoneid_t, uintptr_t *);
-extern int	ip_postfrag_multirt_v4(mblk_t *, struct nce_s *,
-    iaflags_t, uint_t, uint32_t, zoneid_t, zoneid_t, uintptr_t *);
-extern int	ip_postfrag_multirt_v6(mblk_t *, struct nce_s *,
-    iaflags_t, uint_t, uint32_t, zoneid_t, zoneid_t, uintptr_t *);
 
 extern void	ip_postfrag_loopback(mblk_t *, struct nce_s *,
     iaflags_t, uint_t, zoneid_t);
 extern int	ire_revalidate_nce(ire_t *);
 
 extern ire_t	*ip_select_route_pkt(mblk_t *, ip_xmit_attr_t *,
-    uint_t *, int *, boolean_t *);
+    uint_t *, int *);
 extern ire_t	*ip_select_route(const in6_addr_t *, const in6_addr_t,
-    ip_xmit_attr_t *, uint_t *, in6_addr_t *, int *, boolean_t *);
+    ip_xmit_attr_t *, uint_t *, in6_addr_t *, int *);
 extern ire_t	*ip_select_route_v4(ipaddr_t, ipaddr_t, ip_xmit_attr_t *,
-    uint_t *, ipaddr_t *, int *, boolean_t *);
+    uint_t *, ipaddr_t *, int *);
 extern ire_t	*ip_select_route_v6(const in6_addr_t *, const in6_addr_t,
-    ip_xmit_attr_t *, uint_t *, in6_addr_t *, int *, boolean_t *);
+    ip_xmit_attr_t *, uint_t *, in6_addr_t *, int *);
 
 extern	void	ire_walk(pfv_t, void *, ip_stack_t *);
 extern	void	ire_walk_ill(uint_t, uint_t, pfv_t, void *, ill_t *);

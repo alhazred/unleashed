@@ -296,18 +296,6 @@ struct ip_stack {
 	void		*ips_ip_g_head;	/* IP Instance Data List Head */
 	void		*ips_arp_g_head; /* ARP Instance Data List Head */
 
-	/* Multirouting stuff */
-	/* Interval (in ms) between consecutive 'bad MTU' warnings */
-	hrtime_t	ips_ip_multirt_log_interval;
-	/* Time since last warning issued. */
-	hrtime_t	ips_multirt_bad_mtu_last_time;
-
-	/*
-	 * CGTP hooks. Enabling and disabling of hooks is controlled by an
-	 * IP tunable 'ips_ip_cgtp_filter'.
-	 */
-	struct cgtp_filter_ops *ips_ip_cgtp_filter_ops;
-
 	struct ipsq_s	*ips_ipsq_g_head;
 	uint_t		ips_ill_index;	/* Used to assign interface indicies */
 	/* When set search for unused index */

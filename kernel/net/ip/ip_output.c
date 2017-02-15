@@ -354,7 +354,6 @@ conn_ip_output(mblk_t *mp, ip_xmit_attr_t *ixa)
 	/*
 	 * Based on ire_type and ire_flags call one of:
 	 *	ire_send_local_v* - for IRE_LOCAL and IRE_LOOPBACK
-	 *	ire_send_multirt_v* - if RTF_MULTIRT
 	 *	ire_send_noroute_v* - if RTF_REJECT or RTF_BLACHOLE
 	 *	ire_send_multicast_v* - for IRE_MULTICAST
 	 *	ire_send_broadcast_v4 - for IRE_BROADCAST
@@ -439,7 +438,6 @@ ip_verify_ire(mblk_t *mp, ip_xmit_attr_t *ixa)
 	ire_t		*ire;
 	nce_t		*nce;
 	int		error;
-	boolean_t	multirt = B_FALSE;
 
 	/*
 	 * Redo ip_select_route.
@@ -447,7 +445,7 @@ ip_verify_ire(mblk_t *mp, ip_xmit_attr_t *ixa)
 	 * avoid race.
 	 */
 	error = 0;
-	ire = ip_select_route_pkt(mp, ixa, &gen, &error, &multirt);
+	ire = ip_select_route_pkt(mp, ixa, &gen, &error);
 	ASSERT(ire != NULL); /* IRE_NOROUTE if none found */
 	if (error != 0) {
 		ire_refrele(ire);
@@ -462,16 +460,7 @@ ip_verify_ire(mblk_t *mp, ip_xmit_attr_t *ixa)
 #endif
 	ixa->ixa_ire = ire;
 	ixa->ixa_ire_generation = gen;
-	if (multirt) {
-		if (ixa->ixa_flags & IXAF_IS_IPV4)
-			ixa->ixa_postfragfn = ip_postfrag_multirt_v4;
-		else
-			ixa->ixa_postfragfn = ip_postfrag_multirt_v6;
-		ixa->ixa_flags |= IXAF_MULTIRT_MULTICAST;
-	} else {
-		ixa->ixa_postfragfn = ire->ire_postfragfn;
-		ixa->ixa_flags &= ~IXAF_MULTIRT_MULTICAST;
-	}
+	ixa->ixa_postfragfn = ire->ire_postfragfn;
 
 	/*
 	 * Don't look for an nce for reject or blackhole.
@@ -652,7 +641,6 @@ ip_verify_lso(ill_t *ill, ip_xmit_attr_t *ixa)
 		 */
 		if ((ixa->ixa_flags & IXAF_IPSEC_SECURE) ||
 		    (ixa->ixa_ire->ire_type & (IRE_LOCAL | IRE_LOOPBACK)) ||
-		    (ixa->ixa_ire->ire_flags & RTF_MULTIRT) ||
 		    ((ixa->ixa_flags & IXAF_IS_IPV4) ?
 		    !ILL_LSO_TCP_IPV4_USABLE(ill) :
 		    !ILL_LSO_TCP_IPV6_USABLE(ill))) {
@@ -672,7 +660,6 @@ ip_verify_lso(ill_t *ill, ip_xmit_attr_t *ixa)
 	} else { /* Was not usable */
 		if (!(ixa->ixa_flags & IXAF_IPSEC_SECURE) &&
 		    !(ixa->ixa_ire->ire_type & (IRE_LOCAL | IRE_LOOPBACK)) &&
-		    !(ixa->ixa_ire->ire_flags & RTF_MULTIRT) &&
 		    ((ixa->ixa_flags & IXAF_IS_IPV4) ?
 		    ILL_LSO_TCP_IPV4_USABLE(ill) :
 		    ILL_LSO_TCP_IPV6_USABLE(ill))) {
@@ -699,7 +686,6 @@ ip_verify_zcopy(ill_t *ill, ip_xmit_attr_t *ixa)
 		 */
 		if ((ixa->ixa_flags & IXAF_IPSEC_SECURE) ||
 		    (ixa->ixa_ire->ire_type & (IRE_LOCAL | IRE_LOOPBACK)) ||
-		    (ixa->ixa_ire->ire_flags & RTF_MULTIRT) ||
 		    !ILL_ZCOPY_USABLE(ill)) {
 			ixa->ixa_flags &= ~IXAF_ZCOPY_CAPAB;
 
@@ -708,7 +694,6 @@ ip_verify_zcopy(ill_t *ill, ip_xmit_attr_t *ixa)
 	} else { /* Was not usable */
 		if (!(ixa->ixa_flags & IXAF_IPSEC_SECURE) &&
 		    !(ixa->ixa_ire->ire_type & (IRE_LOCAL | IRE_LOOPBACK)) &&
-		    !(ixa->ixa_ire->ire_flags & RTF_MULTIRT) &&
 		    ILL_ZCOPY_USABLE(ill)) {
 			ixa->ixa_flags |= IXAF_ZCOPY_CAPAB;
 
@@ -779,7 +764,6 @@ ip_output_simple_v4(mblk_t *mp, ip_xmit_attr_t *ixa)
 	iaflags_t	ixaflags = ixa->ixa_flags;
 	ip_stack_t	*ipst = ixa->ixa_ipst;
 	boolean_t	repeat = B_FALSE;
-	boolean_t	multirt = B_FALSE;
 	int64_t		now;
 
 	ipha = (ipha_t *)mp->b_rptr;
@@ -808,7 +792,7 @@ repeat_ire:
 	error = 0;
 	setsrc = INADDR_ANY;
 	ire = ip_select_route_v4(firsthop, ipha->ipha_src, ixa, NULL,
-	    &setsrc, &error, &multirt);
+	    &setsrc, &error);
 	ASSERT(ire != NULL);	/* IRE_NOROUTE if none found */
 	if (error != 0) {
 		BUMP_MIB(&ipst->ips_ip_mib, ipIfStatsHCOutRequests);
@@ -864,20 +848,8 @@ repeat_ire:
 		nce = nce1;
 	}
 
-	/*
-	 * For multicast with multirt we have a flag passed back from
-	 * ire_lookup_multi_ill_v4 since we don't have an IRE for each
-	 * possible multicast address.
-	 * We also need a flag for multicast since we can't check
-	 * whether RTF_MULTIRT is set in ixa_ire for multicast.
-	 */
-	if (multirt) {
-		ixa->ixa_postfragfn = ip_postfrag_multirt_v4;
-		ixa->ixa_flags |= IXAF_MULTIRT_MULTICAST;
-	} else {
-		ixa->ixa_postfragfn = ire->ire_postfragfn;
-		ixa->ixa_flags &= ~IXAF_MULTIRT_MULTICAST;
-	}
+	ixa->ixa_postfragfn = ire->ire_postfragfn;
+
 	ASSERT(ixa->ixa_nce == NULL);
 	ixa->ixa_nce = nce;
 
@@ -996,7 +968,6 @@ repeat_ire:
 	/*
 	 * Based on ire_type and ire_flags call one of:
 	 *	ire_send_local_v4 - for IRE_LOCAL and IRE_LOOPBACK
-	 *	ire_send_multirt_v4 - if RTF_MULTIRT
 	 *	ire_send_noroute_v4 - if RTF_REJECT or RTF_BLACHOLE
 	 *	ire_send_multicast_v4 - for IRE_MULTICAST
 	 *	ire_send_broadcast_v4 - for IRE_BROADCAST
@@ -1177,8 +1148,8 @@ ire_send_broadcast_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
 	nce_t		*nce1, *nce_orig;
 
 	/*
-	 * Unless ire_send_multirt_v4 already set a ttl, force the
-	 * ttl to a smallish value.
+	 * Unless someone already set a ttl, force the ttl to a smallish
+	 * value.
 	 */
 	if (!(ixa->ixa_flags & IXAF_NO_TTL_CHANGE)) {
 		/*
@@ -1219,10 +1190,6 @@ ire_send_broadcast_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
 		/*
 		 * Only IREs for the same IP address should be in the same
 		 * bucket.
-		 * But could have IRE_HOSTs in the case of CGTP.
-		 * If we find any multirt routes we bail out of the loop
-		 * and just do the single packet at the end; ip_postfrag_multirt
-		 * will duplicate the packet.
 		 */
 		ASSERT(ire1->ire_addr == ire->ire_addr);
 		if (!(ire1->ire_type & IRE_BROADCAST))
@@ -1236,9 +1203,6 @@ ire_send_broadcast_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
 			continue;
 
 		ASSERT(ire->ire_ill != ire1->ire_ill && ire1->ire_ill != NULL);
-
-		if (ire1->ire_flags & RTF_MULTIRT)
-			break;
 
 		/*
 		 * For IPMP we only send for the ipmp_ill. arp_nce_init() will
@@ -1360,32 +1324,6 @@ ip_output_simple_broadcast(ip_xmit_attr_t *ixa, mblk_t *mp)
 	ixa_cleanup(&ixas);
 }
 
-
-static void
-multirt_check_v4(ire_t *ire, ipha_t *ipha, ip_xmit_attr_t *ixa)
-{
-	ip_stack_t	*ipst = ixa->ixa_ipst;
-
-	/* Limit the TTL on multirt packets */
-	if (ire->ire_type & IRE_MULTICAST) {
-		if (ipha->ipha_ttl > 1) {
-			ip2dbg(("ire_send_multirt_v4: forcing multicast "
-			    "multirt TTL to 1 (was %d), dst 0x%08x\n",
-			    ipha->ipha_ttl, ntohl(ire->ire_addr)));
-			ipha->ipha_ttl = 1;
-		}
-		ixa->ixa_flags |= IXAF_NO_TTL_CHANGE;
-	} else if ((ipst->ips_ip_multirt_ttl > 0) &&
-	    (ipha->ipha_ttl > ipst->ips_ip_multirt_ttl)) {
-		ipha->ipha_ttl = ipst->ips_ip_multirt_ttl;
-		/*
-		 * Need to ensure we don't increase the ttl should we go through
-		 * ire_send_broadcast or multicast.
-		 */
-		ixa->ixa_flags |= IXAF_NO_TTL_CHANGE;
-	}
-}
-
 /*
  * ire_sendfn for IRE_MULTICAST
  */
@@ -1397,13 +1335,6 @@ ire_send_multicast_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
 	ip_stack_t	*ipst = ixa->ixa_ipst;
 	ill_t		*ill = ire->ire_ill;
 	iaflags_t	ixaflags = ixa->ixa_flags;
-
-	/*
-	 * The IRE_MULTICAST is the same whether or not multirt is in use.
-	 * Hence we need special-case code.
-	 */
-	if (ixaflags & IXAF_MULTIRT_MULTICAST)
-		multirt_check_v4(ire, ipha, ixa);
 
 	/*
 	 * Check if anything in ip_input_v4 wants a copy of the transmitted
@@ -1453,33 +1384,14 @@ ire_send_multicast_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
 	}
 
 	/*
-	 * Unless ire_send_multirt_v4 or icmp_output_hdrincl already set a ttl,
-	 * force the ttl to the IP_MULTICAST_TTL value
+	 * Unless icmp_output_hdrincl already set a ttl, force the ttl to
+	 * the IP_MULTICAST_TTL value
 	 */
 	if (!(ixaflags & IXAF_NO_TTL_CHANGE)) {
 		ipha->ipha_ttl = ixa->ixa_multicast_ttl;
 	}
 
 	return (ire_send_wire_v4(ire, mp, ipha, ixa, identp));
-}
-
-/*
- * ire_sendfn for IREs with RTF_MULTIRT
- */
-int
-ire_send_multirt_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
-    ip_xmit_attr_t *ixa, uint32_t *identp)
-{
-	ipha_t		*ipha = (ipha_t *)iph_arg;
-
-	multirt_check_v4(ire, ipha, ixa);
-
-	if (ire->ire_type & IRE_MULTICAST)
-		return (ire_send_multicast_v4(ire, mp, ipha, ixa, identp));
-	else if (ire->ire_type & IRE_BROADCAST)
-		return (ire_send_broadcast_v4(ire, mp, ipha, ixa, identp));
-	else
-		return (ire_send_wire_v4(ire, mp, ipha, ixa, identp));
 }
 
 /*
@@ -1624,8 +1536,6 @@ ip_hdr_cksum:
 
 /*
  * Calculate the ULP checksum - try to use hardware.
- * In the case of MULTIRT, broadcast or multicast the
- * IXAF_NO_HW_CKSUM is set in which case we use software.
  *
  * If the hardware supports IP header checksum offload; then clear the
  * contents of IP header checksum field as expected by NIC.
@@ -1754,7 +1664,7 @@ ip_output_cksum_v4(iaflags_t ixaflags, mblk_t *mp, ipha_t *ipha,
 
 /*
  * ire_sendfn for offlink and onlink destinations.
- * Also called from the multicast, broadcast, multirt send functions.
+ * Also called from the multicast and broadcast send functions.
  *
  * Assumes that the caller has a hold on the ire.
  *
@@ -2076,204 +1986,6 @@ ip_postfrag_loopcheck(mblk_t *mp, nce_t *nce, iaflags_t ixaflags,
 
 	return (ip_xmit(mp, nce, ixaflags, pkt_len, xmit_hint, szone, 0,
 	    ixacookie));
-}
-
-/*
- * Post fragmentation function for RTF_MULTIRT routes.
- * Since IRE_BROADCASTs can have RTF_MULTIRT, this function
- * checks IXAF_LOOPBACK_COPY.
- *
- * If no packet is sent due to failures then we return an errno, but if at
- * least one succeeded we return zero.
- */
-int
-ip_postfrag_multirt_v4(mblk_t *mp, nce_t *nce, iaflags_t ixaflags,
-    uint_t pkt_len, uint32_t xmit_hint, zoneid_t szone, zoneid_t nolzid,
-    uintptr_t *ixacookie)
-{
-	irb_t		*irb;
-	ipha_t		*ipha = (ipha_t *)mp->b_rptr;
-	ire_t		*ire;
-	ire_t		*ire1;
-	mblk_t		*mp1;
-	nce_t		*nce1;
-	ill_t		*ill = nce->nce_ill;
-	ill_t		*ill1;
-	ip_stack_t	*ipst = ill->ill_ipst;
-	int		error = 0;
-	int		num_sent = 0;
-	int		err;
-	uint_t		ire_type;
-	ipaddr_t	nexthop;
-
-	ASSERT(ixaflags & IXAF_IS_IPV4);
-
-	/* Check for IXAF_LOOPBACK_COPY */
-	if (ixaflags & IXAF_LOOPBACK_COPY) {
-		mblk_t *mp1;
-
-		mp1 = copymsg(mp);
-		if (mp1 == NULL) {
-			/* Failed to deliver the loopback copy. */
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsOutDiscards);
-			ip_drop_output("ipIfStatsOutDiscards", mp, ill);
-			error = ENOBUFS;
-		} else {
-			ip_postfrag_loopback(mp1, nce, ixaflags, pkt_len,
-			    nolzid);
-		}
-	}
-
-	/*
-	 * Loop over RTF_MULTIRT for ipha_dst in the same bucket. Send
-	 * a copy to each one.
-	 * Use the nce (nexthop) and ipha_dst to find the ire.
-	 *
-	 * MULTIRT is not designed to work with shared-IP zones thus we don't
-	 * need to pass a zoneid to the IRE lookup.
-	 */
-	if (V4_PART_OF_V6(nce->nce_addr) == ipha->ipha_dst) {
-		/* Broadcast and multicast case */
-		ire = ire_ftable_lookup_v4(ipha->ipha_dst, 0, 0, 0,
-		    NULL, ALL_ZONES, MATCH_IRE_DSTONLY, 0, ipst, NULL);
-	} else {
-		ipaddr_t v4addr = V4_PART_OF_V6(nce->nce_addr);
-
-		/* Unicast case */
-		ire = ire_ftable_lookup_v4(ipha->ipha_dst, 0, v4addr, 0,
-		    NULL, ALL_ZONES, MATCH_IRE_GW, 0, ipst, NULL);
-	}
-
-	if (ire == NULL ||
-	    (ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)) ||
-	    !(ire->ire_flags & RTF_MULTIRT)) {
-		/* Drop */
-		ip_drop_output("ip_postfrag_multirt didn't find route",
-		    mp, nce->nce_ill);
-		if (ire != NULL)
-			ire_refrele(ire);
-		return (ENETUNREACH);
-	}
-
-	irb = ire->ire_bucket;
-	irb_refhold(irb);
-	for (ire1 = irb->irb_ire; ire1 != NULL; ire1 = ire1->ire_next) {
-		/*
-		 * For broadcast we can have a mixture of IRE_BROADCAST and
-		 * IRE_HOST due to the manually added IRE_HOSTs that are used
-		 * to trigger the creation of the special CGTP broadcast routes.
-		 * Thus we have to skip if ire_type doesn't match the original.
-		 */
-		if (IRE_IS_CONDEMNED(ire1) ||
-		    !(ire1->ire_flags & RTF_MULTIRT) ||
-		    ire1->ire_type != ire->ire_type)
-			continue;
-
-		/* Do the ire argument one after the loop */
-		if (ire1 == ire)
-			continue;
-
-		ill1 = ire_nexthop_ill(ire1);
-		if (ill1 == NULL) {
-			/*
-			 * This ire might not have been picked by
-			 * ire_route_recursive, in which case ire_dep might
-			 * not have been setup yet.
-			 * We kick ire_route_recursive to try to resolve
-			 * starting at ire1.
-			 */
-			ire_t *ire2;
-			uint_t	match_flags = MATCH_IRE_DSTONLY;
-
-			if (ire1->ire_ill != NULL)
-				match_flags |= MATCH_IRE_ILL;
-			ire2 = ire_route_recursive_impl_v4(ire1,
-			    ire1->ire_addr, ire1->ire_type, ire1->ire_ill,
-			    ire1->ire_zoneid, match_flags, IRR_ALLOCATE, 0,
-			    ipst, NULL, NULL);
-			if (ire2 != NULL)
-				ire_refrele(ire2);
-			ill1 = ire_nexthop_ill(ire1);
-		}
-
-		if (ill1 == NULL) {
-			BUMP_MIB(ill->ill_ip_mib, ipIfStatsOutDiscards);
-			ip_drop_output("ipIfStatsOutDiscards - no ill",
-			    mp, ill);
-			error = ENETUNREACH;
-			continue;
-		}
-
-		/* Pick the addr and type to use for arp_nce_init */
-		if (nce->nce_common->ncec_flags & NCE_F_BCAST) {
-			ire_type = IRE_BROADCAST;
-			nexthop = ire1->ire_gateway_addr;
-		} else if (nce->nce_common->ncec_flags & NCE_F_MCAST) {
-			ire_type = IRE_MULTICAST;
-			nexthop = ipha->ipha_dst;
-		} else {
-			ire_type = ire1->ire_type;	/* Doesn't matter */
-			nexthop = ire1->ire_gateway_addr;
-		}
-
-		/* If IPMP meta or under, then we just drop */
-		if (ill1->ill_grp != NULL) {
-			BUMP_MIB(ill1->ill_ip_mib, ipIfStatsOutDiscards);
-			ip_drop_output("ipIfStatsOutDiscards - IPMP",
-			    mp, ill1);
-			ill_refrele(ill1);
-			error = ENETUNREACH;
-			continue;
-		}
-
-		nce1 = arp_nce_init(ill1, nexthop, ire_type);
-		if (nce1 == NULL) {
-			BUMP_MIB(ill1->ill_ip_mib, ipIfStatsOutDiscards);
-			ip_drop_output("ipIfStatsOutDiscards - no nce",
-			    mp, ill1);
-			ill_refrele(ill1);
-			error = ENETUNREACH;
-			continue;
-		}
-		mp1 = copymsg(mp);
-		if (mp1 == NULL) {
-			BUMP_MIB(ill1->ill_ip_mib, ipIfStatsOutDiscards);
-			ip_drop_output("ipIfStatsOutDiscards", mp, ill1);
-			nce_refrele(nce1);
-			ill_refrele(ill1);
-			error = ENOBUFS;
-			continue;
-		}
-		/* Preserve HW checksum for this copy */
-		DB_CKSUMSTART(mp1) = DB_CKSUMSTART(mp);
-		DB_CKSUMSTUFF(mp1) = DB_CKSUMSTUFF(mp);
-		DB_CKSUMEND(mp1) = DB_CKSUMEND(mp);
-		DB_CKSUMFLAGS(mp1) = DB_CKSUMFLAGS(mp);
-		DB_LSOMSS(mp1) = DB_LSOMSS(mp);
-
-		ire1->ire_ob_pkt_count++;
-		err = ip_xmit(mp1, nce1, ixaflags, pkt_len, xmit_hint, szone,
-		    0, ixacookie);
-		if (err == 0)
-			num_sent++;
-		else
-			error = err;
-		nce_refrele(nce1);
-		ill_refrele(ill1);
-	}
-	irb_refrele(irb);
-	ire_refrele(ire);
-	/* Finally, the main one */
-	err = ip_xmit(mp, nce, ixaflags, pkt_len, xmit_hint, szone, 0,
-	    ixacookie);
-	if (err == 0)
-		num_sent++;
-	else
-		error = err;
-	if (num_sent > 0)
-		return (0);
-	else
-		return (error);
 }
 
 /*

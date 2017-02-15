@@ -899,8 +899,6 @@ get_ireflags(const ire_t *ire, char *flags)
 		(void) strcat(flags, "L");
 	if (ire->ire_type == IRE_NOROUTE)
 		(void) strcat(flags, "N");
-	if (ire->ire_flags & RTF_MULTIRT)
-		(void) strcat(flags, "M");
 	if (ire->ire_flags & RTF_SETSRC)
 		(void) strcat(flags, "S");
 	if (ire->ire_flags & RTF_REJECT)

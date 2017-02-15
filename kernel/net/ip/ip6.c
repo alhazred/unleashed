@@ -1941,7 +1941,6 @@ ip_set_destination_v6(in6_addr_t *src_addrp, const in6_addr_t *dst_addr,
 	uint_t		generation;
 	nce_t		*nce;
 	ill_t		*ill = NULL;
-	boolean_t	multirt = B_FALSE;
 
 	ASSERT(!IN6_IS_ADDR_V4MAPPED(dst_addr));
 
@@ -1961,7 +1960,7 @@ ip_set_destination_v6(in6_addr_t *src_addrp, const in6_addr_t *dst_addr,
 	 * if ixa_ifindex has been specified.
 	 */
 	ire = ip_select_route_v6(firsthop, *src_addrp, ixa, &generation,
-	    &setsrc, &error, &multirt);
+	    &setsrc, &error);
 	ASSERT(ire != NULL);	/* IRE_NOROUTE if none found */
 	if (error != 0)
 		goto bad_addr;
@@ -2058,22 +2057,8 @@ ip_set_destination_v6(in6_addr_t *src_addrp, const in6_addr_t *dst_addr,
 #endif
 	ixa->ixa_dce = dce;
 	ixa->ixa_dce_generation = generation;
+	ixa->ixa_postfragfn = ire->ire_postfragfn;
 
-
-	/*
-	 * For multicast with multirt we have a flag passed back from
-	 * ire_lookup_multi_ill_v6 since we don't have an IRE for each
-	 * possible multicast address.
-	 * We also need a flag for multicast since we can't check
-	 * whether RTF_MULTIRT is set in ixa_ire for multicast.
-	 */
-	if (multirt) {
-		ixa->ixa_postfragfn = ip_postfrag_multirt_v6;
-		ixa->ixa_flags |= IXAF_MULTIRT_MULTICAST;
-	} else {
-		ixa->ixa_postfragfn = ire->ire_postfragfn;
-		ixa->ixa_flags &= ~IXAF_MULTIRT_MULTICAST;
-	}
 	if (!(ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE))) {
 		/* Get an nce to cache. */
 		nce = ire_to_nce(ire, 0, firsthop);

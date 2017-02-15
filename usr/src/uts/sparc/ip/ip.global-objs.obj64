@@ -83,7 +83,6 @@ ill_no_arena
 inet_dev_info
 inet_devops
 ip6_ftable_hash_size
-ip_cgtp_filter_rev
 ip_conn_cache
 ip_dce_hash_size
 ip_dce_reclaim_interval

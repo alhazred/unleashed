@@ -191,8 +191,6 @@ static ip_v6mapinfo_func_t ip_ether_v6_mapping;
 static ip_v4mapinfo_func_t ip_ib_v4_mapping;
 static ip_v6mapinfo_func_t ip_ib_v6_mapping;
 static ip_v4mapinfo_func_t ip_mbcast_mapping;
-static void 	ip_cgtp_bcast_add(ire_t *, ip_stack_t *);
-static void 	ip_cgtp_bcast_delete(ire_t *, ip_stack_t *);
 static void	phyint_free(phyint_t *);
 
 static void ill_capability_dispatch(ill_t *, mblk_t *, dl_capability_sub_t *);
@@ -4539,17 +4537,14 @@ ill_lookup_multicast(ip_stack_t *ipst, zoneid_t zoneid, boolean_t isv6)
  * anything in between.  If there is no such multicast route, we just find
  * any multicast capable interface and return it.  The returned ipif
  * is refhold'ed.
- *
- * We support MULTIRT and RTF_SETSRC on the multicast routes added to the
- * unicast table. This is used by CGTP.
  */
 ill_t *
 ill_lookup_group_v4(ipaddr_t group, zoneid_t zoneid, ip_stack_t *ipst,
-    boolean_t *multirtp, ipaddr_t *setsrcp)
+    ipaddr_t *setsrcp)
 {
 	ill_t			*ill;
 
-	ill = ire_lookup_multi_ill_v4(group, zoneid, ipst, multirtp, setsrcp);
+	ill = ire_lookup_multi_ill_v4(group, zoneid, ipst, setsrcp);
 	if (ill != NULL)
 		return (ill);
 
@@ -5402,7 +5397,6 @@ ip_rt_add(ipaddr_t dst_addr, ipaddr_t mask, ipaddr_t gw_addr,
 	ipif_t	*ipif = NULL;
 	uint_t	type;
 	int	match_flags = MATCH_IRE_TYPE;
-	boolean_t cgtp_broadcast;
 	boolean_t unbound = B_FALSE;
 
 	ip1dbg(("ip_rt_add:"));
@@ -5509,15 +5503,6 @@ ip_rt_add(ipaddr_t dst_addr, ipaddr_t mask, ipaddr_t gw_addr,
 			goto save_ire;
 		}
 	}
-
-	/*
-	 * The routes for multicast with CGTP are quite special in that
-	 * the gateway is the local interface address, yet RTF_GATEWAY
-	 * is set. We turn off RTF_GATEWAY to provide compatibility with
-	 * this undocumented and unusual use of multicast routes.
-	 */
-	if ((flags & RTF_MULTIRT) && ipif != NULL)
-		flags &= ~RTF_GATEWAY;
 
 	/*
 	 * Traditionally, interface routes are ones where RTF_GATEWAY isn't set
@@ -5772,10 +5757,6 @@ again:
 		return (ENOMEM);
 	}
 
-	/* Before we add, check if an extra CGTP broadcast is needed */
-	cgtp_broadcast = ((flags & RTF_MULTIRT) &&
-	    ip_type_v4(ire->ire_addr, ipst) == IRE_BROADCAST);
-
 	/* src address assigned by the caller? */
 	if ((src_addr != INADDR_ANY) && (flags & RTF_SETSRC))
 		ire->ire_setsrc_addr = src_addr;
@@ -5813,52 +5794,6 @@ again:
 		return (EEXIST);
 	}
 	ire = nire;
-
-	if (flags & RTF_MULTIRT) {
-		/*
-		 * Invoke the CGTP (multirouting) filtering module
-		 * to add the dst address in the filtering database.
-		 * Replicated inbound packets coming from that address
-		 * will be filtered to discard the duplicates.
-		 * It is not necessary to call the CGTP filter hook
-		 * when the dst address is a broadcast or multicast,
-		 * because an IP source address cannot be a broadcast
-		 * or a multicast.
-		 */
-		if (cgtp_broadcast) {
-			ip_cgtp_bcast_add(ire, ipst);
-			goto save_ire;
-		}
-		if (ipst->ips_ip_cgtp_filter_ops != NULL &&
-		    !CLASSD(ire->ire_addr)) {
-			int res;
-			ipif_t *src_ipif;
-
-			/* Find the source address corresponding to gw_ire */
-			src_ipif = ipif_lookup_addr(gw_ire->ire_gateway_addr,
-			    NULL, zoneid, ipst);
-			if (src_ipif != NULL) {
-				res = ipst->ips_ip_cgtp_filter_ops->
-				    cfo_add_dest_v4(
-				    ipst->ips_netstack->netstack_stackid,
-				    ire->ire_addr,
-				    ire->ire_gateway_addr,
-				    ire->ire_setsrc_addr,
-				    src_ipif->ipif_lcl_addr);
-				ipif_refrele(src_ipif);
-			} else {
-				res = EADDRNOTAVAIL;
-			}
-			if (res != 0) {
-				if (ipif != NULL)
-					ipif_refrele(ipif);
-				ire_refrele(gw_ire);
-				ire_delete(ire);
-				ire_refrele(ire);	/* Held in ire_add */
-				return (res);
-			}
-		}
-	}
 
 save_ire:
 	if (gw_ire != NULL) {
@@ -6002,21 +5937,6 @@ ip_rt_delete(ipaddr_t dst_addr, ipaddr_t mask, ipaddr_t gw_addr,
 
 	if (ire == NULL)
 		return (ESRCH);
-
-	if (ire->ire_flags & RTF_MULTIRT) {
-		/*
-		 * Invoke the CGTP (multirouting) filtering module
-		 * to remove the dst address from the filtering database.
-		 * Packets coming from that address will no longer be
-		 * filtered to remove duplicates.
-		 */
-		if (ipst->ips_ip_cgtp_filter_ops != NULL) {
-			err = ipst->ips_ip_cgtp_filter_ops->cfo_del_dest_v4(
-			    ipst->ips_netstack->netstack_stackid,
-			    ire->ire_addr, ire->ire_gateway_addr);
-		}
-		ip_cgtp_bcast_delete(ire, ipst);
-	}
 
 	ill = ire->ire_ill;
 	if (ill != NULL)
@@ -17094,127 +17014,6 @@ ill_remove_saved_ire(ill_t *ill, ire_t *ire)
 }
 
 /*
- * IP multirouting broadcast routes handling
- * Append CGTP broadcast IREs to regular ones created
- * at ifconfig time.
- * The usage is a route add <cgtp_bc> <nic_bc> -multirt i.e., both
- * the destination and the gateway are broadcast addresses.
- * The caller has verified that the destination is an IRE_BROADCAST and that
- * RTF_MULTIRT was set. Here if the gateway is a broadcast address, then
- * we create a MULTIRT IRE_BROADCAST.
- * Note that the IRE_HOST created by ire_rt_add doesn't get found by anything
- * since the IRE_BROADCAST takes precedence; ire_add_v4 does head insertion.
- */
-static void
-ip_cgtp_bcast_add(ire_t *ire, ip_stack_t *ipst)
-{
-	ire_t *ire_prim;
-
-	ASSERT(ire != NULL);
-
-	ire_prim = ire_ftable_lookup_v4(ire->ire_gateway_addr, 0, 0,
-	    IRE_BROADCAST, NULL, ALL_ZONES, MATCH_IRE_TYPE, 0, ipst, NULL);
-	if (ire_prim != NULL) {
-		/*
-		 * We are in the special case of broadcasts for
-		 * CGTP. We add an IRE_BROADCAST that holds
-		 * the RTF_MULTIRT flag, the destination
-		 * address and the low level
-		 * info of ire_prim. In other words, CGTP
-		 * broadcast is added to the redundant ipif.
-		 */
-		ill_t *ill_prim;
-		ire_t  *bcast_ire;
-
-		ill_prim = ire_prim->ire_ill;
-
-		ip2dbg(("ip_cgtp_filter_bcast_add: ire_prim %p, ill_prim %p\n",
-		    (void *)ire_prim, (void *)ill_prim));
-
-		bcast_ire = ire_create(
-		    (uchar_t *)&ire->ire_addr,
-		    (uchar_t *)&ip_g_all_ones,
-		    (uchar_t *)&ire->ire_gateway_addr,
-		    IRE_BROADCAST,
-		    ill_prim,
-		    GLOBAL_ZONEID,	/* CGTP is only for the global zone */
-		    ire->ire_flags | RTF_KERNEL,
-		    ipst);
-
-		/*
-		 * Here we assume that ire_add does head insertion so that
-		 * the added IRE_BROADCAST comes before the existing IRE_HOST.
-		 */
-		if (bcast_ire != NULL) {
-			if (ire->ire_flags & RTF_SETSRC) {
-				bcast_ire->ire_setsrc_addr =
-				    ire->ire_setsrc_addr;
-			}
-			bcast_ire = ire_add(bcast_ire);
-			if (bcast_ire != NULL) {
-				ip2dbg(("ip_cgtp_filter_bcast_add: "
-				    "added bcast_ire %p\n",
-				    (void *)bcast_ire));
-
-				ill_save_ire(ill_prim, bcast_ire);
-				ire_refrele(bcast_ire);
-			}
-		}
-		ire_refrele(ire_prim);
-	}
-}
-
-/*
- * IP multirouting broadcast routes handling
- * Remove the broadcast ire.
- * The usage is a route delete <cgtp_bc> <nic_bc> -multirt i.e., both
- * the destination and the gateway are broadcast addresses.
- * The caller has only verified that RTF_MULTIRT was set. We check
- * that the destination is broadcast and that the gateway is a broadcast
- * address, and if so delete the IRE added by ip_cgtp_bcast_add().
- */
-static void
-ip_cgtp_bcast_delete(ire_t *ire, ip_stack_t *ipst)
-{
-	ASSERT(ire != NULL);
-
-	if (ip_type_v4(ire->ire_addr, ipst) == IRE_BROADCAST) {
-		ire_t *ire_prim;
-
-		ire_prim = ire_ftable_lookup_v4(ire->ire_gateway_addr, 0, 0,
-		    IRE_BROADCAST, NULL, ALL_ZONES, MATCH_IRE_TYPE, 0, ipst,
-		    NULL);
-		if (ire_prim != NULL) {
-			ill_t *ill_prim;
-			ire_t  *bcast_ire;
-
-			ill_prim = ire_prim->ire_ill;
-
-			ip2dbg(("ip_cgtp_filter_bcast_delete: "
-			    "ire_prim %p, ill_prim %p\n",
-			    (void *)ire_prim, (void *)ill_prim));
-
-			bcast_ire = ire_ftable_lookup_v4(ire->ire_addr, 0,
-			    ire->ire_gateway_addr, IRE_BROADCAST,
-			    ill_prim, ALL_ZONES,
-			    MATCH_IRE_TYPE | MATCH_IRE_GW | MATCH_IRE_ILL |
-			    MATCH_IRE_MASK, 0, ipst, NULL);
-
-			if (bcast_ire != NULL) {
-				ip2dbg(("ip_cgtp_filter_bcast_delete: "
-				    "looked up bcast_ire %p\n",
-				    (void *)bcast_ire));
-				ill_remove_saved_ire(bcast_ire->ire_ill,
-				    bcast_ire);
-				ire_delete(bcast_ire);
-				ire_refrele(bcast_ire);
-			}
-			ire_refrele(ire_prim);
-		}
-	}
-}
-
-/*
  * Derive an interface id from the link layer address.
  * Knows about IEEE 802 and IEEE EUI-64 mappings.
  */
@@ -17610,9 +17409,6 @@ ill_set_inputfn(ill_t *ill)
 		else if (ipst->ips_ipcl_proto_fanout_v4[IPPROTO_RSVP].connf_head
 		    != NULL)
 			ill->ill_inputfn = ill_input_full_v4;
-		else if (ipst->ips_ip_cgtp_filter &&
-		    ipst->ips_ip_cgtp_filter_ops != NULL)
-			ill->ill_inputfn = ill_input_full_v4;
 		else
 			ill->ill_inputfn = ill_input_short_v4;
 	}
@@ -17620,7 +17416,7 @@ ill_set_inputfn(ill_t *ill)
 
 /*
  * Re-evaluate ill_inputfn for all the IPv4 ills.
- * Used when RSVP and CGTP comes and goes.
+ * Used when RSVP comes and goes.
  */
 void
 ill_set_inputfn_all(ip_stack_t *ipst)

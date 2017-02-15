@@ -2232,7 +2232,6 @@ struct ip_xmit_attr_s {
 #define	IXAF_NO_TRACE		0x00400000	/* When back from ARP/ND */
 #define	IXAF_SCOPEID_SET	0x00800000	/* ixa_scopeid set */
 
-#define	IXAF_MULTIRT_MULTICAST	0x01000000	/* MULTIRT for multicast */
 #define	IXAF_NO_HW_CKSUM	0x02000000	/* Force software cksum */
 #define	IXAF_SET_RAW_CKSUM	0x04000000	/* Use ixa_raw_cksum_offset */
 #define	IXAF_IPSEC_GLOBAL_POLICY 0x08000000	/* Policy came from global */
@@ -2893,44 +2892,42 @@ extern vmem_t *ip_minor_arena_la;
 /* Misc IP configuration knobs */
 #define	ips_ip_policy_mask		ips_propinfo_tbl[44].prop_cur_uval
 #define	ips_ip_ecmp_behavior		ips_propinfo_tbl[45].prop_cur_uval
-#define	ips_ip_multirt_ttl  		ips_propinfo_tbl[46].prop_cur_uval
-#define	ips_ip_ire_badcnt_lifetime	ips_propinfo_tbl[47].prop_cur_uval
-#define	ips_ip_max_temp_idle		ips_propinfo_tbl[48].prop_cur_uval
-#define	ips_ip_max_temp_defend		ips_propinfo_tbl[49].prop_cur_uval
-#define	ips_ip_max_defend		ips_propinfo_tbl[50].prop_cur_uval
-#define	ips_ip_defend_interval		ips_propinfo_tbl[51].prop_cur_uval
-#define	ips_ip_dup_recovery		ips_propinfo_tbl[52].prop_cur_uval
-#define	ips_ip_restrict_interzone_loopback ips_propinfo_tbl[53].prop_cur_bval
-#define	ips_ip_lso_outbound		ips_propinfo_tbl[54].prop_cur_bval
-#define	ips_igmp_max_version		ips_propinfo_tbl[55].prop_cur_uval
-#define	ips_mld_max_version		ips_propinfo_tbl[56].prop_cur_uval
-#define	ips_ip_forwarding		ips_propinfo_tbl[57].prop_cur_bval
-#define	ips_ipv6_forwarding		ips_propinfo_tbl[58].prop_cur_bval
-#define	ips_ip_reassembly_timeout	ips_propinfo_tbl[59].prop_cur_uval
-#define	ips_ipv6_reassembly_timeout	ips_propinfo_tbl[60].prop_cur_uval
-#define	ips_ip_cgtp_filter		ips_propinfo_tbl[61].prop_cur_bval
-#define	ips_arp_probe_delay		ips_propinfo_tbl[62].prop_cur_uval
-#define	ips_arp_fastprobe_delay		ips_propinfo_tbl[63].prop_cur_uval
-#define	ips_arp_probe_interval		ips_propinfo_tbl[64].prop_cur_uval
-#define	ips_arp_fastprobe_interval	ips_propinfo_tbl[65].prop_cur_uval
-#define	ips_arp_probe_count		ips_propinfo_tbl[66].prop_cur_uval
-#define	ips_arp_fastprobe_count		ips_propinfo_tbl[67].prop_cur_uval
-#define	ips_ipv4_dad_announce_interval	ips_propinfo_tbl[68].prop_cur_uval
-#define	ips_ipv6_dad_announce_interval	ips_propinfo_tbl[69].prop_cur_uval
-#define	ips_arp_defend_interval		ips_propinfo_tbl[70].prop_cur_uval
-#define	ips_arp_defend_rate		ips_propinfo_tbl[71].prop_cur_uval
-#define	ips_ndp_defend_interval		ips_propinfo_tbl[72].prop_cur_uval
-#define	ips_ndp_defend_rate		ips_propinfo_tbl[73].prop_cur_uval
-#define	ips_arp_defend_period		ips_propinfo_tbl[74].prop_cur_uval
-#define	ips_ndp_defend_period		ips_propinfo_tbl[75].prop_cur_uval
-#define	ips_ipv4_icmp_return_pmtu	ips_propinfo_tbl[76].prop_cur_bval
-#define	ips_ipv6_icmp_return_pmtu	ips_propinfo_tbl[77].prop_cur_bval
-#define	ips_ip_arp_publish_count	ips_propinfo_tbl[78].prop_cur_uval
-#define	ips_ip_arp_publish_interval	ips_propinfo_tbl[79].prop_cur_uval
-#define	ips_ip_strict_src_multihoming	ips_propinfo_tbl[80].prop_cur_uval
-#define	ips_ipv6_strict_src_multihoming	ips_propinfo_tbl[81].prop_cur_uval
-#define	ips_ipv6_drop_inbound_icmpv6	ips_propinfo_tbl[82].prop_cur_bval
-#define	ips_ip_dce_reclaim_threshold	ips_propinfo_tbl[83].prop_cur_uval
+#define	ips_ip_ire_badcnt_lifetime	ips_propinfo_tbl[46].prop_cur_uval
+#define	ips_ip_max_temp_idle		ips_propinfo_tbl[47].prop_cur_uval
+#define	ips_ip_max_temp_defend		ips_propinfo_tbl[48].prop_cur_uval
+#define	ips_ip_max_defend		ips_propinfo_tbl[49].prop_cur_uval
+#define	ips_ip_defend_interval		ips_propinfo_tbl[50].prop_cur_uval
+#define	ips_ip_dup_recovery		ips_propinfo_tbl[51].prop_cur_uval
+#define	ips_ip_restrict_interzone_loopback ips_propinfo_tbl[52].prop_cur_bval
+#define	ips_ip_lso_outbound		ips_propinfo_tbl[53].prop_cur_bval
+#define	ips_igmp_max_version		ips_propinfo_tbl[54].prop_cur_uval
+#define	ips_mld_max_version		ips_propinfo_tbl[55].prop_cur_uval
+#define	ips_ip_forwarding		ips_propinfo_tbl[56].prop_cur_bval
+#define	ips_ipv6_forwarding		ips_propinfo_tbl[57].prop_cur_bval
+#define	ips_ip_reassembly_timeout	ips_propinfo_tbl[58].prop_cur_uval
+#define	ips_ipv6_reassembly_timeout	ips_propinfo_tbl[59].prop_cur_uval
+#define	ips_arp_probe_delay		ips_propinfo_tbl[60].prop_cur_uval
+#define	ips_arp_fastprobe_delay		ips_propinfo_tbl[61].prop_cur_uval
+#define	ips_arp_probe_interval		ips_propinfo_tbl[62].prop_cur_uval
+#define	ips_arp_fastprobe_interval	ips_propinfo_tbl[63].prop_cur_uval
+#define	ips_arp_probe_count		ips_propinfo_tbl[64].prop_cur_uval
+#define	ips_arp_fastprobe_count		ips_propinfo_tbl[65].prop_cur_uval
+#define	ips_ipv4_dad_announce_interval	ips_propinfo_tbl[66].prop_cur_uval
+#define	ips_ipv6_dad_announce_interval	ips_propinfo_tbl[67].prop_cur_uval
+#define	ips_arp_defend_interval		ips_propinfo_tbl[68].prop_cur_uval
+#define	ips_arp_defend_rate		ips_propinfo_tbl[69].prop_cur_uval
+#define	ips_ndp_defend_interval		ips_propinfo_tbl[70].prop_cur_uval
+#define	ips_ndp_defend_rate		ips_propinfo_tbl[71].prop_cur_uval
+#define	ips_arp_defend_period		ips_propinfo_tbl[72].prop_cur_uval
+#define	ips_ndp_defend_period		ips_propinfo_tbl[73].prop_cur_uval
+#define	ips_ipv4_icmp_return_pmtu	ips_propinfo_tbl[74].prop_cur_bval
+#define	ips_ipv6_icmp_return_pmtu	ips_propinfo_tbl[75].prop_cur_bval
+#define	ips_ip_arp_publish_count	ips_propinfo_tbl[76].prop_cur_uval
+#define	ips_ip_arp_publish_interval	ips_propinfo_tbl[77].prop_cur_uval
+#define	ips_ip_strict_src_multihoming	ips_propinfo_tbl[78].prop_cur_uval
+#define	ips_ipv6_strict_src_multihoming	ips_propinfo_tbl[79].prop_cur_uval
+#define	ips_ipv6_drop_inbound_icmpv6	ips_propinfo_tbl[80].prop_cur_bval
+#define	ips_ip_dce_reclaim_threshold	ips_propinfo_tbl[81].prop_cur_uval
 
 extern int	dohwcksum;	/* use h/w cksum if supported by the h/w */
 #ifdef ZC_TEST
@@ -3365,46 +3362,6 @@ extern void	ip_unbind(conn_t *);
 extern void tnet_init(void);
 extern void tnet_fini(void);
 
-
-/* Hooks for CGTP (multirt routes) filtering module */
-#define	CGTP_FILTER_REV_1	1
-#define	CGTP_FILTER_REV_2	2
-#define	CGTP_FILTER_REV_3	3
-#define	CGTP_FILTER_REV		CGTP_FILTER_REV_3
-
-/* cfo_filter and cfo_filter_v6 hooks return values */
-#define	CGTP_IP_PKT_NOT_CGTP	0
-#define	CGTP_IP_PKT_PREMIUM	1
-#define	CGTP_IP_PKT_DUPLICATE	2
-
-/* Version 3 of the filter interface */
-typedef struct cgtp_filter_ops {
-	int	cfo_filter_rev;			/* CGTP_FILTER_REV_3 */
-	int	(*cfo_change_state)(netstackid_t, int);
-	int	(*cfo_add_dest_v4)(netstackid_t, ipaddr_t, ipaddr_t,
-		    ipaddr_t, ipaddr_t);
-	int	(*cfo_del_dest_v4)(netstackid_t, ipaddr_t, ipaddr_t);
-	int	(*cfo_add_dest_v6)(netstackid_t, in6_addr_t *, in6_addr_t *,
-		    in6_addr_t *, in6_addr_t *);
-	int	(*cfo_del_dest_v6)(netstackid_t, in6_addr_t *, in6_addr_t *);
-	int	(*cfo_filter)(netstackid_t, uint_t, mblk_t *);
-	int	(*cfo_filter_v6)(netstackid_t, uint_t, ip6_t *,
-		    ip6_frag_t *);
-} cgtp_filter_ops_t;
-
-#define	CGTP_MCAST_SUCCESS	1
-
-/*
- * The separate CGTP module needs this global symbol so that it
- * can check the version and determine whether to use the old or the new
- * version of the filtering interface.
- */
-extern int	ip_cgtp_filter_rev;
-
-extern int	ip_cgtp_filter_supported(void);
-extern int	ip_cgtp_filter_register(netstackid_t, cgtp_filter_ops_t *);
-extern int	ip_cgtp_filter_unregister(netstackid_t);
-extern int	ip_cgtp_filter_is_registered(netstackid_t);
 
 /*
  * rr_ring_state cycles in the order shown below from RR_FREE through

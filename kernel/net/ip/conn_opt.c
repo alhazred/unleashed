@@ -2386,7 +2386,7 @@ cksum_massage_options_v6(ip6_t *ip6h, uint_t ip_hdr_len, netstack_t *ns)
 /*
  * ULPs that change the destination address need to call this for each
  * change to discard any state about a previous destination that might
- * have been multicast or multirt.
+ * have been multicast.
  */
 void
 ip_attr_newdst(ip_xmit_attr_t *ixa)
@@ -2610,7 +2610,7 @@ conn_connect(conn_t *connp, iulp_t *uinfo, uint32_t flags)
 	 * claim LSO for IPv6.
 	 *
 	 * Currently, won't enable LSO for IRE_LOOPBACK or IRE_LOCAL, because
-	 * the receiver can not handle it. Also not to enable LSO for MULTIRT.
+	 * the receiver can not handle it.
 	 */
 	ixa->ixa_flags &= ~IXAF_LSO_CAPAB;
 
@@ -2618,7 +2618,6 @@ conn_connect(conn_t *connp, iulp_t *uinfo, uint32_t flags)
 	if (ixa->ixa_ipst->ips_ip_lso_outbound && (flags & IPDF_LSO) &&
 	    !(ixa->ixa_flags & IXAF_IPSEC_SECURE) &&
 	    !(ixa->ixa_ire->ire_type & (IRE_LOCAL | IRE_LOOPBACK)) &&
-	    !(ixa->ixa_ire->ire_flags & RTF_MULTIRT) &&
 	    (ixa->ixa_nce != NULL) &&
 	    ((ixa->ixa_flags & IXAF_IS_IPV4) ?
 	    ILL_LSO_TCP_IPV4_USABLE(ixa->ixa_nce->nce_ill) :
@@ -2633,7 +2632,6 @@ conn_connect(conn_t *connp, iulp_t *uinfo, uint32_t flags)
 	if ((flags & IPDF_ZCOPY) &&
 	    !(ixa->ixa_flags & IXAF_IPSEC_SECURE) &&
 	    !(ixa->ixa_ire->ire_type & (IRE_LOCAL | IRE_LOOPBACK)) &&
-	    !(ixa->ixa_ire->ire_flags & RTF_MULTIRT) &&
 	    (ixa->ixa_nce != NULL) &&
 	    ILL_ZCOPY_USABLE(ixa->ixa_nce->nce_ill)) {
 		ixa->ixa_flags |= IXAF_ZCOPY_CAPAB;
