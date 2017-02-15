@@ -40,7 +40,6 @@ SUBDIR = man1 \
 	 man3nsl \
 	 man3nvpair \
 	 man3pam \
-	 man3papi \
 	 man3perl \
 	 man3picl \
 	 man3picltree \
