@@ -957,7 +957,7 @@ void
 iscsit_rx_scsi_rsp(idm_conn_t *ic, idm_pdu_t *rx_pdu)
 {
 	idm_pdu_complete(rx_pdu, IDM_STATUS_SUCCESS);
-	idm_conn_event(ic, CE_TRANSPORT_FAIL, NULL);
+	idm_conn_event(ic, CE_TRANSPORT_FAIL, 0);
 }
 
 void

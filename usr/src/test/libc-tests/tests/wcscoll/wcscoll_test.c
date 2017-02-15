@@ -46,7 +46,7 @@ test_russian_collation(void)
 	wchar_t c[] = L"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzЁАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяё";
 	wchar_t res[] = L"aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ";
 
-	if (!setlocale(LC_COLLATE, "ru_RU.UTF-8") != NULL)
+	if (setlocale(LC_COLLATE, "ru_RU.UTF-8") != NULL)
 		test_failed(t, "setlocale LC_COLLATE=ru_RU.UTF-8 failed");
 	qsort(c, wcslen(c), sizeof(wchar_t), cmp);
 	if (wcscmp(c, res) != 0)
