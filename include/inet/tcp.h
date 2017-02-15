@@ -559,15 +559,6 @@ typedef struct cl_tcp_info_s {
 } cl_tcp_info_t;
 
 /*
- * Hook functions to enable cluster networking
- * On non-clustered systems these vectors must always be NULL.
- */
-extern void	(*cl_inet_listen)(netstackid_t, uint8_t, sa_family_t,
-		    uint8_t *, in_port_t, void *);
-extern void	(*cl_inet_unlisten)(netstackid_t, uint8_t, sa_family_t,
-		    uint8_t *, in_port_t, void *);
-
-/*
  * Contracted Consolidation Private ioctl for aborting TCP connections.
  * In order to keep the offsets and size of the structure the same between
  * a 32-bit application and a 64-bit amd64 kernel, we use a #pragma

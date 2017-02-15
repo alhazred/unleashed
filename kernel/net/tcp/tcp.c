@@ -85,7 +85,6 @@
 #include <inet/kstatcom.h>
 #include <inet/tcp.h>
 #include <inet/tcp_impl.h>
-#include <inet/tcp_cluster.h>
 #include <inet/udp_impl.h>
 #include <net/pfkeyv2.h>
 #include <inet/ipdrop.h>
@@ -1209,13 +1208,6 @@ tcp_close_detached(tcp_t *tcp)
 	if (tcp->tcp_fused)
 		tcp_unfuse(tcp);
 
-	/*
-	 * Clustering code serializes TCP disconnect callbacks and
-	 * cluster tcp list walks by blocking a TCP disconnect callback
-	 * if a cluster tcp list walk is in progress. This ensures
-	 * accurate accounting of TCPs in the cluster code even though
-	 * the TCP list walk itself is not atomic.
-	 */
 	tcp_closei_local(tcp);
 	CONN_DEC_REF(tcp->tcp_connp);
 }
@@ -1320,7 +1312,6 @@ tcp_closei_local(tcp_t *tcp)
 	 */
 	if (tcp->tcp_state == TCPS_TIME_WAIT)
 		(void) tcp_time_wait_remove(tcp, NULL);
-	CL_INET_DISCONNECT(connp);
 	ipcl_hash_remove(connp);
 	oldstate = tcp->tcp_state;
 	tcp->tcp_state = TCPS_CLOSED;
@@ -1966,8 +1957,6 @@ tcp_reinit(tcp_t *tcp)
 	 * is enough.
 	 */
 	tcp_close_mpp(&tcp->tcp_conn.tcp_eager_conn_ind);
-
-	CL_INET_DISCONNECT(connp);
 
 	/*
 	 * The connection can't be on the tcp_time_wait_head list
@@ -4186,10 +4175,6 @@ tcp_do_connect(conn_t *connp, const struct sockaddr *sa, socklen_t len,
 		error = tcp_connect_ipv4(tcp, dstaddrp, dstport, srcid);
 	}
 
-	if (error != 0)
-		goto connect_failed;
-
-	CL_INET_CONNECT(connp, B_TRUE, error);
 	if (error != 0)
 		goto connect_failed;
 

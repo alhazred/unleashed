@@ -768,7 +768,7 @@ void cbc_params_init(ipsa_t *, uchar_t *, uint_t, uchar_t *, ipsa_cm_mech_t *,
 void sadb_destroy_acquire(ipsacq_t *, netstack_t *);
 struct ipsec_stack;
 mblk_t *sadb_setup_acquire(ipsacq_t *, uint8_t, struct ipsec_stack *);
-ipsa_t *sadb_getspi(keysock_in_t *, uint32_t, int *, netstack_t *, uint_t);
+ipsa_t *sadb_getspi(keysock_in_t *, uint32_t, int *, netstack_t *);
 void sadb_in_acquire(sadb_msg_t *, sadbp_t *, queue_t *, netstack_t *);
 boolean_t sadb_replay_check(ipsa_t *, uint32_t);
 boolean_t sadb_replay_peek(ipsa_t *, uint32_t);

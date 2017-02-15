@@ -1368,16 +1368,10 @@ esp_getspi(mblk_t *mp, keysock_in_t *ksi, ipsecesp_stack_t *espstack)
 	/*
 	 * Randomly generate a proposed SPI value
 	 */
-	if (cl_inet_getspi != NULL) {
-		cl_inet_getspi(espstack->ipsecesp_netstack->netstack_stackid,
-		    IPPROTO_ESP, (uint8_t *)&newspi, sizeof (uint32_t), NULL);
-	} else {
-		(void) random_get_pseudo_bytes((uint8_t *)&newspi,
-		    sizeof (uint32_t));
-	}
-	newbie = sadb_getspi(ksi, newspi, &diagnostic,
-	    espstack->ipsecesp_netstack, IPPROTO_ESP);
+	(void) random_get_pseudo_bytes((uint8_t *)&newspi, sizeof (uint32_t));
 
+	newbie = sadb_getspi(ksi, newspi, &diagnostic,
+	    espstack->ipsecesp_netstack);
 	if (newbie == NULL) {
 		sadb_pfkey_error(espstack->esp_pfkey_q, mp, ENOMEM, diagnostic,
 		    ksi->ks_in_serial);

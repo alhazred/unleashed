@@ -67,7 +67,7 @@ typedef boolean_t (*edesc_vpf)(conn_t *, void *, struct icmph_s *,
 /* Unused			0x00100000 */
 /* Unused 			0x00200000 */
 /* Unused			0x00400000 */
-#define	IPCL_CL_LISTENER	0x00800000	/* Cluster listener */
+/* Unused			0x00800000 */
 /* Unused			0x01000000 */
 /* Unused			0x02000000 */
 /* Unused			0x04000000 */
