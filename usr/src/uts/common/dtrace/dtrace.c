@@ -5487,7 +5487,7 @@ next:
 
 			if (!dtrace_canload(tupregs[argi].dttk_value,
 			    sizeof (ipaddr_t), mstate, vstate)) {
-				regs[rd] = NULL;
+				regs[rd] = 0;
 				break;
 			}
 
@@ -5546,7 +5546,7 @@ next:
 
 			if (!dtrace_canload(tupregs[argi].dttk_value,
 			    sizeof (struct in6_addr), mstate, vstate)) {
-				regs[rd] = NULL;
+				regs[rd] = 0;
 				break;
 			}
 

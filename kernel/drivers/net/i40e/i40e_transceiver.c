@@ -513,10 +513,10 @@ i40e_prev_desc(int base, int count, int size)
 static void
 i40e_free_dma_buffer(i40e_dma_buffer_t *dmap)
 {
-	if (dmap->dmab_dma_address != NULL) {
+	if (dmap->dmab_dma_address != 0) {
 		VERIFY(dmap->dmab_dma_handle != NULL);
 		(void) ddi_dma_unbind_handle(dmap->dmab_dma_handle);
-		dmap->dmab_dma_address = NULL;
+		dmap->dmab_dma_address = 0;
 		dmap->dmab_size = 0;
 	}
 
