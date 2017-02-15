@@ -48,8 +48,6 @@
  */
 int h_errno;
 
-#ifdef	NSS_INCLUDE_UNSAFE
-
 /*
  * Don't free this, even on an endhostent(), because bitter experience shows
  * that there's production code that does getXXXbyYYY(), then endXXXent(),
@@ -277,4 +275,3 @@ __str2hostent(int af, const char *instr, int lenstr, void *ent, char *buffer,
 
 	return (res);
 }
-#endif	/* NSS_INCLUDE_UNSAFE */

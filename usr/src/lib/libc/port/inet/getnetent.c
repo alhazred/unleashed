@@ -30,8 +30,6 @@
 #include <nss_dbdefs.h>
 
 
-#ifdef	NSS_INCLUDE_UNSAFE
-
 /*
  * Ye olde non-reentrant interface (MT-unsafe, caveat utor)
  */
@@ -82,5 +80,3 @@ getnetent(void)
 	}
 	return (res);
 }
-
-#endif	/* NSS_INCLUDE_UNSAFE */

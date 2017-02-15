@@ -33,8 +33,6 @@
 #include <netdb.h>
 #include <nss_dbdefs.h>
 
-#ifdef	NSS_INCLUDE_UNSAFE
-
 /*
  * Don't free this, even on an endservent(), because bitter experience shows
  * that there's production code that does getXXXbyYYY(), then endXXXent(),
@@ -82,5 +80,3 @@ getservent(void)
 	}
 	return (res);
 }
-
-#endif	/* NSS_INCLUDE_UNSAFE */

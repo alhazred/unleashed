@@ -36,8 +36,6 @@
 #include <stdio.h>
 #include "tsd.h"
 
-#ifdef	NSS_INCLUDE_UNSAFE
-
 /*
  * Ye olde non-reentrant interface (MT-unsafe, caveat utor)
  */
@@ -89,5 +87,3 @@ fgetspent(FILE *f)
 	return (b == NULL ? NULL :
 	    fgetspent_r(f, b->result, b->buffer, b->buflen));
 }
-
-#endif	/* NSS_INCLUDE_UNSAFE */
