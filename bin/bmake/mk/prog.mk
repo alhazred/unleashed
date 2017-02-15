@@ -179,7 +179,7 @@ proginstall:
 
 install: maninstall install_links _SUBDIRUSE
 
-install_links: proginstall
+install_links:
 .if !empty(SYMLINKS)
 	@set ${SYMLINKS}; ${_SYMLINKS_SCRIPT}
 .endif
