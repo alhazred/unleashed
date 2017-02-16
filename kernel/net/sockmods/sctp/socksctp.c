@@ -549,7 +549,7 @@ sosctp_recvmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
 		return (error);
 	}
 	mutex_exit(&so->so_lock);
-again:
+
 	error = so_dequeue_msg(so, &mp, uiop, &rval, flags | MSG_DUPCTRL);
 	if (mp != NULL) {
 		if (so->so_type == SOCK_SEQPACKET) {
@@ -595,7 +595,7 @@ again:
 		}
 		freemsg(mp);
 	}
-done:
+
 	if (!(flags & MSG_PEEK))
 		readcnt = orig_resid - uiop->uio_resid;
 	/*
@@ -1261,11 +1261,8 @@ sosctp_getsockopt(struct sonode *so, int level, int option_name,
 		eprintsoline(so, error);
 		goto free;
 	}
-	len = optlen;
 
-copyout:
-
-	len = MIN(len, maxlen);
+	len = MIN(optlen, maxlen);
 	bcopy(optbuf, optval, len);
 	*optlenp = optlen;
 free:

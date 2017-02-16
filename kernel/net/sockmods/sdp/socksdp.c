@@ -466,7 +466,7 @@ sosdp_recvmsg(struct sonode *so, struct msghdr *msg, struct uio *uiop,
 		msg->msg_controllen = 0;
 		msg->msg_namelen = 0;
 	}
-done:
+
 	mutex_enter(&so->so_lock);
 	so_unlock_read(so);
 	mutex_exit(&so->so_lock);
@@ -767,6 +767,7 @@ sosdp_getsockopt(struct sonode *so, int level, int option_name,
 			eprintsoline(so, error);
 			goto free;
 		}
+#error "What should the 'len' variable be set to?"
 		error = 0;
 		goto copyout;
 	}

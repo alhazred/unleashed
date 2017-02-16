@@ -1522,6 +1522,8 @@ pfp_set_promisc(struct pfpsock *ps, mac_client_promisc_type_t turnon)
 			flags = 0;
 		}
 		flags |= MAC_PROMISC_FLAGS_VLAN_TAG_STRIP;
+	} else {
+		flags = 0;
 	}
 
 	error = mac_promisc_add(ps->ps_mch, turnon, pfp_packet, ps,

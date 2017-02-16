@@ -39,7 +39,7 @@ extern sock_lower_handle_t rdsv3_create(int, int, int, sock_downcalls_t **,
 #define	INET_SOCKDESC	"RDSv3 socket module"
 #define	INET_SOCK_PROTO_CREATE_FUNC	(*rdsv3_create)
 
-#include "../inetddi.c"
+#include "../../inetddi.c"
 
 ldi_ident_t	sockrds_li;
 ldi_handle_t    rdsv3_transport_handle = NULL;
