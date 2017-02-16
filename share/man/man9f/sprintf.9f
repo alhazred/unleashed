@@ -23,7 +23,10 @@
 .Dt SPRINTF 9F
 .Os
 .Sh NAME
-.Nm sprintf, snprintf, vsprintf, vsnprintf
+.Nm sprintf ,
+.Nm snprintf ,
+.Nm vsprintf ,
+.Nm vsnprintf
 .Nd format characters in memory
 .Sh SYNOPSIS
 .In sys/cmn_err.h

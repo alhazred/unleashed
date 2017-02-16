@@ -16,6 +16,8 @@
 .Os
 .Sh NAME
 .Nm mac ,
+.Nm MAC ,
+.Nm gldv3 ,
 .Nm GLDv3
 .Nd MAC networking device driver overview
 .Sh SYNOPSIS

@@ -1,5 +1,4 @@
-MAN = Intro.9e \
-      _fini.9e \
+MAN = _fini.9e \
       aread.9e \
       attach.9e \
       awrite.9e \
@@ -61,7 +60,6 @@ MAN = Intro.9e \
       tran_tgt_probe.9e \
       write.9e
 
-MLINKS+=	Intro.9e intro.9e
 MLINKS+=	_fini.9e _info.9e
 MLINKS+=	_fini.9e _init.9e
 MLINKS+=	mac.9e MAC.9e

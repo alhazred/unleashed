@@ -18,8 +18,8 @@
 string, strcasecmp, strcasecmp_l, strncasecmp, strncasecmp_l, strcat, strncat,
 strlcat, strchr, strchrnul, strrchr, strcmp, strncmp, stpcpy, stpncpy, strcpy,
 strncpy, strlcpy, strcspn, strspn, strdup, strndup, strdupa, strndupa, strlen,
-strnlen, strpbrk, strsep, strstr, strnstr, strcasestr, strtok, strtok_r \-
-string operations
+strnlen, strpbrk, strsep, strstr, strnstr, strcasestr, strcasestr_l, strtok,
+strtok_r \- string operations
 .SH SYNOPSIS
 .LP
 .nf
