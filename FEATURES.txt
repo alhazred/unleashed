@@ -32,10 +32,10 @@ changed.
     - readdir_r
     - getpwuid_r
     - getpwnam_r
- + bmake(1) provides make(1)
- + socket interfaces are now in libc. libsocket, libxnet and libnsl remain as
+ + errc(3), warnc(3) were added to libc
+ * socket interfaces are now in libc. libsocket, libxnet and libnsl remain as
    filter libraries.
- + socket implementation was modified to be more reasonable by default, and it
+ * socket implementation was modified to be more reasonable by default, and it
    is no longer possible to choose an alternate socket implementation.
    msg_accrights was removed and msg_control members are now always visible in
    struct msghdr.
@@ -43,8 +43,7 @@ changed.
    connect(2), getpeername(2), getsockname(2), getsockopt(2), listen(2),
    recv(2), send(2), shutdown(2), socket(2), socketpair(2), and the new
    sockatmark(2) and CMSG_DATA(3)
- + errc(3), warnc(3) were added to libc
- + process security flags (psecflags) 
+ * make(1) is bmake(1) instead of dmake(1)
  * sed(1) replaced with a version imported from FreeBSD
  * locale data has been updated to CLDR v28; tools to generate it were imported
    from FreeBSD. This fixes many character classification errors.

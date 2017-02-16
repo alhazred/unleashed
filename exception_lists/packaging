@@ -618,12 +618,6 @@ usr/lib/libvrrpadm.so
 usr/lib/amd64/libvrrpadm.so		i386
 usr/lib/sparcv9/libvrrpadm.so		sparc
 #
-# This is only used during the -t tools build
-#
-opt/onbld/bin/i386/mandoc	i386
-opt/onbld/bin/sparc/mandoc	sparc
-
-#
 # Private libdwarf
 #
 opt/onbld/lib/i386/libdwarf.so	i386

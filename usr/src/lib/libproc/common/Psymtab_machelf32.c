@@ -628,7 +628,7 @@ done_with_plt:
 			symtabptr = (Sym*)((uintptr_t)symtabptr + addr);
 		}
 
-		if ((hptr == NULL) || (hnbuckets == 0) || (hnchains == 0)) {
+		if ((hptr == 0) || (hnbuckets == 0) || (hnchains == 0)) {
 			dprintf("empty or missing .hash\n");
 			goto badplt;
 		}

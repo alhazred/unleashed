@@ -39,7 +39,6 @@
 #include <inet/ip.h>
 #include <inet/tcp.h>
 #include <inet/tcp_impl.h>
-#include <inet/tcp_cluster.h>
 
 static void tcp_time_wait_purge(tcp_t *, tcp_squeue_priv_t *);
 
@@ -321,7 +320,7 @@ tcp_time_wait_purge(tcp_t *tcp, tcp_squeue_priv_t *tsp)
 	 */
 	if (mutex_tryenter(lock)) {
 		mutex_enter(&connp->conn_lock);
-		if (connp->conn_ref == 2 && cl_inet_disconnect == NULL) {
+		if (connp->conn_ref == 2) {
 			ipcl_hash_remove_locked(connp, connp->conn_fanout);
 			/*
 			 * Set the CONDEMNED flag now itself so that the refcnt

@@ -1,4 +1,4 @@
-#	$Id: prog.mk,v 1.27 2016/08/02 20:52:17 sjg Exp $
+#	$Id: prog.mk,v 1.28 2017/02/14 21:26:13 sjg Exp $
 
 .if !target(__${.PARSEFILE}__)
 __${.PARSEFILE}__:
@@ -179,7 +179,7 @@ proginstall:
 
 install: maninstall install_links _SUBDIRUSE
 
-install_links: proginstall
+install_links:
 .if !empty(SYMLINKS)
 	@set ${SYMLINKS}; ${_SYMLINKS_SCRIPT}
 .endif
@@ -189,6 +189,7 @@ install_links: proginstall
 
 maninstall: afterinstall
 afterinstall: realinstall
+install_links: realinstall
 proginstall: beforeinstall
 realinstall: beforeinstall
 .endif

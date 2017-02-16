@@ -351,9 +351,6 @@ sctp_clr_kstats2(sctp_kstat_t *stats)
 	stats->sctp_send_hb_failed.value.ui64 = 0;
 	stats->sctp_return_hb_failed.value.ui64 = 0;
 	stats->sctp_ss_rexmit_failed.value.ui64 = 0;
-	stats->sctp_cl_connect.value.ui64 = 0;
-	stats->sctp_cl_assoc_change.value.ui64 = 0;
-	stats->sctp_cl_check_addrs.value.ui64 = 0;
 	stats->sctp_reclaim_cnt.value.ui64 = 0;
 	stats->sctp_listen_cnt_drop.value.ui64 = 0;
 }
@@ -394,9 +391,6 @@ sctp_add_kstats2(sctp_kstat_counter_t *from, sctp_kstat_t *to)
 	to->sctp_send_hb_failed.value.ui64 += from->sctp_send_hb_failed;
 	to->sctp_return_hb_failed.value.ui64 += from->sctp_return_hb_failed;
 	to->sctp_ss_rexmit_failed.value.ui64 += from->sctp_ss_rexmit_failed;
-	to->sctp_cl_connect.value.ui64 += from->sctp_cl_connect;
-	to->sctp_cl_assoc_change.value.ui64 += from->sctp_cl_assoc_change;
-	to->sctp_cl_check_addrs.value.ui64 += from->sctp_cl_check_addrs;
 }
 
 /*
@@ -475,9 +469,6 @@ sctp_kstat2_init(netstackid_t stackid)
 		{ "sctp_send_hb_failed",		KSTAT_DATA_UINT64 },
 		{ "sctp_return_hb_failed",		KSTAT_DATA_UINT64 },
 		{ "sctp_ss_rexmit_failed",		KSTAT_DATA_UINT64 },
-		{ "sctp_cl_connect",			KSTAT_DATA_UINT64 },
-		{ "sctp_cl_assoc_change",		KSTAT_DATA_UINT64 },
-		{ "sctp_cl_check_addrs",		KSTAT_DATA_UINT64 },
 		{ "sctp_reclaim_drop",			KSTAT_DATA_UINT64 },
 		{ "sctp_listen_cnt_drop",		KSTAT_DATA_UINT64 },
 	};

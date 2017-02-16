@@ -419,14 +419,6 @@ MAC_KMODS	+= mac_wifi
 MAC_KMODS	+= mac_ib
 
 #
-# socketmod (kernel/socketmod)
-#
-SOCKET_KMODS	+= sockpfp
-SOCKET_KMODS	+= socksctp
-SOCKET_KMODS	+= socksdp
-SOCKET_KMODS	+= sockrds
-
-#
 #	kiconv modules (/kernel/kiconv):
 #
 KICONV_KMODS	+= kiconv_emea kiconv_ja kiconv_ko kiconv_sc kiconv_tc
