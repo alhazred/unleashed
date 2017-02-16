@@ -14,8 +14,6 @@ MAN = lgrp_affinity_get.3lgrp \
       lgrp_version.3lgrp \
       lgrp_view.3lgrp
 
-MLINKS+=	lgrp_affinity_get.3lgrp lgrp_affinity_set.3lgrp
-MLINKS+=	lgrp_latency.3lgrp lgrp_latency_cookie.3lgrp
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

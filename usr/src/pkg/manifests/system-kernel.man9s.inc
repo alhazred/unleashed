@@ -71,8 +71,3 @@ file path=usr/share/man/man9s/streamtab.9s
 file path=usr/share/man/man9s/stroptions.9s
 file path=usr/share/man/man9s/tuple.9s
 file path=usr/share/man/man9s/uio.9s
-link path=usr/share/man/man9s/dblk.9s target=datab.9s
-link path=usr/share/man/man9s/intro.9s target=Intro.9s
-link path=usr/share/man/man9s/mac_callbacks_t.9s target=mac_callbacks.9s
-link path=usr/share/man/man9s/mac_register_t.9s target=mac_register.9s
-link path=usr/share/man/man9s/mblk.9s target=msgb.9s

@@ -175,36 +175,3 @@ file path=usr/share/man/man9s/usb_string_descr.9s
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license license_in_headers license=license_in_headers
-link path=usr/share/man/man7d/usb.7d target=usba.7d
-link path=usr/share/man/man9f/usb_alloc_bulk_req.9f \
-    target=usb_alloc_request.9f
-link path=usr/share/man/man9f/usb_alloc_ctrl_req.9f \
-    target=usb_alloc_request.9f
-link path=usr/share/man/man9f/usb_alloc_intr_req.9f \
-    target=usb_alloc_request.9f
-link path=usr/share/man/man9f/usb_alloc_isoc_req.9f \
-    target=usb_alloc_request.9f
-link path=usr/share/man/man9f/usb_client_detach.9f target=usb_client_attach.9f
-link path=usr/share/man/man9f/usb_free_bulk_req.9f target=usb_alloc_request.9f
-link path=usr/share/man/man9f/usb_free_ctrl_req.9f target=usb_alloc_request.9f
-link path=usr/share/man/man9f/usb_free_descr_tree.9f \
-    target=usb_get_dev_data.9f
-link path=usr/share/man/man9f/usb_free_dev_data.9f target=usb_get_dev_data.9f
-link path=usr/share/man/man9f/usb_free_intr_req.9f target=usb_alloc_request.9f
-link path=usr/share/man/man9f/usb_free_isoc_req.9f target=usb_alloc_request.9f
-link path=usr/share/man/man9f/usb_get_if_number.9f target=usb_get_alt_if.9f
-link path=usr/share/man/man9f/usb_owns_device.9f target=usb_get_alt_if.9f
-link path=usr/share/man/man9f/usb_pipe_ctrl_xfer_wait.9f \
-    target=usb_pipe_ctrl_xfer.9f
-link path=usr/share/man/man9f/usb_pipe_get_private.9f \
-    target=usb_pipe_set_private.9f
-link path=usr/share/man/man9f/usb_pipe_stop_intr_polling.9f \
-    target=usb_pipe_intr_xfer.9f
-link path=usr/share/man/man9f/usb_pipe_stop_isoc_polling.9f \
-    target=usb_pipe_isoc_xfer.9f
-link path=usr/share/man/man9f/usb_print_descr_tree.9f \
-    target=usb_get_dev_data.9f
-link path=usr/share/man/man9f/usb_set_alt_if.9f target=usb_get_alt_if.9f
-link path=usr/share/man/man9f/usb_set_cfg.9f target=usb_get_cfg.9f
-link path=usr/share/man/man9f/usb_unregister_hotplug_cbs.9f \
-    target=usb_register_hotplug_cbs.9f

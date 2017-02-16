@@ -70,11 +70,6 @@ MAN = Intro.9s \
       usb_request_attributes.9s \
       usb_string_descr.9s
 
-MLINKS+=	Intro.9s intro.9s
-MLINKS+=	datab.9s dblk.9s
-MLINKS+=	mac_callbacks.9s mac_callbacks_t.9s
-MLINKS+=	mac_register.9s mac_register_t.9s
-MLINKS+=	msgb.9s mblk.9s
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

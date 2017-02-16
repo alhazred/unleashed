@@ -25,15 +25,6 @@ MAN = libpicltree.3picltree \
       ptree_update_propval.3picltree \
       ptree_walk_tree_by_class.3picltree
 
-MLINKS+=	ptree_add_node.3picltree ptree_delete_node.3picltree
-MLINKS+=	ptree_add_prop.3picltree ptree_delete_prop.3picltree
-MLINKS+=	ptree_create_node.3picltree ptree_destroy_node.3picltree
-MLINKS+=	ptree_create_prop.3picltree ptree_destroy_prop.3picltree
-MLINKS+=	ptree_create_table.3picltree ptree_add_row_to_table.3picltree
-MLINKS+=	ptree_get_first_prop.3picltree ptree_get_next_prop.3picltree
-MLINKS+=	ptree_get_next_by_row.3picltree ptree_get_next_by_col.3picltree
-MLINKS+=	ptree_get_propval.3picltree ptree_get_propval_by_name.3picltree
-MLINKS+=	ptree_update_propval.3picltree ptree_update_propval_by_name.3picltree
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

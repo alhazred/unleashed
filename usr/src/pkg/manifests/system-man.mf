@@ -30,4 +30,3 @@ hardlink path=usr/bin/apropos target=mandoc
 hardlink path=usr/bin/man target=mandoc
 hardlink path=usr/bin/whatis target=mandoc
 hardlink path=usr/sbin/makewhatis target=../bin/mandoc
-link path=usr/share/man/man1/whatis.1 target=apropos.1

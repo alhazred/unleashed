@@ -60,29 +60,6 @@ MAN = _fini.9e \
       tran_tgt_probe.9e \
       write.9e
 
-MLINKS+=	_fini.9e _info.9e
-MLINKS+=	_fini.9e _init.9e
-MLINKS+=	mac.9e MAC.9e
-MLINKS+=	mac.9e gldv3.9e
-MLINKS+=	mac.9e GLDv3.9e
-MLINKS+=	gld.9e gldm_get_stats.9e
-MLINKS+=	gld.9e gldm_intr.9e
-MLINKS+=	gld.9e gldm_ioctl.9e
-MLINKS+=	gld.9e gldm_reset.9e
-MLINKS+=	gld.9e gldm_send.9e
-MLINKS+=	gld.9e gldm_set_mac_addr.9e
-MLINKS+=	gld.9e gldm_set_multicast.9e
-MLINKS+=	gld.9e gldm_set_promiscuous.9e
-MLINKS+=	gld.9e gldm_start.9e
-MLINKS+=	gld.9e gldm_stop.9e
-MLINKS+=	mc_open.9e mc_close.9e
-MLINKS+=	mc_start.9e mc_stop.9e
-MLINKS+=	tran_getcap.9e tran_setcap.9e
-MLINKS+=	tran_init_pkt.9e tran_destroy_pkt.9e
-MLINKS+=	tran_quiesce.9e tran_unquiesce.9e
-MLINKS+=	tran_setup_pkt.9e tran_pkt_constructor.9e
-MLINKS+=	tran_setup_pkt.9e tran_pkt_destructor.9e
-MLINKS+=	tran_setup_pkt.9e tran_teardown_pkt.9e
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

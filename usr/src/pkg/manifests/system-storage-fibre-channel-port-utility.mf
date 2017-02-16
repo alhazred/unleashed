@@ -54,5 +54,4 @@ file path=usr/share/man/man1m/fcinfo.1m
 hardlink path=usr/sbin/fcadm target=../../usr/sbin/fcinfo
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-link path=usr/share/man/man1m/fcadm.1m target=fcinfo.1m
 depend fmri=service/storage/fibre-channel/fc-fabric type=require

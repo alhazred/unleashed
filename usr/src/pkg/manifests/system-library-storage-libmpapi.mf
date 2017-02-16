@@ -101,5 +101,4 @@ license usr/src/lib/mpapi/libmpapi/THIRDPARTYLICENSE \
 link path=lib/$(ARCH64)/libMPAPI.so target=libMPAPI.so.1 \
     variant.opensolaris.zone=global
 link path=lib/libMPAPI.so target=libMPAPI.so.1 variant.opensolaris.zone=global
-link path=usr/share/man/man3lib/libmpapi.3lib target=libMPAPI.3lib
 depend fmri=system/library/storage/libmpscsi_vhci type=require

@@ -29,7 +29,3 @@ file path=usr/share/man/man3lgrp/lgrp_resources.3lgrp
 file path=usr/share/man/man3lgrp/lgrp_root.3lgrp
 file path=usr/share/man/man3lgrp/lgrp_version.3lgrp
 file path=usr/share/man/man3lgrp/lgrp_view.3lgrp
-link path=usr/share/man/man3lgrp/lgrp_affinity_set.3lgrp \
-    target=lgrp_affinity_get.3lgrp
-link path=usr/share/man/man3lgrp/lgrp_latency_cookie.3lgrp \
-    target=lgrp_latency.3lgrp

@@ -27,7 +27,6 @@ LINKS=	${BINDIR}/mandoc ${BINDIR}/apropos \
 	${BINDIR}/mandoc ${BINDIR}/man \
 	${BINDIR}/mandoc ${BINDIR}/whatis \
 	${BINDIR}/mandoc /usr/sbin/makewhatis
-MLINKS=	apropos.1 whatis.1
 
 afterinstall:
 	@mkdir -p ${DESTDIR}/lib/svc/manifest/system

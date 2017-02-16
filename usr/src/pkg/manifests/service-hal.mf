@@ -184,6 +184,3 @@ link path=usr/lib/libhal-storage.so target=./libhal-storage.so.1.0.0
 link path=usr/lib/libhal-storage.so.1 target=./libhal-storage.so.1.0.0
 link path=usr/lib/libhal.so target=./libhal.so.1.0.0
 link path=usr/lib/libhal.so.1 target=./libhal.so.1.0.0
-link path=usr/share/man/man1m/hal-find-by-capability.1m target=hal-find.1m
-link path=usr/share/man/man1m/hal-find-by-property.1m target=hal-find.1m
-link path=usr/share/man/man1m/hal-set-property.1m target=hal-get-property.1m

@@ -34,10 +34,3 @@ file path=usr/share/man/man3pam/pam_sm_open_session.3pam
 file path=usr/share/man/man3pam/pam_sm_setcred.3pam
 file path=usr/share/man/man3pam/pam_start.3pam
 file path=usr/share/man/man3pam/pam_strerror.3pam
-link path=usr/share/man/man3pam/pam_close_session.3pam \
-    target=pam_open_session.3pam
-link path=usr/share/man/man3pam/pam_end.3pam target=pam_start.3pam
-link path=usr/share/man/man3pam/pam_get_data.3pam target=pam_set_data.3pam
-link path=usr/share/man/man3pam/pam_get_item.3pam target=pam_set_item.3pam
-link path=usr/share/man/man3pam/pam_sm_close_session.3pam \
-    target=pam_sm_open_session.3pam

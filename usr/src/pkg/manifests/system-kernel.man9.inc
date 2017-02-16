@@ -15,4 +15,3 @@
 #
 
 file path=usr/share/man/man9/Intro.9
-link path=usr/share/man/man9/intro.9 target=Intro.9

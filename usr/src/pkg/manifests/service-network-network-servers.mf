@@ -87,13 +87,3 @@ license lic_CDDL license=lic_CDDL
 license usr/src/cmd/cmd-inet/usr.sbin/THIRDPARTYLICENSE.comsat \
     license=usr/src/cmd/cmd-inet/usr.sbin/THIRDPARTYLICENSE.comsat
 link path=etc/rmt target=../usr/sbin/rmt
-link path=usr/share/man/man1m/comsat.1m target=in.comsat.1m
-link path=usr/share/man/man1m/fingerd.1m target=in.fingerd.1m
-link path=usr/share/man/man1m/rexecd.1m target=in.rexecd.1m
-link path=usr/share/man/man1m/rstatd.1m target=rpc.rstatd.1m
-link path=usr/share/man/man1m/rusersd.1m target=rpc.rusersd.1m
-link path=usr/share/man/man1m/rwalld.1m target=rpc.rwalld.1m
-link path=usr/share/man/man1m/rwhod.1m target=in.rwhod.1m
-link path=usr/share/man/man1m/sprayd.1m target=rpc.sprayd.1m
-link path=usr/share/man/man1m/talkd.1m target=in.talkd.1m
-link path=usr/share/man/man4/rhosts.4 target=hosts.equiv.4

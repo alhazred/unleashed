@@ -52,4 +52,3 @@ hardlink path=usr/bin/ldapadd target=./ldapmodify
 license cr_Sun license=cr_Sun
 license usr/src/cmd/ldap/THIRDPARTYLICENSE \
     license=usr/src/cmd/ldap/THIRDPARTYLICENSE
-link path=usr/share/man/man1/ldapadd.1 target=ldapmodify.1

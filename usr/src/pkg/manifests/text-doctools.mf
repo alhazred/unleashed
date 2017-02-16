@@ -338,6 +338,4 @@ license usr/src/cmd/ul/THIRDPARTYLICENSE \
 license usr/src/cmd/vgrind/THIRDPARTYLICENSE \
     license=usr/src/cmd/vgrind/THIRDPARTYLICENSE
 link path=usr/lib/tmac target=../share/lib/tmac
-link path=usr/share/man/man1/checkeq.1 target=eqn.1
-link path=usr/share/man/man1/neqn.1 target=eqn.1
 depend fmri=system/man type=require

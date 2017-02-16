@@ -50,7 +50,6 @@ file path=usr/share/man/man4/mech.4
 file path=usr/share/man/man5/gss_auth_rules.5
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-link path=usr/share/man/man4/qop.4 target=mech.4
 #
 # These dependencies can be removed once there is a mechanism in place
 # to configure gss plugins, rather than delivering a fully populated

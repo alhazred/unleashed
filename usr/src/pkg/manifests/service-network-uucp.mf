@@ -121,12 +121,6 @@ license lic_CDDL license=lic_CDDL
 license usr/src/cmd/bnu/THIRDPARTYLICENSE \
     license=usr/src/cmd/bnu/THIRDPARTYLICENSE
 link path=etc/uucp/remote.unknown target=../../usr/lib/uucp/remote.unknown
-link path=usr/share/man/man1c/uudecode.1c target=uuencode.1c
-link path=usr/share/man/man1c/uulog.1c target=uucp.1c
-link path=usr/share/man/man1c/uuname.1c target=uucp.1c
-link path=usr/share/man/man1c/uupick.1c target=uuto.1c
-link path=usr/share/man/man1m/uucpd.1m target=in.uucpd.1m
-link path=usr/share/man/man1m/uutry.1m target=Uutry.1m
 link path=var/spool/uucp/.Admin target=../../uucp/.Admin
 link path=var/spool/uucp/.Log target=../../uucp/.Log
 link path=var/spool/uucp/.Old target=../../uucp/.Old

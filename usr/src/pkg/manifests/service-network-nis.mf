@@ -87,8 +87,4 @@ file path=var/yp/Makefile mode=0555 preserve=renamenew
 file path=var/yp/updaters mode=0500
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-link path=usr/share/man/man1m/rexd.1m target=rpc.rexd.1m
-link path=usr/share/man/man1m/yppasswdd.1m target=rpc.yppasswdd.1m
-link path=usr/share/man/man1m/ypupdated.1m target=rpc.ypupdated.1m
-link path=usr/share/man/man1m/ypxfrd.1m target=ypserv.1m
 depend fmri=pkg:/developer/build/make type=require

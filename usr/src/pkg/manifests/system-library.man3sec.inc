@@ -24,9 +24,3 @@ file path=usr/share/man/man3sec/aclcheck.3sec
 file path=usr/share/man/man3sec/aclsort.3sec
 file path=usr/share/man/man3sec/acltomode.3sec
 file path=usr/share/man/man3sec/acltotext.3sec
-link path=usr/share/man/man3sec/acl_fromtext.3sec target=acl_totext.3sec
-link path=usr/share/man/man3sec/acl_set.3sec target=acl_get.3sec
-link path=usr/share/man/man3sec/aclfrommode.3sec target=acltomode.3sec
-link path=usr/share/man/man3sec/aclfromtext.3sec target=acltotext.3sec
-link path=usr/share/man/man3sec/facl_get.3sec target=acl_get.3sec
-link path=usr/share/man/man3sec/facl_set.3sec target=acl_get.3sec

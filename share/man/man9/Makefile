@@ -1,6 +1,5 @@
 MAN = Intro.9
 
-MLINKS+=	Intro.9 intro.9
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

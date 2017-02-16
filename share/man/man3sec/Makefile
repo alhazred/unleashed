@@ -9,12 +9,6 @@ MAN = acl_check.3sec \
       acltomode.3sec \
       acltotext.3sec
 
-MLINKS+=	acl_get.3sec acl_set.3sec
-MLINKS+=	acl_get.3sec facl_get.3sec
-MLINKS+=	acl_get.3sec facl_set.3sec
-MLINKS+=	acl_totext.3sec acl_fromtext.3sec
-MLINKS+=	acltomode.3sec aclfrommode.3sec
-MLINKS+=	acltotext.3sec aclfromtext.3sec
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

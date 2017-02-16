@@ -46,4 +46,3 @@ file path=usr/share/man/man1/tftp.1
 file path=usr/share/man/man1m/in.tftpd.1m
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-link path=usr/share/man/man1m/tftpd.1m target=in.tftpd.1m

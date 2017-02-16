@@ -20,11 +20,3 @@ file path=usr/share/man/man3kvm/kvm_nextproc.3kvm
 file path=usr/share/man/man3kvm/kvm_nlist.3kvm
 file path=usr/share/man/man3kvm/kvm_open.3kvm
 file path=usr/share/man/man3kvm/kvm_read.3kvm
-link path=usr/share/man/man3kvm/kvm_close.3kvm target=kvm_open.3kvm
-link path=usr/share/man/man3kvm/kvm_getcmd.3kvm target=kvm_getu.3kvm
-link path=usr/share/man/man3kvm/kvm_getproc.3kvm target=kvm_nextproc.3kvm
-link path=usr/share/man/man3kvm/kvm_kwrite.3kvm target=kvm_kread.3kvm
-link path=usr/share/man/man3kvm/kvm_setproc.3kvm target=kvm_nextproc.3kvm
-link path=usr/share/man/man3kvm/kvm_uread.3kvm target=kvm_kread.3kvm
-link path=usr/share/man/man3kvm/kvm_uwrite.3kvm target=kvm_kread.3kvm
-link path=usr/share/man/man3kvm/kvm_write.3kvm target=kvm_read.3kvm

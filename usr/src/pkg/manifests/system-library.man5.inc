@@ -62,8 +62,3 @@ file path=usr/share/man/man5/regex.5
 file path=usr/share/man/man5/regexp.5
 file path=usr/share/man/man5/timerfd.5
 file path=usr/share/man/man5/threads.5
-link path=usr/share/man/man5/advance.5 target=regexp.5
-link path=usr/share/man/man5/compile.5 target=regexp.5
-link path=usr/share/man/man5/endian.5 target=byteorder.5
-link path=usr/share/man/man5/pthreads.5 target=threads.5
-link path=usr/share/man/man5/step.5 target=regexp.5

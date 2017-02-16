@@ -20,8 +20,6 @@ MAN = dlpi_arptype.3dlpi \
       dlpi_unbind.3dlpi \
       dlpi_walk.3dlpi
 
-MLINKS+=	dlpi_enabmulti.3dlpi dlpi_disabmulti.3dlpi
-MLINKS+=	dlpi_promiscon.3dlpi dlpi_promiscoff.3dlpi
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.
