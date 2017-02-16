@@ -1,4 +1,6 @@
-SUBDIR = pfp \
+SUBDIR = datafilt \
+	 httpfilt \
+	 pfp \
 	 rds \
 	 sctp
 
