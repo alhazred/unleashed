@@ -63,7 +63,6 @@ static int	 fts_safe_changedir(FTS *, FTSENT *, int, char *);
 
 #define	FCHDIR(sp, fd)	(!ISSET(FTS_NOCHDIR) && fchdir(fd))
 
-#define	D_NAMELEN(dp) (dp->d_reclen - (offsetof(dirent_t, d_name[0])))
 #define	ALIGNBYTES	(_MAX_ALIGNMENT - 1)
 #define	ALIGN(p)	(((unsigned long)(p) + ALIGNBYTES) &~ALIGNBYTES)
 
@@ -654,11 +653,13 @@ fts_build(FTS *sp, int type)
 		if (!ISSET(FTS_SEEDOT) && ISDOT(dp->d_name))
 			continue;
 
-		if (!(p = fts_alloc(sp, dp->d_name, D_NAMELEN(dp))))
+		size_t namlen = strlen(dp->d_name);
+
+		if (!(p = fts_alloc(sp, dp->d_name, namlen)))
 			goto mem1;
-		if (D_NAMELEN(dp) >= maxlen) {	/* include space for NUL */
+		if (namlen >= maxlen) {	/* include space for NUL */
 			oldaddr = sp->fts_path;
-			if (fts_palloc(sp, D_NAMELEN(dp) +len + 1)) {
+			if (fts_palloc(sp, namlen + len + 1)) {
 				/*
 				 * No more memory for path or structures.  Save
 				 * errno, free up the current structure and the
@@ -684,7 +685,7 @@ mem1:				saved_errno = errno;
 
 		p->fts_level = level;
 		p->fts_parent = sp->fts_cur;
-		p->fts_pathlen = len + D_NAMELEN(dp);
+		p->fts_pathlen = len + namlen;
 		if (p->fts_pathlen < len) {
 			/*
 			 * If we wrap, free up the current structure and
