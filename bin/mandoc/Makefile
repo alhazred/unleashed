@@ -9,7 +9,8 @@ SRCS+=	main.c mdoc_term.c tag.c chars.c term.c tree.c man_term.c eqn_term.c
 SRCS+=	mdoc_man.c
 SRCS+=	html.c mdoc_html.c man_html.c out.c eqn_html.c
 SRCS+=	term_ps.c term_ascii.c tbl_term.c tbl_html.c
-SRCS+=	manpath.c
+SRCS+=	dbm_map.c dbm.c dba_write.c dba_array.c dba.c dba_read.c
+SRCS+=	manpath.c mandocdb.c mansearch.c
 
 SRCS+=	lib.c compat_ohash.c compat_strtonum.c
 
@@ -20,11 +21,12 @@ CFLAGS+=	-std=gnu99
 # FIXME shouldn't need these hacks
 CPPFLAGS+=	-D_TS_ERRNO -I/usr/include
 
-MAN=	apropos.1 man.1 mandoc.1 man.conf.5 eqn.7 man.7 mandoc_char.7 mdoc.7 \
-	roff.7 tbl.7
+MAN=	apropos.1 man.1 mandoc.1 man.conf.5 mandoc.db.5 eqn.7 man.7 \
+	mandoc_char.7 mdoc.7 roff.7 tbl.7 makewhatis.8
 LINKS=	${BINDIR}/mandoc ${BINDIR}/apropos \
 	${BINDIR}/mandoc ${BINDIR}/man \
-	${BINDIR}/mandoc ${BINDIR}/whatis
+	${BINDIR}/mandoc ${BINDIR}/whatis \
+	${BINDIR}/mandoc /usr/sbin/makewhatis
 MLINKS=	apropos.1 whatis.1
 
 .include <prog.mk>
