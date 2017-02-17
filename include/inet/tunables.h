@@ -44,7 +44,7 @@ extern "C" {
  * The `mod_ioc_prop_s' datastructure is used as an IOCTL argument for
  * SIOCSETPROP and SIOCGETPROP ioctls. This datastructure identifies the
  * protocol (`mpr_proto') property (`mpr_name'), which needs to be modified
- * or retrieved (`mpr_valsize' and `mpr_val'). If the property applies to an
+ * or retrieved (`mpr_val'). If the property applies to an
  * interface then `mpr_ifname' contains the name of the interface.
  */
 typedef struct mod_ioc_prop_s {
@@ -54,8 +54,7 @@ typedef struct mod_ioc_prop_s {
 	char		mpr_ifname[LIFNAMSIZ];
 	uint_t		mpr_proto;			/* see below */
 	char		mpr_name[MAXPROPNAMELEN];	/* property name */
-	uint_t		mpr_valsize;			/* size of mpr_val */
-	char		mpr_val[1];
+	char		mpr_val[32];
 } mod_ioc_prop_t;
 
 #define	MOD_PROP_VERSION	1

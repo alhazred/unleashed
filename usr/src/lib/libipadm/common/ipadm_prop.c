@@ -1061,7 +1061,7 @@ i_ipadm_get_prop(ipadm_handle_t iph, const void *arg,
 	uint_t		iocsize;
 
 	/* allocate sufficient ioctl buffer to retrieve value */
-	iocsize = sizeof (mod_ioc_prop_t) + *bufsize - 1;
+	iocsize = sizeof (mod_ioc_prop_t);
 	if ((mip = calloc(1, iocsize)) == NULL)
 		return (IPADM_NO_BUFS);
 
@@ -1073,10 +1073,8 @@ i_ipadm_get_prop(ipadm_handle_t iph, const void *arg,
 		    sizeof (mip->mpr_ifname));
 	}
 	(void) strlcpy(mip->mpr_name, pname, sizeof (mip->mpr_name));
-	mip->mpr_valsize = *bufsize;
 
-	if (i_ipadm_strioctl(iph->iph_sock, SIOCGETPROP, (char *)mip,
-	    iocsize) < 0) {
+	if (ioctl(iph->iph_sock, SIOCGETPROP, (char *)mip) < 0) {
 		if (errno == ENOENT)
 			status = IPADM_PROP_UNKNOWN;
 		else
@@ -1301,7 +1299,7 @@ i_ipadm_set_prop(ipadm_handle_t iph, const void *arg,
 	const char	*ifname = arg;
 	mod_ioc_prop_t 	*mip;
 	char 		*pname = pdp->ipd_name;
-	uint_t 		valsize, iocsize;
+	uint_t 		iocsize;
 	uint_t		iocflags = 0;
 
 	if (flags & IPADM_OPT_DEFAULT) {
@@ -1314,13 +1312,7 @@ i_ipadm_set_prop(ipadm_handle_t iph, const void *arg,
 			iocflags |= MOD_PROP_REMOVE;
 	}
 
-	if (pval != NULL) {
-		valsize = strlen(pval);
-		iocsize = sizeof (mod_ioc_prop_t) + valsize - 1;
-	} else {
-		valsize = 0;
-		iocsize = sizeof (mod_ioc_prop_t);
-	}
+	iocsize = sizeof (mod_ioc_prop_t);
 
 	if ((mip = calloc(1, iocsize)) == NULL)
 		return (IPADM_NO_BUFS);
@@ -1334,12 +1326,10 @@ i_ipadm_set_prop(ipadm_handle_t iph, const void *arg,
 	}
 
 	(void) strlcpy(mip->mpr_name, pname, sizeof (mip->mpr_name));
-	mip->mpr_valsize = valsize;
 	if (pval != NULL)
-		bcopy(pval, mip->mpr_val, valsize);
+		(void) strlcpy(mip->mpr_val, pval, sizeof(mip->mpr_val));
 
-	if (i_ipadm_strioctl(iph->iph_sock, SIOCSETPROP, (char *)mip,
-	    iocsize) < 0) {
+	if (ioctl(iph->iph_sock, SIOCSETPROP, (char *)mip) < 0) {
 		if (errno == ENOENT)
 			status = IPADM_PROP_UNKNOWN;
 		else

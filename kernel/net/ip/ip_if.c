@@ -8633,36 +8633,10 @@ ip_sioctl_lookup(int ioc_cmd)
  * helper function for ip_sioctl_getsetprop(), which does some sanity checks
  */
 static boolean_t
-getset_ioctl_checks(mblk_t *mp)
+getset_ioctl_checks(mod_ioc_prop_t *pioc, int ioc_cmd)
 {
-	struct iocblk	*iocp = (struct iocblk *)mp->b_rptr;
-	mblk_t		*mp1 = mp->b_cont;
-	mod_ioc_prop_t	*pioc;
-	uint_t		flags;
-	uint_t		pioc_size;
-
-	/* do sanity checks on various arguments */
-	if (mp1 == NULL || iocp->ioc_count == 0 ||
-	    iocp->ioc_count == TRANSPARENT) {
-		return (B_FALSE);
-	}
-	if (msgdsize(mp1) < iocp->ioc_count) {
-		if (!pullupmsg(mp1, iocp->ioc_count))
-			return (B_FALSE);
-	}
-
-	pioc = (mod_ioc_prop_t *)mp1->b_rptr;
-
-	/* sanity checks on mpr_valsize */
-	pioc_size = sizeof (mod_ioc_prop_t);
-	if (pioc->mpr_valsize != 0)
-		pioc_size += pioc->mpr_valsize - 1;
-
-	if (iocp->ioc_count != pioc_size)
-		return (B_FALSE);
-
-	flags = pioc->mpr_flags;
-	if (iocp->ioc_cmd == SIOCSETPROP) {
+	uint_t		flags = pioc->mpr_flags;
+	if (ioc_cmd == SIOCSETPROP) {
 		/*
 		 * One can either reset the value to it's default value or
 		 * change the current value or append/remove the value from
@@ -8674,7 +8648,7 @@ getset_ioctl_checks(mblk_t *mp)
 		    flags != (MOD_PROP_ACTIVE|MOD_PROP_REMOVE))
 			return (B_FALSE);
 	} else {
-		ASSERT(iocp->ioc_cmd == SIOCGETPROP);
+		ASSERT(ioc_cmd == SIOCGETPROP);
 
 		/*
 		 * One can retrieve only one kind of property information
@@ -8694,11 +8668,12 @@ getset_ioctl_checks(mblk_t *mp)
  * process the SIOC{SET|GET}PROP ioctl's
  */
 /* ARGSUSED */
-static void
-ip_sioctl_getsetprop(queue_t *q, mblk_t *mp)
+int
+ip_sioctl_getsetprop(ipif_t *dummy_ipif, sin_t *dummy_sin, queue_t *q,
+    mblk_t *mp, ip_ioctl_cmd_t *ipip, void *dummy_if_req)
 {
-	struct iocblk	*iocp = (struct iocblk *)mp->b_rptr;
-	mblk_t		*mp1 = mp->b_cont;
+	int		ioc_cmd = ((struct iocblk *)mp->b_rptr)->ioc_cmd;
+	mblk_t		*mp1;
 	mod_ioc_prop_t	*pioc;
 	mod_prop_info_t *ptbl = NULL, *pinfo = NULL;
 	ip_stack_t	*ipst;
@@ -8710,13 +8685,12 @@ ip_sioctl_getsetprop(queue_t *q, mblk_t *mp)
 	ASSERT(q->q_next == NULL);
 	ASSERT(CONN_Q(q));
 
-	if (!getset_ioctl_checks(mp)) {
-		miocnak(q, mp, 0, EINVAL);
-		return;
-	}
+	mp1 = mp->b_cont->b_cont;
 	ipst = CONNQ_TO_IPST(q);
 	stack = ipst->ips_netstack;
 	pioc = (mod_ioc_prop_t *)mp1->b_rptr;
+	if (!getset_ioctl_checks(pioc, ioc_cmd))
+		return (EINVAL);
 
 	switch (pioc->mpr_proto) {
 	case MOD_PROTO_IP:
@@ -8737,38 +8711,30 @@ ip_sioctl_getsetprop(queue_t *q, mblk_t *mp)
 		ptbl = stack->netstack_sctp->sctps_propinfo_tbl;
 		break;
 	default:
-		miocnak(q, mp, 0, EINVAL);
-		return;
+		return (EINVAL);
 	}
+
+	pioc->mpr_ifname[sizeof(pioc->mpr_ifname)-1] = '\0';
+	pioc->mpr_name[sizeof(pioc->mpr_name)-1] = '\0';
+	pioc->mpr_val[sizeof(pioc->mpr_val)-1] = '\0';
 
 	pinfo = mod_prop_lookup(ptbl, pioc->mpr_name, pioc->mpr_proto);
-	if (pinfo == NULL) {
-		miocnak(q, mp, 0, ENOENT);
-		return;
-	}
+	if (pinfo == NULL)
+		return (ENOENT);
 
-	set = (iocp->ioc_cmd == SIOCSETPROP) ? B_TRUE : B_FALSE;
+	set = (ioc_cmd == SIOCSETPROP) ? B_TRUE : B_FALSE;
 	if (set && pinfo->mpi_setf != NULL) {
 		cr = msg_getcred(mp, NULL);
-		if (cr == NULL)
-			cr = iocp->ioc_cr;
 		err = pinfo->mpi_setf(stack, cr, pinfo, pioc->mpr_ifname,
 		    pioc->mpr_val, pioc->mpr_flags);
 	} else if (!set && pinfo->mpi_getf != NULL) {
 		err = pinfo->mpi_getf(stack, pinfo, pioc->mpr_ifname,
-		    pioc->mpr_val, pioc->mpr_valsize, pioc->mpr_flags);
+		    pioc->mpr_val, sizeof(pioc->mpr_val), pioc->mpr_flags);
 	} else {
 		err = EPERM;
 	}
 
-	if (err != 0) {
-		miocnak(q, mp, 0, err);
-	} else {
-		if (set)
-			miocack(q, mp, 0, 0);
-		else    /* For get, we need to return back the data */
-			miocack(q, mp, iocp->ioc_count, 0);
-	}
+	return (err);
 }
 
 /*
@@ -8996,11 +8962,6 @@ ip_sioctl_copyin_setup(queue_t *q, mblk_t *mp)
 	case ND_SET:
 	case ND_GET:
 		ip_process_legacy_nddprop(q, mp);
-		return;
-
-	case SIOCSETPROP:
-	case SIOCGETPROP:
-		ip_sioctl_getsetprop(q, mp);
 		return;
 
 	case I_PLINK:
