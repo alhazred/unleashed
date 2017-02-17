@@ -110,8 +110,6 @@ MAN = Intro.4 \
       phones.4 \
       policy.conf.4 \
       power.conf.4 \
-      printers.4 \
-      printers.conf.4 \
       priv_names.4 \
       proc.4 \
       process.4 \

@@ -32,10 +32,9 @@
 include ../Makefile.master
 
 #
-#	Note that the commands 'lp', and 'perl' are first in
-#	the list, violating alphabetical order.  This is because they are very
-#	long-running and should be given the most wall-clock time for a
-#	parallel build.
+#	Note that the command 'perl' is first in the list, violating
+#	alphabetical order.  This is because it is very long-running and
+#	should be given the most wall-clock time for a parallel build.
 #
 #	Commands in the FIRST_SUBDIRS list are built before starting the build
 #	of other commands.  Currently this includes only 'isaexec' and
@@ -50,7 +49,6 @@ FIRST_SUBDIRS=		\
 
 COMMON_SUBDIRS=		\
 	allocate	\
-	lp		\
 	perl		\
 	Adm		\
 	abi		\
@@ -306,7 +304,6 @@ COMMON_SUBDIRS=		\
 	plockstat	\
 	pr		\
 	prctl		\
-	print		\
 	printenv	\
 	printf		\
 	priocntl	\
@@ -484,11 +481,9 @@ sparc_SUBDIRS=		\
 	vntsd
 
 #
-# Commands that are messaged.  Note that 'lp' comes first
-# (see previous comment about 'lp'.)
+# Commands that are messaged.
 #
 MSGSUBDIRS=		\
-	lp		\
 	abi		\
 	acctadm		\
 	allocate	\
@@ -627,7 +622,6 @@ MSGSUBDIRS=		\
 	power		\
 	pr		\
 	praudit		\
-	print		\
 	profiles	\
 	projadd		\
 	projects	\
@@ -801,7 +795,6 @@ _dc: $(DCSUBDIRS)
 fs.d: fstyp
 ksh:	shcomp isaexec
 mdb:	terminfo
-print:	lp
 fmt:	mailx
 
 $(FIRST_SUBDIRS) $(BWOSDIRS) $(SUBDIRS) $(AUDITSUBDIRS): FRC

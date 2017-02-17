@@ -20,7 +20,6 @@ MAN_sparc = cvcd.1m \
 MAN = 6to4relay.1m \
       Intro.1m \
       Uutry.1m \
-      accept.1m \
       acct.1m \
       acctadm.1m \
       acctcms.1m \
@@ -65,8 +64,6 @@ MAN = 6to4relay.1m \
       clinfo.1m \
       clri.1m \
       consadm.1m \
-      conv_lp.1m \
-      conv_lpd.1m \
       coreadm.1m \
       cpustat.1m \
       cron.1m \
@@ -240,16 +237,6 @@ MAN = 6to4relay.1m \
       lofiadm.1m \
       logadm.1m \
       logins.1m \
-      lpadmin.1m \
-      lpfilter.1m \
-      lpforms.1m \
-      lpget.1m \
-      lpmove.1m \
-      lpsched.1m \
-      lpset.1m \
-      lpshut.1m \
-      lpsystem.1m \
-      lpusers.1m \
       luxadm.1m \
       mailwrapper.1m \
       makedbm.1m \
@@ -321,7 +308,6 @@ MAN = 6to4relay.1m \
       pppoed.1m \
       pppstats.1m \
       praudit.1m \
-      print-service.1m \
       projadd.1m \
       projdel.1m \
       projmod.1m \
@@ -485,7 +471,6 @@ MAN = 6to4relay.1m \
       zpool.1m \
       zstreamdump.1m \
       $(MAN_$(CONFIG_MACH))
-
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

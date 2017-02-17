@@ -49,7 +49,6 @@ MAN = libMPAPI.3lib \
       libnvpair.3lib \
       libpam.3lib \
       libpanel.3lib \
-      libpapi.3lib \
       libpctx.3lib \
       libpicl.3lib \
       libpicltree.3lib \

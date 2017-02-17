@@ -178,7 +178,6 @@ DIRS= \
 	/lib/svc/manifest/application \
 	/lib/svc/manifest/application/management \
 	/lib/svc/manifest/application/security \
-	/lib/svc/manifest/application/print \
 	/lib/svc/manifest/platform \
 	/lib/svc/manifest/platform/sun4u \
 	/lib/svc/manifest/platform/sun4v \
@@ -289,12 +288,9 @@ DIRS= \
 	/usr/sbin \
 	/usr/sbin/$(MACH32) \
 	/usr/share  \
-	/usr/share/applications \
 	/usr/share/audio \
 	/usr/share/audio/samples \
 	/usr/share/audio/samples/au \
-	/usr/share/gnome \
-	/usr/share/gnome/autostart \
 	/usr/share/hwdata \
 	/usr/share/lib \
 	/usr/share/lib/ccs \
@@ -344,7 +340,6 @@ DIRS= \
 	/var/spool/cron \
 	/var/spool/cron/atjobs \
 	/var/spool/cron/crontabs \
-	/var/spool/lp \
 	/var/spool/uucp \
 	/var/spool/uucppublic \
 	/var/svc \

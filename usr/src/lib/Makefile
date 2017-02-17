@@ -235,7 +235,6 @@ SUBDIRS +=				\
 	passwdutil	\
 	pkcs11		\
 	policykit	\
-	print		\
 	pylibbe		\
 	pysolaris	\
 	pyzfs		\
@@ -625,7 +624,6 @@ pam_modules:	libproject passwdutil smbsrv libpam libbsm libsecdb
 passwdutil:	libsldap
 pkcs11:		libcryptoutil libgen libuuid
 policykit:	libsecdb
-print:		libldap5 libmd5 libsendfile
 pylibbe: 	libbe libzfs
 pysolaris:	libsec libidmap
 pyzfs:		libzfs
