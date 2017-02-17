@@ -50,7 +50,6 @@ file path=usr/bin/$(ARCH64)/elfdump mode=0555
 file path=usr/bin/$(ARCH64)/elfedit mode=0555
 file path=usr/bin/$(ARCH64)/mcs mode=0555
 file path=usr/bin/$(ARCH64)/nm mode=0555
-file path=usr/bin/$(ARCH64)/size mode=0555
 file path=usr/bin/ar mode=0555
 file path=usr/bin/dis mode=0555
 file path=usr/bin/dump mode=0555
@@ -124,7 +123,6 @@ link path=usr/ccs/bin/$(ARCH64)/dump target=../../../bin/$(ARCH64)/dump
 link path=usr/ccs/bin/$(ARCH64)/elfdump target=../../../bin/$(ARCH64)/elfdump
 link path=usr/ccs/bin/$(ARCH64)/mcs target=../../../bin/$(ARCH64)/mcs
 link path=usr/ccs/bin/$(ARCH64)/nm target=../../../bin/$(ARCH64)/nm
-link path=usr/ccs/bin/$(ARCH64)/size target=../../../bin/$(ARCH64)/size
 link path=usr/ccs/bin/$(ARCH64)/strip target=../../../bin/$(ARCH64)/strip
 link path=usr/ccs/bin/ar target=../../bin/ar
 link path=usr/ccs/bin/dump target=../../bin/dump
@@ -138,7 +136,6 @@ link path=usr/ccs/bin/mcs target=../../bin/mcs
 link path=usr/ccs/bin/nm target=../../bin/nm
 link path=usr/ccs/bin/prof target=../../bin/prof
 link path=usr/ccs/bin/ranlib target=../../bin/ranlib
-link path=usr/ccs/bin/size target=../../bin/size
 link path=usr/ccs/bin/strip target=../../bin/strip
 link path=usr/ccs/bin/symorder target=../../bin/symorder
 link path=usr/ccs/bin/tsort target=../../bin/tsort

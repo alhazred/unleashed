@@ -70,7 +70,6 @@ SUBDIRS=	libconv		\
 		nm		\
 		prof		\
 		ranlib		\
-		size		\
 		symorder	\
 		tsort		\
 		unifdef		\

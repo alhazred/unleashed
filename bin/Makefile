@@ -1,3 +1,3 @@
-SUBDIR=	bmake dis localedef mandoc pax sed uname xinstall
+SUBDIR=	bmake dis localedef mandoc pax sed size uname xinstall
 
 .include <bsd.subdir.mk>
