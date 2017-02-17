@@ -412,7 +412,6 @@ ip_input_common_v4(ill_t *ill, ill_rx_ring_t *ip_ring, mblk_t *mp_chain,
 
 /*
  * This input function is used when
- *  - CGTP filtering
  *  - DHCP unicast before we have an IP address configured
  *  - there is an listener for IPPROTO_RSVP
  */
@@ -424,33 +423,6 @@ ill_input_full_v4(mblk_t *mp, void *iph_arg, void *nexthop_arg,
 	ipaddr_t	nexthop = *(ipaddr_t *)nexthop_arg;
 	ill_t		*ill = ira->ira_ill;
 	ip_stack_t	*ipst = ill->ill_ipst;
-	int		cgtp_flt_pkt;
-
-	/*
-	 * Invoke the CGTP (multirouting) filtering module to process
-	 * the incoming packet. Packets identified as duplicates
-	 * must be discarded. Filtering is active only if the
-	 * the ip_cgtp_filter ndd variable is non-zero.
-	 */
-	cgtp_flt_pkt = CGTP_IP_PKT_NOT_CGTP;
-	if (ipst->ips_ip_cgtp_filter &&
-	    ipst->ips_ip_cgtp_filter_ops != NULL) {
-		netstackid_t stackid;
-
-		stackid = ipst->ips_netstack->netstack_stackid;
-		/*
-		 * CGTP and IPMP are mutually exclusive so
-		 * phyint_ifindex is fine here.
-		 */
-		cgtp_flt_pkt =
-		    ipst->ips_ip_cgtp_filter_ops->cfo_filter(stackid,
-		    ill->ill_phyint->phyint_ifindex, mp);
-		if (cgtp_flt_pkt == CGTP_IP_PKT_DUPLICATE) {
-			ip_drop_input("CGTP_IP_PKT_DUPLICATE", mp, ill);
-			freemsg(mp);
-			return;
-		}
-	}
 
 	/*
 	 * Brutal hack for DHCPv4 unicast: RFC2131 allows a DHCP
@@ -772,7 +744,6 @@ after_ilb:
 	 * Based on ire_type and ire_flags call one of:
 	 *	ire_recv_local_v4 - for IRE_LOCAL
 	 *	ire_recv_loopback_v4 - for IRE_LOOPBACK
-	 *	ire_recv_multirt_v4 - if RTF_MULTIRT
 	 *	ire_recv_noroute_v4 - if RTF_REJECT or RTF_BLACHOLE
 	 *	ire_recv_multicast_v4 - for IRE_MULTICAST
 	 *	ire_recv_broadcast_v4 - for IRE_BROADCAST
@@ -1258,7 +1229,7 @@ ire_recv_broadcast_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
 	 * The same broadcast address can be assigned to multiple interfaces
 	 * so have to check explicitly for that case by looking up the alt_ire
 	 */
-	if (dst_ill == ill && !(ire->ire_flags & RTF_MULTIRT)) {
+	if (dst_ill == ill) {
 		/* Reassemble on the ill on which the packet arrived */
 		ip_input_local_v4(ire, mp, ipha, ira);
 		/* Restore */
@@ -1273,47 +1244,6 @@ ire_recv_broadcast_v4(ire_t *ire, mblk_t *mp, void *iph_arg,
 	    ALL_ZONES, MATCH_IRE_TYPE|MATCH_IRE_ILL, 0, ipst, NULL);
 	if (alt_ire != NULL) {
 		/* Not a directed broadcast */
-		/*
-		 * In the special case of multirouted broadcast
-		 * packets, we unconditionally need to "gateway"
-		 * them to the appropriate interface here so that reassembly
-		 * works. We know that the IRE_BROADCAST on cgtp0 doesn't
-		 * have RTF_MULTIRT set so we look for such an IRE in the
-		 * bucket.
-		 */
-		if (alt_ire->ire_flags & RTF_MULTIRT) {
-			irb_t		*irb;
-			ire_t		*ire1;
-
-			irb = ire->ire_bucket;
-			irb_refhold(irb);
-			for (ire1 = irb->irb_ire; ire1 != NULL;
-			    ire1 = ire1->ire_next) {
-				if (IRE_IS_CONDEMNED(ire1))
-					continue;
-				if (!(ire1->ire_type & IRE_BROADCAST) ||
-				    (ire1->ire_flags & RTF_MULTIRT))
-					continue;
-				ill = ire1->ire_ill;
-				ill_refhold(ill);
-				break;
-			}
-			irb_refrele(irb);
-			if (ire1 != NULL) {
-				ill_t *orig_ill = ira->ira_ill;
-
-				ire_refrele(alt_ire);
-				/* Reassemble on the new ill */
-				ira->ira_ill = ill;
-				ip_input_local_v4(ire, mp, ipha, ira);
-				ill_refrele(ill);
-				/* Restore */
-				ira->ira_ill = orig_ill;
-				ira->ira_ruifindex =
-				    orig_ill->ill_phyint->phyint_ifindex;
-				return;
-			}
-		}
 		ire_refrele(alt_ire);
 		/* Reassemble on the ill on which the packet arrived */
 		ip_input_local_v4(ire, mp, ipha, ira);
@@ -1528,21 +1458,6 @@ done:
 		ira->ira_ill = ire->ire_ill;
 		ira->ira_ruifindex = ira->ira_ill->ill_phyint->phyint_ifindex;
 	}
-}
-
-/*
- * ire_recvfn for IRE_OFFLINK with RTF_MULTIRT.
- * Drop packets since we don't forward out multirt routes.
- */
-/* ARGSUSED */
-void
-ire_recv_multirt_v4(ire_t *ire, mblk_t *mp, void *iph_arg, ip_recv_attr_t *ira)
-{
-	ill_t		*ill = ira->ira_ill;
-
-	BUMP_MIB(ill->ill_ip_mib, ipIfStatsInNoRoutes);
-	ip_drop_input("Not forwarding out MULTIRT", mp, ill);
-	freemsg(mp);
 }
 
 /*
@@ -1762,7 +1677,6 @@ ip_input_broadcast_v4(ire_t *ire, mblk_t *mp, ipha_t *ipha, ip_recv_attr_t *ira)
 		/*
 		 * Only IREs for the same IP address should be in the same
 		 * bucket.
-		 * But could have IRE_HOSTs in the case of CGTP.
 		 */
 		ASSERT(ire1->ire_addr == ire->ire_addr);
 		if (!(ire1->ire_type & IRE_BROADCAST))

@@ -2507,7 +2507,7 @@ udp_output_ancillary(conn_t *connp, sin_t *sin, sin6_t *sin6, mblk_t *mp,
 	ixa->ixa_cred = cr;
 	ixa->ixa_cpid = pid;
 
-	/* In case previous destination was multicast or multirt */
+	/* In case previous destination was multicast */
 	ip_attr_newdst(ixa);
 
 	/* Get a copy of conn_xmit_ipp since the options might change it */
@@ -3541,7 +3541,7 @@ udp_output_newdst(conn_t *connp, mblk_t *data_mp, sin_t *sin, sin6_t *sin6,
 		goto ud_error;
 	}
 
-	/* In case previous destination was multicast or multirt */
+	/* In case previous destination was multicast */
 	ip_attr_newdst(ixa);
 
 	/*

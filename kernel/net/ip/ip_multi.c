@@ -1749,16 +1749,14 @@ ill_mcast_lookup(const in6_addr_t *group, ipaddr_t ifaddr, uint_t ifindex,
 				ipif_refrele(ipif);
 			}
 		} else {
-			ill = ill_lookup_group_v4(v4group, zoneid, ipst, NULL,
-			    NULL);
+			ill = ill_lookup_group_v4(v4group, zoneid, ipst, NULL);
 		}
 	} else {
 		if (ifindex != 0) {
 			ill = ill_lookup_on_ifindex_zoneid(ifindex, zoneid,
 			    B_TRUE, ipst);
 		} else {
-			ill = ill_lookup_group_v6(group, zoneid, ipst, NULL,
-			    NULL);
+			ill = ill_lookup_group_v6(group, zoneid, ipst, NULL);
 		}
 	}
 	if (ill == NULL) {

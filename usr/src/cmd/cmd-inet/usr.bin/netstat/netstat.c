@@ -294,7 +294,6 @@ static const char *filter_keys[NFILTERKEYS] = {
 #define	FLF_H		0x00000010
 #define	FLF_L		0x00000020
 #define	FLF_U		0x00000040
-#define	FLF_M		0x00000080
 #define	FLF_S		0x00000100
 #define	FLF_C		0x00000200	/* IRE_IF_CLONE */
 #define	FLF_I		0x00000400	/* RTF_INDIRECT */
@@ -4162,10 +4161,6 @@ form_v4_route_flags(const mib2_ipRouteEntry_t *rp, char *flags)
 		(void) strcat(flags, "L");
 		flag_b |= FLF_L;
 	}
-	if (rp->ipRouteInfo.re_flags & RTF_MULTIRT) {
-		(void) strcat(flags, "M");			/* Multiroute */
-		flag_b |= FLF_M;
-	}
 	if (rp->ipRouteInfo.re_flags & RTF_SETSRC) {
 		(void) strcat(flags, "S");			/* Setsrc */
 		flag_b |= FLF_S;
@@ -4407,10 +4402,6 @@ form_v6_route_flags(const mib2_ipv6RouteEntry_t *rp6, char *flags)
 	if (rp6->ipv6RouteInfo.re_ire_type == IRE_LOCAL) {	/* Local */
 		(void) strcat(flags, "L");
 		flag_b |= FLF_L;
-	}
-	if (rp6->ipv6RouteInfo.re_flags & RTF_MULTIRT) {
-		(void) strcat(flags, "M");			/* Multiroute */
-		flag_b |= FLF_M;
 	}
 	if (rp6->ipv6RouteInfo.re_flags & RTF_SETSRC) {
 		(void) strcat(flags, "S");			/* Setsrc */

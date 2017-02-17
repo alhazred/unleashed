@@ -150,10 +150,6 @@ ire_init_v6(ire_t *ire, const in6_addr_t *v6addr, const in6_addr_t *v6mask,
 	if (ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)) {
 		ire->ire_sendfn = ire_send_noroute_v6;
 		ire->ire_recvfn = ire_recv_noroute_v6;
-	} else if (ire->ire_flags & RTF_MULTIRT) {
-		ire->ire_postfragfn = ip_postfrag_multirt_v6;
-		ire->ire_sendfn = ire_send_multirt_v6;
-		ire->ire_recvfn = ire_recv_multirt_v6;
 	}
 	ire->ire_nce_capable = ire_determine_nce_capable(ire);
 	return (0);
@@ -205,16 +201,12 @@ ire_create_v6(const in6_addr_t *v6addr, const in6_addr_t *v6mask,
  * Supports link-local addresses by using ire_route_recursive which follows
  * the ill when recursing.
  *
- * To handle CGTP, since we don't have a separate IRE_MULTICAST for each group
- * and the MULTIRT property can be different for different groups, we
- * extract RTF_MULTIRT from the special unicast route added for a group
- * with CGTP and pass that back in the multirtp argument.
  * This is used in ip_set_destination etc to set ixa_postfragfn for multicast.
  * We have a setsrcp argument for the same reason.
  */
 ill_t *
 ire_lookup_multi_ill_v6(const in6_addr_t *group, zoneid_t zoneid,
-    ip_stack_t *ipst, boolean_t *multirtp, in6_addr_t *setsrcp)
+    ip_stack_t *ipst, in6_addr_t *setsrcp)
 {
 	ire_t	*ire;
 	ill_t	*ill;
@@ -227,9 +219,6 @@ ire_lookup_multi_ill_v6(const in6_addr_t *group, zoneid_t zoneid,
 		ire_refrele(ire);
 		return (NULL);
 	}
-
-	if (multirtp != NULL)
-		*multirtp = (ire->ire_flags & RTF_MULTIRT) != 0;
 
 	ill = ire_nexthop_ill(ire);
 	ire_refrele(ire);
@@ -1118,12 +1107,11 @@ ire_ftable_lookup_simple_v6(const in6_addr_t *addr, uint32_t xmit_hint,
 ire_t *
 ip_select_route_v6(const in6_addr_t *dst, const in6_addr_t src,
     ip_xmit_attr_t *ixa, uint_t *generationp, in6_addr_t *setsrcp,
-    int *errorp, boolean_t *multirtp)
+    int *errorp)
 {
 	ASSERT(!(ixa->ixa_flags & IXAF_IS_IPV4));
 
-	return (ip_select_route(dst, src, ixa, generationp, setsrcp, errorp,
-	    multirtp));
+	return (ip_select_route(dst, src, ixa, generationp, setsrcp, errorp));
 }
 
 /*
@@ -1351,13 +1339,6 @@ error:
 	ASSERT(ire != NULL);
 	if (need_refrele)
 		ill_refrele(ill);
-
-	/*
-	 * In the case of MULTIRT we want to try a different IRE the next
-	 * time. We let the next packet retry in that case.
-	 */
-	if (i > 0 && (ires[0]->ire_flags & RTF_MULTIRT))
-		(void) ire_no_good(ires[0]);
 
 cleanup:
 	/* cleanup ires[i] */

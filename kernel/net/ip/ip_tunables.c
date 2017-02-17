@@ -204,52 +204,6 @@ ip_get_debug(netstack_t *stack, mod_prop_info_t *pinfo, const char *ifname,
 }
 
 /*
- * Set the CGTP (multirouting) filtering status. If the status is changed
- * from active to transparent or from transparent to active, forward the
- * new status to the filtering module (if loaded).
- */
-/* ARGSUSED */
-static int
-ip_set_cgtp_filter(netstack_t *stack, cred_t *cr, mod_prop_info_t *pinfo,
-    const char *ifname, const void* pval, uint_t flags)
-{
-	unsigned long	new_value;
-	ip_stack_t	*ipst = stack->netstack_ip;
-	char		*end;
-
-	if (flags & MOD_PROP_DEFAULT) {
-		new_value = pinfo->prop_def_bval;
-	} else {
-		if (ddi_strtoul(pval, &end, 10, &new_value) != 0 ||
-		    *end != '\0' || new_value > 1) {
-			return (EINVAL);
-		}
-	}
-	if (!pinfo->prop_cur_bval && new_value) {
-		cmn_err(CE_NOTE, "IP: enabling CGTP filtering%s",
-		    ipst->ips_ip_cgtp_filter_ops == NULL ?
-		    " (module not loaded)" : "");
-	}
-	if (pinfo->prop_cur_bval && !new_value) {
-		cmn_err(CE_NOTE, "IP: disabling CGTP filtering%s",
-		    ipst->ips_ip_cgtp_filter_ops == NULL ?
-		    " (module not loaded)" : "");
-	}
-	if (ipst->ips_ip_cgtp_filter_ops != NULL) {
-		int	res;
-		netstackid_t stackid = ipst->ips_netstack->netstack_stackid;
-
-		res = ipst->ips_ip_cgtp_filter_ops->cfo_change_state(stackid,
-		    new_value);
-		if (res)
-			return (res);
-	}
-	pinfo->prop_cur_bval = (new_value == 1 ? B_TRUE : B_FALSE);
-	ill_set_inputfn_all(ipst);
-	return (0);
-}
-
-/*
  * Retrieve the default MTU or min-max MTU range for a given interface.
  *
  *  -- ill_max_frag value tells us the maximum MTU that can be handled by the
@@ -693,10 +647,6 @@ mod_prop_info_t ip_propinfo_tbl[] = {
 	    mod_set_uint32, mod_get_uint32,
 	    {0, 2, 2}, {2} },
 
-	{ "_multirt_ttl", MOD_PROTO_IP,
-	    mod_set_uint32, mod_get_uint32,
-	    {0, 255, 1}, {1} },
-
 	/* following tunable is in seconds - a deviant */
 	{ "_ire_badcnt_lifetime", MOD_PROTO_IP,
 	    mod_set_uint32, mod_get_uint32,
@@ -763,10 +713,6 @@ mod_prop_info_t ip_propinfo_tbl[] = {
 	    mod_set_uint32, mod_get_uint32,
 	    {5, 255, IPV6_REASM_TIMEOUT},
 	    {IPV6_REASM_TIMEOUT} },
-
-	{ "_cgtp_filter", MOD_PROTO_IP,
-	    ip_set_cgtp_filter, mod_get_boolean,
-	    {B_FALSE}, {B_FALSE} },
 
 	/* delay before sending first probe: */
 	{ "_arp_probe_delay", MOD_PROTO_IP,

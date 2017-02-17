@@ -741,7 +741,6 @@ ill_input_short_v6(mblk_t *mp, void *iph_arg, void *nexthop_arg,
 	 * Based on ire_type and ire_flags call one of:
 	 *	ire_recv_local_v6 - for IRE_LOCAL
 	 *	ire_recv_loopback_v6 - for IRE_LOOPBACK
-	 *	ire_recv_multirt_v6 - if RTF_MULTIRT
 	 *	ire_recv_noroute_v6 - if RTF_REJECT or RTF_BLACHOLE
 	 *	ire_recv_multicast_v6 - for IRE_MULTICAST
 	 *	ire_recv_noaccept_v6 - for ire_noaccept ones
@@ -1274,21 +1273,6 @@ done:
 		ira->ira_ill = ire->ire_ill;
 		ira->ira_ruifindex = ira->ira_ill->ill_phyint->phyint_ifindex;
 	}
-}
-
-/*
- * ire_recvfn for IRE_OFFLINK with RTF_MULTIRT.
- * Drop packets since we don't forward out multirt routes.
- */
-/* ARGSUSED */
-void
-ire_recv_multirt_v6(ire_t *ire, mblk_t *mp, void *iph_arg, ip_recv_attr_t *ira)
-{
-	ill_t		*ill = ira->ira_ill;
-
-	BUMP_MIB(ill->ill_ip_mib, ipIfStatsInNoRoutes);
-	ip_drop_input("Not forwarding out MULTIRT", mp, ill);
-	freemsg(mp);
 }
 
 /*
@@ -2308,35 +2292,6 @@ repeat:
 
 		fraghdr = (ip6_frag_t *)(rptr + ip_hdr_length);
 		BUMP_MIB(ill->ill_ip_mib, ipIfStatsReasmReqds);
-
-		/*
-		 * Invoke the CGTP (multirouting) filtering module to
-		 * process the incoming packet. Packets identified as
-		 * duplicates must be discarded. Filtering is active
-		 * only if the ip_cgtp_filter ndd variable is
-		 * non-zero.
-		 */
-		if (ipst->ips_ip_cgtp_filter &&
-		    ipst->ips_ip_cgtp_filter_ops != NULL) {
-			int cgtp_flt_pkt;
-			netstackid_t stackid;
-
-			stackid = ipst->ips_netstack->netstack_stackid;
-
-			/*
-			 * CGTP and IPMP are mutually exclusive so
-			 * phyint_ifindex is fine here.
-			 */
-			cgtp_flt_pkt =
-			    ipst->ips_ip_cgtp_filter_ops->cfo_filter_v6(
-			    stackid, ill->ill_phyint->phyint_ifindex,
-			    ip6h, fraghdr);
-			if (cgtp_flt_pkt == CGTP_IP_PKT_DUPLICATE) {
-				ip_drop_input("CGTP_IP_PKT_DUPLICATE", mp, ill);
-				freemsg(mp);
-				return;
-			}
-		}
 
 		/*
 		 * Update ip_hdr_length to skip the frag header

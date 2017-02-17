@@ -23,7 +23,7 @@
  * Copyright (c) 1991, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright (c) 1990 Mentat Inc.
  * Copyright (c) 2012 Joyent, Inc. All rights reserved.
- * Copyright (c) 2014, OmniTI Computer Consulting, Inc. All rights reserved.
+ * Copyright (c) 2017 OmniTI Computer Consulting, Inc. All rights reserved.
  */
 
 #include <sys/types.h>
@@ -666,11 +666,6 @@ static void	*ip_stack_init(netstackid_t stackid, netstack_t *ns);
 static void	ip_stack_shutdown(netstackid_t stackid, void *arg);
 static void	ip_stack_fini(netstackid_t stackid, void *arg);
 
-static int	ip_multirt_apply_membership(int (*fn)(conn_t *, boolean_t,
-    const in6_addr_t *, ipaddr_t, uint_t, mcast_record_t, const in6_addr_t *),
-    ire_t *, conn_t *, boolean_t, const in6_addr_t *,  mcast_record_t,
-    const in6_addr_t *);
-
 static int	ip_squeue_switch(int);
 
 static void	*ip_kstat_init(netstackid_t, ip_stack_t *);
@@ -696,11 +691,6 @@ vmem_t *ip_minor_arena_sa; /* for minor nos. from INET_MIN_DEV+2 thru 2^^18-1 */
 vmem_t *ip_minor_arena_la; /* for minor nos. from 2^^18 thru 2^^32-1 */
 
 int	ip_debug;
-
-/*
- * Multirouting/CGTP stuff
- */
-int	ip_cgtp_filter_rev = CGTP_FILTER_REV;	/* CGTP hooks version */
 
 /*
  * IP tunables related declarations. Definitions are in ip_tunables.c
@@ -3291,7 +3281,6 @@ ip_set_destination_v4(ipaddr_t *src_addrp, ipaddr_t dst_addr, ipaddr_t firsthop,
 	uint_t		generation;
 	nce_t		*nce;
 	ill_t		*ill = NULL;
-	boolean_t	multirt = B_FALSE;
 
 	ASSERT(ixa->ixa_flags & IXAF_IS_IPV4);
 
@@ -3309,7 +3298,7 @@ ip_set_destination_v4(ipaddr_t *src_addrp, ipaddr_t dst_addr, ipaddr_t firsthop,
 	 * if ixa_ifindex has been specified.
 	 */
 	ire = ip_select_route_v4(firsthop, *src_addrp, ixa,
-	    &generation, &setsrc, &error, &multirt);
+	    &generation, &setsrc, &error);
 	ASSERT(ire != NULL);	/* IRE_NOROUTE if none found */
 	if (error != 0)
 		goto bad_addr;
@@ -3395,21 +3384,8 @@ ip_set_destination_v4(ipaddr_t *src_addrp, ipaddr_t dst_addr, ipaddr_t firsthop,
 #endif
 	ixa->ixa_dce = dce;
 	ixa->ixa_dce_generation = generation;
+	ixa->ixa_postfragfn = ire->ire_postfragfn;
 
-	/*
-	 * For multicast with multirt we have a flag passed back from
-	 * ire_lookup_multi_ill_v4 since we don't have an IRE for each
-	 * possible multicast address.
-	 * We also need a flag for multicast since we can't check
-	 * whether RTF_MULTIRT is set in ixa_ire for multicast.
-	 */
-	if (multirt) {
-		ixa->ixa_postfragfn = ip_postfrag_multirt_v4;
-		ixa->ixa_flags |= IXAF_MULTIRT_MULTICAST;
-	} else {
-		ixa->ixa_postfragfn = ire->ire_postfragfn;
-		ixa->ixa_flags &= ~IXAF_MULTIRT_MULTICAST;
-	}
 	if (!(ire->ire_flags & (RTF_REJECT|RTF_BLACKHOLE))) {
 		/* Get an nce to cache. */
 		nce = ire_to_nce(ire, firsthop, NULL);
@@ -3758,29 +3734,6 @@ ip_get_pmtu(ip_xmit_attr_t *ixa)
 			/* Default is IPV6_USE_MIN_MTU_MULTICAST */
 			if (ire->ire_type & IRE_MULTICAST)
 				pmtu = IPV6_MIN_MTU;
-		}
-	}
-
-	/*
-	 * After receiving an ICMPv6 "packet too big" message with a
-	 * MTU < 1280, and for multirouted IPv6 packets, the IP layer
-	 * will insert a 8-byte fragment header in every packet. We compensate
-	 * for those cases by returning a smaller path MTU to the ULP.
-	 *
-	 * In the case of CGTP then ip_output will add a fragment header.
-	 * Make sure there is room for it by telling a smaller number
-	 * to the transport.
-	 *
-	 * When IXAF_IPV6_ADDR_FRAGHDR we subtract the frag hdr here
-	 * so the ULPs consistently see a iulp_pmtu and ip_get_pmtu()
-	 * which is the size of the packets it can send.
-	 */
-	if (!(ixa->ixa_flags & IXAF_IS_IPV4)) {
-		if ((dce->dce_flags & DCEF_TOO_SMALL_PMTU) ||
-		    (ire->ire_flags & RTF_MULTIRT) ||
-		    (ixa->ixa_flags & IXAF_MULTIRT_MULTICAST)) {
-			pmtu -= sizeof (ip6_frag_t);
-			ixa->ixa_flags |= IXAF_IPV6_ADD_FRAGHDR;
 		}
 	}
 
@@ -4540,8 +4493,6 @@ ip_stack_init(netstackid_t stackid, netstack_t *ns)
 	conn_drain_init(ipst);
 	ip_mrouter_stack_init(ipst);
 	dce_stack_init(ipst);
-
-	ipst->ips_ip_multirt_log_interval = 1000;
 
 	ipst->ips_ill_index = 1;
 
@@ -6173,8 +6124,6 @@ ip_opt_set_multicast_group(conn_t *connp, t_scalar_t name,
 	 * in replication.  We do so because multirouting is
 	 * reflective, thus we will probably receive multi-
 	 * casts on those interfaces.
-	 * The ip_multirt_apply_membership() succeeds if
-	 * the operation succeeds on at least one interface.
 	 */
 	if (IN6_IS_ADDR_V4MAPPED(&v6group)) {
 		ipaddr_t group;
@@ -6189,14 +6138,8 @@ ip_opt_set_multicast_group(conn_t *connp, t_scalar_t name,
 		    IRE_HOST | IRE_INTERFACE, NULL, ALL_ZONES,
 		    MATCH_IRE_MASK | MATCH_IRE_TYPE, 0, ipst, NULL);
 	}
-	if (ire != NULL) {
-		if (ire->ire_flags & RTF_MULTIRT) {
-			error = ip_multirt_apply_membership(optfn, ire, connp,
-			    checkonly, &v6group, fmode, &ipv6_all_zeros);
-			done = B_TRUE;
-		}
+	if (ire != NULL)
 		ire_refrele(ire);
-	}
 
 	if (!done) {
 		error = optfn(connp, checkonly, &v6group, ifaddr, ifindex,
@@ -6217,7 +6160,6 @@ ip_opt_set_multicast_sources(conn_t *connp, t_scalar_t name,
     uchar_t *invalp, boolean_t inet6, boolean_t checkonly)
 {
 	int		*i1 = (int *)invalp;
-	int		error = 0;
 	ip_stack_t	*ipst = connp->conn_netstack->netstack_ip;
 	struct ip_mreq_source *imreqp;
 	struct group_source_req *gsreqp;
@@ -6227,7 +6169,6 @@ ip_opt_set_multicast_sources(conn_t *connp, t_scalar_t name,
 	boolean_t mcast_opt = B_TRUE;
 	mcast_record_t fmode;
 	ire_t *ire;
-	boolean_t done = B_FALSE;
 	int (*optfn)(conn_t *, boolean_t, const in6_addr_t *,
 	    ipaddr_t, uint_t, mcast_record_t, const in6_addr_t *);
 
@@ -6319,19 +6260,10 @@ ip_opt_set_multicast_sources(conn_t *connp, t_scalar_t name,
 		    IRE_HOST | IRE_INTERFACE, NULL, ALL_ZONES,
 		    MATCH_IRE_MASK | MATCH_IRE_TYPE, 0, ipst, NULL);
 	}
-	if (ire != NULL) {
-		if (ire->ire_flags & RTF_MULTIRT) {
-			error = ip_multirt_apply_membership(optfn, ire, connp,
-			    checkonly, &v6group, fmode, &v6src);
-			done = B_TRUE;
-		}
+	if (ire != NULL)
 		ire_refrele(ire);
-	}
-	if (!done) {
-		error = optfn(connp, checkonly, &v6group, ifaddr, ifindex,
-		    fmode, &v6src);
-	}
-	return (error);
+	return (optfn(connp, checkonly, &v6group, ifaddr, ifindex,
+	    fmode, &v6src));
 }
 
 /*
@@ -13370,201 +13302,6 @@ drop:
 	}
 	freemsg(mp);
 	return (NULL);
-}
-
-/*
- * Propagate a multicast group membership operation (add/drop) on
- * all the interfaces crossed by the related multirt routes.
- * The call is considered successful if the operation succeeds
- * on at least one interface.
- *
- * This assumes that a set of IRE_HOST/RTF_MULTIRT has been created for the
- * multicast addresses with the ire argument being the first one.
- * We walk the bucket to find all the of those.
- *
- * Common to IPv4 and IPv6.
- */
-static int
-ip_multirt_apply_membership(int (*fn)(conn_t *, boolean_t,
-    const in6_addr_t *, ipaddr_t, uint_t, mcast_record_t, const in6_addr_t *),
-    ire_t *ire, conn_t *connp, boolean_t checkonly, const in6_addr_t *v6group,
-    mcast_record_t fmode, const in6_addr_t *v6src)
-{
-	ire_t		*ire_gw;
-	irb_t		*irb;
-	int		ifindex;
-	int		error = 0;
-	int		result;
-	ip_stack_t	*ipst = ire->ire_ipst;
-	ipaddr_t	group;
-	boolean_t	isv6;
-	int		match_flags;
-
-	if (IN6_IS_ADDR_V4MAPPED(v6group)) {
-		IN6_V4MAPPED_TO_IPADDR(v6group, group);
-		isv6 = B_FALSE;
-	} else {
-		isv6 = B_TRUE;
-	}
-
-	irb = ire->ire_bucket;
-	ASSERT(irb != NULL);
-
-	result = 0;
-	irb_refhold(irb);
-	for (; ire != NULL; ire = ire->ire_next) {
-		if ((ire->ire_flags & RTF_MULTIRT) == 0)
-			continue;
-
-		/* We handle -ifp routes by matching on the ill if set */
-		match_flags = MATCH_IRE_TYPE;
-		if (ire->ire_ill != NULL)
-			match_flags |= MATCH_IRE_ILL;
-
-		if (isv6) {
-			if (!IN6_ARE_ADDR_EQUAL(&ire->ire_addr_v6, v6group))
-				continue;
-
-			ire_gw = ire_ftable_lookup_v6(&ire->ire_gateway_addr_v6,
-			    0, 0, IRE_INTERFACE, ire->ire_ill, ALL_ZONES,
-			    match_flags, 0, ipst, NULL);
-		} else {
-			if (ire->ire_addr != group)
-				continue;
-
-			ire_gw = ire_ftable_lookup_v4(ire->ire_gateway_addr,
-			    0, 0, IRE_INTERFACE, ire->ire_ill, ALL_ZONES,
-			    match_flags, 0, ipst, NULL);
-		}
-		/* No interface route exists for the gateway; skip this ire. */
-		if (ire_gw == NULL)
-			continue;
-		if (ire_gw->ire_flags & (RTF_REJECT|RTF_BLACKHOLE)) {
-			ire_refrele(ire_gw);
-			continue;
-		}
-		ASSERT(ire_gw->ire_ill != NULL);	/* IRE_INTERFACE */
-		ifindex = ire_gw->ire_ill->ill_phyint->phyint_ifindex;
-
-		/*
-		 * The operation is considered a success if
-		 * it succeeds at least once on any one interface.
-		 */
-		error = fn(connp, checkonly, v6group, INADDR_ANY, ifindex,
-		    fmode, v6src);
-		if (error == 0)
-			result = CGTP_MCAST_SUCCESS;
-
-		ire_refrele(ire_gw);
-	}
-	irb_refrele(irb);
-	/*
-	 * Consider the call as successful if we succeeded on at least
-	 * one interface. Otherwise, return the last encountered error.
-	 */
-	return (result == CGTP_MCAST_SUCCESS ? 0 : error);
-}
-
-/*
- * Return the expected CGTP hooks version number.
- */
-int
-ip_cgtp_filter_supported(void)
-{
-	return (ip_cgtp_filter_rev);
-}
-
-/*
- * CGTP hooks can be registered by invoking this function.
- * Checks that the version number matches.
- */
-int
-ip_cgtp_filter_register(netstackid_t stackid, cgtp_filter_ops_t *ops)
-{
-	netstack_t *ns;
-	ip_stack_t *ipst;
-
-	if (ops->cfo_filter_rev != CGTP_FILTER_REV)
-		return (ENOTSUP);
-
-	ns = netstack_find_by_stackid(stackid);
-	if (ns == NULL)
-		return (EINVAL);
-	ipst = ns->netstack_ip;
-	ASSERT(ipst != NULL);
-
-	if (ipst->ips_ip_cgtp_filter_ops != NULL) {
-		netstack_rele(ns);
-		return (EALREADY);
-	}
-
-	ipst->ips_ip_cgtp_filter_ops = ops;
-
-	ill_set_inputfn_all(ipst);
-
-	netstack_rele(ns);
-	return (0);
-}
-
-/*
- * CGTP hooks can be unregistered by invoking this function.
- * Returns ENXIO if there was no registration.
- * Returns EBUSY if the ndd variable has not been turned off.
- */
-int
-ip_cgtp_filter_unregister(netstackid_t stackid)
-{
-	netstack_t *ns;
-	ip_stack_t *ipst;
-
-	ns = netstack_find_by_stackid(stackid);
-	if (ns == NULL)
-		return (EINVAL);
-	ipst = ns->netstack_ip;
-	ASSERT(ipst != NULL);
-
-	if (ipst->ips_ip_cgtp_filter) {
-		netstack_rele(ns);
-		return (EBUSY);
-	}
-
-	if (ipst->ips_ip_cgtp_filter_ops == NULL) {
-		netstack_rele(ns);
-		return (ENXIO);
-	}
-	ipst->ips_ip_cgtp_filter_ops = NULL;
-
-	ill_set_inputfn_all(ipst);
-
-	netstack_rele(ns);
-	return (0);
-}
-
-/*
- * Check whether there is a CGTP filter registration.
- * Returns non-zero if there is a registration, otherwise returns zero.
- * Note: returns zero if bad stackid.
- */
-int
-ip_cgtp_filter_is_registered(netstackid_t stackid)
-{
-	netstack_t *ns;
-	ip_stack_t *ipst;
-	int ret;
-
-	ns = netstack_find_by_stackid(stackid);
-	if (ns == NULL)
-		return (0);
-	ipst = ns->netstack_ip;
-	ASSERT(ipst != NULL);
-
-	if (ipst->ips_ip_cgtp_filter_ops != NULL)
-		ret = 1;
-	else
-		ret = 0;
-
-	netstack_rele(ns);
-	return (ret);
 }
 
 static int

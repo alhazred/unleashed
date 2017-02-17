@@ -456,22 +456,15 @@ lookup:
 			goto done;
 		}
 
-		/* Multirouting does not support net routes. */
-		if ((rtm->rtm_flags & (RTF_MULTIRT | RTF_HOST)) ==
-		    RTF_MULTIRT) {
-			error = EADDRNOTAVAIL;
-			goto done;
-		}
-
 		/*
-		 * Multirouting and user-specified source addresses
+		 * User-specified source addresses
 		 * do not support interface based routing.
 		 * Assigning a source address to an interface based
 		 * route is achievable by plumbing a new ipif and
 		 * setting up the interface route via this ipif,
 		 * though.
 		 */
-		if (rtm->rtm_flags & (RTF_MULTIRT | RTF_SETSRC)) {
+		if (rtm->rtm_flags & RTF_SETSRC) {
 			if ((rtm->rtm_flags & RTF_GATEWAY) == 0) {
 				error = EADDRNOTAVAIL;
 				goto done;
@@ -700,17 +693,6 @@ lookup:
 			rtm = (rt_msghdr_t *)mp->b_rptr;
 			break;
 		case RTM_CHANGE:
-			/*
-			 * Do not allow to the multirouting state of a route
-			 * to be changed. This aims to prevent undesirable
-			 * stages where both multirt and non-multirt routes
-			 * for the same destination are declared.
-			 */
-			if ((ire->ire_flags & RTF_MULTIRT) !=
-			    (rtm->rtm_flags & RTF_MULTIRT)) {
-				error = EINVAL;
-				goto done;
-			}
 			/*
 			 * Note that we do not need to do
 			 * ire_flush_cache_*(IRE_FLUSH_ADD) as a change

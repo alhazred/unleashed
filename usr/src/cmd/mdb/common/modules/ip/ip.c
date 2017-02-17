@@ -921,7 +921,6 @@ ire_format(uintptr_t addr, const void *ire_arg, void *ire_cb_arg)
 		{ "PRIVATE",	RTF_PRIVATE,		RTF_PRIVATE	},
 		{ "PROTO2",	RTF_PROTO2,		RTF_PROTO2	},
 		{ "PROTO1",	RTF_PROTO1,		RTF_PROTO1	},
-		{ "MULTIRT",	RTF_MULTIRT,		RTF_MULTIRT	},
 		{ "SETSRC",	RTF_SETSRC,		RTF_SETSRC	},
 		{ "INDIRECT",	RTF_INDIRECT,		RTF_INDIRECT	},
 		{ NULL,		0,			0		}

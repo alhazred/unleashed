@@ -775,7 +775,7 @@ iptun_bind(iptun_t *iptun)
 		goto insert;
 	}
 
-	/* In case previous destination was multirt */
+	/* TODO: do we need to do this? */
 	ip_attr_newdst(ixa);
 
 	/*
@@ -3170,7 +3170,7 @@ iptun_output_6to4(iptun_t *iptun, mblk_t *mp)
 	if (connp->conn_v4lastdst == outer4->ipha_dst) {
 		need_connect = (ixa->ixa_ire == NULL);
 	} else {
-		/* In case previous destination was multirt */
+		/* TODO: do we need to do this? */
 		ip_attr_newdst(ixa);
 
 		/*

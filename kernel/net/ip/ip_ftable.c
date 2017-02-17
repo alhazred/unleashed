@@ -327,16 +327,12 @@ bad:
  * Supports link-local addresses by using ire_route_recursive which follows
  * the ill when recursing.
  *
- * To handle CGTP, since we don't have a separate IRE_MULTICAST for each group
- * and the MULTIRT property can be different for different groups, we
- * extract RTF_MULTIRT from the special unicast route added for a group
- * with CGTP and pass that back in the multirtp argument.
  * This is used in ip_set_destination etc to set ixa_postfragfn for multicast.
  * We have a setsrcp argument for the same reason.
  */
 ill_t *
 ire_lookup_multi_ill_v4(ipaddr_t group, zoneid_t zoneid, ip_stack_t *ipst,
-    boolean_t *multirtp, ipaddr_t *setsrcp)
+    ipaddr_t *setsrcp)
 {
 	ire_t	*ire;
 	ill_t	*ill;
@@ -348,9 +344,6 @@ ire_lookup_multi_ill_v4(ipaddr_t group, zoneid_t zoneid, ip_stack_t *ipst,
 		ire_refrele(ire);
 		return (NULL);
 	}
-
-	if (multirtp != NULL)
-		*multirtp = (ire->ire_flags & RTF_MULTIRT) != 0;
 
 	ill = ire_nexthop_ill(ire);
 	ire_refrele(ire);
@@ -783,11 +776,6 @@ irb_refrele_ftable(irb_t *irb)
  *
  * Applies to IPv4 and IPv6.
  *
- * For CGTP, where an IRE_BROADCAST and IRE_HOST can exist for the same
- * address and bucket, we compare against ire_type for the orig_ire. We also
- * have IRE_BROADCASTs with and without RTF_MULTIRT, with the former being
- * first in the bucket. Thus we compare that RTF_MULTIRT match the orig_ire.
- *
  * Due to shared-IP zones we check that an IRE_OFFLINK has a gateway that is
  * reachable from the zone i.e., that the ire_gateway_addr is in a subnet
  * in which the zone has an IP address. We check this for the global zone
@@ -836,11 +824,6 @@ ire_round_robin(irb_t *irb_ptr, ire_ftable_args_t *margs, uint_t hash,
 			hash--;
 			goto next_ire_skip;
 		}
-
-		/* See CGTP comment above */
-		if (ire->ire_type != orig_ire->ire_type ||
-		    ((ire->ire_flags ^ orig_ire->ire_flags) & RTF_MULTIRT) != 0)
-			goto next_ire;
 
 		/*
 		 * Note: Since IPv6 has hash buckets instead of radix
@@ -1050,7 +1033,7 @@ ip_verify_src_on_ill(const in6_addr_t v6src, ill_t *ill, zoneid_t zoneid)
 ire_t *
 ip_select_route(const in6_addr_t *v6dst, const in6_addr_t v6src,
     ip_xmit_attr_t *ixa, uint_t *generationp, in6_addr_t *setsrcp,
-    int *errorp, boolean_t *multirtp)
+    int *errorp)
 {
 	uint_t		match_args;
 	uint_t		ire_type;
@@ -1123,12 +1106,12 @@ ip_select_route(const in6_addr_t *v6dst, const in6_addr_t v6src,
 			ipaddr_t	v4setsrc = INADDR_ANY;
 
 			ill = ill_lookup_group_v4(v4dst, ixa->ixa_zoneid,
-			    ipst, multirtp, &v4setsrc);
+			    ipst, &v4setsrc);
 			if (setsrcp != NULL)
 				IN6_IPADDR_TO_V4MAPPED(v4setsrc, setsrcp);
 		} else {
 			ill = ill_lookup_group_v6(v6dst, ixa->ixa_zoneid,
-			    ipst, multirtp, setsrcp);
+			    ipst, setsrcp);
 		}
 		if (ill != NULL && IS_VNI(ill)) {
 			ill_refrele(ill);
@@ -1326,7 +1309,7 @@ retry:
  */
 ire_t *
 ip_select_route_pkt(mblk_t *mp, ip_xmit_attr_t *ixa, uint_t *generationp,
-    int *errorp, boolean_t *multirtp)
+    int *errorp)
 {
 	if (ixa->ixa_flags & IXAF_IS_IPV4) {
 		ipha_t		*ipha = (ipha_t *)mp->b_rptr;
@@ -1336,18 +1319,18 @@ ip_select_route_pkt(mblk_t *mp, ip_xmit_attr_t *ixa, uint_t *generationp,
 		IN6_IPADDR_TO_V4MAPPED(ipha->ipha_src, &v6src);
 
 		return (ip_select_route(&v6dst, v6src, ixa, generationp,
-		    NULL, errorp, multirtp));
+		    NULL, errorp));
 	} else {
 		ip6_t	*ip6h = (ip6_t *)mp->b_rptr;
 
 		return (ip_select_route(&ip6h->ip6_dst, ip6h->ip6_src,
-		    ixa, generationp, NULL, errorp, multirtp));
+		    ixa, generationp, NULL, errorp));
 	}
 }
 
 ire_t *
 ip_select_route_v4(ipaddr_t dst, ipaddr_t src, ip_xmit_attr_t *ixa,
-    uint_t *generationp, ipaddr_t *v4setsrcp, int *errorp, boolean_t *multirtp)
+    uint_t *generationp, ipaddr_t *v4setsrcp, int *errorp)
 {
 	in6_addr_t	v6dst, v6src;
 	ire_t		*ire;
@@ -1359,8 +1342,7 @@ ip_select_route_v4(ipaddr_t dst, ipaddr_t src, ip_xmit_attr_t *ixa,
 	IN6_IPADDR_TO_V4MAPPED(src, &v6src);
 
 	setsrc = ipv6_all_zeros;
-	ire = ip_select_route(&v6dst, v6src, ixa, generationp, &setsrc, errorp,
-	    multirtp);
+	ire = ip_select_route(&v6dst, v6src, ixa, generationp, &setsrc, errorp);
 	if (v4setsrcp != NULL)
 		IN6_V4MAPPED_TO_IPADDR(&setsrc, *v4setsrcp);
 	return (ire);
@@ -1596,13 +1578,6 @@ error:
 	ASSERT(ire != NULL);
 	if (need_refrele)
 		ill_refrele(ill);
-
-	/*
-	 * In the case of MULTIRT we want to try a different IRE the next
-	 * time. We let the next packet retry in that case.
-	 */
-	if (i > 0 && (ires[0]->ire_flags & RTF_MULTIRT))
-		(void) ire_no_good(ires[0]);
 
 cleanup:
 	/* cleanup ires[i] */
