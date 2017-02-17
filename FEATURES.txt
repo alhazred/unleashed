@@ -33,6 +33,8 @@ changed.
     - getpwuid_r
     - getpwnam_r
  + errc(3), warnc(3) were added to libc
+ * man(1) is mandoc. mandoc.db support added, eliminating the need for
+   manpage symlinks.
  * socket interfaces are now in libc. libsocket, libxnet and libnsl remain as
    filter libraries.
  * socket implementation was modified to be more reasonable by default, and it

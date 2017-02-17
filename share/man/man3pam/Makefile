@@ -19,11 +19,6 @@ MAN = pam.3pam \
       pam_start.3pam \
       pam_strerror.3pam
 
-MLINKS+=	pam_open_session.3pam pam_close_session.3pam
-MLINKS+=	pam_set_data.3pam pam_get_data.3pam
-MLINKS+=	pam_set_item.3pam pam_get_item.3pam
-MLINKS+=	pam_sm_open_session.3pam pam_sm_close_session.3pam
-MLINKS+=	pam_start.3pam pam_end.3pam
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

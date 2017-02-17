@@ -16,7 +16,7 @@
 .Os
 .Sh NAME
 .Nm pthread_mutexattr_getrobust ,
-.Nm pthrad_mutexattr_setrobust
+.Nm pthread_mutexattr_setrobust
 .Nd get and set the mutex robust attribute
 .Sh SYNOPSIS
 .In pthread.h

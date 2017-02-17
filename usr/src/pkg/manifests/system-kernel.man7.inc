@@ -15,4 +15,3 @@
 #
 
 file path=usr/share/man/man7/Intro.7
-link path=usr/share/man/man7/intro.7 target=Intro.7

@@ -89,7 +89,6 @@ file path=usr/share/mk/warnings.mk
 file path=usr/share/mk/whats.mk
 file path=usr/share/mk/yacc.mk
 hardlink path=usr/bin/bmake target=make
-link path=usr/share/man/man1/bmake.1 target=make.1
 link path=usr/share/mk/bsd.dep.mk target=dep.mk
 link path=usr/share/mk/bsd.doc.mk target=doc.mk
 link path=usr/share/mk/bsd.init.mk target=init.mk

@@ -29,3 +29,4 @@
 <transform file path=etc/user_attr.d/.+ -> add restart_fmri svc:/system/rbac:default>
 <transform file path=usr/share/applications/.*\.desktop -> \
 	add restart_fmri svc:/application/desktop-cache/desktop-mime-cache:default>
+<transform file path=usr/share/man/.+ -> add restart_fmri svc:/system/makewhatis:default>

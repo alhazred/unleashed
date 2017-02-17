@@ -19,11 +19,6 @@ MAN = bufmod.7m \
       vuidmice.7m \
       $(MAN_$(CONFIG_MACH))
 
-MLINKS+=	vuidmice.7m vuid2ps2.7m
-MLINKS+=	vuidmice.7m vuid3ps2.7m
-MLINKS+=	vuidmice.7m vuidm3p.7m
-MLINKS+=	vuidmice.7m vuidm4p.7m
-MLINKS+=	vuidmice.7m vuidm5p.7m
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

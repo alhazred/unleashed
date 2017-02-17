@@ -11,8 +11,6 @@ MAN = media_findname.3volmgt \
       volmgt_running.3volmgt \
       volmgt_symname.3volmgt
 
-MLINKS+=	media_getattr.3volmgt media_setattr.3volmgt
-MLINKS+=	volmgt_symname.3volmgt volmgt_symdev.3volmgt
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

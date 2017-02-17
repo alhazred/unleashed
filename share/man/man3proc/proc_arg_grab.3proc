@@ -16,7 +16,7 @@
 .Os
 .Sh NAME
 .Nm proc_arg_grab ,
-.Nm proc_arg_xrgab
+.Nm proc_arg_xgrab
 .Nd process grabbing utility function
 .Sh SYNOPSIS
 .Lb libproc

@@ -33,7 +33,13 @@
 .Dt FIRMLOAD 9F
 .Os
 .Sh NAME
-.Nm firmload
+.Nm firmload ,
+.Nm firmware_close ,
+.Nm firmware_free ,
+.Nm firmware_get_size ,
+.Nm firmware_malloc ,
+.Nm firmware_open ,
+.Nm firmware_read
 .Nd Firmware loader API for device drivers
 .Sh SYNOPSIS
 .In sys/firmload.h

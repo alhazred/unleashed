@@ -157,7 +157,3 @@ link path=usr/lib/$(ARCH64)/libstmf.so target=libstmf.so.1
 link path=usr/lib/$(ARCH64)/libstmfproxy.so target=libstmfproxy.so.1
 link path=usr/lib/libstmf.so target=libstmf.so.1
 link path=usr/lib/libstmfproxy.so target=libstmfproxy.so.1
-link path=usr/share/man/man3stmf/stmfGetLuProp.3stmf \
-    target=stmfSetLuProp.3stmf
-link path=usr/share/man/man3stmf/stmfModifyLuByFname.3stmf \
-    target=stmfModifyLu.3stmf

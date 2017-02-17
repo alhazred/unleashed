@@ -271,13 +271,4 @@ link path=usr/proc/bin/ptime target=../../bin/ptime
 link path=usr/proc/bin/ptree target=../../bin/ptree
 link path=usr/proc/bin/pwait target=../../bin/pwait
 link path=usr/proc/bin/pwdx target=../../bin/pwdx
-link path=usr/share/man/man1/hashcheck.1 target=spell.1
-link path=usr/share/man/man1/hashmake.1 target=spell.1
-link path=usr/share/man/man1/nawk.1 target=awk.1
-link path=usr/share/man/man1/pcat.1 target=pack.1
-link path=usr/share/man/man1/spellin.1 target=spell.1
-link path=usr/share/man/man1/uncompress.1 target=compress.1
-link path=usr/share/man/man1/unexpand.1 target=expand.1
-link path=usr/share/man/man1/unpack.1 target=pack.1
-link path=usr/share/man/man1/zcat.1 target=compress.1
 depend fmri=runtime/perl$(PERL_PKGVERS) type=require

@@ -20,17 +20,6 @@ MAN = arp.7p \
       tcp.7p \
       udp.7p
 
-MLINKS+=	arp.7p ARP.7p
-MLINKS+=	icmp.7p ICMP.7p
-MLINKS+=	if_tcp.7p if.7p
-MLINKS+=	ip.7p IP.7p
-MLINKS+=	ipsecah.7p AH.7p
-MLINKS+=	ipsecesp.7p ESP.7p
-MLINKS+=	ndp.7p NDP.7p
-MLINKS+=	rarp.7p RARP.7p
-MLINKS+=	sctp.7p SCTP.7p
-MLINKS+=	tcp.7p TCP.7p
-MLINKS+=	udp.7p UDP.7p
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

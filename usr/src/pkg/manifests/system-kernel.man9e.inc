@@ -14,7 +14,6 @@
 # Copyright 2012 Nexenta Systems, Inc. All rights reserved.
 #
 
-file path=usr/share/man/man9e/Intro.9e
 file path=usr/share/man/man9e/_fini.9e
 file path=usr/share/man/man9e/aread.9e
 file path=usr/share/man/man9e/attach.9e
@@ -76,27 +75,3 @@ file path=usr/share/man/man9e/tran_tgt_free.9e
 file path=usr/share/man/man9e/tran_tgt_init.9e
 file path=usr/share/man/man9e/tran_tgt_probe.9e
 file path=usr/share/man/man9e/write.9e
-link path=usr/share/man/man9e/GLDv3.9e target=mac.9e
-link path=usr/share/man/man9e/MAC.9e target=mac.9e
-link path=usr/share/man/man9e/_info.9e target=_fini.9e
-link path=usr/share/man/man9e/_init.9e target=_fini.9e
-link path=usr/share/man/man9e/gldm_get_stats.9e target=gld.9e
-link path=usr/share/man/man9e/gldm_intr.9e target=gld.9e
-link path=usr/share/man/man9e/gldm_ioctl.9e target=gld.9e
-link path=usr/share/man/man9e/gldm_reset.9e target=gld.9e
-link path=usr/share/man/man9e/gldm_send.9e target=gld.9e
-link path=usr/share/man/man9e/gldm_set_mac_addr.9e target=gld.9e
-link path=usr/share/man/man9e/gldm_set_multicast.9e target=gld.9e
-link path=usr/share/man/man9e/gldm_set_promiscuous.9e target=gld.9e
-link path=usr/share/man/man9e/gldm_start.9e target=gld.9e
-link path=usr/share/man/man9e/gldm_stop.9e target=gld.9e
-link path=usr/share/man/man9e/gldv3.9e target=mac.9e
-link path=usr/share/man/man9e/intro.9e target=Intro.9e
-link path=usr/share/man/man9e/mc_close.9e target=mc_open.9e
-link path=usr/share/man/man9e/mc_stop.9e target=mc_start.9e
-link path=usr/share/man/man9e/tran_destroy_pkt.9e target=tran_init_pkt.9e
-link path=usr/share/man/man9e/tran_pkt_constructor.9e target=tran_setup_pkt.9e
-link path=usr/share/man/man9e/tran_pkt_destructor.9e target=tran_setup_pkt.9e
-link path=usr/share/man/man9e/tran_setcap.9e target=tran_getcap.9e
-link path=usr/share/man/man9e/tran_teardown_pkt.9e target=tran_setup_pkt.9e
-link path=usr/share/man/man9e/tran_unquiesce.9e target=tran_quiesce.9e

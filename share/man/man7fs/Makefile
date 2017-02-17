@@ -14,9 +14,6 @@ MAN = bootfs.7fs \
       udfs.7fs \
       ufs.7fs
 
-MLINKS+=	fd.7fs stderr.7fs
-MLINKS+=	fd.7fs stdin.7fs
-MLINKS+=	fd.7fs stdout.7fs
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

@@ -17,7 +17,7 @@
 .Sh NAME
 .Nm tss ,
 .Nm tss_create ,
-.Nm tss_destroy ,
+.Nm tss_delete ,
 .Nm tss_get ,
 .Nm tss_set
 .Nd thread-specific storage
@@ -57,7 +57,7 @@ value-space which can be mainpulated with the
 and
 .Fn tss_set
 functions. A given key persists until
-.Fn tss_destroy
+.Fn tss_delete
 is called.
 .Pp
 When a key is created, the value

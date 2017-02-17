@@ -104,8 +104,4 @@ file path=var/yp/nicknames preserve=true
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/libnisdb.so target=./libnisdb.so.2
-link path=usr/share/man/man1m/ypstop.1m target=ypstart.1m
-link path=usr/share/man/man1m/ypxfr_1perday.1m target=ypxfr.1m
-link path=usr/share/man/man1m/ypxfr_1perhour.1m target=ypxfr.1m
-link path=usr/share/man/man1m/ypxfr_2perday.1m target=ypxfr.1m
 depend fmri=pkg:/developer/build/make type=require

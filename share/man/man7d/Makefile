@@ -216,23 +216,8 @@ MAN = aac.7d \
       zero.7d \
       $(MAN_$(CONFIG_MACH))
 
-MLINKS+=	bscv.7d bscbus.7d
-MLINKS+=	bscv.7d i2bsc.7d
-MLINKS+=	fd.7d fdc.7d
-MLINKS+=	ieee1394.7d 1394.7d
-MLINKS+=	ieee1394.7d firewire.7d
-MLINKS+=	ipnet.7d lo0.7d
-MLINKS+=	mem.7d allkmem.7d
-MLINKS+=	mem.7d kmem.7d
-MLINKS+=	random.7d urandom.7d
-MLINKS+=	ticlts.7d ticots.7d
-MLINKS+=	ticlts.7d ticotsord.7d
-MLINKS+=	usba.7d usb.7d
 
 .if $(CONFIG_MACH) == sparc
-MLINKS+=	dr.7d drmach.7d
-MLINKS+=	dr.7d ngdr.7d
-MLINKS+=	dr.7d ngdrmach.7d
 .endif
 
 # We want to just install manpages but there is no manpage-only mk file so

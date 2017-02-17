@@ -82,46 +82,6 @@ MAN = libMPAPI.3lib \
       libw.3lib \
       liby.3lib
 
-MLINKS+=	libMPAPI.3lib libmpapi.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetAdapterAttributes.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetAdapterPortAttributes.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetBindingCapability.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetBindingSupport.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetDiscoveredPortAttributes.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetFCPhyAttributes.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetLUNStatistics.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetNumberofPorts.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetPersistentBinding.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetPhyStatistics.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetPortAttributesByWWN.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetPortType.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetProtocolStatistics.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetSASPhyAttributes.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetTargetMapping.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetVendorLibraryAttributes.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetVersion.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_GetWrapperLibraryAttributes.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_RegisterForAdapterAddEvents.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_RegisterForAdapterEvents.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_RegisterForAdapterPhyStatEvents.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_RegisterForAdapterPortEvents.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_RegisterForAdapterPortStatEvents.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_RegisterForTargetEvents.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_RegisterLibrary.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_RemoveAllPersistentBindings.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_RemovePersistentBinding.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_ScsiInquiry.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_ScsiReadCapacity.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_ScsiReportLuns.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_SendECHO.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_SendSMPPassThru.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_SendTEST.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_SetBindingSupport.3lib
-MLINKS+=	libSMHBAAPI.3lib SMHBA_SetPersistentBinding.3lib
-MLINKS+=	libSMHBAAPI.3lib libsmhbaapi.3lib
-MLINKS+=	libcurses.3lib libtermcap.3lib
-MLINKS+=	libcurses.3lib libtermlib.3lib
-MLINKS+=	librt.3lib libposix4.3lib
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

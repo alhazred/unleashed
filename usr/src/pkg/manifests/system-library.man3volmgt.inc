@@ -26,7 +26,3 @@ file path=usr/share/man/man3volmgt/volmgt_release.3volmgt
 file path=usr/share/man/man3volmgt/volmgt_root.3volmgt
 file path=usr/share/man/man3volmgt/volmgt_running.3volmgt
 file path=usr/share/man/man3volmgt/volmgt_symname.3volmgt
-link path=usr/share/man/man3volmgt/media_setattr.3volmgt \
-    target=media_getattr.3volmgt
-link path=usr/share/man/man3volmgt/volmgt_symdev.3volmgt \
-    target=volmgt_symname.3volmgt

@@ -35,7 +35,3 @@ file path=usr/share/man/man3dlpi/dlpi_set_timeout.3dlpi
 file path=usr/share/man/man3dlpi/dlpi_strerror.3dlpi
 file path=usr/share/man/man3dlpi/dlpi_unbind.3dlpi
 file path=usr/share/man/man3dlpi/dlpi_walk.3dlpi
-link path=usr/share/man/man3dlpi/dlpi_disabmulti.3dlpi \
-    target=dlpi_enabmulti.3dlpi
-link path=usr/share/man/man3dlpi/dlpi_promiscoff.3dlpi \
-    target=dlpi_promiscon.3dlpi

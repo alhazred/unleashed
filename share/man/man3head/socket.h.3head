@@ -12,7 +12,8 @@
 .Dt SOCKET.H 3HEAD
 .Os
 .Sh NAME
-.Nm socket.h
+.Nm socket.h ,
+.Nm socket
 .Nd Internet Protocol family
 .Sh SYNOPSIS
 .In sys/socket.h

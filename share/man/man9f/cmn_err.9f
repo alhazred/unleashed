@@ -23,7 +23,11 @@
 .Dt CMN_ERR 9F
 .Os
 .Sh NAME
-.Nm cmn_err, dev_err, vcmn_err, zcmn_err, vzcmn_err
+.Nm cmn_err ,
+.Nm dev_err ,
+.Nm vcmn_err ,
+.Nm zcmn_err ,
+.Nm vzcmn_err
 .Nd display an error message or panic the system
 .Sh SYNOPSIS
 .In sys/cmn_err.h

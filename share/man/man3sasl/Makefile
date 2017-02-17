@@ -52,18 +52,6 @@ MAN = sasl_authorize_t.3sasl \
       sasl_verifyfile_t.3sasl \
       sasl_version.3sasl
 
-MLINKS+=	sasl_auxprop.3sasl prop_clear.3sasl
-MLINKS+=	sasl_auxprop.3sasl prop_dispose.3sasl
-MLINKS+=	sasl_auxprop.3sasl prop_dup.3sasl
-MLINKS+=	sasl_auxprop.3sasl prop_erase.3sasl
-MLINKS+=	sasl_auxprop.3sasl prop_format.3sasl
-MLINKS+=	sasl_auxprop.3sasl prop_get.3sasl
-MLINKS+=	sasl_auxprop.3sasl prop_getnames.3sasl
-MLINKS+=	sasl_auxprop.3sasl prop_new.3sasl
-MLINKS+=	sasl_auxprop.3sasl prop_request.3sasl
-MLINKS+=	sasl_auxprop.3sasl prop_set.3sasl
-MLINKS+=	sasl_auxprop.3sasl prop_setvals.3sasl
-MLINKS+=	sasl_encode.3sasl sasl_encodev.3sasl
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

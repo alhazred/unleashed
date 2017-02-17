@@ -1,7 +1,5 @@
 MAN = maillock.3mail 
 
-MLINKS+=	maillock.3mail mailunlock.3mail
-MLINKS+=	maillock.3mail touchlock.3mail
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

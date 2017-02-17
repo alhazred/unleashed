@@ -266,14 +266,3 @@ file path=usr/share/man/man1m/whodo.1m
 file path=usr/share/man/man1m/wracct.1m
 file path=usr/share/man/man1m/zdump.1m
 file path=usr/share/man/man1m/zic.1m
-link path=usr/share/man/man1m/dcopy.1m target=clri.1m
-link path=usr/share/man/man1m/devfsadmd.1m target=devfsadm.1m
-link path=usr/share/man/man1m/grpck.1m target=pwck.1m
-link path=usr/share/man/man1m/intro.1m target=Intro.1m
-link path=usr/share/man/man1m/poweroff.1m target=halt.1m
-link path=usr/share/man/man1m/quotaoff.1m target=quotaon.1m
-link path=usr/share/man/man1m/telinit.1m target=init.1m
-link path=usr/share/man/man1m/umount.1m target=mount.1m
-link path=usr/share/man/man1m/umountall.1m target=mountall.1m
-link path=usr/share/man/man1m/unlink.1m target=link.1m
-link path=usr/share/man/man1m/unshareall.1m target=shareall.1m

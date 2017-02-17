@@ -10,7 +10,7 @@
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
 .TH GETWCHAR 3C "Jul 24, 2002"
 .SH NAME
-getwchar \- get wide character from stdin stream
+getwchar, getwchar_l \- get wide character from stdin stream
 .SH SYNOPSIS
 .LP
 .nf

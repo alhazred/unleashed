@@ -79,29 +79,3 @@ license usr/src/lib/libdns_sd/THIRDPARTYLICENSE \
     license=usr/src/lib/libdns_sd/THIRDPARTYLICENSE
 link path=usr/lib/$(ARCH64)/libdns_sd.so target=libdns_sd.so.1
 link path=usr/lib/libdns_sd.so target=libdns_sd.so.1
-link path=usr/share/man/man3dns_sd/DNSServiceAddRecord.3dns_sd \
-    target=DNSServiceCreateConnection.3dns_sd
-link path=usr/share/man/man3dns_sd/DNSServiceRegisterRecord.3dns_sd \
-    target=DNSServiceCreateConnection.3dns_sd
-link path=usr/share/man/man3dns_sd/DNSServiceRemoveRecord.3dns_sd \
-    target=DNSServiceCreateConnection.3dns_sd
-link path=usr/share/man/man3dns_sd/DNSServiceUpdateRecord.3dns_sd \
-    target=DNSServiceCreateConnection.3dns_sd
-link path=usr/share/man/man3dns_sd/TXTRecordContainsKey.3dns_sd \
-    target=TXTRecordCreate.3dns_sd
-link path=usr/share/man/man3dns_sd/TXTRecordDeallocate.3dns_sd \
-    target=TXTRecordCreate.3dns_sd
-link path=usr/share/man/man3dns_sd/TXTRecordGetBytesPtr.3dns_sd \
-    target=TXTRecordCreate.3dns_sd
-link path=usr/share/man/man3dns_sd/TXTRecordGetCount.3dns_sd \
-    target=TXTRecordCreate.3dns_sd
-link path=usr/share/man/man3dns_sd/TXTRecordGetItemAtIndex.3dns_sd \
-    target=TXTRecordCreate.3dns_sd
-link path=usr/share/man/man3dns_sd/TXTRecordGetLength.3dns_sd \
-    target=TXTRecordCreate.3dns_sd
-link path=usr/share/man/man3dns_sd/TXTRecordGetValuePtr.3dns_sd \
-    target=TXTRecordCreate.3dns_sd
-link path=usr/share/man/man3dns_sd/TXTRecordRemoveValue.3dns_sd \
-    target=TXTRecordCreate.3dns_sd
-link path=usr/share/man/man3dns_sd/TXTRecordSetValue.3dns_sd \
-    target=TXTRecordCreate.3dns_sd

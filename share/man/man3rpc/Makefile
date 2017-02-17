@@ -2,8 +2,6 @@ MAN = rstat.3rpc \
       rusers.3rpc \
       rwall.3rpc
 
-MLINKS+=	rstat.3rpc havedisk.3rpc
-MLINKS+=	rusers.3rpc rnusers.3rpc
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

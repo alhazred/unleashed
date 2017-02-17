@@ -50,6 +50,3 @@ file path=usr/share/man/man4/bootparams.4
 file path=usr/share/man/man7p/rarp.7p
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-link path=usr/share/man/man1m/bootparamd.1m target=rpc.bootparamd.1m
-link path=usr/share/man/man1m/rarpd.1m target=in.rarpd.1m
-link path=usr/share/man/man7p/RARP.7p target=rarp.7p

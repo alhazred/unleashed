@@ -97,39 +97,6 @@ MAN = Intro.5 \
       zones.5 \
       zpool-features.5
 
-MLINKS+=	Intro.5 intro.5
-MLINKS+=	attributes.5 CSI.5
-MLINKS+=	attributes.5 MT-Level.5
-MLINKS+=	attributes.5 architecture.5
-MLINKS+=	attributes.5 availability.5
-MLINKS+=	attributes.5 stability.5
-MLINKS+=	attributes.5 standard.5
-MLINKS+=	byteorder.5 endian.5
-MLINKS+=	rbac.5 RBAC.5
-MLINKS+=	regexp.5 advance.5
-MLINKS+=	regexp.5 compile.5
-MLINKS+=	regexp.5 step.5
-MLINKS+=	standards.5 ANSI.5
-MLINKS+=	standards.5 C++.5
-MLINKS+=	standards.5 C.5
-MLINKS+=	standards.5 ISO.5
-MLINKS+=	standards.5 POSIX.1.5
-MLINKS+=	standards.5 POSIX.2.5
-MLINKS+=	standards.5 POSIX.5
-MLINKS+=	standards.5 SUS.5
-MLINKS+=	standards.5 SUSv2.5
-MLINKS+=	standards.5 SUSv3.5
-MLINKS+=	standards.5 SVID.5
-MLINKS+=	standards.5 SVID3.5
-MLINKS+=	standards.5 XNS.5
-MLINKS+=	standards.5 XNS4.5
-MLINKS+=	standards.5 XNS5.5
-MLINKS+=	standards.5 XPG.5
-MLINKS+=	standards.5 XPG3.5
-MLINKS+=	standards.5 XPG4.5
-MLINKS+=	standards.5 XPG4v2.5
-MLINKS+=	tecla.5 teclarc.5
-MLINKS+=	threads.5 pthreads.5
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

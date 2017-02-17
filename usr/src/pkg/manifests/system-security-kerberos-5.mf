@@ -116,6 +116,5 @@ link path=usr/lib/krb5/libdyn.so target=libdyn.so.1
 link path=usr/lib/krb5/libkadm5srv.so target=libkadm5srv.so.1
 link path=usr/lib/krb5/libkdb.so target=libkdb.so.1
 link path=usr/lib/krb5/libkdb_ldap.so target=libkdb_ldap.so.1
-link path=usr/share/man/man1m/kadmin.local.1m target=kadmin.1m
 depend fmri=naming/ldap type=require
 depend fmri=system/library/security/rpcsec type=require

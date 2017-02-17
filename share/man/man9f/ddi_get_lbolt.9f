@@ -6,7 +6,7 @@
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
 .TH DDI_GET_LBOLT 9F "Feb 18, 1998"
 .SH NAME
-ddi_get_lbolt \- returns the value of lbolt
+ddi_get_lbolt, ddi_get_lbolt64 \- returns the value of lbolt
 .SH SYNOPSIS
 .LP
 .nf

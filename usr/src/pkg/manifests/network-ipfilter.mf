@@ -130,8 +130,3 @@ hardlink path=usr/sbin/ippool target=../../usr/lib/isaexec
 license cr_Sun license=cr_Sun
 license usr/src/cmd/ipf/tools/IPFILTER.LICENCE \
     license=usr/src/cmd/ipf/tools/IPFILTER.LICENCE
-link path=usr/share/man/man4/ipf.conf.4 target=./ipf.4
-link path=usr/share/man/man4/ipf6.conf.4 target=./ipf.4
-link path=usr/share/man/man4/ipmon.conf.4 target=./ipmon.4
-link path=usr/share/man/man4/ipnat.conf.4 target=./ipnat.4
-link path=usr/share/man/man4/ippool.conf.4 target=./ippool.4

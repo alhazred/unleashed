@@ -163,33 +163,8 @@ MAN = Intro.4 \
       zoneinfo.4 \
       $(MAN_$(CONFIG_MACH))
 
-MLINKS+=	Intro.4 intro.4
-MLINKS+=	default_fs.4 fs.4
-MLINKS+=	devices.4 devid_cache.4
-MLINKS+=	devices.4 devname_cache.4
-MLINKS+=	devices.4 mdi_ib_cache.4
-MLINKS+=	devices.4 mdi_scsi_vhci_cache.4
-MLINKS+=	devices.4 pci_unitaddr_persistent.4
-MLINKS+=	devices.4 snapshot_cache.4
-MLINKS+=	dir_ufs.4 dir.4
-MLINKS+=	hosts.equiv.4 rhosts.4
-MLINKS+=	hosts_access.4 hosts.allow.4
-MLINKS+=	hosts_access.4 hosts.deny.4
-MLINKS+=	ipf.4 ipf.conf.4
-MLINKS+=	ipf.4 ipf6.conf.4
-MLINKS+=	ipmon.4 ipmon.conf.4
-MLINKS+=	ipnat.4 ipnat.conf.4
-MLINKS+=	ippool.4 ippool.conf.4
-MLINKS+=	logindevperm.4 fbtab.4
-MLINKS+=	mech.4 qop.4
-MLINKS+=	pam.conf.4 pam.d.4
-MLINKS+=	pci.4 pcie.4
-MLINKS+=	ufsdump.4 dumpdates.4
-MLINKS+=	utmp.4 wtmp.4
-MLINKS+=	utmpx.4 wtmpx.4
 
 .if $(CONFIG_MACH) == i386
-MLINKS+=	sysbus.4 isa.4
 .endif
 
 # We want to just install manpages but there is no manpage-only mk file so

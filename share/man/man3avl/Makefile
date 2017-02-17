@@ -10,11 +10,6 @@ MAN = avl_add.3avl \
       avl_numnodes.3avl \
       avl_swap.3avl
 
-MLINKS+=	avl_add.3avl avl_remove.3avl
-MLINKS+=	avl_first.3avl AVL_NEXT.3avl
-MLINKS+=	avl_first.3avl AVL_PREV.3avl
-MLINKS+=	avl_first.3avl avl_last.3avl
-MLINKS+=	avl_insert.3avl avl_insert_here.3avl
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

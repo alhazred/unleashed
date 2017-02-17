@@ -13,7 +13,7 @@
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
 .TH STRFTIME 3C "Jun 24, 2014"
 .SH NAME
-strftime, strftime_l cftime, ascftime \- convert date and time to string
+strftime, strftime_l, cftime, ascftime \- convert date and time to string
 .SH SYNOPSIS
 .LP
 .nf

@@ -14,7 +14,7 @@
 ctype, isalpha, isalnum, isascii, isblank, iscntrl, isdigit, islower,
 isprint, isspace, isupper, ispunct, isgraph, isxdigit, isalpha_l,
 isalnum_l, isblank_l, iscntrl_l, isdigit_l, islower_l, isprint_l,
-isspace_l, isupper_l, ispunct_l, isgraph_l isxdigit_l \- character handling
+isspace_l, isupper_l, ispunct_l, isgraph_l, isxdigit_l \- character handling
 .SH SYNOPSIS
 .LP
 .nf

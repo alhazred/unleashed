@@ -7,7 +7,8 @@
 .TH CONDVAR 9F "Mar 29, 2016"
 .SH NAME
 condvar, cv_init, cv_destroy, cv_wait, cv_signal, cv_broadcast, cv_wait_sig,
-cv_timedwait, cv_timedwait_sig \- condition variable routines
+cv_timedwait, cv_timedwait_sig, cv_reltimedwait, cv_reltimedwait_sig \-
+condition variable routines
 .SH SYNOPSIS
 .LP
 .nf

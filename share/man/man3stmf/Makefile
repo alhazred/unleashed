@@ -40,8 +40,6 @@ MAN = stmfAddToHostGroup.3stmf \
       stmfSetProviderData.3stmf \
       stmfSetProviderDataProt.3stmf
 
-MLINKS+=	stmfModifyLu.3stmf stmfModifyLuByFname.3stmf
-MLINKS+=	stmfSetLuProp.3stmf stmfGetLuProp.3stmf
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

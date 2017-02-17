@@ -16,10 +16,6 @@ MAN = libpicl.3picl \
       picl_wait.3picl \
       picl_walk_tree_by_class.3picl
 
-MLINKS+=	picl_get_first_prop.3picl picl_get_next_prop.3picl
-MLINKS+=	picl_get_next_by_row.3picl picl_get_next_by_col.3picl
-MLINKS+=	picl_get_propval.3picl picl_get_propval_by_name.3picl
-MLINKS+=	picl_set_propval.3picl picl_set_propval_by_name.3picl
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

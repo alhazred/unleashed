@@ -61,4 +61,3 @@ license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/cmd-inet/usr.bin/THIRDPARTYLICENSE.whois \
     license=usr/src/cmd/cmd-inet/usr.bin/THIRDPARTYLICENSE.whois
-link path=usr/share/man/man1m/restricted_shell.1m target=rsh.1m
