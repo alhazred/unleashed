@@ -1726,7 +1726,7 @@ metaslab_trace(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 		    "MSID", "DVA", "ASIZE", "WEIGHT", "RESULT", "VDEV");
 	}
 
-	if (mat.mat_msp != NULL) {
+	if (mat.mat_msp != 0) {
 		mdb_metaslab_t ms;
 
 		if (mdb_ctf_vread(&ms, "metaslab_t", "mdb_metaslab_t",
@@ -1753,13 +1753,13 @@ metaslab_trace(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 		mdb_printf("%<b>%18llx%</b> ", mat.mat_offset);
 	}
 
-	if (mat.mat_mg != NULL &&
+	if (mat.mat_mg != 0 &&
 	    mdb_ctf_vread(&mg, "metaslab_group_t", "mdb_metaslab_group_t",
 	    mat.mat_mg, 0) == -1) {
 		return (DCMD_ERR);
 	}
 
-	if (mg.mg_vd != NULL) {
+	if (mg.mg_vd != 0) {
 		mdb_vdev_t vdev;
 		char desc[MAXNAMELEN];
 
@@ -1768,7 +1768,7 @@ metaslab_trace(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 			return (DCMD_ERR);
 		}
 
-		if (vdev.vdev_path != NULL) {
+		if (vdev.vdev_path != 0) {
 			char path[MAXNAMELEN];
 
 			if (mdb_readstr(path, sizeof (path),
@@ -1783,7 +1783,7 @@ metaslab_trace(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 			} else {
 				strcpy(desc, path);
 			}
-		} else if (vdev.vdev_ops != NULL) {
+		} else if (vdev.vdev_ops != 0) {
 			mdb_vdev_ops_t ops;
 			if (mdb_ctf_vread(&ops, "vdev_ops_t", "mdb_vdev_ops_t",
 			    vdev.vdev_ops, 0) == -1) {
@@ -2439,7 +2439,7 @@ multilist_walk_init(mdb_walk_state_t *wsp)
 {
 	multilist_walk_data_t *mwd;
 
-	if (wsp->walk_addr == NULL) {
+	if (wsp->walk_addr == 0) {
 		mdb_warn("must supply address of multilist_t\n");
 		return (WALK_ERR);
 	}
@@ -2451,7 +2451,7 @@ multilist_walk_init(mdb_walk_state_t *wsp)
 	}
 
 	if (mwd->mwd_ml.ml_num_sublists == 0 ||
-	    mwd->mwd_ml.ml_sublists == NULL) {
+	    mwd->mwd_ml.ml_sublists == 0) {
 		mdb_warn("invalid or uninitialized multilist at %#lx\n",
 		    wsp->walk_addr);
 		return (WALK_ERR);

@@ -115,9 +115,9 @@ redirect:
 				goto redirect;
 			case 'a':
 				if (appendx >= appendnum)
-					if ((appends = realloc(appends,
-					    sizeof(struct s_appends) *
-					    (appendnum *= 2))) == NULL)
+					if ((appends = reallocarray(appends,
+					    (appendnum *= 2),
+					    sizeof(struct s_appends))) == NULL)
 						err(1, "realloc");
 				appends[appendx].type = AP_STRING;
 				appends[appendx].s = cp->t;
@@ -209,9 +209,9 @@ redirect:
 				exit(0);
 			case 'r':
 				if (appendx >= appendnum)
-					if ((appends = realloc(appends,
-					    sizeof(struct s_appends) *
-					    (appendnum *= 2))) == NULL)
+					if ((appends = reallocarray(appends,
+					    (appendnum *= 2),
+					    sizeof(struct s_appends))) == NULL)
 						err(1, "realloc");
 				appends[appendx].type = AP_FILE;
 				appends[appendx].s = cp->t;
