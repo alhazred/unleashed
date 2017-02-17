@@ -42,7 +42,6 @@
 #include "defs.h"
 
 /* RELEASE STRING */
-#include "conv.h"
 #include "sgs.h"
 
 
@@ -114,11 +113,6 @@ main(int argc, char ** argv, char ** envp)
 	Elf_Cmd		cmd;
 	Elf		*arf;
 	unsigned	Vflag = 0;
-
-	/*
-	 * Check for a binary that better fits this architecture.
-	 */
-	(void) conv_check_native(argv, envp);
 
 	tool_name = argv[0];
 
