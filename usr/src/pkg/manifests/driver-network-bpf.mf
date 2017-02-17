@@ -31,6 +31,9 @@ set name=info.classification \
 set name=variant.arch value=$(ARCH)
 dir path=etc group=sys
 dir path=etc/sock2path.d group=sys
+dir path=kernel group=sys
+dir path=kernel/socketmod group=sys
+dir path=kernel/socketmod/$(ARCH64) group=sys
 dir path=usr group=sys
 dir path=usr/include
 dir path=usr/include/net
@@ -38,10 +41,10 @@ dir path=usr/include/netpacket
 dir path=usr/kernel group=sys
 dir path=usr/kernel/drv group=sys
 dir path=usr/kernel/drv/$(ARCH64) group=sys
-dir path=usr/kernel/socketmod group=sys
-dir path=usr/kernel/socketmod/$(ARCH64) group=sys
 driver name=bpf perms="bpf 0666 root sys"
 file path=etc/sock2path.d/driver%2Fnetwork%2Fbpf group=sys
+file path=kernel/socketmod/$(ARCH64)/sockpfp group=sys mode=0755
+$(i386_ONLY)file path=kernel/socketmod/sockpfp group=sys mode=0755
 file path=usr/include/net/bpf.h mode=0644
 file path=usr/include/net/bpfdesc.h mode=0644
 file path=usr/include/net/dlt.h mode=0644
@@ -49,8 +52,6 @@ file path=usr/include/netpacket/packet.h
 file path=usr/kernel/drv/$(ARCH64)/bpf group=sys
 $(i386_ONLY)file path=usr/kernel/drv/bpf group=sys
 file path=usr/kernel/drv/bpf.conf group=sys
-file path=usr/kernel/socketmod/$(ARCH64)/sockpfp group=sys mode=0755
-$(i386_ONLY)file path=usr/kernel/socketmod/sockpfp group=sys mode=0755
 license cr_Sun license=cr_Sun
 license usr/src/cmd/ipf/tools/IPFILTER.LICENCE \
     license=usr/src/cmd/ipf/tools/IPFILTER.LICENCE

@@ -706,8 +706,8 @@ compile_tr(char *p, struct s_tr **py)
 				y->bytetab[(u_char)*op] = *np;
 			else {
 				y->bytetab[(u_char)*op] = 0;
-				y->multis = realloc(y->multis,
-				    (y->nmultis + 1) * sizeof(*y->multis));
+				y->multis = reallocarray(y->multis,
+				    y->nmultis + 1, sizeof(*y->multis));
 				if (y->multis == NULL)
 					err(1, NULL);
 				i = y->nmultis++;
