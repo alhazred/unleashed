@@ -422,7 +422,7 @@ allocfailure:
 	return (ioctlrespsize);
 }
 
-#define	NFIELDS	22	/* 17 control characters + 4 sets of modes */
+#define	NFIELDS	22	/* 18 control characters + 4 sets of modes */
 
 /*
  * Init routine run from main at boot time.

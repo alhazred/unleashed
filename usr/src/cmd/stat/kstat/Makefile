@@ -43,7 +43,6 @@ CPPFLAGS += -I$(CODEMGR_WS)/include
 
 FILEMODE= 0555
 
-
 .KEEP_STATE:
 
 all: $(PROG)

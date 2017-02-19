@@ -144,9 +144,7 @@ extern pid_t tcgetsid(int);
 #define	VWERASE		14
 #define	VLNEXT		15
 #define	VSTATUS		16
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 #define	VERASE2		17
-#endif /* !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) */
 /* 18 through 19 reserved for future use */
 
 /*

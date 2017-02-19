@@ -1906,6 +1906,29 @@ get_boot_properties(void)
 		} else if (strcmp(name, "stdout") == 0) {
 			(void) ndi_prop_update_int(DDI_DEV_T_NONE, devi,
 			    property_name, *((int *)bop_staging_area));
+		} else if (strcmp(name, "boot-args") == 0) {
+			copy_boot_str(bop_staging_area, property_val, 50);
+			(void) e_ddi_prop_update_string(DDI_DEV_T_NONE, devi,
+			    property_name, property_val);
+		} else if (strcmp(name, "bootargs") == 0) {
+			copy_boot_str(bop_staging_area, property_val, 50);
+			(void) e_ddi_prop_update_string(DDI_DEV_T_NONE, devi,
+			    property_name, property_val);
+		} else if (strcmp(name, "bootp-response") == 0) {
+			(void) e_ddi_prop_update_byte_array(DDI_DEV_T_NONE,
+			    devi, property_name, bop_staging_area, length);
+		} else if (strcmp(name, "ramdisk_start") == 0) {
+			(void) e_ddi_prop_update_int64(DDI_DEV_T_NONE, devi,
+			    property_name, *((int64_t *)bop_staging_area));
+		} else if (strcmp(name, "ramdisk_end") == 0) {
+			(void) e_ddi_prop_update_int64(DDI_DEV_T_NONE, devi,
+			    property_name, *((int64_t *)bop_staging_area));
+		} else if (strncmp(name, "module-addr-", 12) == 0) {
+			(void) e_ddi_prop_update_int64(DDI_DEV_T_NONE, devi,
+			    property_name, *((int64_t *)bop_staging_area));
+		} else if (strncmp(name, "module-size-", 12) == 0) {
+			(void) e_ddi_prop_update_int64(DDI_DEV_T_NONE, devi,
+			    property_name, *((int64_t *)bop_staging_area));
 		} else {
 			/* Property type unknown, use old prop interface */
 			(void) e_ddi_prop_create(DDI_DEV_T_NONE, devi,

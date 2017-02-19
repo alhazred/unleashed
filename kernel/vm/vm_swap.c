@@ -18,6 +18,11 @@
  *
  * CDDL HEADER END
  */
+
+/*
+ * Copyright 2015 Joyent, Inc.
+ */
+
 /*
  * Copyright (c) 1987, 2010, Oracle and/or its affiliates. All rights reserved.
  */
@@ -623,7 +628,18 @@ swapctl(int sc_cmd, void *sc_arg, int *rv)
 			return (0);
 		}
 beginning:
+		mutex_enter(&swapinfo_lock);
 		tmp_nswapfiles = nswapfiles;
+		mutex_exit(&swapinfo_lock);
+
+		/*
+		 * Return early if there are no swap entries to report:
+		 */
+		if (tmp_nswapfiles < 1) {
+			*rv = 0;
+			return (0);
+		}
+
 		/* Return an error if not enough space for the whole table. */
 		if (length < tmp_nswapfiles)
 			return (ENOMEM);
@@ -918,7 +934,18 @@ swapctl32(int sc_cmd, void *sc_arg, int *rv)
 			return (0);
 		}
 beginning:
+		mutex_enter(&swapinfo_lock);
 		tmp_nswapfiles = nswapfiles;
+		mutex_exit(&swapinfo_lock);
+
+		/*
+		 * Return early if there are no swap entries to report:
+		 */
+		if (tmp_nswapfiles < 1) {
+			*rv = 0;
+			return (0);
+		}
+
 		/* Return an error if not enough space for the whole table. */
 		if (length < tmp_nswapfiles)
 			return (ENOMEM);
