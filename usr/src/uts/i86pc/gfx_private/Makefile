@@ -38,10 +38,8 @@ UTSBASE	= ../..
 #	Define the module and object file sets.
 #
 MODULE		= gfx_private
-OBJECTS		= $(GFX_PRIVATE_OBJS:%=$(OBJS_DIR)/%) $(OBJS_DIR)/$(VGATEXT_FONT).o
+OBJECTS		= $(GFX_PRIVATE_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_PSM_MISC_DIR)/$(MODULE)
-VGATEXT_FONT	= 8859-1
-VGATEXT_SRC	= $(UTSBASE)/intel/io/vgatext
 GFXP_VGATEXT	= gfxp_vgatext
 GFXP_VGATEXT_SRC	= $(UTSBASE)/i86pc/io/gfx_private
 
@@ -70,8 +68,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-parentheses
 
-CLOBBERFILES	+= $(OBJS_DIR)/$(VGATEXT_FONT).c
-
 #
 #	Default build targets.
 #
@@ -86,16 +82,6 @@ clean:		$(CLEAN_DEPS)
 clobber:	$(CLOBBER_DEPS)
 
 install:	$(INSTALL_DEPS)
-
-# Custom targets and rules
-
-$(OBJS_DIR)/$(VGATEXT_FONT).c:	$(VGATEXT_SRC)/$(VGATEXT_FONT).bdf
-	$(AWK) -f $(VGATEXT_SRC)/bdf_to_c.awk	\
-		$(VGATEXT_SRC)/$(VGATEXT_FONT).bdf > $@
-
-$(OBJS_DIR)/$(VGATEXT_FONT).o:	$(OBJS_DIR)/$(VGATEXT_FONT).c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
 
 #
 #	Include common targets.

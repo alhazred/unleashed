@@ -21,6 +21,7 @@
 
 /*
  * Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright 2015 RackTop Systems.
  */
 
 /*
@@ -731,7 +732,9 @@ client_destroy(uint32_t id)
 	/*
 	 * End audit session.
 	 */
+#ifndef	NATIVE_BUILD
 	(void) adt_end_session(cp->rc_adt_session);
+#endif
 
 	client_free(cp);
 }
@@ -1948,6 +1951,7 @@ client_annotation_finished()
 	(void) pthread_mutex_unlock(&cp->rc_annotate_lock);
 }
 
+#ifndef	NATIVE_BUILD
 static void
 start_audit_session(repcache_client_t *cp)
 {
@@ -2004,6 +2008,7 @@ start_audit_session(repcache_client_t *cp)
 
 	ucred_free(cred);
 }
+#endif
 
 /*
  * Handle switch client request
@@ -2454,7 +2459,9 @@ create_client(pid_t pid, uint32_t debugflags, int privileged, int *out_fd)
 	cp->rc_pid = pid;
 	cp->rc_debug = debugflags;
 
+#ifndef	NATIVE_BUILD
 	start_audit_session(cp);
+#endif
 
 	cp->rc_doorfd = door_create(client_switcher, (void *)cp->rc_id,
 	    door_flags);

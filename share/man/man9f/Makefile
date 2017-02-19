@@ -443,8 +443,12 @@ MAN = ASSERT.9f \
       usb_register_hotplug_cbs.9f \
       usb_reset_device.9f \
       uwritec.9f \
-      va_arg.9f
-
+      va_arg.9f \
+      vmem_add.9f \
+      vmem_alloc.9f \
+      vmem_contains.9f \
+      vmem_create.9f \
+      vmem_walk.9f
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

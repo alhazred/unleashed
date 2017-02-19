@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright 2011, Richard Lowe
+# Copyright 2017, Richard Lowe
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2016 Hans Rosenfeld <rosenfeld@grumpf.hope-2000.org>
 # Copyright 2016 Nexenta Systems, Inc.
@@ -435,3 +435,8 @@ file path=usr/share/man/man9f/untimeout.9f
 file path=usr/share/man/man9f/ureadc.9f
 file path=usr/share/man/man9f/uwritec.9f
 file path=usr/share/man/man9f/va_arg.9f
+file path=usr/share/man/man9f/vmem_add.9f
+file path=usr/share/man/man9f/vmem_alloc.9f
+file path=usr/share/man/man9f/vmem_contains.9f
+file path=usr/share/man/man9f/vmem_create.9f
+file path=usr/share/man/man9f/vmem_walk.9f

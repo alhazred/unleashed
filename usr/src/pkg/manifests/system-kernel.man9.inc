@@ -10,8 +10,9 @@
 #
 
 #
-# Copyright 2011, Richard Lowe
+# Copyright 2017, Richard Lowe
 # Copyright 2012 Nexenta Systems, Inc. All rights reserved.
 #
 
 file path=usr/share/man/man9/Intro.9
+file path=usr/share/man/man9/vmem.9

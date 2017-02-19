@@ -247,7 +247,22 @@ $(DBOOT_OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/dboot/%.c
 $(DBOOT_OBJS_DIR)/%.o:		$(UTSBASE)/intel/ia32/%.s
 	$(DBOOT_AS) -D_ASM $(DBOOT_DEFS) $(DBOOT_AS_INCL) -o $@ $<
 
+$(DBOOT_OBJS_DIR)/%.o:		$(UTSBASE)/common/font/%.c
+	$(i386_CC) $(DBOOT_FLAGS) -O $(DBOOT_DEFS) $(DBOOT_CC_INCL) -c -o $@ $<
+
+$(DBOOT_OBJS_DIR)/$(VGATEXT_FONT).c:	\
+	$(VGATEXT_FONT_DIR)/$(VGATEXT_FONT_SRC).bdf	\
+	$(VGATEXT_FONT_DIR)/bdf_to_c.awk
+	$(AWK) -f $(VGATEXT_FONT_DIR)/bdf_to_c.awk	\
+		$(VGATEXT_FONT_DIR)/$(VGATEXT_FONT_SRC).bdf > $@
+
+$(DBOOT_OBJS_DIR)/%.o:		$(DBOOT_OBJS_DIR)/%.c
+	$(i386_CC) $(DBOOT_FLAGS) -O $(DBOOT_DEFS) $(DBOOT_CC_INCL) -c -o $@ $<
+
 $(DBOOT_OBJS_DIR)/%.o:		$(COMMONBASE)/crypto/sha1/%.c
+	$(i386_CC) $(DBOOT_FLAGS) -O $(DBOOT_DEFS) $(DBOOT_CC_INCL) -c -o $@ $<
+
+$(DBOOT_OBJS_DIR)/%.o:		$(DBOOT_OBJS_DIR)/%.c
 	$(i386_CC) $(DBOOT_FLAGS) -O $(DBOOT_DEFS) $(DBOOT_CC_INCL) -c -o $@ $<
 
 $(DBOOT_OBJS_DIR)/%.o:		$(COMMONBASE)/util/%.c

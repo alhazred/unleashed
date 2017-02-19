@@ -40,10 +40,8 @@ UTSBASE	= ../..
 #	Define the module and object file sets.
 #
 MODULE		= vgatext
-OBJECTS		= $(VGATEXT_OBJS:%=$(OBJS_DIR)/%) $(OBJS_DIR)/$(VGATEXT_FONT).o
+OBJECTS		= $(VGATEXT_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
-VGATEXT_FONT	= 8859-1
-VGATEXT_SRC	= $(UTSBASE)/intel/io/vgatext
 
 LDFLAGS +=	-dy -Nmisc/agpmaster
 #
@@ -81,20 +79,7 @@ clobber:	$(CLOBBER_DEPS)
 
 install:	$(INSTALL_DEPS)
 
-# Custom targets and rules
-
-$(OBJS_DIR)/$(VGATEXT_FONT).c:	$(VGATEXT_SRC)/$(VGATEXT_FONT).bdf \
-	$(VGATEXT_SRC)/bdf_to_c.awk
-	$(AWK) -f $(VGATEXT_SRC)/bdf_to_c.awk	\
-		$(VGATEXT_SRC)/$(VGATEXT_FONT).bdf > $@
-
-$(OBJS_DIR)/$(VGATEXT_FONT).o:	$(OBJS_DIR)/$(VGATEXT_FONT).c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 #
 #	Include common targets.
 #
 include $(UTSBASE)/intel/Makefile.targ
-
-CLEANFILES	+= $(OBJS_DIR)/$(VGATEXT_FONT).c

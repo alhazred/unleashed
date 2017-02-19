@@ -39,8 +39,9 @@ UTSBASE	= ../..
 #	Define the module and object file sets.
 #
 MODULE		= tem
-OBJECTS		= $(TEM_OBJS:%=$(OBJS_DIR)/%)
+OBJECTS		= $(TEM_OBJS:%=$(OBJS_DIR)/%) $(FONT_OBJS:%=$(OBJS_DIR)/%)
 
+ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 
 #
@@ -84,3 +85,7 @@ install:	$(INSTALL_DEPS)
 #	Include common targets.
 #
 include $(UTSBASE)/sparc/Makefile.targ
+
+CLOBBERFILES	+=	\
+	$(OBJS_DIR)/$(VGATEXT_FONT).o \
+	$(OBJS_DIR)/$(VGATEXT_FONT).c

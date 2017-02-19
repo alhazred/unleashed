@@ -107,6 +107,7 @@ extern "C" {
 
 #define	BUF_LEN		160 /* Two lines of data can be processed at a time */
 
+typedef uint32_t tem_char_t;	/* 32bit char to support UTF-8 */
 typedef uint8_t text_color_t;
 
 typedef struct tem_color {
@@ -175,6 +176,9 @@ struct tem_vt_state {
 	text_color_t	*tvs_fg_buf;	/* fg_color attribute cache */
 	text_color_t	*tvs_bg_buf;	/* bg_color attribute cache */
 	int		tvs_color_buf_size;
+
+	unsigned	tvs_utf8_left;		/* UTF-8 code points */
+	tem_char_t	tvs_utf8_partial;	/* UTF-8 char being completed */
 
 	boolean_t	tvs_isactive;
 	int		tvs_initialized;	/* initialization flag */
@@ -292,7 +296,6 @@ void	tem_safe_pix_clear_entire_screen(struct tem_vt_state *,
 
 void	tem_safe_get_color(struct tem_vt_state *, text_color_t *,
 	    text_color_t *, uint8_t);
-void	set_font(struct font *, short *, short *, short, short);
 
 void	tem_safe_blank_screen(struct tem_vt_state *, cred_t *,
 	    enum called_from);
