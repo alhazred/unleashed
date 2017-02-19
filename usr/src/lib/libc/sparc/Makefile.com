@@ -585,7 +585,6 @@ PORTGEN=			\
 	scandir.o		\
 	seekdir.o		\
 	select.o		\
-	select_large_fdset.o	\
 	setlabel.o		\
 	setpriority.o		\
 	settimeofday.o		\

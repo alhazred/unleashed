@@ -22,6 +22,7 @@ SUBDIRS = \
 	nl_langinfo \
 	priv_gettext \
 	random \
+	select \
 	strerror \
 	strxfrm \
 	symbols \
