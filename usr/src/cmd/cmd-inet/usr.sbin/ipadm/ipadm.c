@@ -18,10 +18,12 @@
  *
  * CDDL HEADER END
  */
+
 /*
  * Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
- * Copyright 2012 Nexenta Systems, Inc. All rights reserved.
+ * Copyright 2017 Nexenta Systems, Inc.
  */
+
 #include <arpa/inet.h>
 #include <errno.h>
 #include <getopt.h>
@@ -499,8 +501,7 @@ do_disable_if(int argc, char *argv[], const char *use)
 }
 
 /*
- * called in from print_prop_cb() and does the job of printing each
- * individual column in the 'ipadm show-*prop' output.
+ * Print individual columns for the show-*prop subcommands.
  */
 static void
 print_prop(show_prop_state_t *statep, uint_t flags, char *buf, size_t bufsize)
@@ -528,22 +529,8 @@ print_prop(show_prop_state_t *statep, uint_t flags, char *buf, size_t bufsize)
 	}
 
 	if (status != IPADM_SUCCESS) {
-		if (status == IPADM_PROP_UNKNOWN ||
-		    status == IPADM_INVALID_ARG) {
-			warn_ipadmerr(status, "cannot get property '%s' for "
-			    "'%s'", prop_name, object);
-		} else if (status == IPADM_NOTSUP) {
-			warn_ipadmerr(status, "'%s'", object);
-		} else if (status == IPADM_NOTFOUND) {
-			if (flags & IPADM_OPT_PERSIST) {
-				propval[0] = '\0';
-				goto cont;
-			} else {
-				warn_ipadmerr(status, "no such object '%s'",
-				    object);
-			}
-		} else if (status == IPADM_ENXIO) {
-			/* the interface is probably disabled */
+		if ((status == IPADM_NOTFOUND && (flags & IPADM_OPT_PERSIST)) ||
+		    status == IPADM_ENXIO) {
 			propval[0] = '\0';
 			goto cont;
 		}
@@ -557,8 +544,7 @@ cont:
 }
 
 /*
- * callback function which displays output for set-prop, set-ifprop and
- * set-addrprop subcommands.
+ * Callback function for show-*prop subcommands.
  */
 static boolean_t
 print_prop_cb(ofmt_arg_t *ofarg, char *buf, size_t bufsize)
@@ -2087,9 +2073,13 @@ do_show_addrprop(int argc, char *argv[], const char *use)
 	ofmt_handle_t		ofmt;
 	ofmt_status_t		oferr;
 	uint_t			ofmtflags = 0;
-	char			*aobjname;
+	char			*aobjname = NULL;
 	char			*ifname = NULL;
 	char			*cp;
+	ipadm_addr_info_t	*ainfop = NULL;
+	ipadm_addr_info_t	*ptr;
+	ipadm_status_t		status;
+	boolean_t		found = _B_FALSE;
 
 	opterr = 0;
 	bzero(&state, sizeof (state));
@@ -2104,7 +2094,7 @@ do_show_addrprop(int argc, char *argv[], const char *use)
 		case 'p':
 			if (ipadm_str2nvlist(optarg, &proplist,
 			    IPADM_NORVAL) != 0)
-				die("invalid interface properties specified");
+				die("invalid addrobj properties specified");
 			break;
 		case 'c':
 			state.sps_parsable = _B_TRUE;
@@ -2121,15 +2111,13 @@ do_show_addrprop(int argc, char *argv[], const char *use)
 		aobjname = argv[optind];
 		cp = strchr(aobjname, '/');
 		if (cp == NULL)
-			die("Invalid address object name provided");
+			die("invalid addrobj name provided");
 		if (*(cp + 1) == '\0') {
 			ifname = aobjname;
 			*cp = '\0';
 			aobjname = NULL;
 		}
-	} else if (optind == argc) {
-		aobjname = NULL;
-	} else {
+	} else if (optind != argc) {
 		die("Usage: %s", use);
 	}
 	state.sps_proplist = proplist;
@@ -2139,38 +2127,41 @@ do_show_addrprop(int argc, char *argv[], const char *use)
 	ipadm_ofmt_check(oferr, state.sps_parsable, ofmt);
 	state.sps_ofmt = ofmt;
 
-	if (aobjname != NULL) {
-		(void) strlcpy(state.sps_aobjname, aobjname,
+	status = ipadm_addr_info(iph, ifname, &ainfop, 0, LIFC_DEFAULT);
+	/* Return without printing any error, if no addresses were found */
+	if (status == IPADM_NOTFOUND)
+		return;
+	if (status != IPADM_SUCCESS)
+		die("error retrieving address: %s", ipadm_status2str(status));
+
+	for (ptr = ainfop; ptr != NULL; ptr = IA_NEXT(ptr)) {
+		char	*taobjname = ptr->ia_aobjname;
+
+		if (taobjname[0] == '\0')
+			continue;
+		if (aobjname != NULL) {
+			if (strcmp(aobjname, taobjname) == 0)
+				found = _B_TRUE;
+			else
+				continue;
+		}
+		if (ptr->ia_atype == IPADM_ADDR_IPV6_ADDRCONF) {
+			if (found)
+				break;
+			else
+				continue;
+		}
+		(void) strlcpy(state.sps_aobjname, taobjname,
 		    sizeof (state.sps_aobjname));
 		show_properties(&state, IPADMPROP_CLASS_ADDR);
-	} else {
-		ipadm_addr_info_t	*ainfop = NULL;
-		ipadm_addr_info_t	*ptr;
-		ipadm_status_t		status;
-
-		status = ipadm_addr_info(iph, ifname, &ainfop, 0, LIFC_DEFAULT);
-		/*
-		 * Return without printing any error, if no addresses were
-		 * found.
-		 */
-		if (status == IPADM_NOTFOUND)
-			return;
-		if (status != IPADM_SUCCESS) {
-			die("Error retrieving address: %s",
-			    ipadm_status2str(status));
-		}
-		for (ptr = ainfop; ptr; ptr = IA_NEXT(ptr)) {
-			aobjname = ptr->ia_aobjname;
-			if (aobjname[0] == '\0' ||
-			    ptr->ia_atype == IPADM_ADDR_IPV6_ADDRCONF) {
-				continue;
-			}
-			(void) strlcpy(state.sps_aobjname, aobjname,
-			    sizeof (state.sps_aobjname));
-			show_properties(&state, IPADMPROP_CLASS_ADDR);
-		}
-		ipadm_free_addr_info(ainfop);
+		if (found)
+			break;
 	}
+	ipadm_free_addr_info(ainfop);
+
+	if (aobjname != NULL && !found)
+		die("addrobj not found: %s", aobjname);
+
 	nvlist_free(proplist);
 	ofmt_close(ofmt);
 	if (state.sps_retstatus != IPADM_SUCCESS) {

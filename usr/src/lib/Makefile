@@ -26,8 +26,8 @@
 # Copyright (c) 2013 Gary Mills
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright (c) 2015 Gary Mills
-# Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
 # Copyright 2016 Toomas Soome <tsoome@me.com>
+# Copyright 2017 Nexenta Systems, Inc.
 #
 
 include ../Makefile.master
@@ -517,6 +517,10 @@ libsocket:	libc libnsl
 basedeps:	libc libm libmd libmp libnsl libnvpair libsocket
 basedeps :=	TARGET=install
 
+# The following dependencies are currently required by libdbus-1 and should
+# be used for anything linking against it.
+dbusdeps:	libsecdb libinetutil libscf libuutil libgen libsmbios
+
 # The following dependencies don't need to be listed below as they are built
 # before everything else:
 # libc libm libmd libmp libnsl libnvpair libsocket
@@ -532,6 +536,7 @@ gss_mechs/mech_dh: libgss
 gss_mechs/mech_dummy: libgss
 gss_mechs/mech_krb5: libgss libresolv2 pkcs11 libkstat
 gss_mechs/mech_spnego: gss_mechs/mech_krb5
+hal:		dbusdeps
 krb5:		gss_mechs/mech_krb5 libtecla libldap5
 libadutils:	libldap5 libresolv2
 libbe:		libzfs libinstzones libuuid libgen libdevinfo libefi libficl
@@ -623,7 +628,7 @@ nsswitch:	libadutils libidmap libdns_sd libscf libldap5 libsldap
 pam_modules:	libproject passwdutil smbsrv libpam libbsm libsecdb
 passwdutil:	libsldap
 pkcs11:		libcryptoutil libgen libuuid
-policykit:	libsecdb
+policykit:	dbusdeps
 pylibbe: 	libbe libzfs
 pysolaris:	libsec libidmap
 pyzfs:		libzfs

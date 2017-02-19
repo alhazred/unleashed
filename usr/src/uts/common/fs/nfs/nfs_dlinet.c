@@ -1183,7 +1183,7 @@ cacheinit(void)
 	if (ddi_prop_lookup_string(DDI_DEV_T_ANY, ddi_root_node(),
 	    DDI_PROP_DONTPASS, BP_SERVER_IP, &str) == DDI_SUCCESS) {
 		if (inet_aton(str, server_ip) != 0)
-			cmn_err(CE_NOTE, "server_ipaddr %s is invalid\n",
+			cmn_err(CE_NOTE, "server_ipaddr %s is invalid",
 			    str);
 		ddi_prop_free(str);
 		if (dldebug)
@@ -1197,10 +1197,44 @@ cacheinit(void)
 	/* extract root path in server_path */
 	if (server_path_c == NULL) {
 		doptp = pl->vs[VS_NFSMNT_ROOTPATH];
+		if (doptp == NULL)
+			doptp = pl->opts[CD_ROOT_PATH];
 		if (doptp != NULL) {
-			server_path_c = kmem_alloc(doptp->len + 1, KM_SLEEP);
-			bcopy(doptp->value, server_path_c, doptp->len);
-			server_path_c[doptp->len] = '\0';
+			int len;
+			str = NULL;
+			for (len = 0; len < doptp->len; len++) {
+				if (doptp->value[len] == ':') {
+					str = (char *)(&doptp->value[++len]);
+					break;
+				}
+			}
+			if (str != NULL) {
+				/* Do not override server_ip from property. */
+				if ((*(uint_t *)server_ip) == 0) {
+					char *ip = kmem_alloc(len, KM_SLEEP);
+					bcopy(doptp->value, ip, len);
+					ip[len - 1] = '\0';
+					if (inet_aton((ip), server_ip) != 0) {
+						cmn_err(CE_NOTE,
+						    "server_ipaddr %s is "
+						    "invalid", ip);
+					}
+					kmem_free(ip, len);
+					if (dldebug) {
+						printf("server ip is %s\n",
+						    inet_ntoa(
+						    *(struct in_addr *)
+						    server_ip));
+					}
+				}
+				len = doptp->len - len;
+			} else {
+				str = (char *)doptp->value;
+				len = doptp->len;
+			}
+			server_path_c = kmem_alloc(len + 1, KM_SLEEP);
+			bcopy(str, server_path_c, len);
+			server_path_c[len] = '\0';
 			if (dldebug)
 				printf("dhcp:  root path %s\n", server_path_c);
 		} else {

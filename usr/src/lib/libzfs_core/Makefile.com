@@ -20,7 +20,7 @@
 #
 #
 # Copyright (c) 2005, 2010, Oracle and/or its affiliates. All rights reserved.
-# Copyright (c) 2012 by Delphix. All rights reserved.
+# Copyright (c) 2012, 2016 by Delphix. All rights reserved.
 #
 
 LIBRARY= libzfs_core.a
@@ -50,6 +50,7 @@ INCS += -I../../libc/inc
 C99MODE=	$(C99_ENABLE)
 LDLIBS +=	-lc -lnvpair
 CPPFLAGS +=	$(INCS) -D_LARGEFILE64_SOURCE=1 -D_REENTRANT
+$(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
 SRCS=	$(OBJS_COMMON:%.o=$(SRCDIR)/%.c)	\
 	$(OBJS_SHARED:%.o=$(SRC)/common/zfs/%.c)

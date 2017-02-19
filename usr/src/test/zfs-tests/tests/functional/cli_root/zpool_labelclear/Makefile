@@ -10,11 +10,12 @@
 #
 
 #
-# Copyright (c) 2012, 2017 by Delphix. All rights reserved.
+# Copyright 2016 Nexenta Systems, Inc.
 #
 
-.PARALLEL: $(SUBDIRS)
+include		$(SRC)/Makefile.master
 
-SUBDIRS:sh = find ./* -maxdepth 0 -type d
+ROOTOPTPKG=	$(ROOT)/opt/zfs-tests
+TARGETDIR=	$(ROOTOPTPKG)/tests/functional/cli_root/zpool_labelclear
 
-include $(SRC)/test/Makefile.com
+include		$(SRC)/test/zfs-tests/Makefile.com

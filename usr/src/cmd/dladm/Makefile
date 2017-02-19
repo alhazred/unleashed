@@ -18,51 +18,55 @@
 #
 # CDDL HEADER END
 #
+
 #
 # Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
 
-PROG= dladm
-CFGFILES= secobj.conf
-
+PROG=		dladm
 ROOTFS_PROG=	$(PROG)
+OBJS=		dladm.o
+
+CFGFILES=	secobj.conf
 ROOTCFGDIR=	$(ROOTETC)/dladm
 ROOTCFGFILES=	$(CFGFILES:%=$(ROOTCFGDIR)/%)
 
-include ../Makefile.cmd
+include		$(SRC)/cmd/Makefile.cmd
+include		$(SRC)/cmd/Makefile.ctf
 
 CPPFLAGS += -I$(CODEMGR_WS)/include
 
-XGETFLAGS += -a -x $(PROG).xcl
-LDLIBS += -L$(ROOT)/lib
-LDLIBS += -ldladm -ldlpi -lkstat -lsecdb -lbsm -linetutil -ldevinfo
-LDLIBS += $(ZLAZYLOAD) -lrstp $(ZNOLAZYLOAD)
+XGETFLAGS +=	-a -x $(PROG).xcl
 
-CERRWARN += -Wno-switch
-CERRWARN += -Wno-unused-label
-CERRWARN += -Wno-uninitialized
+LDLIBS +=	-L$(ROOT)/lib
+LDLIBS +=	-ldladm -ldlpi -lkstat -lsecdb -lbsm -linetutil -ldevinfo
+LDLIBS +=	$(ZLAZYLOAD) -lrstp $(ZNOLAZYLOAD)
 
-# For headers from librstp.
-
+CERRWARN +=	-Wno-switch
+CERRWARN +=	-Wno-unused-label
+CERRWARN +=	-Wno-uninitialized
 $(ROOTCFGDIR)/secobj.conf := FILEMODE= 660
-
 
 .KEEP_STATE:
 
-all: $(ROOTFS_PROG) 
+all:		$(PROG)
 
-install: all $(ROOTSBINPROG) $(ROOTCFGDIR) $(ROOTCFGFILES)
-	$(RM) $(ROOTUSRSBINPROG)
-	-$(SYMLINK) ../../sbin/$(PROG) $(ROOTUSRSBINPROG)
+$(PROG):	$(OBJS)
+		$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
+		$(POST_PROCESS)
 
 clean:
+		$(RM) $(OBJS)
 
+install:	all $(ROOTSBINPROG) $(ROOTCFGDIR) $(ROOTCFGFILES)
+		$(RM) $(ROOTUSRSBINPROG)
+		-$(SYMLINK) ../../sbin/$(PROG) $(ROOTUSRSBINPROG)
 
 $(ROOTCFGDIR):
-	$(INS.dir)
+		$(INS.dir)
 
 $(ROOTCFGDIR)/%: $(ROOTCFGDIR) %
-	$(INS.file)
+		$(INS.file)
 
-include ../Makefile.targ
+include		$(SRC)/cmd/Makefile.targ
