@@ -11,7 +11,7 @@ threads, pthreads \- POSIX pthreads, c11, and illumos threads concepts
 .SS "POSIX"
 .LP
 .nf
-gcc -D_REENTRANT [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
+gcc [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
 .fi
 
 .LP
@@ -22,7 +22,7 @@ gcc -D_REENTRANT [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
 .SS "C11"
 .LP
 .nf
-gcc -std=c11 -D_REENTRANT [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
+gcc -std=c11 [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
 .fi
 
 .LP
@@ -33,7 +33,7 @@ gcc -std=c11 -D_REENTRANT [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
 .SS "illumos"
 .LP
 .nf
-gcc -D_REENTRANT [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
+gcc [ \fIflag\fR... ] \fIfile\fR... [ \fIlibrary\fR... ]
 .fi
 
 .LP
@@ -475,17 +475,6 @@ based on the \fBTS\fR scheduling class.
 .LP
 In a multithreaded application, \fBEINTR\fR can be returned from blocking
 system calls when another thread calls \fBforkall\fR(2).
-.SH USAGE
-.SS "\fB-mt\fR compiler option"
-.LP
-The \fB-mt\fR compiler option compiles and links for multithreaded code. It
-compiles source files with \(mi\fBD_REENTRANT\fR and augments the set of
-support libraries properly.
-.sp
-.LP
-Users of other compilers such as gcc and clang should manually set
-\(mi\fBD_REENTRANT\fR on the compilation line. There are no other libraries or
-flags necessary.
 .SH ATTRIBUTES
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:

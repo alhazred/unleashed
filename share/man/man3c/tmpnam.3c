@@ -112,11 +112,6 @@ The \fBtmpnam()\fR function is safe to use in multithreaded applications
 because it employs thread-specific data if it is passed a NULL pointer.
 However, its use is discouraged. The \fBtempnam()\fR function is safe in
 multithreaded applications and should be used instead.
-.sp
-.LP
-When compiling multithreaded applications, the  \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should be used only with multithreaded
-applications.
 .SH ATTRIBUTES
 .sp
 .LP

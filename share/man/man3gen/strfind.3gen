@@ -45,12 +45,6 @@ the next character; otherwise, it returns a pointer to \fIstring\fR.
 \fIresult\fR. Any character  that appears in  \fIold\fR is replaced with the
 character in the same position in  \fInew\fR. The  \fInew\fR result is
 returned.
-.SH USAGE
-.sp
-.LP
-When compiling multithreaded applications, the \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should only be used in multithreaded
-applications.
 .SH EXAMPLES
 .LP
 \fBExample 1 \fRAn example of the \fBstrfind()\fR function.

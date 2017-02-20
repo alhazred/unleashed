@@ -51,11 +51,6 @@ has at least one file open to a terminal.
 .LP
 The \fBctermid()\fR function is unsafe in multithreaded applications.  The
 \fBctermid_r()\fR function is MT-Safe and should be used instead.
-.sp
-.LP
-When compiling multithreaded applications, the  \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should be used only with multithreaded
-applications.
 .SH ATTRIBUTES
 .sp
 .LP

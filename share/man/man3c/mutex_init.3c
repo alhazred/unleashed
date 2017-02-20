@@ -538,7 +538,6 @@ state of shared data,  but it also prohibits parallelism.
 .in +2
 .nf
 /* cc thisfile.c -lthread */
-#define _REENTRANT
 #include <stdio.h>
 #include <thread.h>
 #define NUM_THREADS 12
@@ -574,7 +573,6 @@ many functions that use just one mutex to protect one data:
 .nf
 /* CC thisfile.c -lthread   use C++ to compile*/
 
-#define _REENTRANT
 #include <stdlib.h>
 #include <stdio.h>
 #include <thread.h>
@@ -643,7 +641,6 @@ mutex-protected data.
 /* cc thisfile.c -lthread */
 /* To execute, run the command line "a.out 0 &; a.out 1" */
 
-#define _REENTRANT
 #include <sys/types.h>
 #include <sys/mman.h>
 #include <sys/stat.h>

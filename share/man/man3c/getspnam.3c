@@ -220,11 +220,6 @@ and are subject to change or removal in future minor releases.
 .SH NOTES
 .sp
 .LP
-When compiling multithreaded applications, see \fBIntro\fR(3), \fINotes On
-Multithreaded Applications\fR, for information about the use of the
-\fB_REENTRANT\fR flag.
-.sp
-.LP
 Use of the enumeration interfaces \fBgetspent()\fR and \fBgetspent_r()\fR is
 not recommended; enumeration is supported for the shadow file, \fBNIS,\fR and
 \fBNIS+,\fR but in general is not efficient and may not be supported for all

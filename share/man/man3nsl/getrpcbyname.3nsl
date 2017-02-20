@@ -219,11 +219,6 @@ and are subject to change or removal in future minor releases.
 .SH NOTES
 .sp
 .LP
-When compiling multithreaded applications, see  \fBIntro\fR(3), \fINotes On
-Multithreaded Applications\fR, for information about the use of the
-\fB_REENTRANT\fR flag.
-.sp
-.LP
 Use of the enumeration interfaces \fBgetrpcent()\fR and \fBgetrpcent_r()\fR is
 discouraged; enumeration may not be supported for all database sources.  The
 semantics of enumeration are discussed further in \fBnsswitch.conf\fR(4).

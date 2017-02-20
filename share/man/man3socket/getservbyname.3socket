@@ -329,11 +329,6 @@ results from a different source than that used by \fBgetservbyname()\fR,
 \fBgetservbyname_r()\fR, \fBgetservbyport()\fR, and \fBgetservbyport_r()\fR.
 .sp
 .LP
-When compiling multithreaded applications, see  \fBIntro\fR(3), \fINotes On
-Multithread Applications\fR, for information about the use of the
-\fB_REENTRANT\fR flag.
-.sp
-.LP
 Use of the enumeration interfaces \fBgetservent()\fR and \fBgetservent_r()\fR
 is discouraged; enumeration may not be supported for all database sources.  The
 semantics of enumeration are discussed further in \fBnsswitch.conf\fR(4).

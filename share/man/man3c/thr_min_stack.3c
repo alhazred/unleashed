@@ -56,8 +56,7 @@ following:
 .sp
 .in +2
 .nf
-/* cc thisfile.c -lthread */
-#define _REENTRANT
+/* cc thisfile.c */
 #include <thread.h>
 #include <stdio.h>
 main(\|)  {

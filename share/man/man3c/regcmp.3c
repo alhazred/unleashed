@@ -203,8 +203,3 @@ MT-Level	MT-Safe
 .LP
 The user program may run out of memory if \fBregcmp()\fR is called iteratively
 without freeing the vectors no longer required.
-.sp
-.LP
-When compiling multithreaded applications, the \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should only be used in multithreaded
-applications.

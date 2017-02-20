@@ -205,9 +205,3 @@ MT-Level	MT-Safe
 .LP
 \fBed\fR(1), \fBgrep\fR(1), \fBsed\fR(1), \fBmalloc\fR(3C),
 \fBattributes\fR(5), \fBregexp\fR(5)
-.SH NOTES
-.sp
-.LP
-When compiling multi-threaded applications, the \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should only be used in multi-threaded
-applications.

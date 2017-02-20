@@ -392,10 +392,6 @@ sorting is disabled by setting \fBSORT_ADDRS\fR to FALSE in the
 first. See \fBnss\fR(4) for more information.
 .sp
 .LP
-When compiling multithreaded applications, see \fBIntro\fR(3), \fBMULTITHREADED
-APPLICATIONS\fR, for information about the use of the \fB_REENTRANT\fR flag.
-.sp
-.LP
 Use of the enumeration interfaces \fBgethostent()\fR and \fBgethostent_r()\fR
 is discouraged; enumeration might not be supported for all database sources.
 The semantics of enumeration are discussed further in \fBnsswitch.conf\fR(4).

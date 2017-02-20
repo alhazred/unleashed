@@ -281,11 +281,6 @@ described in \fBinet\fR(3SOCKET) may be helpful in constructing and
 manipulating addresses and network numbers in this form.
 .sp
 .LP
-When compiling multi-threaded applications, see \fBIntro\fR(3), \fINotes On
-Multithread Applications\fR, for information about the use of the
-\fB_REENTRANT\fR flag.
-.sp
-.LP
 Use of the enumeration interfaces \fBgetnetent()\fR and \fBgetnetent_r()\fR is
 discouraged; enumeration may not be supported for all database sources. The
 semantics of enumeration are discussed further in \fBnsswitch.conf\fR(4).

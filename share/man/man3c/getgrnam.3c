@@ -385,6 +385,6 @@ in future releases. New applications and libraries should use the
 standard-conforming interface.
 .sp
 .LP
-For POSIX.1c-conforming applications, the \fB_POSIX_PTHREAD_SEMANTICS\fR and
-\fB_REENTRANT\fR flags are automatically turned on by defining the
-\fB_POSIX_C_SOURCE\fR flag with a value \(>=199506L.
+For POSIX.1c-conforming applications, the \fB_POSIX_PTHREAD_SEMANTICS\fR
+flag is automatically turned on by defining the \fB_POSIX_C_SOURCE\fR flag
+with a value \(>=199506L.

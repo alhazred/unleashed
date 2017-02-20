@@ -563,14 +563,6 @@ For all except \fBstrlcat()\fR, \fBstrlcpy()\fR, and \fBstrsep()\fR, see
 \fBattributes\fR(5), \fBstandards\fR(5)
 .SH NOTES
 .LP
-When compiling multithreaded applications, the \fB_REENTRANT\fR flag must be
-defined on the compile line. This flag should only be used in multithreaded
-applications.
-.LP
-A single-threaded application can gain access to \fBstrtok_r()\fR only by
-defining \fB__EXTENSIONS__\fR or by defining \fB_POSIX_C_SOURCE\fR to a value
-greater than or equal to 199506L.
-.LP
 Except where noted otherwise, all of these functions assume the default
 locale ``C.'' For some locales,
 \fBstrxfrm\fR(3C) should be applied to the strings before they are passed to

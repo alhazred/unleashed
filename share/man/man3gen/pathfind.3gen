@@ -124,8 +124,3 @@ MT-Level	MT-Safe
 The string pointed to by the returned pointer is stored in an area that is
 reused on subsequent calls to \fBpathfind()\fR. The string should not be
 deallocated by the caller.
-.sp
-.LP
-When compiling multithreaded applications, the \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should only be used in
-multithreadedapplications.

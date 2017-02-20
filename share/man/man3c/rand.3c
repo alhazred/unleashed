@@ -57,11 +57,6 @@ the seed object be private to the thread.
 .LP
 The spectral properties of \fBrand()\fR are limited.  The \fBarc4random\fR(3C)
 function provides a better, more elaborate random-number generator.
-.sp
-.LP
-When compiling multithreaded applications, the  \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should be used only in multithreaded
-applications.
 .SH ATTRIBUTES
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:

@@ -96,9 +96,3 @@ MT-Level	MT-Safe
 .sp
 .LP
 \fBstring\fR(3C), \fBstrfind\fR(3GEN), \fBattributes\fR(5)
-.SH NOTES
-.sp
-.LP
-When compiling multi-thread applications, the \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should only be used in multi-thread
-applications.

@@ -43,11 +43,6 @@ The \fBbasename()\fR function returns a pointer to the final component of
 The \fBbasename()\fR function may modify the string pointed to by \fIpath\fR,
 and may return a pointer to static storage that may then be overwritten by a
 subsequent call to \fBbasename()\fR.
-.sp
-.LP
-When compiling multithreaded applications, the \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should only be used in multithreaded
-applications.
 .SH EXAMPLES
 .LP
 \fBExample 1 \fRExamples for \fBInput String\fR and \fBOutput String\fR

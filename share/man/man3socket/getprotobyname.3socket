@@ -200,11 +200,6 @@ Although \fBgetprotobyname_r()\fR, \fBgetprotobynumber_r()\fR, and
 to complete the functionality provided by similar thread-safe functions.
 .sp
 .LP
-When compiling multithreaded applications, see  \fBIntro\fR(3), \fINotes On
-Multithread Applications\fR, for information about the use of the
-\fB_REENTRANT\fR flag.
-.sp
-.LP
 The \fBgetprotobyname_r()\fR, \fBgetprotobynumber_r()\fR, and
 \fBgetprotoent_r()\fR functions are reentrant and multithread safe. The
 reentrant interfaces can be used in single-threaded as well as multithreaded

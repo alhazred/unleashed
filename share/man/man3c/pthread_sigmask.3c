@@ -174,8 +174,7 @@ Sleeps for 8 seconds to allow time for the user to deliver the signal,
 .sp
 .in +2
 .nf
-/* cc thisfile.c -lthread -lpthread */
-#define _REENTRANT    /* basic first 3-lines for threads */
+/* cc thisfile.c */
 #include <pthread.h>
 #include <thread.h>
 thread_t user_threadID;

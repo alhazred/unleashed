@@ -376,7 +376,6 @@ umem_cache_free(my_obj_cache, cur);
 .sp
 .in +2
 .nf
-#define _REENTRANT
 #include <synch.h>
 #include <umem.h>
 
@@ -426,7 +425,6 @@ umem_cache_free(my_obj_cache, cur);
 .sp
 .in +2
 .nf
-#define _REENTRANT
 #include <assert.h>
 #include <synch.h>
 #include <umem.h>

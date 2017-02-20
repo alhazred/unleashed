@@ -175,8 +175,3 @@ releases.
 .LP
 Only the Network Information Services, \fBNIS\fR and \fBNIS+,\fR are supported
 as sources for the \fBnetgroup\fR database.
-.sp
-.LP
-When compiling multi-threaded applications, see  \fBIntro\fR(3), \fINotes On
-Multithread Applications\fR, for information about the use of the
-\fB_REENTRANT\fR flag.

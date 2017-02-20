@@ -55,11 +55,6 @@ bufsplit("This\etis\eta\ettest\en", 4, a);
 .sp
 .LP
 \fBbufsplit()\fR changes the delimiters to null bytes in \fIbuf\fR.
-.sp
-.LP
-When compiling multithreaded applications, the \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should only be used in multithreaded
-applications.
 .SH ATTRIBUTES
 .sp
 .LP

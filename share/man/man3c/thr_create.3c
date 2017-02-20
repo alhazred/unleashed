@@ -262,7 +262,6 @@ or
 .sp
 .in +2
 .nf
-#define _REENTRANT    /* basic 3-lines for threads */
 #include <pthread.h>
 #include <thread.h>
 #define NUM_THREADS 5

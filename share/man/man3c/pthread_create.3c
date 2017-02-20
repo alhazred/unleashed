@@ -198,8 +198,7 @@ The command-line to time this process is:
 .sp
 .in +2
 .nf
-/* cc thisfile.c -lthread -lpthread */
-#define _REENTRANT    /* basic 3-lines for threads */
+/* cc thisfile.c */
 #include <pthread.h>
 #include <thread.h>
 

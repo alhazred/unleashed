@@ -297,7 +297,6 @@ for (i = 0; i < 100; i++)
 .sp
 .in +2
 .nf
-#define _REENTRANT
 #include <thread.h>
 #include <stdio.h>
 #include <umem.h>

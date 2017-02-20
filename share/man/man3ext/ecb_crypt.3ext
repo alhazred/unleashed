@@ -121,9 +121,3 @@ MT-Level	MT-Safe
 .sp
 .LP
 \fBcrypt\fR(3C), \fBattributes\fR(5)
-.SH NOTES
-.sp
-.LP
-When compiling multi-thread applications, the \fB_REENTRANT\fR flag must be
-defined on the compile line.  This flag should only be used in multi-thread
-applications.
