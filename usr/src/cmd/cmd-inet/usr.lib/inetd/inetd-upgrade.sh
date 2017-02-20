@@ -32,8 +32,6 @@ inetd_obsolete_instances="
 	network/rexec:tcp
 	network/rexec:tcp6
 	network/rpc/gss:ticotsord
-	network/rpc/mdcomm:tcp
-	network/rpc/mdcomm:tcp6
 	network/rpc/meta:tcp
 	network/rpc/meta:tcp6
 	network/rpc/metamed:tcp
