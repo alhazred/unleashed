@@ -4517,10 +4517,8 @@ hermon_intr_or_msi_fini(hermon_state_t *state)
 			return (DDI_FAILURE);
 		}
 	}
-	if (state->hs_intr_cb_hdl) {
-		(void) ddi_cb_unregister(state->hs_intr_cb_hdl);
-		state->hs_intr_cb_hdl = NULL;
-	}
+	(void) ddi_cb_unregister(state->hs_intr_cb_hdl);
+	state->hs_intr_cb_hdl = NULL;
 	return (DDI_SUCCESS);
 }
 
