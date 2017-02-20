@@ -118,7 +118,7 @@ SYMBOL_VERSION SUNW_1.1 {		# SunOS 5.6 (Solaris 2.6)
 	clnt_create_vers_timed	{ TYPE = FUNCTION };
 	clnt_door_create	{ TYPE = FUNCTION };
 $if _ELF32
-	_new_svc_fdset	{ TYPE = DATA; SIZE = 0x80 };
+	_new_svc_fdset	{ TYPE = DATA; SIZE = 0x2000 };
 $endif
 	rpc_gss_getcred	{ TYPE = FUNCTION };
 	rpc_gss_get_error	{ TYPE = FUNCTION };
@@ -332,16 +332,7 @@ $error unknown ELFCLASS
 $endif
         };
 	rpc_broadcast_exp	{ TYPE = FUNCTION };
-	svc_fdset	{
-                TYPE = DATA;
-$if _ELF32
-                SIZE = 0x80;
-$elif _ELF64
-                SIZE = 0x2000;
-$else
-$error unknown ELFCLASS
-$endif
-        };
+	svc_fdset	{ TYPE = DATA; SIZE = 0x2000; };
 $if _ELF32
 } SYSVABI_1.3;
 
