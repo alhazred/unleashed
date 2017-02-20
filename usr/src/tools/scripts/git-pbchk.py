@@ -48,7 +48,7 @@ sys.path.insert(2, os.path.join(os.path.dirname(__file__), ".."))
 
 from onbld.Scm import Ignore
 from onbld.Checks import Comments, Copyright, CStyle, HdrChk
-from onbld.Checks import JStyle, Keywords, ManLint, Mapfile, SpellCheck
+from onbld.Checks import Keywords, ManLint, Mapfile, SpellCheck
 
 
 class GitError(Exception):
@@ -279,16 +279,6 @@ def cstyle(root, parent, flist, output):
     return ret
 
 
-def jstyle(root, parent, flist, output):
-    ret = 0
-    output.write("Java style:\n")
-    for f in flist(lambda x: x.endswith('.java')):
-        fh = open(f, 'r')
-        ret |= JStyle.jstyle(fh, output=output, picky=True)
-        fh.close()
-    return ret
-
-
 def manlint(root, parent, flist, output):
     ret = 0
     output.write("Man page format/spelling:\n")
@@ -339,7 +329,6 @@ def nits(root, parent, paths):
     cmds = [copyright,
             cstyle,
             hdrchk,
-            jstyle,
             keywords,
             manlint,
             mapfilechk]
@@ -351,7 +340,6 @@ def pbchk(root, parent, paths):
             copyright,
             cstyle,
             hdrchk,
-            jstyle,
             keywords,
             manlint,
             mapfilechk]

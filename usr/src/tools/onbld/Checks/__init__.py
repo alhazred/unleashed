@@ -38,7 +38,6 @@ __all__ = [
 	'Copyright',
 	'CStyle',
 	'HdrChk',
-	'JStyle',
 	'Keywords',
 	'ManLint',
 	'Mapfile',

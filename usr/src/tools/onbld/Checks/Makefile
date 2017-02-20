@@ -38,7 +38,6 @@ PYSRCS = \
 	Copyright.py	\
 	DbLookups.py	\
 	HdrChk.py	\
-	JStyle.py	\
 	Keywords.py	\
 	ManLint.py	\
 	Mapfile.py	\

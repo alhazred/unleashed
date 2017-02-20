@@ -41,7 +41,6 @@ PERLFILES= \
 	find_elf \
 	interface_check \
 	interface_cmp \
-	jstyle \
 	validate_paths \
 	wdiff
 
@@ -73,7 +72,6 @@ MAN1ONBLDFILES= \
 	hdrchk.1onbld \
 	interface_check.1onbld \
 	interface_cmp.1onbld \
-	jstyle.1onbld \
 	mapfilechk.1onbld \
 	webrev.1onbld \
 	which_scm.1onbld \
