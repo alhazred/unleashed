@@ -40,8 +40,7 @@ PERLFILES= \
 	find_elf \
 	interface_check \
 	interface_cmp \
-	validate_paths \
-	wdiff
+	validate_paths
 
 PERLMODULES= \
 	onbld_elfmod.pm \

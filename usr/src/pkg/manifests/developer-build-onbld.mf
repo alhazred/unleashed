@@ -97,7 +97,6 @@ file path=opt/onbld/bin/mapfilechk mode=0555
 file path=opt/onbld/bin/protocmp.terse mode=0555
 file path=opt/onbld/bin/validate_paths mode=0555
 file path=opt/onbld/bin/validate_pkg mode=0555
-file path=opt/onbld/bin/wdiff mode=0555
 file path=opt/onbld/bin/which_scm mode=0555
 file path=opt/onbld/bin/wsdiff mode=0555
 file path=opt/onbld/etc/SampleLinks
