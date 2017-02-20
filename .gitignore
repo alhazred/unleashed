@@ -10,15 +10,11 @@ cscope.po.out
 /log
 /packages
 /proto
-/closed
 /usr/src/.build.tstamp
 /usr/src/ELF-data.*
 /usr/src/check-*.out
 /usr/src/clobber-*.out
 /usr/src/install-*.out
-/usr/src/lint-*.out
-/usr/src/lint-noise-*.out
-/usr/src/lint-noise-*.ref
 /usr/src/noise-*.out
 /usr/src/noise-*.ref
 /usr/src/tools/clobber-*.out
