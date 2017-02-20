@@ -451,8 +451,7 @@ Where:
 
 	<env_file>  file in Bourne shell syntax that sets and exports
 	variables that configure the operation of this script and many of
-	the scripts this one calls. If <env_file> does not exist,
-	it will be looked for in $OPTHOME/onbld/env.
+	the scripts this one calls.
 
 non-DEBUG is the default build type. Build options can be set in the
 NIGHTLY_OPTIONS variable in the <env_file> as follows:
@@ -590,12 +589,8 @@ if [ -f $1 ]; then
 		. ./$1
 	fi
 else
-	if [ -f $OPTHOME/onbld/env/$1 ]; then
-		. $OPTHOME/onbld/env/$1
-	else
-		echo "Cannot find env file as either $1 or $OPTHOME/onbld/env/$1"
-		exit 1
-	fi
+	echo "Cannot find env file as either $1"
+	exit 1
 fi
 
 # Check if we have sufficient data to continue...

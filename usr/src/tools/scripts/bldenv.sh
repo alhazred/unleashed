@@ -196,14 +196,9 @@ if [[ -f "$1" ]]; then
 		source "./$1"
 	fi
 else
-	if [[ -f "/opt/onbld/env/$1" ]]; then
-		source "/opt/onbld/env/$1"
-	else
-		printf \
-		    'Cannot find env file as either %s or /opt/onbld/env/%s\n' \
-		    "$1" "$1"
-		exit 1
-	fi
+	printf \
+	    'Cannot find env file as either %s\n' "$1"
+	exit 1
 fi
 shift
 

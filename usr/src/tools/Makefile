@@ -31,7 +31,6 @@ COMMON_SUBDIRS= \
 	codereview \
 	ctf \
 	depcheck \
-	env \
 	findunref \
 	ndrgen \
 	onbld \
@@ -68,7 +67,6 @@ ROOTDIRS= \
 	$(ROOTONBLD)/lib/python$(PYTHON_VERSION)/onbld \
 	$(ROOTONBLD)/lib/python$(PYTHON_VERSION)/onbld/Checks \
 	$(ROOTONBLD)/lib/python$(PYTHON_VERSION)/onbld/Scm \
-	$(ROOTONBLD)/env \
 	$(ROOTONBLD)/etc \
 	$(ROOTONBLD)/etc/exception_lists \
 	$(ROOTONBLD)/man \

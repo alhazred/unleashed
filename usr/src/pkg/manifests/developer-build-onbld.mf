@@ -44,7 +44,6 @@ dir path=opt group=sys
 dir path=opt/onbld
 dir path=opt/onbld/bin
 dir path=opt/onbld/bin/$(ARCH)
-dir path=opt/onbld/env
 dir path=opt/onbld/etc
 dir path=opt/onbld/etc/exception_lists
 dir path=opt/onbld/lib
@@ -105,7 +104,6 @@ file path=opt/onbld/bin/webrev mode=0555
 file path=opt/onbld/bin/which_scm mode=0555
 file path=opt/onbld/bin/ws mode=0555
 file path=opt/onbld/bin/wsdiff mode=0555
-file path=opt/onbld/env/illumos
 file path=opt/onbld/etc/SampleLinks
 file path=opt/onbld/etc/SamplePkgLinks
 file path=opt/onbld/etc/exception_lists/check_rtime
