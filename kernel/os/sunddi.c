@@ -9065,8 +9065,6 @@ ddi_cb_unregister(ddi_cb_handle_t hdl)
 	ddi_cb_t	*cbp;
 	dev_info_t	*dip;
 
-	ASSERT(hdl != NULL);
-
 	/* Sanity check the context */
 	ASSERT(!servicing_interrupt());
 	if (servicing_interrupt())
