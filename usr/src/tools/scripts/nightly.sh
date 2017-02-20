@@ -583,10 +583,6 @@ unset ONBLD_TOOLS
 #
 #	Setup environmental variables
 #
-if [ -f /etc/nightly.conf ]; then
-	. /etc/nightly.conf
-fi    
-
 if [ -f $1 ]; then
 	if [[ $1 = */* ]]; then
 		. $1

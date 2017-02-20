@@ -328,8 +328,7 @@ defined in the environment file will be available.
 .LP
 .B SYS_PRE_NIGHTLY
 .RS 5
-This is reserved for per-build-machine customizations and should be set only
-in /etc/nightly.conf
+This is reserved for per-build-machine customizations.
 .RE
 .LP
 .B PRE_NIGHTLY
@@ -349,15 +348,6 @@ environment variable NIGHTLY_STATUS.
 This is reserved for per-build-machine customizations, and runs
 immedately after POST_NIGHTLY.
 .RE
-.SH FILES
-.LP
-.RS 5
-/etc/nightly.conf
-.RE
-.LP
-If present, nightly executes this file just prior to executing the
-.I env
-file.
 .SH EXAMPLES
 .LP
 Start with the example file in usr/src/tools/env/developer.sh

@@ -188,9 +188,6 @@ unset \
 #
 # Setup environment variables
 #
-if [[ -f /etc/nightly.conf ]]; then
-	source /etc/nightly.conf
-fi
 
 if [[ -f "$1" ]]; then
 	if [[ "$1" == */* ]]; then
