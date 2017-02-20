@@ -70,7 +70,7 @@ MY_NATIVE_CPPFLAGS =\
 		-DNATIVE_BUILD $(DTEXTDOM) \
 		-I../inc -I$(COMDIR) -I$(LIBUUTIL)/common -I$(ROOTHDRDIR)
 MY_NATIVE_LDLIBS = -L$(LIBUUTIL)/native -R$(LIBUUTIL)/native -luutil -lc -lgen \
-		 -lnvpair -lnsl
+		 -lnvpair
 MY_NATIVE_LDLIBS_i386 = -lsmbios
 MY_NATIVE_LDLIBS += $(MY_NATIVE_LDLIBS_$(MACH))
 
