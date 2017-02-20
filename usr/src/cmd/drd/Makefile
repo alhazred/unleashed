@@ -54,7 +54,7 @@ $(ROOTMANIFEST)		:= FILEMODE= 444
 #
 # FLAGS:
 #
-CPPFLAGS= 	-I$(SRC)/uts/sun4v $(CPPFLAGS.master) -D_REENTRANT
+CPPFLAGS= 	-I$(SRC)/uts/sun4v $(CPPFLAGS.master)
 
 XGETFLAGS +=	-a -s -x $(PROG).xcl
 

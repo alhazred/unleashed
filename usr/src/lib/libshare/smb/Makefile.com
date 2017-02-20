@@ -48,7 +48,7 @@ LDLIBS +=	-lshare -lscf -luuid -ldlpi -lnvpair -lxml2 -lumem -lc
 
 CERRWARN +=	-Wno-char-subscripts
 CERRWARN +=	-Wno-switch
-CPPFLAGS +=	-D_REENTRANT -I$(ADJUNCT_PROTO)/usr/include/libxml2 \
+CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/libxml2 \
   		-I$(SRCDIR)/../common
 
 .KEEP_STATE:

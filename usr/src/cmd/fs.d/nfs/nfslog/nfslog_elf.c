@@ -27,8 +27,6 @@
  * nfs log - read buffer file and print structs in user-readable form
  */
 
-#define	_REENTRANT
-
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>

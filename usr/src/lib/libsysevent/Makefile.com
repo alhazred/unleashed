@@ -38,7 +38,7 @@ include ../../Makefile.rootfs
 
 LIBS =		$(DYNLIB)
 
-CPPFLAGS +=	-D_REENTRANT -I..
+CPPFLAGS +=	-I..
 LDLIBS +=	-lnvpair -lc
 
 .KEEP_STATE:

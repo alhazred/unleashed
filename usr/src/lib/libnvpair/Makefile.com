@@ -56,7 +56,6 @@ CERRWARN +=	-Wno-type-limits
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 
-CPPFLAGS +=	-D_REENTRANT
 
 C99MODE=	$(C99_ENABLE)
 

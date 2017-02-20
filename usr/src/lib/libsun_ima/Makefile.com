@@ -45,7 +45,6 @@ LDLIBS +=	-lsysevent
 
 CERRWARN +=	-Wno-parentheses
 
-CPPFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	-DSOLARIS
 CPPFLAGS += -I$(CODEMGR_WS)/include
 

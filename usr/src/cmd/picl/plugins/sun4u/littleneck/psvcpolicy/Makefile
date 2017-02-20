@@ -45,7 +45,6 @@ PLATFORM=SUNW,Sun-Fire-280R
 
 CPPFLAGS +=	-I$(SRC)/uts/sun4u
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/sun4u/psvc/psvcobj
-CPPFLAGS +=	-D_REENTRANT
 
 ZDEFS  =
 LDLIBS +=	-L$(SRC)/lib/libpicl/$(MACH) -L$(SRC)/lib/libpicltree/$(MACH)

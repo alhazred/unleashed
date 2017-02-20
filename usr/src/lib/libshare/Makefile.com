@@ -41,7 +41,7 @@ LDLIBS +=	-lc -lscf -lzfs -luuid -lxml2 -lnvpair
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-switch
-CPPFLAGS +=	-D_REENTRANT -I$(NFSLIB_DIR) \
+CPPFLAGS +=	-I$(NFSLIB_DIR) \
 		-I$(ADJUNCT_PROTO)/usr/include/libxml2
 
 .KEEP_STATE:

@@ -43,7 +43,7 @@ OPENSSLLIBS64=	$(BERLIB64) -lcrypto -lcryptoutil -lc
 SRCDIR=		../common
 INCDIR=		../../include
 
-CPPFLAGS	+=	-D_REENTRANT $(KMFINC) \
+CPPFLAGS	+=	$(KMFINC) \
 			-I$(INCDIR) -I$(ADJUNCT_PROTO)/usr/include/libxml2
 
 CERRWARN	+=	-Wno-unused-label

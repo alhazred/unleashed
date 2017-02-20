@@ -41,7 +41,7 @@ LDLIBS +=	-lpctx -lnvpair -lc
 SRCDIR =	../common
 
 ASFLAGS +=	-D_ASM -I../common
-CPPFLAGS +=	-D_REENTRANT -I../common
+CPPFLAGS +=	-I../common
 
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-uninitialized

@@ -54,7 +54,6 @@ INFOS=		$(CONF:%.conf=%.info)
 CLOBBERFILES += $(LIBLINKS)
 
 CPPFLAGS +=	-I$(SRC)/lib/libdevfsevent -I$(SRC)/uts/common
-CPPFLAGS +=	-D_REENTRANT
 
 DEVTREE_SRC_DIR = $(SRC)/cmd/picl/plugins/common/devtree
 LDLIBS +=       -L$(DEVTREE_SRC_DIR)

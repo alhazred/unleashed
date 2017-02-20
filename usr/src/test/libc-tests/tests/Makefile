@@ -48,7 +48,6 @@ PROGS = \
 SCRIPTS = \
 	quick_exit
 
-CPPFLAGS += -D_REENTRANT
 
 PROGS32 = $(PROGS:%=%.32)
 PROGS64 = $(PROGS:%=%.64)

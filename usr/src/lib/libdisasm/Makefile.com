@@ -116,15 +116,7 @@ ASFLAGS += $(ASFLAGS_$(CURTYPE)) -D_ASM
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 
-# We want the thread-specific errno in the library, but we don't want it in
-# the standalone.  $(DTS_ERRNO) is designed to add -D_TS_ERRNO to $(CPPFLAGS),
-# in order to enable this feature.  Conveniently, -D_REENTRANT does the same
-# thing.  As such, we null out $(DTS_ERRNO) to ensure that the standalone
-# doesn't get it.
-DTS_ERRNO=
-
 CPPFLAGS_standalone = -DDIS_STANDALONE -I$(SRC)/cmd/mdb/common
-CPPFLAGS_library = -D_REENTRANT
 CPPFLAGS +=	-I$(COMDIR) $(CPPFLAGS_$(CURTYPE))
 
 # For the x86 disassembler we have to include sources from usr/src/common

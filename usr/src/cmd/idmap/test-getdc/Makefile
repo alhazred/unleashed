@@ -39,7 +39,7 @@ LDFLAGS +=	-R'$$ORIGIN/../lib'
 INCS += -I. -I../../../lib/libadutils/common
 
 
-$(OBJS) :=	CPPFLAGS += $(INCS) -D_REENTRANT
+$(OBJS) :=	CPPFLAGS += $(INCS)
 $(POFILE) :=	CPPFLAGS += $(INCS)
 
 .KEEP_STATE:

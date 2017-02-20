@@ -71,9 +71,7 @@ CERRWARN += -Wno-unused-label
 CERRWARN += -Wno-switch
 CERRWARN += -Wno-uninitialized
 
-$(OBJS) := CPPFLAGS += -D_FILE_OFFSET_BITS=64 -D_REENTRANT
-
-proc.o := CPPFLAGS += -D_REENTRANT
+$(OBJS) := CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 %.o:	../common/%.c
 	$(COMPILE.c) $(OUTPUT_OPTION) $<

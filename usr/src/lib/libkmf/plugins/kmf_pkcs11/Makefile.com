@@ -48,7 +48,7 @@ SRCS =  \
         $(BIGNUM_COBJECTS:%.o=$(BIGNUMDIR)/%.c)
 
 
-CPPFLAGS	+=	-D_REENTRANT $(KMFINC) -I$(INCDIR) \
+CPPFLAGS	+=	$(KMFINC) -I$(INCDIR) \
 			-I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(BIGNUMDIR)
 
 CERRWARN	+=	-Wno-unused-label

@@ -111,8 +111,6 @@ clean:=		TARGET= clean
 clobber:=	TARGET= clobber
 
 rpc.rstatd:=	LDLIBS += -lkstat
-rwall:=		CPPFLAGS += -D_REENTRANT
-rpc.rwalld:=	CPPFLAGS += -D_REENTRANT
 
 # install rules
 

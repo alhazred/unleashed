@@ -51,7 +51,6 @@ SRCS=   $(OBJS_COMMON:%.o=$(SRCDIR)/%.c)	\
 LDLIBS +=	$(MACH_LDLIBS)
 LDLIBS +=	-lsmb -lads -lgss -lcmdutils -lldap \
 		 -lc -lkrb5
-CPPFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	-Dsyslog=smb_syslog
 CERRWARN +=	-Wno-unused-function
 CERRWARN +=	-Wno-uninitialized

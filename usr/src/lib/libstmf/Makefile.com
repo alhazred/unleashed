@@ -38,7 +38,7 @@ INCS += -I$(SRCDIR)
 
 C99MODE=	$(C99_ENABLE)
 LDLIBS +=	-lc -lnvpair -lscf -lm
-CPPFLAGS +=	$(INCS) -D_REENTRANT
+CPPFLAGS +=	$(INCS)
 
 CERRWARN +=	-Wno-unused-label
 

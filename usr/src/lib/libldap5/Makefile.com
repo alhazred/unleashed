@@ -86,7 +86,6 @@ DYNFLAGS +=	$(ZNODELETE)
 CPPFLAGS=	$(COM_INC) $(CPPFLAGS.master)
 
 # Local Libldap definitions
-LOCFLAGS +=	 -D_REENTRANT
 
 # Following values defined in Makefile.master are overwritten here.
 #sparc_C_PICFLAGS =	$(sparc_C_BIGPICFLAGS)

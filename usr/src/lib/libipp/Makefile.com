@@ -36,7 +36,6 @@ include ../../Makefile.lib
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lnvpair
 
-CPPFLAGS +=	-D_REENTRANT
 
 .KEEP_STATE:
 

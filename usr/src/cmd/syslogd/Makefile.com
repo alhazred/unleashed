@@ -35,7 +35,7 @@ include ../../Makefile.cmd
 
 $(PROG)		:= LDLIBS += -lscf
 CERRWARN	+= -Wno-uninitialized
-CPPFLAGS	+= -D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT
+CPPFLAGS	+= -D_POSIX_PTHREAD_SEMANTICS
 CFLAGS		+= -DNDEBUG
 
 # there's some extra utility code defined but not used.

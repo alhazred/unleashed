@@ -34,7 +34,6 @@ ROOTMANIFESTDIR = $(ROOTSVCSYSTEM)
 LIBBSM = $(SRC)/lib/libbsm/common
 AUDITD = $(SRC)/cmd/auditd
 
-CPPFLAGS += -D_REENTRANT
 CPPFLAGS += -I$(LIBBSM) -I$(AUDITD)
 
 CERRWARN += -Wno-parentheses

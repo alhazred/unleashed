@@ -50,10 +50,10 @@ SRCDIR =	.
 C99MODE=	$(C99_DISABLE)
 
 # We really want to say this:
-#	CPPFLAGS += -DDEBUG -DSYSV -D_REENTRANT -I. -I../common/inc
+#	CPPFLAGS += -DDEBUG -DSYSV -I. -I../common/inc
 # but some system header files are replaced by local versions
 # so we must put -I. ahead of the default include directories:
-CPPFLAGS = -I. -I../common/inc $(CPPFLAGS.master) -DDEBUG -DSYSV -D_REENTRANT
+CPPFLAGS = -I. -I../common/inc $(CPPFLAGS.master) -DDEBUG -DSYSV
 LDLIBS += -lc
 
 CERRWARN += -Wno-parentheses

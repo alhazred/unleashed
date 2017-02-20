@@ -51,7 +51,7 @@ LIBNAME=	passwdutil
 LIBS=		$(DYNLIB)
 LDLIBS		+= -lsldap -lc
 
-CPPFLAGS	+= -DENABLE_SUNOS_AGING -D_REENTRANT \
+CPPFLAGS	+= -DENABLE_SUNOS_AGING \
 		   -I$(SRC)/lib/libsldap/common -I$(SRC)/lib/libc/inc
 
 CERRWARN	+= -Wno-switch

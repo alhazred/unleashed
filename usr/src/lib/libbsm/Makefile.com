@@ -82,7 +82,6 @@ COMDIR=		../common
 AUDITD=		$(SRC)/cmd/auditd
 
 CPPFLAGS += -I$(COMDIR) -I$(AUDITD)
-CPPFLAGS += -D_REENTRANT
 
 #
 # message catalogue file

@@ -74,15 +74,8 @@ ASFLAGS_standalone = -DDIS_STANDALONE
 ASFLAGS_library =
 ASFLAGS += $(ASFLAGS_$(CURTYPE)) -D_ASM
 
-# We want the thread-specific errno in the library, but we don't want it in
-# the standalone.  $(DTS_ERRNO) is designed to add -D_TS_ERRNO to $(CPPFLAGS),
-# in order to enable this feature.  Conveniently, -D_REENTRANT does the same
-# thing.  As such, we null out $(DTS_ERRNO) to ensure that the standalone
-# doesn't get it.
-DTS_ERRNO=
-
 CPPFLAGS_standalone = -DDIS_STANDALONE
-CPPFLAGS_library = -D_REENTRANT
+CPPFLAGS_library =
 CPPFLAGS +=	-I$(COMDIR) $(CPPFLAGS_$(CURTYPE))
 
 CFLAGS_standalone = $(STAND_FLAGS_32)

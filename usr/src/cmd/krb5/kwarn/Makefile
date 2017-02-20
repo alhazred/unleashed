@@ -49,7 +49,6 @@ POFILE = $(PROG).po
 POFILES = generic.po
 
 COPTFLAG +=	#-I$(KINCDIR) 
-CPPFLAGS +=	-D_REENTRANT
 
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-unused-function

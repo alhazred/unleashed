@@ -47,7 +47,7 @@ INCS += -I$(SRC)/common/smbsrv
 LDLIBS +=	$(MACH_LDLIBS)
 LDLIBS +=	-lsmb -luuid -lc
 
-CPPFLAGS += $(INCS) -D_REENTRANT
+CPPFLAGS += $(INCS)
 
 SRCS=   $(OBJS_COMMON:%.o=$(SRCDIR)/%.c)		\
 	$(OBJS_SHARED:%.o=$(SRC)/common/smbsrv/%.c)

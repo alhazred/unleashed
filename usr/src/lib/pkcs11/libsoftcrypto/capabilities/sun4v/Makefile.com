@@ -32,7 +32,7 @@ OBJECTS =	$(ARCFOUR_OBJS) $(BIGNUM_OBJS)
 
 include		$(SRC)/lib/Makefile.lib
 
-AS_CPPFLAGS +=	-D_ASM -DPIC -D_REENTRANT -D$(MACH)
+AS_CPPFLAGS +=	-D_ASM -DPIC -D$(MACH)
 ASFLAGS +=	$(AS_PICFLAGS)
 CFLAGS +=	-fno-strict-aliasing
 CFLAGS +=	-fno-unit-at-a-time

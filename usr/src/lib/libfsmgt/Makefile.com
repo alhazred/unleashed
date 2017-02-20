@@ -46,7 +46,7 @@ LDLIBS +=	-lc -lkstat
 
 SRCDIR =	../common
 
-CPPFLAGS +=	-D_REENTRANT -I$(SRC)/lib/libfsmgt/common \
+CPPFLAGS +=	-I$(SRC)/lib/libfsmgt/common \
 		-I$(SRC)/cmd/fs.d/nfs/lib
 
 CERRWARN	+= -Wno-parentheses

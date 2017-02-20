@@ -41,7 +41,7 @@ SRCDIR =	../common
 
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-uninitialized
-CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
+CPPFLAGS +=	-I$(SRCDIR)
 
 .KEEP_STATE:
 

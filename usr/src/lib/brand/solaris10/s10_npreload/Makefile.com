@@ -39,7 +39,7 @@ CSRCS =		$(COBJS:%o=../common/%c)
 SRCS =		$(CSRCS)
 SRCDIR =	../common
 
-CPPFLAGS +=	-D_REENTRANT -U_ASM -I../sys \
+CPPFLAGS +=	-U_ASM -I../sys \
 		-I$(UTSBASE)/common/brand/solaris10
 DYNFLAGS +=	$(BLOCAL) $(ZNOVERSION)
 LDLIBS +=	-lc

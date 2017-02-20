@@ -49,7 +49,6 @@ DYNFLAGS_COM =		/usr/lib/picl/plugins
 CPPFLAGS +=	-I$(SRC)/uts/sun4u
 CPPFLAGS += 	-I$(ROOT)/usr/platform/sun4u/include
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/sun4u/psvc/psvcobj
-CPPFLAGS +=	-D_REENTRANT
 
 ZDEFS  =
 LDLIBS +=	-L$(ROOT)/usr/lib

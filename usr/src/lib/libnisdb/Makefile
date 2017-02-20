@@ -136,7 +136,6 @@ $(LARGEPICS) :=	sparc_C_PICFLAGS = $(C_BIGPICFLAGS)
 $(LARGEPICS) :=	i386_C_PICFLAGS = $(C_BIGPICFLAGS)
 
 
-CPPFLAGS +=	-D_REENTRANT
 
 # Have an unused variable that can't be removed
 UVAR_PICS = \

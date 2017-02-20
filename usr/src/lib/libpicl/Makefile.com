@@ -34,7 +34,7 @@ include $(SRC)/lib/Makefile.lib
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 
-CPPFLAGS +=	-I.. -D_REENTRANT
+CPPFLAGS +=	-I..
 
 XGETFLAGS +=	-a
 POFILE =	picl.po

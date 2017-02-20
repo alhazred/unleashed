@@ -35,7 +35,7 @@ include		$(SRC)/lib/Makefile.lib
 IFLAGS =	-I$(SRC)/uts/$(GEN_PLATFORM) \
 		-I$(ROOT)/usr/platform/$(GEN_PLATFORM)/include
 
-AS_CPPFLAGS +=	-D_ASM -DPIC -D_REENTRANT -D$(MACH) $(IFLAGS)
+AS_CPPFLAGS +=	-D_ASM -DPIC -D$(MACH) $(IFLAGS)
 ASFLAGS =
 
 # memcpy.s provides __align_cpy_1 as an alias for memcpy.  However, this isn't

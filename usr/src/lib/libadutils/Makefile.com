@@ -38,7 +38,7 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lldap -lresolv -lc
 SRCDIR =	../common
 
-CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR)
+CPPFLAGS +=	-I$(SRCDIR)
 CPPFLAGS +=	-I$(SRC)/lib/libldap5/include/ldap
 
 CERRWARN +=	-Wno-type-limits

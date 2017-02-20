@@ -38,7 +38,7 @@ LDLIBS += -lzpool -lzfs -lnvpair
 
 C99MODE=	$(C99_ENABLE)
 
-CPPFLAGS += -D_LARGEFILE64_SOURCE=1 -D_REENTRANT $(INCS)
+CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS)
 
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-switch

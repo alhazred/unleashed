@@ -263,7 +263,6 @@ CERRWARN +=	-Wno-address
 
 MAPFILES =	../mapfile-vers
 
-#CPPFLAGS += 	-D_REENTRANT
 
 LIBS = $(DYNLIB) $(K5LIBLINK)
 

@@ -23,9 +23,6 @@
  * Use is subject to license terms.
  */
 
-
-#define	_REENTRANT
-
 #include <ctype.h>
 #include <errno.h>
 #include <grp.h>

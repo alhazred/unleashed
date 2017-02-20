@@ -49,7 +49,7 @@ SRCDIR =	../common
 # Relative path to ensure path to idmap_prot.h is also relative
 IDMAP_PROT_X =		../../../uts/common/rpcsvc/idmap_prot.x
 
-CPPFLAGS +=	-D_REENTRANT -I$(SRCDIR)
+CPPFLAGS +=	-I$(SRCDIR)
 
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-switch

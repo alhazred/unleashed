@@ -37,7 +37,7 @@ ROOTBIN =	$(ROOTBRANDDIR)
 
 UTSBASE =	$(SRC)/uts
 
-CPPFLAGS +=	-D_REENTRANT -I$(UTSBASE)/common/brand/solaris10
+CPPFLAGS +=	-I$(UTSBASE)/common/brand/solaris10
 LDLIBS +=	-lzonecfg
 
 .KEEP_STATE:

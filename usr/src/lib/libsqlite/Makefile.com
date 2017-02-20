@@ -89,7 +89,7 @@ SRCS = \
 	$(SRCDIR)/where.c	\
 	$(SRCDIR)/trigger.c
 
-MYCPPFLAGS = -D_REENTRANT -DTHREADSAFE=1 -DHAVE_USLEEP=1 -I. -I.. -I$(SRCDIR)
+MYCPPFLAGS = -DTHREADSAFE=1 -DHAVE_USLEEP=1 -I. -I.. -I$(SRCDIR)
 CPPFLAGS += $(MYCPPFLAGS)
 
 CERRWARN += -Wno-implicit-function-declaration

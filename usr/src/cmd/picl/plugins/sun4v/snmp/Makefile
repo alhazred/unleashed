@@ -46,7 +46,6 @@ ROOT_PLATFORM =	$(USR_PLAT_DIR)/sun4v
 ROOTLIBDIR =	$(ROOT_PLAT_PLUGINDIR)
 
 CPPFLAGS +=	-I. -I../include -I$(SRC)/uts/common/sys
-CPPFLAGS +=	-D_REENTRANT
 
 #
 # Be careful when enabling SNMPPLUGIN_DEBUG. The debug log can quickly

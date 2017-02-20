@@ -42,7 +42,7 @@ LDLIBS +=	-lshare -lscf -lumem -luuid -lc -lxml2 -lsmbfs
 
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-uninitialized
-CPPFLAGS +=	-D_REENTRANT -I$(ADJUNCT_PROTO)/usr/include/libxml2 \
+CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/libxml2 \
 		-I$(SRCDIR)/../common -I$(SRC)/lib/libsmbfs -I$(SRC)/uts/common
 
 .KEEP_STATE:

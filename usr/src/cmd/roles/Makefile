@@ -35,7 +35,6 @@ ROOTBINROLES = $(ROLES:%=$(ROOTBIN)/%)
 
 .KEEP_STATE:
 
-CPPFLAGS +=	-D_REENTRANT
 LDLIBS +=	-lsecdb
 
 all: $(PROG) 

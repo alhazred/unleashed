@@ -32,7 +32,7 @@ include $(SRC)/lib/Makefile.lib
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 
-CPPFLAGS +=	-D_REENTRANT -I.. -I../../libpicl -I$(SRC)/cmd/picl/plugins/inc
+CPPFLAGS +=	-I.. -I../../libpicl -I$(SRC)/cmd/picl/plugins/inc
 
 CERRWARN +=	-Wno-uninitialized
 

@@ -38,7 +38,7 @@ ROOT_PLATFORM = $(USR_PLAT_DIR)/SUNW,A70
 
 include	$(SRC)/cmd/picl/plugins/Makefile.com
 
-CPPFLAGS +=	-D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
+CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/ -I$(SRC)/uts/common/
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/chicago
 CPPFLAGS +=     -I$(SRC)/cmd/picl/plugins/lib/picld_pluginutil

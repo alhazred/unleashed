@@ -42,7 +42,6 @@ ROOTMANIFESTDIR=	$(ROOTSVCNETWORKRPC)
 
 LDLIBS += -lbsm
 
-CPPFLAGS += -D_REENTRANT
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-unused-variable
 

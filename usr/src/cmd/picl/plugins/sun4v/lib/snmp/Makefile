@@ -49,7 +49,6 @@ ROOTLIBDIR      = $(ROOT_PLATFORM)/lib
 CLOBBERFILES += $(LIBLINKS)
 
 CPPFLAGS +=	-I. -I../../include -I$(SRC)/uts/sun4v
-CPPFLAGS +=	-D_REENTRANT
 
 #
 # Be careful when enabling SNMP_DEBUG; the debug log can quickly grow

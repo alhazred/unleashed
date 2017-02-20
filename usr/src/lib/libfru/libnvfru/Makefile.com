@@ -38,7 +38,6 @@ LIBS =		$(DYNLIB)
 CPPFLAGS +=	-I.. \
 		-I$(SRC)/lib/libfru/include \
 		-I$(SRC)/lib/libfruutils
-CPPFLAGS += 	-D_REENTRANT
 
 CERRWARN +=	-Wno-switch
 

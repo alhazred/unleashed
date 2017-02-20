@@ -39,7 +39,7 @@ LDLIBS +=	-lc -linetutil -ldladm
 SRCDIR =	../common
 
 CERRWARN +=	-Wno-uninitialized
-CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
+CPPFLAGS +=	-I$(SRCDIR)
 
 .KEEP_STATE:
 

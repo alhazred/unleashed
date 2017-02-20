@@ -46,7 +46,7 @@ $(NOT_RELEASE_BUILD)DEBUG = -DDEBUG
 $(NOT_RELEASE_BUILD)COPTFLAG =
 $(NOT_RELEASE_BUILD)COPTFLAG64 =
 
-CPPFLAGS = -I../inc -I../../common/inc $(CPPFLAGS.master) -D_REENTRANT $(DEBUG)
+CPPFLAGS = -I../inc -I../../common/inc $(CPPFLAGS.master) $(DEBUG)
 
 CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-parentheses

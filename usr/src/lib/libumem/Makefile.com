@@ -130,13 +130,6 @@ ASFLAGS += $(ASFLAGS_$(CURTYPE)) -D_ASM
 CERRWARN += -Wno-switch
 CERRWARN += -Wno-uninitialized
 
-# We want the thread-specific errno in the library, but we don't want it in
-# the standalone.  $(DTS_ERRNO) is designed to add -D_TS_ERRNO to $(CPPFLAGS),
-# in order to enable this feature.  Conveniently, -D_REENTRANT does the same
-# thing.  As such, we null out $(DTS_ERRNO) to ensure that the standalone
-# doesn't get it.
-DTS_ERRNO=
-
 # We need to rename some standard functions so we can easily implement them
 # in consumers.
 STAND_RENAMED_FUNCS= \
@@ -147,7 +140,7 @@ STAND_RENAMED_FUNCS= \
 	vsnprintf
 
 CPPFLAGS_standalone = -DUMEM_STANDALONE $(STAND_RENAMED_FUNCS:%=-D%=umem_%)
-CPPFLAGS_library = -D_REENTRANT
+CPPFLAGS_library = 
 CPPFLAGS +=	-I../common -I../../common/inc $(CPPFLAGS_$(CURTYPE))
 
 CFLAGS_standalone = $(STAND_FLAGS_32)

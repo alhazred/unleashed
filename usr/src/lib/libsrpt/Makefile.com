@@ -38,7 +38,7 @@ INCS +=		-I$(SRCDIR) -I$(SRPTMODDIR)
 
 C99MODE =	$(C99_ENABLE)
 LDLIBS +=	-lc -lnvpair -lstmf
-CPPFLAGS +=	$(INCS) -D_REENTRANT
+CPPFLAGS +=	$(INCS)
 
 .KEEP_STATE:
 

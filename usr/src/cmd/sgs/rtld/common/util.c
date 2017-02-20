@@ -3697,9 +3697,9 @@ machine_name(Syscapset *scapset)
 }
 
 /*
- * _REENTRANT code gets errno redefined to a function so provide for return
- * of the thread errno if applicable.  This has no meaning in ld.so.1 which
- * is basically singled threaded.  Provide the interface for our dependencies.
+ * errno gets redefined to a function so provide for return of the thread
+ * errno if applicable.  This has no meaning in ld.so.1 which is basically
+ * singled threaded.  Provide the interface for our dependencies.
  */
 #undef errno
 int *

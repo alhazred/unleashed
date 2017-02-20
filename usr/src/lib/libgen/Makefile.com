@@ -38,7 +38,7 @@ LDLIBS +=	-lc
 
 SRCDIR =	../common
 
-CPPFLAGS +=	-D_REENTRANT -D_LARGEFILE64_SOURCE -I../inc -I../../common/inc
+CPPFLAGS +=	-D_LARGEFILE64_SOURCE -I../inc -I../../common/inc
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-char-subscripts

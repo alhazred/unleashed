@@ -39,7 +39,7 @@ LIBSRCS = $(LIBOBJS:%.o=$(SRCDIR)/%.c)
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc
 
-CPPFLAGS +=	-D_REENTRANT -I$(SRC)/cmd/fs.d/nfs/lib
+CPPFLAGS +=	-I$(SRC)/cmd/fs.d/nfs/lib
 
 .KEEP_STATE:
 

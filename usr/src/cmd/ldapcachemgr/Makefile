@@ -39,7 +39,7 @@ OBJS=	cachemgr.o cachemgr_getldap.o cachemgr_parse.o cachemgr_change.o
 
 SRCS=	${OBJS:%.o=%.c} 
 
-CPPFLAGS += 	-D_REENTRANT -DSUN_THREADS \
+CPPFLAGS += 	-DSUN_THREADS \
 		-I$(SRC)/lib/libsldap/common \
 		-I$(SRC)/lib/libldap5/include/ldap \
 		-I$(SRC)/lib/libc/port/gen

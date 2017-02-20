@@ -98,7 +98,7 @@ install clean:
 $(POWERCONF): $(POWERCONF).$(MACH)
 
 $(DAEMON_OBJS): $(DAEMON_SRCS)
-	$(CC) $(CFLAGS) -D_REENTRANT $(CPPFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 	$(PROCESS_COMMENT) $@
 
 $(DAEMON): $(DAEMON_OBJS)

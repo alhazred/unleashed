@@ -86,7 +86,7 @@ LDLIBS +=	$(MACH_LDLIBS)
 LDLIBS += -lmlrpc -lsmb -lsmbns -lshare -lsmbfs -lpkcs11 \
 	-lscf -lcmdutils -lsec -lavl -lnvpair -luutil -luuid -lgen -lzfs -lc
 
-CPPFLAGS += $(INCS) -D_REENTRANT
+CPPFLAGS += $(INCS)
 CPPFLAGS += -Dsyslog=smb_syslog
 
 CERRWARN += -Wno-unused-function

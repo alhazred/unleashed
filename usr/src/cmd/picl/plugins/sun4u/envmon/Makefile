@@ -47,7 +47,6 @@ ROOTLIBDIR	= $(ROOT_PLAT_PLUGINDIR)
 
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/ -I$(SRC)/uts/common/
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/lib/picld_pluginutil
-CPPFLAGS +=	-D_REENTRANT
 DYNFLAGS +=	-R/usr/platform/sun4u/lib/picl/plugins:/usr/lib/picl/plugins
 LDLIBS +=	-L$(SRC)/cmd/picl/plugins/lib/picld_pluginutil/$(MACH)
 LDLIBS +=	-L$(SRC)/lib/libpicltree/$(MACH)

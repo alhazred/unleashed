@@ -39,7 +39,7 @@ LIBS = $(DYNLIB)
 
 CLEANFILES +=	$(DERIVED_FILES:%=../common/%)
 
-CPPFLAGS += -D_REENTRANT -I$(SRC)/cmd/smserverd/
+CPPFLAGS += -I$(SRC)/cmd/smserverd/
 
 CERRWARN +=	-Wno-unused-variable
 

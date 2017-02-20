@@ -76,7 +76,7 @@ FMRIMAP = $(SRC)/cmd/fm/fmd/common/fmd_fmri.map
 CFLAGS += $(CTF_FLAGS) $(CC_PICFLAGS)
 CFLAGS += $(GSHARED) $(XREGSFLAG) 
 
-CPPFLAGS += -D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT
+CPPFLAGS += -D_POSIX_PTHREAD_SEMANTICS
 LDFLAGS += $(ZDEFS) $(ZTEXT) $(ZIGNORE)
 
 MAPFILE-DMOD = $(SRC)/cmd/mdb/common/modules/conf/mapfile-extern

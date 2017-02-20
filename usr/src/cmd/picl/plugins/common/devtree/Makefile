@@ -50,7 +50,6 @@ CLOBBERFILES += $(LIBLINKS)
 CPPFLAGS +=	-I$(SRC)/lib/libsysevent -I$(SRC)/uts/common
 
 CFLAGS +=	$(C_PICFLAGS)
-CPPFLAGS +=	-D_REENTRANT
 LDLIBS +=	-L$(SRC)/lib/libsysevent -L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-lc -lkstat -ldevinfo -lpicltree -lnvpair
 LDLIBS +=	-L../piclevent -L$(ROOT)/usr/lib/picl/plugins -lpiclevent

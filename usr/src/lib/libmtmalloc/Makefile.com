@@ -37,7 +37,7 @@ SRCS =		../common/mtmalloc.c
 LIBS 		 = $(DYNLIB)
 LDLIBS 		+= -lc
 CFLAGS 		+= $(C_PICFLAGS)
-CPPFLAGS	+= -I../common -I../../common/inc -D_REENTRANT
+CPPFLAGS	+= -I../common -I../../common/inc
 DYNFLAGS 	+= $(ZINTERPOSE)
 
 CERRWARN	+= -Wno-uninitialized

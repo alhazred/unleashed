@@ -38,7 +38,6 @@ LDLIBS +=	 -lc
 
 SRCDIR =	../common
 
-CPPFLAGS +=	-D_REENTRANT
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized

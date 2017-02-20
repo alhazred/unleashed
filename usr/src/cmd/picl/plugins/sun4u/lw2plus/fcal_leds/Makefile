@@ -50,7 +50,6 @@ $(ROOTCONF)	:= FILEMODE = 0644
 
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/ -I$(SRC)/uts/common/
 CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS
-CPPFLAGS +=	-D_REENTRANT
 
 # Components of load time linker path.
 # These paths start at / on the target machine, so don't use $(ROOT).

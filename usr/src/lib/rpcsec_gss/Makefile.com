@@ -31,7 +31,7 @@ OBJECTS=rpcsec_gss.o rpcsec_gss_misc.o rpcsec_gss_utils.o svc_rpcsec_gss.o
 # include library definitions
 include ../../Makefile.lib
 
-CPPFLAGS +=     -D_REENTRANT -I$(SRC)/uts/common/gssapi/include  \
+CPPFLAGS +=     -I$(SRC)/uts/common/gssapi/include  \
 		-I$(SRC)/uts/common
 
 CERRWARN +=	-Wno-uninitialized

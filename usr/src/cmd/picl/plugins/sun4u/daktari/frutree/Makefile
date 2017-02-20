@@ -40,7 +40,6 @@ include $(SRC)/cmd/picl/plugins/Makefile.com
 
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/ -I$(SRC)/uts/common/
 CPPFLAGS +=	-I$(SRC)/lib/libdevfsevent -I$(SRC)/uts/common
-CPPFLAGS +=	-D_REENTRANT
 
 SRCS=		$(OBJECTS:%.o=%.c)
 

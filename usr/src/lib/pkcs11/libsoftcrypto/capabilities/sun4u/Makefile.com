@@ -38,7 +38,7 @@ OBJECTS =	$(AES_OBJS) $(ARCFOUR_OBJS) $(DES_OBJS) $(BIGNUM_OBJS) \
 
 include		$(SRC)/lib/Makefile.lib
 
-AS_CPPFLAGS +=	-D_ASM -DPIC -D_REENTRANT -D$(MACH)
+AS_CPPFLAGS +=	-D_ASM -DPIC -D$(MACH)
 ASFLAGS +=	$(AS_PICFLAGS)
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized

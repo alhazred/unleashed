@@ -49,7 +49,7 @@ INCS += -I$(SRC)/cmd/ndmpd/include
 C99MODE=	$(C99_ENABLE)
 LIBS=	$(DYNLIB)
 LDLIBS +=	-lc -lscf
-CPPFLAGS +=	$(INCS) -D_REENTRANT
+CPPFLAGS +=	$(INCS)
 
 CERRWARN +=	-Wno-char-subscripts
 CERRWARN +=	-Wno-uninitialized

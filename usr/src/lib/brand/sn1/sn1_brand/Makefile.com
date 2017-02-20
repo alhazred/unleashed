@@ -61,7 +61,7 @@ SRCS =		$(CSRCS)
 # regular and suid binaries).
 #
 NATIVE_DIR =	/.SUNWnative
-CPPFLAGS +=	-D_REENTRANT -U_ASM \
+CPPFLAGS +=	-U_ASM \
 		-I. -I$(BRAND_SHARED)/brand/sys -I$(UTSBASE)/common/brand/sn1
 DYNFLAGS +=	$(DYNFLAGS_$(CLASS))
 DYNFLAGS +=	$(BLOCAL) $(ZNOVERSION) -Wl,-e_start

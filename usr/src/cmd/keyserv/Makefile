@@ -64,8 +64,7 @@ $(ROOTBIN)/chkey :=				FILEMODE=	4555
 
 $(ROOTKEYSERVDFLT) :=				FILEMODE=	444
 
-CPPFLAGS += -I. -I$(SRC)/lib/libc/inc -I$(SRC)/lib/libsldap/common \
-		-D_REENTRANT
+CPPFLAGS += -I. -I$(SRC)/lib/libc/inc -I$(SRC)/lib/libsldap/common
 
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-parentheses

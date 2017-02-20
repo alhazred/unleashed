@@ -34,7 +34,7 @@ include		$(SRC)/lib/Makefile.lib
 LIBS=		$(DYNLIB)
 LDLIBS		+= -lbsm -lsecdb -lc
 
-CPPFLAGS	+= -D_REENTRANT -I$(LIBBSM)
+CPPFLAGS	+= -I$(LIBBSM)
 CPPFLAGS	+= -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 
 CERRWARN	+= -Wno-parentheses

@@ -40,7 +40,7 @@ SRCDIR=		../common
 
 LIBS=		$(DYNLIB)
 
-CPPFLAGS +=	-D_REENTRANT -I../inc -I../../common/inc -I../../libgen/inc
+CPPFLAGS +=	-I../inc -I../../common/inc -I../../libgen/inc
 LDLIBS +=       -lgen -lc
 
 CERRWARN +=	-Wno-parentheses

@@ -914,11 +914,7 @@ mkfile_output(struct commandline *cmd)
 
 
 	f_print(fout, "\n# Compiler flags \n");
-	if (mtflag)
-		f_print(fout, "\nCPPFLAGS += -D_REENTRANT\n"
-		    "CFLAGS += -g\n");
-	else
-		f_print(fout, "\nCFLAGS += -g \n");
+	f_print(fout, "\nCFLAGS += -g \n");
 	f_print(fout, "RPCGENFLAGS = \n");
 
 	f_print(fout, "\n# Targets \n\n");

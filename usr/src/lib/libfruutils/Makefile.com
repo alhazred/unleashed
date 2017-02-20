@@ -38,7 +38,7 @@ LIBS =		$(DYNLIB)
 # There should be a mapfile here
 MAPFILES =
 
-CPPFLAGS +=	-I.. -D_REENTRANT
+CPPFLAGS +=	-I..
 
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-uninitialized

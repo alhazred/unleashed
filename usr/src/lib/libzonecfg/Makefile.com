@@ -33,7 +33,7 @@ LDLIBS +=	-lc -luuid -lnvpair -lsysevent -lsec -lbrand \
 		-lpool -lscf -lproc -luutil -lbsm -lsecdb -lxml2
 
 SRCDIR =	../common
-CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(SRCDIR) -D_REENTRANT
+CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(SRCDIR)
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-parentheses
 

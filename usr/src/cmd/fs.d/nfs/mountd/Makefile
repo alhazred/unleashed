@@ -39,7 +39,7 @@ SRCS	  =	$(LOCAL:%.o=%.c) $(FSLIBSRC) ../lib/nfs_sec.c \
 DSRC	  =	mountd_dt.d
 DOBJ	  =	$(DSRC:%.d=%.o)
 LDLIBS	 +=	-lrpcsvc -lbsm -lnvpair -lscf -lumem
-CPPFLAGS +=	-D_REENTRANT -I../lib
+CPPFLAGS +=	-I../lib
 
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-switch

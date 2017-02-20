@@ -27,6 +27,7 @@
  * Copyright (c) 2012, Joyent, Inc. All rights reserved.
  */
 
+#define _REENTRANT
 #include <assert.h>
 #include <door.h>
 #include <errno.h>

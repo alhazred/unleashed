@@ -51,7 +51,7 @@ INCS += -I. \
 	-I../../../lib/libsldap/common \
 	-I$(IDMAP_PROT_DIR)
 
-$(OBJS) :=	CPPFLAGS += $(INCS) -D_REENTRANT
+$(OBJS) :=	CPPFLAGS += $(INCS)
 $(POFILE) :=	CPPFLAGS += $(INCS)
 
 .KEEP_STATE:

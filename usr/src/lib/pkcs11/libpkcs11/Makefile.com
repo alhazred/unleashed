@@ -69,7 +69,7 @@ INCDIR=		../../include
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lcryptoutil -lc
 
-CPPFLAGS +=	-I$(INCDIR) -I$(SRCDIR) -D_REENTRANT
+CPPFLAGS +=	-I$(INCDIR) -I$(SRCDIR)
 CPPFLAGS += -I$(CODEMGR_WS)/include
 
 

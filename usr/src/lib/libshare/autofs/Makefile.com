@@ -45,7 +45,7 @@ LDLIBS +=	-lshare -lscf -lumem -lc -lxml2
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-uninitialized
-CPPFLAGS +=	-D_REENTRANT -I$(AUTOFSSMFLIB_DIR) \
+CPPFLAGS +=	-I$(AUTOFSSMFLIB_DIR) \
 			-I$(ADJUNCT_PROTO)/usr/include/libxml2 \
   			-I$(SRCDIR)../common
 

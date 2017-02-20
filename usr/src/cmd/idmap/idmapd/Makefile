@@ -88,7 +88,7 @@ INCS += -I. -I../../../lib/libidmap/common \
 # Should not have to do this, but the Kerberos includes are a mess.
 INCS += -I $(ROOT)/usr/include/kerberosv5
 
-$(OBJS) := CPPFLAGS += $(INCS) -D_REENTRANT
+$(OBJS) := CPPFLAGS += $(INCS)
 $(POFILE) := CPPFLAGS += $(INCS)
 
 

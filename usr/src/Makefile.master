@@ -685,7 +685,6 @@ ZRECORD=	$(LD_ZRECORD:%=-Wl,%)
 ZTEXT=		$(LD_ZTEXT:%=-Wl,%)
 
 GSHARED=	-shared
-CCMT=		-D_REENTRANT
 
 # Handle different PIC models on different ISAs
 # (May be overridden by lower-level Makefiles)

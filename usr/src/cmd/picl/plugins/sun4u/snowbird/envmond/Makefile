@@ -38,7 +38,7 @@ ROOT_PLATFORM = $(USR_PLAT_DIR)/$(PLATFORM)
 
 include	$(SRC)/cmd/picl/plugins/Makefile.com
 
-CPPFLAGS +=	-D_REENTRANT -D_SNOWBIRD \
+CPPFLAGS +=	-D_SNOWBIRD \
 		-I$(USR_PSM_INCL_DIR) \
 		-I$(SRC)/uts/sun4u/sys \
 		-I$(SRC)/cmd/picl/plugins/inc \

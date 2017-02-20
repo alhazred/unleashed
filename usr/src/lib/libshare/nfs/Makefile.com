@@ -46,7 +46,7 @@ CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-uninitialized
-CPPFLAGS +=	-D_REENTRANT -I$(NFSLIB_DIR) \
+CPPFLAGS +=	-I$(NFSLIB_DIR) \
 		-I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(SRCDIR)/../common
 
 .KEEP_STATE:

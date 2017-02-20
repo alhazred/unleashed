@@ -61,7 +61,7 @@ SRCDIR =	../common
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
-CPPFLAGS +=	-D_REENTRANT -I$(SRC)/lib/libdiskmgt/common 
+CPPFLAGS +=	-I$(SRC)/lib/libdiskmgt/common 
 
 .KEEP_STATE:
 

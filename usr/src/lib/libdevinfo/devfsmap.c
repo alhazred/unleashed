@@ -22,10 +22,6 @@
  * Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
  */
 
-#ifdef	lint
-#define	_REENTRANT	/* for localtime_r */
-#endif
-
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>

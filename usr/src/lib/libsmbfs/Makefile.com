@@ -100,7 +100,7 @@ LDLIBS += -lc -lmd -lpkcs11 -lkrb5 -lsec -lidmap
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-unused-variable
 
-CPPFLAGS += -D__EXTENSIONS__ -D_REENTRANT -DMIA \
+CPPFLAGS += -D__EXTENSIONS__ -DMIA \
 	-I$(SRCDIR) -I.. -I../netsmb \
 	-I$(SRC)/uts/common \
 	-I$(CODEMGR_WS)/include \

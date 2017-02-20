@@ -42,7 +42,7 @@ INCS += -I$(CODEMGR_WS)/include
 
 C99MODE=	$(C99_ENABLE)
 LDLIBS +=	-lc -lnvpair -lstmf -luuid -lscf
-CPPFLAGS +=	$(INCS) -D_REENTRANT
+CPPFLAGS +=	$(INCS)
 CERRWARN +=	-Wno-parentheses
 
 SRCS=	$(OBJS_COMMON:%.o=$(SRCDIR)/%.c)			\

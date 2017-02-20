@@ -37,7 +37,7 @@ SRCS += $(STAT_COMMON_SRCS)
 
 CFLAGS		+= $(CTF_FLAGS)
 CERRWARN	+= -Wno-uninitialized
-CPPFLAGS	+= -D_REENTRANT -I$(SRC)/lib/libcpc/common -I$(STATCOMMONDIR)
+CPPFLAGS	+= -I$(SRC)/lib/libcpc/common -I$(STATCOMMONDIR)
 LDLIBS +=	-lcpc -lkstat
 
 .KEEP_STATE:

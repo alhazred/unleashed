@@ -51,7 +51,7 @@ $(NATIVE_BUILD)OBJS = $(MYOBJS:%.o=%-native.o)
 ROOTCMDDIR=	$(ROOT)/lib/svc/bin
 
 MYCPPFLAGS = -I. -I../common -I../../../common/svc \
-	-I$(ROOT)/usr/include/sqlite-sys -D_REENTRANT
+	-I$(ROOT)/usr/include/sqlite-sys
 CPPFLAGS += $(MYCPPFLAGS)
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-type-limits

@@ -41,7 +41,6 @@ ROOTLIBDIR64 =  $(ROOT)/usr/lib/reparse/$(MACH64)
 LDLIBS +=	$(MACH_LDLIBS)
 LDLIBS += -lc
 
-CPPFLAGS += -D_REENTRANT
 
 SRCS=   $(OBJS_COMMON:%.o=$(SRCDIR)/%.c)
 

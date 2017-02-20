@@ -184,7 +184,7 @@ $(PICS)  :=	sparcv9_CFLAGS += -mno-app-regs $(sparcv9_C_PICFLAGS)
 $(PICS)  :=	i386_CFLAGS += $(i386_C_PICFLAGS)
 $(PICS)  :=	amd64_CFLAGS += $(amd64_C_PICFLAGS)
 $(PICS)  :=	CCFLAGS += $(CC_PICFLAGS)
-$(PICS)  :=	CPPFLAGS += -DPIC -D_REENTRANT
+$(PICS)  :=	CPPFLAGS += -DPIC
 $(PICS)  :=	sparcv9_CCFLAGS += -mno-app-regs $(sparcv9_CC_PICFLAGS)
 $(PICS)  :=	amd64_CCFLAGS += $(amd64_CC_PICFLAGS)
 $(PICS)  :=	CFLAGS += $(CTF_FLAGS)

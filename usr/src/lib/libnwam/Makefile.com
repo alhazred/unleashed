@@ -47,7 +47,7 @@ LDLIBS +=	-lbsm -lc -ldladm -lnvpair -lscf -lsecdb
 
 SRCDIR =	../common
 
-CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
+CPPFLAGS +=	-I$(SRCDIR)
 
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-uninitialized

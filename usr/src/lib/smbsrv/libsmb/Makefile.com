@@ -80,7 +80,7 @@ LDLIBS +=	$(MACH_LDLIBS)
 LDLIBS +=	-lscf -lmd -luuid -lpkcs11 -lcryptoutil
 LDLIBS +=	-lsec -lidmap -lreparse -lcmdutils -lavl
 LDLIBS +=	-lnvpair -lresolv -lc
-CPPFLAGS +=	$(INCS) -D_REENTRANT
+CPPFLAGS +=	$(INCS)
 CPPFLAGS +=	-Dsyslog=smb_syslog
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-char-subscripts

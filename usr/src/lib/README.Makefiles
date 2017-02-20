@@ -408,8 +408,7 @@ The third section typically consists of the following macros:
 	CPPFLAGS (if necessary)
 
 	   Appended with any flags that need to be passed to the C
-	   preprocessor (typically -D and -I flags).  When compiling MT-safe
-	   code, CPPFLAGS *must* include -D_REENTRANT.  When compiling large
+	   preprocessor (typically -D and -I flags).  When compiling large
            file aware code, CPPFLAGS *must* include -D_FILE_OFFSET_BITS=64.
 
 	CFLAGS

@@ -100,9 +100,7 @@ typedef union sockaddr46_s {
 } sockaddr46_t;
 
 /*
- * Generic DHCP packet list. Ensure that _REENTRANT bracketed code stays at
- * bottom of this definition - the client doesn't include it. Scan.c in
- * libdhcp isn't aware of it either...
+ * Generic DHCP packet list.
  *
  * The PKT * pointer here actually points to a dhcpv6_message_t if the packet
  * is DHCPv6.  We assume that PKT * the same or stricter alignment

@@ -36,7 +36,6 @@ MAPFILES =
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lgen
-CPPFLAGS +=	-D_REENTRANT
 DYNFLAGS +=	$(ZNOVERSION) $(ZINTERPOSE)
 
 CERRWARN +=	-Wno-parentheses

@@ -59,7 +59,6 @@ LINKPROGmkdevalloc = mkdevmaps
 POFILE =	allocate_all.po
 POFILES =	$(OBJS:%.o=%.po) $(ALLSCRIPTS:%.sh=%.po)
 
-DFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	$(DFLAGS)
 
 ROOTLOCKS =	$(RTLCKS:%=$(ROOTSECDEV)/%)

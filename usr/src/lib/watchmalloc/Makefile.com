@@ -35,7 +35,7 @@ SRCDIR = ../common
 
 LIBS = $(DYNLIB)
 LDLIBS += -lc
-CPPFLAGS += -I../common -I../../common/inc -D_REENTRANT
+CPPFLAGS += -I../common -I../../common/inc
 DYNFLAGS += $(ZINTERPOSE)
 
 CERRWARN += -Wno-unused-label

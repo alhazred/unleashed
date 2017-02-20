@@ -23,7 +23,6 @@ PROGS = pthread_attr_get_np
 include $(SRC)/cmd/Makefile.cmd
 include $(SRC)/test/Makefile.com
 
-CPPFLAGS += -D_REENTRANT
 
 CMDS = $(PROGS:%=$(TESTDIR)/%)
 $(CMDS) := FILEMODE = 0555

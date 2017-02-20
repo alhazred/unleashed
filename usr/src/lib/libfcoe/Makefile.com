@@ -39,7 +39,7 @@ INCS +=		-I$(CODEMGR_WS)/include/sys/fcoe
 
 LDLIBS +=	-lc -ldladm -lscf
 C99MODE=	$(C99_ENABLE)
-CPPFLAGS +=	$(INCS) -D_REENTRANT
+CPPFLAGS +=	$(INCS)
 
 .KEEP_STATE:
 

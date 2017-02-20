@@ -50,7 +50,7 @@ CLEANFILES+=sexpr.lex.c \
 
 LEX=flex
 YACC=bison
-CFLAGS=-D_GNU_SOURCE -D_POSIX_C_SOURCE=200112L -D_REENTRANT -D__EXTENSIONS__ \
+CFLAGS=-D_GNU_SOURCE -D_POSIX_C_SOURCE=200112L -D__EXTENSIONS__ \
        -Wall -O2 -g -std=gnu99 \
        -march=pentiumpro \
        -fno-omit-frame-pointer \

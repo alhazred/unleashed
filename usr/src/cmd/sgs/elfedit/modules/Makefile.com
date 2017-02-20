@@ -90,7 +90,7 @@ $(SYMINFO_LIB):=	SONAME = $(SYMINFO_LIB)
 MAPFILES = ../common/mapfile-vers
 
 CPPFLAGS +=	-I../../../include -I../../../include/$(MACH) \
-		-I../$(SRCBASE)/lib/libc/inc  -D_REENTRANT
+		-I../$(SRCBASE)/lib/libc/inc
 LLDFLAGS =	'-R$$ORIGIN/../../../lib'
 LLDFLAGS64 =	'-R$$ORIGIN/../../../../lib/$(MACH64)'
 LDFLAGS +=	$(CC_USE_PROTO) $(LLDFLAGS)

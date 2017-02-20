@@ -32,7 +32,6 @@
 LDLIBS += -lsysevent
 
 CPPFLAGS += -D_POSIX_PTHREAD_SEMANTICS
-CPPFLAGS += -D_REENTRANT
 
 #
 # install specifics - directories

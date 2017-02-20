@@ -38,7 +38,7 @@ ROOT_PLATFORM = $(USR_PLAT_DIR)/SUNW,Netra-T12
 
 include	$(SRC)/cmd/picl/plugins/Makefile.com
 
-CPPFLAGS +=	-D_REENTRANT -I$(SRC)/uts/sun4u/serengeti
+CPPFLAGS +=	-I$(SRC)/uts/sun4u/serengeti
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/serengeti
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/lw8
 CPPFLAGS +=	-I$(SRC)/uts/sun4u -I$(CLOSED)/uts/sun4u

@@ -42,7 +42,6 @@ LDLIBS +=	 -lc
 
 SRCDIR =	../common
 
-CPPFLAGS +=	-D_REENTRANT
 
 .KEEP_STATE:
 

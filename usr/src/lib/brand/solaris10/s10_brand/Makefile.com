@@ -72,7 +72,7 @@ SRCS =		$(CSRCS)
 # if we (our or copy of libc) try to allocate any memory it will be done
 # via mmap() instead of brk().
 #
-CPPFLAGS +=	-D_REENTRANT -U_ASM -D__UNLEASHED_VISIBLE \
+CPPFLAGS +=	-U_ASM -D__UNLEASHED_VISIBLE \
 		-I. -I$(BRAND_SHARED)/brand/sys -I../sys \
 		-I$(UTSBASE)/common/brand/solaris10 \
 		-I$(SRC)/uts/common/fs/zfs

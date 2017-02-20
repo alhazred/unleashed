@@ -37,7 +37,7 @@ LDLIBS +=	-lc -ldladm -lscf
 
 SRCDIR =	../common
 
-CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
+CPPFLAGS +=	-I$(SRCDIR)
 
 C99MODE =	$(C99_ENABLE)
 

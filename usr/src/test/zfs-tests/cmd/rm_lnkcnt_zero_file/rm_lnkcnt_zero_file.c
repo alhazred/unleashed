@@ -35,7 +35,6 @@
  * --------------------------------------------------------------------
  *
  */
-#define	_REENTRANT 1
 #include <stdio.h>
 #include <fcntl.h>
 #include <pthread.h>

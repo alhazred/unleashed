@@ -33,7 +33,7 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lnvpair
 
 SRCDIR =	../common
-CPPFLAGS +=	-I$(SRCDIR) -D_REENTRANT
+CPPFLAGS +=	-I$(SRCDIR)
 
 CERRWARN +=	-Wno-parentheses
 

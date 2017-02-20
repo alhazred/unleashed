@@ -34,7 +34,7 @@ TYPEPROG=	statd
 ATTMK=		$(TYPEPROG)
 
 include		../../Makefile.fstype
-CPPFLAGS +=     -D_REENTRANT -DSUN_THREADS
+CPPFLAGS +=     -DSUN_THREADS
 
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-parentheses

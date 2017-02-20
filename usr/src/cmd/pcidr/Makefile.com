@@ -44,7 +44,7 @@ ROOTLIBDIR = $(ROOT)/$(INSTALLDIR)
 ROOTCMDDIR = $(ROOTLIBDIR)
 #############################################################################
 
-CPPFLAGS += -D_REENTRANT -I$(HDRDIR)
+CPPFLAGS += -I$(HDRDIR)
 
 CERRWARN += -Wno-type-limits
 

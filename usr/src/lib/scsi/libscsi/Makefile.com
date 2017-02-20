@@ -38,7 +38,7 @@ include ../../Makefile.defs
 
 SRCS = $(OBJECTS:%.o=../common/%.c)
 C99MODE = $(C99_ENABLE)
-CPPFLAGS += -I../common -I. -D_REENTRANT
+CPPFLAGS += -I../common -I.
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
 CERRWARN += -Wno-type-limits

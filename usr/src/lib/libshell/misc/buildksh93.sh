@@ -315,7 +315,7 @@ function build_shell
             # the compiler into C99 mode. Otherwise ksh93 will be much slower and lacks
             # lots of arithmethic functions.
             #
-            # 7. "-D_TS_ERRNO -D_REENTRANT" are flags taken from the default OS/Net
+            # 7. "-D_TS_ERRNO" are flags taken from the default OS/Net
             # build system.
             #
             # 8. "-xpagesize_stack=64K is used on SPARC to enhance the performace
@@ -329,7 +329,7 @@ function build_shell
             print_solaris_builtin_header >"${solaris_builtin_header}"
             
             # OS/Net build flags
-            bon_flags="-D_TS_ERRNO -D_REENTRANT"
+            bon_flags="-D_TS_ERRNO"
             
             # ksh93+AST config flags
             bast_flags="-DSHOPT_CMDLIB_BLTIN=0 -DSH_CMDLIB_DIR=\\\"/usr/ast/bin\\\" -DSHOPT_CMDLIB_HDR=\\\"${solaris_builtin_header}\\\" -DSHOPT_SYSRC -D_map_libc=1"

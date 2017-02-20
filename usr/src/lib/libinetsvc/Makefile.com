@@ -35,7 +35,7 @@ LDLIBS +=	-lscf -lc -lmd -luutil
 SRCDIR =	../common
 
 CFLAGS +=			$(C99_ENABLE)
-CPPFLAGS +=			-I../common -D_REENTRANT
+CPPFLAGS +=			-I../common
 $(RELEASE_BUILD)CPPFLAGS +=     -DNDEBUG
 
 CERRWARN +=	-Wno-parentheses

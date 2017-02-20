@@ -54,7 +54,6 @@ ROOTLIBDIR =		$(ROOT_PLAT_PLUGINDIR)
 CPPFLAGS +=	-I$(SRC)/sun4v/piclsbl
 CPPFLAGS +=	-I$(SRC)/uts/common/sys
 CPPFLAGS +=	-I$(SRC)/lib/libpcp/common
-CPPFLAGS +=	-D_REENTRANT
 
 LDLIBS +=	-L$(SRC)/lib/libpicl/$(MACH) -L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-L$(ROOT)/usr/lib/picl/plugins

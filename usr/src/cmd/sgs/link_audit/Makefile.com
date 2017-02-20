@@ -87,7 +87,6 @@ $(BINDLIB):=	MAPFILES = ../common/mapfile-vers-bindings
 
 $(ROOTCCSLIB) :=	DIRMODE =	755
 
-CPPFLAGS +=	-D_REENTRANT
 LDFLAGS +=	$(CC_USE_PROTO)
 DYNFLAGS +=	$(VERSREF)
 

@@ -43,7 +43,7 @@ CERRWARN	+= -Wno-switch
 C99MODE=	$(C99_ENABLE)
 
 LDLIBS	+= -lproc -lrtld_db -lc_db -lnvpair
-CPPFLAGS += -D_REENTRANT -D_LARGEFILE64_SOURCE=1
+CPPFLAGS += -D_LARGEFILE64_SOURCE=1
 CPPFLAGS += -I$(SRC)/uts/common/fs/zfs
 CPPFLAGS += -I$(CODEMGR_WS)/include
 # SOL_ROUTE

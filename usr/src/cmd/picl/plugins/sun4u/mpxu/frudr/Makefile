@@ -70,7 +70,6 @@ OTHERINFOS	+= fru_SC_data.info SB-tables.info
 OTHERINFOS	+= fru_usb-a-1_data.info fru_usb-a-2_data.info
 
 
-CPPFLAGS +=	-D_REENTRANT
 CPPFLAGS +=	-I$(SRC)/cmd/picl/plugins/lib/picld_pluginutil
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/mpxu
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/ -I$(SRC)/uts/common/
