@@ -32,7 +32,6 @@ SHFILES= \
 	cstyle \
 	elfcmp \
 	genoffsets \
-	onu \
 	protocmp.terse \
 	webrev \
 	which_scm
@@ -76,7 +75,6 @@ MAN1ONBLDFILES= \
 	interface_cmp.1onbld \
 	jstyle.1onbld \
 	mapfilechk.1onbld \
-	onu.1onbld \
 	webrev.1onbld \
 	which_scm.1onbld \
 	wsdiff.1onbld
@@ -94,10 +92,7 @@ EXCEPTFILES= \
 	interface_check \
 	interface_cmp
 
-CLEANFILES = $(SHFILES) $(PERLFILES) $(PYFILES) onu.sh
-
-onu.sh:	onu.sh.in
-	$(SED) -e "s:@PYTHON_VERSION@:$(PYTHON_VERSION):g" < onu.sh.in > $@
+CLEANFILES = $(SHFILES) $(PERLFILES) $(PYFILES)
 
 include ../Makefile.tools
 
