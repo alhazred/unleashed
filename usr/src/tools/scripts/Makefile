@@ -33,7 +33,6 @@ SHFILES= \
 	elfcmp \
 	genoffsets \
 	protocmp.terse \
-	webrev \
 	which_scm
 
 PERLFILES= \
@@ -73,7 +72,6 @@ MAN1ONBLDFILES= \
 	interface_check.1onbld \
 	interface_cmp.1onbld \
 	mapfilechk.1onbld \
-	webrev.1onbld \
 	which_scm.1onbld \
 	wsdiff.1onbld
 
