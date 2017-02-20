@@ -35,8 +35,7 @@ SHFILES= \
 	onu \
 	protocmp.terse \
 	webrev \
-	which_scm \
-	ws
+	which_scm
 
 PERLFILES= \
 	check_rtime \
@@ -80,7 +79,6 @@ MAN1ONBLDFILES= \
 	onu.1onbld \
 	webrev.1onbld \
 	which_scm.1onbld \
-	ws.1onbld \
 	wsdiff.1onbld
 
 MAN1ONBLDLINKS= \

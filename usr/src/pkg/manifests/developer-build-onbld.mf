@@ -102,7 +102,6 @@ file path=opt/onbld/bin/validate_pkg mode=0555
 file path=opt/onbld/bin/wdiff mode=0555
 file path=opt/onbld/bin/webrev mode=0555
 file path=opt/onbld/bin/which_scm mode=0555
-file path=opt/onbld/bin/ws mode=0555
 file path=opt/onbld/bin/wsdiff mode=0555
 file path=opt/onbld/etc/SampleLinks
 file path=opt/onbld/etc/SamplePkgLinks
@@ -208,7 +207,6 @@ file path=opt/onbld/man/man1onbld/ndrgen.1onbld
 file path=opt/onbld/man/man1onbld/onu.1onbld
 file path=opt/onbld/man/man1onbld/webrev.1onbld
 file path=opt/onbld/man/man1onbld/which_scm.1onbld
-file path=opt/onbld/man/man1onbld/ws.1onbld
 file path=opt/onbld/man/man1onbld/wsdiff.1onbld
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
