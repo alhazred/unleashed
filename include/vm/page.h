@@ -758,6 +758,8 @@ void	page_list_break(page_t **, page_t **, size_t);
 void	page_list_concat(page_t **, page_t **);
 void	page_vpadd(page_t **, page_t *);
 void	page_vpsub(page_t **, page_t *);
+void	page_lpadd(page_t **, page_t *);
+void	page_lpsub(page_t **, page_t *);
 int	page_lock(page_t *, se_t, kmutex_t *, reclaim_t);
 int	page_lock_es(page_t *, se_t, kmutex_t *, reclaim_t, int);
 void page_lock_clr_exclwanted(page_t *);

@@ -3705,6 +3705,12 @@ page_vpadd(page_t **ppp, page_t *pp)
 	*ppp = pp;
 }
 
+void
+page_lpadd(page_t **ppp, page_t *pp)
+{
+	page_vpadd(ppp, pp);
+}
+
 /*
  * Remove this page from the linked list of pages
  * using p_list.vnode for the list.
@@ -3730,6 +3736,12 @@ page_vpsub(page_t **ppp, page_t *pp)
 		pp->p_list.vnode.next->p_list.vnode.prev = pp->p_list.vnode.prev;
 	}
 	pp->p_list.vnode.prev = pp->p_list.vnode.next = pp;	/* make pp a list of one */
+}
+
+void
+page_lpsub(page_t **ppp, page_t *pp)
+{
+	page_vpsub(ppp, pp);
 }
 
 /*
