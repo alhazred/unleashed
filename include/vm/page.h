@@ -506,7 +506,7 @@ typedef struct page {
 #if defined(_LP64)
 	uint_t		p_vpmref;	/* vpm ref - index of the vpmap_t */
 #endif
-	struct page	*p_hash;	/* hash by [vnode, offset] */
+	struct page	*unused;	/* used to be p_hash; keep this here for binary compat */
 	union {
 		/* vnode page list - used when on cached list */
 		struct {
@@ -558,6 +558,8 @@ typedef struct page {
 #else
 	uint64_t	p_msresv_2;	/* page allocation debugging */
 #endif
+
+	avl_node_t	p_pagecache;
 } page_t;
 
 
@@ -569,88 +571,7 @@ typedef	page_t	devpage_t;
 
 #define	PAGE_SLOCK_MAXIMUM UINT_MAX
 
-/*
- * Page hash table is a power-of-two in size, externally chained
- * through the hash field.  PAGE_HASHAVELEN is the average length
- * desired for this chain, from which the size of the page_hash
- * table is derived at boot time and stored in the kernel variable
- * page_hashsz.  In the hash function it is given by PAGE_HASHSZ.
- *
- * PAGE_HASH_FUNC returns an index into the page_hash[] array.  This
- * index is also used to derive the mutex that protects the chain.
- *
- * In constructing the hash function, first we dispose of unimportant bits
- * (page offset from "off" and the low 3 bits of "vp" which are zero for
- * struct alignment). Then shift and sum the remaining bits a couple times
- * in order to get as many source bits from the two source values into the
- * resulting hashed value.  Note that this will perform quickly, since the
- * shifting/summing are fast register to register operations with no additional
- * memory references).
- *
- * PH_SHIFT_SIZE is the amount to use for the successive shifts in the hash
- * function below.  The actual value is LOG2(PH_TABLE_SIZE), so that as many
- * bits as possible will filter thru PAGE_HASH_FUNC() and PAGE_HASH_MUTEX().
- *
- * We use ? : instead of #if because <vm/page.h> is included everywhere;
- * NCPU maps to a global variable outside of the "unix" module.
- */
-#if defined(_LP64)
-#define	PH_SHIFT_SIZE	((NCPU < 4) ? 7		: (NCPU_LOG2 + 1))
-#else	/* 32 bits */
-#define	PH_SHIFT_SIZE	((NCPU < 4) ? 4		: 7)
-#endif	/* _LP64 */
-
-#define	PH_TABLE_SIZE	(1ul << PH_SHIFT_SIZE)
-
-/*
- *
- * We take care to get as much randomness as possible from both the vp and
- * the offset.  Workloads can have few vnodes with many offsets, many vnodes
- * with few offsets or a moderate mix of both.  This hash should perform
- * equally well for each of these possibilities and for all types of memory
- * allocations.
- *
- * vnodes representing files are created over a long period of time and
- * have good variation in the upper vp bits, and the right shifts below
- * capture these bits.  However, swap vnodes are created quickly in a
- * narrow vp* range.  Refer to comments at swap_alloc: vnum has exactly
- * AN_VPSHIFT bits, so the kmem_alloc'd vnode addresses have approximately
- * AN_VPSHIFT bits of variation above their VNODE_ALIGN low order 0 bits.
- * Spread swap vnodes widely in the hash table by XOR'ing a term with the
- * vp bits of variation left shifted to the top of the range.
- */
-
-#define	PAGE_HASHSZ	page_hashsz
-#define	PAGE_HASHAVELEN		4
-#define	PAGE_HASH_FUNC(vp, off) \
-	(((((uintptr_t)(off) >> PAGESHIFT) ^ \
-	    ((uintptr_t)(off) >> (PAGESHIFT + PH_SHIFT_SIZE))) ^ \
-	    (((uintptr_t)(vp) >> 3) ^ \
-	    ((uintptr_t)(vp) >> (3 + PH_SHIFT_SIZE)) ^ \
-	    ((uintptr_t)(vp) >> (3 + 2 * PH_SHIFT_SIZE)) ^ \
-	    ((uintptr_t)(vp) << \
-	    (page_hashsz_shift - AN_VPSHIFT - VNODE_ALIGN_LOG2)))) & \
-	    (PAGE_HASHSZ - 1))
-
 #ifdef _KERNEL
-
-/*
- * The page hash value is re-hashed to an index for the ph_mutex array.
- *
- * For 64 bit kernels, the mutex array is padded out to prevent false
- * sharing of cache sub-blocks (64 bytes) of adjacent mutexes.
- *
- * For 32 bit kernels, we don't want to waste kernel address space with
- * padding, so instead we rely on the hash function to introduce skew of
- * adjacent vnode/offset indexes (the left shift part of the hash function).
- * Since sizeof (kmutex_t) is 8, we shift an additional 3 to skew to a different
- * 64 byte sub-block.
- */
-extern pad_mutex_t ph_mutex[];
-
-#define	PAGE_HASH_MUTEX(x) \
-	&(ph_mutex[((x) ^ ((x) >> PH_SHIFT_SIZE) + ((x) << 3)) & \
-		(PH_TABLE_SIZE - 1)].pad_mutex)
 
 /*
  * Flags used while creating pages.
@@ -676,10 +597,6 @@ extern pad_mutex_t ph_mutex[];
 #define	PAGE_EXCL(pp)		((pp)->p_selock < 0)
 #define	PAGE_LOCKED_SE(pp, se)	\
 	((se) == SE_EXCL ? PAGE_EXCL(pp) : PAGE_SHARED(pp))
-
-extern	long page_hashsz;
-extern	unsigned int page_hashsz_shift;
-extern	page_t **page_hash;
 
 extern	pad_mutex_t page_llocks[];	/* page logical lock mutex */
 extern	kmutex_t freemem_lock;		/* freemem lock */
@@ -841,6 +758,10 @@ kmutex_t	*page_vnode_mutex(struct vnode *);
 kmutex_t	*page_se_mutex(struct page *);
 kmutex_t	*page_szc_lock(struct page *);
 int		page_szc_lock_assert(struct page *pp);
+
+
+extern void pagecache_init(struct vnode *vnode);
+extern void pagecache_fini(struct vnode *vnode);
 
 /*
  * Page relocation interfaces. page_relocate() is generic.

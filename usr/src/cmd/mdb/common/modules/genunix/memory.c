@@ -54,178 +54,72 @@
  * address.
  */
 
-/*
- * page_walk_data
- *
- * pw_hashleft is set to -1 when walking a vnode's pages, and holds the
- * number of hash locations remaining in the page hash table when
- * walking all pages.
- *
- * The astute reader will notice that pw_hashloc is only used when
- * reading all pages (to hold a pointer to our location in the page
- * hash table), and that pw_first is only used when reading the pages
- * belonging to a particular vnode (to hold a pointer to the first
- * page).  While these could be combined to be a single pointer, they
- * are left separate for clarity.
- */
-typedef struct page_walk_data {
-	long		pw_hashleft;
-	void		**pw_hashloc;
-	uintptr_t	pw_first;
-} page_walk_data_t;
+#define PW_GLOBAL(wsp)	((wsp)->walk_data == NULL)
 
 int
 page_walk_init(mdb_walk_state_t *wsp)
 {
-	page_walk_data_t	*pwd;
-	void	**ptr;
-	size_t	hashsz;
-	vnode_t	vn;
+	/*
+	 * We use this to let page_walk_step know if this wask a local or a
+	 * global walk.
+	 */
+	wsp->walk_data = (void *)wsp->walk_addr;
 
-	if (wsp->walk_addr == (uintptr_t)NULL) {
-
+	if (wsp->walk_addr == 0) {
 		/*
 		 * Walk all pages
+		 *
+		 * In essence:
+		 *	::walk vn_cache | ::print vnode_t v_pagecache | ::walk avl
 		 */
 
-		if ((mdb_readvar(&ptr, "page_hash") == -1) ||
-		    (mdb_readvar(&hashsz, "page_hashsz") == -1) ||
-		    (ptr == NULL) || (hashsz == 0)) {
-			mdb_warn("page_hash, page_hashsz not found or invalid");
+		if (mdb_layered_walk("vn_cache", wsp) == -1) {
+			mdb_warn("couldn't walk list of vnodes");
 			return (WALK_ERR);
 		}
-
-		/*
-		 * Since we are walking all pages, initialize hashleft
-		 * to be the remaining number of entries in the page
-		 * hash.  hashloc is set the start of the page hash
-		 * table.  Setting the walk address to 0 indicates that
-		 * we aren't currently following a hash chain, and that
-		 * we need to scan the page hash table for a page.
-		 */
-		pwd = mdb_alloc(sizeof (page_walk_data_t), UM_SLEEP);
-		pwd->pw_hashleft = hashsz;
-		pwd->pw_hashloc = ptr;
-		wsp->walk_addr = 0;
 	} else {
-
 		/*
 		 * Walk just this vnode
+		 *
+		 * In essence:
+		 *	addr::print vnode_t v_pagecache | ::walk avl
+		 *
+		 * In this case, all the work happens in the _step function.
 		 */
-
-		if (mdb_vread(&vn, sizeof (vnode_t), wsp->walk_addr) == -1) {
-			mdb_warn("unable to read vnode_t at %#lx",
-			    wsp->walk_addr);
-			return (WALK_ERR);
-		}
-
-		/*
-		 * We set hashleft to -1 to indicate that we are
-		 * walking a vnode, and initialize first to 0 (it is
-		 * used to terminate the walk, so it must not be set
-		 * until after we have walked the first page).  The
-		 * walk address is set to the first page.
-		 */
-		pwd = mdb_alloc(sizeof (page_walk_data_t), UM_SLEEP);
-		pwd->pw_hashleft = -1;
-		pwd->pw_first = 0;
-
-		wsp->walk_addr = (uintptr_t)vn.v_pages;
 	}
-
-	wsp->walk_data = pwd;
 
 	return (WALK_NEXT);
 }
 
+/*
+ * This is called for each vnode, so we just need to do what amounts to:
+ *
+ *	addr::print vnode_t v_pagecache | ::walk avl
+ */
 int
 page_walk_step(mdb_walk_state_t *wsp)
 {
-	page_walk_data_t	*pwd = wsp->walk_data;
-	page_t		page;
-	uintptr_t	pp;
+	uintptr_t addr = wsp->walk_addr + OFFSETOF(struct vnode, v_pagecache);
 
-	pp = wsp->walk_addr;
-
-	if (pwd->pw_hashleft < 0) {
-
-		/* We're walking a vnode's pages */
-
-		/*
-		 * If we don't have any pages to walk, we have come
-		 * back around to the first one (we finished), or we
-		 * can't read the page we're looking at, we are done.
-		 */
-		if (pp == (uintptr_t)NULL || pp == pwd->pw_first)
-			return (WALK_DONE);
-		if (mdb_vread(&page, sizeof (page_t), pp) == -1) {
-			mdb_warn("unable to read page_t at %#lx", pp);
-			return (WALK_ERR);
-		}
-
-		/*
-		 * Set the walk address to the next page, and if the
-		 * first page hasn't been set yet (i.e. we are on the
-		 * first page), set it.
-		 */
-		wsp->walk_addr = (uintptr_t)page.p_list.vnode.next;
-		if (pwd->pw_first == (uintptr_t)NULL)
-			pwd->pw_first = pp;
-
-	} else if (pwd->pw_hashleft > 0) {
-
-		/* We're walking all pages */
-
-		/*
-		 * If pp (the walk address) is NULL, we scan through
-		 * the page hash table until we find a page.
-		 */
-		if (pp == (uintptr_t)NULL) {
-
-			/*
-			 * Iterate through the page hash table until we
-			 * find a page or reach the end.
-			 */
-			do {
-				if (mdb_vread(&pp, sizeof (uintptr_t),
-				    (uintptr_t)pwd->pw_hashloc) == -1) {
-					mdb_warn("unable to read from %#p",
-					    pwd->pw_hashloc);
-					return (WALK_ERR);
-				}
-				pwd->pw_hashleft--;
-				pwd->pw_hashloc++;
-			} while (pwd->pw_hashleft && (pp == (uintptr_t)NULL));
-
-			/*
-			 * We've reached the end; exit.
-			 */
-			if (pp == (uintptr_t)NULL)
-				return (WALK_DONE);
-		}
-
-		if (mdb_vread(&page, sizeof (page_t), pp) == -1) {
-			mdb_warn("unable to read page_t at %#lx", pp);
-			return (WALK_ERR);
-		}
-
-		/*
-		 * Set the walk address to the next page.
-		 */
-		wsp->walk_addr = (uintptr_t)page.p_hash;
-
-	} else {
-		/* We've finished walking all pages. */
-		return (WALK_DONE);
+	if (mdb_pwalk("avl", wsp->walk_callback, wsp->walk_cbdata, addr) == -1) {
+		mdb_warn("couldn't walk vnode's page AVL tree at %p", addr);
+		return (WALK_ERR);
 	}
 
-	return (wsp->walk_callback(pp, &page, wsp->walk_cbdata));
+	/*
+	 * If this was a global walk, we need to move onto the next vnode.
+	 * To do that we return WALK_NEXT which is handled by
+	 * mdb_layered_walk.  If this was a local walk, there was only one
+	 * vnode to walk, and we are already done with it so we return
+	 * WALK_DONE.  (If we returned WALK_NEXT, we would get called again
+	 * with the same ->walk_addr!)
+	 */
+	return (PW_GLOBAL(wsp) ? WALK_NEXT : WALK_DONE);
 }
 
 void
 page_walk_fini(mdb_walk_state_t *wsp)
 {
-	mdb_free(wsp->walk_data, sizeof (page_walk_data_t));
 }
 
 /*

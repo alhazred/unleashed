@@ -2296,7 +2296,7 @@ vn_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	vp->v_vsd = NULL;
 	vp->v_fopdata = NULL;
 
-	mutex_init(&vp->v_pagecache_lock, NULL, MUTEX_DEFAULT, NULL);
+	pagecache_init(vp);
 
 	return (0);
 }
@@ -2309,12 +2309,12 @@ vn_cache_destructor(void *buf, void *cdrarg)
 
 	vp = buf;
 
+	pagecache_fini(vp);
+
 	rw_destroy(&vp->v_nbllock);
 	cv_destroy(&vp->v_cv);
 	mutex_destroy(&vp->v_vsd_lock);
 	mutex_destroy(&vp->v_lock);
-
-	mutex_destroy(&vp->v_pagecache_lock);
 }
 
 void

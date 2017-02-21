@@ -3856,6 +3856,8 @@ segdev_init(void)
 {
 	struct seg kseg;
 
+	pagecache_init(&trashvp);
+
 	umem_np_arena = vmem_create("umem_np", NULL, 0, PAGESIZE,
 	    devmap_alloc_pages, devmap_free_pages, heap_arena,
 	    DEVMAP_UMEM_QUANTUM, VM_SLEEP);

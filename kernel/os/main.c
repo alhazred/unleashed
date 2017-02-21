@@ -410,6 +410,13 @@ main(void)
 	 */
 	lgrp_init(LGRP_INIT_STAGE2);
 
+	pagecache_init(&kvps[KV_KVP]);
+	pagecache_init(&kvps[KV_ZVP]);
+#if defined(__sparc)
+	pagecache_init(&kvps[KV_MPVP]);
+	pagecache_init(&kvps[KV_PROMVP]);
+#endif
+
 	/*
 	 * Once 'startup()' completes, the thread_reaper() daemon would be
 	 * created(in thread_init()). After that, it is safe to create threads

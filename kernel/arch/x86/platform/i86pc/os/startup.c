@@ -300,10 +300,7 @@ int disable_smap = 0;
 /*
  * VM data structures
  */
-long page_hashsz;		/* Size of page hash table (power of two) */
-unsigned int page_hashsz_shift;	/* log2(page_hashsz) */
 struct page *pp_base;		/* Base of initial system page struct array */
-struct page **page_hash;	/* Page hash table */
 pad_mutex_t *pse_mutex;		/* Locks protecting pp->p_selock */
 size_t pse_table_size;		/* Number of mutexes in pse_mutex[] */
 int pse_shift;			/* log2(pse_table_size) */
@@ -994,7 +991,6 @@ startup_memlist(void)
 {
 	size_t memlist_sz;
 	size_t memseg_sz;
-	size_t pagehash_sz;
 	size_t pp_sz;
 	uintptr_t va;
 	size_t len;
@@ -1192,19 +1188,6 @@ startup_memlist(void)
 	    (rsvdmemblocks + POSS_NEW_FRAGMENTS));
 	ADD_TO_ALLOCATIONS(bios_rsvd, rsvdmemlist_sz);
 	PRM_DEBUG(rsvdmemlist_sz);
-
-	/* LINTED */
-	ASSERT(P2SAMEHIGHBIT((1 << PP_SHIFT), sizeof (struct page)));
-	/*
-	 * The page structure hash table size is a power of 2
-	 * such that the average hash chain length is PAGE_HASHAVELEN.
-	 */
-	page_hashsz = npages / PAGE_HASHAVELEN;
-	page_hashsz_shift = highbit(page_hashsz);
-	page_hashsz = 1 << page_hashsz_shift;
-	pagehash_sz = sizeof (struct page *) * page_hashsz;
-	ADD_TO_ALLOCATIONS(page_hash, pagehash_sz);
-	PRM_DEBUG(pagehash_sz);
 
 	/*
 	 * Set aside room for the page structures themselves.
@@ -2623,8 +2606,6 @@ kphysm_init(
 	extern pfn_t	ddiphysmin;
 	extern int	mnode_xwa;
 	int		ms = 0, me = 0;
-
-	ASSERT(page_hash != NULL && page_hashsz != 0);
 
 	cur_memseg = memseg_base;
 	for (pmem = phys_avail; pmem && npages; pmem = pmem->ml_next) {

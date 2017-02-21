@@ -84,7 +84,6 @@ kmutex_t  page_freelock;
 #define	PIO_SHIFT	7	/* log2(sizeof(page_t)) */
 #define	PIO_TABLE_SIZE	128	/* number of io mutexes to have */
 
-pad_mutex_t	ph_mutex[PH_TABLE_SIZE];
 kmutex_t	pio_mutex[PIO_TABLE_SIZE];
 
 #define	PAGE_IO_MUTEX(pp) \

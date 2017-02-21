@@ -2037,6 +2037,8 @@ page_promote(int mnode, pfn_t pfnum, uchar_t new_szc, int flags, int mtype)
 			}
 			which_list = PG_FREE_LIST;
 		} else {
+			kmutex_t *lock;
+
 			ASSERT(pp->p_szc == 0);
 
 			/*
@@ -2050,6 +2052,8 @@ page_promote(int mnode, pfn_t pfnum, uchar_t new_szc, int flags, int mtype)
 				goto fail_promote;
 			}
 
+			lock = page_vnode_mutex(pp->p_vnode);
+
 			/*
 			 * We need to be careful not to deadlock
 			 * with another thread in page_lookup().
@@ -2060,16 +2064,14 @@ page_promote(int mnode, pfn_t pfnum, uchar_t new_szc, int flags, int mtype)
 			 * freelist and page_lookup() could be trying
 			 * to grab a freelist lock.
 			 */
-			index = PAGE_HASH_FUNC(pp->p_vnode, pp->p_offset);
-			phm = PAGE_HASH_MUTEX(index);
-			if (!mutex_tryenter(phm)) {
+			if (!mutex_tryenter(lock)) {
 				page_unlock_nocapture(pp);
 				goto fail_promote;
 			}
 
 			mach_page_sub(&PAGE_CACHELISTS(mnode, bin, mtype), pp);
-			page_hashout(pp, phm);
-			mutex_exit(phm);
+			page_hashout(pp, lock);
+			mutex_exit(lock);
 			PP_SETAGED(pp);
 			page_unlock_nocapture(pp);
 			which_list = PG_CACHE_LIST;
@@ -2964,7 +2966,6 @@ try_again:
 			ASSERT(PP_ISFREE(pp));
 			ASSERT(PP_ISAGED(pp));
 			ASSERT(pp->p_vnode == NULL);
-			ASSERT(pp->p_hash == NULL);
 			ASSERT(pp->p_offset == (u_offset_t)-1);
 			ASSERT(pp->p_szc == szc);
 			ASSERT(PFN_2_MEM_NODE(pp->p_pagenum) == mnode);
@@ -2989,7 +2990,6 @@ try_again:
 				ASSERT(PP_ISFREE(pp));
 				ASSERT(PP_ISAGED(pp));
 				ASSERT(pp->p_vnode == NULL);
-				ASSERT(pp->p_hash == NULL);
 				ASSERT(pp->p_offset == (u_offset_t)-1);
 				ASSERT(pp->p_szc == szc);
 				ASSERT(PFN_2_MEM_NODE(pp->p_pagenum) == mnode);

@@ -51,6 +51,7 @@
 #include <sys/kstat.h>
 #include <sys/kmem.h>
 #include <sys/list.h>
+#include <sys/avl.h>
 #ifdef	_KERNEL
 #include <sys/buf.h>
 #endif	/* _KERNEL */
@@ -258,6 +259,7 @@ typedef struct vnode {
 	struct vnode	*v_xattrdir;	/* unnamed extended attr dir (GFS) */
 	uint_t		v_count_dnlc;	/* dnlc reference count */
 
+	avl_tree_t	v_pagecache;
 	kmutex_t	v_pagecache_lock;
 } vnode_t;
 

@@ -219,8 +219,6 @@ static struct page_tcnt {
 	int	pc_find_hit;		/* find's that find page */
 	int	pc_find_miss;		/* find's that don't find page */
 	int	pc_destroy_free;	/* # of free pages destroyed */
-#define	PC_HASH_CNT	(4*PAGE_HASHAVELEN)
-	int	pc_find_hashlen[PC_HASH_CNT+1];
 	int	pc_addclaim_pages;
 	int	pc_subclaim_pages;
 	int	pc_free_replacement_page[2];
@@ -272,22 +270,21 @@ uint_t  page_create_large_cnt[10];
 #endif
 
 static inline page_t *
-page_hash_search(ulong_t index, vnode_t *vnode, u_offset_t off)
+find_page(vnode_t *vnode, u_offset_t off)
 {
-	uint_t mylen = 0;
+	page_t key = {
+		.p_vnode = vnode,
+		.p_offset = off,
+	};
 	page_t *page;
 
-	for (page = page_hash[index]; page; page = page->p_hash, mylen++)
-		if (page->p_vnode == vnode && page->p_offset == off)
-			break;
+	page = avl_find(&vnode->v_pagecache, &key, NULL);
 
 #ifdef	VM_STATS
 	if (page != NULL)
 		pagecnt.pc_find_hit++;
 	else
 		pagecnt.pc_find_miss++;
-
-	pagecnt.pc_find_hashlen[MIN(mylen, PC_HASH_CNT)]++;
 #endif
 
 	return (page);
@@ -721,123 +718,30 @@ page_lookup_create(
 	page_t		*pp;
 	kmutex_t	*phm;
 	ulong_t		index;
-	uint_t		hash_locked;
 	uint_t		es;
 
 	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
 	VM_STAT_ADD(page_lookup_cnt[0]);
 	ASSERT(newpp ? PAGE_EXCL(newpp) : 1);
 
-	/*
-	 * Acquire the appropriate page hash lock since
-	 * we have to search the hash list.  Pages that
-	 * hash to this list can't change identity while
-	 * this lock is held.
-	 */
-	hash_locked = 0;
-	index = PAGE_HASH_FUNC(vp, off);
-	phm = NULL;
+	mutex_enter(page_vnode_mutex(vp));
 top:
-	pp = page_hash_search(index, vp, off);
+	pp = find_page(vp, off);
+
 	if (pp != NULL) {
 		VM_STAT_ADD(page_lookup_cnt[1]);
 		es = (newpp != NULL) ? 1 : 0;
 		es |= flags;
-		if (!hash_locked) {
-			VM_STAT_ADD(page_lookup_cnt[2]);
-			if (!page_try_reclaim_lock(pp, se, es)) {
-				/*
-				 * On a miss, acquire the phm.  Then
-				 * next time, page_lock() will be called,
-				 * causing a wait if the page is busy.
-				 * just looping with page_trylock() would
-				 * get pretty boring.
-				 */
-				VM_STAT_ADD(page_lookup_cnt[3]);
-				phm = PAGE_HASH_MUTEX(index);
-				mutex_enter(phm);
-				hash_locked = 1;
-				goto top;
-			}
-		} else {
-			VM_STAT_ADD(page_lookup_cnt[4]);
-			if (!page_lock_es(pp, se, phm, P_RECLAIM, es)) {
-				VM_STAT_ADD(page_lookup_cnt[5]);
-				goto top;
-			}
-		}
 
-		/*
-		 * Since `pp' is locked it can not change identity now.
-		 * Reconfirm we locked the correct page.
-		 *
-		 * Both the p_vnode and p_offset *must* be cast volatile
-		 * to force a reload of their values: The page_hash_search
-		 * function will have stuffed p_vnode and p_offset into
-		 * registers before calling page_trylock(); another thread,
-		 * actually holding the hash lock, could have changed the
-		 * page's identity in memory, but our registers would not
-		 * be changed, fooling the reconfirmation.  If the hash
-		 * lock was held during the search, the casting would
-		 * not be needed.
-		 */
-		VM_STAT_ADD(page_lookup_cnt[6]);
-		if (((volatile struct vnode *)(pp->p_vnode) != vp) ||
-		    ((volatile u_offset_t)(pp->p_offset) != off)) {
-			VM_STAT_ADD(page_lookup_cnt[7]);
-			if (hash_locked) {
-				panic("page_lookup_create: lost page %p",
-				    (void *)pp);
-				/*NOTREACHED*/
-			}
-			page_unlock(pp);
-			phm = PAGE_HASH_MUTEX(index);
-			mutex_enter(phm);
-			hash_locked = 1;
+		VM_STAT_ADD(page_lookup_cnt[4]);
+		if (!page_lock_es(pp, se, page_vnode_mutex(vp), P_RECLAIM, es)) {
+			VM_STAT_ADD(page_lookup_cnt[5]);
 			goto top;
 		}
 
-		/*
-		 * If page_trylock() was called, then pp may still be on
-		 * the cachelist (can't be on the free list, it would not
-		 * have been found in the search).  If it is on the
-		 * cachelist it must be pulled now. To pull the page from
-		 * the cachelist, it must be exclusively locked.
-		 *
-		 * The other big difference between page_trylock() and
-		 * page_lock(), is that page_lock() will pull the
-		 * page from whatever free list (the cache list in this
-		 * case) the page is on.  If page_trylock() was used
-		 * above, then we have to do the reclaim ourselves.
-		 */
-		if ((!hash_locked) && (PP_ISFREE(pp))) {
-			ASSERT(PP_ISAGED(pp) == 0);
-			VM_STAT_ADD(page_lookup_cnt[8]);
+		VM_STAT_ADD(page_lookup_cnt[6]);
 
-			/*
-			 * page_relcaim will insure that we
-			 * have this page exclusively
-			 */
-
-			if (!page_reclaim(pp, NULL)) {
-				/*
-				 * Page_reclaim dropped whatever lock
-				 * we held.
-				 */
-				VM_STAT_ADD(page_lookup_cnt[9]);
-				phm = PAGE_HASH_MUTEX(index);
-				mutex_enter(phm);
-				hash_locked = 1;
-				goto top;
-			} else if (se == SE_SHARED && newpp == NULL) {
-				VM_STAT_ADD(page_lookup_cnt[10]);
-				page_downgrade(pp);
-			}
-		}
-
-		if (hash_locked) {
-			mutex_exit(phm);
-		}
+		mutex_exit(page_vnode_mutex(vp));
 
 		if (newpp != NULL && pp->p_szc < newpp->p_szc &&
 		    PAGE_EXCL(pp) && nrelocp != NULL) {
@@ -870,12 +774,6 @@ top:
 		} else if (newpp != NULL && PAGE_EXCL(pp)) {
 			se = SE_EXCL;
 		}
-	} else if (!hash_locked) {
-		VM_STAT_ADD(page_lookup_cnt[17]);
-		phm = PAGE_HASH_MUTEX(index);
-		mutex_enter(phm);
-		hash_locked = 1;
-		goto top;
 	} else if (newpp != NULL) {
 		/*
 		 * If we have a preallocated page then
@@ -892,23 +790,21 @@ top:
 		 * get it over with.  As usual, go down
 		 * holding all the locks.
 		 */
-		ASSERT(MUTEX_HELD(phm));
-		if (!page_hashin(newpp, vp, off, phm)) {
-			ASSERT(MUTEX_HELD(phm));
-			panic("page_lookup_create: hashin failed %p %p %llx %p",
-			    (void *)newpp, (void *)vp, off, (void *)phm);
+		if (!page_hashin(newpp, vp, off, page_vnode_mutex(vp))) {
+			ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+			panic("page_lookup_create: hashin failed %p %p %llx",
+			    (void *)newpp, (void *)vp, off);
 			/*NOTREACHED*/
 		}
-		ASSERT(MUTEX_HELD(phm));
-		mutex_exit(phm);
-		phm = NULL;
+		ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+		mutex_exit(page_vnode_mutex(vp));
 		page_set_props(newpp, P_REF);
 		page_io_lock(newpp);
 		pp = newpp;
 		se = SE_EXCL;
 	} else {
 		VM_STAT_ADD(page_lookup_cnt[19]);
-		mutex_exit(phm);
+		mutex_exit(page_vnode_mutex(vp));
 	}
 
 	ASSERT(pp ? PAGE_LOCKED_SE(pp, se) : 1);
@@ -928,24 +824,12 @@ page_t *
 page_lookup_nowait(vnode_t *vp, u_offset_t off, se_t se)
 {
 	page_t		*pp;
-	kmutex_t	*phm;
-	ulong_t		index;
-	uint_t		locked;
 
 	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
 	VM_STAT_ADD(page_lookup_nowait_cnt[0]);
 
-	index = PAGE_HASH_FUNC(vp, off);
-	pp = page_hash_search(index, vp, off);
-	locked = 0;
-	if (pp == NULL) {
-top:
-		VM_STAT_ADD(page_lookup_nowait_cnt[1]);
-		locked = 1;
-		phm = PAGE_HASH_MUTEX(index);
-		mutex_enter(phm);
-		pp = page_hash_search(index, vp, off);
-	}
+	mutex_enter(page_vnode_mutex(vp));
+	pp = find_page(vp, off);
 
 	if (pp == NULL || PP_ISFREE(pp)) {
 		VM_STAT_ADD(page_lookup_nowait_cnt[2]);
@@ -956,20 +840,6 @@ top:
 			pp = NULL;
 		} else {
 			VM_STAT_ADD(page_lookup_nowait_cnt[4]);
-			/*
-			 * See the comment in page_lookup()
-			 */
-			if (((volatile struct vnode *)(pp->p_vnode) != vp) ||
-			    ((u_offset_t)(pp->p_offset) != off)) {
-				VM_STAT_ADD(page_lookup_nowait_cnt[5]);
-				if (locked) {
-					panic("page_lookup_nowait %p",
-					    (void *)pp);
-					/*NOTREACHED*/
-				}
-				page_unlock(pp);
-				goto top;
-			}
 			if (PP_ISFREE(pp)) {
 				VM_STAT_ADD(page_lookup_nowait_cnt[6]);
 				page_unlock(pp);
@@ -977,10 +847,8 @@ top:
 			}
 		}
 	}
-	if (locked) {
-		VM_STAT_ADD(page_lookup_nowait_cnt[7]);
-		mutex_exit(phm);
-	}
+
+	mutex_exit(page_vnode_mutex(vp));
 
 	ASSERT(pp ? PAGE_LOCKED_SE(pp, se) : 1);
 
@@ -996,18 +864,13 @@ page_t *
 page_find(vnode_t *vp, u_offset_t off)
 {
 	page_t		*pp;
-	kmutex_t	*phm;
-	ulong_t		index;
 
 	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
 	VM_STAT_ADD(page_find_cnt);
 
-	index = PAGE_HASH_FUNC(vp, off);
-	phm = PAGE_HASH_MUTEX(index);
-
-	mutex_enter(phm);
-	pp = page_hash_search(index, vp, off);
-	mutex_exit(phm);
+	mutex_enter(page_vnode_mutex(vp));
+	pp = find_page(vp, off);
+	mutex_exit(page_vnode_mutex(vp));
 
 	ASSERT(pp == NULL || PAGE_LOCKED(pp) || panicstr);
 	return (pp);
@@ -1018,20 +881,23 @@ page_find(vnode_t *vp, u_offset_t off)
  * currently exists in the system.  Obviously this should
  * only be considered as a hint since nothing prevents the
  * page from disappearing or appearing immediately after
- * the return from this routine. Subsequently, we don't
- * even bother to lock the list.
+ * the return from this routine.
+ *
+ * Note: This is virtually identical to page_find.  Can we combine them?
  */
 page_t *
 page_exists(vnode_t *vp, u_offset_t off)
 {
-	ulong_t		index;
+	page_t *page;
 
 	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
 	VM_STAT_ADD(page_exists_cnt);
 
-	index = PAGE_HASH_FUNC(vp, off);
+	mutex_enter(page_vnode_mutex(vp));
+	page = find_page(vp, off);
+	mutex_exit(page_vnode_mutex(vp));
 
-	return (page_hash_search(index, vp, off));
+	return (page);
 }
 
 /*
@@ -1049,7 +915,7 @@ page_exists(vnode_t *vp, u_offset_t off)
  * This routine doesn't work for anonymous(swapfs) pages.
  */
 int
-page_exists_physcontig(vnode_t *vp, u_offset_t off, uint_t szc, page_t *ppa[])
+page_exists_physcontig(vnode_t *vp, u_offset_t off, uint_t szc, page_t **ppa)
 {
 	pgcnt_t pages;
 	pfn_t pfn;
@@ -1057,8 +923,6 @@ page_exists_physcontig(vnode_t *vp, u_offset_t off, uint_t szc, page_t *ppa[])
 	pgcnt_t i;
 	pgcnt_t j;
 	u_offset_t save_off = off;
-	ulong_t index;
-	kmutex_t *phm;
 	page_t *pp;
 	uint_t pszc;
 	int loopcnt = 0;
@@ -1074,12 +938,9 @@ again:
 		return (0);
 	}
 
-	index = PAGE_HASH_FUNC(vp, off);
-	phm = PAGE_HASH_MUTEX(index);
-
-	mutex_enter(phm);
-	pp = page_hash_search(index, vp, off);
-	mutex_exit(phm);
+	mutex_enter(page_vnode_mutex(vp));
+	pp = find_page(vp, off);
+	mutex_exit(page_vnode_mutex(vp));
 
 	VM_STAT_ADD(page_exphcontg[1]);
 
@@ -1293,24 +1154,19 @@ int
 page_exists_forreal(vnode_t *vp, u_offset_t off, uint_t *szc)
 {
 	page_t		*pp;
-	kmutex_t	*phm;
-	ulong_t		index;
 	int		rc = 0;
 
 	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
 	ASSERT(szc != NULL);
 	VM_STAT_ADD(page_exists_forreal_cnt);
 
-	index = PAGE_HASH_FUNC(vp, off);
-	phm = PAGE_HASH_MUTEX(index);
-
-	mutex_enter(phm);
-	pp = page_hash_search(index, vp, off);
+	mutex_enter(page_vnode_mutex(vp));
+	pp = find_page(vp, off);
 	if (pp != NULL) {
 		*szc = pp->p_szc;
 		rc = 1;
 	}
-	mutex_exit(phm);
+	mutex_exit(page_vnode_mutex(vp));
 	return (rc);
 }
 
@@ -2339,14 +2195,9 @@ page_create_va(vnode_t *vp, u_offset_t off, size_t bytes, uint_t flags,
 	 * out we don't need the page, we put it back at the end.
 	 */
 	while (npages--) {
-		page_t		*pp;
-		kmutex_t	*phm = NULL;
-		ulong_t		index;
+		page_t *pp;
 
-		index = PAGE_HASH_FUNC(vp, off);
 top:
-		ASSERT(phm == NULL);
-		ASSERT(index == PAGE_HASH_FUNC(vp, off));
 		ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
 
 		if (npp == NULL) {
@@ -2406,32 +2257,30 @@ top:
 		 * Get the mutex and check to see if it really does
 		 * not exist.
 		 */
-		phm = PAGE_HASH_MUTEX(index);
-		mutex_enter(phm);
-		pp = page_hash_search(index, vp, off);
+		mutex_enter(page_vnode_mutex(vp));
+		pp = find_page(vp, off);
 		if (pp == NULL) {
 			VM_STAT_ADD(page_create_new);
 			pp = npp;
 			npp = NULL;
-			if (!page_hashin(pp, vp, off, phm)) {
+			if (!page_hashin(pp, vp, off, page_vnode_mutex(vp))) {
 				/*
-				 * Since we hold the page hash mutex and
-				 * just searched for this page, page_hashin
-				 * had better not fail.  If it does, that
-				 * means somethread did not follow the
-				 * page hash mutex rules.  Panic now and
-				 * get it over with.  As usual, go down
-				 * holding all the locks.
+				 * Since we hold the page vnode page cache
+				 * mutex and just searched for this page,
+				 * page_hashin had better not fail.  If it
+				 * does, that means some thread did not
+				 * follow the page hash mutex rules.  Panic
+				 * now and get it over with.  As usual, go
+				 * down holding all the locks.
 				 */
-				ASSERT(MUTEX_HELD(phm));
+				ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
 				panic("page_create: "
-				    "hashin failed %p %p %llx %p",
-				    (void *)pp, (void *)vp, off, (void *)phm);
+				    "hashin failed %p %p %llx",
+				    (void *)pp, (void *)vp, off);
 				/*NOTREACHED*/
 			}
-			ASSERT(MUTEX_HELD(phm));
-			mutex_exit(phm);
-			phm = NULL;
+			ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+			mutex_exit(page_vnode_mutex(vp));
 
 			/*
 			 * Hat layer locking need not be done to set
@@ -2454,8 +2303,7 @@ top:
 				 * wanted all new pages.  Undo all of the work
 				 * we have done.
 				 */
-				mutex_exit(phm);
-				phm = NULL;
+				mutex_exit(page_vnode_mutex(vp));
 				while (plist != NULL) {
 					pp = plist;
 					page_sub(&plist, pp);
@@ -2469,18 +2317,16 @@ top:
 				goto fail;
 			}
 			ASSERT(flags & PG_WAIT);
-			if (!page_lock(pp, SE_EXCL, phm, P_NO_RECLAIM)) {
+			if (!page_lock(pp, SE_EXCL, page_vnode_mutex(vp), P_NO_RECLAIM)) {
 				/*
 				 * Start all over again if we blocked trying
 				 * to lock the page.
 				 */
-				mutex_exit(phm);
+				mutex_exit(page_vnode_mutex(vp));
 				VM_STAT_ADD(page_create_page_lock_failed);
-				phm = NULL;
 				goto top;
 			}
-			mutex_exit(phm);
-			phm = NULL;
+			mutex_exit(page_vnode_mutex(vp));
 
 			if (PP_ISFREE(pp)) {
 				ASSERT(PP_ISAGED(pp) == 0);
@@ -2516,7 +2362,6 @@ fail:
 		npp->p_offset = (u_offset_t)-1;
 		page_list_add(npp, PG_FREE_LIST | PG_LIST_TAIL);
 		page_unlock(npp);
-
 	}
 
 	ASSERT(pages_req >= found_on_free);
@@ -3142,7 +2987,6 @@ page_destroy_free(page_t *pp)
 	page_hashout(pp, NULL);
 	ASSERT(pp->p_vnode == NULL);
 	ASSERT(pp->p_offset == (u_offset_t)-1);
-	ASSERT(pp->p_hash == NULL);
 
 	PP_SETAGED(pp);
 	page_list_add(pp, PG_FREE_LIST | PG_LIST_TAIL);
@@ -3174,8 +3018,6 @@ page_rename(page_t *opp, vnode_t *vp, u_offset_t off)
 	page_t		*pp;
 	int		olckcnt = 0;
 	int		ocowcnt = 0;
-	kmutex_t	*phm;
-	ulong_t		index;
 
 	ASSERT(PAGE_EXCL(opp) && !page_iolock_assert(opp));
 	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
@@ -3202,13 +3044,7 @@ page_rename(page_t *opp, vnode_t *vp, u_offset_t off)
 	page_hashout(opp, NULL);
 	PP_CLRAGED(opp);
 
-	/*
-	 * Acquire the appropriate page hash lock, since
-	 * we're going to rename the page.
-	 */
-	index = PAGE_HASH_FUNC(vp, off);
-	phm = PAGE_HASH_MUTEX(index);
-	mutex_enter(phm);
+	mutex_enter(page_vnode_mutex(vp));
 top:
 	/*
 	 * Look for an existing page with this name and destroy it if found.
@@ -3219,7 +3055,7 @@ top:
 	 * lock, again preventing another page from being created with
 	 * this identity.
 	 */
-	pp = page_hash_search(index, vp, off);
+	pp = find_page(vp, off);
 	if (pp != NULL) {
 		VM_STAT_ADD(page_rename_exists);
 
@@ -3231,7 +3067,7 @@ top:
 		 * the page.  It is tempting to add yet another arguement,
 		 * PL_KEEP or PL_DROP, to let page_lock know what to do.
 		 */
-		if (!page_lock(pp, SE_EXCL, phm, P_RECLAIM)) {
+		if (!page_lock(pp, SE_EXCL, page_vnode_mutex(vp), P_RECLAIM)) {
 			/*
 			 * Went to sleep because the page could not
 			 * be locked.  We were woken up when the page
@@ -3257,7 +3093,7 @@ top:
 			 * This is also not a lock protocol violation,
 			 * but rather the proper way to do things.
 			 */
-			mutex_exit(phm);
+			mutex_exit(page_vnode_mutex(vp));
 			(void) hat_pageunload(pp, HAT_FORCE_PGUNLOAD);
 			if (pp->p_szc != 0) {
 				ASSERT(!IS_SWAPFSVP(vp));
@@ -3265,21 +3101,21 @@ top:
 				page_demote_vp_pages(pp);
 				ASSERT(pp->p_szc == 0);
 			}
-			mutex_enter(phm);
+			mutex_enter(page_vnode_mutex(vp));
 		} else if (pp->p_szc != 0) {
 			ASSERT(!IS_SWAPFSVP(vp));
 			ASSERT(!VN_ISKAS(vp));
-			mutex_exit(phm);
+			mutex_exit(page_vnode_mutex(vp));
 			page_demote_vp_pages(pp);
 			ASSERT(pp->p_szc == 0);
-			mutex_enter(phm);
+			mutex_enter(page_vnode_mutex(vp));
 		}
-		page_hashout(pp, phm);
+		page_hashout(pp, page_vnode_mutex(vp));
 	}
 	/*
 	 * Hash in the page with the new identity.
 	 */
-	if (!page_hashin(opp, vp, off, phm)) {
+	if (!page_hashin(opp, vp, off, page_vnode_mutex(vp))) {
 		/*
 		 * We were holding phm while we searched for [vp, off]
 		 * and only dropped phm if we found and locked a page.
@@ -3290,8 +3126,8 @@ top:
 		/*NOTREACHED*/
 	}
 
-	ASSERT(MUTEX_HELD(phm));
-	mutex_exit(phm);
+	ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+	mutex_exit(page_vnode_mutex(vp));
 
 	/*
 	 * Now that we have dropped phm, lets get around to finishing up
@@ -3328,7 +3164,8 @@ top:
 }
 
 /*
- * low level routine to add page `pp' to the hash and vp chains for [vp, offset]
+ * low level routine to add page `page' to the AVL tree and vnode chains for
+ * [vp, offset]
  *
  * Pages are normally inserted at the start of a vnode's v_pages list.
  * If the vnode is VMODSORT and the page is modified, it goes at the end.
@@ -3337,57 +3174,51 @@ top:
  * Returns 1 on success and 0 on failure.
  */
 static int
-page_do_hashin(page_t *pp, vnode_t *vp, u_offset_t offset)
+page_do_hashin(page_t *page, vnode_t *vnode, u_offset_t offset)
 {
-	page_t		**listp;
-	page_t		*tp;
-	ulong_t		index;
+	avl_index_t where;
+	page_t **listp;
 
-	ASSERT(PAGE_EXCL(pp));
-	ASSERT(vp != NULL);
-	ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+	ASSERT(PAGE_EXCL(page));
+	ASSERT(vnode != NULL);
+	ASSERT(MUTEX_HELD(page_vnode_mutex(vnode)));
 
 	/*
-	 * Be sure to set these up before the page is inserted on the hash
-	 * list.  As soon as the page is placed on the list some other
+	 * Be sure to set these up before the page is inserted into the AVL
+	 * tree.  As soon as the page is placed on the list some other
 	 * thread might get confused and wonder how this page could
 	 * possibly hash to this list.
 	 */
-	pp->p_vnode = vp;
-	pp->p_offset = offset;
+	page->p_vnode = vnode;
+	page->p_offset = offset;
 
 	/*
 	 * record if this page is on a swap vnode
 	 */
-	if ((vp->v_flag & VISSWAP) != 0)
-		PP_SETSWAP(pp);
-
-	index = PAGE_HASH_FUNC(vp, offset);
-	ASSERT(MUTEX_HELD(PAGE_HASH_MUTEX(index)));
-	listp = &page_hash[index];
+	if ((vnode->v_flag & VISSWAP) != 0)
+		PP_SETSWAP(page);
 
 	/*
-	 * If this page is already hashed in, fail this attempt to add it.
+	 * Duplicates are not allowed - fail to insert if we already have a
+	 * page with this identity.
 	 */
-	for (tp = *listp; tp != NULL; tp = tp->p_hash) {
-		if (tp->p_vnode == vp && tp->p_offset == offset) {
-			pp->p_vnode = NULL;
-			pp->p_offset = (u_offset_t)(-1);
-			return (0);
-		}
+	if (avl_find(&vnode->v_pagecache, page, &where) != NULL) {
+		page->p_vnode = NULL;
+		page->p_offset = (u_offset_t)(-1);
+		return (0);
 	}
-	pp->p_hash = *listp;
-	*listp = pp;
+
+	avl_insert(&vnode->v_pagecache, page, where);
 
 	/*
 	 * Add the page to the vnode's list of pages
 	 */
-	if (vp->v_pages != NULL && IS_VMODSORT(vp) && hat_ismod(pp))
-		listp = &vp->v_pages->p_list.vnode.prev->p_list.vnode.next;
+	if (vnode->v_pages != NULL && IS_VMODSORT(vnode) && hat_ismod(page))
+		listp = &vnode->v_pages->p_list.vnode.prev->p_list.vnode.next;
 	else
-		listp = &vp->v_pages;
+		listp = &vnode->v_pages;
 
-	page_vpadd(listp, pp);
+	page_vpadd(listp, page);
 
 	return (1);
 }
@@ -3401,130 +3232,100 @@ page_do_hashin(page_t *pp, vnode_t *vp, u_offset_t offset)
 int
 page_hashin(page_t *pp, vnode_t *vp, u_offset_t offset, kmutex_t *hold)
 {
-	kmutex_t	*phm = NULL;
-	kmutex_t	*vphm;
-	int		rc;
+	int rc;
 
-	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
 	ASSERT(pp->p_fsdata == 0 || panicstr);
 
 	VM_STAT_ADD(hashin_count);
 
-	if (hold != NULL)
-		phm = hold;
-	else {
+	if (hold != NULL) {
+		hold = NULL;
+	} else {
 		VM_STAT_ADD(hashin_not_held);
-		phm = PAGE_HASH_MUTEX(PAGE_HASH_FUNC(vp, offset));
-		mutex_enter(phm);
+		hold = page_vnode_mutex(vp);
+		mutex_enter(hold);
 	}
 
-	vphm = page_vnode_mutex(vp);
-	mutex_enter(vphm);
 	rc = page_do_hashin(pp, vp, offset);
-	mutex_exit(vphm);
-	if (hold == NULL)
-		mutex_exit(phm);
+
+	if (hold != NULL)
+		mutex_exit(hold);
+
 	if (rc == 0)
 		VM_STAT_ADD(hashin_already);
+
 	return (rc);
 }
 
 /*
- * Remove page ``pp'' from the hash and vp chains and remove vp association.
- * All mutexes must be held
+ * Remove page `page' from the AVL tree and vnode chains and remove its
+ * vnode association.  All mutexes must be held
  */
 static void
-page_do_hashout(page_t *pp)
+page_do_hashout(page_t *page)
 {
 	page_t	**hpp;
 	page_t	*hp;
-	vnode_t	*vp = pp->p_vnode;
+	vnode_t	*vnode = page->p_vnode;
 
-	ASSERT(vp != NULL);
-	ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+	ASSERT(vnode != NULL);
+	ASSERT(MUTEX_HELD(page_vnode_mutex(vnode)));
 
-	/*
-	 * First, take pp off of its hash chain.
-	 */
-	hpp = &page_hash[PAGE_HASH_FUNC(vp, pp->p_offset)];
-
-	for (;;) {
-		hp = *hpp;
-		if (hp == pp)
-			break;
-		if (hp == NULL) {
-			panic("page_do_hashout");
-			/*NOTREACHED*/
-		}
-		hpp = &hp->p_hash;
-	}
-	*hpp = pp->p_hash;
+	avl_remove(&vnode->v_pagecache, page);
 
 	/*
 	 * Now remove it from its associated vnode.
 	 */
-	if (vp->v_pages)
-		page_vpsub(&vp->v_pages, pp);
+	if (vnode->v_pages)
+		page_vpsub(&vnode->v_pages, page);
 
-	pp->p_hash = NULL;
-	page_clr_all_props(pp);
-	PP_CLRSWAP(pp);
-	pp->p_vnode = NULL;
-	pp->p_offset = (u_offset_t)-1;
-	pp->p_fsdata = 0;
+	page_clr_all_props(page);
+	PP_CLRSWAP(page);
+	page->p_vnode = NULL;
+	page->p_offset = (u_offset_t)-1;
+	page->p_fsdata = 0;
 }
 
 /*
- * Remove page ``pp'' from the hash and vp chains and remove vp association.
+ * Remove page `page' from the AVL tree and vnode chains and remove vnode
+ * association.
  *
- * When `phm' is non-NULL it contains the address of the mutex protecting the
- * hash list pp is on.  It is not dropped.
+ * When `hold' is non-NULL it contains the address of the mutex protecting the
+ * AVL tree page is on.  It is not dropped.
  */
 void
-page_hashout(page_t *pp, kmutex_t *phm)
+page_hashout(page_t *pp, kmutex_t *hold)
 {
 	vnode_t		*vp;
 	ulong_t		index;
-	kmutex_t	*nphm;
-	kmutex_t	*vphm;
 	kmutex_t	*sep;
 
-	ASSERT(phm != NULL ? MUTEX_HELD(phm) : 1);
+	ASSERT(hold != NULL ? MUTEX_HELD(hold) : 1);
 	ASSERT(pp->p_vnode != NULL);
 	ASSERT((PAGE_EXCL(pp) && !page_iolock_assert(pp)) || panicstr);
-	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(pp->p_vnode)));
 
 	vp = pp->p_vnode;
 
-	/*
-	 *
-	 */
-	VM_STAT_ADD(hashout_count);
-	index = PAGE_HASH_FUNC(vp, pp->p_offset);
-	if (phm == NULL) {
+	if (hold != NULL) {
+		hold = NULL;
+	} else {
 		VM_STAT_ADD(hashout_not_held);
-		nphm = PAGE_HASH_MUTEX(index);
-		mutex_enter(nphm);
+		hold = page_vnode_mutex(vp);
+		mutex_enter(hold);
 	}
-	ASSERT(phm ? phm == PAGE_HASH_MUTEX(index) : 1);
-
-
-	/*
-	 * grab page vnode mutex and remove it...
-	 */
-	vphm = page_vnode_mutex(vp);
-	mutex_enter(vphm);
 
 	page_do_hashout(pp);
 
-	mutex_exit(vphm);
-	if (phm == NULL)
-		mutex_exit(nphm);
+	if (hold != NULL)
+		mutex_exit(hold);
 
 	/*
 	 * Wake up processes waiting for this page.  The page's
 	 * identity has been changed, and is probably not the
 	 * desired page any longer.
+	 *
+	 * FIXME: is this a possible lock inversion with the passed in
+	 * mutex?
 	 */
 	sep = page_se_mutex(pp);
 	mutex_enter(sep);
@@ -4464,30 +4265,15 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	ASSERT(PAGE_EXCL(new));
 	ASSERT(vp != NULL);
 	ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
-	ASSERT(MUTEX_HELD(PAGE_HASH_MUTEX(PAGE_HASH_FUNC(vp, old->p_offset))));
-
-	/*
-	 * First find old page on the page hash list
-	 */
-	hash_list = &page_hash[PAGE_HASH_FUNC(vp, old->p_offset)];
-
-	for (;;) {
-		if (*hash_list == old)
-			break;
-		if (*hash_list == NULL) {
-			panic("page_do_hashout");
-			/*NOTREACHED*/
-		}
-		hash_list = &(*hash_list)->p_hash;
-	}
 
 	/*
 	 * update new and replace old with new on the page hash list
 	 */
 	new->p_vnode = old->p_vnode;
 	new->p_offset = old->p_offset;
-	new->p_hash = old->p_hash;
-	*hash_list = new;
+
+	avl_remove(&vp->v_pagecache, old);
+	avl_add(&vp->v_pagecache, new);
 
 	if ((new->p_vnode->v_flag & VISSWAP) != 0)
 		PP_SETSWAP(new);
@@ -4510,7 +4296,6 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	/*
 	 * clear out the old page
 	 */
-	old->p_hash = NULL;
 	old->p_list.vnode.next = NULL;
 	old->p_list.vnode.prev = NULL;
 	old->p_vnode = NULL;
@@ -4541,7 +4326,6 @@ page_relocate_hash(page_t *pp_new, page_t *pp_old)
 {
 	vnode_t *vp = pp_old->p_vnode;
 	u_offset_t off = pp_old->p_offset;
-	kmutex_t *phm, *vphm;
 
 	/*
 	 * Rehash two pages
@@ -4551,21 +4335,13 @@ page_relocate_hash(page_t *pp_new, page_t *pp_old)
 	ASSERT(vp != NULL);
 	ASSERT(pp_new->p_vnode == NULL);
 
-	/*
-	 * hashout then hashin while holding the mutexes
-	 */
-	phm = PAGE_HASH_MUTEX(PAGE_HASH_FUNC(vp, off));
-	mutex_enter(phm);
-	vphm = page_vnode_mutex(vp);
-	mutex_enter(vphm);
+	mutex_enter(page_vnode_mutex(vp));
 
 	page_do_relocate_hash(pp_new, pp_old);
-
-	/* The following comment preserved from page_flip(). */
 	pp_new->p_fsdata = pp_old->p_fsdata;
 	pp_old->p_fsdata = 0;
-	mutex_exit(vphm);
-	mutex_exit(phm);
+
+	mutex_exit(page_vnode_mutex(vp));
 
 	/*
 	 * The page_struct_lock need not be acquired for lckcnt and
@@ -4576,7 +4352,6 @@ page_relocate_hash(page_t *pp_new, page_t *pp_old)
 	pp_new->p_lckcnt = pp_old->p_lckcnt;
 	pp_new->p_cowcnt = pp_old->p_cowcnt;
 	pp_old->p_lckcnt = pp_old->p_cowcnt = 0;
-
 }
 
 /*
@@ -7418,4 +7193,32 @@ pcf_decrement_multiple(pgcnt_t *pcftotal_ret, pgcnt_t npages, int unlock)
 	if (pcftotal_ret != NULL)
 		*pcftotal_ret = pcftotal;
 	return (0);
+}
+
+static int
+pagecache_cmp(const void *va, const void *vb)
+{
+	const page_t *a = va;
+	const page_t *b = vb;
+
+	if (a->p_offset > b->p_offset)
+		return (1);
+	if (a->p_offset < b->p_offset)
+		return (-1);
+	return (0);
+}
+
+void
+pagecache_init(struct vnode *vnode)
+{
+	avl_create(&vnode->v_pagecache, pagecache_cmp, sizeof (struct page),
+	    offsetof(struct page, p_pagecache));
+	mutex_init(&vnode->v_pagecache_lock, NULL, MUTEX_DEFAULT, NULL);
+}
+
+void
+pagecache_fini(struct vnode *vnode)
+{
+	mutex_destroy(&vnode->v_pagecache_lock);
+	avl_destroy(&vnode->v_pagecache);
 }

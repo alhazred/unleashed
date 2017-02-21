@@ -3186,7 +3186,6 @@ page_get_mnode_anylist(ulong_t origbin, uchar_t szc, uint_t flags,
 				ASSERT(PP_ISFREE(pp));
 				ASSERT(PP_ISAGED(pp));
 				ASSERT(pp->p_vnode == NULL);
-				ASSERT(pp->p_hash == NULL);
 				ASSERT(pp->p_offset == (u_offset_t)-1);
 				ASSERT(pp->p_szc == szc);
 				ASSERT(PFN_2_MEM_NODE(pp->p_pagenum) == mnode);
@@ -3460,11 +3459,15 @@ page_get_anylist(struct vnode *vp, u_offset_t off, struct as *as, caddr_t vaddr,
  *	 specific page_get_anylist() interface.
  */
 
-#define	PAGE_HASH_SEARCH(index, pp, vp, off) { \
-	for ((pp) = page_hash[(index)]; (pp); (pp) = (pp)->p_hash) { \
-		if ((pp)->p_vnode == (vp) && (pp)->p_offset == (off)) \
-			break; \
-	} \
+static inline page_t *
+find_page(vnode_t *vnode, u_offset_t off)
+{
+	page_t key = {
+		.p_vnode = vnode,
+		.p_offset = off,
+	};
+
+	return (avl_find(&vnode->v_pagecache, &key, NULL));
 }
 
 
@@ -3484,8 +3487,6 @@ page_create_io(
 	page_t		*npp = NULL;
 	uint_t		pages_req;
 	page_t		*pp;
-	kmutex_t	*phm = NULL;
-	uint_t		index;
 
 	TRACE_4(TR_FAC_VM, TR_PAGE_CREATE_START,
 	    "page_create_start:vp %p off %llx bytes %u flags %x",
@@ -3565,12 +3566,7 @@ page_create_io(
 	 * out we don't need the page, we put it back at the end.
 	 */
 	while (npages--) {
-		phm = NULL;
-
-		index = PAGE_HASH_FUNC(vp, off);
 top:
-		ASSERT(phm == NULL);
-		ASSERT(index == PAGE_HASH_FUNC(vp, off));
 		ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
 
 		if (npp == NULL) {
@@ -3617,7 +3613,7 @@ top:
 				 * cachelist, we must destroy the
 				 * old vnode association.
 				 */
-				page_hashout(npp, (kmutex_t *)NULL);
+				page_hashout(npp, NULL);
 			}
 		}
 
@@ -3636,14 +3632,14 @@ top:
 		 * Get the mutex and check to see if it really does
 		 * not exist.
 		 */
-		phm = PAGE_HASH_MUTEX(index);
-		mutex_enter(phm);
-		PAGE_HASH_SEARCH(index, pp, vp, off);
+		mutex_enter(page_vnode_mutex(vp));
+		pp = find_page(vp, off);
+
 		if (pp == NULL) {
 			VM_STAT_ADD(page_create_new);
 			pp = npp;
 			npp = NULL;
-			if (!page_hashin(pp, vp, off, phm)) {
+			if (!page_hashin(pp, vp, off, page_vnode_mutex(vp))) {
 				/*
 				 * Since we hold the page hash mutex and
 				 * just searched for this page, page_hashin
@@ -3653,14 +3649,13 @@ top:
 				 * get it over with.  As usual, go down
 				 * holding all the locks.
 				 */
-				ASSERT(MUTEX_HELD(phm));
-				panic("page_create: hashin fail %p %p %llx %p",
-				    (void *)pp, (void *)vp, off, (void *)phm);
+				ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+				panic("page_create: hashin fail %p %p %llx",
+				    (void *)pp, (void *)vp, off);
 
 			}
-			ASSERT(MUTEX_HELD(phm));
-			mutex_exit(phm);
-			phm = NULL;
+			ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+			mutex_exit(page_vnode_mutex(vp));
 
 			/*
 			 * Hat layer locking need not be done to set
@@ -3675,9 +3670,9 @@ top:
 			 */
 			page_set_props(pp, P_REF);
 		} else {
-			ASSERT(MUTEX_HELD(phm));
-			mutex_exit(phm);
-			phm = NULL;
+			ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+			mutex_exit(page_vnode_mutex(vp));
+
 			/*
 			 * NOTE: This should not happen for pages associated
 			 *	 with kernel vnode 'kvp'.
