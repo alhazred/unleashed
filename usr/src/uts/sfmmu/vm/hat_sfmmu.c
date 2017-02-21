@@ -7567,10 +7567,10 @@ hat_page_setattr(page_t *pp, uint_t flag)
 		 * grabbing the vphm mutex. Must not let it become NULL when
 		 * pp is the only page on the list.
 		 */
-		if (pp->p_vpnext != pp) {
+		if (pp->p_list.vnode.next != pp) {
 			page_vpsub(&vp->v_pages, pp);
 			if (vp->v_pages != NULL)
-				listp = &vp->v_pages->p_vpprev->p_vpnext;
+				listp = &vp->v_pages->p_list.vnode.prev->p_list.vnode.next;
 			else
 				listp = &vp->v_pages;
 			page_vpadd(listp, pp);

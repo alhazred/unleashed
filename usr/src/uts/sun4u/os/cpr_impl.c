@@ -1543,7 +1543,7 @@ i_cpr_find_ppages(void)
 	for (pp = promvp.v_pages; pp; ) {
 		if (cpr_setbit(pp->p_offset, mapflag) == 0)
 			vcnt++;
-		pp = pp->p_vpnext;
+		pp = pp->p_list.vnode.next;
 		if (pp == promvp.v_pages)
 			break;
 	}

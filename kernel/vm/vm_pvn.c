@@ -401,7 +401,7 @@ pvn_write_done(page_t *plist, int flags)
 			 */
 			vphm = page_vnode_mutex(vp);
 			mutex_enter(vphm);
-			if ((pp->p_vpnext != pp) && !hat_ismod(pp)) {
+			if ((pp->p_list.vnode.next != pp) && !hat_ismod(pp)) {
 				page_vpsub(&vp->v_pages, pp);
 				page_vpadd(&vp->v_pages, pp);
 			}
@@ -790,8 +790,8 @@ pvn_vplist_dirty(
 	/*
 	 * insert the markers and loop through the list of pages
 	 */
-	page_vpadd(&vp->v_pages->p_vpprev->p_vpnext, mark);
-	page_vpadd(&mark->p_vpnext, end);
+	page_vpadd(&vp->v_pages->p_list.vnode.prev->p_list.vnode.next, mark);
+	page_vpadd(&mark->p_list.vnode.next, end);
 	for (;;) {
 
 		/*
@@ -804,14 +804,14 @@ pvn_vplist_dirty(
 		/*
 		 * otherwise stop when we've gone through all the pages
 		 */
-		if (mark->p_vpprev == end)
+		if (mark->p_list.vnode.prev == end)
 			break;
 
-		pp = mark->p_vpprev;
+		pp = mark->p_list.vnode.prev;
 		if (vp->v_pages == pp)
 			where_to_move = &vp->v_pages;
 		else
-			where_to_move = &pp->p_vpprev->p_vpnext;
+			where_to_move = &pp->p_list.vnode.prev->p_list.vnode.next;
 
 		ASSERT(pp->p_vnode == vp);
 
@@ -836,7 +836,7 @@ pvn_vplist_dirty(
 				page_vpsub(&vp->v_pages, mark);
 				page_vpadd(where_to_move, mark);
 				do {
-					chk = chk->p_vpprev;
+					chk = chk->p_list.vnode.prev;
 					ASSERT(chk != end);
 					if (chk == mark)
 						continue;
@@ -993,12 +993,12 @@ pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
 		return;
 	}
 
-	end = vp->v_pages->p_vpprev;
+	end = vp->v_pages->p_list.vnode.prev;
 	shuffle = IS_VMODSORT(vp) && (vp->v_pages != end);
 	pp = vp->v_pages;
 
 	for (;;) {
-		next = pp->p_vpnext;
+		next = pp->p_list.vnode.next;
 		if (!PP_ISPVN_TAG(pp) && page_check(pp)) {
 			/*
 			 * hat_setmod_only() in contrast to hat_setmod() does
@@ -1009,7 +1009,7 @@ pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
 			if (shuffle) {
 				page_vpsub(&vp->v_pages, pp);
 				ASSERT(vp->v_pages != NULL);
-				page_vpadd(&vp->v_pages->p_vpprev->p_vpnext,
+				page_vpadd(&vp->v_pages->p_list.vnode.prev->p_list.vnode.next,
 				    pp);
 			}
 		}

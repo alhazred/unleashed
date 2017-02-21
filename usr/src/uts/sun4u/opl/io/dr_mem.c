@@ -418,7 +418,7 @@ dr_memlist_del_retired_pages(struct memlist *mlist)
 		}
 
 		page_unlock(pp);
-	} while ((pp = pp->p_vpnext) != vp->v_pages);
+	} while ((pp = pp->p_list.vnode.next) != vp->v_pages);
 
 	mutex_exit(vphm);
 

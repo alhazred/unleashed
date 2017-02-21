@@ -11990,7 +11990,7 @@ nfs4_get_commit(vnode_t *vp)
 			    rp->r_commit.c_commbase + PAGESIZE;
 		}
 		page_add(&rp->r_commit.c_pages, pp);
-	} while ((pp = pp->p_vpnext) != vp->v_pages);
+	} while ((pp = pp->p_list.vnode.next) != vp->v_pages);
 
 	mutex_exit(vphm);
 }

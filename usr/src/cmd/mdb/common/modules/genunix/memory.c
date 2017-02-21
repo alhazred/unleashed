@@ -168,7 +168,7 @@ page_walk_step(mdb_walk_state_t *wsp)
 		 * first page hasn't been set yet (i.e. we are on the
 		 * first page), set it.
 		 */
-		wsp->walk_addr = (uintptr_t)page.p_vpnext;
+		wsp->walk_addr = (uintptr_t)page.p_list.vnode.next;
 		if (pwd->pw_first == (uintptr_t)NULL)
 			pwd->pw_first = pp;
 

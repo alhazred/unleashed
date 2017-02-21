@@ -1326,8 +1326,8 @@ chk_lpg(page_t *pp, uchar_t szc)
 		return;
 	}
 
-	ASSERT(pp->p_vpnext == pp || pp->p_vpnext == NULL);
-	ASSERT(pp->p_vpprev == pp || pp->p_vpprev == NULL);
+	ASSERT(pp->p_list.vnode.next == pp || pp->p_list.vnode.next == NULL);
+	ASSERT(pp->p_list.vnode.prev == pp || pp->p_list.vnode.prev == NULL);
 
 	ASSERT(IS_P2ALIGNED(pp->p_pagenum, npgs));
 	ASSERT(pp->p_pagenum == (pp->p_next->p_pagenum - 1));
@@ -1346,8 +1346,8 @@ chk_lpg(page_t *pp, uchar_t szc)
 		ASSERT(pp->p_szc == szc);
 		ASSERT(PP_ISFREE(pp));
 		ASSERT(PP_ISAGED(pp));
-		ASSERT(pp->p_vpnext == pp || pp->p_vpnext == NULL);
-		ASSERT(pp->p_vpprev == pp || pp->p_vpprev == NULL);
+		ASSERT(pp->p_list.vnode.next == pp || pp->p_list.vnode.next == NULL);
+		ASSERT(pp->p_list.vnode.prev == pp || pp->p_list.vnode.prev == NULL);
 		ASSERT(pp->p_vnode  == NULL);
 		ASSERT(PP_ISNORELOC(pp) == noreloc);
 
@@ -2621,7 +2621,7 @@ page_freelist_split(uchar_t szc, uint_t color, int mnode, int mtype,
 			    ((pfnhi != PFNNULL && pp->p_pagenum >= pfnhi) ||
 			    (pfnlo != PFNNULL && pp->p_pagenum < pfnlo))) {
 				do {
-					pp = pp->p_vpnext;
+					pp = pp->p_list.vnode.next;
 					if (pp == firstpp) {
 						pp = NULL;
 						break;
@@ -2970,23 +2970,20 @@ try_again:
 			ASSERT(PFN_2_MEM_NODE(pp->p_pagenum) == mnode);
 
 			/*
-			 * Walk down the hash chain.
-			 * 8k pages are linked on p_next
-			 * and p_prev fields. Large pages
-			 * are a contiguous group of
-			 * constituent pages linked together
-			 * on their p_next and p_prev fields.
-			 * The large pages are linked together
-			 * on the hash chain using p_vpnext
-			 * p_vpprev of the base constituent
-			 * page of each large page.
+			 * Walk down the hash chain.  4k/8k pages are linked
+			 * on p_next and p_prev fields. Large pages are a
+			 * contiguous group of constituent pages linked
+			 * together on their p_next and p_prev fields.  The
+			 * large pages are linked together on the hash chain
+			 * using p_list.vnode of the base constituent page
+			 * of each large page.
 			 */
 			first_pp = pp;
 			while (!page_trylock_cons(pp, SE_EXCL)) {
 				if (szc == 0) {
 					pp = pp->p_next;
 				} else {
-					pp = pp->p_vpnext;
+					pp = pp->p_list.vnode.next;
 				}
 
 				ASSERT(PP_ISFREE(pp));

@@ -989,7 +989,7 @@ kcage_init(pgcnt_t preferred_size)
 				PP_SETNORELOC(pp);
 				PLCNT_XFER_NORELOC(pp);
 			}
-		} while ((pp = pp->p_vpnext) != kvp.v_pages);
+		} while ((pp = pp->p_list.vnode.next) != kvp.v_pages);
 
 	}
 

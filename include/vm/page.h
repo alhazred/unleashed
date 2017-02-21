@@ -275,10 +275,10 @@ struct as;
  *
  * Pages associated with a given vnode appear on a list anchored in the
  * vnode by the `v_pages' field.  They are linked together with
- * `p_vpnext' and `p_vpprev'.  The field `p_offset' contains a page's
- * offset within the vnode.  The pages on this list are not kept in
- * offset order.  These lists, in a manner similar to the hash lists,
- * are protected by an array of mutexes called `vph_hash'.  Before
+ * `p_list.vnode.next' and `p_list.vnode.prev'.  The field `p_offset'
+ * contains a page's offset within the vnode.  The pages on this list are
+ * not kept in offset order.  These lists, in a manner similar to the hash
+ * lists, are protected by an array of mutexes called `vph_hash'.  Before
  * searching or modifying this chain the appropriate mutex in the
  * vph_hash[] array must be held.
  *
@@ -367,8 +367,8 @@ struct as;
  *	p_hash		p_selock(E,S)	p_selock(E) &&	    p_selock, ph_mutex
  *					ph_mutex[]
  *	=====================================================================
- *	p_vpnext	p_selock(E,S)	p_selock(E) &&      p_selock,
- *	p_vpprev			v_pagecache_lock    v_pagecache_lock
+ *	p_list		p_selock(E,S)	p_selock(E) &&      p_selock,
+ *					v_pagecache_lock    v_pagecache_lock
  *	=====================================================================
  *	When the p_free bit is set:
  *
@@ -507,8 +507,13 @@ typedef struct page {
 	uint_t		p_vpmref;	/* vpm ref - index of the vpmap_t */
 #endif
 	struct page	*p_hash;	/* hash by [vnode, offset] */
-	struct page	*p_vpnext;	/* next page in vnode list */
-	struct page	*p_vpprev;	/* prev page in vnode list */
+	union {
+		/* vnode page list - used when on cached list */
+		struct {
+			struct page *next;
+			struct page *prev;
+		} vnode;
+	} p_list;
 	struct page	*p_next;	/* next page in free/intrans lists */
 	struct page	*p_prev;	/* prev page in free/intrans lists */
 	ushort_t	p_lckcnt;	/* number of locks on page data */

@@ -3383,7 +3383,7 @@ page_do_hashin(page_t *pp, vnode_t *vp, u_offset_t offset)
 	 * Add the page to the vnode's list of pages
 	 */
 	if (vp->v_pages != NULL && IS_VMODSORT(vp) && hat_ismod(pp))
-		listp = &vp->v_pages->p_vpprev->p_vpnext;
+		listp = &vp->v_pages->p_list.vnode.prev->p_list.vnode.next;
 	else
 		listp = &vp->v_pages;
 
@@ -3687,7 +3687,7 @@ page_list_next(page_t *pp)
 
 /*
  * Add the page to the front of the linked list of pages
- * using p_vpnext/p_vpprev pointers for the list.
+ * using p_list.vnode for the list.
  *
  * The caller is responsible for protecting the lists.
  */
@@ -3695,19 +3695,19 @@ void
 page_vpadd(page_t **ppp, page_t *pp)
 {
 	if (*ppp == NULL) {
-		pp->p_vpnext = pp->p_vpprev = pp;
+		pp->p_list.vnode.next = pp->p_list.vnode.prev = pp;
 	} else {
-		pp->p_vpnext = *ppp;
-		pp->p_vpprev = (*ppp)->p_vpprev;
-		(*ppp)->p_vpprev = pp;
-		pp->p_vpprev->p_vpnext = pp;
+		pp->p_list.vnode.next = *ppp;
+		pp->p_list.vnode.prev = (*ppp)->p_list.vnode.prev;
+		(*ppp)->p_list.vnode.prev = pp;
+		pp->p_list.vnode.prev->p_list.vnode.next = pp;
 	}
 	*ppp = pp;
 }
 
 /*
  * Remove this page from the linked list of pages
- * using p_vpnext/p_vpprev pointers for the list.
+ * using p_list.vnode for the list.
  *
  * The caller is responsible for protecting the lists.
  */
@@ -3721,15 +3721,15 @@ page_vpsub(page_t **ppp, page_t *pp)
 	}
 
 	if (*ppp == pp)
-		*ppp = pp->p_vpnext;		/* go to next page */
+		*ppp = pp->p_list.vnode.next;		/* go to next page */
 
 	if (*ppp == pp)
 		*ppp = NULL;			/* page list is gone */
 	else {
-		pp->p_vpprev->p_vpnext = pp->p_vpnext;
-		pp->p_vpnext->p_vpprev = pp->p_vpprev;
+		pp->p_list.vnode.prev->p_list.vnode.next = pp->p_list.vnode.next;
+		pp->p_list.vnode.next->p_list.vnode.prev = pp->p_list.vnode.prev;
 	}
-	pp->p_vpprev = pp->p_vpnext = pp;	/* make pp a list of one */
+	pp->p_list.vnode.prev = pp->p_list.vnode.next = pp;	/* make pp a list of one */
 }
 
 /*
@@ -4481,14 +4481,14 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	/*
 	 * replace old with new on the vnode's page list
 	 */
-	if (old->p_vpnext == old) {
-		new->p_vpnext = new;
-		new->p_vpprev = new;
+	if (old->p_list.vnode.next == old) {
+		new->p_list.vnode.next = new;
+		new->p_list.vnode.prev = new;
 	} else {
-		new->p_vpnext = old->p_vpnext;
-		new->p_vpprev = old->p_vpprev;
-		new->p_vpnext->p_vpprev = new;
-		new->p_vpprev->p_vpnext = new;
+		new->p_list.vnode.next = old->p_list.vnode.next;
+		new->p_list.vnode.prev = old->p_list.vnode.prev;
+		new->p_list.vnode.next->p_list.vnode.prev = new;
+		new->p_list.vnode.prev->p_list.vnode.next = new;
 	}
 	if (vp->v_pages == old)
 		vp->v_pages = new;
@@ -4497,8 +4497,8 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	 * clear out the old page
 	 */
 	old->p_hash = NULL;
-	old->p_vpnext = NULL;
-	old->p_vpprev = NULL;
+	old->p_list.vnode.next = NULL;
+	old->p_list.vnode.prev = NULL;
 	old->p_vnode = NULL;
 	PP_CLRSWAP(old);
 	old->p_offset = (u_offset_t)-1;

@@ -183,7 +183,7 @@ nfs4_dross_pages(vnode_t *vp)
 				mutex_exit(vphm);
 				return (1);
 			}
-		} while ((pp = pp->p_vpnext) != vp->v_pages);
+		} while ((pp = pp->p_list.vnode.next) != vp->v_pages);
 	}
 	mutex_exit(vphm);
 
