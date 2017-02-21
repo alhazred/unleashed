@@ -109,11 +109,17 @@ _CCLINK?=	${CC}
 
 ${PROG}: ${LIBCRT0} ${OBJS} ${LIBC} ${DPADD}
 	${_CCLINK} ${LDFLAGS} ${LDSTATIC} -o ${.TARGET} -nostdlib ${_PROGLDOPTS} -L${DESTDIR}/usr/lib ${LIBCRT0} ${LIBCRTBEGIN} ${OBJS} ${LDADD} -L${DESTDIR}/usr/lib ${_SUPCXX} -lgcc -lc -lgcc ${LIBCRTEND}
+.if !empty(BUILDVERSION)
+	mcs -d -a 'illumos-unleashed ${BUILDVERSION}' ${PROG}
+.endif
 
 .else
 
 ${PROG}: ${LIBCRT0} ${OBJS} ${LIBC} ${DPADD}
 	${_CCLINK} ${LDFLAGS} ${LDSTATIC} -o ${.TARGET} ${_PROGLDOPTS} ${OBJS} ${LDADD}
+.if !empty(BUILDVERSION)
+	mcs -d -a 'illumos-unleashed ${BUILDVERSION}' ${PROG}
+.endif
 
 .endif	# defined(DESTDIR)
 .endif	# defined(OBJS) && !empty(OBJS)

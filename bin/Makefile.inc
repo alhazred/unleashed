@@ -9,8 +9,4 @@ _PROGLDOPTS+=	-Wl,-M${MAPFILES}/map.pagealign
 _PROGLDOPTS+=	-Wl,-M${MAPFILES}/map.noexdata
 .endif
 BUILDVERSION!=	git describe --long --all HEAD | cut -d/ -f2-
-.if !target(beforeinstall)
-beforeinstall:
-	mcs -d -a 'illumos-unleashed ${BUILDVERSION}' ${PROG}
-.endif
 .endif
