@@ -513,6 +513,12 @@ typedef struct page {
 			struct page *next;
 			struct page *prev;
 		} vnode;
+
+		/* large page list - used when free & large page */
+		struct {
+			struct page *next;
+			struct page *prev;
+		} largepg;
 	} p_list;
 	struct page	*p_next;	/* next page in free/intrans lists */
 	struct page	*p_prev;	/* prev page in free/intrans lists */

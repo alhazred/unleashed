@@ -1326,8 +1326,8 @@ chk_lpg(page_t *pp, uchar_t szc)
 		return;
 	}
 
-	ASSERT(pp->p_list.vnode.next == pp || pp->p_list.vnode.next == NULL);
-	ASSERT(pp->p_list.vnode.prev == pp || pp->p_list.vnode.prev == NULL);
+	ASSERT(pp->p_list.largepg.next == pp || pp->p_list.largepg.next == NULL);
+	ASSERT(pp->p_list.largepg.prev == pp || pp->p_list.largepg.prev == NULL);
 
 	ASSERT(IS_P2ALIGNED(pp->p_pagenum, npgs));
 	ASSERT(pp->p_pagenum == (pp->p_next->p_pagenum - 1));
@@ -1346,8 +1346,8 @@ chk_lpg(page_t *pp, uchar_t szc)
 		ASSERT(pp->p_szc == szc);
 		ASSERT(PP_ISFREE(pp));
 		ASSERT(PP_ISAGED(pp));
-		ASSERT(pp->p_list.vnode.next == pp || pp->p_list.vnode.next == NULL);
-		ASSERT(pp->p_list.vnode.prev == pp || pp->p_list.vnode.prev == NULL);
+		ASSERT(pp->p_list.largepg.next == pp || pp->p_list.largepg.next == NULL);
+		ASSERT(pp->p_list.largepg.prev == pp || pp->p_list.largepg.prev == NULL);
 		ASSERT(pp->p_vnode  == NULL);
 		ASSERT(PP_ISNORELOC(pp) == noreloc);
 
@@ -1595,7 +1595,7 @@ page_list_add_pages(page_t *pp, int flags)
 
 	if (flags & PG_LIST_ISINIT) {
 		ASSERT(pp->p_szc == mmu_page_sizes - 1);
-		page_vpadd(&PAGE_FREELISTS(mnode, pp->p_szc, bin, mtype), pp);
+		page_lpadd(&PAGE_FREELISTS(mnode, pp->p_szc, bin, mtype), pp);
 		ASSERT(!PP_ISNORELOC(pp));
 		PLCNT_INCR(pp, mnode, mtype, pp->p_szc, flags);
 	} else {
@@ -1605,7 +1605,7 @@ page_list_add_pages(page_t *pp, int flags)
 		pcm = PC_BIN_MUTEX(mnode, bin, PG_FREE_LIST);
 
 		mutex_enter(pcm);
-		page_vpadd(&PAGE_FREELISTS(mnode, pp->p_szc, bin, mtype), pp);
+		page_lpadd(&PAGE_FREELISTS(mnode, pp->p_szc, bin, mtype), pp);
 		page_ctr_add(mnode, mtype, pp, PG_FREE_LIST);
 		mutex_exit(pcm);
 
@@ -1814,7 +1814,7 @@ try_again:
 
 	mtype = PP_2_MTYPE(pp);
 	if (pp->p_szc != 0) {
-		page_vpsub(&PAGE_FREELISTS(mnode, pp->p_szc, bin, mtype), pp);
+		page_lpsub(&PAGE_FREELISTS(mnode, pp->p_szc, bin, mtype), pp);
 		CHK_LPG(pp, pp->p_szc);
 	} else {
 		VM_STAT_ADD(vmm_vmstats.plsubpages_szc0);
@@ -2029,7 +2029,7 @@ page_promote(int mnode, pfn_t pfnum, uchar_t new_szc, int flags, int mtype)
 			 * PG_FREE_LIST
 			 */
 			if (pp->p_szc) {
-				page_vpsub(&PAGE_FREELISTS(mnode,
+				page_lpsub(&PAGE_FREELISTS(mnode,
 				    pp->p_szc, bin, mtype), pp);
 			} else {
 				mach_page_sub(&PAGE_FREELISTS(mnode, 0,
@@ -2106,7 +2106,7 @@ page_promote(int mnode, pfn_t pfnum, uchar_t new_szc, int flags, int mtype)
 	bin = PP_2_BIN(pplist);
 	mnode = PP_2_MEM_NODE(pplist);
 	mtype = PP_2_MTYPE(pplist);
-	page_vpadd(&PAGE_FREELISTS(mnode, new_szc, bin, mtype), pplist);
+	page_lpadd(&PAGE_FREELISTS(mnode, new_szc, bin, mtype), pplist);
 
 	page_ctr_add(mnode, mtype, pplist, PG_FREE_LIST);
 	return (NULL);
@@ -2167,7 +2167,7 @@ page_demote(int mnode, pfn_t pfnum, pfn_t pfnmax, uchar_t cur_szc,
 	bin = PP_2_BIN(pplist);
 	ASSERT(mnode == PP_2_MEM_NODE(pplist));
 	mtype = PP_2_MTYPE(pplist);
-	page_vpsub(&PAGE_FREELISTS(mnode, cur_szc, bin, mtype), pplist);
+	page_lpsub(&PAGE_FREELISTS(mnode, cur_szc, bin, mtype), pplist);
 
 	CHK_LPG(pplist, cur_szc);
 	page_ctr_sub(mnode, mtype, pplist, PG_FREE_LIST);
@@ -2246,7 +2246,7 @@ page_demote(int mnode, pfn_t pfnum, pfn_t pfnmax, uchar_t cur_szc,
 				ret_pp = try_to_return_this_page;
 			} else {
 				mtype = PP_2_MTYPE(pp);
-				page_vpadd(&PAGE_FREELISTS(mnode, new_szc,
+				page_lpadd(&PAGE_FREELISTS(mnode, new_szc,
 				    bin, mtype), pplist);
 
 				page_ctr_add(mnode, mtype, pplist,
@@ -2621,7 +2621,7 @@ page_freelist_split(uchar_t szc, uint_t color, int mnode, int mtype,
 			    ((pfnhi != PFNNULL && pp->p_pagenum >= pfnhi) ||
 			    (pfnlo != PFNNULL && pp->p_pagenum < pfnlo))) {
 				do {
-					pp = pp->p_list.vnode.next;
+					pp = pp->p_list.largepg.next;
 					if (pp == firstpp) {
 						pp = NULL;
 						break;
@@ -2975,7 +2975,7 @@ try_again:
 			 * contiguous group of constituent pages linked
 			 * together on their p_next and p_prev fields.  The
 			 * large pages are linked together on the hash chain
-			 * using p_list.vnode of the base constituent page
+			 * using p_list.largepg of the base constituent page
 			 * of each large page.
 			 */
 			first_pp = pp;
@@ -2983,7 +2983,7 @@ try_again:
 				if (szc == 0) {
 					pp = pp->p_next;
 				} else {
-					pp = pp->p_list.vnode.next;
+					pp = pp->p_list.largepg.next;
 				}
 
 				ASSERT(PP_ISFREE(pp));
@@ -3005,7 +3005,7 @@ try_again:
 				page_sub(&PAGE_FREELISTS(mnode,
 				    szc, bin, mtype), pp);
 			} else {
-				page_vpsub(&PAGE_FREELISTS(mnode,
+				page_lpsub(&PAGE_FREELISTS(mnode,
 				    szc, bin, mtype), pp);
 				CHK_LPG(pp, szc);
 			}

@@ -3708,6 +3708,7 @@ page_vpadd(page_t **ppp, page_t *pp)
 void
 page_lpadd(page_t **ppp, page_t *pp)
 {
+	ASSERT(offsetof(page_t, p_list.vnode) == offsetof(page_t, p_list.largepg));
 	page_vpadd(ppp, pp);
 }
 
@@ -3741,6 +3742,7 @@ page_vpsub(page_t **ppp, page_t *pp)
 void
 page_lpsub(page_t **ppp, page_t *pp)
 {
+	ASSERT(offsetof(page_t, p_list.vnode) == offsetof(page_t, p_list.largepg));
 	page_vpsub(ppp, pp);
 }
 
