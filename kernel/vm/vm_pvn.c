@@ -740,7 +740,7 @@ pvn_vplist_dirty(
 
 	ASSERT(vp->v_type != VCHR);
 
-	if (vp->v_pages == NULL)
+	if (!vn_has_cached_data(vp))
 		return (0);
 
 
@@ -759,7 +759,7 @@ pvn_vplist_dirty(
 	while (vp->v_flag & VVMLOCK)
 		cv_wait(&vp->v_cv, &vp->v_lock);
 
-	if (vp->v_pages == NULL) {
+	if (!vn_has_cached_data(vp)) {
 		mutex_exit(&vp->v_lock);
 		return (0);
 	}
@@ -784,7 +784,7 @@ pvn_vplist_dirty(
 	 */
 	vphm = page_vnode_mutex(vp);
 	mutex_enter(vphm);
-	if (vp->v_pages == NULL)
+	if (!vn_has_cached_data(vp))
 		goto leave;
 
 	/*
@@ -988,7 +988,7 @@ pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
 	vphm = page_vnode_mutex(vp);
 	mutex_enter(vphm);
 
-	if (vp->v_pages == NULL) {
+	if (!vn_has_cached_data(vp)) {
 		mutex_exit(vphm);
 		return;
 	}
@@ -1008,7 +1008,7 @@ pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
 			hat_setmod_only(pp);
 			if (shuffle) {
 				page_vpsub(&vp->v_pages, pp);
-				ASSERT(vp->v_pages != NULL);
+				ASSERT(vn_has_cached_data(vp));
 				page_vpadd(&vp->v_pages->p_list.vnode.prev->p_list.vnode.next,
 				    pp);
 			}
@@ -1035,7 +1035,7 @@ pvn_vpzero(struct vnode *vp, u_offset_t vplen, size_t zbytes)
 
 	ASSERT(vp->v_type != VCHR);
 
-	if (vp->v_pages == NULL)
+	if (!vn_has_cached_data(vp))
 		return;
 
 	/*

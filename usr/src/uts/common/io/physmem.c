@@ -715,7 +715,7 @@ physmem_inactive(vnode_t *vp, cred_t *crp, caller_context_t *ct)
 	 * If it's not in the hash, just free it.
 	 */
 	if (physmem_remove_vnode_hash(vp) == 0) {
-		ASSERT(vp->v_pages == NULL);
+		ASSERT(!vn_has_cached_data(vp));
 		vn_free(vp);
 		physmem_remove_hash_proc();
 		mutex_enter(&physmem_mutex);

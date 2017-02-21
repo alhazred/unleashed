@@ -1139,7 +1139,7 @@ again:
 		ppa[pages] = NULL;
 	}
 	VM_STAT_ADD(page_exphcontg[18]);
-	ASSERT(vp->v_pages != NULL);
+	ASSERT(vn_has_cached_data(vp));
 	return (1);
 }
 

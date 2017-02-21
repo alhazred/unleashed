@@ -935,7 +935,7 @@ vmu_amp_update_incore_bounds(avl_tree_t *tree, struct anon_map *amp,
 			if (ap != NULL)
 				swap_xlate(ap, &vn, &off);
 
-			if (ap != NULL && vn != NULL && vn->v_pages != NULL &&
+			if (ap != NULL && vn != NULL && vn_has_cached_data(vn) &&
 			    (page = page_exists(vn, off)) != NULL) {
 				page_type = VMUSAGE_BOUND_INCORE;
 				if (page->p_szc > 0) {
@@ -999,7 +999,7 @@ vmu_vnode_update_incore_bounds(avl_tree_t *tree, vnode_t *vnode,
 
 	next = *first;
 	for (;;) {
-		if (vnode->v_pages == NULL)
+		if (!vn_has_cached_data(vnode))
 			next->vmb_type = VMUSAGE_BOUND_NOT_INCORE;
 
 		if (next->vmb_type != VMUSAGE_BOUND_UNKNOWN) {
@@ -1022,7 +1022,7 @@ vmu_vnode_update_incore_bounds(avl_tree_t *tree, vnode_t *vnode,
 			uint_t pgshft;
 			pgcnt_t pgmsk;
 
-			if (vnode->v_pages != NULL &&
+			if (vn_has_cached_data(vnode) &&
 			    (page = page_exists(vnode, ptob(index))) != NULL) {
 				page_type = VMUSAGE_BOUND_INCORE;
 				if (page->p_szc > 0) {
@@ -1257,7 +1257,7 @@ vmu_calculate_seg(vmu_entity_t *vmu_entities, struct seg *seg)
 			cnt = ap->an_refcnt;
 			swap_xlate(ap, &vn, &off);
 
-			if (vn == NULL || vn->v_pages == NULL ||
+			if (vn == NULL || !vn_has_cached_data(vn) ||
 			    (page = page_exists(vn, off)) == NULL) {
 				p_index++;
 				s_index++;

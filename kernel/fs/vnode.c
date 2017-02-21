@@ -2341,7 +2341,7 @@ vn_destroy_cache(void)
 void
 vn_recycle(vnode_t *vp)
 {
-	ASSERT(vp->v_pages == NULL);
+	ASSERT(!vn_has_cached_data(vp));
 
 	/*
 	 * XXX - This really belongs in vn_reinit(), but we have some issues
