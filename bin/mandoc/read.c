@@ -1,4 +1,4 @@
-/*	$Id: read.c,v 1.160 2017/02/03 18:18:23 schwarze Exp $ */
+/*	$Id: read.c,v 1.161 2017/02/18 17:29:28 schwarze Exp $ */
 /*
  * Copyright (c) 2008, 2009, 2010, 2011 Kristaps Dzonsons <kristaps@bsd.lv>
  * Copyright (c) 2010-2017 Ingo Schwarze <schwarze@openbsd.org>
@@ -30,7 +30,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdarg.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -603,11 +602,10 @@ static int
 read_whole_file(struct mparse *curp, const char *file, int fd,
 		struct buf *fb, int *with_mmap)
 {
+	struct stat	 st;
 	gzFile		 gz;
 	size_t		 off;
 	ssize_t		 ssz;
-
-	struct stat	 st;
 
 	if (fstat(fd, &st) == -1)
 		err((int)MANDOCLEVEL_SYSERR, "%s", file);

@@ -1,4 +1,4 @@
-/*	$Id: mdoc_html.c,v 1.270 2017/02/06 03:44:58 schwarze Exp $ */
+/*	$Id: mdoc_html.c,v 1.271 2017/02/16 03:00:23 schwarze Exp $ */
 /*
  * Copyright (c) 2008-2011, 2014 Kristaps Dzonsons <kristaps@bsd.lv>
  * Copyright (c) 2014, 2015, 2016, 2017 Ingo Schwarze <schwarze@openbsd.org>
@@ -417,8 +417,6 @@ print_mdoc_node(MDOC_ARGS)
 		(*mdocs[n->tok].post)(meta, n, h);
 		if (n->end != ENDBODY_NOT)
 			n->body->flags |= NODE_ENDED;
-		if (n->end == ENDBODY_NOSPACE)
-			h->flags |= HTML_NOSPACE;
 		break;
 	}
 }
