@@ -38,7 +38,6 @@
 static char sccsid[] = "@(#)hash.c	8.12 (Berkeley) 11/7/95";
 #endif /* LIBC_SCCS and not lint */
 
-#undef _TS_ERRNO_
 #include <sys/param.h>
 #include <sys/stat.h>
 

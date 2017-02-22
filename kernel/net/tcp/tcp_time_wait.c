@@ -614,8 +614,8 @@ tcp_time_wait_processing(tcp_t *tcp, mblk_t *mp, uint32_t seg_seq,
 	new_swnd = ntohs(tcpha->tha_win) <<
 	    ((tcpha->tha_flags & TH_SYN) ? 0 : tcp->tcp_snd_ws);
 
-	boolean_t keepalive = (seg_len == 0 || seg_len == 1) &&
-	    (seg_seq + 1 == tcp->tcp_rnxt);
+	boolean_t keepalive = (flags == TH_ACK) && (seg_len == 0 ||
+	    seg_len == 1) && (seg_seq + 1 == tcp->tcp_rnxt);
 	if (tcp->tcp_snd_ts_ok && !(flags & TH_RST) && !keepalive) {
 		int options;
 		if (tcp->tcp_snd_sack_ok)
