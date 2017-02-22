@@ -31,8 +31,8 @@ include ../../Makefile.cmd
 include ../../Makefile.ctf
 
 INCS += -I../../../lib/libzpool/common
-INCS += -I../../../uts/common/fs/zfs
-INCS += -I../../../common/zfs
+INCS += -I$(CODEMGR_WS)/kernel/fs/zfs
+INCS += -I$(CODEMGR_WS)/kernel/fs/zfs/common
 
 LDLIBS += -lumem -lzpool -lcmdutils -lm -lnvpair
 

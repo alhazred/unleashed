@@ -102,12 +102,6 @@ CORE_OBJS +=		\
 	prmachdep.o
 
 #
-#	ZFS file system module
-#
-ZFS_OBJS +=		\
-	spa_boot.o
-
-#
 #	Decompression code
 #
 CORE_OBJS += decompress.o

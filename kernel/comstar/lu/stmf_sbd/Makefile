@@ -3,7 +3,7 @@ MODULE_TYPE=	drv
 MODULE_DEPS=	drv/stmf \
 		fs/zfs
 MODULE_CONF=	stmf_sbd.conf
-INCS=		${REPOROOT}/usr/src/uts/common/fs/zfs
+INCS=		${REPOROOT}/kernel/fs/zfs
 SRCS=		sbd.c \
 		sbd_pgr.c \
 		sbd_scsi.c \

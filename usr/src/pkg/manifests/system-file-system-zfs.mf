@@ -135,9 +135,9 @@ $(i386_ONLY)hardlink path=kernel/fs/zfs target=../../kernel/drv/zfs
 hardlink path=usr/lib/fs/zfs/fstyp target=../../../sbin/fstyp
 hardlink path=usr/sbin/zdb target=../../usr/lib/isaexec
 license cr_Sun license=cr_Sun
+license kernel/fs/zfs/THIRDPARTYLICENSE.lz4 \
+    license=kernel/fs/zfs/THIRDPARTYLICENSE.lz4
 license lic_CDDL license=lic_CDDL
-license usr/src/uts/common/fs/zfs/THIRDPARTYLICENSE.lz4 \
-    license=usr/src/uts/common/fs/zfs/THIRDPARTYLICENSE.lz4
 link path=etc/fs/zfs/mount target=../../../sbin/zfs
 link path=etc/fs/zfs/umount target=../../../sbin/zfs
 link path=lib/$(ARCH64)/libzfs.so target=libzfs.so.1

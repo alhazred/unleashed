@@ -70,7 +70,7 @@ BINARY		=
 
 CPPFLAGS	+= -I$(CODEMGR_WS)/include
 CPPFLAGS	+= -I$(SRC)/common
-CPPFLAGS	+= -I$(SRC)/uts/common/fs/zfs
+CPPFLAGS	+= -I$(CODEMGR_WS)/kernel/fs/zfs
 
 CPPFLAGS	+= -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
 

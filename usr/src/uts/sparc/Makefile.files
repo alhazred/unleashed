@@ -75,10 +75,6 @@ FCODE_OBJS +=		fcode.o
 #PROC_OBJS +=
 CORE_OBJS +=	prmachdep.o
 
-#			ZFS file system module
-ZFS_OBJS +=		\
-	spa_boot.o
-
 #
 #			misc modules
 #
