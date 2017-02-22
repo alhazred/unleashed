@@ -18,8 +18,8 @@ LDADD+=	-lz
 CPPFLAGS+=	-DOSNAME='"unleashed"'
 CFLAGS+=	-std=gnu99
 
-# FIXME shouldn't need these hacks
-CPPFLAGS+=	-D_TS_ERRNO -I/usr/include
+# FIXME shouldn't need this hack
+CPPFLAGS+=	-I/usr/include
 
 MAN=	apropos.1 man.1 mandoc.1 man.conf.5 mandoc.db.5 eqn.7 man.7 \
 	mandoc_char.7 mdoc.7 roff.7 tbl.7 makewhatis.8

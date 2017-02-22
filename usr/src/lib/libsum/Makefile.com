@@ -60,7 +60,7 @@ SRCDIR =	../common
 # Notes:
 #   - "-D_BLD_DLL" comes from ${mam_cc_DLL} in Mamfile
 CPPFLAGS = \
-	$(DTEXTDOM) $(DTS_ERRNO) \
+	$(DTEXTDOM) \
 	-Isrc/lib/libsum \
 	-I$(ROOT)/usr/include/ast \
 	-I$(ROOT)/usr/include \

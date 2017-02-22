@@ -79,7 +79,7 @@ SRCDIR =	../common
 # option specified overrides previous -D options so we prefer the current
 # way to explicitly list each single flag.
 CPPFLAGS = \
-	$(DTEXTDOM) $(DTS_ERRNO) \
+	$(DTEXTDOM) \
 	-I. \
 	-I$(ROOT)/usr/include/ast \
 	-I$(ROOT)/usr/include \

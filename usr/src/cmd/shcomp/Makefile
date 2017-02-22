@@ -53,7 +53,7 @@ LDLIBS += -lshell -last
 # option specified overrides previous -D options so we prefer the current
 # way to explicitly list each single flag.
 CPPFLAGS = \
-	$(DTEXTDOM) $(DTS_ERRNO) \
+	$(DTEXTDOM) \
 	$(LIBSHELLCPPFLAGS)
 
 CFLAGS += \

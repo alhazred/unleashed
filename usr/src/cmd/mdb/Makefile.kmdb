@@ -46,9 +46,6 @@ OSINCDIRS	+= $(SRC)/uts/$(MMU) $(SRC)/uts/$(ISADIR)
 
 INCDIRS	= $(SRCINCDIRS) $(OSINCDIRS)
 
-# We don't want thread-specific errno's in kmdb, as we're single-threaded.
-DTS_ERRNO=
-
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 CPPFLAGS += -D_MDB -D_KMDB $(INCDIRS:%=-I%) $(ARCHOPTS)
 

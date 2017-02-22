@@ -119,7 +119,7 @@ SRCS=	$(OBJECTS:%.o=%.c)
 LDLIBS += -lshell -lcmd -last
 
 CPPFLAGS = \
-	$(DTEXTDOM) $(DTS_ERRNO) \
+	$(DTEXTDOM) \
 	-I$(ROOT)/usr/include/ast \
 	-I$(ROOT)/usr/include
 

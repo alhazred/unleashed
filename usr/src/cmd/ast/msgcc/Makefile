@@ -34,7 +34,7 @@ include ../../../Makefile.ast
 
 # build rules
 CPPFLAGS = \
-        $(DTEXTDOM) $(DTS_ERRNO) \
+        $(DTEXTDOM) \
         -I$(ROOT)/usr/include/ast \
 	-I$(ROOT)/usr/include \
 	-D_PACKAGE_ast \
