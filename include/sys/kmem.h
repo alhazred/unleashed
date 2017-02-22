@@ -49,6 +49,7 @@ extern "C" {
 #define	KM_PUSHPAGE	0x0004	/* can block for memory; may use reserve */
 #define	KM_NORMALPRI	0x0008  /* with KM_NOSLEEP, lower priority allocation */
 #define	KM_VMFLAGS	0x00ff	/* flags that must match VM_* flags */
+#define	KM_ZERO		0x0100	/* zero out allocated buffer */
 
 #define	KM_FLAGS	0xffff	/* all settable kmem flags */
 

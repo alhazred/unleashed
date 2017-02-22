@@ -2501,7 +2501,7 @@ kmem_cache_alloc(kmem_cache_t *cp, int kmflag)
 					continue;
 				}
 			}
-			return (buf);
+			goto done;
 		}
 
 		/*
@@ -2526,7 +2526,7 @@ kmem_cache_alloc(kmem_cache_t *cp, int kmflag)
 				if ((buf = kmem_cache_alloc_dump(cp, kmflag)) !=
 				    NULL) {
 					mutex_exit(&ccp->cc_lock);
-					return (buf);
+					goto done;
 				}
 				break;		/* fall back to slab layer */
 			}
@@ -2584,7 +2584,7 @@ kmem_cache_alloc(kmem_cache_t *cp, int kmflag)
 			ASSERT(rc == -1);
 			return (kmem_cache_alloc(cp, kmflag));
 		}
-		return (buf);
+		goto done;
 	}
 
 	if (cp->cache_constructor != NULL &&
@@ -2593,6 +2593,10 @@ kmem_cache_alloc(kmem_cache_t *cp, int kmflag)
 		kmem_slab_free(cp, buf);
 		return (NULL);
 	}
+
+done:
+	if (buf != NULL && (kmflag & KM_ZERO))
+		bzero(buf, cp->cache_bufsize);
 
 	return (buf);
 }
@@ -2872,7 +2876,7 @@ kmem_zalloc(size_t size, int kmflag)
 
 	if ((index = ((size - 1) >> KMEM_ALIGN_SHIFT)) < KMEM_ALLOC_TABLE_MAX) {
 		kmem_cache_t *cp = kmem_alloc_table[index];
-		buf = kmem_cache_alloc(cp, kmflag);
+		buf = kmem_cache_alloc(cp, kmflag | KM_ZERO);
 		if (buf != NULL) {
 			if ((cp->cache_flags & KMF_BUFTAG) && !KMEM_DUMP(cp)) {
 				kmem_buftag_t *btp = KMEM_BUFTAG(cp, buf);
@@ -2884,12 +2888,9 @@ kmem_zalloc(size_t size, int kmflag)
 					    kmem_lite_count, caller());
 				}
 			}
-			bzero(buf, size);
 		}
 	} else {
-		buf = kmem_alloc(size, kmflag);
-		if (buf != NULL)
-			bzero(buf, size);
+		buf = kmem_alloc(size, kmflag | KM_ZERO);
 	}
 	return (buf);
 }
@@ -2925,6 +2926,8 @@ kmem_alloc(size_t size, int kmflag)
 			if (size > kmem_dump_oversize_max)
 				kmem_dump_oversize_max = size;
 		}
+		if (buf != NULL && (kmflag & KM_ZERO))
+			bzero(buf, size);
 		return (buf);
 	}
 
