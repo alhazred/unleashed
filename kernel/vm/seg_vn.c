@@ -78,23 +78,12 @@
 
 /*
  * segvn_fault needs a temporary page list array.  To avoid calling kmem all
- * the time, it creates a small (PVN_GETPAGE_NUM entry) array and uses it if
- * it can.  In the rare case when this page list is not large enough, it
- * goes and gets a large enough array from kmem.
- *
- * This small page list array covers either 8 pages or 64kB worth of pages -
- * whichever is smaller.
+ * the time, it creates a small (FAULT_TMP_PAGES_NUM entry) array and uses
+ * it if it can.  In the rare case when this page list is not large enough,
+ * it goes and gets a large enough array from kmem.
  */
-#define	PVN_MAX_GETPAGE_SZ	0x10000
-#define	PVN_MAX_GETPAGE_NUM	0x8
-
-#if PVN_MAX_GETPAGE_SZ > PVN_MAX_GETPAGE_NUM * PAGESIZE
-#define	PVN_GETPAGE_SZ	ptob(PVN_MAX_GETPAGE_NUM)
-#define	PVN_GETPAGE_NUM	PVN_MAX_GETPAGE_NUM
-#else
-#define	PVN_GETPAGE_SZ	PVN_MAX_GETPAGE_SZ
-#define	PVN_GETPAGE_NUM	btop(PVN_MAX_GETPAGE_SZ)
-#endif
+#define	FAULT_TMP_PAGES_NUM	0x8
+#define	FAULT_TMP_PAGES_SZ	ptob(FAULT_TMP_PAGES_NUM)
 
 /*
  * Private seg op routines.
@@ -4895,7 +4884,7 @@ segvn_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t len,
 	struct vpage *vpage;
 	uint_t vpprot, prot;
 	int err;
-	page_t *pl[PVN_GETPAGE_NUM + 1];
+	page_t *pl[FAULT_TMP_PAGES_NUM + 1];
 	size_t plsz, pl_alloc_sz;
 	size_t page;
 	ulong_t anon_index;
@@ -5334,7 +5323,7 @@ slow:
 			enum seg_rw arw;
 			struct as *as = seg->s_as;
 
-			if (len > ptob((sizeof (pl) / sizeof (pl[0])) - 1)) {
+			if (len > FAULT_TMP_PAGES_SZ) {
 				/*
 				 * Page list won't fit in local array,
 				 * allocate one of the needed size.
@@ -5362,7 +5351,7 @@ slow:
 				 * Ask fop_getpage to return adjacent pages
 				 * within the segment.
 				 */
-				plsz = MIN((size_t)PVN_GETPAGE_SZ, (size_t)
+				plsz = MIN((size_t)FAULT_TMP_PAGES_SZ, (size_t)
 				    ((seg->s_base + seg->s_size) - addr));
 				ASSERT((addr + plsz) <=
 				    (seg->s_base + seg->s_size));
