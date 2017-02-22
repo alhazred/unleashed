@@ -2868,35 +2868,8 @@ kmem_slab_prefill(kmem_cache_t *cp, kmem_slab_t *sp)
 	mutex_enter(&cp->cache_lock);
 }
 
-void *
-kmem_zalloc(size_t size, int kmflag)
-{
-	size_t index;
-	void *buf;
-
-	if ((index = ((size - 1) >> KMEM_ALIGN_SHIFT)) < KMEM_ALLOC_TABLE_MAX) {
-		kmem_cache_t *cp = kmem_alloc_table[index];
-		buf = kmem_cache_alloc(cp, kmflag | KM_ZERO);
-		if (buf != NULL) {
-			if ((cp->cache_flags & KMF_BUFTAG) && !KMEM_DUMP(cp)) {
-				kmem_buftag_t *btp = KMEM_BUFTAG(cp, buf);
-				((uint8_t *)buf)[size] = KMEM_REDZONE_BYTE;
-				((uint32_t *)btp)[1] = KMEM_SIZE_ENCODE(size);
-
-				if (cp->cache_flags & KMF_LITE) {
-					KMEM_BUFTAG_LITE_ENTER(btp,
-					    kmem_lite_count, caller());
-				}
-			}
-		}
-	} else {
-		buf = kmem_alloc(size, kmflag | KM_ZERO);
-	}
-	return (buf);
-}
-
-void *
-kmem_alloc(size_t size, int kmflag)
+static void *
+do_kmem_alloc(size_t size, int kmflag, void *caller_pc)
 {
 	size_t index;
 	kmem_cache_t *cp;
@@ -2938,10 +2911,22 @@ kmem_alloc(size_t size, int kmflag)
 		((uint32_t *)btp)[1] = KMEM_SIZE_ENCODE(size);
 
 		if (cp->cache_flags & KMF_LITE) {
-			KMEM_BUFTAG_LITE_ENTER(btp, kmem_lite_count, caller());
+			KMEM_BUFTAG_LITE_ENTER(btp, kmem_lite_count, caller_pc);
 		}
 	}
 	return (buf);
+}
+
+void *
+kmem_zalloc(size_t size, int kmflag)
+{
+	return (do_kmem_alloc(size, kmflag | KM_ZERO, caller()));
+}
+
+void *
+kmem_alloc(size_t size, int kmflag)
+{
+	return (do_kmem_alloc(size, kmflag, caller()));
 }
 
 void
