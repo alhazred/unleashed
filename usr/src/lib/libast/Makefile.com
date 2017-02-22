@@ -692,7 +692,7 @@ SRCDIR =	../common
 #     without examining the symbols that will be removed, and evaluating
 #     whether that breaks compatibility with upstream binaries.
 CPPFLAGS = \
-	$(DTEXTDOM) $(DTS_ERRNO) \
+	$(DTEXTDOM) \
 	$(ASTPLATFORMCPPFLAGS) \
 	-Isrc/lib/libast \
 	-I$(SRCDIR) \
