@@ -6,7 +6,6 @@ MODULE_CONF=	bge.conf
 SRCS=		bge_atomic.c \
 		bge_chip2.c \
 		bge_kstats.c \
-		bge_lint.c \
 		bge_log.c \
 		bge_main2.c \
 		bge_mii.c \
