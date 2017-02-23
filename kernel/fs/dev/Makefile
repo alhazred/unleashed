@@ -13,7 +13,7 @@ SRCS=		sdev_comm.c \
 		sdev_vnops.c \
 		sdev_vtops.c \
 		sdev_zvolops.c
-INCS=		${REPOROOT}/usr/src/uts/common/fs/zfs \
+INCS=		${.CURDIR:H}/zfs \
 		${REPOROOT}/usr/src/uts/common/io/bpf
 
 CERRWARN =  -Wno-unused-label

@@ -550,7 +550,7 @@ function test_fs_setup
 
 #
 # Check to see if the specified features are set in a send stream.
-# The values for these features are found in uts/common/fs/zfs/sys/zfs_ioctl.h
+# The values for these features are found in kernel/fs/zfs/sys/zfs_ioctl.h
 #
 # $1 The stream file
 # $2-$n The flags expected in the stream

@@ -34,7 +34,7 @@ include ../../Makefile.ia32
 include ../../../Makefile.module
 include ../../../common/modules/zfs/Makefile.zfs
 
-CPPFLAGS += -I../../../../../uts/common/fs/zfs
+CPPFLAGS += -I$(CODEMGR_WS)/kernel/fs/zfs
 
 C99MODE=	$(C99_ENABLE)
 

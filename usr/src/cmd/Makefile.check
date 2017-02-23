@@ -122,7 +122,6 @@ MANIFEST_SUBDIRS=			\
 	rcap/rcapd			\
 	rpcsvc/rpc.bootparamd		\
 	smbsrv/smbd			\
-	ssh				\
 	svc/milestone			\
 	vscan/vscand			\
 	xvm/ipagent			\

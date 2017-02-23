@@ -72,7 +72,7 @@ BINARY		=
 CLOBBERFILES	+= $(GENUNIX)
 
 CPPFLAGS += -I$(SRC)/common
-CPPFLAGS += -I$(SRC)/uts/common/fs/zfs
+CPPFLAGS += -I$(CODEMGR_WS)/kernel/fs/zfs
 
 INC_PATH +=  -I$(UTSBASE)/sun4
 

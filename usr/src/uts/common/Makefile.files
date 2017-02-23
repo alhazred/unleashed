@@ -1263,22 +1263,6 @@ ZFS_SHARED_OBJS +=		\
 	zpool_prop.o		\
 	zprop_common.o
 
-ZFS_OBJS +=			\
-	$(ZFS_COMMON_OBJS)	\
-	$(ZFS_SHARED_OBJS)	\
-	vdev_disk.o		\
-	zfs_acl.o		\
-	zfs_ctldir.o		\
-	zfs_dir.o		\
-	zfs_ioctl.o		\
-	zfs_log.o		\
-	zfs_onexit.o		\
-	zfs_replay.o		\
-	zfs_rlock.o		\
-	zfs_vfsops.o		\
-	zfs_vnops.o		\
-	zvol.o
-
 ZUT_OBJS +=			\
 	zut.o
 

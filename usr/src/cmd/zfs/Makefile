@@ -42,7 +42,7 @@ USRLIBFSTYPE=	$(ROOTLIB)/fs/$(FSTYPE)
 
 LDLIBS += -lzfs_core -lzfs -luutil -lumem -lnvpair -lsec -lidmap
 
-INCS += -I../../common/zfs
+INCS += -I$(CODEMGR_WS)/kernel/fs/zfs/common
 
 C99MODE=	$(C99_ENABLE)
 

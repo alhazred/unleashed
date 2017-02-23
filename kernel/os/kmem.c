@@ -433,7 +433,7 @@
  * attempting to acquire the lock as a writer. If tryenter discovers that the
  * same object (or another object hashed to the same lock) is already in use, it
  * aborts the callback and returns KMEM_CBRC_LATER. The second way is to use
- * rprwlock_t (declared in common/fs/zfs/sys/rprwlock.h) instead of rwlock_t,
+ * rprwlock_t (declared in kernel/fs/zfs/sys/rprwlock.h) instead of rwlock_t,
  * since it allows a thread to acquire the lock as a reader in spite of a
  * waiting writer. This second approach insists on moving the object now, no
  * matter how many readers the move function must wait for in order to do so,

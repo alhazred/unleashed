@@ -22,6 +22,7 @@ SUBDIR = ${SUBDIR_y} \
 	 sockfs \
 	 specfs \
 	 tmpfs \
-	 ufs
+	 ufs \
+	 zfs
 
 .include <bsd.subdir.mk>

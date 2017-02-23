@@ -75,7 +75,7 @@ SRCS =		$(CSRCS)
 CPPFLAGS +=	-U_ASM -D__UNLEASHED_VISIBLE \
 		-I. -I$(BRAND_SHARED)/brand/sys -I../sys \
 		-I$(UTSBASE)/common/brand/solaris10 \
-		-I$(SRC)/uts/common/fs/zfs
+		-I$(CODEMGR_WS)/kernel/fs/zfs
 # Needed to handle zfs include files
 C99MODE=	$(C99_ENABLE)
 DYNFLAGS +=	$(DYNFLAGS_$(CLASS))
