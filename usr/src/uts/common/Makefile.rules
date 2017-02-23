@@ -1057,10 +1057,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/vnic/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:                $(UTSBASE)/common/io/wpi/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/cxgbe/common/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

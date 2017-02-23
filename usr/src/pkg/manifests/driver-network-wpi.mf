@@ -59,7 +59,7 @@ file path=kernel/drv/$(ARCH64)/wpi group=sys
 file path=kernel/drv/wpi group=sys
 file path=usr/share/man/man7d/wpi.7d
 license cr_Sun license=cr_Sun
-license usr/src/uts/common/io/wpi/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/wpi/THIRDPARTYLICENSE
-license usr/src/uts/common/io/wpi/fw-wpi/LICENSE \
-    license=usr/src/uts/common/io/wpi/fw-wpi/LICENSE
+license kernel/drivers/net/wifi/wpi/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/wpi/THIRDPARTYLICENSE
+license kernel/drivers/net/wifi/wpi/fw-wpi/LICENSE \
+    license=kernel/drivers/net/wifi/wpi/fw-wpi/LICENSE

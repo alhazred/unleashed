@@ -7,6 +7,7 @@ SUBDIR_${CONFIG_IWN}		+= iwn
 SUBDIR_${CONFIG_IWP}		+= iwp
 SUBDIR_${CONFIG_ZYD}		+= zyd
 
-SUBDIR = ${SUBDIR_y}
+SUBDIR = ${SUBDIR_y} \
+	 wpi
 
 .include <bsd.subdir.mk>

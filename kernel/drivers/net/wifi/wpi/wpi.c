@@ -74,7 +74,8 @@ uint32_t wpi_dbg_flags = 0;
 #define	WPI_DBG(x) \
 	wpi_dbg x
 #else
-#define	WPI_DBG(x)
+#define	WPI_DBG(x) \
+	do { } while (0)
 #endif
 
 static void	*wpi_soft_state_p = NULL;
@@ -1654,7 +1655,9 @@ static void
 wpi_rx_intr(wpi_sc_t *sc, wpi_rx_desc_t *desc, wpi_rx_data_t *data)
 {
 	ieee80211com_t *ic = &sc->sc_ic;
+#ifdef DEBUG
 	wpi_rx_ring_t *ring = &sc->sc_rxq;
+#endif
 	wpi_rx_stat_t *stat;
 	wpi_rx_head_t *head;
 	wpi_rx_tail_t *tail;
@@ -1900,23 +1903,27 @@ wpi_notif_softintr(caddr_t arg)
 		}
 		case WPI_START_SCAN:
 		{
+#ifdef DEBUG
 			wpi_start_scan_t *scan =
 			    (wpi_start_scan_t *)(desc + 1);
 
 			WPI_DBG((WPI_DEBUG_SCAN,
 			    "scanning channel %d status %x\n",
 			    scan->chan, LE_32(scan->status)));
+#endif
 
 			break;
 		}
 		case WPI_STOP_SCAN:
 		{
+#ifdef DEBUG
 			wpi_stop_scan_t *scan =
 			    (wpi_stop_scan_t *)(desc + 1);
 
 			WPI_DBG((WPI_DEBUG_SCAN,
 			    "completed channel %d (burst of %d) status %02x\n",
 			    scan->chan, scan->nchan, scan->status));
+#endif
 
 			sc->sc_scan_pending = 0;
 			sc->sc_scan_next++;
@@ -2534,7 +2541,10 @@ wpi_thread(wpi_sc_t *sc)
 {
 	ieee80211com_t	*ic = &sc->sc_ic;
 	clock_t clk;
-	int times = 0, err, n = 0, timeout = 0;
+	int err, n = 0, timeout = 0;
+#ifdef DEBUG
+	int times = 0;
+#endif
 	uint32_t tmp;
 
 	mutex_enter(&sc->sc_mt_lock);
