@@ -108,7 +108,7 @@ static mutex_t serialize_netname = ERRORCHECKMUTEX;
 
 static int
 user2netname_nis(int *err, char netname[MAXNETNAMELEN + 1], uid_t uid,
-								char *domain)
+    char *domain)
 {
 	int i;
 	char *dfltdom;
@@ -173,7 +173,7 @@ __getnetnamebyuid(char name[MAXNETNAMELEN + 1], uid_t uid)
  */
 int
 user2netname(char netname[MAXNETNAMELEN + 1], const uid_t uid,
-							const char *domain)
+    const char *domain)
 {
 	struct __nsw_switchconfig *conf;
 	struct __nsw_lookup *look;
@@ -188,7 +188,7 @@ user2netname(char netname[MAXNETNAMELEN + 1], const uid_t uid,
 	 */
 
 	if (uid == NOBODY_UID) {
-		(void) strlcpy(netname, "nobody", sizeof (netname));
+		(void) strlcpy(netname, "nobody", MAXNETNAMELEN + 1);
 		return (1);
 	}
 
@@ -201,7 +201,7 @@ user2netname(char netname[MAXNETNAMELEN + 1], const uid_t uid,
 		 * itself requires a netname to look up. As we clearly
 		 * can't continue like this we return 'nobody'.
 		 */
-		(void) strlcpy(netname, "nobody", sizeof (netname));
+		(void) strlcpy(netname, "nobody", MAXNETNAMELEN + 1);
 		return (1);
 	}
 
@@ -264,7 +264,7 @@ user2netname(char netname[MAXNETNAMELEN + 1], const uid_t uid,
  */
 int
 host2netname(char netname[MAXNETNAMELEN + 1], const char *host,
-							const char *domain)
+    const char *domain)
 {
 	char *p;
 	char hostname[MAXHOSTNAMELEN + 1];
