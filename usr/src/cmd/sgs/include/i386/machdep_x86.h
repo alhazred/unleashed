@@ -203,13 +203,8 @@ extern "C" {
 /*
  * Make default data segment and stack flags transparent to the common code.
  */
-#ifdef _ELF64
 #define	M_DATASEG_PERM	(PF_R | PF_W)
 #define	M_STACK_PERM	(PF_R | PF_W)
-#else
-#define	M_DATASEG_PERM	(PF_R | PF_W | PF_X)
-#define	M_STACK_PERM	(PF_R | PF_W | PF_X)
-#endif
 
 /*
  * Define a set of identifies for special sections.  These allow the sections

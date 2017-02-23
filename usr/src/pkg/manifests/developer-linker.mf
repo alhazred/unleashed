@@ -79,6 +79,7 @@ file path=usr/lib/ld/map.below4G mode=0444
 file path=usr/lib/ld/map.bssalign mode=0444
 file path=usr/lib/ld/map.default mode=0444
 file path=usr/lib/ld/map.execdata mode=0444
+file path=usr/lib/ld/map.execstack mode=0444
 file path=usr/lib/ld/map.filter mode=0444
 file path=usr/lib/ld/map.noexbss mode=0444
 file path=usr/lib/ld/map.noexdata mode=0444

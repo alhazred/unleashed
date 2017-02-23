@@ -38,6 +38,7 @@ FILES=	\
 		$(ROOTDIR)/map.noexbss \
 		$(ROOTDIR)/map.noexdata \
 		$(ROOTDIR)/map.noexstk \
+		$(ROOTDIR)/map.execstack \
 		$(ROOTDIR)/map.pagealign
 
 install:	$(DIRS) $(FILES)
