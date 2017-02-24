@@ -86,12 +86,6 @@ $(LIBRARY):	pics $$(PICS)
 		$(AR) $(ARFLAGS) $@ $(PICS)
 		$(POST_PROCESS_A)
 
-chkmsg:		$(COMOBJS_NOMSG:%.o=../common/%.c) \
-		$(ELFCOM_OBJS:%.o=$(ELFCAP)/%.c) ../common/lintsup.c
-		sh $(CHKMSG) $(CHKMSGFLAGS) \
-			$(COMOBJS_NOMSG:%.o=../common/%.c) \
-			$(ELFCOM_OBJS:%.o=$(ELFCAP)/%.c) ../common/lintsup.c
-
 catalog:
 
 pics:

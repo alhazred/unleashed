@@ -127,7 +127,7 @@ $(POFILE):	$(POSUBDIRS)
 $(MSGDIR):	$(MSGSUBDIRS) FRC
 		@ cd $@; pwd; $(MAKE) $(TARGET)
 
-chkmsg:		libconv $(MSGSUBDIRS) FRC
+chkmsg:		$(MSGSUBDIRS) FRC
 
 check:		chkmsg
 
