@@ -93,7 +93,7 @@ $(ITM) :=	sparcv9_CFLAGS += -mno-app-regs
 LDLIBS += -lgen
 
 MY_NATIVE_CPPFLAGS = -D_FILE_OFFSET_BITS=64 -I. -I..
-MY_NATIVE_LDFLAGS = $(MAPFILE.NES:%=-Wl,-M%) $(MAPFILE.PGA:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%)
+MY_NATIVE_LDFLAGS = $(MAPFILE.PGA:%=-Wl,-M%)
 MY_NATIVE_LDLIBS = -lgen
 
 #

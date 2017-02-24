@@ -53,8 +53,7 @@ CPPFLAGS +=	-DTHREADSAFE=1 -DHAVE_USLEEP=1 \
 		-I$(SQLITEHDRDIR)
 
 $(PROG): $(OBJS) $(SQLITEHDRDIR)/sqlite.h
-	$(LINK.c) -o $@ $(OBJS) \
-	    $(MAPFILE.NES:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%) $(LDLIBS)
+	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 	$(CTFMERGE) -t -L VERSION -o $@ $(OBJS)
 	$(POST_PROCESS)
 

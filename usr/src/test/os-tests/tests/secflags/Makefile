@@ -46,7 +46,7 @@ addrs-64: addrs.c
 	$(LINK64.c) addrs.c -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-stacky := MAPFILE.NES=			# Will foil the test, clearly
+stacky := LDFLAGS += -Wl,-M$(SRC)/common/mapfiles/common/map.execstack
 stacky: stacky.o
 	$(LINK.c) stacky.o -o $@ $(LDLIBS)
 	$(POST_PROCESS)

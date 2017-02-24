@@ -19,7 +19,7 @@
 pid=$!
 
 ret=0
-(pmap $pid | grep -q 'rwx.*\[ stack \]$') && re=1
+(pmap $pid | grep -q 'rwx.*\[ stack \]$') && ret=1
 
 kill -9 $pid
 exit $ret

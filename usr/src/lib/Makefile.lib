@@ -128,7 +128,7 @@ SONAME=		$(DYNLIB)
 
 HSONAME=	-h$(SONAME)
 DYNFLAGS=	$(HSONAME) $(ZTEXT) $(ZDEFS) $(BDIRECT) \
-		$(MAPFILES:%=-Wl,-M%) $(MAPFILE.PGA:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%)
+		$(MAPFILES:%=-Wl,-M%) $(MAPFILE.PGA:%=-Wl,-M%)
 
 LDLIBS=		$(LDLIBS.lib)
 
@@ -203,8 +203,7 @@ HSONAMECCC=	-h $(SONAMECCC)
 # Keep in sync with the standard DYNFLAGS
 #
 $(DYNLIBCCC):=	DYNFLAGS = $(HSONAMECCC) $(ZTEXT) $(ZDEFS) \
-		$(MAPFILES:%=-Wl,-M%) $(MAPFILE.PGA:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%) \
-		$(BDIRECT)
+		$(MAPFILES:%=-Wl,-M%) $(MAPFILE.PGA:%=-Wl,-M%) $(BDIRECT)
 
 
 # build rule for "portable" source 

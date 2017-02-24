@@ -243,7 +243,7 @@ Applications without this definition are displayed as:
 foo: application requires non-executable stack \\
 .br
 .nf
-	<no -Mmapfile_noexstk?>
+	<remove -Mmapfile_execstack?>
 .fi
 .RE
 .sp
@@ -260,7 +260,7 @@ Applications without this definition are displayed as:
 foo: application requires non-executable data \\
 .br
 .nf
-	<no -Mmapfile_noexdata?>
+	<remove -Mmapfile_execdata?>
 .fi
 .RE
 .sp

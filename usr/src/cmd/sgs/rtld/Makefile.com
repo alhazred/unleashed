@@ -50,9 +50,6 @@ SRCDIR =	../common
 ELFCAP =	$(SRC)/common/elfcap
 PLAT =		$(VAR_PLAT_$(BASEPLAT))
 
-# DTrace needs an executable data segment.
-MAPFILE.NED=
-
 MAPFILES +=	$(MAPFILE-ORDER)
 
 # For the libc/libthread unified world:
@@ -105,10 +102,12 @@ LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) \
 # The first few lines are essentially duplicating DYNFLAGS, but without the
 # CW & GCC argument prefixes.
 DYNFLAGS =	$(HSONAME) $(LD_ZTEXT) $(LD_ZDEFS) $(LD_BDIRECT) \
-		$(MAPFILES:%=-M%) $(MAPFILE.PGA:%=-M%) $(MAPFILE.NED:%=-M%) \
-		$(LD_ZIGNORE) \
+		$(MAPFILES:%=-M%) $(MAPFILE.PGA:%=-M%) $(LD_ZIGNORE) \
 		-i -e _rt_boot $(VERSREF) $(LD_ZNODLOPEN) \
 		$(LD_ZINTERPOSE) -zdtrace=dtrace_data '-R$$ORIGIN'
+
+# DTrace needs an executable data segment.
+DYNFLAGS += -M$(SRC)/common/mapfiles/common/map.execdata
 
 BUILD.s=	$(AS) $(ASFLAGS) $< -o $@
 

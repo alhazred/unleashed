@@ -1132,7 +1132,7 @@ DTRACE_DATA =	-zdtrace=dtrace_data
 DYNFLAGS +=	$(DTRACE_DATA)
 
 # DTrace needs an executable data segment.
-MAPFILE.NED=
+DYNFLAGS += -M$(SRC)/common/mapfiles/common/map.execdata
 
 BUILD.s=	$(AS) $(ASFLAGS) $< -o $@
 

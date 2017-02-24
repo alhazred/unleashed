@@ -42,7 +42,7 @@ $(ROOTLIBDIR)/$(OLIBRARY) :=	FILEMODE= 755
 $(OLIBRARY):	pics/pics_mp.o libmp.so.2 $(OMAPFILE)
 	$(CC) $(CFLAGS) -o $@ $(GSHARED) -h $(OLIBRARY) $(ZTEXT) $(ZDEFS) \
 	    $(BDIRECT) pics/pics_mp.o libmp.so.2 -Wl,-M$(OMAPFILE) \
-	    $(MAPFILE.PGA:%=-Wl,-M%) $(MAPFILE.NED:%=-Wl,-M%)
+	    $(MAPFILE.PGA:%=-Wl,-M%)
 	$(POST_PROCESS_SO)
 
 pics/pics_mp.o:

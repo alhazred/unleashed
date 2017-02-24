@@ -175,7 +175,7 @@ sub cmp_os_ver {
 #
 sub ProcFile {
 	my($FullPath, $RelPath, $Class, $Type, $Verdef) = @_;
-	my(@Elf, @Ldd, $Dyn, $Sym, $Stack);
+	my(@Elf, @Ldd, $Dyn, $Sym, $ExecStack);
 	my($Sun, $Relsz, $Pltsz, $Tex, $Stab, $Strip, $Lddopt, $SymSort);
 	my($Val, $Header, $IsX86, $RWX, $UnDep);
 	my($HasDirectBinding);
@@ -209,7 +209,7 @@ sub ProcFile {
 	# shared object.
 	@Elf = split(/\n/, `elfdump -epdcy $FullPath 2>&1`);
 
-	$Dyn = $Stack = $IsX86 = $RWX = 0;
+	$Dyn = $ExecStack = $IsX86 = $RWX = 0;
 	$Header = 'None';
 	foreach my $Line (@Elf) {
 		# If we have an invalid file type (which we can tell from the
@@ -259,14 +259,15 @@ sub ProcFile {
 			    ($RelPath !~ $EXRE_exec_data)) {
 				onbld_elfmod::OutMsg($ErrFH, $ErrTtl, $RelPath,
 				    "application requires non-executable " .
-				    "data\t<no -Mmapfile_noexdata?>");
+				    "data\t<remove -Mmapfile_execdata?>");
 			}
 			next;
 		}
 
-		if (($Header eq 'Phdr') && ($Line =~ /\[ PT_SUNWSTACK \]/)) {
-			# This object defines a non-executable stack.
-			$Stack = 1;
+		if (($Header eq 'Phdr') && $RWX == 1 &&
+                    ($Line =~ /\[ PT_SUNWSTACK \]/)) {
+			# This object defines an executable stack.
+			$ExecStack = 1;
 			next;
 		}
 	}
@@ -312,11 +313,11 @@ sub ProcFile {
 		}
 	}
 
-	# Applications should contain a non-executable stack definition.
-	if (($Type eq 'EXEC') && ($Stack == 0) &&
+	# Applications should not contain an executable stack definition.
+	if (($Type eq 'EXEC') && ($ExecStack == 1) &&
 	    (!defined($EXRE_exec_stack) || ($RelPath !~ $EXRE_exec_stack))) {
 		onbld_elfmod::OutMsg($ErrFH, $ErrTtl, $RelPath,
-		    "non-executable stack required\t<no -Mmapfile_noexstk?>");
+		    "non-executable stack required\t<remove -Mmapfile_execstack?>");
 	}
 
 	# Having caught any static executables in the mcs(1) check and non-

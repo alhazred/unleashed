@@ -82,8 +82,6 @@ file path=usr/lib/ld/map.execdata mode=0444
 file path=usr/lib/ld/map.execstack mode=0444
 file path=usr/lib/ld/map.filter mode=0444
 file path=usr/lib/ld/map.noexbss mode=0444
-file path=usr/lib/ld/map.noexdata mode=0444
-file path=usr/lib/ld/map.noexstk mode=0444
 file path=usr/lib/ld/map.pagealign mode=0444
 file path=usr/lib/lddstub mode=0555
 file path=usr/lib/libldstab.so.1
