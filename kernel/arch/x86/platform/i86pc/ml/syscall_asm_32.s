@@ -20,6 +20,7 @@
  */
 /*
  * Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016 by Delphix. All rights reserved.
  */
 
 /*	Copyright (c) 1990, 1991 UNIX System Laboratories, Inc.	*/
@@ -152,7 +153,7 @@
 1:	movl	4(%esp), %ebx		/* restore user %gs (re-do if	*/ ;\
 	movw	%bx, %gs		/* branch due to no callback)	*/ ;\
 	movl	8(%esp), %ebx		/* restore user's %ebx		*/ ;\
-	addl	$16, %esp		/* restore stack ptr		*/ 
+	addl	$16, %esp		/* restore stack ptr		*/
 
 #define	MSTATE_TRANSITION(from, to)		\
 	pushl	$to;				\
@@ -333,7 +334,7 @@ __lwptoregs_msg:
  * |------------|
  * | 8 args	| <- %esp	MAXSYSARGS (currently 8) arguments
  * |------------|
- * 
+ *
  */
 #define	SYS_DROP	_CONST(_MUL(MAXSYSARGS, 4))
 
@@ -378,7 +379,7 @@ _watch_do_syscall:
 	popl	%eax
 
 	movl	%gs:CPU_THREAD, %ebx
-	
+
 	ASSERT_LWPTOREGS(%ebx, %esp)
 
 	CHECK_PRESYS_NE(%ebx, %eax)
@@ -471,7 +472,7 @@ _syscall_fault:
  *	mov	$1f, %edx	/ return %eip
  *	mov	%esp, %ecx	/ return %esp
  *	sysenter
- * 1:	
+ * 1:
  *
  * Hardware and (privileged) initialization code have arranged that by
  * the time the sysenter instructions completes:
@@ -495,7 +496,7 @@ _syscall_fault:
  * single-stepping in a debugger.  For most of the system call mechanisms,
  * the CPU automatically clears the single-step flag before we enter the
  * kernel.  The sysenter mechanism does not clear the flag, so a user
- * single-stepping through a libc routine may suddenly find him/herself
+ * single-stepping through a libc routine may suddenly find themself
  * single-stepping through the kernel.  To detect this, kmdb compares the
  * trap %pc to the [brand_]sys_enter addresses on each single-step trap.
  * If it finds that we have single-stepped to a sysenter entry point, it
@@ -576,7 +577,7 @@ _sysenter_done:
 	/
 	/ sysexit uses %edx to restore %eip, so we can't use it
 	/ to return a value, sigh.
-	/ 
+	/
 	movl	%eax, REGOFF_EAX(%esp)
 	/ movl	%edx, REGOFF_EDX(%esp)
 

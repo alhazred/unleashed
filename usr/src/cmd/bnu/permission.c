@@ -26,6 +26,9 @@
 
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
 /*	  All Rights Reserved  	*/
+/*
+ * Copyright (c) 2016 by Delphix. All rights reserved.
+ */
 
 #ifndef UUCHECK
 #include "uucp.h"
@@ -203,7 +206,7 @@ char *name;
  * this function will find a login name in the LOGNAME
  * field.
  * input:
- *	name	-> who the remote says he/she is
+ *	name	-> who the remote says they are
  * return:
  *	SUCCESS	-> found
  *	FAIL	-> not found
@@ -332,7 +335,7 @@ char *list[];
 	while (*p && num < maxlist) {
 		list[num] = p;
 		if (*p == ':') {	/* null path */
-			*p++ = NULLCHAR; 
+			*p++ = NULLCHAR;
 			continue;
 		}
 		while (*p && *p != ':')
@@ -438,7 +441,7 @@ int type;
 		    continue;
 
 		case U_LOGNAME:
-		    if (EQUALS(arg, name)) 
+		    if (EQUALS(arg, name))
 				break;
 		    continue;
 
@@ -477,7 +480,7 @@ static int
 validateFind(name)
 char *name;
 {
-	
+
 	if ( (Fp = fopen(PERMISSIONS, "r")) == NULL) {
 		DEBUG(5, "can't open %s\n", PERMISSIONS);
 		return(FAIL);
@@ -550,7 +553,7 @@ char *name;
  *
  * return:
  *	0 - OK
- *	EOF - at end of file		
+ *	EOF - at end of file
  */
 int
 parse_tokens(flds, buf)
@@ -622,7 +625,7 @@ struct name_value *pair;
 		string++;
 	if (*string)
 		*string++ = NULLCHAR;
-	
+
 	pair->value = string;
 	while ((*string) && (*string != '\t') && (*string != ' ')
 	    && (*string != '\n'))
@@ -650,7 +653,7 @@ char *line;
 {
 	char *p, *c;
 	char buf[BUFSIZ];
-	
+
 	p = line;
 	for (;fgets(buf, BUFSIZ, fp) != NULL;) {
 		/* remove trailing white space */
@@ -760,7 +763,7 @@ switchRole()
  * rmail
  * Note that the PERMISSIONS file is read once for each system
  * at the time the Rmtname is set in xprocess().
- * Return codes:	
+ * Return codes:
  *	ok: TRUE
  *	fail: FALSE
  */
@@ -809,7 +812,7 @@ char *name, *list[];
 			}
 		    }
 		    if ( _dev[i] == statbuf.st_dev
-		      && _ino[i] == statbuf.st_ino ) {    
+		      && _ino[i] == statbuf.st_ino ) {
 			free(temp);
 			return(TRUE);
 		    }

@@ -21,6 +21,7 @@
 /*
  * Copyright (c) 1994, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2014 Nexenta Systems, Inc.  All rights reserved.
+ * Copyright (c) 2016 by Delphix. All rights reserved.
  */
 
 /*
@@ -819,7 +820,7 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 
 	/*
 	 * Get attributes again so we can send the latest access
-	 * time to the client side for his cache.
+	 * time to the client side for its cache.
 	 */
 	va.va_mask = AT_ALL;
 
@@ -1094,7 +1095,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	if (!error) {
 		/*
 		 * Get attributes again so we send the latest mod
-		 * time to the client side for his cache.
+		 * time to the client side for its cache.
 		 */
 		va.va_mask = AT_ALL;	/* now we want everything */
 
@@ -1588,7 +1589,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 			data_written = 1;
 			/*
 			 * Get attributes again so we send the latest mod
-			 * time to the client side for his cache.
+			 * time to the client side for its cache.
 			 */
 			va.va_mask = AT_ALL;	/* now we want everything */
 

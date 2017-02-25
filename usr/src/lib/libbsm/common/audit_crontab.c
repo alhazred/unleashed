@@ -22,6 +22,7 @@
 /*
  * Copyright 2003 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ * Copyright (c) 2016 by Delphix. All rights reserved.
  */
 
 #include <sys/types.h>
@@ -268,7 +269,7 @@ audit_crontab_not_allowed(uid_t ruid, char *user) {
 		if (!result) {
 			rc = 1;			/* deny access if invalid */
 		} else if (ruid == pwd.pw_uid)
-			rc = 0;			/* editing his own crontab */
+			rc = 0;			/* editing their own crontab */
 		else
 			rc = audit_crontab_process_not_audited();
 	}

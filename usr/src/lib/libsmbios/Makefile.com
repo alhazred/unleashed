@@ -22,8 +22,6 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# ident	"%Z%%M%	%I%	%E% SMI"
-#
 
 LIBRARY = libsmbios.a
 VERS = .1
@@ -53,7 +51,7 @@ SRCDIR = ../common
 CLEANFILES += ../common/smb_tables.c
 
 CPPFLAGS += -I../common -I$(COMMON_SRCDIR)
-LDLIBS += -lc
+LDLIBS += -ldevinfo -lc
 
 .KEEP_STATE:
 

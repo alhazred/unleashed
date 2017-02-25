@@ -22,6 +22,7 @@
 /*
  * Copyright (c) 2003, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2014 Nexenta Systems, Inc. All rights reserved.
+ * Copyright (c) 2016 by Delphix. All rights reserved.
  */
 
 /*
@@ -1372,7 +1373,7 @@ server(void *cookie, char *args, size_t alen, door_desc_t *dp,
 				abort();
 			/*
 			 * We could have two clients racing to halt this
-			 * zone; the second client loses, but his request
+			 * zone; the second client loses, but its request
 			 * doesn't fail, since the zone is now in the desired
 			 * state.
 			 */
@@ -1468,7 +1469,7 @@ server(void *cookie, char *args, size_t alen, door_desc_t *dp,
 		case Z_READY:
 			/*
 			 * We could have two clients racing to ready this
-			 * zone; the second client loses, but his request
+			 * zone; the second client loses, but its request
 			 * doesn't fail, since the zone is now in the desired
 			 * state.
 			 */
@@ -1550,7 +1551,7 @@ server(void *cookie, char *args, size_t alen, door_desc_t *dp,
 		case Z_BOOT:
 			/*
 			 * We could have two clients racing to boot this
-			 * zone; the second client loses, but his request
+			 * zone; the second client loses, but its request
 			 * doesn't fail, since the zone is now in the desired
 			 * state.
 			 */

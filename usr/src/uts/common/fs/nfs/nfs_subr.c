@@ -25,6 +25,7 @@
 
 /*
  * Copyright 2011 Nexenta Systems, Inc. All rights reserved.
+ * Copyright (c) 2016 by Delphix. All rights reserved.
  */
 
 #include <sys/param.h>
