@@ -1,4 +1,5 @@
 SUBDIR = bin \
+	 boot \
 	 etc \
 	 include \
 	 kernel \
