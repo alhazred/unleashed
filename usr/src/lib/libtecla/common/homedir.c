@@ -383,7 +383,6 @@ int _hd_scan_user_home_dirs(HomeDir *home, const char *prefix,
   } else
 #endif
   {
-    struct passwd pwd_buffer;  /* A returned password entry */
     struct passwd *pwd;   /* The pointer to the latest password entry */
 /*
  * Open the password file.
