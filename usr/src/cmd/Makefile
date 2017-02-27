@@ -414,7 +414,6 @@ COMMON_SUBDIRS=		\
 	unpack		\
 	userattr	\
 	users		\
-	utmp_update	\
 	utmpd		\
 	uuidgen		\
 	valtools	\
