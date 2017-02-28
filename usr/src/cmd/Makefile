@@ -133,7 +133,6 @@ COMMON_SUBDIRS=		\
 	du		\
 	dumpadm		\
 	dumpcs		\
-	echo		\
 	ed		\
 	eeprom		\
 	egrep		\

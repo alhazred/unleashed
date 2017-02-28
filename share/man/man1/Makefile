@@ -84,7 +84,6 @@ MAN = acctcom.1 \
       du.1 \
       dump.1 \
       dumpcs.1 \
-      echo.1 \
       ed.1 \
       egrep.1 \
       eject.1 \
