@@ -45,7 +45,6 @@ file path=usr/xpg4/bin/crontab mode=4555
 file path=usr/xpg4/bin/date mode=0555
 file path=usr/xpg4/bin/du mode=0555
 file path=usr/xpg4/bin/ed mode=0555
-file path=usr/xpg4/bin/env mode=0555
 file path=usr/xpg4/bin/expr mode=0555
 file path=usr/xpg4/bin/find mode=0555
 file path=usr/xpg4/bin/getconf mode=0555

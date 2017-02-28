@@ -93,7 +93,6 @@ MAN = acctcom.1 \
       elfwrap.1 \
       encrypt.1 \
       enhance.1 \
-      env.1 \
       eqn.1 \
       exec.1 \
       exit.1 \

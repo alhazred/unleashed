@@ -139,7 +139,6 @@ COMMON_SUBDIRS=		\
 	eject		\
 	emul64ioctl	\
 	enhance		\
-	env		\
 	eqn		\
 	expand		\
 	expr		\
@@ -538,7 +537,6 @@ MSGSUBDIRS=		\
 	dumpcs		\
 	ed		\
 	eject		\
-	env		\
 	eqn		\
 	expand		\
 	expr		\
