@@ -349,7 +349,6 @@ MAN = acctcom.1 \
       xgettext.1 \
       xstr.1 \
       yacc.1 \
-      yes.1 \
       ypcat.1 \
       ypmatch.1 \
       yppasswd.1 \

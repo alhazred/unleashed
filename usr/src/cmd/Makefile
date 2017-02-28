@@ -432,7 +432,6 @@ COMMON_SUBDIRS=		\
 	write		\
 	xargs		\
 	xstr		\
-	yes		\
 	ypcmd		\
 	yppasswd	\
 	zdb		\
