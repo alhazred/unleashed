@@ -75,7 +75,6 @@ COMMON_SUBDIRS=		\
 	cal		\
 	calendar	\
 	captoinfo	\
-	cat		\
 	cdrw		\
 	cfgadm		\
 	checkeq		\
@@ -499,7 +498,6 @@ MSGSUBDIRS=		\
 	bnu		\
 	busstat		\
 	cal		\
-	cat		\
 	cdrw		\
 	cfgadm		\
 	checkeq		\
