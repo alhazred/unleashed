@@ -146,7 +146,6 @@ COMMON_SUBDIRS=		\
 	expr		\
 	exstr		\
 	factor		\
-	false		\
 	fcinfo		\
 	fcoesvc		\
 	fdetach		\
