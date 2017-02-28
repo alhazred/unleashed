@@ -319,7 +319,6 @@ MAN = acctcom.1 \
       tr.1 \
       trap.1 \
       troff.1 \
-      true.1 \
       truss.1 \
       tsort.1 \
       tty.1 \

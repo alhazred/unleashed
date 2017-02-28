@@ -402,7 +402,6 @@ COMMON_SUBDIRS=		\
 	tr		\
 	trapstat	\
 	troff		\
-	true		\
 	truss		\
 	tty		\
 	ttymon		\
