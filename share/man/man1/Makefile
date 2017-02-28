@@ -18,7 +18,6 @@ MAN = acctcom.1 \
       audiotest.1 \
       auths.1 \
       awk.1 \
-      banner.1 \
       basename.1 \
       bc.1 \
       bdiff.1 \

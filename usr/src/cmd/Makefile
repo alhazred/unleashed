@@ -63,7 +63,6 @@ COMMON_SUBDIRS=		\
 	awk		\
 	awk_xpg4	\
 	backup		\
-	banner		\
 	bart		\
 	basename	\
 	bc		\
@@ -491,7 +490,6 @@ MSGSUBDIRS=		\
 	awk		\
 	awk_xpg4	\
 	backup		\
-	banner		\
 	bart		\
 	basename	\
 	beadm		\
