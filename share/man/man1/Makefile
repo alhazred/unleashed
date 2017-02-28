@@ -249,7 +249,6 @@ MAN = acctcom.1 \
       ptree.1 \
       puname.1 \
       pvs.1 \
-      pwd.1 \
       ranlib.1 \
       rcapstat.1 \
       read.1 \

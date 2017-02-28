@@ -320,7 +320,6 @@ COMMON_SUBDIRS=		\
 	ptools		\
 	pwck		\
 	pwconv		\
-	pwd		\
 	pyzfs		\
 	raidctl		\
 	ramdiskadm	\
@@ -626,7 +625,6 @@ MSGSUBDIRS=		\
 	psrinfo		\
 	ptools		\
 	pwconv		\
-	pwd		\
 	pyzfs		\
 	raidctl		\
 	ramdiskadm	\
