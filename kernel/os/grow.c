@@ -618,7 +618,7 @@ smmap_common(caddr_t *addrp, size_t len,
 	int error;
 	int in_crit = 0;
 
-	if ((flags & ~(MAP_SHARED | MAP_PRIVATE | MAP_FIXED | _MAP_NEW |
+	if ((flags & ~(MAP_SHARED | MAP_PRIVATE | MAP_FIXED |
 	    _MAP_LOW32 | MAP_NORESERVE | MAP_ANON | MAP_ALIGN |
 	    MAP_TEXT | MAP_INITDATA)) != 0) {
 		/* | MAP_RENAME */	/* not implemented, let user know */
@@ -645,18 +645,6 @@ smmap_common(caddr_t *addrp, size_t len,
 	if (RANDOMIZABLE_MAPPING(*addrp, flags) &&
 	    secflag_enabled(curproc, PROC_SEC_ASLR))
 		flags |= _MAP_RANDOMIZE;
-
-#if defined(__sparc)
-	/*
-	 * See if this is an "old mmap call".  If so, remember this
-	 * fact and convert the flags value given to mmap to indicate
-	 * the specified address in the system call must be used.
-	 * _MAP_NEW is turned set by all new uses of mmap.
-	 */
-	if ((flags & _MAP_NEW) == 0)
-		flags |= MAP_FIXED;
-#endif
-	flags &= ~_MAP_NEW;
 
 	type = flags & MAP_TYPE;
 	if (type != MAP_PRIVATE && type != MAP_SHARED)

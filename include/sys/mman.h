@@ -115,17 +115,6 @@ extern "C" {
 
 #define	_MAP_LOW32	0x80	/* force mapping in lower 4G of address space */
 #define	MAP_32BIT	_MAP_LOW32
-
-/*
- * For the sake of backward object compatibility, we use the _MAP_NEW flag.
- * This flag will be automatically or'ed in by the C library for all
- * new mmap calls.  Previous binaries with old mmap calls will continue
- * to get 0 or -1 for return values.  New mmap calls will get the mapped
- * address as the return value if successful and -1 on errors.  By default,
- * new mmap calls automatically have the kernel assign the map address
- * unless the MAP_FIXED flag is given.
- */
-#define	_MAP_NEW	0x80000000	/* users should not need to use this */
 #endif	/* (_POSIX_C_SOURCE <= 2) */
 
 

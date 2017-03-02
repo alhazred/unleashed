@@ -38,7 +38,6 @@
 #endif
 
 #include "SYS.h"
-#include <sys/mman.h>		/* Need _MAP_NEW definition     */
 
 #if !defined(_LARGEFILE_SOURCE)
 
@@ -49,11 +48,6 @@
  */
 
 	ENTRY(mmap)
-#if defined(__sparc)
-	/* this depends upon the _MAP_NEW flag being in the top bits */
-	sethi	%hi(_MAP_NEW), %g1
-	or	%g1, %o3, %o3
-#endif
 	SYSTRAP_RVAL1(mmap)
 	SYSCERROR
 	RET
@@ -68,11 +62,6 @@
  */
 
 	ENTRY(mmap64)
-#if defined(__sparc)
-	/* this depends upon the _MAP_NEW flag being in the top bits */
-	sethi	%hi(_MAP_NEW), %g1
-	or	%g1, %o3, %o3
-#endif
 	SYSTRAP_RVAL1(mmap64)
 	SYSCERROR
 	RET

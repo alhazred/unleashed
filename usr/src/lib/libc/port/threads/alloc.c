@@ -115,7 +115,7 @@ initial_allocation(bucket_t *bp)	/* &__uberdata.bucket[0] */
 	 */
 	if (__systemcall6(&rval, SYS_mmap, CHUNKSIZE, BASE_SIZE,
 	    PROT_READ | PROT_WRITE | PROT_EXEC,
-	    _MAP_NEW | MAP_PRIVATE | MAP_ANON | MAP_ALIGN, -1L, (off_t)0) != 0)
+	    _MAP_PRIVATE | MAP_ANON | MAP_ALIGN, -1L, (off_t)0) != 0)
 		thr_panic("initial allocation failed; swap space exhausted?");
 	base = (void *)rval.sys_rval1;
 

@@ -69,7 +69,7 @@ pr_mmap(struct ps_prochandle *Pr,
 	adp->arg_size = 0;
 
 	adp++;			/* flags argument */
-	adp->arg_value = (long)(_MAP_NEW|flags);
+	adp->arg_value = (long)flags;
 	adp->arg_object = NULL;
 	adp->arg_type = AT_BYVAL;
 	adp->arg_inout = AI_INPUT;

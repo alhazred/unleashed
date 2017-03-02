@@ -733,7 +733,7 @@ mmap_type(private_t *pri, long arg)
 		break;
 	}
 
-	arg &= ~(_MAP_NEW|MAP_TYPE);
+	arg &= ~MAP_TYPE;
 
 	if (arg & ~(MAP_FIXED|MAP_RENAME|MAP_NORESERVE|MAP_ANON|MAP_ALIGN|
 	    MAP_TEXT|MAP_INITDATA|MAP_32BIT))
