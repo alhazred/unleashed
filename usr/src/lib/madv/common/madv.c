@@ -721,11 +721,11 @@ shmat(int shmid, const void *shmaddr, int shmflag)
 /*
  * mmap interpose
  */
-caddr_t
-mmap(caddr_t addr, size_t len, int prot, int flags, int fd, off_t pos)
+void *
+mmap(void *addr, size_t len, int prot, int flags, int fd, off_t pos)
 {
-	static caddr_t (*mmapfunc)() = NULL;
-	caddr_t result;
+	static void *(*mmapfunc)();
+	void *result;
 	int advice = -1;
 #ifdef MADVDEBUG
 	int rc;
@@ -735,7 +735,7 @@ mmap(caddr_t addr, size_t len, int prot, int flags, int fd, off_t pos)
 #endif
 
 	if (!mmapfunc) {
-		mmapfunc = (caddr_t (*)()) dlsym(RTLD_NEXT, "mmap");
+		mmapfunc = dlsym(RTLD_NEXT, "mmap");
 		assert(mmapfunc);
 	}
 
@@ -762,7 +762,7 @@ mmap(caddr_t addr, size_t len, int prot, int flags, int fd, off_t pos)
 		rc = memcntl(result, len, MC_ADVISE,
 		    (caddr_t)(intptr_t)advice, 0, 0);
 		MADVPRINT(1, (stderr,
-		    "mmap advice: 0x%x 0x%x %d, rc %d errno %d\n",
+		    "mmap advice: %p 0x%x %d, rc %d errno %d\n",
 		    result, len, advice, rc, errno));
 	}
 
@@ -773,11 +773,11 @@ mmap(caddr_t addr, size_t len, int prot, int flags, int fd, off_t pos)
 /*
  * mmap64 interpose
  */
-caddr_t
-mmap64(caddr_t addr, size_t len, int prot, int flags, int fd, off64_t pos)
+void *
+mmap64(void *addr, size_t len, int prot, int flags, int fd, off64_t pos)
 {
-	static caddr_t (*mmap64func)();
-	caddr_t result;
+	static void *(*mmap64func)();
+	void *result;
 	int advice = -1;
 #ifdef MADVDEBUG
 	int rc;
@@ -787,7 +787,7 @@ mmap64(caddr_t addr, size_t len, int prot, int flags, int fd, off64_t pos)
 #endif
 
 	if (!mmap64func) {
-		mmap64func = (caddr_t (*)()) dlsym(RTLD_NEXT, "mmap64");
+		mmap64func = dlsym(RTLD_NEXT, "mmap64");
 		assert(mmap64func);
 	}
 
@@ -813,7 +813,7 @@ mmap64(caddr_t addr, size_t len, int prot, int flags, int fd, off64_t pos)
 	if (advice >= 0 && result != MAP_FAILED) {
 		rc = memcntl(result, len, MC_ADVISE, (caddr_t)advice, 0, 0);
 		MADVPRINT(1, (stderr,
-		    "mmap64 advice: 0x%x 0x%x %d, rc %d errno %d\n",
+		    "mmap64 advice: %p 0x%x %d, rc %d errno %d\n",
 		    result, len, advice, rc, errno));
 	}
 

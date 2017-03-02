@@ -810,9 +810,9 @@ msgsnd(int msqid, const void *msgp, size_t msgsz, int msgflg)
 }
 
 int
-msync(caddr_t addr, size_t len, int flags)
+msync(void *addr, size_t len, int flags)
 {
-	extern int __msync(caddr_t, size_t, int);
+	extern int __msync(void *, size_t, int);
 	int rv;
 
 	PERFORM(__msync(addr, len, flags))

@@ -12,19 +12,6 @@ mlock, munlock \- lock or unlock pages in memory
 .nf
 #include <sys/mman.h>
 
-\fBint\fR \fBmlock\fR(\fBcaddr_t\fR \fIaddr\fR, \fBsize_t\fR \fIlen\fR);
-.fi
-
-.LP
-.nf
-\fBint\fR \fBmunlock\fR(\fBcaddr_t\fR \fIaddr\fR, \fBsize_t\fR \fIlen\fR);
-.fi
-
-.SS "Standard conforming"
-.LP
-.nf
-#include <sys/mman.h>
-
 \fBint\fR \fBmlock\fR(\fBconst void *\fR \fIaddr\fR, \fBsize_t\fR \fIlen\fR);
 .fi
 

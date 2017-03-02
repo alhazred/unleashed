@@ -40,7 +40,7 @@
  */
 
 int
-munlock(caddr_t addr, size_t len)
+munlock(const void *addr, size_t len)
 {
-	return (memcntl(addr, len, MC_UNLOCK, 0, 0, 0));
+	return (memcntl((void *)addr, len, MC_UNLOCK, 0, 0, 0));
 }

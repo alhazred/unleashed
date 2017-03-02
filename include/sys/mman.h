@@ -215,60 +215,36 @@ typedef struct mmapobj_result32 {
 #define	getpagesizes	getpagesizes2
 #endif
 
-/*
- * Except for old binaries mmap() will return the resultant
- * address of mapping on success and (caddr_t)-1 on error.
- */
-#if (_POSIX_C_SOURCE > 2) || defined(_XPG4_2)
 extern void *mmap(void *, size_t, int, int, int, off_t);
 extern int munmap(void *, size_t);
 extern int mprotect(void *, size_t, int);
 extern int msync(void *, size_t, int);
-#if (!defined(_XPG4_2) || (_POSIX_C_SOURCE > 2)) || defined(__EXTENSIONS__)
 extern int mlock(const void *, size_t);
 extern int munlock(const void *, size_t);
-#endif	/* (!defined(_XPG4_2) || (_POSIX_C_SOURCE > 2))... */
 /* transitional large file interface version */
 #if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
 	    !defined(__PRAGMA_REDEFINE_EXTNAME))
 extern void *mmap64(void *, size_t, int, int, int, off64_t);
 #endif	/* _LARGEFILE64_SOURCE... */
-#else	/* (_POSIX_C_SOURCE > 2) || defined(_XPG4_2) */
-extern caddr_t mmap(caddr_t, size_t, int, int, int, off_t);
-extern int munmap(caddr_t, size_t);
-extern int mprotect(caddr_t, size_t, int);
-extern int msync(caddr_t, size_t, int);
-extern int mlock(caddr_t, size_t);
-extern int munlock(caddr_t, size_t);
+
 extern int mincore(caddr_t, size_t, char *);
 extern int memcntl(caddr_t, size_t, int, caddr_t, int, int);
 extern int madvise(caddr_t, size_t, int);
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 extern int getpagesizes(size_t *, int);
 extern int getpagesizes2(size_t *, int);
 extern int mmapobj(int, uint_t, mmapobj_result_t *, uint_t *, void *);
+extern int posix_madvise(void *, size_t, int);
+
 /* guard visibility of uint64_t */
 #if defined(_INT64_TYPE)
 extern int meminfo(const uint64_t *, int, const uint_t *, int, uint64_t *,
 	uint_t *);
 #endif /* defined(_INT64_TYPE) */
-#endif /* !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) */
-/* transitional large file interface version */
-#ifdef	_LARGEFILE64_SOURCE
-extern caddr_t mmap64(caddr_t, size_t, int, int, int, off64_t);
-#endif
-#endif	/* (_POSIX_C_SOURCE > 2)  || defined(_XPG4_2) */
 
-#if (!defined(_XPG4_2) || (_POSIX_C_SOURCE > 2)) || defined(__EXTENSIONS__)
 extern int mlockall(int);
 extern int munlockall(void);
 extern int shm_open(const char *, int, mode_t);
 extern int shm_unlink(const char *);
-#endif
-
-#if !defined(__XOPEN_OR_POSIX) || defined(_XPG6) || defined(__EXTENSIONS__)
-extern int posix_madvise(void *, size_t, int);
-#endif
 
 /* mmap failure value */
 #define	MAP_FAILED	((void *) -1)

@@ -34,7 +34,7 @@
 #include <sys/mman.h>
 
 int
-__msync(caddr_t addr, size_t len, int flags)
+__msync(void *addr, size_t len, int flags)
 {
 	return (memcntl(addr, len, MC_SYNC, (caddr_t)(uintptr_t)flags, 0, 0));
 }

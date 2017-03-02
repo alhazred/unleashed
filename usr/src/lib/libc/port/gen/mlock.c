@@ -39,7 +39,7 @@
  * Function to lock address range in memory.
  */
 int
-mlock(caddr_t addr, size_t len)
+mlock(const void *addr, size_t len)
 {
-	return (memcntl(addr, len, MC_LOCK, 0, 0, 0));
+	return (memcntl((void *)addr, len, MC_LOCK, 0, 0, 0));
 }

@@ -43,7 +43,7 @@
 
 /*
  * C library -- mmap
- * caddr_t mmap(caddr_t addr, size_t len, int prot,
+ * void *mmap(void *addr, size_t len, int prot,
  *	int flags, int fd, off_t off)
  */
 
@@ -57,7 +57,7 @@
 
 /*
  * C library -- mmap64
- * caddr_t mmap64(caddr_t addr, size_t len, int prot,
+ * void *mmap64(void *addr, size_t len, int prot,
  *	int flags, int fd, off64_t off)
  */
 
