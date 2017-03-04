@@ -349,9 +349,9 @@ cat(FILE *fi, struct stat *statp, struct stat *outp, char *filenm)
 		/*
 		 * Mmap time!
 		 */
-		bufferp = mmap((caddr_t)NULL, (size_t)mapsize, PROT_READ,
+		bufferp = mmap(NULL, (size_t)mapsize, PROT_READ,
 		    MAP_SHARED, fi_desc, (off_t)0);
-		if (bufferp == (caddr_t)-1)
+		if (bufferp == MAP_FAILED)
 			mapsize = 0;	/* I guess we can't mmap today */
 	} else
 		mapsize = 0;		/* can't mmap non-regular files */
@@ -415,7 +415,7 @@ cat(FILE *fi, struct stat *statp, struct stat *outp, char *filenm)
 				mapsize = filesize;
 			if (mmap(bufferp, (size_t)mapsize, PROT_READ,
 			    MAP_SHARED|MAP_FIXED, fi_desc,
-			    mapoffset) == (caddr_t)-1) {
+			    mapoffset) == MAP_FAILED) {
 				if (!silent)
 					perror(gettext("cat: mmap error"));
 				(void) munmap(bufferp, (size_t)munmapsize);
