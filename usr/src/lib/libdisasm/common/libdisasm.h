@@ -55,9 +55,7 @@ typedef struct dis_handle dis_handle_t;
 #define	DIS_X86			0x010
 
 /* s390 disassembler flags */
-#define	DIS_S370		0x200
-#define	DIS_S390_31		0x400
-#define	DIS_S390_64		0x800
+#define	DIS_S3X0		0x020
 
 /* generic disassembler flags */
 #define	DIS_OCTAL		0x040
@@ -65,7 +63,7 @@ typedef struct dis_handle dis_handle_t;
 
 #define	DIS_ARCH_MASK		(DIS_SPARC_V8 | \
 		DIS_SPARC_V9 | DIS_SPARC_V9_SGI | DIS_SPARC_V9_OPL | \
-		DIS_X86 | DIS_S370 | DIS_S390_31 | DIS_S390_64)
+		DIS_X86 | DIS_S3X0)
 #define	DIS_SIZE_MASK		(DIS_SIZE_16 | \
 		DIS_SIZE_24 | DIS_SIZE_32 | DIS_SIZE_64)
 

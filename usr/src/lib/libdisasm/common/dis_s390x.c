@@ -2570,10 +2570,8 @@ inval:
 static int
 dis_s390_supports_flags(int flags)
 {
-	int archflags = flags & DIS_ARCH_MASK;
-
-	if (archflags == DIS_S370 || archflags == DIS_S390_31 ||
-	    archflags == DIS_S390_64)
+	if ((flags & DIS_ARCH_MASK) == DIS_S3X0 &&
+	    DIS_SIZE_CHECK(flags, DIS_SIZE_24 | DIS_SIZE_32 | DIS_SIZE_64))
 		return (1);
 
 	return (0);
@@ -2596,14 +2594,16 @@ dis_s390_disassemble(dis_handle_t *dhp, uint64_t addr, char *buf,
 	    dhp->dh_read(dhp->dh_data, addr + 2, &inst.raw[2], len) != len)
 			return (-1);
 
-	switch (dhp->dh_flags & (DIS_S370 | DIS_S390_31 | DIS_S390_64)) {
-		case DIS_S370:
+	switch (dhp->dh_flags & DIS_SIZE_MASK) {
+		case DIS_SIZE_16:
+			return (-1);
+		case DIS_SIZE_24:
 			mach = F_370;
 			break;
-		case DIS_S390_31:
+		case DIS_SIZE_32:
 			mach = F_390;
 			break;
-		case DIS_S390_64:
+		case DIS_SIZE_64:
 			mach = F_Z;
 			break;
 	}

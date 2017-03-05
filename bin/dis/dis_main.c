@@ -548,7 +548,7 @@ dis_file(const char *filename)
 			break;
 
 		case EM_S370:
-			g_flags |= DIS_S370;
+			g_flags |= DIS_S3X0 | DIS_SIZE_24;
 
 			if (ehdr.e_ident[EI_CLASS] != ELFCLASS32 ||
 			    ehdr.e_ident[EI_DATA] != ELFDATA2MSB) {
@@ -565,9 +565,9 @@ dis_file(const char *filename)
 			 * s390x).
 			 */
 			if (ehdr.e_ident[EI_CLASS] == ELFCLASS32) {
-				g_flags |= DIS_S390_31;
+				g_flags |= DIS_S3X0 | DIS_SIZE_32;
 			} else if (ehdr.e_ident[EI_CLASS] == ELFCLASS64) {
-				g_flags |= DIS_S390_64;
+				g_flags |= DIS_S3X0 | DIS_SIZE_64;
 			} else {
 				warn("invalid E_IDENT field for S390 object");
 				return;
