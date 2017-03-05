@@ -23,7 +23,7 @@
  * Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  * Copyright 2012 Joshua M. Clulow <josh@sysmgr.org>
- * Copyright 2015 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
+ * Copyright 2015-2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  */
 
 #ifndef	_LIBDISASM_H
@@ -38,6 +38,12 @@ extern "C" {
 typedef struct dis_handle dis_handle_t;
 
 #define	DIS_DEFAULT		0x0
+
+/* generic size flags */
+#define	DIS_SIZE_16		0x1000
+#define	DIS_SIZE_24		0x2000
+#define	DIS_SIZE_32		0x4000
+#define	DIS_SIZE_64		0x8000
 
 /* SPARC disassembler flags */
 #define	DIS_SPARC_V8		0x001
@@ -63,6 +69,11 @@ typedef struct dis_handle dis_handle_t;
 		DIS_SPARC_V9 | DIS_SPARC_V9_SGI | DIS_SPARC_V9_OPL | \
 		DIS_X86_SIZE16 | DIS_X86_SIZE32 | DIS_X86_SIZE64 | \
 		DIS_S370 | DIS_S390_31 | DIS_S390_64)
+#define	DIS_SIZE_MASK		(DIS_SIZE_16 | \
+		DIS_SIZE_24 | DIS_SIZE_32 | DIS_SIZE_64)
+
+#define	DIS_SIZE_CHECK(value, allowed_sizes) \
+	((((value) & ~(allowed_sizes)) & DIS_SIZE_MASK) == 0)
 
 typedef int (*dis_lookup_f)(void *, uint64_t, char *, size_t, uint64_t *,
     size_t *);
