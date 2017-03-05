@@ -295,7 +295,13 @@ out:
 int
 openat(int fd, char *path, int omode, int cmode)
 {
-	return (copen(fd, path, FFLAGS(omode), cmode));
+	return (copen(fd, path, FFLAGS(omode) |
+#if defined(_LP64)
+	    FOFFMAX,
+#else
+	    0,
+#endif
+	    cmode));
 }
 
 int
