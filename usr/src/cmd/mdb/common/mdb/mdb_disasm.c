@@ -426,7 +426,7 @@ ia16_create(mdb_disasm_t *dp)
 	return (libdisasm_create(dp,
 	    "ia16",
 	    "Intel 16-bit disassembler",
-	    DIS_X86_SIZE16));
+	    DIS_X86 | DIS_SIZE_16));
 }
 
 static int
@@ -435,7 +435,7 @@ ia32_create(mdb_disasm_t *dp)
 	return (libdisasm_create(dp,
 	    "ia32",
 	    "Intel 32-bit disassembler",
-	    DIS_X86_SIZE32));
+	    DIS_X86 | DIS_SIZE_32));
 }
 #endif
 
@@ -446,7 +446,7 @@ amd64_create(mdb_disasm_t *dp)
 	return (libdisasm_create(dp,
 	    "amd64",
 	    "AMD64 and IA32e 64-bit disassembler",
-	    DIS_X86_SIZE64));
+	    DIS_X86 | DIS_SIZE_64));
 }
 #endif
 

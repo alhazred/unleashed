@@ -540,11 +540,11 @@ dis_file(const char *filename)
 			break;
 
 		case EM_386:
-			g_flags |= DIS_X86_SIZE32;
+			g_flags |= DIS_X86 | DIS_SIZE_32;
 			break;
 
 		case EM_AMD64:
-			g_flags |= DIS_X86_SIZE64;
+			g_flags |= DIS_X86 | DIS_SIZE_64;
 			break;
 
 		case EM_S370:

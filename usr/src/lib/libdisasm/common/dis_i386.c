@@ -97,7 +97,8 @@ dis_i386_handle_attach(dis_handle_t *dhp)
 	/*
 	 * Validate architecture flags
 	 */
-	if (dhp->dh_flags & ~(DIS_X86_SIZE16 | DIS_X86_SIZE32 | DIS_X86_SIZE64 |
+	if (dhp->dh_flags & ~(DIS_X86 |
+	    DIS_SIZE_16 | DIS_SIZE_32 | DIS_SIZE_64 |
 	    DIS_OCTAL | DIS_NOIMMSYM)) {
 		(void) dis_seterrno(E_DIS_INVALFLAG);
 		return (-1);
@@ -115,9 +116,9 @@ dis_i386_handle_attach(dis_handle_t *dhp)
 	/*
 	 * Initialize x86-specific architecture structure
 	 */
-	if (dhp->dh_flags & DIS_X86_SIZE16)
+	if (dhp->dh_flags & DIS_SIZE_16)
 		dhx->dhx_mode = SIZE16;
-	else if (dhp->dh_flags & DIS_X86_SIZE64)
+	else if (dhp->dh_flags & DIS_SIZE_64)
 		dhx->dhx_mode = SIZE64;
 	else
 		dhx->dhx_mode = SIZE32;
@@ -175,10 +176,8 @@ dis_i386_min_instrlen(dis_handle_t *dhp)
 static int
 dis_i386_supports_flags(int flags)
 {
-	int archflags = flags & DIS_ARCH_MASK;
-
-	if (archflags == DIS_X86_SIZE16 || archflags == DIS_X86_SIZE32 ||
-	    archflags == DIS_X86_SIZE64)
+	if ((flags & DIS_ARCH_MASK) == DIS_X86 &&
+	    DIS_SIZE_CHECK(flags, DIS_SIZE_16 | DIS_SIZE_32 | DIS_SIZE_64))
 		return (1);
 
 	return (0);

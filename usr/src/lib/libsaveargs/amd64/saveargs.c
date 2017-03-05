@@ -261,7 +261,7 @@ saveargs_has_args(uint8_t *ins, size_t size, uint_t argc, int start_index)
 
 	argc = MIN((start_index + argc), INSTR_ARRAY_SIZE);
 
-	if ((dhp = dis_handle_create(DIS_X86_SIZE64, NULL, do_lookup,
+	if ((dhp = dis_handle_create(DIS_X86 | DIS_SIZE_64, NULL, do_lookup,
 	    do_read)) == NULL)
 		return (SAVEARGS_NO_ARGS);
 
