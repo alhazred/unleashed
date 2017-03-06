@@ -110,7 +110,6 @@ struct in6_addr {
 		uint16_t	_S6_u16[8];	/* IPv6 address */
 		uint32_t	_S6_u32[4];	/* IPv6 address */
 #endif
-		uint32_t	__S6_align;	/* Align on 32 bit boundary */
 	} _S6_un;
 };
 #define	s6_addr		_S6_un._S6_u8
