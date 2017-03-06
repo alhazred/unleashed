@@ -56,9 +56,7 @@ typedef	uint32_t	socklen_t;
  * Symbols such as htonl() are required to be exposed through this file,
  * per XNS Issue 5. This is achieved by inclusion of <sys/byteorder.h>
  */
-#if !defined(_XPG4_2) || defined(__EXTENSIONS__) || defined(_XPG5)
 #include <sys/byteorder.h>
-#endif
 
 #ifndef _IN_PORT_T
 #define	_IN_PORT_T
