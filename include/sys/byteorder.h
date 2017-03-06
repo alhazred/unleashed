@@ -104,21 +104,14 @@ extern	uint64_t ntohll(uint64_t);
 /*
  * Macros to reverse byte order
  */
-#define	BSWAP_8(x)	((x) & 0xff)
-#if !defined(__i386) && !defined(__amd64)
-#define	BSWAP_16(x)	((BSWAP_8(x) << 8) | BSWAP_8((x) >> 8))
-#define	BSWAP_32(x)	(((uint32_t)(x) << 24) | \
+#define	_BSWAP_8(x)	((x) & 0xff)
+#define	_BSWAP_16(x)	((_BSWAP_8(x) << 8) | _BSWAP_8((x) >> 8))
+#define	_BSWAP_32(x)	(((uint32_t)(x) << 24) | \
 			(((uint32_t)(x) << 8) & 0xff0000) | \
 			(((uint32_t)(x) >> 8) & 0xff00) | \
 			((uint32_t)(x)  >> 24))
-#else /* x86 */
-#define	BSWAP_16(x)	htons(x)
-#define	BSWAP_32(x)	htonl(x)
-#endif	/* !__i386 && !__amd64 */
-
 #if defined(_LP64) || defined(_LONGLONG_TYPE)
-#if (!defined(__i386) && !defined(__amd64))
-#define	BSWAP_64(x)	(((uint64_t)(x) << 56) | \
+#define	_BSWAP_64(x)	(((uint64_t)(x) << 56) | \
 			(((uint64_t)(x) << 40) & 0xff000000000000ULL) | \
 			(((uint64_t)(x) << 24) & 0xff0000000000ULL) | \
 			(((uint64_t)(x) << 8)  & 0xff00000000ULL) | \
@@ -126,12 +119,43 @@ extern	uint64_t ntohll(uint64_t);
 			(((uint64_t)(x) >> 24) & 0xff0000ULL) | \
 			(((uint64_t)(x) >> 40) & 0xff00ULL) | \
 			((uint64_t)(x)  >> 56))
-#else /* x86 */
-#define	BSWAP_64(x)	htonll(x)
-#endif	/* !__i386 && !__amd64 */
 #else /* no uint64_t */
-#define	BSWAP_64(x)	((BSWAP_32(x) << 32) | BSWAP_32((x) >> 32))
+#define	_BSWAP_64(x)	((_BSWAP_32(x) << 32) | _BSWAP_32((x) >> 32))
 #endif	/* _LP64 || _LONGLONG_TYPE  */
+
+/*
+ * We do this convoluted compile time constant check because we need to
+ * decide if we want to use the above C version to byteswap or the inline
+ * assembly.  While modern compilers are smart enough to turn the above C
+ * into the appropriate bswap instruction on x86, gcc 4.4.4 isn't modern
+ * enough.  So, we want to avoid using _BSWAP_XX unconditionally.
+ *
+ * At the same time, we don't want to use hton* functions unconditionally
+ * even though they are simple inline functions because that prevents us
+ * from using BSWAP_XX in contexts where the result must be a compile time
+ * constant.  For example, assigning a global to a constant:
+ *
+ *	uint32_t abc = BSWAP_32(0x12345678);
+ *
+ * Since the argument is a compile time constant, the byte-swapped value is
+ * also a compile time constant.  So, in order for the compiler to be able
+ * to calculate the constant, we must let it use the C implementation
+ * instead of the inline assembly.
+ *
+ * Once we've moved to a more modern compiler, we can always use the C
+ * version.
+ */
+#if !defined(__i386) && !defined(__amd64) && !defined(__GNUC__)
+#define	BSWAP_8(x)	_BSWAP_8(x)
+#define	BSWAP_16(x)	_BSWAP_16(x)
+#define	BSWAP_32(x)	_BSWAP_32(x)
+#define	BSWAP_64(x)	_BSWAP_64(x)
+#else /* x86 */
+#define	BSWAP_8(x)	_BSWAP_8(x)
+#define	BSWAP_16(x)	(__builtin_constant_p(x) ? _BSWAP_16(x) : htons(x))
+#define	BSWAP_32(x)	(__builtin_constant_p(x) ? _BSWAP_32(x) : htonl(x))
+#define	BSWAP_64(x)	(__builtin_constant_p(x) ? _BSWAP_64(x) : htonll(x))
+#endif	/* !__i386 && !__amd64 */
 
 #define	BMASK_8(x)	((x) & 0xff)
 #define	BMASK_16(x)	((x) & 0xffff)
