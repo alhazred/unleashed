@@ -118,6 +118,15 @@ struct in6_addr {
 #define	s6_addr32	_S6_un._S6_u32
 #endif
 
+#ifdef __UNLEASHED_VISIBLE
+#define	IN6ADDR_INITIALIZER(a, b, c, d)				\
+	{							\
+		.s6_addr32 = {					\
+			BE_32(a), BE_32(b), BE_32(c), BE_32(d)	\
+		}						\
+	}
+#endif
+
 typedef struct in6_addr in6_addr_t;
 
 #endif /* !defined(_XPG4_2) || defined(_XPG6) || defined(__EXTENSIONS__) */
