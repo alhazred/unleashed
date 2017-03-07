@@ -14358,7 +14358,7 @@ int
 ill_add_ires(ill_t *ill)
 {
 	ire_t	*ire;
-	in6_addr_t dummy6 = {(uint32_t)V6_MCAST, 0, 0, 1};
+	in6_addr_t dummy6 = IN6ADDR_INITIALIZER(V6_MCAST, 0, 0, 1);
 	in_addr_t dummy4 = htonl(INADDR_ALLHOSTS_GROUP);
 
 	if (ill->ill_ire_multicast != NULL)
