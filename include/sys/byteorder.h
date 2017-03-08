@@ -145,7 +145,7 @@ extern	uint64_t ntohll(uint64_t);
  * Once we've moved to a more modern compiler, we can always use the C
  * version.
  */
-#if !defined(__i386) && !defined(__amd64) && !defined(__GNUC__)
+#if (!defined(__i386) && !defined(__amd64)) || !defined(__GNUC__)
 #define	BSWAP_8(x)	_BSWAP_8(x)
 #define	BSWAP_16(x)	_BSWAP_16(x)
 #define	BSWAP_32(x)	_BSWAP_32(x)
