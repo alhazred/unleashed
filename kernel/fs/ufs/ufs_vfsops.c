@@ -171,8 +171,6 @@ static mntopt_t mntopts[] = {
 		(void *)0 },
 	{ MNTOPT_NOQUOTA,	noquota_cancel,	NULL,
 		MO_NODISPLAY|MO_DEFAULT, (void *)0 },
-	{ MNTOPT_GLOBAL,	NULL,		NULL,		0,
-		(void *)0 },
 	{ MNTOPT_XATTR,	xattr_cancel,		NULL,		MO_DEFAULT,
 		(void *)0 },
 	{ MNTOPT_NOXATTR,	noxattr_cancel,		NULL,		0,
@@ -385,8 +383,7 @@ ufs_mount(struct vfs *vfsp, struct vnode *mvp, struct mounta *uap,
 	 * mount checks. Global mounts require special handling.
 	 */
 	if ((uap->flags & MS_NOCHECK) == 0) {
-		if ((uap->flags & MS_GLOBAL) == 0 &&
-		    vfs_devmounting(dev, vfsp)) {
+		if (vfs_devmounting(dev, vfsp)) {
 			error = EBUSY;
 			goto out;
 		}

@@ -81,7 +81,6 @@
 static int	ro = 0;
 static int	largefiles = 0; /* flag - add default nolargefiles to mnttab */
 
-static int	gflg = 0;
 static int	mflg = 0;
 static int 	Oflg = 0;
 static int	qflg = 0;
@@ -187,12 +186,8 @@ main(int argc, char *argv[])
 	/*
 	 * Set options
 	 */
-	while ((c = getopt(argc, argv, "gmo:pqrVO")) != EOF) {
+	while ((c = getopt(argc, argv, "mo:pqrVO")) != EOF) {
 		switch (c) {
-
-		case 'g':
-			gflg++;
-			break;
 
 		case 'o':
 			if (strlcpy(opts, optarg, sizeof (opts)) >=
@@ -251,16 +246,9 @@ main(int argc, char *argv[])
 	mnt.mnt_mntopts = opts;
 	if (findopt(mnt.mnt_mntopts, "m"))
 		mflg++;
-	if ((gflg || findopt(mnt.mnt_mntopts, MNTOPT_GLOBAL)) &&
-	    findopt(mnt.mnt_mntopts, MNTOPT_NBMAND)) {
-		(void) fprintf(stderr, gettext("NBMAND option not supported on"
-		" global filesystem\n"));
-		exit(32);
-	}
 
 	replace_opts(opts, ro, MNTOPT_RO, MNTOPT_RW);
 	replace_opts(opts, largefiles, MNTOPT_NOLARGEFILES, MNTOPT_LARGEFILES);
-	gflg = replace_opts_dflt(opts, gflg, MNTOPT_GLOBAL, MNTOPT_NOGLOBAL);
 
 	if (findopt(mnt.mnt_mntopts, MNTOPT_RQ)) {
 		rmopt(&mnt, MNTOPT_RQ);
@@ -428,7 +416,6 @@ mountfs(struct mnttab *mnt)
 	flags |= Oflg ? MS_OVERLAY : 0;
 	flags |= eatmntopt(mnt, MNTOPT_RO) ? MS_RDONLY : 0;
 	flags |= eatmntopt(mnt, MNTOPT_REMOUNT) ? MS_REMOUNT : 0;
-	flags |= eatmntopt(mnt, MNTOPT_GLOBAL) ? MS_GLOBAL : 0;
 
 	if (eatmntopt(mnt, MNTOPT_NOINTR))
 		args.flags |= UFSMNT_NOINTR;
@@ -525,29 +512,6 @@ mountfs(struct mnttab *mnt)
 		replace_opts(mnt->mnt_mntopts, 1, MNTOPT_RW, MNTOPT_RO);
 	}
 	fixopts(mnt, opts);
-
-	/*
-	 * For global filesystems we want to pass in logging option
-	 * so that it shows up in the mnttab of all nodes. We add
-	 * logging option if its not specified.
-	 */
-	if (gflg || findopt(mnt->mnt_mntopts, MNTOPT_GLOBAL)) {
-		if (!(flags & MS_RDONLY)) {
-			if (mnt->mnt_mntopts != '\0')
-				(void) strcat(mnt->mnt_mntopts, ",");
-			(void) strcat(mnt->mnt_mntopts, MNTOPT_LOGGING);
-			args.flags |= UFSMNT_LOGGING;
-		} else {
-			/*
-			 * Turn off logging for read only global mounts.
-			 * It was set to logging as default above.
-			 */
-			if (mnt->mnt_mntopts != '\0')
-				(void) strcat(mnt->mnt_mntopts, ",");
-			(void) strcat(mnt->mnt_mntopts, MNTOPT_NOLOGGING);
-			args.flags &= ~UFSMNT_LOGGING;
-		}
-	}
 
 again:	if (mount(mnt->mnt_special, mnt->mnt_mountp, flags, fstype,
 	    &args, sizeof (args), mnt->mnt_mntopts, MAX_MNTOPT_STR) != 0) {
@@ -678,8 +642,6 @@ fixopts(struct mnttab *mnt, char *opts)
 	rmopt(mnt, "f");
 	rmopt(mnt, MNTOPT_REMOUNT);
 
-	rmopt(&omnt, MNTOPT_GLOBAL);
-	rmopt(&omnt, MNTOPT_NOGLOBAL);
 	rmopt(&omnt, MNTOPT_QUOTA);
 }
 

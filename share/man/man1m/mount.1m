@@ -187,18 +187,6 @@ Mount the file system without making an entry in \fB/etc/mnttab\fR.
 .sp
 .ne 2
 .na
-\fB\fB-g\fR\fR
-.ad
-.sp .6
-.RS 4n
-Globally mount the file system. On a clustered system, this globally mounts the
-file system on all nodes of the cluster. On a non-clustered system this has no
-effect.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fB-o\fR\fR
 .ad
 .sp .6
@@ -283,8 +271,7 @@ use the \fBnbmand\fR option with the following file systems:
 .sp
 
 Do not use the \fBremount\fR option to change the \fBnbmand\fR disposition of
-the file system. The \fBnbmand\fR option is mutually exclusive of the global
-option. See \fB-g\fR.
+the file system.
 .RE
 
 .sp

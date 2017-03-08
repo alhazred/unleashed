@@ -47,30 +47,12 @@ extern int optind;
 extern char *optarg;
 
 #define	NAME_MAX	64
-#define	GLOBAL		0
-#define	NOGLOBAL	1
 
-#ifndef	MNTOPT_NOGLOBAL
-#define	MNTOPT_NOGLOBAL	"noglobal"
-#endif	/* MNTOPT_NOGLOBAL */
-
-static int gflg		= 0;	/* mount into global name space: flag form */
-static int global	= 0;	/* mount into global name space: option form */
-static int havegblopt	= 0;	/* global value supercedes gflg value */
 static int qflg		= 0;	/* quiet option - don't flag bad options */
 
 static char fstype[] = MNTTYPE_HSFS;
 
 static char typename[NAME_MAX], *myname;
-/*
- * Mount options that require special handling
- */
-static char *myopts[] = {
-	MNTOPT_GLOBAL,
-	MNTOPT_NOGLOBAL,
-	NULL
-};
-
 
 static void rpterr(char *, char *);
 static void usage(void);
@@ -80,7 +62,6 @@ main(int argc, char **argv)
 {
 	char *options, *value;
 	char *special, *mountp;
-	char *gopt;
 	struct mnttab mm;
 	int c;
 	char	obuff[MAX_MNTOPT_STR];
@@ -110,37 +91,8 @@ main(int argc, char **argv)
 	 * unrecognized options.
 	 */
 	strcpy(obuff, "ro");	/* default */
-	while ((c = getopt(argc, argv, "o:rmOgq")) != EOF) {
+	while ((c = getopt(argc, argv, "rmOq")) != EOF) {
 		switch (c) {
-			case 'o':
-				if (strlen(optarg) > MAX_MNTOPT_STR) {
-					(void) fprintf(stderr, gettext(
-					    "%s: option set too long\n"),
-					    myname);
-					exit(1);
-				}
-				if (strlen(optarg) == 0) {
-					(void) fprintf(stderr, gettext(
-					    "%s: missing suboptions\n"),
-					    myname);
-					exit(1);
-				}
-				strcpy(obuff, optarg);
-				options = optarg;
-				while (*options != '\0') {
-					switch (getsubopt(&options, myopts,
-					    &value)) {
-					case GLOBAL:
-						havegblopt = 1;
-						global = 1;
-						break;
-					case NOGLOBAL:
-						havegblopt = 1;
-						global = 0;
-						break;
-					}
-				}
-				break;
 			case 'O':
 				Oflg++;
 				break;
@@ -148,9 +100,6 @@ main(int argc, char **argv)
 				/* accept for backwards compatibility */
 				break;
 			case 'm':
-				break;
-			case 'g':
-				gflg++;
 				break;
 			case 'q':
 				qflg++;
@@ -181,30 +130,6 @@ main(int argc, char **argv)
 	strcat(obuff, MNTOPT_RO);
 
 	flags |= Oflg ? MS_OVERLAY : 0;
-
-	/*
-	 * xxx it's not clear if should just put MS_GLOBAL in flags,
-	 * or provide it as a string.  Be safe, do both.  The subopt
-	 * version has precedence over the switch version.
-	 */
-	gopt = NULL;
-	if ((havegblopt && global) || gflg) {
-		gopt = MNTOPT_GLOBAL;
-		flags |= MS_GLOBAL;
-	} else if (havegblopt) {
-		gopt = MNTOPT_NOGLOBAL;
-	}
-
-	if (gopt != NULL) {
-		if ((strlen(obuff) + strlen(gopt) + 2) > MAX_MNTOPT_STR) {
-			(void) fprintf(stderr,
-			    gettext("%s: option set too long\n"), myname);
-			exit(1);
-		}
-
-		strcat(obuff, ",");
-		strcat(obuff, gopt);
-	}
 
 	signal(SIGHUP,  SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);

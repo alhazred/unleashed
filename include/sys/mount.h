@@ -48,7 +48,6 @@ extern "C" {
 #define	MS_NOTRUNC	0x0040	/* Return ENAMETOOLONG for long filenames */
 #define	MS_OVERLAY	0x0080	/* Allow overlay mounts */
 #define	MS_OPTIONSTR	0x0100	/* Data is a an in/out option string */
-#define	MS_GLOBAL	0x0200	/* Clustering: Mount into global name space */
 #define	MS_FORCE	0x0400	/* Forced unmount */
 #define	MS_NOMNTTAB	0x0800	/* Don't show mount in mnttab */
 /*
@@ -63,7 +62,7 @@ extern "C" {
  */
 #define	MS_MASK	\
 	(MS_RDONLY|MS_FSS|MS_DATA|MS_NOSUID|MS_REMOUNT|MS_NOTRUNC|MS_OVERLAY|\
-	    MS_OPTIONSTR|MS_GLOBAL|MS_NOMNTTAB)
+	    MS_OPTIONSTR|MS_NOMNTTAB)
 
 /*
  * Mask to sift out flag bits allowable from umount2(2).

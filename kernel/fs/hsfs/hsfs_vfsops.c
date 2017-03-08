@@ -84,8 +84,6 @@
 /*
  * Options for mount.
  */
-#define	HOPT_GLOBAL	MNTOPT_GLOBAL
-#define	HOPT_NOGLOBAL	MNTOPT_NOGLOBAL
 #define	HOPT_MAPLCASE	"maplcase"
 #define	HOPT_NOMAPLCASE	"nomaplcase"
 #define	HOPT_NOTRAILDOT	"notraildot"
@@ -99,8 +97,6 @@
 #define	HOPT_NOVERS2	"novers2"
 #define	HOPT_RO		MNTOPT_RO
 
-static char *global_cancel[] = { HOPT_NOGLOBAL, NULL };
-static char *noglobal_cancel[] = { HOPT_GLOBAL, NULL };
 static char *mapl_cancel[] = { HOPT_NOMAPLCASE, NULL };
 static char *nomapl_cancel[] = { HOPT_MAPLCASE, NULL };
 static char *ro_cancel[] = { MNTOPT_RW, NULL };
@@ -114,8 +110,6 @@ static char *trail_cancel[] = { HOPT_NOTRAILDOT, NULL };
 static char *notrail_cancel[] = { HOPT_TRAILDOT, NULL };
 
 static mntopt_t hsfs_options[] = {
-	{ HOPT_GLOBAL, global_cancel, NULL, 0, NULL },
-	{ HOPT_NOGLOBAL, noglobal_cancel, NULL, MO_DEFAULT, NULL },
 	{ HOPT_MAPLCASE, mapl_cancel, NULL, MO_DEFAULT, NULL },
 	{ HOPT_NOMAPLCASE, nomapl_cancel, NULL, 0, NULL },
 	{ HOPT_RO, ro_cancel, NULL, MO_DEFAULT, NULL },

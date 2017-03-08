@@ -138,7 +138,7 @@ int	lofscnt;		/* presence of lofs prohibits parallel */
 				/* mounting */
 int	lofsfail;		/* count of failures of lofs mounts */
 int	exitcode;
-int	aflg, cflg, fflg, Fflg, gflg, oflg, pflg, rflg, vflg, Vflg, mflg, Oflg,
+int	aflg, cflg, fflg, Fflg, oflg, pflg, rflg, vflg, Vflg, mflg, Oflg,
 	dashflg, questflg, dflg, qflg;
 
 
@@ -250,7 +250,7 @@ main(int argc, char *argv[])
 
 	/* Process the args.  */
 
-	while ((cc = getopt(argc, argv, "?acd:f:F:gmno:pqrt:vVO")) != -1)
+	while ((cc = getopt(argc, argv, "?acd:f:F:mno:pqrt:vVO")) != -1)
 		switch (cc) {
 			case 'a':
 				aflg++;
@@ -273,9 +273,6 @@ main(int argc, char *argv[])
 			case 't':
 				Fflg++;
 				Farg = optarg;
-				break;
-			case 'g':
-				gflg++;
 				break;
 			case 'm':
 				mflg++;
@@ -516,8 +513,6 @@ out:
 	ii = 2;
 	if (cflg)
 		newargv[ii++] = "-c";
-	if (gflg)
-		newargv[ii++] = "-g";
 	if (mflg)
 		newargv[ii++] = "-m";
 	/*
@@ -1198,8 +1193,6 @@ do_mounts(void)
 	i = 2;
 	if (cflg)
 		newargv[i++] = "-c";
-	if (gflg)
-		newargv[i++] = "-g";
 	if (mflg)
 		newargv[i++] = "-m";
 	if (Oflg)

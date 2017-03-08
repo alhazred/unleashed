@@ -983,7 +983,7 @@ lofi_add(const char *fsname, struct vfs *vfsp,
 
 	/* OK, this is a lofi mount. */
 
-	if ((uap->flags & (MS_REMOUNT|MS_GLOBAL)) ||
+	if ((uap->flags & MS_REMOUNT) ||
 	    vfs_optionisset_nolock(mntopts, MNTOPT_SUID, NULL) ||
 	    vfs_optionisset_nolock(mntopts, MNTOPT_SETUID, NULL) ||
 	    vfs_optionisset_nolock(mntopts, MNTOPT_DEVICES, NULL)) {
@@ -1283,8 +1283,7 @@ domount(char *fsname, struct mounta *uap, vnode_t *vp, struct cred *credp,
 		 * successful for later cleanup and addition to
 		 * the mount in progress table.
 		 */
-		if ((uap->flags & MS_GLOBAL) == 0 &&
-		    lookupname(uap->spec, fromspace,
+		if (lookupname(uap->spec, fromspace,
 		    FOLLOW, NULL, &bvp) == 0) {
 			addmip = 1;
 		}
@@ -1499,8 +1498,7 @@ domount(char *fsname, struct mounta *uap, vnode_t *vp, struct cred *credp,
 	 * wlock above. This case is for a non-spliced, non-global filesystem.
 	 */
 	if (!addmip) {
-		if ((uap->flags & MS_GLOBAL) == 0 &&
-		    lookupname(uap->spec, fromspace, FOLLOW, NULL, &bvp) == 0) {
+		if (lookupname(uap->spec, fromspace, FOLLOW, NULL, &bvp) == 0) {
 			addmip = 1;
 		}
 	}
@@ -1622,8 +1620,6 @@ domount(char *fsname, struct mounta *uap, vnode_t *vp, struct cred *credp,
 		vfs_setmntopt(vfsp, MNTOPT_RO, NULL, 0);
 	if (uap->flags & MS_NOSUID)
 		vfs_setmntopt(vfsp, MNTOPT_NOSUID, NULL, 0);
-	if (uap->flags & MS_GLOBAL)
-		vfs_setmntopt(vfsp, MNTOPT_GLOBAL, NULL, 0);
 
 	if (error) {
 		lofi_remove(vfsp);

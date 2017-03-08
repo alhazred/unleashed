@@ -2238,7 +2238,7 @@ strflush(int arg)	/* streams flush option (I_FLUSH) */
 }
 
 #define	ALL_MOUNT_FLAGS	(MS_RDONLY|MS_FSS|MS_DATA|MS_NOSUID|MS_REMOUNT| \
-	MS_NOTRUNC|MS_OVERLAY|MS_OPTIONSTR|MS_GLOBAL|MS_FORCE|MS_NOMNTTAB)
+	MS_NOTRUNC|MS_OVERLAY|MS_OPTIONSTR|MS_FORCE|MS_NOMNTTAB)
 
 const char *
 mountflags(private_t *pri, int arg)	/* bit map of mount syscall flags */
@@ -2266,8 +2266,6 @@ mountflags(private_t *pri, int arg)	/* bit map of mount syscall flags */
 		used = strlcat(str, "|MS_OVERLAY", sizeof (pri->code_buf));
 	if (arg & MS_OPTIONSTR)
 		used = strlcat(str, "|MS_OPTIONSTR", sizeof (pri->code_buf));
-	if (arg & MS_GLOBAL)
-		used = strlcat(str, "|MS_GLOBAL", sizeof (pri->code_buf));
 	if (arg & MS_FORCE)
 		used = strlcat(str, "|MS_FORCE", sizeof (pri->code_buf));
 	if (arg & MS_NOMNTTAB)

@@ -81,16 +81,6 @@ type does not require this data, \fIdataptr\fR and \fIdatalen\fR should both be
 .sp
 .ne 2
 .na
-\fB\fBMS_GLOBAL\fR\fR
-.ad
-.RS 16n
-Mount a file system globally if the system is configured and booted as part of
-a cluster (see \fBclinfo\fR(1M)).
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBMS_NOSUID\fR\fR
 .ad
 .RS 16n
@@ -287,10 +277,7 @@ not a directory.
 \fB\fBENOTSUP\fR\fR
 .ad
 .RS 16n
-A global mount is attempted (the \fBMS_GLOBAL\fR flag is set in \fImflag\fR) on
-a machine which is not booted as a cluster; a local mount is attempted and
-\fIdir\fR is within a globally mounted file system; or a remount was attempted
-on a file system that does not support remounting.
+A remount was attempted on a file system that does not support remounting.
 .RE
 
 .sp

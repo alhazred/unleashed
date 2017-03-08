@@ -103,16 +103,10 @@ mount(long *lp, rval_t *rp)
 	 */
 	uap->flags &= MS_MASK;
 
-	if (uap->flags & MS_GLOBAL) {
-		/*
-		 * Clustering: global mount specified.
-		 */
-		error = ENOTSUP;
-	} else {
-		error = domount(NULL, uap, vp, CRED(), &vfsp);
-		if (!error)
-			VFS_RELE(vfsp);
-	}
+	error = domount(NULL, uap, vp, CRED(), &vfsp);
+	if (!error)
+		VFS_RELE(vfsp);
+
 	VN_RELE(vp);
 	rp->r_val2 = error;
 	return (error ? set_errno(error) : 0);

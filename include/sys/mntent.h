@@ -119,8 +119,6 @@ extern "C" {
 #define	MNTOPT_NOLOGGING "nologging" 	/* disable logging */
 #define	MNTOPT_ATIME	"atime"		/* update atime for files */
 #define	MNTOPT_NOATIME  "noatime"	/* do not update atime for files */
-#define	MNTOPT_GLOBAL	"global"	/* Cluster-wide global mount */
-#define	MNTOPT_NOGLOBAL	"noglobal"	/* Mount local to single node */
 #define	MNTOPT_DFRATIME	"dfratime"	/* Deferred access time updates */
 #define	MNTOPT_NODFRATIME "nodfratime"	/* No Deferred access time updates */
 #define	MNTOPT_NBMAND	"nbmand"	/* allow non-blocking mandatory locks */
