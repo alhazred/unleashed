@@ -35,8 +35,6 @@
 #include <rpc/rpcent.h>
 #include <nss_dbdefs.h>
 
-#ifdef	NSS_INCLUDE_UNSAFE
-
 /*
  * Don't free this, even on an endrpcent(), because bitter experience shows
  * that there's production code that does getXXXbyYYY(), then endXXXent(),
@@ -76,4 +74,3 @@ getrpcent(void)
 		return (NULL);
 	return (getrpcent_r(b->result, b->buffer, b->buflen));
 }
-#endif	/* NSS_INCLUDE_UNSAFE */
