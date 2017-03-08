@@ -56,12 +56,10 @@
 #include <fcntl.h>
 #include <strings.h>
 #include <ctype.h>
-#include <sys/cladm.h>
 
 #include <ipsec_util.h>
 
 static int keysock;
-static int cluster_socket;
 static uint32_t seq;
 static pid_t mypid;
 static boolean_t vflag = B_FALSE;	/* Verbose? */
@@ -69,8 +67,6 @@ static boolean_t cflag = B_FALSE;	/* Check Only */
 
 char *my_fmri = NULL;
 FILE *debugfile = stdout;
-static struct sockaddr_in cli_addr;
-static boolean_t in_cluster_mode = B_FALSE;
 
 #define	MAX_GET_SIZE	1024
 /*
@@ -1215,16 +1211,6 @@ doaddresses(uint8_t sadb_msg_type, uint8_t sadb_msg_satype, int cmd,
 			if (rc == -1)
 				Bail("write() to PF_KEY socket "
 				    "(in doaddresses)");
-			/*
-			 * Sends the message to the Solaris Cluster daemon
-			 */
-
-			if (in_cluster_mode) {
-				(void) sendto(cluster_socket, buffer,
-				    SADB_64TO8(msgp->sadb_msg_len), 0,
-				    (struct sockaddr *)&cli_addr,
-				    sizeof (cli_addr));
-			}
 
 			time_critical_enter();
 			do {
@@ -1457,12 +1443,6 @@ doaddresses(uint8_t sadb_msg_type, uint8_t sadb_msg_satype, int cmd,
 		if (rc == -1)
 			Bail("write() to PF_KEY socket (in doaddresses)");
 
-		if (in_cluster_mode) {
-			(void) sendto(cluster_socket, buffer,
-			    SADB_64TO8(msgp->sadb_msg_len), 0,
-			    (struct sockaddr *)&cli_addr,
-			    sizeof (cli_addr));
-		}
 		/* Blank the key for paranoia's sake. */
 		bzero(buffer, buffer_size);
 		time_critical_enter();
@@ -3593,15 +3573,6 @@ main(int argc, char *argv[])
 			/* some other reason */
 			EXIT_FATAL("Opening PF_KEY socket");
 		}
-	}
-
-	if ((_cladm(CL_INITIALIZE, CL_GET_BOOTFLAG, &bootflags) != 0) ||
-	    (bootflags & CLUSTER_BOOTED)) {
-		in_cluster_mode = B_TRUE;
-		cluster_socket = socket(AF_INET, SOCK_DGRAM, 0);
-		cli_addr.sin_family = AF_INET;
-		cli_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-		cli_addr.sin_port = htons(CLUSTER_UDP_PORT);
 	}
 
 	if (dosave) {
