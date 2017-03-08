@@ -175,8 +175,6 @@ typedef	struct	graph	graph_t;
 #define	DELETED_LOCK		0x0800	/* deleted - free at earliest */
 #define	INTERRUPTED_LOCK	0x1000	/* pretend signal */
 #define	LOCKMGR_LOCK		0x2000	/* remote lock (server-side) */
-/* Clustering: flag for PXFS locks */
-#define	PXFS_LOCK		0x4000	/* lock created by PXFS file system */
 #define	NBMAND_LOCK		0x8000	/* non-blocking mandatory locking */
 
 #define	HASH_SIZE	32
@@ -263,8 +261,6 @@ for ((lock) = SLEEPING_HEAD((gp))->l_next; ((lock) != SLEEPING_HEAD((gp)) && \
 		((lock)->l_state & WILLING_TO_SLEEP_LOCK)
 #define	IS_LOCKMGR(lock)	((lock)->l_state & LOCKMGR_LOCK)
 #define	IS_NLM_UP(lock)		((lock)->l_nlm_state == FLK_NLM_UP)
-/* Clustering: Macro for PXFS locks */
-#define	IS_PXFS(lock)		((lock)->l_state & PXFS_LOCK)
 
 /*
  * "local" requests don't involve the NFS lock manager in any way.
@@ -277,22 +273,6 @@ for ((lock) = SLEEPING_HEAD((gp))->l_next; ((lock) != SLEEPING_HEAD((gp)) && \
  */
 #define	IS_LOCAL(lock)	(GETSYSID((lock)->l_flock.l_sysid) == 0)
 #define	IS_REMOTE(lock)	(! IS_LOCAL(lock))
-
-/* Clustering: Return value for blocking PXFS locks */
-/*
- * For PXFS locks, reclock() will return this error code for requests that
- * need to block
- */
-#define	PXFS_LOCK_BLOCKED -1
-
-/* Clustering: PXFS callback function */
-/*
- * This function is a callback from the LLM into the PXFS server module.  It
- * is initialized as a weak stub, and is functional when the pxfs server module
- * is loaded.
- */
-extern void cl_flk_state_transition_notify(lock_descriptor_t *lock,
-    int old_state, int new_state);
 
 #define	BLOCKS(lock1, lock2)	(!SAME_OWNER((lock1), (lock2)) && \
 					(((lock1)->l_type == F_WRLCK) || \
@@ -322,39 +302,21 @@ extern void cl_flk_state_transition_notify(lock_descriptor_t *lock,
 	{	\
 		flk_set_state(lock, FLK_GRANTED_STATE); \
 		(lock)->l_state |= GRANTED_LOCK; \
-		/* \
-		 * Clustering: PXFS locks do not sleep in the LLM, \
-		 * so there is no need to signal them \
-		 */ \
-		if (!IS_PXFS(lock)) { \
-			cv_signal(&(lock)->l_cv); \
-		} \
+		cv_signal(&(lock)->l_cv); \
 	}
 
 #define	CANCEL_WAKEUP(lock)	\
 	{ \
 		flk_set_state(lock, FLK_CANCELLED_STATE); \
 		(lock)->l_state |= CANCELLED_LOCK; \
-		/* \
-		 * Clustering: PXFS locks do not sleep in the LLM, \
-		 * so there is no need to signal them \
-		 */ \
-		if (!IS_PXFS(lock)) { \
-			cv_signal(&(lock)->l_cv); \
-		} \
+		cv_signal(&(lock)->l_cv); \
 	}
 
 #define	INTERRUPT_WAKEUP(lock)	\
 	{ \
 		flk_set_state(lock, FLK_INTERRUPTED_STATE); \
 		(lock)->l_state |= INTERRUPTED_LOCK; \
-		/* \
-		 * Clustering: PXFS locks do not sleep in the LLM, \
-		 * so there is no need to signal them \
-		 */ \
-		if (!IS_PXFS(lock)) { \
-			cv_signal(&(lock)->l_cv); \
-		} \
+		cv_signal(&(lock)->l_cv); \
 	}
 
 #define	REMOVE_SLEEP_QUEUE(lock)	\

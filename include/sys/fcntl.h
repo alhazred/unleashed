@@ -167,10 +167,6 @@ extern "C" {
 #define	BITS_IN_SYSID		16
 #define	GETNLMID(sysid)		((int)(((uint_t)(sysid) & NODEIDMASK) >> \
 				    BITS_IN_SYSID))
-
-/* Clustering: Macro used for PXFS locks */
-#define	GETPXFSID(sysid)	((int)(((uint_t)(sysid) & NODEIDMASK) >> \
-				    BITS_IN_SYSID))
 #endif	/* defined(_KERNEL) */
 
 #define	F_CHKFL		8	/* Unused */

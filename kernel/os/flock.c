@@ -605,15 +605,7 @@ reclock(vnode_t *vp, flock64_t *lckdat, int cmd, int flag, u_offset_t offset,
 		lock_request->l_state |= LOCKMGR_LOCK;
 	if (cmd & NBMLCK)
 		lock_request->l_state |= NBMAND_LOCK;
-	/*
-	 * Clustering: set flag for PXFS locks
-	 * We do not _only_ check the GETPXFSID() macro because local PXFS
-	 * clients use a pxfsid of zero to permit deadlock detection in the LLM.
-	 */
 
-	if (GETPXFSID(lckdat->l_sysid) != 0) {
-		lock_request->l_state |= PXFS_LOCK;
-	}
 	if (!((cmd & SETFLCK) || (cmd & INOFLCK))) {
 		if (lock_request->l_type == F_RDLCK ||
 		    lock_request->l_type == F_WRLCK)
@@ -741,13 +733,6 @@ reclock(vnode_t *vp, flock64_t *lckdat, int cmd, int flag, u_offset_t offset,
 	default:
 		error = EINVAL;
 		break;
-	}
-
-	/* Clustering: For blocked PXFS locks, return */
-	if (error == PXFS_LOCK_BLOCKED) {
-		lock_request->l_state &= ~REFERENCED_LOCK;
-		mutex_exit(&gp->gp_mutex);
-		return (error);
 	}
 
 	/*
@@ -1021,9 +1006,6 @@ flk_set_state(lock_descriptor_t *lock, int new_state)
 		}
 	}
 	CHECK_LOCK_TRANSITION(lock->l_status, new_state);
-	if (IS_PXFS(lock)) {
-		cl_flk_state_transition_notify(lock, lock->l_status, new_state);
-	}
 	lock->l_status = new_state;
 }
 
@@ -1352,18 +1334,6 @@ flk_wait_execute_request(lock_descriptor_t *request)
 				return (ENOLCK);
 			}
 		}
-	}
-
-	/* Clustering: For blocking PXFS locks, return */
-	if (IS_PXFS(request)) {
-		/*
-		 * PXFS locks sleep on the client side.
-		 * The callback argument is used to wake up the sleeper
-		 * when the lock is granted.
-		 * We return -1 (rather than an errno value) to indicate
-		 * the client side should sleep
-		 */
-		return (PXFS_LOCK_BLOCKED);
 	}
 
 	if (request->l_callbacks != NULL) {

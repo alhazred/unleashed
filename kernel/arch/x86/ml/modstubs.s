@@ -1064,15 +1064,6 @@ fcnname##_info:							\
 #endif
 
 /*
- * Clustering: stubs for global file system operations.
- */
-#ifndef PXFS_MODULE
-	MODULE(pxfs,fs);
-	NO_UNLOAD_WSTUB(pxfs, cl_flk_state_transition_notify, nomod_zero);
-	END_MODULE(pxfs);
-#endif
-
-/*
  * Stubs for kernel cryptographic framework module (misc/kcf).
  */
 #ifndef KCF_MODULE
