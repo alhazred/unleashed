@@ -982,19 +982,6 @@ stubs_base:
 #endif
 
 /*
- * Clustering: stubs for bootstrapping.
- */
-#ifndef CL_BOOTSTRAP
-	MODULE(cl_bootstrap,misc);
-	NO_UNLOAD_WSTUB(cl_bootstrap, clboot_modload, nomod_minus_one);
-	NO_UNLOAD_WSTUB(cl_bootstrap, clboot_loadrootmodules, nomod_zero);
-	NO_UNLOAD_WSTUB(cl_bootstrap, clboot_rootconf, nomod_zero);
-	NO_UNLOAD_WSTUB(cl_bootstrap, clboot_mountroot, nomod_zero);
-	NO_UNLOAD_WSTUB(cl_bootstrap, cluster, nomod_zero);
-	END_MODULE(cl_bootstrap);
-#endif
-
-/*
  * Clustering: stubs for cluster infrastructure.
  */	
 #ifndef CL_COMM_MODULE

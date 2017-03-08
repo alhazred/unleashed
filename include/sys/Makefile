@@ -107,7 +107,6 @@ INCS=	${${CONFIG_MACH}_INCS}	\
 	dacf_impl.h		\
 	damap.h			\
 	damap_impl.h		\
-	dc_ki.h			\
 	ddi.h			\
 	ddifm.h			\
 	ddifm_impl.h		\

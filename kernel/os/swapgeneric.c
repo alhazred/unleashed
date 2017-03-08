@@ -67,7 +67,6 @@
 #include <sys/ddi.h>
 #include <sys/sunddi.h>
 #include <sys/hwconf.h>
-#include <sys/dc_ki.h>
 #include <sys/promif.h>
 #include <sys/bootprops.h>
 
@@ -128,13 +127,6 @@ rootconf(void)
 	BMDPRINTF(("rootconf: name %s\n", rootfs.bo_name));
 	BMDPRINTF(("rootconf: flags 0x%x\n", rootfs.bo_flags));
 	BMDPRINTF(("rootconf: obp_bootpath %s\n", obp_bootpath));
-
-	/*
-	 * Install cluster modules that were only loaded during
-	 * loadrootmodules().
-	 */
-	if (error = clboot_rootconf())
-		return (error);
 
 	/*
 	 * Run _init on the root filesystem (we already loaded it
@@ -506,10 +498,6 @@ loop:
 			goto out;
 		}
 	}
-	/*
-	 * Preload modules needed for booting as a cluster.
-	 */
-	err = clboot_loadrootmodules();
 
 out:
 	if (err != 0 && (boothowto & RB_ASKNAME))

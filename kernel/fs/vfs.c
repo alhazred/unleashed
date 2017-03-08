@@ -76,7 +76,6 @@
 #include <sys/pathname.h>
 #include <sys/bootconf.h>
 #include <sys/dumphdr.h>
-#include <sys/dc_ki.h>
 #include <sys/poll.h>
 #include <sys/sunddi.h>
 #include <sys/sysmacros.h>
@@ -881,11 +880,6 @@ vfs_mountroot(void)
 	 * Set up mnttab information for root
 	 */
 	vfs_setresource(rootvfs, rootfs.bo_name, 0);
-
-	/*
-	 * Notify cluster software that the root filesystem is available.
-	 */
-	clboot_mountroot();
 
 	/* Now that we're all done with the root FS, set up its vopstats */
 	if ((vswp = vfs_getvfsswbyvfsops(vfs_getops(rootvfs))) != NULL) {
@@ -4507,9 +4501,6 @@ rootconf()
 	if (error = hvmboot_rootconf())
 		return (error);
 #endif /* __x86 */
-
-	if (error = clboot_rootconf())
-		return (error);
 
 	if (modload("fs", fsmod) == -1)
 		panic("Cannot _init %s module", fsmod);

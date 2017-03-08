@@ -47,7 +47,6 @@
 #include <sys/ddi_impldefs.h>
 #include <sys/ddi_implfuncs.h>
 #include <sys/bootconf.h>
-#include <sys/dc_ki.h>
 #include <sys/dtrace.h>
 #include <sys/kdi.h>
 

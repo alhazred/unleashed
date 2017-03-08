@@ -58,6 +58,7 @@
 #include <sys/vm.h>
 #include <sys/callb.h>
 #include <sys/ddi_periodic.h>
+#include <sys/sunddi.h>
 #include <sys/kmem.h>
 #include <sys/vmem.h>
 #include <sys/cpuvar.h>
@@ -76,7 +77,6 @@
 
 #include <vm/as.h>
 #include <vm/seg_kmem.h>
-#include <sys/dc_ki.h>
 
 #include <c2/audit.h>
 #include <sys/bootprops.h>

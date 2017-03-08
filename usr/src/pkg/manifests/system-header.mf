@@ -859,7 +859,6 @@ file path=usr/include/sys/dacf.h
 file path=usr/include/sys/dacf_impl.h
 file path=usr/include/sys/damap.h
 file path=usr/include/sys/damap_impl.h
-file path=usr/include/sys/dc_ki.h
 file path=usr/include/sys/ddi.h
 file path=usr/include/sys/ddi_hp.h
 file path=usr/include/sys/ddi_hp_impl.h
