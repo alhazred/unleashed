@@ -36,7 +36,6 @@
 #include <sys/vfs.h>
 #include <sys/t_lock.h>		/* for <sys/callb.h> */
 #include <sys/callb.h>
-#include <sys/clconf.h>
 #include <sys/nbmlock.h>
 #include <sys/cred.h>
 #include <sys/policy.h>
@@ -95,7 +94,7 @@ proc_graph_t	pgraph;
  *
  * Assumptions:
  *  1.  Nodes in a cluster are numbered starting at 1; always non-negative
- *	integers; maximum node id is returned by clconf_maximum_nodeid().
+ *	integers.
  *  2.  We use this node id to identify the node an NLM server runs on.
  */
 
@@ -117,7 +116,6 @@ proc_graph_t	pgraph;
  *		0   -> 0
  *		1   -> 1
  *		2   -> 2
- *		n-1 -> clconf_maximum_nodeid()+1
  *	3.  This 1-1 mapping is quite convenient and it avoids errors resulting
  *	    from forgetting to subtract 1 from the index.
  *	4.  The reason we keep the 0th index is the following.  A legitimate

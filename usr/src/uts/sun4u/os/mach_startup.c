@@ -50,7 +50,6 @@
 #include <vm/hat_sfmmu.h>
 #include <sys/kobj.h>
 #include <sys/sun4asi.h>
-#include <sys/clconf.h>
 #include <sys/platform_module.h>
 #include <sys/panic.h>
 #include <sys/cpu_sgnblk_defs.h>

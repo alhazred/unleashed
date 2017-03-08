@@ -27,7 +27,6 @@
 #include <sys/kmem.h>
 #include <sys/cmn_err.h>
 #include <sys/atomic.h>
-#include <sys/clconf.h>
 #include <sys/flock.h>
 #include <nfs/export.h>
 #include <nfs/nfs.h>

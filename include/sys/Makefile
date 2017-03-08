@@ -67,7 +67,6 @@ INCS=	${${CONFIG_MACH}_INCS}	\
 	cdio.h			\
 	cfgparam.h		\
 	class.h			\
-	clconf.h		\
 	clock_impl.h		\
 	cmlb.h			\
 	cmn_err.h		\

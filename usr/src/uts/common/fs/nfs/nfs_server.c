@@ -87,7 +87,6 @@
 #include <nfs/nfs4_drc.h>
 
 #include <sys/modctl.h>
-#include <sys/clconf.h>
 
 #define	MAXHOST 32
 const char *kinet_ntop6(uchar_t *, char *, size_t);

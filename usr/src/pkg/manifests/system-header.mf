@@ -810,7 +810,6 @@ file path=usr/include/sys/ccompile.h
 file path=usr/include/sys/cdio.h
 file path=usr/include/sys/cfgparam.h
 file path=usr/include/sys/class.h
-file path=usr/include/sys/clconf.h
 file path=usr/include/sys/cmlb.h
 file path=usr/include/sys/cmn_err.h
 $(sparc_ONLY)file path=usr/include/sys/cmpregs.h

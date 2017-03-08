@@ -112,7 +112,6 @@
 #include <sys/x86_archext.h>
 #include <sys/cpuvar.h>
 #include <sys/segments.h>
-#include <sys/clconf.h>
 #include <sys/kobj.h>
 #include <sys/kobj_lex.h>
 #include <sys/cpc_impl.h>
@@ -1660,9 +1659,6 @@ startup_modules(void)
 
 	dispinit();
 
-	/* Read cluster configuration data. */
-	clconf_init();
-
 #if defined(__xpv)
 	(void) ec_init();
 	gnttab_init();
@@ -1711,8 +1707,6 @@ startup_modules(void)
 
 
 	/*
-	 * Originally clconf_init() apparently needed the hostid.  But
-	 * this no longer appears to be true - it uses its own nodeid.
 	 * By placing the hostid logic here, we are able to make use of
 	 * the SMBIOS UUID.
 	 */

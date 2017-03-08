@@ -50,7 +50,6 @@
 #include <vm/hat_sfmmu.h>
 #include <sys/kobj.h>
 #include <sys/sun4asi.h>
-#include <sys/clconf.h>
 #include <sys/platform_module.h>
 #include <sys/panic.h>
 #include <sys/cpu_sgnblk_defs.h>
@@ -1601,9 +1600,6 @@ startup_modules(void)
 	 * Infer meanings to the members of the idprom buffer.
 	 */
 	parse_idprom();
-
-	/* Read cluster configuration data. */
-	clconf_init();
 
 	setup_ddi();
 
