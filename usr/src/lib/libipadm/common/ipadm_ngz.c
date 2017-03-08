@@ -316,7 +316,8 @@ i_ipadm_create_ngz_route(int rtsock, char *link, uint8_t *buf, size_t buflen)
 	boolean_t isv6;
 	struct in_addr gw4;
 	uint8_t *cp;
-	const in6_addr_t ipv6_all_zeros = { 0, 0, 0, 0 };
+	const in6_addr_t ipv6_all_zeros = { { { 0, 0, 0, 0, 0, 0, 0, 0,
+						0, 0, 0, 0, 0, 0, 0, 0 } } };
 
 	if (rtsock == -1)
 		return;

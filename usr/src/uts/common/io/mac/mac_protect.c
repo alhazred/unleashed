@@ -2174,7 +2174,8 @@ mac_protect_update_v6_local_addr(mac_client_impl_t *mcip)
 	uint_t		i;
 	in6_addr_t	*token = &mcip->mci_v6_mac_token;
 	in6_addr_t	*v6addr = &mcip->mci_v6_local_addr;
-	in6_addr_t	ll_template = {(uint32_t)V6_LINKLOCAL, 0x0, 0x0, 0x0};
+	in6_addr_t	ll_template = IN6ADDR_INITIALIZER(V6_LINKLOCAL, 0x0,
+							  0x0, 0x0);
 
 	for (i = 0; i < 4; i++) {
 		v6addr->s6_addr32[i] = token->s6_addr32[i] |

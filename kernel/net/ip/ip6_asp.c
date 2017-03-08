@@ -43,13 +43,11 @@
 #include <inet/ipclassifier.h>
 
 #define	IN6ADDR_MASK128_INIT \
-	{ 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU }
-#define	IN6ADDR_MASK96_INIT	{ 0xffffffffU, 0xffffffffU, 0xffffffffU, 0 }
-#ifdef _BIG_ENDIAN
-#define	IN6ADDR_MASK16_INIT	{ 0xffff0000U, 0, 0, 0 }
-#else
-#define	IN6ADDR_MASK16_INIT	{ 0x0000ffffU, 0, 0, 0 }
-#endif
+	IN6ADDR_INITIALIZER(0xffffffffu, 0xffffffffu, 0xffffffffu, 0xffffffffu)
+#define	IN6ADDR_MASK96_INIT \
+	IN6ADDR_INITIALIZER(0xffffffffu, 0xffffffffu, 0xffffffffu, 0)
+#define	IN6ADDR_MASK16_INIT \
+	IN6ADDR_INITIALIZER(0xffff0000u, 0, 0, 0)
 
 
 /*
@@ -58,22 +56,15 @@
  * entry (::0/0).
  */
 static ip6_asp_t default_ip6_asp_table[] = {
-	{ IN6ADDR_LOOPBACK_INIT,	IN6ADDR_MASK128_INIT,
+	{ IN6ADDR_LOOPBACK_INIT,			IN6ADDR_MASK128_INIT,
 	    "Loopback", 50 },
-	{ IN6ADDR_ANY_INIT,		IN6ADDR_MASK96_INIT,
+	{ IN6ADDR_ANY_INIT,				IN6ADDR_MASK96_INIT,
 	    "IPv4_Compatible", 20 },
-#ifdef _BIG_ENDIAN
-	{ { 0, 0, 0x0000ffffU, 0 },	IN6ADDR_MASK96_INIT,
+	{ IN6ADDR_INITIALIZER(0, 0, 0x0000ffffu, 0),	IN6ADDR_MASK96_INIT,
 	    "IPv4", 10 },
-	{ { 0x20020000U, 0, 0, 0 },	IN6ADDR_MASK16_INIT,
+	{ IN6ADDR_INITIALIZER(0x20020000u, 0, 0, 0),	IN6ADDR_MASK16_INIT,
 	    "6to4", 30 },
-#else
-	{ { 0, 0, 0xffff0000U, 0 },	IN6ADDR_MASK96_INIT,
-	    "IPv4", 10 },
-	{ { 0x00000220U, 0, 0, 0 },	IN6ADDR_MASK16_INIT,
-	    "6to4", 30 },
-#endif
-	{ IN6ADDR_ANY_INIT,		IN6ADDR_ANY_INIT,
+	{ IN6ADDR_ANY_INIT,				IN6ADDR_ANY_INIT,
 	    "Default", 40 }
 };
 

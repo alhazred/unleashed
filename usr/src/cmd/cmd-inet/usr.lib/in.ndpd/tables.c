@@ -714,12 +714,12 @@ tmptoken_isvalid(struct in6_addr *token)
 {
 	struct phyint *pi;
 	struct in6_addr mask;
-	struct in6_addr isatap = { 0, 0, 0, 0, 0, 0, 0, 0, \
-				    0, 0, 0x5e, 0xfe, 0, 0, 0, 0 };
-	struct in6_addr anycast = { 0, 0, 0, 0, \
+	struct in6_addr isatap = { { { 0, 0, 0, 0, 0, 0, 0, 0, \
+				    0, 0, 0x5e, 0xfe, 0, 0, 0, 0 } } };
+	struct in6_addr anycast = { { { 0, 0, 0, 0, \
 				    0, 0, 0, 0, \
 				    0xfd, 0xff, 0xff, 0xff, \
-				    0xff, 0xff, 0xff, 0x80 };
+				    0xff, 0xff, 0xff, 0x80 } } };
 
 	if (IN6_IS_ADDR_UNSPECIFIED(token))
 		return (_B_FALSE);

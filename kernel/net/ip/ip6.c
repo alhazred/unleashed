@@ -118,46 +118,21 @@
  */
 
 const in6_addr_t ipv6_all_ones =
-	{ 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU };
-const in6_addr_t ipv6_all_zeros = { 0, 0, 0, 0 };
-
-#ifdef	_BIG_ENDIAN
-const in6_addr_t ipv6_unspecified_group = { 0xff000000U, 0, 0, 0 };
-#else	/* _BIG_ENDIAN */
-const in6_addr_t ipv6_unspecified_group = { 0x000000ffU, 0, 0, 0 };
-#endif	/* _BIG_ENDIAN */
-
-#ifdef	_BIG_ENDIAN
-const in6_addr_t ipv6_loopback = { 0, 0, 0, 0x00000001U };
-#else  /* _BIG_ENDIAN */
-const in6_addr_t ipv6_loopback = { 0, 0, 0, 0x01000000U };
-#endif /* _BIG_ENDIAN */
-
-#ifdef _BIG_ENDIAN
-const in6_addr_t ipv6_all_hosts_mcast = { 0xff020000U, 0, 0, 0x00000001U };
-#else  /* _BIG_ENDIAN */
-const in6_addr_t ipv6_all_hosts_mcast = { 0x000002ffU, 0, 0, 0x01000000U };
-#endif /* _BIG_ENDIAN */
-
-#ifdef _BIG_ENDIAN
-const in6_addr_t ipv6_all_rtrs_mcast = { 0xff020000U, 0, 0, 0x00000002U };
-#else  /* _BIG_ENDIAN */
-const in6_addr_t ipv6_all_rtrs_mcast = { 0x000002ffU, 0, 0, 0x02000000U };
-#endif /* _BIG_ENDIAN */
-
-#ifdef _BIG_ENDIAN
-const in6_addr_t ipv6_all_v2rtrs_mcast = { 0xff020000U, 0, 0, 0x00000016U };
-#else  /* _BIG_ENDIAN */
-const in6_addr_t ipv6_all_v2rtrs_mcast = { 0x000002ffU, 0, 0, 0x16000000U };
-#endif /* _BIG_ENDIAN */
-
-#ifdef _BIG_ENDIAN
+	IN6ADDR_INITIALIZER(0xffffffffu, 0xffffffffu, 0xffffffffu, 0xffffffffu);
+const in6_addr_t ipv6_all_zeros =
+	IN6ADDR_INITIALIZER(0, 0, 0, 0);
+const in6_addr_t ipv6_unspecified_group =
+	IN6ADDR_INITIALIZER(0xff000000u, 0, 0, 0);
+const in6_addr_t ipv6_loopback =
+	IN6ADDR_INITIALIZER(0, 0, 0, 0x01u);
+const in6_addr_t ipv6_all_hosts_mcast =
+	IN6ADDR_INITIALIZER(0xff020000u, 0, 0, 0x01u);
+const in6_addr_t ipv6_all_rtrs_mcast =
+	IN6ADDR_INITIALIZER(0xff020000u, 0, 0, 0x02u);
+const in6_addr_t ipv6_all_v2rtrs_mcast =
+	IN6ADDR_INITIALIZER(0xff020000u, 0, 0, 0x16u);
 const in6_addr_t ipv6_solicited_node_mcast =
-			{ 0xff020000U, 0, 0x00000001U, 0xff000000U };
-#else  /* _BIG_ENDIAN */
-const in6_addr_t ipv6_solicited_node_mcast =
-			{ 0x000002ffU, 0, 0x01000000U, 0x000000ffU };
-#endif /* _BIG_ENDIAN */
+	IN6ADDR_INITIALIZER(0xff020000u, 0, 0x01u, 0xff000000u);
 
 static boolean_t icmp_inbound_verify_v6(mblk_t *, icmp6_t *, ip_recv_attr_t *);
 static void	icmp_inbound_too_big_v6(icmp6_t *, ip_recv_attr_t *);

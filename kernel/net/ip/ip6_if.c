@@ -67,7 +67,7 @@
 #include <inet/sctp_ip.h>
 
 static in6_addr_t	ipv6_ll_template =
-			{(uint32_t)V6_LINKLOCAL, 0x0, 0x0, 0x0};
+	IN6ADDR_INITIALIZER(V6_LINKLOCAL, 0x0, 0x0, 0x0);
 
 static ipif_t *
 ipif_lookup_interface_v6(const in6_addr_t *if_addr, const in6_addr_t *dst,

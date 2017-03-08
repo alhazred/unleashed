@@ -3217,7 +3217,8 @@ do_address_adds(ips_conf_t *cptr, int *diag)
 	int i, j;
 	int ret = 0;	/* For ioctl() call. */
 	int rc = 0;	/* My own return code. */
-	struct in6_addr zeroes = {0, 0, 0, 0};
+	struct in6_addr zeroes = { { { 0, 0, 0, 0, 0, 0, 0, 0,
+				       0, 0, 0, 0, 0, 0, 0, 0 } } };
 	char *ptr[2];
 	struct hostent hent;
 	boolean_t isv4;
