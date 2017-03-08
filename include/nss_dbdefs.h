@@ -51,10 +51,6 @@
 extern "C" {
 #endif
 
-#ifndef	NSS_INCLUDE_UNSAFE
-#define	NSS_INCLUDE_UNSAFE	1	/* Build old, MT-unsafe interfaces, */
-#endif	/* NSS_INCLUDE_UNSAFE */	/*  e.g. getpwnam (c.f. getpwnam_r) */
-
 /*
  * Names of the well-known databases.
  */

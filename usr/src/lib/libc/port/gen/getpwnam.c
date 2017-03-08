@@ -37,8 +37,6 @@
 #include <stdio.h>
 #include "tsd.h"
 
-#ifdef	NSS_INCLUDE_UNSAFE
-
 void _nss_initf_passwd(nss_db_params_t *p);
 void _nss_XbyY_fgets(FILE *, nss_XbyY_args_t *);
 int str2passwd(const char *, int, void *, char *, int);
@@ -87,5 +85,3 @@ fgetpwent(FILE *f)
 	(void) _nss_XbyY_fgets(f, &arg);
 	return (NSS_XbyY_FINI(&arg));
 }
-
-#endif	/* NSS_INCLUDE_UNSAFE */

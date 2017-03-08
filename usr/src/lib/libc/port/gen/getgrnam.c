@@ -39,8 +39,6 @@
 #include <stdio.h>
 #include "tsd.h"
 
-#ifdef	NSS_INCLUDE_UNSAFE
-
 extern size_t _nss_get_bufsizes(int arg);
 
 /*
@@ -133,5 +131,3 @@ fgetgrent(FILE *f)
 	return (b == NULL ? NULL :
 	    fgetgrent_r(f, b->result, b->buffer, b->buflen));
 }
-
-#endif	/* NSS_INCLUDE_UNSAFE */
