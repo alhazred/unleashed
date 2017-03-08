@@ -1064,15 +1064,6 @@ fcnname##_info:							\
 #endif
 
 /*
- * Clustering: stubs for cluster infrastructure.
- */	
-#ifndef CL_COMM_MODULE
-	MODULE(cl_comm,misc);
-	NO_UNLOAD_STUB(cl_comm, cladmin, nomod_minus_one);
-	END_MODULE(cl_comm);
-#endif
-
-/*
  * Clustering: stubs for global file system operations.
  */
 #ifndef PXFS_MODULE
