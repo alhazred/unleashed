@@ -1069,8 +1069,7 @@
 @ MSG_SYS_LWP_MUTEX_TRYLOCK_ALT		"lwp_mutex_trylock"
 @ MSG_SYS_LWP_MUTEX_REGISTER		"[ lwp_mutex_register ]"	# 252
 @ MSG_SYS_LWP_MUTEX_REGISTER_ALT	"lwp_mutex_register"
-@ MSG_SYS_CLADM				"[ cladm ]"			# 253
-@ MSG_SYS_CLADM_ALT			"cladm"
+@ MSG_SYS_253				"253"				# 253(u)
 @ MSG_SYS_UUCOPY			"[ uucopy ]"			# 254
 @ MSG_SYS_UUCOPY_ALT			"uucopy"
 @ MSG_SYS_UMOUNT2			"[ umount2 ]"			# 255

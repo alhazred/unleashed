@@ -68,7 +68,6 @@ int	chdir(char *);
 int	chmod(char *, int);
 int	chown(char *, uid_t, gid_t);
 int	chroot(char *);
-int	cladm(int, int, void *);
 int	close(int);
 int	exece(const char *, const char **, const char **);
 int	faccessat(int, char *, int, int);
@@ -755,7 +754,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 250 */ SYSENT_CI("lwp_mutex_unlock",	lwp_mutex_unlock,	1),
 	/* 251 */ SYSENT_CI("lwp_mutex_trylock", lwp_mutex_trylock,	2),
 	/* 252 */ SYSENT_CI("lwp_mutex_register", lwp_mutex_register,	2),
-	/* 253 */ SYSENT_CI("cladm",		cladm,		3),
+	/* 253 */ SYSENT_LOADABLE(),			/* (was cladm) */
 	/* 254 */ SYSENT_CI("uucopy",		uucopy,		3),
 	/* 255 */ SYSENT_CI("umount2",		umount2,	2)
 };
@@ -1080,7 +1079,7 @@ struct sysent sysent32[NSYSCALL] =
 	/* 250 */ SYSENT_CI("lwp_mutex_unlock",	lwp_mutex_unlock,	1),
 	/* 251 */ SYSENT_CI("lwp_mutex_trylock", lwp_mutex_trylock,	2),
 	/* 252 */ SYSENT_CI("lwp_mutex_register", lwp_mutex_register,	2),
-	/* 253 */ SYSENT_CI("cladm",		cladm,		3),
+	/* 253 */ SYSENT_LOADABLE(),			/* (was cladm) */
 	/* 254 */ SYSENT_CI("uucopy",		uucopy,		3),
 	/* 255 */ SYSENT_CI("umount2",		umount2,	2)
 };

@@ -715,7 +715,7 @@ aui_null,	AUE_NULL,	aus_null,	/* 251 lwp_mutex_trylock */
 		auf_null,	0,
 aui_null,	AUE_NULL,	aus_null,	/* 252 lwp_mutex_register */
 		auf_null,	0,
-aui_null,	AUE_NULL,	aus_null,	/* 253 cladm */
+aui_null,	AUE_NULL,	aus_null,	/* 253 (loadable) was cladm */
 		auf_null,	0,
 aui_null,	AUE_NULL,	aus_null,	/* 254 uucopy */
 		auf_null,	0,

@@ -123,7 +123,6 @@ GENUNIX_OBJS +=	\
 		chdir.o		\
 		chmod.o		\
 		chown.o		\
-		cladm.o		\
 		class.o		\
 		clock.o		\
 		clock_highres.o	\

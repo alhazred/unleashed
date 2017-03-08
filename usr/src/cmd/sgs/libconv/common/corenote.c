@@ -315,7 +315,7 @@ conv_cnote_syscall(Word sysnum, Conv_fmt_flags_t fmt_flags,
 		MSG_SYS_SOCKCONFIG,		MSG_SYS_NTP_GETTIME,
 		MSG_SYS_NTP_ADJTIME,		MSG_SYS_LWP_MUTEX_UNLOCK,
 		MSG_SYS_LWP_MUTEX_TRYLOCK,	MSG_SYS_LWP_MUTEX_REGISTER,
-		MSG_SYS_CLADM,			MSG_SYS_UUCOPY,
+		MSG_SYS_253,			MSG_SYS_UUCOPY,
 		MSG_SYS_UMOUNT2
 	};
 	static const conv_ds_msg_t ds_sysnumarr = {
@@ -2089,7 +2089,7 @@ conv_cnote_fltset(uint32_t *maskarr, int n_mask,
 	MSG_SYS_LWP_MUTEX_UNLOCK_ALT_SIZE	/* 250 */ + \
 	MSG_SYS_LWP_MUTEX_TRYLOCK_ALT_SIZE	/* 251 */ + \
 	MSG_SYS_LWP_MUTEX_REGISTER_ALT_SIZE	/* 252 */ + \
-	MSG_SYS_CLADM_ALT_SIZE			/* 253 */ + \
+	MSG_SYS_253_SIZE			/* 253 (unused) */ + \
 	MSG_SYS_UUCOPY_ALT_SIZE			/* 254 */ + \
 	MSG_SYS_UMOUNT2_ALT_SIZE		/* 255 */ + \
 	3					/* 256 (unused) */ + \
@@ -2416,7 +2416,7 @@ conv_cnote_sysset(uint32_t *maskarr, int n_mask,
 		{ 0x02000000,	MSG_SYS_LWP_MUTEX_UNLOCK_ALT },
 		{ 0x04000000,	MSG_SYS_LWP_MUTEX_TRYLOCK_ALT },
 		{ 0x08000000,	MSG_SYS_LWP_MUTEX_REGISTER_ALT },
-		{ 0x10000000,	MSG_SYS_CLADM_ALT },
+		{ 0x10000000,	MSG_SYS_253 },
 		{ 0x20000000,	MSG_SYS_UUCOPY_ALT },
 		{ 0x40000000,	MSG_SYS_UMOUNT2_ALT },
 		/* 256 (unused) */

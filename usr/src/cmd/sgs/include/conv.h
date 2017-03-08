@@ -354,7 +354,7 @@ typedef union {
 } Conv_cnote_fltset_buf_t;
 
 /* conv_cnote_sysset() */
-#define	CONV_CNOTE_SYSSET_BUFSIZE	3190
+#define	CONV_CNOTE_SYSSET_BUFSIZE	3188
 typedef union {
 	Conv_inv_buf_t			inv_buf;
 	char				buf[CONV_CNOTE_SYSSET_BUFSIZE];

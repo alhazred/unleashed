@@ -366,7 +366,7 @@ static const char *const systable[] = {
 	"lwp_mutex_unlock",	/* 250 */
 	"lwp_mutex_trylock",	/* 251 */
 	"lwp_mutex_register",	/* 252 */
-	"cladm",		/* 253 */
+	NULL,			/* 253 */
 	"uucopy",		/* 254 */
 	"umount2"		/* 255 */
 };
