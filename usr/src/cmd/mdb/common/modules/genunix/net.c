@@ -867,7 +867,7 @@ get_ifname(const ire_t *ire, char *intf)
 }
 
 const in6_addr_t ipv6_all_ones =
-	{ 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU };
+	IN6ADDR_INITIALIZER(0xffffffffu, 0xffffffffu, 0xffffffffu, 0xffffffffu);
 
 static void
 get_ireflags(const ire_t *ire, char *flags)

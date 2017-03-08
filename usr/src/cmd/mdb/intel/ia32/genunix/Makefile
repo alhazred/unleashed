@@ -67,6 +67,8 @@ CPPFLAGS += -I$(SRC)/uts/common
 # Needed to find include file mutex_impl.h
 CPPFLAGS += -I$(SRC)/uts/intel
 
+CPPFLAGS += -D__UNLEASHED_VISIBLE
+
 CERRWARN += -Wno-char-subscripts
 CERRWARN += -Wno-unused-label
 CERRWARN += -Wno-uninitialized
