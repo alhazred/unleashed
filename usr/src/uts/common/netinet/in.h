@@ -88,26 +88,9 @@ typedef uint32_t ipaddr_t;
 
 struct in6_addr {
 	union {
-		/*
-		 * Note: Static initalizers of "union" type assume
-		 * the constant on the RHS is the type of the first member
-		 * of union.
-		 * To make static initializers (and efficient usage) work,
-		 * the order of members exposed to user and kernel view of
-		 * this data structure is different.
-		 * User environment sees specified uint8_t type as first
-		 * member whereas kernel sees most efficient type as
-		 * first member.
-		 */
-#ifdef _KERNEL
-		uint32_t	_S6_u32[4];	/* IPv6 address */
-		uint16_t	_S6_u16[8];	/* IPv6 address */
-		uint8_t		_S6_u8[16];	/* IPv6 address */
-#else
 		uint8_t		_S6_u8[16];	/* IPv6 address */
 		uint16_t	_S6_u16[8];	/* IPv6 address */
 		uint32_t	_S6_u32[4];	/* IPv6 address */
-#endif
 	} _S6_un;
 };
 #define	s6_addr		_S6_un._S6_u8
@@ -437,27 +420,13 @@ struct sockaddr_in6 {
 #endif	/* _BIG_ENDIAN */
 
 /*
- * Note: Macros IN6ADDR_ANY_INIT and IN6ADDR_LOOPBACK_INIT are for
- * use as RHS of Static initializers of "struct in6_addr" (or in6_addr_t)
- * only. They need to be different for User/Kernel versions because union
- * component data structure is defined differently (it is identical at
- * binary representation level).
+ * We don't use IN6ADDR_INITIALIZER here because (1) we don't want to rely
+ * on this __UNLEASHED_VISIBLE macro, and (2) the macro uses C99 syntax and
+ * we want these to be usable with older compilers.
  *
  * const struct in6_addr IN6ADDR_ANY_INIT;
  * const struct in6_addr IN6ADDR_LOOPBACK_INIT;
  */
-
-
-#ifdef _KERNEL
-#define	IN6ADDR_ANY_INIT		{ 0, 0, 0, 0 }
-
-#ifdef _BIG_ENDIAN
-#define	IN6ADDR_LOOPBACK_INIT		{ 0, 0, 0, 0x00000001U }
-#else /* _BIG_ENDIAN */
-#define	IN6ADDR_LOOPBACK_INIT		{ 0, 0, 0, 0x01000000U }
-#endif /* _BIG_ENDIAN */
-
-#else
 
 #define	IN6ADDR_ANY_INIT	{ { {	0, 0, 0, 0,	\
 					0, 0, 0, 0,	\
@@ -468,7 +437,6 @@ struct sockaddr_in6 {
 					0, 0, 0, 0,	\
 					0, 0, 0, 0,	\
 					0, 0, 0, 0x1u } } }
-#endif /* _KERNEL */
 
 /*
  * RFC 2553 specifies the following macros. Their type is defined
