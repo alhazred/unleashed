@@ -61,7 +61,6 @@
 #include <sys/kmem.h>
 #include <sys/vmem.h>
 #include <sys/cpuvar.h>
-#include <sys/cladm.h>
 #include <sys/corectl.h>
 #include <sys/exec.h>
 #include <sys/syscall.h>
@@ -125,15 +124,6 @@ lwpent_t p0_lep;
  *		- process 2 to page out
  *	create system threads
  */
-
-int cluster_bootflags = 0;
-
-void
-cluster_wrapper(void)
-{
-	cluster();
-	panic("cluster()  returned");
-}
 
 char initname[INITNAME_SZ] = "/sbin/init";	/* also referenced by zone0 */
 char initargs[BOOTARGS_MAX] = "";		/* also referenced by zone0 */
@@ -628,14 +618,6 @@ main(void)
 	if (newproc(fsflush, NULL, syscid, minclsyspri, NULL,
 	    FAMOUS_PID_FSFLUSH))
 		panic("main: unable to fork fsflush()");
-
-	/* create cluster process if we're a member of one */
-	if (cluster_bootflags & CLUSTER_BOOTED) {
-		if (newproc(cluster_wrapper, NULL, syscid, minclsyspri,
-		    NULL, 0)) {
-			panic("main: unable to fork cluster()");
-		}
-	}
 
 	/*
 	 * Create system threads (threads are associated with p0)

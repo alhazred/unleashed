@@ -67,7 +67,6 @@ extern "C" {
 #include <libsysevent.h>
 #include <thread.h>
 #include <message.h>
-#include <sys/cladm.h>
 #include <sys/sysevent/dev.h>
 #include <libzonecfg.h>
 #include <device_info.h>

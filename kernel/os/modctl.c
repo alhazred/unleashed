@@ -48,7 +48,6 @@
 #include <sys/ddi_implfuncs.h>
 #include <sys/bootconf.h>
 #include <sys/dc_ki.h>
-#include <sys/cladm.h>
 #include <sys/dtrace.h>
 #include <sys/kdi.h>
 
@@ -211,13 +210,6 @@ mod_setup(void)
 	 * Initialize streams device implementation structures.
 	 */
 	devimpl = kmem_zalloc(devcnt * sizeof (cdevsw_impl_t), KM_SLEEP);
-
-	/*
-	 * If the cl_bootstrap module is present,
-	 * we should be configured as a cluster. Loading this module
-	 * will set "cluster_bootflags" to non-zero.
-	 */
-	(void) modload("misc", "cl_bootstrap");
 
 	(void) read_binding_file(sysbind, sb_hashtab, make_mbind);
 	init_syscallnames(NSYSCALL);
@@ -3449,19 +3441,6 @@ mod_load(struct modctl *mp, int usepath)
 		else {
 			mp->mod_linkage = (void *)modinfop->mi_base;
 			ASSERT(mp->mod_linkage->ml_rev == MODREV_1);
-		}
-
-		/*
-		 * DCS: bootstrapping code. If the driver is loaded
-		 * before root mount, it is assumed that the driver
-		 * may be used before mounting root. In order to
-		 * access mappings of global to local minor no.'s
-		 * during installation/open of the driver, we load
-		 * them into memory here while the BOP_interfaces
-		 * are still up.
-		 */
-		if ((cluster_bootflags & CLUSTER_BOOTED) && !modrootloaded) {
-			retval = clboot_modload(mp);
 		}
 
 		kmem_free(modinfop, sizeof (struct modinfo));

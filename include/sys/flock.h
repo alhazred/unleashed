@@ -253,12 +253,6 @@ extern	zone_key_t flock_zone_key;
 void	*flk_zone_init(zoneid_t);
 void	flk_zone_fini(zoneid_t, void *);
 
-/* Clustering hooks */
-void	cl_flk_set_nlm_status(int nlmid, flk_nlm_status_t nlm_state);
-void	cl_flk_remove_locks_by_sysid(int sysid);
-int	cl_flk_has_remote_locks_for_nlmid(struct vnode *vp, int nlmid);
-void	cl_flk_change_nlm_state_to_unknown(int nlmid);
-void	cl_flk_delete_pxfs_locks(struct vfs *vfsp, int pxfsid);
 #endif /* _KERNEL */
 
 #ifdef	__cplusplus

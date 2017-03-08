@@ -226,7 +226,6 @@ fs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
     flk_callback_t *flk_cbp, cred_t *cr, caller_context_t *ct)
 {
 	int frcmd;
-	int nlmid;
 	int error = 0;
 	boolean_t skip_lock = B_FALSE;
 	flk_callback_t serialize_callback;
@@ -335,14 +334,7 @@ fs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
 		break;
 
 	case F_HASREMOTELOCKS:
-		nlmid = GETNLMID(bfp->l_sysid);
-		if (nlmid != 0) {	/* booted as a cluster */
-			l_has_rmt(bfp) =
-			    cl_flk_has_remote_locks_for_nlmid(vp, nlmid);
-		} else {		/* not booted as a cluster */
-			l_has_rmt(bfp) = flk_has_remote_locks(vp);
-		}
-
+		l_has_rmt(bfp) = flk_has_remote_locks(vp);
 		goto done;
 
 	default:

@@ -46,7 +46,6 @@
 #include <sys/sysevent.h>
 #include <sys/modctl.h>
 #include <sys/console.h>
-#include <sys/cladm.h>
 #include <sys/sysmacros.h>
 #include <sys/crc32.h>
 
@@ -1067,18 +1066,6 @@ in_make_path(char *path)
 	(void) snprintf(buf, sizeof (buf), "%s", path);
 	cp = buf + 1;	/* skip over initial '/' in path */
 	name = in_name_addr(&cp, &addr);
-
-	/*
-	 * In S9 and earlier releases, the path_to_inst file
-	 * SunCluster was prepended with "/node@#". This was
-	 * removed in S10. We skip the prefix if the prefix
-	 * still exists in /etc/path_to_inst. It is needed for
-	 * various forms of Solaris upgrade to work properly
-	 * in the SunCluster environment.
-	 */
-	if ((cluster_bootflags & CLUSTER_CONFIGURED) &&
-	    (strcmp(name, "node") == 0))
-		name = in_name_addr(&cp, &addr);
 
 	ap = e_ddi_inst_state.ins_root;
 	np = e_ddi_inst_state.ins_root->in_child;

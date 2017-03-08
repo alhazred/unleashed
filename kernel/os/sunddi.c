@@ -65,7 +65,6 @@
 #include <sys/epm.h>
 #include <sys/devctl.h>
 #include <sys/callb.h>
-#include <sys/cladm.h>
 #include <sys/sysevent.h>
 #include <sys/dacf_impl.h>
 #include <sys/ddidevmap.h>

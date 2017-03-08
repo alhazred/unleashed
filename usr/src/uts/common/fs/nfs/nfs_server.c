@@ -87,7 +87,6 @@
 #include <nfs/nfs4_drc.h>
 
 #include <sys/modctl.h>
-#include <sys/cladm.h>
 #include <sys/clconf.h>
 
 #define	MAXHOST 32
@@ -489,10 +488,6 @@ nfs_svc(struct nfs_svc_args *arg, model_t model)
 
 	releasef(STRUCT_FGET(uap, fd));
 
-	/* HA-NFSv4: save the cluster nodeid */
-	if (cluster_bootflags & CLUSTER_BOOTED)
-		lm_global_nlmid = clconf_get_nodeid();
-
 	return (error);
 }
 
@@ -523,14 +518,6 @@ rfs4_server_start(int nfs4_srv_delegation)
 				cmn_err(CE_NOTE, "nfs_server: "
 				    "server was previously quiesced; "
 				    "existing NFSv4 state will be re-used");
-
-				/*
-				 * HA-NFSv4: this is also the signal
-				 * that a Resource Group failover has
-				 * occurred.
-				 */
-				if (cluster_bootflags & CLUSTER_BOOTED)
-					hanfsv4_failover();
 			} else {
 				/* cold start */
 				rfs4_state_init();

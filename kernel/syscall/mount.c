@@ -53,7 +53,6 @@
 #include <sys/swap.h>
 #include <sys/debug.h>
 #include <sys/pathname.h>
-#include <sys/cladm.h>
 
 /*
  * System calls.
@@ -115,17 +114,7 @@ mount(long *lp, rval_t *rp)
 		/*
 		 * Clustering: global mount specified.
 		 */
-		if ((cluster_bootflags & CLUSTER_BOOTED) == 0) {
-			/*
-			 * If we're not booted as a cluster,
-			 * global mounts are not allowed.
-			 */
-			error = ENOTSUP;
-		} else {
-			error = domount("pxfs", uap, vp, CRED(), &vfsp);
-			if (!error)
-				VFS_RELE(vfsp);
-		}
+		error = ENOTSUP;
 	} else {
 		error = domount(NULL, uap, vp, CRED(), &vfsp);
 		if (!error)

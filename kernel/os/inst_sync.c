@@ -39,7 +39,6 @@
 #include <sys/file.h>
 #include <sys/cmn_err.h>
 #include <sys/kmem.h>
-#include <sys/cladm.h>
 #include <sys/sunddi.h>
 #include <sys/dditypes.h>
 #include <sys/instance.h>
