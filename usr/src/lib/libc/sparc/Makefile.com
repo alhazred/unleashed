@@ -234,7 +234,6 @@ COMSYSOBJS=			\
 	brk.o			\
 	chdir.o			\
 	chroot.o		\
-	cladm.o			\
 	close.o			\
 	execve.o		\
 	exit.o			\

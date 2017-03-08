@@ -38,7 +38,6 @@
 # the supplemental lists of names specific to each individual ISA.
 #
 
-_cladm
 _lwp_cond_broadcast
 _lwp_cond_reltimedwait
 _lwp_cond_signal

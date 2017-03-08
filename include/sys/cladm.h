@@ -142,8 +142,6 @@ typedef struct {
 #ifdef _KERNEL
 extern int cladmin(int fac, int cmd, void *data);
 extern int cluster_bootflags;
-#else
-extern int _cladm(int fac, int cmd, void *data);
 #endif	/* _KERNEL */
 
 #ifdef	__cplusplus

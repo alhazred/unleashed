@@ -2926,7 +2926,6 @@ $endif
 	attr_to_xattr_view;	
 	_autofssys;
 	_bufsync;
-	_cladm;
 	__class_quadruple;
 	core_get_default_content;
 	core_get_default_path;
