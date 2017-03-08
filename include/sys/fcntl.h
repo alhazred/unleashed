@@ -133,11 +133,12 @@ extern "C" {
 #define	FIGNORECASE	0x00080000	/* request case-insensitive lookups */
 #define	FXATTRDIROPEN	0x00100000	/* only opening hidden attribute directory */
 #define	FEPOLLED	0x02000000	/* never user-visible */
-/* flags originally from flock.h, but since they are ORed with and otherwise
- * conflated with f_flag all over vfs, put them here and give them distinct
- * values */
+/*
+ * A flag originally from flock.h, but since it is ORed with and otherwise
+ * conflated with f_flag all over vfs, put it here and give it a distinct
+ * value.
+ */
 #define	F_REMOTELOCK	0x04000000	/* Set if NLM lock */
-#define	F_PXFSLOCK	0x08000000	/* Clustering: set if PXFS lock */
 #endif /* _KERNEL || __UNLEASHED_VISIBLE */
 
 /*

@@ -238,8 +238,6 @@ fs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
 	case F_O_GETLK:
 		if (flag & F_REMOTELOCK) {
 			frcmd = RCMDLCK;
-		} else if (flag & F_PXFSLOCK) {
-			frcmd = PCMDLCK;
 		} else {
 			frcmd = 0;
 			bfp->l_pid = ttoproc(curthread)->p_pid;
@@ -251,7 +249,7 @@ fs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
 		/*
 		 * TBD we do not support remote OFD locks at this time.
 		 */
-		if (flag & (F_REMOTELOCK | F_PXFSLOCK)) {
+		if (flag & F_REMOTELOCK) {
 			error = EINVAL;
 			goto done;
 		}
@@ -276,8 +274,6 @@ fs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
 	case F_SETLK:
 		if (flag & F_REMOTELOCK) {
 			frcmd = SETFLCK|RCMDLCK;
-		} else if (flag & F_PXFSLOCK) {
-			frcmd = SETFLCK|PCMDLCK;
 		} else {
 			frcmd = SETFLCK;
 			bfp->l_pid = ttoproc(curthread)->p_pid;
@@ -305,8 +301,6 @@ fs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
 	case F_SETLKW:
 		if (flag & F_REMOTELOCK) {
 			frcmd = SETFLCK|SLPFLCK|RCMDLCK;
-		} else if (flag & F_PXFSLOCK) {
-			frcmd = SETFLCK|SLPFLCK|PCMDLCK;
 		} else {
 			frcmd = SETFLCK|SLPFLCK;
 			bfp->l_pid = ttoproc(curthread)->p_pid;
@@ -326,7 +320,7 @@ fs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
 		/*
 		 * TBD we do not support remote OFD locks at this time.
 		 */
-		if (flag & (F_REMOTELOCK | F_PXFSLOCK)) {
+		if (flag & F_REMOTELOCK) {
 			error = EINVAL;
 			goto done;
 		}

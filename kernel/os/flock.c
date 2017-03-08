@@ -574,8 +574,7 @@ reclock(vnode_t *vp, flock64_t *lckdat, int cmd, int flag, u_offset_t offset,
 	 * 32-bit range, so there's no range checking for remote requests,
 	 * but we still need to verify that local requests obey the rules.
 	 */
-	/* Clustering */
-	if ((cmd & (RCMDLCK | PCMDLCK)) != 0) {
+	if ((cmd & RCMDLCK) != 0) {
 		ASSERT(lckdat->l_whence == 0);
 		lock_request->l_start = lckdat->l_start;
 		lock_request->l_end = (lckdat->l_len == 0) ? MAX_U_OFFSET_T :
@@ -608,13 +607,11 @@ reclock(vnode_t *vp, flock64_t *lckdat, int cmd, int flag, u_offset_t offset,
 		lock_request->l_state |= NBMAND_LOCK;
 	/*
 	 * Clustering: set flag for PXFS locks
-	 * We do not _only_ check for the PCMDLCK flag because PXFS locks could
-	 * also be of type 'RCMDLCK'.
 	 * We do not _only_ check the GETPXFSID() macro because local PXFS
 	 * clients use a pxfsid of zero to permit deadlock detection in the LLM.
 	 */
 
-	if ((cmd & PCMDLCK) || (GETPXFSID(lckdat->l_sysid) != 0)) {
+	if (GETPXFSID(lckdat->l_sysid) != 0) {
 		lock_request->l_state |= PXFS_LOCK;
 	}
 	if (!((cmd & SETFLCK) || (cmd & INOFLCK))) {

@@ -63,7 +63,6 @@ extern "C" {
 #define	SETFLCK		0x02	/* Set a file lock. */
 #define	SLPFLCK		0x04	/* Wait if blocked. */
 #define	RCMDLCK		0x08	/* F_REMOTELOCK specified */
-#define	PCMDLCK		0x10	/* Clustering: F_PXFSLOCK specified */
 #define	NBMLCK		0x20	/* non-blocking mandatory locking */
 
 /*
