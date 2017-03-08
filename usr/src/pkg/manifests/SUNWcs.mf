@@ -1237,7 +1237,6 @@ file path=usr/sbin/auditstat mode=0555
 file path=usr/sbin/cfgadm mode=0555
 file path=usr/sbin/chroot mode=0555
 file path=usr/sbin/clear_locks mode=0555
-file path=usr/sbin/clinfo mode=0555
 file path=usr/sbin/clri mode=0555
 file path=usr/sbin/consadm group=sys mode=0555
 file path=usr/sbin/cron group=sys mode=0555

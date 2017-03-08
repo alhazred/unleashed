@@ -83,7 +83,6 @@ COMMON_SUBDIRS=		\
 	chown		\
 	chroot		\
 	clear		\
-	clinfo		\
 	cmd-crypto	\
 	cmd-inet	\
 	col		\

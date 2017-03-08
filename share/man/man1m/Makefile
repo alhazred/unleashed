@@ -61,7 +61,6 @@ MAN = 6to4relay.1m \
       chat.1m \
       chroot.1m \
       clear_locks.1m \
-      clinfo.1m \
       clri.1m \
       consadm.1m \
       coreadm.1m \

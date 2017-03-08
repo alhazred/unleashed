@@ -45,7 +45,6 @@ file path=usr/share/man/man1m/cfgadm_sysctrl.1m
 file path=usr/share/man/man1m/cfgadm_usb.1m
 file path=usr/share/man/man1m/chroot.1m
 file path=usr/share/man/man1m/clear_locks.1m
-file path=usr/share/man/man1m/clinfo.1m
 file path=usr/share/man/man1m/clri.1m
 file path=usr/share/man/man1m/consadm.1m
 file path=usr/share/man/man1m/coreadm.1m
