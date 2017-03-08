@@ -16,7 +16,6 @@ INCS=	autofs.h \
 	pc_fs.h \
 	pc_label.h \
 	pc_node.h \
-	pxfs_ki.h \
 	sdev_impl.h \
 	snode.h \
 	swapnode.h \

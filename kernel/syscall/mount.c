@@ -103,14 +103,7 @@ mount(long *lp, rval_t *rp)
 	 */
 	uap->flags &= MS_MASK;
 
-	if ((vp->v_flag & VPXFS) && ((uap->flags & MS_GLOBAL) != MS_GLOBAL)) {
-		/*
-		 * Clustering: if we're doing a mount onto the global
-		 * namespace, and the mount is not a global mount, return
-		 * an error.
-		 */
-		error = ENOTSUP;
-	} else if (uap->flags & MS_GLOBAL) {
+	if (uap->flags & MS_GLOBAL) {
 		/*
 		 * Clustering: global mount specified.
 		 */

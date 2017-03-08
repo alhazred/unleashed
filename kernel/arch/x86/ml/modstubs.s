@@ -1068,8 +1068,6 @@ fcnname##_info:							\
  */
 #ifndef PXFS_MODULE
 	MODULE(pxfs,fs);
-	NO_UNLOAD_WSTUB(pxfs, clpxfs_aio_read, nomod_zero);
-	NO_UNLOAD_WSTUB(pxfs, clpxfs_aio_write, nomod_zero);
 	NO_UNLOAD_WSTUB(pxfs, cl_flk_state_transition_notify, nomod_zero);
 	END_MODULE(pxfs);
 #endif

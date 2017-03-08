@@ -360,17 +360,6 @@ ufs_mount(struct vfs *vfsp, struct vnode *mvp, struct mounta *uap,
 			goto out;
 		}
 
-		/*
-		 * In SunCluster, requests to a global device are
-		 * satisfied by a local device. We substitute the global
-		 * pxfs node with a local spec node here.
-		 */
-		if (IS_PXFSVP(svp)) {
-			ASSERT(lvp == NULL);
-			VN_RELE(svp);
-			svp = makespecvp(dev, VBLK);
-		}
-
 		if ((error = secpolicy_spec_open(cr, svp, oflag)) != 0) {
 			VN_RELE(svp);
 			pn_free(&dpn);

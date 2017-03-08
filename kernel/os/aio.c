@@ -49,7 +49,6 @@
 #include <sys/param.h>
 #include <sys/systm.h>
 #include <sys/vmsystm.h>
-#include <sys/fs/pxfs_ki.h>
 #include <sys/contract/process_impl.h>
 
 /*
@@ -2810,18 +2809,6 @@ static int
 	if (cb->cb_strategy == nodev || cb->cb_strategy == NULL)
 		return (NULL);
 
-	/*
-	 * Clustering: If vnode is a PXFS vnode, then the device may be remote.
-	 * We cannot call the driver directly. Instead return the
-	 * PXFS functions.
-	 */
-
-	if (IS_PXFSVP(vp)) {
-		if (mode & FREAD)
-			return (clpxfs_aio_read);
-		else
-			return (clpxfs_aio_write);
-	}
 	if (mode & FREAD)
 		aio_func = (cb->cb_aread == nodev) ? NULL : driver_aio_read;
 	else
@@ -2853,7 +2840,6 @@ driver_aio_write(vnode_t *vp, struct aio_req *aio, cred_t *cred_p)
 	struct cb_ops  	*cb;
 
 	ASSERT(vp->v_type == VCHR);
-	ASSERT(!IS_PXFSVP(vp));
 	dev = VTOS(vp)->s_dev;
 	ASSERT(STREAMSTAB(getmajor(dev)) == NULL);
 
@@ -2877,7 +2863,6 @@ driver_aio_read(vnode_t *vp, struct aio_req *aio, cred_t *cred_p)
 	struct cb_ops  	*cb;
 
 	ASSERT(vp->v_type == VCHR);
-	ASSERT(!IS_PXFSVP(vp));
 	dev = VTOS(vp)->s_dev;
 	ASSERT(!STREAMSTAB(getmajor(dev)));
 

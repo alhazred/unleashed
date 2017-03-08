@@ -320,10 +320,6 @@ typedef struct vn_vfslocks_entry {
  */
 #define	VVMEXEC		0x1000
 
-#define	VPXFS		0x2000  /* clustering: global fs proxy vnode */
-
-#define	IS_PXFSVP(vp)	((vp)->v_flag & VPXFS)
-
 #define	V_XATTRDIR	0x4000	/* attribute unnamed directory */
 
 #define	IS_XATTRDIR(vp)	((vp)->v_flag & V_XATTRDIR)

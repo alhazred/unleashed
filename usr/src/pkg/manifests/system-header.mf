@@ -992,7 +992,6 @@ file path=usr/include/sys/fs/pc_dir.h
 file path=usr/include/sys/fs/pc_fs.h
 file path=usr/include/sys/fs/pc_label.h
 file path=usr/include/sys/fs/pc_node.h
-file path=usr/include/sys/fs/pxfs_ki.h
 file path=usr/include/sys/fs/sdev_impl.h
 file path=usr/include/sys/fs/snode.h
 file path=usr/include/sys/fs/swapnode.h
