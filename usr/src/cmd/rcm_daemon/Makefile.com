@@ -54,7 +54,6 @@ COMMON_MOD_SRC = \
 	$(COMMON)/ibpart_rcm.c \
 	$(COMMON)/aggr_rcm.c \
 	$(COMMON)/ip_rcm.c \
-	$(COMMON)/cluster_rcm.c \
 	$(COMMON)/pool_rcm.c \
 	$(COMMON)/mpxio_rcm.c \
 	$(COMMON)/ip_anon_rcm.c \
@@ -79,7 +78,6 @@ COMMON_MOD_OBJ = \
 	ibpart_rcm.o \
 	aggr_rcm.o \
 	ip_rcm.o \
-	cluster_rcm.o \
 	pool_rcm.o \
 	mpxio_rcm.o \
 	ip_anon_rcm.o \
@@ -99,7 +97,6 @@ COMMON_RCM_MODS = \
 	SUNW_ibpart_rcm.so \
 	SUNW_aggr_rcm.so \
 	SUNW_ip_rcm.so \
-	SUNW_cluster_rcm.so \
 	SUNW_pool_rcm.so \
 	SUNW_mpxio_rcm.so \
 	SUNW_ip_anon_rcm.so \
