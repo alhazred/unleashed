@@ -76,7 +76,6 @@
 #include <sys/byteorder.h>
 #include <arpa/inet.h>
 #include <sys/audioio.h>
-#include <sys/cladm.h>
 #include <sys/synch.h>
 #include <sys/synch32.h>
 #include <sys/sysmacros.h>
@@ -495,39 +494,6 @@ show_utssys32(private_t *pri, long r0)
 	}
 }
 #endif	/* _LP64 */
-
-void
-show_cladm(private_t *pri, int code, int function, long offset)
-{
-	int	arg;
-
-	switch (code) {
-	case CL_INITIALIZE:
-		switch (function) {
-		case CL_GET_BOOTFLAG:
-			if (Pread(Proc, &arg, sizeof (arg), offset)
-			    == sizeof (arg)) {
-				if (arg & CLUSTER_CONFIGURED)
-					(void) printf("%s\tbootflags="
-					    "CLUSTER_CONFIGURED", pri->pname);
-				if (arg & CLUSTER_BOOTED)
-					(void) printf("|CLUSTER_BOOTED\n");
-			}
-			break;
-		}
-		break;
-	case CL_CONFIG:
-		switch (function) {
-		case CL_NODEID:
-		case CL_HIGHEST_NODEID:
-			if (Pread(Proc, &arg, sizeof (arg), offset)
-			    == sizeof (arg))
-				(void) printf("%s\tnodeid=%d\n",
-				    pri->pname, arg);
-		}
-		break;
-	}
-}
 
 #define	ALL_LOCK_TYPES						\
 	(USYNC_PROCESS | LOCK_ERRORCHECK | LOCK_RECURSIVE | 	\
@@ -5469,11 +5435,6 @@ expound(private_t *pri, long r0, int raw)
 		if (!err && pri->sys_nargs > 2)
 			show_sockaddr(pri, "name", (long)pri->sys_args[1],
 			    (long)pri->sys_args[2], 0);
-		break;
-	case SYS_cladm:
-		if (!err && pri->sys_nargs > 2)
-			show_cladm(pri, pri->sys_args[0], pri->sys_args[1],
-			    (long)pri->sys_args[2]);
 		break;
 	case SYS_recvfrom:
 		if (!err && pri->sys_nargs > 5)

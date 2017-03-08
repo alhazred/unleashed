@@ -52,7 +52,6 @@
 #include <stropts.h>
 #include <sys/isa_defs.h>
 #include <sys/systeminfo.h>
-#include <sys/cladm.h>
 #include <sys/lwp.h>
 #include <bsm/audit.h>
 #include <libproc.h>
@@ -1406,54 +1405,6 @@ grow(private_t *pri, int nbyte)	/* reallocate format buffer if necessary */
 	while (pri->sys_leng + nbyte >= pri->sys_ssize)
 		pri->sys_string = my_realloc(pri->sys_string,
 		    pri->sys_ssize *= 2, "format buffer");
-}
-
-void
-prt_clc(private_t *pri, int raw, long val)
-{
-	const char *s = NULL;
-
-	if (!raw) {
-		switch (val) {
-		case CL_INITIALIZE:	s = "CL_INITIALIZE";	break;
-		case CL_CONFIG:		s = "CL_CONFIG";	break;
-		}
-	}
-
-	if (s == NULL)
-		prt_dec(pri, 0, val);
-	else
-		outstring(pri, s);
-}
-
-void
-prt_clf(private_t *pri, int raw, long val)
-{
-	const char *s = NULL;
-
-	if (!raw) {
-		switch (pri->sys_args[0]) {
-		case CL_CONFIG:
-			switch (pri->sys_args[1]) {
-			case CL_NODEID:
-				s = "CL_NODEID";		break;
-			case CL_HIGHEST_NODEID:
-				s = "CL_HIGHEST_NODEID";	break;
-			}
-			break;
-		case CL_INITIALIZE:
-			switch (pri->sys_args[1]) {
-			case CL_GET_BOOTFLAG:
-				s = "CL_GET_BOOTFLAG";		break;
-			}
-			break;
-		}
-	}
-
-	if (s == NULL)
-		prt_dec(pri, 0, val);
-	else
-		outstring(pri, s);
 }
 
 void
@@ -2870,8 +2821,6 @@ void (* const Print[])() = {
 	prt_aio,	/* AIO -- print kaio() code */
 	prt_aud,	/* AUD -- print auditsys() code */
 	prt_uns,	/* DEC -- print value in unsigned decimal */
-	prt_clc,	/* CLC -- print cladm command argument */
-	prt_clf,	/* CLF -- print cladm flag argument */
 	prt_cor,	/* COR -- print corectl() subcode */
 	prt_cco,	/* CCO -- print corectl() options */
 	prt_ccc,	/* CCC -- print corectl() content */

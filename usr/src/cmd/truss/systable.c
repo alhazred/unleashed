@@ -472,7 +472,7 @@ const struct systable systable[] = {
 {"lwp_mutex_unlock", 1, DEC, NOV, HEX},				/* 250 */
 {"lwp_mutex_trylock", 2, DEC, NOV, HEX, HEX},			/* 251 */
 {"lwp_mutex_register", 2, DEC, NOV, HEX, HEX},			/* 252 */
-{"cladm",	3, DEC, NOV, CLC, CLF, HEX},			/* 253 */
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"uucopy",	3, DEC, NOV, HEX, HEX, UNS},			/* 254 */
 {"umount2",	2, DEC, NOV, STG, MTF},				/* 255 */
 { NULL, -1, DEC, NOV},

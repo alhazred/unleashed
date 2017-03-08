@@ -93,57 +93,55 @@ extern "C" {
 #define	AIO	51		/* print kaio() code */
 #define	AUD	52		/* print auditsys() code */
 #define	UNS	53		/* print value in unsigned decimal */
-#define	CLC	54		/* print cladm() command argument */
-#define	CLF	55		/* print cladm() flag argument */
-#define	COR	56		/* print corectl() subcode */
-#define	CCO	57		/* print corectl() options */
-#define	CCC	58		/* print corectl() content */
-#define	RCC	59		/* print corectl() content */
-#define	CPC	60		/* print cpc() subcode */
-#define	SQC	61		/* print sigqueue() si_code argument */
-#define	PC4	62		/* print priocntlsys() (fourth) argument */
-#define	PC5	63		/* print priocntlsys() (key-value) pairs */
-#define	PST	64		/* print processor set id */
-#define	MIF	65		/* print meminfo() argument */
-#define	PFM	66		/* print so_socket() proto-family (1st) arg */
-#define	SKT	67		/* print so_socket() socket type (2nd) arg */
-#define	SKP	68		/* print so_socket() protocol (3rd) arg */
-#define	SKV	69		/* print so_socket() version (5th) arg */
-#define	SOL	70		/* print [sg]etsockopt() level (2nd) arg */
-#define	SON	71		/* print [sg]etsockopt() name (3rd) arg */
-#define	UTT	72		/* print utrap type */
-#define	UTH	73		/* print utrap handler */
-#define	ACC	74		/* print access flags */
-#define	SHT	75		/* print shutdown() "how" (2nd) arg */
-#define	FFG	76		/* print fcntl() flags (3rd) arg */
-#define	PRS	77		/* privilege set */
-#define	PRO	78		/* privilege set operation */
-#define	PRN	79		/* privilege set name */
-#define	PFL	80		/* privilege/process flag name */
-#define	LAF	81		/* print lgrp_affinity arguments */
-#define	KEY	82		/* print key_t 0 as IPC_PRIVATE */
-#define	ZGA	83		/* print zone_getattr attribute types */
-#define	ATC	84		/* print AT_FDCWD or file descriptor */
-#define	LIO	85		/* print LIO_XX flags */
-#define	DFL	86		/* print door_create() flags */
-#define	DPM	87		/* print DOOR_PARAM_XX flags */
-#define	TND	88		/* print trusted network data base opcode */
-#define	RSC	89		/* print rctlsys subcode */
-#define	RGF	90		/* print rctlsys_get flags */
-#define	RSF	91		/* print rctlsys_set flags */
-#define	RCF	92		/* print rctlsys_ctl flags */
-#define	FXF	93		/* print forkx flags */
-#define	SPF	94		/* print rctlsys_projset flags */
-#define	UN1	95		/* unsigned except for -1 */
-#define	MOB	96		/* print mmapobj() flags */
-#define	SNF	97		/* print AT_SYMLINK_[NO]FOLLOW flag */
-#define	SKC	98		/* print sockconfig subcode */
-#define	ACF	99		/* accept4 flags */
-#define	PFD	100		/* pipe fds[2] */
-#define	GRF	101		/* getrandom flags */
-#define	PSDLT	102		/* secflagsdelta_t */
-#define	PSFW	103		/* psecflagswhich_t */
-#define	HID	104		/* hidden argument, don't print */
+#define	COR	54		/* print corectl() subcode */
+#define	CCO	55		/* print corectl() options */
+#define	CCC	56		/* print corectl() content */
+#define	RCC	57		/* print corectl() content */
+#define	CPC	58		/* print cpc() subcode */
+#define	SQC	59		/* print sigqueue() si_code argument */
+#define	PC4	60		/* print priocntlsys() (fourth) argument */
+#define	PC5	61		/* print priocntlsys() (key-value) pairs */
+#define	PST	62		/* print processor set id */
+#define	MIF	63		/* print meminfo() argument */
+#define	PFM	64		/* print so_socket() proto-family (1st) arg */
+#define	SKT	65		/* print so_socket() socket type (2nd) arg */
+#define	SKP	66		/* print so_socket() protocol (3rd) arg */
+#define	SKV	67		/* print so_socket() version (5th) arg */
+#define	SOL	68		/* print [sg]etsockopt() level (2nd) arg */
+#define	SON	69		/* print [sg]etsockopt() name (3rd) arg */
+#define	UTT	70		/* print utrap type */
+#define	UTH	71		/* print utrap handler */
+#define	ACC	72		/* print access flags */
+#define	SHT	73		/* print shutdown() "how" (2nd) arg */
+#define	FFG	74		/* print fcntl() flags (3rd) arg */
+#define	PRS	75		/* privilege set */
+#define	PRO	76		/* privilege set operation */
+#define	PRN	77		/* privilege set name */
+#define	PFL	78		/* privilege/process flag name */
+#define	LAF	79		/* print lgrp_affinity arguments */
+#define	KEY	80		/* print key_t 0 as IPC_PRIVATE */
+#define	ZGA	81		/* print zone_getattr attribute types */
+#define	ATC	82		/* print AT_FDCWD or file descriptor */
+#define	LIO	83		/* print LIO_XX flags */
+#define	DFL	84		/* print door_create() flags */
+#define	DPM	85		/* print DOOR_PARAM_XX flags */
+#define	TND	86		/* print trusted network data base opcode */
+#define	RSC	87		/* print rctlsys subcode */
+#define	RGF	88		/* print rctlsys_get flags */
+#define	RSF	89		/* print rctlsys_set flags */
+#define	RCF	90		/* print rctlsys_ctl flags */
+#define	FXF	91		/* print forkx flags */
+#define	SPF	92		/* print rctlsys_projset flags */
+#define	UN1	93		/* unsigned except for -1 */
+#define	MOB	94		/* print mmapobj() flags */
+#define	SNF	95		/* print AT_SYMLINK_[NO]FOLLOW flag */
+#define	SKC	96		/* print sockconfig subcode */
+#define	ACF	97		/* accept4 flags */
+#define	PFD	98		/* pipe fds[2] */
+#define	GRF	99		/* getrandom flags */
+#define	PSDLT	100		/* secflagsdelta_t */
+#define	PSFW	101		/* psecflagswhich_t */
+#define	HID	102		/* hidden argument, don't print */
 				/* make sure HID is always the last member */
 
 /*
