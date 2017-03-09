@@ -680,8 +680,6 @@ file path=usr/include/rpcsvc/nlm_prot.h mode=0644
 file path=usr/include/rpcsvc/nlm_prot.x mode=0644
 file path=usr/include/rpcsvc/nsm_addr.h mode=0644
 file path=usr/include/rpcsvc/nsm_addr.x mode=0644
-file path=usr/include/rpcsvc/rex.h
-file path=usr/include/rpcsvc/rex.x
 file path=usr/include/rpcsvc/rpc_sztypes.h
 file path=usr/include/rpcsvc/rpc_sztypes.x
 file path=usr/include/rpcsvc/rquota.h

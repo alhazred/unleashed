@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright 2016 Joyent, Inc.
+# Copyright 2017 Joyent, Inc.
 #
 
 MODULE = i40e.so
@@ -26,7 +26,3 @@ CPPFLAGS += -I$(CODEMGR_WS)/kernel/drivers/net/i40e
 CPPFLAGS += -I$(CODEMGR_WS)/kernel/drivers/net/i40e/core
 CPPFLAGS += -I$(CODEMGR_WS)/include
 CPPFLAGS += -D_I40E_MDB_DMOD
-
-#
-# i40e needs this due to the use of Intel provided headers.
-#

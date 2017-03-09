@@ -34,7 +34,6 @@ INCS+=	bootparam_prot.x \
 	nfs_prot.x	\
 	nis.x		\
 	nis_object.x	\
-	rex.x		\
 	rquota.x	\
 	rstat.x		\
 	rusers.x	\
@@ -51,7 +50,6 @@ GENERATED_INCS= \
 	nfs_prot.h	\
 	nfs4_prot.h	\
 	nis.h		\
-	rex.h		\
 	rquota.h	\
 	rstat.h		\
 	rusers.h	\

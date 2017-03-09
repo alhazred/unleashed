@@ -62,19 +62,6 @@ DEBUG_DEFS	+= $(DEBUG_FLGS)
 INC_PATH	+= -I$(UTSBASE)/intel/io/scsi/targets
 
 #
-# For now, disable these compiler warnings; maintainers should endeavor to
-# investigate and remove these for maximum coverage.  Please do not carry
-# these forward to new Makefiles.
-#
-
-CERRWARN	+= -Wno-unused-variable
-CERRWARN	+= -Wno-unused-function
-CERRWARN	+= -Wno-unused-label
-CERRWARN	+= -Wno-parentheses
-CERRWARN	+= -Wno-type-limits
-CERRWARN	+= -Wno-uninitialized
-
-#
 # Depends on scsi and cmlb
 #
 LDFLAGS         += -dy -N misc/scsi -N misc/cmlb
