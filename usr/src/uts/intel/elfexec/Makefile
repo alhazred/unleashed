@@ -23,6 +23,7 @@
 #
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
+# Copyright 2016 Joyent, Inc.
 #
 
 #
@@ -57,6 +58,8 @@ include $(UTSBASE)/intel/Makefile.intel
 #
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
+
+INC_PATH	+= -I$(UTSBASE)/intel/ia32
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

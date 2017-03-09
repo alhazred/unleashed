@@ -55,7 +55,9 @@ GENUNIX_DIR	= ../../intel/$(GENUNIX)
 
 LIBOPTS		= -L $(GENUNIX_DIR)/$(OBJS_DIR) -l $(GENUNIX)
 
-CTFEXTRAOBJS	= $(OBJS_DIR)/vers.o
+COMMP_CTF_SRC	= $(OBJS_DIR)/comm_page_ctf.c
+
+CTFEXTRAOBJS	= $(OBJS_DIR)/vers.o $(OBJS_DIR)/comm_page_ctf.o
 
 DBOOT_OBJS_DIR	= dboot/$(OBJS_DIR)
 DBOOT_OBJECTS	= $(DBOOT_OBJS:%=$(DBOOT_OBJS_DIR)/%)
@@ -84,9 +86,11 @@ UNIX_DIR	= .
 #
 CLEANFILES	+=		\
 	$(UNIX_O) $(MODSTUBS_O)	\
-	$(OBJS_DIR)/vers.c $(OBJS_DIR)/vers.o \
+	$(OBJS_DIR)/vers.c \
 	$(OBJS_DIR)/dtracestubs.s \
-	$(DTRACESTUBS_O) $(DTRACESTUBS)
+	$(DTRACESTUBS_O) $(DTRACESTUBS) \
+	$(CTFEXTRAOBJS) \
+	$(COMMP_CTF_SRC)
 
 CLEANFILES	+=		\
 	$(DBOOT_O) $(DBOOT_S)	\
@@ -163,7 +167,7 @@ $(UNIX_BIN):	$(UNIX_O) $(MODSTUBS_O) $(MAPFILE_NAME) \
 	$(CTFMERGE_MODULE)
 	$(POST_PROCESS)
 
-$(UNIX_O):	$(OBJECTS) $(OBJS_DIR)/vers.o
+$(UNIX_O):	$(OBJECTS) $(CTFEXTRAOBJS)
 	$(LD) -r -o $@ $(OBJECTS) $(OBJS_DIR)/vers.o
 
 $(DBOOT_BIN):	$(DBOOT_OBJS_DIR) $(DBOOT_OBJECTS) dboot/Mapfile.dboot
@@ -179,6 +183,13 @@ $(DBOOT_O):	$(DBOOT_BIN)
 
 $(DBOOT_OBJS_DIR):
 	-@mkdir -p $@ 2> /dev/null
+
+$(COMMP_CTF_SRC):	$(UTSBASE)/i86pc/ml/comm_page.s
+	$(COMPILE.cpp) -D_GENCTF -o $@ $(UTSBASE)/i86pc/ml/comm_page.s
+
+$(OBJS_DIR)/comm_page_ctf.o:	$(COMMP_CTF_SRC)
+	$(COMPILE.c) -o $@ $<
+	$(CTFCONVERT_O)
 
 #
 #	Special rules for generating assym.h for inclusion in assembly files.

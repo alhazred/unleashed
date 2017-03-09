@@ -26,8 +26,8 @@
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
 /*	  All Rights Reserved	*/
 /*
- * Copyright (c) 2012 Joyent, Inc.  All rights reserved.
  * Copyright 2014 Garrett D'Amore <garrett@damore.org>
+ * Copyright 2016 Joyent, Inc.
  */
 
 
@@ -212,6 +212,7 @@ typedef	struct	user {
 	int	u_argc;			/* value of argc passed to main() */
 	uintptr_t u_argv;		/* value of argv passed to main() */
 	uintptr_t u_envp;		/* value of envp passed to main() */
+	uintptr_t u_commpagep;		/* address of mapped comm page */
 
 	/*
 	 * These fields are protected by p_lock:
