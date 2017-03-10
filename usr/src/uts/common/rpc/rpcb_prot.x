@@ -162,11 +162,7 @@ typedef rp__list *rpcblist_ptr;		/* results of RPCBPROC_DUMP */
 %#ifdef __cplusplus
 %extern "C" {
 %#endif
-%#ifdef __STDC__
 %extern  bool_t xdr_rpcblist(XDR *, rpcblist**);
-%#else /* K&R C */
-%bool_t xdr_rpcblist();
-%#endif
 %#ifdef	__cplusplus
 %}
 %#endif
@@ -229,7 +225,7 @@ struct rpcb_rmtcallres {
 %	} results;
 %	xdrproc_t	xdr_res;	/* decodes results */
 %};
-#endif RPC_HDR
+#endif
 %
 %/*
 % * rpcb_entry contains a merged address of a service on a particular
@@ -322,13 +318,10 @@ typedef rpcb_stat rpcb_stat_byvers[RPCBVERS_STAT];
 %#ifdef __cplusplus
 %extern "C" bool_t xdr_netbuf(XDR *, struct netbuf *);
 %
-%#elif __STDC__
+%#else
 %extern  bool_t xdr_netbuf(XDR *, struct netbuf *);
 %
-%#else /* K&R C */
-%bool_t xdr_netbuf();
-%
-%#endif /* K&R C */
+%#endif
 #endif /* def RPC_HDR */
 
 /*

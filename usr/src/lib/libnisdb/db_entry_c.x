@@ -95,7 +95,7 @@ struct db_request {
 %extern "C"  bool_t copy_entry ( entry_object*, entry_object*);
 %extern "C"  void free_entry (entry_object*);
 %extern "C"  bool_t sameEntry(entry_object *, entry_object *);
-%#elif __STDC__
+%#else
 %extern entry_object * new_entry( entry_object*);
 %extern bool_t copy_entry ( entry_object*, entry_object*);
 %extern void free_entry (entry_object*);

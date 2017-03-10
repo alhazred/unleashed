@@ -72,13 +72,7 @@
 % */
 %
 %bool_t
-%#ifdef __STDC__
 %xdr_timeval(XDR *xdrs, struct timeval *tvp)
-%#else /* K&R C */
-%xdr_timeval(xdrs, tvp)
-%	XDR *xdrs;
-%	struct timeval *tvp;
-%#endif /* K&R C */
 %{
 %	return (xdr_rstat_timeval(xdrs, (rstat_timeval *)tvp));
 %}
@@ -167,12 +161,7 @@ program RSTATPROG {
 
 #ifdef RPC_HDR
 %
-%#if defined(__STDC__) || defined(__cplusplus)
 %enum clnt_stat rstat(char *, struct statstime *);
 %int havedisk(char *);
-%#else
-%enum clnt_stat rstat();
-%int havedisk();
-%#endif
 %
 #endif

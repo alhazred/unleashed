@@ -73,10 +73,10 @@ static const char *Fileopened;
 static FILE *Fp;
 static int Line;
 static const char *File;
-static const char *Cpp = "/usr/bin/cpp";
+static const char *Cpp = "/opt/gcc/4.4.4/bin/cpp";
 #ifdef	ESC
 static const char *Cppargs;
-static const char *Cppstdargs = "-undef -Y.";
+static const char *Cppstdargs = "-undef -P -I.";
 #endif	/* ESC */
 
 /* for debugging */
@@ -234,7 +234,7 @@ lex_init(char **av, const char *cppargs, int lexecho)
 
 	/* verify we can find cpp */
 	if (access(Cpp, X_OK) < 0) {
-		Cpp = "/usr/lib/cpp";
+		Cpp = "/opt/gcc/4.4.4/bin/cpp";
 		if (access(Cpp, X_OK) < 0)
 			out(O_DIE, "can't locate cpp");
 	}

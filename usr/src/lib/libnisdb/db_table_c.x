@@ -294,7 +294,7 @@ typedef struct db_table * db_table_p;
 %};
 %#ifdef __cplusplus
 %extern "C" bool_t xdr_db_table( XDR*, db_table*);
-%#elif __STDC__
+%#else
 %extern bool_t xdr_db_table(XDR*, db_table*);
 %#endif
 %typedef class db_table * db_table_p;

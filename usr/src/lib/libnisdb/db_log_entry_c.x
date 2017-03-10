@@ -109,7 +109,7 @@ typedef  struct db_log_entry* db_log_entry_p;
 %};
 %#ifdef __cplusplus
 %extern "C" bool_t xdr_db_log_entry(XDR*, db_log_entry*);
-%#elif __STDC__
+%#else
 %extern bool_t xdr_db_log_entry(XDR*, db_log_entry*);
 %#endif
 %typedef class db_log_entry * db_log_entry_p;

@@ -111,12 +111,7 @@ program RUSERSPROG {
 %
 %int xdr_utmpidlearr();
 %
-%#if defined(__STDC__) || defined(__cplusplus)
 %enum clnt_stat rusers(char *host, struct utmpidlearr *up);
 %int rnusers(char *host);
-%#else
-%enum clnt_stat rusers();
-%int rnusers();
-%#endif
 %
 #endif

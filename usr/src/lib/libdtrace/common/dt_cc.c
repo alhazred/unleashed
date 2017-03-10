@@ -1850,16 +1850,6 @@ dt_preproc(dtrace_hdl_t *dtp, FILE *ifp)
 	    "-D__SUNW_D_VERSION=0x%08x", dtp->dt_vmax);
 	argv[argc++] = verdef;
 
-	switch (dtp->dt_stdcmode) {
-	case DT_STDC_XA:
-	case DT_STDC_XT:
-		argv[argc++] = "-D__STDC__=0";
-		break;
-	case DT_STDC_XC:
-		argv[argc++] = "-D__STDC__=1";
-		break;
-	}
-
 	argv[argc++] = ipath;
 	argv[argc++] = opath;
 	argv[argc] = NULL;

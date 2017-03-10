@@ -115,7 +115,7 @@ STRIP=		/usr/ccs/bin/strip
 LEX=		/usr/ccs/bin/lex
 FLEX=		/usr/bin/flex
 YACC=		/usr/ccs/bin/yacc
-CPP=		/usr/lib/cpp
+CPP=		$(GCC_ROOT)/cpp
 CTFCONVERT=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfconvert
 CTFDIFF=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfdiff
 CTFMERGE=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfmerge
@@ -590,25 +590,25 @@ BASIC_AS_ARGS=	-x assembler-with-cpp \
 #
 sparc_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
 sparc_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
-sparc_CPP=		/usr/ccs/lib/cpp
+sparc_CPP=		$(GCC_ROOT)/bin/cpp
 sparc_AS=		/usr/ccs/bin/as -xregsym=no
 sparc_LD=		/usr/ccs/bin/ld
 
 sparcv9_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
 sparcv9_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
-sparcv9_CPP=		/usr/ccs/lib/cpp
+sparcv9_CPP=		$(GCC_ROOT)/bin/cpp
 sparcv9_AS=		/usr/ccs/bin/as -xregsym=no
 sparcv9_LD=		/usr/ccs/bin/ld
 
 i386_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
 i386_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
-i386_CPP=		/usr/ccs/lib/cpp
+i386_CPP=		$(GCC_ROOT)/bin/cpp
 i386_AS=		$(GCC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
 i386_LD=		/usr/ccs/bin/ld
 
 amd64_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
 amd64_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
-amd64_CPP=		/usr/ccs/lib/cpp
+amd64_CPP=		$(GCC_ROOT)/bin/cpp
 amd64_AS=		$(GCC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
 amd64_LD=		/usr/ccs/bin/ld
 

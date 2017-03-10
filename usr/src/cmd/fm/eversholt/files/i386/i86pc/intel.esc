@@ -73,7 +73,7 @@ prop fault.cpu.intel.internal@chip/core/strand
 
 #define	CMPND_EVENT(leafclass, t) \
 	event ereport.cpu.intel.leafclass@chip/core/strand { within(t) }; \
-	event ereport.cpu.intel.leafclass/**/_uc@chip/core/strand { within(t) }
+	event ereport.cpu.intel.leafclass##_uc@chip/core/strand { within(t) }
 
 /*
  * Ereports for Compound error codes - intel errors
@@ -144,7 +144,7 @@ CMPND_EVENT(bus_interconnect_io, 1s);
 									\
 	prop fault.cpu.intel.fltleaf@chip/core/strand			\
 	    { setserdincrement(n + 1) } (0)->				\
-	    ereport.cpu.intel.erptleaf/**/_uc@chip/core/strand
+	    ereport.cpu.intel.erptleaf##_uc@chip/core/strand
 
 #define	CMPND_FLT_PROP_2(erptleaf, fltleaf, n, t)			\
 	engine serd.cpu.intel.fltleaf@chip/core/strand, N=n, T=t;	\
@@ -156,7 +156,7 @@ CMPND_EVENT(bus_interconnect_io, 1s);
 									\
 	prop fault.cpu.intel.fltleaf@chip/core/strand 			\
 	    { setserdincrement(n + 1) } (0)->				\
-	    ereport.cpu.intel.erptleaf/**/_uc@chip/core/strand
+	    ereport.cpu.intel.erptleaf##_uc@chip/core/strand
 
 CMPND_FLT_PROP_1(l0cache, l0cache, 3, 72h);
 CMPND_FLT_PROP_1(l1cache, l1cache, 3, 72h);
