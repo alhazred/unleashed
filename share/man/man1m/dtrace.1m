@@ -182,9 +182,7 @@ for more information on macro variables.
 .RS 4n
 Run the C preprocessor \fBcpp\fR(1) over D programs before compiling them. You
 can pass options to the C preprocessor using the \fB-D\fR, \fB-U\fR, \fB-I\fR,
-and \fB-H\fR options. You can select the degree of C standard conformance if
-you use the \fB-X\fR option. For a description of the set of tokens defined by
-the D compiler when invoking the C preprocessor, see \fB-X\fR.
+and \fB-H\fR options.
 .RE
 
 .sp
@@ -543,63 +541,13 @@ the option name and value with an equals sign (\fB=\fR).
 .ad
 .sp .6
 .RS 4n
-Specify the degree of conformance to the ISO C standard that should be selected
-when invoking \fBcpp\fR(1) (enabled using the \fB-C\fR option). The \fB-X\fR
-option argument affects the value and presence of the \fB__STDC__\fR macro
-depending upon the value of the argument letter.
-.sp
-The \fB-X\fR option supports the following arguments:
-.sp
-.ne 2
-.na
-\fB\fBa\fR\fR
-.ad
-.RS 5n
-Default. ISO C plus K&R compatibility extensions, with semantic changes
-required by ISO C. This is the default mode if \fB-X\fR is not specified. The
-predefined macro \fB__STDC__\fR has a value of 0 when \fBcpp\fR is invoked in
-conjunction with the \fB-Xa\fR option.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBc\fR\fR
-.ad
-.RS 5n
-Conformance. Strictly conformant ISO C, without K&R C compatibility extensions.
-The predefined macro \fB__STDC__\fR has a value of 1 when \fBcpp\fR is invoked
-in conjunction with the \fB-Xc\fR option.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBs\fR\fR
-.ad
-.RS 5n
-K&R C only. The macro \fB__STDC__\fR is not defined when \fBcpp\fR is invoked
-in conjunction with the \fB-Xs\fR option.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBt\fR\fR
-.ad
-.RS 5n
-Transition. ISO C plus K&R C compatibility extensions, without semantic changes
-required by ISO C. The predefined macro \fB__STDC__\fR has a value of 0 when
-\fBcpp\fR is invoked in conjunction with the \fB-Xt\fR option.
-.RE
-
-As the \fB-X\fR option only affects how the D compiler invokes the C
-preprocessor, the \fB-Xa\fR and \fB-Xt\fR options are equivalent from the
-perspective of D and both are provided only to ease re-use of settings from a C
-build environment.
+Obsolete and only provided for compatibility. Was used to specify the degree of
+conformance to the ISO C standard that should be selected when invoking
+\fBcpp\fR(1) (with the \fB-C\fR option).
 .sp
 Regardless of the \fB-X\fR mode, the following additional C preprocessor
-definitions are always specified and valid in all modes:
+definitions are always specified and valid in all modes, in addition to the
+macros predefined by \fBcpp\fR(1):
 .RS +4
 .TP
 .ie t \(bu

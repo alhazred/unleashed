@@ -80,7 +80,7 @@ static void options_usage(void);
 #define	EXTEND		1		/* alias for TRUE */
 #define	DONT_EXTEND	0		/* alias for FALSE */
 
-#define	SUNOS_CPP "/usr/lib/cpp"
+#define	SUNOS_CPP "/opt/gcc/4.4.4/bin/cpp"
 static int cppDefined = 0;	/* explicit path for C preprocessor */
 
 

@@ -64,9 +64,9 @@ $(OBJS_DIR)/%.o			:= CPPFLAGS += -I$(OBJS_DIR)
 $(OBJS_DIR)/%.ln		:= CPPFLAGS += -I$(OBJS_DIR)
 $(OBJS_DIR)/emu10k_gpr.h	:= ASM10KFLAGS = -v -0 -P gpr
 $(OBJS_DIR)/emu10k1_dsp.h	:= ASM10KFLAGS = -v -1 -P emu10k1
-$(OBJS_DIR)/emu10k2_dsp.h	:= MODEL10K = SBLIVE
+$(OBJS_DIR)/emu10k2_dsp.h	:= MODEL10K = -DSBLIVE
 $(OBJS_DIR)/emu10k2_dsp.h	:= ASM10KFLAGS = -v -2 -P emu10k2
-$(OBJS_DIR)/emu10k2_dsp.h	:= MODEL10K = AUDIGY
+$(OBJS_DIR)/emu10k2_dsp.h	:= MODEL10K = -DAUDIGY
 
 #
 #	Default build targets.
@@ -89,7 +89,7 @@ $(ASM10K):	$(DSP_SRCDIR)/asm10k.c
 	$(NATIVECC) $(NATIVE_CFLAGS) -o $@ $(DSP_SRCDIR)/asm10k.c
 
 $(DSP_HDRS): $(ASM10K) $(DSP_SRCS)
-	$(CPP) -D$(MODEL10K) -I$(DSP_SRCDIR) $(DSP_SRCDIR)/emu10k.dsp | \
+	$(CPP) -I$(DSP_SRCDIR) $(DSP_SRCDIR)/emu10k.dsp | \
 	$(OBJS_DIR)/asm10k $(ASM10KFLAGS) -h $@
 
 CLOBBERFILES += $(ASM10K) $(DSP_HDRS)

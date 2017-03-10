@@ -144,5 +144,5 @@ link path=usr/ccs/bin/yacc target=../../bin/yacc
 link path=usr/ccs/bin/yaccpar target=../../share/lib/ccs/yaccpar
 link path=usr/lib/elfedit/32 target=.
 link path=usr/lib/elfedit/64 target=$(ARCH64)
-depend fmri=developer/macro/cpp type=require
+depend fmri=developer/illumos-gcc type=require
 depend fmri=runtime/perl$(PERL_PKGVERS) type=require

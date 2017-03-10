@@ -685,8 +685,8 @@ const dtrace_pattr_t _dtrace_prvdesc = {
 { DTRACE_STABILITY_UNSTABLE, DTRACE_STABILITY_UNSTABLE, DTRACE_CLASS_COMMON },
 };
 
-const char *_dtrace_defcpp = "/usr/ccs/lib/cpp"; /* default cpp(1) to invoke */
-const char *_dtrace_defld = "/usr/ccs/bin/ld";   /* default ld(1) to invoke */
+const char *_dtrace_defcpp = "/opt/gcc/4.4.4/bin/cpp"; /* default cpp(1) to invoke */
+const char *_dtrace_defld = "/usr/bin/ld";   /* default ld(1) to invoke */
 
 const char *_dtrace_libdir = "/usr/lib/dtrace"; /* default library directory */
 const char *_dtrace_provdir = "/dev/dtrace/provider"; /* provider directory */
@@ -978,7 +978,7 @@ alloc:
 	for (i = 0; i < DTRACEOPT_MAX; i++)
 		dtp->dt_options[i] = DTRACEOPT_UNSET;
 
-	dtp->dt_cpp_argv[0] = (char *)strbasename(dtp->dt_cpp_path);
+	dtp->dt_cpp_argv[0] = dtp->dt_cpp_path;
 
 	(void) snprintf(isadef, sizeof (isadef), "-D__SUNW_D_%u",
 	    (uint_t)(sizeof (void *) * NBBY));
@@ -987,7 +987,8 @@ alloc:
 	    dt_get_sysinfo(SI_SYSNAME, s1, sizeof (s1)),
 	    dt_get_sysinfo(SI_RELEASE, s2, sizeof (s2)));
 
-	if (dt_cpp_add_arg(dtp, "-D__sun") == NULL ||
+	if (dt_cpp_add_arg(dtp, "-undef") == NULL ||
+	    dt_cpp_add_arg(dtp, "-D__sun") == NULL ||
 	    dt_cpp_add_arg(dtp, "-D__unix") == NULL ||
 	    dt_cpp_add_arg(dtp, "-D__SVR4") == NULL ||
 	    dt_cpp_add_arg(dtp, "-D__SUNW_D=1") == NULL ||

@@ -369,7 +369,7 @@ typedef struct xdr_nis_object_s	xdr_nis_object_t;
 %};
 %#ifdef __cplusplus
 %extern "C" bool_t xdr_db_mindex(XDR*, db_mindex*);
-%#elif __STDC__
+%#else
 %extern bool_t xdr_db_mindex(XDR*, db_mindex*);
 %#endif
 %typedef class db_mindex * db_mindex_p;

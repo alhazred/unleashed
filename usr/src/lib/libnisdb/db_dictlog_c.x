@@ -118,7 +118,7 @@ typedef  struct db_dictlog_entry* db_dictlog_entry_p;
 %};
 %#ifdef __cplusplus
 %extern "C" bool_t xdr_db_dictlog_entry(XDR*, db_dictlog_entry*);
-%#elif __STDC__
+%#else
 %extern bool_t xdr_db_dictlog_entry(XDR*, db_dictlog_entry*);
 %#endif
 %typedef class db_dictlog_entry * db_dictlog_entry_p;

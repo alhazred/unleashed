@@ -83,7 +83,7 @@ prop fault.cpu.generic-x86.internal@chip/core/strand
 #define	CMPND_EVENT(leafclass) \
 	event ereport.cpu.generic-x86.leafclass@chip/core/strand \
 	{ within(1s) }; \
-	event ereport.cpu.generic-x86.leafclass/**/_uc@chip/core/strand \
+	event ereport.cpu.generic-x86.leafclass##_uc@chip/core/strand \
 	{ within(1s) }
 
 /*
@@ -155,7 +155,7 @@ CMPND_EVENT(mc);
             ereport.cpu.generic-x86.erptleaf@chip/core/strand;		\
 	prop fault.cpu.generic-x86.fltleaf@chip/core/strand		\
 	    { setserdincrement(n + 1) } (0)->				\
-	    ereport.cpu.generic-x86.erptleaf/**/_uc@chip/core/strand
+	    ereport.cpu.generic-x86.erptleaf##_uc@chip/core/strand
 
 #define	CMPND_FLT_PROP_2(erptleaf, fltleaf, n, t) \
 	engine serd.cpu.generic-x86.fltleaf@chip/core/strand, N=n, T=t;	\
@@ -166,7 +166,7 @@ CMPND_EVENT(mc);
             ereport.cpu.generic-x86.erptleaf@chip/core/strand;		\
 	prop fault.cpu.generic-x86.fltleaf@chip/core/strand		\
 	    { setserdincrement(n + 1) } (0)->				\
-	    ereport.cpu.generic-x86.erptleaf/**/_uc@chip/core/strand
+	    ereport.cpu.generic-x86.erptleaf##_uc@chip/core/strand
 
 CMPND_FLT_PROP_1(l0cache, l0cache, 3, 72h);
 CMPND_FLT_PROP_1(l1cache, l1cache, 3, 72h);

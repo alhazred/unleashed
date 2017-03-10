@@ -157,7 +157,7 @@ typedef struct db_index * db_index_p;
 %};
 %#ifdef __cplusplus
 %extern "C" bool_t xdr_db_index(XDR *, db_index *);
-%#elif __STDC__
+%#else
 %extern bool_t xdr_db_index(XDR *, db_index *);
 %#endif
 %typedef class db_index * db_index_p;

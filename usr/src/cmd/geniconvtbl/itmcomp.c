@@ -46,7 +46,7 @@
 #endif
 #define	ITMSUFFIX	".bt"
 #define	ME_DEFAULT	"geniconvtbl"
-#define	CPP_PATH	"/usr/lib/cpp"
+#define	CPP_PATH	"/opt/gcc/4.4.4/bin/cpp"
 
 itmc_ref_t	*ref_first[ITMC_OBJ_LAST + 1];
 itmc_ref_t	*ref_last[ITMC_OBJ_LAST + 1];

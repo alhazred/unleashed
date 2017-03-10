@@ -133,11 +133,7 @@ typedef pm__list *pmaplist_ptr;		/* results of PMAPPROC_DUMP */
 %#ifdef __cplusplus
 %extern "C" {
 %#endif
-%#ifdef __STDC__
 %extern  bool_t xdr_pmaplist(XDR *, pmaplist**);
-%#else /* K&R C */
-%bool_t xdr_pmaplist();
-%#endif
 %#ifdef	__cplusplus
 %}
 %#endif
@@ -253,11 +249,7 @@ program PMAPPROG {
 %	rpcport_t pm_port;
 %};
 %typedef struct pmap PMAP;
-%#ifdef __STDC__
 %extern bool_t xdr_pmap (XDR *, struct pmap *);
-%#else
-%extern bool_t xdr_pmap ();
-%#endif
 %
 %struct pmaplist {
 %	struct pmap pml_map;

@@ -60,10 +60,6 @@ program WALLPROG {
 #ifdef RPC_HDR
 %
 %
-%#if defined(__STDC__) || defined(__cplusplus)
 %enum clnt_stat rwall(char *, char *);
-%#else
-%enum clnt_stat rwall();
-%#endif
 %
 #endif

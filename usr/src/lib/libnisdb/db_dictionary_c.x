@@ -280,13 +280,11 @@ typedef struct __nisdb_dictionary_defer_struct	__nisdb_dictionary_defer_t;
 %/* Roll back deferred changes; intended for replica resync */
 %  db_status rollback(char *table);
 %};
-%#ifdef __STDC__
 %extern "C" bool_t xdr_db_table_desc_p(XDR *, db_table_desc_p *); 
 %extern "C" bool_t xdr_db_table_desc(XDR *, db_table_desc *); 
 %extern "C" bool_t xdr_db_dict_desc_p(XDR *, db_dict_desc_p *); 
 %extern "C" bool_t xdr_db_table_namep(XDR *, db_table_namep *); 
 %extern "C" bool_t xdr_db_table_names(XDR *, db_table_names *); 
-%#endif
 
 #endif /* RPC_HDR */
 #endif /* USINGC */
