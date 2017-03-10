@@ -989,6 +989,10 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/usb/hcd/ehci/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
+$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/usb/hcd/xhci/%.c
+	$(COMPILE.c) -o $@ $<
+	$(CTFCONVERT_O)
+
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/usb/hcd/uhci/%.c
 	$(COMPILE.c) -I../../common -o $@ $<
 	$(CTFCONVERT_O)

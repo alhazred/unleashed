@@ -54,18 +54,20 @@ MAN = Intro.9s \
       stroptions.9s \
       tuple.9s \
       uio.9s \
-      usb_bulk_request.9s \
+      usb_bulk_req.9s \
       usb_callback_flags.9s \
       usb_cfg_descr.9s \
       usb_client_dev_data.9s \
       usb_completion_reason.9s \
-      usb_ctrl_request.9s \
+      usb_ctrl_req.9s \
       usb_dev_descr.9s \
       usb_dev_qlf_descr.9s \
       usb_ep_descr.9s \
+      usb_ep_ss_comp_descr.9s \
+      usb_ep_xdescr.9s \
       usb_if_descr.9s \
-      usb_intr_request.9s \
-      usb_isoc_request.9s \
+      usb_intr_req.9s \
+      usb_isoc_req.9s \
       usb_other_speed_cfg_descr.9s \
       usb_request_attributes.9s \
       usb_string_descr.9s

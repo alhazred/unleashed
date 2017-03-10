@@ -20,6 +20,8 @@
  *
  * Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ *
+ * Copyright 2016 Joyent, Inc.
  */
 
 #ifndef _SYS_USB_SCSA2USB_H
@@ -303,9 +305,9 @@ typedef struct scsa2usb_state {
 	struct scsi_inquiry	scsa2usb_lun_inquiry[SCSA2USB_MAX_LUNS];
 						/* store inquiry per LUN  */
 	usb_if_descr_t		scsa2usb_intfc_descr;	/* Interface descr    */
-	usb_ep_descr_t		scsa2usb_bulkin_ept;	/* Bulk In descriptor */
-	usb_ep_descr_t		scsa2usb_bulkout_ept;	/* Bulkout descriptor */
-	usb_ep_descr_t		scsa2usb_intr_ept;	/* Intr ept descr */
+	usb_ep_xdescr_t		scsa2usb_bulkin_xept;	/* Bulk In descriptor */
+	usb_ep_xdescr_t		scsa2usb_bulkout_xept;	/* Bulkout descriptor */
+	usb_ep_xdescr_t		scsa2usb_intr_xept;	/* Intr ept descr */
 
 	usb_pipe_handle_t	scsa2usb_default_pipe;	/* Default pipe	Hndle */
 	usb_pipe_handle_t	scsa2usb_intr_pipe;	/* Intr polling Hndle */
@@ -350,6 +352,15 @@ typedef struct scsa2usb_state {
 
 	uint8_t			scsa2usb_clones[SCSA2USB_MAX_CLONE];
 } scsa2usb_state_t;
+
+/*
+ * These macros were added as part of updating scsa2usb to support USB 3.0 and
+ * newer devices to minimize driver changes. There's no reason these can't be
+ * expanded by someone who wants to.
+ */
+#define	scsa2usb_bulkin_ept	scsa2usb_bulkin_xept.uex_ep
+#define	scsa2usb_bulkout_ept	scsa2usb_bulkout_xept.uex_ep
+#define	scsa2usb_intr_ept	scsa2usb_intr_xept.uex_ep
 
 
 /* scsa2usb_pipe_state values */
