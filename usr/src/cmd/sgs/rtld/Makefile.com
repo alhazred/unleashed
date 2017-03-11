@@ -139,7 +139,7 @@ SRCS=		$(AVLOBJ:%.o=$(VAR_AVLDIR)/%.c) \
 		$(DTROBJ:%.o=$(VAR_DTRDIR)/%.c) \
 		$(TOOLOBJS:%.o=$(SGSTOOLS)/common/%.c) \
 		$(COMOBJS:%.o=../common/%.c)  $(MACHOBJS:%.o=%.c) $(BLTDATA) \
-		$(G_MACHOBJS:%.o=$(CODEMGR_WS)/kernel/arch/x86/krtld/$(BITS)/%.c) \
+		$(G_MACHOBJS:%.o=$(CODEMGR_WS)/arch/x86/kernel/krtld/$(BITS)/%.c) \
 		$(CP_MACHOBJS:%.o=../$(MACH)/%.c) \
 		$(ASOBJS:%.o=%.s)
 

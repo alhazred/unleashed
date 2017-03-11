@@ -24,7 +24,7 @@ CFGARCH=sparc
 .error "Unknown machine architecture ${MACHINE}; override it via BUILD_ARCH"
 .endif
 
-CFGFILE=kernel/arch/${CFGARCH}/Sconfig
+CFGFILE=arch/${CFGARCH}/Sconfig
 
 gen-config:
 	${.MAKE} -C tools

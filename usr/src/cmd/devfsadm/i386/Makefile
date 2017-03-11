@@ -27,7 +27,7 @@ LINK_OBJS_i386 = \
 	misc_link_i386.o \
 	xen_link.o
 
-xen_link.o xen_link.ln xen_link.po := CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86xpv/include
+xen_link.o xen_link.ln xen_link.po := CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86xpv/include
 
 include ../Makefile.com
 

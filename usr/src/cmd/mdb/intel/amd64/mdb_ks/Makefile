@@ -51,4 +51,4 @@ include ../../../Makefile.mdb_ks
 # machparam.h, even though we don't use anything there.  This is a temporary
 # kludge until we invent -DDONTINCLUDEMACHPARAM or something.
 #
-CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
+CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include

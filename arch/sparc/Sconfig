@@ -1,37 +1,37 @@
 ((const
    MACH
-   'i386)
+   'sparc)
 
  (const
    MACH32
-   'i86)
+   'sparcv7)
 
  (const
    MACH64
-   'amd64)
+   'sparcv9)
 
  (const
    ISA32
-   'ia32)
+   'v7)
 
  (const
    ISA64
-   'amd64)
+   'v9)
 
  (select
    PLATFORM
-   ('i86pc 'i86xpv))
+   ('sun4u 'sun4v))
 
  (const
    ; Build 32-bit kernel modules
    BUILD_KMOD_32
-   #t)
+   #f)
 
  (const
    ; Build 64-bit kernel modules
    BUILD_KMOD_64
    #t)
 
- (include "../../../Sconfig"))
+ (include "../../Sconfig"))
 
 ; vim: set syntax=scheme:

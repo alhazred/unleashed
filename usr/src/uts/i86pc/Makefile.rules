@@ -39,7 +39,7 @@
 #
 #	Section 1: C object build rules
 #
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/conf/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/conf/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -63,7 +63,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/io/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/io/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -83,7 +83,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/acpi/acpinex/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-SBD_IOCTL	= $(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include/sys/sbd_ioctl.h
+SBD_IOCTL	= $(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include/sys/sbd_ioctl.h
 DRMACH_IO	= $(UTSBASE)/i86pc/io/acpi/drmach_acpi
 DRMACH_GENERR	= $(DRMACH_IO)/sbdgenerr
 DR_IO		= $(UTSBASE)/i86pc/io/dr
@@ -167,26 +167,26 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/tzmon/%.c
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/ml/%.s
 	$(COMPILE.s) -o $@ $<
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/ml/%.s
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/ml/%.s
 	$(COMPILE.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/os/%.c
 	$(COMPILE.c) -fno-stack-protector -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/os/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/os/%.c
 	$(COMPILE.c) -fno-stack-protector -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/os/cpupm/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/os/cpupm/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/boot/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/vm/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/vm/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -218,7 +218,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/xsvc/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/xen/os/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/xen/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -238,7 +238,7 @@ DBOOT_AS_INCL	= $(AS_INC_PATH)
 
 DBOOT_AS	= $($(MACH)_AS)
 
-$(DBOOT_OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/boot/%.c
+$(DBOOT_OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/%.c
 	$(i386_CC) $(DBOOT_FLAGS) -O $(DBOOT_DEFS) $(DBOOT_CC_INCL) -c -o $@ $<
 
 $(DBOOT_OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/dboot/%.c

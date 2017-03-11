@@ -34,8 +34,8 @@ include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.libstand
 
-CPPFLAGS += -I. -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
-AS_CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
+CPPFLAGS += -I. -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
+AS_CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
 
 %.o: %.c
 	$(COMPILE.c) $<

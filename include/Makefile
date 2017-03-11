@@ -187,7 +187,7 @@ INCS=	$($(CONFIG_MACH)_INCS) \
 	xti_inet.h	\
 	zone.h
 
-SUBDIR=	../kernel/arch/${CONFIG_MACH}/include \
+SUBDIR=	../arch/${CONFIG_MACH}/kernel/include \
 	arpa \
 	audio \
 	inet \

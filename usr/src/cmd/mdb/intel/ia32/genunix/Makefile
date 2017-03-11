@@ -57,8 +57,8 @@ dmod/$(MODULE) := LDLIBS += -lm -lproc
 # machparam.h, even though we don't use anything there.  This is a temporary
 # kludge until we invent -DDONTINCLUDEMACHPARAM or something.
 #
-CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
-CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86xpv/include
+CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
+CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86xpv/include
 
 # Needed to include c2/audit.h (from cred.h)
 CPPFLAGS += -I$(CODEMGR_WS)/include

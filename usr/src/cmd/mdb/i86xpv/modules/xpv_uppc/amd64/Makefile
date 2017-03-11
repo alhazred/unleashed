@@ -41,9 +41,9 @@ CPPFLAGS += -DMP -D_MACHDEP -D__xen
 CPPFLAGS += -I../../../../common
 CPPFLAGS += -I../../../../i86pc/modules/common
 CPPFLAGS += -I$(SRC)/uts/common
-CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86xpv/include
-CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
-CPPFLAGS += -I$(CODEMGR_WS)/kernel/arch/x86/include
+CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86xpv/include
+CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
+CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/include
 CPPFLAGS += -I$(SRC)/uts/intel
 
 CERRWARN += -Wno-unused-function

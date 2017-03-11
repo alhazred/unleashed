@@ -51,7 +51,7 @@ OBJECTS		= $(INTEL_NHM_OBJS:%=$(OBJS_DIR)/%)
 ALL_TARGET      = $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET  = $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-CPPFLAGS	+=  -I$(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
+CPPFLAGS	+=  -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
 LDFLAGS		+= -dy -N drv/smbios
 
 CERRWARN	+= -Wno-uninitialized

@@ -95,8 +95,8 @@ CERRWARN += -Wno-type-limits
 
 # Location of the shared relocation engines maintained under usr/src/uts.
 #
-KRTLD_I386 = $(CODEMGR_WS)/kernel/arch/x86/krtld/32
-KRTLD_AMD64 = $(CODEMGR_WS)/kernel/arch/x86/krtld/64
+KRTLD_I386 = $(CODEMGR_WS)/arch/x86/kernel/krtld/32
+KRTLD_AMD64 = $(CODEMGR_WS)/arch/x86/kernel/krtld/64
 KRTLD_SPARC = $(SRCBASE)/uts/$(VAR_PLAT_sparc)/krtld
 
 

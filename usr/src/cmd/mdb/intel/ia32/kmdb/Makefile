@@ -48,7 +48,7 @@ include ../../../Makefile.kmdb
 
 STANDLIBS += $(ROOT)/usr/lib/libstanddisasm.so
 
-INCDIRS += $(CODEMGR_WS)/kernel/arch/x86/platform/i86pc/include
+INCDIRS += $(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
 
 CPPFLAGS += -DDIS_TEXT
 

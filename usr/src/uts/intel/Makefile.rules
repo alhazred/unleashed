@@ -72,11 +72,11 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/dtrace/%.c
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/dtrace/%.s
 	$(COMPILE.s) -o $@ $<
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/fs/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/fs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/ml/%.s
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/ml/%.s
 	$(COMPILE.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/ia32/os/%.c
@@ -91,7 +91,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/io/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/io/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/io/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -250,7 +250,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/os/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -258,11 +258,11 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/pcbe/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/promif/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/promif/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/syscall/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/syscall/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -270,11 +270,11 @@ $(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/kdi/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/kdi/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/arch/x86/kdi/%.s
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/kdi/%.s
 	$(COMPILE.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/zfs/%.c
@@ -286,7 +286,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/zfs/%.c
 #
 
 KRTLD_INC_PATH	= -I$(CODEMGR_WS)/kernel/krtld
-KRTLD_INC_PATH	+= -I$(CODEMGR_WS)/kernel/arch/x86/include/sys
+KRTLD_INC_PATH	+= -I$(CODEMGR_WS)/arch/x86/kernel/include/sys
 
 KRTLD_CPPFLAGS_32	= -DELF_TARGET_386
 KRTLD_CPPFLAGS_64	= -DELF_TARGET_AMD64 -DMODDIR_SUFFIX=\"amd64\"
@@ -296,7 +296,7 @@ $(OBJS_DIR)/%.o:	$(CODEMGR_WS)/kernel/krtld/%.c
 	$(COMPILE.c) $(KRTLD_INC_PATH) $(KRTLD_CPPFLAGS) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:	$(CODEMGR_WS)/kernel/arch/x86/krtld/$(CLASS)/%.c
+$(OBJS_DIR)/%.o:	$(CODEMGR_WS)/arch/x86/kernel/krtld/$(CLASS)/%.c
 	$(COMPILE.c) $(KRTLD_INC_PATH) $(KRTLD_CPPFLAGS) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -305,7 +305,7 @@ $(OBJS_DIR)/%.o:	$(CODEMGR_WS)/kernel/arch/x86/krtld/$(CLASS)/%.c
 #
 $(OBJS_DIR)/kobj.o		:= CPPFLAGS += -D_DBOOT
 
-$(OBJS_DIR)/%.o:	$(CODEMGR_WS)/kernel/arch/x86/krtld/$(CLASS)/%.s
+$(OBJS_DIR)/%.o:	$(CODEMGR_WS)/arch/x86/kernel/krtld/$(CLASS)/%.s
 	$(COMPILE.s) $(KRTLD_INC_PATH) $(KRTLD_CPPFLAGS) -o $@ $<
 	$(CTFCONVERT_O)
 
