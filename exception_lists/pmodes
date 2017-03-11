@@ -36,24 +36,6 @@ etc/dladm/secobj.conf
 
 etc/dumpdates
 
-#
-# Lp stuff is chmod'ed back by the lp system; prevent pkgchk errors
-# later by listing them here.
-#
-etc/lp
-etc/lp/classes
-etc/lp/forms
-etc/lp/interfaces
-etc/lp/ppd
-etc/lp/printers
-etc/lp/pwheels
-var/lp
-var/lp/logs
-var/spool/lp
-var/spool/lp/admins
-var/spool/lp/requests
-var/spool/lp/system
-
 # /var/adm stuff added because std cron jobs for sys/adm expect this
 var/adm
 var/adm/acct

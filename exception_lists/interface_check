@@ -52,7 +52,6 @@ PLUGIN		^usr/lib/fm/topo/plugins
 PLUGIN		^usr/lib/fwflash
 PLUGIN		^usr/lib/iconv
 PLUGIN		^usr/lib/inet/ppp
-PLUGIN		^usr/lib/lp/ipp
 PLUGIN		^usr/lib/mdb
 PLUGIN		^usr/lib/pci
 PLUGIN		^usr/lib/picl/plugins
