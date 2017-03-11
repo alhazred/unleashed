@@ -228,147 +228,147 @@ kmem_cache_t *vn_cache;
 
 static const fs_operation_trans_def_t vn_ops_table[] = {
 	VOPNAME_OPEN, offsetof(struct vnodeops, vop_open),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_CLOSE, offsetof(struct vnodeops, vop_close),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_READ, offsetof(struct vnodeops, vop_read),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_WRITE, offsetof(struct vnodeops, vop_write),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_IOCTL, offsetof(struct vnodeops, vop_ioctl),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_SETFL, offsetof(struct vnodeops, vop_setfl),
-	    fs_setfl, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_GETATTR, offsetof(struct vnodeops, vop_getattr),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_SETATTR, offsetof(struct vnodeops, vop_setattr),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_ACCESS, offsetof(struct vnodeops, vop_access),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_LOOKUP, offsetof(struct vnodeops, vop_lookup),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_CREATE, offsetof(struct vnodeops, vop_create),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_REMOVE, offsetof(struct vnodeops, vop_remove),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_LINK, offsetof(struct vnodeops, vop_link),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_RENAME, offsetof(struct vnodeops, vop_rename),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_MKDIR, offsetof(struct vnodeops, vop_mkdir),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_RMDIR, offsetof(struct vnodeops, vop_rmdir),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_READDIR, offsetof(struct vnodeops, vop_readdir),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_SYMLINK, offsetof(struct vnodeops, vop_symlink),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_READLINK, offsetof(struct vnodeops, vop_readlink),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_FSYNC, offsetof(struct vnodeops, vop_fsync),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_INACTIVE, offsetof(struct vnodeops, vop_inactive),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_FID, offsetof(struct vnodeops, vop_fid),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_RWLOCK, offsetof(struct vnodeops, vop_rwlock),
-	    fs_rwlock, fs_rwlock,
+	    NULL, fs_rwlock,
 
 	VOPNAME_RWUNLOCK, offsetof(struct vnodeops, vop_rwunlock),
-	    (fs_generic_func_p) fs_rwunlock,
+	    NULL,
 	    (fs_generic_func_p) fs_rwunlock,	/* no errors allowed */
 
 	VOPNAME_SEEK, offsetof(struct vnodeops, vop_seek),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_CMP, offsetof(struct vnodeops, vop_cmp),
-	    fs_cmp, fs_cmp,		/* no errors allowed */
+	    NULL, fs_cmp,		/* no errors allowed */
 
 	VOPNAME_FRLOCK, offsetof(struct vnodeops, vop_frlock),
-	    fs_frlock, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_SPACE, offsetof(struct vnodeops, vop_space),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_REALVP, offsetof(struct vnodeops, vop_realvp),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_GETPAGE, offsetof(struct vnodeops, vop_getpage),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_PUTPAGE, offsetof(struct vnodeops, vop_putpage),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_MAP, offsetof(struct vnodeops, vop_map),
-	    (fs_generic_func_p) fs_nosys_map,
+	    NULL,
 	    (fs_generic_func_p) fs_nosys_map,
 
 	VOPNAME_ADDMAP, offsetof(struct vnodeops, vop_addmap),
-	    (fs_generic_func_p) fs_nosys_addmap,
+	    NULL,
 	    (fs_generic_func_p) fs_nosys_addmap,
 
 	VOPNAME_DELMAP, offsetof(struct vnodeops, vop_delmap),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_POLL, offsetof(struct vnodeops, vop_poll),
-	    (fs_generic_func_p) fs_poll, (fs_generic_func_p) fs_nosys_poll,
+	    NULL, (fs_generic_func_p) fs_nosys_poll,
 
 	VOPNAME_DUMP, offsetof(struct vnodeops, vop_dump),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_PATHCONF, offsetof(struct vnodeops, vop_pathconf),
-	    fs_pathconf, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_PAGEIO, offsetof(struct vnodeops, vop_pageio),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_DUMPCTL, offsetof(struct vnodeops, vop_dumpctl),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_DISPOSE, offsetof(struct vnodeops, vop_dispose),
-	    (fs_generic_func_p) fs_dispose,
+	    NULL,
 	    (fs_generic_func_p) fs_nodispose,
 
 	VOPNAME_SETSECATTR, offsetof(struct vnodeops, vop_setsecattr),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_GETSECATTR, offsetof(struct vnodeops, vop_getsecattr),
-	    fs_fab_acl, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_SHRLOCK, offsetof(struct vnodeops, vop_shrlock),
-	    fs_shrlock, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_VNEVENT, offsetof(struct vnodeops, vop_vnevent),
-	    (fs_generic_func_p) fs_vnevent_nosupport,
+	    NULL,
 	    (fs_generic_func_p) fs_vnevent_nosupport,
 
 	VOPNAME_REQZCBUF, offsetof(struct vnodeops, vop_reqzcbuf),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	VOPNAME_RETZCBUF, offsetof(struct vnodeops, vop_retzcbuf),
-	    fs_nosys, fs_nosys,
+	    NULL, fs_nosys,
 
 	NULL, 0, NULL, NULL
 };
