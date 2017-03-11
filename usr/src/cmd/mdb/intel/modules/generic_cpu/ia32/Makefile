@@ -33,7 +33,7 @@ include ../../../../Makefile.module
 
 CPPFLAGS += -I../../../../common
 CPPFLAGS += -I$(SRC)/uts/i86pc/cpu
-CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/include
+CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/include
 CPPFLAGS += -I$(SRC)/uts/intel
 CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
 

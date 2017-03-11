@@ -286,7 +286,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/zfs/%.c
 #
 
 KRTLD_INC_PATH	= -I$(CODEMGR_WS)/kernel/krtld
-KRTLD_INC_PATH	+= -I$(CODEMGR_WS)/arch/x86/kernel/include/sys
+KRTLD_INC_PATH	+= -I$(CODEMGR_WS)/arch/x86/include/sys
 
 KRTLD_CPPFLAGS_32	= -DELF_TARGET_386
 KRTLD_CPPFLAGS_64	= -DELF_TARGET_AMD64 -DMODDIR_SUFFIX=\"amd64\"
