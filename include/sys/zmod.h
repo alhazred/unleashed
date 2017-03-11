@@ -38,7 +38,7 @@ extern "C" {
  *
  * This file provides the public interfaces to zmod, an in-kernel RFC 1950
  * decompression library.  More information about the implementation of these
- * interfaces can be found in the usr/src/uts/common/zmod/ directory.
+ * interfaces can be found in the kernel/zmod/ directory.
  */
 
 #define	Z_OK		0

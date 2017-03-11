@@ -121,6 +121,8 @@ $(OBJS_DIR)/instr_size.ln :=	EXTRA_OPTIONS	= -I$(SRC)/common/dis/i386
 
 CFLAGS += -DDIS_MEM
 
+$(OBJS_DIR)/decompress.o :=	EXTRA_OPTIONS	= -I$(CODEMGR_WS)/kernel/zmod
+
 #
 # For now, disable these compiler warnings; maintainers should endeavor to
 # investigate and remove these for maximum coverage.  Please do not carry
