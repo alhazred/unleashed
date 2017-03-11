@@ -26,8 +26,8 @@ COMMPAGE_OFFSETS_H = cp_offsets.h
 
 CLEANFILES += $(COMMPAGE_OFFSETS_H)
 
-pics/cp_main.o := CPPFLAGS += -I$(SRC)/uts/i86pc
-pics/cp_subr.o := ASFLAGS += -I$(SRC)/uts/i86pc -I./
-$(COMMPAGE_OFFSETS_H) := CPPFLAGS += -I$(SRC)/uts/i86pc
+pics/cp_main.o := CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
+pics/cp_subr.o := ASFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include -I./
+$(COMMPAGE_OFFSETS_H) := CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
 
 COMMPAGE_CPPFLAGS = -I$(SRC)/lib/commpage/common
