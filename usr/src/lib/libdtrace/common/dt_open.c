@@ -987,8 +987,7 @@ alloc:
 	    dt_get_sysinfo(SI_SYSNAME, s1, sizeof (s1)),
 	    dt_get_sysinfo(SI_RELEASE, s2, sizeof (s2)));
 
-	if (dt_cpp_add_arg(dtp, "-undef") == NULL ||
-	    dt_cpp_add_arg(dtp, "-D__sun") == NULL ||
+	if (dt_cpp_add_arg(dtp, "-D__sun") == NULL ||
 	    dt_cpp_add_arg(dtp, "-D__unix") == NULL ||
 	    dt_cpp_add_arg(dtp, "-D__SVR4") == NULL ||
 	    dt_cpp_add_arg(dtp, "-D__SUNW_D=1") == NULL ||
