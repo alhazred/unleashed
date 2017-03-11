@@ -54,7 +54,6 @@ i386_LDLIBS =   -lfdisk
 sparc_LDLIBS =
 LDLIBS +=       -ldevinfo -ladm -ldevid -lkstat -lsysevent \
 		-lnvpair -lefi -lc $($(MACH)_LDLIBS)
-DYNFLAGS +=	-R/opt/VRTSvxvm/lib
 
 SRCDIR =	../common
 

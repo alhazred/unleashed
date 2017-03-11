@@ -44,7 +44,6 @@
 SKIP		^usr/lib/libc/			# optimized libc
 SKIP		^usr/lib/rcm/			# 4426119
 SKIP		^usr/perl5/			# alan's taking care of these :-)
-SKIP		^usr/src/			# no objects in source code
 
 # Individual files that we don't examine
 # USIII specific extns. cause ldd noise on USII bld. m/c
@@ -66,11 +65,9 @@ EXEC_DATA	^lib/amd64/libumem\.so\.1$ # ptcumem
 EXEC_DATA	^lib/libumem\.so\.1$	# ptcumem
 EXEC_DATA	^opt/SUNWdtrt/tst/.*/ustack/tst\.helper\.exe$
 EXEC_DATA	^platform/.*/MACH(kernel)/unix$
-EXEC_DATA	^platform/.*/multiboot$
 
 # Objects that are allowed to have an executable stack
 EXEC_STACK	^platform/.*/MACH(kernel)/unix$
-EXEC_STACK	^platform/.*/multiboot$
 EXEC_STACK	^opt/os-tests/tests/secflags/stacky$
 
 # Objects for which we allow relocations to the text segment
@@ -82,7 +79,7 @@ NODIRECT	^platform/.*/MACH(kernel)/unix$
 # Identify any files that should be skipped when building a crle(1)
 # configuration file.  As the hwcap libraries can be loop-back mounted onto
 # libc, these can confuse crle(1) because of their identical dev/inode.
-NOCRLEALT	^usr/lib/libc/libc_hwcap[1-3].so.1$
+NOCRLEALT	^usr/lib/libc/libc_hwcap[1-2].so.1$
 
 # Files that should contain debugging information.
 STAB	^platform/.*/MACH(kernel)/unix$
@@ -107,7 +104,6 @@ UNUSED_RPATH	/usr/lib/inet/ppp.*\ from\ .*pppd
 UNUSED_RPATH	/usr/sfw/lib.*\ from\ .*libipsecutil\.so\.1
 UNUSED_RPATH	/usr/platform/.*rsmlib.*\ from\ .*librsm\.so\.2
 UNUSED_RPATH	\$ORIGIN.*\ from\ .*fcode.so
-UNUSED_RPATH	/opt/VRTSvxvm/lib.*\ from\ .*libdiskmgt\.so\.1
 
 # Unused runpaths in picl code
 UNUSED_RPATH	/usr/platform/.*\ from\ .*/usr/platform
@@ -119,21 +115,12 @@ UNUSED_RPATH	/usr/lib/mps.*\ from\ .*libnss3\.so
 UNUSED_RPATH	/usr/lib/mps.*\ from\ .*libnssutil3\.so
 UNUSED_RPATH	/usr/lib/mps.*\ from\ .*libsmime3\.so
 UNUSED_RPATH	/usr/lib/mps.*\ from\ .*libssl3\.so
-UNUSED_RPATH	/usr/sfw/lib.*\ from\ .*libdbus-1\.so\.3
-UNUSED_RPATH	/usr/sfw/lib.*\ from\ .*libdbus-glib-1\.so\.2
-UNUSED_RPATH	/usr/sfw/lib.*\ from\ .*libglib-2\.0\.so\.0
 UNUSED_RPATH	/usr/X11/lib.*\ from\ .*libglib-2\.0\.so\.0
-UNUSED_RPATH	/usr/sfw/lib.*\ from\ .*libgobject-2\.0\.so\.0
 UNUSED_RPATH	/usr/X11/lib.*\ from\ .*libgobject-2\.0\.so\.0
-UNUSED_RPATH	/usr/sfw/lib.*\ from\ .*libgthread-2\.0\.so\.0
 UNUSED_RPATH	/usr/X11/lib.*\ from\ .*libgthread-2\.0\.so\.0
-UNUSED_RPATH	/usr/sfw/lib.*\ from\ .*libcrypto\.so\.0\.9\.8
-UNUSED_RPATH	/usr/sfw/lib.*\ from\ .*libnetsnmp\.so\..*
-UNUSED_RPATH	/usr/sfw/lib.*\ from\ .*libgcc_s\.so\.1
 UNUSED_RPATH	/usr/ccs/lib.*\ from\ .*libgcc_s\.so\.1
 UNUSED_RPATH	/usr/lib.*\ from\ .*libgcc_s\.so\.1
 UNUSED_RPATH	/usr/postgres/8.3/lib.*\ from\ .*libpq\.so\.5
-UNUSED_RPATH	/usr/sfw/lib.*\ from\ .*libpq\.so\.5
 UNUSED_RPATH	/usr/lib.*\ from\ .*/usr/lib/mps
 UNUSED_RPATH	/usr/ccs/lib.*\ from\ .*/usr/lib/mps
 UNUSED_RPATH	/usr/gnu/lib.*\ from\ .*/usr/lib/libpython2\..
