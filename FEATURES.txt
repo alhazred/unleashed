@@ -11,6 +11,7 @@ changed.
 --------------
  - Trusted Solaris aka. Trusted Extensions
  - SVR4 pkg support & code
+ - solaris10 zone brand
  - GRUB
  - closed source components were removed, including:
    - in.iked(1M) and related utilities

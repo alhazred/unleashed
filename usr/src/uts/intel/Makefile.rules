@@ -62,9 +62,6 @@ $(OBJS_DIR)/%.o:		$(SRC)/common/util/i386/%.s
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/brand/sn1/%.s
 	$(COMPILE.s) -o $@ $<
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/intel/brand/solaris10/%.s
-	$(COMPILE.s) -o $@ $<
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/dtrace/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

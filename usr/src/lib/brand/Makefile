@@ -30,8 +30,8 @@ include ../../Makefile.master
 # Build everything in parallel; use .WAIT for dependencies
 .PARALLEL:
 
-SUBDIRS= shared .WAIT sn1 solaris10 ipkg $($(MACH)_SUBDIRS)
-MSGSUBDIRS= solaris10 shared $($(MACH)_MSGSUBDIRS)
+SUBDIRS= shared .WAIT sn1 ipkg $($(MACH)_SUBDIRS)
+MSGSUBDIRS= shared $($(MACH)_MSGSUBDIRS)
 
 all :=		TARGET= all
 install :=	TARGET= install

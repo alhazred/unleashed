@@ -65,9 +65,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/sun4v/pcbe/%.c
 $(OBJS_DIR)/%.o:		$(UTSBASE)/sun4/brand/sn1/%.s
 	$(COMPILE.s) -o $@ $<
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/sun4/brand/solaris10/%.s
-	$(COMPILE.s) -o $@ $<
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/sun4v/promif/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

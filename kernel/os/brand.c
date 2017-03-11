@@ -648,7 +648,7 @@ brand_solaris_elfexec(vnode_t *vp, execa_t *uap, uarg_t *args,
 	/*
 	 * The following elf{32}exec call changes the execenv in the proc
 	 * struct which includes changing the p_exec member to be the vnode
-	 * for the brand library (e.g. /.SUNWnative/usr/lib/s10_brand.so.1).
+	 * for the brand library (e.g. /.native/usr/lib/foo_brand.so.1).
 	 * We will eventually set the p_exec member to be the vnode for the new
 	 * executable when we call setexecenv().  However, if we get an error
 	 * before that call we need to restore the execenv to its original
