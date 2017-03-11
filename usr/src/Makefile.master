@@ -163,7 +163,6 @@ CSTYLE=		$(ONBLD_TOOLS)/bin/cstyle
 CSTYLE_TAIL=
 HDRCHK=		$(ONBLD_TOOLS)/bin/hdrchk
 HDRCHK_TAIL=
-JSTYLE=		$(ONBLD_TOOLS)/bin/jstyle
 
 DOT_H_CHECK=	\
 	@$(ECHO) "checking $<"; $(CSTYLE) $< $(CSTYLE_TAIL); \
