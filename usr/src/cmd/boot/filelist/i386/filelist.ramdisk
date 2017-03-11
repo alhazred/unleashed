@@ -1,7 +1,6 @@
 boot/acpi/tables
 boot/solaris/bootenv.rc
 boot/solaris/devicedb/master
-etc/cluster/nodeid
 etc/dacf.conf
 etc/devices/devid_cache
 etc/devices/mdi_ib_cache
