@@ -87,7 +87,6 @@ typedef struct fs_operation_trans_def {
  * Generic operations vector types (used for vfs/vnode ops registration).
  */
 
-extern int fs_default();		/* "default" function placeholder */
 extern int fs_error();			/* "error" function placeholder */
 
 int fs_build_vector(void *vector, int *unused_ops,
