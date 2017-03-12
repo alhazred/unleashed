@@ -109,9 +109,9 @@ const fs_operation_def_t auto_vnodeops_template[] = {
 	VOPNAME_RWLOCK,		{ .vop_rwlock = auto_rwlock },
 	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = auto_rwunlock },
 	VOPNAME_SEEK,		{ .vop_seek = auto_seek },
-	VOPNAME_FRLOCK,		{ .error = fs_error },
-	VOPNAME_DISPOSE,	{ .error = fs_error },
-	VOPNAME_SHRLOCK,	{ .error = fs_error },
+	VOPNAME_FRLOCK,		{ .error = fs_nosys },
+	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
+	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
 	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
 	NULL,			NULL
 };

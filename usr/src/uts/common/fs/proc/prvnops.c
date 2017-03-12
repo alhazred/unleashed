@@ -6092,10 +6092,10 @@ const fs_operation_def_t pr_vnodeops_template[] = {
 	VOPNAME_INACTIVE,	{ .vop_inactive = prinactive },
 	VOPNAME_SEEK,		{ .vop_seek = prseek },
 	VOPNAME_CMP,		{ .vop_cmp = prcmp },
-	VOPNAME_FRLOCK,		{ .error = fs_error },
+	VOPNAME_FRLOCK,		{ .error = fs_nosys },
 	VOPNAME_REALVP,		{ .vop_realvp = prrealvp },
 	VOPNAME_POLL,		{ .vop_poll = prpoll },
-	VOPNAME_DISPOSE,	{ .error = fs_error },
-	VOPNAME_SHRLOCK,	{ .error = fs_error },
+	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
+	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
 	NULL,			NULL
 };

@@ -137,7 +137,7 @@ const fs_operation_def_t fifo_vnodeops_template[] = {
 	VOPNAME_REALVP,		{ .vop_realvp = fifo_realvp },
 	VOPNAME_POLL,		{ .vop_poll = fifo_poll },
 	VOPNAME_PATHCONF,	{ .vop_pathconf = fifo_pathconf },
-	VOPNAME_DISPOSE,	{ .error = fs_error },
+	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
 	VOPNAME_SETSECATTR,	{ .vop_setsecattr = fifo_setsecattr },
 	VOPNAME_GETSECATTR,	{ .vop_getsecattr = fifo_getsecattr },
 	NULL,			NULL

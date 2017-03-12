@@ -1884,7 +1884,7 @@ const fs_operation_def_t mnt_vnodeops_template[] = {
 	VOPNAME_SEEK,		{ .vop_seek = mntseek },
 	VOPNAME_POLL,		{ .vop_poll = mntpoll },
 	VOPNAME_CMP,		{ .vop_cmp = mntcmp },
-	VOPNAME_DISPOSE,	{ .error = fs_error },
-	VOPNAME_SHRLOCK,	{ .error = fs_error },
+	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
+	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
 	NULL,			NULL
 };

@@ -57,13 +57,13 @@ const fs_operation_def_t door_vnodeops_template[] = {
 	VOPNAME_GETATTR,	{ .vop_getattr = door_getattr },
 	VOPNAME_ACCESS,		{ .vop_access = door_access },
 	VOPNAME_INACTIVE,	{ .vop_inactive = door_inactive },
-	VOPNAME_FRLOCK,		{ .error = fs_error },
+	VOPNAME_FRLOCK,		{ .error = fs_nosys },
 	VOPNAME_REALVP,		{ .vop_realvp = door_realvp },
-	VOPNAME_POLL,		{ .error = fs_error },
-	VOPNAME_PATHCONF,	{ .error = fs_error },
-	VOPNAME_DISPOSE,	{ .error = fs_error },
-	VOPNAME_GETSECATTR,	{ .error = fs_error },
-	VOPNAME_SHRLOCK,	{ .error = fs_error },
+	VOPNAME_POLL,		{ .error = fs_nosys },
+	VOPNAME_PATHCONF,	{ .error = fs_nosys },
+	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
+	VOPNAME_GETSECATTR,	{ .error = fs_nosys },
+	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
 	NULL,			NULL
 };
 
