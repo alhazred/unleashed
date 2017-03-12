@@ -83,12 +83,6 @@ typedef struct fs_operation_trans_def {
 	fs_generic_func_p errorFunc; 	/* error function */
 } fs_operation_trans_def_t;
 
-/*
- * Generic operations vector types (used for vfs/vnode ops registration).
- */
-
-extern int fs_error();			/* "error" function placeholder */
-
 int fs_build_vector(void *vector, int *unused_ops,
     const fs_operation_trans_def_t *translation,
     const fs_operation_def_t *operations);
