@@ -937,9 +937,7 @@ struct taskq;
 	/* NB: No ";" */
 
 /*
- * Operations on vnodes.  Note: File systems must never operate directly
- * on a 'vnodeops' structure -- it WILL change in future releases!  They
- * must use vn_make_ops() to create the structure.
+ * Operations on vnodes.
  */
 typedef struct vnodeops {
 	const char *vnop_name;
@@ -1140,7 +1138,6 @@ int	vn_has_cached_data(vnode_t *);
 void	vn_setops(struct vnode *, const struct vnodeops *);
 const struct vnodeops *vn_getops(struct vnode *);
 int	vn_matchops(struct vnode *, const struct vnodeops *);
-int	vn_matchopval(vnode_t *, char *, fs_generic_func_p);
 int	vn_ismntpt(vnode_t *);
 
 struct vfs *vn_mountedvfs(vnode_t *);
@@ -1149,8 +1146,6 @@ int	vn_in_dnlc(vnode_t *);
 
 void	vn_create_cache(void);
 void	vn_destroy_cache(void);
-
-void	vn_freevnodeops(vnodeops_t *);
 
 int	vn_open(char *pnamep, enum uio_seg seg, int filemode, int createmode,
 		struct vnode **vpp, enum create crwhy, mode_t umask);

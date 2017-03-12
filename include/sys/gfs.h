@@ -44,14 +44,6 @@
 extern "C" {
 #endif
 
-typedef struct gfs_opsvec {
-	const char		*gfsv_name;	/* vnode description */
-	const fs_operation_def_t *gfsv_template; /* ops template */
-	vnodeops_t		**gfsv_ops;	/* ptr to result */
-} gfs_opsvec_t;
-
-int gfs_make_opsvec(gfs_opsvec_t *);
-
 #define	GFS_CACHE_VNODE		0x1
 
 typedef struct gfs_dirent {

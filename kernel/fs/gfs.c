@@ -112,40 +112,6 @@
  */
 
 /*
- * gfs_make_opsvec: take an array of vnode type definitions and create
- * their vnodeops_t structures
- *
- * This routine takes an array of gfs_opsvec_t's.  It could
- * alternatively take an array of gfs_opsvec_t*'s, which would allow
- * vnode types to be completely defined in files external to the caller
- * of gfs_make_opsvec().  As it stands, much more sharing takes place --
- * both the caller and the vnode type provider need to access gfsv_ops
- * and gfsv_template, and the caller also needs to know gfsv_name.
- */
-int
-gfs_make_opsvec(gfs_opsvec_t *vec)
-{
-	int error, i;
-
-	for (i = 0; ; i++) {
-		if (vec[i].gfsv_name == NULL)
-			return (0);
-		error = vn_make_ops(vec[i].gfsv_name, vec[i].gfsv_template,
-		    vec[i].gfsv_ops);
-		if (error)
-			break;
-	}
-
-	cmn_err(CE_WARN, "gfs_make_opsvec: bad vnode ops template for '%s'",
-	    vec[i].gfsv_name);
-	for (i--; i >= 0; i--) {
-		vn_freevnodeops(*vec[i].gfsv_ops);
-		*vec[i].gfsv_ops = NULL;
-	}
-	return (error);
-}
-
-/*
  * Low level directory routines
  *
  * These routines provide some simple abstractions for reading directories.

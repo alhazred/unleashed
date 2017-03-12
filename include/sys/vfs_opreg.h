@@ -44,14 +44,12 @@ typedef union fs_func {
 	fs_generic_func_p fs_generic;	/* Generic function signature */
 	int (*error)();			/* Signature of error function */
 	VFS_OPS;		/* Signatures of all vfs operations (vfsops) */
-	VNODE_OPS;		/* Signatures of all vnode operations (vops) */
 } fs_func_p;
 
 /*
  * File systems use arrays of fs_operation_def structures to form
  * name/value pairs of operations.  These arrays get passed to:
  *
- * 	- vn_make_ops() to create vnodeops
  * 	- vfs_makefsops()/vfs_setfsops() to create vfsops.
  */
 typedef struct fs_operation_def {
@@ -60,14 +58,14 @@ typedef struct fs_operation_def {
 } fs_operation_def_t;
 
 /*
- * The operation registration mechanism uses two master tables of operations:
- * one for vnode operations (vn_ops_table[]) and one for vfs operations
- * (vfs_ops_table[]).  These tables are arrays of fs_operation_trans_def
- * structures.  They contain all of the information necessary for the system
- * to populate an operations structure (e.g., vnodeops, vfsops).
+ * The operation registration mechanism uses a master table of operations:
+ * one for vfs operations (vfs_ops_table[]).  This table is an array of
+ * fs_operation_trans_def structures.  It contains all of the information
+ * necessary for the system to populate an operations structure (e.g.,
+ * vfsops).
  *
- * File systems call registration routines (vfs_setfsops(), vfs_makefsops(),
- * and vn_make_ops()) and pass in their operations specification tables
+ * File systems call registration routines (vfs_setfsops() and
+ * vfs_makefsops()) and pass in their operations specification tables
  * (arrays of fs_operation_def structures).  These routines use the master
  * table(s) of operations to build a vnodeops or vfsops structure.
  */
@@ -84,10 +82,6 @@ int fs_build_vector(void *vector, int *unused_ops,
 /*
  * Public operations.
  */
-
-int	vn_make_ops(const char *, const struct fs_operation_def *,
-		vnodeops_t **);
-void	vn_freevnodeops(vnodeops_t *);
 
 int	vfs_setfsops(int, const fs_operation_def_t *, vfsops_t **);
 int	vfs_makefsops(const fs_operation_def_t *, vfsops_t **);
