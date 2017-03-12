@@ -254,9 +254,7 @@ vnodeops_t *nfs4_trigger_vnodeops;
  *
  *
  * These VOPs we do not want to define, but nor do we want the VFS default
- * action. Instead, we specify the VFS error function, with fs_error(), but
- * note that fs_error() is not actually called. Instead it results in the
- * use of the error function defined for the particular VOP, in vn_ops_table[]:
+ * action. Instead, we specify the an error function.
  *
  * -   frlock, dispose, shrlock.
  *
@@ -294,9 +292,9 @@ const fs_operation_def_t nfs4_trigger_vnodeops_template[] = {
 	VOPNAME_REALVP,		{ .vop_realvp = nfs4_realvp },
 	VOPNAME_GETSECATTR,	{ .vop_getsecattr = nfs4_getsecattr },
 	VOPNAME_PATHCONF,	{ .vop_pathconf = nfs4_pathconf },
-	VOPNAME_FRLOCK,		{ .error = fs_error },
-	VOPNAME_DISPOSE,	{ .error = fs_error },
-	VOPNAME_SHRLOCK,	{ .error = fs_error },
+	VOPNAME_FRLOCK,		{ .error = fs_nosys },
+	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
+	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
 	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
 	NULL, NULL
 };

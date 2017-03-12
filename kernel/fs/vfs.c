@@ -4401,11 +4401,7 @@ fs_build_vector(void *vector, int *unused_ops,
 
 		if (found) {
 			result = operations[j].func.fs_generic;
-			if (result == fs_default) {
-				result = translation[i].defaultFunc;
-			} else if (result == fs_error) {
-				result = translation[i].errorFunc;
-			} else if (result == NULL) {
+			if (result == NULL) {
 				/* Null values are PROHIBITED */
 				return (EINVAL);
 			}
@@ -4423,22 +4419,6 @@ fs_build_vector(void *vector, int *unused_ops,
 
 	*unused_ops = num_ops - used;
 
-	return (0);
-}
-
-/* Placeholder functions, should never be called. */
-
-int
-fs_error(void)
-{
-	cmn_err(CE_PANIC, "fs_error called");
-	return (0);
-}
-
-int
-fs_default(void)
-{
-	cmn_err(CE_PANIC, "fs_default called");
 	return (0);
 }
 

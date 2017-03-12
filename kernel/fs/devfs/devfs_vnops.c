@@ -1146,7 +1146,7 @@ const fs_operation_def_t dv_vnodeops_template[] = {
 	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = devfs_rwunlock },
 	VOPNAME_SEEK,		{ .vop_seek = devfs_seek },
 	VOPNAME_PATHCONF,	{ .vop_pathconf = devfs_pathconf },
-	VOPNAME_DISPOSE,	{ .error = fs_error },
+	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
 	VOPNAME_SETSECATTR,	{ .vop_setsecattr = devfs_setsecattr },
 	VOPNAME_GETSECATTR,	{ .vop_getsecattr = devfs_getsecattr },
 	NULL,			NULL

@@ -327,9 +327,9 @@ static const fs_operation_def_t fd_vnodeops_template[] = {
 	VOPNAME_CREATE,		{ .vop_create = fdcreate },
 	VOPNAME_READDIR,	{ .vop_readdir = fdreaddir },
 	VOPNAME_INACTIVE,	{ .vop_inactive = fdinactive },
-	VOPNAME_FRLOCK,		{ .error = fs_error },
-	VOPNAME_POLL,		{ .error = fs_error },
-	VOPNAME_DISPOSE,	{ .error = fs_error },
+	VOPNAME_FRLOCK,		{ .error = fs_nosys },
+	VOPNAME_POLL,		{ .error = fs_nosys },
+	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
 	NULL,			NULL
 };
 

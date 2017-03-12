@@ -38,6 +38,7 @@
 #include <sys/flock.h>
 #include <sys/stat.h>
 #include <sys/share.h>
+#include <sys/fs_subr.h>
 
 #include <sys/vfs.h>
 #include <sys/vfs_opreg.h>
@@ -101,7 +102,7 @@ const fs_operation_def_t socket_vnodeops_template[] = {
 	VOPNAME_FID,		{ .vop_fid = socket_vop_fid },
 	VOPNAME_SEEK,		{ .vop_seek = socket_vop_seek },
 	VOPNAME_POLL,		{ .vop_poll = socket_vop_poll },
-	VOPNAME_DISPOSE,	{ .error = fs_error },
+	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
 	NULL,			NULL
 };
 

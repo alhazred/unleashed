@@ -55,13 +55,13 @@ const fs_operation_def_t port_vnodeops_template[] = {
 	VOPNAME_GETATTR,	{ .vop_getattr = port_getattr },
 	VOPNAME_ACCESS,		{ .vop_access = port_access },
 	VOPNAME_INACTIVE,	{ .vop_inactive = port_inactive },
-	VOPNAME_FRLOCK,		{ .error = fs_error },
+	VOPNAME_FRLOCK,		{ .error = fs_nosys },
 	VOPNAME_REALVP,		{ .vop_realvp = port_realvp },
 	VOPNAME_POLL,		{ .vop_poll = port_poll },
-	VOPNAME_PATHCONF,	{ .error = fs_error },
-	VOPNAME_DISPOSE,	{ .error = fs_error },
-	VOPNAME_GETSECATTR,	{ .error = fs_error },
-	VOPNAME_SHRLOCK,	{ .error = fs_error },
+	VOPNAME_PATHCONF,	{ .error = fs_nosys },
+	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
+	VOPNAME_GETSECATTR,	{ .error = fs_nosys },
+	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
 	NULL,			NULL
 };
 

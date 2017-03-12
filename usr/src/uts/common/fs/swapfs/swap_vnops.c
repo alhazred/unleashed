@@ -79,11 +79,11 @@ const fs_operation_def_t swap_vnodeops_template[] = {
 	VOPNAME_GETPAGE,	{ .vop_getpage = swap_getpage },
 	VOPNAME_PUTPAGE,	{ .vop_putpage = swap_putpage },
 	VOPNAME_DISPOSE,	{ .vop_dispose = swap_dispose },
-	VOPNAME_SETFL,		{ .error = fs_error },
-	VOPNAME_POLL,		{ .error = fs_error },
-	VOPNAME_PATHCONF,	{ .error = fs_error },
-	VOPNAME_GETSECATTR,	{ .error = fs_error },
-	VOPNAME_SHRLOCK,	{ .error = fs_error },
+	VOPNAME_SETFL,		{ .error = fs_nosys },
+	VOPNAME_POLL,		{ .error = fs_nosys },
+	VOPNAME_PATHCONF,	{ .error = fs_nosys },
+	VOPNAME_GETSECATTR,	{ .error = fs_nosys },
+	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
 	NULL,			NULL
 };
 
