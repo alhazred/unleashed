@@ -30,7 +30,6 @@ set name=info.classification \
     value="org.opensolaris.category.2008:Development/Distribution Tools"
 set name=org.opensolaris.noincorp value=true
 set name=variant.arch value=$(ARCH)
-depend fmri=data/docbook@0.5.11-0.133 type=require
 depend fmri=developer/astdev@0.5.11-0.133 type=require
 depend fmri=developer/build/make@0.5.11-0.133 type=require
 depend fmri=developer/build/onbld@0.5.11-0.133 type=require
