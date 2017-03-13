@@ -179,9 +179,5 @@ link path=usr/lib/locale/zz_AA.UTF-8/LC_MONETARY \
 link path=usr/lib/locale/zz_AA.UTF-8/LC_NUMERIC \
     target=../en_US.UTF-8/LC_NUMERIC
 link path=usr/lib/locale/zz_AA.UTF-8/LC_TIME target=../en_US.UTF-8/LC_TIME
-depend fmri=locale/de type=require
-depend fmri=locale/en type=require
-depend fmri=locale/en-extra type=require
-depend fmri=locale/ja type=require
-depend fmri=locale/ru type=require
+depend fmri=system/locale type=require
 depend fmri=system/test/testrunner type=require
