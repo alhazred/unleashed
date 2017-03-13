@@ -160,5 +160,4 @@ file path=opt/util-tests/tests/mergeq/wqt mode=0555
 file path=opt/util-tests/tests/printf_test mode=0555
 file path=opt/util-tests/tests/xargs_test mode=0555
 license lic_CDDL license=lic_CDDL
-depend fmri=system/library/iconv/utf-8 type=require
 depend fmri=system/test/testrunner type=require
