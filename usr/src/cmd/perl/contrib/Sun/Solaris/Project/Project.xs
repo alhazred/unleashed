@@ -12,6 +12,9 @@
 #include <project.h>
 #include <pool.h>
 #include <sys/pool_impl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <rctl.h>
 #include <stdio.h>
 
