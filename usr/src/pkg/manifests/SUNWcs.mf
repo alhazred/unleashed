@@ -389,6 +389,7 @@ file path=etc/project group=sys preserve=true
 file path=etc/rc2.d/README group=sys
 file path=etc/rc3.d/README group=sys
 file path=etc/rcS.d/README group=sys
+file path=etc/release mode=0444
 file path=etc/remote preserve=true
 file path=etc/rpc group=sys preserve=true
 file path=etc/saf/_sactab group=sys preserve=true
@@ -1728,10 +1729,6 @@ link path=usr/spool target=../var/spool
 link path=usr/tmp target=../var/tmp
 link path=var/ld/32 target=.
 link path=var/ld/64 target=$(ARCH64)
-#
-# The bootadm binary needs the etc/release file.
-#
-depend fmri=release/name type=require
 #
 # intrd and others use the illumos-defaulted perl interpreter
 #
