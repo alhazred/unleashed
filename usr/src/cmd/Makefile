@@ -452,7 +452,6 @@ i386_SUBDIRS=		\
 	lms		\
 	rtc		\
 	ucodeadm	\
-	xvm
 
 sparc_SUBDIRS=		\
 	cvcd		\
