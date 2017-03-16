@@ -2117,8 +2117,7 @@ cmdk_bbh_gethandle(opaque_t bbh_data, struct buf *bp)
 	cnt++;
 
 	/* allocate the handle */
-	hp = (struct bbh_handle *)kmem_zalloc((sizeof (*hp) +
-	    (cnt * sizeof (*ckp))), KM_SLEEP);
+	hp = kmem_zalloc((sizeof (*hp) + (cnt * sizeof (*ckp))), KM_SLEEP);
 
 	hp->h_idx = 0;
 	hp->h_totck = cnt;

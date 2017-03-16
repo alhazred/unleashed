@@ -2664,7 +2664,7 @@ sbd_handle_inquiry(struct scsi_task *task, struct stmf_data_buf *initial_dbuf)
 		int	i;
 		struct scsi_inquiry *inq;
 
-		p = (uint8_t *)kmem_zalloc(bsize, KM_SLEEP);
+		p = kmem_zalloc(bsize, KM_SLEEP);
 		inq = (struct scsi_inquiry *)p;
 
 		page_length = 69;
@@ -2772,7 +2772,7 @@ sbd_handle_inquiry(struct scsi_task *task, struct stmf_data_buf *initial_dbuf)
 		if (bsize <  cmd_size)
 			bsize = cmd_size;
 	}
-	p = (uint8_t *)kmem_zalloc(bsize, KM_SLEEP);
+	p = kmem_zalloc(bsize, KM_SLEEP);
 
 	switch (cdbp[2]) {
 	case 0x00:

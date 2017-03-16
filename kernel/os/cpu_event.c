@@ -381,7 +381,7 @@ cpu_idle_insert_callback(cpu_idle_cb_impl_t *cip)
 	 */
 	if (cpu_idle_cb_curr == cpu_idle_cb_max) {
 		cnt_new = cpu_idle_cb_max + CPU_IDLE_ARRAY_CAPACITY_INC;
-		buf_new = (char *)kmem_zalloc(cnt_new *
+		buf_new = kmem_zalloc(cnt_new *
 		    sizeof (cpu_idle_cb_item_t), KM_SLEEP);
 	}
 

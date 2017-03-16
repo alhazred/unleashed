@@ -218,7 +218,7 @@ ndi_ra_map_setup(dev_info_t *dip, char *type)
 		if (backtype == NULL) {
 			typemapp = (struct ra_type_map *)
 			    kmem_zalloc(sizeof (*typemapp), KM_SLEEP);
-			typemapp->type = (char *)kmem_zalloc(strlen(type) + 1,
+			typemapp->type = kmem_zalloc(strlen(type) + 1,
 			    KM_SLEEP);
 			(void) strcpy(typemapp->type, type);
 			RA_INSERT(&ra_map_list_head, typemapp);

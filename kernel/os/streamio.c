@@ -2656,7 +2656,7 @@ strput(struct stdata *stp, mblk_t *mctl, struct uio *uiop, ssize_t *iosize,
 
 	if (uiop->uio_iovcnt > IOV_MAX_STACK) {
 		iovlen = uiop->uio_iovcnt * sizeof (iovec_t);
-		uiod.d_iov = (struct iovec *)kmem_alloc(iovlen, KM_SLEEP);
+		uiod.d_iov = kmem_alloc(iovlen, KM_SLEEP);
 	} else {
 		uiod.d_iov = buf;
 	}

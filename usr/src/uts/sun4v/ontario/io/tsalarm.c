@@ -529,11 +529,11 @@ tsalarm_open(dev_t *devp, int flag, int otyp, cred_t *credp)
 	    KM_NOSLEEP)) == NULL) {
 		goto FAIL;
 	}
-	if ((softc->peek_area = (uint8_t *)kmem_zalloc(softc->mtu_size,
+	if ((softc->peek_area = kmem_zalloc(softc->mtu_size,
 	    KM_NOSLEEP)) == NULL) {
 		goto FAIL;
 	}
-	if ((softc->peek_read_area = (uint8_t *)kmem_zalloc(2*softc->mtu_size,
+	if ((softc->peek_read_area = kmem_zalloc(2*softc->mtu_size,
 	    KM_NOSLEEP)) == NULL) {
 		goto FAIL;
 	}
@@ -1216,7 +1216,7 @@ tsal_pcp_read(tsalarm_softc_t *sc, uint8_t *buf, int byte_cnt)
 	 * from which the stream read requests are serviced.
 	 */
 	if (sc->read_area == NULL) {
-		sc->read_area = (uint8_t *)kmem_zalloc(read_area_size,
+		sc->read_area = kmem_zalloc(read_area_size,
 		    KM_NOSLEEP);
 		if (sc->read_area == NULL) {
 			return (TSAL_PCP_ERROR);

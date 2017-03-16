@@ -1205,9 +1205,9 @@ persistent_dump_data(void)
 	iscsi_chap_props_t	*chap;
 	iscsi_auth_props_t	*auth;
 
-	name = (char *)kmem_alloc(ISCSI_MAX_NAME_LEN, KM_SLEEP);
-	addr_buf = (char *)kmem_alloc(INET6_ADDRSTRLEN, KM_SLEEP);
-	bitbuf = (char *)kmem_alloc(BITBUF_LEN, KM_SLEEP);
+	name = kmem_alloc(ISCSI_MAX_NAME_LEN, KM_SLEEP);
+	addr_buf = kmem_alloc(INET6_ADDRSTRLEN, KM_SLEEP);
+	bitbuf = kmem_alloc(BITBUF_LEN, KM_SLEEP);
 
 	rval = persistent_initiator_name_get(name, ISCSI_MAX_NAME_LEN);
 	if (rval == B_TRUE) {

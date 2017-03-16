@@ -392,8 +392,7 @@ opromioctl_cb(void *avp, int has_changed)
 #if !defined(__i386) && !defined(__amd64)
 	case OPROMLISTKEYSLEN:
 		valsize = prom_asr_list_keys_len();
-		opp = (struct openpromio *)kmem_zalloc(
-		    sizeof (uint_t) + 1, KM_SLEEP);
+		opp = kmem_zalloc(sizeof (uint_t) + 1, KM_SLEEP);
 		opp->oprom_size = valsize;
 		if (copyout(opp, (void *)arg, (sizeof (uint_t))) != 0)
 			error = EFAULT;
@@ -405,13 +404,12 @@ opromioctl_cb(void *avp, int has_changed)
 			return (EFAULT);
 		if (valsize > userbufsize)
 			return (EINVAL);
-		valbuf = (char *)kmem_zalloc(valsize + 1, KM_SLEEP);
+		valbuf = kmem_zalloc(valsize + 1, KM_SLEEP);
 		if (prom_asr_list_keys((caddr_t)valbuf) == -1) {
 			kmem_free(valbuf, valsize + 1);
 			return (EFAULT);
 		}
-		opp = (struct openpromio *)kmem_zalloc(
-		    valsize + sizeof (uint_t) + 1, KM_SLEEP);
+		opp = kmem_zalloc(valsize + sizeof (uint_t) + 1, KM_SLEEP);
 		opp->oprom_size = valsize;
 		bcopy(valbuf, opp->oprom_array, valsize);
 		if (copyout(opp, (void *)arg, (valsize + sizeof (uint_t))) != 0)
@@ -425,13 +423,12 @@ opromioctl_cb(void *avp, int has_changed)
 			return (EFAULT);
 		if (valsize > userbufsize)
 			return (EINVAL);
-		valbuf = (char *)kmem_zalloc(valsize + 1, KM_SLEEP);
+		valbuf = kmem_zalloc(valsize + 1, KM_SLEEP);
 		if (prom_asr_export((caddr_t)valbuf) == -1) {
 			kmem_free(valbuf, valsize + 1);
 			return (EFAULT);
 		}
-		opp = (struct openpromio *)kmem_zalloc(
-		    valsize + sizeof (uint_t) + 1, KM_SLEEP);
+		opp = kmem_zalloc(valsize + sizeof (uint_t) + 1, KM_SLEEP);
 		opp->oprom_size = valsize;
 		bcopy(valbuf, opp->oprom_array, valsize);
 		if (copyout(opp, (void *)arg, (valsize + sizeof (uint_t))) != 0)
@@ -441,8 +438,7 @@ opromioctl_cb(void *avp, int has_changed)
 		break;
 	case OPROMEXPORTLEN:
 		valsize = prom_asr_export_len();
-		opp = (struct openpromio *)kmem_zalloc(
-		    sizeof (uint_t) + 1, KM_SLEEP);
+		opp = kmem_zalloc(sizeof (uint_t) + 1, KM_SLEEP);
 		opp->oprom_size = valsize;
 		if (copyout(opp, (void *)arg, (sizeof (uint_t))) != 0)
 			error = EFAULT;
@@ -526,8 +522,7 @@ opromioctl_cb(void *avp, int has_changed)
 	if (userbufsize == 0 || userbufsize > OPROMMAXPARAM)
 		return (EINVAL);
 
-	opp = (struct openpromio *)kmem_zalloc(
-	    userbufsize + sizeof (uint_t) + 1, KM_SLEEP);
+	opp = kmem_zalloc(userbufsize + sizeof (uint_t) + 1, KM_SLEEP);
 
 	/*
 	 * Execute command

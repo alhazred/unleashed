@@ -202,7 +202,7 @@ char *emul64_name = "emul64";
 void
 emul64_bsd_init()
 {
-	emul64_zeros = (unsigned char *) kmem_zalloc(DEV_BSIZE, KM_SLEEP);
+	emul64_zeros = kmem_zalloc(DEV_BSIZE, KM_SLEEP);
 	mutex_init(&emul64_stats_mutex, NULL, MUTEX_DRIVER, NULL);
 	mutex_init(&emul64_yield_mutex, NULL, MUTEX_DRIVER, NULL);
 	cv_init(&emul64_yield_cv, NULL, CV_DRIVER, NULL);

@@ -254,8 +254,7 @@ smb_idpool_constructor(
 	pool->id_bit = 0x02;
 	pool->id_bit_idx = 1;
 	pool->id_idx = 0;
-	pool->id_pool = (uint8_t *)kmem_alloc((SMB_IDPOOL_MIN_SIZE / 8),
-	    KM_SLEEP);
+	pool->id_pool = kmem_alloc((SMB_IDPOOL_MIN_SIZE / 8), KM_SLEEP);
 	bzero(pool->id_pool, (SMB_IDPOOL_MIN_SIZE / 8));
 	/* -1 id made unavailable */
 	pool->id_pool[0] = 0x01;		/* id 0 made unavailable */

@@ -93,7 +93,7 @@ oplmsu_uwioctl_iplink(queue_t *uwq, mblk_t *mp)
 	 */
 
 	lpath->rbuftbl =
-	    (struct buf_tbl *)kmem_zalloc(sizeof (struct buf_tbl), KM_NOSLEEP);
+	    kmem_zalloc(sizeof (struct buf_tbl), KM_NOSLEEP);
 	if (lpath->rbuftbl == NULL) {
 		rw_exit(&oplmsu_uinst->lock);
 		kmem_free(lpath, sizeof (lpath_t));

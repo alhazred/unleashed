@@ -2973,7 +2973,7 @@ emlxs_fca_ub_alloc(opaque_t fca_port_handle, uint64_t tokens[], uint32_t size,
 		ub_priv->cmd = 0;
 
 		/* Allocate the actual buffer */
-		ubp->ub_buffer = (caddr_t)kmem_zalloc(size, KM_SLEEP);
+		ubp->ub_buffer = kmem_zalloc(size, KM_SLEEP);
 
 
 		tokens[i] = (uint64_t)((unsigned long)ubp);

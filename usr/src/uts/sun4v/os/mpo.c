@@ -1482,7 +1482,7 @@ mblock_alloc(mpo_config_t *mc, update_t utype, int nmblocks)
 	 */
 
 	if (utype == U_ADD || utype == U_DEL) {
-		mb = (struct mblock_md *)kmem_zalloc(allocsz, KM_SLEEP);
+		mb = kmem_zalloc(allocsz, KM_SLEEP);
 		ms = (mem_stripe_t *)(mb + nmblocks);
 		mc->mc_alloc_sz = allocsz;
 	} else if (nmblocks <= SMALL_MBLOCKS_COUNT) {

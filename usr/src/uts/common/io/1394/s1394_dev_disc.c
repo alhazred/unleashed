@@ -470,7 +470,7 @@ s1394_alloc_cfgrom(s1394_hal_t *hal, s1394_node_t *node, s1394_status_t *status)
 	    CFGROM_GEN_CHANGED(node) == B_TRUE));
 
 	s1394_unlock_tree(hal);
-	cfgrom = (uint32_t *)kmem_zalloc(IEEE1394_CONFIG_ROM_SZ, KM_SLEEP);
+	cfgrom = kmem_zalloc(IEEE1394_CONFIG_ROM_SZ, KM_SLEEP);
 	if (s1394_lock_tree(hal) != DDI_SUCCESS) {
 		kmem_free(cfgrom, IEEE1394_CONFIG_ROM_SZ);
 		*status |= S1394_LOCK_FAILED;

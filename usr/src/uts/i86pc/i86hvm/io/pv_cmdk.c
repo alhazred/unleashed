@@ -280,7 +280,7 @@ xdfs_devid_fabricate(xdfs_state_t *xsp)
 		return (DDI_FAILURE);
 
 	/* allocate a buffer */
-	dkdevidp = (struct dk_devid *)kmem_zalloc(NBPSCTR, KM_SLEEP);
+	dkdevidp = kmem_zalloc(NBPSCTR, KM_SLEEP);
 
 	/* Fill in the revision */
 	dkdevidp->dkd_rev_hi = DK_DEVID_REV_MSB;
@@ -632,7 +632,7 @@ xdfs_c_bb_check(xdfs_state_t *xsp)
 		return (B_FALSE); /* no V_ALTSCTR slice defined */
 
 	/* read in ALTS label block */
-	ap = (struct alts_parttbl *)kmem_zalloc(NBPSCTR, KM_SLEEP);
+	ap = kmem_zalloc(NBPSCTR, KM_SLEEP);
 	if (xdfs_lb_rdwr(xsp->xdfss_dip, TG_READ, ap, blk, NBPSCTR, NULL) != 0)
 		goto err;
 

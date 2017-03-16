@@ -3257,8 +3257,7 @@ fdstart(struct fdctlr *fdc)
 				    ch->fdc_sec_size;
 				if (len < tlen) {
 					partial_read = 1;
-					temp_addr = (caddr_t)kmem_alloc(tlen,
-					    KM_SLEEP);
+					temp_addr = kmem_alloc(tlen, KM_SLEEP);
 				}
 
 			} else if (fdc->c_fdtype & FDCTYPE_TCBUG) {

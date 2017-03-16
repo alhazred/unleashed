@@ -553,7 +553,7 @@ oplmsu_open(queue_t *urq, dev_t *dev, int oflag, int sflag, cred_t *cred_p)
 	ctrl->sleep_flag = CV_WAKEUP;
 	ctrl->node_type = node_flag;
 	ctrl->wbuftbl =
-	    (struct buf_tbl *)kmem_zalloc(sizeof (struct buf_tbl), KM_SLEEP);
+	    kmem_zalloc(sizeof (struct buf_tbl), KM_SLEEP);
 	cv_init(&ctrl->cvp, "oplmsu ctrl_tbl condvar", CV_DRIVER, NULL);
 
 	mutex_enter(&oplmsu_uinst->c_lock);
@@ -1281,7 +1281,7 @@ oplmsu_dr_attach(dev_info_t *dip)
 		    "Failed to start the path. errno = %d", rval);
 
 		len = sizeof (struct msu_path) + sizeof (struct msu_dev);
-		mpath = (struct msu_path *)kmem_zalloc((size_t)len, KM_SLEEP);
+		mpath = kmem_zalloc((size_t)len, KM_SLEEP);
 		mpath->num = 1;
 		mdev = (struct msu_dev *)(mpath + 1);
 		mdev->dip = dip;
@@ -1413,7 +1413,7 @@ oplmsu_dr_detach(dev_info_t *dip)
 	ldi_ident_release(msu_li);
 
 	len = sizeof (struct msu_path) + sizeof (struct msu_dev);
-	mpath = (struct msu_path *)kmem_zalloc((size_t)len, KM_SLEEP);
+	mpath = kmem_zalloc((size_t)len, KM_SLEEP);
 	mpath->num = 1;
 	mdev = (struct msu_dev *)(mpath + 1);
 	mdev->dip = dip;
@@ -1580,7 +1580,7 @@ oplmsu_conf_stream(uinst_t *msu_uinst)
 	}
 
 	size = (sizeof (struct msu_path) + (sizeof (struct msu_dev) * devcnt));
-	mpath = (struct msu_path *)kmem_zalloc((size_t)size, KM_SLEEP);
+	mpath = kmem_zalloc((size_t)size, KM_SLEEP);
 	plink_id = (int *)kmem_zalloc((sizeof (int) * devcnt), KM_SLEEP);
 
 	mdev = (struct msu_dev *)(mpath + 1);

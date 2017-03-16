@@ -1265,9 +1265,7 @@ rdsv3_ib_alloc_hdrs(ib_device_t *dev, struct rdsv3_ib_connection *ic)
 		return (-1);
 	}
 
-	ic->i_mr =
-	    (struct rdsv3_hdrs_mr *)kmem_alloc(sizeof (struct rdsv3_hdrs_mr),
-	    KM_SLEEP);
+	ic->i_mr = kmem_alloc(sizeof (struct rdsv3_hdrs_mr), KM_SLEEP);
 	ic->i_mr->addr = addr;
 	ic->i_mr->size = size;
 	ic->i_mr->hdl =	mr_hdl;

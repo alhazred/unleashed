@@ -16116,8 +16116,7 @@ st_get_contig_mem(struct scsi_tape *un, size_t len, int alloc_flags)
 		 * alloc one more contig_mem for this I/O
 		 */
 		mutex_exit(ST_MUTEX);
-		cp = (struct contig_mem *)kmem_zalloc(
-		    sizeof (struct contig_mem) + biosize(),
+		cp = kmem_zalloc(sizeof (struct contig_mem) + biosize(),
 		    alloc_flags);
 		if (cp == NULL) {
 			ST_DEBUG2(ST_DEVINFO, st_label, SCSI_DEBUG,

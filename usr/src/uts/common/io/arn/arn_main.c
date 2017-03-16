@@ -458,7 +458,7 @@ arn_desc_alloc(dev_info_t *devinfo, struct arn_softc *sc)
 #else
 	sc->sc_vbuflen = sizeof (struct ath_buf) * (ATH_TXBUF + ATH_RXBUF);
 #endif
-	bf = (struct ath_buf *)kmem_zalloc(sc->sc_vbuflen, KM_SLEEP);
+	bf = kmem_zalloc(sc->sc_vbuflen, KM_SLEEP);
 	sc->sc_vbufptr = bf;
 
 	/* DMA buffer size for each TX/RX packet */

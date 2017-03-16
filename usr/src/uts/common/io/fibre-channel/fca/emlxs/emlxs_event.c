@@ -365,7 +365,7 @@ emlxs_log_rscn_event(emlxs_port_t *port, uint8_t *payload, uint32_t size)
 	size += sizeof (uint32_t);
 
 	/* Save a copy of the payload for the event log */
-	if (!(bp = (uint8_t *)kmem_alloc(size, KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s: Unable to allocate buffer.", emlxs_rscn_event.label);
 
@@ -406,7 +406,7 @@ emlxs_log_vportrscn_event(emlxs_port_t *port, uint8_t *payload, uint32_t size)
 	size += sizeof (NAME_TYPE);
 
 	/* Save a copy of the payload for the event log */
-	if (!(bp = (uint8_t *)kmem_alloc(size, KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s: Unable to allocate buffer.",
 		    emlxs_vportrscn_event.label);
@@ -486,7 +486,7 @@ emlxs_log_ct_event(emlxs_port_t *port, uint8_t *payload, uint32_t size,
 	size += sizeof (uint32_t);
 
 	/* Save a copy of the payload for the event log */
-	if (!(bp = (uint8_t *)kmem_alloc(size, KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s: Unable to allocate buffer.", emlxs_ct_event.label);
 
@@ -551,7 +551,7 @@ emlxs_log_link_event(emlxs_port_t *port)
 	size = sizeof (dfc_linkinfo_t) + sizeof (uint32_t);
 
 	/* Save a copy of the buffer for the event log */
-	if (!(bp = (uint8_t *)kmem_alloc(size, KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s: Unable to allocate buffer.", emlxs_link_event.label);
 
@@ -671,7 +671,7 @@ emlxs_log_dump_event(emlxs_port_t *port, uint8_t *buffer, uint32_t size)
 
 	if (buffer && size) {
 		/* Save a copy of the buffer for the event log */
-		if (!(bp = (uint8_t *)kmem_alloc(size, KM_NOSLEEP))) {
+		if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 			EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 			    "%s: Unable to allocate buffer.",
 			    emlxs_dump_event.label);
@@ -710,7 +710,7 @@ emlxs_log_temp_event(emlxs_port_t *port, uint32_t type, uint32_t temp)
 
 	size = 2 * sizeof (uint32_t);
 
-	if (!(bp = (uint32_t *)kmem_alloc(size, KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s: Unable to allocate buffer.", emlxs_temp_event.label);
 
@@ -747,7 +747,7 @@ emlxs_log_fcoe_event(emlxs_port_t *port, menlo_init_rsp_t *init_rsp)
 
 	size = sizeof (menlo_init_rsp_t);
 
-	if (!(bp = (uint8_t *)kmem_alloc(size, KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s: Unable to allocate buffer.", emlxs_fcoe_event.label);
 
@@ -776,7 +776,7 @@ emlxs_log_async_event(emlxs_port_t *port, IOCB *iocb)
 	/* ASYNC_STATUS_CN response size */
 	size = 64;
 
-	if (!(bp = (uint8_t *)kmem_alloc(size, KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s: Unable to allocate buffer.", emlxs_async_event.label);
 
@@ -1113,7 +1113,7 @@ emlxs_log_sd_basic_els_event(emlxs_port_t *port, uint32_t subcat,
 
 	size = sizeof (struct sd_plogi_rcv_v0);
 
-	if (!(bp = (struct sd_plogi_rcv_v0 *)kmem_alloc(size, KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s: Unable to allocate buffer.", emlxs_sd_els_event.label);
 
@@ -1150,8 +1150,7 @@ emlxs_log_sd_prlo_event(emlxs_port_t *port, HBA_WWN *remoteport)
 
 	size = sizeof (struct sd_prlo_rcv_v0);
 
-	if (!(bp = (struct sd_prlo_rcv_v0 *)kmem_alloc(size,
-	    KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s PRLO: Unable to allocate buffer.",
 		    emlxs_sd_els_event.label);
@@ -1188,8 +1187,7 @@ emlxs_log_sd_lsrjt_event(emlxs_port_t *port, HBA_WWN *remoteport,
 
 	size = sizeof (struct sd_lsrjt_rcv_v0);
 
-	if (!(bp = (struct sd_lsrjt_rcv_v0 *)kmem_alloc(size,
-	    KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s LSRJT: Unable to allocate buffer.",
 		    emlxs_sd_els_event.label);
@@ -1228,8 +1226,7 @@ emlxs_log_sd_fc_bsy_event(emlxs_port_t *port, HBA_WWN *remoteport)
 
 	size = sizeof (struct sd_pbsy_rcv_v0);
 
-	if (!(bp = (struct sd_pbsy_rcv_v0 *)kmem_alloc(size,
-	    KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s BSY: Unable to allocate buffer.",
 		    emlxs_sd_fabric_event.label);
@@ -1271,8 +1268,7 @@ emlxs_log_sd_fc_rdchk_event(emlxs_port_t *port, HBA_WWN *remoteport,
 
 	size = sizeof (struct sd_fcprdchkerr_v0);
 
-	if (!(bp = (struct sd_fcprdchkerr_v0 *)kmem_alloc(size,
-	    KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s RDCHK: Unable to allocate buffer.",
 		    emlxs_sd_fabric_event.label);
@@ -1312,8 +1308,7 @@ emlxs_log_sd_scsi_event(emlxs_port_t *port, uint32_t type,
 
 	size = sizeof (struct sd_scsi_generic_v0);
 
-	if (!(bp = (struct sd_scsi_generic_v0 *)kmem_alloc(size,
-	    KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s: Unable to allocate buffer.",
 		    emlxs_sd_scsi_event.label);
@@ -1352,8 +1347,7 @@ emlxs_log_sd_scsi_check_event(emlxs_port_t *port, HBA_WWN *remoteport,
 
 	size = sizeof (struct sd_scsi_checkcond_v0);
 
-	if (!(bp = (struct sd_scsi_checkcond_v0 *)kmem_alloc(size,
-	    KM_NOSLEEP))) {
+	if (!(bp = kmem_alloc(size, KM_NOSLEEP))) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_event_debug_msg,
 		    "%s CHECK: Unable to allocate buffer.",
 		    emlxs_sd_scsi_event.label);

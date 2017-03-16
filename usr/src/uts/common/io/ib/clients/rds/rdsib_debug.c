@@ -93,7 +93,7 @@ rds_logging_initialization()
 	rds_debug_buf_size = max(RDS_MIN_DEBUG_BUF_SIZE,
 	    rds_debug_buf_size);
 
-	rds_debug_buf = (char *)kmem_alloc(rds_debug_buf_size, KM_SLEEP);
+	rds_debug_buf = kmem_alloc(rds_debug_buf_size, KM_SLEEP);
 	rds_clear_print_buf();
 	mutex_exit(&rds_debug_mutex);
 

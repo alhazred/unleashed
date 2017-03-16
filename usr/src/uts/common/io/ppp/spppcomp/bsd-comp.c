@@ -412,7 +412,7 @@ bsd_alloc(uchar_t *options, int opt_len, int decomp)
 	ilen = newlen = sizeof (*db) + (hsize-1) * sizeof (db->dict[0]);
 	if (decomp)
 		newlen += (maxmaxcode+1) * sizeof (db->lens[0]);
-	db = (struct bsd_db *)kmem_alloc(newlen, KM_NOSLEEP);
+	db = kmem_alloc(newlen, KM_NOSLEEP);
 	if (!db) {
 		return (NULL);
 	}

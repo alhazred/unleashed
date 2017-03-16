@@ -1691,7 +1691,7 @@ amd8111s_attach(dev_info_t *devinfo, ddi_attach_cmd_t cmd)
 	pLayerPointers->instance = ddi_get_instance(devinfo);
 	ddi_set_driver_private(devinfo, (caddr_t)pLayerPointers);
 
-	pOdl = (struct odl *)kmem_zalloc(sizeof (struct odl), KM_SLEEP);
+	pOdl = kmem_zalloc(sizeof (struct odl), KM_SLEEP);
 	pLayerPointers->pOdl = pOdl;
 
 	pOdl->devinfo = devinfo;

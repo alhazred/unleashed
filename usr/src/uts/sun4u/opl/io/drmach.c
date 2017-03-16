@@ -2943,7 +2943,7 @@ opl_check_dr_status()
 		return (1);
 	}
 
-	str = (char *)kmem_zalloc(len+1, KM_SLEEP);
+	str = kmem_zalloc(len+1, KM_SLEEP);
 	rtn = prom_getprop(node, OPL_DR_STATUS_PROP, str);
 	kmem_free(str, len + 1);
 	if (rtn == -1) {

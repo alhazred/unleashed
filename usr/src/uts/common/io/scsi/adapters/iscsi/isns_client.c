@@ -2726,7 +2726,7 @@ isns_process_scn(isns_pdu_t *scn_pdu_p, uint8_t *lhba_handle)
 	data_p = scn_pdu_p->payload;
 	done_b = B_FALSE;
 	total_payload_len = 0;
-	src_attr = (uint8_t *)kmem_zalloc(ISCSI_MAX_NAME_LEN, KM_SLEEP);
+	src_attr = kmem_zalloc(ISCSI_MAX_NAME_LEN, KM_SLEEP);
 	/*
 	 * Section 5.6.5.8 states an SCN can have more than one
 	 * source attribute.  Process all attributes until we

@@ -615,7 +615,7 @@ hermon_ioctl_flash_init(hermon_state_t *state, dev_t dev, intptr_t arg,
 	init_info.af_fwrev.afi_sub	= state->hs_fw.fw_rev_subminor;
 
 	/* Alloc flash mem for one sector size */
-	state->hs_fw_sector = (uint32_t *)kmem_zalloc(1 <<
+	state->hs_fw_sector = kmem_zalloc(1 <<
 	    state->hs_fw_log_sector_sz, KM_SLEEP);
 
 	/* Set HW part number and length */

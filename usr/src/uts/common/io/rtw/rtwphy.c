@@ -446,7 +446,7 @@ rtw_sa2400_create(struct rtw_regs *regs, rtw_rf_write_t rf_write, int digphy)
 	struct rtw_rf *rf;
 	struct rtw_bbpset *bb;
 
-	sa = (struct rtw_sa2400 *)kmem_zalloc(sizeof (*sa), KM_SLEEP);
+	sa = kmem_zalloc(sizeof (*sa), KM_SLEEP);
 	if (sa == NULL)
 		return (NULL);
 
@@ -594,7 +594,7 @@ rtw_max2820_create(struct rtw_regs *regs, rtw_rf_write_t rf_write, int is_a)
 	struct rtw_rf *rf;
 	struct rtw_bbpset *bb;
 
-	mx = (struct rtw_max2820 *)kmem_zalloc(sizeof (*mx), KM_SLEEP);
+	mx = kmem_zalloc(sizeof (*mx), KM_SLEEP);
 	if (mx == NULL)
 		return (NULL);
 

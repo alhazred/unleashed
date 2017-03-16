@@ -3896,7 +3896,7 @@ iscsi_ioctl(dev_t dev, int cmd, intptr_t arg, int mode,
 		 * kernel space and copyin caller memory.
 		 */
 		if (iu.iu_ucmd.uscsi_buflen > 0) {
-			iu.iu_ucmd.uscsi_bufaddr = (caddr_t)kmem_alloc(
+			iu.iu_ucmd.uscsi_bufaddr = kmem_alloc(
 			    iu.iu_ucmd.uscsi_buflen, KM_SLEEP);
 			if (ddi_copyin(iu_caller.iu_ucmd.uscsi_bufaddr,
 			    iu.iu_ucmd.uscsi_bufaddr,
@@ -3912,7 +3912,7 @@ iscsi_ioctl(dev_t dev, int cmd, intptr_t arg, int mode,
 		 * kernel space and copyin caller memory.
 		 */
 		if (iu.iu_ucmd.uscsi_cdblen > 0) {
-			iu.iu_ucmd.uscsi_cdb = (caddr_t)kmem_alloc(
+			iu.iu_ucmd.uscsi_cdb = kmem_alloc(
 			    iu_caller.iu_ucmd.uscsi_cdblen, KM_SLEEP);
 			if (ddi_copyin(iu_caller.iu_ucmd.uscsi_cdb,
 			    iu.iu_ucmd.uscsi_cdb,
@@ -3932,7 +3932,7 @@ iscsi_ioctl(dev_t dev, int cmd, intptr_t arg, int mode,
 		 * duplicate kernel space.  No need to copyin.
 		 */
 		if (iu.iu_ucmd.uscsi_rqlen > 0) {
-			iu.iu_ucmd.uscsi_rqbuf = (caddr_t)kmem_alloc(
+			iu.iu_ucmd.uscsi_rqbuf = kmem_alloc(
 			    iu.iu_ucmd.uscsi_rqlen, KM_SLEEP);
 		}
 

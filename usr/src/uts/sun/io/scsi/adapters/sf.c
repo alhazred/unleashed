@@ -3014,15 +3014,14 @@ sf_els_alloc(struct sf *sf, uchar_t dest_id, int priv_size, int cmd_size,
 	caddr_t			cmd = NULL;
 	caddr_t			rsp = NULL;
 
-	if ((fpkt = (struct fcal_packet *)kmem_zalloc(
+	if ((fpkt = kmem_zalloc(
 	    sizeof (struct fcal_packet), KM_NOSLEEP)) == NULL) {
 		SF_DEBUG(1, (sf, CE_WARN,
 			"Could not allocate fcal_packet for ELS\n"));
 		return (NULL);
 	}
 
-	if ((privp = (struct sf_els_hdr *)kmem_zalloc(priv_size,
-	    KM_NOSLEEP)) == NULL) {
+	if ((privp = kmem_zalloc(priv_size, KM_NOSLEEP)) == NULL) {
 		SF_DEBUG(1, (sf, CE_WARN,
 		    "Could not allocate sf_els_hdr for ELS\n"));
 		goto fail;

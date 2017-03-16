@@ -225,14 +225,12 @@ tem_internal_init(struct tem_vt_state *ptem, cred_t *credp,
 	}
 
 	ptem->tvs_outbuf_size = tems.ts_c_dimension.width;
-	ptem->tvs_outbuf =
-	    (unsigned char *)kmem_alloc(ptem->tvs_outbuf_size, KM_SLEEP);
+	ptem->tvs_outbuf = kmem_alloc(ptem->tvs_outbuf_size, KM_SLEEP);
 
 	width = tems.ts_c_dimension.width;
 	height = tems.ts_c_dimension.height;
 	ptem->tvs_screen_buf_size = width * height;
-	ptem->tvs_screen_buf =
-	    (unsigned char *)kmem_alloc(width * height, KM_SLEEP);
+	ptem->tvs_screen_buf = kmem_alloc(width * height, KM_SLEEP);
 
 	total = width * height * tc_size;
 	ptem->tvs_fg_buf = (text_color_t *)kmem_alloc(total, KM_SLEEP);

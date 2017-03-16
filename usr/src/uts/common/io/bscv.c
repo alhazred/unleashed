@@ -4326,7 +4326,7 @@ bscv_prog(bscv_soft_state_t *ssp, intptr_t arg, int mode)
 		}
 	} else {
 		if (ssp->image == NULL) {
-			ssp->image = (uint8_t *)kmem_zalloc(
+			ssp->image = kmem_zalloc(
 			    BSC_IMAGE_MAX_SIZE, KM_SLEEP);
 		}
 		res = bscv_prog_receive_image(ssp, prog,

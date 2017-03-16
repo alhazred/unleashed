@@ -328,7 +328,7 @@ tryagain:
 		 * deadlock if all users of memory have to do a ud_iget()
 		 * before releasing memory.
 		 */
-		ip = (struct ud_inode *)kmem_zalloc(sizeof (struct ud_inode),
+		ip = kmem_zalloc(sizeof (struct ud_inode),
 		    KM_NOSLEEP);
 		vp = vn_alloc(KM_NOSLEEP);
 		if ((ip == NULL) || (vp == NULL)) {
@@ -730,7 +730,7 @@ end_4096:
 		    SWAP_32(fe->fe_len_adesc) / sizeof (struct short_ad);
 		ip->i_ext_count =
 		    ((ip->i_ext_count / EXT_PER_MALLOC) + 1) * EXT_PER_MALLOC;
-		ip->i_ext = (struct icb_ext  *)kmem_zalloc(ip->i_ext_count *
+		ip->i_ext = kmem_zalloc(ip->i_ext_count *
 		    sizeof (struct icb_ext), KM_SLEEP);
 		ip->i_cur_max_ext = ip->i_max_emb / sizeof (struct short_ad);
 		ip->i_cur_max_ext --;
@@ -792,7 +792,7 @@ end_4096:
 		    SWAP_32(fe->fe_len_adesc) / sizeof (struct long_ad);
 		ip->i_ext_count =
 		    ((ip->i_ext_count / EXT_PER_MALLOC) + 1) * EXT_PER_MALLOC;
-		ip->i_ext = (struct icb_ext  *)kmem_zalloc(ip->i_ext_count *
+		ip->i_ext = kmem_zalloc(ip->i_ext_count *
 		    sizeof (struct icb_ext), KM_SLEEP);
 
 		ip->i_cur_max_ext = ip->i_max_emb / sizeof (struct long_ad);

@@ -1131,7 +1131,7 @@ plat_send_ecc_mailbox_msg(plat_ecc_message_type_t msg_type, void *datap)
 	msgp->ecc_req.msg_status = 0;
 	msgp->ecc_req.msg_len = (int)msg_size;
 	msgp->ecc_req.msg_bytes = 0;
-	msgp->ecc_req.msg_buf = (caddr_t)kmem_zalloc(msg_size, sleep_flag);
+	msgp->ecc_req.msg_buf = kmem_zalloc(msg_size, sleep_flag);
 	msgp->ecc_req.msg_data[0] = 0;
 	msgp->ecc_req.msg_data[1] = 0;
 
@@ -1173,7 +1173,7 @@ plat_send_ecc_mailbox_msg(plat_ecc_message_type_t msg_type, void *datap)
 		 * the mailbox msg
 		 */
 		msgp->ecc_resp.msg_len = (int)msg_size;
-		msgp->ecc_resp.msg_buf = (caddr_t)kmem_zalloc(msg_size,
+		msgp->ecc_resp.msg_buf = kmem_zalloc(msg_size,
 		    sleep_flag);
 		/* FALLTHRU */
 
@@ -1183,7 +1183,7 @@ plat_send_ecc_mailbox_msg(plat_ecc_message_type_t msg_type, void *datap)
 
 	case PLAT_ECC_DIMM_SID_MESSAGE:
 		msgp->ecc_resp.msg_len = sizeof (plat_dimm_sid_board_data_t);
-		msgp->ecc_resp.msg_buf = (caddr_t)kmem_zalloc(
+		msgp->ecc_resp.msg_buf = kmem_zalloc(
 		    sizeof (plat_dimm_sid_board_data_t), sleep_flag);
 		return ((*sg_ecc_mbox_func)(msgp));
 

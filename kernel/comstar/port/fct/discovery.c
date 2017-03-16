@@ -1220,7 +1220,7 @@ fct_send_accrjt(fct_cmd_t *cmd, uint8_t accrjt, uint8_t reason, uint8_t expl)
 	fct_els_t *els = (fct_els_t *)cmd->cmd_specific;
 
 	els->els_resp_size = els->els_resp_alloc_size = 8;
-	els->els_resp_payload = (uint8_t *)kmem_zalloc(8, KM_SLEEP);
+	els->els_resp_payload = kmem_zalloc(8, KM_SLEEP);
 	els->els_resp_payload[0] = accrjt;
 	if (accrjt == 1) {
 		els->els_resp_payload[5] = reason;
@@ -1449,7 +1449,7 @@ fct_process_plogi(fct_i_cmd_t *icmd)
 
 	if (cmd->cmd_type == FCT_CMD_RCVD_ELS) {
 		els->els_resp_size = els->els_req_size;
-		p = els->els_resp_payload = (uint8_t *)kmem_zalloc(
+		p = els->els_resp_payload = kmem_zalloc(
 		    els->els_resp_size, KM_SLEEP);
 		els->els_resp_alloc_size = els->els_resp_size;
 		bcopy(els->els_req_payload, p, els->els_resp_size);
@@ -1678,7 +1678,7 @@ fct_process_prli(fct_i_cmd_t *icmd)
 		ret = fct_send_accrjt(cmd, ELS_OP_LSRJT, 3, 0);
 	} else {
 		/* accept PRLI */
-		els->els_resp_payload = (uint8_t *)kmem_zalloc(20, KM_SLEEP);
+		els->els_resp_payload = kmem_zalloc(20, KM_SLEEP);
 		bcopy(fct_prli_temp, els->els_resp_payload, 20);
 		els->els_resp_payload[0] = 2;
 		els->els_resp_payload[6] = 0x21;
@@ -1923,7 +1923,7 @@ fct_process_rcvd_adisc(fct_i_cmd_t *icmd)
 	} else {
 		rp->rp_hard_address = BE_32(q[1]);
 		els->els_resp_size = els->els_resp_alloc_size = 28;
-		els->els_resp_payload = (uint8_t *)kmem_zalloc(28, KM_SLEEP);
+		els->els_resp_payload = kmem_zalloc(28, KM_SLEEP);
 		bcopy(p, els->els_resp_payload, 28);
 		p = els->els_resp_payload;
 		q = (uint32_t *)p;

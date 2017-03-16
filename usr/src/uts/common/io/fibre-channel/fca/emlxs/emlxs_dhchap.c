@@ -2964,8 +2964,7 @@ uint32_t evt)
 		/* Collect the DH Value */
 		tmp += sizeof (uint32_t);
 
-		dhval = (uint8_t *)kmem_zalloc(LE_SWAP32(dhvallen),
-		    KM_NOSLEEP);
+		dhval = kmem_zalloc(LE_SWAP32(dhvallen), KM_NOSLEEP);
 		if (dhval == NULL) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_fcsp_error_msg,
 		    "rcv_auth_msg_auth_negotiate_cmpl_wait4next: 0x%x %x %x",
@@ -5072,8 +5071,7 @@ emlxs_hash_vrf(
 
 			MD5Final((uint8_t *)md5_digest, &mdctx);
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				return (NULL);
 			} else {
@@ -5105,8 +5103,7 @@ emlxs_hash_vrf(
 			 * output);
 			 */
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				return (NULL);
 			} else {
@@ -5156,8 +5153,7 @@ emlxs_hash_vrf(
 
 			MD5Final((void *)md5_digest, &mdctx);
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				return (NULL);
 			} else {
@@ -5198,8 +5194,7 @@ emlxs_hash_vrf(
 
 			SHA1Final((void *)sha1_digest, &sha1ctx);
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				return (NULL);
 			} else {
@@ -5287,8 +5282,7 @@ uint32_t dhvallen)
 
 			MD5Final((uint8_t *)md5_digest, &mdctx);
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				return (NULL);
 			} else {
@@ -5322,8 +5316,7 @@ uint32_t dhvallen)
 			 * output);
 			 */
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				return (NULL);
 			} else {
@@ -5373,8 +5366,7 @@ uint32_t dhvallen)
 
 			MD5Final((uint8_t *)md5_digest, &mdctx);
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				return (NULL);
 			} else {
@@ -5397,8 +5389,7 @@ uint32_t dhvallen)
 
 			SHA1Final((void *)sha1_digest, &sha1ctx);
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				return (NULL);
 			} else {
@@ -6276,8 +6267,7 @@ emlxs_hash_verification(
 
 			MD5Final((uint8_t *)md5_digest, &mdctx);
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_fcsp_error_msg,
 				    "hash_verification: alloc failed");
@@ -6313,8 +6303,7 @@ emlxs_hash_verification(
 			}
 
 			SHA1Final((void *)sha1_digest, &sha1ctx);
-			hash_val = (uint32_t *)kmem_zalloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_zalloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_fcsp_error_msg,
 				    "hash_verification: alloc failed");
@@ -6409,8 +6398,7 @@ emlxs_hash_verification(
 			MD5Update(&mdctx, (unsigned char *)Cai, MD5_LEN);
 			MD5Final((uint8_t *)md5_digest, &mdctx);
 
-			hash_val = (uint32_t *)kmem_zalloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_zalloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_fcsp_error_msg,
 				    "hash_vf: alloc failed(Non-NULL dh)");
@@ -6439,7 +6427,7 @@ emlxs_hash_verification(
 			SHA1Update(&sha1ctx, (void *)Cai, SHA1_LEN);
 			SHA1Final((void *)sha1_digest, &sha1ctx);
 
-			hash_val = (uint32_t *)kmem_zalloc(hash_size,
+			hash_val = kmem_zalloc(hash_size,
 			    KM_NOSLEEP);
 			if (hash_val == NULL) {
 			EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_fcsp_error_msg,
@@ -6563,8 +6551,7 @@ emlxs_hash_get_R2(
 
 			MD5Final((uint8_t *)md5_digest, &mdctx);
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				return (NULL);
 			} else {
@@ -6588,8 +6575,7 @@ emlxs_hash_get_R2(
 
 			SHA1Update(&sha1ctx, (void *)bi_cval, SHA1_LEN);
 			SHA1Final((void *)sha1_digest, &sha1ctx);
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 				return (NULL);
 			} else {
@@ -6665,8 +6651,7 @@ emlxs_hash_get_R2(
 			MD5Update(&mdctx, (unsigned char *)Cai, MD5_LEN);
 			MD5Final((uint8_t *)md5_digest, &mdctx);
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 			EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_fcsp_error_msg,
 			    "hash_get_R2: hash_val MD5 alloc failed.");
@@ -6695,8 +6680,7 @@ emlxs_hash_get_R2(
 			SHA1Update(&sha1ctx, (void *)Cai, SHA1_LEN);
 			SHA1Final((void *)sha1_digest, &sha1ctx);
 
-			hash_val = (uint32_t *)kmem_alloc(hash_size,
-			    KM_NOSLEEP);
+			hash_val = kmem_alloc(hash_size, KM_NOSLEEP);
 			if (hash_val == NULL) {
 			EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_fcsp_error_msg,
 			    "hash_get_R2: hash_val SHA1 alloc failed.");
@@ -6740,7 +6724,7 @@ emlxs_log_auth_event(
 		info = tmp;
 	}
 	bcopy((void *) &auth_cfg->local_entity, (void *)lwwn, 8);
-	lwwn_str = (char *)kmem_zalloc(32, KM_NOSLEEP);
+	lwwn_str = kmem_zalloc(32, KM_NOSLEEP);
 	if (lwwn_str == NULL) {
 		return;
 	}
@@ -6749,7 +6733,7 @@ emlxs_log_auth_event(
 	    lwwn[7]);
 
 	bcopy((void *)&auth_cfg->remote_entity, (void *)rwwn, 8);
-	rwwn_str = (char *)kmem_zalloc(32, KM_NOSLEEP);
+	rwwn_str = kmem_zalloc(32, KM_NOSLEEP);
 	if (rwwn_str == NULL) {
 		kmem_free(lwwn_str, 32);
 		return;

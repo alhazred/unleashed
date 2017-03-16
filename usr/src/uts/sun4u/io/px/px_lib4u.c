@@ -1399,7 +1399,7 @@ oberon_set_cb(dev_info_t *dip, uint64_t val)
 
 	if (px_oberon_ubc_scratch_regs == NULL)
 		px_oberon_ubc_scratch_regs =
-		    (uint64_t *)kmem_zalloc(sizeof (uint64_t)*
+		    kmem_zalloc(sizeof (uint64_t)*
 		    OBERON_UBC_ID_MAX, KM_SLEEP);
 
 	ubc_id = oberon_get_ubc_id(dip);

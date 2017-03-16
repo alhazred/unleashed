@@ -1413,8 +1413,7 @@ mrsas_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp,
 		return (ENXIO);
 	}
 
-	ioctl = (struct mrsas_ioctl *)kmem_zalloc(sizeof (struct mrsas_ioctl),
-	    KM_SLEEP);
+	ioctl = kmem_zalloc(sizeof (struct mrsas_ioctl), KM_SLEEP);
 	ASSERT(ioctl);
 
 	switch ((uint_t)cmd) {

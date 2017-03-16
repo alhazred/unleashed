@@ -1802,8 +1802,7 @@ qlt_ioctl(dev_t dev, int cmd, intptr_t data, int mode,
 			atomic_inc_32(&qlt_loaded_counter);
 		}
 		qlt->fw_length01 = intp[3];
-		qlt->fw_code01 = (uint32_t *)kmem_alloc(iocd->stmf_ibuf_size,
-		    KM_SLEEP);
+		qlt->fw_code01 = kmem_alloc(iocd->stmf_ibuf_size, KM_SLEEP);
 		bcopy(intp, qlt->fw_code01, iocd->stmf_ibuf_size);
 		qlt->fw_addr01 = intp[2];
 		qlt->fw_code02 = &qlt->fw_code01[intp[3]];
@@ -5898,7 +5897,7 @@ qlt_el_trace_desc_ctor(qlt_state_t *qlt)
 	} else {
 		qlt->el_trace_desc->next = 0;
 		qlt->el_trace_desc->trace_buffer =
-		    (char *)kmem_zalloc(EL_TRACE_BUF_SIZE, KM_SLEEP);
+		    kmem_zalloc(EL_TRACE_BUF_SIZE, KM_SLEEP);
 
 		if (qlt->el_trace_desc->trace_buffer == NULL) {
 			cmn_err(CE_WARN, "qlt(%d): can't get trace buffer",

@@ -281,7 +281,7 @@ rdsv3_ib_create_mr_pool(struct rdsv3_ib_device *rds_ibdev)
 	RDSV3_DPRINTF4("rdsv3_ib_create_mr_pool",
 	    "Enter: ibdev: %p", rds_ibdev);
 
-	pool = (struct rdsv3_fmr_pool *)kmem_zalloc(sizeof (*pool), KM_NOSLEEP);
+	pool = kmem_zalloc(sizeof (*pool), KM_NOSLEEP);
 	if (pool == NULL) {
 		return (-ENOMEM);
 	}
@@ -395,8 +395,7 @@ rdsv3_ib_alloc_fmr(struct rdsv3_ib_device *rds_ibdev)
 	RDSV3_DPRINTF4("rdsv3_ib_alloc_fmr", "Enter: ibdev: %p", rds_ibdev);
 
 	if (rds_ibdev->fmr_pool_hdl) {
-		ibmr = (struct rdsv3_ib_mr *)kmem_zalloc(sizeof (*ibmr),
-		    KM_SLEEP);
+		ibmr = kmem_zalloc(sizeof (*ibmr), KM_SLEEP);
 		ibmr->rc_hca_hdl = ib_get_ibt_hca_hdl(rds_ibdev->dev);
 		ibmr->fmr_pool_hdl = rds_ibdev->fmr_pool_hdl;
 		return (ibmr);

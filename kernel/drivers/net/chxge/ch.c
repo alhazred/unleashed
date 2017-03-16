@@ -1802,7 +1802,7 @@ ch_intr(gld_mac_info_t *mp)
 void
 ch_set_name(ch_t *chp, int unit)
 {
-	chp->ch_name = (char *)kmem_alloc(sizeof ("chxge00"), KM_SLEEP);
+	chp->ch_name = kmem_alloc(sizeof ("chxge00"), KM_SLEEP);
 	if (unit > 9) {
 		bcopy("chxge00", (void *)chp->ch_name, sizeof ("chxge00"));
 		chp->ch_name[5] += unit/10;

@@ -5048,7 +5048,7 @@ ql_flash_fcode_load(ql_adapter_state_t *ha, void *bp, uint32_t bsize,
 		return (ENOMEM);
 	}
 
-	if ((bfp = (uint8_t *)kmem_zalloc(bsize, KM_SLEEP)) == NULL) {
+	if ((bfp = kmem_zalloc(bsize, KM_SLEEP)) == NULL) {
 		EL(ha, "failed, kmem_zalloc\n");
 		rval = ENOMEM;
 	} else  {
@@ -5177,7 +5177,7 @@ ql_flash_fcode_dump(ql_adapter_state_t *ha, void *bp, uint32_t bsize,
 		bsize = xp->fdesc.flash_size;
 	}
 
-	if ((bfp = (uint8_t *)kmem_zalloc(bsize, KM_SLEEP)) == NULL) {
+	if ((bfp = kmem_zalloc(bsize, KM_SLEEP)) == NULL) {
 		EL(ha, "failed, kmem_zalloc\n");
 		rval = ENOMEM;
 	} else {

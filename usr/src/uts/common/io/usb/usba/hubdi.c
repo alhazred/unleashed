@@ -2059,7 +2059,7 @@ usba_hubdi_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	/*
 	 * create cfgadm nodes
 	 */
-	hubd->h_ancestry_str = (char *)kmem_zalloc(HUBD_APID_NAMELEN, KM_SLEEP);
+	hubd->h_ancestry_str = kmem_zalloc(HUBD_APID_NAMELEN, KM_SLEEP);
 	hubd_get_ancestry_str(hubd);
 
 	USB_DPRINTF_L4(DPRINT_MASK_ATTA, hubd->h_log_handle,

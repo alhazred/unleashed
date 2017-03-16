@@ -1178,7 +1178,7 @@ netstack_shared_zone_add(zoneid_t zoneid)
 	struct shared_zone_list *sz;
 	struct shared_kstat_list *sk;
 
-	sz = (struct shared_zone_list *)kmem_zalloc(sizeof (*sz), KM_SLEEP);
+	sz = kmem_zalloc(sizeof (*sz), KM_SLEEP);
 	sz->sz_zoneid = zoneid;
 
 	/* Insert in list */
@@ -1235,7 +1235,7 @@ netstack_shared_kstat_add(kstat_t *ks)
 	struct shared_zone_list *sz;
 	struct shared_kstat_list *sk;
 
-	sk = (struct shared_kstat_list *)kmem_zalloc(sizeof (*sk), KM_SLEEP);
+	sk = kmem_zalloc(sizeof (*sk), KM_SLEEP);
 	sk->sk_kstat = ks;
 
 	/* Insert in list */

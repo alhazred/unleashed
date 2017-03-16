@@ -1060,7 +1060,7 @@ drerr_int(int e_code, uint64_t *arr, int idx, int majors)
 		return (NULL);
 
 	/* MAXPATHLEN is the size of the e_rsc field in sbd_error_t. */
-	buf = (char *)kmem_zalloc(MAXPATHLEN, KM_SLEEP);
+	buf = kmem_zalloc(MAXPATHLEN, KM_SLEEP);
 
 	/*
 	 * This is the total working area of the buffer.  It must be computed

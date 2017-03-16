@@ -863,7 +863,7 @@ dadk_ioctl(opaque_t objp, dev_t dev, int cmd, intptr_t arg, int flag,
 			if ((flag & FKIOCTL) && dkc != NULL &&
 			    dkc->dkc_callback != NULL) {
 				struct dk_callback *dkc2 =
-				    (struct dk_callback *)kmem_zalloc(
+				    kmem_zalloc(
 				    sizeof (struct dk_callback), KM_SLEEP);
 
 				bcopy(dkc, dkc2, sizeof (*dkc2));

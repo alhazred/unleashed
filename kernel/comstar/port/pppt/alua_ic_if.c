@@ -667,7 +667,7 @@ stmf_ic_scsi_cmd_msg_alloc(
 		ASSERT(task->task_mgmt_function == TM_NONE);
 		icsc->icsc_task_cdb_length = task->task_cdb_length;
 		icsc->icsc_task_cdb =
-		    (uint8_t *)kmem_zalloc(task->task_cdb_length, KM_SLEEP);
+		    kmem_zalloc(task->task_cdb_length, KM_SLEEP);
 		bcopy(task->task_cdb, icsc->icsc_task_cdb,
 		    task->task_cdb_length);
 	}

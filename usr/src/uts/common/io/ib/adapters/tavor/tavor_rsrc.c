@@ -416,7 +416,7 @@ tavor_rsrc_init_phase1(tavor_state_t *state)
 	cleanup = TAVOR_RSRC_CLEANUP_LEVEL0;
 
 	/* Build kmem cache name from Tavor instance */
-	rsrc_name = (char *)kmem_zalloc(TAVOR_RSRC_NAME_MAXLEN, KM_SLEEP);
+	rsrc_name = kmem_zalloc(TAVOR_RSRC_NAME_MAXLEN, KM_SLEEP);
 	TAVOR_RSRC_NAME(rsrc_name, TAVOR_RSRC_CACHE);
 
 	/*
@@ -565,7 +565,7 @@ tavor_rsrc_init_phase2(tavor_state_t *state)
 	fw_size  = state->ts_fw.fw_endaddr - state->ts_fw.fw_baseaddr + 1;
 
 	/* Build the DDR vmem arena name from Tavor instance */
-	rsrc_name = (char *)kmem_zalloc(TAVOR_RSRC_NAME_MAXLEN, KM_SLEEP);
+	rsrc_name = kmem_zalloc(TAVOR_RSRC_NAME_MAXLEN, KM_SLEEP);
 	TAVOR_RSRC_NAME(rsrc_name, TAVOR_DDR_VMEM);
 
 	/*

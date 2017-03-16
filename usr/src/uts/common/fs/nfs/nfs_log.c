@@ -305,10 +305,10 @@ log_buffer_create(caddr_t name)
 	if (log_file_create(name, &logfile))
 		return (NULL);
 
-	buffer = (struct log_buffer *)kmem_alloc(sizeof (*buffer), KM_SLEEP);
+	buffer = kmem_alloc(sizeof (*buffer), KM_SLEEP);
 	buffer->lb_refcnt = 1;
 	buffer->lb_rec_id = 0;
-	buffer->lb_path = (caddr_t)kmem_alloc(namelen + 1, KM_SLEEP);
+	buffer->lb_path = kmem_alloc(namelen + 1, KM_SLEEP);
 	bcopy(name, buffer->lb_path, namelen + 1);
 	buffer->lb_logfile = logfile;
 	buffer->lb_records = NULL;
@@ -434,7 +434,7 @@ log_file_create(caddr_t origname, struct log_file **lfpp)
 	size_t loghdr_free = 0;
 
 	namelen = strlen(origname) + strlen(LOG_INPROG_STRING);
-	name = (caddr_t)kmem_alloc(namelen + 1, KM_SLEEP);
+	name = kmem_alloc(namelen + 1, KM_SLEEP);
 	(void) sprintf(name, "%s%s", origname, LOG_INPROG_STRING);
 
 	LOGGING_DPRINT((3, "log_file_create: %s\n", name));
@@ -447,7 +447,7 @@ log_file_create(caddr_t origname, struct log_file **lfpp)
 	LOGGING_DPRINT((3, "log_file_create: %s vp=%p v_count=%d\n",
 	    name, (void *)vp, vp->v_count));
 
-	logfile = (struct log_file *)kmem_zalloc(sizeof (*logfile), KM_SLEEP);
+	logfile = kmem_zalloc(sizeof (*logfile), KM_SLEEP);
 	logfile->lf_path = name;
 	/*
 	 * No need to bump the vnode reference count since it is set
@@ -787,7 +787,7 @@ nfslog_write_logrecords(struct log_file *lfp,
 	vp = lfp->lf_vp;
 
 	size_iovecs = sizeof (struct iovec) * num_recs;
-	iovp = (struct iovec *)kmem_alloc(size_iovecs, KM_NOSLEEP);
+	iovp = kmem_alloc(size_iovecs, KM_NOSLEEP);
 
 	if (iovp == NULL) {
 		error = ENOMEM;
@@ -1231,7 +1231,7 @@ nfslog_do_flush(struct flush_thread_params *tparams)
 		 */
 		buf_inprog_len = strlen(args->buff) +
 		    strlen(LOG_INPROG_STRING) + 1;
-		buf_inprog = (caddr_t)kmem_alloc(buf_inprog_len, KM_SLEEP);
+		buf_inprog = kmem_alloc(buf_inprog_len, KM_SLEEP);
 		(void) sprintf(buf_inprog, "%s%s",
 		    args->buff, LOG_INPROG_STRING);
 
@@ -1286,7 +1286,7 @@ create_buffer_header(caddr_t *loghdr, size_t *reclen, size_t *freesize)
 	/*
 	 * Encode the header
 	 */
-	*loghdr = (caddr_t)kmem_alloc(*freesize, KM_SLEEP);
+	*loghdr = kmem_alloc(*freesize, KM_SLEEP);
 	xdrmem_create(&xdrs, *loghdr, *freesize, XDR_ENCODE);
 
 	(void) xdr_nfslog_buffer_header(&xdrs, &lh);

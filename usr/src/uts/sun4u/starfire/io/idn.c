@@ -5226,7 +5226,7 @@ idn_rw_mem(idnop_t *idnop)
 	/*
 	 * Default READ only.
 	 */
-	ibuf = (char *)kmem_alloc(blksize, KM_SLEEP);
+	ibuf = kmem_alloc(blksize, KM_SLEEP);
 	if (rw == 1) {
 		/*
 		 * WRITE only.
@@ -5237,7 +5237,7 @@ idn_rw_mem(idnop_t *idnop)
 		/*
 		 * READ/WRITE.
 		 */
-		obuf = (char *)kmem_alloc(blksize, KM_SLEEP);
+		obuf = kmem_alloc(blksize, KM_SLEEP);
 		for (segp = &ktextseg; segp; segp = AS_SEGNEXT(&kas, segp)) {
 			if (segp->s_size >= blksize)
 				break;

@@ -619,11 +619,11 @@ acpi_probe(char *modname)
 	if (!apicadr)
 		return (PSM_FAILURE);
 
-	if ((local_ids = (uint32_t *)kmem_zalloc(NCPU * sizeof (uint32_t),
+	if ((local_ids = kmem_zalloc(NCPU * sizeof (uint32_t),
 	    KM_NOSLEEP)) == NULL)
 		return (PSM_FAILURE);
 
-	if ((proc_ids = (uint32_t *)kmem_zalloc(NCPU * sizeof (uint32_t),
+	if ((proc_ids = kmem_zalloc(NCPU * sizeof (uint32_t),
 	    KM_NOSLEEP)) == NULL) {
 		kmem_free(local_ids, NCPU * sizeof (uint32_t));
 		return (PSM_FAILURE);

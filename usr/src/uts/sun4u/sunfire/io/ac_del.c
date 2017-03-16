@@ -81,7 +81,7 @@ ac_del_alloc_status()
 {
 	struct del_status *dsp;
 
-	dsp = (struct del_status *)kmem_zalloc(sizeof (*dsp), KM_SLEEP);
+	dsp = kmem_zalloc(sizeof (*dsp), KM_SLEEP);
 	mutex_enter(&ac_del_mutex);
 	dsp->next = ac_del_list;
 	ac_del_list = dsp;

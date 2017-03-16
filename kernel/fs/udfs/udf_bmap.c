@@ -263,7 +263,7 @@ one_ad_no_i_ext:
 		}
 		ip->i_ext_count =
 			((next / EXT_PER_MALLOC) + 1) * EXT_PER_MALLOC;
-		iext = ip->i_ext = (struct icb_ext  *)kmem_zalloc(
+		iext = ip->i_ext = kmem_zalloc(
 			ip->i_ext_count * sizeof (struct icb_ext), KM_SLEEP);
 		memory_allocated = 1;
 
@@ -1267,7 +1267,7 @@ ud_zero_it(struct ud_inode *ip, uint32_t start_block, uint32_t block_count)
 		ip->i_icb_prn, start_block, block_count, &dummy);
 
 	dummy = block_count << udf_vfsp->udf_l2b_shift;
-	bp = (struct buf *)kmem_zalloc(biosize(), KM_SLEEP);
+	bp = kmem_zalloc(biosize(), KM_SLEEP);
 	sema_init(&bp->b_sem, 0, NULL, SEMA_DEFAULT, NULL);
 	sema_init(&bp->b_io, 0, NULL, SEMA_DEFAULT, NULL);
 

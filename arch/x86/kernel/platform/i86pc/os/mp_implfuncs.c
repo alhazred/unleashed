@@ -86,7 +86,7 @@ psm_modlinkage_alloc(struct psm_info *infop)
 
 	memsz = sizeof (struct modlinkage) + sizeof (struct modlpsm) +
 	    sizeof (struct psm_sw);
-	mlinkp = (struct modlinkage *)kmem_zalloc(memsz, KM_NOSLEEP);
+	mlinkp = kmem_zalloc(memsz, KM_NOSLEEP);
 	if (!mlinkp) {
 		cmn_err(CE_WARN, "!psm_mod_init: Cannot install %s",
 		    infop->p_mach_idstring);

@@ -336,7 +336,7 @@ initialize:
 
 	/* Allocate interrupt priority table */
 	intr_pri =
-	    (uint32_t *)kmem_alloc((size_t)(count * sizeof (uint32_t)),
+	    kmem_alloc((size_t)(count * sizeof (uint32_t)),
 	    KM_SLEEP);
 
 	/* Allocate interrupt capability table */

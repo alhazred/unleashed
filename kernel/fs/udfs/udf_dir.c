@@ -662,7 +662,7 @@ ud_dirremove(
 		return (err);
 	}
 
-	buf = (uint8_t *)kmem_zalloc(udf_vfsp->udf_lbsize, KM_SLEEP);
+	buf = kmem_zalloc(udf_vfsp->udf_lbsize, KM_SLEEP);
 
 	rw_enter(&dp->i_contents, RW_WRITER);
 
@@ -892,7 +892,7 @@ ud_dircheckforname(struct ud_inode *tdp,
 	ASSERT(RW_WRITE_HELD(&tdp->i_rwlock));
 	fbp = NULL;
 
-	dname = (uint8_t *)kmem_zalloc(1024, KM_SLEEP);
+	dname = kmem_zalloc(1024, KM_SLEEP);
 
 	udf_vfsp = tdp->i_udf;
 
@@ -1304,7 +1304,7 @@ ud_diraddentry(struct ud_inode *tdp, char *namep,
 		}
 	}
 
-	buf = (uint8_t *)kmem_zalloc(udf_vfsp->udf_lbsize, KM_SLEEP);
+	buf = kmem_zalloc(udf_vfsp->udf_lbsize, KM_SLEEP);
 
 	/*
 	 * Fill in entry data.

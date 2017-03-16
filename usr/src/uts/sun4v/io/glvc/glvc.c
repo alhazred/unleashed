@@ -318,8 +318,7 @@ glvc_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 			goto bad;
 		}
 
-		softsp->mb_recv_buf =
-		    (char *)kmem_zalloc(softsp->mtu, KM_NOSLEEP);
+		softsp->mb_recv_buf = kmem_zalloc(softsp->mtu, KM_NOSLEEP);
 		if (softsp->mb_recv_buf == NULL) {
 			cmn_err(CE_WARN, "Failed to alloc mem for recv buf");
 			goto bad;
@@ -327,8 +326,7 @@ glvc_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		softsp->mb_recv_buf_pa =
 		    va_to_pa((caddr_t)softsp->mb_recv_buf);
 
-		softsp->mb_send_buf =
-		    (char *)kmem_zalloc(softsp->mtu, KM_NOSLEEP);
+		softsp->mb_send_buf = kmem_zalloc(softsp->mtu, KM_NOSLEEP);
 		if (softsp->mb_send_buf == NULL) {
 			kmem_free(softsp->mb_recv_buf, softsp->mtu);
 			cmn_err(CE_WARN, "Failed to alloc mem for send buf");
@@ -963,8 +961,7 @@ glvc_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *cred_p,
 		break;
 
 	case GLVC_XPORT_IOCTL_DATA_PEEK:
-		glvc_peek_msg.buf =
-		    (char *)kmem_zalloc(softsp->mtu, KM_NOSLEEP);
+		glvc_peek_msg.buf = kmem_zalloc(softsp->mtu, KM_NOSLEEP);
 		if (glvc_peek_msg.buf == NULL)
 			return (EBUSY);
 		retval = glvc_peek(softsp, &glvc_peek_msg);

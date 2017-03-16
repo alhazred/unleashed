@@ -537,7 +537,7 @@ tavor_ioctl_flash_init(tavor_state_t *state, dev_t dev, intptr_t arg, int mode)
 	init_info.tf_fwrev.tfi_sub	= state->ts_fw.fw_rev_subminor;
 
 	/* Alloc flash mem for one sector size */
-	state->ts_fw_sector = (uint32_t *)kmem_zalloc(1 <<
+	state->ts_fw_sector = kmem_zalloc(1 <<
 	    state->ts_fw_log_sector_sz, KM_SLEEP);
 
 	/* Set HW part number and length */

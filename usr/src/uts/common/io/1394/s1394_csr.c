@@ -1250,11 +1250,11 @@ s1394_init_local_config_rom(s1394_hal_t *hal)
 	    NULL, MUTEX_DRIVER, hal->halinfo.hw_interrupt);
 
 	/* Allocate 1K for the Config ROM buffer */
-	hal->local_config_rom = (uint32_t *)kmem_zalloc(IEEE1394_CONFIG_ROM_SZ,
+	hal->local_config_rom = kmem_zalloc(IEEE1394_CONFIG_ROM_SZ,
 	    KM_SLEEP);
 
 	/* Allocate 1K for the temporary buffer */
-	hal->temp_config_rom_buf = (uint32_t *)kmem_zalloc(
+	hal->temp_config_rom_buf = kmem_zalloc(
 	    IEEE1394_CONFIG_ROM_SZ, KM_SLEEP);
 
 	config_rom = hal->local_config_rom;
@@ -1338,7 +1338,7 @@ s1394_init_local_config_rom(s1394_hal_t *hal)
 		config_rom[i] = T1394_DATA32(config_rom[i]);
 
 	/* Build the Root Text leaf - see IEEE 1394-1995, Section 8.3.2.5.7 */
-	text_leaf = (uint32_t *)kmem_zalloc(S1394_ROOT_TEXT_LEAF_SZ, KM_SLEEP);
+	text_leaf = kmem_zalloc(S1394_ROOT_TEXT_LEAF_SZ, KM_SLEEP);
 	text_leaf[1] = 0x00000000;
 	text_leaf[2] = 0x00000000;
 	text_leaf[3] = 0x53756e20;	/* "Sun " */
@@ -1372,7 +1372,7 @@ s1394_init_local_config_rom(s1394_hal_t *hal)
 	kmem_free((void *)text_leaf, S1394_ROOT_TEXT_LEAF_SZ);
 
 	/* Build the Node_Unique_Id leaf - IEEE 1394-1995, Sect. 8.3.2.5.7.1 */
-	node_unique_id_leaf = (uint32_t *)kmem_zalloc(S1394_NODE_UNIQUE_ID_SZ,
+	node_unique_id_leaf = kmem_zalloc(S1394_NODE_UNIQUE_ID_SZ,
 	    KM_SLEEP);
 	node_unique_id_leaf[1] = guid_hi;
 	node_unique_id_leaf[2] = guid_lo;
@@ -1404,7 +1404,7 @@ s1394_init_local_config_rom(s1394_hal_t *hal)
 	kmem_free((void *)node_unique_id_leaf, S1394_NODE_UNIQUE_ID_SZ);
 
 	/* Build the Unit_Directory for 1394 Framework */
-	unit_dir = (uint32_t *)kmem_zalloc(S1394_UNIT_DIR_SZ, KM_SLEEP);
+	unit_dir = kmem_zalloc(S1394_UNIT_DIR_SZ, KM_SLEEP);
 	unit_dir[1] = 0x12080020;	/* Sun Microsystems */
 	unit_dir[2] = 0x13000001;	/* Version 1 */
 	unit_dir[3] = 0x81000001;	/* offset to the text leaf */

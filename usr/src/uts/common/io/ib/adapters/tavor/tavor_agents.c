@@ -75,7 +75,7 @@ tavor_agent_handlers_init(tavor_state_t *state)
 	 * Build a unique name for the Tavor task queue from the Tavor driver
 	 * instance number and TAVOR_TASKQ_NAME
 	 */
-	rsrc_name = (char *)kmem_zalloc(TAVOR_RSRC_NAME_MAXLEN, KM_SLEEP);
+	rsrc_name = kmem_zalloc(TAVOR_RSRC_NAME_MAXLEN, KM_SLEEP);
 	TAVOR_RSRC_NAME(rsrc_name, TAVOR_TASKQ_NAME);
 
 	/* Initialize the Tavor IB management agent list */

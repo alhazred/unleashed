@@ -4708,7 +4708,7 @@ ldterm_do_ioctl(queue_t *q, mblk_t *mp)
 			    strlen(tp->t_csdata.locale_name) + 1);
 		}
 		if (locale_name_sz > 1) {
-			tp->t_csdata.locale_name = (char *)kmem_alloc(
+			tp->t_csdata.locale_name = kmem_alloc(
 			    locale_name_sz, KM_SLEEP);
 			(void) strcpy(tp->t_csdata.locale_name,
 			    csdp->locale_name);

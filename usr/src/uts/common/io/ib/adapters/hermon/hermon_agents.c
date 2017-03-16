@@ -75,7 +75,7 @@ hermon_agent_handlers_init(hermon_state_t *state)
 	 * Build a unique name for the Hermon task queue from the Hermon driver
 	 * instance number and HERMON_TASKQ_NAME
 	 */
-	rsrc_name = (char *)kmem_zalloc(HERMON_RSRC_NAME_MAXLEN, KM_SLEEP);
+	rsrc_name = kmem_zalloc(HERMON_RSRC_NAME_MAXLEN, KM_SLEEP);
 	HERMON_RSRC_NAME(rsrc_name, HERMON_TASKQ_NAME);
 
 	/* Initialize the Hermon IB management agent list */

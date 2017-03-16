@@ -1157,8 +1157,7 @@ fct_register_local_port(fct_local_port_t *port)
 		if (l < 16) {
 			iport->iport_alias = iport->iport_alias_mem;
 		} else {
-			iport->iport_alias =
-			    (char *)kmem_zalloc(l+1, KM_SLEEP);
+			iport->iport_alias = kmem_zalloc(l+1, KM_SLEEP);
 		}
 		(void) strcpy(iport->iport_alias, port->port_default_alias);
 	} else {
@@ -2358,11 +2357,11 @@ fct_create_solels(fct_local_port_t *port, fct_remote_port_t *rp, int implicit,
 		switch (elsop) {
 		case ELS_OP_LOGO:
 			els->els_resp_alloc_size = els->els_resp_size = 4;
-			els->els_resp_payload = (uint8_t *)kmem_zalloc(
-			    els->els_resp_size, KM_SLEEP);
+			els->els_resp_payload = kmem_zalloc(els->els_resp_size,
+			    KM_SLEEP);
 			els->els_req_alloc_size = els->els_req_size = 16;
-			els->els_req_payload = (uint8_t *)kmem_zalloc(
-			    els->els_req_size, KM_SLEEP);
+			els->els_req_payload = kmem_zalloc(els->els_req_size,
+			    KM_SLEEP);
 			ptid = PORT_TO_IPORT(port)->iport_link_info.portid;
 			fct_value_to_netbuf(ptid, els->els_req_payload + 5, 3);
 			bcopy(port->port_pwwn, els->els_req_payload + 8, 8);
@@ -2370,11 +2369,11 @@ fct_create_solels(fct_local_port_t *port, fct_remote_port_t *rp, int implicit,
 
 		case ELS_OP_RSCN:
 			els->els_resp_alloc_size = els->els_resp_size = 4;
-			els->els_resp_payload = (uint8_t *)kmem_zalloc(
-			    els->els_resp_size, KM_SLEEP);
+			els->els_resp_payload = kmem_zalloc(els->els_resp_size,
+			    KM_SLEEP);
 			els->els_req_size = els->els_req_alloc_size = 8;
-			els->els_req_payload = (uint8_t *)kmem_zalloc(
-			    els->els_req_size, KM_SLEEP);
+			els->els_req_payload = kmem_zalloc(els->els_req_size,
+			    KM_SLEEP);
 			els->els_req_payload[1] = 0x04;
 			els->els_req_payload[3] = 0x08;
 			els->els_req_payload[4] |= 0x80;
@@ -2546,23 +2545,19 @@ fct_create_solct(fct_local_port_t *port, fct_remote_port_t *query_rp,
 		 * Allocate max space for its sybolic name
 		 */
 		ct->ct_resp_alloc_size = ct->ct_resp_size = 272;
-		ct->ct_resp_payload = (uint8_t *)kmem_zalloc(ct->ct_resp_size,
-		    KM_SLEEP);
+		ct->ct_resp_payload = kmem_zalloc(ct->ct_resp_size, KM_SLEEP);
 
 		ct->ct_req_size = ct->ct_req_alloc_size = 24;
-		p = ct->ct_req_payload = (uint8_t *)kmem_zalloc(ct->ct_req_size,
-		    KM_SLEEP);
+		p = ct->ct_req_payload = kmem_zalloc(ct->ct_req_size, KM_SLEEP);
 
 		bcopy(query_rp->rp_nwwn, p + 16, 8);
 		break;
 
 	case NS_RNN_ID:
 		ct->ct_resp_alloc_size = ct->ct_resp_size = 16;
-		ct->ct_resp_payload = (uint8_t *)kmem_zalloc(ct->ct_resp_size,
-		    KM_SLEEP);
+		ct->ct_resp_payload = kmem_zalloc(ct->ct_resp_size, KM_SLEEP);
 		ct->ct_req_size = ct->ct_req_alloc_size = 28;
-		p = ct->ct_req_payload = (uint8_t *)kmem_zalloc(ct->ct_req_size,
-		    KM_SLEEP);
+		p = ct->ct_req_payload = kmem_zalloc(ct->ct_req_size, KM_SLEEP);
 
 		/*
 		 * Port Identifier
@@ -2579,11 +2574,9 @@ fct_create_solct(fct_local_port_t *port, fct_remote_port_t *query_rp,
 
 	case NS_RCS_ID:
 		ct->ct_resp_alloc_size = ct->ct_resp_size = 16;
-		ct->ct_resp_payload = (uint8_t *)kmem_zalloc(ct->ct_resp_size,
-		    KM_SLEEP);
+		ct->ct_resp_payload = kmem_zalloc(ct->ct_resp_size, KM_SLEEP);
 		ct->ct_req_size = ct->ct_req_alloc_size = 24;
-		p = ct->ct_req_payload = (uint8_t *)kmem_zalloc(ct->ct_req_size,
-		    KM_SLEEP);
+		p = ct->ct_req_payload = kmem_zalloc(ct->ct_req_size, KM_SLEEP);
 
 		/*
 		 * Port Identifier
@@ -2600,11 +2593,9 @@ fct_create_solct(fct_local_port_t *port, fct_remote_port_t *query_rp,
 
 	case NS_RFT_ID:
 		ct->ct_resp_alloc_size = ct->ct_resp_size = 16;
-		ct->ct_resp_payload = (uint8_t *)kmem_zalloc(ct->ct_resp_size,
-		    KM_SLEEP);
+		ct->ct_resp_payload = kmem_zalloc(ct->ct_resp_size, KM_SLEEP);
 		ct->ct_req_size = ct->ct_req_alloc_size = 52;
-		p = ct->ct_req_payload = (uint8_t *)kmem_zalloc(ct->ct_req_size,
-		    KM_SLEEP);
+		p = ct->ct_req_payload = kmem_zalloc(ct->ct_req_size, KM_SLEEP);
 
 		/*
 		 * Port Identifier
@@ -2626,12 +2617,10 @@ fct_create_solct(fct_local_port_t *port, fct_remote_port_t *query_rp,
 		ASSERT(port->port_sym_port_name);
 		namelen = strlen(port->port_sym_port_name);
 		ct->ct_resp_alloc_size = ct->ct_resp_size = 16;
-		ct->ct_resp_payload = (uint8_t *)kmem_zalloc(ct->ct_resp_size,
-		    KM_SLEEP);
+		ct->ct_resp_payload = kmem_zalloc(ct->ct_resp_size, KM_SLEEP);
 		ct->ct_req_size = ct->ct_req_alloc_size =
 		    (21 + namelen + 3) & ~3;
-		p = ct->ct_req_payload = (uint8_t *)kmem_zalloc(ct->ct_req_size,
-		    KM_SLEEP);
+		p = ct->ct_req_payload = kmem_zalloc(ct->ct_req_size, KM_SLEEP);
 
 		/*
 		 * Port Identifier
@@ -2659,12 +2648,10 @@ fct_create_solct(fct_local_port_t *port, fct_remote_port_t *query_rp,
 		    utsname.nodename : port->port_sym_node_name;
 
 		ct->ct_resp_alloc_size = ct->ct_resp_size = 16;
-		ct->ct_resp_payload = (uint8_t *)kmem_zalloc(ct->ct_resp_size,
-		    KM_SLEEP);
+		ct->ct_resp_payload = kmem_zalloc(ct->ct_resp_size, KM_SLEEP);
 		ct->ct_req_size = ct->ct_req_alloc_size =
 		    (25 + namelen + 3) & ~3;
-		p = ct->ct_req_payload = (uint8_t *)kmem_zalloc(ct->ct_req_size,
-		    KM_SLEEP);
+		p = ct->ct_req_payload = kmem_zalloc(ct->ct_req_size, KM_SLEEP);
 
 		/*
 		 * Node name
@@ -2684,11 +2671,9 @@ fct_create_solct(fct_local_port_t *port, fct_remote_port_t *query_rp,
 
 	case NS_GSPN_ID:
 		ct->ct_resp_alloc_size = ct->ct_resp_size = 272;
-		ct->ct_resp_payload = (uint8_t *)kmem_zalloc(ct->ct_resp_size,
-		    KM_SLEEP);
+		ct->ct_resp_payload = kmem_zalloc(ct->ct_resp_size, KM_SLEEP);
 		ct->ct_req_size = ct->ct_req_alloc_size = 20;
-		p = ct->ct_req_payload = (uint8_t *)kmem_zalloc(ct->ct_req_size,
-		    KM_SLEEP);
+		p = ct->ct_req_payload = kmem_zalloc(ct->ct_req_size, KM_SLEEP);
 		/*
 		 * Port Identifier
 		 */
@@ -2699,11 +2684,9 @@ fct_create_solct(fct_local_port_t *port, fct_remote_port_t *query_rp,
 
 	case NS_GCS_ID:
 		ct->ct_resp_alloc_size = ct->ct_resp_size = 20;
-		ct->ct_resp_payload = (uint8_t *)kmem_zalloc(ct->ct_resp_size,
-		    KM_SLEEP);
+		ct->ct_resp_payload = kmem_zalloc(ct->ct_resp_size, KM_SLEEP);
 		ct->ct_req_size = ct->ct_req_alloc_size = 20;
-		p = ct->ct_req_payload = (uint8_t *)kmem_zalloc(ct->ct_req_size,
-		    KM_SLEEP);
+		p = ct->ct_req_payload = kmem_zalloc(ct->ct_req_size, KM_SLEEP);
 		/*
 		 * Port Identifier
 		 */
@@ -2714,11 +2697,9 @@ fct_create_solct(fct_local_port_t *port, fct_remote_port_t *query_rp,
 
 	case NS_GFT_ID:
 		ct->ct_resp_alloc_size = ct->ct_resp_size = 48;
-		ct->ct_resp_payload = (uint8_t *)kmem_zalloc(ct->ct_resp_size,
-		    KM_SLEEP);
+		ct->ct_resp_payload = kmem_zalloc(ct->ct_resp_size, KM_SLEEP);
 		ct->ct_req_size = ct->ct_req_alloc_size = 20;
-		p = ct->ct_req_payload = (uint8_t *)kmem_zalloc(ct->ct_req_size,
-		    KM_SLEEP);
+		p = ct->ct_req_payload = kmem_zalloc(ct->ct_req_size, KM_SLEEP);
 		/*
 		 * Port Identifier
 		 */
@@ -2729,12 +2710,10 @@ fct_create_solct(fct_local_port_t *port, fct_remote_port_t *query_rp,
 
 	case NS_GID_PN:
 		ct->ct_resp_alloc_size = ct->ct_resp_size = 20;
-		ct->ct_resp_payload = (uint8_t *)kmem_zalloc(ct->ct_resp_size,
-		    KM_SLEEP);
+		ct->ct_resp_payload = kmem_zalloc(ct->ct_resp_size, KM_SLEEP);
 
 		ct->ct_req_size = ct->ct_req_alloc_size = 24;
-		p = ct->ct_req_payload = (uint8_t *)kmem_zalloc(ct->ct_req_size,
-		    KM_SLEEP);
+		p = ct->ct_req_payload = kmem_zalloc(ct->ct_req_size, KM_SLEEP);
 
 		bcopy(query_rp->rp_pwwn, p + 16, 8);
 		break;

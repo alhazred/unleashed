@@ -478,7 +478,7 @@ bpfopen(dev_t *devp, int flag, int mode, cred_t *cred)
 	 * A structure is allocated per open file in BPF to store settings
 	 * such as buffer capture size, provide private buffers, etc.
 	 */
-	d = (struct bpf_d *)kmem_zalloc(sizeof (*d), KM_SLEEP);
+	d = kmem_zalloc(sizeof (*d), KM_SLEEP);
 	d->bd_bufsize = bpf_bufsize;
 	d->bd_fmode = flag;
 	d->bd_zone = crgetzoneid(cred);

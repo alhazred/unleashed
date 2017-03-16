@@ -3110,7 +3110,7 @@ vfs_addmip(dev_t dev, struct vfs *vfsp)
 {
 	struct ipmnt *mipp;
 
-	mipp = (struct ipmnt *)kmem_alloc(sizeof (struct ipmnt), KM_SLEEP);
+	mipp = kmem_alloc(sizeof (struct ipmnt), KM_SLEEP);
 	mipp->mip_next = NULL;
 	mipp->mip_dev = dev;
 	mipp->mip_vfsp = vfsp;

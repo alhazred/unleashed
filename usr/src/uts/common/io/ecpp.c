@@ -696,7 +696,7 @@ ecpp_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		goto fail_minor;
 	}
 
-	pp->ioblock = (caddr_t)kmem_alloc(IO_BLOCK_SZ, KM_SLEEP);
+	pp->ioblock = kmem_alloc(IO_BLOCK_SZ, KM_SLEEP);
 	if (pp->ioblock == NULL) {
 		ecpp_error(dip, "ecpp_attach: kmem_alloc failed\n");
 		goto fail_iob;

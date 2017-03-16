@@ -3249,7 +3249,7 @@ alloc_res_array(void)
 
 	while (array_size <= pci_bios_maxbus + 1)
 		array_size <<= 1;
-	pci_bus_res = (struct pci_bus_resource *)kmem_zalloc(
+	pci_bus_res = kmem_zalloc(
 	    array_size * sizeof (struct pci_bus_resource), KM_SLEEP);
 
 	if (old_res) {	/* copy content and free old array */

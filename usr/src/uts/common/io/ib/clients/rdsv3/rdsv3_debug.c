@@ -90,7 +90,7 @@ rdsv3_logging_initialization()
 	rdsv3_debug_buf_size = max(RDSV3_MIN_DEBUG_BUF_SIZE,
 	    rdsv3_debug_buf_size);
 
-	rdsv3_debug_buf = (char *)kmem_alloc(rdsv3_debug_buf_size, KM_SLEEP);
+	rdsv3_debug_buf = kmem_alloc(rdsv3_debug_buf_size, KM_SLEEP);
 	rdsv3_clear_print_buf();
 	mutex_exit(&rdsv3_debug_mutex);
 

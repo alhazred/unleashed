@@ -391,7 +391,7 @@ out:
 			 */
 			*lenp = strlen(errmsg) + 20 + 20 +
 			    strlen(ip->i_fs->fs_fsmnt) + 1;
-			*uerrp = (char *)kmem_alloc(*lenp, KM_NOSLEEP);
+			*uerrp = kmem_alloc(*lenp, KM_NOSLEEP);
 			if (*uerrp != NULL) {
 				/* errmsg+1 => skip leading ! */
 				(void) sprintf(*uerrp, errmsg+1,
@@ -570,7 +570,7 @@ out:
 			 */
 			*lenp = strlen(errmsg) + 20 + 20 +
 			    strlen(ufsvfsp->vfs_fs->fs_fsmnt) + 1;
-			*uerrp = (char *)kmem_alloc(*lenp, KM_NOSLEEP);
+			*uerrp = kmem_alloc(*lenp, KM_NOSLEEP);
 			if (*uerrp != NULL) {
 				/* errmsg+1 => skip leading ! */
 				(void) sprintf(*uerrp, errmsg+1,

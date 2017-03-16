@@ -1548,7 +1548,7 @@ ud_compress(int32_t in_len, int32_t *out_len,
 	}
 
 	*out_len = 0;
-	w2_str = (uint16_t *)kmem_zalloc(512, KM_SLEEP);
+	w2_str = kmem_zalloc(512, KM_SLEEP);
 
 	error = in_index = out_index = c_tx_sz = 0;
 	comp_id = 8;

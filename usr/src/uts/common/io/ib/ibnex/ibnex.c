@@ -2043,7 +2043,7 @@ ibnex_pseudo_mdi_config_one(int flag, void *devname, dev_info_t **child,
 	ASSERT(MUTEX_HELD(&ibnex.ibnex_mutex));
 
 	len = strlen(cname) + strlen(caddr) + 2;
-	node_addr = (char *)kmem_alloc(len, KM_SLEEP);
+	node_addr = kmem_alloc(len, KM_SLEEP);
 
 	(void) snprintf(node_addr, len, "%s,%s", cname, caddr);
 	node_data = ibnex_is_node_data_present(IBNEX_PSEUDO_NODE,
@@ -3498,7 +3498,7 @@ ibnex_pseudo_initnodes()
 		    pseudo_node.pseudo_node_addr, pnam_len, "%s", node_addr);
 
 		len = strlen(temp) + 1;
-		unit_addr = (char *)kmem_alloc(len, KM_SLEEP);
+		unit_addr = kmem_alloc(len, KM_SLEEP);
 		nodep->node_data.pseudo_node.pseudo_unit_addr = unit_addr;
 		(void) snprintf(unit_addr, len, "%s", temp);
 		nodep->node_data.pseudo_node.pseudo_unit_addr_len = len;

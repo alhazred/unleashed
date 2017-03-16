@@ -276,7 +276,7 @@ create_authdh_data(char *netname, int nlen, struct netbuf *syncaddr,
 
 	data->syncaddr.maxlen = syncaddr->maxlen;
 	data->syncaddr.len = syncaddr->len;
-	data->syncaddr.buf = (char *)kmem_alloc(syncaddr->len, KM_SLEEP);
+	data->syncaddr.buf = kmem_alloc(syncaddr->len, KM_SLEEP);
 	bcopy(syncaddr->buf, data->syncaddr.buf, syncaddr->len);
 
 	/*

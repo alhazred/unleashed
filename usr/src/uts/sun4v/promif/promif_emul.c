@@ -218,7 +218,7 @@ read_prom_mappings(size_t *ntransp)
 		PMFREE_DEBUG("no translations property");
 		return (NULL);
 	}
-	transroot = (struct translation *)kmem_zalloc(translen, KM_SLEEP);
+	transroot = kmem_zalloc(translen, KM_SLEEP);
 
 	if (prom_getprop(node, prop, (caddr_t)transroot) == -1) {
 		PMFREE_DEBUG("translations getprop failed");

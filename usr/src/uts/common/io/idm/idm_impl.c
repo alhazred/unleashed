@@ -692,7 +692,7 @@ idm_idpool_create(idm_idpool_t *pool)
 	pool->id_bit = 0x02;
 	pool->id_bit_idx = 1;
 	pool->id_idx = 0;
-	pool->id_pool = (uint8_t *)kmem_alloc((IDM_IDPOOL_MIN_SIZE / 8),
+	pool->id_pool = kmem_alloc((IDM_IDPOOL_MIN_SIZE / 8),
 	    KM_SLEEP);
 	bzero(pool->id_pool, (IDM_IDPOOL_MIN_SIZE / 8));
 	/* -1 id made unavailable */

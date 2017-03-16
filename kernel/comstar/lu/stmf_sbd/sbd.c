@@ -669,7 +669,7 @@ sbd_read_meta(sbd_lu_t *sl, uint64_t offset, uint64_t size, uint8_t *buf)
 		}
 	}
 	io_size = ending_off - starting_off;
-	io_buf = (uint8_t *)kmem_zalloc(io_size, KM_SLEEP);
+	io_buf = kmem_zalloc(io_size, KM_SLEEP);
 	ASSERT((starting_off + io_size) <= sl->sl_total_meta_size);
 
 	/*
@@ -743,7 +743,7 @@ sbd_write_meta(sbd_lu_t *sl, uint64_t offset, uint64_t size, uint8_t *buf)
 	data_off = offset & meta_align;
 	ending_off = (offset + size + meta_align) & (~meta_align);
 	io_size = ending_off - starting_off;
-	io_buf = (uint8_t *)kmem_zalloc(io_size, KM_SLEEP);
+	io_buf = kmem_zalloc(io_size, KM_SLEEP);
 	ret = sbd_read_meta(sl, starting_off, io_size, io_buf);
 	if (ret != SBD_SUCCESS) {
 		goto sbd_write_meta_failure;
@@ -3353,7 +3353,7 @@ sbd_get_zvol_name(sbd_lu_t *sl)
 	src += 14;	/* Past /dev/zvol/dsk/ */
 	if (*src == '/')
 		src++;	/* or /dev/zvol/rdsk/ */
-	p = (char *)kmem_alloc(strlen(src) + 1, KM_SLEEP);
+	p = kmem_alloc(strlen(src) + 1, KM_SLEEP);
 	(void) strcpy(p, src);
 	return (p);
 }

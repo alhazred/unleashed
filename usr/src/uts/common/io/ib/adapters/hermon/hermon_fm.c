@@ -656,7 +656,7 @@ hermon_fm_ereport_init(hermon_state_t *state)
 	rsrc_pool->rsrc_align	  = PAGESIZE;
 	rsrc_pool->rsrc_state	  = state;
 	rsrc_pool->rsrc_start	  = (void *)state->hs_reg_uar_baseaddr;
-	rsrc_name = (char *)kmem_zalloc(HERMON_RSRC_NAME_MAXLEN, KM_SLEEP);
+	rsrc_name = kmem_zalloc(HERMON_RSRC_NAME_MAXLEN, KM_SLEEP);
 	HERMON_RSRC_NAME(rsrc_name, HERMON_UAR_PAGE_VMEM_RUNTM);
 	entry_info.hwi_num	  = num;
 	entry_info.hwi_max	  = max;

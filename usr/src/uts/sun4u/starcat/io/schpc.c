@@ -862,8 +862,7 @@ schpc_connect(caddr_t ops_arg, hpc_slot_t slot_hdl, void *data, uint_t flags)
 			    (POWER_LED_ON | SERVICE_LED_OFF | FAULT_LED_OFF));
 
 			find_dev.cname = schpc_p->schpc_slot[slot].nexus_path;
-			find_dev.caddr = (char *)kmem_alloc(MAXPATHLEN,
-			    KM_SLEEP);
+			find_dev.caddr = kmem_alloc(MAXPATHLEN, KM_SLEEP);
 			find_dev.dip = NULL;
 
 			/* root node doesn't have to be held */
@@ -4134,8 +4133,7 @@ schpc_save_leaf(int slot)
 		return (0);
 
 	schpc_p->schpc_slot[slot].saved_regs =
-	    (uint64_t *)kmem_zalloc(schpc_p->schpc_slot[slot].saved_size,
-	    KM_SLEEP);
+	    kmem_zalloc(schpc_p->schpc_slot[slot].saved_size, KM_SLEEP);
 
 	/*
 	 * Walk through the register list and save contents.

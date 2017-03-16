@@ -1386,7 +1386,7 @@ create_rxtx_rings(unm_adapter *adapter)
 	unm_rcv_desc_ctx_t	*rcv_desc;
 	int			i, ring;
 
-	adapter->cmd_buf_arr = (struct unm_cmd_buffer *)kmem_zalloc(
+	adapter->cmd_buf_arr = kmem_zalloc(
 	    sizeof (struct unm_cmd_buffer) * adapter->MaxTxDescCount,
 	    KM_SLEEP);
 

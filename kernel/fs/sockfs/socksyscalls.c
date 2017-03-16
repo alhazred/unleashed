@@ -220,7 +220,7 @@ copyin_name(struct sonode *so, struct sockaddr *name, socklen_t *namelenp,
 		return (NULL);
 	}
 
-	faddr = (char *)kmem_alloc(namelen, KM_SLEEP);
+	faddr = kmem_alloc(namelen, KM_SLEEP);
 	if (copyin(name, faddr, namelen)) {
 		kmem_free(faddr, namelen);
 		*errorp = EFAULT;
@@ -247,7 +247,7 @@ copyin_name(struct sonode *so, struct sockaddr *name, socklen_t *namelenp,
 			/* Add extra byte for NUL padding */
 			char *nfaddr;
 
-			nfaddr = (char *)kmem_alloc(namelen + 1, KM_SLEEP);
+			nfaddr = kmem_alloc(namelen + 1, KM_SLEEP);
 			bcopy(faddr, nfaddr, namelen);
 			kmem_free(faddr, namelen);
 
@@ -671,7 +671,7 @@ accept(int sock, struct sockaddr *name, socklen_t *namelenp, int flags)
 	ASSERT(MUTEX_NOT_HELD(&nso->so_lock));
 	if (namelen != 0) {
 		addrlen = so->so_max_addr_len;
-		addrp = (struct sockaddr *)kmem_alloc(addrlen, KM_SLEEP);
+		addrp = kmem_alloc(addrlen, KM_SLEEP);
 
 		if ((error = socket_getpeername(nso, (struct sockaddr *)addrp,
 		    &addrlen, B_TRUE, CRED())) == 0) {
@@ -1410,7 +1410,7 @@ getpeername(int sock, struct sockaddr *name, socklen_t *namelenp)
 		goto rel_out;
 	}
 	sock_addrlen = so->so_max_addr_len;
-	sock_addrp = (struct sockaddr *)kmem_alloc(sock_addrlen, KM_SLEEP);
+	sock_addrp = kmem_alloc(sock_addrlen, KM_SLEEP);
 
 	if ((error = socket_getpeername(so, sock_addrp, &sock_addrlen,
 	    B_FALSE, CRED())) == 0) {
@@ -1447,7 +1447,7 @@ getsockname(int sock, struct sockaddr *name,
 	}
 
 	sock_addrlen = so->so_max_addr_len;
-	sock_addrp = (struct sockaddr *)kmem_alloc(sock_addrlen, KM_SLEEP);
+	sock_addrp = kmem_alloc(sock_addrlen, KM_SLEEP);
 	if ((error = socket_getsockname(so, sock_addrp, &sock_addrlen,
 	    CRED())) == 0) {
 		ASSERT(MUTEX_NOT_HELD(&so->so_lock));

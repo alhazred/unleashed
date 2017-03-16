@@ -476,7 +476,7 @@ p4_pcbe_init(void)
 		 * We use 'size + 1' here to ensure room for the final
 		 * strcat when it terminates the string.
 		 */
-		p4_eventlist[i] = (char *)kmem_alloc(size + 1, KM_SLEEP);
+		p4_eventlist[i] = kmem_alloc(size + 1, KM_SLEEP);
 		*p4_eventlist[i] = '\0';
 
 		for (ev = p4_events; ev->pe_name != NULL; ev++) {

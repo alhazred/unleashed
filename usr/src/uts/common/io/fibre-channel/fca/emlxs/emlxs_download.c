@@ -194,7 +194,7 @@ emlxs_fw_download(emlxs_hba_t *hba, caddr_t buffer, uint32_t len,
 	/*
 	 * Use KM_SLEEP to allocate a temporary buffer
 	 */
-	local_buffer = (caddr_t)kmem_zalloc(len, KM_SLEEP);
+	local_buffer = kmem_zalloc(len, KM_SLEEP);
 
 	/* Perform a 32 bit swap of the image */
 	bptr1 = (uint32_t *)local_buffer;
@@ -2152,7 +2152,7 @@ emlxs_cfl_download(emlxs_hba_t *hba, uint32_t region, caddr_t buffer,
 	/*
 	 * Use KM_SLEEP to allocate a temporary buffer
 	 */
-	local_buffer = (caddr_t)kmem_zalloc(len, KM_SLEEP);
+	local_buffer = kmem_zalloc(len, KM_SLEEP);
 
 	/* Perform a 32 bit swap of the image */
 	bptr1 = (uint32_t *)local_buffer;
@@ -2482,7 +2482,7 @@ emlxs_start_abs_download(emlxs_hba_t *hba,
 	EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_image_detail_msg,
 	    "Performing absolute download...");
 
-	if ((DataBuffer = (caddr_t)kmem_zalloc(DL_SLIM_SEG_BYTE_COUNT,
+	if ((DataBuffer = kmem_zalloc(DL_SLIM_SEG_BYTE_COUNT,
 	    KM_NOSLEEP)) == NULL) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_download_failed_msg,
 		    "Unable to allocate data buffer.");
@@ -3169,7 +3169,7 @@ emlxs_start_rel_download(emlxs_hba_t *hba,
 	EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_image_detail_msg,
 	    "Relative download: %08x %08x", wptr[0], wptr[1]);
 
-	if ((DataBuffer = (caddr_t)kmem_zalloc(DL_SLIM_SEG_BYTE_COUNT,
+	if ((DataBuffer = kmem_zalloc(DL_SLIM_SEG_BYTE_COUNT,
 	    KM_NOSLEEP)) == NULL) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_download_failed_msg,
 		    "Unable to allocate data buffer.");
@@ -5173,7 +5173,7 @@ emlxs_proc_abs_2mb(emlxs_hba_t *hba, caddr_t EntireBuffer,
 	DlByteCount = AifHdr->RoSize + AifHdr->RwSize;
 	DlToAddr = AifHdr->ImageBase;
 
-	if ((DataBuffer = (caddr_t)kmem_zalloc(DL_SLIM_SEG_BYTE_COUNT,
+	if ((DataBuffer = kmem_zalloc(DL_SLIM_SEG_BYTE_COUNT,
 	    KM_NOSLEEP)) == NULL) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_download_failed_msg,
 		    "%x: Unable to allocate data buffer.", FileType);

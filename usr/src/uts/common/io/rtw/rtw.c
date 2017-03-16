@@ -1252,7 +1252,7 @@ rtw_dma_init(dev_info_t *devinfo, rtw_softc_t *rsc)
 		txds = rsc->sc_txq[i].txdesc_h;
 		/* allocate data structures to describe TX DMA buffers */
 		buflen = sizeof (struct rtw_txbuf) * rtw_qlen[i];
-		txbf = (struct rtw_txbuf *)kmem_zalloc(buflen, KM_SLEEP);
+		txbf = kmem_zalloc(buflen, KM_SLEEP);
 		rsc->sc_txq[i].txbuf_h = txbf;
 		for (j = 0; j < rtw_qlen[i]; j++, txbf++, txds++) {
 			txbf->txdesc = txds;
@@ -1281,7 +1281,7 @@ rtw_dma_init(dev_info_t *devinfo, rtw_softc_t *rsc)
 
 	/* allocate data structures to describe RX DMA buffers */
 	buflen = sizeof (struct rtw_rxbuf) * RTW_RXQLEN;
-	rxbf = (struct rtw_rxbuf *)kmem_zalloc(buflen, KM_SLEEP);
+	rxbf = kmem_zalloc(buflen, KM_SLEEP);
 	rsc->rxbuf_h = rxbf;
 
 	for (j = 0; j < RTW_RXQLEN; j++, rxbf++, rxds++) {

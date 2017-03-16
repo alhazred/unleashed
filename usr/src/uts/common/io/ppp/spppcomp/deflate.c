@@ -154,7 +154,7 @@ z_alloc(void *notused, uint_t items, uint_t size)
 
 	size = items * size + sizeof (struct zchunk);
 
-	z = (struct zchunk *)kmem_alloc(size, KM_NOSLEEP);
+	z = kmem_alloc(size, KM_NOSLEEP);
 	if (z == NULL)
 		return (NULL);
 
@@ -214,7 +214,7 @@ z_comp_alloc(uchar_t *options, int opt_len)
 		return (NULL);
 	}
 
-	state = (struct deflate_state *)kmem_zalloc(sizeof (*state), KM_SLEEP);
+	state = kmem_zalloc(sizeof (*state), KM_SLEEP);
 	ASSERT(state != NULL);
 
 	state->strm.zalloc = (alloc_func)z_alloc;
@@ -664,7 +664,7 @@ z_decomp_alloc(uchar_t *options, int opt_len)
 		return (NULL);
 	}
 
-	state = (struct deflate_state *)kmem_zalloc(sizeof (*state), KM_SLEEP);
+	state = kmem_zalloc(sizeof (*state), KM_SLEEP);
 	ASSERT(state != NULL);
 
 	state->strm.zalloc = (alloc_func)z_alloc;

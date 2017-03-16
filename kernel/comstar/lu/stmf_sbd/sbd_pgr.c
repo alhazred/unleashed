@@ -1876,7 +1876,7 @@ sbd_pgr_remove_it_handle(sbd_lu_t *sl, sbd_it_data_t *my_it) {
 char *
 sbd_get_devid_string(sbd_lu_t *sl)
 {
-	char *str = (char *)kmem_zalloc(33, KM_SLEEP);
+	char *str = kmem_zalloc(33, KM_SLEEP);
 	(void) snprintf(str, 33,
 	    "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
 	    sl->sl_device_id[4], sl->sl_device_id[5], sl->sl_device_id[6],

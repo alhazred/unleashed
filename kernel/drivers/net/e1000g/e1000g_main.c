@@ -428,8 +428,7 @@ e1000g_attach(dev_info_t *devinfo, ddi_attach_cmd_t cmd)
 	/*
 	 * Allocate soft data structure
 	 */
-	Adapter =
-	    (struct e1000g *)kmem_zalloc(sizeof (*Adapter), KM_SLEEP);
+	Adapter = kmem_zalloc(sizeof (*Adapter), KM_SLEEP);
 
 	Adapter->dip = devinfo;
 	Adapter->instance = instance;

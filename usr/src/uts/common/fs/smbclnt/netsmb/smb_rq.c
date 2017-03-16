@@ -106,7 +106,7 @@ smb_rq_alloc(struct smb_connobj *layer, uchar_t cmd, struct smb_cred *scred,
 	struct smb_rq *rqp;
 	int error;
 
-	rqp = (struct smb_rq *)kmem_alloc(sizeof (struct smb_rq), KM_SLEEP);
+	rqp = kmem_alloc(sizeof (struct smb_rq), KM_SLEEP);
 	if (rqp == NULL)
 		return (ENOMEM);
 	error = smb_rq_init(rqp, layer, cmd, scred);
@@ -551,7 +551,7 @@ smb_t2_alloc(struct smb_connobj *layer, ushort_t setup, struct smb_cred *scred,
 	struct smb_t2rq *t2p;
 	int error;
 
-	t2p = (struct smb_t2rq *)kmem_alloc(sizeof (*t2p), KM_SLEEP);
+	t2p = kmem_alloc(sizeof (*t2p), KM_SLEEP);
 	if (t2p == NULL)
 		return (ENOMEM);
 	error = smb_t2_init(t2p, layer, &setup, 1, scred);
@@ -571,7 +571,7 @@ smb_nt_alloc(struct smb_connobj *layer, ushort_t fn, struct smb_cred *scred,
 	struct smb_ntrq *ntp;
 	int error;
 
-	ntp = (struct smb_ntrq *)kmem_alloc(sizeof (*ntp), KM_SLEEP);
+	ntp = kmem_alloc(sizeof (*ntp), KM_SLEEP);
 	if (ntp == NULL)
 		return (ENOMEM);
 	error = smb_nt_init(ntp, layer, fn, scred);

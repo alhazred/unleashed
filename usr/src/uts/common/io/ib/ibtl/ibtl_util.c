@@ -184,7 +184,7 @@ ibtl_logging_initialization()
 	ibtf_debug_buf_size = max(IBTF_MIN_DEBUG_BUF_SIZE,
 	    ibtf_debug_buf_size);
 
-	ibtf_debug_buf = (char *)kmem_alloc(ibtf_debug_buf_size, KM_SLEEP);
+	ibtf_debug_buf = kmem_alloc(ibtf_debug_buf_size, KM_SLEEP);
 	ibtf_clear_print_buf();
 	mutex_exit(&ibtf_print_mutex);
 

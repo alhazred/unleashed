@@ -1149,12 +1149,12 @@ udf_readdir(
 	iovp = uiop->uio_iov;
 	bufsize = iovp->iov_len;
 
-	outb = outbuf = (char *)kmem_alloc((uint32_t)bufsize, KM_SLEEP);
+	outb = outbuf = kmem_alloc((uint32_t)bufsize, KM_SLEEP);
 	end_outb = outb + bufsize;
 	nd = (struct dirent64 *)outbuf;
 
-	dname = (uint8_t *)kmem_zalloc(1024, KM_SLEEP);
-	buf = (uint8_t *)kmem_zalloc(udf_vfsp->udf_lbsize, KM_SLEEP);
+	dname = kmem_zalloc(1024, KM_SLEEP);
+	buf = kmem_zalloc(udf_vfsp->udf_lbsize, KM_SLEEP);
 
 	if (offset == 0) {
 		len = DIRENT64_RECLEN(1);

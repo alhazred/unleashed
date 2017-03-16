@@ -4680,7 +4680,7 @@ emlxs_dfc_send_mbox(emlxs_hba_t *hba, dfc_t *dfc, int32_t mode)
 
 		extsize = (dfc->buf3_size > dfc->buf4_size) ?
 		    dfc->buf3_size : dfc->buf4_size;
-		extbuf = (uint8_t *)kmem_zalloc(extsize, KM_SLEEP);
+		extbuf = kmem_zalloc(extsize, KM_SLEEP);
 
 		if (dfc->buf3_size) {
 			bcopy((void *)dfc->buf3, (void *)extbuf,

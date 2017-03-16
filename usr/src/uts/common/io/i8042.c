@@ -596,7 +596,7 @@ i8042_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	 * DDI_ATTACH processing
 	 */
 
-	global = (struct i8042 *)kmem_zalloc(sizeof (struct i8042), KM_SLEEP);
+	global = kmem_zalloc(sizeof (struct i8042), KM_SLEEP);
 	ddi_set_driver_private(dip, (caddr_t)global);
 	global->dip = dip;
 	global->initialized = B_FALSE;

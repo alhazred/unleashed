@@ -280,8 +280,7 @@ cryptmodopen(queue_t *rq, dev_t *dev, int oflag, int sflag, cred_t *crp)
 	/*
 	 * Allocate and initialize per-Stream structure.
 	 */
-	tmi = (struct tmodinfo *)kmem_zalloc(sizeof (struct tmodinfo),
-						KM_SLEEP);
+	tmi = kmem_zalloc(sizeof (struct tmodinfo), KM_SLEEP);
 
 	tmi->enc_data.method = CRYPT_METHOD_NONE;
 	tmi->dec_data.method = CRYPT_METHOD_NONE;
@@ -2675,7 +2674,7 @@ setup_crypto(struct cr_info_t *ci, struct cipher_data_t *cd, int encrypt)
 		 * cd->key holds the copy of the raw key bytes passed in
 		 * from the userland app.
 		 */
-		cd->key = (char *)kmem_alloc((size_t)ci->keylen, KM_SLEEP);
+		cd->key = kmem_alloc((size_t)ci->keylen, KM_SLEEP);
 
 		cd->keylen = ci->keylen;
 		bcopy(ci->key, cd->key, (size_t)ci->keylen);
@@ -2761,12 +2760,12 @@ setup_crypto(struct cr_info_t *ci, struct cipher_data_t *cd, int encrypt)
 
 		cd->blocklen = newblocklen;
 		if (cd->blocklen) {
-			cd->block = (char *)kmem_zalloc((size_t)cd->blocklen,
+			cd->block = kmem_zalloc((size_t)cd->blocklen,
 				KM_SLEEP);
 		}
 
 		if (cd->method == CRYPT_METHOD_DES_CFB)
-			cd->saveblock = (char *)kmem_zalloc(cd->blocklen,
+			cd->saveblock = kmem_zalloc(cd->blocklen,
 						KM_SLEEP);
 		else
 			cd->saveblock = NULL;
@@ -2778,7 +2777,7 @@ setup_crypto(struct cr_info_t *ci, struct cipher_data_t *cd, int encrypt)
 			cd->ivec = NULL;
 		}
 		if (ci->ivec_usage != IVEC_NEVER && ci->iveclen > 0) {
-			cd->ivec = (char *)kmem_zalloc((size_t)ci->iveclen,
+			cd->ivec = kmem_zalloc((size_t)ci->iveclen,
 						KM_SLEEP);
 			cd->ivlen = ci->iveclen;
 		} else {

@@ -481,7 +481,7 @@ mwl_alloc_rx_ring(struct mwl_softc *sc, int count)
 	bzero(ring->desc, count * sizeof (struct mwl_rxdesc));
 
 	datadlen = count * sizeof (struct mwl_rxbuf);
-	ring->buf = (struct mwl_rxbuf *)kmem_zalloc(datadlen, KM_SLEEP);
+	ring->buf = kmem_zalloc(datadlen, KM_SLEEP);
 	if (ring->buf == NULL) {
 		MWL_DBG(MWL_DBG_DMA, "mwl: mwl_alloc_rxring(): "
 		    "could not alloc rx ring data buffer\n");
@@ -959,7 +959,7 @@ mwl_fwload(struct mwl_softc *sc, void *fwargs)
 		goto bad2;
 	}
 
-	fwboot = (uint8_t *)kmem_alloc(fwboot_size, KM_SLEEP);
+	fwboot = kmem_alloc(fwboot_size, KM_SLEEP);
 	if (fwboot == NULL) {
 		MWL_DBG(MWL_DBG_FW, "mwl: mwl_loadfirmware(): "
 		    "failed to alloc boot firmware memory\n");
@@ -968,7 +968,7 @@ mwl_fwload(struct mwl_softc *sc, void *fwargs)
 	}
 	(void) memcpy(fwboot, fwboot_index, fwboot_size);
 
-	fw = (uint8_t *)kmem_alloc(fw_size, KM_SLEEP);
+	fw = kmem_alloc(fw_size, KM_SLEEP);
 	if (fw == NULL) {
 		MWL_DBG(MWL_DBG_FW, "mwl: mwl_loadfirmware(): "
 		    "failed to alloc firmware memory\n");

@@ -55,8 +55,7 @@ memlist_dump(struct memlist *listp)
 struct memlist *
 memlist_alloc()
 {
-	return ((struct memlist *)kmem_zalloc(sizeof (struct memlist),
-	    KM_SLEEP));
+	return (kmem_zalloc(sizeof (struct memlist), KM_SLEEP));
 }
 
 void

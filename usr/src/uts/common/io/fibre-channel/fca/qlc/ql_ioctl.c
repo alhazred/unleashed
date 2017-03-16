@@ -1472,7 +1472,7 @@ ql_vpd_lookup(ql_adapter_state_t *ha, uint8_t *opcode, uint8_t *bp,
 		return (len);
 	}
 
-	if ((vpdbuf = (uint8_t *)kmem_zalloc(QL_24XX_VPD_SIZE,
+	if ((vpdbuf = kmem_zalloc(QL_24XX_VPD_SIZE,
 	    KM_SLEEP)) == NULL) {
 		EL(ha, "unable to allocate vpd memory\n");
 		return (len);
@@ -2368,7 +2368,7 @@ ql_adm_vpd_gettag(ql_adapter_state_t *ha, ql_adm_op_t *dop, int mode)
 		return (EINVAL);
 	}
 
-	if ((lbuf = (uint8_t *)kmem_zalloc(dop->length, KM_SLEEP)) == NULL) {
+	if ((lbuf = kmem_zalloc(dop->length, KM_SLEEP)) == NULL) {
 		EL(ha, "mem alloc failure of %xh bytes\n", dop->length);
 		rval = EFAULT;
 	} else {

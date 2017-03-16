@@ -718,10 +718,10 @@ top:
 	 * again.
 	 */
 	if (new == NULL) {
-		new = (struct upcount *)kmem_alloc(sizeof (*new), KM_NOSLEEP);
+		new = kmem_alloc(sizeof (*new), KM_NOSLEEP);
 		if (new == NULL) {
 			mutex_exit(&pidlock);
-			new = (struct upcount *)kmem_alloc(sizeof (*new),
+			new = kmem_alloc(sizeof (*new),
 			    KM_SLEEP);
 			mutex_enter(&pidlock);
 			goto top;

@@ -481,7 +481,7 @@ ath_desc_alloc(dev_info_t *devinfo, ath_t *asc)
 
 	/* allocate data structures to describe TX/RX DMA buffers */
 	asc->asc_vbuflen = sizeof (struct ath_buf) * (ATH_TXBUF + ATH_RXBUF);
-	bf = (struct ath_buf *)kmem_zalloc(asc->asc_vbuflen, KM_SLEEP);
+	bf = kmem_zalloc(asc->asc_vbuflen, KM_SLEEP);
 	asc->asc_vbufptr = bf;
 
 	/* DMA buffer size for each TX/RX packet */

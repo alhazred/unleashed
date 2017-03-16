@@ -390,7 +390,7 @@ nfsauth_retrieve(struct exportinfo *exi, char *req_netid, int flavor,
 		return (FALSE);
 	}
 
-	abuf = (caddr_t)kmem_alloc(absz, KM_SLEEP);
+	abuf = kmem_alloc(absz, KM_SLEEP);
 	xdrmem_create(&xdrs, abuf, absz, XDR_ENCODE);
 	if (!xdr_varg(&xdrs, &varg)) {
 		XDR_DESTROY(&xdrs);

@@ -728,7 +728,7 @@ pcie_hp_create_port_name_num(dev_info_t *dip, ddi_hp_cn_info_t *cn_info)
 	 */
 	name_len = strlen(tmp) + PCIE_HP_PORT_NAME_STRING_LEN + 1;
 
-	cn_info->cn_name = (char *)kmem_zalloc(name_len, KM_SLEEP);
+	cn_info->cn_name = kmem_zalloc(name_len, KM_SLEEP);
 	(void) snprintf(cn_info->cn_name, name_len, "pci.%x,%x",
 	    dev_num, func_num);
 	cn_info->cn_num = (dev_num << 8) | func_num;

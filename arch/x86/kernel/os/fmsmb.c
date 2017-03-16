@@ -130,7 +130,7 @@ smb_create_strcnt(int count)
 
 	for (i = 0; i < count; i++) {
 		for (j = 0; j < MAX_CONT; j++) {
-			types->ids[i]->cont_ids[j] = (uint16_t *)kmem_zalloc(
+			types->ids[i]->cont_ids[j] = kmem_zalloc(
 			    sizeof (uint16_t), KM_SLEEP);
 		}
 	}

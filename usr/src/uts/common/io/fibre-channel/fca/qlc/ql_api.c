@@ -10912,7 +10912,7 @@ ql_erase_flash(ql_adapter_state_t *ha, int erase_all)
 
 		erase_delay = 20000000;
 
-		bfp = (uint8_t *)kmem_zalloc(ssize, KM_SLEEP);
+		bfp = kmem_zalloc(ssize, KM_SLEEP);
 
 		/* Save the section of flash we're not updating to buffer */
 		tmp = bfp;
@@ -17250,7 +17250,7 @@ ql_el_trace_desc_ctor(ql_adapter_state_t *ha)
 	} else {
 		ha->el_trace_desc->next		= 0;
 		ha->el_trace_desc->trace_buffer =
-		    (char *)kmem_zalloc(EL_TRACE_BUF_SIZE, KM_SLEEP);
+		    kmem_zalloc(EL_TRACE_BUF_SIZE, KM_SLEEP);
 
 		if (ha->el_trace_desc->trace_buffer == NULL) {
 			cmn_err(CE_WARN, "%s(%d): can't get trace buffer",

@@ -1173,10 +1173,10 @@ nfs4_trigger_esi_create_mirrormount(vnode_t *vp, servinfo4_t *svp)
 	sikncp = esi->esi_knconf;
 	svkncp = svp->sv_knconf;
 	sikncp->knc_semantics = svkncp->knc_semantics;
-	sikncp->knc_protofmly = (caddr_t)kmem_zalloc(KNC_STRSIZE, KM_SLEEP);
+	sikncp->knc_protofmly = kmem_zalloc(KNC_STRSIZE, KM_SLEEP);
 	(void) strcat((char *)sikncp->knc_protofmly,
 	    (char *)svkncp->knc_protofmly);
-	sikncp->knc_proto = (caddr_t)kmem_zalloc(KNC_STRSIZE, KM_SLEEP);
+	sikncp->knc_proto = kmem_zalloc(KNC_STRSIZE, KM_SLEEP);
 	(void) strcat((char *)sikncp->knc_proto, (char *)svkncp->knc_proto);
 	sikncp->knc_rdev = svkncp->knc_rdev;
 
@@ -1769,10 +1769,10 @@ nfs4_trigger_esi_create_referral(vnode_t *vp, cred_t *cr)
 
 	svkncp = nfsfsloc.knconf;
 	sikncp->knc_semantics = svkncp->knc_semantics;
-	sikncp->knc_protofmly = (caddr_t)kmem_zalloc(KNC_STRSIZE, KM_SLEEP);
+	sikncp->knc_protofmly = kmem_zalloc(KNC_STRSIZE, KM_SLEEP);
 	(void) strlcat((char *)sikncp->knc_protofmly,
 	    (char *)svkncp->knc_protofmly, KNC_STRSIZE);
-	sikncp->knc_proto = (caddr_t)kmem_zalloc(KNC_STRSIZE, KM_SLEEP);
+	sikncp->knc_proto = kmem_zalloc(KNC_STRSIZE, KM_SLEEP);
 	(void) strlcat((char *)sikncp->knc_proto, (char *)svkncp->knc_proto,
 	    KNC_STRSIZE);
 	sikncp->knc_rdev = svkncp->knc_rdev;

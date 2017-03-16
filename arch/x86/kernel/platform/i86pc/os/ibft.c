@@ -763,8 +763,7 @@ ld_ib_prop()
 		return;
 	}
 
-	ibft_tbl_buf = (char *)kmem_zalloc(ISCSI_IBFT_TBL_BUF_LEN,
-	    KM_SLEEP);
+	ibft_tbl_buf = kmem_zalloc(ISCSI_IBFT_TBL_BUF_LEN, KM_SLEEP);
 
 	if (!ibft_tbl_buf) {
 		/* Unlikely to happen */

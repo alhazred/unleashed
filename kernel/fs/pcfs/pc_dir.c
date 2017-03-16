@@ -1350,7 +1350,7 @@ direntries_needed(struct pcnode *dp, char *namep)
 		 * needed. Conversion will consume at the most 512 bytes
 		 */
 		u16l = PCMAXNAMLEN + 1;
-		w2_str = (uint16_t *)kmem_zalloc(PCMAXNAM_UTF16, KM_SLEEP);
+		w2_str = kmem_zalloc(PCMAXNAM_UTF16, KM_SLEEP);
 		u8l = strlen(namep);
 		ret = uconv_u8tou16((const uchar_t *)namep, &u8l,
 		    w2_str, &u16l, UCONV_OUT_LITTLE_ENDIAN);
@@ -1396,7 +1396,7 @@ pc_name_to_pcdir(struct pcnode *dp, char *namep, int ndirentries, int *errret)
 	/* Here we need to convert to UTF-16 or UNICODE for writing */
 
 	u16l = PCMAXNAMLEN + 1;
-	w2_str = (uint16_t *)kmem_zalloc(PCMAXNAM_UTF16, KM_SLEEP);
+	w2_str = kmem_zalloc(PCMAXNAM_UTF16, KM_SLEEP);
 	u8l = strlen(namep);
 	ret = uconv_u8tou16((const uchar_t *)namep, &u8l, w2_str, &u16l,
 	    UCONV_OUT_LITTLE_ENDIAN);

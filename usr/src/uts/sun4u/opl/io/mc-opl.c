@@ -4043,7 +4043,7 @@ mc_ioctl_debug(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp,
 		}
 		buf = NULL;
 	} else {
-		buf = (caddr_t)kmem_alloc(PAGESIZE, KM_SLEEP);
+		buf = kmem_alloc(PAGESIZE, KM_SLEEP);
 
 		pa = va_to_pa(buf);
 		pa += offset;

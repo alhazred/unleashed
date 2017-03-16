@@ -263,7 +263,7 @@ openfile(char *filename)
 		if (mfg_name == NULL)
 			mfg_name = get_mfg_name();
 
-		fullpath = (char *)kmem_alloc(MAXPATHLEN, 0);
+		fullpath = kmem_alloc(MAXPATHLEN, 0);
 	}
 
 	if (*filename == '/') {

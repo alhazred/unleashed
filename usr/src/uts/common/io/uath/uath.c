@@ -775,7 +775,7 @@ uath_loadfirmware(struct uath_softc *sc)
 		goto label;
 	}
 
-	fw_image = (char *)kmem_alloc(fw_size, KM_SLEEP);
+	fw_image = kmem_alloc(fw_size, KM_SLEEP);
 	if (fw_image == NULL) {
 		UATH_DEBUG(UATH_DBG_ERR, "uath: uath_loadfirmware(): "
 		    "failed to alloc firmware memory\n");

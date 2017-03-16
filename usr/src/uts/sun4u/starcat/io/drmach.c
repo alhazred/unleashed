@@ -8460,8 +8460,7 @@ drmach_sr_insert(struct drmach_sr_list **lp, dev_info_t *dip)
 
 	DRMACH_PR("drmach_sr_insert: adding dip %p\n", (void *)dip);
 
-	np = (struct drmach_sr_list *)kmem_alloc(
-	    sizeof (struct drmach_sr_list), KM_SLEEP);
+	np = kmem_alloc(sizeof (struct drmach_sr_list), KM_SLEEP);
 
 	ndi_hold_devi(dip);
 	np->dip = dip;

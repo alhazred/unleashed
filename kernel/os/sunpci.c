@@ -441,7 +441,7 @@ pci_save_config_regs(dev_info_t *dip)
 no_cap:
 	if (pcie) {
 		/* PCI express device. Can have data in all 4k space */
-		regbuf = (uint32_t *)kmem_zalloc((size_t)PCIE_CONF_HDR_SIZE,
+		regbuf = kmem_zalloc((size_t)PCIE_CONF_HDR_SIZE,
 		    KM_SLEEP);
 		p = regbuf;
 		/*
@@ -450,7 +450,7 @@ no_cap:
 		 */
 		maskbufsz = (size_t)((PCIE_CONF_HDR_SIZE/ sizeof (uint32_t)) >>
 		    INDEX_SHIFT);
-		maskbuf = (uint8_t *)kmem_zalloc(maskbufsz, KM_SLEEP);
+		maskbuf = kmem_zalloc(maskbufsz, KM_SLEEP);
 #ifdef __sparc
 		hp = impl_acc_hdl_get(confhdl);
 #endif
@@ -495,7 +495,7 @@ no_cap:
 		kmem_free(maskbuf, (size_t)maskbufsz);
 		kmem_free(regbuf, (size_t)PCIE_CONF_HDR_SIZE);
 	} else {
-		regbuf = (uint32_t *)kmem_zalloc((size_t)PCI_CONF_HDR_SIZE,
+		regbuf = kmem_zalloc((size_t)PCI_CONF_HDR_SIZE,
 		    KM_SLEEP);
 		chsp = (pci_config_header_state_t *)regbuf;
 

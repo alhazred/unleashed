@@ -14019,7 +14019,7 @@ mptsas_probe_lun(dev_info_t *pdip, int lun, dev_info_t **dip,
 	struct scsi_inquiry	*sd_inq = NULL;
 	mptsas_t		*mpt = DIP2MPT(pdip);
 
-	sd_inq = (struct scsi_inquiry *)kmem_alloc(SUN_INQSIZE, KM_SLEEP);
+	sd_inq = kmem_alloc(SUN_INQSIZE, KM_SLEEP);
 
 	rval = mptsas_inquiry(mpt, ptgt, lun, 0, (uchar_t *)sd_inq,
 	    SUN_INQSIZE, 0, (uchar_t)0);
@@ -14318,7 +14318,7 @@ mptsas_config_raid(dev_info_t *pdip, uint16_t target, dev_info_t **dip)
 		return (rval);
 	}
 
-	sd_inq = (struct scsi_inquiry *)kmem_alloc(SUN_INQSIZE, KM_SLEEP);
+	sd_inq = kmem_alloc(SUN_INQSIZE, KM_SLEEP);
 	rval = mptsas_inquiry(mpt, ptgt, 0, 0, (uchar_t *)sd_inq,
 	    SUN_INQSIZE, 0, (uchar_t)0);
 

@@ -219,7 +219,7 @@ rds_init_recv_caches(rds_state_t *statep)
 	RDS_DPRINTF3(LABEL, "RDS Buffer Pool Memory: %lld", memsize);
 	RDS_DPRINTF3(LABEL, "Total Buffers: %d", nbuf);
 
-	memp = (uint8_t *)kmem_zalloc(memsize, KM_NOSLEEP);
+	memp = kmem_zalloc(memsize, KM_NOSLEEP);
 	if (memp == NULL) {
 		RDS_DPRINTF1(LABEL, "RDS Memory allocation failed");
 		mutex_exit(&rds_dpool.pool_lock);
@@ -432,7 +432,7 @@ rds_init_send_pool(rds_ep_t *ep, ib_guid_t hca_guid)
 
 	RDS_DPRINTF3(LABEL, "RDS Send Pool Memory: %lld", memsize);
 
-	memp = (uint8_t *)kmem_zalloc(memsize, KM_NOSLEEP);
+	memp = kmem_zalloc(memsize, KM_NOSLEEP);
 	if (memp == NULL) {
 		RDS_DPRINTF1(LABEL, "RDS Send Memory allocation failed");
 		return (-1);

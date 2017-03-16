@@ -1596,7 +1596,7 @@ ql_common_properties(ql_adapter_state_t *ha)
 
 		if (ha->el_trace_desc->trace_buffer != NULL) {
 			new_size = 1024 * data;
-			new_trace = (char *)kmem_zalloc(new_size, KM_SLEEP);
+			new_trace = kmem_zalloc(new_size, KM_SLEEP);
 
 			if (new_trace == NULL) {
 				cmn_err(CE_WARN, "%s(%d): can't get new"

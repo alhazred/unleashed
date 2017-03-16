@@ -365,7 +365,7 @@ read_elf32(int fd, int print, Elf32_Ehdr *elfhdrp)
 	 */
 	nphdrs = elfhdrp->e_phnum;
 	phdrsize = nphdrs * elfhdrp->e_phentsize;
-	allphdrs = (caddr_t)kmem_alloc(phdrsize, 0);
+	allphdrs = kmem_alloc(phdrsize, 0);
 	if (allphdrs == NULL)
 		goto elferror;
 	if (verbosemode)
@@ -764,7 +764,7 @@ read_elf64(int fd, int print, Elf64_Ehdr *elfhdrp)
 	 */
 	nphdrs = elfhdrp->e_phnum;
 	phdrsize = nphdrs * elfhdrp->e_phentsize;
-	allphdrs = (caddr_t)kmem_alloc(phdrsize, 0);
+	allphdrs = kmem_alloc(phdrsize, 0);
 	if (allphdrs == NULL)
 		goto elf64error;
 	if (verbosemode)
@@ -1137,7 +1137,7 @@ iload32(char *rtld, Elf32_Phdr *thdr, Elf32_Phdr *dhdr, auxv32_t **avp)
 	}
 
 	size = ehdr->e_shentsize * ehdr->e_shnum;
-	if ((shdrs = (caddr_t)kmem_alloc(size, 0)) == NULL) {
+	if ((shdrs = kmem_alloc(size, 0)) == NULL) {
 		printf("boot: alloc error reading ELF header (%s).\n", rtld);
 		goto error;
 	}
@@ -1293,7 +1293,7 @@ iload64(char *rtld, Elf64_Phdr *thdr, Elf64_Phdr *dhdr, auxv64_t **avp)
 	}
 
 	size = ehdr->e_shentsize * ehdr->e_shnum;
-	if ((shdrs = (caddr_t)kmem_alloc(size, 0)) == NULL) {
+	if ((shdrs = kmem_alloc(size, 0)) == NULL) {
 		printf("boot: alloc error reading ELF header (%s).\n", rtld);
 		goto error;
 	}

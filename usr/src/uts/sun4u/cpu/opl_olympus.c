@@ -2230,8 +2230,7 @@ opl_ta3(void)
 	 * opl_ta3 should only be called once at boot time.
 	 */
 	if (opl_ta3_save == NULL)
-		opl_ta3_save = (char *)kmem_alloc(NCPU * sizeof (win_regs_t),
-		    KM_SLEEP);
+		opl_ta3_save = kmem_alloc(NCPU * sizeof (win_regs_t), KM_SLEEP);
 }
 
 /*

@@ -143,7 +143,7 @@ pci_common_set_parent_private_data(dev_info_t *dip)
 {
 	struct ddi_parent_private_data *pdptr;
 
-	pdptr = (struct ddi_parent_private_data *)kmem_zalloc(
+	pdptr = kmem_zalloc(
 	    (sizeof (struct ddi_parent_private_data) +
 	    sizeof (struct intrspec)), KM_SLEEP);
 	pdptr->par_intr = (struct intrspec *)(pdptr + 1);

@@ -435,7 +435,7 @@ usb_get_dev_data(dev_info_t *dip,
 	USB_DPRINTF_L4(DPRINT_MASK_REGISTER, usbai_reg_log_handle,
 	    "cookie = 0x%p", (void *)usb_reg->dev_iblock_cookie);
 
-	tmpbuf = (char *)kmem_zalloc(USB_MAXSTRINGLEN, KM_SLEEP);
+	tmpbuf = kmem_zalloc(USB_MAXSTRINGLEN, KM_SLEEP);
 
 	if (usba_device->usb_mfg_str != NULL) {
 		usb_reg->dev_mfg = kmem_zalloc(

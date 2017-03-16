@@ -1114,7 +1114,7 @@ hook_family_copy(hook_family_t *src)
 	TAILQ_INIT(&new->hfi_nhead);
 
 	/* Copy name */
-	dst->hf_name = (char *)kmem_alloc(strlen(src->hf_name) + 1, KM_SLEEP);
+	dst->hf_name = kmem_alloc(strlen(src->hf_name) + 1, KM_SLEEP);
 	(void) strcpy(dst->hf_name, src->hf_name);
 
 	return (new);
@@ -2289,7 +2289,7 @@ hook_copy(hook_t *src)
 
 	/* Copy name */
 	len = strlen(src->h_name);
-	dst->h_name = (char *)kmem_alloc(len + 1, KM_SLEEP);
+	dst->h_name = kmem_alloc(len + 1, KM_SLEEP);
 	(void) strcpy(dst->h_name, src->h_name);
 
 	/*
@@ -2343,7 +2343,7 @@ hook_init_kstats(hook_family_int_t *hfi, hook_event_int_t *hei, hook_int_t *hi)
 	kslen = strlen(hfi->hfi_family.hf_name) +
 	    strlen(hei->hei_event->he_name) + 2;
 
-	hi->hi_ksname = (char *)kmem_zalloc(kslen, KM_SLEEP);
+	hi->hi_ksname = kmem_zalloc(kslen, KM_SLEEP);
 	(void) snprintf(hi->hi_ksname, kslen, "%s/%s",
 	    hfi->hfi_family.hf_name, hei->hei_event->he_name);
 

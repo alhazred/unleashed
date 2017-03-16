@@ -153,8 +153,7 @@ dr_memlist_dup(struct memlist *mlist)
 	mlp = &hl;
 	tl = *mlp;
 	for (; mlist; mlist = mlist->ml_next) {
-		*mlp = 	(struct memlist *)kmem_zalloc(sizeof (struct memlist),\
-		    KM_SLEEP);
+		*mlp = kmem_zalloc(sizeof (struct memlist), KM_SLEEP);
 		(*mlp)->ml_address = mlist->ml_address;
 		(*mlp)->ml_size = mlist->ml_size;
 		(*mlp)->ml_prev = tl;

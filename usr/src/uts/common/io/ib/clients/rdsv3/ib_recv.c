@@ -259,7 +259,7 @@ rdsv3_ib_create_inc_pool(struct rdsv3_ib_device *rds_ibdev)
 {
 	struct rdsv3_inc_pool *pool;
 
-	pool = (struct rdsv3_inc_pool *)kmem_zalloc(sizeof (*pool), KM_NOSLEEP);
+	pool = kmem_zalloc(sizeof (*pool), KM_NOSLEEP);
 	if (pool == NULL) {
 		return (-ENOMEM);
 	}

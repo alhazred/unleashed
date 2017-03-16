@@ -609,7 +609,7 @@ ps_suspend_sequence(ps_suspend_data_t *data)
 	ASSERT(data != NULL);
 
 	msg = data->buf;
-	error_reason = (char *)kmem_zalloc(SUSPEND_MAX_REASON_SIZE, KM_SLEEP);
+	error_reason = kmem_zalloc(SUSPEND_MAX_REASON_SIZE, KM_SLEEP);
 
 	/*
 	 * Abort the suspend if a DR operation is in progress. Otherwise,

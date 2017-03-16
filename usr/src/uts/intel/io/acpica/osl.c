@@ -290,14 +290,14 @@ AcpiOsTableOverride(ACPI_TABLE_HEADER *ExistingTable,
 		*NewTable = 0;
 		return (AE_OK);
 	} else {
-		buf1 = (char *)kmem_alloc(MAX_DAT_FILE_SIZE, KM_SLEEP);
+		buf1 = kmem_alloc(MAX_DAT_FILE_SIZE, KM_SLEEP);
 		count = kobj_read_file(file, buf1, MAX_DAT_FILE_SIZE-1, 0);
 		if (count >= MAX_DAT_FILE_SIZE) {
 			cmn_err(CE_WARN, "!acpica: table %s file size too big",
 			    acpi_table_loc);
 			*NewTable = 0;
 		} else {
-			buf2 = (char *)kmem_alloc(count, KM_SLEEP);
+			buf2 = kmem_alloc(count, KM_SLEEP);
 			(void) memcpy(buf2, buf1, count);
 			*NewTable = (ACPI_TABLE_HEADER *)buf2;
 			cmn_err(CE_NOTE, "!acpica: replacing table: %s",
@@ -475,7 +475,7 @@ AcpiOsCreateLock(ACPI_HANDLE *OutHandle)
 	if (OutHandle == NULL)
 		return (AE_BAD_PARAMETER);
 
-	mp = (kmutex_t *)kmem_alloc(sizeof (kmutex_t), KM_SLEEP);
+	mp = kmem_alloc(sizeof (kmutex_t), KM_SLEEP);
 	mutex_init(mp, NULL, MUTEX_DRIVER, NULL);
 	*OutHandle = (ACPI_HANDLE)mp;
 	return (AE_OK);

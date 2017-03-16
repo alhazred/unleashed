@@ -1243,7 +1243,7 @@ swapadd(struct vnode *vp, ulong_t lowblk, ulong_t nblks, char *swapname)
 	nsip->si_checkcnt = nsip->si_alloccnt = 0;
 
 	nsip->si_pnamelen = (int)strlen(swapname) + 1;
-	nsip->si_pname = (char *)kmem_zalloc(nsip->si_pnamelen, KM_SLEEP);
+	nsip->si_pname = kmem_zalloc(nsip->si_pnamelen, KM_SLEEP);
 	bcopy(swapname, nsip->si_pname, nsip->si_pnamelen - 1);
 	SWAP_PRINT(SW_CTL, "swapadd: allocating swapinfo for %s, %ld pages\n",
 	    swapname, pages, 0, 0, 0);

@@ -3177,7 +3177,7 @@ skd_cons_skmsg(struct skd_device *skdev)
 	    (ulong_t)(sizeof (struct skd_fitmsg_context) *
 	    skdev->num_fitmsg_context));
 
-	skdev->skmsg_table = (struct skd_fitmsg_context *)kmem_zalloc(
+	skdev->skmsg_table = kmem_zalloc(
 	    sizeof (struct skd_fitmsg_context) * skdev->num_fitmsg_context,
 	    KM_SLEEP);
 
@@ -3237,7 +3237,7 @@ skd_cons_skreq(struct skd_device *skdev)
 	    (ulong_t) (sizeof (struct skd_request_context) *
 	    skdev->num_req_context));
 
-	skdev->skreq_table = (struct skd_request_context *)kmem_zalloc(
+	skdev->skreq_table = kmem_zalloc(
 	    sizeof (struct skd_request_context) * skdev->num_req_context,
 	    KM_SLEEP);
 

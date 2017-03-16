@@ -3618,7 +3618,7 @@ dcdioctl_cmd(dev_t devp, struct udcd_cmd *in, enum uio_seg cdbspace,
 		kmem_free(cdb, sizeof (struct dcd_cmd));
 		return (EFAULT);
 	}
-	scmd = (struct udcd_cmd *)kmem_alloc(sizeof (*scmd), KM_SLEEP);
+	scmd = kmem_alloc(sizeof (*scmd), KM_SLEEP);
 	bcopy((caddr_t)in, (caddr_t)scmd, sizeof (*scmd));
 	scmd->udcd_cmd = (struct dcd_cmd *)cdb;
 	rw = (scmd->udcd_flags & UDCD_READ) ? B_READ: B_WRITE;

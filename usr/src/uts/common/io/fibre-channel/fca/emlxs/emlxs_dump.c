@@ -516,8 +516,7 @@ emlxs_fopen(
 	fp->size &= 0xFFFFFFFC;
 
 	if (!fp->buffer) {
-		fp->buffer =
-		    (uint8_t *)kmem_zalloc(fp->size, KM_SLEEP);
+		fp->buffer = kmem_zalloc(fp->size, KM_SLEEP);
 
 	} else {
 		bzero(fp->buffer, fp->size);
@@ -1378,8 +1377,8 @@ emlxs_dump_parm_table(
 	char *buf1;
 	char *buf2;
 
-	buf1 = (char *)kmem_zalloc(8192, KM_SLEEP);
-	buf2 = (char *)kmem_zalloc(8192, KM_SLEEP);
+	buf1 = kmem_zalloc(8192, KM_SLEEP);
+	buf2 = kmem_zalloc(8192, KM_SLEEP);
 
 	/* Driver Parameters Heading */
 	(void) snprintf(buf1, 8192,
@@ -1545,8 +1544,8 @@ emlxs_dump_fw_version(
 	buf1_size = 1024;
 	buf2_size = 1024;
 
-	buf1 = (char *)kmem_zalloc(buf1_size, KM_SLEEP);
-	buf2 = (char *)kmem_zalloc(buf2_size, KM_SLEEP);
+	buf1 = kmem_zalloc(buf1_size, KM_SLEEP);
+	buf2 = kmem_zalloc(buf2_size, KM_SLEEP);
 
 	/* Write the Firmware Version into the buffer */
 	(void) snprintf(buf2, buf2_size, "%s", vpd->fw_version);
@@ -1623,8 +1622,8 @@ emlxs_dump_boot_version(
 	buf1_size = 1024;
 	buf2_size = 1024;
 
-	buf1 = (char *)kmem_zalloc(buf1_size, KM_SLEEP);
-	buf2 = (char *)kmem_zalloc(buf2_size, KM_SLEEP);
+	buf1 = kmem_zalloc(buf1_size, KM_SLEEP);
+	buf2 = kmem_zalloc(buf2_size, KM_SLEEP);
 
 #ifdef EMLXS_SPARC
 	if (strcmp(vpd->fcode_version, "none") == 0)
@@ -1694,8 +1693,8 @@ emlxs_dump_cfg_region4_decoded(
 	buf1_size = 1024;
 	buf2_size = 1024;
 
-	buf1 = (char *)kmem_zalloc(buf1_size, KM_SLEEP);
-	buf2 = (char *)kmem_zalloc(buf2_size, KM_SLEEP);
+	buf1 = kmem_zalloc(buf1_size, KM_SLEEP);
+	buf2 = kmem_zalloc(buf2_size, KM_SLEEP);
 
 	/* Write the Initial ID into the buffer */
 	(void) snprintf(buf2, buf2_size, "%s: %08x %08x",
@@ -1785,8 +1784,8 @@ emlxs_dump_cfg_region14_decoded(
 	buf1_size = 1024;
 	buf2_size = 1024;
 
-	buf1 = (char *)kmem_zalloc(buf1_size, KM_SLEEP);
-	buf2 = (char *)kmem_zalloc(buf2_size, KM_SLEEP);
+	buf1 = kmem_zalloc(buf1_size, KM_SLEEP);
+	buf2 = kmem_zalloc(buf2_size, KM_SLEEP);
 
 /* If Big Endian, swap the data in place, */
 /* because it's PCI Data (Little Endian) */
@@ -1912,11 +1911,11 @@ emlxs_dump_cfg_region(
 	buf1_size = 4096;
 	buf2_size = 1024;
 
-	buf1 = (char *)kmem_zalloc(buf1_size, KM_SLEEP);
-	buf2 = (char *)kmem_zalloc(buf2_size, KM_SLEEP);
+	buf1 = kmem_zalloc(buf1_size, KM_SLEEP);
+	buf2 = kmem_zalloc(buf2_size, KM_SLEEP);
 
 	buffer =
-	    (uint32_t *)kmem_zalloc(DUMP_MAX_CONFIG_REGION_LENGTH, KM_SLEEP);
+	    kmem_zalloc(DUMP_MAX_CONFIG_REGION_LENGTH, KM_SLEEP);
 
 	status =
 	    emlxs_read_cfg_region(hba, Region, DUMP_MAX_CONFIG_REGION_LENGTH,
@@ -2130,8 +2129,8 @@ emlxs_dump_os_version(
 	buf1_size = 1024;
 	buf2_size = 1024;
 
-	buf1 = (char *)kmem_zalloc(buf1_size, KM_SLEEP);
-	buf2 = (char *)kmem_zalloc(buf2_size, KM_SLEEP);
+	buf1 = kmem_zalloc(buf1_size, KM_SLEEP);
+	buf2 = kmem_zalloc(buf2_size, KM_SLEEP);
 
 	/* First, write the OS Name string into the buffer */
 	(void) strlcpy(buf1, utsname.sysname, buf1_size);
@@ -2172,8 +2171,8 @@ emlxs_dump_drv_version(
 	buf1_size = 1024;
 	buf2_size = 1024;
 
-	buf1 = (char *)kmem_zalloc(buf1_size, KM_SLEEP);
-	buf2 = (char *)kmem_zalloc(buf2_size, KM_SLEEP);
+	buf1 = kmem_zalloc(buf1_size, KM_SLEEP);
+	buf2 = kmem_zalloc(buf2_size, KM_SLEEP);
 
 	/* Write the Driver Type into the buffer */
 	(void) strlcpy(buf1, "Driver Type: ", buf1_size);
@@ -2503,10 +2502,10 @@ emlxs_dump_table_read(
 		return (status);
 	}
 
-	buf1 = (char *)kmem_zalloc(size, KM_SLEEP);
+	buf1 = kmem_zalloc(size, KM_SLEEP);
 
 	/* Allocate a buffer to hold the Dump Table */
-	*ppDumpTable = (uint32_t *)kmem_zalloc(*pDumpTableSize, KM_SLEEP);
+	*ppDumpTable = kmem_zalloc(*pDumpTableSize, KM_SLEEP);
 
 	pDumpTableEntry = *ppDumpTable;
 
@@ -2774,7 +2773,7 @@ emlxs_dump_hba_memory(
 			    byteCount, total);
 
 			/* allocate a buffer to receive the dump data */
-			pBuf = (uint8_t *)kmem_zalloc(byteCount, KM_SLEEP);
+			pBuf = kmem_zalloc(byteCount, KM_SLEEP);
 
 			/* loop issuing MBX commands, 18x measly words at */
 			/* a time */
@@ -2902,7 +2901,7 @@ emlxs_dump_drv_region(
 	}
 
 	/* Now that we know the required length, request the actual data */
-	*pBuf = (uint8_t *)kmem_zalloc(size, KM_SLEEP);
+	*pBuf = kmem_zalloc(size, KM_SLEEP);
 
 	status = emlxs_get_dump_region(hba, regionId, *pBuf, &size);
 
@@ -3766,8 +3765,7 @@ emlxs_dump_tigershark_log(
 		goto done;
 	}
 
-	if ((buffer = (uint8_t *)kmem_alloc(
-	    buffer_size, KM_NOSLEEP)) == NULL) {
+	if ((buffer = kmem_alloc(buffer_size, KM_NOSLEEP)) == NULL) {
 		EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_fw_dump_msg,
 		    "Unable to allocate log buffer.");
 

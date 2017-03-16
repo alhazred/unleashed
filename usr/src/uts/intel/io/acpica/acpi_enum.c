@@ -472,7 +472,7 @@ parse_resources(ACPI_HANDLE handle, dev_info_t *xdip, char *path)
 		return (status);
 		break;
 	}
-	io = (struct regspec *)kmem_zalloc(sizeof (struct regspec) *
+	io = kmem_zalloc(sizeof (struct regspec) *
 	    MAX_PARSED_ACPI_RESOURCES, KM_SLEEP);
 	current_ptr = buf.Pointer;
 	last_ptr = (char *)buf.Pointer + buf.Length;
