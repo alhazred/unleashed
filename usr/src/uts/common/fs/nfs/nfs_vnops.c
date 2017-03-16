@@ -86,7 +86,7 @@
 
 #include <sys/ddi.h>
 
-static int	nfs_rdwrlbn(vnode_t *, page_t *, u_offset_t, size_t, int,
+static int	nfs_rdwrlbn(vnode_t *, page_t *, uoff_t, size_t, int,
 			cred_t *);
 static int	nfswrite(vnode_t *, caddr_t, uint_t, int, cred_t *);
 static int	nfsread(vnode_t *, caddr_t, uint_t, int, size_t *, cred_t *);
@@ -97,14 +97,14 @@ static int	nfsrename(vnode_t *, char *, vnode_t *, char *, cred_t *,
 			caller_context_t *);
 static int	nfsreaddir(vnode_t *, rddir_cache *, cred_t *);
 static int	nfs_bio(struct buf *, cred_t *);
-static int	nfs_getapage(vnode_t *, u_offset_t, size_t, uint_t *,
+static int	nfs_getapage(vnode_t *, uoff_t, size_t, uint_t *,
 			page_t *[], size_t, struct seg *, caddr_t,
 			enum seg_rw, cred_t *);
-static void	nfs_readahead(vnode_t *, u_offset_t, caddr_t, struct seg *,
+static void	nfs_readahead(vnode_t *, uoff_t, caddr_t, struct seg *,
 			cred_t *);
-static int	nfs_sync_putapage(vnode_t *, page_t *, u_offset_t, size_t,
+static int	nfs_sync_putapage(vnode_t *, page_t *, uoff_t, size_t,
 			int, cred_t *);
-static int	nfs_sync_pageio(vnode_t *, page_t *, u_offset_t, size_t,
+static int	nfs_sync_pageio(vnode_t *, page_t *, uoff_t, size_t,
 			int, cred_t *);
 static void	nfs_delmap_callback(struct as *, void *, uint_t);
 
@@ -187,7 +187,7 @@ static int	nfs_delmap(vnode_t *, offset_t, struct as *, caddr_t, size_t,
 			uint_t, uint_t, uint_t, cred_t *, caller_context_t *);
 static int	nfs_pathconf(vnode_t *, int, ulong_t *, cred_t *,
 			caller_context_t *);
-static int	nfs_pageio(vnode_t *, page_t *, u_offset_t, size_t, int,
+static int	nfs_pageio(vnode_t *, page_t *, uoff_t, size_t, int,
 			cred_t *, caller_context_t *);
 static int	nfs_setsecattr(vnode_t *, vsecattr_t *, int, cred_t *,
 			caller_context_t *);
@@ -415,7 +415,7 @@ nfs_read(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 	caller_context_t *ct)
 {
 	rnode_t *rp;
-	u_offset_t off;
+	uoff_t off;
 	offset_t diff;
 	int on;
 	size_t n;
@@ -549,7 +549,7 @@ nfs_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 	caller_context_t *ct)
 {
 	rnode_t *rp;
-	u_offset_t off;
+	uoff_t off;
 	caddr_t base;
 	uint_t flags;
 	int remainder;
@@ -822,7 +822,7 @@ bottom:
  * Flags are composed of {B_ASYNC, B_INVAL, B_FREE, B_DONTNEED}
  */
 static int
-nfs_rdwrlbn(vnode_t *vp, page_t *pp, u_offset_t off, size_t len,
+nfs_rdwrlbn(vnode_t *vp, page_t *pp, uoff_t off, size_t len,
 	int flags, cred_t *cr)
 {
 	struct buf *bp;
@@ -2113,14 +2113,14 @@ nfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 
 		(void) cmpldev(&dev32, d);
 		if (dev32 & ~((SO4_MAXMAJ << L_BITSMINOR32) | SO4_MAXMIN))
-			vattr.va_size = (u_offset_t)dev32;
+			vattr.va_size = (uoff_t)dev32;
 		else
-			vattr.va_size = (u_offset_t)nfsv2_cmpdev(d);
+			vattr.va_size = (uoff_t)nfsv2_cmpdev(d);
 
 		vattr.va_mask |= AT_MODE|AT_SIZE;
 	} else if (vattr.va_type == VFIFO) {
 		vattr.va_mode |= IFCHR;		/* xtra kludge for namedpipe */
-		vattr.va_size = (u_offset_t)NFS_FIFO_DEV;	/* blech */
+		vattr.va_size = (uoff_t)NFS_FIFO_DEV;	/* blech */
 		vattr.va_mask |= AT_MODE|AT_SIZE;
 	} else if (vattr.va_type == VSOCK) {
 		vattr.va_mode |= IFSOCK;
@@ -2178,7 +2178,7 @@ nfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 				if (vn_has_cached_data(vp)) {
 					ASSERT(vp->v_type != VCHR);
 					nfs_invalidate_pages(vp,
-					    (u_offset_t)0, cr);
+					    (uoff_t)0, cr);
 				}
 			}
 
@@ -3701,7 +3701,7 @@ retry:
  */
 /* ARGSUSED */
 static int
-nfs_getapage(vnode_t *vp, u_offset_t off, size_t len, uint_t *protp,
+nfs_getapage(vnode_t *vp, uoff_t off, size_t len, uint_t *protp,
 	page_t *pl[], size_t plsz, struct seg *seg, caddr_t addr,
 	enum seg_rw rw, cred_t *cr)
 {
@@ -3709,10 +3709,10 @@ nfs_getapage(vnode_t *vp, u_offset_t off, size_t len, uint_t *protp,
 	uint_t bsize;
 	struct buf *bp;
 	page_t *pp;
-	u_offset_t lbn;
-	u_offset_t io_off;
-	u_offset_t blkoff;
-	u_offset_t rablkoff;
+	uoff_t lbn;
+	uoff_t io_off;
+	uoff_t blkoff;
+	uoff_t rablkoff;
 	size_t io_len;
 	uint_t blksize;
 	int error;
@@ -3964,12 +3964,12 @@ out:
 }
 
 static void
-nfs_readahead(vnode_t *vp, u_offset_t blkoff, caddr_t addr, struct seg *seg,
+nfs_readahead(vnode_t *vp, uoff_t blkoff, caddr_t addr, struct seg *seg,
 	cred_t *cr)
 {
 	int error;
 	page_t *pp;
-	u_offset_t io_off;
+	uoff_t io_off;
 	size_t io_len;
 	struct buf *bp;
 	uint_t bsize, blksize;
@@ -4114,12 +4114,12 @@ nfs_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
  * Write out a single page, possibly klustering adjacent dirty pages.
  */
 int
-nfs_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp, size_t *lenp,
+nfs_putapage(vnode_t *vp, page_t *pp, uoff_t *offp, size_t *lenp,
 	int flags, cred_t *cr)
 {
-	u_offset_t io_off;
-	u_offset_t lbn_off;
-	u_offset_t lbn;
+	uoff_t io_off;
+	uoff_t lbn_off;
+	uoff_t lbn;
 	size_t io_len;
 	uint_t bsize;
 	int error;
@@ -4237,7 +4237,7 @@ nfs_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp, size_t *lenp,
 }
 
 static int
-nfs_sync_putapage(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
+nfs_sync_putapage(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
 	int flags, cred_t *cr)
 {
 	int error;
@@ -4436,7 +4436,7 @@ nfs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
 {
 	netobj lm_fh;
 	int rc;
-	u_offset_t start, end;
+	uoff_t start, end;
 	rnode_t *rp;
 	int error = 0, intr = INTR(vp);
 
@@ -4913,7 +4913,7 @@ nfs_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
  * for it to complete, and cleanup the page list when done.
  */
 static int
-nfs_sync_pageio(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
+nfs_sync_pageio(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
 	int flags, cred_t *cr)
 {
 	int error;
@@ -4929,7 +4929,7 @@ nfs_sync_pageio(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
 
 /* ARGSUSED */
 static int
-nfs_pageio(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
+nfs_pageio(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
 	int flags, cred_t *cr, caller_context_t *ct)
 {
 	int error;

@@ -1431,7 +1431,7 @@ zfs_grow_blocksize(znode_t *zp, uint64_t size, dmu_tx_t *tx)
  */
 /* ARGSUSED */
 static int
-zfs_no_putpage(vnode_t *vp, page_t *pp, u_offset_t *offp, size_t *lenp,
+zfs_no_putpage(vnode_t *vp, page_t *pp, uoff_t *offp, size_t *lenp,
     int flags, cred_t *cr)
 {
 	ASSERT(0);

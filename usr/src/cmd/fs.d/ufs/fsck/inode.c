@@ -49,7 +49,7 @@ static int clearanentry(struct inodesc *);
 static void pdinode(struct dinode *);
 static void inoflush(void);
 static void mark_delayed_inodes(fsck_ino_t, daddr32_t);
-static int iblock(struct inodesc *, int, u_offset_t, enum cki_action);
+static int iblock(struct inodesc *, int, uoff_t, enum cki_action);
 static struct inoinfo *search_cache(struct inoinfo *, fsck_ino_t);
 static int ckinode_common(struct dinode *, struct inodesc *, enum cki_action);
 static int lookup_dotdot_ino(fsck_ino_t);
@@ -258,7 +258,7 @@ ckinode_common(struct dinode *dp, struct inodesc *idesc,
 	int ret, i, frags;
 
 	(void) memmove(&dino, dp, sizeof (struct dinode));
-	ndb = howmany(dino.di_size, (u_offset_t)sblock.fs_bsize);
+	ndb = howmany(dino.di_size, (uoff_t)sblock.fs_bsize);
 
 	for (i = 0; i < NDADDR; i++) {
 		idesc->id_lbn++;
@@ -324,7 +324,7 @@ ckinode_common(struct dinode *dp, struct inodesc *idesc,
 	 * levels.
 	 */
 	idesc->id_numfrags = sblock.fs_frag;
-	ndb = howmany(dino.di_size, (u_offset_t)sblock.fs_bsize);
+	ndb = howmany(dino.di_size, (uoff_t)sblock.fs_bsize);
 	for (i = 0; i < NIADDR; i++) {
 		(void) get_indir_offsets(i, ndb, &indir_data_blks,
 		    &last_indir_blk);
@@ -339,8 +339,8 @@ ckinode_common(struct dinode *dp, struct inodesc *idesc,
 			 */
 			idesc->id_blkno = dino.di_ib[i];
 			ret = iblock(idesc, i + 1,
-			    (u_offset_t)howmany(dino.di_size,
-			    (u_offset_t)sblock.fs_bsize) - indir_data_blks,
+			    (uoff_t)howmany(dino.di_size,
+			    (uoff_t)sblock.fs_bsize) - indir_data_blks,
 			    action);
 			if ((action == CKI_TRUNCATE) &&
 			    (idesc->id_truncto <= indir_data_blks) &&
@@ -421,13 +421,13 @@ get_indir_offsets(int ilevel_wanted, daddr_t ndb, int *data_blks,
 }
 
 static int
-iblock(struct inodesc *idesc, int ilevel, u_offset_t iblks,
+iblock(struct inodesc *idesc, int ilevel, uoff_t iblks,
 	enum cki_action action)
 {
 	struct bufarea *bp;
 	int i, n;
 	int (*func)(struct inodesc *) = NULL;
-	u_offset_t fsbperindirb;
+	uoff_t fsbperindirb;
 	daddr32_t last_lbn;
 	int nif;
 	char buf[BUFSIZ];
@@ -469,7 +469,7 @@ iblock(struct inodesc *idesc, int ilevel, u_offset_t iblks,
 	 * fragments.
 	 */
 	for (fsbperindirb = 1, i = 0; i < ilevel; i++) {
-		fsbperindirb *= (u_offset_t)NINDIR(&sblock);
+		fsbperindirb *= (uoff_t)NINDIR(&sblock);
 	}
 	/*
 	 * nif indicates the next "free" pointer (as an array index) in this
@@ -1223,7 +1223,7 @@ allocino(fsck_ino_t request, int type)
 	dp->di_atime = (time32_t)t;
 	dp->di_ctime = dp->di_atime;
 	dp->di_mtime = dp->di_ctime;
-	dp->di_size = (u_offset_t)sblock.fs_fsize;
+	dp->di_size = (uoff_t)sblock.fs_fsize;
 	dp->di_blocks = btodb(sblock.fs_fsize);
 	n_files++;
 	inodirty();
@@ -1383,8 +1383,8 @@ freeino(fsck_ino_t ino, int update_parent)
 	 * negative size, which shall be cleared. (see verify_inode() in
 	 * pass1.c)
 	 */
-	if (dp->di_size > (u_offset_t)MAXOFF_T &&
-	    dp->di_size <= (u_offset_t)UFS_MAXOFFSET_T &&
+	if (dp->di_size > (uoff_t)MAXOFF_T &&
+	    dp->di_size <= (uoff_t)UFS_MAXOFFSET_T &&
 	    ftypeok(dp) &&
 	    (dp->di_mode & IFMT) != IFBLK &&
 	    (dp->di_mode & IFMT) != IFCHR) {

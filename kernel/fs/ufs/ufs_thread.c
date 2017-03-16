@@ -350,7 +350,7 @@ ufs_delete(struct ufsvfs *ufsvfsp, struct inode *ip, int dolockfs)
 		ufs_attr_purge(ip);
 	}
 
-	(void) TRANS_ITRUNC(ip, (u_offset_t)0, I_FREE | I_ACCT, CRED());
+	(void) TRANS_ITRUNC(ip, (uoff_t)0, I_FREE | I_ACCT, CRED());
 
 	/*
 	 * the inode's space has been freed; now free the inode
@@ -738,7 +738,7 @@ ufs_idle_free(struct inode *ip)
 			 * and  this data needs  to be
 			 * cleaned up.
 			 */
-			(void) pvn_vplist_dirty(vp, (u_offset_t)0,
+			(void) pvn_vplist_dirty(vp, (uoff_t)0,
 			    ufs_putapage, B_INVAL | B_TRUNC,
 			    (struct cred *)NULL);
 		}

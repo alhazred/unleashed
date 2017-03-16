@@ -120,8 +120,8 @@ int32_t ud_updat_ext4(struct ud_inode *, struct file_entry *);
 int32_t ud_updat_ext4096(struct ud_inode *, struct file_entry *);
 void ud_make_sad(struct icb_ext *, struct short_ad *, int32_t);
 void ud_make_lad(struct icb_ext *, struct long_ad *, int32_t);
-void ud_trunc_ext4(struct ud_inode *, u_offset_t);
-void ud_trunc_ext4096(struct ud_inode *, u_offset_t);
+void ud_trunc_ext4(struct ud_inode *, uoff_t);
+void ud_trunc_ext4096(struct ud_inode *, uoff_t);
 void ud_add_to_free_list(struct ud_inode *, uint32_t);
 void ud_remove_from_free_list(struct ud_inode *, uint32_t);
 
@@ -1552,7 +1552,7 @@ ud_make_lad(struct icb_ext *iext, struct long_ad *lad, int32_t count)
  */
 /* ARGSUSED */
 int
-ud_itrunc(struct ud_inode *oip, u_offset_t length,
+ud_itrunc(struct ud_inode *oip, uoff_t length,
     int32_t flags, struct cred *cr)
 {
 	int32_t error, boff;
@@ -1603,7 +1603,7 @@ ud_itrunc(struct ud_inode *oip, u_offset_t length,
 			error = ud_bmap_write(oip, length - 1, boff, 0, cr);
 		}
 		if (error == 0) {
-			u_offset_t osize = oip->i_size;
+			uoff_t osize = oip->i_size;
 			oip->i_size  = length;
 
 			/*
@@ -1680,11 +1680,11 @@ done:
 }
 
 void
-ud_trunc_ext4(struct ud_inode *ip, u_offset_t length)
+ud_trunc_ext4(struct ud_inode *ip, uoff_t length)
 {
 	int32_t index, l2b, count, ecount;
 	int32_t elen, ndent, nient;
-	u_offset_t ext_beg, ext_end;
+	uoff_t ext_beg, ext_end;
 	struct icb_ext *iext, *icon;
 	int32_t lbmask, ext_used;
 	uint32_t loc;
@@ -1828,7 +1828,7 @@ ud_trunc_ext4(struct ud_inode *ip, u_offset_t length)
 }
 
 void
-ud_trunc_ext4096(struct ud_inode *ip, u_offset_t length)
+ud_trunc_ext4096(struct ud_inode *ip, uoff_t length)
 {
 	/*
 	 * Truncate code is the same for

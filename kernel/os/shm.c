@@ -1126,7 +1126,7 @@ lock_again(size_t npages, kshmid_t *sp, struct anon_map *amp)
 	struct anon *ap;
 	struct page *pp;
 	struct vnode *vp;
-	u_offset_t off;
+	uoff_t off;
 	ulong_t anon_idx;
 	anon_sync_obj_t cookie;
 
@@ -1175,7 +1175,7 @@ shmem_lock(kshmid_t *sp, struct anon_map *amp)
 	as = as_alloc();
 	/* Initialize the create arguments and map the segment */
 	crargs = *(struct segvn_crargs *)zfod_argsp;	/* structure copy */
-	crargs.offset = (u_offset_t)0;
+	crargs.offset = (uoff_t)0;
 	crargs.type = MAP_SHARED;
 	crargs.amp = amp;
 	crargs.prot = PROT_ALL;
@@ -1204,7 +1204,7 @@ shmem_unlock(kshmid_t *sp, struct anon_map *amp)
 	pgcnt_t npages = sp->shm_lkpages;
 	struct vnode *vp;
 	struct page *pp;
-	u_offset_t off;
+	uoff_t off;
 	ulong_t anon_idx;
 	size_t unlocked_bytes = 0;
 	kproject_t	*proj;

@@ -588,7 +588,7 @@ dc_getpage(struct vnode *vp, offset_t off, size_t len, uint_t *protp,
  */
 /*ARGSUSED*/
 static int
-dc_putapage(struct vnode *vp, struct page *pp, u_offset_t *offp, size_t *lenp,
+dc_putapage(struct vnode *vp, struct page *pp, uoff_t *offp, size_t *lenp,
     int flags, struct cred *cr)
 {
 	/* should never happen */

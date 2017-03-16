@@ -52,12 +52,12 @@
 
 static int max_uniq = 9999;
 
-void create_snap(int, char *, u_offset_t, uint_t, int, int);
+void create_snap(int, char *, uoff_t, uint_t, int, int);
 void delete_snap(int);
 void stats_snap(char *, char *);
 
-int open_backpath(int, u_offset_t, char **, char **, int **);
-u_offset_t spec_to_bytes(char *);
+int open_backpath(int, uoff_t, char **, char **, int **);
+uoff_t spec_to_bytes(char *);
 void gen_backing_store_path(char *basepath, int num, char **outpath);
 void unlink_all(char *, int);
 void close_all(char *, int, int *);
@@ -110,7 +110,7 @@ main(int argc, char *argv[])
 
 	int delete = 0;
 	int stats = 0;
-	u_offset_t maxsize = 0;
+	uoff_t maxsize = 0;
 	uint_t chunksize = 0;
 	int rawfile = 0;
 	int dounlink = 0;
@@ -225,7 +225,7 @@ main(int argc, char *argv[])
 }
 
 void
-create_snap(int mountfd, char *backpath, u_offset_t maxsize, uint_t chunksize,
+create_snap(int mountfd, char *backpath, uoff_t maxsize, uint_t chunksize,
     int rawfile, int dounlink)
 {
 	struct fiosnapcreate_multi *enable;
@@ -234,7 +234,7 @@ create_snap(int mountfd, char *backpath, u_offset_t maxsize, uint_t chunksize,
 	char *unlinkpath = NULL;
 	di_devlink_handle_t hdl;
 	int *fd_array;
-	u_offset_t max_bf_size;
+	uoff_t max_bf_size;
 	int save_errno;
 
 	/*
@@ -385,7 +385,7 @@ stats_snap(char *mountpath, char *opts)
  * same name as the first, but with suffixes, .2, .3, etc.
  */
 int
-open_backpath(int mountfd, u_offset_t max_bf_size, char **path,
+open_backpath(int mountfd, uoff_t max_bf_size, char **path,
     char **unlinkpath, int **fd_array)
 {
 	struct stat st;
@@ -474,10 +474,10 @@ open_backpath(int mountfd, u_offset_t max_bf_size, char **path,
 	return (num_back_files);
 }
 
-u_offset_t
+uoff_t
 spec_to_bytes(char *spec)
 {
-	u_offset_t base;
+	uoff_t base;
 
 	base = strtoull(spec, NULL, 10);
 	if ((base == 0LL) && (spec[0] != '0'))

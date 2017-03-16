@@ -1354,8 +1354,8 @@ lofi_strategy_task(void *arg)
 		uint64_t uncompressed_seg_index;
 		struct lofi_comp_cache *lc;
 		offset_t sblkoff, eblkoff;
-		u_offset_t salign, ealign;
-		u_offset_t sdiff;
+		uoff_t salign, ealign;
+		uoff_t sdiff;
 		uint32_t comp_data_sz;
 		uint64_t i;
 		int j;
@@ -2203,7 +2203,7 @@ file_to_lofi(char *filename, boolean_t readonly, struct lofi_state **lspp)
 static void
 fake_disk_geometry(struct lofi_state *lsp)
 {
-	u_offset_t dsize = lsp->ls_vp_size - lsp->ls_crypto_offset;
+	uoff_t dsize = lsp->ls_vp_size - lsp->ls_crypto_offset;
 
 	/* dk_geom - see dkio(7I) */
 	/*
@@ -2354,7 +2354,7 @@ lofi_map_compressed_file(struct lofi_state *lsp, char *buf)
 	 * compressed file size.
 	 */
 	lsp->ls_vp_size =
-	    (u_offset_t)(lsp->ls_comp_index_sz - 2) * lsp->ls_uncomp_seg_sz
+	    (uoff_t)(lsp->ls_comp_index_sz - 2) * lsp->ls_uncomp_seg_sz
 	    + lsp->ls_uncomp_last_seg_sz;
 
 	/*

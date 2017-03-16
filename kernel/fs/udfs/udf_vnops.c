@@ -158,19 +158,19 @@ static int32_t udf_delmap(struct vnode *, offset_t, struct as *,
 static int32_t udf_l_pathconf(struct vnode *, int32_t,
 	ulong_t *, struct cred *, caller_context_t *);
 static int32_t udf_pageio(struct vnode *, struct page *,
-	u_offset_t, size_t, int32_t, struct cred *, caller_context_t *);
+	uoff_t, size_t, int32_t, struct cred *, caller_context_t *);
 
-int32_t ud_getpage_miss(struct vnode *, u_offset_t,
+int32_t ud_getpage_miss(struct vnode *, uoff_t,
 	size_t, struct seg *, caddr_t, page_t *pl[],
 	size_t, enum seg_rw, int32_t);
-void ud_getpage_ra(struct vnode *, u_offset_t, struct seg *, caddr_t);
+void ud_getpage_ra(struct vnode *, uoff_t, struct seg *, caddr_t);
 int32_t ud_putpages(struct vnode *, offset_t, size_t, int32_t, struct cred *);
 int32_t ud_page_fill(struct ud_inode *, page_t *,
-	u_offset_t, uint32_t, u_offset_t *);
+	uoff_t, uint32_t, uoff_t *);
 int32_t ud_iodone(struct buf *);
 int32_t ud_rdip(struct ud_inode *, struct uio *, int32_t, cred_t *);
 int32_t ud_wrip(struct ud_inode *, struct uio *, int32_t, cred_t *);
-int32_t ud_multi_strat(struct ud_inode *, page_t *, struct buf *, u_offset_t);
+int32_t ud_multi_strat(struct ud_inode *, page_t *, struct buf *, uoff_t);
 int32_t ud_slave_done(struct buf *);
 
 /*
@@ -1676,13 +1676,13 @@ udf_getpage(
 	int32_t pgsize = PAGESIZE;
 	struct udf_vfs *udf_vfsp = ip->i_udf;
 	page_t **pl;
-	u_offset_t pgoff, eoff, uoff;
+	uoff_t pgoff, eoff, uoff;
 	krw_t rwtype;
 	caddr_t pgaddr;
 
 	ud_printf("udf_getpage\n");
 
-	uoff = (u_offset_t)off; /* type conversion */
+	uoff = (uoff_t)off; /* type conversion */
 	if (protp) {
 		*protp = PROT_ALL;
 	}
@@ -1734,7 +1734,7 @@ retrylock:
 
 	if ((rw == S_WRITE || rw == S_CREATE) && (has_holes || beyond_eof)) {
 		int32_t	blk_size, count;
-		u_offset_t offset;
+		uoff_t offset;
 
 		/*
 		 * We must acquire the RW_WRITER lock in order to
@@ -1814,7 +1814,7 @@ retrylock:
 	for (pgoff = uoff, pgaddr = addr, pl = plarr;
 	    pgoff < eoff; /* empty */) {
 		page_t	*pp;
-		u_offset_t	nextrio;
+		uoff_t	nextrio;
 		se_t	se;
 
 		se = ((rw == S_CREATE) ? SE_EXCL : SE_SHARED);
@@ -1993,7 +1993,7 @@ udf_putpage(
 			 */
 			if (ip->i_delaylen >= WR_CLUSTSZ(ip) ||
 			    ip->i_delayoff + ip->i_delaylen != off) {
-				u_offset_t doff;
+				uoff_t doff;
 				size_t dlen;
 
 				doff = ip->i_delayoff;
@@ -2200,7 +2200,7 @@ static int32_t
 udf_pageio(
 	struct vnode *vp,
 	struct page *pp,
-	u_offset_t io_off,
+	uoff_t io_off,
 	size_t io_len,
 	int32_t flags,
 	struct cred *cr,
@@ -2245,7 +2245,7 @@ udf_pageio(
 		ASSERT(cpp);
 		bp = NULL;
 		contig = 0;
-		if (error = ud_bmap_read(ip, (u_offset_t)(io_off + done_len),
+		if (error = ud_bmap_read(ip, (uoff_t)(io_off + done_len),
 		    &bn, &contig)) {
 			break;
 		}
@@ -2291,7 +2291,7 @@ udf_pageio(
 			(void) bdev_strategy(bp);
 		} else {
 			error = ud_multi_strat(ip, cpp, bp,
-			    (u_offset_t)(io_off + done_len));
+			    (uoff_t)(io_off + done_len));
 			if (error != 0) {
 				pageio_done(bp);
 				break;
@@ -2408,15 +2408,15 @@ int32_t ud_smallfile = 32 * 1024;
 
 /* ARGSUSED */
 int32_t
-ud_getpage_miss(struct vnode *vp, u_offset_t off,
+ud_getpage_miss(struct vnode *vp, uoff_t off,
     size_t len, struct seg *seg, caddr_t addr, page_t *pl[],
     size_t plsz, enum seg_rw rw, int32_t seq)
 {
 	struct ud_inode *ip = VTOI(vp);
 	int32_t err = 0;
 	size_t io_len;
-	u_offset_t io_off;
-	u_offset_t pgoff;
+	uoff_t io_off;
+	uoff_t pgoff;
 	page_t *pp;
 
 	pl[0] = NULL;
@@ -2475,12 +2475,12 @@ outmiss:
 /* ARGSUSED */
 void
 ud_getpage_ra(struct vnode *vp,
-    u_offset_t off, struct seg *seg, caddr_t addr)
+    uoff_t off, struct seg *seg, caddr_t addr)
 {
 	page_t *pp;
 	size_t io_len;
 	struct ud_inode *ip = VTOI(vp);
-	u_offset_t io_off = ip->i_nextrio, pgoff;
+	uoff_t io_off = ip->i_nextrio, pgoff;
 	caddr_t addr2 = addr + (io_off - off);
 	daddr_t bn;
 	int32_t contig = 0;
@@ -2516,8 +2516,8 @@ ud_getpage_ra(struct vnode *vp,
 }
 
 int
-ud_page_fill(struct ud_inode *ip, page_t *pp, u_offset_t off,
-    uint32_t bflgs, u_offset_t *pg_off)
+ud_page_fill(struct ud_inode *ip, page_t *pp, uoff_t off,
+    uint32_t bflgs, uoff_t *pg_off)
 {
 	daddr_t bn;
 	struct buf *bp;
@@ -2657,9 +2657,9 @@ ud_putpages(struct vnode *vp, offset_t off,
 {
 	struct ud_inode *ip;
 	page_t *pp;
-	u_offset_t io_off;
+	uoff_t io_off;
 	size_t io_len;
-	u_offset_t eoff;
+	uoff_t eoff;
 	int32_t err = 0;
 	int32_t dolock;
 
@@ -2706,7 +2706,7 @@ ud_putpages(struct vnode *vp, offset_t off,
 		/*
 		 * Search the entire vp list for pages >= off.
 		 */
-		err = pvn_vplist_dirty(vp, (u_offset_t)off, ud_putapage,
+		err = pvn_vplist_dirty(vp, (uoff_t)off, ud_putapage,
 		    flags, cr);
 	} else {
 		/*
@@ -2776,7 +2776,7 @@ ud_putpages(struct vnode *vp, offset_t off,
 /* ARGSUSED */
 int32_t
 ud_putapage(struct vnode *vp,
-    page_t *pp, u_offset_t *offp,
+    page_t *pp, uoff_t *offp,
     size_t *lenp, int32_t flags, struct cred *cr)
 {
 	daddr_t bn;
@@ -2784,7 +2784,7 @@ ud_putapage(struct vnode *vp,
 	struct ud_inode *ip;
 	int32_t error = 0, contig, multi_io = 0;
 	struct udf_vfs *udf_vfsp;
-	u_offset_t off, io_off;
+	uoff_t off, io_off;
 	caddr_t kaddr, caddr;
 	struct buf *bp = NULL;
 	int32_t lbmask;
@@ -3004,7 +3004,7 @@ ud_rdip(struct ud_inode *ip, struct uio *uio, int32_t ioflag, cred_t *cr)
 	caddr_t base;
 	uint32_t flags;
 	int32_t error, n, on, mapon, dofree;
-	u_offset_t off;
+	uoff_t off;
 	long oresid = uio->uio_resid;
 
 	ASSERT(RW_LOCK_HELD(&ip->i_contents));
@@ -3036,7 +3036,7 @@ ud_rdip(struct ud_inode *ip, struct uio *uio, int32_t ioflag, cred_t *cr)
 
 	do {
 		offset_t diff;
-		u_offset_t uoff = uio->uio_loffset;
+		uoff_t uoff = uio->uio_loffset;
 		off = uoff & (offset_t)MAXBMASK;
 		mapon = (int)(uoff & (offset_t)MAXBOFFSET);
 		on = (int)blkoff(udf_vfsp, uoff);
@@ -3136,7 +3136,7 @@ ud_wrip(struct ud_inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 	int32_t error = 0, iupdat_flag, n, on, mapon, i_size_changed = 0;
 	int32_t pagecreate, newpage;
 	uint64_t old_i_size;
-	u_offset_t off;
+	uoff_t off;
 	long start_resid = uio->uio_resid, premove_resid;
 	rlim64_t limit = uio->uio_limit;
 
@@ -3187,7 +3187,7 @@ ud_wrip(struct ud_inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 	vp = ITOV(ip);
 
 	do {
-		u_offset_t uoff = uio->uio_loffset;
+		uoff_t uoff = uio->uio_loffset;
 		off = uoff & (offset_t)MAXBMASK;
 		mapon = (int)(uoff & (offset_t)MAXBOFFSET);
 		on = (int)blkoff(udf_vfsp, uoff);
@@ -3443,7 +3443,7 @@ out:
 
 int32_t
 ud_multi_strat(struct ud_inode *ip,
-    page_t *pp, struct buf *bp, u_offset_t start)
+    page_t *pp, struct buf *bp, uoff_t start)
 {
 	daddr_t bn;
 	int32_t error = 0, io_count, contig, alloc_sz, i;
@@ -3460,7 +3460,7 @@ ud_multi_strat(struct ud_inode *ip,
 	io_count = 0;
 	for (io_off = 0; io_off < bp->b_bcount; io_off += contig) {
 		contig = 0;
-		if (error = ud_bmap_read(ip, (u_offset_t)(start + io_off),
+		if (error = ud_bmap_read(ip, (uoff_t)(start + io_off),
 		    &bn, &contig)) {
 			goto end;
 		}
@@ -3519,7 +3519,7 @@ ud_multi_strat(struct ud_inode *ip,
 		for (io_off = 0; io_off < bp->b_bcount; io_off += contig) {
 			contig = 0;
 			if (error = ud_bmap_read(ip,
-			    (u_offset_t)(start + io_off),
+			    (uoff_t)(start + io_off),
 			    &bn, &contig)) {
 				goto end;
 			}

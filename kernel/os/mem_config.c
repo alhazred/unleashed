@@ -454,7 +454,7 @@ mapalloc:
 		page_iolock_init(pp);
 		while (!page_lock(pp, SE_EXCL, (kmutex_t *)NULL, P_RECLAIM))
 			continue;
-		pp->p_offset = (u_offset_t)-1;
+		pp->p_offset = (uoff_t)-1;
 	}
 
 	if (reuse) {
@@ -1812,7 +1812,7 @@ delete_memory_thread(caddr_t amhp)
 				page_t *pp, *tpp, *tpp_targ;
 				pgcnt_t bit;
 				struct vnode *vp;
-				u_offset_t offset;
+				uoff_t offset;
 				int mod, result;
 				spgcnt_t pgcnt;
 
@@ -2496,7 +2496,7 @@ memseg_remap_init_pages(page_t *pages, page_t *epages)
 
 	for (pp = pages; pp < epages; pp++) {
 		pp->p_pagenum = PFN_INVALID;	/* XXXX */
-		pp->p_offset = (u_offset_t)-1;
+		pp->p_offset = (uoff_t)-1;
 		page_iolock_init(pp);
 		while (!page_lock(pp, SE_EXCL, (kmutex_t *)NULL, P_RECLAIM))
 			continue;

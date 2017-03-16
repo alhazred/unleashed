@@ -1931,7 +1931,7 @@ segop_getprot(struct seg *seg, caddr_t addr, size_t len, uint_t *p)
 	return (seg->s_ops->getprot(seg, addr, len, p));
 }
 
-u_offset_t
+uoff_t
 segop_getoffset(struct seg *seg, caddr_t addr)
 {
 	return (seg->s_ops->getoffset(seg, addr));

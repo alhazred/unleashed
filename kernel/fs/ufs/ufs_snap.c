@@ -69,7 +69,7 @@ ufs_snap_create(struct vnode *vp, struct fiosnapcreate_multi *fiosnapp,
 	struct lockfs	lf;
 	void		*snapid = NULL;
 
-	u_offset_t	nchunks;
+	uoff_t	nchunks;
 	uint_t		chunksize, fragsperchunk;
 
 	/*

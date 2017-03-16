@@ -139,7 +139,7 @@ extern int choose_addr(struct as *as, caddr_t *addrp, size_t len, offset_t off,
     int vacalign, uint_t flags);
 extern	void map_addr(caddr_t *addrp, size_t len, offset_t off, int vacalign,
     uint_t flags);
-extern	int map_addr_vacalign_check(caddr_t, u_offset_t);
+extern	int map_addr_vacalign_check(caddr_t, uoff_t);
 extern	void map_addr_proc(caddr_t *addrp, size_t len, offset_t off,
     int vacalign, caddr_t userlimit, struct proc *p, uint_t flags);
 extern	void vmmeter(void);

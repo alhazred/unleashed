@@ -154,7 +154,7 @@ static const struct seg_ops segkp_ops = {
 	.incore		= SEGKP_BADOP(size_t),
 	.lockop		= SEGKP_BADOP(int),
 	.getprot	= SEGKP_BADOP(int),
-	.getoffset	= SEGKP_BADOP(u_offset_t),
+	.getoffset	= SEGKP_BADOP(uoff_t),
 	.gettype	= SEGKP_BADOP(int),
 	.getvp		= SEGKP_BADOP(int),
 	.advise		= SEGKP_BADOP(int),
@@ -529,10 +529,10 @@ segkp_get_internal(
 			pp = pl[0];
 		} else {
 			ASSERT(page_exists(&kvp,
-			    (u_offset_t)(uintptr_t)va) == NULL);
+			    (uoff_t)(uintptr_t)va) == NULL);
 
 			if ((pp = page_create_va(&kvp,
-			    (u_offset_t)(uintptr_t)va, PAGESIZE,
+			    (uoff_t)(uintptr_t)va, PAGESIZE,
 			    (flags & KPD_NOWAIT ? 0 : PG_WAIT) | PG_EXCL |
 			    PG_NORELOC, seg, va)) == NULL) {
 				/*
@@ -684,7 +684,7 @@ segkp_release_internal(struct seg *seg, struct segkp_data *kpd, size_t len)
 				    kpd->kp_anon_idx + i);
 				swap_xlate(ap, &vp, &off);
 				/* Find the shared-locked page. */
-				pp = page_find(vp, (u_offset_t)off);
+				pp = page_find(vp, (uoff_t)off);
 				if (pp == NULL) {
 					panic("segkp_release: "
 					    "kp_anon: no page to unlock ");
@@ -703,7 +703,7 @@ segkp_release_internal(struct seg *seg, struct segkp_data *kpd, size_t len)
 			}
 		} else {
 			if (kpd->kp_flags & KPD_LOCKED) {
-				pp = page_find(&kvp, (u_offset_t)(uintptr_t)va);
+				pp = page_find(&kvp, (uoff_t)(uintptr_t)va);
 				if (pp == NULL) {
 					panic("segkp_release: "
 					    "no page to unlock");
@@ -717,7 +717,7 @@ segkp_release_internal(struct seg *seg, struct segkp_data *kpd, size_t len)
 				 */
 				page_unlock(pp);
 			}
-			pp = page_lookup(&kvp, (u_offset_t)(uintptr_t)va,
+			pp = page_lookup(&kvp, (uoff_t)(uintptr_t)va,
 			    SE_EXCL);
 			if (pp != NULL)
 				page_destroy(pp, 0);
@@ -781,7 +781,7 @@ segkp_map_red(void)
 		    (((uintptr_t)curthread->t_stkbase & (uintptr_t)PAGEMASK) -
 		    PAGESIZE);
 
-		ASSERT(page_exists(&kvp, (u_offset_t)(uintptr_t)red_va) ==
+		ASSERT(page_exists(&kvp, (uoff_t)(uintptr_t)red_va) ==
 		    NULL);
 
 		/*
@@ -794,7 +794,7 @@ segkp_map_red(void)
 		 */
 
 		kseg.s_as = &kas;
-		red_pp = page_create_va(&kvp, (u_offset_t)(uintptr_t)red_va,
+		red_pp = page_create_va(&kvp, (uoff_t)(uintptr_t)red_va,
 		    PAGESIZE, PG_WAIT | PG_EXCL, &kseg, red_va);
 		ASSERT(red_pp != NULL);
 
@@ -869,7 +869,7 @@ segkp_unmap_red(void)
 
 	pp = curthread->t_red_pp;
 
-	ASSERT(pp == page_find(&kvp, (u_offset_t)(uintptr_t)red_va));
+	ASSERT(pp == page_find(&kvp, (uoff_t)(uintptr_t)red_va));
 
 	/*
 	 * Need to upgrade the SE_SHARED lock to SE_EXCL.
@@ -880,7 +880,7 @@ segkp_unmap_red(void)
 		 * SE_SHARED lock and wait for SE_EXCL.
 		 */
 		page_unlock(pp);
-		pp = page_lookup(&kvp, (u_offset_t)(uintptr_t)red_va, SE_EXCL);
+		pp = page_lookup(&kvp, (uoff_t)(uintptr_t)red_va, SE_EXCL);
 		/* pp may be NULL here, hence the test below */
 	}
 

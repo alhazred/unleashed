@@ -642,7 +642,7 @@ typedef struct smb_node {
 	smb_llist_t		n_lock_list;
 	uint32_t		n_pending_dosattr;
 	volatile int		flags;
-	u_offset_t		n_allocsz;
+	uoff_t			n_allocsz;
 	smb_node_fcn_t		n_fcn;
 	smb_oplock_t		n_oplock;
 	struct smb_node		*n_dnode;

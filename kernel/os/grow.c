@@ -665,7 +665,7 @@ smmap_common(caddr_t *addrp, size_t len,
 	 * We let the fop_map routine check for negative lengths
 	 * since on some vnode types this might be appropriate.
 	 */
-	if (len == 0 || (pos & (u_offset_t)PAGEOFFSET) != 0)
+	if (len == 0 || (pos & (uoff_t)PAGEOFFSET) != 0)
 		return (EINVAL);
 
 	maxprot = PROT_ALL;		/* start out allowing all accesses */
@@ -921,9 +921,9 @@ smmaplf32(struct mmaplf32a *uap, rval_t *rvp)
 	int flags = (int)uap->flags;
 	int fd = (int)uap->fd;
 #ifdef _BIG_ENDIAN
-	offset_t off = ((u_offset_t)uap->offhi << 32) | (u_offset_t)uap->offlo;
+	offset_t off = ((uoff_t)uap->offhi << 32) | (uoff_t)uap->offlo;
 #else
-	offset_t off = ((u_offset_t)uap->offlo << 32) | (u_offset_t)uap->offhi;
+	offset_t off = ((uoff_t)uap->offlo << 32) | (uoff_t)uap->offhi;
 #endif
 
 	if (flags & _MAP_LOW32)

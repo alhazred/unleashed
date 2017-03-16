@@ -102,8 +102,8 @@
 
 static struct instats ins;
 
-static 	int ufs_getpage_ra(struct vnode *, u_offset_t, struct seg *, caddr_t);
-static	int ufs_getpage_miss(struct vnode *, u_offset_t, size_t, struct seg *,
+static 	int ufs_getpage_ra(struct vnode *, uoff_t, struct seg *, caddr_t);
+static	int ufs_getpage_miss(struct vnode *, uoff_t, size_t, struct seg *,
 		caddr_t, struct page **, size_t, enum seg_rw, int);
 static	int ufs_open(struct vnode **, int, struct cred *, caller_context_t *);
 static	int ufs_close(struct vnode *, int, int, offset_t, struct cred *,
@@ -171,7 +171,7 @@ static	int ufs_dump(vnode_t *, caddr_t, offset_t, offset_t,
     caller_context_t *);
 static	int ufs_l_pathconf(struct vnode *, int, ulong_t *, struct cred *,
 		caller_context_t *);
-static	int ufs_pageio(struct vnode *, struct page *, u_offset_t, size_t, int,
+static	int ufs_pageio(struct vnode *, struct page *, uoff_t, size_t, int,
 		struct cred *, caller_context_t *);
 static	int ufs_dumpctl(vnode_t *, int, offset_t *, caller_context_t *);
 static	daddr32_t *save_dblks(struct inode *, struct ufsvfs *, daddr32_t *,
@@ -665,7 +665,7 @@ int stickyhack = 1;
  */
 int	freebehind = 1;
 int	smallfile = 0;
-u_offset_t smallfile64 = 32 * 1024;
+uoff_t smallfile64 = 32 * 1024;
 
 /*
  * While we should, in most cases, cache the pages for write, we
@@ -722,8 +722,8 @@ int	cache_read_ahead = 0;
 
 #define	SMALLFILE1_D 1000
 #define	SMALLFILE2_D 10
-static u_offset_t smallfile1 = 32 * 1024;
-static u_offset_t smallfile2 = 32 * 1024;
+static uoff_t smallfile1 = 32 * 1024;
+static uoff_t smallfile2 = 32 * 1024;
 static clock_t smallfile_update = 0; /* lbolt value of when to recompute */
 uint_t smallfile1_d = SMALLFILE1_D;
 uint_t smallfile2_d = SMALLFILE2_D;
@@ -735,8 +735,8 @@ int
 wrip(struct inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 {
 	rlim64_t limit = uio->uio_llimit;
-	u_offset_t off;
-	u_offset_t old_i_size;
+	uoff_t off;
+	uoff_t old_i_size;
 	struct fs *fs;
 	struct vnode *vp;
 	struct ufsvfs *ufsvfsp;
@@ -880,7 +880,7 @@ wrip(struct inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 
 	fs = ip->i_fs;
 	do {
-		u_offset_t uoff = uio->uio_loffset;
+		uoff_t uoff = uio->uio_loffset;
 		off = uoff & (offset_t)MAXBMASK;
 		mapon = (int)(uoff & (offset_t)MAXBOFFSET);
 		on = (int)blkoff(fs, uoff);
@@ -1341,13 +1341,13 @@ out:
 int
 rdip(struct inode *ip, struct uio *uio, int ioflag, cred_t *cr)
 {
-	u_offset_t off;
+	uoff_t off;
 	caddr_t base;
 	struct fs *fs;
 	struct ufsvfs *ufsvfsp;
 	struct vnode *vp;
 	long oresid = uio->uio_resid;
-	u_offset_t n, on, mapon;
+	uoff_t n, on, mapon;
 	int error = 0;
 	int doupdate = 1;
 	uint_t flags;
@@ -1404,12 +1404,12 @@ rdip(struct inode *ip, struct uio *uio, int ioflag, cred_t *cr)
 
 	do {
 		offset_t diff;
-		u_offset_t uoff = uio->uio_loffset;
+		uoff_t uoff = uio->uio_loffset;
 		off = uoff & (offset_t)MAXBMASK;
-		mapon = (u_offset_t)(uoff & (offset_t)MAXBOFFSET);
-		on = (u_offset_t)blkoff(fs, uoff);
-		n = MIN((u_offset_t)fs->fs_bsize - on,
-		    (u_offset_t)uio->uio_resid);
+		mapon = (uoff_t)(uoff & (offset_t)MAXBOFFSET);
+		on = (uoff_t)blkoff(fs, uoff);
+		n = MIN((uoff_t)fs->fs_bsize - on,
+		    (uoff_t)uio->uio_resid);
 
 		diff = ip->i_size - uoff;
 
@@ -3092,7 +3092,7 @@ again:
 					rw_enter(&ufsvfsp->vfs_dqrwlock,
 					    RW_READER);
 					rw_enter(&ip->i_contents, RW_WRITER);
-					(void) ufs_itrunc(ip, (u_offset_t)0, 0,
+					(void) ufs_itrunc(ip, (uoff_t)0, 0,
 					    cr);
 					rw_exit(&ip->i_rwlock);
 				}
@@ -3169,7 +3169,7 @@ unlock:
 			VN_RELE(ITOV(ip));
 			goto again;
 		}
-		(void) TRANS_ITRUNC(ip, (u_offset_t)0, 0, cr);
+		(void) TRANS_ITRUNC(ip, (uoff_t)0, 0, cr);
 		rw_exit(&ip->i_rwlock);
 	}
 
@@ -4530,9 +4530,9 @@ ufs_getpage(struct vnode *vp, offset_t off, size_t len, uint_t *protp,
 	page_t *plarr[], size_t plsz, struct seg *seg, caddr_t addr,
 	enum seg_rw rw, struct cred *cr, caller_context_t *ct)
 {
-	u_offset_t	uoff = (u_offset_t)off; /* type conversion */
-	u_offset_t	pgoff;
-	u_offset_t	eoff;
+	uoff_t	uoff = (uoff_t)off; /* type conversion */
+	uoff_t	pgoff;
+	uoff_t	eoff;
 	struct inode 	*ip = VTOI(vp);
 	struct ufsvfs	*ufsvfsp = ip->i_ufsvfs;
 	struct fs 	*fs;
@@ -4629,7 +4629,7 @@ retrylock:
 	 * is held in bmap routines.
 	 */
 	beyond_eof = uoff + len >
-	    P2ROUNDUP_TYPED(ip->i_size, PAGESIZE, u_offset_t);
+	    P2ROUNDUP_TYPED(ip->i_size, PAGESIZE, uoff_t);
 	if (beyond_eof && seg != segkmap) {
 		if (dolock) {
 			rw_exit(&ip->i_contents);
@@ -4651,7 +4651,7 @@ retrylock:
 
 	if ((rw == S_WRITE || rw == S_CREATE) && has_holes && !beyond_eof) {
 		int	blk_size;
-		u_offset_t offset;
+		uoff_t offset;
 
 		/*
 		 * We must acquire the RW_WRITER lock in order to
@@ -4741,7 +4741,7 @@ retrylock:
 	for (pgoff = uoff, pgaddr = addr, pl = plarr;
 	    pgoff < eoff; /* empty */) {
 		page_t	*pp;
-		u_offset_t	nextrio;
+		uoff_t	nextrio;
 		se_t	se;
 		int retval;
 
@@ -4890,7 +4890,7 @@ out:
  */
 /* ARGSUSED */
 static int
-ufs_getpage_miss(struct vnode *vp, u_offset_t off, size_t len, struct seg *seg,
+ufs_getpage_miss(struct vnode *vp, uoff_t off, size_t len, struct seg *seg,
 	caddr_t addr, page_t *pl[], size_t plsz, enum seg_rw rw, int seq)
 {
 	struct inode	*ip = VTOI(vp);
@@ -4936,7 +4936,7 @@ ufs_getpage_miss(struct vnode *vp, u_offset_t off, size_t len, struct seg *seg,
 
 		io_len = PAGESIZE;
 	} else {
-		u_offset_t	io_off;
+		uoff_t	io_off;
 		uint_t	xlen;
 		struct buf	*bp;
 		ufsvfs_t	*ufsvfsp = ip->i_ufsvfs;
@@ -5017,11 +5017,11 @@ ufs_getpage_miss(struct vnode *vp, u_offset_t off, size_t len, struct seg *seg,
  * Read ahead a cluster from the disk. Returns the length in bytes.
  */
 static int
-ufs_getpage_ra(struct vnode *vp, u_offset_t off, struct seg *seg, caddr_t addr)
+ufs_getpage_ra(struct vnode *vp, uoff_t off, struct seg *seg, caddr_t addr)
 {
 	struct inode	*ip = VTOI(vp);
 	page_t		*pp;
-	u_offset_t	io_off = ip->i_nextrio;
+	uoff_t	io_off = ip->i_nextrio;
 	ufsvfs_t	*ufsvfsp;
 	caddr_t		addr2 = addr + (io_off - off);
 	struct buf	*bp;
@@ -5061,7 +5061,7 @@ ufs_getpage_ra(struct vnode *vp, u_offset_t off, struct seg *seg, caddr_t addr)
 	/*
 	 * Limit the transfer size to bsize if this is the 2nd block.
 	 */
-	if (io_off == (u_offset_t)bsize)
+	if (io_off == (uoff_t)bsize)
 		contig = MIN(contig, bsize);
 
 	if ((pp = pvn_read_kluster(vp, io_off, seg, addr2, &io_off,
@@ -5150,7 +5150,7 @@ ufs_putpage(struct vnode *vp, offset_t off, size_t len, int flags,
 			 */
 			if (ip->i_delaylen >= CLUSTSZ(ip) ||
 			    ip->i_delayoff + ip->i_delaylen != off) {
-				u_offset_t doff;
+				uoff_t doff;
 				size_t dlen;
 
 				doff = ip->i_delayoff;
@@ -5198,8 +5198,8 @@ ufs_putpages(
 	int flags,
 	struct cred *cr)
 {
-	u_offset_t io_off;
-	u_offset_t eoff;
+	uoff_t io_off;
+	uoff_t eoff;
 	struct inode *ip = VTOI(vp);
 	page_t *pp;
 	size_t io_len;
@@ -5273,7 +5273,7 @@ ufs_putpages(
 		/*
 		 * Search the entire vp list for pages >= off.
 		 */
-		err = pvn_vplist_dirty(vp, (u_offset_t)off, ufs_putapage,
+		err = pvn_vplist_dirty(vp, (uoff_t)off, ufs_putapage,
 		    flags, cr);
 	} else {
 		/*
@@ -5304,7 +5304,7 @@ ufs_putpages(
 			if (pp == NULL || pvn_getdirty(pp, flags) == 0)
 				io_len = PAGESIZE;
 			else {
-				u_offset_t *io_offp = &io_off;
+				uoff_t *io_offp = &io_off;
 
 				err = ufs_putapage(vp, pp, io_offp, &io_len,
 				    flags, cr);
@@ -5369,13 +5369,13 @@ int
 ufs_putapage(
 	struct vnode *vp,
 	page_t *pp,
-	u_offset_t *offp,
+	uoff_t *offp,
 	size_t *lenp,		/* return values */
 	int flags,
 	struct cred *cr)
 {
-	u_offset_t io_off;
-	u_offset_t off;
+	uoff_t io_off;
+	uoff_t off;
 	struct inode *ip = VTOI(vp);
 	struct ufsvfs *ufsvfsp = ip->i_ufsvfs;
 	struct fs *fs;
@@ -5497,7 +5497,7 @@ ufs_putapage(
 	 */
 	if (io_len == 0) {
 		ASSERT(pp->p_offset >=
-		    (u_offset_t)(roundup(ip->i_size, PAGESIZE)));
+		    (uoff_t)(roundup(ip->i_size, PAGESIZE)));
 		io_len = PAGESIZE;
 	}
 
@@ -5708,7 +5708,7 @@ retry_map:
 	}
 
 	vn_a.vp = vp;
-	vn_a.offset = (u_offset_t)off;
+	vn_a.offset = (uoff_t)off;
 	vn_a.type = flags & MAP_TYPE;
 	vn_a.prot = prot;
 	vn_a.maxprot = maxprot;
@@ -5936,7 +5936,7 @@ int ufs_pageio_writes, ufs_pageio_reads;
 
 /*ARGSUSED*/
 static int
-ufs_pageio(struct vnode *vp, page_t *pp, u_offset_t io_off, size_t io_len,
+ufs_pageio(struct vnode *vp, page_t *pp, uoff_t io_off, size_t io_len,
 	int flags, struct cred *cr, caller_context_t *ct)
 {
 	struct inode *ip = VTOI(vp);
@@ -6051,7 +6051,7 @@ ufs_pageio(struct vnode *vp, page_t *pp, u_offset_t io_off, size_t io_len,
 	while (done_len < io_len) {
 		ASSERT(cpp);
 		contig = 0;
-		if (err = bmap_read(ip, (u_offset_t)(io_off + done_len),
+		if (err = bmap_read(ip, (uoff_t)(io_off + done_len),
 		    &bn, &contig))
 			break;
 
@@ -6161,7 +6161,7 @@ static int
 ufs_dump(vnode_t *vp, caddr_t addr, offset_t ldbn, offset_t dblks,
     caller_context_t *ct)
 {
-	u_offset_t	file_size;
+	uoff_t	file_size;
 	struct inode    *ip = VTOI(vp);
 	struct fs	*fs = ip->i_fs;
 	daddr_t		dbn, lfsbn;

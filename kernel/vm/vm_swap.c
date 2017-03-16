@@ -113,10 +113,10 @@ struct swapinfo	*swapinfo;
 static	struct	swapinfo *silast;
 static	int	nswapfiles;
 
-static u_offset_t	swap_getoff(struct swapinfo *);
+static uoff_t	swap_getoff(struct swapinfo *);
 static int	swapadd(struct vnode *, ulong_t, ulong_t, char *);
 static int	swapdel(struct vnode *, ulong_t);
-static int	swapslot_free(struct vnode *, u_offset_t, struct swapinfo *);
+static int	swapslot_free(struct vnode *, uoff_t, struct swapinfo *);
 
 /*
  * swap device bitmap allocation macros
@@ -144,7 +144,7 @@ uint_t swapalloc_maxcontig;
 int
 swap_phys_alloc(
 	struct vnode **vpp,
-	u_offset_t *offp,
+	uoff_t *offp,
 	size_t *lenp,
 	uint_t flags)
 {
@@ -217,7 +217,7 @@ int swap_backsearch = 0;
  * Get a free offset on swap device sip.
  * Return >=0 offset if succeeded, -1 for failure.
  */
-static u_offset_t
+static uoff_t
 swap_getoff(struct swapinfo *sip)
 {
 	uint_t *sp, *ep;
@@ -259,7 +259,7 @@ swap_getoff(struct swapinfo *sip)
 	}
 	if (*sp == 0xffffffff) {
 		cmn_err(CE_WARN, "No free swap slots!");
-		return ((u_offset_t)-1);
+		return ((uoff_t)-1);
 	}
 
 foundentry:
@@ -313,7 +313,7 @@ foundslot:
  * Free a swap page.
  */
 void
-swap_phys_free(struct vnode *vp, u_offset_t off, size_t len)
+swap_phys_free(struct vnode *vp, uoff_t off, size_t len)
 {
 	struct swapinfo *sip;
 	ssize_t pagenumber, npage;
@@ -355,7 +355,7 @@ swap_phys_free(struct vnode *vp, u_offset_t off, size_t len)
  * Return the anon struct if found, otherwise NULL.
  */
 struct anon *
-swap_anon(struct vnode *vp, u_offset_t off)
+swap_anon(struct vnode *vp, uoff_t off)
 {
 	struct anon *ap;
 
@@ -373,10 +373,10 @@ swap_anon(struct vnode *vp, u_offset_t off)
  * Determine if the vp offset range overlap a swap device.
  */
 int
-swap_in_range(struct vnode *vp, u_offset_t offset, size_t len)
+swap_in_range(struct vnode *vp, uoff_t offset, size_t len)
 {
 	struct swapinfo *sip;
-	u_offset_t eoff;
+	uoff_t eoff;
 
 	eoff = offset + len;
 	ASSERT(eoff > offset);
@@ -409,7 +409,7 @@ swapdel_byname(
 	ulong_t lowblk) 	/* Low block number of area to delete */
 {
 	struct swapinfo **sipp, *osip;
-	u_offset_t soff;
+	uoff_t soff;
 
 	/*
 	 * Find the swap file entry for the file to
@@ -1101,7 +1101,7 @@ swapadd(struct vnode *vp, ulong_t lowblk, ulong_t nblks, char *swapname)
 	struct vnode *cvp;
 	struct vattr vattr;
 	pgcnt_t pages;
-	u_offset_t soff, eoff;
+	uoff_t soff, eoff;
 	int error;
 	ssize_t i, start, end;
 	ushort_t wasswap;
@@ -1181,7 +1181,7 @@ swapadd(struct vnode *vp, ulong_t lowblk, ulong_t nblks, char *swapname)
 		goto out;
 
 	/* Fail if fs does not support fop_pageio */
-	error = fop_pageio(cvp, (page_t *)NULL, (u_offset_t)0, 0, 0, CRED(),
+	error = fop_pageio(cvp, (page_t *)NULL, (uoff_t)0, 0, 0, CRED(),
 	    NULL);
 
 	if (error == ENOSYS)
@@ -1391,9 +1391,9 @@ swapdel(
 {
 	struct swapinfo **sipp, *osip = NULL;
 	struct vnode *cvp;
-	u_offset_t soff;
+	uoff_t soff;
 	int error = 0;
-	u_offset_t toff = 0;
+	uoff_t toff = 0;
 	struct vnode *tvp = NULL;
 	spgcnt_t pages;
 	struct anon **app, *ap;
@@ -1589,7 +1589,7 @@ out:
 static int
 swapslot_free(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	struct swapinfo *sip)
 {
 	struct page *pp = NULL;
@@ -1597,7 +1597,7 @@ swapslot_free(
 	int error = 0;
 	kmutex_t *ahm;
 	struct vnode *pvp = NULL;
-	u_offset_t poff;
+	uoff_t poff;
 	int	alloc_pg = 0;
 
 	ASSERT(sip->si_vp != NULL);
@@ -1685,18 +1685,18 @@ again:
 int
 swap_newphysname(
 	struct vnode *vp,
-	u_offset_t offset,
-	u_offset_t *offp,
+	uoff_t offset,
+	uoff_t *offp,
 	size_t *lenp,
 	struct vnode **pvpp,
-	u_offset_t *poffp)
+	uoff_t *poffp)
 {
 	struct anon *ap = NULL;		/* anon slot for vp, off */
 	int error = 0;
 	struct vnode *pvp;
-	u_offset_t poff, pstart, prem;
+	uoff_t poff, pstart, prem;
 	size_t plen;
-	u_offset_t off, start;
+	uoff_t off, start;
 	kmutex_t *ahm;
 
 	ASSERT(*offp <= offset && offset < *offp + *lenp);
@@ -1798,9 +1798,9 @@ swap_newphysname(
 int
 swap_getphysname(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	struct vnode **pvpp,
-	u_offset_t *poffp)
+	uoff_t *poffp)
 {
 	struct anon *ap;
 	int error = 0;

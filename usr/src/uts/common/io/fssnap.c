@@ -168,10 +168,10 @@ static int snap_getchunk(struct snapshot_id *sidp, chunknumber_t chunk,
 
 /* fssnap interface implementations (see fssnap_if.h) */
 static void fssnap_strategy_impl(void *, struct buf *);
-static void *fssnap_create_impl(chunknumber_t, uint_t, u_offset_t,
-    struct vnode *, int, struct vnode **, char *, u_offset_t);
+static void *fssnap_create_impl(chunknumber_t, uint_t, uoff_t,
+    struct vnode *, int, struct vnode **, char *, uoff_t);
 static void fssnap_set_candidate_impl(void *, chunknumber_t);
-static int fssnap_is_candidate_impl(void *, u_offset_t);
+static int fssnap_is_candidate_impl(void *, uoff_t);
 static int fssnap_create_done_impl(void *);
 static int fssnap_delete_impl(void *);
 
@@ -1744,9 +1744,9 @@ fssnap_write_taskq(void *arg)
  *    create, and are not released until fssnap_create_done is called().
  */
 static void *
-fssnap_create_impl(chunknumber_t nchunks, uint_t chunksz, u_offset_t maxsize,
+fssnap_create_impl(chunknumber_t nchunks, uint_t chunksz, uoff_t maxsize,
     struct vnode *fsvp, int backfilecount, struct vnode **bfvpp, char *backpath,
-    u_offset_t max_backfile_size)
+    uoff_t max_backfile_size)
 {
 	refstr_t *mountpoint;
 	char taskqname[50];
@@ -1915,7 +1915,7 @@ fssnap_set_candidate_impl(void *snapshot_id, chunknumber_t chunknumber)
  *    bytes since the chunk size may not be known by the file system.
  */
 static int
-fssnap_is_candidate_impl(void *snapshot_id, u_offset_t off)
+fssnap_is_candidate_impl(void *snapshot_id, uoff_t off)
 {
 	struct snapshot_id	*sid = snapshot_id;
 	struct cow_info *cowp = sid->sid_cowinfo;

@@ -51,7 +51,7 @@ struct segkpm_crargs {
 };
 
 extern struct seg *segkpm;
-extern u_offset_t kpm_pgoff;
+extern uoff_t	kpm_pgoff;
 extern size_t	kpm_pgsz;
 extern uint_t	kpm_pgshft;
 extern uint_t	kpmp2pshft;
@@ -108,7 +108,7 @@ extern faultcode_t	segkpm_fault(struct hat *, struct seg *, caddr_t,
 /*
  * Public seg_kpm interfaces.
  */
-extern caddr_t	segkpm_create_va(u_offset_t);
+extern caddr_t	segkpm_create_va(uoff_t);
 extern void	segkpm_mapout_validkpme(struct kpme *);
 
 #endif	/* _KERNEL */

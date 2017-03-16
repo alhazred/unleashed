@@ -335,7 +335,7 @@ ptable_free(pfn_t pfn)
 	 * Get an exclusive lock, might have to wait for a kmem reader.
 	 */
 	if (!page_tryupgrade(pp)) {
-		u_offset_t off = pp->p_offset;
+		uoff_t off = pp->p_offset;
 		page_unlock(pp);
 		pp = page_lookup(&kvp, off, SE_EXCL);
 		if (pp == NULL)
@@ -1537,7 +1537,7 @@ htable_attach(
 	 */
 	if (pp->p_vnode == NULL) {
 		/* match offset calculation in page_get_physical() */
-		u_offset_t offset = (uintptr_t)ht;
+		uoff_t offset = (uintptr_t)ht;
 		if (offset > kernelbase)
 			offset -= kernelbase;
 		offset <<= MMU_PAGESHIFT;

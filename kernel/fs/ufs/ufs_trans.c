@@ -491,7 +491,7 @@ ufs_trans_dir(struct inode *ip, off_t offset)
 
 	ASSERT(ip);
 	ASSERT(RW_WRITE_HELD(&ip->i_contents));
-	error = bmap_read(ip, (u_offset_t)offset, &bn, &contig);
+	error = bmap_read(ip, (uoff_t)offset, &bn, &contig);
 	if (error || (bn == UFS_HOLE)) {
 		cmn_err(CE_WARN, "ufs_trans_dir - could not get block"
 		    " number error = %d bn = %d\n", error, (int)bn);
@@ -638,7 +638,7 @@ ufs_log_amt(struct inode *ip, offset_t offset, ssize_t resid, int trunc)
 {
 	long		ncg, last2blk;
 	long		niblk		= 0;
-	u_offset_t	writeend, offblk;
+	uoff_t	writeend, offblk;
 	int		resv;
 	daddr_t		nblk, maxfblk;
 	long		avgbfree;
@@ -740,12 +740,12 @@ ufs_log_amt(struct inode *ip, offset_t offset, ssize_t resid, int trunc)
 void
 ufs_trans_trunc_resv(
 	struct inode *ip,
-	u_offset_t length,
+	uoff_t length,
 	int *resvp,
-	u_offset_t *residp)
+	uoff_t *residp)
 {
 	ulong_t		resv;
-	u_offset_t	size, offset, resid;
+	uoff_t	size, offset, resid;
 	int		nchunks, flag;
 
 	/*
@@ -795,10 +795,10 @@ done:
 }
 
 int
-ufs_trans_itrunc(struct inode *ip, u_offset_t length, int flags, cred_t *cr)
+ufs_trans_itrunc(struct inode *ip, uoff_t length, int flags, cred_t *cr)
 {
 	int 		err, issync, resv;
-	u_offset_t	resid;
+	uoff_t	resid;
 	int		do_block	= 0;
 	struct ufsvfs	*ufsvfsp	= ip->i_ufsvfs;
 	struct fs	*fs		= ufsvfsp->vfs_fs;

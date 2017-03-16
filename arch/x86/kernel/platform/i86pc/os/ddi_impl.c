@@ -1000,10 +1000,10 @@ static int kmem_io_idx;		/* index of first populated kmem_io[] */
 static page_t *
 page_create_io_wrapper(void *addr, size_t len, int vmflag, void *arg)
 {
-	extern page_t *page_create_io(vnode_t *, u_offset_t, uint_t,
+	extern page_t *page_create_io(vnode_t *, uoff_t, uint_t,
 	    uint_t, struct as *, caddr_t, ddi_dma_attr_t *);
 
-	return (page_create_io(&kvp, (u_offset_t)(uintptr_t)addr, len,
+	return (page_create_io(&kvp, (uoff_t)(uintptr_t)addr, len,
 	    PG_EXCL | ((vmflag & VM_NOSLEEP) ? 0 : PG_WAIT), &kas, addr, arg));
 }
 
@@ -1323,7 +1323,7 @@ contig_alloc(size_t size, ddi_dma_attr_t *attr, uintptr_t align, int cansleep)
 	int		pflag;
 	void		*addr;
 
-	extern page_t *page_create_io(vnode_t *, u_offset_t, uint_t,
+	extern page_t *page_create_io(vnode_t *, uoff_t, uint_t,
 	    uint_t, struct as *, caddr_t, ddi_dma_attr_t *);
 
 	/* segkmem_xalloc */
@@ -1350,7 +1350,7 @@ contig_alloc(size_t size, ddi_dma_attr_t *attr, uintptr_t align, int cansleep)
 		if (pgcnt > 1 || align > PAGESIZE)
 			pflag |= PG_PHYSCONTIG;
 
-		ppl = page_create_io(&kvp, (u_offset_t)(uintptr_t)addr,
+		ppl = page_create_io(&kvp, (uoff_t)(uintptr_t)addr,
 		    asize, pflag, &kas, (caddr_t)addr, attr);
 
 		if (!ppl) {
@@ -1384,14 +1384,14 @@ contig_free(void *addr, size_t size)
 	hat_unload(kas.a_hat, addr, asize, HAT_UNLOAD_UNLOCK);
 
 	for (a = addr, ea = a + asize; a < ea; a += PAGESIZE) {
-		pp = page_find(&kvp, (u_offset_t)(uintptr_t)a);
+		pp = page_find(&kvp, (uoff_t)(uintptr_t)a);
 		if (!pp)
 			panic("contig_free: contig pp not found");
 
 		if (!page_tryupgrade(pp)) {
 			page_unlock(pp);
 			pp = page_lookup(&kvp,
-			    (u_offset_t)(uintptr_t)a, SE_EXCL);
+			    (uoff_t)(uintptr_t)a, SE_EXCL);
 			if (pp == NULL)
 				panic("contig_free: page freed");
 		}

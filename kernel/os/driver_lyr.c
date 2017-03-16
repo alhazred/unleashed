@@ -1865,7 +1865,7 @@ ldi_get_size(ldi_handle_t lh, uint64_t *sizep)
 				return (DDI_FAILURE);
 
 			*sizep = (uint64_t)
-			    (((u_offset_t)drv_prop64) << blkshift);
+			    (((uoff_t)drv_prop64) << blkshift);
 			return (DDI_SUCCESS);
 		}
 
@@ -1895,7 +1895,7 @@ ldi_get_size(ldi_handle_t lh, uint64_t *sizep)
 				return (DDI_FAILURE);
 
 			*sizep = (uint64_t)
-			    (((u_offset_t)value) << blkshift);
+			    (((uoff_t)value) << blkshift);
 			return (DDI_SUCCESS);
 		}
 	}

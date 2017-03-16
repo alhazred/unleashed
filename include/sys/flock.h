@@ -85,7 +85,7 @@ extern "C" {
 typedef ulong_t u_off_t;
 
 #define	MAX_U_OFF_T	((u_off_t)~0)
-#define	MAX_U_OFFSET_T	((u_offset_t)~0)
+#define	MAX_U_OFFSET_T	((uoff_t)~0)
 
 /*
  * define MAXEND as the largest positive value the signed offset_t will hold.
@@ -216,12 +216,12 @@ typedef struct locklist {
 #define	FLK_QUERY_SLEEPING	0x2
 
 #if defined(_KERNEL)
-int	ofdlock(file_t *, int, struct flock64 *, int, u_offset_t);
+int	ofdlock(file_t *, int, struct flock64 *, int, uoff_t);
 void	ofdcleanlock(file_t *);
 #endif
-int	reclock(struct vnode *, struct flock64 *, int, int, u_offset_t,
+int	reclock(struct vnode *, struct flock64 *, int, int, uoff_t,
 		flk_callback_t *);
-int	chklock(struct vnode *, int, u_offset_t, ssize_t, int,
+int	chklock(struct vnode *, int, uoff_t, ssize_t, int,
 		caller_context_t *);
 int	convoff(struct vnode *, struct flock64 *, int, offset_t);
 void	cleanlocks(struct vnode *, pid_t, int);
@@ -232,8 +232,8 @@ locklist_t *flk_active_nbmand_locks_for_vp(const struct vnode *vp);
 locklist_t *flk_active_nbmand_locks(pid_t pid);
 void	flk_free_locklist(locklist_t *);
 int	flk_convert_lock_data(struct vnode *, struct flock64 *,
-		u_offset_t *, u_offset_t *, offset_t);
-int	flk_check_lock_data(u_offset_t, u_offset_t, offset_t);
+		uoff_t *, uoff_t *, offset_t);
+int	flk_check_lock_data(uoff_t, uoff_t, offset_t);
 int	flk_has_remote_locks(struct vnode *vp);
 void	flk_set_lockmgr_status(flk_lockmgr_status_t status);
 int	flk_sysid_has_locks(int sysid, int chklck);

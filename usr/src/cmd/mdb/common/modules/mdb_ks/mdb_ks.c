@@ -627,7 +627,7 @@ out:
 struct page_lookup_state {
 	/* input */
 	uintptr_t vnode;
-	u_offset_t offset;
+	uoff_t offset;
 
 	/* output */
 	uintptr_t page;
@@ -653,7 +653,7 @@ __page_lookup(uintptr_t addr, const void *data, void *private)
 }
 
 uintptr_t
-mdb_page_lookup(uintptr_t vp, u_offset_t offset)
+mdb_page_lookup(uintptr_t vp, uoff_t offset)
 {
 	uintptr_t addr = vp + OFFSETOF(vnode_t, v_pagecache);
 	struct page_lookup_state state = {

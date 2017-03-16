@@ -1207,7 +1207,7 @@ segvn_anon_walk_init(mdb_walk_state_t *wsp)
 
 
 typedef struct {
-	u_offset_t		svs_offset;
+	uoff_t		svs_offset;
 	uintptr_t		svs_page;
 } segvn_sparse_t;
 #define	SEGVN_MAX_SPARSE	((128 * 1024) / sizeof (segvn_sparse_t))
@@ -1231,12 +1231,12 @@ segvn_sparse_fill(uintptr_t addr, const void *pp_arg, void *arg)
 {
 	segvn_walk_data_t	*const	svw = arg;
 	const page_t		*const	pp = pp_arg;
-	const u_offset_t		offset = pp->p_offset;
+	const uoff_t		offset = pp->p_offset;
 	segvn_sparse_t		*const	cur =
 	    &svw->svw_sparse[svw->svw_sparse_count];
 
 	/* See if the page is of interest */
-	if ((u_offset_t)(offset - svw->svw_svd.offset) >= svw->svw_seg.s_size) {
+	if ((uoff_t)(offset - svw->svw_svd.offset) >= svw->svw_seg.s_size) {
 		return (WALK_NEXT);
 	}
 	/* See if we have space for the new entry, then add it. */
@@ -1383,7 +1383,7 @@ segvn_pages_walk_step(mdb_walk_state_t *wsp)
 	 * If we've got a sparse page array, just send it directly.
 	 */
 	if (svw->svw_sparse != NULL) {
-		u_offset_t off;
+		uoff_t off;
 
 		if (svw->svw_sparse_idx >= svw->svw_sparse_count) {
 			pp = (uintptr_t)NULL;

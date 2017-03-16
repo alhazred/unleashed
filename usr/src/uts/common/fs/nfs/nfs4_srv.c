@@ -3046,7 +3046,7 @@ rfs4_op_read(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	struct iovec iov, *iovp = NULL;
 	int iovcnt;
 	struct uio uio;
-	u_offset_t offset;
+	uoff_t offset;
 	bool_t *deleg = &cs->deleg;
 	nfsstat4 stat;
 	int in_crit = 0;
@@ -5056,7 +5056,7 @@ do_rfs4_op_setattr(bitmap4 *resp, fattr4 *fattrp, struct compound_state *cs,
 	 * the region of the change.
 	 */
 	if (vp->v_type == VREG && (sarg.vap->va_mask & AT_SIZE)) {
-		u_offset_t offset;
+		uoff_t offset;
 		ssize_t length;
 
 		/*
@@ -5372,7 +5372,7 @@ rfs4_op_write(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	int error;
 	vnode_t *vp;
 	struct vattr bva;
-	u_offset_t rlimit;
+	uoff_t rlimit;
 	struct uio uio;
 	struct iovec iov[MAX_IOVECS];
 	struct iovec *iovp;
@@ -5511,7 +5511,7 @@ rfs4_op_write(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	uio.uio_resid = args->data_len;
 	uio.uio_llimit = curproc->p_fsz_ctl;
 	rlimit = uio.uio_llimit - args->offset;
-	if (rlimit < (u_offset_t)uio.uio_resid)
+	if (rlimit < (uoff_t)uio.uio_resid)
 		uio.uio_resid = (int)rlimit;
 
 	if (args->stable == UNSTABLE4)
@@ -8212,7 +8212,7 @@ rfs4_release_share_lock_state(rfs4_state_t *sp, cred_t *cr,
 				flk.l_pid = 0;
 				(void) fop_frlock(sp->rs_finfo->rf_vp, F_SETLK,
 				    &flk, F_REMOTELOCK | FREAD | FWRITE,
-				    (u_offset_t)0, NULL, CRED(), NULL);
+				    (uoff_t)0, NULL, CRED(), NULL);
 			}
 
 			sp->rs_owner->ro_client->rc_unlksys_completed = TRUE;
@@ -8368,7 +8368,7 @@ retry:
 	for (i = 0; i < rfs4_maxlock_tries; i++) {
 		LOCK_PRINT(rfs4_debug, "setlock", cmd, flock);
 		error = fop_frlock(vp, cmd,
-		    flock, flag, (u_offset_t)0, NULL, cred, NULL);
+		    flock, flag, (uoff_t)0, NULL, cred, NULL);
 
 		if (error != EAGAIN && error != EACCES)
 			break;
@@ -9254,7 +9254,7 @@ retry:
 		resp->status = NFS4ERR_INVAL;
 		goto err;
 	}
-	error = fop_frlock(cs->vp, F_GETLK, &flk, flag, (u_offset_t)0,
+	error = fop_frlock(cs->vp, F_GETLK, &flk, flag, (uoff_t)0,
 	    NULL, cs->cr, NULL);
 
 	/*

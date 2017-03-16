@@ -308,7 +308,7 @@ ud_ip_off2bno(struct ud_inode *ip, uint32_t offset, uint32_t *bno)
 		return (0);
 	}
 
-	if ((error = ud_read_icb_till_off(ip, (u_offset_t)offset)) != 0) {
+	if ((error = ud_read_icb_till_off(ip, (uoff_t)offset)) != 0) {
 		return (error);
 	}
 

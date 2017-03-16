@@ -1102,7 +1102,7 @@ sfmmu_tsb_page_create(void *addr, size_t size, int vmflag, void *arg)
 	if (vmflag & VM_PUSHPAGE)
 		pgflags |= PG_PUSHPAGE;
 
-	return (page_create_va_large(&kvp, (u_offset_t)(uintptr_t)addr, size,
+	return (page_create_va_large(&kvp, (uoff_t)(uintptr_t)addr, size,
 	    pgflags, &kvseg, addr, arg));
 }
 
@@ -1210,7 +1210,7 @@ sfmmu_tsb_segkmem_free(vmem_t *vmp, void *inaddr, size_t size)
 	hat_unload(kas.a_hat, addr, size, HAT_UNLOAD_UNLOCK);
 
 	for (eaddr = addr + size; addr < eaddr; addr += PAGESIZE) {
-		pp = page_lookup(&kvp, (u_offset_t)(uintptr_t)addr, SE_EXCL);
+		pp = page_lookup(&kvp, (uoff_t)(uintptr_t)addr, SE_EXCL);
 		if (pp == NULL)
 			panic("sfmmu_tsb_segkmem_free: page not found");
 

@@ -158,7 +158,7 @@ int
 normspcl(struct byteorder_ctx *ctx, struct s_spcl *sp, int *cs,
     int css, int magic)
 {
-	u_offset_t sv;
+	uoff_t sv;
 
 	if ((! ctx->initialized) && (sp->c_magic != magic)) {
 		if (swabl(sp->c_magic) != (uint32_t)magic)

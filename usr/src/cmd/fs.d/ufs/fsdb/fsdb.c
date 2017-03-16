@@ -130,7 +130,7 @@ static char sccsid[] = "@(#)fsdb.c	5.8 (Berkeley) 6/1/90";
 #define	CHAR		(sizeof (char))
 #define	SHORT		(sizeof (short))
 #define	LONG		(sizeof (long))
-#define	U_OFFSET_T	(sizeof (u_offset_t))	/* essentially "long long" */
+#define	U_OFFSET_T	(sizeof (uoff_t))	/* essentially "long long" */
 #define	INODE		(sizeof (struct dinode))
 #define	DIRECTORY	(sizeof (struct direct))
 #define	CGRP		(sizeof (struct cg))
@@ -144,8 +144,8 @@ static char sccsid[] = "@(#)fsdb.c	5.8 (Berkeley) 6/1/90";
 /*
  * Messy macros that would otherwise clutter up such glamorous code.
  */
-#define	itob(i)		(((u_offset_t)itod(fs, (i)) << \
-	(u_offset_t)FRGSHIFT) + (u_offset_t)itoo(fs, (i)) * (u_offset_t)INODE)
+#define	itob(i)		(((uoff_t)itod(fs, (i)) << \
+	(uoff_t)FRGSHIFT) + (uoff_t)itoo(fs, (i)) * (uoff_t)INODE)
 #define	min(x, y)	((x) < (y) ? (x) : (y))
 #define	STRINGSIZE(d)	((long)d->d_reclen - \
 				((long)&d->d_name[0] - (long)&d->d_ino))
@@ -175,15 +175,15 @@ static struct lbuf {
 	struct	lbuf  *back;
 	char	*blkaddr;
 	short	valid;
-	u_offset_t	blkno;
+	uoff_t	blkno;
 } lbuf[NBUF], bhdr;
 
 /*
  * used to hold save registers (see '<' and '>').
  */
 struct	save_registers {
-	u_offset_t	sv_addr;
-	u_offset_t	sv_value;
+	uoff_t	sv_addr;
+	uoff_t	sv_value;
 	long		sv_objsz;
 } regs[NREG];
 
@@ -255,22 +255,22 @@ static short		acting_on_directory;
 static short		should_print = 1;
 static short		clear;
 static short		star;
-static u_offset_t	addr;
-static u_offset_t	bod_addr;
-static u_offset_t	value;
-static u_offset_t	erraddr;
+static uoff_t	addr;
+static uoff_t	bod_addr;
+static uoff_t	value;
+static uoff_t	erraddr;
 static long		errcur_bytes;
-static u_offset_t	errino;
+static uoff_t	errino;
 static long		errinum;
 static long		cur_cgrp;
-static u_offset_t	cur_ino;
+static uoff_t	cur_ino;
 static long		cur_inum;
-static u_offset_t	cur_dir;
+static uoff_t	cur_dir;
 static long		cur_block;
 static long		cur_bytes;
 static long		find_ino;
-static u_offset_t	filesize;
-static u_offset_t	blocksize;
+static uoff_t	filesize;
+static uoff_t	blocksize;
 static long		stringsize;
 static long		count = 1;
 static long		commands;
@@ -291,7 +291,7 @@ static long		bmap();
 static long		expr();
 static long		term();
 static long		getnumb();
-static u_offset_t	getdirslot();
+static uoff_t	getdirslot();
 static unsigned long	*print_check(unsigned long *, long *, short, int);
 
 static void		usage(char *);
@@ -308,16 +308,16 @@ static void		getname();
 static void		freemem(struct filenames *, int);
 static void		print_path(char **, int);
 static void		fill();
-static void		put(u_offset_t, short);
+static void		put(uoff_t, short);
 static void		insert(struct lbuf *);
 static void		puta();
 static void		fprnt(char, char);
 static void		index();
 #ifdef _LARGEFILE64_SOURCE
 static void		printll
-	(u_offset_t value, int fieldsz, int digits, int lead);
+	(uoff_t value, int fieldsz, int digits, int lead);
 #define	print(value, fieldsz, digits, lead) \
-	printll((u_offset_t)value, fieldsz, digits, lead)
+	printll((uoff_t)value, fieldsz, digits, lead)
 #else /* !_LARGEFILE64_SOURCE */
 static void		print(long value, int fieldsz, int digits, int lead);
 #endif /* _LARGEFILE64_SOURCE */
@@ -327,7 +327,7 @@ static void		pbits(unsigned char *, int);
 static void		old_fsdb(int, char *);	/* For old fsdb functionality */
 
 static int		isnumber(char *);
-static int		icheck(u_offset_t);
+static int		icheck(uoff_t);
 static int		cgrp_check(long);
 static int		valid_addr();
 static int		match(char *, int);
@@ -631,9 +631,9 @@ main(int argc, char *argv[])
 	 * each directory traversed during a "find" or "ls -R" needs 3
 	 * entries.
 	 */
-	maxfiles = (long)((((u_offset_t)fs->fs_ncg * (u_offset_t)fs->fs_ipg) -
-	    (u_offset_t)fs->fs_cstotal.cs_nifree) +
-	    ((u_offset_t)fs->fs_cstotal.cs_ndir * (u_offset_t)3));
+	maxfiles = (long)((((uoff_t)fs->fs_ncg * (uoff_t)fs->fs_ipg) -
+	    (uoff_t)fs->fs_cstotal.cs_nifree) +
+	    ((uoff_t)fs->fs_cstotal.cs_ndir * (uoff_t)3));
 
 	filenames = (struct filenames *)calloc(maxfiles,
 	    sizeof (struct filenames));
@@ -1323,7 +1323,7 @@ showbase:
 					value = addr;
 				objsz = DIRECTORY;
 				type = DIRECTORY;
-				addr = (u_offset_t)getdirslot((long)value);
+				addr = (uoff_t)getdirslot((long)value);
 				continue;
 			}
 			if (match("db", 2)) {		/* direct block */
@@ -1404,7 +1404,7 @@ showbase:
 					    continue;
 					}
 				}
-				if ((addr = (u_offset_t)
+				if ((addr = (uoff_t)
 				    (bmap((long)value) << FRGSHIFT)) == 0)
 					continue;
 				cur_block = (long)value;
@@ -1530,7 +1530,7 @@ showbase:
 				continue;
 			}
 			if (match("log_otodb", 9)) {
-				if (log_lodb((u_offset_t)addr, &temp)) {
+				if (log_lodb((uoff_t)addr, &temp)) {
 					addr = temp;
 					should_print = 1;
 					laststyle = '=';
@@ -2463,8 +2463,8 @@ follow_path(long level, long inum)
 	while (cur_bytes < filesize) {
 	    if (block == 0 || bcomp(addr)) {
 		error = 0;
-		if ((addr = ((u_offset_t)bmap(block++) <<
-				(u_offset_t)FRGSHIFT)) == 0)
+		if ((addr = ((uoff_t)bmap(block++) <<
+				(uoff_t)FRGSHIFT)) == 0)
 		    break;
 		if ((cptr = getblk(addr)) == 0)
 		    break;
@@ -2817,7 +2817,7 @@ fill()
 	int		i;
 	short		eof_flag, end = 0, eof = 0;
 	long		temp, tcount;
-	u_offset_t	taddr;
+	uoff_t	taddr;
 
 	if (wrtflag == O_RDONLY) {
 		printf("not opened for write '-w'\n");
@@ -2865,7 +2865,7 @@ fill()
 	}
 	addr += (tcount - 1) * objsz;
 	cur_bytes += (tcount - 1) * objsz;
-	put((u_offset_t)temp, objsz);
+	put((uoff_t)temp, objsz);
 	if (eof) {
 		printf("end of file\n");
 		error++;
@@ -2885,7 +2885,7 @@ get(short lngth)
 {
 
 	char		*bptr;
-	u_offset_t	temp = addr;
+	uoff_t	temp = addr;
 
 	objsz = lngth;
 	if (objsz == INODE || objsz == SHORT)
@@ -2949,7 +2949,7 @@ cgrp_check(long cgrp)
  *	0 if error otherwise return the mode.
  */
 int
-icheck(u_offset_t address)
+icheck(uoff_t address)
 {
 	char		*cptr;
 	struct dinode	*ip;
@@ -2977,7 +2977,7 @@ icheck(u_offset_t address)
 /*
  * getdirslot - get the address of the directory slot desired.
  */
-static u_offset_t
+static uoff_t
 getdirslot(long slot)
 {
 	char		*cptr;
@@ -3230,7 +3230,7 @@ putf(char c)
  *	the entire block is written back to the file system.
  */
 static void
-put(u_offset_t item, short lngth)
+put(uoff_t item, short lngth)
 {
 
 	char	*bptr, *sbptr;
@@ -3313,7 +3313,7 @@ put(u_offset_t item, short lngth)
  *	Finally, a pointer to the buffer is returned.
  */
 static char *
-getblk(u_offset_t address)
+getblk(uoff_t address)
 {
 
 	struct lbuf	*bp;
@@ -3445,7 +3445,7 @@ puta()
 	char		*sbptr;
 	short		terror = 0;
 	long		maxchars, s_err, nbytes, temp;
-	u_offset_t	taddr = addr;
+	uoff_t	taddr = addr;
 	long		tcount = 0, item, olditem = 0;
 
 	if (wrtflag == O_RDONLY) {
@@ -3612,7 +3612,7 @@ fprnt(char style, char po)
 	int		tbase;
 	char		c, *cptr, *p;
 	long		tinode, tcount, temp;
-	u_offset_t	taddr;
+	uoff_t	taddr;
 	short		offset, mode, end = 0, eof = 0, eof_flag;
 	unsigned short	*sptr;
 	unsigned long	*lptr;
@@ -4330,7 +4330,7 @@ static int
 check_addr(short eof_flag, short *end, short *eof, short keep_on)
 {
 	long	temp, tcount = count, tcur_bytes = cur_bytes;
-	u_offset_t	taddr = addr;
+	uoff_t	taddr = addr;
 
 	if (bcomp(addr + count * objsz - 1) ||
 	    (keep_on && taddr < (bmap(cur_block) << FRGSHIFT))) {
@@ -4484,7 +4484,7 @@ index(int b)
  */
 static void
 #ifdef _LARGEFILE64_SOURCE
-printll(u_offset_t value, int fieldsz, int digits, int lead)
+printll(uoff_t value, int fieldsz, int digits, int lead)
 #else /* !_LARGEFILE64_SOURCE */
 print(long value, int fieldsz, int digits, int lead)
 #endif /* _LARGEFILE64_SOURCE */
@@ -4769,7 +4769,7 @@ pbits(unsigned char *cp, int max)
  */
 static int
 bcomp(addr)
-	u_offset_t	addr;
+	uoff_t	addr;
 {
 	if (override)
 		return (0);
@@ -4859,7 +4859,7 @@ old_fsdb(int inum, char *special)
 	int		f;	/* File descriptor for "special" */
 	int		j;
 	int		status = 0;
-	u_offset_t	off;
+	uoff_t	off;
 	long		gen;
 	time_t		t;
 
@@ -4882,7 +4882,7 @@ old_fsdb(int inum, char *special)
 		printf("%d: is zero\n", inum);
 		exit(31+1);
 	}
-	off = (u_offset_t)fsbtodb(&sblock, itod(&sblock, inum)) * DEV_BSIZE;
+	off = (uoff_t)fsbtodb(&sblock, itod(&sblock, inum)) * DEV_BSIZE;
 	(void) llseek(f, off, 0);
 	if (read(f, (char *)di_buf, sblock.fs_bsize) != sblock.fs_bsize) {
 		printf("%s: read error\n", special);
@@ -4903,7 +4903,7 @@ old_fsdb(int inum, char *special)
 	}
 
 	printf("clearing %u\n", inum);
-	off = (u_offset_t)fsbtodb(&sblock, itod(&sblock, inum)) * DEV_BSIZE;
+	off = (uoff_t)fsbtodb(&sblock, itod(&sblock, inum)) * DEV_BSIZE;
 	(void) llseek(f, off, 0);
 	read(f, (char *)di_buf, sblock.fs_bsize);
 	j = itoo(&sblock, inum);
@@ -4977,7 +4977,7 @@ log_get_header_info(void)
 	 * data. The block number for that data is fs_logbno in the
 	 * super block.
 	 */
-	if ((b = getblk((u_offset_t)ldbtob(logbtodb(fs, fs->fs_logbno))))
+	if ((b = getblk((uoff_t)ldbtob(logbtodb(fs, fs->fs_logbno))))
 	    == 0) {
 		printf("getblk() indicates an error with logging block\n");
 		return (0);
@@ -5018,7 +5018,7 @@ log_get_header_info(void)
 	 * Now read in the on disk log structure. This is always in the
 	 * first block of the first extent.
 	 */
-	b = getblk((u_offset_t)ldbtob(logbtodb(fs, log_eb->extents[0].pbno)));
+	b = getblk((uoff_t)ldbtob(logbtodb(fs, log_eb->extents[0].pbno)));
 	log_odi = (ml_odunit_t *)malloc(sizeof (ml_odunit_t));
 	if (log_odi == NULL) {
 		free(log_eb);
@@ -5092,7 +5092,7 @@ log_display_header(void)
  * log_lodb -- logical log offset to disk block number
  */
 int
-log_lodb(u_offset_t off, diskaddr_t *pblk)
+log_lodb(uoff_t off, diskaddr_t *pblk)
 {
 	uint32_t	lblk = (uint32_t)btodb(off);
 	int	x;
@@ -5130,7 +5130,7 @@ char *dt_str[] = {
  * log_read_log -- transfer information from the log and adjust offset
  */
 int
-log_read_log(u_offset_t *addr, caddr_t va, int nb, uint32_t *chk)
+log_read_log(uoff_t *addr, caddr_t va, int nb, uint32_t *chk)
 {
 	int		xfer;
 	caddr_t		bp;
@@ -5146,7 +5146,7 @@ log_read_log(u_offset_t *addr, caddr_t va, int nb, uint32_t *chk)
 		/*
 		 * fsdb getblk() expects offsets not block number.
 		 */
-		if ((bp = getblk((u_offset_t)dbtob(pblk))) == NULL)
+		if ((bp = getblk((uoff_t)dbtob(pblk))) == NULL)
 			return (0);
 
 		xfer = MIN(NB_LEFT_IN_SECTOR(*addr), nb);
@@ -5191,8 +5191,8 @@ log_read_log(u_offset_t *addr, caddr_t va, int nb, uint32_t *chk)
 	return (1);
 }
 
-u_offset_t
-log_nbcommit(u_offset_t a)
+uoff_t
+log_nbcommit(uoff_t a)
 {
 	/*
 	 * Comments are straight from ufs_log.c
@@ -5250,7 +5250,7 @@ log_show(enum log_enum l)
 	 * deltas in the log.
 	 */
 	if ((l == LOG_ALLDELTAS) || (l == LOG_CHECKSCAN))
-		addr = (u_offset_t)bol;
+		addr = (uoff_t)bol;
 
 	if (l != LOG_CHECKSCAN) {
 		printf("       Log Offset       Delta       Count     Type\n");

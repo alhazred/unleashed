@@ -124,9 +124,9 @@ static void	nfs4_update_dircaches(change_info4 *, vnode_t *, vnode_t *,
 static void	nfs4close_otw(rnode4_t *, cred_t *, nfs4_open_owner_t *,
 		    nfs4_open_stream_t *, int *, int *, nfs4_close_type_t,
 		    nfs4_error_t *, int *);
-static int	nfs4_rdwrlbn(vnode_t *, page_t *, u_offset_t, size_t, int,
+static int	nfs4_rdwrlbn(vnode_t *, page_t *, uoff_t, size_t, int,
 			cred_t *);
-static int	nfs4write(vnode_t *, caddr_t, u_offset_t, int, cred_t *,
+static int	nfs4write(vnode_t *, caddr_t, uoff_t, int, cred_t *,
 			stable_how4 *);
 static int	nfs4read(vnode_t *, caddr_t, offset_t, int, size_t *,
 			cred_t *, bool_t, struct uio *);
@@ -150,21 +150,21 @@ static int	nfs4rename_volatile_fh(vnode_t *, char *, vnode_t *,
 static int	do_nfs4readdir(vnode_t *, rddir4_cache *, cred_t *);
 static void	nfs4readdir(vnode_t *, rddir4_cache *, cred_t *);
 static int	nfs4_bio(struct buf *, stable_how4 *, cred_t *, bool_t);
-static int	nfs4_getapage(vnode_t *, u_offset_t, size_t, uint_t *,
+static int	nfs4_getapage(vnode_t *, uoff_t, size_t, uint_t *,
 			page_t *[], size_t, struct seg *, caddr_t,
 			enum seg_rw, cred_t *);
-static void	nfs4_readahead(vnode_t *, u_offset_t, caddr_t, struct seg *,
+static void	nfs4_readahead(vnode_t *, uoff_t, caddr_t, struct seg *,
 			cred_t *);
-static int	nfs4_sync_putapage(vnode_t *, page_t *, u_offset_t, size_t,
+static int	nfs4_sync_putapage(vnode_t *, page_t *, uoff_t, size_t,
 			int, cred_t *);
-static int	nfs4_sync_pageio(vnode_t *, page_t *, u_offset_t, size_t,
+static int	nfs4_sync_pageio(vnode_t *, page_t *, uoff_t, size_t,
 			int, cred_t *);
 static int	nfs4_commit(vnode_t *, offset4, count4, cred_t *);
 static void	nfs4_set_mod(vnode_t *);
 static void	nfs4_get_commit(vnode_t *);
-static void	nfs4_get_commit_range(vnode_t *, u_offset_t, size_t);
+static void	nfs4_get_commit_range(vnode_t *, uoff_t, size_t);
 static int	nfs4_putpage_commit(vnode_t *, offset_t, size_t, cred_t *);
-static int	nfs4_commit_vp(vnode_t *, u_offset_t, size_t, cred_t *, int);
+static int	nfs4_commit_vp(vnode_t *, uoff_t, size_t, cred_t *, int);
 static int	nfs4_sync_commit(vnode_t *, page_t *, offset3, count3,
 			cred_t *);
 static void	do_nfs4_async_commit(vnode_t *, page_t *, offset3, count3,
@@ -174,7 +174,7 @@ static int	nfs4_update_attrcache(nfsstat4, nfs4_ga_res_t *,
 static int	nfs4_open_non_reg_file(vnode_t **, int, cred_t *);
 static int	nfs4_safelock(vnode_t *, const struct flock64 *, cred_t *);
 static void	nfs4_register_lock_locally(vnode_t *, struct flock64 *, int,
-			u_offset_t);
+			uoff_t);
 static int 	nfs4_lockrelease(vnode_t *, int, offset_t, cred_t *);
 static int	nfs4_block_and_wait(clock_t *, rnode4_t *);
 static cred_t  *state_to_cred(nfs4_open_stream_t *);
@@ -261,7 +261,7 @@ static int	nfs4_space(vnode_t *, int, struct flock64 *, int, offset_t,
 			cred_t *, caller_context_t *);
 static int	nfs4_delmap(vnode_t *, offset_t, struct as *, caddr_t, size_t,
 			uint_t, uint_t, uint_t, cred_t *, caller_context_t *);
-static int	nfs4_pageio(vnode_t *, page_t *, u_offset_t, size_t, int,
+static int	nfs4_pageio(vnode_t *, page_t *, uoff_t, size_t, int,
 			cred_t *, caller_context_t *);
 static void	nfs4_dispose(vnode_t *, page_t *, int, int, cred_t *,
 			caller_context_t *);
@@ -2605,7 +2605,7 @@ nfs4_read(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
     caller_context_t *ct)
 {
 	rnode4_t *rp;
-	u_offset_t off;
+	uoff_t off;
 	offset_t diff;
 	uint_t on;
 	uint_t n;
@@ -2731,7 +2731,7 @@ nfs4_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 {
 	rlim64_t limit = uiop->uio_llimit;
 	rnode4_t *rp;
-	u_offset_t off;
+	uoff_t off;
 	caddr_t base;
 	uint_t flags;
 	int remainder;
@@ -2739,7 +2739,7 @@ nfs4_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 	int on;
 	int error;
 	int resid;
-	u_offset_t offset;
+	uoff_t offset;
 	mntinfo4_t *mi;
 	uint_t bsize;
 
@@ -2840,7 +2840,7 @@ nfs4_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 	    rp->r_mapcnt == 0 && rp->r_inmap == 0 && !nfs4_has_pages(vp))) {
 		size_t bufsize;
 		int count;
-		u_offset_t org_offset;
+		uoff_t org_offset;
 		stable_how4 stab_comm;
 nfs4_fwrite:
 		if (rp->r_flags & R4STALE) {
@@ -3041,7 +3041,7 @@ bottom:
  * Flags are composed of {B_ASYNC, B_INVAL, B_FREE, B_DONTNEED}
  */
 static int
-nfs4_rdwrlbn(vnode_t *vp, page_t *pp, u_offset_t off, size_t len,
+nfs4_rdwrlbn(vnode_t *vp, page_t *pp, uoff_t off, size_t len,
     int flags, cred_t *cr)
 {
 	struct buf *bp;
@@ -3158,7 +3158,7 @@ nfs4rdwr_check_osid(vnode_t *vp, nfs4_error_t *ep, cred_t *cr)
  * chunks that the server can handle.  Write is synchronous.
  */
 static int
-nfs4write(vnode_t *vp, caddr_t base, u_offset_t offset, int count, cred_t *cr,
+nfs4write(vnode_t *vp, caddr_t base, uoff_t offset, int count, cred_t *cr,
     stable_how4 *stab_comm)
 {
 	mntinfo4_t *mi;
@@ -3693,7 +3693,7 @@ nfs4_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 					rp->r_gcount++;
 					mutex_exit(&rp->r_statelock);
 					error =
-					    nfs4_putpage(vp, (u_offset_t)0,
+					    nfs4_putpage(vp, (uoff_t)0,
 					    0, 0, cr, NULL);
 					mutex_enter(&rp->r_statelock);
 					if (error && (error == ENOSPC ||
@@ -4837,7 +4837,7 @@ redo:
 	if (nfs4_has_pages(vp) &&
 	    ((rp->r_flags & R4DIRTY) || rp->r_count > 0)) {
 		ASSERT(vp->v_type != VCHR);
-		e.error = nfs4_putpage(vp, (u_offset_t)0, 0, 0, cr, NULL);
+		e.error = nfs4_putpage(vp, (uoff_t)0, 0, 0, cr, NULL);
 		if (e.error) {
 			mutex_enter(&rp->r_statelock);
 			if (!rp->r_error)
@@ -7345,7 +7345,7 @@ nfs4_remove(vnode_t *dvp, char *nm, cred_t *cr, caller_context_t *ct, int flags)
 	 */
 	if (nfs4_has_pages(vp) &&
 	    ((rp->r_flags & R4DIRTY) || rp->r_count > 0)) {
-		e.error = nfs4_putpage(vp, (u_offset_t)0, 0, 0, cr, ct);
+		e.error = nfs4_putpage(vp, (uoff_t)0, 0, 0, cr, ct);
 		if (e.error && (e.error == ENOSPC || e.error == EDQUOT)) {
 			mutex_enter(&rp->r_statelock);
 			if (!rp->r_error)
@@ -9825,7 +9825,7 @@ retry:
  */
 /* ARGSUSED */
 static int
-nfs4_getapage(vnode_t *vp, u_offset_t off, size_t len, uint_t *protp,
+nfs4_getapage(vnode_t *vp, uoff_t off, size_t len, uint_t *protp,
     page_t *pl[], size_t plsz, struct seg *seg, caddr_t addr,
     enum seg_rw rw, cred_t *cr)
 {
@@ -9833,10 +9833,10 @@ nfs4_getapage(vnode_t *vp, u_offset_t off, size_t len, uint_t *protp,
 	uint_t bsize;
 	struct buf *bp;
 	page_t *pp;
-	u_offset_t lbn;
-	u_offset_t io_off;
-	u_offset_t blkoff;
-	u_offset_t rablkoff;
+	uoff_t lbn;
+	uoff_t io_off;
+	uoff_t blkoff;
+	uoff_t rablkoff;
 	size_t io_len;
 	uint_t blksize;
 	int error;
@@ -10094,12 +10094,12 @@ out:
 }
 
 static void
-nfs4_readahead(vnode_t *vp, u_offset_t blkoff, caddr_t addr, struct seg *seg,
+nfs4_readahead(vnode_t *vp, uoff_t blkoff, caddr_t addr, struct seg *seg,
     cred_t *cr)
 {
 	int error;
 	page_t *pp;
-	u_offset_t io_off;
+	uoff_t io_off;
 	size_t io_len;
 	struct buf *bp;
 	uint_t bsize, blksize;
@@ -10253,12 +10253,12 @@ nfs4_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
  * Write out a single page, possibly klustering adjacent dirty pages.
  */
 int
-nfs4_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp, size_t *lenp,
+nfs4_putapage(vnode_t *vp, page_t *pp, uoff_t *offp, size_t *lenp,
     int flags, cred_t *cr)
 {
-	u_offset_t io_off;
-	u_offset_t lbn_off;
-	u_offset_t lbn;
+	uoff_t io_off;
+	uoff_t lbn_off;
+	uoff_t lbn;
 	size_t io_len;
 	uint_t bsize;
 	int error;
@@ -10375,7 +10375,7 @@ nfs4_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp, size_t *lenp,
 }
 
 static int
-nfs4_sync_putapage(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
+nfs4_sync_putapage(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
     int flags, cred_t *cr)
 {
 	int error;
@@ -10430,7 +10430,7 @@ nfs4_sync_putapage(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
 		}
 		pvn_write_done(pp, flags);
 		if (freemem < desfree)
-			(void) nfs4_commit_vp(vp, (u_offset_t)0, 0, cr,
+			(void) nfs4_commit_vp(vp, (uoff_t)0, 0, cr,
 			    NFS4_WRITE_NOWAIT);
 	}
 
@@ -10846,7 +10846,7 @@ nfs4_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
     caller_context_t *ct)
 {
 	int rc;
-	u_offset_t start, end;
+	uoff_t start, end;
 	rnode4_t *rp;
 	int error = 0, intr = INTR4(vp);
 	nfs4_error_t e;
@@ -11471,7 +11471,7 @@ nfs4_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
  * for it to complete, and cleanup the page list when done.
  */
 static int
-nfs4_sync_pageio(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
+nfs4_sync_pageio(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
     int flags, cred_t *cr)
 {
 	int error;
@@ -11488,7 +11488,7 @@ nfs4_sync_pageio(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
 
 /* ARGSUSED */
 static int
-nfs4_pageio(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
+nfs4_pageio(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
     int flags, cred_t *cr, caller_context_t *ct)
 {
 	int error;
@@ -12006,13 +12006,13 @@ nfs4_get_commit(vnode_t *vp)
  * structure without requiring any other locks.
  */
 static void
-nfs4_get_commit_range(vnode_t *vp, u_offset_t soff, size_t len)
+nfs4_get_commit_range(vnode_t *vp, uoff_t soff, size_t len)
 {
 
 	rnode4_t *rp;
 	page_t *pp;
-	u_offset_t end;
-	u_offset_t off;
+	uoff_t end;
+	uoff_t off;
 	ASSERT(len != 0);
 	rp = VTOR4(vp);
 	ASSERT(rp->r_flags & R4COMMIT);
@@ -12147,7 +12147,7 @@ top:
  * file. Called from nfs4_putpage_commit() or nfs4_sync_putapage()
  */
 static int
-nfs4_commit_vp(vnode_t *vp, u_offset_t poff, size_t plen,
+nfs4_commit_vp(vnode_t *vp, uoff_t poff, size_t plen,
     cred_t *cr, int wait_on_writes)
 {
 	rnode4_t *rp;
@@ -12919,7 +12919,7 @@ flk_to_locktype(int cmd, int l_type)
  */
 static int
 nfs4frlock_validate_args(int cmd, flock64_t *flk, int flag, vnode_t *vp,
-    u_offset_t offset)
+    uoff_t offset)
 {
 	int error = 0;
 
@@ -13328,7 +13328,7 @@ static void
 nfs4frlock_setup_locku_args(nfs4_lock_call_type_t ctype, nfs_argop4 *argop,
     LOCKU4args **locku_argsp, flock64_t *flk,
     nfs4_lock_owner_t **lopp, nfs4_error_t *ep, COMPOUND4args_clnt *argsp,
-    vnode_t *vp, int flag, u_offset_t offset, cred_t *cr,
+    vnode_t *vp, int flag, uoff_t offset, cred_t *cr,
     bool_t *skip_get_err, bool_t *go_otwp)
 {
 	nfs4_lock_owner_t	*lop = NULL;
@@ -13778,7 +13778,7 @@ nfs4frlock_recovery(int needrecov, nfs4_error_t *ep,
  */
 static void
 nfs4frlock_results_ok(nfs4_lock_call_type_t ctype, int cmd, flock64_t *flk,
-    vnode_t *vp, int flag, u_offset_t offset,
+    vnode_t *vp, int flag, uoff_t offset,
     nfs4_lost_rqst_t *resend_rqstp)
 {
 	ASSERT(nfs_zone() == VTOMI4(vp)->mi_zone);
@@ -14023,7 +14023,7 @@ nfs4frlock_final_cleanup(nfs4_lock_call_type_t ctype, COMPOUND4args_clnt *argsp,
     COMPOUND4res_clnt *resp, vnode_t *vp, nfs4_op_hint_t op_hint,
     nfs4_recov_state_t *recov_statep, int needrecov, nfs4_open_owner_t *oop,
     nfs4_open_stream_t *osp, nfs4_lock_owner_t *lop, flock64_t *flk,
-    short whence, u_offset_t offset, struct lm_sysid *ls,
+    short whence, uoff_t offset, struct lm_sysid *ls,
     int *errorp, LOCK4args *lock_args, LOCKU4args *locku_args,
     bool_t did_start_fop, bool_t skip_get_err,
     cred_t *cred_otw, cred_t *cred)
@@ -14153,7 +14153,7 @@ nfs4frlock_final_cleanup(nfs4_lock_call_type_t ctype, COMPOUND4args_clnt *argsp,
  */
 void
 nfs4frlock(nfs4_lock_call_type_t ctype, vnode_t *vp, int cmd, flock64_t *flk,
-    int flag, u_offset_t offset, cred_t *cr, nfs4_error_t *ep,
+    int flag, uoff_t offset, cred_t *cr, nfs4_error_t *ep,
     nfs4_lost_rqst_t *resend_rqstp, int *did_reclaimp)
 {
 	COMPOUND4args_clnt	args, *argsp = NULL;
@@ -14569,7 +14569,7 @@ nfs4_safelock(vnode_t *vp, const struct flock64 *bfp, cred_t *cr)
  */
 void
 nfs4_register_lock_locally(vnode_t *vp, struct flock64 *flk, int flag,
-    u_offset_t offset)
+    uoff_t offset)
 {
 	int oldsysid;
 	int error;

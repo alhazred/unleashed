@@ -2053,8 +2053,8 @@ void
 snf_async_read(snf_req_t *sr)
 {
 	size_t iosize;
-	u_offset_t fileoff;
-	u_offset_t size;
+	uoff_t fileoff;
+	uoff_t size;
 	int ret_size;
 	int error;
 	file_t *fp;
@@ -2180,7 +2180,7 @@ snf_async_thread(void)
 
 snf_req_t *
 create_thread(int operation, struct vnode *vp, file_t *fp,
-    u_offset_t fileoff, u_offset_t size)
+    uoff_t fileoff, uoff_t size)
 {
 	snf_req_t *sr;
 	stdata_t *stp;
@@ -2234,7 +2234,7 @@ create_thread(int operation, struct vnode *vp, file_t *fp,
 }
 
 int
-snf_direct_io(file_t *fp, file_t *rfp, u_offset_t fileoff, u_offset_t size,
+snf_direct_io(file_t *fp, file_t *rfp, uoff_t fileoff, uoff_t size,
     ssize_t *count)
 {
 	snf_req_t *sr;
@@ -2393,7 +2393,7 @@ snf_smap_desbfree(snf_smap_desbinfo *snfi)
  * caller of sendfile() can safely modify the file content.
  */
 int
-snf_segmap(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t total_size,
+snf_segmap(file_t *fp, vnode_t *fvp, uoff_t fileoff, uoff_t total_size,
     ssize_t *count, boolean_t nowait)
 {
 	caddr_t base;
@@ -2643,7 +2643,7 @@ done:
 }
 
 int
-snf_cache(file_t *fp, vnode_t *fvp, u_offset_t fileoff, u_offset_t size,
+snf_cache(file_t *fp, vnode_t *fvp, uoff_t fileoff, uoff_t size,
     uint_t maxpsz, ssize_t *count)
 {
 	struct vnode *vp;
@@ -2777,7 +2777,7 @@ sosendfile64(file_t *fp, file_t *rfp, const struct ksendfilevec64 *sfv,
     ssize32_t *count32)
 {
 	ssize32_t sfv_len;
-	u_offset_t sfv_off, va_size;
+	uoff_t sfv_off, va_size;
 	struct vnode *vp, *fvp, *realvp;
 	struct vattr va;
 	stdata_t *stp;
@@ -2794,7 +2794,7 @@ sosendfile64(file_t *fp, file_t *rfp, const struct ksendfilevec64 *sfv,
 
 	if (sfv_len == 0) goto out;
 
-	sfv_off = (u_offset_t)sfv->sfv_off;
+	sfv_off = (uoff_t)sfv->sfv_off;
 
 	/* Same checks as in pread */
 	if (sfv_off > MAXOFFSET_T) {
@@ -2806,14 +2806,14 @@ sosendfile64(file_t *fp, file_t *rfp, const struct ksendfilevec64 *sfv,
 
 	/*
 	 * There are no more checks on sfv_len. So, we cast it to
-	 * u_offset_t and share the snf_direct_io/snf_cache code between
+	 * uoff_t and share the snf_direct_io/snf_cache code between
 	 * 32 bit and 64 bit.
 	 *
 	 * TODO: should do nbl_need_check() like read()?
 	 */
 	if (sfv_len > sendfile_max_size) {
 		sf_stats.ss_file_not_cached++;
-		error = snf_direct_io(fp, rfp, sfv_off, (u_offset_t)sfv_len,
+		error = snf_direct_io(fp, rfp, sfv_off, (uoff_t)sfv_len,
 		    &count);
 		goto out;
 	}
@@ -2861,7 +2861,7 @@ sosendfile64(file_t *fp, file_t *rfp, const struct ksendfilevec64 *sfv,
 	}
 	if (dozcopy) {
 		sf_stats.ss_file_segmap++;
-		error = snf_segmap(fp, fvp, sfv_off, (u_offset_t)sfv_len,
+		error = snf_segmap(fp, fvp, sfv_off, (uoff_t)sfv_len,
 		    &count, ((sfv->sfv_flag & SFV_NOWAIT) != 0));
 	} else {
 		if (vp->v_type == VSOCK && stp == NULL) {
@@ -2878,7 +2878,7 @@ sosendfile64(file_t *fp, file_t *rfp, const struct ksendfilevec64 *sfv,
 		else
 			maxpsz = roundup(maxpsz, MAXBSIZE);
 		sf_stats.ss_file_cached++;
-		error = snf_cache(fp, fvp, sfv_off, (u_offset_t)sfv_len,
+		error = snf_cache(fp, fvp, sfv_off, (uoff_t)sfv_len,
 		    maxpsz, &count);
 	}
 out:

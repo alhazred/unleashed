@@ -92,9 +92,9 @@
 
 #include <sys/ddi.h>
 
-static int	nfs3_rdwrlbn(vnode_t *, page_t *, u_offset_t, size_t, int,
+static int	nfs3_rdwrlbn(vnode_t *, page_t *, uoff_t, size_t, int,
 			cred_t *);
-static int	nfs3write(vnode_t *, caddr_t, u_offset_t, int, cred_t *,
+static int	nfs3write(vnode_t *, caddr_t, uoff_t, int, cred_t *,
 			stable_how *);
 static int	nfs3read(vnode_t *, caddr_t, offset_t, int, size_t *, cred_t *);
 static int	nfs3setattr(vnode_t *, struct vattr *, int, cred_t *);
@@ -112,21 +112,21 @@ static int	do_nfs3readdir(vnode_t *, rddir_cache *, cred_t *);
 static void	nfs3readdir(vnode_t *, rddir_cache *, cred_t *);
 static void	nfs3readdirplus(vnode_t *, rddir_cache *, cred_t *);
 static int	nfs3_bio(struct buf *, stable_how *, cred_t *);
-static int	nfs3_getapage(vnode_t *, u_offset_t, size_t, uint_t *,
+static int	nfs3_getapage(vnode_t *, uoff_t, size_t, uint_t *,
 			page_t *[], size_t, struct seg *, caddr_t,
 			enum seg_rw, cred_t *);
-static void	nfs3_readahead(vnode_t *, u_offset_t, caddr_t, struct seg *,
+static void	nfs3_readahead(vnode_t *, uoff_t, caddr_t, struct seg *,
 			cred_t *);
-static int	nfs3_sync_putapage(vnode_t *, page_t *, u_offset_t, size_t,
+static int	nfs3_sync_putapage(vnode_t *, page_t *, uoff_t, size_t,
 			int, cred_t *);
-static int	nfs3_sync_pageio(vnode_t *, page_t *, u_offset_t, size_t,
+static int	nfs3_sync_pageio(vnode_t *, page_t *, uoff_t, size_t,
 			int, cred_t *);
 static int	nfs3_commit(vnode_t *, offset3, count3, cred_t *);
 static void	nfs3_set_mod(vnode_t *);
 static void	nfs3_get_commit(vnode_t *);
-static void	nfs3_get_commit_range(vnode_t *, u_offset_t, size_t);
+static void	nfs3_get_commit_range(vnode_t *, uoff_t, size_t);
 static int	nfs3_putpage_commit(vnode_t *, offset_t, size_t, cred_t *);
-static int	nfs3_commit_vp(vnode_t *, u_offset_t, size_t,  cred_t *);
+static int	nfs3_commit_vp(vnode_t *, uoff_t, size_t,  cred_t *);
 static int	nfs3_sync_commit(vnode_t *, page_t *, offset3, count3,
 			cred_t *);
 static void	nfs3_async_commit(vnode_t *, page_t *, offset3, count3,
@@ -221,7 +221,7 @@ static int	nfs3_delmap(vnode_t *, offset_t, struct as *, caddr_t, size_t,
 			uint_t, uint_t, uint_t, cred_t *, caller_context_t *);
 static int	nfs3_pathconf(vnode_t *, int, ulong_t *, cred_t *,
 			caller_context_t *);
-static int	nfs3_pageio(vnode_t *, page_t *, u_offset_t, size_t, int,
+static int	nfs3_pageio(vnode_t *, page_t *, uoff_t, size_t, int,
 			cred_t *, caller_context_t *);
 static void	nfs3_dispose(vnode_t *, page_t *, int, int, cred_t *,
 			caller_context_t *);
@@ -541,7 +541,7 @@ nfs3_read(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 	caller_context_t *ct)
 {
 	rnode_t *rp;
-	u_offset_t off;
+	uoff_t off;
 	offset_t diff;
 	int on;
 	size_t n;
@@ -651,7 +651,7 @@ nfs3_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 {
 	rlim64_t limit = uiop->uio_llimit;
 	rnode_t *rp;
-	u_offset_t off;
+	uoff_t off;
 	caddr_t base;
 	uint_t flags;
 	int remainder;
@@ -739,7 +739,7 @@ nfs3_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 	    !vn_has_cached_data(vp))) {
 		size_t bufsize;
 		int count;
-		u_offset_t org_offset;
+		uoff_t org_offset;
 		stable_how stab_comm;
 
 nfs3_fwrite:
@@ -927,7 +927,7 @@ bottom:
  * Flags are composed of {B_ASYNC, B_INVAL, B_FREE, B_DONTNEED}
  */
 static int
-nfs3_rdwrlbn(vnode_t *vp, page_t *pp, u_offset_t off, size_t len,
+nfs3_rdwrlbn(vnode_t *vp, page_t *pp, uoff_t off, size_t len,
 	int flags, cred_t *cr)
 {
 	struct buf *bp;
@@ -999,7 +999,7 @@ nfs3_rdwrlbn(vnode_t *vp, page_t *pp, u_offset_t off, size_t len,
  * chunks that the server can handle.  Write is synchronous.
  */
 static int
-nfs3write(vnode_t *vp, caddr_t base, u_offset_t offset, int count, cred_t *cr,
+nfs3write(vnode_t *vp, caddr_t base, uoff_t offset, int count, cred_t *cr,
 	stable_how *stab_comm)
 {
 	mntinfo_t *mi;
@@ -4605,7 +4605,7 @@ retry:
  */
 /* ARGSUSED */
 static int
-nfs3_getapage(vnode_t *vp, u_offset_t off, size_t len, uint_t *protp,
+nfs3_getapage(vnode_t *vp, uoff_t off, size_t len, uint_t *protp,
 	page_t *pl[], size_t plsz, struct seg *seg, caddr_t addr,
 	enum seg_rw rw, cred_t *cr)
 {
@@ -4613,10 +4613,10 @@ nfs3_getapage(vnode_t *vp, u_offset_t off, size_t len, uint_t *protp,
 	uint_t bsize;
 	struct buf *bp;
 	page_t *pp;
-	u_offset_t lbn;
-	u_offset_t io_off;
-	u_offset_t blkoff;
-	u_offset_t rablkoff;
+	uoff_t lbn;
+	uoff_t io_off;
+	uoff_t blkoff;
+	uoff_t rablkoff;
 	size_t io_len;
 	uint_t blksize;
 	int error;
@@ -4874,12 +4874,12 @@ out:
 }
 
 static void
-nfs3_readahead(vnode_t *vp, u_offset_t blkoff, caddr_t addr, struct seg *seg,
+nfs3_readahead(vnode_t *vp, uoff_t blkoff, caddr_t addr, struct seg *seg,
 	cred_t *cr)
 {
 	int error;
 	page_t *pp;
-	u_offset_t io_off;
+	uoff_t io_off;
 	size_t io_len;
 	struct buf *bp;
 	uint_t bsize, blksize;
@@ -5026,12 +5026,12 @@ nfs3_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
  * Write out a single page, possibly klustering adjacent dirty pages.
  */
 int
-nfs3_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp, size_t *lenp,
+nfs3_putapage(vnode_t *vp, page_t *pp, uoff_t *offp, size_t *lenp,
 	int flags, cred_t *cr)
 {
-	u_offset_t io_off;
-	u_offset_t lbn_off;
-	u_offset_t lbn;
+	uoff_t io_off;
+	uoff_t lbn_off;
+	uoff_t lbn;
 	size_t io_len;
 	uint_t bsize;
 	int error;
@@ -5147,7 +5147,7 @@ nfs3_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp, size_t *lenp,
 }
 
 static int
-nfs3_sync_putapage(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
+nfs3_sync_putapage(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
 	int flags, cred_t *cr)
 {
 	int error;
@@ -5202,7 +5202,7 @@ nfs3_sync_putapage(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
 		}
 		pvn_write_done(pp, flags);
 		if (freemem < desfree)
-			(void) nfs3_commit_vp(vp, (u_offset_t)0, 0, cr);
+			(void) nfs3_commit_vp(vp, (uoff_t)0, 0, cr);
 	}
 
 	return (error);
@@ -5349,7 +5349,7 @@ nfs3_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
 {
 	netobj lm_fh3;
 	int rc;
-	u_offset_t start, end;
+	uoff_t start, end;
 	rnode_t *rp;
 	int error = 0, intr = INTR(vp);
 
@@ -5913,7 +5913,7 @@ nfs3_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
  * for it to complete, and cleanup the page list when done.
  */
 static int
-nfs3_sync_pageio(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
+nfs3_sync_pageio(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
 	int flags, cred_t *cr)
 {
 	int error;
@@ -5929,7 +5929,7 @@ nfs3_sync_pageio(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
 
 /* ARGSUSED */
 static int
-nfs3_pageio(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
+nfs3_pageio(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
 	int flags, cred_t *cr, caller_context_t *ct)
 {
 	int error;
@@ -6369,13 +6369,13 @@ nfs3_get_commit(vnode_t *vp)
  * structure without requiring any other locks.
  */
 static void
-nfs3_get_commit_range(vnode_t *vp, u_offset_t soff, size_t len)
+nfs3_get_commit_range(vnode_t *vp, uoff_t soff, size_t len)
 {
 
 	rnode_t *rp;
 	page_t *pp;
-	u_offset_t end;
-	u_offset_t off;
+	uoff_t end;
+	uoff_t off;
 
 	ASSERT(len != 0);
 
@@ -6501,7 +6501,7 @@ top:
 }
 
 static int
-nfs3_commit_vp(vnode_t *vp, u_offset_t poff, size_t plen, cred_t *cr)
+nfs3_commit_vp(vnode_t *vp, uoff_t poff, size_t plen, cred_t *cr)
 {
 	rnode_t *rp;
 	page_t *plist;

@@ -101,7 +101,7 @@ extern void page_relocate_hash(page_t *, page_t *);
  */
 extern void map_addr_proc(caddr_t *, size_t, offset_t, int, caddr_t,
 	struct proc *, uint_t);
-extern page_t *page_get_freelist(struct vnode *, u_offset_t, struct seg *,
+extern page_t *page_get_freelist(struct vnode *, uoff_t, struct seg *,
 	caddr_t, size_t, uint_t, struct lgrp *);
 /*
  * Convert page frame number to an OBMEM page frame number
@@ -496,7 +496,7 @@ getexinfo(
  * assumes it can't be in VAC conflict with any larger than PAGESIZE mapping.
  */
 int
-map_addr_vacalign_check(caddr_t addr, u_offset_t off)
+map_addr_vacalign_check(caddr_t addr, uoff_t off)
 {
 	if (vac) {
 		return (((uintptr_t)addr ^ off) & shm_alignment - 1);

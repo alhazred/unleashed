@@ -266,7 +266,7 @@ opendq(
 		 */
 		rw_enter(&qip->i_contents, RW_WRITER);
 		if (qip->i_size < qlen) {
-			if (ufs_itrunc(qip, (u_offset_t)qlen, (int)0, cr) != 0)
+			if (ufs_itrunc(qip, (uoff_t)qlen, (int)0, cr) != 0)
 				cmn_err(CE_WARN, "opendq failed to remove frags"
 				    " from quota file\n");
 			rw_exit(&qip->i_contents);

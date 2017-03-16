@@ -1815,7 +1815,7 @@ sockfs_snapshot(kstat_t *ksp, void *buf, int rw)
 }
 
 ssize_t
-soreadfile(file_t *fp, uchar_t *buf, u_offset_t fileoff, int *err, size_t size)
+soreadfile(file_t *fp, uchar_t *buf, uoff_t fileoff, int *err, size_t size)
 {
 	struct uio auio;
 	struct iovec aiov[1];

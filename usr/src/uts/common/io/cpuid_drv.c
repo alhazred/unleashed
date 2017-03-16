@@ -120,9 +120,9 @@ cpuid_read(dev_t dev, uio_t *uio, cred_t *cr)
 		return (EINVAL);
 
 	while (uio->uio_resid > 0) {
-		u_offset_t uoff;
+		uoff_t uoff;
 
-		if ((uoff = (u_offset_t)uio->uio_loffset) > UINT_MAX) {
+		if ((uoff = (uoff_t)uio->uio_loffset) > UINT_MAX) {
 			error = EINVAL;
 			break;
 		}

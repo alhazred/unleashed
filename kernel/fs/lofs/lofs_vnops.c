@@ -1181,7 +1181,7 @@ static int
 lo_pageio(
 	vnode_t *vp,
 	struct page *pp,
-	u_offset_t io_off,
+	uoff_t io_off,
 	size_t io_len,
 	int flags,
 	cred_t *cr,

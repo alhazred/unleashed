@@ -368,7 +368,7 @@ typedef struct lgrp_mem_policy_info {
  * Shared memory policy segment
  */
 typedef struct lgrp_shm_policy_seg {
-	u_offset_t		shm_off;	/* offset into shared object */
+	uoff_t			shm_off;	/* offset into shared object */
 	size_t			shm_size;	/* size of segment */
 	lgrp_mem_policy_info_t	shm_policy;	/* memory allocation policy */
 	avl_node_t		shm_tree;	/* AVL tree */
@@ -566,9 +566,9 @@ int	lgrp_privm_policy_set(lgrp_mem_policy_t, lgrp_mem_policy_info_t *,
 void	lgrp_shm_policy_init(struct anon_map *, vnode_t *);
 void	lgrp_shm_policy_fini(struct anon_map *, vnode_t *);
 lgrp_mem_policy_info_t	*lgrp_shm_policy_get(struct anon_map *, ulong_t,
-    vnode_t *, u_offset_t);
+    vnode_t *, uoff_t);
 int	lgrp_shm_policy_set(lgrp_mem_policy_t, struct anon_map *, ulong_t,
-    vnode_t *, u_offset_t, size_t);
+    vnode_t *, uoff_t, size_t);
 
 /*
  * Used by numat driver

@@ -305,9 +305,9 @@ kaio(
 
 		rvp->r_vals = 0;
 #if defined(_LITTLE_ENDIAN)
-	off = ((u_offset_t)uap[5] << 32) | (u_offset_t)uap[4];
+	off = ((uoff_t)uap[5] << 32) | (uoff_t)uap[4];
 #else
-	off = ((u_offset_t)uap[4] << 32) | (u_offset_t)uap[5];
+	off = ((uoff_t)uap[4] << 32) | (uoff_t)uap[5];
 #endif
 
 	switch (uap[0] & ~AIO_POLL_BIT) {

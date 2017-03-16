@@ -52,7 +52,7 @@ extern "C" {
 void	setupclock(int);
 void	pageout(void);
 void	cv_signal_pageout(void);
-int	queue_io_request(struct vnode *, u_offset_t);
+int	queue_io_request(struct vnode *, uoff_t);
 
 extern	kmutex_t	memavail_lock;
 extern	kcondvar_t	memavail_cv;

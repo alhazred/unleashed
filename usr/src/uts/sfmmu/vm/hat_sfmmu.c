@@ -267,7 +267,7 @@ static int	sfhmergnmap_isnull(sf_hmeregion_map_t *);
 static int	sfmmu_scdcache_constructor(void *, void *, int);
 static void	sfmmu_scdcache_destructor(void *, void *);
 static void	sfmmu_rgn_cb_noop(caddr_t, caddr_t, caddr_t,
-    size_t, void *, u_offset_t);
+    size_t, void *, uoff_t);
 
 static uint_t srd_hashmask = SFMMU_MAX_SRD_BUCKETS - 1;
 static sf_srd_bucket_t *srd_buckets;
@@ -3668,7 +3668,7 @@ sfmmu_cleanup_rhblk(sf_srd_t *srdp, caddr_t addr, uint_t rid, int ttesz)
 /* ARGSUSED */
 static void
 sfmmu_rgn_cb_noop(caddr_t saddr, caddr_t eaddr, caddr_t r_saddr,
-    size_t r_size, void *r_obj, u_offset_t r_objoff)
+    size_t r_size, void *r_obj, uoff_t r_objoff)
 {
 }
 
@@ -4154,7 +4154,7 @@ hat_add_callback(id_t callback_id, caddr_t vaddr, uint_t len, uint_t flags,
 	tte_t   	tte;
 	page_t		*pp;
 	vnode_t		*vp;
-	u_offset_t	off;
+	uoff_t	off;
 	pfn_t		pfn;
 	int		kmflags = (flags & HAC_SLEEP)? KM_SLEEP : KM_NOSLEEP;
 	int		locked = 0;
@@ -4274,11 +4274,11 @@ rehash:
 			 */
 			sfmmu_mlist_exit(pml);
 			SFMMU_HASH_UNLOCK(hmebp);
-			pp = page_lookup(&kvp, (u_offset_t)saddr, SE_SHARED);
+			pp = page_lookup(&kvp, (uoff_t)saddr, SE_SHARED);
 
 			/* check zvp before giving up */
 			if (pp == NULL)
-				pp = page_lookup(&zvp, (u_offset_t)saddr,
+				pp = page_lookup(&zvp, (uoff_t)saddr,
 				    SE_SHARED);
 
 			/* Okay, we didn't find it, give up */
@@ -4383,7 +4383,7 @@ hat_delete_callback(caddr_t vaddr, uint_t len, void *pvt, uint_t flags,
 	tte_t		tte;
 	page_t		*pp;
 	vnode_t		*vp;
-	u_offset_t	off;
+	uoff_t	off;
 	int		locked = 0;
 
 	/*
@@ -4453,10 +4453,10 @@ rehash:
 			 */
 			sfmmu_mlist_exit(pml);
 			SFMMU_HASH_UNLOCK(hmebp);
-			pp = page_lookup(&kvp, (u_offset_t)saddr, SE_SHARED);
+			pp = page_lookup(&kvp, (uoff_t)saddr, SE_SHARED);
 			/* check zvp before giving up */
 			if (pp == NULL)
-				pp = page_lookup(&zvp, (u_offset_t)saddr,
+				pp = page_lookup(&zvp, (uoff_t)saddr,
 				    SE_SHARED);
 
 			if (pp == NULL) {
@@ -13659,7 +13659,7 @@ hat_join_region(struct hat *sfmmup,
 	caddr_t r_saddr,
 	size_t r_size,
 	void *r_obj,
-	u_offset_t r_objoff,
+	uoff_t r_objoff,
 	uchar_t r_perm,
 	uchar_t r_pgszc,
 	hat_rgn_cb_func_t r_cb_function,

@@ -70,7 +70,7 @@ char	*myname;
 static long sblock_buf[SBSIZE/sizeof (long)];
 
 #ifdef __STDC__
-static char *mb(u_offset_t);
+static char *mb(uoff_t);
 static void nextstate(int);
 #else
 static char *mb();
@@ -89,7 +89,7 @@ main(int argc, char *argv[])
 	struct	mnttab	*dt;
 	char		msgbuf[3000], *msgp;
 	char		kbsbuf[BUFSIZ];
-	u_offset_t	esize_shift = 0;
+	uoff_t	esize_shift = 0;
 	int32_t	new_mult = 0;
 	time32_t	snapdate;
 
@@ -954,7 +954,7 @@ restart:
 		forceflag++;
 		esize_shift =
 		    ((esize + (INT_MAX - FUDGE_FACTOR) - 1)/
-		    ((u_offset_t)(INT_MAX - FUDGE_FACTOR))) - 1;
+		    ((uoff_t)(INT_MAX - FUDGE_FACTOR))) - 1;
 		if ((esize_shift > ESIZE_SHIFT_MAX) || (ntrec == 0)) {
 			msgp = gettext(
 	"Block factor %d ('b' flag) is too small for this size dump.");
@@ -1116,13 +1116,13 @@ restart:
 		(void) snprintf(msgbuf, sizeof (msgbuf),
 		    gettext("%lld blocks (%s) on %ld volumes"),
 		    ((uint64_t)spcl.c_tapea*(tp_bsize/DEV_BSIZE)),
-		    mb((u_offset_t)(unsigned)(spcl.c_tapea)),
+		    mb((uoff_t)(unsigned)(spcl.c_tapea)),
 		    spcl.c_volume);
 	else
 		(void) snprintf(msgbuf, sizeof (msgbuf),
 		    gettext("%lld blocks (%s) on 1 volume"),
 		    ((uint64_t)spcl.c_tapea*(tp_bsize/DEV_BSIZE)),
-		    mb((u_offset_t)(unsigned)(spcl.c_tapea)));
+		    mb((uoff_t)(unsigned)(spcl.c_tapea)));
 	if (timeclock((time_t)0) != (time_t)0) {
 		(void) snprintf(kbsbuf, sizeof (kbsbuf),
 		    gettext(" at %ld KB/sec"),
@@ -1232,7 +1232,7 @@ rawname(char *cp)
 }
 
 static char *
-mb(u_offset_t blks)
+mb(uoff_t blks)
 {
 	static char buf[16];
 

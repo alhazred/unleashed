@@ -136,7 +136,7 @@ smbfs_purge_caches(struct vnode *vp)
 	 * Flush the page cache.
 	 */
 	if (vn_has_cached_data(vp)) {
-		(void) fop_putpage(vp, (u_offset_t)0, 0, B_INVAL, cr, NULL);
+		(void) fop_putpage(vp, (uoff_t)0, 0, B_INVAL, cr, NULL);
 	}
 #endif	/* not yet */
 }
@@ -212,7 +212,7 @@ smbfs_attrcache_fa(vnode_t *vp, struct smbfattr *fap)
 	smbnode_t *np;
 	smbmntinfo_t *smi;
 	hrtime_t delta, now;
-	u_offset_t newsize;
+	uoff_t newsize;
 	vtype_t	 vtype, oldvt;
 	mode_t mode;
 

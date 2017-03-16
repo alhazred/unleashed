@@ -641,7 +641,7 @@ map_addr(caddr_t *addrp, size_t len, offset_t off, int vacalign, uint_t flags)
 
 /*ARGSUSED*/
 int
-map_addr_vacalign_check(caddr_t addr, u_offset_t off)
+map_addr_vacalign_check(caddr_t addr, uoff_t off)
 {
 	return (0);
 }
@@ -2723,7 +2723,7 @@ skip:
 }
 
 page_t *
-page_swap_with_hypervisor(struct vnode *vp, u_offset_t off, caddr_t vaddr,
+page_swap_with_hypervisor(struct vnode *vp, uoff_t off, caddr_t vaddr,
     ddi_dma_attr_t *mattr, uint_t flags, pgcnt_t minctg)
 {
 	uint_t kflags;
@@ -2772,7 +2772,7 @@ page_swap_with_hypervisor(struct vnode *vp, u_offset_t off, caddr_t vaddr,
 		 */
 		for (i = 0; i < extra; i++) {
 			expp = page_create_va(vp,
-			    (u_offset_t)(uintptr_t)io_pool_kva,
+			    (uoff_t)(uintptr_t)io_pool_kva,
 			    PAGESIZE, flags, &kvseg, io_pool_kva);
 			if (expp == NULL)
 				goto balloon_fail;
@@ -2856,7 +2856,7 @@ return_partial_alloc(page_t *plist)
 static page_t *
 page_get_contigpages(
 	struct vnode	*vp,
-	u_offset_t	off,
+	uoff_t	off,
 	int		*npagesp,
 	uint_t		flags,
 	caddr_t		vaddr,
@@ -2989,7 +2989,7 @@ fail:
 page_t *
 page_create_io(
 	struct vnode	*vp,
-	u_offset_t	off,
+	uoff_t	off,
 	uint_t		bytes,
 	uint_t		flags,
 	struct as	*as,
@@ -3186,7 +3186,7 @@ page_get_mnode_anylist(ulong_t origbin, uchar_t szc, uint_t flags,
 				ASSERT(PP_ISFREE(pp));
 				ASSERT(PP_ISAGED(pp));
 				ASSERT(pp->p_vnode == NULL);
-				ASSERT(pp->p_offset == (u_offset_t)-1);
+				ASSERT(pp->p_offset == (uoff_t)-1);
 				ASSERT(pp->p_szc == szc);
 				ASSERT(PFN_2_MEM_NODE(pp->p_pagenum) == mnode);
 				/* check if page within DMA attributes */
@@ -3335,7 +3335,7 @@ nextcachebin:
  */
 /*ARGSUSED*/
 static page_t *
-page_get_anylist(struct vnode *vp, u_offset_t off, struct as *as, caddr_t vaddr,
+page_get_anylist(struct vnode *vp, uoff_t off, struct as *as, caddr_t vaddr,
     size_t size, uint_t flags, ddi_dma_attr_t *dma_attr, lgrp_t	*lgrp)
 {
 	uint_t		bin;
@@ -3460,7 +3460,7 @@ page_get_anylist(struct vnode *vp, u_offset_t off, struct as *as, caddr_t vaddr,
  */
 
 static inline page_t *
-find_page(vnode_t *vnode, u_offset_t off)
+find_page(vnode_t *vnode, uoff_t off)
 {
 	page_t key = {
 		.p_vnode = vnode,
@@ -3474,7 +3474,7 @@ find_page(vnode_t *vnode, u_offset_t off)
 page_t *
 page_create_io(
 	struct vnode	*vp,
-	u_offset_t	off,
+	uoff_t	off,
 	uint_t		bytes,
 	uint_t		flags,
 	struct as	*as,
@@ -3712,7 +3712,7 @@ fail:
 		VM_STAT_ADD(page_create_putbacks);
 		PP_SETFREE(npp);
 		PP_SETAGED(npp);
-		npp->p_offset = (u_offset_t)-1;
+		npp->p_offset = (uoff_t)-1;
 		page_list_add(npp, PG_FREE_LIST | PG_LIST_TAIL);
 		page_unlock(npp);
 	}
@@ -3996,7 +3996,7 @@ page_t *
 page_get_physical(uintptr_t seed)
 {
 	page_t *pp;
-	u_offset_t offset;
+	uoff_t offset;
 	static struct seg tmpseg;
 	static uintptr_t ctr = 0;
 

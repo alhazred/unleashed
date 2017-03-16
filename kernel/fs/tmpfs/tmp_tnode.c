@@ -140,7 +140,7 @@ tmpnode_growmap(struct tmpnode *tp, ulong_t newsize)
 		return;
 
 	if (newsize > MAXOFF_T)
-		np = btopr((u_offset_t)MAXOFF_T);
+		np = btopr((uoff_t)MAXOFF_T);
 
 	if (tp->tn_anon == NULL) {
 		tp->tn_anon = anon_create(MAX(np, TMP_INIT_SZ), ANON_SLEEP);
@@ -308,7 +308,7 @@ tmpnode_trunc(
 
 			zlen = PAGESIZE - ((ulong_t)newsize & PAGEOFFSET);
 			rw_exit(&tp->tn_contents);
-			pvn_vpzero(TNTOV(tp), (u_offset_t)newsize, zlen);
+			pvn_vpzero(TNTOV(tp), (uoff_t)newsize, zlen);
 			rw_enter(&tp->tn_contents, RW_WRITER);
 		}
 

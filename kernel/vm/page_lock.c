@@ -711,7 +711,7 @@ page_lock_delete(page_t *pp)
 
 	ASSERT(PAGE_EXCL(pp));
 	ASSERT(pp->p_vnode == NULL);
-	ASSERT(pp->p_offset == (u_offset_t)-1);
+	ASSERT(pp->p_offset == (uoff_t)-1);
 	ASSERT(!PP_ISFREE(pp));
 
 	mutex_enter(pse);

@@ -391,7 +391,7 @@ struct ud_inode {
 	krwlock_t	i_rwlock;	/* serializes write/setattr requests */
 	krwlock_t	i_contents;	/* protects (most of) inode contents */
 	dev_t		i_dev;		/* device where inode resides */
-	u_offset_t	i_diroff;	/* last loc for fast name lookup */
+	uoff_t		i_diroff;	/* last loc for fast name lookup */
 
 	daddr_t		i_icb_lbano;	/* Loc of file icb on disk */
 	uint16_t	i_icb_prn;	/* partition reference number */
@@ -420,7 +420,7 @@ struct ud_inode {
 	gid_t		i_gid;		/* File owner's gid */
 	uint32_t	i_nlink;	/* number of links to file */
 	uint32_t	i_maxent;	/* Max entries that are recorded */
-	u_offset_t	i_size;		/* File size in bytes */
+	uoff_t		i_size;		/* File size in bytes */
 	uint64_t	i_lbr;		/* Logical blocks recorded */
 	uint64_t	i_uniqid;	/* from the file entry */
 
@@ -624,7 +624,7 @@ void		ud_update_superblock(struct vfs *);
 int32_t		ud_rdwri(enum uio_rw, int32_t, struct ud_inode *, caddr_t,
 			int32_t, offset_t, enum uio_seg, int32_t *,
 			struct cred *cr);
-int32_t		ud_putapage(struct vnode *, page_t *, u_offset_t *,
+int32_t		ud_putapage(struct vnode *, page_t *, uoff_t *,
 			size_t *, int32_t, struct cred *);
 
 
@@ -635,7 +635,7 @@ int32_t	ud_iget(struct vfs *, uint16_t, uint32_t, struct ud_inode **,
     struct buf *, struct cred *);
 void	ud_iinactive(struct ud_inode *, struct cred *);
 void	ud_iupdat(struct ud_inode *, int32_t);
-int32_t	ud_itrunc(struct ud_inode *, u_offset_t, int32_t, struct cred *);
+int32_t	ud_itrunc(struct ud_inode *, uoff_t, int32_t, struct cred *);
 int32_t	ud_iaccess(struct ud_inode *, int32_t, struct cred *, int dolock);
 int32_t	ud_iflush(struct vfs *);
 void	ud_imark(struct ud_inode *);
@@ -677,7 +677,7 @@ int32_t		ud_fbwrite(struct fbuf *, struct ud_inode *);
 void		ud_sbwrite(struct udf_vfs *);
 int32_t		ud_sync_indir(struct ud_inode *);
 void		ud_update_regid(struct regid *);
-int32_t		ud_read_icb_till_off(struct ud_inode *, u_offset_t);
+int32_t		ud_read_icb_till_off(struct ud_inode *, uoff_t);
 void		ud_make_tag(struct udf_vfs *, struct tag *,
 			uint16_t, uint32_t, uint16_t);
 int32_t		ud_make_dev_spec_ear(struct dev_spec_ear *, major_t, minor_t);
@@ -714,16 +714,16 @@ int32_t		ud_dirremove(struct ud_inode *,
  * udf_bmap.c
  */
 int32_t		ud_bmap_has_holes(struct ud_inode *);
-int32_t		ud_bmap_write(struct ud_inode *, u_offset_t,
+int32_t		ud_bmap_write(struct ud_inode *, uoff_t,
 			int, int32_t, struct cred *);
-int32_t		ud_bmap_read(struct ud_inode *, u_offset_t,
+int32_t		ud_bmap_read(struct ud_inode *, uoff_t,
 			daddr_t *, int32_t *);
 void		ud_insert_new_ext(struct ud_inode *,
 			int32_t, struct icb_ext *);
 int32_t		ud_alloc_and_make_ext(struct ud_inode *, int32_t);
 int32_t		ud_create_new_icb(struct ud_inode *);
 void		ud_append_new_ext(struct ud_inode *, uint16_t,
-			u_offset_t, uint32_t, uint16_t, uint32_t);
+			uoff_t, uint32_t, uint16_t, uint32_t);
 
 
 #ifdef	__cplusplus

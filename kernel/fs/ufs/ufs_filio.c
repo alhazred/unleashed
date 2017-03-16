@@ -631,8 +631,8 @@ int
 ufs_fio_holey(vnode_t *vp, int cmd, offset_t *off)
 {
 	inode_t	*ip = VTOI(vp);
-	u_offset_t noff = (u_offset_t)*off; /* new offset */
-	u_offset_t isz;
+	uoff_t noff = (uoff_t)*off; /* new offset */
+	uoff_t isz;
 	int error;
 	boolean_t hole;
 

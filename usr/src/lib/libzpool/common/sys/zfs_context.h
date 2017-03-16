@@ -431,7 +431,7 @@ typedef struct xoptattr {
 
 typedef struct vattr {
 	uint_t		va_mask;	/* bit-mask of attributes */
-	u_offset_t	va_size;	/* file size in bytes */
+	uoff_t		va_size;	/* file size in bytes */
 } vattr_t;
 
 

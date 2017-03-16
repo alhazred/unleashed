@@ -230,7 +230,7 @@ xdr_nfslog_buffer_header(XDR *xdrs, nfslog_buffer_header *objp)
 		if (!xdr_u_int(xdrs, &bh_offset))
 			return (FALSE);
 		if (xdrs->x_op == XDR_DECODE)
-			objp->bh_offset = (u_offset_t)bh_offset;
+			objp->bh_offset = (uoff_t)bh_offset;
 	}
 	if (!xdr_timestruc32_t(xdrs, &objp->bh_timestamp))
 		return (FALSE);

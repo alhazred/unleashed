@@ -740,7 +740,7 @@ get_vpmap(page_t *pp)
 static int
 vpm_pagecreate(
 	struct vnode *vp,
-	u_offset_t baseoff,
+	uoff_t baseoff,
 	size_t len,
 	vmap_t vml[],
 	int nseg,
@@ -749,7 +749,7 @@ vpm_pagecreate(
 
 	page_t *pp = NULL;
 	caddr_t base;
-	u_offset_t off = baseoff;
+	uoff_t off = baseoff;
 	int i;
 	ASSERT(nseg >= MINVMAPS && nseg <= MAXVMAPS);
 
@@ -812,7 +812,7 @@ vpm_pagecreate(
 int
 vpm_map_pages(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	int fetchpage,
 	vmap_t *vml,
@@ -821,7 +821,7 @@ vpm_map_pages(
 	enum seg_rw rw)
 {
 	extern struct vnode *common_specvp();
-	u_offset_t baseoff;
+	uoff_t baseoff;
 	uint_t prot;
 	caddr_t base;
 	page_t *pp, *pplist[MAXVMAPS];
@@ -1008,7 +1008,7 @@ vpm_unmap_pages(vmap_t vml[], enum seg_rw rw)
  */
 int
 vpm_data_copy(struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	struct uio *uio,
 	int fetchpage,
@@ -1078,7 +1078,7 @@ vpm_data_copy(struct vnode *vp,
  */
 int
 vpm_sync_pages(struct vnode *vp,
-		u_offset_t off,
+		uoff_t off,
 		size_t len,
 		uint_t flags)
 {
@@ -1125,7 +1125,7 @@ vpm_init()
 int
 vpm_pagecreate(
 	struct vnode *vp,
-	u_offset_t baseoff,
+	uoff_t baseoff,
 	size_t len,
 	vmap_t vml[],
 	int nseg,
@@ -1138,7 +1138,7 @@ vpm_pagecreate(
 int
 vpm_map_pages(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	int fetchpage,
 	vmap_t vml[],
@@ -1152,7 +1152,7 @@ vpm_map_pages(
 /*ARGSUSED*/
 int
 vpm_data_copy(struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	struct uio *uio,
 	int fetchpage,
@@ -1171,7 +1171,7 @@ vpm_unmap_pages(vmap_t vml[], enum seg_rw rw)
 /*ARGSUSED*/
 int
 vpm_sync_pages(struct vnode *vp,
-		u_offset_t off,
+		uoff_t off,
 		size_t len,
 		uint_t flags)
 {

@@ -589,12 +589,12 @@ void	hat_enter(struct hat *);
 void	hat_exit(struct hat *);
 
 typedef void (*hat_rgn_cb_func_t)(caddr_t, caddr_t, caddr_t,
-    size_t, void *, u_offset_t);
+    size_t, void *, uoff_t);
 
 void			hat_join_srd(struct hat *, vnode_t *);
 
 hat_region_cookie_t	hat_join_region(struct hat *, caddr_t, size_t, void *,
-			    u_offset_t, uchar_t, uchar_t, hat_rgn_cb_func_t,
+			    uoff_t, uchar_t, uchar_t, hat_rgn_cb_func_t,
 			    uint_t);
 void			hat_leave_region(struct hat *, hat_region_cookie_t,
 			    uint_t);

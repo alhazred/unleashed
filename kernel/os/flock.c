@@ -204,8 +204,8 @@ static void flk_free_proc_edge(proc_edge_t *);
 static void flk_update_proc_graph(edge_t *, int);
 
 /* Non-blocking mandatory locking */
-static int lock_blocks_io(nbl_op_t, u_offset_t, ssize_t, int, u_offset_t,
-			u_offset_t);
+static int lock_blocks_io(nbl_op_t, uoff_t, ssize_t, int, uoff_t,
+			uoff_t);
 
 static struct flock_globals *
 flk_get_globals(void)
@@ -283,7 +283,7 @@ flk_get_lockmgr_status(void)
  * semantics in all cases.
  */
 int
-ofdlock(file_t *fp, int fcmd, flock64_t *lckdat, int flag, u_offset_t offset)
+ofdlock(file_t *fp, int fcmd, flock64_t *lckdat, int flag, uoff_t offset)
 {
 	int cmd = 0;
 	vnode_t *vp;
@@ -524,7 +524,7 @@ ofdcleanlock(file_t *fp)
  * scheme.
  */
 int
-reclock(vnode_t *vp, flock64_t *lckdat, int cmd, int flag, u_offset_t offset,
+reclock(vnode_t *vp, flock64_t *lckdat, int cmd, int flag, uoff_t offset,
     flk_callback_t *flk_cbp)
 {
 	lock_descriptor_t	stack_lock_request;
@@ -2745,7 +2745,7 @@ cleanlocks(vnode_t *vp, pid_t pid, int sysid)
  */
 
 int
-chklock(struct vnode *vp, int iomode, u_offset_t offset, ssize_t len, int fmode,
+chklock(struct vnode *vp, int iomode, uoff_t offset, ssize_t len, int fmode,
     caller_context_t *ct)
 {
 	register int	i;
@@ -3570,7 +3570,7 @@ create_flock(lock_descriptor_t *lp, flock64_t *flp)
 
 int
 flk_convert_lock_data(vnode_t *vp, flock64_t *flp,
-    u_offset_t *start, u_offset_t *end, offset_t offset)
+    uoff_t *start, uoff_t *end, offset_t offset)
 {
 	struct vattr	vattr;
 	int	error;
@@ -3580,16 +3580,16 @@ flk_convert_lock_data(vnode_t *vp, flock64_t *flp,
 	 */
 	switch (flp->l_whence) {
 	case 0:		/* SEEK_SET */
-		*start = (u_offset_t)flp->l_start;
+		*start = (uoff_t)flp->l_start;
 		break;
 	case 1:		/* SEEK_CUR */
-		*start = (u_offset_t)(flp->l_start + offset);
+		*start = (uoff_t)(flp->l_start + offset);
 		break;
 	case 2:		/* SEEK_END */
 		vattr.va_mask = AT_SIZE;
 		if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			return (error);
-		*start = (u_offset_t)(flp->l_start + vattr.va_size);
+		*start = (uoff_t)(flp->l_start + vattr.va_size);
 		break;
 	default:
 		return (EINVAL);
@@ -3601,7 +3601,7 @@ flk_convert_lock_data(vnode_t *vp, flock64_t *flp,
 	if (flp->l_len == 0)
 		*end = MAX_U_OFFSET_T;
 	else if ((offset_t)flp->l_len > 0) {
-		*end = (u_offset_t)(*start + (flp->l_len - 1));
+		*end = (uoff_t)(*start + (flp->l_len - 1));
 	} else {
 		/*
 		 * Negative length; why do we even allow this ?
@@ -3609,7 +3609,7 @@ flk_convert_lock_data(vnode_t *vp, flock64_t *flp,
 		 * the last n bytes of the file.
 		 */
 		*end = *start;
-		*start += (u_offset_t)flp->l_len;
+		*start += (uoff_t)flp->l_len;
 		(*start)++;
 	}
 	return (0);
@@ -3624,7 +3624,7 @@ flk_convert_lock_data(vnode_t *vp, flock64_t *flp,
  */
 
 int
-flk_check_lock_data(u_offset_t start, u_offset_t end, offset_t max)
+flk_check_lock_data(uoff_t start, uoff_t end, offset_t max)
 {
 	/*
 	 * The end (length) for local locking should never be greater
@@ -3700,7 +3700,7 @@ report_blocker(lock_descriptor_t *blocker, lock_descriptor_t *request)
  */
 
 int
-nbl_lock_conflict(vnode_t *vp, nbl_op_t op, u_offset_t offset,
+nbl_lock_conflict(vnode_t *vp, nbl_op_t op, uoff_t offset,
     ssize_t length, int svmand, caller_context_t *ct)
 {
 	int conflict = 0;
@@ -3746,8 +3746,8 @@ nbl_lock_conflict(vnode_t *vp, nbl_op_t op, u_offset_t offset,
  */
 
 static int
-lock_blocks_io(nbl_op_t op, u_offset_t offset, ssize_t length,
-    int lock_type, u_offset_t lock_start, u_offset_t lock_end)
+lock_blocks_io(nbl_op_t op, uoff_t offset, ssize_t length,
+    int lock_type, uoff_t lock_start, uoff_t lock_end)
 {
 	ASSERT(op == NBL_READ || op == NBL_WRITE || op == NBL_READWRITE);
 	ASSERT(lock_type == F_RDLCK || lock_type == F_WRLCK);

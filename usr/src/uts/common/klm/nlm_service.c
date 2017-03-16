@@ -373,7 +373,7 @@ nlm_do_test(nlm4_testargs *argp, nlm4_testres *resp,
 	/* BSD: VOP_ADVLOCK(nv->nv_vp, NULL, F_GETLK, &fl, F_REMOTE); */
 	error = nlm_vop_frlock(vp, F_GETLK, &fl,
 	    F_REMOTELOCK | FREAD | FWRITE,
-	    (u_offset_t)0, NULL, CRED(), NULL);
+	    (uoff_t)0, NULL, CRED(), NULL);
 	if (error) {
 		resp->stat.stat = nlm4_failed;
 		goto out;
@@ -552,7 +552,7 @@ nlm_do_lock(nlm4_lockargs *argp, nlm4_res *resp, struct svc_req *sr,
 	 */
 	flags = F_REMOTELOCK | FREAD | FWRITE;
 	error = nlm_vop_frlock(nvp->nv_vp, F_SETLK, &fl, flags,
-	    (u_offset_t)0, NULL, CRED(), NULL);
+	    (uoff_t)0, NULL, CRED(), NULL);
 
 	DTRACE_PROBE3(setlk__res, struct flock64 *, &fl,
 	    int, flags, int, error);
@@ -718,7 +718,7 @@ nlm_block(nlm4_lockargs *lockargs,
 	/* BSD: VOP_ADVLOCK(vp, NULL, F_SETLK, fl, F_REMOTE); */
 	error = nlm_vop_frlock(nvp->nv_vp, F_SETLKW, flp,
 	    F_REMOTELOCK | FREAD | FWRITE,
-	    (u_offset_t)0, &flk_cb, CRED(), NULL);
+	    (uoff_t)0, &flk_cb, CRED(), NULL);
 
 	if (error != 0) {
 		/*
@@ -835,7 +835,7 @@ nlm_do_cancel(nlm4_cancargs *argp, nlm4_res *resp,
 	fl.l_type = F_UNLCK;
 	error = nlm_vop_frlock(nvp->nv_vp, F_SETLK, &fl,
 	    F_REMOTELOCK | FREAD | FWRITE,
-	    (u_offset_t)0, NULL, CRED(), NULL);
+	    (uoff_t)0, NULL, CRED(), NULL);
 
 	resp->stat.stat = (error == 0) ?
 	    nlm4_granted : nlm4_denied;
@@ -922,7 +922,7 @@ nlm_do_unlock(nlm4_unlockargs *argp, nlm4_res *resp,
 	/* BSD: VOP_ADVLOCK(nv->nv_vp, NULL, F_UNLCK, &fl, F_REMOTE); */
 	error = nlm_vop_frlock(vp, F_SETLK, &fl,
 	    F_REMOTELOCK | FREAD | FWRITE,
-	    (u_offset_t)0, NULL, CRED(), NULL);
+	    (uoff_t)0, NULL, CRED(), NULL);
 
 	DTRACE_PROBE1(unlock__res, int, error);
 out:

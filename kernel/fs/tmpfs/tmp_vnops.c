@@ -71,9 +71,9 @@
 #include <sys/policy.h>
 #include <sys/fs_subr.h>
 
-static int	tmp_getapage(struct vnode *, u_offset_t, size_t, uint_t *,
+static int	tmp_getapage(struct vnode *, uoff_t, size_t, uint_t *,
 	page_t **, size_t, struct seg *, caddr_t, enum seg_rw, struct cred *);
-static int 	tmp_putapage(struct vnode *, page_t *, u_offset_t *, size_t *,
+static int 	tmp_putapage(struct vnode *, page_t *, uoff_t *, size_t *,
 	int, struct cred *);
 
 /* ARGSUSED1 */
@@ -216,7 +216,7 @@ wrtmp(
 		 * we don't need to call tmp_resv.
 		 */
 		delta = offset + bytes -
-		    P2ROUNDUP_TYPED(tp->tn_size, PAGESIZE, u_offset_t);
+		    P2ROUNDUP_TYPED(tp->tn_size, PAGESIZE, uoff_t);
 		if (delta > 0) {
 			pagecreate = 1;
 			if (tmp_resv(tm, tp, delta, pagecreate)) {
@@ -698,7 +698,7 @@ tmp_getattr(
 	vap->va_fsid = tp->tn_fsid;
 	vap->va_nodeid = (ino64_t)tp->tn_nodeid;
 	vap->va_nlink = tp->tn_nlink;
-	vap->va_size = (u_offset_t)tp->tn_size;
+	vap->va_size = (uoff_t)tp->tn_size;
 	vap->va_atime = tp->tn_atime;
 	vap->va_mtime = tp->tn_mtime;
 	vap->va_ctime = tp->tn_ctime;
@@ -1783,7 +1783,7 @@ tmp_getpage(
 	struct tmpnode *tp = VTOTN(vp);
 	anoff_t toff = (anoff_t)off;
 	size_t tlen = len;
-	u_offset_t tmpoff;
+	uoff_t tmpoff;
 	timestruc_t now;
 
 	rw_enter(&tp->tn_contents, RW_READER);
@@ -1821,7 +1821,7 @@ tmp_getpage(
 	}
 
 
-	err = pvn_getpages(tmp_getapage, vp, (u_offset_t)off, len, protp,
+	err = pvn_getpages(tmp_getapage, vp, (uoff_t)off, len, protp,
 	    pl, plsz, seg, addr, rw, cr);
 
 	gethrestime(&now);
@@ -1841,7 +1841,7 @@ out:
 static int
 tmp_getapage(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	uint_t *protp,
 	page_t *pl[],
@@ -1855,7 +1855,7 @@ tmp_getapage(
 	int flags;
 	int err = 0;
 	struct vnode *pvp;
-	u_offset_t poff;
+	uoff_t poff;
 
 	if (protp != NULL)
 		*protp = PROT_ALL;
@@ -1889,7 +1889,7 @@ again:
 		}
 		if (pvp) {
 			flags = (pl == NULL ? B_ASYNC|B_READ : B_READ);
-			err = fop_pageio(pvp, pp, (u_offset_t)poff, PAGESIZE,
+			err = fop_pageio(pvp, pp, (uoff_t)poff, PAGESIZE,
 			    flags, cr, NULL);
 			if (flags & B_ASYNC)
 				pp = NULL;
@@ -1926,7 +1926,7 @@ tmp_putpage(
 	caller_context_t *ct)
 {
 	register page_t *pp;
-	u_offset_t io_off;
+	uoff_t io_off;
 	size_t io_len = 0;
 	int err = 0;
 	struct tmpnode *tp = VTOTN(vp);
@@ -1987,10 +1987,10 @@ tmp_putpage(
 		}
 
 		/* Search the entire vp list for pages >= off. */
-		err = pvn_vplist_dirty(vp, (u_offset_t)off, tmp_putapage,
+		err = pvn_vplist_dirty(vp, (uoff_t)off, tmp_putapage,
 		    flags, cr);
 	} else {
-		u_offset_t eoff;
+		uoff_t eoff;
 
 		/*
 		 * Loop over all offsets in the range [off...off + len]
@@ -2059,7 +2059,7 @@ static int
 tmp_putapage(
 	struct vnode *vp,
 	page_t *pp,
-	u_offset_t *offp,
+	uoff_t *offp,
 	size_t *lenp,
 	int flags,
 	struct cred *cr)
@@ -2071,12 +2071,12 @@ tmp_putapage(
 	long tmp_klustsize;
 	struct tmpnode *tp;
 	size_t pp_off, pp_len;
-	u_offset_t io_off;
+	uoff_t io_off;
 	size_t io_len;
 	struct vnode *pvp;
-	u_offset_t pstart;
-	u_offset_t offset;
-	u_offset_t tmpoff;
+	uoff_t pstart;
+	uoff_t offset;
+	uoff_t tmpoff;
 
 	ASSERT(PAGE_LOCKED(pp));
 
@@ -2139,7 +2139,7 @@ tmp_putapage(
 	ASSERT(btopr(io_len) <= btopr(kllen));
 
 	/* Do i/o on the remaining kluster */
-	err = fop_pageio(pvp, pplist, (u_offset_t)pstart, io_len,
+	err = fop_pageio(pvp, pplist, (uoff_t)pstart, io_len,
 	    B_WRITE | flags, cr, NULL);
 
 	if ((flags & B_ASYNC) == 0) {
@@ -2207,7 +2207,7 @@ tmp_map(
 	}
 
 	vn_a.vp = vp;
-	vn_a.offset = (u_offset_t)off;
+	vn_a.offset = (uoff_t)off;
 	vn_a.type = flags & MAP_TYPE;
 	vn_a.prot = prot;
 	vn_a.maxprot = maxprot;

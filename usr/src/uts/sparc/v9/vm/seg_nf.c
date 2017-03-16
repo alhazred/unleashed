@@ -70,7 +70,7 @@ static void	segnf_badop(void);
 static int	segnf_nop(void);
 static int	segnf_getprot(struct seg *seg, caddr_t addr,
 		    size_t len, uint_t *protv);
-static u_offset_t segnf_getoffset(struct seg *seg, caddr_t addr);
+static uoff_t segnf_getoffset(struct seg *seg, caddr_t addr);
 static int	segnf_gettype(struct seg *seg, caddr_t addr);
 static int	segnf_getvp(struct seg *seg, caddr_t addr, struct vnode **vpp);
 static int	segnf_pagelock(struct seg *seg, caddr_t addr, size_t len,
@@ -165,7 +165,7 @@ segnf_create(struct seg *seg, void *argsp)
 {
 	uint_t prot;
 	pgcnt_t	vacpgs;
-	u_offset_t off = 0;
+	uoff_t off = 0;
 	caddr_t	vaddr = NULL;
 	int i, color;
 	struct seg *s1;
@@ -417,12 +417,12 @@ segnf_getprot(struct seg *seg, caddr_t addr, size_t len, uint_t *protv)
 }
 
 /* ARGSUSED */
-static u_offset_t
+static uoff_t
 segnf_getoffset(struct seg *seg, caddr_t addr)
 {
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
-	return ((u_offset_t)0);
+	return ((uoff_t)0);
 }
 
 /* ARGSUSED */

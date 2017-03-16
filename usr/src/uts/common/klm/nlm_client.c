@@ -93,10 +93,10 @@ static int nlm_map_clnt_stat(enum clnt_stat);
 static void nlm_send_siglost(pid_t);
 
 static int nlm_frlock_getlk(struct nlm_host *, vnode_t *,
-    struct flock64 *, int, u_offset_t, struct netobj *, int);
+    struct flock64 *, int, uoff_t, struct netobj *, int);
 
 static int nlm_frlock_setlk(struct nlm_host *, vnode_t *,
-    struct flock64 *, int, u_offset_t, struct netobj *,
+    struct flock64 *, int, uoff_t, struct netobj *,
     struct flk_callback *, int, bool_t);
 
 static int nlm_reclaim_lock(struct nlm_host *, vnode_t *,
@@ -257,7 +257,7 @@ nlm_reclaim_client(struct nlm_globals *g, struct nlm_host *hostp)
 /* ARGSUSED */
 int
 nlm_frlock(struct vnode *vp, int cmd, struct flock64 *flkp,
-    int flags, u_offset_t offset, struct cred *crp,
+    int flags, uoff_t offset, struct cred *crp,
     struct netobj *fhp, struct flk_callback *flcb, int vers)
 {
 	mntinfo_t *mi;
@@ -315,7 +315,7 @@ nlm_frlock(struct vnode *vp, int cmd, struct flock64 *flkp,
 
 static int
 nlm_frlock_getlk(struct nlm_host *hostp, vnode_t *vp,
-    struct flock64 *flkp, int flags, u_offset_t offset,
+    struct flock64 *flkp, int flags, uoff_t offset,
     struct netobj *fhp, int vers)
 {
 	struct flock64 flk0;
@@ -367,7 +367,7 @@ nlm_frlock_getlk(struct nlm_host *hostp, vnode_t *vp,
 
 static int
 nlm_frlock_setlk(struct nlm_host *hostp, vnode_t *vp,
-    struct flock64 *flkp, int flags, u_offset_t offset,
+    struct flock64 *flkp, int flags, uoff_t offset,
     struct netobj *fhp, struct flk_callback *flcb,
     int vers, bool_t do_block)
 {
@@ -616,7 +616,7 @@ nlm_has_sleep(const vnode_t *vp)
 
 void
 nlm_register_lock_locally(struct vnode *vp, struct nlm_host *hostp,
-    struct flock64 *flk, int flags, u_offset_t offset)
+    struct flock64 *flk, int flags, uoff_t offset)
 {
 	struct nlm_globals *g = NULL;
 	int sysid = 0;

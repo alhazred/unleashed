@@ -108,7 +108,7 @@ static int	segvn_lockop(struct seg *seg, caddr_t addr, size_t len,
 		    int attr, int op, ulong_t *lockmap, size_t pos);
 static int	segvn_getprot(struct seg *seg, caddr_t addr, size_t len,
 		    uint_t *protv);
-static u_offset_t	segvn_getoffset(struct seg *seg, caddr_t addr);
+static uoff_t	segvn_getoffset(struct seg *seg, caddr_t addr);
 static int	segvn_gettype(struct seg *seg, caddr_t addr);
 static int	segvn_getvp(struct seg *seg, caddr_t addr,
 		    struct vnode **vpp);
@@ -184,14 +184,14 @@ static void	segvn_pagelist_rele(page_t **);
 static void	segvn_setvnode_mpss(vnode_t *);
 static void	segvn_relocate_pages(page_t **, page_t *);
 static int	segvn_full_szcpages(page_t **, uint_t, int *, uint_t *);
-static int	segvn_fill_vp_pages(struct segvn_data *, vnode_t *, u_offset_t,
+static int	segvn_fill_vp_pages(struct segvn_data *, vnode_t *, uoff_t,
     uint_t, page_t **, page_t **, uint_t *, int *);
 static faultcode_t segvn_fault_vnodepages(struct hat *, struct seg *, caddr_t,
     caddr_t, enum fault_type, enum seg_rw, caddr_t, caddr_t, int);
 static faultcode_t segvn_fault_anonpages(struct hat *, struct seg *, caddr_t,
     caddr_t, enum fault_type, enum seg_rw, caddr_t, caddr_t, int);
 static faultcode_t segvn_faultpage(struct hat *, struct seg *, caddr_t,
-    u_offset_t, struct vpage *, page_t **, uint_t,
+    uoff_t, struct vpage *, page_t **, uint_t,
     enum fault_type, enum seg_rw, int);
 static void	segvn_vpage(struct seg *);
 static size_t	segvn_count_swap_by_vpages(struct seg *);
@@ -207,11 +207,11 @@ static int sameprot(struct seg *, caddr_t, size_t);
 static int segvn_demote_range(struct seg *, caddr_t, size_t, int, uint_t);
 static int segvn_clrszc(struct seg *);
 static struct seg *segvn_split_seg(struct seg *, caddr_t);
-static int segvn_claim_pages(struct seg *, struct vpage *, u_offset_t,
+static int segvn_claim_pages(struct seg *, struct vpage *, uoff_t,
     ulong_t, uint_t);
 
 static void segvn_hat_rgn_unload_callback(caddr_t, caddr_t, caddr_t,
-    size_t, void *, u_offset_t);
+    size_t, void *, uoff_t);
 
 static struct kmem_cache *segvn_cache;
 static struct kmem_cache **segvn_szc_cache;
@@ -502,7 +502,7 @@ segvn_setvnode_mpss(vnode_t *vp)
 	if (vp->v_mpssdata == NULL) {
 		if (vn_vmpss_usepageio(vp)) {
 			err = fop_pageio(vp, (page_t *)NULL,
-			    (u_offset_t)0, 0, 0, CRED(), NULL);
+			    (uoff_t)0, 0, 0, CRED(), NULL);
 		} else {
 			err = ENOSYS;
 		}
@@ -1761,9 +1761,9 @@ extern int free_pages;
 
 static void
 segvn_hat_rgn_unload_callback(caddr_t saddr, caddr_t eaddr, caddr_t r_saddr,
-    size_t r_size, void *r_obj, u_offset_t r_objoff)
+    size_t r_size, void *r_obj, uoff_t r_objoff)
 {
-	u_offset_t off;
+	uoff_t off;
 	size_t len;
 	vnode_t *vp = (vnode_t *)r_obj;
 
@@ -1793,7 +1793,7 @@ segvn_hat_unload_callback(hat_callback_t *cb)
 	struct seg		*seg = cb->hcb_data;
 	struct segvn_data	*svd = (struct segvn_data *)seg->s_data;
 	size_t			len;
-	u_offset_t		off;
+	uoff_t		off;
 
 	ASSERT(svd->vp != NULL);
 	ASSERT(cb->hcb_end_addr > cb->hcb_start_addr);
@@ -2535,7 +2535,7 @@ segvn_softunlock(struct seg *seg, caddr_t addr, size_t len, enum seg_rw rw)
 	page_t *pp;
 	caddr_t adr;
 	struct vnode *vp;
-	u_offset_t offset;
+	uoff_t offset;
 	ulong_t anon_index;
 	struct anon_map *amp;
 	struct anon *ap = NULL;
@@ -2667,7 +2667,7 @@ segvn_faultpage(
 	struct hat *hat,		/* the hat to use for mapping */
 	struct seg *seg,		/* seg_vn of interest */
 	caddr_t addr,			/* address in as */
-	u_offset_t off,			/* offset in vp */
+	uoff_t off,			/* offset in vp */
 	struct vpage *vpage,		/* pointer to vpage for vp, off */
 	page_t *pl[],			/* object source page pointer */
 	uint_t vpprot,			/* access allowed to object pages */
@@ -3317,7 +3317,7 @@ segvn_full_szcpages(page_t **ppa, uint_t szc, int *upgrdfail, uint_t *pszc)
  */
 
 static int
-segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, u_offset_t off,
+segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, uoff_t off,
     uint_t szc, page_t **ppa, page_t **ppplist, uint_t *ret_pszc,
     int *downsize)
 
@@ -3326,9 +3326,9 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, u_offset_t off,
 	size_t pgsz = page_get_pagesize(szc);
 	pgcnt_t pages = btop(pgsz);
 	ulong_t start_off = off;
-	u_offset_t eoff = off + pgsz;
+	uoff_t eoff = off + pgsz;
 	spgcnt_t nreloc;
-	u_offset_t io_off = off;
+	uoff_t io_off = off;
 	size_t io_len;
 	page_t *io_pplist = NULL;
 	page_t *done_pplist = NULL;
@@ -3791,7 +3791,7 @@ segvn_fault_vnodepages(struct hat *hat, struct seg *seg, caddr_t lpgaddr,
 	size_t ppasize = (pages + 1) * sizeof (page_t *);
 	caddr_t a = lpgaddr;
 	caddr_t	maxlpgeaddr = lpgeaddr;
-	u_offset_t off = svd->offset + (uintptr_t)(a - seg->s_base);
+	uoff_t off = svd->offset + (uintptr_t)(a - seg->s_base);
 	ulong_t aindx = svd->anon_index + seg_page(seg, a);
 	struct vpage *vpage = (svd->vpage != NULL) ?
 	    &svd->vpage[seg_page(seg, a)] : NULL;
@@ -4879,7 +4879,7 @@ segvn_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t len,
 {
 	struct segvn_data *svd = (struct segvn_data *)seg->s_data;
 	page_t **plp, **ppp, *pp;
-	u_offset_t off;
+	uoff_t off;
 	caddr_t a;
 	struct vpage *vpage;
 	uint_t vpprot, prot;
@@ -5188,7 +5188,7 @@ slow:
 		struct vpage *vpp;
 		ulong_t fanon_index;
 		size_t fpage;
-		u_offset_t pgoff, fpgoff;
+		uoff_t pgoff, fpgoff;
 		struct vnode *fvp;
 		struct anon *fap = NULL;
 
@@ -5291,7 +5291,7 @@ slow:
 	 * was no original vnode.
 	 */
 	if (svd->vp != NULL) {
-		u_offset_t vp_off;
+		uoff_t vp_off;
 		size_t vp_len;
 		struct anon *ap;
 		vnode_t *vp;
@@ -5842,7 +5842,7 @@ segvn_setprot(struct seg *seg, caddr_t addr, size_t len, uint_t prot)
 	} else if (svd->type == MAP_PRIVATE) {
 		struct anon *ap = NULL;
 		page_t *pp;
-		u_offset_t offset, off;
+		uoff_t offset, off;
 		struct anon_map *amp;
 		ulong_t anon_idx = 0;
 
@@ -6025,7 +6025,7 @@ segvn_setpagesize(struct seg *seg, caddr_t addr, size_t len, uint_t szc)
 	size_t pgsz = page_get_pagesize(szc);
 	pgcnt_t pgcnt = page_get_pagecnt(szc);
 	int err;
-	u_offset_t off = svd->offset + (uintptr_t)(addr - seg->s_base);
+	uoff_t off = svd->offset + (uintptr_t)(addr - seg->s_base);
 
 	ASSERT(seg->s_as && AS_WRITE_HELD(seg->s_as));
 	ASSERT(addr >= seg->s_base && eaddr <= seg->s_base + seg->s_size);
@@ -6251,7 +6251,7 @@ segvn_setpagesize(struct seg *seg, caddr_t addr, size_t len, uint_t szc)
 	}
 	if (svd->vp != NULL && szc != 0) {
 		struct vattr va;
-		u_offset_t eoffpage = svd->offset;
+		uoff_t eoffpage = svd->offset;
 		va.va_mask = AT_SIZE;
 		eoffpage += seg->s_size;
 		eoffpage = btopr(eoffpage);
@@ -6414,7 +6414,7 @@ static int
 segvn_claim_pages(
 	struct seg *seg,
 	struct vpage *svp,
-	u_offset_t off,
+	uoff_t off,
 	ulong_t anon_idx,
 	uint_t prot)
 {
@@ -6465,11 +6465,11 @@ segvn_claim_pages(
 				panic("segvn_claim_pages: no anon slot");
 			}
 			swap_xlate(ap, &vp, &aoff);
-			off = (u_offset_t)aoff;
+			off = (uoff_t)aoff;
 		}
 		ASSERT(vp != NULL);
 		if ((pp = page_lookup(vp,
-		    (u_offset_t)off, SE_SHARED)) == NULL) {
+		    (uoff_t)off, SE_SHARED)) == NULL) {
 			panic("segvn_claim_pages: no page");
 		}
 		ppa[pg_idx++] = pp;
@@ -6866,7 +6866,7 @@ segvn_getprot(struct seg *seg, caddr_t addr, size_t len, uint_t *protv)
 	return (0);
 }
 
-static u_offset_t
+static uoff_t
 segvn_getoffset(struct seg *seg, caddr_t addr)
 {
 	struct segvn_data *svd = (struct segvn_data *)seg->s_data;
@@ -6918,7 +6918,7 @@ segvn_kluster(struct seg *seg, caddr_t addr, ssize_t delta)
 	ssize_t pd;
 	size_t page;
 	struct vnode *vp1, *vp2;
-	u_offset_t off1, off2;
+	uoff_t off1, off2;
 	struct anon_map *amp;
 
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
@@ -7009,9 +7009,9 @@ segvn_sync(struct seg *seg, caddr_t addr, size_t len, int attr, uint_t flags)
 	struct segvn_data *svd = (struct segvn_data *)seg->s_data;
 	struct vpage *vpp;
 	page_t *pp;
-	u_offset_t offset;
+	uoff_t offset;
 	struct vnode *vp;
-	u_offset_t off;
+	uoff_t off;
 	caddr_t eaddr;
 	int bflags;
 	int err = 0;
@@ -7234,7 +7234,7 @@ segvn_incore(struct seg *seg, caddr_t addr, size_t len, char *vec)
 {
 	struct segvn_data *svd = (struct segvn_data *)seg->s_data;
 	struct vnode *vp, *avp;
-	u_offset_t offset, aoffset;
+	uoff_t offset, aoffset;
 	size_t p, ep;
 	int ret;
 	struct vpage *vpp;
@@ -7398,8 +7398,8 @@ segvn_lockop(struct seg *seg, caddr_t addr, size_t len,
 	struct vpage *vpp;
 	struct vpage *evp;
 	page_t *pp;
-	u_offset_t offset;
-	u_offset_t off;
+	uoff_t offset;
+	uoff_t off;
 	int segtype;
 	int pageprot;
 	int claim;
@@ -7522,7 +7522,7 @@ segvn_lockop(struct seg *seg, caddr_t addr, size_t len,
 			anon_sync_obj_t	i_cookie;
 			struct anon	*i_ap;
 			struct vnode	*i_vp;
-			u_offset_t	i_off;
+			uoff_t	i_off;
 
 			/* Only count sysV pages once for locked memory */
 			i_edx = svd->anon_index + seg_page(seg, addr + len);
@@ -8092,7 +8092,7 @@ segvn_advise(struct seg *seg, caddr_t addr, size_t len, uint_t behav)
 		caddr_t			eaddr;
 		struct seg		*new_seg;
 		struct segvn_data	*new_svd;
-		u_offset_t		off;
+		uoff_t		off;
 		caddr_t			oldeaddr;
 
 		page = seg_page(seg, addr);
@@ -8466,7 +8466,7 @@ segvn_dump(struct seg *seg)
 	struct anon_map *amp;
 	ulong_t	anon_index;
 	struct vnode *vp;
-	u_offset_t off, offset;
+	uoff_t off, offset;
 	pfn_t pfn;
 	pgcnt_t page, npages;
 	caddr_t addr;
@@ -9056,7 +9056,7 @@ segvn_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***ppp,
 	for (a = addr; a < addr + len; a += PAGESIZE, anon_index++) {
 		struct anon *ap;
 		struct vnode *vp;
-		u_offset_t off;
+		uoff_t off;
 
 		/*
 		 * Lock and unlock anon array only once per large page.
@@ -9433,7 +9433,7 @@ segvn_getpolicy(struct seg *seg, caddr_t addr)
 	ulong_t			anon_index;
 	lgrp_mem_policy_info_t	*policy_info;
 	struct segvn_data	*svn_data;
-	u_offset_t		vn_off;
+	uoff_t		vn_off;
 	vnode_t			*vp;
 
 	ASSERT(seg != NULL);
@@ -9480,9 +9480,9 @@ segvn_textrepl(struct seg *seg)
 {
 	struct segvn_data	*svd = (struct segvn_data *)seg->s_data;
 	vnode_t			*vp = svd->vp;
-	u_offset_t		off = svd->offset;
+	uoff_t		off = svd->offset;
 	size_t			size = seg->s_size;
-	u_offset_t		eoff = off + size;
+	uoff_t		eoff = off + size;
 	uint_t			szc = seg->s_szc;
 	ulong_t			hash = SVNTR_HASH_FUNC(vp);
 	svntr_t			*svntrp;
@@ -9764,9 +9764,9 @@ segvn_textunrepl(struct seg *seg, int unload_unmap)
 {
 	struct segvn_data	*svd = (struct segvn_data *)seg->s_data;
 	vnode_t			*vp = svd->vp;
-	u_offset_t		off = svd->offset;
+	uoff_t		off = svd->offset;
 	size_t			size = seg->s_size;
-	u_offset_t		eoff = off + size;
+	uoff_t		eoff = off + size;
 	uint_t			szc = seg->s_szc;
 	ulong_t			hash = SVNTR_HASH_FUNC(vp);
 	svntr_t			*svntrp;

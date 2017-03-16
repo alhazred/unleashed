@@ -68,7 +68,7 @@
 
 extern int sosendfile64(file_t *, file_t *, const struct ksendfilevec64 *,
 		ssize32_t *);
-extern int snf_segmap(file_t *, vnode_t *, u_offset_t, u_offset_t, ssize_t *,
+extern int snf_segmap(file_t *, vnode_t *, uoff_t, uoff_t, ssize_t *,
 		boolean_t);
 extern sotpi_info_t *sotpi_sototpi(struct sonode *);
 
@@ -81,7 +81,7 @@ extern sotpi_info_t *sotpi_sototpi(struct sonode *);
  * more than 2GB of data.
  */
 static int
-sendvec_chunk64(file_t *fp, u_offset_t *fileoff, struct ksendfilevec64 *sfv,
+sendvec_chunk64(file_t *fp, uoff_t *fileoff, struct ksendfilevec64 *sfv,
     int copy_cnt, ssize32_t *count)
 {
 	struct vnode *vp;
@@ -90,7 +90,7 @@ sendvec_chunk64(file_t *fp, u_offset_t *fileoff, struct ksendfilevec64 *sfv,
 	size32_t cnt;
 	ssize32_t sfv_len;
 	ssize32_t tmpcount;
-	u_offset_t sfv_off;
+	uoff_t sfv_off;
 	struct uio auio;
 	struct iovec aiov;
 	int i, error;
@@ -345,7 +345,7 @@ static ssize32_t
 sendvec64(file_t *fp, const struct ksendfilevec64 *vec, int sfvcnt,
     size32_t *xferred, int fildes)
 {
-	u_offset_t		fileoff;
+	uoff_t		fileoff;
 	int			copy_cnt;
 	const struct ksendfilevec64 *copy_vec;
 	struct ksendfilevec64 sfv[SEND_MAX_CHUNK];
@@ -389,7 +389,7 @@ sendvec64(file_t *fp, const struct ksendfilevec64 *vec, int sfvcnt,
 #endif
 
 static int
-sendvec_small_chunk(file_t *fp, u_offset_t *fileoff, struct sendfilevec *sfv,
+sendvec_small_chunk(file_t *fp, uoff_t *fileoff, struct sendfilevec *sfv,
     int copy_cnt, ssize_t total_size, int maxblk, ssize_t *count)
 {
 	struct vnode *vp;
@@ -400,13 +400,13 @@ sendvec_small_chunk(file_t *fp, u_offset_t *fileoff, struct sendfilevec *sfv,
 	int i, error;
 	size_t cnt;
 	ssize_t sfv_len;
-	u_offset_t sfv_off;
+	uoff_t sfv_off;
 #ifdef _SYSCALL32_IMPL
 	model_t model = get_udatamodel();
-	u_offset_t maxoff = (model == DATAMODEL_ILP32) ?
+	uoff_t maxoff = (model == DATAMODEL_ILP32) ?
 	    MAXOFF32_T : MAXOFFSET_T;
 #else
-	const u_offset_t maxoff = MAXOFF32_T;
+	const uoff_t maxoff = MAXOFF32_T;
 #endif
 	mblk_t *dmp = NULL;
 	int wroff;
@@ -480,7 +480,7 @@ sendvec_small_chunk(file_t *fp, u_offset_t *fileoff, struct sendfilevec *sfv,
 			return (EINVAL);
 		}
 
-		sfv_off = (u_offset_t)(ulong_t)sfv->sfv_off;
+		sfv_off = (uoff_t)(ulong_t)sfv->sfv_off;
 
 		if (sfv->sfv_fd == SFV_FD_SELF) {
 			while (sfv_len > 0) {
@@ -679,7 +679,7 @@ sendvec_small_chunk(file_t *fp, u_offset_t *fileoff, struct sendfilevec *sfv,
 
 
 static int
-sendvec_chunk(file_t *fp, u_offset_t *fileoff, struct sendfilevec *sfv,
+sendvec_chunk(file_t *fp, uoff_t *fileoff, struct sendfilevec *sfv,
     int copy_cnt, ssize_t *count)
 {
 	struct vnode *vp;
@@ -690,13 +690,13 @@ sendvec_chunk(file_t *fp, u_offset_t *fileoff, struct sendfilevec *sfv,
 	int i, error;
 	size_t cnt;
 	ssize_t sfv_len;
-	u_offset_t sfv_off;
+	uoff_t sfv_off;
 #ifdef _SYSCALL32_IMPL
 	model_t model = get_udatamodel();
-	u_offset_t maxoff = (model == DATAMODEL_ILP32) ?
+	uoff_t maxoff = (model == DATAMODEL_ILP32) ?
 	    MAXOFF32_T : MAXOFFSET_T;
 #else
-	const u_offset_t maxoff = MAXOFF32_T;
+	const uoff_t maxoff = MAXOFF32_T;
 #endif
 	mblk_t	*dmp = NULL;
 	char	*buf = NULL;
@@ -770,7 +770,7 @@ sendvec_chunk(file_t *fp, u_offset_t *fileoff, struct sendfilevec *sfv,
 		if ((*count + sfv_len) < 0)
 			return (EINVAL);
 
-		sfv_off = (u_offset_t)(ulong_t)sfv->sfv_off;
+		sfv_off = (uoff_t)(ulong_t)sfv->sfv_off;
 
 		if (sfv->sfv_fd == SFV_FD_SELF) {
 			if (vp->v_type == VSOCK) {
@@ -960,7 +960,7 @@ sendvec_chunk(file_t *fp, u_offset_t *fileoff, struct sendfilevec *sfv,
 
 				nowait = (sfv->sfv_flag & SFV_NOWAIT) != 0;
 				error = snf_segmap(fp, readvp, sfv_off,
-				    (u_offset_t)sfv_len, (ssize_t *)&cnt,
+				    (uoff_t)sfv_len, (ssize_t *)&cnt,
 				    nowait);
 				releasef(sfv->sfv_fd);
 				*count += cnt;
@@ -1122,7 +1122,7 @@ sendfilev(int opcode, int fildes, const struct sendfilevec *vec, int sfvcnt,
 	file_t *fp;
 	struct vnode *vp;
 	struct sonode *so;
-	u_offset_t fileoff;
+	uoff_t fileoff;
 	int copy_cnt;
 	const struct sendfilevec *copy_vec;
 	struct sendfilevec sfv[SEND_MAX_CHUNK];

@@ -73,8 +73,8 @@ page_valid(struct seg *seg, caddr_t addr)
 	    segop_getvp(seg, addr, &vp) == 0 &&
 	    vp != NULL && vp->v_type == VREG &&
 	    fop_getattr(vp, &vattr, 0, CRED(), NULL) == 0) {
-		u_offset_t size = roundup(vattr.va_size, (u_offset_t)PAGESIZE);
-		u_offset_t offset = segop_getoffset(seg, addr);
+		uoff_t size = roundup(vattr.va_size, (uoff_t)PAGESIZE);
+		uoff_t offset = segop_getoffset(seg, addr);
 
 		if (offset >= size)
 			return (0);

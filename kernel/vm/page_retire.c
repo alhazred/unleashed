@@ -530,7 +530,7 @@ page_retire_done(page_t *pp, int code)
 static void
 page_retire_destroy(page_t *pp)
 {
-	u_offset_t off = (u_offset_t)((uintptr_t)pp);
+	uoff_t off = (uoff_t)((uintptr_t)pp);
 
 	ASSERT(PAGE_EXCL(pp));
 	ASSERT(!PP_ISFREE(pp));

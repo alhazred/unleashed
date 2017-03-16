@@ -139,7 +139,7 @@ static int rnode4_hashlen = 4;
 static void	r4inactive(rnode4_t *, cred_t *);
 static vnode_t	*make_rnode4(nfs4_sharedfh_t *, r4hashq_t *, struct vfs *,
 		    struct vnodeops *,
-		    int (*)(vnode_t *, page_t *, u_offset_t *, size_t *, int,
+		    int (*)(vnode_t *, page_t *, uoff_t *, size_t *, int,
 		    cred_t *),
 		    int *, cred_t *);
 static void	rp4_rmfree(rnode4_t *);
@@ -217,7 +217,7 @@ r4flushpages(rnode4_t *rp, cred_t *cr)
 	if (nfs4_has_pages(vp)) {
 		ASSERT(vp->v_type != VCHR);
 		if ((rp->r_flags & R4DIRTY) && !rp->r_error) {
-			error = fop_putpage(vp, (u_offset_t)0, 0, 0, cr, NULL);
+			error = fop_putpage(vp, (uoff_t)0, 0, 0, cr, NULL);
 			if (error && (error == ENOSPC || error == EDQUOT)) {
 				mutex_enter(&rp->r_statelock);
 				if (!rp->r_error)
@@ -225,7 +225,7 @@ r4flushpages(rnode4_t *rp, cred_t *cr)
 				mutex_exit(&rp->r_statelock);
 			}
 		}
-		nfs4_invalidate_pages(vp, (u_offset_t)0, cr);
+		nfs4_invalidate_pages(vp, (uoff_t)0, cr);
 	}
 }
 
@@ -570,7 +570,7 @@ rtable4hash(nfs4_sharedfh_t *fh)
 static vnode_t *
 make_rnode4(nfs4_sharedfh_t *fh, r4hashq_t *rhtp, struct vfs *vfsp,
     struct vnodeops *vops,
-    int (*putapage)(vnode_t *, page_t *, u_offset_t *, size_t *, int, cred_t *),
+    int (*putapage)(vnode_t *, page_t *, uoff_t *, size_t *, int, cred_t *),
     int *newnode, cred_t *cr)
 {
 	rnode4_t *rp;
@@ -1340,7 +1340,7 @@ toomany:
 	 */
 	while (cnt-- > 0) {
 		vp = vplist[cnt];
-		(void) fop_putpage(vp, (u_offset_t)0, 0, B_ASYNC, cr, NULL);
+		(void) fop_putpage(vp, (uoff_t)0, 0, B_ASYNC, cr, NULL);
 		VN_RELE(vp);
 	}
 

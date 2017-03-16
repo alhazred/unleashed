@@ -1293,7 +1293,7 @@ ud_freesp(struct vnode *vp,
 	}
 
 	rw_enter(&ip->i_contents, RW_READER);
-	if (ip->i_size == (u_offset_t)lp->l_start) {
+	if (ip->i_size == (uoff_t)lp->l_start) {
 		rw_exit(&ip->i_contents);
 		return (0);
 	}

@@ -102,8 +102,8 @@ typedef struct smbfattr {
 	timespec_t	fa_atime;	/* these 3 are like unix */
 	timespec_t	fa_mtime;
 	timespec_t	fa_ctime;
-	u_offset_t	fa_size;	/* EOF position */
-	u_offset_t	fa_allocsz;	/* Allocated size. */
+	uoff_t		fa_size;	/* EOF position */
+	uoff_t		fa_allocsz;	/* Allocated size. */
 	uint32_t	fa_attr;	/* Ext. file (DOS) attr */
 } smbfattr_t;
 

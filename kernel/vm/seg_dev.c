@@ -174,7 +174,7 @@ static size_t	segdev_incore(struct seg *, caddr_t, size_t, char *);
 static int	segdev_lockop(struct seg *, caddr_t, size_t, int, int,
 		    ulong_t *, size_t);
 static int	segdev_getprot(struct seg *, caddr_t, size_t, uint_t *);
-static u_offset_t	segdev_getoffset(struct seg *, caddr_t);
+static uoff_t	segdev_getoffset(struct seg *, caddr_t);
 static int	segdev_gettype(struct seg *, caddr_t);
 static int	segdev_getvp(struct seg *, caddr_t, struct vnode **);
 static int	segdev_advise(struct seg *, caddr_t, size_t, uint_t);
@@ -1383,7 +1383,7 @@ segdev_faultpage(
 	struct segdev_data *sdp = (struct segdev_data *)seg->s_data;
 	uint_t prot;
 	pfn_t pfnum = PFN_INVALID;
-	u_offset_t offset;
+	uoff_t offset;
 	uint_t hat_flags;
 	dev_info_t *dip;
 
@@ -1428,7 +1428,7 @@ segdev_faultpage(
 	}
 
 	hat_flags = ((type == F_SOFTLOCK) ? HAT_LOAD_LOCK : HAT_LOAD);
-	offset = sdp->offset + (u_offset_t)(addr - seg->s_base);
+	offset = sdp->offset + (uoff_t)(addr - seg->s_base);
 	/*
 	 * In the devmap framework, sdp->mapfunc is set to NULL.  we can get
 	 * pfnum from dhp->dh_pfn (at beginning of segment) and offset from
@@ -2201,14 +2201,14 @@ segdev_getprot(struct seg *seg, caddr_t addr, size_t len, uint_t *protv)
 	return (0);
 }
 
-static u_offset_t
+static uoff_t
 segdev_getoffset(register struct seg *seg, caddr_t addr)
 {
 	register struct segdev_data *sdp = (struct segdev_data *)seg->s_data;
 
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
-	return ((u_offset_t)sdp->offset + (addr - seg->s_base));
+	return ((uoff_t)sdp->offset + (addr - seg->s_base));
 }
 
 /*ARGSUSED*/
@@ -3641,13 +3641,13 @@ devmap_free_pages(vmem_t *vmp, void *inaddr, size_t size)
 		 * Use page_find() instead of page_lookup() to find the page
 		 * since we know that it is hashed and has a shared lock.
 		 */
-		pp = page_find(&kvp, (u_offset_t)(uintptr_t)addr);
+		pp = page_find(&kvp, (uoff_t)(uintptr_t)addr);
 
 		if (pp == NULL)
 			panic("devmap_free_pages: page not found");
 		if (!page_tryupgrade(pp)) {
 			page_unlock(pp);
-			pp = page_lookup(&kvp, (u_offset_t)(uintptr_t)addr,
+			pp = page_lookup(&kvp, (uoff_t)(uintptr_t)addr,
 			    SE_EXCL);
 			if (pp == NULL)
 				panic("devmap_free_pages: page already freed");

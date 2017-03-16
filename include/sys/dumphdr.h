@@ -171,7 +171,7 @@ typedef struct dumpdatahdr {
 
 extern kmutex_t dump_lock;
 extern struct vnode *dumpvp;
-extern u_offset_t dumpvp_size;
+extern uoff_t dumpvp_size;
 extern struct dumphdr *dumphdr;
 extern int dump_conflags;
 extern char *dumppath;

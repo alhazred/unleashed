@@ -125,7 +125,7 @@ ud_bmap_has_holes(struct ud_inode *ip)
 }
 
 int32_t
-ud_bmap_read(struct ud_inode *ip, u_offset_t off, daddr_t *bnp, int32_t *lenp)
+ud_bmap_read(struct ud_inode *ip, uoff_t off, daddr_t *bnp, int32_t *lenp)
 {
 	struct icb_ext *iext;
 	daddr_t bno;
@@ -194,13 +194,13 @@ ud_bmap_read(struct ud_inode *ip, u_offset_t off, daddr_t *bnp, int32_t *lenp)
 /* ARGSUSED3 */
 int32_t
 ud_bmap_write(struct ud_inode *ip,
-	u_offset_t off, int32_t size, int32_t alloc_only, struct cred *cr)
+	uoff_t off, int32_t size, int32_t alloc_only, struct cred *cr)
 {
 	int32_t error = 0, i, isdir, issync;
 	struct udf_vfs *udf_vfsp;
 	struct icb_ext *iext, *pext;
 	uint32_t blkno, sz;
-	u_offset_t isize;
+	uoff_t isize;
 	uint32_t acount, prox;
 	int32_t blkcount, next;
 	int32_t lbmask, l2b;
@@ -605,7 +605,7 @@ ud_common_ad(struct ud_inode *ip, struct buf *bp)
 	uint32_t length;
 	struct alloc_ext_desc *aed;
 	struct icb_ext *iext, *con;
-	u_offset_t offset;
+	uoff_t offset;
 	long_ad_t *lad;
 	short_ad_t *sad;
 	int islong;
@@ -737,7 +737,7 @@ ud_read_next_cont(struct ud_inode *ip)
 
 
 int32_t
-ud_read_icb_till_off(struct ud_inode *ip, u_offset_t offset)
+ud_read_icb_till_off(struct ud_inode *ip, uoff_t offset)
 {
 	int32_t error = 0;
 	struct icb_ext *iext;

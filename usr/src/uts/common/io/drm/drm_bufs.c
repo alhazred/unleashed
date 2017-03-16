@@ -65,7 +65,7 @@ drm_order(unsigned long size)
 }
 
 static inline drm_local_map_t *
-drm_find_map(drm_device_t *dev, u_offset_t offset, int type)
+drm_find_map(drm_device_t *dev, uoff_t offset, int type)
 {
 	drm_local_map_t		*map;
 

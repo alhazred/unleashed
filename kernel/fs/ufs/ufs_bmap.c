@@ -121,10 +121,10 @@ static void ufs_undo_allocation(inode_t *ip, int block_count,
 		len = findextent(fs, dp, (int)(n), lenp, maxtrans) << 	\
 			(fs)->fs_bshift; 				\
 		if (_chkfrag) {						\
-			register u_offset_t tmp;			\
+			register uoff_t tmp;			\
 									\
 			tmp = fragroundup((fs), size) -			\
-			    (((u_offset_t)lbn) << fs->fs_bshift);	\
+			    (((uoff_t)lbn) << fs->fs_bshift);	\
 			len = (int)MIN(tmp, len);			\
 		}							\
 		len -= (boff);						\
@@ -202,7 +202,7 @@ static void ufs_undo_allocation(inode_t *ip, int block_count,
  */
 
 int
-bmap_read(struct inode *ip, u_offset_t off, daddr_t *bnp, int *lenp)
+bmap_read(struct inode *ip, uoff_t off, daddr_t *bnp, int *lenp)
 {
 	daddr_t lbn;
 	ufsvfs_t *ufsvfsp = ip->i_ufsvfs;
@@ -305,7 +305,7 @@ bmap_read(struct inode *ip, u_offset_t off, daddr_t *bnp, int *lenp)
  * Returns 0 on success, or a non-zero errno if an error occurs.
  */
 int
-bmap_write(struct inode	*ip, u_offset_t	off, int size,
+bmap_write(struct inode	*ip, uoff_t	off, int size,
     enum bi_type alloc_type, daddr_t *allocblk, struct cred *cr)
 {
 	struct	fs *fs;
@@ -412,7 +412,7 @@ bmap_write(struct inode	*ip, u_offset_t	off, int size,
 			 */
 			TRANS_MATA_ALLOC(ufsvfsp, ip, nb, bsize, 0);
 			ip->i_db[llbn] = nb;
-			UFS_SET_ISIZE(((u_offset_t)(llbn + 1)) << fs->fs_bshift,
+			UFS_SET_ISIZE(((uoff_t)(llbn + 1)) << fs->fs_bshift,
 			    ip);
 			ip->i_blocks += btodb(bsize - osize);
 			ASSERT((unsigned)ip->i_blocks <= INT_MAX);
@@ -443,7 +443,7 @@ bmap_write(struct inode	*ip, u_offset_t	off, int size,
 	if (lbn < NDADDR) {
 		nb = ip->i_db[lbn];
 		if (nb == 0 ||
-		    ip->i_size < ((u_offset_t)(lbn + 1)) << fs->fs_bshift) {
+		    ip->i_size < ((uoff_t)(lbn + 1)) << fs->fs_bshift) {
 			if (nb != 0) {
 				/* consider need to reallocate a frag */
 				osize = fragroundup(fs, blkoff(fs, ip->i_size));
@@ -481,7 +481,7 @@ bmap_write(struct inode	*ip, u_offset_t	off, int size,
 				 */
 				osize = 0;
 				if (ip->i_size <
-				    ((u_offset_t)(lbn + 1)) << fs->fs_bshift)
+				    ((uoff_t)(lbn + 1)) << fs->fs_bshift)
 					nsize = fragroundup(fs, size);
 				else
 					nsize = bsize;
@@ -521,7 +521,7 @@ bmap_write(struct inode	*ip, u_offset_t	off, int size,
 				if (alloc_type == BI_NORMAL ||
 				    alloc_type == BI_FALLOCATE ||
 				    P2ROUNDUP_TYPED(size,
-				    PAGESIZE, u_offset_t) < nsize) {
+				    PAGESIZE, uoff_t) < nsize) {
 					/* fbzero doesn't cause a pagefault */
 					fbzero(ITOV(ip),
 					    ((offset_t)lbn << fs->fs_bshift),
@@ -800,7 +800,7 @@ gotit:
 				brelse(nbp);
 			} else if (alloc_type == BI_NORMAL ||
 			    P2ROUNDUP_TYPED(size,
-			    PAGESIZE, u_offset_t) < bsize) {
+			    PAGESIZE, uoff_t) < bsize) {
 				TRANS_MATA_ALLOC(ufsvfsp, ip, nb, bsize, 0);
 				fbzero(ITOV(ip),
 				    ((offset_t)lbn << fs->fs_bshift),
@@ -937,7 +937,7 @@ bmap_has_holes(struct inode *ip)
 	}
 
 	dblks = (ip->i_size + fsboffset) >> fsbshift;
-	mblks = (ldbtob((u_offset_t)ip->i_blocks) + fsboffset) >> fsbshift;
+	mblks = (ldbtob((uoff_t)ip->i_blocks) + fsboffset) >> fsbshift;
 
 	/*
 	 * File has only direct blocks.
@@ -1178,7 +1178,7 @@ ufs_undo_allocation(
  *         EIO for block read error.
  */
 int
-bmap_find(struct inode *ip, boolean_t hole, u_offset_t *off)
+bmap_find(struct inode *ip, boolean_t hole, uoff_t *off)
 {
 	ufsvfs_t *ufsvfsp = ip->i_ufsvfs;
 	struct fs *fs = ufsvfsp->vfs_fs;
@@ -1188,7 +1188,7 @@ bmap_find(struct inode *ip, boolean_t hole, u_offset_t *off)
 	int nindirshift, nindiroffset;
 	daddr_t	ob, nb, tbn, lbn, skip;
 	daddr32_t *bap;
-	u_offset_t isz = (offset_t)ip->i_size;
+	uoff_t isz = (offset_t)ip->i_size;
 	int32_t bs = fs->fs_bsize; /* file system block size */
 	int32_t nindir = fs->fs_nindir;
 	dev_t dev;
@@ -1213,7 +1213,7 @@ bmap_find(struct inode *ip, boolean_t hole, u_offset_t *off)
 				goto out;
 			}
 		}
-		if ((u_offset_t)lbn << fs->fs_bshift >= isz)
+		if ((uoff_t)lbn << fs->fs_bshift >= isz)
 			goto out;
 	}
 
@@ -1243,7 +1243,7 @@ loop:
 	}
 	if (j == 0) {
 		/* must have passed end of file */
-		ASSERT(((u_offset_t)lbn << fs->fs_bshift) >= isz);
+		ASSERT(((uoff_t)lbn << fs->fs_bshift) >= isz);
 		goto out;
 	}
 
@@ -1257,7 +1257,7 @@ loop:
 			goto out;
 		} else {
 			lbn = limits[NIADDR - j + 1];
-			if ((u_offset_t)lbn << fs->fs_bshift >= isz)
+			if ((uoff_t)lbn << fs->fs_bshift >= isz)
 				goto out;
 			goto loop;
 		}
@@ -1304,7 +1304,7 @@ loop:
 			}
 		}
 	}
-	if (((u_offset_t)lbn << fs->fs_bshift) < isz)
+	if (((uoff_t)lbn << fs->fs_bshift) < isz)
 		goto loop;
 out:
 	for (i = 0; i < NIADDR; i++) {
@@ -1312,11 +1312,11 @@ out:
 			brelse(bp[i]);
 	}
 	if (error == 0) {
-		if (((u_offset_t)lbn << fs->fs_bshift) >= isz) {
+		if (((uoff_t)lbn << fs->fs_bshift) >= isz) {
 			error = ENXIO;
 		} else {
 			/* success */
-			*off = (u_offset_t)lbn << fs->fs_bshift;
+			*off = (uoff_t)lbn << fs->fs_bshift;
 		}
 	}
 	return (error);
@@ -1327,7 +1327,7 @@ out:
  * User is responsible for calling TRANS* functions
  */
 int
-bmap_set_bn(struct vnode *vp, u_offset_t off, daddr32_t bn)
+bmap_set_bn(struct vnode *vp, uoff_t off, daddr32_t bn)
 {
 	daddr_t lbn;
 	struct inode *ip;

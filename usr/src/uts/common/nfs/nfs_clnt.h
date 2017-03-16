@@ -97,7 +97,7 @@ enum ioqtype {
 
 struct nfs_async_read_req {
 	void (*readahead)();		/* pointer to readahead function */
-	u_offset_t blkoff;		/* offset in file */
+	uoff_t blkoff;			/* offset in file */
 	struct seg *seg;		/* segment to do i/o to */
 	caddr_t addr;			/* address to do i/o to */
 };
@@ -105,7 +105,7 @@ struct nfs_async_read_req {
 struct nfs_pageio_req {
 	int (*pageio)();		/* pointer to pageio function */
 	page_t *pp;			/* page list */
-	u_offset_t io_off;		/* offset in file */
+	uoff_t io_off;			/* offset in file */
 	uint_t io_len;			/* size of request */
 	int flags;
 };
@@ -557,7 +557,7 @@ struct mntinfo_kstat {
 			rp->r_error = (error);			\
 		mutex_exit(&rp->r_statelock);			\
 		if (vn_has_cached_data(vp))			\
-			nfs_invalidate_pages((vp), (u_offset_t)0, (cr)); \
+			nfs_invalidate_pages((vp), (uoff_t)0, (cr)); \
 		nfs_purge_caches((vp), NFS_PURGE_DNLC, (cr));	\
 	}
 

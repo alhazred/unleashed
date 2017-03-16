@@ -210,14 +210,14 @@ struct	swapinfo {
 #define	SE_NOANON	-2	/* No anon slot for swap slot */
 
 #ifdef _KERNEL
-extern struct anon *swap_anon(struct vnode *vp, u_offset_t off);
-extern int swap_phys_alloc(struct vnode **vpp, u_offset_t *offp, size_t *lenp,
+extern struct anon *swap_anon(struct vnode *vp, uoff_t off);
+extern int swap_phys_alloc(struct vnode **vpp, uoff_t *offp, size_t *lenp,
     uint_t flags);
-extern void swap_phys_free(struct vnode *vp, u_offset_t off, size_t len);
-extern int swap_getphysname(struct vnode *vp, u_offset_t off,
-    struct vnode **pvpp, u_offset_t *poffp);
-extern int swap_newphysname(struct vnode *vp, u_offset_t offset,
-    u_offset_t *offp, size_t *lenp, struct vnode **pvpp, u_offset_t *poffp);
+extern void swap_phys_free(struct vnode *vp, uoff_t off, size_t len);
+extern int swap_getphysname(struct vnode *vp, uoff_t off,
+    struct vnode **pvpp, uoff_t *poffp);
+extern int swap_newphysname(struct vnode *vp, uoff_t offset,
+    uoff_t *offp, size_t *lenp, struct vnode **pvpp, uoff_t *poffp);
 
 extern struct swapinfo *swapinfo;
 extern int swap_debug;

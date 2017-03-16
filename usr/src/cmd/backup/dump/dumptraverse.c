@@ -19,11 +19,11 @@
 #include <sys/mman.h>
 
 #ifdef __STDC__
-static void lf_dmpindir(daddr32_t, int, u_offset_t *);
-static void indir(daddr32_t, int, u_offset_t *);
-static void lf_blksout(daddr32_t *, u_offset_t);
+static void lf_dmpindir(daddr32_t, int, uoff_t *);
+static void indir(daddr32_t, int, uoff_t *);
+static void lf_blksout(daddr32_t *, uoff_t);
 static void lf_dumpinode(struct dinode *);
-static void dsrch(daddr32_t, ulong_t, u_offset_t);
+static void dsrch(daddr32_t, ulong_t, uoff_t);
 void lf_dump(struct dinode *);
 #else
 static void lf_dmpindir();
@@ -198,8 +198,8 @@ void
 estshad(ip)
 	struct dinode *ip;
 {
-	u_offset_t esizeprime;
-	u_offset_t tmpesize;
+	uoff_t esizeprime;
+	uoff_t tmpesize;
 
 	if (ip->di_size <= sizeof (union u_shadow))
 		return;
@@ -244,7 +244,7 @@ add(ip)
 	struct	dinode	*ip;
 {
 	int i;
-	u_offset_t filesize;
+	uoff_t filesize;
 
 	if (BIT(ino, nodmap))
 		return;
@@ -295,7 +295,7 @@ static void
 indir(d, n, filesize)
 	daddr32_t d;
 	int n;
-	u_offset_t *filesize;
+	uoff_t *filesize;
 {
 	int i;
 	daddr32_t idblk[MAXNINDIR];
@@ -359,7 +359,7 @@ dirdump(ip)
 	lf_dump(ip);
 }
 
-static u_offset_t loffset; /* current offset in file (ufsdump) */
+static uoff_t loffset; /* current offset in file (ufsdump) */
 
 static void
 lf_dumpmeta(ip)
@@ -392,7 +392,7 @@ lf_dumpinode(ip)
     struct dinode *ip;
 {
 	int i;
-	u_offset_t size;
+	uoff_t size;
 
 	i = ip->di_mode & IFMT;
 
@@ -463,10 +463,10 @@ static void
 lf_dmpindir(blk, lvl, size)
 	daddr32_t blk;
 	int lvl;
-	u_offset_t *size;
+	uoff_t *size;
 {
 	int i;
-	u_offset_t cnt;
+	uoff_t cnt;
 	daddr32_t idblk[MAXNINDIR];
 
 	if ((unsigned)(sblock->fs_bsize) > sizeof (idblk)) {
@@ -490,8 +490,8 @@ blocks than valid maximum.\n"));
 	else
 		bzero((char *)idblk, (size_t)sblock->fs_bsize);
 	if (lvl <= 0) {
-		cnt = (u_offset_t)(unsigned)NINDIR(sblock) *
-		    (u_offset_t)(unsigned)(sblock->fs_bsize);
+		cnt = (uoff_t)(unsigned)NINDIR(sblock) *
+		    (uoff_t)(unsigned)(sblock->fs_bsize);
 		if (cnt > *size)
 			cnt = *size;
 		*size -= cnt;
@@ -509,21 +509,21 @@ blocks than valid maximum.\n"));
 static void
 lf_blksout(blkp, bytes)
 	daddr32_t *blkp;
-	u_offset_t bytes;
+	uoff_t bytes;
 {
-	u_offset_t i;
-	u_offset_t tbperfsb = (unsigned)(sblock->fs_bsize / tp_bsize);
+	uoff_t i;
+	uoff_t tbperfsb = (unsigned)(sblock->fs_bsize / tp_bsize);
 
-	u_offset_t j, k, count;
+	uoff_t j, k, count;
 
-	u_offset_t bytepos, diff;
-	u_offset_t bytecnt = 0;
+	uoff_t bytepos, diff;
+	uoff_t bytecnt = 0;
 	off_t byteoff = 0;	/* bytes to skip within first f/s block */
 	off_t fragoff = 0;	/* frags to skip within first f/s block */
 
-	u_offset_t tpblkoff = 0; /* tape blocks to skip in first f/s block */
-	u_offset_t tpblkskip = 0;	/* total tape blocks to skip  */
-	u_offset_t skip;		/* tape blocks to skip this pass */
+	uoff_t tpblkoff = 0; /* tape blocks to skip in first f/s block */
+	uoff_t tpblkskip = 0;	/* total tape blocks to skip  */
+	uoff_t skip;		/* tape blocks to skip this pass */
 
 	if (pos) {
 		/*
@@ -535,9 +535,9 @@ lf_blksout(blkp, bytes)
 
 		if ((loffset + bytes) <= bytepos) {
 			/* This stuff was dumped already, forget it. */
-			loffset += (u_offset_t)tp_bsize *
+			loffset += (uoff_t)tp_bsize *
 			    /* LINTED: spurious complaint on sign-extending */
-			    d_howmany(bytes, (u_offset_t)tp_bsize);
+			    d_howmany(bytes, (uoff_t)tp_bsize);
 			return;
 		}
 
@@ -548,7 +548,7 @@ lf_blksout(blkp, bytes)
 			 */
 			diff = bytepos - loffset;
 			/* LINTED: spurious complaint on sign-extending */
-			tpblkskip = d_howmany(diff, (u_offset_t)tp_bsize);
+			tpblkskip = d_howmany(diff, (uoff_t)tp_bsize);
 			/* LINTED room after EOT is only a few MB */
 			blkp += (int)(diff / sblock->fs_bsize);
 
@@ -557,7 +557,7 @@ lf_blksout(blkp, bytes)
 			byteoff = bytecnt % (off_t)(sblock->fs_fsize);
 			/* LINTED: spurious complaint on sign-extending */
 			tpblkoff = d_howmany(bytecnt,
-			    (u_offset_t)(unsigned)tp_bsize);
+			    (uoff_t)(unsigned)tp_bsize);
 			/* LINTED: result fits, due to modulus */
 			fragoff = bytecnt / (off_t)(sblock->fs_fsize);
 			bytecnt = (unsigned)(sblock->fs_bsize) - bytecnt;
@@ -569,12 +569,12 @@ lf_blksout(blkp, bytes)
 	while (bytes > 0) {
 		if (bytes < TP_NINDIR*tp_bsize)
 			/* LINTED: spurious complaint on sign-extending */
-			count = d_howmany(bytes, (u_offset_t)tp_bsize);
+			count = d_howmany(bytes, (uoff_t)tp_bsize);
 		else
 			count = TP_NINDIR;
 		if (tpblkskip) {
 			if (tpblkskip < TP_NINDIR) {
-				bytes -= (tpblkskip * (u_offset_t)tp_bsize);
+				bytes -= (tpblkskip * (uoff_t)tp_bsize);
 				skip = tpblkskip;
 				tpblkskip = 0;
 			} else {
@@ -608,7 +608,7 @@ lf_blksout(blkp, bytes)
 			blkp++;
 			bytes -= bytecnt;
 			/* LINTED: spurious complaint on sign-extending */
-			j += d_howmany(bytecnt, (u_offset_t)tp_bsize);
+			j += d_howmany(bytecnt, (uoff_t)tp_bsize);
 			bytecnt = MIN(bytes, (unsigned)(sblock->fs_bsize));
 			byteoff = 0;
 			fragoff = 0;
@@ -625,7 +625,7 @@ bitmap(map, typ)
 	int typ;
 {
 	int i;
-	u_offset_t count;
+	uoff_t count;
 	uchar_t *cp;
 
 	if (!newtape)
@@ -637,7 +637,7 @@ bitmap(map, typ)
 	/* LINTED: spurious complaint on sign-extending */
 	count = d_howmany(msiz * sizeof (map[0]), tp_bsize) - pos;
 	for (cp = &map[pos * tp_bsize]; count > 0;
-	    count -= (u_offset_t)(unsigned)spcl.c_count) {
+	    count -= (uoff_t)(unsigned)spcl.c_count) {
 		if (leftover) {
 			spcl.c_count = leftover;
 			leftover = 0;
@@ -656,7 +656,7 @@ static void
 dsrch(d, size, filesize)
 	daddr32_t d;
 	ulong_t size; 	/* block size */
-	u_offset_t filesize;
+	uoff_t filesize;
 {
 	struct direct *dp;
 	struct dinode *ip;
@@ -665,8 +665,8 @@ dsrch(d, size, filesize)
 
 	if (dadded || filesize == 0)
 		return;
-	if (filesize > (u_offset_t)size)
-		filesize = (u_offset_t)size;
+	if (filesize > (uoff_t)size)
+		filesize = (uoff_t)size;
 	if (sizeof (dblk) < roundup(filesize, DEV_BSIZE)) {
 		msg(gettext(
 "Inconsistency detected: filesystem block size larger than valid maximum.\n"));
@@ -683,7 +683,7 @@ dsrch(d, size, filesize)
 	    /* LINTED from sizeof check above, roundup() <= max(size_t) */
 	    (size_t)(roundup(filesize, DEV_BSIZE)));
 	loc = 0;
-	while ((u_offset_t)loc < filesize) {
+	while ((uoff_t)loc < filesize) {
 		/*LINTED [dblk is char[], loc (dp->d_reclen) % 4 == 0]*/
 		dp = (struct direct *)(dblk + loc);
 		if (dp->d_reclen == 0) {

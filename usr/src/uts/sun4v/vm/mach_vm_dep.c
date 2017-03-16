@@ -469,7 +469,7 @@ contig_mem_span_alloc(vmem_t *vmp, size_t size, int vmflag)
 	if (vmflag & VM_NORELOC)
 		pgflags |= PG_NORELOC;
 
-	ppl = page_create_va_large(&kvp, (u_offset_t)(uintptr_t)addr, size,
+	ppl = page_create_va_large(&kvp, (uoff_t)(uintptr_t)addr, size,
 	    pgflags, &kvseg, addr, NULL);
 
 	if (ppl == NULL) {
@@ -589,14 +589,14 @@ contig_mem_span_free(vmem_t *vmp, void *inaddr, size_t size)
 	hat_unload(kas.a_hat, addr, size, HAT_UNLOAD_UNLOCK);
 
 	for (eaddr = addr + size; addr < eaddr; addr += PAGESIZE) {
-		pp = page_find(&kvp, (u_offset_t)(uintptr_t)addr);
+		pp = page_find(&kvp, (uoff_t)(uintptr_t)addr);
 		if (pp == NULL) {
 			panic("contig_mem_span_free: page not found");
 		}
 		if (!page_tryupgrade(pp)) {
 			page_unlock(pp);
 			pp = page_lookup(&kvp,
-			    (u_offset_t)(uintptr_t)addr, SE_EXCL);
+			    (uoff_t)(uintptr_t)addr, SE_EXCL);
 			if (pp == NULL)
 				panic("contig_mem_span_free: page not found");
 		}

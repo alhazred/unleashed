@@ -143,7 +143,7 @@ extern int pc_blkatoff(struct pcnode *, offset_t, struct buf **,
 	struct pcdir **);
 extern int pc_truncate(struct pcnode *, uint_t);
 extern int pc_fileclsize(struct pcfs *, pc_cluster32_t, pc_cluster32_t *);
-extern int pcfs_putapage(struct vnode *, page_t *, u_offset_t *, size_t *, int,
+extern int pcfs_putapage(struct vnode *, page_t *, uoff_t *, size_t *, int,
 	struct cred *);
 extern void pc_badfs(struct pcfs *);
 

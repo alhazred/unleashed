@@ -386,7 +386,7 @@ mmrw(dev_t dev, struct uio *uio, enum uio_rw rw, cred_t *cred)
 			}
 			memlist_read_unlock();
 
-			v = BTOP((u_offset_t)uio->uio_loffset);
+			v = BTOP((uoff_t)uio->uio_loffset);
 			error = mmio(uio, rw, v,
 			    uio->uio_loffset & PAGEOFFSET, 0, NULL);
 			break;

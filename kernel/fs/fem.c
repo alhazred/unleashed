@@ -1455,7 +1455,7 @@ vhead_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
 }
 
 static int
-vhead_pageio(vnode_t *vp, struct page *pp, u_offset_t io_off,
+vhead_pageio(vnode_t *vp, struct page *pp, uoff_t io_off,
 	size_t io_len, int flags, cred_t *cr, caller_context_t *ct)
 {
 	femarg_t	farg;
@@ -2598,7 +2598,7 @@ vnext_pathconf(femarg_t *vf, int cmd, ulong_t *valp, cred_t *cr,
 }
 
 int
-vnext_pageio(femarg_t *vf, struct page *pp, u_offset_t io_off,
+vnext_pageio(femarg_t *vf, struct page *pp, uoff_t io_off,
 	size_t io_len, int flags, cred_t *cr, caller_context_t *ct)
 {
 	int (*func)() = NULL;

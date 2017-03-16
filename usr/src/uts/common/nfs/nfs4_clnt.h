@@ -245,7 +245,7 @@ enum ioqtype4 {
 
 struct nfs4_async_read_req {
 	void (*readahead)();		/* pointer to readahead function */
-	u_offset_t blkoff;		/* offset in file */
+	uoff_t blkoff;			/* offset in file */
 	struct seg *seg;		/* segment to do i/o to */
 	caddr_t addr;			/* address to do i/o to */
 };
@@ -253,7 +253,7 @@ struct nfs4_async_read_req {
 struct nfs4_pageio_req {
 	int (*pageio)();		/* pointer to pageio function */
 	page_t *pp;			/* page list */
-	u_offset_t io_off;		/* offset in file */
+	uoff_t io_off;			/* offset in file */
 	uint_t io_len;			/* size of request */
 	int flags;
 };
@@ -1488,23 +1488,23 @@ extern void	nfs4_async_manager(struct vfs *);
 extern void	nfs4_async_manager_stop(struct vfs *);
 extern void	nfs4_async_stop(struct vfs *);
 extern int	nfs4_async_stop_sig(struct vfs *);
-extern int	nfs4_async_readahead(vnode_t *, u_offset_t, caddr_t,
+extern int	nfs4_async_readahead(vnode_t *, uoff_t, caddr_t,
 				struct seg *, cred_t *,
-				void (*)(vnode_t *, u_offset_t,
+				void (*)(vnode_t *, uoff_t,
 				caddr_t, struct seg *, cred_t *));
-extern int	nfs4_async_putapage(vnode_t *, page_t *, u_offset_t, size_t,
+extern int	nfs4_async_putapage(vnode_t *, page_t *, uoff_t, size_t,
 				int, cred_t *, int (*)(vnode_t *, page_t *,
-				u_offset_t, size_t, int, cred_t *));
-extern int	nfs4_async_pageio(vnode_t *, page_t *, u_offset_t, size_t,
+				uoff_t, size_t, int, cred_t *));
+extern int	nfs4_async_pageio(vnode_t *, page_t *, uoff_t, size_t,
 				int, cred_t *, int (*)(vnode_t *, page_t *,
-				u_offset_t, size_t, int, cred_t *));
+				uoff_t, size_t, int, cred_t *));
 extern void	nfs4_async_commit(vnode_t *, page_t *, offset3, count3,
 				cred_t *, void (*)(vnode_t *, page_t *,
 				offset3, count3, cred_t *));
 extern void	nfs4_async_inactive(vnode_t *, cred_t *);
 extern void	nfs4_inactive_thread(mntinfo4_t *mi);
 extern void	nfs4_inactive_otw(vnode_t *, cred_t *);
-extern int	nfs4_putpages(vnode_t *, u_offset_t, size_t, int, cred_t *);
+extern int	nfs4_putpages(vnode_t *, uoff_t, size_t, int, cred_t *);
 
 extern int	nfs4_setopts(vnode_t *, model_t, struct nfs_args *);
 extern void	nfs4_mnt_kstat_init(struct vfs *);
@@ -1521,7 +1521,7 @@ extern void	nfs4_attr_cache(vnode_t *, nfs4_ga_res_t *,
 				hrtime_t, cred_t *, int,
 				change_info4 *);
 extern void	nfs4_purge_rddir_cache(vnode_t *);
-extern void	nfs4_invalidate_pages(vnode_t *, u_offset_t, cred_t *);
+extern void	nfs4_invalidate_pages(vnode_t *, uoff_t, cred_t *);
 extern void	nfs4_purge_caches(vnode_t *, int, cred_t *, int);
 extern void	nfs4_purge_stale_fh(int, vnode_t *, cred_t *);
 extern void	nfs4_flush_pages(vnode_t *vp, cred_t *cr);
@@ -1549,7 +1549,7 @@ extern void	save_mnt_secinfo(servinfo4_t *);
 extern void	check_mnt_secinfo(servinfo4_t *, vnode_t *);
 extern int	vattr_to_fattr4(vattr_t *, vsecattr_t *, fattr4 *, int,
 				enum nfs_opnum4, bitmap4 supp_mask);
-extern int	nfs4_putapage(vnode_t *, page_t *, u_offset_t *, size_t *,
+extern int	nfs4_putapage(vnode_t *, page_t *, uoff_t *, size_t *,
 			int, cred_t *);
 extern void	nfs4_write_error(vnode_t *, int, cred_t *);
 extern void	nfs4_lockcompletion(vnode_t *, int);
@@ -1933,7 +1933,7 @@ extern uint64_t		nfs4_get_new_oo_name(void);
 extern nfs4_open_owner_t *find_open_owner(cred_t *, int, mntinfo4_t *);
 extern nfs4_open_owner_t *find_open_owner_nolock(cred_t *, int, mntinfo4_t *);
 extern void	nfs4frlock(nfs4_lock_call_type_t, vnode_t *, int, flock64_t *,
-			int, u_offset_t, cred_t *, nfs4_error_t *,
+			int, uoff_t, cred_t *, nfs4_error_t *,
 			nfs4_lost_rqst_t *, int *);
 extern void	nfs4open_dg_save_lost_rqst(int, nfs4_lost_rqst_t *,
 		    nfs4_open_owner_t *, nfs4_open_stream_t *, cred_t *,

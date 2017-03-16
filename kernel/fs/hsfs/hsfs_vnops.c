@@ -141,11 +141,11 @@ extern int use_rrip_inodes;
 static int	freebehind = 1;
 static int	smallfile = 0;
 static int	cache_read_ahead = 0;
-static u_offset_t smallfile64 = 32 * 1024;
+static uoff_t smallfile64 = 32 * 1024;
 #define	SMALLFILE1_D 1000
 #define	SMALLFILE2_D 10
-static u_offset_t smallfile1 = 32 * 1024;
-static u_offset_t smallfile2 = 32 * 1024;
+static uoff_t smallfile1 = 32 * 1024;
+static uoff_t smallfile2 = 32 * 1024;
 static clock_t smallfile_update = 0; /* when to recompute */
 static uint_t smallfile1_d = SMALLFILE1_D;
 static uint_t smallfile2_d = SMALLFILE2_D;
@@ -269,7 +269,7 @@ hsfs_read(struct vnode *vp,
 		    hp->hs_ra_bytes > 0;
 
 		base = segmap_getmapflt(segkmap, vp,
-		    (u_offset_t)uiop->uio_loffset, n, 1, S_READ);
+		    (uoff_t)uiop->uio_loffset, n, 1, S_READ);
 
 		error = uiomove(base + mapon, n, UIO_READ, uiop);
 
@@ -796,7 +796,7 @@ hsfs_ra_task(void *arg)
 static int
 hsfs_getpage_ra(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	struct seg *seg,
 	caddr_t addr,
 	struct hsnode *hp,
@@ -829,7 +829,7 @@ hsfs_getpage_ra(
 	uint_t	extension;
 	int	remainder;	/* must be signed */
 	diskaddr_t driver_block;
-	u_offset_t io_off_tmp;
+	uoff_t io_off_tmp;
 	ksema_t	*fio_done;
 	struct hio_info *info;
 	size_t len;
@@ -895,7 +895,7 @@ hsfs_getpage_ra(
 	/* check for truncation */
 	/*
 	 * xxx Clean up and return EIO instead?
-	 * xxx Ought to go to u_offset_t for everything, but we
+	 * xxx Ought to go to uoff_t for everything, but we
 	 * xxx call lots of things that want uint_t arguments.
 	 */
 	ASSERT(io_off == io_off_tmp);
@@ -1084,7 +1084,7 @@ hsfs_getpage_ra(
 static int
 hsfs_getapage(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	uint_t *protp,
 	struct page *pl[],
@@ -1125,7 +1125,7 @@ hsfs_getapage(
 	int	chunk_data_bytes;
 	int	xarsiz;
 	diskaddr_t driver_block;
-	u_offset_t io_off_tmp;
+	uoff_t io_off_tmp;
 	ksema_t *fio_done;
 	int	calcdone;
 
@@ -1257,7 +1257,7 @@ again:
 		/* check for truncation */
 		/*
 		 * xxx Clean up and return EIO instead?
-		 * xxx Ought to go to u_offset_t for everything, but we
+		 * xxx Ought to go to uoff_t for everything, but we
 		 * xxx call lots of things that want uint_t arguments.
 		 */
 		ASSERT(io_off == io_off_tmp);
@@ -1519,7 +1519,7 @@ again:
 		/* LINTED (plsz is unsigned) */
 		for (soff = off + PAGESIZE; plsz > 0;
 		    soff += PAGESIZE, plsz -= PAGESIZE) {
-			pp = page_lookup_nowait(vp, (u_offset_t)soff,
+			pp = page_lookup_nowait(vp, (uoff_t)soff,
 			    SE_SHARED);
 			if (pp == NULL)
 				break;
@@ -1666,7 +1666,7 @@ int
 hsfs_putapage(
 	vnode_t		*vp,
 	page_t		*pp,
-	u_offset_t	*offp,
+	uoff_t	*offp,
 	size_t		*lenp,
 	int		flags,
 	cred_t		*cr)

@@ -460,7 +460,7 @@ kvm_physaddr(kvm_t *kd, struct as *as, uintptr_t addr)
 	} else {
 		if ((off = kvm_lookup(kd, as, addr)) != 0) {
 			long pfn_index =
-			    (u_offset_t)(off - kd->kvm_dump.dump_data) >>
+			    (uoff_t)(off - kd->kvm_dump.dump_data) >>
 			    kd->kvm_dump.dump_pageshift;
 			return (((uint64_t)kd->kvm_pfn[pfn_index] <<
 			    kd->kvm_dump.dump_pageshift) +

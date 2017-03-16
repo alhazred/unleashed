@@ -1441,10 +1441,10 @@ fifo_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 	 */
 	if (vp->v_stream && (fnp->fn_flag & FIFOISOPEN)) {
 		if ((fnp->fn_flag & FIFOFAST)) {
-			vap->va_size = (u_offset_t)fnp->fn_count;
+			vap->va_size = (uoff_t)fnp->fn_count;
 		} else {
 			qp = RD((strvp2wq(vp)));
-			vap->va_size = (u_offset_t)qp->q_count;
+			vap->va_size = (uoff_t)qp->q_count;
 			if (qp->q_nband != 0) {
 				mutex_enter(QLOCK(qp));
 				for (bandp = qp->q_bandp; bandp;
@@ -1455,7 +1455,7 @@ fifo_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 		}
 		vap->va_nblocks = (fsblkcnt64_t)btod(vap->va_size);
 	} else {
-		vap->va_size = (u_offset_t)0;
+		vap->va_size = (uoff_t)0;
 		vap->va_nblocks = (fsblkcnt64_t)0;
 	}
 	mutex_exit(&fn_lock->flk_lock);

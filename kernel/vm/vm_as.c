@@ -1544,7 +1544,7 @@ as_map_vnsegs(struct as *as, caddr_t addr, size_t size,
 	int error;
 	struct seg *seg;
 	struct vattr va;
-	u_offset_t eoff;
+	uoff_t eoff;
 	size_t save_size = 0;
 	extern size_t textrepl_size_thresh;
 

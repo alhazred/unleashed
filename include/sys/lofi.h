@@ -253,7 +253,7 @@ struct lofi_state {
 	uint32_t	ls_vp_iocount;	/* # pending I/O requests */
 	boolean_t	ls_vp_closereq;	/* force close requested */
 	boolean_t	ls_vp_ready;	/* is vp ready for use? */
-	u_offset_t	ls_vp_size;
+	uoff_t		ls_vp_size;
 	uint32_t	ls_open_lyr[LOFI_PART_MAX];	/* open count */
 	uint64_t	ls_open_reg[OTYPCNT];		/* bitmask */
 	uint64_t	ls_open_excl;			/* bitmask */
@@ -284,7 +284,7 @@ struct lofi_state {
 	uint64_t	*ls_comp_seg_index; /* array of index entries */
 	caddr_t		ls_comp_index_data; /* index pages loaded from file */
 	uint32_t	ls_comp_index_data_sz;
-	u_offset_t	ls_vp_comp_size; /* actual compressed file size */
+	uoff_t		ls_vp_comp_size; /* actual compressed file size */
 
 	/* pre-allocated list of buffers for compressed segment data */
 	kmutex_t	ls_comp_bufs_lock;
@@ -297,7 +297,7 @@ struct lofi_state {
 
 	/* the following fields are required for encryption support */
 	boolean_t		ls_crypto_enabled;
-	u_offset_t		ls_crypto_offset;	/* crypto meta size */
+	uoff_t			ls_crypto_offset;	/* crypto meta size */
 	struct crypto_meta	ls_crypto;
 	crypto_mechanism_t	ls_mech;	/* for data encr/decr */
 	crypto_key_t		ls_key;		/* for data encr/decr */

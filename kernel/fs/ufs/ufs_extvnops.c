@@ -61,7 +61,7 @@ int evn_ufs_debug = 0;
 int
 ufs_rdwr_data(
 	vnode_t		*vnodep,
-	u_offset_t	offset,
+	uoff_t	offset,
 	size_t		len,
 	fdbuffer_t	*fdbp,
 	int		flags,
@@ -72,7 +72,7 @@ ufs_rdwr_data(
 	struct ufsvfs	*ufsvfsp = ip->i_ufsvfs;
 	struct buf	*bp;
 	krw_t		rwtype = RW_READER;
-	u_offset_t	offset1 = offset;	/* Initial offset */
+	uoff_t	offset1 = offset;	/* Initial offset */
 	size_t		iolen;
 	int		curlen = 0;
 	int		pplen;
@@ -233,7 +233,7 @@ ufs_rdwr_data(
 int
 ufs_alloc_data(
 	vnode_t		*vnodep,
-	u_offset_t	offset,
+	uoff_t	offset,
 	size_t		*len,
 	fdbuffer_t	*fdbp,
 	int		flags,
@@ -242,7 +242,7 @@ ufs_alloc_data(
 	struct inode	*ip = VTOI(vnodep);
 	size_t		done_len, io_len;
 	int		contig;
-	u_offset_t	uoff, io_off;
+	uoff_t	uoff, io_off;
 	int		error = 0;		/* No error occurred */
 	int		offsetn;		/* Start point this IO */
 	int		nbytes;			/* Number bytes in this IO */
@@ -250,7 +250,7 @@ ufs_alloc_data(
 	struct fs	*fs;
 	struct ufsvfs	*ufsvfsp = ip->i_ufsvfs;
 	int		i_size_changed = 0;
-	u_offset_t	old_i_size;
+	uoff_t	old_i_size;
 	struct ulockfs	*ulp;
 	int		trans_size;
 	int		issync;			/* UFS Log transaction */
@@ -303,7 +303,7 @@ ufs_alloc_data(
 	fs = ip->i_fs;
 
 	while (error == 0 && done_len < io_len) {
-		uoff = (u_offset_t)(io_off + done_len);
+		uoff = (uoff_t)(io_off + done_len);
 		offsetn = (int)blkoff(fs, uoff);
 		nbytes = (int)MIN(fs->fs_bsize - offsetn, io_len - done_len);
 

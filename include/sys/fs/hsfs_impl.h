@@ -39,7 +39,7 @@ extern "C" {
  * global routines.
  */
 
-extern int hsfs_putapage(vnode_t *, page_t *, u_offset_t *, size_t *, int,
+extern int hsfs_putapage(vnode_t *, page_t *, uoff_t *, size_t *, int,
 	cred_t *);
 /* read a sector */
 extern int hs_readsector(struct vnode *vp, uint_t secno, uchar_t *ptr);

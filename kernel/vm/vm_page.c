@@ -270,7 +270,7 @@ uint_t  page_create_large_cnt[10];
 #endif
 
 static inline page_t *
-find_page(vnode_t *vnode, u_offset_t off)
+find_page(vnode_t *vnode, uoff_t off)
 {
 	page_t key = {
 		.p_vnode = vnode,
@@ -330,7 +330,7 @@ enum lpap {
 enum lpap lpg_alloc_prefer = LPAP_DEFAULT;
 
 static void page_init_mem_config(void);
-static int page_do_hashin(page_t *, vnode_t *, u_offset_t);
+static int page_do_hashin(page_t *, vnode_t *, uoff_t);
 static void page_do_hashout(page_t *);
 static void page_capture_init();
 int page_capture_take_action(page_t *, uint_t, void *);
@@ -604,7 +604,7 @@ add_physmem(
 		PP_SETFREE(pp);
 		page_clr_all_props(pp);
 		PP_SETAGED(pp);
-		pp->p_offset = (u_offset_t)-1;
+		pp->p_offset = (uoff_t)-1;
 		pp->p_next = pp;
 		pp->p_prev = pp;
 
@@ -689,7 +689,7 @@ add_physmem(
  * list, while a NULL is returned if the page doesn't exist.
  */
 page_t *
-page_lookup(vnode_t *vp, u_offset_t off, se_t se)
+page_lookup(vnode_t *vp, uoff_t off, se_t se)
 {
 	return (page_lookup_create(vp, off, se, NULL, NULL, 0));
 }
@@ -709,7 +709,7 @@ page_lookup(vnode_t *vp, u_offset_t off, se_t se)
 page_t *
 page_lookup_create(
 	vnode_t *vp,
-	u_offset_t off,
+	uoff_t off,
 	se_t se,
 	page_t *newpp,
 	spgcnt_t *nrelocp,
@@ -821,7 +821,7 @@ top:
  * Used while attempting to kluster pages.
  */
 page_t *
-page_lookup_nowait(vnode_t *vp, u_offset_t off, se_t se)
+page_lookup_nowait(vnode_t *vp, uoff_t off, se_t se)
 {
 	page_t		*pp;
 
@@ -861,7 +861,7 @@ page_lookup_nowait(vnode_t *vp, u_offset_t off, se_t se)
  * is typically used by segment SOFTUNLOCK routines.
  */
 page_t *
-page_find(vnode_t *vp, u_offset_t off)
+page_find(vnode_t *vp, uoff_t off)
 {
 	page_t		*pp;
 
@@ -886,7 +886,7 @@ page_find(vnode_t *vp, u_offset_t off)
  * Note: This is virtually identical to page_find.  Can we combine them?
  */
 page_t *
-page_exists(vnode_t *vp, u_offset_t off)
+page_exists(vnode_t *vp, uoff_t off)
 {
 	page_t *page;
 
@@ -915,14 +915,14 @@ page_exists(vnode_t *vp, u_offset_t off)
  * This routine doesn't work for anonymous(swapfs) pages.
  */
 int
-page_exists_physcontig(vnode_t *vp, u_offset_t off, uint_t szc, page_t **ppa)
+page_exists_physcontig(vnode_t *vp, uoff_t off, uint_t szc, page_t **ppa)
 {
 	pgcnt_t pages;
 	pfn_t pfn;
 	page_t *rootpp;
 	pgcnt_t i;
 	pgcnt_t j;
-	u_offset_t save_off = off;
+	uoff_t save_off = off;
 	page_t *pp;
 	uint_t pszc;
 	int loopcnt = 0;
@@ -1151,7 +1151,7 @@ again:
  * or appearing immediately after the return from this routine.
  */
 int
-page_exists_forreal(vnode_t *vp, u_offset_t off, uint_t *szc)
+page_exists_forreal(vnode_t *vp, uoff_t off, uint_t *szc)
 {
 	page_t		*pp;
 	int		rc = 0;
@@ -1593,7 +1593,7 @@ uint_t	pcgs_cagelocked;
 #endif	/* VM_STATS */
 
 static page_t *
-page_create_get_something(vnode_t *vp, u_offset_t off, struct seg *seg,
+page_create_get_something(vnode_t *vp, uoff_t off, struct seg *seg,
     caddr_t vaddr, uint_t flags)
 {
 	uint_t		count;
@@ -1797,7 +1797,7 @@ page_create_get_something(vnode_t *vp, u_offset_t off, struct seg *seg,
  *	 there.
  */
 page_t *
-page_create(vnode_t *vp, u_offset_t off, size_t bytes, uint_t flags)
+page_create(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags)
 {
 	caddr_t random_vaddr;
 	struct seg kseg;
@@ -1967,7 +1967,7 @@ page_alloc_pages(struct vnode *vp, struct seg *seg, caddr_t addr,
  * or fail the requester.
  */
 page_t *
-page_create_va_large(vnode_t *vp, u_offset_t off, size_t bytes, uint_t flags,
+page_create_va_large(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
     struct seg *seg, caddr_t vaddr, void *arg)
 {
 	pgcnt_t		npages;
@@ -2090,7 +2090,7 @@ page_create_va_large(vnode_t *vp, u_offset_t off, size_t bytes, uint_t flags,
 }
 
 page_t *
-page_create_va(vnode_t *vp, u_offset_t off, size_t bytes, uint_t flags,
+page_create_va(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
     struct seg *seg, caddr_t vaddr)
 {
 	page_t		*plist = NULL;
@@ -2359,7 +2359,7 @@ fail:
 		VM_STAT_ADD(page_create_putbacks);
 		PP_SETFREE(npp);
 		PP_SETAGED(npp);
-		npp->p_offset = (u_offset_t)-1;
+		npp->p_offset = (uoff_t)-1;
 		page_list_add(npp, PG_FREE_LIST | PG_LIST_TAIL);
 		page_unlock(npp);
 	}
@@ -2487,7 +2487,7 @@ page_free(page_t *pp, int dontneed)
 		 * Page has no identity, put it on the free list.
 		 */
 		PP_SETAGED(pp);
-		pp->p_offset = (u_offset_t)-1;
+		pp->p_offset = (uoff_t)-1;
 		page_list_add(pp, PG_FREE_LIST | PG_LIST_TAIL);
 		VM_STAT_ADD(pagecnt.pc_free_free);
 	} else {
@@ -2608,7 +2608,7 @@ page_free_pages(page_t *pp)
 		PP_SETFREE(tpp);
 		page_clr_all_props(tpp);
 		PP_SETAGED(tpp);
-		tpp->p_offset = (u_offset_t)-1;
+		tpp->p_offset = (uoff_t)-1;
 		ASSERT(tpp->p_next == tpp);
 		ASSERT(tpp->p_prev == tpp);
 		page_list_concat(&rootpp, &tpp);
@@ -2632,11 +2632,11 @@ int free_pages = 1;
  * find any page we miss in free_vp_pages().
  */
 void
-free_vp_pages(vnode_t *vp, u_offset_t off, size_t len)
+free_vp_pages(vnode_t *vp, uoff_t off, size_t len)
 {
 	page_t *pp;
-	u_offset_t eoff;
-	extern int swap_in_range(vnode_t *, u_offset_t, size_t);
+	uoff_t eoff;
+	extern int swap_in_range(vnode_t *, uoff_t, size_t);
 
 	eoff = off + len;
 
@@ -2931,7 +2931,7 @@ page_destroy_pages(page_t *pp)
 		ASSERT(tpp->p_slckcnt == 0 || panicstr);
 		(void) hat_pageunload(tpp, HAT_FORCE_PGUNLOAD);
 		page_hashout(tpp, NULL);
-		ASSERT(tpp->p_offset == (u_offset_t)-1);
+		ASSERT(tpp->p_offset == (uoff_t)-1);
 		if (tpp->p_lckcnt != 0) {
 			pglcks++;
 			tpp->p_lckcnt = 0;
@@ -2986,7 +2986,7 @@ page_destroy_free(page_t *pp)
 
 	page_hashout(pp, NULL);
 	ASSERT(pp->p_vnode == NULL);
-	ASSERT(pp->p_offset == (u_offset_t)-1);
+	ASSERT(pp->p_offset == (uoff_t)-1);
 
 	PP_SETAGED(pp);
 	page_list_add(pp, PG_FREE_LIST | PG_LIST_TAIL);
@@ -3013,7 +3013,7 @@ page_destroy_free(page_t *pp)
  * caller 2 tries to rename B to A.
  */
 void
-page_rename(page_t *opp, vnode_t *vp, u_offset_t off)
+page_rename(page_t *opp, vnode_t *vp, uoff_t off)
 {
 	page_t		*pp;
 	int		olckcnt = 0;
@@ -3174,7 +3174,7 @@ top:
  * Returns 1 on success and 0 on failure.
  */
 static int
-page_do_hashin(page_t *page, vnode_t *vnode, u_offset_t offset)
+page_do_hashin(page_t *page, vnode_t *vnode, uoff_t offset)
 {
 	avl_index_t where;
 	page_t **listp;
@@ -3204,7 +3204,7 @@ page_do_hashin(page_t *page, vnode_t *vnode, u_offset_t offset)
 	 */
 	if (avl_find(&vnode->v_pagecache, page, &where) != NULL) {
 		page->p_vnode = NULL;
-		page->p_offset = (u_offset_t)(-1);
+		page->p_offset = (uoff_t)(-1);
 		return (0);
 	}
 
@@ -3230,7 +3230,7 @@ page_do_hashin(page_t *page, vnode_t *vnode, u_offset_t offset)
  * If hold is passed in, it is not dropped.
  */
 int
-page_hashin(page_t *pp, vnode_t *vp, u_offset_t offset, kmutex_t *hold)
+page_hashin(page_t *pp, vnode_t *vp, uoff_t offset, kmutex_t *hold)
 {
 	int rc;
 
@@ -3282,7 +3282,7 @@ page_do_hashout(page_t *page)
 	page_clr_all_props(page);
 	PP_CLRSWAP(page);
 	page->p_vnode = NULL;
-	page->p_offset = (u_offset_t)-1;
+	page->p_offset = (uoff_t)-1;
 	page->p_fsdata = 0;
 }
 
@@ -4064,7 +4064,7 @@ page_busy(int cleanit)
 	page_t *page0 = page_first();
 	page_t *pp = page0;
 	pgcnt_t nppbusy = 0;
-	u_offset_t off;
+	uoff_t off;
 
 	do {
 		vnode_t *vp = pp->p_vnode;
@@ -4147,7 +4147,7 @@ top:
 	pp = page0 = page_first();
 	do {
 		struct vnode	*vp;
-		u_offset_t	offset;
+		uoff_t	offset;
 		int		mod;
 
 		/*
@@ -4300,7 +4300,7 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	old->p_list.vnode.prev = NULL;
 	old->p_vnode = NULL;
 	PP_CLRSWAP(old);
-	old->p_offset = (u_offset_t)-1;
+	old->p_offset = (uoff_t)-1;
 	page_clr_all_props(old);
 
 	/*
@@ -4325,7 +4325,7 @@ void
 page_relocate_hash(page_t *pp_new, page_t *pp_old)
 {
 	vnode_t *vp = pp_old->p_vnode;
-	u_offset_t off = pp_old->p_offset;
+	uoff_t off = pp_old->p_offset;
 
 	/*
 	 * Rehash two pages
@@ -5073,13 +5073,13 @@ page_demote_vp_pages(page_t *pp)
 void
 page_mark_migrate(struct seg *seg, caddr_t addr, size_t len,
     struct anon_map *amp, ulong_t anon_index, vnode_t *vp,
-    u_offset_t vnoff, int rflag)
+    uoff_t vnoff, int rflag)
 {
 	struct anon	*ap;
 	vnode_t		*curvp;
 	lgrp_t		*from;
 	pgcnt_t		nlocked;
-	u_offset_t	off;
+	uoff_t	off;
 	pfn_t		pfn;
 	size_t		pgsz;
 	size_t		segpgsz;

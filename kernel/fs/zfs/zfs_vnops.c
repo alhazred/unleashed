@@ -4157,7 +4157,7 @@ top:
  */
 /* ARGSUSED */
 static int
-zfs_null_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp,
+zfs_null_putapage(vnode_t *vp, page_t *pp, uoff_t *offp,
     size_t *lenp, int flags, cred_t *cr)
 {
 	pvn_write_done(pp, B_INVAL|B_FORCE|B_ERROR);
@@ -4183,13 +4183,13 @@ zfs_null_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp,
  */
 /* ARGSUSED */
 static int
-zfs_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp,
+zfs_putapage(vnode_t *vp, page_t *pp, uoff_t *offp,
     size_t *lenp, int flags, cred_t *cr)
 {
 	znode_t		*zp = VTOZ(vp);
 	zfsvfs_t	*zfsvfs = zp->z_zfsvfs;
 	dmu_tx_t	*tx;
-	u_offset_t	off, koff;
+	uoff_t	off, koff;
 	size_t		len, klen;
 	int		err;
 
@@ -4202,7 +4202,7 @@ zfs_putapage(vnode_t *vp, page_t *pp, u_offset_t *offp,
 	 */
 	if (off < zp->z_size && zp->z_blksz > PAGESIZE) {
 		klen = P2ROUNDUP((ulong_t)zp->z_blksz, PAGESIZE);
-		koff = ISP2(klen) ? P2ALIGN(off, (u_offset_t)klen) : 0;
+		koff = ISP2(klen) ? P2ALIGN(off, (uoff_t)klen) : 0;
 		ASSERT(koff <= zp->z_size);
 		if (koff + klen > zp->z_size)
 			klen = P2ROUNDUP(zp->z_size - koff, (uint64_t)PAGESIZE);
@@ -4307,7 +4307,7 @@ zfs_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
 	zfsvfs_t	*zfsvfs = zp->z_zfsvfs;
 	page_t		*pp;
 	size_t		io_len;
-	u_offset_t	io_off;
+	uoff_t	io_off;
 	uint_t		blksz;
 	rl_t		*rl;
 	int		error = 0;
@@ -4332,7 +4332,7 @@ zfs_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
 	 */
 	blksz = zp->z_blksz;
 	if (ISP2(blksz))
-		io_off = P2ALIGN_TYPED(off, blksz, u_offset_t);
+		io_off = P2ALIGN_TYPED(off, blksz, uoff_t);
 	else
 		io_off = 0;
 	if (len > 0 && ISP2(blksz))
@@ -4506,13 +4506,13 @@ zfs_frlock(vnode_t *vp, int cmd, flock64_t *bfp, int flag, offset_t offset,
  * lock to prevent access by other threads while they are being filled.
  */
 static int
-zfs_fillpage(vnode_t *vp, u_offset_t off, struct seg *seg,
+zfs_fillpage(vnode_t *vp, uoff_t off, struct seg *seg,
     caddr_t addr, page_t *pl[], size_t plsz, enum seg_rw rw)
 {
 	znode_t *zp = VTOZ(vp);
 	page_t *pp, *cur_pp;
 	objset_t *os = zp->z_zfsvfs->z_os;
-	u_offset_t io_off, total;
+	uoff_t io_off, total;
 	size_t io_len;
 	int err;
 
@@ -4742,7 +4742,7 @@ zfs_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 	}
 
 	vn_a.vp = vp;
-	vn_a.offset = (u_offset_t)off;
+	vn_a.offset = (uoff_t)off;
 	vn_a.type = flags & MAP_TYPE;
 	vn_a.prot = prot;
 	vn_a.maxprot = maxprot;

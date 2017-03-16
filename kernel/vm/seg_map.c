@@ -80,7 +80,7 @@ static int	segmap_checkprot(struct seg *seg, caddr_t addr, size_t len,
 static int	segmap_kluster(struct seg *seg, caddr_t addr, ssize_t);
 static int	segmap_getprot(struct seg *seg, caddr_t addr, size_t len,
 			uint_t *protv);
-static u_offset_t	segmap_getoffset(struct seg *seg, caddr_t addr);
+static uoff_t	segmap_getoffset(struct seg *seg, caddr_t addr);
 static int	segmap_gettype(struct seg *seg, caddr_t addr);
 static int	segmap_getvp(struct seg *seg, caddr_t addr, struct vnode **vpp);
 static void	segmap_dump(struct seg *seg);
@@ -91,7 +91,7 @@ static void	segmap_badop(void);
 static int	segmap_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp);
 
 /* segkpm support */
-static caddr_t	segmap_pagecreate_kpm(struct seg *, vnode_t *, u_offset_t,
+static caddr_t	segmap_pagecreate_kpm(struct seg *, vnode_t *, uoff_t,
 			struct smap *, enum seg_rw);
 struct smap	*get_smap_kpm(caddr_t, page_t **);
 
@@ -127,7 +127,7 @@ static void	segmap_unlock(struct hat *hat, struct seg *seg, caddr_t addr,
 			size_t len, enum seg_rw rw, struct smap *smp);
 static void	segmap_smapadd(struct smap *smp);
 static struct smap *segmap_hashin(struct smap *smp, struct vnode *vp,
-			u_offset_t off, int hashid);
+			uoff_t off, int hashid);
 static void	segmap_hashout(struct smap *smp);
 
 
@@ -491,7 +491,7 @@ segmap_unlock(
 {
 	page_t *pp;
 	caddr_t adr;
-	u_offset_t off;
+	uoff_t off;
 	struct vnode *vp;
 	kmutex_t *smtx;
 
@@ -512,7 +512,7 @@ segmap_unlock(
 	}
 
 	vp = smp->sm_vp;
-	off = smp->sm_off + (u_offset_t)((uintptr_t)addr & MAXBOFFSET);
+	off = smp->sm_off + (uoff_t)((uintptr_t)addr & MAXBOFFSET);
 
 	hat_unlock(hat, addr, P2ROUNDUP(len, PAGESIZE));
 	for (adr = addr; adr < addr + len; adr += PAGESIZE, off += PAGESIZE) {
@@ -545,7 +545,7 @@ segmap_unlock(
 		 * Large Files: Following assertion is to verify
 		 * the correctness of the cast to (int) above.
 		 */
-		ASSERT((u_offset_t)(off - smp->sm_off) <= INT_MAX);
+		ASSERT((uoff_t)(off - smp->sm_off) <= INT_MAX);
 		smtx = SMAPMTX(smp);
 		mutex_enter(smtx);
 		if (smp->sm_bitmap & bitmask) {
@@ -579,13 +579,13 @@ segmap_fault(
 	struct smap *smp;
 	page_t *pp, **ppp;
 	struct vnode *vp;
-	u_offset_t off;
+	uoff_t off;
 	page_t *pl[MAXPPB + 1];
 	uint_t prot;
-	u_offset_t addroff;
+	uoff_t addroff;
 	caddr_t adr;
 	int err;
-	u_offset_t sm_off;
+	uoff_t sm_off;
 	int hat_flag;
 
 	if (segmap_kpm && IS_KPM_ADDR(addr)) {
@@ -632,7 +632,7 @@ segmap_fault(
 
 		ASSERT(smp->sm_refcnt > 0);
 
-		addroff = (u_offset_t)((uintptr_t)addr & MAXBOFFSET);
+		addroff = (uoff_t)((uintptr_t)addr & MAXBOFFSET);
 		if (addroff + len > MAXBSIZE)
 			panic("segmap_fault: endaddr %p exceeds MAXBSIZE chunk",
 			    (void *)(addr + len));
@@ -669,7 +669,7 @@ segmap_fault(
 
 	ASSERT(smp->sm_refcnt > 0);
 
-	addroff = (u_offset_t)((uintptr_t)addr & MAXBOFFSET);
+	addroff = (uoff_t)((uintptr_t)addr & MAXBOFFSET);
 	if (addroff + len > MAXBSIZE) {
 		panic("segmap_fault: endaddr %p "
 		    "exceeds MAXBSIZE chunk", (void *)(addr + len));
@@ -702,7 +702,7 @@ segmap_fault(
 	 */
 	ppp = pl;
 	while ((pp = *ppp++) != NULL) {
-		u_offset_t poff;
+		uoff_t poff;
 		ASSERT(pp->p_vnode == vp);
 		hat_flag = HAT_LOAD;
 
@@ -756,7 +756,7 @@ segmap_faulta(struct seg *seg, caddr_t addr)
 {
 	struct smap *smp;
 	struct vnode *vp;
-	u_offset_t off;
+	uoff_t off;
 	int err;
 
 	if (segmap_kpm && IS_KPM_ADDR(addr)) {
@@ -840,14 +840,14 @@ segmap_getprot(struct seg *seg, caddr_t addr, size_t len, uint_t *protv)
 	return (0);
 }
 
-static u_offset_t
+static uoff_t
 segmap_getoffset(struct seg *seg, caddr_t addr)
 {
 	struct segmap_data *smd = (struct segmap_data *)seg->s_data;
 
 	ASSERT(seg->s_as && RW_READ_HELD(&seg->s_as->a_lock));
 
-	return ((u_offset_t)smd->smd_sm->sm_off + (addr - seg->s_base));
+	return ((uoff_t)smd->smd_sm->sm_off + (addr - seg->s_base));
 }
 
 /*ARGSUSED*/
@@ -963,7 +963,7 @@ segmap_smapadd(struct smap *smp)
 
 
 static struct smap *
-segmap_hashin(struct smap *smp, struct vnode *vp, u_offset_t off, int hashid)
+segmap_hashin(struct smap *smp, struct vnode *vp, uoff_t off, int hashid)
 {
 	struct smap **hpp;
 	struct smap *tmp;
@@ -1028,7 +1028,7 @@ segmap_hashout(struct smap *smp)
 	struct vnode *vp;
 	kmutex_t *mtx;
 	int hashid;
-	u_offset_t off;
+	uoff_t off;
 
 	ASSERT(MUTEX_HELD(SMAPMTX(smp)));
 
@@ -1059,7 +1059,7 @@ segmap_hashout(struct smap *smp)
 	mutex_exit(mtx);
 
 	smp->sm_vp = NULL;
-	smp->sm_off = (u_offset_t)0;
+	smp->sm_off = (uoff_t)0;
 
 }
 
@@ -1068,9 +1068,9 @@ segmap_hashout(struct smap *smp)
  * pages.
  */
 void
-segmap_pagefree(struct vnode *vp, u_offset_t off)
+segmap_pagefree(struct vnode *vp, uoff_t off)
 {
-	u_offset_t pgoff;
+	uoff_t pgoff;
 	page_t  *pp;
 
 	for (pgoff = off; pgoff < off + MAXBSIZE; pgoff += PAGESIZE) {
@@ -1105,7 +1105,7 @@ grab_smp(struct smap *smp, page_t *pp)
 
 	if (smp->sm_vp != (struct vnode *)NULL) {
 		struct vnode	*vp = smp->sm_vp;
-		u_offset_t 	off = smp->sm_off;
+		uoff_t 	off = smp->sm_off;
 		/*
 		 * Destroy old vnode association and
 		 * unload any hardware translations to
@@ -1357,7 +1357,7 @@ segmap_pagecreate(struct seg *seg, caddr_t addr, size_t len, int softlock)
 {
 	struct segmap_data *smd = (struct segmap_data *)seg->s_data;
 	page_t *pp;
-	u_offset_t off;
+	uoff_t off;
 	struct smap *smp;
 	struct vnode *vp;
 	caddr_t eaddr;
@@ -1405,7 +1405,7 @@ segmap_pagecreate(struct seg *seg, caddr_t addr, size_t len, int softlock)
 	ASSERT(smp->sm_refcnt > 0);
 
 	vp = smp->sm_vp;
-	off = smp->sm_off + ((u_offset_t)((uintptr_t)addr & MAXBOFFSET));
+	off = smp->sm_off + ((uoff_t)((uintptr_t)addr & MAXBOFFSET));
 	prot = smd->smd_prot;
 
 	for (; addr < eaddr; addr += PAGESIZE, off += PAGESIZE) {
@@ -1439,7 +1439,7 @@ segmap_pagecreate(struct seg *seg, caddr_t addr, size_t len, int softlock)
 			 * Large Files: The following assertion is to
 			 * verify the cast above.
 			 */
-			ASSERT((u_offset_t)(off - smp->sm_off) <= INT_MAX);
+			ASSERT((uoff_t)(off - smp->sm_off) <= INT_MAX);
 			smtx = SMAPMTX(smp);
 			mutex_enter(smtx);
 			smp->sm_bitmap |= SMAP_BIT_MASK(bitindex);
@@ -1469,7 +1469,7 @@ segmap_pageunlock(struct seg *seg, caddr_t addr, size_t len, enum seg_rw rw)
 	ushort_t	bitmask;
 	page_t		*pp;
 	struct	vnode	*vp;
-	u_offset_t	off;
+	uoff_t	off;
 	caddr_t		eaddr;
 	kmutex_t	*smtx;
 
@@ -1504,7 +1504,7 @@ segmap_pageunlock(struct seg *seg, caddr_t addr, size_t len, enum seg_rw rw)
 	ASSERT(smp->sm_refcnt > 0);
 
 	vp = smp->sm_vp;
-	off = smp->sm_off + ((u_offset_t)((uintptr_t)addr & MAXBOFFSET));
+	off = smp->sm_off + ((uoff_t)((uintptr_t)addr & MAXBOFFSET));
 
 	for (; addr < eaddr; addr += PAGESIZE, off += PAGESIZE) {
 		bitmask = SMAP_BIT_MASK((int)(off - smp->sm_off) >> PAGESHIFT);
@@ -1513,7 +1513,7 @@ segmap_pageunlock(struct seg *seg, caddr_t addr, size_t len, enum seg_rw rw)
 		 * Large Files: Following assertion is to verify
 		 * the correctness of the cast to (int) above.
 		 */
-		ASSERT((u_offset_t)(off - smp->sm_off) <= INT_MAX);
+		ASSERT((uoff_t)(off - smp->sm_off) <= INT_MAX);
 
 		/*
 		 * If the bit corresponding to "off" is set,
@@ -1549,7 +1549,7 @@ segmap_pageunlock(struct seg *seg, caddr_t addr, size_t len, enum seg_rw rw)
 }
 
 caddr_t
-segmap_getmap(struct seg *seg, struct vnode *vp, u_offset_t off)
+segmap_getmap(struct seg *seg, struct vnode *vp, uoff_t off)
 {
 	return (segmap_getmapflt(seg, vp, off, MAXBSIZE, 0, S_OTHER));
 }
@@ -1572,7 +1572,7 @@ caddr_t
 segmap_getmapflt(
 	struct seg *seg,
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	int forcefault,
 	enum seg_rw rw)
@@ -1580,7 +1580,7 @@ segmap_getmapflt(
 	struct smap *smp, *nsmp;
 	extern struct vnode *common_specvp();
 	caddr_t baseaddr;			/* MAXBSIZE aligned */
-	u_offset_t baseoff;
+	uoff_t baseoff;
 	int newslot;
 	caddr_t vaddr;
 	int color, hashid;
@@ -1952,7 +1952,7 @@ segmap_release(struct seg *seg, caddr_t addr, uint_t flags)
 	int 		error;
 	int		bflags = 0;
 	struct vnode	*vp;
-	u_offset_t	offset;
+	uoff_t	offset;
 	kmutex_t	*smtx;
 	int		is_kpm = 0;
 	page_t		*pp;
@@ -2096,7 +2096,7 @@ segmap_dump(struct seg *seg)
 	struct smap *smp, *smp_end;
 	page_t *pp;
 	pfn_t pfn;
-	u_offset_t off;
+	uoff_t off;
 	caddr_t addr;
 
 	smd = (struct segmap_data *)seg->s_data;
@@ -2161,7 +2161,7 @@ segmap_getmemid(struct seg *seg, caddr_t addr, memid_t *memidp)
  */
 
 static caddr_t
-segmap_pagecreate_kpm(struct seg *seg, vnode_t *vp, u_offset_t off,
+segmap_pagecreate_kpm(struct seg *seg, vnode_t *vp, uoff_t off,
 	struct smap *smp, enum seg_rw rw)
 {
 	caddr_t	base;
@@ -2185,7 +2185,7 @@ segmap_pagecreate_kpm(struct seg *seg, vnode_t *vp, u_offset_t off,
 
 		newpage = 1;
 		page_io_unlock(pp);
-		ASSERT((u_offset_t)(off - smp->sm_off) <= INT_MAX);
+		ASSERT((uoff_t)(off - smp->sm_off) <= INT_MAX);
 
 		/*
 		 * Mark this here until the following segmap_pagecreate
@@ -2229,7 +2229,7 @@ get_smap_kpm(caddr_t addr, page_t **ppp)
 {
 	struct smap	*smp;
 	struct vnode	*vp;
-	u_offset_t	offset;
+	uoff_t	offset;
 	caddr_t		baseaddr = (caddr_t)((uintptr_t)addr & MAXBMASK);
 	int		hashid;
 	kmutex_t	*hashmtx;
@@ -2287,7 +2287,7 @@ get_smap_kpm(caddr_t addr, page_t **ppp)
 
 /*ARGSUSED*/
 static caddr_t
-segmap_pagecreate_kpm(struct seg *seg, vnode_t *vp, u_offset_t off,
+segmap_pagecreate_kpm(struct seg *seg, vnode_t *vp, uoff_t off,
 	struct smap *smp, enum seg_rw rw)
 {
 	return (NULL);

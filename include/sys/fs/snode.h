@@ -78,13 +78,13 @@ struct snode {
 	 * Doesn't always need to be updated atomically because it is a hint.
 	 * No lock required.
 	 */
-	u_offset_t s_nextr;		/* next byte read offset (read-ahead) */
+	uoff_t s_nextr;			/* next byte read offset (read-ahead) */
 
 	/* These fields are protected by spec_syncbusy */
 	struct	snode *s_list;		/* used for syncing */
 	/* These fields are protected by s_lock */
 	struct devplcy *s_plcy;		/* device node open policy (cs only) */
-	u_offset_t s_size;		/* block device size in bytes */
+	uoff_t s_size;			/* block device size in bytes */
 	uint_t	s_flag;			/* flags, see below */
 	dev_t	s_fsid;			/* file system identifier */
 	time_t  s_atime;		/* time of last access */

@@ -1084,7 +1084,7 @@ anon_decref(struct anon *ap)
 		 * pending i/o always completes before the swap slot
 		 * is freed.
 		 */
-		pp = page_lookup(vp, (u_offset_t)off, SE_EXCL);
+		pp = page_lookup(vp, (uoff_t)off, SE_EXCL);
 		if (pp != NULL) {
 			VN_DISPOSE(pp, B_INVAL, 0, kcred);
 		}
@@ -1209,7 +1209,7 @@ anon_decref_pages(
 
 		if (ahmpages == NULL) {
 			swap_xlate(ap, &vp, &off);
-			pp = page_lookup(vp, (u_offset_t)off, SE_EXCL);
+			pp = page_lookup(vp, (uoff_t)off, SE_EXCL);
 			if (pp == NULL || pp->p_szc == 0) {
 				VM_STAT_ADD(anonvmstats.decrefpages[3]);
 				ahm = AH_MUTEX(ap->an_vp, ap->an_off);
@@ -1224,7 +1224,7 @@ anon_decref_pages(
 					    PAGESIZE);
 				mutex_exit(ahm);
 				if (pp == NULL) {
-					pp = page_lookup(vp, (u_offset_t)off,
+					pp = page_lookup(vp, (uoff_t)off,
 					    SE_EXCL);
 					ASSERT(pp == NULL || pp->p_szc == 0);
 				}
@@ -1256,7 +1256,7 @@ anon_decref_pages(
 					ASSERT(ap != NULL &&
 					    ap->an_refcnt == 1);
 					swap_xlate(ap, &vp, &off);
-					pp = page_lookup(vp, (u_offset_t)off,
+					pp = page_lookup(vp, (uoff_t)off,
 					    SE_EXCL);
 					if (pp == NULL)
 						panic("anon_decref_pages: "
@@ -1493,7 +1493,7 @@ anon_fill_cow_holes(
 	struct anon_hdr *ahp,
 	ulong_t an_idx,
 	struct vnode *vp,
-	u_offset_t vp_off,
+	uoff_t vp_off,
 	size_t size,
 	uint_t szc,
 	uint_t prot,
@@ -1712,7 +1712,7 @@ anon_disclaim(struct anon_map *amp, ulong_t index, size_t size,
 		 * if we couldn't grab the lock we skip to next page.
 		 */
 		swap_xlate(ap, &vp, &off);
-		pp = page_lookup_nowait(vp, (u_offset_t)off, SE_EXCL);
+		pp = page_lookup_nowait(vp, (uoff_t)off, SE_EXCL);
 		if (pp == NULL) {
 			segadvstat.MADV_FREE_miss.value.ul++;
 			pgcnt = 1;
@@ -1920,7 +1920,7 @@ anon_getpage(
 	 * pages since this routine acts like the fop_getpage
 	 * routine does.
 	 */
-	if (pl != NULL && (pp = page_lookup(vp, (u_offset_t)off, SE_SHARED))) {
+	if (pl != NULL && (pp = page_lookup(vp, (uoff_t)off, SE_SHARED))) {
 		ahm = AH_MUTEX(ap->an_vp, ap->an_off);
 		mutex_enter(ahm);
 		if (ap->an_refcnt == 1)
@@ -1937,7 +1937,7 @@ anon_getpage(
 	 * Simply treat it as a vnode fault on the anon vp.
 	 */
 
-	err = fop_getpage(vp, (u_offset_t)off, PAGESIZE, protp, pl, plsz,
+	err = fop_getpage(vp, (uoff_t)off, PAGESIZE, protp, pl, plsz,
 	    seg, addr, rw, cred, NULL);
 
 	if (err == 0 && pl != NULL) {
@@ -2048,7 +2048,7 @@ anon_map_getpages(
 	if (ap) {
 		uint_t pszc;
 		swap_xlate(ap, &vp, &off);
-		if (page_exists_forreal(vp, (u_offset_t)off, &pszc)) {
+		if (page_exists_forreal(vp, (uoff_t)off, &pszc)) {
 			if (pszc > szc && upsize) {
 				*ppa_szc = MIN(pszc, seg->s_szc);
 				return (-2);
@@ -2169,7 +2169,7 @@ top:
 		 * with S_CREATE to prevent doing IO on the page.
 		 * Similar to the anon_zero case.
 		 */
-		err = swap_getconpage(vp, (u_offset_t)off, PAGESIZE,
+		err = swap_getconpage(vp, (uoff_t)off, PAGESIZE,
 		    NULL, pl, PAGESIZE, conpp, ppa_szc, &nreloc, seg, vaddr,
 		    slotcreate == 1 ? S_CREATE : rw, cred);
 
@@ -2416,7 +2416,7 @@ anon_private(
 	swap_xlate(new, &vp, &off);
 
 	if (oppflags & STEAL_PAGE) {
-		page_rename(opp, vp, (u_offset_t)off);
+		page_rename(opp, vp, (uoff_t)off);
 		pp = opp;
 		hat_setmod(pp);
 
@@ -2432,7 +2432,7 @@ anon_private(
 	 * prevents more than one page from being added to the
 	 * vnode at the same time.
 	 */
-	err = fop_getpage(vp, (u_offset_t)off, PAGESIZE, NULL,
+	err = fop_getpage(vp, (uoff_t)off, PAGESIZE, NULL,
 	    anon_pl, PAGESIZE, seg, addr, S_CREATE, cred, NULL);
 	if (err)
 		goto out;
@@ -2688,7 +2688,7 @@ anon_map_privatepages(
 			conpp = pp;
 		}
 
-		err = swap_getconpage(vp, (u_offset_t)off, PAGESIZE, NULL, pl,
+		err = swap_getconpage(vp, (uoff_t)off, PAGESIZE, NULL, pl,
 		    PAGESIZE, conpp, NULL, &nreloc, seg, vaddr,
 		    S_CREATE, cred);
 
@@ -2952,7 +2952,7 @@ anon_map_createpages(
 				lgrp = lgrp_mem_choose(seg, addr, pgsz);
 
 				pplist = page_get_freelist(
-				    anon_vp, (u_offset_t)0, seg,
+				    anon_vp, (uoff_t)0, seg,
 				    addr, pgsz, 0, lgrp);
 
 				if (pplist == NULL) {
@@ -3434,7 +3434,7 @@ anonmap_free(struct anon_map *amp)
  * to be the largest range which includes empty slots.
  */
 int
-non_anon(struct anon_hdr *ahp, ulong_t anon_idx, u_offset_t *offp,
+non_anon(struct anon_hdr *ahp, ulong_t anon_idx, uoff_t *offp,
 				size_t *lenp)
 {
 	ulong_t i, el;

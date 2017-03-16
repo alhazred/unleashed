@@ -246,7 +246,7 @@ struct fem_head {
 	int (*femop_pathconf)(femarg_t *vf, int cmd, ulong_t *valp,	\
 			cred_t *cr, caller_context_t *ct);		\
 	int (*femop_pageio)(femarg_t *vf, struct page *pp,		\
-			u_offset_t io_off, size_t io_len, int flags,	\
+			uoff_t io_off, size_t io_len, int flags,	\
 			cred_t *cr, caller_context_t *ct);		\
 	int (*femop_dumpctl)(femarg_t *vf, int action, offset_t *blkp,	\
 			caller_context_t *ct);				\
@@ -383,7 +383,7 @@ extern int vnext_dump(femarg_t *vf, caddr_t addr, offset_t lbdn,
     offset_t dblks, caller_context_t *ct);
 extern int vnext_pathconf(femarg_t *vf, int cmd, ulong_t *valp, cred_t *cr,
 			caller_context_t *ct);
-extern int vnext_pageio(femarg_t *vf, struct page *pp, u_offset_t io_off,
+extern int vnext_pageio(femarg_t *vf, struct page *pp, uoff_t io_off,
 			size_t io_len, int flags, cred_t *cr,
 			caller_context_t *ct);
 extern int vnext_dumpctl(femarg_t *vf, int action, offset_t *blkp,

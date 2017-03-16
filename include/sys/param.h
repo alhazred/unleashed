@@ -260,9 +260,9 @@ extern "C" {
 
 /*	64 bit versions of btodb and dbtob */
 #define	lbtodb(bytes)			/* calculates (bytes / DEV_BSIZE) */ \
-	((u_offset_t)(bytes) >> DEV_BSHIFT)
+	((uoff_t)(bytes) >> DEV_BSHIFT)
 #define	ldbtob(db)			/* calculates (db * DEV_BSIZE) */ \
-	((u_offset_t)(db) << DEV_BSHIFT)
+	((uoff_t)(db) << DEV_BSHIFT)
 
 #ifndef _ASM	/* Avoid typedef headaches for assembly files */
 #ifndef NODEV

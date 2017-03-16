@@ -215,7 +215,7 @@ fdb_free(fdbuffer_t *fdb)
  */
 
 void
-fdb_add_hole(fdbuffer_t *fdb, u_offset_t off, size_t len)
+fdb_add_hole(fdbuffer_t *fdb, uoff_t off, size_t len)
 {
 	fdb_holes_t *this_hole;
 
@@ -283,7 +283,7 @@ fdb_zero_holes(fdbuffer_t *fdb)
 		while (fdh) {
 			fdb_holes_t *pfdh = fdh;
 			size_t l = fdh->len;
-			u_offset_t o = fdh->off;
+			uoff_t o = fdh->off;
 			ASSERT(pp);
 
 			do {
@@ -340,7 +340,7 @@ fdb_zero_holes(fdbuffer_t *fdb)
 
 
 buf_t *
-fdb_iosetup(fdbuffer_t *fdb, u_offset_t off, size_t len, struct vnode *vp,
+fdb_iosetup(fdbuffer_t *fdb, uoff_t off, size_t len, struct vnode *vp,
     int b_flags)
 {
 	buf_t *bp;

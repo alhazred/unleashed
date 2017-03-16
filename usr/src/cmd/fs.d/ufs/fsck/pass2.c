@@ -158,7 +158,7 @@ pass2(void)
 			inp->i_isize = (offset_t)roundup(MINDIRSIZE, DIRBLKSIZ);
 			if (reply("FIX") == 1) {
 				dp = ginode(inp->i_number);
-				dp->di_size = (u_offset_t)inp->i_isize;
+				dp->di_size = (uoff_t)inp->i_isize;
 				inodirty();
 			} else {
 				iscorrupt = 1;
@@ -173,7 +173,7 @@ pass2(void)
 			if (preen || reply("ADJUST") == 1) {
 				dp = ginode(inp->i_number);
 				dp->di_size =
-					(u_offset_t)roundup(inp->i_isize,
+					(uoff_t)roundup(inp->i_isize,
 						    (offset_t)DIRBLKSIZ);
 				inodirty();
 				if (preen)
@@ -195,7 +195,7 @@ pass2(void)
 			}
 		}
 		dp = &dino;
-		dp->di_size = (u_offset_t)inp->i_isize;
+		dp->di_size = (uoff_t)inp->i_isize;
 		(void) memmove((void *)&dp->di_db[0], (void *)&inp->i_blks[0],
 			inp->i_blkssize);
 		init_inodesc(&curino);

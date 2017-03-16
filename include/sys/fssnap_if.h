@@ -51,7 +51,7 @@ struct fiosnapcreate {
 	int	backfiledesc;	/* IN  backing store file for snapshot data */
 	uint_t	snapshotnumber;	/* OUT snapshot number created */
 	uint_t	chunksize;	/* IN  chunk size, 0 == fs defined */
-	u_offset_t	maxsize; /* IN  maximum size of backing file */
+	uoff_t	maxsize; /* IN  maximum size of backing file */
 	char	backfilename[MAXPATHLEN];	/* IN  for bookkeeping */
 	int	error;		/* OUT error code */
 };
@@ -60,11 +60,11 @@ struct fiosnapcreate_multi {
 	int	rootfiledesc;	/* IN  fd for root of fs to be snapshotted */
 	uint_t	snapshotnumber;	/* OUT snapshot number created */
 	uint_t	chunksize;	/* IN  chunk size, 0 == fs defined */
-	u_offset_t	maxsize; /* IN  max size of entire backing store */
+	uoff_t	maxsize; /* IN  max size of entire backing store */
 	char	backfilename[MAXPATHLEN];	/* IN  for bookkeeping */
 	int	error;		/* OUT error code */
 	int	backfilecount;	/* IN  number of backing store files */
-	u_offset_t	backfilesize; /* IN maximum size of each backfile */
+	uoff_t	backfilesize; /* IN maximum size of each backfile */
 	int	backfiledesc[1]; /* IN  backing store files for snapshot data */
 };
 
@@ -120,10 +120,10 @@ struct fiosnapdelete {
  * snapshot operations implemented by the loadable snapshot subsystem
  */
 struct fssnap_operations {
-	void *(*fssnap_create)(chunknumber_t, uint_t, u_offset_t,
-	    struct vnode *, int, struct vnode **, char *, u_offset_t);
+	void *(*fssnap_create)(chunknumber_t, uint_t, uoff_t,
+	    struct vnode *, int, struct vnode **, char *, uoff_t);
 	void (*fssnap_set_candidate)(void *, chunknumber_t);
-	int (*fssnap_is_candidate)(void *, u_offset_t);
+	int (*fssnap_is_candidate)(void *, uoff_t);
 	int  (*fssnap_create_done)(void *);
 	int (*fssnap_delete)(void *);
 	void (*fssnap_strategy)(void *, struct buf *);
@@ -136,10 +136,10 @@ extern struct fssnap_operations snapops;
 /* External functions called by file systems that use snapshots */
 extern int fssnap_init(void);
 extern int fssnap_fini(void);
-extern void *fssnap_create(chunknumber_t, uint_t, u_offset_t, struct vnode *,
-    int, struct vnode **, char *, u_offset_t);
+extern void *fssnap_create(chunknumber_t, uint_t, uoff_t, struct vnode *,
+    int, struct vnode **, char *, uoff_t);
 extern void fssnap_set_candidate(void *, chunknumber_t);
-extern int fssnap_is_candidate(void *, u_offset_t);
+extern int fssnap_is_candidate(void *, uoff_t);
 extern int  fssnap_create_done(void *);
 extern int fssnap_delete(void *);
 extern void fssnap_strategy(void *, struct buf *);

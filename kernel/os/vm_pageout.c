@@ -1061,7 +1061,7 @@ recheck:
 	 */
 	if ((ppattr & P_MOD) && pp->p_vnode) {
 		struct vnode *vp = pp->p_vnode;
-		u_offset_t offset = pp->p_offset;
+		uoff_t offset = pp->p_offset;
 
 		/*
 		 * XXX - Test for process being swapped out or about to exit?
@@ -1124,7 +1124,7 @@ recheck:
  * The pageout thread empties this list by initiating i/o operations.
  */
 int
-queue_io_request(vnode_t *vp, u_offset_t off)
+queue_io_request(vnode_t *vp, uoff_t off)
 {
 	struct async_reqs *arg;
 

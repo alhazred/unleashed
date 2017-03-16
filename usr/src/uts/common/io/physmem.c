@@ -380,7 +380,7 @@ physmem_setup_addrs(struct physmem_setup_param *pspp)
 	php->ph_vnode = vp;
 
 	vn_a.vp = vp;
-	vn_a.offset = (u_offset_t)base_pa;
+	vn_a.offset = (uoff_t)base_pa;
 	vn_a.type = MAP_SHARED;
 	vn_a.prot = PROT_ALL;
 	vn_a.maxprot = PROT_ALL;
@@ -491,7 +491,7 @@ physmem_map_addrs(struct physmem_map_param *pmpp)
 	 * asynchronously for us.  Return success in this case.
 	 */
 	if (pp->p_vnode == vp) {
-		ASSERT(pp->p_offset == (u_offset_t)req_paddr);
+		ASSERT(pp->p_offset == (uoff_t)req_paddr);
 		pmpp->ret_va = (uint64_t)(uintptr_t)uvaddr;
 		return (0);
 	}
@@ -530,7 +530,7 @@ map_page_proc(page_t *pp, void *arg, uint_t flags)
 	struct vnode *vp;
 	proc_t *procp = (proc_t *)arg;
 	int ret;
-	u_offset_t paddr = (u_offset_t)ptob(pp->p_pagenum);
+	uoff_t paddr = (uoff_t)ptob(pp->p_pagenum);
 	struct physmem_hash *php;
 
 	ASSERT(pp != NULL);

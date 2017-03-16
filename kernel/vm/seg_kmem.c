@@ -60,7 +60,7 @@
  * into kas.
  *
  * Pages which belong to seg_kmem are hashed into &kvp vnode at
- * an offset equal to (u_offset_t)virt_addr, and have p_lckcnt >= 1.
+ * an offset equal to (uoff_t)virt_addr, and have p_lckcnt >= 1.
  * They must never be paged out since segkmem_fault() is a no-op to
  * prevent recursive faults.
  *
@@ -394,7 +394,7 @@ boot_mapin(caddr_t addr, size_t size)
 			PLCNT_XFER_NORELOC(pp);
 		}
 
-		(void) page_hashin(pp, &kvp, (u_offset_t)(uintptr_t)addr, NULL);
+		(void) page_hashin(pp, &kvp, (uoff_t)(uintptr_t)addr, NULL);
 		pp->p_lckcnt = 1;
 #if defined(__x86)
 		page_downgrade(pp);
@@ -468,7 +468,7 @@ segkmem_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t size,
 	switch (type) {
 	case F_SOFTLOCK:	/* lock down already-loaded translations */
 		for (pg = 0; pg < npages; pg++) {
-			pp = page_lookup(vp, (u_offset_t)(uintptr_t)addr,
+			pp = page_lookup(vp, (uoff_t)(uintptr_t)addr,
 			    SE_SHARED);
 			if (pp == NULL) {
 				/*
@@ -478,7 +478,7 @@ segkmem_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t size,
 				if (!hat_probe(kas.a_hat, addr)) {
 					addr -= PAGESIZE;
 					while (--pg >= 0) {
-						pp = page_find(vp, (u_offset_t)
+						pp = page_find(vp, (uoff_t)
 						    (uintptr_t)addr);
 						if (pp)
 							page_unlock(pp);
@@ -494,7 +494,7 @@ segkmem_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t size,
 		return (0);
 	case F_SOFTUNLOCK:
 		while (npages--) {
-			pp = page_find(vp, (u_offset_t)(uintptr_t)addr);
+			pp = page_find(vp, (uoff_t)(uintptr_t)addr);
 			if (pp)
 				page_unlock(pp);
 			addr += PAGESIZE;
@@ -718,7 +718,7 @@ segkmem_pagelock(struct seg *seg, caddr_t addr, size_t len,
 	}
 
 	for (pg = 0; pg < npages; pg++) {
-		pp = page_lookup(vp, (u_offset_t)(uintptr_t)addr, SE_SHARED);
+		pp = page_lookup(vp, (uoff_t)(uintptr_t)addr, SE_SHARED);
 		if (pp == NULL) {
 			while (--pg >= 0)
 				page_unlock(pplist[pg]);
@@ -780,7 +780,7 @@ const struct seg_ops segkmem_ops = {
 	.incore		= SEGKMEM_BADOP(size_t),
 	.lockop		= SEGKMEM_BADOP(int),
 	.getprot	= SEGKMEM_BADOP(int),
-	.getoffset	= SEGKMEM_BADOP(u_offset_t),
+	.getoffset	= SEGKMEM_BADOP(uoff_t),
 	.gettype	= SEGKMEM_BADOP(int),
 	.getvp		= SEGKMEM_BADOP(int),
 	.advise		= SEGKMEM_BADOP(int),
@@ -838,7 +838,7 @@ segkmem_page_create(void *addr, size_t size, int vmflag, void *arg)
 		pgflags |= PG_NORMALPRI;
 	}
 
-	return (page_create_va(vp, (u_offset_t)(uintptr_t)addr, size,
+	return (page_create_va(vp, (uoff_t)(uintptr_t)addr, size,
 	    pgflags, &kseg, addr));
 }
 
@@ -995,7 +995,7 @@ segkmem_free_vn(vmem_t *vmp, void *inaddr, size_t size, struct vnode *vp,
 
 	for (eaddr = addr + size; addr < eaddr; addr += PAGESIZE) {
 #if defined(__x86)
-		pp = page_find(vp, (u_offset_t)(uintptr_t)addr);
+		pp = page_find(vp, (uoff_t)(uintptr_t)addr);
 		if (pp == NULL)
 			panic("segkmem_free: page not found");
 		if (!page_tryupgrade(pp)) {
@@ -1004,11 +1004,11 @@ segkmem_free_vn(vmem_t *vmp, void *inaddr, size_t size, struct vnode *vp,
 			 * it to drop the lock so we can free this page.
 			 */
 			page_unlock(pp);
-			pp = page_lookup(vp, (u_offset_t)(uintptr_t)addr,
+			pp = page_lookup(vp, (uoff_t)(uintptr_t)addr,
 			    SE_EXCL);
 		}
 #else
-		pp = page_lookup(vp, (u_offset_t)(uintptr_t)addr, SE_EXCL);
+		pp = page_lookup(vp, (uoff_t)(uintptr_t)addr, SE_EXCL);
 #endif
 		if (pp == NULL)
 			panic("segkmem_free: page not found");
@@ -1107,7 +1107,7 @@ segkmem_page_create_large(void *addr, size_t size, int vmflag, void *arg)
 	if (vmflag & VM_NORMALPRI)
 		pgflags |= PG_NORMALPRI;
 
-	return (page_create_va_large(&kvp, (u_offset_t)(uintptr_t)addr, size,
+	return (page_create_va_large(&kvp, (uoff_t)(uintptr_t)addr, size,
 	    pgflags, &kvseg, addr, arg));
 }
 
@@ -1219,7 +1219,7 @@ segkmem_free_one_lp(caddr_t addr, size_t size)
 	hat_unload(kas.a_hat, addr, size, HAT_UNLOAD_UNLOCK);
 
 	for (; pgs_left > 0; addr += PAGESIZE, pgs_left--) {
-		pp = page_lookup(&kvp, (u_offset_t)(uintptr_t)addr, SE_EXCL);
+		pp = page_lookup(&kvp, (uoff_t)(uintptr_t)addr, SE_EXCL);
 		if (pp == NULL)
 			panic("segkmem_free_one_lp: page not found");
 		ASSERT(PAGE_EXCL(pp));

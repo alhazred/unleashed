@@ -500,7 +500,7 @@ struct as;
  */
 
 typedef struct page {
-	u_offset_t	p_offset;	/* offset into vnode for this page */
+	uoff_t		p_offset;	/* offset into vnode for this page */
 	struct vnode	*p_vnode;	/* vnode that this page is named by */
 	selock_t	p_selock;	/* shared/exclusive lock on the page */
 #if defined(_LP64)
@@ -627,45 +627,45 @@ struct lgrp;
 /*
  * Page frame operations.
  */
-page_t	*page_lookup(struct vnode *, u_offset_t, se_t);
-page_t	*page_lookup_create(struct vnode *, u_offset_t, se_t, page_t *,
+page_t	*page_lookup(struct vnode *, uoff_t, se_t);
+page_t	*page_lookup_create(struct vnode *, uoff_t, se_t, page_t *,
 	spgcnt_t *, int);
-page_t	*page_lookup_nowait(struct vnode *, u_offset_t, se_t);
-page_t	*page_find(struct vnode *, u_offset_t);
-page_t	*page_exists(struct vnode *, u_offset_t);
-int	page_exists_physcontig(vnode_t *, u_offset_t, uint_t, page_t *[]);
-int	page_exists_forreal(struct vnode *, u_offset_t, uint_t *);
+page_t	*page_lookup_nowait(struct vnode *, uoff_t, se_t);
+page_t	*page_find(struct vnode *, uoff_t);
+page_t	*page_exists(struct vnode *, uoff_t);
+int	page_exists_physcontig(vnode_t *, uoff_t, uint_t, page_t *[]);
+int	page_exists_forreal(struct vnode *, uoff_t, uint_t *);
 void	page_needfree(spgcnt_t);
-page_t	*page_create(struct vnode *, u_offset_t, size_t, uint_t);
+page_t	*page_create(struct vnode *, uoff_t, size_t, uint_t);
 int	page_alloc_pages(struct vnode *, struct seg *, caddr_t, page_t **,
 	page_t **, uint_t, int, int);
-page_t  *page_create_va_large(vnode_t *vp, u_offset_t off, size_t bytes,
+page_t  *page_create_va_large(vnode_t *vp, uoff_t off, size_t bytes,
 	uint_t flags, struct seg *seg, caddr_t vaddr, void *arg);
-page_t	*page_create_va(struct vnode *, u_offset_t, size_t, uint_t,
+page_t	*page_create_va(struct vnode *, uoff_t, size_t, uint_t,
 	struct seg *, caddr_t);
 int	page_create_wait(pgcnt_t npages, uint_t flags);
 void    page_create_putback(spgcnt_t npages);
 void	page_free(page_t *, int);
 void	page_free_at_startup(page_t *);
 void	page_free_pages(page_t *);
-void	free_vp_pages(struct vnode *, u_offset_t, size_t);
+void	free_vp_pages(struct vnode *, uoff_t, size_t);
 int	page_reclaim(page_t *, kmutex_t *);
 int	page_reclaim_pages(page_t *, kmutex_t *, uint_t);
 void	page_destroy(page_t *, int);
 void	page_destroy_pages(page_t *);
 void	page_destroy_free(page_t *);
-void	page_rename(page_t *, struct vnode *, u_offset_t);
-int	page_hashin(page_t *, struct vnode *, u_offset_t, kmutex_t *);
+void	page_rename(page_t *, struct vnode *, uoff_t);
+int	page_hashin(page_t *, struct vnode *, uoff_t, kmutex_t *);
 void	page_hashout(page_t *, kmutex_t *);
-int	page_num_hashin(pfn_t, struct vnode *, u_offset_t);
+int	page_num_hashin(pfn_t, struct vnode *, uoff_t);
 void	page_add(page_t **, page_t *);
 void	page_add_common(page_t **, page_t *);
 void	page_sub(page_t **, page_t *);
 void	page_sub_common(page_t **, page_t *);
-page_t	*page_get_freelist(struct vnode *, u_offset_t, struct seg *,
+page_t	*page_get_freelist(struct vnode *, uoff_t, struct seg *,
 		caddr_t, size_t, uint_t, struct lgrp *);
 
-page_t	*page_get_cachelist(struct vnode *, u_offset_t, struct seg *,
+page_t	*page_get_cachelist(struct vnode *, uoff_t, struct seg *,
 		caddr_t, uint_t, struct lgrp *);
 #if defined(__i386) || defined(__amd64)
 int	page_chk_freelist(uint_t);
@@ -783,7 +783,7 @@ void page_demote_free_pages(page_t *);
 struct anon_map;
 
 void page_mark_migrate(struct seg *, caddr_t, size_t, struct anon_map *,
-    ulong_t, vnode_t *, u_offset_t, int);
+    ulong_t, vnode_t *, uoff_t, int);
 void page_migrate(struct seg *, caddr_t, page_t **, pgcnt_t);
 
 /*

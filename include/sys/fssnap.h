@@ -122,7 +122,7 @@ typedef struct cow_map {
 	uint_t		cmap_chunksz;	/* granularity of COW operations */
 	chunknumber_t	cmap_chunksperbf; /* chunks in max backing file */
 	chunknumber_t	cmap_nchunks;	/* number of chunks in backing file */
-	u_offset_t	cmap_maxsize;	/* max bytes allowed (0 is no limit) */
+	uoff_t		cmap_maxsize;	/* max bytes allowed (0 is no limit) */
 	size_t		cmap_bmsize;	/* size of bitmaps (in bytes) */
 	caddr_t		cmap_candidate;	/* 1 = block is a candidate for COW */
 	caddr_t		cmap_hastrans;	/* 1 = an entry exists in the table */
@@ -153,7 +153,7 @@ typedef struct cow_map_node {
 typedef struct cow_info {
 	int		cow_backcount;	/* number of backing files */
 	vnode_t		**cow_backfile_array; /* array of backing files */
-	u_offset_t	cow_backfile_sz;	/* max size of a backfile */
+	uoff_t		cow_backfile_sz;	/* max size of a backfile */
 	taskq_t		*cow_taskq;	/* task queue for async writes */
 	struct kstat	*cow_kstat_mntpt;	/* kstat for mount point */
 	struct kstat	*cow_kstat_bfname;	/* kstat for backing file */

@@ -493,7 +493,7 @@ extern zone_key_t nlm_zone_key;
  * NLM interface functions (called directly by
  * either klmmod or klmpos)
  */
-extern int nlm_frlock(struct vnode *, int, struct flock64 *, int, u_offset_t,
+extern int nlm_frlock(struct vnode *, int, struct flock64 *, int, uoff_t,
     struct cred *, struct netobj *, struct flk_callback *, int);
 extern int nlm_shrlock(struct vnode *, int, struct shrlock *, int,
     struct netobj *, int);
@@ -501,7 +501,7 @@ extern int nlm_safemap(const vnode_t *);
 extern int nlm_safelock(vnode_t *, const struct flock64 *, cred_t *);
 extern int nlm_has_sleep(const vnode_t *);
 extern void nlm_register_lock_locally(struct vnode *, struct nlm_host *,
-    struct flock64 *, int, u_offset_t);
+    struct flock64 *, int, uoff_t);
 int nlm_vp_active(const vnode_t *vp);
 void nlm_sysid_free(sysid_t);
 int nlm_vp_active(const vnode_t *);

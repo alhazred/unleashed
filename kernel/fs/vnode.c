@@ -1021,7 +1021,7 @@ top:
 			    CRED(), NULL))) {
 				goto out;
 			}
-			if (vattr.va_size > (u_offset_t)MAXOFF32_T) {
+			if (vattr.va_size > (uoff_t)MAXOFF32_T) {
 				/*
 				 * Large File API - regular open fails
 				 * if FOFFMAX flag is set in file mode
@@ -1444,7 +1444,7 @@ top:
 			 * locks are currently on the file.
 			 */
 			if ((vap->va_mask & AT_SIZE) && in_crit) {
-				u_offset_t offset;
+				uoff_t offset;
 				ssize_t length;
 
 				offset = vap->va_size > vattr.va_size ?
@@ -1500,7 +1500,7 @@ top:
 			    CRED(), NULL))) {
 				goto out;
 			}
-			if ((vattr.va_size > (u_offset_t)MAXOFF32_T)) {
+			if ((vattr.va_size > (uoff_t)MAXOFF32_T)) {
 				error = EOVERFLOW;
 				goto out;
 			}
@@ -4254,7 +4254,7 @@ int
 fop_pageio(
 	vnode_t *vp,
 	struct page *pp,
-	u_offset_t io_off,
+	uoff_t io_off,
 	size_t io_len,
 	int flags,
 	cred_t *cr,

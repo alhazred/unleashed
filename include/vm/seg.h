@@ -129,7 +129,7 @@ struct	seg_ops {
 	int	(*lockop)(struct seg *, caddr_t, size_t, int, int, ulong_t *,
 			size_t);
 	int	(*getprot)(struct seg *, caddr_t, size_t, uint_t *);
-	u_offset_t	(*getoffset)(struct seg *, caddr_t);
+	uoff_t	(*getoffset)(struct seg *, caddr_t);
 	int	(*gettype)(struct seg *, caddr_t);
 	int	(*getvp)(struct seg *, caddr_t, struct vnode **);
 	int	(*advise)(struct seg *, caddr_t, size_t, uint_t);
@@ -260,7 +260,7 @@ extern size_t segop_incore(struct seg *, caddr_t, size_t, char *);
 extern int segop_lockop(struct seg *, caddr_t, size_t, int, int, ulong_t *,
     size_t);
 extern int segop_getprot(struct seg *, caddr_t, size_t, uint_t *);
-extern u_offset_t segop_getoffset(struct seg *, caddr_t);
+extern uoff_t segop_getoffset(struct seg *, caddr_t);
 extern int segop_gettype(struct seg *, caddr_t);
 extern int segop_getvp(struct seg *, caddr_t, struct vnode **);
 extern int segop_advise(struct seg *, caddr_t, size_t, uint_t);

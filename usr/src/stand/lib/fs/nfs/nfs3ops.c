@@ -220,7 +220,7 @@ nfs3getattr(struct nfs_file *nfp, struct vattr *vap)
 	if (vap->va_mask & AT_MODE)
 		vap->va_mode = (mode_t)na->mode;
 	if (vap->va_mask & AT_SIZE)
-		vap->va_size = (u_offset_t)na->size;
+		vap->va_size = (uoff_t)na->size;
 	if (vap->va_mask & AT_NODEID)
 		vap->va_nodeid = (u_longlong_t)na->fileid;
 	if (vap->va_mask & AT_ATIME) {

@@ -357,7 +357,7 @@ void
 est(ip)
 	struct dinode *ip;
 {
-	u_offset_t s, t;
+	uoff_t s, t;
 
 	/*
 	 * ip->di_size is the size of the file in bytes.
@@ -378,7 +378,7 @@ est(ip)
 	t = d_howmany(ip->di_size, (unsigned)tp_bsize);
 	if (s > t)
 		s = t;
-	if (ip->di_size > (u_offset_t)((unsigned)(sblock->fs_bsize) * NDADDR)) {
+	if (ip->di_size > (uoff_t)((unsigned)(sblock->fs_bsize) * NDADDR)) {
 		/* calculate the number of indirect blocks on the dump tape */
 		/* LINTED: spurious complaint sign-extending 32 to 64 bits */
 		s += d_howmany(t -

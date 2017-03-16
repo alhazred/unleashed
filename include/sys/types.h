@@ -231,7 +231,7 @@ typedef union {
 } upad128_t;
 
 typedef	longlong_t	offset_t;
-typedef	u_longlong_t	u_offset_t;
+typedef	u_longlong_t	uoff_t;
 typedef u_longlong_t	len_t;
 typedef	u_longlong_t	diskaddr_t;
 #if (defined(_KERNEL) || defined(_KMEMUSER) || defined(_BOOT))

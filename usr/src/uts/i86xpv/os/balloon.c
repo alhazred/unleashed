@@ -297,7 +297,7 @@ balloon_init_new_pages(mfn_t framelist[], pgcnt_t count)
 	 */
 	for (i = 0; i < metapgs; i++) {
 		page_array[i].p_pagenum = bln_stats.bln_max_pages++;
-		page_array[i].p_offset = (u_offset_t)-1;
+		page_array[i].p_offset = (uoff_t)-1;
 		page_iolock_init(&page_array[i]);
 		rv = page_lock(&page_array[i], SE_EXCL, NULL, P_NO_RECLAIM);
 		ASSERT(rv == 1);
@@ -309,7 +309,7 @@ balloon_init_new_pages(mfn_t framelist[], pgcnt_t count)
 	 */
 	for (i = metapgs; i < num_pages; i++) {
 		page_array[i].p_pagenum = bln_stats.bln_max_pages++;
-		page_array[i].p_offset = (u_offset_t)-1;
+		page_array[i].p_offset = (uoff_t)-1;
 		page_iolock_init(&page_array[i]);
 		rv = page_lock(&page_array[i], SE_EXCL, NULL, P_NO_RECLAIM);
 		ASSERT(rv == 1);

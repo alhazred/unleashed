@@ -2966,7 +2966,7 @@ try_again:
 			ASSERT(PP_ISFREE(pp));
 			ASSERT(PP_ISAGED(pp));
 			ASSERT(pp->p_vnode == NULL);
-			ASSERT(pp->p_offset == (u_offset_t)-1);
+			ASSERT(pp->p_offset == (uoff_t)-1);
 			ASSERT(pp->p_szc == szc);
 			ASSERT(PFN_2_MEM_NODE(pp->p_pagenum) == mnode);
 
@@ -2990,7 +2990,7 @@ try_again:
 				ASSERT(PP_ISFREE(pp));
 				ASSERT(PP_ISAGED(pp));
 				ASSERT(pp->p_vnode == NULL);
-				ASSERT(pp->p_offset == (u_offset_t)-1);
+				ASSERT(pp->p_offset == (uoff_t)-1);
 				ASSERT(pp->p_szc == szc);
 				ASSERT(PFN_2_MEM_NODE(pp->p_pagenum) == mnode);
 
@@ -3722,7 +3722,7 @@ page_chk_freelist(uint_t szc)
 
 /*ARGSUSED*/
 page_t *
-page_get_freelist(struct vnode *vp, u_offset_t off, struct seg *seg,
+page_get_freelist(struct vnode *vp, uoff_t off, struct seg *seg,
 	caddr_t vaddr, size_t size, uint_t flags, struct lgrp *lgrp)
 {
 	struct as	*as = seg->s_as;
@@ -3871,7 +3871,7 @@ pgretry:
 
 /*ARGSUSED*/
 page_t *
-page_get_cachelist(struct vnode *vp, u_offset_t off, struct seg *seg,
+page_get_cachelist(struct vnode *vp, uoff_t off, struct seg *seg,
     caddr_t vaddr, uint_t flags, struct lgrp *lgrp)
 {
 	page_t		*pp;

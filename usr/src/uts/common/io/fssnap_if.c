@@ -59,9 +59,9 @@ struct fssnap_operations snapops = {
 };
 
 void *
-fssnap_create(chunknumber_t nchunks, uint_t chunksz, u_offset_t maxsize,
+fssnap_create(chunknumber_t nchunks, uint_t chunksz, uoff_t maxsize,
     struct vnode *fsvp, int backfilecount, struct vnode **bfvpp, char *backpath,
-    u_offset_t max_backfile_size)
+    uoff_t max_backfile_size)
 {
 	void *snapid = NULL;
 
@@ -80,7 +80,7 @@ fssnap_set_candidate(void *snapshot_id, chunknumber_t chunknumber)
 }
 
 int
-fssnap_is_candidate(void *snapshot_id, u_offset_t off)
+fssnap_is_candidate(void *snapshot_id, uoff_t off)
 {
 	int rc = 0;
 

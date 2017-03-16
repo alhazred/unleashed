@@ -439,7 +439,7 @@ segmf_getprot(struct seg *seg, caddr_t addr, size_t len, uint_t *protv)
 	return (0);
 }
 
-static u_offset_t
+static uoff_t
 segmf_getoffset(struct seg *seg, caddr_t addr)
 {
 	return (addr - seg->s_base);

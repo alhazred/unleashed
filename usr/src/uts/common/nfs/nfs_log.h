@@ -89,7 +89,7 @@ typedef struct nfslog_buffer_header_1 nfslog_buffer_header_1;
 struct nfslog_buffer_header_2 {
 	uint32_t bh_length;		/* Length of this header */
 	rpcvers_t bh_version;		/* Version of buffer contents */
-	u_offset_t bh_offset;		/* offset within file to begin */
+	uoff_t bh_offset;		/* offset within file to begin */
 	uint32_t bh_flags;		/* Optional flags field */
 	timestruc32_t bh_timestamp;	/* When the buffer was created */
 };

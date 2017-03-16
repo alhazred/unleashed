@@ -80,7 +80,7 @@ kmutex_t	dump_lock;		/* lock for dump configuration */
 dumphdr_t	*dumphdr;		/* dump header */
 int		dump_conflags = DUMP_KERNEL; /* dump configuration flags */
 vnode_t		*dumpvp;		/* dump device vnode pointer */
-u_offset_t	dumpvp_size;		/* size of dump device, in bytes */
+uoff_t	dumpvp_size;		/* size of dump device, in bytes */
 char		*dumppath;		/* pathname of dump device */
 int		dump_timeout = 120;	/* timeout for dumping pages */
 int		dump_timeleft;		/* portion of dump_timeout remaining */
@@ -720,7 +720,7 @@ dump_process(pid_t pid)
 void
 dump_summary(void)
 {
-	u_offset_t dumpvp_start;
+	uoff_t dumpvp_start;
 	summary_dump_t sd;
 
 	if (dumpvp == NULL || dumphdr == NULL)
@@ -746,7 +746,7 @@ dump_summary(void)
 void
 dump_ereports(void)
 {
-	u_offset_t dumpvp_start;
+	uoff_t dumpvp_start;
 	erpt_dump_t ed;
 
 	if (dumpvp == NULL || dumphdr == NULL)
@@ -778,7 +778,7 @@ dump_messages(void)
 	log_dump_t ld;
 	mblk_t *mctl, *mdata;
 	queue_t *q, *qlast;
-	u_offset_t dumpvp_start;
+	uoff_t dumpvp_start;
 
 	if (dumpvp == NULL || dumphdr == NULL || log_consq == NULL)
 		return;

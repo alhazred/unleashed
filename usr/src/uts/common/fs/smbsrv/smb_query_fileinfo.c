@@ -375,7 +375,7 @@ smb_query_by_path(smb_request_t *sr, smb_xa_t *xa, uint16_t infolev)
  * exceeds UINT_MAX (32 bit) we return UINT_MAX in the response.
  */
 static uint32_t
-smb_size32(u_offset_t size)
+smb_size32(uoff_t size)
 {
 	return ((size > UINT_MAX) ? UINT_MAX : (uint32_t)size);
 }
@@ -390,7 +390,7 @@ smb_query_encode_response(smb_request_t *sr, smb_xa_t *xa,
     uint16_t infolev, smb_queryinfo_t *qinfo)
 {
 	uint16_t dattr;
-	u_offset_t datasz, allocsz;
+	uoff_t datasz, allocsz;
 	uint32_t status;
 
 	dattr = qinfo->qi_attr.sa_dosattr & FILE_ATTRIBUTE_MASK;
@@ -627,7 +627,7 @@ smb_query_stream_info(smb_request_t *sr, mbuf_chain_t *mbc,
 	uint32_t next_offset;
 	uint32_t stream_nlen;
 	uint32_t pad;
-	u_offset_t datasz, allocsz;
+	uoff_t datasz, allocsz;
 	smb_streaminfo_t *sinfo, *sinfo_next;
 	int rc = 0;
 	boolean_t done = B_FALSE;

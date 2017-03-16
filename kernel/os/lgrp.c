@@ -3540,9 +3540,9 @@ lgrp_privm_policy_set(lgrp_mem_policy_t policy,
  */
 lgrp_mem_policy_info_t *
 lgrp_shm_policy_get(struct anon_map *amp, ulong_t anon_index, vnode_t *vp,
-    u_offset_t vn_off)
+    uoff_t vn_off)
 {
-	u_offset_t		off;
+	uoff_t		off;
 	lgrp_mem_policy_info_t	*policy_info;
 	lgrp_shm_policy_seg_t	*policy_seg;
 	lgrp_shm_locality_t	*shm_locality;
@@ -4066,7 +4066,7 @@ lgrp_shm_policy_concat(avl_tree_t *tree, lgrp_shm_policy_seg_t *seg1,
  */
 static lgrp_shm_policy_seg_t *
 lgrp_shm_policy_split(avl_tree_t *tree, lgrp_shm_policy_seg_t *seg,
-    u_offset_t off)
+    uoff_t off)
 {
 	lgrp_shm_policy_seg_t	*newseg;
 	avl_index_t		where;
@@ -4108,13 +4108,13 @@ lgrp_shm_policy_split(avl_tree_t *tree, lgrp_shm_policy_seg_t *seg,
  */
 int
 lgrp_shm_policy_set(lgrp_mem_policy_t policy, struct anon_map *amp,
-    ulong_t anon_index, vnode_t *vp, u_offset_t vn_off, size_t len)
+    ulong_t anon_index, vnode_t *vp, uoff_t vn_off, size_t len)
 {
-	u_offset_t		eoff;
+	uoff_t		eoff;
 	lgrp_shm_policy_seg_t	*next;
 	lgrp_shm_policy_seg_t	*newseg;
-	u_offset_t		off;
-	u_offset_t		oldeoff;
+	uoff_t		off;
+	uoff_t		oldeoff;
 	lgrp_shm_policy_seg_t	*prev;
 	int			retval;
 	lgrp_shm_policy_seg_t	*seg;

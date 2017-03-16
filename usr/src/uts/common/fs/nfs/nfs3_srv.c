@@ -256,7 +256,7 @@ rfs3_setattr(SETATTR3args *args, SETATTR3res *resp, struct exportinfo *exi,
 	 */
 	if (vp->v_type == VREG && (ava.va_mask & AT_SIZE)) {
 		if (in_crit) {
-			u_offset_t offset;
+			uoff_t offset;
 			ssize_t length;
 
 			if (ava.va_size < bva.va_size) {
@@ -813,7 +813,7 @@ rfs3_read(READ3args *args, READ3res *resp, struct exportinfo *exi,
 	struct iovec iov, *iovp = NULL;
 	int iovcnt;
 	struct uio uio;
-	u_offset_t offset;
+	uoff_t offset;
 	mblk_t *mp = NULL;
 	int in_crit = 0;
 	int need_rwunlock = 0;
@@ -1135,7 +1135,7 @@ rfs3_write(WRITE3args *args, WRITE3res *resp, struct exportinfo *exi,
 	struct vattr bva;
 	struct vattr *avap = NULL;
 	struct vattr ava;
-	u_offset_t rlimit;
+	uoff_t rlimit;
 	struct uio uio;
 	struct iovec iov[MAX_IOVECS];
 	mblk_t *m;
@@ -1270,7 +1270,7 @@ rfs3_write(WRITE3args *args, WRITE3res *resp, struct exportinfo *exi,
 	uio.uio_resid = args->count;
 	uio.uio_llimit = curproc->p_fsz_ctl;
 	rlimit = uio.uio_llimit - args->offset;
-	if (rlimit < (u_offset_t)uio.uio_resid)
+	if (rlimit < (uoff_t)uio.uio_resid)
 		uio.uio_resid = (int)rlimit;
 
 	if (args->stable == UNSTABLE)
@@ -1483,7 +1483,7 @@ rfs3_create(CREATE3args *args, CREATE3res *resp, struct exportinfo *exi,
 				 * Check for NBMAND lock conflicts
 				 */
 				if (!error && nbl_need_check(tvp)) {
-					u_offset_t offset;
+					uoff_t offset;
 					ssize_t len;
 
 					nbl_start_crit(tvp, RW_READER);

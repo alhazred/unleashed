@@ -780,7 +780,7 @@ smb_ofile_seek(
     int32_t		off,
     uint32_t		*retoff)
 {
-	u_offset_t	newoff = 0;
+	uoff_t	newoff = 0;
 	int		rc = 0;
 	smb_attr_t	attr;
 
@@ -794,14 +794,14 @@ smb_ofile_seek(
 		if (off < 0)
 			newoff = 0;
 		else
-			newoff = (u_offset_t)off;
+			newoff = (uoff_t)off;
 		break;
 
 	case SMB_SEEK_CUR:
 		if (off < 0 && (-off) > of->f_seek_pos)
 			newoff = 0;
 		else
-			newoff = of->f_seek_pos + (u_offset_t)off;
+			newoff = of->f_seek_pos + (uoff_t)off;
 		break;
 
 	case SMB_SEEK_END:
@@ -815,7 +815,7 @@ smb_ofile_seek(
 		if (off < 0 && (-off) > attr.sa_vattr.va_size)
 			newoff = 0;
 		else
-			newoff = attr.sa_vattr.va_size + (u_offset_t)off;
+			newoff = attr.sa_vattr.va_size + (uoff_t)off;
 		break;
 
 	default:

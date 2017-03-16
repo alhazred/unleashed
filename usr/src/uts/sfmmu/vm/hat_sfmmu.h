@@ -394,7 +394,7 @@ typedef struct sf_region {
 	caddr_t			rgn_saddr;   /* base addr of attached seg */
 	size_t			rgn_size;    /* size of attached seg */
 	void			*rgn_obj;    /* the underlying object id */
-	u_offset_t		rgn_objoff;  /* offset in the object mapped */
+	uoff_t			rgn_objoff;  /* offset in the object mapped */
 	uchar_t			rgn_perm;    /* PROT_READ/WRITE/EXEC */
 	uchar_t			rgn_pgszc;   /* page size of the region */
 	uchar_t			rgn_flags;   /* region type, free flag */

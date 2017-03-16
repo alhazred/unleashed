@@ -376,7 +376,7 @@ recheck:
 			numdirpasses = 2;
 		}
 	}
-	endsearch = P2ROUNDUP_TYPED(dp->i_size, DIRBLKSIZ, u_offset_t);
+	endsearch = P2ROUNDUP_TYPED(dp->i_size, DIRBLKSIZ, uoff_t);
 	namlen = strlen(namep);
 	last_offset = 0;
 
@@ -1182,7 +1182,7 @@ ufs_dircheckforname(
 		case DNOENT:
 			slotp->status = NONE;
 			slotp->offset = P2ROUNDUP_TYPED(tdp->i_size,
-			    DIRBLKSIZ, u_offset_t);
+			    DIRBLKSIZ, uoff_t);
 			slotp->size = DIRBLKSIZ;
 			slotp->endoff = 0;
 			slotp->cached = 1;
@@ -1233,7 +1233,7 @@ ufs_dircheckforname(
 	/*
 	 * No point in using i_diroff since we must search whole directory
 	 */
-	dirsize = P2ROUNDUP_TYPED(tdp->i_size, DIRBLKSIZ, u_offset_t);
+	dirsize = P2ROUNDUP_TYPED(tdp->i_size, DIRBLKSIZ, uoff_t);
 	enduseful = 0;
 	offset = last_offset = 0;
 	entryoffsetinblk = 0;
@@ -1913,7 +1913,7 @@ ufs_diraddentry(
 
 	if (slotp->endoff && (slotp->endoff < tdp->i_size)) {
 		if (!TRANS_ISTRANS(tdp->i_ufsvfs)) {
-			(void) ufs_itrunc(tdp, (u_offset_t)slotp->endoff, 0,
+			(void) ufs_itrunc(tdp, (uoff_t)slotp->endoff, 0,
 			    cr);
 		}
 	}
@@ -1984,7 +1984,7 @@ dirprepareentry(
 		/*
 		 * Allocate the new block.
 		 */
-		err = BMAPALLOC(dp, (u_offset_t)slotp->offset,
+		err = BMAPALLOC(dp, (uoff_t)slotp->offset,
 		    (int)(blkoff(dp->i_fs, slotp->offset) + DIRBLKSIZ), cr);
 		if (err) {
 			return (err);
@@ -2324,7 +2324,7 @@ ufs_dirmakedirect(
 	/*
 	 * Allocate space for the directory we're creating.
 	 */
-	err = BMAPALLOC(ip, (u_offset_t)0, DIRBLKSIZ, cr);
+	err = BMAPALLOC(ip, (uoff_t)0, DIRBLKSIZ, cr);
 	if (err)
 		return (err);
 	if (DIRBLKSIZ > dp->i_fs->fs_fsize) {

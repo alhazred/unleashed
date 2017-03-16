@@ -346,7 +346,7 @@ ufs_directio_write(struct inode *ip, uio_t *arg_uio, int ioflag, int rewrite,
 	cred_t *cr, int *statusp)
 {
 	long		resid, bytes_written;
-	u_offset_t	size, uoff;
+	uoff_t	size, uoff;
 	uio_t		*uio = arg_uio;
 	rlim64_t	limit = uio->uio_llimit;
 	int		on, n, error, newerror, len, has_holes;
@@ -397,7 +397,7 @@ ufs_directio_write(struct inode *ip, uio_t *arg_uio, int ioflag, int rewrite,
 	/*
 	 * must be sector aligned
 	 */
-	if ((uoff & (u_offset_t)(DEV_BSIZE - 1)) || (resid & (DEV_BSIZE - 1)))
+	if ((uoff & (uoff_t)(DEV_BSIZE - 1)) || (resid & (DEV_BSIZE - 1)))
 		return (0);
 
 	/*
@@ -537,7 +537,7 @@ ufs_directio_write(struct inode *ip, uio_t *arg_uio, int ioflag, int rewrite,
 				has_holes = bmap_has_holes(ip);
 			if (has_holes) {
 				uint_t	blk_size;
-				u_offset_t offset;
+				uoff_t offset;
 
 				offset = uoff & (offset_t)fs->fs_bmask;
 				blk_size = (int)blksize(fs, ip,
@@ -816,7 +816,7 @@ int
 ufs_directio_read(struct inode *ip, uio_t *uio, cred_t *cr, int *statusp)
 {
 	ssize_t		resid, bytes_read;
-	u_offset_t	size, uoff;
+	uoff_t	size, uoff;
 	int		error, newerror, len;
 	size_t		nbytes;
 	struct fs	*fs;
@@ -853,7 +853,7 @@ ufs_directio_read(struct inode *ip, uio_t *uio, cred_t *cr, int *statusp)
 	 */
 	uoff = uio->uio_loffset;
 	resid = uio->uio_resid;
-	if ((uoff & (u_offset_t)(DEV_BSIZE - 1)) || (resid & (DEV_BSIZE - 1)))
+	if ((uoff & (uoff_t)(DEV_BSIZE - 1)) || (resid & (DEV_BSIZE - 1)))
 		return (0);
 	/*
 	 * must be short aligned and sector aligned

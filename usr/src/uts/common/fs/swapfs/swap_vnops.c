@@ -62,16 +62,16 @@ static void	swap_inactive(struct vnode *vp, struct cred *cr,
 static void	swap_dispose(vnode_t *vp, page_t *pp, int fl, int dn,
     cred_t *cr, caller_context_t *ct);
 
-static int	swap_getapage(struct vnode *vp, u_offset_t off, size_t len,
+static int	swap_getapage(struct vnode *vp, uoff_t off, size_t len,
     uint_t *protp, page_t **plarr, size_t plsz,
     struct seg *seg, caddr_t addr, enum seg_rw rw, struct cred *cr);
 
-int	swap_getconpage(struct vnode *vp, u_offset_t off, size_t len,
+int	swap_getconpage(struct vnode *vp, uoff_t off, size_t len,
     uint_t *protp, page_t **plarr, size_t plsz, page_t *conpp,
     uint_t *pszc, spgcnt_t *nreloc, struct seg *seg, caddr_t addr,
     enum seg_rw rw, struct cred *cr);
 
-static int 	swap_putapage(struct vnode *vp, page_t *pp, u_offset_t *off,
+static int 	swap_putapage(struct vnode *vp, page_t *pp, uoff_t *off,
     size_t *lenp, int flags, struct cred *cr);
 
 const fs_operation_def_t swap_vnodeops_template[] = {
@@ -124,7 +124,7 @@ swap_getpage(
 	    "swapfs getpage:vp %p off %llx len %ld",
 	    (void *)vp, off, len);
 
-	return (pvn_getpages(swap_getapage, vp, (u_offset_t)off, len, protp,
+	return (pvn_getpages(swap_getapage, vp, (uoff_t)off, len, protp,
 	    pl, plsz, seg, addr, rw, cr));
 }
 
@@ -135,7 +135,7 @@ swap_getpage(
 static int
 swap_getapage(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	uint_t *protp,
 	page_t *pl[],
@@ -149,7 +149,7 @@ swap_getapage(
 	int flags;
 	int err = 0;
 	struct vnode *pvp = NULL;
-	u_offset_t poff;
+	uoff_t poff;
 	int flag_noreloc;
 	se_t lock;
 	extern int kcage_on;
@@ -306,7 +306,7 @@ again:
 int
 swap_getconpage(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	uint_t *protp,
 	page_t *pl[],
@@ -322,7 +322,7 @@ swap_getconpage(
 	struct page	*pp;
 	int 		err = 0;
 	struct vnode	*pvp = NULL;
-	u_offset_t	poff;
+	uoff_t	poff;
 
 	ASSERT(len == PAGESIZE);
 	ASSERT(pl != NULL);
@@ -338,7 +338,7 @@ swap_getconpage(
 	 * exists. So just let the old code handle it.
 	 */
 	if (conpp == NULL) {
-		err = swap_getapage(vp, (u_offset_t)off, len, protp, pl, plsz,
+		err = swap_getapage(vp, (uoff_t)off, len, protp, pl, plsz,
 		    seg, addr, rw, cr);
 		return (err);
 	}
@@ -482,7 +482,7 @@ swap_putpage(
 	caller_context_t *ct)
 {
 	page_t *pp;
-	u_offset_t io_off;
+	uoff_t io_off;
 	size_t io_len = 0;
 	int err = 0;
 	int nowait;
@@ -517,17 +517,17 @@ swap_putpage(
 			cmn_err(CE_PANIC, "swapfs: pageout can't block");
 
 		/* Search the entire vp list for pages >= off. */
-		err = pvn_vplist_dirty(vp, (u_offset_t)off, swap_putapage,
+		err = pvn_vplist_dirty(vp, (uoff_t)off, swap_putapage,
 		    flags, cr);
 	} else {
-		u_offset_t eoff;
+		uoff_t eoff;
 
 		/*
 		 * Loop over all offsets in the range [off...off + len]
 		 * looking for pages to deal with.
 		 */
 		eoff = off + len;
-		for (io_off = (u_offset_t)off; io_off < eoff;
+		for (io_off = (uoff_t)off; io_off < eoff;
 		    io_off += io_len) {
 			/*
 			 * If we run out of the async req slot, put the page
@@ -599,18 +599,18 @@ static int
 swap_putapage(
 	struct vnode *vp,
 	page_t *pp,
-	u_offset_t *offp,
+	uoff_t *offp,
 	size_t *lenp,
 	int flags,
 	struct cred *cr)
 {
 	int err;
 	struct vnode *pvp;
-	u_offset_t poff, off;
-	u_offset_t doff;
+	uoff_t poff, off;
+	uoff_t doff;
 	size_t dlen;
 	size_t klsz = 0;
-	u_offset_t klstart = 0;
+	uoff_t klstart = 0;
 	struct vnode *klvp = NULL;
 	page_t *pplist;
 	se_t se;
@@ -759,9 +759,9 @@ swap_dispose(
 	caller_context_t *ct)
 {
 	int err;
-	u_offset_t off = pp->p_offset;
+	uoff_t off = pp->p_offset;
 	vnode_t *pvp;
-	u_offset_t poff;
+	uoff_t poff;
 
 	ASSERT(PAGE_EXCL(pp));
 

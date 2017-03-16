@@ -1154,7 +1154,7 @@ indirtrunc(struct inode *ip, daddr_t bn, daddr_t lastbn, int level, int flags)
  */
 static int i_genrand = 1234;
 int
-ufs_itrunc(struct inode *oip, u_offset_t length, int flags, cred_t *cr)
+ufs_itrunc(struct inode *oip, uoff_t length, int flags, cred_t *cr)
 {
 	struct fs *fs = oip->i_fs;
 	struct ufsvfs *ufsvfsp = oip->i_ufsvfs;
@@ -1169,7 +1169,7 @@ ufs_itrunc(struct inode *oip, u_offset_t length, int flags, cred_t *cr)
 	ushort_t mode;
 	struct inode tip;
 	int err;
-	u_offset_t maxoffset = (ufsvfsp->vfs_lfflags & UFS_LARGEFILES) ?
+	uoff_t maxoffset = (ufsvfsp->vfs_lfflags & UFS_LARGEFILES) ?
 	    (UFS_MAXOFFSET_T) : (MAXOFF32_T);
 
 	/*
@@ -1256,7 +1256,7 @@ ufs_itrunc(struct inode *oip, u_offset_t length, int flags, cred_t *cr)
 			 * so that we don't cause too much of the
 			 * file to be zero'd and pushed.
 			 */
-			u_offset_t osize = oip->i_size;
+			uoff_t osize = oip->i_size;
 			oip->i_size  = length;
 			/*
 			 * Make sure we zero out the remaining bytes of
@@ -1281,7 +1281,7 @@ ufs_itrunc(struct inode *oip, u_offset_t length, int flags, cred_t *cr)
 			 * and update the superblock, if the flag
 			 * is not already on.
 			 */
-			if ((length > (u_offset_t)MAXOFF32_T) &&
+			if ((length > (uoff_t)MAXOFF32_T) &&
 			    !(fs->fs_flags & FSLARGEFILES)) {
 				ASSERT(ufsvfsp->vfs_lfflags & UFS_LARGEFILES);
 				mutex_enter(&ufsvfsp->vfs_lock);

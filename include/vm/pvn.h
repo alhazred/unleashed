@@ -56,33 +56,33 @@ extern "C" {
  * used to help implement the VM/file system routines.
  */
 
-struct page	*pvn_read_kluster(struct vnode *vp, u_offset_t off,
-			struct seg *seg, caddr_t addr, u_offset_t *offp,
-			size_t *lenp, u_offset_t vp_off, size_t vp_len,
+struct page	*pvn_read_kluster(struct vnode *vp, uoff_t off,
+			struct seg *seg, caddr_t addr, uoff_t *offp,
+			size_t *lenp, uoff_t vp_off, size_t vp_len,
 			int isra);
 struct page	*pvn_write_kluster(struct vnode *vp, struct page *pp,
-			u_offset_t *offp, size_t *lenp, u_offset_t vp_off,
+			uoff_t *offp, size_t *lenp, uoff_t vp_off,
 			size_t vp_len, int flags);
 void		pvn_read_done(struct page *plist, int flags);
 void		pvn_write_done(struct page *plist, int flags);
 void		pvn_io_done(struct page *plist);
-int		pvn_vplist_dirty(struct vnode *vp, u_offset_t off,
-			int (*putapage)(vnode_t *, struct page *, u_offset_t *,
+int		pvn_vplist_dirty(struct vnode *vp, uoff_t off,
+			int (*putapage)(vnode_t *, struct page *, uoff_t *,
 				size_t *, int, cred_t *),
 			int flags, struct cred *cred);
 void		pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *));
 int		pvn_getdirty(struct page *pp, int flags);
-void		pvn_vpzero(struct vnode *vp, u_offset_t vplen, size_t zbytes);
+void		pvn_vpzero(struct vnode *vp, uoff_t vplen, size_t zbytes);
 int		pvn_getpages(
-			int (*getpage)(vnode_t *, u_offset_t, size_t, uint_t *,
+			int (*getpage)(vnode_t *, uoff_t, size_t, uint_t *,
 				struct page *[], size_t, struct seg *,
 				caddr_t, enum seg_rw, cred_t *),
-			struct vnode *vp, u_offset_t off, size_t len,
+			struct vnode *vp, uoff_t off, size_t len,
 			uint_t *protp, struct page **pl, size_t plsz,
 			struct seg *seg, caddr_t addr, enum seg_rw rw,
 			struct cred *cred);
 void		pvn_plist_init(struct page *pp, struct page **pl, size_t plsz,
-			u_offset_t off, size_t io_len, enum seg_rw rw);
+			uoff_t off, size_t io_len, enum seg_rw rw);
 void		pvn_init(void);
 
 #endif	/* _KERNEL */

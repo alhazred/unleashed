@@ -67,7 +67,7 @@ extern void	dump16(char *, char *);
 static void	adjust(struct fileinfo *);
 static void	opndir(struct file_entry *);
 static int32_t	getdir(struct file_entry *, struct bufarea **,
-	u_offset_t *, struct file_id **);
+	uoff_t *, struct file_id **);
 static void ckinode(struct file_entry *);
 struct bufarea *getfilentry();
 
@@ -79,7 +79,7 @@ static uint8_t *extbuf;
 static uint8_t *dir_adrlist;
 
 /* Keep track of where we are in the directory */
-static u_offset_t dir_baseoff;
+static uoff_t dir_baseoff;
 static uint32_t dir_basesize;
 static uint8_t *dirbuf;
 static uint8_t *dir_fidp;
@@ -104,7 +104,7 @@ pass1()
 	fip->fe_lseen = 0;		/* Didn't get here through directory */
 	n_files = n_dirs = 0;
 	while (fip->fe_block) {
-		u_offset_t offset, end;
+		uoff_t offset, end;
 
 		markbusy(fip->fe_block, fip->fe_len);
 		bp = getfilentry(fip->fe_block, fip->fe_len);
@@ -296,7 +296,7 @@ getallocext(struct file_entry *fp, uint32_t loc, uint32_t len)
 /* ARGSUSED1 */
 static int32_t
 getdir(struct file_entry *fp, struct bufarea **fbp,
-	u_offset_t *poffset, struct file_id **fidpp)
+	uoff_t *poffset, struct file_id **fidpp)
 {
 	/* LINTED */
 	register struct file_id *fidp = (struct file_id *)fidbuf;
@@ -304,7 +304,7 @@ getdir(struct file_entry *fp, struct bufarea **fbp,
 	register struct long_ad *lap;
 	register int i, newoff, xoff = 0;
 	uint32_t block = 0, nb, len, left;
-	u_offset_t offset;
+	uoff_t offset;
 	int err, type;
 
 

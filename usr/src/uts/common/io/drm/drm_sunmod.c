@@ -519,7 +519,7 @@ drm_sun_devmap(dev_t dev, devmap_cookie_t dhp, offset_t offset,
 	ddi_umem_cookie_t	cookie;
 	drm_local_map_t		*map = NULL;
 	unsigned long	aperbase;
-	u_offset_t		handle;
+	uoff_t		handle;
 	offset_t		koff;
 	caddr_t			kva;
 	minor_t			minor;
@@ -583,7 +583,7 @@ drm_sun_devmap(dev_t dev, devmap_cookie_t dhp, offset_t offset,
 
 		spin_lock(&dp->struct_mutex);
 		idr_list_for_each(entry, &(mp->fpriv->object_idr)) {
-			if ((uintptr_t)entry->obj == (u_offset_t)offset) {
+			if ((uintptr_t)entry->obj == (uoff_t)offset) {
 				map = entry->obj->map;
 				goto goon;
 			}
@@ -597,12 +597,12 @@ goon:
 		 * We will solve 32-bit application on 64-bit kernel
 		 * issue later, now, we just use low 32-bit
 		 */
-		handle = (u_offset_t)offset;
+		handle = (uoff_t)offset;
 		handle &= 0xffffffff;
 
 		TAILQ_FOREACH(map, &dp->maplist, link) {
 			if (handle ==
-			    ((u_offset_t)((uintptr_t)map->handle) & 0xffffffff))
+			    ((uoff_t)((uintptr_t)map->handle) & 0xffffffff))
 				break;
 		}
 
@@ -620,14 +620,14 @@ goon:
 	}
 
 	if (map == NULL) {
-		u_offset_t	tmp;
+		uoff_t	tmp;
 
 		mutex_exit(&dp->dev_lock);
 		cmn_err(CE_WARN, "Can't find map, offset=0x%llx, len=%x\n",
 		    offset, (int)len);
 		cmn_err(CE_WARN, "Current mapping:\n");
 		TAILQ_FOREACH(map, &dp->maplist, link) {
-		tmp = (u_offset_t)((uintptr_t)map->handle) & 0xffffffff;
+		tmp = (uoff_t)((uintptr_t)map->handle) & 0xffffffff;
 		cmn_err(CE_WARN, "map(handle=0x%p, size=0x%lx,type=%d,"
 		    "offset=0x%lx), handle=%llx, tmp=%lld", map->handle,
 		    map->size, map->type, map->offset, handle, tmp);

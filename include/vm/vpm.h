@@ -70,7 +70,7 @@ extern "C" {
  *
  * Interfaces:
  *
- * int vpm_map_pages( struct vnode *vp, u_offset_t off, size_t len,
+ * int vpm_map_pages( struct vnode *vp, uoff_t off, size_t len,
  *			int fetchpage, vmap_t *vml, int vmlsz,
  *			int *newpagecreated, enum seg_rw rw);
  *
@@ -146,7 +146,7 @@ extern "C" {
  *
  *
  *
- * int vpm_data_copy(struct vnode *vp, u_offset_t off, size_t len,
+ * int vpm_data_copy(struct vnode *vp, uoff_t off, size_t len,
  *		struct uio *uio, int fetchpage, int *newpagecreated,
  *		int zerostart, enum seg_rw rw);
  *
@@ -164,7 +164,7 @@ extern "C" {
  * offset 'off' in the first page. i.e  from 'off & PAGEMASK' to 'off'.
  *
  *
- * int vpm_sync_pages(struct vnode *vp, u_offset_t off,
+ * int vpm_sync_pages(struct vnode *vp, uoff_t off,
  *					 size_t len, uint_t flags)
  *
  * This function can be called to flush or sync the vnode(file) pages that
@@ -199,7 +199,7 @@ struct vpmap {
 	struct vnode	*vpm_vp;	/* pointer to vnode of cached page */
 	struct vpmap	*vpm_next;	/* free list pointers */
 	struct vpmap	*vpm_prev;
-	u_offset_t	vpm_off;	/* offset of the page */
+	uoff_t		vpm_off;	/* offset of the page */
 	page_t		*vpm_pp;	/* page pointer */
 	ushort_t	vpm_refcnt;	/* Number active references */
 	ushort_t	vpm_ndxflg;	/* indicates which queue */
@@ -281,12 +281,12 @@ extern int	vpm_enable;
  * vpm page mapping operations.
  */
 extern void	vpm_init(void);
-extern int	vpm_map_pages(struct vnode *, u_offset_t, size_t, int,
+extern int	vpm_map_pages(struct vnode *, uoff_t, size_t, int,
 		vmap_t *, int, int  *, enum seg_rw);
 
 extern void	vpm_unmap_pages(vmap_t *, enum seg_rw);
-extern int	vpm_sync_pages(struct vnode *, u_offset_t, size_t, uint_t);
-extern int	vpm_data_copy(struct vnode *, u_offset_t, size_t,
+extern int	vpm_sync_pages(struct vnode *, uoff_t, size_t, uint_t);
+extern int	vpm_data_copy(struct vnode *, uoff_t, size_t,
 		struct uio *, int, int *, int, enum seg_rw rw);
 #endif	/* _KERNEL */
 

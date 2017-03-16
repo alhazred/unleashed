@@ -1002,10 +1002,10 @@ expanddir(fsck_ino_t ino, char *name)
 		freeblk(ino, dp->di_db[nxtbn - 1],
 		    frag2blks / sblock.fs_fsize);
 		frag2blks = btodb(frag2blks);
-		dp->di_size -= (u_offset_t)lffragsz;
+		dp->di_size -= (uoff_t)lffragsz;
 		dp->di_blocks = dp->di_blocks - frag2blks;
 		dp->di_db[nxtbn - 1] = newblk[0];
-		dp->di_size += (u_offset_t)sblock.fs_bsize;
+		dp->di_size += (uoff_t)sblock.fs_bsize;
 		dp->di_blocks += btodb(sblock.fs_bsize);
 		inodirty();
 		retval = 1;
@@ -1015,7 +1015,7 @@ expanddir(fsck_ino_t ino, char *name)
 	/*
 	 * Full-block addition's much easier.  It's just an append.
 	 */
-	dp->di_size += (u_offset_t)sblock.fs_bsize;
+	dp->di_size += (uoff_t)sblock.fs_bsize;
 	dp->di_blocks += btodb(sblock.fs_bsize);
 	if (allocIndir) {
 		dp->di_blocks += btodb(sblock.fs_bsize);

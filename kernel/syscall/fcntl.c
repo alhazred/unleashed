@@ -55,7 +55,7 @@
 #include <sys/cmn_err.h>
 
 static int flock_check(vnode_t *, flock64_t *, offset_t, offset_t);
-static int flock_get_start(vnode_t *, flock64_t *, offset_t, u_offset_t *);
+static int flock_get_start(vnode_t *, flock64_t *, offset_t, uoff_t *);
 static void fd_too_big(proc_t *);
 
 /*
@@ -70,8 +70,8 @@ fcntl(int fdes, int cmd, intptr_t arg)
 	proc_t *p;
 	file_t *fp;
 	vnode_t *vp;
-	u_offset_t offset;
-	u_offset_t start;
+	uoff_t offset;
+	uoff_t start;
 	struct vattr vattr;
 	int in_crit;
 	int flag;
@@ -607,7 +607,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 			break;
 
 		if (nbl_need_check(vp)) {
-			u_offset_t	begin;
+			uoff_t	begin;
 			ssize_t		length;
 
 			nbl_start_crit(vp, RW_READER);
@@ -829,21 +829,21 @@ flock_check(vnode_t *vp, flock64_t *flp, offset_t offset, offset_t max)
 {
 	struct vattr	vattr;
 	int	error;
-	u_offset_t start, end;
+	uoff_t start, end;
 
 	/*
 	 * Determine the starting point of the request
 	 */
 	switch (flp->l_whence) {
 	case 0:		/* SEEK_SET */
-		start = (u_offset_t)flp->l_start;
+		start = (uoff_t)flp->l_start;
 		if (start > max)
 			return (EINVAL);
 		break;
 	case 1:		/* SEEK_CUR */
 		if (flp->l_start > (max - offset))
 			return (EOVERFLOW);
-		start = (u_offset_t)(flp->l_start + offset);
+		start = (uoff_t)(flp->l_start + offset);
 		if (start > max)
 			return (EINVAL);
 		break;
@@ -853,7 +853,7 @@ flock_check(vnode_t *vp, flock64_t *flp, offset_t offset, offset_t max)
 			return (error);
 		if (flp->l_start > (max - (offset_t)vattr.va_size))
 			return (EOVERFLOW);
-		start = (u_offset_t)(flp->l_start + (offset_t)vattr.va_size);
+		start = (uoff_t)(flp->l_start + (offset_t)vattr.va_size);
 		if (start > max)
 			return (EINVAL);
 		break;
@@ -869,7 +869,7 @@ flock_check(vnode_t *vp, flock64_t *flp, offset_t offset, offset_t max)
 	else if ((offset_t)flp->l_len > 0) {
 		if (flp->l_len > (max - start + 1))
 			return (EOVERFLOW);
-		end = (u_offset_t)(start + (flp->l_len - 1));
+		end = (uoff_t)(start + (flp->l_len - 1));
 		ASSERT(end <= max);
 	} else {
 		/*
@@ -878,7 +878,7 @@ flock_check(vnode_t *vp, flock64_t *flp, offset_t offset, offset_t max)
 		 * the last n bytes of the file.
 		 */
 		end = start;
-		start += (u_offset_t)flp->l_len;
+		start += (uoff_t)flp->l_len;
 		(start)++;
 		if (start > max)
 			return (EINVAL);
@@ -895,7 +895,7 @@ flock_check(vnode_t *vp, flock64_t *flp, offset_t offset, offset_t max)
 }
 
 static int
-flock_get_start(vnode_t *vp, flock64_t *flp, offset_t offset, u_offset_t *start)
+flock_get_start(vnode_t *vp, flock64_t *flp, offset_t offset, uoff_t *start)
 {
 	struct vattr	vattr;
 	int	error;
@@ -906,16 +906,16 @@ flock_get_start(vnode_t *vp, flock64_t *flp, offset_t offset, u_offset_t *start)
 	 */
 	switch (flp->l_whence) {
 	case 0:		/* SEEK_SET */
-		*start = (u_offset_t)flp->l_start;
+		*start = (uoff_t)flp->l_start;
 		break;
 	case 1:		/* SEEK_CUR */
-		*start = (u_offset_t)(flp->l_start + offset);
+		*start = (uoff_t)(flp->l_start + offset);
 		break;
 	case 2:		/* SEEK_END */
 		vattr.va_mask = AT_SIZE;
 		if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			return (error);
-		*start = (u_offset_t)(flp->l_start + (offset_t)vattr.va_size);
+		*start = (uoff_t)(flp->l_start + (offset_t)vattr.va_size);
 		break;
 	default:
 		return (EINVAL);

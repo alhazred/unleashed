@@ -325,7 +325,7 @@ port_getattr(struct vnode *vp, struct vattr *vap, int flags, cred_t *cr,
 	vap->va_fsid = portdev;		/* file system id  */
 	vap->va_nodeid = (ino64_t)0;	/* node id */
 	vap->va_nlink = vp->v_count;	/* number of references to file */
-	vap->va_size = (u_offset_t)pp->port_queue.portq_nent; /* file size */
+	vap->va_size = (uoff_t)pp->port_queue.portq_nent; /* file size */
 	vap->va_atime = pp->port_ctime;	/* time of last access */
 	vap->va_mtime = pp->port_ctime;	/* time of last modification */
 	vap->va_ctime = pp->port_ctime;	/* time file ``created'' */

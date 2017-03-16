@@ -194,7 +194,7 @@ struct 	icommon {
 	short	ic_nlink;	/*  2: number of links to file */
 	o_uid_t	ic_suid;	/*  4: owner's user id */
 	o_gid_t	ic_sgid;	/*  6: owner's group id */
-	u_offset_t ic_lsize;	/*  8: number of bytes in file */
+	uoff_t ic_lsize;	/*  8: number of bytes in file */
 #ifdef _KERNEL
 	struct timeval32 ic_atime;	/* 16: time last accessed */
 	struct timeval32 ic_mtime;	/* 24: time last modified */
@@ -565,7 +565,7 @@ extern kmutex_t ufs_iuniqtime_lock;
  * and make sure any in-core pages are initialized.
  */
 #define	BMAPALLOC(ip, off, size, cr) \
-	bmap_write((ip), (u_offset_t)(off), (size), BI_NORMAL, NULL, cr)
+	bmap_write((ip), (uoff_t)(off), (size), BI_NORMAL, NULL, cr)
 
 #define	ESAME	(-1)		/* trying to rename linked files (special) */
 
@@ -641,7 +641,7 @@ struct ufs_q {
  * may be on the delete queue.  Protected by ufsvfsp->vfs_delete.uq_mutex
  */
 struct ufs_delq_info {
-	u_offset_t	delq_unreclaimed_blocks;
+	uoff_t		delq_unreclaimed_blocks;
 	ulong_t		delq_unreclaimed_files;
 };
 
@@ -838,7 +838,7 @@ extern	void	ufs_reset_vnode(vnode_t *);
 extern	void	ufs_iinactive(struct inode *);
 extern	void	ufs_iupdat(struct inode *, int);
 extern	int	ufs_rmidle(struct inode *);
-extern	int	ufs_itrunc(struct inode *, u_offset_t, int, cred_t *);
+extern	int	ufs_itrunc(struct inode *, uoff_t, int, cred_t *);
 extern	int	ufs_iaccess(struct inode *, int, cred_t *, int);
 extern  int	rdip(struct inode *, struct uio *, int, struct cred *);
 extern  int	wrip(struct inode *, struct uio *, int, struct cred *);
@@ -882,12 +882,12 @@ extern	daddr_t	contigpref(ufsvfs_t *, size_t, size_t);
 extern	int	ufs_rdwri(enum uio_rw, int, struct inode *, caddr_t, ssize_t,
 	offset_t, enum uio_seg, int *, cred_t *);
 
-extern	int	bmap_read(struct inode *, u_offset_t, daddr_t *, int *);
-extern	int	bmap_write(struct inode *, u_offset_t, int, enum bi_type,
+extern	int	bmap_read(struct inode *, uoff_t, daddr_t *, int *);
+extern	int	bmap_write(struct inode *, uoff_t, int, enum bi_type,
     daddr_t *, struct cred *);
 extern	int	bmap_has_holes(struct inode *);
-extern	int	bmap_find(struct inode *, boolean_t, u_offset_t *);
-extern	int	bmap_set_bn(struct vnode *, u_offset_t, daddr32_t);
+extern	int	bmap_find(struct inode *, boolean_t, uoff_t *);
+extern	int	bmap_set_bn(struct vnode *, uoff_t, daddr32_t);
 
 extern	void	ufs_vfs_add(struct ufsvfs *);
 extern	void	ufs_vfs_remove(struct ufsvfs *);
@@ -911,7 +911,7 @@ extern	void	fragacct(struct fs *, int, int32_t *, int);
 extern	int	skpc(char, uint_t, char *);
 extern	int	ufs_fbwrite(struct fbuf *, struct inode *);
 extern	int	ufs_fbiwrite(struct fbuf *, struct inode *, daddr_t, long);
-extern	int	ufs_putapage(struct vnode *, struct page *, u_offset_t *,
+extern	int	ufs_putapage(struct vnode *, struct page *, uoff_t *,
 				size_t *, int, struct cred *);
 extern inode_t	*ufs_alloc_inode(ufsvfs_t *, ino_t);
 extern void	ufs_free_inode(inode_t *);
@@ -996,9 +996,9 @@ extern int ufs_directio_read(struct inode *, uio_t *, cred_t *, int *);
  * ufs extensions for PXFS
  */
 
-int ufs_rdwr_data(vnode_t *vp, u_offset_t offset, size_t len, fdbuffer_t *fdb,
+int ufs_rdwr_data(vnode_t *vp, uoff_t offset, size_t len, fdbuffer_t *fdb,
     int flags, cred_t *cr);
-int ufs_alloc_data(vnode_t *vp, u_offset_t offset, size_t *len, fdbuffer_t *fdb,
+int ufs_alloc_data(vnode_t *vp, uoff_t offset, size_t *len, fdbuffer_t *fdb,
     int flags, cred_t *cr);
 
 /*

@@ -72,8 +72,8 @@ struct lock_descriptor {
 		vnode_t		*l_vnode;	/* vnode being locked */
 			int	l_type;		/* type of lock */
 			int	l_state;	/* state described below */
-		u_offset_t	l_start;	/* start offset */
-		u_offset_t	l_end;		/* end offset */
+		uoff_t		l_start;	/* start offset */
+		uoff_t		l_end;		/* end offset */
 		flock64_t	l_flock;	/* original flock request */
 			int	l_color;	/* color used for graph alg */
 		kcondvar_t	l_cv;		/* wait condition for lock */

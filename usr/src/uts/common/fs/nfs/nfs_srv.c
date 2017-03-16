@@ -247,7 +247,7 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 		}
 
 		if (in_crit) {
-			u_offset_t offset;
+			uoff_t offset;
 			ssize_t length;
 
 			if (va.va_size < bva.va_size) {
@@ -741,7 +741,7 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 	rr->rr_ok.rrok_wlist_len = 0;
 	rr->rr_ok.rrok_wlist = NULL;
 
-	if ((u_offset_t)ra->ra_offset >= va.va_size) {
+	if ((uoff_t)ra->ra_offset >= va.va_size) {
 		rr->rr_count = 0;
 		rr->rr_data = NULL;
 		/*
@@ -1622,7 +1622,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	 * the data and metadata to stable storage.
 	 */
 	if (data_written) {
-		error = fop_putpage(vp, (u_offset_t)off, len, 0, cr, &ct);
+		error = fop_putpage(vp, (uoff_t)off, len, 0, cr, &ct);
 
 		if (!error) {
 			error = fop_fsync(vp, FNODSYNC, cr, &ct);
@@ -1814,7 +1814,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 			 * in the region being changed.
 			 */
 			struct vattr bva;
-			u_offset_t offset;
+			uoff_t offset;
 			ssize_t length;
 
 			nbl_start_crit(tvp, RW_READER);

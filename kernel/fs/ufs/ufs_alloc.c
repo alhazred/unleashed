@@ -413,7 +413,7 @@ loop:
 		/*
 		 * Clear any garbage left behind.
 		 */
-		ip->i_size = (u_offset_t)0;
+		ip->i_size = (uoff_t)0;
 		ip->i_blocks = 0;
 		for (i = 0; i < NDADDR; i++)
 			ip->i_db[i] = 0;
@@ -1557,11 +1557,11 @@ ufs_allocsp(struct vnode *vp, struct flock64 *lp, cred_t *cr)
 	struct inode *ip;
 	struct fs *fs;
 	struct ufsvfs *ufsvfsp;
-	u_offset_t resid, i, uoff;
+	uoff_t resid, i, uoff;
 	daddr32_t db_undo[NDADDR];	/* old direct blocks */
 	struct allocsp_undo *ib_undo = NULL;	/* ib undo */
 	struct allocsp_undo *undo = NULL;
-	u_offset_t osz;			/* old file size */
+	uoff_t osz;			/* old file size */
 	int chunkblks = 0;		/* # of blocks in 1 allocation */
 	int cnt = 0;
 	daddr_t allocblk;
@@ -1892,7 +1892,7 @@ ufs_freesp(struct vnode *vp, struct flock64 *lp, int flag, cred_t *cr)
 		return (EINVAL);
 
 	rw_enter(&ip->i_contents, RW_READER);
-	if (ip->i_size == (u_offset_t)lp->l_start) {
+	if (ip->i_size == (uoff_t)lp->l_start) {
 		rw_exit(&ip->i_contents);
 		return (0);
 	}
@@ -1937,7 +1937,7 @@ ufs_freesp(struct vnode *vp, struct flock64 *lp, int flag, cred_t *cr)
 	 */
 	rw_exit(&ip->i_contents);
 	rw_enter(&ip->i_rwlock, RW_WRITER);
-	error = TRANS_ITRUNC(ip, (u_offset_t)lp->l_start, 0, cr);
+	error = TRANS_ITRUNC(ip, (uoff_t)lp->l_start, 0, cr);
 	rw_exit(&ip->i_rwlock);
 	return (error);
 }

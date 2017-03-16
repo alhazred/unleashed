@@ -240,7 +240,7 @@ typedef struct rnode4 {
 	nfs4_sharedfh_t	*r_fh;		/* file handle */
 	struct servinfo4
 			*r_server;	/* current server */
-	u_offset_t	r_nextr;	/* next byte read offset (read-ahead) */
+	uoff_t		r_nextr;	/* next byte read offset (read-ahead) */
 	uint_t		r_flags;	/* flags, see below */
 	short		r_error;	/* async write error */
 	cred_t		*r_unlcred;	/* unlinked credentials */
@@ -262,14 +262,14 @@ typedef struct rnode4 {
 	uint_t		r_gcount;	/* getattrs waiting to flush pages */
 	kcondvar_t	r_cv;		/* condvar for blocked threads */
 	int		(*r_putapage)	/* address of putapage routine */
-		(vnode_t *, page_t *, u_offset_t *, size_t *, int, cred_t *);
+		(vnode_t *, page_t *, uoff_t *, size_t *, int, cred_t *);
 	void		*r_dir;		/* cache of readdir responses */
 	rddir4_cache	*r_direof;	/* pointer to the EOF entry */
 	symlink_cache	r_symlink;	/* cached readlink response */
 	verifier4	r_writeverf;	/* file data write verifier */
-	u_offset_t	r_modaddr;	/* address for page in writerp */
+	uoff_t		r_modaddr;	/* address for page in writerp */
 	commit_t	r_commit;	/* commit information */
-	u_offset_t	r_truncaddr;	/* base for truncate operation */
+	uoff_t		r_truncaddr;	/* base for truncate operation */
 	vsecattr_t	*r_secattr;	/* cached security attributes (acls) */
 	verifier4	r_cookieverf4;	/* version 4 readdir cookie verifier */
 	nfs4_pathconf_info_t r_pathconf; /* cached pathconf info */

@@ -54,10 +54,10 @@ extern int nbl_in_crit(vnode_t *);
 
 /* conflict checking */
 extern int nbl_need_check(vnode_t *);
-extern int nbl_conflict(vnode_t *, nbl_op_t, u_offset_t, ssize_t, int,
+extern int nbl_conflict(vnode_t *, nbl_op_t, uoff_t, ssize_t, int,
     caller_context_t *);
 extern int nbl_share_conflict(vnode_t *, nbl_op_t, caller_context_t *);
-extern int nbl_lock_conflict(vnode_t *, nbl_op_t, u_offset_t, ssize_t, int,
+extern int nbl_lock_conflict(vnode_t *, nbl_op_t, uoff_t, ssize_t, int,
     caller_context_t *);
 extern int nbl_svmand(vnode_t *, cred_t *, int *);
 

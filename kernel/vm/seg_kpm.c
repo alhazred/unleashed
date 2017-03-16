@@ -119,7 +119,7 @@ static const struct seg_ops segkpm_ops = {
 	.incore		= SEGKPM_BADOP(size_t),
 	.lockop		= SEGKPM_BADOP(int),
 	.getprot	= SEGKPM_BADOP(int),
-	.getoffset	= SEGKPM_BADOP(u_offset_t),
+	.getoffset	= SEGKPM_BADOP(uoff_t),
 	.gettype	= SEGKPM_BADOP(int),
 	.getvp		= SEGKPM_BADOP(int),
 	.advise		= SEGKPM_BADOP(int),
@@ -133,7 +133,7 @@ static const struct seg_ops segkpm_ops = {
  */
 size_t		kpm_pgsz;	/* kpm page size */
 uint_t		kpm_pgshft;	/* kpm page shift */
-u_offset_t	kpm_pgoff;	/* kpm page offset mask */
+uoff_t	kpm_pgoff;	/* kpm page offset mask */
 uint_t		kpmp2pshft;	/* kpm page to page shift */
 pgcnt_t		kpmpnpgs;	/* how many pages per kpm page */
 
@@ -228,7 +228,7 @@ segkpm_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t len,
  * (see also segkpm_create block comment).
  */
 caddr_t
-segkpm_create_va(u_offset_t off)
+segkpm_create_va(uoff_t off)
 {
 	int vcolor;
 	ushort_t *p;
@@ -297,7 +297,7 @@ segkpm_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t len,
 }
 
 /* ARGSUSED */
-caddr_t segkpm_create_va(u_offset_t off) { return (NULL); }
+caddr_t segkpm_create_va(uoff_t off) { return (NULL); }
 
 /* ARGSUSED */
 void segkpm_mapout_validkpme(struct kpme *kpme) {}

@@ -135,7 +135,7 @@ door_getattr(struct vnode *vp, struct vattr *vap, int flags, struct cred *cr,
 	vap->va_fsid = doordev;		/* file system id (dev for now) */
 	vap->va_nodeid = (ino64_t)0;		/* node id */
 	vap->va_nlink = vp->v_count;	/* number of references to file */
-	vap->va_size = (u_offset_t)0;		/* file size in bytes */
+	vap->va_size = (uoff_t)0;		/* file size in bytes */
 	vap->va_atime = tzero;		/* time of last access */
 	vap->va_mtime = tzero;		/* time of last modification */
 	vap->va_ctime = tzero;		/* time file ``created'' */

@@ -78,7 +78,7 @@ _info(struct modinfo *modinfop)
  */
 int
 lm_frlock(struct vnode *vp, int cmd, struct flock64 *flk, int flags,
-    u_offset_t off, struct cred *cr, struct netobj *fh,
+    uoff_t off, struct cred *cr, struct netobj *fh,
     struct flk_callback *flcb)
 {
 	return (nlm_frlock(vp, cmd, flk, flags, off,
@@ -91,7 +91,7 @@ lm_frlock(struct vnode *vp, int cmd, struct flock64 *flk, int flags,
  */
 int
 lm4_frlock(struct vnode *vp, int cmd, struct flock64 *flk, int flags,
-	u_offset_t off, struct cred *cr, struct netobj *fh,
+	uoff_t off, struct cred *cr, struct netobj *fh,
 	struct flk_callback *flcb)
 {
 	int err;
@@ -127,7 +127,7 @@ lm4_shrlock(struct vnode *vp, int cmd,
  */
 void
 lm_register_lock_locally(struct vnode *vp, struct lm_sysid *ls,
-    struct flock64 *flk, int flags, u_offset_t offset)
+    struct flock64 *flk, int flags, uoff_t offset)
 {
 	nlm_register_lock_locally(vp, (struct nlm_host *)ls,
 	    flk, flags, offset);

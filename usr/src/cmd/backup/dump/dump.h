@@ -133,9 +133,9 @@ int	nadded;		/* number of added sub directories */
 int	dadded;		/* directory added flag */
 int	density;	/* density in 0.1" units */
 ulong_t	tsize;		/* tape size in 0.1" units */
-u_offset_t esize;	/* estimated tape size, blocks */
-u_offset_t o_esize;	/* number of header blocks (overhead) */
-u_offset_t f_esize;	/* number of TP_BSIZE blocks for files/maps */
+uoff_t esize;		/* estimated tape size, blocks */
+uoff_t o_esize;		/* number of header blocks (overhead) */
+uoff_t f_esize;		/* number of TP_BSIZE blocks for files/maps */
 uint_t	etapes;		/* estimated number of tapes */
 uint_t	ntrec;		/* 1K records per tape block */
 int	tenthsperirg;	/* 1/10" per tape inter-record gap */

@@ -245,7 +245,7 @@ static void	rinactive(rnode_t *, cred_t *);
 static int	rtablehash(nfs_fhandle *);
 static vnode_t	*make_rnode(nfs_fhandle *, rhashq_t *, struct vfs *,
 		    struct vnodeops *,
-		    int (*)(vnode_t *, page_t *, u_offset_t *, size_t *, int,
+		    int (*)(vnode_t *, page_t *, uoff_t *, size_t *, int,
 			cred_t *),
 		    int (*)(const void *, const void *), int *, cred_t *,
 		    char *, char *);
@@ -2178,7 +2178,7 @@ rinactive(rnode_t *rp, cred_t *cr)
 	if (vn_has_cached_data(vp)) {
 		ASSERT(vp->v_type != VCHR);
 		if ((rp->r_flags & RDIRTY) && !rp->r_error) {
-			error = fop_putpage(vp, (u_offset_t)0, 0, 0, cr, NULL);
+			error = fop_putpage(vp, (uoff_t)0, 0, 0, cr, NULL);
 			if (error && (error == ENOSPC || error == EDQUOT)) {
 				mutex_enter(&rp->r_statelock);
 				if (!rp->r_error)
@@ -2186,7 +2186,7 @@ rinactive(rnode_t *rp, cred_t *cr)
 				mutex_exit(&rp->r_statelock);
 			}
 		}
-		nfs_invalidate_pages(vp, (u_offset_t)0, cr);
+		nfs_invalidate_pages(vp, (uoff_t)0, cr);
 	}
 
 	/*
@@ -2435,7 +2435,7 @@ rtablehash(nfs_fhandle *fh)
 static vnode_t *
 make_rnode(nfs_fhandle *fh, rhashq_t *rhtp, struct vfs *vfsp,
     struct vnodeops *vops,
-    int (*putapage)(vnode_t *, page_t *, u_offset_t *, size_t *, int, cred_t *),
+    int (*putapage)(vnode_t *, page_t *, uoff_t *, size_t *, int, cred_t *),
     int (*compar)(const void *, const void *),
     int *newnode, cred_t *cr, char *dnm, char *nm)
 {
@@ -3088,7 +3088,7 @@ toomany:
 	 */
 	while (cnt-- > 0) {
 		vp = vplist[cnt];
-		(void) fop_putpage(vp, (u_offset_t)0, 0, B_ASYNC, cr, NULL);
+		(void) fop_putpage(vp, (uoff_t)0, 0, B_ASYNC, cr, NULL);
 		VN_RELE(vp);
 	}
 

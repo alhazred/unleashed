@@ -113,11 +113,11 @@ static boolean_t gcore_initialized = B_FALSE;
 
 typedef int (*gsop_init_t)(gcore_seg_t *);
 typedef void (*gsop_fini_t)(gcore_seg_t *);
-typedef u_offset_t (*gsop_incore_t)(gcore_seg_t *, u_offset_t, u_offset_t);
-typedef uint_t (*gsop_getprot_t)(gcore_seg_t *, u_offset_t);
-typedef int (*gsop_getoffset_t)(gcore_seg_t *, u_offset_t);
+typedef uoff_t (*gsop_incore_t)(gcore_seg_t *, uoff_t, uoff_t);
+typedef uint_t (*gsop_getprot_t)(gcore_seg_t *, uoff_t);
+typedef int (*gsop_getoffset_t)(gcore_seg_t *, uoff_t);
 typedef void (*gsop_name_t)(gcore_seg_t *, char *name, size_t size);
-typedef int (*gsop_gettype_t)(gcore_seg_t *, u_offset_t);
+typedef int (*gsop_gettype_t)(gcore_seg_t *, uoff_t);
 typedef boolean_t (*gsop_noreserve_t)(gcore_seg_t *);
 
 typedef struct gcore_segops {
@@ -139,11 +139,11 @@ static uintptr_t gcore_prchoose(mdb_proc_t *);
  */
 static int gsvn_init(gcore_seg_t *);
 static void gsvn_fini(gcore_seg_t *);
-static u_offset_t gsvn_incore(gcore_seg_t *, u_offset_t, u_offset_t);
-static uint_t gsvn_getprot(gcore_seg_t *, u_offset_t);
-static int gsvn_getoffset(gcore_seg_t *, u_offset_t);
+static uoff_t gsvn_incore(gcore_seg_t *, uoff_t, uoff_t);
+static uint_t gsvn_getprot(gcore_seg_t *, uoff_t);
+static int gsvn_getoffset(gcore_seg_t *, uoff_t);
 static void gsvn_name(gcore_seg_t *, char *, size_t);
-static int gsvn_gettype(gcore_seg_t *, u_offset_t);
+static int gsvn_gettype(gcore_seg_t *, uoff_t);
 static boolean_t gsvn_noreserve(gcore_seg_t *);
 
 static gcore_segops_t gsvn_ops = {
@@ -203,7 +203,7 @@ error:
 
 /*ARGSUSED*/
 static int
-gsvn_getoffset(gcore_seg_t *gs, u_offset_t addr)
+gsvn_getoffset(gcore_seg_t *gs, uoff_t addr)
 {
 	mdb_segvn_data_t	*svd = gs->gs_data;
 	mdb_seg_t		*seg = gs->gs_seg;
@@ -252,7 +252,7 @@ gsvn_name(gcore_seg_t *gs, char *name, size_t size)
 
 /*ARGSUSED*/
 static int
-gsvn_gettype(gcore_seg_t *gs, u_offset_t addr)
+gsvn_gettype(gcore_seg_t *gs, uoff_t addr)
 {
 	return (0);
 }
@@ -358,7 +358,7 @@ gcore_anon_get_ptr(uintptr_t ah_addr, ulong_t an_idx)
 }
 
 static void
-gcore_anon_get(uintptr_t ahp, ulong_t an_index, uintptr_t *vp, u_offset_t *off)
+gcore_anon_get(uintptr_t ahp, ulong_t an_index, uintptr_t *vp, uoff_t *off)
 {
 	mdb_anon_t	anon;
 	uintptr_t	ap;
@@ -378,13 +378,13 @@ gcore_anon_get(uintptr_t ahp, ulong_t an_index, uintptr_t *vp, u_offset_t *off)
 	}
 }
 
-static u_offset_t
-gsvn_incore(gcore_seg_t *gs, u_offset_t addr, u_offset_t eaddr)
+static uoff_t
+gsvn_incore(gcore_seg_t *gs, uoff_t addr, uoff_t eaddr)
 {
 	mdb_segvn_data_t	*svd = gs->gs_data;
 	mdb_seg_t		*seg = gs->gs_seg;
 	mdb_amp_t		amp;
-	u_offset_t		offset;
+	uoff_t		offset;
 	uintptr_t		vp;
 	size_t			p, ep;
 
@@ -420,7 +420,7 @@ gsvn_incore(gcore_seg_t *gs, u_offset_t addr, u_offset_t eaddr)
 }
 
 static uint_t
-gsvn_getprot(gcore_seg_t *gs, u_offset_t addr)
+gsvn_getprot(gcore_seg_t *gs, uoff_t addr)
 {
 	mdb_segvn_data_t	*svd = gs->gs_data;
 	mdb_seg_t		*seg = gs->gs_seg;
@@ -489,7 +489,7 @@ gcore_break_seg(mdb_proc_t *p)
 	return (gcore_as_segat(p->p_as, addr));
 }
 
-static u_offset_t
+static uoff_t
 gcore_vnode_size(uintptr_t vnode_addr)
 {
 	mdb_vnode_t	vnode;
@@ -552,8 +552,8 @@ gcore_pr_getsegsize(mdb_seg_t *seg)
 		}
 
 		if (svd.vp != 0) {
-			u_offset_t fsize;
-			u_offset_t offset;
+			uoff_t fsize;
+			uoff_t offset;
 
 			fsize = gcore_vnode_size(svd.vp);
 			if (fsize == -1) {
@@ -596,7 +596,7 @@ gcore_getwatchprot_cb(uintptr_t node_addr, const void *aw_buff, void *arg)
 }
 
 static void
-gcore_getwatchprot(uintptr_t as_addr, u_offset_t addr, uint_t *prot)
+gcore_getwatchprot(uintptr_t as_addr, uoff_t addr, uint_t *prot)
 {
 	getwatchprot_cbarg_t	cbarg;
 	uintptr_t		wp_addr;
@@ -612,12 +612,12 @@ gcore_getwatchprot(uintptr_t as_addr, u_offset_t addr, uint_t *prot)
 	}
 }
 
-static u_offset_t
-gcore_pr_nextprot(gcore_seg_t *gs, u_offset_t *saddrp, u_offset_t eaddr,
+static uoff_t
+gcore_pr_nextprot(gcore_seg_t *gs, uoff_t *saddrp, uoff_t eaddr,
     uint_t *protp)
 {
 	uint_t		prot, nprot;
-	u_offset_t	addr = *saddrp;
+	uoff_t	addr = *saddrp;
 	uintptr_t	as_addr = gs->gs_seg->s_as;
 	int		noreserve = 0;
 
@@ -664,10 +664,10 @@ out:
  *   - eaddr: in - end address
  */
 static uint_t
-gcore_pr_getprot(gcore_seg_t *gs, u_offset_t *saddrp, u_offset_t *naddrp,
-    u_offset_t eaddr)
+gcore_pr_getprot(gcore_seg_t *gs, uoff_t *saddrp, uoff_t *naddrp,
+    uoff_t eaddr)
 {
-	u_offset_t	naddr;
+	uoff_t	naddr;
 	uint_t		prot;
 
 	dprintf("seg: %p saddr: %p eaddr: %p\n",
@@ -725,7 +725,7 @@ read_maps_cb(uintptr_t seg_addr, const void *aw_buff, void *arg)
 	uint_t			prot;
 	gcore_seg_t		*gs;
 	uintptr_t		eaddr;
-	u_offset_t		saddr, baddr;
+	uoff_t		saddr, baddr;
 	prmap_node_t		*mnode;
 	prmap_t			*mp;
 

@@ -237,7 +237,7 @@ nfs4_purge_stale_fh(int errno, vnode_t *vp, cred_t *cr)
 		rp->r_error = errno;
 	mutex_exit(&rp->r_statelock);
 	if (nfs4_has_pages(vp))
-		nfs4_invalidate_pages(vp, (u_offset_t)0, cr);
+		nfs4_invalidate_pages(vp, (uoff_t)0, cr);
 	nfs4_purge_caches(vp, NFS4_PURGE_DNLC, cr, FALSE);
 }
 
@@ -346,7 +346,7 @@ nfs4_flush_pages(vnode_t *vp, cred_t *cr)
 	int error;
 	rnode4_t *rp = VTOR4(vp);
 
-	error = fop_putpage(vp, (u_offset_t)0, 0, B_INVAL, cr, NULL);
+	error = fop_putpage(vp, (uoff_t)0, 0, B_INVAL, cr, NULL);
 	if (error == ENOSPC || error == EDQUOT) {
 		mutex_enter(&rp->r_statelock);
 		if (!rp->r_error)
@@ -1259,9 +1259,9 @@ nfs4_async_manager_stop(vfs_t *vfsp)
 }
 
 int
-nfs4_async_readahead(vnode_t *vp, u_offset_t blkoff, caddr_t addr,
+nfs4_async_readahead(vnode_t *vp, uoff_t blkoff, caddr_t addr,
     struct seg *seg, cred_t *cr, void (*readahead)(vnode_t *,
-    u_offset_t, caddr_t, struct seg *, cred_t *))
+    uoff_t, caddr_t, struct seg *, cred_t *))
 {
 	rnode4_t *rp;
 	mntinfo4_t *mi;
@@ -1705,9 +1705,9 @@ interrupted:
 }
 
 int
-nfs4_async_putapage(vnode_t *vp, page_t *pp, u_offset_t off, size_t len,
+nfs4_async_putapage(vnode_t *vp, page_t *pp, uoff_t off, size_t len,
     int flags, cred_t *cr, int (*putapage)(vnode_t *, page_t *,
-    u_offset_t, size_t, int, cred_t *))
+    uoff_t, size_t, int, cred_t *))
 {
 	rnode4_t *rp;
 	mntinfo4_t *mi;
@@ -1829,8 +1829,8 @@ noasync:
 }
 
 int
-nfs4_async_pageio(vnode_t *vp, page_t *pp, u_offset_t io_off, size_t io_len,
-    int flags, cred_t *cr, int (*pageio)(vnode_t *, page_t *, u_offset_t,
+nfs4_async_pageio(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
+    int flags, cred_t *cr, int (*pageio)(vnode_t *, page_t *, uoff_t,
     size_t, int, cred_t *))
 {
 	rnode4_t *rp;
@@ -2267,7 +2267,7 @@ writerp4(rnode4_t *rp, caddr_t base, int tcount, struct uio *uio, int pgcreated)
 	int n;
 	int saved_n;
 	caddr_t saved_base;
-	u_offset_t offset;
+	uoff_t offset;
 	int error;
 	int sm_error;
 	vnode_t *vp = RTOV(rp);
@@ -2423,12 +2423,12 @@ writerp4(rnode4_t *rp, caddr_t base, int tcount, struct uio *uio, int pgcreated)
 }
 
 int
-nfs4_putpages(vnode_t *vp, u_offset_t off, size_t len, int flags, cred_t *cr)
+nfs4_putpages(vnode_t *vp, uoff_t off, size_t len, int flags, cred_t *cr)
 {
 	rnode4_t *rp;
 	page_t *pp;
-	u_offset_t eoff;
-	u_offset_t io_off;
+	uoff_t eoff;
+	uoff_t io_off;
 	size_t io_len;
 	int error;
 	int rdirty;
@@ -2468,14 +2468,14 @@ nfs4_putpages(vnode_t *vp, u_offset_t off, size_t len, int flags, cred_t *cr)
 		 * If there are no full file async write operations
 		 * pending and RDIRTY bit is set, clear it.
 		 */
-		if (off == (u_offset_t)0 &&
+		if (off == (uoff_t)0 &&
 		    !(flags & B_ASYNC) &&
 		    (rp->r_flags & R4DIRTY)) {
 			mutex_enter(&rp->r_statelock);
 			rdirty = (rp->r_flags & R4DIRTY);
 			rp->r_flags &= ~R4DIRTY;
 			mutex_exit(&rp->r_statelock);
-		} else if (flags & B_ASYNC && off == (u_offset_t)0) {
+		} else if (flags & B_ASYNC && off == (uoff_t)0) {
 			mutex_enter(&rp->r_statelock);
 			if (rp->r_flags & R4DIRTY && rp->r_awcount == 0) {
 				rdirty = (rp->r_flags & R4DIRTY);
@@ -2554,7 +2554,7 @@ nfs4_putpages(vnode_t *vp, u_offset_t off, size_t len, int flags, cred_t *cr)
 }
 
 void
-nfs4_invalidate_pages(vnode_t *vp, u_offset_t off, cred_t *cr)
+nfs4_invalidate_pages(vnode_t *vp, uoff_t off, cred_t *cr)
 {
 	rnode4_t *rp;
 
@@ -2565,7 +2565,7 @@ nfs4_invalidate_pages(vnode_t *vp, u_offset_t off, cred_t *cr)
 	while (rp->r_flags & R4TRUNCATE)
 		cv_wait(&rp->r_cv, &rp->r_statelock);
 	rp->r_flags |= R4TRUNCATE;
-	if (off == (u_offset_t)0) {
+	if (off == (uoff_t)0) {
 		rp->r_flags &= ~R4DIRTY;
 		if (!(rp->r_flags & R4STALE))
 			rp->r_error = 0;

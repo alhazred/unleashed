@@ -409,7 +409,7 @@ boot_nfs_fstat(int fd, struct bootstat *stp)
 	if (status != 0)
 		return (-1);
 
-	if (va.va_size > (u_offset_t)MAXOFF_T) {
+	if (va.va_size > (uoff_t)MAXOFF_T) {
 		dprintf("boot_nfs_fstat(): File too large.\n");
 		return (-1);
 	}

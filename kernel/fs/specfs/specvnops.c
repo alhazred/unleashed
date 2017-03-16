@@ -122,11 +122,11 @@ static int spec_realvp(struct vnode *, struct vnode **, caller_context_t *);
 static int spec_getpage(struct vnode *, offset_t, size_t, uint_t *, page_t **,
 	size_t, struct seg *, caddr_t, enum seg_rw, struct cred *,
 	caller_context_t *);
-static int spec_putapage(struct vnode *, page_t *, u_offset_t *, size_t *, int,
+static int spec_putapage(struct vnode *, page_t *, uoff_t *, size_t *, int,
 	struct cred *);
-static struct buf *spec_startio(struct vnode *, page_t *, u_offset_t, size_t,
+static struct buf *spec_startio(struct vnode *, page_t *, uoff_t, size_t,
 	int);
-static int spec_getapage(struct vnode *, u_offset_t, size_t, uint_t *,
+static int spec_getapage(struct vnode *, uoff_t, size_t, uint_t *,
 	page_t **, size_t, struct seg *, caddr_t, enum seg_rw, struct cred *);
 static int spec_map(struct vnode *, offset_t, struct as *, caddr_t *, size_t,
 	uchar_t, uchar_t, uint_t, struct cred *, caller_context_t *);
@@ -139,7 +139,7 @@ static int spec_poll(struct vnode *, short, int, short *, struct pollhead **,
 	caller_context_t *);
 static int spec_dump(struct vnode *, caddr_t, offset_t, offset_t,
     caller_context_t *);
-static int spec_pageio(struct vnode *, page_t *, u_offset_t, size_t, int,
+static int spec_pageio(struct vnode *, page_t *, uoff_t, size_t, int,
     cred_t *, caller_context_t *);
 
 static int spec_getsecattr(struct vnode *, vsecattr_t *, int, struct cred *,
@@ -305,11 +305,11 @@ spec_lockcsp(struct snode *csp, int intr, int setlock, int hold)
  * XXX There is an inconsistency between block and raw - "unknown" is
  * UNKNOWN_SIZE for VBLK and 0 for VCHR(raw).
  */
-static u_offset_t
+static uoff_t
 spec_size(struct snode *csp)
 {
 	struct vnode	*cvp = STOV(csp);
-	u_offset_t	size;
+	uoff_t	size;
 	int		plen;
 	uint32_t	size32;
 	dev_t		dev;
@@ -982,7 +982,7 @@ spec_read(
 	dev_t dev = sp->s_dev;
 	size_t n;
 	ulong_t on;
-	u_offset_t bdevsize;
+	uoff_t bdevsize;
 	offset_t maxoff;
 	offset_t off;
 	struct vnode *blkvp;
@@ -1037,11 +1037,11 @@ spec_read(
 			n = (size_t)diff;
 
 		if (vpm_enable) {
-			error = vpm_data_copy(blkvp, (u_offset_t)(off + on),
+			error = vpm_data_copy(blkvp, (uoff_t)(off + on),
 			    n, uiop, 1, NULL, 0, S_READ);
 		} else {
 			base = segmap_getmapflt(segkmap, blkvp,
-			    (u_offset_t)(off + on), n, 1, S_READ);
+			    (uoff_t)(off + on), n, 1, S_READ);
 
 			error = uiomove(base + on, n, UIO_READ, uiop);
 		}
@@ -1088,7 +1088,7 @@ spec_write(
 	dev_t dev = sp->s_dev;
 	size_t n;
 	ulong_t on;
-	u_offset_t bdevsize;
+	uoff_t bdevsize;
 	offset_t maxoff;
 	offset_t off;
 	struct vnode *blkvp;
@@ -1165,11 +1165,11 @@ spec_write(
 		uio_prefaultpages((long)n, uiop);
 
 		if (vpm_enable) {
-			error = vpm_data_copy(blkvp, (u_offset_t)(off + on),
+			error = vpm_data_copy(blkvp, (uoff_t)(off + on),
 			    n, uiop, !pagecreate, NULL, 0, S_WRITE);
 		} else {
 			base = segmap_getmapflt(segkmap, blkvp,
-			    (u_offset_t)(off + on), n, !pagecreate, S_WRITE);
+			    (uoff_t)(off + on), n, !pagecreate, S_WRITE);
 
 			/*
 			 * segmap_pagecreate() returns 1 if it calls
@@ -1789,10 +1789,10 @@ spec_getpage(
 		if (protp != NULL)
 			*protp = PROT_ALL;
 
-		if (((u_offset_t)off + len) > (SPEC_SIZE(sp) + PAGEOFFSET))
+		if (((uoff_t)off + len) > (SPEC_SIZE(sp) + PAGEOFFSET))
 			return (EFAULT);	/* beyond EOF */
 
-		err = pvn_getpages(spec_getapage, vp, (u_offset_t)off, len,
+		err = pvn_getpages(spec_getapage, vp, (uoff_t)off, len,
 		    protp, pl, plsz, seg, addr, rw, cr);
 		break;
 
@@ -1820,7 +1820,7 @@ int spec_lostpage;	/* number of times we lost original page */
 static int
 spec_getapage(
 	struct vnode *vp,
-	u_offset_t	off,
+	uoff_t	off,
 	size_t		len,
 	uint_t		*protp,
 	page_t		*pl[],
@@ -1833,17 +1833,17 @@ spec_getapage(
 	struct snode *sp;
 	struct buf *bp;
 	page_t *pp, *pp2;
-	u_offset_t io_off1, io_off2;
+	uoff_t io_off1, io_off2;
 	size_t io_len1;
 	size_t io_len2;
 	size_t blksz;
-	u_offset_t blkoff;
+	uoff_t blkoff;
 	int dora, err;
 	page_t *pagefound;
 	uint_t xlen;
 	size_t adj_klustsize;
-	u_offset_t size;
-	u_offset_t tmpoff;
+	uoff_t size;
+	uoff_t tmpoff;
 
 	sp = VTOS(vp);
 	TRACE_3(TR_FAC_SPECFS, TR_SPECFS_GETAPAGE,
@@ -1927,7 +1927,7 @@ again:
 	}
 
 	if (dora && rw != S_CREATE) {
-		u_offset_t off2;
+		uoff_t off2;
 		caddr_t addr2;
 
 		off2 = ((off / adj_klustsize) + 1) * adj_klustsize;
@@ -2023,11 +2023,11 @@ spec_putpage(
 	struct snode *sp = VTOS(vp);
 	struct vnode *cvp;
 	page_t *pp;
-	u_offset_t io_off;
+	uoff_t io_off;
 	size_t io_len = 0;	/* for lint */
 	int err = 0;
-	u_offset_t size;
-	u_offset_t tmpoff;
+	uoff_t size;
+	uoff_t tmpoff;
 
 	ASSERT(vp->v_count != 0);
 
@@ -2052,7 +2052,7 @@ spec_putpage(
 		err = pvn_vplist_dirty(vp, off, spec_putapage,
 		    flags, cr);
 	} else {
-		u_offset_t eoff;
+		uoff_t eoff;
 
 		/*
 		 * Loop over all offsets in the range [off...off + len]
@@ -2108,21 +2108,21 @@ static int
 spec_putapage(
 	struct vnode	*vp,
 	page_t		*pp,
-	u_offset_t	*offp,		/* return value */
+	uoff_t	*offp,		/* return value */
 	size_t		*lenp,		/* return value */
 	int		flags,
 	struct cred	*cr)
 {
 	struct snode *sp = VTOS(vp);
-	u_offset_t io_off;
+	uoff_t io_off;
 	size_t io_len;
 	size_t blksz;
-	u_offset_t blkoff;
+	uoff_t blkoff;
 	int err = 0;
 	struct buf *bp;
-	u_offset_t size;
+	uoff_t size;
 	size_t adj_klustsize;
-	u_offset_t tmpoff;
+	uoff_t tmpoff;
 
 	/*
 	 * Destroy read ahead value since we are really going to write.
@@ -2183,7 +2183,7 @@ static struct buf *
 spec_startio(
 	struct vnode *vp,
 	page_t		*pp,
-	u_offset_t	io_off,
+	uoff_t	io_off,
 	size_t		io_len,
 	int		flags)
 {
@@ -2582,7 +2582,7 @@ static int
 spec_pageio(
 	struct vnode *vp,
 	page_t	*pp,
-	u_offset_t io_off,
+	uoff_t io_off,
 	size_t	io_len,
 	int	flags,
 	cred_t	*cr,

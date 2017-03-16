@@ -52,7 +52,7 @@ typedef enum {
 
 typedef struct fdb_holes {
 	struct fdb_holes *next_hole;
-	u_offset_t off;		/* start offset for this hole */
+	uoff_t off;		/* start offset for this hole */
 	size_t len;		/* length of this hole */
 } fdb_holes_t;
 
@@ -150,8 +150,8 @@ extern void fdb_free(fdbuffer_t *fdbuf);
  * Need to add:
  * fdb_get_iolen
  */
-extern void fdb_add_hole(fdbuffer_t *fdbuf, u_offset_t off, size_t len);
-extern buf_t *fdb_iosetup(fdbuffer_t *fdbuf, u_offset_t off, size_t len,
+extern void fdb_add_hole(fdbuffer_t *fdbuf, uoff_t off, size_t len);
+extern buf_t *fdb_iosetup(fdbuffer_t *fdbuf, uoff_t off, size_t len,
     struct vnode *vn, int flags);
 extern void fdb_iodone(buf_t *bufp);
 extern void fdb_ioerrdone(fdbuffer_t *fdbuf, int error);

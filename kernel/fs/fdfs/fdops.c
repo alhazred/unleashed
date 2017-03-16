@@ -169,13 +169,13 @@ fdgetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 
 	if (vp->v_type == VDIR) {
 		vap->va_nlink = 2;
-		vap->va_size = (u_offset_t)
+		vap->va_size = (uoff_t)
 		    ((P_FINFO(curproc)->fi_nfiles + 2) * FDSDSIZE);
 		vap->va_mode = 0555;
 		vap->va_nodeid = (ino64_t)FDROOTINO;
 	} else {
 		vap->va_nlink = 1;
-		vap->va_size = (u_offset_t)0;
+		vap->va_size = (uoff_t)0;
 		vap->va_mode = 0666;
 		vap->va_nodeid = (ino64_t)fdtoi(getminor(vp->v_rdev));
 	}
@@ -228,7 +228,7 @@ fdreaddir(vnode_t *vp, uio_t *uiop, cred_t *cr, int *eofp, caller_context_t *ct,
 	int flags)
 {
 	/* bp holds one dirent structure */
-	u_offset_t bp[DIRENT64_RECLEN(FDNSIZE) / sizeof (u_offset_t)];
+	uoff_t bp[DIRENT64_RECLEN(FDNSIZE) / sizeof (uoff_t)];
 	struct dirent64 *dirent = (struct dirent64 *)bp;
 	int reclen, nentries;
 	rctl_qty_t fdno_ctl;

@@ -269,7 +269,7 @@ typedef struct rnode {
 	nfs_fhandle	r_fh;		/* file handle */
 	struct servinfo	*r_server;	/* current server */
 	char		*r_path;	/* path to this rnode */
-	u_offset_t	r_nextr;	/* next byte read offset (read-ahead) */
+	uoff_t		r_nextr;	/* next byte read offset (read-ahead) */
 	cred_t		*r_cred;	/* current credentials */
 	cred_t		*r_unlcred;	/* unlinked credentials */
 	char		*r_unlname;	/* unlinked file name */
@@ -286,14 +286,14 @@ typedef struct rnode {
 	short		r_error;	/* async write error */
 	kcondvar_t	r_cv;		/* condvar for blocked threads */
 	int		(*r_putapage)	/* address of putapage routine */
-		(vnode_t *, page_t *, u_offset_t *, size_t *, int, cred_t *);
+		(vnode_t *, page_t *, uoff_t *, size_t *, int, cred_t *);
 	avl_tree_t	r_dir;		/* cache of readdir responses */
 	rddir_cache	*r_direof;	/* pointer to the EOF entry */
 	symlink_cache	r_symlink;	/* cached readlink response */
 	writeverf3	r_verf;		/* version 3 write verifier */
-	u_offset_t	r_modaddr;	/* address for page in writerp */
+	uoff_t		r_modaddr;	/* address for page in writerp */
 	commit_t	r_commit;	/* commit information */
-	u_offset_t	r_truncaddr;	/* base for truncate operation */
+	uoff_t		r_truncaddr;	/* base for truncate operation */
 	vsecattr_t	*r_secattr;	/* cached security attributes (acls) */
 	cookieverf3	r_cookieverf;	/* version 3 readdir cookie verifier */
 	lmpl_t		*r_lmpl;	/* pids that may be holding locks */
@@ -337,16 +337,16 @@ typedef struct rnode {
 #define	RTOFH3(rp)	((nfs_fh3 *)(&(rp)->r_fh))
 
 #ifdef _KERNEL
-extern int	nfs_async_readahead(vnode_t *, u_offset_t, caddr_t,
+extern int	nfs_async_readahead(vnode_t *, uoff_t, caddr_t,
 				struct seg *, cred_t *,
-				void (*)(vnode_t *, u_offset_t,
+				void (*)(vnode_t *, uoff_t,
 				caddr_t, struct seg *, cred_t *));
-extern int	nfs_async_putapage(vnode_t *, page_t *, u_offset_t, size_t,
+extern int	nfs_async_putapage(vnode_t *, page_t *, uoff_t, size_t,
 				int, cred_t *, int (*)(vnode_t *, page_t *,
-				u_offset_t, size_t, int, cred_t *));
-extern int	nfs_async_pageio(vnode_t *, page_t *, u_offset_t, size_t,
+				uoff_t, size_t, int, cred_t *));
+extern int	nfs_async_pageio(vnode_t *, page_t *, uoff_t, size_t,
 				int, cred_t *, int (*)(vnode_t *, page_t *,
-				u_offset_t, size_t, int, cred_t *));
+				uoff_t, size_t, int, cred_t *));
 extern void	nfs_async_readdir(vnode_t *, rddir_cache *,
 				cred_t *, int (*)(vnode_t *,
 				rddir_cache *, cred_t *));
@@ -356,8 +356,8 @@ extern void	nfs_async_commit(vnode_t *, page_t *, offset3, count3,
 extern void	nfs_async_inactive(vnode_t *, cred_t *, void (*)(vnode_t *,
 				cred_t *, caller_context_t *));
 extern int	writerp(rnode_t *, caddr_t, int, struct uio *, int);
-extern int	nfs_putpages(vnode_t *, u_offset_t, size_t, int, cred_t *);
-extern void	nfs_invalidate_pages(vnode_t *, u_offset_t, cred_t *);
+extern int	nfs_putpages(vnode_t *, uoff_t, size_t, int, cred_t *);
+extern void	nfs_invalidate_pages(vnode_t *, uoff_t, cred_t *);
 extern int	rfs2call(struct mntinfo *, rpcproc_t, xdrproc_t, caddr_t,
 			xdrproc_t, caddr_t, cred_t *, int *, enum nfsstat *,
 			int, struct failinfo *);
@@ -379,9 +379,9 @@ extern void	rflush(struct vfs *, cred_t *);
 extern nfs_access_type_t nfs_access_check(rnode_t *, uint32_t, cred_t *);
 extern void	nfs_access_cache(rnode_t *rp, uint32_t, uint32_t, cred_t *);
 extern int	nfs_access_purge_rp(rnode_t *);
-extern int	nfs_putapage(vnode_t *, page_t *, u_offset_t *, size_t *,
+extern int	nfs_putapage(vnode_t *, page_t *, uoff_t *, size_t *,
 			int, cred_t *);
-extern int	nfs3_putapage(vnode_t *, page_t *, u_offset_t *, size_t *,
+extern int	nfs3_putapage(vnode_t *, page_t *, uoff_t *, size_t *,
 			int, cred_t *);
 extern void	nfs_printfhandle(nfs_fhandle *);
 extern void	nfs_write_error(vnode_t *, int, cred_t *);

@@ -78,7 +78,7 @@ struct	smap {
 	struct	smap	*sm_hash;	/* hash pointer */
 	struct	smap	*sm_next;	/* next pointer */
 	struct	smap	*sm_prev;	/* previous pointer */
-	u_offset_t	sm_off;		/* file offset for mapping */
+	uoff_t		sm_off;		/* file offset for mapping */
 	ushort_t	sm_bitmap;	/* bit map for locked translations */
 	ushort_t	sm_refcnt;	/* reference count for uses */
 	ushort_t	sm_flags;	/* smap flags */
@@ -278,12 +278,12 @@ extern int	segmap_pagecreate(struct seg *, caddr_t, size_t, int);
 extern void	segmap_pageunlock(struct seg *, caddr_t, size_t, enum seg_rw);
 extern faultcode_t segmap_fault(struct hat *, struct seg *, caddr_t, size_t,
 		enum fault_type, enum seg_rw);
-extern caddr_t	segmap_getmap(struct seg *, struct vnode *, u_offset_t);
-extern caddr_t	segmap_getmapflt(struct seg *, struct vnode *, u_offset_t,
+extern caddr_t	segmap_getmap(struct seg *, struct vnode *, uoff_t);
+extern caddr_t	segmap_getmapflt(struct seg *, struct vnode *, uoff_t,
 		size_t, int, enum seg_rw);
 extern int	segmap_release(struct seg *, caddr_t, uint_t);
 extern void	segmap_flush(struct seg *, struct vnode *);
-extern void	segmap_inval(struct seg *, struct vnode *, u_offset_t);
+extern void	segmap_inval(struct seg *, struct vnode *, uoff_t);
 
 #endif	/* _KERNEL */
 

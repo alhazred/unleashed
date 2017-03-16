@@ -3798,17 +3798,17 @@ pr_getsegsize(struct seg *seg, int reserved)
 		    vp != NULL && vp->v_type == VREG &&
 		    fop_getattr(vp, &vattr, 0, CRED(), NULL) == 0) {
 
-			u_offset_t fsize = vattr.va_size;
-			u_offset_t offset = segop_getoffset(seg, seg->s_base);
+			uoff_t fsize = vattr.va_size;
+			uoff_t offset = segop_getoffset(seg, seg->s_base);
 
 			if (fsize < offset)
 				fsize = 0;
 			else
 				fsize -= offset;
 
-			fsize = roundup(fsize, (u_offset_t)PAGESIZE);
+			fsize = roundup(fsize, (uoff_t)PAGESIZE);
 
-			if (fsize < (u_offset_t)size)
+			if (fsize < (uoff_t)size)
 				size = (size_t)fsize;
 		}
 

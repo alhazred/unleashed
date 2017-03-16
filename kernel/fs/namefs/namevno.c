@@ -130,7 +130,7 @@ nm_open(vnode_t **vpp, int flag, cred_t *crp, caller_context_t *ct)
 		bcopy(&nodep->nm_vattr, &newnamep->nm_vattr, sizeof (vattr_t));
 		newnamep->nm_vattr.va_type = outfilevp->v_type;
 		newnamep->nm_vattr.va_nodeid = namenodeno_alloc();
-		newnamep->nm_vattr.va_size = (u_offset_t)0;
+		newnamep->nm_vattr.va_size = (uoff_t)0;
 		newnamep->nm_vattr.va_rdev = outfilevp->v_rdev;
 		newnamep->nm_flag = NMNMNT;
 		newnamep->nm_filevp = outfilevp;

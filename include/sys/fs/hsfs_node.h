@@ -101,7 +101,7 @@ struct  hsnode {
 	long		hs_mapcnt;	/* mappings to file pages */
 	uint_t		hs_seq;		/* sequence number */
 	uint_t		hs_flags;	/* (see below) */
-	u_offset_t	hs_prev_offset; /* Last read end offset (readahead) */
+	uoff_t		hs_prev_offset; /* Last read end offset (readahead) */
 	int		hs_num_contig;  /* Count of contiguous reads */
 	int		hs_ra_bytes;    /* Bytes to readahead */
 	kmutex_t	hs_contents_lock;	/* protects hsnode contents */
@@ -185,7 +185,7 @@ struct hio {
 	struct buf	*bp;		/* The buf for this read */
 	struct hio	*contig_chain;  /* Next adjacent read if any */
 	offset_t	io_lblkno;	/* Starting disk block of io */
-	u_offset_t	nblocks;	/* # disk blocks */
+	uoff_t		nblocks;	/* # disk blocks */
 	uint64_t	io_timestamp;	/* usec timestamp for deadline */
 	ksema_t		*sema;		/* Completion flag */
 	avl_node_t	io_offset_node; /* Avl tree requirements */

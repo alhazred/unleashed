@@ -101,7 +101,7 @@ nbl_need_check(vnode_t *vp)
 int
 nbl_conflict(vnode_t *vp,
 		nbl_op_t op,		/* attempted operation */
-		u_offset_t offset,	/* ignore if not I/O */
+		uoff_t offset,	/* ignore if not I/O */
 		ssize_t length,		/* ignore if not I/O */
 		int svmand,		/* System V mandatory locking */
 		caller_context_t *ct)	/* caller context */

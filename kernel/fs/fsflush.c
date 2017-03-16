@@ -128,7 +128,7 @@ fsflush_do_pages()
 	ulong_t		cnt;
 	int		mod;
 	int		fspage = 1;
-	u_offset_t	offset;
+	uoff_t		offset;
 	uint_t		szc;
 
 	page_t		*coal_page = NULL;  /* 1st page in group to coalesce */

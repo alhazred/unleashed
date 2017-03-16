@@ -53,7 +53,7 @@ extern "C" {
 typedef struct segvn_crargs {
 	struct	vnode *vp;	/* vnode mapped from */
 	struct	cred *cred;	/* credentials */
-	u_offset_t	offset; /* starting offset of vnode for mapping */
+	uoff_t	offset;		/* starting offset of vnode for mapping */
 	uchar_t	type;		/* type of sharing done */
 	uchar_t	prot;		/* protections */
 	uchar_t	maxprot;	/* maximum protections */
@@ -90,7 +90,7 @@ typedef struct	segvn_data {
 	uchar_t	prot;		/* current segment prot if pageprot == 0 */
 	uchar_t	maxprot;	/* maximum segment protections */
 	uchar_t	type;		/* type of sharing done */
-	u_offset_t offset;	/* starting offset of vnode for mapping */
+	uoff_t offset;		/* starting offset of vnode for mapping */
 	struct	vnode *vp;	/* vnode that segment mapping is to */
 	ulong_t	anon_index;	/* starting index into anon_map anon array */
 	struct	anon_map *amp;	/* pointer to anon share structure, if needed */
@@ -195,7 +195,7 @@ typedef struct	segvn_data {
  */
 typedef struct svntr {
 	struct vnode	*tr_vp;		/* text file vnode */
-	u_offset_t	tr_off;		/* tr_vp mapping start offset */
+	uoff_t		tr_off;		/* tr_vp mapping start offset */
 	size_t		tr_eoff;	/* tr_vp mapping end offset */
 	uint_t		tr_szc;		/* tr_vp mapping pagesize */
 	int		tr_valid;	/* entry validity state */

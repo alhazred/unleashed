@@ -625,8 +625,8 @@ typedef struct snf_req {
 	struct vnode	*sr_vp;
 	file_t 		*sr_fp;
 	ssize_t		sr_maxpsz;
-	u_offset_t	sr_file_off;
-	u_offset_t	sr_file_size;
+	uoff_t		sr_file_off;
+	uoff_t		sr_file_size;
 #define	SR_READ_DONE	0x80000000
 	int		sr_read_error;
 	int		sr_write_error;
@@ -907,7 +907,7 @@ extern void	soseterror(struct sonode *, int);
 extern int	sogeterr(struct sonode *, boolean_t);
 extern int	sowaitconnected(struct sonode *, int, int);
 
-extern ssize_t	soreadfile(file_t *, uchar_t *, u_offset_t, int *, size_t);
+extern ssize_t	soreadfile(file_t *, uchar_t *, uoff_t, int *, size_t);
 extern void	*sock_kstat_init(zoneid_t);
 extern void	sock_kstat_fini(zoneid_t, void *);
 extern struct sonode *getsonode(int, int *, file_t **);

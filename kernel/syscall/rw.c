@@ -83,7 +83,7 @@ read(int fdes, void *cbuf, size_t count)
 	int fflag, ioflag, rwflag;
 	ssize_t cnt, bcount;
 	int error = 0;
-	u_offset_t fileoff;
+	uoff_t fileoff;
 	int in_crit = 0;
 
 	if ((cnt = (ssize_t)count) < 0)
@@ -136,7 +136,7 @@ read(int fdes, void *cbuf, size_t count)
 	 * can lead to incorrect functionality.
 	 */
 
-	fileoff = (u_offset_t)fp->f_offset;
+	fileoff = (uoff_t)fp->f_offset;
 	if (fileoff >= OFFSET_MAX(fp) && (vp->v_type == VREG)) {
 		struct vattr va;
 		va.va_mask = AT_SIZE;
@@ -219,7 +219,7 @@ write(int fdes, void *cbuf, size_t count)
 	int fflag, ioflag, rwflag;
 	ssize_t cnt, bcount;
 	int error = 0;
-	u_offset_t fileoff;
+	uoff_t fileoff;
 	int in_crit = 0;
 
 	if ((cnt = (ssize_t)count) < 0)
@@ -345,12 +345,12 @@ pread(int fdes, void *cbuf, size_t count, off_t offset)
 	int fflag, ioflag, rwflag;
 	ssize_t bcount;
 	int error = 0;
-	u_offset_t fileoff = (u_offset_t)(ulong_t)offset;
+	uoff_t fileoff = (uoff_t)(ulong_t)offset;
 #ifdef _SYSCALL32_IMPL
-	u_offset_t maxoff = get_udatamodel() == DATAMODEL_ILP32 ?
+	uoff_t maxoff = get_udatamodel() == DATAMODEL_ILP32 ?
 	    MAXOFF32_T : MAXOFFSET_T;
 #else
-	const u_offset_t maxoff = MAXOFF32_T;
+	const uoff_t maxoff = MAXOFF32_T;
 #endif
 	int in_crit = 0;
 
@@ -415,7 +415,7 @@ pread(int fdes, void *cbuf, size_t count, off_t offset)
 	aiov.iov_base = cbuf;
 	aiov.iov_len = bcount;
 	(void) fop_rwlock(vp, rwflag, NULL);
-	if (vp->v_type == VREG && fileoff == (u_offset_t)maxoff) {
+	if (vp->v_type == VREG && fileoff == (uoff_t)maxoff) {
 		struct vattr va;
 		va.va_mask = AT_SIZE;
 		if ((error = fop_getattr(vp, &va, 0, fp->f_cred, NULL))) {
@@ -485,12 +485,12 @@ pwrite(int fdes, void *cbuf, size_t count, off_t offset)
 	int fflag, ioflag, rwflag;
 	ssize_t bcount;
 	int error = 0;
-	u_offset_t fileoff = (u_offset_t)(ulong_t)offset;
+	uoff_t fileoff = (uoff_t)(ulong_t)offset;
 #ifdef _SYSCALL32_IMPL
-	u_offset_t maxoff = get_udatamodel() == DATAMODEL_ILP32 ?
+	uoff_t maxoff = get_udatamodel() == DATAMODEL_ILP32 ?
 	    MAXOFF32_T : MAXOFFSET_T;
 #else
-	const u_offset_t maxoff = MAXOFF32_T;
+	const uoff_t maxoff = MAXOFF32_T;
 #endif
 	int in_crit = 0;
 
@@ -541,7 +541,7 @@ pwrite(int fdes, void *cbuf, size_t count, off_t offset)
 			goto out;
 		}
 		if (fileoff + count > maxoff)
-			bcount = (ssize_t)((u_offset_t)maxoff - fileoff);
+			bcount = (ssize_t)((uoff_t)maxoff - fileoff);
 	} else if (vp->v_type == VFIFO) {
 		error = ESPIPE;
 		goto out;
@@ -621,7 +621,7 @@ readv(int fdes, struct iovec *iovp, int iovcnt)
 	ssize_t count, bcount;
 	int error = 0;
 	int i;
-	u_offset_t fileoff;
+	uoff_t fileoff;
 	int in_crit = 0;
 
 	if (iovcnt <= 0 || iovcnt > IOV_MAX)
@@ -814,7 +814,7 @@ writev(int fdes, struct iovec *iovp, int iovcnt)
 	ssize_t count, bcount;
 	int error = 0;
 	int i;
-	u_offset_t fileoff;
+	uoff_t fileoff;
 	int in_crit = 0;
 
 	if (iovcnt <= 0 || iovcnt > IOV_MAX)
@@ -1000,17 +1000,17 @@ preadv(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 	int i;
 
 #if defined(_SYSCALL32_IMPL) || defined(_ILP32)
-	u_offset_t fileoff = ((u_offset_t)extended_offset << 32) |
-	    (u_offset_t)offset;
+	uoff_t fileoff = ((uoff_t)extended_offset << 32) |
+	    (uoff_t)offset;
 #else /* _SYSCALL32_IMPL || _ILP32 */
-	u_offset_t fileoff = (u_offset_t)(ulong_t)offset;
+	uoff_t fileoff = (uoff_t)(ulong_t)offset;
 #endif /* _SYSCALL32_IMPR || _ILP32 */
 #ifdef _SYSCALL32_IMPL
-	const u_offset_t maxoff = get_udatamodel() == DATAMODEL_ILP32 &&
+	const uoff_t maxoff = get_udatamodel() == DATAMODEL_ILP32 &&
 	    extended_offset == 0?
 	    MAXOFF32_T : MAXOFFSET_T;
 #else /* _SYSCALL32_IMPL */
-	const u_offset_t maxoff = MAXOFF32_T;
+	const uoff_t maxoff = MAXOFF32_T;
 #endif /* _SYSCALL32_IMPL */
 
 	int in_crit = 0;
@@ -1113,7 +1113,7 @@ preadv(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 		}
 
 		if (fileoff + bcount > maxoff)
-			bcount = (ssize_t)((u_offset_t)maxoff - fileoff);
+			bcount = (ssize_t)((uoff_t)maxoff - fileoff);
 	} else if (vp->v_type == VFIFO) {
 		error = ESPIPE;
 		goto out;
@@ -1219,17 +1219,17 @@ pwritev(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 	int i;
 
 #if defined(_SYSCALL32_IMPL) || defined(_ILP32)
-	u_offset_t fileoff = ((u_offset_t)extended_offset << 32) |
-	    (u_offset_t)offset;
+	uoff_t fileoff = ((uoff_t)extended_offset << 32) |
+	    (uoff_t)offset;
 #else /* _SYSCALL32_IMPL || _ILP32 */
-	u_offset_t fileoff = (u_offset_t)(ulong_t)offset;
+	uoff_t fileoff = (uoff_t)(ulong_t)offset;
 #endif /* _SYSCALL32_IMPR || _ILP32 */
 #ifdef _SYSCALL32_IMPL
-	const u_offset_t maxoff = get_udatamodel() == DATAMODEL_ILP32 &&
+	const uoff_t maxoff = get_udatamodel() == DATAMODEL_ILP32 &&
 	    extended_offset == 0?
 	    MAXOFF32_T : MAXOFFSET_T;
 #else /* _SYSCALL32_IMPL */
-	const u_offset_t maxoff = MAXOFF32_T;
+	const uoff_t maxoff = MAXOFF32_T;
 #endif /* _SYSCALL32_IMPL */
 
 	int in_crit = 0;
@@ -1362,7 +1362,7 @@ pwritev(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 		}
 
 		if (fileoff + bcount > maxoff)
-			bcount = (ssize_t)((u_offset_t)maxoff - fileoff);
+			bcount = (ssize_t)((uoff_t)maxoff - fileoff);
 	} else if (vp->v_type == VFIFO) {
 		error = ESPIPE;
 		goto out;
@@ -1466,13 +1466,13 @@ pread64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 	int fflag, ioflag, rwflag;
 	ssize_t bcount;
 	int error = 0;
-	u_offset_t fileoff;
+	uoff_t fileoff;
 	int in_crit = 0;
 
 #if defined(_LITTLE_ENDIAN)
-	fileoff = ((u_offset_t)offset_2 << 32) | (u_offset_t)offset_1;
+	fileoff = ((uoff_t)offset_2 << 32) | (uoff_t)offset_1;
 #else
-	fileoff = ((u_offset_t)offset_1 << 32) | (u_offset_t)offset_2;
+	fileoff = ((uoff_t)offset_1 << 32) | (uoff_t)offset_2;
 #endif
 
 	if ((bcount = (ssize_t)count) < 0 || bcount > INT32_MAX)
@@ -1589,13 +1589,13 @@ pwrite64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 	int fflag, ioflag, rwflag;
 	ssize_t bcount;
 	int error = 0;
-	u_offset_t fileoff;
+	uoff_t fileoff;
 	int in_crit = 0;
 
 #if defined(_LITTLE_ENDIAN)
-	fileoff = ((u_offset_t)offset_2 << 32) | (u_offset_t)offset_1;
+	fileoff = ((uoff_t)offset_2 << 32) | (uoff_t)offset_1;
 #else
-	fileoff = ((u_offset_t)offset_1 << 32) | (u_offset_t)offset_2;
+	fileoff = ((uoff_t)offset_1 << 32) | (uoff_t)offset_2;
 #endif
 
 	if ((bcount = (ssize_t)count) < 0 || bcount > INT32_MAX)
@@ -1635,7 +1635,7 @@ pwrite64(int fdes, void *cbuf, size32_t count, uint32_t offset_1,
 			goto out;
 		}
 		if (fileoff + bcount > MAXOFFSET_T)
-			bcount = (ssize_t)((u_offset_t)MAXOFFSET_T - fileoff);
+			bcount = (ssize_t)((uoff_t)MAXOFFSET_T - fileoff);
 	} else if (vp->v_type == VFIFO) {
 		error = ESPIPE;
 		goto out;

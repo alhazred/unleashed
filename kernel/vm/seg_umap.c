@@ -56,7 +56,7 @@ static size_t segumap_incore(struct seg *, caddr_t, size_t, char *);
 static int segumap_lockop(struct seg *, caddr_t, size_t, int, int, ulong_t *,
     size_t);
 static int segumap_getprot(struct seg *, caddr_t, size_t, uint_t *);
-static u_offset_t segumap_getoffset(struct seg *, caddr_t);
+static uoff_t segumap_getoffset(struct seg *, caddr_t);
 static int segumap_gettype(struct seg *, caddr_t);
 static int segumap_getvp(struct seg *, caddr_t, struct vnode **);
 static int segumap_advise(struct seg *, caddr_t, size_t, uint_t);
@@ -362,7 +362,7 @@ segumap_getprot(struct seg *seg, caddr_t addr, size_t len, uint_t *protv)
 }
 
 /* ARGSUSED */
-static u_offset_t
+static uoff_t
 segumap_getoffset(struct seg *seg, caddr_t addr)
 {
 	/*

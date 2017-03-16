@@ -118,7 +118,7 @@ ud_dirlook(struct ud_inode *dip,
 {
 	struct udf_vfs *udf_vfsp;
 	int32_t error = 0, namelen, adhoc_search;
-	u_offset_t offset, adhoc_offset, dirsize, end;
+	uoff_t offset, adhoc_offset, dirsize, end;
 	struct vnode *dvp, *vp;
 	struct fbuf *fbp;
 	struct file_id *fid;

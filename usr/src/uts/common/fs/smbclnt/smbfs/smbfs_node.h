@@ -230,7 +230,7 @@ typedef struct smbnode {
 	 * Misc. bookkeeping
 	 */
 	cred_t		*r_cred;	/* current credentials */
-	u_offset_t	r_nextr;	/* next read offset (read-ahead) */
+	uoff_t		r_nextr;	/* next read offset (read-ahead) */
 	long		r_mapcnt;	/* count of mmapped pages */
 	uint_t		r_count;	/* # of refs not reflect in v_count */
 	uint_t		r_awcount;	/* # of outstanding async write */

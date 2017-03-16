@@ -159,7 +159,7 @@ verify_inode(fsck_ino_t inumber, struct inodesc *idesc, fsck_ino_t maxinumber)
 	    ((dp->di_mode & IFMT) == IFATTRDIR);
 
 	lastino = inumber;
-	if (dp->di_size > (u_offset_t)UFS_MAXOFFSET_T) {
+	if (dp->di_size > (uoff_t)UFS_MAXOFFSET_T) {
 		pfatal("NEGATIVE SIZE %lld I=%d",
 		    (longlong_t)dp->di_size, inumber);
 		goto bogus;
@@ -185,7 +185,7 @@ verify_inode(fsck_ino_t inumber, struct inodesc *idesc, fsck_ino_t maxinumber)
 		}
 	}
 
-	ndb = howmany(dp->di_size, (u_offset_t)sblock.fs_bsize);
+	ndb = howmany(dp->di_size, (uoff_t)sblock.fs_bsize);
 	if (ndb < 0) {
 		/* extra space to distinguish from previous pfatal() */
 		pfatal("NEGATIVE SIZE %lld  I=%d",
@@ -387,7 +387,7 @@ verify_inode(fsck_ino_t inumber, struct inodesc *idesc, fsck_ino_t maxinumber)
 	dupblk = 0;
 	idesc->id_number = inumber;
 	idesc->id_fix = DONTKNOW;
-	if (dp->di_size > (u_offset_t)MAXOFF_T) {
+	if (dp->di_size > (uoff_t)MAXOFF_T) {
 		largefile_count++;
 	}
 

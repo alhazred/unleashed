@@ -83,7 +83,7 @@ smb_com_unlock_byte_range(smb_request_t *sr)
 	}
 
 	result = smb_unlock_range(sr, sr->fid_ofile->f_node,
-	    (u_offset_t)Offset, (uint64_t)Length);
+	    (uoff_t)Offset, (uint64_t)Length);
 	if (result != NT_STATUS_SUCCESS) {
 		smbsr_error(sr, NT_STATUS_RANGE_NOT_LOCKED,
 		    ERRDOS, ERROR_NOT_LOCKED);

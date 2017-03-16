@@ -123,7 +123,7 @@ smb_set_eof_info(smb_request_t *sr, smb_setinfo_t *si)
 
 	bzero(attr, sizeof (*attr));
 	attr->sa_mask = SMB_AT_SIZE;
-	attr->sa_vattr.va_size = (u_offset_t)eof;
+	attr->sa_vattr.va_size = (uoff_t)eof;
 	rc = smb_node_setattr(sr, node, sr->user_cr, sr->fid_ofile, attr);
 	if (rc != 0)
 		return (smb_errno2status(rc));
@@ -159,7 +159,7 @@ smb_set_alloc_info(smb_request_t *sr, smb_setinfo_t *si)
 
 	bzero(attr, sizeof (*attr));
 	attr->sa_mask = SMB_AT_ALLOCSZ;
-	attr->sa_allocsz = (u_offset_t)allocsz;
+	attr->sa_allocsz = (uoff_t)allocsz;
 	rc = smb_node_setattr(sr, node, sr->user_cr, sr->fid_ofile, attr);
 	if (rc != 0)
 		return (smb_errno2status(rc));

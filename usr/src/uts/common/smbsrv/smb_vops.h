@@ -70,7 +70,7 @@ typedef struct smb_attr {
 	vattr_t		sa_vattr;	/* Legacy vattr */
 	uint32_t	sa_dosattr;	/* DOS attributes */
 	timestruc_t	sa_crtime;	/* Creation time */
-	u_offset_t	sa_allocsz;	/* File allocation size in bytes */
+	uoff_t		sa_allocsz;	/* File allocation size in bytes */
 } smb_attr_t;
 
 #define	SMB_AT_TYPE	0x00001

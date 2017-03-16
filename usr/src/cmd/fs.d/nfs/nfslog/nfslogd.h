@@ -106,7 +106,7 @@ struct valid_rpcs {
 struct processed_records {
 	struct processed_records *next;
 	struct processed_records *prev;
-	u_offset_t start_offset;
+	uoff_t start_offset;
 	unsigned int len;
 	unsigned int num_recs;
 };
@@ -117,16 +117,16 @@ struct nfslog_buf {
 	char	*bufpath;			/* buffer file name */
 	int	fd;				/* buffer file fd */
 	flock_t fl;				/* buffer file lock */
-	u_offset_t	filesize;		/* file size */
+	uoff_t	filesize;			/* file size */
 	intptr_t mmap_addr;			/* address of mmap */
-	u_offset_t next_rec;			/* address of next record */
+	uoff_t next_rec;			/* address of next record */
 	unsigned int last_rec_id;		/* last record id processed */
 	nfslog_buffer_header	bh;		/* file buffer header */
 	struct nfslog_lr *bh_lrp;
 	int num_lrps;
 	struct nfslog_lr *lrps;			/* raw records - not cooked */
 	/* Next fields used for tracking processed records from buf file */
-	u_offset_t last_record_offset;		/* value last written to hdr */
+	uoff_t last_record_offset;		/* value last written to hdr */
 	struct processed_records *prp;		/* list of processed chunks */
 	int num_pr_queued;			/* # of processed records */
 };
@@ -134,7 +134,7 @@ struct nfslog_buf {
 struct nfslog_lr {
 	struct	nfslog_lr *next;
 	struct	nfslog_lr *prev;
-	u_offset_t f_offset;			/* offset for ondisk file */
+	uoff_t f_offset;			/* offset for ondisk file */
 	intptr_t record;			/* mmap address of record */
 	unsigned int recsize;			/* size of this record */
 	caddr_t buffer;				/* used if mmap fails */

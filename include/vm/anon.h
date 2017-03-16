@@ -387,7 +387,7 @@ extern void	anon_dup(struct anon_hdr *, ulong_t,
 extern void	anon_dup_fill_holes(struct anon_hdr *, ulong_t,
 		    struct anon_hdr *, ulong_t, size_t, uint_t, int);
 extern int	anon_fill_cow_holes(struct seg *, caddr_t, struct anon_hdr *,
-		    ulong_t, struct vnode *, u_offset_t, size_t, uint_t,
+		    ulong_t, struct vnode *, uoff_t, size_t, uint_t,
 		    uint_t, struct vpage [], struct cred *);
 extern void	anon_free(struct anon_hdr *, ulong_t, size_t);
 extern void	anon_free_pages(struct anon_hdr *, ulong_t, size_t, uint_t);
@@ -395,7 +395,7 @@ extern int	anon_disclaim(struct anon_map *,
 		    ulong_t, size_t, uint_t, pgcnt_t *);
 extern int	anon_getpage(struct anon **, uint_t *, struct page **,
 		    size_t, struct seg *, caddr_t, enum seg_rw, struct cred *);
-extern int	swap_getconpage(struct vnode *, u_offset_t, size_t,
+extern int	swap_getconpage(struct vnode *, uoff_t, size_t,
 		    uint_t *, page_t *[], size_t, page_t *, uint_t *,
 		    spgcnt_t *, struct seg *, caddr_t,
 		    enum seg_rw, struct cred *);
@@ -426,7 +426,7 @@ extern void	anonmap_free(struct anon_map *);
 extern void	anonmap_purge(struct anon_map *);
 extern void	anon_swap_free(struct anon *, struct page *);
 extern void	anon_decref(struct anon *);
-extern int	non_anon(struct anon_hdr *, ulong_t, u_offset_t *, size_t *);
+extern int	non_anon(struct anon_hdr *, ulong_t, uoff_t *, size_t *);
 extern pgcnt_t	anon_pages(struct anon_hdr *, ulong_t, pgcnt_t);
 extern int	anon_swap_adjust(pgcnt_t);
 extern void	anon_swap_restore(pgcnt_t);

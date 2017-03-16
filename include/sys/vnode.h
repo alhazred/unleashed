@@ -369,7 +369,7 @@ typedef struct vattr {
 	dev_t		va_fsid;	/* file system id (dev for now) */
 	u_longlong_t	va_nodeid;	/* node id */
 	nlink_t		va_nlink;	/* number of references to file */
-	u_offset_t	va_size;	/* file size in bytes */
+	uoff_t		va_size;	/* file size in bytes */
 	timestruc_t	va_atime;	/* time of last access */
 	timestruc_t	va_mtime;	/* time of last modification */
 	timestruc_t	va_ctime;	/* time of last status change */
@@ -497,7 +497,7 @@ typedef struct vattr32 {
 	dev32_t		va_fsid;	/* file system id (dev for now) */
 	u_longlong_t	va_nodeid;	/* node id */
 	nlink_t		va_nlink;	/* number of references to file */
-	u_offset_t	va_size;	/* file size in bytes */
+	uoff_t	va_size;	/* file size in bytes */
 	timestruc32_t	va_atime;	/* time of last access */
 	timestruc32_t	va_mtime;	/* time of last modification */
 	timestruc32_t	va_ctime;	/* time of last status change */
@@ -915,7 +915,7 @@ struct taskq;
 	int	(*vop_pathconf)(vnode_t *, int, ulong_t *, cred_t *,	\
 				caller_context_t *);			\
 	int	(*vop_pageio)(vnode_t *, struct page *,			\
-				u_offset_t, size_t, int, cred_t *,	\
+				uoff_t, size_t, int, cred_t *,	\
 				caller_context_t *);			\
 	int	(*vop_dumpctl)(vnode_t *, int, offset_t *,		\
 				caller_context_t *);			\
@@ -1017,7 +1017,7 @@ extern int	fop_dump(vnode_t *, caddr_t, offset_t, offset_t,
     caller_context_t *);
 extern int	fop_pathconf(vnode_t *, int, ulong_t *, cred_t *,
 				caller_context_t *);
-extern int	fop_pageio(vnode_t *, struct page *, u_offset_t, size_t, int,
+extern int	fop_pageio(vnode_t *, struct page *, uoff_t, size_t, int,
 				cred_t *, caller_context_t *);
 extern int	fop_dumpctl(vnode_t *, int, offset_t *, caller_context_t *);
 extern void	fop_dispose(vnode_t *, struct page *, int, int, cred_t *,
@@ -1324,7 +1324,7 @@ typedef enum {
 struct async_reqs {
 	struct async_reqs *a_next;	/* pointer to next arg struct */
 	struct vnode *a_vp;		/* vnode pointer */
-	u_offset_t a_off;			/* offset in file */
+	uoff_t a_off;			/* offset in file */
 	uint_t a_len;			/* size of i/o request */
 	int a_flags;			/* flags to indicate operation type */
 	struct cred *a_cred;		/* cred pointer	*/

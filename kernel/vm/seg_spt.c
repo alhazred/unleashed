@@ -100,7 +100,7 @@ static const struct seg_ops segspt_ops = {
 	.incore		= SEGSPT_BADOP(size_t),
 	.lockop		= SEGSPT_BADOP(int),
 	.getprot	= SEGSPT_BADOP(int),
-	.getoffset	= SEGSPT_BADOP(u_offset_t),
+	.getoffset	= SEGSPT_BADOP(uoff_t),
 	.gettype	= SEGSPT_BADOP(int),
 	.getvp		= SEGSPT_BADOP(int),
 	.advise		= SEGSPT_BADOP(int),
@@ -131,7 +131,7 @@ static int segspt_shmlockop(struct seg *seg, caddr_t addr, size_t len,
 			int attr, int op, ulong_t *lockmap, size_t pos);
 static int segspt_shmgetprot(struct seg *seg, caddr_t addr, size_t len,
 			uint_t *protv);
-static u_offset_t segspt_shmgetoffset(struct seg *seg, caddr_t addr);
+static uoff_t segspt_shmgetoffset(struct seg *seg, caddr_t addr);
 static int segspt_shmgettype(struct seg *seg, caddr_t addr);
 static int segspt_shmgetvp(struct seg *seg, caddr_t addr, struct vnode **vpp);
 static int segspt_shmadvise(struct seg *seg, caddr_t addr, size_t len,
@@ -281,7 +281,7 @@ segspt_shmincore(struct seg *seg, caddr_t addr, size_t len, char *vec)
 		page_t		*pp;
 		pgcnt_t 	anon_index;
 		struct vnode 	*vp;
-		u_offset_t 	off;
+		uoff_t 	off;
 		ulong_t		i;
 		int		ret;
 		anon_sync_obj_t	cookie;
@@ -597,7 +597,7 @@ segspt_free_pages(struct seg *seg, caddr_t addr, size_t len)
 	struct anon_map *amp;
 	struct anon 	*ap;
 	struct vnode 	*vp;
-	u_offset_t 	off;
+	uoff_t 	off;
 	uint_t		hat_flags;
 	int		root = 0;
 	pgcnt_t		pgs, curnpgs = 0;
@@ -811,7 +811,7 @@ segspt_dismpagelock(struct seg *seg, caddr_t addr, size_t len,
 	uint_t	pl_built = 0;
 	struct  anon *ap;
 	struct  vnode *vp;
-	u_offset_t off;
+	uoff_t off;
 	pgcnt_t claim_availrmem = 0;
 	uint_t	szc;
 
@@ -1168,7 +1168,7 @@ segspt_shmpagelock(struct seg *seg, caddr_t addr, size_t len,
 	uint_t	pl_built = 0;
 	struct anon *ap;
 	struct vnode *vp;
-	u_offset_t off;
+	uoff_t off;
 
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 	ASSERT(type == L_PAGELOCK || type == L_PAGEUNLOCK);
@@ -1553,7 +1553,7 @@ segspt_softunlock(struct seg *seg, caddr_t sptseg_addr,
 	page_t *pp;
 	caddr_t adr;
 	struct vnode *vp;
-	u_offset_t offset;
+	uoff_t offset;
 	ulong_t anon_index;
 	struct anon_map *amp;		/* XXX - for locknest */
 	struct anon *ap = NULL;
@@ -1983,7 +1983,7 @@ segspt_shmfault(struct hat *hat, struct seg *seg, caddr_t addr,
 	caddr_t sptseg_addr, shm_addr;
 	page_t *pp, **ppa;
 	int	i;
-	u_offset_t offset;
+	uoff_t offset;
 	ulong_t anon_index = 0;
 	struct vnode *vp;
 	struct anon_map *amp;		/* XXX - for locknest */
@@ -2532,7 +2532,7 @@ spt_unlockpages(struct seg *seg, pgcnt_t anon_index, pgcnt_t npages,
 	struct anon_map	*amp = sptd->spt_amp;
 	struct anon 	*ap;
 	struct vnode 	*vp;
-	u_offset_t 	off;
+	uoff_t 	off;
 	struct page	*pp;
 	int		kernel;
 	anon_sync_obj_t	cookie;
@@ -2758,14 +2758,14 @@ segspt_shmgetprot(struct seg *seg, caddr_t addr, size_t len, uint_t *protv)
 }
 
 /*ARGSUSED*/
-u_offset_t
+uoff_t
 segspt_shmgetoffset(struct seg *seg, caddr_t addr)
 {
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
 	/* Offset does not matter in ISM memory */
 
-	return ((u_offset_t)0);
+	return ((uoff_t)0);
 }
 
 /* ARGSUSED */

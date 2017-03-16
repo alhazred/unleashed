@@ -248,7 +248,7 @@ nfs4getattr(struct nfs_file *nfp, struct vattr *vap)
 	if (vap->va_mask & AT_MODE)
 		vap->va_mode = (mode_t)bfattr4->b_fattr4_mode;
 	if (vap->va_mask & AT_SIZE)
-		vap->va_size = (u_offset_t)bfattr4->b_fattr4_size;
+		vap->va_size = (uoff_t)bfattr4->b_fattr4_size;
 	if (vap->va_mask & AT_NODEID)
 		vap->va_nodeid = (uint64_t)bfattr4->b_fattr4_fileid;
 	/*

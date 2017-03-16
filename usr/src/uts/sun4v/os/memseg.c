@@ -91,7 +91,7 @@ memseg_alloc_meta(pfn_t base, pgcnt_t npgs, void **ptp, pgcnt_t *metap)
 	metapgs = btopr(npgs * sizeof (page_t));
 
 	if (!IS_P2ALIGNED((uint64_t)pp, PAGESIZE) &&
-	    page_find(&mpvp, (u_offset_t)pp)) {
+	    page_find(&mpvp, (uoff_t)pp)) {
 		/*
 		 * Another memseg has page_t's in the same
 		 * page which 'pp' resides.  This would happen
@@ -116,7 +116,7 @@ memseg_alloc_meta(pfn_t base, pgcnt_t npgs, void **ptp, pgcnt_t *metap)
 	}
 
 	if (!IS_P2ALIGNED((uint64_t)epp, PAGESIZE) &&
-	    page_find(&mpvp, (u_offset_t)epp)) {
+	    page_find(&mpvp, (uoff_t)epp)) {
 		/*
 		 * Another memseg has page_t's in the same
 		 * page which 'epp' resides.  This would happen
@@ -140,7 +140,7 @@ memseg_alloc_meta(pfn_t base, pgcnt_t npgs, void **ptp, pgcnt_t *metap)
 	vaddr = (caddr_t)pp;
 
 	for (i = 0; i < metapgs; i++)
-		if (page_find(&mpvp, (u_offset_t)(vaddr + i * PAGESIZE)))
+		if (page_find(&mpvp, (uoff_t)(vaddr + i * PAGESIZE)))
 			panic("page_find(0x%p, %p)\n",
 			    (void *)&mpvp, (void *)(vaddr + i * PAGESIZE));
 
@@ -148,7 +148,7 @@ memseg_alloc_meta(pfn_t base, pgcnt_t npgs, void **ptp, pgcnt_t *metap)
 	 * Allocate the metadata pages; these are the pages that will
 	 * contain the page_t's for the incoming memory.
 	 */
-	if ((page_create_va(&mpvp, (u_offset_t)pp, ptob(metapgs),
+	if ((page_create_va(&mpvp, (uoff_t)pp, ptob(metapgs),
 	    PG_NORELOC | PG_EXCL, &kseg, vaddr)) == NULL) {
 		MEMSEG_DEBUG("memseg_alloc_meta: can't get 0x%ld metapgs",
 		    metapgs);
@@ -169,12 +169,12 @@ memseg_free_meta(void *ptp, pgcnt_t metapgs)
 {
 	int i;
 	page_t *pp;
-	u_offset_t off;
+	uoff_t off;
 
 	if (!metapgs)
 		return;
 
-	off = (u_offset_t)ptp;
+	off = (uoff_t)ptp;
 
 	ASSERT(off);
 	ASSERT(IS_P2ALIGNED((uint64_t)off, PAGESIZE));
@@ -198,9 +198,9 @@ pfn_t
 memseg_get_metapfn(void *ptp, pgcnt_t metapg)
 {
 	page_t *pp;
-	u_offset_t off;
+	uoff_t off;
 
-	off = (u_offset_t)ptp + ptob(metapg);
+	off = (uoff_t)ptp + ptob(metapg);
 
 	ASSERT(off);
 	ASSERT(IS_P2ALIGNED((uint64_t)off, PAGESIZE));
@@ -221,7 +221,7 @@ void
 memseg_remap_meta(struct memseg *seg)
 {
 	int i;
-	u_offset_t off;
+	uoff_t off;
 	page_t *pp;
 #if 0
 	page_t *epp;
@@ -242,7 +242,7 @@ memseg_remap_meta(struct memseg *seg)
 	 */
 
 	if (!IS_P2ALIGNED((uint64_t)pp, PAGESIZE) &&
-	    page_find(&mpvp, (u_offset_t)(pp - 1)) && !page_deleted(pp - 1)) {
+	    page_find(&mpvp, (uoff_t)(pp - 1)) && !page_deleted(pp - 1)) {
 		/*
 		 * Another memseg has page_t's in the same
 		 * page which 'pp' resides.  This would happen
@@ -269,7 +269,7 @@ memseg_remap_meta(struct memseg *seg)
 	}
 
 	if (!IS_P2ALIGNED((uint64_t)epp, PAGESIZE) &&
-	    page_find(&mpvp, (u_offset_t)epp) && !page_deleted(epp)) {
+	    page_find(&mpvp, (uoff_t)epp) && !page_deleted(epp)) {
 		/*
 		 * Another memseg has page_t's in the same
 		 * page which 'epp' resides.  This would happen
@@ -288,7 +288,7 @@ memseg_remap_meta(struct memseg *seg)
 
 	remap_to_dummy((caddr_t)pp, metapgs);
 
-	off = (u_offset_t)pp;
+	off = (uoff_t)pp;
 
 	MEMSEG_DEBUG("memseg_remap_meta: off=0x%lx metapgs=0x%lx\n",
 	    (uint64_t)off, metapgs);

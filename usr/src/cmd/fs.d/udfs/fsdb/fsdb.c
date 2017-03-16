@@ -60,7 +60,7 @@ extern int32_t run_fsdb();
 
 void usage();
 void init_buffers();
-char *getblk(u_offset_t);
+char *getblk(uoff_t);
 int32_t parse_udfs(uint32_t);
 int32_t parse_vds(uint32_t, uint32_t);
 int32_t parse_part(struct part_desc *);
@@ -236,7 +236,7 @@ static struct lbuf {
 	struct lbuf	*back;
 	int32_t		valid;
 	char		*blkaddr;
-	u_offset_t	blkno;
+	uoff_t	blkno;
 } lbuf[NBUF], bhdr;
 
 #define	INSERT(bp)	\
@@ -265,9 +265,9 @@ init_buffers()
 }
 
 char *
-getblk(u_offset_t address)
+getblk(uoff_t address)
 {
-	u_offset_t off, block;
+	uoff_t off, block;
 	struct lbuf *bp;
 
 	off = address & ~bmask;
@@ -306,7 +306,7 @@ found:
 int32_t
 putblk(caddr_t address)
 {
-	u_offset_t off;
+	uoff_t off;
 	struct lbuf *bp;
 
 	if (openflg == O_RDONLY) {

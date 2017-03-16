@@ -80,7 +80,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 	vnode_t *vp;
 	struct vattr vattr;
 	int error;
-	u_offset_t noff;
+	uoff_t noff;
 	offset_t curoff, newoff;
 	int reg;
 
@@ -91,7 +91,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 
 	switch (stype) {
 	case SEEK_SET:
-		noff = (u_offset_t)off;
+		noff = (uoff_t)off;
 		if (reg && noff > max) {
 			error = EINVAL;
 			goto out;
@@ -103,7 +103,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 			error = EOVERFLOW;
 			goto out;
 		}
-		noff = (u_offset_t)(off + curoff);
+		noff = (uoff_t)(off + curoff);
 		if (reg && noff > max) {
 			error = EINVAL;
 			goto out;
@@ -119,7 +119,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 			error = EOVERFLOW;
 			goto out;
 		}
-		noff = (u_offset_t)(off + (offset_t)vattr.va_size);
+		noff = (uoff_t)(off + (offset_t)vattr.va_size);
 		if (reg && noff > max) {
 			error = EINVAL;
 			goto out;
@@ -131,7 +131,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 		 * Get and set the file pointer to the offset of the next
 		 * data past "off"
 		 */
-		noff = (u_offset_t)off;
+		noff = (uoff_t)off;
 		error = fop_ioctl(vp, _FIO_SEEK_DATA, (intptr_t)(&noff),
 		    FKIOCTL, kcred, NULL, NULL);
 		if (error) {
@@ -145,7 +145,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error)
 				return (error);
-			if (noff >= (u_offset_t)vattr.va_size)
+			if (noff >= (uoff_t)vattr.va_size)
 				return (ENXIO);
 		}
 		if (reg && (noff > max))
@@ -160,7 +160,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 		 * Get and set the file pointer to the offset of the next
 		 * hole past "off"
 		 */
-		noff = (u_offset_t)off;
+		noff = (uoff_t)off;
 		error = fop_ioctl(vp, _FIO_SEEK_HOLE, (intptr_t)(&noff),
 		    FKIOCTL, kcred, NULL, NULL);
 		if (error) {
@@ -175,7 +175,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 			if (error)
 				return (error);
 			if (off < (offset_t)vattr.va_size)
-				noff = (u_offset_t)vattr.va_size;
+				noff = (uoff_t)vattr.va_size;
 			else
 				return (ENXIO);
 		}
@@ -247,9 +247,9 @@ llseek32(int32_t fdes, uint32_t off1, uint32_t off2, int stype)
 	int error;
 	offset_t retoff;
 #if defined(_LITTLE_ENDIAN)
-	offset_t off = ((u_offset_t)off2 << 32) | (u_offset_t)off1;
+	offset_t off = ((uoff_t)off2 << 32) | (uoff_t)off1;
 #else
-	offset_t off = ((u_offset_t)off1 << 32) | (u_offset_t)off2;
+	offset_t off = ((uoff_t)off1 << 32) | (uoff_t)off2;
 #endif
 
 	if ((fp = getf(fdes)) == NULL)

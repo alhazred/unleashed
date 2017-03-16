@@ -247,7 +247,7 @@ retry:
 		/*
 		 * pvn_vplist_dirty will abort all old pages
 		 */
-		(void) pvn_vplist_dirty(vp, (u_offset_t)0,
+		(void) pvn_vplist_dirty(vp, (uoff_t)0,
 		    pcfs_putapage, B_INVAL, (struct cred *)NULL);
 	}
 
@@ -418,7 +418,7 @@ pc_truncate(struct pcnode *pcp, uint_t length)
 			 * requires us to invalidate everything after the new
 			 * end of the file.
 			 */
-			(void) pvn_vplist_dirty(PCTOV(pcp), (u_offset_t)length,
+			(void) pvn_vplist_dirty(PCTOV(pcp), (uoff_t)length,
 			    pcfs_putapage, B_INVAL | B_TRUNC, CRED());
 		} else {
 			/*
@@ -433,9 +433,9 @@ pc_truncate(struct pcnode *pcp, uint_t length)
 			    roundup(length, MIN(fsp->pcfs_clsize, MAXBSIZE)) -
 			    length;
 
-			pvn_vpzero(PCTOV(pcp), (u_offset_t)length, nbytes);
+			pvn_vpzero(PCTOV(pcp), (uoff_t)length, nbytes);
 			(void) pvn_vplist_dirty(PCTOV(pcp),
-			    (u_offset_t)length + nbytes,
+			    (uoff_t)length + nbytes,
 			    pcfs_putapage, B_INVAL | B_TRUNC, CRED());
 		}
 		error = pc_bfree(pcp, (pc_cluster32_t)
@@ -713,7 +713,7 @@ pc_diskchanged(struct pcfs *fsp)
 				VN_RELE(vp);
 				if (!(pcp->pc_flags & PC_EXTERNAL)) {
 					(void) pvn_vplist_dirty(vp,
-					    (u_offset_t)0, pcfs_putapage,
+					    (uoff_t)0, pcfs_putapage,
 					    B_INVAL | B_TRUNC,
 					    (struct cred *)NULL);
 					vn_free(vp);
@@ -745,7 +745,7 @@ pc_diskchanged(struct pcfs *fsp)
 				VN_RELE(vp);
 				if (!(pcp->pc_flags & PC_EXTERNAL)) {
 					(void) pvn_vplist_dirty(vp,
-					    (u_offset_t)0, pcfs_putapage,
+					    (uoff_t)0, pcfs_putapage,
 					    B_INVAL | B_TRUNC,
 					    (struct cred *)NULL);
 					vn_free(vp);

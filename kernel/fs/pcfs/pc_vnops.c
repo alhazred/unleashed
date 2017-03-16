@@ -112,7 +112,7 @@ static int pcfs_space(struct vnode *, int, struct flock64 *, int,
 static int pcfs_getpage(struct vnode *, offset_t, size_t, uint_t *, page_t *[],
 	size_t, struct seg *, caddr_t, enum seg_rw, struct cred *,
 	caller_context_t *);
-static int pcfs_getapage(struct vnode *, u_offset_t, size_t, uint_t *,
+static int pcfs_getapage(struct vnode *, uoff_t, size_t, uint_t *,
 	page_t *[], size_t, struct seg *, caddr_t, enum seg_rw, struct cred *);
 static int pcfs_putpage(struct vnode *, offset_t, size_t, int, struct cred *,
 	caller_context_t *);
@@ -127,7 +127,7 @@ static int pcfs_seek(struct vnode *, offset_t, offset_t *,
 static int pcfs_pathconf(struct vnode *, int, ulong_t *, struct cred *,
 	caller_context_t *);
 
-int pcfs_putapage(struct vnode *, page_t *, u_offset_t *, size_t *, int,
+int pcfs_putapage(struct vnode *, page_t *, uoff_t *, size_t *, int,
 	struct cred *);
 static int rwpcp(struct pcnode *, struct uio *, enum uio_rw, int);
 static int get_long_fn_chunk(struct pcdir_lfn *ep, char *buf);
@@ -404,7 +404,7 @@ rwpcp(
 		 */
 		uio_prefaultpages((long)n, uio);
 
-		base = segmap_getmap(segkmap, vp, (u_offset_t)off);
+		base = segmap_getmap(segkmap, vp, (uoff_t)off);
 		pagecreate = 0;
 		newpage = 0;
 		if (rw == UIO_WRITE) {
@@ -626,7 +626,7 @@ pcfs_getattr(
 	    pcp->pc_eoffset, pcp->pc_entry.pcd_attr,
 	    pc_getstartcluster(fsp, &pcp->pc_entry), pc_direntpersec(fsp));
 	vap->va_nlink = 1;
-	vap->va_size = (u_offset_t)pcp->pc_size;
+	vap->va_size = (uoff_t)pcp->pc_size;
 	vap->va_rdev = 0;
 	vap->va_nblocks =
 	    (fsblkcnt64_t)howmany((offset_t)pcp->pc_size, DEV_BSIZE);
@@ -767,7 +767,7 @@ pcfs_setattr(
 	/*
 	 * Truncate file. Must have write permission.
 	 */
-	if ((mask & AT_SIZE) && (vap->va_size != (u_offset_t)-1)) {
+	if ((mask & AT_SIZE) && (vap->va_size != (uoff_t)-1)) {
 		if (pcp->pc_entry.pcd_attr & PCA_RDONLY) {
 			error = EACCES;
 			goto out;
@@ -930,7 +930,7 @@ pcfs_inactive(
 	if (vp->v_vfsp->vfs_flag & VFS_UNMOUNTED) {
 		pcp = VTOPC(vp);
 		if (vn_has_cached_data(vp)) {
-			(void) pvn_vplist_dirty(vp, (u_offset_t)0,
+			(void) pvn_vplist_dirty(vp, (uoff_t)0,
 			    pcfs_putapage, B_INVAL, (struct cred *)NULL);
 		}
 		remque(pcp);
@@ -960,7 +960,7 @@ pcfs_inactive(
 	pcp = VTOPC(vp);
 	if (pcp == NULL || pcp->pc_flags & PC_INVAL) {
 		if (vn_has_cached_data(vp))
-			(void) pvn_vplist_dirty(vp, (u_offset_t)0,
+			(void) pvn_vplist_dirty(vp, (uoff_t)0,
 			    pcfs_putapage, B_INVAL | B_TRUNC,
 			    (struct cred *)NULL);
 	}
@@ -1434,7 +1434,7 @@ pcfs_readdir(
 static int
 pcfs_getapage(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	uint_t *protp,
 	page_t *pl[],		/* NULL if async IO is requested */
@@ -1487,10 +1487,10 @@ reread:
 		 */
 		struct buf *bp;
 		daddr_t lbn, bn;
-		u_offset_t io_off;
+		uoff_t io_off;
 		size_t io_len;
-		u_offset_t lbnoff, xferoffset;
-		u_offset_t pgoff;
+		uoff_t lbnoff, xferoffset;
+		uoff_t pgoff;
 		uint_t	xfersize;
 		int err1;
 
@@ -1632,7 +1632,7 @@ pcfs_putpage(
 	struct pcnode *pcp;
 	page_t *pp;
 	struct pcfs *fsp;
-	u_offset_t io_off;
+	uoff_t io_off;
 	size_t io_len;
 	offset_t eoff;
 	int err;
@@ -1756,7 +1756,7 @@ int
 pcfs_putapage(
 	struct vnode *vp,
 	page_t *pp,
-	u_offset_t *offp,
+	uoff_t *offp,
 	size_t *lenp,
 	int flags,
 	struct cred *cr)
@@ -1766,10 +1766,10 @@ pcfs_putapage(
 	struct vnode *devvp;
 	size_t io_len;
 	daddr_t bn;
-	u_offset_t lbn, lbnoff, xferoffset;
+	uoff_t lbn, lbnoff, xferoffset;
 	uint_t pgoff, xfersize;
 	int err = 0;
-	u_offset_t io_off;
+	uoff_t io_off;
 
 	pcp = VTOPC(vp);
 	fsp = VFSTOPCFS(vp->v_vfsp);

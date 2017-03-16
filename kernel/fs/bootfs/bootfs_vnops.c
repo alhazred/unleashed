@@ -363,7 +363,7 @@ bootfs_seek(vnode_t *vp, offset_t ooff, offset_t *noffp,
  */
 /*ARGSUSED*/
 static int
-bootfs_getapage(vnode_t *vp, u_offset_t off, size_t len, uint_t *protp,
+bootfs_getapage(vnode_t *vp, uoff_t off, size_t len, uint_t *protp,
     page_t *pl[], size_t plsz, struct seg *seg, caddr_t addr, enum seg_rw rw,
     cred_t *cr)
 {
@@ -428,10 +428,10 @@ bootfs_getpage(vnode_t *vp, offset_t off, size_t len, uint_t *protp,
 		*protp = PROT_ALL;
 
 	if (len <= PAGESIZE)
-		err = bootfs_getapage(vp, (u_offset_t)off, len, protp, pl,
+		err = bootfs_getapage(vp, (uoff_t)off, len, protp, pl,
 		    plsz, seg, addr, rw, cr);
 	else
-		err = pvn_getpages(bootfs_getapage, vp, (u_offset_t)off, len,
+		err = pvn_getpages(bootfs_getapage, vp, (uoff_t)off, len,
 		    protp, pl, plsz, seg, addr, rw, cr);
 
 	return (err);
@@ -471,7 +471,7 @@ bootfs_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 	}
 
 	vn_a.vp = vp;
-	vn_a.offset = (u_offset_t)off;
+	vn_a.offset = (uoff_t)off;
 	vn_a.type = flags & MAP_TYPE;
 	vn_a.prot = prot;
 	vn_a.maxprot = maxprot;

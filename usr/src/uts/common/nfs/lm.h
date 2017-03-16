@@ -106,12 +106,12 @@ extern void		   lm_cprresume(void);
 
 extern int		   lm_frlock(struct vnode *vp, int cmd,
 				struct flock64 *flk, int flag,
-				u_offset_t offset, struct cred *cr,
+				uoff_t offset, struct cred *cr,
 				netobj *fh, struct flk_callback *);
 extern int		   lm_has_sleep(const struct vnode *);
 extern void		   lm_register_lock_locally(vnode_t *,
 				struct lm_sysid *, struct flock64 *, int,
-				u_offset_t);
+				uoff_t);
 extern int		   lm_safelock(vnode_t *, const struct flock64 *,
 				cred_t *);
 extern int		   lm_safemap(const vnode_t *);
@@ -119,7 +119,7 @@ extern int		   lm_shrlock(struct vnode *vp, int cmd,
 				struct shrlock *shr, int flag, netobj *fh);
 extern int		   lm4_frlock(struct vnode *vp, int cmd,
 				struct flock64 *flk, int flag,
-				u_offset_t offset, struct cred *cr,
+				uoff_t offset, struct cred *cr,
 				netobj *fh, struct flk_callback *);
 extern int		   lm4_shrlock(struct vnode *vp, int cmd,
 				struct shrlock *shr, int flag, netobj *fh);

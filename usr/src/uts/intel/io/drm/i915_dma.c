@@ -200,7 +200,7 @@ static int i915_initialize(drm_device_t * dev,
 		dev_priv->ring.Size = init->ring_size;
 		dev_priv->ring.tail_mask = dev_priv->ring.Size - 1;
 
-		dev_priv->ring.map.offset = (u_offset_t)init->ring_start;
+		dev_priv->ring.map.offset = (uoff_t)init->ring_start;
 		dev_priv->ring.map.size = init->ring_size;
 		dev_priv->ring.map.type = 0;
 		dev_priv->ring.map.flags = 0;
@@ -876,7 +876,7 @@ DRM_ERROR("i915_set_status_page set status page addr 0x%08x\n", (u32)hws.addr);
 	DRM_DEBUG("set gfx_addr 0x%08x\n", dev_priv->status_gfx_addr);
 
 	dev_priv->hws_map.offset =
-	    (u_offset_t)dev->agp->agp_info.agpi_aperbase + hws.addr;
+	    (uoff_t)dev->agp->agp_info.agpi_aperbase + hws.addr;
 	dev_priv->hws_map.size = 4 * 1024; /* 4K pages */
 	dev_priv->hws_map.type = 0;
 	dev_priv->hws_map.flags = 0;

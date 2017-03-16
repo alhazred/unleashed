@@ -121,8 +121,8 @@ static void mpool_append(page_t **, pgcnt_t);
 static void lpp_break(page_t **, pgcnt_t, pgcnt_t, pmem_lpg_t *);
 static void lpp_free(page_t *, pgcnt_t, pmem_lpg_t **);
 static int lpp_create(page_t **, pgcnt_t, pgcnt_t *, pmem_lpg_t **,
-    vnode_t *, u_offset_t *, uint_t);
-static void tlist_in(page_t *, pgcnt_t, vnode_t *, u_offset_t *);
+    vnode_t *, uoff_t *, uint_t);
+static void tlist_in(page_t *, pgcnt_t, vnode_t *, uoff_t *);
 static void tlist_out(page_t *, pgcnt_t);
 static int pmem_cookie_alloc(struct devmap_pmem_cookie **, pgcnt_t, uint_t);
 static int pmem_lock(pgcnt_t, proc_t *p);
@@ -279,7 +279,7 @@ devmap_pmem_remap(devmap_cookie_t dhc, dev_info_t *dip,
 int
 devmap_pmem_alloc(size_t size, uint_t flags, devmap_pmem_cookie_t *cookiep)
 {
-	u_offset_t	pmem_off = 0;
+	uoff_t	pmem_off = 0;
 	page_t		*pp = NULL;
 	page_t		*lpp = NULL;
 	page_t		*tlist = NULL;
@@ -750,7 +750,7 @@ mpool_break(page_t **ppp, pgcnt_t n)
  */
 static int
 lpp_create(page_t **lppp, pgcnt_t n, pgcnt_t *lpages, pmem_lpg_t **plpp,
-    vnode_t *vnp, u_offset_t *offp, uint_t kflags)
+    vnode_t *vnp, uoff_t *offp, uint_t kflags)
 {
 	pgcnt_t i;
 	pmem_lpg_t *plp;
@@ -841,7 +841,7 @@ lpp_free(page_t *lpp, pgcnt_t lpgs, pmem_lpg_t **plpp)
  * the same time.
  */
 static void
-tlist_in(page_t *tlist, pgcnt_t tpages, vnode_t *pvnp, u_offset_t *poffp)
+tlist_in(page_t *tlist, pgcnt_t tpages, vnode_t *pvnp, uoff_t *poffp)
 {
 	page_t *pp;
 	pgcnt_t i = 0;

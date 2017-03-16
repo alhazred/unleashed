@@ -502,7 +502,7 @@ extern void		ufs_trans_mata_alloc(struct ufsvfs *, struct inode *,
 extern int		ufs_trans_dir(struct inode *, off_t);
 extern void		ufs_trans_quota(struct dquot *);
 extern void		ufs_trans_dqrele(struct dquot *);
-extern int		ufs_trans_itrunc(struct inode *, u_offset_t, int,
+extern int		ufs_trans_itrunc(struct inode *, uoff_t, int,
 			    cred_t *);
 extern int		ufs_trans_write(struct inode *, struct uio *, int,
 			    cred_t *, int, long);
@@ -510,8 +510,8 @@ extern void		ufs_trans_write_resv(struct inode *, struct uio *,
 				int *, int *);
 extern int		ufs_trans_check(dev_t);
 extern void		ufs_trans_redev(dev_t odev, dev_t ndev);
-extern void		ufs_trans_trunc_resv(struct inode *, u_offset_t, int *,
-				u_offset_t *);
+extern void		ufs_trans_trunc_resv(struct inode *, uoff_t, int *,
+				uoff_t *);
 
 /*
  * transaction prototypes

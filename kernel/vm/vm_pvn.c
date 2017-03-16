@@ -90,12 +90,12 @@ static struct kmem_cache *marker_cache = NULL;
 page_t *
 pvn_read_kluster(
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	struct seg *seg,
 	caddr_t addr,
-	u_offset_t *offp,			/* return values */
+	uoff_t *offp,			/* return values */
 	size_t *lenp,				/* return values */
-	u_offset_t vp_off,
+	uoff_t vp_off,
 	size_t vp_len,
 	int isra)
 {
@@ -103,7 +103,7 @@ pvn_read_kluster(
 	page_t *pp;
 	page_t *plist = NULL;
 	spgcnt_t pagesavail;
-	u_offset_t vp_end;
+	uoff_t vp_end;
 
 	ASSERT(off >= vp_off && off < vp_off + vp_len);
 
@@ -232,17 +232,17 @@ page_t *
 pvn_write_kluster(
 	struct vnode *vp,
 	page_t *pp,
-	u_offset_t *offp,		/* return values */
+	uoff_t *offp,		/* return values */
 	size_t *lenp,			/* return values */
-	u_offset_t vp_off,
+	uoff_t vp_off,
 	size_t vp_len,
 	int flags)
 {
-	u_offset_t off;
+	uoff_t off;
 	page_t *dirty;
 	size_t deltab, deltaf;
 	se_t se;
-	u_offset_t vp_end;
+	uoff_t vp_end;
 
 	off = pp->p_offset;
 
@@ -723,8 +723,8 @@ pvn_init()
 int
 pvn_vplist_dirty(
 	vnode_t		*vp,
-	u_offset_t	off,
-	int		(*putapage)(vnode_t *, page_t *, u_offset_t *,
+	uoff_t	off,
+	int		(*putapage)(vnode_t *, page_t *, uoff_t *,
 			size_t *, int, cred_t *),
 	int		flags,
 	cred_t		*cred)
@@ -773,10 +773,10 @@ pvn_vplist_dirty(
 	 */
 	end = kmem_cache_alloc(marker_cache, KM_SLEEP);
 	end->p_vnode = vp;
-	end->p_offset = (u_offset_t)-2;
+	end->p_offset = (uoff_t)-2;
 	mark = kmem_cache_alloc(marker_cache, KM_SLEEP);
 	mark->p_vnode = vp;
-	mark->p_offset = (u_offset_t)-1;
+	mark->p_offset = (uoff_t)-1;
 
 	/*
 	 * Grab the lock protecting the vnode's page list
@@ -1029,7 +1029,7 @@ pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
  * calling this.
  */
 void
-pvn_vpzero(struct vnode *vp, u_offset_t vplen, size_t zbytes)
+pvn_vpzero(struct vnode *vp, uoff_t vplen, size_t zbytes)
 {
 	caddr_t addr;
 
@@ -1074,10 +1074,10 @@ pvn_vpzero(struct vnode *vp, u_offset_t vplen, size_t zbytes)
  */
 int
 pvn_getpages(
-	int (*getpage)(vnode_t *, u_offset_t, size_t, uint_t *, page_t *[],
+	int (*getpage)(vnode_t *, uoff_t, size_t, uint_t *, page_t *[],
 		size_t, struct seg *, caddr_t, enum seg_rw, cred_t *),
 	struct vnode *vp,
-	u_offset_t off,
+	uoff_t off,
 	size_t len,
 	uint_t *protp,
 	page_t *pl[],
@@ -1088,7 +1088,7 @@ pvn_getpages(
 	struct cred *cred)
 {
 	page_t **ppp;
-	u_offset_t o, eoff;
+	uoff_t o, eoff;
 	size_t sz, xlen;
 	int err;
 
@@ -1142,7 +1142,7 @@ pvn_getpages(
 /*ARGSUSED*/
 void
 pvn_plist_init(page_t *pp, page_t *pl[], size_t plsz,
-    u_offset_t off, size_t io_len, enum seg_rw rw)
+    uoff_t off, size_t io_len, enum seg_rw rw)
 {
 	ssize_t sz;
 	page_t *ppcur, **ppp;
