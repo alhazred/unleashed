@@ -371,7 +371,7 @@ static struct dev_ops bscv_dev_ops = {
 	bscv_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&bscv_cb_ops,		/* devo_cb_ops */
-	(struct bus_ops *)0,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	NULL,			/* devo_power */
 	bscv_quiesce,		/* devo_quiesce */
 };

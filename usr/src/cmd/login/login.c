@@ -1968,7 +1968,7 @@ update_utmpx_entry(int sublogin, boolean_t silent)
 	static char	*errmsg	= "No utmpx entry. "
 	    "You must exec \"login\" from the lowest level \"shell\".";
 	int	tmplen;
-	struct utmpx  *u = (struct utmpx *)0;
+	struct utmpx  *u = NULL;
 	struct utmpx  utmpx;
 	char	*ttyntail;
 	int	pamflags = 0;

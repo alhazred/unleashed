@@ -1855,7 +1855,7 @@ forklwp(klwp_t *lwp, proc_t *cp, id_t lwpid)
 #endif
 	clwp->lwp_cursig = 0;
 	clwp->lwp_extsig = 0;
-	clwp->lwp_curinfo = (struct sigqueue *)0;
+	clwp->lwp_curinfo = NULL;
 	clwp->lwp_thread = ct;
 	ct->t_sysnum = t->t_sysnum;
 	clwp->lwp_regs = tregs;

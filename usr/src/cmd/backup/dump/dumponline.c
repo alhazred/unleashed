@@ -102,7 +102,7 @@ allocino()
 	/* LINTED maxino guaranteed to fit into a size_t by above test */
 	nused =  maxino - sblock->fs_cstotal.cs_nifree;
 	freeinodesc = (struct inodesc *)xcalloc(nused, sizeof (*freeinodesc));
-	if (freeinodesc == (struct inodesc *)0) {
+	if (freeinodesc == NULL) {
 		msg(gettext("%s: out of memory\n"), "allocino");
 		dumpabort();
 		/*NOTREACHED*/
@@ -111,7 +111,7 @@ allocino()
 	ialloc =
 	    (struct inodesc **)xmalloc(2*sizeof (*ialloc));
 	ialloc[0] = freeinodesc;
-	ialloc[1] = (struct inodesc *)0;
+	ialloc[1] = NULL;
 	nchunks = 1;
 }
 

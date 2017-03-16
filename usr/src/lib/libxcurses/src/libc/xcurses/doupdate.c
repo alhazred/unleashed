@@ -130,14 +130,14 @@ __m_doupdate_init()
 		return 0;
 
 	new = m_malloc((lines+1) * (lines+1) * sizeof *lc);
-	if (new == (void *) 0)
+	if (new == NULL)
 		return -1;
 	if (lc != (lcost *) 0)
 		free(lc);
 	lc = (lcost *) new;
 
 	new = m_malloc((lines + lines) * sizeof *del);
-	if (new == (void *) 0)
+	if (new == NULL)
 		return -1;
 	if (del != (t_action *) 0)
 		free(del);
@@ -145,7 +145,7 @@ __m_doupdate_init()
 	ins_rep = del + lines;
 
 	new = m_malloc(lines * sizeof *nhash);
-	if (new == (void *) 0)
+	if (new == NULL)
 		return -1;
 	if (nhash != (unsigned long *) 0)
 		free(nhash);
@@ -179,7 +179,7 @@ int y;
 
 	/* Restore default color pair before doing area clears. */
 	if (back_color_erase)
-		(void) vid_puts(WA_NORMAL, 0, (void *) 0, __m_outc);
+		(void) vid_puts(WA_NORMAL, 0, NULL, __m_outc);
 
 	if (y == 0 && clear_screen != (char *) 0) {
 		(void) tputs(clear_screen, 1, __m_outc);
@@ -361,7 +361,7 @@ write_loop:
 			if (ATTR_STATE != nattr 
 			|| optr->_at != nattr || optr->_co != npair) {
 				(void) vid_puts(
-					nattr, npair, (void *) 0, __m_outc
+					nattr, npair, NULL, __m_outc
 				);
 
 				/* Remember new or existing cookie. */
@@ -402,7 +402,7 @@ done:
 			/* Attributes on an HP terminal do not cross lines. */
 			ATTR_STATE = A_NORMAL;
 		else
-			(void) vid_puts(WA_NORMAL, 0, (void *) 0, __m_outc);
+			(void) vid_puts(WA_NORMAL, 0, NULL, __m_outc);
 	}
 
 	/* Re-check for clear to end-of-line optimization. */
@@ -421,7 +421,7 @@ done:
 			/* Restore default color pair before area clear. */
 			if (back_color_erase)
 				(void) vid_puts(
-					WA_NORMAL, 0, (void *) 0, __m_outc
+					WA_NORMAL, 0, NULL, __m_outc
 				);
 
 			(void) tputs(clr_eol, 1, __m_outc);

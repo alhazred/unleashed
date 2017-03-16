@@ -95,7 +95,7 @@ static struct dev_ops tcli_ops = {
 	tcli_detach,		/* detach */
 	nodev,			/* reset */
 	&tcli_cb_ops,		/* driver ops */
-	(struct bus_ops *)0,	/* bus ops */
+	NULL,	/* bus ops */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

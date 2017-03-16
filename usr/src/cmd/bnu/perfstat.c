@@ -1062,7 +1062,7 @@ times(tmsp)
 		return (clock_t)(-1);
 	tmsp->tms_cutime = scale60(&ru.ru_utime);
 	tmsp->tms_cstime = scale60(&ru.ru_stime);
-	if (gettimeofday(&now, (struct timezone *)0) < 0)
+	if (gettimeofday(&now, NULL) < 0)
 		return (clock_t)(-1);
 	if (epoch == 0)
 		epoch = now.tv_sec;

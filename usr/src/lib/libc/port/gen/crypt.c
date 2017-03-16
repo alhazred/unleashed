@@ -787,7 +787,7 @@ _unix_crypt_gensalt(char *gsbuffer,
 	    "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	struct timeval tv;
 
-	(void) gettimeofday(&tv, (void *) 0);
+	(void) gettimeofday(&tv, NULL);
 	srand48(tv.tv_sec ^ tv.tv_usec);
 	gsbuffer[0] = saltchars[lrand48() % 64]; /* lrand48() is MT-SAFE */
 	gsbuffer[1] = saltchars[lrand48() % 64]; /* lrand48() is MT-SAFE */

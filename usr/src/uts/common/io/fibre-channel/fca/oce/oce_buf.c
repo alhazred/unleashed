@@ -100,7 +100,7 @@ oce_alloc_dma_buffer(struct oce_dev *dev,
 
 	/* bind handle */
 	ret = ddi_dma_addr_bind_handle(dbuf->dma_handle,
-	    (struct as *)0, dbuf->base, actual_len,
+	    NULL, dbuf->base, actual_len,
 	    DDI_DMA_RDWR | flags,
 	    DDI_DMA_DONTWAIT, NULL, &cookie, &count);
 	if (ret != DDI_DMA_MAPPED) {

@@ -325,7 +325,7 @@ static struct dev_ops dcd_ops = {
 	dcddetach,		/* detach */
 	dcdreset,		/* reset */
 	&dcd_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	dcdpower,		/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };
@@ -887,7 +887,7 @@ static int
 dcd_doattach(dev_info_t *devi, int (*canwait)())
 {
 	struct dcd_device *devp;
-	struct dcd_disk *un = (struct dcd_disk *)0;
+	struct dcd_disk *un = NULL;
 	int instance;
 	int km_flags = (canwait != NULL_FUNC)? KM_SLEEP : KM_NOSLEEP;
 	int rval;
@@ -1680,7 +1680,7 @@ dcdread(dev_t dev, struct uio *uio, cred_t *cred_p)
 		    "transfer length not modulo %d\n", un->un_secsize);
 		return (EINVAL);
 	}
-	return (physio(dcdstrategy, (struct buf *)0, dev, B_READ, dcdmin, uio));
+	return (physio(dcdstrategy, NULL, dev, B_READ, dcdmin, uio));
 }
 
 /* ARGSUSED2 */
@@ -1723,7 +1723,7 @@ dcdwrite(dev_t dev, struct uio *uio, cred_t *cred_p)
 		    "transfer length not modulo %d\n", un->un_secsize);
 		return (EINVAL);
 	}
-	return (physio(dcdstrategy, (struct buf *)0, dev, B_WRITE, dcdmin,
+	return (physio(dcdstrategy, NULL, dev, B_WRITE, dcdmin,
 	    uio));
 }
 
@@ -3060,7 +3060,7 @@ dcdioctl(dev_t dev, int cmd, intptr_t arg, int flag,
 	case DKIOCABORT:
 		DAD_DEBUG(DCD_DEVINFO, dcd_label, DCD_DEBUG,
 		    "DKIOCABORT:\n");
-		if (dcd_abort(ROUTE, (struct dcd_pkt *)0)) {
+		if (dcd_abort(ROUTE, NULL)) {
 			return (0);
 		} else {
 			return (EIO);

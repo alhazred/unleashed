@@ -49,7 +49,7 @@ sigstack(struct sigstack *nss, struct sigstack *oss)
 		nalt.ss_flags = 0;
 		naltp = &nalt;
 	} else
-		naltp = (struct sigaltstack *)0;
+		naltp = NULL;
 
 	if (sigaltstack(naltp, &oalt) < 0)
 		return (-1);

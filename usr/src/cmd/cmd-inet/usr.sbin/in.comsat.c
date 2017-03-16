@@ -205,7 +205,7 @@ char *argv[];
 reapchildren()
 {
 
-	while (wait3((struct wait *)0, WNOHANG, (struct rusage *)0) > 0)
+	while (wait3(NULL, WNOHANG, NULL) > 0)
 		;
 }
 #endif /* SYSV */

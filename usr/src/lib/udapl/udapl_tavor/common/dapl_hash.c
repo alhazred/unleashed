@@ -106,7 +106,7 @@ struct dapl_hash_table
 		DAPL_HASH_ELEM *element = \
 		&((p_table)->table)[DAPL_DOHASH(in_key, (p_table)->tbl_size)]; \
 		if (NO_DATUM(element->datum)) { \
-			(bucket_head) = (void *)0; \
+			(bucket_head) = NULL; \
 		} else if (element->key == (DAPL_HASH_KEY) (in_key)) { \
 			(out_datum) = element->datum; \
 			(bucket_head) = (void *)element; \
@@ -116,7 +116,7 @@ struct dapl_hash_table
 					(void **)&(out_datum), \
 					(DAPL_HASH_ELEM **)&(bucket_head)); \
 		} else { \
-			(bucket_head) = (void *)0; \
+			(bucket_head) = NULL; \
 		}\
 	}
 

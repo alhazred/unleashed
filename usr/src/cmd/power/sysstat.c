@@ -80,7 +80,7 @@ struct diskinfo {
 	kstat_io_t 	new_kios, old_kios;
 };
 
-#define	NULLDISK (struct diskinfo *)0
+#define	NULLDISK ((struct diskinfo *)NULL)
 static	struct diskinfo zerodisk = { NULL, NULL };
 static	struct diskinfo *firstdisk = NULLDISK;
 static	struct diskinfo *lastdisk = NULLDISK;
@@ -600,7 +600,7 @@ fail(char *fmt, ...)
 		vsyslog(LOG_ERR, fmtptr, args);
 	va_end(args);
 
-	thr_exit((void *) 0);
+	thr_exit(NULL);
 }
 
 static void

@@ -126,10 +126,10 @@ _libnsl_lock_init()
 	(void) sigfillset(&fillset);
 
 	for (i = 0; i <  (sizeof (mutex_table) / sizeof (mutex_table[0])); i++)
-		(void) mutex_init(mutex_table[i], 0, (void *) 0);
+		(void) mutex_init(mutex_table[i], 0, NULL);
 
 	for (i = 0; i < (sizeof (rwlock_table) / sizeof (rwlock_table[0])); i++)
-		(void) rwlock_init(rwlock_table[i], 0, (void *) 0);
+		(void) rwlock_init(rwlock_table[i], 0, NULL);
 
 	(void) cond_init(&svc_thr_fdwait, USYNC_THREAD, 0);
 

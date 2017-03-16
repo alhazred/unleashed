@@ -101,7 +101,7 @@ static struct dev_ops axq_ops = {
 	axq_detach,			/* detach */
 	nulldev,			/* reset */
 	&axq_cb_ops,			/* cb_ops */
-	(struct bus_ops *)0,		/* bus_ops */
+	NULL,		/* bus_ops */
 	nulldev,			/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };

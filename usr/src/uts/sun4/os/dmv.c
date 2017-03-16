@@ -76,7 +76,7 @@ uint_t dmv_hwint = 0;
 uint_t dmv_swint = 0;
 uint_t dmv_totalints = 0;
 
-struct dmv_disp *dmv_dispatch_table = (struct dmv_disp *)0;
+struct dmv_disp *dmv_dispatch_table = NULL;
 
 /*
  * dmv_disp_lock protects the dispatch table from being modified by two

@@ -217,7 +217,7 @@ struct dev_ops isa_ops = {
 	isa_attach,		/* attach */
 	nulldev,		/* detach */
 	nodev,			/* reset */
-	(struct cb_ops *)0,	/* driver operations */
+	NULL,	/* driver operations */
 	&isa_bus_ops,		/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
@@ -516,7 +516,7 @@ isa_bus_map(dev_info_t *dip, dev_info_t *rdip, ddi_map_req_t *mp,
 		int rnumber = mp->map_obj.rnumber;
 
 		rp = i_ddi_rnumber_to_regspec(rdip, rnumber);
-		if (rp == (struct regspec *)0)
+		if (rp == NULL)
 			return (DDI_ME_RNUMBER_RANGE);
 
 		/*

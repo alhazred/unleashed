@@ -222,7 +222,7 @@ static struct dev_ops   amr_ops = {
 	amr_detach,	/* detach */
 	nodev,		/* reset */
 	NULL,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	0,		/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };

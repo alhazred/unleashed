@@ -130,7 +130,7 @@ rmthost(char *host, uint_t blocksize)
 	sv.sa_flags = SA_RESTART;
 	(void) sigemptyset(&sv.sa_mask);
 	sv.sv_handler = rmtconnaborted;
-	(void) sigvec(SIGPIPE, &sv, (struct sigvec *)0);
+	(void) sigvec(SIGPIPE, &sv, NULL);
 	rmtgetconn();
 	if (rmtape < 0)
 		return (0);

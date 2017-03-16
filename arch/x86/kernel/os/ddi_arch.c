@@ -70,7 +70,7 @@ i_ddi_bus_map(dev_info_t *dip, dev_info_t *rdip, ddi_map_req_t *mp,
 #endif	/* DDI_MAP_DEBUG */
 
 		rp = i_ddi_rnumber_to_regspec(rdip, rnumber);
-		if (rp == (struct regspec *)0)  {
+		if (rp == NULL)  {
 #ifdef	DDI_MAP_DEBUG
 			cmn_err(CE_WARN, out_of_range, rnumber,
 			    ddi_get_name(rdip));
@@ -181,7 +181,7 @@ struct regspec *
 i_ddi_rnumber_to_regspec(dev_info_t *dip, int rnumber)
 {
 	if (rnumber >= sparc_pd_getnreg(DEVI(dip)))
-		return ((struct regspec *)0);
+		return (NULL);
 
 	return (sparc_pd_getreg(DEVI(dip), rnumber));
 }

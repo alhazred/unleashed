@@ -283,7 +283,7 @@ __rpc_get_ltaddr(struct netbuf *nbufp, struct netbuf *ltaddr)
 	int s;
 	struct sioc_addrreq areq;
 
-	if (nbufp == (struct netbuf *)0 || ltaddr == (struct netbuf *)0) {
+	if (nbufp == NULL || ltaddr == NULL) {
 		t_errno = TBADOPT;
 		return (-1);
 	}

@@ -738,9 +738,8 @@ udf_create(
 	} else {
 		xip = NULL;
 		rw_enter(&ip->i_rwlock, RW_WRITER);
-		error = ud_direnter(ip, name, DE_CREATE,
-		    (struct ud_inode *)0, (struct ud_inode *)0,
-		    vap, &xip, cr, ct);
+		error = ud_direnter(ip, name, DE_CREATE, NULL, NULL, vap,
+		    &xip, cr, ct);
 		rw_exit(&ip->i_rwlock);
 		ITIMES(ip);
 		ip = xip;
@@ -845,7 +844,7 @@ udf_remove(
 
 	rw_enter(&ip->i_rwlock, RW_WRITER);
 	error = ud_dirremove(ip, nm,
-	    (struct ud_inode *)0, (struct vnode *)0, DR_REMOVE, cr, ct);
+	    NULL, NULL, DR_REMOVE, cr, ct);
 	rw_exit(&ip->i_rwlock);
 	ITIMES(ip);
 
@@ -887,8 +886,8 @@ udf_link(
 	tdp = VTOI(tdvp);
 
 	rw_enter(&tdp->i_rwlock, RW_WRITER);
-	error = ud_direnter(tdp, tnm, DE_LINK, (struct ud_inode *)0,
-	    sip, (struct vattr *)0, (struct ud_inode **)0, cr, ct);
+	error = ud_direnter(tdp, tnm, DE_LINK, NULL,
+	    sip, NULL, (struct ud_inode **)0, cr, ct);
 	rw_exit(&tdp->i_rwlock);
 	ITIMES(sip);
 	ITIMES(tdp);
@@ -995,7 +994,7 @@ udf_rename(
 	 */
 	rw_enter(&tdp->i_rwlock, RW_WRITER);
 	if (error = ud_direnter(tdp, tnm, DE_RENAME, sdp, sip,
-	    (struct vattr *)0, (struct ud_inode **)0, cr, ct)) {
+	    NULL, (struct ud_inode **)0, cr, ct)) {
 		/*
 		 * ESAME isn't really an error; it indicates that the
 		 * operation should not be done because the source and target
@@ -1017,7 +1016,7 @@ udf_rename(
 	 * If the entry has changed just forget about it.  Release
 	 * the source inode.
 	 */
-	if ((error = ud_dirremove(sdp, snm, sip, (struct vnode *)0,
+	if ((error = ud_dirremove(sdp, snm, sip, NULL,
 	    DR_RENAME, cr, ct)) == ENOENT) {
 		error = 0;
 	}
@@ -1063,7 +1062,7 @@ udf_mkdir(
 	ip = VTOI(dvp);
 	rw_enter(&ip->i_rwlock, RW_WRITER);
 	error = ud_direnter(ip, dirname, DE_MKDIR,
-	    (struct ud_inode *)0, (struct ud_inode *)0, vap, &xip, cr, ct);
+	    NULL, NULL, vap, &xip, cr, ct);
 	rw_exit(&ip->i_rwlock);
 	ITIMES(ip);
 	if (error == 0) {
@@ -1094,7 +1093,7 @@ udf_rmdir(
 	ud_printf("udf_rmdir\n");
 
 	rw_enter(&ip->i_rwlock, RW_WRITER);
-	error = ud_dirremove(ip, nm, (struct ud_inode *)0, cdir, DR_RMDIR,
+	error = ud_dirremove(ip, nm, NULL, cdir, DR_RMDIR,
 	    cr, ct);
 	rw_exit(&ip->i_rwlock);
 	ITIMES(ip);
@@ -1276,13 +1275,13 @@ udf_symlink(
 
 	ud_printf("udf_symlink\n");
 
-	ip = (struct ud_inode *)0;
+	ip = NULL;
 	vap->va_type = VLNK;
 	vap->va_rdev = 0;
 
 	rw_enter(&dip->i_rwlock, RW_WRITER);
 	error = ud_direnter(dip, linkname, DE_CREATE,
-	    (struct ud_inode *)0, (struct ud_inode *)0, vap, &ip, cr, ct);
+	    NULL, NULL, vap, &ip, cr, ct);
 	rw_exit(&dip->i_rwlock);
 	if (error == 0) {
 		dname = kmem_zalloc(1024, KM_SLEEP);
@@ -1366,8 +1365,8 @@ udf_symlink(
 			ud_idrop(ip);
 			rw_exit(&ip->i_contents);
 			rw_enter(&dip->i_rwlock, RW_WRITER);
-			(void) ud_dirremove(dip, linkname, (struct ud_inode *)0,
-			    (struct vnode *)0, DR_REMOVE, cr, ct);
+			(void) ud_dirremove(dip, linkname, NULL,
+			    NULL, DR_REMOVE, cr, ct);
 			rw_exit(&dip->i_rwlock);
 			goto update_inode;
 		}

@@ -274,7 +274,7 @@ int ss_listen (sci_idx)
 		continue;
 	}
 #ifdef POSIX_SIGNALS
-	sigaction(SIGCONT, &csig, (struct sigaction *)0);
+	sigaction(SIGCONT, &csig, NULL);
 #else
 	(void) signal(SIGCONT, sig_cont);
 #endif
@@ -305,7 +305,7 @@ egress:
     gl = del_GetLine(gl);
 
 #ifdef POSIX_SIGNALS
-    sigaction(SIGINT, &isig, (struct sigaction *)0);
+    sigaction(SIGINT, &isig, NULL);
 #else
     (void) signal(SIGINT, sig_int);
 #endif

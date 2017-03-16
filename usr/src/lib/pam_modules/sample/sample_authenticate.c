@@ -72,7 +72,7 @@ pam_sm_authenticate(
 	char			*user;
 	struct pam_conv 	*pam_convp;
 	int			err, result = PAM_AUTH_ERR;
-	struct pam_response 	*ret_resp = (struct pam_response *)0;
+	struct pam_response 	*ret_resp = NULL;
 	char 			messages[PAM_MAX_NUM_MSG][PAM_MAX_MSG_SIZE];
 	int			debug = 0;
 	int			try_first_pass = 0;

@@ -2025,7 +2025,7 @@ mbox_read_header(uint32_t mailbox, struct sbbc_mbox_header *header)
 	 * can use it to calculate the offsets of fields inside
 	 * the structure.
 	 */
-	hd = (struct sbbc_mbox_header *)0;
+	hd = NULL;
 
 	if (rc = iosram_read(SBBC_MAILBOX_KEY, 0, (caddr_t)header,
 	    sizeof (struct sbbc_mbox_header)))
@@ -2082,7 +2082,7 @@ mbox_update_header(uint32_t mailbox, struct sbbc_mbox_header *header)
 	 * can use it to calculate the offsets of fields inside
 	 * the structure.
 	 */
-	hd = (struct sbbc_mbox_header *)0;
+	hd = NULL;
 
 	switch (mailbox) {
 

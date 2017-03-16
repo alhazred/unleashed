@@ -250,10 +250,10 @@ main(int c, char **av)
 	 * We catch it only if we are the login shell.
 	 */
 		/* parents interruptibility */
-	(void) sigvec(SIGINT, (struct sigvec *)0, &osv);
+	(void) sigvec(SIGINT, NULL, &osv);
 	parintr = osv.sv_handler;
 		/* parents terminability */
-	(void) sigvec(SIGTERM, (struct sigvec *)0, &osv);
+	(void) sigvec(SIGTERM, NULL, &osv);
 	parterm = osv.sv_handler;
 
 	_signal(SIGLWP, siglwp);

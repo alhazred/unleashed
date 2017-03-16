@@ -269,7 +269,7 @@ FILE *out_fp, *in_fp;
 	sp->_unget._stack = calloc(
 		(size_t) sp->_unget._size,  sizeof *sp->_unget._stack
 	);
-	if (sp->_unget._stack == (void *) 0)
+	if (sp->_unget._stack == NULL)
 		goto error2;
 
 	if ((wio = (t_wide_io *) calloc(1, sizeof *wio)) == (t_wide_io *) 0)
@@ -409,7 +409,7 @@ SCREEN *sp;
 		if (sp->_unget._stack != (int *) 0)
 			free(sp->_unget._stack);
 
-		if (sp->_in != (void *) 0)
+		if (sp->_in != NULL)
 			free(sp->_in);
 
 		free(sp);

@@ -196,7 +196,7 @@ ldap_sasl_bind_s(
 	    clientctrls, &msgid )) != LDAP_SUCCESS )
 		return( err );
 
-	if ( ldap_result( ld, msgid, 1, (struct timeval *) 0, &result ) == -1 )
+	if ( ldap_result( ld, msgid, 1, NULL, &result ) == -1 )
 		return( LDAP_GET_LDERRNO( ld, NULL, NULL ) );
 
 	err = ldap_parse_sasl_bind_result( ld, result, servercredp, 0 );

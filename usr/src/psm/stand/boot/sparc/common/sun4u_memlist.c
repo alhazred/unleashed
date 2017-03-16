@@ -167,7 +167,7 @@ reg_to_list(struct sun4u_prom_memlist *ar, size_t n, struct memlist *old)
 	int flag = 0;
 
 	if (n == 0)
-		return ((struct memlist *)0);
+		return (NULL);
 
 	/*
 	 * if there was a memory list allocated before, free it first.

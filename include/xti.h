@@ -444,7 +444,7 @@ struct t_uderr {
 
 #define	T_OPT_FIRSTHDR(nbp)    \
 	((nbp)->len >= _T_OPTHDR_SZ ? (struct t_opthdr *)(nbp)->buf : \
-	    (struct t_opthdr *)0)
+	    NULL)
 
 #define	T_OPT_DATA(tohp)	\
 	((unsigned char *)_T_OPTDATA_ALIGN((char *)(tohp) + _T_OPTHDR_SZ))
@@ -453,7 +453,7 @@ struct t_uderr {
 	(((char *)_T_OPTHDR_ALIGN((char *)(popt) + (popt)->len) + \
 	    _T_OPTHDR_SZ <= ((char *)(pbuf) + (buflen))) ? \
 	(struct t_opthdr *)((char *)_T_OPTHDR_ALIGN((char *)(popt) + \
-	    (popt)->len)) : (struct t_opthdr *)0)
+	    (popt)->len)) : NULL)
 
 #define	T_OPT_NEXTHDR(nbp, tohp)   (_T_NEXTHDR((nbp)->buf, (nbp)->len, (tohp)))
 

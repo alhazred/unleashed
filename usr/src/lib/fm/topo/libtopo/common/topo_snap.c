@@ -391,7 +391,7 @@ topo_snap_hold(topo_hdl_t *thp, const char *uuid, int *errp)
 		 */
 		if (ret != NULL && getzoneid() == 0) {
 			if ((twp = topo_walk_init(thp, FM_FMRI_SCHEME_HC,
-			    fac_walker, (void *)0, errp)) == NULL) {
+			    fac_walker, NULL, errp)) == NULL) {
 				return (ret);
 			}
 			(void) topo_walk_step(twp, TOPO_WALK_CHILD);

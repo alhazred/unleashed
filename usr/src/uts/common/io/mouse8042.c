@@ -201,7 +201,7 @@ static struct dev_ops	mouse8042_ops = {
 	mouse8042_detach,	/* detach */
 	nodev,			/* reset */
 	&mouse8042_cb_ops,	/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

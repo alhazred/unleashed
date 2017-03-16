@@ -1002,7 +1002,7 @@ usb_ugen_read(usb_ugen_hdl_t usb_ugen_hdl, dev_t dev, struct uio *uiop,
 	}
 
 	return (physio(ugen_strategy,
-	    (struct buf *)0, dev, B_READ, ugen_minphys, uiop));
+	    NULL, dev, B_READ, ugen_minphys, uiop));
 }
 
 
@@ -1027,7 +1027,7 @@ usb_ugen_write(usb_ugen_hdl_t usb_ugen_hdl, dev_t dev, struct uio *uiop,
 	}
 
 	return (physio(ugen_strategy,
-	    (struct buf *)0, dev, B_WRITE, ugen_minphys, uiop));
+	    NULL, dev, B_WRITE, ugen_minphys, uiop));
 }
 
 

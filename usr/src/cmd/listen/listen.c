@@ -686,8 +686,8 @@ int qlen;
 int clen;
 char **ap;
 {
-	struct t_bind *req = (struct t_bind *)0;
-	struct t_bind *ret = (struct t_bind *)0;
+	struct t_bind *req = NULL;
+	struct t_bind *ret = NULL;
 	char	*p, *q;
 	unsigned int	retval;
 	extern void	nlsaddr2c();

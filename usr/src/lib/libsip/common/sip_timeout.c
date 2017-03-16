@@ -81,7 +81,7 @@ sip_run_to_functions(void *arg)
 	}
 	(void) pthread_mutex_unlock(&timeout_mutex);
 	pthread_exit(NULL);
-	return ((void *)0);
+	return (NULL);
 }
 
 /*
@@ -343,7 +343,7 @@ again:
 			goto again;
 	}
 	/* NOTREACHED */
-	return ((void *)0);
+	return (NULL);
 }
 
 /*

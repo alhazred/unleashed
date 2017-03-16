@@ -662,7 +662,7 @@ lookup(uid_t uid)
 	for (fup = fuhead[uid % FUHASH]; fup != 0; fup = fup->fu_next)
 		if (fup->fu_uid == uid)
 			return (fup);
-	return ((struct fileusage *)0);
+	return (NULL);
 }
 
 struct fileusage *

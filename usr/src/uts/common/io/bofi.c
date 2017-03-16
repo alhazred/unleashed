@@ -816,7 +816,7 @@ bofi_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 		}
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		retval = DDI_SUCCESS;
 		break;
 	default:

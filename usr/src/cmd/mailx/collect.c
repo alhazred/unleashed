@@ -756,7 +756,7 @@ resetsigs(int resethup)
 	nsig.sa_handler = (void (*)())savecont;
 	sigemptyset(&nsig.sa_mask);
 	nsig.sa_flags = SA_RESTART;
-	(void) sigaction(SIGCONT, &nsig, (struct sigaction*)0);
+	(void) sigaction(SIGCONT, &nsig, NULL);
 	}
 # endif
 #endif

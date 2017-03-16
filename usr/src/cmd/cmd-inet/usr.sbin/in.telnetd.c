@@ -827,7 +827,7 @@ kerberos5_is(AuthInfo *ap, uchar_t *data, int cnt)
 					    "\tCould not read "
 					    "forwarded credentials\r\n");
 		} else
-			reply_to_client(ap, KRB_FORWARD_ACCEPT, (void *) 0, 0);
+			reply_to_client(ap, KRB_FORWARD_ACCEPT, NULL, 0);
 
 		free(rsaddr.contents);
 
@@ -842,7 +842,7 @@ kerberos5_is(AuthInfo *ap, uchar_t *data, int cnt)
 			(void) fprintf(stderr,
 				    "\tUnknown Kerberos option %d\r\n",
 				    data[-1]);
-		reply_to_client(ap, KRB_REJECT, (void *) 0, 0);
+		reply_to_client(ap, KRB_REJECT, NULL, 0);
 		break;
 	}
 	return;
@@ -3384,7 +3384,7 @@ telnet(int net, int master)
 		}
 
 		if ((c = select(max(net, master) + 1, &ibits, &obits, &xbits,
-		    (struct timeval *)0)) < 1) {
+		    NULL)) < 1) {
 			if (c == -1) {
 				if (errno == EINTR) {
 					continue;

@@ -667,7 +667,7 @@ static struct cb_ops pool_cb_ops = {
 	nodev,			/* segmap */
 	nochpoll,		/* poll */
 	nodev,			/* cb_prop_op */
-	(struct streamtab *)0,	/* streamtab */
+	NULL,	/* streamtab */
 	D_NEW | D_MP		/* driver compatibility flags */
 };
 

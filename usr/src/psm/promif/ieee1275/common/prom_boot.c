@@ -57,7 +57,7 @@ struct bootparam *
 prom_bootparam(void)
 {
 	PROMIF_DPRINTF(("prom_bootparam on P1275?\n"));
-	return ((struct bootparam *)0);
+	return (NULL);
 }
 
 char *

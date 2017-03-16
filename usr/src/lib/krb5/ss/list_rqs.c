@@ -130,7 +130,7 @@ ss_list_requests(argc, argv, sci_idx, info_ptr)
     wait(&waitb);
 #endif
 #ifdef POSIX_SIGNALS
-    sigaction(SIGINT, &osig, (struct sigaction *)0);
+    sigaction(SIGINT, &osig, NULL);
 #else
     (void) signal(SIGINT, func);
 #endif

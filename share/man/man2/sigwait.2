@@ -149,7 +149,7 @@ main(void)
     printf("press CTRL-C to deliver SIGINT to sigint thread\en");
     printf("##################\en");
 
-    pthread_exit((void *)0);
+    pthread_exit(NULL);
 }
 static void *
 threadTwo(void *arg)
@@ -158,7 +158,7 @@ threadTwo(void *arg)
                             pthread_self());
     printf("threadTwo [tid: %d] is now complete and exiting\en",
                             pthread_self());
-    pthread_exit((void *)0);
+    pthread_exit(NULL);
 }
 
 static void *
@@ -168,7 +168,7 @@ threadThree(void *arg)
                             pthread_self());
     printf("threadThree [tid: %d] is now complete and exiting\en",
                             pthread_self());
-    pthread_exit((void *)0);
+    pthread_exit(NULL);
 }
 
 void *
@@ -191,7 +191,7 @@ sigint(void *arg)
 
     printf("\enSIGINT signal %d caught by sigint thread [tid: %d]\en",
                             sig, pthread_self());
-    pthread_exit((void *)0);
+    pthread_exit(NULL);
 }
 .fi
 .in -2

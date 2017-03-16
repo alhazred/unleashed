@@ -284,7 +284,7 @@ skip_jitter_correction:
 	(void) str_print(gettext("done.\n"), progress_pos);
 
 read_audio_track_done:
-	(void) sigaction(SIGINT, &oldsv, (struct sigaction *)0);
+	(void) sigaction(SIGINT, &oldsv, NULL);
 
 	free(buf);
 	free(prev);

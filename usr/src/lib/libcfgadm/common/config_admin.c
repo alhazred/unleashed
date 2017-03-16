@@ -313,7 +313,7 @@ static void destroy_cache();
 #define	DOT_DOT_DEVICES		"../devices"
 #define	CFGA_DEV_DIR		"/dev/cfg"
 #define	SLASH			"/"
-#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : (void *)0)
+#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
 #define	GET_DYN(a)	(strstr((a), CFGA_DYN_SEP))
 
 #define	CFGA_NO_CLASS		"none"

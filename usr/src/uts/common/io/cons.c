@@ -113,7 +113,7 @@ static struct dev_ops cn_ops = {
 	cn_detach,		/* detach */
 	nodev,			/* reset */
 	&cn_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 
@@ -253,7 +253,7 @@ cn_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 
 	case DDI_INFO_DEVT2INSTANCE:
 		if (getminor((dev_t)arg) == 0) {
-			*result = (void *)0;
+			*result = NULL;
 			error = DDI_SUCCESS;
 		}
 		break;

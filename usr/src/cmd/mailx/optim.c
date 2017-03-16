@@ -409,7 +409,7 @@ minit(void)
 		xp->xh_name = NOSTR;
 		xp->xh_mid = 0;
 		xp->xh_attnet = 0;
-		*tp++ = (struct xtrahash *) 0;
+		*tp++ = NULL;
 	}
 }
 
@@ -428,7 +428,7 @@ mstash(char name[], int attnet)
 	int x;
 
 	xp = xlocate(name);
-	if (xp == (struct xtrahash *) 0) {
+	if (xp == NULL) {
 		printf(gettext("Ran out of machine id spots\n"));
 		return(0);
 	}
@@ -484,7 +484,7 @@ xlocate(char name[])
 		if (strcmp(cp, xp->xh_name) == 0)
 			return(xp);
 	}
-	return((struct xtrahash *) 0);
+	return(NULL);
 }
 
 #ifdef OPTIM

@@ -143,7 +143,7 @@ execute(t, wanttty, pipein, pipeout)
 		/*
 		 * Check if we have a builtin function and remember which one.
 		 */
-		bifunc = t->t_dtyp == TCOM ? isbfunc(t) : (struct biltins *) 0;
+		bifunc = t->t_dtyp == TCOM ? isbfunc(t) : NULL;
 
 		/*
 		 * We fork only if we are timed, or are not the end of
@@ -185,7 +185,7 @@ execute(t, wanttty, pipein, pipeout)
 			sv.SHDIAG = SHDIAG; sv.OLDSTD = OLDSTD;
 			sv.tpgrp = tpgrp;
 			Vsav = Vdp = 0; Vav = 0;
-			(void) sigvec(SIGINT, (struct sigvec *)0, &sv.sigv);
+			(void) sigvec(SIGINT, NULL, &sv.sigv);
 			pid = vfork();
 			if (pid < 0) {
 				(void) sigsetmask(sv.mask);
@@ -211,7 +211,7 @@ execute(t, wanttty, pipein, pipeout)
 				/*
 				 * Restore SIGINT handler.
 				 */
-				(void) sigvec(SIGINT, &sv.sigv, (struct sigvec *)0);
+				(void) sigvec(SIGINT, &sv.sigv, NULL);
 				(void) sigsetmask(sv.mask);
 			} else {	/* child */
 				/* this is from pfork() */

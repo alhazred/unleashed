@@ -87,7 +87,7 @@ found:
 		pp->p_reason = w.w_stopsig;
 	} else {
 		if (pp->p_flags & (PTIME|PPTIME) || adrof(S_time /* "time" */))
-			(void) gettimeofday(&pp->p_etime, (struct timezone *)0);
+			(void) gettimeofday(&pp->p_etime, NULL);
 		pp->p_rusage = ru;
 		if (WIFSIGNALED(w)) {
 			if (w.w_termsig == SIGINT)
@@ -467,7 +467,7 @@ palloc(int pid, struct command *t)
 	}
 	pp->p_next = proclist.p_next;
 	proclist.p_next = pp;
-	(void) gettimeofday(&pp->p_btime, (struct timezone *)0);
+	(void) gettimeofday(&pp->p_btime, NULL);
 }
 
 void

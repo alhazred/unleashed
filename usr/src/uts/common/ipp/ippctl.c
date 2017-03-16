@@ -156,7 +156,7 @@ static	struct dev_ops	ippctl_dev_ops = {
 	ippctl_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&ippctl_cb_ops,		/* devo_cb_ops */
-	(struct bus_ops *)0,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	NULL,			/* devo_power */
 	ddi_quiesce_not_needed,		/* devo_quiesce */
 };
@@ -300,7 +300,7 @@ ippctl_info(
 
 	switch (cmd) {
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;	/* Single instance driver */
+		*result = NULL;	/* Single instance driver */
 		rc = DDI_SUCCESS;
 		break;
 	case DDI_INFO_DEVT2DEVINFO:

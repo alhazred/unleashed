@@ -51,8 +51,8 @@ struct dev_ops	options_ops = {
 	options_attach,		/* attach */
 	options_detach,		/* detach */
 	nodev,			/* reset */
-	(struct cb_ops *)0,	/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* driver operations */
+	NULL,	/* bus operations */
 	nulldev,		/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 
@@ -114,7 +114,7 @@ options_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 		}
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		error = DDI_SUCCESS;
 		break;
 	default:

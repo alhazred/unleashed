@@ -338,7 +338,7 @@ crypto_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 		return (DDI_SUCCESS);
 
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		return (DDI_SUCCESS);
 	}
 	return (DDI_FAILURE);

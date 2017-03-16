@@ -326,7 +326,7 @@ _fmd_init(fmd_hdl_t *hdl)
 	fmd_hdl_subscribe(hdl, "list.repaired");
 
 	/* open dictionaries referenced by all .eft files */
-	lut_walk(Dicts, (lut_cb)doopendict, (void *)0);
+	lut_walk(Dicts, (lut_cb)doopendict, NULL);
 
 	Verbose = fmd_prop_get_int32(hdl, "verbose");
 	Warn = fmd_prop_get_int32(hdl, "warn");

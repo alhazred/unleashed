@@ -94,7 +94,7 @@ static struct dev_ops sbmem_ops = {
 	sbmem_detach,		/* detach */
 	nodev,			/* reset */
 	&sbmem_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	nulldev,		/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

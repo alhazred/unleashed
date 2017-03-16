@@ -186,7 +186,7 @@ rt_dldump(Rt_map *lmp, const char *opath, int flags, Addr addr)
 		 * processing becoming default), and thus use /proc to obtain a
 		 * file descriptor of the input file.
 		 */
-		if ((fd = ioctl(pfd, PIOCOPENM, (void *)0)) == -1) {
+		if ((fd = ioctl(pfd, PIOCOPENM, NULL)) == -1) {
 			err = errno;
 			eprintf(lml, ERR_FATAL, MSG_INTL(MSG_SYS_PROC), ipath,
 			    strerror(err));

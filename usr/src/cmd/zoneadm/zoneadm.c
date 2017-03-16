@@ -4009,7 +4009,7 @@ move_func(int argc, char *argv[])
 		zperror(gettext("could not open new zone path"), B_FALSE);
 		return (Z_ERR);
 	}
-	while ((dp = readdir(dirp)) != (struct dirent *)0) {
+	while ((dp = readdir(dirp)) != NULL) {
 		if (strcmp(dp->d_name, ".") == 0 ||
 		    strcmp(dp->d_name, "..") == 0)
 			continue;

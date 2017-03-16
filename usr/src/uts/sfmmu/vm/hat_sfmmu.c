@@ -1214,7 +1214,7 @@ hat_init(void)
 	 * Set up memory callback to update tsb_alloc_hiwater and
 	 * tsb_max_growsize.
 	 */
-	i = kphysm_setup_func_register(&sfmmu_update_vec, (void *) 0);
+	i = kphysm_setup_func_register(&sfmmu_update_vec, NULL);
 	ASSERT(i == 0);
 
 	/*

@@ -52,7 +52,7 @@
 #include <config_admin.h>
 #include "cfgadm.h"
 
-#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : (void *)0)
+#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
 #define	GET_DYN(a)	(strstr((a), CFGA_DYN_SEP))
 /*
  * forward declarations

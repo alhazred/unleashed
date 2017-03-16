@@ -180,7 +180,7 @@ write_to_cd(void *arg)
 			tio_done = 1;
 			(void) cond_broadcast(&tio_cond);
 			(void) mutex_unlock(&tio_mutex);
-			thr_exit((void *)0);
+			thr_exit(NULL);
 		}
 
 		(void) mutex_unlock(&tio_mutex);
@@ -227,7 +227,7 @@ pc_again:
 		if (tio_got_ctrl_c) {
 			pcb_cb(pcb_arg, 0xFFFFFFFF);
 		}
-		thr_exit((void *)0);
+		thr_exit(NULL);
 	}
 	(void) mutex_unlock(&pcb_mutex);
 	ret = pcb_cb(pcb_arg, pcb_completed_io_size);
@@ -235,7 +235,7 @@ pc_again:
 		(void) mutex_lock(&pcb_mutex);
 		pcb_user_abort = (uchar_t)ret;
 		(void) mutex_unlock(&pcb_mutex);
-		thr_exit((void *)0);
+		thr_exit(NULL);
 	}
 	goto pc_again;
 }

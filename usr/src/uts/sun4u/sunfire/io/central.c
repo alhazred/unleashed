@@ -105,7 +105,7 @@ static struct dev_ops central_ops = {
 	central_attach,		/* attach */
 	central_detach,		/* detach */
 	nulldev,		/* reset */
-	(struct cb_ops *)0,	/* cb_ops */
+	NULL,	/* cb_ops */
 	&central_bus_ops,	/* bus_ops */
 	nulldev,		/* power */
 	ddi_quiesce_not_needed,		/* quiesce */

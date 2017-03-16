@@ -178,7 +178,7 @@ iommu_init(struct sbus_soft_state *softsp, caddr_t address)
 
 #if defined(DEBUG) && defined(IO_MEMUSAGE)
 	mutex_init(&softsp->iomemlock, NULL, MUTEX_DEFAULT, NULL);
-	softsp->iomem = (struct io_mem_list *)0;
+	softsp->iomem = NULL;
 #endif /* DEBUG && IO_MEMUSAGE */
 	/*
 	 * Get the base address of the TSB table and store it in the hardware

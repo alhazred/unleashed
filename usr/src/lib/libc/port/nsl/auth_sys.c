@@ -116,7 +116,7 @@ authsys_create(const char *machname, const uid_t uid, const gid_t gid,
 	/*
 	 * fill in param struct from the given params
 	 */
-	(void) gettimeofday(&now,  (struct timezone *)0);
+	(void) gettimeofday(&now,  NULL);
 	aup.aup_time = now.tv_sec;
 	aup.aup_machname = (char *)machname;
 	aup.aup_uid = uid;
@@ -303,7 +303,7 @@ authsys_refresh(AUTH *auth, void *dummy)
 		goto done;
 
 	/* update the time and serialize in place */
-	(void) gettimeofday(&now, (struct timezone *)0);
+	(void) gettimeofday(&now, NULL);
 	aup.aup_time = now.tv_sec;
 	xdrs.x_op = XDR_ENCODE;
 	XDR_SETPOS(&xdrs, 0);

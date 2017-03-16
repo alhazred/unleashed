@@ -112,7 +112,7 @@ static struct dev_ops sysm_ops = {
 	sysm_detach,		/* detach */
 	nodev,			/* reset */
 	&sysm_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	nulldev,		/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 

@@ -58,7 +58,7 @@ FILE *fp;
 	if (fscanf(fp, "%[^\n]%n ", mbs, &n) < 1)
 		return 0;
 
-	if (wattr_set(w, at, co, (void *) 0) == ERR)
+	if (wattr_set(w, at, co, NULL) == ERR)
 		return 0;
 
 	if (mvwaddstr(w, y, x, mbs) == ERR)

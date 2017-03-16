@@ -36,7 +36,7 @@ settimes(void)
 #ifdef TRACE
 	tprintf("TRACE- settimes()\n");
 #endif
-	(void) gettimeofday(&time0, (struct timezone *)0);
+	(void) gettimeofday(&time0, NULL);
 	(void) getrusage(RUSAGE_SELF, &ru0);
 	(void) getrusage(RUSAGE_CHILDREN, &ruch);
 	ruadd(&ru0, &ruch);
@@ -58,7 +58,7 @@ dotime(void)
 	(void) getrusage(RUSAGE_SELF, &ru1);
 	(void) getrusage(RUSAGE_CHILDREN, &ruch);
 	ruadd(&ru1, &ruch);
-	(void) gettimeofday(&timedol, (struct timezone *)0);
+	(void) gettimeofday(&timedol, NULL);
 	prusage(&ru0, &ru1, &timedol, &time0);
 }
 

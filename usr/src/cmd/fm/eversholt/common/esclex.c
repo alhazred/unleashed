@@ -812,7 +812,7 @@ doident()
 			;
 	}
 	(void) ungetc(c, Fp);
-	Ident = lut_add(Ident, (void *)stable(Tok), (void *)0, NULL);
+	Ident = lut_add(Ident, (void *)stable(Tok), NULL, NULL);
 
 	outfl(O_VERB, File, Line, "pragma set: ident \"%s\"", Tok);
 }
@@ -848,7 +848,7 @@ dodictionary()
 			;
 	}
 	(void) ungetc(c, Fp);
-	Dicts = lut_add(Dicts, (void *)stable(Tok), (void *)0, NULL);
+	Dicts = lut_add(Dicts, (void *)stable(Tok), NULL, NULL);
 
 	outfl(O_VERB, File, Line, "pragma set: dictionary \"%s\"", Tok);
 }

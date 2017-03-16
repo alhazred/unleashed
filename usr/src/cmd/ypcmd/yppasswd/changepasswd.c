@@ -50,7 +50,7 @@
 #define	STRSIZE 100
 #define	FINGERSIZE (4 * STRSIZE - 4)
 #define	SHELLSIZE (STRSIZE - 2)
-#define	UTUSERLEN (sizeof (((struct utmpx *)0)->ut_user))
+#define	UTUSERLEN (sizeof (((struct utmpx *)NULL)->ut_user))
 
 /* Prototypes */
 extern bool_t validloginshell(char *sh, char *arg, int);
@@ -185,7 +185,7 @@ changepasswd(SVCXPRT *transp)
 
 	memset(&sa, 0, sizeof (struct sigaction));
 	sa.sa_handler = SIG_IGN;
-	sigaction(SIGTSTP, &sa, (struct sigaction *)0);
+	sigaction(SIGTSTP, &sa, NULL);
 	sigaction(SIGHUP,  &sa, &osa1);
 	sigaction(SIGINT,  &sa, &osa2);
 	sigaction(SIGQUIT, &sa, &osa3);
@@ -795,9 +795,9 @@ cleanup:
 		}
 	}
 
-	sigaction(SIGHUP,  &osa1, (struct sigaction *)0);
-	sigaction(SIGINT,  &osa2, (struct sigaction *)0);
-	sigaction(SIGQUIT, &osa3, (struct sigaction *)0);
+	sigaction(SIGHUP,  &osa1, NULL);
+	sigaction(SIGINT,  &osa2, NULL);
+	sigaction(SIGQUIT, &osa3, NULL);
 
 	if (!svc_sendreply(transp, xdr_int, (char *)&ans))
 		syslog(LOG_WARNING,

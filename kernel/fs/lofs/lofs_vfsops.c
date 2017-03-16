@@ -75,13 +75,13 @@ static mntopt_t mntopts[] = {
  *		private data
  */
 	{ MNTOPT_XATTR,		xattr_cancel,	NULL,		0,
-		(void *)0 },
+		NULL },
 	{ MNTOPT_NOXATTR,	noxattr_cancel,	NULL,		0,
-		(void *)0 },
+		NULL },
 	{ MNTOPT_LOFS_SUB,	sub_cancel,	NULL,		0,
-		(void *)0 },
+		NULL },
 	{ MNTOPT_LOFS_NOSUB,	nosub_cancel,	NULL,		0,
-		(void *)0 },
+		NULL },
 };
 
 static mntopts_t lofs_mntopts = {

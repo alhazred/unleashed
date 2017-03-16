@@ -1105,7 +1105,7 @@ char *dev[];
 
 	/* bind */
 	errno = t_errno = 0;
-	if (t_bind(fd, (struct t_bind *) 0, bind_ret ) < 0) {
+	if (t_bind(fd, NULL, bind_ret ) < 0) {
 		tfaillog(fd, "t_bind" );
 		TFREE(bind_ret, T_BIND);TFREE(sndcall, T_CALL);
 		TFREE(rcvcall, T_CALL);

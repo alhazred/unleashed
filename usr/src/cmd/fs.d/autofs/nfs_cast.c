@@ -282,7 +282,7 @@ nfs_cast(struct mapfs *mfs_in, struct mapfs **mfs_out, int timeout)
 		goto done_broad;
 	}
 
-	(void) gettimeofday(&t, (struct timezone *)0);
+	(void) gettimeofday(&t, NULL);
 	xid = (getpid() ^ t.tv_sec ^ t.tv_usec) & ~0xFF;
 	t.tv_usec = 0;
 
@@ -349,7 +349,7 @@ nfs_cast(struct mapfs *mfs_in, struct mapfs **mfs_out, int timeout)
 					*((ulong_t *)outbuf) =
 						htonl(xid + ts->ts_inx);
 					(void) gettimeofday(&(ts->ts_timeval),
-						(struct timezone *)0);
+						NULL);
 					/*
 					 * Check if already received
 					 * from a previous iteration.
@@ -655,7 +655,7 @@ struct timeval *send_time;
 {
 	struct timeval time_now;
 
-	(void) gettimeofday(&time_now, (struct timezone *)0);
+	(void) gettimeofday(&time_now, NULL);
 	if (time_now.tv_usec <  send_time->tv_usec) {
 		time_now.tv_sec--;
 		time_now.tv_usec += 1000000;

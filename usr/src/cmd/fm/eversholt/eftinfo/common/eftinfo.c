@@ -206,7 +206,7 @@ main(int argc, char *argv[])
 
 	if (Dflag) {
 		out(O_OK|O_NONL, "Dictionaries: ");
-		lut_walk(Dicts, (lut_cb)dictprint, (void *)0);
+		lut_walk(Dicts, (lut_cb)dictprint, NULL);
 		out(O_OK, NULL);
 	}
 

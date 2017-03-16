@@ -280,12 +280,12 @@ struct grouphead {
 	struct	mgroup *g_list;		/* Users in group. */
 };
 
-#define	NIL	((struct name *)0)	/* The nil pointer for namelists */
-#define	NONE	((struct cmd *)0)	/* The nil pointer to command tab */
-#define	NOVAR	((struct var *)0)	/* The nil pointer to variables */
-#define	NOGRP	((struct grouphead *)0) /* The nil grouphead pointer */
-#define	NOGE	((struct mgroup *)0)	/* The nil group pointer */
-#define	NOFP	((struct fplst *)0)	/* The nil file pointer */
+#define	NIL	((struct name *)NULL)	/* The nil pointer for namelists */
+#define	NONE	((struct cmd *)NULL)	/* The nil pointer to command tab */
+#define	NOVAR	((struct var *)NULL)	/* The nil pointer to variables */
+#define	NOGRP	((struct grouphead *)NULL) /* The nil grouphead pointer */
+#define	NOGE	((struct mgroup *)NULL)	/* The nil group pointer */
+#define	NOFP	((struct fplst *)NULL)	/* The nil file pointer */
 
 #define	TRUE	1
 #define	FALSE	0

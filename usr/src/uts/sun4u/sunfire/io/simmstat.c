@@ -96,7 +96,7 @@ static struct dev_ops simmstat_ops = {
 	simmstat_detach,		/* detach */
 	nulldev,			/* reset */
 	&simmstat_cb_ops,		/* cb_ops */
-	(struct bus_ops *)0,		/* bus_ops */
+	NULL,		/* bus_ops */
 	nulldev,			/* power */
 	ddi_quiesce_not_needed,			/* quiesce */
 };

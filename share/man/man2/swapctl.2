@@ -277,16 +277,13 @@ again:
         exit(2);
     }
     /* allocate swaptable for num+1 entries */
-    if ((s = (swaptbl_t *)
-        malloc(num * sizeof(swapent_t) +
-            sizeof(struct swaptable))) ==
-        (void *) 0) {
+    if ((s = malloc(num * sizeof(swapent_t) +
+            sizeof(struct swaptable))) == NULL) {
         fprintf(stderr, "Malloc Failed\en");
         exit(3);
     }
     /* allocate num+1 string holders */
-    if ((strtab = (char *)
-        malloc((num + 1) * MAXSTRSIZE)) == (void *) 0) {
+    if ((strtab = malloc((num + 1) * MAXSTRSIZE)) == NULL) {
         fprintf(stderr, "Malloc Failed\en");
         exit(3);
     }

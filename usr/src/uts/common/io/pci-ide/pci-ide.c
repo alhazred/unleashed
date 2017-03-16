@@ -165,7 +165,7 @@ struct dev_ops pciide_ops = {
 	pciide_attach,		/* attach */
 	pciide_detach,		/* detach */
 	nodev,			/* reset */
-	(struct cb_ops *)0,	/* driver operations */
+	NULL,	/* driver operations */
 	&pciide_bus_ops,	/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */

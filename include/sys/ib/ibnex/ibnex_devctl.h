@@ -52,7 +52,7 @@ extern "C" {
 
 /* defines for dynamic APID handling */
 #define	DYN_SEP		"::"
-#define	GET_DYN(a)	(((a) != NULL) ? strstr((a), DYN_SEP) : (void *)0)
+#define	GET_DYN(a)	(((a) != NULL) ? strstr((a), DYN_SEP) : NULL)
 
 #define	IBNEX_FABRIC		"fabric"
 #define	IBNEX_VPPA_STR		"vppa"

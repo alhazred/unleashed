@@ -148,7 +148,7 @@ sigignore(int sig)
 	if (STOPDEFAULT(sig))
 		act.sa_flags |= SA_RESTART;
 
-	if (sigaction(sig, &act, (struct sigaction *)0) < 0)
+	if (sigaction(sig, &act, NULL) < 0)
 		return (-1);
 
 	(void) sigemptyset(&set);
@@ -197,7 +197,7 @@ sigset(int sig, void(*func)(int)))(int)
 	if (func == SIG_HOLD) {
 		if (sigprocmask(SIG_BLOCK, &nset, &oset) < 0)
 			return (SIG_ERR);
-		if (sigaction(sig, (struct sigaction *)0, &oact) < 0)
+		if (sigaction(sig, NULL, &oact) < 0)
 			return (SIG_ERR);
 	} else {
 		nact.sa_handler = func;

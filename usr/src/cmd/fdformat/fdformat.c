@@ -1581,7 +1581,7 @@ gettext("%s: write of MS-DOS File Allocation Table failed, "),
 			fat_rdir[i] = ' ';
 		}
 		fat_rdir[0x0B] = 0x28;
-		(void) gettimeofday(&tv, (struct timezone *)0);
+		(void) gettimeofday(&tv, NULL);
 		tp = localtime(&tv.tv_sec);
 		/* get the time & day into DOS format */
 		dostime = tp->tm_sec / 2;
@@ -1714,7 +1714,7 @@ gettext("%s: write of NEC-DOS File Allocation Table failed, "), myname);
 			fat_rdir[i] = ' ';
 		}
 		fat_rdir[0xb] = 0x28;
-		(void) gettimeofday(&tv, (struct timezone *)0);
+		(void) gettimeofday(&tv, NULL);
 		tp = localtime(&tv.tv_sec);
 		/* get the time & day into DOS format */
 		dostime = tp->tm_sec / 2;

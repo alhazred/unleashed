@@ -352,7 +352,7 @@ proc_request(struct yppasswd *yppwd, struct passwd_entry *old_pwd,
 	/* Are going to be forking pushes, set up signals */
 	memset(&sa, 0, sizeof (struct sigaction));
 	sa.sa_handler = SIG_IGN;
-	sigaction(SIGTSTP, &sa, (struct sigaction *)0);
+	sigaction(SIGTSTP, &sa, NULL);
 	sigaction(SIGHUP,  &sa, &osa1);
 	sigaction(SIGINT,  &sa, &osa2);
 	sigaction(SIGQUIT, &sa, &osa3);
@@ -361,9 +361,9 @@ proc_request(struct yppasswd *yppwd, struct passwd_entry *old_pwd,
 	ans = proc_maps(domain, old_pwd);
 
 	/* Tidy up signals */
-	sigaction(SIGHUP,  &osa1, (struct sigaction *)0);
-	sigaction(SIGINT,  &osa2, (struct sigaction *)0);
-	sigaction(SIGQUIT, &osa3, (struct sigaction *)0);
+	sigaction(SIGHUP,  &osa1, NULL);
+	sigaction(SIGINT,  &osa2, NULL);
+	sigaction(SIGQUIT, &osa3, NULL);
 
 	return (ans);
 }

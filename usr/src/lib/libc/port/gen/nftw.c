@@ -594,7 +594,7 @@ nftw(const char *path,
 	save_errno = errno;
 	errno = 0;
 	var.savedstatf = NULL;
-	rc = walk(dp, fn, depth, (struct Save *)0, &var);
+	rc = walk(dp, fn, depth, NULL, &var);
 	if (errno == 0)
 		errno = save_errno;
 done:

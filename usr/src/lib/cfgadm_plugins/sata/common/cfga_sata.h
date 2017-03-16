@@ -123,10 +123,10 @@ typedef struct walk_link {
 	"This operation will enable activity on the SATA port\nContinue"
 
 #define	S_FREE(x)		(((x) != NULL) ? \
-				(free(x), (x) = NULL) : (void *)0)
+				(free(x), (x) = NULL) : NULL)
 
 #define	GET_DYN(a)		(((a) != NULL) ? \
-				strstr((a), DYN_SEP) : (void *)0)
+				strstr((a), DYN_SEP) : NULL)
 
 typedef struct sata_apid {
 	char		*hba_phys;

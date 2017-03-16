@@ -1074,8 +1074,8 @@ extern const wchar_t *wunctrl(const cchar_t *);
 #define	standend()			wstandend(stdscr)
 #define	standout()			wstandout(stdscr)
 #define	wstandend(w)			(wattr_set(w, WA_NORMAL, COLOR_BLACK, \
-					(void *)0), 1)
-#define	wstandout(w)			(wattr_on(w, WA_STANDOUT, (void *)0), 1)
+					NULL), 1)
+#define	wstandout(w)			(wattr_on(w, WA_STANDOUT, NULL), 1)
 
 #define	touchline(w, y, n)		wtouchln(w, y, n, 1)
 #define	touchwin(w)			wtouchln(w, 0, (w)->_maxy, 1)

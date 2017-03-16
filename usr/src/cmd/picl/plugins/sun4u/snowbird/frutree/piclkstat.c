@@ -347,7 +347,7 @@ serial_port_state(kstat_ctl_t *kc, char *driver, int instance)
 	fd = open(device, O_RDONLY|O_NDELAY|O_NONBLOCK|O_NOCTTY);
 
 	/* Restore sig action flags */
-	(void) sigaction(SIGALRM, &old_sa, (struct sigaction *)0);
+	(void) sigaction(SIGALRM, &old_sa, NULL);
 	/* Disable alarm */
 	(void) alarm(0);
 

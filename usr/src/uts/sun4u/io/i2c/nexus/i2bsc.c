@@ -279,7 +279,7 @@ i2bsc_doattach(dev_info_t *dip)
 	i2c->i2bsc_attachflags |= SETUP_REGS;
 
 	mutex_init(&i2c->i2bsc_imutex, NULL, MUTEX_DRIVER,
-	    (void *) 0);
+	    NULL);
 	cv_init(&i2c->i2bsc_icv, NULL, CV_DRIVER, NULL);
 	i2c->i2bsc_attachflags |= IMUTEX;
 

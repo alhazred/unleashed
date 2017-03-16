@@ -604,7 +604,7 @@ void * mm_alloc_phys_mem_align_imp(lm_device_t *       pLM,
     if ((rc = ddi_dma_alloc_handle(pUM->pDev,
                                    &dmaAttrib,
                                    DDI_DMA_DONTWAIT,
-                                   (void *)0,
+                                   NULL,
                                    pDmaHandle)) != DDI_SUCCESS)
     {
         BnxeLogWarn(pUM, "Failed to alloc DMA handle");
@@ -617,7 +617,7 @@ void * mm_alloc_phys_mem_align_imp(lm_device_t *       pLM,
                                 &bnxeAccessAttribBUF,
                                 DDI_DMA_CONSISTENT,
                                 DDI_DMA_DONTWAIT,
-                                (void *)0,
+                                NULL,
                                 &pBuf,
                                 &length,
                                 pDmaAccHandle)) != DDI_SUCCESS)
@@ -629,12 +629,12 @@ void * mm_alloc_phys_mem_align_imp(lm_device_t *       pLM,
     }
 
     if ((rc = ddi_dma_addr_bind_handle(*pDmaHandle,
-                                       (struct as *)0,
+                                       NULL,
                                        pBuf,
                                        length,
                                        DDI_DMA_RDWR | DDI_DMA_CONSISTENT,
                                        DDI_DMA_DONTWAIT,
-                                       (void *)0,
+                                       NULL,
                                        &cookie,
                                        &count)) != DDI_DMA_MAPPED)
     {

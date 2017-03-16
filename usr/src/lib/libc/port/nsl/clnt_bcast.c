@@ -250,7 +250,7 @@ rpc_broadcast_exp(const rpcprog_t prog, const rpcvers_t vers,
 	}
 
 	/* Serialize all the arguments which have to be sent */
-	(void) gettimeofday(&t, (struct timezone *)0);
+	(void) gettimeofday(&t, NULL);
 	msg.rm_xid = getpid() ^ t.tv_sec ^ t.tv_usec;
 	msg.rm_direction = CALL;
 	msg.rm_call.cb_rpcvers = RPC_MSG_VERSION;

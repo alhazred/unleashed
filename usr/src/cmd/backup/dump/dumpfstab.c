@@ -112,7 +112,7 @@ addvfstab(tablename, pm)
 	if (tp == (FILE *)0) {
 		msg(gettext("Cannot open %s for dump table information.\n"),
 			tablename);
-		return ((struct pmntent *)0);
+		return (NULL);
 	}
 	while ((status = getvfsent(tp, &vfs)) == 0) {
 		if (vfs.vfs_fstype == (char *)0 ||
@@ -125,7 +125,7 @@ addvfstab(tablename, pm)
 		mnt->mnt_type = mntstrdup(vfs.vfs_fstype);
 		mnt->mnt_opts = mntstrdup(vfs.vfs_mntopts);
 
-		if (mnttable == (struct pmntent *)0)
+		if (mnttable == NULL)
 			/*
 			 * Guaranteed by caller that pm will also be NULL,
 			 * so no memory leak to worry about.
@@ -137,7 +137,7 @@ addvfstab(tablename, pm)
 			pm = pm->pm_next;
 		}
 		pm->pm_mnt = mnt;
-		pm->pm_next = (struct pmntent *)0;
+		pm->pm_next = NULL;
 	}
 
 	switch (status) {
@@ -179,9 +179,9 @@ allocmntent(mnt)
 void
 mnttabread()
 {
-	struct pmntent *pm = (struct pmntent *)0;
+	struct pmntent *pm = NULL;
 
-	if (mnttable != (struct pmntent *)0)
+	if (mnttable != NULL)
 		return;
 	/*
 	 * Read in the file system mount tables.  Order
@@ -205,7 +205,7 @@ addmtab(tablename, pm)
 	if (tp == (FILE *)0) {
 		msg(gettext("Cannot open %s for dump table information.\n"),
 			tablename);
-		return ((struct pmntent *)0);
+		return (NULL);
 	}
 	while (mnt = mygetmntent(tp, tablename)) {
 		if (mnt->mnt_type == (char *)0 ||
@@ -213,7 +213,7 @@ addmtab(tablename, pm)
 			continue;
 
 		mnt = allocmntent(mnt);
-		if (mnttable == (struct pmntent *)0)
+		if (mnttable == NULL)
 			/*
 			 * Guaranteed by caller that pm will also be NULL,
 			 * so no memory leak to worry about.
@@ -225,7 +225,7 @@ addmtab(tablename, pm)
 			pm = pm->pm_next;
 		}
 		pm->pm_mnt = mnt;
-		pm->pm_next = (struct pmntent *)0;
+		pm->pm_next = NULL;
 	}
 	(void) endmntent(tp);
 	return (pm);
@@ -251,7 +251,7 @@ mnttabsearch(key, mounted)
 {
 	struct pmntent *pm;
 	struct mntent *mnt;
-	struct mntent *first = (struct mntent *)0;
+	struct mntent *first = NULL;
 	char *s;
 	char *gotreal;
 	char path[MAXPATHLEN];
@@ -295,7 +295,7 @@ found:
 		 */
 		if (lf_ismounted(mnt->mnt_fsname, mnt->mnt_dir) > 0)
 			return (mnt);
-		else if (first == (struct mntent *)0)
+		else if (first == NULL)
 			first = mnt;
 	}
 	/*
@@ -307,7 +307,7 @@ found:
 	 * matched entry (or null).
 	 */
 	if (mounted)
-		return ((struct mntent *)0);
+		return (NULL);
 	return (first);
 }
 
@@ -341,5 +341,5 @@ getmnttab()
 		current = current->pm_next;
 		return (pm->pm_mnt);
 	}
-	return ((struct mntent *)0);
+	return (NULL);
 }

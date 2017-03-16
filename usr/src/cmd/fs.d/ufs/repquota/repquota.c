@@ -390,7 +390,7 @@ lookup(uid_t uid)
 		if (up->u_uid == uid)
 			return (up);
 	if ((pwp = getpwuid((uid_t)uid)) == NULL)
-		return ((struct username *)0);
+		return (NULL);
 	up = adduid(pwp->pw_uid);
 	(void) strncpy(up->u_name, pwp->pw_name, sizeof (up->u_name));
 	return (up);

@@ -167,7 +167,7 @@ getnetgr_destr(be, dummy)
 	void			*dummy;
 {
 	if (be != 0) {
-		(void) getnetgr_end(be, (void *)0);
+		(void) getnetgr_end(be, NULL);
 		free(be);
 	}
 	return (NSS_SUCCESS);
@@ -263,7 +263,7 @@ ngt_insert(ngt, name, namelen)
 	struct netgrnam	*cur;
 	struct netgrnam	**head;
 
-#define	dummy		((struct netgrnam *)0)
+#define	dummy		((struct netgrnam *)NULL)
 
 	for (hashval = 0, i = 0;  i < namelen;  i++) {
 		hashval = (hashval << 2) + hashval +

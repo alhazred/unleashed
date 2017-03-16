@@ -221,7 +221,7 @@ krb5_rc_file_resolve(krb5_context context, krb5_rcache id, char *name)
 	goto cleanup;
     }
     memset(t->h, 0, t->hsize*sizeof(struct authlist *));
-    t->a = (struct authlist *) 0;
+    t->a = NULL;
     t->d.fd = -1;
     t->recovering = 0;
     return 0;

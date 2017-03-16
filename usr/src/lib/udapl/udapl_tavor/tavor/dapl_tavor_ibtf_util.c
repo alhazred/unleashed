@@ -169,7 +169,7 @@ dapls_ib_cq_alloc(
 			    mcq->mcq_armdbr_offset);
 
 		cq_handle->cq_addr = (tavor_hw_cqe_t *)(void *) mmap64(
-		    (void *)0, mcq->mcq_maplen,
+		    NULL, mcq->mcq_maplen,
 		    (PROT_READ | PROT_WRITE), MAP_SHARED, hca_fd,
 		    mcq->mcq_mapoffset);
 
@@ -360,7 +360,7 @@ dapli_ib_cq_resize_internal(
 		    mcq->mcq_armdbr_mapoffset,
 		    mcq->mcq_armdbr_offset);
 
-	cq_addr = (tavor_hw_cqe_t *)(void *)mmap64((void *)0,
+	cq_addr = (tavor_hw_cqe_t *)(void *)mmap64(NULL,
 	    mcq->mcq_maplen, (PROT_READ | PROT_WRITE),
 	    MAP_SHARED, hca_fd, mcq->mcq_mapoffset);
 
@@ -2006,7 +2006,7 @@ uint32_t *dapls_ib_get_dbp(uint64_t maplen, int fd, uint64_t mapoffset,
 		dapl_os_unlock(&dapls_ib_dbp_lock);
 		return (MAP_FAILED);
 	}
-	new_page->dbp_page_addr = (uint32_t *)(void *)mmap64((void *)0,
+	new_page->dbp_page_addr = (uint32_t *)(void *)mmap64(NULL,
 	    maplen, (PROT_READ | PROT_WRITE), MAP_SHARED, fd, mapoffset);
 	if (new_page->dbp_page_addr == MAP_FAILED) {
 		free(new_page);

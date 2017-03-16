@@ -320,7 +320,7 @@ get_Hname(uint32_t addr, char *buf, size_t buflen)
 	struct in_addr ia;
 
 	phe = gethostbyaddr((const char *)&addr, 4, AF_INET);
-	if (phe == (struct hostent *)0) {
+	if (phe == NULL) {
 		ia.s_addr = addr;
 		(void) snprintf(buf, buflen, "%s", inet_ntoa(ia));
 		return;
@@ -337,7 +337,7 @@ get_Hname_ex(uint32_t *addr, char *buf, size_t buflen)
 
 	phe = getipnodebyaddr((const void *)addr, 16, AF_INET6, &err);
 
-	if (phe == (struct hostent *)0) {
+	if (phe == NULL) {
 		(void) inet_ntop(AF_INET6, (void *)addr, buf, buflen);
 	} else
 		(void) snprintf(buf, buflen, "%s", phe->h_name);

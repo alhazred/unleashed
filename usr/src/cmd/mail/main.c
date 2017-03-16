@@ -72,7 +72,7 @@ main(int argc, char **argv)
 	nsig.sa_handler = SIG_DFL;
 	sigemptyset(&nsig.sa_mask);
 	nsig.sa_flags = SA_RESTART;
-	(void) sigaction(SIGCONT, &nsig, (struct sigaction *)0);
+	(void) sigaction(SIGCONT, &nsig, NULL);
 	}
 #else
 	sigset(SIGCONT, SIG_DFL);

@@ -1177,7 +1177,7 @@ power_button_monitor(void *arg)
 
 	if (ioctl(pb_fd, PB_BEGIN_MONITOR, NULL) == -1) {
 		logerror("Failed to monitor the power button.");
-		thr_exit((void *) 0);
+		thr_exit(NULL);
 	}
 
 	pfd.fd = pb_fd;
@@ -1187,7 +1187,7 @@ power_button_monitor(void *arg)
 	while (1) {
 		if (poll(&pfd, 1, INFTIM) == -1) {
 			logerror("Failed to poll for power button events.");
-			thr_exit((void *) 0);
+			thr_exit(NULL);
 		}
 
 		if (!(pfd.revents & POLLIN))
@@ -1203,7 +1203,7 @@ power_button_monitor(void *arg)
 
 		if (ioctl(pfd.fd, PB_GET_EVENTS, &events) == -1) {
 			logerror("Failed to get power button events.");
-			thr_exit((void *) 0);
+			thr_exit(NULL);
 		}
 
 		if ((ret > 0) && (events & PB_BUTTON_PRESS) &&
@@ -1225,7 +1225,7 @@ power_button_monitor(void *arg)
 		 */
 		if (ioctl(pfd.fd, PB_GET_EVENTS, &events) == -1) {
 			logerror("Failed to get power button events.");
-			thr_exit((void *) 0);
+			thr_exit(NULL);
 		}
 	}
 }

@@ -156,7 +156,7 @@ ldap_extended_operation_s(
 		return( err );
 	}
 
-	if ( ldap_result( ld, msgid, 1, (struct timeval *) 0, &result )
+	if ( ldap_result( ld, msgid, 1, NULL, &result )
 	    == -1 ) {
 		return( LDAP_GET_LDERRNO( ld, NULL, NULL ) );
 	}

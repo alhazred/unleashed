@@ -1153,7 +1153,7 @@ pcfs_remove(
 			return (EACCES);
 		}
 	}
-	error = pc_dirremove(pcp, nm, (struct vnode *)0, VREG, ct);
+	error = pc_dirremove(pcp, nm, NULL, VREG, ct);
 	pc_unlockfs(fsp);
 	return (error);
 }

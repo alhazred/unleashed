@@ -84,7 +84,7 @@ static struct cb_ops    dp_cb_ops = {
 	nodev,			/* segmap */
 	dppoll,			/* poll */
 	ddi_prop_op,		/* prop_op */
-	(struct streamtab *)0,	/* streamtab */
+	NULL,	/* streamtab */
 	D_MP,			/* flags */
 	CB_REV,			/* cb_ops revision */
 	nodev,			/* aread */
@@ -223,7 +223,7 @@ dpinfo(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 		error = DDI_SUCCESS;
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		error = DDI_SUCCESS;
 		break;
 	default:

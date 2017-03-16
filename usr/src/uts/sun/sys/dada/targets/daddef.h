@@ -54,7 +54,7 @@ extern "C" {
 #define	SCBP(pkt)	((struct dcd_status *)(pkt)->pkt_scbp)
 #define	SCBP_C(pkt)	((*(pkt)->pkt_scbp) & STATUS_ATA_MASK)
 #define	CDBP(pkt)	((union scsi_cdb *)(pkt)->pkt_cdbp)
-#define	NO_PKT_ALLOCATED ((struct buf *)0)
+#define	NO_PKT_ALLOCATED ((struct buf *)NULL)
 #define	ALLOCATING_PKT	((struct buf *)-1)
 #define	BP_PKT(bp)	((struct dcd_pkt *)bp->av_back)
 #define	BP_HAS_NO_PKT(bp) (bp->av_back == NO_PKT_ALLOCATED)

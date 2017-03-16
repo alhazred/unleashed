@@ -591,7 +591,7 @@ kb8042_getinfo(
 		}
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		error = DDI_SUCCESS;
 		break;
 	default:

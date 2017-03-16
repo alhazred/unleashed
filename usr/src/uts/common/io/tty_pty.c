@@ -95,7 +95,7 @@ struct dev_ops	ptc_ops = {
 	nodev,			/* detach */
 	nodev,			/* reset */
 	&ptc_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };
@@ -200,7 +200,7 @@ ptc_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 		}
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		error = DDI_SUCCESS;
 		break;
 	default:

@@ -48,7 +48,7 @@ sprayproc_spray_1(argp, clnt)
 	CLIENT *clnt;
 {
 	cumul.counter++;
-	return ((void *)0);
+	return (NULL);
 }
 
 spraycumul *

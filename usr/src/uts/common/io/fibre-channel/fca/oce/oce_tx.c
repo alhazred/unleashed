@@ -521,7 +521,7 @@ oce_map_wqe(struct oce_wq *wq, oce_wqe_desc_t *wqed, mblk_t *mp,
 	}
 
 	ret = ddi_dma_addr_bind_handle(wqmd->dma_handle,
-	    (struct as *)0, (caddr_t)mp->b_rptr,
+	    NULL, (caddr_t)mp->b_rptr,
 	    pkt_len, DDI_DMA_WRITE | DDI_DMA_STREAMING,
 	    DDI_DMA_DONTWAIT, NULL, &cookie, &ncookies);
 	if (ret != DDI_DMA_MAPPED) {

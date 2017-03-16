@@ -472,7 +472,7 @@ static struct dev_ops st_ops = {
 	st_detach,		/* detach */
 	nodev,			/* reset */
 	&st_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	nulldev,		/* power */
 	ddi_quiesce_not_needed,	/* devo_quiesce */
 };

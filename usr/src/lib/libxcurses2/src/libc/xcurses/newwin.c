@@ -136,8 +136,8 @@ __m_newwin(WINDOW *parent,
 		goto error_2;
 
 	/* Window rendition. */
-	(void) setcchar(&w->_bg, L" ", WA_NORMAL, 0, (void *) 0);
-	(void) setcchar(&w->_fg, L" ", WA_NORMAL, 0, (void *) 0);
+	(void) setcchar(&w->_bg, L" ", WA_NORMAL, 0, NULL);
+	(void) setcchar(&w->_fg, L" ", WA_NORMAL, 0, NULL);
 	if (parent == NULL) {
 		w->_base = (cchar_t *) malloc((size_t) (nlines * ncols) *
 			sizeof (*w->_base));

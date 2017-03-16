@@ -99,7 +99,7 @@ static struct dev_ops environ_ops = {
 	environ_detach,			/* detach */
 	nulldev,			/* reset */
 	&environ_cb_ops,		/* cb_ops */
-	(struct bus_ops *)0,		/* bus_ops */
+	NULL,		/* bus_ops */
 	nulldev,			/* power */
 	ddi_quiesce_not_needed,			/* quiesce */
 };

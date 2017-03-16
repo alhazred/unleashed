@@ -148,7 +148,7 @@ static mntopt_t mntopts[] = {
  *		ufs arg flag
  */
 	{ MNTOPT_INTR,		intr_cancel,	NULL,		MO_DEFAULT,
-		(void *)0 },
+		NULL },
 	{ MNTOPT_NOINTR,	nointr_cancel,	NULL,		0,
 		(void *)UFSMNT_NOINTR },
 	{ MNTOPT_SYNCDIR,	NULL,		NULL,		0,
@@ -162,27 +162,27 @@ static mntopt_t mntopts[] = {
 	{ MNTOPT_LARGEFILES,	largefiles_cancel, NULL,	MO_DEFAULT,
 		(void *)UFSMNT_LARGEFILES },
 	{ MNTOPT_NOLARGEFILES,	nolargefiles_cancel, NULL,	0,
-		(void *)0 },
+		NULL },
 	{ MNTOPT_LOGGING,	logging_cancel, NULL,		MO_TAG,
 		(void *)UFSMNT_LOGGING },
 	{ MNTOPT_NOLOGGING,	nologging_cancel, NULL,
-		MO_NODISPLAY|MO_DEFAULT|MO_TAG, (void *)0 },
+		MO_NODISPLAY|MO_DEFAULT|MO_TAG, NULL },
 	{ MNTOPT_QUOTA,		quota_cancel, NULL,		MO_IGNORE,
-		(void *)0 },
+		NULL },
 	{ MNTOPT_NOQUOTA,	noquota_cancel,	NULL,
-		MO_NODISPLAY|MO_DEFAULT, (void *)0 },
+		MO_NODISPLAY|MO_DEFAULT, NULL },
 	{ MNTOPT_XATTR,	xattr_cancel,		NULL,		MO_DEFAULT,
-		(void *)0 },
+		NULL },
 	{ MNTOPT_NOXATTR,	noxattr_cancel,		NULL,		0,
-		(void *)0 },
+		NULL },
 	{ MNTOPT_NOATIME,	NULL,		NULL,		0,
 		(void *)UFSMNT_NOATIME },
 	{ MNTOPT_DFRATIME,	dfratime_cancel, NULL,		0,
-		(void *)0 },
+		NULL },
 	{ MNTOPT_NODFRATIME,	nodfratime_cancel, NULL,
 		MO_NODISPLAY|MO_DEFAULT, (void *)UFSMNT_NODFRATIME },
 	{ MNTOPT_ONERROR,	NULL,		UFSMNT_ONERROR_PANIC_STR,
-		MO_DEFAULT|MO_HASVALUE,	(void *)0 },
+		MO_DEFAULT|MO_HASVALUE,	NULL },
 };
 
 static mntopts_t ufs_mntopts = {
@@ -542,13 +542,13 @@ ufs_mountroot(struct vfs *vfsp, enum whymountroot why)
 			vfsp->vfs_flag = ovflags;
 		if (rootvp) {
 			VN_RELE(rootvp);
-			rootvp = (struct vnode *)0;
+			rootvp = NULL;
 		}
 		VN_RELE(devvp);
 		return (error);
 	}
 	if (why == ROOT_INIT)
-		vfs_add((struct vnode *)0, vfsp,
+		vfs_add(NULL, vfsp,
 		    (vfsp->vfs_flag & VFS_RDONLY) ? MS_RDONLY : 0);
 	vfs_unlock(vfsp);
 	fsp = getfs(vfsp);

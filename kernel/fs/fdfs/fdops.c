@@ -534,7 +534,7 @@ static mntopt_t mntopts[] = {
 	{ MNTOPT_RW,		rw_cancel,	NULL,		MO_DEFAULT,
 		(void *)MNTOPT_NOINTR },
 	{ MNTOPT_IGNORE,	NULL,		NULL,		0,
-		(void *)0 },
+		NULL },
 };
 
 static mntopts_t fdfs_mntopts = {

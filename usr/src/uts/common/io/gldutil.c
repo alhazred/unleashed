@@ -2388,7 +2388,7 @@ gld_sr_lookup_entry(gld_mac_info_t *macinfo, uchar_t *macaddr)
 		if (mac_eq(macaddr, sr->sr_mac, macinfo->gldm_addrlen))
 			return (sr);
 
-	return ((struct srtab *)0);
+	return (NULL);
 }
 
 static struct srtab *
@@ -2412,7 +2412,7 @@ gld_sr_create_entry(gld_mac_info_t *macinfo, uchar_t *macaddr)
 			cmn_err(CE_WARN,
 			    "gld: gld_sr_create_entry kmem_alloc failed");
 #endif
-		return ((struct srtab *)0);
+		return (NULL);
 	}
 
 	bcopy((caddr_t)macaddr, (caddr_t)sr->sr_mac, macinfo->gldm_addrlen);

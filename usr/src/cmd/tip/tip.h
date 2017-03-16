@@ -232,7 +232,7 @@ extern void	loginit(void);
 #define	NOACU	((acu_t *)NULL)
 #define	NOSTR	((char *)NULL)
 #define	NOFILE	((FILE *)NULL)
-#define	NOPWD	((struct passwd *)0)
+#define	NOPWD	((struct passwd *)NULL)
 
 struct termios	arg;		/* current mode of local terminal */
 struct termios	defarg;		/* initial mode of local terminal */

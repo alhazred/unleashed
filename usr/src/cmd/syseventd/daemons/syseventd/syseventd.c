@@ -454,7 +454,7 @@ main(int argc, char **argv)
 	}
 
 	if (thr_create(NULL, 0, (void *(*)(void *))dispatch_message,
-	    (void *)0, 0, NULL) < 0) {
+	    NULL, 0, NULL) < 0) {
 		syseventd_err_print(INIT_THR_CREATE_ERR, strerror(errno));
 		syseventd_exit(2);
 	}

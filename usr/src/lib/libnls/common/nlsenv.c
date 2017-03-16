@@ -132,7 +132,7 @@ nlsgetcall(int fd)
 	extern char *calloc();
 
 	if (!(call = (struct t_call *) calloc(1, sizeof(struct t_call))))
-		return((struct t_call *)0);
+		return(NULL);
 
 /*
  * Note: space for buffers gets allocated by nlsenv on the fly

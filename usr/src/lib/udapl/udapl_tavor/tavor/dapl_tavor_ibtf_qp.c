@@ -294,7 +294,7 @@ dapls_ib_qp_alloc(
 		qp_p->qp_rq_dbp = dapls_ib_get_dbp(mqp->mqp_rdbr_maplen,
 		    hca_fd, mqp->mqp_rdbr_mapoffset, mqp->mqp_rdbr_offset);
 
-	qp_p->qp_addr = mmap64((void *)0, mqp->mqp_maplen,
+	qp_p->qp_addr = mmap64(NULL, mqp->mqp_maplen,
 	    (PROT_READ | PROT_WRITE), MAP_SHARED, hca_fd,
 	    mqp->mqp_mapoffset);
 
@@ -642,7 +642,7 @@ dapls_ib_srq_alloc(IN DAPL_IA *ia_ptr, IN DAPL_SRQ *srq_ptr)
 		    msrq->msrq_rdbr_maplen, hca_fd,
 		    msrq->msrq_rdbr_mapoffset, msrq->msrq_rdbr_offset);
 
-	ibsrq_p->srq_addr = mmap64((void *)0,
+	ibsrq_p->srq_addr = mmap64(NULL,
 	    msrq->msrq_maplen, (PROT_READ | PROT_WRITE),
 	    MAP_SHARED, hca_fd, msrq->msrq_mapoffset);
 
@@ -1001,7 +1001,7 @@ dapli_ib_srq_resize_internal(
 		    hca_fd, msrq->msrq_rdbr_mapoffset,
 		    msrq->msrq_rdbr_offset);
 
-	srq_handle->srq_addr = mmap64((void *)0,
+	srq_handle->srq_addr = mmap64(NULL,
 	    msrq->msrq_maplen, (PROT_READ | PROT_WRITE),
 	    MAP_SHARED, hca_fd, msrq->msrq_mapoffset);
 

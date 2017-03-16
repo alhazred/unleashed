@@ -473,7 +473,7 @@ differ(void *arg)
 		    "Internal error: bad data from diff IOCTL"));
 		return ((void *)-1);
 	}
-	return ((void *)0);
+	return (NULL);
 }
 
 static int

@@ -1123,7 +1123,7 @@ tl_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 		break;
 
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		retcode = DDI_SUCCESS;
 		break;
 

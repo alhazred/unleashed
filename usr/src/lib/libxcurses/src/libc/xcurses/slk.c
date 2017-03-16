@@ -161,7 +161,7 @@ slk_color(short co)
 #endif
 
 	if (__m_screen->_slk._w != (WINDOW *) 0)
-		code = wcolor_set(__m_screen->_slk._w, co, (void *) 0);
+		code = wcolor_set(__m_screen->_slk._w, co, NULL);
 
 	return __m_return_code("slk_color", code);
 }

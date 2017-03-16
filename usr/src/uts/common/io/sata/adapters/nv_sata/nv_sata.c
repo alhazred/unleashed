@@ -285,7 +285,7 @@ static struct dev_ops nv_dev_ops = {
 #ifdef SGPIO_SUPPORT
 	&nv_cb_ops,		/* driver operations */
 #else
-	(struct cb_ops *)0,	/* driver operations */
+	NULL,	/* driver operations */
 #endif
 	NULL,			/* bus operations */
 	NULL,			/* power */

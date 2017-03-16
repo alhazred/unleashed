@@ -332,7 +332,7 @@ static struct dev_ops i8042_ops = {
 	i8042_attach,
 	i8042_detach,
 	nodev,
-	(struct cb_ops *)0,
+	NULL,
 	&i8042_bus_ops,
 	NULL,
 	ddi_quiesce_not_needed,

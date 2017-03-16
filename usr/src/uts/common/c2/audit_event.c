@@ -1520,7 +1520,7 @@ aus_kill(struct t_audit_data *tad)
 	au_uwrite(au_to_arg32(2, "signal", signo));
 	if (pid > 0) {
 		mutex_enter(&pidlock);
-		if (((p = prfind(pid)) == (struct proc *)0) ||
+		if (((p = prfind(pid)) == NULL) ||
 		    (p->p_stat == SIDL)) {
 			mutex_exit(&pidlock);
 			au_uwrite(au_to_arg32(1, "process", (uint32_t)pid));
@@ -4720,7 +4720,7 @@ aus_sigqueue(struct t_audit_data *tad)
 	au_uwrite(au_to_arg32(2, "signal", (uint32_t)uap->signo));
 	if (pid > 0) {
 		mutex_enter(&pidlock);
-		if ((p = prfind(pid)) == (struct proc *)0) {
+		if ((p = prfind(pid)) == NULL) {
 			mutex_exit(&pidlock);
 			return;
 		}

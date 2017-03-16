@@ -763,7 +763,7 @@ probe_dependencies()
 	link_t		*link;
 	di_node_t	root;
 
-	cnt = istrioctl(muxfd, TTYMUX_LIST, (void *)0, 0, 0);
+	cnt = istrioctl(muxfd, TTYMUX_LIST, NULL, 0, 0);
 
 	_msg(8, ("TTYMUX: Probed %d links [%d]\n", cnt, errno));
 

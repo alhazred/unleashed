@@ -4758,14 +4758,14 @@ ddi_report_dev(dev_info_t *d)
 {
 	char *b;
 
-	(void) ddi_ctlops(d, d, DDI_CTLOPS_REPORTDEV, (void *)0, (void *)0);
+	(void) ddi_ctlops(d, d, DDI_CTLOPS_REPORTDEV, NULL, NULL);
 
 	/*
 	 * If this devinfo node has cb_ops, it's implicitly accessible from
 	 * userland, so we print its full name together with the instance
 	 * number 'abbreviation' that the driver may use internally.
 	 */
-	if (DEVI(d)->devi_ops->devo_cb_ops != (struct cb_ops *)0 &&
+	if (DEVI(d)->devi_ops->devo_cb_ops != NULL &&
 	    (b = kmem_zalloc(MAXPATHLEN, KM_NOSLEEP))) {
 		cmn_err(CE_CONT, "?%s%d is %s\n",
 		    ddi_driver_name(d), ddi_get_instance(d),
@@ -4799,19 +4799,19 @@ ddi_dev_nregs(dev_info_t *dev, int *result)
 int
 ddi_dev_is_sid(dev_info_t *d)
 {
-	return (ddi_ctlops(d, d, DDI_CTLOPS_SIDDEV, (void *)0, (void *)0));
+	return (ddi_ctlops(d, d, DDI_CTLOPS_SIDDEV, NULL, NULL));
 }
 
 int
 ddi_slaveonly(dev_info_t *d)
 {
-	return (ddi_ctlops(d, d, DDI_CTLOPS_SLAVEONLY, (void *)0, (void *)0));
+	return (ddi_ctlops(d, d, DDI_CTLOPS_SLAVEONLY, NULL, NULL));
 }
 
 int
 ddi_dev_affinity(dev_info_t *a, dev_info_t *b)
 {
-	return (ddi_ctlops(a, a, DDI_CTLOPS_AFFINITY, (void *)b, (void *)0));
+	return (ddi_ctlops(a, a, DDI_CTLOPS_AFFINITY, (void *)b, NULL));
 }
 
 int

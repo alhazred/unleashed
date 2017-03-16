@@ -2757,7 +2757,7 @@ notype(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 int
 typegraph_walk_init(mdb_walk_state_t *wsp)
 {
-	wsp->walk_data = (void *)0;
+	wsp->walk_data = NULL;
 	return (WALK_NEXT);
 }
 

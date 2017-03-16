@@ -117,7 +117,7 @@ static struct dev_ops upa64s_ops = {
 	upa64s_attach,
 	upa64s_detach,
 	nodev,
-	(struct cb_ops *)0,
+	NULL,
 	&upa64s_bus_ops,
 	upa64s_power,
 	ddi_quiesce_not_supported,	/* devo_quiesce */

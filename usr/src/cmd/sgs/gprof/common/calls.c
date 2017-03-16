@@ -51,7 +51,7 @@ nltype	indirectchild = {
 	(int)0,				/* graph call chain top-sort order */
 	(int)0,				/* internal number of cycle on */
 	(struct nl *)&indirectchild,	/* pointer to head of cycle */
-	(struct nl *)0,			/* pointer to next member of cycle */
+	NULL,			/* pointer to next member of cycle */
 	(arctype *)0,			/* list of caller arcs */
 	(arctype *)0, 			/* list of callee arcs */
 	(unsigned long)0		/* number of callers */

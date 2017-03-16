@@ -122,12 +122,12 @@ int fd;
 
 	if (t_getinfo(fd, &info) == -1)  {
 		DEBUG((5, "nlscalloc: t_getinfo failed, t_errno %d errno %d"));
-		return ((struct t_call *)0);
+		return (NULL);
 	}
 
 	if (!(call = (struct t_call *)t_alloc(fd, T_CALL, T_NONE)))  {
 		DEBUG((5, "nlscalloc: t_alloc failed, t_errno %d errno %d"));
-		return ((struct t_call *)0);
+		return (NULL);
 	}
 
 	if (size = externsz((unsigned)info.addr))
@@ -154,7 +154,7 @@ fail:
 	DEBUG((1, "nlscalloc: malloc failed!"));
 	t_free((char *)call, T_CALL);	/* t_free will release allocated mem*/
 	t_errno = TSYSERR;		/* errno must be ENOMEM	*/
-	return((struct t_call *)0);
+	return(NULL);
 }
 
 

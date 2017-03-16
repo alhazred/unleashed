@@ -176,7 +176,7 @@ struct dev_ops cmdk_ops = {
 	cmdkdetach,		/* detach */
 	nodev, 			/* reset */
 	&cmdk_cb_ops, 		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	cmdkpower,		/* power */
 	ddi_quiesce_not_needed,	/* quiesce */
 };
@@ -1272,7 +1272,7 @@ cmdkrw(dev_t dev, struct uio *uio, int flag)
 	}
 	mutex_exit(&dkp->dk_mutex);
 
-	return (physio(cmdkstrategy, (struct buf *)0, dev, flag, cmdkmin, uio));
+	return (physio(cmdkstrategy, NULL, dev, flag, cmdkmin, uio));
 }
 
 static int

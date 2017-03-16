@@ -880,7 +880,7 @@ pcfs_root(
 	if (error = pc_lockfs(fsp, 0, 0))
 		return (error);
 
-	pcp = pc_getnode(fsp, (daddr_t)0, 0, (struct pcdir *)0);
+	pcp = pc_getnode(fsp, (daddr_t)0, 0, NULL);
 	pc_unlockfs(fsp);
 	*vpp = PCTOV(pcp);
 	pcp->pc_flags |= PC_EXTERNAL;
@@ -1172,7 +1172,7 @@ pcfs_vget(struct vfs *vfsp, struct vnode **vpp, struct fid *fidp)
 	}
 
 	if (pcfid->pcfid_block == 0) {
-		pcp = pc_getnode(fsp, (daddr_t)0, 0, (struct pcdir *)0);
+		pcp = pc_getnode(fsp, (daddr_t)0, 0, NULL);
 		pcp->pc_flags |= PC_EXTERNAL;
 		*vpp = PCTOV(pcp);
 		pc_unlockfs(fsp);

@@ -226,7 +226,7 @@ ldl_strategy(ml_unit_t *ul, buf_t *pb)
 				fssnap_strategy(&ufsvfsp->vfs_snapshot, cb);
 
 				(void) tsd_set(bypass_snapshot_throttle_key,
-				    (void *)0);
+				    NULL);
 			} else {
 				(void) bdev_strategy(cb);
 			}

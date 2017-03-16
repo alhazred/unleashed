@@ -969,7 +969,7 @@ establish_ppp(fd)
 	for (i = 0; ; ++i) {
 		if ((myioctl(fd, I_LOOK, tty_modules[i]) < 0) ||
 		    (strcmp(tty_modules[i], "ptem") == 0) ||
-		    (myioctl(fd, I_POP, (void *)0) < 0)) {
+		    (myioctl(fd, I_POP, NULL) < 0)) {
 			break;
 		}
 	}
@@ -1055,7 +1055,7 @@ disestablish_ppp(fd)
 	}
 	fdmuxid = -1;
 	if (!hungup) {
-		while (tty_npushed > 0 && myioctl(fd, I_POP, (void *)0) >= 0) {
+		while (tty_npushed > 0 && myioctl(fd, I_POP, NULL) >= 0) {
 			--tty_npushed;
 		}
 		for (i = tty_nmodules - 1; i >= 0; --i) {

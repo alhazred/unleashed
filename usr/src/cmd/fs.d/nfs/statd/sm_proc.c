@@ -719,7 +719,7 @@ thr_send_notice(void *arg)
 	free(minfop->id.mon_id.my_id.my_name);
 	free(minfop);
 
-	thr_exit((void *) 0);
+	thr_exit(NULL);
 }
 
 /*

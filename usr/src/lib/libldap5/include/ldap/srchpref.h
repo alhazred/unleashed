@@ -101,7 +101,7 @@ struct ldap_searchobj {
 	struct ldap_searchobj		*so_next;
 };
 
-#define NULLSEARCHOBJ			((struct ldap_searchobj *)0)
+#define NULLSEARCHOBJ			((struct ldap_searchobj *)NULL)
 
 /*
  * global search object options

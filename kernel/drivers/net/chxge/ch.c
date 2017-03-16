@@ -966,7 +966,7 @@ ch_alloc_dma_mem(ch_t *chp, int type, int flags, int size, uint64_t *paddr,
 
 	rv = ddi_dma_addr_bind_handle(
 	    ch_dh,				/* dma handle */
-	    (struct as *)0,			/* kernel address space */
+	    NULL,			/* kernel address space */
 	    ch_vaddr,				/* virtual address */
 	    rlen,				/* length of object */
 	    direction|mapping,
@@ -1129,7 +1129,7 @@ ch_bind_dma_handle(ch_t *chp, int size, caddr_t vaddr, cmdQ_ce_t *cmp,
 
 	rv = ddi_dma_addr_bind_handle(
 	    ch_dh,		/* dma handle */
-	    (struct as *)0,	/* kernel address space */
+	    NULL,	/* kernel address space */
 	    vaddr,		/* virtual address */
 	    size,		/* length of object */
 	    DDI_DMA_WRITE|DDI_DMA_STREAMING,

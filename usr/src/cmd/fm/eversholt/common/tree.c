@@ -1335,7 +1335,7 @@ tree_report()
 	lut_walk(SERDs, (lut_cb)check_refcount, (void *)T_SERD);
 
 	/* check for cycles */
-	lut_walk(Errors, (lut_cb)check_cycle, (void *)0);
+	lut_walk(Errors, (lut_cb)check_cycle, NULL);
 }
 
 /* compare two T_NAMES by only looking at components, not iterators */

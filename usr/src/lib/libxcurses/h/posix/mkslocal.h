@@ -241,7 +241,7 @@
 
 #undef M_NULL			/* define this if you want to change the
 				 * system default defintion of NULL.
-				 * (e.g #define M_NULL  ((void*)0)
+				 * (e.g #define M_NULL  (NULL)
 				 */
 #define M_MALLOC	1	/* Define M_MALLOC if your system has either
 				 * of the following two problems:

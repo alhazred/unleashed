@@ -400,7 +400,7 @@ static struct dev_ops rsm_ops = {
 	rsm_detach,		/* detach */
 	nodev,			/* reset */
 	&rsm_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	0,
 	ddi_quiesce_not_needed,		/* quiesce */
 };
@@ -1043,7 +1043,7 @@ rsm_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 		}
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		error = DDI_SUCCESS;
 		break;
 	default:

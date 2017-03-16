@@ -132,7 +132,7 @@ static struct dev_ops pmubus_ops = {
 	pmubus_attach,
 	pmubus_detach,
 	nodev,
-	(struct cb_ops *)0,
+	NULL,
 	&pmubus_bus_ops,
 	NULL,
 	ddi_quiesce_not_needed,		/* quiesce */

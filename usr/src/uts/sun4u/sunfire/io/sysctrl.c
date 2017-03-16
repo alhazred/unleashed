@@ -203,7 +203,7 @@ static struct dev_ops sysctrl_ops = {
 	sysctrl_detach,		/* detach */
 	nulldev,		/* reset */
 	&sysctrl_cb_ops,	/* cb_ops */
-	(struct bus_ops *)0,	/* bus_ops */
+	NULL,	/* bus_ops */
 	nulldev,		/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };

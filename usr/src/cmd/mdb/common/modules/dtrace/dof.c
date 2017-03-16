@@ -659,7 +659,7 @@ dof_sec_walk_init(mdb_walk_state_t *wsp)
 		return (WALK_ERR);
 	}
 
-	wsp->walk_arg = (void *)0;
+	wsp->walk_arg = NULL;
 	wsp->walk_data = hp;
 
 	return (WALK_NEXT);

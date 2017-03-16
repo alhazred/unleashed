@@ -68,8 +68,8 @@ static struct dev_ops spm_ops = {
 	spm_attach,		/* attach */
 	spm_detach,		/* detach */
 	nodev,			/* reset */
-	(struct cb_ops *)0,	/* cb_ops */
-	(struct bus_ops *)0,	/* bus_ops */
+	NULL,	/* cb_ops */
+	NULL,	/* bus_ops */
 	NULL,			/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };

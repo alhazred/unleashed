@@ -3240,8 +3240,7 @@ retry_remove:
 	ufs_tryirwlock_trans(&ip->i_rwlock, RW_WRITER, TOP_REMOVE, retry);
 	if (indeadlock)
 		goto retry_remove;
-	error = ufs_dirremove(ip, nm, (struct inode *)0, (struct vnode *)0,
-	    DR_REMOVE, cr);
+	error = ufs_dirremove(ip, nm, NULL, NULL, DR_REMOVE, cr);
 	rw_exit(&ip->i_rwlock);
 
 	if (ulp) {
@@ -3318,8 +3317,7 @@ retry_link:
 	ufs_tryirwlock_trans(&tdp->i_rwlock, RW_WRITER, TOP_LINK, retry);
 	if (indeadlock)
 		goto retry_link;
-	error = ufs_direnter_lr(tdp, tnm, DE_LINK, (struct inode *)0,
-	    sip, cr);
+	error = ufs_direnter_lr(tdp, tnm, DE_LINK, NULL, sip, cr);
 	rw_exit(&tdp->i_rwlock);
 
 unlock:
@@ -3721,7 +3719,7 @@ retry_firstlock:
 	 * If the entry has changed just forget about it.  Release
 	 * the source inode.
 	 */
-	if ((error = ufs_dirremove(sdp, snm, sip, (struct vnode *)0,
+	if ((error = ufs_dirremove(sdp, snm, sip, NULL,
 	    DR_RENAME, cr)) == ENOENT)
 		error = 0;
 
@@ -3885,7 +3883,7 @@ retry_rmdir:
 	ufs_tryirwlock_trans(&ip->i_rwlock, RW_WRITER, TOP_RMDIR, retry);
 	if (indeadlock)
 		goto retry_rmdir;
-	error = ufs_dirremove(ip, nm, (struct inode *)0, cdir, DR_RMDIR, cr);
+	error = ufs_dirremove(ip, nm, NULL, cdir, DR_RMDIR, cr);
 
 	rw_exit(&ip->i_rwlock);
 

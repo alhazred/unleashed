@@ -160,7 +160,7 @@ struct dev_ops xpvd_ops = {
 	xpvd_attach,		/* attach */
 	xpvd_detach,		/* detach */
 	nulldev,		/* reset */
-	(struct cb_ops *)0,	/* driver operations */
+	NULL,	/* driver operations */
 	&xpvd_bus_ops,		/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
@@ -235,7 +235,7 @@ xpvd_info(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 		return (DDI_FAILURE);
 
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		return (DDI_SUCCESS);
 
 	case DDI_INFO_DEVT2DEVINFO:

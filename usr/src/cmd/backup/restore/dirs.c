@@ -615,7 +615,7 @@ rst_readdir(RST_DIR *rdirp)
 			if (rdirp->dd_size <= 0) {
 				dprintf(stderr,
 					gettext("error reading directory\n"));
-				return ((struct direct *)0);
+				return (NULL);
 			}
 		}
 		if (rdirp->dd_loc >= rdirp->dd_size) {
@@ -629,7 +629,7 @@ rst_readdir(RST_DIR *rdirp)
 			dprintf(stderr,
 			    gettext("corrupted directory: bad reclen %d\n"),
 				dp->d_reclen);
-			return ((struct direct *)0);
+			return (NULL);
 		}
 		rdirp->dd_loc += dp->d_reclen;
 		if (dp->d_ino == 0 && strcmp(dp->d_name, "/") != 0)
@@ -919,7 +919,7 @@ inotablookup(ino_t ino)
 	for (itp = inotab[INOHASH(ino)]; itp != NULL; itp = itp->t_next)
 		if (itp->t_ino == ino)
 			return (itp);
-	return ((struct inotab *)0);
+	return (NULL);
 }
 
 /*

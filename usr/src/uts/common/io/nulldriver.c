@@ -89,7 +89,7 @@ static struct dev_ops nulldriver_dev_ops = {
 	nulldriver_detach,		/* detach */
 	nodev,				/* reset */
 	&nulldriver_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,		/* bus operations */
+	NULL,		/* bus operations */
 	NULL,				/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

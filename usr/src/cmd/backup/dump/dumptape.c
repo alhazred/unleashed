@@ -1385,7 +1385,7 @@ otape(int top)
 	sv.sv_flags = SA_RESTART;
 	(void) sigemptyset(&sv.sa_mask);
 	sv.sv_handler = SIG_IGN;
-	(void) sigvec(SIGINT, &sv, (struct sigvec *)0);
+	(void) sigvec(SIGINT, &sv, NULL);
 
 	parentpid = getpid();
 
@@ -1398,7 +1398,7 @@ otape(int top)
 restore_check_point:
 
 	sv.sv_handler = interrupt;
-	(void) sigvec(SIGINT, &sv, (struct sigvec *)0);
+	(void) sigvec(SIGINT, &sv, NULL);
 	(void) fflush(stderr);
 	/*
 	 *	All signals are inherited...
@@ -1419,7 +1419,7 @@ restore_check_point:
 		 *	let the child catch user interrupts
 		 */
 		sv.sv_handler = SIG_IGN;
-		(void) sigvec(SIGINT, &sv, (struct sigvec *)0);
+		(void) sigvec(SIGINT, &sv, NULL);
 		sigrelse(SIGINT);
 #ifdef TDEBUG
 
@@ -1506,7 +1506,7 @@ restore_check_point:
 				autoload = 0;
 			changevol();
 			sv.sv_handler = interrupt;
-			(void) sigvec(SIGINT, &sv, (struct sigvec *)0);
+			(void) sigvec(SIGINT, &sv, NULL);
 			return;
 			/* NOTREACHED */
 		default:
@@ -1599,7 +1599,7 @@ restore_check_point:
 					(void) sleep(10);
 				(void) alarm(0);
 				(void) sigvec(SIGALRM, &osv,
-				    (struct sigvec *)0);
+				    NULL);
 			} else {
 				int m;
 				m = (access(tape, F_OK) == 0) ? 0 : O_CREAT;
@@ -1799,11 +1799,11 @@ enslave()
 	 * slave sends SIGTERM on dumpabort
 	 */
 	sv.sv_handler = (void(*)(int))dumpabort;
-	(void) sigvec(SIGTERM, &sv, (struct sigvec *)0);
+	(void) sigvec(SIGTERM, &sv, NULL);
 	sv.sv_handler = tperror;
-	(void) sigvec(SIGUSR2, &sv, (struct sigvec *)0);
+	(void) sigvec(SIGUSR2, &sv, NULL);
 	sv.sv_handler = proceed;
-	(void) sigvec(SIGUSR1, &sv, (struct sigvec *)0);
+	(void) sigvec(SIGUSR1, &sv, NULL);
 	totalrecsout += recsout;
 	caught = 0;
 	recsout = 0;
@@ -1836,11 +1836,11 @@ enslave()
 			pid_t next;		    /* pid of neighbor */
 
 			sv.sv_handler = SIG_DFL;
-			(void) sigvec(SIGUSR2, &sv, (struct sigvec *)0);
+			(void) sigvec(SIGUSR2, &sv, NULL);
 			sv.sv_handler = SIG_IGN;	/* master handler INT */
-			(void) sigvec(SIGINT, &sv, (struct sigvec *)0);
+			(void) sigvec(SIGINT, &sv, NULL);
 			sv.sv_handler = die;		/* normal slave exit */
-			(void) sigvec(SIGTERM, &sv, (struct sigvec *)0);
+			(void) sigvec(SIGTERM, &sv, NULL);
 
 			child_chdir();
 			sigrelse(SIGUSR2);
@@ -1922,7 +1922,7 @@ enslave()
 		}
 	}
 	sv.sv_handler = rollforward;		/* rcvd from writer on EOT */
-	(void) sigvec(SIGUSR1, &sv, (struct sigvec *)0);
+	(void) sigvec(SIGUSR1, &sv, NULL);
 	slp = slaves;
 	(void) kill(slp->sl_slavepid, SIGUSR1);
 	master = 0;

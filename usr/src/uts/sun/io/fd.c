@@ -524,7 +524,7 @@ static struct dev_ops	fd_ops = {
 	fd_detach, 		/* detach */
 	nodev, 			/* reset */
 	&fd_cb_ops, 		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	fd_power,		/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };

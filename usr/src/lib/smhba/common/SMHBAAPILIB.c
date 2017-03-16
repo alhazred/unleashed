@@ -3513,7 +3513,7 @@ SMHBA_GetWrapperLibraryAttributes(
 	attributes->VVersion[0] = '\0';
 #endif
 
-	if (gettimeofday(&tv, (void *)0) == 0) {
+	if (gettimeofday(&tv, NULL) == 0) {
 	if (localtime_r(&tv.tv_sec, &tp) != NULL) {
 		attributes->build_date.tm_mday = tp.tm_mday;
 		attributes->build_date.tm_mon = tp.tm_mon;

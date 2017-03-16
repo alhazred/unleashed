@@ -116,7 +116,7 @@ static struct dev_ops fd_ops = {
 	fd_detach,		/* detach */
 	nodev,			/* reset */
 	&fd_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };
@@ -1785,7 +1785,7 @@ get_geom:
 			uio->uio_resid = aiov.iov_len;
 			uio->uio_segflg = UIO_USERSPACE;
 
-			rval = physio(fd_strategy, (struct buf *)0, dev,
+			rval = physio(fd_strategy, NULL, dev,
 			    spc, minphys, uio);
 			break;
 		} else if (fc.fdc_cmd == FDCMD_FORMAT_TRACK) {

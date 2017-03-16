@@ -173,7 +173,7 @@ done:
 	sv.sv_handler = sigAbort;
 	sv.sv_flags = SA_RESTART;
 	(void) sigemptyset(&sv.sa_mask);
-	(void) sigvec(SIGALRM, &sv, (struct sigvec *)0);
+	(void) sigvec(SIGALRM, &sv, NULL);
 	if (tstart_writing)
 		(void) time(tstart_writing);
 	(void) timeclock(timeclockstate);
@@ -207,7 +207,7 @@ alarmcatch()
 	sv.sv_handler = alarmcatch;
 	sv.sv_flags = SA_RESTART;
 	(void) sigemptyset(&sv.sa_mask);
-	(void) sigvec(SIGALRM, &sv, (struct sigvec *)0);
+	(void) sigvec(SIGALRM, &sv, NULL);
 	(void) alarm(timeout);
 }
 

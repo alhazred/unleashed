@@ -383,7 +383,7 @@ static struct dev_ops fm_ops = {
 	fm_detach,		/* detach */
 	nodev,			/* reset */
 	&fm_cb_ops,		/* driver operations */
-	(struct bus_ops *)0	/* bus operations */
+	NULL	/* bus operations */
 };
 
 static struct modldrv modldrv = {

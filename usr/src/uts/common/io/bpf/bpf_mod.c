@@ -99,7 +99,7 @@ static struct dev_ops bpf_ops = {
 	bpf_detach,
 	nodev,		/* reset */
 	&bpf_cb_ops,
-	(struct bus_ops *)0
+	NULL
 };
 
 extern struct mod_ops mod_driverops;
@@ -254,7 +254,7 @@ bpf_getinfo(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 		error = DDI_SUCCESS;
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		error = DDI_SUCCESS;
 		break;
 	default:

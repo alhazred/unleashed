@@ -324,7 +324,7 @@ llc1_getinfo(dev_info_t *dev, ddi_info_cmd_t cmd, void *arg, void **result)
 		}
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		error = DDI_SUCCESS;
 		break;
 	default:

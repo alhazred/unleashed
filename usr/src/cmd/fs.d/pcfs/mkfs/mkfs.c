@@ -2895,7 +2895,7 @@ dirent_time_fill(struct pcdir *dep)
 	ushort_t	dostime;
 	ushort_t	dosday;
 
-	(void) gettimeofday(&tv, (struct timezone *)0);
+	(void) gettimeofday(&tv, NULL);
 	tp = localtime(&tv.tv_sec);
 	/* get the time & day into DOS format */
 	dostime = tp->tm_sec / 2;

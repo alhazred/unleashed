@@ -64,7 +64,7 @@ char *rem_machine_name;
 
 	hp = gethostbyname(my_machine_name);
 
-	if (hp == (struct hostent *) 0) {
+	if (hp == NULL) {
 		fprintf(stderr,
 		gettext("This machine doesn't exist. Boy, am I confused!\n"));
 		exit(1);
@@ -93,7 +93,7 @@ char *rem_machine_name;
 
 		hp = gethostbyname(rem_machine_name);
 
-		if (hp == (struct hostent *) 0) {
+		if (hp == NULL) {
 			fprintf(stderr,
 			gettext("%s is an unknown host\n"), rem_machine_name);
 			exit(1);

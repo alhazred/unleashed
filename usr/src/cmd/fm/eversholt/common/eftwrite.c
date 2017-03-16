@@ -115,8 +115,8 @@ eftwrite(const char *fname)
 
 	rewind(tfp);
 
-	lut_walk(Ident, (lut_cb)ident_lencalc, (void *)0);
-	lut_walk(Dicts, (lut_cb)dict_lencalc, (void *)0);
+	lut_walk(Ident, (lut_cb)ident_lencalc, NULL);
+	lut_walk(Dicts, (lut_cb)dict_lencalc, NULL);
 
 	bzero(&hdr, sizeof (hdr));
 	hdr.magic = EFT_HDR_MAGIC;

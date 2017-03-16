@@ -173,7 +173,7 @@ struct ldap_tmplitem {
     void			*ti_appdata;
 };
 
-#define NULLTMPLITEM	((struct ldap_tmplitem *)0)
+#define NULLTMPLITEM	((struct ldap_tmplitem *)NULL)
 
 #define LDAP_SET_TMPLITEM_APPDATA( ti, datap )	\
 	(ti)->ti_appdata = (void *)(datap)
@@ -193,7 +193,7 @@ struct ldap_oclist {
     struct ldap_oclist	*oc_next;
 };
 
-#define NULLOCLIST	((struct ldap_oclist *)0)
+#define NULLOCLIST	((struct ldap_oclist *)NULL)
 
 
 /*
@@ -208,7 +208,7 @@ struct ldap_adddeflist {
     struct ldap_adddeflist	*ad_next;
 };
 
-#define NULLADLIST	((struct ldap_adddeflist *)0)
+#define NULLADLIST	((struct ldap_adddeflist *)NULL)
 
 
 /*
@@ -249,7 +249,7 @@ struct ldap_disptmpl {
     struct ldap_disptmpl	*dt_next;
 };
 
-#define NULLDISPTMPL	((struct ldap_disptmpl *)0)
+#define NULLDISPTMPL	((struct ldap_disptmpl *)NULL)
 
 #define LDAP_SET_DISPTMPL_APPDATA( dt, datap )	\
 	(dt)->dt_appdata = (void *)(datap)

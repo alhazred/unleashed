@@ -136,7 +136,7 @@ slk_color(short co)
 	int	code = OK;
 
 	if (__m_screen->_slk._w != NULL)
-		code = wcolor_set(__m_screen->_slk._w, co, (void *) 0);
+		code = wcolor_set(__m_screen->_slk._w, co, NULL);
 
 	return (code);
 }

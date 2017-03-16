@@ -1486,12 +1486,12 @@ hsfs_mountroot(struct vfs *vfsp, enum whymountroot why)
 		vfs_unlock(vfsp);
 		if (rootvp) {
 			VN_RELE(rootvp);
-			rootvp = (struct vnode *)0;
+			rootvp = NULL;
 		}
 		return (error);
 	}
 	if (why == ROOT_INIT)
-		vfs_add((struct vnode *)0, vfsp,
+		vfs_add(NULL, vfsp,
 		    (vfsp->vfs_flag & VFS_RDONLY) ? MS_RDONLY : 0);
 	vfs_unlock(vfsp);
 	fsp = VFS_TO_HSFS(vfsp);

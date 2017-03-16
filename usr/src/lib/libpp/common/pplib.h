@@ -504,7 +504,7 @@ struct pathid				/* physical file name and id	*/
 #define IN_SQUOTE	12		/* '...' macro arg (copied)	*/
 #define IN_STRING	14		/* string			*/
 
-#define INC_CLEAR	((struct ppsymbol*)0)
+#define INC_CLEAR	((struct ppsymbol *)NULL)
 #define INC_IGNORE	((struct ppsymbol*)pp.addbuf)
 #define INC_TEST	((struct ppsymbol*)pp.catbuf)
 

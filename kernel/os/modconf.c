@@ -86,7 +86,7 @@ struct dev_ops mod_nodev_ops = {
 	nodev,			/* detach	*/
 	nulldev,		/* reset	*/
 	&no_cb_ops,		/* character/block driver operations */
-	(struct bus_ops *)0	/* bus operations for nexus drivers */
+	NULL	/* bus operations for nexus drivers */
 };
 
 /*

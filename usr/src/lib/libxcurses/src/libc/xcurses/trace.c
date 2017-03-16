@@ -113,7 +113,7 @@ chtype
 void *
 (__m_return_pointer)(const char *s, const void *ptr)
 {
-	if (ptr == (void *) 0)
+	if (ptr == NULL)
 		__m_trace("%s returned NULL.", s);
 	else
 		__m_trace("%s returned %p.", s, ptr);

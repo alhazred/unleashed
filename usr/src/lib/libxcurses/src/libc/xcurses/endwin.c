@@ -68,7 +68,7 @@ endwin()
 		
 		/* Make sure the current attribute state is normal.*/
 		if (ATTR_STATE != WA_NORMAL) {
-			(void) vid_puts(WA_NORMAL, 0, (void *) 0, __m_outc);
+			(void) vid_puts(WA_NORMAL, 0, NULL, __m_outc);
 
 			if (ceol_standout_glitch)
 				curscr->_line[curscr->_maxx-1][0]._at 

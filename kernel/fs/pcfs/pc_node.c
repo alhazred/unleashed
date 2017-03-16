@@ -92,7 +92,7 @@ pc_getnode(
 	pc_cluster32_t scluster;
 
 	ASSERT(fsp->pcfs_flags & PCFS_LOCKED);
-	if (ep == (struct pcdir *)0) {
+	if (ep == NULL) {
 		ep = &pcfs_rootdirentry;
 		scluster = 0;
 	} else {

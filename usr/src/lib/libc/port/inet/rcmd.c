@@ -189,8 +189,7 @@ int rcmd_af(char **ahost, unsigned short rport, const char *locuser,
 				perror("rcmd: socket");
 #ifdef SYSV
 			/* restore original SIGPIPE handler */
-			(void) sigaction(SIGPIPE, &oldaction,
-			    (struct sigaction *)0);
+			(void) sigaction(SIGPIPE, &oldaction, NULL);
 
 			/* restore original signal mask */
 			(void) sigprocmask(SIG_SETMASK, &oldmask,
@@ -258,8 +257,7 @@ int rcmd_af(char **ahost, unsigned short rport, const char *locuser,
 		freeaddrinfo(resp);
 #ifdef SYSV
 		/* restore original SIGPIPE handler */
-		(void) sigaction(SIGPIPE, &oldaction,
-		    (struct sigaction *)0);
+		(void) sigaction(SIGPIPE, &oldaction, NULL);
 
 		/* restore original signal mask */
 		(void) sigprocmask(SIG_SETMASK, &oldmask, (sigset_t *)0);
@@ -290,7 +288,7 @@ int rcmd_af(char **ahost, unsigned short rport, const char *locuser,
 		FD_SET(s, &fdset);
 		FD_SET(s2, &fdset);
 		while ((selret = select(FD_SETSIZE, &fdset, (fd_set *)0,
-		    (fd_set *)0, (struct timeval *)0)) > 0) {
+		    (fd_set *)0, NULL)) > 0) {
 			if (FD_ISSET(s, &fdset)) {
 				/*
 				 *	Something's wrong:  we should get no
@@ -387,7 +385,7 @@ int rcmd_af(char **ahost, unsigned short rport, const char *locuser,
 	}
 #ifdef SYSV
 	/* restore original SIGPIPE handler */
-	(void) sigaction(SIGPIPE, &oldaction, (struct sigaction *)0);
+	(void) sigaction(SIGPIPE, &oldaction, NULL);
 
 	/* restore original signal mask */
 	(void) sigprocmask(SIG_SETMASK, &oldmask, (sigset_t *)0);
@@ -403,7 +401,7 @@ bad:
 	(void) close(s);
 #ifdef SYSV
 	/* restore original SIGPIPE handler */
-	(void) sigaction(SIGPIPE, &oldaction, (struct sigaction *)0);
+	(void) sigaction(SIGPIPE, &oldaction, NULL);
 
 	/* restore original signal mask */
 	(void) sigprocmask(SIG_SETMASK, &oldmask, (sigset_t *)0);

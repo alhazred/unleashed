@@ -52,7 +52,7 @@ vidattr(chtype ch)
 #endif
 
 	(void) __m_chtype_cc(ch, &cc);
-	code = vid_puts(cc._at, cc._co, (void *) 0, __m_putchar);
+	code = vid_puts(cc._at, cc._co, NULL, __m_putchar);
 
 	return __m_return_code("vidattr", code);
 }
@@ -68,7 +68,7 @@ vidputs(chtype ch, int (*putout)(int))
 #endif
 
 	(void) __m_chtype_cc(ch, &cc);
-	code = vid_puts(cc._at, cc._co, (void *) 0, putout);
+	code = vid_puts(cc._at, cc._co, NULL, putout);
 
 	return __m_return_code("vidputs", code);
 }

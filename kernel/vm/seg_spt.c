@@ -183,7 +183,7 @@ sptcreate(size_t size, struct seg **sptseg, struct anon_map *amp,
 	if (segspt_minfree == 0)	/* leave min 5% of availrmem for */
 		segspt_minfree = availrmem/20;	/* for the system */
 
-	if (!hat_supported(HAT_SHARED_PT, (void *)0))
+	if (!hat_supported(HAT_SHARED_PT, NULL))
 		return (EINVAL);
 
 	/*
@@ -613,7 +613,7 @@ segspt_free_pages(struct seg *seg, caddr_t addr, size_t len)
 	npages = btop(len);
 
 	hat_flags = HAT_UNLOAD_UNLOCK | HAT_UNLOAD_UNMAP;
-	if ((hat_supported(HAT_DYNAMIC_ISM_UNMAP, (void *)0)) ||
+	if ((hat_supported(HAT_DYNAMIC_ISM_UNMAP, NULL)) ||
 	    (sptd->spt_flags & SHM_PAGEABLE)) {
 		hat_flags = HAT_UNLOAD_UNMAP;
 	}
@@ -1569,7 +1569,7 @@ segspt_softunlock(struct seg *seg, caddr_t sptseg_addr,
 	 * and therefore their pages are SE_SHARED locked
 	 * for the entire life of the segment.
 	 */
-	if ((!hat_supported(HAT_DYNAMIC_ISM_UNMAP, (void *)0)) &&
+	if ((!hat_supported(HAT_DYNAMIC_ISM_UNMAP, NULL)) &&
 	    ((sptd->spt_flags & SHM_PAGEABLE) == 0)) {
 		goto softlock_decrement;
 	}
@@ -1678,7 +1678,7 @@ segspt_shmattach(struct seg *seg, caddr_t *argsp)
 			return (ENOMEM);
 		}
 		shmd->shm_lckpgs = 0;
-		if (hat_supported(HAT_DYNAMIC_ISM_UNMAP, (void *)0)) {
+		if (hat_supported(HAT_DYNAMIC_ISM_UNMAP, NULL)) {
 			if ((error = hat_share(seg->s_as->a_hat, seg->s_base,
 			    shmd_arg->shm_sptas->a_hat, SEGSPTADDR,
 			    seg->s_size, seg->s_szc)) != 0) {
@@ -1805,7 +1805,7 @@ segspt_dismfault(struct hat *hat, struct seg *seg, caddr_t addr,
 	int	i;
 	ulong_t an_idx = 0;
 	int	err = 0;
-	int	dyn_ism_unmap = hat_supported(HAT_DYNAMIC_ISM_UNMAP, (void *)0);
+	int	dyn_ism_unmap = hat_supported(HAT_DYNAMIC_ISM_UNMAP, NULL);
 	size_t	pgsz;
 	pgcnt_t	pgcnt;
 	caddr_t	a;
@@ -2067,7 +2067,7 @@ segspt_shmfault(struct hat *hat, struct seg *seg, caddr_t addr,
 		 * Some platforms assume that ISM pages are SE_SHARED
 		 * locked for the entire life of the segment.
 		 */
-		if (!hat_supported(HAT_DYNAMIC_ISM_UNMAP, (void *)0))
+		if (!hat_supported(HAT_DYNAMIC_ISM_UNMAP, NULL))
 			return (0);
 		/*
 		 * Fall through to the F_INVAL case to load up the hat layer
@@ -2087,7 +2087,7 @@ segspt_shmfault(struct hat *hat, struct seg *seg, caddr_t addr,
 		 * HAT_LOAD_LOCK translation, which would seem
 		 * contradictory.
 		 */
-		if (!hat_supported(HAT_DYNAMIC_ISM_UNMAP, (void *)0)) {
+		if (!hat_supported(HAT_DYNAMIC_ISM_UNMAP, NULL)) {
 			if (hat_share(seg->s_as->a_hat, seg->s_base,
 			    curspt->a_hat, sptseg->s_base,
 			    sptseg->s_size, sptseg->s_szc) != 0) {
@@ -2242,7 +2242,7 @@ segspt_shmdup(struct seg *seg, struct seg *newseg)
 	if (sptd->spt_flags & SHM_PAGEABLE) {
 		shmd_new->shm_vpage = kmem_zalloc(btopr(amp->size), KM_SLEEP);
 		shmd_new->shm_lckpgs = 0;
-		if (hat_supported(HAT_DYNAMIC_ISM_UNMAP, (void *)0)) {
+		if (hat_supported(HAT_DYNAMIC_ISM_UNMAP, NULL)) {
 			if ((error = hat_share(newseg->s_as->a_hat,
 			    newseg->s_base, shmd->shm_sptas->a_hat, SEGSPTADDR,
 			    seg->s_size, seg->s_szc)) != 0) {

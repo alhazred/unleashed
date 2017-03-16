@@ -179,7 +179,7 @@ extern int	BoolCount;
 extern int	NumCount;
 extern int	StrCount;
 
-#define	NOTFOUND	((struct name_table_entry *)0)
+#define	NOTFOUND	((struct name_table_entry *)NULL)
 	/*
 	 *	Function types
 	 *

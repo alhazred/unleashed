@@ -157,11 +157,11 @@ main(int argc, char *argv[])
 
 	(void) sigaction(SIGINT, &sa, &osa);
 	if (osa.sa_handler == SIG_IGN)
-		(void) sigaction(SIGINT, &osa, (struct sigaction *)0);
+		(void) sigaction(SIGINT, &osa, NULL);
 
 	(void) sigaction(SIGTERM, &sa, &osa);
 	if (osa.sa_handler == SIG_IGN)
-		(void) sigaction(SIGTERM, &osa, (struct sigaction *)0);
+		(void) sigaction(SIGTERM, &osa, NULL);
 	if (argc < 2) {
 usage:
 		(void) fprintf(stderr, gettext("Usage:\n\

@@ -201,7 +201,7 @@ remove_callbacks(void)
 {
 	void remove_vx_handler(char *);
 
-	(void) prom_set_symbol_lookup((void *)0, (void *)0);
+	(void) prom_set_symbol_lookup(NULL, NULL);
 
 	remove_vx_handler("sym-to-value");
 	remove_vx_handler("value-to-sym");

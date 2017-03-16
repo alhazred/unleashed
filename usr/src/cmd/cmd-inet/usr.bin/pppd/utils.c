@@ -834,7 +834,7 @@ lock(dev)
 #ifdef LOCKLIB
     int result;
 
-    result = mklock (dev, (void *) 0);
+    result = mklock (dev, NULL);
     if (result == 0) {
 	(void) strlcpy(lock_file, sizeof(lock_file), dev);
 	return (0);
@@ -986,7 +986,7 @@ unlock()
 {
     if (lock_file[0]) {
 #ifdef LOCKLIB
-	(void) rmlock(lock_file, (void *) 0);
+	(void) rmlock(lock_file, NULL);
 #else
 	(void) unlink(lock_file);
 #endif

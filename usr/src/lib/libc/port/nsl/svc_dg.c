@@ -380,8 +380,7 @@ again:
 
 			lookres = t_look(xprt->xp_fd);
 			if ((lookres == T_UDERR) &&
-			    (t_rcvuderr(xprt->xp_fd,
-				    (struct t_uderr *)0) < 0)) {
+			    (t_rcvuderr(xprt->xp_fd, NULL) < 0)) {
 				/*EMPTY*/
 #ifdef RPC_DEBUG
 				syslog(LOG_ERR,

@@ -107,7 +107,7 @@ static int	get_wwns(char *, uchar_t *, uchar_t *, int *,
 
 /* type for g_dev_map_init related routines */
 
-#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : (void *)0)
+#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
 
 typedef struct impl_map_dev_prop {
 	char	prop_name[MAXNAMELEN];

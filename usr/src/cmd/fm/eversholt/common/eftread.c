@@ -158,11 +158,11 @@ eftread_fopen(const char *fname, char *idbuf, size_t idbufsz)
 			if (*dptr == '\0') {
 				/* found separator, record string */
 				Dicts = lut_add(Dicts,
-				    (void *)stable(dptr + 1), (void *)0, NULL);
+				    (void *)stable(dptr + 1), NULL, NULL);
 			}
 		/* record the first string */
 		Dicts = lut_add(Dicts,
-		    (void *)stable(dptr), (void *)0, NULL);
+		    (void *)stable(dptr), NULL, NULL);
 	}
 
 	if ((tfp = tmpfile()) == NULL)

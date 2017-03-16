@@ -72,7 +72,7 @@ int nsvc_xdrs;		/* total number of svc_xdrs allocated */
 
 int __rpc_use_pollfd_done;	/* to unlimit the number of connections */
 
-#define	NULL_SVC ((struct svc_callout *)0)
+#define	NULL_SVC ((struct svc_callout *)NULL)
 #define	RQCRED_SIZE	400		/* this size is excessive */
 
 /*
@@ -994,7 +994,7 @@ svc_register(SVCXPRT *xprt, rpcprog_t prog, rpcvers_t vers,
 		return (FALSE);
 	}
 	s = malloc(sizeof (struct svc_callout));
-	if (s == (struct svc_callout *)0) {
+	if (s == NULL) {
 		free(netid);
 		(void) rw_unlock(&svc_lock);
 		return (FALSE);
@@ -1510,7 +1510,7 @@ svc_xprt_alloc(void)
 	xt->cred_area = cred_area;
 
 /* LINTED pointer alignment */
-	(void) mutex_init(&svc_send_mutex(xprt), USYNC_THREAD, (void *)0);
+	(void) mutex_init(&svc_send_mutex(xprt), USYNC_THREAD, NULL);
 	return (xprt);
 
 err_exit:

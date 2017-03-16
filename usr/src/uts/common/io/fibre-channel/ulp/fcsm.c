@@ -2353,7 +2353,7 @@ fcsm_alloc_job(int sleep)
 		job->job_caller_priv	= (opaque_t)0;
 		job->job_comp		= NULL;
 		job->job_comp_arg	= (opaque_t)0;
-		job->job_priv		= (void *)0;
+		job->job_priv		= NULL;
 		job->job_priv_flags	= 0;
 		job->job_next		= 0;
 	}

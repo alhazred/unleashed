@@ -163,7 +163,7 @@ ldap_simple_bind_s( LDAP *ld, const char *dn, const char *passwd )
 	if ( (msgid = ldap_simple_bind( ld, dn, passwd )) == -1 )
 		return( LDAP_GET_LDERRNO( ld, NULL, NULL ) );
 
-	if ( ldap_result( ld, msgid, 1, (struct timeval *) 0, &result ) == -1 )
+	if ( ldap_result( ld, msgid, 1, NULL, &result ) == -1 )
 		return( LDAP_GET_LDERRNO( ld, NULL, NULL ) );
 
 	return( ldap_result2error( ld, result, 1 ) );
@@ -248,7 +248,7 @@ simple_bindifnot_s( LDAP *ld, const char *dn, const char *passwd )
 	 * Wait for the bind result.  Code inside result.c:read1msg()
 	 * takes care of setting the connection's bind DN and status.
 	 */
-	if ( nsldapi_result_nolock( ld, msgid, 1, 0, (struct timeval *) 0,
+	if ( nsldapi_result_nolock( ld, msgid, 1, 0, NULL,
 	    &result ) == -1 ) {
 		rc = LDAP_GET_LDERRNO( ld, NULL, NULL );
 		goto unlock_and_return;

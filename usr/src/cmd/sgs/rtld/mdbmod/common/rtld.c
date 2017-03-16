@@ -864,7 +864,7 @@ _dcmd_Lm_list(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 
 			if (lmc.lc_head) {
 				if (mdb_pwalk(MSG_ORIG(MSG_RTMAPS_STR),
-				    rtmap_format, (void *)0,
+				    rtmap_format, NULL,
 				    (uintptr_t)lmc.lc_head) == -1) {
 					(void) mdb_dec_indent(4);
 					return (DCMD_ERR);
@@ -899,7 +899,7 @@ _dcmd_Lm_list(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 
 				if (lmc.lc_head) {
 					if (mdb_pwalk(MSG_ORIG(MSG_RTMAPS_STR),
-					    rtmap_format, (void *)0,
+					    rtmap_format, NULL,
 					    (uintptr_t)lmc.lc_head) == -1) {
 						(void) mdb_dec_indent(4);
 						return (DCMD_ERR);

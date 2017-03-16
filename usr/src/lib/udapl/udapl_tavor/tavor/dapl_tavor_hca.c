@@ -266,7 +266,7 @@ dapli_process_tavor_node(char *dev_path, int *hca_idx, int try_blueflame)
 	uarpg_offset = (((off64_t)cur_pid << MLNX_UMAP_RSRC_TYPE_SHIFT) |
 	    MLNX_UMAP_UARPG_RSRC) * pagesize;
 
-	mapaddr = mmap64((void  *)0, pagesize, PROT_READ | PROT_WRITE,
+	mapaddr = mmap64(NULL, pagesize, PROT_READ | PROT_WRITE,
 	    MAP_SHARED, fd, uarpg_offset);
 	if (mapaddr == MAP_FAILED) {
 		dapl_dbg_log(DAPL_DBG_TYPE_ERR,
@@ -287,7 +287,7 @@ dapli_process_tavor_node(char *dev_path, int *hca_idx, int try_blueflame)
 	uarpg_offset = (((off64_t)cur_pid << MLNX_UMAP_RSRC_TYPE_SHIFT) |
 	    MLNX_UMAP_BLUEFLAMEPG_RSRC) * pagesize;
 
-	mapaddr = mmap64((void  *)0, pagesize, PROT_READ | PROT_WRITE,
+	mapaddr = mmap64(NULL, pagesize, PROT_READ | PROT_WRITE,
 	    MAP_SHARED, fd, uarpg_offset);
 	if (mapaddr == MAP_FAILED) {
 		/* This is not considered to be fatal.  Charge on! */

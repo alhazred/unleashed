@@ -501,7 +501,7 @@ No errors are defined.
 An application could use:
 .sp
 .LP
-\fBregerror(code,preg,NULL,(size_t)0)\fR
+\fBregerror(code,preg,NULL,0)\fR
 .sp
 .LP
 to find out how big a buffer is needed for the generated string, \fBmalloc\fR a
@@ -532,7 +532,7 @@ match(const char *string, char *pattern)
       if (regcomp(&re, pattern, REG_EXTENDED\||\|REG_NOSUB) != 0) {
            return(0);      /* report error */
       }
-      status = regexec(&re, string, (size_t) 0, NULL, 0);
+      status = regexec(&re, string, 0, NULL, 0);
       regfree(&re);
       if (status != 0) {
             return(0);      /* report error */

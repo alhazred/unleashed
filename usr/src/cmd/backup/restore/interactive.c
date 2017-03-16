@@ -616,7 +616,7 @@ expandarg(arg, ap)
 	static struct afile single;
 	int size;
 
-	ap->head = ap->last = (struct afile *)0;
+	ap->head = ap->last = NULL;
 	if (dontexpand)
 		size = 0;
 	else
@@ -673,7 +673,7 @@ printlist(name, ino, basename, marked_only)
 			alist.base = NULL;
 		}
 	} else {
-		alist.head = (struct afile *)0;
+		alist.head = NULL;
 		(void) fprintf(stderr, "%s:\n", name);
 		while (dp = rst_readdir(dirp)) {
 			if (dp == NULL || dp->d_ino == 0) {

@@ -62,7 +62,7 @@ bindresvport(int sd, struct sockaddr_in *sin)
 	socklen_t len;
 
 	bindaddr = sin;
-	if (bindaddr == (struct sockaddr_in *)0) {
+	if (bindaddr == NULL) {
 		bindaddr = &myaddr;
 		bzero(bindaddr, sizeof (*bindaddr));
 		bindaddr->sin_family = AF_INET;

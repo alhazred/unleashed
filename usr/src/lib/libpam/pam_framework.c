@@ -499,7 +499,7 @@ pam_set_item(pam_handle_t *pamh, int item_type, const void *item)
 		    (void *)pamh,
 		    pam_trace_iname(item_type, iname_buf),
 		    item ? (void *)((struct pam_conv *)item)->conv :
-		    (void *)0);
+		    NULL);
 		break;
 	case PAM_REPOSITORY:
 		pam_trace(PAM_DEBUG_ITEM, "pam_set_item(%p:%s)=%s",

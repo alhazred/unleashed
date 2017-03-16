@@ -957,7 +957,7 @@ done:
 		}
 
 		timout = backoff(timout);
-		if (p->cku_timeall != (struct rpc_timers *)0)
+		if (p->cku_timeall != NULL)
 			p->cku_timeall->rt_rtxcur = timout;
 
 		if (p->cku_err.re_status == RPC_SYSTEMERROR ||

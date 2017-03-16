@@ -156,7 +156,7 @@ static struct dev_ops pseudo_ops = {
 	vnex_attach,		/* attach */
 	vnex_detach,		/* detach */
 	nodev,			/* reset */
-	(struct cb_ops *)0,	/* driver operations */
+	NULL,	/* driver operations */
 	&vnex_bus_ops,		/* bus operations */
 	nulldev,		/* power */
 	ddi_quiesce_not_needed,		/* quiesce */

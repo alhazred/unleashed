@@ -96,7 +96,7 @@ static struct stab_list_s {
 	struct stab_list_s *next;
 	char *strings;
 	size_t size;
-} *StringTableList = (void *)0;
+} *StringTableList = NULL;
 
 extern void ar_sym_read();
 extern void dump_exec_header();
@@ -1755,7 +1755,7 @@ load_arstring_table(struct stab_list_s *STabList,
 			STabList = STL_entry;
 		else {
 			STL_next = STabList;
-			while (STL_next->next != (void *)0)
+			while (STL_next->next != NULL)
 				STL_next = STL_next->next;
 			STL_next->next = STL_entry;
 		}

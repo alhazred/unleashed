@@ -131,10 +131,10 @@ int nlines, ncols, begy, begx;
 
 	/* Window rendition. */
 	(void) setcchar(
-		&w->_bg, M_MB_L(" "), WA_NORMAL, 0, (void *) 0
+		&w->_bg, M_MB_L(" "), WA_NORMAL, 0, NULL
 	);
 	(void) setcchar(
-		&w->_fg, M_MB_L(" "), WA_NORMAL, 0, (void *) 0
+		&w->_fg, M_MB_L(" "), WA_NORMAL, 0, NULL
 	);
 
 	if (parent == (WINDOW *) 0) {

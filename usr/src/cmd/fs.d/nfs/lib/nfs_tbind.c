@@ -750,7 +750,7 @@ add_to_poll_list(int fd, struct netconfig *nconf)
 			tpa = poll_array;
 			tnp = conn_polled;
 		} else
-			tpa = (struct pollfd *)0;
+			tpa = NULL;
 
 		poll_array_size += POLL_ARRAY_INC_SIZE;
 		/*
@@ -1168,7 +1168,7 @@ conn_close_oldest(void)
 		 * For politeness, send a T_DISCON_REQ to the transport
 		 * provider.  We close the stream anyway.
 		 */
-		(void) t_snddis(fd, (struct t_call *)0);
+		(void) t_snddis(fd, NULL);
 		num_conns--;
 		remove_from_poll_list(fd);
 		(void) t_close(fd);
@@ -1255,7 +1255,7 @@ discon_get(int fd, struct netconfig *nconf, struct conn_ind **connp)
 	do {
 		if (conn->conn_call->sequence == discon.sequence) {
 			if (conn->conn_next == conn)
-				*connp = (struct conn_ind *)0;
+				*connp = NULL;
 			else {
 				if (conn == *connp) {
 					*connp = conn->conn_next;
@@ -1500,7 +1500,7 @@ printf("initiating orderly release of idle connection\n");
 #endif
 				if (nconf->nc_semantics == NC_TPI_COTS ||
 				    connent->closing != 0) {
-					(void) t_snddis(fd, (struct t_call *)0);
+					(void) t_snddis(fd, NULL);
 					goto fdclose;
 				}
 				/*

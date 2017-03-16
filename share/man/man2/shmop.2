@@ -79,7 +79,7 @@ process at the address specified based on one of the  following criteria:
 .TP
 .ie t \(bu
 .el o
-If \fIshmaddr\fR is equal to \fB(void *) 0\fR, the segment is attached to the
+If \fIshmaddr\fR is equal to \fBNULL\fR, the segment is attached to the
 first available address as selected by the system.
 .RE
 .RS +4
@@ -98,7 +98,7 @@ reading and writing.
 .TP
 .ie t \(bu
 .el o
-If \fIshmaddr\fR is not equal to \fB(void *) 0\fR and
+If \fIshmaddr\fR is not equal to \fBNULL\fR and
 (\fIshmflg\fR\fB&SHM_RND\fR) is true, the segment is attached to the address
 given by (\fIshmaddr\fR\fB-\fR  (\fIshmaddr\fR modulus \fBSHMLBA\fR)).
 .RE
@@ -106,7 +106,7 @@ given by (\fIshmaddr\fR\fB-\fR  (\fIshmaddr\fR modulus \fBSHMLBA\fR)).
 .TP
 .ie t \(bu
 .el o
-If \fIshmaddr\fR is not equal to \fB(void *) 0\fR and
+If \fIshmaddr\fR is not equal to \fBNULL\fR and
 (\fIshmflg\fR\fB&SHM_RND\fR) is false, the segment is attached to the address
 given by \fIshmaddr\fR.
 .RE

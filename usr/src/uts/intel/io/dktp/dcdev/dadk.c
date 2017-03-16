@@ -1110,7 +1110,7 @@ dadk_iob_xfer(opaque_t objp, struct tgdk_iob *iobp, int rw)
 	bp->b_flags |= (B_BUSY | rw);
 	bp->b_bcount = iobp->b_pbytecnt;
 	SET_BP_SEC(bp, iobp->b_psec);
-	bp->av_back = (struct buf *)0;
+	bp->av_back = NULL;
 	bp->b_resid = 0;
 
 	/* call flow control */

@@ -2090,7 +2090,7 @@ xdt_detach(dev_info_t *devi, ddi_detach_cmd_t cmd)
 		cyclic_remove(xdt_cyclic);
 	if (xdt_kstats != NULL)
 		kstat_delete(xdt_kstats);
-	xdt_devi = (void *)0;
+	xdt_devi = NULL;
 	ddi_remove_minor_node(devi, NULL);
 
 	return (DDI_SUCCESS);
@@ -2108,7 +2108,7 @@ xdt_info(dev_info_t *devi, ddi_info_cmd_t infocmd, void *arg, void **result)
 		error = DDI_SUCCESS;
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		error = DDI_SUCCESS;
 		break;
 	default:

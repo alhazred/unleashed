@@ -1662,7 +1662,7 @@ void kadmin_getprincs(argc, argv)
 	/* Solaris Kerberos:
 	 * Restore the original handler for SIGINT
 	 */
-	if (sigaction(SIGINT, &osig, (struct sigaction *)0) == -1) {
+	if (sigaction(SIGINT, &osig, NULL) == -1) {
 		perror("sigaction");
 	}
 
@@ -1967,7 +1967,7 @@ void kadmin_getpols(argc, argv)
             perror("sigprocmask");
         }
 
-        if (sigaction(SIGINT, &osig, (struct sigaction *)0) == -1) {
+        if (sigaction(SIGINT, &osig, NULL) == -1) {
             perror("sigaction");
         }
 
@@ -1997,7 +1997,7 @@ void kadmin_getpols(argc, argv)
         perror("wait");
     }
 
-    if (sigaction(SIGINT, &osig, (struct sigaction *)0) == -1) {
+    if (sigaction(SIGINT, &osig, NULL) == -1) {
         perror("sigaction");
     }
     kadm5_free_name_list(handle, names, count);

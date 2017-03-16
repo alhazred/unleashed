@@ -1498,7 +1498,7 @@ ql_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		/* Start one second driver timer. */
 		if (ql_timer_timeout_id == NULL) {
 			ql_timer_ticks = drv_usectohz(1000000);
-			ql_timer_timeout_id = timeout(ql_timer, (void *)0,
+			ql_timer_timeout_id = timeout(ql_timer, NULL,
 			    ql_timer_ticks);
 		}
 
@@ -1692,7 +1692,7 @@ attach_failed:
 
 		/* Restart driver timer. */
 		if (ql_timer_timeout_id == NULL) {
-			ql_timer_timeout_id = timeout(ql_timer, (void *)0,
+			ql_timer_timeout_id = timeout(ql_timer, NULL,
 			    ql_timer_ticks);
 		}
 

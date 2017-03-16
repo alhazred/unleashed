@@ -325,7 +325,7 @@ static struct dev_ops ahcictl_dev_ops = {
 	ahci_attach,		/* attach */
 	ahci_detach,		/* detach */
 	nodev,			/* no reset */
-	(struct cb_ops *)0,	/* driver operations */
+	NULL,	/* driver operations */
 	NULL,			/* bus operations */
 	NULL,			/* power */
 	ahci_quiesce,		/* quiesce */

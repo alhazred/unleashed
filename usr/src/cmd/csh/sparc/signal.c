@@ -193,7 +193,7 @@ sigvec(int sig, struct sigvec *nvec, struct sigvec *ovec)
         ohandler = _siguhandler[sig];
 
         if (nvec) {
-		_sigaction(sig, (struct sigaction *)0, &nact);
+		_sigaction(sig, NULL, &nact);
                 nhandler = nvec->sv_handler; 
                 _siguhandler[sig] = nhandler;
                 if (nhandler != SIG_DFL && nhandler != SIG_IGN)
@@ -213,7 +213,7 @@ sigvec(int sig, struct sigvec *nvec, struct sigvec *ovec)
 			nact.sa_flags |= SA_ONSTACK;
 		nactp = &nact;
         } else
-		nactp = (struct sigaction *)0;
+		nactp = NULL;
 
         if (_sigaction(sig, nactp, &oact) < 0) {
                 _siguhandler[sig] = ohandler;
@@ -255,7 +255,7 @@ signal(int s, void (*a)()))()
         if (nsv.sv_mask != osv.sv_mask || nsv.sv_flags != osv.sv_flags) {
                 mask[s] = nsv.sv_mask = osv.sv_mask;
                 flags[s] = nsv.sv_flags = osv.sv_flags & ~SV_RESETHAND;
-                if (sigvec(s, &nsv, (struct sigvec *)0) < 0)
+                if (sigvec(s, &nsv, NULL) < 0)
                         return (SIG_ERR);
         }
         return (osv.sv_handler);

@@ -90,8 +90,8 @@ typedef struct {
 
 
 #define	MATCH_MINOR_NAME	1
-#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : (void *)0)
-#define	GET_DYN(a)	(((a) != NULL) ? strstr((a), DYN_SEP) : (void *)0)
+#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
+#define	GET_DYN(a)	(((a) != NULL) ? strstr((a), DYN_SEP) : NULL)
 
 
 /* Location of USB configuration file */

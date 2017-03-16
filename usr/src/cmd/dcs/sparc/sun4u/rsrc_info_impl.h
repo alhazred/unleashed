@@ -71,7 +71,7 @@ static int ri_debug = 1;
 #define	RI_AP_MEMS		"ri.ap_mems"
 #define	RI_AP_IOS		"ri.ap_ios"
 
-#define	s_free(x)	(((x) != NULL) ? (free(x), (x) = NULL) : (void *)0)
+#define	s_free(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
 
 struct ri_hdl {
 	int		flags;

@@ -7008,7 +7008,7 @@ page_capture_handle_outstanding(void)
 	kmem_reap();
 
 	if ((page_retire_pend_count() > page_retire_pend_kas_count()) &&
-	    hat_supported(HAT_DYNAMIC_ISM_UNMAP, (void *)0)) {
+	    hat_supported(HAT_DYNAMIC_ISM_UNMAP, NULL)) {
 		/*
 		 * Note: Purging only for platforms that support
 		 * ISM hat_pageunload() - mainly SPARC. On x86/x64

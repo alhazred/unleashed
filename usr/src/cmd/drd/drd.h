@@ -46,7 +46,7 @@ extern void drd_dbg(char *fmt, ...);
 extern boolean_t drd_daemonized;
 extern boolean_t drd_debug;
 
-#define	s_free(x)	(((x) != NULL) ? (free(x), (x) = NULL) : (void *)0)
+#define	s_free(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
 #define	s_nvfree(x)	(((x) != NULL) ? (nvlist_free(x)) : (void)0)
 
 /*

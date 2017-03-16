@@ -96,7 +96,7 @@ struct diskinfo {
 	kstat_io_t kios;
 };
 
-#define	NULLDISK (struct diskinfo *)0
+#define	NULLDISK ((struct diskinfo *)NULL)
 static	struct diskinfo zerodisk = { NULL, NULL };
 static	struct diskinfo *firstdisk = NULLDISK;
 static	struct diskinfo *lastdisk = NULLDISK;
@@ -117,7 +117,7 @@ struct netinfo {
 	kstat_named_t *collisions;
 };
 
-#define	NULLNET (struct netinfo *)0
+#define	NULLNET ((struct netinfo *)NULL)
 static	struct netinfo zeronet = { NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 static	struct netinfo *firstnet = NULLNET;
 static	struct netinfo *lastnet = NULLNET;

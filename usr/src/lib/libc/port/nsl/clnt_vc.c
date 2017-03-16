@@ -318,7 +318,7 @@ _clnt_vc_create_timed(int fd, struct netbuf *svcaddr, rpcprog_t prog,
 	/*
 	 * Initialize call message
 	 */
-	(void) gettimeofday(&now, (struct timezone *)0);
+	(void) gettimeofday(&now, NULL);
 	call_msg.rm_xid = getpid() ^ now.tv_sec ^ now.tv_usec;
 	call_msg.rm_call.cb_prog = prog;
 	call_msg.rm_call.cb_vers = vers;

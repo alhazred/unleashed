@@ -87,7 +87,7 @@ void ss_page_stdin()
 	sa.sa_handler = SIG_DFL;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, (struct sigaction *)0);
+	sigaction(SIGINT, &sa, NULL);
 #else
 	(void) signal(SIGINT, SIG_DFL);
 #endif

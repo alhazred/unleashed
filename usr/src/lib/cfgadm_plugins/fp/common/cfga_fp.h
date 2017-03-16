@@ -400,7 +400,7 @@ typedef struct {
 #define	LUN_COMP_SEP		","
 #define	MINOR_SEP		":"
 
-#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : (void *)0)
+#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
 #define	S_STR(x)	(((x) == NULL) ? "" : (x))
 
 
@@ -409,8 +409,8 @@ typedef struct {
 
 #define	GET_MSG_STR(i)		(str_tbl[msg_idx(i)].msgstr)
 
-#define	GET_DYN(a)	(((a) != NULL) ? strstr((a), DYN_SEP) : (void *)0)
-#define	GET_LUN_DYN(a)	(((a) != NULL) ? strstr((a), LUN_COMP_SEP) : (void *)0)
+#define	GET_DYN(a)	(((a) != NULL) ? strstr((a), DYN_SEP) : NULL)
+#define	GET_LUN_DYN(a)	(((a) != NULL) ? strstr((a), LUN_COMP_SEP) : NULL)
 
 /*
  * The following macro removes the separator from the dynamic component.

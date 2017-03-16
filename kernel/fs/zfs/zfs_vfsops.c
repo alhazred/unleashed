@@ -1373,7 +1373,7 @@ zfs_mountroot(vfs_t *vfsp, enum whymountroot why)
 		 * Leave rootvp held.  The root file system is never unmounted.
 		 */
 
-		vfs_add((struct vnode *)0, vfsp,
+		vfs_add(NULL, vfsp,
 		    (vfsp->vfs_flag & VFS_RDONLY) ? MS_RDONLY : 0);
 out:
 		vfs_unlock(vfsp);

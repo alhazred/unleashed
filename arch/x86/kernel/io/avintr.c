@@ -228,7 +228,7 @@ int
 add_avintr(void *intr_id, int lvl, avfunc xxintr, char *name, int vect,
     caddr_t arg1, caddr_t arg2, uint64_t *ticksp, dev_info_t *dip)
 {
-	struct av_head *vecp = (struct av_head *)0;
+	struct av_head *vecp = NULL;
 	avfunc f;
 	int s, vectindex;			/* save old spl value */
 	ushort_t hi_pri;
@@ -422,7 +422,7 @@ insert_av(void *intr_id, struct av_head *vectp, avfunc f, caddr_t arg1,
 static int
 av_rem_softintr(void *intr_id, int lvl, avfunc xxintr, boolean_t rem_softinfo)
 {
-	struct av_head *vecp = (struct av_head *)0;
+	struct av_head *vecp = NULL;
 	int slvl;
 	ddi_softint_hdl_impl_t	*hdlp = (ddi_softint_hdl_impl_t *)intr_id;
 	av_softinfo_t *infop = (av_softinfo_t *)hdlp->ih_pending;
@@ -485,7 +485,7 @@ rem_avsoftintr(void *intr_id, int lvl, avfunc xxintr)
 void
 rem_avintr(void *intr_id, int lvl, avfunc xxintr, int vect)
 {
-	struct av_head *vecp = (struct av_head *)0;
+	struct av_head *vecp = NULL;
 	avfunc f;
 	int s, vectindex;			/* save old spl value */
 

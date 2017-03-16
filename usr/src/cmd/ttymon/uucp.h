@@ -256,7 +256,7 @@ extern "C" {
 #define SUCCESS 0
 #define NULLCHAR	'\0'
 #define CNULL (char *) 0
-#define STBNULL (struct sgttyb *) 0
+#define STBNULL ((struct sgttyb *)NULL)
 #define MASTER 1
 #define SLAVE 0
 #define MAXBASENAME 14 /* should be DIRSIZ but that is now fs dependent */

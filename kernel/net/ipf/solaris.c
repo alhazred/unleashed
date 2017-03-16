@@ -157,7 +157,7 @@ static struct dev_ops ipf_ops = {
 	ipf_detach,
 	nodev,		/* reset */
 	&ipf_cb_ops,
-	(struct bus_ops *)0,
+	NULL,
 	NULL,
 	ddi_quiesce_not_needed,		/* quiesce */
 };
@@ -838,7 +838,7 @@ void *arg, **result;
 		error = DDI_SUCCESS;
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		error = DDI_SUCCESS;
 		break;
 	default:

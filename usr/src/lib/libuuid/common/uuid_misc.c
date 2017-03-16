@@ -161,7 +161,7 @@ get_system_time(uuid_time_t *uuid_time)
 {
 	struct timeval tp;
 
-	(void) gettimeofday(&tp, (struct timezone *)0);
+	(void) gettimeofday(&tp, NULL);
 
 	/*
 	 * Offset between UUID formatted times and Unix formatted times.

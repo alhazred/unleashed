@@ -1494,7 +1494,7 @@ static struct dev_ops rd_ops = {
 	rd_detach,
 	nodev,		/* reset */
 	&rd_cb_ops,
-	(struct bus_ops *)0,
+	NULL,
 	NULL,
 	ddi_quiesce_not_needed,		/* quiesce */
 };

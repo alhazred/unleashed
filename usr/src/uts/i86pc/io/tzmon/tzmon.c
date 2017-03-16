@@ -119,7 +119,7 @@ static struct dev_ops tzmon_ops = {
 	tzmon_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&tzmon_cb_ops,		/* devo_cb_ops */
-	(struct bus_ops *)0,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	NULL,			/* devo_power */
 	ddi_quiesce_not_needed,		/* devo_quiesce */
 };

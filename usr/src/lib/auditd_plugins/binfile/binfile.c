@@ -404,7 +404,7 @@ write_file_token(int fd, char *name)
 	char	token_id;
 	short	i;
 
-	(void) gettimeofday(&tv, (struct timezone *)0);
+	(void) gettimeofday(&tv, NULL);
 	i = strlen(name) + 1;
 	adr_start(&adr, for_adr);
 #ifdef _LP64

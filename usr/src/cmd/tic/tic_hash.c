@@ -114,7 +114,7 @@ make_hash_table()
 		hashvalue = hash_function(cap_table[i].nte_name);
 		DEBUG(9, "%d\n", hashvalue);
 
-		if (cap_hash_table[hashvalue] != (struct name_table_entry *) 0)
+		if (cap_hash_table[hashvalue] != NULL)
 			collisions++;
 
 		cap_table[i].nte_link = cap_hash_table[hashvalue];
@@ -212,7 +212,7 @@ find_entry(char *string)
 
 	ptr = cap_hash_table[hashvalue];
 
-	while (ptr != (struct name_table_entry *) 0 &&
+	while (ptr != NULL &&
 	    strcmp(ptr->nte_name, string) != 0)
 		ptr = ptr->nte_link;
 

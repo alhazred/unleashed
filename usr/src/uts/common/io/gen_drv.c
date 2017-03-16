@@ -131,7 +131,7 @@ static struct dev_ops gen_ops = {
 	gen_detach,		/* detach */
 	nodev,			/* reset */
 	&gen_cb_ops,		/* driver ops */
-	(struct bus_ops *)0,	/* bus ops */
+	NULL,	/* bus ops */
 	gen_power,		/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };

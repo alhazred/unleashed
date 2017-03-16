@@ -176,7 +176,7 @@ clear_bottom(int y)
 {
 	/* Restore default color pair before doing area clears. */
 	if (back_color_erase)
-		(void) vid_puts(WA_NORMAL, 0, (void *) 0, __m_outc);
+		(void) vid_puts(WA_NORMAL, 0, NULL, __m_outc);
 
 	if (y == 0 && clear_screen != NULL) {
 		(void) TPUTS(clear_screen, 1, __m_outc);

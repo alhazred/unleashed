@@ -75,7 +75,7 @@ start_msgs()
 	message(current_state);
 	signal(SIGALRM, (void (*)())disp_msg);
 	itimer.it_value = itimer.it_interval = wait;
-	setitimer(ITIMER_REAL, &itimer, (struct itimerval *)0);
+	setitimer(ITIMER_REAL, &itimer, NULL);
 }
 
 void
@@ -84,5 +84,5 @@ end_msgs()
 	signal(SIGALRM, SIG_IGN);
 	timerclear(&itimer.it_value);
 	timerclear(&itimer.it_interval);
-	setitimer(ITIMER_REAL, &itimer, (struct itimerval *)0);
+	setitimer(ITIMER_REAL, &itimer, NULL);
 }

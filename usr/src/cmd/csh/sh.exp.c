@@ -480,7 +480,7 @@ exp6(tchar ***vp, bool ignore)
 
 		faket.t_dtyp = TCOM;
 		faket.t_dflg = 0;
-		faket.t_dcar = faket.t_dcdr = faket.t_dspr = (struct command *)0;
+		faket.t_dcar = faket.t_dcdr = faket.t_dspr = NULL;
 		faket.t_dcom = fakecom;
 		fakecom[0] = S_BRAPPPBRA /* "{ ... }" */;
 		fakecom[1] = NOSTR;

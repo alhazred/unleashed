@@ -2532,8 +2532,8 @@ release_bootstrap(void)
 			rd_pages = pp;
 			continue;
 		}
-		pp->p_next = (struct page *)0;
-		pp->p_prev = (struct page *)0;
+		pp->p_next = NULL;
+		pp->p_prev = NULL;
 		PP_CLRBOOTPAGES(pp);
 		page_free(pp, 1);
 	}

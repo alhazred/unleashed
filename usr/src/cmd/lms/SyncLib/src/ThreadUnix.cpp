@@ -66,7 +66,7 @@ void *OSThread::threadFunc(void *thread_p)
 		pthread_cond_signal(&t->_osThread->_cond);
 		pthread_mutex_unlock(&t->_osThread->_mut);
 	}
-	return ((void *)0);
+	return (NULL);
 }
 
 Thread::Thread(CallbackFunction func_p, void* param_p)

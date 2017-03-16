@@ -114,7 +114,7 @@ struct block_descriptor {
 	((mhdr)->bdesc_length/(sizeof (struct block_descriptor)))) ? \
 	((struct block_descriptor *)(((ulong_t)(mhdr))+MODE_HEADER_LENGTH+ \
 	((bdnum) * sizeof (struct block_descriptor)))) : \
-	((struct block_descriptor *)0)
+	NULL
 
 /*
  * Mode page header. Zero or more Mode Pages follow either the block

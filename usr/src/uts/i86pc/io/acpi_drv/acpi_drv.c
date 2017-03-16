@@ -438,7 +438,7 @@ acpi_drv_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **resultp)
 		*resultp = acpi_drv_dip;
 		return (DDI_SUCCESS);
 	case DDI_INFO_DEVT2INSTANCE:
-		*resultp = (void*) 0;
+		*resultp = NULL;
 		return (DDI_SUCCESS);
 	default:
 		return (DDI_FAILURE);

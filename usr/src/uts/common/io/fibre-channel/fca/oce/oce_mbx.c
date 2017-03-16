@@ -1328,7 +1328,7 @@ oce_issue_mbox(struct oce_dev *dev, queue_t *wq, mblk_t *mp,
 		/* bind mblk mem to handle */
 		ret = ddi_dma_addr_bind_handle(
 		    dma_handle,
-		    (struct as *)0, sg_va,
+		    NULL, sg_va,
 		    alloc_len,
 		    DDI_DMA_RDWR | DDI_DMA_CONSISTENT,
 		    DDI_DMA_DONTWAIT, NULL, &cookie, &count);

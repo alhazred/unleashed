@@ -170,7 +170,7 @@ int krb5int_pthread_loaded (void)
 static struct tsd_block tsd_if_single;
 # define GET_NO_PTHREAD_TSD()	(&tsd_if_single)
 #else
-# define GET_NO_PTHREAD_TSD()	(abort(),(struct tsd_block *)0)
+# define GET_NO_PTHREAD_TSD()	(abort(),NULL)
 #endif
 
 static pthread_key_t key;

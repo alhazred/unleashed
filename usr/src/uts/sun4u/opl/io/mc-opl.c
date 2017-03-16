@@ -147,7 +147,7 @@ static struct dev_ops mc_ops = {
 	mc_detach,			/* detach */
 	nulldev,			/* reset */
 	&mc_cb_ops,			/* cb_ops */
-	(struct bus_ops *)0,		/* bus_ops */
+	NULL,		/* bus_ops */
 	nulldev,			/* power */
 	ddi_quiesce_not_needed,			/* quiesce */
 };

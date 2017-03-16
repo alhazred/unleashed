@@ -310,7 +310,7 @@ struct rdsv3_scatterlist {
 
 #define	CMSG_FIRSTHDR(m)						\
 	(((m)->msg_controllen < sizeof (struct cmsghdr)) ?		\
-	    (struct cmsghdr *)0 : (struct cmsghdr *)((m)->msg_control))
+	    NULL : (struct cmsghdr *)((m)->msg_control))
 
 #define	CMSG_NXTHDR(m, c)						\
 	(((c) == 0) ? CMSG_FIRSTHDR(m) :			\
@@ -318,8 +318,7 @@ struct rdsv3_scatterlist {
 	((struct cmsghdr *)(c))->cmsg_len) + sizeof (struct cmsghdr)) >	\
 	(((uintptr_t)((struct msghdr *)(m))->msg_control) +		\
 	((uintptr_t)((struct msghdr *)(m))->msg_controllen))) ?		\
-	((struct cmsghdr *)0) :						\
-	((struct cmsghdr *)_CMSG_HDR_ALIGN((char *)(c) +		\
+	NULL : ((struct cmsghdr *)_CMSG_HDR_ALIGN((char *)(c) +		\
 	    ((struct cmsghdr *)(c))->cmsg_len))))
 
 /* Amount of space + padding needed for a message of length l */

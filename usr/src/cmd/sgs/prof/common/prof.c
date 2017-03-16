@@ -303,7 +303,7 @@ getSnymEntry(char *sl_addr)
 		if (sl_addr == p->sym_addr)
 			return (p);
 
-	return ((struct snymEntry *)0);
+	return (NULL);
 }
 
 

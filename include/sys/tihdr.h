@@ -728,13 +728,13 @@ struct T_opthdr {
 #define	_TPI_TOPT_FIRSTHDR(pbuf, buflen) \
 	((((buflen) >= (unsigned int) sizeof (struct T_opthdr)) && \
 		__TPI_TOPT_ISALIGNED(pbuf)) ? \
-	    (struct T_opthdr *)(pbuf) : (struct T_opthdr *)0)
+	    (struct T_opthdr *)(pbuf) : NULL)
 
 #define	_TPI_TOPT_NEXTHDR(pbuf, buflen, popt) \
 	(((char *)(popt) + _TPI_ALIGN_TOPT((popt)->len)) < \
 	    ((char *)(pbuf) + (buflen)) ?  \
 	(struct T_opthdr *)((char *)(popt) + _TPI_ALIGN_TOPT((popt)->len)) : \
-	    (struct T_opthdr *)0)
+	    NULL)
 
 /*
  * bool_t

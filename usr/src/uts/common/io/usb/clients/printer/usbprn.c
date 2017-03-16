@@ -1215,7 +1215,7 @@ usbprn_write(dev_t dev, struct uio *uiop, cred_t *credp)
 	 * call the strategy routine, and then call
 	 * biowait() to block until the transfer completes.
 	 */
-	rval = physio(usbprn_strategy, (struct buf *)0, dev,
+	rval = physio(usbprn_strategy, NULL, dev,
 	    B_WRITE, usbprn_minphys, uiop);
 
 	usb_release_access(usbprnp->usbprn_write_acc);

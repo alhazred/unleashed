@@ -291,7 +291,7 @@ static struct dev_ops ucode_dv_ops = {
 	ucode_detach,
 	nodev,			/* reset */
 	&ucode_cb_ops,
-	(struct bus_ops *)0,
+	NULL,
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

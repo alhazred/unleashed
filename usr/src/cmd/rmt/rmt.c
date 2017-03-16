@@ -194,12 +194,12 @@ main(int argc, char *argv[])
 
 	sa.sa_handler = catch;
 	sa.sa_flags = SA_RESTART;
-	(void) sigaction(RECV, &sa, (struct sigaction *)0);
-	(void) sigaction(SEND, &sa, (struct sigaction *)0);
-	(void) sigaction(TAPE, &sa, (struct sigaction *)0);
-	(void) sigaction(OPEN, &sa, (struct sigaction *)0);
-	(void) sigaction(CLOSE, &sa, (struct sigaction *)0);
-	(void) sigaction(ERROR, &sa, (struct sigaction *)0);
+	(void) sigaction(RECV, &sa, NULL);
+	(void) sigaction(SEND, &sa, NULL);
+	(void) sigaction(TAPE, &sa, NULL);
+	(void) sigaction(OPEN, &sa, NULL);
+	(void) sigaction(CLOSE, &sa, NULL);
+	(void) sigaction(ERROR, &sa, NULL);
 
 	(void) sigprocmask(SIG_SETMASK, &maskall, (sigset_t *)0);
 

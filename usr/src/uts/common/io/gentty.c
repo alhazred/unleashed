@@ -97,7 +97,7 @@ struct dev_ops	sy_ops = {
 	nodev,			/* detach */
 	nodev,			/* reset */
 	&sy_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };
@@ -180,7 +180,7 @@ sy_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 			*result = (void *)-1;
 			error = DDI_FAILURE;
 		} else {
-			*result = (void *)0;
+			*result = NULL;
 			error = DDI_SUCCESS;
 		}
 		break;

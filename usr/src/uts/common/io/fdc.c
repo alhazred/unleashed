@@ -245,7 +245,7 @@ struct dev_ops	fdc_ops = {
 	fdc_attach,		/* attach */
 	fdc_detach,		/* detach */
 	nodev,			/* reset */
-	(struct cb_ops *)0,	/* driver operations */
+	NULL,	/* driver operations */
 	&fdc_bus_ops,		/* bus operations */
 	NULL,			/* power */
 	fdc_quiesce,		/* quiesce */

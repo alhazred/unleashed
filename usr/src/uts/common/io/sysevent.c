@@ -756,7 +756,7 @@ static struct dev_ops sysevent_ops = {
 	sysevent_detach,	/* detach */
 	nodev,			/* reset */
 	&sysevent_cb_ops,	/* driver operations */
-	(struct bus_ops *)0,	/* no bus operations */
+	NULL,	/* no bus operations */
 	nulldev,		/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

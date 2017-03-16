@@ -100,7 +100,7 @@ static struct dev_ops smp_dev_ops = {
 	smp_detach,		/* detach */
 	nodev,			/* reset */
 	&smp_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

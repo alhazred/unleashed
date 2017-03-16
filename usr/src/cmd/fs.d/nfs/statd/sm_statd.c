@@ -437,7 +437,7 @@ thr_statd_init(void *unused)
 	if (thr_create(NULL, 0, sm_try, NULL, THR_DETACHED, NULL))
 		syslog(LOG_ERR,
 		    "statd: unable to create thread for sm_try().\n");
-	thr_exit((void *) 0);
+	thr_exit(NULL);
 }
 
 /*
@@ -522,7 +522,7 @@ thr_call_statd(void *namep)
 		remove_name(name, 1, 1);
 		free(name);
 	}
-	thr_exit((void *) 0);
+	thr_exit(NULL);
 }
 
 /*
@@ -696,7 +696,7 @@ out:
 	rw_unlock(&thr_rwlock);
 	if (debug)
 		(void) printf("EXITING sm_try\n");
-	thr_exit((void *) 0);
+	thr_exit(NULL);
 }
 
 /*

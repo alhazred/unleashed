@@ -265,7 +265,7 @@ loop:
 	if (ip && rbf0(ip) == 0 && ejf && frame->pframe <= ejl) {
 		nflush++;
 		trap = 0;
-		eject((struct s *)0);
+		eject(NULL);
 #ifdef	DEBUG
 	if (debug & DB_LOOP)
 		fdprintf(stderr, "loop: NL=%d, ejf=%d, lss=%d, eileenct=%d\n",

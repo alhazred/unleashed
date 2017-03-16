@@ -39,7 +39,7 @@
 #include <sys/kdi_impl.h>
 #include <sys/callb.h>
 
-#define	KCTL_WR_PROCESS_NORMAL		(void *)0
+#define	KCTL_WR_PROCESS_NORMAL		NULL
 #define	KCTL_WR_PROCESS_UNLOADING	(void *)1
 
 /*

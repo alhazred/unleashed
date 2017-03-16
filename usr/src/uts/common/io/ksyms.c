@@ -438,7 +438,7 @@ static struct dev_ops ksyms_ops = {
 	ksyms_detach,		/* detach */
 	nodev,			/* reset */
 	&ksyms_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* no bus operations */
+	NULL,	/* no bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

@@ -390,7 +390,7 @@ static struct dev_ops sictl_dev_ops = {
 	si_attach,		/* attach */
 	si_detach,		/* detach */
 	nodev,			/* no reset */
-	(struct cb_ops *)0,	/* driver operations */
+	NULL,	/* driver operations */
 	NULL,			/* bus operations */
 	si_power,		/* power */
 	si_quiesce,		/* devo_quiesce */

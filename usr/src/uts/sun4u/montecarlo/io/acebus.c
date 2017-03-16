@@ -136,7 +136,7 @@ static struct dev_ops acebus_ops = {
 	acebus_attach,
 	acebus_detach,
 	nodev,
-	(struct cb_ops *)0,
+	NULL,
 	&acebus_bus_ops,
 	NULL,
 	ddi_quiesce_not_supported,	/* devo_quiesce */

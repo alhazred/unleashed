@@ -287,7 +287,7 @@ static int nss_cfg_policy_init();
 static nss_config_t	nss_policy_params[] = {
 	{ "nss:policyfunc", NSS_CONFIG_ADD, &nss_policyf_lock,
 		(void *)&nss_policyf_ptrs, (size_t)sizeof (nss_policyf_t) },
-	{ NULL,	NSS_CONFIG_ADD,	(mutex_t *)NULL, NULL, (size_t)0 },
+	{ NULL,	NSS_CONFIG_ADD,	(mutex_t *)NULL, NULL, 0 },
 };
 
 /*

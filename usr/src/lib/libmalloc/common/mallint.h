@@ -170,9 +170,9 @@ struct holdblk {
 /* memory is gotten from sbrk in multiples of BLOCKSZ */
 #define	BLOCKSZ		2048	/* ??? Too Small, ?? pagesize? */
 
-#define	GROUND	(struct header *)0
-#define	LGROUND	(struct lblk *)0
-#define	HGROUND	(struct holdblk *)0	/* ground for the holding block queue */
+#define	GROUND	((struct header *)NULL)
+#define	LGROUND	((struct lblk *)NULL)
+#define	HGROUND	((struct holdblk *)NULL)	/* ground for the holding block queue */
 #ifndef	NULL
 #define	NULL	(char *)0
 #endif

@@ -189,7 +189,7 @@ static struct dev_ops sgen_dev_ops = {
 	sgen_detach,		/* detach */
 	nodev,			/* reset */
 	&sgen_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* bus operations */
+	NULL,	/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };

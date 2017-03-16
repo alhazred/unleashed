@@ -99,7 +99,7 @@ invite_remote()
 	 */
 
 	end_msgs();
-	setitimer(ITIMER_REAL, &itimer, (struct itimerval *)0);
+	setitimer(ITIMER_REAL, &itimer, NULL);
 	message(gettext("Waiting for your party to respond"));
 	signal(SIGALRM, re_invite);
 	(void) setjmp(invitebuf);

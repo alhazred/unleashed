@@ -518,7 +518,7 @@ rootnex_map(dev_info_t *dip, dev_info_t *rdip, ddi_map_req_t *mp,
 		int rnumber = mp->map_obj.rnumber;
 
 		rp = i_ddi_rnumber_to_regspec(rdip, rnumber);
-		if (rp == (struct regspec *)0)  {
+		if (rp == NULL)  {
 			DPRINTF(ROOTNEX_MAP_DEBUG, ("rootnex_map: Out of "
 			    "range rnumber <%d>, device <%s>", rnumber,
 			    ddi_get_name(rdip)));
@@ -752,7 +752,7 @@ rootnex_map_fault(dev_info_t *dip, dev_info_t *rdip,
 		}
 		hat_devload(hat, addr, MMU_PAGESIZE, pfn, prot | sdp->hat_attr,
 		    (lock ? HAT_LOAD_LOCK : HAT_LOAD));
-	} else if (seg == &kvseg && dp == (struct devpage *)0) {
+	} else if (seg == &kvseg && dp == NULL) {
 		hat_devload(kas.a_hat, addr, MMU_PAGESIZE, pfn, prot,
 		    HAT_LOAD_LOCK);
 	} else

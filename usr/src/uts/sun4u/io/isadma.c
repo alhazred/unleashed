@@ -127,7 +127,7 @@ static struct dev_ops isadma_ops = {
 	isadma_attach,
 	isadma_detach,
 	nodev,
-	(struct cb_ops *)0,
+	NULL,
 	&isadma_bus_ops,
 	NULL,
 	ddi_quiesce_not_needed,		/* quiesce */

@@ -710,7 +710,7 @@ mibget(int sd)
 	ctlbuf.buf = (char *)buf;
 	ctlbuf.len = tor->OPT_length + tor->OPT_offset;
 	flags = 0;
-	if (putmsg(sd, &ctlbuf, (struct strbuf *)0, flags) == -1) {
+	if (putmsg(sd, &ctlbuf, NULL, flags) == -1) {
 		perror("mibget: putmsg(ctl) failed");
 		goto error_exit;
 	}
@@ -726,7 +726,7 @@ mibget(int sd)
 	j = 1;
 	for (;;) {
 		flags = 0;
-		getcode = getmsg(sd, &ctlbuf, (struct strbuf *)0, &flags);
+		getcode = getmsg(sd, &ctlbuf, NULL, &flags);
 		if (getcode == -1) {
 			perror("mibget getmsg(ctl) failed");
 			if (Xflag) {
@@ -810,7 +810,7 @@ mibget(int sd)
 		databuf.buf    = (char *)last_item->valp;
 		databuf.len    = 0;
 		flags = 0;
-		getcode = getmsg(sd, (struct strbuf *)0, &databuf, &flags);
+		getcode = getmsg(sd, NULL, &databuf, &flags);
 		if (getcode == -1) {
 			perror("mibget getmsg(data) failed");
 			goto error_exit;

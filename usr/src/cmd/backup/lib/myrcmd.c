@@ -163,12 +163,10 @@ again:
 				err = MYRCMD_ENOSOCK;
 			}
 			/* restore original SIGPIPE handler */
-			(void) sigaction(SIGPIPE, &oldaction,
-			    (struct sigaction *)0);
+			(void) sigaction(SIGPIPE, &oldaction, NULL);
 
 			/* restore original signal mask */
-			(void) sigprocmask(SIG_SETMASK, &oldmask,
-			    (sigset_t *)0);
+			(void) sigprocmask(SIG_SETMASK, &oldmask, NULL);
 			return (err);
 		}
 		/* Can't fail, according to fcntl(2) */
@@ -207,7 +205,7 @@ again:
 		    "%s: %s\n", hp->h_name, strerror(saverr));
 		/* restore original SIGPIPE handler */
 		(void) sigaction(SIGPIPE, &oldaction,
-		    (struct sigaction *)0);
+		    NULL);
 
 		/* restore original signal mask */
 		(void) sigprocmask(SIG_SETMASK, &oldmask, (sigset_t *)0);
@@ -272,7 +270,7 @@ again:
 		goto bad;
 	}
 	/* restore original SIGPIPE handler */
-	(void) sigaction(SIGPIPE, &oldaction, (struct sigaction *)0);
+	(void) sigaction(SIGPIPE, &oldaction, NULL);
 
 	/* restore original signal mask */
 	(void) sigprocmask(SIG_SETMASK, &oldmask, (sigset_t *)0);
@@ -280,7 +278,7 @@ again:
 bad:
 	(void) close(s);
 	/* restore original SIGPIPE handler */
-	(void) sigaction(SIGPIPE, &oldaction, (struct sigaction *)0);
+	(void) sigaction(SIGPIPE, &oldaction, NULL);
 
 	/* restore original signal mask */
 	(void) sigprocmask(SIG_SETMASK, &oldmask, (sigset_t *)0);

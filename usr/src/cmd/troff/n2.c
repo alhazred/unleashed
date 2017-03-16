@@ -283,7 +283,7 @@ int	x;
 	if (!ejf)
 		tbreak();
 	nflush++;
-	eject((struct s *)0);
+	eject(NULL);
 	longjmp(sjbuf, 1);
 
 	return (0);
@@ -297,7 +297,7 @@ int	x;
 	error |= x;
 	if (numtab[NL].val) {
 		trap = 0;
-		eject((struct s *)0);
+		eject(NULL);
 		longjmp(sjbuf, 1);
 	}
 	if (nofeed) {

@@ -75,7 +75,7 @@ struct dev_ops nodev_ops = {
 	nodev,			/* detach	*/
 	nulldev,		/* reset	*/
 	&no_cb_ops,		/* character/block driver operations */
-	(struct bus_ops *)0,	/* bus operations for nexus drivers */
+	NULL,	/* bus operations for nexus drivers */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

@@ -130,7 +130,7 @@ static struct dev_ops sckm_ops = {
 	sckm_detach,		/* detach */
 	nodev,			/* reset */
 	&sckm_cb_ops,		/* driver operations */
-	(struct bus_ops *)0,	/* no bus operations */
+	NULL,	/* no bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };
@@ -415,7 +415,7 @@ sckm_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg,
 		rv = DDI_SUCCESS;
 		break;
 	case DDI_INFO_DEVT2INSTANCE:
-		*result = (void *)0;
+		*result = NULL;
 		rv = DDI_SUCCESS;
 		break;
 	default:

@@ -91,7 +91,7 @@ static struct dev_ops sram_ops = {
 	sram_detach,			/* detach */
 	nulldev,			/* reset */
 	&sram_cb_ops,			/* cb_ops */
-	(struct bus_ops *)0,		/* bus_ops */
+	NULL,		/* bus_ops */
 	nulldev,			/* power */
 	ddi_quiesce_not_needed,			/* quiesce */
 };

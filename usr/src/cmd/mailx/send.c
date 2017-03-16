@@ -514,7 +514,7 @@ mail1(struct header *hp, int use_to, char *orig_to)
 	 */
 
 #ifdef VMUNIX
-	while (wait3((int *)0, WNOHANG, (struct rusage *)0) > 0)
+	while (wait3(NULL, WNOHANG, NULL) > 0)
 		;
 #else
 #ifdef preSVr4

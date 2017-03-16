@@ -75,7 +75,7 @@ get_time_now(struct time_now *n)
     tv.tv_sec = now.tv_sec;
     tv.tv_usec = now.tv_nsec / (NANOSEC / MICROSEC);
 #else
-    if (gettimeofday(&tv, (struct timezone *)0) == -1)
+    if (gettimeofday(&tv, NULL) == -1)
 	return errno;
 #endif
 
