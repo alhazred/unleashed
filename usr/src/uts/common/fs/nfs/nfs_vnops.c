@@ -2178,7 +2178,7 @@ nfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 				if (vn_has_cached_data(vp)) {
 					ASSERT(vp->v_type != VCHR);
 					nfs_invalidate_pages(vp,
-					    (uoff_t)0, cr);
+					    0, cr);
 				}
 			}
 

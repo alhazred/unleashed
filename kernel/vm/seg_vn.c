@@ -502,7 +502,7 @@ segvn_setvnode_mpss(vnode_t *vp)
 	if (vp->v_mpssdata == NULL) {
 		if (vn_vmpss_usepageio(vp)) {
 			err = fop_pageio(vp, (page_t *)NULL,
-			    (uoff_t)0, 0, 0, CRED(), NULL);
+			    0, 0, 0, CRED(), NULL);
 		} else {
 			err = ENOSYS;
 		}

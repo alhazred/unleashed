@@ -413,7 +413,7 @@ loop:
 		/*
 		 * Clear any garbage left behind.
 		 */
-		ip->i_size = (uoff_t)0;
+		ip->i_size = 0;
 		ip->i_blocks = 0;
 		for (i = 0; i < NDADDR; i++)
 			ip->i_db[i] = 0;

@@ -1181,7 +1181,7 @@ swapadd(struct vnode *vp, ulong_t lowblk, ulong_t nblks, char *swapname)
 		goto out;
 
 	/* Fail if fs does not support fop_pageio */
-	error = fop_pageio(cvp, (page_t *)NULL, (uoff_t)0, 0, 0, CRED(),
+	error = fop_pageio(cvp, (page_t *)NULL, 0, 0, 0, CRED(),
 	    NULL);
 
 	if (error == ENOSYS)

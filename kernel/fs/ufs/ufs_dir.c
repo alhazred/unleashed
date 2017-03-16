@@ -2324,7 +2324,7 @@ ufs_dirmakedirect(
 	/*
 	 * Allocate space for the directory we're creating.
 	 */
-	err = BMAPALLOC(ip, (uoff_t)0, DIRBLKSIZ, cr);
+	err = BMAPALLOC(ip, 0, DIRBLKSIZ, cr);
 	if (err)
 		return (err);
 	if (DIRBLKSIZ > dp->i_fs->fs_fsize) {

@@ -1175,7 +1175,7 @@ shmem_lock(kshmid_t *sp, struct anon_map *amp)
 	as = as_alloc();
 	/* Initialize the create arguments and map the segment */
 	crargs = *(struct segvn_crargs *)zfod_argsp;	/* structure copy */
-	crargs.offset = (uoff_t)0;
+	crargs.offset = 0;
 	crargs.type = MAP_SHARED;
 	crargs.amp = amp;
 	crargs.prot = PROT_ALL;

@@ -1455,7 +1455,7 @@ fifo_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 		}
 		vap->va_nblocks = (fsblkcnt64_t)btod(vap->va_size);
 	} else {
-		vap->va_size = (uoff_t)0;
+		vap->va_size = 0;
 		vap->va_nblocks = (fsblkcnt64_t)0;
 	}
 	mutex_exit(&fn_lock->flk_lock);

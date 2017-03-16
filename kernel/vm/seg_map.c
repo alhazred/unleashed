@@ -1059,7 +1059,7 @@ segmap_hashout(struct smap *smp)
 	mutex_exit(mtx);
 
 	smp->sm_vp = NULL;
-	smp->sm_off = (uoff_t)0;
+	smp->sm_off = 0;
 
 }
 

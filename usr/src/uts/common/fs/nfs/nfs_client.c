@@ -229,7 +229,7 @@ nfs_purge_caches(vnode_t *vp, int purge_dnlc, cred_t *cr)
 	 * Flush the page cache.
 	 */
 	if (vn_has_cached_data(vp)) {
-		error = fop_putpage(vp, (uoff_t)0, 0, B_INVAL, cr, NULL);
+		error = fop_putpage(vp, 0, 0, B_INVAL, cr, NULL);
 		if (error && (error == ENOSPC || error == EDQUOT)) {
 			mutex_enter(&rp->r_statelock);
 			if (!rp->r_error)
@@ -2432,14 +2432,14 @@ nfs_putpages(vnode_t *vp, uoff_t off, size_t len, int flags, cred_t *cr)
 		 * If there are no full file async write operations
 		 * pending and RDIRTY bit is set, clear it.
 		 */
-		if (off == (uoff_t)0 &&
+		if (off == 0 &&
 		    !(flags & B_ASYNC) &&
 		    (rp->r_flags & RDIRTY)) {
 			mutex_enter(&rp->r_statelock);
 			rdirty = (rp->r_flags & RDIRTY);
 			rp->r_flags &= ~RDIRTY;
 			mutex_exit(&rp->r_statelock);
-		} else if (flags & B_ASYNC && off == (uoff_t)0) {
+		} else if (flags & B_ASYNC && off == 0) {
 			mutex_enter(&rp->r_statelock);
 			if (rp->r_flags & RDIRTY && rp->r_awcount == 0) {
 				rdirty = (rp->r_flags & RDIRTY);
@@ -2526,7 +2526,7 @@ nfs_invalidate_pages(vnode_t *vp, uoff_t off, cred_t *cr)
 	while (rp->r_flags & RTRUNCATE)
 		cv_wait(&rp->r_cv, &rp->r_statelock);
 	rp->r_flags |= RTRUNCATE;
-	if (off == (uoff_t)0) {
+	if (off == 0) {
 		rp->r_flags &= ~RDIRTY;
 		if (!(rp->r_flags & RSTALE))
 			rp->r_error = 0;

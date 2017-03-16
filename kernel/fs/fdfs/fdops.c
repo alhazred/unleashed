@@ -175,7 +175,7 @@ fdgetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 		vap->va_nodeid = (ino64_t)FDROOTINO;
 	} else {
 		vap->va_nlink = 1;
-		vap->va_size = (uoff_t)0;
+		vap->va_size = 0;
 		vap->va_mode = 0666;
 		vap->va_nodeid = (ino64_t)fdtoi(getminor(vp->v_rdev));
 	}

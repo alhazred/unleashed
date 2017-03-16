@@ -237,7 +237,7 @@ nfs4_purge_stale_fh(int errno, vnode_t *vp, cred_t *cr)
 		rp->r_error = errno;
 	mutex_exit(&rp->r_statelock);
 	if (nfs4_has_pages(vp))
-		nfs4_invalidate_pages(vp, (uoff_t)0, cr);
+		nfs4_invalidate_pages(vp, 0, cr);
 	nfs4_purge_caches(vp, NFS4_PURGE_DNLC, cr, FALSE);
 }
 
@@ -346,7 +346,7 @@ nfs4_flush_pages(vnode_t *vp, cred_t *cr)
 	int error;
 	rnode4_t *rp = VTOR4(vp);
 
-	error = fop_putpage(vp, (uoff_t)0, 0, B_INVAL, cr, NULL);
+	error = fop_putpage(vp, 0, 0, B_INVAL, cr, NULL);
 	if (error == ENOSPC || error == EDQUOT) {
 		mutex_enter(&rp->r_statelock);
 		if (!rp->r_error)
@@ -2468,14 +2468,14 @@ nfs4_putpages(vnode_t *vp, uoff_t off, size_t len, int flags, cred_t *cr)
 		 * If there are no full file async write operations
 		 * pending and RDIRTY bit is set, clear it.
 		 */
-		if (off == (uoff_t)0 &&
+		if (off == 0 &&
 		    !(flags & B_ASYNC) &&
 		    (rp->r_flags & R4DIRTY)) {
 			mutex_enter(&rp->r_statelock);
 			rdirty = (rp->r_flags & R4DIRTY);
 			rp->r_flags &= ~R4DIRTY;
 			mutex_exit(&rp->r_statelock);
-		} else if (flags & B_ASYNC && off == (uoff_t)0) {
+		} else if (flags & B_ASYNC && off == 0) {
 			mutex_enter(&rp->r_statelock);
 			if (rp->r_flags & R4DIRTY && rp->r_awcount == 0) {
 				rdirty = (rp->r_flags & R4DIRTY);
@@ -2565,7 +2565,7 @@ nfs4_invalidate_pages(vnode_t *vp, uoff_t off, cred_t *cr)
 	while (rp->r_flags & R4TRUNCATE)
 		cv_wait(&rp->r_cv, &rp->r_statelock);
 	rp->r_flags |= R4TRUNCATE;
-	if (off == (uoff_t)0) {
+	if (off == 0) {
 		rp->r_flags &= ~R4DIRTY;
 		if (!(rp->r_flags & R4STALE))
 			rp->r_error = 0;

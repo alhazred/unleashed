@@ -930,7 +930,7 @@ pcfs_inactive(
 	if (vp->v_vfsp->vfs_flag & VFS_UNMOUNTED) {
 		pcp = VTOPC(vp);
 		if (vn_has_cached_data(vp)) {
-			(void) pvn_vplist_dirty(vp, (uoff_t)0,
+			(void) pvn_vplist_dirty(vp, 0,
 			    pcfs_putapage, B_INVAL, (struct cred *)NULL);
 		}
 		remque(pcp);
@@ -960,7 +960,7 @@ pcfs_inactive(
 	pcp = VTOPC(vp);
 	if (pcp == NULL || pcp->pc_flags & PC_INVAL) {
 		if (vn_has_cached_data(vp))
-			(void) pvn_vplist_dirty(vp, (uoff_t)0,
+			(void) pvn_vplist_dirty(vp, 0,
 			    pcfs_putapage, B_INVAL | B_TRUNC,
 			    (struct cred *)NULL);
 	}

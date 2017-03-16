@@ -3092,7 +3092,7 @@ again:
 					rw_enter(&ufsvfsp->vfs_dqrwlock,
 					    RW_READER);
 					rw_enter(&ip->i_contents, RW_WRITER);
-					(void) ufs_itrunc(ip, (uoff_t)0, 0,
+					(void) ufs_itrunc(ip, 0, 0,
 					    cr);
 					rw_exit(&ip->i_rwlock);
 				}
@@ -3169,7 +3169,7 @@ unlock:
 			VN_RELE(ITOV(ip));
 			goto again;
 		}
-		(void) TRANS_ITRUNC(ip, (uoff_t)0, 0, cr);
+		(void) TRANS_ITRUNC(ip, 0, 0, cr);
 		rw_exit(&ip->i_rwlock);
 	}
 

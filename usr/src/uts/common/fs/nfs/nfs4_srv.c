@@ -8212,7 +8212,7 @@ rfs4_release_share_lock_state(rfs4_state_t *sp, cred_t *cr,
 				flk.l_pid = 0;
 				(void) fop_frlock(sp->rs_finfo->rf_vp, F_SETLK,
 				    &flk, F_REMOTELOCK | FREAD | FWRITE,
-				    (uoff_t)0, NULL, CRED(), NULL);
+				    0, NULL, CRED(), NULL);
 			}
 
 			sp->rs_owner->ro_client->rc_unlksys_completed = TRUE;
@@ -8368,7 +8368,7 @@ retry:
 	for (i = 0; i < rfs4_maxlock_tries; i++) {
 		LOCK_PRINT(rfs4_debug, "setlock", cmd, flock);
 		error = fop_frlock(vp, cmd,
-		    flock, flag, (uoff_t)0, NULL, cred, NULL);
+		    flock, flag, 0, NULL, cred, NULL);
 
 		if (error != EAGAIN && error != EACCES)
 			break;
@@ -9254,7 +9254,7 @@ retry:
 		resp->status = NFS4ERR_INVAL;
 		goto err;
 	}
-	error = fop_frlock(cs->vp, F_GETLK, &flk, flag, (uoff_t)0,
+	error = fop_frlock(cs->vp, F_GETLK, &flk, flag, 0,
 	    NULL, cs->cr, NULL);
 
 	/*

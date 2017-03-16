@@ -321,7 +321,7 @@ hs_getfree(struct hsfs *fsp)
 				/*
 				 * pvn_vplist_dirty will abort all old pages
 				 */
-				(void) pvn_vplist_dirty(vp, (uoff_t)0,
+				(void) pvn_vplist_dirty(vp, 0,
 				    hsfs_putapage, B_INVAL,
 				    (struct cred *)NULL);
 			*tp = hp->hs_hash;
@@ -462,7 +462,7 @@ hs_synchash(struct vfs *vfsp)
 				continue;
 			}
 			if (vn_has_cached_data(vp))
-				(void) pvn_vplist_dirty(vp, (uoff_t)0,
+				(void) pvn_vplist_dirty(vp, 0,
 				    hsfs_putapage, B_INVAL,
 				    (struct cred *)NULL);
 		}
@@ -686,7 +686,7 @@ hs_freenode(vnode_t *vp, struct hsfs *fsp, int nopage)
 		}
 		if (vn_has_cached_data(vp)) {
 			/* clean all old pages */
-			(void) pvn_vplist_dirty(vp, (uoff_t)0,
+			(void) pvn_vplist_dirty(vp, 0,
 			    hsfs_putapage, B_INVAL, (struct cred *)NULL);
 			/* XXX - can we remove pages by fiat like this??? */
 			vp->v_pages = NULL;

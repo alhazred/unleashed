@@ -3693,7 +3693,7 @@ nfs4_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 					rp->r_gcount++;
 					mutex_exit(&rp->r_statelock);
 					error =
-					    nfs4_putpage(vp, (uoff_t)0,
+					    nfs4_putpage(vp, 0,
 					    0, 0, cr, NULL);
 					mutex_enter(&rp->r_statelock);
 					if (error && (error == ENOSPC ||
@@ -4837,7 +4837,7 @@ redo:
 	if (nfs4_has_pages(vp) &&
 	    ((rp->r_flags & R4DIRTY) || rp->r_count > 0)) {
 		ASSERT(vp->v_type != VCHR);
-		e.error = nfs4_putpage(vp, (uoff_t)0, 0, 0, cr, NULL);
+		e.error = nfs4_putpage(vp, 0, 0, 0, cr, NULL);
 		if (e.error) {
 			mutex_enter(&rp->r_statelock);
 			if (!rp->r_error)
@@ -7345,7 +7345,7 @@ nfs4_remove(vnode_t *dvp, char *nm, cred_t *cr, caller_context_t *ct, int flags)
 	 */
 	if (nfs4_has_pages(vp) &&
 	    ((rp->r_flags & R4DIRTY) || rp->r_count > 0)) {
-		e.error = nfs4_putpage(vp, (uoff_t)0, 0, 0, cr, ct);
+		e.error = nfs4_putpage(vp, 0, 0, 0, cr, ct);
 		if (e.error && (e.error == ENOSPC || e.error == EDQUOT)) {
 			mutex_enter(&rp->r_statelock);
 			if (!rp->r_error)
@@ -10430,7 +10430,7 @@ nfs4_sync_putapage(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
 		}
 		pvn_write_done(pp, flags);
 		if (freemem < desfree)
-			(void) nfs4_commit_vp(vp, (uoff_t)0, 0, cr,
+			(void) nfs4_commit_vp(vp, 0, 0, cr,
 			    NFS4_WRITE_NOWAIT);
 	}
 

@@ -247,7 +247,7 @@ retry:
 		/*
 		 * pvn_vplist_dirty will abort all old pages
 		 */
-		(void) pvn_vplist_dirty(vp, (uoff_t)0,
+		(void) pvn_vplist_dirty(vp, 0,
 		    pcfs_putapage, B_INVAL, (struct cred *)NULL);
 	}
 
@@ -713,7 +713,7 @@ pc_diskchanged(struct pcfs *fsp)
 				VN_RELE(vp);
 				if (!(pcp->pc_flags & PC_EXTERNAL)) {
 					(void) pvn_vplist_dirty(vp,
-					    (uoff_t)0, pcfs_putapage,
+					    0, pcfs_putapage,
 					    B_INVAL | B_TRUNC,
 					    (struct cred *)NULL);
 					vn_free(vp);
@@ -745,7 +745,7 @@ pc_diskchanged(struct pcfs *fsp)
 				VN_RELE(vp);
 				if (!(pcp->pc_flags & PC_EXTERNAL)) {
 					(void) pvn_vplist_dirty(vp,
-					    (uoff_t)0, pcfs_putapage,
+					    0, pcfs_putapage,
 					    B_INVAL | B_TRUNC,
 					    (struct cred *)NULL);
 					vn_free(vp);

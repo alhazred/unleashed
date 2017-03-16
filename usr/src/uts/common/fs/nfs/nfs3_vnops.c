@@ -5202,7 +5202,7 @@ nfs3_sync_putapage(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
 		}
 		pvn_write_done(pp, flags);
 		if (freemem < desfree)
-			(void) nfs3_commit_vp(vp, (uoff_t)0, 0, cr);
+			(void) nfs3_commit_vp(vp, 0, 0, cr);
 	}
 
 	return (error);

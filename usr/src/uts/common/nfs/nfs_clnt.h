@@ -557,7 +557,7 @@ struct mntinfo_kstat {
 			rp->r_error = (error);			\
 		mutex_exit(&rp->r_statelock);			\
 		if (vn_has_cached_data(vp))			\
-			nfs_invalidate_pages((vp), (uoff_t)0, (cr)); \
+			nfs_invalidate_pages((vp), 0, (cr)); \
 		nfs_purge_caches((vp), NFS_PURGE_DNLC, (cr));	\
 	}
 

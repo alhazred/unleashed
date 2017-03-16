@@ -2765,7 +2765,7 @@ segspt_shmgetoffset(struct seg *seg, caddr_t addr)
 
 	/* Offset does not matter in ISM memory */
 
-	return ((uoff_t)0);
+	return (0);
 }
 
 /* ARGSUSED */

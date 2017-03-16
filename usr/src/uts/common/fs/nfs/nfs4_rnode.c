@@ -217,7 +217,7 @@ r4flushpages(rnode4_t *rp, cred_t *cr)
 	if (nfs4_has_pages(vp)) {
 		ASSERT(vp->v_type != VCHR);
 		if ((rp->r_flags & R4DIRTY) && !rp->r_error) {
-			error = fop_putpage(vp, (uoff_t)0, 0, 0, cr, NULL);
+			error = fop_putpage(vp, 0, 0, 0, cr, NULL);
 			if (error && (error == ENOSPC || error == EDQUOT)) {
 				mutex_enter(&rp->r_statelock);
 				if (!rp->r_error)
@@ -225,7 +225,7 @@ r4flushpages(rnode4_t *rp, cred_t *cr)
 				mutex_exit(&rp->r_statelock);
 			}
 		}
-		nfs4_invalidate_pages(vp, (uoff_t)0, cr);
+		nfs4_invalidate_pages(vp, 0, cr);
 	}
 }
 
@@ -1340,7 +1340,7 @@ toomany:
 	 */
 	while (cnt-- > 0) {
 		vp = vplist[cnt];
-		(void) fop_putpage(vp, (uoff_t)0, 0, B_ASYNC, cr, NULL);
+		(void) fop_putpage(vp, 0, 0, B_ASYNC, cr, NULL);
 		VN_RELE(vp);
 	}
 

@@ -422,7 +422,7 @@ segnf_getoffset(struct seg *seg, caddr_t addr)
 {
 	ASSERT(seg->s_as && AS_LOCK_HELD(seg->s_as));
 
-	return ((uoff_t)0);
+	return (0);
 }
 
 /* ARGSUSED */
