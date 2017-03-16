@@ -55,7 +55,7 @@ add_recip(reciplist *plist, char *name, int checkdups)
 	static char	pn[] = "add_recip";
 	recip		*r = &plist->recip_list;
 
-	if ((name == (char *)NULL) || (*name == '\0')) {
+	if ((name == NULL) || (*name == '\0')) {
 		Tout(pn, "translation to NULL name ignored\n");
 		return(0);
 	}
@@ -70,7 +70,7 @@ add_recip(reciplist *plist, char *name, int checkdups)
 	}
 
 	if (checkdups == TRUE) {
-	    while (r->next != (struct recip *)NULL) {
+	    while (r->next != NULL) {
 		r = r->next;
 		if (strcmp(r->name, name) == 0) {
 			Tout(pn, "duplicate recipient '%s' not added to list\n",
@@ -80,18 +80,18 @@ add_recip(reciplist *plist, char *name, int checkdups)
 	    }
 	}
 
-	if ((p = malloc (sizeof(struct recip))) == (char *)NULL) {
+	if ((p = malloc (sizeof(struct recip))) == NULL) {
 		errmsg(E_MEM,"first malloc failed in add_recip()");
 		done(1);
 	}
 	plist->last_recip->next = (struct recip *)p;
 	r = plist->last_recip = plist->last_recip->next;
-	if ((r->name = malloc (strlen(name)+1)) == (char *)NULL) {
+	if ((r->name = malloc (strlen(name)+1)) == NULL) {
 		errmsg(E_MEM,"second malloc failed in add_recip()");
 		done(1);
 	}
 	strcpy (r->name, name);
-	r->next = (struct recip *)NULL;
+	r->next = NULL;
 	Tout(pn, "'%s' added to recipient list\n", name);
 
 	return(1);

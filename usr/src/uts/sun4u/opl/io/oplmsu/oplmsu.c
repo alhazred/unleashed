@@ -140,7 +140,7 @@ static struct dev_ops oplmsu_ops = {
 	(oplmsu_detach),		/* devo_detach */
 	(nodev),			/* devo_reset */
 	&(cb_oplmsu_ops),		/* devo_cb_ops */
-	(struct bus_ops *)NULL,		/* devo_bus_ops */
+	NULL,		/* devo_bus_ops */
 	NULL,				/* devo_power */
 	ddi_quiesce_not_needed,			/* dev_quiesce */
 };
@@ -991,7 +991,7 @@ oplmsu_lrsrv(queue_t *lrq)
 				rw_enter(&oplmsu_uinst->lock, RW_READER);
 				if ((abort_enable != KIOCABORTALTERNATE) &&
 				    (RD(oplmsu_uinst->lower_queue) == lrq)) {
-					abort_sequence_enter((char *)NULL);
+					abort_sequence_enter(NULL);
 				}
 				rw_exit(&oplmsu_uinst->lock);
 				freemsg(mp);

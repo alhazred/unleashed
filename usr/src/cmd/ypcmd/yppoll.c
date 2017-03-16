@@ -244,8 +244,8 @@ getmapparms()
 	struct ypresp_order oresp;
 	struct ypreq_nokey req;
 	struct ypresp_master mresp;
-	struct ypresp_master *mresults = (struct ypresp_master *)NULL;
-	struct ypresp_order *oresults = (struct ypresp_order *)NULL;
+	struct ypresp_master *mresults = NULL;
+	struct ypresp_order *oresults = NULL;
 
 	struct timeval timeout;
 	enum clnt_stat s;

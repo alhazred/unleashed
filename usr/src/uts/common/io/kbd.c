@@ -1585,7 +1585,7 @@ kbdinput(register struct kbddata *kbdd, register unsigned key)
 			if (key == k->k_curkeyboard->k_abort2 &&
 			    rconsvp == wsconsvp) {
 				DELAY(100000);
-				abort_sequence_enter((char *)NULL);
+				abort_sequence_enter(NULL);
 				k->k_state = NORMAL;
 				kbduse(kbdd, IDLEKEY);	/* fake */
 				return;
@@ -1604,7 +1604,7 @@ kbdinput(register struct kbddata *kbdd, register unsigned key)
 			if (key == k->k_curkeyboard->k_newabort2 &&
 			    rconsvp == wsconsvp) {
 				DELAY(100000);
-				abort_sequence_enter((char *)NULL);
+				abort_sequence_enter(NULL);
 				k->k_state = NORMAL;
 				kbdd->shiftkey |= RELEASED;
 				kbduse(kbdd, kbdd->shiftkey);

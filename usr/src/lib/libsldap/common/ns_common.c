@@ -682,7 +682,7 @@ __s_api_get_local_interfaces()
 	int			i, n = 0;
 
 	if ((fd = open(UDP, O_RDONLY)) < 0)
-		return ((struct ifinfo *)NULL);
+		return (NULL);
 
 	if (ioctl(fd, SIOCGIFNUM, (char *)&numifs) < 0) {
 		numifs = MAXIFS;
@@ -691,7 +691,7 @@ __s_api_get_local_interfaces()
 	buf = malloc(numifs * sizeof (struct ifreq));
 	if (buf == NULL) {
 		(void) close(fd);
-		return ((struct ifinfo *)NULL);
+		return (NULL);
 	}
 	ifc.ifc_len = numifs * (int)sizeof (struct ifreq);
 	ifc.ifc_buf = buf;
@@ -699,7 +699,7 @@ __s_api_get_local_interfaces()
 		(void) close(fd);
 		free(buf);
 		buf = NULL;
-		return ((struct ifinfo *)NULL);
+		return (NULL);
 	}
 	ifr = (struct ifreq *)buf;
 	numifs = ifc.ifc_len/(int)sizeof (struct ifreq);
@@ -709,7 +709,7 @@ __s_api_get_local_interfaces()
 		(void) close(fd);
 		free(buf);
 		buf = NULL;
-		return ((struct ifinfo *)NULL);
+		return (NULL);
 	}
 
 	for (i = 0, n = numifs; n > 0; n--, ifr++) {

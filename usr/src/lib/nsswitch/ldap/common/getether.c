@@ -44,7 +44,7 @@
 static const char *ethers_attrs[] = {
 	_E_HOSTNAME,
 	_E_MACADDRESS,
-	(char *)NULL
+	NULL
 };
 
 /*

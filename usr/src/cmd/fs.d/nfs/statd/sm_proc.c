@@ -983,7 +983,7 @@ get_system_id(char *hostname)
 		service.h_host = hostname;
 	service.h_serv = NULL;
 	hp = setnetconfig();
-	if (hp == (void *) NULL) {
+	if (hp == NULL) {
 		return (NULL);
 	}
 	while ((ncp = getnetconfig(hp)) != NULL) {

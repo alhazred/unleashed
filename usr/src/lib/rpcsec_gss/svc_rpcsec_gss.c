@@ -513,7 +513,7 @@ __rpc_gss_getcred(req, rcred, ucred, cookie)
 						client_data->u_cred.gidlen =
 							(short)len;
 						gettimeofday(&now,
-						(struct timezone *)NULL);
+						NULL);
 						client_data->time_secs_set =
 						now.tv_sec;
 						*ucred = &client_data->u_cred;
@@ -526,7 +526,7 @@ __rpc_gss_getcred(req, rcred, ucred, cookie)
 			 * gid's already set;
 			 * check if they have expired.
 			 */
-			gettimeofday(&now, (struct timezone *)NULL);
+			gettimeofday(&now, NULL);
 			if ((now.tv_sec - client_data->time_secs_set)
 				> gid_timeout) {
 				/* Refresh gid's */
@@ -539,7 +539,7 @@ __rpc_gss_getcred(req, rcred, ucred, cookie)
 					client_data->u_cred.gidlen =
 						(short)len;
 					gettimeofday(&now,
-					(struct timezone *)NULL);
+					NULL);
 					client_data->time_secs_set = now.tv_sec;
 					*ucred = &client_data->u_cred;
 				} else {

@@ -3045,7 +3045,7 @@ door_copy(struct as *as, caddr_t src, caddr_t dest, uint_t len)
 	 * Map destination page into kernel address
 	 */
 	if (kpm_enable)
-		kaddr = (caddr_t)hat_kpm_mapin(pp, (struct kpme *)NULL);
+		kaddr = (caddr_t)hat_kpm_mapin(pp, NULL);
 	else
 		kaddr = (caddr_t)ppmapin(pp, PROT_READ | PROT_WRITE,
 		    (caddr_t)-1);
@@ -3059,7 +3059,7 @@ door_copy(struct as *as, caddr_t src, caddr_t dest, uint_t len)
 	 * Unmap destination page from kernel
 	 */
 	if (kpm_enable)
-		hat_kpm_mapout(pp, (struct kpme *)NULL, kaddr);
+		hat_kpm_mapout(pp, NULL, kaddr);
 	else
 		ppmapout(kaddr);
 	/*

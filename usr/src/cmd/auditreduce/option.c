@@ -327,7 +327,7 @@ proc_object(char *optarg)
 
 	switch (obj_flag) {
 	case OBJ_PATH:
-		if ((error_str = re_comp2(obj_val)) != (char *)NULL) {
+		if ((error_str = re_comp2(obj_val)) != NULL) {
 			return (-1);
 		}
 		return (0);
@@ -451,8 +451,7 @@ proc_type(char *optstr)
 		if ((aep = getauevnam(optstr)) != NULL)
 			m_type = aep->ae_number;
 	} else {
-		if ((aep = getauevnum((au_event_t)atoi(optstr))) !=
-		    (struct au_event_ent *)NULL)
+		if ((aep = getauevnum((au_event_t)atoi(optstr))) != NULL)
 			m_type = aep->ae_number;
 	}
 	if ((m_type == 0)) {
@@ -717,7 +716,7 @@ process_fileopt(int argc, char **argv, int optindex)
 		fcb->fcb_next = NULL;
 		fcb->fcb_start = 0;
 		fcb->fcb_end = MAXLONG;		/* forever */
-		if ((pcb = get_next_pcb((char *)NULL)) == (audit_pcb_t *)NULL)
+		if ((pcb = get_next_pcb(NULL)) == NULL)
 			return (-1);
 		pcb->pcb_suffix = fcb->fcb_file;
 		pcb->pcb_dfirst = pcb->pcb_first = fcb;	/* one-item list */

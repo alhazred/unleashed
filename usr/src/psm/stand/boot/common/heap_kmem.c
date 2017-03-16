@@ -864,7 +864,7 @@ prtree(Freehdr p, char *cp)
 	}
 	if (p != NIL) {
 		depth++;
-		prtree(p->left, (char *)NULL);
+		prtree(p->left, NULL);
 		depth--;
 
 		for (n = 0; n < depth; n++) {
@@ -875,7 +875,7 @@ prtree(Freehdr p, char *cp)
 			p, p->left, p->right, p->block, p->size);
 
 		depth++;
-		prtree(p->right, (char *)NULL);
+		prtree(p->right, NULL);
 		depth--;
 	}
 }

@@ -2148,7 +2148,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		if (cp != cp2)
 			len++;
 		if (len == 0) {
-			conf.ns_pi = (int *)NULL;
+			conf.ns_pi = NULL;
 			conf.ns_acnt = 0;
 			break;
 		}
@@ -2218,7 +2218,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 		if (cp != cp2)
 			len++;
 		if (len == 0) {
-			conf.ns_pi = (int *)NULL;
+			conf.ns_pi = NULL;
 			conf.ns_acnt = 0;
 			break;
 		}

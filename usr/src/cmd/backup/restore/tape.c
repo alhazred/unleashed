@@ -368,7 +368,7 @@ setup(void)
 	/* LINTED maxino size-checked above */
 	mapsize = (size_t)d_howmany(maxino, NBBY);
 	beginmap = map = calloc((size_t)1, mapsize);
-	if (map == (char *)NULL) {
+	if (map == NULL) {
 		(void) fprintf(stderr,
 		    gettext("no memory for file dump list\n"));
 		done(1);
@@ -1977,7 +1977,7 @@ findinode(struct s_spcl *header)
 
 	curfile.name = gettext("<name unknown>");
 	curfile.action = UNKNOWN;
-	curfile.dip = (struct dinode *)NULL;
+	curfile.dip = NULL;
 	curfile.ino = 0;
 	curfile.ts = 0;
 	if (ishead(header) == FAIL) {

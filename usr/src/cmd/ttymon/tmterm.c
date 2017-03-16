@@ -205,7 +205,7 @@ push_linedisc(
 
 	while(ioctl(fd, I_POP, 0) >= 0)  /* pop everything */ 
 		;
-	for (p=(char *)strtok(p,","); p!=(char *)NULL; 
+	for (p=(char *)strtok(p,","); p!=NULL; 
 		p=(char *)strtok(NULL,",")) {
 		for (tp = p + strlen(p) - 1; tp >= p && isspace(*tp); --tp)
 			*tp = '\0';
@@ -278,10 +278,10 @@ struct	pmtab	*pmptr;
 	else {
 		if (pmptr->p_ttyflags & R_FLAG)
 			ret = set_termio(fd,speedef->g_iflags,
-				(char *)NULL, TRUE, (long)RAW);
+				NULL, TRUE, (long)RAW);
 		else 
 			ret = set_termio(fd,speedef->g_iflags,
-				(char *)NULL, TRUE, (long)CANON);
+				NULL, TRUE, (long)CANON);
 		if (ret == -1) {
 			log("initial termio on (%s) failed", pmptr->p_device);
 			(void)close(fd);

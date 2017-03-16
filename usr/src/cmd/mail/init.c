@@ -246,7 +246,7 @@ char		m_sendto[1024];
 jmp_buf		sjbuf;
 int		surg_rc = 0;	/* exit code of surrogate command */
 int		surr_len = 0;
-char		*SURRcmdstr = (char *)NULL; /* save in case of FAILURE */
+char		*SURRcmdstr = NULL; /* save in case of FAILURE */
 FILE		*SURRerrfile;	/* stderr from surrogate in case of FAILURE */
 char		*thissys;	/* Holds name of the system we are on */
 FILE		*tmpf;		/* file pointer for temporary files */

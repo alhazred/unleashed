@@ -4246,7 +4246,7 @@ g_get_port_multipath(char *port_wwn_s, struct dlist **dlh, int verbose)
 
 
 	/* Initialize list structures. */
-	dl = *dlh  = dlt = (struct dlist *)NULL;
+	dl = *dlh  = dlt = NULL;
 	wwn_list = wwn_list_ptr = NULL;
 
 	H_DPRINTF("  g_get_port_multipath: Looking for multiple paths for"
@@ -4365,7 +4365,7 @@ get_multipath_disk(char *devpath, struct dlist **multipath_list,
 		return (err);
 	}
 
-	*multipath_list = (struct dlist *)NULL;
+	*multipath_list = NULL;
 	if ((err = devid_get_all(devid, root, SSD_DRVR_NAME, &mplisth)) != 0) {
 		di_fini(root);
 		return (err);
@@ -4445,7 +4445,7 @@ get_multipath(char *devpath, struct dlist **multipath_list,
 		(void) strcpy(path, devpath);
 	}
 
-	*multipath_list = dl = dlt = (struct dlist *)NULL;
+	*multipath_list = dl = dlt = NULL;
 
 
 	if (wwn_list == NULL) {
@@ -5448,7 +5448,7 @@ devid_get_all(ddi_devid_t devid, di_node_t root, char *drvr_name,
 		return (EINVAL);
 	}
 
-	*mplistp = mpl = mpln = (struct mplist_struct *)NULL;
+	*mplistp = mpl = mpln = NULL;
 
 	/* point to first node which matches portdrvr */
 	node = di_drv_first_node(drvr_name, root);

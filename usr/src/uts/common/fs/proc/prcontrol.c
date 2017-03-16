@@ -1561,7 +1561,7 @@ pr_nice(proc_t *p, int nice, cred_t *cr)
 	t = p->p_tlist;
 	do {
 		ASSERT(!(t->t_proc_flag & TP_LWPEXIT));
-		err = CL_DONICE(t, cr, nice, (int *)NULL);
+		err = CL_DONICE(t, cr, nice, NULL);
 		schedctl_set_cidpri(t);
 		if (error == 0)
 			error = err;

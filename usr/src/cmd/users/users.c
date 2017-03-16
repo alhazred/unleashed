@@ -40,7 +40,7 @@ main(int argc, char **argv)
 			exit(1);
 		}
 
-	names = namp = (char **)realloc((void *)NULL, BUFSIZ * sizeof (char *));
+	names = namp = (char **)realloc(NULL, BUFSIZ * sizeof (char *));
 
 	setutxent();
 

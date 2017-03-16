@@ -455,7 +455,7 @@ main(int argc, char *argv[])
 	sv.sv_handler = timer;
 	sv.sv_mask = 0;
 	sv.sv_flags = SV_INTERRUPT;
-	(void) sigvec(SIGALRM, &sv, (struct sigvec *)NULL);
+	(void) sigvec(SIGALRM, &sv, NULL);
 #endif
 	timer();	/* start things going */
 

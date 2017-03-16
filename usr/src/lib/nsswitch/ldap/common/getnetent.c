@@ -45,7 +45,7 @@
 static const char *networks_attrs[] = {
 	_N_NAME,
 	_N_NETWORK,
-	(char *)NULL
+	NULL
 };
 
 /*

@@ -555,7 +555,7 @@ traverse_post(struct fs_traverse *ftp)
 			efh = tsp->ts_fh;
 			est = tsp->ts_st;
 			free(tsp);
-			if (cstack_pop(sp, (void **)&tsp, (int *)NULL))
+			if (cstack_pop(sp, (void **)&tsp, NULL))
 				break;
 
 			assert(tsp != NULL);
@@ -611,7 +611,7 @@ traverse_post(struct fs_traverse *ftp)
 	/*
 	 * Pop and free all the remaining entries on the stack.
 	 */
-	while (!cstack_pop(sp, (void **)&tsp, (int *)NULL)) {
+	while (!cstack_pop(sp, (void **)&tsp, NULL)) {
 		traverse_stats.fss_stack_residue++;
 
 		free(tsp->ts_fh.fh_fpath);
@@ -1008,7 +1008,7 @@ skip_dir:
 			rv = 0;
 
 		if (rv == 0) {
-			if (cstack_pop(sp, (void **)&tsp, (int *)NULL))
+			if (cstack_pop(sp, (void **)&tsp, NULL))
 				break;
 
 			traverse_stats.fss_pops++;
@@ -1027,7 +1027,7 @@ skip_dir:
 	/*
 	 * Pop and free all the remaining entries on the stack.
 	 */
-	while (!cstack_pop(sp, (void **)&tsp, (int *)NULL)) {
+	while (!cstack_pop(sp, (void **)&tsp, NULL)) {
 		traverse_stats.fss_stack_residue++;
 
 		free(tsp->ts_fh.fh_fpath);

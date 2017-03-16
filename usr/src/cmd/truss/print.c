@@ -698,7 +698,7 @@ mmap_protect(private_t *pri, long arg)
 	char *str = pri->code_buf;
 
 	if (arg & ~(PROT_READ|PROT_WRITE|PROT_EXEC))
-		return ((char *)NULL);
+		return (NULL);
 
 	if (arg == PROT_NONE)
 		return ("PROT_NONE");

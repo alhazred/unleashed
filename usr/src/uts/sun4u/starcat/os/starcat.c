@@ -974,7 +974,7 @@ plat_get_ecache_cpu(dev_info_t *dip, void *arg)
 	if (cpuarg->dimm < numlabels) {
 		cpuarg->jnum = kmem_alloc(strlen(dimm_labels[cpuarg->dimm]) + 1,
 		    KM_SLEEP);
-		if (cpuarg->jnum != (char *)NULL)
+		if (cpuarg->jnum != NULL)
 			(void) strcpy(cpuarg->jnum, dimm_labels[cpuarg->dimm]);
 #ifdef	DEBUG
 		else
@@ -1007,7 +1007,7 @@ plat_get_ecacheunum(int cpuid, unsigned long long physaddr, char *buf,
 	plat_ecache_cpu_arg_t	findcpu;
 	uint_t	expander, slot, proc;
 
-	findcpu.jnum = (char *)NULL;
+	findcpu.jnum = NULL;
 	findcpu.cpuid = cpuid;
 
 	/*
@@ -1027,7 +1027,7 @@ plat_get_ecacheunum(int cpuid, unsigned long long physaddr, char *buf,
 
 	ddi_walk_devs(ddi_root_node(), plat_get_ecache_cpu, (void *)&findcpu);
 
-	if (findcpu.jnum == (char *)NULL)
+	if (findcpu.jnum == NULL)
 		return (-1);
 
 	expander = STARCAT_CPUID_TO_EXPANDER(cpuid);

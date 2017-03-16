@@ -1032,7 +1032,7 @@ st_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 
 	un->un_max_throttle = un->un_throttle = un->un_last_throttle = 1;
 	un->un_flush_on_errors = 0;
-	un->un_mkr_pkt = (struct scsi_pkt *)NULL;
+	un->un_mkr_pkt = NULL;
 
 	ST_DEBUG(devi, st_label, SCSI_DEBUG,
 	    "throttle=%x, max_throttle = %x\n",
@@ -3971,7 +3971,7 @@ st_rw(dev_t dev, struct uio *uio, int flag)
 
 	len = uio->uio_resid;
 
-	rval = physio(st_queued_strategy, (struct buf *)NULL,
+	rval = physio(st_queued_strategy, NULL,
 	    dev, flag, st_minphys, uio);
 	/*
 	 * if we have hit logical EOT during this xfer and there is not a
@@ -12241,7 +12241,7 @@ st_hba_unflush(struct scsi_tape *un)
 #ifdef FLUSH_ON_ERRORS
 
 	if (!un->un_mkr_pkt) {
-		un->un_mkr_pkt = scsi_init_pkt(ROUTE, NULL, (struct buf *)NULL,
+		un->un_mkr_pkt = scsi_init_pkt(ROUTE, NULL, NULL,
 		    NULL, 0, 0, 0, SLEEP_FUNC, NULL);
 
 		/* we slept, so it must be there */

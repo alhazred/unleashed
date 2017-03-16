@@ -317,16 +317,14 @@ main(int argc, char **argv)
 	(void) sigset(SIGUSR1, usr1_handler);
 	(void) sigset(SIGHUP, idmap_cfg_hup_handler);
 
-	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET,
-	    DAEMON_UID, DAEMON_GID,
-	    PRIV_PROC_AUDIT, PRIV_FILE_DAC_READ,
-	    (char *)NULL) == -1) {
+	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET, DAEMON_UID,
+	    DAEMON_GID, PRIV_PROC_AUDIT, PRIV_FILE_DAC_READ, NULL) == -1) {
 		idmapdlog(LOG_ERR, "unable to drop privileges");
 		exit(1);
 	}
 
 	__fini_daemon_priv(PRIV_PROC_FORK, PRIV_PROC_EXEC, PRIV_PROC_SESSION,
-	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, (char *)NULL);
+	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, NULL);
 
 	if (_idmapdstate.daemon_mode == TRUE)
 		daemonize_ready();

@@ -78,17 +78,17 @@ int	*svopts;
 		return (*svopts);
 	}
 	memset((char *)&defopts, 0, sizeof(struct dlvopts));
-	if ((hp = hdrlines[H_DEFOPTS].head) != (struct hdrs *)NULL) {
+	if ((hp = hdrlines[H_DEFOPTS].head) != NULL) {
 		Dout(pn, 3, "H_DEFOPTS line = '%s'\n", hp->value);
 		getopts(hp->value, &defopts);
 	}
 	memset((char *)&tropts, 0, sizeof(struct dlvopts));
-	if ((hp = hdrlines[H_TROPTS].head) != (struct hdrs *)NULL) {
+	if ((hp = hdrlines[H_TROPTS].head) != NULL) {
 		Dout(pn, 3, "H_TROPTS line = '%s'\n", hp->value);
 		getopts(hp->value, &tropts);
 	}
 	memset((char *)&toopts, 0, sizeof(struct dlvopts));
-	if ((hp = hdrlines[tcopy_hdr].head) != (struct hdrs *)NULL) {
+	if ((hp = hdrlines[tcopy_hdr].head) != NULL) {
 		Dout(pn, 3,"H_TCOPY line = '%s'\n", hp->value);
 		getopts(hp->value, &toopts);
 	}

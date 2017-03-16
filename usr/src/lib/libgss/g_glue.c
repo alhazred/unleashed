@@ -406,8 +406,7 @@ OM_uint32 gssint_export_internal_name(minor_status, mech_type,
 	mechOidTagLen + mechOidDERLen +
 	mech_type->length +
 	nameLenLen + dispName.length;
-    if ((name_buf->value = (void*)malloc(name_buf->length)) ==
-	(void*)NULL) {
+    if ((name_buf->value = malloc(name_buf->length)) == NULL) {
 	name_buf->length = 0;
 	(void) gss_release_buffer(&status, &dispName);
 	return (GSS_S_FAILURE);

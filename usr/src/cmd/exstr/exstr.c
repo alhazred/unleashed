@@ -261,7 +261,7 @@ char	*name;
 	outp = outbuf;
 	linebuf[0] = '\0';
 	/* open input C source file */
-	if ((fi = fopen(name, "r")) == (FILE *)NULL) {
+	if ((fi = fopen(name, "r")) == NULL) {
 		(void) fprintf(stderr,
 		    "exstr: ERROR: couldn't open file '%s'\n", name);
 		exit(1);
@@ -271,7 +271,7 @@ char	*name;
 	(void) fprintf(stdout, "extern char *gettxt();\n");
 
 	/* process file containing the list of strings */
-	while (fgets(repbuf, sizeof (repbuf), stdin) != (char *)NULL) {
+	while (fgets(repbuf, sizeof (repbuf), stdin) != NULL) {
 
 		wrong_msg = 0;
 
@@ -280,14 +280,14 @@ char	*name;
 
 		/* take apart the input string */
 		repbufp = strchr(repbuf, ':');
-		if (repbufp == (char *)NULL)
+		if (repbufp == NULL)
 			badformat(curline);
 		*repbufp++ = '\0';
 		/* verify that string belongs to the input C source file */
 		if (strcmp(repbuf, name) != 0)
 			continue;
 		repstr = strchr(repbufp, ':');
-		if (repstr == (char *)NULL)
+		if (repstr == NULL)
 			badformat(curline);
 		*repstr++ = '\0';
 		curlineno = atoi(repbufp);
@@ -300,14 +300,14 @@ char	*name;
 		savelineno = curlineno;
 		repbufp = repstr;
 		repstr = strchr(repbufp, ':');
-		if (repstr == (char *)NULL)
+		if (repstr == NULL)
 			badformat(curline);
 		repstr[strlen(repstr) - 1 ] = '\0';
 		*repstr++ = '\0';
 		curposno = atoi(repbufp);
 		repbufp = repstr;
 		repstr = strchr(repbufp, ':');
-		if (repstr == (char *)NULL)
+		if (repstr == NULL)
 			badformat(curline);
 		*repstr++ = '\0';
 		msgfile = repbufp;
@@ -320,7 +320,7 @@ char	*name;
 		}
 		repbufp = repstr;
 		repstr = strchr(repbufp, ':');
-		if (repstr == (char *)NULL)
+		if (repstr == NULL)
 			badformat(curline);
 		*repstr++ = '\0';
 		cp = repbufp;
@@ -349,7 +349,7 @@ char	*name;
 			outp = outbuf;
 			inp = linebuf;
 			if (fgets(linebuf,
-			    sizeof (linebuf), fi) == (char *)NULL) {
+			    sizeof (linebuf), fi) == NULL) {
 				(void) fprintf(stderr, "read error\n");
 				exit(1);
 			}
@@ -375,7 +375,7 @@ char	*name;
 		while (inp[strlen(inp)-2] == '\\' &&
 		    inp[strlen(inp)-1] == '\n') {
 			if (fgets(linebuf,
-			    sizeof (linebuf), fi) == (char *)NULL) {
+			    sizeof (linebuf), fi) == NULL) {
 				(void) fprintf(stderr, "exstr: ERROR: read "
 				    "error in file (%s)\n", Fname);
 				exit(1);
@@ -416,7 +416,7 @@ char	*name;
 		*outp = '\0';
 		(void) fputs(outbuf, stdout);
 	}
-	while (fgets(linebuf, sizeof (linebuf), fi) != (char *)NULL)
+	while (fgets(linebuf, sizeof (linebuf), fi) != NULL)
 		(void) fputs(linebuf, stdout);
 
 	(void) fclose(fi);

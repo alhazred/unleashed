@@ -263,7 +263,7 @@ cvcr_ioctl(queue_t *q, mblk_t *mp)
 	 * reuse it for ACKing.
 	 */
 	if (iocp->ioc_cmd == CVC_BREAK) {
-		abort_sequence_enter((char *)NULL);
+		abort_sequence_enter(NULL);
 		miocack(q, mp, 0, 0);
 	} else if (iocp->ioc_cmd == CVC_DISCONNECT) {
 		(void) cvc_redir(mp);

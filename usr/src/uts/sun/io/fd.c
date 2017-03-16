@@ -1297,7 +1297,7 @@ fd_cleanup(dev_info_t *dip, struct fdctlr *fdc, int hard, int locks)
 
 
 	/* Remove unit structure if one exists */
-	if (fdc->c_un != (struct fdunit *)NULL) {
+	if (fdc->c_un != NULL) {
 
 		ASSERT(!mutex_owned(&fdc->c_lolock));
 

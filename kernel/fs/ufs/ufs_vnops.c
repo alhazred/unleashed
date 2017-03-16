@@ -2282,10 +2282,10 @@ again:
 				owner_change = 1;
 
 				(void) chkdq(ip, -blocks, /* force */ 1, cr,
-				    (char **)NULL, (size_t *)NULL);
+				    (char **)NULL, NULL);
 				(void) chkiq(ufsvfsp, /* change */ -1, ip,
 				    (uid_t)ip->i_uid, /* force */ 1, cr,
-				    (char **)NULL, (size_t *)NULL);
+				    (char **)NULL, NULL);
 				dqrele(ip->i_dquot);
 			}
 
@@ -2303,7 +2303,7 @@ again:
 				(void) chkdq(ip, blocks, /* force */ 1, cr,
 				    &errmsg1, &len1);
 				(void) chkiq(ufsvfsp, /* change */ 1,
-				    (struct inode *)NULL, (uid_t)ip->i_uid,
+				    NULL, (uid_t)ip->i_uid,
 				    /* force */ 1, cr, &errmsg2, &len2);
 			}
 		}
@@ -4136,7 +4136,7 @@ ufs_symlink(
 		return (EINVAL);
 
 again:
-	ip = (struct inode *)NULL;
+	ip = NULL;
 	vap->va_type = VLNK;
 	vap->va_rdev = 0;
 
@@ -5815,7 +5815,7 @@ ufs_poll(vnode_t *vp, short ev, int any, short *revp, struct pollhead **phpp,
 	if ((ev & POLLPRI) && (*revp & (POLLERR|POLLHUP)))
 		*revp |= POLLPRI;
 out:
-	*phpp = !any && !*revp ? &ufs_pollhd : (struct pollhead *)NULL;
+	*phpp = !any && !*revp ? &ufs_pollhd : NULL;
 
 	return (0);
 }

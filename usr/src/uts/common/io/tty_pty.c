@@ -192,7 +192,7 @@ ptc_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 	switch (infocmd) {
 	case DDI_INFO_DEVT2DEVINFO:
 		if (ptc_dip == NULL) {
-			*result = (void *)NULL;
+			*result = NULL;
 			error = DDI_FAILURE;
 		} else {
 			*result = (void *) ptc_dip;
@@ -998,7 +998,7 @@ ptcpoll(dev_t dev,
 		 * A non NULL pollhead pointer should be returned in case
 		 * user polls for 0 events.
 		 */
-		*phpp = !anyyet && !*reventsp ? php : (struct pollhead *)NULL;
+		*phpp = !anyyet && !*reventsp ? php : NULL;
 		return (0);
 	}
 	if (events & (POLLIN|POLLRDNORM)) {

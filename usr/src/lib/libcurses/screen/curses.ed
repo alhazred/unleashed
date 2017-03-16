@@ -1200,7 +1200,7 @@ extern WINDOW *subwin();
 #define	intrflush(win, flag)	_setqiflush(flag)
 #define	meta(win, flag)		_meta(flag)
 
-#define	setterm(name)		setupterm((name), 1, (char *)NULL)
+#define	setterm(name)		setupterm((name), 1, NULL)
 #define	gettmode()		(OK)
 #define	halfdelay(tens)		ttimeout((tens)*100)
 

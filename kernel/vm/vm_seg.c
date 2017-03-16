@@ -1592,12 +1592,12 @@ seg_alloc(struct as *as, caddr_t base, size_t size)
 	    (uintptr_t)segbase;
 
 	if (!valid_va_range(&segbase, &segsize, segsize, AH_LO))
-		return ((struct seg *)NULL);	/* bad virtual addr range */
+		return (NULL);	/* bad virtual addr range */
 
 	if (as != &kas &&
 	    valid_usr_range(segbase, segsize, 0, as,
 	    as->a_userlimit) != RANGE_OKAY)
-		return ((struct seg *)NULL);	/* bad virtual addr range */
+		return (NULL);	/* bad virtual addr range */
 
 	new = kmem_cache_alloc(seg_cache, KM_SLEEP);
 	new->s_ops = NULL;
@@ -1609,7 +1609,7 @@ seg_alloc(struct as *as, caddr_t base, size_t size)
 	new->s_phead.p_lprev = &new->s_phead;
 	if (seg_attach(as, segbase, segsize, new) < 0) {
 		kmem_cache_free(seg_cache, new);
-		return ((struct seg *)NULL);
+		return (NULL);
 	}
 	/* caller must fill in ops, data */
 	return (new);
@@ -1803,7 +1803,7 @@ seg_pinit_mem_config(void)
 {
 	int ret;
 
-	ret = kphysm_setup_func_register(&seg_p_mem_config_vec, (void *)NULL);
+	ret = kphysm_setup_func_register(&seg_p_mem_config_vec, NULL);
 	/*
 	 * Want to catch this in the debug kernel. At run time, if the
 	 * callbacks don't get run all will be OK as the disable just makes

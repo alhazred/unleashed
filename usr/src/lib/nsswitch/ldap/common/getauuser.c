@@ -42,7 +42,7 @@ static const char *auuser_attrs[] = {
 	_AU_NAME,
 	_AU_ALWAYS,
 	_AU_NEVER,
-	(char *)NULL
+	NULL
 };
 /*
  * _nss_ldap_au2str is the data marshaling method for the audit_user

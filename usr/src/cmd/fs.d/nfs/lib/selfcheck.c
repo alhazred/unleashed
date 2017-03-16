@@ -122,7 +122,7 @@ getmyaddrs(void)
 
 	if ((sock = socket(AF_INET6, SOCK_DGRAM, 0)) < 0) {
 		syslog(LOG_ERR, "statd:getmyaddrs socket: %m");
-		return ((struct lifconf *)NULL);
+		return (NULL);
 	}
 
 	lifn.lifn_family = AF_UNSPEC;
@@ -141,7 +141,7 @@ getmyaddrs(void)
 		syslog(LOG_ERR,
 		    "statd:getmyaddrs, malloc for lifconf failed: %m");
 		(void) close(sock);
-		return ((struct lifconf *)NULL);
+		return (NULL);
 	}
 	buf = (char *)malloc(numifs * sizeof (struct lifreq));
 	if (buf == NULL) {
@@ -149,7 +149,7 @@ getmyaddrs(void)
 		    "statd:getmyaddrs, malloc for lifreq failed: %m");
 		(void) close(sock);
 		free(lifc);
-		return ((struct lifconf *)NULL);
+		return (NULL);
 	}
 
 	lifc->lifc_family = AF_UNSPEC;
@@ -162,7 +162,7 @@ getmyaddrs(void)
 		(void) close(sock);
 		free(buf);
 		free(lifc);
-		return ((struct lifconf *)NULL);
+		return (NULL);
 	}
 
 	(void) close(sock);

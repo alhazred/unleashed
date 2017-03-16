@@ -503,7 +503,7 @@ static const ldterm_cs_data_t default_cs_data = {
 	LDTERM_CS_TYPE_EUC,
 	(uchar_t)0,
 	(uchar_t)0,
-	(char *)NULL,
+	NULL,
 	{
 		'\0', '\0', '\0', '\0',
 		'\0', '\0', '\0', '\0',
@@ -4453,10 +4453,10 @@ ldterm_do_ioctl(queue_t *q, mblk_t *mp)
 			 */
 			tp->t_csdata.csinfo_num =
 			    LDTERM_CS_TYPE_EUC_MAX_SUBCS;
-			if (tp->t_csdata.locale_name != (char *)NULL) {
+			if (tp->t_csdata.locale_name != NULL) {
 				kmem_free(tp->t_csdata.locale_name,
 				    strlen(tp->t_csdata.locale_name) + 1);
-				tp->t_csdata.locale_name = (char *)NULL;
+				tp->t_csdata.locale_name = NULL;
 			}
 			tp->t_csmethods = cs_methods[LDTERM_CS_TYPE_EUC];
 
@@ -4694,7 +4694,7 @@ ldterm_do_ioctl(queue_t *q, mblk_t *mp)
 			bzero(&tp->eucwioc, EUCSIZE);
 			tp->eucwioc.eucw[0] = 1;
 			tp->eucwioc.scrw[0] = 1;
-			if (tp->t_csdata.locale_name != (char *)NULL) {
+			if (tp->t_csdata.locale_name != NULL) {
 				kmem_free(tp->t_csdata.locale_name,
 				    strlen(tp->t_csdata.locale_name) + 1);
 			}
@@ -4703,7 +4703,7 @@ ldterm_do_ioctl(queue_t *q, mblk_t *mp)
 		}
 
 		/* Copy over locale_name. */
-		if (tp->t_csdata.locale_name != (char *)NULL) {
+		if (tp->t_csdata.locale_name != NULL) {
 			kmem_free(tp->t_csdata.locale_name,
 			    strlen(tp->t_csdata.locale_name) + 1);
 		}
@@ -4713,7 +4713,7 @@ ldterm_do_ioctl(queue_t *q, mblk_t *mp)
 			(void) strcpy(tp->t_csdata.locale_name,
 			    csdp->locale_name);
 		} else {
-			tp->t_csdata.locale_name = (char *)NULL;
+			tp->t_csdata.locale_name = NULL;
 		}
 
 		/*

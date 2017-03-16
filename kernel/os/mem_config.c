@@ -452,7 +452,7 @@ mapalloc:
 		pp->p_pagenum = pfn;
 		pfn++;
 		page_iolock_init(pp);
-		while (!page_lock(pp, SE_EXCL, (kmutex_t *)NULL, P_RECLAIM))
+		while (!page_lock(pp, SE_EXCL, NULL, P_RECLAIM))
 			continue;
 		pp->p_offset = (uoff_t)-1;
 	}
@@ -2498,7 +2498,7 @@ memseg_remap_init_pages(page_t *pages, page_t *epages)
 		pp->p_pagenum = PFN_INVALID;	/* XXXX */
 		pp->p_offset = (uoff_t)-1;
 		page_iolock_init(pp);
-		while (!page_lock(pp, SE_EXCL, (kmutex_t *)NULL, P_RECLAIM))
+		while (!page_lock(pp, SE_EXCL, NULL, P_RECLAIM))
 			continue;
 		page_lock_delete(pp);
 	}
@@ -2815,7 +2815,7 @@ page_delete_collect(
 	struct mem_handle *mhp)
 {
 	if (pp->p_vnode) {
-		page_hashout(pp, (kmutex_t *)NULL);
+		page_hashout(pp, NULL);
 		/* do not do PP_SETAGED(pp); */
 	} else {
 		kmutex_t *sep;

@@ -681,7 +681,7 @@ static struct dev_ops pool_ops = {
 	pool_detach,		/* detach */
 	nodev,			/* reset */
 	&pool_cb_ops,		/* cb_ops */
-	(struct bus_ops *)NULL,	/* bus_ops */
+	NULL,	/* bus_ops */
 	nulldev,		/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

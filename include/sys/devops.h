@@ -482,7 +482,7 @@ static struct dev_ops XXname = {					\
 	(XXdetach),		/* devo_detach */			\
 	(XXreset),		/* devo_reset */			\
 	&(cb_##XXname),		/* devo_cb_ops */			\
-	(struct bus_ops *)NULL,	/* devo_bus_ops */			\
+	NULL,			/* devo_bus_ops */			\
 	NULL,			/* devo_power */			\
 	(XXquiesce)		/* devo_quiesce */			\
 }

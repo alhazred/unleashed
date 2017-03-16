@@ -103,7 +103,7 @@ nxge_tx_ring_send(void *arg, mblk_t *mp)
 	if (tx_ring_p == NULL) {
 		ASSERT(tx_ring_p != NULL);
 		freemsg(mp);
-		return ((mblk_t *)NULL);
+		return (NULL);
 	}
 
 	/*
@@ -117,7 +117,7 @@ nxge_tx_ring_send(void *arg, mblk_t *mp)
 	if (isLDOMservice(nxgep) && tx_ring_p->tx_ring_offline) {
 		ASSERT(!tx_ring_p->tx_ring_offline);
 		freemsg(mp);
-		return ((mblk_t *)NULL);
+		return (NULL);
 	}
 
 	/*
@@ -129,7 +129,7 @@ nxge_tx_ring_send(void *arg, mblk_t *mp)
 		return (mp);
 	}
 
-	return ((mblk_t *)NULL);
+	return (NULL);
 }
 
 int

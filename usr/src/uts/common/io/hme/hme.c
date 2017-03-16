@@ -3625,7 +3625,7 @@ hme_setup_mac_address(struct hme *hmep, dev_info_t *dip)
 	/*
 	 * Get the system ethernet address.
 	 */
-	(void) localetheraddr((struct ether_addr *)NULL, &hmep->hme_ouraddr);
+	(void) localetheraddr(NULL, &hmep->hme_ouraddr);
 #else
 	ether_bcopy(&hmep->hme_factaddr, &hmep->hme_ouraddr);
 #endif

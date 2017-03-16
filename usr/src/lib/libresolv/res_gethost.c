@@ -109,7 +109,7 @@ getanswer(answer, anslen, iquery)
 			if ((n = dn_expand(answer->buf, eom,
 			    cp, (u_char *)bp, buflen)) < 0) {
 				h_errno = NO_RECOVERY;
-				return ((struct hostent *) NULL);
+				return (NULL);
 			}
 			cp += n + QFIXEDSZ;
 			host.h_name = bp;
@@ -125,7 +125,7 @@ getanswer(answer, anslen, iquery)
 			h_errno = HOST_NOT_FOUND;
 		else
 			h_errno = TRY_AGAIN;
-		return ((struct hostent *) NULL);
+		return (NULL);
 	}
 	ap = host_aliases;
 	host.h_aliases = host_aliases;
@@ -221,7 +221,7 @@ getanswer(answer, anslen, iquery)
 		return (&host);
 	} else {
 		h_errno = TRY_AGAIN;
-		return ((struct hostent *) NULL);
+		return (NULL);
 	}
 }
 
@@ -245,7 +245,7 @@ res_gethostbyname(name)
 				if (*--cp == '.')
 					break;
 				h_errno = HOST_NOT_FOUND;
-				return ((struct hostent *) NULL);
+				return (NULL);
 			}
 			if (!isdigit(*cp) && *cp != '.')
 				break;
@@ -259,7 +259,7 @@ res_gethostbyname(name)
 		if (errno == ECONNREFUSED)
 			return (_gethtbyname(name));
 		else
-			return ((struct hostent *) NULL);
+			return (NULL);
 	}
 	return (getanswer(&buf, n, 0));
 }
@@ -277,7 +277,7 @@ _getrhbyaddr(addr, len, type)
 	char qbuf[MAXDNAME];
 
 	if (type != AF_INET)
-		return ((struct hostent *) NULL);
+		return (NULL);
 	(void) sprintf(qbuf, "%d.%d.%d.%d.in-addr.arpa",
 		((unsigned)addr[3] & 0xff),
 		((unsigned)addr[2] & 0xff),
@@ -291,11 +291,11 @@ _getrhbyaddr(addr, len, type)
 #endif
 		if (errno == ECONNREFUSED)
 			return (_gethtbyaddr(addr, len, type));
-		return ((struct hostent *) NULL);
+		return (NULL);
 	}
 	hp = getanswer(&buf, n, 1);
 	if (hp == NULL)
-		return ((struct hostent *) NULL);
+		return (NULL);
 	hp->h_addrtype = type;
 	hp->h_length = len;
 	h_addr_ptrs[0] = (char *)&host_addr;
@@ -319,14 +319,14 @@ res_gethostbyaddr(addr, len, type)
 	char		**a, hbuf[MAXHOSTNAMELEN];
 	struct hostent	*hp, *hp2;
 
-	if ((hp = _getrhbyaddr(addr, len, type)) == (struct hostent *)NULL)
-		return ((struct hostent *)NULL);
+	if ((hp = _getrhbyaddr(addr, len, type)) == NULL)
+		return (NULL);
 
 	/* hang on to what we got as an answer */
 	(void) strcpy(hbuf, hp->h_name);
 
 	/* check to make sure by doing a forward query */
-	if ((hp2 = res_gethostbyname(hbuf)) != (struct hostent *)NULL)
+	if ((hp2 = res_gethostbyname(hbuf)) != NULL)
 		for (a = hp2->h_addr_list; *a; a++)
 #ifdef SYSV
 			if (memcmp(*a, addr, hp2->h_length) == 0)
@@ -341,7 +341,7 @@ res_gethostbyaddr(addr, len, type)
 	 */
 	syslog(LOG_NOTICE, "gethostbyaddr: %s != %s", hbuf,
 		inet_ntoa(*(struct in_addr *)addr));
-	return ((struct hostent *)NULL);
+	return (NULL);
 }
 
 static void

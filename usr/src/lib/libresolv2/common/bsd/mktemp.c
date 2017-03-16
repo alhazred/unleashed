@@ -85,7 +85,7 @@ mkstemp(char *path) {
 #ifdef NEED_MKTEMP
 char *
 mktemp(char *path) {
-	return(gettemp(path, (int *)NULL) ? path : (char *)NULL);
+	return(gettemp(path, NULL) ? path : NULL);
 }
 #endif
 

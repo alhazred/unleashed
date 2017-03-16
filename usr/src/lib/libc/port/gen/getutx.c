@@ -630,7 +630,7 @@ pututxline(const struct utmpx *entry)
 	if (fd < 0) {
 		(void) getutxent_frec();
 		if (fd < 0)
-			return ((struct utmpx *)NULL);
+			return (NULL);
 	}
 
 	/*
@@ -673,7 +673,7 @@ pututxline(const struct utmpx *entry)
 	 * utmpx file.
 	 */
 	if (fwrite(&ftmpxbuf, sizeof (ftmpxbuf), 1, fp) != 1) {
-		answer = (struct utmpx *)NULL;
+		answer = NULL;
 	} else {
 		/*
 		 * Save the new user structure into ubuf and fubuf so that

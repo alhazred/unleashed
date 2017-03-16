@@ -350,7 +350,7 @@ ppm_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 
 	mutex_init(&ppm_cpr_window_lock, NULL, MUTEX_DRIVER, NULL);
 	ppm_cpr_window_flag = B_FALSE;
-	ppm_cprcb_id = callb_add(ppm_cpr_callb, (void *)NULL,
+	ppm_cprcb_id = callb_add(ppm_cpr_callb, NULL,
 	    CB_CL_CPR_PM, "ppm_cpr");
 
 #if defined(__x86)

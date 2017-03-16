@@ -127,7 +127,7 @@ retry:
 
 		page_destroy_free(pp);
 
-		if (!page_lock(pp, SE_EXCL, (kmutex_t *)NULL, P_NO_RECLAIM)) {
+		if (!page_lock(pp, SE_EXCL, NULL, P_NO_RECLAIM)) {
 			return (NULL);
 		}
 
@@ -142,7 +142,7 @@ retry:
 		return (NULL);
 	}
 
-	if (!page_reclaim(pp, (kmutex_t *)NULL))
+	if (!page_reclaim(pp, NULL))
 		return (NULL);
 
 	return (pp);

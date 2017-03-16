@@ -383,7 +383,7 @@ sec_clnt_loadinfo(struct sec_data *in, struct sec_data **out, model_t model)
 		*out = secdata;
 	} else {
 		kmem_free(secdata, sizeof (*secdata));
-		*out = (struct sec_data *)NULL;
+		*out = NULL;
 	}
 
 	return (error);

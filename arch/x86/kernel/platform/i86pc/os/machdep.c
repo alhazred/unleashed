@@ -364,7 +364,7 @@ mdboot(int cmd, int fcn, char *mdep, boolean_t invoke_cb)
 		(*psm_shutdownf)(cmd, fcn);
 
 		if (fcn == AD_HALT || fcn == AD_POWEROFF)
-			halt((char *)NULL);
+			halt(NULL);
 		else
 			prom_reboot("");
 	}

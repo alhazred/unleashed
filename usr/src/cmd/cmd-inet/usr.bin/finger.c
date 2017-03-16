@@ -155,7 +155,7 @@ char *termopts[] = {
 	"low",
 #define	TERM_HIGH	1
 	"high",
-	(char *)NULL
+	NULL
 };
 #define	TS_LOW	(1 << TERM_LOW)		/* print characters less than 32 */
 #define	TS_HIGH	(1 << TERM_HIGH)	/* print characters greater than 126 */

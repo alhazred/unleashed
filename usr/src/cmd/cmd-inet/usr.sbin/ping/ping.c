@@ -291,8 +291,7 @@ main(int argc, char *argv[])
 	has_sys_ip_config = priv_ineffect(PRIV_SYS_IP_CONFIG);
 
 	(void) __init_suid_priv(PU_CLEARLIMITSET, PRIV_NET_ICMPACCESS,
-	    has_sys_ip_config ? PRIV_SYS_IP_CONFIG : (char *)NULL,
-	    (char *)NULL);
+	    has_sys_ip_config ? PRIV_SYS_IP_CONFIG : NULL, NULL);
 
 	setbuf(stdout, (char *)0);
 
@@ -1945,7 +1944,7 @@ ushort_t udp_src_port6, ushort_t udp_src_port)
 			FD_SET(recv_sock, &fds);
 
 		result = select(MAX(recv_sock6, recv_sock) + 1, &fds,
-		    (fd_set *)NULL, (fd_set *)NULL, (struct timeval *)NULL);
+		    (fd_set *)NULL, (fd_set *)NULL, NULL);
 		if (result == -1) {
 			if (errno == EINTR) {
 				continue;
@@ -2115,7 +2114,7 @@ pinger(int send_sock, struct sockaddr *whereto, struct msghdr *msg6,
 
 	start = sizeof (struct timeval);	/* skip for time */
 
-	(void) gettimeofday(&t_snd, (struct timezone *)NULL);
+	(void) gettimeofday(&t_snd, NULL);
 
 	/* if packet is big enough to store timeval OR ... */
 	if ((datalen >= sizeof (struct timeval)) ||
@@ -2571,7 +2570,7 @@ ping_gettime(struct msghdr *msg, struct timeval *tv)
 		}
 	}
 
-	(void) gettimeofday(tv, (struct timezone *)NULL);
+	(void) gettimeofday(tv, NULL);
 }
 
 /*

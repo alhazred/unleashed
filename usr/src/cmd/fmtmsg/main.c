@@ -329,7 +329,7 @@ noesc(str)
  *
  *	Parses a string that is in the format of the severity definitions.
  *	Returns a pointer to a (malloc'd) structure that contains the
- *	definition, or (struct sevstr *) NULL if none was parsed.
+ *	definition, or NULL if none was parsed.
  *
  * Arguments:
  *	ptr	char *
@@ -339,7 +339,7 @@ noesc(str)
  *
  * Returns: struct sevstr *
  *	A pointer to a malloc'd structure containing the severity definition
- *	parsed from string, or (struct sevstr *) NULL if none.
+ *	parsed from string, or NULL if none.
  *
  * Notes:
  *    - This function is destructive to the string referenced by its argument.
@@ -372,7 +372,7 @@ getauxsevs(ptr)
 
 	/* If nothing to parse, return (char *) NULL */
 	if (current == (char *) NULL) {
-	    return ((struct sevstr *) NULL);
+	    return (NULL);
 	}
 
 
@@ -383,7 +383,7 @@ getauxsevs(ptr)
 
 	/* Loop initializations */
 	done = FALSE;
-	rtnval = (struct sevstr *) NULL;
+	rtnval = NULL;
 	while (!done) {
 
 	    /* Eat leading junk */
@@ -425,7 +425,7 @@ getauxsevs(ptr)
 			    rtnval->sevkywd = noesc(kywd);
 			    rtnval->sevvalue = val;
 			    rtnval->sevprstr = noesc(prstr);
-			    rtnval->sevnext = (struct sevstr *) NULL;
+			    rtnval->sevnext = NULL;
 			}
 
 			done = TRUE;
@@ -763,7 +763,7 @@ main(int argc, char **argv)
 		    if ((sevstrval = getenv(SEV_LEVEL)) != (char *) NULL) {
 			sevval = (char *) malloc((unsigned int) strlen(sevstrval)+1);
 			penvsev = getauxsevs(strcpy(sevval, sevstrval));
-			if (penvsev != (struct sevstr *) NULL) do {
+			if (penvsev != NULL) do {
 			    if (strcmp(penvsev->sevkywd, sstr) == 0) {
 				severity = penvsev->sevvalue;
 				found = TRUE;
@@ -772,7 +772,7 @@ main(int argc, char **argv)
 				free(penvsev);
 				penvsev = getauxsevs((char *) NULL);
 			    }
-			} while (!found && (penvsev != (struct sevstr *) NULL));
+			} while (!found && (penvsev != NULL));
 
 			if (found) free(penvsev);
 			free(sevval);

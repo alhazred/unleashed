@@ -814,7 +814,7 @@ L_inquiry		inq;
 		return (L_INVALID_PATH_FORMAT);
 	}
 
-	dl = (struct dlist *)NULL;
+	dl = NULL;
 	map.dev_addr = (gfc_port_dev_info_t *)NULL;
 
 	if (err = g_get_dev_map(path_struct->p_physical_path,
@@ -1004,7 +1004,7 @@ WWN_list	*wwn_list = NULL;
 		return (L_INVALID_PATH_FORMAT);
 	}
 
-	dl = (struct dlist *)NULL;
+	dl = NULL;
 	if ((l_state = (L_state *)calloc(1, sizeof (L_state))) == NULL) {
 		return (L_MALLOC_FAILED);
 	}
@@ -4965,7 +4965,7 @@ struct dlist		*dlt, *dl;
 	}
 
 	/* Initialize lists/arrays */
-	*ses_list = dlt = dl = (struct dlist *)NULL;
+	*ses_list = dlt = dl = NULL;
 	node_wwn_s[0] = '\0';
 
 	H_DPRINTF("  l_get_allses: Looking for all ses paths for"

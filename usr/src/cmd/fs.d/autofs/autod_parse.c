@@ -137,7 +137,7 @@ parse_entry(char *key, char *mapname, char *mapopts, struct mapline *ml,
 		if (isspace(*p)) {
 			syslog(LOG_ERR,
 			"parse_entry: bad key in map %s: %s", mapname, key);
-			return ((struct mapent *)NULL);
+			return (NULL);
 		}
 	}
 
@@ -213,7 +213,7 @@ parse_error:
 	free_mapent(mapents);
 	if (rootnode != NULL)
 		free_hiernode(rootnode);
-	return ((struct mapent *)NULL);
+	return (NULL);
 }
 
 
@@ -1847,11 +1847,11 @@ do_mapent_hosts(mapopts, host, isdirect)
 		nfsvers = 0;
 	if (set_versrange(nfsvers, &vers, &versmin) != 0) {
 		syslog(LOG_ERR, "Incorrect NFS version specified for %s", host);
-		return ((struct mapent *)NULL);
+		return (NULL);
 	}
 	if (pingnfs(host, get_retry(mapopts) + 1, &vers, versmin, 0, FALSE,
 	    NULL, NULL) != RPC_SUCCESS)
-		return ((struct mapent *)NULL);
+		return (NULL);
 
 	retries = get_retry(mapopts);
 	delay = INITDELAY;
@@ -1863,7 +1863,7 @@ retry:
 		if (cl == NULL) {
 			syslog(LOG_ERR,
 			"do_mapent_hosts: %s %s", host, clnt_spcreateerror(""));
-			return ((struct mapent *)NULL);
+			return (NULL);
 		}
 
 	}
@@ -1893,7 +1893,7 @@ retry:
 			__FILE__, __LINE__);
 #endif
 		clnt_destroy(cl);
-		return ((struct mapent *)NULL);
+		return (NULL);
 	}
 
 #ifdef MALLOC_DEBUG
@@ -1907,7 +1907,7 @@ retry:
 		if (trace > 1)
 			trace_prt(1,
 			    gettext("  getmapent_hosts: null export list\n"));
-		return ((struct mapent *)NULL);
+		return (NULL);
 	}
 
 	/* now sort by length of names - to get mount order right */
@@ -2012,7 +2012,7 @@ alloc_failed:
 	syslog(LOG_ERR, "do_mapent_hosts: Memory allocation failed");
 	free_mapent(ms);
 	freeex(exlist);
-	return ((struct mapent *)NULL);
+	return (NULL);
 }
 
 

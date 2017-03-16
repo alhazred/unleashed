@@ -181,8 +181,7 @@ check(question)
 	 * Ask the user.
 	 */
 	ioparam.io_charlist = confirm_list;
-	answer = input(FIO_MSTR, question, '?', &ioparam,
-	    (int *)NULL, DATA_INPUT);
+	answer = input(FIO_MSTR, question, '?', &ioparam, NULL, DATA_INPUT);
 	return (answer);
 }
 
@@ -575,7 +574,7 @@ alloc_string(s)
 {
 	char	*ns;
 
-	if (s == (char *)NULL) {
+	if (s == NULL) {
 		ns = (char *)zalloc(1);
 	} else {
 		ns = (char *)zalloc(strlen(s) + 1);
@@ -951,7 +950,7 @@ get_tty_lines()
 	int	tty_lines = TTY_LINES;
 	struct	winsize	winsize;
 
-	if ((option_f == (char *)NULL) && isatty(0) == 1 && isatty(1) == 1) {
+	if ((option_f == NULL) && isatty(0) == 1 && isatty(1) == 1) {
 		/*
 		 * We have a real terminal for std input and output
 		 */

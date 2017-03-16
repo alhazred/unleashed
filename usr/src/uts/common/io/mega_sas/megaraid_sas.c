@@ -1214,11 +1214,11 @@ megasas_tran_init_pkt(struct scsi_address *ap, register struct scsi_pkt *pkt,
 					scsi_hba_pkt_free(ap, new_pkt);
 				}
 
-				return ((struct scsi_pkt *)NULL);
+				return (NULL);
 			}
 		} else {
 			if (megasas_dma_move(instance, pkt, bp) == -1) {
-				return ((struct scsi_pkt *)NULL);
+				return (NULL);
 			}
 		}
 	}

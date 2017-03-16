@@ -105,7 +105,7 @@ static struct dev_ops dp_ops = {
 	dpdetach,		/* detach */
 	nodev,			/* reset */
 	&dp_cb_ops,		/* driver operations */
-	(struct bus_ops *)NULL, /* bus operations */
+	NULL, /* bus operations */
 	nulldev,		/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

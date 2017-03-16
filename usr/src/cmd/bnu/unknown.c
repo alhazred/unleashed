@@ -77,7 +77,7 @@ char	*argv[];
 		ctoday, tmpbuf, (logname == NULL ? "<unknown>" : logname));
 
 	errno = 0;
-	if ( (fp = fopen(FOREIGN, "a+")) == (FILE *)NULL )
+	if ( (fp = fopen(FOREIGN, "a+")) == NULL )
 		fall_on_sword("cannot open", buf);
 	if ( fputs(buf, fp) == EOF )
 		fall_on_sword("cannot write", buf);

@@ -1127,7 +1127,7 @@ rpc_gss_refresh(auth, msg, cr)
 		 * Recreate context.
 		 */
 		error = rpc_gss_seccreate_pvt(&gssstat, &minor_stat, auth,
-				ap, ap->mech_type, (gss_OID *)NULL, (int *)NULL,
+				ap, ap->mech_type, (gss_OID *)NULL, NULL,
 				(OM_uint32 *)NULL, cr, 1);
 
 		switch (error) {

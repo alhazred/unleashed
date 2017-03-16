@@ -3941,7 +3941,7 @@ vhci_update_pathstates(void *arg)
 
 			/* Check for Reservation Conflict */
 			bp = scsi_alloc_consistent_buf(
-			    &svp->svp_psd->sd_address, (struct buf *)NULL,
+			    &svp->svp_psd->sd_address, NULL,
 			    DEV_BSIZE, B_READ, NULL, NULL);
 			if (!bp) {
 				VHCI_DEBUG(1, (CE_NOTE, NULL,
@@ -6962,7 +6962,7 @@ next_pathclass:
 		UA_condition = 0;
 
 		bp = scsi_alloc_consistent_buf(&svp->svp_psd->sd_address,
-		    (struct buf *)NULL, DEV_BSIZE, B_READ, NULL, NULL);
+		    NULL, DEV_BSIZE, B_READ, NULL, NULL);
 		if (!bp) {
 			VHCI_DEBUG(1, (CE_NOTE, NULL,
 			    "vhci_failover !No resources (buf)\n"));

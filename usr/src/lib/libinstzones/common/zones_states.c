@@ -106,7 +106,7 @@ _z_make_zone_running(zoneListElement_t *a_zlem)
 	FILE		*fp;
 	argArray_t	*args;
 	char		 zonename[ZONENAME_MAX];
-	char		*results = (char *)NULL;
+	char		*results = NULL;
 	int		ret;
 	int		status = 0;
 
@@ -140,7 +140,7 @@ _z_make_zone_running(zoneListElement_t *a_zlem)
 		(void) _z_add_arg(args, a_zlem->_zlName);
 		(void) _z_add_arg(args, "halt");
 
-		ret = z_ExecCmdArray(&status, &results, (char *)NULL,
+		ret = z_ExecCmdArray(&status, &results, NULL,
 		    ZONEADM_CMD, _z_get_argv(args));
 
 		/* free generated argument list */
@@ -196,7 +196,7 @@ _z_make_zone_running(zoneListElement_t *a_zlem)
 		(void) _z_add_arg(args, "%s", a_zlem->_zlName);
 		(void) _z_add_arg(args, "mount");
 
-		ret = z_ExecCmdArray(&status, &results, (char *)NULL,
+		ret = z_ExecCmdArray(&status, &results, NULL,
 		    ZONEADM_CMD, _z_get_argv(args));
 
 		/* free generated argument list */
@@ -274,7 +274,7 @@ boolean_t
 _z_make_zone_ready(zoneListElement_t *a_zlem)
 {
 	argArray_t	*args;
-	char		*results = (char *)NULL;
+	char		*results = NULL;
 	int		status = 0;
 	int		i;
 	int		ret;
@@ -375,7 +375,7 @@ _z_make_zone_ready(zoneListElement_t *a_zlem)
 		(void) _z_add_arg(args, "%s", a_zlem->_zlName);
 		(void) _z_add_arg(args, "ready");
 
-		ret = z_ExecCmdArray(&status, &results, (char *)NULL,
+		ret = z_ExecCmdArray(&status, &results, NULL,
 		    ZONEADM_CMD, _z_get_argv(args));
 
 		/* free generated argument list */
@@ -392,15 +392,15 @@ _z_make_zone_ready(zoneListElement_t *a_zlem)
 		if (status != 0) {
 			_z_program_error(ERR_ZONEREADY_CMDFAIL, ZONEADM_CMD,
 			    a_zlem->_zlName, strerror(errno),
-			    results == (char *)NULL ? "" : "\n",
-			    results == (char *)NULL ? "" : results);
-			if (results != (char *)NULL) {
+			    results == NULL ? "" : "\n",
+			    results == NULL ? "" : results);
+			if (results != NULL) {
 				(void) free(results);
 			}
 			return (B_FALSE);
 		}
 
-		if (results != (char *)NULL) {
+		if (results != NULL) {
 			(void) free(results);
 		}
 
@@ -456,7 +456,7 @@ boolean_t
 _z_make_zone_down(zoneListElement_t *a_zlem)
 {
 	argArray_t	*args;
-	char		*results = (char *)NULL;
+	char		*results = NULL;
 	int		status = 0;
 	int		ret;
 
@@ -492,7 +492,7 @@ _z_make_zone_down(zoneListElement_t *a_zlem)
 		(void) _z_add_arg(args, "%s", a_zlem->_zlName);
 		(void) _z_add_arg(args, "unmount");
 
-		ret = z_ExecCmdArray(&status, &results, (char *)NULL,
+		ret = z_ExecCmdArray(&status, &results, NULL,
 		    ZONEADM_CMD, _z_get_argv(args));
 
 		/* free generated argument list */
@@ -564,7 +564,7 @@ UmountAllZones(char *mntpnt) {
 			return (0);
 		}
 
-		for (k = 0; z_zlist_get_zonename(zlst, k) != (char *)NULL;
+		for (k = 0; z_zlist_get_zonename(zlst, k) != NULL;
 		    k++) {
 			if (z_zlist_get_current_state(zlst, k) >
 			    ZONE_STATE_INSTALLED) {

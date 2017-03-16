@@ -165,7 +165,7 @@ static struct dev_ops ses_dev_ops = {
 	ses_detach,		/* detach */
 	nodev,			/* reset */
 	&ses_cb_ops,		/* driver operations */
-	(struct bus_ops *)NULL,	/* bus operations */
+	NULL,	/* bus operations */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };
@@ -948,8 +948,8 @@ ses_uscsi_cmd(ses_softc_t *ssc, Uscmd *Uc, int Uf)
 	ssc->ses_uscsicmd.uscsi_status = 0;
 
 	bp = ssc->ses_sbufp;
-	bp->av_back = (struct buf *)NULL;
-	bp->av_forw = (struct buf *)NULL;
+	bp->av_back = NULL;
+	bp->av_forw = NULL;
 	bp->b_back = (struct buf *)ssc;
 	bp->b_edev = NODEV;
 
@@ -1101,7 +1101,7 @@ ses_get_pkt(struct buf *bp, int (*func)())
 		    func, (caddr_t)ssc);
 	}
 	SET_BP_PKT(bp, pkt);
-	if (pkt == (struct scsi_pkt *)NULL)
+	if (pkt == NULL)
 		return;
 	bcopy(scmd->uscsi_cdb, pkt->pkt_cdbp, (size_t)scmd->uscsi_cdblen);
 

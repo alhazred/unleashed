@@ -743,7 +743,7 @@ main(int argc, char *argv[])
 	 * If 'f' is given, bypass looking in DEF_FILE altogether.
 	 * If no digit or 'f' is given, still look in DEF_FILE but use '0'.
 	 */
-	if ((usefile = getenv("TAPE")) == (char *)NULL) {
+	if ((usefile = getenv("TAPE")) == NULL) {
 		for (cp = *argv; *cp; ++cp)
 			if (isdigit(*cp) || *cp == 'f')
 				break;
@@ -946,7 +946,7 @@ main(int argc, char *argv[])
 	(void) sprintf(pidchars, "%ld", thispid);
 	thispid = strlen(pidchars);
 
-	if ((tmpdirp = getenv("TMPDIR")) == (char *)NULL)
+	if ((tmpdirp = getenv("TMPDIR")) == NULL)
 		(void) strcpy(xhdr_dirname, "/tmp");
 	else {
 		/*
@@ -1226,7 +1226,7 @@ dorep(char *argv[])
 	char *cp, *cp2, *p;
 	char wdir[PATH_MAX+2], tempdir[PATH_MAX+2], *parent;
 	char file[PATH_MAX*2], origdir[PATH_MAX+1];
-	FILE *fp = (FILE *)NULL;
+	FILE *fp = NULL;
 	int archtype;
 	int ret;
 
@@ -5379,7 +5379,7 @@ build_table(file_list_t *table[], char *file)
 	FILE	*fp;
 	char	buf[PATH_MAX + 1];
 
-	if ((fp = fopen(file, "r")) == (FILE *)NULL)
+	if ((fp = fopen(file, "r")) == NULL)
 		vperror(1, gettext("could not open %s"), file);
 	while (fgets(buf, sizeof (buf), fp) != NULL) {
 		if (buf[strlen(buf) - 1] == '\n')
@@ -7470,7 +7470,7 @@ prepare_xattr(
 	 * Release previous buffer
 	 */
 
-	if (*attrbuf != (char *)NULL) {
+	if (*attrbuf != NULL) {
 		free(*attrbuf);
 		*attrbuf = NULL;
 	}
@@ -7570,7 +7570,7 @@ prepare_xattr(
 	 * Now fill in the optional link section if we have one
 	 */
 
-	if (linkinfo != (struct linkbuf *)NULL) {
+	if (linkinfo != NULL) {
 		tptr = (struct xattr_buf *)(bufhead +
 		    sizeof (struct xattr_hdr) + complen);
 
@@ -7939,7 +7939,7 @@ put_link(char *name, char *longname, char *component, char *longattrname,
 			return (0);
 		} else {
 			lp = (struct linkbuf *)getmem(sizeof (*lp));
-			if (lp != (struct linkbuf *)NULL) {
+			if (lp != NULL) {
 				lp->nextp = ihead;
 				ihead = lp;
 				lp->inum = stbuf.st_ino;

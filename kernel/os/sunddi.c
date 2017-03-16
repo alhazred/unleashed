@@ -5386,10 +5386,10 @@ ddi_append_minor_node(dev_info_t *ddip, struct ddi_minor_data *dmdp)
 	struct ddi_minor_data	*dp;
 
 	ndi_devi_enter(ddip, &circ);
-	if ((dp = DEVI(ddip)->devi_minor) == (struct ddi_minor_data *)NULL) {
+	if ((dp = DEVI(ddip)->devi_minor) == NULL) {
 		DEVI(ddip)->devi_minor = dmdp;
 	} else {
-		while (dp->next != (struct ddi_minor_data *)NULL)
+		while (dp->next != NULL)
 			dp = dp->next;
 		dp->next = dmdp;
 	}
@@ -8672,7 +8672,7 @@ ddi_umem_unlock(ddi_umem_cookie_t cookie)
 	ASSERT(CPU_ON_INTR(CPU) == 0); /* cannot be high level */
 	ASSERT(ddi_umem_unlock_thread != NULL);
 
-	p->unl_forw = (struct ddi_umem_cookie *)NULL;	/* end of list */
+	p->unl_forw = NULL;	/* end of list */
 	/*
 	 * Queue the unlock request and notify i_ddi_umem_unlock thread
 	 * if it's called in the interrupt context. Otherwise, unlock pages

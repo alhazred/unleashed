@@ -26,7 +26,7 @@
 
 static char buffer[25];
 
-struct et_list * _et_list = (struct et_list *) NULL;
+struct et_list * _et_list = NULL;
 
 const char * KRB5_CALLCONV error_message (code)
 long code;

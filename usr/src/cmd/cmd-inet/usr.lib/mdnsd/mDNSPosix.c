@@ -1801,7 +1801,7 @@ mStatus mDNSPosixListenForSignalInEventLoop(int signum)
 
     mDNSPlatformMemZero(&action, sizeof action);        // more portable than member-wise assignment
     action.sa_handler = NoteSignal;
-    err = sigaction(signum, &action, (struct sigaction*) NULL);
+    err = sigaction(signum, &action, NULL);
 
     sigaddset(&gEventSignalSet, signum);
 
@@ -1816,7 +1816,7 @@ mStatus mDNSPosixIgnoreSignalInEventLoop(int signum)
 
     mDNSPlatformMemZero(&action, sizeof action);        // more portable than member-wise assignment
     action.sa_handler = SIG_DFL;
-    err = sigaction(signum, &action, (struct sigaction*) NULL);
+    err = sigaction(signum, &action, NULL);
 
     sigdelset(&gEventSignalSet, signum);
 

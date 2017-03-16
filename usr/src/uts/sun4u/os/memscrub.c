@@ -293,7 +293,7 @@ static struct memscrub_kstats {
 #define	MEMSCRUB_STAT_SET(stat, val) memscrub_counts.stat.value.ui32 = (val)
 #define	MEMSCRUB_STAT_NINC(stat, val) memscrub_counts.stat.value.ui32 += (val)
 
-static struct kstat *memscrub_ksp = (struct kstat *)NULL;
+static struct kstat *memscrub_ksp = NULL;
 
 static timeout_id_t memscrub_tid = 0;	/* keep track of timeout id */
 
@@ -417,7 +417,7 @@ memscrub_run(void)
 	MEMSCRUB_STAT_INC(force_run);
 	if (memscrub_tid) {
 		(void) untimeout(memscrub_tid);
-		memscrub_wakeup((void *)NULL);
+		memscrub_wakeup(NULL);
 	}
 }
 
@@ -1477,7 +1477,7 @@ memscrub_init_mem_config()
 	int ret;
 
 	ret = kphysm_setup_func_register(&memscrub_mem_config_vec,
-	    (void *)NULL);
+	    NULL);
 	ASSERT(ret == 0);
 }
 
@@ -1485,5 +1485,5 @@ static void
 memscrub_uninit_mem_config()
 {
 	/* This call is OK if the register call was not done. */
-	kphysm_setup_func_unregister(&memscrub_mem_config_vec, (void *)NULL);
+	kphysm_setup_func_unregister(&memscrub_mem_config_vec, NULL);
 }

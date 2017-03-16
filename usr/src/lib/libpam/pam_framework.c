@@ -2549,12 +2549,12 @@ nextline(struct pam_fh *pam_fh, pam_handle_t *pamh, int *err)
 static int
 verify_pam_conf(pamtab_t *pam, char *service)
 {
-	return ((pam->pam_service == (char *)NULL) ||
+	return ((pam->pam_service == NULL) ||
 	    ((strcasecmp(pam->pam_service, service) == 0) &&
 	    ((pam->pam_type == -1) ||
 	    (pam->pam_flag == 0) ||
 	    (pam->pam_err != PAM_SUCCESS) ||
-	    (pam->module_path == (char *)NULL))));
+	    (pam->module_path == NULL))));
 }
 
 /*

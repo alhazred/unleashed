@@ -1178,7 +1178,7 @@ sys_set_var(int fcn, struct sysparam *sysp, void *p)
 	if (fcn == SYS_SET_KVAR && sysp->sys_modnam == NULL) {
 		symaddr = kobj_getelfsym(sysp->sys_ptr, NULL, &size);
 	} else if (fcn == SYS_SET_MVAR) {
-		if (sysp->sys_modnam == (char *)NULL ||
+		if (sysp->sys_modnam == NULL ||
 		    strcmp(((struct modctl *)p)->mod_modname,
 		    sysp->sys_modnam) != 0)
 			return;

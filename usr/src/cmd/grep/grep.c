@@ -183,8 +183,7 @@ main(int argc, char **argv)
 
 	if (errflg || (optind >= argc)) {
 		errmsg("Usage: grep [-c|-l|-q] [-r|-R] -hHbnsviw "
-		    "pattern file . . .\n",
-		    (char *)NULL);
+		    "pattern file . . .\n", NULL);
 		exit(2);
 	}
 
@@ -206,7 +205,7 @@ main(int argc, char **argv)
 
 		wordlen = strlen(*argv) + 5; /* '\\' '<' *argv '\\' '>' '\0' */
 		if ((wordbuf = malloc(wordlen)) == NULL) {
-			errmsg("grep: Out of memory for word\n", (char *)NULL);
+			errmsg("grep: Out of memory for word\n", NULL);
 			exit(2);
 		}
 

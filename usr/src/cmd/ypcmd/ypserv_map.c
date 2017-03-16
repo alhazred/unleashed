@@ -77,7 +77,7 @@ ypget_map_order(char *map, char *domain, uint_t *order)
 		key.dsize = yp_last_modified_sz;
 		val = dbm_fetch(fdb, key);
 
-		if (val.dptr != (char *)NULL) {
+		if (val.dptr != NULL) {
 
 			if (val.dsize > MAX_ASCII_ORDER_NUMBER_LENGTH) {
 			return (FALSE);
@@ -118,7 +118,7 @@ ypget_map_master(char **owner, DBM *fdb)
 	key.dsize = yp_master_name_sz;
 	val = dbm_fetch(fdb, key);
 
-	if (val.dptr != (char *)NULL) {
+	if (val.dptr != NULL) {
 
 		if (val.dsize > MAX_MASTER_NAME) {
 			return (FALSE);
@@ -250,7 +250,7 @@ yp_map_access(SVCXPRT *transp, uint_t *error, DBM *fdb)
 		key.dptr = yp_secure;
 		key.dsize = yp_secure_sz;
 		val = dbm_fetch(fdb, key);
-		if (val.dptr == (char *)NULL) {
+		if (val.dptr == NULL) {
 			current_map_access = PUBLIC;
 			return (TRUE);
 		}

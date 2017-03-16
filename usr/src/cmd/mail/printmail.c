@@ -341,7 +341,7 @@ printmail()
 				if (getarg(lfil, resp + 1) == NULL) {
 					cat(resp + 1, hmbox, "");
 				}
-				malf = (FILE *)NULL;
+				malf = NULL;
 				p = resp + 1;
 				while ((p = getarg(lfil, p)) != NULL) {
 					if (flg) {
@@ -371,7 +371,7 @@ printmail()
 						flg++;
 					} else
 						Dout(pn, 0, "!saved\n");
-					if (malf != (FILE *)NULL) {
+					if (malf != NULL) {
 						fclose(malf);
 					}
 				}

@@ -55,7 +55,7 @@ printhdr(int type, int hdrtype, struct hdrs *hptr, FILE *fp)
 
 	/* Print continuation lines, if any... */
 	contptr = hptr;
-	while (contptr->cont != (struct hdrs *)NULL) {
+	while (contptr->cont != NULL) {
 		contptr = contptr->cont;
 		(void) snprintf(buf, sizeof (buf), "%s\n", contptr->value);
 		n = strlen(buf);

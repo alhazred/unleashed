@@ -517,16 +517,14 @@ dynamic_update(struct interface *ifp)
 	    /* BEGIN CSTYLED */
 	    timercmp(&nextmcast, &now, <)) {
 	    /* END CSTYLED */
-		TRACE_ACTION("send dynamic update",
-		    (struct rt_entry *)NULL);
+		TRACE_ACTION("send dynamic update", NULL);
 		supplyall(&allrouters, RTS_CHANGED, ifp, _B_TRUE);
 		lastmcast = now;
 		needupdate = _B_FALSE;
 		nextmcast.tv_sec = 0;
 	} else {
 		needupdate = _B_TRUE;
-		TRACE_ACTION("delay dynamic update",
-		    (struct rt_entry *)NULL);
+		TRACE_ACTION("delay dynamic update", NULL);
 	}
 
 	if (nextmcast.tv_sec == 0) {

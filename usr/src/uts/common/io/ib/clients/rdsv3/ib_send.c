@@ -93,7 +93,7 @@ rdsv3_ib_send_unmap_rdma(struct rdsv3_ib_connection *ic,
 			rdsv3_ib_dma_unmap_sg_rdma(ic->i_cm_id->device,
 			    op->r_nents, op->r_rdma_sg);
 		} else {
-			rdsv3_ib_dma_unmap_sg_rdma((struct ib_device *)NULL,
+			rdsv3_ib_dma_unmap_sg_rdma(NULL,
 			    op->r_nents, op->r_rdma_sg);
 		}
 	}

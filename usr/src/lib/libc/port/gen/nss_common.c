@@ -104,7 +104,7 @@ typedef struct {
 
 static mutex_t nss_policyf_lock = DEFAULTMUTEX;
 static nss_policyf_t nss_policyf_ptrs =
-	{ (void *)NULL };
+	{ NULL };
 
 /*
  * nsswitch db_root state machine definitions:
@@ -287,7 +287,7 @@ static int nss_cfg_policy_init();
 static nss_config_t	nss_policy_params[] = {
 	{ "nss:policyfunc", NSS_CONFIG_ADD, &nss_policyf_lock,
 		(void *)&nss_policyf_ptrs, (size_t)sizeof (nss_policyf_t) },
-	{ NULL,	NSS_CONFIG_ADD,	(mutex_t *)NULL, (void *)NULL, (size_t)0 },
+	{ NULL,	NSS_CONFIG_ADD,	(mutex_t *)NULL, NULL, (size_t)0 },
 };
 
 /*
@@ -513,10 +513,10 @@ nss_cfg_del(nss_config_t *cfgp)
 	/* erase the last one */
 	if (cur->name) {
 		libc_free(cur->name);
-		cur->name = (char *)NULL;
+		cur->name = NULL;
 	}
 	cur->lock = (mutex_t *)NULL;
-	cur->buffer = (void *)NULL;
+	cur->buffer = NULL;
 	cur->length = 0;
 	comp->count--;
 	lmutex_unlock(&nss_cfglock);

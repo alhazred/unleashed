@@ -82,7 +82,7 @@ vassign(value_t *p, char *v)
 	switch (p->v_type&TMASK) {
 
 	case STRING:
-		if (p->v_value != (char *)NULL) {
+		if (p->v_value != NULL) {
 			if (equal(p->v_value, v))
 				return;
 			if (!(p->v_type&(ENVIRON|INIT)))

@@ -535,7 +535,7 @@ static struct stats {
 ldom_hdl_t
 *etm_lhp = NULL;		/* ldom pointer */
 
-static void *etm_dl_hdl = (void *)NULL;
+static void *etm_dl_hdl = NULL;
 static const char *etm_dl_path = "libds.so.1";
 static int etm_dl_mode = (RTLD_NOW | RTLD_LOCAL);
 

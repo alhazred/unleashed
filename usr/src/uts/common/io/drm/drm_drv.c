@@ -162,7 +162,7 @@ drm_find_description(int vendor, int device, drm_pci_id_list_t *idlist)
 			return (idlist[i].name);
 		}
 	}
-	return ((char *)NULL);
+	return (NULL);
 }
 
 static int

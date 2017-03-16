@@ -236,7 +236,7 @@ main(int argc, char **argv)
 		/*
 		 * defopen of NULL closes the open defaults file.
 		 */
-		(void) defopen((char *)NULL);
+		(void) defopen(NULL);
 	}
 
 	if (Umask > ((mode_t)0777))

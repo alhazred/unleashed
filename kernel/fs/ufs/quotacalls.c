@@ -637,8 +637,7 @@ setquota(int cmd, uid_t uid, struct ufsvfs *ufsvfsp,
 	qip = ufsvfsp->vfs_qinod;
 	rw_enter(&qip->i_contents, RW_WRITER);
 	(void) ufs_rdwri(UIO_WRITE, FWRITE | FSYNC, qip, (caddr_t)&dqp->dq_dqb,
-	    sizeof (struct dqblk), dqoff(uid), UIO_SYSSPACE,
-	    (int *)NULL, kcred);
+	    sizeof (struct dqblk), dqoff(uid), UIO_SYSSPACE, NULL, kcred);
 	rw_exit(&qip->i_contents);
 
 	(void) fop_putpage(ITOV(qip), dqoff(dqp->dq_uid) & ~qip->i_fs->fs_bmask,

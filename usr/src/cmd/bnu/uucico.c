@@ -920,9 +920,9 @@ setTZ()
 	int		i;
 	extern int	fclose(), strncmp();
 
-	if ( (tzfp = fopen("/etc/default/init","r")) == (FILE *)NULL )
+	if ( (tzfp = fopen("/etc/default/init","r")) == NULL )
 		return;
-	while ( (bp = fgets(buf,LINELEN,tzfp)) != (char *)NULL ) {
+	while ( (bp = fgets(buf,LINELEN,tzfp)) != NULL ) {
 		while ( isspace(*bp) )
 			++bp;
 		if ( strncmp(bp, "TZ=", 3) == 0 ) {

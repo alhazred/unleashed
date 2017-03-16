@@ -1007,7 +1007,7 @@ sbbc_mbox_request_response(sbbc_msg_t *request,
 	 */
 	waiter = kmem_zalloc(sizeof (struct sbbc_msg_waiter), KM_NOSLEEP);
 
-	if (waiter == (struct sbbc_msg_waiter *)NULL) {
+	if (waiter == NULL) {
 		cmn_err(CE_WARN, "SBBC Mailbox can't allocate waiter\n");
 
 		wakeup_next();
@@ -1496,7 +1496,7 @@ sbbc_mbox_recv_msg()
 				 * client buffer.
 				 */
 				sbbc_msg_t *arg = (sbbc_msg_t *)intr->sbbc_arg;
-				if (arg != (void *)NULL) {
+				if (arg != NULL) {
 					if (arg->msg_len >= frag.f_total_len) {
 						if (f_frag_len > 0)
 							bcopy(tmpmsg.msg_buf,

@@ -47,7 +47,7 @@
 static const char *netgrent_attrs[] = {
 	_N_TRIPLE,
 	_N_MEMBER,
-	(char *)NULL
+	NULL
 };
 
 typedef struct netgroup_name {

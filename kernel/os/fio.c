@@ -1378,7 +1378,7 @@ fassign(vnode_t **vpp, int mode, int *fdp)
 	int error;
 	int fd;
 
-	if (error = falloc((vnode_t *)NULL, mode, &fp, &fd))
+	if (error = falloc(NULL, mode, &fp, &fd))
 		return (error);
 	if (error = fop_open(vpp, mode, fp->f_cred, NULL)) {
 		setf(fd, NULL);

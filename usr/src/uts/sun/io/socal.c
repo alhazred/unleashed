@@ -600,7 +600,7 @@ socal_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 
 	if ((rval != DDI_PROP_SUCCESS) || (i < FC_WWN_SIZE) ||
 	    (bcmp(wwn, "00000000", FC_WWN_SIZE) == 0)) {
-		(void) localetheraddr((struct ether_addr *)NULL, &ourmacaddr);
+		(void) localetheraddr(NULL, &ourmacaddr);
 
 		bcopy((caddr_t)&ourmacaddr, (caddr_t)&s, sizeof (short));
 		socalp->socal_n_wwn.w.wwn_hi = s;
@@ -877,7 +877,7 @@ socal_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	}
 
 	ddi_remove_intr(dip, 0, socalp->iblkc);
-	socalp->iblkc = (void *)NULL;
+	socalp->iblkc = NULL;
 	/*
 	 * Install the interrupt routine.
 	 */
@@ -999,7 +999,7 @@ socal_dodetach(dev_info_t *dip)
 	mutex_exit(&socalp->k_imr_mtx);
 
 	/* remove soc+ interrupt */
-	if (socalp->iblkc != (void *)NULL) {
+	if (socalp->iblkc != NULL) {
 		ddi_remove_intr(dip, (uint_t)0, socalp->iblkc);
 		DEBUGF(2, (CE_CONT,
 		    "socal%d: detach: Removed SOC+ interrupt from ddi\n",
@@ -1926,7 +1926,7 @@ socal_cqalloc_init(socal_state_t *socalp, uint32_t index)
 		    ((uintptr_t)(~(SOCAL_CQ_ALIGN-1))));
 
 		if (ddi_dma_addr_bind_handle(cqp->skc_dhandle,
-		    (struct as *)NULL, (caddr_t)cqp->skc_cq, cq_size,
+		    NULL, (caddr_t)cqp->skc_cq, cq_size,
 		    DDI_DMA_RDWR | DDI_DMA_CONSISTENT, DDI_DMA_DONTWAIT,
 		    NULL, &cqp->skc_dcookie, &ccount) != DDI_DMA_MAPPED) {
 			socal_disp_err(socalp, CE_WARN, "driver.4040",
@@ -1981,7 +1981,7 @@ socal_cqalloc_init(socal_state_t *socalp, uint32_t index)
 		    ((uintptr_t)(~(SOCAL_CQ_ALIGN-1))));
 
 		if (ddi_dma_addr_bind_handle(cqp->skc_dhandle,
-		    (struct as *)NULL, (caddr_t)cqp->skc_cq, cq_size,
+		    NULL, (caddr_t)cqp->skc_cq, cq_size,
 		    DDI_DMA_RDWR | DDI_DMA_CONSISTENT, DDI_DMA_DONTWAIT,
 		    NULL, &cqp->skc_dcookie, &ccount) != DDI_DMA_MAPPED) {
 			socal_disp_err(socalp, CE_WARN, "driver.4070",
@@ -2504,7 +2504,7 @@ socal_add_pool_buffer(socal_state_t *socalp, uint32_t poolid)
 	if (real_len < SOCAL_POOL_SIZE)
 		goto fail;
 
-	if (ddi_dma_addr_bind_handle(socalp->pool_dhandle, (struct as *)NULL,
+	if (ddi_dma_addr_bind_handle(socalp->pool_dhandle, NULL,
 	    (caddr_t)socalp->pool, SOCAL_POOL_SIZE,
 	    DDI_DMA_READ | DDI_DMA_CONSISTENT, DDI_DMA_DONTWAIT,
 	    NULL, &socalp->pool_dcookie, &ccount) != DDI_DMA_MAPPED)
@@ -4450,7 +4450,7 @@ socal_els_alloc(socal_state_t *socalp, uint32_t port, uint32_t dest,
 	if (real_len < cmd_size)
 		goto fail;
 
-	if (ddi_dma_addr_bind_handle(chandle, (struct as *)NULL,
+	if (ddi_dma_addr_bind_handle(chandle, NULL,
 	    (caddr_t)cmd, cmd_size,
 	    DDI_DMA_WRITE | DDI_DMA_CONSISTENT,
 	    DDI_DMA_DONTWAIT, NULL, &ccookie, &ccount)
@@ -4475,7 +4475,7 @@ socal_els_alloc(socal_state_t *socalp, uint32_t port, uint32_t dest,
 		if (real_len < rsp_size)
 		goto fail;
 
-		if (ddi_dma_addr_bind_handle(rhandle, (struct as *)NULL,
+		if (ddi_dma_addr_bind_handle(rhandle, NULL,
 		    rsp, rsp_size,
 		    DDI_DMA_READ | DDI_DMA_CONSISTENT,
 		    DDI_DMA_DONTWAIT, NULL, &rcookie, &ccount)
@@ -4596,7 +4596,7 @@ socal_lbf_alloc(socal_state_t *socalp, uint32_t port,
 	if (real_len < cmd_size)
 		goto fail;
 
-	if (ddi_dma_addr_bind_handle(chandle, (struct as *)NULL,
+	if (ddi_dma_addr_bind_handle(chandle, NULL,
 	    (caddr_t)cmd, cmd_size,
 	    DDI_DMA_WRITE | DDI_DMA_CONSISTENT,
 	    DDI_DMA_DONTWAIT, NULL, &ccookie, &ccount)
@@ -4622,7 +4622,7 @@ socal_lbf_alloc(socal_state_t *socalp, uint32_t port,
 		if (real_len < rsp_size)
 		goto fail;
 
-		if (ddi_dma_addr_bind_handle(rhandle, (struct as *)NULL,
+		if (ddi_dma_addr_bind_handle(rhandle, NULL,
 		    rsp, rsp_size,
 		    DDI_DMA_READ | DDI_DMA_CONSISTENT,
 		    DDI_DMA_DONTWAIT, NULL, &rcookie, &ccount)
@@ -4787,7 +4787,7 @@ socal_getmap(socal_state_t *socalp, uint32_t port, caddr_t arg,
 	if (real_len < i)
 		goto getmap_fail;
 
-	if (ddi_dma_addr_bind_handle(dhandle, (struct as *)NULL,
+	if (ddi_dma_addr_bind_handle(dhandle, NULL,
 	    (caddr_t)buf, i, DDI_DMA_READ | DDI_DMA_CONSISTENT,
 	    DDI_DMA_DONTWAIT, NULL, &dcookie, &ccount) != DDI_DMA_MAPPED)
 		goto getmap_fail;

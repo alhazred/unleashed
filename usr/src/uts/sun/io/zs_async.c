@@ -1793,7 +1793,7 @@ zsa_xsint(struct zscom *zs)
 		if ((za->za_dev == kbddev) ||
 		    ((za->za_dev == rconsdev) || (za->za_dev == stdindev)) &&
 		    (abort_enable != KIOCABORTALTERNATE)) {
-			abort_sequence_enter((char *)NULL);
+			abort_sequence_enter(NULL);
 			/*
 			 * We just broke into the monitor or debugger,
 			 * ignore the break in this case so whatever
@@ -1842,7 +1842,7 @@ zsa_rxint(struct zscom *zs)
 	 */
 	if ((abort_enable == KIOCABORTALTERNATE) && (za->za_dev == rconsdev)) {
 		if (abort_charseq_recognize(c))
-			abort_sequence_enter((char *)NULL);
+			abort_sequence_enter(NULL);
 	}
 
 	if (!rd_cur) {

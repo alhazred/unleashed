@@ -85,7 +85,7 @@ getswapentries(void)
 	/*
 	 * get the number of swap entries
 	 */
-	if ((num = swapctl(SC_GETNSWP, (void *)NULL)) == -1) {
+	if ((num = swapctl(SC_GETNSWP, NULL)) == -1) {
 		err_print("swapctl error ");
 		fullabort();
 	}
@@ -228,7 +228,7 @@ checkswap(start, end)
 	/*
 	 * if there are no swap entries return.
 	 */
-	if (st == (struct swaptable *)NULL)
+	if (st == NULL)
 		return (0);
 	swapent = st->swt_ent;
 	for (i = 0; i < st->swt_n; i++, swapent++) {
@@ -664,7 +664,7 @@ check_label_with_swap()
 	/*
 	 * if there are no swap entries return.
 	 */
-	if (st == (struct swaptable *)NULL)
+	if (st == NULL)
 		return (0);
 	swapent = st->swt_ent;
 	for (i = 0; i < st->swt_n; i++, swapent++)

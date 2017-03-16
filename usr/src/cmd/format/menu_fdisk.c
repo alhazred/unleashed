@@ -362,7 +362,7 @@ c_fdisk()
 	/*
 	 * We must be in interactive mode to use the fdisk command
 	 */
-	if (option_f != (char *)NULL || isatty(0) != 1 || isatty(1) != 1) {
+	if (option_f != NULL || isatty(0) != 1 || isatty(1) != 1) {
 		err_print("Fdisk command is for interactive use only!\n");
 		return (-1);
 	}

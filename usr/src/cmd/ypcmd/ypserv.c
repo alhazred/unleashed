@@ -257,11 +257,11 @@ ypinit(int argc, char **argv)
 	act.sa_handler = cleanup_resolv;
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = SA_RESETHAND;
-	sigaction(SIGTERM, &act, (struct sigaction *)NULL);
-	sigaction(SIGQUIT, &act, (struct sigaction *)NULL);
-	sigaction(SIGABRT, &act, (struct sigaction *)NULL);
-	sigaction(SIGBUS, &act, (struct sigaction *)NULL);
-	sigaction(SIGSEGV, &act, (struct sigaction *)NULL);
+	sigaction(SIGTERM, &act, NULL);
+	sigaction(SIGQUIT, &act, NULL);
+	sigaction(SIGABRT, &act, NULL);
+	sigaction(SIGBUS, &act, NULL);
+	sigaction(SIGSEGV, &act, NULL);
 
 	/*
 	 * Set non-blocking mode and maximum record size for

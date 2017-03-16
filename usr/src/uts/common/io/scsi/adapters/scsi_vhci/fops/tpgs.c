@@ -268,7 +268,7 @@ std_path_activate(struct scsi_device *sd, char *pathclass,
 		    (void *)sd));
 	}
 
-	bp = scsi_alloc_consistent_buf(ap, (struct buf *)NULL, DEV_BSIZE,
+	bp = scsi_alloc_consistent_buf(ap, NULL, DEV_BSIZE,
 	    B_READ, NULL, NULL);
 	if (!bp) {
 		VHCI_DEBUG(4, (CE_WARN, NULL,

@@ -323,7 +323,7 @@ kadm5int_acl_parse_restrictions(s, rpp)
 	    code = ENOMEM;
 	} else {
 	    memset(*rpp, 0, sizeof(**rpp));
-	    for (tp=strtok(sp, delims); tp; tp=strtok((char *)NULL, delims)) {
+	    for (tp=strtok(sp, delims); tp; tp=strtok(NULL, delims)) {
 		flag = 0;
 		if (!krb5_string_to_flags(tp, "+", "-", &flag)) {
 		    /* OK, but was it in the positive or negative sense? */
@@ -339,7 +339,7 @@ kadm5int_acl_parse_restrictions(s, rpp)
 		    (*rpp)->mask |= KADM5_POLICY_CLR;
 		} else {
 		    /* everything else needs an argument ... */
-		    if (!(ap = strtok((char *)NULL, delims))) {
+		    if (!(ap = strtok(NULL, delims))) {
 			code = EINVAL;
 			break;
 		    }

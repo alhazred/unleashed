@@ -1150,7 +1150,7 @@ mach_smpinit(void)
 
 	psm_get_ipivect = pops->psm_get_ipivect;
 
-	(void) add_avintr((void *)NULL, XC_HI_PIL, xc_serv, "xc_intr",
+	(void) add_avintr(NULL, XC_HI_PIL, xc_serv, "xc_intr",
 	    (*pops->psm_get_ipivect)(XC_HI_PIL, PSM_INTR_IPI_HI),
 	    NULL, NULL, NULL, NULL);
 

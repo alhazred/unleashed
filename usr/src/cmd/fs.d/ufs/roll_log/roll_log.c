@@ -154,23 +154,23 @@ rl_roll_log(char *bdev)
 static void
 cleanup(log_info_t *lip)
 {
-	if (lip->li_blkname != (char *)NULL) {
+	if (lip->li_blkname != NULL) {
 		free(lip->li_blkname);
-		lip->li_blkname = (char *)NULL;
+		lip->li_blkname = NULL;
 	}
-	if (lip->li_mntpoint != (char *)NULL) {
+	if (lip->li_mntpoint != NULL) {
 		free(lip->li_mntpoint);
-		lip->li_mntpoint = (char *)NULL;
+		lip->li_mntpoint = NULL;
 	}
-	if (lip->li_tmpmp != (char *)NULL) {
+	if (lip->li_tmpmp != NULL) {
 		(void) rmdir(lip->li_tmpmp);
 		free(lip->li_tmpmp);
-		lip->li_tmpmp = (char *)NULL;
+		lip->li_tmpmp = NULL;
 	}
-	if (lip->li_tmpmp_parent != (char *)NULL) {
+	if (lip->li_tmpmp_parent != NULL) {
 		(void) rmdir(lip->li_tmpmp_parent);
 		free(lip->li_tmpmp_parent);
-		lip->li_tmpmp_parent = (char *)NULL;
+		lip->li_tmpmp_parent = NULL;
 	}
 }
 

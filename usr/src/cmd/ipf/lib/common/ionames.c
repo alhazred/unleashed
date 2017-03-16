@@ -34,5 +34,5 @@ struct	ipopt_names	ionames[] ={
 	{ IPOPT_NSAPA,	0x200000,	3,	"nsapa" },	/* size ?? */
 	{ IPOPT_RTRALRT,0x400000,	3,	"rtralrt" },	/* RFC2113 */
 	{ IPOPT_UMP,	0x800000,	3,	"ump" },	/* size ?? */
-	{ 0, 		0,	0,	(char *)NULL }     /* must be last */
+	{ 0, 		0,	0,	NULL }     /* must be last */
 };

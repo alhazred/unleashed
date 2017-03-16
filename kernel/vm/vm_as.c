@@ -2121,7 +2121,7 @@ as_segunlock(struct seg *seg, caddr_t addr, int attr,
 		    ptob(pos1 - position));
 
 		(void) segop_lockop(seg, range_start, size, attr, MC_UNLOCK,
-		    (ulong_t *)NULL, (size_t)NULL);
+		    NULL, (size_t)NULL);
 		pos1 = pos2;
 	}
 }
@@ -2350,7 +2350,7 @@ retry:
 		 */
 		case MC_UNLOCK:
 			(void) segop_lockop(seg, raddr, ssize, attr, func,
-			    (ulong_t *)NULL, (size_t)NULL);
+			    NULL, (size_t)NULL);
 			break;
 
 		/*

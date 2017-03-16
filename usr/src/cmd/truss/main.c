@@ -543,7 +543,7 @@ main(int argc, char *argv[])
 	setoutput(ofd);		/* establish truss output */
 	istty = isatty(1);
 
-	if (setvbuf(stdout, (char *)NULL, _IOFBF, MYBUFSIZ) != 0)
+	if (setvbuf(stdout, NULL, _IOFBF, MYBUFSIZ) != 0)
 		abend("setvbuf() failure", NULL);
 
 	/*

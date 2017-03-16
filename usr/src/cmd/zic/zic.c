@@ -391,7 +391,7 @@ eat(name, num)
 const char * const	name;
 const int		num;
 {
-	eats(name, num, (char *)NULL, -1);
+	eats(name, num, NULL, -1);
 }
 
 static void
@@ -1677,7 +1677,7 @@ const int			zonecount;
 		if (zp->z_nrules == 0) {
 			stdoff = zp->z_stdoff;
 			doabbr(startbuf, zp->z_format,
-				(char *)NULL, stdoff != 0);
+				NULL, stdoff != 0);
 			type = addtype(oadd(zp->z_gmtoff, stdoff),
 				startbuf, stdoff != 0, startttisstd,
 				startttisgmt);

@@ -187,7 +187,7 @@ main(int argc, char *argv[])
 	 * privilege here (if needed), and then restores the user's
 	 * normal privileges.  When root runs this, it's a no-op.
 	 */
-	if (__init_suid_priv(0, PRIV_SYS_MOUNT, (char *)NULL) < 0) {
+	if (__init_suid_priv(0, PRIV_SYS_MOUNT, NULL) < 0) {
 		(void) fprintf(stderr,
 		    gettext("Insufficient privileges, "
 		    "%s must be set-uid root\n"), argv[0]);

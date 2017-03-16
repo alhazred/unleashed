@@ -68,7 +68,7 @@ lastname(char *name)
 	if (strncmp(sp, "/dev/", 5) == 0)
 		sp += 5;
 	else
-		while ((p = (char *)strchr(sp,'/')) != (char *)NULL) {
+		while ((p = (char *)strchr(sp,'/')) != NULL) {
 			sp = ++p;
 		}
 	return (sp);

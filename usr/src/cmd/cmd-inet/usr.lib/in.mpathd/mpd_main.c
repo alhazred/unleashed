@@ -1900,7 +1900,7 @@ getdefault(char *name)
 			value = strdup(cp);
 
 		/* close */
-		(void) defopen((char *)NULL);
+		(void) defopen(NULL);
 	}
 	return (value);
 }

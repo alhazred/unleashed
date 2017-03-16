@@ -163,7 +163,7 @@ main(int argc, char *argv[])
 	 *
 	 */
 	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET, 0, 0,
-	    (char *)NULL) == -1) {
+	    NULL) == -1) {
 		syslog(LOG_ERR, "should be run with sufficient privileges");
 		exit(3);
 	}
@@ -172,7 +172,7 @@ main(int argc, char *argv[])
 	 * Clear basic privileges not required by reparsed.
 	 */
 	__fini_daemon_priv(PRIV_PROC_FORK, PRIV_PROC_EXEC, PRIV_PROC_SESSION,
-	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, (char *)NULL);
+	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, NULL);
 
 	return (start_reparsed_svcs());
 }

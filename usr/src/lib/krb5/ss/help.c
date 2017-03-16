@@ -55,14 +55,14 @@ void ss_help (argc, argv, sci_idx, info_ptr)
     }
     info = ss_info(sci_idx);
     if (info->info_dirs == (char **)NULL) {
-	ss_perror(sci_idx, SS_ET_NO_INFO_DIR, (char *)NULL);
+	ss_perror(sci_idx, SS_ET_NO_INFO_DIR, NULL);
 	return;
     }
-    if (info->info_dirs[0] == (char *)NULL) {
-	ss_perror(sci_idx, SS_ET_NO_INFO_DIR, (char *)NULL);
+    if (info->info_dirs[0] == NULL) {
+	ss_perror(sci_idx, SS_ET_NO_INFO_DIR, NULL);
 	return;
     }
-    for (idx = 0; info->info_dirs[idx] != (char *)NULL; idx++) {
+    for (idx = 0; info->info_dirs[idx] != NULL; idx++) {
 	(void) strncpy(buffer, info->info_dirs[idx], sizeof(buffer) - 1);
 	buffer[sizeof(buffer) - 1] = '\0';
 	(void) strncat(buffer, "/", sizeof(buffer) - 1 - strlen(buffer));
@@ -89,7 +89,7 @@ got_it:
     default:
 	(void) close(fd); /* what can we do if it fails? */
 #ifdef WAIT_USES_INT
-	while (wait((int *)NULL) != child) {
+	while (wait(NULL) != child) {
 #else
 	while (wait((union wait *)NULL) != child) {
 #endif
@@ -125,7 +125,7 @@ void ss_add_info_dir(sci_idx, info_dir, code_ptr)
     }
     closedir(d);
     dirs = info->info_dirs;
-    for (n_dirs = 0; dirs[n_dirs] != (char *)NULL; n_dirs++)
+    for (n_dirs = 0; dirs[n_dirs] != NULL; n_dirs++)
 	;		/* get number of non-NULL dir entries */
     dirs = (char **)realloc((char *)dirs,
 			    (unsigned)(n_dirs + 2)*sizeof(char *));
@@ -135,7 +135,7 @@ void ss_add_info_dir(sci_idx, info_dir, code_ptr)
 	return;
     }
     info->info_dirs = dirs;
-    dirs[n_dirs + 1] = (char *)NULL;
+    dirs[n_dirs + 1] = NULL;
     dirs[n_dirs] = malloc((unsigned)strlen(info_dir)+1);
     strcpy(dirs[n_dirs], info_dir);
     *code_ptr = 0;

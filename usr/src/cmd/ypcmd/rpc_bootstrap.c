@@ -84,7 +84,7 @@ __clnt_tp_create_bootstrap(hostname, prog, vers, nconf)
 	struct sockaddr_in6	*sa;
 	int fd;
 
-	if (nconf == (struct netconfig *)NULL) {
+	if (nconf == NULL) {
 		rpc_createerr.cf_stat = RPC_N2AXLATEFAILURE;
 		return (NULL);
 	}
@@ -167,7 +167,7 @@ __rpcb_getaddr_bootstrap(program, version, nconf, address, hostname)
 
 	/* Get the address of the RPCBIND at hostname */
 	hent = __files_gethostbyname(hostname, type);
-	if (hent == (struct hostent *)NULL) {
+	if (hent == NULL) {
 		/* Make sure this is not an IP address before giving up */
 		if (inet_pton(type, hostname, addr) == 1) {
 			/* This is a numeric address, fill in the blanks */

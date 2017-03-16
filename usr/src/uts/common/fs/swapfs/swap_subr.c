@@ -403,6 +403,6 @@ swap_init_mem_config(void)
 {
 	int ret;
 
-	ret = kphysm_setup_func_register(&swap_mem_config_vec, (void *)NULL);
+	ret = kphysm_setup_func_register(&swap_mem_config_vec, NULL);
 	ASSERT(ret == 0);
 }

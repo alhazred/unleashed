@@ -143,8 +143,8 @@ main(int ac, char *av[])
 	int logmaxservers = 0;
 	int pid;
 	int i;
-	char *provider = (char *)NULL;
-	char *df_provider = (char *)NULL;
+	char *provider = NULL;
+	char *df_provider = NULL;
 	struct protob *protobp0, *protobp;
 	NETSELDECL(proto) = NULL;
 	NETSELDECL(df_proto) = NULL;
@@ -543,7 +543,7 @@ main(int ac, char *av[])
 	protobp->versmax = (nfs_server_vers_max > NFS_ACL_V3) ?
 	    NFS_ACL_V3 : nfs_server_vers_max;
 	protobp->program = NFS_ACL_PROGRAM;
-	protobp->next = (struct protob *)NULL;
+	protobp->next = NULL;
 
 	if (allflag) {
 		if (do_all(protobp0, nfssvc) == -1) {
@@ -605,7 +605,7 @@ done:
 	 * Get rid of unneeded privileges.
 	 */
 	__fini_daemon_priv(PRIV_PROC_FORK, PRIV_PROC_EXEC, PRIV_PROC_SESSION,
-	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, (char *)NULL);
+	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, NULL);
 
 	/*
 	 * Poll for non-data control events on the transport descriptors.

@@ -756,7 +756,7 @@ scosmb_process_input(void *unused)
 			extern void halt(char *);
 			cmn_err(CE_WARN, "%s Environmental Interrupt",
 			    scosmb_hdr);
-			power_down((char *)NULL);
+			power_down(NULL);
 			halt("Power off the System!\n");
 		}
 

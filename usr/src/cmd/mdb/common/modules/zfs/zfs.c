@@ -2428,7 +2428,7 @@ multilist_walk_step(mdb_walk_state_t *wsp)
 	    mdb_ctf_sizeof_by_name("multilist_sublist_t") * mwd->mwd_idx +
 	    mdb_ctf_offsetof_by_name("multilist_sublist_t", "mls_list");
 
-	mdb_pwalk("list", multilist_print_cb, (void*)NULL, wsp->walk_addr);
+	mdb_pwalk("list", multilist_print_cb, NULL, wsp->walk_addr);
 	mwd->mwd_idx++;
 
 	return (WALK_NEXT);

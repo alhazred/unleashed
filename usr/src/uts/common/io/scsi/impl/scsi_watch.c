@@ -273,7 +273,7 @@ scsi_watch_request_submit_impl(
 	bp = scsi_alloc_consistent_buf(ROUTE, NULL,
 	    sense_length, B_READ, SLEEP_FUNC, NULL);
 
-	rqpkt = scsi_init_pkt(ROUTE, (struct scsi_pkt *)NULL,
+	rqpkt = scsi_init_pkt(ROUTE, NULL,
 	    bp, CDB_GROUP0, 1, 0, PKT_CONSISTENT, SLEEP_FUNC, NULL);
 
 	(void) scsi_setup_cdb((union scsi_cdb *)rqpkt->pkt_cdbp,
@@ -297,7 +297,7 @@ scsi_watch_request_submit_impl(
 		mmcbp = scsi_alloc_consistent_buf(ROUTE, NULL,
 		    8, B_READ, SLEEP_FUNC, NULL);
 
-		pkt = scsi_init_pkt(ROUTE, (struct scsi_pkt *)NULL, mmcbp,
+		pkt = scsi_init_pkt(ROUTE, NULL, mmcbp,
 		    CDB_GROUP1, sizeof (struct scsi_arq_status),
 		    0, 0, SLEEP_FUNC, NULL);
 
@@ -307,14 +307,14 @@ scsi_watch_request_submit_impl(
 		pkt->pkt_cdbp[4] = 1 << SD_GESN_MEDIA_CLASS;
 	} else if (((dtype == 0) || (dtype == 0xE)) &&
 	    (devp->sd_inq->inq_ansi > 2)) {
-		pkt = scsi_init_pkt(ROUTE, (struct scsi_pkt *)NULL, NULL,
+		pkt = scsi_init_pkt(ROUTE, NULL, NULL,
 		    CDB_GROUP1, sizeof (struct scsi_arq_status),
 		    0, 0, SLEEP_FUNC, NULL);
 
 		(void) scsi_setup_cdb((union scsi_cdb *)pkt->pkt_cdbp,
 		    SCMD_WRITE_G1, 0, 0, 0);
 	} else {
-		pkt = scsi_init_pkt(ROUTE, (struct scsi_pkt *)NULL, NULL,
+		pkt = scsi_init_pkt(ROUTE, NULL, NULL,
 		    CDB_GROUP0, sizeof (struct scsi_arq_status),
 		    0, 0, SLEEP_FUNC, NULL);
 
@@ -378,7 +378,7 @@ scsi_watch_request_submit_impl(
 void
 scsi_watch_resume(opaque_t token)
 {
-	struct scsi_watch_request *swr = (struct scsi_watch_request *)NULL;
+	struct scsi_watch_request *swr = NULL;
 	/*
 	 * Change the state to SW_RUNNING and wake up the scsi_watch_thread
 	 */
@@ -395,7 +395,7 @@ scsi_watch_resume(opaque_t token)
 	}
 
 	/* if we can't find this value, then we just do nothing */
-	if (swr == (struct scsi_watch_request *)NULL)
+	if (swr == NULL)
 		goto exit;
 
 	swr->swr_what = SWR_WATCH;
@@ -421,7 +421,7 @@ exit:
 void
 scsi_watch_suspend(opaque_t token)
 {
-	struct scsi_watch_request *swr = (struct scsi_watch_request *)NULL;
+	struct scsi_watch_request *swr = NULL;
 	clock_t halfsec_delay = drv_usectohz(500000);
 
 	SW_DEBUG(0, sw_label, SCSI_DEBUG, "scsi_watch_suspend:\n");
@@ -438,7 +438,7 @@ scsi_watch_suspend(opaque_t token)
 	}
 
 	/* if we can't find this value, then we just do nothing */
-	if (swr == (struct scsi_watch_request *)NULL)
+	if (swr == NULL)
 		goto exit;
 
 

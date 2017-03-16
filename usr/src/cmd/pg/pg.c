@@ -483,7 +483,7 @@ char *file_name;
 			error("(EOF)");
 		}
 		old_ss = new_ss;
-		cmd_ret = command((char *)NULL);
+		cmd_ret = command(NULL);
 	}
 }
 
@@ -965,9 +965,9 @@ char *pc;
 	static int slash;
 
 	if (*pstate == 0) {
-		psign = (char *)NULL;
-		pnumber = (char *)NULL;
-		pcommand = (char *)NULL;
+		psign = NULL;
+		pnumber = NULL;
+		pcommand = NULL;
 		*pstate = 1;
 		slash = 0;
 		return (1);
@@ -981,7 +981,7 @@ char *pc;
 		case 4:
 			if (pc > pcommand)
 				return (1);
-			pcommand = (char *)NULL;
+			pcommand = NULL;
 			/*FALLTHROUGH*/
 
 		case 3:
@@ -989,7 +989,7 @@ char *pc;
 				*pstate = 3;
 				return (1);
 			}
-			pnumber = (char *)NULL;
+			pnumber = NULL;
 			/*FALLTHROUGH*/
 
 		case 2:
@@ -997,7 +997,7 @@ char *pc;
 				*pstate = 2;
 				return (1);
 			}
-			psign = (char *)NULL;
+			psign = NULL;
 			/*FALLTHROUGH*/
 
 		case 1:
@@ -1134,10 +1134,10 @@ char *fs;
 		}
 		f_was_opened = 0;
 	} else {
-		if ((f = fopen(fs, "r")) == (FILE *)NULL) {
+		if ((f = fopen(fs, "r")) == NULL) {
 			(void) fflush(stdout);
 			perror(fs);
-			return ((FILE *)NULL);
+			return (NULL);
 		}
 		f_was_opened = 1;
 	}
@@ -1146,14 +1146,14 @@ char *fs;
 			(void) fclose(f);
 		(void) fflush(stdout);
 		perror(fs);
-		return ((FILE *)NULL);
+		return (NULL);
 	}
 	if ((stbuf.st_mode & S_IFMT) == S_IFDIR) {
 		if (f_was_opened)
 			(void) fclose(f);
 		(void) fprintf(stderr, "pg: ");
 		(void) fprintf(stderr, gettext("%s is a directory\n"), fs);
-		return ((FILE *)NULL);
+		return (NULL);
 	}
 	if ((stbuf.st_mode & S_IFMT) == S_IFREG) {
 		if (f == stdin)		/* It may have been read from */
@@ -1165,20 +1165,20 @@ char *fs;
 			(void) fprintf(stderr, "pg: ");
 			(void) fprintf(stderr, gettext(
 			"special files only handled as standard input\n"));
-			return ((FILE *)NULL);
+			return (NULL);
 		} else {
 			if ((fd = mkstemp(tmp_name)) < 0) {
 			    (void) perror(tmp_name);
-			    return ((FILE *)NULL);
+			    return (NULL);
 			}
 			(void) close(fd);
 			if ((tmp_fou = fopen(tmp_name, "w")) == NULL) {
 				(void) perror(tmp_name);
-				return ((FILE *)NULL);
+				return (NULL);
 			}
 			if ((tmp_fin = fopen(tmp_name, "r")) == NULL) {
 				(void) perror(tmp_name);
-				return ((FILE *)NULL);
+				return (NULL);
 			}
 			pipe_in = 1;
 		}
@@ -1644,7 +1644,7 @@ terminit()	/* set up terminal dependencies from termlib */
 		columns = 80;
 	if (clropt && !clear_screen)
 		clropt = 0;
-	if ((shell = getenv("SHELL")) == (char *)NULL)
+	if ((shell = getenv("SHELL")) == NULL)
 			shell = "/usr/bin/sh";
 }
 
@@ -1654,7 +1654,7 @@ char *mess;
 {
 	kill_line();
 	sopr(gettext(mess), 1);
-	prompt((char *)NULL);
+	prompt(NULL);
 	errors++;
 }
 

@@ -176,7 +176,7 @@ main(int argc, char *argv[])
 
 	for (i = optind; i < argc; i++) {
 		if ((getdev(&argv[i]) == 0) &&
-			(check(argv[i], (char *)NULL) == 0)) {
+			(check(argv[i], NULL) == 0)) {
 				report();
 				cleanup();
 		}

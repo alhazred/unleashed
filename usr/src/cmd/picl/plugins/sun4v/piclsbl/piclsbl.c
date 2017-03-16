@@ -93,7 +93,7 @@ load_pcp_libs()
 	    LIB_PCP_PATH, PCPLIB);
 
 	/* load the library and set up function pointers */
-	if ((pcp_handle = dlopen(pcp_dl_lib, RTLD_NOW)) == (void *) NULL)
+	if ((pcp_handle = dlopen(pcp_dl_lib, RTLD_NOW)) == NULL)
 		return (1);
 
 	pcp_init_ptr = (int(*)())dlsym(pcp_handle, "pcp_init");

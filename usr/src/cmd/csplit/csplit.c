@@ -371,7 +371,7 @@ getfile()
 		/* check for filename length overflow */
 
 		delim = strrchr(file, '/');
-		if (delim == (char *)NULL) {
+		if (delim == NULL) {
 			if (strlen(file) > pathconf(".", _PC_NAME_MAX)) {
 				fatal("Name too long: %s\n", file);
 			}

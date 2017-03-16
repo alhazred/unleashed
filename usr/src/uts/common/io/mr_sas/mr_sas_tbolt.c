@@ -3638,7 +3638,7 @@ mrsas_tbolt_config_pd(struct mrsas_instance *instance, uint16_t tgt,
 		/* sd_unprobe is blank now. Free buffer manually */
 		if (sd->sd_inq) {
 			kmem_free(sd->sd_inq, SUN_INQSIZE);
-			sd->sd_inq = (struct scsi_inquiry *)NULL;
+			sd->sd_inq = NULL;
 		}
 		kmem_free(sd, sizeof (struct scsi_device));
 	} else {

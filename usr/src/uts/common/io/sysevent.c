@@ -88,7 +88,7 @@ sysevent_minor_alloc(void)
 
 	/* Increase bitmap by one BT_NBIPUL */
 	if (sysevent_minor_bits + BT_NBIPUL > SYSEVENT_MINOR_MAX) {
-		return ((ulong_t *)NULL);
+		return (NULL);
 	}
 	sysevent_minor_bitmap = kmem_zalloc(
 	    BT_SIZEOFMAP(sysevent_minor_bits + BT_NBIPUL), KM_SLEEP);

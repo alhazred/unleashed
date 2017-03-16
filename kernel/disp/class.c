@@ -138,7 +138,7 @@ getcid(char *clname, id_t *cidp)
 			kmem_free(clp->cl_name, strlen(clname) + 1);
 			kmem_free(clp->cl_lock, sizeof (krwlock_t));
 			clp->cl_name = "";
-			clp->cl_lock = (krwlock_t *)NULL;
+			clp->cl_lock = NULL;
 		}
 	}
 	mutex_exit(&class_lock);

@@ -2520,7 +2520,7 @@ out:
 		page_unlock(pp);
 	anon_decref(new);
 	page_unlock(opp);
-	return ((page_t *)NULL);
+	return (NULL);
 }
 
 int

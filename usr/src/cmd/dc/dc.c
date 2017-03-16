@@ -1138,7 +1138,7 @@ init(int argc, char **argv)
 
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
 		signal(SIGINT, onintr);
-	setbuf(stdout, (char *)NULL);
+	setbuf(stdout, NULL);
 	svargc = --argc;
 	svargv = argv;
 	while (svargc > 0 && svargv[1][0] == '-') {
@@ -2066,7 +2066,7 @@ load(void)
 			while (sfeof(p) == 0) {
 				s = getwd(p);
 				if (s == 0)
-					putwd(q, (struct blk *)NULL);
+					putwd(q, NULL);
 				else {
 					t = copy(s, length(s));
 					putwd(q, t);

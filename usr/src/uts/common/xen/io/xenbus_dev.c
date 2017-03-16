@@ -240,7 +240,7 @@ xenbusdrv_info(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 	switch (cmd) {
 	case DDI_INFO_DEVT2DEVINFO:
 		if (minor != 0 || xenbusdrv_dip == NULL) {
-			*result = (void *)NULL;
+			*result = NULL;
 			retval = DDI_FAILURE;
 		} else {
 			*result = (void *)xenbusdrv_dip;

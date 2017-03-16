@@ -806,7 +806,7 @@ store_netname(uid, netstore)
 	if (netstore->st_netname)
 		new->keynetdata.st_netname = strdup(netstore->st_netname);
 	else
-		new->keynetdata.st_netname = (char *)NULL;
+		new->keynetdata.st_netname = NULL;
 	new->sc_flag = KEY_NAME;
 	(void) rw_unlock(&g_secretkey_netname_lock);
 	return (1);
@@ -863,7 +863,7 @@ appendnetname3(struct mechentry *mp, uid_t uid, key_netstarg3 *net)
 	if (net->st_netname) {
 		cp->netname = strdup(net->st_netname);
 	} else {
-		cp->netname = (char *)NULL;
+		cp->netname = NULL;
 	}
 	mutex_unlock(&mp->mech_lock);
 	return (1);

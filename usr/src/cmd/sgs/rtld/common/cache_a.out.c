@@ -173,7 +173,7 @@ find_so(const char *ds)
 	 * Try to open directory.  Failing that, just return silently.
 	 */
 	if ((fd = open(ds, O_RDONLY)) == -1)
-		return ((struct db *)NULL);
+		return (NULL);
 
 	/*
 	 * If we have not yet gotten a buffer for reading directories,
@@ -183,7 +183,7 @@ find_so(const char *ds)
 	if (!buf) {
 		if (rtld_fstat(fd, &sb) == -1) {
 			(void) close(fd);
-			return ((struct db *)NULL);
+			return (NULL);
 		}
 		bs = sb.st_blksize;
 		buf = calloc(bs, 1);

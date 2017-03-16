@@ -81,7 +81,7 @@ hxge_tx_ring_send(void *arg, mblk_t *mp)
 		return (mp);
 	}
 
-	return ((mblk_t *)NULL);
+	return (NULL);
 }
 
 static int

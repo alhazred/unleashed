@@ -252,7 +252,7 @@ map_wellknown(pnode_t curnode)
 		/*
 		 * prune subtree if status property indicating not okay
 		 */
-		sok = status_okay((int)curnode, (char *)NULL, 0);
+		sok = status_okay((int)curnode, NULL, 0);
 		if (!sok) {
 			char devtype_buf[OBP_MAXPROPNAME];
 			int size;

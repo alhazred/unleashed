@@ -66,7 +66,7 @@ int ss_parse (sci_idx, line_ptr, argc_ptr, argv_ptr, quiet)
 	*argv_ptr = argv;
 	return(ENOMEM);
     }
-    *argv = (char *)NULL;
+    *argv = NULL;
 
     argc = 0;
 

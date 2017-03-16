@@ -312,7 +312,7 @@ main(int argc, char **argv)
 		    strcasecmp("YES", ptr) == 0)
 			pam_flags |= PAM_DISALLOW_NULL_AUTHTOK;
 
-		(void) defopen((char *)NULL);
+		(void) defopen(NULL);
 	}
 	/*
 	 * Ignore SIGQUIT and SIGINT

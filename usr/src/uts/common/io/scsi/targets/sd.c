@@ -29634,7 +29634,7 @@ sddump_do_read_of_rmw(struct sd_lun *un, uint64_t blkno, uint64_t nblk,
 
 	mutex_exit(SD_MUTEX(un));
 
-	bp = scsi_alloc_consistent_buf(SD_ADDRESS(un), (struct buf *)NULL,
+	bp = scsi_alloc_consistent_buf(SD_ADDRESS(un), NULL,
 	    (size_t)(nblk * target_blocksize), B_READ, NULL_FUNC, NULL);
 	if (bp == NULL) {
 		scsi_log(SD_DEVINFO(un), sd_label, CE_WARN,

@@ -967,7 +967,7 @@ main(ac, av)
     (void) printf(gettext("Enter date, or blank line to exit.\n\t> "));
     (void) fflush(stdout);
     while (gets(buff) && buff[0]) {
-	d = getreldate(buff, (struct timeb *)NULL);
+	d = getreldate(buff, NULL);
 	if (d == -1)
 	    (void) printf(gettext("Bad format - couldn't convert.\n"));
 	else {

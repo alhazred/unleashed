@@ -683,7 +683,7 @@ int main(int argc, char *argv[])
      l_port = addr.sin_port = htons(params.kadmind_port);
      sin = &addr;
 
-	if ((handlep = setnetconfig()) == (void *) NULL) {
+	if ((handlep = setnetconfig()) == NULL) {
 		(void) krb5_klog_syslog(LOG_ERR,
 		    gettext("cannot get any transport information"));
 		krb5_klog_close(context);
@@ -697,7 +697,7 @@ int main(int argc, char *argv[])
 			break;
 	}
 
-	if (nconf == (struct netconfig *) NULL) {
+	if (nconf == NULL) {
 		(void) endnetconfig(handlep);
 		krb5_klog_close(context);
 		exit(1);
@@ -1302,11 +1302,11 @@ void setup_signal_handlers(iprop_role iproprole) {
 #ifdef POSIX_SIGNALS
 	(void) sigemptyset(&s_action.sa_mask);
 	s_action.sa_handler = request_exit;
-	(void) sigaction(SIGINT, &s_action, (struct sigaction *) NULL);
-	(void) sigaction(SIGTERM, &s_action, (struct sigaction *) NULL);
-	(void) sigaction(SIGQUIT, &s_action, (struct sigaction *) NULL);
+	(void) sigaction(SIGINT, &s_action, NULL);
+	(void) sigaction(SIGTERM, &s_action, NULL);
+	(void) sigaction(SIGQUIT, &s_action, NULL);
 	s_action.sa_handler = sig_pipe;
-	(void) sigaction(SIGPIPE, &s_action, (struct sigaction *) NULL);
+	(void) sigaction(SIGPIPE, &s_action, NULL);
 
 	/*
 	 * IProp will fork for a full-resync, we don't want to
@@ -1314,7 +1314,7 @@ void setup_signal_handlers(iprop_role iproprole) {
 	 */
 	if (iproprole == IPROP_MASTER) {
 		s_action.sa_handler = SIG_IGN;
-		(void) sigaction(SIGCHLD, &s_action, (struct sigaction *) NULL);
+		(void) sigaction(SIGCHLD, &s_action, NULL);
 	}
 #else
      signal(SIGINT, request_exit);

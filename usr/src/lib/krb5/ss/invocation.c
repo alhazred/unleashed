@@ -45,9 +45,9 @@ int ss_create_invocation(subsystem_name, version_string, info_ptr,
 	new_table->subsystem_name = subsystem_name;
 	new_table->subsystem_version = version_string;
 	new_table->argv = (char **)NULL;
-	new_table->current_request = (char *)NULL;
+	new_table->current_request = NULL;
 	new_table->info_dirs = (char **)malloc(sizeof(char *));
-	*new_table->info_dirs = (char *)NULL;
+	*new_table->info_dirs = NULL;
 	new_table->info_ptr = info_ptr;
 	/* Solaris Kerberos */
 	new_table->prompt = malloc((unsigned)strlen(subsystem_name)+3);
@@ -78,7 +78,7 @@ ss_delete_invocation(sci_idx)
 	t = ss_info(sci_idx);
 	free(t->prompt);
 	free(t->rqt_tables);
-	while(t->info_dirs[0] != (char *)NULL)
+	while(t->info_dirs[0] != NULL)
 		ss_delete_info_dir(sci_idx, t->info_dirs[0], &ignored_code);
 	free((char *)t->info_dirs);
 	free((char *)t);

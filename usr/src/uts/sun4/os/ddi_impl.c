@@ -1672,7 +1672,7 @@ status_okay(int id, char *buf, int buflen)
 	/*
 	 * if a buffer was provided, use it
 	 */
-	if ((buf == (char *)NULL) || (buflen <= 0)) {
+	if ((buf == NULL) || (buflen <= 0)) {
 		bufp = status_buf;
 		len = sizeof (status_buf);
 	}
@@ -1724,7 +1724,7 @@ parse_idprom(void)
 {
 	if (idprom.id_format == IDFORM_1) {
 		(void) localetheraddr((struct ether_addr *)idprom.id_ether,
-		    (struct ether_addr *)NULL);
+		    NULL);
 		(void) snprintf(hw_serial, HW_HOSTID_LEN, "%u",
 		    (idprom.id_machine << 24) + idprom.id_serial);
 	} else

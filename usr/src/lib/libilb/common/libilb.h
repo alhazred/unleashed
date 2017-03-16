@@ -147,7 +147,7 @@ typedef enum {
 	ILB_TOPO_HALF_NAT
 } ilb_topo_t;
 
-#define	ILB_INVALID_HANDLE ((void *) NULL)
+#define	ILB_INVALID_HANDLE (NULL)
 
 /*
  * note: pointer to a non-existant struct

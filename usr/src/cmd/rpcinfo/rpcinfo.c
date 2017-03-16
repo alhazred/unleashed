@@ -414,7 +414,7 @@ ip_ping(portnum, trans, argc, argv)
 	addr.sin_port = htons(portnum);
 	client = clnt_com_create(&addr, prognum, vers, &fd, trans);
 	rpc_stat = CLNT_CALL(client, NULLPROC, (xdrproc_t)xdr_void,
-			(char *)NULL, (xdrproc_t)xdr_void, (char *)NULL,
+			NULL, (xdrproc_t)xdr_void, NULL,
 			to);
 	if (argc != 2) {
 		/* Version number was known */
@@ -424,7 +424,7 @@ ip_ping(portnum, trans, argc, argv)
 		return;
 	}
 	/* Version number not known */
-	(void) CLNT_CONTROL(client, CLSET_FD_NCLOSE, (char *)NULL);
+	(void) CLNT_CONTROL(client, CLSET_FD_NCLOSE, NULL);
 	if (rpc_stat == RPC_PROGVERSMISMATCH) {
 		clnt_geterr(client, &rpcerr);
 		minvers = rpcerr.re_vers.low;
@@ -438,8 +438,8 @@ ip_ping(portnum, trans, argc, argv)
 		addr.sin_port = htons(portnum);
 		client = clnt_com_create(&addr, prognum, MAX_VERS, &fd, trans);
 		rpc_stat = CLNT_CALL(client, NULLPROC, (xdrproc_t)xdr_void,
-				(char *)NULL, (xdrproc_t)xdr_void,
-				(char *)NULL, to);
+				NULL, (xdrproc_t)xdr_void,
+				NULL, to);
 		if (rpc_stat == RPC_PROGVERSMISMATCH) {
 			clnt_geterr(client, &rpcerr);
 			minvers = rpcerr.re_vers.low;
@@ -466,8 +466,8 @@ ip_ping(portnum, trans, argc, argv)
 		addr.sin_port = htons(portnum);
 		client = clnt_com_create(&addr, prognum, vers, &fd, trans);
 		rpc_stat = CLNT_CALL(client, NULLPROC, (xdrproc_t)xdr_void,
-				(char *)NULL, (xdrproc_t)xdr_void,
-				(char *)NULL, to);
+				NULL, (xdrproc_t)xdr_void,
+				NULL, to);
 		if (pstatus(client, prognum, vers) < 0)
 				failure = 1;
 		(void) CLNT_DESTROY(client);
@@ -649,8 +649,8 @@ brdcst(argc, argv)
 	prognum = getprognum(argv[0]);
 	vers = getvers(argv[1]);
 	rpc_stat = rpc_broadcast(prognum, vers, NULLPROC,
-		(xdrproc_t)xdr_void, (char *)NULL, (xdrproc_t)xdr_void,
-		(char *)NULL, (resultproc_t)reply_proc, NULL);
+		(xdrproc_t)xdr_void, NULL, (xdrproc_t)xdr_void,
+		NULL, (resultproc_t)reply_proc, NULL);
 	if ((rpc_stat != RPC_SUCCESS) && (rpc_stat != RPC_TIMEDOUT)) {
 		(void) fprintf(stderr, "rpcinfo: broadcast failed: %s\n",
 			clnt_sperrno(rpc_stat));
@@ -1384,7 +1384,7 @@ addrping(address, netid, argc, argv)
 		exit(1);
 	}
 	nconf = getnetconfigent(netid);
-	if (nconf == (struct netconfig *)NULL) {
+	if (nconf == NULL) {
 		(void) fprintf(stderr, "rpcinfo: Could not find %s\n", netid);
 		exit(1);
 	}
@@ -1402,8 +1402,8 @@ addrping(address, netid, argc, argv)
 	}
 	client = clnt_addr_create(address, nconf, prognum, versnum);
 	rpc_stat = CLNT_CALL(client, NULLPROC, (xdrproc_t)xdr_void,
-			(char *)NULL, (xdrproc_t)xdr_void,
-			(char *)NULL, to);
+			NULL, (xdrproc_t)xdr_void,
+			NULL, to);
 	if (argc == 2) {
 		/* Version number was known */
 		if (pstatus(client, prognum, versnum) < 0)
@@ -1414,7 +1414,7 @@ addrping(address, netid, argc, argv)
 		return;
 	}
 	/* Version number not known */
-	(void) CLNT_CONTROL(client, CLSET_FD_NCLOSE, (char *)NULL);
+	(void) CLNT_CONTROL(client, CLSET_FD_NCLOSE, NULL);
 	(void) CLNT_CONTROL(client, CLGET_FD, (char *)&fd);
 	if (rpc_stat == RPC_PROGVERSMISMATCH) {
 		clnt_geterr(client, &rpcerr);
@@ -1428,8 +1428,8 @@ addrping(address, netid, argc, argv)
 		(void) CLNT_DESTROY(client);
 		client = clnt_addr_create(address, nconf, prognum, MAX_VERS);
 		rpc_stat = CLNT_CALL(client, NULLPROC, (xdrproc_t)xdr_void,
-				(char *)NULL, (xdrproc_t)xdr_void,
-				(char *)NULL, to);
+				NULL, (xdrproc_t)xdr_void,
+				NULL, to);
 		if (rpc_stat == RPC_PROGVERSMISMATCH) {
 			clnt_geterr(client, &rpcerr);
 			minvers = rpcerr.re_vers.low;
@@ -1455,8 +1455,8 @@ addrping(address, netid, argc, argv)
 	for (versnum = minvers; versnum <= maxvers; versnum++) {
 		client = clnt_addr_create(address, nconf, prognum, versnum);
 		rpc_stat = CLNT_CALL(client, NULLPROC, (xdrproc_t)xdr_void,
-				(char *)NULL, (xdrproc_t)xdr_void,
-				(char *)NULL, to);
+				NULL, (xdrproc_t)xdr_void,
+				NULL, to);
 		if (pstatus(client, prognum, versnum) < 0)
 				failure = 1;
 		(void) CLNT_DESTROY(client);
@@ -1502,7 +1502,7 @@ progping(netid, argc, argv)
 	}
 	if (netid) {
 		nconf = getnetconfigent(netid);
-		if (nconf == (struct netconfig *)NULL) {
+		if (nconf == NULL) {
 			(void) fprintf(stderr,
 				"rpcinfo: Could not find %s\n", netid);
 			exit(1);
@@ -1518,8 +1518,8 @@ progping(netid, argc, argv)
 	to.tv_sec = 10;
 	to.tv_usec = 0;
 	rpc_stat = CLNT_CALL(client, NULLPROC, (xdrproc_t)xdr_void,
-			(char *)NULL, (xdrproc_t)xdr_void,
-			(char *)NULL, to);
+			NULL, (xdrproc_t)xdr_void,
+			NULL, to);
 	if (argc == 3) {
 		/* Version number was known */
 		if (pstatus(client, prognum, versnum) < 0)
@@ -1542,8 +1542,8 @@ progping(netid, argc, argv)
 		versnum = MAX_VERS;
 		(void) CLNT_CONTROL(client, CLSET_VERS, (char *)&versnum);
 		rpc_stat = CLNT_CALL(client, NULLPROC,
-				(xdrproc_t)xdr_void, (char *)NULL,
-				(xdrproc_t)xdr_void, (char *)NULL, to);
+				(xdrproc_t)xdr_void, NULL,
+				(xdrproc_t)xdr_void, NULL, to);
 		if (rpc_stat == RPC_PROGVERSMISMATCH) {
 			clnt_geterr(client, &rpcerr);
 			minvers = rpcerr.re_vers.low;
@@ -1568,8 +1568,8 @@ progping(netid, argc, argv)
 	for (versnum = minvers; versnum <= maxvers; versnum++) {
 		(void) CLNT_CONTROL(client, CLSET_VERS, (char *)&versnum);
 		rpc_stat = CLNT_CALL(client, NULLPROC, (xdrproc_t)xdr_void,
-					(char *)NULL, (xdrproc_t)xdr_void,
-					(char *)NULL, to);
+					NULL, (xdrproc_t)xdr_void,
+					NULL, to);
 		if (pstatus(client, prognum, versnum) < 0)
 				failure = 1;
 	}

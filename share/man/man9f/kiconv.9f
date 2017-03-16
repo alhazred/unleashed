@@ -233,7 +233,7 @@ doconversion(char *fromcode, char *tocode, char *inbuf, char *outbuf,
          * in the conversion descriptor state.
          */
         ileft = 0;
-        ret = kiconv(cd, (char *)NULL, &ileft, &outbuf, outlen, &err);
+        ret = kiconv(cd, NULL, &ileft, &outbuf, outlen, &err);
         if (ret == (size_t)-1)
                 goto doconv_error_return;
 

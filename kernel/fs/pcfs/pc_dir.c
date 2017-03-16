@@ -654,8 +654,7 @@ top:
 				error = ENOTDIR;
 			} else {
 				/* nondir/nondir, remove target */
-				error = pc_dirremove(tdp, tnm,
-				    (struct vnode *)NULL, VREG, ctp);
+				error = pc_dirremove(tdp, tnm, NULL, VREG, ctp);
 				if (error == 0) {
 					vnevent_rename_dest(PCTOV(tpcp),
 					    PCTOV(tdp), tnm, ctp);
@@ -667,8 +666,7 @@ top:
 			}
 		} else if (oldisdir) {
 			/* dir/dir, remove target */
-			error = pc_dirremove(tdp, tnm,
-			    (struct vnode *)NULL, VDIR, ctp);
+			error = pc_dirremove(tdp, tnm, NULL, VDIR, ctp);
 			if (error == 0) {
 				vnevent_rename_dest(PCTOV(tpcp), PCTOV(tdp),
 				    tnm, ctp);

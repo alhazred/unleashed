@@ -914,7 +914,7 @@ rpcbproc_callit_com(struct svc_req *rqstp, SVCXPRT *transp, ulong_t reply_type,
 	if (reply_type == RPCBPROC_INDIRECT) {
 		char *uaddr = mergeaddr(transp, transp->xp_netid,
 		    rbl->rpcb_map.r_addr, NULL);
-		if ((uaddr == (char *)NULL) || uaddr[0] == '\0') {
+		if ((uaddr == NULL) || uaddr[0] == '\0') {
 			(void) rw_unlock(&list_rbl_lock);
 			svcerr_noprog(transp);
 			goto error;

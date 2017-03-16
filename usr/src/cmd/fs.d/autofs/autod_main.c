@@ -699,7 +699,7 @@ autofs_doorfunc(
 		return;
 	}
 
-	timenow = time((time_t *)NULL);
+	timenow = time(NULL);
 
 	which = ((autofs_door_args_t *)argp)->cmd;
 	switch (which) {

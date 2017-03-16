@@ -48,7 +48,7 @@ static const char *pwd_attrs[] = {
 	_PWD_HOMEDIRECTORY,
 	_PWD_LOGINSHELL,
 	_PWD_OBJCLASS,
-	(char *)NULL
+	NULL
 };
 
 static int

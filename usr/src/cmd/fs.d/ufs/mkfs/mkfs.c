@@ -1397,7 +1397,7 @@ retry_alternate_logic:
 		sigemptyset(&sigact.sa_mask);
 		sigact.sa_flags = SA_RESTART;
 
-		if (sigaction(SIGINT, &sigact, (struct sigaction *)NULL) < 0) {
+		if (sigaction(SIGINT, &sigact, NULL) < 0) {
 			perror(gettext("Could not register SIGINT handler"));
 			lockexit(3);
 		}
@@ -1504,7 +1504,7 @@ retry_alternate_logic:
 #ifdef MKFS_DEBUG
 	srand48(12962);	/* reproducible results */
 #else
-	srand48((long)(time((time_t *)NULL) + getpid()));
+	srand48((long)(time(NULL) + getpid()));
 #endif
 
 	if (grow) {
@@ -4017,11 +4017,11 @@ logsetup(char *devstr)
 
 		/* get the log allocation block */
 		buf = (void *)malloc(DEV_BSIZE);
-		if (buf == (void *) NULL)
+		if (buf == NULL)
 			return;
 
 		ud_buf = (void *)malloc(DEV_BSIZE);
-		if (ud_buf == (void *) NULL) {
+		if (ud_buf == NULL) {
 			free(buf);
 			return;
 		}

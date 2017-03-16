@@ -1388,8 +1388,8 @@ display_schizo_revisions(Board_node *bdlist, int mode)
 			SG_SET_FRU_NAME_MODULE(fru_name, portid % 2);
 
 			if (mode == SG_SCHIZO_FAILED) {
-				if ((status_a != (char *)NULL) &&
-				    ((status_b != (char *)NULL))) {
+				if ((status_a != NULL) &&
+				    ((status_b != NULL))) {
 					if ((strcmp
 					    (status_a, SG_DISABLED) == 0) &&
 					    (strcmp(status_b,
@@ -1412,13 +1412,13 @@ display_schizo_revisions(Board_node *bdlist, int mode)
 			 * SG_SCHIZO_FAILED, then this section of code will
 			 * not be executed
 			 */
-			if ((status_a == (char *)NULL) &&
-			    ((status_b == (char *)NULL)))
+			if ((status_a == NULL) &&
+			    ((status_b == NULL)))
 				sprintf(status, " %s      ", SG_OK);
-			else if ((status_a == (char *)NULL) &&
+			else if ((status_a == NULL) &&
 			    ((strcmp(status_b, SG_DISABLED) == 0)))
 				sprintf(status, " %s", SG_DEGRADED);
-			else if ((status_b == (char *)NULL) &&
+			else if ((status_b == NULL) &&
 			    ((strcmp(status_a, SG_DISABLED) == 0)))
 				sprintf(status, " %s", SG_DEGRADED);
 			else
@@ -1541,7 +1541,7 @@ display_sgsbbc_revisions(Board_node *bdlist)
 			/* portid */
 			log_printf("%-3d ", portid, 0);
 			/* status */
-			if (status == (char *)NULL)
+			if (status == NULL)
 				log_printf(" ok      ", 0);
 			else
 				log_printf(" fail    ", 0);

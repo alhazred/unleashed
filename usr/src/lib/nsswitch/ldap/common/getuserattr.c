@@ -47,7 +47,7 @@ static const char *user_attrs[] = {
 	_USER_RES1,
 	_USER_RES2,
 	_USER_ATTRS,
-	(char *)NULL
+	NULL
 };
 /*
  * _nss_ldap_user2str is the data marshaling method for the user_attr

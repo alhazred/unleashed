@@ -81,7 +81,7 @@ getgssd_handle()
 	if (first_time == TRUE) {
 		if (uname(&u) == -1)
 			return ((CLIENT *) NULL);
-		if ((hostname = strdup(u.nodename)) == (char *)NULL)
+		if ((hostname = strdup(u.nodename)) == NULL)
 			return ((CLIENT *) NULL);
 		first_time = FALSE;
 	}

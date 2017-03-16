@@ -3969,13 +3969,13 @@ page_numtopp(pfn_t pfnum, se_t se)
 retry:
 	pp = page_numtopp_nolock(pfnum);
 	if (pp == NULL) {
-		return ((page_t *)NULL);
+		return (NULL);
 	}
 
 	/*
 	 * Acquire the appropriate lock on the page.
 	 */
-	while (!page_lock(pp, se, (kmutex_t *)NULL, P_RECLAIM)) {
+	while (!page_lock(pp, se, NULL, P_RECLAIM)) {
 		if (page_pptonum(pp) != pfnum)
 			goto retry;
 		continue;
@@ -3997,13 +3997,13 @@ page_numtopp_noreclaim(pfn_t pfnum, se_t se)
 retry:
 	pp = page_numtopp_nolock(pfnum);
 	if (pp == NULL) {
-		return ((page_t *)NULL);
+		return (NULL);
 	}
 
 	/*
 	 * Acquire the appropriate lock on the page.
 	 */
-	while (!page_lock(pp, se, (kmutex_t *)NULL, P_NO_RECLAIM)) {
+	while (!page_lock(pp, se, NULL, P_NO_RECLAIM)) {
 		if (page_pptonum(pp) != pfnum)
 			goto retry;
 		continue;
@@ -4029,7 +4029,7 @@ page_numtopp_nowait(pfn_t pfnum, se_t se)
 retry:
 	pp = page_numtopp_nolock(pfnum);
 	if (pp == NULL) {
-		return ((page_t *)NULL);
+		return (NULL);
 	}
 
 	/*
@@ -5522,7 +5522,7 @@ page_numtopp_nolock(pfn_t pfnum)
 	vc->vc_pnum_memseg = NULL;
 	kpreempt_enable();
 	MEMSEG_STAT_INCR(nnotfound);
-	return ((page_t *)NULL);
+	return (NULL);
 
 }
 
@@ -5559,7 +5559,7 @@ page_numtomemseg_nolock(pfn_t pfnum)
 		}
 	}
 	kpreempt_enable();
-	return ((struct memseg *)NULL);
+	return (NULL);
 }
 
 /*

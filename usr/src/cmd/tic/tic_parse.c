@@ -192,7 +192,7 @@ compile()
 "File does not start with terminal names in column one");
 
 	while (token_type != EOF)
-		token_type = do_entry((struct use_item *)NULL);
+		token_type = do_entry(NULL);
 
 	DEBUG(2, "Starting handling of forward USE's\n", "");
 

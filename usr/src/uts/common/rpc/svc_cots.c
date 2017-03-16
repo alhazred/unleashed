@@ -443,7 +443,7 @@ svc_cots_ksend(SVCXPRT *clone_xprt, struct rpc_msg *msg)
 		 * The program above pre-allocated an mblk and put
 		 * the data in place.
 		 */
-		cd->cd_mp = (mblk_t *)NULL;
+		cd->cd_mp = NULL;
 		if (!(xdr_replymsg_body(xdrs, msg) &&
 		    (!has_args || SVCAUTH_WRAP(&clone_xprt->xp_auth, xdrs,
 		    xdr_results, xdr_location)))) {
@@ -698,7 +698,7 @@ svc_cots_kfreeres(SVCXPRT *clone_xprt)
 	cd = (cots_data_t *)clone_xprt->xp_p2buf;
 	if ((mp = cd->cd_mp) != NULL) {
 		XDR_DESTROY(&clone_xprt->xp_xdrout);
-		cd->cd_mp = (mblk_t *)NULL;
+		cd->cd_mp = NULL;
 		freemsg(mp);
 	}
 }

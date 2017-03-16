@@ -703,7 +703,7 @@ load_certs(KMF_HANDLE *kmfh, char *issuer, char *subject, KMF_BIGINT *serial,
 
 		/* This function only works on PEM files */
 		rv = extract_pem(kmfh, issuer, subject, serial, pathname,
-		    (uchar_t *)NULL, 0, NULL, &certs, &nc);
+		    NULL, 0, NULL, &certs, &nc);
 	} else {
 		return (KMF_ERR_ENCODING);
 	}

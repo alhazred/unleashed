@@ -47,7 +47,7 @@ static const char *prof_attrs[] = {
 	_PROF_RES2,
 	_PROF_DESC,
 	_PROF_ATTRS,
-	(char *)NULL
+	NULL
 };
 /*
  * _nss_ldap_prof2str is the data marshaling method for the prof_attr

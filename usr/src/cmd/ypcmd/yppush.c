@@ -124,8 +124,8 @@ struct server {
 };
 #define	n_conf dom_binding->ypbind_nconf
 #define	svc_addr dom_binding->ypbind_svcaddr
-static struct server *server_list = (struct server *)NULL;
-static struct server *active_list = (struct server *)NULL;
+static struct server *server_list = NULL;
+static struct server *active_list = NULL;
 
 /*  State values for server.state field */
 
@@ -167,7 +167,7 @@ static struct state_duple state_duples[] = {
 	{SSTAT_RPC, "RPC error to %s:  "},
 	{SSTAT_RSCRC, "Local resource allocation failure - can't talk to %s."},
 	{SSTAT_SYSTEM, "System error talking to %s:  "},
-	{0, (char *)NULL}
+	{0, NULL}
 };
 /*
  * Status_duple table.  No messages should require any args.
@@ -199,7 +199,7 @@ static struct status_duple status_duples[] = {
 	{YPPUSH_REFUSED, "Failed - Transfer request refused."},
 	{YPPUSH_NOALIAS,
 		"Failed - System V domain/map alias not in alias file."},
-	{0, (char *)NULL}
+	{0, NULL}
 };
 /*
  * rpcerr_duple table
@@ -225,7 +225,7 @@ static struct rpcerr_duple rpcerr_duples[] = {
 	{RPC_RPCBFAILURE, "rpcbind failure (host is down?)"},
 	{RPC_PROGNOTREGISTERED, "RPC prog not registered"},
 	{RPC_SYSTEMERROR, "RPC system error"},
-	{RPC_SUCCESS, (char *)NULL}		/* Duplicate rpc_stat 	*/
+	{RPC_SUCCESS, NULL}		/* Duplicate rpc_stat 	*/
 						/* unused in list-end 	*/
 						/* entry */
 };
@@ -547,7 +547,7 @@ add_server(char *sname, int namelen)
 	}
 
 	if ((ps = (struct server *)malloc((unsigned)sizeof (struct server)))
-		== (struct server *)NULL) {
+		== NULL) {
 		perror("yppush: malloc failure");
 		exit(1);
 	}
@@ -1006,7 +1006,7 @@ send_message(struct server *ps, unsigned long program, long *err)
 	struct rpc_err rpcerr;
 
 	if ((ps->domb.dom_client = __yp_clnt_create_rsvdport(ps->svc_name,
-	    YPPROG, YPVERS, (char *)NULL, 0, 0))  == NULL) {
+	    YPPROG, YPVERS, NULL, 0, 0))  == NULL) {
 
 		if (rpc_createerr.cf_stat == RPC_PROGNOTREGISTERED) {
 			return (SSTAT_PROGNOTREG);

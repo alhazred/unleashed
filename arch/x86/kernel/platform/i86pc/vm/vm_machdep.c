@@ -1090,7 +1090,7 @@ retry:
 
 		if (!PP_ISAGED(pp)) {
 			page_list_sub(pp, PG_CACHE_LIST);
-			page_hashout(pp, (kmutex_t *)NULL);
+			page_hashout(pp, NULL);
 		} else {
 			page_list_sub(pp, PG_FREE_LIST);
 		}

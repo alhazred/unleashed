@@ -46,7 +46,7 @@
 		mode, 0600, vpp, CRCREAT, 0))
 #define	cpr_rdwr(rw, vp, basep, cnt)	(vn_rdwr(rw, vp,  (caddr_t)(basep), \
 		cnt, 0LL, UIO_SYSSPACE, 0, (rlim64_t)MAXOFF_T, CRED(), \
-		(ssize_t *)NULL))
+		NULL))
 
 extern void clkset(time_t);
 extern cpu_t *i_cpr_bootcpu(void);

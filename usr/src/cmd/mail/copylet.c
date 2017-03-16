@@ -123,8 +123,7 @@ xxxcopylet(int letnum, FILE *f, int type)
 			if (!sending) {
 				savehdrs(buf,htype);
 			}
-			if ((hptr = hdrlines[H_CLEN].head) !=
-			    (struct hdrs *)NULL) {
+			if ((hptr = hdrlines[H_CLEN].head) != NULL) {
 				clen = atol (hptr->value);
 			}
 		}
@@ -206,28 +205,26 @@ xxxcopylet(int letnum, FILE *f, int type)
 				}
 				if (orig_tcopy) {
 				    if ((hptr = hdrlines[H_TCOPY].head) !=
-							(struct hdrs *)NULL) {
+							NULL) {
 				        i +=
 					  strlen(hdrlines[H_TCOPY].head->value);
 				    }
 				}
 				if ((hptr = hdrlines[H_RECEIVED].head) !=
-							(struct hdrs *)NULL) {
+							NULL) {
 				    i += rcvbytecnt;
 				}
 				/* Add in strlen of MIME-Version:, */
 				/* Content-Length: and Content-Type: */
 				/* values for msg being returned... */
 				if ((hptr = hdrlines[H_MIMEVERS].head) !=
-							(struct hdrs *)NULL) {
+							NULL) {
 				    i += strlen(hdrlines[H_MIMEVERS].head->value);
 				}
-				if ((hptr = hdrlines[H_CTYPE].head) !=
-							(struct hdrs *)NULL) {
+				if ((hptr = hdrlines[H_CTYPE].head) != NULL) {
 				    i += strlen(hdrlines[H_CTYPE].head->value);
 				}
-				if ((hptr = hdrlines[H_CLEN].head) !=
-							(struct hdrs *)NULL) {
+				if ((hptr = hdrlines[H_CLEN].head) != NULL) {
 				    i += strlen(hdrlines[H_CLEN].head->value);
 				}
 				if (fprintf(f, "%s %ld\n", header[H_CLEN].tag, i) < 0)

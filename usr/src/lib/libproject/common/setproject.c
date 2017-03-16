@@ -768,9 +768,9 @@ setproject_initpriv(void)
 
 	if (getzoneid() == GLOBAL_ZONEID) {
 		res = __init_suid_priv(0, taskpriv, rctlpriv, poolpriv,
-		    schedpriv, (char *)NULL);
+		    schedpriv, NULL);
 	} else {
-		res = __init_suid_priv(0, taskpriv, rctlpriv, (char *)NULL);
+		res = __init_suid_priv(0, taskpriv, rctlpriv, NULL);
 	}
 
 	if (res != 0)

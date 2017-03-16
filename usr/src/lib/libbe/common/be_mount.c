@@ -1689,7 +1689,7 @@ loopback_mount_shared_fs(zfs_handle_t *zhp, be_mount_data_t *md)
 static int
 loopback_mount_zonepath(const char *zonepath, be_mount_data_t *md)
 {
-	FILE		*fp = (FILE *)NULL;
+	FILE		*fp = NULL;
 	struct stat	st;
 	char		*p;
 	char		*p1;

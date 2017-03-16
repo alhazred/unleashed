@@ -1086,8 +1086,7 @@ ufs_fbiwrite(struct fbuf *fbp, struct inode *ip, daddr_t bn, long bsize)
 	/*
 	 * Inlined version of fbiwrite()
 	 */
-	bp = pageio_setup((struct page *)NULL, fbp->fb_count,
-	    ip->i_devvp, B_WRITE);
+	bp = pageio_setup(NULL, fbp->fb_count, ip->i_devvp, B_WRITE);
 	bp->b_flags &= ~B_PAGEIO;
 	bp->b_un.b_addr = fbp->fb_addr;
 

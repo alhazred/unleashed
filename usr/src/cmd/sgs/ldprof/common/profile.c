@@ -147,7 +147,7 @@ la_version(uint_t version)
 	 * We're presently not being monitored (although there's no control of
 	 * someone attaching to us later), so retrieve the profile target name.
 	 */
-	if (dlinfo((void *)NULL, RTLD_DI_PROFILENAME, &pname) == -1)
+	if (dlinfo(NULL, RTLD_DI_PROFILENAME, &pname) == -1)
 		(void) fprintf(stderr,  MSG_INTL(MSG_GEN_PROFNOTSET));
 
 	return (LAV_CURRENT);
@@ -191,7 +191,7 @@ profile_open(const char *fname, Link_map *lmp)
 #else
 		suf = MSG_ORIG(MSG_SUF_PROFILE);
 #endif
-		if (dlinfo((void *)NULL, RTLD_DI_PROFILEOUT, &dir) == -1)
+		if (dlinfo(NULL, RTLD_DI_PROFILEOUT, &dir) == -1)
 			dir = MSG_ORIG(MSG_PTH_VARTMP);
 
 		(void) snprintf(Profile, MAXPATHLEN, MSG_ORIG(MSG_FMT_PROFILE),

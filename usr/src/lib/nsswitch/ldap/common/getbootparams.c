@@ -36,7 +36,7 @@
 static const char *bootparams_attrs[] = {
 	_B_HOSTNAME,
 	_B_PARAMETER,
-	(char *)NULL
+	NULL
 };
 
 /*

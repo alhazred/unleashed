@@ -184,7 +184,7 @@ main(int argc, char *argv[])
 	 * This program needs the proc_owner privilege
 	 */
 	(void) __init_suid_priv(PU_CLEARLIMITSET, PRIV_PROC_OWNER,
-	    (char *)NULL);
+	    NULL);
 
 	(void) setlocale(LC_ALL, "");
 #if !defined(TEXT_DOMAIN)

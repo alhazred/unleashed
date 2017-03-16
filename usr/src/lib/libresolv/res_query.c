@@ -86,7 +86,7 @@ res_query(name, class, type, answer, anslen)
 	if (_res.options & RES_DEBUG)
 		printf("res_query(%s, %d, %d)\n", name, class, type);
 #endif
-	n = res_mkquery(QUERY, name, class, type, (char *)NULL, 0, NULL,
+	n = res_mkquery(QUERY, name, class, type, NULL, 0, NULL,
 	    buf, sizeof (buf));
 
 	if (n <= 0) {
@@ -211,7 +211,7 @@ res_search(name, class, type, answer, anslen)
 	 * about a top-level domain (for servers, SOA, etc) will not use
 	 * res_search.
 	 */
-	if (n && (ret = res_querydomain(name, (char *)NULL, class, type,
+	if (n && (ret = res_querydomain(name, NULL, class, type,
 	    answer, anslen)) > 0)
 		return (ret);
 	if (got_nodata)
@@ -236,7 +236,7 @@ res_querydomain(name, domain, class, type, answer, anslen)
 
 #ifdef DEBUG
 	if (_res.options & RES_DEBUG) {
-		if (domain == (char *)NULL)
+		if (domain == NULL)
 			printf("res_querydomain(%s, NULL, %d, %d)\n",
 					    name, class, type);
 		else

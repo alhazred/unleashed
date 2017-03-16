@@ -97,7 +97,7 @@ psm_modlinkage_alloc(struct psm_info *infop)
 
 	mlinkp->ml_rev = MODREV_1;
 	mlinkp->ml_linkage[0] = (void *)mlpsmp;
-	mlinkp->ml_linkage[1] = (void *)NULL;
+	mlinkp->ml_linkage[1] = NULL;
 
 	mlpsmp->psm_modops = &mod_psmops;
 	mlpsmp->psm_linkinfo = infop->p_mach_desc;
@@ -185,7 +185,7 @@ psm_mod_info(void **handlepp, struct psm_info *infop, struct modinfo *modinfop)
 int
 psm_add_intr(int lvl, avfunc xxintr, char *name, int vect, caddr_t arg)
 {
-	return (add_avintr((void *)NULL, lvl, xxintr, name, vect,
+	return (add_avintr(NULL, lvl, xxintr, name, vect,
 	    arg, NULL, NULL, NULL));
 }
 
@@ -382,7 +382,7 @@ psm_modload(void)
 	mutex_init(&psmsw_lock, NULL, MUTEX_DEFAULT, NULL);
 	open_mach_list();
 
-	for (this = psm_get_impl_module(1); this != (char *)NULL;
+	for (this = psm_get_impl_module(1); this != NULL;
 	    this = psm_get_impl_module(0)) {
 		if (modload("mach", this) == -1)
 			cmn_err(CE_CONT, "!Skipping psm: %s\n", this);

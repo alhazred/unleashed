@@ -45,7 +45,7 @@ getcomment(char *s, char *q)
 	char	*p, *sav_q;
 	int	depth = 0;
 	
-	if ((p = strchr(s, '(')) == (char *)NULL) {
+	if ((p = strchr(s, '(')) == NULL) {
 		/* no comment found */
 		return (0);
 	}

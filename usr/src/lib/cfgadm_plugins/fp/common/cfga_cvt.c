@@ -504,7 +504,7 @@ update_lunlist(
 {
 	struct luninfo_list *newlun, *curlun, *prevlun;
 
-	newlun = curlun = prevlun = (struct luninfo_list *)NULL;
+	newlun = curlun = prevlun = NULL;
 
 	newlun = calloc(1, sizeof (struct luninfo_list));
 	if (newlun == NULL) {
@@ -515,7 +515,7 @@ update_lunlist(
 	newlun->lunnum = lun;
 	newlun->node_state = state;
 	newlun->path = pathp;
-	newlun->next = (struct luninfo_list *)NULL;
+	newlun->next = NULL;
 
 	/* if lunlist is empty add the new lun info and return. */
 	if (*lunlistpp == NULL) {

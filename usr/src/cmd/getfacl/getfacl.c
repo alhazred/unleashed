@@ -306,7 +306,7 @@ pruname(uid_t uid)
 	static char	uidp[10];	/* big enough */
 
 	passwdp = getpwuid(uid);
-	if (passwdp == (struct passwd *)NULL) {
+	if (passwdp == NULL) {
 		/* could not get passwd information: display uid instead */
 		(void) sprintf(uidp, "%u", uid);
 		return (uidp);
@@ -321,7 +321,7 @@ prgname(gid_t gid)
 	static char	gidp[10];	/* big enough */
 
 	groupp = getgrgid(gid);
-	if (groupp == (struct group *)NULL) {
+	if (groupp == NULL) {
 		/* could not get group information: display gid instead */
 		(void) sprintf(gidp, "%u", gid);
 		return (gidp);

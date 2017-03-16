@@ -250,7 +250,7 @@ main(int argc, char *argv[])
 				nonfatal(msg);
 			}
 		dprintf(("Max fds set to %d\n", Max_fds));
-		(void) defopen((char *)NULL);
+		(void) defopen(NULL);
 	}
 
 	if (Debug == 0) {

@@ -117,7 +117,7 @@ mypopen(char *cmd, char *mode)
 			(void) dup2(remside, tst(0, 1));
 			(void) close(remside);
 		}
-		execl("/bin/sh", "sh", "-c", cmd, (char *)NULL);
+		execl("/bin/sh", "sh", "-c", cmd, NULL);
 		_exit(127);
 	}
 	if (pid == (pid_t)-1) {

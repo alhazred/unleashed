@@ -105,7 +105,7 @@ void kadm_1(rqstp, transp)
      
      switch (rqstp->rq_proc) {
      case NULLPROC:
-	  (void) svc_sendreply(transp, xdr_void, (char *)NULL);
+	  (void) svc_sendreply(transp, xdr_void, NULL);
 	  return;
 	  
      case CREATE_PRINCIPAL:

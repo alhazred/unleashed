@@ -128,7 +128,7 @@ main(int argc, char *argv[])
 		(void) printf("fsid: %x %x\n", fs->fs_id[0], fs->fs_id[1]);
 	} else {
 		n = getpid();
-		(void) gettimeofday(&timeval, (struct timezone *)NULL);
+		(void) gettimeofday(&timeval, NULL);
 		srand48((long)(timeval.tv_sec + timeval.tv_usec + n));
 	}
 	bsize = INOPB(fs) * sizeof (struct dinode);
@@ -179,7 +179,7 @@ main(int argc, char *argv[])
 		}
 	}
 	if (!pflag) {
-		(void) gettimeofday(&timeval, (struct timezone *)NULL);
+		(void) gettimeofday(&timeval, NULL);
 		fs->fs_id[0] = timeval.tv_sec;
 		fs->fs_id[1] = timeval.tv_usec + getpid();
 		if (llseek(fd, (offset_t)SBLOCK * DEV_BSIZE, 0) == -1) {

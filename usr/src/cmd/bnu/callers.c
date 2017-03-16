@@ -1093,12 +1093,9 @@ char *dev[];
 
 	/* allocate tli structures	*/
 	errno = t_errno = 0;
-	if ( (bind_ret = (struct t_bind *)t_alloc(fd, T_BIND, T_ALL)) == 
-	    (struct t_bind *)NULL
-	|| (sndcall = (struct t_call *)t_alloc(fd, T_CALL, T_ALL)) == 
-	    (struct t_call *)NULL
-	|| (rcvcall = (struct t_call *)t_alloc(fd, T_CALL, T_ALL)) ==
-	    (struct t_call *)NULL ) {
+	if ( (bind_ret = (struct t_bind *)t_alloc(fd, T_BIND, T_ALL)) == NULL ||
+	     (sndcall = (struct t_call *)t_alloc(fd, T_CALL, T_ALL)) == NULL ||
+	     (rcvcall = (struct t_call *)t_alloc(fd, T_CALL, T_ALL)) == NULL ) {
 		tfaillog(fd, "t_alloc" );
 		TFREE(bind_ret, T_BIND);TFREE(sndcall, T_CALL);
 		TFREE(rcvcall, T_CALL);
@@ -1145,7 +1142,7 @@ char *dev[];
 	if ( dev[D_ARG][0] == '\\' &&
 	( dev[D_ARG][1] == 'x' || dev[D_ARG][1] == 'X'
 	|| dev[D_ARG][1] == 'o' || dev[D_ARG][1] == 'O' ) ) {
-		if ( stoa(dev[D_ARG], &(sndcall->addr)) == (struct netbuf *)NULL ) {
+		if ( stoa(dev[D_ARG], &(sndcall->addr)) == NULL ) {
 			DEBUG(5, "tlicall: stoa failed\n%s", "");
 			logent("tlicall", "string-to-address failed");
 			TFREE(bind_ret, T_BIND);TFREE(sndcall, T_CALL);

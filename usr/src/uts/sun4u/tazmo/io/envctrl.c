@@ -204,7 +204,7 @@ struct dev_ops  envctrl_ops = {
 	envctrl_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&envctrl_cb_ops,	/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	nulldev,		/* devo_power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };
@@ -884,7 +884,7 @@ envctrl_open(queue_t *q, dev_t *dev, int flag, int sflag, cred_t *credp)
 
 	unitp->readq = RD(q);
 	unitp->writeq = WR(q);
-	unitp->msg = (mblk_t *)NULL;
+	unitp->msg = NULL;
 
 	mutex_exit(&unitp->umutex);
 	return (status);

@@ -105,11 +105,11 @@ zmalloc(size_t size)
 
 	/* XXX - Special case: never allocate 0 bytes, use a special buffer */
 	if (size == 0)
-	    return ((void *)NULL); /* return (bm_empty); */
+	    return (NULL); /* return (bm_empty); */
 
 	if ((fd = open("/dev/zero", O_RDWR)) < 0) {
 		perror("/dev/zero");
-		return ((void *) NULL);
+		return (NULL);
 	}
 
 	mbuf = mmap(0, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
@@ -117,7 +117,7 @@ zmalloc(size_t size)
 
 	if (mbuf == (caddr_t)-1) {
 		perror("zmalloc: mmap");
-		return ((void *) NULL);
+		return (NULL);
 	}
 
 	(void) insert_bm(mbuf, size);

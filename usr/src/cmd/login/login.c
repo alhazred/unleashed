@@ -1125,7 +1125,7 @@ logins_disabled(char *user_name)
 	FILE	*nlfd;
 	int	c;
 	if (!EQN("root", user_name) &&
-	    ((nlfd = fopen(NOLOGIN, "r")) != (FILE *)NULL)) {
+	    ((nlfd = fopen(NOLOGIN, "r")) != NULL)) {
 		while ((c = getc(nlfd)) != EOF)
 			(void) putchar(c);
 		(void) fflush(stdout);
@@ -1306,7 +1306,7 @@ defaults(void)
 				flogin = retry;
 		} else
 			flogin = retry;
-		(void) defopen((char *)NULL);
+		(void) defopen(NULL);
 	}
 }
 
@@ -2045,7 +2045,7 @@ update_utmpx_entry(int sublogin, boolean_t silent)
 	}
 	endutxent();
 
-	if (u == (struct utmpx *)NULL) {
+	if (u == NULL) {
 		if (!sublogin) {
 			/*
 			 * no utmpx entry already setup
@@ -2096,7 +2096,7 @@ process_chroot_logins(void)
 		 * knows that it is a sublogin.
 		 */
 		envinit[0] = SUBLOGIN;
-		envinit[1] = (char *)NULL;
+		envinit[1] = NULL;
 		(void) printf("Subsystem root: %s\n", pwd->pw_dir);
 		(void) execle("/usr/bin/login", "login", (char *)0,
 		    &envinit[0]);

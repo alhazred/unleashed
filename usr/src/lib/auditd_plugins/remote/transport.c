@@ -934,7 +934,7 @@ init_recv_record()
 {
 	DPRINT((dfile, "Initiating the recv thread\n"));
 	(void) pthread_create(&recv_tid, NULL, (void *(*)(void *))recv_record,
-	    (void *)NULL);
+	    NULL);
 
 }
 
@@ -1029,7 +1029,7 @@ recv_record()
 				case NP_EXIT:	/* exit receiving thread */
 					do_cleanup(&fds_cnt, recv_fd,
 					    np_data.sync);
-					pthread_exit((void *)NULL);
+					pthread_exit(NULL);
 					break;
 				case NP_CLOSE:	/* close and remove recv_fd */
 					do_reset(&fds_cnt, recv_fd,

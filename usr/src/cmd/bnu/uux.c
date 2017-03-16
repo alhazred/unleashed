@@ -325,9 +325,9 @@ char *envp[];
 	 */
 	ap = inargs;
 	xsys[0] = '\0';
-	while ((ap = getprm(ap, (char *)NULL, prm)) != NULL) {
+	while ((ap = getprm(ap, NULL, prm)) != NULL) {
 		if (prm[0] == '>' || prm[0] == '<') {
-			ap = getprm(ap, (char *)NULL, prm);
+			ap = getprm(ap, NULL, prm);
 			continue;
 		}
 
@@ -490,7 +490,7 @@ char *envp[];
 	 * parse command
 	 */
 	ap = inargs;
-	while ((ap = getprm(ap, (char *)NULL, prm)) != NULL) {
+	while ((ap = getprm(ap, NULL, prm)) != NULL) {
 		DEBUG(4, "prm - %s\n", prm);
 
 		/*

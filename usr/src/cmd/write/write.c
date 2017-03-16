@@ -313,7 +313,7 @@ main(int argc, char **argv)
 /*	Use the user id instead of utmp name if the entry in the	*/
 /*	utmp file couldn't be found.					*/
 
-	    if ((passptr = getpwuid(getuid())) == (struct passwd *)NULL) {
+	    if ((passptr = getpwuid(getuid())) == NULL) {
 		(void) fprintf(stderr,
 			gettext("Cannot determine who you are.\n"));
 		exit(1);

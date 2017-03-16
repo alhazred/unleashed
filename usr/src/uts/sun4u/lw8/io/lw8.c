@@ -119,7 +119,7 @@ static struct dev_ops lw8_ops = {
 	lw8_detach,		/* detach */
 	nodev,			/* reset */
 	&lw8_cb_ops,		/* pointer to cb_ops structure */
-	(struct bus_ops *)NULL,
+	NULL,
 	nulldev,		/* power() */
 	ddi_quiesce_not_needed,		/* quiesce() */
 };

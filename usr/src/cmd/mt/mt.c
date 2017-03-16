@@ -349,7 +349,7 @@ status(int mtfd, struct mtget *bp)
 {
 	struct mtdrivetype mdt;
 	struct mtdrivetype_request mdt_req;
-	const char *name = (char *)NULL;
+	const char *name = NULL;
 
 	/*
 	 * Make a call to MTIOCGETDRIVETYPE ioctl, Also use old method
@@ -370,7 +370,7 @@ status(int mtfd, struct mtget *bp)
 
 	/* Handle SCSI tape drives specially. */
 	if ((bp->mt_flags & MTF_SCSI)) {
-		if (name == (char *)NULL) {
+		if (name == NULL) {
 			name = "SCSI";
 		}
 

@@ -247,7 +247,7 @@ main(int argc, char **argv)
 	}
 
 	cvcd_pfd = (struct pollfd *)malloc(3*sizeof (struct pollfd));
-	if (cvcd_pfd == (struct pollfd *)NULL) {
+	if (cvcd_pfd == NULL) {
 		cvcd_err(LOG_ERR, "malloc:", strerror(errno));
 		exit(1);
 	}
@@ -350,12 +350,12 @@ main(int argc, char **argv)
 	 * Bind it.
 	 */
 	if (((reqb = (struct t_bind *)t_alloc(cvcd_ssp, T_BIND, T_ALL))
-		== (struct t_bind *)NULL)) {
+		== NULL)) {
 			cvcd_err(LOG_ERR, "%s", t_errlist[t_errno]);
 			exit(1);
 	}
 	if (((retb = (struct t_bind *)t_alloc(cvcd_ssp, T_BIND, T_ALL))
-		== (struct t_bind *)NULL)) {
+		== NULL)) {
 			cvcd_err(LOG_ERR, "%s", t_errlist[t_errno]);
 			exit(1);
 	}
@@ -552,7 +552,7 @@ cvcd_reject(int fd)
 	struct t_call		*tcall;
 
 	tcall = (struct t_call *)t_alloc(fd, T_CALL, T_ALL);
-	if (tcall == (struct t_call *)NULL) {
+	if (tcall == NULL) {
 		cvcd_err(LOG_ERR, "cvcd_reject: t_alloc: %s",
 			t_errlist[t_errno]);
 		return;
@@ -587,7 +587,7 @@ cvcd_connect(int fd, struct pollfd *pfd)
 	char			**pp;
 
 	tcall = (struct t_call *)t_alloc(fd, T_CALL, T_ALL);
-	if (tcall == (struct t_call *)NULL) {
+	if (tcall == NULL) {
 		cvcd_err(LOG_ERR, "cvcd_connect: t_alloc: %s",
 			t_errlist[t_errno]);
 		return;

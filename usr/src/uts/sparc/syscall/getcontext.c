@@ -214,7 +214,7 @@ getsetcontext(int flag, void *arg)
 		 * a later setcontext(2).
 		 */
 		uc.uc_mcontext.fpregs.fpu_qcnt = 0;
-		uc.uc_mcontext.fpregs.fpu_q = (struct _fq *)NULL;
+		uc.uc_mcontext.fpregs.fpu_q = NULL;
 
 		if (copyout(&uc, arg, sizeof (ucontext_t)))
 			return (set_errno(EFAULT));

@@ -1344,7 +1344,7 @@ print_time(
 	char	time_buf[50];	/* array to hold day and time */
 
 	if (year == 0) {
-		now = time((long *)NULL);
+		now = time(NULL);
 		year = now - 6L*30L*24L*60L*60L; /* 6 months ago */
 		now = now + 60;
 	}

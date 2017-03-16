@@ -233,7 +233,7 @@ main(int argc, char **argv)
 			 */
 			operand[0] = '\0';
 			while (argc > 0) {
-				if (strrchr(*argv, '-') == (char *)NULL) {
+				if (strrchr(*argv, '-') == NULL) {
 					(void) strcat(operand, *argv);
 					if (argc > 1)
 						(void) strcat(operand, ",");
@@ -250,7 +250,7 @@ main(int argc, char **argv)
 		}
 	}
 	if (*terminal == '\0') {
-		if ((terminal = getenv("TERM")) == (char *)NULL ||
+		if ((terminal = getenv("TERM")) == NULL ||
 		    *terminal == '\0') {
 			/*
 			 * Use tab setting and clearing sequences specified

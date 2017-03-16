@@ -66,7 +66,7 @@ mygetpass(char *prompt)
 	if ((fi = fopen("/dev/tty", "r")) == NULL)
 		fi = stdin;
 	else
-		setbuf(fi, (char *)NULL);
+		setbuf(fi, NULL);
 
 	if (tcgetattr(fileno(fi), &termios_b) < 0)
 		perror("ftp: tcgetattr");	/* go ahead, anyway */

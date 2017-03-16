@@ -33,7 +33,7 @@ translator pancakes_t < void *V > {
 
 BEGIN
 {
-	print(*(xlate < pancakes_t * > ((void *)NULL)));
+	print(*(xlate < pancakes_t * > NULL));
 }
 
 BEGIN

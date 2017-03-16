@@ -42,7 +42,7 @@
 static const char *rpc_attrs[] = {
 	_R_NAME,
 	_R_NUMBER,
-	(char *)NULL
+	NULL
 };
 
 /*

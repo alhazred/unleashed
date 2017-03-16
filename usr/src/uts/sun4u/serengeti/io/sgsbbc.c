@@ -130,7 +130,7 @@ struct dev_ops  sbbc_ops = {
 	sbbc_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&sbbc_cb_ops,		/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	nulldev,		/* devo_power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };
@@ -813,7 +813,7 @@ sbbc_send_intr(sbbc_softstate_t *softsp, int send_intr)
 	ASSERT(MUTEX_HELD(&master_iosram->iosram_lock));
 
 	if ((softsp == (sbbc_softstate_t *)NULL) ||
-	    (softsp->epld_regs == (struct sbbc_epld_regs *)NULL))
+	    (softsp->epld_regs == NULL))
 		return (ENXIO);
 
 	/*

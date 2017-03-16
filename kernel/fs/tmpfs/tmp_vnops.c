@@ -1039,9 +1039,8 @@ again:
 		return (error);
 
 	rw_enter(&parent->tn_rwlock, RW_WRITER);
-	error = tdirenter(tm, parent, nm, DE_CREATE,
-	    (struct tmpnode *)NULL, (struct tmpnode *)NULL,
-	    vap, &self, cred, ct);
+	error = tdirenter(tm, parent, nm, DE_CREATE, NULL, NULL, vap, &self,
+	    cred, ct);
 	rw_exit(&parent->tn_rwlock);
 
 	if (error) {
@@ -1158,7 +1157,7 @@ tmp_link(
 		return (error);
 
 	rw_enter(&parent->tn_rwlock, RW_WRITER);
-	error = tdirenter(tm, parent, tnm, DE_LINK, (struct tmpnode *)NULL,
+	error = tdirenter(tm, parent, tnm, DE_LINK, NULL,
 	    from, NULL, (struct tmpnode **)NULL, cred, ct);
 	rw_exit(&parent->tn_rwlock);
 	if (error == 0) {
@@ -1257,8 +1256,7 @@ tmp_rename(
 	 */
 	rw_enter(&toparent->tn_rwlock, RW_WRITER);
 	error = tdirenter(tm, toparent, nnm, DE_RENAME,
-	    fromparent, fromtp, (struct vattr *)NULL,
-	    (struct tmpnode **)NULL, cred, ct);
+	    fromparent, fromtp, NULL, (struct tmpnode **)NULL, cred, ct);
 	rw_exit(&toparent->tn_rwlock);
 
 	if (error) {
@@ -1353,8 +1351,8 @@ tmp_mkdir(
 		return (error);
 
 	rw_enter(&parent->tn_rwlock, RW_WRITER);
-	error = tdirenter(tm, parent, nm, DE_MKDIR, (struct tmpnode *)NULL,
-	    (struct tmpnode *)NULL, va, &self, cred, ct);
+	error = tdirenter(tm, parent, nm, DE_MKDIR, NULL,
+	    NULL, va, &self, cred, ct);
 	if (error) {
 		rw_exit(&parent->tn_rwlock);
 		if (self)
@@ -1572,7 +1570,7 @@ tmp_symlink(
 	int flags)
 {
 	struct tmpnode *parent = (struct tmpnode *)VTOTN(dvp);
-	struct tmpnode *self = (struct tmpnode *)NULL;
+	struct tmpnode *self = NULL;
 	struct tmount *tm = (struct tmount *)VTOTM(dvp);
 	char *cp = NULL;
 	int error;
@@ -1598,8 +1596,8 @@ tmp_symlink(
 	}
 
 	rw_enter(&parent->tn_rwlock, RW_WRITER);
-	error = tdirenter(tm, parent, lnm, DE_CREATE, (struct tmpnode *)NULL,
-	    (struct tmpnode *)NULL, tva, &self, cred, ct);
+	error = tdirenter(tm, parent, lnm, DE_CREATE, NULL,
+	    NULL, tva, &self, cred, ct);
 	rw_exit(&parent->tn_rwlock);
 
 	if (error) {

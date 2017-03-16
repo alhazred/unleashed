@@ -4299,7 +4299,7 @@ scsa2usb_do_inquiry(scsa2usb_state_t *scsa2usbp, uint_t target, uint_t lun)
 
 	/* limit inquiry to 36 bytes */
 	mutex_exit(&scsa2usbp->scsa2usb_mutex);
-	if ((bp = scsi_alloc_consistent_buf(&ap, (struct buf *)NULL,
+	if ((bp = scsi_alloc_consistent_buf(&ap, NULL,
 	    len, B_READ, SLEEP_FUNC, NULL)) == NULL) {
 		mutex_enter(&scsa2usbp->scsa2usb_mutex);
 		USB_DPRINTF_L2(DPRINT_MASK_SCSA,
@@ -4420,7 +4420,7 @@ scsa2usb_create_arq_pkt(scsa2usb_state_t *scsa2usbp, struct scsi_address *ap)
 	ASSERT(mutex_owned(&scsa2usbp->scsa2usb_mutex));
 
 	mutex_exit(&scsa2usbp->scsa2usb_mutex);
-	if ((bp = scsi_alloc_consistent_buf(ap, (struct buf *)NULL,
+	if ((bp = scsi_alloc_consistent_buf(ap, NULL,
 	    SENSE_LENGTH, B_READ, SLEEP_FUNC, NULL)) == NULL) {
 		mutex_enter(&scsa2usbp->scsa2usb_mutex);
 

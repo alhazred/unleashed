@@ -55,7 +55,7 @@ keyspan_init_one_pipe(keyspan_state_t *ksp, keyspan_port_t *kp,
 	    "pipe = %p, pipe_stat %x", (void *)pipe, pipe->pipe_state);
 
 	/* init sync primitives */
-	mutex_init(&pipe->pipe_mutex, NULL, MUTEX_DRIVER, (void *)NULL);
+	mutex_init(&pipe->pipe_mutex, NULL, MUTEX_DRIVER, NULL);
 
 	/* init pipe policy */
 	policy = &pipe->pipe_policy;

@@ -75,7 +75,7 @@ static const char *exec_attrs[] = {
 	_EXEC_RES2,
 	_EXEC_ID,
 	_EXEC_ATTRS,
-	(char *)NULL
+	NULL
 };
 
 
@@ -85,22 +85,22 @@ _print_execstr(execstr_t *exec)
 {
 
 	(void) fprintf(stdout, "      exec-name: [%s]\n", exec->name);
-	if (exec->policy != (char *)NULL) {
+	if (exec->policy != NULL) {
 		(void) fprintf(stdout, "      policy: [%s]\n", exec->policy);
 	}
-	if (exec->type != (char *)NULL) {
+	if (exec->type != NULL) {
 		(void) fprintf(stdout, "      type: [%s]\n", exec->type);
 	}
-	if (exec->res1 != (char *)NULL) {
+	if (exec->res1 != NULL) {
 		(void) fprintf(stdout, "      res1: [%s]\n", exec->res1);
 	}
-	if (exec->res2 != (char *)NULL) {
+	if (exec->res2 != NULL) {
 		(void) fprintf(stdout, "      res2: [%s]\n", exec->res2);
 	}
-	if (exec->id != (char *)NULL) {
+	if (exec->id != NULL) {
 		(void) fprintf(stdout, "      id: [%s]\n", exec->id);
 	}
-	if (exec->attr != (char *)NULL) {
+	if (exec->attr != NULL) {
 		(void) fprintf(stdout, "      attr: [%s]\n", exec->attr);
 	}
 	if (exec->next != (execstr_t *)NULL) {
@@ -119,9 +119,9 @@ _exec_ldap_exec2ent(ns_ldap_entry_t *entry, nss_XbyY_args_t *argp)
 	int			i;
 	unsigned long		len = 0L;
 	int			buflen = (int)0;
-	char			*nullstring = (char *)NULL;
-	char			*buffer = (char *)NULL;
-	char			*ceiling = (char *)NULL;
+	char			*nullstring = NULL;
+	char			*buffer = NULL;
+	char			*ceiling = NULL;
 	execstr_t		*exec = (execstr_t *)NULL;
 	ns_ldap_attr_t		*attrptr;
 
@@ -130,13 +130,13 @@ _exec_ldap_exec2ent(ns_ldap_entry_t *entry, nss_XbyY_args_t *argp)
 	(void) memset(argp->buf.buffer, 0, buflen);
 	exec = (execstr_t *)(argp->buf.result);
 	ceiling = buffer + buflen;
-	exec->name = (char *)NULL;
-	exec->policy = (char *)NULL;
-	exec->type = (char *)NULL;
-	exec->res1 = (char *)NULL;
-	exec->res2 = (char *)NULL;
-	exec->id = (char *)NULL;
-	exec->attr = (char *)NULL;
+	exec->name = NULL;
+	exec->policy = NULL;
+	exec->type = NULL;
+	exec->res1 = NULL;
+	exec->res2 = NULL;
+	exec->id = NULL;
+	exec->attr = NULL;
 
 	for (i = 0; i < entry->attr_count; i++) {
 		attrptr = entry->attr_pair[i];

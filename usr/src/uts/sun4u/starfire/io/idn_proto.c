@@ -7371,7 +7371,7 @@ idn_recv_config_done(int domid)
 	 * domains that have at least one cpu on all boards that
 	 * contain memory.
 	 */
-	if (!idn_cpu_per_board((void *)NULL, dp->dcpuset, &dp->dhw)) {
+	if (!idn_cpu_per_board(NULL, dp->dcpuset, &dp->dhw)) {
 		cmn_err(CE_WARN,
 		    "IDN: 233: domain %d missing CPU per "
 		    "memory boardset (0x%x), CPU boardset (0x%x)",

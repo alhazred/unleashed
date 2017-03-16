@@ -1700,7 +1700,7 @@ sm_lrmsg_check(queue_t *q, mblk_t *mp)
 					lqi->sm_nachar++;
 					if (*lqi->sm_nachar == '\0') {
 						abort_sequence_enter(
-						    (char *)NULL);
+						    NULL);
 						lqi->sm_nachar = sm_ssp->sm_abs;
 						aborted = B_TRUE;
 					}
@@ -1734,7 +1734,7 @@ sm_lrmsg_check(queue_t *q, mblk_t *mp)
 
 			if (lqi->sm_break_abort_on &&
 			    abort_enable != KIOCABORTALTERNATE)
-				abort_sequence_enter((char *)NULL);
+				abort_sequence_enter(NULL);
 
 			freemsg(mp);
 			UNLOCK_UNIT(lqi);

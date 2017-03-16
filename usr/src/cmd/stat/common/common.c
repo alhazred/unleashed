@@ -101,7 +101,7 @@ sleep_until(hrtime_t *wakeup, hrtime_t interval, int forever,
 	do {
 		pause_tv.tv_sec = pause_left / NANOSEC;
 		pause_tv.tv_nsec = pause_left % NANOSEC;
-		status = nanosleep(&pause_tv, (struct timespec *)NULL);
+		status = nanosleep(&pause_tv, NULL);
 		if (status < 0)
 			if (errno == EINTR) {
 				now = gethrtime();

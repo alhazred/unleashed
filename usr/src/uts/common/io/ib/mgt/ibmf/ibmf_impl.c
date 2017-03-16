@@ -172,8 +172,8 @@ ibmf_init(void)
 	ibmf_statep->ibmf_ibt_modinfo.mi_clnt_name = "ibmf";
 
 	/* setup a connection to IB transport layer (IBTF) */
-	status = ibt_attach(&ibmf_statep->ibmf_ibt_modinfo, (void *)NULL,
-	    (void *)NULL, (void *)&ibmf_ibt_handle);
+	status = ibt_attach(&ibmf_statep->ibmf_ibt_modinfo, NULL,
+	    NULL, (void *)&ibmf_ibt_handle);
 	if (status != IBT_SUCCESS) {
 		IBMF_TRACE_2(DPRINT_L1, "%s, status = %d\n",
 		    "ibt attach failed", status);

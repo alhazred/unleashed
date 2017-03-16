@@ -80,9 +80,9 @@ systm(char *s)
 		setuid(my_uid);
 		setgid(my_gid);
 #ifdef SVR3
-		execl("/bin/sh", "sh", "-c", s, (char*)NULL);
+		execl("/bin/sh", "sh", "-c", s, NULL);
 #else
-		execl("/usr/bin/sh", "sh", "-c", s, (char*)NULL);
+		execl("/usr/bin/sh", "sh", "-c", s, NULL);
 #endif
 		exit(127);
 	}

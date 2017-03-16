@@ -258,7 +258,7 @@ mmchpoll(dev_t dev, short events, int anyyet, short *reventsp,
 		 * user polls for 0 events.
 		 */
 		*phpp = !anyyet && !*reventsp ?
-		    &mm_pollhd : (struct pollhead *)NULL;
+		    &mm_pollhd : NULL;
 		return (0);
 	default:
 		/* no other devices currently support polling */

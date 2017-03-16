@@ -373,7 +373,7 @@ dumpconfig(void)
 	/*
 	 * Determine the configuration file and where it is mapped.
 	 */
-	if (dlinfo((void *)NULL, RTLD_DI_CONFIGADDR, &info) == -1) {
+	if (dlinfo(NULL, RTLD_DI_CONFIGADDR, &info) == -1) {
 		(void) fprintf(stderr, MSG_INTL(MSG_DL_INFO),
 		    MSG_ORIG(MSG_FIL_LIBCRLE), dlerror());
 		return (1);

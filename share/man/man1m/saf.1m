@@ -1132,7 +1132,7 @@ main(argc, argv)
  */
 	sprintf(Scratch, "/var/saf/%s/log", Tag);
 	Fp = fopen(Scratch, "a+");
-	if (Fp == (FILE *)NULL)
+	if (Fp == NULL)
 		exit(1);
 	log(Fp, "starting");
 /*
@@ -1156,7 +1156,7 @@ main(argc, argv)
  * set up pid file and lock it to indicate that we are active
  */
 	Tfp = fopen("_pid", "w");
-	if (Tfp == (FILE *)NULL) {
+	if (Tfp == NULL) {
 		log(Fp, "couldn't open pid file");
 		exit(1);
 	}

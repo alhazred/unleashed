@@ -200,13 +200,13 @@ main(int argc, char *argv[])
 
 	openlog("in.ripngd", LOG_PID | LOG_CONS, LOG_DAEMON);
 
-	(void) gettimeofday(&now, (struct timezone *)NULL);
+	(void) gettimeofday(&now, NULL);
 
 	initifs();
 	solicitall(&allrouters);
 
 	if (supplier)
-		supplyall(&allrouters, 0, (struct interface *)NULL, _B_TRUE);
+		supplyall(&allrouters, 0, NULL, _B_TRUE);
 
 	(void) sigset(SIGALRM, (void (*)(int))timer);
 	(void) sigset(SIGHUP, (void (*)(int))initifs);
@@ -254,11 +254,10 @@ main(int argc, char *argv[])
 		if (n == 0) {
 			if (needupdate) {
 				TRACE_ACTION("send delayed dynamic update",
-				    (struct rt_entry *)NULL);
-				(void) gettimeofday(&now,
-				    (struct timezone *)NULL);
-				supplyall(&allrouters, RTS_CHANGED,
-				    (struct interface *)NULL, _B_TRUE);
+				    NULL);
+				(void) gettimeofday(&now, NULL);
+				supplyall(&allrouters, RTS_CHANGED, NULL,
+				    _B_TRUE);
 				lastmcast = now;
 				needupdate = _B_FALSE;
 				nextmcast.tv_sec = 0;
@@ -267,7 +266,7 @@ main(int argc, char *argv[])
 			(void) sigrelse(SIGALRM);
 			continue;
 		}
-		(void) gettimeofday(&now, (struct timezone *)NULL);
+		(void) gettimeofday(&now, NULL);
 		for (i = 0; i < poll_ifs_num; i++) {
 			/*
 			 * This case should never happen.

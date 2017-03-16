@@ -51,7 +51,7 @@ static const char *sp_attrs[] = {
 	_S_INACTIVE,
 	_S_EXPIRE,
 	_S_FLAG,
-	(char *)NULL
+	NULL
 };
 
 /*

@@ -354,7 +354,7 @@ initifs(void)
 	if (netmaskchange)
 		rtchangeall();
 	if (supplier & changes)
-		dynamic_update((struct interface *)NULL);
+		dynamic_update(NULL);
 }
 
 static void

@@ -140,7 +140,7 @@ kgss_acquire_cred_wrapped(
 
 	arg.name_type.GSS_OID_val =
 	    name_type == GSS_C_NULL_OID ?
-	    (char *)NULL : (char *)name_type->elements;
+	    NULL : (char *)name_type->elements;
 
 	arg.time_req = time_req;
 
@@ -356,7 +356,7 @@ kgss_add_cred_wrapped(
 	    0 : (uint_t)name_type->length;
 	arg.name_type.GSS_OID_val =
 	    name_type == GSS_C_NULL_OID ?
-	    (char *)NULL : (char *)name_type->elements;
+	    NULL : (char *)name_type->elements;
 
 	arg.desired_mech_type.GSS_OID_len =
 	    (uint_t)(desired_mech_type != GSS_C_NULL_OID ?
@@ -635,7 +635,7 @@ kgss_init_sec_context_wrapped(
 
 	arg.name_type.GSS_OID_val =
 	    name_type == GSS_C_NULL_OID ?
-	    (char *)NULL : (char *)name_type->elements;
+	    NULL : (char *)name_type->elements;
 
 	arg.mech_type.GSS_OID_len = (uint_t)(mech_type != GSS_C_NULL_OID ?
 	    mech_type->length : 0);

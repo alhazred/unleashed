@@ -73,7 +73,7 @@ yplist_maps(domain, list)
 	int namesz;
 	char *mapname;
 
-	*list = (struct ypmaplist *)NULL;
+	*list = NULL;
 
 	if (!ypcheck_domain(domain)) {
 		return (YP_NODOM);

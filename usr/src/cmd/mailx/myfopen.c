@@ -128,7 +128,7 @@ my_fopen(char *file, char *mode)
 {
 	FILE *fp;
 
-	if ((fp = fopen(file, mode)) == (FILE *)NULL) {
+	if ((fp = fopen(file, mode)) == NULL) {
 		fplist = NOFP;
 		return(fp);
 	} else {

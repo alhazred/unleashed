@@ -959,7 +959,7 @@ scsi_pkt *arcmsr_tran_init_pkt(struct scsi_address *ap,
 		(void) ddi_dma_sync(acb->ccbs_pool_handle, 0, 0,
 		    DDI_DMA_SYNC_FORKERNEL);
 		ccb = arcmsr_get_freeccb(acb);
-		if (ccb == (struct CCB *)NULL) {
+		if (ccb == NULL) {
 			return (NULL);
 		}
 

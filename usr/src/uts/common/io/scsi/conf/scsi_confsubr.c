@@ -296,14 +296,14 @@ scsi_slave_do_rqsense(struct scsi_device *sd, int (*callback)())
 	/*
 	 * prepare rqsense packet
 	 */
-	rq_bp = scsi_alloc_consistent_buf(ROUTE, (struct buf *)NULL,
+	rq_bp = scsi_alloc_consistent_buf(ROUTE, NULL,
 	    (uint_t)SENSE_LENGTH, B_READ, callback, NULL);
 	if (rq_bp == NULL) {
 		rval = SCSIPROBE_NOMEM;
 		goto out;
 	}
 
-	rq_pkt = scsi_init_pkt(ROUTE, (struct scsi_pkt *)NULL,
+	rq_pkt = scsi_init_pkt(ROUTE, NULL,
 	    rq_bp, CDB_GROUP0, 1, 0, PKT_CONSISTENT,
 	    callback, NULL);
 
@@ -364,7 +364,7 @@ scsi_slave(struct scsi_device *sd, int (*callback)())
 	 * responded and if there was one, it will clear the unit attention
 	 * condition
 	 */
-	pkt = scsi_init_pkt(ROUTE, (struct scsi_pkt *)NULL, NULL,
+	pkt = scsi_init_pkt(ROUTE, NULL, NULL,
 	    CDB_GROUP0, sizeof (struct scsi_arq_status), 0, 0, callback, NULL);
 
 	if (pkt == NULL) {
@@ -1110,12 +1110,12 @@ scsi_hba_probe_pi(struct scsi_device *sd, int (*callback)(), int pi)
 		cb_flag = callback;
 	}
 	inq_bp = scsi_alloc_consistent_buf(ROUTE,
-	    (struct buf *)NULL, SUN_INQSIZE, B_READ, cb_flag, NULL);
+	    NULL, SUN_INQSIZE, B_READ, cb_flag, NULL);
 	if (inq_bp == NULL) {
 		goto out;
 	}
 
-	inq_pkt = scsi_init_pkt(ROUTE, (struct scsi_pkt *)NULL,
+	inq_pkt = scsi_init_pkt(ROUTE, NULL,
 	    inq_bp, CDB_GROUP0, sizeof (struct scsi_arq_status),
 	    0, PKT_CONSISTENT, callback, NULL);
 	if (inq_pkt == NULL) {
@@ -1213,13 +1213,13 @@ again:	FILL_SCSI1_LUN(sd, inq_pkt);
 		 * there is no real need for this because the
 		 * check condition should have been cleared by now.
 		 */
-		rq_bp = scsi_alloc_consistent_buf(ROUTE, (struct buf *)NULL,
+		rq_bp = scsi_alloc_consistent_buf(ROUTE, NULL,
 		    (uint_t)SENSE_LENGTH, B_READ, cb_flag, NULL);
 		if (rq_bp == NULL) {
 			goto out;
 		}
 
-		rq_pkt = scsi_init_pkt(ROUTE, (struct scsi_pkt *)NULL,
+		rq_pkt = scsi_init_pkt(ROUTE, NULL,
 		    rq_bp, CDB_GROUP0, 1, 0, PKT_CONSISTENT, callback, NULL);
 
 		if (rq_pkt == NULL) {
@@ -2169,11 +2169,11 @@ send_scsi_INQUIRY(struct scsi_device *sd, int (*callback)(),
 	else
 		cb_flag = callback;
 	inq_bp = scsi_alloc_consistent_buf(ROUTE,
-	    (struct buf *)NULL, buflen, B_READ, cb_flag, NULL);
+	    NULL, buflen, B_READ, cb_flag, NULL);
 	if (inq_bp == NULL)
 		goto out;		/* memory allocation problem */
 
-	inq_pkt = scsi_init_pkt(ROUTE, (struct scsi_pkt *)NULL,
+	inq_pkt = scsi_init_pkt(ROUTE, NULL,
 	    inq_bp, CDB_GROUP0, sizeof (struct scsi_arq_status),
 	    0, PKT_CONSISTENT, callback, NULL);
 	if (inq_pkt == NULL)

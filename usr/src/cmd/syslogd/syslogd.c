@@ -2361,7 +2361,7 @@ logerror_format(const char *type, char *buf, va_list ap)
 		if (errno == 0) {
 			(void) snprintf(buf, MAXLINE, "syslogd: %.*s",
 			    MAXLINE, tmpbuf);
-		} else if ((errstr = strerror(errno)) == (char *)NULL) {
+		} else if ((errstr = strerror(errno)) == NULL) {
 			(void) snprintf(buf, MAXLINE, "syslogd: %s: error"
 			    " %d", tmpbuf, errno);
 		} else {
@@ -3927,7 +3927,7 @@ logforward(struct filed *f, char *ebuf, size_t elen)
 		errno = 0;
 		return (-1);
 	}
-	nap = (struct nd_addrlist *)NULL;
+	nap = NULL;
 	while ((ncp = getnetconfig(handle)) != NULL) {
 		if (ncp->nc_semantics == NC_TPI_CLTS) {
 			if (netdir_getbyname(ncp, &hs, &nap) == 0) {
@@ -3945,7 +3945,7 @@ logforward(struct filed *f, char *ebuf, size_t elen)
 		errno = 0;
 		return (-1);
 	}
-	if (nap == (struct nd_addrlist *)NULL) {
+	if (nap == NULL) {
 		(void) endnetconfig(handle);
 		(void) snprintf(ebuf, elen, "unknown host %s", hp);
 		errno = 0;
@@ -4033,7 +4033,7 @@ amiloghost(void)
 		nbp = nap->n_addrs;
 
 		for (i = 0; i < nap->n_cnt; i++) {
-			if ((uap = taddr2uaddr(ncp, nbp)) != (char *)NULL) {
+			if ((uap = taddr2uaddr(ncp, nbp)) != NULL) {
 				DPRINT2(1, "amiloghost(%u): testing %s\n",
 				    mythreadno, uap);
 			}

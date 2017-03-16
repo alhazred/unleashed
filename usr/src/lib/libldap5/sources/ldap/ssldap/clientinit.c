@@ -877,7 +877,7 @@ ldapssl_tls_start_s(LDAP *ld,int defsecure, char *certdbpath, char *keydbpath,
          return rc;
     }
 
-    rc = ldap_result( ld, msgid, 1, (struct timeval *) NULL, &res );
+    rc = ldap_result( ld, msgid, 1, NULL, &res );
     if ( rc != LDAP_RES_EXTENDED ) {
 
       /* the first response received must be an extended response to an

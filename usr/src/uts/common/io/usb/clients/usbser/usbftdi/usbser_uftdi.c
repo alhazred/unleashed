@@ -140,7 +140,7 @@ static struct dev_ops uftdi_ops = {
 	usbser_uftdi_detach,
 	nodev,			/* devo_reset */
 	&uftdi_cb_ops,
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	usbser_power,		/* devo_power */
 	ddi_quiesce_not_needed
 };

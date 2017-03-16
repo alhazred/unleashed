@@ -94,7 +94,7 @@ tstostr(char *to, tchar *from)
 	char	*pmb;
 	int	len;
 
-	if (to == (char *)NULL) {	/* Need to xalloc(). */
+	if (to == NULL) {	/* Need to xalloc(). */
 		int	i;
 		int	i1;
 		char	junk[MB_LEN_MAX];
@@ -348,7 +348,7 @@ getenvs_(char *name)
 		pbuf = NOSTR;
 	}
 	val = getenv(name);
-	if (val == (char *)NULL) {
+	if (val == NULL) {
 		return (NOSTR);
 	}
 	return (pbuf = strtots(NOSTR, val));

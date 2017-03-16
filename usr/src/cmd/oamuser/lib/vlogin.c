@@ -87,7 +87,7 @@ valid_login(char *login, struct passwd **pptr, int *warning)
 				break;
 			}
 		}
-		(void) defopen((char *)NULL);
+		(void) defopen(NULL);
 	}
 
 	if (len > LOGNAME_MAX)

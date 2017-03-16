@@ -41,7 +41,7 @@
 static const char *netmasks_attrs[] = {
 	_N_NETWORK,
 	_N_NETMASK,
-	(char *)NULL
+	NULL
 };
 
 

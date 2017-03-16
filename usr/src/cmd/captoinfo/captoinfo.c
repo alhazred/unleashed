@@ -450,7 +450,7 @@ getcapstr(char *capname)
 	(void) fprintf(stderr, "%s: TERM=%s: termcap name '%s' not found.\n",
 	    progname, term_name, capname);
 
-	return ((char *)NULL);
+	return (NULL);
 }
 
 /*
@@ -511,7 +511,7 @@ getinfostr(char *infoname)
 		(void) fprintf(trace, "terminfo name '%s' not found.\n",
 		    infoname);
 
-	return ((char *)NULL);
+	return (NULL);
 }
 
 /*

@@ -43,20 +43,20 @@ pckaffspot(void)
 	static char pn[] = "pckaffspot";
 	int	rc;	
 
-	if (hdrlines[H_AFWDFROM].head == (struct hdrs *)NULL) {
+	if (hdrlines[H_AFWDFROM].head == NULL) {
 		rc = -1;
 	} else if (orig_aff) {
 		rc = H_AFWDFROM;
 	} else if (fnuhdrtype == H_RVERS) {
-		if (hdrlines[H_EOH].head != (struct hdrs *)NULL) {
-			if (hdrlines[H_DATE].head != (struct hdrs *)NULL) {
+		if (hdrlines[H_EOH].head != NULL) {
+			if (hdrlines[H_DATE].head != NULL) {
 				rc = H_DATE;
 			} else {
 				rc = H_EOH;
 			}
 		}
 	} else if ((fnuhdrtype == H_MVERS) &&
-	    (hdrlines[H_EOH].head != (struct hdrs *)NULL)) {
+	    (hdrlines[H_EOH].head != NULL)) {
 		rc = H_EOH;
 	} else {
 		rc = H_CTYPE;

@@ -101,7 +101,7 @@ struct call_list {
 };
 
 
-#define	EMPTYLIST(p)	(p->cl_head == (struct callsave *) NULL)
+#define	EMPTYLIST(p)	(p->cl_head == NULL)
 
 /*
  * Ridiculously high value for maximum number of connects per stream.

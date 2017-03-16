@@ -478,7 +478,7 @@ printf("Warning: no access to tty; thus no job control in this shell...\n");
 	sigemptyset(&sa.sa_mask);
 	sa.sa_handler = pchild;
 	sa.sa_flags = SA_RESTART;
-	(void) sigaction(SIGCHLD, &sa, (struct sigaction *)NULL);
+	(void) sigaction(SIGCHLD, &sa, NULL);
 
 	/*
 	 * Set an exit here in case of an interrupt or error reading

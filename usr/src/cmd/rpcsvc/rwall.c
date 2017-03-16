@@ -199,7 +199,7 @@ doit(char *hostname)
 	(void) mutex_unlock(&thr_mtx);
 
 	thread_hostname = strdup(hostname);
-	if (thread_hostname == (char *)NULL) {
+	if (thread_hostname == NULL) {
 		(void) mutex_lock(&tty);
 		(void) fprintf(stderr, "Ran out of memory\n");
 		(void) mutex_unlock(&tty);

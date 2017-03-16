@@ -163,7 +163,7 @@ do_readdir(autofs_rddirargs *rda, autofs_rddirres *rd)
 			 * keep list of entries for up to
 			 * 'cache_time' seconds
 			 */
-			rdcp->ttl = time((time_t *)NULL) + cache_time;
+			rdcp->ttl = time(NULL) + cache_time;
 		} else {
 			/*
 			 * the underlying name service indicated not
@@ -616,7 +616,7 @@ cache_cleanup(void)
 			 * them at this time. Otherwise, free caches only
 			 * if their time to live (ttl) has expired.
 			 */
-			if (error == ETIME && (p->ttl > time((time_t *)NULL))) {
+			if (error == ETIME && (p->ttl > time(NULL))) {
 				/*
 				 * Scheduled cache cleanup, if cache is still
 				 * valid don't free.

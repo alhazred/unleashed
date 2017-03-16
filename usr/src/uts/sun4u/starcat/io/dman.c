@@ -1075,7 +1075,7 @@ man_get_our_etheraddr(eaddr_t *eap)
 			return (status);
 		ether_copy(&manc.manc_dom_eaddr, eap);
 	} else {
-		(void) localetheraddr((struct ether_addr *)NULL, eap);
+		(void) localetheraddr(NULL, eap);
 	}
 
 	return (status);
@@ -3538,7 +3538,7 @@ man_pareq(queue_t *wq, mblk_t *mp)
 
 	switch (type) {
 	case	DL_FACT_PHYS_ADDR:
-		(void) localetheraddr((struct ether_addr *)NULL, &addr);
+		(void) localetheraddr(NULL, &addr);
 		break;
 
 	case	DL_CURR_PHYS_ADDR:

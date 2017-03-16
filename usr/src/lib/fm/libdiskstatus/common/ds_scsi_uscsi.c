@@ -73,7 +73,7 @@ find_string(slist_t *slist, int match_value)
 		}
 	}
 
-	return ((char *)NULL);
+	return (NULL);
 }
 
 /*

@@ -1118,7 +1118,7 @@ uninit_node(dev_info_t *dip)
 		addr = NULL;
 	}
 
-	error = (*f)(pdip, pdip, DDI_CTLOPS_UNINITCHILD, dip, (void *)NULL);
+	error = (*f)(pdip, pdip, DDI_CTLOPS_UNINITCHILD, dip, NULL);
 	if (error == DDI_SUCCESS) {
 		/* ensure that devids are unregistered */
 		mutex_enter(&DEVI(dip)->devi_lock);
@@ -4355,7 +4355,7 @@ i_ddi_bind_devs(void)
 	/* flush devfs so that ndi_devi_unbind_driver will work when possible */
 	(void) devfs_clean(top_devinfo, NULL, 0);
 
-	ddi_walk_devs(top_devinfo, bind_dip, (void *)NULL);
+	ddi_walk_devs(top_devinfo, bind_dip, NULL);
 }
 
 /* callback data for unbind_children_by_alias() */

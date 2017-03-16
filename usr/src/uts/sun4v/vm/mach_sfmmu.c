@@ -193,7 +193,7 @@ sfmmu_remap_kernel(void)
 	TTE_SET_LOCKED(&kdata_tte);
 	TTE_SET_LOFLAGS(&kdata_tte, 0, TTE_HWWR_INT);
 	sfmmu_tteload(kas.a_hat, &kdata_tte, datava,
-	    (struct page *)NULL, flags);
+	    NULL, flags);
 
 	/*
 	 * create bigktsb ttes if necessary.

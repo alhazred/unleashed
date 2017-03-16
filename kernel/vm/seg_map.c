@@ -1103,7 +1103,7 @@ grab_smp(struct smap *smp, page_t *pp)
 	ASSERT(MUTEX_HELD(SMAPMTX(smp)));
 	ASSERT(smp->sm_refcnt == 0);
 
-	if (smp->sm_vp != (struct vnode *)NULL) {
+	if (smp->sm_vp != NULL) {
 		struct vnode	*vp = smp->sm_vp;
 		uoff_t 	off = smp->sm_off;
 		/*

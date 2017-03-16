@@ -212,7 +212,7 @@ struct dev_ops kb8042_ops = {
 	kb8042_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&cb_kb8042_ops,		/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	NULL,			/* devo_power */
 	ddi_quiesce_not_needed,	/* devo_quiesce */
 };

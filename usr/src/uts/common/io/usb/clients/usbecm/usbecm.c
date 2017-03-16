@@ -211,7 +211,7 @@ static struct dev_ops usbecm_devops = {
 	usbecm_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&(cb_usbecm),		/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	usbecm_power,		/* devo_power */
 	ddi_quiesce_not_needed	/* devo_quiesce */
 };

@@ -994,7 +994,7 @@ immu_intr_register(immu_t *immu)
 	(void) snprintf(intr_handler_name, sizeof (intr_handler_name),
 	    "%s-intr-handler", immu->immu_name);
 
-	(void) add_avintr((void *)NULL, IMMU_INTR_IPL,
+	(void) add_avintr(NULL, IMMU_INTR_IPL,
 	    (avfunc)(immu_intr_handler), intr_handler_name, irq,
 	    (caddr_t)immu, NULL, NULL, NULL);
 

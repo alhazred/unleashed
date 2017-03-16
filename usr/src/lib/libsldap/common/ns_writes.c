@@ -852,7 +852,7 @@ write_state_machine(
 			break;
 		case GET_RESULT_ASYNC:
 			rc = ldap_result(conp->ld, msgid, 1,
-			    (struct timeval *)NULL, &res);
+			    NULL, &res);
 			/* if no server response, set Errno */
 			if (rc == -1) {
 				(void) ldap_get_option(conp->ld,

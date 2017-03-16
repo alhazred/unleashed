@@ -247,14 +247,14 @@ static mutex_t fmt_lock = DEFAULTMUTEX;
 static	int		msgverb		= 0;
 static	int		sevlook		= TRUE;
 
-static	struct sevstr  *paugsevs	= (struct sevstr *)NULL;
-static	struct sevstr  *penvsevs	= (struct sevstr *)NULL;
+static	struct sevstr  *paugsevs	= NULL;
+static	struct sevstr  *penvsevs	= NULL;
 
 static	struct sevstr	sevstrs[]	= {
 	{ MM_HALT,	"", SV_HALT,	&sevstrs[1]},
 	{ MM_ERROR,    "", SV_ERROR,	&sevstrs[2]},
 	{ MM_WARNING,  "", SV_WARN, 	&sevstrs[3]},
-	{ MM_INFO,	"", SV_INF,  	(struct sevstr *)NULL},
+	{ MM_INFO,	"", SV_INF,  	NULL},
 };
 static	struct sevstr  *pstdsevs	= &sevstrs[0];
 
@@ -266,7 +266,7 @@ static	struct sevstr  *pstdsevs	= &sevstrs[0];
  *	This function examines the string pointed to by "str", looking
  *	for the first occurrence of any of the characters in the string
  *	whose address is "delims".  It returns the address of that
- *	character or (char *)NULL if there was nothing to search.
+ *	character or NULL if there was nothing to search.
  *
  * Arguments:
  *	str	Address of the string to search
@@ -275,7 +275,7 @@ static	struct sevstr  *pstdsevs	= &sevstrs[0];
  * Returns:  char *
  *	Returns the address of the first occurrence of any of the characters
  *	in "delim" in the string "str" (incl '\0').  If there was nothing
- *	to search, the function returns (char *)NULL.
+ *	to search, the function returns NULL.
  *
  * Notes:
  *    - This function is needed because strtok() can't be used inside a
@@ -295,7 +295,7 @@ exttok(const char *tok, const char *delims)
 	/*
 	 * Algorithm:
 	 *    1.  Get the starting address(new string or where we
-	 *	  left off).  If nothing to search, return(char *)NULL
+	 *	  left off).  If nothing to search, returnNULL
 	 *    2.  Find the end of the string
 	 *    3.  Look for the first unescaped delimiter closest to the
 	 *	  beginning of the string
@@ -304,8 +304,8 @@ exttok(const char *tok, const char *delims)
 	 */
 
 	/* Begin at the beginning, if any */
-	if (tok == (char *)NULL) {
-		return ((char *)NULL);
+	if (tok == NULL) {
+		return (NULL);
 	}
 
 	/* Find end of the token string */
@@ -375,24 +375,24 @@ noesc(char *str)
  *
  *	Parses a string that is in the format of the severity definitions.
  *	Returns a pointer to a (malloc'd) structure that contains the
- *	definition, or (struct sevstr *)NULL if none was parsed.
+ *	definition, or NULL if none was parsed.
  *
  * Arguments:
  *	ptr	char *
  *		References the string from which data is to be extracted.
- *		If (char *)NULL, continue where we left off.  Otherwise,
+ *		If NULL, continue where we left off.  Otherwise,
  *		start with the string referenced by ptr.
  *
  * Returns: struct sevstr *
  *	A pointer to a malloc'd structure containing the severity definition
- *	parsed from string, or (struct sevstr *)NULL if none.
+ *	parsed from string, or NULL if none.
  *
  * Notes:
  *    - This function is destructive to the string referenced by its argument.
  */
 
 /* Static data */
-static	char		*leftoff = (char *)NULL;
+static	char		*leftoff = NULL;
 
 static	struct sevstr *
 getauxsevs(char *ptr)
@@ -409,12 +409,12 @@ getauxsevs(char *ptr)
 
 
 	/* Start anew or start where we left off? */
-	current = (ptr == (char *)NULL) ? leftoff : ptr;
+	current = (ptr == NULL) ? leftoff : ptr;
 
 
-	/* If nothing to parse, return (char *)NULL */
-	if (current == (char *)NULL) {
-		return ((struct sevstr *)NULL);
+	/* If nothing to parse, return NULL */
+	if (current == NULL) {
+		return (NULL);
 	}
 
 
@@ -425,7 +425,7 @@ getauxsevs(char *ptr)
 
 	/* Loop initializations */
 	done = FALSE;
-	rtnval = (struct sevstr *)NULL;
+	rtnval = NULL;
 	while (!done) {
 		/* Eat leading junk */
 		while (*(tokend = exttok(current, ":,")) == ':') {
@@ -461,7 +461,7 @@ getauxsevs(char *ptr)
 						leftoff = tokend +
 						    (ptrdiff_t)1;
 					} else {
-						leftoff = (char *)NULL;
+						leftoff = NULL;
 					}
 
 					/*
@@ -477,7 +477,7 @@ getauxsevs(char *ptr)
 						rtnval->sevvalue = val;
 						rtnval->sevprstr = noesc(prstr);
 						rtnval->sevnext =
-						    (struct sevstr *)NULL;
+						    NULL;
 					}
 					done = TRUE;
 				} else {
@@ -503,7 +503,7 @@ getauxsevs(char *ptr)
 		} else {
 			/* End of string found */
 			done = TRUE;
-			leftoff = (char *)NULL;
+			leftoff = NULL;
 		}
 	} /* while (!done) */
 
@@ -539,7 +539,7 @@ msgverbset(void)
 	msgverb = 0;
 
 	/* Get the value of MSGVERB.  If none, use default value */
-	if ((opts = getenv(MSGVERB)) == (char *)NULL) {
+	if ((opts = getenv(MSGVERB)) == NULL) {
 		msgverb = MV_DFLT;
 	} else { /* MSGVERB has a value.  Interpret it */
 		if ((alloced = libc_malloc(strlen(opts) + 1)) == NULL) {
@@ -549,7 +549,7 @@ msgverbset(void)
 			nexttok = strcpy(alloced, opts);
 
 			/* Parse the options given by the user */
-			while ((tok = nexttok) != (char *)NULL) {
+			while ((tok = nexttok) != NULL) {
 				/*
 				 * Find end of the next token and squeeze
 				 * out escaped characters
@@ -562,7 +562,7 @@ msgverbset(void)
 					nexttok = tokend + (ptrdiff_t)1;
 					*tokend = '\0';
 				} else {
-					nexttok = (char *)NULL;
+					nexttok = NULL;
 				}
 
 				/* Check for "text" */
@@ -588,7 +588,7 @@ msgverbset(void)
 					/* Unknown, ignore MSGVERB value */
 				} else {
 					msgverb = MV_DFLT;
-					nexttok = (char *)NULL;
+					nexttok = NULL;
 				}
 			} /* do while */
 
@@ -618,7 +618,7 @@ msgverbset(void)
  *  Returns:  Void
  */
 
-static char *sevspace = (char *)NULL;
+static char *sevspace = NULL;
 
 static void
 sevstrset(void)
@@ -629,7 +629,7 @@ sevstrset(void)
 
 
 	/* Look for SEV_LEVEL definition */
-	if ((value = getenv(SEV_LEVEL)) != (char *)NULL) {
+	if ((value = getenv(SEV_LEVEL)) != NULL) {
 
 		/* Allocate space and make a copy of the value of SEV_LEVEL */
 		if ((sevspace = libc_malloc(strlen(value) + 1)) != NULL) {
@@ -637,17 +637,17 @@ sevstrset(void)
 
 			/* Continue for all severity descriptions */
 			psev = getauxsevs(sevspace);
-			plast = (struct sevstr *)NULL;
-			if (psev != (struct sevstr *)NULL) {
+			plast = NULL;
+			if (psev != NULL) {
 				penvsevs = psev;
 				plast = psev;
-				while (psev = getauxsevs((char *)NULL)) {
+				while (psev = getauxsevs(NULL)) {
 					plast->sevnext = psev;
 					plast = psev;
 				}
 			}
-		} /* if sevspace != (char *)NULL */
-	} /* if value != (char *)NULL */
+		} /* if sevspace != NULL */
+	} /* if value != NULL */
 }
 
 /*
@@ -701,14 +701,14 @@ addseverity(int value, const char *string)
 	 * Leaf through the list.  We may be redefining or removing a
 	 * definition
 	 */
-	q = (struct sevstr *)NULL;
+	q = NULL;
 	found = FALSE;
-	for (p = paugsevs; !found && (p != (struct sevstr *)NULL);
+	for (p = paugsevs; !found && (p != NULL);
 	    p = p->sevnext) {
 		if (p->sevvalue == value) {
 			/* We've a match.  Remove or modify the entry */
-			if (string == (char *)NULL) {
-				if (q == (struct sevstr *)NULL) {
+			if (string == NULL) {
+				if (q == NULL) {
 					paugsevs = p->sevnext;
 				} else {
 					q->sevnext = p->sevnext;
@@ -723,7 +723,7 @@ addseverity(int value, const char *string)
 	}
 
 	/* Adding a definition */
-	if (!found && (string != (char *)NULL)) {
+	if (!found && (string != NULL)) {
 		/* Allocate space for the severity structure */
 		if ((p = libc_malloc(sizeof (struct sevstr))) == NULL) {
 			lmutex_unlock(&fmt_lock);
@@ -735,7 +735,7 @@ addseverity(int value, const char *string)
 		 * the head of the augmented severity list.
 		 */
 
-		p->sevkywd = (char *)NULL;
+		p->sevkywd = NULL;
 		p->sevprstr = string;
 		p->sevvalue = value;
 		p->sevnext = paugsevs;
@@ -743,7 +743,7 @@ addseverity(int value, const char *string)
 
 		/* Successfully added a new severity */
 		rtnval = 0;
-	} else if (string == (char *)NULL) {
+	} else if (string == NULL) {
 		/* Attempting to undefined a non-defined severity */
 		rtnval = -1;
 		errno = EINVAL;
@@ -874,35 +874,35 @@ writemsg(char *buf, size_t size,
 	if (dosev) {
 		/* Search the default severity definitions */
 		psev = pstdsevs;
-		while (psev != (struct sevstr *)NULL) {
+		while (psev != NULL) {
 			if (psev->sevvalue == severity)
 				break;
 			psev = psev->sevnext;
 		}
 
-		if (psev == (struct sevstr *)NULL) {
+		if (psev == NULL) {
 			/*
 			 * Search the severity definitions
 			 * added by the application
 			 */
 			psev = paugsevs;
-			while (psev != (struct sevstr *)NULL) {
+			while (psev != NULL) {
 				if (psev->sevvalue == severity)
 					break;
 				psev = psev->sevnext;
 			}
-			if (psev == (struct sevstr *)NULL) {
+			if (psev == NULL) {
 				/*
 				 * Search the severity definitions
 				 * added by the environment
 				 */
 				psev = penvsevs;
-				while (psev != (struct sevstr *)NULL) {
+				while (psev != NULL) {
 					if (psev->sevvalue == severity)
 						break;
 					psev = psev->sevnext;
 				}
-				if (psev == (struct sevstr *)NULL) {
+				if (psev == NULL) {
 					/* Use default string, SV=severity */
 					(void) strcpy(sevpstrbuf, "SV=");
 					itoa(severity, &sevpstrbuf[3]);
@@ -1117,8 +1117,8 @@ const char *text, const char *action, const char *tag)
 	}
 
 
-	/* Set up the default text component [if text==(char *)NULL] */
-	if (text == (char *)NULL)
+	/* Set up the default text component [if text==NULL] */
+	if (text == NULL)
 		text = DEFLT_TEXT;
 
 	/* Prepare the message for stderr if requested */

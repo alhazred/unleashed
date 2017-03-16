@@ -329,7 +329,7 @@ open_input(char *infile, char *define)
 		addarg(define);
 		if (infile)
 			addarg(infile);
-		addarg((char *)NULL);
+		addarg(NULL);
 		(void) close(1);
 		(void) dup2(pd[1], 1);
 		(void) close(pd[0]);

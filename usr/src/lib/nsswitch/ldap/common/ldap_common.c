@@ -84,7 +84,7 @@ static struct gettablefilter {
 	{(char *)_USERATTR,	(char *)_F_GETUSERNAME,	(char *)_A_UID},
 	{(char *)_PROJECT,	(char *)_F_GETPROJENT,	(char *)_A_PROJECTNAM},
 	{(char *)_PRINTERS,	(char *)_F_GETPRINTERENT, (char *)_A_CN},
-	{(char *)NULL,		(char *)NULL,		(char *)NULL}
+	{NULL,		NULL,		NULL}
 };
 
 
@@ -341,7 +341,7 @@ _nss_ldap_setent(ldap_backend_ptr be, void *a)
 		(void) _nss_ldap_endent(be, a);
 	be->filter = NULL;
 	be->sortattr = NULL;
-	for (gtf = gettablefilterent; gtf->tablename != (char *)NULL; gtf++) {
+	for (gtf = gettablefilterent; gtf->tablename != NULL; gtf++) {
 		if (strcmp(gtf->tablename, be->tablename))
 			continue;
 		be->filter = (char *)gtf->tablefilter;

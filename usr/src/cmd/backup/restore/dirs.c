@@ -59,7 +59,7 @@ static RST_DIR	*dirp;
 
 #define	INIT_TEMPFILE(name, type) \
 	if (name[0] == '#') { \
-		if (tmpdir == (char *)NULL) /* can't happen; be paranoid */ \
+		if (tmpdir == NULL) /* can't happen; be paranoid */ \
 			tmpdir = "/tmp"; \
 		(void) snprintf(name, sizeof (name), \
 		    "%s/rst" type "%ld.XXXXXX", tmpdir, dumpdate); \
@@ -124,7 +124,7 @@ extractdirs(int genmode)
 
 	vprintf(stdout, gettext("Extract directories from tape\n"));
 	INIT_DIRFILE();
-	if ((df = safe_fopen(dirfile, "w", 0600)) == (FILE *)NULL) {
+	if ((df = safe_fopen(dirfile, "w", 0600)) == NULL) {
 		saverr = errno;
 		(void) fprintf(stderr,
 		    gettext("%s: %s - cannot create directory temporary\n"),
@@ -135,7 +135,7 @@ extractdirs(int genmode)
 	}
 	if (genmode != 0) {
 		INIT_MODEFILE();
-		if ((mf = safe_fopen(modefile, "w", 0600)) == (FILE *)NULL) {
+		if ((mf = safe_fopen(modefile, "w", 0600)) == NULL) {
 			saverr = errno;
 			(void) fprintf(stderr,
 			    gettext("%s: %s - cannot create modefile \n"),

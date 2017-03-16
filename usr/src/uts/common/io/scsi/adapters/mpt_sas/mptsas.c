@@ -3831,7 +3831,7 @@ mptsas_scsi_init_pkt(struct scsi_address *ap, struct scsi_pkt *pkt,
 			if (new_cmd) {
 				mptsas_scsi_destroy_pkt(ap, pkt);
 			}
-			return ((struct scsi_pkt *)NULL);
+			return (NULL);
 		}
 
 get_dma_cookies:
@@ -3845,7 +3845,7 @@ get_dma_cookies:
 			if (new_cmd) {
 				mptsas_scsi_destroy_pkt(ap, pkt);
 			}
-			return ((struct scsi_pkt *)NULL);
+			return (NULL);
 		}
 
 		/*
@@ -3861,7 +3861,7 @@ get_dma_cookies:
 				if (new_cmd) {
 					mptsas_scsi_destroy_pkt(ap, pkt);
 				}
-				return ((struct scsi_pkt *)NULL);
+				return (NULL);
 			}
 		}
 
@@ -3903,7 +3903,7 @@ get_dma_cookies:
 				if (new_cmd) {
 					mptsas_scsi_destroy_pkt(ap, pkt);
 				}
-				return ((struct scsi_pkt *)NULL);
+				return (NULL);
 			}
 		}
 
@@ -13721,7 +13721,7 @@ mptsas_inquiry(mptsas_t *mpt, mptsas_target_t *ptgt, int lun, uchar_t page,
 	ap.a_hba_tran = mpt->m_tran;
 
 	data_bp = scsi_alloc_consistent_buf(&ap,
-	    (struct buf *)NULL, len, B_READ, NULL_FUNC, NULL);
+	    NULL, len, B_READ, NULL_FUNC, NULL);
 	if (data_bp == NULL) {
 		return (ret);
 	}
@@ -13779,7 +13779,7 @@ mptsas_send_scsi_cmd(mptsas_t *mpt, struct scsi_address *ap,
 	tran_clone->tran_tgt_private = tgt_private;
 	ap->a_hba_tran = tran_clone;
 
-	pktp = scsi_init_pkt(ap, (struct scsi_pkt *)NULL,
+	pktp = scsi_init_pkt(ap, NULL,
 	    data_bp, cdblen, sizeof (struct scsi_arq_status),
 	    0, PKT_CONSISTENT, NULL, NULL);
 	if (pktp == NULL) {
@@ -14235,7 +14235,7 @@ mptsas_config_luns(dev_info_t *pdip, mptsas_target_t *ptgt)
 		ap.a_lun = 0;
 		ap.a_hba_tran = mpt->m_tran;
 		repluns_bp = scsi_alloc_consistent_buf(&ap,
-		    (struct buf *)NULL, buf_len, B_READ, NULL_FUNC, NULL);
+		    NULL, buf_len, B_READ, NULL_FUNC, NULL);
 		if (repluns_bp == NULL) {
 			retry++;
 			continue;

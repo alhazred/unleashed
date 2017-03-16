@@ -107,8 +107,8 @@ char	*name;
 
 
 char	*tx_icmptypes[] = {
-	"echorep", (char *)NULL, (char *)NULL, "unreach", "squench",
-	"redir", (char *)NULL, (char *)NULL, "echo", "routerad",
+	"echorep", NULL, NULL, "unreach", "squench",
+	"redir", NULL, NULL, "echo", "routerad",
 	"routersol", "timex", "paramprob", "timest", "timestrep",
 	"inforeq", "inforep", "maskreq", "maskrep", "END"
 };

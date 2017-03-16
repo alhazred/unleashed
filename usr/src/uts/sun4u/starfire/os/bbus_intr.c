@@ -233,7 +233,7 @@ bbus_intr(caddr_t arg)
 		if (initpp == NULL) {
 			extern void halt(char *);
 			cmn_err(CE_WARN, "?Environmental Interrupt");
-			power_down((char *)NULL);
+			power_down(NULL);
 			halt("Power off the System!\n"); /* just in case */
 		}
 

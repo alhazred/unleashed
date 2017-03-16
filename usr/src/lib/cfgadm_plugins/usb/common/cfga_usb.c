@@ -957,7 +957,7 @@ fill_in_ap_info(const char *ap_id, char *info_buf, size_t info_size)
 	}
 
 	/* add ": " to output coz PSARC case says so */
-	if ((cfg_descr != (char *)NULL) && rv != CFGA_USB_ZEROLEN) {
+	if ((cfg_descr != NULL) && rv != CFGA_USB_ZEROLEN) {
 		flag = B_TRUE;
 		free_cfg_str = B_TRUE;
 	} else {
@@ -1296,7 +1296,7 @@ cfga_private_func(
 
 		/* return error if no options are specified */
 		subopts = (char *)options;
-		if (subopts == (char *)NULL) {
+		if (subopts == NULL) {
 			DPRINTF("cfga_private_func: no options\n");
 			rv = CFGA_USB_OPNOTSUPP;
 			(void) cfga_help(msgp, options, flags);
@@ -1734,6 +1734,6 @@ usb_get_devicepath(const char *ap_id)
 		return (devpath);
 	} else {
 		DPRINTF("usb_get_devicepath: get device path ioctl failed\n");
-		return ((char *)NULL);
+		return (NULL);
 	}
 }

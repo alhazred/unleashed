@@ -164,8 +164,7 @@ run_menu(menu, title, prompt, display_flag)
 		 * Ask the user which command they want to run.
 		 */
 		ioparam.io_charlist = list;
-		i = input(FIO_MSTR, prompt, '>', &ioparam,
-		    (int *)NULL, CMD_INPUT);
+		i = input(FIO_MSTR, prompt, '>', &ioparam, NULL, CMD_INPUT);
 		/*
 		 * If they choose 'quit', the party's over.
 		 */

@@ -421,7 +421,7 @@ vscand_daemonize_fini(int fd, int err_status)
 
 	/* clear basic privileges not required by vscand */
 	__fini_daemon_priv(PRIV_PROC_FORK, PRIV_PROC_EXEC, PRIV_PROC_SESSION,
-	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, (char *)NULL);
+	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, NULL);
 }
 
 

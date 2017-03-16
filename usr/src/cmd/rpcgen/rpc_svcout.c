@@ -1089,7 +1089,7 @@ write_rpc_svc_fg(char *infile, char *sp)
 		f_print(fout, "%si = open(\"/dev/tty\", 2);\n", sp);
 		f_print(fout, "%sif (i >= 0) {\n", sp);
 		f_print(fout,
-		    "%s\t(void) ioctl(i, TIOCNOTTY, (char *)NULL);\n", sp);
+		    "%s\t(void) ioctl(i, TIOCNOTTY, NULL);\n", sp);
 		f_print(fout, "%s\t(void) close(i);\n", sp);
 		f_print(fout, "%s}\n", sp);
 	}

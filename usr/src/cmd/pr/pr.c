@@ -1359,7 +1359,7 @@ mustopen(char *s, FILS *f)
 			cerror(s);
 			(void) putc('\n', stderr);
 		}
-	return ((FILE *)NULL);
+	return (NULL);
 }
 
 

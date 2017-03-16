@@ -563,7 +563,7 @@ static struct dev_ops idnops = {
 	idndetach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&cb_idnops,		/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	NULL,			/* devo_power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };
@@ -5106,7 +5106,7 @@ idn_gkstat_init()
 	kstat_named_init(&sgkp->sk_dropped_intrs,	"dropped_intrs",
 	    KSTAT_DATA_ULONG);
 	ksp->ks_update = idn_gkstat_update;
-	ksp->ks_private = (void *)NULL;
+	ksp->ks_private = NULL;
 	kstat_install(ksp);
 }
 

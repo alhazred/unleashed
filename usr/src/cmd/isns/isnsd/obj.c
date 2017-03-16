@@ -3836,13 +3836,13 @@ data_sync(
 		}
 		if (ec == 0) {
 			/* successful, trigger the SCN */
-			(void) queue_msg_set(scn_q, SCN_TRIGGER, (void *)NULL);
+			(void) queue_msg_set(scn_q, SCN_TRIGGER, NULL);
 		} else {
 			shutdown_server();
 		}
 	} else {
 		/* ignore all SCNs which have been generated */
-		(void) queue_msg_set(scn_q, SCN_IGNORE, (void *)NULL);
+		(void) queue_msg_set(scn_q, SCN_IGNORE, NULL);
 
 		(void) write_data(DATA_RETREAT, NULL);
 	}

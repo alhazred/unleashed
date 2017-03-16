@@ -844,11 +844,11 @@ dcdpower(dev_info_t *devi, int component, int level)
 			Restore_state(un);
 		mutex_exit(DCD_MUTEX);
 	} else {
-		pkt = dcd_init_pkt(ROUTE, (struct dcd_pkt *)NULL,
+		pkt = dcd_init_pkt(ROUTE, NULL,
 		    NULL, (uint32_t)sizeof (struct dcd_cmd), 2, PP_LEN,
 		    PKT_CONSISTENT, NULL_FUNC, NULL);
 
-		if (pkt == (struct dcd_pkt *)NULL) {
+		if (pkt == NULL) {
 			mutex_exit(DCD_MUTEX);
 			return (DDI_FAILURE);
 		}
@@ -935,7 +935,7 @@ dcd_doattach(dev_info_t *devi, int (*canwait)())
 	un = ddi_get_soft_state(dcd_state, instance);
 
 	un->un_sbufp = getrbuf(km_flags);
-	if (un->un_sbufp == (struct buf *)NULL) {
+	if (un->un_sbufp == NULL) {
 		rval = DDI_FAILURE;
 		goto error;
 	}
@@ -2349,7 +2349,7 @@ make_dcd_cmd(struct dcd_disk *un, struct buf *bp, int (*func)())
 		if (scmd->udcd_flags & UDCD_NOINTR)
 			flags |= FLAG_NOINTR;
 
-		pkt = dcd_init_pkt(ROUTE, (struct dcd_pkt *)NULL,
+		pkt = dcd_init_pkt(ROUTE, NULL,
 		    (bp->b_bcount)? bp: NULL,
 		    (uint32_t)sizeof (struct dcd_cmd),
 		    2, PP_LEN, PKT_CONSISTENT, func, (caddr_t)un);
@@ -3411,7 +3411,7 @@ dcdioctl(dev_t dev, int cmd, intptr_t arg, int flag,
 		bp  = un->un_sbufp;
 		mutex_exit(DCD_MUTEX);
 
-		pkt = dcd_init_pkt(ROUTE, (struct dcd_pkt *)NULL,
+		pkt = dcd_init_pkt(ROUTE, NULL,
 		    NULL, (uint32_t)sizeof (struct dcd_cmd),
 		    2, PP_LEN, PKT_CONSISTENT, SLEEP_FUNC, (caddr_t)un);
 		ASSERT(pkt != NULL);
@@ -4436,7 +4436,7 @@ dcd_send_lb_rw_cmd(dev_info_t *devi, void *bufaddr,
 	if (un == NULL)
 		return (ENXIO);
 
-	bp = dcd_alloc_consistent_buf(ROUTE, (struct buf *)NULL,
+	bp = dcd_alloc_consistent_buf(ROUTE, NULL,
 	    buffer_size, B_READ, NULL_FUNC, NULL);
 	if (!bp) {
 		dcd_log(DCD_DEVINFO, dcd_label, CE_WARN,
@@ -4444,7 +4444,7 @@ dcd_send_lb_rw_cmd(dev_info_t *devi, void *bufaddr,
 		return (ENOMEM);
 	}
 
-	pkt = dcd_init_pkt(ROUTE, (struct dcd_pkt *)NULL,
+	pkt = dcd_init_pkt(ROUTE, NULL,
 	    bp, (uint32_t)sizeof (struct dcd_cmd), 2, PP_LEN,
 	    PKT_CONSISTENT, NULL_FUNC, NULL);
 

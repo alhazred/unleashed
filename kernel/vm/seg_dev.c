@@ -3712,7 +3712,7 @@ ddi_umem_alloc(size_t size, int flags, ddi_umem_cookie_t *cookie)
 	*cookie = NULL;
 
 	if (len == 0)
-		return ((void *)NULL);
+		return (NULL);
 
 	/*
 	 * allocate cookie
@@ -3720,7 +3720,7 @@ ddi_umem_alloc(size_t size, int flags, ddi_umem_cookie_t *cookie)
 	if ((cp = kmem_zalloc(sizeof (struct ddi_umem_cookie),
 	    flags & DDI_UMEM_NOSLEEP ? KM_NOSLEEP : KM_SLEEP)) == NULL) {
 		ASSERT(flags & DDI_UMEM_NOSLEEP);
-		return ((void *)NULL);
+		return (NULL);
 	}
 
 	if (flags & DDI_UMEM_PAGEABLE) {
@@ -3740,7 +3740,7 @@ ddi_umem_alloc(size_t size, int flags, ddi_umem_cookie_t *cookie)
 
 		if ((buf = segkp_get(segkp, len, iflags)) == NULL) {
 			kmem_free(cp, sizeof (struct ddi_umem_cookie));
-			return ((void *)NULL);
+			return (NULL);
 		}
 		cp->type = KMEM_PAGEABLE;
 		mutex_init(&cp->lock, NULL, MUTEX_DEFAULT, NULL);
@@ -3753,7 +3753,7 @@ ddi_umem_alloc(size_t size, int flags, ddi_umem_cookie_t *cookie)
 	} else {
 		if ((buf = devmap_umem_alloc_np(len, flags)) == NULL) {
 			kmem_free(cp, sizeof (struct ddi_umem_cookie));
-			return ((void *)NULL);
+			return (NULL);
 		}
 
 		cp->type = KMEM_NON_PAGEABLE;

@@ -138,8 +138,8 @@ nfslib_transport_open(struct netconfig *nconf)
 	int fd;
 	struct strioctl	strioc;
 
-	if ((nconf == (struct netconfig *)NULL) ||
-	    (nconf->nc_device == (char *)NULL)) {
+	if ((nconf == NULL) ||
+	    (nconf->nc_device == NULL)) {
 		syslog(LOG_ERR, "no netconfig device");
 		return (-1);
 	}
@@ -147,13 +147,12 @@ nfslib_transport_open(struct netconfig *nconf)
 	/*
 	 * Open the transport device.
 	 */
-	fd = t_open(nconf->nc_device, O_RDWR, (struct t_info *)NULL);
+	fd = t_open(nconf->nc_device, O_RDWR, NULL);
 	if (fd == -1) {
 		if (t_errno == TSYSERR && errno == EMFILE &&
 		    (nofile_increase(0) == 0)) {
 			/* Try again with a higher NOFILE limit. */
-			fd = t_open(nconf->nc_device, O_RDWR,
-			    (struct t_info *)NULL);
+			fd = t_open(nconf->nc_device, O_RDWR, NULL);
 		}
 		if (fd == -1) {
 			syslog(LOG_ERR, "t_open %s failed:  t_errno %d, %m",
@@ -296,7 +295,7 @@ nfslib_bindit(struct netconfig *nconf, struct netbuf **addr,
 		return (-1);
 	}
 
-	addrlist = (struct nd_addrlist *)NULL;
+	addrlist = NULL;
 
 	/* nfs4_callback service does not used a fieed port number */
 
@@ -345,7 +344,7 @@ nfslib_bindit(struct netconfig *nconf, struct netbuf **addr,
 
 	/* LINTED pointer alignment */
 	ntb = (struct t_bind *)t_alloc(fd, T_BIND, T_ALL);
-	if (ntb == (struct t_bind *)NULL) {
+	if (ntb == NULL) {
 		syslog(LOG_ERR, "t_alloc failed:  t_errno %d, %m", t_errno);
 		(void) t_close(fd);
 		netdir_free((void *)addrlist, ND_ADDRLIST);
@@ -761,8 +760,7 @@ add_to_poll_list(int fd, struct netconfig *nconf)
 		    malloc(poll_array_size * sizeof (struct pollfd) + 256);
 		conn_polled = (struct conn_entry *)
 		    malloc(poll_array_size * sizeof (struct conn_entry) + 256);
-		if (poll_array == (struct pollfd *)NULL ||
-		    conn_polled == (struct conn_entry *)NULL) {
+		if (poll_array == NULL || conn_polled == NULL) {
 			syslog(LOG_ERR, "malloc failed for poll array");
 			exit(1);
 		}
@@ -1554,7 +1552,7 @@ printf("do_poll_cots_action(%s,%d): T_ORDREL event\n", nconf->nc_proto, fd);
 #ifdef DEBUG
 printf("do_poll_cots_action(%s,%d): T_DISCONNECT event\n", nconf->nc_proto, fd);
 #endif
-			if (t_rcvdis(fd, (struct t_discon *)NULL) == -1)
+			if (t_rcvdis(fd, NULL) == -1)
 				nfslib_log_tli_error("t_rcvdis", fd, nconf);
 
 			/*

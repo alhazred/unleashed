@@ -180,7 +180,7 @@ bootparamprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 	_rpcsvcdirty = 1;
 	switch (rqstp->rq_proc) {
 	case NULLPROC:
-		(void) svc_sendreply(transp, xdr_void, (char *)NULL);
+		(void) svc_sendreply(transp, xdr_void, NULL);
 		_rpcsvcdirty = 0;
 		return;
 

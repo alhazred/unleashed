@@ -34,7 +34,7 @@
 #include <sys/promif.h>
 #include <sys/salib.h>
 
-static struct boot_fs_ops *dfl_fsw = (struct boot_fs_ops *)NULL;
+static struct boot_fs_ops *dfl_fsw = NULL;
 static char *fsmsg = "Fstype has not been selected yet!\n";
 static char *msg_noops = "not fs_ops supplied\n";
 
@@ -50,7 +50,7 @@ get_fs_ops_pointer(char *fsw_name)
 		if (strcmp(boot_fsw[fsw_idx]->fsw_name, fsw_name) == 0) {
 			return (boot_fsw[fsw_idx]);
 		}
-	return ((struct boot_fs_ops *)NULL);
+	return (NULL);
 }
 
 /*
@@ -103,7 +103,7 @@ boot_no_ops()
 int
 close(int fd)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_close)(fd));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -112,7 +112,7 @@ close(int fd)
 int
 mountroot(char *str)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_mountroot)(str));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -121,7 +121,7 @@ mountroot(char *str)
 int
 unmountroot(void)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_unmountroot)());
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -131,7 +131,7 @@ unmountroot(void)
 int
 open(const char *filename, int flags)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_open)((char *)filename, flags));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -140,7 +140,7 @@ open(const char *filename, int flags)
 ssize_t
 read(int fd, void *buf, size_t size)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_read)(fd, buf, size));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -149,7 +149,7 @@ read(int fd, void *buf, size_t size)
 void
 closeall(int flag)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL) {
+	if (dfl_fsw != NULL) {
 		(*dfl_fsw->fsw_closeall)(flag);
 		return;
 	}
@@ -207,7 +207,7 @@ stat(const char *filename, struct stat *sb)
 off_t
 lseek(int filefd, off_t addr, int whence)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_lseek)(filefd, addr, whence));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -219,7 +219,7 @@ lseek(int filefd, off_t addr, int whence)
 int
 kern_open(char *str, int flags)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_open)(str, flags));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -236,7 +236,7 @@ kern_open(char *str, int flags)
 off_t
 kern_lseek(int filefd, off_t hi, off_t lo)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_lseek)(filefd, lo, 0));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -245,7 +245,7 @@ kern_lseek(int filefd, off_t hi, off_t lo)
 ssize_t
 kern_read(int fd, caddr_t buf, size_t size)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_read)(fd, buf, size));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -254,7 +254,7 @@ kern_read(int fd, caddr_t buf, size_t size)
 int
 kern_close(int fd)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_close)(fd));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -263,7 +263,7 @@ kern_close(int fd)
 int
 kern_fstat(int fd, struct bootstat *buf)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_fstat)(fd, buf));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/
@@ -272,7 +272,7 @@ kern_fstat(int fd, struct bootstat *buf)
 int
 kern_getdents(int fd, struct dirent *buf, size_t size)
 {
-	if (dfl_fsw != (struct boot_fs_ops *)NULL)
+	if (dfl_fsw != NULL)
 		return ((*dfl_fsw->fsw_getdents)(fd, buf, size));
 	prom_panic(fsmsg);
 	/*NOTREACHED*/

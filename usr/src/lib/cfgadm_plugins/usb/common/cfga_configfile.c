@@ -122,7 +122,7 @@ get_string(u_longlong_t *llptr, char *tchar)
 	start = tchar;
 	/* copy string */
 	cp = (char *)calloc(len + 1, sizeof (char));
-	if (cp == (char *)NULL) {
+	if (cp == NULL) {
 		*llptr = 0;
 
 		return (0);
@@ -727,7 +727,7 @@ add_entry(char *selection, int vid, int pid, int cfgndx, char *srno,
 {
 	int		file;
 	int		rval = CFGA_USB_OK;
-	char		*buf = (char *)NULL;
+	char		*buf = NULL;
 	char		str[MAXLINESIZE];
 	token_t		token = NEWLINE;
 	boolean_t	found = B_FALSE;
@@ -737,8 +737,8 @@ add_entry(char *selection, int vid, int pid, int cfgndx, char *srno,
 	DPRINTF("add_entry: driver=%s, path=%s\n",
 	    driver ? driver : "", path ? path : "");
 
-	if (*errmsg == (char *)NULL) {
-		if ((*errmsg = calloc(MAXPATHLEN, 1)) == (char *)NULL) {
+	if (*errmsg == NULL) {
+		if ((*errmsg = calloc(MAXPATHLEN, 1)) == NULL) {
 
 			return (CFGA_USB_CONFIG_FILE);
 		}

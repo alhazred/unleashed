@@ -56,7 +56,7 @@ extern "C" {
 /*
  * Define for the dcd_get_addr/ dcd_get_name first argument.
  */
-#define	DCD_GET_INITIATOR_ID	((struct dcd_device *)NULL)
+#define	DCD_GET_INITIATOR_ID	(NULL)
 				/* return initiator-id */
 
 /*

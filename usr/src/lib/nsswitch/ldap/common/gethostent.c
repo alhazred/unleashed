@@ -46,7 +46,7 @@
 static const char *hosts_attrs[] = {
 	_H_NAME,
 	_H_ADDR,
-	(char *)NULL
+	NULL
 };
 
 /*

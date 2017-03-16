@@ -60,7 +60,7 @@ setseed(unsigned char *pass)
 	int rseed;
 	struct timeval tv;
 
-	(void) gettimeofday(&tv, (struct timezone *)NULL);
+	(void) gettimeofday(&tv, NULL);
 	rseed = tv.tv_sec + tv.tv_usec;
 
 	for (i = 0; i < 8; i++) {

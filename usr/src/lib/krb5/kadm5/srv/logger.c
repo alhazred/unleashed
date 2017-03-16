@@ -208,7 +208,7 @@ struct log_control {
 };
 
 static struct log_control log_control = {
-    (struct log_entry *) NULL,
+    NULL,
     0,
     (char *) NULL,
     (char *) NULL,
@@ -952,7 +952,7 @@ krb5_klog_close(krb5_context kcontext)
     }
     if (log_control.log_entries != &def_log_entry)
 	free(log_control.log_entries);
-    log_control.log_entries = (struct log_entry *) NULL;
+    log_control.log_entries = NULL;
     log_control.log_nentries = 0;
     free(log_control.log_whoami);
     log_control.log_whoami = (char *) NULL;

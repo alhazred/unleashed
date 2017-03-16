@@ -153,7 +153,7 @@ c_disk()
 		/*
 		 * Convert the token into an integer.
 		 */
-		if (geti(cleantoken, &index, (int *)NULL))
+		if (geti(cleantoken, &index, NULL))
 			return (0);
 
 		/*
@@ -169,7 +169,7 @@ c_disk()
 	fmt_print("\n\nAVAILABLE DISK SELECTIONS:\n");
 
 	i = 0;
-	if ((option_f == (char *)NULL) && isatty(0) == 1 && isatty(1) == 1) {
+	if ((option_f == NULL) && isatty(0) == 1 && isatty(1) == 1) {
 		/*
 		 * We have a real terminal for std input and output, enable
 		 * more style of output for disk selection list.
@@ -1267,7 +1267,7 @@ c_repair()
 	}
 	bn = input(FIO_BN,
 	    "Enter absolute block number of defect", ':',
-	    &ioparam, (int *)NULL, DATA_INPUT);
+	    &ioparam, NULL, DATA_INPUT);
 	/*
 	 * Check to see if there is a mounted file system over the
 	 * specified sector.  If there is, make sure the user is
@@ -1452,7 +1452,7 @@ c_show()
 		ioparam.io_bounds.upper = cur_parts->etoc->efi_last_lba;
 	}
 	bn = input(FIO_BN, "Enter a disk block", ':',
-	    &ioparam, (int *)NULL, DATA_INPUT);
+	    &ioparam, NULL, DATA_INPUT);
 	/*
 	 * Echo it back.
 	 */

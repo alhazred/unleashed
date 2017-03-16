@@ -226,7 +226,7 @@ static struct dev_ops snap_ops = {
 	snap_detach,
 	nodev,			/* no snap_reset */
 	&snap_cb_ops,
-	(struct bus_ops *)NULL,
+	NULL,
 	nulldev,		/* no snap_power() */
 	ddi_quiesce_not_needed,		/* quiesce */
 };
@@ -1701,7 +1701,7 @@ fssnap_write_taskq(void *arg)
 	if (error = vn_rdwr(UIO_WRITE, (cowp->cow_backfile_array)[bf_index],
 	    cmn->cmn_buf, cmap->cmap_chunksz,
 	    (cmn->cmn_chunk % cmap->cmap_chunksperbf) * cmap->cmap_chunksz,
-	    UIO_SYSSPACE, 0, RLIM64_INFINITY, kcred, (ssize_t *)NULL)) {
+	    UIO_SYSSPACE, 0, RLIM64_INFINITY, kcred, NULL)) {
 		cmn_err(CE_WARN, "fssnap_write_taskq: error writing to "
 		    "backing file.  DELETING SNAPSHOT %d, backing file path "
 		    "%s, offset %llu bytes, error %d.", sidp->sid_snapnumber,

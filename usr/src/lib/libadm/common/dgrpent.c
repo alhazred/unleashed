@@ -412,7 +412,7 @@ _opendgrptab(char *mode)
  *
  *  Returns:  struct dgrptabent *
  *	Pointer to the next record in the device-group table, or
- *	(struct dgrptabent *) NULL if it was unable to open the file or there
+ *	NULL if it was unable to open the file or there
  *	are no more records to read.  "errno" reflects the situation.  If
  *	errno is not changed and the function returns NULL, there are no more
  *	records to read.  If errno is set, it indicates the error.

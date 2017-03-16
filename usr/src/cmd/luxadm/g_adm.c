@@ -5873,7 +5873,7 @@ struct dlist		*dlist;
 	strcpy(phys_path, path_struct->p_physical_path);
 	strcpy(last_logical_path, phys_path);
 
-	mplistp = mpl = mpln = (struct mplist_struct *)NULL;
+	mplistp = mpl = mpln = NULL;
 	/*
 	 * Get path to all the FC disk and tape devices.
 	 * If there is no slash in the argument in this routine, we assume

@@ -112,7 +112,7 @@ static struct dev_ops pmc_dev_ops = {
 	pmc_detach,
 	nulldev,			/* reset */
 	&pmc_cb_ops,
-	(struct bus_ops *)NULL,
+	NULL,
 	nulldev				/* power */
 };
 
@@ -207,7 +207,7 @@ pmc_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 		instance = getminor((dev_t)arg);
 		pmcp = (pmc_t *)ddi_get_soft_state(pmc_soft_state, instance);
 		if (pmcp == NULL) {
-			*result = (void *)NULL;
+			*result = NULL;
 			return (DDI_FAILURE);
 		}
 		*result = (void *)pmcp->dip;

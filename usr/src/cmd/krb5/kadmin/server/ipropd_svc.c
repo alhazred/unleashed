@@ -342,7 +342,7 @@ iprop_full_resync_1(
 #ifdef POSIX_SIGNALS
 		(void) sigemptyset(&s_action.sa_mask);
 		s_action.sa_handler = SIG_DFL;
-		(void) sigaction(SIGCHLD, &s_action, (struct sigaction *) NULL);
+		(void) sigaction(SIGCHLD, &s_action, NULL);
 #else
 		(void) signal(SIGCHLD, SIG_DFL);
 #endif /* POSIX_SIGNALS */
@@ -420,8 +420,7 @@ krb5_iprop_prog_1(
 
 	switch (rqstp->rq_proc) {
 	case NULLPROC:
-		(void) svc_sendreply(transp, xdr_void,
-			(char *)NULL);
+		(void) svc_sendreply(transp, xdr_void, NULL);
 		return;
 
 	case IPROP_GET_UPDATES:

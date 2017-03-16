@@ -37,7 +37,7 @@ void mkdead()
 	gid_t egid = getegid();
 	struct stat st;
 
-	malf = (FILE *)NULL;
+	malf = NULL;
 
 	/*
 		Make certain that there's something to copy.

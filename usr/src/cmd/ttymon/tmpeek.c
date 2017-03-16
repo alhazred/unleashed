@@ -176,7 +176,7 @@ int	n;	/* maxlen of data to peek at */
 		exit(1);
 	}
 	if (ret == 0) {
-		return( (struct strbuf *)NULL );
+		return( NULL );
 	}
 	return(&(peekp->databuf));
 }

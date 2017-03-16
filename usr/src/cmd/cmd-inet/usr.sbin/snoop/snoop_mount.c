@@ -290,7 +290,7 @@ sum_mountstat(line)
 	status = getxdr_u_long();
 	if (status == 0)
 		str = "OK";
-	else if ((str = strerror(status)) == (char *)NULL)
+	else if ((str = strerror(status)) == NULL)
 		str = "";
 	(void) strcpy(line, str);
 	if (status == 0) {
@@ -307,7 +307,7 @@ detail_mountstat()
 	status = getxdr_u_long();
 	if (status == 0)
 		str = "OK";
-	else if ((str = strerror(status)) == (char *)NULL)
+	else if ((str = strerror(status)) == NULL)
 		str = "";
 
 	(void) sprintf(get_line(0, 0), "Status = %d (%s)", status, str);

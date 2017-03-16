@@ -161,7 +161,7 @@ sema_dequeue(ksema_t *sp, kthread_t *t)
 static kthread_t *
 sema_owner(ksema_t *sp)
 {
-	return ((kthread_t *)NULL);
+	return (NULL);
 }
 
 /*

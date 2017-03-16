@@ -948,8 +948,8 @@ static struct dev_ops rmc_comm_dev_ops =
 	rmc_comm_attach,		/* attach		*/
 	rmc_comm_detach,		/* detach		*/
 	rmc_comm_reset,			/* reset		*/
-	(struct cb_ops *)NULL,		/* driver operations	*/
-	(struct bus_ops *)NULL,		/* bus operations	*/
+	NULL,		/* driver operations	*/
+	NULL,		/* bus operations	*/
 	nulldev,			/* power()		*/
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };

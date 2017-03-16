@@ -455,7 +455,7 @@ eval_file(const char *fname, const struct stat64 *statb, struct FTW *ftwx)
 	if ((subtree_root != NULL) &&
 	    ((result = exclude_fname(fname, ftype, subtree_root)) !=
 	    NO_EXCLUDE)) {
-		if ((result == EXCLUDE_PRUNE) && (ftwx != (struct FTW *)NULL))
+		if ((result == EXCLUDE_PRUNE) && (ftwx != NULL))
 			ftwx->quit = FTW_PRUNE;
 		return (err_code);
 	}

@@ -300,7 +300,7 @@ get_default_zfs_flags()
 					break;
 			}
 		}
-		(void) defopen((char *)NULL);
+		(void) defopen(NULL);
 	}
 	return (flags);
 }

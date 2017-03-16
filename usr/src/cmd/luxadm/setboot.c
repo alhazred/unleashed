@@ -166,7 +166,7 @@ setprom(unsigned yes, unsigned verbose, char *bdev)
 	pio = (struct openpromio *)malloc(sizeof (struct openpromio) +
 					MAXVALSIZE + MAXPROPSIZE);
 
-	if (pio == (struct openpromio *)NULL) {
+	if (pio == NULL) {
 		perror(MSGSTR(6003, " Error: Unable to allocate memory."));
 		return (errno);
 	}

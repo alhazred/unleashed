@@ -430,7 +430,7 @@ e1000g_alloc_tx_descriptors(e1000g_tx_ring_t *tx_ring)
 	 * the memory address
 	 */
 	mystat = ddi_dma_addr_bind_handle(tx_ring->tbd_dma_handle,
-	    (struct as *)NULL, (caddr_t)tx_ring->tbd_area,
+	    NULL, (caddr_t)tx_ring->tbd_area,
 	    len, DDI_DMA_RDWR | DDI_DMA_CONSISTENT,
 	    DDI_DMA_DONTWAIT, 0, &cookie, &cookie_count);
 
@@ -612,7 +612,7 @@ e1000g_alloc_rx_descriptors(e1000g_rx_data_t *rx_data)
 	 * the ddi_dma_mem_alloc call.
 	 */
 	mystat = ddi_dma_addr_bind_handle(rx_data->rbd_dma_handle,
-	    (struct as *)NULL, (caddr_t)rx_data->rbd_area,
+	    NULL, (caddr_t)rx_data->rbd_area,
 	    len, DDI_DMA_RDWR | DDI_DMA_CONSISTENT,
 	    DDI_DMA_DONTWAIT, 0, &cookie, &cookie_count);
 
@@ -876,8 +876,7 @@ e1000g_alloc_dma_buffer(struct e1000g *Adapter,
 
 	mystat = ddi_dma_mem_alloc(buf->dma_handle,
 	    size, &e1000g_buf_acc_attr, DDI_DMA_STREAMING,
-	    DDI_DMA_DONTWAIT, 0,
-	    &buf->address,
+	    DDI_DMA_DONTWAIT, 0, &buf->address,
 	    &len, &buf->acc_handle);
 
 	if (mystat != DDI_SUCCESS) {
@@ -893,9 +892,7 @@ e1000g_alloc_dma_buffer(struct e1000g *Adapter,
 	}
 
 	mystat = ddi_dma_addr_bind_handle(buf->dma_handle,
-	    (struct as *)NULL,
-	    buf->address,
-	    len, DDI_DMA_RDWR | DDI_DMA_STREAMING,
+	    NULL, buf->address, len, DDI_DMA_RDWR | DDI_DMA_STREAMING,
 	    DDI_DMA_DONTWAIT, 0, &cookie, &count);
 
 	if (mystat != DDI_SUCCESS) {
@@ -986,9 +983,7 @@ e1000g_alloc_dma_buffer_82546(struct e1000g *Adapter,
 	}
 
 	mystat = ddi_dma_addr_bind_handle(buf->dma_handle,
-	    (struct as *)NULL,
-	    buf->address,
-	    len, DDI_DMA_READ | DDI_DMA_STREAMING,
+	    NULL, buf->address, len, DDI_DMA_READ | DDI_DMA_STREAMING,
 	    DDI_DMA_DONTWAIT, 0, &cookie, &count);
 
 	if (mystat != DDI_SUCCESS) {

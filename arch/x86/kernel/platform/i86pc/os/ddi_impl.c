@@ -300,7 +300,7 @@ status_okay(int id, char *buf, int buflen)
 	/*
 	 * if a buffer was provided, use it
 	 */
-	if ((buf == (char *)NULL) || (buflen <= 0)) {
+	if ((buf == NULL) || (buflen <= 0)) {
 		bufp = status_buf;
 		len = sizeof (status_buf);
 	}

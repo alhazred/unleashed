@@ -71,7 +71,7 @@ size_t
 rm_asrss(as)
 	register struct as *as;
 {
-	if (as != (struct as *)NULL && as != &kas)
+	if (as != NULL && as != &kas)
 		return ((size_t)btop(hat_get_mapped_size(as->a_hat)));
 	else
 		return (0);

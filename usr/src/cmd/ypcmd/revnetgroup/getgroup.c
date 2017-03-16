@@ -88,7 +88,7 @@ my_getgroup(group)
 	char *group;
 {
 	freegrouplist();
-	doit(group, (struct list *) NULL);
+	doit(group, NULL);
 	return (grouplist);
 }
 
@@ -200,8 +200,8 @@ fill(start, target, termchar)
 	for (p = start; *p == ' ' || *p == '\t'; p++)
 		;
 	r = strchr(p, termchar);
-	if (r == (char *)NULL) {
-		return ((char *)NULL);
+	if (r == NULL) {
+		return (NULL);
 	}
 	if (p == r) {
 		*target = NULL;

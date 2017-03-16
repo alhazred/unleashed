@@ -52,12 +52,12 @@ int main(argc, argv)
     path = malloc(strlen(argv[1])+4); /* extra space to add ".ct" */
     strcpy(path, argv[1]);
     p = strrchr(path, '/');
-    if (p == (char *)NULL)
+    if (p == NULL)
 	p = path;
     else
 	p++;
     p = strrchr(p, '.');
-    if (p == (char *)NULL || strcmp(p, ".ct"))
+    if (p == NULL || strcmp(p, ".ct"))
 	strcat(path, ".ct");
     yyin = fopen(path, "rF");
     if (!yyin) {

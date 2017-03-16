@@ -624,6 +624,6 @@ bop_fini(void)
 	bop_free_elf();
 	bop_temp_freeall();
 
-	bootops = (struct bootops *)NULL;
+	bootops = NULL;
 	BOOTOPS_GONE();
 }

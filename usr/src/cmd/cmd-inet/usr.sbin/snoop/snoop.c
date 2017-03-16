@@ -168,55 +168,55 @@ main(int argc, char **argv)
 	sigact.sa_flags = SA_ONSTACK|SA_SIGINFO;
 
 	/* Register master signal handler */
-	if (sigaction(SIGHUP, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGHUP, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGINT, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGINT, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGQUIT, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGQUIT, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGILL, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGILL, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGTRAP, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGTRAP, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGIOT, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGIOT, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGEMT, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGEMT, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGFPE, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGFPE, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGBUS, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGBUS, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGSEGV, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGSEGV, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGSYS, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGSYS, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGALRM, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGALRM, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}
-	if (sigaction(SIGTERM, &sigact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGTERM, &sigact, NULL) < 0) {
 		perror("Warning: sigaction");
 		exit(1);
 	}

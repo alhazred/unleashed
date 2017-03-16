@@ -3222,7 +3222,7 @@ gld_addudind(gld_t *gld, mblk_t *mp, pktinfo_t *pktinfo, boolean_t tagged)
 			cmn_err(CE_WARN,
 			    "gld_addudind: allocb failed");
 #endif
-		return ((mblk_t *)NULL);
+		return (NULL);
 	}
 	DB_TYPE(nmp) = M_PROTO;
 	nmp->b_rptr = nmp->b_datap->db_lim - size;

@@ -1829,11 +1829,11 @@ mrsas_tran_init_pkt(struct scsi_address *ap, register struct scsi_pkt *pkt,
 				if (new_pkt) {
 					scsi_hba_pkt_free(ap, new_pkt);
 				}
-				return ((struct scsi_pkt *)NULL);
+				return (NULL);
 			}
 		} else {
 			if (mrsas_dma_move(instance, pkt, bp) == DDI_FAILURE) {
-				return ((struct scsi_pkt *)NULL);
+				return (NULL);
 			}
 		}
 	}
@@ -7642,7 +7642,7 @@ mrsas_config_ld(struct mrsas_instance *instance, uint16_t tgt,
 	/* sd_unprobe is blank now. Free buffer manually */
 	if (sd->sd_inq) {
 		kmem_free(sd->sd_inq, SUN_INQSIZE);
-		sd->sd_inq = (struct scsi_inquiry *)NULL;
+		sd->sd_inq = NULL;
 	}
 
 	kmem_free(sd, sizeof (struct scsi_device));

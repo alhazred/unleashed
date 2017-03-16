@@ -561,7 +561,7 @@ krb5_db2_db_end_update(krb5_context context)
 	    if (utime(db_ctx->db_lf_name, &utbuf))
 		retval = errno;
 	} else {
-	    if (utime(db_ctx->db_lf_name, (struct utimbuf *) NULL))
+	    if (utime(db_ctx->db_lf_name, NULL))
 		retval = errno;
 	}
 	if (retval) {

@@ -386,7 +386,7 @@ mlsetup(struct regs *rp)
 
 	rp->r_fp = 0;	/* terminate kernel stack traces! */
 
-	prom_init("kernel", (void *)NULL);
+	prom_init("kernel", NULL);
 
 	/* User-set option overrides firmware value. */
 	if (bootprop_getval(PLAT_DR_OPTIONS_NAME, &prop_value) == 0) {

@@ -2302,8 +2302,8 @@ startup_end(void)
 	 * we're still using bootsvcs.
 	 */
 	PRM_POINT("NULLing out bootops");
-	*bootopsp = (struct bootops *)NULL;
-	bootops = (struct bootops *)NULL;
+	*bootopsp = NULL;
+	bootops = NULL;
 
 #if defined(__xpv)
 	ec_init_debug_irq();

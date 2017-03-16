@@ -259,7 +259,7 @@ retry:
 		return;
 	}
 
-	if (page_lock(pp, SE_SHARED, (kmutex_t *)NULL, P_RECLAIM) == 0)
+	if (page_lock(pp, SE_SHARED, NULL, P_RECLAIM) == 0)
 		goto retry;
 
 	/*

@@ -306,7 +306,7 @@ mdboot(int cmd, int fcn, char *bootstr, boolean_t invoke_cb)
 	if (fcn == AD_HALT) {
 		mach_set_soft_state(SIS_TRANSITION,
 		    &SOLARIS_SOFT_STATE_HALT_MSG);
-		halt((char *)NULL);
+		halt(NULL);
 	} else if (fcn == AD_POWEROFF) {
 		mach_set_soft_state(SIS_TRANSITION,
 		    &SOLARIS_SOFT_STATE_POWER_MSG);

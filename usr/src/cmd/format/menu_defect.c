@@ -295,7 +295,7 @@ loop:
 			ioparam.io_bounds.upper = cur_parts->etoc->efi_last_lba;
 		}
 		bn = input(FIO_BN, "Enter defective block number", ':',
-		    &ioparam, (int *)NULL, DATA_INPUT);
+		    &ioparam, NULL, DATA_INPUT);
 		def.cyl = bn2c(bn);
 		def.head = bn2h(bn);
 		def.sect = bn2s(bn);
@@ -309,13 +309,13 @@ loop:
 		ioparam.io_bounds.upper = pcyl - 1;
 		def.cyl = input(FIO_INT,
 		    "Enter defect's cylinder number", ':',
-		    &ioparam, (int *)NULL, DATA_INPUT);
+		    &ioparam, NULL, DATA_INPUT);
 		ioparam.io_bounds.upper = nhead - 1;
 		def.head = input(FIO_INT, "Enter defect's head number",
-		    ':', &ioparam, (int *)NULL, DATA_INPUT);
+		    ':', &ioparam, NULL, DATA_INPUT);
 		ioparam.io_bounds.upper = cur_dtype->dtype_bpt - 1;
 		def.bfi = input(FIO_INT, "Enter defect's bytes-from-index",
-		    ':', &ioparam, (int *)NULL, DATA_INPUT);
+		    ':', &ioparam, NULL, DATA_INPUT);
 		ioparam.io_bounds.lower = -1;
 		ioparam.io_bounds.upper = (cur_dtype->dtype_bpt - def.bfi) * 8;
 		if (ioparam.io_bounds.upper >= 32 * 1024)
@@ -397,7 +397,7 @@ d_delete()
 	ioparam.io_bounds.lower = 1;
 	ioparam.io_bounds.upper = count;
 	num = input(FIO_INT, "Specify defect to be deleted (enter its number)",
-	    ':', &ioparam, (int *)NULL, DATA_INPUT);
+	    ':', &ioparam, NULL, DATA_INPUT);
 	/*
 	 *
 	 * The user thinks it's one relative but it's not really.
@@ -561,7 +561,7 @@ d_dump()
 	 * type OSTR.
 	 */
 	str = (char *)(uintptr_t)input(FIO_OSTR, "Enter name of defect file",
-	    ':', (u_ioparam_t *)NULL, (int *)NULL, DATA_INPUT);
+	    ':', (u_ioparam_t *)NULL, NULL, DATA_INPUT);
 	/*
 	 * Lock out interrupts so the file doesn't get half written.
 	 */
@@ -626,7 +626,7 @@ d_load()
 	 * input will be malloc'd space since we inputted type OSTR.
 	 */
 	str = (char *)(uintptr_t)input(FIO_OSTR, "Enter name of defect file",
-	    ':', (u_ioparam_t *)NULL, (int *)NULL, DATA_INPUT);
+	    ':', (u_ioparam_t *)NULL, NULL, DATA_INPUT);
 	/*
 	 * Copy the file name into local space then destroy the string
 	 * it came in.  This is simply a precaution against later having

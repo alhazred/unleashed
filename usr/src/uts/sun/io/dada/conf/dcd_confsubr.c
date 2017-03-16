@@ -96,7 +96,7 @@ dcd_unprobe(struct dcd_device *devp)
 {
 	if (devp->dcd_ident) {
 		kmem_free((caddr_t)devp->dcd_ident, SUN_IDENTSIZE);
-		devp->dcd_ident = (struct dcd_identify *)NULL;
+		devp->dcd_ident = NULL;
 	}
 }
 
@@ -130,13 +130,13 @@ dcd_hba_probe(struct dcd_device *devp, int (*callback)())
 		cb_flag = callback;
 	}
 
-	ident_bp = dcd_alloc_consistent_buf(ROUTE, (struct buf *)NULL,
+	ident_bp = dcd_alloc_consistent_buf(ROUTE, NULL,
 			(uint_t)SUN_IDENTSIZE, B_READ, cb_flag, NULL);
 	if (ident_bp == NULL) {
 		goto out;
 	}
 
-	ident_pkt = dcd_init_pkt(ROUTE, (struct dcd_pkt *)NULL,
+	ident_pkt = dcd_init_pkt(ROUTE, NULL,
 			ident_bp, sizeof (struct dcd_cmd), 2, 0,
 			PKT_CONSISTENT,
 			callback, NULL);

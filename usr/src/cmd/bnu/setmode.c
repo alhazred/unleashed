@@ -329,7 +329,7 @@ parse_modes(modes)
 			CDEBUG(5, "unknown mode %s in STTY= string", curtoken);
 			return (0);
 		}
-		curtoken = strtok((char *)NULL, ",");
+		curtoken = strtok(NULL, ",");
 	}
 	return (1);
 }

@@ -3655,7 +3655,7 @@ nfsunmount(mnt)
 		timeout.tv_usec = 0;
 		timeout.tv_sec = 5;
 		rpc_stat = clnt_call(cl, MOUNTPROC_UMNT, xdr_dirpath,
-			    (caddr_t)&path, xdr_void, (char *)NULL, timeout);
+			    (caddr_t)&path, xdr_void, NULL, timeout);
 		if (verbose && rpc_stat != RPC_SUCCESS)
 			syslog(LOG_ERR, "%s: %s",
 				host, clnt_sperror(cl, "unmount"));

@@ -215,7 +215,7 @@ noxattr:
 	if ((filemode & (FREAD|FWRITE|FSEARCH|FEXEC|FXATTRDIROPEN)) != 0) {
 		if ((filemode & (FNONBLOCK|FNDELAY)) == (FNONBLOCK|FNDELAY))
 			filemode &= ~FNDELAY;
-		error = falloc((vnode_t *)NULL, filemode, &fp, &fd);
+		error = falloc(NULL, filemode, &fp, &fd);
 		if (error == 0) {
 			if (auditing && startvp != NULL)
 				audit_setfsat_path(1);

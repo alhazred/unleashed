@@ -1459,7 +1459,7 @@ gld_interpret_tr(gld_mac_info_t *macinfo, mblk_t *mp, pktinfo_t *pktinfo,
 	pktinfo->isForMe = mac_eq(pktinfo->dhost,
 	    mac_pvt->curr_macaddr, macinfo->gldm_addrlen);
 
-	rh = (struct gld_ri *)NULL;
+	rh = NULL;
 	pktinfo->macLen = sizeof (struct tr_mac_frm_nori);
 
 	/*
@@ -2020,7 +2020,7 @@ gld_rcc_send(gld_mac_info_t *macinfo, queue_t *q, uchar_t *dhost,
 	 */
 	ASSERT(mutex_owned(GLD_SR_MUTEX(macinfo)));
 
-	*rhp = (struct gld_ri *)NULL;	/* start off clean (no RIF) */
+	*rhp = NULL;	/* start off clean (no RIF) */
 
 	if (!((gld_mac_pvt_t *)macinfo->gldm_mac_pvt)->rde_enabled) {
 		/* RDE is disabled -- use NULL or STE always */
@@ -2189,7 +2189,7 @@ gld_get_route(gld_mac_info_t *macinfo, queue_t *q, uchar_t *dhost,
 		 * create an empty entry and initiate RQC
 		 */
 		sr = gld_sr_create_entry(macinfo, dhost);
-		gld_rde_pdu_req(macinfo, q, dhost, (struct gld_ri *)NULL,
+		gld_rde_pdu_req(macinfo, q, dhost, NULL,
 		    dsap, ssap, RDE_RQC);
 		if (sr)
 			sr->sr_timer = t;
@@ -2205,7 +2205,7 @@ gld_get_route(gld_mac_info_t *macinfo, queue_t *q, uchar_t *dhost,
 		    ((gld_mac_pvt_t *)macinfo->gldm_mac_pvt)->rde_timeout) {
 			/* RQR overdue, resend RQC */
 			gld_rde_pdu_req(macinfo, q, dhost,
-			    (struct gld_ri *)NULL, dsap, ssap, RDE_RQC);
+			    NULL, dsap, ssap, RDE_RQC);
 			sr->sr_timer = t;
 		}
 		*rhp = NULL;		/* we have no route yet */
@@ -2218,7 +2218,7 @@ gld_get_route(gld_mac_info_t *macinfo, queue_t *q, uchar_t *dhost,
 	if (t - sr->sr_timer >
 	    ((gld_mac_pvt_t *)macinfo->gldm_mac_pvt)->rde_timeout) {
 		gld_rde_pdu_req(macinfo, q, dhost,
-		    (struct gld_ri *)NULL, dsap, ssap, RDE_RQC);
+		    NULL, dsap, ssap, RDE_RQC);
 		sr->sr_ri.len = 0;
 		sr->sr_timer = t;
 		*rhp = NULL;		/* we have no route */
@@ -2246,7 +2246,7 @@ gld_reset_route(gld_mac_info_t *macinfo, queue_t *q,
 	ASSERT(mutex_owned(GLD_SR_MUTEX(macinfo)));
 
 	sr = gld_sr_create_entry(macinfo, dhost);
-	gld_rde_pdu_req(macinfo, q, dhost, (struct gld_ri *)NULL,
+	gld_rde_pdu_req(macinfo, q, dhost, NULL,
 	    dsap, ssap, RDE_RQC);
 	if (sr == NULL)
 		return;

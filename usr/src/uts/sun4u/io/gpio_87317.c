@@ -110,7 +110,7 @@ static struct dev_ops gpio_dev_ops = {
 	gpio_detach,
 	nulldev,			/* reset */
 	&gpio_cb_ops,
-	(struct bus_ops *)NULL,
+	NULL,
 	nulldev,			/* power */
 	ddi_quiesce_not_needed,			/* quiesce */
 };
@@ -178,7 +178,7 @@ gpio_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 	switch (cmd) {
 	case DDI_INFO_DEVT2DEVINFO:
 		if ((softc = getsoftc(instance)) == NULL) {
-			*result = (void *)NULL;
+			*result = NULL;
 			retval = DDI_FAILURE;
 		} else
 		*result = (void *)softc->gp_dip;

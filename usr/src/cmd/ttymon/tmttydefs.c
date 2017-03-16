@@ -374,7 +374,7 @@ int 	*cnt, maxargs;
 	int qsize;
 	extern	char	quoted();
 
-	for (i=0; i < maxargs; i++) args[i] = (char *)NULL;
+	for (i=0; i < maxargs; i++) args[i] = NULL;
 	for (ptrin = ptrout = string,i=0; *ptrin != '\0' && i < maxargs; i++) {
 		/* Skip excess white spaces between arguments. */
 		while(*ptrin == ' ' || *ptrin == '\t') {

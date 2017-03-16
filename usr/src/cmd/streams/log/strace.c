@@ -224,7 +224,7 @@ main(int ac, char *av[])
 		return (1);
 	}
 
-	setbuf(stdout, (char *)NULL);
+	setbuf(stdout, NULL);
 	flag = 0;
 	while (getmsg(log, &ctl, &dat, &flag) >= 0) {
 		flag = 0;

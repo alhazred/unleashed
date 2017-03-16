@@ -688,7 +688,7 @@ ypmaplist(SVCXPRT *transp)
 	struct ypresp_maplist maplist;
 	struct ypmaplist *tmp;
 
-	maplist.list = (struct ypmaplist *)NULL;
+	maplist.list = NULL;
 
 	memset(domain_name, 0, sizeof (domain_name));
 
@@ -795,7 +795,7 @@ xdrypserv_ypall(XDR *xdrs, struct ypreq_nokey *req)
 	struct ypresp_key_val resp;
 	DBM *fdb;
 
-	resp.keydat.dptr = resp.valdat.dptr = (char *)NULL;
+	resp.keydat.dptr = resp.valdat.dptr = NULL;
 	resp.keydat.dsize = resp.valdat.dsize = 0;
 
 	if ((fdb = ypset_current_map(req->map, req->domain,

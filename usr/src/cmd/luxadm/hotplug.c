@@ -2139,7 +2139,7 @@ Box_list		*bl1, *box_list = NULL;
 	 * The mod time of /dev/es was newer than the mod time prior to
 	 * insert so dir entry is checked at this time.
 	 */
-	while ((dirent = readdir(dir)) != (struct dirent *)NULL) {
+	while ((dirent = readdir(dir)) != NULL) {
 		if (strcmp(dirent->d_name, ".") == 0 ||
 			strcmp(dirent->d_name, "..") == 0)
 			continue;
@@ -2548,7 +2548,7 @@ struct	dlist	*dlist;
 			MSGSTR(5563,
 			"    Removing Logical Nodes: \n"));
 
-	while ((dirent = readdir(dir)) != (struct dirent *)NULL) {
+	while ((dirent = readdir(dir)) != NULL) {
 		if (strcmp(dirent->d_name, ".") == 0 ||
 				strcmp(dirent->d_name, "..") == 0) {
 			continue;
@@ -2613,7 +2613,7 @@ struct	dlist	*dl;
 	 * from the /dev/es directory.
 	 */
 
-	while ((dirent = readdir(dir)) != (struct dirent *)NULL) {
+	while ((dirent = readdir(dir)) != NULL) {
 		if (strcmp(dirent->d_name, ".") == 0 ||
 			strcmp(dirent->d_name, "..") == 0)
 			continue;
@@ -2731,7 +2731,7 @@ struct	dlist	*dl;
 			MSGSTR(5569,
 			"  Logical Nodes under /dev/dsk and /dev/rdsk :\n"));
 
-	while ((dirent = readdir(dir)) != (struct dirent *)NULL) {
+	while ((dirent = readdir(dir)) != NULL) {
 		if (strcmp(dirent->d_name, ".") == 0 ||
 			strcmp(dirent->d_name, "..") == 0) {
 				continue;
@@ -2933,7 +2933,7 @@ int		found_newlink = 0;
 		}
 	}
 
-	while ((dirent = readdir(dir)) != (struct dirent *)NULL) {
+	while ((dirent = readdir(dir)) != NULL) {
 		if (strcmp(dirent->d_name, ".") == 0 ||
 			strcmp(dirent->d_name, "..") == 0) {
 			continue;

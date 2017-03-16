@@ -613,7 +613,7 @@ loop:
 				} else {
 					cons += i;
 				}
-				abort_sequence_enter((char *)NULL);
+				abort_sequence_enter(NULL);
 				/*
 				 * Back from debugger, resume normal processing
 				 */

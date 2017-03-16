@@ -126,7 +126,7 @@ static struct dev_ops vcc_ops = {
 	vcc_detach,		/* detach */
 	nodev,			/* reset */
 	&vcc_cb_ops,		/* cb_ops */
-	(struct bus_ops *)NULL,	/* bus_ops */
+	NULL,	/* bus_ops */
 	NULL,			/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

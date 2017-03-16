@@ -39,26 +39,26 @@ register int	where;
 	hdr2rm = (where == HEAD ?
 			hdrlines[hdrtype].head : hdrlines[hdrtype].tail);
 
-	if (hdr2rm == (struct hdrs *)NULL) {
+	if (hdr2rm == NULL) {
 		return;
 	}
 	if (where == HEAD) {
-		if (hdr2rm->next == (struct hdrs *)NULL) {
+		if (hdr2rm->next == NULL) {
 			/* Only 1 entry in list */
 			hdrlines[hdrtype].head = hdrlines[hdrtype].tail =
-							(struct hdrs *)NULL;
+							NULL;
 		} else {
 			hdrlines[hdrtype].head = hdr2rm->next;
-			hdr2rm->next->prev = (struct hdrs *)NULL;
+			hdr2rm->next->prev = NULL;
 		}
 	} else {
-		if (hdr2rm->prev == (struct hdrs *)NULL) {
+		if (hdr2rm->prev == NULL) {
 			/* Only 1 entry in list */
 			hdrlines[hdrtype].head = hdrlines[hdrtype].tail =
-							(struct hdrs *)NULL;
+							NULL;
 		} else {
 			hdrlines[hdrtype].tail = hdr2rm->prev;
-			hdr2rm->prev->next = (struct hdrs *)NULL;
+			hdr2rm->prev->next = NULL;
 		}
 	}
 	/* Keep track of total bytes added to message due to    */
@@ -75,7 +75,7 @@ register int	where;
 	}
 
 	cont2rm = hdr2rm->cont;
-	while (cont2rm != (struct hdrs *)NULL) {
+	while (cont2rm != NULL) {
 		nextcont = cont2rm->next;
 		if (hdrtype == H_AFWDFROM) {
 		    affbytecnt -= (strlen(cont2rm->value) + 1);

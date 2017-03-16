@@ -471,7 +471,7 @@ main(int argc, char **argv)
 		syseventd_exit(2);
 	}
 
-	setbuf(stdout, (char *)NULL);
+	setbuf(stdout, NULL);
 
 	/* Initialize and load SLM clients */
 	initialize_client_tbl();

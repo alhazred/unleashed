@@ -135,14 +135,14 @@ main(int argc, char *argv[])
 	svcsetprio();
 
 	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET,
-	    DAEMON_UID, DAEMON_GID, PRIV_SYS_NFS, (char *)NULL) == -1) {
+	    DAEMON_UID, DAEMON_GID, PRIV_SYS_NFS, NULL) == -1) {
 		(void) fprintf(stderr, "%s must be run with sufficient"
 			" privileges\n", argv[0]);
 		exit(1);
 	}
 	/* Basic privileges we don't need, remove from E/P. */
 	__fini_daemon_priv(PRIV_PROC_EXEC, PRIV_PROC_FORK, PRIV_FILE_LINK_ANY,
-	    PRIV_PROC_SESSION, PRIV_PROC_INFO, (char *)NULL);
+	    PRIV_PROC_SESSION, PRIV_PROC_INFO, NULL);
 
 	/*
 	 * establish our lock on the lock file and write our pid to it.

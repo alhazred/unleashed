@@ -915,7 +915,7 @@ showpaths(private_t *pri, const struct systable *stp)
 				s = fetchstring(pri, addr,
 				    maxleng > PATH_MAX ? PATH_MAX : maxleng);
 
-			if (s != (char *)NULL)
+			if (s != NULL)
 				(void) printf("%s     0x%.8lX: \"%s\"\n",
 				    pri->pname, addr, s);
 		}

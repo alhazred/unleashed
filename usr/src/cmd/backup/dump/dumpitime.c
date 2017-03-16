@@ -203,7 +203,7 @@ putitime()
 
 	if (uflag == 0)
 		return;
-	if ((df = safe_fopen(increm, "r+", 0664)) == (FILE *)NULL) {
+	if ((df = safe_fopen(increm, "r+", 0664)) == NULL) {
 		msg("%s: %s\n", increm, strerror(errno));
 		(void) unlink(increm);
 		dumpabort();

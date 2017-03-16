@@ -340,7 +340,7 @@ nd_send_data(TIUSER *tiptr, caddr_t addr, int offset, XDR *xdrp, uint32_t *xidp)
 	mblk_p->b_cont->b_wptr += ptob(1);
 
 	sudata.addr = nfsdump_addr;		/* structure copy */
-	sudata.udata.buf = (char *)NULL;
+	sudata.udata.buf = NULL;
 	sudata.udata.maxlen = 0;
 	sudata.udata.len = 1;			/* needed for t_ksndudata */
 	sudata.udata.udata_mp = mblk_p;
@@ -370,7 +370,7 @@ nd_get_reply(TIUSER *tiptr, XDR *xdrp, uint32_t call_xid, int *badmsg)
 
 	rudata.addr.maxlen = 0;
 	rudata.opt.maxlen = 0;
-	rudata.udata.udata_mp = (mblk_t *)NULL;
+	rudata.udata.udata_mp = NULL;
 
 	nd_log("nfs_dump: calling t_krcvudata\n");
 

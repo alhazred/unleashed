@@ -66,7 +66,7 @@
 
 static int ldom_ldmd_is_up = 0; /* assume stays up if ever seen up */
 
-static void *ldom_dl_hp = (void *)NULL;
+static void *ldom_dl_hp = NULL;
 static const char *ldom_dl_path = "libpri.so.1";
 static int ldom_dl_mode = (RTLD_NOW | RTLD_LOCAL);
 
@@ -111,7 +111,7 @@ ldom_pri_unconfig(void)
 	    uint64_t **buf, void *(*allocp)(size_t),
 	    void (*freep)(void *, size_t)))NULL;
 	(void) dlclose(ldom_dl_hp);
-	ldom_dl_hp = (void *)NULL;
+	ldom_dl_hp = NULL;
 }
 
 /*

@@ -131,7 +131,7 @@ print_error(char *string)
 	if (debug)
 		err_dev = "/dev/tty";
 
-	if ((sys = strerror(errno)) == (char *)NULL)
+	if ((sys = strerror(errno)) == NULL)
 	    sys = "Unknown error";
 
 	/* don't ever open tty's directly, let a child do it */

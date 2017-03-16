@@ -275,7 +275,7 @@ outof(struct name *names, FILE *fo)
 		 */
 
 		if (ispipe) {
-			wait((int *)NULL);
+			wait(NULL);
 			switch (fork()) {
 			case 0:
 				sigchild();

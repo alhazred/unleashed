@@ -47,9 +47,9 @@
 #include <signal.h>
 #include <locale.h>
 
-#define	NULL_MSG	((struct msqid_ds *)NULL)
-#define	NULL_SEM	((struct semid_ds *)NULL)
-#define	NULL_SHM	((struct shmid_ds *)NULL)
+#define	NULL_MSG	(NULL)
+#define	NULL_SEM	(NULL)
+#define	NULL_SHM	(NULL)
 
 #define	USAGE	"usage: ipcrm [-z zone] [ [-q msqid] [-m shmid] " \
 "[-s semid]\n\t [-Q msgkey] [-M shmkey] [-S semkey] ... ]\n"

@@ -461,7 +461,7 @@ f_sprintf(NODE *np)
 
         if (nargs(np) == 0)
                 awkerr(nargerr, s_sprintf);
-        length = xprintf(np, (FILE *)NULL, &cp);
+        length = xprintf(np, NULL, &cp);
         np = stringnode(cp, FNOALLOC, length);
         return (np);
 }

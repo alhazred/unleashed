@@ -185,7 +185,7 @@ pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 int
 roleinlist(char *list, char *role)
 {
-	char *lasts = (char *)NULL;
+	char *lasts = NULL;
 	char *rolename = (char *)strtok_r(list, ",", &lasts);
 
 	while (rolename) {

@@ -413,12 +413,7 @@ ufs_si_load(struct inode *ip, cred_t *cr)
 	struct inode	*sip;
 	ufs_fsd_t	*fsdp;
 	si_t		*sp;
-	vsecattr_t	vsecattr = {
-				(uint_t)0,
-				(int)0,
-				(void *)NULL,
-				(int)0,
-				(void *)NULL};
+	vsecattr_t	vsecattr = { 0, 0, NULL, 0, NULL };
 	aclent_t	*aclp;
 	ufs_acl_t	*ufsaclp;
 	caddr_t		acldata = NULL;

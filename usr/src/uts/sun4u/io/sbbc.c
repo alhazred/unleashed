@@ -367,9 +367,9 @@ sbbc_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		return (DDI_FAILURE);
 	}
 
-	mutex_init(&sbbcsoftp->umutex, NULL, MUTEX_DRIVER, (void *)NULL);
+	mutex_init(&sbbcsoftp->umutex, NULL, MUTEX_DRIVER, NULL);
 	mutex_init(&sbbcsoftp->sbbc_intr_mutex, NULL,
-	    MUTEX_DRIVER, (void *)NULL);
+	    MUTEX_DRIVER, NULL);
 
 	/* Map SBBC's Internal Registers */
 	if (ddi_regs_map_setup(dip, 1, (caddr_t *)&sbbcsoftp->pci_sbbc_map,
@@ -1038,7 +1038,7 @@ sbbc_getinfo(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 			sbbcsoftp = (struct sbbcsoft *)
 			    ddi_get_soft_state(sbbcsoft_statep, instance);
 			if (sbbcsoftp == NULL) {
-				*result = (void *) NULL;
+				*result = NULL;
 				ret = DDI_FAILURE;
 			} else {
 				*result = sbbcsoftp->dip;

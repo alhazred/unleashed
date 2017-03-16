@@ -2819,7 +2819,7 @@ lwp_rwlock_sys(int subcode, lwp_rwlock_t *rwlp, timespec_t *tsp)
 static kthread_t *
 lwpsobj_owner(caddr_t sobj)
 {
-	return ((kthread_t *)NULL);
+	return (NULL);
 }
 
 /*

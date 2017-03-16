@@ -313,7 +313,7 @@ au_close_time(au_kcontext_t *kctx, token_t *dchain, int flag, au_event_t e_type,
 		    kctx->auk_info.ai_termid.at_type;
 	if (etime != NULL) {
 		au_save_time(&hadr, etime, 1);
-		hadr.adr_now = (char *)NULL;
+		hadr.adr_now = NULL;
 	}
 
 	/* append body of audit record */

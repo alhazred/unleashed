@@ -364,7 +364,7 @@ apic_probe_common(char *modname)
 	biosdatap = psm_map_phys(0x400, 0x20, PROT_READ);
 	if (!biosdatap)
 		goto apic_ret;
-	fpsp = (struct apic_mpfps_hdr *)NULL;
+	fpsp = NULL;
 	mapsize = MPFPS_RAM_WIN_LEN;
 	/*LINTED: pointer cast may result in improper alignment */
 	ebda_seg = *((ushort_t *)(biosdatap+0xe));
@@ -1473,7 +1473,7 @@ apic_find_io_intr_w_busid(int irqno, int busid)
 	}
 	APIC_VERBOSE_IOAPIC((CE_NOTE, "Did not find io intr for irqno:"
 	    "busid %x:%x\n", irqno, busid));
-	return ((struct apic_io_intr *)NULL);
+	return (NULL);
 }
 
 
@@ -1562,7 +1562,7 @@ apic_find_io_intr(int irqno)
 			intrp++;
 		}
 	}
-	return ((struct apic_io_intr *)NULL);
+	return (NULL);
 }
 
 /*

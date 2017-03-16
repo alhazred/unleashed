@@ -158,7 +158,7 @@ beep_fini(void)
 		kmem_free(beep_state.queue,
 		    sizeof (beep_entry_t) * beep_state.queue_size);
 
-	beep_state.arg = (void *)NULL;
+	beep_state.arg = NULL;
 	beep_state.mode = BEEP_UNINIT;
 	beep_state.beep_freq = (beep_freq_func_t)NULL;
 	beep_state.beep_on = (beep_on_func_t)NULL;

@@ -223,7 +223,7 @@ initialize()
 		Npollfd = Maxfds;
 	if ((Pollp = (struct pollfd *)
 	    malloc((unsigned)(Npollfd * sizeof (struct pollfd))))
-	    == (struct pollfd *)NULL)
+	    == NULL)
 		fatal("malloc for Pollp failed");
 
 	(void) mod_ttydefs();	/* just to initialize Mtime */

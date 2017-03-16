@@ -160,7 +160,7 @@ _z_close_file_descriptors(void *a_fds, int a_fd)
 
 	/* if no file descriptor retention list, close this file */
 
-	if (a_fds == (void *)NULL) {
+	if (a_fds == NULL) {
 		(void) close(a_fd);
 		return (0);
 	}
@@ -435,14 +435,14 @@ _z_zones_are_implemented(void)
 	/* locate zone cfg library */
 
 	libptr = dlopen(ZONECFG_LIBRARY, RTLD_NOW|RTLD_GLOBAL);
-	if (libptr == (void *)NULL) {
+	if (libptr == NULL) {
 		_z_echoDebug(DBG_LIBRARY_NOT_FOUND, ZONECFG_LIBRARY, dlerror());
 		libptr = dlopen(ZONECFG1_LIBRARY, RTLD_NOW|RTLD_GLOBAL);
 	}
 
 	/* return false if library not available */
 
-	if (libptr == (void *)NULL) {
+	if (libptr == NULL) {
 		_z_echoDebug(DBG_LIBRARY_NOT_FOUND, ZONECFG1_LIBRARY,
 		    dlerror());
 		return (B_FALSE);
@@ -455,7 +455,7 @@ _z_zones_are_implemented(void)
 	/* locate contract filesystem library */
 
 	libptr = dlopen(CONTRACT_LIBRARY, RTLD_NOW|RTLD_GLOBAL);
-	if (libptr == (void *)NULL) {
+	if (libptr == NULL) {
 		_z_echoDebug(DBG_LIBRARY_NOT_FOUND, CONTRACT_LIBRARY,
 		    dlerror());
 		libptr = dlopen(CONTRACT1_LIBRARY, RTLD_NOW|RTLD_GLOBAL);
@@ -463,7 +463,7 @@ _z_zones_are_implemented(void)
 
 	/* return false if library not available */
 
-	if (libptr == (void *)NULL) {
+	if (libptr == NULL) {
 		_z_echoDebug(DBG_LIBRARY_NOT_FOUND, CONTRACT1_LIBRARY,
 		    dlerror());
 		return (B_FALSE);
@@ -574,9 +574,9 @@ _z_realloc(void *ptr, size_t size)
 {
 	void *tmp;
 
-	if ((tmp = (void *)realloc(ptr, size)) == (void *)NULL) {
+	if ((tmp = (void *)realloc(ptr, size)) == NULL) {
 		fatal_err_func(ERR_MALLOC_FAIL);
-		return ((void *)NULL);
+		return (NULL);
 	} else
 		return (tmp);
 }
@@ -599,11 +599,11 @@ _z_strdup(char *str)
 	char *tmp;
 
 	if (str == NULL)
-		return ((char *)NULL);
+		return (NULL);
 
 	if ((tmp = strdup(str)) == NULL) {
 		fatal_err_func(ERR_MALLOC_FAIL);
-		return ((char *)NULL);
+		return (NULL);
 	} else
 		return (tmp);
 }

@@ -754,10 +754,10 @@ rsm_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 	if (rsm_enable_dr) {
 #ifdef	RSM_DRTEST
 		ret = rsm_kphysm_setup_func_register(&rsm_dr_callback_vec,
-		    (void *)NULL);
+		    NULL);
 #else
 		ret = kphysm_setup_func_register(&rsm_dr_callback_vec,
-		    (void *)NULL);
+		    NULL);
 #endif
 		if (ret != 0) {
 			mutex_exit(&rsm_drv_data.drv_lock);
@@ -852,7 +852,7 @@ rsm_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 
 		p = (rsmresource_t *)kmem_zalloc(sizeof (*p), KM_SLEEP);
 
-		mutex_init(&p->rsmrc_lock, NULL, MUTEX_DRIVER, (void *) NULL);
+		mutex_init(&p->rsmrc_lock, NULL, MUTEX_DRIVER, NULL);
 
 		rsmresource_insert(rnum, p, RSM_RESOURCE_BAR);
 	}
@@ -949,10 +949,10 @@ rsm_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 	if (rsm_enable_dr) {
 #ifdef	RSM_DRTEST
 		rsm_kphysm_setup_func_unregister(&rsm_dr_callback_vec,
-		    (void *)NULL);
+		    NULL);
 #else
 		kphysm_setup_func_unregister(&rsm_dr_callback_vec,
-		    (void *)NULL);
+		    NULL);
 #endif
 	}
 
@@ -1919,7 +1919,7 @@ rsmseg_alloc(minor_t num, struct cred *cred)
 	new->s_uid  = crgetuid(cred);
 	new->s_gid  = crgetgid(cred);
 
-	mutex_init(&new->s_lock, NULL, MUTEX_DRIVER, (void *)NULL);
+	mutex_init(&new->s_lock, NULL, MUTEX_DRIVER, NULL);
 	cv_init(&new->s_cv, NULL, CV_DRIVER, 0);
 
 	DBG_PRINTF((category, RSM_DEBUG_VERBOSE, "rsmseg_alloc done\n"));
@@ -6607,7 +6607,7 @@ rsm_closeconnection(rsmseg_t *seg, void **cookie)
 	DBG_PRINTF((category, RSM_DEBUG_VERBOSE,
 	    "rsm_closeconnection enter\n"));
 
-	*cookie = (void *)NULL;
+	*cookie = NULL;
 
 	ASSERT(seg->s_hdr.rsmrc_type == RSM_RESOURCE_IMPORT_SEGMENT);
 

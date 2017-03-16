@@ -415,8 +415,7 @@ main(int argc, char **argv) {
 		}
 
 		/* Check to make sure this is an audio file */
-		err = audio_read_filehdr(ifd, &File_hdr, &file_type,
-		    (char *)NULL, 0);
+		err = audio_read_filehdr(ifd, &File_hdr, &file_type, NULL, 0);
 		if (err != AUDIO_SUCCESS) {
 			Error(stderr,
 			    MGET("%s: %s is not a valid audio file\n"),

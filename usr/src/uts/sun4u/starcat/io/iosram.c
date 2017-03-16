@@ -186,7 +186,7 @@ struct dev_ops  iosram_ops = {
 	iosram_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&iosram_cb_ops,		/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	nulldev,		/* devo_power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };
@@ -215,11 +215,11 @@ _init(void)
 	int    error;
 	int	i;
 
-	mutex_init(&iosram_mutex, NULL, MUTEX_DRIVER, (void *)NULL);
+	mutex_init(&iosram_mutex, NULL, MUTEX_DRIVER, NULL);
 	cv_init(&iosram_tswitch_wait, NULL, CV_DRIVER, NULL);
 	cv_init(&iosram_rw_wait, NULL, CV_DRIVER, NULL);
 #if defined(IOSRAM_LOG)
-	mutex_init(&iosram_log_mutex, NULL, MUTEX_DRIVER, (void *)NULL);
+	mutex_init(&iosram_log_mutex, NULL, MUTEX_DRIVER, NULL);
 #endif
 
 	DPRINTF(1, ("_init:IOSRAM\n"));

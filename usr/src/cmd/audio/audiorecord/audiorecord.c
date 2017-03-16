@@ -393,7 +393,7 @@ main(int argc, char **argv)
 			}
 
 			err = audio_read_filehdr(ofd, &File_hdr, &file_type,
-			    (char *)NULL, 0);
+			    NULL, 0);
 
 			if (err != AUDIO_SUCCESS) {
 				Error(stderr,

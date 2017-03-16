@@ -170,7 +170,7 @@ ldap_compare_ext_s( LDAP *ld, const char *dn, const char *attr,
 		return( err );
 	}
 
-	if ( ldap_result( ld, msgid, 1, (struct timeval *)NULL, &res )
+	if ( ldap_result( ld, msgid, 1, NULL, &res )
 	    == -1 ) {
 		return( LDAP_GET_LDERRNO( ld, NULL, NULL ) );
 	}

@@ -138,7 +138,7 @@ look_in_sections(char *file, sec_name_t *seclistptr)
 
 			/* Only look in the specified section(s). */
 			if ((scn_name = elf_strptr(elf, ehdr.e_shstrndx,
-			    (size_t)shdr.sh_name)) == (char *)NULL) {
+			    (size_t)shdr.sh_name)) == NULL) {
 				(void) fprintf(stderr, "%s: %s\n", file,
 				    elf_errmsg(-1));
 				rc = 1;

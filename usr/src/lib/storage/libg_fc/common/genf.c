@@ -154,7 +154,7 @@ g_alloc_string(char *s)
 {
 	char	*ns;
 
-	if (s == (char *)NULL) {
+	if (s == NULL) {
 		ns = (char *)g_zalloc(1);
 	} else {
 		ns = (char *)g_zalloc(strlen(s) + 1);

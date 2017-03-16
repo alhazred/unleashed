@@ -177,7 +177,7 @@ broadcast_proc_exit()
 	/* to aid the progeny print the infamous "not responding" message */
 		firsttime = FALSE;
 
-		for (pdom = known_domains; pdom != (struct domain *)NULL;
+		for (pdom = known_domains; pdom != NULL;
 				pdom = pdom->dom_pnext) {
 
 			if (pdom->dom_broadcaster_pid == pid) {
@@ -216,7 +216,7 @@ struct domain *pdom;
 #ifdef DEBUG
 	fprintf(stderr, "parent: broadcast_setup: got xdr ok \n");
 #endif
-			ypbindproc_setdom_3(&req, (struct svc_req *)NULL,
+			ypbindproc_setdom_3(&req, NULL,
 			    (SVCXPRT *)NULL);
 			xdr_free(xdr_ypbind_setdom, (char *)&req);
 			gettimeofday(&(pdom->lastping), NULL);
@@ -262,7 +262,7 @@ CLIENT *clnt;
 	}
 
 	if ((cur_domain = ypbind_point_to_domain(argp->ypbind_domainname)) !=
-	    (struct domain *)NULL) {
+	    NULL) {
 		if (cur_domain->dom_boundp) {
 
 			struct timeval tp;
@@ -852,7 +852,7 @@ SVCXPRT *transp;
 
 		who = svc_getrpccaller(transp);
 		if ((nconf = getnetconfigent(transp->xp_netid))
-			== (struct netconfig *)NULL) {
+			== NULL) {
 			svcerr_systemerr(transp);
 			return (0);
 		}
@@ -920,7 +920,7 @@ argp->ypsetdom_domain, argp->ypsetdom_bindinfo->ypbind_servername);
 	}
 
 	if ((a_domain = ypbind_point_to_domain(argp->ypsetdom_domain))
-	    != (struct domain *)NULL) {
+	    != NULL) {
 		/* setting binding; old may be invalid */
 		uncache_binding(a_domain);
 
@@ -953,7 +953,7 @@ argp->ypsetdom_domain, argp->ypsetdom_bindinfo->ypbind_servername);
  * This returns a pointer to a domain entry.  If no such domain existed on
  * the list previously, an entry will be allocated, initialized, and linked
  * to the list.  Note:  If no memory can be malloc-ed for the domain structure,
- * the functional value will be (struct domain *) NULL.
+ * the functional value will be NULL.
  */
 static struct domain *
 ypbind_point_to_domain(pname)
@@ -962,7 +962,7 @@ register char	*pname;
 	register struct domain *pdom;
 	char buf[300];
 
-	for (pdom = known_domains; pdom != (struct domain *)NULL;
+	for (pdom = known_domains; pdom != NULL;
 	    pdom = pdom->dom_pnext) {
 		if (strcmp(pname, pdom->dom_name) == 0)
 			return (pdom);
@@ -1182,7 +1182,7 @@ ypbind_init_default()
 	if (getdomainname(domain, 256) == 0) {
 		cur_domain = ypbind_point_to_domain(domain);
 
-		if (cur_domain == (struct domain *)NULL) {
+		if (cur_domain == NULL) {
 			abort();
 		}
 		(void) pong_servers(cur_domain);
@@ -1454,7 +1454,7 @@ clean_cache()
 	char filename[300];
 
 	/* close and unlink cache files for each domain */
-	for (pdom = known_domains; pdom != (struct domain *)NULL;
+	for (pdom = known_domains; pdom != NULL;
 	    pdom = pdom->dom_pnext) {
 		if (pdom->cache_file)
 			unlink(pdom->cache_file);

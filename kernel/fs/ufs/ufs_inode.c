@@ -1506,8 +1506,7 @@ done:
 	oip->i_flag |= ICHG|IATTCHG;
 	oip->i_seq++;
 	/* blocksreleased is >= zero, so this can not fail */
-	(void) chkdq(oip, -blocksreleased, 0, cr, (char **)NULL,
-	    (size_t *)NULL);
+	(void) chkdq(oip, -blocksreleased, 0, cr, (char **)NULL, NULL);
 	return (0);
 }
 

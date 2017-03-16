@@ -751,7 +751,7 @@ char *file, *dir;
 	    exit(1);
 	}
 
- 	times.actime = times.modtime = time((time_t *)NULL);
+ 	times.actime = times.modtime = time(NULL);
  
 	while (fgets(buf, BUFSIZ, fp) != NULL) {
 	    if (sscanf(buf,"%s%s%s%s%s%s", type, file1, file2,

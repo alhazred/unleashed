@@ -302,11 +302,11 @@ pvscsi_inquiry_target(pvscsi_softc_t *pvs, int target, struct scsi_inquiry *inq)
 	ap.a_target = (ushort_t)target;
 	ap.a_lun = (uchar_t)0;
 
-	if ((b = scsi_alloc_consistent_buf(&ap, (struct buf *)NULL, len,
+	if ((b = scsi_alloc_consistent_buf(&ap, NULL, len,
 	    B_READ, NULL_FUNC, NULL)) == NULL)
 		return (-1);
 
-	if ((pkt = scsi_init_pkt(&ap, (struct scsi_pkt *)NULL, b,
+	if ((pkt = scsi_init_pkt(&ap, NULL, b,
 	    CDB_GROUP0, sizeof (struct scsi_arq_status), 0, 0,
 	    NULL_FUNC, NULL)) == NULL)
 		goto free_buf;
@@ -1745,7 +1745,7 @@ pvscsi_ccache_constructor(void *buf, void *cdrarg, int kmflags)
 	}
 
 	/* Setup ARQ buffer */
-	if ((cmd->arqbuf = scsi_alloc_consistent_buf(&ap, (struct buf *)NULL,
+	if ((cmd->arqbuf = scsi_alloc_consistent_buf(&ap, NULL,
 	    SENSE_BUFFER_SIZE, B_READ, callback, NULL)) == NULL) {
 		dev_err(pvs->dip, CE_WARN, "!failed to allocate ARQ buffer");
 		goto free_handle;

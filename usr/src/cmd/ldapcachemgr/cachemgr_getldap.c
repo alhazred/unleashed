@@ -633,7 +633,7 @@ getldap_get_rootDSE(void *arg)
 
 	thr_exit((void *) exitrc);
 
-	return ((void *) NULL);
+	return (NULL);
 }
 
 static int

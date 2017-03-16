@@ -710,7 +710,7 @@ cnx_write_image(ib_cnx_encap_ident_t *handle, int type)
 
 		if (i && !(i % handle->sector_sz)) {
 			(void) printf(" .");
-			(void) fflush((void *)NULL);
+			(void) fflush(NULL);
 		}
 	}
 

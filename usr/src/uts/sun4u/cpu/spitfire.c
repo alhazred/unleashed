@@ -4272,7 +4272,7 @@ add_leaky_bucket_timeout(void)
 		timeout_in_microsecs = SOFTERR_MIN_TIMEOUT;
 
 	leaky_bucket_timeout_id = timeout(leaky_bucket_timeout,
-	    (void *)NULL, drv_usectohz((clock_t)timeout_in_microsecs));
+	    NULL, drv_usectohz((clock_t)timeout_in_microsecs));
 }
 
 /*

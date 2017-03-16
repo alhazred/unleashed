@@ -226,23 +226,23 @@ dcd_hba_detach(dev_info_t *dip)
 
 	mutex_enter(&dcd_hba_mutex);
 
-	for (elem = dcd_hba_list; elem != (struct dcd_hba_inst *)NULL;
+	for (elem = dcd_hba_list; elem != NULL;
 	    elem = elem->inst_next) {
 		if (elem->inst_dip == dip)
 			break;
 	}
 
-	if (elem == (struct dcd_hba_inst *)NULL) {
+	if (elem == NULL) {
 		cmn_err(CE_NOTE, "dcd_hba_attach: Unknown HBA instance\n");
 		mutex_exit(&dcd_hba_mutex);
 	}
 
 	if (elem == dcd_hba_list) {
 		dcd_hba_list = elem->inst_next;
-		dcd_hba_list->inst_prev = (struct dcd_hba_inst *)NULL;
+		dcd_hba_list->inst_prev = NULL;
 	} else if (elem == dcd_hba_list_tail) {
 		dcd_hba_list_tail = elem->inst_prev;
-		dcd_hba_list_tail->inst_next = (struct dcd_hba_inst *)NULL;
+		dcd_hba_list_tail->inst_next = NULL;
 	} else {
 		elem->inst_prev->inst_next = elem->inst_next;
 		elem->inst_next->inst_prev = elem->inst_prev;

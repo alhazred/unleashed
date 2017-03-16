@@ -389,9 +389,8 @@ ufs_delete(struct ufsvfs *ufsvfsp, struct inode *ip, int dolockfs)
 	/*
 	 * release quota resources; can't fail
 	 */
-	(void) chkiq((struct ufsvfs *)vp->v_vfsp->vfs_data,
-	    /* change */ -1, ip, (uid_t)ip->i_uid, 0, CRED(),
-	    (char **)NULL, (size_t *)NULL);
+	(void) chkiq((struct ufsvfs *)vp->v_vfsp->vfs_data, /* change */ -1,
+	    ip, (uid_t)ip->i_uid, 0, CRED(), (char **)NULL, NULL);
 	dqrele(ip->i_dquot);
 	ip->i_dquot = NULL;
 	ip->i_flag &= ~(IDEL | IDIRECTIO);
@@ -739,8 +738,7 @@ ufs_idle_free(struct inode *ip)
 			 * cleaned up.
 			 */
 			(void) pvn_vplist_dirty(vp, 0,
-			    ufs_putapage, B_INVAL | B_TRUNC,
-			    (struct cred *)NULL);
+			    ufs_putapage, B_INVAL | B_TRUNC, NULL);
 		}
 		ufs_si_del(ip);
 		if (pages) {

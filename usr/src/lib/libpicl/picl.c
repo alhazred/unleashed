@@ -697,7 +697,7 @@ picl_strerror(int err)
 	if ((err < N_ERRORS) && (err >= 0)) {
 		return (gettext(picl_errmsg[err]));
 	}
-	return ((char *)NULL);
+	return (NULL);
 }
 
 /*

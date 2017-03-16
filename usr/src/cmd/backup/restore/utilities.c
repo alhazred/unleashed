@@ -779,7 +779,7 @@ safe_fopen(const char *filename, const char *smode, int perms)
 	if (fd >= 0)
 		return (fdopen(fd, smode));
 
-	return ((FILE *)NULL);
+	return (NULL);
 }
 
 /*

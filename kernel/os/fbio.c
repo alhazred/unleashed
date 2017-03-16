@@ -202,7 +202,7 @@ fbiwrite(struct fbuf *fbp, vnode_t *devvp, daddr_t bn, int bsize)
 	 * could then use these new facilities in a more straight
 	 * forward fashion instead of playing all these games.
 	 */
-	bp = pageio_setup((struct page *)NULL, fbp->fb_count, devvp, B_WRITE);
+	bp = pageio_setup(NULL, fbp->fb_count, devvp, B_WRITE);
 	bp->b_flags &= ~B_PAGEIO;		/* XXX */
 	bp->b_un.b_addr = fbp->fb_addr;
 

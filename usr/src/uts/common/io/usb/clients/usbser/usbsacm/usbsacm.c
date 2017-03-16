@@ -389,7 +389,7 @@ struct dev_ops usbsacm_ops = {
 	usbsacm_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&usbsacm_cb_ops,	/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	usbser_power,		/* devo_power */
 	ddi_quiesce_not_needed,	/* devo_quiesce */
 };

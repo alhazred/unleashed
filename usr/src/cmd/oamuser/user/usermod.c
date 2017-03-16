@@ -591,7 +591,7 @@ char **argv;
 		}
 	}
 	if (projects) {
-		ret = edit_project(logname, (char *)NULL, projlist, 0);
+		ret = edit_project(logname, NULL, projlist, 0);
 		if (ret != EX_SUCCESS) {
 			errmsg(M_UPDATE, "modified");
 			exit(ret);

@@ -581,7 +581,7 @@ parseargs(int ac, char *av[])
 		}
 	}
 
-	mav[mac] = (char *)NULL;
+	mav[mac] = NULL;
 }
 
 static int

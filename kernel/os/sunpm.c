@@ -685,12 +685,10 @@ pm_init(void)
 	pm_system_idle_threshold = pm_default_idle_threshold;
 	pm_cpu_idle_threshold = 0;
 
-	pm_cpr_cb_id = callb_add(pm_cpr_callb, (void *)NULL,
-	    CB_CL_CPR_PM, "pm_cpr");
-	pm_panic_cb_id = callb_add(pm_panic_callb, (void *)NULL,
-	    CB_CL_PANIC, "pm_panic");
-	pm_halt_cb_id = callb_add(pm_halt_callb, (void *)NULL,
-	    CB_CL_HALT, "pm_halt");
+	pm_cpr_cb_id = callb_add(pm_cpr_callb, NULL, CB_CL_CPR_PM, "pm_cpr");
+	pm_panic_cb_id = callb_add(pm_panic_callb, NULL, CB_CL_PANIC,
+	    "pm_panic");
+	pm_halt_cb_id = callb_add(pm_halt_callb, NULL, CB_CL_HALT, "pm_halt");
 
 	/*
 	 * Create a thread to do dependency processing.
@@ -7737,7 +7735,7 @@ pm_cfb_softint(caddr_t int_handler_arg)
 	mutex_enter(&pm_cfb_lock);
 	if (pm_soft_pending) {
 		mutex_exit(&pm_cfb_lock);
-		debug_enter((char *)NULL);
+		debug_enter(NULL);
 		/* acquired in debug_enter before calling pm_cfb_trigger */
 		pm_cfb_rele();
 		mutex_enter(&pm_cfb_lock);

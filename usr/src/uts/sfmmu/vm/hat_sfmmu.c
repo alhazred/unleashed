@@ -11085,7 +11085,7 @@ hblk_init:
 	}
 	set_hblk_sz(hmeblkp, size);
 	ASSERT(SFMMU_HASH_LOCK_ISHELD(hmebp));
-	hmeblkp->hblk_next = (struct hme_blk *)NULL;
+	hmeblkp->hblk_next = NULL;
 	hmeblkp->hblk_tag = hblktag;
 	hmeblkp->hblk_shadow = shw_hblkp;
 	hblkpa = hmeblkp->hblk_nextpa;

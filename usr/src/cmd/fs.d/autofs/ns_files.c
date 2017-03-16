@@ -196,7 +196,7 @@ getmapent_files(key, mapname, ml, stack, stkptr, iswildcard, isrestricted)
 	nserr = __NSW_SUCCESS;
 done:
 	if (fp) {
-		(void) stack_op(POP, (char *)NULL, stack, stkptr);
+		(void) stack_op(POP, NULL, stack, stkptr);
 		(void) fclose(fp);
 	}
 
@@ -306,7 +306,7 @@ getmapkeys_files(mapname, list, error, cache_time, stack, stkptr)
 	nserr = __NSW_SUCCESS;
 done:
 	if (fp) {
-		(void) stack_op(POP, (char *)NULL, stack, stkptr);
+		(void) stack_op(POP, NULL, stack, stkptr);
 		(void) fclose(fp);
 	}
 
@@ -405,7 +405,7 @@ pr_msg("Warning: invalid entry for %s in %s ignored.\n", dir, fname);
 		done++;
 	}
 
-	(void) stack_op(POP, (char *)NULL, stack, stkptr);
+	(void) stack_op(POP, NULL, stack, stkptr);
 	(void) fclose(fp);
 
 	return (done ? __NSW_SUCCESS : __NSW_NOTFOUND);
@@ -446,7 +446,7 @@ loaddirect_files(map, local_map, opts, stack, stkptr)
 		done++;
 	}
 
-	(void) stack_op(POP, (char *)NULL, stack, stkptr);
+	(void) stack_op(POP, NULL, stack, stkptr);
 	(void) fclose(fp);
 
 	return (done ? __NSW_SUCCESS : __NSW_NOTFOUND);
@@ -503,7 +503,7 @@ stack_op(op, name, stack, stkptr)
 	switch (op) {
 	case INIT:
 		for (ptr = stack; ptr != stk_top; ptr++)
-			*ptr = (char *)NULL;
+			*ptr = NULL;
 		*stkptr = stack;
 		return (1);
 	case ERASE:
@@ -512,7 +512,7 @@ stack_op(op, name, stack, stkptr)
 				if (trace > 1)
 					trace_prt(1, "  ERASE %s\n", *ptr);
 				free (*ptr);
-				*ptr = (char *)NULL;
+				*ptr = NULL;
 			}
 		*stkptr = stack;
 		return (1);
@@ -541,7 +541,7 @@ stack_op(op, name, stack, stkptr)
 			if (trace > 1)
 				trace_prt(1, "  POP %s\n", **stkptr);
 			free (**stkptr);
-			**stkptr = (char *)NULL;
+			**stkptr = NULL;
 		}
 		return (1);
 	default:

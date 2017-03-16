@@ -3739,7 +3739,7 @@ nxge_get_mac_addr_properties(p_nxge_t nxgep)
 	/*
 	 * Get the ethernet address.
 	 */
-	(void) localetheraddr((struct ether_addr *)NULL, &nxgep->ouraddr);
+	(void) localetheraddr(NULL, &nxgep->ouraddr);
 
 	/*
 	 * Check if it is an adapter with its own local mac address If it is

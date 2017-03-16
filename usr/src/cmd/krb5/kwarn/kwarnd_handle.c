@@ -78,7 +78,7 @@ getkwarnd_handle(void)
 			(void) endnetconfig(localhandle);
 			return ((CLIENT *)NULL);
 		}
-		if ((hostname = strdup(u.nodename)) == (char *)NULL) {
+		if ((hostname = strdup(u.nodename)) == NULL) {
 			(void) endnetconfig(localhandle);
 			return ((CLIENT *)NULL);
 		}

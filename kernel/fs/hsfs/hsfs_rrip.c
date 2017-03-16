@@ -83,7 +83,7 @@ ext_signature_t  rrip_signature_table[ ] = {
 	RRIP_RR,	rrip_rock_ridge,
 	RRIP_SL,	rrip_sym_link,
 	RRIP_TF,	rrip_file_time,
-	(char *)NULL,   NULL
+	NULL,		NULL
 };
 
 
@@ -296,8 +296,8 @@ rrip_name(sig_args_t *sig_args_p)
 {
 	uchar_t *nm_ptr = sig_args_p->SUF_ptr;
 
-	if ((sig_args_p->name_p == (uchar_t *)NULL) ||
-	    (sig_args_p->name_len_p == (int *)NULL))
+	if ((sig_args_p->name_p == NULL) ||
+	    (sig_args_p->name_len_p == NULL))
 		goto end;
 	/*
 	 * If we have a "." or ".." directory, we should not look for
@@ -357,7 +357,7 @@ rrip_sym_link(sig_args_t *sig_args_p)
 	 * If there is an original string put it into sym_link[], otherwise
 	 * initialize sym_link[] to the empty string.
 	 */
-	if (hdp->sym_link != (char *)NULL) {
+	if (hdp->sym_link != NULL) {
 		sym_link_len = (int)strlen(strcpy(sym_link, hdp->sym_link));
 	} else {
 		sym_link[0] = '\0';
@@ -409,7 +409,7 @@ rrip_sym_link(sig_args_t *sig_args_p)
 
 	(void) strcpy(tmp_sym_link, sym_link);
 
-	if (hdp->sym_link != (char *)NULL)
+	if (hdp->sym_link != NULL)
 		kmem_free(hdp->sym_link, (size_t)(hdp->ext_size + 1));
 
 	hdp->sym_link = (char *)&tmp_sym_link[0];
@@ -449,11 +449,8 @@ rrip_namecopy(
 	int	change_flag = 0;
 	int	ret_val;
 
-	if ((to == (char *)NULL) ||
-	    (from == (char *)NULL) ||
-	    (dirp == (uchar_t *)NULL)) {
+	if ((to == NULL) || (from == NULL) || (dirp == NULL))
 		return (0);
-	}
 
 	/* special handling for '.' and '..' */
 
@@ -469,7 +466,7 @@ rrip_namecopy(
 
 
 	ret_val = parse_sua((uchar_t *)to, &size, &change_flag,
-	    dirp, last_offset, hdp, fsp, (uchar_t *)NULL, 0);
+	    dirp, last_offset, hdp, fsp, NULL, 0);
 
 	if (IS_NAME_BIT_SET(change_flag, RRIP_NAME_CHANGE) && !ret_val)
 		return (size);

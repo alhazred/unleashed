@@ -1492,7 +1492,7 @@ pci_targetq_init(void)
 	 */
 	if (pci_target_queue == NULL) {
 		pci_target_queue = errorq_create("pci_target_queue",
-		    (errorq_func_t)pci_target_drain, (void *)NULL,
+		    (errorq_func_t)pci_target_drain, NULL,
 		    TARGET_MAX_ERRS, sizeof (pci_target_err_t), FM_ERR_PIL,
 		    ERRORQ_VITAL);
 		if (pci_target_queue == NULL)

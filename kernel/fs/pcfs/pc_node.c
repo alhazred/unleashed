@@ -248,7 +248,7 @@ retry:
 		 * pvn_vplist_dirty will abort all old pages
 		 */
 		(void) pvn_vplist_dirty(vp, 0,
-		    pcfs_putapage, B_INVAL, (struct cred *)NULL);
+		    pcfs_putapage, B_INVAL, NULL);
 	}
 
 	(void) pc_syncfat(fsp);
@@ -714,8 +714,7 @@ pc_diskchanged(struct pcfs *fsp)
 				if (!(pcp->pc_flags & PC_EXTERNAL)) {
 					(void) pvn_vplist_dirty(vp,
 					    0, pcfs_putapage,
-					    B_INVAL | B_TRUNC,
-					    (struct cred *)NULL);
+					    B_INVAL | B_TRUNC, NULL);
 					vn_free(vp);
 				}
 				kmem_free(pcp, sizeof (struct pcnode));
@@ -746,8 +745,7 @@ pc_diskchanged(struct pcfs *fsp)
 				if (!(pcp->pc_flags & PC_EXTERNAL)) {
 					(void) pvn_vplist_dirty(vp,
 					    0, pcfs_putapage,
-					    B_INVAL | B_TRUNC,
-					    (struct cred *)NULL);
+					    B_INVAL | B_TRUNC, NULL);
 					vn_free(vp);
 				}
 				kmem_free(pcp, sizeof (struct pcnode));

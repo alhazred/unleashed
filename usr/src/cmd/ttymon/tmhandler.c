@@ -410,7 +410,7 @@ re_read()
 			Npollfd = Maxfds;
 		if ((Pollp = (struct pollfd *)
 		    malloc((unsigned)(Npollfd * sizeof(struct pollfd))))
-		    == (struct pollfd *)NULL) 
+		    == NULL) 
 			fatal("malloc for Pollp failed");
 	}
 	Retry = TRUE;
@@ -430,7 +430,7 @@ pid_t	pid;
 			return(pmptr);
 		}
 	}
-	return((struct pmtab *)NULL);
+	return(NULL);
 }
 
 /*
@@ -447,7 +447,7 @@ int	fd;
 			return(pmptr);
 		}
 	}
-	return((struct pmtab *)NULL);
+	return(NULL);
 }
 
 /*

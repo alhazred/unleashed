@@ -123,7 +123,7 @@ boolean_t	_z_unlock_zone_object(char **r_objectLocks,
  *			associated with the lock object to be acquired - this
  *			key is returned when the lock is acquired and must be
  *			provided when releasing the lock
- *			== (char *)NULL - lock not acquired
+ *			== NULL - lock not acquired
  *		a_zoneName - [RO, *RO] - (char *)
  *			Pointer to string representing the name of the zone to
  *			acquire the specified lock on
@@ -148,16 +148,16 @@ _z_acquire_lock(char **r_lockKey, char *a_zoneName, char *a_lockObject,
 {
 	argArray_t	*args;
 	boolean_t	b;
-	char		*adjustedLockObject = (char *)NULL;
+	char		*adjustedLockObject = NULL;
 	char		*p;
-	char		*results = (char *)NULL;
+	char		*results = NULL;
 	int		r;
 	int		status;
 
 	/* entry assertions */
 
-	assert(a_zoneName != (char *)NULL);
-	assert(a_lockObject != (char *)NULL);
+	assert(a_zoneName != NULL);
+	assert(a_lockObject != NULL);
 	assert(*a_lockObject != '\0');
 	assert(r_lockKey != (char **)NULL);
 
@@ -167,7 +167,7 @@ _z_acquire_lock(char **r_lockKey, char *a_zoneName, char *a_lockObject,
 
 	/* reset returned lock key handle */
 
-	*r_lockKey = (char *)NULL;
+	*r_lockKey = NULL;
 
 	/*
 	 * Only one lock file must ever be used - the one located on the root
@@ -217,8 +217,8 @@ _z_acquire_lock(char **r_lockKey, char *a_zoneName, char *a_lockObject,
 
 	/* execute command */
 
-	r = _z_zone_exec(&status, &results, (char *)NULL, PKGADM_CMD,
-	    _z_get_argv(args), a_zoneName, (int *)NULL);
+	r = _z_zone_exec(&status, &results, NULL, PKGADM_CMD,
+	    _z_get_argv(args), a_zoneName, NULL);
 
 	/* free generated argument list */
 
@@ -245,13 +245,13 @@ _z_acquire_lock(char **r_lockKey, char *a_zoneName, char *a_lockObject,
 
 	/* return success if no results returned */
 
-	if (results == (char *)NULL) {
+	if (results == NULL) {
 		return (B_TRUE);
 	}
 
 	/* return the lock key */
 
-	p = _z_strGetToken((char *)NULL, results, 0, "\n");
+	p = _z_strGetToken(NULL, results, 0, "\n");
 	_z_strRemoveLeadingWhitespace(&p);
 	*r_lockKey = p;
 
@@ -358,12 +358,12 @@ _z_adjust_lock_object_for_rootpath(char **r_result, char *a_lockObject)
 	/* entry assertions */
 
 	assert(r_result != (char **)NULL);
-	assert(a_lockObject != (char *)NULL);
+	assert(a_lockObject != NULL);
 	assert(*a_lockObject != '\0');
 
 	/* reset returned lock object handle */
 
-	*r_result = (char *)NULL;
+	*r_result = NULL;
 
 	/*
 	 * if root path points to "/" return a duplicate of the passed in
@@ -372,7 +372,7 @@ _z_adjust_lock_object_for_rootpath(char **r_result, char *a_lockObject)
 	 */
 
 	a_rootPath = _z_global_data._z_root_dir;
-	if ((a_rootPath == (char *)NULL) ||
+	if ((a_rootPath == NULL) ||
 	    (*a_rootPath == '\0') ||
 	    (strcmp(a_rootPath, "/") == 0)) {
 
@@ -386,7 +386,7 @@ _z_adjust_lock_object_for_rootpath(char **r_result, char *a_lockObject)
 		 * of path name and determine absolute path to the root path.
 		 */
 
-		if (realpath(a_rootPath, realRootPath) == (char *)NULL) {
+		if (realpath(a_rootPath, realRootPath) == NULL) {
 			/* cannot determine absolute path; use path specified */
 			(void) strlcpy(realRootPath, a_rootPath,
 			    sizeof (realRootPath));
@@ -434,7 +434,7 @@ _z_adjust_lock_object_for_rootpath(char **r_result, char *a_lockObject)
 
 			p2 = _z_strPrintf(LOBJ_ROOTPATH, p1);
 			free(p1);
-			if (p2 == (char *)NULL) {
+			if (p2 == NULL) {
 				_z_program_error(ERR_MALLOC, "<path>", errno,
 				    strerror(errno));
 				return (B_FALSE);
@@ -444,7 +444,7 @@ _z_adjust_lock_object_for_rootpath(char **r_result, char *a_lockObject)
 
 			*r_result = _z_strPrintf("%s/%s", p2, a_lockObject);
 			free(p2);
-			if (*r_result == (char *)NULL) {
+			if (*r_result == NULL) {
 				_z_program_error(ERR_MALLOC, "<path>", errno,
 				    strerror(errno));
 				return (B_FALSE);
@@ -581,7 +581,7 @@ _z_lock_zone_object(char **r_objectLocks, char *a_zoneName, char *a_lockObject,
 	pid_t a_pid, char *a_waitingMsg, char *a_busyMsg)
 {
 	boolean_t	b;
-	char		*p = (char *)NULL;
+	char		*p = NULL;
 	char		lockItem[LOCK_OBJECT_MAXLEN+LOCK_KEY_MAXLEN+4];
 	char		lockKey[LOCK_KEY_MAXLEN+2];
 	char		lockObject[LOCK_OBJECT_MAXLEN+2];
@@ -590,10 +590,10 @@ _z_lock_zone_object(char **r_objectLocks, char *a_zoneName, char *a_lockObject,
 	/* entry assertions */
 
 	assert(r_objectLocks != (char **)NULL);
-	assert(a_zoneName != (char *)NULL);
-	assert(a_waitingMsg != (char *)NULL);
-	assert(a_busyMsg != (char *)NULL);
-	assert(a_lockObject != (char *)NULL);
+	assert(a_zoneName != NULL);
+	assert(a_waitingMsg != NULL);
+	assert(a_busyMsg != NULL);
+	assert(a_lockObject != NULL);
 	assert(*a_lockObject != '\0');
 
 	/* entry debugging info */
@@ -603,10 +603,10 @@ _z_lock_zone_object(char **r_objectLocks, char *a_zoneName, char *a_lockObject,
 
 	/* if lock objects held search for object to lock */
 
-	if (*r_objectLocks != (char *)NULL) {
+	if (*r_objectLocks != NULL) {
 		for (i = 0; ; i++) {
 			/* get next object locked on this zone */
-			_z_strGetToken_r((char *)NULL, *r_objectLocks, i, "\n",
+			_z_strGetToken_r(NULL, *r_objectLocks, i, "\n",
 			    lockItem, sizeof (lockItem));
 
 			/* break out of loop if no more locks in list */
@@ -618,9 +618,9 @@ _z_lock_zone_object(char **r_objectLocks, char *a_zoneName, char *a_lockObject,
 			}
 
 			/* get object and key for this lock */
-			_z_strGetToken_r((char *)NULL, lockItem, 0, "\t",
+			_z_strGetToken_r(NULL, lockItem, 0, "\t",
 			    lockObject, sizeof (lockObject));
-			_z_strGetToken_r((char *)NULL, lockItem, 1, "\t",
+			_z_strGetToken_r(NULL, lockItem, 1, "\t",
 			    lockKey, sizeof (lockKey));
 
 			/* return success if the lock is held */
@@ -697,17 +697,17 @@ _z_release_lock(char *a_zoneName, char *a_lockObject, char *a_lockKey,
 {
 	argArray_t	*args;
 	boolean_t	b;
-	char		*adjustedLockObject = (char *)NULL;
-	char		*results = (char *)NULL;
+	char		*adjustedLockObject = NULL;
+	char		*results = NULL;
 	int		r;
 	int		status;
 
 	/* entry assertions */
 
-	assert(a_zoneName != (char *)NULL);
-	assert(a_lockObject != (char *)NULL);
+	assert(a_zoneName != NULL);
+	assert(a_lockObject != NULL);
 	assert(*a_lockObject != '\0');
-	assert(a_lockKey != (char *)NULL);
+	assert(a_lockKey != NULL);
 	assert(*a_lockKey != '\0');
 
 	/* entry debugging info */
@@ -754,8 +754,8 @@ _z_release_lock(char *a_zoneName, char *a_lockObject, char *a_lockKey,
 
 	/* execute command */
 
-	r = _z_zone_exec(&status, &results, (char *)NULL, PKGADM_CMD,
-	    _z_get_argv(args), a_zoneName, (int *)NULL);
+	r = _z_zone_exec(&status, &results, NULL, PKGADM_CMD,
+	    _z_get_argv(args), a_zoneName, NULL);
 
 	/* free generated argument list */
 
@@ -883,9 +883,9 @@ _z_unlock_zone_object(char **r_objectLocks, char *a_zoneName,
 	/* entry assertions */
 
 	assert(r_objectLocks != (char **)NULL);
-	assert(a_zoneName != (char *)NULL);
-	assert(a_errMsg != (char *)NULL);
-	assert(a_lockObject != (char *)NULL);
+	assert(a_zoneName != NULL);
+	assert(a_errMsg != NULL);
+	assert(a_lockObject != NULL);
 	assert(*a_lockObject != '\0');
 
 	/* entry debugging info */
@@ -895,7 +895,7 @@ _z_unlock_zone_object(char **r_objectLocks, char *a_zoneName,
 
 	/* return success if no objects are locked */
 
-	if (*r_objectLocks == (char *)NULL) {
+	if (*r_objectLocks == NULL) {
 		_z_echoDebug(DBG_ZONES_ULK_OBJ_NONE, a_zoneName);
 		return (B_TRUE);
 	}
@@ -904,7 +904,7 @@ _z_unlock_zone_object(char **r_objectLocks, char *a_zoneName,
 
 	for (i = 0; ; i++) {
 		/* get next object locked on this zone */
-		_z_strGetToken_r((char *)NULL, *r_objectLocks, i, "\n",
+		_z_strGetToken_r(NULL, *r_objectLocks, i, "\n",
 		    lockItem, sizeof (lockItem));
 
 		/* return success if no more objects locked */
@@ -915,9 +915,9 @@ _z_unlock_zone_object(char **r_objectLocks, char *a_zoneName,
 		}
 
 		/* get object and key for this lock */
-		_z_strGetToken_r((char *)NULL, lockItem, 0, "\t",
+		_z_strGetToken_r(NULL, lockItem, 0, "\t",
 		    lockObject, sizeof (lockObject));
-		_z_strGetToken_r((char *)NULL, lockItem, 1, "\t",
+		_z_strGetToken_r(NULL, lockItem, 1, "\t",
 		    lockKey, sizeof (lockKey));
 
 		/* break out of loop if object is the one to unlock */

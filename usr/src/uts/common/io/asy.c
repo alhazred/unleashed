@@ -2485,7 +2485,7 @@ async_rxint(struct asycom *asy, uchar_t lsr)
 		if ((abort_enable == KIOCABORTALTERNATE) &&
 		    (asy->asy_flags & ASY_CONSOLE)) {
 			if (abort_charseq_recognize(c))
-				abort_sequence_enter((char *)NULL);
+				abort_sequence_enter(NULL);
 		}
 
 		/* Handle framing errors */

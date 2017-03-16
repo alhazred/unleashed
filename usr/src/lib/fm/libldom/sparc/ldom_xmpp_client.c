@@ -383,7 +383,7 @@ xmpp_client_thr(void *data)
 			} else if (pipe_fd->revents & POLLIN) {
 				/* Receive a notification to exit */
 				xmpp_close(&conn);
-				pthread_exit((void *)NULL);
+				pthread_exit(NULL);
 			}
 
 			/*

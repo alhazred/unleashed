@@ -133,8 +133,8 @@ timer(void)
 	}
 
 	if (timetomulticast) {
-		supplyall(&allrouters, 0, (struct interface *)NULL, _B_TRUE);
-		(void) gettimeofday(&now, (struct timezone *)NULL);
+		supplyall(&allrouters, 0, NULL, _B_TRUE);
+		(void) gettimeofday(&now, NULL);
 		lastmcast = now;
 		lastfullupdate = now;
 		needupdate = _B_FALSE;	/* cancel any pending dynamic update */
@@ -175,7 +175,7 @@ term(void)
 			}
 		}
 	}
-	supplyall(&allrouters, 0, (struct interface *)NULL, _B_TRUE);
+	supplyall(&allrouters, 0, NULL, _B_TRUE);
 	(void) unlink(PATH_PID);
 	exit(EXIT_SUCCESS);
 }

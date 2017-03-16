@@ -200,8 +200,7 @@ scandisk(char *device, int devfd, int writeflag)
 		perror("mallopt");
 		exit(1);
 	}
-	if ((verbuf = malloc(sector_size * dkg.dkg_nsect)) ==
-	    (char *)NULL) {
+	if ((verbuf = malloc(sector_size * dkg.dkg_nsect)) == NULL) {
 		perror("malloc");
 		exit(1);
 	}
@@ -209,7 +208,7 @@ scandisk(char *device, int devfd, int writeflag)
 #else
 
 	if ((verbuf = malloc(sector_size + sector_size * dkg.dkg_nsect))
-	    == (char *)NULL) {
+	    == NULL) {
 		perror("malloc");
 		exit(1);
 	}

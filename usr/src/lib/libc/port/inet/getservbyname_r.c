@@ -66,7 +66,7 @@ getservbyname_r(const char *name, const char *proto, struct servent *result,
 
 	if ((nconf = __rpc_getconfip("udp")) == NULL &&
 	    (nconf = __rpc_getconfip("tcp")) == NULL) {
-		return ((struct servent *)NULL);
+		return (NULL);
 	}
 	nssin.op_t = NSS_SERV;
 	nssin.arg.nss.serv.name = name;
@@ -84,7 +84,7 @@ getservbyname_r(const char *name, const char *proto, struct servent *result,
 
 	(void) freenetconfigent(nconf);
 	if (neterr != ND_OK) {
-		return ((struct servent *)NULL);
+		return (NULL);
 	}
 	return (nssout.nss.serv);
 }
@@ -100,7 +100,7 @@ getservbyport_r(int port, const char *proto, struct servent *result,
 
 	if ((nconf = __rpc_getconfip("udp")) == NULL &&
 	    (nconf = __rpc_getconfip("tcp")) == NULL) {
-		return ((struct servent *)NULL);
+		return (NULL);
 	}
 	nssin.op_t = NSS_SERV;
 	nssin.arg.nss.serv.port = port;
@@ -118,7 +118,7 @@ getservbyport_r(int port, const char *proto, struct servent *result,
 
 	(void) freenetconfigent(nconf);
 	if (neterr != ND_OK) {
-		return ((struct servent *)NULL);
+		return (NULL);
 	}
 	return (nssout.nss.serv);
 }

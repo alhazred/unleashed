@@ -532,7 +532,7 @@ module_not_found(char *drv_name, char *drv_path, int drv_path_size,
 
 				return (NOERR);
 			}
-			next = strtok((char *)NULL, MOD_SEP);
+			next = strtok(NULL, MOD_SEP);
 		}
 		(void) strcpy(data, pathsave);
 		next = strtok(data, MOD_SEP);
@@ -618,7 +618,7 @@ drv_name_conflict(di_node_t root_node)
 	 */
 	if (di_walk_node(root_node, DI_WALK_SIBFIRST, NULL, devfs_node) == -1) {
 		free_conflict_list(conflict_lst);
-		conflict_lst = (struct dev_list *)NULL;
+		conflict_lst = NULL;
 		(void) fprintf(stderr, gettext(ERR_DEVTREE));
 		return (-1);
 	}
@@ -691,7 +691,7 @@ devfs_node(di_node_t node, void *arg)
 		di_devfs_path_free(devfsnm);
 		new_entry = (struct dev_list *)calloc(1,
 		    sizeof (struct dev_list));
-		if (new_entry == (struct dev_list *)NULL) {
+		if (new_entry == NULL) {
 			(void) fprintf(stderr, gettext(ERR_NO_MEM));
 			err_exit();
 		}
@@ -922,7 +922,7 @@ correct_location(char *drv_path, char **drvelf_desc, int *drvelf_type_ptr)
 	token = strtok(copy_drv_path, DIR_SEP);
 	while (token != NULL) {
 		if (strcmp("drv", token) == 0) {
-			token = strtok((char *)NULL, DIR_SEP);
+			token = strtok(NULL, DIR_SEP);
 			if (strcmp(DRVDIR64, token) == 0) {
 				if (*drvelf_type_ptr == ELFCLASS64)
 					return (NOERR);
@@ -937,7 +937,7 @@ correct_location(char *drv_path, char **drvelf_desc, int *drvelf_type_ptr)
 				return (ERROR);
 			}
 		} else {
-			token = strtok((char *)NULL, DIR_SEP);
+			token = strtok(NULL, DIR_SEP);
 		}
 	}
 	return (ERROR);

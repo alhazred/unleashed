@@ -60,7 +60,7 @@ sel_disp(int type, int hdrtype, char *s)
 				break;
 			}
 		}
-		if (p == (char *)NULL) {
+		if (p == NULL) {
 			rc = -1;
 		}
 		break;

@@ -257,7 +257,7 @@ _init(void)
 		return (error);
 	}
 
-	axq_panic_cb_id = callb_add(axq_panic_callb, (void *)NULL,
+	axq_panic_cb_id = callb_add(axq_panic_callb, NULL,
 	    CB_CL_PANIC, "axq_panic");
 
 	return (0);

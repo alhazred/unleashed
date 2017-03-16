@@ -318,6 +318,6 @@ audio_drain(int fd, int sig)
 int
 audio_play_eof(int fd)
 {
-	return (write(fd, (char *)NULL, 0) < 0 ?
+	return (write(fd, NULL, 0) < 0 ?
 	    AUDIO_UNIXERROR : AUDIO_SUCCESS);
 }

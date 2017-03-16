@@ -121,7 +121,7 @@ ypxfrd_1(struct svc_req *rqstp, register SVCXPRT *transp)
 	switch (rqstp->rq_proc) {
 	case NULLPROC:
 		(void) svc_sendreply(transp,
-			(xdrproc_t)xdr_void, (char *)NULL);
+			(xdrproc_t)xdr_void, NULL);
 		_rpcsvccount--;
 		_rpcsvcstate = _SERVED;
 		return;

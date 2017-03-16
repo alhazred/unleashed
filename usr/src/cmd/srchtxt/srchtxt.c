@@ -141,7 +141,7 @@ main(int argc, char **argv)
 
 	if (textflg) {
 			/* compile regular expression */
-		if (compile(text, &ebuf[0], &ebuf[ESIZE]) == (char *)NULL) {
+		if (compile(text, &ebuf[0], &ebuf[ESIZE]) == NULL) {
 			(void) fprintf(stderr,
 			    "%s: ERROR: regular expression compile failed\n",
 			    cmdname);
@@ -155,7 +155,7 @@ main(int argc, char **argv)
 		if (*msgfile == ',' || *(end - 2) == ',')
 			usage();
 		while ((fname = strtok(msgfile, ",\0")) != NULL) {
-			if (strchr(fname, '/') != (char *)NULL) {
+			if (strchr(fname, '/') != NULL) {
 				cp = fname;
 				len1 = 0;
 			} else {

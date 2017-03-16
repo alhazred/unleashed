@@ -445,7 +445,7 @@ randomize(master)
 
 	seed = 0;
 	for (i = 0; i < 1024; i++) {
-		(void) gettimeofday(&tv, (struct timezone *)NULL);
+		(void) gettimeofday(&tv, NULL);
 		shift = i % 8 * sizeof (int);
 		seed ^= (tv.tv_usec << shift) | (tv.tv_usec >> (32 - shift));
 	}
@@ -840,7 +840,7 @@ __key_gen_1_svc(v, s, key)
 	static mutex_t keygen_mutex = DEFAULTMUTEX;
 	int r;
 
-	(void) gettimeofday(&time, (struct timezone *)NULL);
+	(void) gettimeofday(&time, NULL);
 	(void) mutex_lock(&keygen_mutex);
 	keygen.key.high += (time.tv_sec ^ time.tv_usec);
 	keygen.key.low += (time.tv_sec ^ time.tv_usec);
@@ -961,7 +961,7 @@ __key_gen_3_svc(void *v, keynum_t *kp, deskeyarray *res)
 	for (i = 0; i < keynum; i++) {
 		debug(KEYSERV_DEBUG, ("gen_3 calling gen_1 %x",
 		    res->deskeyarray_val+i));
-		__key_gen_1_svc((void *) NULL, (struct svc_req *)NULL,
+		__key_gen_1_svc(NULL, NULL,
 		    res->deskeyarray_val+i);
 		debug(KEYSERV_DEBUG, ("gen_3 val %d %x",
 		    i, *(int *)(res->deskeyarray_val+i)));
@@ -1118,7 +1118,7 @@ keyprogram(rqstp, transp)
 
 	switch (rqstp->rq_proc) {
 	case NULLPROC:
-		svc_sendreply(transp, xdr_void, (char *)NULL);
+		svc_sendreply(transp, xdr_void, NULL);
 		return;
 
 	case KEY_SET:
@@ -1409,6 +1409,6 @@ defaults(void)
 			}
 		}
 
-		(void) defopen((char *)NULL);
+		(void) defopen(NULL);
 	}
 }

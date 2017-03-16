@@ -2612,7 +2612,7 @@ static struct dev_ops gssd_ops = {
 	nulldev,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&gssd_cb_ops,		/* devo_cb_ops */
-	(struct bus_ops *)NULL	/* devo_bus_ops */
+	NULL	/* devo_bus_ops */
 };
 
 extern struct mod_ops mod_driverops;

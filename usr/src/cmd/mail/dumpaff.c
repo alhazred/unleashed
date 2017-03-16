@@ -71,7 +71,7 @@ register FILE	*f;
 
 	*didafflines = TRUE;
 	for (hptr = hdrlines[H_AFWDFROM].head;
-	     hptr != (struct hdrs *)NULL;
+	     hptr != NULL;
 	     hptr = hptr->next) {
 		printhdr(type, H_AFWDFROM, hptr, f);
 	}

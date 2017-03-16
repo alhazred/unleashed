@@ -612,7 +612,7 @@ struct	pmtab	*pmtab;
 		log("Starting service (%s) on %s", argvp[0], pmtab->p_device);
 	}
 
-	if (pmtab->p_termtype != (char *)NULL) {
+	if (pmtab->p_termtype != NULL) {
 		(void) sprintf(tbuf, "TERM=%s", pmtab->p_termtype);
 		if (putenv(tbuf)) {
 			log("cannot expand service <%s> environment", argvp[0]);

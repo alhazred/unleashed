@@ -81,8 +81,8 @@ static int		ibcfg_btoken = 0;		/* begin of new token */
 static mutex_t		ibcfg_lock = DEFAULTMUTEX;	/* lock for the file */
 static int		ibcfg_fd = -1;			/* file descriptor */
 static int		ibcfg_tmpfd = 0;		/* tmp file "fd" */
-static char		*file_buf = (char *)NULL;	/* read file into buf */
-static char		*tmpnamef = (char *)NULL;	/* tmp file name */
+static char		*file_buf = NULL;	/* read file into buf */
+static char		*tmpnamef = NULL;	/* tmp file name */
 static boolean_t	wrote_tmp = B_FALSE;		/* tmp file write in */
 							/* progress indicator */
 static struct stat	ibcfg_st;			/* file stat struct */
@@ -362,7 +362,7 @@ ib_get_string(char **llptr, char *tchar)
 
 	start = tchar;
 	/* copy string */
-	if ((cp = (char *)calloc(tlen + 1, sizeof (char))) == (char *)NULL) {
+	if ((cp = (char *)calloc(tlen + 1, sizeof (char))) == NULL) {
 		*llptr = NULL;
 		return (0);
 	}
@@ -728,8 +728,8 @@ ib_init_file(char **errmsg)
 {
 	(void) mutex_lock(&ibcfg_lock);
 
-	if (*errmsg == (char *)NULL) {
-		if ((*errmsg = calloc(MAXPATHLEN, 1)) == (char *)NULL) {
+	if (*errmsg == NULL) {
+		if ((*errmsg = calloc(MAXPATHLEN, 1)) == NULL) {
 			(void) mutex_unlock(&ibcfg_lock);
 			DPRINTF("ib_init_file: calloc errmsg failed\n");
 			return (CFGA_IB_CONFIG_FILE_ERR);
@@ -920,7 +920,7 @@ ib_delete_service(char **errmsg)
 	int		sbuf_len;
 	int		tot_len;
 	char		tmp[12];
-	char		*sbuf = (char *)NULL;
+	char		*sbuf = NULL;
 	boolean_t	found = B_FALSE;
 	ib_token_t	token = NEWLINE;
 	ib_svc_rec_t	*recp;

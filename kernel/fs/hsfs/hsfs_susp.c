@@ -73,7 +73,7 @@ ext_signature_t  susp_signature_table[ ] = {
 	SUSP_PD,	share_padding,
 	SUSP_ER,	share_ext_ref,
 	SUSP_ST,	share_stop,
-	(char *)NULL,	NULL
+	NULL,		NULL
 };
 
 /*
@@ -94,8 +94,8 @@ ext_signature_t	*susp_ce = &susp_signature_table[1];
  */
 extension_name_t   extension_name_table[]  =  {
 	"SUSP_1991A",	SUSP_VERSION,		susp_signature_table, /* #1 */
-	RRIP_ER_EXT_ID,	RRIP_EXT_VERSION, 	rrip_signature_table,
-	(char *)NULL,	0,			(ext_signature_t *)NULL
+	RRIP_ER_EXT_ID,	RRIP_EXT_VERSION,	rrip_signature_table,
+	NULL,		0,			NULL
 };
 
 extension_name_t	*susp_ext_name = extension_name_table;
@@ -119,7 +119,7 @@ share_protocol(sig_args_t *sig_args_p)
 
 	/* Let's check the check bytes */
 	if (!CHECK_BYTES_OK(sp_ptr))
-		return ((uchar_t *)NULL);
+		return (NULL);
 
 	/*
 	 * 	Ah, we have the go ahead, so let's set the implemented bit
@@ -130,7 +130,7 @@ share_protocol(sig_args_t *sig_args_p)
 		cmn_err(CE_NOTE,
 		    "System Use Sharing Protocol ver. %d:not supported\n",
 		    (int)SUF_VER(sp_ptr));
-		return ((uchar_t *)NULL);
+		return (NULL);
 	}
 
 	SET_SUSP_BIT(sig_args_p->fsp);
@@ -169,7 +169,7 @@ share_ext_ref(sig_args_t *sig_args_p)
 	 * Find appropriate extension and signature table
 	 */
 	for (extnp = extension_name_table, index = 0;
-	    extnp->extension_name != (char *)NULL;
+	    extnp->extension_name != NULL;
 	    extnp++, index++)  {
 		if (strncmp(extnp->extension_name,
 			    (char *)ER_ext_id(er_ptr),

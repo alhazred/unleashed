@@ -162,7 +162,7 @@ idmap_add_ds(adutils_ad_t *ad, const char *host, int port)
 	/* Start reaper if it doesn't exist */
 	if (ret == 0 && reaperid == 0)
 		(void) pthread_create(&reaperid, NULL,
-		    (void *(*)(void *))adreaper, (void *)NULL);
+		    (void *(*)(void *))adreaper, NULL);
 	return (ret);
 }
 

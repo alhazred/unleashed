@@ -48,7 +48,7 @@ static const char *auth_attrs[] = {
 	_AUTH_SHORTDES,
 	_AUTH_LONGDES,
 	_AUTH_ATTRS,
-	(char *)NULL
+	NULL
 };
 /*
  * _nss_ldap_auth2str is the data marshaling method for the auth_attr

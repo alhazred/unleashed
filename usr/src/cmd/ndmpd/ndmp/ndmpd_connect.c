@@ -1053,11 +1053,11 @@ ndmpd_connect_kill(ndmp_connection_t *connection)
 
 	switch (session->ns_protocol_version) {
 	case NDMPV2:
-		ndmpd_connect_close_v2(connection, (void *)NULL);
+		ndmpd_connect_close_v2(connection, NULL);
 		break;
 	case NDMPV3:
 	case NDMPV4:
-		ndmpd_connect_close_v3(connection, (void *)NULL);
+		ndmpd_connect_close_v3(connection, NULL);
 		break;
 	default:
 		NDMP_LOG(LOG_DEBUG,

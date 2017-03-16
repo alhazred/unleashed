@@ -348,7 +348,7 @@ main(int argc, char *argv[])
 
 	/* These are basic privileges we do not need */
 	__fini_daemon_priv(PRIV_PROC_EXEC, PRIV_PROC_SESSION,
-	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, (char *)NULL);
+	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, NULL);
 
 	svc_run();
 	syslog(LOG_ERR, "svc_run returned unexpectedly");

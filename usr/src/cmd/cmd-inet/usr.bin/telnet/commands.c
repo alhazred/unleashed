@@ -249,7 +249,7 @@ makeargv()
 			break;
 		cp++;
 	}
-	set_argv((char *)NULL);
+	set_argv(NULL);
 }
 
 /*

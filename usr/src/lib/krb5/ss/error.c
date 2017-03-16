@@ -29,8 +29,8 @@ char * ss_name(sci_idx)
 	ret_val = malloc((unsigned)
 			 (strlen(infop->subsystem_name)+1)
 			 * sizeof(char));
-	if (ret_val == (char *)NULL)
-	    return((char *)NULL);
+	if (ret_val == NULL)
+	    return(NULL);
 	strcpy(ret_val, infop->subsystem_name);
 	return(ret_val);
     }

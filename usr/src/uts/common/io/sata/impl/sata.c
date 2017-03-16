@@ -10313,13 +10313,13 @@ sata_remove_hba_instance(dev_info_t *dip)
 
 	mutex_enter(&sata_mutex);
 	for (sata_hba_inst = sata_hba_list;
-	    sata_hba_inst != (struct sata_hba_inst *)NULL;
+	    sata_hba_inst != NULL;
 	    sata_hba_inst = sata_hba_inst->satahba_next) {
 		if (sata_hba_inst->satahba_dip == dip)
 			break;
 	}
 
-	if (sata_hba_inst == (struct sata_hba_inst *)NULL) {
+	if (sata_hba_inst == NULL) {
 #ifdef SATA_DEBUG
 		cmn_err(CE_WARN, "sata_remove_hba_instance: "
 		    "unknown HBA instance\n");
@@ -10330,7 +10330,7 @@ sata_remove_hba_instance(dev_info_t *dip)
 		sata_hba_list = sata_hba_inst->satahba_next;
 		if (sata_hba_list) {
 			sata_hba_list->satahba_prev =
-			    (struct sata_hba_inst *)NULL;
+			    NULL;
 		}
 		if (sata_hba_inst == sata_hba_list_tail) {
 			sata_hba_list_tail = NULL;
@@ -10339,7 +10339,7 @@ sata_remove_hba_instance(dev_info_t *dip)
 		sata_hba_list_tail = sata_hba_inst->satahba_prev;
 		if (sata_hba_list_tail) {
 			sata_hba_list_tail->satahba_next =
-			    (struct sata_hba_inst *)NULL;
+			    NULL;
 		}
 	} else {
 		sata_hba_inst->satahba_prev->satahba_next =

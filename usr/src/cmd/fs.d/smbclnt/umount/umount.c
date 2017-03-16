@@ -74,7 +74,7 @@ main(int argc, char *argv[])
 	 * it adds SYS_MOUNT privilege here (if needed), and then
 	 * restores the user's normal privileges.
 	 */
-	if (__init_suid_priv(0, PRIV_SYS_MOUNT, (char *)NULL) < 0) {
+	if (__init_suid_priv(0, PRIV_SYS_MOUNT, NULL) < 0) {
 		(void) fprintf(stderr,
 		    gettext("Insufficient privileges, "
 		    "%s must be set-uid root\n"), argv[0]);

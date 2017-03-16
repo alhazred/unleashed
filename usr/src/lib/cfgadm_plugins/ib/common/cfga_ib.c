@@ -1330,7 +1330,7 @@ cfga_private_func(const char *func, const char *ap_id, const char *options,
 
 		/* return error if no options are specified */
 		subopts = (char *)options;
-		if (subopts == (char *)NULL) {
+		if (subopts == NULL) {
 			DPRINTF("cfga_private_func: no sub-options\n");
 			(void) cfga_help(msgp, options, flags);
 			return (ib_err_msg(errstring, CFGA_IB_INVAL_ARG_ERR,
@@ -2122,6 +2122,6 @@ ib_get_devicepath(const char *ap_id)
 
 	} else {
 		DPRINTF("ib_get_devicepath: get device path ioctl failed\n");
-		return ((char *)NULL);
+		return (NULL);
 	}
 }

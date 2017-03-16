@@ -427,7 +427,7 @@ static char	*attrFilter[] = {
 	"objectclass",
 	"nispublickey",
 	"nissecretkey",
-	(char *)NULL
+	NULL
 };
 
 

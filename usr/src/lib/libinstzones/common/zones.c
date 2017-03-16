@@ -180,7 +180,7 @@ boolean_t
 z_create_zone_admin_file(char *a_zoneAdminFilename, char *a_userAdminFilename)
 {
 	FILE	*zFp;
-	FILE	*uFp = (FILE *)NULL;
+	FILE	*uFp = NULL;
 
 	/* entry assertions */
 
@@ -190,19 +190,19 @@ z_create_zone_admin_file(char *a_zoneAdminFilename, char *a_userAdminFilename)
 	/* create temporary zone admin file */
 
 	zFp = fopen(a_zoneAdminFilename, "w");
-	if (zFp == (FILE *)NULL) {
+	if (zFp == NULL) {
 		return (B_FALSE);
 	}
 
 	/* open user admin file if specified */
 
-	if (a_userAdminFilename != (char *)NULL) {
+	if (a_userAdminFilename != NULL) {
 		uFp = fopen(a_userAdminFilename, "r");
 	}
 
 	/* create default admin file for zone pkg ops if no user admin file */
 
-	if (uFp == (FILE *)NULL) {
+	if (uFp == NULL) {
 		/* create default admin file */
 		(void) fprintf(zFp, "action=nocheck\nauthentication=nocheck\n"
 		    "basedir=default\nconflict=nocheck\nidepend=nocheck\n"
@@ -217,7 +217,7 @@ z_create_zone_admin_file(char *a_zoneAdminFilename, char *a_userAdminFilename)
 		/* read next line of user admin file */
 
 		p = fgets(buf, sizeof (buf), uFp);
-		if (p == (char *)NULL) {
+		if (p == NULL) {
 			(void) fclose(uFp);
 			break;
 		}
@@ -311,7 +311,7 @@ z_free_zone_list(zoneList_t a_zlst)
 
 	/* free each entry in the zone list */
 
-	for (numzones = 0; a_zlst[numzones]._zlName != (char *)NULL;
+	for (numzones = 0; a_zlst[numzones]._zlName != NULL;
 	    numzones++) {
 		zoneListElement_t *zelm = &a_zlst[numzones];
 
@@ -321,7 +321,7 @@ z_free_zone_list(zoneList_t a_zlst)
 
 		/* free zonepath string */
 
-		if (zelm->_zlPath != (char *)NULL) {
+		if (zelm->_zlPath != NULL) {
 			free(zelm->_zlPath);
 		}
 
@@ -752,7 +752,7 @@ z_lock_zones(zoneList_t a_zlst, ZLOCKS_T a_lflags)
 	 * lock each listed zone that is currently running
 	 */
 
-	for (i = 0; (a_zlst[i]._zlName != (char *)NULL); i++) {
+	for (i = 0; (a_zlst[i]._zlName != NULL); i++) {
 		/* ignore zone if already locked */
 		if (a_zlst[i]._zlStatus & ZST_LOCKED) {
 			continue;
@@ -832,9 +832,9 @@ z_mount_in_lz(char **r_lzMountPoint, char **r_lzRootPath, char *a_zoneName,
 
 	/* entry assertions */
 
-	assert(a_zoneName != (char *)NULL);
+	assert(a_zoneName != NULL);
 	assert(*a_zoneName != '\0');
-	assert(a_gzPath != (char *)NULL);
+	assert(a_gzPath != NULL);
 	assert(*a_gzPath != '\0');
 	assert(r_lzMountPoint != (char **)NULL);
 	assert(r_lzRootPath != (char **)NULL);
@@ -845,8 +845,8 @@ z_mount_in_lz(char **r_lzMountPoint, char **r_lzRootPath, char *a_zoneName,
 
 	/* reset returned non-global zone mount point path handle */
 
-	*r_lzMountPoint = (char *)NULL;
-	*r_lzRootPath = (char *)NULL;
+	*r_lzMountPoint = NULL;
+	*r_lzRootPath = NULL;
 
 	/* if zones are not implemented, return FALSE */
 
@@ -915,7 +915,7 @@ z_mount_in_lz(char **r_lzMountPoint, char **r_lzRootPath, char *a_zoneName,
 
 	hretime = gethrtime();
 
-	thetime = time((time_t *)NULL);
+	thetime = time(NULL);
 	(void) localtime_r(&thetime, &tstruct);
 
 	slen = snprintf(uuid, sizeof (uuid),
@@ -973,7 +973,7 @@ z_mount_in_lz(char **r_lzMountPoint, char **r_lzRootPath, char *a_zoneName,
 	/* mount the global zone path on the non-global zone root file system */
 
 	err = mount(a_gzPath, gzMountPoint, MS_RDONLY|MS_DATA, "lofs",
-	    (char *)NULL, 0, (char *)NULL, 0);
+	    NULL, 0, NULL, 0);
 	if (err != 0) {
 		_z_program_error(ERR_GZMOUNT_FAILED, a_gzPath,
 		    gzMountPoint, a_zoneName, strerror(errno));
@@ -1292,7 +1292,7 @@ z_umount_lz_mount(char *a_lzMountPoint)
 
 	/* entry assertions */
 
-	assert(a_lzMountPoint != (char *)NULL);
+	assert(a_lzMountPoint != NULL);
 	assert(*a_lzMountPoint != '\0');
 
 	/* entry debugging info */
@@ -1366,7 +1366,7 @@ z_unlock_this_zone(ZLOCKS_T a_lflags)
 
 	/* return if no objects locked */
 
-	if ((_z_global_data._z_ObjectLocks == (char *)NULL) ||
+	if ((_z_global_data._z_ObjectLocks == NULL) ||
 	    (*_z_global_data._z_ObjectLocks == '\0')) {
 		return (B_TRUE);
 	}
@@ -1446,7 +1446,7 @@ z_unlock_zones(zoneList_t a_zlst, ZLOCKS_T a_lflags)
 	 * unlock each listed zone that is currently running
 	 */
 
-	for (i = 0; (a_zlst[i]._zlName != (char *)NULL); i++) {
+	for (i = 0; (a_zlst[i]._zlName != NULL); i++) {
 		/* ignore zone if not locked */
 		if (!(a_zlst[i]._zlStatus & ZST_LOCKED)) {
 			continue;
@@ -1567,12 +1567,12 @@ z_zlist_change_zone_state(zoneList_t a_zlst, int a_zoneIndex,
 	/* find the specified zone in the list */
 
 	for (i = 0; (i != a_zoneIndex) &&
-	    (a_zlst[i]._zlName != (char *)NULL); i++)
+	    (a_zlst[i]._zlName != NULL); i++)
 		;
 
 	/* return error if the specified zone does not exist */
 
-	if (a_zlst[i]._zlName == (char *)NULL) {
+	if (a_zlst[i]._zlName == NULL) {
 		return (B_FALSE);
 	}
 
@@ -1722,12 +1722,12 @@ z_zlist_get_current_state(zoneList_t a_zlst, int a_zoneIndex)
 	/* find the specified zone in the list */
 
 	for (i = 0; (i != a_zoneIndex) &&
-	    (a_zlst[i]._zlName != (char *)NULL); i++)
+	    (a_zlst[i]._zlName != NULL); i++)
 		;
 
 	/* return error if the specified zone does not exist */
 
-	if (a_zlst[i]._zlName == (char *)NULL) {
+	if (a_zlst[i]._zlName == NULL) {
 		return (ZONE_STATE_INCOMPLETE);
 	}
 
@@ -1765,12 +1765,12 @@ z_zlist_get_original_state(zoneList_t a_zlst, int a_zoneIndex)
 	/* find the specified zone in the list */
 
 	for (i = 0; (i != a_zoneIndex) &&
-	    (a_zlst[i]._zlName != (char *)NULL); i++)
+	    (a_zlst[i]._zlName != NULL); i++)
 		;
 
 	/* return error if the specified zone does not exist */
 
-	if (a_zlst[i]._zlName == (char *)NULL) {
+	if (a_zlst[i]._zlName == NULL) {
 		return (ZONE_STATE_INCOMPLETE);
 	}
 
@@ -1834,18 +1834,18 @@ z_zlist_get_zonename(zoneList_t a_zlst, int a_zoneIndex)
 	/* ignore empty list */
 
 	if (a_zlst == (zoneList_t)NULL) {
-		return ((char *)NULL);
+		return (NULL);
 	}
 
 	/* find the specified zone in the list */
 
 	for (i = 0; (i != a_zoneIndex) &&
-	    (a_zlst[i]._zlName != (char *)NULL); i++)
+	    (a_zlst[i]._zlName != NULL); i++)
 		;
 
 	/* return error if the specified zone does not exist */
 
-	if (a_zlst[i]._zlName == (char *)NULL) {
+	if (a_zlst[i]._zlName == NULL) {
 		return (NULL);
 	}
 
@@ -1874,18 +1874,18 @@ z_zlist_get_zonepath(zoneList_t a_zlst, int a_zoneIndex)
 	/* ignore empty list */
 
 	if (a_zlst == (zoneList_t)NULL) {
-		return ((char *)NULL);
+		return (NULL);
 	}
 
 	/* find the specified zone in the list */
 
 	for (i = 0; (i != a_zoneIndex) &&
-	    (a_zlst[i]._zlName != (char *)NULL); i++)
+	    (a_zlst[i]._zlName != NULL); i++)
 		;
 
 	/* return error if the specified zone does not exist */
 
-	if (a_zlst[i]._zlName == (char *)NULL) {
+	if (a_zlst[i]._zlName == NULL) {
 		return (NULL);
 	}
 
@@ -1914,12 +1914,12 @@ z_zlist_is_zone_runnable(zoneList_t a_zlst, int a_zoneIndex)
 	/* find the specified zone in the list */
 
 	for (i = 0; (i != a_zoneIndex) &&
-	    (a_zlst[i]._zlName != (char *)NULL); i++)
+	    (a_zlst[i]._zlName != NULL); i++)
 		;
 
 	/* return error if the specified zone does not exist */
 
-	if (a_zlst[i]._zlName == (char *)NULL) {
+	if (a_zlst[i]._zlName == NULL) {
 		return (B_FALSE);
 	}
 
@@ -1976,12 +1976,12 @@ z_zlist_restore_zone_state(zoneList_t a_zlst, int a_zoneIndex)
 	/* find the specified zone in the list */
 
 	for (i = 0; (i != a_zoneIndex) &&
-	    (a_zlst[i]._zlName != (char *)NULL); i++)
+	    (a_zlst[i]._zlName != NULL); i++)
 		;
 
 	/* return error if the specified zone does not exist */
 
-	if (a_zlst[i]._zlName == (char *)NULL) {
+	if (a_zlst[i]._zlName == NULL) {
 		return (B_FALSE);
 	}
 
@@ -2001,17 +2001,17 @@ z_zlist_restore_zone_state(zoneList_t a_zlst, int a_zoneIndex)
  *			to be executed
  *		a_argv[] - Pointer to array of character strings representing
  *			the arguments to be passed to the Unix command. The list
- *			must be termianted with an element that is (char *)NULL
+ *			must be termianted with an element that is NULL
  *		NOTE: a_argv[0] is the "command name" passed to the command
  *		a_stdoutPath - Pointer to string representing the path to a file
  *			into which all output to "stdout" from the Unix command
  *			is placed.
- *			== (char *)NULL - leave stdout open and pass through
+ *			== NULL - leave stdout open and pass through
  *			== "/dev/null" - discard stdout output
  *		a_strerrPath - Pointer to string representing the path to a file
  *			into which all output to "stderr" from the Unix command
  *			is placed.
- *			== (char *)NULL - leave stderr open and pass through
+ *			== NULL - leave stderr open and pass through
  *			== "/dev/null" - discard stderr output
  *		a_fds - Pointer to array of integers representing file
  *			descriptors to remain open during the call - all
@@ -2124,7 +2124,7 @@ z_zone_exec(const char *a_zoneName, const char *a_path, char *a_argv[],
 		 * file to capture stdout from the _zexec process
 		 */
 
-		if (a_stdoutPath != (char *)NULL) {
+		if (a_stdoutPath != NULL) {
 			int	stdoutfd;
 
 			stdoutfd = open(a_stdoutPath,
@@ -2144,7 +2144,7 @@ z_zone_exec(const char *a_zoneName, const char *a_path, char *a_argv[],
 		 * file to capture stderr from the _zexec process
 		 */
 
-		if (a_stderrPath != (char *)NULL) {
+		if (a_stderrPath != NULL) {
 			int	stderrfd;
 
 			stderrfd = open(a_stderrPath,
@@ -2275,7 +2275,7 @@ z_zone_exec(const char *a_zoneName, const char *a_path, char *a_argv[],
 	nact.sa_flags = SA_RESTART;
 	(void) sigemptyset(&nact.sa_mask);
 
-	(void) sigaction(SIGINT, &nact, (struct sigaction *)NULL);
+	(void) sigaction(SIGINT, &nact, NULL);
 
 	/* reset SIGHUP */
 
@@ -2283,7 +2283,7 @@ z_zone_exec(const char *a_zoneName, const char *a_path, char *a_argv[],
 	nact.sa_flags = SA_RESTART;
 	(void) sigemptyset(&nact.sa_mask);
 
-	(void) sigaction(SIGHUP, &nact, (struct sigaction *)NULL);
+	(void) sigaction(SIGHUP, &nact, NULL);
 
 	/*
 	 * if signal received during command execution, interrupt

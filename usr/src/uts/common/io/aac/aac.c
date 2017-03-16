@@ -7258,7 +7258,7 @@ aac_config_lun(struct aac_softstate *softs, uint16_t tgt, uint8_t lun,
 	/* scsi_unprobe is blank now. Free buffer manually */
 	if (sd.sd_inq) {
 		kmem_free(sd.sd_inq, SUN_INQSIZE);
-		sd.sd_inq = (struct scsi_inquiry *)NULL;
+		sd.sd_inq = NULL;
 	}
 	return (rval);
 }

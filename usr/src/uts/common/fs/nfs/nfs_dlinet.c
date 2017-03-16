@@ -1642,7 +1642,7 @@ revarp_start(ldi_handle_t lh, struct netbuf *myaddr)
 	if (dl_phys_addr(lh, (uchar_t *)&myether, &addrlen, NULL) != 0 ||
 	    addrlen != ETHERADDRL) {
 		/* Fallback using per-node address */
-		(void) localetheraddr((struct ether_addr *)NULL, &myether);
+		(void) localetheraddr(NULL, &myether);
 		cmn_err(CE_CONT, "?DLPI failed to get Ethernet address. Using "
 		    "system wide Ethernet address %s\n",
 		    ether_sprintf(&myether));

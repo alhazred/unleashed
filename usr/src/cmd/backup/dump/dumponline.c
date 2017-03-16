@@ -354,7 +354,7 @@ activepass()
 		old = archivefile;
 
 		ext = strstr(old, defext);
-		if (ext != (char *)NULL)
+		if (ext != NULL)
 			*ext = '\0'; /* just want the base name */
 
 		/* The two is for the trailing \0 and rounding up log10() */

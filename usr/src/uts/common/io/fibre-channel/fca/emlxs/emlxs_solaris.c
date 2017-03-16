@@ -9688,7 +9688,7 @@ emlxs_send_els_rsp(emlxs_port_t *port, emlxs_buf_t *sbp)
 	}
 
 	/* Initalize iocbq */
-	iocbq->node = (void *)NULL;
+	iocbq->node = NULL;
 	if ((rval = EMLXS_SLI_PREP_ELS_IOCB(port, sbp)) != FC_SUCCESS) {
 
 		if (rval == 0xff) {
@@ -9706,7 +9706,7 @@ emlxs_send_els_rsp(emlxs_port_t *port, emlxs_buf_t *sbp)
 	mutex_enter(&sbp->mtx);
 	sbp->ticks = hba->timer_tics + pkt->pkt_timeout +
 	    ((pkt->pkt_timeout > 0xff) ? 0 : 10);
-	sbp->node = (void *) NULL;
+	sbp->node = NULL;
 	sbp->lun = EMLXS_LUN_NONE;
 	sbp->class = iocb->ULPCLASS;
 	sbp->did = did;

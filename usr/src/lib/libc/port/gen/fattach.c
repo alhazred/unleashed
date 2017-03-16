@@ -82,7 +82,7 @@ fattach(int fildes, const char *path)
 			}
 			path = buf;
 		}
-		return (mount((char *)NULL, path, MS_DATA|MS_NOMNTTAB,
+		return (mount(NULL, path, MS_DATA|MS_NOMNTTAB,
 		    (const char *)"namefs", (char *)&namefdp,
 		    sizeof (struct namefd), NULL, 0));
 	} else if (s == 0) {

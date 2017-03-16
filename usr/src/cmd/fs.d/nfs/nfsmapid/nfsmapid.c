@@ -332,7 +332,7 @@ main(int argc, char **argv)
 	 */
 #ifndef	DEBUG
 	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET,
-	    DAEMON_UID, DAEMON_GID, PRIV_SYS_NFS, (char *)NULL) == -1) {
+	    DAEMON_UID, DAEMON_GID, PRIV_SYS_NFS, NULL) == -1) {
 		(void) fprintf(stderr, gettext("%s PRIV_SYS_NFS privilege "
 			"missing\n"), MyName);
 		exit(1);
@@ -349,9 +349,8 @@ main(int argc, char **argv)
 	 * XXX This restriction will go away once we stop holding
 	 * XXX open_owner lock across rfscalls!
 	 */
-	(void) priv_set(PRIV_OFF, PRIV_PERMITTED,
-		PRIV_FILE_LINK_ANY, PRIV_PROC_SESSION,
-		(char *)NULL);
+	(void) priv_set(PRIV_OFF, PRIV_PERMITTED, PRIV_FILE_LINK_ANY,
+	    PRIV_PROC_SESSION, NULL);
 
 #ifndef DEBUG
 	daemonize();

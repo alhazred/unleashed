@@ -5783,7 +5783,7 @@ monitor_node_status(void *arg)
 		(void) pthread_mutex_unlock(&monitor_mutex);
 		if (err == ETIMEDOUT) { /* woke up from sleep */
 			(void) ptree_walk_tree_by_class(chassish,
-				PICL_CLASS_FRU, (void *)NULL, monitor_fru);
+				PICL_CLASS_FRU, NULL, monitor_fru);
 		}
 	} while (fini_called == 0);
 	return (NULL);

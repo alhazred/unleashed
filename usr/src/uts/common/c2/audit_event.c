@@ -1742,7 +1742,7 @@ aus_mount(struct t_audit_data *tad)
 		if (copyin((caddr_t)dataptr,
 		    STRUCT_BUF(nfsargs),
 		    MIN(uap->datalen, STRUCT_SIZE(nfsargs)))) {
-			/* DEBUG debug_enter((char *)NULL); */
+			/* DEBUG debug_enter(NULL); */
 			goto mount_free_fstype;
 		}
 		hostname = kmem_alloc(MAXNAMELEN, KM_SLEEP);

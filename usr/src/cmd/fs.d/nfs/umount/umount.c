@@ -327,8 +327,7 @@ retry:
 		clnt_control(cl, CLSET_RETRY_TIMEOUT, (char *)&timeout);
 		timeout.tv_sec = 25;
 		rpc_stat = clnt_call(cl, MOUNTPROC_UMNT, xdr_dirpath,
-		    (char *)&list[i].path, xdr_void, (char *)NULL,
-		    timeout);
+		    (char *)&list[i].path, xdr_void, NULL, timeout);
 		AUTH_DESTROY(cl->cl_auth);
 		clnt_destroy(cl);
 		if (rpc_stat == RPC_PROGVERSMISMATCH && vers == MOUNTVERS) {

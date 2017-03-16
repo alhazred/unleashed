@@ -3143,7 +3143,7 @@ defaults()
 	/*
 	 * get HZ value for environment
 	 */
-	if ((hz = getenv("HZ")) == (char *)NULL)
+	if ((hz = getenv("HZ")) == NULL)
 		(void) sprintf(hzname, "HZ=%d", HZ);
 	else
 		(void) snprintf(hzname, sizeof (hzname), "HZ=%s", hz);

@@ -129,7 +129,7 @@ static	csu_md_t m_info;
 		mode, 0600, vpp, CRCREAT, 0))
 #define	cpr_rdwr(rw, vp, basep, cnt)	(vn_rdwr(rw, vp,  (caddr_t)(basep), \
 		cnt, 0LL, UIO_SYSSPACE, 0, (rlim64_t)MAXOFF_T, CRED(), \
-		(ssize_t *)NULL))
+		NULL))
 
 /*
  * definitions for saving/restoring prom pages

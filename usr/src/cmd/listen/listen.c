@@ -482,8 +482,8 @@ net_open(void)
 
 	/* set up free call list and pending connection lists */
 
-	Free_call_p->cl_head = (struct callsave *) NULL;
-	Free_call_p->cl_tail = (struct callsave *) NULL;
+	Free_call_p->cl_head = NULL;
+	Free_call_p->cl_tail = NULL;
 
 	/* Pending calls are linked in a structure, one per fild descriptor */
 	if ((Priv_call = (struct call_list *) malloc(Ndesc *(sizeof(
@@ -542,8 +542,8 @@ struct call_list *head;
 struct callsave *cp;
 {
 	DEBUG((9,"in queue"));
-	if (head->cl_tail == (struct callsave *) NULL) {
-		cp->c_np = (struct callsave *) NULL;
+	if (head->cl_tail == NULL) {
+		cp->c_np = NULL;
 		head->cl_head = head->cl_tail = cp;
 	}
 	else {
@@ -565,8 +565,8 @@ pqueue(head, cp)
 struct call_list *head;
 struct callsave *cp;
 {
-	if (head->cl_head == (struct callsave *) NULL) {
-		cp->c_np = (struct callsave *) NULL;
+	if (head->cl_head == NULL) {
+		cp->c_np = NULL;
 		head->cl_head = head->cl_tail = cp;
 	}
 	else {
@@ -590,18 +590,18 @@ struct call_list *head;
 	struct callsave *ret;
 
 	DEBUG((9,"in dequeue"));
-	if (head->cl_head == (struct callsave *) NULL)  {
+	if (head->cl_head == NULL)  {
 #ifdef OLD
 		DEBUG((9,"cl_head = null"));
 		error(E_CANT_HAPPEN, EXIT);
 #endif
 		DEBUG((9, "NULL return"));
-		return((struct callsave *) NULL);
+		return(NULL);
 	}
 	ret = head->cl_head;
 	head->cl_head = ret->c_np;
-	if (head->cl_head == (struct callsave *) NULL)
-		head->cl_tail = (struct callsave *) NULL;
+	if (head->cl_head == NULL)
+		head->cl_tail = NULL;
 	return(ret);
 }
 
@@ -1632,13 +1632,13 @@ pitchcall(struct call_list *pending, struct t_discon *discon)
 		return;
 	}
 	p = pending->cl_head;
-	oldp = (struct callsave *) NULL;
+	oldp = NULL;
 	while (p) {
 		if (p->c_cp->sequence == discon->sequence) {
-			if (oldp == (struct callsave *) NULL) {
+			if (oldp == NULL) {
 				pending->cl_head = p->c_np;
-				if (pending->cl_head == (struct callsave *) NULL) {
-					pending->cl_tail = (struct callsave *) NULL;
+				if (pending->cl_head == NULL) {
+					pending->cl_tail = NULL;
 				}
 			}
 			else if (p == pending->cl_tail) {
@@ -1699,7 +1699,7 @@ dbf_t *dbp;
 
 		/* call stoa - convert from rfs address to netbuf */
 
-		if (stoa(lstr, &netbuf) == (struct netbuf *)NULL)  {
+		if (stoa(lstr, &netbuf) == NULL)  {
 			DEBUG((9,"stoa returned null, errno = %d\n",errno));
 			error(1, E_MALLOC);
 			return(-1);
@@ -1740,8 +1740,8 @@ dbf_t *dbp;
 	temp_pend = Priv_call + bindfd;
 	dbp->dbf_fd = bindfd;
 	dbp->dbf_maxcon = maxcon;
-	temp_pend->cl_head = (struct callsave *) NULL;
-	temp_pend->cl_tail = (struct callsave *) NULL;
+	temp_pend->cl_head = NULL;
+	temp_pend->cl_tail = NULL;
 	for (j=0; j < maxcon; ++j)  {
 		if ((tmp = (struct callsave *) malloc(sizeof(struct callsave))) == NULL)  {
 			error (E_MALLOC, NOCORE | EXIT);
@@ -1957,7 +1957,7 @@ dbf_t *dbp;
 	netbuf.maxlen = 0;
 	netbuf.len = 0;
 	strcpy(lstr, dbp->dbf_prv_adr);
-	if (stoa(lstr, &netbuf) == (struct netbuf *)NULL)  {
+	if (stoa(lstr, &netbuf) == NULL)  {
 		DEBUG((9,"stoa returned null, errno = %d\n",errno));
 		error(1, E_MALLOC);
 		return;

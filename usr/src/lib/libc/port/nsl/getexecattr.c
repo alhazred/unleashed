@@ -113,7 +113,7 @@ str2execattr(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 	}
 
 	/* quick exit do not entry fill if not needed */
-	if (ent == (void *)NULL)
+	if (ent == NULL)
 		return (NSS_STR_PARSE_SUCCESS);
 
 	exec->name = _strtok_escape(buffer, sep, &last);

@@ -521,7 +521,7 @@ kbtrans_streams_key(
 			upper->kbtrans_streams_abort_state = ABORT_NORMAL;
 			if (state == KEY_PRESSED &&
 			    key == (kbtrans_key_t)kp->k_abort2) {
-				abort_sequence_enter((char *)NULL);
+				abort_sequence_enter(NULL);
 				return;
 			} else {
 				kbtrans_processkey(lower,
@@ -534,7 +534,7 @@ kbtrans_streams_key(
 			upper->kbtrans_streams_abort_state = ABORT_NORMAL;
 			if (state == KEY_PRESSED &&
 			    key == (kbtrans_key_t)kp->k_newabort2) {
-				abort_sequence_enter((char *)NULL);
+				abort_sequence_enter(NULL);
 				kbtrans_processkey(lower,
 				    upper->kbtrans_streams_callback,
 				    upper->kbtrans_streams_new_abort1_key,

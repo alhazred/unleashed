@@ -131,7 +131,7 @@ char *argv[];
 
 	/* Initializations */
 
-	localep = (char *)NULL;
+	localep = NULL;
 	num_msgs = 0;
 	iflag   = 0;
 	oflag   = 0;
@@ -389,7 +389,7 @@ char	*localdir;
 		return(0);
 	*path = '\0';
 	while( (dirp = strtok(s1, "/")) != NULL ) {
-		s1 = (char *)NULL;
+		s1 = NULL;
 		(void)strcat(path, "/");
 		(void)strcat(path, dirp);
 		if (access(path, 3) == 0)

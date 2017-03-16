@@ -878,7 +878,7 @@ reinit:
 			reinit_cnt++;
 			if (server_handle)
 				kadm5_destroy((void *) server_handle);
-			server_handle = (void *)NULL;
+			server_handle = NULL;
 			handle = (kadm5_iprop_handle_t)NULL;
 
 			com_err(progname, retval, gettext(
@@ -948,7 +948,7 @@ reinit:
 				    "iprop_get_updates call failed");
 			if (server_handle)
 				kadm5_destroy((void *)server_handle);
-			server_handle = (void *)NULL;
+			server_handle = NULL;
 			handle = (kadm5_iprop_handle_t)NULL;
 			goto reinit;
 		}
@@ -976,7 +976,7 @@ reinit:
 					if (server_handle)
 						kadm5_destroy((void *)
 							server_handle);
-					server_handle = (void *)NULL;
+					server_handle = NULL;
 					handle = (kadm5_iprop_handle_t)NULL;
 					goto reinit;
 				}

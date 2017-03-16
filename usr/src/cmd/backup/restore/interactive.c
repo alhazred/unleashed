@@ -773,7 +773,7 @@ formatf(ap)
 		default:
 			(void) close(fds[1]);
 			output = fdopen(fds[0], "w");
-			if (output != (FILE *)NULL) {
+			if (output != NULL) {
 				break;
 			}
 			perror(gettext("could not open pipe to pager"));
@@ -821,7 +821,7 @@ formatf(ap)
 
 	if (paginating) {
 		(void) fclose(output);
-		(void) wait((int *)NULL);
+		(void) wait(NULL);
 	}
 }
 
@@ -961,7 +961,7 @@ setpagercmd()
 		return;
 
 	if (pager_len > 0) {
-		for (index = 0; pager_vector[index] != (char *)NULL; index += 1)
+		for (index = 0; pager_vector[index] != NULL; index += 1)
 			free(pager_vector[index]);
 		free(pager_vector);
 		free(pager_catenated);
@@ -984,11 +984,11 @@ setpagercmd()
 	catenate_length = setpagerargs(&nextarg) + strlen(pager_vector[0]) + 1;
 	pager_catenated = (char *)malloc(catenate_length *
 		(size_t)sizeof (char));
-	if (pager_catenated == (char *)NULL) {
+	if (pager_catenated == NULL) {
 		(void) fprintf(stderr, gettext("out of memory\n"));
 		done(1);
 	}
-	for (index = 0; pager_vector[index] != (char *)NULL; index += 1) {
+	for (index = 0; pager_vector[index] != NULL; index += 1) {
 		if (index > 0)
 			(void) strcat(pager_catenated, " ");
 		(void) strcat(pager_catenated, pager_vector[index]);
@@ -1007,7 +1007,7 @@ setpagerargs(source)
 	char	*cp = *source;
 	uint_t	length = 0;
 
-	while ((cp != (char *)NULL) && (*cp != '\0')) {
+	while ((cp != NULL) && (*cp != '\0')) {
 		cp = copynext(cp, word, sizeof (word));
 		if (dflag)
 			fprintf(stderr, gettext("got word `%s'\n"), word);
@@ -1018,14 +1018,14 @@ setpagerargs(source)
 			done(1);
 		}
 		pager_vector[pager_len - 1] = strdup(word);
-		if (pager_vector[pager_len - 1] == (char *)NULL) {
+		if (pager_vector[pager_len - 1] == NULL) {
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			done(1);
 		}
 		length += strlen(word) + 1;
 		pager_len += 1;
 	}
-	pager_vector[pager_len - 1] = (char *)NULL;
+	pager_vector[pager_len - 1] = NULL;
 	*source = cp;
 	return (length);
 }

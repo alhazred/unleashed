@@ -1104,7 +1104,7 @@ hs_parsehsvol(struct hsfs *fsp, uchar_t *volp, struct hs_volume *hvp)
 		return (EINVAL);
 	}
 	return (hs_parsedir(fsp, HSV_ROOT_DIR(volp), &hvp->root_dir,
-	    (char *)NULL, (int *)NULL, HDE_ROOT_DIR_REC_SIZE));
+	    NULL, NULL, HDE_ROOT_DIR_REC_SIZE));
 }
 
 /*
@@ -1321,7 +1321,7 @@ hs_parseisovol(struct hsfs *fsp, uchar_t *volp, struct hs_volume *hvp)
 		return (EINVAL);
 	}
 	return (hs_parsedir(fsp, ISO_ROOT_DIR(volp), &hvp->root_dir,
-	    (char *)NULL, (int *)NULL, IDE_ROOT_DIR_REC_SIZE));
+	    NULL, NULL, IDE_ROOT_DIR_REC_SIZE));
 }
 
 /*

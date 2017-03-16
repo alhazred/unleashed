@@ -734,7 +734,7 @@ struct dom_binding *binding;
 	struct ypmaplist *pmpl;
 	struct ypresp_maplist maplist;
 
-	maplist.list = (struct ypmaplist *)NULL;
+	maplist.list = NULL;
 
 	rpc_stat = clnt_call(binding->dom_client, YPPROC_MAPLIST,
 	    (xdrproc_t)xdr_ypdomain_wrap_string, (caddr_t)&domain,

@@ -205,7 +205,7 @@ static struct dev_ops consms_ops = {
 	consms_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&(cb_consms_ops),	/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	NULL,			/* devo_power */
 	ddi_quiesce_not_needed,		/* devo_quiesce */
 };

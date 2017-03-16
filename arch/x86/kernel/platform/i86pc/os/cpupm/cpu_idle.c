@@ -707,10 +707,10 @@ cpu_idle_init(cpu_t *cp)
 		mutex_enter(&cpu_idle_callb_mutex);
 		if (cpu_deep_idle_callb_id == (callb_id_t)0)
 			cpu_deep_idle_callb_id = callb_add(&cpu_deep_idle_callb,
-			    (void *)NULL, CB_CL_CPU_DEEP_IDLE, "cpu_deep_idle");
+			    NULL, CB_CL_CPU_DEEP_IDLE, "cpu_deep_idle");
 		if (cpu_idle_cpr_callb_id == (callb_id_t)0)
 			cpu_idle_cpr_callb_id = callb_add(&cpu_idle_cpr_callb,
-			    (void *)NULL, CB_CL_CPR_PM, "cpu_idle_cpr");
+			    NULL, CB_CL_CPR_PM, "cpu_idle_cpr");
 		mutex_exit(&cpu_idle_callb_mutex);
 
 

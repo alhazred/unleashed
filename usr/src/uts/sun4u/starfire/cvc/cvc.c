@@ -801,7 +801,7 @@ cvc_bbsram_ops(volatile unsigned char *op_reg)
 
 	switch (op) {
 	case CVC_BBSRAM_BREAK:		/* A console break (L1-A) */
-		abort_sequence_enter((char *)NULL);
+		abort_sequence_enter(NULL);
 		break;
 	case CVC_BBSRAM_DISCONNECT:	/* Break connection, hang up */
 		if (cvcinput_q && cvc_hangup_ok)

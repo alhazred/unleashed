@@ -281,7 +281,7 @@ main(int argc, char **argv)
 	nfile = argc;
 	argv = &argv[optind];
 	if (argc <= 0) {
-		execute((char *)NULL);
+		execute(NULL);
 	} else
 		while (--argc >= 0) {
 			execute(*argv);

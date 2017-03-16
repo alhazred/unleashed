@@ -153,7 +153,7 @@ _get_domain_name(char *cdn)
 const char *
 _strip_quotes(char *ipaddress)
 {
-	char	*cp = (char *)NULL;
+	char	*cp = NULL;
 
 	/* look for first " */
 	if ((cp = strchr(ipaddress, '"')) == NULL)

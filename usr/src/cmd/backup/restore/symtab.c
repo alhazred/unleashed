@@ -587,7 +587,7 @@ dumpsymtable(filename, checkpt)
 	struct symtableheader hdr;
 
 	vprintf(stdout, gettext("Check pointing the restore\n"));
-	if ((fp = safe_fopen(filename, "w", 0600)) == (FILE *)NULL) {
+	if ((fp = safe_fopen(filename, "w", 0600)) == NULL) {
 		perror("fopen");
 		(void) fprintf(stderr,
 		    gettext("cannot create save file %s for symbol table\n"),

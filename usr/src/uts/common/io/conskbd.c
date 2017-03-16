@@ -199,7 +199,7 @@ static struct dev_ops conskbd_ops = {
 	conskbd_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&(cb_conskbd_ops),	/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	NULL,			/* devo_power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

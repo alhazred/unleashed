@@ -246,7 +246,7 @@ usb_vprintf(dev_info_t *dip, int level, char *label, char *fmt, va_list ap)
 		    "%s%d", ddi_driver_name(dip), instance);
 	}
 
-	if (label == (char *)NULL) {
+	if (label == NULL) {
 		len = snprintf(usba_print_buf, USBA_PRINT_BUF_LEN, "\t");
 	} else if (usba_timestamp_dprintf) {
 		hrtime_t t = gethrtime();

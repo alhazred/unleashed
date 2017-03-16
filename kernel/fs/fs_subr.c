@@ -413,7 +413,7 @@ fs_poll(vnode_t *vp, short events, int anyyet, short *reventsp,
 		*reventsp |= POLLOUT;
 	if (events & POLLWRBAND)
 		*reventsp |= POLLWRBAND;
-	*phpp = !anyyet && !*reventsp ? &fs_pollhd : (struct pollhead *)NULL;
+	*phpp = !anyyet && !*reventsp ? &fs_pollhd : NULL;
 	return (0);
 }
 

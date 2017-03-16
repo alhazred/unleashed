@@ -2925,7 +2925,7 @@ vfs_mnttab_poll(timespec_t *old, struct pollhead **phpp)
 {
 	int changed;
 
-	*phpp = (struct pollhead *)NULL;
+	*phpp = NULL;
 
 	/*
 	 * Note: don't grab vfs list lock before accessing vfs_mnttab_mtime.

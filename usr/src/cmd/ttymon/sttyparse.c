@@ -554,7 +554,7 @@ parse_encoded(struct termios *cb
 	/* This is to fulfill PSARC/1999/140 TCR2. */
 	if (term & CSIW) {
 		r = strdup(s_arg);
-		if (r == (char *)NULL) {
+		if (r == NULL) {
 			(void) fprintf(stderr, gettext(
 			    "no more memory - try again later\n"));
 			return (0);

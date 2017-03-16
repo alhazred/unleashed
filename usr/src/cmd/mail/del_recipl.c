@@ -44,8 +44,8 @@ reciplist	*plist;
 	static char	pn[] = "del_reciplist";
 	recip		*r = &plist->recip_list;
 	Dout(pn, 0, "entered\n");
-	if (r->next != (struct recip *)NULL) {
-		for (r = r->next; r != (struct recip *)NULL; ) {
+	if (r->next != NULL) {
+		for (r = r->next; r != NULL; ) {
 			recip *old = r;
 			r = old->next;
 			free(old->name);

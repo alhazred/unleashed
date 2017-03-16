@@ -1226,7 +1226,7 @@ AllocStringBuffer(bufp, bufsiz, size)
 	unsigned int *bufsiz;
 	unsigned int size;
 {
-	return (GetStringAtOffset(bufp, bufsiz, size, (FILE *)NULL));
+	return (GetStringAtOffset(bufp, bufsiz, size, NULL));
 }
 
 /*

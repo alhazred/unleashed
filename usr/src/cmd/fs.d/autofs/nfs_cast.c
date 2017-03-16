@@ -198,8 +198,7 @@ nfs_cast(struct mapfs *mfs_in, struct mapfs **mfs_out, int timeout)
 				stat = RPC_CANTSEND;
 				goto done_broad;
 			}
-			if (t_bind(trans->tr_fd, (struct t_bind *)NULL,
-				(struct t_bind *)NULL) < 0) {
+			if (t_bind(trans->tr_fd, NULL, NULL) < 0) {
 				syslog(LOG_ERR, "nfscast: t_bind: %m");
 				stat = RPC_CANTSEND;
 				goto done_broad;
@@ -207,7 +206,7 @@ nfs_cast(struct mapfs *mfs_in, struct mapfs **mfs_out, int timeout)
 			trans->tr_taddr =
 				/* LINTED pointer alignment */
 			(struct t_bind *)t_alloc(trans->tr_fd, T_BIND, T_ADDR);
-			if (trans->tr_taddr == (struct t_bind *)NULL) {
+			if (trans->tr_taddr == NULL) {
 				syslog(LOG_ERR, "nfscast: t_alloc: %m");
 				stat = RPC_SYSTEMERROR;
 				goto done_broad;

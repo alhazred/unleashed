@@ -564,7 +564,7 @@ add_ctl_info(
 	 * Need to add the message block header as
 	 * an M_PROTO type message.
 	 */
-	if ((bp = allocb(sizeof (char), BPRI_MED)) == (mblk_t *)NULL) {
+	if ((bp = allocb(sizeof (char), BPRI_MED)) == NULL) {
 
 		/*
 		 * There are two reasons to disable the q:

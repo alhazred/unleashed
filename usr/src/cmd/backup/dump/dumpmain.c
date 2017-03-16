@@ -119,7 +119,7 @@ main(int argc, char *argv[])
 	 * If someone strips the set-uid bit, dump will still work for local
 	 * tapes.  Fail when we try to access a remote tape.
 	 */
-	(void) __init_suid_priv(0, PRIV_NET_PRIVADDR, (char *)NULL);
+	(void) __init_suid_priv(0, PRIV_NET_PRIVADDR, NULL);
 
 	if (sysinfo(SI_HOSTNAME, spcl.c_host, sizeof (spcl.c_host)) < 0) {
 		saverr = errno;
@@ -622,7 +622,7 @@ main(int argc, char *argv[])
 		char	*slashed;
 
 		slashed = (char *)malloc(strlen(disk) + 2);
-		if (slashed != (char *)NULL) {
+		if (slashed != NULL) {
 			(void) sprintf(slashed, "%c%s", '/', disk);
 			(void) rl_roll_log(slashed);
 			free(slashed);
@@ -784,7 +784,7 @@ restart:
 	/* XXX should sanity-check the super block before trusting/using it */
 
 	/* LINTED XXX time truncated - tolerate until tape format changes */
-	spcl.c_date = (time32_t)time((time_t *)NULL);
+	spcl.c_date = (time32_t)time(NULL);
 	bcopy(&(spcl.c_shadow), c_shadow_save, sizeof (c_shadow_save));
 
 	snapdate = is_fssnap_dump(disk);
@@ -1301,7 +1301,7 @@ timeclock(time32_t state)
 #endif /* DEBUG */
 
 	/* if we haven't setup the shared memory, init */
-	if (currentState == (int *)NULL) {
+	if (currentState == NULL) {
 		if ((fd = open("/dev/zero", O_RDWR)) < 0) {
 			saverr = errno;
 			msg(gettext("Cannot open `%s': %s\n"),
@@ -1622,7 +1622,7 @@ safe_fopen(const char *filename, const char *smode, int perms)
 	if (fd >= 0)
 		return (fdopen(fd, smode));
 
-	return ((FILE *)NULL);
+	return (NULL);
 }
 
 void

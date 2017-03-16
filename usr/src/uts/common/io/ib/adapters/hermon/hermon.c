@@ -507,7 +507,7 @@ hermon_close(dev_t dev, int flag, int otyp, cred_t *credp)
 		if (priv != NULL) {
 			reset_status = hermon_umap_db_handle_onclose_cb(priv);
 			kmem_free(priv, sizeof (hermon_umap_db_priv_t));
-			umapdb->hdbe_common.hdb_priv = (void *)NULL;
+			umapdb->hdbe_common.hdb_priv = NULL;
 		}
 
 		hermon_umap_db_free(umapdb);

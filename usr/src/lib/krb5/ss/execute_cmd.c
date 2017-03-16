@@ -93,7 +93,7 @@ static int check_request_table (rqtbl, argc, argv, sci_idx)
 		info->current_request = request->command_names[0];
 		(request->function)(argc, (const char *const *) argv,
 				    sci_idx,info->info_ptr);
-		info->current_request = (char *)NULL;
+		info->current_request = NULL;
 		return(0);
 	    }
     }

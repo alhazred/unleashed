@@ -577,7 +577,7 @@ main(int argc, char **argv)
 		printfile(stdin);
 	} else {
 		for (i = first_file; i < argc; i++) {
-			if ((infile = fopen(argv[i], "r")) == (FILE *)NULL) {
+			if ((infile = fopen(argv[i], "r")) == NULL) {
 				fatal("can't open %s for reading", argv[i]);
 				/*NOTREACHED*/
 			}
@@ -895,7 +895,7 @@ printpage(FILE *infile, FILE *outfile)
 		savestate(outfile);
 	}
 	for (; current.lineno < lines_per_page; ) {
-		if (fgetline(bufin, sizeof (bufin), infile) == (char *)NULL) {
+		if (fgetline(bufin, sizeof (bufin), infile) == NULL) {
 			if (elide)
 				process_elide(outfile);
 			return (1);
@@ -978,7 +978,7 @@ startpage(FILE *outfile)
 	if (logical_page == 0)
 		setuppage(outfile);
 	else
-		setcurrentfont((char *)NULL, outfile);
+		setcurrentfont(NULL, outfile);
 	(void) fprintf(outfile, "%s ", SET_WIDTHS);
 	(void) fprintf(outfile, "%d %f %d %d %s\n",
 	    rot_text, layoutp->scale, positions[logical_page].base_x,
@@ -1024,7 +1024,7 @@ setuppage(FILE *outfile)
 	int	begin, end, place;
 
 	(void) fprintf(outfile, "%%%%Page: ? %d\n", current.page_count + 1);
-	setcurrentfont((char *)NULL, outfile);
+	setcurrentfont(NULL, outfile);
 	if (layoutp->pages == 1)
 		return;
 
@@ -1417,8 +1417,8 @@ setup(void)
 	struct utsname	utsname;
 	struct passwd	*pw;
 
-	if ((p = getlogin()) == (char *)NULL) {
-		if ((pw = getpwuid(getuid())) == (struct passwd *)NULL)
+	if ((p = getlogin()) == NULL) {
+		if ((pw = getpwuid(getuid())) == NULL)
 			p = "Whoknows";
 		else
 			p = pw->pw_name;
@@ -1466,7 +1466,7 @@ fgetline(char *s, int n, FILE *iop)
 	 * Check out the special cases
 	 */
 	if ((ch = getc(iop)) == EOF)
-		return ((char *)NULL);
+		return (NULL);
 	if (ch == '\f') {
 		if ((ch = getc(iop)) != '\n') {
 			/*
@@ -1499,7 +1499,7 @@ fgetline(char *s, int n, FILE *iop)
 	}
 
 	if (ch == EOF && cs == s)		/* Nothing was read */
-		return ((char *)NULL);
+		return (NULL);
 	if (ch == '\f') {
 		if (ungetc(ch, iop) == EOF)
 			(void) fprintf(stderr, "fgetline - can't ungetc??\n");

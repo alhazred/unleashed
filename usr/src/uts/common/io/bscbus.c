@@ -1671,7 +1671,7 @@ bscbus_online(struct bscbus_state *ssp)
 	int err;
 
 	ssp->h8_handle = NULL;
-	ssp->h8_regs = (void *)NULL;
+	ssp->h8_regs = NULL;
 	ssp->per_channel_regs = B_FALSE;
 
 	if (ddi_dev_nregs(ssp->dip, &nregs) != DDI_SUCCESS)
@@ -1849,7 +1849,7 @@ failed2:
 		ddi_regs_map_free(&csp->ch_handle);
 	}
 	csp->ch_handle = NULL;
-	csp->ch_regs = (void *)NULL;
+	csp->ch_regs = NULL;
 failed1:
 	csp->map_count--;
 	mutex_exit(csp->ssp->ch_mutex);
@@ -1880,7 +1880,7 @@ bscbus_release_channel(struct bscbus_channel_state *csp)
 			ddi_regs_map_free(&csp->ch_handle);
 		}
 		csp->ch_handle = NULL;
-		csp->ch_regs = (void *)NULL;
+		csp->ch_regs = NULL;
 	}
 	csp->map_count--;
 	bscbus_trace(csp, 'C', "bscbus_release_channel",

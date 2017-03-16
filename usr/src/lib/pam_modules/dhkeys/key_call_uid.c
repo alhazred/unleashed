@@ -239,7 +239,7 @@ key_secretkey_is_set_uid(uid_t uid, gid_t gid)
 
 	(void) memset((void*)&kres, 0, sizeof (kres));
 
-	if (my_key_call((rpcproc_t)KEY_NET_GET, xdr_void, (char *)NULL,
+	if (my_key_call((rpcproc_t)KEY_NET_GET, xdr_void, NULL,
 			xdr_key_netstres, (char *)&kres, uid, gid) &&
 	    (kres.status == KEY_SUCCESS) &&
 	    (kres.key_netstres_u.knet.st_priv_key[0] != 0)) {
@@ -257,7 +257,7 @@ key_removesecret_g_uid(uid_t uid, gid_t gid)
 {
 	keystatus status;
 
-	if (my_key_call((rpcproc_t)KEY_CLEAR_3, xdr_void, (char *)NULL,
+	if (my_key_call((rpcproc_t)KEY_CLEAR_3, xdr_void, NULL,
 	    xdr_keystatus, (char *)&status, uid, gid))
 		return (-1);
 

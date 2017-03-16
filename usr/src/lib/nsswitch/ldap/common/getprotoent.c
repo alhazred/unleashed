@@ -43,7 +43,7 @@
 static const char *protocols_attrs[] = {
 	_P_NAME,
 	_P_PROTO,
-	(char *)NULL
+	NULL
 };
 
 typedef struct protocol_alias {

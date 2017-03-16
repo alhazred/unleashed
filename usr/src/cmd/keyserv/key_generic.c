@@ -169,7 +169,7 @@ char *servname;			/* name of the service */
 				continue;
 			}
 			l = (struct xlist *)malloc(sizeof (struct xlist));
-			if (l == (struct xlist *)NULL) {
+			if (l == NULL) {
 				(void) syslog(LOG_ERR,
 					    "svc_create: no memory");
 				SVC_DESTROY(xprt);

@@ -1060,7 +1060,7 @@ zone_graceful_shutdown(zlog_t *zlogp)
 		if (zone_enter(zoneid) == -1) {
 			_exit(errno);
 		}
-		_exit(execl("/bin/sh", "sh", "-c", cmdbuf, (char *)NULL));
+		_exit(execl("/bin/sh", "sh", "-c", cmdbuf, NULL));
 	}
 
 	if (contract_latest(&ct) == -1)

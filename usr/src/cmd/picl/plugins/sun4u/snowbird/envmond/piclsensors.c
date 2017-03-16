@@ -648,7 +648,7 @@ env_create_temp_sensor_node(picl_nodehdl_t parenth, uint8_t sensor_no)
 			sizeof (uint8_t), env_thresholds[i],
 			get_sensor_thr, set_sensor_thr,
 			sensorh, (picl_prophdl_t *)NULL,
-			(void *)NULL)) != PICL_SUCCESS) {
+			NULL)) != PICL_SUCCESS) {
 			(void) ptree_delete_node(sensorh);
 			(void) ptree_destroy_node(sensorh);
 			(void) close(sensor_fd);

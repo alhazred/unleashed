@@ -2105,7 +2105,7 @@ sata_get_devicepath(const char *ap_id)
 	if (rv == CFGA_SATA_OK) {
 		return (devpath);
 	} else {
-		return ((char *)NULL);
+		return (NULL);
 	}
 
 }

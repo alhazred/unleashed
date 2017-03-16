@@ -151,7 +151,7 @@ static struct dev_ops heci_dev_ops = {
 	heci_detach,		/* detach */
 	nodev,			/* reset */
 	&heci_cb_ops,		/* Driver Ops */
-	(struct bus_ops *)NULL,	/* Bus Operations */
+	NULL,	/* Bus Operations */
 	NULL,			/* power */
 	heci_quiesce		/* devo_quiesce */
 };

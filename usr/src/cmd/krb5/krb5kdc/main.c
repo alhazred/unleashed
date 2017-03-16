@@ -407,12 +407,12 @@ setup_signal_handlers(void)
     (void) sigemptyset(&s_action.sa_mask);
     s_action.sa_flags = 0;
     s_action.sa_handler = request_exit;
-    (void) sigaction(SIGINT, &s_action, (struct sigaction *) NULL);
-    (void) sigaction(SIGTERM, &s_action, (struct sigaction *) NULL);
+    (void) sigaction(SIGINT, &s_action, NULL);
+    (void) sigaction(SIGTERM, &s_action, NULL);
     s_action.sa_handler = request_hup;
-    (void) sigaction(SIGHUP, &s_action, (struct sigaction *) NULL);
+    (void) sigaction(SIGHUP, &s_action, NULL);
     s_action.sa_handler = SIG_IGN;
-    (void) sigaction(SIGPIPE, &s_action, (struct sigaction *) NULL);
+    (void) sigaction(SIGPIPE, &s_action, NULL);
 #else  /* POSIX_SIGNALS */
     signal(SIGINT, request_exit);
     signal(SIGTERM, request_exit);

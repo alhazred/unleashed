@@ -501,7 +501,7 @@ segvn_setvnode_mpss(vnode_t *vp)
 
 	if (vp->v_mpssdata == NULL) {
 		if (vn_vmpss_usepageio(vp)) {
-			err = fop_pageio(vp, (page_t *)NULL,
+			err = fop_pageio(vp, NULL,
 			    0, 0, 0, CRED(), NULL);
 		} else {
 			err = ENOSYS;
@@ -7751,7 +7751,7 @@ segvn_lockop(struct seg *seg, caddr_t addr, size_t len,
 				} else
 					locked_bytes += PAGESIZE;
 
-				if (lockmap != (ulong_t *)NULL)
+				if (lockmap != NULL)
 					BT_SET(lockmap, pos);
 
 				page_unlock(pp);

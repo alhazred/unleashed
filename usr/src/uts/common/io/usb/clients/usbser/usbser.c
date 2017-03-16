@@ -228,7 +228,7 @@ _init(void)
 {
 	int err;
 
-	mutex_init(&usbser_lock, NULL, MUTEX_DRIVER, (void *)NULL);
+	mutex_init(&usbser_lock, NULL, MUTEX_DRIVER, NULL);
 
 	if ((err = mod_install(&modlinkage)) != 0)
 		mutex_destroy(&usbser_lock);
@@ -735,7 +735,7 @@ usbser_init_soft_state(usbser_state_t *usp)
 	usp->us_lh = usb_alloc_log_hdl(usp->us_dip, "usbs[*].",
 	    &usbser_errlevel, &usbser_errmask, &usbser_instance_debug,
 	    0);
-	mutex_init(&usp->us_mutex, NULL, MUTEX_DRIVER, (void *)NULL);
+	mutex_init(&usp->us_mutex, NULL, MUTEX_DRIVER, NULL);
 
 	/* save state pointer for use in event callbacks */
 	ddi_set_driver_private(usp->us_dip, usp->us_statep);
@@ -842,7 +842,7 @@ usbser_attach_ports(usbser_state_t *usp)
 		    pp->port_lh_name, &usbser_errlevel, &usbser_errmask,
 		    &usbser_instance_debug, 0);
 
-		mutex_init(&pp->port_mutex, NULL, MUTEX_DRIVER, (void *)NULL);
+		mutex_init(&pp->port_mutex, NULL, MUTEX_DRIVER, NULL);
 		cv_init(&pp->port_state_cv, NULL, CV_DEFAULT, NULL);
 		cv_init(&pp->port_act_cv, NULL, CV_DEFAULT, NULL);
 		cv_init(&pp->port_car_cv, NULL, CV_DEFAULT, NULL);

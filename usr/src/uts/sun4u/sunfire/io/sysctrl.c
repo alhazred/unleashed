@@ -744,7 +744,7 @@ sysctrl_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 	 * Now add this soft state structure to the front of the linked list
 	 * of soft state structures.
 	 */
-	if (sys_list == (struct sysctrl_soft_state *)NULL) {
+	if (sys_list == NULL) {
 		mutex_init(&sslist_mutex, NULL, MUTEX_DEFAULT, NULL);
 	}
 	mutex_enter(&sslist_mutex);

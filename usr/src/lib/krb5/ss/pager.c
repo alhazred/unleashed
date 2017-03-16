@@ -102,8 +102,8 @@ void ss_page_stdin()
 		sigsetmask(mask);
 #endif
 	}
-	if (_ss_pager_name == (char *)NULL) {
-		if ((_ss_pager_name = getenv("PAGER")) == (char *)NULL)
+	if (_ss_pager_name == NULL) {
+		if ((_ss_pager_name = getenv("PAGER")) == NULL)
 			_ss_pager_name = MORE;
 	}
 	(void) execlp(_ss_pager_name, _ss_pager_name, (char *) NULL);

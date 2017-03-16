@@ -55,7 +55,7 @@ register		char *s;
 			1 :
 			(strlen(header[H_RECEIVED].tag) + 2)) );
 	}
-	if ((p = malloc(sizeof(struct hdrs))) == (char *)NULL) {
+	if ((p = malloc(sizeof(struct hdrs))) == NULL) {
 		errmsg(E_MEM,"malloc failed in pushlist()");
 		done(1);
 	}
@@ -70,7 +70,7 @@ register		char *s;
 		hdrtype, header[hdrtype].tag, contflg, s);
 
 	if (contflg) {
-		if (ohp == (struct hdrs *)NULL) {
+		if (ohp == NULL) {
 			/* This shouldn't happen.....? */
 			/* No headline of this type found so far. How */
 			/* did we think this is a continuation of something? */
@@ -97,7 +97,7 @@ register		char *s;
 		/* Since we ONLY walk down 'cont' chains, */
 		/* we only need forward links */
 		nextcont = ohp;
-		while (nextcont->cont != (struct hdrs *)NULL) {
+		while (nextcont->cont != NULL) {
 			nextcont = nextcont->cont;
 		}
 		/* Add this one to end of list... */
@@ -108,7 +108,7 @@ register		char *s;
 	/* link value from this header line to end of list for */
 	/* all header lines of the same type */
 
-	if (ohp == (struct hdrs *)NULL) {
+	if (ohp == NULL) {
 		/* Empty list so far. New element goes first */
 		hdrlines[hdrtype].head = hdrlines[hdrtype].tail = nhp;
 	} else {

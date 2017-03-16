@@ -125,7 +125,7 @@ kstr_close(vnode_t *vp, int fd)
 {
 	int ret;
 
-	if (vp == (vnode_t *)NULL && fd == -1)
+	if (vp == NULL && fd == -1)
 		return (EINVAL);
 
 	if (fd != -1) {
@@ -330,7 +330,7 @@ kstr_autopush(int op, major_t *maj, minor_t *min, minor_t *lastmin,
 			push.sap_lastminor = 0;
 
 		/* pain */
-		for (i = 0; i < MAXAPUSH && mods[i] != (char *)NULL; i++) {
+		for (i = 0; i < MAXAPUSH && mods[i] != NULL; i++) {
 			(void) strcpy(push.sap_list[i], mods[i]);
 		}
 		push.sap_npush = i;

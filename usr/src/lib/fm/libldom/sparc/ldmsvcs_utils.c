@@ -502,7 +502,7 @@ poller_loop(void *arg)
 		} else if (pipe_fd->revents & POLLIN) {
 			/* Receive a notification to exit */
 			channel_close(lsp);
-			pthread_exit((void *)NULL);
+			pthread_exit(NULL);
 		} else if (read_msg(lsp) != 0) {
 			/* fail to read a message from the LDOM manager */
 			(void) pthread_mutex_lock(&pollbase.mt);

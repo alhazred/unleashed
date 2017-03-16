@@ -68,7 +68,7 @@ main(int argc, char *argv[])
 		return (errno);
 	}
 
-	if (execl(EXECSHELL, "sh",  "-c", cmds, (char *)NULL) != 0) {
+	if (execl(EXECSHELL, "sh",  "-c", cmds, NULL) != 0) {
 		perror("execl: " EXECSHELL);
 		return (errno);
 	}

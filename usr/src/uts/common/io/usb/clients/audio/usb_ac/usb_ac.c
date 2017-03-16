@@ -2765,7 +2765,7 @@ usb_ac_teardown(usb_ac_state_t *uacp, usb_audio_eng_t *engine)
 
 	/* Send teardown command to usb_as */
 	if (usb_ac_send_as_cmd(uacp, engine, USB_AUDIO_TEARDOWN,
-	    (void *)NULL) != USB_SUCCESS) {
+	    NULL) != USB_SUCCESS) {
 
 		USB_DPRINTF_L2(PRINT_MASK_ALL, uacp->usb_ac_log_handle,
 		    "usb_ac_teardown: failure");
@@ -3154,7 +3154,7 @@ usb_ac_stop_play(usb_ac_state_t *uacp, usb_audio_eng_t *engine)
 
 	/* Send setup command to usb_as */
 	if (usb_ac_send_as_cmd(uacp, engine, USB_AUDIO_PAUSE_PLAY,
-	    (void *)NULL) != USB_SUCCESS) {
+	    NULL) != USB_SUCCESS) {
 
 		USB_DPRINTF_L2(PRINT_MASK_ALL, uacp->usb_ac_log_handle,
 		    "usb_ac_do_pause_play: failure");

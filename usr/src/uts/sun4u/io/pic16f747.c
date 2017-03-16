@@ -79,7 +79,7 @@ static struct dev_ops pic_dev_ops = {
 	pic_detach,
 	nulldev,		/* reset */
 	&pic_cb_ops,
-	(struct bus_ops *)NULL,
+	NULL,
 	nulldev,		/* power */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };
@@ -180,7 +180,7 @@ pic_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 	switch (cmd) {
 	case DDI_INFO_DEVT2DEVINFO:
 		if ((softc = getsoftc(inst)) == NULL) {
-			*result = (void *)NULL;
+			*result = NULL;
 			retval = DDI_FAILURE;
 		} else
 			*result = (void *)softc->dip;

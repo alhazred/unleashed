@@ -653,7 +653,7 @@ secpolicy_fs_common(cred_t *cr, vnode_t *mvp, const vfs_t *vfsp,
 			*needoptcheck = B_FALSE;
 
 		return (priv_policy_va(cr, PRIV_SYS_MOUNT, allzone, EPERM,
-		    NULL, KLPDARG_VNODE, mvp, (char *)NULL, KLPDARG_NOMORE));
+		    NULL, KLPDARG_VNODE, mvp, NULL, KLPDARG_NOMORE));
 	}
 
 	/*
@@ -706,7 +706,7 @@ secpolicy_fs_common(cred_t *cr, vnode_t *mvp, const vfs_t *vfsp,
 		}
 	}
 	return (priv_policy_va(cr, PRIV_SYS_MOUNT, allzone, EPERM,
-	    NULL, KLPDARG_VNODE, mvp, (char *)NULL, KLPDARG_NOMORE));
+	    NULL, KLPDARG_VNODE, mvp, NULL, KLPDARG_NOMORE));
 }
 
 void
@@ -901,8 +901,7 @@ int
 secpolicy_vnode_access(const cred_t *cr, vnode_t *vp, uid_t owner, mode_t mode)
 {
 	if ((mode & VREAD) && priv_policy_va(cr, PRIV_FILE_DAC_READ, B_FALSE,
-	    EACCES, NULL, KLPDARG_VNODE, vp, (char *)NULL,
-	    KLPDARG_NOMORE) != 0) {
+	    EACCES, NULL, KLPDARG_VNODE, vp, NULL, KLPDARG_NOMORE) != 0) {
 		return (EACCES);
 	}
 
@@ -914,8 +913,7 @@ secpolicy_vnode_access(const cred_t *cr, vnode_t *vp, uid_t owner, mode_t mode)
 		else
 			allzone = B_FALSE;
 		if (priv_policy_va(cr, PRIV_FILE_DAC_WRITE, allzone, EACCES,
-		    NULL, KLPDARG_VNODE, vp, (char *)NULL,
-		    KLPDARG_NOMORE) != 0) {
+		    NULL, KLPDARG_VNODE, vp, NULL, KLPDARG_NOMORE) != 0) {
 			return (EACCES);
 		}
 	}
@@ -928,7 +926,7 @@ secpolicy_vnode_access(const cred_t *cr, vnode_t *vp, uid_t owner, mode_t mode)
 		    PRIV_FILE_DAC_EXECUTE;
 
 		return (priv_policy_va(cr, p, B_FALSE, EACCES, NULL,
-		    KLPDARG_VNODE, vp, (char *)NULL, KLPDARG_NOMORE));
+		    KLPDARG_VNODE, vp, NULL, KLPDARG_NOMORE));
 	}
 	return (0);
 }
@@ -947,14 +945,14 @@ secpolicy_vnode_access2(const cred_t *cr, vnode_t *vp, uid_t owner,
 	if ((wantmode & VREAD) &&
 	    !PRIV_ISMEMBER(&CR_OEPRIV(cr), PRIV_FILE_READ) &&
 	    priv_policy_va(cr, PRIV_FILE_READ, B_FALSE, EACCES, NULL,
-	    KLPDARG_VNODE, vp, (char *)NULL, KLPDARG_NOMORE) != 0) {
+	    KLPDARG_VNODE, vp, NULL, KLPDARG_NOMORE) != 0) {
 		return (EACCES);
 	}
 
 	if ((wantmode & VWRITE) &&
 	    !PRIV_ISMEMBER(&CR_OEPRIV(cr), PRIV_FILE_WRITE) &&
 	    priv_policy_va(cr, PRIV_FILE_WRITE, B_FALSE, EACCES, NULL,
-	    KLPDARG_VNODE, vp, (char *)NULL, KLPDARG_NOMORE) != 0) {
+	    KLPDARG_VNODE, vp, NULL, KLPDARG_NOMORE) != 0) {
 		return (EACCES);
 	}
 
@@ -964,8 +962,7 @@ secpolicy_vnode_access2(const cred_t *cr, vnode_t *vp, uid_t owner,
 		return (0);
 
 	if ((mode & VREAD) && priv_policy_va(cr, PRIV_FILE_DAC_READ, B_FALSE,
-	    EACCES, NULL, KLPDARG_VNODE, vp, (char *)NULL,
-	    KLPDARG_NOMORE) != 0) {
+	    EACCES, NULL, KLPDARG_VNODE, vp, NULL, KLPDARG_NOMORE) != 0) {
 		return (EACCES);
 	}
 
@@ -977,8 +974,7 @@ secpolicy_vnode_access2(const cred_t *cr, vnode_t *vp, uid_t owner,
 		else
 			allzone = B_FALSE;
 		if (priv_policy_va(cr, PRIV_FILE_DAC_WRITE, allzone, EACCES,
-		    NULL, KLPDARG_VNODE, vp, (char *)NULL,
-		    KLPDARG_NOMORE) != 0) {
+		    NULL, KLPDARG_VNODE, vp, NULL, KLPDARG_NOMORE) != 0) {
 			return (EACCES);
 		}
 	}
@@ -991,7 +987,7 @@ secpolicy_vnode_access2(const cred_t *cr, vnode_t *vp, uid_t owner,
 		    PRIV_FILE_DAC_EXECUTE;
 
 		return (priv_policy_va(cr, p, B_FALSE, EACCES, NULL,
-		    KLPDARG_VNODE, vp, (char *)NULL, KLPDARG_NOMORE));
+		    KLPDARG_VNODE, vp, NULL, KLPDARG_NOMORE));
 	}
 	return (0);
 }
@@ -2078,7 +2074,7 @@ secpolicy_basic_exec(const cred_t *cr, vnode_t *vp)
 	FAST_BASIC_CHECK(cr, PRIV_PROC_EXEC);
 
 	return (priv_policy_va(cr, PRIV_PROC_EXEC, B_FALSE, EPERM, NULL,
-	    KLPDARG_VNODE, vp, (char *)NULL, KLPDARG_NOMORE));
+	    KLPDARG_VNODE, vp, NULL, KLPDARG_NOMORE));
 }
 
 int

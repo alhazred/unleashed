@@ -337,7 +337,7 @@ put_loopback_port(struct netbuf *addr, char *port)
 	 * patch in `port', and then adjust addr's len and maxlen
 	 * to reflect the change.
 	 */
-	if ((dot = strnrchr(addr->buf, '.', addr->len)) == (char *)NULL)
+	if ((dot = strnrchr(addr->buf, '.', addr->len)) == NULL)
 		return;
 
 	newlen = (int)((dot - addr->buf + 1) + strlen(port));

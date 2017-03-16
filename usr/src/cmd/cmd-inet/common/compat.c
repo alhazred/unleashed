@@ -62,7 +62,7 @@ get_compat_flag(char **value)
 			*value = strdup(cp);
 
 		/* close */
-		(void) defopen((char *)NULL);
+		(void) defopen(NULL);
 
 		if (*value != NULL) {
 			if (strcasecmp(*value, "IP_VERSION4") == 0) {

@@ -663,7 +663,7 @@ _validalias(char   *alias)			/* Alias to validate */
  *
  *  Returns:  struct devtabent *
  *	Pointer to the next record in the device table, or
- *	(struct devtabent *) NULL if it was unable to open the file or there
+ *	NULL if it was unable to open the file or there
  *	are no more records to read.  "errno" reflects the situation.  If
  *	errno is not changed and the function returns NULL, there are no more
  *	records to read.  If errno is set, it indicates the error.

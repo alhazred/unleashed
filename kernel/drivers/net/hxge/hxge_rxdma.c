@@ -1356,7 +1356,7 @@ hxge_rx_poll(void *arg, int bytes_to_pickup)
 
 	if (!ring->poll_flag) {
 		MUTEX_EXIT(&ring->lock);
-		return ((mblk_t *)NULL);
+		return (NULL);
 	}
 
 	/*

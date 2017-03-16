@@ -375,7 +375,7 @@ charswitch:	/* target of a goto 8-( */
 				}
 			}
 			wlen = wcslen(wbracket_str);
-			clen = wcstombs((char *)NULL, wbracket_str, 0);
+			clen = wcstombs(NULL, wbracket_str, 0);
 			if (clen == (size_t)-1) {
 				free(wbracket_str);
 				return (EOF);

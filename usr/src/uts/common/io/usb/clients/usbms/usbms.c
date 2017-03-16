@@ -1175,7 +1175,7 @@ usbms_ioctl(register queue_t	*q,
 			 * Hence there is no need for an explicit check here.
 			 */
 			freemsg(mp->b_cont);
-			mp->b_cont = (mblk_t *)NULL;
+			mp->b_cont = NULL;
 			qreply(q, mp);
 
 			return;
@@ -1201,7 +1201,7 @@ usbms_ioctl(register queue_t	*q,
 				break;
 			}
 			freemsg(mp->b_cont);
-			mp->b_cont = (mblk_t *)NULL;
+			mp->b_cont = NULL;
 			qreply(q, mp);
 
 			return;
@@ -1228,7 +1228,7 @@ usbms_ioctl(register queue_t	*q,
 				break;
 			}
 			freemsg(mp->b_cont);
-			mp->b_cont = (mblk_t *)NULL;
+			mp->b_cont = NULL;
 			qreply(q, mp);
 
 			return;
@@ -1255,7 +1255,7 @@ usbms_ioctl(register queue_t	*q,
 			}
 
 			freemsg(mp->b_cont);
-			mp->b_cont = (mblk_t *)NULL;
+			mp->b_cont = NULL;
 			qreply(q, mp);
 
 			return;
@@ -1442,11 +1442,11 @@ err:
 		mp->b_datap->db_type = M_IOCNAK;
 		if (mp->b_cont) {
 			freemsg(mp->b_cont);
-			mp->b_cont = (mblk_t *)NULL;
+			mp->b_cont = NULL;
 		}
 		if (copyresp->cp_private) {
 			freemsg((mblk_t *)copyresp->cp_private);
-			copyresp->cp_private = (mblk_t *)NULL;
+			copyresp->cp_private = NULL;
 		}
 		iocbp->ioc_count = 0;
 		iocbp->ioc_error = err;

@@ -44,7 +44,7 @@ strbreak(char *field[], int array_size, char *s, char *sep)
 	int	inquote;
 
 	qp = strchr(s, '"');
-	for (i = 0; i < array_size && (field[i] = strtok_r((i?(char *)NULL:s),
+	for (i = 0; i < array_size && (field[i] = strtok_r((i?NULL:s),
 	    sep, &lasts)); i++) {
 		/* empty */
 	}

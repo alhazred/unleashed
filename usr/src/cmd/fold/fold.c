@@ -151,8 +151,8 @@ main(int argc, char *argv[])
 			case 'w':
 				wflg++;
 				/* No required arg ? */
-				if ((optarg == (char *)NULL) ||
-					((optarg != (char *)NULL) &&
+				if ((optarg == NULL) ||
+					((optarg != NULL) &&
 					(*optarg == '-'))) {
 						(void) fprintf(stderr, "fold");
 						(void) fprintf(stderr, gettext(

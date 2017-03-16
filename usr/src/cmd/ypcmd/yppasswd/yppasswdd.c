@@ -589,7 +589,7 @@ validloginshell(char *pw_shell, char *arg, int privileged)
 				return (0);
 			}
 		}
-		(void) defopen((char *)NULL);
+		(void) defopen(NULL);
 	}
 
 	for (valid = getusershell(); valid; valid = getusershell())

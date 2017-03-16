@@ -175,7 +175,7 @@ showregs(uint_t type, struct regs *rp, caddr_t addr, uint_t mmu_fsr)
 	    trap_window[20], trap_window[21], trap_window[22], trap_window[23]);
 #endif /* TRAPWINDOW */
 	if (tudebug > 1 && (boothowto & RB_DEBUG)) {
-		debug_enter((char *)NULL);
+		debug_enter(NULL);
 	}
 	splx(s);
 }

@@ -200,8 +200,8 @@ typedef struct mbuf {
 
 #define	MGET(m, how, type) { \
 	m = smb_mbuf_alloc(); \
-	(m)->m_next = (struct mbuf *)NULL; \
-	(m)->m_nextpkt = (struct mbuf *)NULL; \
+	(m)->m_next = NULL; \
+	(m)->m_nextpkt = NULL; \
 	(m)->m_data = (m)->m_dat; \
 	(m)->m_flags = 0; \
 	(m)->m_type = (short)(type); \
@@ -210,8 +210,8 @@ typedef struct mbuf {
 #define	MGETHDR(m, how, type) { \
 	m = smb_mbuf_alloc(); \
 	(m)->m_type = (MT_HEADER); \
-	(m)->m_next = (struct mbuf *)NULL; \
-	(m)->m_nextpkt = (struct mbuf *)NULL; \
+	(m)->m_next = NULL; \
+	(m)->m_nextpkt = NULL; \
 	(m)->m_data = (m)->m_pktdat; \
 	(m)->m_flags = M_PKTHDR; \
 }

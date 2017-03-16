@@ -1575,7 +1575,7 @@ wait4result( LDAP *ld, int msgid, struct berval **servercredp, char *msg )
 
     while ( received_only_unsolicited ) {
 	res = NULL;
-	if (( rc = ldap_result( ld, msgid, 1, (struct timeval *)NULL, &res ))
+	if (( rc = ldap_result( ld, msgid, 1, NULL, &res ))
 		    == -1 ) {
 	    ldaptool_print_lderror( ld, msg, LDAPTOOL_CHECK4SSL_IF_APPROP );
 	    return( ldap_get_lderrno( ld, NULL, NULL ));

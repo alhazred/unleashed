@@ -53,7 +53,7 @@ static const char *pwd_attrs[] = {
 	_PWD_DESCRIPTION,
 	_PWD_HOMEDIRECTORY,
 	_PWD_LOGINSHELL,
-	(char *)NULL
+	NULL
 };
 
 /*

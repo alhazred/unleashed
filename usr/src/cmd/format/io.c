@@ -530,7 +530,7 @@ reprompt:
 			 * the first item in the list.
 			 */
 			s = find_string(param->io_slist, *deflt);
-			if (s == (char *)NULL) {
+			if (s == NULL) {
 				s = (param->io_slist)->str;
 			}
 			fmt_print("[%s]", s);
@@ -729,10 +729,10 @@ reprompt:
 				 */
 				s = find_string(param->io_slist, *deflt);
 				if ((cur_label == L_TYPE_EFI) &&
-				    (s == (char *)NULL)) {
+				    (s == NULL)) {
 					return (*deflt);
 				}
-				if (s == (char *)NULL) {
+				if (s == NULL) {
 					return ((param->io_slist)->value);
 				} else {
 					return (*deflt);
@@ -840,7 +840,7 @@ reprompt:
 		/*
 		 * Convert the token into an integer.
 		 */
-		if (geti(cleantoken, (int *)&bn, (int *)NULL))
+		if (geti(cleantoken, (int *)&bn, NULL))
 			break;
 		/*
 		 * Check to be sure it is within the legal bounds.
@@ -904,7 +904,7 @@ reprompt:
 		/*
 		 * Convert the token into an integer.
 		 */
-		if (geti(cleantoken, (int *)&bn, (int *)NULL))
+		if (geti(cleantoken, (int *)&bn, NULL))
 			break;
 		/*
 		 * Check to be sure it is within the legal bounds.
@@ -1364,7 +1364,7 @@ or g(gigabytes)\n");
 			 */
 
 			/* convert token to integer */
-			if (geti(cleantoken, &cylno, (int *)NULL)) {
+			if (geti(cleantoken, &cylno, NULL)) {
 				break;
 			}
 
@@ -1845,7 +1845,7 @@ find_string(slist, match_value)
 		}
 	}
 
-	return ((char *)NULL);
+	return (NULL);
 }
 
 /*

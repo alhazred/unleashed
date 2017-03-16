@@ -844,8 +844,8 @@ gem_init_rx_ring(struct gem_dev *dp)
 	dp->rx_active_head = (seqnum_t)0;
 	dp->rx_active_tail = (seqnum_t)0;
 
-	ASSERT(dp->rx_buf_head == (struct rxbuf *)NULL);
-	ASSERT(dp->rx_buf_tail == (struct rxbuf *)NULL);
+	ASSERT(dp->rx_buf_head == NULL);
+	ASSERT(dp->rx_buf_tail == NULL);
 }
 
 /*
@@ -914,7 +914,7 @@ gem_clean_rx_buf(struct gem_dev *dp)
 		/* recycle the rxbuf */
 		gem_free_rxbuf(rbp);
 	}
-	dp->rx_buf_tail = (struct rxbuf *)NULL;
+	dp->rx_buf_tail = NULL;
 
 	DPRINTF(2, (CE_CONT,
 	    "!%s: %s: %d buffers freeed, total: %d free",

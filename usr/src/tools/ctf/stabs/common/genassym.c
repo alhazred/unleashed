@@ -121,11 +121,11 @@ ga_parse_common(char *line, int min, int max, char **w1, char **w2, char **w3)
 		return (-1);
 
 	if (nread < 3 && wret[2] != NULL)
-		*wret[2] = (char *)NULL;
+		*wret[2] = NULL;
 	if (nread < 2 && wret[1] != NULL)
-		*wret[1] = (char *)NULL;
+		*wret[1] = NULL;
 	if (nread < 1 && wret[0] != NULL)
-		*wret[0] = (char *)NULL;
+		*wret[0] = NULL;
 
 	return (nread);
 }

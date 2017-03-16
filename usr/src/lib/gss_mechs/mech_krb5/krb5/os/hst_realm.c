@@ -226,17 +226,17 @@ krb5_get_host_realm(krb5_context context, const char *host, char ***realmsp)
 #ifdef DEBUG_REFERRALS
     printf("  local_host: %s\n",local_host);
 #endif
-    realm = (char *)NULL;
+    realm = NULL;
     temp_realm = 0;
     while (cp) {
 #ifdef DEBUG_REFERRALS
         printf("  trying to look up %s in the domain_realm map\n",cp);
 #endif
 	retval = profile_get_string(context->profile, "domain_realm", cp,
-				    0, (char *)NULL, &temp_realm);
+				    0, NULL, &temp_realm);
 	if (retval)
 	    return retval;
-	if (temp_realm != (char *)NULL)
+	if (temp_realm != NULL)
 	    break;	/* Match found */
 
 	/* Setup for another test */
@@ -262,7 +262,7 @@ krb5_get_host_realm(krb5_context context, const char *host, char ***realmsp)
         profile_release_string(temp_realm);
     }
 
-    if (realm == (char *)NULL) {
+    if (realm == NULL) {
         if (!(cp = (char *)malloc(strlen(KRB5_REFERRAL_REALM)+1)))
 	    return ENOMEM;
 	strcpy(cp, KRB5_REFERRAL_REALM);
@@ -270,7 +270,7 @@ krb5_get_host_realm(krb5_context context, const char *host, char ***realmsp)
     }
     
     if (!(retrealms = (char **)calloc(2, sizeof(*retrealms)))) {
-	if (realm != (char *)NULL)
+	if (realm != NULL)
 	    free(realm);
 	return ENOMEM;
     }
@@ -341,7 +341,7 @@ krb5_error_code KRB5_CALLCONV
 krb5_get_fallback_host_realm(krb5_context context, krb5_data *hdata, char ***realmsp)
 {
     char **retrealms;
-    char *realm = (char *)NULL, *cp;
+    char *realm = NULL, *cp;
     krb5_error_code retval;
     char local_host[MAXDNAME+1], host[MAXDNAME+1];
 
@@ -392,7 +392,7 @@ krb5_get_fallback_host_realm(krb5_context context, krb5_data *hdata, char ***rea
     }
 
       
-    if (realm == (char *)NULL) {
+    if (realm == NULL) {
         /* We are defaulting to the local realm */
         retval = krb5_get_default_realm(context, &realm);
         if (retval) {
@@ -400,7 +400,7 @@ krb5_get_fallback_host_realm(krb5_context context, krb5_data *hdata, char ***rea
         }
     }
     if (!(retrealms = (char **)calloc(2, sizeof(*retrealms)))) {
-	if (realm != (char *)NULL)
+	if (realm != NULL)
 	    free(realm);
 	return ENOMEM;
     }

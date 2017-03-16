@@ -162,7 +162,7 @@ klpd_unregister_id(void *handle, idtype_t type, id_t id)
 	int err;
 
 	err = syscall(SYS_privsys, PRIVSYS_KLPD_UNREG, p->kd_doorfd, id,
-	    (void *)NULL, 0L, type);
+	    NULL, 0L, type);
 	if (close(p->kd_doorfd) != 0)
 		err = -1;
 	free(p);

@@ -688,7 +688,7 @@ main(int argc, char *argv[])
 
 	/* Get rid of the most dangerous basic privileges. */
 	__fini_daemon_priv(PRIV_PROC_EXEC, PRIV_PROC_INFO, PRIV_PROC_SESSION,
-	    (char *)NULL);
+	    NULL);
 
 	svc_run();
 	syslog(LOG_ERR, "Error: svc_run shouldn't have returned");
@@ -3041,7 +3041,7 @@ umount(struct svc_req *rqstp)
 	cln_init(&cln, transp);
 
 	errno = 0;
-	if (!svc_sendreply(transp, xdr_void, (char *)NULL))
+	if (!svc_sendreply(transp, xdr_void, NULL))
 		log_cant_reply_cln(&cln);
 
 	host = cln_gethost(&cln);

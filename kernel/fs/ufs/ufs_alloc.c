@@ -155,8 +155,7 @@ alloc(struct inode *ip, daddr_t bpref, int size, daddr_t *bnp, cred_t *cr)
 	 * ignore the return because subtractions don't fail and
 	 * size is guaranteed to be >= zero by our caller.
 	 */
-	(void) chkdq(ip, -(long)btodb(size), 0, cr, (char **)NULL,
-	    (size_t *)NULL);
+	(void) chkdq(ip, -(long)btodb(size), 0, cr, (char **)NULL, NULL);
 
 nospace:
 	now = ddi_get_lbolt();
@@ -260,7 +259,7 @@ realloccg(struct inode *ip, daddr_t bprev, daddr_t bpref, int osize,
 	 * our caller guarantees nsize >= osize.
 	 */
 	(void) chkdq(ip, -(long)btodb(nsize - osize), 0, cr, (char **)NULL,
-	    (size_t *)NULL);
+	    NULL);
 
 nospace:
 	now = ddi_get_lbolt();
@@ -317,7 +316,7 @@ loop:
 	 */
 	if ((mode != IFSHAD) && (mode != IFATTRDIR)) {
 		err = chkiq((struct ufsvfs *)ITOV(pip)->v_vfsp->vfs_data,
-		    /* change */ 1, (struct inode *)NULL, crgetuid(cr), 0,
+		    /* change */ 1, NULL, crgetuid(cr), 0,
 		    cr, &errmsg, &len);
 		/*
 		 * As we haven't acquired any locks yet, dump the message
@@ -346,9 +345,8 @@ loop:
 			 * the disk due to an I/O error.  In that case,
 			 * the quota subsystem is already messed up.
 			 */
-			(void) chkiq(ufsvfsp, /* change */ -1,
-			    (struct inode *)NULL, crgetuid(cr), 0, cr,
-			    (char **)NULL, (size_t *)NULL);
+			(void) chkiq(ufsvfsp, /* change */ -1, NULL,
+			    crgetuid(cr), 0, cr, (char **)NULL, NULL);
 		}
 		goto noinodes;
 	}
@@ -359,9 +357,8 @@ loop:
 			 * See above comment about why it is safe to ignore an
 			 * error return here.
 			 */
-			(void) chkiq(ufsvfsp, /* change */ -1,
-			    (struct inode *)NULL, crgetuid(cr), 0, cr,
-			    (char **)NULL, (size_t *)NULL);
+			(void) chkiq(ufsvfsp, /* change */ -1, NULL,
+			    crgetuid(cr), 0, cr, (char **)NULL, NULL);
 		}
 		ufs_ifree(pip, ino, 0);
 		return (err);

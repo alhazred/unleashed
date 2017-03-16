@@ -303,13 +303,13 @@ cpqary3_init_pkt(struct scsi_address *sa, struct scsi_pkt *scsi_pktp,
 			    bp, flags, callback) == CPQARY3_FAILURE) {
 				if (new_scsi_pktp)
 					scsi_hba_pkt_free(sa, new_scsi_pktp);
-				return ((struct scsi_pkt *)NULL);
+				return (NULL);
 			}
 		} else {
 			ASSERT(new_scsi_pktp == NULL);
 			if (CPQARY3_FAILURE ==
 			    cpqary3_dma_move(scsi_pktp, bp, cpqary3p)) {
-				return ((struct scsi_pkt *)NULL);
+				return (NULL);
 			}
 		}
 	}

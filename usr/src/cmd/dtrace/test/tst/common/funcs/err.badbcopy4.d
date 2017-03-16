@@ -43,7 +43,7 @@ BEGIN
 	ptr = alloca(sizeof (int));
 
 	/* Attempt to copy from a NULL address */
-	bcopy((void *)NULL, ptr, sizeof (int));
+	bcopy(NULL, ptr, sizeof (int));
 	exit(0);
 }
 

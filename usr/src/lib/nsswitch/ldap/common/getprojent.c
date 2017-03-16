@@ -46,7 +46,7 @@ static const char *project_attrs[] = {
 	_PROJ_USERS,
 	_PROJ_GROUPS,
 	_PROJ_ATTR,
-	(char *)NULL
+	NULL
 };
 
 /*

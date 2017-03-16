@@ -2783,7 +2783,7 @@ blkatoff(
 	err = fbread(ITOV(ip), (offset_t)(offset & fs->fs_bmask),
 	    bsize, S_READ, &fbp);
 	if (err) {
-		*fbpp = (struct fbuf *)NULL;
+		*fbpp = NULL;
 		return (err);
 	}
 	if (res)

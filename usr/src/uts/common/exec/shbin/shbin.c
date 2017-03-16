@@ -180,7 +180,7 @@ shbinexec(
 		goto bad;
 	}
 
-	ASSERT(idatap == (struct intpdata *)NULL);
+	ASSERT(idatap == NULL);
 
 	/*
 	 * Check whether the executable has the correct magic value.

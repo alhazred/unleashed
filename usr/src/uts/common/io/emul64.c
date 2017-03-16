@@ -356,7 +356,7 @@ emul64_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	}
 
 	emul64 = (struct emul64 *)ddi_get_soft_state(emul64_state, instance);
-	if (emul64 == (struct emul64 *)NULL) {
+	if (emul64 == NULL) {
 		emul64_i_log(NULL, CE_WARN, "emul64%d: Bad soft state",
 		    instance);
 		ddi_soft_state_free(emul64_state, instance);

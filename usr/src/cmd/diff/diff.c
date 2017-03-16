@@ -1866,7 +1866,7 @@ filename(char **pa1, char **pa2, struct stat *st, char **ifile)
 	else
 		*ifile = strdup(*pa1);
 
-	if (*ifile == (char *)NULL) {
+	if (*ifile == NULL) {
 		(void) fprintf(stderr, gettext(
 			"no more memory - try again later\n"));
 		status = 2;
@@ -1884,7 +1884,7 @@ filename(char **pa1, char **pa2, struct stat *st, char **ifile)
 				a1 = b1;
 		*ifile = strdup(*pa1);
 
-		if (*ifile == (char *)NULL) {
+		if (*ifile == NULL) {
 			(void) fprintf(stderr, gettext(
 				"no more memory - try again later\n"));
 			status = 2;

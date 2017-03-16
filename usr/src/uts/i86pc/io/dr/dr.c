@@ -414,7 +414,7 @@ struct dev_ops dr_dev_ops = {
 	dr_detach,	/* detach */
 	nodev,		/* reset */
 	&dr_cb_ops,	/* cb_ops */
-	(struct bus_ops *)NULL, /* bus ops */
+	NULL, /* bus ops */
 	NULL,		/* power */
 	ddi_quiesce_not_needed,	/* quiesce */
 };
@@ -3032,7 +3032,7 @@ dr_pt_ioctl(dr_handle_t *hp)
 	sz = hp->h_opts.size;
 	copts = hp->h_opts.copts;
 
-	if (sz == 0 || copts == (char *)NULL) {
+	if (sz == 0 || copts == NULL) {
 		cmn_err(CE_WARN, "%s: invalid passthru args", f);
 		return (EINVAL);
 	}

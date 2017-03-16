@@ -96,7 +96,7 @@ ADM_Process_modem_setup()
 	/* Create Listening Thread */
 	ADM_Continue = 1;
 	if (pthread_create(&modemListen, NULL,
-	    (void * (*)(void *))ADM_Modem_Listen, (void *)NULL) != 0) {
+	    (void * (*)(void *))ADM_Modem_Listen, NULL) != 0) {
 		(void) fprintf(stderr, "\n%s\n\n",
 		    gettext("scadm: couldn't create thread"));
 		exit(-1);

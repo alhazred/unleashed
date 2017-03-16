@@ -181,7 +181,7 @@ _nsc_init_private_db(char *dblist)
 		return (0);
 	arrlen += 2;
 	nsc_db_buf = (char *)libc_malloc(buflen);
-	if (nsc_db_buf == (char *)NULL)
+	if (nsc_db_buf == NULL)
 		return (0);
 	nsc_db_list = (char **)libc_malloc(arrlen * sizeof (char *));
 	if (nsc_db_list == (char **)NULL) {

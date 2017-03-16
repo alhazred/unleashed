@@ -1778,12 +1778,12 @@ run_rule_commands(char *host, char **commands)
 		/* To control the processed targets list is not the child's business */
 		running_list = NULL;
 		if(out_err_same) {
-			redirect_io(stdout_file, (char*)NULL);
+			redirect_io(stdout_file, NULL);
 		} else {
 			redirect_io(stdout_file, stderr_file);
 		}
 		for (commands = commands;
-		     (*commands != (char *)NULL);
+		     (*commands != NULL);
 		     commands++) {
 			silent_flag = silent;
 			ignore = false;

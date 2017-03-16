@@ -378,7 +378,7 @@ addr2netname(namebuf, transp)
 	if ((who == NULL) || (who->len == 0))
 		return (-1);
 	if ((nconf = getnetconfigent(transp->xp_netid))
-		== (struct netconfig *)NULL)
+		== NULL)
 		return (-1);
 	if (netdir_getbyaddr(nconf, &hostservs, who) != 0) {
 		(void) freenetconfigent(nconf);

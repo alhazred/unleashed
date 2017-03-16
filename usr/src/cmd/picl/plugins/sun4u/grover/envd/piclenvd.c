@@ -982,7 +982,7 @@ envd_setup(void)
 		 * speed.
 		 */
 		if (envthr_created == B_FALSE && pthread_create(&envthr_tid,
-		    &thr_attr, envthr, (void *)NULL) != 0) {
+		    &thr_attr, envthr, NULL) != 0) {
 			envd_close_fans();
 			envd_close_sensors();
 			envd_log(LOG_CRIT, ENV_THREAD_CREATE_FAILED);
@@ -998,7 +998,7 @@ envd_setup(void)
 	if (pmthr_created == B_FALSE) {
 		pm_fd = open(PM_DEVICE, O_RDONLY);
 		if (pm_fd == -1 || pthread_create(&pmthr_tid, &thr_attr,
-		    pmthr, (void *)NULL) != 0) {
+		    pmthr, NULL) != 0) {
 			envd_close_pm();
 			envd_log(LOG_CRIT, PM_THREAD_CREATE_FAILED);
 		} else

@@ -57,7 +57,7 @@ static const char *services_attrs[] = {
 	_S_NAME,
 	_S_PORT,
 	_S_PROTOCOL,
-	(char *)NULL
+	NULL
 };
 
 void

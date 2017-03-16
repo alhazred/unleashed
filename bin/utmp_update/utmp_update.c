@@ -172,7 +172,7 @@ main(int argc, char *argv[])
 	}
 
 	err = 0;
-	for (rutmpx = getutxent(); rutmpx != (struct utmpx *)NULL;
+	for (rutmpx = getutxent(); rutmpx != NULL;
 	    rutmpx = getutxent()) {
 
 		if ((rutmpx->ut_type != USER_PROCESS) &&
@@ -195,7 +195,7 @@ main(int argc, char *argv[])
 		return (ILLEGAL_ARGUMENT);
 	}
 
-	if (pututxline(&entryx) == (struct utmpx *)NULL) {
+	if (pututxline(&entryx) == NULL) {
 		return (PUTUTXLINE_FAILURE);
 	}
 	return (NORMAL_EXIT);
@@ -324,7 +324,7 @@ check_utmpx(struct utmpx *entryx)
 
 	(void) strlcat(strcpy(buf, "/dev/"), entryx->ut_line, sizeof (buf));
 
-	if (pwd != (struct passwd *)NULL) {
+	if (pwd != NULL) {
 		uid = pwd->pw_uid;
 		/*
 		 * We nolonger permit the UID of the caller to be different

@@ -115,7 +115,7 @@ pvn_read_kluster(
 
 	if (pagesavail <= 0)
 		if (isra)
-			return ((page_t *)NULL);    /* ra case - give up */
+			return (NULL);    /* ra case - give up */
 		else
 			pagesavail = 1;		    /* must return a page */
 
@@ -141,11 +141,11 @@ pvn_read_kluster(
 	ASSERT(off >= vp_off && off < vp_end);
 
 	if (isra && segop_kluster(seg, addr, 0))
-		return ((page_t *)NULL);	/* segment driver says no */
+		return (NULL);	/* segment driver says no */
 
 	if ((plist = page_create_va(vp, off,
 	    PAGESIZE, PG_EXCL | PG_WAIT, seg, addr)) == NULL)
-		return ((page_t *)NULL);
+		return (NULL);
 
 	if (vp_len <= PAGESIZE || pvn_nofodklust) {
 		*offp = off;

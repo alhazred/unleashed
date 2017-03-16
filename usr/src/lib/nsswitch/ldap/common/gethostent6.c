@@ -53,7 +53,7 @@
 static const char *ipnodes_attrs[] = {
 	_H_NAME,
 	_H_ADDR,
-	(char *)NULL
+	NULL
 };
 
 extern int

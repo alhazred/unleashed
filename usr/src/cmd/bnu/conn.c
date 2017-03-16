@@ -248,7 +248,7 @@ char *buf;
 
 		/* may have ",M" subfield in D_LINE */
 		Modemctrl = FALSE;
-		if ( (commap = strchr(dev[D_LINE], ',')) != (char *)NULL ) {
+		if ( (commap = strchr(dev[D_LINE], ',')) != NULL ) {
 			if ( strcmp( commap, ",M") == SAME )
 				Modemctrl = TRUE;
 			*commap = '\0';
@@ -259,7 +259,7 @@ char *buf;
 		 * must be pulled off before comparing to desired type.
 		 */
 		(void)strcpy(d_type, dev[D_TYPE]);
-		if ((commap = strchr(d_type, ',')) != (char *)NULL )
+		if ((commap = strchr(d_type, ',')) != NULL )
 			*commap = '\0';
 
 		/* to force the requested device type to be used. */

@@ -1945,7 +1945,7 @@ sigdeq(proc_t *p, kthread_t *t, int sig, sigqueue_t **qpp)
 	*psqp = sqp->sq_next;
 	for (sqp = *psqp; sqp; sqp = sqp->sq_next) {
 		if (sqp->sq_info.si_signo == sig) {
-			if (t != (kthread_t *)NULL) {
+			if (t != NULL) {
 				sigaddset(&t->t_sig, sig);
 				t->t_sig_check = 1;
 			} else {
@@ -2025,7 +2025,7 @@ sigdelq(proc_t *p, kthread_t *t, int sig)
 	ASSERT(MUTEX_HELD(&p->p_lock) ||
 	    p->p_stat == SIDL || p->p_stat == SZOMB);
 
-	if (t != (kthread_t *)NULL)
+	if (t != NULL)
 		psqp = &t->t_sigqueue;
 	else
 		psqp = &p->p_sigqueue;

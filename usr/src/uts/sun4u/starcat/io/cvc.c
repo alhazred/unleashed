@@ -855,7 +855,7 @@ cvc_iosram_ops(uint8_t op)
 
 	switch (op) {
 		case CVC_IOSRAM_BREAK:		/* A console break (L1-A) */
-			abort_sequence_enter((char *)NULL);
+			abort_sequence_enter(NULL);
 			break;
 
 		case CVC_IOSRAM_DISCONNECT:	/* Break connection, hang up */

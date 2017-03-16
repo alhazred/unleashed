@@ -1564,7 +1564,7 @@ tpi_optcom_buf(queue_t *q, mblk_t *mp, t_scalar_t *opt_lenp,
 	opt_end = (struct T_opthdr *)((uchar_t *)opt_start
 	    + *opt_lenp);
 
-	if ((copy_mp_head = copyb(mp)) == (mblk_t *)NULL) {
+	if ((copy_mp_head = copyb(mp)) == NULL) {
 		error = ENOMEM;
 		goto error_ret;
 	}

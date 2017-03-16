@@ -166,7 +166,7 @@ static struct dev_ops sgenv_ops = {
 	sgenv_detach,		/* detach */
 	nodev,			/* reset */
 	&sgenv_cb_ops,		/* pointer to cb_ops structure */
-	(struct bus_ops *)NULL,
+	NULL,
 	nulldev,		/* power() */
 	ddi_quiesce_not_needed,		/* quiesce() */
 };
@@ -373,7 +373,7 @@ static const hpu_value_t hpus[] = {
 	HPU_ENTRY(SG_HPU_TYPE_K12_CPU_THREE_FAN_TRAY),
 	HPU_ENTRY(SG_HPU_TYPE_R24_IO_FOUR_FAN_TRAY),
 	HPU_ENTRY(SG_HPU_TYPE_R24_CPU_SIX_FAN_TRAY),
-	0,	(char *)NULL
+	0,	NULL
 };
 
 static const struct part_value parts[] = {
@@ -393,7 +393,7 @@ static const struct part_value parts[] = {
 	PART_VALUE(SG_SENSOR_PART_SCAPP),
 	PART_VALUE(SG_SENSOR_PART_SCHIZO),
 	PART_VALUE(SG_SENSOR_PART_FAN),
-	0,	(char *)NULL
+	0,	NULL
 };
 
 static const struct type_value types[] = {
@@ -407,7 +407,7 @@ static const struct type_value types[] = {
 	TYPE_VALUE(SG_SENSOR_TYPE_48_VDC, SG_48_VDC_SCALE),
 	TYPE_VALUE(SG_SENSOR_TYPE_ENVDB, 1),
 	TYPE_VALUE(SG_SENSOR_TYPE_COOLING, 1),
-	0,	(char *)NULL
+	0,	NULL
 };
 
 int
@@ -2110,7 +2110,7 @@ sgenv_handle_env_data_error(int err, int status, int key_posn,
 {
 	int	rv = DDI_SUCCESS;
 
-	ASSERT(str != (char *)NULL);
+	ASSERT(str != NULL);
 
 	switch (err) {
 	case ENXIO:
@@ -2490,13 +2490,13 @@ sgenv_get_hpu_id_str(uint_t hpu_type)
 {
 	const hpu_value_t *hpu_list = hpus;
 
-	while (hpu_list->name != (char *)NULL) {
+	while (hpu_list->name != NULL) {
 		if (hpu_list->value == hpu_type)
 			return (hpu_list->IDstr);
 		else
 			hpu_list++;
 	}
-	return ((char *)NULL);
+	return (NULL);
 }
 
 
@@ -2509,13 +2509,13 @@ sgenv_get_part_str(uint_t sensor_part)
 {
 	const part_value_t *part_list = parts;
 
-	while (part_list->name != (char *)NULL) {
+	while (part_list->name != NULL) {
 		if (part_list->value == sensor_part)
 			return (part_list->name);
 		else
 			part_list++;
 	}
-	return ((char *)NULL);
+	return (NULL);
 }
 
 
@@ -2528,13 +2528,13 @@ sgenv_get_type_str(uint_t sensor_type)
 {
 	const type_value_t *type_list = types;
 
-	while (type_list->name != (char *)NULL) {
+	while (type_list->name != NULL) {
 		if (type_list->value == sensor_type)
 			return (type_list->name);
 		else
 			type_list++;
 	}
-	return ((char *)NULL);
+	return (NULL);
 }
 
 

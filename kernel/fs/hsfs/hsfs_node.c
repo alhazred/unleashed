@@ -322,13 +322,12 @@ hs_getfree(struct hsfs *fsp)
 				 * pvn_vplist_dirty will abort all old pages
 				 */
 				(void) pvn_vplist_dirty(vp, 0,
-				    hsfs_putapage, B_INVAL,
-				    (struct cred *)NULL);
+				    hsfs_putapage, B_INVAL, NULL);
 			*tp = hp->hs_hash;
 			break;
 		}
 	}
-	if (hp->hs_dirent.sym_link != (char *)NULL) {
+	if (hp->hs_dirent.sym_link != NULL) {
 		kmem_free(hp->hs_dirent.sym_link,
 		    (size_t)(hp->hs_dirent.ext_size + 1));
 	}
@@ -463,8 +462,7 @@ hs_synchash(struct vfs *vfsp)
 			}
 			if (vn_has_cached_data(vp))
 				(void) pvn_vplist_dirty(vp, 0,
-				    hsfs_putapage, B_INVAL,
-				    (struct cred *)NULL);
+				    hsfs_putapage, B_INVAL, NULL);
 		}
 	}
 	if (busy) {
@@ -558,7 +556,7 @@ hs_makenode(
 	 */
 	if (dp->inode != 0 && use_rrip_inodes) {
 		nodeid = dp->inode;
-	} else if ((dp->ext_size == 0 || dp->sym_link != (char *)NULL) &&
+	} else if ((dp->ext_size == 0 || dp->sym_link != NULL) &&
 	    (fsp->hsfs_flags & HSFSMNT_INODE) == 0) {
 		nodeid = HS_DUMMY_INO;
 	} else {
@@ -593,7 +591,7 @@ hs_makenode(
 			 * We've just copied this pointer into hs_dirent,
 			 * and don't want 2 references to same symlink.
 			 */
-			dp->sym_link = (char *)NULL;
+			dp->sym_link = NULL;
 
 			/*
 			 * No need to hold any lock because hsnode is not
@@ -638,9 +636,9 @@ hs_makenode(
 		}
 	}
 
-	if (dp->sym_link != (char *)NULL) {
+	if (dp->sym_link != NULL) {
 		kmem_free(dp->sym_link, (size_t)(dp->ext_size + 1));
-		dp->sym_link = (char *)NULL;
+		dp->sym_link = NULL;
 	}
 
 	rw_exit(&fsp->hsfs_hash_lock);
@@ -679,7 +677,7 @@ hs_freenode(vnode_t *vp, struct hsfs *fsp, int nopage)
 			}
 		}
 
-		if (hp->hs_dirent.sym_link != (char *)NULL) {
+		if (hp->hs_dirent.sym_link != NULL) {
 			kmem_free(hp->hs_dirent.sym_link,
 			    (size_t)(hp->hs_dirent.ext_size + 1));
 			hp->hs_dirent.sym_link = NULL;
@@ -687,7 +685,7 @@ hs_freenode(vnode_t *vp, struct hsfs *fsp, int nopage)
 		if (vn_has_cached_data(vp)) {
 			/* clean all old pages */
 			(void) pvn_vplist_dirty(vp, 0,
-			    hsfs_putapage, B_INVAL, (struct cred *)NULL);
+			    hsfs_putapage, B_INVAL, NULL);
 			/* XXX - can we remove pages by fiat like this??? */
 			vp->v_pages = NULL;
 		}
@@ -737,7 +735,7 @@ hs_remakenode(uint_t lbn, uint_t off, struct vfs *vfsp,
 	}
 
 	dirp = (uchar_t *)secbp->b_un.b_addr;
-	error = hs_parsedir(fsp, &dirp[off], &hd, (char *)NULL, (int *)NULL,
+	error = hs_parsedir(fsp, &dirp[off], &hd, NULL, NULL,
 	    HS_SECTOR_SIZE - off);
 	if (!error) {
 		*vpp = hs_makenode(&hd, lbn, off, vfsp);
@@ -942,7 +940,7 @@ hs_parsedir(
 	hdp->xar_len = HDE_XAR_LEN(dirp);
 	hdp->intlf_sz = HDE_INTRLV_SIZE(dirp);
 	hdp->intlf_sk = HDE_INTRLV_SKIP(dirp);
-	hdp->sym_link = (char *)NULL;
+	hdp->sym_link = NULL;
 
 	if (fsp->hsfs_vol_type == HS_VOL_TYPE_HS) {
 		flags = HDE_FLAGS(dirp);
@@ -1009,13 +1007,12 @@ hs_parsedir(
 		if (IS_SUSP_IMPLEMENTED(fsp)) {
 			error = parse_sua((uchar_t *)dnp, dnlen,
 			    &name_change_flag, dirp, last_offset,
-			    hdp, fsp,
-			    (uchar_t *)NULL, 0);
+			    hdp, fsp, NULL, 0);
 			if (error) {
 				if (hdp->sym_link) {
 					kmem_free(hdp->sym_link,
 					    (size_t)(hdp->ext_size + 1));
-					hdp->sym_link = (char *)NULL;
+					hdp->sym_link = NULL;
 				}
 				return (error);
 			}
@@ -1428,8 +1425,8 @@ hs_filldirent(struct vnode *vp, struct hs_direntry *hdp)
 		cmn_err(CE_NOTE, "hsfs_filldirent: dirent not match");
 		/* keep on going */
 	}
-	(void) hs_parsedir(fsp, &secp[secoff], hdp, (char *)NULL,
-	    (int *)NULL, HS_SECTOR_SIZE - secoff);
+	(void) hs_parsedir(fsp, &secp[secoff], hdp, NULL,
+	    NULL, HS_SECTOR_SIZE - secoff);
 
 end:
 	brelse(secbp);
@@ -1568,7 +1565,7 @@ process_dirblock(
 			if (hd.sym_link) {
 				kmem_free(hd.sym_link,
 				    (size_t)(hd.ext_size+1));
-				hd.sym_link = (char *)NULL;
+				hd.sym_link = NULL;
 			}
 
 			if (rr_namelen != -1) {
@@ -1651,8 +1648,7 @@ process_dirblock(
 
 		if ((res = bcmp(dname, nm, nmlen)) == 0) {
 			/* name matches */
-			parsedir_res = hs_parsedir(fsp, dirp, &hd,
-			    (char *)NULL, (int *)NULL,
+			parsedir_res = hs_parsedir(fsp, dirp, &hd, NULL, NULL,
 			    last_offset - *offset);
 			if (!parsedir_res) {
 				uint_t lbn;	/* logical block number */

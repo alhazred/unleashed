@@ -61,7 +61,7 @@ alloc_string(char *s)
 {
 	char	*ns;
 
-	if (s == (char *)NULL) {
+	if (s == NULL) {
 		ns = (char *)calloc(1, 1);
 	} else {
 		ns = (char *)calloc(1, strlen(s) + 1);

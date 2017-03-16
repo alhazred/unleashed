@@ -361,7 +361,7 @@ hsfs_readlink(struct vnode *vp,
 
 	hp = VTOH(vp);
 
-	if (hp->hs_dirent.sym_link == (char *)NULL)
+	if (hp->hs_dirent.sym_link == NULL)
 		return (ENOENT);
 
 	return (uiomove(hp->hs_dirent.sym_link,
@@ -593,7 +593,7 @@ hsfs_readdir(
 				if (hd.inode != 0 && use_rrip_inodes) {
 					dirino = hd.inode;
 				} else if ((hd.ext_size == 0 ||
-				    hd.sym_link != (char *)NULL) &&
+				    hd.sym_link != NULL) &&
 				    (fsp->hsfs_flags & HSFSMNT_INODE) == 0) {
 					dirino = HS_DUMMY_INO;
 				} else {
@@ -614,10 +614,10 @@ hsfs_readdir(
 				/*
 				 * free up space allocated for symlink
 				 */
-				if (hd.sym_link != (char *)NULL) {
+				if (hd.sym_link != NULL) {
 					kmem_free(hd.sym_link,
 					    (size_t)(hd.ext_size+1));
-					hd.sym_link = (char *)NULL;
+					hd.sym_link = NULL;
 				}
 			}
 			offset += hdlen;

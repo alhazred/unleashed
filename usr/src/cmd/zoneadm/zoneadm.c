@@ -1460,7 +1460,7 @@ do_subproc(char *cmdbuf)
 	int pid, child, status;
 
 	if ((child = vfork()) == 0) {
-		(void) execl("/bin/sh", "sh", "-c", cmdbuf, (char *)NULL);
+		(void) execl("/bin/sh", "sh", "-c", cmdbuf, NULL);
 	}
 
 	if (child == -1)

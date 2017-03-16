@@ -149,7 +149,7 @@ _readchar()
 			infd = 1 << cur_term->_inputfd;
 			t.tv_sec = cur_term->_delay / 1000;
 			t.tv_usec = (cur_term->_delay % 1000) * 1000;
-			i = select(20, &infd, (int *)NULL, (int *)NULL, &t);
+			i = select(20, &infd, NULL, NULL, &t);
 			if (i < 0)
 				return (ERR);
 			i = read(cur_term->_inputfd, &c, 1);
@@ -571,7 +571,7 @@ _fpk()
 	struct timeval	t;
 
 	infd = 1 << cur_term->_inputfd;
-	outfd = exfd = (int *)NULL;
+	outfd = exfd = NULL;
 	t.tv_sec = 0;
 	t.tv_usec = 100000;		/* 100 milliseconds */
 	rc = select(20, &infd, outfd, exfd, &t);

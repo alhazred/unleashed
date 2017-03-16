@@ -65,7 +65,7 @@ main(int argc, char **argv)
 		exit(0);
 	}
 
-	if ((dfltp = malloc(strlen(argv[2] + 1))) == (char *)NULL) {
+	if ((dfltp = malloc(strlen(argv[2] + 1))) == NULL) {
 		(void) fprintf(stderr, gettext("malloc failed\n"));
 		exit(1);
 	}

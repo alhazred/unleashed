@@ -1391,7 +1391,7 @@ in_dq_drv(in_drv_t *mp)
 		return;
 	}
 	prev = node->in_drivers;
-	for (ptr = prev->ind_next_drv; ptr != (struct in_drv *)NULL;
+	for (ptr = prev->ind_next_drv; ptr != NULL;
 	    ptr = ptr->ind_next_drv) {
 		if (ptr == mp) {
 			prev->ind_next_drv = ptr->ind_next_drv;

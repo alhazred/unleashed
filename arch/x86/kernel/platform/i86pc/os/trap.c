@@ -1141,7 +1141,7 @@ trap(struct regs *rp, caddr_t addr, processorid_t cpuid)
 		}
 		/* XXX - needs review on debugger interface? */
 		if (boothowto & RB_DEBUG)
-			debug_enter((char *)NULL);
+			debug_enter(NULL);
 		else
 			(void) die(type, rp, addr, cpuid);
 		break;

@@ -125,7 +125,7 @@ static struct dev_ops glvc_ops = {
 	glvc_detach,		/* detach */
 	nodev,			/* reset */
 	&glvc_cb_ops,		/* pointer to cb_ops structure */
-	(struct bus_ops *)NULL,
+	NULL,
 	nulldev,		/* power() */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

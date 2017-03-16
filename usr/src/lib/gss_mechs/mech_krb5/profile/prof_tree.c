@@ -358,7 +358,7 @@ errcode_t profile_find_node_subsection(struct profile_node *section,
 	errcode_t	retval;
 
 	/* Solaris Kerberos */
-	if (section == (struct profile_node *)NULL)
+	if (section == NULL)
 		return (PROF_NO_PROFILE);
 
 	retval = profile_find_node(section, name, 0, 1, state, &p);

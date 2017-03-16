@@ -19,7 +19,7 @@ struct	ipopt_names	v6ionames[] ={
 	{ IPPROTO_AH,		0x000020,	0,	"ah" },
 	{ IPPROTO_NONE,		0x000040,	0,	"none" },	
 	{ IPPROTO_DSTOPTS,	0x000080,	0,	"dstopts" },
-	{ 0, 			0,		0,	(char *)NULL }
+	{ 0, 			0,		0,	NULL }
 };
 
 #endif

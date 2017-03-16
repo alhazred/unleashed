@@ -72,7 +72,7 @@ main(int argc, char **argv)
 	char	*tail;
 	char	*last;
 	FILE	*in_file = NULL;
-	FILE	*out_file = (FILE *)NULL;
+	FILE	*out_file = NULL;
 	int	i;
 	int	c;
 	wint_t	wc;

@@ -264,7 +264,7 @@ loop:
 		 */
 		error = ufs_rdwri(UIO_READ, FREAD, qip, (caddr_t)&dqp->dq_dqb,
 		    sizeof (struct dqblk), dqoff(uid), UIO_SYSSPACE,
-		    (int *)NULL, kcred);
+		    NULL, kcred);
 		/*
 		 * We must set the dq_mof even if not we are not logging in case
 		 * we are later remount to logging.
@@ -435,7 +435,7 @@ dqupdate(dqp)
 					(caddr_t)&dqp->dq_dqb,
 					sizeof (struct dqblk),
 					dqoff(dqp->dq_uid), UIO_SYSSPACE,
-					(int *)NULL, kcred);
+					NULL, kcred);
 		}
 		rw_exit(&qip->i_contents);
 	}

@@ -183,7 +183,7 @@ dtree_pop(cstack_t *stp)
 	int err;
 	stack_ent_t *sp;
 
-	err = cstack_pop(stp, (void **)&sp, (void *)NULL);
+	err = cstack_pop(stp, (void **)&sp, NULL);
 	if (err)
 		return (-1);
 
@@ -204,7 +204,7 @@ dtree_peek(cstack_t *stp)
 	int err;
 	stack_ent_t *sp;
 
-	err = cstack_top(stp, (void **)&sp, (void *)NULL);
+	err = cstack_top(stp, (void **)&sp, NULL);
 	if (err)
 		return (NULL);
 

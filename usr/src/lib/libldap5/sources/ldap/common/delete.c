@@ -146,7 +146,7 @@ ldap_delete_ext_s( LDAP *ld, const char *dn, LDAPControl **serverctrls,
 		return( err );
 	}
 
-	if ( ldap_result( ld, msgid, 1, (struct timeval *)NULL, &res ) == -1 ) {
+	if ( ldap_result( ld, msgid, 1, NULL, &res ) == -1 ) {
 		return( LDAP_GET_LDERRNO( ld, NULL, NULL ) );
 	}
 

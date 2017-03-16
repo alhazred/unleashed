@@ -104,8 +104,8 @@ getauclassent_r(au_class_ent_t *au_class_entry)
 	au_class_t	v;
 
 	if (au_class_entry == (au_class_ent_t *)NULL ||
-	    au_class_entry->ac_name == (char *)NULL ||
-	    au_class_entry->ac_desc == (char *)NULL) {
+	    au_class_entry->ac_name == NULL ||
+	    au_class_entry->ac_desc == NULL) {
 		return (NULL);
 	}
 

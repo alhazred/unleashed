@@ -1168,7 +1168,7 @@ fas_dr_detach(dev_info_t *dip)
 	if (fas_head == fas) {
 		f = fas_head = fas->f_next;
 	} else {
-		for (f = fas_head; f != (struct fas *)NULL; f = f->f_next) {
+		for (f = fas_head; f != NULL; f = f->f_next) {
 			if (f->f_next == fas) {
 				f->f_next = fas->f_next;
 				break;
@@ -1181,7 +1181,7 @@ fas_dr_detach(dev_info_t *dip)
 		 * enable interrupts, the instance is effectively
 		 * unusable.
 		 */
-		if (f == (struct fas *)NULL) {
+		if (f == NULL) {
 			cmn_err(CE_WARN, "fas_dr_detach: fas instance not"
 			    " in softc list!");
 			rw_exit(&fas_global_rwlock);
@@ -1243,7 +1243,7 @@ fas_dr_detach(dev_info_t *dip)
 	 * last fas? ... if active, CANCEL watch threads.
 	 */
 	mutex_enter(&fas_global_mutex);
-	if (fas_head == (struct fas *)NULL) {
+	if (fas_head == NULL) {
 		if (fas_timeout_initted) {
 			timeout_id_t tid = fas_timeout_id;
 			fas_timeout_initted = 0;
@@ -1298,7 +1298,7 @@ fas_dr_detach(dev_info_t *dip)
 		kmem_cache_destroy(fas->f_kmem_cache);
 	}
 
-	if (fas->f_cmdarea != (uchar_t *)NULL) {
+	if (fas->f_cmdarea != NULL) {
 		(void) ddi_dma_unbind_handle(fas->f_dmahandle);
 		ddi_dma_mem_free(&fas->f_cmdarea_acc_handle);
 	}
@@ -2181,7 +2181,7 @@ fas_scsi_init_pkt(struct scsi_address *ap, struct scsi_pkt *pkt,
 			}
 			TRACE_0(TR_FAC_SCSI_FAS, TR_FAS_SCSI_IMPL_DMAGET_END,
 			    "fas_scsi_impl_dmaget_end");
-			return ((struct scsi_pkt *)NULL);
+			return (NULL);
 		}
 		ASSERT(dmacookie_count == 1);
 		cmd->cmd_dmacount = bp->b_bcount;
@@ -6941,7 +6941,7 @@ fas_create_arq_pkt(struct fas *fas, struct scsi_address *ap)
 	 * drivers to use SENSE_LENGTH
 	 * Allocate a request sense packet.
 	 */
-	bp = scsi_alloc_consistent_buf(ap, (struct buf *)NULL,
+	bp = scsi_alloc_consistent_buf(ap, NULL,
 	    SENSE_LENGTH, B_READ, SLEEP_FUNC, NULL);
 	rqpktp = PKT2CMD(scsi_init_pkt(ap,
 	    NULL, bp, CDB_GROUP0, 1, PKT_PRIV_LEN,
@@ -7194,7 +7194,7 @@ fas_watch(void *arg)
 
 	rw_enter(&fas_global_rwlock, RW_READER);
 
-	for (fas = fas_head; fas != (struct fas *)NULL; fas = fas->f_next) {
+	for (fas = fas_head; fas != NULL; fas = fas->f_next) {
 
 		mutex_enter(FAS_MUTEX(fas));
 		IPRINTF2("ncmds=%x, ndisc=%x\n", fas->f_ncmds, fas->f_ndisc);
@@ -8386,7 +8386,7 @@ fas_watch_reset_delay(void *arg)
 	mutex_exit(&fas_global_mutex);
 
 	rw_enter(&fas_global_rwlock, RW_READER);
-	for (fas = fas_head; fas != (struct fas *)NULL; fas = fas->f_next) {
+	for (fas = fas_head; fas != NULL; fas = fas->f_next) {
 		if (fas->f_tran == 0) {
 			continue;
 		}

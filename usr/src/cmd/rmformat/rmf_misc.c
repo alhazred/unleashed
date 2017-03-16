@@ -925,7 +925,7 @@ trap_SIGINT()
 void
 release_SIGINT()
 {
-	if (sigaction(SIGINT, &oact, (struct sigaction *)NULL) < 0) {
+	if (sigaction(SIGINT, &oact, NULL) < 0) {
 		DPRINTF("sigunset failed\n");
 		return;
 	}
@@ -1846,7 +1846,7 @@ alloc_string(s)
 {
 	char    *ns;
 
-	if (s == (char *)NULL) {
+	if (s == NULL) {
 		ns = (char *)my_zalloc(1);
 	} else {
 		ns = (char *)my_zalloc(strlen(s) + 1);

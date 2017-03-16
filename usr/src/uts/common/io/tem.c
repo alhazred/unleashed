@@ -137,7 +137,7 @@ _init(void)
 		return (ret);
 	}
 
-	mutex_init(&tems.ts_lock, (char *)NULL, MUTEX_DRIVER, NULL);
+	mutex_init(&tems.ts_lock, NULL, MUTEX_DRIVER, NULL);
 	list_create(&tems.ts_list, sizeof (struct tem_vt_state),
 	    offsetof(struct tem_vt_state, tvs_list_node));
 	tems.ts_active = NULL;
@@ -276,7 +276,7 @@ tem_init(cred_t *credp)
 	struct tem_vt_state *ptem;
 
 	ptem = kmem_zalloc(sizeof (struct tem_vt_state), KM_SLEEP);
-	mutex_init(&ptem->tvs_lock, (char *)NULL, MUTEX_DRIVER, NULL);
+	mutex_init(&ptem->tvs_lock, NULL, MUTEX_DRIVER, NULL);
 
 	mutex_enter(&tems.ts_lock);
 	mutex_enter(&ptem->tvs_lock);

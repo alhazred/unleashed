@@ -501,7 +501,7 @@ No errors are defined.
 An application could use:
 .sp
 .LP
-\fBregerror(code,preg,(char *)NULL,(size_t)0)\fR
+\fBregerror(code,preg,NULL,(size_t)0)\fR
 .sp
 .LP
 to find out how big a buffer is needed for the generated string, \fBmalloc\fR a

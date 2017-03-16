@@ -197,7 +197,7 @@ main(int argc, char *argv[])
 			    program_name, target_host);
 			exit(1);
 		}
-		(void) host2netname(name, target_host, (char *)NULL);
+		(void) host2netname(name, target_host, NULL);
 		uid = 0;
 	}
 

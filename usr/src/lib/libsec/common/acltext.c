@@ -92,7 +92,7 @@ pruname(uid_t uid, char *uidp, size_t buflen, int noresolve)
 
 	if (noresolve == 0)
 		passwdp = getpwuid(uid);
-	if (passwdp == (struct passwd *)NULL) {
+	if (passwdp == NULL) {
 		/* could not get passwd information: display uid instead */
 		(void) snprintf(uidp, buflen, "%u", uid);
 	} else {
@@ -108,7 +108,7 @@ prgname(gid_t gid, char *gidp, size_t buflen, int noresolve)
 
 	if (noresolve == 0)
 		groupp = getgrgid(gid);
-	if (groupp == (struct group *)NULL) {
+	if (groupp == NULL) {
 		/* could not get group information: display gid instead */
 		(void) snprintf(gidp, buflen, "%u", gid);
 	} else {

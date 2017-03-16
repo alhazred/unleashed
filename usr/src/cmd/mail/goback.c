@@ -137,16 +137,16 @@ int	letnum;
 
 			hdrlines[H_DAFWDFROM].head = hdrlines[H_AFWDFROM].head;
 			hdrlines[H_DAFWDFROM].tail = hdrlines[H_AFWDFROM].tail;
-			hdrlines[H_AFWDFROM].head = (struct hdrs *)NULL;
-			hdrlines[H_AFWDFROM].tail = (struct hdrs *)NULL;
+			hdrlines[H_AFWDFROM].head = NULL;
+			hdrlines[H_AFWDFROM].tail = NULL;
 			hdrlines[H_DRECEIVED].head = hdrlines[H_RECEIVED].head;
 			hdrlines[H_DRECEIVED].tail = hdrlines[H_RECEIVED].tail;
-			hdrlines[H_RECEIVED].head = (struct hdrs *)NULL;
-			hdrlines[H_RECEIVED].tail = (struct hdrs *)NULL;
+			hdrlines[H_RECEIVED].head = NULL;
+			hdrlines[H_RECEIVED].tail = NULL;
 			hdrlines[H_DTCOPY].head = hdrlines[H_TCOPY].head;
 			hdrlines[H_DTCOPY].tail = hdrlines[H_TCOPY].tail;
-			hdrlines[H_TCOPY].head = (struct hdrs *)NULL;
-			hdrlines[H_TCOPY].tail = (struct hdrs *)NULL;
+			hdrlines[H_TCOPY].head = NULL;
+			hdrlines[H_TCOPY].tail = NULL;
 
 			pushlist(H_TCOPY, HEAD, work, FALSE);
 

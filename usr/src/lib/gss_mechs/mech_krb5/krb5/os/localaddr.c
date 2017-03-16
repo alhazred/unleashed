@@ -1087,7 +1087,7 @@ int main ()
 {
     int r;
 
-    (void) setvbuf (stdout, (char *)NULL, _IONBF, 0);
+    (void) setvbuf (stdout, NULL, _IONBF, 0);
     r = foreach_localaddr (0, print_addr, NULL, NULL);
     printf ("return value = %d\n", r);
     return 0;

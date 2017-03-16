@@ -254,7 +254,7 @@ void *ctpriv)
 		    (void *)sd));
 	}
 
-	bp = scsi_alloc_consistent_buf(ap, (struct buf *)NULL, DEV_BSIZE,
+	bp = scsi_alloc_consistent_buf(ap, NULL, DEV_BSIZE,
 	    B_READ, NULL, NULL);
 	if (!bp) {
 		cmn_err(CE_WARN, "!No resources (buf) to initiate T3 path "
@@ -443,7 +443,7 @@ purple_path_get_opinfo(struct scsi_device *sd, struct scsi_path_opinfo
 
 	ap = &sd->sd_address;
 
-	bp = scsi_alloc_consistent_buf(ap, (struct buf *)NULL, SUN_INQSIZE,
+	bp = scsi_alloc_consistent_buf(ap, NULL, SUN_INQSIZE,
 	    B_READ, NULL, NULL);
 	if (!bp)
 		return (1);

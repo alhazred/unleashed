@@ -62,7 +62,7 @@ int hdrtype;
 	switch (hdrtype) {
 	    case H_FROM1:
 		/* If first ">From " line, check for '...remote from...' */
-		if (hdrlines[H_FROM1].head == (struct hdrs *)NULL) {
+		if (hdrlines[H_FROM1].head == NULL) {
 			if ((rf = substr(s, " remote from ")) >= 0) {
 				trimnl(s + rf);
 				(void) snprintf(tbuf, sizeof (tbuf),

@@ -65,7 +65,7 @@ clr_hinfo()
 void clrhdr(hdrtype)
 int	hdrtype;
 {
-	while (hdrlines[hdrtype].head != (struct hdrs *)NULL) {
+	while (hdrlines[hdrtype].head != NULL) {
 		poplist (hdrtype, HEAD);
 	}
 }

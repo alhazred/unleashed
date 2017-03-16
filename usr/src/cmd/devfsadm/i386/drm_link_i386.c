@@ -131,7 +131,7 @@ agp_process(di_minor_t minor, di_node_t node)
 	char *minor_nm, *drv_nm;
 	char *devfspath;
 	char *I_path, *p_path, *buf;
-	char *name = (char *)NULL;
+	char *name = NULL;
 	int i, index;
 	devfsadm_enumerate_t rules[1];
 

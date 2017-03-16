@@ -238,7 +238,7 @@ authdes_marshal(AUTH *auth, XDR *xdrs, struct cred *cr)
 	 * Figure out the "time", accounting for any time difference
 	 * with the server if necessary.
 	 */
-	(void) gettimeofday(&ad->ad_timestamp, (struct timezone *)NULL);
+	(void) gettimeofday(&ad->ad_timestamp, NULL);
 	ad->ad_timestamp.tv_sec += ad->ad_timediff.tv_sec;
 	ad->ad_timestamp.tv_usec += ad->ad_timediff.tv_usec;
 	if (ad->ad_timestamp.tv_usec >= MILLION) {
@@ -437,7 +437,7 @@ synchronize(struct knetconfig *synconfig, struct netbuf *syncaddr, int calltype,
 	timout.tv_usec = 0;
 	if (rtime(synconfig, syncaddr, calltype, timep, &timout) < 0)
 		return (FALSE);
-	(void) gettimeofday(&mytime, (struct timezone *)NULL);
+	(void) gettimeofday(&mytime, NULL);
 	timep->tv_sec -= mytime.tv_sec;
 	if (mytime.tv_usec > timep->tv_usec) {
 		timep->tv_sec -= 1;

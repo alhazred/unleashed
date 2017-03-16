@@ -1870,7 +1870,7 @@ scsb_fru_register(void (*cb_func)(void *, scsb_fru_event_t, scsb_fru_status_t),
 		    kmem_zalloc(sizeof (struct scsb_cb_entry), KM_SLEEP);
 	cbe_ptr = scsb_cb_table;
 	while (cbe_ptr->cb_softstate_ptr != NULL) {
-		if (cbe_ptr->cb_next == (struct scsb_cb_entry *)NULL) {
+		if (cbe_ptr->cb_next == NULL) {
 			cbe_ptr->cb_next = (struct scsb_cb_entry *)
 			    kmem_zalloc(sizeof (struct scsb_cb_entry),
 			    KM_SLEEP);
@@ -1882,7 +1882,7 @@ scsb_fru_register(void (*cb_func)(void *, scsb_fru_event_t, scsb_fru_status_t),
 	cbe_ptr->cb_softstate_ptr = soft_ptr;
 	cbe_ptr->cb_fru_id = fru_id;
 	cbe_ptr->cb_func = cb_func;
-	cbe_ptr->cb_next = (struct scsb_cb_entry *)NULL;
+	cbe_ptr->cb_next = NULL;
 	cbe_ptr->cb_fru_ptr = find_fru_info(fru_id);
 #ifdef DEBUG
 	scsb_cb_count++;

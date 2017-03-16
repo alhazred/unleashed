@@ -308,10 +308,10 @@ static void *emlxs_fc_fcftab_action_table[] =
 	/* Action routine				Event */
 /* FC_FCFTAB_STATE_SHUTDOWN  0			(Requires adapter reset) */
 	(void *) emlxs_fcftab_shutdown_action,		/* STATE_ENTER */
-	(void *) NULL,					/* SHUTDOWN */
-	(void *) NULL,					/* LINK_UP */
-	(void *) NULL,					/* LINK_DOWN */
-	(void *) NULL,					/* FCFI_ONLINE */
+	NULL,					/* SHUTDOWN */
+	NULL,					/* LINK_UP */
+	NULL,					/* LINK_DOWN */
+	NULL,					/* FCFI_ONLINE */
 	(void *) emlxs_fc_fcftab_fcfi_offline_evt_action, /* FCFI_OFFLINE */
 
 /* FC_FCFTAB_STATE_OFFLINE  1			(Wait for LINK_UP event) */
@@ -567,15 +567,15 @@ static void *emlxs_fcoe_fcftab_action_table[] =
 	/* Action routine				Event */
 /* FCOE_FCFTAB_STATE_SHUTDOWN  0		(Requires adapter reset) */
 	(void *) emlxs_fcftab_shutdown_action,		/* STATE_ENTER */
-	(void *) NULL,					/* SHUTDOWN */
-	(void *) NULL,					/* LINK_UP */
-	(void *) NULL,					/* LINK_DOWN */
-	(void *) NULL,					/* CVL_RECD */
-	(void *) NULL,					/* FCF_FOUND */
-	(void *) NULL,					/* FCF_LOST */
-	(void *) NULL,					/* FCF_CHANGED */
-	(void *) NULL,					/* TABLE_FULL */
-	(void *) NULL,					/* FCFI_ONLINE */
+	NULL,					/* SHUTDOWN */
+	NULL,					/* LINK_UP */
+	NULL,					/* LINK_DOWN */
+	NULL,					/* CVL_RECD */
+	NULL,					/* FCF_FOUND */
+	NULL,					/* FCF_LOST */
+	NULL,					/* FCF_CHANGED */
+	NULL,					/* TABLE_FULL */
+	NULL,					/* FCFI_ONLINE */
 	(void *) emlxs_fcoe_fcftab_fcfi_offline_evt_action, /* FCFI_OFFLINE */
 
 /* FCOE_FCFTAB_STATE_OFFLINE  1			(Wait for LINK_UP event) */
@@ -872,11 +872,11 @@ static void *emlxs_fcfi_action_table[] =
 	/* Action routine				Event */
 /* FCFI_STATE_FREE  0			(Wait for allocation) */
 	(void *) emlxs_fcfi_free_action,		/* STATE_ENTER */
-	(void *) NULL,					/* FCFI_ONLINE */
-	(void *) NULL,					/* FCFI_OFFLINE */
-	(void *) NULL,					/* FCFI_PAUSE */
-	(void *) NULL,					/* VFI_ONLINE */
-	(void *) NULL,					/* VFI_OFFLINE */
+	NULL,					/* FCFI_ONLINE */
+	NULL,					/* FCFI_OFFLINE */
+	NULL,					/* FCFI_PAUSE */
+	NULL,					/* VFI_ONLINE */
+	NULL,					/* VFI_OFFLINE */
 
 /* FCFI_STATE_OFFLINE  1		(Wait for FCFI_ONLINE event) */
 	(void *) emlxs_fcfi_offline_action,		/* STATE_ENTER */
@@ -1737,10 +1737,10 @@ static void *emlxs_rpi_action_table[] =
 	/* Action routine				Event */
 /* RPI_STATE_FREE  0			(Wait for allocation) */
 	(void *) emlxs_rpi_free_action,			/* STATE_ENTER */
-	(void *) NULL,					/* RPI_ONLINE */
-	(void *) NULL,					/* RPI_OFFLINE */
-	(void *) NULL,					/* RPI_PAUSE */
-	(void *) NULL,					/* RPI_RESUME */
+	NULL,					/* RPI_ONLINE */
+	NULL,					/* RPI_OFFLINE */
+	NULL,					/* RPI_PAUSE */
+	NULL,					/* RPI_RESUME */
 
 /* RPI_STATE_RESERVED  1		(Wait for RPI_ONLINE event) */
 	(void *) emlxs_rpi_reserved_action,		/* STATE_ENTER */

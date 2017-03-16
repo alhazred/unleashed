@@ -42,7 +42,7 @@
 static const char *keys_attrs[] = {
 	_KEY_NISPUBLICKEY,
 	_KEY_NISSECRETKEY,
-	(char *)NULL
+	NULL
 };
 
 

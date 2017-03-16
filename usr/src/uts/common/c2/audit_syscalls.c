@@ -288,7 +288,7 @@ audit(caddr_t record, int length)
 		adr_start(&sadr, memtod(m, char *));
 		sadr.adr_now += 1;
 	} else
-		sadr.adr_now = (char *)NULL;
+		sadr.adr_now = NULL;
 
 	/* add the (optional) trailer token */
 	if (kctx->auk_policy & AUDIT_TRAIL) {

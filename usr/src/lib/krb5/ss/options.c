@@ -19,7 +19,7 @@ static struct option options[] = {
      { "^list", SS_OPT_DONT_LIST },
      { "dont_summarize", SS_OPT_DONT_SUMMARIZE },
      { "^summarize", SS_OPT_DONT_SUMMARIZE },
-     { (char *)NULL, 0 }
+     { NULL, 0 }
 };
 
 long

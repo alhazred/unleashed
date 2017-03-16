@@ -495,7 +495,7 @@ tavor_close(dev_t dev, int flag, int otyp, cred_t *credp)
 		if (priv != NULL) {
 			tavor_umap_db_handle_onclose_cb(priv);
 			kmem_free(priv, sizeof (tavor_umap_db_priv_t));
-			umapdb->tdbe_common.tdb_priv = (void *)NULL;
+			umapdb->tdbe_common.tdb_priv = NULL;
 		}
 
 		tavor_umap_db_free(umapdb);

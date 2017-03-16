@@ -206,7 +206,7 @@ display_pci(Board_node *board)
 
 			for (i = 0; i < MAX_SLOTS_PER_IO_BD; i++) {
 				if (! (slot_name_bits & (1 << i))) {
-					slot_name_arr[i] = (char *)NULL;
+					slot_name_arr[i] = NULL;
 					continue;
 				}
 
@@ -218,7 +218,7 @@ display_pci(Board_node *board)
 				slot_name_arr[i] = slot_name;
 				slot_name += strlen(slot_name) + 1;
 			}
-			slot_name = (char *)NULL;
+			slot_name = NULL;
 		}
 
 		/*
@@ -304,7 +304,7 @@ display_pci(Board_node *board)
 					slot_name = slot_name_arr[
 					    child_dev_no + slot_name_offset];
 				} else
-					slot_name = (char *)NULL;
+					slot_name = NULL;
 
 				if (slot_name != NULL && slot_name[0] != '\0') {
 					(void) sprintf(card.slot_str, "%s",

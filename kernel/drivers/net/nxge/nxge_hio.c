@@ -1598,7 +1598,7 @@ nxge_hio_share_free(mac_share_handle_t shandle)
 	 * Clear internal handle state.
 	 */
 	vr = shp->vrp;
-	shp->vrp = (void *)NULL;
+	shp->vrp = NULL;
 	shp->index = 0;
 	shp->tmap = 0;
 	shp->rmap = 0;

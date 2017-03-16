@@ -134,7 +134,7 @@ main(int argc, char **argv)
 		/* If not set as an invocation option, check for system-wide */
 		/* global flag */
 		char *xp = xgetenv("DEBUG");
-		if (xp != (char *)NULL) {
+		if (xp != NULL) {
 			debug = atoi(xp);
 			if (debug < 0) {
 				/* Keep trace file even if successful */
@@ -150,7 +150,7 @@ main(int argc, char **argv)
 				program, dbgfname);
 			exit(13);
 		}
-		if ((dbgfp = fdopen(tmpfd, "w")) == (FILE *)NULL) {
+		if ((dbgfp = fdopen(tmpfd, "w")) == NULL) {
 			fprintf(stderr, "%s: can't open debugging file '%s'\n",
 				program, dbgfname);
 			(void) close(tmpfd);
@@ -177,7 +177,7 @@ main(int argc, char **argv)
 
 	umsave = umask(7);
 	uname(&utsn);
-	if ((p = xgetenv("CLUSTER")) != (char *)NULL) {
+	if ((p = xgetenv("CLUSTER")) != NULL) {
 		/*
 		 * We are not who we appear...
 		 */

@@ -283,7 +283,7 @@ static struct dev_ops tsalarm_ops = {
 	tsalarm_detach,		/* detach */
 	nodev,			/* reset */
 	&tsalarm_cb_ops,	/* pointer to cb_ops structure */
-	(struct bus_ops *)NULL,
+	NULL,
 	nulldev,		/* power() */
 	ddi_quiesce_not_needed,		/* quiesce() */
 };
@@ -356,7 +356,7 @@ tsalarm_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 
 	case DDI_INFO_DEVT2DEVINFO:
 		if ((softc = getsoftc(inst)) == NULL) {
-			*result = (void *)NULL;
+			*result = NULL;
 			retval = DDI_FAILURE;
 		} else {
 			*result = (void *)softc->dip;

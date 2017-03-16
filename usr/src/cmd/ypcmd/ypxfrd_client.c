@@ -283,7 +283,7 @@ ypxfrd_getdbm(tempmap, master, domain, map)
 		(void) t_free((char *)tbind, T_BIND);
 		break;
 	}
-	(void) CLNT_CONTROL(clnt, CLSET_FD_CLOSE, (char *)NULL);
+	(void) CLNT_CONTROL(clnt, CLSET_FD_CLOSE, NULL);
 
 	rmap.map = map;
 	rmap.domain = domain;

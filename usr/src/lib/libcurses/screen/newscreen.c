@@ -87,7 +87,7 @@ newscreen(char *type, int lsize, int csize, int tabsize,
 			perror("trace");
 			exit(-1);
 		}
-		setbuf(outf, (char *)NULL);
+		setbuf(outf, NULL);
 	}
 
 	if (outf)
@@ -153,7 +153,7 @@ newscreen(char *type, int lsize, int csize, int tabsize,
 
 	/* force the output to be buffered */
 #ifdef	_IOFBF
-	(void) setvbuf(outfptr, (char *)NULL, _IOFBF, 0);
+	(void) setvbuf(outfptr, NULL, _IOFBF, 0);
 #else	/* _IOFBF */
 	if ((sobuf = malloc(BUFSIZ)) == NULL) {
 		curs_errno = CURS_BAD_MALLOC;

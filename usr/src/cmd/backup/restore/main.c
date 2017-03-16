@@ -108,7 +108,7 @@ main(int argc, char *argv[])
 	 * still works for local tapes.  Fail when trying to access
 	 * a remote tape in that case and not immediately.
 	 */
-	(void) __init_suid_priv(0, PRIV_NET_PRIVADDR, (char *)NULL);
+	(void) __init_suid_priv(0, PRIV_NET_PRIVADDR, NULL);
 
 	inputdev = DEFTAPE;
 
@@ -183,7 +183,7 @@ If set, the envar TMPDIR selects where temporary files are kept\n"),
 	argv++;			/* the bag-of-options */
 	argc -= 2;		/* count of parameters to the options  */
 	command = '\0';
-	c_label = (char *)NULL;	/* any tape's acceptable */
+	c_label = NULL;	/* any tape's acceptable */
 	for (cp = *argv++; *cp; cp++) {
 		switch (*cp) {		/* BE CAUTIOUS OF FALLTHROUGHS */
 		case 'T':
@@ -491,7 +491,7 @@ If set, the envar TMPDIR selects where temporary files are kept\n"),
 						freename(fname);
 						alist.head++;
 					}
-					alist.head = (struct afile *)NULL;
+					alist.head = NULL;
 					continue; /* argc loop */
 				}
 			} else {
@@ -529,7 +529,7 @@ set_tmpdir(void)
 	char name[MAXPATHLEN];
 
 	tmpdir = getenv("TMPDIR");
-	if ((tmpdir == (char *)NULL) || (*tmpdir == '\0'))
+	if ((tmpdir == NULL) || (*tmpdir == '\0'))
 		tmpdir = "/tmp";
 
 	if (*tmpdir != '/') {

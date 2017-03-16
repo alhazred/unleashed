@@ -222,7 +222,7 @@ dump_di_node(Prom_node *pnode, di_node_t di_node)
 		int		di_ptype;
 
 		di_name = di_prop_name(di_prop);
-		if (di_name == (char *)NULL)
+		if (di_name == NULL)
 			continue;
 
 		di_ptype = di_prop_type(di_prop);
@@ -345,7 +345,7 @@ dump_di_node(Prom_node *pnode, di_node_t di_node)
 		unsigned char	*p_data;
 
 		p_name = di_prom_prop_name(p_prop);
-		if (p_name == (char *)NULL)
+		if (p_name == NULL)
 			retval = -1;
 		else
 			retval = di_prom_prop_data(p_prop, &p_data);

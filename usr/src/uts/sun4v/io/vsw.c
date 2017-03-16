@@ -397,7 +397,7 @@ static	struct	dev_ops	vsw_ops = {
 	vsw_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&vsw_cb_ops,		/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	ddi_power		/* devo_power */
 };
 

@@ -171,7 +171,7 @@ static struct dev_ops sgcn_ops = {
 	sgcn_detach,		/* detach()		*/
 	nodev,			/* reset()		*/
 	&sgcn_cb_ops,		/* cb_ops		*/
-	(struct bus_ops *)NULL,	/* bus_ops		*/
+	NULL,	/* bus_ops		*/
 	NULL,			/* power()		*/
 	ddi_quiesce_not_supported,	/* quiesce	*/
 };
@@ -796,13 +796,13 @@ sgcn_data_in_handler(caddr_t arg)
 		if (abort_enable == KIOCABORTALTERNATE) {
 			for (i = 0; i < len; i ++) {
 				if (abort_charseq_recognize(buf[i]))
-					abort_sequence_enter((char *)NULL);
+					abort_sequence_enter(NULL);
 			}
 		}
 
 		/* put console input onto stream */
 		if (sgcn_state->sgcn_readq) {
-			if ((mp = allocb(len, BPRI_MED)) == (mblk_t *)NULL) {
+			if ((mp = allocb(len, BPRI_MED)) == NULL) {
 				sgcn_input_dropped += len;
 				cmn_err(CE_WARN,
 				    "sgcn_data_in_handler(): allocb failed"
@@ -862,7 +862,7 @@ sgcn_break_handler(caddr_t arg)
 	mutex_exit(&sgcn_state->sgcn_sbbc_brk_lock);
 
 	if (abort_enable != KIOCABORTALTERNATE)
-		abort_sequence_enter((char *)NULL);
+		abort_sequence_enter(NULL);
 
 	/* restore interrupt state */
 	mutex_enter(&sgcn_state->sgcn_sbbc_brk_lock);

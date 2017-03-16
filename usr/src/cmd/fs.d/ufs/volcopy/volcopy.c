@@ -784,7 +784,7 @@ mem_setup(void)
 	(void) signal(SIGSYS, sigsys);
 	errno = 0;
 	if (Ipc) {
-		if ((int)shmat(0, (char *)NULL, 0) < 0 && errno != EINVAL)
+		if ((int)shmat(0, NULL, 0) < 0 && errno != EINVAL)
 			Ipc = 0; /* something went wrong */
 	}
 	if (Ipc) { /* ipc is available */
@@ -810,7 +810,7 @@ mem_setup(void)
 		}
 	} else { /* ipc is not available */
 		Bufcnt = 1;
-		if ((Buf[0] = align(size)) == (char *)NULL)
+		if ((Buf[0] = align(size)) == NULL)
 			perr(1, "Out of memory\n");
 		Cnts[0] = (int *)(Buf[0] + Bufsz);
 		*Cnts[0] = 0;
@@ -887,8 +887,8 @@ align(int size)
 
 	if ((pad = ((int)malloc(0) & (PAGESIZE-1))) > 0) {
 		pad = PAGESIZE - pad;
-		if (malloc(pad) == (char *)NULL)
-			return ((char *)NULL);
+		if (malloc(pad) == NULL)
+			return (NULL);
 	}
 	return (malloc((unsigned)size));
 }
@@ -1032,7 +1032,7 @@ parent_copy(void)
 	*Cnts[cur_buf] = 0;
 	if (semop(Sem_id[cur_buf], &Rstsem_buf, 1) < 0)
 		perr(4, "Semaphore operation error %d\n", errno);
-	wait((int *)NULL);
+	wait(NULL);
 	Blocks /= BLKSIZ;
 }
 

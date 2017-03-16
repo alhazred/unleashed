@@ -544,8 +544,7 @@ bmap_write(struct inode	*ip, uoff_t	off, int size,
 					ASSERT(nsize >= osize);
 					(void) chkdq(ip,
 					    -(long)btodb(nsize - osize),
-					    0, cr, (char **)NULL,
-					    (size_t *)NULL);
+					    0, cr, (char **)NULL, NULL);
 					return (err);
 				}
 			}

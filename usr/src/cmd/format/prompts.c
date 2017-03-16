@@ -51,7 +51,7 @@ get_mlba()
 	ioparam.io_bounds.upper = UINT_MAX64;
 
 	return (input(FIO_INT64, "Enter maximum number of LBAs",
-	    ':', &ioparam, (int *)NULL, DATA_INPUT));
+	    ':', &ioparam, NULL, DATA_INPUT));
 }
 
 /*
@@ -65,7 +65,7 @@ get_ncyl()
 	ioparam.io_bounds.lower = 1;
 	ioparam.io_bounds.upper = MAX_CYLS;
 	return (input(FIO_INT, "Enter number of data cylinders",
-	    ':', &ioparam, (int *)NULL, DATA_INPUT));
+	    ':', &ioparam, NULL, DATA_INPUT));
 }
 
 /*
@@ -114,7 +114,7 @@ get_nhead()
 	ioparam.io_bounds.lower = 1;
 	ioparam.io_bounds.upper = MAX_HEADS;
 	return (input(FIO_INT, "Enter number of heads", ':',
-	    &ioparam, (int *)NULL, DATA_INPUT));
+	    &ioparam, NULL, DATA_INPUT));
 }
 
 /*
@@ -153,7 +153,7 @@ get_nsect()
 	ioparam.io_bounds.upper = MAX_SECTS;
 	return (input(FIO_INT,
 	    "Enter number of data sectors/track", ':',
-	    &ioparam, (int *)NULL, DATA_INPUT));
+	    &ioparam, NULL, DATA_INPUT));
 }
 
 /*
@@ -446,5 +446,5 @@ get_asciilabel()
 {
 	return ((char *)(uintptr_t)input(FIO_OSTR,
 	    "Enter disk type name (remember quotes)", ':',
-	    (u_ioparam_t *)NULL, (int *)NULL, DATA_INPUT));
+	    (u_ioparam_t *)NULL, NULL, DATA_INPUT));
 }

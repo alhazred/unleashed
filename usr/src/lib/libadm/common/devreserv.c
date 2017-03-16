@@ -1078,7 +1078,7 @@ devfree(
  *	Pointer to the list of pointers to structures describing
  *	the reserved devices, or (struct reservdev **) NULL if an
  *	error occurred.  The list of pointers is terminated by
- *	(struct reservdev *) NULL.
+ *	NULL.
  *
  *  Statics Used:
  *	locklist	List of reserved devices

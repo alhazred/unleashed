@@ -109,7 +109,7 @@ main(int argc, char **argv)
 			 */
 
 #ifndef	STANDALONE
-			setbuf(stdout, (char *)NULL);
+			setbuf(stdout, NULL);
 #endif
 			continue;
 

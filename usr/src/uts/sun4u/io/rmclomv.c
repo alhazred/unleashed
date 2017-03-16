@@ -153,7 +153,7 @@ static struct dev_ops rmclomv_ops = {
 	rmclomv_detach,		/* detach */
 	nodev,			/* reset */
 	&rmclomv_cb_ops,		/* pointer to cb_ops structure */
-	(struct bus_ops *)NULL,
+	NULL,
 	nulldev,		/* power() */
 	ddi_quiesce_not_supported,	/* devo_quiesce */
 };

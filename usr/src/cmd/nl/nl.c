@@ -219,7 +219,7 @@ char *argv[];
 				}
 				break;
 			case 'p':
-				if (optarg == (char *)NULL)
+				if (optarg == NULL)
 					cntck = 'y';
 				else
 					optmsg(c, optarg);
@@ -772,7 +772,7 @@ optmsg(option, option_arg)
 int option;
 char *option_arg;
 {
-	if (option_arg != (char *)NULL) {
+	if (option_arg != NULL) {
 		(void) fprintf(stderr, gettext(
 			"nl: invalid option (-%c %s)\n"), option, option_arg);
 	}

@@ -182,7 +182,7 @@ main(int argc, char **argv)
 
 	/* Create signal catching thread */
 	if (thr_create(NULL, 0, (void *(*)(void *))sigwait_thr,
-	    (void *)NULL, 0, NULL) < 0) {
+	    NULL, 0, NULL) < 0) {
 		syserrmsg(INIT_THR_CREATE_ERR, strerror(errno));
 		exit(2);
 	}

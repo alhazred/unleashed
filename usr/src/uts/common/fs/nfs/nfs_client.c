@@ -2923,7 +2923,7 @@ nfs_lockrelease(vnode_t *vp, int flag, offset_t offset, cred_t *cr)
 	 */
 	buf = kmem_alloc(MAX_SHR_OWNER_LEN, KM_SLEEP);
 	while (nfs_remove_locking_id(vp, RLMPL_OWNER,
-	    (char *)NULL, buf, &shr.s_own_len)) {
+	    NULL, buf, &shr.s_own_len)) {
 		shr.s_owner = buf;
 		shr.s_access = 0;
 		shr.s_deny = 0;
@@ -3149,7 +3149,7 @@ nfs_remove_locking_id(vnode_t *vp, int type, char *id, char *rid, int *rlen)
 	for (cur = rp->r_lmpl; cur != (lmpl_t *)NULL; cur = cur->lmpl_next) {
 		if (cur->lmpl_type == type &&
 		    cur->lmpl_pid == curproc->p_pid &&
-		    (id == (char *)NULL ||
+		    (id == NULL ||
 		    bcmp(cur->lmpl_owner, id, cur->lmpl_own_len) == 0)) {
 			*lmplp = cur->lmpl_next;
 			ASSERT(cur->lmpl_own_len < MAX_SHR_OWNER_LEN);

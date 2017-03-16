@@ -206,7 +206,7 @@ intpexec(
 	}
 
 	if (level == 0)
-		ASSERT(idatap == (struct intpdata *)NULL);
+		ASSERT(idatap == NULL);
 
 	bzero(&idata, sizeof (intpdata_t));
 

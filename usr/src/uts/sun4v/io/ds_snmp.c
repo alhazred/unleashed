@@ -180,7 +180,7 @@ static struct cb_ops ds_snmp_cb_ops = {
 	nodev,			/* cb_segmap */
 	nochpoll,		/* cb_chpoll */
 	ddi_prop_op,		/* cb_prop_op */
-	(struct streamtab *)NULL, /* cb_str */
+	NULL, /* cb_str */
 	D_MP | D_64BIT,		/* cb_flag */
 	CB_REV,			/* cb_rev */
 	nodev,			/* cb_aread */
@@ -197,7 +197,7 @@ static struct dev_ops ds_snmp_dev_ops = {
 	ds_snmp_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&ds_snmp_cb_ops,	/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	nulldev,		/* devo_power */
 	ddi_quiesce_not_needed,		/* devo_quiesce */
 };

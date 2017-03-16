@@ -355,7 +355,7 @@ p_name()
 	 */
 	name = (char *)(uintptr_t)input(FIO_OSTR,
 	    "Enter table name (remember quotes)",
-	    ':', (u_ioparam_t *)NULL, (int *)NULL, DATA_INPUT);
+	    ':', (u_ioparam_t *)NULL, NULL, DATA_INPUT);
 	/*
 	 * Lock out interrupts.
 	 */
@@ -502,14 +502,14 @@ print_efi_partition(struct dk_gpt *map, int partnum, int want_header)
 	fmt_print("  %d ", partnum);
 	s = find_string(ptag_choices,
 		(int)map->efi_parts[partnum].p_tag);
-	if (s == (char *)NULL)
+	if (s == NULL)
 		s = "-";
 	nspaces(10 - (int)strlen(s));
 	fmt_print("%s", s);
 
 	s = find_string(pflag_choices,
 		(int)map->efi_parts[partnum].p_flag);
-	if (s == (char *)NULL)
+	if (s == NULL)
 		s = "-";
 	nspaces(6 - (int)strlen(s));
 	fmt_print("%s", s);
@@ -606,7 +606,7 @@ print_partition(struct partition_info *pinfo, int partnum, int want_header)
 	 */
 	s = find_string(ptag_choices,
 		(int)pinfo->vtoc.v_part[partnum].p_tag);
-	if (s == (char *)NULL)
+	if (s == NULL)
 		s = "-";
 	nspaces(10 - (int)strlen(s));
 	fmt_print("%s", s);
@@ -616,7 +616,7 @@ print_partition(struct partition_info *pinfo, int partnum, int want_header)
 	 */
 	s = find_string(pflag_choices,
 		(int)pinfo->vtoc.v_part[partnum].p_flag);
-	if (s == (char *)NULL)
+	if (s == NULL)
 		s = "-";
 	nspaces(6 - (int)strlen(s));
 	fmt_print("%s", s);

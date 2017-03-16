@@ -1158,7 +1158,7 @@ sdev_symlink(struct vnode *dvp, char *lnm, struct vattr *tva,
 	int error;
 	struct vnode *vp = NULL;
 	struct sdev_node *parent = (struct sdev_node *)VTOSDEV(dvp);
-	struct sdev_node *self = (struct sdev_node *)NULL;
+	struct sdev_node *self = NULL;
 
 	ASSERT(parent);
 	rw_enter(&parent->sdev_dotdot->sdev_contents, RW_READER);

@@ -410,7 +410,7 @@ apic_init_intr(void)
 			 * Not PSMI compliant, but we are going to merge
 			 * with ON anyway
 			 */
-			(void) add_avintr((void *)NULL, ipl,
+			(void) add_avintr(NULL, ipl,
 			    (avfunc)apic_error_intr, "apic error intr",
 			    irq, NULL, NULL, NULL, NULL);
 		}

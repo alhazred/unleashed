@@ -255,24 +255,21 @@ char **argv;
 			 * and -length only if explicitly present.
 			 * Write out 'place-holders' only. (see below....)
 			 */
-			if ((hptr = hdrlines[H_MIMEVERS].head) !=
-						    (struct hdrs *)NULL) {
+			if ((hptr = hdrlines[H_MIMEVERS].head) != NULL) {
 				(void) snprintf(line, sizeof (line), "%s \n",
 				    header[H_MIMEVERS].tag);
 				if (!wtmpf(line, strlen(line))) {
 					done(0);
 				}
 			}
-			if ((hptr = hdrlines[H_CTYPE].head) !=
-						    (struct hdrs *)NULL) {
+			if ((hptr = hdrlines[H_CTYPE].head) != NULL) {
 				(void) snprintf(line, sizeof (line), "%s \n",
 				    header[H_CTYPE].tag);
 				if (!wtmpf(line, strlen(line))) {
 					done(0);
 				}
 			}
-			if ((hptr = hdrlines[H_CLEN].head) !=
-						    (struct hdrs *)NULL) {
+			if ((hptr = hdrlines[H_CLEN].head) != NULL) {
 				(void) snprintf(line, sizeof (line), "%s \n",
 				    header[H_CLEN].tag);
 				if (!wtmpf(line, strlen(line))) {
@@ -291,24 +288,21 @@ char **argv;
 			 * and -length only if explicitly present.
 			 * Write out 'place-holders' only. (see below....)
 			 */
-			if ((hptr = hdrlines[H_MIMEVERS].head) !=
-						    (struct hdrs *)NULL) {
+			if ((hptr = hdrlines[H_MIMEVERS].head) != NULL) {
 				(void) snprintf(line, sizeof (line), "%s \n",
 				    header[H_MIMEVERS].tag);
 				if (!wtmpf(line, strlen(line))) {
 					done(0);
 				}
 			}
-			if ((hptr = hdrlines[H_CTYPE].head) !=
-						    (struct hdrs *)NULL) {
+			if ((hptr = hdrlines[H_CTYPE].head) != NULL) {
 				(void) snprintf(line, sizeof (line), "%s \n",
 				    header[H_CTYPE].tag);
 				if (!wtmpf(line, strlen(line))) {
 					done(0);
 				}
 			}
-			if ((hptr = hdrlines[H_CLEN].head) !=
-						    (struct hdrs *)NULL) {
+			if ((hptr = hdrlines[H_CLEN].head) != NULL) {
 				(void) snprintf(line, sizeof (line), "%s \n",
 				    header[H_CLEN].tag);
 				if (!wtmpf(line, strlen(line))) {
@@ -334,21 +328,21 @@ char **argv;
 	if (!wtmpf(line, strlen(line))) {
 		done(0);
 	}
-	if (hdrlines[H_MIMEVERS].head == (struct hdrs *)NULL) {
+	if (hdrlines[H_MIMEVERS].head == NULL) {
 		savehdrs(line, H_MIMEVERS);
 	}
 	(void) snprintf(line, sizeof (line), "%s \n", header[H_CTYPE].tag);
 	if (!wtmpf(line, strlen(line))) {
 		done(0);
 	}
-	if (hdrlines[H_CTYPE].head == (struct hdrs *)NULL) {
+	if (hdrlines[H_CTYPE].head == NULL) {
 		savehdrs(line, H_CTYPE);
 	}
 	(void) snprintf(line, sizeof (line), "%s \n", header[H_CLEN].tag);
 	if (!wtmpf(line, strlen(line))) {
 		done(0);
 	}
-	if (hdrlines[H_CLEN].head == (struct hdrs *)NULL) {
+	if (hdrlines[H_CLEN].head == NULL) {
 		savehdrs(line, H_CLEN);
 	}
 	/* and a blank line */
@@ -400,7 +394,7 @@ wrapsend:
 	/*
 	 * Modify value of H_MIMEVERS if necessary.
 	 */
-	if ((hptr = hdrlines[H_MIMEVERS].head) != (struct hdrs *)NULL) {
+	if ((hptr = hdrlines[H_MIMEVERS].head) != NULL) {
 		if (strlen(hptr->value) == 0) {
 			(void) strlcpy(hptr->value, "1.0",
 			    sizeof (hptr->value));
@@ -409,7 +403,7 @@ wrapsend:
 	/*
 	 * Modify value of H_CTYPE if necessary.
 	 */
-	if ((hptr = hdrlines[H_CTYPE].head) != (struct hdrs *)NULL) {
+	if ((hptr = hdrlines[H_CTYPE].head) != NULL) {
 		if (strlen(hptr->value) == 0) {
 			(void) strlcpy(hptr->value, "text/plain",
 			    sizeof (hptr->value));
@@ -418,7 +412,7 @@ wrapsend:
 	/*
 	 * Set 'place-holder' value of content length to true value
 	 */
-	if ((hptr = hdrlines[H_CLEN].head) != (struct hdrs *)NULL) {
+	if ((hptr = hdrlines[H_CLEN].head) != NULL) {
 		(void) snprintf(hptr->value, sizeof (hptr->value),
 		    "%ld", count);
 	}

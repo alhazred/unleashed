@@ -308,7 +308,7 @@ set_src_addr(SVCXPRT *xprt, struct netbuf *opt)
 	struct netbuf *nbufp, *ltaddr;
 	struct T_opthdr *opthdr;
 	in_pktinfo_t *pktinfo;
-	struct sockaddr_in *sock = (struct sockaddr_in *)NULL;
+	struct sockaddr_in *sock = NULL;
 
 	/* extract dest IP of inbound packet */
 	/* LINTED pointer alignment */

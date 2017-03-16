@@ -140,8 +140,8 @@ main(int argc, char *argv[])
 		fflush(stdout);
 	}
 
-	sv.cp_time.cp_time_val = (int *)NULL;
-	sv.dk_xfer.dk_xfer_val = (int *)NULL;
+	sv.cp_time.cp_time_val = NULL;
+	sv.dk_xfer.dk_xfer_val = NULL;
 
 	/*
 	 * Null out pointers in the statsvar struct
@@ -153,9 +153,9 @@ main(int argc, char *argv[])
 	 *  not registered).
 	 */
 	sv.cp_time.cp_time_len = 0;
-	sv.cp_time.cp_time_val = (int *)NULL;
+	sv.cp_time.cp_time_val = NULL;
 	sv.dk_xfer.dk_xfer_len = 0;
-	sv.dk_xfer.dk_xfer_val = (int *)NULL;
+	sv.dk_xfer.dk_xfer_val = NULL;
 
 	vers = RSTATVERS_VAR;
 	bstat = rpc_broadcast(RSTATPROG, RSTATVERS_VAR, RSTATPROC_STATS,
@@ -208,8 +208,8 @@ singlehost(host)
 		entry = tmp;
 	}
 
-	sw_var.cp_time.cp_time_val = (int *)NULL;
-	sw_var.dk_xfer.dk_xfer_val = (int *)NULL;
+	sw_var.cp_time.cp_time_val = NULL;
+	sw_var.dk_xfer.dk_xfer_val = NULL;
 	err = (enum clnt_stat)callrpc(host, RSTATPROG, RSTATVERS_VAR,
 			RSTATPROC_STATS, xdr_void, 0, xdr_statsvar, &sw_var);
 	if (err == RPC_SUCCESS) {

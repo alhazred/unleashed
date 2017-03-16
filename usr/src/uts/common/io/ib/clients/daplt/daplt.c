@@ -514,7 +514,7 @@ static struct dev_ops daplka_ops = {
 	daplka_detach,		/* devo_detach */
 	nodev,			/* devo_reset */
 	&daplka_cb_ops,		/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	nulldev,		/* power */
 	ddi_quiesce_not_needed,	/* devo_quiesce */
 };

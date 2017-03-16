@@ -5713,7 +5713,7 @@ stmf_scsilib_uniq_lu_id2(uint32_t company_id, uint32_t host_id,
 	p[5] = (company_id >> 12) & 0xff;
 	p[6] = (company_id >> 4) & 0xff;
 	p[7] = (company_id << 4) & 0xf0;
-	if (hid == 0 && !localetheraddr((struct ether_addr *)NULL, &mac)) {
+	if (hid == 0 && !localetheraddr(NULL, &mac)) {
 		hid = BE_32((int)zone_get_hostid(NULL));
 	}
 	if (hid != 0) {

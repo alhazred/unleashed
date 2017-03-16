@@ -297,7 +297,7 @@ rdsv3_ib_create_mr_pool(struct rdsv3_ib_device *rds_ibdev)
 	    IBT_MR_ENABLE_REMOTE_WRITE | IBT_MR_ENABLE_REMOTE_READ;
 	fmr_attr.fmr_page_sz = h_page_sz;
 	fmr_attr.fmr_func_hdlr = NULL;
-	fmr_attr.fmr_func_arg = (void *) NULL;
+	fmr_attr.fmr_func_arg = NULL;
 
 	/* create the FMR pool */
 	ibt_status = ibt_create_fmr_pool(rds_ibdev->ibt_hca_hdl,

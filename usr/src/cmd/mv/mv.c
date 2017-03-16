@@ -987,7 +987,7 @@ create_tnode(dev_t dev, ino_t ino)
 static int
 chkfiles(char *source, char **to)
 {
-	char	*buf = (char *)NULL;
+	char	*buf = NULL;
 	int	(*statf)() = (cpy &&
 	    !(Pflg || (Hflg && !cmdarg))) ? stat : lstat;
 	char    *target = *to;

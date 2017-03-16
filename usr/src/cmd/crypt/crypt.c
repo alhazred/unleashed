@@ -133,7 +133,7 @@ main(int argc, char **argv)
 				pflag = 1;
 				break;
 			case 'k':
-				if ((s = getenv("CrYpTkEy")) == (char *)NULL) {
+				if ((s = getenv("CrYpTkEy")) == NULL) {
 					(void) fprintf(stderr,
 					    "CrYpTkEy not set.\n");
 					exit(1);

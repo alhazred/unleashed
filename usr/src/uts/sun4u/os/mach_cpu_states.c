@@ -123,7 +123,7 @@ mdboot(int cmd, int fcn, char *bootstr, boolean_t invoke_cb)
 	reset_leaves();
 
 	if (fcn == AD_HALT) {
-		halt((char *)NULL);
+		halt(NULL);
 	} else if (fcn == AD_POWEROFF) {
 		power_down(NULL);
 	} else {

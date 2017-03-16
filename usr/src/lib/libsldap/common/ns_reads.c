@@ -44,7 +44,7 @@
 #define	_NIS_DOMAIN	"nisdomain"
 static const char *nis_domain_attrs[] = {
 	_NIS_DOMAIN,
-	(char *)NULL
+	NULL
 };
 
 static int validate_filter(ns_ldap_cookie_t *cookie);

@@ -63,7 +63,7 @@ static const char *gr_attrs[] = {
 	_G_GID,
 	_G_PASSWD,
 	_G_MEM,
-	(char *)NULL
+	NULL
 };
 
 

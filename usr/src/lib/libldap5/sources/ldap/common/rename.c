@@ -220,7 +220,7 @@ ldap_rename_s(
  	if ( msgid == -1 ) 
 		return( LDAP_GET_LDERRNO( ld, NULL, NULL ) );
 
-	if ( ldap_result( ld, msgid, 1, (struct timeval *) NULL, &res ) == -1 )
+	if ( ldap_result( ld, msgid, 1, NULL, &res ) == -1 )
 		return( LDAP_GET_LDERRNO( ld, NULL, NULL ) );
 
 	return( ldap_result2error( ld, res, 1 ) );
@@ -236,7 +236,7 @@ ldap_modrdn2_s( LDAP *ld, const char *dn, const char *newrdn, int deleteoldrdn )
         if ( (msgid = ldap_modrdn2( ld, dn, newrdn, deleteoldrdn )) == -1 )
                 return( LDAP_GET_LDERRNO( ld, NULL, NULL ) );
  
-        if ( ldap_result( ld, msgid, 1, (struct timeval *) NULL, &res ) == -1 )
+        if ( ldap_result( ld, msgid, 1, NULL, &res ) == -1 )
                 return( LDAP_GET_LDERRNO( ld, NULL, NULL ) );
  
         return( ldap_result2error( ld, res, 1 ) );

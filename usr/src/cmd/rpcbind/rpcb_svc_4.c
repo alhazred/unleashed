@@ -90,7 +90,7 @@ rpcb_service_4(struct svc_req *rqstp, SVCXPRT *transp)
 		/*
 		 * Null proc call
 		 */
-		(void) svc_sendreply(transp, (xdrproc_t)xdr_void, (char *)NULL);
+		(void) svc_sendreply(transp, (xdrproc_t)xdr_void, NULL);
 		return;
 
 	case RPCBPROC_SET:

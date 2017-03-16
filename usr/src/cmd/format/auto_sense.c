@@ -275,14 +275,14 @@ auto_efi_sense(int fd, struct efi_info *label)
 	 * get vendor, product, revision and capacity info.
 	 */
 	if (get_disk_info(fd, label, disk_info) == -1) {
-		return ((struct disk_type *)NULL);
+		return (NULL);
 	}
 	/*
 	 * Now build the default partition table
 	 */
 	if (efi_alloc_and_init(fd, EFI_NUMPAR, &vtoc) != 0) {
 		err_print("efi_alloc_and_init failed. \n");
-		return ((struct disk_type *)NULL);
+		return (NULL);
 	}
 
 	label->e_parts = vtoc;
@@ -393,7 +393,7 @@ find_ctlr_type(ushort_t type)
 
 	impossible("no DIRECT/VBD/BLKDEV controller type");
 
-	return ((struct ctlr_type *)NULL);
+	return (NULL);
 }
 
 static struct ctlr_info *
@@ -415,7 +415,7 @@ find_ctlr_info(struct dk_cinfo *dkinfo, ushort_t type)
 
 	impossible("no DIRECT/VBD/BLKDEV controller info");
 	/*NOTREACHED*/
-	return ((struct ctlr_info *)NULL);
+	return (NULL);
 }
 
 static  struct disk_info *
@@ -440,7 +440,7 @@ find_disk_info(struct dk_cinfo *dkinfo, ushort_t type)
 
 	impossible("No DIRECT/VBD/BLKDEV disk info instance\n");
 	/*NOTREACHED*/
-	return ((struct disk_info *)NULL);
+	return (NULL);
 }
 
 /*
@@ -801,7 +801,7 @@ auto_sense(
 	 * no hope for this disk, so give up.
 	 */
 	if (uscsi_inquiry(fd, (char *)&inquiry, sizeof (inquiry))) {
-		return ((struct disk_type *)NULL);
+		return (NULL);
 	}
 	if (option_msg && diag_msg) {
 		err_print("Product id: ");
@@ -813,7 +813,7 @@ auto_sense(
 	 * Get the Read Capacity
 	 */
 	if (uscsi_read_capacity(fd, &capacity)) {
-		return ((struct disk_type *)NULL);
+		return (NULL);
 	}
 
 	/*
@@ -829,7 +829,7 @@ auto_sense(
 		if (option_msg && diag_msg) {
 			err_print("Invalid capacity\n");
 		}
-		return ((struct disk_type *)NULL);
+		return (NULL);
 	}
 	if (option_msg && diag_msg) {
 		err_print("blocks:  %llu (0x%llx)\n",
@@ -849,7 +849,7 @@ auto_sense(
 	if (scsi_rdwr(DIR_READ, fd, (diskaddr_t)0, 1, (caddr_t)buf,
 	    F_SILENT, NULL)) {
 		free(buf);
-		return ((struct disk_type *)NULL);
+		return (NULL);
 	}
 	free(buf);
 
@@ -1707,7 +1707,7 @@ find_scsi_disk_type(
 		}
 	}
 
-	return ((struct disk_type *)NULL);
+	return (NULL);
 }
 
 
@@ -1731,7 +1731,7 @@ find_scsi_disk_by_name(
 		}
 	}
 
-	return ((struct disk_type *)NULL);
+	return (NULL);
 }
 
 
@@ -1757,7 +1757,7 @@ find_scsi_ctlr_type()
 
 	impossible("no SCSI controller type");
 
-	return ((struct ctlr_type *)NULL);
+	return (NULL);
 }
 
 
@@ -1787,7 +1787,7 @@ find_scsi_ctlr_info(
 
 	impossible("no SCSI controller info");
 
-	return ((struct ctlr_info *)NULL);
+	return (NULL);
 }
 
 
@@ -2013,7 +2013,7 @@ find_scsi_disk_info(
 
 	impossible("No SCSI disk info instance\n");
 
-	return ((struct disk_info *)NULL);
+	return (NULL);
 }
 
 

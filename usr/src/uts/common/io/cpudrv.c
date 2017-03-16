@@ -93,8 +93,8 @@ struct dev_ops cpudrv_ops = {
 	cpudrv_attach,		/* attach */
 	cpudrv_detach,		/* detach */
 	nodev,			/* reset */
-	(struct cb_ops *)NULL,	/* cb_ops */
-	(struct bus_ops *)NULL,	/* bus_ops */
+	NULL,	/* cb_ops */
+	NULL,	/* bus_ops */
 	cpudrv_power,		/* power */
 	ddi_quiesce_not_needed,		/* quiesce */
 };

@@ -426,7 +426,7 @@ automountd_do_fork_exec(void *cookie, char *argp, size_t arg_size,
 
 		for (i = 0; *command->argv[i]; i++) {
 			newargv[i] = strdup(command->argv[i]);
-			if (newargv[i] == (char *)NULL) {
+			if (newargv[i] == NULL) {
 				syslog(LOG_ERR, "failed to copy argument '%s'"
 				    " of %s: %m", command->argv[i],
 				    command->file);

@@ -173,7 +173,7 @@ static struct dev_ops qcn_ops = {
 	qcn_detach,		/* detach()		*/
 	nodev,			/* reset()		*/
 	&qcn_cb_ops,		/* cb_ops		*/
-	(struct bus_ops *)NULL,	/* bus_ops		*/
+	NULL,	/* bus_ops		*/
 	NULL,			/* power()		*/
 	ddi_quiesce_not_needed,		/* quiesce()		*/
 };
@@ -1104,7 +1104,7 @@ qcn_receive_read(void)
 				for (i = 0; i < retcount; i++) {
 					if (abort_charseq_recognize(*bufp++)) {
 						abort_sequence_enter(
-						    (char *)NULL);
+						    NULL);
 					}
 				}
 			}
@@ -1134,7 +1134,7 @@ qcn_receive_read(void)
 				 * on break enter the debugger
 				 */
 				if (abort_enable != KIOCABORTALTERNATE)
-					abort_sequence_enter((char *)NULL);
+					abort_sequence_enter(NULL);
 				break;
 
 			case H_HUP :
@@ -1159,7 +1159,7 @@ qcn_receive_getchr(void)
 		if (rv == H_EOK) {
 			if (abort_enable == KIOCABORTALTERNATE) {
 				if (abort_charseq_recognize(buf)) {
-					abort_sequence_enter((char *)NULL);
+					abort_sequence_enter(NULL);
 				}
 			}
 
@@ -1172,7 +1172,7 @@ qcn_receive_getchr(void)
 		} else {
 			if (rv == H_BREAK) {
 				if (abort_enable != KIOCABORTENABLE)
-					abort_sequence_enter((char *)NULL);
+					abort_sequence_enter(NULL);
 			}
 
 			if (rv == H_HUP)  {
@@ -1198,7 +1198,7 @@ qcn_poll_handler(void *unused)
 		rv = hv_cngetchar(&buf);
 		if (rv == H_BREAK) {
 			if (abort_enable != KIOCABORTALTERNATE)
-				abort_sequence_enter((char *)NULL);
+				abort_sequence_enter(NULL);
 		}
 
 		if (rv == H_HUP)  {
@@ -1214,7 +1214,7 @@ qcn_poll_handler(void *unused)
 
 		if (abort_enable == KIOCABORTALTERNATE) {
 			if (abort_charseq_recognize(buf)) {
-				abort_sequence_enter((char *)NULL);
+				abort_sequence_enter(NULL);
 			}
 		}
 

@@ -491,7 +491,7 @@ _checkhost(const char *rhost, const char *lhost, int len)
 			return(0);
 		}
 		ldomain[MAXHOSTNAMELEN] = (char) 0;
-		if ((domainp = index(ldomain, '.')) == (char *)NULL) {
+		if ((domainp = index(ldomain, '.')) == NULL) {
 			nodomain = 1;
 			return(0);
 		}

@@ -2038,7 +2038,7 @@ msgflags(private_t *pri, int arg)
 	char *str;
 
 	if (arg == 0 || (arg & ~(IPC_FLAGS|MSG_NOERROR|0777)) != 0)
-		return ((char *)NULL);
+		return (NULL);
 
 	str = ipcflags(pri, arg);
 
@@ -2056,7 +2056,7 @@ semflags(private_t *pri, int arg)
 	char *str;
 
 	if (arg == 0 || (arg & ~(IPC_FLAGS|SEM_UNDO|0777)) != 0)
-		return ((char *)NULL);
+		return (NULL);
 
 	str = ipcflags(pri, arg);
 
@@ -2074,7 +2074,7 @@ shmflags(private_t *pri, int arg)
 	char *str;
 
 	if (arg == 0 || (arg & ~(IPC_FLAGS|SHM_RDONLY|SHM_RND|0777)) != 0)
-		return ((char *)NULL);
+		return (NULL);
 
 	str = ipcflags(pri, arg);
 
@@ -2187,7 +2187,7 @@ strevents(private_t *pri, int arg)
 	char *str = pri->code_buf;
 
 	if (arg & ~(S_INPUT|S_HIPRI|S_OUTPUT|S_MSG|S_ERROR|S_HANGUP))
-		return ((char *)NULL);
+		return (NULL);
 
 	*str = '\0';
 	if (arg & S_INPUT)
@@ -2212,7 +2212,7 @@ tiocflush(private_t *pri, int arg)	/* bit map passsed by TIOCFLUSH */
 	char *str = pri->code_buf;
 
 	if (arg & ~(FREAD|FWRITE))
-		return ((char *)NULL);
+		return (NULL);
 
 	*str = '\0';
 	if (arg & FREAD)
@@ -2247,7 +2247,7 @@ mountflags(private_t *pri, int arg)	/* bit map of mount syscall flags */
 	size_t used = 0;
 
 	if (arg & ~ALL_MOUNT_FLAGS)
-		return ((char *)NULL);
+		return (NULL);
 
 	*str = '\0';
 	if (arg & MS_RDONLY)
@@ -2272,7 +2272,7 @@ mountflags(private_t *pri, int arg)	/* bit map of mount syscall flags */
 		used = strlcat(str, "|MS_NOMNTTAB", sizeof (pri->code_buf));
 
 	if (used == 0 || used >= sizeof (pri->code_buf))
-		return ((char *)NULL);			/* use prt_hex() */
+		return (NULL);			/* use prt_hex() */
 
 	return ((const char *)(str+1));
 }

@@ -130,7 +130,7 @@ ring_buff_create(dcam_state_t *softc_p, size_t num_buffs,
 
 		rc = ddi_dma_addr_bind_handle(
 		    buff_info_p->dma_handle,
-		    (struct as *)NULL,
+		    NULL,
 		    (caddr_t)buff_info_p->kaddr_p,
 		    buff_info_p->real_len,
 		    DDI_DMA_RDWR | DDI_DMA_STREAMING,

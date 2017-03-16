@@ -74,7 +74,7 @@ typedef struct _ss_data {	/* init values */
     /* info directory for 'help' */
     char **info_dirs;
     /* to be extracted by subroutines */
-    pointer info_ptr;		/* (void *) NULL */
+    pointer info_ptr;		/* NULL */
     /* for ss_listen processing */
     char *prompt;
     ss_request_table **rqt_tables;

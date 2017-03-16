@@ -99,7 +99,7 @@ static struct	opvar {
 	e(MODE_PROPERTY,	i_secure,	(func)NULL),
 	e(PASSWORD_PROPERTY,	i_passwd,	o_passwd),
 	e(LOGO_PROPERTY,	i_oemlogo,	(func)NULL),
-	{ (char *)NULL, (func)NULL, (func)NULL}
+	{ NULL, (func)NULL, (func)NULL}
 #undef e
 };
 

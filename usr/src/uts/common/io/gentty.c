@@ -168,7 +168,7 @@ sy_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 	switch (infocmd) {
 	case DDI_INFO_DEVT2DEVINFO:
 		if (sy_dip == NULL) {
-			*result = (void *)NULL;
+			*result = NULL;
 			error = DDI_FAILURE;
 		} else {
 			*result = (void *) sy_dip;

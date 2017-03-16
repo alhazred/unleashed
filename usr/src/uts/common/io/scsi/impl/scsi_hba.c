@@ -1428,7 +1428,7 @@ scsi_hba_fini(struct modlinkage *modlp)
 	if (hba_dev_ops->devo_getinfo == scsi_hba_info)
 		hba_dev_ops->devo_getinfo = NULL;
 
-	hba_dev_ops->devo_bus_ops = (struct bus_ops *)NULL;
+	hba_dev_ops->devo_bus_ops = NULL;
 }
 
 /*
@@ -2200,7 +2200,7 @@ scsi_busctl_uninitchild(dev_info_t *child)
 	 */
 	if (sd->sd_inq) {
 		kmem_free(sd->sd_inq, SUN_INQSIZE);
-		sd->sd_inq = (struct scsi_inquiry *)NULL;
+		sd->sd_inq = NULL;
 	}
 
 	mutex_destroy(&sd->sd_mutex);
@@ -7014,14 +7014,14 @@ again:	bsize = sizeof (struct scsi_lunrpt) +
 	    ((nluns - 1) * sizeof (struct scsi_lun));
 
 	lunrpt_bp = scsi_alloc_consistent_buf(&sd0->sd_address,
-	    (struct buf *)NULL, bsize, B_READ, SLEEP_FUNC, NULL);
+	    NULL, bsize, B_READ, SLEEP_FUNC, NULL);
 	if (lunrpt_bp == NULL) {
 		SCSI_HBA_LOG((_LOG(1), NULL, child, "failed alloc"));
 		return (NDI_NOMEM);
 	}
 
 	lunrpt_pkt = scsi_init_pkt(&sd0->sd_address,
-	    (struct scsi_pkt *)NULL, lunrpt_bp, CDB_GROUP5,
+	    NULL, lunrpt_bp, CDB_GROUP5,
 	    sizeof (struct scsi_arq_status), 0, PKT_CONSISTENT,
 	    SLEEP_FUNC, NULL);
 	if (lunrpt_pkt == NULL) {

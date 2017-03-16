@@ -142,7 +142,7 @@ main(int ac, char *av[])
 {
 	char *propname = NULL;
 	char *dir = "/";
-	char *provider = (char *)NULL;
+	char *provider = NULL;
 	struct protob *protobp;
 	NETSELPDECL(providerp);
 	sigset_t sgset;
@@ -384,7 +384,7 @@ main(int ac, char *av[])
 	protobp->versmin = NLM_VERS;
 	protobp->versmax = NLM4_VERS;
 	protobp->program = NLM_PROG;
-	protobp->next = (struct protob *)NULL;
+	protobp->next = NULL;
 
 	for (providerp = defaultproviders;
 	    *providerp != NULL; providerp++) {
@@ -412,7 +412,7 @@ main(int ac, char *av[])
 	 * Get rid of unneeded privileges.
 	 */
 	__fini_daemon_priv(PRIV_PROC_FORK, PRIV_PROC_EXEC, PRIV_PROC_SESSION,
-	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, (char *)NULL);
+	    PRIV_FILE_LINK_ANY, PRIV_PROC_INFO, NULL);
 
 	/*
 	 * Poll for non-data control events on the transport descriptors.

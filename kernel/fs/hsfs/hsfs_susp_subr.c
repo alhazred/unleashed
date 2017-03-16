@@ -95,7 +95,7 @@ parse_sua(
 	uchar_t			*tmp_SUA_p = (SUA_p + fsp->hsfs_sua_off);
 	int			tmp_SUA_len = (SUA_len - fsp->hsfs_sua_off);
 	short			ret_val = -1;
-	uchar_t			*cont_p = (uchar_t *)NULL;
+	uchar_t			*cont_p = NULL;
 	sig_args_t		sig_args;
 	cont_info_t		cont_info;
 
@@ -226,7 +226,7 @@ parse_signatures(
 					/* remaining to be parsed */
 
 	/* This should never happen ... just so we don't panic, literally */
-	if (sig_string == (uchar_t *)NULL)
+	if (sig_string == NULL)
 		return (SUA_NULL_POINTER);
 
 	if (SUA_len < 0)
@@ -246,7 +246,7 @@ parse_signatures(
 		 * Find appropriate extension and signature table
 		 */
 		for (extnp = extension_name_table, impl_bit_num = 0;
-		    extnp->extension_name != (char *)NULL;
+		    extnp->extension_name != NULL;
 		    extnp++, impl_bit_num++)  {
 
 			/*
@@ -260,7 +260,7 @@ parse_signatures(
 			 * Find the appropriate signature
 			 */
 			for (ext_sigp = extnp->signature_table;
-			    ext_sigp->ext_signature != (char *)NULL;
+			    ext_sigp->ext_signature != NULL;
 			    ext_sigp++)  {
 
 				if (strncmp((char *)sig_string,
@@ -426,7 +426,7 @@ hs_check_root_dirent(struct vnode *vp, struct hs_direntry *hdp)
 		sig_args.SUF_ptr = IDE_sys_use_area(root_ptr);
 		sig_args.fsp	 = fsp;
 
-		if ((susp_sp->sig_handler)(&sig_args) == (uchar_t *)NULL) {
+		if ((susp_sp->sig_handler)(&sig_args) == NULL) {
 			goto end;
 		}
 	} else {
@@ -442,10 +442,10 @@ hs_check_root_dirent(struct vnode *vp, struct hs_direntry *hdp)
 	 * the root vnode. The solution is to run hs_parsedir() a second time
 	 * for the root directory.
 	 */
-	if (hs_parsedir(fsp, root_ptr, hdp, (char *)NULL, (int *)NULL,
+	if (hs_parsedir(fsp, root_ptr, hdp, NULL, NULL,
 	    HS_SECTOR_SIZE - secoff) == 0) {
-		(void) hs_parsedir(fsp, root_ptr, hdp, (char *)NULL,
-		    (int *)NULL, HS_SECTOR_SIZE - secoff);
+		(void) hs_parsedir(fsp, root_ptr, hdp, NULL,
+		    NULL, HS_SECTOR_SIZE - secoff);
 	}
 
 	/*
@@ -487,7 +487,7 @@ get_cont_area(struct hsfs *fsp, uchar_t **buf_pp, cont_info_t *cont_info_p)
 		return (1);
 	}
 
-	if (*buf_pp == (uchar_t *)NULL)
+	if (*buf_pp == NULL)
 		*buf_pp = kmem_alloc((size_t)HS_SECTOR_SIZE, KM_SLEEP);
 
 	secno = (uint_t)LBN_TO_SEC(cont_info_p->cont_lbn, fsp->hsfs_vfs);
@@ -557,5 +557,5 @@ free_cont_area(uchar_t *cont_p)
 {
 	if (cont_p)
 		(void) kmem_free((caddr_t)cont_p, (size_t)HS_SECTOR_SIZE);
-	cont_p = (uchar_t *)NULL;
+	cont_p = NULL;
 }

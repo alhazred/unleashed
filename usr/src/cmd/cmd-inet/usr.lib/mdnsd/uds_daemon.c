@@ -5108,7 +5108,7 @@ mDNSlocal mDNSBool uds_socket_setup(dnssd_sock_t skt)
         return mDNSfalse;
     }
 
-    if (mStatus_NoError != udsSupportAddFDToEventLoop(skt, connect_callback, (void *) NULL, (void **) NULL))
+    if (mStatus_NoError != udsSupportAddFDToEventLoop(skt, connect_callback, NULL, (void **) NULL))
     {
         my_perror("ERROR: could not add listen socket to event loop");
         return mDNSfalse;

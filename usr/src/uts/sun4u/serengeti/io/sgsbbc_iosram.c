@@ -769,10 +769,10 @@ iosram_unreg_intr(uint32_t intr_num)
 		ddi_remove_softintr(intr->sbbc_intr_id);
 
 	intr->sbbc_handler  = (sbbc_intrfunc_t)NULL;
-	intr->sbbc_arg = (void *)NULL;
+	intr->sbbc_arg = NULL;
 	intr->sbbc_intr_id = 0;
 	intr->sbbc_intr_state = NULL;
-	intr->sbbc_intr_lock = (kmutex_t *)NULL;
+	intr->sbbc_intr_lock = NULL;
 	intr->sbbc_intr_next = (sbbc_intrs_t *)NULL;
 
 unreg_intr_exit:

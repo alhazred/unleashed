@@ -701,7 +701,7 @@ char *argv[];
 
 	/* update project database */
 	if ((projects != NULL) &&
-	    edit_project(logname, (char *)NULL, projlist, 0)) {
+	    edit_project(logname, NULL, projlist, 0)) {
 		errmsg(M_UPDATE, "created");
 		cleanup(logname);
 		exit(EX_UPDATE);
@@ -718,7 +718,7 @@ char *argv[];
 		ret = create_home(homedir, skel_dir, uid, gid, zfs_flags);
 	}
 	if (ret != EX_SUCCESS) {
-		(void) edit_project(logname, (char *)NULL, (projid_t **)NULL,
+		(void) edit_project(logname, NULL, (projid_t **)NULL,
 		    0);
 		(void) edit_group(logname, (char *)0, (int **)0, 1);
 		cleanup(logname);

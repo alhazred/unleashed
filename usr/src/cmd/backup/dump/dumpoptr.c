@@ -64,7 +64,7 @@ addem(s)
 {
 	int total = 0;
 
-	if (s == (char *)NULL)
+	if (s == NULL)
 		return (total);
 	while (*s)
 		total += *s++;
@@ -87,7 +87,7 @@ query_once(question, def)
 
 	/* special hook to flush timeout cache */
 	if (question == NULL) {
-		lastmsg = (char *)NULL;
+		lastmsg = NULL;
 		lastmsgsum = 0;
 		return (0);
 	}
@@ -149,12 +149,12 @@ query_once(question, def)
 		timeout = 0;
 		if (strcasecmp(replybuffer, gettext("yes\n")) == 0) {
 			back = 1;
-			lastmsg = (char *)NULL;
+			lastmsg = NULL;
 			lastmsgsum = 0;
 			goto done;
 		} else if (strcasecmp(replybuffer, gettext("no\n")) == 0) {
 			back = 0;
-			lastmsg = (char *)NULL;
+			lastmsg = NULL;
 			lastmsgsum = 0;
 			goto done;
 		} else {
@@ -272,7 +272,7 @@ broadcast(message)
 			msg(gettext("dup2: %s\n"), strerror(saverr));
 			exit(1);
 		}
-		execl("/usr/sbin/wall", "wall", "-g", OPGRENT, (char *)NULL);
+		execl("/usr/sbin/wall", "wall", "-g", OPGRENT, NULL);
 		saverr = errno;
 		msg(gettext("execl: %s\n"), strerror(saverr));
 		exit(1);
@@ -282,7 +282,7 @@ broadcast(message)
 
 	close(fildes[1]);
 	wall = fdopen(fildes[0], "r+");
-	if (wall == (FILE *)NULL) {
+	if (wall == NULL) {
 		saverr = errno;
 		msg(gettext("fdopen: %s\n"), strerror(saverr));
 		return;

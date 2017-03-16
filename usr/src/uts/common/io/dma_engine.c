@@ -89,7 +89,7 @@ i_dmae_init(dev_info_t *dip)
 	/* initialize semaphore map */
 	for (chnl = 0; chnl < NCHANS; chnl++) {
 		sema_init(&dmae_stat[chnl].dch_lock, 1, NULL, SEMA_DRIVER,
-		    (void *)NULL);
+		    NULL);
 	}
 	return (d37A_init(dip));
 }

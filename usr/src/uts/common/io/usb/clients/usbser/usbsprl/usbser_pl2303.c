@@ -134,7 +134,7 @@ struct dev_ops usbser_pl2303_ops = {
 	usbser_pl2303_detach,	/* devo_detach */
 	nodev,			/* devo_reset */
 	&usbser_pl2303_cb_ops,	/* devo_cb_ops */
-	(struct bus_ops *)NULL,	/* devo_bus_ops */
+	NULL,	/* devo_bus_ops */
 	usbser_power,		/* devo_power */
 	ddi_quiesce_not_needed,	/* devo_quiesce */
 };

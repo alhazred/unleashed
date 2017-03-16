@@ -212,7 +212,7 @@ tmpnode_init(struct tmount *tm, struct tmpnode *t, vattr_t *vap, cred_t *cred)
 	 * Add new tmpnode to end of linked list of tmpnodes for this tmpfs
 	 * Root directory is handled specially in tmp_mount.
 	 */
-	if (tm->tm_rootnode != (struct tmpnode *)NULL) {
+	if (tm->tm_rootnode != NULL) {
 		t->tn_forw = NULL;
 		t->tn_back = tm->tm_rootnode->tn_back;
 		t->tn_back->tn_forw = tm->tm_rootnode->tn_back = t;

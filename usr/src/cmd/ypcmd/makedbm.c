@@ -322,7 +322,7 @@ main(argc, argv)
 			exit(1);
 		}
 
-		if ((outfp = fopen(tmpdirbuf, "w")) == (FILE *)NULL) {
+		if ((outfp = fopen(tmpdirbuf, "w")) == NULL) {
 			fprintf(stderr, "makedbm: can't create %s\n",
 				tmpdirbuf);
 			exit(1);
@@ -361,7 +361,7 @@ main(argc, argv)
 		sleep(1);
 	}
 
-	if (fopen(tmppagbuf, "w") == (FILE *)NULL) {
+	if (fopen(tmppagbuf, "w") == NULL) {
 		fprintf(stderr, "makedbm: can't create %s\n", tmppagbuf);
 		exit(1);
 	}

@@ -1673,7 +1673,7 @@ segspt_shmattach(struct seg *seg, caddr_t *argsp)
 	if (sptd->spt_flags & SHM_PAGEABLE) {
 		if ((shmd->shm_vpage = kmem_zalloc(btopr(shm_amp->size),
 		    KM_NOSLEEP)) == NULL) {
-			seg->s_data = (void *)NULL;
+			seg->s_data = NULL;
 			kmem_free(shmd, (sizeof (*shmd)));
 			return (ENOMEM);
 		}
@@ -1693,7 +1693,7 @@ segspt_shmattach(struct seg *seg, caddr_t *argsp)
 	}
 	if (error) {
 		seg->s_szc = 0;
-		seg->s_data = (void *)NULL;
+		seg->s_data = NULL;
 		kmem_free(shmd, (sizeof (*shmd)));
 	} else {
 		ANON_LOCK_ENTER(&shm_amp->a_rwlock, RW_WRITER);

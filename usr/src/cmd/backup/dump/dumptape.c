@@ -1061,7 +1061,7 @@ nextdevice()
 	 *	device
 	 * for local devices.
 	 */
-	if (dumpdev != (char *)NULL) {
+	if (dumpdev != NULL) {
 		/* LINTED: dumpdev is not NULL */
 		free(dumpdev);
 	}
@@ -1287,7 +1287,7 @@ changevol()
 		 * Stop the clock for throughput calculations.
 		 */
 		if ((telapsed != NULL) && (tstart_writing != NULL)) {
-			*telapsed += time((time_t *)NULL) - *tstart_writing;
+			*telapsed += time(NULL) - *tstart_writing;
 		}
 
 		(void) snprintf(volname, sizeof (volname), "#%d", tapeno+1);

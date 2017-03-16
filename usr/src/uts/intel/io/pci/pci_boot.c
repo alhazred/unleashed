@@ -3133,7 +3133,7 @@ add_ranges_prop(int bus, int ppb)
 	if (pci_bus_res[bus].dip == NULL)
 		return;
 
-	iolist = memlist = pmemlist = (struct memlist *)NULL;
+	iolist = memlist = pmemlist = NULL;
 
 	memlist_merge(&pci_bus_res[bus].io_avail, &iolist);
 	memlist_merge(&pci_bus_res[bus].io_used, &iolist);

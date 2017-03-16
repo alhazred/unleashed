@@ -243,7 +243,7 @@ usb_process(di_minor_t minor, di_node_t node)
 {
 	devfsadm_enumerate_t rules[1];
 	char *l_path, *p_path, *buf, *devfspath;
-	char *minor_nm, *drvr_nm, *name = (char *)NULL;
+	char *minor_nm, *drvr_nm, *name = NULL;
 	int i, index;
 	int flags = 0;
 	int create_secondary_link = 0;
