@@ -191,7 +191,7 @@ _rsm_librsm_init()
 	 * in order to support close barrier
 	 */
 	/* LINTED */
-	bar_va = (rsm_gnum_t *)mmap(NULL, msg.len,
+	bar_va = mmap(NULL, msg.len,
 	    PROT_READ, MAP_SHARED, _rsm_fd, msg.off);
 	if (bar_va == (rsm_gnum_t *)MAP_FAILED) {
 		bar_va = NULL;

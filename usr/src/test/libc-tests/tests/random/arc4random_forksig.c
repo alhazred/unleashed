@@ -65,7 +65,7 @@ main(void)
 	(void) arc4random();
 #endif
 
-	fork_data = (arc4_fork_t *)mmap(NULL, sizeof (arc4_fork_t),
+	fork_data = mmap(NULL, sizeof (arc4_fork_t),
 	    PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 	assert(fork_data != MAP_FAILED);
 

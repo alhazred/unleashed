@@ -181,7 +181,7 @@ __uaio_init(void)
 	 */
 	if (_aio_hash == NULL) {
 		/* LINTED pointer cast */
-		_aio_hash = (aio_hash_t *)mmap(NULL,
+		_aio_hash = mmap(NULL,
 		    HASHSZ * sizeof (aio_hash_t), PROT_READ | PROT_WRITE,
 		    MAP_PRIVATE | MAP_ANON, -1, (off_t)0);
 		if ((void *)_aio_hash == MAP_FAILED) {

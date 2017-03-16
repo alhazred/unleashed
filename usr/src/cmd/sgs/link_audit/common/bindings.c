@@ -251,7 +251,7 @@ la_version(uint_t version)
 		}
 
 		/* LINTED */
-		if ((bhp = (bindhead *)mmap(NULL, init_size,
+		if ((bhp = mmap(NULL, init_size,
 		    PROT_READ | PROT_WRITE,
 		    MAP_SHARED, fd, 0)) == MAP_FAILED) {
 			perror("bindings.so: mmap");
@@ -287,7 +287,7 @@ la_version(uint_t version)
 				continue;
 			}
 			/* LINTED */
-			if ((bhp = (bindhead *)mmap(NULL, stbuf.st_size,
+			if ((bhp = mmap(NULL, stbuf.st_size,
 			    PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0)) ==
 			    MAP_FAILED) {
 				(void) fprintf(stderr,

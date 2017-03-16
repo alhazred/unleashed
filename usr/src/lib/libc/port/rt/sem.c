@@ -137,7 +137,7 @@ sem_open(const char *path, int oflag, /* mode_t mode, int value */ ...)
 	cr_flag |= ALLOC_MEM;
 
 	/* LINTED */
-	sem = (sem_t *)mmap64(NULL, sizeof (sem_t), PROT_READ|PROT_WRITE,
+	sem = mmap64(NULL, sizeof (sem_t), PROT_READ|PROT_WRITE,
 	    MAP_SHARED, fd, (off64_t)0);
 	(void) __close_nc(fd);
 	cr_flag &= ~DFILE_OPEN;

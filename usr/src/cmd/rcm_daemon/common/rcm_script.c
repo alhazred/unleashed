@@ -547,7 +547,7 @@ open_state_file(const char *filename,
 
 	if (stats.st_size != 0) {
 		/* LINTED */
-		statefd->state_file = (state_file_t *)mmap(NULL,
+		statefd->state_file = mmap(NULL,
 			stats.st_size, PROT_READ|PROT_WRITE, MAP_SHARED,
 			statefd->fd, 0);
 
@@ -626,7 +626,7 @@ grow_state_file(state_file_descr_t *statefd)
 	}
 
 	/* LINTED */
-	statefd->state_file = (state_file_t *)mmap(NULL, size,
+	statefd->state_file = mmap(NULL, size,
 		PROT_READ|PROT_WRITE, MAP_SHARED, statefd->fd, 0);
 
 	if (statefd->state_file == MAP_FAILED) {

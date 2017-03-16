@@ -832,7 +832,7 @@ int main(int argc, char *argv[])
          */
         maplen = alloc.agpa_pgcount * AGP_PAGE_SIZE;
         mapoff = bindinfo.agpb_pgstart * AGP_PAGE_SIZE;
-        p = (int *)mmap(NULL, maplen, (PROT_READ | PROT_WRITE),
+        p = mmap(NULL, maplen, (PROT_READ | PROT_WRITE),
                         MAP_SHARED, fd, mapoff);
         if (p == MAP_FAILED) {
                 printf("Mmap error %d\en", errno);

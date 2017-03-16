@@ -111,7 +111,7 @@ Mmvm_t*	mm;	/* to return some mapped info	*/
 		if(mm->magic != MM_MAGIC || !mm->base ||
 		   (off_t)mm->size != size || mm->busy > mm->size )
 			goto done;
-		base = (Void_t*)mmap(mm->base, mm->size, PROT_READ|PROT_WRITE,
+		base = mmap(mm->base, mm->size, PROT_READ|PROT_WRITE,
 				     MAP_FIXED|MAP_SHARED, fd, (off_t)0 );
 		if(base == (Void_t*)MAP_FAILED)
 			base = NIL(Void_t*);
@@ -125,7 +125,7 @@ Mmvm_t*	mm;	/* to return some mapped info	*/
 		if(lseek(fd, size-1, 0) != (size-1) || write(fd, "", 1) != 1 )
 			goto done;
 
-		base = (Void_t*)mmap(addr, (size_t)size, PROT_READ|PROT_WRITE,
+		base = mmap(addr, (size_t)size, PROT_READ|PROT_WRITE,
 				     (addr ? MAP_FIXED : 0)|MAP_SHARED, fd, (off_t)0 );
 		if(base == (Void_t*)MAP_FAILED)
 			base = NIL(Void_t*);
@@ -191,7 +191,7 @@ Vmdisc_t*	disc;
 		
 		/* remap the space */
 		(void)munmap(caddr, mmdc->mm->size);
-		caddr = (Void_t*)mmap(caddr, csize, PROT_READ|PROT_WRITE,
+		caddr = mmap(caddr, csize, PROT_READ|PROT_WRITE,
 				     MAP_FIXED|MAP_SHARED, mmdc->fd, (off_t)0 );
 		if(caddr == (Void_t*)MAP_FAILED)
 			caddr = NIL(Void_t*);

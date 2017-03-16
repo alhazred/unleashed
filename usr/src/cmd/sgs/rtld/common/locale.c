@@ -164,7 +164,7 @@ open_mofile(Domain * dom)
 	}
 
 	/* LINTED */
-	if ((msghdr = (Msghdr *)mmap(NULL, status.st_size, PROT_READ, MAP_SHARED,
+	if ((msghdr = mmap(NULL, status.st_size, PROT_READ, MAP_SHARED,
 	    fd, 0)) == (Msghdr *)-1) {
 		(void) close(fd);
 		return;

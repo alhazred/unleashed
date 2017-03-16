@@ -132,7 +132,7 @@ found:
 		size_t totsize = size + HDR_PAGE;
 		size_t totpage = align(totsize, pagesize);
 
-		if ((page = (struct page *)mmap(NULL, totpage,
+		if ((page = mmap(NULL, totpage,
 		    PROT_READ|PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))
 		    == MAP_FAILED)
 			return (0);

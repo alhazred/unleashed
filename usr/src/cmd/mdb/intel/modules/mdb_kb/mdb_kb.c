@@ -396,7 +396,7 @@ xkb_map_p2m(xkb_t *xkb)
 	off = PAGE_MASK(boff);
 
 	/* LINTED - alignment */
-	xc->xc_p2m_buf = (mfn_t *)mmap(NULL, size, PROT_READ,
+	xc->xc_p2m_buf = mmap(NULL, size, PROT_READ,
 	    MAP_SHARED, xkb->xkb_fd, off);
 
 	if (xc->xc_p2m_buf == (xen_pfn_t *)MAP_FAILED) {

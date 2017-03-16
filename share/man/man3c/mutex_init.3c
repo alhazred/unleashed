@@ -673,7 +673,7 @@ main(int argc,char * argv[]){
          /* Should be run prior to running a DECREMENT process */
          create_shared_memory();
          ipc_fd = open(INTERPROCESS_FILE, O_RDWR);
-         buffer = (buffer_t *)mmap(NULL, sizeof(buffer_t),
+         buffer = mmap(NULL, sizeof(buffer_t),
              PROT_READ | PROT_WRITE, MAP_SHARED, ipc_fd, 0);
          buffer->Interprocess_data = 0;
          mutex_init(&buffer->Interprocess_mutex, USYNC_PROCESS,0);
@@ -686,7 +686,7 @@ main(int argc,char * argv[]){
          /* Should be run after the INCREMENT process has run. */
          while(ipc_fd = open(INTERPROCESS_FILE, O_RDWR)) == -1)
              sleep(1);
-         buffer = (buffer_t *)mmap(NULL, sizeof(buffer_t),
+         buffer = mmap(NULL, sizeof(buffer_t),
              PROT_READ | PROT_WRITE, MAP_SHARED, ipc_fd, 0);
          for (i=0; i< NUM_SUBTRACTTHREADS; i++)
          thr_create(NULL, 0, subtract_interprocess_data, argv[1],
@@ -775,14 +775,14 @@ The following example shows how to use a \fBUSYNC_PROCESS\fR |
      if (argc > 1) {
          while((ipc_fd = open(INTERPROCESS_FILE, O_RDWR)) == -1)
              sleep(1);
-         buffer = (buffer_t *)mmap(NULL, sizeof(buffer_t),
+         buffer = mmap(NULL, sizeof(buffer_t),
                    PROT_READ | PROT_WRITE, MAP_SHARED, ipc_fd, 0);
          mutex_init(&buffer->Interprocess_mutex,
                      USYNC_PROCESS | LOCK_ROBUST, 0);
      } else {
          create_shared_memory();
          ipc_fd = open(INTERPROCESS_FILE, O_RDWR);
-         buffer = (buffer_t *)mmap(NULL, sizeof(buffer_t),
+         buffer = mmap(NULL, sizeof(buffer_t),
                PROT_READ | PROT_WRITE, MAP_SHARED, ipc_fd, 0);
          buffer->Interprocess_data = 0;
          mutex_init(&buffer->Interprocess_mutex,

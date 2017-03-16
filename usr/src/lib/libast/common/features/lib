@@ -481,7 +481,7 @@ tst	lib_memccpy string.h unistd.h stdlib.h fcntl.h signal.h sys/types.h sys/stat
 			return 0;
 		if ((fd = open("/dev/zero", O_RDWR)) < 0)
 			return 0;
-		if (!(srcbuf = (char*)mmap(NULL, siz, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0)))
+		if (!(srcbuf = mmap(NULL, siz, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0)))
 			return 0;
 		if (!mmap(srcbuf + siz, siz, PROT_NONE, MAP_PRIVATE, fd, 0))
 			return 0;

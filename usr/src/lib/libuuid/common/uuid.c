@@ -266,7 +266,7 @@ map_state()
 	(void) ftruncate(fd, (off_t)sizeof (shared_buffer_t));
 
 	/* LINTED - alignment */
-	data = (shared_buffer_t *)mmap(NULL, sizeof (shared_buffer_t),
+	data = mmap(NULL, sizeof (shared_buffer_t),
 	    PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 
 	if (data == MAP_FAILED)

@@ -123,7 +123,7 @@ rcmd_lock_init(void)
 	}
 
 	/*LINTED*/
-	dr_req_list = (req_list_t *)mmap(NULL, size, PROT_READ|PROT_WRITE,
+	dr_req_list = mmap(NULL, size, PROT_READ|PROT_WRITE,
 	    MAP_SHARED, state_fd, 0);
 	if (dr_req_list == MAP_FAILED) {
 		rcm_log_message(RCM_ERROR, gettext("cannot mmap %s: %s\n"),
@@ -239,7 +239,7 @@ get_req_entry(req_list_t **listp)
 			    RCM_STATE_FILE, strerror(errno));
 			rcmd_exit(errno);
 		/*LINTED*/
-		} else if ((*listp = (req_list_t *)mmap(NULL, newsize,
+		} else if ((*listp = mmap(NULL, newsize,
 		    PROT_READ|PROT_WRITE, MAP_SHARED, state_fd, 0)) ==
 		    MAP_FAILED) {
 			rcm_log_message(RCM_ERROR,
