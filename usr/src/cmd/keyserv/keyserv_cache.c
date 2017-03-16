@@ -280,7 +280,7 @@ create_cache_file_ch(keylen_t keylen, algtype_t algtype, int sizespec)
 		 * Temporarily mmap the header, to sanity check and obtain
 		 * the address where it was mapped the last time.
 		 */
-		if ((ch = (void *)mmap(0, sizeof (struct cachekey_header),
+		if ((ch = mmap(0, sizeof (struct cachekey_header),
 				PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) ==
 			MAP_FAILED) {
 			syslog(LOG_WARNING,
@@ -317,7 +317,7 @@ create_cache_file_ch(keylen_t keylen, algtype_t algtype, int sizespec)
 	}
 
 	/* Map the file */
-	if ((ch = (void *)mmap((caddr_t)oldbase, length,
+	if ((ch = mmap((caddr_t)oldbase, length,
 		PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED) {
 		syslog(LOG_WARNING,
 			"cache file mmap2 error for mech %d-%d: %m",
@@ -542,7 +542,7 @@ remap_cache_file_ch(struct cachekey_header *ch, u_int newrecs)
 	}
 
 	/* Map it again */
-	if ((newch = (void *)mmap(oldaddr, newsize,
+	if ((newch = mmap(oldaddr, newsize,
 			PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) ==
 	MAP_FAILED) {
 		return (0);

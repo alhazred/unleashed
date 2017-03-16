@@ -572,7 +572,7 @@ main(int argc, char *argv[])
 	/* create shared mem space for global mutexes */
 
 	sharedmem = (fflag || Dynpat != NULL || ngrab > 1);
-	gps = (void *)mmap(NULL, sizeof (struct global_psinfo),
+	gps = mmap(NULL, sizeof (struct global_psinfo),
 	    PROT_READ|PROT_WRITE,
 	    MAP_ANON | (sharedmem? MAP_SHARED : MAP_PRIVATE),
 	    -1, (off_t)0);

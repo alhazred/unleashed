@@ -2018,7 +2018,7 @@ main(int argc, char *argv[])
 	/*
 	 * Pre-fork: setup shared state
 	 */
-	if ((shstate = (void *)mmap(NULL, shstatelen,
+	if ((shstate = mmap(NULL, shstatelen,
 	    PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANON, -1, (off_t)0)) ==
 	    MAP_FAILED) {
 		zerror(zlogp, B_TRUE, "%s failed", "mmap");

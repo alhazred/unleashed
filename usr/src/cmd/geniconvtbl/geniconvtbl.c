@@ -1762,7 +1762,7 @@ itm_ref_inc(const char		*itm)
 		itm_ref_free(fd, NULL, NULL, NULL, 0);
 		return	(NULL);
 	}
-	hdr = (void *) mmap(NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
+	hdr = mmap(NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
 	if (MAP_FAILED == hdr) {
 		itm_ref_free(fd, NULL, NULL, NULL, 0);
 		return	(NULL);

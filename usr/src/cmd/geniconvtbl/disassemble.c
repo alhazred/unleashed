@@ -3236,7 +3236,7 @@ itm_attach(const char	*itm_file)
 		PERROR(gettext("fstat()"));
 		return	(NULL);
 	}
-	itm_hdr = (void *) mmap(NULL, st.st_size,
+	itm_hdr = mmap(NULL, st.st_size,
 				    PROT_READ, MAP_SHARED, fd, 0);
 	if (MAP_FAILED == itm_hdr) {
 		PERROR(gettext("mmap()"));
