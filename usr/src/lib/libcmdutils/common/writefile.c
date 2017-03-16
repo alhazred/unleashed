@@ -109,7 +109,7 @@ writefile(int fi, int fo, char *infile, char *outfile, char *asfile,
 		/*
 		 * Mmap time!
 		 */
-		if ((cp = mmap((caddr_t)NULL, mapsize, PROT_READ,
+		if ((cp = mmap(NULL, mapsize, PROT_READ,
 		    MAP_SHARED, fi, (off_t)0)) == MAP_FAILED)
 			mapsize = 0;   /* can't mmap today */
 	} else
