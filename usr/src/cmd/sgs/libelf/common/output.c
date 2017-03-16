@@ -57,7 +57,7 @@ _elf_outmap(int fd, size_t sz, unsigned int *pflag)
 	 * fall through to the calloc() mechanism will occur.
 	 */
 	if ((!*pflag) && (ftruncate(fd, (off_t)sz) == 0) &&
-	    (p = mmap((char *)0, sz, PROT_READ+PROT_WRITE,
+	    (p = mmap(NULL, sz, PROT_READ+PROT_WRITE,
 	    MAP_SHARED, fd, (off_t)0)) != (char *)-1) {
 		*pflag = 1;
 		return (p);

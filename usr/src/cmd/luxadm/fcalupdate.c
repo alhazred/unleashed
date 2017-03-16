@@ -245,7 +245,7 @@ char		fbuf[BUFSIZ];
 		/*
 		 * Mmap that SBus memory into my memory space.
 		 */
-		addr = mmap((caddr_t)0, PROM_SIZ_ROUNDED, PROT_READ|PROT_WRITE,
+		addr = mmap(NULL, PROM_SIZ_ROUNDED, PROT_READ|PROT_WRITE,
 			MAP_SHARED, fd, 0);
 
 		if (addr == MAP_FAILED) {

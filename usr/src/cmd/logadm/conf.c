@@ -413,7 +413,7 @@ conf_open(const char *cfname, const char *tfname, struct opts *cliopts)
 	if (Conflen == 0)
 		return (1);	/* empty file, don't bother parsing it */
 
-	if ((Confbuf = (char *)mmap(0, Conflen,
+	if ((Confbuf = (char *)mmap(NULL, Conflen,
 	    PROT_READ | PROT_WRITE, MAP_PRIVATE, Conffd, 0)) == (char *)-1)
 		err(EF_SYS, "mmap on %s", Confname);
 
@@ -427,7 +427,7 @@ conf_open(const char *cfname, const char *tfname, struct opts *cliopts)
 	}
 
 	if (Timesfd != -1 && Timeslen != 0) {
-		if ((Timesbuf = (char *)mmap(0, Timeslen,
+		if ((Timesbuf = (char *)mmap(NULL, Timeslen,
 		    PROT_READ | PROT_WRITE, MAP_PRIVATE,
 		    Timesfd, 0)) == (char *)-1)
 			err(EF_SYS, "mmap on %s", Timesname);

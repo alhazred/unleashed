@@ -263,7 +263,7 @@ alloctape(void)
 	    + (size_t)sizeof (int *)
 	    + (3 * (size_t)sizeof (time_t));
 
-	shared = mmap((char *)0, tapesize, PROT_READ|PROT_WRITE,
+	shared = mmap(NULL, tapesize, PROT_READ|PROT_WRITE,
 	    MAP_SHARED, mapfd, (off_t)0);
 	if (shared == (caddr_t)-1) {
 		saverr = errno;

@@ -1805,7 +1805,7 @@ set_shfd(door_data_t *door_dp, int32_t fd, smedia_services_t *req)
 		door_dp->dd_buf_len = 0;
 	}
 
-	fbuf = mmap(0, req->reqset_shfd.fdbuf_len,
+	fbuf = mmap(NULL, req->reqset_shfd.fdbuf_len,
 	    PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if (fbuf == MAP_FAILED) {
 		ret_val = errno;

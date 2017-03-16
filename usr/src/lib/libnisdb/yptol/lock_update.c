@@ -177,7 +177,7 @@ init_update_lock_map()
 	 * File exists with correct size, is open, and we're holding
 	 * the file lock.
 	 */
-	shmupdatearray = (updatearray *)mmap((caddr_t)0, sizeof (updatearray),
+	shmupdatearray = (updatearray *)mmap(NULL, sizeof (updatearray),
 	    PROT_READ | PROT_WRITE, MAP_SHARED, lockfile, 0);
 	if (shmupdatearray == MAP_FAILED) {
 		logmsg(MSG_NOTIMECHECK, LOG_ERR,

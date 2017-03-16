@@ -66,7 +66,7 @@ badioctl(pid_t parent)
 	if ((random = open("/dev/random", O_RDONLY)) == -1)
 		fatal("couldn't open /dev/random");
 
-	if ((addr = mmap(0, ps, PROT_READ | PROT_WRITE,
+	if ((addr = mmap(NULL, ps, PROT_READ | PROT_WRITE,
 	    MAP_ANON | MAP_PRIVATE, -1, 0)) == (caddr_t)-1)
 		fatal("mmap");
 

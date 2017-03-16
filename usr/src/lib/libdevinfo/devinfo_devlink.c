@@ -280,7 +280,7 @@ open_db(struct di_devlink_handle *hdp, int flags)
 		return (-1);
 	}
 
-	cp = mmap(0, HDR_LEN, flg, MAP_SHARED, fd, 0);
+	cp = mmap(NULL, HDR_LEN, flg, MAP_SHARED, fd, 0);
 	if (cp == MAP_FAILED) {
 		(void) close(fd);
 		return (-1);
@@ -2902,7 +2902,7 @@ map_seg(
 	}
 	slen = seg_size(hdp, seg);
 
-	addr = mmap(0, slen, prot, MAP_SHARED, DB(hdp)->db_fd, off);
+	addr = mmap(NULL, slen, prot, MAP_SHARED, DB(hdp)->db_fd, off);
 	if (addr == MAP_FAILED) {
 		(void) dprintf(DBG_ERR, "map_seg: seg[%d]: mmap failed: %s\n",
 		    seg, strerror(errno));

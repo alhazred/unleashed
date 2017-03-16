@@ -1117,7 +1117,7 @@ inspectconfig(Crle_desc * crle, int c_class)
 		(void) fprintf(stderr, MSG_INTL(MSG_COR_TRUNC), caller, file);
 		return (INSCFG_RET_FAIL);
 	}
-	if ((addr = (Addr)mmap(0, status.st_size, PROT_READ, MAP_SHARED,
+	if ((addr = (Addr)mmap(NULL, status.st_size, PROT_READ, MAP_SHARED,
 	    fd, 0)) == (Addr)MAP_FAILED) {
 		int err = errno;
 		(void) fprintf(stderr, MSG_INTL(MSG_SYS_MMAP), caller, file,

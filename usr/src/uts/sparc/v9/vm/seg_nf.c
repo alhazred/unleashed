@@ -125,7 +125,7 @@ static struct page **nfpp;
  *	structures and the HAT data to map the zero pages.
  *
  * 	Secondly, creating nofault segments actually uses up user virtual
- * 	address space. This makes it unavailable for subsequent mmap(0, ...)
+ * 	address space. This makes it unavailable for subsequent mmap(NULL, ...)
  *	calls which use as_gap() to find empty va regions.  Creation of too
  *	many nofault segments could thus interfere with the ability of the
  *	runtime linker to load a shared object.

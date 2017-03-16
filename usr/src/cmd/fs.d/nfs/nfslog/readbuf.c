@@ -202,7 +202,7 @@ nfslog_init_buf(char *bufpath, struct nfslog_buf *lbp, int *error)
 	}
 	lbp->filesize = sb.st_size;
 
-	lbp->mmap_addr = (intptr_t)mmap(0, lbp->filesize, PROT_READ|PROT_WRITE,
+	lbp->mmap_addr = (intptr_t)mmap(NULL, lbp->filesize, PROT_READ|PROT_WRITE,
 		MAP_SHARED|MAP_NORESERVE, lbp->fd, 0);
 
 	/* This is part of the duality of the use of either mmap()|read() */

@@ -1419,7 +1419,7 @@ copy_file(int ofd, char *fname, Tmp_File *temp_file)
 	 * then use the malloc() and read().
 	 */
 	mmap_status = MMAP_USED;
-	buf = (char *)mmap(0, stbuf.st_size, PROT_READ, MAP_SHARED, fdtmp2, 0);
+	buf = (char *)mmap(NULL, stbuf.st_size, PROT_READ, MAP_SHARED, fdtmp2, 0);
 	if (buf == (caddr_t)-1) {
 		if ((buf =
 		    malloc(stbuf.st_size * sizeof (char))) == NULL) {

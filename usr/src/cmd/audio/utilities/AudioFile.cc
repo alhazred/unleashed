@@ -345,7 +345,7 @@ tryopen(
 		 * place.
 		 */
 		if (localByteOrder() == BIG_ENDIAN) {
-			if ((mapaddr = (caddr_t)mmap(0, (int)maplen, PROT_READ,
+			if ((mapaddr = (caddr_t)mmap(NULL, (int)maplen, PROT_READ,
 				MAP_SHARED, desc, 0)) != (caddr_t)-1) {
 				// set default access method
 				(void) madvise(mapaddr, (unsigned int)maplen,

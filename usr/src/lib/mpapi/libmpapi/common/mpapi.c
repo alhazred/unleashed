@@ -3522,7 +3522,7 @@ MP_STATUS MP_RegisterPlugin(
 	    CLEANUP_N_RET(mpconf, MP_STATUS_SUCCESS);
 	}
 
-	if ((mpconf_buf = (MP_CHAR *)mmap(0, stbuf.st_size,
+	if ((mpconf_buf = (MP_CHAR *)mmap(NULL, stbuf.st_size,
 		PROT_READ | PROT_WRITE,
 		MAP_SHARED, mpconf, 0)) == MAP_FAILED) {
 	    CLEANUP_N_RET(mpconf, MP_STATUS_FAILED);
@@ -3621,7 +3621,7 @@ MP_STATUS MP_DeregisterPlugin(
 	    CLEANUP_N_RET(mpconf, MP_STATUS_SUCCESS);
 	}
 
-	if ((mpconf_buf = (MP_CHAR *)mmap(0, stbuf.st_size,
+	if ((mpconf_buf = (MP_CHAR *)mmap(NULL, stbuf.st_size,
 		PROT_READ | PROT_WRITE,
 		MAP_SHARED, mpconf, 0)) == MAP_FAILED) {
 	    CLEANUP_N_RET(mpconf, MP_STATUS_FAILED);

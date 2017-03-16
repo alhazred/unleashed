@@ -16586,7 +16586,7 @@ check_mfst_history(const char *svcname)
 		return (-1);
 	}
 
-	mfsthist_start = mmap(0, st.st_size, PROT_READ,
+	mfsthist_start = mmap(NULL, st.st_size, PROT_READ,
 	    MAP_PRIVATE, fd, 0);
 
 	(void) close(fd);

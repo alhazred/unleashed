@@ -1310,7 +1310,7 @@ timeclock(time32_t state)
 			/*NOTREACHED*/
 		}
 		/*LINTED [mmap always returns an aligned value]*/
-		currentState = (int *)mmap((char *)0, getpagesize(),
+		currentState = (int *)mmap(NULL, getpagesize(),
 		    PROT_READ|PROT_WRITE, MAP_SHARED, fd, (off_t)0);
 		if (currentState == (int *)-1) {
 			saverr = errno;

@@ -226,7 +226,7 @@ stream_open_for_read(sort_t *S, stream_t *str)
 			else
 				die(EMSG_OPEN, str->s_filename);
 		}
-		str->s_buffer = mmap(0, str->s_filesize, PROT_READ,
+		str->s_buffer = mmap(NULL, str->s_filesize, PROT_READ,
 		    MAP_SHARED, fd, 0);
 
 		if (str->s_buffer != MAP_FAILED) {

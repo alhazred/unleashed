@@ -322,7 +322,7 @@ map_benv(benv_des_t *bd)
 
 	(void) lseek(bd->fd, 0, SEEK_SET);
 
-	if ((bd->adr = mmap((caddr_t)0, bd->len, (PROT_READ | PROT_WRITE),
+	if ((bd->adr = mmap(NULL, bd->len, (PROT_READ | PROT_WRITE),
 	    MAP_PRIVATE, bd->fd, 0)) == MAP_FAILED)
 		exit(_error(PERROR, "cannot map %s", bd->name));
 }

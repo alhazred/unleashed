@@ -125,7 +125,7 @@ read_repos_file(char *repos_filename)
 		return (-1);
 	}
 	filesize = stbuf.st_size;
-	tmp_ptr = mmap_ptr = mmap((caddr_t)0, filesize,
+	tmp_ptr = mmap_ptr = mmap(NULL, filesize,
 	    (PROT_READ | PROT_WRITE), MAP_PRIVATE, fd, 0);
 
 	if (mmap_ptr == MAP_FAILED) {

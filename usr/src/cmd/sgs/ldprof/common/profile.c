@@ -301,7 +301,7 @@ profile_open(const char *fname, Link_map *lmp)
 	/*
 	 * Map the file in.
 	 */
-	if ((addr = (caddr_t)mmap(0, Fsize, (PROT_READ | PROT_WRITE),
+	if ((addr = (caddr_t)mmap(NULL, Fsize, (PROT_READ | PROT_WRITE),
 	    MAP_SHARED, fd, 0)) == (char *)-1) {
 		err = errno;
 		(void) fprintf(stderr, MSG_INTL(MSG_SYS_MMAP), Profile,
@@ -441,7 +441,7 @@ remap_profile(int fd)
 
 	l_fsize = Hptr->hd_fsize;
 
-	if ((addr = (caddr_t)mmap(0, l_fsize, (PROT_READ | PROT_WRITE),
+	if ((addr = (caddr_t)mmap(NULL, l_fsize, (PROT_READ | PROT_WRITE),
 	    MAP_SHARED, fd, 0)) == (char *)-1) {
 		int	err = errno;
 

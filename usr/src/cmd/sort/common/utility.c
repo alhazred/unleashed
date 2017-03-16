@@ -692,7 +692,7 @@ xcp(char *dst, char *src, off_t size)
 		die(EMSG_OPEN, dst);
 
 	for (i = 0; i < nchunks; i++) {
-		if ((mm_in = mmap(0, chunksize, PROT_READ, MAP_SHARED, fd_in,
+		if ((mm_in = mmap(NULL, chunksize, PROT_READ, MAP_SHARED, fd_in,
 		    i * chunksize)) == MAP_FAILED)
 			die(EMSG_MMAP, src);
 
@@ -703,7 +703,7 @@ xcp(char *dst, char *src, off_t size)
 	}
 
 	if (lastchunk) {
-		if ((mm_in = mmap(0, lastchunk, PROT_READ, MAP_SHARED, fd_in,
+		if ((mm_in = mmap(NULL, lastchunk, PROT_READ, MAP_SHARED, fd_in,
 		    nchunks * chunksize)) == MAP_FAILED)
 			die(EMSG_MMAP, src);
 

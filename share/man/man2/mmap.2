@@ -885,7 +885,7 @@ The following is a rewrite using  \fBmmap()\fR:
 .in +2
 .nf
 fildes = open(\|.\|.\|.)
-address = mmap((caddr_t) 0, len, (PROT_READ | PROT_WRITE),
+address = mmap(NULL, len, (PROT_READ | PROT_WRITE),
           MAP_PRIVATE, fildes, offset)
 /* use data at address */
 .fi

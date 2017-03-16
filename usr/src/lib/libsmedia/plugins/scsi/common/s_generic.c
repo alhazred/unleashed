@@ -845,7 +845,7 @@ remap_shared_buf(rmedia_handle_t *handle, size_t buf_size, char *buffer)
 		}
 		file_size += buf_size;
 	}
-	fbuf = (char *)mmap(0, shared_bufsize, PROT_READ | PROT_WRITE,
+	fbuf = (char *)mmap(NULL, shared_bufsize, PROT_READ | PROT_WRITE,
 		MAP_SHARED, fd, 0);
 	if (fbuf == (char *)-1) {
 		perror("mmap failed");

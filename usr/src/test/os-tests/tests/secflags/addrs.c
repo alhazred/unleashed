@@ -14,7 +14,7 @@ main(int argc, char **argv)
 	if ((heap = malloc(10)) == NULL)
 		err(1, "couldn't allocate");
 
-	if ((mapping = mmap((caddr_t)0, 10, (PROT_READ | PROT_WRITE),
+	if ((mapping = mmap(NULL, 10, (PROT_READ | PROT_WRITE),
 	    MAP_ANON|MAP_PRIVATE, -1, 0)) == (void*)-1)
 		err(1, "couldn't map");
 

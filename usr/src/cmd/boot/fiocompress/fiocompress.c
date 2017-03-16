@@ -145,7 +145,7 @@ setup_infile(char *file)
 	}
 	srclen = stbuf.st_size;
 
-	addr = mmap(0, srclen, PROT_READ, MAP_SHARED, fd, 0);
+	addr = mmap(NULL, srclen, PROT_READ, MAP_SHARED, fd, 0);
 	if (addr == MAP_FAILED) {
 		(void) fprintf(stderr, MMAP_FAIL, srcfile, strerror(errno));
 		exit(-1);

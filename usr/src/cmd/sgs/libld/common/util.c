@@ -89,7 +89,7 @@ dz_map(size_t size)
 {
 	void	*addr;
 
-	if ((addr = mmap(0, size, (PROT_READ | PROT_WRITE | PROT_EXEC),
+	if ((addr = mmap(NULL, size, (PROT_READ | PROT_WRITE | PROT_EXEC),
 	    (MAP_PRIVATE | MAP_ANON), -1, 0)) == MAP_FAILED) {
 		int	err = errno;
 		eprintf(NULL, ERR_FATAL, MSG_INTL(MSG_SYS_MMAPANON),

@@ -85,7 +85,7 @@ main(int argc, char **argv)
 		goto end;
 	}
 
-	map = mmap(0, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+	map = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 	if (map == MAP_FAILED) {
 		perror("mmap");
 		retval = 1;

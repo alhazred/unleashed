@@ -1971,7 +1971,7 @@ open_pam_conf(struct pam_fh **pam_fh, pam_handle_t *pamh, char *config,
 	}
 	(*pam_fh)->fconfig = fd;
 	(*pam_fh)->bufsize = (size_t)stb.st_size;
-	if (((*pam_fh)->data = mmap(0, (*pam_fh)->bufsize, PROT_READ,
+	if (((*pam_fh)->data = mmap(NULL, (*pam_fh)->bufsize, PROT_READ,
 	    MAP_PRIVATE, (*pam_fh)->fconfig, 0)) == MAP_FAILED) {
 		(void) close(fd);
 		free (*pam_fh);

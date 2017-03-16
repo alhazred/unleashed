@@ -272,7 +272,7 @@ elf_config(Rt_map *lmp, int aout)
 		(void) close(fd);
 		return (DBG_CONF_CORRUPT);
 	}
-	if ((addr = (Addr)mmap(0, status.st_size, PROT_READ, MAP_SHARED,
+	if ((addr = (Addr)mmap(NULL, status.st_size, PROT_READ, MAP_SHARED,
 	    fd, 0)) == (Addr)MAP_FAILED) {
 		(void) close(fd);
 		return (DBG_CONF_PRCFAIL);

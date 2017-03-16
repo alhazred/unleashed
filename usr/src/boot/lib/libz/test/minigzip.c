@@ -409,7 +409,7 @@ int gz_compress_mmap(in, out)
     if (buf_len <= 0) return Z_ERRNO;
 
     /* Now do the actual mmap: */
-    buf = mmap((caddr_t) 0, buf_len, PROT_READ, MAP_SHARED, ifd, (off_t)0);
+    buf = mmap(NULL, buf_len, PROT_READ, MAP_SHARED, ifd, (off_t)0);
     if (buf == (caddr_t)(-1)) return Z_ERRNO;
 
     /* Compress the whole file at once: */

@@ -586,13 +586,13 @@ ulog_map(krb5_context context, kadm5_config_params *params, int caller)
 		fstat(ulogfd, &st);
 		ulog_filesize = st.st_size;
 
-		ulog = (kdb_hlog_t *)mmap(0, ulog_filesize,
+		ulog = (kdb_hlog_t *)mmap(NULL, ulog_filesize,
 		    PROT_READ+PROT_WRITE, MAP_PRIVATE, ulogfd, 0);
 	} else {
 		/*
 		 * else kadmind, kpropd, & kcommands should udpate stores
 		 */
-		ulog = (kdb_hlog_t *)mmap(0, MAXLOGLEN,
+		ulog = (kdb_hlog_t *)mmap(NULL, MAXLOGLEN,
 		    PROT_READ+PROT_WRITE, MAP_SHARED, ulogfd, 0);
 	}
 

@@ -112,7 +112,7 @@ zmalloc(size_t size)
 		return (NULL);
 	}
 
-	mbuf = mmap(0, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+	mbuf = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 	(void) close(fd);
 
 	if (mbuf == (caddr_t)-1) {

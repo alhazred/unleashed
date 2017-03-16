@@ -1353,7 +1353,7 @@ Vmdisc_t*	disc;	/* discipline structure			*/
 #endif /* _mem_sbrk */
 
 #if _mem_mmap_anon /* anonymous mmap */
-		addr = (Vmuchar_t*)mmap(0, nsize, PROT_READ|PROT_WRITE,
+		addr = (Vmuchar_t*)mmap(NULL, nsize, PROT_READ|PROT_WRITE,
                                         MAP_ANON|MAP_PRIVATE, -1, 0);
 		if(addr && addr != (Vmuchar_t*)MAP_FAILED)
 		{	if(okaddr(addr,nsize) >= 0)
@@ -1378,7 +1378,7 @@ Vmdisc_t*	disc;	/* discipline structure			*/
 			fcntl(mmdc->fd, F_SETFD, FD_CLOEXEC);
 #endif
 		}
-		addr = (Vmuchar_t*)mmap(0, nsize, PROT_READ|PROT_WRITE,
+		addr = (Vmuchar_t*)mmap(NULL, nsize, PROT_READ|PROT_WRITE,
 					MAP_PRIVATE, mmdc->fd, mmdc->offset);
 		if(addr && addr != (Vmuchar_t*)MAP_FAILED)
 		{	if(okaddr(addr, nsize) >= 0)

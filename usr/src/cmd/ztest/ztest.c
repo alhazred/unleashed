@@ -6040,7 +6040,7 @@ setup_hdr(void)
 	int size;
 	ztest_shared_hdr_t *hdr;
 
-	hdr = mmap(0, P2ROUNDUP(sizeof (*hdr), getpagesize()),
+	hdr = mmap(NULL, P2ROUNDUP(sizeof (*hdr), getpagesize()),
 	    PROT_READ | PROT_WRITE, MAP_SHARED, ztest_fd_data, 0);
 	ASSERT(hdr != MAP_FAILED);
 
@@ -6067,14 +6067,14 @@ setup_data(void)
 	ztest_shared_hdr_t *hdr;
 	uint8_t *buf;
 
-	hdr = mmap(0, P2ROUNDUP(sizeof (*hdr), getpagesize()),
+	hdr = mmap(NULL, P2ROUNDUP(sizeof (*hdr), getpagesize()),
 	    PROT_READ, MAP_SHARED, ztest_fd_data, 0);
 	ASSERT(hdr != MAP_FAILED);
 
 	size = shared_data_size(hdr);
 
 	(void) munmap((caddr_t)hdr, P2ROUNDUP(sizeof (*hdr), getpagesize()));
-	hdr = ztest_shared_hdr = mmap(0, P2ROUNDUP(size, getpagesize()),
+	hdr = ztest_shared_hdr = mmap(NULL, P2ROUNDUP(size, getpagesize()),
 	    PROT_READ | PROT_WRITE, MAP_SHARED, ztest_fd_data, 0);
 	ASSERT(hdr != MAP_FAILED);
 	buf = (uint8_t *)hdr;

@@ -292,7 +292,7 @@ file_open(const char *name, int safe)
 		return (NULL);
 	}
 
-	addr = mmap(0, (size_t)statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
+	addr = mmap(NULL, (size_t)statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
 	(void) close(fd);
 
 	if (addr == MAP_FAILED) {

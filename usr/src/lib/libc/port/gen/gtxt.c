@@ -160,7 +160,7 @@ load_db(const char *curloc, const char *catname, int *err)
 	}
 	if ((fd = open(pathname, O_RDONLY)) != -1 &&
 	    fstat64(fd, &sb) != -1 &&
-	    (addr = mmap(0, (size_t)sb.st_size, PROT_READ, MAP_SHARED,
+	    (addr = mmap(NULL, (size_t)sb.st_size, PROT_READ, MAP_SHARED,
 	    fd, 0)) != MAP_FAILED) {
 		db->flag |= DB_EXIST;
 		db->addr = (uintptr_t)addr;

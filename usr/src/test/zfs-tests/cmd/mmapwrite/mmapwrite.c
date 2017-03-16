@@ -48,7 +48,7 @@ mapper(void *fdp)
 	int fd = *(int *)fdp;
 
 	if ((addr =
-	    mmap(0, 8192, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED) {
+	    mmap(NULL, 8192, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED) {
 		perror("mmap");
 		exit(1);
 	}

@@ -1500,7 +1500,7 @@ handle_versioned(FILE *pfile, char *filename, size_t *fsz)
 	}
 	*fsz = lret;
 
-	fmem = mmap(0, *fsz, PROT_READ, MAP_PRIVATE, fd, 0);
+	fmem = mmap(NULL, *fsz, PROT_READ, MAP_PRIVATE, fd, 0);
 	if (fmem == MAP_FAILED) {
 		(void) fprintf(stderr, "%s: can't map %s\n", whoami, filename);
 		exit(EX_IOERR);

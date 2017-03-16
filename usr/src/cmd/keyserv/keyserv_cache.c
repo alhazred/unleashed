@@ -280,7 +280,7 @@ create_cache_file_ch(keylen_t keylen, algtype_t algtype, int sizespec)
 		 * Temporarily mmap the header, to sanity check and obtain
 		 * the address where it was mapped the last time.
 		 */
-		if ((ch = mmap(0, sizeof (struct cachekey_header),
+		if ((ch = mmap(NULL, sizeof (struct cachekey_header),
 				PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0)) ==
 			MAP_FAILED) {
 			syslog(LOG_WARNING,

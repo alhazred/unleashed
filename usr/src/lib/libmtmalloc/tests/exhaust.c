@@ -62,7 +62,7 @@ main(int argc, char ** argv)
 	}
 
 	while (ncpus--)
-		stacks[ncpus] = mmap(0, 1<<23, PROT_READ|PROT_WRITE,
+		stacks[ncpus] = mmap(NULL, 1<<23, PROT_READ|PROT_WRITE,
 			MAP_PRIVATE, fd, 0);
 
 	close(fd);

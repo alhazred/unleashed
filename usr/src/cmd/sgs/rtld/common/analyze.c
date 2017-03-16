@@ -1586,7 +1586,7 @@ map_fail(Fdesc *fdp, size_t fsize, const char *name, int fd, Rej_desc *rej)
 	else
 		size = syspagsz;
 
-	if ((addr = mmap(0, size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
+	if ((addr = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 		return (0);
 
 	rej->rej_type = 0;

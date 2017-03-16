@@ -427,7 +427,7 @@ tst	lib_memccpy string.h unistd.h stdlib.h fcntl.h signal.h sys/types.h sys/stat
 			return 1;
 		}
 		m = n * (sizeof(x)-1);
-		if (!(b = mmap((void*)0, m, PROT_READ|PROT_WRITE, MAP_PRIVATE, d, (off_t)0)))
+		if (!(b = mmap(NULL, m, PROT_READ|PROT_WRITE, MAP_PRIVATE, d, (off_t)0)))
 		{
 			close(d);
 			return 1;

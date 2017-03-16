@@ -61,7 +61,7 @@ main(int argc, char *argv[])
 		return (errno);
 	}
 
-	if (mmap(0, statbuf.st_size,
+	if (mmap(NULL, statbuf.st_size,
 	    PROT_EXEC, MAP_SHARED, fd, 0) == MAP_FAILED) {
 		perror("mmap");
 		return (errno);

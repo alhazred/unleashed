@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
 	if ((fd = open("/dev/zero", O_RDWR)) < 0)
 		return 2;
-	(void) mmap(0, 1, PROT_READ, MAP_PRIVATE|MAP_FIXED, fd, 0);
+	(void) mmap(NULL, 1, PROT_READ, MAP_PRIVATE|MAP_FIXED, fd, 0);
 	(void) close(fd);
 
 	(void) sleep(atoi(argv[1]));

@@ -172,7 +172,7 @@ genconfig(Crle_desc *crle)
 		(void) close(crle->c_tempfd);
 		return (1);
 	}
-	if ((addr = (Addr)mmap(0, size, (PROT_READ | PROT_WRITE), MAP_SHARED,
+	if ((addr = (Addr)mmap(NULL, size, (PROT_READ | PROT_WRITE), MAP_SHARED,
 	    crle->c_tempfd, 0)) == (Addr)-1) {
 		int err = errno;
 		(void) fprintf(stderr, MSG_INTL(MSG_SYS_MMAP),

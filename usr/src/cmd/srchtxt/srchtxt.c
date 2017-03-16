@@ -244,7 +244,7 @@ size_t	*size;
 	(void) strcpy(&path[len], fname);
 	if ((fd = open(path, O_RDONLY)) != -1 &&
 	    fstat(fd, &sb) != -1 &&
-	    (addr = mmap(0, sb.st_size,
+	    (addr = mmap(NULL, sb.st_size,
 		PROT_READ, MAP_SHARED,
 		fd, 0)) != (caddr_t)-1) {
 		*fdescr = fd;

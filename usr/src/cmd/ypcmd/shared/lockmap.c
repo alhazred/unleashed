@@ -230,7 +230,7 @@ init_lock_map()
 	 * File exists with correct size, is open, and we're holding
 	 * the file lock.
 	 */
-	shmlockarray = (lockarray *)mmap((caddr_t)0, sizeof (lockarray),
+	shmlockarray = (lockarray *)mmap(NULL, sizeof (lockarray),
 	    PROT_READ | PROT_WRITE, MAP_SHARED, lockfile, 0);
 	if (shmlockarray == MAP_FAILED) {
 		syslog(LOG_ERR, "mmap(%s) => errno=%d", LOCKFILE, errno);

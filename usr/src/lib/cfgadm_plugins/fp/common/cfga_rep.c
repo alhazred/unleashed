@@ -317,7 +317,7 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
 
-		if ((repbuf = (char *)mmap(0, filesize, PROT_READ,
+		if ((repbuf = (char *)mmap(NULL, filesize, PROT_READ,
 		    MAP_SHARED, fd, 0)) == MAP_FAILED) {
 			close(fd);
 			free(upd_str);
@@ -335,7 +335,7 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
 
-		if ((c_repbuf = (char *)mmap(0, filesize,
+		if ((c_repbuf = (char *)mmap(NULL, filesize,
 		    PROT_READ | PROT_WRITE,
 		    MAP_SHARED, copy_fd, 0)) == MAP_FAILED) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
@@ -455,7 +455,7 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
 		}
 
-		if ((t_repbuf = (char *)mmap(0, size, PROT_READ|PROT_WRITE,
+		if ((t_repbuf = (char *)mmap(NULL, size, PROT_READ|PROT_WRITE,
 		    MAP_SHARED, tmp_fd, 0)) == MAP_FAILED) {
 			cfga_err(errstring, errno, ERR_UPD_REP, 0);
 			CLEANUP_N_RET(FPCFGA_LIB_ERR);
@@ -551,7 +551,7 @@ update_fabric_wwn_list(int cmd, const char *update_str, char **errstring)
 				CLEANUP_N_RET(FPCFGA_LIB_ERR);
 			}
 
-			if ((t_repbuf = (char *)mmap(0, size,
+			if ((t_repbuf = (char *)mmap(NULL, size,
 			    PROT_READ|PROT_WRITE,
 			    MAP_SHARED, tmp_fd, 0)) == MAP_FAILED) {
 				cfga_err(errstring, errno, ERR_UPD_REP, 0);

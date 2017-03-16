@@ -498,7 +498,7 @@ main(int argc, char **argv) {
 		 * This should compare to MAP_FAILED not -1, can't
 		 * find MAP_FAILED
 		 */
-		if (regular && ((mapaddr = mmap(0, st.st_size, PROT_READ,
+		if (regular && ((mapaddr = mmap(NULL, st.st_size, PROT_READ,
 		    MAP_SHARED, ifd, 0)) != MAP_FAILED)) {
 
 			(void) madvise(mapaddr, st.st_size, MADV_SEQUENTIAL);

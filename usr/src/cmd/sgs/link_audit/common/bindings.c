@@ -118,7 +118,7 @@ static void
 remap_buffer(int fd)
 {
 	void *	new_bhp;
-	if ((new_bhp = mmap(0, bhp->bh_size, PROT_READ | PROT_WRITE,
+	if ((new_bhp = mmap(NULL, bhp->bh_size, PROT_READ | PROT_WRITE,
 	    MAP_SHARED, fd, 0)) == MAP_FAILED) {
 		(void) fprintf(stderr, "bindings: remap: mmap failed\n");
 		perror("mmap");
@@ -251,7 +251,7 @@ la_version(uint_t version)
 		}
 
 		/* LINTED */
-		if ((bhp = (bindhead *)mmap(0, init_size,
+		if ((bhp = (bindhead *)mmap(NULL, init_size,
 		    PROT_READ | PROT_WRITE,
 		    MAP_SHARED, fd, 0)) == MAP_FAILED) {
 			perror("bindings.so: mmap");
@@ -287,7 +287,7 @@ la_version(uint_t version)
 				continue;
 			}
 			/* LINTED */
-			if ((bhp = (bindhead *)mmap(0, stbuf.st_size,
+			if ((bhp = (bindhead *)mmap(NULL, stbuf.st_size,
 			    PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0)) ==
 			    MAP_FAILED) {
 				(void) fprintf(stderr,

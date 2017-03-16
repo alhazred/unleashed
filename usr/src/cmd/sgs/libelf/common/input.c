@@ -238,7 +238,7 @@ _elf_inmap(Elf * elf)
 		register char	*p;
 
 		if ((elf->ed_myflags & EDF_WRITE) == 0 &&
-		    (p = mmap((char *)0, sz, PROT_READ,
+		    (p = mmap(NULL, sz, PROT_READ,
 		    MAP_PRIVATE, fd, (off_t)0)) != (char *)-1) {
 			elf->ed_image = elf->ed_ident = p;
 			elf->ed_imagesz = elf->ed_fsz = elf->ed_identsz = sz;

@@ -2411,7 +2411,7 @@ reload_counter(void)
 	if ((fd = open(TZSYNC_FILE, O_RDONLY)) < 0)
 		return;
 
-	addr = mmap(0, sizeof (uint32_t), PROT_READ, MAP_SHARED, fd, 0);
+	addr = mmap(NULL, sizeof (uint32_t), PROT_READ, MAP_SHARED, fd, 0);
 	(void) close(fd);
 
 	if (addr == MAP_FAILED)

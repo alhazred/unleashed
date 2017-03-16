@@ -621,7 +621,7 @@ cap_open_read(const char *name)
 		    (unsigned long long)st.st_size, INT_MAX);
 	cap_len = st.st_size;
 
-	cap_buffp = mmap(0, cap_len, PROT_READ, MAP_PRIVATE, capfile_in, 0);
+	cap_buffp = mmap(NULL, cap_len, PROT_READ, MAP_PRIVATE, capfile_in, 0);
 	(void) close(capfile_in);
 	if ((int)cap_buffp == -1)
 		pr_err("couldn't mmap %s: %m", name);

@@ -244,7 +244,7 @@ mapfile(fd, offset, bytes, fetch)
 	mapsize = bytes + (offset - mapoffset);
 	if (mapsize > MAXMAPSIZE)
 		mapsize = MAXMAPSIZE;
-	while ((mapbase = mmap((caddr_t)0, mapsize, PROT_READ,
+	while ((mapbase = mmap(NULL, mapsize, PROT_READ,
 	    MAP_SHARED, fd, mapoffset)) == (caddr_t)-1 &&
 	    errno == ENOMEM && mapsize >= MINMAPSIZE) {
 		/*

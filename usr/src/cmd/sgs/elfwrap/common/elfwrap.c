@@ -118,7 +118,7 @@ input(int argc, char **argv, const char *prog, const char *ofile,
 			continue;
 		}
 
-		if ((outsec.os_addr = mmap(0, outsec.os_size, PROT_READ,
+		if ((outsec.os_addr = mmap(NULL, outsec.os_size, PROT_READ,
 		    MAP_PRIVATE, fd, 0)) == MAP_FAILED) {
 			int err = errno;
 			(void) fprintf(stderr, MSG_INTL(MSG_ERR_MMAP),

@@ -863,7 +863,7 @@ profver(void)
 		perror(mon_fn);
 		exit(ERR_SYSCALL);
 	}
-	if ((fmem = mmap(0, monout_stat.st_size,
+	if ((fmem = mmap(NULL, monout_stat.st_size,
 	    PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED) {
 		perror("mmap");
 		exit(ERR_SYSCALL);

@@ -113,7 +113,7 @@ main(int argc, char **argv)
 
         getcontext(&uc);
 
-        uc.uc_stack.ss_sp = mmap(0, sz,
+        uc.uc_stack.ss_sp = mmap(NULL, sz,
             PROT_READ | PROT_WRITE | PROT_EXEC,
             MAP_PRIVATE | MAP_ANON, -1, 0);
         uc.uc_stack.ss_size = sz;
@@ -188,7 +188,7 @@ that must be applied:
 --- example1_s9.c       Thu Oct  3 11:58:17 2002
 +++ example1.c  Thu Jun 27 13:28:16 2002
 @@ -27,12 +27,9 @@
-        uc.uc_stack.ss_sp = mmap(0, sz,
+        uc.uc_stack.ss_sp = mmap(NULL, sz,
             PROT_READ | PROT_WRITE | PROT_EXEC,
             MAP_PRIVATE | MAP_ANON, -1, 0);
 -       uc.uc_stack.ss_sp = (char *)uc.uc_stack.ss_sp + sz - 8;

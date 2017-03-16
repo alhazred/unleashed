@@ -165,7 +165,7 @@ main(int argc, char **argv)
 		return (1);
 	}
 	/* LINTED */
-	if ((bhp = (bindhead *)mmap(0, sizeof (bindhead),
+	if ((bhp = (bindhead *)mmap(NULL, sizeof (bindhead),
 	    (PROT_READ | PROT_WRITE), MAP_SHARED, fd, 0)) == MAP_FAILED) {
 		(void) fprintf(stderr, "dumpbind: mmap failed\n");
 		perror("mmap");
@@ -187,7 +187,7 @@ main(int argc, char **argv)
 	}
 
 	/* LINTED */
-	if ((tmp_bhp = (bindhead *)mmap(0, bhp->bh_size,
+	if ((tmp_bhp = (bindhead *)mmap(NULL, bhp->bh_size,
 	    (PROT_READ | PROT_WRITE), MAP_SHARED, fd, 0)) == MAP_FAILED) {
 		(void) fprintf(stderr, "dumpbind: remap: mmap failed\n");
 		perror("mmap");
