@@ -1009,19 +1009,6 @@ JAVAEXEC_OBJS +=java.o
 #
 PIPE_OBJS +=	pipe.o
 
-NFS_OBJS +=	nfs_client.o	nfs_common.o	nfs_dump.o \
-		nfs_subr.o	nfs_vfsops.o	nfs_vnops.o \
-		nfs_xdr.o	nfs_sys.o	nfs_strerror.o \
-		nfs3_vfsops.o	nfs3_vnops.o	nfs3_xdr.o \
-		nfs_acl_vnops.o	nfs_acl_xdr.o	nfs4_vfsops.o \
-		nfs4_vnops.o	nfs4_xdr.o 	nfs4_idmap.o \
-		nfs4_shadow.o	nfs4_subr.o \
-		nfs4_attr.o	nfs4_rnode.o	nfs4_client.o \
-		nfs4_acache.o	nfs4_common.o	nfs4_client_state.o \
-		nfs4_callback.o	nfs4_recovery.o nfs4_client_secinfo.o \
-		nfs4_client_debug.o	nfs_stats.o \
-		nfs4_acl.o	nfs4_stub_vnops.o	nfs_cmd.o
-
 NFSSRV_OBJS +=	nfs_server.o	nfs_srv.o	nfs3_srv.o \
 		nfs_acl_srv.o	nfs_auth.o	nfs_auth_xdr.o \
 		nfs_export.o	nfs_log.o	nfs_log_xdr.o \

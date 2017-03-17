@@ -17,6 +17,7 @@ SUBDIR = ${SUBDIR_y} \
 	 fdfs \
 	 fifofs \
 	 mntfs \
+	 nfs \
 	 objfs \
 	 portfs \
 	 sockfs \

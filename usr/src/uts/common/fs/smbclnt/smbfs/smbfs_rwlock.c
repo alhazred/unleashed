@@ -35,7 +35,7 @@
  * that that they can be re`enter'ed by writers without deadlock.
  *
  * All of this was borrowed from NFS.
- * See: uts/common/fs/nfs/nfs_subr.c
+ * See: kernel/fs/nfs/nfs_subr.c
  *
  * XXX: Could we make this serve our needs instead?
  * See: kernel/os/rwstlock.c
