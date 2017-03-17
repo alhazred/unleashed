@@ -31,7 +31,7 @@
 
 #include <libnvpair.h>
 #include <libzfs.h>
-#include <instzones_api.h>
+#include <libzonecfg.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -62,8 +62,6 @@ extern "C" {
 
 #define	BE_ZONE_PARENTBE_PROPERTY	"org.opensolaris.libbe:parentbe"
 #define	BE_ZONE_ACTIVE_PROPERTY		"org.opensolaris.libbe:active"
-#define	BE_ZONE_SUPPORTED_BRANDS	"ipkg labeled nlipkg"
-#define	BE_ZONE_SUPPORTED_BRANDS_DELIM	" "
 
 /* Maximum length for the BE name. */
 #define	BE_NAME_MAX_LEN		64
@@ -194,7 +192,6 @@ void be_make_zoneroot(char *, char *, int);
 int be_find_active_zone_root(zfs_handle_t *, char *, char *, int);
 int be_find_mounted_zone_root(char *, char *, char *, int);
 boolean_t be_zone_supported(char *);
-zoneBrandList_t *be_get_supported_brandlist(void);
 int be_zone_get_parent_uuid(const char *, uuid_t *);
 int be_zone_set_parent_uuid(char *, uuid_t);
 boolean_t be_zone_compare_uuids(char *);

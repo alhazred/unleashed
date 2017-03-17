@@ -1613,25 +1613,11 @@ be_destroy_zones(char *be_name, char *be_root_ds, be_destroy_data_t *dd)
 	int		i;
 	int		ret = BE_SUCCESS;
 	int		force_umnt = BE_UNMOUNT_FLAG_NULL;
-	char		*zonepath = NULL;
-	char		*zonename = NULL;
 	char		*zonepath_ds = NULL;
 	char		*mp = NULL;
-	zoneList_t	zlist = NULL;
-	zoneBrandList_t	*brands = NULL;
 	zfs_handle_t	*zhp = NULL;
-
-	/* If zones are not implemented, then get out. */
-	if (!z_zones_are_implemented()) {
-		return (BE_SUCCESS);
-	}
-
-	/* Get list of supported brands */
-	if ((brands = be_get_supported_brandlist()) == NULL) {
-		be_print_err(gettext("be_destroy_zones: "
-		    "no supported brands\n"));
-		return (BE_SUCCESS);
-	}
+	FILE		*cookie;
+	struct zoneent	*ze;
 
 	/* Get handle to BE's root dataset */
 	if ((zhp = zfs_open(g_zfs, be_root_ds, ZFS_TYPE_FILESYSTEM)) ==
@@ -1639,7 +1625,6 @@ be_destroy_zones(char *be_name, char *be_root_ds, be_destroy_data_t *dd)
 		be_print_err(gettext("be_destroy_zones: failed to "
 		    "open BE root dataset (%s): %s\n"), be_root_ds,
 		    libzfs_error_description(g_zfs));
-		z_free_brand_list(brands);
 		return (zfs_err_to_be_err(g_zfs));
 	}
 
@@ -1654,20 +1639,13 @@ be_destroy_zones(char *be_name, char *be_root_ds, be_destroy_data_t *dd)
 			    "mount the BE (%s) for zones processing.\n"),
 			    be_name);
 			ZFS_CLOSE(zhp);
-			z_free_brand_list(brands);
 			return (ret);
 		}
 	}
 	ZFS_CLOSE(zhp);
 
-	z_set_zone_root(mp);
+	zonecfg_set_root((const char*)mp);
 	free(mp);
-
-	/* Get list of supported zones. */
-	if ((zlist = z_get_nonglobal_zone_list_by_brand(brands)) == NULL) {
-		z_free_brand_list(brands);
-		return (BE_SUCCESS);
-	}
 
 	/* Unmount the BE before destroying the zones in it. */
 	if (dd->force_unmount)
@@ -1678,27 +1656,18 @@ be_destroy_zones(char *be_name, char *be_root_ds, be_destroy_data_t *dd)
 		goto done;
 	}
 
-	/* Iterate through the zones and destroy them. */
-	for (i = 0; (zonename = z_zlist_get_zonename(zlist, i)) != NULL; i++) {
+	cookie = setzoneent();
+	while((ze = getzoneent_private(cookie)) != NULL) {
+
+		if (strcmp(ze->zone_name, "global") == 0)
+			continue;
 
 		/* Skip zones that aren't at least installed */
-		if (z_zlist_get_current_state(zlist, i) < ZONE_STATE_INSTALLED)
+		if (ze->zone_state < ZONE_STATE_INSTALLED)
 			continue;
 
-		zonepath = z_zlist_get_zonepath(zlist, i);
-
-		/*
-		 * Get the dataset of this zonepath.  If its not
-		 * a dataset, skip it.
-		 */
-		if ((zonepath_ds = be_get_ds_from_dir(zonepath)) == NULL)
-			continue;
-
-		/*
-		 * Check if this zone is supported based on the
-		 * dataset of its zonepath.
-		 */
-		if (!be_zone_supported(zonepath_ds)) {
+		if (((zonepath_ds = be_get_ds_from_dir(ze->zone_path)) == NULL) ||
+		    !be_zone_supported(zonepath_ds)) {
 			free(zonepath_ds);
 			continue;
 		}
@@ -1708,16 +1677,16 @@ be_destroy_zones(char *be_name, char *be_root_ds, be_destroy_data_t *dd)
 		    != BE_SUCCESS) {
 			be_print_err(gettext("be_destroy_zones: failed to "
 			    "find and destroy zone roots for zone %s\n"),
-			    zonename);
+			    ze->zone_name);
 			free(zonepath_ds);
 			goto done;
 		}
+		free(ze);
 		free(zonepath_ds);
 	}
+	endzoneent(cookie);
 
 done:
-	z_free_brand_list(brands);
-	z_free_zone_list(zlist);
 
 	return (ret);
 }
@@ -1891,8 +1860,6 @@ be_copy_zones(char *obe_name, char *obe_root_ds, char *nbe_root_ds)
 	int		i, num_retries;
 	int		ret = BE_SUCCESS;
 	int		iret = 0;
-	char		*zonename = NULL;
-	char		*zonepath = NULL;
 	char		*zone_be_name = NULL;
 	char		*temp_mntpt = NULL;
 	char		*new_zone_be_name = NULL;
@@ -1907,22 +1874,10 @@ be_copy_zones(char *obe_name, char *obe_root_ds, char *nbe_root_ds)
 	zfs_handle_t	*obe_zhp = NULL;
 	zfs_handle_t	*nbe_zhp = NULL;
 	zfs_handle_t	*z_zhp = NULL;
-	zoneList_t	zlist = NULL;
-	zoneBrandList_t	*brands = NULL;
 	boolean_t	mounted_here = B_FALSE;
 	char		*snap_name = NULL;
-
-	/* If zones are not implemented, then get out. */
-	if (!z_zones_are_implemented()) {
-		return (BE_SUCCESS);
-	}
-
-	/* Get list of supported brands */
-	if ((brands = be_get_supported_brandlist()) == NULL) {
-		be_print_err(gettext("be_copy_zones: "
-		    "no supported brands\n"));
-		return (BE_SUCCESS);
-	}
+	FILE		*cookie;
+	struct zoneent	*ze;
 
 	/* Get handle to origin BE's root dataset */
 	if ((obe_zhp = zfs_open(g_zfs, obe_root_ds, ZFS_TYPE_FILESYSTEM))
@@ -1969,32 +1924,23 @@ be_copy_zones(char *obe_name, char *obe_root_ds, char *nbe_root_ds)
 		mounted_here = B_TRUE;
 	}
 
-	z_set_zone_root(temp_mntpt);
+	zonecfg_set_root((const char *)temp_mntpt);
 
-	/* Get list of supported zones. */
-	if ((zlist = z_get_nonglobal_zone_list_by_brand(brands)) == NULL) {
-		ret = BE_SUCCESS;
-		goto done;
-	}
-
-	for (i = 0; (zonename = z_zlist_get_zonename(zlist, i)) != NULL; i++) {
+	cookie = setzoneent();
+	while((ze = getzoneent_private(cookie)) != NULL) {
 
 		be_fs_list_data_t	fld = { 0 };
 		char			zonepath_ds[MAXPATHLEN];
 		char			*ds = NULL;
 
-		/* Get zonepath of zone */
-		zonepath = z_zlist_get_zonepath(zlist, i);
-
-		/* Skip zones that aren't at least installed */
-		if (z_zlist_get_current_state(zlist, i) < ZONE_STATE_INSTALLED)
+		if (strcmp(ze->zone_name, "global") == 0)
 			continue;
 
-		/*
-		 * Get the dataset of this zonepath.  If its not
-		 * a dataset, skip it.
-		 */
-		if ((ds = be_get_ds_from_dir(zonepath)) == NULL)
+		/* Skip zones that aren't at least installed */
+		if (ze->zone_state < ZONE_STATE_INSTALLED)
+			continue;
+
+		if ((ds = be_get_ds_from_dir(ze->zone_path)) == NULL)
 			continue;
 
 		(void) strlcpy(zonepath_ds, ds, sizeof (zonepath_ds));
@@ -2002,10 +1948,12 @@ be_copy_zones(char *obe_name, char *obe_root_ds, char *nbe_root_ds)
 		ds = NULL;
 
 		/* Get zoneroot directory */
-		be_make_zoneroot(zonepath, zoneroot, sizeof (zoneroot));
+		be_make_zoneroot(ze->zone_path, zoneroot, sizeof (zoneroot));
 
 		/* If zonepath dataset not supported, skip it. */
 		if (!be_zone_supported(zonepath_ds)) {
+			free(zonepath_ds);
+			free(ze);
 			continue;
 		}
 
@@ -2013,7 +1961,7 @@ be_copy_zones(char *obe_name, char *obe_root_ds, char *nbe_root_ds)
 		    zoneroot_ds, sizeof (zoneroot_ds))) != BE_SUCCESS) {
 			be_print_err(gettext("be_copy_zones: "
 			    "failed to find active zone root for zone %s "
-			    "in BE %s\n"), zonename, obe_name);
+			    "in BE %s\n"), ze->zone_name, obe_name);
 			goto done;
 		}
 
@@ -2219,7 +2167,7 @@ be_copy_zones(char *obe_name, char *obe_root_ds, char *nbe_root_ds)
 		    zoneroot_ds, zoneroot, &fld)) != BE_SUCCESS) {
 			be_print_err(gettext("be_copy_zones: "
 			    "failed to get legacy mounted file system "
-			    "list for zone %s\n"), zonename);
+			    "list for zone %s\n"), ze->zone_name);
 			ZFS_CLOSE(z_zhp);
 			goto done;
 		}
@@ -2237,16 +2185,14 @@ be_copy_zones(char *obe_name, char *obe_root_ds, char *nbe_root_ds)
 			goto done;
 		}
 
+		free(ze);
 		be_free_fs_list(&fld);
 		ZFS_CLOSE(z_zhp);
 	}
+	endzoneent(cookie);
 
 done:
 	free(snap_name);
-	if (brands != NULL)
-		z_free_brand_list(brands);
-	if (zlist != NULL)
-		z_free_zone_list(zlist);
 
 	if (mounted_here)
 		(void) _be_unmount(obe_name, 0);

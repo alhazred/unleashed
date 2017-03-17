@@ -22,6 +22,9 @@
 /*
  * Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved.
  */
+/*
+ * Copyright 2012 Nexenta Systems, Inc. All rights reserved.
+ */
 
 /*
  * Copyright 2013 Nexenta Systems, Inc. All rights reserved.
@@ -306,25 +309,6 @@ be_zone_supported(char *zonepath_ds)
 	}
 
 	return (B_TRUE);
-}
-
-/*
- * Function:	be_get_supported_brandlist
- * Desciption:	This functions retuns a list of supported brands in
- *		a zoneBrandList_t object.
- * Parameters:
- *		None
- * Returns:
- *		Failure - NULL if no supported brands found.
- *		Success - pointer to zoneBrandList structure.
- * Scope:
- *		Semi-private (library wide use only)
- */
-zoneBrandList_t *
-be_get_supported_brandlist(void)
-{
-	return (z_make_brand_list(BE_ZONE_SUPPORTED_BRANDS,
-	    BE_ZONE_SUPPORTED_BRANDS_DELIM));
 }
 
 /*

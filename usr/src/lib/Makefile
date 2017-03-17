@@ -538,7 +538,7 @@ gss_mechs/mech_spnego: gss_mechs/mech_krb5
 hal:		dbusdeps
 krb5:		gss_mechs/mech_krb5 libtecla libldap5
 libadutils:	libldap5 libresolv2
-libbe:		libzfs libinstzones libuuid libgen libdevinfo libefi libficl
+libbe:		libzfs libzonecfg libuuid libgen libdevinfo libefi libficl
 libbsm:		libinetutil libscf libsecdb
 libcfgadm:	libdevinfo
 libcmd:		libsum libast

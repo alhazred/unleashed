@@ -914,7 +914,6 @@ be_get_ds_from_dir(char *dir)
 
 	/* Resolve dir in case its lofs mounted */
 	(void) strlcpy(resolved_dir, dir, sizeof (resolved_dir));
-	z_resolve_lofs(resolved_dir, sizeof (resolved_dir));
 
 	dd.dir = resolved_dir;
 
@@ -2289,48 +2288,27 @@ cleanup:
 static int
 be_mount_zones(zfs_handle_t *be_zhp, be_mount_data_t *md)
 {
-	zoneBrandList_t	*brands = NULL;
-	zoneList_t	zlst = NULL;
-	char		*zonename = NULL;
-	char		*zonepath = NULL;
 	char		*zonepath_ds = NULL;
 	int		k;
 	int		ret = BE_SUCCESS;
+	FILE *cookie;
+	struct zoneent *ze;
 
-	z_set_zone_root(md->altroot);
+	zonecfg_set_root((const char *)md->altroot);
 
-	if ((brands = be_get_supported_brandlist()) == NULL) {
-		be_print_err(gettext("be_mount_zones: "
-		    "no supported brands\n"));
-		return (BE_SUCCESS);
-	}
+	cookie = setzoneent();
+	while((ze = getzoneent_private(cookie)) != NULL) {
 
-	zlst = z_get_nonglobal_zone_list_by_brand(brands);
-	if (zlst == NULL) {
-		z_free_brand_list(brands);
-		return (BE_SUCCESS);
-	}
+		if (strcmp(ze->zone_name, "global") == 0)
+			continue;
 
-	for (k = 0; (zonename = z_zlist_get_zonename(zlst, k)) != NULL; k++) {
-		if (z_zlist_get_current_state(zlst, k) ==
-		    ZONE_STATE_INSTALLED) {
-			zonepath = z_zlist_get_zonepath(zlst, k);
+		/* Skip zones that aren't at least installed */
+		if (ze->zone_state == ZONE_STATE_INSTALLED) {
 
-			/*
-			 * Get the dataset of this zonepath in current BE.
-			 * If its not a dataset, skip it.
-			 */
-			if ((zonepath_ds = be_get_ds_from_dir(zonepath))
-			    == NULL)
-				continue;
-
-			/*
-			 * Check if this zone is supported based on
-			 * the dataset of its zonepath
-			 */
-			if (!be_zone_supported(zonepath_ds)) {
+			if (((zonepath_ds = be_get_ds_from_dir(ze->zone_path)) == NULL) ||
+			    !be_zone_supported(zonepath_ds)) {
 				free(zonepath_ds);
-				zonepath_ds = NULL;
+				free(ze);
 				continue;
 			}
 
@@ -2341,15 +2319,14 @@ be_mount_zones(zfs_handle_t *be_zhp, be_mount_data_t *md)
 			 * it here.
 			 */
 			if (!md->shared_fs) {
-				ret = loopback_mount_zonepath(zonepath, md);
+				ret = loopback_mount_zonepath(ze->zone_path, md);
 				if (ret != BE_SUCCESS)
 					goto done;
 			}
 
-
 			/* Mount this zone */
-			ret = be_mount_one_zone(be_zhp, md, zonename,
-			    zonepath, zonepath_ds);
+			ret = be_mount_one_zone(be_zhp, md, ze->zone_name,
+			    ze->zone_path, zonepath_ds);
 
 			free(zonepath_ds);
 			zonepath_ds = NULL;
@@ -2357,26 +2334,16 @@ be_mount_zones(zfs_handle_t *be_zhp, be_mount_data_t *md)
 			if (ret != BE_SUCCESS) {
 				be_print_err(gettext("be_mount_zones: "
 				    "failed to mount zone %s under "
-				    "altroot %s\n"), zonename, md->altroot);
+				    "altroot %s\n"), ze->zone_name, md->altroot);
 				goto done;
 			}
 		}
+		free(ze);
 	}
+	endzoneent(cookie);
 
 done:
-	z_free_brand_list(brands);
-	z_free_zone_list(zlst);
-	/*
-	 * libinstzones caches mnttab and uses cached version for resolving lofs
-	 * mounts when we call z_resolve_lofs. It creates the cached version
-	 * when the first call to z_resolve_lofs happens. So, library's cached
-	 * mnttab doesn't contain entries for lofs mounts created in the above
-	 * loop. Because of this, subsequent calls to z_resolve_lofs would fail
-	 * to resolve these lofs mounts. So, here we destroy library's cached
-	 * mnttab to force its recreation when the next call to z_resolve_lofs
-	 * happens.
-	 */
-	z_destroyMountTable();
+
 	return (ret);
 }
 
@@ -2395,37 +2362,26 @@ done:
 static int
 be_unmount_zones(be_unmount_data_t *ud)
 {
-	zoneBrandList_t		*brands = NULL;
-	zoneList_t		zlst = NULL;
-	char			*zonename = NULL;
-	char			*zonepath = NULL;
-	char			alt_zonepath[MAXPATHLEN];
-	char			*zonepath_ds = NULL;
-	int			k;
-	int			ret = BE_SUCCESS;
+	char		alt_zonepath[MAXPATHLEN];
+	char		*zonepath_ds = NULL;
+	int		k;
+	int		ret = BE_SUCCESS;
+	FILE		*cookie;
+	struct zoneent	*ze;
 
-	z_set_zone_root(ud->altroot);
+	zonecfg_set_root((const char *)ud->altroot);
 
-	if ((brands = be_get_supported_brandlist()) == NULL) {
-		be_print_err(gettext("be_unmount_zones: "
-		    "no supported brands\n"));
-		return (BE_SUCCESS);
-	}
+	cookie = setzoneent();
+	while((ze = getzoneent_private(cookie)) != NULL) {
 
-	zlst = z_get_nonglobal_zone_list_by_brand(brands);
-	if (zlst == NULL) {
-		z_free_brand_list(brands);
-		return (BE_SUCCESS);
-	}
+		if (strcmp(ze->zone_name, "global") == 0)
+			continue;
 
-	for (k = 0; (zonename = z_zlist_get_zonename(zlst, k)) != NULL; k++) {
-		if (z_zlist_get_current_state(zlst, k) ==
-		    ZONE_STATE_INSTALLED) {
-			zonepath = z_zlist_get_zonepath(zlst, k);
+		if (ze->zone_state == ZONE_STATE_INSTALLED) {
 
 			/* Build zone's zonepath wrt the global BE altroot */
 			(void) snprintf(alt_zonepath, sizeof (alt_zonepath),
-			    "%s%s", ud->altroot, zonepath);
+			    "%s%s", ud->altroot, ze->zone_path);
 
 			/*
 			 * Get the dataset of this zonepath.  If its not
@@ -2442,11 +2398,12 @@ be_unmount_zones(be_unmount_data_t *ud)
 			if (!be_zone_supported(zonepath_ds)) {
 				free(zonepath_ds);
 				zonepath_ds = NULL;
+				free(ze);
 				continue;
 			}
 
 			/* Unmount this zone */
-			ret = be_unmount_one_zone(ud, zonename, zonepath,
+			ret = be_unmount_one_zone(ud, ze->zone_name, ze->zone_path,
 			    zonepath_ds);
 
 			free(zonepath_ds);
@@ -2455,15 +2412,16 @@ be_unmount_zones(be_unmount_data_t *ud)
 			if (ret != BE_SUCCESS) {
 				be_print_err(gettext("be_unmount_zones:"
 				    " failed to unmount zone %s from "
-				    "altroot %s\n"), zonename, ud->altroot);
+				    "altroot %s\n"), ze->zone_name, ud->altroot);
 				goto done;
 			}
 		}
+		free(ze);
 	}
+	endzoneent(cookie);
 
 done:
-	z_free_brand_list(brands);
-	z_free_zone_list(zlst);
+
 	return (ret);
 }
 

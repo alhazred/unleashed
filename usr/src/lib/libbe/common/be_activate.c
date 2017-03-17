@@ -22,6 +22,9 @@
 /*
  * Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved.
  */
+/*
+ * Copyright 2012 Nexenta Systems, Inc. All rights reserved.
+ */
 
 /*
  * Copyright 2015 Nexenta Systems, Inc. All rights reserved.
@@ -988,23 +991,11 @@ be_promote_zone_ds(char *be_name, char *be_root_ds)
 	char		zoneroot_ds[MAXPATHLEN];
 	zfs_handle_t	*zhp = NULL;
 	zfs_handle_t	*z_zhp = NULL;
-	zoneList_t	zone_list = NULL;
-	zoneBrandList_t *brands = NULL;
 	boolean_t	be_mounted = B_FALSE;
 	int		zone_index = 0;
 	int		err = BE_SUCCESS;
-
-	/*
-	 * Get the supported zone brands so we can pass that
-	 * to z_get_nonglobal_zone_list_by_brand. Currently
-	 * only the ipkg and labeled brand zones are supported
-	 *
-	 */
-	if ((brands = be_get_supported_brandlist()) == NULL) {
-		be_print_err(gettext("be_promote_zone_ds: no supported "
-		    "brands\n"));
-		return (BE_SUCCESS);
-	}
+	FILE 		*cookie;
+	struct zoneent	*ze;
 
 	if ((zhp = zfs_open(g_zfs, be_root_ds,
 	    ZFS_TYPE_FILESYSTEM)) == NULL) {
@@ -1012,7 +1003,6 @@ be_promote_zone_ds(char *be_name, char *be_root_ds)
 		    "dataset (%s): %s\n"), be_root_ds,
 		    libzfs_error_description(g_zfs));
 		err = zfs_err_to_be_err(g_zfs);
-		z_free_brand_list(brands);
 		return (err);
 	}
 
@@ -1022,7 +1012,6 @@ be_promote_zone_ds(char *be_name, char *be_root_ds)
 			be_print_err(gettext("be_promote_zone_ds: failed to "
 			    "mount the BE for zones procesing.\n"));
 			ZFS_CLOSE(zhp);
-			z_free_brand_list(brands);
 			return (err);
 		}
 		be_mounted = B_TRUE;
@@ -1031,34 +1020,24 @@ be_promote_zone_ds(char *be_name, char *be_root_ds)
 	/*
 	 * Set the zone root to the temp mount point for the BE we just mounted.
 	 */
-	z_set_zone_root(temp_mntpt);
+	zonecfg_set_root((const char *)temp_mntpt);
 
-	/*
-	 * Get all the zones based on the brands we're looking for. If no zones
-	 * are found that we're interested in unmount the BE and move on.
-	 */
-	if ((zone_list = z_get_nonglobal_zone_list_by_brand(brands)) == NULL) {
-		if (be_mounted)
-			(void) _be_unmount(be_name, 0);
-		ZFS_CLOSE(zhp);
-		z_free_brand_list(brands);
-		free(temp_mntpt);
-		return (BE_SUCCESS);
-	}
-	for (zone_index = 0; z_zlist_get_zonename(zone_list, zone_index)
-	    != NULL; zone_index++) {
-		char *zone_path = NULL;
+	cookie = setzoneent();
+	while((ze = getzoneent_private(cookie)) != NULL) {
+
+		if (strcmp(ze->zone_name, "global") == 0)
+			continue;
 
 		/* Skip zones that aren't at least installed */
-		if (z_zlist_get_current_state(zone_list, zone_index) <
-		    ZONE_STATE_INSTALLED)
+		if (ze->zone_state < ZONE_STATE_INSTALLED)
 			continue;
 
-		if (((zone_path =
-		    z_zlist_get_zonepath(zone_list, zone_index)) == NULL) ||
-		    ((zone_ds = be_get_ds_from_dir(zone_path)) == NULL) ||
-		    !be_zone_supported(zone_ds))
+		if (((zone_ds = be_get_ds_from_dir(ze->zone_path)) == NULL) ||
+		    !be_zone_supported(zone_ds)) {
+			free(zone_ds);
+			free(ze);
 			continue;
+		}
 
 		if (be_find_active_zone_root(zhp, zone_ds,
 		    zoneroot_ds, sizeof (zoneroot_ds)) != 0) {
@@ -1098,14 +1077,15 @@ be_promote_zone_ds(char *be_name, char *be_root_ds)
 			err = BE_ERR_PROMOTE;
 			goto done;
 		}
+		free(ze);
 	}
+	endzoneent(cookie);
+
 done:
 	if (be_mounted)
 		(void) _be_unmount(be_name, 0);
 	ZFS_CLOSE(zhp);
 	free(temp_mntpt);
-	z_free_brand_list(brands);
-	z_free_zone_list(zone_list);
 	return (err);
 }
 

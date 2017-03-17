@@ -51,7 +51,7 @@ INCS += -I$(SRCDIR) -I$(SRC)/cmd/boot/common -I$(SRC)/common/ficl
 
 C99MODE=	$(C99_ENABLE)
 
-LDLIBS +=	-lficl-sys -lzfs -linstzones -luuid -lnvpair -lc -lgen -lefi
+LDLIBS +=	-lficl-sys -lzfs -lzonecfg -luuid -lnvpair -lc -lgen -lefi
 CPPFLAGS +=	$(INCS)
 
 CLOBBERFILES += $(LIBRARY)
