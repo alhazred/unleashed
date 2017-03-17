@@ -134,7 +134,6 @@ SUBDIRS +=				\
 	libima		\
 	libinetsvc	\
 	libinetutil	\
-	libinstzones	\
 	libintl		\
 	libipadm	\
 	libipd		\
@@ -298,7 +297,6 @@ MSGSUBDIRS=		\
 	libidmap	\
 	libilb		\
 	libinetutil	\
-	libinstzones	\
 	libipadm	\
 	libipmp		\
 	libipsecutil	\
@@ -377,7 +375,6 @@ HDRSUBDIRS=				\
 	libima		\
 	libinetsvc	\
 	libinetutil	\
-	libinstzones	\
 	libipadm	\
 	libipd		\
 	libipmi		\
@@ -568,7 +565,6 @@ libfru:		libfruutils
 libfsmgt:	libkstat
 libidmap:	libavl libuutil
 libinetsvc:	libscf
-libinstzones:	libzonecfg libcontract
 libipadm:	libinetutil libdlpi libdhcpagent libdladm libsecdb
 libipmp:	libinetutil
 libipsecutil:	libtecla
