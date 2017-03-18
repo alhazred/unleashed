@@ -40,6 +40,8 @@
 
 #include <sharefs/sharefs.h>
 
+static const struct vnodeops sharefs_ops_data;
+
 /*
  * sharefs_snap_create: create a large character buffer with
  * the shares enumerated.
@@ -229,7 +231,7 @@ sharefs_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 	 * avoid locks, we create a snapshot which can not change during
 	 * reads.
 	 */
-	vp = gfs_file_create(sizeof (shnode_t), NULL, sharefs_ops_data);
+	vp = gfs_file_create(sizeof (shnode_t), NULL, &sharefs_ops_data);
 
 	((gfs_file_t *)vp->v_data)->gfs_ino = SHAREFS_INO_FILE;
 
@@ -362,7 +364,7 @@ sharefs_create_root_file(vfs_t *vfsp)
 	shnode_t	*sft;
 
 	vp = gfs_root_create_file(sizeof (shnode_t),
-	    vfsp, sharefs_ops_data, SHAREFS_INO_FILE);
+	    vfsp, &sharefs_ops_data, SHAREFS_INO_FILE);
 
 	sft = VTOSH(vp);
 
@@ -371,14 +373,14 @@ sharefs_create_root_file(vfs_t *vfsp)
 	return (vp);
 }
 
-const fs_operation_def_t sharefs_tops_data[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = sharefs_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = sharefs_close } },
-	{ VOPNAME_IOCTL,	{ .error = fs_inval } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = sharefs_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = sharefs_access } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = sharefs_inactive } },
-	{ VOPNAME_READ,		{ .vop_read = sharefs_read } },
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek } },
-	{ NULL }
+static const struct vnodeops sharefs_ops_data = {
+	.vnop_name = "sharefs",
+	.vop_open = sharefs_open,
+	.vop_close = sharefs_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = sharefs_getattr,
+	.vop_access = sharefs_access,
+	.vop_inactive = sharefs_inactive,
+	.vop_read = sharefs_read,
+	.vop_seek = fs_seek,
 };

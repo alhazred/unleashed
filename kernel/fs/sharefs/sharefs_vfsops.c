@@ -49,10 +49,7 @@
  *
  */
 
-vnodeops_t			*sharefs_ops_data;
-
 static const fs_operation_def_t	sharefs_vfstops[];
-static gfs_opsvec_t		 sharefs_opsvec[];
 
 static int sharefs_init(int, char *);
 
@@ -142,11 +139,6 @@ static int sharefs_fstype;
 static major_t sharefs_major;
 static minor_t sharefs_minor;
 
-static gfs_opsvec_t sharefs_opsvec[] = {
-	{ "sharefs sharetab file", sharefs_tops_data, &sharefs_ops_data },
-	{ NULL }
-};
-
 /* ARGSUSED */
 static int
 sharefs_init(int fstype, char *name)
@@ -157,11 +149,6 @@ sharefs_init(int fstype, char *name)
 	sharefs_fstype = fstype;
 	if (error = vfs_setfsops(fstype, sharefs_vfstops, &vfsops)) {
 		cmn_err(CE_WARN, "sharefs_init: bad vfs ops template");
-		return (error);
-	}
-
-	if (error = gfs_make_opsvec(sharefs_opsvec)) {
-		(void) vfs_freevfsops(vfsops);
 		return (error);
 	}
 

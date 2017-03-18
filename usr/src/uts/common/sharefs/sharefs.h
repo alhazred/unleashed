@@ -109,9 +109,6 @@ typedef struct shnode_t {
  */
 #define	VTOSH(vp)	((shnode_t *)((vp)->v_data))
 
-extern const fs_operation_def_t	sharefs_tops_data[];
-extern vnodeops_t		*sharefs_ops_data;
-
 extern void sharefs_data_init(void);
 
 extern void sharefs_sharetab_init(void);
