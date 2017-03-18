@@ -103,13 +103,8 @@ struct pchead {
 /*
  * pcnode file and directory operations vectors
  */
-extern struct vnodeops *pcfs_fvnodeops;
-extern struct vnodeops *pcfs_dvnodeops;
-
-#ifdef _KERNEL
-extern const struct fs_operation_def pcfs_fvnodeops_template[];
-extern const struct fs_operation_def pcfs_dvnodeops_template[];
-#endif
+extern const struct vnodeops pcfs_fvnodeops;
+extern const struct vnodeops pcfs_dvnodeops;
 
 extern struct pchead pcfhead[];
 extern struct pchead pcdhead[];

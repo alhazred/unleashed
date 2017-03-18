@@ -210,11 +210,9 @@ _fini(void)
 	mutex_destroy(&pcfslock);
 	rw_destroy(&pcnodes_lock);
 	/*
-	 * Tear down the operations vectors
+	 * Tear down the operations vector
 	 */
 	(void) vfs_freevfsops_by_type(pcfstype);
-	vn_freevnodeops(pcfs_fvnodeops);
-	vn_freevnodeops(pcfs_dvnodeops);
 	return (0);
 }
 
@@ -243,21 +241,6 @@ pcfsinit(int fstype, char *name)
 	error = vfs_setfsops(fstype, pcfs_vfsops_template, NULL);
 	if (error != 0) {
 		cmn_err(CE_WARN, "pcfsinit: bad vfs ops template");
-		return (error);
-	}
-
-	error = vn_make_ops("pcfs", pcfs_fvnodeops_template, &pcfs_fvnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "pcfsinit: bad file vnode ops template");
-		return (error);
-	}
-
-	error = vn_make_ops("pcfsd", pcfs_dvnodeops_template, &pcfs_dvnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		vn_freevnodeops(pcfs_fvnodeops);
-		cmn_err(CE_WARN, "pcfsinit: bad dir vnode ops template");
 		return (error);
 	}
 

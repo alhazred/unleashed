@@ -152,7 +152,7 @@ pc_getnode(
 	pcp->pc_lindex = 0;
 	pcp->pc_flags = 0;
 	if (ep->pcd_attr & PCA_DIR) {
-		vn_setops(vp, pcfs_dvnodeops);
+		vn_setops(vp, &pcfs_dvnodeops);
 		vp->v_type = VDIR;
 		if (scluster == 0) {
 			vp->v_flag = VROOT;
@@ -183,7 +183,7 @@ pc_getnode(
 			pcp->pc_size = fsp->pcfs_clsize * ncl;
 		}
 	} else {
-		vn_setops(vp, pcfs_fvnodeops);
+		vn_setops(vp, &pcfs_fvnodeops);
 		vp->v_type = VREG;
 		vp->v_flag = VNOSWAP;
 		fsp->pcfs_frefs++;

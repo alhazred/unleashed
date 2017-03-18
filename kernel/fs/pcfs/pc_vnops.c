@@ -140,52 +140,49 @@ extern krwlock_t pcnodes_lock;
 /*
  * vnode op vectors for files and directories.
  */
-struct vnodeops *pcfs_fvnodeops;
-struct vnodeops *pcfs_dvnodeops;
-
-const fs_operation_def_t pcfs_fvnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = pcfs_open },
-	VOPNAME_CLOSE,		{ .vop_close = pcfs_close },
-	VOPNAME_READ,		{ .vop_read = pcfs_read },
-	VOPNAME_WRITE,		{ .vop_write = pcfs_write },
-	VOPNAME_GETATTR,	{ .vop_getattr = pcfs_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = pcfs_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = pcfs_access },
-	VOPNAME_FSYNC,		{ .vop_fsync = pcfs_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = pcfs_inactive },
-	VOPNAME_FID,		{ .vop_fid = pcfs_fid },
-	VOPNAME_SEEK,		{ .vop_seek = pcfs_seek },
-	VOPNAME_SPACE,		{ .vop_space = pcfs_space },
-	VOPNAME_GETPAGE,	{ .vop_getpage = pcfs_getpage },
-	VOPNAME_PUTPAGE,	{ .vop_putpage = pcfs_putpage },
-	VOPNAME_MAP,		{ .vop_map = pcfs_map },
-	VOPNAME_ADDMAP,		{ .vop_addmap = pcfs_addmap },
-	VOPNAME_DELMAP,		{ .vop_delmap = pcfs_delmap },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = pcfs_pathconf },
-	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
-	NULL,			NULL
+const struct vnodeops pcfs_fvnodeops = {
+	.vnop_name = "pcfs",
+	.vop_open = pcfs_open,
+	.vop_close = pcfs_close,
+	.vop_read = pcfs_read,
+	.vop_write = pcfs_write,
+	.vop_getattr = pcfs_getattr,
+	.vop_setattr = pcfs_setattr,
+	.vop_access = pcfs_access,
+	.vop_fsync = pcfs_fsync,
+	.vop_inactive = pcfs_inactive,
+	.vop_fid = pcfs_fid,
+	.vop_seek = pcfs_seek,
+	.vop_space = pcfs_space,
+	.vop_getpage = pcfs_getpage,
+	.vop_putpage = pcfs_putpage,
+	.vop_map = pcfs_map,
+	.vop_addmap = pcfs_addmap,
+	.vop_delmap = pcfs_delmap,
+	.vop_pathconf = pcfs_pathconf,
+	.vop_vnevent = fs_vnevent_support,
 };
 
-const fs_operation_def_t pcfs_dvnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = pcfs_open },
-	VOPNAME_CLOSE,		{ .vop_close = pcfs_close },
-	VOPNAME_GETATTR,	{ .vop_getattr = pcfs_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = pcfs_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = pcfs_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = pcfs_lookup },
-	VOPNAME_CREATE,		{ .vop_create = pcfs_create },
-	VOPNAME_REMOVE,		{ .vop_remove = pcfs_remove },
-	VOPNAME_RENAME,		{ .vop_rename = pcfs_rename },
-	VOPNAME_MKDIR,		{ .vop_mkdir = pcfs_mkdir },
-	VOPNAME_RMDIR,		{ .vop_rmdir = pcfs_rmdir },
-	VOPNAME_READDIR,	{ .vop_readdir = pcfs_readdir },
-	VOPNAME_FSYNC,		{ .vop_fsync = pcfs_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = pcfs_inactive },
-	VOPNAME_FID,		{ .vop_fid = pcfs_fid },
-	VOPNAME_SEEK,		{ .vop_seek = pcfs_seek },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = pcfs_pathconf },
-	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
-	NULL,			NULL
+const struct vnodeops pcfs_dvnodeops = {
+	.vnop_name = "pcfs",
+	.vop_open = pcfs_open,
+	.vop_close = pcfs_close,
+	.vop_getattr = pcfs_getattr,
+	.vop_setattr = pcfs_setattr,
+	.vop_access = pcfs_access,
+	.vop_lookup = pcfs_lookup,
+	.vop_create = pcfs_create,
+	.vop_remove = pcfs_remove,
+	.vop_rename = pcfs_rename,
+	.vop_mkdir = pcfs_mkdir,
+	.vop_rmdir = pcfs_rmdir,
+	.vop_readdir = pcfs_readdir,
+	.vop_fsync = pcfs_fsync,
+	.vop_inactive = pcfs_inactive,
+	.vop_fid = pcfs_fid,
+	.vop_seek = pcfs_seek,
+	.vop_pathconf = pcfs_pathconf,
+	.vop_vnevent = fs_vnevent_support,
 };
 
 
