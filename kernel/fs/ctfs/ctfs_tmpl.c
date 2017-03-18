@@ -59,7 +59,7 @@ ctfs_create_tmplnode(vnode_t *pvp)
 
 	ASSERT(gfs_file_index(pvp) < ct_ntypes);
 
-	vp = gfs_file_create(sizeof (ctfs_tmplnode_t), pvp, ctfs_ops_tmpl);
+	vp = gfs_file_create(sizeof (ctfs_tmplnode_t), pvp, &ctfs_ops_tmpl);
 	tmplnode = vp->v_data;
 	tmplnode->ctfs_tmn_tmpl =
 	    ct_types[gfs_file_index(pvp)]->ct_type_default();
@@ -186,14 +186,14 @@ ctfs_tmpl_inactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 	}
 }
 
-const fs_operation_def_t ctfs_tops_tmpl[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_tmpl_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = ctfs_close } },
-	{ VOPNAME_IOCTL,	{ .vop_ioctl = ctfs_tmpl_ioctl } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_tmpl_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_access_readwrite } },
-	{ VOPNAME_READDIR,	{ .error = fs_notdir } },
-	{ VOPNAME_LOOKUP,	{ .error = fs_notdir } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = ctfs_tmpl_inactive } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_tmpl = {
+	.vnop_name = "ctfs template file",
+	.vop_open = ctfs_tmpl_open,
+	.vop_close = ctfs_close,
+	.vop_ioctl = ctfs_tmpl_ioctl,
+	.vop_getattr = ctfs_tmpl_getattr,
+	.vop_access = ctfs_access_readwrite,
+	.vop_readdir = fs_notdir,
+	.vop_lookup = fs_notdir,
+	.vop_inactive = ctfs_tmpl_inactive,
 };

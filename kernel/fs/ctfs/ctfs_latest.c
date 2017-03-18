@@ -54,7 +54,7 @@ vnode_t *
 ctfs_create_latenode(vnode_t *pvp)
 {
 	return (gfs_file_create(sizeof (ctfs_latenode_t), pvp,
-	    ctfs_ops_latest));
+	    &ctfs_ops_latest));
 }
 
 /*
@@ -172,14 +172,14 @@ ctfs_latest_getattr(
 	return (0);
 }
 
-const fs_operation_def_t ctfs_tops_latest[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_latest_open } },
-	{ VOPNAME_CLOSE,	{ .error = fs_inval } },
-	{ VOPNAME_IOCTL,	{ .error = fs_inval } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_latest_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_latest_access } },
-	{ VOPNAME_READDIR,	{ .error = fs_notdir } },
-	{ VOPNAME_LOOKUP,	{ .error = fs_notdir } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_latest = {
+	.vnop_name = "ctfs latest file",
+	.vop_open = ctfs_latest_open,
+	.vop_close = fs_inval,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = ctfs_latest_getattr,
+	.vop_access = ctfs_latest_access,
+	.vop_readdir = fs_notdir,
+	.vop_lookup = fs_notdir,
+	.vop_inactive = gfs_vop_inactive,
 };

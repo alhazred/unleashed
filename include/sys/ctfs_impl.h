@@ -220,17 +220,17 @@ extern int ctfs_open(vnode_t **, int, cred_t *,
 /*
  * vnode ops vector templates
  */
-extern vnodeops_t *ctfs_ops_root;
-extern vnodeops_t *ctfs_ops_adir;
-extern vnodeops_t *ctfs_ops_sym;
-extern vnodeops_t *ctfs_ops_tdir;
-extern vnodeops_t *ctfs_ops_tmpl;
-extern vnodeops_t *ctfs_ops_cdir;
-extern vnodeops_t *ctfs_ops_ctl;
-extern vnodeops_t *ctfs_ops_stat;
-extern vnodeops_t *ctfs_ops_event;
-extern vnodeops_t *ctfs_ops_bundle;
-extern vnodeops_t *ctfs_ops_latest;
+extern const struct vnodeops ctfs_ops_root;
+extern const struct vnodeops ctfs_ops_adir;
+extern const struct vnodeops ctfs_ops_sym;
+extern const struct vnodeops ctfs_ops_tdir;
+extern const struct vnodeops ctfs_ops_tmpl;
+extern const struct vnodeops ctfs_ops_cdir;
+extern const struct vnodeops ctfs_ops_ctl;
+extern const struct vnodeops ctfs_ops_stat;
+extern const struct vnodeops ctfs_ops_event;
+extern const struct vnodeops ctfs_ops_bundle;
+extern const struct vnodeops ctfs_ops_latest;
 
 #ifdef	__cplusplus
 }

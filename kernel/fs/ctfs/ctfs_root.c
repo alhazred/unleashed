@@ -71,25 +71,7 @@
  * implementation of the root vnode.
  */
 
-/*
- * Ops vectors for all the vnode types; they have to be defined
- * somewhere.  See gfs_make_opsvec for thoughts on how this could be
- * done differently.
- */
-vnodeops_t *ctfs_ops_root;
-vnodeops_t *ctfs_ops_adir;
-vnodeops_t *ctfs_ops_sym;
-vnodeops_t *ctfs_ops_tdir;
-vnodeops_t *ctfs_ops_tmpl;
-vnodeops_t *ctfs_ops_cdir;
-vnodeops_t *ctfs_ops_ctl;
-vnodeops_t *ctfs_ops_stat;
-vnodeops_t *ctfs_ops_event;
-vnodeops_t *ctfs_ops_bundle;
-vnodeops_t *ctfs_ops_latest;
-
 static const fs_operation_def_t ctfs_vfstops[];
-static gfs_opsvec_t ctfs_opsvec[];
 
 static int ctfs_init(int, char *);
 
@@ -149,36 +131,6 @@ static major_t ctfs_major;
 static minor_t ctfs_minor = 0;
 
 /*
- * The ops vector vector.
- */
-static const fs_operation_def_t ctfs_tops_root[];
-extern const fs_operation_def_t ctfs_tops_tmpl[];
-extern const fs_operation_def_t ctfs_tops_ctl[];
-extern const fs_operation_def_t ctfs_tops_adir[];
-extern const fs_operation_def_t ctfs_tops_cdir[];
-extern const fs_operation_def_t ctfs_tops_tdir[];
-extern const fs_operation_def_t ctfs_tops_latest[];
-extern const fs_operation_def_t ctfs_tops_stat[];
-extern const fs_operation_def_t ctfs_tops_sym[];
-extern const fs_operation_def_t ctfs_tops_event[];
-extern const fs_operation_def_t ctfs_tops_bundle[];
-static gfs_opsvec_t ctfs_opsvec[] = {
-	{ "ctfs root directory", ctfs_tops_root, &ctfs_ops_root },
-	{ "ctfs all directory", ctfs_tops_adir, &ctfs_ops_adir },
-	{ "ctfs all symlink", ctfs_tops_sym, &ctfs_ops_sym },
-	{ "ctfs template directory", ctfs_tops_tdir, &ctfs_ops_tdir },
-	{ "ctfs template file", ctfs_tops_tmpl, &ctfs_ops_tmpl },
-	{ "ctfs contract directory", ctfs_tops_cdir, &ctfs_ops_cdir },
-	{ "ctfs ctl file", ctfs_tops_ctl, &ctfs_ops_ctl },
-	{ "ctfs status file", ctfs_tops_stat, &ctfs_ops_stat },
-	{ "ctfs events file", ctfs_tops_event, &ctfs_ops_event },
-	{ "ctfs bundle file", ctfs_tops_bundle, &ctfs_ops_bundle },
-	{ "ctfs latest file", ctfs_tops_latest, &ctfs_ops_latest },
-	{ NULL }
-};
-
-
-/*
  * ctfs_init - the vfsdef_t init entry point
  *
  * Sets the VFS ops, builds all the vnode ops, and allocates a device
@@ -194,11 +146,6 @@ ctfs_init(int fstype, char *name)
 	ctfs_fstype = fstype;
 	if (error = vfs_setfsops(fstype, ctfs_vfstops, &vfsops)) {
 		cmn_err(CE_WARN, "ctfs_init: bad vfs ops template");
-		return (error);
-	}
-
-	if (error = gfs_make_opsvec(ctfs_opsvec)) {
-		(void) vfs_freevfsops(vfsops);
 		return (error);
 	}
 
@@ -264,7 +211,7 @@ ctfs_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 	 * Create root vnode
 	 */
 	data->ctvfs_root = gfs_root_create(sizeof (ctfs_rootnode_t),
-	    vfsp, ctfs_ops_root, CTFS_INO_ROOT, dirent, ctfs_root_do_inode,
+	    vfsp, &ctfs_ops_root, CTFS_INO_ROOT, dirent, ctfs_root_do_inode,
 	    CTFS_NAME_MAX, NULL, NULL);
 
 	kmem_free(dirent, (ct_ntypes + 2) * sizeof (gfs_dirent_t));
@@ -507,15 +454,15 @@ ctfs_root_do_inode(vnode_t *vp, int index)
 	return (CTFS_INO_TYPE_DIR(index));
 }
 
-static const fs_operation_def_t ctfs_tops_root[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = ctfs_close } },
-	{ VOPNAME_IOCTL,	{ .error = fs_inval } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_root_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_access_dir } },
-	{ VOPNAME_READDIR,	{ .vop_readdir = gfs_vop_readdir } },
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = gfs_vop_lookup } },
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_root = {
+	.vnop_name = "ctfs root directory",
+	.vop_open = ctfs_open,
+	.vop_close = ctfs_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = ctfs_root_getattr,
+	.vop_access = ctfs_access_dir,
+	.vop_readdir = gfs_vop_readdir,
+	.vop_lookup = gfs_vop_lookup,
+	.vop_seek = fs_seek,
+	.vop_inactive = gfs_vop_inactive,
 };

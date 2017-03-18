@@ -171,7 +171,7 @@ ctfs_create_evnode(vnode_t *pvp)
 	ctfs_evnode_t *evnode;
 	ctfs_cdirnode_t *cdirnode = pvp->v_data;
 
-	vp = gfs_file_create(sizeof (ctfs_evnode_t), pvp, ctfs_ops_event);
+	vp = gfs_file_create(sizeof (ctfs_evnode_t), pvp, &ctfs_ops_event);
 	evnode = vp->v_data;
 
 	/*
@@ -325,17 +325,17 @@ ctfs_ev_poll(
 	    reventsp, php));
 }
 
-const fs_operation_def_t ctfs_tops_event[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_ev_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = ctfs_close } },
-	{ VOPNAME_IOCTL,	{ .vop_ioctl = ctfs_ev_ioctl } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_ev_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_ev_access } },
-	{ VOPNAME_READDIR,	{ .error = fs_notdir } },
-	{ VOPNAME_LOOKUP,	{ .error = fs_notdir } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = ctfs_ev_inactive } },
-	{ VOPNAME_POLL,		{ .vop_poll = ctfs_ev_poll } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_event = {
+	.vnop_name = "ctfs events file",
+	.vop_open = ctfs_ev_open,
+	.vop_close = ctfs_close,
+	.vop_ioctl = ctfs_ev_ioctl,
+	.vop_getattr = ctfs_ev_getattr,
+	.vop_access = ctfs_ev_access,
+	.vop_readdir = fs_notdir,
+	.vop_lookup = fs_notdir,
+	.vop_inactive = ctfs_ev_inactive,
+	.vop_poll = ctfs_ev_poll,
 };
 
 /*
@@ -350,7 +350,7 @@ ctfs_create_pbundle(vnode_t *pvp)
 	vnode_t *vp;
 	ctfs_bunode_t *bundle;
 
-	vp = gfs_file_create(sizeof (ctfs_bunode_t), pvp, ctfs_ops_bundle);
+	vp = gfs_file_create(sizeof (ctfs_bunode_t), pvp, &ctfs_ops_bundle);
 	bundle = vp->v_data;
 	bundle->ctfs_bu_queue =
 	    contract_type_pbundle(ct_types[gfs_file_index(pvp)], curproc);
@@ -370,7 +370,7 @@ ctfs_create_bundle(vnode_t *pvp)
 	vnode_t *vp;
 	ctfs_bunode_t *bundle;
 
-	vp = gfs_file_create(sizeof (ctfs_bunode_t), pvp, ctfs_ops_bundle);
+	vp = gfs_file_create(sizeof (ctfs_bunode_t), pvp, &ctfs_ops_bundle);
 	bundle = vp->v_data;
 	bundle->ctfs_bu_queue =
 	    contract_type_bundle(ct_types[gfs_file_index(pvp)]);
@@ -485,15 +485,15 @@ ctfs_bu_poll(
 	    reventsp, php));
 }
 
-const fs_operation_def_t ctfs_tops_bundle[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_bu_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = ctfs_close } },
-	{ VOPNAME_IOCTL,	{ .vop_ioctl = ctfs_bu_ioctl } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_bu_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_access_readonly } },
-	{ VOPNAME_READDIR,	{ .error = fs_notdir } },
-	{ VOPNAME_LOOKUP,	{ .error = fs_notdir } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = ctfs_bu_inactive } },
-	{ VOPNAME_POLL,		{ .vop_poll = ctfs_bu_poll } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_bundle = {
+	.vnop_name = "ctfs bundle file",
+	.vop_open = ctfs_bu_open,
+	.vop_close = ctfs_close,
+	.vop_ioctl = ctfs_bu_ioctl,
+	.vop_getattr = ctfs_bu_getattr,
+	.vop_access = ctfs_access_readonly,
+	.vop_readdir = fs_notdir,
+	.vop_lookup = fs_notdir,
+	.vop_inactive = ctfs_bu_inactive,
+	.vop_poll = ctfs_bu_poll,
 };

@@ -68,7 +68,7 @@ static ino64_t ctfs_tdir_do_inode(vnode_t *, int);
 vnode_t *
 ctfs_create_tdirnode(vnode_t *pvp)
 {
-	return (gfs_dir_create(sizeof (ctfs_tdirnode_t), pvp, ctfs_ops_tdir,
+	return (gfs_dir_create(sizeof (ctfs_tdirnode_t), pvp, &ctfs_ops_tdir,
 	    ctfs_tdir_dirents, ctfs_tdir_do_inode, CTFS_NAME_MAX,
 	    ctfs_tdir_do_readdir, ctfs_tdir_do_lookup));
 }
@@ -156,15 +156,15 @@ ctfs_tdir_do_lookup(vnode_t *vp, const char *nm, vnode_t **vpp, ino64_t *inop,
 	return (0);
 }
 
-const fs_operation_def_t ctfs_tops_tdir[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = ctfs_close } },
-	{ VOPNAME_IOCTL,	{ .error = fs_inval } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_tdir_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_access_dir } },
-	{ VOPNAME_READDIR,	{ .vop_readdir = gfs_vop_readdir } },
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = gfs_vop_lookup } },
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_tdir = {
+	.vnop_name = "ctfs template directory",
+	.vop_open = ctfs_open,
+	.vop_close = ctfs_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = ctfs_tdir_getattr,
+	.vop_access = ctfs_access_dir,
+	.vop_readdir = gfs_vop_readdir,
+	.vop_lookup = gfs_vop_lookup,
+	.vop_seek = fs_seek,
+	.vop_inactive = gfs_vop_inactive,
 };

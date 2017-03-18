@@ -73,7 +73,7 @@ ctfs_create_cdirnode(vnode_t *pvp, contract_t *ct)
 	if ((vp = contract_vnode_get(ct, pvp->v_vfsp)) != NULL)
 		return (vp);
 
-	vp = gfs_dir_create(sizeof (ctfs_cdirnode_t), pvp, ctfs_ops_cdir,
+	vp = gfs_dir_create(sizeof (ctfs_cdirnode_t), pvp, &ctfs_ops_cdir,
 	    ctfs_ctls, ctfs_cdir_do_inode, CTFS_NAME_MAX, NULL, NULL);
 	cdir = vp->v_data;
 
@@ -153,15 +153,15 @@ ctfs_cdir_inactive(vnode_t *vp, cred_t *cr, caller_context_t *cct)
 }
 
 
-const fs_operation_def_t ctfs_tops_cdir[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = ctfs_close } },
-	{ VOPNAME_IOCTL,	{ .error = fs_inval } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_cdir_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_access_dir } },
-	{ VOPNAME_READDIR,	{ .vop_readdir = gfs_vop_readdir } },
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = gfs_vop_lookup } },
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = ctfs_cdir_inactive } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_cdir = {
+	.vnop_name = "ctfs contract directory",
+	.vop_open = ctfs_open,
+	.vop_close = ctfs_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = ctfs_cdir_getattr,
+	.vop_access = ctfs_access_dir,
+	.vop_readdir = gfs_vop_readdir,
+	.vop_lookup = gfs_vop_lookup,
+	.vop_seek = fs_seek,
+	.vop_inactive = ctfs_cdir_inactive,
 };

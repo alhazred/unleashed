@@ -60,7 +60,7 @@ ctfs_create_symnode(vnode_t *pvp, contract_t *ct)
 	vnode_t *vp;
 	size_t len;
 
-	vp = gfs_file_create(sizeof (ctfs_symnode_t), pvp, ctfs_ops_sym);
+	vp = gfs_file_create(sizeof (ctfs_symnode_t), pvp, &ctfs_ops_sym);
 	vp->v_type = VLNK;
 	symnode = vp->v_data;
 
@@ -133,15 +133,15 @@ ctfs_sym_inactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 	}
 }
 
-const fs_operation_def_t ctfs_tops_sym[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = ctfs_close } },
-	{ VOPNAME_IOCTL,	{ .error = fs_inval } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_sym_getattr } },
-	{ VOPNAME_READLINK,	{ .vop_readlink = ctfs_sym_readlink } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_access_readonly } },
-	{ VOPNAME_READDIR,	{ .error = fs_notdir } },
-	{ VOPNAME_LOOKUP,	{ .error = fs_notdir } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = ctfs_sym_inactive } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_sym = {
+	.vnop_name = "ctfs all symlink",
+	.vop_open = ctfs_open,
+	.vop_close = ctfs_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = ctfs_sym_getattr,
+	.vop_readlink = ctfs_sym_readlink,
+	.vop_access = ctfs_access_readonly,
+	.vop_readdir = fs_notdir,
+	.vop_lookup = fs_notdir,
+	.vop_inactive = ctfs_sym_inactive,
 };

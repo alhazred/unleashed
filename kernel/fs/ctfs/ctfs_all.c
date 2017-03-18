@@ -61,7 +61,7 @@ vnode_t *
 ctfs_create_adirnode(vnode_t *pvp)
 {
 	vnode_t *vp = gfs_dir_create(sizeof (ctfs_adirnode_t), pvp,
-	    ctfs_ops_adir, NULL, NULL, CTFS_NAME_MAX, ctfs_adir_do_readdir,
+	    &ctfs_ops_adir, NULL, NULL, CTFS_NAME_MAX, ctfs_adir_do_readdir,
 	    ctfs_adir_do_lookup);
 
 	return (vp);
@@ -145,15 +145,15 @@ ctfs_adir_do_readdir(vnode_t *vp, void *dp, int *eofp,
 	return (0);
 }
 
-const fs_operation_def_t ctfs_tops_adir[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = ctfs_close } },
-	{ VOPNAME_IOCTL,	{ .error = fs_inval } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_adir_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_access_dir } },
-	{ VOPNAME_READDIR,	{ .vop_readdir = gfs_vop_readdir } },
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = gfs_vop_lookup } },
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_adir = {
+	.vnop_name = "ctfs all directory",
+	.vop_open = ctfs_open,
+	.vop_close = ctfs_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = ctfs_adir_getattr,
+	.vop_access = ctfs_access_dir,
+	.vop_readdir = gfs_vop_readdir,
+	.vop_lookup = gfs_vop_lookup,
+	.vop_seek = fs_seek,
+	.vop_inactive = gfs_vop_inactive,
 };

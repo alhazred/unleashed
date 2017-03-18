@@ -62,7 +62,7 @@ ctfs_create_ctlnode(vnode_t *pvp)
 	ctfs_cdirnode_t *cdirnode = pvp->v_data;
 	vnode_t *vp;
 
-	vp = gfs_file_create(sizeof (ctfs_ctlnode_t), pvp, ctfs_ops_ctl);
+	vp = gfs_file_create(sizeof (ctfs_ctlnode_t), pvp, &ctfs_ops_ctl);
 	ctlnode = vp->v_data;
 	/*
 	 * We transitively have a hold on the contract through our
@@ -226,16 +226,16 @@ ctfs_ctl_ioctl(
 	return (error);
 }
 
-const fs_operation_def_t ctfs_tops_ctl[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_ctl_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = ctfs_close } },
-	{ VOPNAME_IOCTL,	{ .vop_ioctl = ctfs_ctl_ioctl } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_ctl_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_ctl_access } },
-	{ VOPNAME_READDIR,	{ .error = fs_notdir } },
-	{ VOPNAME_LOOKUP,	{ .error = fs_notdir } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_ctl = {
+	.vnop_name = "ctfs ctl file",
+	.vop_open = ctfs_ctl_open,
+	.vop_close = ctfs_close,
+	.vop_ioctl = ctfs_ctl_ioctl,
+	.vop_getattr = ctfs_ctl_getattr,
+	.vop_access = ctfs_ctl_access,
+	.vop_readdir = fs_notdir,
+	.vop_lookup = fs_notdir,
+	.vop_inactive = gfs_vop_inactive,
 };
 
 /*
@@ -252,7 +252,7 @@ ctfs_create_statnode(vnode_t *pvp)
 	ctfs_cdirnode_t *cdirnode = pvp->v_data;
 	ctfs_ctlnode_t *ctlnode;
 
-	vp = gfs_file_create(sizeof (ctfs_ctlnode_t), pvp, ctfs_ops_stat);
+	vp = gfs_file_create(sizeof (ctfs_ctlnode_t), pvp, &ctfs_ops_stat);
 	ctlnode = vp->v_data;
 	/*
 	 * We transitively have a hold on the contract through our
@@ -325,14 +325,14 @@ ctfs_stat_ioctl(
 	return (0);
 }
 
-const fs_operation_def_t ctfs_tops_stat[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = ctfs_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = ctfs_close } },
-	{ VOPNAME_IOCTL,	{ .vop_ioctl = ctfs_stat_ioctl } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = ctfs_stat_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = ctfs_access_readonly } },
-	{ VOPNAME_READDIR,	{ .error = fs_notdir } },
-	{ VOPNAME_LOOKUP,	{ .error = fs_notdir } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive } },
-	{ NULL, NULL }
+const struct vnodeops ctfs_ops_stat = {
+	.vnop_name = "ctfs status file",
+	.vop_open = ctfs_open,
+	.vop_close = ctfs_close,
+	.vop_ioctl = ctfs_stat_ioctl,
+	.vop_getattr = ctfs_stat_getattr,
+	.vop_access = ctfs_access_readonly,
+	.vop_readdir = fs_notdir,
+	.vop_lookup = fs_notdir,
+	.vop_inactive = gfs_vop_inactive,
 };
