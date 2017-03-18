@@ -145,7 +145,7 @@ static struct modlinkage modlinkage = {
 dev_t	doordev;
 
 extern	struct vfs door_vfs;
-extern	struct vnodeops *door_vnodeops;
+extern	const struct vnodeops door_vnodeops;
 
 int
 _init(void)
@@ -153,7 +153,6 @@ _init(void)
 	static const fs_operation_def_t door_vfsops_template[] = {
 		NULL, NULL
 	};
-	extern const fs_operation_def_t door_vnodeops_template[];
 	vfsops_t *door_vfsops;
 	major_t major;
 	int error;
@@ -174,12 +173,6 @@ _init(void)
 	door_vfs.vfs_dev = doordev;
 	vfs_make_fsid(&(door_vfs.vfs_fsid), doordev, 0);
 
-	error = vn_make_ops("doorfs", door_vnodeops_template, &door_vnodeops);
-	if (error != 0) {
-		vfs_freevfsops(door_vfsops);
-		cmn_err(CE_WARN, "door init: bad vnode ops");
-		return (error);
-	}
 	return (mod_install(&modlinkage));
 }
 
@@ -440,7 +433,7 @@ door_create_common(void (*pc_cookie)(), void *data_cookie, uint_t attributes,
 	dp->door_desc_max = (attributes & DOOR_REFUSE_DESC)? 0 : INT_MAX;
 
 	vp = DTOV(dp);
-	vn_setops(vp, door_vnodeops);
+	vn_setops(vp, &door_vnodeops);
 	vp->v_type = VDOOR;
 	vp->v_vfsp = &door_vfs;
 	vp->v_data = (caddr_t)dp;

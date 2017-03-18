@@ -52,22 +52,20 @@ static int	door_realvp(vnode_t *vp, vnode_t **vpp, caller_context_t *ct);
 
 struct vfs door_vfs;
 
-struct vnodeops *door_vnodeops;
-
-const fs_operation_def_t door_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = door_open },
-	VOPNAME_CLOSE,		{ .vop_close = door_close },
-	VOPNAME_GETATTR,	{ .vop_getattr = door_getattr },
-	VOPNAME_ACCESS,		{ .vop_access = door_access },
-	VOPNAME_INACTIVE,	{ .vop_inactive = door_inactive },
-	VOPNAME_FRLOCK,		{ .error = fs_nosys },
-	VOPNAME_REALVP,		{ .vop_realvp = door_realvp },
-	VOPNAME_POLL,		{ .error = fs_nosys },
-	VOPNAME_PATHCONF,	{ .error = fs_nosys },
-	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
-	VOPNAME_GETSECATTR,	{ .error = fs_nosys },
-	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
-	NULL,			NULL
+const struct vnodeops door_vnodeops = {
+	.vnop_name = "doorfs",
+	.vop_open = door_open,
+	.vop_close = door_close,
+	.vop_getattr = door_getattr,
+	.vop_access = door_access,
+	.vop_inactive = door_inactive,
+	.vop_frlock = fs_nosys,
+	.vop_realvp = door_realvp,
+	.vop_poll = fs_nosys_poll,
+	.vop_pathconf = fs_nosys,
+	.vop_dispose = fs_nodispose,
+	.vop_getsecattr = fs_nosys,
+	.vop_shrlock = fs_nosys,
 };
 
 /* ARGSUSED */
