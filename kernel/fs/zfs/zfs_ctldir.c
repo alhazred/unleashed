@@ -113,28 +113,15 @@ snapentry_compare(const void *a, const void *b)
 		return (0);
 }
 
-vnodeops_t *zfsctl_ops_root;
-vnodeops_t *zfsctl_ops_snapdir;
-vnodeops_t *zfsctl_ops_snapshot;
-vnodeops_t *zfsctl_ops_shares;
-
-static const fs_operation_def_t zfsctl_tops_root[];
-static const fs_operation_def_t zfsctl_tops_snapdir[];
-static const fs_operation_def_t zfsctl_tops_snapshot[];
-static const fs_operation_def_t zfsctl_tops_shares[];
+static const struct vnodeops zfsctl_ops_root;
+static const struct vnodeops zfsctl_ops_snapdir;
+static const struct vnodeops zfsctl_ops_snapshot;
+static const struct vnodeops zfsctl_ops_shares;
 
 static vnode_t *zfsctl_mknode_snapdir(vnode_t *);
 static vnode_t *zfsctl_mknode_shares(vnode_t *);
 static vnode_t *zfsctl_snapshot_mknode(vnode_t *, uint64_t objset);
 static int zfsctl_unmount_snap(zfs_snapentry_t *, int, cred_t *);
-
-static gfs_opsvec_t zfsctl_opsvec[] = {
-	{ ".zfs", zfsctl_tops_root, &zfsctl_ops_root },
-	{ ".zfs/snapshot", zfsctl_tops_snapdir, &zfsctl_ops_snapdir },
-	{ ".zfs/snapshot/vnode", zfsctl_tops_snapshot, &zfsctl_ops_snapshot },
-	{ ".zfs/shares", zfsctl_tops_shares, &zfsctl_ops_shares },
-	{ NULL }
-};
 
 /*
  * Root directory elements.  We only have two entries
@@ -159,37 +146,20 @@ static gfs_dirent_t zfsctl_root_entries[] = {
 void
 zfsctl_init(void)
 {
-	VERIFY(gfs_make_opsvec(zfsctl_opsvec) == 0);
 }
 
 void
 zfsctl_fini(void)
 {
-	/*
-	 * Remove vfsctl vnode ops
-	 */
-	if (zfsctl_ops_root)
-		vn_freevnodeops(zfsctl_ops_root);
-	if (zfsctl_ops_snapdir)
-		vn_freevnodeops(zfsctl_ops_snapdir);
-	if (zfsctl_ops_snapshot)
-		vn_freevnodeops(zfsctl_ops_snapshot);
-	if (zfsctl_ops_shares)
-		vn_freevnodeops(zfsctl_ops_shares);
-
-	zfsctl_ops_root = NULL;
-	zfsctl_ops_snapdir = NULL;
-	zfsctl_ops_snapshot = NULL;
-	zfsctl_ops_shares = NULL;
 }
 
 boolean_t
 zfsctl_is_node(vnode_t *vp)
 {
-	return (vn_matchops(vp, zfsctl_ops_root) ||
-	    vn_matchops(vp, zfsctl_ops_snapdir) ||
-	    vn_matchops(vp, zfsctl_ops_snapshot) ||
-	    vn_matchops(vp, zfsctl_ops_shares));
+	return (vn_matchops(vp, &zfsctl_ops_root) ||
+	    vn_matchops(vp, &zfsctl_ops_snapdir) ||
+	    vn_matchops(vp, &zfsctl_ops_snapshot) ||
+	    vn_matchops(vp, &zfsctl_ops_shares));
 
 }
 
@@ -227,7 +197,7 @@ zfsctl_create(zfsvfs_t *zfsvfs)
 	ASSERT(zfsvfs->z_ctldir == NULL);
 
 	vp = gfs_root_create(sizeof (zfsctl_node_t), zfsvfs->z_vfs,
-	    zfsctl_ops_root, ZFSCTL_INO_ROOT, zfsctl_root_entries,
+	    &zfsctl_ops_root, ZFSCTL_INO_ROOT, zfsctl_root_entries,
 	    zfsctl_root_inode_cb, MAXNAMELEN, NULL, NULL);
 	zcp = vp->v_data;
 	zcp->zc_id = ZFSCTL_INO_ROOT;
@@ -485,19 +455,19 @@ zfsctl_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
 	return (fs_pathconf(vp, cmd, valp, cr, ct));
 }
 
-static const fs_operation_def_t zfsctl_tops_root[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = zfsctl_common_open }	},
-	{ VOPNAME_CLOSE,	{ .vop_close = zfsctl_common_close }	},
-	{ VOPNAME_IOCTL,	{ .error = fs_inval }			},
-	{ VOPNAME_GETATTR,	{ .vop_getattr = zfsctl_root_getattr }	},
-	{ VOPNAME_ACCESS,	{ .vop_access = zfsctl_common_access }	},
-	{ VOPNAME_READDIR,	{ .vop_readdir = gfs_vop_readdir } 	},
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = zfsctl_root_lookup }	},
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek }			},
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive }	},
-	{ VOPNAME_PATHCONF,	{ .vop_pathconf = zfsctl_pathconf }	},
-	{ VOPNAME_FID,		{ .vop_fid = zfsctl_common_fid	}	},
-	{ NULL }
+static const struct vnodeops zfsctl_ops_root = {
+	.vnop_name = ".zfs",
+	.vop_open = zfsctl_common_open,
+	.vop_close = zfsctl_common_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = zfsctl_root_getattr,
+	.vop_access = zfsctl_common_access,
+	.vop_readdir = gfs_vop_readdir,
+	.vop_lookup = zfsctl_root_lookup,
+	.vop_seek = fs_seek,
+	.vop_inactive = gfs_vop_inactive,
+	.vop_pathconf = zfsctl_pathconf,
+	.vop_fid = zfsctl_common_fid,
 };
 
 /*
@@ -1060,7 +1030,7 @@ zfsctl_mknode_snapdir(vnode_t *pvp)
 	zfsctl_snapdir_t *sdp;
 
 	vp = gfs_dir_create(sizeof (zfsctl_snapdir_t), pvp,
-	    zfsctl_ops_snapdir, NULL, NULL, MAXNAMELEN,
+	    &zfsctl_ops_snapdir, NULL, NULL, MAXNAMELEN,
 	    zfsctl_snapdir_readdir_cb, NULL);
 	sdp = vp->v_data;
 	sdp->sd_node.zc_id = ZFSCTL_INO_SNAPDIR;
@@ -1078,7 +1048,7 @@ zfsctl_mknode_shares(vnode_t *pvp)
 	zfsctl_node_t *sdp;
 
 	vp = gfs_dir_create(sizeof (zfsctl_node_t), pvp,
-	    zfsctl_ops_shares, NULL, NULL, MAXNAMELEN,
+	    &zfsctl_ops_shares, NULL, NULL, MAXNAMELEN,
 	    NULL, NULL);
 	sdp = vp->v_data;
 	sdp->zc_cmtime = ((zfsctl_node_t *)pvp->v_data)->zc_cmtime;
@@ -1144,35 +1114,35 @@ zfsctl_snapdir_inactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 	}
 }
 
-static const fs_operation_def_t zfsctl_tops_snapdir[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = zfsctl_common_open }	},
-	{ VOPNAME_CLOSE,	{ .vop_close = zfsctl_common_close }	},
-	{ VOPNAME_IOCTL,	{ .error = fs_inval }			},
-	{ VOPNAME_GETATTR,	{ .vop_getattr = zfsctl_snapdir_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = zfsctl_common_access }	},
-	{ VOPNAME_RENAME,	{ .vop_rename = zfsctl_snapdir_rename }	},
-	{ VOPNAME_RMDIR,	{ .vop_rmdir = zfsctl_snapdir_remove }	},
-	{ VOPNAME_MKDIR,	{ .vop_mkdir = zfsctl_snapdir_mkdir }	},
-	{ VOPNAME_READDIR,	{ .vop_readdir = gfs_vop_readdir }	},
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = zfsctl_snapdir_lookup }	},
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek }			},
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = zfsctl_snapdir_inactive } },
-	{ VOPNAME_FID,		{ .vop_fid = zfsctl_common_fid }	},
-	{ NULL }
+static const struct vnodeops zfsctl_ops_snapdir = {
+	.vnop_name = ".zfs/snapshot",
+	.vop_open = zfsctl_common_open,
+	.vop_close = zfsctl_common_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = zfsctl_snapdir_getattr,
+	.vop_access = zfsctl_common_access,
+	.vop_rename = zfsctl_snapdir_rename,
+	.vop_rmdir = zfsctl_snapdir_remove,
+	.vop_mkdir = zfsctl_snapdir_mkdir,
+	.vop_readdir = gfs_vop_readdir,
+	.vop_lookup = zfsctl_snapdir_lookup,
+	.vop_seek = fs_seek,
+	.vop_inactive = zfsctl_snapdir_inactive,
+	.vop_fid = zfsctl_common_fid,
 };
 
-static const fs_operation_def_t zfsctl_tops_shares[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = zfsctl_common_open }	},
-	{ VOPNAME_CLOSE,	{ .vop_close = zfsctl_common_close }	},
-	{ VOPNAME_IOCTL,	{ .error = fs_inval }			},
-	{ VOPNAME_GETATTR,	{ .vop_getattr = zfsctl_shares_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = zfsctl_common_access }	},
-	{ VOPNAME_READDIR,	{ .vop_readdir = zfsctl_shares_readdir } },
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = zfsctl_shares_lookup }	},
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek }			},
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive } },
-	{ VOPNAME_FID,		{ .vop_fid = zfsctl_shares_fid } },
-	{ NULL }
+static const struct vnodeops zfsctl_ops_shares = {
+	.vnop_name = ".zfs/shares",
+	.vop_open = zfsctl_common_open,
+	.vop_close = zfsctl_common_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = zfsctl_shares_getattr,
+	.vop_access = zfsctl_common_access,
+	.vop_readdir = zfsctl_shares_readdir,
+	.vop_lookup = zfsctl_shares_lookup,
+	.vop_seek = fs_seek,
+	.vop_inactive = gfs_vop_inactive,
+	.vop_fid = zfsctl_shares_fid,
 };
 
 /*
@@ -1189,7 +1159,7 @@ zfsctl_snapshot_mknode(vnode_t *pvp, uint64_t objset)
 	zfsctl_node_t *zcp;
 
 	vp = gfs_dir_create(sizeof (zfsctl_node_t), pvp,
-	    zfsctl_ops_snapshot, NULL, NULL, MAXNAMELEN, NULL, NULL);
+	    &zfsctl_ops_snapshot, NULL, NULL, MAXNAMELEN, NULL, NULL);
 	zcp = vp->v_data;
 	zcp->zc_id = objset;
 
@@ -1251,9 +1221,9 @@ zfsctl_snapshot_inactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
  * These VP's should never see the light of day.  They should always
  * be covered.
  */
-static const fs_operation_def_t zfsctl_tops_snapshot[] = {
-	VOPNAME_INACTIVE, { .vop_inactive =  zfsctl_snapshot_inactive },
-	NULL, NULL
+static const struct vnodeops zfsctl_ops_snapshot = {
+	.vnop_name = ".zfs/snapshot/vnode",
+	.vop_inactive =  zfsctl_snapshot_inactive,
 };
 
 int

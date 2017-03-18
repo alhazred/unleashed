@@ -5230,112 +5230,109 @@ zfs_isdir()
 {
 	return (SET_ERROR(EISDIR));
 }
+
 /*
- * Directory vnode operations template
+ * Directory vnode operations
  */
-vnodeops_t *zfs_dvnodeops;
-const fs_operation_def_t zfs_dvnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = zfs_open },
-	VOPNAME_CLOSE,		{ .vop_close = zfs_close },
-	VOPNAME_READ,		{ .error = zfs_isdir },
-	VOPNAME_WRITE,		{ .error = zfs_isdir },
-	VOPNAME_IOCTL,		{ .vop_ioctl = zfs_ioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = zfs_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = zfs_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = zfs_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = zfs_lookup },
-	VOPNAME_CREATE,		{ .vop_create = zfs_create },
-	VOPNAME_REMOVE,		{ .vop_remove = zfs_remove },
-	VOPNAME_LINK,		{ .vop_link = zfs_link },
-	VOPNAME_RENAME,		{ .vop_rename = zfs_rename },
-	VOPNAME_MKDIR,		{ .vop_mkdir = zfs_mkdir },
-	VOPNAME_RMDIR,		{ .vop_rmdir = zfs_rmdir },
-	VOPNAME_READDIR,	{ .vop_readdir = zfs_readdir },
-	VOPNAME_SYMLINK,	{ .vop_symlink = zfs_symlink },
-	VOPNAME_FSYNC,		{ .vop_fsync = zfs_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = zfs_inactive },
-	VOPNAME_FID,		{ .vop_fid = zfs_fid },
-	VOPNAME_SEEK,		{ .vop_seek = zfs_seek },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = zfs_pathconf },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = zfs_getsecattr },
-	VOPNAME_SETSECATTR,	{ .vop_setsecattr = zfs_setsecattr },
-	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
-	NULL,			NULL
+const struct vnodeops zfs_dvnodeops = {
+	.vnop_name = "zfs",
+	.vop_open = zfs_open,
+	.vop_close = zfs_close,
+	.vop_read = zfs_isdir,
+	.vop_write = zfs_isdir,
+	.vop_ioctl = zfs_ioctl,
+	.vop_getattr = zfs_getattr,
+	.vop_setattr = zfs_setattr,
+	.vop_access = zfs_access,
+	.vop_lookup = zfs_lookup,
+	.vop_create = zfs_create,
+	.vop_remove = zfs_remove,
+	.vop_link = zfs_link,
+	.vop_rename = zfs_rename,
+	.vop_mkdir = zfs_mkdir,
+	.vop_rmdir = zfs_rmdir,
+	.vop_readdir = zfs_readdir,
+	.vop_symlink = zfs_symlink,
+	.vop_fsync = zfs_fsync,
+	.vop_inactive = zfs_inactive,
+	.vop_fid = zfs_fid,
+	.vop_seek = zfs_seek,
+	.vop_pathconf = zfs_pathconf,
+	.vop_getsecattr = zfs_getsecattr,
+	.vop_setsecattr = zfs_setsecattr,
+	.vop_vnevent = fs_vnevent_support,
 };
 
 /*
- * Regular file vnode operations template
+ * Regular file vnode operations
  */
-vnodeops_t *zfs_fvnodeops;
-const fs_operation_def_t zfs_fvnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = zfs_open },
-	VOPNAME_CLOSE,		{ .vop_close = zfs_close },
-	VOPNAME_READ,		{ .vop_read = zfs_read },
-	VOPNAME_WRITE,		{ .vop_write = zfs_write },
-	VOPNAME_IOCTL,		{ .vop_ioctl = zfs_ioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = zfs_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = zfs_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = zfs_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = zfs_lookup },
-	VOPNAME_RENAME,		{ .vop_rename = zfs_rename },
-	VOPNAME_FSYNC,		{ .vop_fsync = zfs_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = zfs_inactive },
-	VOPNAME_FID,		{ .vop_fid = zfs_fid },
-	VOPNAME_SEEK,		{ .vop_seek = zfs_seek },
-	VOPNAME_FRLOCK,		{ .vop_frlock = zfs_frlock },
-	VOPNAME_SPACE,		{ .vop_space = zfs_space },
-	VOPNAME_GETPAGE,	{ .vop_getpage = zfs_getpage },
-	VOPNAME_PUTPAGE,	{ .vop_putpage = zfs_putpage },
-	VOPNAME_MAP,		{ .vop_map = zfs_map },
-	VOPNAME_ADDMAP,		{ .vop_addmap = zfs_addmap },
-	VOPNAME_DELMAP,		{ .vop_delmap = zfs_delmap },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = zfs_pathconf },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = zfs_getsecattr },
-	VOPNAME_SETSECATTR,	{ .vop_setsecattr = zfs_setsecattr },
-	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
-	VOPNAME_REQZCBUF,	{ .vop_reqzcbuf = zfs_reqzcbuf },
-	VOPNAME_RETZCBUF,	{ .vop_retzcbuf = zfs_retzcbuf },
-	NULL,			NULL
+const struct vnodeops zfs_fvnodeops = {
+	.vnop_name = "zfs",
+	.vop_open = zfs_open,
+	.vop_close = zfs_close,
+	.vop_read = zfs_read,
+	.vop_write = zfs_write,
+	.vop_ioctl = zfs_ioctl,
+	.vop_getattr = zfs_getattr,
+	.vop_setattr = zfs_setattr,
+	.vop_access = zfs_access,
+	.vop_lookup = zfs_lookup,
+	.vop_rename = zfs_rename,
+	.vop_fsync = zfs_fsync,
+	.vop_inactive = zfs_inactive,
+	.vop_fid = zfs_fid,
+	.vop_seek = zfs_seek,
+	.vop_frlock = zfs_frlock,
+	.vop_space = zfs_space,
+	.vop_getpage = zfs_getpage,
+	.vop_putpage = zfs_putpage,
+	.vop_map = zfs_map,
+	.vop_addmap = zfs_addmap,
+	.vop_delmap = zfs_delmap,
+	.vop_pathconf = zfs_pathconf,
+	.vop_getsecattr = zfs_getsecattr,
+	.vop_setsecattr = zfs_setsecattr,
+	.vop_vnevent = fs_vnevent_support,
+	.vop_reqzcbuf = zfs_reqzcbuf,
+	.vop_retzcbuf = zfs_retzcbuf,
 };
 
 /*
- * Symbolic link vnode operations template
+ * Symbolic link vnode operations
  */
-vnodeops_t *zfs_symvnodeops;
-const fs_operation_def_t zfs_symvnodeops_template[] = {
-	VOPNAME_GETATTR,	{ .vop_getattr = zfs_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = zfs_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = zfs_access },
-	VOPNAME_RENAME,		{ .vop_rename = zfs_rename },
-	VOPNAME_READLINK,	{ .vop_readlink = zfs_readlink },
-	VOPNAME_INACTIVE,	{ .vop_inactive = zfs_inactive },
-	VOPNAME_FID,		{ .vop_fid = zfs_fid },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = zfs_pathconf },
-	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
-	NULL,			NULL
+const struct vnodeops zfs_symvnodeops = {
+	.vnop_name = "zfs",
+	.vop_getattr = zfs_getattr,
+	.vop_setattr = zfs_setattr,
+	.vop_access = zfs_access,
+	.vop_rename = zfs_rename,
+	.vop_readlink = zfs_readlink,
+	.vop_inactive = zfs_inactive,
+	.vop_fid = zfs_fid,
+	.vop_pathconf = zfs_pathconf,
+	.vop_vnevent = fs_vnevent_support,
 };
 
 /*
- * special share hidden files vnode operations template
+ * special share hidden files vnode operations
  */
-vnodeops_t *zfs_sharevnodeops;
-const fs_operation_def_t zfs_sharevnodeops_template[] = {
-	VOPNAME_GETATTR,	{ .vop_getattr = zfs_getattr },
-	VOPNAME_ACCESS,		{ .vop_access = zfs_access },
-	VOPNAME_INACTIVE,	{ .vop_inactive = zfs_inactive },
-	VOPNAME_FID,		{ .vop_fid = zfs_fid },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = zfs_pathconf },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = zfs_getsecattr },
-	VOPNAME_SETSECATTR,	{ .vop_setsecattr = zfs_setsecattr },
-	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
-	NULL,			NULL
+const struct vnodeops zfs_sharevnodeops = {
+	.vnop_name = "zfs",
+	.vop_getattr = zfs_getattr,
+	.vop_access = zfs_access,
+	.vop_inactive = zfs_inactive,
+	.vop_fid = zfs_fid,
+	.vop_pathconf = zfs_pathconf,
+	.vop_getsecattr = zfs_getsecattr,
+	.vop_setsecattr = zfs_setsecattr,
+	.vop_vnevent = fs_vnevent_support,
 };
 
 /*
- * Extended attribute directory vnode operations template
+ * Extended attribute directory vnode operations
  *
- * This template is identical to the directory vnodes
- * operation template except for restricted operations:
+ * These ops are identical to the directory vnode
+ * operations except for restricted operations:
  *	fop_mkdir()
  *	fop_symlink()
  *
@@ -5344,40 +5341,38 @@ const fs_operation_def_t zfs_sharevnodeops_template[] = {
  *	zfs_link()	- no links into/out of attribute space
  *	zfs_rename()	- no moves into/out of attribute space
  */
-vnodeops_t *zfs_xdvnodeops;
-const fs_operation_def_t zfs_xdvnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = zfs_open },
-	VOPNAME_CLOSE,		{ .vop_close = zfs_close },
-	VOPNAME_IOCTL,		{ .vop_ioctl = zfs_ioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = zfs_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = zfs_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = zfs_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = zfs_lookup },
-	VOPNAME_CREATE,		{ .vop_create = zfs_create },
-	VOPNAME_REMOVE,		{ .vop_remove = zfs_remove },
-	VOPNAME_LINK,		{ .vop_link = zfs_link },
-	VOPNAME_RENAME,		{ .vop_rename = zfs_rename },
-	VOPNAME_MKDIR,		{ .error = zfs_inval },
-	VOPNAME_RMDIR,		{ .vop_rmdir = zfs_rmdir },
-	VOPNAME_READDIR,	{ .vop_readdir = zfs_readdir },
-	VOPNAME_SYMLINK,	{ .error = zfs_inval },
-	VOPNAME_FSYNC,		{ .vop_fsync = zfs_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = zfs_inactive },
-	VOPNAME_FID,		{ .vop_fid = zfs_fid },
-	VOPNAME_SEEK,		{ .vop_seek = zfs_seek },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = zfs_pathconf },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = zfs_getsecattr },
-	VOPNAME_SETSECATTR,	{ .vop_setsecattr = zfs_setsecattr },
-	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
-	NULL,			NULL
+const struct vnodeops zfs_xdvnodeops = {
+	.vnop_name = "zfs",
+	.vop_open = zfs_open,
+	.vop_close = zfs_close,
+	.vop_ioctl = zfs_ioctl,
+	.vop_getattr = zfs_getattr,
+	.vop_setattr = zfs_setattr,
+	.vop_access = zfs_access,
+	.vop_lookup = zfs_lookup,
+	.vop_create = zfs_create,
+	.vop_remove = zfs_remove,
+	.vop_link = zfs_link,
+	.vop_rename = zfs_rename,
+	.vop_mkdir = zfs_inval,
+	.vop_rmdir = zfs_rmdir,
+	.vop_readdir = zfs_readdir,
+	.vop_symlink = zfs_inval,
+	.vop_fsync = zfs_fsync,
+	.vop_inactive = zfs_inactive,
+	.vop_fid = zfs_fid,
+	.vop_seek = zfs_seek,
+	.vop_pathconf = zfs_pathconf,
+	.vop_getsecattr = zfs_getsecattr,
+	.vop_setsecattr = zfs_setsecattr,
+	.vop_vnevent = fs_vnevent_support,
 };
 
 /*
- * Error vnode operations template
+ * Error vnode operations
  */
-vnodeops_t *zfs_evnodeops;
-const fs_operation_def_t zfs_evnodeops_template[] = {
-	VOPNAME_INACTIVE,	{ .vop_inactive = zfs_inactive },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = zfs_pathconf },
-	NULL,			NULL
+const struct vnodeops zfs_evnodeops = {
+	.vnop_name = "zfs",
+	.vop_inactive = zfs_inactive,
+	.vop_pathconf = zfs_pathconf,
 };
