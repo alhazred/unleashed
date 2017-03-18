@@ -52,12 +52,7 @@
  * In addition, some common routines are found in the 'objfs_common.c' file.
  */
 
-vnodeops_t *objfs_ops_root;
-vnodeops_t *objfs_ops_odir;
-vnodeops_t *objfs_ops_data;
-
 static const fs_operation_def_t objfs_vfstops[];
-static gfs_opsvec_t objfs_opsvec[];
 
 static int objfs_init(int, char *);
 
@@ -116,13 +111,6 @@ static int objfs_fstype;
 static major_t objfs_major;
 static minor_t objfs_minor;
 
-static gfs_opsvec_t objfs_opsvec[] = {
-	{ "objfs root directory", objfs_tops_root, &objfs_ops_root },
-	{ "objfs object directory", objfs_tops_odir, &objfs_ops_odir },
-	{ "objfs data file", objfs_tops_data, &objfs_ops_data },
-	{ NULL }
-};
-
 /* ARGSUSED */
 static int
 objfs_init(int fstype, char *name)
@@ -133,11 +121,6 @@ objfs_init(int fstype, char *name)
 	objfs_fstype = fstype;
 	if (error = vfs_setfsops(fstype, objfs_vfstops, &vfsops)) {
 		cmn_err(CE_WARN, "objfs_init: bad vfs ops template");
-		return (error);
-	}
-
-	if (error = gfs_make_opsvec(objfs_opsvec)) {
-		(void) vfs_freevfsops(vfsops);
 		return (error);
 	}
 

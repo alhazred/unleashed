@@ -89,9 +89,6 @@ typedef gfs_dir_t	objfs_rootnode_t;
 
 #define	OBJFS_INO_ROOT	0xffffffff
 
-extern const fs_operation_def_t objfs_tops_root[];
-extern vnodeops_t *objfs_ops_root;
-
 extern vnode_t *objfs_create_root(vfs_t *);
 
 /*
@@ -105,9 +102,6 @@ typedef struct objfs_odirnode {
 
 #define	OBJFS_INO_ODIR(modid)	OBJFS_INO(modid, 0)
 
-extern const fs_operation_def_t objfs_tops_odir[];
-extern vnodeops_t *objfs_ops_odir;
-
 extern vnode_t *objfs_create_odirnode(vnode_t *, struct modctl *);
 
 /*
@@ -120,9 +114,6 @@ typedef struct objfs_datanode {
 } objfs_datanode_t;
 
 #define	OBJFS_INO_DATA(modid)	OBJFS_INO(modid, 1)
-
-extern const fs_operation_def_t objfs_tops_data[];
-extern vnodeops_t *objfs_ops_data;
 
 extern void objfs_data_init(void);
 extern vnode_t *objfs_create_data(vnode_t *);

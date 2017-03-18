@@ -38,6 +38,8 @@
 
 extern int last_module_id;
 
+static const struct vnodeops objfs_ops_root;
+
 static int objfs_root_do_lookup(vnode_t *, const char *, vnode_t **, ino64_t *,
     cred_t *, int, int *, pathname_t *);
 static int objfs_root_do_readdir(vnode_t *, void *, int *,
@@ -47,7 +49,7 @@ vnode_t *
 objfs_create_root(vfs_t *vfsp)
 {
 	vnode_t *vp = gfs_root_create(sizeof (objfs_rootnode_t), vfsp,
-	    objfs_ops_root, OBJFS_INO_ROOT, NULL, NULL, OBJFS_NAME_MAX,
+	    &objfs_ops_root, OBJFS_INO_ROOT, NULL, NULL, OBJFS_NAME_MAX,
 	    objfs_root_do_readdir, objfs_root_do_lookup);
 
 	return (vp);
@@ -163,15 +165,15 @@ objfs_root_readdir(vnode_t *vp, uio_t *uiop, cred_t *cr, int *eofp,
 	return (gfs_dir_readdir(vp, uiop, eofp, &mp, cr, ct, flags));
 }
 
-const fs_operation_def_t objfs_tops_root[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = objfs_dir_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = objfs_common_close } },
-	{ VOPNAME_IOCTL,	{ .error = fs_inval } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = objfs_root_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = objfs_dir_access } },
-	{ VOPNAME_READDIR,	{ .vop_readdir = objfs_root_readdir } },
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = gfs_vop_lookup } },
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive } },
-	{ NULL }
+static const struct vnodeops objfs_ops_root = {
+	.vnop_name = "objfs root directory",
+	.vop_open = objfs_dir_open,
+	.vop_close = objfs_common_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = objfs_root_getattr,
+	.vop_access = objfs_dir_access,
+	.vop_readdir = objfs_root_readdir,
+	.vop_lookup = gfs_vop_lookup,
+	.vop_seek = fs_seek,
+	.vop_inactive = gfs_vop_inactive,
 };

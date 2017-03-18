@@ -39,6 +39,8 @@
 #include <sys/sysmacros.h>
 #include <sys/vfs_opreg.h>
 
+static const struct vnodeops objfs_ops_data;
+
 /*
  * /system/object/<obj>/object
  *
@@ -443,7 +445,7 @@ objfs_create_data(vnode_t *pvp)
 {
 	objfs_odirnode_t *onode = pvp->v_data;
 	vnode_t *vp = gfs_file_create(sizeof (objfs_datanode_t), pvp,
-	    objfs_ops_data);
+	    &objfs_ops_data);
 	objfs_datanode_t *dnode = vp->v_data;
 
 	dnode->objfs_data_gencount = onode->objfs_odir_modctl->mod_gencount;
@@ -754,15 +756,15 @@ objfs_data_seek(vnode_t *vp, offset_t off, offset_t *offp,
 	return (0);
 }
 
-const fs_operation_def_t objfs_tops_data[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = objfs_data_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = objfs_common_close } },
-	{ VOPNAME_IOCTL,	{ .error = fs_inval } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = objfs_data_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = objfs_data_access } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive } },
-	{ VOPNAME_READ,		{ .vop_read = objfs_data_read } },
-	{ VOPNAME_SEEK,		{ .vop_seek = objfs_data_seek } },
-	{ VOPNAME_MAP,		{ .vop_map = gfs_vop_map } },
-	{ NULL }
+static const struct vnodeops objfs_ops_data = {
+	.vnop_name = "objfs data file",
+	.vop_open = objfs_data_open,
+	.vop_close = objfs_common_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = objfs_data_getattr,
+	.vop_access = objfs_data_access,
+	.vop_inactive = gfs_vop_inactive,
+	.vop_read = objfs_data_read,
+	.vop_seek = objfs_data_seek,
+	.vop_map = gfs_vop_map,
 };

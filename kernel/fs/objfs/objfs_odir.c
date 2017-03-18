@@ -34,6 +34,8 @@
 #include <sys/vfs_opreg.h>
 #include <sys/stat.h>
 
+static const struct vnodeops objfs_ops_odir;
+
 static gfs_dirent_t objfs_odir_entries[] = {
 	{ "object", objfs_create_data, 0 },
 	{ NULL }
@@ -52,7 +54,7 @@ vnode_t *
 objfs_create_odirnode(vnode_t *pvp, struct modctl *mp)
 {
 	vnode_t *vp = gfs_dir_create(sizeof (objfs_odirnode_t), pvp,
-	    objfs_ops_odir, objfs_odir_entries, objfs_odir_do_inode,
+	    &objfs_ops_odir, objfs_odir_entries, objfs_odir_do_inode,
 	    OBJFS_NAME_MAX, NULL, NULL);
 	objfs_odirnode_t *onode = vp->v_data;
 
@@ -78,15 +80,15 @@ objfs_odir_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	return (objfs_common_getattr(vp, vap));
 }
 
-const fs_operation_def_t objfs_tops_odir[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = objfs_dir_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = objfs_common_close } },
-	{ VOPNAME_IOCTL,	{ .error = fs_inval } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = objfs_odir_getattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = objfs_dir_access } },
-	{ VOPNAME_READDIR,	{ .vop_readdir = gfs_vop_readdir } },
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = gfs_vop_lookup } },
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive } },
-	{ NULL }
+static const struct vnodeops objfs_ops_odir = {
+	.vnop_name = "objfs object directory",
+	.vop_open = objfs_dir_open,
+	.vop_close = objfs_common_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = objfs_odir_getattr,
+	.vop_access = objfs_dir_access,
+	.vop_readdir = gfs_vop_readdir,
+	.vop_lookup = gfs_vop_lookup,
+	.vop_seek = fs_seek,
+	.vop_inactive = gfs_vop_inactive,
 };
