@@ -1921,8 +1921,6 @@ udfinit(int fstype, char *name)
 		VFSNAME_MOUNTROOT,	{ .vfs_mountroot = udf_mountroot },
 		NULL,			NULL
 	};
-	extern struct vnodeops *udf_vnodeops;
-	extern const fs_operation_def_t udf_vnodeops_template[];
 	int error;
 
 	ud_printf("udfinit\n");
@@ -1930,13 +1928,6 @@ udfinit(int fstype, char *name)
 	error = vfs_setfsops(fstype, udf_vfsops_template, NULL);
 	if (error != 0) {
 		cmn_err(CE_WARN, "udfinit: bad vfs ops template");
-		return (error);
-	}
-
-	error = vn_make_ops(name, udf_vnodeops_template, &udf_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "udfinit: bad vnode ops template");
 		return (error);
 	}
 

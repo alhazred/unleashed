@@ -82,7 +82,7 @@
 #include <sys/fs/udf_volume.h>
 #include <sys/fs/udf_inode.h>
 
-extern struct vnodeops *udf_vnodeops;
+extern const struct vnodeops udf_vnodeops;
 
 kmutex_t ud_sync_busy;
 /*
@@ -242,7 +242,7 @@ tryagain:
 			 * sitting in the dnlc.
 			 */
 			mutex_exit(&udf_ifree_lock);
-			purged = dnlc_fs_purge1(udf_vnodeops);
+			purged = dnlc_fs_purge1(&udf_vnodeops);
 			mutex_enter(&udf_ifree_lock);
 			if (!purged) {
 				break;
@@ -366,7 +366,7 @@ tryagain:
 		ip->i_forw = ip;
 		ip->i_back = ip;
 		vp->v_data = (caddr_t)ip;
-		vn_setops(vp, udf_vnodeops);
+		vn_setops(vp, &udf_vnodeops);
 		ip->i_flag = IREF;
 		cv_init(&ip->i_wrcv, NULL, CV_DRIVER, NULL);
 		mutex_enter(&ud_nino_lock);
