@@ -459,27 +459,25 @@ nm_poll(vnode_t *vp, short events, int anyyet, short *reventsp,
 	    phpp, ct));
 }
 
-struct vnodeops *nm_vnodeops;
-
-const fs_operation_def_t nm_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = nm_open },
-	VOPNAME_CLOSE,		{ .vop_close = nm_close },
-	VOPNAME_READ,		{ .vop_read = nm_read },
-	VOPNAME_WRITE,		{ .vop_write = nm_write },
-	VOPNAME_IOCTL,		{ .vop_ioctl = nm_ioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = nm_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = nm_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = nm_access },
-	VOPNAME_CREATE,		{ .vop_create = nm_create },
-	VOPNAME_LINK,		{ .vop_link = nm_link },
-	VOPNAME_FSYNC,		{ .vop_fsync = nm_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = nm_inactive },
-	VOPNAME_FID,		{ .vop_fid = nm_fid },
-	VOPNAME_RWLOCK,		{ .vop_rwlock = nm_rwlock },
-	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = nm_rwunlock },
-	VOPNAME_SEEK,		{ .vop_seek = nm_seek },
-	VOPNAME_REALVP,		{ .vop_realvp = nm_realvp },
-	VOPNAME_POLL,		{ .vop_poll = nm_poll },
-	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
-	NULL,			NULL
+const struct vnodeops nm_vnodeops = {
+	.vnop_name = "namefs",
+	.vop_open = nm_open,
+	.vop_close = nm_close,
+	.vop_read = nm_read,
+	.vop_write = nm_write,
+	.vop_ioctl = nm_ioctl,
+	.vop_getattr = nm_getattr,
+	.vop_setattr = nm_setattr,
+	.vop_access = nm_access,
+	.vop_create = nm_create,
+	.vop_link = nm_link,
+	.vop_fsync = nm_fsync,
+	.vop_inactive = nm_inactive,
+	.vop_fid = nm_fid,
+	.vop_rwlock = nm_rwlock,
+	.vop_rwunlock = nm_rwunlock,
+	.vop_seek = nm_seek,
+	.vop_realvp = nm_realvp,
+	.vop_poll = nm_poll,
+	.vop_dispose = fs_nodispose,
 };

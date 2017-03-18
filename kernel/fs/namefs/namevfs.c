@@ -473,7 +473,7 @@ nm_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *crp)
 	newvp = NMTOV(nodep);
 
 	newvp->v_flag = filevp->v_flag | VROOT | VNOMAP | VNOSWAP;
-	vn_setops(newvp, nm_vnodeops);
+	vn_setops(newvp, &nm_vnodeops);
 	newvp->v_vfsp = vfsp;
 	newvp->v_stream = filevp->v_stream;
 	newvp->v_type = filevp->v_type;
@@ -694,14 +694,6 @@ nameinit(int fstype, char *name)
 	if (error != 0) {
 		(void) vfs_freevfsops_by_type(fstype);
 		cmn_err(CE_WARN, "nameinit: bad dummy vfs ops template");
-		return (error);
-	}
-
-	error = vn_make_ops(name, nm_vnodeops_template, &nm_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		vfs_freevfsops(dummy_vfsops);
-		cmn_err(CE_WARN, "nameinit: bad vnode ops template");
 		return (error);
 	}
 

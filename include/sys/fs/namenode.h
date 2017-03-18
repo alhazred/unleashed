@@ -89,8 +89,7 @@ extern void nameremove(struct namenode *);
 extern struct namenode *namefind(struct vnode *, struct vnode *);
 extern uint64_t namenodeno_alloc(void);
 extern void namenodeno_free(uint64_t);
-extern struct vnodeops *nm_vnodeops;
-extern const struct fs_operation_def nm_vnodeops_template[];
+extern const struct vnodeops nm_vnodeops;
 extern kmutex_t ntable_lock;
 
 #endif /* _KERNEL */
