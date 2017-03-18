@@ -219,27 +219,25 @@ static int dc_addmap(struct vnode *, offset_t, struct as *, caddr_t, size_t,
 static int dc_delmap(struct vnode *, offset_t, struct as *, caddr_t, size_t,
     uint_t, uint_t, uint_t, struct cred *, caller_context_t *);
 
-struct vnodeops *dc_vnodeops;
-
-const fs_operation_def_t dc_vnodeops_template[] = {
-	VOPNAME_OPEN,			{ .vop_open = dc_open },
-	VOPNAME_CLOSE,			{ .vop_close = dc_close },
-	VOPNAME_READ,			{ .vop_read = dc_read },
-	VOPNAME_GETATTR,		{ .vop_getattr =  dc_getattr },
-	VOPNAME_SETATTR,		{ .vop_setattr = dc_setattr },
-	VOPNAME_ACCESS,			{ .vop_access = dc_access },
-	VOPNAME_FSYNC,			{ .vop_fsync = dc_fsync },
-	VOPNAME_INACTIVE,		{ .vop_inactive = dc_inactive },
-	VOPNAME_FID,			{ .vop_fid = dc_fid },
-	VOPNAME_SEEK,			{ .vop_seek = dc_seek },
-	VOPNAME_FRLOCK,			{ .vop_frlock = dc_frlock },
-	VOPNAME_REALVP,			{ .vop_realvp = dc_realvp },
-	VOPNAME_GETPAGE,		{ .vop_getpage = dc_getpage },
-	VOPNAME_PUTPAGE,		{ .vop_putpage = dc_putpage },
-	VOPNAME_MAP,			{ .vop_map = dc_map },
-	VOPNAME_ADDMAP,			{ .vop_addmap = dc_addmap },
-	VOPNAME_DELMAP,			{ .vop_delmap = dc_delmap },
-	NULL,				NULL
+static const struct vnodeops dc_vnodeops = {
+	.vnop_name = "dcfs",
+	.vop_open = dc_open,
+	.vop_close = dc_close,
+	.vop_read = dc_read,
+	.vop_getattr =  dc_getattr,
+	.vop_setattr = dc_setattr,
+	.vop_access = dc_access,
+	.vop_fsync = dc_fsync,
+	.vop_inactive = dc_inactive,
+	.vop_fid = dc_fid,
+	.vop_seek = dc_seek,
+	.vop_frlock = dc_frlock,
+	.vop_realvp = dc_realvp,
+	.vop_getpage = dc_getpage,
+	.vop_putpage = dc_putpage,
+	.vop_map = dc_map,
+	.vop_addmap = dc_addmap,
+	.vop_delmap = dc_delmap,
 };
 
 /*ARGSUSED*/
@@ -781,7 +779,7 @@ dcnode_constructor(void *buf, void *cdrarg, int kmflags)
 	vp->v_type = VREG;
 	vp->v_flag = VNOSWAP;
 	vp->v_vfsp = &dc_vfs;
-	vn_setops(vp, dc_vnodeops);
+	vn_setops(vp, &dc_vnodeops);
 	vn_exists(vp);
 
 	mutex_init(&dp->dc_lock, NULL, MUTEX_DEFAULT, NULL);
@@ -903,13 +901,6 @@ dcinit(int fstype, char *name)
 		dev = 0;
 	dcdev = makedevice(dev, 0);
 	dc_vfs.vfs_dev = dcdev;
-
-	error = vn_make_ops(name, dc_vnodeops_template, &dc_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "dcinit: bad vnode ops template");
-		return (error);
-	}
 
 	mutex_init(&dctable_lock, NULL, MUTEX_DEFAULT, NULL);
 	mutex_init(&dccache_lock, NULL, MUTEX_DEFAULT, NULL);
