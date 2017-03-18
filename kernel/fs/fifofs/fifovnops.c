@@ -117,31 +117,29 @@ extern kmutex_t ftable_lock;
 
 struct  streamtab fifoinfo = { &fifo_strdata, &fifo_stwdata, NULL, NULL };
 
-struct vnodeops *fifo_vnodeops;
-
-const fs_operation_def_t fifo_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = fifo_open },
-	VOPNAME_CLOSE,		{ .vop_close = fifo_close },
-	VOPNAME_READ,		{ .vop_read = fifo_read },
-	VOPNAME_WRITE,		{ .vop_write = fifo_write },
-	VOPNAME_IOCTL,		{ .vop_ioctl = fifo_ioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = fifo_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = fifo_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = fifo_access },
-	VOPNAME_CREATE,		{ .vop_create = fifo_create },
-	VOPNAME_FSYNC,		{ .vop_fsync = fifo_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = fifo_inactive },
-	VOPNAME_FID,		{ .vop_fid = fifo_fid },
-	VOPNAME_RWLOCK,		{ .vop_rwlock = fifo_rwlock },
-	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = fifo_rwunlock },
-	VOPNAME_SEEK,		{ .vop_seek = fifo_seek },
-	VOPNAME_REALVP,		{ .vop_realvp = fifo_realvp },
-	VOPNAME_POLL,		{ .vop_poll = fifo_poll },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = fifo_pathconf },
-	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
-	VOPNAME_SETSECATTR,	{ .vop_setsecattr = fifo_setsecattr },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = fifo_getsecattr },
-	NULL,			NULL
+const struct vnodeops fifo_vnodeops = {
+	.vnop_name = "fifofs",
+	.vop_open = fifo_open,
+	.vop_close = fifo_close,
+	.vop_read = fifo_read,
+	.vop_write = fifo_write,
+	.vop_ioctl = fifo_ioctl,
+	.vop_getattr = fifo_getattr,
+	.vop_setattr = fifo_setattr,
+	.vop_access = fifo_access,
+	.vop_create = fifo_create,
+	.vop_fsync = fifo_fsync,
+	.vop_inactive = fifo_inactive,
+	.vop_fid = fifo_fid,
+	.vop_rwlock = fifo_rwlock,
+	.vop_rwunlock = fifo_rwunlock,
+	.vop_seek = fifo_seek,
+	.vop_realvp = fifo_realvp,
+	.vop_poll = fifo_poll,
+	.vop_pathconf = fifo_pathconf,
+	.vop_dispose = fs_nodispose,
+	.vop_setsecattr = fifo_setsecattr,
+	.vop_getsecattr = fifo_getsecattr,
 };
 
 /*
@@ -172,7 +170,7 @@ fifo_open(vnode_t **vpp, int flag, cred_t *crp, caller_context_t *ct)
 	int		error;
 
 	ASSERT(vp->v_type == VFIFO);
-	ASSERT(vn_matchops(vp, fifo_vnodeops));
+	ASSERT(vn_matchops(vp, &fifo_vnodeops));
 
 	mutex_enter(&fn_lock->flk_lock);
 	/*

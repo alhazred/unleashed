@@ -209,7 +209,7 @@ fnode_constructor(void *buf, void *cdrarg, int kmflags)
 
 		cv_init(&fnp->fn_wait_cv, NULL, CV_DEFAULT, NULL);
 
-		vn_setops(vp, fifo_vnodeops);
+		vn_setops(vp, &fifo_vnodeops);
 		vp->v_stream = NULL;
 		vp->v_type = VFIFO;
 		vp->v_data = (caddr_t)fnp;
@@ -248,7 +248,7 @@ fnode_destructor(void *buf, void *cdrarg)
 		ASSERT(fnp->fn_rsynccnt == 0 && fnp->fn_wsynccnt == 0);
 		ASSERT(fnp->fn_wwaitcnt == 0);
 		ASSERT(fnp->fn_pcredp == NULL);
-		ASSERT(vn_matchops(vp, fifo_vnodeops));
+		ASSERT(vn_matchops(vp, &fifo_vnodeops));
 		ASSERT(vp->v_stream == NULL);
 		ASSERT(vp->v_type == VFIFO);
 		ASSERT(vp->v_data == (caddr_t)fnp);
@@ -335,13 +335,6 @@ fifoinit(int fstype, char *name)
 	error = vfs_setfsops(fstype, fifo_vfsops_template, &fifo_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "fifoinit: bad vfs ops template");
-		return (error);
-	}
-
-	error = vn_make_ops(name, fifo_vnodeops_template, &fifo_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "fifoinit: bad vnode ops template");
 		return (error);
 	}
 

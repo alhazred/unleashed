@@ -157,8 +157,7 @@ extern int Fifohiwat;
 #define	Fifohiwat	FIFOHIWAT
 #endif /* FIFODEBUG */
 
-extern struct vnodeops *fifo_vnodeops;
-extern const struct fs_operation_def fifo_vnodeops_template[];
+extern const struct vnodeops fifo_vnodeops;
 extern struct kmem_cache *fnode_cache;
 extern struct kmem_cache *pipe_cache;
 
