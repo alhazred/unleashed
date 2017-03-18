@@ -152,10 +152,8 @@ kmem_cache_t	*sdev_node_cache;	/* sdev_node cache */
 int		devtype;		/* fstype */
 
 /* static */
-static struct vnodeops *sdev_get_vop(struct sdev_node *);
+static const struct vnodeops *sdev_get_vop(struct sdev_node *);
 static void sdev_set_no_negcache(struct sdev_node *);
-static fs_operation_def_t *sdev_merge_vtab(const fs_operation_def_t []);
-static void sdev_free_vtab(fs_operation_def_t *);
 
 static void
 sdev_prof_free(struct sdev_node *dv)
@@ -456,7 +454,7 @@ sdev_mkroot(struct vfs *vfsp, dev_t devdev, struct vnode *mvp,
 	vp->v_vfsp = vfsp;
 	vp->v_type = VDIR;
 	vp->v_rdev = devdev;
-	vn_setops(vp, sdev_vnodeops); /* apply the default vnodeops at /dev */
+	vn_setops(vp, &sdev_vnodeops); /* apply the default vnodeops at /dev */
 	vn_exists(vp);
 
 	if (vfsp->vfs_mntpt)
@@ -501,9 +499,7 @@ sdev_mkroot(struct vfs *vfsp, dev_t devdev, struct vnode *mvp,
 /* directory dependent vop table */
 struct sdev_vop_table {
 	char *vt_name;				/* subdirectory name */
-	const fs_operation_def_t *vt_service;	/* vnodeops table */
-	struct vnodeops *vt_vops;		/* constructed vop */
-	struct vnodeops **vt_global_vops;	/* global container for vop */
+	const struct vnodeops *vt_vops;		/* vops */
 	int (*vt_vtor)(struct sdev_node *);	/* validate sdev_node */
 	int vt_flags;
 };
@@ -514,22 +510,19 @@ struct sdev_vop_table {
  */
 static struct sdev_vop_table vtab[] =
 {
-	{ "pts", devpts_vnodeops_tbl, NULL, &devpts_vnodeops, devpts_validate,
-	SDEV_DYNAMIC | SDEV_VTOR },
+	{ "pts", &devpts_vnodeops, devpts_validate, SDEV_DYNAMIC | SDEV_VTOR },
 
-	{ "vt", devvt_vnodeops_tbl, NULL, &devvt_vnodeops, devvt_validate,
-	SDEV_DYNAMIC | SDEV_VTOR },
+	{ "vt", &devvt_vnodeops, devvt_validate, SDEV_DYNAMIC | SDEV_VTOR },
 
-	{ "zvol", devzvol_vnodeops_tbl, NULL, &devzvol_vnodeops,
-	devzvol_validate, SDEV_ZONED | SDEV_DYNAMIC | SDEV_VTOR | SDEV_SUBDIR },
+	{ "zvol", &devzvol_vnodeops, devzvol_validate,
+	  SDEV_ZONED | SDEV_DYNAMIC | SDEV_VTOR | SDEV_SUBDIR },
 
-	{ "zcons", NULL, NULL, NULL, NULL, SDEV_NO_NCACHE },
+	{ "zcons", NULL, NULL, SDEV_NO_NCACHE },
 
-	{ "net", devnet_vnodeops_tbl, NULL, &devnet_vnodeops, devnet_validate,
-	SDEV_DYNAMIC | SDEV_VTOR },
+	{ "net", &devnet_vnodeops, devnet_validate, SDEV_DYNAMIC | SDEV_VTOR },
 
-	{ "ipnet", devipnet_vnodeops_tbl, NULL, &devipnet_vnodeops,
-	devipnet_validate, SDEV_DYNAMIC | SDEV_VTOR | SDEV_NO_NCACHE },
+	{ "ipnet", &devipnet_vnodeops, devipnet_validate,
+	  SDEV_DYNAMIC | SDEV_VTOR | SDEV_NO_NCACHE },
 
 	/*
 	 * SDEV_DYNAMIC: prevent calling out to devfsadm, since only the
@@ -543,12 +536,10 @@ static struct sdev_vop_table vtab[] =
 	 * preventing a mkdir.
 	 */
 
-	{ "lofi", NULL, NULL, NULL, NULL,
-	    SDEV_ZONED | SDEV_DYNAMIC | SDEV_PERSIST },
-	{ "rlofi", NULL, NULL, NULL, NULL,
-	    SDEV_ZONED | SDEV_DYNAMIC | SDEV_PERSIST },
+	{ "lofi", NULL, NULL, SDEV_ZONED | SDEV_DYNAMIC | SDEV_PERSIST },
+	{ "rlofi", NULL, NULL, SDEV_ZONED | SDEV_DYNAMIC | SDEV_PERSIST },
 
-	{ NULL, NULL, NULL, NULL, NULL, 0}
+	{ NULL, NULL, NULL, 0}
 };
 
 /*
@@ -586,7 +577,7 @@ sdev_match(struct sdev_node *dv)
 /*
  *  sets a directory's vnodeops if the directory is in the vtab;
  */
-static struct vnodeops *
+static const struct vnodeops *
 sdev_get_vop(struct sdev_node *dv)
 {
 	struct sdev_vop_table *vtp;
@@ -605,39 +596,17 @@ sdev_get_vop(struct sdev_node *dv)
 		    (SDEV_IS_PERSIST(dv) || !SDEV_IS_DYNAMIC(dv)))
 			dv->sdev_flags |= SDEV_PERSIST;
 
-		if (vtp->vt_vops) {
-			if (vtp->vt_global_vops)
-				*(vtp->vt_global_vops) = vtp->vt_vops;
-
+		if (vtp->vt_vops)
 			return (vtp->vt_vops);
-		}
 
-		if (vtp->vt_service) {
-			fs_operation_def_t *templ;
-			templ = sdev_merge_vtab(vtp->vt_service);
-			if (vn_make_ops(vtp->vt_name,
-			    (const fs_operation_def_t *)templ,
-			    &vtp->vt_vops) != 0) {
-				cmn_err(CE_PANIC, "%s: malformed vnode ops\n",
-				    vtp->vt_name);
-				/*NOTREACHED*/
-			}
-			if (vtp->vt_global_vops) {
-				*(vtp->vt_global_vops) = vtp->vt_vops;
-			}
-			sdev_free_vtab(templ);
-
-			return (vtp->vt_vops);
-		}
-
-		return (sdev_vnodeops);
+		return (&sdev_vnodeops);
 	}
 
 	/* child inherits the persistence of the parent */
 	if (SDEV_IS_PERSIST(dv->sdev_dotdot))
 		dv->sdev_flags |= SDEV_PERSIST;
 
-	return (sdev_vnodeops);
+	return (&sdev_vnodeops);
 }
 
 static void
@@ -2943,46 +2912,6 @@ sdev_modctl_devexists(const char *path)
 		VN_RELE(vp);
 
 	return (error);
-}
-
-extern int sdev_vnodeops_tbl_size;
-
-/*
- * construct a new template with overrides from vtab
- */
-static fs_operation_def_t *
-sdev_merge_vtab(const fs_operation_def_t tab[])
-{
-	fs_operation_def_t *new;
-	const fs_operation_def_t *tab_entry;
-
-	/* make a copy of standard vnode ops table */
-	new = kmem_alloc(sdev_vnodeops_tbl_size, KM_SLEEP);
-	bcopy((void *)sdev_vnodeops_tbl, new, sdev_vnodeops_tbl_size);
-
-	/* replace the overrides from tab */
-	for (tab_entry = tab; tab_entry->name != NULL; tab_entry++) {
-		fs_operation_def_t *std_entry = new;
-		while (std_entry->name) {
-			if (strcmp(tab_entry->name, std_entry->name) == 0) {
-				std_entry->func = tab_entry->func;
-				break;
-			}
-			std_entry++;
-		}
-		if (std_entry->name == NULL)
-			cmn_err(CE_NOTE, "sdev_merge_vtab: entry %s unused.",
-			    tab_entry->name);
-	}
-
-	return (new);
-}
-
-/* free memory allocated by sdev_merge_vtab */
-static void
-sdev_free_vtab(fs_operation_def_t *new)
-{
-	kmem_free(new, sdev_vnodeops_tbl_size);
 }
 
 /*

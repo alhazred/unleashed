@@ -41,6 +41,7 @@
 #include <sys/ptms.h>
 #include <sys/stat.h>
 #include <sys/vfs_opreg.h>
+#include "sdev_vnops.h"
 
 #define	DEVPTS_UID_DEFAULT	0
 #define	DEVPTS_GID_DEFAULT	3
@@ -57,12 +58,12 @@ static vattr_t devpts_vattr = {
 	0					/* 0 hereafter */
 };
 
-struct vnodeops		*devpts_vnodeops;
+const struct vnodeops devpts_vnodeops;
 
-struct vnodeops *
+const struct vnodeops *
 devpts_getvnodeops(void)
 {
-	return (devpts_vnodeops);
+	return (&devpts_vnodeops);
 }
 
 /*
@@ -403,15 +404,33 @@ devpts_setattr(struct vnode *vp, struct vattr *vap, int flags,
  * in kernel pty table. Also override setattr/setsecattr to
  * avoid persisting permissions.
  */
-const fs_operation_def_t devpts_vnodeops_tbl[] = {
-	VOPNAME_READDIR,	{ .vop_readdir = devpts_readdir },
-	VOPNAME_LOOKUP,		{ .vop_lookup = devpts_lookup },
-	VOPNAME_CREATE,		{ .vop_create = devpts_create },
-	VOPNAME_SETATTR,	{ .vop_setattr = devpts_setattr },
-	VOPNAME_REMOVE,		{ .error = fs_nosys },
-	VOPNAME_MKDIR,		{ .error = fs_nosys },
-	VOPNAME_RMDIR,		{ .error = fs_nosys },
-	VOPNAME_SYMLINK,	{ .error = fs_nosys },
-	VOPNAME_SETSECATTR,	{ .error = fs_nosys },
-	NULL,			NULL
+const struct vnodeops devpts_vnodeops = {
+	.vop_open = sdev_open,
+	.vop_close = sdev_close,
+	.vop_read = sdev_read,
+	.vop_write = sdev_write,
+	.vop_ioctl = sdev_ioctl,
+	.vop_getattr = sdev_getattr,
+	.vop_access = sdev_access,
+	.vop_rename = sdev_rename,
+	.vop_readlink = sdev_readlink,
+	.vop_inactive = sdev_inactive,
+	.vop_fid = sdev_fid,
+	.vop_rwlock = sdev_rwlock,
+	.vop_rwunlock = sdev_rwunlock,
+	.vop_seek = sdev_seek,
+	.vop_frlock = sdev_frlock,
+	.vop_pathconf = sdev_pathconf,
+	.vop_getsecattr = sdev_getsecattr,
+
+	/* overrides */
+	.vop_readdir = devpts_readdir,
+	.vop_lookup = devpts_lookup,
+	.vop_create = devpts_create,
+	.vop_setattr = devpts_setattr,
+	.vop_remove = fs_nosys,
+	.vop_mkdir = fs_nosys,
+	.vop_rmdir = fs_nosys,
+	.vop_symlink = fs_nosys,
+	.vop_setsecattr = fs_nosys,
 };

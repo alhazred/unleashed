@@ -313,9 +313,10 @@
 #include <sys/fs_subr.h>
 #include <sys/fs/dv_node.h>
 #include <sys/fs/sdev_impl.h>
+#include "sdev_vnops.h"
 
 /*ARGSUSED*/
-static int
+int
 sdev_open(struct vnode **vpp, int flag, struct cred *cred, caller_context_t *ct)
 {
 	struct sdev_node *dv = VTOSDEV(*vpp);
@@ -346,7 +347,7 @@ sdev_open(struct vnode **vpp, int flag, struct cred *cred, caller_context_t *ct)
 }
 
 /*ARGSUSED1*/
-static int
+int
 sdev_close(struct vnode *vp, int flag, int count,
     offset_t offset, struct cred *cred, caller_context_t *ct)
 {
@@ -370,7 +371,7 @@ sdev_close(struct vnode *vp, int flag, int count,
 }
 
 /*ARGSUSED*/
-static int
+int
 sdev_read(struct vnode *vp, struct uio *uio, int ioflag, struct cred *cred,
 	struct caller_context *ct)
 {
@@ -397,7 +398,7 @@ sdev_read(struct vnode *vp, struct uio *uio, int ioflag, struct cred *cred,
 }
 
 /*ARGSUSED*/
-static int
+int
 sdev_write(struct vnode *vp, struct uio *uio, int ioflag, struct cred *cred,
 	struct caller_context *ct)
 {
@@ -428,7 +429,7 @@ sdev_write(struct vnode *vp, struct uio *uio, int ioflag, struct cred *cred,
 }
 
 /*ARGSUSED*/
-static int
+int
 sdev_ioctl(struct vnode *vp, int cmd, intptr_t arg, int flag,
     struct cred *cred, int *rvalp,  caller_context_t *ct)
 {
@@ -445,7 +446,7 @@ sdev_ioctl(struct vnode *vp, int cmd, intptr_t arg, int flag,
 	return (fop_ioctl(dv->sdev_attrvp, cmd, arg, flag, cred, rvalp, ct));
 }
 
-static int
+int
 sdev_getattr(struct vnode *vp, struct vattr *vap, int flags,
     struct cred *cr, caller_context_t *ct)
 {
@@ -478,14 +479,14 @@ sdev_getattr(struct vnode *vp, struct vattr *vap, int flags,
 }
 
 /*ARGSUSED4*/
-static int
+int
 sdev_setattr(struct vnode *vp, struct vattr *vap, int flags,
     struct cred *cred, caller_context_t *ctp)
 {
 	return (devname_setattr_func(vp, vap, flags, cred, NULL, 0));
 }
 
-static int
+int
 sdev_getsecattr(struct vnode *vp, struct vsecattr *vsap, int flags,
     struct cred *cr, caller_context_t *ct)
 {
@@ -510,7 +511,7 @@ sdev_getsecattr(struct vnode *vp, struct vsecattr *vsap, int flags,
 	return (error);
 }
 
-static int
+int
 sdev_setsecattr(struct vnode *vp, struct vsecattr *vsap, int flags,
     struct cred *cr, caller_context_t *ct)
 {
@@ -594,7 +595,7 @@ sdev_self_access(sdev_node_t *dv, int mode, int flags, struct cred *cr,
 	return (ret);
 }
 
-static int
+int
 sdev_access(struct vnode *vp, int mode, int flags, struct cred *cr,
     caller_context_t *ct)
 {
@@ -612,7 +613,7 @@ sdev_access(struct vnode *vp, int mode, int flags, struct cred *cr,
  * Lookup
  */
 /*ARGSUSED3*/
-static int
+int
 sdev_lookup(struct vnode *dvp, char *nm, struct vnode **vpp,
     struct pathname *pnp, int flags, struct vnode *rdir, struct cred *cred,
     caller_context_t *ct, int *direntflags, pathname_t *realpnp)
@@ -633,7 +634,7 @@ sdev_lookup(struct vnode *dvp, char *nm, struct vnode **vpp,
 }
 
 /*ARGSUSED2*/
-static int
+int
 sdev_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
     int mode, struct vnode **vpp, struct cred *cred, int flag,
     caller_context_t *ct, vsecattr_t *vsecp)
@@ -787,7 +788,7 @@ sdev_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 	return (error);
 }
 
-static int
+int
 sdev_remove(struct vnode *dvp, char *nm, struct cred *cred,
     caller_context_t *ct, int flags)
 {
@@ -901,7 +902,7 @@ sdev_remove(struct vnode *dvp, char *nm, struct cred *cred,
  *    to simply the namespace management model.
  */
 /*ARGSUSED6*/
-static int
+int
 sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
     struct cred *cred, caller_context_t *ct, int flags)
 {
@@ -1151,7 +1152,7 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
  *	lnm - dev_name
  */
 /*ARGSUSED6*/
-static int
+int
 sdev_symlink(struct vnode *dvp, char *lnm, struct vattr *tva,
     char *tnm, struct cred *cred, caller_context_t *ct, int flags)
 {
@@ -1226,7 +1227,7 @@ sdev_symlink(struct vnode *dvp, char *lnm, struct vattr *tva,
 }
 
 /*ARGSUSED6*/
-static int
+int
 sdev_mkdir(struct vnode *dvp, char *nm, struct vattr *va, struct vnode **vpp,
     struct cred *cred, caller_context_t *ct, int flags, vsecattr_t *vsecp)
 {
@@ -1301,7 +1302,7 @@ sdev_mkdir(struct vnode *dvp, char *nm, struct vattr *va, struct vnode **vpp,
  * allowing removing an empty directory under /dev
  */
 /*ARGSUSED*/
-static int
+int
 sdev_rmdir(struct vnode *dvp, char *nm, struct vnode *cdir, struct cred *cred,
     caller_context_t *ct, int flags)
 {
@@ -1409,7 +1410,7 @@ sdev_rmdir(struct vnode *dvp, char *nm, struct vnode *cdir, struct cred *cred,
 /*
  * read the contents of a symbolic link
  */
-static int
+int
 sdev_readlink(struct vnode *vp, struct uio *uiop, struct cred *cred,
     caller_context_t *ct)
 {
@@ -1437,7 +1438,7 @@ sdev_readlink(struct vnode *vp, struct uio *uiop, struct cred *cred,
 }
 
 /*ARGSUSED4*/
-static int
+int
 sdev_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred, int *eofp,
     caller_context_t *ct, int flags)
 {
@@ -1467,14 +1468,14 @@ sdev_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred, int *eofp,
 }
 
 /*ARGSUSED1*/
-static void
+void
 sdev_inactive(struct vnode *vp, struct cred *cred, caller_context_t *ct)
 {
 	devname_inactive_func(vp, cred, NULL);
 }
 
 /*ARGSUSED2*/
-static int
+int
 sdev_fid(struct vnode *vp, struct fid *fidp, caller_context_t *ct)
 {
 	struct sdev_node	*dv = VTOSDEV(vp);
@@ -1500,7 +1501,7 @@ sdev_fid(struct vnode *vp, struct fid *fidp, caller_context_t *ct)
  * moving around while we're looking at them.
  */
 /*ARGSUSED2*/
-static int
+int
 sdev_rwlock(struct vnode *vp, int write_flag, caller_context_t *ctp)
 {
 	rw_enter(&VTOSDEV(vp)->sdev_contents,
@@ -1509,14 +1510,14 @@ sdev_rwlock(struct vnode *vp, int write_flag, caller_context_t *ctp)
 }
 
 /*ARGSUSED1*/
-static void
+void
 sdev_rwunlock(struct vnode *vp, int write_flag, caller_context_t *ctp)
 {
 	rw_exit(&VTOSDEV(vp)->sdev_contents);
 }
 
 /*ARGSUSED1*/
-static int
+int
 sdev_seek(struct vnode *vp, offset_t ooff, offset_t *noffp,
     caller_context_t *ct)
 {
@@ -1533,7 +1534,7 @@ sdev_seek(struct vnode *vp, offset_t ooff, offset_t *noffp,
 }
 
 /*ARGSUSED1*/
-static int
+int
 sdev_frlock(struct vnode *vp, int cmd, struct flock64 *bfp, int flag,
     offset_t offset, struct flk_callback *flk_cbp, struct cred *cr,
     caller_context_t *ct)
@@ -1549,7 +1550,7 @@ sdev_frlock(struct vnode *vp, int cmd, struct flock64 *bfp, int flag,
 	return (error);
 }
 
-static int
+int
 sdev_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
     caller_context_t *ct)
 {
@@ -1562,36 +1563,31 @@ sdev_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
 	return (fs_pathconf(vp, cmd, valp, cr, ct));
 }
 
-vnodeops_t *sdev_vnodeops;
-
-const fs_operation_def_t sdev_vnodeops_tbl[] = {
-	VOPNAME_OPEN,		{ .vop_open = sdev_open },
-	VOPNAME_CLOSE,		{ .vop_close = sdev_close },
-	VOPNAME_READ,		{ .vop_read = sdev_read },
-	VOPNAME_WRITE,		{ .vop_write = sdev_write },
-	VOPNAME_IOCTL,		{ .vop_ioctl = sdev_ioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = sdev_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = sdev_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = sdev_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = sdev_lookup },
-	VOPNAME_CREATE,		{ .vop_create = sdev_create },
-	VOPNAME_RENAME,		{ .vop_rename = sdev_rename },
-	VOPNAME_REMOVE,		{ .vop_remove = sdev_remove },
-	VOPNAME_MKDIR,		{ .vop_mkdir = sdev_mkdir },
-	VOPNAME_RMDIR,		{ .vop_rmdir = sdev_rmdir },
-	VOPNAME_READDIR,	{ .vop_readdir = sdev_readdir },
-	VOPNAME_SYMLINK,	{ .vop_symlink = sdev_symlink },
-	VOPNAME_READLINK,	{ .vop_readlink = sdev_readlink },
-	VOPNAME_INACTIVE,	{ .vop_inactive = sdev_inactive },
-	VOPNAME_FID,		{ .vop_fid = sdev_fid },
-	VOPNAME_RWLOCK,		{ .vop_rwlock = sdev_rwlock },
-	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = sdev_rwunlock },
-	VOPNAME_SEEK,		{ .vop_seek = sdev_seek },
-	VOPNAME_FRLOCK,		{ .vop_frlock = sdev_frlock },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = sdev_pathconf },
-	VOPNAME_SETSECATTR,	{ .vop_setsecattr = sdev_setsecattr },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = sdev_getsecattr },
-	NULL,			NULL
+const struct vnodeops sdev_vnodeops = {
+	.vop_open = sdev_open,
+	.vop_close = sdev_close,
+	.vop_read = sdev_read,
+	.vop_write = sdev_write,
+	.vop_ioctl = sdev_ioctl,
+	.vop_getattr = sdev_getattr,
+	.vop_setattr = sdev_setattr,
+	.vop_access = sdev_access,
+	.vop_lookup = sdev_lookup,
+	.vop_create = sdev_create,
+	.vop_rename = sdev_rename,
+	.vop_remove = sdev_remove,
+	.vop_mkdir = sdev_mkdir,
+	.vop_rmdir = sdev_rmdir,
+	.vop_readdir = sdev_readdir,
+	.vop_symlink = sdev_symlink,
+	.vop_readlink = sdev_readlink,
+	.vop_inactive = sdev_inactive,
+	.vop_fid = sdev_fid,
+	.vop_rwlock = sdev_rwlock,
+	.vop_rwunlock = sdev_rwunlock,
+	.vop_seek = sdev_seek,
+	.vop_frlock = sdev_frlock,
+	.vop_pathconf = sdev_pathconf,
+	.vop_setsecattr = sdev_setsecattr,
+	.vop_getsecattr = sdev_getsecattr,
 };
-
-int sdev_vnodeops_tbl_size = sizeof (sdev_vnodeops_tbl);

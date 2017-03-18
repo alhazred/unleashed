@@ -39,6 +39,7 @@
 #include <sys/tty.h>
 #include <sys/vt_impl.h>
 #include <sys/note.h>
+#include "sdev_vnops.h"
 
 #define	DEVVT_UID_DEFAULT	SDEV_UID_DEFAULT
 #define	DEVVT_GID_DEFAULT	(0)
@@ -58,12 +59,12 @@ static vattr_t devvt_vattr = {
 	0					/* 0 hereafter */
 };
 
-struct vnodeops		*devvt_vnodeops;
+const struct vnodeops devvt_vnodeops;
 
-struct vnodeops *
+const struct vnodeops *
 devvt_getvnodeops(void)
 {
-	return (devvt_vnodeops);
+	return (&devvt_vnodeops);
 }
 
 static int
@@ -462,14 +463,33 @@ devvt_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 	return (error);
 }
 
-const fs_operation_def_t devvt_vnodeops_tbl[] = {
-	VOPNAME_READDIR,	{ .vop_readdir = devvt_readdir },
-	VOPNAME_LOOKUP,		{ .vop_lookup = devvt_lookup },
-	VOPNAME_CREATE,		{ .vop_create = devvt_create },
-	VOPNAME_REMOVE,		{ .error = fs_nosys },
-	VOPNAME_MKDIR,		{ .error = fs_nosys },
-	VOPNAME_RMDIR,		{ .error = fs_nosys },
-	VOPNAME_SYMLINK,	{ .error = fs_nosys },
-	VOPNAME_SETSECATTR,	{ .error = fs_nosys },
-	NULL,			NULL
+const struct vnodeops devvt_vnodeops = {
+	.vop_open = sdev_open,
+	.vop_close = sdev_close,
+	.vop_read = sdev_read,
+	.vop_write = sdev_write,
+	.vop_ioctl = sdev_ioctl,
+	.vop_getattr = sdev_getattr,
+	.vop_setattr = sdev_setattr,
+	.vop_access = sdev_access,
+	.vop_rename = sdev_rename,
+	.vop_readlink = sdev_readlink,
+	.vop_inactive = sdev_inactive,
+	.vop_fid = sdev_fid,
+	.vop_rwlock = sdev_rwlock,
+	.vop_rwunlock = sdev_rwunlock,
+	.vop_seek = sdev_seek,
+	.vop_frlock = sdev_frlock,
+	.vop_pathconf = sdev_pathconf,
+	.vop_getsecattr = sdev_getsecattr,
+
+	/* overrides */
+	.vop_readdir = devvt_readdir,
+	.vop_lookup = devvt_lookup,
+	.vop_create = devvt_create,
+	.vop_remove = fs_nosys,
+	.vop_mkdir = fs_nosys,
+	.vop_rmdir = fs_nosys,
+	.vop_symlink = fs_nosys,
+	.vop_setsecattr = fs_nosys,
 };

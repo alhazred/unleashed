@@ -164,13 +164,6 @@ devinit(int fstype, char *name)
 		return (error);
 	}
 
-	error = vn_make_ops("dev", sdev_vnodeops_tbl, &sdev_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "devinit: bad vnode ops tbl");
-		return (error);
-	}
-
 	if ((devmajor = getudev()) == (major_t)-1) {
 		cmn_err(CE_WARN, "%s: can't get unique dev", sdev_vfssw.name);
 		return (1);

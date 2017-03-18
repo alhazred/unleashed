@@ -369,8 +369,8 @@ extern void sdev_devfsadmd_thread(struct sdev_node *, struct sdev_node *,
 extern int devname_profile_update(char *, size_t);
 extern struct sdev_data *sdev_find_mntinfo(char *);
 void sdev_mntinfo_rele(struct sdev_data *);
-extern struct vnodeops *devpts_getvnodeops(void);
-extern struct vnodeops *devvt_getvnodeops(void);
+extern const struct vnodeops *devpts_getvnodeops(void);
+extern const struct vnodeops *devvt_getvnodeops(void);
 
 /*
  * boot states - warning, the ordering here is significant
@@ -521,22 +521,13 @@ extern void sdev_modctl_dump_files(void);
 extern kmutex_t sdev_lock;
 extern int devtype;
 extern kmem_cache_t *sdev_node_cache;
-extern struct vnodeops		*sdev_vnodeops;
-extern struct vnodeops		*devpts_vnodeops;
-extern struct vnodeops		*devnet_vnodeops;
-extern struct vnodeops		*devipnet_vnodeops;
-extern struct vnodeops		*devvt_vnodeops;
+extern const struct vnodeops	sdev_vnodeops;
+extern const struct vnodeops	devpts_vnodeops;
+extern const struct vnodeops	devnet_vnodeops;
+extern const struct vnodeops	devipnet_vnodeops;
+extern const struct vnodeops	devvt_vnodeops;
+extern const struct vnodeops	devzvol_vnodeops;
 extern struct sdev_data *sdev_origins; /* mount info for global /dev instance */
-extern struct vnodeops		*devzvol_vnodeops;
-
-extern const fs_operation_def_t	sdev_vnodeops_tbl[];
-extern const fs_operation_def_t	devpts_vnodeops_tbl[];
-extern const fs_operation_def_t	devnet_vnodeops_tbl[];
-extern const fs_operation_def_t devipnet_vnodeops_tbl[];
-extern const fs_operation_def_t	devvt_vnodeops_tbl[];
-extern const fs_operation_def_t	devsys_vnodeops_tbl[];
-extern const fs_operation_def_t	devpseudo_vnodeops_tbl[];
-extern const fs_operation_def_t	devzvol_vnodeops_tbl[];
 
 extern sdev_nc_list_t	*sdev_ncache;
 extern int		sdev_reconfig_boot;

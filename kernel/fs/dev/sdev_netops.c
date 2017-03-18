@@ -40,8 +40,7 @@
 #include <sys/policy.h>
 #include <sys/zone.h>
 #include <sys/dls.h>
-
-struct vnodeops		*devnet_vnodeops;
+#include "sdev_vnops.h"
 
 /*
  * Check if a net sdev_node is still valid - i.e. it represents a current
@@ -363,15 +362,33 @@ devnet_inactive(struct vnode *dvp, struct cred *cred, caller_context_t *ct)
  * We override lookup and readdir to build entries based on the
  * in kernel vanity naming node table.
  */
-const fs_operation_def_t devnet_vnodeops_tbl[] = {
-	VOPNAME_READDIR,	{ .vop_readdir = devnet_readdir },
-	VOPNAME_LOOKUP,		{ .vop_lookup = devnet_lookup },
-	VOPNAME_INACTIVE,	{ .vop_inactive = devnet_inactive },
-	VOPNAME_CREATE,		{ .error = fs_nosys },
-	VOPNAME_REMOVE,		{ .error = fs_nosys },
-	VOPNAME_MKDIR,		{ .error = fs_nosys },
-	VOPNAME_RMDIR,		{ .error = fs_nosys },
-	VOPNAME_SYMLINK,	{ .error = fs_nosys },
-	VOPNAME_SETSECATTR,	{ .error = fs_nosys },
-	NULL,			NULL
+const struct vnodeops devnet_vnodeops = {
+	.vop_open = sdev_open,
+	.vop_close = sdev_close,
+	.vop_read = sdev_read,
+	.vop_write = sdev_write,
+	.vop_ioctl = sdev_ioctl,
+	.vop_getattr = sdev_getattr,
+	.vop_setattr = sdev_setattr,
+	.vop_access = sdev_access,
+	.vop_rename = sdev_rename,
+	.vop_readlink = sdev_readlink,
+	.vop_fid = sdev_fid,
+	.vop_rwlock = sdev_rwlock,
+	.vop_rwunlock = sdev_rwunlock,
+	.vop_seek = sdev_seek,
+	.vop_frlock = sdev_frlock,
+	.vop_pathconf = sdev_pathconf,
+	.vop_getsecattr = sdev_getsecattr,
+
+	/* overrides */
+	.vop_readdir = devnet_readdir,
+	.vop_lookup = devnet_lookup,
+	.vop_inactive = devnet_inactive,
+	.vop_create = fs_nosys,
+	.vop_remove = fs_nosys,
+	.vop_mkdir = fs_nosys,
+	.vop_rmdir = fs_nosys,
+	.vop_symlink = fs_nosys,
+	.vop_setsecattr = fs_nosys,
 };
