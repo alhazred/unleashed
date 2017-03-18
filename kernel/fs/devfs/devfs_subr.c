@@ -294,7 +294,7 @@ dv_mkroot(struct vfs *vfsp, dev_t devfsdev)
 	vp->v_vfsp = vfsp;
 	vp->v_type = VDIR;
 	vp->v_rdev = devfsdev;
-	vn_setops(vp, dv_vnodeops);
+	vn_setops(vp, &dv_vnodeops);
 	vn_exists(vp);
 
 	dvroot = dv;
@@ -612,7 +612,7 @@ devfs_get_defattr(struct vnode *vp, struct vattr *vap, int *no_fs_perm)
 	struct dv_node	*dv;
 
 	/* If vp isn't a dv_node, return something sensible */
-	if (!vn_matchops(vp, dv_vnodeops)) {
+	if (!vn_matchops(vp, &dv_vnodeops)) {
 		if (no_fs_perm)
 			*no_fs_perm = 0;
 		*vap = dv_vattr_file;

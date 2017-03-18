@@ -190,8 +190,7 @@ extern struct dv_node *devfs_dip_to_dvnode(dev_info_t *);
 extern int devfs_reset_perm(uint_t);
 extern int devfs_remdrv_cleanup(const char *, const char *);
 
-extern struct vnodeops *dv_vnodeops;
-extern const struct fs_operation_def dv_vnodeops_template[];
+extern const struct vnodeops dv_vnodeops;
 
 
 #ifdef DEBUG

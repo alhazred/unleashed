@@ -150,13 +150,6 @@ devfsinit(int fstype, char *name)
 		return (error);
 	}
 
-	error = vn_make_ops("dev fs", dv_vnodeops_template, &dv_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "devfsinit: bad vnode ops template");
-		return (error);
-	}
-
 	/*
 	 * Invent a dev_t (sigh).
 	 */
@@ -554,7 +547,8 @@ devfs_devpolicy(vnode_t *vp, devplcy_t **dpp)
 	if (devfs_mntinfo == NULL)
 		return (rval);
 
-	if (fop_realvp(vp, &rvp, NULL) == 0 && vn_matchops(rvp, dv_vnodeops)) {
+	if (fop_realvp(vp, &rvp, NULL) == 0 &&
+	    vn_matchops(rvp, &dv_vnodeops)) {
 		dvp = VTODV(rvp);
 		rw_enter(&dvp->dv_contents, RW_READER);
 		if (dvp->dv_priv) {
