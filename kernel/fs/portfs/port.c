@@ -424,7 +424,7 @@ port_kstat_t port_kstat = {
 };
 
 dev_t	portdev;
-struct	vnodeops *port_vnodeops;
+extern const struct vnodeops port_vnodeops;
 struct	vfs port_vfs;
 
 extern	rctl_hndl_t rc_process_portev;
@@ -473,7 +473,6 @@ _init(void)
 	static const fs_operation_def_t port_vfsops_template[] = {
 		NULL, NULL
 	};
-	extern const	fs_operation_def_t port_vnodeops_template[];
 	vfsops_t	*port_vfsops;
 	int		error;
 	major_t 	major;
@@ -492,13 +491,6 @@ _init(void)
 	port_vfs.vfs_flag = VFS_RDONLY;
 	port_vfs.vfs_dev = portdev;
 	vfs_make_fsid(&(port_vfs.vfs_fsid), portdev, 0);
-
-	error = vn_make_ops("portfs", port_vnodeops_template, &port_vnodeops);
-	if (error) {
-		vfs_freevfsops(port_vfsops);
-		cmn_err(CE_WARN, "port init: bad vnode ops");
-		return (error);
-	}
 
 	mutex_init(&port_control.pc_mutex, NULL, MUTEX_DEFAULT, NULL);
 	port_control.pc_nents = 0;	/* number of active ports */
@@ -729,7 +721,7 @@ port_create(int *fdp)
 
 	pp->port_vnode = vn_alloc(KM_SLEEP);
 	vp = EPTOV(pp);
-	vn_setops(vp, port_vnodeops);
+	vn_setops(vp, &port_vnodeops);
 	vp->v_type = VPORT;
 	vp->v_vfsp = &port_vfs;
 	vp->v_data = (caddr_t)pp;

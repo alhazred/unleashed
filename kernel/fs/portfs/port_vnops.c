@@ -49,20 +49,20 @@ static int port_poll(vnode_t *, short, int, short *, struct pollhead **,
 	caller_context_t *);
 static void port_inactive(struct vnode *, cred_t *, caller_context_t *);
 
-const fs_operation_def_t port_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = port_open },
-	VOPNAME_CLOSE,		{ .vop_close = port_close },
-	VOPNAME_GETATTR,	{ .vop_getattr = port_getattr },
-	VOPNAME_ACCESS,		{ .vop_access = port_access },
-	VOPNAME_INACTIVE,	{ .vop_inactive = port_inactive },
-	VOPNAME_FRLOCK,		{ .error = fs_nosys },
-	VOPNAME_REALVP,		{ .vop_realvp = port_realvp },
-	VOPNAME_POLL,		{ .vop_poll = port_poll },
-	VOPNAME_PATHCONF,	{ .error = fs_nosys },
-	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
-	VOPNAME_GETSECATTR,	{ .error = fs_nosys },
-	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
-	NULL,			NULL
+const struct vnodeops port_vnodeops = {
+	.vnop_name = "portfs",
+	.vop_open = port_open,
+	.vop_close = port_close,
+	.vop_getattr = port_getattr,
+	.vop_access = port_access,
+	.vop_inactive = port_inactive,
+	.vop_frlock = fs_nosys,
+	.vop_realvp = port_realvp,
+	.vop_poll = port_poll,
+	.vop_pathconf = fs_nosys,
+	.vop_dispose = fs_nodispose,
+	.vop_getsecattr = fs_nosys,
+	.vop_shrlock = fs_nosys,
 };
 
 /* ARGSUSED */
