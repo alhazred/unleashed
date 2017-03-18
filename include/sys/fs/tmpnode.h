@@ -148,8 +148,7 @@ struct tfid {
 
 #define	ESAME	(-1)		/* trying to rename linked files (special) */
 
-extern struct vnodeops *tmp_vnodeops;
-extern const struct fs_operation_def tmp_vnodeops_template[];
+extern const struct vnodeops tmp_vnodeops;
 
 #ifdef	__cplusplus
 }

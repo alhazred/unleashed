@@ -130,7 +130,6 @@ _fini()
 	 * Tear down the operations vectors
 	 */
 	(void) vfs_freevfsops_by_type(tmpfsfstype);
-	vn_freevnodeops(tmp_vnodeops);
 	return (0);
 }
 
@@ -190,13 +189,6 @@ tmpfsinit(int fstype, char *name)
 	error = vfs_setfsops(fstype, tmp_vfsops_template, NULL);
 	if (error != 0) {
 		cmn_err(CE_WARN, "tmpfsinit: bad vfs ops template");
-		return (error);
-	}
-
-	error = vn_make_ops(name, tmp_vnodeops_template, &tmp_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "tmpfsinit: bad vnode ops template");
 		return (error);
 	}
 

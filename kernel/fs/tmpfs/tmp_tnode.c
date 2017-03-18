@@ -194,7 +194,7 @@ tmpnode_init(struct tmount *tm, struct tmpnode *t, vattr_t *vap, cred_t *cred)
 
 	t->tn_vnode = vn_alloc(KM_SLEEP);
 	vp = TNTOV(t);
-	vn_setops(vp, tmp_vnodeops);
+	vn_setops(vp, &tmp_vnodeops);
 	vp->v_vfsp = tm->tm_vfsp;
 	vp->v_type = vap->va_type;
 	vp->v_rdev = vap->va_rdev;
