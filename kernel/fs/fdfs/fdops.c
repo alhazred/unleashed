@@ -317,22 +317,20 @@ fdinactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 	vn_free(vp);
 }
 
-static struct vnodeops *fd_vnodeops;
-
-static const fs_operation_def_t fd_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = fdopen },
-	VOPNAME_CLOSE,		{ .vop_close = fdclose },
-	VOPNAME_READ,		{ .vop_read = fdread },
-	VOPNAME_GETATTR,	{ .vop_getattr = fdgetattr },
-	VOPNAME_ACCESS,		{ .vop_access = fdaccess },
-	VOPNAME_LOOKUP,		{ .vop_lookup = fdlookup },
-	VOPNAME_CREATE,		{ .vop_create = fdcreate },
-	VOPNAME_READDIR,	{ .vop_readdir = fdreaddir },
-	VOPNAME_INACTIVE,	{ .vop_inactive = fdinactive },
-	VOPNAME_FRLOCK,		{ .error = fs_nosys },
-	VOPNAME_POLL,		{ .error = fs_nosys },
-	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
-	NULL,			NULL
+static const struct vnodeops fd_vnodeops = {
+	.vnop_name = "fdfs",
+	.vop_open = fdopen,
+	.vop_close = fdclose,
+	.vop_read = fdread,
+	.vop_getattr = fdgetattr,
+	.vop_access = fdaccess,
+	.vop_lookup = fdlookup,
+	.vop_create = fdcreate,
+	.vop_readdir = fdreaddir,
+	.vop_inactive = fdinactive,
+	.vop_frlock = fs_nosys,
+	.vop_poll = fs_nosys_poll,
+	.vop_dispose = fs_nodispose,
 };
 
 static int
@@ -349,7 +347,7 @@ fdget(struct vnode *dvp, char *comp, struct vnode **vpp)
 	vp = vn_alloc(KM_SLEEP);
 	vp->v_type = VCHR;
 	vp->v_vfsp = dvp->v_vfsp;
-	vn_setops(vp, fd_vnodeops);
+	vn_setops(vp, &fd_vnodeops);
 	vp->v_data = NULL;
 	vp->v_flag = VNOMAP;
 	vp->v_rdev = makedevice(fdrmaj, n);
@@ -389,7 +387,7 @@ fdmount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 
 	vp = vn_alloc(KM_SLEEP);
 	vp->v_vfsp = vfsp;
-	vn_setops(vp, fd_vnodeops);
+	vn_setops(vp, &fd_vnodeops);
 	vp->v_type = VDIR;
 	vp->v_data = NULL;
 	vp->v_flag |= VROOT;
@@ -497,13 +495,6 @@ fdinit(int fstype, char *name)
 	 */
 	error = vfs_setfsops(fstype, fd_vfsops_template, NULL);
 	if (error != 0) {
-		cmn_err(CE_WARN, "fdinit: bad vnode ops template");
-		return (error);
-	}
-
-	error = vn_make_ops(name, fd_vnodeops_template, &fd_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
 		cmn_err(CE_WARN, "fdinit: bad vnode ops template");
 		return (error);
 	}
