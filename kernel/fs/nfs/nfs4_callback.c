@@ -919,7 +919,7 @@ nfs4_dquery(struct nfs4_svc_args *arg, model_t model)
 	vp = fp->f_vnode;
 
 	if (vp == NULL || vp->v_type != VREG ||
-	    !vn_matchops(vp, nfs4_vnodeops)) {
+	    !vn_matchops(vp, &nfs4_vnodeops)) {
 		releasef(STRUCT_FGET(uap, fd));
 		return (EBADF);
 	}

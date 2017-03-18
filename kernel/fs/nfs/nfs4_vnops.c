@@ -397,51 +397,49 @@ static int nfs4_pathconf_disable_cache = 0;
  * more details on rnode locking.
  */
 
-struct vnodeops *nfs4_vnodeops;
-
-const fs_operation_def_t nfs4_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = nfs4_open },
-	VOPNAME_CLOSE,		{ .vop_close = nfs4_close },
-	VOPNAME_READ,		{ .vop_read = nfs4_read },
-	VOPNAME_WRITE,		{ .vop_write = nfs4_write },
-	VOPNAME_IOCTL,		{ .vop_ioctl = nfs4_ioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = nfs4_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = nfs4_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = nfs4_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = nfs4_lookup },
-	VOPNAME_CREATE,		{ .vop_create = nfs4_create },
-	VOPNAME_REMOVE,		{ .vop_remove = nfs4_remove },
-	VOPNAME_LINK,		{ .vop_link = nfs4_link },
-	VOPNAME_RENAME,		{ .vop_rename = nfs4_rename },
-	VOPNAME_MKDIR,		{ .vop_mkdir = nfs4_mkdir },
-	VOPNAME_RMDIR,		{ .vop_rmdir = nfs4_rmdir },
-	VOPNAME_READDIR,	{ .vop_readdir = nfs4_readdir },
-	VOPNAME_SYMLINK,	{ .vop_symlink = nfs4_symlink },
-	VOPNAME_READLINK,	{ .vop_readlink = nfs4_readlink },
-	VOPNAME_FSYNC,		{ .vop_fsync = nfs4_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = nfs4_inactive },
-	VOPNAME_FID,		{ .vop_fid = nfs4_fid },
-	VOPNAME_RWLOCK,		{ .vop_rwlock = nfs4_rwlock },
-	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = nfs4_rwunlock },
-	VOPNAME_SEEK,		{ .vop_seek = nfs4_seek },
-	VOPNAME_FRLOCK,		{ .vop_frlock = nfs4_frlock },
-	VOPNAME_SPACE,		{ .vop_space = nfs4_space },
-	VOPNAME_REALVP,		{ .vop_realvp = nfs4_realvp },
-	VOPNAME_GETPAGE,	{ .vop_getpage = nfs4_getpage },
-	VOPNAME_PUTPAGE,	{ .vop_putpage = nfs4_putpage },
-	VOPNAME_MAP,		{ .vop_map = nfs4_map },
-	VOPNAME_ADDMAP,		{ .vop_addmap = nfs4_addmap },
-	VOPNAME_DELMAP,		{ .vop_delmap = nfs4_delmap },
+const struct vnodeops nfs4_vnodeops = {
+	.vnop_name = "nfs4",
+	.vop_open = nfs4_open,
+	.vop_close = nfs4_close,
+	.vop_read = nfs4_read,
+	.vop_write = nfs4_write,
+	.vop_ioctl = nfs4_ioctl,
+	.vop_getattr = nfs4_getattr,
+	.vop_setattr = nfs4_setattr,
+	.vop_access = nfs4_access,
+	.vop_lookup = nfs4_lookup,
+	.vop_create = nfs4_create,
+	.vop_remove = nfs4_remove,
+	.vop_link = nfs4_link,
+	.vop_rename = nfs4_rename,
+	.vop_mkdir = nfs4_mkdir,
+	.vop_rmdir = nfs4_rmdir,
+	.vop_readdir = nfs4_readdir,
+	.vop_symlink = nfs4_symlink,
+	.vop_readlink = nfs4_readlink,
+	.vop_fsync = nfs4_fsync,
+	.vop_inactive = nfs4_inactive,
+	.vop_fid = nfs4_fid,
+	.vop_rwlock = nfs4_rwlock,
+	.vop_rwunlock = nfs4_rwunlock,
+	.vop_seek = nfs4_seek,
+	.vop_frlock = nfs4_frlock,
+	.vop_space = nfs4_space,
+	.vop_realvp = nfs4_realvp,
+	.vop_getpage = nfs4_getpage,
+	.vop_putpage = nfs4_putpage,
+	.vop_map = nfs4_map,
+	.vop_addmap = nfs4_addmap,
+	.vop_delmap = nfs4_delmap,
 	/* no separate nfs4_dump */
-	VOPNAME_DUMP,		{ .vop_dump = nfs_dump },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = nfs4_pathconf },
-	VOPNAME_PAGEIO,		{ .vop_pageio = nfs4_pageio },
-	VOPNAME_DISPOSE,	{ .vop_dispose = nfs4_dispose },
-	VOPNAME_SETSECATTR,	{ .vop_setsecattr = nfs4_setsecattr },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = nfs4_getsecattr },
-	VOPNAME_SHRLOCK,	{ .vop_shrlock = nfs4_shrlock },
-	VOPNAME_VNEVENT, 	{ .vop_vnevent = fs_vnevent_support },
-	NULL,			NULL
+	.vop_dump = nfs_dump,
+	.vop_pathconf = nfs4_pathconf,
+	.vop_pageio = nfs4_pageio,
+	.vop_dispose = nfs4_dispose,
+	.vop_setsecattr = nfs4_setsecattr,
+	.vop_getsecattr = nfs4_getsecattr,
+	.vop_shrlock = nfs4_shrlock,
+	.vop_vnevent = fs_vnevent_support,
 };
 
 /*
@@ -604,10 +602,10 @@ nfs4args_copen_free(OPEN4cargs *open_args)
 /*
  * XXX:  This is referenced in modstubs.s
  */
-struct vnodeops *
+const struct vnodeops *
 nfs4_getvnodeops(void)
 {
-	return (nfs4_vnodeops);
+	return (&nfs4_vnodeops);
 }
 
 /*

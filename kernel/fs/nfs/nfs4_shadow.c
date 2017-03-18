@@ -237,7 +237,7 @@ sv_find(vnode_t *mvp, vnode_t *dvp, nfs4_fname_t **namepp)
 
 	/* Initialize the vnode */
 
-	vn_setops(vp, nfs4_vnodeops);
+	vn_setops(vp, &nfs4_vnodeops);
 	vp->v_data = (caddr_t)rp;
 	vp->v_vfsp = mvp->v_vfsp;
 	ASSERT(nfs4_consistent_type(mvp));

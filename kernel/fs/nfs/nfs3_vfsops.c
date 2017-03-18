@@ -171,14 +171,6 @@ nfs3init(int fstyp, char *name)
 		return (error);
 	}
 
-	error = vn_make_ops(name, nfs3_vnodeops_template, &nfs3_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstyp);
-		zcmn_err(GLOBAL_ZONEID, CE_WARN,
-		    "nfs3init: bad vnode ops template");
-		return (error);
-	}
-
 	nfs3fstyp = fstyp;
 
 	return (0);

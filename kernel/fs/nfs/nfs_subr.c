@@ -244,7 +244,7 @@ static int	aclcall(mntinfo_t *, rpcproc_t, xdrproc_t, caddr_t, xdrproc_t,
 static void	rinactive(rnode_t *, cred_t *);
 static int	rtablehash(nfs_fhandle *);
 static vnode_t	*make_rnode(nfs_fhandle *, rhashq_t *, struct vfs *,
-		    struct vnodeops *,
+		    const struct vnodeops *,
 		    int (*)(vnode_t *, page_t *, uoff_t *, size_t *, int,
 			cred_t *),
 		    int (*)(const void *, const void *), int *, cred_t *,
@@ -2267,7 +2267,7 @@ makenfsnode(fhandle_t *fh, struct nfsfattr *attr, struct vfs *vfsp,
 	index = rtablehash(&nfh);
 	rw_enter(&rtable[index].r_lock, RW_READER);
 
-	vp = make_rnode(&nfh, &rtable[index], vfsp, nfs_vnodeops,
+	vp = make_rnode(&nfh, &rtable[index], vfsp, &nfs_vnodeops,
 	    nfs_putapage, nfs_rddir_compar, &newnode, cr, dnm, nm);
 
 	if (attr != NULL) {
@@ -2325,7 +2325,7 @@ makenfs3node_va(nfs_fh3 *fh, vattr_t *vap, struct vfs *vfsp, hrtime_t t,
 	rw_enter(&rtable[index].r_lock, RW_READER);
 
 	vp = make_rnode((nfs_fhandle *)fh, &rtable[index], vfsp,
-	    nfs3_vnodeops, nfs3_putapage, nfs3_rddir_compar, &newnode, cr,
+	    &nfs3_vnodeops, nfs3_putapage, nfs3_rddir_compar, &newnode, cr,
 	    dnm, nm);
 
 	if (vap == NULL) {
@@ -2368,7 +2368,7 @@ makenfs3node(nfs_fh3 *fh, fattr3 *attr, struct vfs *vfsp, hrtime_t t,
 	rw_enter(&rtable[index].r_lock, RW_READER);
 
 	vp = make_rnode((nfs_fhandle *)fh, &rtable[index], vfsp,
-	    nfs3_vnodeops, nfs3_putapage, nfs3_rddir_compar, &newnode, cr,
+	    &nfs3_vnodeops, nfs3_putapage, nfs3_rddir_compar, &newnode, cr,
 	    dnm, nm);
 
 	if (attr == NULL) {
@@ -2434,7 +2434,7 @@ rtablehash(nfs_fhandle *fh)
 
 static vnode_t *
 make_rnode(nfs_fhandle *fh, rhashq_t *rhtp, struct vfs *vfsp,
-    struct vnodeops *vops,
+    const struct vnodeops *vops,
     int (*putapage)(vnode_t *, page_t *, uoff_t *, size_t *, int, cred_t *),
     int (*compar)(const void *, const void *),
     int *newnode, cred_t *cr, char *dnm, char *nm)

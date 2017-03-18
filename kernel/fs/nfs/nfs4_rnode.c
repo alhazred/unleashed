@@ -139,7 +139,7 @@ static int rnode4_hashlen = 4;
 
 static void	r4inactive(rnode4_t *, cred_t *);
 static vnode_t	*make_rnode4(nfs4_sharedfh_t *, r4hashq_t *, struct vfs *,
-		    struct vnodeops *,
+		    const struct vnodeops *,
 		    int (*)(vnode_t *, page_t *, uoff_t *, size_t *, int,
 		    cred_t *),
 		    int *, cred_t *);
@@ -462,7 +462,7 @@ makenfs4node_by_fh(nfs4_sharedfh_t *sfh, nfs4_sharedfh_t *psfh,
 	rw_enter(&rtable4[index].r_lock, RW_READER);
 
 	vp = make_rnode4(sfh, &rtable4[index], vfsp,
-	    nfs4_vnodeops, nfs4_putapage, &newnode, cr);
+	    &nfs4_vnodeops, nfs4_putapage, &newnode, cr);
 
 	svp = VTOSV(vp);
 	rp = VTOR4(vp);
@@ -523,7 +523,7 @@ makenfs4node(nfs4_sharedfh_t *fh, nfs4_ga_res_t *garp, struct vfs *vfsp,
 	/*
 	 * Note: make_rnode4() may upgrade the hash bucket lock to exclusive.
 	 */
-	vp = make_rnode4(fh, &rtable4[index], vfsp, nfs4_vnodeops,
+	vp = make_rnode4(fh, &rtable4[index], vfsp, &nfs4_vnodeops,
 	    nfs4_putapage, &newnode, cr);
 
 	rp = VTOR4(vp);
@@ -568,7 +568,7 @@ rtable4hash(nfs4_sharedfh_t *fh)
 
 static vnode_t *
 make_rnode4(nfs4_sharedfh_t *fh, r4hashq_t *rhtp, struct vfs *vfsp,
-    struct vnodeops *vops,
+    const struct vnodeops *vops,
     int (*putapage)(vnode_t *, page_t *, uoff_t *, size_t *, int, cred_t *),
     int *newnode, cred_t *cr)
 {
@@ -1947,7 +1947,7 @@ r4_stub_set(rnode4_t *rp, nfs4_stub_type_t type)
 	 * correct v4 vnodeops by default. So, no "else" case required here.
 	 */
 	if (type != NFS4_STUB_NONE)
-		vn_setops(vp, nfs4_trigger_vnodeops);
+		vn_setops(vp, &nfs4_trigger_vnodeops);
 }
 
 void

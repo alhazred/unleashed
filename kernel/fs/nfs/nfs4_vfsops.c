@@ -201,8 +201,6 @@ nfs4init(int fstyp, char *name)
 	int error;
 
 	nfs4_vfsops = NULL;
-	nfs4_vnodeops = NULL;
-	nfs4_trigger_vnodeops = NULL;
 
 	error = vfs_setfsops(fstyp, nfs4_vfsops_template, &nfs4_vfsops);
 	if (error != 0) {
@@ -211,35 +209,13 @@ nfs4init(int fstyp, char *name)
 		goto out;
 	}
 
-	error = vn_make_ops(name, nfs4_vnodeops_template, &nfs4_vnodeops);
-	if (error != 0) {
-		zcmn_err(GLOBAL_ZONEID, CE_WARN,
-		    "nfs4init: bad vnode ops template");
-		goto out;
-	}
-
-	error = vn_make_ops("nfs4_trigger", nfs4_trigger_vnodeops_template,
-	    &nfs4_trigger_vnodeops);
-	if (error != 0) {
-		zcmn_err(GLOBAL_ZONEID, CE_WARN,
-		    "nfs4init: bad trigger vnode ops template");
-		goto out;
-	}
-
 	nfs4fstyp = fstyp;
 	(void) nfs4_vfsinit();
 	(void) nfs4_init_dot_entries();
 
 out:
-	if (error) {
-		if (nfs4_trigger_vnodeops != NULL)
-			vn_freevnodeops(nfs4_trigger_vnodeops);
-
-		if (nfs4_vnodeops != NULL)
-			vn_freevnodeops(nfs4_vnodeops);
-
+	if (error)
 		(void) vfs_freevfsops_by_type(fstyp);
-	}
 
 	return (error);
 }
@@ -774,7 +750,7 @@ more:
 	 * Note that we are already serialised at this point.
 	 */
 	mutex_enter(&mvp->v_lock);
-	if (vn_matchops(mvp, nfs4_trigger_vnodeops)) {
+	if (vn_matchops(mvp, &nfs4_trigger_vnodeops)) {
 		/* mntpt is a v4 stub vnode */
 		ASSERT(RP_ISSTUB(VTOR4(mvp)));
 		ASSERT(!(uap->flags & MS_OVERLAY));

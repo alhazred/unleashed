@@ -1349,10 +1349,8 @@ extern uint_t nfs4_ntov_map_size;
 
 extern kstat_named_t	*rfsproccnt_v4_ptr;
 extern struct vfsops	*nfs4_vfsops;
-extern struct vnodeops	*nfs4_vnodeops;
-extern const struct	fs_operation_def nfs4_vnodeops_template[];
-extern vnodeops_t	*nfs4_trigger_vnodeops;
-extern const struct	fs_operation_def nfs4_trigger_vnodeops_template[];
+extern const struct vnodeops	nfs4_vnodeops;
+extern const struct vnodeops	nfs4_trigger_vnodeops;
 
 extern uint_t nfs4_tsize(struct knetconfig *);
 extern uint_t rfs4_tsize(struct svc_req *);

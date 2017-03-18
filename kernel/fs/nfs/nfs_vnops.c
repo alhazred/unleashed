@@ -196,58 +196,56 @@ static int	nfs_getsecattr(vnode_t *, vsecattr_t *, int, cred_t *,
 static int	nfs_shrlock(vnode_t *, int, struct shrlock *, int, cred_t *,
 			caller_context_t *);
 
-struct vnodeops *nfs_vnodeops;
-
-const fs_operation_def_t nfs_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = nfs_open },
-	VOPNAME_CLOSE,		{ .vop_close = nfs_close },
-	VOPNAME_READ,		{ .vop_read = nfs_read },
-	VOPNAME_WRITE,		{ .vop_write = nfs_write },
-	VOPNAME_IOCTL,		{ .vop_ioctl = nfs_ioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = nfs_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = nfs_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = nfs_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = nfs_lookup },
-	VOPNAME_CREATE,		{ .vop_create = nfs_create },
-	VOPNAME_REMOVE,		{ .vop_remove = nfs_remove },
-	VOPNAME_LINK,		{ .vop_link = nfs_link },
-	VOPNAME_RENAME,		{ .vop_rename = nfs_rename },
-	VOPNAME_MKDIR,		{ .vop_mkdir = nfs_mkdir },
-	VOPNAME_RMDIR,		{ .vop_rmdir = nfs_rmdir },
-	VOPNAME_READDIR,	{ .vop_readdir = nfs_readdir },
-	VOPNAME_SYMLINK,	{ .vop_symlink = nfs_symlink },
-	VOPNAME_READLINK,	{ .vop_readlink = nfs_readlink },
-	VOPNAME_FSYNC,		{ .vop_fsync = nfs_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = nfs_inactive },
-	VOPNAME_FID,		{ .vop_fid = nfs_fid },
-	VOPNAME_RWLOCK,		{ .vop_rwlock = nfs_rwlock },
-	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = nfs_rwunlock },
-	VOPNAME_SEEK,		{ .vop_seek = nfs_seek },
-	VOPNAME_FRLOCK,		{ .vop_frlock = nfs_frlock },
-	VOPNAME_SPACE,		{ .vop_space = nfs_space },
-	VOPNAME_REALVP,		{ .vop_realvp = nfs_realvp },
-	VOPNAME_GETPAGE,	{ .vop_getpage = nfs_getpage },
-	VOPNAME_PUTPAGE,	{ .vop_putpage = nfs_putpage },
-	VOPNAME_MAP,		{ .vop_map = nfs_map },
-	VOPNAME_ADDMAP,		{ .vop_addmap = nfs_addmap },
-	VOPNAME_DELMAP,		{ .vop_delmap = nfs_delmap },
-	VOPNAME_DUMP,		{ .vop_dump = nfs_dump },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = nfs_pathconf },
-	VOPNAME_PAGEIO,		{ .vop_pageio = nfs_pageio },
-	VOPNAME_SETSECATTR,	{ .vop_setsecattr = nfs_setsecattr },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = nfs_getsecattr },
-	VOPNAME_SHRLOCK,	{ .vop_shrlock = nfs_shrlock },
-	VOPNAME_VNEVENT, 	{ .vop_vnevent = fs_vnevent_support },
-	NULL,			NULL
+const struct vnodeops nfs_vnodeops = {
+	.vnop_name = "nfs2",
+	.vop_open = nfs_open,
+	.vop_close = nfs_close,
+	.vop_read = nfs_read,
+	.vop_write = nfs_write,
+	.vop_ioctl = nfs_ioctl,
+	.vop_getattr = nfs_getattr,
+	.vop_setattr = nfs_setattr,
+	.vop_access = nfs_access,
+	.vop_lookup = nfs_lookup,
+	.vop_create = nfs_create,
+	.vop_remove = nfs_remove,
+	.vop_link = nfs_link,
+	.vop_rename = nfs_rename,
+	.vop_mkdir = nfs_mkdir,
+	.vop_rmdir = nfs_rmdir,
+	.vop_readdir = nfs_readdir,
+	.vop_symlink = nfs_symlink,
+	.vop_readlink = nfs_readlink,
+	.vop_fsync = nfs_fsync,
+	.vop_inactive = nfs_inactive,
+	.vop_fid = nfs_fid,
+	.vop_rwlock = nfs_rwlock,
+	.vop_rwunlock = nfs_rwunlock,
+	.vop_seek = nfs_seek,
+	.vop_frlock = nfs_frlock,
+	.vop_space = nfs_space,
+	.vop_realvp = nfs_realvp,
+	.vop_getpage = nfs_getpage,
+	.vop_putpage = nfs_putpage,
+	.vop_map = nfs_map,
+	.vop_addmap = nfs_addmap,
+	.vop_delmap = nfs_delmap,
+	.vop_dump = nfs_dump,
+	.vop_pathconf = nfs_pathconf,
+	.vop_pageio = nfs_pageio,
+	.vop_setsecattr = nfs_setsecattr,
+	.vop_getsecattr = nfs_getsecattr,
+	.vop_shrlock = nfs_shrlock,
+	.vop_vnevent = fs_vnevent_support,
 };
 
 /*
  * XXX:  This is referenced in modstubs.s
  */
-struct vnodeops *
+const struct vnodeops *
 nfs_getvnodeops(void)
 {
-	return (nfs_vnodeops);
+	return (&nfs_vnodeops);
 }
 
 /* ARGSUSED */

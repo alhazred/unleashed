@@ -231,8 +231,6 @@ static enum clnt_stat nfs4_ping_server_common(struct knetconfig *,
 
 extern int	umount2_engine(vfs_t *, int, cred_t *, int);
 
-vnodeops_t *nfs4_trigger_vnodeops;
-
 /*
  * These are the vnodeops that we must define for stub vnodes.
  *
@@ -271,32 +269,32 @@ vnodeops_t *nfs4_trigger_vnodeops;
  * - These VOPs would not make sense to trigger:
  *       inactive, rwlock, rwunlock, fid, realvp.
  */
-const fs_operation_def_t nfs4_trigger_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = nfs4_trigger_open },
-	VOPNAME_GETATTR,	{ .vop_getattr = nfs4_trigger_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = nfs4_trigger_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = nfs4_trigger_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = nfs4_trigger_lookup },
-	VOPNAME_CREATE,		{ .vop_create = nfs4_trigger_create },
-	VOPNAME_REMOVE,		{ .vop_remove = nfs4_trigger_remove },
-	VOPNAME_LINK,		{ .vop_link = nfs4_trigger_link },
-	VOPNAME_RENAME,		{ .vop_rename = nfs4_trigger_rename },
-	VOPNAME_MKDIR,		{ .vop_mkdir = nfs4_trigger_mkdir },
-	VOPNAME_RMDIR,		{ .vop_rmdir = nfs4_trigger_rmdir },
-	VOPNAME_SYMLINK,	{ .vop_symlink = nfs4_trigger_symlink },
-	VOPNAME_READLINK,	{ .vop_readlink = nfs4_trigger_readlink },
-	VOPNAME_INACTIVE, 	{ .vop_inactive = nfs4_inactive },
-	VOPNAME_FID,		{ .vop_fid = nfs4_fid },
-	VOPNAME_RWLOCK,		{ .vop_rwlock = nfs4_rwlock },
-	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = nfs4_rwunlock },
-	VOPNAME_REALVP,		{ .vop_realvp = nfs4_realvp },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = nfs4_getsecattr },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = nfs4_pathconf },
-	VOPNAME_FRLOCK,		{ .error = fs_nosys },
-	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
-	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
-	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
-	NULL, NULL
+const struct vnodeops nfs4_trigger_vnodeops = {
+	.vnop_name = "nfs4_trigger",
+	.vop_open = nfs4_trigger_open,
+	.vop_getattr = nfs4_trigger_getattr,
+	.vop_setattr = nfs4_trigger_setattr,
+	.vop_access = nfs4_trigger_access,
+	.vop_lookup = nfs4_trigger_lookup,
+	.vop_create = nfs4_trigger_create,
+	.vop_remove = nfs4_trigger_remove,
+	.vop_link = nfs4_trigger_link,
+	.vop_rename = nfs4_trigger_rename,
+	.vop_mkdir = nfs4_trigger_mkdir,
+	.vop_rmdir = nfs4_trigger_rmdir,
+	.vop_symlink = nfs4_trigger_symlink,
+	.vop_readlink = nfs4_trigger_readlink,
+	.vop_inactive = nfs4_inactive,
+	.vop_fid = nfs4_fid,
+	.vop_rwlock = nfs4_rwlock,
+	.vop_rwunlock = nfs4_rwunlock,
+	.vop_realvp = nfs4_realvp,
+	.vop_getsecattr = nfs4_getsecattr,
+	.vop_pathconf = nfs4_pathconf,
+	.vop_frlock = fs_nosys,
+	.vop_dispose = fs_nodispose,
+	.vop_shrlock = fs_nosys,
+	.vop_vnevent = fs_vnevent_support,
 };
 
 static void
