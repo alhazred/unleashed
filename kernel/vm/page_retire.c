@@ -151,6 +151,13 @@
  */
 vnode_t *retired_pages;
 
+/*
+ * vnode ops - all defaults
+ */
+static const struct vnodeops retired_vnodeops = {
+	.vnop_name = "retired_pages",
+};
+
 static int page_retire_pp_finish(page_t *, void *, uint_t);
 
 /*
@@ -876,10 +883,6 @@ page_retire_decr_pend_count(void *datap)
 void
 page_retire_init(void)
 {
-	const fs_operation_def_t retired_vnodeops_template[] = {
-		{ NULL, NULL }
-	};
-	struct vnodeops *vops;
 	kstat_t *ksp;
 
 	const uint_t page_retire_ndata =
@@ -894,11 +897,7 @@ page_retire_init(void)
 	mutex_init(&pr_q_mutex, NULL, MUTEX_DEFAULT, NULL);
 
 	retired_pages = vn_alloc(KM_SLEEP);
-	if (vn_make_ops("retired_pages", retired_vnodeops_template, &vops)) {
-		cmn_err(CE_PANIC,
-		    "page_retired_init: can't make retired vnodeops");
-	}
-	vn_setops(retired_pages, vops);
+	vn_setops(retired_pages, &retired_vnodeops);
 
 	if ((page_retire_ksp = kstat_create("unix", 0, "page_retire",
 	    "misc", KSTAT_TYPE_NAMED, page_retire_ndata,
