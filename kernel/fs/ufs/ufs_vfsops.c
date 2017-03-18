@@ -2078,13 +2078,6 @@ ufsinit(int fstype, char *name)
 		return (error);
 	}
 
-	error = vn_make_ops(name, ufs_vnodeops_template, &ufs_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "ufsinit: bad vnode ops template");
-		return (error);
-	}
-
 	ufs_iinit();
 	return (0);
 }

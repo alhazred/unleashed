@@ -486,8 +486,7 @@ struct instats {
 #define	XATTR_DIR_NAME	"/@/"
 extern int	ufs_ninode;		/* high-water mark for inode cache */
 
-extern struct vnodeops *ufs_vnodeops;	/* vnode operations for ufs */
-extern const struct fs_operation_def ufs_vnodeops_template[];
+extern const struct vnodeops ufs_vnodeops;	/* vnode operations for ufs */
 
 /*
  * Convert between inode pointers and vnode pointers

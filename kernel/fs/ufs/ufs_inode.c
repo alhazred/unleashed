@@ -258,7 +258,7 @@ ufs_inode_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	if (vp == NULL) {
 		return (-1);
 	}
-	vn_setops(vp, ufs_vnodeops);
+	vn_setops(vp, &ufs_vnodeops);
 	vp->v_data = ip;
 
 	rw_init(&ip->i_rwlock, NULL, RW_DEFAULT, NULL);
