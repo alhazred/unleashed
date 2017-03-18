@@ -243,12 +243,6 @@ bootfs_init(int fstype, char *name)
 	if (ret != 0)
 		return (ret);
 
-	ret = vn_make_ops(name, bootfs_vnodeops_template, &bootfs_vnodeops);
-	if (ret != 0) {
-		(void) vfs_freevfsops_by_type(bootfs_fstype);
-		return (ret);
-	}
-
 	bootfs_major = getudev();
 	if (bootfs_major == (major_t)-1) {
 		cmn_err(CE_WARN, "bootfs_init: Can't get unique device number");
@@ -314,7 +308,6 @@ _fini(void)
 		return (err);
 
 	(void) vfs_freevfsops_by_type(bootfs_fstype);
-	vn_freevnodeops(bootfs_vnodeops);
 	id_space_destroy(bootfs_idspace);
 	mutex_destroy(&bootfs_lock);
 	kmem_cache_destroy(bootfs_node_cache);

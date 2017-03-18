@@ -119,7 +119,7 @@ bootfs_node_init(bootfs_t *bfs, bootfs_node_t *bnp, const struct vattr *vap,
 	bnp->bvn_vnp->v_vfsp = bfs->bfs_vfsp;
 	bnp->bvn_vnp->v_rdev = 0;
 	bnp->bvn_vnp->v_data = (caddr_t)bnp;
-	vn_setops(bnp->bvn_vnp, bootfs_vnodeops);
+	vn_setops(bnp->bvn_vnp, &bootfs_vnodeops);
 
 	bnp->bvn_name = kmem_alloc(namelen + 1, KM_SLEEP);
 	bcopy(name, bnp->bvn_name, namelen);

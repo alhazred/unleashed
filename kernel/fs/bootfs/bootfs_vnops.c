@@ -38,8 +38,6 @@
 
 #include <sys/fs/bootfs_impl.h>
 
-struct vnodeops *bootfs_vnodeops;
-
 /*ARGSUSED*/
 static int
 bootfs_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
@@ -526,24 +524,24 @@ bootfs_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
 	return (ret);
 }
 
-const fs_operation_def_t bootfs_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = bootfs_open },
-	VOPNAME_CLOSE,		{ .vop_close = bootfs_close },
-	VOPNAME_READ,		{ .vop_read = bootfs_read },
-	VOPNAME_IOCTL,		{ .vop_ioctl = bootfs_ioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = bootfs_getattr },
-	VOPNAME_ACCESS,		{ .vop_access = bootfs_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = bootfs_lookup },
-	VOPNAME_READDIR,	{ .vop_readdir = bootfs_readdir },
-	VOPNAME_INACTIVE,	{ .vop_inactive = bootfs_inactive },
-	VOPNAME_RWLOCK,		{ .vop_rwlock = bootfs_rwlock },
-	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = bootfs_rwunlock },
-	VOPNAME_SEEK,		{ .vop_seek = bootfs_seek },
-	VOPNAME_GETPAGE,	{ .vop_getpage = bootfs_getpage },
-	VOPNAME_MAP,		{ .vop_map = bootfs_map },
-	VOPNAME_ADDMAP,		{ .vop_addmap = bootfs_addmap },
-	VOPNAME_DELMAP,		{ .vop_delmap = bootfs_delmap },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = bootfs_pathconf },
-	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_nosupport },
-	NULL,			NULL
+const struct vnodeops bootfs_vnodeops = {
+	.vnop_name = "bootfs",
+	.vop_open = bootfs_open,
+	.vop_close = bootfs_close,
+	.vop_read = bootfs_read,
+	.vop_ioctl = bootfs_ioctl,
+	.vop_getattr = bootfs_getattr,
+	.vop_access = bootfs_access,
+	.vop_lookup = bootfs_lookup,
+	.vop_readdir = bootfs_readdir,
+	.vop_inactive = bootfs_inactive,
+	.vop_rwlock = bootfs_rwlock,
+	.vop_rwunlock = bootfs_rwunlock,
+	.vop_seek = bootfs_seek,
+	.vop_getpage = bootfs_getpage,
+	.vop_map = bootfs_map,
+	.vop_addmap = bootfs_addmap,
+	.vop_delmap = bootfs_delmap,
+	.vop_pathconf = bootfs_pathconf,
+	.vop_vnevent = fs_vnevent_nosupport,
 };

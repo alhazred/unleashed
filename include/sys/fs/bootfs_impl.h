@@ -69,8 +69,7 @@ extern void bootfs_destruct(bootfs_t *);
 extern int bootfs_node_constructor(void *, void *, int);
 extern void bootfs_node_destructor(void *, void *);
 
-extern struct vnodeops *bootfs_vnodeops;
-extern const fs_operation_def_t bootfs_vnodeops_template[];
+extern const struct vnodeops bootfs_vnodeops;
 extern kmem_cache_t *bootfs_node_cache;
 extern major_t bootfs_major;
 
