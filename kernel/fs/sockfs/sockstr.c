@@ -2853,7 +2853,7 @@ sock_getmsg(
 	}
 	ASSERT(vp->v_stream->sd_vnode);
 	vp = vp->v_stream->sd_vnode;
-	ASSERT(vn_matchops(vp, socket_vnodeops));
+	ASSERT(vn_matchops(vp, &socket_vnodeops));
 	so = VTOSO(vp);
 
 	dprintso(so, 1, ("sock_getmsg(%p) %s\n",
@@ -2893,7 +2893,7 @@ sock_putmsg(
 	}
 	ASSERT(vp->v_stream->sd_vnode);
 	vp = vp->v_stream->sd_vnode;
-	ASSERT(vn_matchops(vp, socket_vnodeops));
+	ASSERT(vn_matchops(vp, &socket_vnodeops));
 	so = VTOSO(vp);
 
 	dprintso(so, 1, ("sock_putmsg(%p) %s\n",

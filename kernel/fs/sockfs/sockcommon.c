@@ -440,7 +440,7 @@ sonode_constructor(void *buf, void *cdrarg, int kmflags)
 		return (-1);
 	}
 	vp->v_data = so;
-	vn_setops(vp, socket_vnodeops);
+	vn_setops(vp, &socket_vnodeops);
 
 	so->so_priv 		= NULL;
 	so->so_oobmsg		= NULL;
@@ -517,7 +517,7 @@ sonode_destructor(void *buf, void *cdrarg)
 	ASSERT(so->so_filter_bottom == NULL);
 
 	ASSERT(vp->v_data == so);
-	ASSERT(vn_matchops(vp, socket_vnodeops));
+	ASSERT(vn_matchops(vp, &socket_vnodeops));
 
 	vn_free(vp);
 

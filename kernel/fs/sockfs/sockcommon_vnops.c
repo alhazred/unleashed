@@ -89,24 +89,23 @@ static int	socket_vop_poll(struct vnode *, short, int, short *,
 extern int	socket_close_internal(struct sonode *, int, cred_t *);
 extern void	socket_destroy_internal(struct sonode *, cred_t *);
 
-struct vnodeops *socket_vnodeops;
-const fs_operation_def_t socket_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = socket_vop_open },
-	VOPNAME_CLOSE,		{ .vop_close = socket_vop_close },
-	VOPNAME_READ,		{ .vop_read = socket_vop_read },
-	VOPNAME_WRITE,		{ .vop_write = socket_vop_write },
-	VOPNAME_IOCTL,		{ .vop_ioctl = socket_vop_ioctl },
-	VOPNAME_SETFL,		{ .vop_setfl = socket_vop_setfl },
-	VOPNAME_GETATTR,	{ .vop_getattr = socket_vop_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = socket_vop_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = socket_vop_access },
-	VOPNAME_FSYNC,		{ .vop_fsync = socket_vop_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = socket_vop_inactive },
-	VOPNAME_FID,		{ .vop_fid = socket_vop_fid },
-	VOPNAME_SEEK,		{ .vop_seek = socket_vop_seek },
-	VOPNAME_POLL,		{ .vop_poll = socket_vop_poll },
-	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
-	NULL,			NULL
+const struct vnodeops socket_vnodeops = {
+	.vnop_name = "sockfs",
+	.vop_open = socket_vop_open,
+	.vop_close = socket_vop_close,
+	.vop_read = socket_vop_read,
+	.vop_write = socket_vop_write,
+	.vop_ioctl = socket_vop_ioctl,
+	.vop_setfl = socket_vop_setfl,
+	.vop_getattr = socket_vop_getattr,
+	.vop_setattr = socket_vop_setattr,
+	.vop_access = socket_vop_access,
+	.vop_fsync = socket_vop_fsync,
+	.vop_inactive = socket_vop_inactive,
+	.vop_fid = socket_vop_fid,
+	.vop_seek = socket_vop_seek,
+	.vop_poll = socket_vop_poll,
+	.vop_dispose = fs_nodispose,
 };
 
 

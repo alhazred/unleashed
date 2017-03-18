@@ -861,8 +861,7 @@ extern int sockprinterr;
 #endif /* defined(DEBUG) */
 
 extern struct vfsops			sock_vfsops;
-extern struct vnodeops			*socket_vnodeops;
-extern const struct fs_operation_def	socket_vnodeops_template[];
+extern const struct vnodeops		socket_vnodeops;
 
 extern dev_t				sockdev;
 

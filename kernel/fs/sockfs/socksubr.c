@@ -230,15 +230,6 @@ sockinit(int fstype, char *name)
 		return (error);
 	}
 
-	error = vn_make_ops(name, socket_vnodeops_template,
-	    &socket_vnodeops);
-	if (error != 0) {
-		err_str = "sockinit: bad socket vnode ops template";
-		/* vn_make_ops() does not reset socktpi_vnodeops on failure. */
-		socket_vnodeops = NULL;
-		goto failure;
-	}
-
 	socket_cache = kmem_cache_create("socket_cache",
 	    sizeof (struct sonode), 0, sonode_constructor,
 	    sonode_destructor, NULL, NULL, NULL, 0);
@@ -295,8 +286,6 @@ sockinit(int fstype, char *name)
 
 failure:
 	(void) vfs_freevfsops_by_type(fstype);
-	if (socket_vnodeops != NULL)
-		vn_freevnodeops(socket_vnodeops);
 	if (err_str != NULL)
 		zcmn_err(GLOBAL_ZONEID, CE_WARN, err_str);
 	return (error);
