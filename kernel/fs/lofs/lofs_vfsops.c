@@ -483,13 +483,6 @@ lofsinit(int fstyp, char *name)
 		return (error);
 	}
 
-	error = vn_make_ops(name, lo_vnodeops_template, &lo_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstyp);
-		cmn_err(CE_WARN, "lofsinit: bad vnode ops template");
-		return (error);
-	}
-
 	lofsfstype = fstyp;
 
 	return (0);

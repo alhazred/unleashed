@@ -115,9 +115,7 @@ extern void lofs_subrfini(void);
 extern void lsetup(struct loinfo *, uint_t);
 extern void ldestroy(struct loinfo *);
 
-extern const struct fs_operation_def lo_vnodeops_template[];
-
-extern struct vnodeops *lo_vnodeops;
+extern const struct vnodeops lo_vnodeops;
 extern vfsops_t *lo_vfsops;
 extern struct mod_ops mod_fsops;
 

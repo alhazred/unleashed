@@ -295,7 +295,7 @@ makelonode(struct vnode *vp, struct loinfo *li, int flag)
 		lp->lo_vnode = nvp;
 		VN_SET_VFS_TYPE_DEV(nvp, vfsp, vp->v_type, vp->v_rdev);
 		nvp->v_flag |= (vp->v_flag & (VNOMOUNT|VNOMAP|VDIROPEN));
-		vn_setops(nvp, lo_vnodeops);
+		vn_setops(nvp, &lo_vnodeops);
 		nvp->v_data = (caddr_t)lp;
 		lp->lo_vp = vp;
 		lp->lo_looping = 0;

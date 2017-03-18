@@ -705,9 +705,9 @@ lo_create(
 		 * the root vnode (the directory vp is the file vp). Some
 		 * underlying file systems (e.g. tmpfs or ufs) properly handle
 		 * this style of create but at least zfs won't support create
-		 * this way (see zfs_fvnodeops_template which has fs_nosys for
-		 * the vop_create entry because zfs_create doesn't work
-		 * properly for this case).
+		 * this way (see zfs_fvnodeops which has fs_nosys for the
+		 * vop_create entry because zfs_create doesn't work properly
+		 * for this case).
 		 */
 		if ((error = fop_access(dvp, mode, 0, cr, NULL)) == 0) {
 			/*
@@ -791,7 +791,7 @@ lo_link(
 	if (vn_is_readonly(vp)) {
 		return (EROFS);
 	}
-	while (vn_matchops(vp, lo_vnodeops)) {
+	while (vn_matchops(vp, &lo_vnodeops)) {
 		vp = realvp(vp);
 	}
 
@@ -805,7 +805,7 @@ lo_link(
 	if (fop_realvp(vp, &realvp, ct) == 0)
 		vp = realvp;
 
-	while (vn_matchops(tdvp, lo_vnodeops)) {
+	while (vn_matchops(tdvp, &lo_vnodeops)) {
 		tdvp = realvp(tdvp);
 	}
 	if (vp->v_vfsp != tdvp->v_vfsp)
@@ -854,7 +854,7 @@ lo_rename(
 	 * We need to make sure we're not trying to remove a mount point for a
 	 * filesystem mounted on top of lofs, which only we know about.
 	 */
-	if (vn_matchops(ndvp, lo_vnodeops))	/* Not our problem. */
+	if (vn_matchops(ndvp, &lo_vnodeops))	/* Not our problem. */
 		goto rename;
 
 	/*
@@ -883,13 +883,13 @@ rename:
 	 * lofs, the source directory (the one used for getting the fs-specific
 	 * version of fop_rename()) is also of type lofs.
 	 */
-	if (vn_matchops(ndvp, lo_vnodeops)) {
+	if (vn_matchops(ndvp, &lo_vnodeops)) {
 		ndvp = realvp(ndvp);	/* Check the next layer */
 	} else {
 		/*
 		 * We can go fast here
 		 */
-		while (vn_matchops(odvp, lo_vnodeops)) {
+		while (vn_matchops(odvp, &lo_vnodeops)) {
 			odvp = realvp(odvp);
 		}
 		if (odvp->v_vfsp != ndvp->v_vfsp)
@@ -926,7 +926,7 @@ lo_realvp(vnode_t *vp, vnode_t **vpp, caller_context_t *ct)
 #ifdef LODEBUG
 	lo_dprint(4, "lo_realvp %p\n", vp);
 #endif
-	while (vn_matchops(vp, lo_vnodeops))
+	while (vn_matchops(vp, &lo_vnodeops))
 		vp = realvp(vp);
 
 	if (fop_realvp(vp, vpp, ct) != 0)
@@ -1023,9 +1023,9 @@ lo_seek(vnode_t *vp, offset_t ooff, offset_t *noffp, caller_context_t *ct)
 static int
 lo_cmp(vnode_t *vp1, vnode_t *vp2, caller_context_t *ct)
 {
-	while (vn_matchops(vp1, lo_vnodeops))
+	while (vn_matchops(vp1, &lo_vnodeops))
 		vp1 = realvp(vp1);
-	while (vn_matchops(vp2, lo_vnodeops))
+	while (vn_matchops(vp2, &lo_vnodeops))
 		vp2 = realvp(vp2);
 	return (fop_cmp(vp1, vp2, ct));
 }
@@ -1248,51 +1248,49 @@ lo_shrlock(
  * Loopback vnode operations vector.
  */
 
-struct vnodeops *lo_vnodeops;
-
-const fs_operation_def_t lo_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = lo_open },
-	VOPNAME_CLOSE,		{ .vop_close = lo_close },
-	VOPNAME_READ,		{ .vop_read = lo_read },
-	VOPNAME_WRITE,		{ .vop_write = lo_write },
-	VOPNAME_IOCTL,		{ .vop_ioctl = lo_ioctl },
-	VOPNAME_SETFL,		{ .vop_setfl = lo_setfl },
-	VOPNAME_GETATTR,	{ .vop_getattr = lo_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = lo_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = lo_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = lo_lookup },
-	VOPNAME_CREATE,		{ .vop_create = lo_create },
-	VOPNAME_REMOVE,		{ .vop_remove = lo_remove },
-	VOPNAME_LINK,		{ .vop_link = lo_link },
-	VOPNAME_RENAME,		{ .vop_rename = lo_rename },
-	VOPNAME_MKDIR,		{ .vop_mkdir = lo_mkdir },
-	VOPNAME_RMDIR,		{ .vop_rmdir = lo_rmdir },
-	VOPNAME_READDIR,	{ .vop_readdir = lo_readdir },
-	VOPNAME_SYMLINK,	{ .vop_symlink = lo_symlink },
-	VOPNAME_READLINK,	{ .vop_readlink = lo_readlink },
-	VOPNAME_FSYNC,		{ .vop_fsync = lo_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = lo_inactive },
-	VOPNAME_FID,		{ .vop_fid = lo_fid },
-	VOPNAME_RWLOCK,		{ .vop_rwlock = lo_rwlock },
-	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = lo_rwunlock },
-	VOPNAME_SEEK,		{ .vop_seek = lo_seek },
-	VOPNAME_CMP,		{ .vop_cmp = lo_cmp },
-	VOPNAME_FRLOCK,		{ .vop_frlock = lo_frlock },
-	VOPNAME_SPACE,		{ .vop_space = lo_space },
-	VOPNAME_REALVP,		{ .vop_realvp = lo_realvp },
-	VOPNAME_GETPAGE,	{ .vop_getpage = lo_getpage },
-	VOPNAME_PUTPAGE,	{ .vop_putpage = lo_putpage },
-	VOPNAME_MAP,		{ .vop_map = lo_map },
-	VOPNAME_ADDMAP,		{ .vop_addmap = lo_addmap },
-	VOPNAME_DELMAP,		{ .vop_delmap = lo_delmap },
-	VOPNAME_POLL,		{ .vop_poll = lo_poll },
-	VOPNAME_DUMP,		{ .vop_dump = lo_dump },
-	VOPNAME_DUMPCTL,	{ .error = fs_nosys },	/* XXX - why? */
-	VOPNAME_PATHCONF,	{ .vop_pathconf = lo_pathconf },
-	VOPNAME_PAGEIO,		{ .vop_pageio = lo_pageio },
-	VOPNAME_DISPOSE,	{ .vop_dispose = lo_dispose },
-	VOPNAME_SETSECATTR,	{ .vop_setsecattr = lo_setsecattr },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = lo_getsecattr },
-	VOPNAME_SHRLOCK,	{ .vop_shrlock = lo_shrlock },
-	NULL,			NULL
+const struct vnodeops lo_vnodeops = {
+	.vnop_name = "lofs",
+	.vop_open = lo_open,
+	.vop_close = lo_close,
+	.vop_read = lo_read,
+	.vop_write = lo_write,
+	.vop_ioctl = lo_ioctl,
+	.vop_setfl = lo_setfl,
+	.vop_getattr = lo_getattr,
+	.vop_setattr = lo_setattr,
+	.vop_access = lo_access,
+	.vop_lookup = lo_lookup,
+	.vop_create = lo_create,
+	.vop_remove = lo_remove,
+	.vop_link = lo_link,
+	.vop_rename = lo_rename,
+	.vop_mkdir = lo_mkdir,
+	.vop_rmdir = lo_rmdir,
+	.vop_readdir = lo_readdir,
+	.vop_symlink = lo_symlink,
+	.vop_readlink = lo_readlink,
+	.vop_fsync = lo_fsync,
+	.vop_inactive = lo_inactive,
+	.vop_fid = lo_fid,
+	.vop_rwlock = lo_rwlock,
+	.vop_rwunlock = lo_rwunlock,
+	.vop_seek = lo_seek,
+	.vop_cmp = lo_cmp,
+	.vop_frlock = lo_frlock,
+	.vop_space = lo_space,
+	.vop_realvp = lo_realvp,
+	.vop_getpage = lo_getpage,
+	.vop_putpage = lo_putpage,
+	.vop_map = lo_map,
+	.vop_addmap = lo_addmap,
+	.vop_delmap = lo_delmap,
+	.vop_poll = lo_poll,
+	.vop_dump = lo_dump,
+	.vop_dumpctl = fs_nosys,	/* XXX - why? */
+	.vop_pathconf = lo_pathconf,
+	.vop_pageio = lo_pageio,
+	.vop_dispose = lo_dispose,
+	.vop_setsecattr = lo_setsecattr,
+	.vop_getsecattr = lo_getsecattr,
+	.vop_shrlock = lo_shrlock,
 };
