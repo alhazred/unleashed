@@ -3950,7 +3950,7 @@ pr_getprot_done(void **tmp)
 int
 pr_isobject(vnode_t *vp)
 {
-	return (vn_matchops(vp, prvnodeops) && VTOP(vp)->pr_type == PR_OBJECT);
+	return (vn_matchops(vp, &prvnodeops) && VTOP(vp)->pr_type == PR_OBJECT);
 }
 
 /*
@@ -3964,7 +3964,7 @@ pr_isself(vnode_t *vp)
 	 * ioctl()-based version of /proc, we exempt self-opens
 	 * of /proc/<pid> from being marked close-on-exec.
 	 */
-	return (vn_matchops(vp, prvnodeops) &&
+	return (vn_matchops(vp, &prvnodeops) &&
 	    (VTOP(vp)->pr_flags & PR_ISSELF) &&
 	    VTOP(vp)->pr_type != PR_PIDDIR);
 }

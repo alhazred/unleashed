@@ -270,7 +270,7 @@ typedef struct prhusage {
 extern	int	prnwatch;	/* number of supported watchpoints */
 extern	int	nproc_highbit;	/* highbit(v.v_nproc) */
 
-extern	struct vnodeops	*prvnodeops;
+extern	const struct vnodeops	prvnodeops;
 
 /*
  * Generic chained copyout buffers for procfs use.

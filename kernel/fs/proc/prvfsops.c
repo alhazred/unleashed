@@ -130,7 +130,7 @@ prinitrootnode(prnode_t *pnp, vfs_t *vfsp)
 	mutex_init(&pnp->pr_mutex, NULL, MUTEX_DEFAULT, NULL);
 	vp->v_flag = VROOT|VNOCACHE|VNOMAP|VNOSWAP|VNOMOUNT;
 	VN_SET_VFS_TYPE_DEV(vp, vfsp, VDIR, 0);
-	vn_setops(vp, prvnodeops);
+	vn_setops(vp, &prvnodeops);
 	vp->v_data = (caddr_t)pnp;
 	pnp->pr_type = PR_PROCDIR;
 	pnp->pr_mode = 0555;	/* read-search by everyone */
@@ -147,7 +147,6 @@ prinit(int fstype, char *name)
 		VFSNAME_STATVFS,	{ .vfs_statvfs = prstatvfs },
 		NULL,			NULL
 	};
-	extern const fs_operation_def_t pr_vnodeops_template[];
 	int error;
 
 	nproc_highbit = highbit(v.v_proc);
@@ -159,17 +158,6 @@ prinit(int fstype, char *name)
 	error = vfs_setfsops(fstype, pr_vfsops_template, NULL);
 	if (error != 0) {
 		cmn_err(CE_WARN, "prinit: bad vfs ops template");
-		return (error);
-	}
-
-	/*
-	 * Set up vnode ops vector too.
-	 */
-
-	error = vn_make_ops(name, pr_vnodeops_template, &prvnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "prinit: bad vnode ops template");
 		return (error);
 	}
 

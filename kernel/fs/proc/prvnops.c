@@ -79,11 +79,6 @@
 #endif
 
 /*
- * Created by prinit.
- */
-vnodeops_t *prvnodeops;
-
-/*
  * Directory characteristics (patterned after the s5 file system).
  */
 #define	PRROOTINO	2
@@ -4502,7 +4497,7 @@ prgetnode(vnode_t *dp, prnodetype_t type)
 
 	vp = PTOV(pnp);
 	vp->v_flag = VNOCACHE|VNOMAP|VNOSWAP|VNOMOUNT;
-	vn_setops(vp, prvnodeops);
+	vn_setops(vp, &prvnodeops);
 	vp->v_vfsp = dp->v_vfsp;
 	vp->v_type = VPROC;
 	vp->v_data = (caddr_t)pnp;
@@ -5906,7 +5901,7 @@ prcmp(vnode_t *vp1, vnode_t *vp2, caller_context_t *ct)
 	if (vp1 == vp2)
 		return (1);
 
-	if (!vn_matchops(vp1, prvnodeops) || !vn_matchops(vp2, prvnodeops))
+	if (!vn_matchops(vp1, &prvnodeops) || !vn_matchops(vp2, &prvnodeops))
 		return (0);
 
 	pp1 = VTOP(vp1);
@@ -6077,26 +6072,26 @@ extern int prioctl(vnode_t *, int, intptr_t, int, cred_t *, int *,
 /*
  * /proc vnode operations vector
  */
-const fs_operation_def_t pr_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = propen },
-	VOPNAME_CLOSE,		{ .vop_close = prclose },
-	VOPNAME_READ,		{ .vop_read = prread },
-	VOPNAME_WRITE,		{ .vop_write = prwrite },
-	VOPNAME_IOCTL,		{ .vop_ioctl = prioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = prgetattr },
-	VOPNAME_ACCESS,		{ .vop_access = praccess },
-	VOPNAME_LOOKUP,		{ .vop_lookup = prlookup },
-	VOPNAME_CREATE,		{ .vop_create = prcreate },
-	VOPNAME_READDIR,	{ .vop_readdir = prreaddir },
-	VOPNAME_READLINK,	{ .vop_readlink = prreadlink },
-	VOPNAME_FSYNC,		{ .vop_fsync = prfsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = prinactive },
-	VOPNAME_SEEK,		{ .vop_seek = prseek },
-	VOPNAME_CMP,		{ .vop_cmp = prcmp },
-	VOPNAME_FRLOCK,		{ .error = fs_nosys },
-	VOPNAME_REALVP,		{ .vop_realvp = prrealvp },
-	VOPNAME_POLL,		{ .vop_poll = prpoll },
-	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
-	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
-	NULL,			NULL
+const struct vnodeops prvnodeops = {
+	.vnop_name = "procfs",
+	.vop_open = propen,
+	.vop_close = prclose,
+	.vop_read = prread,
+	.vop_write = prwrite,
+	.vop_ioctl = prioctl,
+	.vop_getattr = prgetattr,
+	.vop_access = praccess,
+	.vop_lookup = prlookup,
+	.vop_create = prcreate,
+	.vop_readdir = prreaddir,
+	.vop_readlink = prreadlink,
+	.vop_fsync = prfsync,
+	.vop_inactive = prinactive,
+	.vop_seek = prseek,
+	.vop_cmp = prcmp,
+	.vop_frlock = fs_nosys,
+	.vop_realvp = prrealvp,
+	.vop_poll = prpoll,
+	.vop_dispose = fs_nodispose,
+	.vop_shrlock = fs_nosys,
 };
