@@ -165,8 +165,6 @@ static int spec_pathconf(struct	vnode *, int, ulong_t *, struct cred *,
 
 #define	S_ISFENCED(sp)	((VTOS((sp)->s_commonvp))->s_flag & SFENCED)
 
-struct vnodeops *spec_vnodeops;
-
 /*
  * *PLEASE NOTE*: If you add new entry points to specfs, do
  * not forget to add support for fencing. A fenced snode
@@ -180,43 +178,43 @@ struct vnodeops *spec_vnodeops;
  * it is any other operation, let it through.
  */
 
-const fs_operation_def_t spec_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = spec_open },
-	VOPNAME_CLOSE,		{ .vop_close = spec_close },
-	VOPNAME_READ,		{ .vop_read = spec_read },
-	VOPNAME_WRITE,		{ .vop_write = spec_write },
-	VOPNAME_IOCTL,		{ .vop_ioctl = spec_ioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = spec_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = spec_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = spec_access },
-	VOPNAME_CREATE,		{ .vop_create = spec_create },
-	VOPNAME_FSYNC,		{ .vop_fsync = spec_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = spec_inactive },
-	VOPNAME_FID,		{ .vop_fid = spec_fid },
-	VOPNAME_SEEK,		{ .vop_seek = spec_seek },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = spec_pathconf },
-	VOPNAME_FRLOCK,		{ .vop_frlock = spec_frlock },
-	VOPNAME_REALVP,		{ .vop_realvp = spec_realvp },
-	VOPNAME_GETPAGE,	{ .vop_getpage = spec_getpage },
-	VOPNAME_PUTPAGE,	{ .vop_putpage = spec_putpage },
-	VOPNAME_MAP,		{ .vop_map = spec_map },
-	VOPNAME_ADDMAP,		{ .vop_addmap = spec_addmap },
-	VOPNAME_DELMAP,		{ .vop_delmap = spec_delmap },
-	VOPNAME_POLL,		{ .vop_poll = spec_poll },
-	VOPNAME_DUMP,		{ .vop_dump = spec_dump },
-	VOPNAME_PAGEIO,		{ .vop_pageio = spec_pageio },
-	VOPNAME_SETSECATTR,	{ .vop_setsecattr = spec_setsecattr },
-	VOPNAME_GETSECATTR,	{ .vop_getsecattr = spec_getsecattr },
-	NULL,			NULL
+const struct vnodeops spec_vnodeops = {
+	.vnop_name = "specfs",
+	.vop_open = spec_open,
+	.vop_close = spec_close,
+	.vop_read = spec_read,
+	.vop_write = spec_write,
+	.vop_ioctl = spec_ioctl,
+	.vop_getattr = spec_getattr,
+	.vop_setattr = spec_setattr,
+	.vop_access = spec_access,
+	.vop_create = spec_create,
+	.vop_fsync = spec_fsync,
+	.vop_inactive = spec_inactive,
+	.vop_fid = spec_fid,
+	.vop_seek = spec_seek,
+	.vop_pathconf = spec_pathconf,
+	.vop_frlock = spec_frlock,
+	.vop_realvp = spec_realvp,
+	.vop_getpage = spec_getpage,
+	.vop_putpage = spec_putpage,
+	.vop_map = spec_map,
+	.vop_addmap = spec_addmap,
+	.vop_delmap = spec_delmap,
+	.vop_poll = spec_poll,
+	.vop_dump = spec_dump,
+	.vop_pageio = spec_pageio,
+	.vop_setsecattr = spec_setsecattr,
+	.vop_getsecattr = spec_getsecattr,
 };
 
 /*
  * Return address of spec_vnodeops
  */
-struct vnodeops *
+const struct vnodeops *
 spec_getvnodeops(void)
 {
-	return (spec_vnodeops);
+	return (&spec_vnodeops);
 }
 
 extern vnode_t *rconsvp;

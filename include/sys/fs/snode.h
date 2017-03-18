@@ -150,7 +150,7 @@ extern struct kmem_cache *snode_cache;
  * specfs functions
  */
 offset_t	spec_maxoffset(struct vnode *);
-struct vnodeops	*spec_getvnodeops(void);
+const struct vnodeops	*spec_getvnodeops(void);
 struct vnode *specvp(struct vnode *, dev_t, vtype_t, struct cred *);
 struct vnode *makespecvp(dev_t, vtype_t);
 struct vnode *other_specvp(struct vnode *);

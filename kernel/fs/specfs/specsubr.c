@@ -792,8 +792,6 @@ specinit(int fstype, char *name)
 		VFSNAME_SYNC, { .vfs_sync = spec_sync },
 		NULL, NULL
 	};
-	extern struct vnodeops *spec_vnodeops;
-	extern const fs_operation_def_t spec_vnodeops_template[];
 	struct vfsops *spec_vfsops;
 	int error;
 	dev_t dev;
@@ -804,13 +802,6 @@ specinit(int fstype, char *name)
 	error = vfs_setfsops(fstype, spec_vfsops_template, &spec_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "specinit: bad vfs ops template");
-		return (error);
-	}
-
-	error = vn_make_ops(name, spec_vnodeops_template, &spec_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "specinit: bad vnode ops template");
 		return (error);
 	}
 
