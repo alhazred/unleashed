@@ -614,7 +614,7 @@ hs_makenode(
 			vp->v_vfsp = vfsp;
 			vp->v_type = dp->type;
 			vp->v_rdev = dp->r_dev;
-			vn_setops(vp, hsfs_vnodeops);
+			vn_setops(vp, &hsfs_vnodeops);
 			vp->v_data = (caddr_t)hp;
 			vn_exists(vp);
 			/*

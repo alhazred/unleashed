@@ -184,7 +184,6 @@ _fini(void)
 	 * Tear down the operations vectors
 	 */
 	(void) vfs_freevfsops_by_type(hsfsfstype);
-	vn_freevnodeops(hsfs_vnodeops);
 
 	hs_fini_hsnode_cache();
 	hsched_fini_caches();
@@ -257,13 +256,6 @@ hsfsinit(int fstype, char *name)
 	error = vfs_setfsops(fstype, hsfs_vfsops_template, NULL);
 	if (error != 0) {
 		cmn_err(CE_WARN, "hsfsinit: bad vfs ops template");
-		return (error);
-	}
-
-	error = vn_make_ops(name, hsfs_vnodeops_template, &hsfs_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "hsfsinit: bad vnode ops template");
 		return (error);
 	}
 

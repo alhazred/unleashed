@@ -2316,29 +2316,25 @@ hsfs_pathconf(struct vnode *vp, int cmd, ulong_t *valp, struct cred *cr,
 	return (error);
 }
 
-
-
-const fs_operation_def_t hsfs_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = hsfs_open },
-	VOPNAME_CLOSE,		{ .vop_close = hsfs_close },
-	VOPNAME_READ,		{ .vop_read = hsfs_read },
-	VOPNAME_GETATTR,	{ .vop_getattr = hsfs_getattr },
-	VOPNAME_ACCESS,		{ .vop_access = hsfs_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = hsfs_lookup },
-	VOPNAME_READDIR,	{ .vop_readdir = hsfs_readdir },
-	VOPNAME_READLINK,	{ .vop_readlink = hsfs_readlink },
-	VOPNAME_FSYNC,		{ .vop_fsync = hsfs_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = hsfs_inactive },
-	VOPNAME_FID,		{ .vop_fid = hsfs_fid },
-	VOPNAME_SEEK,		{ .vop_seek = hsfs_seek },
-	VOPNAME_FRLOCK,		{ .vop_frlock = hsfs_frlock },
-	VOPNAME_GETPAGE,	{ .vop_getpage = hsfs_getpage },
-	VOPNAME_PUTPAGE,	{ .vop_putpage = hsfs_putpage },
-	VOPNAME_MAP,		{ .vop_map = hsfs_map },
-	VOPNAME_ADDMAP,		{ .vop_addmap = hsfs_addmap },
-	VOPNAME_DELMAP,		{ .vop_delmap = hsfs_delmap },
-	VOPNAME_PATHCONF,	{ .vop_pathconf = hsfs_pathconf },
-	NULL,			NULL
+const struct vnodeops hsfs_vnodeops = {
+	.vnop_name = "hsfs",
+	.vop_open = hsfs_open,
+	.vop_close = hsfs_close,
+	.vop_read = hsfs_read,
+	.vop_getattr = hsfs_getattr,
+	.vop_access = hsfs_access,
+	.vop_lookup = hsfs_lookup,
+	.vop_readdir = hsfs_readdir,
+	.vop_readlink = hsfs_readlink,
+	.vop_fsync = hsfs_fsync,
+	.vop_inactive = hsfs_inactive,
+	.vop_fid = hsfs_fid,
+	.vop_seek = hsfs_seek,
+	.vop_frlock = hsfs_frlock,
+	.vop_getpage = hsfs_getpage,
+	.vop_putpage = hsfs_putpage,
+	.vop_map = hsfs_map,
+	.vop_addmap = hsfs_addmap,
+	.vop_delmap = hsfs_delmap,
+	.vop_pathconf = hsfs_pathconf,
 };
-
-struct vnodeops *hsfs_vnodeops;

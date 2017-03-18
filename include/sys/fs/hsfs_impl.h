@@ -84,8 +84,7 @@ extern void hs_fini_hsnode_cache(void);
 /*
  * Global data structures
  */
-extern const struct fs_operation_def hsfs_vnodeops_template[];
-extern struct vnodeops *hsfs_vnodeops;
+extern const struct vnodeops hsfs_vnodeops;
 extern kmutex_t hs_mounttab_lock;
 extern struct hsfs *hs_mounttab;
 
