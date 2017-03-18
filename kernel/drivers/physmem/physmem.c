@@ -107,15 +107,14 @@ static int physmem_delmap(struct vnode *vp, offset_t off, struct as *as,
 
 static void physmem_inactive(vnode_t *vp, cred_t *crp, caller_context_t *ct);
 
-const fs_operation_def_t physmem_vnodeops_template[] = {
-	VOPNAME_GETPAGE,	{ .vop_getpage = physmem_getpage },
-	VOPNAME_ADDMAP,		{ .vop_addmap = physmem_addmap },
-	VOPNAME_DELMAP,		{ .vop_delmap = physmem_delmap },
-	VOPNAME_INACTIVE,	{ .vop_inactive = physmem_inactive },
-	NULL,			NULL
+static const struct vnodeops physmem_vnodeops = {
+	.vnop_name = "physmem",
+	.vop_getpage = physmem_getpage,
+	.vop_addmap = physmem_addmap,
+	.vop_delmap = physmem_delmap,
+	.vop_inactive = physmem_inactive,
 };
 
-vnodeops_t *physmem_vnodeops = NULL;
 
 /*
  * Removes the current process from the hash if the process has no more
@@ -315,20 +314,6 @@ physmem_remove_vnode_hash(vnode_t *vp)
 	return (0);
 }
 
-int
-physmem_setup_vnops()
-{
-	int error;
-	char *name = "physmem";
-	if (physmem_vnodeops != NULL)
-		cmn_err(CE_PANIC, "physmem vnodeops already set\n");
-	error = vn_make_ops(name, physmem_vnodeops_template, &physmem_vnodeops);
-	if (error != 0) {
-		cmn_err(CE_WARN, "physmem_setup_vnops: bad vnode ops template");
-	}
-	return (error);
-}
-
 /*
  * The guts of the PHYSMEM_SETUP ioctl.
  * Create a segment in the address space with the specified parameters.
@@ -375,7 +360,7 @@ physmem_setup_addrs(struct physmem_setup_param *pspp)
 
 	vp = vn_alloc(KM_SLEEP);
 	ASSERT(vp != NULL);	/* SLEEP can't return NULL */
-	vn_setops(vp, physmem_vnodeops);
+	vn_setops(vp, &physmem_vnodeops);
 
 	php->ph_vnode = vp;
 
@@ -876,10 +861,6 @@ physmem_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	physmem_dip = dip;
 
 	/* Initialize driver specific data */
-	if (physmem_setup_vnops()) {
-		ddi_remove_minor_node(dip, ddi_get_name(dip));
-		return (DDI_FAILURE);
-	}
 
 	for (i = 0; i < PPH_SIZE; i++)
 		pph[i] = NULL;
@@ -906,11 +887,7 @@ physmem_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 
 	mutex_enter(&physmem_mutex);
 	if (physmem_vnodecnt == 0) {
-		if (physmem_vnodeops != NULL) {
-			vn_freevnodeops(physmem_vnodeops);
-			physmem_vnodeops = NULL;
-			page_capture_unregister_callback(PC_PHYSMEM);
-		}
+		page_capture_unregister_callback(PC_PHYSMEM);
 	} else {
 		ret = EBUSY;
 	}
