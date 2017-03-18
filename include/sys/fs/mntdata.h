@@ -103,7 +103,7 @@ typedef struct mntdata {
  */
 #define	MNT_SHOWHIDDEN	0x1	/* Include MS_NOMNTTAB mounts in snapshots. */
 
-extern	struct vnodeops	*mntvnodeops;
+extern	const struct vnodeops	mntvnodeops;
 extern	void mntfs_getmntopts(struct vfs *, char **, size_t *);
 
 #endif	/* _KERNEL */

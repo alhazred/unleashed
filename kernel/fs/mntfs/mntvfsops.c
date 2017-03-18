@@ -123,7 +123,7 @@ mntinitrootnode(mntnode_t *mnp)
 	vp = MTOV(mnp);
 
 	vp->v_flag = VROOT|VNOCACHE|VNOMAP|VNOSWAP|VNOMOUNT;
-	vn_setops(vp, mntvnodeops);
+	vn_setops(vp, &mntvnodeops);
 	vp->v_type = VREG;
 	vp->v_data = (caddr_t)mnp;
 }
@@ -138,7 +138,6 @@ mntinit(int fstype, char *name)
 		VFSNAME_STATVFS,	{ .vfs_statvfs = mntstatvfs },
 		NULL,			NULL
 	};
-	extern const fs_operation_def_t mnt_vnodeops_template[];
 	int error;
 
 	mntfstype = fstype;
@@ -149,15 +148,6 @@ mntinit(int fstype, char *name)
 	error = vfs_setfsops(fstype, mnt_vfsops_template, NULL);
 	if (error != 0) {
 		cmn_err(CE_WARN, "mntinit: bad vfs ops template");
-		return (error);
-	}
-
-	/* Vnode ops too. */
-
-	error = vn_make_ops(name, mnt_vnodeops_template, &mntvnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "mntinit: bad vnode ops template");
 		return (error);
 	}
 

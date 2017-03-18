@@ -46,7 +46,6 @@
 
 static mntnode_t *mntgetnode(vnode_t *);
 
-vnodeops_t *mntvnodeops;
 extern void vfs_mnttab_readop(void);
 
 /*
@@ -1143,7 +1142,7 @@ mntgetnode(vnode_t *dp)
 	rw_init(&mnp->mnt_contents, NULL, RW_DEFAULT, NULL);
 	vp = MTOV(mnp);
 	vp->v_flag = VNOCACHE|VNOMAP|VNOSWAP|VNOMOUNT;
-	vn_setops(vp, mntvnodeops);
+	vn_setops(vp, &mntvnodeops);
 	vp->v_vfsp = dp->v_vfsp;
 	vp->v_type = VREG;
 	vp->v_data = (caddr_t)mnp;
@@ -1873,19 +1872,19 @@ mntcmp(vnode_t *vp1, vnode_t *vp2, caller_context_t *ct)
 /*
  * /mntfs vnode operations vector
  */
-const fs_operation_def_t mnt_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = mntopen },
-	VOPNAME_CLOSE,		{ .vop_close = mntclose },
-	VOPNAME_READ,		{ .vop_read = mntread },
-	VOPNAME_IOCTL,		{ .vop_ioctl = mntioctl },
-	VOPNAME_GETATTR,	{ .vop_getattr = mntgetattr },
-	VOPNAME_ACCESS,		{ .vop_access = mntaccess },
-	VOPNAME_FSYNC,		{ .vop_fsync = mntfsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = mntinactive },
-	VOPNAME_SEEK,		{ .vop_seek = mntseek },
-	VOPNAME_POLL,		{ .vop_poll = mntpoll },
-	VOPNAME_CMP,		{ .vop_cmp = mntcmp },
-	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
-	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
-	NULL,			NULL
+const struct vnodeops mntvnodeops = {
+	.vnop_name = "mntfs",
+	.vop_open = mntopen,
+	.vop_close = mntclose,
+	.vop_read = mntread,
+	.vop_ioctl = mntioctl,
+	.vop_getattr = mntgetattr,
+	.vop_access = mntaccess,
+	.vop_fsync = mntfsync,
+	.vop_inactive = mntinactive,
+	.vop_seek = mntseek,
+	.vop_poll = mntpoll,
+	.vop_cmp = mntcmp,
+	.vop_dispose = fs_nodispose,
+	.vop_shrlock = fs_nosys,
 };
