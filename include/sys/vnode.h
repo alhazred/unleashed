@@ -240,7 +240,6 @@ typedef struct vnode {
 
 	struct vfs	*v_vfsmountedhere; /* ptr to vfs mounted here */
 	struct vnodeops	*v_op;		/* vnode operations */
-	struct page	*v_pages;	/* vnode pages list */
 	struct filock	*v_filocks;	/* ptr to filock list */
 	struct shrlocklist *v_shrlocks;	/* ptr to shrlock list */
 	krwlock_t	v_nbllock;	/* sync for NBMAND locks */
@@ -260,8 +259,50 @@ typedef struct vnode {
 	uint_t		v_count_dnlc;	/* dnlc reference count */
 
 	avl_tree_t	v_pagecache;
+	list_t		v_pagecache_list;
 	kmutex_t	v_pagecache_lock;
 } vnode_t;
+
+#if defined(_KERNEL)
+#define vnode_add_page_head(v,p)	list_insert_head(&(v)->v_pagecache_list, (p))
+#define vnode_add_page_tail(v,p)	list_insert_tail(&(v)->v_pagecache_list, (p))
+#define vnode_remove_page(v,p)		list_remove(&(v)->v_pagecache_list, (p))
+#define vnode_get_head(v)		list_head(&(v)->v_pagecache_list)
+#define vnode_get_tail(v)		list_tail(&(v)->v_pagecache_list)
+#define vnode_get_prev(v,p)		list_prev(&(v)->v_pagecache_list, (p))
+#define vnode_get_next(v,p)		list_next(&(v)->v_pagecache_list, (p))
+
+static inline struct page *
+vnode_get_prev_loop(struct vnode *vnode, struct page *page)
+{
+	struct page *p;
+
+	p = vnode_get_prev(vnode, page);
+	if (p == NULL)
+		p = vnode_get_tail(vnode);
+
+	return (p);
+}
+
+static inline struct page *
+vnode_get_next_loop(struct vnode *vnode, struct page *page)
+{
+	struct page *p;
+
+	p = vnode_get_next(vnode, page);
+	if (p == NULL)
+		p = vnode_get_head(vnode);
+
+	return (p);
+}
+
+static inline void
+vnode_move_page_tail(struct vnode *vnode, struct page *page)
+{
+	vnode_remove_page(vnode, page);
+	vnode_add_page_tail(vnode, page);
+}
+#endif
 
 #define	IS_DEVVP(vp)	\
 	((vp)->v_type == VCHR || (vp)->v_type == VBLK || (vp)->v_type == VFIFO)
@@ -327,10 +368,11 @@ typedef struct vn_vfslocks_entry {
 #define	V_LOCALITY	0x8000	/* whether locality aware */
 
 /*
- * Flag that indicates the VM should maintain the v_pages list with all modified
- * pages on one end and unmodified pages at the other. This makes finding dirty
- * pages to write back to disk much faster at the expense of taking a minor
- * fault on the first store instruction which touches a writable page.
+ * Flag that indicates the VM should maintain the v_pagecache_list with all
+ * modified pages on one end and unmodified pages at the other. This makes
+ * finding dirty pages to write back to disk much faster at the expense of
+ * taking a minor fault on the first store instruction which touches a
+ * writable page.
  */
 #define	VMODSORT	(0x10000)
 #define	IS_VMODSORT(vp) \

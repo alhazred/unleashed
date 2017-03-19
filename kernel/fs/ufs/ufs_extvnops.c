@@ -97,10 +97,10 @@ ufs_rdwr_data(
 	fs = ufsvfsp->vfs_fs;
 	iolen = len;
 
-	DEBUGF((CE_CONT, "?ufs_rdwr: %s vp: %p pages:%p  off %llx len %lx"
+	DEBUGF((CE_CONT, "?ufs_rdwr: %s vp: %p off %llx len %lx"
 	    " isize: %llx fdb: %p\n",
 	    flags & B_READ ? "READ" : "WRITE", (void *)vnodep,
-	    (void *)vnodep->v_pages, offset1, iolen, ip->i_size, (void *)fdbp));
+	    offset1, iolen, ip->i_size, (void *)fdbp));
 
 	rw_enter(&ip->i_ufsvfs->vfs_dqrwlock, RW_READER);
 	rw_enter(&ip->i_contents, rwtype);
@@ -191,8 +191,8 @@ ufs_rdwr_data(
 		    offset1, (iolen - curlen)));
 	}
 
-	DEBUGF((CE_CONT, "?ufs_rdwr_data: off %llx len %lx pages: %p ------\n",
-	    offset1, (iolen - curlen), (void *)vnodep->v_pages));
+	DEBUGF((CE_CONT, "?ufs_rdwr_data: off %llx len %lx ------\n",
+	    offset1, (iolen - curlen)));
 
 	rw_exit(&ip->i_contents);
 	rw_exit(&ip->i_ufsvfs->vfs_dqrwlock);

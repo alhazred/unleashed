@@ -2395,7 +2395,7 @@ vn_reinit(vnode_t *vp)
 
 	vp->v_filocks = NULL;
 	vp->v_shrlocks = NULL;
-	vp->v_pages = NULL;
+	VERIFY(!vn_has_cached_data(vp));
 
 	vp->v_locality = NULL;
 	vp->v_xattrdir = NULL;
@@ -2653,7 +2653,7 @@ vn_has_mandatory_locks(vnode_t *vp, int mode)
 int
 vn_has_cached_data(vnode_t *vp)
 {
-	return (vp->v_pages != NULL);
+	return (!list_is_empty(&vp->v_pagecache_list));
 }
 
 /*

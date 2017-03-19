@@ -176,14 +176,14 @@ nfs4_dross_pages(vnode_t *vp)
 
 	vphm = page_vnode_mutex(vp);
 	mutex_enter(vphm);
-	if ((pp = vp->v_pages) != NULL) {
-		do {
-			if (PP_ISPVN_TAG(pp) &&
-			    pp->p_fsdata != C_NOCOMMIT) {
-				mutex_exit(vphm);
-				return (1);
-			}
-		} while ((pp = pp->p_list.vnode.next) != vp->v_pages);
+	for (pp = vnode_get_head(vp);
+	     pp != NULL;
+	     pp = vnode_get_next(vp, pp)) {
+		if (PP_ISPVN_TAG(pp) &&
+		    pp->p_fsdata != C_NOCOMMIT) {
+			mutex_exit(vphm);
+			return (1);
+		}
 	}
 	mutex_exit(vphm);
 

@@ -11927,19 +11927,12 @@ nfs4_get_commit(vnode_t *vp)
 	mutex_enter(vphm);
 
 	/*
-	 * If there are no pages associated with this vnode, then
-	 * just return.
-	 */
-	if ((pp = vp->v_pages) == NULL) {
-		mutex_exit(vphm);
-		return;
-	}
-
-	/*
 	 * Step through all of the pages associated with this vnode
 	 * looking for pages which need to be committed.
 	 */
-	do {
+	for (pp = vnode_get_head(vp);
+	     pp != NULL;
+	     pp = vnode_get_next(vp, pp)) {
 		/* Skip marker pages. */
 		if (PP_ISPVN_TAG(pp))
 			continue;
@@ -11990,7 +11983,7 @@ nfs4_get_commit(vnode_t *vp)
 			    rp->r_commit.c_commbase + PAGESIZE;
 		}
 		page_add(&rp->r_commit.c_pages, pp);
-	} while ((pp = pp->p_list.vnode.next) != vp->v_pages);
+	}
 
 	mutex_exit(vphm);
 }
@@ -12028,7 +12021,7 @@ nfs4_get_commit_range(vnode_t *vp, uoff_t soff, size_t len)
 	 * If there are no pages associated with this vnode, then
 	 * just return.
 	 */
-	if ((pp = vp->v_pages) == NULL)
+	if (!vn_has_cached_data(vp))
 		return;
 	/*
 	 * Calculate the ending offset.
