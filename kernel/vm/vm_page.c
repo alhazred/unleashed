@@ -3167,7 +3167,7 @@ top:
  * low level routine to add page `page' to the AVL tree and vnode chains for
  * [vp, offset]
  *
- * Pages are normally inserted at the start of a vnode's v_pages list.
+ * Pages are normally inserted at the start of a vnode's v_pagecache_list.
  * If the vnode is VMODSORT and the page is modified, it goes at the end.
  * This can happen when a modified page is relocated for DR.
  *
@@ -3213,12 +3213,10 @@ page_do_hashin(page_t *page, vnode_t *vnode, uoff_t offset)
 	/*
 	 * Add the page to the vnode's list of pages
 	 */
-	if (vnode->v_pages != NULL && IS_VMODSORT(vnode) && hat_ismod(page))
-		listp = &vnode->v_pages->p_list.vnode.prev->p_list.vnode.next;
+	if (IS_VMODSORT(vnode) && hat_ismod(page))
+		vnode_add_page_tail(vnode, page);
 	else
-		listp = &vnode->v_pages;
-
-	page_vpadd(listp, page);
+		vnode_add_page_head(vnode, page);
 
 	return (1);
 }
@@ -3273,11 +3271,7 @@ page_do_hashout(page_t *page)
 
 	avl_remove(&vnode->v_pagecache, page);
 
-	/*
-	 * Now remove it from its associated vnode.
-	 */
-	if (vnode->v_pages)
-		page_vpsub(&vnode->v_pages, page);
+	vnode_remove_page(vnode, page);
 
 	page_clr_all_props(page);
 	PP_CLRSWAP(page);
@@ -3495,22 +3489,21 @@ page_list_next(page_t *pp)
 void
 page_vpadd(page_t **ppp, page_t *pp)
 {
-	if (*ppp == NULL) {
-		pp->p_list.vnode.next = pp->p_list.vnode.prev = pp;
-	} else {
-		pp->p_list.vnode.next = *ppp;
-		pp->p_list.vnode.prev = (*ppp)->p_list.vnode.prev;
-		(*ppp)->p_list.vnode.prev = pp;
-		pp->p_list.vnode.prev->p_list.vnode.next = pp;
-	}
-	*ppp = pp;
+	panic("%s should not be used", __func__);
 }
 
 void
 page_lpadd(page_t **ppp, page_t *pp)
 {
-	ASSERT(offsetof(page_t, p_list.vnode) == offsetof(page_t, p_list.largepg));
-	page_vpadd(ppp, pp);
+	if (*ppp == NULL) {
+		pp->p_list.largepg.next = pp->p_list.largepg.prev = pp;
+	} else {
+		pp->p_list.largepg.next = *ppp;
+		pp->p_list.largepg.prev = (*ppp)->p_list.largepg.prev;
+		(*ppp)->p_list.largepg.prev = pp;
+		pp->p_list.largepg.prev->p_list.largepg.next = pp;
+	}
+	*ppp = pp;
 }
 
 /*
@@ -3522,6 +3515,12 @@ page_lpadd(page_t **ppp, page_t *pp)
 void
 page_vpsub(page_t **ppp, page_t *pp)
 {
+	panic("%s should not be used", __func__);
+}
+
+void
+page_lpsub(page_t **ppp, page_t *pp)
+{
 	if (*ppp == NULL || pp == NULL) {
 		panic("page_vpsub: bad arg(s): pp %p, *ppp %p",
 		    (void *)pp, (void *)(*ppp));
@@ -3529,22 +3528,15 @@ page_vpsub(page_t **ppp, page_t *pp)
 	}
 
 	if (*ppp == pp)
-		*ppp = pp->p_list.vnode.next;		/* go to next page */
+		*ppp = pp->p_list.largepg.next;		/* go to next page */
 
 	if (*ppp == pp)
 		*ppp = NULL;			/* page list is gone */
 	else {
-		pp->p_list.vnode.prev->p_list.vnode.next = pp->p_list.vnode.next;
-		pp->p_list.vnode.next->p_list.vnode.prev = pp->p_list.vnode.prev;
+		pp->p_list.largepg.prev->p_list.largepg.next = pp->p_list.largepg.next;
+		pp->p_list.largepg.next->p_list.largepg.prev = pp->p_list.largepg.prev;
 	}
-	pp->p_list.vnode.prev = pp->p_list.vnode.next = pp;	/* make pp a list of one */
-}
-
-void
-page_lpsub(page_t **ppp, page_t *pp)
-{
-	ASSERT(offsetof(page_t, p_list.vnode) == offsetof(page_t, p_list.largepg));
-	page_vpsub(ppp, pp);
+	pp->p_list.largepg.prev = pp->p_list.largepg.next = pp;	/* make pp a list of one */
 }
 
 /*
@@ -4249,10 +4241,10 @@ top:
  *	page_do_hashin(new, vp, off)
  *
  * doesn't work, since
- *  1) if old is the only page on the vnode, the v_pages list has a window
+ *  1) if old is the only page on the vnode, the v_pagecache_list has a window
  *     where it looks empty. This will break file system assumptions.
  * and
- *  2) pvn_vplist_dirty() can't deal with pages moving on the v_pages list.
+ *  2) pvn_vplist_dirty() can't deal with pages moving on the v_pagecache_list.
  */
 static void
 page_do_relocate_hash(page_t *new, page_t *old)
@@ -4281,23 +4273,12 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	/*
 	 * replace old with new on the vnode's page list
 	 */
-	if (old->p_list.vnode.next == old) {
-		new->p_list.vnode.next = new;
-		new->p_list.vnode.prev = new;
-	} else {
-		new->p_list.vnode.next = old->p_list.vnode.next;
-		new->p_list.vnode.prev = old->p_list.vnode.prev;
-		new->p_list.vnode.next->p_list.vnode.prev = new;
-		new->p_list.vnode.prev->p_list.vnode.next = new;
-	}
-	if (vp->v_pages == old)
-		vp->v_pages = new;
+	list_insert_before(&vp->v_pagecache_list, old, new);
+	list_remove(&vp->v_pagecache_list, old);
 
 	/*
 	 * clear out the old page
 	 */
-	old->p_list.vnode.next = NULL;
-	old->p_list.vnode.prev = NULL;
 	old->p_vnode = NULL;
 	PP_CLRSWAP(old);
 	old->p_offset = (uoff_t)-1;
@@ -7213,6 +7194,8 @@ pagecache_init(struct vnode *vnode)
 {
 	avl_create(&vnode->v_pagecache, pagecache_cmp, sizeof (struct page),
 	    offsetof(struct page, p_pagecache));
+	list_create(&vnode->v_pagecache_list, sizeof (struct page),
+	    offsetof(struct page, p_list.vnode));
 	mutex_init(&vnode->v_pagecache_lock, NULL, MUTEX_DEFAULT, NULL);
 }
 
@@ -7220,5 +7203,6 @@ void
 pagecache_fini(struct vnode *vnode)
 {
 	mutex_destroy(&vnode->v_pagecache_lock);
+	list_destroy(&vnode->v_pagecache_list);
 	avl_destroy(&vnode->v_pagecache);
 }

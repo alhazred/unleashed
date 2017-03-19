@@ -686,8 +686,15 @@ hs_freenode(vnode_t *vp, struct hsfs *fsp, int nopage)
 			/* clean all old pages */
 			(void) pvn_vplist_dirty(vp, 0,
 			    hsfs_putapage, B_INVAL, NULL);
-			/* XXX - can we remove pages by fiat like this??? */
-			vp->v_pages = NULL;
+			/*
+			 * XXX - can we remove pages by fiat like this???
+			 * This really doesn't seem safe.
+			 */
+			vp->v_pagecache_list.list_head.list_next =
+			    vp->v_pagecache_list.list_head.list_prev =
+			    &vp->v_pagecache_list.list_head;
+			cmn_err(CE_WARN, "%s: dropped vnode cached pages in a "
+			    "questionable way", __func__);
 		}
 		mutex_destroy(&hp->hs_contents_lock);
 		vn_invalid(vp);

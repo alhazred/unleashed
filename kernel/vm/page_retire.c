@@ -773,8 +773,8 @@ pr_list_kstat_update(kstat_t *ksp, int rw)
 	}
 
 	count = 1;
-	for (pp = retired_pages->v_pages->p_list.vnode.next;
-	    pp != retired_pages->v_pages; pp = pp->p_list.vnode.next) {
+	for (pp = vnode_get_next(retired_pages, vnode_get_head(retired_pages));
+	    pp != NULL; pp = vnode_get_next(retired_pages, pp)) {
 		count++;
 	}
 	mutex_exit(vphm);
@@ -808,7 +808,7 @@ pr_list_kstat_snapshot(kstat_t *ksp, void *buf, int rw)
 
 	vphm = page_vnode_mutex(retired_pages);
 	mutex_enter(vphm);
-	pp = retired_pages->v_pages;
+	pp = vnode_get_head(retired_pages);
 	if (((caddr_t)kspmem >= (caddr_t)buf + ksp->ks_data_size) ||
 	    (pp == NULL)) {
 		mutex_exit(vphm);
@@ -817,8 +817,8 @@ pr_list_kstat_snapshot(kstat_t *ksp, void *buf, int rw)
 	kspmem->address = ptob(pp->p_pagenum);
 	kspmem->size = PAGESIZE;
 	kspmem++;
-	for (pp = pp->p_list.vnode.next; pp != retired_pages->v_pages;
-	    pp = pp->p_list.vnode.next, kspmem++) {
+	for (pp = vnode_get_next(retired_pages, pp); pp != NULL;
+	    pp = vnode_get_next(retired_pages, pp), kspmem++) {
 		if ((caddr_t)kspmem >= (caddr_t)buf + ksp->ks_data_size)
 			break;
 		kspmem->address = ptob(pp->p_pagenum);

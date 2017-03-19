@@ -2935,7 +2935,7 @@ nfs4_directio(vnode_t *vp, int cmd, cred_t *cr)
 
 /*
  * Return TRUE if the file has any pages.  Always go back to
- * the master vnode to check v_pages since none of the shadows
+ * the master vnode to check it since none of the shadows
  * can have pages.
  */
 

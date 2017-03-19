@@ -1327,7 +1327,7 @@ ufs_itrunc(struct inode *oip, uoff_t length, int flags, cred_t *cr)
 		/*
 		 * BugId 4069932
 		 * Make sure that the relevant partial page appears in
-		 * the v_pages list, so that pvn_vpzero() will do its
+		 * the v_pagecache_list, so that pvn_vpzero() will do its
 		 * job.  Since doing this correctly requires everything
 		 * in rdip() except for the uiomove(), it's easier and
 		 * safer to do the uiomove() rather than duplicate the

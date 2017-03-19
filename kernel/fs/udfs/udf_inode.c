@@ -385,7 +385,7 @@ tryagain:
 		return (EINVAL);
 	}
 	if (vn_has_cached_data(vp)) {
-		cmn_err(CE_WARN, "ud_iget: v_pages not NULL\n");
+		cmn_err(CE_WARN, "ud_iget: v_pagecache_list is not NULL\n");
 		mutex_exit(&ud_icache_lock);
 		rw_exit(&ip->i_contents);
 		if (pbp != NULL) {
@@ -1082,7 +1082,8 @@ tryagain:
 		 */
 		mutex_enter(&vp->v_lock);
 		if (vn_has_cached_data(vp)) {
-			cmn_err(CE_WARN, "ud_iinactive: v_pages not NULL\n");
+			cmn_err(CE_WARN, "ud_iinactive: v_pagecache_list is "
+			    "not NULL\n");
 		}
 		vp->v_count--;
 		mutex_exit(&vp->v_lock);
@@ -1097,7 +1098,8 @@ tryagain:
 	} else {
 		mutex_exit(&ud_nino_lock);
 		if (vn_has_cached_data(vp)) {
-			cmn_err(CE_WARN, "ud_iinactive: v_pages not NULL\n");
+			cmn_err(CE_WARN, "ud_iinactive: v_pagecache_list is "
+			    "not NULL\n");
 		}
 		/*
 		 * Try to free the inode. We must make sure

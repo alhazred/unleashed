@@ -460,7 +460,7 @@ void	hat_setstat(struct as *, caddr_t, size_t, uint_t);
 #define	P_MOD	0x1		/* the modified bit */
 #define	P_REF	0x2		/* the referenced bit */
 #define	P_RO	0x4		/* Read only page */
-#define	P_NSH	0x8		/* Not to shuffle v_pages */
+#define	P_NSH	0x8		/* Not to shuffle v_pagecache_list */
 
 #define	hat_ismod(pp)		(hat_page_getattr(pp, P_MOD))
 #define	hat_isref(pp)		(hat_page_getattr(pp, P_REF))

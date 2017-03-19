@@ -401,10 +401,8 @@ pvn_write_done(page_t *plist, int flags)
 			 */
 			vphm = page_vnode_mutex(vp);
 			mutex_enter(vphm);
-			if ((pp->p_list.vnode.next != pp) && !hat_ismod(pp)) {
-				page_vpsub(&vp->v_pages, pp);
-				page_vpadd(&vp->v_pages, pp);
-			}
+			if (!hat_ismod(pp))
+				vnode_move_page_tail(vp, pp);
 			mutex_exit(vphm);
 		}
 
@@ -690,6 +688,12 @@ pvn_init()
 	    NULL, NULL, NULL, NULL, 0);
 }
 
+static inline void
+move_marker(struct vnode *vnode, struct page *ref, struct page *mark)
+{
+	list_remove(&vnode->v_pagecache_list, mark);
+	list_insert_before(&vnode->v_pagecache_list, ref, mark);
+}
 
 /*
  * Process a vnode's page list for all pages whose offset is >= off.
@@ -736,7 +740,6 @@ pvn_vplist_dirty(
 	int		error;
 	kmutex_t	*vphm;
 	se_t		se;
-	page_t		**where_to_move;
 
 	ASSERT(vp->v_type != VCHR);
 
@@ -790,28 +793,25 @@ pvn_vplist_dirty(
 	/*
 	 * insert the markers and loop through the list of pages
 	 */
-	page_vpadd(&vp->v_pages->p_list.vnode.prev->p_list.vnode.next, mark);
-	page_vpadd(&mark->p_list.vnode.next, end);
+	vnode_add_page_tail(vp, mark);
+	vnode_add_page_tail(vp, end);
+
 	for (;;) {
 
 		/*
 		 * If only doing an async write back, then we can
 		 * stop as soon as we get to start of the list.
 		 */
-		if (flags == B_ASYNC && vp->v_pages == mark)
+		if (flags == B_ASYNC && vnode_get_head(vp) == mark)
 			break;
+
+		pp = vnode_get_prev_loop(vp, mark);
 
 		/*
 		 * otherwise stop when we've gone through all the pages
 		 */
-		if (mark->p_list.vnode.prev == end)
+		if (pp == end)
 			break;
-
-		pp = mark->p_list.vnode.prev;
-		if (vp->v_pages == pp)
-			where_to_move = &vp->v_pages;
-		else
-			where_to_move = &pp->p_list.vnode.prev->p_list.vnode.next;
 
 		ASSERT(pp->p_vnode == vp);
 
@@ -833,10 +833,10 @@ pvn_vplist_dirty(
 				page_t	*chk = pp;
 				int	attr;
 
-				page_vpsub(&vp->v_pages, mark);
-				page_vpadd(where_to_move, mark);
+				move_marker(vp, pp, mark);
+
 				do {
-					chk = chk->p_list.vnode.prev;
+					chk = vnode_get_prev_loop(vp, chk);
 					ASSERT(chk != end);
 					if (chk == mark)
 						continue;
@@ -844,13 +844,12 @@ pvn_vplist_dirty(
 					    P_REF);
 					if ((attr & P_MOD) == 0)
 						continue;
-					panic("v_pages list not all clean: "
+					panic("v_pagecache_list not all clean: "
 					    "page_t*=%p vnode=%p off=%lx "
 					    "attr=0x%x last clean page_t*=%p\n",
-					    (void *)chk, (void *)chk->p_vnode,
-					    (long)chk->p_offset, attr,
-					    (void *)pp);
-				} while (chk != vp->v_pages);
+					    chk, chk->p_vnode,
+					    (long)chk->p_offset, attr, pp);
+				} while (chk != vnode_get_head(vp));
 #endif
 				break;
 			} else if (!(flags & B_ASYNC) && !hat_ismod(pp)) {
@@ -871,8 +870,7 @@ pvn_vplist_dirty(
 		 * Just move the marker and continue.
 		 */
 		if (pp->p_offset < off) {
-			page_vpsub(&vp->v_pages, mark);
-			page_vpadd(where_to_move, mark);
+			move_marker(vp, pp, mark);
 			continue;
 		}
 
@@ -897,15 +895,13 @@ pvn_vplist_dirty(
 			/*
 			 * It's ok to move the marker page now.
 			 */
-			page_vpsub(&vp->v_pages, mark);
-			page_vpadd(where_to_move, mark);
+			move_marker(vp, pp, mark);
 		} else {
 
 			/*
 			 * update the marker page for all remaining cases
 			 */
-			page_vpsub(&vp->v_pages, mark);
-			page_vpadd(where_to_move, mark);
+			move_marker(vp, pp, mark);
 
 			/*
 			 * For write backs, If we can't lock the page, it's
@@ -953,12 +949,13 @@ pvn_vplist_dirty(
 		}
 		mutex_enter(vphm);
 	}
-	page_vpsub(&vp->v_pages, mark);
-	page_vpsub(&vp->v_pages, end);
+	vnode_remove_page(vp, mark);
+	vnode_remove_page(vp, end);
 
 leave:
 	/*
-	 * Release v_pages mutex, also VVMLOCK and wakeup blocked thrds
+	 * Release v_pagecache_list mutex, also VVMLOCK and wakeup blocked
+	 * threads
 	 */
 	mutex_exit(vphm);
 	kmem_cache_free(marker_cache, mark);
@@ -971,12 +968,10 @@ leave:
 }
 
 /*
- * Walk the vp->v_pages list, for every page call the callback function
+ * Walk the vp->v_pagecache_list, for every page call the callback function
  * pointed by *page_check. If page_check returns non-zero, then mark the
- * page as modified and if VMODSORT is set, move it to the end of v_pages
- * list. Moving makes sense only if we have at least two pages - this also
- * avoids having v_pages temporarily being NULL after calling page_vpsub()
- * if there was just one page.
+ * page as modified and if VMODSORT is set, move it to the end of
+ * v_pagecache_list. Moving makes sense only if we have at least two pages.
  */
 void
 pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
@@ -993,12 +988,12 @@ pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
 		return;
 	}
 
-	end = vp->v_pages->p_list.vnode.prev;
-	shuffle = IS_VMODSORT(vp) && (vp->v_pages != end);
-	pp = vp->v_pages;
+	end = vnode_get_tail(vp);
+	pp = vnode_get_head(vp);
+	shuffle = IS_VMODSORT(vp) && (pp != end);
 
 	for (;;) {
-		next = pp->p_list.vnode.next;
+		next = vnode_get_next_loop(vp, pp);
 		if (!PP_ISPVN_TAG(pp) && page_check(pp)) {
 			/*
 			 * hat_setmod_only() in contrast to hat_setmod() does
@@ -1006,12 +1001,8 @@ pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
 			 * page_vnode_mutex. Exactly what we need.
 			 */
 			hat_setmod_only(pp);
-			if (shuffle) {
-				page_vpsub(&vp->v_pages, pp);
-				ASSERT(vn_has_cached_data(vp));
-				page_vpadd(&vp->v_pages->p_list.vnode.prev->p_list.vnode.next,
-				    pp);
-			}
+			if (shuffle)
+				vnode_move_page_tail(vp, pp);
 		}
 		/* Stop if we have just processed the last page. */
 		if (pp == end)

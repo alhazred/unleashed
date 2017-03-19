@@ -1540,12 +1540,11 @@ i_cpr_find_ppages(void)
 	 * these pages are mostly comprised of forthdebug words
 	 */
 	vcnt = 0;
-	for (pp = promvp.v_pages; pp; ) {
+	for (pp = vnode_get_head(&promvp);
+	     pp != NULL;
+	     pp = vnode_get_next(&promvp, pp)) {
 		if (cpr_setbit(pp->p_offset, mapflag) == 0)
 			vcnt++;
-		pp = pp->p_list.vnode.next;
-		if (pp == promvp.v_pages)
-			break;
 	}
 
 	/*

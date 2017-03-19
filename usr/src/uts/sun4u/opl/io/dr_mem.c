@@ -390,12 +390,9 @@ dr_memlist_del_retired_pages(struct memlist *mlist)
 
 	PR_MEM("%s\n", f);
 
-	if ((pp = vp->v_pages) == NULL) {
-		mutex_exit(vphm);
-		return (mlist);
-	}
-
-	do {
+	for (pp = vnode_get_head(vp);
+	     pp != NULL;
+	     pp = vnode_get_next(vp, pp)) {
 		ASSERT(pp != NULL);
 		ASSERT(pp->p_vnode == retired_pages);
 
@@ -418,7 +415,7 @@ dr_memlist_del_retired_pages(struct memlist *mlist)
 		}
 
 		page_unlock(pp);
-	} while ((pp = pp->p_list.vnode.next) != vp->v_pages);
+	}
 
 	mutex_exit(vphm);
 

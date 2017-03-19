@@ -979,18 +979,15 @@ kcage_init(pgcnt_t preferred_size)
 	 * and capture them into the Cage.  These will primarily
 	 * be pages gotten through boot_alloc().
 	 */
-	if (kvp.v_pages) {
-
-		pp = kvp.v_pages;
-		do {
-			ASSERT(!PP_ISFREE(pp));
-			ASSERT(pp->p_szc == 0);
-			if (PP_ISNORELOC(pp) == 0) {
-				PP_SETNORELOC(pp);
-				PLCNT_XFER_NORELOC(pp);
-			}
-		} while ((pp = pp->p_list.vnode.next) != kvp.v_pages);
-
+	for (pp = vnode_get_head(&kvp);
+	     pp != NULL;
+	     pp = vnode_get_next(&kvp, pp)) {
+		ASSERT(!PP_ISFREE(pp));
+		ASSERT(pp->p_szc == 0);
+		if (PP_ISNORELOC(pp) == 0) {
+			PP_SETNORELOC(pp);
+			PLCNT_XFER_NORELOC(pp);
+		}
 	}
 
 	kcage_on = 1;

@@ -726,10 +726,13 @@ physmem_inactive(vnode_t *vp, cred_t *crp, caller_context_t *ct)
 
 	/*
 	 * At this point in time, no other logic can be adding or removing
-	 * pages from the vnode, otherwise the v_pages list could be inaccurate.
+	 * pages from the vnode, otherwise the v_pagecache_list could be
+	 * inaccurate.
 	 */
 
-	while ((pp = vp->v_pages) != NULL) {
+	for (pp = vnode_get_head(vp);
+	     pp != NULL;
+	     pp = vnode_get_next(vp, pp)) {
 		page_t *rpp;
 		if (page_tryupgrade(pp)) {
 			/*

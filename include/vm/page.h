@@ -274,13 +274,12 @@ struct as;
  * are anchored in architecture dependent ways (to handle page coloring etc.).
  *
  * Pages associated with a given vnode appear on a list anchored in the
- * vnode by the `v_pages' field.  They are linked together with
- * `p_list.vnode.next' and `p_list.vnode.prev'.  The field `p_offset'
- * contains a page's offset within the vnode.  The pages on this list are
- * not kept in offset order.  These lists, in a manner similar to the hash
- * lists, are protected by an array of mutexes called `vph_hash'.  Before
- * searching or modifying this chain the appropriate mutex in the
- * vph_hash[] array must be held.
+ * vnode by the `v_pagecache' field.  They are linked together with
+ * `p_list.vnode'.  The field `p_offset' contains a page's offset within
+ * the vnode.  The pages on this list are not kept in offset order.  These
+ * lists, in a manner similar to the hash lists, are protected by an array
+ * of mutexes called `vph_hash'.  Before searching or modifying this chain
+ * the appropriate mutex in the vph_hash[] array must be held.
  *
  * Again, each of the lists that a page can appear on is protected by a
  * mutex.  Before reading or writing any of the fields comprising the
@@ -350,7 +349,8 @@ struct as;
  *
  * 	ph_mutex[]'s protect the page_hash[] array and its chains.
  *
- *	v_pagecache_lock protects the v_pages field and the vp page chains.
+ *	v_pagecache_lock protects the v_pagecache_list field and the vp page
+ *	chains.
  *
  *	First lock the page, then the hash chain, then the vnode chain.  When
  *	this is not possible `trylocks' must be used.  Sleeping while holding
@@ -410,7 +410,8 @@ struct as;
  *							    a v_pagecache_lock
  *							    or pse_mutex.
  *	=====================================================================
- *	vp->v_pages	v_pagecache_lock v_pagecache_lock   can only acquire
+ *	vp->v_pagecache_list
+ *			v_pagecache_lock v_pagecache_lock   can only acquire
  *							    a pse_mutex while
  *							    holding this lock.
  *	=====================================================================
@@ -509,10 +510,7 @@ typedef struct page {
 	struct page	*unused;	/* used to be p_hash; keep this here for binary compat */
 	union {
 		/* vnode page list - used when on cached list */
-		struct {
-			struct page *next;
-			struct page *prev;
-		} vnode;
+		struct list_node vnode;
 
 		/* large page list - used when free & large page */
 		struct {

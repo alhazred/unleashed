@@ -239,7 +239,6 @@ sv_find(vnode_t *mvp, vnode_t *dvp, nfs4_fname_t **namepp)
 	vp->v_vfsp = mvp->v_vfsp;
 	ASSERT(nfs4_consistent_type(mvp));
 	vp->v_type = mvp->v_type;
-	vp->v_pages = (page_t *)-1;	/* No pages, please */
 	vn_exists(vp);
 
 	/* Initialize the shadow vnode */
