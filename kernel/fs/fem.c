@@ -76,7 +76,7 @@ int fsem_err();
 
 
 #define	_FEMOPDEF(name, member)  \
-	{ VOPNAME_##name, offsetof(fem_t, femop_##member), NULL, fem_err }
+	{ VOPNAME_##name, offsetof(fem_t, femop_##member), NULL }
 
 static fs_operation_trans_def_t	fem_opdef[] = {
 	_FEMOPDEF(OPEN,		open),
@@ -125,7 +125,7 @@ static fs_operation_trans_def_t	fem_opdef[] = {
 	_FEMOPDEF(VNEVENT,	vnevent),
 	_FEMOPDEF(REQZCBUF,	reqzcbuf),
 	_FEMOPDEF(RETZCBUF,	retzcbuf),
-	{ NULL, 0, NULL, NULL }
+	{ NULL, 0, NULL }
 };
 
 
@@ -184,7 +184,7 @@ static struct fs_operation_def fem_guard_ops[] = {
 
 
 #define	_FSEMOPDEF(name, member)  \
-	{ VFSNAME_##name, offsetof(fsem_t, fsemop_##member), NULL, fsem_err }
+	{ VFSNAME_##name, offsetof(fsem_t, fsemop_##member), NULL }
 
 static fs_operation_trans_def_t fsem_opdef[] = {
 	_FSEMOPDEF(MOUNT, 	mount),
@@ -196,7 +196,7 @@ static fs_operation_trans_def_t fsem_opdef[] = {
 	_FSEMOPDEF(MOUNTROOT,	mountroot),
 	_FSEMOPDEF(FREEVFS,	freevfs),
 	_FSEMOPDEF(VNSTATE,	vnstate),
-	{ NULL, 0, NULL, NULL }
+	{ NULL, 0, NULL }
 };
 
 #define	_FSEMGUARD(name, ignore)  \

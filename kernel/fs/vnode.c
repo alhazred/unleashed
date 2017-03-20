@@ -228,144 +228,144 @@ kmem_cache_t *vn_cache;
 
 static const fs_operation_trans_def_t vn_ops_table[] = {
 	VOPNAME_OPEN, offsetof(struct vnodeops, vop_open),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_CLOSE, offsetof(struct vnodeops, vop_close),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_READ, offsetof(struct vnodeops, vop_read),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_WRITE, offsetof(struct vnodeops, vop_write),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_IOCTL, offsetof(struct vnodeops, vop_ioctl),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_SETFL, offsetof(struct vnodeops, vop_setfl),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_GETATTR, offsetof(struct vnodeops, vop_getattr),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_SETATTR, offsetof(struct vnodeops, vop_setattr),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_ACCESS, offsetof(struct vnodeops, vop_access),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_LOOKUP, offsetof(struct vnodeops, vop_lookup),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_CREATE, offsetof(struct vnodeops, vop_create),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_REMOVE, offsetof(struct vnodeops, vop_remove),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_LINK, offsetof(struct vnodeops, vop_link),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_RENAME, offsetof(struct vnodeops, vop_rename),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_MKDIR, offsetof(struct vnodeops, vop_mkdir),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_RMDIR, offsetof(struct vnodeops, vop_rmdir),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_READDIR, offsetof(struct vnodeops, vop_readdir),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_SYMLINK, offsetof(struct vnodeops, vop_symlink),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_READLINK, offsetof(struct vnodeops, vop_readlink),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_FSYNC, offsetof(struct vnodeops, vop_fsync),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_INACTIVE, offsetof(struct vnodeops, vop_inactive),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_FID, offsetof(struct vnodeops, vop_fid),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_RWLOCK, offsetof(struct vnodeops, vop_rwlock),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_RWUNLOCK, offsetof(struct vnodeops, vop_rwunlock),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_SEEK, offsetof(struct vnodeops, vop_seek),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_CMP, offsetof(struct vnodeops, vop_cmp),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_FRLOCK, offsetof(struct vnodeops, vop_frlock),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_SPACE, offsetof(struct vnodeops, vop_space),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_REALVP, offsetof(struct vnodeops, vop_realvp),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_GETPAGE, offsetof(struct vnodeops, vop_getpage),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_PUTPAGE, offsetof(struct vnodeops, vop_putpage),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_MAP, offsetof(struct vnodeops, vop_map),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_ADDMAP, offsetof(struct vnodeops, vop_addmap),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_DELMAP, offsetof(struct vnodeops, vop_delmap),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_POLL, offsetof(struct vnodeops, vop_poll),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_DUMP, offsetof(struct vnodeops, vop_dump),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_PATHCONF, offsetof(struct vnodeops, vop_pathconf),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_PAGEIO, offsetof(struct vnodeops, vop_pageio),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_DUMPCTL, offsetof(struct vnodeops, vop_dumpctl),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_DISPOSE, offsetof(struct vnodeops, vop_dispose),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_SETSECATTR, offsetof(struct vnodeops, vop_setsecattr),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_GETSECATTR, offsetof(struct vnodeops, vop_getsecattr),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_SHRLOCK, offsetof(struct vnodeops, vop_shrlock),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_VNEVENT, offsetof(struct vnodeops, vop_vnevent),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_REQZCBUF, offsetof(struct vnodeops, vop_reqzcbuf),
-	    NULL, NULL,
+	    NULL,
 
 	VOPNAME_RETZCBUF, offsetof(struct vnodeops, vop_retzcbuf),
-	    NULL, NULL,
+	    NULL,
 
-	NULL, 0, NULL, NULL
+	NULL, 0, NULL,
 };
 
 /* Extensible attribute (xva) routines. */

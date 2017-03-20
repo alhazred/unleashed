@@ -80,7 +80,6 @@ typedef struct fs_operation_trans_def {
 	char *name;			/* name of operation (NULL at end) */
 	int offset;			/* byte offset within ops vector */
 	fs_generic_func_p defaultFunc;	/* default function */
-	fs_generic_func_p errorFunc; 	/* error function */
 } fs_operation_trans_def_t;
 
 int fs_build_vector(void *vector, int *unused_ops,

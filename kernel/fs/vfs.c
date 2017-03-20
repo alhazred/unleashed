@@ -323,36 +323,33 @@ fs_copyfsops(const fs_operation_def_t *template, vfsops_t *actual,
 {
 	static const fs_operation_trans_def_t vfs_ops_table[] = {
 		VFSNAME_MOUNT, offsetof(vfsops_t, vfs_mount),
-			fs_nosys, fs_nosys,
+			fs_nosys,
 
 		VFSNAME_UNMOUNT, offsetof(vfsops_t, vfs_unmount),
-			fs_nosys, fs_nosys,
+			fs_nosys,
 
 		VFSNAME_ROOT, offsetof(vfsops_t, vfs_root),
-			fs_nosys, fs_nosys,
+			fs_nosys,
 
 		VFSNAME_STATVFS, offsetof(vfsops_t, vfs_statvfs),
-			fs_nosys, fs_nosys,
+			fs_nosys,
 
 		VFSNAME_SYNC, offsetof(vfsops_t, vfs_sync),
 			(fs_generic_func_p) fs_sync,
-			(fs_generic_func_p) fs_sync,	/* No errors allowed */
 
 		VFSNAME_VGET, offsetof(vfsops_t, vfs_vget),
-			fs_nosys, fs_nosys,
+			fs_nosys,
 
 		VFSNAME_MOUNTROOT, offsetof(vfsops_t, vfs_mountroot),
-			fs_nosys, fs_nosys,
+			fs_nosys,
 
 		VFSNAME_FREEVFS, offsetof(vfsops_t, vfs_freevfs),
 			(fs_generic_func_p)fs_freevfs,
-			(fs_generic_func_p)fs_freevfs,	/* Shouldn't fail */
 
 		VFSNAME_VNSTATE, offsetof(vfsops_t, vfs_vnstate),
 			(fs_generic_func_p)fs_nosys,
-			(fs_generic_func_p)fs_nosys,
 
-		NULL, 0, NULL, NULL
+		NULL, 0, NULL,
 	};
 
 	return (fs_build_vector(actual, unused_ops, vfs_ops_table, template));
