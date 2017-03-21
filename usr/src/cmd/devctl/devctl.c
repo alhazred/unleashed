@@ -472,8 +472,7 @@ bus_devcreate(devctl_hdl_t bus_dcp)
 	}
 
 	devctl_ddef_free(ddef_hdl);
-	if (dev_hdl)
-		devctl_release(dev_hdl);
+	devctl_release(dev_hdl);
 
 	return (rv);
 }

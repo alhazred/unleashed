@@ -1881,9 +1881,7 @@ static void
 cleanup_after_devctl_cmd(devctl_hdl_t devctl_hdl, nvlist_t *user_nvlist)
 {
 	nvlist_free(user_nvlist);
-	if (devctl_hdl != NULL) {
-		devctl_release(devctl_hdl);
-	}
+	devctl_release(devctl_hdl);
 }
 
 static cfga_sata_ret_t
