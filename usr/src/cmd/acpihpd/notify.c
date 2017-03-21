@@ -344,9 +344,7 @@ L_EXIT:
 		free(vendor);
 	}
 
-	if (attr_list != NULL) {
-		nvlist_free(attr_list);
-	}
+	nvlist_free(attr_list);
 
 	/* No need to free class & subclass. */
 }

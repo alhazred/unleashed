@@ -578,9 +578,7 @@ ib_verify_params(const char *ap_id, const char *options, char **errstring)
 static void
 ib_cleanup_after_devctl_cmd(devctl_hdl_t devctl_hdl, nvlist_t *user_nvlist)
 {
-	if (user_nvlist != NULL) {
-		nvlist_free(user_nvlist);
-	}
+	nvlist_free(user_nvlist);
 
 	if (devctl_hdl != NULL) {
 		devctl_release(devctl_hdl);

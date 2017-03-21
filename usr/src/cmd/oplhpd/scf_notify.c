@@ -524,8 +524,6 @@ out:
 		free(publisher);
 	}
 
-	if (ev_attr_list != NULL) {
-		nvlist_free(ev_attr_list);
-	}
+	nvlist_free(ev_attr_list);
 
 }

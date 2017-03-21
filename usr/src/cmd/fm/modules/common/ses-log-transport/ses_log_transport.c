@@ -772,9 +772,7 @@ static void
 free_expander(ses_log_monitor_t *slmp, expander_t *exp)
 {
 	if (exp != NULL) {
-		if (exp->fmri != NULL) {
-			nvlist_free(exp->fmri);
-		}
+		nvlist_free(exp->fmri);
 		fmd_hdl_free(slmp->slt_hdl, exp, sizeof (expander_t));
 	}
 }

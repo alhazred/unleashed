@@ -47,7 +47,6 @@ extern boolean_t drd_daemonized;
 extern boolean_t drd_debug;
 
 #define	s_free(x)	(free(x), (x) = NULL)
-#define	s_nvfree(x)	(((x) != NULL) ? (nvlist_free(x)) : (void)0)
 
 /*
  * Backend support

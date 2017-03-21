@@ -361,9 +361,7 @@ event_handler(sysevent_t *ev)
 		cache_update(DM_EV_DISK_DELETE, dev_name);
 	    }
 
-	    if (nvlist != NULL) {
-		nvlist_free(nvlist);
-	    }
+	    nvlist_free(nvlist);
 	}
 }
 

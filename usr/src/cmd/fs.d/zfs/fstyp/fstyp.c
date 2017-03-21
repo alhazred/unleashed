@@ -74,9 +74,7 @@ fstyp_mod_fini(fstyp_mod_handle_t handle)
 {
 	struct fstyp_zfs *h = (struct fstyp_zfs *)handle;
 
-	if (h->config != NULL) {
-		nvlist_free(h->config);
-	}
+	nvlist_free(h->config);
 	free(h);
 }
 

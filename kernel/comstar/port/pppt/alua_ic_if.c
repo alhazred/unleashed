@@ -1419,9 +1419,7 @@ stmf_ic_scsi_devid_desc_marshal(nvlist_t *parent_nvl,
 
 	rc = nvlist_add_nvlist(parent_nvl, sdid_name, nvl);
 done:
-	if (nvl) {
-		nvlist_free(nvl);
-	}
+	nvlist_free(nvl);
 	return (rc);
 }
 
@@ -1448,9 +1446,7 @@ stmf_ic_remote_port_marshal(nvlist_t *parent_nvl, char *rport_name,
 
 	rc = nvlist_add_nvlist(parent_nvl, rport_name, nvl);
 done:
-	if (nvl) {
-		nvlist_free(nvl);
-	}
+	nvlist_free(nvl);
 	return (rc);
 }
 

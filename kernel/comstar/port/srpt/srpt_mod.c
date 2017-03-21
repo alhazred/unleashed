@@ -620,9 +620,7 @@ srpt_pp_cb(stmf_port_provider_t *pp, int cmd, void *arg, uint32_t flags)
 	srpt_ctxt->sc_cfg_hca_nv = nvl;
 
 	/* free the old nvlist */
-	if (ctxt_nvl != NULL) {
-		nvlist_free(ctxt_nvl);
-	}
+	nvlist_free(ctxt_nvl);
 
 	if (called_by_reg) {
 		return;

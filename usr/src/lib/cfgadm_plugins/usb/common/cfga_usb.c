@@ -502,9 +502,7 @@ get_port_num(const char *ap_id, uint_t *port)
 static void
 cleanup_after_devctl_cmd(devctl_hdl_t devctl_hdl, nvlist_t *user_nvlist)
 {
-	if (user_nvlist != NULL) {
-		nvlist_free(user_nvlist);
-	}
+	nvlist_free(user_nvlist);
 	if (devctl_hdl != NULL) {
 		devctl_release(devctl_hdl);
 	}

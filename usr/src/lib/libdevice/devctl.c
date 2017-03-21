@@ -1175,9 +1175,7 @@ devctl_ddef_free(devctl_ddef_t ddef_hdl)
 	if (_libdevice_debug)
 		(void) printf("devctl_ddef_free: nvp %p\n", (void *)ddef_hdl);
 
-	if (ddef_hdl != NULL) {
-		nvlist_free((nvlist_t *)ddef_hdl);
-	}
+	nvlist_free((nvlist_t *)ddef_hdl);
 }
 
 /*

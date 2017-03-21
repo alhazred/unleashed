@@ -1444,9 +1444,7 @@ it_config_free_cmn(it_config_t *cfg)
 		it_ini_free_cmn(cfg->config_ini_list);
 	}
 
-	if (cfg->config_global_properties) {
-		nvlist_free(cfg->config_global_properties);
-	}
+	nvlist_free(cfg->config_global_properties);
 
 	if (cfg->config_isns_svr_list) {
 		it_portal_t	*pp = cfg->config_isns_svr_list;
@@ -1485,9 +1483,7 @@ it_tgt_free_cmn(it_tgt_t *tgt)
 			it_tpgt_free_cmn(tgtp->tgt_tpgt_list);
 		}
 
-		if (tgtp->tgt_properties) {
-			nvlist_free(tgtp->tgt_properties);
-		}
+		nvlist_free(tgtp->tgt_properties);
 
 		iscsit_free(tgtp, sizeof (it_tgt_t));
 
@@ -1570,9 +1566,7 @@ it_ini_free_cmn(it_ini_t *ini)
 	while (inip) {
 		next = inip->ini_next;
 
-		if (inip->ini_properties) {
-			nvlist_free(inip->ini_properties);
-		}
+		nvlist_free(inip->ini_properties);
 
 		iscsit_free(inip, sizeof (it_ini_t));
 

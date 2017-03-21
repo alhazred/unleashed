@@ -786,7 +786,5 @@ init_configuration_from_topo(void)
 void
 fini_configuration_from_topo(void)
 {
-	if (g_topo2diskmon) {
-		nvlist_free(g_topo2diskmon);
-	}
+	nvlist_free(g_topo2diskmon);
 }

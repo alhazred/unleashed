@@ -146,9 +146,7 @@ it_config_load(it_config_t **cfg)
 		*cfg = newcfg;
 	}
 
-	if (cfg_nv) {
-		nvlist_free(cfg_nv);
-	}
+	nvlist_free(cfg_nv);
 
 	return (ret);
 }
@@ -291,9 +289,7 @@ it_config_commit(it_config_t *cfg)
 		}
 	}
 
-	if (cfgnv) {
-		nvlist_free(cfgnv);
-	}
+	nvlist_free(cfgnv);
 
 	return (ret);
 }
@@ -407,9 +403,7 @@ it_config_setprop(it_config_t *cfg, nvlist_t *proplist, nvlist_t **errlist)
 
 	ret = it_validate_configprops(cprops, errs);
 	if (ret != 0) {
-		if (cprops) {
-			nvlist_free(cprops);
-		}
+		nvlist_free(cprops);
 		return (ret);
 	}
 
@@ -483,9 +477,7 @@ it_config_setprop(it_config_t *cfg, nvlist_t *proplist, nvlist_t **errlist)
 		nvlist_free(cfg->config_global_properties);
 		cfg->config_global_properties = cprops;
 	} else {
-		if (cprops) {
-			nvlist_free(cprops);
-		}
+		nvlist_free(cprops);
 	}
 
 	if (ret == 0)
@@ -700,15 +692,11 @@ it_tgt_setprop(it_config_t *cfg, it_tgt_t *tgt, nvlist_t *proplist,
 	}
 
 	if (ret != 0) {
-		if (tprops) {
-			nvlist_free(tprops);
-		}
+		nvlist_free(tprops);
 		return (ret);
 	}
 
-	if (tgt->tgt_properties) {
-		nvlist_free(tgt->tgt_properties);
-	}
+	nvlist_free(tgt->tgt_properties);
 	tgt->tgt_properties = tprops;
 
 	free_empty_errlist(errlist);
@@ -1449,15 +1437,11 @@ it_ini_setprop(it_ini_t *ini, nvlist_t *proplist, nvlist_t **errlist)
 	}
 
 	if (ret != 0) {
-		if (iprops) {
-			nvlist_free(iprops);
-		}
+		nvlist_free(iprops);
 		return (ret);
 	}
 
-	if (ini->ini_properties) {
-		nvlist_free(ini->ini_properties);
-	}
+	nvlist_free(ini->ini_properties);
 	ini->ini_properties = iprops;
 
 	free_empty_errlist(errlist);

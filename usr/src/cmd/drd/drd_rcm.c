@@ -352,7 +352,7 @@ drd_rcm_add_cpu_notify(drctl_rsrc_t *rsrcs, int nrsrc)
 	rv = (rv == RCM_SUCCESS) ? 0 : -1;
 
 done:
-	s_nvfree(nvl);
+	nvlist_free(nvl);
 	s_free(cpus);
 	s_free(oldcpus);
 	s_free(newcpus);
@@ -453,7 +453,7 @@ drd_rcm_del_cpu_request(drctl_rsrc_t *rsrcs, int nrsrc)
 	rv = 0;
 
 done:
-	s_nvfree(nvl);
+	nvlist_free(nvl);
 	s_free(cpus);
 	s_free(oldcpus);
 	s_free(newcpus);
@@ -726,7 +726,7 @@ drd_rcm_del_cpu_notify(drctl_rsrc_t *rsrcs, int nrsrc)
 	rv = (rv == RCM_SUCCESS) ? 0 : -1;
 
 done:
-	s_nvfree(nvl);
+	nvlist_free(nvl);
 	s_free(cpus);
 	s_free(oldcpus);
 	s_free(newcpus);
@@ -1286,7 +1286,7 @@ drd_rcm_mem_op(rcm_op_t op, uint64_t change)
 	rv = (rv == RCM_SUCCESS) ? 0 : -1;
 
 done:
-	s_nvfree(nvl);
+	nvlist_free(nvl);
 
 	return (rv);
 }

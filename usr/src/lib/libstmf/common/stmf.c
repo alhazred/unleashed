@@ -5180,9 +5180,7 @@ out:
 	if (viewEntryList != NULL) {
 		free(viewEntryList);
 	}
-	if (nvl != NULL) {
-		nvlist_free(nvl);
-	}
+	nvlist_free(nvl);
 	return (ret);
 }
 

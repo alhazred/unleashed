@@ -185,9 +185,7 @@ nvf_fini(void)
 	}
 
 	rw_enter(&nvf_list_lock, RW_WRITER);
-	if (nvf_list) {
-		nvlist_free(nvf_list);
-	}
+	nvlist_free(nvf_list);
 	nvf_list = NULL;
 	rw_exit(&nvf_list_lock);
 	mutex_exit(&nvf_lock);
@@ -1202,9 +1200,7 @@ nvf_parse(char *filename)
 	/*
 	 * free up old nvlist
 	 */
-	if (old_nvl) {
-		nvlist_free(old_nvl);
-	}
+	nvlist_free(old_nvl);
 
 	return (B_TRUE);
 }

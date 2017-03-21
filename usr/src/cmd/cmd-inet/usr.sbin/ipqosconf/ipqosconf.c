@@ -6440,9 +6440,7 @@ free_filter(ipqos_conf_filter_t *flt)
 
 	free(flt->src_nd_name);
 	free(flt->dst_nd_name);
-	if (flt->nvlist) {
-		nvlist_free(flt->nvlist);
-	}
+	nvlist_free(flt->nvlist);
 	free(flt);
 }
 
@@ -6650,9 +6648,7 @@ ipqos_conf_action_t *actions)
 
 		if (act->params != NULL) {
 			free_arefs(act->params->actions);
-			if (act->params->nvlist != NULL) {
-				nvlist_free(act->params->nvlist);
-			}
+			nvlist_free(act->params->nvlist);
 			free(act->params);
 		}
 

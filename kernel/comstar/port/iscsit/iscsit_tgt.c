@@ -1047,9 +1047,7 @@ iscsit_tgt_destroy(iscsit_tgt_t *tgt)
 		iscsit_tpgt_destroy(tpgt);
 	}
 
-	if (tgt->target_props) {
-		nvlist_free(tgt->target_props);
-	}
+	nvlist_free(tgt->target_props);
 	mutex_exit(&tgt->target_mutex);
 
 	/*
