@@ -72,7 +72,6 @@ int nsvc_xdrs;		/* total number of svc_xdrs allocated */
 
 int __rpc_use_pollfd_done;	/* to unlimit the number of connections */
 
-#define	NULL_SVC ((struct svc_callout *)NULL)
 #define	RQCRED_SIZE	400		/* this size is excessive */
 
 /*
@@ -881,7 +880,7 @@ svc_reg(const SVCXPRT *xprt, const rpcprog_t prog, const rpcvers_t vers,
 		return (FALSE);
 
 	(void) rw_wrlock(&svc_lock);
-	if ((s = svc_find(prog, vers, &prev, netid)) != NULL_SVC) {
+	if ((s = svc_find(prog, vers, &prev, netid)) != NULL) {
 		free(netid);
 		if (s->sc_dispatch == dispatch)
 			goto rpcb_it; /* it is registering another xptr */
@@ -942,13 +941,13 @@ svc_unreg(const rpcprog_t prog, const rpcvers_t vers)
 	(void) rpcb_unset(prog, vers, NULL);
 
 	(void) rw_wrlock(&svc_lock);
-	while ((s = svc_find(prog, vers, &prev, NULL)) != NULL_SVC) {
-		if (prev == NULL_SVC) {
+	while ((s = svc_find(prog, vers, &prev, NULL)) != NULL) {
+		if (prev == NULL) {
 			svc_head = s->sc_next;
 		} else {
 			prev->sc_next = s->sc_next;
 		}
-		s->sc_next = NULL_SVC;
+		s->sc_next = NULL;
 		free(s->sc_netid);
 		free(s);
 	}
@@ -986,7 +985,7 @@ svc_register(SVCXPRT *xprt, rpcprog_t prog, rpcvers_t vers,
 		return (FALSE);
 
 	(void) rw_wrlock(&svc_lock);
-	if ((s = svc_find(prog, vers, &prev, netid)) != NULL_SVC) {
+	if ((s = svc_find(prog, vers, &prev, netid)) != NULL) {
 		free(netid);
 		if (s->sc_dispatch == dispatch)
 			goto pmap_it;  /* it is registering another xptr */
@@ -1035,13 +1034,13 @@ svc_unregister(rpcprog_t prog, rpcvers_t vers)
 	struct svc_callout *s;
 
 	(void) rw_wrlock(&svc_lock);
-	while ((s = svc_find(prog, vers, &prev, NULL)) != NULL_SVC) {
-		if (prev == NULL_SVC) {
+	while ((s = svc_find(prog, vers, &prev, NULL)) != NULL) {
+		if (prev == NULL) {
 			svc_head = s->sc_next;
 		} else {
 			prev->sc_next = s->sc_next;
 		}
-		s->sc_next = NULL_SVC;
+		s->sc_next = NULL;
 		free(s->sc_netid);
 		free(s);
 		/* unregister the information with the local binder service */
@@ -1065,8 +1064,8 @@ svc_find(rpcprog_t prog, rpcvers_t vers, struct svc_callout **prev, char *netid)
 /* WRITE LOCK HELD ON ENTRY: svc_lock */
 
 /*	assert(RW_WRITE_HELD(&svc_lock)); */
-	p = NULL_SVC;
-	for (s = svc_head; s != NULL_SVC; s = s->sc_next) {
+	p = NULL;
+	for (s = svc_head; s != NULL; s = s->sc_next) {
 		if (((s->sc_prog == prog) && (s->sc_vers == vers)) &&
 		    ((netid == NULL) || (s->sc_netid == NULL) ||
 		    (strcmp(netid, s->sc_netid) == 0)))
@@ -1433,7 +1432,7 @@ _svc_prog_dispatch(SVCXPRT *xprt, struct rpc_msg *msg, struct svc_req *r)
 	low_vers = (rpcvers_t)(0 - 1);
 	high_vers = 0;
 	(void) rw_rdlock(&svc_lock);
-	for (s = svc_head; s != NULL_SVC; s = s->sc_next) {
+	for (s = svc_head; s != NULL; s = s->sc_next) {
 		if (s->sc_prog == r->rq_prog) {
 			prog_found = TRUE;
 			if (s->sc_vers == r->rq_vers) {
