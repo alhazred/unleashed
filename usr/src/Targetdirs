@@ -51,9 +51,7 @@ i386_DIRS=			\
 	/boot/acpi		\
 	/boot/acpi/tables	\
 	/platform/i86pc		\
-	/lib/libmvec		\
-	/usr/lib/xen		\
-	/usr/lib/xen/bin
+	/lib/libmvec
 
 sparc_DIRS=				\
 	/usr/lib/ldoms

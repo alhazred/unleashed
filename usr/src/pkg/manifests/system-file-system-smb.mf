@@ -111,5 +111,3 @@ license usr/src/lib/libsmbfs/smb/THIRDPARTYLICENSE.microsoft \
 link path=usr/lib/security/$(ARCH64)/pam_smbfs_login.so \
     target=pam_smbfs_login.so.1
 link path=usr/lib/security/pam_smbfs_login.so target=pam_smbfs_login.so.1
-# libsmbfs uses iconv_open() which requires this at run-time.
-depend fmri=system/library/iconv/utf-8 type=require

@@ -452,7 +452,6 @@ i386_SUBDIRS=		\
 	lms		\
 	rtc		\
 	ucodeadm	\
-	xvm
 
 sparc_SUBDIRS=		\
 	cvcd		\
@@ -618,7 +617,6 @@ MSGSUBDIRS=		\
 	psrinfo		\
 	ptools		\
 	pwconv		\
-	pyzfs		\
 	raidctl		\
 	ramdiskadm	\
 	rcap		\

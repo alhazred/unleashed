@@ -29,7 +29,6 @@ ROOTCMDDIR=	$(ROOTLIB)/zfs
 PYSRCS=		pyzfs.py
 PYOBJS=		$(PYSRCS:%.py=%.pyc)
 PYFILES=	$(PYSRCS) $(PYOBJS)
-POFILE=		pyzfs.po
 
 ROOTLIBZFSFILES= $(PYFILES:%=$(ROOTLIB)/zfs/%)
 

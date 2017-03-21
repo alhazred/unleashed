@@ -23,7 +23,7 @@
 # Copyright 2010 Nexenta Systems, Inc.  All rights reserved.
 #
 
-ETCFILES= ioctl.syscon passwd shadow motd
+ETCFILES= ioctl.syscon passwd shadow motd release
 FTPDFILES= ftpusers
 SMBFILES= smbpasswd
 
@@ -38,6 +38,7 @@ FILEMODE= 0644
 ROOTETCFTPUSERSLINK= $(ROOTETC)/ftpusers
 
 $(ROOTETC)/shadow 	:=	FILEMODE =	400
+$(ROOTETC)/release	:=	FILEMODE =	0444
 $(ROOTVARSMB)/smbpasswd :=	FILEMODE =	0400
 
 
@@ -58,10 +59,11 @@ clobber:
 
 motd:	FRC
 	@-$(ECHO) "rebuilding motd"
-	@$(RELEASE_BUILD)-$(ECHO) "The Illumos Project\tSunOS $(RELEASE)\t$(VERSION)\t$(RELEASE_DATE)" > motd
-	@$(NOT_RELEASE_BUILD)-$(ECHO) "The Illumos Project\tSunOS $(RELEASE)\t$(VERSION)\t`date +'%h. %d, %Y'`" > motd
-	@$(NOT_RELEASE_BUILD)-$(ECHO) $(DEV_CM) | sed -e "s/@(#)//" >> motd
+	@-$(ECHO) "unleashed\t$(VERSION)\t$(RELEASE_DATE)" > motd
 	@-$(CAT) release_info >> motd
+
+release: motd
+	cp motd release
 
 smbpasswd:
 	$(TOUCH) smbpasswd
