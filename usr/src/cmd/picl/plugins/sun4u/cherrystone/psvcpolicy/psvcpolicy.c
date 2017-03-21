@@ -258,7 +258,7 @@ create_i2c_node(char *nd_name, char *nd_compat, int nd_nexi, int *nd_reg)
 	rv = PSVC_SUCCESS;
 bad:
 	devctl_release(dev_hdl);
-	if (ddef_hdl) devctl_ddef_free(ddef_hdl);
+	devctl_ddef_free(ddef_hdl);
 	devctl_release(bus_hdl);
 	return (rv);
 }
