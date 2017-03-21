@@ -320,12 +320,7 @@ parse_opts(int argc, char **argv)
 				error_num += 1;
 			}
 			(void) cpp_opt_append(NULL, NULL);
-			p = basename(optarg);
-			if (NULL == p) {
-				*(cmd_opt.cpp_opt + 0) = strdup_vital(optarg);
-			} else {
-				*(cmd_opt.cpp_opt + 0) = strdup_vital(p);
-			}
+			*(cmd_opt.cpp_opt + 0) = strdup_vital(optarg);
 			break;
 		case 'W':
 			if (cpp_opt_append(optarg, NULL)) {
@@ -443,13 +438,8 @@ parse_opts(int argc, char **argv)
 	if ((NULL == cmd_opt.preprocess_specified) &&
 	    (NULL != cmd_opt.preprocess_default)) {
 		(void) cpp_opt_append(NULL, NULL);
-		p = basename(cmd_opt.preprocess_default);
-		if (NULL == p) {
-			*(cmd_opt.cpp_opt + 0) =
-				strdup_vital(cmd_opt.preprocess_default);
-		} else {
-			*(cmd_opt.cpp_opt + 0) = strdup_vital(p);
-		}
+		*(cmd_opt.cpp_opt + 0) =
+		    strdup_vital(cmd_opt.preprocess_default);
 	}
 	return (0);
 }
@@ -513,7 +503,7 @@ cpp_opt_append(char	*opt, char	*arg)
 	if (0 == cmd_opt.cpp_opt_reserved) {
 		cmd_opt.cpp_opt_reserved = 32;
 		cmd_opt.cpp_opt = malloc_vital((sizeof (char *)) * 32);
-		*(cmd_opt.cpp_opt + 0) = "cpp";
+		*(cmd_opt.cpp_opt + 0) = cmd_opt.preprocess;
 		cmd_opt.cpp_opt_num = 1;
 	} else if ((cmd_opt.cpp_opt_reserved - 2) <= cmd_opt.cpp_opt_num) {
 		cmd_opt.cpp_opt_reserved += 32;
