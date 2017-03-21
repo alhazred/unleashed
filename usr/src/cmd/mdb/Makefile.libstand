@@ -57,6 +57,8 @@ INCDIRS = \
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 CPPFLAGS = $(INCDIRS:%=-I%) -D_KMDB
 
+C99MODE=	$(C99_ENABLE)
+
 #
 # kmdb is a kernel module, so we'll use the kernel's build flags.
 CFLAGS += $(STAND_FLAGS_32)
