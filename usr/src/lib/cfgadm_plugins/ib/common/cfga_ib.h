@@ -72,7 +72,7 @@ typedef struct walk_link {
  * Stuff carried over for the routines borrowed from cfgadm/SCSI.
  */
 #define	MATCH_MINOR_NAME	1
-#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
+#define	S_FREE(x)	(free(x), (x) = NULL)
 
 /* Return/error codes */
 typedef enum {

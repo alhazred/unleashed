@@ -194,7 +194,7 @@ typedef struct {
 #define	MSG_NORCM		6
 #define	MSG_NONE		7
 
-#define	s_free(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
+#define	s_free(x)	(free(x), (x) = NULL)
 #define	str_valid(p)	((p) != NULL && *(p) != '\0')
 #define	mask(x)		((uint_t)1 << (x))
 

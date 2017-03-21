@@ -122,8 +122,7 @@ typedef struct walk_link {
 #define	SATA_CONFIRM_PORT_ENABLE \
 	"This operation will enable activity on the SATA port\nContinue"
 
-#define	S_FREE(x)		(((x) != NULL) ? \
-				(free(x), (x) = NULL) : NULL)
+#define	S_FREE(x)		(free(x), (x) = NULL)
 
 #define	GET_DYN(a)		(((a) != NULL) ? \
 				strstr((a), DYN_SEP) : NULL)

@@ -82,7 +82,7 @@ extern "C" {
 #define	OUT_OF_MEMORY(routine)  \
     log(LOG_DEBUG, routine, "Out of memory.")
 
-#define	S_FREE(x)   (((x) != NULL) ? (free(x), (x) = NULL) : NULL)
+#define	S_FREE(x)   (free(x), (x) = NULL)
 
 #define	IS_STUB_NODE(s) (di_instance(s) == -1 && \
 	di_nodeid(s) == (DI_PROM_NODEID))

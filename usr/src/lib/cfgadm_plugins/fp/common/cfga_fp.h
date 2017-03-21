@@ -400,7 +400,7 @@ typedef struct {
 #define	LUN_COMP_SEP		","
 #define	MINOR_SEP		":"
 
-#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
+#define	S_FREE(x)	(free(x), (x) = NULL)
 #define	S_STR(x)	(((x) == NULL) ? "" : (x))
 
 

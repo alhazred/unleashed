@@ -180,7 +180,7 @@ int version_p15_and_p20			= 0;
 #define	DISK3_OK_BIT			SLOT6_OK_BIT
 #define	PS1_OK_BIT			SLOT7_OK_BIT
 #define	PS2_OK_BIT			SLOT8_OK_BIT
-#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
+#define	S_FREE(x)	(free(x), (x) = NULL)
 #define	ENVC_DEBUG_MODE			0x03
 #define	OPENPROMDEV			"/dev/openprom"
 #define	I2C_PCF8591_NAME 		"adc-dac"

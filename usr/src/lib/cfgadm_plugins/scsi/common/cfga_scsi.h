@@ -335,7 +335,7 @@ typedef struct {
 #define	MINOR_SEP		":"
 #define	PATH_APID_DYN_SEP	","
 
-#define	S_FREE(x)	(((x) != NULL) ? (free(x), (x) = NULL) : NULL)
+#define	S_FREE(x)	(free(x), (x) = NULL)
 #define	S_STR(x)	(((x) == NULL) ? "" : (x))
 
 
