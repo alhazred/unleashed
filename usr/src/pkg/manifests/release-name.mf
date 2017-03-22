@@ -1,0 +1,3 @@
+set name=pkg.fmri value=pkg:/release/name@$(PKGVERS)
+set name=pkg.obsolete value=true
+set name=org.opensolaris.noincorp value=true
