@@ -1079,7 +1079,7 @@ struct sysent sysent32[NSYSCALL] =
 	/* 250 */ SYSENT_CI("lwp_mutex_unlock",	lwp_mutex_unlock,	1),
 	/* 251 */ SYSENT_CI("lwp_mutex_trylock", lwp_mutex_trylock,	2),
 	/* 252 */ SYSENT_CI("lwp_mutex_register", lwp_mutex_register,	2),
-	/* 253 */ SYSENT_LOADABLE(),			/* (was cladm) */
+	/* 253 */ SYSENT_LOADABLE32(),			/* (was cladm) */
 	/* 254 */ SYSENT_CI("uucopy",		uucopy,		3),
 	/* 255 */ SYSENT_CI("umount2",		umount2,	2)
 };
