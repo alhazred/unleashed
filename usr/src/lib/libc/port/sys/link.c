@@ -52,13 +52,6 @@ link(const char *path1, const char *path2)
 	 * non-XPG4 based environments. For a more detailed discussion,
 	 * see bug 1256170.
 	 */
-	if (__xpg4 != 0)
-		return (linkat(AT_FDCWD, path1, AT_FDCWD, path2,
-		    AT_SYMLINK_FOLLOW));
-
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_link, path1, path2));
-#else
-	return (linkat(AT_FDCWD, path1, AT_FDCWD, path2, 0));
-#endif
+	return (linkat(AT_FDCWD, path1, AT_FDCWD, path2,
+	    (__xpg4 != 0) ? AT_SYMLINK_FOLLOW : 0));
 }

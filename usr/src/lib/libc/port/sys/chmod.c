@@ -41,20 +41,12 @@ fchmodat(int fd, const char *path, mode_t mode, int flag)
 int
 chmod(const char *path, mode_t mode)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_chmod, path, mode));
-#else
 	return (fchmodat(AT_FDCWD, path, mode, 0));
-#endif
 }
 
 #pragma weak _fchmod = fchmod
 int
 fchmod(int fd, mode_t mode)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_fchmod, fd, mode));
-#else
 	return (fchmodat(fd, NULL, mode, 0));
-#endif
 }

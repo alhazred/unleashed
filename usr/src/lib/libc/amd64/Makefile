@@ -1084,11 +1084,6 @@ CPPFLAGS=	-D$(MACH64) -D__$(MACH64) $(THREAD_DEBUG) \
 ASFLAGS=	$(AS_PICFLAGS) -D_ASM $(CPPFLAGS) \
 		$(amd64_AS_XARCH)
 
-# As a favor to the dtrace syscall provider, libc still calls the
-# old syscall traps that have been obsoleted by the *at() interfaces.
-# Delete this to compile libc using only the new *at() system call traps
-CPPFLAGS += -D_RETAIN_OLD_SYSCALLS
-
 # proc64_id.o is built with defines in $(CODEMGR_WS)/arch/x86/include/sys/x86_archext.h
 pics/proc64_id.o	:= CFLAGS64 += -I$(CODEMGR_WS)/arch/x86/include
 

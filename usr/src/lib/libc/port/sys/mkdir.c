@@ -38,9 +38,5 @@ mkdirat(int fd, const char *path, mode_t mode)
 int
 mkdir(const char *path, mode_t mode)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_mkdir, path, mode));
-#else
 	return (mkdirat(AT_FDCWD, path, mode));
-#endif
 }

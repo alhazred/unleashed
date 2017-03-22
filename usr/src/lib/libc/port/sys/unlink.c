@@ -40,20 +40,12 @@ unlinkat(int fd, const char *name, int flags)
 int
 unlink(const char *name)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_unlink, name));
-#else
 	return (unlinkat(AT_FDCWD, name, 0));
-#endif
 }
 
 #pragma weak _rmdir = rmdir
 int
 rmdir(const char *name)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_rmdir, name));
-#else
 	return (unlinkat(AT_FDCWD, name, AT_REMOVEDIR));
-#endif
 }

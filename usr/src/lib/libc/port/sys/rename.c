@@ -40,9 +40,5 @@ renameat(int oldfd, const char *oldname, int newfd, const char *newname)
 int
 rename(const char *oldname, const char *newname)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_rename, oldname, newname));
-#else
 	return (renameat(AT_FDCWD, oldname, AT_FDCWD, newname));
-#endif
 }

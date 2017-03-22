@@ -38,9 +38,5 @@ symlinkat(const char *path1, int fd, const char *path2)
 int
 symlink(const char *path1, const char *path2)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_symlink, path1, path2));
-#else
 	return (symlinkat(path1, AT_FDCWD, path2));
-#endif
 }

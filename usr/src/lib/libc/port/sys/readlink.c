@@ -44,15 +44,5 @@ readlinkat(int fd, const char *path, char *buf, size_t bufsize)
 ssize_t
 readlink(const char *path, char *buf, size_t bufsize)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	sysret_t rval;
-	int error;
-
-	error = __systemcall(&rval, SYS_readlink, path, buf, bufsize);
-	if (error)
-		(void) __set_errno(error);
-	return ((ssize_t)rval.sys_rval1);
-#else
 	return (readlinkat(AT_FDCWD, path, buf, bufsize));
-#endif
 }

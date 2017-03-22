@@ -1107,11 +1107,6 @@ CPPFLAGS=	-Dsparc $(EXTN_CPPFLAGS) $(THREAD_DEBUG) \
 		-I$(LIBCBASE)/inc -I$(LIBCDIR)/inc $(CPPFLAGS.master)
 ASFLAGS=	$(EXTN_ASFLAGS) -D_ASM $(CPPFLAGS) $(sparc_AS_XARCH)
 
-# As a favor to the dtrace syscall provider, libc still calls the
-# old syscall traps that have been obsoleted by the *at() interfaces.
-# Delete this to compile libc using only the new *at() system call traps
-CPPFLAGS += -D_RETAIN_OLD_SYSCALLS
-
 # Inform the run-time linker about libc specialized initialization
 RTLDINFO =	-z rtldinfo=tls_rtldinfo
 DYNFLAGS +=	$(RTLDINFO)

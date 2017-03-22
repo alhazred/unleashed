@@ -38,9 +38,5 @@ mknodat(int fd, const char *path, mode_t mode, dev_t dev)
 int
 mknod(const char *path, mode_t mode, dev_t dev)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_mknod, path, mode, dev));
-#else
 	return (mknodat(AT_FDCWD, path, mode, dev));
-#endif
 }

@@ -39,9 +39,5 @@ faccessat(int fd, const char *fname, int amode, int flag)
 int
 access(const char *fname, int amode)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_access, fname, amode));
-#else
 	return (faccessat(AT_FDCWD, fname, amode, 0));
-#endif
 }

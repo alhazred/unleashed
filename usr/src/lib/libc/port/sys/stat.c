@@ -43,33 +43,21 @@ fstatat64(int fd, const char *name, struct stat64 *sb, int flags)
 int
 stat64(const char *name, struct stat64 *sb)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_stat64, name, sb));
-#else
 	return (fstatat64(AT_FDCWD, name, sb, 0));
-#endif
 }
 
 #pragma weak _lstat64 = lstat64
 int
 lstat64(const char *name, struct stat64 *sb)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_lstat64, name, sb));
-#else
 	return (fstatat64(AT_FDCWD, name, sb, AT_SYMLINK_NOFOLLOW));
-#endif
 }
 
 #pragma weak _fstat64 = fstat64
 int
 fstat64(int fd, struct stat64 *sb)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_fstat64, fd, sb));
-#else
 	return (fstatat64(fd, NULL, sb, 0));
-#endif
 }
 
 #else	/* !defined(_LP64) && _FILE_OFFSET_BITS == 64 */
@@ -85,33 +73,21 @@ fstatat(int fd, const char *name, struct stat *sb, int flags)
 int
 stat(const char *name, struct stat *sb)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_stat, name, sb));
-#else
 	return (fstatat(AT_FDCWD, name, sb, 0));
-#endif
 }
 
 #pragma weak _lstat = lstat
 int
 lstat(const char *name, struct stat *sb)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_lstat, name, sb));
-#else
 	return (fstatat(AT_FDCWD, name, sb, AT_SYMLINK_NOFOLLOW));
-#endif
 }
 
 #pragma weak _fstat = fstat
 int
 fstat(int fd, struct stat *sb)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_fstat, fd, sb));
-#else
 	return (fstatat(fd, NULL, sb, 0));
-#endif
 }
 
 #endif	/* !defined(_LP64) && _FILE_OFFSET_BITS == 64 */

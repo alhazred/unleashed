@@ -42,31 +42,19 @@ fchownat(int fd, const char *name, uid_t uid, gid_t gid, int flags)
 int
 chown(const char *name, uid_t uid, gid_t gid)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_chown, name, uid, gid));
-#else
 	return (fchownat(AT_FDCWD, name, uid, gid, 0));
-#endif
 }
 
 #pragma weak _lchown = lchown
 int
 lchown(const char *name, uid_t uid, gid_t gid)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_lchown, name, uid, gid));
-#else
 	return (fchownat(AT_FDCWD, name, uid, gid, AT_SYMLINK_NOFOLLOW));
-#endif
 }
 
 #pragma weak _fchown = fchown
 int
 fchown(int filedes, uid_t uid, gid_t gid)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	return (syscall(SYS_fchown, filedes, uid, gid));
-#else
 	return (fchownat(filedes, NULL, uid, gid, 0));
-#endif
 }

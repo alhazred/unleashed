@@ -57,12 +57,7 @@ __openat(int dfd, const char *path, int oflag, mode_t mode)
 int
 __open(const char *path, int oflag, mode_t mode)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	int fd = syscall(SYS_open, path, oflag, mode);
-	return (xpg4_fixup(fd));
-#else
 	return (__openat(AT_FDCWD, path, oflag, mode));
-#endif
 }
 
 #if !defined(_LP64)
@@ -77,12 +72,7 @@ __openat64(int dfd, const char *path, int oflag, mode_t mode)
 int
 __open64(const char *path, int oflag, mode_t mode)
 {
-#if defined(_RETAIN_OLD_SYSCALLS)
-	int fd = syscall(SYS_open64, path, oflag, mode);
-	return (xpg4_fixup(fd));
-#else
 	return (__openat64(AT_FDCWD, path, oflag, mode));
-#endif
 }
 
 #endif	/* !_LP64 */
