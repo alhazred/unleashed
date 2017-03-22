@@ -304,12 +304,6 @@ openat(int fd, char *path, int omode, int cmode)
 	    cmode));
 }
 
-int
-open(char *path, int omode, int cmode)
-{
-	return (openat(AT_FDCWD, path, omode, cmode));
-}
-
 #if defined(_ILP32) || defined(_SYSCALL32_IMPL)
 /*
  * Open for large files in 32-bit environment. Sets the FOFFMAX flag.
@@ -319,13 +313,6 @@ openat64(int fd, char *path, int omode, int cmode)
 {
 	return (copen(fd, path, FFLAGS(omode) | FOFFMAX, cmode));
 }
-
-int
-open64(char *path, int omode, int cmode)
-{
-	return (openat64(AT_FDCWD, path, omode, cmode));
-}
-
 #endif	/* _ILP32 || _SYSCALL32_IMPL */
 
 #ifdef _SYSCALL32_IMPL
@@ -337,11 +324,4 @@ openat32(int fd, char *path, int omode, int cmode)
 {
 	return (copen(fd, path, FFLAGS(omode), cmode));
 }
-
-int
-open32(char *path, int omode, int cmode)
-{
-	return (openat32(AT_FDCWD, path, omode, cmode));
-}
-
 #endif	/* _SYSCALL32_IMPL */

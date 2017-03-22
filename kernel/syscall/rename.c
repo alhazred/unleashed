@@ -72,9 +72,3 @@ out:
 		return (set_errno(error));
 	return (0);
 }
-
-int
-rename(char *from, char *to)
-{
-	return (renameat(AT_FDCWD, from, AT_FDCWD, to));
-}

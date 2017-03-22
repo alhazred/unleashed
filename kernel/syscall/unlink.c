@@ -68,15 +68,3 @@ unlinkat(int fd, char *name, int flags)
 		return (set_errno(error));
 	return (0);
 }
-
-int
-unlink(char *name)
-{
-	return (unlinkat(AT_FDCWD, name, 0));
-}
-
-int
-rmdir(char *name)
-{
-	return (unlinkat(AT_FDCWD, name, AT_REMOVEDIR));
-}

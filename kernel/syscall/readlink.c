@@ -115,12 +115,6 @@ out:
 	return ((ssize_t)(cnt - auio.uio_resid));
 }
 
-ssize_t
-readlink(char *name, char *buf, size_t count)
-{
-	return (readlinkat(AT_FDCWD, name, buf, count));
-}
-
 #ifdef _SYSCALL32_IMPL
 /*
  * readlink32() intentionally returns a ssize_t rather than ssize32_t;
@@ -131,13 +125,6 @@ ssize_t
 readlinkat32(int dfd, caddr32_t name, caddr32_t buf, size32_t count)
 {
 	return ((ssize32_t)readlinkat(dfd, (char *)(uintptr_t)name,
-	    (char *)(uintptr_t)buf, (ssize32_t)count));
-}
-
-ssize_t
-readlink32(caddr32_t name, caddr32_t buf, size32_t count)
-{
-	return ((ssize32_t)readlinkat(AT_FDCWD, (char *)(uintptr_t)name,
 	    (char *)(uintptr_t)buf, (ssize32_t)count));
 }
 

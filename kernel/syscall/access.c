@@ -144,9 +144,3 @@ faccessat(int fd, char *fname, int fmode, int flag)
 		return (set_errno(error));
 	return (0);
 }
-
-int
-access(char *fname, int fmode)
-{
-	return (faccessat(AT_FDCWD, fname, fmode, 0));
-}

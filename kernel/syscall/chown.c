@@ -78,21 +78,3 @@ fchownat(int fd, char *path, uid_t uid, gid_t gid, int flag)
 		return (set_errno(error));
 	return (0);
 }
-
-int
-chown(char *path, uid_t uid, gid_t gid)
-{
-	return (fchownat(AT_FDCWD, path, uid, gid, 0));
-}
-
-int
-lchown(char *path, uid_t uid, gid_t gid)
-{
-	return (fchownat(AT_FDCWD, path, uid, gid, AT_SYMLINK_NOFOLLOW));
-}
-
-int
-fchown(int fd, uid_t uid, uid_t gid)
-{
-	return (fchownat(fd, NULL, uid, gid, 0));
-}

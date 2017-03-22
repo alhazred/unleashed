@@ -77,9 +77,3 @@ out:
 		return (set_errno(error));
 	return (0);
 }
-
-int
-link(char *from, char *to)
-{
-	return (linkat(AT_FDCWD, from, AT_FDCWD, to, 0));
-}

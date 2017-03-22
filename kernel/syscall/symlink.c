@@ -110,9 +110,3 @@ out:
 		return (set_errno(error));
 	return (0);
 }
-
-int
-symlink(char *target, char *linkname)
-{
-	return (symlinkat(target, AT_FDCWD, linkname));
-}

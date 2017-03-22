@@ -107,9 +107,3 @@ mknodat(int fd, char *fname, mode_t fmode, dev_t dev)
 	VN_RELE(vp);
 	return (0);
 }
-
-int
-mknod(char *fname, mode_t fmode, dev_t dev)
-{
-	return (mknodat(AT_FDCWD, fname, fmode, dev));
-}

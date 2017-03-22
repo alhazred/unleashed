@@ -150,7 +150,7 @@ static int cstat(vnode_t *vp, struct stat *, int, cred_t *);
 		return (0);					\
 	}
 
-int
+static inline int
 fstat(int fd, struct stat *sb)
 {
 	FSTAT_BODY(fd, sb, cstat)
@@ -171,18 +171,6 @@ fstatat(int fd, char *name, struct stat *sb, int flags)
 		csflags |= ATTR_REAL;	/* flag for procfs lookups */
 
 	return (cstatat(fd, name, sb, followflag, csflags));
-}
-
-int
-stat(char *name, struct stat *sb)
-{
-	return (fstatat(AT_FDCWD, name, sb, 0));
-}
-
-int
-lstat(char *name, struct stat *sb)
-{
-	return (fstatat(AT_FDCWD, name, sb, AT_SYMLINK_NOFOLLOW));
 }
 
 /*
@@ -285,7 +273,7 @@ lookup:
 static int cstatat32(int, char *, struct stat32 *, int, int);
 static int cstat32(vnode_t *, struct stat32 *, int, cred_t *);
 
-int
+static inline int
 fstat32(int fd, struct stat32 *sb)
 {
 	FSTAT_BODY(fd, sb, cstat32)
@@ -306,18 +294,6 @@ fstatat32(int fd, char *name, struct stat32 *sb, int flags)
 		csflags |= ATTR_REAL;	/* flag for procfs lookups */
 
 	return (cstatat32(fd, name, sb, followflag, csflags));
-}
-
-int
-stat32(char *name, struct stat32 *sb)
-{
-	return (fstatat32(AT_FDCWD, name, sb, 0));
-}
-
-int
-lstat32(char *name, struct stat32 *sb)
-{
-	return (fstatat32(AT_FDCWD, name, sb, AT_SYMLINK_NOFOLLOW));
 }
 
 static int
@@ -412,7 +388,7 @@ lookup:
 static int cstatat64(int, char *, struct stat64 *, int, int);
 static int cstat64(vnode_t *, struct stat64 *, int, cred_t *);
 
-int
+static inline int
 fstat64(int fd, struct stat64 *sb)
 {
 	FSTAT_BODY(fd, sb, cstat64)
@@ -433,18 +409,6 @@ fstatat64(int fd, char *name, struct stat64 *sb, int flags)
 		csflags |= ATTR_REAL;	/* flag for procfs lookups */
 
 	return (cstatat64(fd, name, sb, followflag, csflags));
-}
-
-int
-stat64(char *name, struct stat64 *sb)
-{
-	return (fstatat64(AT_FDCWD, name, sb, 0));
-}
-
-int
-lstat64(char *name, struct stat64 *sb)
-{
-	return (fstatat64(AT_FDCWD, name, sb, AT_SYMLINK_NOFOLLOW));
 }
 
 static int
@@ -523,7 +487,7 @@ lookup:
 static int cstatat64_32(int, char *, struct stat64_32 *, int, int);
 static int cstat64_32(vnode_t *, struct stat64_32 *, int, cred_t *);
 
-int
+static inline int
 fstat64_32(int fd, struct stat64_32 *sb)
 {
 	FSTAT_BODY(fd, sb, cstat64_32)
@@ -544,18 +508,6 @@ fstatat64_32(int fd, char *name, struct stat64_32 *sb, int flags)
 		csflags |= ATTR_REAL;	/* flag for procfs lookups */
 
 	return (cstatat64_32(fd, name, sb, followflag, csflags));
-}
-
-int
-stat64_32(char *name, struct stat64_32 *sb)
-{
-	return (fstatat64_32(AT_FDCWD, name, sb, 0));
-}
-
-int
-lstat64_32(char *name, struct stat64_32 *sb)
-{
-	return (fstatat64_32(AT_FDCWD, name, sb, AT_SYMLINK_NOFOLLOW));
 }
 
 static int

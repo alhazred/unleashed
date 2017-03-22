@@ -65,21 +65,3 @@ fchmodat(int fd, char *path, int mode, int flag)
 		return (set_errno(error));
 	return (0);
 }
-
-/*
- * Change mode of file given path name.
- */
-int
-chmod(char *path, int mode)
-{
-	return (fchmodat(AT_FDCWD, path, mode, 0));
-}
-
-/*
- * Change mode of file given file descriptor.
- */
-int
-fchmod(int fd, int mode)
-{
-	return (fchmodat(fd, NULL, mode, 0));
-}
