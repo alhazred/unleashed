@@ -42,7 +42,7 @@
 # - This script is only interpreted by ksh93 and explicitly allows the
 #   use of ksh93 language extensions.
 #
-export NIGHTLY_OPTIONS='-DCAmpr'
+export NIGHTLY_OPTIONS='-CAmpr'
 
 # CODEMGR_WS - where is your workspace at
 #export CODEMGR_WS="$HOME/ws/illumos-gate"
@@ -121,7 +121,7 @@ export VERSION="`git describe --long --all HEAD | cut -d/ -f2-`"
 # PKGPUBLISHER controls the publisher setting for the repository.
 #
 export PKGARCHIVE="${CODEMGR_WS}/packages/${MACH}/nightly"
-# export PKGPUBLISHER='publisher'
+export PKGPUBLISHER='unleashed'
 
 # Package manifest format version.
 export PKGFMT_OUTPUT='v1'
@@ -137,10 +137,3 @@ export MAKEFLAGS='k'
 # POST_NIGHTLY can be any command to be run at the end of nightly.  See
 # nightly(1) for interactions between environment variables and this command.
 #POST_NIGHTLY=
-
-# If your distro uses certain versions of Perl, make sure either Makefile.master
-# contains your new defaults OR your .env file sets them.
-# These are how you would override for building on OmniOS r151012, for example.
-#export PERL_VERSION=5.16.1
-#export PERL_ARCH=i86pc-solaris-thread-multi-64int
-#export PERL_PKGVERS=-5161
