@@ -125,6 +125,7 @@ MAN = aac.7d \
       fctl.7d \
       fd.7d \
       fp.7d \
+      full.7d \
       gld.7d \
       hci1394.7d \
       hermon.7d \
