@@ -16,7 +16,7 @@ all: ${SUBDIR}
 
 .if !empty(BUILD_ARCH)
 CFGARCH=${BUILD_ARCH}
-.elif ${MACHINE} == "i86pc"
+.elif ${MACHINE} == "i86pc" || ${MACHINE} == "i386" || ${MACHINE} == "amd64"
 CFGARCH=x86
 .elif ${MACHINE} == "sparc"
 CFGARCH=sparc
