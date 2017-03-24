@@ -60,10 +60,6 @@ case "$0" in
 	if [ ! -f .hushlogin ]
 	then
 		/usr/sbin/quota
-		#	Allow the user to break the Message-Of-The-Day only.
-		trap "trap '' 2"  2
-		/bin/cat -s /etc/motd
-		trap "" 2
 
 		/bin/mail -E
 		case $? in

@@ -371,6 +371,7 @@ static	void	login_exit(int)__NORETURN;
 static	int	logins_disabled(char *);
 static	void	log_bad_attempts(void);
 static	int	is_number(char *);
+static	void	printmotd(void);
 
 /*
  *			*** main ***
@@ -591,6 +592,9 @@ main(int argc, char *argv[], char **renvp)
 	if (setuid(pwd->pw_uid) == -1) {
 		login_exit(1);
 	}
+
+	if (!silent)
+		printmotd();
 
 	/*
 	 * Set up the basic environment for the exec.  This includes
@@ -2459,4 +2463,22 @@ is_number(char *ptr)
 		ptr++;
 	}
 	return (1);
+}
+
+static void
+printmotd(void)
+{
+	int fd;
+	char buf[2048];
+	ssize_t nr, nwr;
+
+	if ((fd = open("/etc/motd", O_RDONLY)) < 0)
+		return;
+
+	do {
+		nr = read(fd, buf, sizeof(buf));
+		nwr = write(STDOUT_FILENO, buf, nr);
+	} while(nr > 0 && nwr == nr);
+
+	close(fd);
 }

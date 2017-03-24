@@ -4,7 +4,7 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH LOGIN 1 "Feb 25, 2017"
+.TH LOGIN 1 "Mar 24, 2017"
 .SH NAME
 login \- sign on to the system
 .SH SYNOPSIS
@@ -78,8 +78,9 @@ silently disconnected.
 .LP
 After a successful login, accounting files are updated. Device owner, group,
 and permissions are set according to the contents of the
-\fB/etc/logindevperm\fR file, and the time you last logged in is printed (see
-\fBlogindevperm\fR(4)).
+\fB/etc/logindevperm\fR file, and the time you last logged in as well as the
+message of the day (\fB/etc/motd\fR) are printed, unless \fB$HOME/.hushlogin\fR
+exists.
 .sp
 .LP
 The user-ID, group-ID, supplementary group list, and working directory are
@@ -99,26 +100,6 @@ TZ=\fItimezone-specification\fR
 .fi
 .in -2
 
-.sp
-.LP
-For Bourne shell and Korn shell logins, the shell executes \fB/etc/profile\fR
-and \fB$HOME/.profile\fR, if it exists.
-.sp
-.LP
-For the \fBksh93\fR Korn shell, an interactive shell then executes
-\fB/etc/ksh.kshrc\fR, followed by the file specified by the \fBENV\fR
-environment variable. If \fB$ENV\fR is not set, this defaults to
-\fB$HOME/.kshrc\fR. For the \fBksh\fR and \fB/usr/xpg4/bin/sh\fR Korn Shell, an
-interactive shell executes the file named by \fB$ENV\fR (no default).
-.sp
-.LP
-For C shell logins, the shell executes \fB/etc/.login\fR, \fB$HOME/.cshrc\fR,
-and \fB$HOME/.login\fR. The default \fB/etc/profile\fR and \fB/etc/.login\fR
-files check quotas (see \fBquota\fR(1M)), print \fB/etc/motd\fR, and check for
-mail. None of the messages are printed if the file \fB$HOME/.hushlogin\fR
-exists. The name of the command interpreter is set to \fB\(mi\fR (dash),
-followed by the last component of the interpreter's path name, for example,
-\fB\(mish\fR\&.
 .sp
 .LP
 If the \fIlogin-shell\fR field in the password file (see \fBpasswd\fR(4)) is
@@ -340,47 +321,10 @@ Error.
 .SH FILES
 .ne 2
 .na
-\fB\fB$HOME/.cshrc\fR\fR
-.ad
-.RS 23n
-Initial commands for each \fBcsh\fR.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fB$HOME/.hushlogin\fR\fR
 .ad
 .RS 23n
 Suppresses login messages.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB$HOME/.kshrc\fR\fR
-.ad
-.RS 23n
-User's commands for interactive \fBksh93\fR, if \fB$ENV\fR is unset; executes
-after \fB/etc/ksh.kshrc\fR.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB$HOME/.login\fR\fR
-.ad
-.RS 23n
-User's login commands for \fBcsh\fR.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB$HOME/.profile\fR\fR
-.ad
-.RS 23n
-User's login commands for \fBsh\fR, \fBksh\fR, and \fBksh93\fR.
 .RE
 
 .sp
@@ -395,28 +339,10 @@ Private list of trusted hostname/username combinations.
 .sp
 .ne 2
 .na
-\fB\fB/etc/.login\fR\fR
-.ad
-.RS 23n
-System-wide \fBcsh\fR login commands.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fB/etc/issue\fR\fR
 .ad
 .RS 23n
 Issue or project identification.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB/etc/ksh.kshrc\fR\fR
-.ad
-.RS 23n
-System-wide commands for interactive \fBksh93\fR.
 .RE
 
 .sp
@@ -458,15 +384,6 @@ Password file.
 .sp
 .ne 2
 .na
-\fB\fB/etc/profile\fR\fR
-.ad
-.RS 23n
-System-wide \fBsh\fR, \fBksh\fR, and \fBksh93\fR login commands.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fB/etc/shadow\fR\fR
 .ad
 .RS 23n
@@ -485,7 +402,7 @@ User's default command interpreter.
 .sp
 .ne 2
 .na
-\fB\fB/var/adm/lastlog.v2\fR\fR
+\fB\fB/var/adm/lastlog\fR\fR
 .ad
 .RS 23n
 Time of last login.

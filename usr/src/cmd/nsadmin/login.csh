@@ -48,7 +48,6 @@ setenv PAGER "/usr/bin/less -ins"
 
 if (! -e .hushlogin ) then
 	/usr/sbin/quota
-	/bin/cat -s /etc/motd
 	/bin/mail -E
 	switch ( $status )
 	case 0: 
