@@ -2470,15 +2470,14 @@ printmotd(void)
 {
 	int fd;
 	char buf[2048];
-	ssize_t nr, nwr;
+	ssize_t nr;
 
 	if ((fd = open("/etc/motd", O_RDONLY)) < 0)
 		return;
 
-	do {
-		nr = read(fd, buf, sizeof(buf));
-		nwr = write(STDOUT_FILENO, buf, nr);
-	} while(nr > 0 && nwr == nr);
+	while ((nr = read(fd, buf, sizeof(buf))) > 0 &&
+		write(STDOUT_FILENO, buf, nr) == nr)
+		;
 
 	close(fd);
 }
