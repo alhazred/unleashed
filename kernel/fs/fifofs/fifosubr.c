@@ -71,7 +71,8 @@ int Fifohiwat = FIFOHIWAT;	/* Modifiable FIFO high water mark */
 
 extern struct qinit fifo_strdata;
 
-struct vfsops *fifo_vfsops;
+/* yes, we want all defaults */
+static const struct vfsops fifo_vfsops;
 
 static vfsdef_t vfw = {
 	VFSDEF_VERSION,
@@ -325,16 +326,13 @@ static void fifo_reinit_vp(vnode_t *vp)
 int
 fifoinit(int fstype, char *name)
 {
-	static const fs_operation_def_t fifo_vfsops_template[] = {
-		NULL, NULL
-	};
 	int error;
 	major_t dev;
 
 	fifofstype = fstype;
-	error = vfs_setfsops(fstype, fifo_vfsops_template, &fifo_vfsops);
+	error = vfs_setfsops_const(fstype, &fifo_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "fifoinit: bad vfs ops template");
+		cmn_err(CE_WARN, "fifoinit: bad fstype");
 		return (error);
 	}
 
@@ -346,7 +344,7 @@ fifoinit(int fstype, char *name)
 
 	fifovfsp = kmem_zalloc(sizeof (struct vfs), KM_SLEEP);
 	fifovfsp->vfs_next = NULL;
-	vfs_setops(fifovfsp, fifo_vfsops);
+	vfs_setops(fifovfsp, &fifo_vfsops);
 	fifovfsp->vfs_vnodecovered = NULL;
 	fifovfsp->vfs_flag = 0;
 	fifovfsp->vfs_bsize = 1024;
