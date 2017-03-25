@@ -78,7 +78,8 @@ kmutex_t ntable_lock;
 static vmem_t	*nm_inoarena;	/* vmem arena to allocate inode no's from */
 static kmutex_t	nm_inolock;
 
-vfsops_t *namefs_vfsops;
+static const struct vfsops namefs_vfsops;
+
 /*
  * Functions to allocate node id's starting from 1. Based on vmem routines.
  * The vmem arena is extended in NM_INOQUANT chunks.
@@ -344,7 +345,7 @@ nm_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *crp)
 
 	mutex_enter(&mvp->v_lock);
 	if ((mvp->v_flag & VROOT) ||
-	    vfs_matchops(mvp->v_vfsp, namefs_vfsops)) {
+	    vfs_matchops(mvp->v_vfsp, &namefs_vfsops)) {
 		mutex_exit(&mvp->v_lock);
 		releasef(namefdp.fd);
 		return (EBUSY);
@@ -660,6 +661,19 @@ nm_sync(vfs_t *vfsp, short flag, cred_t *crp)
 	return (fop_fsync(nodep->nm_filevp, FSYNC, crp, NULL));
 }
 
+static const struct vfsops namefs_vfsops = {
+	.vfs_mount = nm_mount,
+	.vfs_unmount = nm_unmount,
+	.vfs_root = nm_root,
+	.vfs_statvfs = nm_statvfs,
+	.vfs_sync = nm_sync,
+};
+
+static const struct vfsops namefs_dummy_vfsops = {
+	.vfs_statvfs = nm_statvfs,
+	.vfs_sync = nm_sync,
+};
+
 /*
  * File system initialization routine. Save the file system type,
  * establish a file system device number and initialize nm_filevp_hash[].
@@ -667,33 +681,12 @@ nm_sync(vfs_t *vfsp, short flag, cred_t *crp)
 int
 nameinit(int fstype, char *name)
 {
-	static const fs_operation_def_t nm_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = nm_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = nm_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = nm_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = nm_statvfs },
-		VFSNAME_SYNC,		{ .vfs_sync = nm_sync },
-		NULL,			NULL
-	};
-	static const fs_operation_def_t nm_dummy_vfsops_template[] = {
-		VFSNAME_STATVFS,	{ .vfs_statvfs = nm_statvfs },
-		VFSNAME_SYNC,		{ .vfs_sync = nm_sync },
-		NULL,			NULL
-	};
 	int error;
 	int dev;
-	vfsops_t *dummy_vfsops;
 
-	error = vfs_setfsops(fstype, nm_vfsops_template, &namefs_vfsops);
+	error = vfs_setfsops_const(fstype, &namefs_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "nameinit: bad vfs ops template");
-		return (error);
-	}
-
-	error = vfs_makefsops(nm_dummy_vfsops_template, &dummy_vfsops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "nameinit: bad dummy vfs ops template");
+		cmn_err(CE_WARN, "nameinit: bad fsytpe");
 		return (error);
 	}
 
@@ -706,7 +699,7 @@ nameinit(int fstype, char *name)
 	mutex_init(&ntable_lock, NULL, MUTEX_DEFAULT, NULL);
 	namedev = makedevice(dev, 0);
 	bzero(nm_filevp_hash, sizeof (nm_filevp_hash));
-	vfs_setops(&namevfs, dummy_vfsops);
+	vfs_setops(&namevfs, &namefs_dummy_vfsops);
 	namevfs.vfs_vnodecovered = NULL;
 	namevfs.vfs_bsize = 1024;
 	namevfs.vfs_fstype = namefstype;
