@@ -147,28 +147,20 @@ dev_t	doordev;
 extern	struct vfs door_vfs;
 extern	const struct vnodeops door_vnodeops;
 
+/* yes, we want all defaults */
+static const struct vfsops door_vfsops;
+
 int
 _init(void)
 {
-	static const fs_operation_def_t door_vfsops_template[] = {
-		NULL, NULL
-	};
-	vfsops_t *door_vfsops;
 	major_t major;
-	int error;
 
 	mutex_init(&door_knob, NULL, MUTEX_DEFAULT, NULL);
 	if ((major = getudev()) == (major_t)-1)
 		return (ENXIO);
 	doordev = makedevice(major, 0);
 
-	/* Create a dummy vfs */
-	error = vfs_makefsops(door_vfsops_template, &door_vfsops);
-	if (error != 0) {
-		cmn_err(CE_WARN, "door init: bad vfs ops");
-		return (error);
-	}
-	VFS_INIT(&door_vfs, door_vfsops, NULL);
+	VFS_INIT(&door_vfs, &door_vfsops, NULL);
 	door_vfs.vfs_flag = VFS_RDONLY;
 	door_vfs.vfs_dev = doordev;
 	vfs_make_fsid(&(door_vfs.vfs_fsid), doordev, 0);
