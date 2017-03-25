@@ -475,16 +475,16 @@ fdstatvfs(struct vfs *vfsp, struct statvfs64 *sp)
 	return (0);
 }
 
+static const struct vfsops fd_vfsops = {
+	.vfs_mount = fdmount,
+	.vfs_unmount = fdunmount,
+	.vfs_root = fdroot,
+	.vfs_statvfs = fdstatvfs,
+};
+
 int
 fdinit(int fstype, char *name)
 {
-	static const fs_operation_def_t fd_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = fdmount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = fdunmount },
-		VFSNAME_ROOT, 		{ .vfs_root = fdroot },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = fdstatvfs },
-		NULL,			NULL
-	};
 	int error;
 
 	fdfstype = fstype;
@@ -493,9 +493,9 @@ fdinit(int fstype, char *name)
 	/*
 	 * Associate VFS ops vector with this fstype.
 	 */
-	error = vfs_setfsops(fstype, fd_vfsops_template, NULL);
+	error = vfs_setfsops_const(fstype, &fd_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "fdinit: bad vnode ops template");
+		cmn_err(CE_WARN, "fdinit: bad fstype");
 		return (error);
 	}
 
