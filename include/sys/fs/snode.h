@@ -143,7 +143,6 @@ struct vfssw;
 struct cred;
 
 extern struct vfs	spec_vfs;
-extern struct vfsops	spec_vfsops;
 extern struct kmem_cache *snode_cache;
 
 /*

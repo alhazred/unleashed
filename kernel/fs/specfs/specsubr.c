@@ -784,24 +784,22 @@ snode_destructor(void *buf, void *cdrarg)
 	vn_free(vp);
 }
 
+static const struct vfsops spec_vfsops = {
+	.vfs_sync = spec_sync,
+};
 
 int
 specinit(int fstype, char *name)
 {
-	static const fs_operation_def_t spec_vfsops_template[] = {
-		VFSNAME_SYNC, { .vfs_sync = spec_sync },
-		NULL, NULL
-	};
-	struct vfsops *spec_vfsops;
 	int error;
 	dev_t dev;
 
 	/*
 	 * Associate vfs and vnode operations.
 	 */
-	error = vfs_setfsops(fstype, spec_vfsops_template, &spec_vfsops);
+	error = vfs_setfsops_const(fstype, &spec_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "specinit: bad vfs ops template");
+		cmn_err(CE_WARN, "specinit: bad fstype");
 		return (error);
 	}
 
@@ -817,7 +815,7 @@ specinit(int fstype, char *name)
 	/*
 	 * Associate vfs operations with spec_vfs
 	 */
-	VFS_INIT(&spec_vfs, spec_vfsops, NULL);
+	VFS_INIT(&spec_vfs, &spec_vfsops, NULL);
 	if ((dev = getudev()) == -1)
 		dev = 0;
 	specdev = makedevice(dev, 0);
