@@ -128,16 +128,16 @@ mntinitrootnode(mntnode_t *mnp)
 	vp->v_data = (caddr_t)mnp;
 }
 
+static const struct vfsops mnt_vfsops = {
+	.vfs_mount = mntmount,
+	.vfs_unmount = mntunmount,
+	.vfs_root = mntroot,
+	.vfs_statvfs = mntstatvfs,
+};
+
 static int
 mntinit(int fstype, char *name)
 {
-	static const fs_operation_def_t mnt_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = mntmount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = mntunmount },
-		VFSNAME_ROOT,		{ .vfs_root = mntroot },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = mntstatvfs },
-		NULL,			NULL
-	};
 	int error;
 
 	mntfstype = fstype;
@@ -145,9 +145,9 @@ mntinit(int fstype, char *name)
 	/*
 	 * Associate VFS ops vector with this fstype.
 	 */
-	error = vfs_setfsops(fstype, mnt_vfsops_template, NULL);
+	error = vfs_setfsops_const(fstype, &mnt_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "mntinit: bad vfs ops template");
+		cmn_err(CE_WARN, "mntinit: bad fstyp");
 		return (error);
 	}
 
