@@ -52,7 +52,7 @@
  * In addition, some common routines are found in the 'objfs_common.c' file.
  */
 
-static const fs_operation_def_t objfs_vfstops[];
+static const struct vfsops objfs_vfsops;
 
 static int objfs_init(int, char *);
 
@@ -115,12 +115,11 @@ static minor_t objfs_minor;
 static int
 objfs_init(int fstype, char *name)
 {
-	vfsops_t *vfsops;
 	int error;
 
 	objfs_fstype = fstype;
-	if (error = vfs_setfsops(fstype, objfs_vfstops, &vfsops)) {
-		cmn_err(CE_WARN, "objfs_init: bad vfs ops template");
+	if (error = vfs_setfsops_const(fstype, &objfs_vfsops)) {
+		cmn_err(CE_WARN, "objfs_init: bad fstype");
 		return (error);
 	}
 
@@ -246,10 +245,9 @@ objfs_statvfs(vfs_t *vfsp, statvfs64_t *sp)
 	return (0);
 }
 
-static const fs_operation_def_t objfs_vfstops[] = {
-	{ VFSNAME_MOUNT,	{ .vfs_mount = objfs_mount } },
-	{ VFSNAME_UNMOUNT,	{ .vfs_unmount = objfs_unmount } },
-	{ VFSNAME_ROOT,		{ .vfs_root = objfs_root } },
-	{ VFSNAME_STATVFS,	{ .vfs_statvfs = objfs_statvfs } },
-	{ NULL }
+static const struct vfsops objfs_vfsops = {
+	.vfs_mount = objfs_mount,
+	.vfs_unmount = objfs_unmount,
+	.vfs_root = objfs_root,
+	.vfs_statvfs = objfs_statvfs,
 };
