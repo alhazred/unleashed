@@ -3182,13 +3182,13 @@ hat_page_setattr(struct page *pp, uint_t flag)
 
 	if (locked) {
 		/*
-		 * Some File Systems check if v_pagecache_list is empty
-		 * without grabbing the vphm mutex. Must not let it become
-		 * empty when pp is the only page on the list.
+		 * Some File Systems check if v_object's page list is
+		 * empty without grabbing the vphm mutex. Must not let it
+		 * become empty when pp is the only page on the list.
 		 */
-		if (vnode_get_prev(vp, pp) != NULL ||
-		    vnode_get_next(vp, pp) != NULL)
-			vnode_move_page_tail(vp, pp);
+		if (vmobject_get_prev(&vp->v_object, pp) != NULL ||
+		    vmobject_get_next(&vp->v_object, pp) != NULL)
+			vmobject_move_page_tail(&vp->v_object, pp);
 		mutex_exit(page_vnode_mutex(vp));
 	}
 }

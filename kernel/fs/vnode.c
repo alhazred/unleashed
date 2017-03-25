@@ -2654,7 +2654,7 @@ vn_has_mandatory_locks(vnode_t *vp, int mode)
 int
 vn_has_cached_data(vnode_t *vp)
 {
-	return (!list_is_empty(&vp->v_pagecache_list));
+	return (!list_is_empty(&vp->v_object.list));
 }
 
 /*

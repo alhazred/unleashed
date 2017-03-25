@@ -118,7 +118,7 @@ typedef struct commit {
  * marked as C_DELAYCOMMIT, which can be later changed to C_COMMIT if the
  * commit operation is in progress. If the NFS server is e.g. rebooted, the
  * client needs to resend all the uncommitted data. The client walks all the
- * vp->v_pagecache_list and if C_DELAYCOMMIT or C_COMMIT is set, the page is
+ * vp->v_object's list and if C_DELAYCOMMIT or C_COMMIT is set, the page is
  * marked as dirty and thus will be written to the server again.
  */
 #define	C_NOCOMMIT	0	/* no commit is required */

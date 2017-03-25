@@ -49,10 +49,10 @@
 #include <sys/uio.h>
 #include <sys/resource.h>
 #include <vm/seg_enum.h>
+#include <vm/object.h>
 #include <sys/kstat.h>
 #include <sys/kmem.h>
 #include <sys/list.h>
-#include <sys/avl.h>
 #ifdef	_KERNEL
 #include <sys/buf.h>
 #include <sys/sdt.h>
@@ -260,51 +260,8 @@ typedef struct vnode {
 	struct vnode	*v_xattrdir;	/* unnamed extended attr dir (GFS) */
 	uint_t		v_count_dnlc;	/* dnlc reference count */
 
-	avl_tree_t	v_pagecache;
-	list_t		v_pagecache_list;
-	kmutex_t	v_pagecache_lock;
+	struct vmobject v_object;
 } vnode_t;
-
-#if defined(_KERNEL)
-#define vnode_add_page_head(v,p)	list_insert_head(&(v)->v_pagecache_list, (p))
-#define vnode_add_page_tail(v,p)	list_insert_tail(&(v)->v_pagecache_list, (p))
-#define vnode_remove_page(v,p)		list_remove(&(v)->v_pagecache_list, (p))
-#define vnode_get_head(v)		list_head(&(v)->v_pagecache_list)
-#define vnode_get_tail(v)		list_tail(&(v)->v_pagecache_list)
-#define vnode_get_prev(v,p)		list_prev(&(v)->v_pagecache_list, (p))
-#define vnode_get_next(v,p)		list_next(&(v)->v_pagecache_list, (p))
-
-static inline struct page *
-vnode_get_prev_loop(struct vnode *vnode, struct page *page)
-{
-	struct page *p;
-
-	p = vnode_get_prev(vnode, page);
-	if (p == NULL)
-		p = vnode_get_tail(vnode);
-
-	return (p);
-}
-
-static inline struct page *
-vnode_get_next_loop(struct vnode *vnode, struct page *page)
-{
-	struct page *p;
-
-	p = vnode_get_next(vnode, page);
-	if (p == NULL)
-		p = vnode_get_head(vnode);
-
-	return (p);
-}
-
-static inline void
-vnode_move_page_tail(struct vnode *vnode, struct page *page)
-{
-	vnode_remove_page(vnode, page);
-	vnode_add_page_tail(vnode, page);
-}
-#endif
 
 #define	IS_DEVVP(vp)	\
 	((vp)->v_type == VCHR || (vp)->v_type == VBLK || (vp)->v_type == VFIFO)
@@ -370,7 +327,7 @@ typedef struct vn_vfslocks_entry {
 #define	V_LOCALITY	0x8000	/* whether locality aware */
 
 /*
- * Flag that indicates the VM should maintain the v_pagecache_list with all
+ * Flag that indicates the VM should maintain the v_object's list with all
  * modified pages on one end and unmodified pages at the other. This makes
  * finding dirty pages to write back to disk much faster at the expense of
  * taking a minor fault on the first store instruction which touches a

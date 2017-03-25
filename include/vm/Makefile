@@ -4,6 +4,7 @@ INCS=	anon.h \
 	faultcode.h \
 	hat.h \
 	kpm.h \
+	object.h \
 	page.h \
 	pvn.h \
 	rm.h \

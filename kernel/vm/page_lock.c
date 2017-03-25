@@ -832,7 +832,7 @@ page_iolock_assert(page_t *pp)
 kmutex_t *
 page_vnode_mutex(vnode_t *vp)
 {
-	return (&vp->v_pagecache_lock);
+	return (&vp->v_object.lock);
 }
 
 kmutex_t *

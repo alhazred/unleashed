@@ -388,9 +388,9 @@ dr_memlist_del_retired_pages(struct memlist *mlist)
 
 	PR_MEM("%s\n", f);
 
-	for (pp = vnode_get_head(vp);
+	for (pp = vmobject_get_head(&vp->v_object);
 	     pp != NULL;
-	     pp = vnode_get_next(vp, pp)) {
+	     pp = vmobject_get_next(&vp->v_object, pp)) {
 		ASSERT(pp != NULL);
 		ASSERT(pp->p_vnode == retired_pages);
 

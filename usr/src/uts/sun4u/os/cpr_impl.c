@@ -1540,9 +1540,9 @@ i_cpr_find_ppages(void)
 	 * these pages are mostly comprised of forthdebug words
 	 */
 	vcnt = 0;
-	for (pp = vnode_get_head(&promvp);
+	for (pp = vmobject_get_head(&promvp.v_object);
 	     pp != NULL;
-	     pp = vnode_get_next(&promvp, pp)) {
+	     pp = vmobject_get_next(&promvp.v_object, pp)) {
 		if (cpr_setbit(pp->p_offset, mapflag) == 0)
 			vcnt++;
 	}

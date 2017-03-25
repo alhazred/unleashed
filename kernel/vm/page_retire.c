@@ -771,8 +771,9 @@ pr_list_kstat_update(kstat_t *ksp, int rw)
 	}
 
 	count = 1;
-	for (pp = vnode_get_next(retired_pages, vnode_get_head(retired_pages));
-	    pp != NULL; pp = vnode_get_next(retired_pages, pp)) {
+	for (pp = vmobject_get_next(&retired_pages->v_object,
+				    vmobject_get_head(&retired_pages->v_object));
+	    pp != NULL; pp = vmobject_get_next(&retired_pages->v_object, pp)) {
 		count++;
 	}
 	mutex_exit(page_vnode_mutex(retired_pages));
@@ -804,7 +805,7 @@ pr_list_kstat_snapshot(kstat_t *ksp, void *buf, int rw)
 	kspmem = (struct memunit *)buf;
 
 	mutex_enter(page_vnode_mutex(retired_pages));
-	pp = vnode_get_head(retired_pages);
+	pp = vmobject_get_head(&retired_pages->v_object);
 	if (((caddr_t)kspmem >= (caddr_t)buf + ksp->ks_data_size) ||
 	    (pp == NULL)) {
 		mutex_exit(page_vnode_mutex(retired_pages));
@@ -813,8 +814,8 @@ pr_list_kstat_snapshot(kstat_t *ksp, void *buf, int rw)
 	kspmem->address = ptob(pp->p_pagenum);
 	kspmem->size = PAGESIZE;
 	kspmem++;
-	for (pp = vnode_get_next(retired_pages, pp); pp != NULL;
-	    pp = vnode_get_next(retired_pages, pp), kspmem++) {
+	for (pp = vmobject_get_next(&retired_pages->v_object, pp); pp != NULL;
+	    pp = vmobject_get_next(&retired_pages->v_object, pp), kspmem++) {
 		if ((caddr_t)kspmem >= (caddr_t)buf + ksp->ks_data_size)
 			break;
 		kspmem->address = ptob(pp->p_pagenum);

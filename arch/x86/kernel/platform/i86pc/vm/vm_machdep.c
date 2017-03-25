@@ -3466,7 +3466,7 @@ find_page(vnode_t *vnode, uoff_t off)
 		.p_offset = off,
 	};
 
-	return (avl_find(&vnode->v_pagecache, &key, NULL));
+	return (avl_find(&vnode->v_object.tree, &key, NULL));
 }
 
 

@@ -70,7 +70,7 @@ page_walk_init(mdb_walk_state_t *wsp)
 		 * Walk all pages
 		 *
 		 * In essence:
-		 *	::walk vn_cache | ::print vnode_t v_pagecache | ::walk avl
+		 *	::walk vn_cache | ::print vnode_t v_object.tree | ::walk avl
 		 */
 
 		if (mdb_layered_walk("vn_cache", wsp) == -1) {
@@ -82,7 +82,7 @@ page_walk_init(mdb_walk_state_t *wsp)
 		 * Walk just this vnode
 		 *
 		 * In essence:
-		 *	addr::print vnode_t v_pagecache | ::walk avl
+		 *	addr::print vnode_t v_object.tree | ::walk avl
 		 *
 		 * In this case, all the work happens in the _step function.
 		 */
@@ -94,12 +94,12 @@ page_walk_init(mdb_walk_state_t *wsp)
 /*
  * This is called for each vnode, so we just need to do what amounts to:
  *
- *	addr::print vnode_t v_pagecache | ::walk avl
+ *	addr::print vnode_t v_object.tree | ::walk avl
  */
 int
 page_walk_step(mdb_walk_state_t *wsp)
 {
-	uintptr_t addr = wsp->walk_addr + OFFSETOF(struct vnode, v_pagecache);
+	uintptr_t addr = wsp->walk_addr + OFFSETOF(struct vnode, v_object.tree);
 
 	if (mdb_pwalk("avl", wsp->walk_callback, wsp->walk_cbdata, addr) == -1) {
 		mdb_warn("couldn't walk vnode's page AVL tree at %p", addr);

@@ -277,7 +277,7 @@ find_page(vnode_t *vnode, uoff_t off)
 	};
 	page_t *page;
 
-	page = avl_find(&vnode->v_pagecache, &key, NULL);
+	page = avl_find(&vnode->v_object.tree, &key, NULL);
 
 #ifdef	VM_STATS
 	if (page != NULL)
@@ -3148,7 +3148,7 @@ top:
  * low level routine to add page `page' to the AVL tree and vnode chains for
  * [vp, offset]
  *
- * Pages are normally inserted at the start of a vnode's v_pagecache_list.
+ * Pages are normally inserted at the start of a vnode's v_object list.
  * If the vnode is VMODSORT and the page is modified, it goes at the end.
  * This can happen when a modified page is relocated for DR.
  *
@@ -3183,21 +3183,21 @@ page_do_hashin(page_t *page, vnode_t *vnode, uoff_t offset)
 	 * Duplicates are not allowed - fail to insert if we already have a
 	 * page with this identity.
 	 */
-	if (avl_find(&vnode->v_pagecache, page, &where) != NULL) {
+	if (avl_find(&vnode->v_object.tree, page, &where) != NULL) {
 		page->p_vnode = NULL;
 		page->p_offset = (uoff_t)(-1);
 		return (0);
 	}
 
-	avl_insert(&vnode->v_pagecache, page, where);
+	avl_insert(&vnode->v_object.tree, page, where);
 
 	/*
 	 * Add the page to the vnode's list of pages
 	 */
 	if (IS_VMODSORT(vnode) && hat_ismod(page))
-		vnode_add_page_tail(vnode, page);
+		vmobject_add_page_tail(&vnode->v_object, page);
 	else
-		vnode_add_page_head(vnode, page);
+		vmobject_add_page_head(&vnode->v_object, page);
 
 	return (1);
 }
@@ -3247,9 +3247,9 @@ page_do_hashout(page_t *page)
 	ASSERT(vnode != NULL);
 	ASSERT(MUTEX_HELD(page_vnode_mutex(vnode)));
 
-	avl_remove(&vnode->v_pagecache, page);
+	avl_remove(&vnode->v_object.tree, page);
 
-	vnode_remove_page(vnode, page);
+	vmobject_remove_page(&vnode->v_object, page);
 
 	page_clr_all_props(page);
 	PP_CLRSWAP(page);
@@ -4213,10 +4213,10 @@ top:
  *	page_do_hashin(new, vp, off)
  *
  * doesn't work, since
- *  1) if old is the only page on the vnode, the v_pagecache_list has a window
+ *  1) if old is the only page on the vnode, the v_object list has a window
  *     where it looks empty. This will break file system assumptions.
  * and
- *  2) pvn_vplist_dirty() can't deal with pages moving on the v_pagecache_list.
+ *  2) pvn_vplist_dirty() can't deal with pages moving on the v_object list.
  */
 static void
 page_do_relocate_hash(page_t *new, page_t *old)
@@ -4236,8 +4236,8 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	new->p_vnode = old->p_vnode;
 	new->p_offset = old->p_offset;
 
-	avl_remove(&vp->v_pagecache, old);
-	avl_add(&vp->v_pagecache, new);
+	avl_remove(&vp->v_object.tree, old);
+	avl_add(&vp->v_object.tree, new);
 
 	if ((new->p_vnode->v_flag & VISSWAP) != 0)
 		PP_SETSWAP(new);
@@ -4245,8 +4245,8 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	/*
 	 * replace old with new on the vnode's page list
 	 */
-	list_insert_before(&vp->v_pagecache_list, old, new);
-	list_remove(&vp->v_pagecache_list, old);
+	list_insert_before(&vp->v_object.list, old, new);
+	list_remove(&vp->v_object.list, old);
 
 	/*
 	 * clear out the old page
@@ -7164,17 +7164,17 @@ pagecache_cmp(const void *va, const void *vb)
 void
 pagecache_init(struct vnode *vnode)
 {
-	avl_create(&vnode->v_pagecache, pagecache_cmp, sizeof (struct page),
+	avl_create(&vnode->v_object.tree, pagecache_cmp, sizeof (struct page),
 	    offsetof(struct page, p_pagecache));
-	list_create(&vnode->v_pagecache_list, sizeof (struct page),
+	list_create(&vnode->v_object.list, sizeof (struct page),
 	    offsetof(struct page, p_list.vnode));
-	mutex_init(&vnode->v_pagecache_lock, NULL, MUTEX_DEFAULT, NULL);
+	mutex_init(&vnode->v_object.lock, NULL, MUTEX_DEFAULT, NULL);
 }
 
 void
 pagecache_fini(struct vnode *vnode)
 {
-	mutex_destroy(&vnode->v_pagecache_lock);
-	list_destroy(&vnode->v_pagecache_list);
-	avl_destroy(&vnode->v_pagecache);
+	mutex_destroy(&vnode->v_object.lock);
+	list_destroy(&vnode->v_object.list);
+	avl_destroy(&vnode->v_object.tree);
 }

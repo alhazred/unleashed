@@ -274,10 +274,10 @@ struct as;
  * with a vnode is anchored by `page_cachelist' while other free pages
  * are anchored in architecture dependent ways (to handle page coloring etc.).
  *
- * Pages associated with a given vnode appear on a list anchored in the
- * vnode by the `v_pagecache' field.  They are linked together with
+ * Pages associated with a given vmobject appear on a list anchored in the
+ * vmobject by the `list' field.  They are linked together with
  * `p_list.vnode'.  The field `p_offset' contains a page's offset within
- * the vnode.  The pages on this list are not kept in offset order.  These
+ * the object.  The pages on this list are not kept in offset order.  These
  * lists, in a manner similar to the hash lists, are protected by an array
  * of mutexes called `vph_hash'.  Before searching or modifying this chain
  * the appropriate mutex in the vph_hash[] array must be held.
@@ -336,8 +336,8 @@ struct as;
  * the interval between dropping the list lock and acquiring the page
  * lock is indeterminate.
  *
- * In addition, when both a hash list lock (ph_mutex[]) and a vnode list
- * lock (v_pagecache_lock) are needed, the hash list lock must be acquired
+ * In addition, when both a hash list lock (ph_mutex[]) and a vmobject list
+ * lock (vmobject->lock) are needed, the hash list lock must be acquired
  * first.  The routine page_hashin() is a good example of this sequence.
  * This sequence is ASSERTed by checking that the vnode page cache lock is
  * not held just before each acquisition of one of the mutexs in ph_mutex[].
@@ -350,8 +350,7 @@ struct as;
  *
  * 	ph_mutex[]'s protect the page_hash[] array and its chains.
  *
- *	v_pagecache_lock protects the v_pagecache_list field and the vp page
- *	chains.
+ *	vmobject lock protects the object's list field and the page chains.
  *
  *	First lock the page, then the hash chain, then the vnode chain.  When
  *	this is not possible `trylocks' must be used.  Sleeping while holding
@@ -369,7 +368,7 @@ struct as;
  *					ph_mutex[]
  *	=====================================================================
  *	p_list		p_selock(E,S)	p_selock(E) &&      p_selock,
- *					v_pagecache_lock    v_pagecache_lock
+ *					vmobject's lock     vmobject's lock
  *	=====================================================================
  *	When the p_free bit is set:
  *
@@ -408,11 +407,10 @@ struct as;
  *	=====================================================================
  *	page_hash[]	ph_mutex[]	ph_mutex[]	    can hold this lock
  *							    before acquiring
- *							    a v_pagecache_lock
+ *							    a vmobject's lock
  *							    or pse_mutex.
  *	=====================================================================
- *	vp->v_pagecache_list
- *			v_pagecache_lock v_pagecache_lock   can only acquire
+ *	vmobject->list	vmobject's lock vmobject's lock     can only acquire
  *							    a pse_mutex while
  *							    holding this lock.
  *	=====================================================================
@@ -497,7 +495,7 @@ struct as;
  * Please see comments in front of page_demote_vp_pages(), hat_page_demote()
  * and page_szc_lock() for more details.
  *
- * Lock order: p_selock, page_szc_lock, ph_mutex/v_pagecache_lock/freelist,
+ * Lock order: p_selock, page_szc_lock, ph_mutex/vmobject's lock/freelist,
  * hat level locks.
  */
 

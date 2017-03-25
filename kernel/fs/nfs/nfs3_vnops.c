@@ -6289,9 +6289,9 @@ nfs3_get_commit(vnode_t *vp)
 	 * Step through all of the pages associated with this vnode
 	 * looking for pages which need to be committed.
 	 */
-	for (pp = vnode_get_head(vp);
+	for (pp = vmobject_get_head(&vp->v_object);
 	     pp != NULL;
-	     pp = vnode_get_next(vp, pp)) {
+	     pp = vmobject_get_next(&vp->v_object, pp)) {
 		/* Skip marker pages. */
 		if (PP_ISPVN_TAG(pp))
 			continue;

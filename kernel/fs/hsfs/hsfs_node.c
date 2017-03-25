@@ -690,9 +690,9 @@ hs_freenode(vnode_t *vp, struct hsfs *fsp, int nopage)
 			 * XXX - can we remove pages by fiat like this???
 			 * This really doesn't seem safe.
 			 */
-			vp->v_pagecache_list.list_head.list_next =
-			    vp->v_pagecache_list.list_head.list_prev =
-			    &vp->v_pagecache_list.list_head;
+			vp->v_object.list.list_head.list_next =
+			    vp->v_object.list.list_head.list_prev =
+			    &vp->v_object.list.list_head;
 			cmn_err(CE_WARN, "%s: dropped vnode cached pages in a "
 			    "questionable way", __func__);
 		}

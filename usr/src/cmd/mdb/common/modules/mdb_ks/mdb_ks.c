@@ -655,7 +655,7 @@ __page_lookup(uintptr_t addr, const void *data, void *private)
 uintptr_t
 mdb_page_lookup(uintptr_t vp, uoff_t offset)
 {
-	uintptr_t addr = vp + OFFSETOF(vnode_t, v_pagecache);
+	uintptr_t addr = vp + OFFSETOF(vnode_t, v_object.tree);
 	struct page_lookup_state state = {
 		.vnode = vp,
 		.offset = offset,

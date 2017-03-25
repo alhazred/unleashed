@@ -7528,8 +7528,8 @@ retry:
 
 /*
  * Set the given REF/MOD/RO bits for the given page.
- * For a vnode with a sorted v_pagecache_list, we need to change
- * the attributes and the v_pagecache_list together under page_vnode_mutex.
+ * For a vnode with a sorted v_object's list, we need to change
+ * the attributes and the v_object's list together under page_vnode_mutex.
  */
 void
 hat_page_setattr(page_t *pp, uint_t flag)
@@ -7563,13 +7563,13 @@ hat_page_setattr(page_t *pp, uint_t flag)
 
 	if (locked) {
 		/*
-		 * Some File Systems check if v_pagecache_list is empty
+		 * Some File Systems check if v_object's list is empty
 		 * without grabbing the vphm mutex. Must not let it become
 		 * empty when pp is the only page on the list.
 		 */
-		if (vnode_get_prev(vp, pp) != NULL ||
-		    vnode_get_next(vp, pp) != NULL)
-			vnode_move_page_tail(vp, pp);
+		if (vmobject_get_prev(&vp->v_object, pp) != NULL ||
+		    vmobject_get_next(&vp->v_object, pp) != NULL)
+			vmobject_move_page_tail(&vp->v_object, pp);
 		mutex_exit(page_vnode_mutex(vp));
 	}
 }

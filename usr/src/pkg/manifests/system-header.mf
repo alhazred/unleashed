@@ -1591,6 +1591,7 @@ file path=usr/include/vm/as.h
 file path=usr/include/vm/faultcode.h
 file path=usr/include/vm/hat.h
 file path=usr/include/vm/kpm.h
+file path=usr/include/vm/object.h
 file path=usr/include/vm/page.h
 file path=usr/include/vm/pvn.h
 file path=usr/include/vm/rm.h
