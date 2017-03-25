@@ -153,7 +153,8 @@ static void		dclru_sub(struct dcnode *);
  */
 #include <sys/modctl.h>
 
-struct vfsops *dc_vfsops;
+/* yes, we want all defaults */
+static const struct vfsops dc_vfsops;
 
 static vfsdef_t vfw = {
 	VFSDEF_VERSION,
@@ -883,18 +884,15 @@ dcnode_recycle(struct dcnode *dp)
 static int
 dcinit(int fstype, char *name)
 {
-	static const fs_operation_def_t dc_vfsops_template[] = {
-		NULL, NULL
-	};
 	int error;
 	major_t dev;
 
-	error = vfs_setfsops(fstype, dc_vfsops_template, &dc_vfsops);
+	error = vfs_setfsops_const(fstype, &dc_vfsops);
 	if (error) {
-		cmn_err(CE_WARN, "dcinit: bad vfs ops template");
+		cmn_err(CE_WARN, "dcinit: bad fstype");
 		return (error);
 	}
-	VFS_INIT(&dc_vfs, dc_vfsops, NULL);
+	VFS_INIT(&dc_vfs, &dc_vfsops, NULL);
 	dc_vfs.vfs_flag = VFS_RDONLY;
 	dc_vfs.vfs_fstype = fstype;
 	if ((dev = getudev()) == (major_t)-1)
