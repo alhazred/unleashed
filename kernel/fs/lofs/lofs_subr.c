@@ -342,7 +342,7 @@ makelfsnode(struct vfs *vfsp, struct loinfo *li)
 		 * implementation detail of lofs, it should behave as a regular
 		 * vfs_t for the benefit of the rest of the kernel.
 		 */
-		VFS_INIT(&lfs->lfs_vfs, lo_vfsops, (caddr_t)li);
+		VFS_INIT(&lfs->lfs_vfs, &lo_vfsops, (caddr_t)li);
 		lfs->lfs_vfs.vfs_fstype = li->li_mountvfs->vfs_fstype;
 		lfs->lfs_vfs.vfs_flag =
 		    ((vfsp->vfs_flag | li->li_mflag) & ~li->li_dflag) &

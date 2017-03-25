@@ -116,7 +116,7 @@ extern void lsetup(struct loinfo *, uint_t);
 extern void ldestroy(struct loinfo *);
 
 extern const struct vnodeops lo_vnodeops;
-extern vfsops_t *lo_vfsops;
+extern const struct vfsops lo_vfsops;
 extern struct mod_ops mod_fsops;
 
 #endif /* _KERNEL */

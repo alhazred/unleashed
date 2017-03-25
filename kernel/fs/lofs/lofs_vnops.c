@@ -488,7 +488,7 @@ lo_lookup(
 	 * we're not doing dotdot, check if we are
 	 * looping.
 	 */
-	if (!doingdotdot && vfs_matchops(vp->v_vfsp, lo_vfsops)) {
+	if (!doingdotdot && vfs_matchops(vp->v_vfsp, &lo_vfsops)) {
 		/*
 		 * Check if we're looping, i.e.
 		 * vp equals the root vp of the lofs, directly
@@ -538,7 +538,7 @@ lo_lookup(
 				is_indirectloop = 0;
 				nonlovp = vp;
 				while (
-				    vfs_matchops(nonlovp->v_vfsp, lo_vfsops) &&
+				    vfs_matchops(nonlovp->v_vfsp, &lo_vfsops) &&
 				    !(is_indirectloop)) {
 					if (li->li_rootvp  == nonlovp) {
 						is_indirectloop++;
@@ -582,7 +582,7 @@ lo_lookup(
 			 * when performing a dotdot.
 			 */
 			realdvp = realvp(dvp);
-			while (vfs_matchops(realdvp->v_vfsp, lo_vfsops)) {
+			while (vfs_matchops(realdvp->v_vfsp, &lo_vfsops)) {
 				realdvp = realvp(realdvp);
 			}
 

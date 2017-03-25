@@ -141,7 +141,6 @@ _info(struct modinfo *modinfop)
 
 
 static int lofsfstype;
-vfsops_t *lo_vfsops;
 
 /*
  * lo mount vfsop
@@ -462,24 +461,24 @@ lo_freevfs(struct vfs *vfsp)
 	kmem_free(li, sizeof (struct loinfo));
 }
 
+const struct vfsops lo_vfsops = {
+	.vfs_mount = lo_mount,
+	.vfs_unmount = lo_unmount,
+	.vfs_root = lo_root,
+	.vfs_statvfs = lo_statvfs,
+	.vfs_sync = lo_sync,
+	.vfs_vget = lo_vget,
+	.vfs_freevfs = lo_freevfs,
+};
+
 static int
 lofsinit(int fstyp, char *name)
 {
-	static const fs_operation_def_t lo_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = lo_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = lo_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = lo_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = lo_statvfs },
-		VFSNAME_SYNC,		{ .vfs_sync = lo_sync },
-		VFSNAME_VGET,		{ .vfs_vget = lo_vget },
-		VFSNAME_FREEVFS,	{ .vfs_freevfs = lo_freevfs },
-		NULL,			NULL
-	};
 	int error;
 
-	error = vfs_setfsops(fstyp, lo_vfsops_template, &lo_vfsops);
+	error = vfs_setfsops_const(fstyp, &lo_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "lofsinit: bad vfs ops template");
+		cmn_err(CE_WARN, "lofsinit: bad fstyp");
 		return (error);
 	}
 
