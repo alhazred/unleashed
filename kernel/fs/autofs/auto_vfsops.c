@@ -246,16 +246,16 @@ autofs_zone_init(void)
 	return (fngp);
 }
 
+static const struct vfsops auto_vfsops = {
+	.vfs_mount = auto_mount,
+	.vfs_unmount = auto_unmount,
+	.vfs_root = auto_root,
+	.vfs_statvfs = auto_statvfs,
+};
+
 int
 autofs_init(int fstype, char *name)
 {
-	static const fs_operation_def_t auto_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = auto_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = auto_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = auto_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = auto_statvfs },
-		NULL,			NULL
-	};
 	int error;
 
 	autofs_fstype = fstype;
@@ -263,9 +263,9 @@ autofs_init(int fstype, char *name)
 	/*
 	 * Associate VFS ops vector with this fstype
 	 */
-	error = vfs_setfsops(fstype, auto_vfsops_template, NULL);
+	error = vfs_setfsops_const(fstype, &auto_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "autofs_init: bad vfs ops template");
+		cmn_err(CE_WARN, "autofs_init: bad fstype");
 		return (error);
 	}
 
