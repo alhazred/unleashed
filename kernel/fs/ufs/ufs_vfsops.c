@@ -94,7 +94,7 @@
 #include <sys/modctl.h>
 
 int			ufsfstype;
-vfsops_t		*ufs_vfsops;
+static const struct vfsops ufs_vfsops;
 static int		ufsinit(int, char *);
 static int		mountfs();
 extern int		highbit();
@@ -1877,7 +1877,7 @@ ufs_sync(struct vfs *vfsp, short flag, struct cred *cr)
 	}
 
 	/* Flush a single ufs */
-	if (!vfs_matchops(vfsp, ufs_vfsops) || vfs_lock(vfsp) != 0)
+	if (!vfs_matchops(vfsp, &ufs_vfsops) || vfs_lock(vfsp) != 0)
 		return (0);
 
 	ufsvfsp = (struct ufsvfs *)vfsp->vfs_data;
@@ -2055,26 +2055,26 @@ errout:
 	return (error);
 }
 
+static const struct vfsops ufs_vfsops = {
+	.vfs_mount = ufs_mount,
+	.vfs_unmount = ufs_unmount,
+	.vfs_root = ufs_root,
+	.vfs_statvfs = ufs_statvfs,
+	.vfs_sync = ufs_sync,
+	.vfs_vget = ufs_vget,
+	.vfs_mountroot = ufs_mountroot,
+};
+
 static int
 ufsinit(int fstype, char *name)
 {
-	static const fs_operation_def_t ufs_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = ufs_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = ufs_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = ufs_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = ufs_statvfs },
-		VFSNAME_SYNC,		{ .vfs_sync = ufs_sync },
-		VFSNAME_VGET,		{ .vfs_vget = ufs_vget },
-		VFSNAME_MOUNTROOT,	{ .vfs_mountroot = ufs_mountroot },
-		NULL,			NULL
-	};
 	int error;
 
 	ufsfstype = fstype;
 
-	error = vfs_setfsops(fstype, ufs_vfsops_template, &ufs_vfsops);
+	error = vfs_setfsops_const(fstype, &ufs_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "ufsinit: bad vfs ops template");
+		cmn_err(CE_WARN, "ufsinit: bad fstype");
 		return (error);
 	}
 
