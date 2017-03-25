@@ -556,7 +556,7 @@ typedef struct page {
 	uint64_t	p_msresv_2;	/* page allocation debugging */
 #endif
 
-	avl_node_t	p_pagecache;
+	avl_node_t	p_object_node;
 } page_t;
 
 

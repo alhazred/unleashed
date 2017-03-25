@@ -7165,7 +7165,7 @@ void
 pagecache_init(struct vnode *vnode)
 {
 	avl_create(&vnode->v_object.tree, pagecache_cmp, sizeof (struct page),
-	    offsetof(struct page, p_pagecache));
+	    offsetof(struct page, p_object_node));
 	list_create(&vnode->v_object.list, sizeof (struct page),
 	    offsetof(struct page, p_list.vnode));
 	mutex_init(&vnode->v_object.lock, NULL, MUTEX_DEFAULT, NULL);
