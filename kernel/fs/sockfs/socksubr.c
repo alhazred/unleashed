@@ -210,23 +210,24 @@ so_update_attrs(struct sonode *so, int flag)
 
 extern so_create_func_t sock_comm_create_function;
 extern so_destroy_func_t sock_comm_destroy_function;
+
+/* yes, we want all defaults */
+static const struct vfsops sock_vfsops;
+
 /*
  * Init function called when sockfs is loaded.
  */
 int
 sockinit(int fstype, char *name)
 {
-	static const fs_operation_def_t sock_vfsops_template[] = {
-		NULL, NULL
-	};
 	int error;
 	major_t dev;
 	char *err_str;
 
-	error = vfs_setfsops(fstype, sock_vfsops_template, NULL);
+	error = vfs_setfsops_const(fstype, &sock_vfsops);
 	if (error != 0) {
 		zcmn_err(GLOBAL_ZONEID, CE_WARN,
-		    "sockinit: bad vfs ops template");
+		    "sockinit: bad fstype");
 		return (error);
 	}
 
