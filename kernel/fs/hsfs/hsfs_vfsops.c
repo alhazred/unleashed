@@ -239,23 +239,23 @@ static int hs_getmdev(struct vfs *, char *fspec, int flags, dev_t *pdev,
 	mode_t *mode, cred_t *cr);
 static int hs_findvoldesc(dev_t rdev, int desc_sec);
 
+static const struct vfsops hsfs_vfsops = {
+	.vfs_mount = hsfs_mount,
+	.vfs_unmount = hsfs_unmount,
+	.vfs_root = hsfs_root,
+	.vfs_statvfs = hsfs_statvfs,
+	.vfs_vget = hsfs_vget,
+	.vfs_mountroot = hsfs_mountroot,
+};
+
 static int
 hsfsinit(int fstype, char *name)
 {
-	static const fs_operation_def_t hsfs_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = hsfs_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = hsfs_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = hsfs_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = hsfs_statvfs },
-		VFSNAME_VGET,		{ .vfs_vget = hsfs_vget },
-		VFSNAME_MOUNTROOT,	{ .vfs_mountroot = hsfs_mountroot },
-		NULL,			NULL
-	};
 	int error;
 
-	error = vfs_setfsops(fstype, hsfs_vfsops_template, NULL);
+	error = vfs_setfsops_const(fstype, &hsfs_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "hsfsinit: bad vfs ops template");
+		cmn_err(CE_WARN, "hsfsinit: bad fstyp");
 		return (error);
 	}
 
