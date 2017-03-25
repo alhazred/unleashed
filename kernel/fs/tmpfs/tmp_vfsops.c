@@ -164,6 +164,14 @@ static major_t tmpfs_major;
 static minor_t tmpfs_minor;
 static kmutex_t	tmpfs_minor_lock;
 
+static const struct vfsops tmp_vfsops = {
+	.vfs_mount = tmp_mount,
+	.vfs_unmount = tmp_unmount,
+	.vfs_root = tmp_root,
+	.vfs_statvfs = tmp_statvfs,
+	.vfs_vget = tmp_vget,
+};
+
 /*
  * initialize global tmpfs locks and such
  * called when loading tmpfs module
@@ -171,14 +179,6 @@ static kmutex_t	tmpfs_minor_lock;
 static int
 tmpfsinit(int fstype, char *name)
 {
-	static const fs_operation_def_t tmp_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = tmp_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = tmp_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = tmp_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = tmp_statvfs },
-		VFSNAME_VGET,		{ .vfs_vget = tmp_vget },
-		NULL,			NULL
-	};
 	int error;
 	extern  void    tmpfs_hash_init();
 
@@ -186,9 +186,9 @@ tmpfsinit(int fstype, char *name)
 	tmpfsfstype = fstype;
 	ASSERT(tmpfsfstype != 0);
 
-	error = vfs_setfsops(fstype, tmp_vfsops_template, NULL);
+	error = vfs_setfsops_const(fstype, &tmp_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "tmpfsinit: bad vfs ops template");
+		cmn_err(CE_WARN, "tmpfsinit: bad fstype");
 		return (error);
 	}
 
