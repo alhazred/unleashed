@@ -71,7 +71,7 @@
  * implementation of the root vnode.
  */
 
-static const fs_operation_def_t ctfs_vfstops[];
+static const struct vfsops ctfs_vfsops;
 
 static int ctfs_init(int, char *);
 
@@ -140,12 +140,11 @@ static minor_t ctfs_minor = 0;
 static int
 ctfs_init(int fstype, char *name)
 {
-	vfsops_t *vfsops;
 	int error;
 
 	ctfs_fstype = fstype;
-	if (error = vfs_setfsops(fstype, ctfs_vfstops, &vfsops)) {
-		cmn_err(CE_WARN, "ctfs_init: bad vfs ops template");
+	if (error = vfs_setfsops_const(fstype, &ctfs_vfsops)) {
+		cmn_err(CE_WARN, "ctfs_init: bad fstype");
 		return (error);
 	}
 
@@ -307,12 +306,11 @@ ctfs_statvfs(vfs_t *vfsp, statvfs64_t *sp)
 	return (0);
 }
 
-static const fs_operation_def_t ctfs_vfstops[] = {
-	{ VFSNAME_MOUNT,	{ .vfs_mount = ctfs_mount } },
-	{ VFSNAME_UNMOUNT,	{ .vfs_unmount = ctfs_unmount } },
-	{ VFSNAME_ROOT,		{ .vfs_root = ctfs_root } },
-	{ VFSNAME_STATVFS,	{ .vfs_statvfs = ctfs_statvfs } },
-	{ NULL, NULL }
+static const struct vfsops ctfs_vfsops = {
+	.vfs_mount = ctfs_mount,
+	.vfs_unmount = ctfs_unmount,
+	.vfs_root = ctfs_root,
+	.vfs_statvfs = ctfs_statvfs,
 };
 
 /*
