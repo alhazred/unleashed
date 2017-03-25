@@ -60,7 +60,6 @@
 #include <vm/page.h>
 #include <vm/pvn.h>
 #include <sys/vtrace.h>
-#include <sys/tnf_probe.h>
 #include <sys/fs/ufs_inode.h>
 #include <sys/fs/ufs_bio.h>
 #include <sys/fs/ufs_log.h>
@@ -1238,11 +1237,6 @@ biowait(struct buf *bp)
 	return (error);
 }
 
-static void
-biodone_tnf_probe(struct buf *bp)
-{
-}
-
 /*
  * Mark I/O complete on a buffer, release it if I/O is asynchronous,
  * and wake up anyone waiting for it.
@@ -1254,12 +1248,6 @@ biodone(struct buf *bp)
 		DTRACE_IO1(done, struct buf *, bp);
 		bp->b_flags &= ~B_STARTED;
 	}
-
-	/*
-	 * Call the TNF probe here instead of the inline code
-	 * to force our compiler to use the tail call optimization.
-	 */
-	biodone_tnf_probe(bp);
 
 	if (bp->b_iodone != NULL) {
 		(*(bp->b_iodone))(bp);
