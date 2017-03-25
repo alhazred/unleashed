@@ -202,9 +202,9 @@ uint_t	page_try_reclaim_upgrade;
  */
 
 int
-page_lock(page_t *pp, se_t se, kmutex_t *lock, reclaim_t reclaim)
+page_lock(page_t *pp, se_t se, vnode_t *vnode, reclaim_t reclaim)
 {
-	return (page_lock_es(pp, se, lock, reclaim, 0));
+	return (page_lock_es(pp, se, vnode, reclaim, 0));
 }
 
 /*
@@ -253,14 +253,14 @@ page_lock(page_t *pp, se_t se, kmutex_t *lock, reclaim_t reclaim)
  * It's on the list to be cleaned up.
  */
 int
-page_lock_es(page_t *pp, se_t se, kmutex_t *lock, reclaim_t reclaim, int es)
+page_lock_es(page_t *pp, se_t se, vnode_t *vnode, reclaim_t reclaim, int es)
 {
 	int		retval;
 	kmutex_t	*pse = PAGE_SE_MUTEX(pp);
 	int		upgraded;
 	int		reclaim_it;
 
-	ASSERT(lock != NULL ? MUTEX_HELD(lock) : 1);
+	ASSERT(vnode != NULL ? MUTEX_HELD(page_vnode_mutex(vnode)) : 1);
 
 	VM_STAT_ADD(page_lock_count);
 
@@ -358,9 +358,9 @@ page_lock_es(page_t *pp, se_t se, kmutex_t *lock, reclaim_t reclaim, int es)
 		VM_STAT_ADD(page_lock_miss);
 		VM_STAT_COND_ADD(upgraded, page_lock_upgrade_failed);
 
-		if (lock) {
+		if (vnode != NULL) {
 			VM_STAT_ADD(page_lock_miss_lock);
-			mutex_exit(lock);
+			mutex_exit(page_vnode_mutex(vnode));
 		}
 
 		/*
@@ -382,11 +382,10 @@ page_lock_es(page_t *pp, se_t se, kmutex_t *lock, reclaim_t reclaim, int es)
 		 * cv_wait holding pse (the expensive part of this
 		 * operation) we might as well try the cheap part.
 		 * Though we would also have to confirm that dropping
-		 * `lock' did not cause any grief to the callers.
+		 * vnode page lock did not cause any grief to the callers.
 		 */
-		if (lock) {
-			mutex_enter(lock);
-		}
+		if (vnode != NULL)
+			mutex_enter(page_vnode_mutex(vnode));
 	} else {
 		/*
 		 * We have the page lock.
@@ -411,7 +410,7 @@ page_lock_es(page_t *pp, se_t se, kmutex_t *lock, reclaim_t reclaim, int es)
 		 *	if it can't be reclaimed.
 		 */
 		if (reclaim_it) {
-			if (!page_reclaim(pp, lock)) {
+			if (!page_reclaim(pp, vnode)) {
 				VM_STAT_ADD(page_lock_bad_reclaim);
 				retval = 0;
 			} else {

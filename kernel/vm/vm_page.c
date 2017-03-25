@@ -734,7 +734,7 @@ top:
 		es |= flags;
 
 		VM_STAT_ADD(page_lookup_cnt[4]);
-		if (!page_lock_es(pp, se, page_vnode_mutex(vp), P_RECLAIM, es)) {
+		if (!page_lock_es(pp, se, vp, P_RECLAIM, es)) {
 			VM_STAT_ADD(page_lookup_cnt[5]);
 			goto top;
 		}
@@ -2317,7 +2317,7 @@ top:
 				goto fail;
 			}
 			ASSERT(flags & PG_WAIT);
-			if (!page_lock(pp, SE_EXCL, page_vnode_mutex(vp), P_NO_RECLAIM)) {
+			if (!page_lock(pp, SE_EXCL, vp, P_NO_RECLAIM)) {
 				/*
 				 * Start all over again if we blocked trying
 				 * to lock the page.
@@ -2698,20 +2698,20 @@ free_vp_pages(vnode_t *vp, uoff_t off, size_t len)
  * the memsegs, locks the page, then pulls it off the free list!
  */
 int
-page_reclaim(page_t *pp, kmutex_t *lock)
+page_reclaim(page_t *pp, vnode_t *vnode)
 {
 	struct pcf	*p;
 	struct cpu	*cpup;
 	int		enough;
 	uint_t		i;
 
-	ASSERT(lock != NULL ? MUTEX_HELD(lock) : 1);
+	ASSERT(vnode != NULL ? MUTEX_HELD(page_vnode_mutex(vnode)) : 1);
 	ASSERT(PAGE_EXCL(pp) && PP_ISFREE(pp));
 
 	/*
 	 * If `freemem' is 0, we cannot reclaim this page from the
 	 * freelist, so release every lock we might hold: the page,
-	 * and the `lock' before blocking.
+	 * and the vnode page lock before blocking.
 	 *
 	 * The only way `freemem' can become 0 while there are pages
 	 * marked free (have their p->p_free bit set) is when the
@@ -2770,14 +2770,13 @@ page_reclaim_nomem:
 			 * Time for the no-memory dance with
 			 * page_free().  This is just like
 			 * page_create_wait().  Plus the added
-			 * attraction of releasing whatever mutex
-			 * we held when we were called with in `lock'.
+			 * attraction of releasing the vnode page lock.
 			 * Page_unlock() will wakeup any thread
 			 * waiting around for this page.
 			 */
-			if (lock) {
+			if (vnode != NULL) {
 				VM_STAT_ADD(page_reclaim_zero_locked);
-				mutex_exit(lock);
+				mutex_exit(page_vnode_mutex(vnode));
 			}
 			page_unlock(pp);
 
@@ -2799,9 +2798,9 @@ page_reclaim_nomem:
 
 			mutex_exit(&new_freemem_lock);
 
-			if (lock) {
-				mutex_enter(lock);
-			}
+			if (vnode != NULL)
+				mutex_enter(page_vnode_mutex(vnode));
+
 			return (0);
 		}
 
@@ -3067,7 +3066,7 @@ top:
 		 * the page.  It is tempting to add yet another arguement,
 		 * PL_KEEP or PL_DROP, to let page_lock know what to do.
 		 */
-		if (!page_lock(pp, SE_EXCL, page_vnode_mutex(vp), P_RECLAIM)) {
+		if (!page_lock(pp, SE_EXCL, vp, P_RECLAIM)) {
 			/*
 			 * Went to sleep because the page could not
 			 * be locked.  We were woken up when the page
