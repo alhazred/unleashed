@@ -223,12 +223,11 @@ bootfs_statvfs(vfs_t *vfsp, struct statvfs64 *sbp)
 	return (0);
 }
 
-static const fs_operation_def_t bootfs_vfsops_tmpl[] = {
-	VFSNAME_MOUNT,		{ .vfs_mount = bootfs_mount },
-	VFSNAME_UNMOUNT,	{ .vfs_unmount = bootfs_unmount },
-	VFSNAME_ROOT,		{ .vfs_root = bootfs_root },
-	VFSNAME_STATVFS,	{ .vfs_statvfs = bootfs_statvfs },
-	NULL,			NULL
+static const struct vfsops bootfs_vfsops = {
+	.vfs_mount = bootfs_mount,
+	.vfs_unmount = bootfs_unmount,
+	.vfs_root = bootfs_root,
+	.vfs_statvfs = bootfs_statvfs,
 };
 
 static int
@@ -239,7 +238,7 @@ bootfs_init(int fstype, char *name)
 	bootfs_fstype = fstype;
 	ASSERT(bootfs_fstype != 0);
 
-	ret = vfs_setfsops(fstype, bootfs_vfsops_tmpl, NULL);
+	ret = vfs_setfsops_const(fstype, &bootfs_vfsops);
 	if (ret != 0)
 		return (ret);
 
