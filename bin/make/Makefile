@@ -148,17 +148,6 @@ ${OBJS}: config.h
 # make sure that MAKE_VERSION gets updated.
 main.o: ${SRCS} ${MAKEFILE}
 
-SHARE_MK?=${SHAREDIR}/mk
-MKSRC=${srcdir}/mk
-install: install-mk
-install-mk:
-.if exists(${MKSRC}/install-mk)
-	test -d ${DESTDIR}${SHARE_MK} || ${INSTALL} -m ${DIRMODE} -d ${DESTDIR}${SHARE_MK}
-	sh ${MKSRC}/install-mk -v -m ${NONBINMODE} ${DESTDIR}${SHARE_MK}
-.else
-	@echo need to unpack mk.tar.gz under ${srcdir} or set MKSRC; false
-.endif
-
 # A simple unit-test driver to help catch regressions
 accept test:
 	cd ${.CURDIR}/unit-tests && MAKEFLAGS= ${.MAKE} -r -m / TEST_MAKE=${TEST_MAKE:U${.OBJDIR}/${PROG:T}} ${.TARGET}

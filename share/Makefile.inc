@@ -1,0 +1,2 @@
+SHAREDIR=	/usr/share
+BINDIR=		${SHAREDIR}

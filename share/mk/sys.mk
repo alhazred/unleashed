@@ -1,7 +1,25 @@
-.SUFFIXES: .out .a .o .s .S .c ${CXX_SUFFIXES} .F .f .r .y .l .cl .p .h .sh .m4
-
 OS?=		illumos
 unix?=		We run ${OS}.
+
+CXX_SUFFIXES +=	.cc .cpp .cxx .C
+CXX_SUFFIXES :=	${CXX_SUFFIXES:O:u}
+.SUFFIXES: .out .a .o .s .S .c ${CXX_SUFFIXES} .F .f .r .y .l .cl .p .h .sh .m4
+
+# some options we need to know early
+OPTIONS_DEFAULT_NO += \
+	DIRDEPS_BUILD \
+	DIRDEPS_CACHE
+
+OPTIONS_DEFAULT_DEPENDENT += \
+	AUTO_OBJ/DIRDEPS_BUILD \
+	META_MODE/DIRDEPS_BUILD \
+	STAGING/DIRDEPS_BUILD \
+
+# if you want objdirs make them automatic
+# and do it early before we compute .PATH
+.if ${MK_AUTO_OBJ:Uno} == "yes" || ${MKOBJDIRS:Uno} == "auto"
+.include <auto.obj.mk>
+.endif
 
 MANTARGET?=	man
 # MANTARGET=man causes MANDIR to contain share/man/man with mk-20160802
