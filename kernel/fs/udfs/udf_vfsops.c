@@ -1908,26 +1908,26 @@ ud_get_lbsize(dev_t dev, uint32_t *loc)
 	return (0);
 }
 
+static const struct vfsops udf_vfsops = {
+	.vfs_mount = udf_mount,
+	.vfs_unmount = udf_unmount,
+	.vfs_root = udf_root,
+	.vfs_statvfs = udf_statvfs,
+	.vfs_sync = udf_sync,
+	.vfs_vget = udf_vget,
+	.vfs_mountroot = udf_mountroot,
+};
+
 static int
 udfinit(int fstype, char *name)
 {
-	static const fs_operation_def_t udf_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = udf_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = udf_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = udf_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = udf_statvfs },
-		VFSNAME_SYNC,		{ .vfs_sync = udf_sync },
-		VFSNAME_VGET,		{ .vfs_vget = udf_vget },
-		VFSNAME_MOUNTROOT,	{ .vfs_mountroot = udf_mountroot },
-		NULL,			NULL
-	};
 	int error;
 
 	ud_printf("udfinit\n");
 
-	error = vfs_setfsops(fstype, udf_vfsops_template, NULL);
+	error = vfs_setfsops_const(fstype, &udf_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "udfinit: bad vfs ops template");
+		cmn_err(CE_WARN, "udfinit: bad fstype");
 		return (error);
 	}
 
