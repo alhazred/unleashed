@@ -3638,7 +3638,7 @@ out:
 			ASSERT(pp->p_offset == io_off);
 			ASSERT(page_iolock_assert(pp));
 			page_io_unlock(pp);
-			page_hashout(pp, NULL);
+			page_hashout(pp, false);
 			io_off += PAGESIZE;
 		} while ((pp = pp->p_next) != io_pplist);
 		page_list_concat(&io_pplist, &pplist);

@@ -2237,7 +2237,7 @@ top:
 					 * cachelist, we must destroy the
 					 * old vnode association.
 					 */
-					page_hashout(npp, NULL);
+					page_hashout(npp, false);
 				}
 			}
 		}
@@ -2877,7 +2877,7 @@ page_destroy(page_t *pp, int dontfree)
 	 * page to erase its identity.
 	 */
 	(void) hat_pageunload(pp, HAT_FORCE_PGUNLOAD);
-	page_hashout(pp, NULL);
+	page_hashout(pp, false);
 
 	if (!dontfree) {
 		/*
@@ -2930,7 +2930,7 @@ page_destroy_pages(page_t *pp)
 		    !page_iolock_assert(tpp)) || panicstr);
 		ASSERT(tpp->p_slckcnt == 0 || panicstr);
 		(void) hat_pageunload(tpp, HAT_FORCE_PGUNLOAD);
-		page_hashout(tpp, NULL);
+		page_hashout(tpp, false);
 		ASSERT(tpp->p_offset == (uoff_t)-1);
 		if (tpp->p_lckcnt != 0) {
 			pglcks++;
@@ -2984,7 +2984,7 @@ page_destroy_free(page_t *pp)
 	VM_STAT_ADD(pagecnt.pc_destroy_free);
 	page_list_sub(pp, PG_CACHE_LIST);
 
-	page_hashout(pp, NULL);
+	page_hashout(pp, false);
 	ASSERT(pp->p_vnode == NULL);
 	ASSERT(pp->p_offset == (uoff_t)-1);
 
@@ -3041,7 +3041,7 @@ page_rename(page_t *opp, vnode_t *vp, uoff_t off)
 		ASSERT(opp->p_szc == 0);
 	}
 
-	page_hashout(opp, NULL);
+	page_hashout(opp, false);
 	PP_CLRAGED(opp);
 
 	mutex_enter(page_vnode_mutex(vp));
@@ -3110,7 +3110,7 @@ top:
 			ASSERT(pp->p_szc == 0);
 			mutex_enter(page_vnode_mutex(vp));
 		}
-		page_hashout(pp, page_vnode_mutex(vp));
+		page_hashout(pp, true);
 	}
 	/*
 	 * Hash in the page with the new identity.
@@ -3284,11 +3284,11 @@ page_do_hashout(page_t *page)
  * Remove page `page' from the AVL tree and vnode chains and remove vnode
  * association.
  *
- * When `hold' is non-NULL it contains the address of the mutex protecting the
- * AVL tree page is on.  It is not dropped.
+ * When `locked` is true, we do *not* attempt to lock the vnode's page
+ * mutex.
  */
 void
-page_hashout(page_t *pp, kmutex_t *hold)
+page_hashout(page_t *pp, bool locked)
 {
 	vnode_t		*vp;
 	ulong_t		index;
@@ -3300,26 +3300,20 @@ page_hashout(page_t *pp, kmutex_t *hold)
 
 	vp = pp->p_vnode;
 
-	if (hold != NULL) {
-		hold = NULL;
-	} else {
+	if (!locked) {
 		VM_STAT_ADD(hashout_not_held);
-		hold = page_vnode_mutex(vp);
-		mutex_enter(hold);
+		mutex_enter(page_vnode_mutex(vp));
 	}
 
 	page_do_hashout(pp);
 
-	if (hold != NULL)
-		mutex_exit(hold);
+	if (!locked)
+		mutex_exit(page_vnode_mutex(vp));
 
 	/*
 	 * Wake up processes waiting for this page.  The page's
 	 * identity has been changed, and is probably not the
 	 * desired page any longer.
-	 *
-	 * FIXME: is this a possible lock inversion with the passed in
-	 * mutex?
 	 */
 	sep = page_se_mutex(pp);
 	mutex_enter(sep);
@@ -6235,7 +6229,7 @@ page_capture_clean_page(page_t *pp)
 			 * cachelist, we must destroy the
 			 * old vnode association.
 			 */
-			page_hashout(pp, NULL);
+			page_hashout(pp, false);
 		}
 		goto cleanup;
 	}
@@ -6348,7 +6342,7 @@ skip_relocate:
 		goto cleanup;
 	}
 	if (pp->p_vnode != NULL) {
-		page_hashout(pp, NULL);
+		page_hashout(pp, false);
 	}
 
 	/*

@@ -345,7 +345,7 @@ ptable_free(pfn_t pfn)
 	if (kpm_vbase && xen_kpm_page(pfn, PT_VALID | PT_WRITABLE) < 0)
 		panic("failure making kpm r/w pfn=0x%lx", pfn);
 #endif
-	page_hashout(pp, NULL);
+	page_hashout(pp, false);
 	page_free(pp, 1);
 	page_unresv(1);
 }

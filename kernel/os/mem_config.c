@@ -2815,7 +2815,7 @@ page_delete_collect(
 	struct mem_handle *mhp)
 {
 	if (pp->p_vnode) {
-		page_hashout(pp, NULL);
+		page_hashout(pp, false);
 		/* do not do PP_SETAGED(pp); */
 	} else {
 		kmutex_t *sep;

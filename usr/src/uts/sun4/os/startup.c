@@ -2702,7 +2702,7 @@ kphysm_add(uint64_t addr, uint64_t len, int reclaim)
 			ASSERT(PP_ISNORELOC(rpp));
 			PP_CLRNORELOC(rpp);
 			page_pp_unlock(rpp, 0, 1);
-			page_hashout(rpp, NULL);
+			page_hashout(rpp, false);
 			page_unlock(rpp);
 			rpp++;
 		}

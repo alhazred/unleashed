@@ -433,7 +433,7 @@ devmap_pmem_free(devmap_pmem_cookie_t cookie)
 	/* Free small pages and return them to memory pool. */
 	for (i = pcp->dp_npages; i > 0; i--) {
 		pp = pcp->dp_pparray[i - 1];
-		page_hashout(pp, NULL);
+		page_hashout(pp, false);
 		/*
 		 * Remove the mapping of this single page, this mapping is
 		 * created using hat_devload() in segdev_faultpage().
@@ -795,7 +795,7 @@ lpp_break(page_t **lppp, pgcnt_t n, pgcnt_t r, pmem_lpg_t *oplp)
 	/* IOunlock and hashout the residual pages. */
 	for (pp1 = pp, i = 0; i < r; i++) {
 		page_io_unlock(pp1);
-		page_hashout(pp1, NULL);
+		page_hashout(pp1, false);
 		/* Mark this page as free. */
 		BT_SET(plp->pl_bitmap, PFIND(pp1));
 		pp1 = pp1->p_next;
@@ -819,7 +819,7 @@ lpp_free(page_t *lpp, pgcnt_t lpgs, pmem_lpg_t **plpp)
 		for (j = 0; j < pmem_pgcnt; j++) {
 			/* IO unlock and hashout this small page. */
 			page_io_unlock(pp);
-			page_hashout(pp, NULL);
+			page_hashout(pp, false);
 			pp1 = pp->p_next;
 			pp->p_prev = pp->p_next = pp;
 			pp = pp1;
@@ -876,7 +876,7 @@ tlist_out(page_t *tlist, pgcnt_t tpages)
 	for (pp = tlist; i < tpages; i++) {
 		ASSERT(FROM_LPG(pp));
 		page_io_unlock(pp);
-		page_hashout(pp, NULL);
+		page_hashout(pp, false);
 		plp = pmem_lpg_get(pmem_occ_lpgs, pp, &last_pl);
 		/* Mark this page as free. */
 		BT_SET(plp->pl_bitmap, PFIND(pp));

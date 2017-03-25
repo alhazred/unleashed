@@ -1090,7 +1090,7 @@ retry:
 
 		if (!PP_ISAGED(pp)) {
 			page_list_sub(pp, PG_CACHE_LIST);
-			page_hashout(pp, NULL);
+			page_hashout(pp, false);
 		} else {
 			page_list_sub(pp, PG_FREE_LIST);
 		}
@@ -2467,7 +2467,7 @@ page_destroy_io(page_t *pp)
 	 * page to erase its identity.
 	 */
 	(void) hat_pageunload(pp, HAT_FORCE_PGUNLOAD);
-	page_hashout(pp, NULL);
+	page_hashout(pp, false);
 
 	/*
 	 * If the page came from the free lists, just put it back to them.
@@ -2778,7 +2778,7 @@ page_swap_with_hypervisor(struct vnode *vp, uoff_t off, caddr_t vaddr,
 				goto balloon_fail;
 			(void) hat_pageunload(expp, HAT_FORCE_PGUNLOAD);
 			page_io_unlock(expp);
-			page_hashout(expp, NULL);
+			page_hashout(expp, false);
 			page_io_lock(expp);
 			/*
 			 * add page to end of list
@@ -2829,7 +2829,7 @@ balloon_fail:
 		page_sub(&pp_first, pp);
 		page_io_unlock(pp);
 		if (pp->p_vnode != NULL)
-			page_hashout(pp, NULL);
+			page_hashout(pp, false);
 		page_free(pp, 1);
 	}
 	if (pplist)
@@ -3613,7 +3613,7 @@ top:
 				 * cachelist, we must destroy the
 				 * old vnode association.
 				 */
-				page_hashout(npp, NULL);
+				page_hashout(npp, false);
 			}
 		}
 

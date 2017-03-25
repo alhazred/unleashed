@@ -39,6 +39,7 @@
 #define	_VM_PAGE_H
 
 #include <vm/seg.h>
+#include <sys/stdbool.h>
 
 #ifdef	__cplusplus
 extern "C" {
@@ -654,7 +655,7 @@ void	page_destroy_pages(page_t *);
 void	page_destroy_free(page_t *);
 void	page_rename(page_t *, struct vnode *, uoff_t);
 int	page_hashin(page_t *, struct vnode *, uoff_t, kmutex_t *);
-void	page_hashout(page_t *, kmutex_t *);
+void	page_hashout(page_t *, bool);
 int	page_num_hashin(pfn_t, struct vnode *, uoff_t);
 void	page_add(page_t **, page_t *);
 void	page_add_common(page_t **, page_t *);

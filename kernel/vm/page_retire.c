@@ -1147,7 +1147,7 @@ page_unretire_pp(page_t *pp, int flags)
 			page_destroy(pp, 0);
 		} else {
 			PR_DEBUG(prd_uhashout);
-			page_hashout(pp, NULL);
+			page_hashout(pp, false);
 		}
 
 		mutex_enter(&freemem_lock);

@@ -369,7 +369,7 @@ rd_phys_alloc(pgcnt_t npages)
 			if (pp == NULL)
 				goto out;
 			if (!PP_ISAGED(pp))
-				page_hashout(pp, NULL);
+				page_hashout(pp, false);
 		}
 
 		PP_CLRFREE(pp);

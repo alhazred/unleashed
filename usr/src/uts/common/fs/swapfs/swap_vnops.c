@@ -439,7 +439,7 @@ swap_getconpage(
 	 */
 	page_io_unlock(pp);
 	if (err != 0)
-		page_hashout(pp, NULL);
+		page_hashout(pp, false);
 	ASSERT(pp->p_next == pp);
 	ASSERT(pp->p_prev == pp);
 

@@ -2070,7 +2070,7 @@ page_promote(int mnode, pfn_t pfnum, uchar_t new_szc, int flags, int mtype)
 			}
 
 			mach_page_sub(&PAGE_CACHELISTS(mnode, bin, mtype), pp);
-			page_hashout(pp, lock);
+			page_hashout(pp, true);
 			mutex_exit(lock);
 			PP_SETAGED(pp);
 			page_unlock_nocapture(pp);
@@ -3248,7 +3248,7 @@ page_claim_contig_pages(page_t *pp, uchar_t szc, int flags)
 			ASSERT(!PP_ISAGED(pp));
 			ASSERT(pp->p_szc == 0);
 			page_list_sub(pp, PG_CACHE_LIST);
-			page_hashout(pp, NULL);
+			page_hashout(pp, false);
 			PP_SETAGED(pp);
 			pp->p_szc = szc;
 			page_list_concat(&pplist, &pp);
@@ -4224,7 +4224,7 @@ page_get_replacement_page(page_t *orig_like_pp, struct lgrp *lgrp_target,
 					    mnode, mtype);
 				}
 				if (pplist != NULL) {
-					page_hashout(pplist, NULL);
+					page_hashout(pplist, false);
 					PP_SETAGED(pplist);
 					REPL_STAT_INCR(nhashout);
 					break;
@@ -4256,7 +4256,7 @@ page_get_replacement_page(page_t *orig_like_pp, struct lgrp *lgrp_target,
 				pplist = page_get_mnode_cachelist(bin, flags,
 				    mnode, mtype);
 				if (pplist != NULL) {
-					page_hashout(pplist, NULL);
+					page_hashout(pplist, false);
 					PP_SETAGED(pplist);
 					REPL_STAT_INCR(nhashout);
 					break;
@@ -4305,7 +4305,7 @@ page_get_replacement_page(page_t *orig_like_pp, struct lgrp *lgrp_target,
 				    flags, mnode, mtype);
 
 				if (pplist != NULL) {
-					page_hashout(pplist, NULL);
+					page_hashout(pplist, false);
 					PP_SETAGED(pplist);
 					REPL_STAT_INCR(nhashout);
 					break;
