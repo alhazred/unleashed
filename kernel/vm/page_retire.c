@@ -543,7 +543,7 @@ page_retire_destroy(page_t *pp)
 
 	pp->p_next = NULL;
 	pp->p_prev = NULL;
-	if (page_hashin(pp, retired_pages, off, NULL) == 0) {
+	if (page_hashin(pp, retired_pages, off, false) == 0) {
 		cmn_err(CE_PANIC, "retired page %p hashin failed", (void *)pp);
 	}
 

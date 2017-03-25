@@ -587,7 +587,7 @@ map_page_proc(page_t *pp, void *arg, uint_t flags)
 		return (-1);
 	}
 
-	ret = page_hashin(pp, vp, paddr, NULL);
+	ret = page_hashin(pp, vp, paddr, false);
 	rw_exit(&pph_rwlock);
 	if (ret == 0) {
 		page_free(pp, 1);

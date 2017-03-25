@@ -790,7 +790,7 @@ top:
 		 * get it over with.  As usual, go down
 		 * holding all the locks.
 		 */
-		if (!page_hashin(newpp, vp, off, page_vnode_mutex(vp))) {
+		if (!page_hashin(newpp, vp, off, true)) {
 			ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
 			panic("page_lookup_create: hashin failed %p %p %llx",
 			    (void *)newpp, (void *)vp, off);
@@ -2077,7 +2077,7 @@ page_create_va_large(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
 		ASSERT(!hat_page_is_mapped(pp));
 		PP_CLRFREE(pp);
 		PP_CLRAGED(pp);
-		if (!page_hashin(pp, vp, off, NULL))
+		if (!page_hashin(pp, vp, off, false))
 			panic("page_create_large: hashin failed: page %p",
 			    (void *)pp);
 		page_io_lock(pp);
@@ -2263,7 +2263,7 @@ top:
 			VM_STAT_ADD(page_create_new);
 			pp = npp;
 			npp = NULL;
-			if (!page_hashin(pp, vp, off, page_vnode_mutex(vp))) {
+			if (!page_hashin(pp, vp, off, true)) {
 				/*
 				 * Since we hold the page vnode page cache
 				 * mutex and just searched for this page,
@@ -3115,7 +3115,7 @@ top:
 	/*
 	 * Hash in the page with the new identity.
 	 */
-	if (!page_hashin(opp, vp, off, page_vnode_mutex(vp))) {
+	if (!page_hashin(opp, vp, off, true)) {
 		/*
 		 * We were holding phm while we searched for [vp, off]
 		 * and only dropped phm if we found and locked a page.
@@ -3225,10 +3225,10 @@ page_do_hashin(page_t *page, vnode_t *vnode, uoff_t offset)
  * Add page `pp' to both the hash and vp chains for [vp, offset].
  *
  * Returns 1 on success and 0 on failure.
- * If hold is passed in, it is not dropped.
+ * If `locked` is true, we do *not* attempt to lock the vnode's page mutex.
  */
 int
-page_hashin(page_t *pp, vnode_t *vp, uoff_t offset, kmutex_t *hold)
+page_hashin(page_t *pp, vnode_t *vp, uoff_t offset, bool locked)
 {
 	int rc;
 
@@ -3236,18 +3236,15 @@ page_hashin(page_t *pp, vnode_t *vp, uoff_t offset, kmutex_t *hold)
 
 	VM_STAT_ADD(hashin_count);
 
-	if (hold != NULL) {
-		hold = NULL;
-	} else {
+	if (!locked) {
 		VM_STAT_ADD(hashin_not_held);
-		hold = page_vnode_mutex(vp);
-		mutex_enter(hold);
+		mutex_enter(page_vnode_mutex(vp));
 	}
 
 	rc = page_do_hashin(pp, vp, offset);
 
-	if (hold != NULL)
-		mutex_exit(hold);
+	if (!locked)
+		mutex_exit(page_vnode_mutex(vp));
 
 	if (rc == 0)
 		VM_STAT_ADD(hashin_already);

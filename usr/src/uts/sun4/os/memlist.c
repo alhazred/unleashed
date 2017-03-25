@@ -222,7 +222,7 @@ less_pages(uint64_t base, uint64_t len)
 			 * physical memory machines.
 			 */
 			(void) page_hashin(pp, &promvp,
-			    (offset_t)pfnum, NULL);
+			    (offset_t)pfnum, false);
 
 			if (kcage_on) {
 				ASSERT(pp->p_szc == 0);
