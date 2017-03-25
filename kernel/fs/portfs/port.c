@@ -467,27 +467,19 @@ static void port_kstat_init(void);
 static int port_copy_event32(port_event32_t *, port_kevent_t *, list_t *);
 #endif
 
+/* yes, we want defaults */
+static const struct vfsops port_vfsops;
+
 int
 _init(void)
 {
-	static const fs_operation_def_t port_vfsops_template[] = {
-		NULL, NULL
-	};
-	vfsops_t	*port_vfsops;
-	int		error;
 	major_t 	major;
 
 	if ((major = getudev()) == (major_t)-1)
 		return (ENXIO);
 	portdev = makedevice(major, 0);
 
-	/* Create a dummy vfs */
-	error = vfs_makefsops(port_vfsops_template, &port_vfsops);
-	if (error) {
-		cmn_err(CE_WARN, "port init: bad vfs ops");
-		return (error);
-	}
-	vfs_setops(&port_vfs, port_vfsops);
+	vfs_setops(&port_vfs, &port_vfsops);
 	port_vfs.vfs_flag = VFS_RDONLY;
 	port_vfs.vfs_dev = portdev;
 	vfs_make_fsid(&(port_vfs.vfs_fsid), portdev, 0);
