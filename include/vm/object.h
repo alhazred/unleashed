@@ -77,6 +77,10 @@ vmobject_move_page_tail(struct vmobject *obj, struct page *page)
 	vmobject_remove_page(obj, page);
 	vmobject_add_page_tail(obj, page);
 }
+
+extern void vmobject_init(struct vmobject *obj);
+extern void vmobject_fini(struct vmobject *obj);
+
 #endif
 
 #ifdef	__cplusplus

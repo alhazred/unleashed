@@ -3202,7 +3202,7 @@ nfs4_clnt_init(void)
 	 * Initialize the reference count of the notsupp xattr cache vnode to 1
 	 * so that it never goes away (fop_inactive isn't called on it).
 	 */
-	pagecache_init(&nfs4_xattr_notsupp_vnode);
+	vmobject_init(&nfs4_xattr_notsupp_vnode.v_object);
 	vn_reinit(&nfs4_xattr_notsupp_vnode);
 }
 

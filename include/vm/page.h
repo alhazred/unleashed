@@ -754,9 +754,6 @@ kmutex_t	*page_szc_lock(struct page *);
 int		page_szc_lock_assert(struct page *pp);
 
 
-extern void pagecache_init(struct vnode *vnode);
-extern void pagecache_fini(struct vnode *vnode);
-
 /*
  * Page relocation interfaces. page_relocate() is generic.
  * page_get_replacement_page() is provided by the PSM.

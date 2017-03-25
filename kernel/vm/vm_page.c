@@ -7149,7 +7149,7 @@ pcf_decrement_multiple(pgcnt_t *pcftotal_ret, pgcnt_t npages, int unlock)
 }
 
 static int
-pagecache_cmp(const void *va, const void *vb)
+vmobject_cmp(const void *va, const void *vb)
 {
 	const page_t *a = va;
 	const page_t *b = vb;
@@ -7162,19 +7162,19 @@ pagecache_cmp(const void *va, const void *vb)
 }
 
 void
-pagecache_init(struct vnode *vnode)
+vmobject_init(struct vmobject *obj)
 {
-	avl_create(&vnode->v_object.tree, pagecache_cmp, sizeof (struct page),
+	avl_create(&obj->tree, vmobject_cmp, sizeof (struct page),
 	    offsetof(struct page, p_object_node));
-	list_create(&vnode->v_object.list, sizeof (struct page),
+	list_create(&obj->list, sizeof (struct page),
 	    offsetof(struct page, p_list.vnode));
-	mutex_init(&vnode->v_object.lock, NULL, MUTEX_DEFAULT, NULL);
+	mutex_init(&obj->lock, NULL, MUTEX_DEFAULT, NULL);
 }
 
 void
-pagecache_fini(struct vnode *vnode)
+vmobject_fini(struct vmobject *obj)
 {
-	mutex_destroy(&vnode->v_object.lock);
-	list_destroy(&vnode->v_object.list);
-	avl_destroy(&vnode->v_object.tree);
+	mutex_destroy(&obj->lock);
+	list_destroy(&obj->list);
+	avl_destroy(&obj->tree);
 }

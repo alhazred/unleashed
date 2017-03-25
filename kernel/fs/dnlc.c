@@ -409,10 +409,10 @@ dnlc_init()
 	/*
 	 * Initialize and put a hold on the negative cache vnode so that it
 	 * never goes away (fop_inactive isn't called on it).  Note that
-	 * vn_reinit doesn't call pagecache_init - that is normally done by
+	 * vn_reinit doesn't call vmobject_init - that is normally done by
 	 * the vn_cache constructor.
 	 */
-	pagecache_init(&negative_cache_vnode);
+	vmobject_init(&negative_cache_vnode.v_object);
 	vn_reinit(&negative_cache_vnode);
 
 	/*

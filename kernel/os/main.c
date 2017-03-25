@@ -399,11 +399,11 @@ main(void)
 	 */
 	lgrp_init(LGRP_INIT_STAGE2);
 
-	pagecache_init(&kvps[KV_KVP]);
-	pagecache_init(&kvps[KV_ZVP]);
+	vmobject_init(&kvps[KV_KVP].v_object);
+	vmobject_init(&kvps[KV_ZVP].v_object);
 #if defined(__sparc)
-	pagecache_init(&kvps[KV_MPVP]);
-	pagecache_init(&kvps[KV_PROMVP]);
+	vmobject_init(&kvps[KV_MPVP].v_object);
+	vmobject_init(&kvps[KV_PROMVP].v_object);
 #endif
 
 	/*
