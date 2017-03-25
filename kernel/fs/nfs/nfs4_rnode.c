@@ -172,20 +172,18 @@ static int
 nfs4_dross_pages(vnode_t *vp)
 {
 	page_t *pp;
-	kmutex_t *vphm;
 
-	vphm = page_vnode_mutex(vp);
-	mutex_enter(vphm);
+	mutex_enter(page_vnode_mutex(vp));
 	for (pp = vnode_get_head(vp);
 	     pp != NULL;
 	     pp = vnode_get_next(vp, pp)) {
 		if (PP_ISPVN_TAG(pp) &&
 		    pp->p_fsdata != C_NOCOMMIT) {
-			mutex_exit(vphm);
+			mutex_exit(page_vnode_mutex(vp));
 			return (1);
 		}
 	}
-	mutex_exit(vphm);
+	mutex_exit(page_vnode_mutex(vp));
 
 	return (0);
 }

@@ -757,16 +757,14 @@ pr_list_kstat_update(kstat_t *ksp, int rw)
 {
 	uint_t count;
 	page_t *pp;
-	kmutex_t *vphm;
 
 	if (rw == KSTAT_WRITE)
 		return (EACCES);
 
-	vphm = page_vnode_mutex(retired_pages);
-	mutex_enter(vphm);
+	mutex_enter(page_vnode_mutex(retired_pages));
 	/* Needs to be under a lock so that for loop will work right */
 	if (!vn_has_cached_data(retired_pages)) {
-		mutex_exit(vphm);
+		mutex_exit(page_vnode_mutex(retired_pages));
 		ksp->ks_ndata = 0;
 		ksp->ks_data_size = 0;
 		return (0);
@@ -777,7 +775,7 @@ pr_list_kstat_update(kstat_t *ksp, int rw)
 	    pp != NULL; pp = vnode_get_next(retired_pages, pp)) {
 		count++;
 	}
-	mutex_exit(vphm);
+	mutex_exit(page_vnode_mutex(retired_pages));
 
 	ksp->ks_ndata = count;
 	ksp->ks_data_size = count * 2 * sizeof (uint64_t);
@@ -792,7 +790,6 @@ pr_list_kstat_update(kstat_t *ksp, int rw)
 static int
 pr_list_kstat_snapshot(kstat_t *ksp, void *buf, int rw)
 {
-	kmutex_t *vphm;
 	page_t *pp;
 	struct memunit {
 		uint64_t address;
@@ -806,12 +803,11 @@ pr_list_kstat_snapshot(kstat_t *ksp, void *buf, int rw)
 
 	kspmem = (struct memunit *)buf;
 
-	vphm = page_vnode_mutex(retired_pages);
-	mutex_enter(vphm);
+	mutex_enter(page_vnode_mutex(retired_pages));
 	pp = vnode_get_head(retired_pages);
 	if (((caddr_t)kspmem >= (caddr_t)buf + ksp->ks_data_size) ||
 	    (pp == NULL)) {
-		mutex_exit(vphm);
+		mutex_exit(page_vnode_mutex(retired_pages));
 		return (0);
 	}
 	kspmem->address = ptob(pp->p_pagenum);
@@ -824,7 +820,7 @@ pr_list_kstat_snapshot(kstat_t *ksp, void *buf, int rw)
 		kspmem->address = ptob(pp->p_pagenum);
 		kspmem->size = PAGESIZE;
 	}
-	mutex_exit(vphm);
+	mutex_exit(page_vnode_mutex(retired_pages));
 
 	return (0);
 }

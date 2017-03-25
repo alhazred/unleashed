@@ -381,12 +381,10 @@ dr_memlist_del_retired_pages(struct memlist *mlist)
 {
 	page_t		*pp;
 	pfn_t		pfn;
-	kmutex_t	*vphm;
 	vnode_t		*vp = retired_pages;
 	static fn_t	f = "dr_memlist_del_retired_pages";
 
-	vphm = page_vnode_mutex(vp);
-	mutex_enter(vphm);
+	mutex_enter(page_vnode_mutex(vp));
 
 	PR_MEM("%s\n", f);
 
@@ -417,7 +415,7 @@ dr_memlist_del_retired_pages(struct memlist *mlist)
 		page_unlock(pp);
 	}
 
-	mutex_exit(vphm);
+	mutex_exit(page_vnode_mutex(vp));
 
 	return (mlist);
 }

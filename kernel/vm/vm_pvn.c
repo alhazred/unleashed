@@ -370,7 +370,6 @@ pvn_write_done(page_t *plist, int flags)
 	struct cpu *cpup;
 	struct vnode *vp = NULL;	/* for probe */
 	uint_t ppattr;
-	kmutex_t *vphm = NULL;
 
 	ASSERT((flags & B_READ) == 0);
 
@@ -399,11 +398,10 @@ pvn_write_done(page_t *plist, int flags)
 			 * Move page to the top of the v_page list.
 			 * Skip pages modified during IO.
 			 */
-			vphm = page_vnode_mutex(vp);
-			mutex_enter(vphm);
+			mutex_enter(page_vnode_mutex(vp));
 			if (!hat_ismod(pp))
 				vnode_move_page_tail(vp, pp);
-			mutex_exit(vphm);
+			mutex_exit(page_vnode_mutex(vp));
 		}
 
 		if (flags & B_ERROR) {
@@ -716,9 +714,10 @@ move_marker(struct vnode *vnode, struct page *ref, struct page *mark)
  *    Move one marker page backwards towards the start of the list until
  *    it is at the list head, processing the pages passed along the way.
  *
- *    Due to race conditions when the vphm mutex is dropped, additional pages
- *    can be added to either end of the list, so we'll continue to move
- *    the marker and process pages until it is up against the end marker.
+ *    Due to race conditions when the vnode page mutex is dropped,
+ *    additional pages can be added to either end of the list, so we'll
+ *    continue to move the marker and process pages until it is up against
+ *    the end marker.
  *
  * There is one special exit condition. If we are processing a VMODSORT
  * vnode and only writing back modified pages, we can stop as soon as
@@ -738,7 +737,6 @@ pvn_vplist_dirty(
 	page_t		*end;		/* marker page at end of list */
 	int		err = 0;
 	int		error;
-	kmutex_t	*vphm;
 	se_t		se;
 
 	ASSERT(vp->v_type != VCHR);
@@ -785,8 +783,7 @@ pvn_vplist_dirty(
 	 * Grab the lock protecting the vnode's page list
 	 * note that this lock is dropped at times in the loop.
 	 */
-	vphm = page_vnode_mutex(vp);
-	mutex_enter(vphm);
+	mutex_enter(page_vnode_mutex(vp));
 	if (!vn_has_cached_data(vp))
 		goto leave;
 
@@ -858,9 +855,9 @@ pvn_vplist_dirty(
 				 * Block only for sync IO since we don't want
 				 * to block async IO.
 				 */
-				mutex_exit(vphm);
+				mutex_exit(page_vnode_mutex(vp));
 				page_io_wait(pp);
-				mutex_enter(vphm);
+				mutex_enter(page_vnode_mutex(vp));
 				continue;
 			}
 		}
@@ -928,9 +925,9 @@ pvn_vplist_dirty(
 			/*
 			 * Invalidate (destroy) the page.
 			 */
-			mutex_exit(vphm);
+			mutex_exit(page_vnode_mutex(vp));
 			page_destroy_free(pp);
-			mutex_enter(vphm);
+			mutex_enter(page_vnode_mutex(vp));
 			continue;
 		}
 
@@ -941,13 +938,13 @@ pvn_vplist_dirty(
 		 *
 		 * pvn_getdirty() and `(*putapage)' unlock the page.
 		 */
-		mutex_exit(vphm);
+		mutex_exit(page_vnode_mutex(vp));
 		if (pvn_getdirty(pp, flags)) {
 			error = (*putapage)(vp, pp, NULL, NULL, flags, cred);
 			if (!err)
 				err = error;
 		}
-		mutex_enter(vphm);
+		mutex_enter(page_vnode_mutex(vp));
 	}
 	vnode_remove_page(vp, mark);
 	vnode_remove_page(vp, end);
@@ -957,7 +954,7 @@ leave:
 	 * Release v_pagecache_list mutex, also VVMLOCK and wakeup blocked
 	 * threads
 	 */
-	mutex_exit(vphm);
+	mutex_exit(page_vnode_mutex(vp));
 	kmem_cache_free(marker_cache, mark);
 	kmem_cache_free(marker_cache, end);
 	mutex_enter(&vp->v_lock);
@@ -977,14 +974,12 @@ void
 pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
 {
 	page_t	*pp, *next, *end;
-	kmutex_t	*vphm;
 	int	shuffle;
 
-	vphm = page_vnode_mutex(vp);
-	mutex_enter(vphm);
+	mutex_enter(page_vnode_mutex(vp));
 
 	if (!vn_has_cached_data(vp)) {
-		mutex_exit(vphm);
+		mutex_exit(page_vnode_mutex(vp));
 		return;
 	}
 
@@ -1010,7 +1005,7 @@ pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
 		pp = next;
 	}
 
-	mutex_exit(vphm);
+	mutex_exit(page_vnode_mutex(vp));
 }
 
 /*

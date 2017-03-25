@@ -6278,14 +6278,12 @@ nfs3_get_commit(vnode_t *vp)
 {
 	rnode_t *rp;
 	page_t *pp;
-	kmutex_t *vphm;
 
 	rp = VTOR(vp);
 
 	ASSERT(rp->r_flags & RCOMMIT);
 
-	vphm = page_vnode_mutex(vp);
-	mutex_enter(vphm);
+	mutex_enter(page_vnode_mutex(vp));
 
 	/*
 	 * Step through all of the pages associated with this vnode
@@ -6348,7 +6346,7 @@ nfs3_get_commit(vnode_t *vp)
 		page_add(&rp->r_commit.c_pages, pp);
 	}
 
-	mutex_exit(vphm);
+	mutex_exit(page_vnode_mutex(vp));
 }
 
 /*

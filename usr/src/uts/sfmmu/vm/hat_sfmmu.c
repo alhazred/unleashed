@@ -7537,8 +7537,8 @@ hat_page_setattr(page_t *pp, uint_t flag)
 	vnode_t		*vp = pp->p_vnode;
 	page_t		**listp;
 	kmutex_t	*pmtx;
-	kmutex_t	*vphm = NULL;
 	int		noshuffle;
+	bool		locked = false;
 
 	noshuffle = flag & P_NSH;
 	flag &= ~P_NSH;
@@ -7553,15 +7553,15 @@ hat_page_setattr(page_t *pp, uint_t flag)
 
 	if ((flag & P_MOD) != 0 && vp != NULL && IS_VMODSORT(vp) &&
 	    !noshuffle) {
-		vphm = page_vnode_mutex(vp);
-		mutex_enter(vphm);
+		mutex_enter(page_vnode_mutex(vp));
+		locked = true;
 	}
 
 	pmtx = sfmmu_page_enter(pp);
 	pp->p_nrm |= flag;
 	sfmmu_page_exit(pmtx);
 
-	if (vphm != NULL) {
+	if (locked) {
 		/*
 		 * Some File Systems check if v_pagecache_list is empty
 		 * without grabbing the vphm mutex. Must not let it become
@@ -7570,7 +7570,7 @@ hat_page_setattr(page_t *pp, uint_t flag)
 		if (vnode_get_prev(vp, pp) != NULL ||
 		    vnode_get_next(vp, pp) != NULL)
 			vnode_move_page_tail(vp, pp);
-		mutex_exit(vphm);
+		mutex_exit(page_vnode_mutex(vp));
 	}
 }
 
