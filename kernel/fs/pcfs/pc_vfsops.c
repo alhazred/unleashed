@@ -222,25 +222,25 @@ _info(struct modinfo *modinfop)
 	return (mod_info(&modlinkage, modinfop));
 }
 
+static const struct vfsops pcfs_vfsops = {
+	.vfs_mount = pcfs_mount,
+	.vfs_unmount = pcfs_unmount,
+	.vfs_root = pcfs_root,
+	.vfs_statvfs = pcfs_statvfs,
+	.vfs_sync = pcfs_sync,
+	.vfs_vget = pcfs_vget,
+	.vfs_freevfs = pcfs_freevfs,
+};
+
 /* ARGSUSED1 */
 static int
 pcfsinit(int fstype, char *name)
 {
-	static const fs_operation_def_t pcfs_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = pcfs_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = pcfs_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = pcfs_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = pcfs_statvfs },
-		VFSNAME_SYNC,		{ .vfs_sync = pcfs_sync },
-		VFSNAME_VGET,		{ .vfs_vget = pcfs_vget },
-		VFSNAME_FREEVFS,	{ .vfs_freevfs = pcfs_freevfs },
-		NULL,			NULL
-	};
 	int error;
 
-	error = vfs_setfsops(fstype, pcfs_vfsops_template, NULL);
+	error = vfs_setfsops_const(fstype, &pcfs_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "pcfsinit: bad vfs ops template");
+		cmn_err(CE_WARN, "pcfsinit: bad fstype");
 		return (error);
 	}
 
