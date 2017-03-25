@@ -593,9 +593,6 @@ main(int argc, char *argv[], char **renvp)
 		login_exit(1);
 	}
 
-	if (!silent)
-		printmotd();
-
 	/*
 	 * Set up the basic environment for the exec.  This includes
 	 * HOME, PATH, LOGNAME, SHELL, TERM, TZ, HZ, and MAIL.
@@ -617,6 +614,9 @@ main(int argc, char *argv[], char **renvp)
 		}
 	}
 	closelog();
+
+	if (!silent)
+		printmotd();
 
 	(void) signal(SIGQUIT, SIG_DFL);
 	(void) signal(SIGINT, SIG_DFL);
@@ -2466,6 +2466,12 @@ is_number(char *ptr)
 }
 
 static void
+interrupt_syscall(int sig)
+{
+	return;
+}
+
+static void
 printmotd(void)
 {
 	int fd;
@@ -2474,6 +2480,8 @@ printmotd(void)
 
 	if ((fd = open("/etc/motd", O_RDONLY)) < 0)
 		return;
+
+	(void) signal(SIGINT, interrupt_syscall);
 
 	while ((nr = read(fd, buf, sizeof(buf))) > 0 &&
 		write(STDOUT_FILENO, buf, nr) == nr)
