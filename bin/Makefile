@@ -1,4 +1,4 @@
-SUBDIR=	banner bmake cat dis echo env false localedef mandoc pax pwd sed \
-	size true uname utmp_update xinstall yes
+SUBDIR=	banner cat dis echo env false localedef mandoc make pax pwd sed size \
+	true uname utmp_update xinstall yes
 
 .include <bsd.subdir.mk>
