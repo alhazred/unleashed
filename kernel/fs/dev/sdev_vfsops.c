@@ -141,26 +141,25 @@ _info(struct modinfo *modinfop)
 	return (mod_info(&modlinkage, modinfop));
 }
 
+static const struct vfsops dev_vfsops = {
+	.vfs_mount = sdev_mount,
+	.vfs_unmount = sdev_unmount,
+	.vfs_root = sdev_root,
+	.vfs_statvfs = sdev_statvfs,
+};
+
 /*ARGSUSED*/
 static int
 devinit(int fstype, char *name)
 {
-	static const fs_operation_def_t dev_vfsops_tbl[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = sdev_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = sdev_unmount },
-		VFSNAME_ROOT, 		{ .vfs_root = sdev_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = sdev_statvfs },
-		NULL,			NULL
-	};
-
 	int	error;
 	extern major_t getudev(void);
 
 	devtype = fstype;
 
-	error = vfs_setfsops(fstype, dev_vfsops_tbl, NULL);
+	error = vfs_setfsops_const(fstype, &dev_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "devinit: bad vfs ops tbl");
+		cmn_err(CE_WARN, "devinit: bad fstype");
 		return (error);
 	}
 
