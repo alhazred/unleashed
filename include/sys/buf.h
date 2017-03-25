@@ -208,23 +208,25 @@ struct biostats {
 /*
  * Insq/Remq for the buffer hash lists.
  */
-#define	bremhash(bp) { \
-	ASSERT((bp)->b_forw != NULL); \
-	ASSERT((bp)->b_back != NULL); \
-	(bp)->b_back->b_forw = (bp)->b_forw; \
-	(bp)->b_forw->b_back = (bp)->b_back; \
-	(bp)->b_forw = (bp)->b_back = NULL; \
-}
-#define	binshash(bp, dp) { \
-	ASSERT((bp)->b_forw == NULL); \
-	ASSERT((bp)->b_back == NULL); \
-	ASSERT((dp)->b_forw != NULL); \
-	ASSERT((dp)->b_back != NULL); \
-	(bp)->b_forw = (dp)->b_forw; \
-	(bp)->b_back = (dp); \
-	(dp)->b_forw->b_back = (bp); \
-	(dp)->b_forw = (bp); \
-}
+#define	bremhash(bp) \
+	do { \
+		ASSERT((bp)->b_forw != NULL); \
+		ASSERT((bp)->b_back != NULL); \
+		(bp)->b_back->b_forw = (bp)->b_forw; \
+		(bp)->b_forw->b_back = (bp)->b_back; \
+		(bp)->b_forw = (bp)->b_back = NULL; \
+	} while (0)
+#define	binshash(bp, dp) \
+	do { \
+		ASSERT((bp)->b_forw == NULL); \
+		ASSERT((bp)->b_back == NULL); \
+		ASSERT((dp)->b_forw != NULL); \
+		ASSERT((dp)->b_back != NULL); \
+		(bp)->b_forw = (dp)->b_forw; \
+		(bp)->b_back = (dp); \
+		(dp)->b_forw->b_back = (bp); \
+		(dp)->b_forw = (bp); \
+	} while (0)
 
 
 /*
@@ -325,19 +327,22 @@ struct	dwbuf {
 /*
  * Same as bdwrite() except write failures are retried.
  */
-#define	bdrwrite(bp) { \
-	(bp)->b_flags |= B_RETRYWRI; \
-	bdwrite((bp)); \
-}
+#define	bdrwrite(bp) \
+	do { \
+		(bp)->b_flags |= B_RETRYWRI; \
+		bdwrite(bp); \
+	} while (0)
 
 /*
  * Same as bwrite() except write failures are retried.
  */
-#define	brwrite(bp) { \
-	(bp)->b_flags |= B_RETRYWRI; \
-	bwrite_common((bp), /* force_wait */ 0, /* do_relse */ 1, \
-		/* clear_flags */ (B_READ | B_DONE | B_ERROR | B_DELWRI)); \
-}
+#define	brwrite(bp) \
+	do { \
+		(bp)->b_flags |= B_RETRYWRI; \
+		bwrite_common((bp), /* force_wait */ 0, /* do_relse */ 1, \
+			/* clear_flags */ \
+			(B_READ | B_DONE | B_ERROR | B_DELWRI)); \
+	} while (0)
 
 extern struct hbuf	*hbuf;		/* Hash table */
 extern struct dwbuf	*dwbuf;		/* delayed write hash table */
