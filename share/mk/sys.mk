@@ -31,7 +31,6 @@ STRIP_FLAG?=
 AR?=		ar
 ARFLAGS?=	rl
 LORDER?=	lorder
-RANLIB?=	:
 TSORT?=		tsort
 
 DBG?=		-g

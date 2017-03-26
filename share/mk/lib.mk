@@ -206,7 +206,6 @@ PICFLAG ?= -fPIC
 .else
 PICFLAG ?= -fPIC -fno-common
 .endif
-RANLIB = :
 .endif
 
 SHLIB_LD ?= ${LD}
@@ -422,7 +421,6 @@ lib${LIB}.a:: ${OBJS}
 	@echo building standard ${LIB} library
 	@rm -f ${.TARGET}
 	@${AR} ${AR_cq} ${.TARGET} ${LD_objs}
-	${RANLIB} ${.TARGET}
 
 POBJS+=	${OBJS:.o=.po}
 .NOPATH:	${POBJS}
@@ -430,7 +428,6 @@ lib${LIB}_p.a:: ${POBJS}
 	@echo building profiled ${LIB} library
 	@rm -f ${.TARGET}
 	@${AR} ${AR_cq} ${.TARGET} ${LD_pobjs}
-	${RANLIB} ${.TARGET}
 
 SOBJS+=	${OBJS:.o=${PICO}}
 .NOPATH:	${SOBJS}
@@ -438,7 +435,6 @@ lib${LIB}_pic.a:: ${SOBJS}
 	@echo building shared object ${LIB} library
 	@rm -f ${.TARGET}
 	@${AR} ${AR_cq} ${.TARGET} ${LD_sobjs}
-	${RANLIB} ${.TARGET}
 
 #SHLIB_LDADD?= ${LDADD}
 
@@ -519,20 +515,17 @@ libinstall:
 .if ${MK_ARCHIVE} != "no"
 	${INSTALL} ${COPY} ${LIB_INSTALL_OWN} -m 600 lib${LIB}.a \
 	    ${DESTDIR}${LIBDIR}
-	${RANLIB} ${DESTDIR}${LIBDIR}/lib${LIB}.a
 	chmod ${LIBMODE} ${DESTDIR}${LIBDIR}/lib${LIB}.a
 .endif
 .if ${MK_PROFILE} != "no"
 	${INSTALL} ${COPY} ${LIB_INSTALL_OWN} -m 600 \
 	    lib${LIB}_p.a ${DESTDIR}${LIBDIR}
-	${RANLIB} ${DESTDIR}${LIBDIR}/lib${LIB}_p.a
 	chmod ${LIBMODE} ${DESTDIR}${LIBDIR}/lib${LIB}_p.a
 .endif
 .if ${MK_PIC} != "no"
 .if ${MK_PICLIB} != "no"
 	${INSTALL} ${COPY} ${LIB_INSTALL_OWN} -m 600 \
 	    lib${LIB}_pic.a ${DESTDIR}${LIBDIR}
-	${RANLIB} ${DESTDIR}${LIBDIR}/lib${LIB}_pic.a
 	chmod ${LIBMODE} ${DESTDIR}${LIBDIR}/lib${LIB}_pic.a
 .endif
 .if !empty(SHLIB_MAJOR)
@@ -581,7 +574,6 @@ realinstall: beforeinstall
 	test -d ${DESTDIR}${LIBDIR} || ${INSTALL} -d -m775 ${DESTDIR}${LIBDIR}
 .for _lib in ${_LIBS:M*.a}
 	${INSTALL} ${COPY} -m 644 ${_lib} ${DESTDIR}${LIBDIR}
-	${RANLIB} ${DESTDIR}${LIBDIR}/${_lib}
 .endfor
 .for _lib in ${_LIBS:M*.${LD_solink}*:O:u}
 	${INSTALL} ${COPY} -m ${LIBMODE} ${_lib} ${DESTDIR}${LIBDIR}
