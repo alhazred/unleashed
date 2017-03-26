@@ -439,7 +439,7 @@ add_prop_val(topo_hdl_t *thp, struct cfgdata *rawdata, char *propn,
 	uint32_t ui32;
 	int64_t i64;
 	int32_t i32;
-	boolean_t bool;
+	boolean_t b;
 	uint64_t ui64;
 	char buf[32];	/* big enough for any 64-bit int */
 	uint_t nelem;
@@ -501,8 +501,8 @@ add_prop_val(topo_hdl_t *thp, struct cfgdata *rawdata, char *propn,
 		/*
 		 * Convert boolean_t to hex strings
 		 */
-		(void) nvpair_value_boolean_value(pv_nvp, &bool);
-		(void) snprintf(buf, sizeof (buf), "0x%llx", (uint64_t)bool);
+		(void) nvpair_value_boolean_value(pv_nvp, &b);
+		(void) snprintf(buf, sizeof (buf), "0x%llx", (uint64_t)b);
 		propv = buf;
 		break;
 

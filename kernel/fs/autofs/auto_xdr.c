@@ -401,8 +401,8 @@ xdr_autofs_putrddirres(XDR *xdrs, struct autofsrddir *rddir, uint_t reqsize)
 	char *name;
 	int size;
 	uint_t namlen;
-	bool_t true = TRUE;
-	bool_t false = FALSE;
+	bool_t t = TRUE;
+	bool_t f = FALSE;
 	int entrysz;
 	int tofit;
 	int bufsize;
@@ -428,7 +428,7 @@ xdr_autofs_putrddirres(XDR *xdrs, struct autofsrddir *rddir, uint_t reqsize)
 			rddir->rddir_eof = FALSE;
 			break;
 		}
-		if (!xdr_bool(xdrs, &true) ||
+		if (!xdr_bool(xdrs, &t) ||
 		    !xdr_u_int(xdrs, &ino) ||
 		    !xdr_bytes(xdrs, &name, &namlen, AUTOFS_MAXPATHLEN) ||
 		    !xdr_u_int(xdrs, &off)) {
@@ -436,7 +436,7 @@ xdr_autofs_putrddirres(XDR *xdrs, struct autofsrddir *rddir, uint_t reqsize)
 		}
 		bufsize += entrysz;
 	}
-	if (!xdr_bool(xdrs, &false))
+	if (!xdr_bool(xdrs, &f))
 		return (FALSE);
 	if (!xdr_bool(xdrs, &rddir->rddir_eof))
 		return (FALSE);

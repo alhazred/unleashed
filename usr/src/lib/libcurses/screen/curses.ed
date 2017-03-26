@@ -95,9 +95,7 @@ typedef struct sgttyb SGTTY;
  * The above comment should not be removed or changed until GNU
  * gcc/fixinc/inclhack.def is updated to bypass this header.
  */
-#if !defined(__cplusplus) && !defined(_BOOL)
-typedef	char bool;
-#endif /* !defined(__cplusplus) && !defined(_BOOL) */
+#include <stdbool.h>
 
 #define	_VR3_COMPAT_CODE
 /*

@@ -97,8 +97,8 @@ dapl_ro_disallowed(void)
 	boolean_t ro_disallowed;
 	static const char *ro_disallowed_property =
 	    "pci-relaxed-ordering-disallowed";
-	int bool;
-	int *boolp = &bool;
+	int b;
+	int *boolp = &b;
 
 	ret = sysinfo(SI_PLATFORM, platform, sizeof (platform));
 	if ((ret != -1) && (ret <= sizeof (platform))) {

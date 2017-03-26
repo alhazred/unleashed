@@ -801,9 +801,9 @@ xdr_nfslog_READDIRPLUS3args(XDR *xdrs, READDIRPLUS3args *objp)
 bool_t
 xdr_nfslog_READDIRPLUS3resok(XDR *xdrs, READDIRPLUS3resok *objp)
 {
+	bool_t t = TRUE;
+	bool_t f = FALSE;
 	struct dirent64 *dp;
-	bool_t true = TRUE;
-	bool_t false = FALSE;
 	int nents;
 	char *name;
 	entryplus3_info *infop;
@@ -822,7 +822,7 @@ xdr_nfslog_READDIRPLUS3resok(XDR *xdrs, READDIRPLUS3resok *objp)
 		}
 		name = dp->d_name;
 
-		if (!xdr_bool(xdrs, &true) ||
+		if (!xdr_bool(xdrs, &t) ||
 		    !xdr_post_op_fh3(xdrs, &infop->fh) ||
 		    !xdr_string(xdrs, &name, ~0)) {
 			return (FALSE);
@@ -831,7 +831,7 @@ xdr_nfslog_READDIRPLUS3resok(XDR *xdrs, READDIRPLUS3resok *objp)
 		infop++;
 		nents--;
 	}
-	if (!xdr_bool(xdrs, &false))
+	if (!xdr_bool(xdrs, &f))
 		return (FALSE);
 
 	return (xdr_bool(xdrs, &objp->reply.eof));

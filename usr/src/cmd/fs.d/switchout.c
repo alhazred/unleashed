@@ -459,7 +459,7 @@ match(char **opts, char *s)
 
 	while (*cs++ == *s) {
 		if (*s++ == '\0') {
-			goto true;
+			goto t;
 		}
 	}
 	if (*s != '\0') {
@@ -474,7 +474,7 @@ match(char **opts, char *s)
 		*opts = tmp_str;
 		return (0);
 	}
-true:
+t:
 	cs--;
 	*opts = cs;
 	return (1);

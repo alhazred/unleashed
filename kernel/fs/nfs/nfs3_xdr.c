@@ -2030,8 +2030,8 @@ xdr_putdirlist(XDR *xdrs, READDIR3resok *objp)
 	int size;
 	int bufsize;
 	uint_t namlen;
-	bool_t true = TRUE;
-	bool_t false = FALSE;
+	bool_t t = TRUE;
+	bool_t f = FALSE;
 	int entrysz;
 	int tofit;
 	fileid3 fileid;
@@ -2093,7 +2093,7 @@ xdr_putdirlist(XDR *xdrs, READDIR3resok *objp)
 		}
 		fileid = (fileid3)(dp->d_ino);
 		cookie = (cookie3)(dp->d_off);
-		if (!xdr_bool(xdrs, &true) ||
+		if (!xdr_bool(xdrs, &t) ||
 		    !xdr_u_longlong_t(xdrs, &fileid) ||
 		    !xdr_bytes(xdrs, &name, &namlen, ~0) ||
 		    !xdr_u_longlong_t(xdrs, &cookie)) {
@@ -2101,7 +2101,7 @@ xdr_putdirlist(XDR *xdrs, READDIR3resok *objp)
 		}
 		bufsize += entrysz;
 	}
-	if (!xdr_bool(xdrs, &false))
+	if (!xdr_bool(xdrs, &f))
 		return (FALSE);
 	if (!xdr_bool(xdrs, &objp->reply.eof))
 		return (FALSE);
@@ -2290,8 +2290,8 @@ xdr_putdirpluslist(XDR *xdrs, READDIRPLUS3resok *objp)
 	struct dirent64 *dp;
 	char *name;
 	int nents;
-	bool_t true = TRUE;
-	bool_t false = FALSE;
+	bool_t t = TRUE;
+	bool_t f = FALSE;
 	fileid3 fileid;
 	cookie3 cookie;
 	entryplus3_info *infop;
@@ -2310,7 +2310,7 @@ xdr_putdirpluslist(XDR *xdrs, READDIRPLUS3resok *objp)
 			name = dp->d_name;
 			fileid = (fileid3)(dp->d_ino);
 			cookie = (cookie3)(dp->d_off);
-			if (!xdr_bool(xdrs, &true) ||
+			if (!xdr_bool(xdrs, &t) ||
 			    !xdr_u_longlong_t(xdrs, &fileid) ||
 			    !xdr_bytes(xdrs, &name, &infop->namelen, ~0) ||
 			    !xdr_u_longlong_t(xdrs, &cookie) ||
@@ -2324,7 +2324,7 @@ xdr_putdirpluslist(XDR *xdrs, READDIRPLUS3resok *objp)
 		nents--;
 	}
 
-	if (!xdr_bool(xdrs, &false))
+	if (!xdr_bool(xdrs, &f))
 		return (FALSE);
 	if (!xdr_bool(xdrs, &objp->reply.eof))
 		return (FALSE);

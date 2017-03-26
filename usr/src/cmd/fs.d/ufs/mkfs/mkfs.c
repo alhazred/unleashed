@@ -3725,14 +3725,14 @@ match(char *s)
 	cs = string;
 	while (*cs++ == *s) {
 		if (*s++ == '\0') {
-			goto true;
+			goto t;
 		}
 	}
 	if (*s != '\0') {
 		return (0);
 	}
 
-true:
+t:
 	cs--;
 	string = cs;
 	return (1);
