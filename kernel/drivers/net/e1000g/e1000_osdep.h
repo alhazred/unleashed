@@ -45,6 +45,7 @@ extern "C" {
 #include <sys/errno.h>
 #include <sys/ddi.h>
 #include <sys/sunddi.h>
+#include <sys/stdbool.h>
 #include <sys/pci.h>
 #include <sys/atomic.h>
 #include <sys/note.h>
@@ -78,8 +79,6 @@ extern "C" {
 
 #define	OS_DEP(hw)		((struct e1000g_osdep *)((hw)->back))
 
-#define	false		0
-#define	true		1
 #define	FALSE		false
 #define	TRUE		true
 
@@ -203,7 +202,6 @@ typedef	uint8_t		u8;
 typedef	uint16_t	u16;
 typedef	uint32_t	u32;
 typedef	uint64_t	u64;
-typedef boolean_t	bool;
 
 #define	__le16 u16
 #define	__le32 u32
