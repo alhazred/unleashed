@@ -329,7 +329,7 @@ enum lpap {
 enum lpap lpg_alloc_prefer = LPAP_DEFAULT;
 
 static void page_init_mem_config(void);
-static int page_do_hashin(page_t *, vnode_t *, uoff_t);
+static int page_do_hashin(struct page *, struct vmobject *, uoff_t);
 static void page_do_hashout(page_t *);
 static void page_capture_init();
 int page_capture_take_action(page_t *, uint_t, void *);
@@ -789,7 +789,7 @@ top:
 		 * get it over with.  As usual, go down
 		 * holding all the locks.
 		 */
-		if (!page_hashin(newpp, vp, off, true)) {
+		if (!page_hashin(newpp, &vp->v_object, off, true)) {
 			ASSERT(VMOBJECT_LOCKED(&vp->v_object));
 			panic("page_lookup_create: hashin failed %p %p %llx",
 			    (void *)newpp, (void *)vp, off);
@@ -2027,7 +2027,7 @@ page_create_va_large(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
 		ASSERT(!hat_page_is_mapped(pp));
 		PP_CLRFREE(pp);
 		PP_CLRAGED(pp);
-		if (!page_hashin(pp, vp, off, false))
+		if (!page_hashin(pp, &vp->v_object, off, false))
 			panic("page_create_large: hashin failed: page %p",
 			    (void *)pp);
 		page_io_lock(pp);
@@ -2245,7 +2245,7 @@ top:
 			VM_STAT_ADD(page_create_new);
 			pp = npp;
 			npp = NULL;
-			if (!page_hashin(pp, vp, off, true)) {
+			if (!page_hashin(pp, &vp->v_object, off, true)) {
 				/*
 				 * Since we hold the page vnode page cache
 				 * mutex and just searched for this page,
@@ -3096,7 +3096,7 @@ top:
 	/*
 	 * Hash in the page with the new identity.
 	 */
-	if (!page_hashin(opp, vp, off, true)) {
+	if (!page_hashin(opp, &vp->v_object, off, true)) {
 		/*
 		 * We were holding phm while we searched for [vp, off]
 		 * and only dropped phm if we found and locked a page.
@@ -3155,14 +3155,15 @@ top:
  * Returns 1 on success and 0 on failure.
  */
 static int
-page_do_hashin(page_t *page, vnode_t *vnode, uoff_t offset)
+page_do_hashin(struct page *page, struct vmobject *obj, uoff_t offset)
 {
 	avl_index_t where;
 	page_t **listp;
 
 	ASSERT(PAGE_EXCL(page));
-	ASSERT(vnode != NULL);
-	ASSERT(VMOBJECT_LOCKED(&vnode->v_object));
+	ASSERT(obj != NULL);
+	ASSERT(obj->vnode != NULL);
+	ASSERT(VMOBJECT_LOCKED(obj));
 
 	/*
 	 * Be sure to set these up before the page is inserted into the AVL
@@ -3170,34 +3171,34 @@ page_do_hashin(page_t *page, vnode_t *vnode, uoff_t offset)
 	 * thread might get confused and wonder how this page could
 	 * possibly hash to this list.
 	 */
-	page->p_vnode = vnode;
+	page->p_vnode = obj->vnode;
 	page->p_offset = offset;
 
 	/*
 	 * record if this page is on a swap vnode
 	 */
-	if ((vnode->v_flag & VISSWAP) != 0)
+	if ((obj->vnode->v_flag & VISSWAP) != 0)
 		PP_SETSWAP(page);
 
 	/*
 	 * Duplicates are not allowed - fail to insert if we already have a
 	 * page with this identity.
 	 */
-	if (avl_find(&vnode->v_object.tree, page, &where) != NULL) {
+	if (avl_find(&obj->tree, page, &where) != NULL) {
 		page->p_vnode = NULL;
 		page->p_offset = (uoff_t)(-1);
 		return (0);
 	}
 
-	avl_insert(&vnode->v_object.tree, page, where);
+	avl_insert(&obj->tree, page, where);
 
 	/*
 	 * Add the page to the vnode's list of pages
 	 */
-	if (IS_VMODSORT(vnode) && hat_ismod(page))
-		vmobject_add_page_tail(&vnode->v_object, page);
+	if (IS_VMODSORT(obj->vnode) && hat_ismod(page))
+		vmobject_add_page_tail(obj, page);
 	else
-		vmobject_add_page_head(&vnode->v_object, page);
+		vmobject_add_page_head(obj, page);
 
 	return (1);
 }
@@ -3209,7 +3210,7 @@ page_do_hashin(page_t *page, vnode_t *vnode, uoff_t offset)
  * If `locked` is true, we do *not* attempt to lock the vnode's page mutex.
  */
 int
-page_hashin(page_t *pp, vnode_t *vp, uoff_t offset, bool locked)
+page_hashin(struct page *pp, struct vmobject *obj, uoff_t offset, bool locked)
 {
 	int rc;
 
@@ -3219,13 +3220,13 @@ page_hashin(page_t *pp, vnode_t *vp, uoff_t offset, bool locked)
 
 	if (!locked) {
 		VM_STAT_ADD(hashin_not_held);
-		vmobject_lock(&vp->v_object);
+		vmobject_lock(obj);
 	}
 
-	rc = page_do_hashin(pp, vp, offset);
+	rc = page_do_hashin(pp, obj, offset);
 
 	if (!locked)
-		vmobject_unlock(&vp->v_object);
+		vmobject_unlock(obj);
 
 	if (rc == 0)
 		VM_STAT_ADD(hashin_already);
@@ -4210,7 +4211,7 @@ top:
  *	vp = old->p_vnode;
  *	off = old->p_offset;
  *	page_do_hashout(old)
- *	page_do_hashin(new, vp, off)
+ *	page_do_hashin(new, obj, off)
  *
  * doesn't work, since
  *  1) if old is the only page on the vnode, the v_object list has a window

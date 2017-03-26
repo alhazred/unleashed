@@ -1547,7 +1547,7 @@ htable_attach(
 		offset += 1ULL << 40;		/* something > 4 Gig */
 #endif
 		ASSERT(page_exists(&kvp, offset) == NULL);
-		(void) page_hashin(pp, &kvp, offset, false);
+		(void) page_hashin(pp, &kvp.v_object, offset, false);
 	}
 	page_downgrade(pp);
 #if defined(__xpv) && defined(__amd64)

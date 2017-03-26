@@ -2602,8 +2602,8 @@ kphysm_erase(uint64_t addr, uint64_t len)
 			add_physmem_cb(pp, base);
 			if (page_trylock(pp, SE_EXCL) == 0)
 				cmn_err(CE_PANIC, "prom page locked");
-			(void) page_hashin(pp, &promvp,
-			    (offset_t)base, false);
+			(void) page_hashin(pp, &promvp.v_object,
+					   (offset_t)base, false);
 			(void) page_pp_lock(pp, 0, 1);
 			pp++, base++, num--;
 		}

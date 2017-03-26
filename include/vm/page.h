@@ -650,7 +650,7 @@ void	page_destroy(page_t *, int);
 void	page_destroy_pages(page_t *);
 void	page_destroy_free(page_t *);
 void	page_rename(page_t *, struct vnode *, uoff_t);
-int	page_hashin(page_t *, struct vnode *, uoff_t, bool);
+int	page_hashin(struct page *, struct vmobject *, uoff_t, bool);
 void	page_hashout(page_t *, bool);
 void	page_add(page_t **, page_t *);
 void	page_add_common(page_t **, page_t *);

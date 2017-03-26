@@ -394,7 +394,8 @@ boot_mapin(caddr_t addr, size_t size)
 			PLCNT_XFER_NORELOC(pp);
 		}
 
-		(void) page_hashin(pp, &kvp, (uoff_t)(uintptr_t)addr, false);
+		(void) page_hashin(pp, &kvp.v_object, (uoff_t)(uintptr_t)addr,
+				   false);
 		pp->p_lckcnt = 1;
 #if defined(__x86)
 		page_downgrade(pp);

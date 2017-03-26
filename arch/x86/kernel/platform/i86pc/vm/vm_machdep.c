@@ -2933,7 +2933,7 @@ page_get_contigpages(
 		if (mcpl != NULL) {
 			pp = mcpl;
 			do {
-				if (!page_hashin(pp, vp, off, false)) {
+				if (!page_hashin(pp, &vp->v_object, off, false)) {
 					panic("page_get_contigpages:"
 					    " hashin failed"
 					    " pp %p, vp %p, off %llx",
@@ -3529,7 +3529,7 @@ page_create_io(
 		pp = plist;
 
 		do {
-			if (!page_hashin(pp, vp, off, false)) {
+			if (!page_hashin(pp, &vp->v_object, off, false)) {
 				panic("pg_creat_io: hashin failed %p %p %llx",
 				    (void *)pp, (void *)vp, off);
 			}
@@ -3638,7 +3638,7 @@ top:
 			VM_STAT_ADD(page_create_new);
 			pp = npp;
 			npp = NULL;
-			if (!page_hashin(pp, vp, off, true)) {
+			if (!page_hashin(pp, &vp->v_object, off, true)) {
 				/*
 				 * Since we hold the page hash mutex and
 				 * just searched for this page, page_hashin

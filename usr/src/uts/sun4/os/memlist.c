@@ -221,8 +221,8 @@ less_pages(uint64_t base, uint64_t len)
 			 * are page numbers (gack) for >32 bit
 			 * physical memory machines.
 			 */
-			(void) page_hashin(pp, &promvp,
-			    (offset_t)pfnum, false);
+			(void) page_hashin(pp, &promvp.v_object,
+					   (offset_t)pfnum, false);
 
 			if (kcage_on) {
 				ASSERT(pp->p_szc == 0);

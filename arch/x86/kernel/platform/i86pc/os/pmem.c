@@ -851,7 +851,7 @@ tlist_in(page_t *tlist, pgcnt_t tpages, vnode_t *pvnp, uoff_t *poffp)
 	for (pp = tlist; i < tpages; i++) {
 		ASSERT(FROM_LPG(pp));
 		page_io_lock(pp);
-		(void) page_hashin(pp, pvnp, *poffp, false);
+		(void) page_hashin(pp, &pvnp->v_object, *poffp, false);
 		plp = pmem_lpg_get(pmem_occ_lpgs, pp, &last_pl);
 		/* Mark this page as allocated. */
 		BT_CLEAR(plp->pl_bitmap, PFIND(pp));
