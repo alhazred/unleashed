@@ -1591,8 +1591,8 @@ uint_t	pcgs_locked;
 uint_t	pcgs_cagelocked;
 #endif	/* VM_STATS */
 
-static page_t *
-page_create_get_something(vnode_t *vp, uoff_t off, struct seg *seg,
+static struct page *
+page_create_get_something(struct vmobject *obj, uoff_t off, struct seg *seg,
     caddr_t vaddr, uint_t flags)
 {
 	uint_t		count;
@@ -1688,10 +1688,10 @@ page_create_get_something(vnode_t *vp, uoff_t off, struct seg *seg,
 	lgrp = lgrp_mem_choose(seg, vaddr, PAGESIZE);
 
 	for (count = 0; kcage_on || count < MAX_PCGS; count++) {
-		pp = page_get_freelist(vp, off, seg, vaddr, PAGESIZE,
+		pp = page_get_freelist(obj->vnode, off, seg, vaddr, PAGESIZE,
 		    flags, lgrp);
 		if (pp == NULL) {
-			pp = page_get_cachelist(vp, off, seg, vaddr,
+			pp = page_get_cachelist(obj->vnode, off, seg, vaddr,
 			    flags, lgrp);
 		}
 		if (pp == NULL) {
@@ -2208,8 +2208,8 @@ top:
 				npp = page_get_cachelist(vp, off, seg,
 				    vaddr, flags | PG_MATCH_COLOR, lgrp);
 				if (npp == NULL) {
-					npp = page_create_get_something(vp,
-					    off, seg, vaddr,
+					npp = page_create_get_something(
+					    &vp->v_object, off, seg, vaddr,
 					    flags & ~PG_MATCH_COLOR);
 				}
 
