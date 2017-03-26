@@ -1859,7 +1859,7 @@ tmp_getapage(
 	if (protp != NULL)
 		*protp = PROT_ALL;
 again:
-	if (pp = page_lookup(vp, off, rw == S_CREATE ? SE_EXCL : SE_SHARED)) {
+	if (pp = page_lookup(&vp->v_object, off, rw == S_CREATE ? SE_EXCL : SE_SHARED)) {
 		if (pl) {
 			pl[0] = pp;
 			pl[1] = NULL;
@@ -2004,9 +2004,8 @@ tmp_putpage(
 			 * them from the free list.
 			 */
 			if ((flags & B_INVAL) || ((flags & B_ASYNC) == 0)) {
-				pp = page_lookup(vp, io_off,
-				    (flags & (B_INVAL | B_FREE)) ?
-				    SE_EXCL : SE_SHARED);
+				pp = page_lookup(&vp->v_object, io_off,
+						 (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
 			} else {
 				pp = page_lookup_nowait(vp, io_off,
 				    (flags & B_FREE) ? SE_EXCL : SE_SHARED);

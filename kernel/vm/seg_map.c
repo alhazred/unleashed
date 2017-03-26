@@ -1410,7 +1410,7 @@ segmap_pagecreate(struct seg *seg, caddr_t addr, size_t len, int softlock)
 
 	for (; addr < eaddr; addr += PAGESIZE, off += PAGESIZE) {
 		hat_flag = HAT_LOAD;
-		pp = page_lookup(vp, off, SE_SHARED);
+		pp = page_lookup(&vp->v_object, off, SE_SHARED);
 		if (pp == NULL) {
 			ushort_t bitindex;
 
@@ -1816,11 +1816,12 @@ vrfy_smp:
 				    !(pp->p_vnode == vp &&
 				    pp->p_offset == baseoff)) {
 					page_unlock(pp);
-					pp = page_lookup(vp, baseoff,
-					    SE_SHARED);
+					pp = page_lookup(&vp->v_object,
+							 baseoff, SE_SHARED);
 				}
 			} else {
-				pp = page_lookup(vp, baseoff, SE_SHARED);
+				pp = page_lookup(&vp->v_object, baseoff,
+						 SE_SHARED);
 			}
 
 			if (pp == NULL) {
@@ -2171,7 +2172,7 @@ segmap_pagecreate_kpm(struct seg *seg, vnode_t *vp, uoff_t off,
 
 	ASSERT(smp->sm_refcnt > 0);
 
-	if ((pp = page_lookup(vp, off, SE_SHARED)) == NULL) {
+	if ((pp = page_lookup(&vp->v_object, off, SE_SHARED)) == NULL) {
 		kmutex_t *smtx;
 
 		base = segkpm_create_va(off);

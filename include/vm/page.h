@@ -624,8 +624,8 @@ struct lgrp;
 /*
  * Page frame operations.
  */
-page_t	*page_lookup(struct vnode *, uoff_t, se_t);
-page_t	*page_lookup_create(struct vnode *, uoff_t, se_t, page_t *,
+struct page *page_lookup(struct vmobject *, uoff_t, se_t);
+struct page *page_lookup_create(struct vmobject *, uoff_t, se_t, struct page *,
 	spgcnt_t *, int);
 page_t	*page_lookup_nowait(struct vnode *, uoff_t, se_t);
 page_t	*page_find(struct vnode *, uoff_t);

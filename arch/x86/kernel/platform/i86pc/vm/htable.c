@@ -337,7 +337,7 @@ ptable_free(pfn_t pfn)
 	if (!page_tryupgrade(pp)) {
 		uoff_t off = pp->p_offset;
 		page_unlock(pp);
-		pp = page_lookup(&kvp, off, SE_EXCL);
+		pp = page_lookup(&kvp.v_object, off, SE_EXCL);
 		if (pp == NULL)
 			panic("page not found");
 	}

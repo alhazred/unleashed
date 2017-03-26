@@ -4274,12 +4274,13 @@ rehash:
 			 */
 			sfmmu_mlist_exit(pml);
 			SFMMU_HASH_UNLOCK(hmebp);
-			pp = page_lookup(&kvp, (uoff_t)saddr, SE_SHARED);
+			pp = page_lookup(&(&kvp)->v_object, (uoff_t)saddr,
+					 SE_SHARED);
 
 			/* check zvp before giving up */
 			if (pp == NULL)
-				pp = page_lookup(&zvp, (uoff_t)saddr,
-				    SE_SHARED);
+				pp = page_lookup(&(&zvp)->v_object,
+						 (uoff_t)saddr, SE_SHARED);
 
 			/* Okay, we didn't find it, give up */
 			if (pp == NULL) {
@@ -4453,11 +4454,12 @@ rehash:
 			 */
 			sfmmu_mlist_exit(pml);
 			SFMMU_HASH_UNLOCK(hmebp);
-			pp = page_lookup(&kvp, (uoff_t)saddr, SE_SHARED);
+			pp = page_lookup(&(&kvp)->v_object, (uoff_t)saddr,
+					 SE_SHARED);
 			/* check zvp before giving up */
 			if (pp == NULL)
-				pp = page_lookup(&zvp, (uoff_t)saddr,
-				    SE_SHARED);
+				pp = page_lookup(&(&zvp)->v_object,
+						 (uoff_t)saddr, SE_SHARED);
 
 			if (pp == NULL) {
 				ASSERT(cookie == NULL);

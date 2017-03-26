@@ -1559,7 +1559,7 @@ out:
 		 * Page exists in the cache, acquire the "shared"
 		 * lock.  If this fails, go back to reread.
 		 */
-		if ((pp = page_lookup(vp, off, SE_SHARED)) == NULL) {
+		if ((pp = page_lookup(&vp->v_object, off, SE_SHARED)) == NULL) {
 			goto reread;
 		}
 		pl[0] = pp;
@@ -1707,9 +1707,8 @@ pcfs_putpage(
 			 * them from the free list.
 			 */
 			if ((flags & B_INVAL) || ((flags & B_ASYNC) == 0)) {
-				pp = page_lookup(vp, io_off,
-				    (flags & (B_INVAL | B_FREE)) ?
-				    SE_EXCL : SE_SHARED);
+				pp = page_lookup(&vp->v_object, io_off,
+						 (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
 			} else {
 				pp = page_lookup_nowait(vp, io_off,
 				    (flags & B_FREE) ? SE_EXCL : SE_SHARED);

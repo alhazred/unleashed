@@ -1840,7 +1840,7 @@ retrylock:
 		    nextrio < ip->i_size && page_exists(vp, pgoff))
 			ud_getpage_ra(vp, pgoff, seg, pgaddr);
 
-		if ((pp = page_lookup(vp, pgoff, se)) != NULL) {
+		if ((pp = page_lookup(&vp->v_object, pgoff, se)) != NULL) {
 
 			/*
 			 * We found the page in the page cache.
@@ -2726,9 +2726,8 @@ ud_putpages(struct vnode *vp, offset_t off,
 			 * them from the free list.
 			 */
 			if ((flags & B_INVAL) || ((flags & B_ASYNC) == 0)) {
-				pp = page_lookup(vp, io_off,
-				    (flags & (B_INVAL | B_FREE)) ?
-				    SE_EXCL : SE_SHARED);
+				pp = page_lookup(&vp->v_object, io_off,
+						 (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
 			} else {
 				pp = page_lookup_nowait(vp, io_off,
 				    (flags & B_FREE) ? SE_EXCL : SE_SHARED);

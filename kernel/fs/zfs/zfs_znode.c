@@ -1624,7 +1624,7 @@ zfs_trunc(znode_t *zp, uint64_t end)
 		uint64_t start = end & PAGEMASK;
 		int poff = end & PAGEOFFSET;
 
-		if (poff != 0 && (pp = page_lookup(vp, start, SE_SHARED))) {
+		if (poff != 0 && (pp = page_lookup(&vp->v_object, start, SE_SHARED))) {
 			/*
 			 * We need to zero a partial page.
 			 */

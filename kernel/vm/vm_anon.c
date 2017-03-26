@@ -1084,7 +1084,7 @@ anon_decref(struct anon *ap)
 		 * pending i/o always completes before the swap slot
 		 * is freed.
 		 */
-		pp = page_lookup(vp, (uoff_t)off, SE_EXCL);
+		pp = page_lookup(&vp->v_object, (uoff_t)off, SE_EXCL);
 		if (pp != NULL) {
 			VN_DISPOSE(pp, B_INVAL, 0, kcred);
 		}
@@ -1209,7 +1209,7 @@ anon_decref_pages(
 
 		if (ahmpages == NULL) {
 			swap_xlate(ap, &vp, &off);
-			pp = page_lookup(vp, (uoff_t)off, SE_EXCL);
+			pp = page_lookup(&vp->v_object, (uoff_t)off, SE_EXCL);
 			if (pp == NULL || pp->p_szc == 0) {
 				VM_STAT_ADD(anonvmstats.decrefpages[3]);
 				ahm = AH_MUTEX(ap->an_vp, ap->an_off);
@@ -1224,8 +1224,8 @@ anon_decref_pages(
 					    PAGESIZE);
 				mutex_exit(ahm);
 				if (pp == NULL) {
-					pp = page_lookup(vp, (uoff_t)off,
-					    SE_EXCL);
+					pp = page_lookup(&vp->v_object,
+							 (uoff_t)off, SE_EXCL);
 					ASSERT(pp == NULL || pp->p_szc == 0);
 				}
 				if (pp != NULL) {
@@ -1256,8 +1256,8 @@ anon_decref_pages(
 					ASSERT(ap != NULL &&
 					    ap->an_refcnt == 1);
 					swap_xlate(ap, &vp, &off);
-					pp = page_lookup(vp, (uoff_t)off,
-					    SE_EXCL);
+					pp = page_lookup(&vp->v_object,
+							 (uoff_t)off, SE_EXCL);
 					if (pp == NULL)
 						panic("anon_decref_pages: "
 						    "no page");
@@ -1920,7 +1920,7 @@ anon_getpage(
 	 * pages since this routine acts like the fop_getpage
 	 * routine does.
 	 */
-	if (pl != NULL && (pp = page_lookup(vp, (uoff_t)off, SE_SHARED))) {
+	if (pl != NULL && (pp = page_lookup(&vp->v_object, (uoff_t)off, SE_SHARED))) {
 		ahm = AH_MUTEX(ap->an_vp, ap->an_off);
 		mutex_enter(ahm);
 		if (ap->an_refcnt == 1)
@@ -3108,8 +3108,8 @@ anon_try_demote_pages(
 			if (ap->an_refcnt != 1) {
 				panic("anon_try_demote_pages: an_refcnt != 1");
 			}
-			pp = ppa[i] = page_lookup(ap->an_vp, ap->an_off,
-			    SE_EXCL);
+			pp = ppa[i] = page_lookup(&ap->an_vp->v_object,
+						    ap->an_off, SE_EXCL);
 			if (pp != NULL) {
 				(void) hat_pageunload(pp,
 				    HAT_FORCE_PGUNLOAD);

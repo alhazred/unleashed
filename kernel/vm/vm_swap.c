@@ -1605,7 +1605,7 @@ swapslot_free(
 	 * Get the page for the old swap slot if exists or create a new one.
 	 */
 again:
-	if ((pp = page_lookup(vp, off, SE_SHARED)) == NULL) {
+	if ((pp = page_lookup(&vp->v_object, off, SE_SHARED)) == NULL) {
 		pp = page_create_va(vp, off, PAGESIZE, PG_WAIT | PG_EXCL,
 		    segkmap, NULL);
 		if (pp == NULL)

@@ -1448,7 +1448,7 @@ again:
 		/*
 		 * Make sure it's in memory before we say it's here.
 		 */
-		if ((pp = page_lookup(vp, off, SE_SHARED)) == NULL) {
+		if ((pp = page_lookup(&vp->v_object, off, SE_SHARED)) == NULL) {
 			hsfs_lostpage++;
 			goto reread;
 		}
@@ -1662,9 +1662,8 @@ hsfs_putpage(struct vnode *vp, offset_t off, size_t len, int flags,
 			 * the B_ASYNC flag is not set.
 			 */
 			if ((flags & B_INVAL) || ((flags & B_ASYNC) == 0)) {
-				pp = page_lookup(vp, io_off,
-				    (flags & (B_INVAL | B_FREE)) ?
-				    SE_EXCL : SE_SHARED);
+				pp = page_lookup(&vp->v_object, io_off,
+						 (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
 			} else {
 				pp = page_lookup_nowait(vp, io_off,
 				    (flags & B_FREE) ? SE_EXCL : SE_SHARED);

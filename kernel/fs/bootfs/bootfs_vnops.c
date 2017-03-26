@@ -373,7 +373,8 @@ bootfs_getapage(vnode_t *vp, uoff_t off, size_t len, uint_t *protp,
 
 	for (;;) {
 		/* Easy case where the page exists */
-		pp = page_lookup(vp, off, rw == S_CREATE ? SE_EXCL : SE_SHARED);
+		pp = page_lookup(&vp->v_object, off,
+				 rw == S_CREATE ? SE_EXCL : SE_SHARED);
 		if (pp != NULL) {
 			if (pl != NULL) {
 				pl[0] = pp;

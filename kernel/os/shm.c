@@ -1140,7 +1140,7 @@ lock_again(size_t npages, kshmid_t *sp, struct anon_map *amp)
 		swap_xlate(ap, &vp, &off);
 		anon_array_exit(&cookie);
 
-		pp = page_lookup(vp, off, SE_SHARED);
+		pp = page_lookup(&vp->v_object, off, SE_SHARED);
 		if (pp == NULL) {
 			panic("lock_again: page not in the system");
 			/*NOTREACHED*/
@@ -1222,7 +1222,7 @@ shmem_unlock(kshmid_t *sp, struct anon_map *amp)
 		}
 		swap_xlate(ap, &vp, &off);
 		anon_array_exit(&cookie);
-		pp = page_lookup(vp, off, SE_SHARED);
+		pp = page_lookup(&vp->v_object, off, SE_SHARED);
 		if (pp == NULL) {
 			panic("shmem_unlock: page not in the system");
 			/*NOTREACHED*/

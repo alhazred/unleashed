@@ -3373,7 +3373,8 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, uoff_t off,
 		 * pages in the range we handle and they are all
 		 * aligned.
 		 */
-		pp = page_lookup_create(vp, off, SE_SHARED, newpp, NULL, 0);
+		pp = page_lookup_create(&vp->v_object, off, SE_SHARED, newpp,
+					NULL, 0);
 		ASSERT(pp != NULL);
 		ASSERT(!PP_ISFREE(pp));
 		ASSERT(pp->p_vnode == vp);
@@ -5912,8 +5913,7 @@ segvn_setprot(struct seg *seg, caddr_t addr, size_t len, uint_t prot)
 					if (amp != NULL)
 						anon_array_exit(&cookie);
 
-					if ((pp = page_lookup(vp, off,
-					    SE_SHARED)) == NULL) {
+					if ((pp = page_lookup(&vp->v_object, off, SE_SHARED)) == NULL) {
 						panic("segvn_setprot: no page");
 						/*NOTREACHED*/
 					}
@@ -6468,8 +6468,7 @@ segvn_claim_pages(
 			off = (uoff_t)aoff;
 		}
 		ASSERT(vp != NULL);
-		if ((pp = page_lookup(vp,
-		    (uoff_t)off, SE_SHARED)) == NULL) {
+		if ((pp = page_lookup(&vp->v_object, (uoff_t)off, SE_SHARED)) == NULL) {
 			panic("segvn_claim_pages: no page");
 		}
 		ppa[pg_idx++] = pp;
@@ -7155,7 +7154,7 @@ segvn_sync(struct seg *seg, caddr_t addr, size_t len, int attr, uint_t flags)
 		 * we do the PUTPAGE, then PUTPAGE simply does nothing.
 		 */
 		if (flags & MS_INVALIDATE) {
-			if ((pp = page_lookup(vp, off, SE_SHARED)) != NULL) {
+			if ((pp = page_lookup(&vp->v_object, off, SE_SHARED)) != NULL) {
 				if (pp->p_lckcnt != 0 || pp->p_cowcnt != 0) {
 					page_unlock(pp);
 					SEGVN_LOCK_EXIT(seg->s_as, &svd->lock);
@@ -7537,7 +7536,8 @@ segvn_lockop(struct seg *seg, caddr_t addr, size_t len,
 				}
 				swap_xlate(i_ap, &i_vp, &i_off);
 				anon_array_exit(&i_cookie);
-				pp = page_lookup(i_vp, i_off, SE_SHARED);
+				pp = page_lookup(&i_vp->v_object, i_off,
+						 SE_SHARED);
 				if (pp == NULL) {
 					unlocked_bytes += PAGESIZE;
 					continue;
@@ -7644,7 +7644,8 @@ segvn_lockop(struct seg *seg, caddr_t addr, size_t len,
 			 * been paged out.
 			 */
 			if (op != MC_LOCK)
-				pp = page_lookup(vp, off, SE_SHARED);
+				pp = page_lookup(&vp->v_object, off,
+						 SE_SHARED);
 			else {
 				page_t *pl[1 + 1];
 				int error;

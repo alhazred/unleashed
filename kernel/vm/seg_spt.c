@@ -659,7 +659,7 @@ segspt_free_pages(struct seg *seg, caddr_t addr, size_t len)
 		 */
 		if ((sptd->spt_flags & SHM_PAGEABLE) == 0) {
 			if (hat_flags == HAT_UNLOAD_UNMAP)
-				pp = page_lookup(vp, off, SE_EXCL);
+				pp = page_lookup(&vp->v_object, off, SE_EXCL);
 			else {
 				if ((pp = page_find(vp, off)) == NULL) {
 					panic("segspt_free_pages: "
@@ -668,7 +668,8 @@ segspt_free_pages(struct seg *seg, caddr_t addr, size_t len)
 				}
 				if (!page_tryupgrade(pp)) {
 					page_unlock(pp);
-					pp = page_lookup(vp, off, SE_EXCL);
+					pp = page_lookup(&vp->v_object, off,
+							 SE_EXCL);
 				}
 			}
 			if (pp == NULL) {
@@ -681,7 +682,7 @@ segspt_free_pages(struct seg *seg, caddr_t addr, size_t len)
 			if (pp->p_lckcnt == 0)
 				unlocked_bytes += PAGESIZE;
 		} else {
-			if ((pp = page_lookup(vp, off, SE_EXCL)) == NULL)
+			if ((pp = page_lookup(&vp->v_object, off, SE_EXCL)) == NULL)
 				continue;
 		}
 		/*
@@ -981,7 +982,8 @@ segspt_dismpagelock(struct seg *seg, caddr_t addr, size_t len,
 			    (sptd->spt_ppa_lckcnt[an_idx] != 0))) {
 
 				swap_xlate(ap, &vp, &off);
-				pp = page_lookup(vp, off, SE_SHARED);
+				pp = page_lookup(&vp->v_object, off,
+						 SE_SHARED);
 				ASSERT(pp != NULL);
 				if (lpg_cnt == 0) {
 					lpg_cnt++;
@@ -1302,7 +1304,7 @@ segspt_shmpagelock(struct seg *seg, caddr_t addr, size_t len,
 			ap = anon_get_ptr(amp->ahp, anon_index);
 			ASSERT(ap != NULL);
 			swap_xlate(ap, &vp, &off);
-			pp = page_lookup(vp, off, SE_SHARED);
+			pp = page_lookup(&vp->v_object, off, SE_SHARED);
 			ASSERT(pp != NULL);
 			*pplist = pp;
 		}
@@ -2114,7 +2116,7 @@ segspt_shmfault(struct hat *hat, struct seg *seg, caddr_t addr,
 			ap = anon_get_ptr(amp->ahp, anon_index++);
 			ASSERT(ap != NULL);
 			swap_xlate(ap, &vp, &offset);
-			pp = page_lookup(vp, offset, SE_SHARED);
+			pp = page_lookup(&vp->v_object, offset, SE_SHARED);
 			ASSERT(pp != NULL);
 			ppa[i] = pp;
 		}
@@ -2549,7 +2551,7 @@ spt_unlockpages(struct seg *seg, pgcnt_t anon_index, pgcnt_t npages,
 
 			swap_xlate(ap, &vp, &off);
 			anon_array_exit(&cookie);
-			pp = page_lookup(vp, off, SE_SHARED);
+			pp = page_lookup(&vp->v_object, off, SE_SHARED);
 			ASSERT(pp);
 			/*
 			 * availrmem is decremented only for pages which are not

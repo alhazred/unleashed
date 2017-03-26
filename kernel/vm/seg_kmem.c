@@ -469,7 +469,7 @@ segkmem_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t size,
 	switch (type) {
 	case F_SOFTLOCK:	/* lock down already-loaded translations */
 		for (pg = 0; pg < npages; pg++) {
-			pp = page_lookup(vp, (uoff_t)(uintptr_t)addr,
+			pp = page_lookup(&vp->v_object, (uoff_t)(uintptr_t)addr,
 			    SE_SHARED);
 			if (pp == NULL) {
 				/*
@@ -719,7 +719,8 @@ segkmem_pagelock(struct seg *seg, caddr_t addr, size_t len,
 	}
 
 	for (pg = 0; pg < npages; pg++) {
-		pp = page_lookup(vp, (uoff_t)(uintptr_t)addr, SE_SHARED);
+		pp = page_lookup(&vp->v_object, (uoff_t)(uintptr_t)addr,
+				 SE_SHARED);
 		if (pp == NULL) {
 			while (--pg >= 0)
 				page_unlock(pplist[pg]);
@@ -1005,11 +1006,12 @@ segkmem_free_vn(vmem_t *vmp, void *inaddr, size_t size, struct vnode *vp,
 			 * it to drop the lock so we can free this page.
 			 */
 			page_unlock(pp);
-			pp = page_lookup(vp, (uoff_t)(uintptr_t)addr,
+			pp = page_lookup(&vp->v_object, (uoff_t)(uintptr_t)addr,
 			    SE_EXCL);
 		}
 #else
-		pp = page_lookup(vp, (uoff_t)(uintptr_t)addr, SE_EXCL);
+		pp = page_lookup(&vp->v_object, (uoff_t)(uintptr_t)addr,
+				 SE_EXCL);
 #endif
 		if (pp == NULL)
 			panic("segkmem_free: page not found");
@@ -1220,7 +1222,7 @@ segkmem_free_one_lp(caddr_t addr, size_t size)
 	hat_unload(kas.a_hat, addr, size, HAT_UNLOAD_UNLOCK);
 
 	for (; pgs_left > 0; addr += PAGESIZE, pgs_left--) {
-		pp = page_lookup(&kvp, (uoff_t)(uintptr_t)addr, SE_EXCL);
+		pp = page_lookup(&kvp.v_object, (uoff_t)(uintptr_t)addr, SE_EXCL);
 		if (pp == NULL)
 			panic("segkmem_free_one_lp: page not found");
 		ASSERT(PAGE_EXCL(pp));

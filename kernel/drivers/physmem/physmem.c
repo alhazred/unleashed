@@ -653,7 +653,7 @@ physmem_getpage(struct vnode *vp, offset_t off, size_t len, uint_t *protp,
 	 * If the page is in the hash, then we successfully claimed this
 	 * page earlier, so return it to the caller.
 	 */
-	pp = page_lookup(vp, off, SE_SHARED);
+	pp = page_lookup(&vp->v_object, off, SE_SHARED);
 	if (pp != NULL) {
 		pl[0] = pp;
 		pl[1] = NULL;
@@ -743,7 +743,8 @@ physmem_inactive(vnode_t *vp, cred_t *crp, caller_context_t *ct)
 			page_destroy(pp, 0);
 		} else {
 			/* failure to lock should be transient */
-			rpp = page_lookup(vp, ptob(pp->p_pagenum), SE_SHARED);
+			rpp = page_lookup(&vp->v_object, ptob(pp->p_pagenum),
+					  SE_SHARED);
 			if (rpp != pp) {
 				page_unlock(rpp);
 				continue;

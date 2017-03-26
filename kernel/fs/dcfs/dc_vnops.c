@@ -497,7 +497,7 @@ dc_getblock(struct vnode *vp, offset_t off, size_t len, struct page **ppp,
 	 */
 	rdblk = 0;
 	for (pgoff = off; pgoff < off + len; pgoff += PAGESIZE) {
-		pp = page_lookup(vp, pgoff, SE_EXCL);
+		pp = page_lookup(&vp->v_object, pgoff, SE_EXCL);
 		if (pp == NULL) {
 			rdblk = 1;
 			break;
@@ -645,7 +645,7 @@ dc_putpage(struct vnode *vp, offset_t off, size_t len, int flags,
 			 * the B_ASYNC flag is not set.
 			 */
 			if ((flags & B_INVAL) || ((flags & B_ASYNC) == 0))
-				pp = page_lookup(vp, io_off, se);
+				pp = page_lookup(&vp->v_object, io_off, se);
 			else
 				pp = page_lookup_nowait(vp, io_off, se);
 

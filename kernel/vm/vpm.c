@@ -757,7 +757,7 @@ vpm_pagecreate(
 		struct vpmap *vpm;
 
 
-		if ((pp = page_lookup(vp, off, SE_SHARED)) == NULL) {
+		if ((pp = page_lookup(&vp->v_object, off, SE_SHARED)) == NULL) {
 
 			base = segkpm_create_va(off);
 
@@ -865,7 +865,7 @@ vpm_map_pages(
 
 	for (i = 0; len > 0; len -= PAGESIZE, i++, pplist[i] = NULL) {
 
-		pp = page_lookup(vp, baseoff, SE_SHARED);
+		pp = page_lookup(&vp->v_object, baseoff, SE_SHARED);
 
 		/*
 		 * If we did not find the page or if this page was not

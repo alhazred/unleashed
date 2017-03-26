@@ -717,8 +717,8 @@ segkp_release_internal(struct seg *seg, struct segkp_data *kpd, size_t len)
 				 */
 				page_unlock(pp);
 			}
-			pp = page_lookup(&kvp, (uoff_t)(uintptr_t)va,
-			    SE_EXCL);
+			pp = page_lookup(&(&kvp)->v_object,
+					 (uoff_t)(uintptr_t)va, SE_EXCL);
 			if (pp != NULL)
 				page_destroy(pp, 0);
 		}
@@ -880,7 +880,8 @@ segkp_unmap_red(void)
 		 * SE_SHARED lock and wait for SE_EXCL.
 		 */
 		page_unlock(pp);
-		pp = page_lookup(&kvp, (uoff_t)(uintptr_t)red_va, SE_EXCL);
+		pp = page_lookup(&(&kvp)->v_object,
+				 (uoff_t)(uintptr_t)red_va, SE_EXCL);
 		/* pp may be NULL here, hence the test below */
 	}
 
@@ -1192,7 +1193,7 @@ segkp_unlock(
 			 * Nothing to do if the slot is not locked and the
 			 * page doesn't exist.
 			 */
-			if ((pp = page_lookup(vp, off, SE_SHARED)) == NULL)
+			if ((pp = page_lookup(&vp->v_object, off, SE_SHARED)) == NULL)
 				continue;
 		}
 

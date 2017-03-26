@@ -1985,7 +1985,7 @@ again:
 		 * lock.  If this fails, start all over again.
 		 */
 
-		if ((pp = page_lookup(vp, off, se)) == NULL) {
+		if ((pp = page_lookup(&vp->v_object, off, se)) == NULL) {
 			spec_lostpage++;
 			goto reread;
 		}
@@ -2068,9 +2068,8 @@ spec_putpage(
 			 * them from the free list.
 			 */
 			if ((flags & B_INVAL) || ((flags & B_ASYNC) == 0)) {
-				pp = page_lookup(vp, io_off,
-				    (flags & (B_INVAL | B_FREE)) ?
-				    SE_EXCL : SE_SHARED);
+				pp = page_lookup(&vp->v_object, io_off,
+						 (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
 			} else {
 				pp = page_lookup_nowait(vp, io_off,
 				    (flags & B_FREE) ? SE_EXCL : SE_SHARED);

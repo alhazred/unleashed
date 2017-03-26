@@ -1390,8 +1390,8 @@ contig_free(void *addr, size_t size)
 
 		if (!page_tryupgrade(pp)) {
 			page_unlock(pp);
-			pp = page_lookup(&kvp,
-			    (uoff_t)(uintptr_t)a, SE_EXCL);
+			pp = page_lookup(&kvp.v_object,
+					 (uoff_t)(uintptr_t)a, SE_EXCL);
 			if (pp == NULL)
 				panic("contig_free: page freed");
 		}

@@ -173,7 +173,7 @@ swap_getapage(
 	lock = (rw == S_CREATE ? SE_EXCL : SE_SHARED);
 
 again:
-	if (pp = page_lookup(vp, off, lock)) {
+	if (pp = page_lookup(&vp->v_object, off, lock)) {
 		/*
 		 * In very rare instances, a segkp page may have been
 		 * relocated outside of the kernel by the kernel cage
@@ -352,7 +352,8 @@ swap_getconpage(
 	ASSERT(!PP_ISFREE(conpp));
 
 	*nreloc = 0;
-	pp = page_lookup_create(vp, off, SE_SHARED, conpp, nreloc, 0);
+	pp = page_lookup_create(&vp->v_object, off, SE_SHARED, conpp, nreloc,
+				0);
 
 	/*
 	 * If existing page is found we may need to relocate.
@@ -561,7 +562,8 @@ swap_putpage(
 			 */
 			if (!nowait && ((flags & B_INVAL) ||
 			    (flags & (B_ASYNC | B_FREE)) == B_FREE))
-				pp = page_lookup(vp, io_off, SE_EXCL);
+				pp = page_lookup(&vp->v_object, io_off,
+						 SE_EXCL);
 			else
 				pp = page_lookup_nowait(vp, io_off,
 				    (flags & (B_FREE | B_INVAL)) ?

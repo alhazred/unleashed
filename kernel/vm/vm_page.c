@@ -687,10 +687,10 @@ add_physmem(
  * is locked, its data is valid and it isn't on the free
  * list, while a NULL is returned if the page doesn't exist.
  */
-page_t *
-page_lookup(vnode_t *vp, uoff_t off, se_t se)
+struct page *
+page_lookup(struct vmobject *obj, uoff_t off, se_t se)
 {
-	return (page_lookup_create(vp, off, se, NULL, NULL, 0));
+	return (page_lookup_create(obj, off, se, NULL, NULL, 0));
 }
 
 /*
@@ -705,12 +705,12 @@ page_lookup(vnode_t *vp, uoff_t off, se_t se)
  * it isn't on the free list, while a NULL is returned
  * if the page doesn't exist and newpp is NULL;
  */
-page_t *
+struct page *
 page_lookup_create(
-	vnode_t *vp,
+	struct vmobject *obj,
 	uoff_t off,
 	se_t se,
-	page_t *newpp,
+	struct page *newpp,
 	spgcnt_t *nrelocp,
 	int flags)
 {
@@ -719,13 +719,13 @@ page_lookup_create(
 	ulong_t		index;
 	uint_t		es;
 
-	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
+	ASSERT(!VMOBJECT_LOCKED(obj));
 	VM_STAT_ADD(page_lookup_cnt[0]);
 	ASSERT(newpp ? PAGE_EXCL(newpp) : 1);
 
-	vmobject_lock(&vp->v_object);
+	vmobject_lock(obj);
 top:
-	pp = find_page(&vp->v_object, off);
+	pp = find_page(obj, off);
 
 	if (pp != NULL) {
 		VM_STAT_ADD(page_lookup_cnt[1]);
@@ -733,14 +733,14 @@ top:
 		es |= flags;
 
 		VM_STAT_ADD(page_lookup_cnt[4]);
-		if (!page_lock_es(pp, se, vp, P_RECLAIM, es)) {
+		if (!page_lock_es(pp, se, obj->vnode, P_RECLAIM, es)) {
 			VM_STAT_ADD(page_lookup_cnt[5]);
 			goto top;
 		}
 
 		VM_STAT_ADD(page_lookup_cnt[6]);
 
-		vmobject_unlock(&vp->v_object);
+		vmobject_unlock(obj);
 
 		if (newpp != NULL && pp->p_szc < newpp->p_szc &&
 		    PAGE_EXCL(pp) && nrelocp != NULL) {
@@ -789,21 +789,21 @@ top:
 		 * get it over with.  As usual, go down
 		 * holding all the locks.
 		 */
-		if (!page_hashin(newpp, &vp->v_object, off, true)) {
-			ASSERT(VMOBJECT_LOCKED(&vp->v_object));
+		if (!page_hashin(newpp, obj, off, true)) {
+			ASSERT(VMOBJECT_LOCKED(obj));
 			panic("page_lookup_create: hashin failed %p %p %llx",
-			    (void *)newpp, (void *)vp, off);
+			    newpp, obj, off);
 			/*NOTREACHED*/
 		}
-		ASSERT(VMOBJECT_LOCKED(&vp->v_object));
-		vmobject_unlock(&vp->v_object);
+		ASSERT(VMOBJECT_LOCKED(obj));
+		vmobject_unlock(obj);
 		page_set_props(newpp, P_REF);
 		page_io_lock(newpp);
 		pp = newpp;
 		se = SE_EXCL;
 	} else {
 		VM_STAT_ADD(page_lookup_cnt[19]);
-		vmobject_unlock(&vp->v_object);
+		vmobject_unlock(obj);
 	}
 
 	ASSERT(pp ? PAGE_LOCKED_SE(pp, se) : 1);
@@ -5088,7 +5088,7 @@ page_mark_migrate(struct seg *seg, caddr_t addr, size_t len,
 
 		pp = NULL;
 		if (curvp)
-			pp = page_lookup(curvp, off, SE_SHARED);
+			pp = page_lookup(&curvp->v_object, off, SE_SHARED);
 
 		/*
 		 * If there isn't a page at this virtual address,

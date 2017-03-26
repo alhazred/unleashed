@@ -3647,8 +3647,8 @@ devmap_free_pages(vmem_t *vmp, void *inaddr, size_t size)
 			panic("devmap_free_pages: page not found");
 		if (!page_tryupgrade(pp)) {
 			page_unlock(pp);
-			pp = page_lookup(&kvp, (uoff_t)(uintptr_t)addr,
-			    SE_EXCL);
+			pp = page_lookup(&kvp.v_object,
+					 (uoff_t)(uintptr_t)addr, SE_EXCL);
 			if (pp == NULL)
 				panic("devmap_free_pages: page already freed");
 		}

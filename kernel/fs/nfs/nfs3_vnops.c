@@ -4856,7 +4856,7 @@ out:
 		 * Page exists in the cache, acquire the appropriate lock.
 		 * If this fails, start all over again.
 		 */
-		if ((pp = page_lookup(vp, off, se)) == NULL) {
+		if ((pp = page_lookup(&vp->v_object, off, se)) == NULL) {
 #ifdef DEBUG
 			nfs3_lostpage++;
 #endif

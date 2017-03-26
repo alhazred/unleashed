@@ -2485,9 +2485,8 @@ nfs_putpages(vnode_t *vp, uoff_t off, size_t len, int flags, cred_t *cr)
 			 * them from the free list.
 			 */
 			if ((flags & B_INVAL) || !(flags & B_ASYNC)) {
-				pp = page_lookup(vp, io_off,
-				    (flags & (B_INVAL | B_FREE)) ?
-				    SE_EXCL : SE_SHARED);
+				pp = page_lookup(&vp->v_object, io_off,
+						 (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
 			} else {
 				pp = page_lookup_nowait(vp, io_off,
 				    (flags & B_FREE) ? SE_EXCL : SE_SHARED);

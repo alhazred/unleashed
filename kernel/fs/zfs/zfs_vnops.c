@@ -428,7 +428,7 @@ update_pages(vnode_t *vp, int64_t start, int len, objset_t *os, uint64_t oid)
 		page_t *pp;
 		uint64_t nbytes = MIN(PAGESIZE - off, len);
 
-		if (pp = page_lookup(vp, start, SE_SHARED)) {
+		if (pp = page_lookup(&vp->v_object, start, SE_SHARED)) {
 			caddr_t va;
 
 			va = zfs_map_page(pp, S_WRITE);
@@ -466,7 +466,7 @@ mappedread(vnode_t *vp, int nbytes, uio_t *uio)
 		page_t *pp;
 		uint64_t bytes = MIN(PAGESIZE - off, len);
 
-		if (pp = page_lookup(vp, start, SE_SHARED)) {
+		if (pp = page_lookup(&vp->v_object, start, SE_SHARED)) {
 			caddr_t va;
 
 			va = zfs_map_page(pp, S_READ);
@@ -4361,8 +4361,8 @@ zfs_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
 
 	for (off = io_off; io_off < off + len; io_off += io_len) {
 		if ((flags & B_INVAL) || ((flags & B_ASYNC) == 0)) {
-			pp = page_lookup(vp, io_off,
-			    (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
+			pp = page_lookup(&vp->v_object, io_off,
+					 (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
 		} else {
 			pp = page_lookup_nowait(vp, io_off,
 			    (flags & B_FREE) ? SE_EXCL : SE_SHARED);
@@ -4631,7 +4631,7 @@ zfs_getpage(vnode_t *vp, offset_t off, size_t len, uint_t *protp,
 	 * a new page and fill it with data from the file.
 	 */
 	while (len > 0) {
-		if (*pl = page_lookup(vp, off, SE_SHARED))
+		if (*pl = page_lookup(&vp->v_object, off, SE_SHARED))
 			*(pl+1) = NULL;
 		else if (err = zfs_fillpage(vp, off, seg, addr, pl, plsz, rw))
 			goto out;
