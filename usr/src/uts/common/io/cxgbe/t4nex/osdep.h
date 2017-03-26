@@ -25,6 +25,7 @@
 
 #include <sys/ddi.h>
 #include <sys/sunddi.h>
+#include <sys/stdbool.h>
 #include <sys/byteorder.h>
 #include <sys/cmn_err.h>
 #include <sys/pcie.h>
@@ -161,10 +162,6 @@ typedef uint8_t		__be8;
 typedef uint16_t	__be16;
 typedef uint32_t	__be32;
 typedef uint64_t	__be64;
-
-typedef boolean_t	bool;
-#define	true		B_TRUE
-#define	false		B_FALSE
 
 #if defined(__sparc)
 #define	__BIG_ENDIAN_BITFIELD
