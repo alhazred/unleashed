@@ -9927,7 +9927,7 @@ reread:
 	}
 
 again:
-	if ((pagefound = page_exists(vp, off)) == NULL) {
+	if ((pagefound = page_exists(&vp->v_object, off)) == NULL) {
 		if (pl == NULL) {
 			(void) nfs4_async_readahead(vp, blkoff, addr, seg, cr,
 			    nfs4_readahead);

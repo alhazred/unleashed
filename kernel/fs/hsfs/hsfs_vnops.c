@@ -1154,7 +1154,7 @@ reread:
 	pp = NULL;
 again:
 	/* search for page in buffer */
-	if ((pagefound = page_exists(vp, off)) == 0) {
+	if ((pagefound = page_exists(&vp->v_object, off)) == 0) {
 		/*
 		 * Need to really do disk IO to get the page.
 		 */
@@ -1489,7 +1489,7 @@ again:
 		    hp->hs_prev_offset - off == PAGESIZE &&
 		    hp->hs_prev_offset < filsiz &&
 		    hp->hs_ra_bytes > 0 &&
-		    !page_exists(vp, hp->hs_prev_offset)) {
+		    !page_exists(&vp->v_object, hp->hs_prev_offset)) {
 			(void) hsfs_getpage_ra(vp, hp->hs_prev_offset, seg,
 			    addr + PAGESIZE, hp, fsp, xarsiz, bof,
 			    chunk_lbn_count, chunk_data_bytes);

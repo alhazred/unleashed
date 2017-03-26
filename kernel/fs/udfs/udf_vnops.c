@@ -1837,7 +1837,7 @@ retrylock:
 		nextrio = ip->i_nextrio;
 		if (seqmode &&
 		    pgoff + RD_CLUSTSZ(ip) >= nextrio && pgoff <= nextrio &&
-		    nextrio < ip->i_size && page_exists(vp, pgoff))
+		    nextrio < ip->i_size && page_exists(&vp->v_object, pgoff))
 			ud_getpage_ra(vp, pgoff, seg, pgaddr);
 
 		if ((pp = page_lookup(&vp->v_object, pgoff, se)) != NULL) {

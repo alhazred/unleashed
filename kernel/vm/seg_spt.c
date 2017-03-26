@@ -662,7 +662,7 @@ segspt_free_pages(struct seg *seg, caddr_t addr, size_t len)
 			if (hat_flags == HAT_UNLOAD_UNMAP)
 				pp = page_lookup(&vp->v_object, off, SE_EXCL);
 			else {
-				if ((pp = page_find(vp, off)) == NULL) {
+				if ((pp = page_find(&vp->v_object, off)) == NULL) {
 					panic("segspt_free_pages: "
 					    "page not locked");
 					/*NOTREACHED*/
@@ -1604,7 +1604,7 @@ segspt_softunlock(struct seg *seg, caddr_t sptseg_addr,
 		 * find the page since we know that it has a
 		 * "shared" lock.
 		 */
-		pp = page_find(vp, offset);
+		pp = page_find(&vp->v_object, offset);
 		ASSERT(ap == anon_get_ptr(amp->ahp, anon_index - 1));
 		if (pp == NULL) {
 			panic("segspt_softunlock: "

@@ -628,8 +628,8 @@ struct page *page_lookup(struct vmobject *, uoff_t, se_t);
 struct page *page_lookup_create(struct vmobject *, uoff_t, se_t, struct page *,
 	spgcnt_t *, int);
 struct page *page_lookup_nowait(struct vmobject *, uoff_t, se_t);
-page_t	*page_find(struct vnode *, uoff_t);
-page_t	*page_exists(struct vnode *, uoff_t);
+struct page *page_find(struct vmobject *, uoff_t);
+struct page *page_exists(struct vmobject *, uoff_t);
 int	page_exists_physcontig(vnode_t *, uoff_t, uint_t, page_t *[]);
 int	page_exists_forreal(struct vnode *, uoff_t, uint_t *);
 void	page_needfree(spgcnt_t);

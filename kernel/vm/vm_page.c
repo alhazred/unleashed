@@ -859,20 +859,20 @@ page_lookup_nowait(struct vmobject *obj, uoff_t off, se_t se)
  * that is known to exist and is already locked.  This routine
  * is typically used by segment SOFTUNLOCK routines.
  */
-page_t *
-page_find(vnode_t *vp, uoff_t off)
+struct page *
+page_find(struct vmobject *obj, uoff_t off)
 {
-	page_t		*pp;
+	struct page *page;
 
-	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
+	ASSERT(!VMOBJECT_LOCKED(obj));
 	VM_STAT_ADD(page_find_cnt);
 
-	vmobject_lock(&vp->v_object);
-	pp = find_page(&vp->v_object, off);
-	vmobject_unlock(&vp->v_object);
+	vmobject_lock(obj);
+	page = find_page(obj, off);
+	vmobject_unlock(obj);
 
-	ASSERT(pp == NULL || PAGE_LOCKED(pp) || panicstr);
-	return (pp);
+	ASSERT(page == NULL || PAGE_LOCKED(page) || panicstr);
+	return (page);
 }
 
 /*
@@ -884,17 +884,17 @@ page_find(vnode_t *vp, uoff_t off)
  *
  * Note: This is virtually identical to page_find.  Can we combine them?
  */
-page_t *
-page_exists(vnode_t *vp, uoff_t off)
+struct page *
+page_exists(struct vmobject *obj, uoff_t off)
 {
-	page_t *page;
+	struct page *page;
 
-	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
+	ASSERT(!VMOBJECT_LOCKED(obj));
 	VM_STAT_ADD(page_exists_cnt);
 
-	vmobject_lock(&vp->v_object);
-	page = find_page(&vp->v_object, off);
-	vmobject_unlock(&vp->v_object);
+	vmobject_lock(obj);
+	page = find_page(obj, off);
+	vmobject_unlock(obj);
 
 	return (page);
 }
@@ -2633,7 +2633,7 @@ free_vp_pages(vnode_t *vp, uoff_t off, size_t len)
 		 * find the page using a fast, but inexact search. It'll be OK
 		 * if a few pages slip through the cracks here.
 		 */
-		pp = page_exists(vp, off);
+		pp = page_exists(&vp->v_object, off);
 
 		/*
 		 * If we didn't find the page (it may not exist), the page

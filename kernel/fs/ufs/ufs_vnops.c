@@ -4761,7 +4761,7 @@ retrylock:
 		nextrio = ip->i_nextrio;
 		if (seqmode &&
 		    pgoff + CLUSTSZ(ip) >= nextrio && pgoff <= nextrio &&
-		    nextrio < ip->i_size && page_exists(vp, pgoff)) {
+		    nextrio < ip->i_size && page_exists(&vp->v_object, pgoff)) {
 			retval = ufs_getpage_ra(vp, pgoff, seg, pgaddr);
 			/*
 			 * We always read ahead the next cluster of data
@@ -4772,7 +4772,7 @@ retrylock:
 			 * through ufs_getpage_miss(). So, we should increase
 			 * i_nextrio if the page (vp, nextrio) exists.
 			 */
-			if ((retval == 0) && page_exists(vp, nextrio)) {
+			if ((retval == 0) && page_exists(&vp->v_object, nextrio)) {
 				ip->i_nextrio = nextrio + pgsize;
 			}
 		}

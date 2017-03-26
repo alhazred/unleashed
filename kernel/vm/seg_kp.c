@@ -684,7 +684,7 @@ segkp_release_internal(struct seg *seg, struct segkp_data *kpd, size_t len)
 				    kpd->kp_anon_idx + i);
 				swap_xlate(ap, &vp, &off);
 				/* Find the shared-locked page. */
-				pp = page_find(vp, (uoff_t)off);
+				pp = page_find(&vp->v_object, (uoff_t)off);
 				if (pp == NULL) {
 					panic("segkp_release: "
 					    "kp_anon: no page to unlock ");
@@ -703,7 +703,8 @@ segkp_release_internal(struct seg *seg, struct segkp_data *kpd, size_t len)
 			}
 		} else {
 			if (kpd->kp_flags & KPD_LOCKED) {
-				pp = page_find(&kvp, (uoff_t)(uintptr_t)va);
+				pp = page_find(&kvp.v_object,
+					       (uoff_t)(uintptr_t)va);
 				if (pp == NULL) {
 					panic("segkp_release: "
 					    "no page to unlock");
@@ -869,7 +870,7 @@ segkp_unmap_red(void)
 
 	pp = curthread->t_red_pp;
 
-	ASSERT(pp == page_find(&kvp, (uoff_t)(uintptr_t)red_va));
+	ASSERT(pp == page_find(&kvp.v_object, (uoff_t)(uintptr_t)red_va));
 
 	/*
 	 * Need to upgrade the SE_SHARED lock to SE_EXCL.
@@ -1182,7 +1183,7 @@ segkp_unlock(
 		swap_xlate(ap, &vp, &off);
 
 		if (flags & KPD_LOCKED) {
-			if ((pp = page_find(vp, off)) == NULL) {
+			if ((pp = page_find(&vp->v_object, off)) == NULL) {
 				if (flags & KPD_LOCKED) {
 					panic("segkp_softunlock: missing page");
 					/*NOTREACHED*/

@@ -523,7 +523,7 @@ segmap_unlock(
 		 * find the page since we know that it has
 		 * "shared" lock.
 		 */
-		pp = page_find(vp, off);
+		pp = page_find(&vp->v_object, off);
 		if (pp == NULL) {
 			panic("segmap_unlock: page not found");
 			/*NOTREACHED*/
@@ -639,7 +639,7 @@ segmap_fault(
 
 		off = sm_off + addroff;
 
-		pp = page_find(vp, off);
+		pp = page_find(&vp->v_object, off);
 
 		if (pp == NULL)
 			panic("segmap_fault: softunlock page not found");
@@ -1532,7 +1532,7 @@ segmap_pageunlock(struct seg *seg, caddr_t addr, size_t len, enum seg_rw rw)
 			 * find the page since we know that it has
 			 * "exclusive" lock.
 			 */
-			pp = page_find(vp, off);
+			pp = page_find(&vp->v_object, off);
 			if (pp == NULL) {
 				panic("segmap_pageunlock: page not found");
 				/*NOTREACHED*/
@@ -2120,8 +2120,8 @@ segmap_dump(struct seg *seg)
 							     SE_SHARED)))
 					we_own_it = 1;
 				else
-					pp = page_exists(smp->sm_vp,
-					    smp->sm_off + off);
+					pp = page_exists(&smp->sm_vp->v_object,
+							 smp->sm_off + off);
 
 				if (pp) {
 					pfn = page_pptonum(pp);

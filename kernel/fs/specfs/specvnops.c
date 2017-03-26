@@ -1872,7 +1872,7 @@ reread:
 	}
 
 again:
-	if ((pagefound = page_exists(vp, off)) == NULL) {
+	if ((pagefound = page_exists(&vp->v_object, off)) == NULL) {
 		if (rw == S_CREATE) {
 			/*
 			 * We're allocating a swap slot and it's

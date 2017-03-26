@@ -3641,7 +3641,7 @@ devmap_free_pages(vmem_t *vmp, void *inaddr, size_t size)
 		 * Use page_find() instead of page_lookup() to find the page
 		 * since we know that it is hashed and has a shared lock.
 		 */
-		pp = page_find(&kvp, (uoff_t)(uintptr_t)addr);
+		pp = page_find(&kvp.v_object, (uoff_t)(uintptr_t)addr);
 
 		if (pp == NULL)
 			panic("devmap_free_pages: page not found");

@@ -91,7 +91,7 @@ memseg_alloc_meta(pfn_t base, pgcnt_t npgs, void **ptp, pgcnt_t *metap)
 	metapgs = btopr(npgs * sizeof (page_t));
 
 	if (!IS_P2ALIGNED((uint64_t)pp, PAGESIZE) &&
-	    page_find(&mpvp, (uoff_t)pp)) {
+	    page_find(&mpvp.v_object, (uoff_t)pp)) {
 		/*
 		 * Another memseg has page_t's in the same
 		 * page which 'pp' resides.  This would happen
@@ -116,7 +116,7 @@ memseg_alloc_meta(pfn_t base, pgcnt_t npgs, void **ptp, pgcnt_t *metap)
 	}
 
 	if (!IS_P2ALIGNED((uint64_t)epp, PAGESIZE) &&
-	    page_find(&mpvp, (uoff_t)epp)) {
+	    page_find(&mpvp.v_object, (uoff_t)epp)) {
 		/*
 		 * Another memseg has page_t's in the same
 		 * page which 'epp' resides.  This would happen
@@ -140,7 +140,7 @@ memseg_alloc_meta(pfn_t base, pgcnt_t npgs, void **ptp, pgcnt_t *metap)
 	vaddr = (caddr_t)pp;
 
 	for (i = 0; i < metapgs; i++)
-		if (page_find(&mpvp, (uoff_t)(vaddr + i * PAGESIZE)))
+		if (page_find(&mpvp.v_object, (uoff_t)(vaddr + i * PAGESIZE)))
 			panic("page_find(0x%p, %p)\n",
 			    (void *)&mpvp, (void *)(vaddr + i * PAGESIZE));
 
@@ -185,7 +185,7 @@ memseg_free_meta(void *ptp, pgcnt_t metapgs)
 	 * Free pages allocated during add.
 	 */
 	for (i = 0; i < metapgs; i++) {
-		pp = page_find(&mpvp, off);
+		pp = page_find(&mpvp.v_object, off);
 		ASSERT(pp);
 		ASSERT(pp->p_szc == 0);
 		page_io_unlock(pp);
@@ -205,7 +205,7 @@ memseg_get_metapfn(void *ptp, pgcnt_t metapg)
 	ASSERT(off);
 	ASSERT(IS_P2ALIGNED((uint64_t)off, PAGESIZE));
 
-	pp = page_find(&mpvp, off);
+	pp = page_find(&mpvp.v_object, off);
 	ASSERT(pp);
 	ASSERT(pp->p_szc == 0);
 	ASSERT(pp->p_pagenum != PFN_INVALID);
@@ -242,7 +242,7 @@ memseg_remap_meta(struct memseg *seg)
 	 */
 
 	if (!IS_P2ALIGNED((uint64_t)pp, PAGESIZE) &&
-	    page_find(&mpvp, (uoff_t)(pp - 1)) && !page_deleted(pp - 1)) {
+	    page_find(&mpvp.v_object, (uoff_t)(pp - 1)) && !page_deleted(pp - 1)) {
 		/*
 		 * Another memseg has page_t's in the same
 		 * page which 'pp' resides.  This would happen
@@ -269,7 +269,7 @@ memseg_remap_meta(struct memseg *seg)
 	}
 
 	if (!IS_P2ALIGNED((uint64_t)epp, PAGESIZE) &&
-	    page_find(&mpvp, (uoff_t)epp) && !page_deleted(epp)) {
+	    page_find(&mpvp.v_object, (uoff_t)epp) && !page_deleted(epp)) {
 		/*
 		 * Another memseg has page_t's in the same
 		 * page which 'epp' resides.  This would happen
@@ -296,7 +296,7 @@ memseg_remap_meta(struct memseg *seg)
 	 * Free pages allocated during add.
 	 */
 	for (i = 0; i < metapgs; i++) {
-		pp = page_find(&mpvp, off);
+		pp = page_find(&mpvp.v_object, off);
 		ASSERT(pp);
 		ASSERT(pp->p_szc == 0);
 		page_io_unlock(pp);

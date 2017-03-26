@@ -1384,7 +1384,7 @@ contig_free(void *addr, size_t size)
 	hat_unload(kas.a_hat, addr, asize, HAT_UNLOAD_UNLOCK);
 
 	for (a = addr, ea = a + asize; a < ea; a += PAGESIZE) {
-		pp = page_find(&kvp, (uoff_t)(uintptr_t)a);
+		pp = page_find(&kvp.v_object, (uoff_t)(uintptr_t)a);
 		if (!pp)
 			panic("contig_free: contig pp not found");
 

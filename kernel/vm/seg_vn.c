@@ -2574,7 +2574,7 @@ segvn_softunlock(struct seg *seg, caddr_t addr, size_t len, enum seg_rw rw)
 		 * Use page_find() instead of page_lookup() to
 		 * find the page since we know that it is locked.
 		 */
-		pp = page_find(vp, offset);
+		pp = page_find(&vp->v_object, offset);
 		if (pp == NULL) {
 			panic(
 			    "segvn_softunlock: addr %p, ap %p, vp %p, off %llx",
@@ -7275,7 +7275,7 @@ segvn_incore(struct seg *seg, caddr_t addr, size_t len, char *vec)
 			anon_array_exit(&cookie);
 			ANON_LOCK_EXIT(&amp->a_rwlock);
 		}
-		if ((avp != NULL) && page_exists(avp, aoffset)) {
+		if ((avp != NULL) && page_exists(&avp->v_object, aoffset)) {
 			/* A page exists for the anon slot */
 			ret |= SEG_PAGE_INCORE;
 
@@ -7314,7 +7314,7 @@ segvn_incore(struct seg *seg, caddr_t addr, size_t len, char *vec)
 			 */
 			pp = page_lookup_nowait(&vp->v_object, offset,
 						SE_SHARED);
-			if ((pp == NULL) && (page_exists(vp, offset))) {
+			if ((pp == NULL) && (page_exists(&vp->v_object, offset))) {
 				/* Page is incore, and is named */
 				ret |= (SEG_PAGE_INCORE | SEG_PAGE_VNODE);
 			}
@@ -8506,7 +8506,7 @@ segvn_dump(struct seg *seg)
 		if ((pp = page_lookup_nowait(&vp->v_object, off, SE_SHARED)))
 			we_own_it = 1;
 		else
-			pp = page_exists(vp, off);
+			pp = page_exists(&vp->v_object, off);
 
 		if (pp) {
 			pfn = page_pptonum(pp);

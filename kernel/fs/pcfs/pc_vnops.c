@@ -1481,7 +1481,7 @@ pcfs_getapage(
 		pc_mark_acc(fsp, pcp);
 	}
 reread:
-	if ((pagefound = page_exists(vp, off)) == NULL) {
+	if ((pagefound = page_exists(&vp->v_object, off)) == NULL) {
 		/*
 		 * Need to really do disk IO to get the page(s).
 		 */

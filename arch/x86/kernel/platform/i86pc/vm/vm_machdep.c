@@ -4021,7 +4021,7 @@ page_get_physical(uintptr_t seed)
 		return (NULL);
 
 #ifdef	DEBUG
-	pp = page_exists(&kvp, offset);
+	pp = page_exists(&kvp.v_object, offset);
 	if (pp != NULL)
 		panic("page already exists %p", (void *)pp);
 #endif
