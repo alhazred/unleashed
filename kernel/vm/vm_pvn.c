@@ -987,8 +987,8 @@ pvn_vplist_setdirty(vnode_t *vp, int (*page_check)(page_t *))
 		if (!PP_ISPVN_TAG(pp) && page_check(pp)) {
 			/*
 			 * hat_setmod_only() in contrast to hat_setmod() does
-			 * not shuffle the pages and does not grab the mutex
-			 * page_vnode_mutex. Exactly what we need.
+			 * not shuffle the pages and does not grab the vnode
+			 * page mutex. Exactly what we need.
 			 */
 			hat_setmod_only(pp);
 			if (shuffle)

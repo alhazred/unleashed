@@ -748,7 +748,6 @@ void page_set_props(page_t *, uint_t);
 void page_clr_all_props(page_t *);
 int page_clear_lck_cow(page_t *, int);
 
-kmutex_t	*page_vnode_mutex(struct vnode *);
 kmutex_t	*page_se_mutex(struct page *);
 kmutex_t	*page_szc_lock(struct page *);
 int		page_szc_lock_assert(struct page *pp);

@@ -7529,7 +7529,8 @@ retry:
 /*
  * Set the given REF/MOD/RO bits for the given page.
  * For a vnode with a sorted v_object's list, we need to change
- * the attributes and the v_object's list together under page_vnode_mutex.
+ * the attributes and the v_object's list atomically via the object's page
+ * lock.
  */
 void
 hat_page_setattr(page_t *pp, uint_t flag)
