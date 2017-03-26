@@ -733,7 +733,7 @@ top:
 		es |= flags;
 
 		VM_STAT_ADD(page_lookup_cnt[4]);
-		if (!page_lock_es(pp, se, obj->vnode, P_RECLAIM, es)) {
+		if (!page_lock_es(pp, se, obj, P_RECLAIM, es)) {
 			VM_STAT_ADD(page_lookup_cnt[5]);
 			goto top;
 		}
@@ -2299,7 +2299,7 @@ top:
 				goto fail;
 			}
 			ASSERT(flags & PG_WAIT);
-			if (!page_lock(pp, SE_EXCL, vp, P_NO_RECLAIM)) {
+			if (!page_lock(pp, SE_EXCL, &vp->v_object, P_NO_RECLAIM)) {
 				/*
 				 * Start all over again if we blocked trying
 				 * to lock the page.
@@ -3048,7 +3048,7 @@ top:
 		 * the page.  It is tempting to add yet another arguement,
 		 * PL_KEEP or PL_DROP, to let page_lock know what to do.
 		 */
-		if (!page_lock(pp, SE_EXCL, vp, P_RECLAIM)) {
+		if (!page_lock(pp, SE_EXCL, &vp->v_object, P_RECLAIM)) {
 			/*
 			 * Went to sleep because the page could not
 			 * be locked.  We were woken up when the page

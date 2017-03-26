@@ -881,7 +881,7 @@ pvn_vplist_dirty(
 			 * If the page_lock() drops the mutex
 			 * we must retry the loop.
 			 */
-			if (!page_lock(pp, se, vp, P_NO_RECLAIM))
+			if (!page_lock(pp, se, &vp->v_object, P_NO_RECLAIM))
 				continue;
 
 			/*

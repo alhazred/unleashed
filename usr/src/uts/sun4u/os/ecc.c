@@ -270,8 +270,7 @@ ecc_page_zero(void *arg)
 	 * This will only fail if someone has or wants an exclusive lock on
 	 * the page.  Since it's a retired page, this shouldn't happen.
 	 */
-	ret = page_lock_es(pp, SE_SHARED, NULL,
-	    P_NO_RECLAIM, SE_RETIRED);
+	ret = page_lock_es(pp, SE_SHARED, NULL, P_NO_RECLAIM, SE_RETIRED);
 
 	if (ret > 0) {
 		on_trap_data_t otd;
