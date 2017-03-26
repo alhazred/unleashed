@@ -200,13 +200,6 @@ proginstall: beforeinstall
 realinstall: beforeinstall
 .endif
 
-.if !target(lint)
-lint: ${LOBJS}
-.if defined(LOBJS) && !empty(LOBJS)
-	@${LINT} ${LINTFLAGS} ${LDFLAGS:M-L*} ${LOBJS} ${LDADD}
-.endif
-.endif
-
 .NOPATH:	${PROG}
 .if defined(OBJS) && !empty(OBJS)
 .NOPATH:	${OBJS}

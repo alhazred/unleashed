@@ -60,80 +60,6 @@ CFLAGS+=	${COPTS}
 #		 	(usually just ${CPPPICFLAGS} ${CPICFLAGS})
 # APICFLAGS:		flags for ${AS} to assemble .[sS] to ${PICO} objects.
 
-.if ${TARGET_OSNAME} == "NetBSD"
-.if ${MACHINE_ARCH} == "alpha"
-		# Alpha-specific shared library flags
-FPICFLAGS ?= -fPIC
-CPICFLAGS ?= -fPIC -DPIC
-CPPPICFLAGS?= -DPIC 
-CAPICFLAGS?= ${CPPPICFLAGS} ${CPICFLAGS}
-APICFLAGS ?=
-.elif ${MACHINE_ARCH} == "mipsel" || ${MACHINE_ARCH} == "mipseb"
-		# mips-specific shared library flags
-
-# On mips, all libs are compiled with ABIcalls, not just sharedlibs.
-MKPICLIB= no
-
-# so turn shlib PIC flags on for ${AS}.
-AINC+=-DABICALLS
-AFLAGS+= -fPIC
-AS+=	-KPIC
-
-.elif ${MACHINE_ARCH} == "vax" && ${OBJECT_FMT} == "ELF"
-# On the VAX, all object are PIC by default, not just sharedlibs.
-MKPICLIB= no
-
-.elif (${MACHINE_ARCH} == "sparc" || ${MACHINE_ARCH} == "sparc64") && \
-       ${OBJECT_FMT} == "ELF"
-# If you use -fPIC you need to define BIGPIC to turn on 32-bit 
-# relocations in asm code
-FPICFLAGS ?= -fPIC
-CPICFLAGS ?= -fPIC -DPIC
-CPPPICFLAGS?= -DPIC -DBIGPIC
-CAPICFLAGS?= ${CPPPICFLAGS} ${CPICFLAGS}
-APICFLAGS ?= -KPIC
-
-.else
-
-# Platform-independent flags for NetBSD a.out shared libraries
-SHLIB_SOVERSION=${SHLIB_FULLVERSION}
-SHLIB_SHFLAGS=
-FPICFLAGS ?= -fPIC
-CPICFLAGS?= -fPIC -DPIC
-CPPPICFLAGS?= -DPIC 
-CAPICFLAGS?= ${CPPPICFLAGS} ${CPICFLAGS}
-APICFLAGS?= -k
-
-.endif
-
-# Platform-independent linker flags for ELF shared libraries
-.if ${OBJECT_FMT} == "ELF"
-SHLIB_SOVERSION=	${SHLIB_MAJOR}
-SHLIB_SHFLAGS=		-soname lib${LIB}.so.${SHLIB_SOVERSION}
-SHLIB_LDSTARTFILE?=	/usr/lib/crtbeginS.o
-SHLIB_LDENDFILE?=	/usr/lib/crtendS.o
-.endif
-
-# for compatibility with the following
-CC_PIC?= ${CPICFLAGS}
-LD_shared=${SHLIB_SHFLAGS}
-
-.endif # NetBSD
-
-.if ${TARGET_OSNAME} == "FreeBSD"
-.if ${OBJECT_FMT} == "ELF"
-SHLIB_SOVERSION=	${SHLIB_MAJOR}
-SHLIB_SHFLAGS=		-soname lib${LIB}.so.${SHLIB_SOVERSION}
-.else
-SHLIB_SHFLAGS=		-assert pure-text
-.endif
-SHLIB_LDSTARTFILE=
-SHLIB_LDENDFILE=
-CC_PIC?= -fpic
-LD_shared=${SHLIB_SHFLAGS}
-
-.endif # FreeBSD
-
 MKPICLIB?= yes
 
 # sys.mk can override these
@@ -141,72 +67,7 @@ LD_X?=-X
 LD_x?=-x
 LD_r?=-r
 
-# Non BSD machines will be using bmake.
-.if ${TARGET_OSNAME} == "SunOS"
-LD_shared=-assert pure-text
-.if ${OBJECT_FMT} == "ELF" || ${MACHINE} == "solaris"
-# Solaris
 LD_shared=-h lib${LIB}.so.${SHLIB_MAJOR} -G
-.endif
-.elif ${TARGET_OSNAME} == "HP-UX"
-LD_shared=-b
-LD_so=sl
-DLLIB=
-# HPsUX lorder does not grok anything but .o
-LD_sobjs=`${LORDER} ${OBJS} | ${TSORT} | sed 's,\.o,${PICO},'`
-LD_pobjs=`${LORDER} ${OBJS} | ${TSORT} | sed 's,\.o,.po,'`
-.elif ${TARGET_OSNAME} == "OSF1"
-LD_shared= -msym -shared -expect_unresolved '*'
-LD_solib= -all lib${LIB}_pic.a
-DLLIB=
-# lorder does not grok anything but .o
-LD_sobjs=`${LORDER} ${OBJS} | ${TSORT} | sed 's,\.o,${PICO},'`
-LD_pobjs=`${LORDER} ${OBJS} | ${TSORT} | sed 's,\.o,.po,'`
-AR_cq= -cqs
-.elif ${TARGET_OSNAME} == "FreeBSD"
-LD_solib= lib${LIB}_pic.a
-.elif ${TARGET_OSNAME} == "Linux"
-SHLIB_LD = ${CC}
-# this is ambiguous of course
-LD_shared=-shared -Wl,"-h lib${LIB}.so.${SHLIB_MAJOR}"
-LD_solib= -Wl,--whole-archive lib${LIB}_pic.a -Wl,--no-whole-archive
-# Linux uses GNU ld, which is a multi-pass linker
-# so we don't need to use lorder or tsort
-LD_objs = ${OBJS}
-LD_pobjs = ${POBJS}
-LD_sobjs = ${SOBJS}
-.elif ${TARGET_OSNAME} == "Darwin"
-SHLIB_LD = ${CC}
-SHLIB_INSTALL_VERSION ?= ${SHLIB_MAJOR}
-SHLIB_COMPATABILITY_VERSION ?= ${SHLIB_MAJOR}.${SHLIB_MINOR:U0}
-SHLIB_COMPATABILITY ?= \
-	-compatibility_version ${SHLIB_COMPATABILITY_VERSION} \
-	-current_version ${SHLIB_FULLVERSION}
-LD_shared = -dynamiclib \
-	-flat_namespace -undefined suppress \
-	-install_name ${LIBDIR}/lib${LIB}.${SHLIB_INSTALL_VERSION}.${LD_solink} \
-	${SHLIB_COMPATABILITY}
-SHLIB_LINKS =
-.for v in ${SHLIB_COMPATABILITY_VERSION} ${SHLIB_INSTALL_VERSION}
-.if "$v" != "${SHLIB_FULLVERSION}"
-SHLIB_LINKS += lib${LIB}.$v.${LD_solink}
-.endif
-.endfor
-.if ${MK_LINKLIB} != "no"
-SHLIB_LINKS += lib${LIB}.${LD_solink}
-.endif
-
-LD_so = ${SHLIB_FULLVERSION}.dylib
-LD_sobjs = ${SOBJS:O:u}
-LD_solib = ${LD_sobjs}
-SOLIB = ${LD_sobjs}
-LD_solink = dylib
-.if ${MACHINE_ARCH} == "i386"
-PICFLAG ?= -fPIC
-.else
-PICFLAG ?= -fPIC -fno-common
-.endif
-.endif
 
 SHLIB_LD ?= ${LD}
 
@@ -236,9 +97,6 @@ LD_pobjs ?= `${LORDER} ${POBJS} | ${TSORT}`
 .endif
 LD_solib ?= ${LD_sobjs}
 AR_cq ?= cq
-.if exists(/netbsd) && exists(${DESTDIR}/usr/lib/libdl.so)
-DLLIB ?= -ldl
-.endif
 
 # some libs have lots of objects, and scanning all .o, .po and ${PICO} meta files
 # is a waste of time, this tells meta.autodep.mk to just pick one 
@@ -247,7 +105,6 @@ DLLIB ?= -ldl
 .if ${MK_DIRDEPS_BUILD} == "yes" && ${SRCS:Uno:[\#]} > 42
 OPTIMIZE_OBJECT_META_FILES ?= yes
 .endif
-
 
 .if ${MK_LIBTOOL} == "yes"
 # because libtool is so fascist about naming the object files,
@@ -331,9 +188,6 @@ ${CXX_SUFFIXES:%=%${PICO}}:
 .endif
 .endif
 
-.c.ln:
-	${LINT} ${LINTFLAGS} ${CFLAGS:M-[IDU]*} -i ${.IMPSRC}
-
 .if ${MK_LIBTOOL} != "yes"
 
 .if !defined(PICFLAG)
@@ -361,10 +215,6 @@ _LIBS+=${SOLIB}
 .if !empty(SHLIB_FULLVERSION)
 _LIBS+=lib${LIB}.${LD_so}
 .endif
-.endif
-
-.if ${MK_LINT} != "no"
-_LIBS+=llib-l${LIB}.ln
 .endif
 
 # here is where you can define what LIB* are
@@ -443,31 +293,11 @@ lib${LIB}_pic.a:: ${SOBJS}
 lib${LIB}.${LD_so}: ${SOLIB} ${DPADD}
 	@echo building shared ${LIB} library \(version ${SHLIB_FULLVERSION}\)
 	@rm -f ${.TARGET}
-.if ${TARGET_OSNAME} == "NetBSD" || ${TARGET_OSNAME} == "FreeBSD"
-.if ${OBJECT_FMT} == "ELF"
-	${SHLIB_LD} -x -shared ${SHLIB_SHFLAGS} -o ${.TARGET} \
-	    ${SHLIB_LDSTARTFILE} \
-	    --whole-archive ${SOLIB} --no-whole-archive ${SHLIB_LDADD} \
-	    ${SHLIB_LDENDFILE}
-.else
-	${SHLIB_LD} ${LD_x} ${LD_shared} \
-	    -o ${.TARGET} ${SOLIB} ${SHLIB_LDADD}
-.endif
-.else
 	${SHLIB_LD} -o ${.TARGET} ${LD_shared} ${LD_solib} ${DLLIB} ${SHLIB_LDADD}
-.endif
 .endif
 .if !empty(SHLIB_LINKS)
 	rm -f ${SHLIB_LINKS}; ${SHLIB_LINKS:O:u:@x@ln -s ${.TARGET} $x;@}
 .endif
-
-LOBJS+=	${LSRCS:.c=.ln} ${SRCS:M*.c:.c=.ln}
-.NOPATH:	${LOBJS}
-LLIBS?=	-lc
-llib-l${LIB}.ln: ${LOBJS}
-	@echo building llib-l${LIB}.ln
-	@rm -f llib-l${LIB}.ln
-	@${LINT} -C${LIB} ${LOBJS} ${LLIBS}
 
 .if !target(clean)
 cleanlib: .PHONY
@@ -475,7 +305,6 @@ cleanlib: .PHONY
 	rm -f lib${LIB}.a ${OBJS}
 	rm -f lib${LIB}_p.a ${POBJS}
 	rm -f lib${LIB}_pic.a lib${LIB}.so.* ${SOBJS}
-	rm -f llib-l${LIB}.ln ${LOBJS}
 .if !empty(SHLIB_LINKS)
 	rm -f ${SHLIB_LINKS}
 .endif
@@ -535,10 +364,6 @@ libinstall:
 	(cd ${DESTDIR}${LIBDIR} && { rm -f ${SHLIB_LINKS}; ${SHLIB_LINKS:O:u:@x@ln -s lib${LIB}.${LD_so} $x;@} })
 .endif
 .endif
-.endif
-.if ${MK_LINT} != "no" && ${MK_LINKLIB} != "no" && !empty(LOBJS)
-	${INSTALL} ${COPY} ${LIB_INSTALL_OWN} -m ${LIBMODE} \
-	    llib-l${LIB}.ln ${DESTDIR}${LINTLIBDIR}
 .endif
 .if defined(LINKS) && !empty(LINKS)
 	@set ${LINKS}; ${_LINKS_SCRIPT}

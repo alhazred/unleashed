@@ -91,7 +91,6 @@ OPTIONS_DEFAULT_NO+= DPADD_MK
 OPTIONS_DEFAULT_NO+= \
 	GPROF \
 	LIBTOOL \
-	LINT \
 
 OPTIONS_DEFAULT_YES+= \
 	ARCHIVE \
@@ -164,7 +163,6 @@ _LIBSODIR?=	${LIBDIR}
 .endif
 # this is where ld.*so lives
 SHLINKDIR?=	/usr/libexec
-LINTLIBDIR?=	${libprefix}/libdata/lint
 LIBGRP?=	${BINGRP}
 LIBOWN?=	${BINOWN}
 LIBMODE?=	${NONBINMODE}
@@ -217,10 +215,6 @@ CFLAGS += ${CFLAGS_${.TARGET:T:R}} ${CFLAGS_${.TARGET:T}}
     ((${MACHINE_ARCH} == "alpha") && defined(ECOFF_TOOLCHAIN))
 MK_PIC=no
 .endif
-
-# No lint, for now.
-NOLINT=
-
 
 .if ${MK_LINKLIB} == "no"
 MK_PICINSTALL=	no
