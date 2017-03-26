@@ -103,11 +103,11 @@ install-fw: ${MODULE_FW}
 .PHONY: install-misc install-conf install-fw
 
 ${MODULE}: ${OBJS}
-	${QLD}${LD} ${LDFLAGS} -o ${.TARGET} ${.ALLSRC}
-	${QCTFCVT}${CTFCONVERT} -L VERSION ${.TARGET}
+	${LD} ${LDFLAGS} -o ${.TARGET} ${.ALLSRC}
+	${CTFCONVERT} -L VERSION ${.TARGET}
 
 .SUFFIXES: .o
 
 .c.o:
 	@mkdir -p ${.TARGET:H}
-	${QCC}${CC} ${CFLAGS} -c -o ${.TARGET} ${.IMPSRC}
+	${CC} ${CFLAGS} -c -o ${.TARGET} ${.IMPSRC}

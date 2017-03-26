@@ -128,14 +128,8 @@ CTFMERGE=/opt/onbld/bin/i386/ctfmerge
 #
 # Verbosity
 #
-.if !empty(VERBOSE) && ${VERBOSE} != "0" && ${VERBOSE} != "no"
-QCC =
-QLD =
-QCTFCVT =
-QCTFMRG =
-.else
-QCC = @echo "  CC (${BITS})   ${.IMPSRC}";
-QLD = @echo "  LD (${BITS})   ${.TARGET}";
-QCTFCVT = @
-QCTFMRG = @
+.if ${VERBOSE:Uno} != "yes"
+CC := @echo "  CC ($${BITS})   $${.IMPSRC}";${CC}
+LD := @echo "  LD ($${BITS})   $${.TARGET}";${LD}
+CTFCONVERT := @${CTFCONVERT}
 .endif
