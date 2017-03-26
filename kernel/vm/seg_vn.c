@@ -5239,7 +5239,8 @@ slow:
 				 * Skip pages that are free or have an
 				 * "exclusive" lock.
 				 */
-				pp = page_lookup_nowait(fvp, fpgoff, SE_SHARED);
+				pp = page_lookup_nowait(&fvp->v_object,
+							fpgoff, SE_SHARED);
 				if (pp == NULL)
 					break;
 				/*
@@ -7191,7 +7192,7 @@ segvn_sync(struct seg *seg, caddr_t addr, size_t len, int attr, uint_t flags)
 			 * invalidating and skips a page if
 			 * page_lookup_nowait returns NULL.
 			 */
-			pp = page_lookup_nowait(vp, off, SE_SHARED);
+			pp = page_lookup_nowait(&vp->v_object, off, SE_SHARED);
 			if (pp == NULL) {
 				continue;
 			}
@@ -7290,8 +7291,9 @@ segvn_incore(struct seg *seg, caddr_t addr, size_t len, char *vec)
 			 * Don't get page_struct lock for lckcnt and cowcnt,
 			 * since this is purely advisory.
 			 */
-			if ((pp = page_lookup_nowait(avp, aoffset,
-			    SE_SHARED)) != NULL) {
+			if ((pp = page_lookup_nowait(&avp->v_object,
+						     aoffset,
+						     SE_SHARED)) != NULL) {
 				if (pp->p_lckcnt)
 					ret |= SEG_PAGE_SOFTLOCK;
 				if (pp->p_cowcnt)
@@ -7310,7 +7312,8 @@ segvn_incore(struct seg *seg, caddr_t addr, size_t len, char *vec)
 			 * without blocking.  If this fails, determine
 			 * if the page is in memory.
 			 */
-			pp = page_lookup_nowait(vp, offset, SE_SHARED);
+			pp = page_lookup_nowait(&vp->v_object, offset,
+						SE_SHARED);
 			if ((pp == NULL) && (page_exists(vp, offset))) {
 				/* Page is incore, and is named */
 				ret |= (SEG_PAGE_INCORE | SEG_PAGE_VNODE);
@@ -8500,7 +8503,7 @@ segvn_dump(struct seg *seg)
 		 * exists before searching for it.
 		 */
 
-		if ((pp = page_lookup_nowait(vp, off, SE_SHARED)))
+		if ((pp = page_lookup_nowait(&vp->v_object, off, SE_SHARED)))
 			we_own_it = 1;
 		else
 			pp = page_exists(vp, off);
@@ -9114,7 +9117,7 @@ segvn_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***ppp,
 			}
 		}
 		swap_xlate(ap, &vp, &off);
-		pp = page_lookup_nowait(vp, off, SE_SHARED);
+		pp = page_lookup_nowait(&vp->v_object, off, SE_SHARED);
 		if (pp == NULL) {
 			error = EFAULT;
 			break;

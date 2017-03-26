@@ -627,7 +627,7 @@ struct lgrp;
 struct page *page_lookup(struct vmobject *, uoff_t, se_t);
 struct page *page_lookup_create(struct vmobject *, uoff_t, se_t, struct page *,
 	spgcnt_t *, int);
-page_t	*page_lookup_nowait(struct vnode *, uoff_t, se_t);
+struct page *page_lookup_nowait(struct vmobject *, uoff_t, se_t);
 page_t	*page_find(struct vnode *, uoff_t);
 page_t	*page_exists(struct vnode *, uoff_t);
 int	page_exists_physcontig(vnode_t *, uoff_t, uint_t, page_t *[]);

@@ -1465,8 +1465,8 @@ again:
 		/* LINTED (plsz is unsigned) */
 		for (soff = off + PAGESIZE; plsz > 0;
 		    soff += PAGESIZE, plsz -= PAGESIZE) {
-			pp = page_lookup_nowait(vp, (uoff_t)soff,
-			    SE_SHARED);
+			pp = page_lookup_nowait(&vp->v_object, (uoff_t)soff,
+						SE_SHARED);
 			if (pp == NULL)
 				break;
 			pl[index++] = pp;
@@ -1665,8 +1665,9 @@ hsfs_putpage(struct vnode *vp, offset_t off, size_t len, int flags,
 				pp = page_lookup(&vp->v_object, io_off,
 						 (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
 			} else {
-				pp = page_lookup_nowait(vp, io_off,
-				    (flags & B_FREE) ? SE_EXCL : SE_SHARED);
+				pp = page_lookup_nowait(&vp->v_object,
+							io_off,
+							(flags & B_FREE) ? SE_EXCL : SE_SHARED);
 			}
 
 			if (pp == NULL)

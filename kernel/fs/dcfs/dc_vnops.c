@@ -647,7 +647,8 @@ dc_putpage(struct vnode *vp, offset_t off, size_t len, int flags,
 			if ((flags & B_INVAL) || ((flags & B_ASYNC) == 0))
 				pp = page_lookup(&vp->v_object, io_off, se);
 			else
-				pp = page_lookup_nowait(vp, io_off, se);
+				pp = page_lookup_nowait(&vp->v_object,
+							io_off, se);
 
 			if (pp == NULL)
 				continue;

@@ -4364,8 +4364,8 @@ zfs_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
 			pp = page_lookup(&vp->v_object, io_off,
 					 (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
 		} else {
-			pp = page_lookup_nowait(vp, io_off,
-			    (flags & B_FREE) ? SE_EXCL : SE_SHARED);
+			pp = page_lookup_nowait(&vp->v_object, io_off,
+						(flags & B_FREE) ? SE_EXCL : SE_SHARED);
 		}
 
 		if (pp != NULL && pvn_getdirty(pp, flags)) {
@@ -4653,7 +4653,7 @@ zfs_getpage(vnode_t *vp, offset_t off, size_t len, uint_t *protp,
 	 * Fill out the page array with any pages already in the cache.
 	 */
 	while (plsz > 0 &&
-	    (*pl++ = page_lookup_nowait(vp, off, SE_SHARED))) {
+	    (*pl++ = page_lookup_nowait(&vp->v_object, off, SE_SHARED))) {
 			off += PAGESIZE;
 			plsz -= PAGESIZE;
 	}

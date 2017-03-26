@@ -819,16 +819,16 @@ top:
  * free pages and pages that cannot be locked as requested.
  * Used while attempting to kluster pages.
  */
-page_t *
-page_lookup_nowait(vnode_t *vp, uoff_t off, se_t se)
+struct page *
+page_lookup_nowait(struct vmobject *obj, uoff_t off, se_t se)
 {
 	page_t		*pp;
 
-	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
+	ASSERT(!VMOBJECT_LOCKED(obj));
 	VM_STAT_ADD(page_lookup_nowait_cnt[0]);
 
-	vmobject_lock(&vp->v_object);
-	pp = find_page(&vp->v_object, off);
+	vmobject_lock(obj);
+	pp = find_page(obj, off);
 
 	if (pp == NULL || PP_ISFREE(pp)) {
 		VM_STAT_ADD(page_lookup_nowait_cnt[2]);
@@ -847,7 +847,7 @@ page_lookup_nowait(vnode_t *vp, uoff_t off, se_t se)
 		}
 	}
 
-	vmobject_unlock(&vp->v_object);
+	vmobject_unlock(obj);
 
 	ASSERT(pp ? PAGE_LOCKED_SE(pp, se) : 1);
 

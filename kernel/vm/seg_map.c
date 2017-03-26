@@ -1075,7 +1075,7 @@ segmap_pagefree(struct vnode *vp, uoff_t off)
 
 	for (pgoff = off; pgoff < off + MAXBSIZE; pgoff += PAGESIZE) {
 
-		if ((pp = page_lookup_nowait(vp, pgoff, SE_EXCL)) == NULL)
+		if ((pp = page_lookup_nowait(&vp->v_object, pgoff, SE_EXCL)) == NULL)
 			continue;
 
 		switch (page_release(pp, 1)) {
@@ -2115,8 +2115,9 @@ segmap_dump(struct seg *seg)
 				 * So determine if it exists before
 				 * searching for it.
 				 */
-				if ((pp = page_lookup_nowait(smp->sm_vp,
-				    smp->sm_off + off, SE_SHARED)))
+				if ((pp = page_lookup_nowait(&smp->sm_vp->v_object,
+							     smp->sm_off + off,
+							     SE_SHARED)))
 					we_own_it = 1;
 				else
 					pp = page_exists(smp->sm_vp,

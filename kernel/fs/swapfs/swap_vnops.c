@@ -565,9 +565,9 @@ swap_putpage(
 				pp = page_lookup(&vp->v_object, io_off,
 						 SE_EXCL);
 			else
-				pp = page_lookup_nowait(vp, io_off,
-				    (flags & (B_FREE | B_INVAL)) ?
-				    SE_EXCL : SE_SHARED);
+				pp = page_lookup_nowait(&vp->v_object,
+							io_off,
+							(flags & (B_FREE | B_INVAL)) ? SE_EXCL : SE_SHARED);
 
 			if (pp == NULL || pvn_getdirty(pp, flags) == 0)
 				io_len = PAGESIZE;
@@ -684,7 +684,7 @@ swap_putapage(
 		vp = arg->a_vp;
 		off = arg->a_off;
 
-		if ((pp = page_lookup_nowait(vp, off, se)) == NULL) {
+		if ((pp = page_lookup_nowait(&vp->v_object, off, se)) == NULL) {
 			swap_otherfail++;
 			swap_otherpages += btop(klsz);
 			sw_putfree(arg);

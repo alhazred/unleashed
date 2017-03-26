@@ -1712,7 +1712,7 @@ anon_disclaim(struct anon_map *amp, ulong_t index, size_t size,
 		 * if we couldn't grab the lock we skip to next page.
 		 */
 		swap_xlate(ap, &vp, &off);
-		pp = page_lookup_nowait(vp, (uoff_t)off, SE_EXCL);
+		pp = page_lookup_nowait(&vp->v_object, (uoff_t)off, SE_EXCL);
 		if (pp == NULL) {
 			segadvstat.MADV_FREE_miss.value.ul++;
 			pgcnt = 1;

@@ -4818,8 +4818,7 @@ retrylock:
 		while (pgoff < eoff) {
 			page_t		*pp;
 
-			if ((pp = page_lookup_nowait(vp, pgoff,
-			    SE_SHARED)) == NULL)
+			if ((pp = page_lookup_nowait(&vp->v_object, pgoff, SE_SHARED)) == NULL)
 				break;
 
 			*pl++ = pp;
@@ -5294,8 +5293,9 @@ ufs_putpages(
 				pp = page_lookup(&vp->v_object, io_off,
 						 (flags & (B_INVAL | B_FREE)) ? SE_EXCL : SE_SHARED);
 			} else {
-				pp = page_lookup_nowait(vp, io_off,
-				    (flags & B_FREE) ? SE_EXCL : SE_SHARED);
+				pp = page_lookup_nowait(&vp->v_object,
+							io_off,
+							(flags & B_FREE) ? SE_EXCL : SE_SHARED);
 			}
 
 			if (pp == NULL || pvn_getdirty(pp, flags) == 0)

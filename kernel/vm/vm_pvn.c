@@ -265,7 +265,7 @@ pvn_write_kluster(
 	 * avoid "signed" versus "unsigned" conversion problems.
 	 */
 	for (deltab = PAGESIZE; off >= vp_off + deltab; deltab += PAGESIZE) {
-		pp = page_lookup_nowait(vp, off - deltab, se);
+		pp = page_lookup_nowait(&vp->v_object, off - deltab, se);
 		if (pp == NULL)
 			break;		/* page not found */
 		if (pvn_getdirty(pp, flags | B_DELWRI) == 0)
@@ -277,7 +277,7 @@ pvn_write_kluster(
 	vp_end = vp_off + vp_len;
 	/* now scan forwards looking for pages to kluster */
 	for (deltaf = PAGESIZE; off + deltaf < vp_end; deltaf += PAGESIZE) {
-		pp = page_lookup_nowait(vp, off + deltaf, se);
+		pp = page_lookup_nowait(&vp->v_object, off + deltaf, se);
 		if (pp == NULL)
 			break;		/* page not found */
 		if (pvn_getdirty(pp, flags | B_DELWRI) == 0)

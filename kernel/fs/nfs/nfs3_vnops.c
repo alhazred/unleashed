@@ -6391,7 +6391,7 @@ nfs3_get_commit_range(vnode_t *vp, uoff_t soff, size_t len)
 		/*
 		 * Lookup each page by vp, offset.
 		 */
-		if ((pp = page_lookup_nowait(vp, off, SE_EXCL)) == NULL)
+		if ((pp = page_lookup_nowait(&vp->v_object, off, SE_EXCL)) == NULL)
 			continue;
 
 		/*

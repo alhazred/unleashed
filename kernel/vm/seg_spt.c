@@ -300,7 +300,8 @@ segspt_shmincore(struct seg *seg, caddr_t addr, size_t len, char *vec)
 			if (ap != NULL) {
 				swap_xlate(ap, &vp, &off);
 				anon_array_exit(&cookie);
-				pp = page_lookup_nowait(vp, off, SE_SHARED);
+				pp = page_lookup_nowait(&vp->v_object, off,
+							SE_SHARED);
 				if (pp != NULL) {
 					ret |= SEG_PAGE_INCORE | SEG_PAGE_ANON;
 					page_unlock(pp);
