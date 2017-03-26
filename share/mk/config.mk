@@ -1,5 +1,6 @@
 MK_ARCHIVE?=	no
 MK_PROFILE?=	no
+MK_PICLIB?=	no
 
 .if ${MACHINE} == "amd64"
 CFLAGS+=	-m64

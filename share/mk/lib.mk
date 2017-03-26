@@ -288,9 +288,7 @@ lib${LIB}_pic.a:: ${SOBJS}
 
 #SHLIB_LDADD?= ${LDADD}
 
-# bound to be non-portable...
-# this is known to work for NetBSD 1.6 and FreeBSD 4.2
-lib${LIB}.${LD_so}: ${SOLIB} ${DPADD}
+lib${LIB}.${LD_so}: ${SOBJS} ${DPADD}
 	@echo building shared ${LIB} library \(version ${SHLIB_FULLVERSION}\)
 	@rm -f ${.TARGET}
 	${SHLIB_LD} -o ${.TARGET} ${LD_shared} ${LD_solib} ${DLLIB} ${SHLIB_LDADD}
