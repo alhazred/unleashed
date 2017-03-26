@@ -375,8 +375,7 @@ typedef struct vn_vfslocks_entry {
  * writable page.
  */
 #define	VMODSORT	(0x10000)
-#define	IS_VMODSORT(vp) \
-	(pvn_vmodsort_supported != 0 && ((vp)->v_flag  & VMODSORT) != 0)
+#define	IS_VMODSORT(vp)	(((vp)->v_flag  & VMODSORT) != 0)
 
 #define	VISSWAPFS	0x20000	/* vnode is being used for swapfs */
 
@@ -1285,11 +1284,6 @@ void reparse_point_init(void);
 u_longlong_t	fs_new_caller_id();
 
 int	vn_vmpss_usepageio(vnode_t *);
-
-/*
- * Needed for use of IS_VMODSORT() in kernel.
- */
-extern uint_t pvn_vmodsort_supported;
 
 #define	VN_HOLD(vp)	{ \
 	mutex_enter(&(vp)->v_lock); \

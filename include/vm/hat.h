@@ -296,7 +296,6 @@ void	hat_page_demote(struct page *);
 enum hat_features {
 	HAT_SHARED_PT,		/* Shared page tables */
 	HAT_DYNAMIC_ISM_UNMAP,	/* hat_pageunload() handles ISM pages */
-	HAT_VMODSORT,		/* support for VMODSORT flag of vnode */
 	HAT_SHARED_REGIONS	/* shared regions support */
 };
 

@@ -13130,7 +13130,6 @@ hat_supported(enum hat_features feature, void *arg)
 	switch (feature) {
 	case    HAT_SHARED_PT:
 	case	HAT_DYNAMIC_ISM_UNMAP:
-	case	HAT_VMODSORT:
 		return (1);
 	case	HAT_SHARED_REGIONS:
 		if (shctx_on)

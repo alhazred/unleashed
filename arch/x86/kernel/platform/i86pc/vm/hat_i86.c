@@ -3728,9 +3728,6 @@ hat_supported(enum hat_features feature, void *arg)
 	case HAT_DYNAMIC_ISM_UNMAP:
 		return (0);
 
-	case HAT_VMODSORT:
-		return (1);
-
 	case HAT_SHARED_REGIONS:
 		return (0);
 
