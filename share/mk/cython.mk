@@ -89,7 +89,6 @@ MODULE_BINDIR?= ${.CURDIR:H}/${PY_HOST_TARGET:U${HOST_TARGET}}
 build-cython-module: ${CYTHON_MODULE}
 
 install-cython-module: ${CYTHON_MODULE}
-	test -d ${DESTDIR}${MODULE_BINDIR} || \
 	${INSTALL} -d ${DESTDIR}${MODULE_BINDIR}
 	${INSTALL} -m 755 ${.ALLSRC} ${DESTDIR}${MODULE_BINDIR}
 

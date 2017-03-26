@@ -171,7 +171,6 @@ realinstall: proginstall
 .if !target(proginstall)
 proginstall:
 .if defined(PROG)
-	[ -d ${DESTDIR}${BINDIR} ] || \
 	${INSTALL} -d ${PROG_INSTALL_OWN} -m 775 ${DESTDIR}${BINDIR}
 	${INSTALL} ${COPY} ${STRIP_FLAG} ${PROG_INSTALL_OWN} -m ${BINMODE} \
 	    ${PROG} ${DESTDIR}${BINDIR}/${PROG_NAME}

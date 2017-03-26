@@ -47,8 +47,7 @@ install:
 .else
 FILES?=	${SRCS}
 install:
-	test -d ${DESTDIR}${DOCDIR}/${DIR} || \
-	    ${INSTALL} -d ${DOC_INSTALL_OWN} -m ${DIRMODE} ${DESTDIR}${DOCDIR}/${DIR}
+	${INSTALL} -d ${DOC_INSTALL_OWN} -m ${DIRMODE} ${DESTDIR}${DOCDIR}/${DIR}
 	${INSTALL} ${COPY} ${DOC_INSTALL_OWN} -m ${DOCMODE} \
 	    Makefile ${FILES} ${EXTRA} ${DESTDIR}${DOCDIR}/${DIR}
 .endif
