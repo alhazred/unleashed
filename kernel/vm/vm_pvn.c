@@ -76,8 +76,6 @@ int pvn_nofodklust = 0;
 int pvn_write_noklust = 0;
 
 uint_t pvn_vmodsort_supported = 0;	/* set if HAT supports VMODSORT */
-uint_t pvn_vmodsort_disable = 0;	/* set in /etc/system to disable HAT */
-					/* support for vmodsort for testing */
 
 static struct kmem_cache *marker_cache = NULL;
 
@@ -679,8 +677,7 @@ marker_constructor(void *buf, void *cdrarg, int kmflags)
 void
 pvn_init()
 {
-	if (pvn_vmodsort_disable == 0)
-		pvn_vmodsort_supported = hat_supported(HAT_VMODSORT, NULL);
+	pvn_vmodsort_supported = hat_supported(HAT_VMODSORT, NULL);
 	marker_cache = kmem_cache_create("marker_cache",
 	    sizeof (page_t), 0, marker_constructor,
 	    NULL, NULL, NULL, NULL, 0);
