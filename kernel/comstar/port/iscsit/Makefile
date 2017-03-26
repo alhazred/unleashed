@@ -17,7 +17,7 @@ SRCS=		iscsit.c \
 		iscsit_text.c \
 		iscsit_tgt.c \
 		iscsit_common.c
-SRCS_DIRS=	${SRCTOP}/usr/src/common/iscsit
+.PATH: ${SRCTOP}/usr/src/common/iscsit
 
 CERRWARN =  -Wno-switch
 CERRWARN += -Wno-uninitialized

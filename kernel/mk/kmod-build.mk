@@ -64,11 +64,7 @@ LINKS += "/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}" \
 OBJS =	$(SRCS:%.c=%.o) \
 	$(SRCS$(BITS):%.c=%.o)
 
-.if !empty(SRCS_DIRS)
-.PATH: ${SRCS_DIRS:%=%}
-.endif
-
-all: $(MODULE)
+all: ${MODULE}
 
 clean cleandir:
 
