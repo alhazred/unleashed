@@ -384,7 +384,7 @@ dr_memlist_del_retired_pages(struct memlist *mlist)
 	vnode_t		*vp = retired_pages;
 	static fn_t	f = "dr_memlist_del_retired_pages";
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 
 	PR_MEM("%s\n", f);
 
@@ -415,7 +415,7 @@ dr_memlist_del_retired_pages(struct memlist *mlist)
 		page_unlock(pp);
 	}
 
-	mutex_exit(page_vnode_mutex(vp));
+	vmobject_unlock(&vp->v_object);
 
 	return (mlist);
 }

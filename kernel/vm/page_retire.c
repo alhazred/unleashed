@@ -755,28 +755,28 @@ page_retire_kstat_update(kstat_t *ksp, int rw)
 static int
 pr_list_kstat_update(kstat_t *ksp, int rw)
 {
+	struct vmobject *obj = &retired_pages->v_object;
 	uint_t count;
 	page_t *pp;
 
 	if (rw == KSTAT_WRITE)
 		return (EACCES);
 
-	mutex_enter(page_vnode_mutex(retired_pages));
+	vmobject_lock(obj);
 	/* Needs to be under a lock so that for loop will work right */
 	if (!vn_has_cached_data(retired_pages)) {
-		mutex_exit(page_vnode_mutex(retired_pages));
+		vmobject_unlock(obj);
 		ksp->ks_ndata = 0;
 		ksp->ks_data_size = 0;
 		return (0);
 	}
 
 	count = 1;
-	for (pp = vmobject_get_next(&retired_pages->v_object,
-				    vmobject_get_head(&retired_pages->v_object));
-	    pp != NULL; pp = vmobject_get_next(&retired_pages->v_object, pp)) {
+	for (pp = vmobject_get_next(obj, vmobject_get_head(obj));
+	    pp != NULL; pp = vmobject_get_next(obj, pp)) {
 		count++;
 	}
-	mutex_exit(page_vnode_mutex(retired_pages));
+	vmobject_unlock(obj);
 
 	ksp->ks_ndata = count;
 	ksp->ks_data_size = count * 2 * sizeof (uint64_t);
@@ -791,6 +791,7 @@ pr_list_kstat_update(kstat_t *ksp, int rw)
 static int
 pr_list_kstat_snapshot(kstat_t *ksp, void *buf, int rw)
 {
+	struct vmobject *obj = &retired_pages->v_object;
 	page_t *pp;
 	struct memunit {
 		uint64_t address;
@@ -804,24 +805,24 @@ pr_list_kstat_snapshot(kstat_t *ksp, void *buf, int rw)
 
 	kspmem = (struct memunit *)buf;
 
-	mutex_enter(page_vnode_mutex(retired_pages));
-	pp = vmobject_get_head(&retired_pages->v_object);
+	vmobject_lock(obj);
+	pp = vmobject_get_head(obj);
 	if (((caddr_t)kspmem >= (caddr_t)buf + ksp->ks_data_size) ||
 	    (pp == NULL)) {
-		mutex_exit(page_vnode_mutex(retired_pages));
+		vmobject_unlock(obj);
 		return (0);
 	}
 	kspmem->address = ptob(pp->p_pagenum);
 	kspmem->size = PAGESIZE;
 	kspmem++;
-	for (pp = vmobject_get_next(&retired_pages->v_object, pp); pp != NULL;
-	    pp = vmobject_get_next(&retired_pages->v_object, pp), kspmem++) {
+	for (pp = vmobject_get_next(obj, pp); pp != NULL;
+	    pp = vmobject_get_next(obj, pp), kspmem++) {
 		if ((caddr_t)kspmem >= (caddr_t)buf + ksp->ks_data_size)
 			break;
 		kspmem->address = ptob(pp->p_pagenum);
 		kspmem->size = PAGESIZE;
 	}
-	mutex_exit(page_vnode_mutex(retired_pages));
+	vmobject_unlock(obj);
 
 	return (0);
 }

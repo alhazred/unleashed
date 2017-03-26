@@ -2037,7 +2037,7 @@ page_promote(int mnode, pfn_t pfnum, uchar_t new_szc, int flags, int mtype)
 			}
 			which_list = PG_FREE_LIST;
 		} else {
-			vnode_t *vp;
+			struct vmobject *obj;
 
 			ASSERT(pp->p_szc == 0);
 
@@ -2052,7 +2052,7 @@ page_promote(int mnode, pfn_t pfnum, uchar_t new_szc, int flags, int mtype)
 				goto fail_promote;
 			}
 
-			vp = pp->p_vnode;
+			obj = &pp->p_vnode->v_object;
 
 			/*
 			 * We need to be careful not to deadlock
@@ -2064,14 +2064,14 @@ page_promote(int mnode, pfn_t pfnum, uchar_t new_szc, int flags, int mtype)
 			 * freelist and page_lookup() could be trying
 			 * to grab a freelist lock.
 			 */
-			if (!mutex_tryenter(page_vnode_mutex(vp))) {
+			if (!vmobject_trylock(obj)) {
 				page_unlock_nocapture(pp);
 				goto fail_promote;
 			}
 
 			mach_page_sub(&PAGE_CACHELISTS(mnode, bin, mtype), pp);
 			page_hashout(pp, true);
-			mutex_exit(page_vnode_mutex(vp));
+			vmobject_unlock(obj);
 			PP_SETAGED(pp);
 			page_unlock_nocapture(pp);
 			which_list = PG_CACHE_LIST;

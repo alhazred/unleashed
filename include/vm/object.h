@@ -78,6 +78,26 @@ vmobject_move_page_tail(struct vmobject *obj, struct page *page)
 	vmobject_add_page_tail(obj, page);
 }
 
+#define VMOBJECT_LOCKED(obj)	MUTEX_HELD(&(obj)->lock)
+
+static inline void
+vmobject_lock(struct vmobject *obj)
+{
+	mutex_enter(&obj->lock);
+}
+
+static inline int
+vmobject_trylock(struct vmobject *obj)
+{
+	return mutex_tryenter(&obj->lock);
+}
+
+static inline void
+vmobject_unlock(struct vmobject *obj)
+{
+	mutex_exit(&obj->lock);
+}
+
 extern void vmobject_init(struct vmobject *obj);
 extern void vmobject_fini(struct vmobject *obj);
 

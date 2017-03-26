@@ -3566,7 +3566,7 @@ page_create_io(
 	 */
 	while (npages--) {
 top:
-		ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
+		ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
 
 		if (npp == NULL) {
 			/*
@@ -3631,7 +3631,7 @@ top:
 		 * Get the mutex and check to see if it really does
 		 * not exist.
 		 */
-		mutex_enter(page_vnode_mutex(vp));
+		vmobject_lock(&vp->v_object);
 		pp = find_page(vp, off);
 
 		if (pp == NULL) {
@@ -3648,13 +3648,13 @@ top:
 				 * get it over with.  As usual, go down
 				 * holding all the locks.
 				 */
-				ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+				ASSERT(VMOBJECT_LOCKED(&vp->v_object));
 				panic("page_create: hashin fail %p %p %llx",
 				    (void *)pp, (void *)vp, off);
 
 			}
-			ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
-			mutex_exit(page_vnode_mutex(vp));
+			ASSERT(VMOBJECT_LOCKED(&vp->v_object));
+			vmobject_unlock(&vp->v_object);
 
 			/*
 			 * Hat layer locking need not be done to set
@@ -3669,8 +3669,8 @@ top:
 			 */
 			page_set_props(pp, P_REF);
 		} else {
-			ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
-			mutex_exit(page_vnode_mutex(vp));
+			ASSERT(VMOBJECT_LOCKED(&vp->v_object));
+			vmobject_unlock(&vp->v_object);
 
 			/*
 			 * NOTE: This should not happen for pages associated

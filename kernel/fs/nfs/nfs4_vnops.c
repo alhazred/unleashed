@@ -11922,7 +11922,7 @@ nfs4_get_commit(vnode_t *vp)
 	if (IS_SHADOW(vp, rp))
 		vp = RTOV4(rp);
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 
 	/*
 	 * Step through all of the pages associated with this vnode
@@ -11983,7 +11983,7 @@ nfs4_get_commit(vnode_t *vp)
 		page_add(&rp->r_commit.c_pages, pp);
 	}
 
-	mutex_exit(page_vnode_mutex(vp));
+	vmobject_unlock(&vp->v_object);
 }
 
 /*

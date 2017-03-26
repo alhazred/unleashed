@@ -260,7 +260,7 @@ page_lock_es(page_t *pp, se_t se, vnode_t *vnode, reclaim_t reclaim, int es)
 	int		upgraded;
 	int		reclaim_it;
 
-	ASSERT(vnode != NULL ? MUTEX_HELD(page_vnode_mutex(vnode)) : 1);
+	ASSERT(vnode != NULL ? VMOBJECT_LOCKED(&vnode->v_object) : 1);
 
 	VM_STAT_ADD(page_lock_count);
 
@@ -360,7 +360,7 @@ page_lock_es(page_t *pp, se_t se, vnode_t *vnode, reclaim_t reclaim, int es)
 
 		if (vnode != NULL) {
 			VM_STAT_ADD(page_lock_miss_lock);
-			mutex_exit(page_vnode_mutex(vnode));
+			vmobject_unlock(&vnode->v_object);
 		}
 
 		/*
@@ -385,7 +385,7 @@ page_lock_es(page_t *pp, se_t se, vnode_t *vnode, reclaim_t reclaim, int es)
 		 * vnode page lock did not cause any grief to the callers.
 		 */
 		if (vnode != NULL)
-			mutex_enter(page_vnode_mutex(vnode));
+			vmobject_lock(&vnode->v_object);
 	} else {
 		/*
 		 * We have the page lock.

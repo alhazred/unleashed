@@ -6283,7 +6283,7 @@ nfs3_get_commit(vnode_t *vp)
 
 	ASSERT(rp->r_flags & RCOMMIT);
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 
 	/*
 	 * Step through all of the pages associated with this vnode
@@ -6346,7 +6346,7 @@ nfs3_get_commit(vnode_t *vp)
 		page_add(&rp->r_commit.c_pages, pp);
 	}
 
-	mutex_exit(page_vnode_mutex(vp));
+	vmobject_unlock(&vp->v_object);
 }
 
 /*

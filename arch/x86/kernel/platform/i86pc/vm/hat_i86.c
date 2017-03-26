@@ -3174,7 +3174,7 @@ hat_page_setattr(struct page *pp, uint_t flag)
 
 	if ((flag & P_MOD) != 0 && vp != NULL && IS_VMODSORT(vp) &&
 	    !noshuffle) {
-		mutex_enter(page_vnode_mutex(vp));
+		vmobject_lock(&vp->v_object);
 		locked = true;
 	}
 
@@ -3189,7 +3189,7 @@ hat_page_setattr(struct page *pp, uint_t flag)
 		if (vmobject_get_prev(&vp->v_object, pp) != NULL ||
 		    vmobject_get_next(&vp->v_object, pp) != NULL)
 			vmobject_move_page_tail(&vp->v_object, pp);
-		mutex_exit(page_vnode_mutex(vp));
+		vmobject_unlock(&vp->v_object);
 	}
 }
 

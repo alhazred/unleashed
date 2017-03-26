@@ -581,7 +581,7 @@ map_page_proc(page_t *pp, void *arg, uint_t flags)
 	 * the mutex which can lead to the page being captured and eventually
 	 * end up here.
 	 */
-	if (mutex_owned(page_vnode_mutex(vp))) {
+	if (VMOBJECT_LOCKED(&vp->v_object)) {
 		rw_exit(&pph_rwlock);
 		page_free(pp, 1);
 		return (-1);

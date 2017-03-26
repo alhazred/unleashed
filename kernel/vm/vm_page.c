@@ -719,11 +719,11 @@ page_lookup_create(
 	ulong_t		index;
 	uint_t		es;
 
-	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
+	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
 	VM_STAT_ADD(page_lookup_cnt[0]);
 	ASSERT(newpp ? PAGE_EXCL(newpp) : 1);
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 top:
 	pp = find_page(vp, off);
 
@@ -740,7 +740,7 @@ top:
 
 		VM_STAT_ADD(page_lookup_cnt[6]);
 
-		mutex_exit(page_vnode_mutex(vp));
+		vmobject_unlock(&vp->v_object);
 
 		if (newpp != NULL && pp->p_szc < newpp->p_szc &&
 		    PAGE_EXCL(pp) && nrelocp != NULL) {
@@ -790,20 +790,20 @@ top:
 		 * holding all the locks.
 		 */
 		if (!page_hashin(newpp, vp, off, true)) {
-			ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+			ASSERT(VMOBJECT_LOCKED(&vp->v_object));
 			panic("page_lookup_create: hashin failed %p %p %llx",
 			    (void *)newpp, (void *)vp, off);
 			/*NOTREACHED*/
 		}
-		ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
-		mutex_exit(page_vnode_mutex(vp));
+		ASSERT(VMOBJECT_LOCKED(&vp->v_object));
+		vmobject_unlock(&vp->v_object);
 		page_set_props(newpp, P_REF);
 		page_io_lock(newpp);
 		pp = newpp;
 		se = SE_EXCL;
 	} else {
 		VM_STAT_ADD(page_lookup_cnt[19]);
-		mutex_exit(page_vnode_mutex(vp));
+		vmobject_unlock(&vp->v_object);
 	}
 
 	ASSERT(pp ? PAGE_LOCKED_SE(pp, se) : 1);
@@ -824,10 +824,10 @@ page_lookup_nowait(vnode_t *vp, uoff_t off, se_t se)
 {
 	page_t		*pp;
 
-	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
+	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
 	VM_STAT_ADD(page_lookup_nowait_cnt[0]);
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 	pp = find_page(vp, off);
 
 	if (pp == NULL || PP_ISFREE(pp)) {
@@ -847,7 +847,7 @@ page_lookup_nowait(vnode_t *vp, uoff_t off, se_t se)
 		}
 	}
 
-	mutex_exit(page_vnode_mutex(vp));
+	vmobject_unlock(&vp->v_object);
 
 	ASSERT(pp ? PAGE_LOCKED_SE(pp, se) : 1);
 
@@ -864,12 +864,12 @@ page_find(vnode_t *vp, uoff_t off)
 {
 	page_t		*pp;
 
-	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
+	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
 	VM_STAT_ADD(page_find_cnt);
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 	pp = find_page(vp, off);
-	mutex_exit(page_vnode_mutex(vp));
+	vmobject_unlock(&vp->v_object);
 
 	ASSERT(pp == NULL || PAGE_LOCKED(pp) || panicstr);
 	return (pp);
@@ -889,12 +889,12 @@ page_exists(vnode_t *vp, uoff_t off)
 {
 	page_t *page;
 
-	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
+	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
 	VM_STAT_ADD(page_exists_cnt);
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 	page = find_page(vp, off);
-	mutex_exit(page_vnode_mutex(vp));
+	vmobject_unlock(&vp->v_object);
 
 	return (page);
 }
@@ -937,9 +937,9 @@ again:
 		return (0);
 	}
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 	pp = find_page(vp, off);
-	mutex_exit(page_vnode_mutex(vp));
+	vmobject_unlock(&vp->v_object);
 
 	VM_STAT_ADD(page_exphcontg[1]);
 
@@ -1155,17 +1155,17 @@ page_exists_forreal(vnode_t *vp, uoff_t off, uint_t *szc)
 	page_t		*pp;
 	int		rc = 0;
 
-	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
+	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
 	ASSERT(szc != NULL);
 	VM_STAT_ADD(page_exists_forreal_cnt);
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 	pp = find_page(vp, off);
 	if (pp != NULL) {
 		*szc = pp->p_szc;
 		rc = 1;
 	}
-	mutex_exit(page_vnode_mutex(vp));
+	vmobject_unlock(&vp->v_object);
 	return (rc);
 }
 
@@ -2180,7 +2180,7 @@ page_create_va(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
 		page_t *pp;
 
 top:
-		ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
+		ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
 
 		if (npp == NULL) {
 			/*
@@ -2239,7 +2239,7 @@ top:
 		 * Get the mutex and check to see if it really does
 		 * not exist.
 		 */
-		mutex_enter(page_vnode_mutex(vp));
+		vmobject_lock(&vp->v_object);
 		pp = find_page(vp, off);
 		if (pp == NULL) {
 			VM_STAT_ADD(page_create_new);
@@ -2255,14 +2255,14 @@ top:
 				 * now and get it over with.  As usual, go
 				 * down holding all the locks.
 				 */
-				ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+				ASSERT(VMOBJECT_LOCKED(&vp->v_object));
 				panic("page_create: "
 				    "hashin failed %p %p %llx",
 				    (void *)pp, (void *)vp, off);
 				/*NOTREACHED*/
 			}
-			ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
-			mutex_exit(page_vnode_mutex(vp));
+			ASSERT(VMOBJECT_LOCKED(&vp->v_object));
+			vmobject_unlock(&vp->v_object);
 
 			/*
 			 * Hat layer locking need not be done to set
@@ -2285,7 +2285,7 @@ top:
 				 * wanted all new pages.  Undo all of the work
 				 * we have done.
 				 */
-				mutex_exit(page_vnode_mutex(vp));
+				vmobject_unlock(&vp->v_object);
 				while (plist != NULL) {
 					pp = plist;
 					page_sub(&plist, pp);
@@ -2304,11 +2304,11 @@ top:
 				 * Start all over again if we blocked trying
 				 * to lock the page.
 				 */
-				mutex_exit(page_vnode_mutex(vp));
+				vmobject_unlock(&vp->v_object);
 				VM_STAT_ADD(page_create_page_lock_failed);
 				goto top;
 			}
-			mutex_exit(page_vnode_mutex(vp));
+			vmobject_unlock(&vp->v_object);
 
 			if (PP_ISFREE(pp)) {
 				ASSERT(PP_ISAGED(pp) == 0);
@@ -2687,7 +2687,7 @@ page_reclaim(page_t *pp, vnode_t *vnode)
 	int		enough;
 	uint_t		i;
 
-	ASSERT(vnode != NULL ? MUTEX_HELD(page_vnode_mutex(vnode)) : 1);
+	ASSERT(vnode != NULL ? VMOBJECT_LOCKED(&vnode->v_object) : 1);
 	ASSERT(PAGE_EXCL(pp) && PP_ISFREE(pp));
 
 	/*
@@ -2758,7 +2758,7 @@ page_reclaim_nomem:
 			 */
 			if (vnode != NULL) {
 				VM_STAT_ADD(page_reclaim_zero_locked);
-				mutex_exit(page_vnode_mutex(vnode));
+				vmobject_unlock(&vnode->v_object);
 			}
 			page_unlock(pp);
 
@@ -2781,7 +2781,7 @@ page_reclaim_nomem:
 			mutex_exit(&new_freemem_lock);
 
 			if (vnode != NULL)
-				mutex_enter(page_vnode_mutex(vnode));
+				vmobject_lock(&vnode->v_object);
 
 			return (0);
 		}
@@ -3001,7 +3001,7 @@ page_rename(page_t *opp, vnode_t *vp, uoff_t off)
 	int		ocowcnt = 0;
 
 	ASSERT(PAGE_EXCL(opp) && !page_iolock_assert(opp));
-	ASSERT(MUTEX_NOT_HELD(page_vnode_mutex(vp)));
+	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
 	ASSERT(PP_ISFREE(opp) == 0);
 
 	VM_STAT_ADD(page_rename_count);
@@ -3025,7 +3025,7 @@ page_rename(page_t *opp, vnode_t *vp, uoff_t off)
 	page_hashout(opp, false);
 	PP_CLRAGED(opp);
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 top:
 	/*
 	 * Look for an existing page with this name and destroy it if found.
@@ -3074,7 +3074,7 @@ top:
 			 * This is also not a lock protocol violation,
 			 * but rather the proper way to do things.
 			 */
-			mutex_exit(page_vnode_mutex(vp));
+			vmobject_unlock(&vp->v_object);
 			(void) hat_pageunload(pp, HAT_FORCE_PGUNLOAD);
 			if (pp->p_szc != 0) {
 				ASSERT(!IS_SWAPFSVP(vp));
@@ -3082,14 +3082,14 @@ top:
 				page_demote_vp_pages(pp);
 				ASSERT(pp->p_szc == 0);
 			}
-			mutex_enter(page_vnode_mutex(vp));
+			vmobject_lock(&vp->v_object);
 		} else if (pp->p_szc != 0) {
 			ASSERT(!IS_SWAPFSVP(vp));
 			ASSERT(!VN_ISKAS(vp));
-			mutex_exit(page_vnode_mutex(vp));
+			vmobject_unlock(&vp->v_object);
 			page_demote_vp_pages(pp);
 			ASSERT(pp->p_szc == 0);
-			mutex_enter(page_vnode_mutex(vp));
+			vmobject_lock(&vp->v_object);
 		}
 		page_hashout(pp, true);
 	}
@@ -3107,8 +3107,8 @@ top:
 		/*NOTREACHED*/
 	}
 
-	ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
-	mutex_exit(page_vnode_mutex(vp));
+	ASSERT(VMOBJECT_LOCKED(&vp->v_object));
+	vmobject_unlock(&vp->v_object);
 
 	/*
 	 * Now that we have dropped phm, lets get around to finishing up
@@ -3162,7 +3162,7 @@ page_do_hashin(page_t *page, vnode_t *vnode, uoff_t offset)
 
 	ASSERT(PAGE_EXCL(page));
 	ASSERT(vnode != NULL);
-	ASSERT(MUTEX_HELD(page_vnode_mutex(vnode)));
+	ASSERT(VMOBJECT_LOCKED(&vnode->v_object));
 
 	/*
 	 * Be sure to set these up before the page is inserted into the AVL
@@ -3219,13 +3219,13 @@ page_hashin(page_t *pp, vnode_t *vp, uoff_t offset, bool locked)
 
 	if (!locked) {
 		VM_STAT_ADD(hashin_not_held);
-		mutex_enter(page_vnode_mutex(vp));
+		vmobject_lock(&vp->v_object);
 	}
 
 	rc = page_do_hashin(pp, vp, offset);
 
 	if (!locked)
-		mutex_exit(page_vnode_mutex(vp));
+		vmobject_unlock(&vp->v_object);
 
 	if (rc == 0)
 		VM_STAT_ADD(hashin_already);
@@ -3245,7 +3245,7 @@ page_do_hashout(page_t *page)
 	vnode_t	*vnode = page->p_vnode;
 
 	ASSERT(vnode != NULL);
-	ASSERT(MUTEX_HELD(page_vnode_mutex(vnode)));
+	ASSERT(VMOBJECT_LOCKED(&vnode->v_object));
 
 	avl_remove(&vnode->v_object.tree, page);
 
@@ -3280,13 +3280,13 @@ page_hashout(page_t *pp, bool locked)
 
 	if (!locked) {
 		VM_STAT_ADD(hashout_not_held);
-		mutex_enter(page_vnode_mutex(vp));
+		vmobject_lock(&vp->v_object);
 	}
 
 	page_do_hashout(pp);
 
 	if (!locked)
-		mutex_exit(page_vnode_mutex(vp));
+		vmobject_unlock(&vp->v_object);
 
 	/*
 	 * Wake up processes waiting for this page.  The page's
@@ -4228,7 +4228,7 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	ASSERT(PAGE_EXCL(old));
 	ASSERT(PAGE_EXCL(new));
 	ASSERT(vp != NULL);
-	ASSERT(MUTEX_HELD(page_vnode_mutex(vp)));
+	ASSERT(VMOBJECT_LOCKED(&vp->v_object));
 
 	/*
 	 * update new and replace old with new on the page hash list
@@ -4288,13 +4288,13 @@ page_relocate_hash(page_t *pp_new, page_t *pp_old)
 	ASSERT(vp != NULL);
 	ASSERT(pp_new->p_vnode == NULL);
 
-	mutex_enter(page_vnode_mutex(vp));
+	vmobject_lock(&vp->v_object);
 
 	page_do_relocate_hash(pp_new, pp_old);
 	pp_new->p_fsdata = pp_old->p_fsdata;
 	pp_old->p_fsdata = 0;
 
-	mutex_exit(page_vnode_mutex(vp));
+	vmobject_unlock(&vp->v_object);
 
 	/*
 	 * The page_struct_lock need not be acquired for lckcnt and
@@ -6718,11 +6718,11 @@ page_unlock_capture(page_t *pp)
 	 * before they hashin to a vnode that they do not currently own the
 	 * vphm mutex otherwise there will be a panic.
 	 */
-	if (mutex_owned(page_vnode_mutex(&retired_pages))) {
+	if (VMOBJECT_LOCKED(&retired_pages.v_object)) {
 		page_unlock_nocapture(pp);
 		return;
 	}
-	if (pp->p_vnode != NULL && mutex_owned(page_vnode_mutex(pp->p_vnode))) {
+	if (pp->p_vnode != NULL && VMOBJECT_LOCKED(&pp->p_vnode->v_object)) {
 		page_unlock_nocapture(pp);
 		return;
 	}
