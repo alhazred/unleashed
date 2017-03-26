@@ -416,7 +416,7 @@ sum_out(char const *pretty, kstat_t *ks, char *name)
 static void
 zero_out(char const *pretty)
 {
-	(void) printf("%9llu %s\n", 0, pretty);
+	(void) printf("%9u %s\n", 0, pretty);
 }
 
 static void
