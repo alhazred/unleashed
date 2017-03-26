@@ -9,6 +9,12 @@ __${.PARSEFILE}__:
 NEED_SOLINKS?= yes
 .endif
 
+MAPFILE_VERS=${.CURDIR}/mapfile-vers
+.if exists(${MAPFILE_VERS})
+SHLIB_MAJOR=	1
+SHLIB_LDADD+=	-M${MAPFILE_VERS}
+.else
+
 SHLIB_VERSION_FILE?= ${.CURDIR}/shlib_version
 .if !defined(SHLIB_MAJOR) && exists(${SHLIB_VERSION_FILE})
 SHLIB_MAJOR != . ${SHLIB_VERSION_FILE} ; echo $$major
@@ -24,6 +30,7 @@ print-shlib-$x:
 	@false
 .endif
 .endfor
+.endif
 
 SHLIB_FULLVERSION ?= ${${SHLIB_MAJOR} ${SHLIB_MINOR} ${SHLIB_TEENY}:L:ts.}
 SHLIB_FULLVERSION := ${SHLIB_FULLVERSION}
