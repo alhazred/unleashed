@@ -752,7 +752,7 @@ ixgbe_m_propinfo(void *arg, const char *pr_name, mac_prop_id_t pr_num,
 	}
 }
 
-boolean_t
+bool
 ixgbe_param_locked(mac_prop_id_t pr_num)
 {
 	/*

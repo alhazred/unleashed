@@ -53,6 +53,7 @@ extern "C" {
 #include <sys/ddi.h>
 #include <sys/dditypes.h>
 #include <sys/sunddi.h>
+#include <sys/stdbool.h>
 #include <sys/pci.h>
 #include <sys/atomic.h>
 #include <sys/note.h>
@@ -71,8 +72,6 @@ void ixgbe_write_pci_cfg(struct ixgbe_hw *, uint32_t, uint32_t);
 
 #define	OS_DEP(hw)		((struct ixgbe_osdep *)((hw)->back))
 
-#define	false		B_FALSE
-#define	true		B_TRUE
 #define	FALSE		B_FALSE
 #define	TRUE		B_TRUE
 
@@ -137,7 +136,6 @@ typedef uint8_t		u8;
 typedef	uint16_t 	u16;
 typedef	uint32_t	u32;
 typedef	uint64_t	u64;
-typedef boolean_t	bool;
 
 /* shared code requires this */
 #define	__le16  u16

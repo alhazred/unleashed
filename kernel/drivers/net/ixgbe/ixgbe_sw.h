@@ -399,7 +399,7 @@ typedef struct ixgbe_tx_context {
 	uint32_t		l4_proto;
 	uint32_t		mss;
 	uint32_t		l4_hdr_len;
-	boolean_t		lso_flag;
+	bool			lso_flag;
 } ixgbe_tx_context_t;
 
 /*
@@ -448,7 +448,7 @@ typedef struct rx_control_block {
 	struct ixgbe_rx_data	*rx_data;
 	int			lro_next;	/* Index of next rcb */
 	int			lro_prev;	/* Index of previous rcb */
-	boolean_t		lro_pkt;	/* Flag for LRO rcb */
+	bool			lro_pkt;	/* Flag for LRO rcb */
 } rx_control_block_t;
 
 /*
@@ -501,7 +501,7 @@ typedef struct ixgbe_tx_ring {
 	uint32_t		ring_size; /* Tx descriptor ring size */
 	uint32_t		free_list_size;	/* Tx free list size */
 
-	boolean_t		reschedule;
+	bool			reschedule;
 	uint32_t		recycle_fail;
 	uint32_t		stall_watchdog;
 
@@ -662,7 +662,7 @@ typedef struct ixgbe {
 	uint32_t		num_rx_rings;	/* Number of rx rings in use */
 	uint32_t		rx_ring_size;	/* Rx descriptor ring size */
 	uint32_t		rx_buf_size;	/* Rx buffer size */
-	boolean_t		lro_enable;	/* Large Receive Offload */
+	bool			lro_enable;	/* Large Receive Offload */
 	uint64_t		lro_pkt_count;	/* LRO packet count */
 	/*
 	 * Receive Groups
@@ -678,18 +678,18 @@ typedef struct ixgbe {
 	uint32_t		tx_ring_size;	/* Tx descriptor ring size */
 	uint32_t		tx_buf_size;	/* Tx buffer size */
 
-	boolean_t		tx_ring_init;
-	boolean_t		tx_head_wb_enable; /* Tx head wrtie-back */
-	boolean_t		tx_hcksum_enable; /* Tx h/w cksum offload */
-	boolean_t 		lso_enable; 	/* Large Segment Offload */
-	boolean_t 		mr_enable; 	/* Multiple Tx and Rx Ring */
-	boolean_t		relax_order_enable; /* Relax Order */
+	bool			tx_ring_init;
+	bool			tx_head_wb_enable; /* Tx head wrtie-back */
+	bool			tx_hcksum_enable; /* Tx h/w cksum offload */
+	bool			lso_enable;	/* Large Segment Offload */
+	bool			mr_enable;	/* Multiple Tx and Rx Ring */
+	bool			relax_order_enable; /* Relax Order */
 	uint32_t		classify_mode;	/* Classification mode */
 	uint32_t		tx_copy_thresh;	/* Tx copy threshold */
 	uint32_t		tx_recycle_thresh; /* Tx recycle threshold */
 	uint32_t		tx_overload_thresh; /* Tx overload threshold */
 	uint32_t		tx_resched_thresh; /* Tx reschedule threshold */
-	boolean_t		rx_hcksum_enable; /* Rx h/w cksum offload */
+	bool			rx_hcksum_enable; /* Rx h/w cksum offload */
 	uint32_t		rx_copy_thresh; /* Rx copy threshold */
 	uint32_t		rx_limit_per_intr; /* Rx pkts per interrupt */
 	uint32_t		intr_throttling[MAX_INTR_VECTOR];
@@ -711,11 +711,11 @@ typedef struct ixgbe {
 	kmutex_t		watchdog_lock;
 	kmutex_t		rx_pending_lock;
 
-	boolean_t		watchdog_enable;
-	boolean_t		watchdog_start;
+	bool			watchdog_enable;
+	bool			watchdog_start;
 	timeout_id_t		watchdog_tid;
 
-	boolean_t		unicst_init;
+	bool			unicst_init;
 	uint32_t		unicst_avail;
 	uint32_t		unicst_total;
 	ixgbe_ether_addr_t	unicst_addr[MAX_NUM_UNICAST_ADDRESSES];
@@ -724,7 +724,7 @@ typedef struct ixgbe {
 
 	ulong_t			sys_page_size;
 
-	boolean_t		link_check_complete;
+	bool			link_check_complete;
 	hrtime_t		link_check_hrtime;
 	ddi_periodic_t		periodic_id; /* for link check timer func */
 
@@ -839,9 +839,9 @@ void ixgbe_free_rx_ring_data(ixgbe_rx_data_t *rx_data);
 /*
  * Function prototypes in ixgbe_main.c
  */
-int ixgbe_start(ixgbe_t *, boolean_t);
-void ixgbe_stop(ixgbe_t *, boolean_t);
-int ixgbe_driver_setup_link(ixgbe_t *, boolean_t);
+int ixgbe_start(ixgbe_t *, bool);
+void ixgbe_stop(ixgbe_t *, bool);
+int ixgbe_driver_setup_link(ixgbe_t *, bool);
 int ixgbe_multicst_add(ixgbe_t *, const uint8_t *);
 int ixgbe_multicst_remove(ixgbe_t *, const uint8_t *);
 enum ioc_reply ixgbe_loopback_ioctl(ixgbe_t *, struct iocblk *, mblk_t *);
@@ -877,7 +877,7 @@ void ixgbe_m_propinfo(void *, const char *, mac_prop_id_t,
     mac_prop_info_handle_t);
 int ixgbe_set_priv_prop(ixgbe_t *, const char *, uint_t, const void *);
 int ixgbe_get_priv_prop(ixgbe_t *, const char *, uint_t, void *);
-boolean_t ixgbe_param_locked(mac_prop_id_t);
+bool ixgbe_param_locked(mac_prop_id_t);
 
 /*
  * Function prototypes in ixgbe_rx.c

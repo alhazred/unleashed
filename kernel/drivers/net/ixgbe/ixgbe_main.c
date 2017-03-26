@@ -51,8 +51,8 @@ static int ixgbe_chip_start(ixgbe_t *);
 static void ixgbe_chip_stop(ixgbe_t *);
 static int ixgbe_reset(ixgbe_t *);
 static void ixgbe_tx_clean(ixgbe_t *);
-static boolean_t ixgbe_tx_drain(ixgbe_t *);
-static boolean_t ixgbe_rx_drain(ixgbe_t *);
+static bool ixgbe_tx_drain(ixgbe_t *);
+static bool ixgbe_rx_drain(ixgbe_t *);
 static int ixgbe_alloc_rings(ixgbe_t *);
 static void ixgbe_free_rings(ixgbe_t *);
 static int ixgbe_alloc_rx_data(ixgbe_t *);
@@ -84,11 +84,11 @@ static void ixgbe_arm_watchdog_timer(ixgbe_t *);
 static void ixgbe_restart_watchdog_timer(ixgbe_t *);
 static void ixgbe_disable_adapter_interrupts(ixgbe_t *);
 static void ixgbe_enable_adapter_interrupts(ixgbe_t *);
-static boolean_t is_valid_mac_addr(uint8_t *);
-static boolean_t ixgbe_stall_check(ixgbe_t *);
-static boolean_t ixgbe_set_loopback_mode(ixgbe_t *, uint32_t);
+static bool is_valid_mac_addr(uint8_t *);
+static bool ixgbe_stall_check(ixgbe_t *);
+static bool ixgbe_set_loopback_mode(ixgbe_t *, uint32_t);
 static void ixgbe_set_internal_mac_loopback(ixgbe_t *);
-static boolean_t ixgbe_find_mac_address(ixgbe_t *);
+static bool ixgbe_find_mac_address(ixgbe_t *);
 static int ixgbe_alloc_intrs(ixgbe_t *);
 static int ixgbe_alloc_intr_handles(ixgbe_t *, int);
 static int ixgbe_add_intr_handlers(ixgbe_t *);
@@ -1722,11 +1722,11 @@ ixgbe_tx_clean(ixgbe_t *ixgbe)
  * ixgbe_tx_drain - Drain the tx rings to allow pending packets to be
  * transmitted.
  */
-static boolean_t
+static bool
 ixgbe_tx_drain(ixgbe_t *ixgbe)
 {
 	ixgbe_tx_ring_t *tx_ring;
-	boolean_t done;
+	bool done;
 	int i, j;
 
 	/*
@@ -1760,10 +1760,10 @@ ixgbe_tx_drain(ixgbe_t *ixgbe)
 /*
  * ixgbe_rx_drain - Wait for all rx buffers to be released by upper layer.
  */
-static boolean_t
+static bool
 ixgbe_rx_drain(ixgbe_t *ixgbe)
 {
-	boolean_t done = B_TRUE;
+	bool done = B_TRUE;
 	int i;
 
 	/*
@@ -1792,7 +1792,7 @@ ixgbe_rx_drain(ixgbe_t *ixgbe)
  * ixgbe_start - Start the driver/chipset.
  */
 int
-ixgbe_start(ixgbe_t *ixgbe, boolean_t alloc_buffer)
+ixgbe_start(ixgbe_t *ixgbe, bool alloc_buffer)
 {
 	struct ixgbe_hw *hw = &ixgbe->hw;
 	int i;
@@ -1893,7 +1893,7 @@ start_failure:
  * ixgbe_stop - Stop the driver/chipset.
  */
 void
-ixgbe_stop(ixgbe_t *ixgbe, boolean_t free_buffer)
+ixgbe_stop(ixgbe_t *ixgbe, bool free_buffer)
 {
 	int i;
 
@@ -3476,7 +3476,7 @@ ixgbe_init_params(ixgbe_t *ixgbe)
 {
 	struct ixgbe_hw *hw = &ixgbe->hw;
 	ixgbe_link_speed speeds_supported = 0;
-	boolean_t negotiate;
+	bool negotiate;
 
 	/*
 	 * Get a list of speeds the adapter supports. If the hw struct hasn't
@@ -3607,7 +3607,7 @@ ixgbe_get_prop(ixgbe_t *ixgbe,
  * ixgbe_driver_setup_link - Using the link properties to setup the link.
  */
 int
-ixgbe_driver_setup_link(ixgbe_t *ixgbe, boolean_t setup_hw)
+ixgbe_driver_setup_link(ixgbe_t *ixgbe, bool setup_hw)
 {
 	struct ixgbe_hw *hw = &ixgbe->hw;
 	ixgbe_link_speed advertised = 0;
@@ -3665,8 +3665,8 @@ ixgbe_driver_link_check(ixgbe_t *ixgbe)
 {
 	struct ixgbe_hw *hw = &ixgbe->hw;
 	ixgbe_link_speed speed = IXGBE_LINK_SPEED_UNKNOWN;
-	boolean_t link_up = B_FALSE;
-	boolean_t link_changed = B_FALSE;
+	bool link_up = B_FALSE;
+	bool link_changed = B_FALSE;
 
 	ASSERT(mutex_owned(&ixgbe->gen_lock));
 
@@ -3790,7 +3790,7 @@ ixgbe_overtemp_check(void *arg)
 	struct ixgbe_hw *hw = &ixgbe->hw;
 	uint32_t eicr = ixgbe->eicr;
 	ixgbe_link_speed speed;
-	boolean_t link_up;
+	bool link_up;
 
 	mutex_enter(&ixgbe->gen_lock);
 
@@ -3946,11 +3946,11 @@ out:
  * value exceeds the threshold, the ixgbe is assumed to
  * have stalled and need to be reset.
  */
-static boolean_t
+static bool
 ixgbe_stall_check(ixgbe_t *ixgbe)
 {
 	ixgbe_tx_ring_t *tx_ring;
-	boolean_t result;
+	bool result;
 	int i;
 
 	if (ixgbe->link_state != LINK_STATE_UP)
@@ -3989,7 +3989,7 @@ ixgbe_stall_check(ixgbe_t *ixgbe)
 /*
  * is_valid_mac_addr - Check if the mac address is valid.
  */
-static boolean_t
+static bool
 is_valid_mac_addr(uint8_t *mac_addr)
 {
 	const uint8_t addr_test1[6] = { 0, 0, 0, 0, 0, 0 };
@@ -4003,7 +4003,7 @@ is_valid_mac_addr(uint8_t *mac_addr)
 	return (B_TRUE);
 }
 
-static boolean_t
+static bool
 ixgbe_find_mac_address(ixgbe_t *ixgbe)
 {
 #ifdef __sparc
@@ -4012,7 +4012,7 @@ ixgbe_find_mac_address(ixgbe_t *ixgbe)
 	struct ether_addr sysaddr;
 	uint_t nelts;
 	int err;
-	boolean_t found = B_FALSE;
+	bool found = B_FALSE;
 
 	/*
 	 * The "vendor's factory-set address" may already have
@@ -4365,7 +4365,7 @@ ixgbe_loopback_ioctl(ixgbe_t *ixgbe, struct iocblk *iocp, mblk_t *mp)
 /*
  * ixgbe_set_loopback_mode - Setup loopback based on the loopback mode.
  */
-static boolean_t
+static bool
 ixgbe_set_loopback_mode(ixgbe_t *ixgbe, uint32_t mode)
 {
 	if (mode == ixgbe->loopback_mode)
@@ -4621,7 +4621,7 @@ ixgbe_intr_legacy(void *arg1, void *arg2)
 	ixgbe_rx_ring_t *rx_ring;
 	uint32_t eicr;
 	mblk_t *mp;
-	boolean_t tx_reschedule;
+	bool tx_reschedule;
 	uint_t result;
 
 	_NOTE(ARGUNUSED(arg2));
@@ -5749,7 +5749,7 @@ ixgbe_get_hw_state(ixgbe_t *ixgbe)
 {
 	struct ixgbe_hw *hw = &ixgbe->hw;
 	ixgbe_link_speed speed = 0;
-	boolean_t link_up = B_FALSE;
+	bool link_up = B_FALSE;
 	uint32_t pcs1g_anlp = 0;
 
 	ASSERT(mutex_owned(&ixgbe->gen_lock));
