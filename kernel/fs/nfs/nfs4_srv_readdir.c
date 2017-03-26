@@ -30,6 +30,7 @@
 
 #include <sys/param.h>
 #include <sys/types.h>
+#include <sys/stdbool.h>
 #include <sys/systm.h>
 #include <sys/cred.h>
 #include <sys/buf.h>
@@ -427,8 +428,6 @@ rfs4_op_readdir(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	ulong_t pc_val;
 	uint64_t maxread;
 	uint64_t maxwrite;
-	uint_t true = TRUE;
-	uint_t false = FALSE;
 	uid_t lastuid;
 	gid_t lastgid;
 	int lu_set, lg_set;
