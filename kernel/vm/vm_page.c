@@ -269,15 +269,15 @@ uint_t  page_create_large_cnt[10];
 
 #endif
 
-static inline page_t *
-find_page(vnode_t *vnode, uoff_t off)
+static inline struct page *
+find_page(struct vmobject *obj, uoff_t off)
 {
-	page_t key = {
+	struct page key = {
 		.p_offset = off,
 	};
-	page_t *page;
+	struct page *page;
 
-	page = avl_find(&vnode->v_object.tree, &key, NULL);
+	page = avl_find(&obj->tree, &key, NULL);
 
 #ifdef	VM_STATS
 	if (page != NULL)
@@ -725,7 +725,7 @@ page_lookup_create(
 
 	vmobject_lock(&vp->v_object);
 top:
-	pp = find_page(vp, off);
+	pp = find_page(&vp->v_object, off);
 
 	if (pp != NULL) {
 		VM_STAT_ADD(page_lookup_cnt[1]);
@@ -828,7 +828,7 @@ page_lookup_nowait(vnode_t *vp, uoff_t off, se_t se)
 	VM_STAT_ADD(page_lookup_nowait_cnt[0]);
 
 	vmobject_lock(&vp->v_object);
-	pp = find_page(vp, off);
+	pp = find_page(&vp->v_object, off);
 
 	if (pp == NULL || PP_ISFREE(pp)) {
 		VM_STAT_ADD(page_lookup_nowait_cnt[2]);
@@ -868,7 +868,7 @@ page_find(vnode_t *vp, uoff_t off)
 	VM_STAT_ADD(page_find_cnt);
 
 	vmobject_lock(&vp->v_object);
-	pp = find_page(vp, off);
+	pp = find_page(&vp->v_object, off);
 	vmobject_unlock(&vp->v_object);
 
 	ASSERT(pp == NULL || PAGE_LOCKED(pp) || panicstr);
@@ -893,7 +893,7 @@ page_exists(vnode_t *vp, uoff_t off)
 	VM_STAT_ADD(page_exists_cnt);
 
 	vmobject_lock(&vp->v_object);
-	page = find_page(vp, off);
+	page = find_page(&vp->v_object, off);
 	vmobject_unlock(&vp->v_object);
 
 	return (page);
@@ -938,7 +938,7 @@ again:
 	}
 
 	vmobject_lock(&vp->v_object);
-	pp = find_page(vp, off);
+	pp = find_page(&vp->v_object, off);
 	vmobject_unlock(&vp->v_object);
 
 	VM_STAT_ADD(page_exphcontg[1]);
@@ -1160,7 +1160,7 @@ page_exists_forreal(vnode_t *vp, uoff_t off, uint_t *szc)
 	VM_STAT_ADD(page_exists_forreal_cnt);
 
 	vmobject_lock(&vp->v_object);
-	pp = find_page(vp, off);
+	pp = find_page(&vp->v_object, off);
 	if (pp != NULL) {
 		*szc = pp->p_szc;
 		rc = 1;
@@ -2240,7 +2240,7 @@ top:
 		 * not exist.
 		 */
 		vmobject_lock(&vp->v_object);
-		pp = find_page(vp, off);
+		pp = find_page(&vp->v_object, off);
 		if (pp == NULL) {
 			VM_STAT_ADD(page_create_new);
 			pp = npp;
@@ -3036,7 +3036,7 @@ top:
 	 * lock, again preventing another page from being created with
 	 * this identity.
 	 */
-	pp = find_page(vp, off);
+	pp = find_page(&vp->v_object, off);
 	if (pp != NULL) {
 		VM_STAT_ADD(page_rename_exists);
 

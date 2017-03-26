@@ -479,8 +479,8 @@ segkmem_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t size,
 				if (!hat_probe(kas.a_hat, addr)) {
 					addr -= PAGESIZE;
 					while (--pg >= 0) {
-						pp = page_find(vp, (uoff_t)
-						    (uintptr_t)addr);
+						pp = page_find(&vp->v_object,
+						    (uoff_t)(uintptr_t)addr);
 						if (pp)
 							page_unlock(pp);
 						addr -= PAGESIZE;
@@ -495,7 +495,7 @@ segkmem_fault(struct hat *hat, struct seg *seg, caddr_t addr, size_t size,
 		return (0);
 	case F_SOFTUNLOCK:
 		while (npages--) {
-			pp = page_find(vp, (uoff_t)(uintptr_t)addr);
+			pp = page_find(&vp->v_object, (uoff_t)(uintptr_t)addr);
 			if (pp)
 				page_unlock(pp);
 			addr += PAGESIZE;
@@ -996,7 +996,7 @@ segkmem_free_vn(vmem_t *vmp, void *inaddr, size_t size, struct vnode *vp,
 
 	for (eaddr = addr + size; addr < eaddr; addr += PAGESIZE) {
 #if defined(__x86)
-		pp = page_find(vp, (uoff_t)(uintptr_t)addr);
+		pp = page_find(&vp->v_object, (uoff_t)(uintptr_t)addr);
 		if (pp == NULL)
 			panic("segkmem_free: page not found");
 		if (!page_tryupgrade(pp)) {
