@@ -412,7 +412,7 @@ dnlc_init()
 	 * vn_reinit doesn't call vmobject_init - that is normally done by
 	 * the vn_cache constructor.
 	 */
-	vmobject_init(&negative_cache_vnode.v_object);
+	vmobject_init(&negative_cache_vnode.v_object, &negative_cache_vnode);
 	vn_reinit(&negative_cache_vnode);
 
 	/*

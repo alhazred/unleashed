@@ -3856,7 +3856,7 @@ segdev_init(void)
 {
 	struct seg kseg;
 
-	vmobject_init(&trashvp.v_object);
+	vmobject_init(&trashvp.v_object, &trashvp);
 
 	umem_np_arena = vmem_create("umem_np", NULL, 0, PAGESIZE,
 	    devmap_alloc_pages, devmap_free_pages, heap_arena,

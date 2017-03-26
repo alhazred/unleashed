@@ -7162,13 +7162,15 @@ vmobject_cmp(const void *va, const void *vb)
 }
 
 void
-vmobject_init(struct vmobject *obj)
+vmobject_init(struct vmobject *obj, struct vnode *vnode)
 {
 	avl_create(&obj->tree, vmobject_cmp, sizeof (struct page),
 	    offsetof(struct page, p_object_node));
 	list_create(&obj->list, sizeof (struct page),
 	    offsetof(struct page, p_list.vnode));
 	mutex_init(&obj->lock, NULL, MUTEX_DEFAULT, NULL);
+
+	obj->vnode = vnode;
 }
 
 void

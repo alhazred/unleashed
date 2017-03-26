@@ -399,11 +399,11 @@ main(void)
 	 */
 	lgrp_init(LGRP_INIT_STAGE2);
 
-	vmobject_init(&kvps[KV_KVP].v_object);
-	vmobject_init(&kvps[KV_ZVP].v_object);
+	vmobject_init(&kvps[KV_KVP].v_object, &kvps[KV_KVP]);
+	vmobject_init(&kvps[KV_ZVP].v_object, &kvps[KV_ZVP]);
 #if defined(__sparc)
-	vmobject_init(&kvps[KV_MPVP].v_object);
-	vmobject_init(&kvps[KV_PROMVP].v_object);
+	vmobject_init(&kvps[KV_MPVP].v_object, &kvps[KV_MPVP]);
+	vmobject_init(&kvps[KV_PROMVP].v_object, &kvps[KV_PROMVP]);
 #endif
 
 	/*

@@ -2292,7 +2292,7 @@ vn_cache_constructor(void *buf, void *cdrarg, int kmflags)
 	vp->v_vsd = NULL;
 	vp->v_fopdata = NULL;
 
-	vmobject_init(&vp->v_object);
+	vmobject_init(&vp->v_object, vp);
 
 	return (0);
 }

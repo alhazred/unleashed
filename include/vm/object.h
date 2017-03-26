@@ -24,6 +24,8 @@
 extern "C" {
 #endif
 
+struct vnode;
+
 struct vmobject {
 	/*
 	 * We keep all the pages in an AVL tree indexed by the offset.  This
@@ -36,6 +38,8 @@ struct vmobject {
 	list_t		list;
 
 	kmutex_t	lock;
+
+	struct vnode	*vnode;		/* the owner */
 };
 
 #if defined(_KERNEL)
@@ -98,7 +102,7 @@ vmobject_unlock(struct vmobject *obj)
 	mutex_exit(&obj->lock);
 }
 
-extern void vmobject_init(struct vmobject *obj);
+extern void vmobject_init(struct vmobject *obj, struct vnode *vnode);
 extern void vmobject_fini(struct vmobject *obj);
 
 #endif
