@@ -547,10 +547,10 @@ i40e_free_dma_buffer(i40e_dma_buffer_t *dmap)
  * fills in the information in dmap and is designed for all of our single cookie
  * allocations.
  */
-static boolean_t
+static bool
 i40e_alloc_dma_buffer(i40e_t *i40e, i40e_dma_buffer_t *dmap,
-    ddi_dma_attr_t *attrsp, ddi_device_acc_attr_t *accp, boolean_t stream,
-    boolean_t zero, size_t size)
+    ddi_dma_attr_t *attrsp, ddi_device_acc_attr_t *accp, bool stream,
+    bool zero, size_t size)
 {
 	int ret;
 	uint_t flags;
@@ -649,7 +649,7 @@ i40e_free_rx_data(i40e_rx_data_t *rxd)
 	kmem_free(rxd, sizeof (i40e_rx_data_t));
 }
 
-static boolean_t
+static bool
 i40e_alloc_rx_data(i40e_t *i40e, i40e_trqpair_t *itrq)
 {
 	i40e_rx_data_t *rxd;
@@ -709,7 +709,7 @@ cleanup:
  * data and clean it up when we get there.
  */
 static void
-i40e_free_rx_dma(i40e_rx_data_t *rxd, boolean_t failed_init)
+i40e_free_rx_dma(i40e_rx_data_t *rxd, bool failed_init)
 {
 	uint32_t i, count, ref;
 
@@ -756,7 +756,7 @@ i40e_free_rx_dma(i40e_rx_data_t *rxd, boolean_t failed_init)
  * Initialize the DMA memory for the descriptor ring and for each frame in the
  * control block list.
  */
-static boolean_t
+static bool
 i40e_alloc_rx_dma(i40e_rx_data_t *rxd)
 {
 	int i, count;
@@ -868,7 +868,7 @@ i40e_free_tx_dma(i40e_trqpair_t *itrq)
 
 }
 
-static boolean_t
+static bool
 i40e_alloc_tx_dma(i40e_trqpair_t *itrq)
 {
 	int i, ret;
@@ -981,7 +981,7 @@ cleanup:
  * this is done as part of the GLDv3 stop routine.
  */
 void
-i40e_free_ring_mem(i40e_t *i40e, boolean_t failed_init)
+i40e_free_ring_mem(i40e_t *i40e, bool failed_init)
 {
 	int i;
 
@@ -1017,7 +1017,7 @@ i40e_free_ring_mem(i40e_t *i40e, boolean_t failed_init)
  * should not use blocking allocations. This takes care of both DMA and non-DMA
  * related resources.
  */
-boolean_t
+bool
 i40e_alloc_ring_mem(i40e_t *i40e)
 {
 	int i;
@@ -1049,7 +1049,7 @@ unwind:
  * way and use them for determining attributes.
  */
 void
-i40e_init_dma_attrs(i40e_t *i40e, boolean_t fma)
+i40e_init_dma_attrs(i40e_t *i40e, bool fma)
 {
 	bcopy(&i40e_g_static_dma_attr, &i40e->i40e_static_dma_attr,
 	    sizeof (ddi_dma_attr_t));

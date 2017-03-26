@@ -443,7 +443,7 @@ typedef struct i40e_rx_data {
 	 * are protected by the i40e_t`i40e_rx_pending_lock.
 	 */
 	uint32_t	rxd_rcb_pending;
-	boolean_t	rxd_shutdown;
+	bool		rxd_shutdown;
 } i40e_rx_data_t;
 
 /*
@@ -540,7 +540,7 @@ typedef struct i40e_trqpair {
 	uint64_t itrq_rxgen;		/* Generation number for mac/GLDv3. */
 	uint32_t itrq_index;		/* Queue index in the PF */
 	uint32_t itrq_rx_intrvec;	/* Receive interrupt vector. */
-	boolean_t itrq_intr_poll;	/* True when polling */
+	bool itrq_intr_poll;		/* True when polling */
 
 	/* Receive-side stats. */
 	i40e_rxq_stat_t	itrq_rxstat;
@@ -550,7 +550,7 @@ typedef struct i40e_trqpair {
 	kmutex_t itrq_tx_lock;
 	mac_ring_handle_t itrq_mactxring; /* Transmit ring handle. */
 	uint32_t itrq_tx_intrvec;	/* Transmit interrupt vector. */
-	boolean_t itrq_tx_blocked;	/* Does MAC think we're blocked? */
+	bool itrq_tx_blocked;		/* Does MAC think we're blocked? */
 
 	/*
 	 * TX data sizing
@@ -792,7 +792,7 @@ typedef struct i40e {
 	i40e_uaddr_t		*i40e_uaddrs;
 	i40e_maddr_t		*i40e_maddrs;
 	int			i40e_mcast_promisc_count;
-	boolean_t		i40e_promisc_on;
+	bool			i40e_promisc_on;
 	link_state_t		i40e_link_state;
 	uint32_t		i40e_link_speed;	/* In Mbps */
 	link_duplex_t		i40e_link_duplex;
@@ -803,7 +803,7 @@ typedef struct i40e {
 	 * Transmit and receive information, tunables, and MAC info.
 	 */
 	i40e_trqpair_t	*i40e_trqpairs;
-	boolean_t 	i40e_mr_enable;
+	bool		i40e_mr_enable;
 	int		i40e_num_trqpairs;
 	uint_t		i40e_other_itr;
 
@@ -812,7 +812,7 @@ typedef struct i40e {
 	mac_group_handle_t i40e_rx_group_handle;
 	uint32_t	i40e_rx_ring_size;
 	uint32_t	i40e_rx_buf_size;
-	boolean_t	i40e_rx_hcksum_enable;
+	bool		i40e_rx_hcksum_enable;
 	uint32_t	i40e_rx_dma_min;
 	uint32_t	i40e_rx_limit_per_intr;
 	uint_t		i40e_rx_itr;
@@ -821,7 +821,7 @@ typedef struct i40e {
 	uint32_t	i40e_tx_ring_size;
 	uint32_t	i40e_tx_buf_size;
 	uint32_t	i40e_tx_block_thresh;
-	boolean_t	i40e_tx_hcksum_enable;
+	bool		i40e_tx_hcksum_enable;
 	uint32_t	i40e_tx_dma_min;
 	uint_t		i40e_tx_itr;
 
@@ -956,11 +956,11 @@ extern void i40e_tx_cleanup_ring(i40e_trqpair_t *);
 /*
  * Statistics functions.
  */
-extern boolean_t i40e_stats_init(i40e_t *);
+extern bool i40e_stats_init(i40e_t *);
 extern void i40e_stats_fini(i40e_t *);
-extern boolean_t i40e_stat_vsi_init(i40e_t *);
+extern bool i40e_stat_vsi_init(i40e_t *);
 extern void i40e_stat_vsi_fini(i40e_t *);
-extern boolean_t i40e_stats_trqpair_init(i40e_trqpair_t *);
+extern bool i40e_stats_trqpair_init(i40e_trqpair_t *);
 extern void i40e_stats_trqpair_fini(i40e_trqpair_t *);
 extern int i40e_m_stat(void *, uint_t, uint64_t *);
 extern int i40e_rx_ring_stat(mac_ring_driver_t, uint_t, uint64_t *);
@@ -969,16 +969,16 @@ extern int i40e_tx_ring_stat(mac_ring_driver_t, uint_t, uint64_t *);
 /*
  * MAC/GLDv3 functions, and functions called by MAC/GLDv3 support code.
  */
-extern boolean_t i40e_register_mac(i40e_t *);
-extern boolean_t i40e_start(i40e_t *, boolean_t);
-extern void i40e_stop(i40e_t *, boolean_t);
+extern bool i40e_register_mac(i40e_t *);
+extern bool i40e_start(i40e_t *, bool);
+extern void i40e_stop(i40e_t *, bool);
 
 /*
  * DMA & buffer functions and attributes
  */
-extern void i40e_init_dma_attrs(i40e_t *, boolean_t);
-extern boolean_t i40e_alloc_ring_mem(i40e_t *);
-extern void i40e_free_ring_mem(i40e_t *, boolean_t);
+extern void i40e_init_dma_attrs(i40e_t *, bool);
+extern bool i40e_alloc_ring_mem(i40e_t *);
+extern void i40e_free_ring_mem(i40e_t *, bool);
 
 #ifdef __cplusplus
 }

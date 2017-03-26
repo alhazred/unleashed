@@ -108,7 +108,7 @@
 
 static void
 i40e_stat_get_uint48(i40e_t *i40e, uintptr_t reg, kstat_named_t *kstat,
-    uint64_t *base, boolean_t init)
+    uint64_t *base, bool init)
 {
 	i40e_hw_t *hw = &i40e->i40e_hw_space;
 	uint64_t raw, delta;
@@ -139,7 +139,7 @@ i40e_stat_get_uint48(i40e_t *i40e, uintptr_t reg, kstat_named_t *kstat,
 
 static void
 i40e_stat_get_uint32(i40e_t *i40e, uintptr_t reg, kstat_named_t *kstat,
-    uint64_t *base, boolean_t init)
+    uint64_t *base, bool init)
 {
 	i40e_hw_t *hw = &i40e->i40e_hw_space;
 	uint64_t raw, delta;
@@ -169,7 +169,7 @@ i40e_stat_get_uint32(i40e_t *i40e, uintptr_t reg, kstat_named_t *kstat,
 }
 
 static void
-i40e_stat_vsi_update(i40e_t *i40e, boolean_t init)
+i40e_stat_vsi_update(i40e_t *i40e, bool init)
 {
 	i40e_vsi_stats_t *ivs;
 	i40e_vsi_kstats_t *ivk;
@@ -244,7 +244,7 @@ i40e_stat_vsi_fini(i40e_t *i40e)
 	}
 }
 
-boolean_t
+bool
 i40e_stat_vsi_init(i40e_t *i40e)
 {
 	kstat_t *ksp;
@@ -299,7 +299,7 @@ i40e_stat_vsi_init(i40e_t *i40e)
 }
 
 static void
-i40e_stat_pf_update(i40e_t *i40e, boolean_t init)
+i40e_stat_pf_update(i40e_t *i40e, bool init)
 {
 	i40e_pf_stats_t *ips;
 	i40e_pf_kstats_t *ipk;
@@ -454,7 +454,7 @@ i40e_stat_pf_kstat_update(kstat_t *ksp, int rw)
 }
 
 
-static boolean_t
+static bool
 i40e_stat_pf_init(i40e_t *i40e)
 {
 	kstat_t *ksp;
@@ -679,7 +679,7 @@ i40e_stats_fini(i40e_t *i40e)
 	mutex_destroy(&i40e->i40e_stat_lock);
 }
 
-boolean_t
+bool
 i40e_stats_init(i40e_t *i40e)
 {
 	mutex_init(&i40e->i40e_stat_lock, NULL, MUTEX_DRIVER, NULL);
@@ -1186,7 +1186,7 @@ i40e_stats_trqpair_fini(i40e_trqpair_t *itrq)
 	}
 }
 
-boolean_t
+bool
 i40e_stats_trqpair_init(i40e_trqpair_t *itrq)
 {
 	char buf[128];

@@ -1089,7 +1089,7 @@ static mac_callbacks_t i40e_m_callbacks = {
 	i40e_m_propinfo
 };
 
-boolean_t
+bool
 i40e_register_mac(i40e_t *i40e)
 {
 	struct i40e_hw *hw = &i40e->i40e_hw_space;

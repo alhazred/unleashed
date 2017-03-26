@@ -24,6 +24,7 @@ extern "C" {
 #include <sys/types.h>
 #include <sys/ddi.h>
 #include <sys/sunddi.h>
+#include <sys/stdbool.h>
 #include <sys/pci_cap.h>
 #include <sys/sysmacros.h>
 
@@ -58,9 +59,7 @@ extern "C" {
  */
 #ifndef _I40E_MDB_DMOD
 #define	FALSE	B_FALSE
-#define	false	B_FALSE
 #define	TRUE	B_TRUE
-#define	true	B_TRUE
 #endif /* _I40E_MDB_DMOD */
 
 
@@ -86,8 +85,6 @@ extern "C" {
 
 #define	BIT(a) 		(1UL << (a))
 #define	BIT_ULL(a) 	(1ULL << (a))
-
-typedef boolean_t	bool;
 
 typedef uint8_t		u8;
 typedef int8_t		s8;

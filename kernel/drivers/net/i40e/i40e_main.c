@@ -395,7 +395,7 @@ static ddi_device_acc_attr_t i40e_regs_acc_attr = {
  * Logging function for this driver.
  */
 static void
-i40e_dev_err(i40e_t *i40e, int level, boolean_t console, const char *fmt,
+i40e_dev_err(i40e_t *i40e, int level, bool console, const char *fmt,
     va_list ap)
 {
 	char buf[1024];
@@ -423,7 +423,7 @@ i40e_error(i40e_t *i40e, const char *fmt, ...)
 	va_list ap;
 
 	va_start(ap, fmt);
-	i40e_dev_err(i40e, CE_WARN, B_FALSE, fmt, ap);
+	i40e_dev_err(i40e, CE_WARN, false, fmt, ap);
 	va_end(ap);
 }
 
@@ -434,7 +434,7 @@ i40e_log(i40e_t *i40e, const char *fmt, ...)
 	va_list ap;
 
 	va_start(ap, fmt);
-	i40e_dev_err(i40e, CE_NOTE, B_FALSE, fmt, ap);
+	i40e_dev_err(i40e, CE_NOTE, false, fmt, ap);
 	va_end(ap);
 }
 
@@ -445,7 +445,7 @@ i40e_notice(i40e_t *i40e, const char *fmt, ...)
 	va_list ap;
 
 	va_start(ap, fmt);
-	i40e_dev_err(i40e, CE_NOTE, B_TRUE, fmt, ap);
+	i40e_dev_err(i40e, CE_NOTE, true, fmt, ap);
 	va_end(ap);
 }
 
@@ -543,12 +543,12 @@ void
 i40e_link_check(i40e_t *i40e)
 {
 	i40e_hw_t *hw = &i40e->i40e_hw_space;
-	boolean_t ls;
+	bool ls;
 	int ret;
 
 	ASSERT(MUTEX_HELD(&i40e->i40e_general_lock));
 
-	hw->phy.get_link_info = B_TRUE;
+	hw->phy.get_link_info = true;
 	if ((ret = i40e_get_link_status(hw, &ls)) != I40E_SUCCESS) {
 		i40e->i40e_s_link_status_errs++;
 		i40e->i40e_s_link_status_lasterr = ret;
@@ -559,7 +559,7 @@ i40e_link_check(i40e_t *i40e)
 	 * Firmware abstracts all of the mac and phy information for us, so we
 	 * can use i40e_get_link_status to determine the current state.
 	 */
-	if (ls == B_TRUE) {
+	if (ls == true) {
 		enum i40e_aq_link_speed speed;
 
 		speed = i40e_get_link_speed(hw);
@@ -712,9 +712,9 @@ i40e_fm_init(i40e_t *i40e)
 	}
 
 	if (i40e->i40e_fm_capabilities & DDI_FM_DMACHK_CAPABLE) {
-		i40e_init_dma_attrs(i40e, B_TRUE);
+		i40e_init_dma_attrs(i40e, true);
 	} else {
-		i40e_init_dma_attrs(i40e, B_FALSE);
+		i40e_init_dma_attrs(i40e, false);
 	}
 }
 
@@ -791,7 +791,7 @@ i40e_get_vsi_id(i40e_t *i40e)
  * to the call to the common code. It takes it and parses it into an internal
  * structure.
  */
-static boolean_t
+static bool
 i40e_get_hw_capabilities(i40e_t *i40e, i40e_hw_t *hw)
 {
 	struct i40e_aqc_list_capabilities_element_resp *buf;
@@ -814,27 +814,27 @@ i40e_get_hw_capabilities(i40e_t *i40e, i40e_hw_t *hw)
 			if (nelems == needed) {
 				i40e_error(i40e, "Capability discovery failed "
 				    "due to byzantine common code");
-				return (B_FALSE);
+				return (false);
 			}
 			len = needed;
 			continue;
 		} else if (rc != I40E_SUCCESS ||
 		    hw->aq.asq_last_status != I40E_AQ_RC_OK) {
 			i40e_error(i40e, "Capability discovery failed: %d", rc);
-			return (B_FALSE);
+			return (false);
 		}
 
 		break;
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
 /*
  * Obtain the switch's capabilities as seen by this PF and keep it around for
  * our later use.
  */
-static boolean_t
+static bool
 i40e_get_switch_resources(i40e_t *i40e)
 {
 	i40e_hw_t *hw = &i40e->i40e_hw_space;
@@ -848,7 +848,7 @@ i40e_get_switch_resources(i40e_t *i40e)
 		size = cnt * sizeof (i40e_switch_rsrc_t);
 		ASSERT(size > 0);
 		if (size > UINT16_MAX)
-			return (B_FALSE);
+			return (false);
 		buf = kmem_alloc(size, KM_SLEEP);
 
 		ret = i40e_aq_get_switch_resource_alloc(hw, &act, buf,
@@ -862,7 +862,7 @@ i40e_get_switch_resources(i40e_t *i40e)
 			kmem_free(buf, size);
 			i40e_error(i40e,
 			    "failed to retrieve switch statistics: %d", ret);
-			return (B_FALSE);
+			return (false);
 		}
 
 		break;
@@ -872,7 +872,7 @@ i40e_get_switch_resources(i40e_t *i40e)
 	i40e->i40e_switch_rsrc_actual = act;
 	i40e->i40e_switch_rsrcs = buf;
 
-	return (B_TRUE);
+	return (true);
 }
 
 static void
@@ -902,7 +902,7 @@ i40e_cleanup_resources(i40e_t *i40e)
 		i40e_device_rele(i40e);
 }
 
-static boolean_t
+static bool
 i40e_get_available_resources(i40e_t *i40e)
 {
 	dev_info_t *parent;
@@ -916,12 +916,12 @@ i40e_get_available_resources(i40e_t *i40e)
 
 	if (ddi_prop_lookup_int_array(DDI_DEV_T_ANY, i40e->i40e_dip, 0, "reg",
 	    &regs, &nregs) != DDI_PROP_SUCCESS) {
-		return (B_FALSE);
+		return (false);
 	}
 
 	if (nregs < 1) {
 		ddi_prop_free(regs);
-		return (B_FALSE);
+		return (false);
 	}
 
 	bus = PCI_REG_BUS_G(regs[0]);
@@ -932,8 +932,8 @@ i40e_get_available_resources(i40e_t *i40e)
 	i40e->i40e_hw_space.bus.func = func;
 	i40e->i40e_hw_space.bus.device = device;
 
-	if (i40e_get_switch_resources(i40e) == B_FALSE) {
-		return (B_FALSE);
+	if (i40e_get_switch_resources(i40e) == false) {
+		return (false);
 	}
 
 	/*
@@ -1018,10 +1018,10 @@ i40e_get_available_resources(i40e_t *i40e)
 	for (i = 0; i < i40e->i40e_resources.ifr_nmacfilt; i++)
 		i40e->i40e_uaddrs[i].iua_mac[0] = 0x01;
 
-	return (B_TRUE);
+	return (true);
 }
 
-static boolean_t
+static bool
 i40e_enable_interrupts(i40e_t *i40e)
 {
 	int i, rc;
@@ -1032,7 +1032,7 @@ i40e_enable_interrupts(i40e_t *i40e)
 		if (rc != DDI_SUCCESS) {
 			i40e_error(i40e, "Interrupt block-enable failed: %d",
 			    rc);
-			return (B_FALSE);
+			return (false);
 		}
 	} else {
 		for (i = 0; i < i40e->i40e_intr_count; i++) {
@@ -1044,15 +1044,15 @@ i40e_enable_interrupts(i40e_t *i40e)
 					(void) ddi_intr_disable(
 					    i40e->i40e_intr_handles[i]);
 				}
-				return (B_FALSE);
+				return (false);
 			}
 		}
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
-static boolean_t
+static bool
 i40e_disable_interrupts(i40e_t *i40e)
 {
 	int i, rc;
@@ -1063,7 +1063,7 @@ i40e_disable_interrupts(i40e_t *i40e)
 		if (rc != DDI_SUCCESS) {
 			i40e_error(i40e,
 			    "Interrupt block-disabled failed: %d", rc);
-			return (B_FALSE);
+			return (false);
 		}
 	} else {
 		for (i = 0; i < i40e->i40e_intr_count; i++) {
@@ -1072,12 +1072,12 @@ i40e_disable_interrupts(i40e_t *i40e)
 				i40e_error(i40e,
 				    "Failed to disable interrupt %d: %d",
 				    i, rc);
-				return (B_FALSE);
+				return (false);
 			}
 		}
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
 /*
@@ -1118,7 +1118,7 @@ i40e_free_trqpairs(i40e_t *i40e)
  * Allocate transmit and receive rings, as well as other data structures that we
  * need.
  */
-static boolean_t
+static bool
 i40e_alloc_trqpairs(i40e_t *i40e)
 {
 	int i;
@@ -1144,7 +1144,7 @@ i40e_alloc_trqpairs(i40e_t *i40e)
 		itrq->itrq_index = i;
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
 
@@ -1192,7 +1192,7 @@ i40e_common_code_fini(i40e_t *i40e)
  * the common code expects from the driver.  Also prints on failure, so
  * the caller doesn't have to.
  */
-static boolean_t
+static bool
 i40e_common_code_init(i40e_t *i40e, i40e_hw_t *hw)
 {
 	int rc;
@@ -1202,13 +1202,13 @@ i40e_common_code_init(i40e_t *i40e, i40e_hw_t *hw)
 	if (rc != 0) {
 		i40e_error(i40e, "failed to reset hardware: %d", rc);
 		i40e_fm_ereport(i40e, DDI_FM_DEVICE_NO_RESPONSE);
-		return (B_FALSE);
+		return (false);
 	}
 
 	rc = i40e_init_shared_code(hw);
 	if (rc != 0) {
 		i40e_error(i40e, "failed to initialize i40e core: %d", rc);
-		return (B_FALSE);
+		return (false);
 	}
 
 	hw->aq.num_arq_entries = I40E_DEF_ADMINQ_SIZE;
@@ -1221,7 +1221,7 @@ i40e_common_code_init(i40e_t *i40e, i40e_hw_t *hw)
 		i40e_error(i40e, "failed to initialize firmware admin queue: "
 		    "%d, potential firmware version mismatch", rc);
 		i40e_fm_ereport(i40e, DDI_FM_DEVICE_INVAL_STATE);
-		return (B_FALSE);
+		return (false);
 	}
 
 	if (hw->aq.api_maj_ver == I40E_FW_API_VERSION_MAJOR &&
@@ -1248,12 +1248,12 @@ i40e_common_code_init(i40e_t *i40e, i40e_hw_t *hw)
 	 */
 	if (!i40e_get_hw_capabilities(i40e, hw)) {
 		i40e_error(i40e, "failed to obtain hardware capabilities");
-		return (B_FALSE);
+		return (false);
 	}
 
-	if (i40e_get_available_resources(i40e) == B_FALSE) {
+	if (i40e_get_available_resources(i40e) == false) {
 		i40e_error(i40e, "failed to obtain hardware resources");
-		return (B_FALSE);
+		return (false);
 	}
 
 	i40e_hw_to_instance(i40e, hw);
@@ -1263,14 +1263,14 @@ i40e_common_code_init(i40e_t *i40e, i40e_hw_t *hw)
 	if (rc != 0) {
 		i40e_error(i40e, "failed to initialize hardware memory cache: "
 		    "%d", rc);
-		return (B_FALSE);
+		return (false);
 	}
 
 	rc = i40e_configure_lan_hmc(hw, I40E_HMC_MODEL_DIRECT_ONLY);
 	if (rc != 0) {
 		i40e_error(i40e, "failed to configure hardware memory cache: "
 		    "%d", rc);
-		return (B_FALSE);
+		return (false);
 	}
 
 	(void) i40e_aq_stop_lldp(hw, TRUE, NULL);
@@ -1279,21 +1279,21 @@ i40e_common_code_init(i40e_t *i40e, i40e_hw_t *hw)
 	if (rc != I40E_SUCCESS) {
 		i40e_error(i40e, "failed to retrieve hardware mac address: %d",
 		    rc);
-		return (B_FALSE);
+		return (false);
 	}
 
 	rc = i40e_validate_mac_addr(hw->mac.addr);
 	if (rc != 0) {
 		i40e_error(i40e, "failed to validate internal mac address: "
 		    "%d", rc);
-		return (B_FALSE);
+		return (false);
 	}
 	bcopy(hw->mac.addr, hw->mac.perm_addr, ETHERADDRL);
 	if ((rc = i40e_get_port_mac_addr(hw, hw->mac.port_addr)) !=
 	    I40E_SUCCESS) {
 		i40e_error(i40e, "failed to retrieve port mac address: %d",
 		    rc);
-		return (B_FALSE);
+		return (false);
 	}
 
 	/*
@@ -1303,10 +1303,10 @@ i40e_common_code_init(i40e_t *i40e, i40e_hw_t *hw)
 	i40e->i40e_vsi_id = i40e_get_vsi_id(i40e);
 	if (i40e->i40e_vsi_id == -1) {
 		i40e_error(i40e, "failed to obtain VSI ID");
-		return (B_FALSE);
+		return (false);
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
 static void
@@ -1373,7 +1373,7 @@ i40e_unconfigure(dev_info_t *devinfo, i40e_t *i40e)
 	ddi_set_driver_private(devinfo, NULL);
 }
 
-static boolean_t
+static bool
 i40e_final_init(i40e_t *i40e)
 {
 	i40e_hw_t *hw = &i40e->i40e_hw_space;
@@ -1412,14 +1412,14 @@ i40e_final_init(i40e_t *i40e)
 	    "api-version", buf);
 
 	if (!i40e_set_hw_bus_info(hw))
-		return (B_FALSE);
+		return (false);
 
 	if (i40e_check_acc_handle(osdep->ios_reg_handle) != DDI_FM_OK) {
 		ddi_fm_service_impact(i40e->i40e_dip, DDI_SERVICE_LOST);
-		return (B_FALSE);
+		return (false);
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
 static void
@@ -1445,7 +1445,7 @@ i40e_identify_hardware(i40e_t *i40e)
 	 */
 }
 
-static boolean_t
+static bool
 i40e_regs_map(i40e_t *i40e)
 {
 	dev_info_t *devinfo = i40e->i40e_dip;
@@ -1457,18 +1457,18 @@ i40e_regs_map(i40e_t *i40e)
 	if (ddi_dev_regsize(devinfo, I40E_ADAPTER_REGSET, &memsize) !=
 	    DDI_SUCCESS) {
 		i40e_error(i40e, "Used invalid register set to map PCIe regs");
-		return (B_FALSE);
+		return (false);
 	}
 
 	if ((ret = ddi_regs_map_setup(devinfo, I40E_ADAPTER_REGSET,
 	    (caddr_t *)&hw->hw_addr, 0, memsize, &i40e_regs_acc_attr,
 	    &osdep->ios_reg_handle)) != DDI_SUCCESS) {
 		i40e_error(i40e, "failed to map device registers: %d", ret);
-		return (B_FALSE);
+		return (false);
 	}
 
 	osdep->ios_reg_size = memsize;
-	return (B_TRUE);
+	return (true);
 }
 
 /*
@@ -1517,7 +1517,7 @@ i40e_init_properties(i40e_t *i40e)
 	    I40E_INTR_NONE, I40E_INTR_LEGACY, I40E_INTR_NONE);
 
 	i40e->i40e_mr_enable = i40e_get_prop(i40e, "mr_enable",
-	    B_FALSE, B_TRUE, B_TRUE);
+	    false, true, true);
 
 	i40e->i40e_tx_ring_size = i40e_get_prop(i40e, "tx_ring_size",
 	    I40E_MIN_TX_RING_SIZE, I40E_MAX_TX_RING_SIZE,
@@ -1545,10 +1545,10 @@ i40e_init_properties(i40e_t *i40e)
 	    I40E_DEF_RX_LIMIT_PER_INTR);
 
 	i40e->i40e_tx_hcksum_enable = i40e_get_prop(i40e, "tx_hcksum_enable",
-	    B_FALSE, B_TRUE, B_TRUE);
+	    false, true, true);
 
 	i40e->i40e_rx_hcksum_enable = i40e_get_prop(i40e, "rx_hcksum_enable",
-	    B_FALSE, B_TRUE, B_TRUE);
+	    false, true, true);
 
 	i40e->i40e_rx_dma_min = i40e_get_prop(i40e, "rx_dma_threshold",
 	    I40E_MIN_RX_DMA_THRESH, I40E_MAX_RX_DMA_THRESH,
@@ -1588,7 +1588,7 @@ i40e_init_properties(i40e_t *i40e)
  * number of rings and groups available. Obviously, we only bother with a single
  * fixed interrupt.
  */
-static boolean_t
+static bool
 i40e_alloc_intr_handles(i40e_t *i40e, dev_info_t *devinfo, int intr_type)
 {
 	i40e_hw_t *hw = &i40e->i40e_hw_space;
@@ -1616,7 +1616,7 @@ i40e_alloc_intr_handles(i40e_t *i40e, dev_info_t *devinfo, int intr_type)
 		if (i40e_check_acc_handle(rh) != DDI_FM_OK) {
 			ddi_fm_service_impact(i40e->i40e_dip,
 			    DDI_SERVICE_DEGRADED);
-			return (B_FALSE);
+			return (false);
 		}
 		request = (reg & I40E_GLPCI_CNF2_MSI_X_PF_N_MASK) >>
 		    I40E_GLPCI_CNF2_MSI_X_PF_N_SHIFT;
@@ -1625,21 +1625,21 @@ i40e_alloc_intr_handles(i40e_t *i40e, dev_info_t *devinfo, int intr_type)
 	default:
 		panic("bad interrupt type passed to i40e_alloc_intr_handles: "
 		    "%d", intr_type);
-		return (B_FALSE);
+		return (false);
 	}
 
 	rc = ddi_intr_get_nintrs(devinfo, intr_type, &count);
 	if (rc != DDI_SUCCESS || count < min) {
 		i40e_log(i40e, "Get interrupt number failed, "
 		    "returned %d, count %d", rc, count);
-		return (B_FALSE);
+		return (false);
 	}
 
 	rc = ddi_intr_get_navail(devinfo, intr_type, &count);
 	if (rc != DDI_SUCCESS || count < min) {
 		i40e_log(i40e, "Get AVAILABLE interrupt number failed, "
 		    "returned %d, count %d", rc, count);
-		return (B_FALSE);
+		return (false);
 	}
 
 	actual = 0;
@@ -1688,15 +1688,15 @@ i40e_alloc_intr_handles(i40e_t *i40e, dev_info_t *devinfo, int intr_type)
 	}
 
 	i40e->i40e_intr_type = intr_type;
-	return (B_TRUE);
+	return (true);
 
 alloc_handle_fail:
 
 	i40e_rem_intrs(i40e);
-	return (B_FALSE);
+	return (false);
 }
 
-static boolean_t
+static bool
 i40e_alloc_intrs(i40e_t *i40e, dev_info_t *devinfo)
 {
 	int intr_types, rc;
@@ -1705,7 +1705,7 @@ i40e_alloc_intrs(i40e_t *i40e, dev_info_t *devinfo)
 	if (rc != DDI_SUCCESS) {
 		i40e_error(i40e, "failed to get supported interrupt types: %d",
 		    rc);
-		return (B_FALSE);
+		return (false);
 	}
 
 	i40e->i40e_intr_type = 0;
@@ -1717,7 +1717,7 @@ i40e_alloc_intrs(i40e_t *i40e, dev_info_t *devinfo)
 			i40e->i40e_num_trqpairs =
 			    MIN(i40e->i40e_intr_count - 1,
 			    I40E_AQ_VSI_TC_QUE_SIZE_MAX);
-			return (B_TRUE);
+			return (true);
 		}
 	}
 
@@ -1732,27 +1732,27 @@ i40e_alloc_intrs(i40e_t *i40e, dev_info_t *devinfo)
 	if ((intr_types & DDI_INTR_TYPE_MSI) &&
 	    (i40e->i40e_intr_force <= I40E_INTR_MSI)) {
 		if (i40e_alloc_intr_handles(i40e, devinfo, DDI_INTR_TYPE_MSI))
-			return (B_TRUE);
+			return (true);
 	}
 
 	if (intr_types & DDI_INTR_TYPE_FIXED) {
 		if (i40e_alloc_intr_handles(i40e, devinfo, DDI_INTR_TYPE_FIXED))
-			return (B_TRUE);
+			return (true);
 	}
 
-	return (B_FALSE);
+	return (false);
 }
 
 /*
  * Map different interrupts to MSI-X vectors.
  */
-static boolean_t
+static bool
 i40e_map_intrs_to_vectors(i40e_t *i40e)
 {
 	int i;
 
 	if (i40e->i40e_intr_type != DDI_INTR_TYPE_MSIX) {
-		return (B_TRUE);
+		return (true);
 	}
 
 	/*
@@ -1769,10 +1769,10 @@ i40e_map_intrs_to_vectors(i40e_t *i40e)
 		i40e->i40e_trqpairs[i].itrq_tx_intrvec = i + 1;
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
-static boolean_t
+static bool
 i40e_add_intr_handlers(i40e_t *i40e)
 {
 	int rc, vector;
@@ -1791,7 +1791,7 @@ i40e_add_intr_handlers(i40e_t *i40e)
 					(void) ddi_intr_remove_handler(
 					    i40e->i40e_intr_handles[vector]);
 				}
-				return (B_FALSE);
+				return (false);
 			}
 		}
 		break;
@@ -1801,7 +1801,7 @@ i40e_add_intr_handlers(i40e_t *i40e)
 		if (rc != DDI_SUCCESS) {
 			i40e_log(i40e, "Add interrupt handler (MSI) failed: "
 			    "return %d", rc);
-			return (B_FALSE);
+			return (false);
 		}
 		break;
 	case DDI_INTR_TYPE_FIXED:
@@ -1810,7 +1810,7 @@ i40e_add_intr_handlers(i40e_t *i40e)
 		if (rc != DDI_SUCCESS) {
 			i40e_log(i40e, "Add interrupt handler (legacy) failed:"
 			    " return %d", rc);
-			return (B_FALSE);
+			return (false);
 		}
 		break;
 	default:
@@ -1819,7 +1819,7 @@ i40e_add_intr_handlers(i40e_t *i40e)
 		    (void *)i40e, i40e->i40e_intr_type);
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
 /*
@@ -1858,11 +1858,11 @@ i40e_get_hw_state(i40e_t *i40e, i40e_hw_t *hw)
 	 * Try and determine our PHY. Note that we may have to retry to and
 	 * delay to detect fiber correctly.
 	 */
-	rc = i40e_aq_get_phy_capabilities(hw, B_FALSE, B_TRUE, &i40e->i40e_phy,
+	rc = i40e_aq_get_phy_capabilities(hw, false, true, &i40e->i40e_phy,
 	    NULL);
 	if (rc == I40E_ERR_UNKNOWN_PHY) {
 		i40e_msec_delay(200);
-		rc = i40e_aq_get_phy_capabilities(hw, B_FALSE, B_TRUE,
+		rc = i40e_aq_get_phy_capabilities(hw, false, true,
 		    &i40e->i40e_phy, NULL);
 	}
 
@@ -1909,7 +1909,7 @@ i40e_init_macaddrs(i40e_t *i40e, i40e_hw_t *hw)
  * we only support one, but in the future we could instantiate more than one
  * per attach-point.
  */
-static boolean_t
+static bool
 i40e_config_vsi(i40e_t *i40e, i40e_hw_t *hw)
 {
 	struct i40e_vsi_context	context;
@@ -1921,7 +1921,7 @@ i40e_config_vsi(i40e_t *i40e, i40e_hw_t *hw)
 	err = i40e_aq_get_vsi_params(hw, &context, NULL);
 	if (err != I40E_SUCCESS) {
 		i40e_error(i40e, "get VSI params failed with %d", err);
-		return (B_FALSE);
+		return (false);
 	}
 
 	i40e->i40e_vsi_num = context.vsi_number;
@@ -1958,17 +1958,17 @@ i40e_config_vsi(i40e_t *i40e, i40e_hw_t *hw)
 	context.flags = LE16_TO_CPU(I40E_AQ_VSI_TYPE_PF);
 
 	i40e->i40e_vsi_stat_id = LE16_TO_CPU(context.info.stat_counter_idx);
-	if (i40e_stat_vsi_init(i40e) == B_FALSE)
-		return (B_FALSE);
+	if (i40e_stat_vsi_init(i40e) == false)
+		return (false);
 
 	err = i40e_aq_update_vsi_params(hw, &context, NULL);
 	if (err != I40E_SUCCESS) {
 		i40e_error(i40e, "Update VSI params failed with %d", err);
-		return (B_FALSE);
+		return (false);
 	}
 
 
-	return (B_TRUE);
+	return (true);
 }
 
 /*
@@ -1981,14 +1981,14 @@ i40e_config_vsi(i40e_t *i40e, i40e_hw_t *hw)
  *	 to i40e_aq_set_rss_key(), and the LUT is populated using
  *	 i40e_aq_set_rss_lut().
  */
-static boolean_t
+static bool
 i40e_config_rss(i40e_t *i40e, i40e_hw_t *hw)
 {
 	int i;
 	uint8_t lut_mask;
 	uint32_t *hlut;
 	uint64_t hena;
-	boolean_t rv = B_TRUE;
+	bool rv = true;
 	uint32_t seed[I40E_PFQF_HKEY_MAX_INDEX + 1];
 
 	/*
@@ -2025,7 +2025,7 @@ i40e_config_rss(i40e_t *i40e, i40e_hw_t *hw)
 	hlut = kmem_alloc(hw->func_caps.rss_table_size, KM_NOSLEEP);
 	if (hlut == NULL) {
 		i40e_error(i40e, "i40e_config_rss() buffer allocation failed");
-		return (B_FALSE);
+		return (false);
 	}
 
 	lut_mask = (1 << hw->func_caps.rss_table_entry_width) - 1;
@@ -2044,7 +2044,7 @@ i40e_config_rss(i40e_t *i40e, i40e_hw_t *hw)
 /*
  * Wrapper to kick the chipset on.
  */
-static boolean_t
+static bool
 i40e_chip_start(i40e_t *i40e)
 {
 	i40e_hw_t *hw = &i40e->i40e_hw_space;
@@ -2058,7 +2058,7 @@ i40e_chip_start(i40e_t *i40e)
 		    I40E_SUCCESS) {
 			i40e_error(i40e, "failed to restart link: admin queue "
 			    "error: %d", hw->aq.asq_last_status);
-			return (B_FALSE);
+			return (false);
 		}
 	}
 
@@ -2079,20 +2079,20 @@ i40e_chip_start(i40e_t *i40e)
 	rc = i40e_set_filter_control(hw, &filter);
 	if (rc != I40E_SUCCESS) {
 		i40e_error(i40e, "i40e_set_filter_control() returned %d", rc);
-		return (B_FALSE);
+		return (false);
 	}
 
 	i40e_intr_chip_init(i40e);
 
 	if (!i40e_config_vsi(i40e, hw))
-		return (B_FALSE);
+		return (false);
 
 	if (!i40e_config_rss(i40e, hw))
-		return (B_FALSE);
+		return (false);
 
 	i40e_flush(hw);
 
-	return (B_TRUE);
+	return (true);
 }
 
 /*
@@ -2176,7 +2176,7 @@ i40e_shutdown_tx_rings(i40e_t *i40e)
 		/*
 		 * Step 2. Set the SET_QDIS flag for every queue.
 		 */
-		i40e_pre_tx_queue_cfg(hw, i, B_FALSE);
+		i40e_pre_tx_queue_cfg(hw, i, false);
 	}
 
 	/*
@@ -2209,7 +2209,7 @@ i40e_shutdown_tx_rings(i40e_t *i40e)
  * Wait for all the rings to be shut down. e.g. Steps 2 and 5 from the above
  * functions.
  */
-static boolean_t
+static bool
 i40e_shutdown_rings_wait(i40e_t *i40e)
 {
 	int i, try;
@@ -2228,7 +2228,7 @@ i40e_shutdown_rings_wait(i40e_t *i40e)
 		if ((reg & I40E_QRX_ENA_QENA_STAT_MASK) != 0) {
 			i40e_error(i40e, "timed out disabling rx queue %d",
 			    i);
-			return (B_FALSE);
+			return (false);
 		}
 
 		for (try = 0; try < I40E_RING_WAIT_NTRIES; try++) {
@@ -2241,14 +2241,14 @@ i40e_shutdown_rings_wait(i40e_t *i40e)
 		if ((reg & I40E_QTX_ENA_QENA_STAT_MASK) != 0) {
 			i40e_error(i40e, "timed out disabling tx queue %d",
 			    i);
-			return (B_FALSE);
+			return (false);
 		}
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
-static boolean_t
+static bool
 i40e_shutdown_rings(i40e_t *i40e)
 {
 	i40e_shutdown_rx_rings(i40e);
@@ -2275,7 +2275,7 @@ i40e_setup_rx_descs(i40e_trqpair_t *itrq)
 	}
 }
 
-static boolean_t
+static bool
 i40e_setup_rx_hmc(i40e_trqpair_t *itrq)
 {
 	i40e_rx_data_t *rxd = itrq->itrq_rxdata;
@@ -2317,17 +2317,17 @@ i40e_setup_rx_hmc(i40e_trqpair_t *itrq)
 	if (err != I40E_SUCCESS) {
 		i40e_error(i40e, "failed to clear rx queue %d context: %d",
 		    itrq->itrq_index, err);
-		return (B_FALSE);
+		return (false);
 	}
 
 	err = i40e_set_lan_rx_queue_context(hw, itrq->itrq_index, &rctx);
 	if (err != I40E_SUCCESS) {
 		i40e_error(i40e, "failed to set rx queue %d context: %d",
 		    itrq->itrq_index, err);
-		return (B_FALSE);
+		return (false);
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
 /*
@@ -2335,7 +2335,7 @@ i40e_setup_rx_hmc(i40e_trqpair_t *itrq)
  * device. See 8.3.3.1.1 for the full list of steps we need to do to enable the
  * rx rings.
  */
-static boolean_t
+static bool
 i40e_setup_rx_rings(i40e_t *i40e)
 {
 	int i;
@@ -2354,8 +2354,8 @@ i40e_setup_rx_rings(i40e_t *i40e)
 		/*
 		 * Step 2. Program the queue's FPM/HMC context.
 		 */
-		if (i40e_setup_rx_hmc(itrq) == B_FALSE)
-			return (B_FALSE);
+		if (i40e_setup_rx_hmc(itrq) == false)
+			return (false);
 
 		/*
 		 * Step 3. Clear the queue's tail pointer and set it to the end
@@ -2397,14 +2397,14 @@ i40e_setup_rx_rings(i40e_t *i40e)
 		if ((reg & I40E_QRX_ENA_QENA_STAT_MASK) == 0) {
 			i40e_error(i40e, "failed to enable rx queue %d, timed "
 			    "out.", i);
-			return (B_FALSE);
+			return (false);
 		}
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
-static boolean_t
+static bool
 i40e_setup_tx_hmc(i40e_trqpair_t *itrq)
 {
 	i40e_t *i40e = itrq->itrq_i40e;
@@ -2450,7 +2450,7 @@ i40e_setup_tx_hmc(i40e_trqpair_t *itrq)
 	err = i40e_aq_get_vsi_params(hw, &context, NULL);
 	if (err != I40E_SUCCESS) {
 		i40e_error(i40e, "get VSI params failed with %d", err);
-		return (B_FALSE);
+		return (false);
 	}
 	tctx.rdylist = LE_16(context.info.qs_handle[0]);
 
@@ -2458,24 +2458,24 @@ i40e_setup_tx_hmc(i40e_trqpair_t *itrq)
 	if (err != I40E_SUCCESS) {
 		i40e_error(i40e, "failed to clear tx queue %d context: %d",
 		    itrq->itrq_index, err);
-		return (B_FALSE);
+		return (false);
 	}
 
 	err = i40e_set_lan_tx_queue_context(hw, itrq->itrq_index, &tctx);
 	if (err != I40E_SUCCESS) {
 		i40e_error(i40e, "failed to set tx queue %d context: %d",
 		    itrq->itrq_index, err);
-		return (B_FALSE);
+		return (false);
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
 /*
  * Take care of setting up the descriptor rings and actually programming the
  * device. See 8.4.3.1.1 for what we need to do here.
  */
-static boolean_t
+static bool
 i40e_setup_tx_rings(i40e_t *i40e)
 {
 	int i;
@@ -2489,13 +2489,13 @@ i40e_setup_tx_rings(i40e_t *i40e)
 		 * Step 1. Clear the queue disable flag and verify that the
 		 * index is set correctly.
 		 */
-		i40e_pre_tx_queue_cfg(hw, i, B_TRUE);
+		i40e_pre_tx_queue_cfg(hw, i, true);
 
 		/*
 		 * Step 2. Prepare the queue's FPM/HMC context.
 		 */
-		if (i40e_setup_tx_hmc(itrq) == B_FALSE)
-			return (B_FALSE);
+		if (i40e_setup_tx_hmc(itrq) == false)
+			return (false);
 
 		/*
 		 * Step 3. Verify that it's clear that this PF owns this queue.
@@ -2539,15 +2539,15 @@ i40e_setup_tx_rings(i40e_t *i40e)
 		if ((reg & I40E_QTX_ENA_QENA_STAT_MASK) == 0) {
 			i40e_error(i40e, "failed to enable tx queue %d, timed "
 			    "out", i);
-			return (B_FALSE);
+			return (false);
 		}
 	}
 
-	return (B_TRUE);
+	return (true);
 }
 
 void
-i40e_stop(i40e_t *i40e, boolean_t free_allocations)
+i40e_stop(i40e_t *i40e, bool free_allocations)
 {
 	int i;
 
@@ -2579,7 +2579,7 @@ i40e_stop(i40e_t *i40e, boolean_t free_allocations)
 	i40e_intr_io_disable_all(i40e);
 	i40e_intr_io_clear_cause(i40e);
 
-	if (i40e_shutdown_rings(i40e) == B_FALSE) {
+	if (i40e_shutdown_rings(i40e) == false) {
 		ddi_fm_service_impact(i40e->i40e_dip, DDI_SERVICE_LOST);
 	}
 
@@ -2621,24 +2621,24 @@ i40e_stop(i40e_t *i40e, boolean_t free_allocations)
 	i40e_link_state_set(i40e, LINK_STATE_UNKNOWN);
 
 	if (free_allocations) {
-		i40e_free_ring_mem(i40e, B_FALSE);
+		i40e_free_ring_mem(i40e, false);
 	}
 }
 
-boolean_t
-i40e_start(i40e_t *i40e, boolean_t alloc)
+bool
+i40e_start(i40e_t *i40e, bool alloc)
 {
 	i40e_hw_t *hw = &i40e->i40e_hw_space;
-	boolean_t rc = B_TRUE;
+	bool rc = true;
 	int i, err;
 
 	ASSERT(MUTEX_HELD(&i40e->i40e_general_lock));
 
 	if (alloc) {
-		if (i40e_alloc_ring_mem(i40e) == B_FALSE) {
+		if (i40e_alloc_ring_mem(i40e) == false) {
 			i40e_error(i40e,
 			    "Failed to allocate ring memory");
-			return (B_FALSE);
+			return (false);
 		}
 	}
 
@@ -2648,30 +2648,30 @@ i40e_start(i40e_t *i40e, boolean_t alloc)
 	 */
 	for (i = 0; i < i40e->i40e_num_trqpairs; i++) {
 		if (i40e_stats_trqpair_init(&i40e->i40e_trqpairs[i]) ==
-		    B_FALSE) {
+		    false) {
 			int j;
 
 			for (j = 0; j < i; j++) {
 				i40e_trqpair_t *itrq = &i40e->i40e_trqpairs[j];
 				i40e_stats_trqpair_fini(itrq);
 			}
-			return (B_FALSE);
+			return (false);
 		}
 	}
 
 	if (!i40e_chip_start(i40e)) {
 		i40e_fm_ereport(i40e, DDI_FM_DEVICE_INVAL_STATE);
-		rc = B_FALSE;
+		rc = false;
 		goto done;
 	}
 
-	if (i40e_setup_rx_rings(i40e) == B_FALSE) {
-		rc = B_FALSE;
+	if (i40e_setup_rx_rings(i40e) == false) {
+		rc = false;
 		goto done;
 	}
 
-	if (i40e_setup_tx_rings(i40e) == B_FALSE) {
-		rc = B_FALSE;
+	if (i40e_setup_tx_rings(i40e) == false) {
+		rc = false;
 		goto done;
 	}
 
@@ -2679,17 +2679,17 @@ i40e_start(i40e_t *i40e, boolean_t alloc)
 	 * Enable broadcast traffic; however, do not enable multicast traffic.
 	 * That's handle exclusively through MAC's mc_multicst routines.
 	 */
-	err = i40e_aq_set_vsi_broadcast(hw, i40e->i40e_vsi_id, B_TRUE, NULL);
+	err = i40e_aq_set_vsi_broadcast(hw, i40e->i40e_vsi_id, true, NULL);
 	if (err != I40E_SUCCESS) {
 		i40e_error(i40e, "failed to set default VSI: %d", err);
-		rc = B_FALSE;
+		rc = false;
 		goto done;
 	}
 
-	err = i40e_aq_set_mac_config(hw, i40e->i40e_frame_max, B_TRUE, 0, NULL);
+	err = i40e_aq_set_mac_config(hw, i40e->i40e_frame_max, true, 0, NULL);
 	if (err != I40E_SUCCESS) {
 		i40e_error(i40e, "failed to set MAC config: %d", err);
-		rc = B_FALSE;
+		rc = false;
 		goto done;
 	}
 
@@ -2698,7 +2698,7 @@ i40e_start(i40e_t *i40e, boolean_t alloc)
 	 */
 	if (i40e_check_acc_handle(i40e->i40e_osdep_space.ios_reg_handle) !=
 	    DDI_FM_OK) {
-		rc = B_FALSE;
+		rc = false;
 		goto done;
 	}
 
@@ -2709,10 +2709,10 @@ i40e_start(i40e_t *i40e, boolean_t alloc)
 	i40e_intr_io_enable_all(i40e);
 
 done:
-	if (rc == B_FALSE) {
-		i40e_stop(i40e, B_FALSE);
-		if (alloc == B_TRUE) {
-			i40e_free_ring_mem(i40e, B_TRUE);
+	if (rc == false) {
+		i40e_stop(i40e, false);
+		if (alloc == true) {
+			i40e_free_ring_mem(i40e, true);
 		}
 		ddi_fm_service_impact(i40e->i40e_dip, DDI_SERVICE_LOST);
 	}
@@ -2724,7 +2724,7 @@ done:
  * We may have loaned up descriptors to the stack. As such, if we still have
  * them outstanding, then we will not continue with detach.
  */
-static boolean_t
+static bool
 i40e_drain_rx(i40e_t *i40e)
 {
 	mutex_enter(&i40e->i40e_rx_pending_lock);
@@ -2733,12 +2733,12 @@ i40e_drain_rx(i40e_t *i40e)
 		    &i40e->i40e_rx_pending_lock,
 		    drv_usectohz(I40E_DRAIN_RX_WAIT), TR_CLOCK_TICK) == -1) {
 			mutex_exit(&i40e->i40e_rx_pending_lock);
-			return (B_FALSE);
+			return (false);
 		}
 	}
 	mutex_exit(&i40e->i40e_rx_pending_lock);
 
-	return (B_TRUE);
+	return (true);
 }
 
 static int
@@ -2883,7 +2883,7 @@ i40e_detach(dev_info_t *devinfo, ddi_detach_cmd_t cmd)
 		return (DDI_FAILURE);
 	}
 
-	if (i40e_drain_rx(i40e) == B_FALSE) {
+	if (i40e_drain_rx(i40e) == false) {
 		i40e_log(i40e, "timed out draining DMA resources, %d buffers "
 		    "remain", i40e->i40e_rx_pending);
 		return (DDI_FAILURE);
