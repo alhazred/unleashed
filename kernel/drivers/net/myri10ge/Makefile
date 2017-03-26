@@ -7,5 +7,4 @@ SRCS=		myri10ge.c \
 INCS=		${.CURDIR}/firmware
 DEFS=		-DSOLARIS_11
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

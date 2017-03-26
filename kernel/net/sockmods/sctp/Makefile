@@ -6,5 +6,4 @@ SRCS=		sockmod_sctp.c \
 		socksctp.c \
 		socksctpsubr.c
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

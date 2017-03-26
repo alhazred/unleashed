@@ -12,5 +12,4 @@ DEFS=		-DUNIQUE_FW_NAME
 
 CERRWARN = -Wno-uninitialized
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

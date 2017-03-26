@@ -6,5 +6,4 @@ SRCS=		yge.c
 
 CERRWARN = -Wno-unused-label
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

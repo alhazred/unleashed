@@ -6,5 +6,4 @@ MODULE_DEPS=	misc/mac \
 		drv/ip
 SRCS=		wpi.c
 
-REPOROOT = ${.CURDIR:H:H:H:H:H}
 .include <kmod.mk>

@@ -14,12 +14,11 @@ SRCS=		sdev_comm.c \
 		sdev_vtops.c \
 		sdev_zvolops.c
 INCS=		${.CURDIR:H}/zfs \
-		${REPOROOT}/usr/src/uts/common/io/bpf
+		${SRCTOP}/usr/src/uts/common/io/bpf
 
 CERRWARN =  -Wno-unused-label
 CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-parentheses
 
-REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

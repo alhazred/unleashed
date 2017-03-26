@@ -17,11 +17,10 @@ SRCS=		iscsit.c \
 		iscsit_text.c \
 		iscsit_tgt.c \
 		iscsit_common.c
-SRCS_DIRS=	${REPOROOT}/usr/src/common/iscsit
+SRCS_DIRS=	${SRCTOP}/usr/src/common/iscsit
 
 CERRWARN =  -Wno-switch
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-unused-label
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

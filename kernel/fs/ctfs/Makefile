@@ -12,5 +12,4 @@ SRCS=		ctfs_all.c \
 
 CERRWARN = -Wno-parentheses
 
-REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

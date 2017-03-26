@@ -34,11 +34,8 @@
 
 .if empty(_KMOD_BUILD)
 
-.if empty(REPOROOT)
-.error "You must define REPOROOT to point to the top-level of the repository"
-.endif
-
-.include <${REPOROOT}/Makefile.cfgparam>
+.include <unleashed.mk>
+.include <${SRCTOP}/Makefile.cfgparam>
 
 BUILD=
 .if defined(CONFIG_BUILD_KMOD_32) && ${CONFIG_BUILD_KMOD_32} == "y"
@@ -53,25 +50,25 @@ all: ${BUILD:%=all-%}
 # we don't use a for loop to allow for more parallelism
 all-32:
 	@mkdir -p obj32
-	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk all \
-		BITS=32 REPOROOT=${REPOROOT}
+	@${MAKE} -f ${SRCTOP}/kernel/mk/kmod-build.mk all \
+		BITS=32 SRCTOP=${SRCTOP}
 
 all-64:
 	@mkdir -p obj64
-	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk all \
-		BITS=64 REPOROOT=${REPOROOT}
+	@${MAKE} -f ${SRCTOP}/kernel/mk/kmod-build.mk all \
+		BITS=64 SRCTOP=${SRCTOP}
 
 clean cleandir:
-	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk clean \
-		REPOROOT=${REPOROOT}
+	@${MAKE} -f ${SRCTOP}/kernel/mk/kmod-build.mk clean \
+		SRCTOP=${SRCTOP}
 	@rm -rf obj32 obj64
 
 install:
-	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk install-misc \
-		REPOROOT=${REPOROOT}
+	@${MAKE} -f ${SRCTOP}/kernel/mk/kmod-build.mk install-misc \
+		SRCTOP=${SRCTOP}
 .for bits in ${BUILD}
-	@${MAKE} -f ${REPOROOT}/kernel/mk/kmod-build.mk install \
-		BITS=${bits} REPOROOT=${REPOROOT}
+	@${MAKE} -f ${SRCTOP}/kernel/mk/kmod-build.mk install \
+		BITS=${bits} SRCTOP=${SRCTOP}
 .endfor
 
 .PHONY: all all-32 all-64 clean cleandir install

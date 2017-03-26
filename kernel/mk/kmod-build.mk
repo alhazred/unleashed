@@ -21,20 +21,18 @@
 # Additionally, we get the following values from kmod.mk:
 #
 #   BITS		- should we build a 32-bit or a 64-bit binary
-#   REPOROOT		- root of the repository
+#   SRCTOP		- root of the repository
 #
 
-.if empty(REPOROOT)
-.error "You must define REPOROOT to point to the top-level of the repository"
-.endif
+.include <unleashed.mk>
 
-.include <${REPOROOT}/Makefile.cfgparam>
+.include <${SRCTOP}/Makefile.cfgparam>
 
 # prevent kmod.mk inclusion in user's Makefile from setting up confusing targets
 _KMOD_BUILD=yes
 .include <${.CURDIR}/Makefile>
 
-.include <${REPOROOT}/kernel/mk/defines.mk>
+.include <${SRCTOP}/kernel/mk/defines.mk>
 
 CFLAGS = \
 	$(KERNEL_CFLAGS) \

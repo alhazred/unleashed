@@ -5,5 +5,4 @@ SRCS=		fifosubr.c \
 
 CERRWARN = -Wno-parentheses
 
-REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

@@ -19,5 +19,4 @@ MODULE_FW=	fw/iwlwifi-100-5.ucode \
 		fw/iwlwifi-6050-5.ucode
 SRCS=		if_iwn.c
 
-REPOROOT = ${.CURDIR:H:H:H:H:H}
 .include <kmod.mk>

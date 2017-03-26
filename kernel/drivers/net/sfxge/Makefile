@@ -69,5 +69,4 @@ INCS+=		${.CURDIR}/common
 CERRWARN =  -Wno-unused-variable
 CERRWARN += -Wno-unused-function
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

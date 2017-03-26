@@ -14,5 +14,4 @@ CERRWARN += -Wno-unused-function
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-empty-body
 
-REPOROOT = ${.CURDIR:H:H:H:H:H}
 .include <kmod.mk>

@@ -5,8 +5,8 @@ INCS=	hat_i86.h \
 	htable.h \
 	kboot_mmu.h
 
+.include <unleashed.mk>
 .include <prog.mk>
 .include <inc.mk>
 
-REPOROOT = ${.CURDIR:H:H:H:H:H:H:H}
-.include <${REPOROOT}/Makefile.cfgparam>
+.include <${SRCTOP}/Makefile.cfgparam>

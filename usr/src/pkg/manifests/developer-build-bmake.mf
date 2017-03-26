@@ -65,6 +65,7 @@ file path=usr/share/mk/sys.dependfile.mk
 file path=usr/share/mk/sys.mk
 file path=usr/share/mk/sys.vars.mk
 file path=usr/share/mk/target-flags.mk
+file path=usr/share/mk/unleashed.mk
 file path=usr/share/mk/warnings.mk
 file path=usr/share/mk/whats.mk
 file path=usr/share/mk/yacc.mk

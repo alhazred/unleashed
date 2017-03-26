@@ -4,8 +4,8 @@ INCS=	balloon.h	\
 	xen_mmu.h \
 	xpv_impl.h
 
+.include <unleashed.mk>
 .include <prog.mk>
 .include <inc.mk>
 
-REPOROOT = ${.CURDIR:H:H:H:H:H:H:H}
-.include <${REPOROOT}/Makefile.cfgparam>
+.include <${SRCTOP}/Makefile.cfgparam>

@@ -20,5 +20,4 @@ CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-switch
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

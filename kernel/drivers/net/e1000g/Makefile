@@ -20,5 +20,4 @@ CERRWARN += -Wno-unused-variable
 
 .include <../e1000api/Makefile.common>
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

@@ -10,5 +10,4 @@ INCS=		${.CURDIR}
 CERRWARN =  -Wno-unused-label
 CERRWARN += -Wno-uninitialized
 
-REPOROOT = ${.CURDIR:H:H:H:H:H}
 .include <kmod.mk>

@@ -110,7 +110,7 @@ SRCS=		arc.c \
 		zvol.c
 INCS=		${.CURDIR} \
 		${.CURDIR}/common \
-		${REPOROOT}/usr/src/common
+		${SRCTOP}/usr/src/common
 
 CERRWARN	+= -Wno-type-limits
 CERRWARN	+= -Wno-switch
@@ -119,5 +119,4 @@ CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-unused-label
 
-REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

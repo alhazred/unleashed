@@ -10,5 +10,4 @@ SRCS=		alua_ic_if.c \
 CERRWARN =  -Wno-switch
 CERRWARN += -Wno-uninitialized
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

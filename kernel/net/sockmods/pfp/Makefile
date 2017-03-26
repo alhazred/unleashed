@@ -6,7 +6,6 @@ MODULE_DEPS=	fs/sockfs \
 		drv/bpf \
 		drv/ip
 SRCS=		sockmod_pfp.c
-INCS=		${REPOROOT}/usr/src/uts/common/io/bpf
+INCS=		${SRCTOP}/usr/src/uts/common/io/bpf
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

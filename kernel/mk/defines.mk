@@ -94,12 +94,12 @@ KERNEL_CFLAGS_sparcv7 =
 KERNEL_CFLAGS_sparcv9 =
 
 KERNEL_INCLUDES = \
-	-I${REPOROOT}/usr/src/uts/common \
-	-I${REPOROOT}/arch/${CONFIG_MACH}/include \
-	-I${REPOROOT}/include
+	-I${SRCTOP}/usr/src/uts/common \
+	-I${SRCTOP}/arch/${CONFIG_MACH}/include \
+	-I${SRCTOP}/include
 
 KERNEL_INCLUDES_i386 = \
-	-I${REPOROOT}/usr/src/uts/intel
+	-I${SRCTOP}/usr/src/uts/intel
 
 KERNEL_INCLUDES_sparc =
 

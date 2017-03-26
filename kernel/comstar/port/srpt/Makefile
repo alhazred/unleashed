@@ -13,5 +13,4 @@ SRCS=		srpt_ch.c \
 CERRWARN =  -Wno-unused-label
 CERRWARN += -Wno-unused-value
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

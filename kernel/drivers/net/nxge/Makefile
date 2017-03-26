@@ -26,7 +26,7 @@ SRCS=		nxge_classify.c \
 		nxge_virtual.c \
 		nxge_zcp.c
 # sunv4 also needs: nxge_hcall.s
-INCS=		${REPOROOT}/include/sys/nxge
+INCS=		${SRCTOP}/include/sys/nxge
 DEFS=		-DSOLARIS
 
 SRCS+=		npi/npi.c \
@@ -48,5 +48,4 @@ CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-switch
 CERRWARN += -Wno-type-limits
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

@@ -17,5 +17,4 @@ SRCS+=		core/i40e_adminq.c \
 		core/i40e_nvm.c
 INCS+=		${.CURDIR}/core
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

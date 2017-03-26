@@ -5,5 +5,4 @@ MODULE_DEPS=	fs/sockfs \
 		drv/rdsv3
 SRCS=		sockmod_rds.c
 
-REPOROOT = ${.CURDIR:H:H:H:H}
 .include <kmod.mk>

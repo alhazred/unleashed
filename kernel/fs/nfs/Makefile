@@ -48,5 +48,4 @@ CERRWARN += -Wno-empty-body
 CERRWARN += -Wno-switch
 CERRWARN += -Wno-type-limits
 
-REPOROOT = ${.CURDIR:H:H:H}
 .include <kmod.mk>

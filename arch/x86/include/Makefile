@@ -3,5 +3,5 @@ SUBDIR=	../kernel/platform/${CONFIG_PLATFORM}/include \
 
 .include <subdir.mk>
 
-REPOROOT = ${.CURDIR:H:H:H}
-.include <${REPOROOT}/Makefile.cfgparam>
+.include <unleashed.mk>
+.include <${SRCTOP}/Makefile.cfgparam>

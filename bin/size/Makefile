@@ -1,9 +1,9 @@
 PROG=	size
 SRCS=	main.c process.c fcns.c
 CPPFLAGS+= \
-	-I${REPOROOT}/usr/src/cmd/sgs/include \
-	-I${REPOROOT}/usr/src/common/elfcap
+	-I${SRCTOP}/usr/src/cmd/sgs/include \
+	-I${SRCTOP}/usr/src/common/elfcap
 LDFLAGS+= -lelf
 
-REPOROOT = ${.CURDIR:H:H}
+.include <unleashed.mk>
 .include <prog.mk>
