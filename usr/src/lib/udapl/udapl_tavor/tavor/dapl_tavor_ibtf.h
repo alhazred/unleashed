@@ -40,6 +40,7 @@ extern "C" {
 #include <sys/ib/ibtl/ibti.h>
 #include <daplt_if.h>
 #include <sys/ib/adapters/mlnx_umap.h>
+#include <sys/stdbool.h>
 
 #define	DAPLIB_NEEDS_INIT(ep)  ((ep)->qp_state == IBT_STATE_ERROR)
 #define	DAPL_MAX_IOV		8
@@ -54,8 +55,6 @@ extern "C" {
 #define	DAPL_MAX_ADDRESS		0xfffffffffffffff0ULL
 
 
-#define	true				B_TRUE
-#define	false				B_FALSE
 #define	IB_INVALID_HANDLE		NULL
 
 #define	DAPL_CQE_INVALID_PRMEVENT	0x1015
