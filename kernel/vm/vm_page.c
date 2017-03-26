@@ -3269,7 +3269,7 @@ page_do_hashout(page_t *page)
 void
 page_hashout(page_t *pp, bool locked)
 {
-	vnode_t		*vp;
+	struct vmobject	*obj;
 	ulong_t		index;
 	kmutex_t	*sep;
 
@@ -3277,17 +3277,17 @@ page_hashout(page_t *pp, bool locked)
 	ASSERT(pp->p_vnode != NULL);
 	ASSERT((PAGE_EXCL(pp) && !page_iolock_assert(pp)) || panicstr);
 
-	vp = pp->p_vnode;
+	obj = &pp->p_vnode->v_object;
 
 	if (!locked) {
 		VM_STAT_ADD(hashout_not_held);
-		vmobject_lock(&vp->v_object);
+		vmobject_lock(obj);
 	}
 
 	page_do_hashout(pp);
 
 	if (!locked)
-		vmobject_unlock(&vp->v_object);
+		vmobject_unlock(obj);
 
 	/*
 	 * Wake up processes waiting for this page.  The page's
