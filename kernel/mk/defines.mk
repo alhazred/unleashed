@@ -10,13 +10,13 @@
 # The following can be tweaked to change up the KERNEL_CFLAGS variables:
 #
 #   KERNEL_CFLAGS		- CFLAGS used by both 32- & 64-bit
-#   KERNEL_CFLAGS_$(BITS)
-#   KERNEL_CFLAGS_$(CONFIG_MACH)
-#   KERNEL_CFLAGS_$(CONFIG_MACH32)
-#   KERNEL_CFLAGS_$(CONFIG_MACH64)
+#   KERNEL_CFLAGS_${BITS}
+#   KERNEL_CFLAGS_${CONFIG_MACH}
+#   KERNEL_CFLAGS_${CONFIG_MACH32}
+#   KERNEL_CFLAGS_${CONFIG_MACH64}
 #   				- CFLAGS used by specific builds
 #   KERNEL_INCLUDES		- -Ifoo directives used by all builds
-#   KERNEL_INCLUDES_$(CONFIG_MACH)
+#   KERNEL_INCLUDES_${CONFIG_MACH}
 #   				- -Ifoo directives for specific build
 #   KERNEL_LDFLAGS		- LDFLAGS used by both 32- & 64-bit
 #
@@ -104,12 +104,12 @@ KERNEL_INCLUDES_i386 = \
 KERNEL_INCLUDES_sparc =
 
 KERNEL_CFLAGS = \
-	$(KERNEL_CFLAGS_ALL) \
-	$(KERNEL_CFLAGS_$(BITS)) \
-	$(KERNEL_CFLAGS_$(CONFIG_MACH$(BITS))) \
-	$(KERNEL_CFLAGS_$(CONFIG_MACH)) \
-	$(KERNEL_INCLUDES) \
-	$(KERNEL_INCLUDES_$(CONFIG_MACH))
+	${KERNEL_CFLAGS_ALL} \
+	${KERNEL_CFLAGS_${BITS}} \
+	${KERNEL_CFLAGS_${CONFIG_MACH${BITS}}} \
+	${KERNEL_CFLAGS_${CONFIG_MACH}} \
+	${KERNEL_INCLUDES} \
+	${KERNEL_INCLUDES_${CONFIG_MACH}}
 
 #
 # LDFLAGS
@@ -122,7 +122,6 @@ KERNEL_LDFLAGS = \
 #
 CC=/opt/gcc/4.4.4/bin/gcc
 LD=/usr/bin/ld
-INS=/usr/bin/install
 CTFCONVERT=/opt/onbld/bin/i386/ctfconvert
 CTFMERGE=/opt/onbld/bin/i386/ctfmerge
 

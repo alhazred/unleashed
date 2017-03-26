@@ -35,14 +35,14 @@ _KMOD_BUILD=yes
 .include <${SRCTOP}/kernel/mk/defines.mk>
 
 CFLAGS = \
-	$(KERNEL_CFLAGS) \
-	$(CERRWARN) \
-	$(INCS:%=-I%) \
-	$(DEFS)
+	${KERNEL_CFLAGS} \
+	${CERRWARN} \
+	${INCS:%=-I%} \
+	${DEFS}
 
-LDFLAGS = $(KERNEL_LDFLAGS)
+LDFLAGS = ${KERNEL_LDFLAGS}
 .if !empty(MODULE_DEPS)
-LDFLAGS += -dy $(MODULE_DEPS:%=-N %)
+LDFLAGS += -dy ${MODULE_DEPS:%=-N %}
 .endif
 
 # generate all the hard link names even though we may not use it all
@@ -61,8 +61,8 @@ LINKS += "/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}" \
 
 .OBJDIR: ${.CURDIR}/obj${BITS}
 
-OBJS =	$(SRCS:%.c=%.o) \
-	$(SRCS$(BITS):%.c=%.o)
+OBJS =	${SRCS:%.c=%.o} \
+	${SRCS${BITS}:%.c=%.o}
 
 all: ${MODULE}
 
@@ -72,11 +72,11 @@ clean cleandir:
 
 install:
 .if !empty(BITS) && ${BITS} == 32
-	$(INS) -d -m 755 "$(DESTDIR)/kernel/${MODULE_TYPE}"
-	$(INS) -m 755 ${MODULE} "$(DESTDIR)/kernel/${MODULE_TYPE}/${MODULE}"
+	${INSTALL} -d -m 755 "${DESTDIR}/kernel/${MODULE_TYPE}"
+	${INSTALL} -m 755 ${MODULE} "${DESTDIR}/kernel/${MODULE_TYPE}/${MODULE}"
 .else
-	$(INS) -d -m 755 "$(DESTDIR)/kernel/${MODULE_TYPE}/${CONFIG_MACH64}"
-	$(INS) -m 755 ${MODULE} "$(DESTDIR)/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}"
+	${INSTALL} -d -m 755 "${DESTDIR}/kernel/${MODULE_TYPE}/${CONFIG_MACH64}"
+	${INSTALL} -m 755 ${MODULE} "${DESTDIR}/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}"
 .endif
 .if !empty(LINKS)
 	@set ${LINKS}; ${_LINKS_SCRIPT}
@@ -88,26 +88,26 @@ install-misc: install-conf install-fw
 
 install-conf: ${MODULE_CONF}
 .if !empty(MODULE_CONF)
-	$(INS) -d -m 755 "$(DESTDIR)/kernel/${MODULE_TYPE}"
-	$(INS) -m 644 ${MODULE_CONF} "$(DESTDIR)/kernel/${MODULE_TYPE}/${MODULE}.conf"
+	${INSTALL} -d -m 755 "${DESTDIR}/kernel/${MODULE_TYPE}"
+	${INSTALL} -m 644 ${MODULE_CONF} "${DESTDIR}/kernel/${MODULE_TYPE}/${MODULE}.conf"
 .endif
 
 install-fw: ${MODULE_FW}
 .if !empty(MODULE_FW)
-	$(INS) -d -m 755 "$(DESTDIR)/kernel/firmware/${MODULE}"
+	${INSTALL} -d -m 755 "${DESTDIR}/kernel/firmware/${MODULE}"
 .for x in ${MODULE_FW}
-	$(INS) -m 644 ${x} "$(DESTDIR)/kernel/firmware/${MODULE}"
+	${INSTALL} -m 644 ${x} "${DESTDIR}/kernel/firmware/${MODULE}"
 .endfor
 .endif
 
 .PHONY: install-misc install-conf install-fw
 
-$(MODULE): $(OBJS)
-	${QLD}$(LD) $(LDFLAGS) -o ${.TARGET} ${.ALLSRC}
-	${QCTFCVT}$(CTFCONVERT) -L VERSION ${.TARGET}
+${MODULE}: ${OBJS}
+	${QLD}${LD} ${LDFLAGS} -o ${.TARGET} ${.ALLSRC}
+	${QCTFCVT}${CTFCONVERT} -L VERSION ${.TARGET}
 
 .SUFFIXES: .o
 
 .c.o:
 	@mkdir -p ${.TARGET:H}
-	${QCC}$(CC) $(CFLAGS) -c -o ${.TARGET} ${.IMPSRC}
+	${QCC}${CC} ${CFLAGS} -c -o ${.TARGET} ${.IMPSRC}
