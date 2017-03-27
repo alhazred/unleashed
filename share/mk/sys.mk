@@ -5,6 +5,8 @@ CXX_SUFFIXES +=	.cc .cpp .cxx .C
 CXX_SUFFIXES :=	${CXX_SUFFIXES:O:u}
 .SUFFIXES: .out .a .o .s .S .c ${CXX_SUFFIXES} .F .f .r .y .l .cl .p .h .sh .m4
 
+.MAKE.MODE ?= normal
+
 # some options we need to know early
 OPTIONS_DEFAULT_NO += \
 	DIRDEPS_BUILD \
