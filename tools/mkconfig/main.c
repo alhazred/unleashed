@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
+ * Copyright (c) 2016-2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -203,6 +203,18 @@ static int cmp(const void *va, const void *vb)
 	return 0;
 }
 
+/* return a config item's value, taking into account selects' defaults */
+static inline struct val *config_item_val(struct config_item *ci)
+{
+	if (!ci)
+		return NULL;
+
+	if (!ci->select)
+		return val_getref(ci->value);
+
+	return sexpr_car(val_getref(ci->value));
+}
+
 static struct val *config_lookup(struct str *name, void *private)
 {
 	struct config_item key = {
@@ -214,7 +226,7 @@ static struct val *config_lookup(struct str *name, void *private)
 
 	str_putref(name);
 
-	return ci ? val_getref(ci->value) : NULL;
+	return config_item_val(ci);
 }
 
 struct mapping {
@@ -529,10 +541,7 @@ static void map(const char *outfile, enum gen_what what)
 	     cur = list_next(&mapping_list, cur)) {
 		struct val *value;
 
-		if (!cur->select)
-			value = val_getref(cur->value);
-		else
-			value = sexpr_car(val_getref(cur->value));
+		value = config_item_val(cur);
 
 		m->entry[cur->value->type](f, cur->name, value);
 
