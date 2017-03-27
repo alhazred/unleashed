@@ -11,11 +11,13 @@ SRCS=	parser.y \
 	time.c \
 	wide.c
 
-CPPFLAGS+=	-I${.CURDIR:H:H}/usr/src/lib/libc/port/locale
+CPPFLAGS+=	-I${SRCTOP}/usr/src/lib/libc/port/locale
+CPPFLAGS+=	-I. -I${.CURDIR}
 LDADD=		-lavl -lgen
 
 ${SRCS:M*.c}: parser.h
 parser.h: parser.y
 
+.include <unleashed.mk>
 .include <yacc.mk>
 .include <prog.mk>
