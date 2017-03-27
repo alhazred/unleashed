@@ -9,7 +9,7 @@ __${.PARSEFILE}__:
 NEED_SOLINKS?= yes
 .endif
 
-MAPFILE_VERS=${.CURDIR}/mapfile-vers
+MAPFILE_VERS?=	${.CURDIR}/mapfile-vers
 .if exists(${MAPFILE_VERS})
 SHLIB_MAJOR=	1
 SHLIB_LDADD+=	-M${MAPFILE_VERS}
