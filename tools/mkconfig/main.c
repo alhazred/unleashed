@@ -373,7 +373,7 @@ static struct mapping mapping[NGEN] = {
 
 static char *prog;
 
-static void __config(struct val *args)
+static void __config(struct val *args, enum config_item_type type)
 {
 	struct val *name = sexpr_nth(val_getref(args), 1);
 	struct val *value = sexpr_nth(val_getref(args), 2);
@@ -388,7 +388,7 @@ static void __config(struct val *args)
 
 	item->name = str_getref(name->str);
 	item->defvalue = val_getref(value);
-	item->select = false;
+	item->type = type;
 
 	avl_add(&mapping_tree, item);
 	list_insert_tail(&mapping_list, item);
@@ -412,7 +412,7 @@ static void __select(struct val *args)
 
 	item->name = str_getref(name->str);
 	item->defvalue = val_getref(value);
-	item->select = true;
+	item->type = CIT_SELECT;
 
 	avl_add(&mapping_tree, item);
 	list_insert_tail(&mapping_list, item);
@@ -475,9 +475,10 @@ static int process(int dirfd, const char *infile)
 		if (stmt->type != VT_SYM)
 			die("statement not a VT_SYM");
 
-		if (strcmp(str_cstr(stmt->str), CONFIG_STMT) == 0 ||
-		    strcmp(str_cstr(stmt->str), CONST_STMT) == 0) {
-			__config(args);
+		if (strcmp(str_cstr(stmt->str), CONFIG_STMT) == 0) {
+			__config(args, CIT_CONFIG);
+		} else if (strcmp(str_cstr(stmt->str), CONST_STMT) == 0) {
+			__config(args, CIT_CONST);
 		} else if (strcmp(str_cstr(stmt->str), SELECT_STMT) == 0) {
 			__select(args);
 		} else if (strcmp(str_cstr(stmt->str), INCLUDE_STMT) == 0) {
@@ -559,7 +560,7 @@ static void eval(void)
 				cur->value = get_val_sym(cur);
 				break;
 			case VT_CONS:
-				if (cur->select)
+				if (cur->type != CIT_SELECT)
 					cur->value = get_val_expr(cur);
 				else
 					cur->value = get_val_select(cur);

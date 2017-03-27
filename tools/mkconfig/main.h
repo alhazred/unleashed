@@ -36,11 +36,17 @@
 			exit(1); \
 		} while (0)
 
+enum config_item_type {
+	CIT_CONFIG,
+	CIT_CONST,
+	CIT_SELECT,
+};
+
 struct config_item {
 	const struct str *name;
 	struct val *value;
 	struct val *defvalue;
-	bool select;
+	enum config_item_type type;
 
 	avl_node_t tree;
 	list_node_t list;
