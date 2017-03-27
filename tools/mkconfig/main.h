@@ -38,6 +38,7 @@
 
 struct config_item {
 	const struct str *name;
+	struct val *value;
 	struct val *defvalue;
 	bool select;
 

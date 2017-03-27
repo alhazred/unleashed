@@ -203,18 +203,6 @@ static int cmp(const void *va, const void *vb)
 	return 0;
 }
 
-/* return a config item's value, taking into account selects' defaults */
-static inline struct val *config_item_val(struct config_item *ci)
-{
-	if (!ci)
-		return NULL;
-
-	if (!ci->select)
-		return val_getref(ci->defvalue);
-
-	return sexpr_car(val_getref(ci->defvalue));
-}
-
 static struct val *config_lookup(struct str *name, void *private)
 {
 	struct config_item key = {
@@ -226,7 +214,13 @@ static struct val *config_lookup(struct str *name, void *private)
 
 	str_putref(name);
 
-	return config_item_val(ci);
+	/*
+	 * We're supposed to return "code", so we wrap the value in a quote.
+	 * If we returned a value instead (e.g., i386), sexpr_eval() would
+	 * try to evaluate that - by looking up the symbol.
+	 */
+	return VAL_ALLOC_CONS(VAL_ALLOC_SYM_CSTR("quote"),
+			      VAL_ALLOC_CONS(val_getref(ci->value), NULL));
 }
 
 struct mapping {
@@ -304,32 +298,13 @@ static void map_bool_makefile_dmake(FILE *f, const struct str *name,
 	fprintf(f, "CONFIG_%s=%s\n", str_cstr(name), val->b ? "" : "$(POUND_SIGN)");
 }
 
-static void __map_cons(FILE *f, const struct str *name,
-		       struct val *val, enum gen_what what)
+static void map_cons(FILE *f, const struct str *name, struct val *val)
 {
-	struct val *ret;
-
-	ret = sexpr_eval(val, config_lookup, NULL);
-
-	mapping[what].entry[ret->type](f, name, ret);
-}
-
-static void map_cons_header(FILE *f, const struct str *name,
-			    struct val *val)
-{
-	__map_cons(f, name, val, GEN_HEADER);
-}
-
-static void map_cons_makefile(FILE *f, const struct str *name,
-			      struct val *val)
-{
-	__map_cons(f, name, val, GEN_MAKEFILE);
-}
-
-static void map_cons_makefile_dmake(FILE *f, const struct str *name,
-				    struct val *val)
-{
-	__map_cons(f, name, val, GEN_MAKEFILE_DMAKE);
+	/*
+	 * All VT_CONS value should have been evaluated away into ints,
+	 * bools, strings, and symbols.
+	 */
+	panic("We should never be mapping a VT_CONS");
 }
 
 static void map_file_start_header(FILE *f)
@@ -371,7 +346,7 @@ static struct mapping mapping[NGEN] = {
 			[VT_STR] = map_str_header,
 			[VT_SYM] = map_sym_header,
 			[VT_BOOL] = map_bool_header,
-			[VT_CONS] = map_cons_header,
+			[VT_CONS] = map_cons,
 		},
 	},
 	[GEN_MAKEFILE] = {
@@ -381,7 +356,7 @@ static struct mapping mapping[NGEN] = {
 			[VT_STR] = map_str_makefile,
 			[VT_SYM] = map_sym_makefile,
 			[VT_BOOL] = map_bool_makefile,
-			[VT_CONS] = map_cons_makefile,
+			[VT_CONS] = map_cons,
 		},
 	},
 	[GEN_MAKEFILE_DMAKE] = {
@@ -391,7 +366,7 @@ static struct mapping mapping[NGEN] = {
 			[VT_STR] = map_str_makefile,
 			[VT_SYM] = map_sym_makefile,
 			[VT_BOOL] = map_bool_makefile_dmake,
-			[VT_CONS] = map_cons_makefile_dmake,
+			[VT_CONS] = map_cons,
 		},
 	},
 };
@@ -522,6 +497,78 @@ static int process(int dirfd, const char *infile)
 	return 0;
 }
 
+static inline struct val *get_val_atom(struct config_item *ci)
+{
+	return val_getref(ci->defvalue);
+}
+
+static inline struct val *get_val_sym(struct config_item *ci)
+{
+	return sexpr_eval(val_getref(ci->defvalue), config_lookup, NULL);
+}
+
+static inline struct val *get_val_expr(struct config_item *ci)
+{
+	return sexpr_eval(val_getref(ci->defvalue), config_lookup, NULL);
+}
+
+static inline struct val *get_val_select(struct config_item *ci)
+{
+	/* grab the first option */
+	return sexpr_eval(sexpr_car(val_getref(ci->defvalue)), NULL, NULL);
+}
+
+/* figure out config items' values */
+static void eval(void)
+{
+	struct config_item *cur;
+
+	/* use defaults for all atoms */
+	for (cur = list_head(&mapping_list);
+	     cur != NULL;
+	     cur = list_next(&mapping_list, cur)) {
+		ASSERT3P(cur->value, ==, NULL);
+
+		switch (cur->defvalue->type) {
+			case VT_INT:
+			case VT_STR:
+			case VT_BOOL:
+				cur->value = get_val_atom(cur);
+				break;
+			case VT_SYM:
+			case VT_CONS:
+				/* skip these for now */
+				break;
+		}
+	}
+
+	/* fill in all the rest (i.e., those with VT_CONS & VT_SYM defaults) */
+	for (cur = list_head(&mapping_list);
+	     cur != NULL;
+	     cur = list_next(&mapping_list, cur)) {
+		if (cur->value)
+			continue; /* already set */
+
+		switch (cur->defvalue->type) {
+			case VT_INT:
+			case VT_STR:
+			case VT_BOOL:
+				panic("config item %p (%s) found empty", cur,
+				      str_cstr(cur->name));
+			case VT_SYM:
+				cur->value = get_val_sym(cur);
+				break;
+			case VT_CONS:
+				if (cur->select)
+					cur->value = get_val_expr(cur);
+				else
+					cur->value = get_val_select(cur);
+				break;
+		}
+	}
+}
+
+/* print out the config items */
 static void map(const char *outfile, enum gen_what what)
 {
 	struct mapping *m = &mapping[what];
@@ -541,9 +588,9 @@ static void map(const char *outfile, enum gen_what what)
 	     cur = list_next(&mapping_list, cur)) {
 		struct val *value;
 
-		value = config_item_val(cur);
+		value = val_getref(cur->value);
 
-		m->entry[cur->defvalue->type](f, cur->name, value);
+		m->entry[value->type](f, cur->name, value);
 
 		val_putref(value);
 	}
@@ -620,6 +667,8 @@ int main(int argc, char **argv)
 	 * here, but that would duplicate some ugly code.
 	 */
 	__include(AT_FDCWD, VAL_ALLOC_CONS(VAL_ALLOC_CSTR(argv[argc - 1]), NULL));
+
+	eval();
 
 	map(outfile, what);
 
