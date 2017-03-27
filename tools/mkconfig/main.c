@@ -210,9 +210,9 @@ static inline struct val *config_item_val(struct config_item *ci)
 		return NULL;
 
 	if (!ci->select)
-		return val_getref(ci->value);
+		return val_getref(ci->defvalue);
 
-	return sexpr_car(val_getref(ci->value));
+	return sexpr_car(val_getref(ci->defvalue));
 }
 
 static struct val *config_lookup(struct str *name, void *private)
@@ -412,7 +412,7 @@ static void __config(struct val *args)
 		die("failed to allocate config item");
 
 	item->name = str_getref(name->str);
-	item->value = val_getref(value);
+	item->defvalue = val_getref(value);
 	item->select = false;
 
 	avl_add(&mapping_tree, item);
@@ -436,7 +436,7 @@ static void __select(struct val *args)
 		die("failed to allocate config item");
 
 	item->name = str_getref(name->str);
-	item->value = val_getref(value);
+	item->defvalue = val_getref(value);
 	item->select = true;
 
 	avl_add(&mapping_tree, item);
@@ -543,7 +543,7 @@ static void map(const char *outfile, enum gen_what what)
 
 		value = config_item_val(cur);
 
-		m->entry[cur->value->type](f, cur->name, value);
+		m->entry[cur->defvalue->type](f, cur->name, value);
 
 		val_putref(value);
 	}
