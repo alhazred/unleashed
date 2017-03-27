@@ -4,7 +4,21 @@ SUBDIR = bin \
 	 lib \
 	 share
 
-.include <bsd.subdir.mk>
+.-include "Makefile.cfgparam"
+
+.ifdef CONFIG_MACH64
+build:
+	${.MAKE} -C lib obj
+	${.MAKE} -C lib MACHINE=${CONFIG_MACH64} obj
+	${.MAKE}
+	${.MAKE} -C lib MACHINE=${CONFIG_MACH64}
+	${.MAKE} install
+	${.MAKE} -C lib MACHINE=${CONFIG_MACH64} install
+
+.include <unleashed.mk>
+.endif
+
+.include <subdir.mk>
 
 #
 # Config related support
@@ -28,4 +42,4 @@ gen-config:
 	${.CURDIR}/tools/mkconfig/mkconfig -m -o usr/src/Makefile.cfgparam ${CFGFILE}
 	${.CURDIR}/tools/mkconfig/mkconfig -M -o Makefile.cfgparam ${CFGFILE}
 
-.PHONY: gen-config
+.PHONY: gen-config build

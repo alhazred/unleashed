@@ -181,13 +181,11 @@ function build {
 	#
 	#	Build the new part of the source
 	#
-	bmake_build_step_user all
-	bmake_build_step_user install
+	bmake_build_step_user build
 
 	echo "\n==== Build warnings ($LABEL) ====\n" >>$mail_msg_file
 	cat $SRC/${INSTALLOG}.out \
-	    $SRC/${INSTALLOG}-bmake-all.out \
-	    $SRC/${INSTALLOG}-bmake-install.out \
+	    $SRC/${INSTALLOG}-bmake-build.out \
 		| egrep -i warning: \
 		| egrep -v '^tic:' \
 		| egrep -v "symbol (\`|')timezone' has differing types:" \
@@ -207,11 +205,8 @@ function build {
 	echo "dmake install:" >>$mail_msg_file
 	tail -3  $SRC/${INSTALLOG}.out >>$mail_msg_file
 	echo >>$mail_msg_file
-	echo "bmake all:" >>$mail_msg_file
-	tail -3  $SRC/${INSTALLOG}-bmake-all.out >>$mail_msg_file
-	echo >>$mail_msg_file
-	echo "bmake install:" >>$mail_msg_file
-	tail -3  $SRC/${INSTALLOG}-bmake-install.out >>$mail_msg_file
+	echo "bmake build:" >>$mail_msg_file
+	tail -3  $SRC/${INSTALLOG}-bmake-build.out >>$mail_msg_file
 
 	if [ "$i_FLAG" = "n" ]; then
 		rm -f $SRC/${NOISE}.ref
@@ -219,8 +214,7 @@ function build {
 			mv $SRC/${NOISE}.out $SRC/${NOISE}.ref
 		fi
 		cat $SRC/${INSTALLOG}.out \
-		    $SRC/${INSTALLOG}-bmake-all.out \
-		    $SRC/${INSTALLOG}-bmake-install.out \
+		    $SRC/${INSTALLOG}-bmake-build.out \
 			| grep : \
 			| egrep -v '^/' \
 			| egrep -v '^(Start|Finish|real|user|sys|./bld_awk)' \
@@ -1035,7 +1029,7 @@ function bmake_build_step_args {
 	D=$1
 	shift
 
-	echo "\n==== \`bmake $1\` at `date` ($LABEL) ====\n" >> $LOGFILE
+	echo "\n==== \`bmake -C $D $@\` at `date` ($LABEL) ====\n" >> $LOGFILE
 
 	rm -f $SRC/${INSTALLOG}-bmake-${1}.out
 	run_bmake -C $D "$@" | \
@@ -1059,13 +1053,13 @@ function bmake_build_step_args {
 # usage: bmake_build_step_user <target>
 function bmake_build_step_user {
 	bmake_build_step_args $CODEMGR_WS $1 \
-		DESTDIR=$ROOT MK_INSTALL_AS_USER=yes
+		DESTDIR=$ROOT
 }
 
 # usage: bmake_build_step_user_dir <dir> <target>
 function bmake_build_step_user_dir {
 	bmake_build_step_args $1 $2 \
-		DESTDIR=$ROOT MK_INSTALL_AS_USER=yes
+		DESTDIR=$ROOT
 }
 
 SCM_TYPE=$(child_wstype)
