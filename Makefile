@@ -6,10 +6,6 @@ SUBDIR = bin \
 
 .include <bsd.subdir.mk>
 
-# FIXME: this is a hack, for whatever reason subdir.mk doesn't seem to
-# recurse into the subdirectories for the all target
-all: ${SUBDIR}
-
 #
 # Config related support
 #

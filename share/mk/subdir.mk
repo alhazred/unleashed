@@ -86,6 +86,7 @@ SUBDIR_TARGETS += \
 	depend \
 	lint \
 	obj \
+	objlink \
 	tags \
 	etags
 
