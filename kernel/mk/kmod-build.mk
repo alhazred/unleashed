@@ -25,6 +25,7 @@
 #
 
 .include <unleashed.mk>
+.include <init.mk>
 
 .include <${SRCTOP}/Makefile.cfgparam>
 
