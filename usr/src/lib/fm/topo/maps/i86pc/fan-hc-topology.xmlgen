@@ -426,6 +426,7 @@ sub process_topology
 			    "type='string_array'>\n", $indent + 2, "");
 			my @refs = split(/\,/, $val);
 			foreach my $ref (@refs) {
+				no warnings 'redundant';
 				printf("%*s<propitem value='", $indent+4, "");
 				printf($ref, @indices);
 				printf("' />\n");
