@@ -1,4 +1,5 @@
 #!/bin/ksh -p
+# vim: noet sw=8 ts=8
 #
 # CDDL HEADER START
 #
@@ -106,12 +107,11 @@ function run_hook {
 			    	# Let exit status propagate up
 			    	touch $TMPDIR/abort
 			fi
-		) | tee -a $mail_msg_file >> $LOGFILE
+		)
 
 		if [ -f $TMPDIR/abort ]; then
 			build_ok=n
-			echo "\nAborting at request of $HOOKNAME" |
-				tee -a $mail_msg_file >> $LOGFILE
+			echo "\nAborting at request of $HOOKNAME"
 			exit 1
 		fi
 	fi
@@ -143,6 +143,7 @@ function build {
 	export ENVCPPFLAGS1=`myheaders $ROOT`
 
 	this_build_ok=y
+
 	#
 	#	Before we build anything via dmake, we need to install
 	#	bmake-ified headers to the proto area
@@ -153,27 +154,11 @@ function build {
 	#
 	#	Build the legacy part of the source
 	#
-	echo "\n==== Building legacy source at `date` ($LABEL) ====\n" \
-		>> $LOGFILE
+	echo "\n==== Building legacy source at `date` ($LABEL) ====\n"
 
-	rm -f $SRC/${INSTALLOG}.out
 	cd $SRC
-	/bin/time $MAKE -e install 2>&1 | \
-	       tee -a $SRC/${INSTALLOG}.out >> $LOGFILE
-
-	echo "\n==== Legacy build errors ($LABEL) ====\n" >> $mail_msg_file
-	egrep -e "(^(${MAKE}:|\*\*\*)|[ 	]error:[ 	\n])" \
-		${SRC}/${INSTALLOG}.out | tee $TMPDIR/build_errs \
-		>> $mail_msg_file
-	if [[ -s $TMPDIR/build_errs ]]; then
-		sed 's,$, returned non-zero exit status,' \
-			$TMPDIR/build_errs >> $mail_msg_file
-		build_ok=n
-		this_build_ok=n
-	fi
-	grep "bootblock image is .* bytes too big" $SRC/${INSTALLOG}.out \
-		>> $mail_msg_file
-	if [ "$?" = "0" ]; then
+	echo "\n==== dmake install ====\n" >&2
+	if ! /bin/time $MAKE -e install; then
 		build_ok=n
 		this_build_ok=n
 	fi
@@ -183,118 +168,22 @@ function build {
 	#
 	bmake_build_step_user build
 
-	echo "\n==== Build warnings ($LABEL) ====\n" >>$mail_msg_file
-	cat $SRC/${INSTALLOG}.out \
-	    $SRC/${INSTALLOG}-bmake-build.out \
-		| egrep -i warning: \
-		| egrep -v '^tic:' \
-		| egrep -v "symbol (\`|')timezone' has differing types:" \
-		| egrep -v "parameter <PSTAMP> set to" \
-		| egrep -v "Ignoring unknown host" \
-		| egrep -v "redefining segment flags attribute for" \
-		| tee $TMPDIR/build_warnings >> $mail_msg_file
-	if [[ -s $TMPDIR/build_warnings ]]; then
-		build_ok=n
-		this_build_ok=n
-	fi
-
-	echo "\n==== Ended OS-Net source build at `date` ($LABEL) ====\n" \
-		>> $LOGFILE
-
-	echo "\n==== Elapsed build time ($LABEL) ====\n" >>$mail_msg_file
-	echo "dmake install:" >>$mail_msg_file
-	tail -3  $SRC/${INSTALLOG}.out >>$mail_msg_file
-	echo >>$mail_msg_file
-	echo "bmake build:" >>$mail_msg_file
-	tail -3  $SRC/${INSTALLOG}-bmake-build.out >>$mail_msg_file
-
-	if [ "$i_FLAG" = "n" ]; then
-		rm -f $SRC/${NOISE}.ref
-		if [ -f $SRC/${NOISE}.out ]; then
-			mv $SRC/${NOISE}.out $SRC/${NOISE}.ref
-		fi
-		cat $SRC/${INSTALLOG}.out \
-		    $SRC/${INSTALLOG}-bmake-build.out \
-			| grep : \
-			| egrep -v '^/' \
-			| egrep -v '^(Start|Finish|real|user|sys|./bld_awk)' \
-			| egrep -v '^tic:' \
-			| egrep -v '^mcs' \
-			| egrep -v '^LD_LIBRARY_PATH=' \
-			| egrep -v 'ar: creating' \
-			| egrep -v 'ar: writing' \
-			| egrep -v 'conflicts:' \
-			| egrep -v ':saved created' \
-			| egrep -v '^stty.*c:' \
-			| egrep -v '^mfgname.c:' \
-			| egrep -v '^uname-i.c:' \
-			| egrep -v '^volumes.c:' \
-			| egrep -v 'tsort: INFORM:' \
-			| egrep -v 'stripalign:' \
-			| egrep -v 'chars, width' \
-			| egrep -v "symbol (\`|')timezone' has differing types:" \
-			| egrep -v 'PSTAMP' \
-			| egrep -v '^Manifying' \
-			| egrep -v 'Ignoring unknown host' \
-			| egrep -v 'Processing method:' \
-			| egrep -v '^Writing' \
-			| egrep -v 'spellin1:' \
-			| egrep -v '^adding:' \
-			| egrep -v "^echo 'msgid" \
-			| egrep -v '^echo ' \
-			| egrep -v '\.c:$' \
-			| egrep -v '^Adding file:' \
-			| egrep -v 'CLASSPATH=' \
-			| egrep -v '\/var\/mail\/:saved' \
-			| egrep -v -- '-DUTS_VERSION=' \
-			| egrep -v '^Running Mkbootstrap' \
-			| egrep -v '^Applet length read:' \
-			| egrep -v 'bytes written:' \
-			| egrep -v '^File:SolarisAuthApplet.bin' \
-			| egrep -v -i 'jibversion' \
-			| egrep -v '^Output size:' \
-			| egrep -v '^Solo size statistics:' \
-			| egrep -v '^Using ROM API Version' \
-			| egrep -v '^Zero Signature length:' \
-			| egrep -v '^Note \(probably harmless\):' \
-			| egrep -v '::' \
-			| egrep -v '^\+' \
-			| egrep -v '^cc1: note: -fwritable-strings' \
-			| egrep -v 'svccfg-native -s svc:/' \
-			| sort | uniq >$SRC/${NOISE}.out
-		if [ ! -f $SRC/${NOISE}.ref ]; then
-			cp $SRC/${NOISE}.out $SRC/${NOISE}.ref
-		fi
-		echo "\n==== Build noise differences ($LABEL) ====\n" \
-			>>$mail_msg_file
-		diff $SRC/${NOISE}.ref $SRC/${NOISE}.out >>$mail_msg_file
-	fi
+	echo "\n==== Ended OS-Net source build at `date` ($LABEL) ====\n"
 
 	#
 	#	Building Packages
 	#
 	if [ "$p_FLAG" = "y" -a "$this_build_ok" = "y" ]; then
 		if [ -d $SRC/pkg ]; then
-			echo "\n==== Creating $LABEL packages at `date` ====\n" \
-				>> $LOGFILE
-			echo "Clearing out $PKGARCHIVE ..." >> $LOGFILE
-			rm -rf $PKGARCHIVE >> "$LOGFILE" 2>&1
-			mkdir -p $PKGARCHIVE >> "$LOGFILE" 2>&1
+			echo "\n==== Creating $LABEL packages at `date` ====\n"
+			echo "Clearing out $PKGARCHIVE ..."
+			rm -rf $PKGARCHIVE
+			mkdir -p $PKGARCHIVE
 
 			rm -f $SRC/pkg/${INSTALLOG}.out
 			cd $SRC/pkg
-			/bin/time $MAKE -e install 2>&1 | \
-			    tee -a $SRC/pkg/${INSTALLOG}.out >> $LOGFILE
-
-			echo "\n==== package build errors ($LABEL) ====\n" \
-				>> $mail_msg_file
-
-			egrep "${MAKE}|ERROR|WARNING" $SRC/pkg/${INSTALLOG}.out | \
-				grep ':' | \
-				grep -v PSTAMP | \
-				egrep -v "Ignoring unknown host" | \
-				tee $TMPDIR/package >> $mail_msg_file
-			if [[ -s $TMPDIR/package ]]; then
+			echo "\n==== package build errors ($LABEL) ====\n" >&2
+			if ! /bin/time $MAKE -e install; then
 				build_extras_ok=n
 				this_build_ok=n
 			fi
@@ -303,11 +192,10 @@ function build {
 			# Handle it gracefully if -p was set but there so
 			# no pkg directory.
 			#
-			echo "\n==== No $LABEL packages to build ====\n" \
-				>> $LOGFILE
+			echo "\n==== No $LABEL packages to build ====\n"
 		fi
 	else
-		echo "\n==== Not creating $LABEL packages ====\n" >> $LOGFILE
+		echo "\n==== Not creating $LABEL packages ====\n"
 	fi
 }
 
@@ -324,21 +212,11 @@ function build_tools {
 	INSTALLOG=install-${MACH}
 
 	echo "\n==== Building tools at `date` ====\n" \
-		>> $LOGFILE
 
 	rm -f ${TOOLS}/${INSTALLOG}.out
 	cd ${TOOLS}
-	/bin/time $MAKE TOOLS_PROTO=${DESTROOT} -e install 2>&1 | \
-	    tee -a ${TOOLS}/${INSTALLOG}.out >> $LOGFILE
-
-	echo "\n==== Tools build errors ====\n" >> $mail_msg_file
-
-	egrep ":" ${TOOLS}/${INSTALLOG}.out |
-		egrep -e "(${MAKE}:|[ 	]error[: 	\n])" | \
-		egrep -v "Ignoring unknown host" | \
-		egrep -v warning | tee $TMPDIR/tools_errors >> $mail_msg_file
-
-	if [[ -s $TMPDIR/tools_errors ]]; then
+	echo "\n==== Tools build errors ====\n" >&2
+	if ! /bin/time $MAKE TOOLS_PROTO=${DESTROOT} -e install; then
 		return 1
 	fi
 	return 0
@@ -386,11 +264,11 @@ function use_tools {
 		export ONBLD_TOOLS
 	fi
 
-	echo "\n==== New environment settings. ====\n" >> $LOGFILE
-	echo "STABS=${STABS}" >> $LOGFILE
-	echo "CTFSTABS=${CTFSTABS}" >> $LOGFILE
-	echo "PATH=${PATH}" >> $LOGFILE
-	echo "ONBLD_TOOLS=${ONBLD_TOOLS}" >> $LOGFILE
+	echo "\n==== New environment settings. ====\n"
+	echo "STABS=${STABS}"
+	echo "CTFSTABS=${CTFSTABS}"
+	echo "PATH=${PATH}"
+	echo "ONBLD_TOOLS=${ONBLD_TOOLS}"
 }
 
 #
@@ -405,11 +283,9 @@ function do_wsdiff {
 	wsdiff="wsdiff -t"
 
 	echo "\n==== Getting object changes since last build at `date`" \
-	    "($label) ====\n" | tee -a $LOGFILE >> $mail_msg_file
-	$wsdiff -s -r ${TMPDIR}/wsdiff.results $oldproto $newproto 2>&1 | \
-		    tee -a $LOGFILE >> $mail_msg_file
-	echo "\n==== Object changes determined at `date` ($label) ====\n" | \
-	    tee -a $LOGFILE >> $mail_msg_file
+	    "($label) ====\n" >&2
+	$wsdiff -s -r ${TMPDIR}/wsdiff.results $oldproto $newproto >&2
+	echo "\n==== Object changes determined at `date` ($label) ====\n" >&2
 }
 
 #
@@ -743,8 +619,6 @@ TMPDIR="/tmp/nightly.tmpdir.$$"
 export TMPDIR
 rm -rf ${TMPDIR}
 mkdir -p $TMPDIR || exit 1
-chmod 777 $TMPDIR
-
 #
 # Tools should only be built non-DEBUG.  Keep track of the tools proto
 # area path relative to $TOOLS, because the latter changes in an
@@ -830,24 +704,7 @@ function logshuffle {
 		fi
 	fi
 
-	#
-	# Now that we're about to send mail, it's time to check the noise
-	# file.  In the event that an error occurs beyond this point, it will
-	# be recorded in the nightly.log file, but nowhere else.  This would
-	# include only errors that cause the copying of the noise log to fail
-	# or the mail itself not to be sent.
-	#
-
-	exec >>$LOGFILE 2>&1
-	if [ -s $build_noise_file ]; then
-	    	echo "\n==== Nightly build noise ====\n" |
-		    tee -a $LOGFILE >>$mail_msg_file
-		cat $build_noise_file >>$LOGFILE
-		cat $build_noise_file >>$mail_msg_file
-		echo | tee -a $LOGFILE >>$mail_msg_file
-	fi
-	rm -f $build_noise_file
-
+	kill $TEE
 	case "$build_ok" in
 		y)
 			state=Completed
@@ -879,7 +736,7 @@ function logshuffle {
 		mailx_r="-r ${MAILFROM}"
 	fi
 
-	cat $build_time_file $build_environ_file $mail_msg_file \
+	cat $build_time_file $mail_msg_file \
 	    > ${LLOG}/mail_msg
 	if [ "$m_FLAG" = "y" ]; then
 	    	cat ${LLOG}/mail_msg | /usr/bin/mailx ${mailx_r} -s \
@@ -921,8 +778,6 @@ newdirlist=
 mail_msg_file="${TMPDIR}/mail_msg"
 touch $mail_msg_file
 build_time_file="${TMPDIR}/build_time"
-build_environ_file="${TMPDIR}/build_environ"
-touch $build_environ_file
 
 mkdir -p "$ATLOG"
 #
@@ -931,64 +786,68 @@ mkdir -p "$ATLOG"
 if [ -f $LOGFILE ]; then
 	mv -f $LOGFILE ${LOGFILE}-
 fi
+
+mkfifo ${TMPDIR}/err.fifo ${TMPDIR}/out.fifo
+tee $mail_msg_file < ${TMPDIR}/err.fifo >> $LOGFILE &
+TEE=$!
+tee ${TMPDIR}/stdout.txt < ${TMPDIR}/out.fifo >> $LOGFILE &
+TEE="$TEE $!"
+exec > ${TMPDIR}/out.fifo
+exec 2> ${TMPDIR}/err.fifo
+
 #
 #	Build OsNet source
 #
 START_DATE=`date`
 SECONDS=0
-echo "\n==== Nightly $maketype build started:   $START_DATE ====" \
-    | tee -a $LOGFILE > $build_time_file
+echo "\n==== Nightly $maketype build started:   $START_DATE ====" | \
+    tee -a $build_time_file
 
-echo "\nBuild project:  $build_project\nBuild taskid:   $build_taskid" | \
-    tee -a $mail_msg_file >> $LOGFILE
-
-# make sure we log only to the nightly build file
-build_noise_file="${TMPDIR}/build_noise"
-exec </dev/null >$build_noise_file 2>&1
+echo "\nBuild project:  $build_project\nBuild taskid:   $build_taskid" >&2
 
 run_hook SYS_PRE_NIGHTLY
 run_hook PRE_NIGHTLY
 
-echo "\n==== list of environment variables ====\n" >> $LOGFILE
-env >> $LOGFILE
+echo "\n==== list of environment variables ====\n"
+env
 
-echo "\n==== Nightly argument issues ====\n" | tee -a $mail_msg_file >> $LOGFILE
+echo "\n==== Nightly argument issues ====\n" >&2
 
 if [ "$N_FLAG" = "y" ]; then
 	if [ "$p_FLAG" = "y" ]; then
-		cat <<EOF | tee -a $mail_msg_file >> $LOGFILE
+		cat <<EOF >&2
 WARNING: the p option (create packages) is set, but so is the N option (do
          not run protocmp); this is dangerous; you should unset the N option
 EOF
 	else
-		cat <<EOF | tee -a $mail_msg_file >> $LOGFILE
+		cat <<EOF >&2
 Warning: the N option (do not run protocmp) is set; it probably shouldn't be
 EOF
 	fi
-	echo "" | tee -a $mail_msg_file >> $LOGFILE
+	echo "" >&2
 fi
 
 if [ "$f_FLAG" = "y" ]; then
 	if [ "$i_FLAG" = "y" ]; then
 		echo "WARNING: the -f flag cannot be used during incremental" \
-		    "builds; ignoring -f\n" | tee -a $mail_msg_file >> $LOGFILE
+		    "builds; ignoring -f\n" >&2
 		f_FLAG=n
 	fi
 	if [ "${p_FLAG}" != "y" ]; then
 		echo "WARNING: the -f flag requires -p;" \
-		    "ignoring -f\n" | tee -a $mail_msg_file >> $LOGFILE
+		    "ignoring -f\n" >&2
 		f_FLAG=n
 	fi
 fi
 
 if [ "$w_FLAG" = "y" -a ! -d $ROOT ]; then
 	echo "WARNING: -w specified, but $ROOT does not exist;" \
-	    "ignoring -w\n" | tee -a $mail_msg_file >> $LOGFILE
+	    "ignoring -w\n" >&2
 	w_FLAG=n
 fi
 
-echo "\n==== Build version ====\n" | tee -a $mail_msg_file >> $LOGFILE
-echo $VERSION | tee -a $mail_msg_file >> $LOGFILE
+echo "\n==== Build version ====\n" >&2
+echo $VERSION >&2
 
 # Save the current proto area if we're comparing against the last build
 if [ "$w_FLAG" = "y" -a -d "$ROOT" ]; then
@@ -1018,10 +877,11 @@ function child_wstype {
 }
 
 function run_bmake {
+	echo "\n==== bmake $@ ====\n" >&2
 	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
 		bmake -j $DMAKE_MAX_JOBS \
 			VERBOSE=yes \
-			"$@" 2>&1
+			"$@"
 }
 
 # usage: bmake_build_step_args <dir> <target> <args...>
@@ -1029,19 +889,9 @@ function bmake_build_step_args {
 	D=$1
 	shift
 
-	echo "\n==== \`bmake -C $D $@\` at `date` ($LABEL) ====\n" >> $LOGFILE
+	echo "\n==== \`bmake -C $D $@\` at `date` ($LABEL) ====\n"
 
-	rm -f $SRC/${INSTALLOG}-bmake-${1}.out
-	run_bmake -C $D "$@" | \
-		tee -a $SRC/${INSTALLOG}-bmake-${1}.out >> $LOGFILE
-
-	echo "\n==== \`bmake $1\` errors ($LABEL) ====\n" >> $mail_msg_file
-	egrep -e "(^(bmake[^\s]*:|\*\*\*)|[ 	]error:[ 	\n])" \
-		${SRC}/${INSTALLOG}-bmake-${1}.out | \
-		tee $TMPDIR/build_errs-${1} >> $mail_msg_file
-	if [ -s $TMPDIR/build_errs-${1} ] ; then
-		sed 's,$, returned non-zero exit status,' \
-			$TMPDIR/build_errs-${1} >> $mail_msg_file
+	if ! run_bmake -C $D "$@"; then
 		build_ok=n
 		this_build_ok=n
 		return 1
@@ -1080,7 +930,7 @@ bmake_build_step_args $CODEMGR_WS gen-config || build_extras_ok=n
 #	Decide whether to clobber
 #
 if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
-	echo "\n==== Make clobber at `date` ====\n" >> $LOGFILE
+	echo "\n==== Make clobber at `date` ====\n"
 
 	cd $SRC
 	# remove old clobber file
@@ -1093,33 +943,24 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 		-o -name 'interfaces.*' \) -prune \
 		-o -name '.make.*' -print | xargs rm -f
 
-	$MAKE -ek clobber 2>&1 | tee -a $SRC/clobber-${MACH}.out >> $LOGFILE
-	echo "\n==== Make clobber ERRORS ====\n" >> $mail_msg_file
-	grep "$MAKE:" $SRC/clobber-${MACH}.out |
-		egrep -v "Ignoring unknown host" | \
-		tee $TMPDIR/clobber_errs >> $mail_msg_file
-
-	if [[ -s $TMPDIR/clobber_errs ]]; then
+	echo "\n==== Make clobber ERRORS ====\n" >&2
+	if ! $MAKE -ek clobber; then
 		build_extras_ok=n
 	fi
 
-	echo "\n==== Make tools clobber at `date` ====\n" >> $LOGFILE
+	echo "\n==== Make tools clobber at `date` ====\n"
 	cd ${TOOLS}
 	rm -f ${TOOLS}/clobber-${MACH}.out
-	$MAKE TOOLS_PROTO=$TOOLS_PROTO -ek clobber 2>&1 | \
-		tee -a ${TOOLS}/clobber-${MACH}.out >> $LOGFILE
-	echo "\n==== Make tools clobber ERRORS ====\n" \
-		>> $mail_msg_file
-	grep "$MAKE:" ${TOOLS}/clobber-${MACH}.out \
-		>> $mail_msg_file
-	if (( $? == 0 )); then
+
+	echo "\n==== Make tools clobber ERRORS ====\n" >&2
+	if ! $MAKE TOOLS_PROTO=$TOOLS_PROTO -ek clobber; then
 		build_extras_ok=n
 	fi
 	rm -rf ${TOOLS_PROTO}
 	mkdir -p ${TOOLS_PROTO}
 
 	typeset roots=$ROOT
-	echo "\n\nClearing $roots" >> "$LOGFILE"
+	echo "\n\nClearing $roots"
 	rm -rf $roots
 
 	# Get back to a clean workspace as much as possible to catch
@@ -1134,24 +975,23 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	    \( -name '.make.*' -o -name 'lib*.a' -o -name 'lib*.so*' -o \
 	       -name '*.o' \) -print | \
 	    grep -v 'tools/ctf/dwarf/.*/libdwarf' | xargs rm -f
-	echo "\n==== bmake cleandir ====\n" >> $LOGFILE
-	run_bmake -C $CODEMGR_WS cleandir >> $LOGFILE 2>&1
+	echo "\n==== bmake cleandir ====\n"
+	run_bmake -C $CODEMGR_WS cleandir
 else
-	echo "\n==== No clobber at `date` ====\n" >> $LOGFILE
+	echo "\n==== No clobber at `date` ====\n"
 fi
 
-echo "\n==== Build environment ====\n" | tee -a $build_environ_file >> $LOGFILE
+echo "\n==== Build environment ====\n" >&2
 
 # System
-whence uname | tee -a $build_environ_file >> $LOGFILE
-uname -a 2>&1 | tee -a $build_environ_file >> $LOGFILE
-echo | tee -a $build_environ_file >> $LOGFILE
+whence uname >&2
+uname -a >&2
+echo >&2
 
 # make
-whence $MAKE | tee -a $build_environ_file >> $LOGFILE
-$MAKE -v | tee -a $build_environ_file >> $LOGFILE
-echo "number of concurrent jobs = $DMAKE_MAX_JOBS" |
-    tee -a $build_environ_file >> $LOGFILE
+whence $MAKE >&2
+$MAKE -v >&2
+echo "number of concurrent jobs = $DMAKE_MAX_JOBS" >&2
 
 #
 # Report the compiler versions.
@@ -1159,23 +999,13 @@ echo "number of concurrent jobs = $DMAKE_MAX_JOBS" |
 
 if [[ ! -f $SRC/Makefile ]]; then
 	build_ok=n
-	echo "\nUnable to find \"Makefile\" in $SRC." | \
-	    tee -a $build_environ_file >> $LOGFILE
+	echo "\nUnable to find \"Makefile\" in $SRC." >&2
 	exit 1
 fi
 
-# Check that we're running a capable link-editor
-whence ld | tee -a $build_environ_file >> $LOGFILE
+whence ld >&2
 LDVER=`ld -V 2>&1`
-echo $LDVER | tee -a $build_environ_file >> $LOGFILE
-LDVER=`echo $LDVER | sed -e "s/.*-1\.\([0-9]*\).*/\1/"`
-if [ `expr $LDVER \< 422` -eq 1 ]; then
-	echo "The link-editor needs to be at version 422 or higher to build" | \
-	    tee -a $build_environ_file >> $LOGFILE
-	echo "the latest stuff.  Hope your build works." | \
-	    tee -a $build_environ_file >> $LOGFILE
-fi
-
+echo $LDVER >&2
 #
 # Build and use the workspace's tools if requested
 #
@@ -1198,10 +1028,8 @@ BINARCHIVE=${CODEMGR_WS}/bin-${MACH}.cpio.Z
 
 if [ "$build_ok" = "y" ]; then
 	echo "\n==== Creating protolist system file at `date` ====" \
-		>> $LOGFILE
 	protolist $ROOT > $ATLOG/proto_list_${MACH}
 	echo "==== protolist system file created at `date` ====\n" \
-		>> $LOGFILE
 
 	if [ "$N_FLAG" != "y" ]; then
 
@@ -1227,11 +1055,8 @@ if [ "$build_ok" = "y" ]; then
 	fi
 
 	if [ "$N_FLAG" != "y" -a -d $SRC/pkg ]; then
-		echo "\n==== Validating manifests against proto area ====\n" \
-		    >> $mail_msg_file
-		( cd $SRC/pkg ; $MAKE -e protocmp ROOT="$ROOT" ) | \
-		    tee $TMPDIR/protocmp_noise >> $mail_msg_file
-		if [[ -s $TMPDIR/protocmp_noise ]]; then
+		echo "\n==== Validating manifests against proto area ====\n" >&2
+		if ! ( cd $SRC/pkg ; $MAKE -e protocmp ROOT="$ROOT" ) >&2; then
 			build_extras_ok=n
 		fi
 	fi
@@ -1259,15 +1084,13 @@ if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 	find_elf -fr $ROOT > $elf_ddir/object_list
 
 	if [[ $A_FLAG = y ]]; then
-	       	echo "\n==== Check versioning and ABI information ====\n"  | \
-		    tee -a $LOGFILE >> $mail_msg_file
+	       	echo "\n==== Check versioning and ABI information ====\n" >&2
 
 		# Produce interface description for the proto. Report errors.
 		interface_check -o -w $elf_ddir -f object_list \
 			-i interface -E interface.err
 		if [[ -s $elf_ddir/interface.err ]]; then
-			tee -a $LOGFILE < $elf_ddir/interface.err \
-			    >> $mail_msg_file
+			cat $elf_ddir/interface.err >&2
 			build_extras_ok=n
 		fi
 
@@ -1278,32 +1101,27 @@ if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 			base_ifile="$ELF_DATA_BASELINE_DIR/interface"
 
 		       	echo "\n==== Compare versioning and ABI information" \
-			    "to baseline ====\n"  | \
-			    tee -a $LOGFILE >> $mail_msg_file
-		       	echo "Baseline:  $base_ifile\n" >> $LOGFILE
+			    "to baseline ====\n" >&2
+		       	echo "Baseline:  $base_ifile\n"
 
 			if [[ -f $base_ifile ]]; then
 				interface_cmp -d -o $base_ifile \
 				    $elf_ddir/interface > $elf_ddir/interface.cmp
 				if [[ -s $elf_ddir/interface.cmp ]]; then
-					echo | tee -a $LOGFILE >> $mail_msg_file
-					tee -a $LOGFILE < \
-					    $elf_ddir/interface.cmp \
-					    >> $mail_msg_file
+					echo >&2
+					cat $elf_ddir/interface.cmp >&2
 					build_extras_ok=n
 				fi
 			else
 			       	echo "baseline not available. comparison" \
-                                    "skipped" | \
-				    tee -a $LOGFILE >> $mail_msg_file
+                                    "skipped" >&2
 			fi
 
 		fi
 	fi
 
 	if [[ $r_FLAG = y ]]; then
-		echo "\n==== Check ELF runtime attributes ====\n" | \
-		    tee -a $LOGFILE >> $mail_msg_file
+		echo "\n==== Check ELF runtime attributes ====\n" >&2
 
 		# If we're doing a DEBUG build the proto area will be left
 		# with debuggable objects, thus don't assert -s.
@@ -1326,8 +1144,7 @@ if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 
 		# Report errors
 		if [[ -s $elf_ddir/runtime.err ]]; then
-			tee -a $LOGFILE < $elf_ddir/runtime.err \
-				>> $mail_msg_file
+			cat $elf_ddir/runtime.err >&2
 			build_extras_ok=n
 		fi
 
@@ -1338,13 +1155,11 @@ if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 		# flushes out non-ABI interface differences along with the
 		# other information.
 		echo "\n==== Diff ELF runtime attributes" \
-		    "(since last build) ====\n" | \
-		    tee -a $LOGFILE >> $mail_msg_file >> $mail_msg_file
+		    "(since last build) ====\n" >&2
 
 		if [[ -f $elf_ddir.ref/runtime.attr ]]; then
 			diff $elf_ddir.ref/runtime.attr \
-				$elf_ddir/runtime.attr \
-				>> $mail_msg_file
+				$elf_ddir/runtime.attr >&2
 		fi
 	fi
 fi
@@ -1357,44 +1172,34 @@ if [ "$i_CMD_LINE_FLAG" = "n" -a "$C_FLAG" = "y" ]; then
 
 	rm -f $SRC/check-${MACH}.out
 	cd $SRC
-	$MAKE -ek check ROOT="$ROOT" 2>&1 | tee -a $SRC/check-${MACH}.out \
-	    >> $LOGFILE
-	echo "\n==== cstyle/hdrchk errors ====\n" >> $mail_msg_file
-
-	grep ":" $SRC/check-${MACH}.out |
-		egrep -v "Ignoring unknown host" | \
-		sort | uniq | tee $TMPDIR/check_errors >> $mail_msg_file
-
-	if [[ -s $TMPDIR/check_errors ]]; then
+	echo "\n==== cstyle/hdrchk errors ====\n" >&2
+	if ! $MAKE -ek check ROOT="$ROOT"; then
 		build_extras_ok=n
 	fi
 else
-	echo "\n==== No '$MAKE check' ====\n" >> $LOGFILE
+	echo "\n==== No '$MAKE check' ====\n"
 fi
 
-echo "\n==== Find core files ====\n" | \
-    tee -a $LOGFILE >> $mail_msg_file
+echo "\n==== Find core files ====\n" >&2
 
-find $abssrcdirs -name core -a -type f -exec file {} \; | \
-	tee -a $LOGFILE >> $mail_msg_file
+find $abssrcdirs -name core -a -type f -exec file {} \; >&2
 
 if [ "$f_FLAG" = "y" -a "$build_ok" = "y" ]; then
-	echo "\n==== Diff unreferenced files (since last build) ====\n" \
-	    | tee -a $LOGFILE >>$mail_msg_file
+	echo "\n==== Diff unreferenced files (since last build) ====\n" >&2
 	rm -f $SRC/unref-${MACH}.ref
 	if [ -f $SRC/unref-${MACH}.out ]; then
 		mv $SRC/unref-${MACH}.out $SRC/unref-${MACH}.ref
 	fi
 
 	findunref -S $SCM_TYPE -t $SRC/.build.tstamp -s usr $CODEMGR_WS \
-	    ${TOOLS}/findunref/exception_list 2>> $mail_msg_file | \
+	    ${TOOLS}/findunref/exception_list | \
 	    sort > $SRC/unref-${MACH}.out
 
 	if [ ! -f $SRC/unref-${MACH}.ref ]; then
 		cp $SRC/unref-${MACH}.out $SRC/unref-${MACH}.ref
 	fi
 
-	diff $SRC/unref-${MACH}.ref $SRC/unref-${MACH}.out >>$mail_msg_file
+	diff $SRC/unref-${MACH}.ref $SRC/unref-${MACH}.out >&2
 fi
 
 # Verify that the usual lists of files, such as exception lists,
@@ -1402,20 +1207,18 @@ fi
 # then don't check the proto area.
 CHECK_PATHS=${CHECK_PATHS:-y}
 if [ "$CHECK_PATHS" = y -a "$N_FLAG" != y ]; then
-	echo "\n==== Check lists of files ====\n" | tee -a $LOGFILE \
-		>>$mail_msg_file
+	echo "\n==== Check lists of files ====\n" >&2
 	arg=-b
 	[ "$build_ok" = y ] && arg=
 	checkpaths $arg $ROOT > $SRC/check-paths.out 2>&1
 	if [[ -s $SRC/check-paths.out ]]; then
-		tee -a $LOGFILE < $SRC/check-paths.out >> $mail_msg_file
+		cat $SRC/check-paths.out >&2
 		build_extras_ok=n
 	fi
 fi
 
 if [ "$M_FLAG" != "y" -a "$build_ok" = y ]; then
-	echo "\n==== Impact on file permissions ====\n" \
-		>> $mail_msg_file
+	echo "\n==== Impact on file permissions ====\n" >&2
 
 	abspkg=
 	for d in $abssrcdirs; do
@@ -1426,7 +1229,7 @@ if [ "$M_FLAG" != "y" -a "$build_ok" = y ]; then
 
 	if [ -n "$abspkg" ]; then
 		for d in "$abspkg"; do
-			( cd $d/pkg ; $MAKE -e pmodes ) >> $mail_msg_file
+			( cd $d/pkg ; $MAKE -e pmodes ) >&2
 		done
 	fi
 fi
@@ -1441,7 +1244,7 @@ fi
 
 END_DATE=`date`
 echo "==== Nightly $maketype build completed: $END_DATE ====" | \
-    tee -a $LOGFILE >> $build_time_file
+    tee -a $build_time_file
 
 typeset -i10 hours
 typeset -Z2 minutes
@@ -1453,9 +1256,9 @@ elapsed_time=$SECONDS
 ((seconds = elapsed_time % 60))
 
 echo "\n==== Total build time ====" | \
-    tee -a $LOGFILE >> $build_time_file
+    tee -a $build_time_file
 echo "\nreal    ${hours}:${minutes}:${seconds}" | \
-    tee -a $LOGFILE >> $build_time_file
+    tee -a $build_time_file
 
 #
 # All done save for the sweeping up.
