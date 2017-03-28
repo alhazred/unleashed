@@ -90,6 +90,7 @@ MAN_i386 = ahci.7d \
       ural.7d \
       urtw.7d \
       wpi.7d \
+      xhci.7d \
       zyd.7d
 
 MAN = aac.7d \

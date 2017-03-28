@@ -443,6 +443,15 @@ MAN = ASSERT.9f \
       usb_pipe_xopen.9f \
       usb_register_hotplug_cbs.9f \
       usb_reset_device.9f \
+      usba_alloc_hcdi_ops.9f \
+      usba_hcdi_cb.9f \
+      usba_hcdi_dup_intr_req.9f \
+      usba_hcdi_dup_isoc_req.9f \
+      usba_hcdi_get_device_private.9f \
+      usba_hcdi_register.9f \
+      usba_hubdi_bind_root_hub.9f \
+      usba_hubdi_cb_ops.9f \
+      usba_hubdi_dev_ops.9f \
       uwritec.9f \
       va_arg.9f \
       vmem_add.9f \

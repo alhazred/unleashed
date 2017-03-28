@@ -58,6 +58,18 @@ MAN = _fini.9e \
       tran_tgt_free.9e \
       tran_tgt_init.9e \
       tran_tgt_probe.9e \
+      usba_hcdi.9e \
+      usba_hcdi_cb_ops.9e \
+      usba_hcdi_device_address.9e \
+      usba_hcdi_device_init.9e \
+      usba_hcdi_hub_update.9e \
+      usba_hcdi_pipe_bulk_xfer.9e \
+      usba_hcdi_pipe_ctrl_xfer.9e \
+      usba_hcdi_pipe_intr_xfer.9e \
+      usba_hcdi_pipe_isoc_xfer.9e \
+      usba_hcdi_pipe_open.9e \
+      usba_hcdi_pipe_reset.9e \
+      usba_hcdi_pipe_stop_intr_polling.9e \
       write.9e
 
 

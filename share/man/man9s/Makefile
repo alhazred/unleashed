@@ -70,8 +70,11 @@ MAN = Intro.9s \
       usb_isoc_req.9s \
       usb_other_speed_cfg_descr.9s \
       usb_request_attributes.9s \
-      usb_string_descr.9s
-
+      usb_string_descr.9s \
+      usba_device.9s \
+      usba_hcdi_ops.9s \
+      usba_hcdi_register_args.9s \
+      usba_pipe_handle_data.9s
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.
