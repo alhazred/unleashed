@@ -960,7 +960,7 @@ extern kstat_named_t	*rfsproccnt_v2_ptr;
 extern kmutex_t		nfs_minor_lock;
 extern int		nfs_major;
 extern int		nfs_minor;
-extern vfsops_t		*nfs_vfsops;
+extern const struct vfsops	nfs_vfsops;
 extern const struct vnodeops	nfs_vnodeops;
 extern int		nfsfstyp;
 extern void		(*nfs_srv_quiesce_func)(void);
@@ -2277,7 +2277,7 @@ extern int	rfs_pathname(char *, vnode_t **, vnode_t **, vnode_t *,
 
 extern vtype_t		nf3_to_vt[];
 extern kstat_named_t	*rfsproccnt_v3_ptr;
-extern vfsops_t		*nfs3_vfsops;
+extern const struct vfsops	nfs3_vfsops;
 extern const struct vnodeops	nfs3_vnodeops;
 
 /*

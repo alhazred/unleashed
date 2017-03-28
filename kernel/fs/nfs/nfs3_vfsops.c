@@ -139,7 +139,6 @@ static int	nfs3rootvp(vnode_t **, vfs_t *, struct servinfo *,
  */
 
 static int nfs3fstyp;
-vfsops_t *nfs3_vfsops;
 
 /*
  * Debug variable to check for rdma based
@@ -148,26 +147,26 @@ vfsops_t *nfs3_vfsops;
  */
 extern int rdma_debug;
 
+const struct vfsops nfs3_vfsops = {
+	.vfs_mount = nfs3_mount,
+	.vfs_unmount = nfs3_unmount,
+	.vfs_root = nfs3_root,
+	.vfs_statvfs = nfs3_statvfs,
+	.vfs_sync = nfs3_sync,
+	.vfs_vget = nfs3_vget,
+	.vfs_mountroot = nfs3_mountroot,
+	.vfs_freevfs = nfs3_freevfs,
+};
+
 int
 nfs3init(int fstyp, char *name)
 {
-	static const fs_operation_def_t nfs3_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = nfs3_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = nfs3_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = nfs3_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = nfs3_statvfs },
-		VFSNAME_SYNC,		{ .vfs_sync = nfs3_sync },
-		VFSNAME_VGET,		{ .vfs_vget = nfs3_vget },
-		VFSNAME_MOUNTROOT,	{ .vfs_mountroot = nfs3_mountroot },
-		VFSNAME_FREEVFS,	{ .vfs_freevfs = nfs3_freevfs },
-		NULL,			NULL
-	};
 	int error;
 
-	error = vfs_setfsops(fstyp, nfs3_vfsops_template, &nfs3_vfsops);
+	error = vfs_setfsops_const(fstyp, &nfs3_vfsops);
 	if (error != 0) {
 		zcmn_err(GLOBAL_ZONEID, CE_WARN,
-		    "nfs3init: bad vfs ops template");
+		    "nfs3init: bad fstyp");
 		return (error);
 	}
 

@@ -141,7 +141,6 @@ static int	nfsrootvp(vnode_t **, vfs_t *, struct servinfo *,
  */
 
 int nfsfstyp;
-vfsops_t *nfs_vfsops;
 
 /*
  * Debug variable to check for rdma based
@@ -150,26 +149,26 @@ vfsops_t *nfs_vfsops;
  */
 int rdma_debug = 0;
 
+const struct vfsops nfs_vfsops = {
+	.vfs_mount = nfs_mount,
+	.vfs_unmount = nfs_unmount,
+	.vfs_root = nfs_root,
+	.vfs_statvfs = nfs_statvfs,
+	.vfs_sync = nfs_sync,
+	.vfs_vget = nfs_vget,
+	.vfs_mountroot = nfs_mountroot,
+	.vfs_freevfs = nfs_freevfs,
+};
+
 int
 nfsinit(int fstyp, char *name)
 {
-	static const fs_operation_def_t nfs_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = nfs_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = nfs_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = nfs_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = nfs_statvfs },
-		VFSNAME_SYNC,		{ .vfs_sync = nfs_sync },
-		VFSNAME_VGET,		{ .vfs_vget = nfs_vget },
-		VFSNAME_MOUNTROOT,	{ .vfs_mountroot = nfs_mountroot },
-		VFSNAME_FREEVFS,	{ .vfs_freevfs = nfs_freevfs },
-		NULL,			NULL
-	};
 	int error;
 
-	error = vfs_setfsops(fstyp, nfs_vfsops_template, &nfs_vfsops);
+	error = vfs_setfsops_const(fstyp, &nfs_vfsops);
 	if (error != 0) {
 		zcmn_err(GLOBAL_ZONEID, CE_WARN,
-		    "nfsinit: bad vfs ops template");
+		    "nfsinit: bad fstyp");
 		return (error);
 	}
 

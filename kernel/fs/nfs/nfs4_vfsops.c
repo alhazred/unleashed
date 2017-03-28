@@ -148,7 +148,6 @@ static void	nfs4_freevfs(vfs_t *);
 static int	nfs4rootvp(vnode_t **, vfs_t *, struct servinfo4 *,
 		    int, cred_t *, zone_t *);
 
-vfsops_t	*nfs4_vfsops;
 
 int nfs4_vfsinit(void);
 void nfs4_vfsfini(void);
@@ -184,28 +183,26 @@ static int nfs4fstyp;
  */
 extern int rdma_debug;
 
+const struct vfsops nfs4_vfsops = {
+	.vfs_mount = nfs4_mount,
+	.vfs_unmount = nfs4_unmount,
+	.vfs_root = nfs4_root,
+	.vfs_statvfs = nfs4_statvfs,
+	.vfs_sync = nfs4_sync,
+	.vfs_vget = nfs4_vget,
+	.vfs_mountroot = nfs4_mountroot,
+	.vfs_freevfs = nfs4_freevfs,
+};
+
 int
 nfs4init(int fstyp, char *name)
 {
-	static const fs_operation_def_t nfs4_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = nfs4_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = nfs4_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = nfs4_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = nfs4_statvfs },
-		VFSNAME_SYNC,		{ .vfs_sync = nfs4_sync },
-		VFSNAME_VGET,		{ .vfs_vget = nfs4_vget },
-		VFSNAME_MOUNTROOT,	{ .vfs_mountroot = nfs4_mountroot },
-		VFSNAME_FREEVFS,	{ .vfs_freevfs = nfs4_freevfs },
-		NULL,			NULL
-	};
 	int error;
 
-	nfs4_vfsops = NULL;
-
-	error = vfs_setfsops(fstyp, nfs4_vfsops_template, &nfs4_vfsops);
+	error = vfs_setfsops_const(fstyp, &nfs4_vfsops);
 	if (error != 0) {
 		zcmn_err(GLOBAL_ZONEID, CE_WARN,
-		    "nfs4init: bad vfs ops template");
+		    "nfs4init: bad fstyp");
 		goto out;
 	}
 

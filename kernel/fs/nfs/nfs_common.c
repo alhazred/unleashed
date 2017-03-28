@@ -85,8 +85,6 @@
 static int nfsdyninit(int, char *);
 static int nfsdyn_mountroot(vfs_t *, whymountroot_t);
 
-vfsops_t *nfsdyn_vfsops;
-
 /*
  * The following data structures are used to configure the NFS
  * system call, the NFS Version 2 client VFS, and the NFS Version
@@ -325,17 +323,17 @@ rfs3_tsize(struct svc_req *req)
 	return (nfs3_max_transfer_size_clts);
 }
 
+static const struct vfsops nfsdyn_vfsops = {
+	.vfs_mountroot = nfsdyn_mountroot,
+};
+
 /* ARGSUSED */
 static int
 nfsdyninit(int fstyp, char *name)
 {
-	static const fs_operation_def_t nfsdyn_vfsops_template[] = {
-		VFSNAME_MOUNTROOT, { .vfs_mountroot = nfsdyn_mountroot },
-		NULL, NULL
-	};
 	int error;
 
-	error = vfs_setfsops(fstyp, nfsdyn_vfsops_template, &nfsdyn_vfsops);
+	error = vfs_setfsops_const(fstyp, &nfsdyn_vfsops);
 	if (error != 0)
 		return (error);
 
@@ -395,7 +393,7 @@ nfsdyn_mountroot(vfs_t *vfsp, whymountroot_t why)
 	/*
 	 * First try version 4
 	 */
-	vfs_setops(vfsp, nfs4_vfsops);
+	vfs_setops(vfsp, &nfs4_vfsops);
 	args.addr = &svp->sv_addr;
 	args.fh = (char *)&svp->sv_fhandle;
 	args.knconf = svp->sv_knconf;
@@ -409,7 +407,7 @@ nfsdyn_mountroot(vfs_t *vfsp, whymountroot_t why)
 			    "Unable to mount NFS root filesystem: %m");
 			sv_free(svp);
 			pn_free(&pn);
-			vfs_setops(vfsp, nfsdyn_vfsops);
+			vfs_setops(vfsp, &nfsdyn_vfsops);
 			return (error);
 		}
 
@@ -417,7 +415,7 @@ nfsdyn_mountroot(vfs_t *vfsp, whymountroot_t why)
 		 * Then try version 3
 		 */
 		bzero(&args, sizeof (args));
-		vfs_setops(vfsp, nfs3_vfsops);
+		vfs_setops(vfsp, &nfs3_vfsops);
 		args.addr = &svp->sv_addr;
 		args.fh = (char *)&svp->sv_fhandle;
 		args.knconf = svp->sv_knconf;
@@ -431,7 +429,7 @@ nfsdyn_mountroot(vfs_t *vfsp, whymountroot_t why)
 				    "Unable to mount NFS root filesystem: %m");
 				sv_free(svp);
 				pn_free(&pn);
-				vfs_setops(vfsp, nfsdyn_vfsops);
+				vfs_setops(vfsp, &nfsdyn_vfsops);
 				return (error);
 			}
 
@@ -445,7 +443,7 @@ nfsdyn_mountroot(vfs_t *vfsp, whymountroot_t why)
 			args.hostname = root_hostname;
 			vfsflags = 0;
 
-			vfs_setops(vfsp, nfs_vfsops);
+			vfs_setops(vfsp, &nfs_vfsops);
 
 			if (error = mount_root(*name ? name : "root",
 			    root_path, NFS_VERSION, &args, &vfsflags)) {
@@ -453,7 +451,7 @@ nfsdyn_mountroot(vfs_t *vfsp, whymountroot_t why)
 				    "Unable to mount NFS root filesystem: %m");
 				sv_free(svp);
 				pn_free(&pn);
-				vfs_setops(vfsp, nfsdyn_vfsops);
+				vfs_setops(vfsp, &nfsdyn_vfsops);
 				return (error);
 			}
 		}
