@@ -69,7 +69,6 @@
 #include "zfs_comutil.h"
 
 int zfsfstype;
-vfsops_t *zfs_vfsops = NULL;
 static major_t zfs_major;
 static minor_t zfs_minor;
 static kmutex_t	zfs_dev_mtx;
@@ -84,16 +83,15 @@ static int zfs_statvfs(vfs_t *vfsp, struct statvfs64 *statp);
 static int zfs_vget(vfs_t *vfsp, vnode_t **vpp, fid_t *fidp);
 static void zfs_freevfs(vfs_t *vfsp);
 
-static const fs_operation_def_t zfs_vfsops_template[] = {
-	VFSNAME_MOUNT,		{ .vfs_mount = zfs_mount },
-	VFSNAME_MOUNTROOT,	{ .vfs_mountroot = zfs_mountroot },
-	VFSNAME_UNMOUNT,	{ .vfs_unmount = zfs_umount },
-	VFSNAME_ROOT,		{ .vfs_root = zfs_root },
-	VFSNAME_STATVFS,	{ .vfs_statvfs = zfs_statvfs },
-	VFSNAME_SYNC,		{ .vfs_sync = zfs_sync },
-	VFSNAME_VGET,		{ .vfs_vget = zfs_vget },
-	VFSNAME_FREEVFS,	{ .vfs_freevfs = zfs_freevfs },
-	NULL,			NULL
+static const struct vfsops zfs_vfsops = {
+	.vfs_mount = zfs_mount,
+	.vfs_mountroot = zfs_mountroot,
+	.vfs_unmount = zfs_umount,
+	.vfs_root = zfs_root,
+	.vfs_statvfs = zfs_statvfs,
+	.vfs_sync = zfs_sync,
+	.vfs_vget = zfs_vget,
+	.vfs_freevfs = zfs_freevfs,
 };
 
 /*
@@ -1971,9 +1969,9 @@ zfs_vfsinit(int fstype, char *name)
 	/*
 	 * Setup vfsops and vnodeops tables.
 	 */
-	error = vfs_setfsops(fstype, zfs_vfsops_template, &zfs_vfsops);
+	error = vfs_setfsops_const(fstype, &zfs_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "zfs: bad vfs ops template");
+		cmn_err(CE_WARN, "zfs: bad fstype");
 	}
 
 	error = zfs_create_op_tables();
