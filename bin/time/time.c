@@ -121,7 +121,6 @@ main(int argc, char **argv)
 		(void) fprintf(stderr, "time: %s\n",
 		    gettext("command terminated abnormally."));
 	after = times(&buffer);
-	(void) fprintf(stderr, "\n");
 	if (pflag)
 		(void) fprintf(stderr, "real %.2f\nuser %.2f\nsys %.2f\n",
 		    (double)(after-before)/clock_tick,
