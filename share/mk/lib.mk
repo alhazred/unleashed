@@ -344,7 +344,7 @@ realinstall: libinstall
 .endif
 .if !target(libinstall)
 libinstall:
-	${INSTALL} -d ${LIB_INSTALL_OWN} -m 775 ${DESTDIR}${LIBDIR}
+	${INSTALL} -d ${LIB_INSTALL_OWN} -m 755 ${DESTDIR}${LIBDIR}
 .if ${MK_ARCHIVE} != "no"
 	${INSTALL} ${COPY} ${LIB_INSTALL_OWN} -m 600 lib${LIB}.a \
 	    ${DESTDIR}${LIBDIR}
@@ -400,7 +400,7 @@ realinstall: beforeinstall
 # otherwise it is the same as realinstall
 # Note that we don't need this when using dpadd.mk
 .libinstall:	${_LIBS}
-	${INSTALL} -d -m775 ${DESTDIR}${LIBDIR}
+	${INSTALL} -d -m755 ${DESTDIR}${LIBDIR}
 .for _lib in ${_LIBS:M*.a}
 	${INSTALL} ${COPY} -m 644 ${_lib} ${DESTDIR}${LIBDIR}
 .endfor

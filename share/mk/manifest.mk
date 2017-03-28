@@ -46,7 +46,7 @@
 
 UID.dirs ?= 0
 GID.dirs ?= 0
-MODE.dirs ?= 775
+MODE.dirs ?= 755
 FLAGS.dirs ?= 
 
 UID.files ?= 0
