@@ -139,7 +139,7 @@ LIBDAUDITLIBS = $(LDLIBS.lib) -lmapmalloc -lc -lproc
 
 yydebug := YYCFLAGS += -DYYDEBUG
 
-LFLAGS = -t -v
+LFLAGS = -t -n
 YFLAGS = -d -v
 
 ROOTDLIBDIR = $(ROOT)/usr/lib/dtrace
