@@ -387,7 +387,6 @@ COMMON_SUBDIRS=		\
 	terminfo	\
 	th_tools	\
 	tic		\
-	time		\
 	tip		\
 	touch		\
 	tput		\
@@ -655,7 +654,6 @@ MSGSUBDIRS=		\
 	tabs		\
 	tar		\
 	tbl		\
-	time		\
 	touch		\
 	tput		\
 	troff		\
