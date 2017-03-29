@@ -22,14 +22,13 @@
 # Use is subject to license terms.
 #
 
-TXTS= nsswitch.conf netconfig hosts services
+TXTS= nsswitch.conf netconfig services
 DEFAULTFILES= nss.dfl
 
 include ../Makefile.cmd
 
-FILES= hosts services
-ETCFILES= netconfig nsswitch.conf nsswitch.files nsswitch.nis \
-		nsswitch.dns nsswitch.ldap nsswitch.ad
+FILES= services
+ETCFILES= netconfig nsswitch.conf
 
 ROOTNET=    $(ROOTETC)/net
 TICLTS=     $(ROOTNET)/ticlts

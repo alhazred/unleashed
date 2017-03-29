@@ -365,19 +365,12 @@ file path=etc/mailcap preserve=true
 file path=etc/mime.types preserve=true
 file path=etc/mnttab group=root mode=0444 preserve=true
 file path=etc/motd group=sys preserve=true
-file path=etc/net/ticlts/hosts group=sys
 file path=etc/net/ticlts/services group=sys preserve=true
-file path=etc/net/ticots/hosts group=sys
 file path=etc/net/ticots/services group=sys preserve=true
-file path=etc/net/ticotsord/hosts group=sys
 file path=etc/net/ticotsord/services group=sys preserve=true
 file path=etc/netconfig group=sys preserve=true
 file path=etc/nscd.conf group=sys preserve=true
-file path=etc/nsswitch.ad group=sys
 file path=etc/nsswitch.conf group=sys preserve=true
-file path=etc/nsswitch.dns group=sys
-file path=etc/nsswitch.files group=sys
-file path=etc/nsswitch.ldap group=sys
 file path=etc/pam.conf group=sys preserve=true
 file path=etc/pam.d/cron group=sys preserve=true
 file path=etc/pam.d/login group=sys preserve=true
