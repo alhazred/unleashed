@@ -77,11 +77,6 @@ PRINTOBJDIR=	${PRINT.VAR.MAKE} -V .OBJDIR
 PRINTOBJDIR=	echo # prevent infinite recursion
 .endif
 
-# we really like to have SRCTOP and OBJTOP defined...
-.if !defined(SRCTOP) || !defined(OBJTOP)
-.-include <srctop.mk>
-.endif
-
 .if !defined(SRCTOP) || !defined(OBJTOP)
 # dpadd.mk is rather pointless without these
 OPTIONS_DEFAULT_NO+= DPADD_MK
