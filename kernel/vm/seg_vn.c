@@ -1780,7 +1780,7 @@ segvn_hat_rgn_unload_callback(caddr_t saddr, caddr_t eaddr, caddr_t r_saddr,
 
 	len = eaddr - saddr;
 	off = (saddr - r_saddr) + r_objoff;
-	free_vp_pages(vp, off, len);
+	free_vp_pages(&vp->v_object, off, len);
 }
 
 /*
@@ -1801,7 +1801,7 @@ segvn_hat_unload_callback(hat_callback_t *cb)
 
 	len = cb->hcb_end_addr - cb->hcb_start_addr;
 	off = cb->hcb_start_addr - seg->s_base;
-	free_vp_pages(svd->vp, svd->offset + off, len);
+	free_vp_pages(&svd->vp->v_object, svd->offset + off, len);
 }
 
 /*

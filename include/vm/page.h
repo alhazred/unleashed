@@ -644,7 +644,7 @@ void    page_create_putback(spgcnt_t npages);
 void	page_free(page_t *, int);
 void	page_free_at_startup(page_t *);
 void	page_free_pages(page_t *);
-void	free_vp_pages(struct vnode *, uoff_t, size_t);
+void free_vp_pages(struct vmobject *, uoff_t, size_t);
 int	page_reclaim(page_t *, vnode_t *);
 void	page_destroy(page_t *, int);
 void	page_destroy_pages(page_t *);

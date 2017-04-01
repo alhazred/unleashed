@@ -2616,7 +2616,7 @@ int free_pages = 1;
  * find any page we miss in free_vp_pages().
  */
 void
-free_vp_pages(vnode_t *vp, uoff_t off, size_t len)
+free_vp_pages(struct vmobject *obj, uoff_t off, size_t len)
 {
 	page_t *pp;
 	uoff_t eoff;
@@ -2626,7 +2626,7 @@ free_vp_pages(vnode_t *vp, uoff_t off, size_t len)
 
 	if (free_pages == 0)
 		return;
-	if (swap_in_range(vp, off, len))
+	if (swap_in_range(obj->vnode, off, len))
 		return;
 
 	for (; off < eoff; off += PAGESIZE) {
@@ -2635,7 +2635,7 @@ free_vp_pages(vnode_t *vp, uoff_t off, size_t len)
 		 * find the page using a fast, but inexact search. It'll be OK
 		 * if a few pages slip through the cracks here.
 		 */
-		pp = page_exists(&vp->v_object, off);
+		pp = page_exists(obj, off);
 
 		/*
 		 * If we didn't find the page (it may not exist), the page
@@ -2653,7 +2653,8 @@ free_vp_pages(vnode_t *vp, uoff_t off, size_t len)
 		 * correct page and not already free
 		 */
 		ASSERT(PAGE_LOCKED_SE(pp, SE_EXCL));
-		if (pp->p_vnode != vp || pp->p_offset != off || PP_ISFREE(pp)) {
+		if (pp->p_vnode != obj->vnode || pp->p_offset != off ||
+		    PP_ISFREE(pp)) {
 			page_unlock(pp);
 			continue;
 		}
