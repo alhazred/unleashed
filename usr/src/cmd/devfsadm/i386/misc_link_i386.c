@@ -46,7 +46,6 @@ static int mc_node(di_minor_t minor, di_node_t node);
 static int xsvc(di_minor_t minor, di_node_t node);
 static int srn(di_minor_t minor, di_node_t node);
 static int ucode(di_minor_t minor, di_node_t node);
-static int heci(di_minor_t minor, di_node_t node);
 
 
 static devfsadm_create_t misc_cbt[] = {
@@ -87,9 +86,6 @@ static devfsadm_create_t misc_cbt[] = {
 	{ "pseudo", "ddi_pseudo", "ucode",
 	    TYPE_EXACT | DRV_EXACT, ILEVEL_0, ucode,
 	},
-	{ "pseudo", "ddi_pseudo", "heci",
-	    TYPE_EXACT | DRV_EXACT, ILEVEL_0, heci,
-	}
 };
 
 DEVFSADM_CREATE_INIT_V0(misc_cbt);
@@ -390,14 +386,5 @@ static int
 ucode(di_minor_t minor, di_node_t node)
 {
 	(void) devfsadm_mklink("ucode", node, minor, 0);
-	return (DEVFSADM_CONTINUE);
-}
-
-static int
-heci(di_minor_t minor, di_node_t node)
-{
-	if (strcmp(di_minor_name(minor), "AMT") == 0) {
-		(void) devfsadm_mklink("heci", node, minor, 0);
-	}
 	return (DEVFSADM_CONTINUE);
 }

@@ -1,8 +1,7 @@
 .include <../../../Makefile.cfgparam>
 
 MAN_i386 = acpidump.1m \
-      acpixtract.1m \
-      lms.1m
+      acpixtract.1m
 
 MAN_sparc = cvcd.1m \
       dcs.1m \
