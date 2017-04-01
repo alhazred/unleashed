@@ -45,5 +45,5 @@ driver name=rtw alias=pci10ec,8180 clone_perms="rtw 0666 root sys" \
 file path=kernel/drv/$(ARCH64)/rtw group=sys
 file path=kernel/drv/rtw group=sys
 file path=usr/share/man/man7d/rtw.7d
-license usr/src/uts/common/io/rtw/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/rtw/THIRDPARTYLICENSE
+license kernel/drivers/net/wifi/rtw/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/rtw/THIRDPARTYLICENSE

@@ -1581,36 +1581,11 @@ PCN_OBJS += pcn.o
 
 RGE_OBJS += rge_main.o rge_chip.o rge_ndd.o rge_kstats.o rge_log.o rge_rxtx.o
 
-URTW_OBJS += urtw.o
-
-ARN_OBJS += arn_hw.o arn_eeprom.o arn_mac.o arn_calib.o arn_ani.o arn_phy.o arn_regd.o arn_beacon.o \
-		arn_main.o arn_recv.o arn_xmit.o arn_rc.o
-
-ATH_OBJS += ath_aux.o ath_main.o ath_osdep.o ath_rate.o
-
-ATU_OBJS += atu.o
-
 IPW_OBJS += ipw2100_hw.o ipw2100.o
-
-MWL_OBJS += mwl.o
 
 MWLFW_OBJS += mwlfw_mode.o
 
-RAL_OBJS += rt2560.o ral_rate.o
-
-RUM_OBJS += rum.o
-
-RWD_OBJS += rt2661.o
-
-RWN_OBJS += rt2860.o
-
-UATH_OBJS += uath.o
-
 UATHFW_OBJS += uathfw_mod.o
-
-URAL_OBJS += ural.o
-
-RTW_OBJS += rtw.o smc93cx6.o rtwphy.o rtwphyio.o
 
 MXFE_OBJS += mxfe.o
 

@@ -8,6 +8,18 @@ SUBDIR_${CONFIG_IWP}		+= iwp
 SUBDIR_${CONFIG_ZYD}		+= zyd
 
 SUBDIR = ${SUBDIR_y} \
+	 arn \
+	 ath \
+	 atu \
+	 mwl \
+	 ral \
+	 rtw \
+	 rum \
+	 rwd \
+	 rwn \
+	 uath \
+	 ural \
+	 urtw \
 	 wpi
 
 .include <bsd.subdir.mk>

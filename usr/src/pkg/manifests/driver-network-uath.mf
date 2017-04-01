@@ -54,7 +54,7 @@ file path=kernel/drv/uath group=sys
 file path=kernel/misc/$(ARCH64)/uathfw group=sys mode=0755
 file path=kernel/misc/uathfw group=sys mode=0755
 file path=usr/share/man/man7d/uath.7d
-license usr/src/uts/common/io/uath/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/uath/THIRDPARTYLICENSE
-license usr/src/uts/common/io/uath/uath_fw/LICENSE \
-    license=usr/src/uts/common/io/uath/uath_fw/LICENSE
+license kernel/drivers/net/wifi/uath/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/uath/THIRDPARTYLICENSE
+license kernel/drivers/net/wifi/uath/uath_fw/LICENSE \
+    license=kernel/drivers/net/wifi/uath/uath_fw/LICENSE

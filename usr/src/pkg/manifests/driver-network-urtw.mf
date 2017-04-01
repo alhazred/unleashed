@@ -58,5 +58,5 @@ file path=kernel/drv/$(ARCH64)/urtw group=sys
 file path=kernel/drv/urtw group=sys
 file path=usr/share/man/man7d/urtw.7d
 license cr_Sun license=cr_Sun
-license usr/src/uts/common/io/urtw/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/urtw/THIRDPARTYLICENSE
+license kernel/drivers/net/wifi/urtw/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/urtw/THIRDPARTYLICENSE

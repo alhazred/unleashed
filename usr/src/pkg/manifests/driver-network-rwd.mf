@@ -47,5 +47,5 @@ driver name=rwd alias=pci1814,401 clone_perms="rwd 0666 root sys" \
 file path=kernel/drv/$(ARCH64)/rwd group=sys
 file path=kernel/drv/rwd group=sys
 file path=usr/share/man/man7d/rwd.7d
-license usr/src/uts/common/io/rwd/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/rwd/THIRDPARTYLICENSE
+license kernel/drivers/net/wifi/rwd/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/rwd/THIRDPARTYLICENSE

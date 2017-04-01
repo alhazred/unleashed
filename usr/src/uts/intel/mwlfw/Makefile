@@ -77,7 +77,7 @@ install:	$(INSTALL_DEPS)
 
 # customized section for transforming firmware binary
 ELFWRAP		= elfwrap
-BINSRC		= $(UTSBASE)/common/io/mwl/mwl_fw
+BINSRC		= $(CODEMGR_WS)/kernel/drivers/net/wifi/mwl/mwl_fw
 BINDEST		= $(UTSBASE)/intel/mwlfw
 FWBINCOPY	= mw88W8363fw
 BOOTBINCOPY	= mwlboot

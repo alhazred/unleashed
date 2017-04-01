@@ -51,7 +51,7 @@ driver name=rwn clone_perms="rwn 0666 root sys" perms="* 0666 root sys" \
 file path=kernel/drv/$(ARCH64)/rwn group=sys
 file path=kernel/drv/rwn group=sys
 file path=usr/share/man/man7d/rwn.7d
-license usr/src/uts/common/io/rwn/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/rwn/THIRDPARTYLICENSE
-license usr/src/uts/common/io/rwn/fw-rt2860/LICENSE \
-    license=usr/src/uts/common/io/rwn/fw-rt2860/LICENSE
+license kernel/drivers/net/wifi/rwn/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/rwn/THIRDPARTYLICENSE
+license kernel/drivers/net/wifi/rwn/fw-rt2860/LICENSE \
+    license=kernel/drivers/net/wifi/rwn/fw-rt2860/LICENSE

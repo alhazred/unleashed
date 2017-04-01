@@ -54,5 +54,5 @@ file path=kernel/drv/$(ARCH64)/rum group=sys
 file path=kernel/drv/rum group=sys
 file path=usr/share/man/man7d/rum.7d
 license cr_Sun license=cr_Sun
-license usr/src/uts/common/io/rum/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/rum/THIRDPARTYLICENSE
+license kernel/drivers/net/wifi/rum/THIRDPARTYLICENSE \
+    license=kernel/drivers/net/wifi/rum/THIRDPARTYLICENSE
