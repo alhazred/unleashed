@@ -2069,7 +2069,7 @@ top:
 	 */
 	if (prealloc) {
 		ASSERT(conpp == NULL);
-		if (page_alloc_pages(anon_vp, seg, addr, NULL, ppa,
+		if (page_alloc_pages(&anon_vp->v_object, seg, addr, NULL, ppa,
 		    szc, 0, pgflags) != 0) {
 			VM_STAT_ADD(anonvmstats.getpages[7]);
 			if (brkcow == 0 || szc < seg->s_szc ||
@@ -2578,8 +2578,8 @@ anon_map_privatepages(
 	if (anypgsz == -1) {
 		VM_STAT_ADD(anonvmstats.privatepages[2]);
 		prealloc = 0;
-	} else if (page_alloc_pages(anon_vp, seg, addr, &pplist, NULL, szc,
-	    anypgsz, pgflags) != 0) {
+	} else if (page_alloc_pages(&anon_vp->v_object, seg, addr, &pplist,
+	    NULL, szc, anypgsz, pgflags) != 0) {
 		VM_STAT_ADD(anonvmstats.privatepages[3]);
 		prealloc = 0;
 	}

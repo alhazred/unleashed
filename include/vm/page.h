@@ -633,8 +633,8 @@ struct page *page_exists(struct vmobject *, uoff_t);
 int page_exists_physcontig(struct vmobject *, uoff_t, uint_t, struct page **);
 int page_exists_forreal(struct vmobject *, uoff_t, uint_t *);
 void	page_needfree(spgcnt_t);
-int	page_alloc_pages(struct vnode *, struct seg *, caddr_t, page_t **,
-	page_t **, uint_t, int, int);
+int page_alloc_pages(struct vmobject *, struct seg *, caddr_t,
+    struct page **, struct page **, uint_t, int, int);
 page_t  *page_create_va_large(vnode_t *vp, uoff_t off, size_t bytes,
 	uint_t flags, struct seg *seg, caddr_t vaddr, void *arg);
 page_t	*page_create_va(struct vnode *, uoff_t, size_t, uint_t,
