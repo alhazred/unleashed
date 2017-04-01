@@ -1765,55 +1765,6 @@ page_create_get_something(vnode_t *vp, uoff_t off, struct seg *seg,
 	/*NOTREACHED*/
 }
 
-/*
- * Create enough pages for "bytes" worth of data starting at
- * "off" in "vp".
- *
- *	Where flag must be one of:
- *
- *		PG_EXCL:	Exclusive create (fail if any page already
- *				exists in the page cache) which does not
- *				wait for memory to become available.
- *
- *		PG_WAIT:	Non-exclusive create which can wait for
- *				memory to become available.
- *
- *		PG_PHYSCONTIG:	Allocate physically contiguous pages.
- *				(Not Supported)
- *
- * A doubly linked list of pages is returned to the caller.  Each page
- * on the list has the "exclusive" (p_selock) lock and "iolock" (p_iolock)
- * lock.
- *
- * Unable to change the parameters to page_create() in a minor release,
- * we renamed page_create() to page_create_va(), changed all known calls
- * from page_create() to page_create_va(), and created this wrapper.
- *
- * Upon a major release, we should break compatibility by deleting this
- * wrapper, and replacing all the strings "page_create_va", with "page_create".
- *
- * NOTE: There is a copy of this interface as page_create_io() in
- *	 i86/vm/vm_machdep.c. Any bugs fixed here should be applied
- *	 there.
- */
-page_t *
-page_create(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags)
-{
-	caddr_t random_vaddr;
-	struct seg kseg;
-
-#ifdef DEBUG
-	cmn_err(CE_WARN, "Using deprecated interface page_create: caller %p",
-	    (void *)caller());
-#endif
-
-	random_vaddr = (caddr_t)(((uintptr_t)vp >> 7) ^
-	    (uintptr_t)(off >> PAGESHIFT));
-	kseg.s_as = &kas;
-
-	return (page_create_va(vp, off, bytes, flags, &kseg, random_vaddr));
-}
-
 #ifdef DEBUG
 uint32_t pg_alloc_pgs_mtbf = 0;
 #endif
@@ -2089,6 +2040,38 @@ page_create_va_large(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
 	return (rootpp);
 }
 
+
+/*
+ * Create enough pages for "bytes" worth of data starting at
+ * "off" in "vp".
+ *
+ *	Where flag must be one of:
+ *
+ *		PG_EXCL:	Exclusive create (fail if any page already
+ *				exists in the page cache) which does not
+ *				wait for memory to become available.
+ *
+ *		PG_WAIT:	Non-exclusive create which can wait for
+ *				memory to become available.
+ *
+ *		PG_PHYSCONTIG:	Allocate physically contiguous pages.
+ *				(Not Supported)
+ *
+ * A doubly linked list of pages is returned to the caller.  Each page
+ * on the list has the "exclusive" (p_selock) lock and "iolock" (p_iolock)
+ * lock.
+ *
+ * Unable to change the parameters to page_create() in a minor release,
+ * we renamed page_create() to page_create_va(), and changed all known calls
+ * from page_create() to page_create_va().
+ *
+ * We should consider ditch this renaming by replacing all the strings
+ * "page_create_va", with "page_create".
+ *
+ * NOTE: There is a copy of this interface as page_create_io() in
+ *	 i86/vm/vm_machdep.c. Any bugs fixed here should be applied
+ *	 there.
+ */
 page_t *
 page_create_va(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
     struct seg *seg, caddr_t vaddr)

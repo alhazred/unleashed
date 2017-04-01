@@ -635,7 +635,6 @@ page_t	*page_exists(struct vnode *, uoff_t);
 int	page_exists_physcontig(vnode_t *, uoff_t, uint_t, page_t *[]);
 int	page_exists_forreal(struct vnode *, uoff_t, uint_t *);
 void	page_needfree(spgcnt_t);
-page_t	*page_create(struct vnode *, uoff_t, size_t, uint_t);
 int	page_alloc_pages(struct vnode *, struct seg *, caddr_t, page_t **,
 	page_t **, uint_t, int, int);
 page_t  *page_create_va_large(vnode_t *vp, uoff_t off, size_t bytes,
