@@ -6,6 +6,7 @@ SUBDIR_${CONFIG_RANDOM}		+= random
 SUBDIR_${CONFIG_VIRTIO}		+= virtio
 
 SUBDIR = ${SUBDIR_y} \
-	 net
+	 net \
+	 physmem
 
 .include <bsd.subdir.mk>

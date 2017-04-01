@@ -725,8 +725,6 @@ FSSNAPIF_OBJS += fssnap_if.o
 
 MM_OBJS +=	mem.o
 
-PHYSMEM_OBJS +=	physmem.o
-
 OPTIONS_OBJS += options.o
 
 WINLOCK_OBJS +=	winlockio.o
