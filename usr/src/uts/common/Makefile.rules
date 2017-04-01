@@ -230,7 +230,7 @@ $(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/fs/proc/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/sharefs/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/fs/sharefs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
