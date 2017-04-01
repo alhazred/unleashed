@@ -37,8 +37,8 @@
 #include "boot_keyboard_table.h"
 
 #if defined(_BOOT)
-#include "dboot/dboot_asm.h"
-#include "dboot/dboot_xboot.h"
+#include <dboot_asm.h>
+#include <dboot_xboot.h>
 #endif /* _BOOT */
 
 /*

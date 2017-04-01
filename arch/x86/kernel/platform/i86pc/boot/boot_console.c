@@ -39,8 +39,8 @@
 #include "boot_vga.h"
 
 #if defined(_BOOT)
-#include <dboot/dboot_asm.h>
-#include <dboot/dboot_xboot.h>
+#include <dboot_asm.h>
+#include <dboot_xboot.h>
 #else /* _BOOT */
 #include <sys/bootconf.h>
 #if defined(__xpv)

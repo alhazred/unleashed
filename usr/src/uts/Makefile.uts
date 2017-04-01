@@ -503,14 +503,14 @@ $(OBJS_DIR)/unix_bb.o	:= XAOPT =
 #
 # Privilege files
 #
-PRIVS_AWK = $(SRC)/uts/common/os/privs.awk
-PRIVS_DEF = $(SRC)/uts/common/os/priv_defs
+PRIVS_AWK = $(CODEMGR_WS)/tools/privs.awk
+PRIVS_DEF = $(CODEMGR_WS)/kernel/os/priv_defs
 
 #
 # USB device data
 #
-USBDEVS_AWK =	$(SRC)/uts/common/io/usb/usbdevs2h.awk
-USBDEVS_DATA =	$(SRC)/uts/common/io/usb/usbdevs
+USBDEVS_AWK =	$(CODEMGR_WS)/tools/usbdevs2h.awk
+USBDEVS_DATA =	$(CODEMGR_WS)/kernel/drivers/usb/usbdevs
 
 
 #

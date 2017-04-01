@@ -38,7 +38,7 @@
 #endif
 
 #ifdef _BOOT
-#include <dboot/dboot_printf.h>
+#include <dboot_printf.h>
 #define	bop_panic dboot_panic
 #else
 #include <sys/bootconf.h>

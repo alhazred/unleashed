@@ -155,14 +155,9 @@ clobber: $(CLOBBER_DEPS)
 
 install: $(INSTALL_DEPS)
 
-MAPFILE_32 = $(MAPFILE)
-MAPFILE_64 = $(MAPFILE).amd64
-
-MAPFILE_NAME = $(MAPFILE_$(CLASS))
-
-$(UNIX_BIN):	$(UNIX_O) $(MODSTUBS_O) $(MAPFILE_NAME) \
+$(UNIX_BIN):	$(UNIX_O) $(MODSTUBS_O) $(MAPFILE) \
 		$(GENLIB) $(DTRACESTUBS) $(DBOOT_O)
-	$(LD) -dy -b -o $@ -e dboot_image -znointerp -M $(MAPFILE_NAME) \
+	$(LD) -dy -b -o $@ -e dboot_image -znointerp -M $(MAPFILE) \
 	    $(UNIX_O) $(DBOOT_O) $(MODSTUBS_O) $(LIBOPTS) \
 	    $(DTRACESTUBS)
 	$(MBH_PATCH) $(UNIX_BIN)
@@ -172,8 +167,10 @@ $(UNIX_BIN):	$(UNIX_O) $(MODSTUBS_O) $(MAPFILE_NAME) \
 $(UNIX_O):	$(OBJECTS) $(CTFEXTRAOBJS)
 	$(LD) -r -o $@ $(OBJECTS) $(OBJS_DIR)/vers.o
 
-$(DBOOT_BIN):	$(DBOOT_OBJS_DIR) $(DBOOT_OBJECTS) dboot/Mapfile.dboot
-	$(LD) -dn -e _start -M dboot/Mapfile.dboot \
+$(DBOOT_BIN):	$(DBOOT_OBJS_DIR) $(DBOOT_OBJECTS) \
+		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/dboot/mapfile-dboot
+	$(LD) -dn -e _start -M \
+		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/dboot/mapfile-dboot \
 		-o $(DBOOT_BIN) $(DBOOT_OBJECTS)
 
 $(DBOOT_O):	$(DBOOT_BIN)

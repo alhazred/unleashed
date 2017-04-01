@@ -634,8 +634,8 @@ INCS+=		${GENERATED_INCS}
 CLEANFILES+=	${GENERATED_INCS}
 
 AWK?=	/usr/bin/awk
-PRIVS_AWK = ../../usr/src/uts/common/os/privs.awk
-PRIVS_DEF = ../../usr/src/uts/common/os/priv_defs
+PRIVS_AWK = ../../tools/privs.awk
+PRIVS_DEF = ../../kernel/os/priv_defs
 
 .PHONY: all
 

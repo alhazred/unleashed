@@ -9,8 +9,8 @@ INCS+=	${GENERATED_INCS}
 CLEANFILES+=	${GENERATED_INCS}
 
 AWK?=	/usr/bin/awk
-USBDEVS_AWK = ../../../usr/src/uts/common/io/usb/usbdevs2h.awk
-USBDEVS_DATA = ../../../usr/src/uts/common/io/usb/usbdevs
+USBDEVS_AWK = ../../../tools/usbdevs2h.awk
+USBDEVS_DATA = ../../../kernel/drivers/usb/usbdevs
 
 .PHONY: all
 
