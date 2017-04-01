@@ -412,7 +412,7 @@ page_lock_es(struct page *pp, se_t se, struct vmobject *obj, reclaim_t reclaim,
 		 *	if it can't be reclaimed.
 		 */
 		if (reclaim_it) {
-			if (!page_reclaim(pp, obj->vnode)) {
+			if (!page_reclaim(pp, obj)) {
 				VM_STAT_ADD(page_lock_bad_reclaim);
 				retval = 0;
 			} else {

@@ -2683,14 +2683,14 @@ free_vp_pages(struct vmobject *obj, uoff_t off, size_t len)
  * the memsegs, locks the page, then pulls it off the free list!
  */
 int
-page_reclaim(page_t *pp, vnode_t *vnode)
+page_reclaim(struct page *pp, struct vmobject *obj)
 {
 	struct pcf	*p;
 	struct cpu	*cpup;
 	int		enough;
 	uint_t		i;
 
-	ASSERT(vnode != NULL ? VMOBJECT_LOCKED(&vnode->v_object) : 1);
+	ASSERT(obj != NULL ? VMOBJECT_LOCKED(obj) : 1);
 	ASSERT(PAGE_EXCL(pp) && PP_ISFREE(pp));
 
 	/*
@@ -2759,9 +2759,9 @@ page_reclaim_nomem:
 			 * Page_unlock() will wakeup any thread
 			 * waiting around for this page.
 			 */
-			if (vnode != NULL) {
+			if (obj != NULL) {
 				VM_STAT_ADD(page_reclaim_zero_locked);
-				vmobject_unlock(&vnode->v_object);
+				vmobject_unlock(obj);
 			}
 			page_unlock(pp);
 
@@ -2783,8 +2783,8 @@ page_reclaim_nomem:
 
 			mutex_exit(&new_freemem_lock);
 
-			if (vnode != NULL)
-				vmobject_lock(&vnode->v_object);
+			if (obj != NULL)
+				vmobject_lock(obj);
 
 			return (0);
 		}
