@@ -649,7 +649,7 @@ int page_reclaim(struct page *, struct vmobject *);
 void	page_destroy(page_t *, int);
 void	page_destroy_pages(page_t *);
 void	page_destroy_free(page_t *);
-void	page_rename(page_t *, struct vnode *, uoff_t);
+void page_rename(struct page *, struct vmobject *, uoff_t);
 int	page_hashin(struct page *, struct vmobject *, uoff_t, bool);
 void	page_hashout(page_t *, bool);
 void	page_add(page_t **, page_t *);

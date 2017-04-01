@@ -2416,7 +2416,7 @@ anon_private(
 	swap_xlate(new, &vp, &off);
 
 	if (oppflags & STEAL_PAGE) {
-		page_rename(opp, vp, (uoff_t)off);
+		page_rename(opp, &vp->v_object, (uoff_t)off);
 		pp = opp;
 		hat_setmod(pp);
 

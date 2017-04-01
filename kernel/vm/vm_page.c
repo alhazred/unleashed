@@ -2997,14 +2997,14 @@ page_destroy_free(page_t *pp)
  * caller 2 tries to rename B to A.
  */
 void
-page_rename(page_t *opp, vnode_t *vp, uoff_t off)
+page_rename(struct page *opp, struct vmobject *obj, uoff_t off)
 {
 	page_t		*pp;
 	int		olckcnt = 0;
 	int		ocowcnt = 0;
 
 	ASSERT(PAGE_EXCL(opp) && !page_iolock_assert(opp));
-	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
+	ASSERT(!VMOBJECT_LOCKED(obj));
 	ASSERT(PP_ISFREE(opp) == 0);
 
 	VM_STAT_ADD(page_rename_count);
@@ -3028,7 +3028,7 @@ page_rename(page_t *opp, vnode_t *vp, uoff_t off)
 	page_hashout(opp, false);
 	PP_CLRAGED(opp);
 
-	vmobject_lock(&vp->v_object);
+	vmobject_lock(obj);
 top:
 	/*
 	 * Look for an existing page with this name and destroy it if found.
@@ -3039,7 +3039,7 @@ top:
 	 * lock, again preventing another page from being created with
 	 * this identity.
 	 */
-	pp = find_page(&vp->v_object, off);
+	pp = find_page(obj, off);
 	if (pp != NULL) {
 		VM_STAT_ADD(page_rename_exists);
 
@@ -3051,7 +3051,7 @@ top:
 		 * the page.  It is tempting to add yet another arguement,
 		 * PL_KEEP or PL_DROP, to let page_lock know what to do.
 		 */
-		if (!page_lock(pp, SE_EXCL, &vp->v_object, P_RECLAIM)) {
+		if (!page_lock(pp, SE_EXCL, obj, P_RECLAIM)) {
 			/*
 			 * Went to sleep because the page could not
 			 * be locked.  We were woken up when the page
@@ -3077,29 +3077,29 @@ top:
 			 * This is also not a lock protocol violation,
 			 * but rather the proper way to do things.
 			 */
-			vmobject_unlock(&vp->v_object);
+			vmobject_unlock(obj);
 			(void) hat_pageunload(pp, HAT_FORCE_PGUNLOAD);
 			if (pp->p_szc != 0) {
-				ASSERT(!IS_SWAPFSVP(vp));
-				ASSERT(!VN_ISKAS(vp));
+				ASSERT(!IS_SWAPFSVP(obj->vnode));
+				ASSERT(!VN_ISKAS(obj->vnode));
 				page_demote_vp_pages(pp);
 				ASSERT(pp->p_szc == 0);
 			}
-			vmobject_lock(&vp->v_object);
+			vmobject_lock(obj);
 		} else if (pp->p_szc != 0) {
-			ASSERT(!IS_SWAPFSVP(vp));
-			ASSERT(!VN_ISKAS(vp));
-			vmobject_unlock(&vp->v_object);
+			ASSERT(!IS_SWAPFSVP(obj->vnode));
+			ASSERT(!VN_ISKAS(obj->vnode));
+			vmobject_unlock(obj);
 			page_demote_vp_pages(pp);
 			ASSERT(pp->p_szc == 0);
-			vmobject_lock(&vp->v_object);
+			vmobject_lock(obj);
 		}
 		page_hashout(pp, true);
 	}
 	/*
 	 * Hash in the page with the new identity.
 	 */
-	if (!page_hashin(opp, &vp->v_object, off, true)) {
+	if (!page_hashin(opp, obj, off, true)) {
 		/*
 		 * We were holding phm while we searched for [vp, off]
 		 * and only dropped phm if we found and locked a page.
@@ -3110,8 +3110,8 @@ top:
 		/*NOTREACHED*/
 	}
 
-	ASSERT(VMOBJECT_LOCKED(&vp->v_object));
-	vmobject_unlock(&vp->v_object);
+	ASSERT(VMOBJECT_LOCKED(obj));
+	vmobject_unlock(obj);
 
 	/*
 	 * Now that we have dropped phm, lets get around to finishing up
