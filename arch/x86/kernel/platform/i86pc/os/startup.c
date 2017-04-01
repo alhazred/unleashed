@@ -250,7 +250,6 @@ uintptr_t hole_start, hole_end;
  */
 caddr_t kpm_vbase;
 size_t  kpm_size;
-static int kpm_desired;
 #ifdef __amd64
 static uintptr_t segkpm_base = (uintptr_t)SEGKPM_BASE;
 #endif
@@ -753,14 +752,6 @@ startup(void)
 #endif
 	extern cpuset_t cpu_ready_set;
 
-	/*
-	 * Make sure that nobody tries to use sekpm until we have
-	 * initialized it properly.
-	 */
-#if defined(__amd64)
-	kpm_desired = 1;
-#endif
-	kpm_enable = 0;
 	CPUSET_ONLY(cpu_ready_set, 0);	/* cpu 0 is boot cpu */
 
 #if defined(__xpv)	/* XXPV fix me! */
@@ -2184,10 +2175,7 @@ startup_vm(void)
 	 * kpm segment
 	 */
 	segmap_kpm = 0;
-	if (kpm_desired) {
-		kpm_init();
-		kpm_enable = 1;
-	}
+	kpm_init();
 
 	/*
 	 * Now create segmap segment.
