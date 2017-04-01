@@ -246,7 +246,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/smbclnt/smbfs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/swapfs/%.c
+$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/fs/swapfs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
