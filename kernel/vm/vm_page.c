@@ -914,7 +914,8 @@ page_exists(struct vmobject *obj, uoff_t off)
  * This routine doesn't work for anonymous(swapfs) pages.
  */
 int
-page_exists_physcontig(vnode_t *vp, uoff_t off, uint_t szc, page_t **ppa)
+page_exists_physcontig(struct vmobject *obj, uoff_t off, uint_t szc,
+    struct page **ppa)
 {
 	pgcnt_t pages;
 	pfn_t pfn;
@@ -927,9 +928,9 @@ page_exists_physcontig(vnode_t *vp, uoff_t off, uint_t szc, page_t **ppa)
 	int loopcnt = 0;
 
 	ASSERT(szc != 0);
-	ASSERT(vp != NULL);
-	ASSERT(!IS_SWAPFSVP(vp));
-	ASSERT(!VN_ISKAS(vp));
+	ASSERT(obj != NULL);
+	ASSERT(!IS_SWAPFSVP(obj->vnode));
+	ASSERT(!VN_ISKAS(obj->vnode));
 
 again:
 	if (++loopcnt > 3) {
@@ -937,9 +938,9 @@ again:
 		return (0);
 	}
 
-	vmobject_lock(&vp->v_object);
-	pp = find_page(&vp->v_object, off);
-	vmobject_unlock(&vp->v_object);
+	vmobject_lock(obj);
+	pp = find_page(obj, off);
+	vmobject_unlock(obj);
 
 	VM_STAT_ADD(page_exphcontg[1]);
 
@@ -961,7 +962,7 @@ again:
 		/*
 		 * Also check whether p_pagenum was modified by DR.
 		 */
-		if (pp->p_szc != pszc || pp->p_vnode != vp ||
+		if (pp->p_szc != pszc || pp->p_vnode != obj->vnode ||
 		    pp->p_offset != off || pp->p_pagenum != pfn) {
 			VM_STAT_ADD(page_exphcontg[5]);
 			page_unlock(pp);
@@ -1011,7 +1012,7 @@ again:
 			 * and therefore must have the expected identity.
 			 */
 			ASSERT(!PP_ISFREE(pp));
-			if (pp->p_vnode != vp ||
+			if (pp->p_vnode != obj->vnode ||
 			    pp->p_offset != off) {
 				panic("page_exists_physcontig: "
 				    "large page identity doesn't match");
@@ -1060,7 +1061,7 @@ again:
 			page_unlock(pp);
 			break;
 		}
-		if (pp->p_vnode != vp ||
+		if (pp->p_vnode != obj->vnode ||
 		    pp->p_offset != off) {
 			VM_STAT_ADD(page_exphcontg[13]);
 			page_unlock(pp);
@@ -1121,7 +1122,7 @@ again:
 		ASSERT(PAGE_EXCL(pp));
 		ASSERT(!PP_ISFREE(pp));
 		ASSERT(!hat_page_is_mapped(pp));
-		ASSERT(pp->p_vnode == vp);
+		ASSERT(pp->p_vnode == obj->vnode);
 		ASSERT(pp->p_offset == off);
 		pp->p_szc = szc;
 	}
@@ -1138,7 +1139,7 @@ again:
 		ppa[pages] = NULL;
 	}
 	VM_STAT_ADD(page_exphcontg[18]);
-	ASSERT(vn_has_cached_data(vp));
+	ASSERT(vn_has_cached_data(obj->vnode));
 	return (1);
 }
 

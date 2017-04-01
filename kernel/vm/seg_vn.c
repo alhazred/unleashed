@@ -3951,7 +3951,7 @@ segvn_fault_vnodepages(struct hat *hat, struct seg *seg, caddr_t lpgaddr,
 			physcontig = 0;
 			ppa[0] = NULL;
 			if (!brkcow && !tron && szc &&
-			    !page_exists_physcontig(vp, off, szc,
+			    !page_exists_physcontig(&vp->v_object, off, szc,
 			    segtype == MAP_PRIVATE ? ppa : NULL)) {
 				SEGVN_VMSTAT_FLTVNPAGES(9);
 				if (page_alloc_pages(vp, seg, a, &pplist, NULL,
