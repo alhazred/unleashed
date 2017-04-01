@@ -346,7 +346,6 @@ MISC_KMODS	+= idm
 MISC_KMODS	+= idmap
 MISC_KMODS	+= hook
 MISC_KMODS	+= neti
-MISC_KMODS	+= ctf
 MISC_KMODS	+= mac dls
 MISC_KMODS	+= cmlb
 MISC_KMODS	+= tem

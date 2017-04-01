@@ -1,4 +1,5 @@
 SUBDIR = comstar \
+	 ctf \
 	 drivers \
 	 fs \
 	 net \
