@@ -1151,22 +1151,22 @@ again:
  * or appearing immediately after the return from this routine.
  */
 int
-page_exists_forreal(vnode_t *vp, uoff_t off, uint_t *szc)
+page_exists_forreal(struct vmobject *obj, uoff_t off, uint_t *szc)
 {
 	page_t		*pp;
 	int		rc = 0;
 
-	ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
+	ASSERT(!VMOBJECT_LOCKED(obj));
 	ASSERT(szc != NULL);
 	VM_STAT_ADD(page_exists_forreal_cnt);
 
-	vmobject_lock(&vp->v_object);
-	pp = find_page(&vp->v_object, off);
+	vmobject_lock(obj);
+	pp = find_page(obj, off);
 	if (pp != NULL) {
 		*szc = pp->p_szc;
 		rc = 1;
 	}
-	vmobject_unlock(&vp->v_object);
+	vmobject_unlock(obj);
 	return (rc);
 }
 

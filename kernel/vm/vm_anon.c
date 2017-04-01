@@ -2048,7 +2048,7 @@ anon_map_getpages(
 	if (ap) {
 		uint_t pszc;
 		swap_xlate(ap, &vp, &off);
-		if (page_exists_forreal(vp, (uoff_t)off, &pszc)) {
+		if (page_exists_forreal(&vp->v_object, (uoff_t)off, &pszc)) {
 			if (pszc > szc && upsize) {
 				*ppa_szc = MIN(pszc, seg->s_szc);
 				return (-2);
