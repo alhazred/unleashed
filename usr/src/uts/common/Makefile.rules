@@ -737,10 +737,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/mwl/mwl_fw/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/net80211/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/nvme/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
