@@ -4239,12 +4239,9 @@ process_ack:
 		tcp->tcp_valid_bits &= ~TCP_URG_VALID;
 
 	/* Can we update the RTT estimates? */
-	if (tcp->tcp_snd_ts_ok) {
-		/* Ignore zero timestamp echo-reply. */
-		if (tcpopt.tcp_opt_ts_ecr != 0) {
-			tcp_set_rto(tcp, (int32_t)LBOLT_FASTPATH -
-			    (int32_t)tcpopt.tcp_opt_ts_ecr);
-		}
+	if (tcp->tcp_snd_ts_ok && tcpopt.tcp_opt_ts_ecr != 0) {
+		tcp_set_rto(tcp, (int32_t)LBOLT_FASTPATH -
+		    (int32_t)tcpopt.tcp_opt_ts_ecr);
 
 		/* If needed, restart the timer. */
 		if (tcp->tcp_set_timer == 1) {
