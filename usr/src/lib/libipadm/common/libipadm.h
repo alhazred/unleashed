@@ -355,8 +355,6 @@ extern uint_t		ipadm_str2proto(const char *);
 extern ipadm_status_t	ipadm_open_arp_on_udp(const char *, int *);
 extern int		ipadm_legacy2new_propname(const char *, char *,
 			    uint_t, uint_t *);
-extern int		ipadm_new2legacy_propname(const char *, char *,
-			    uint_t, uint_t);
 
 #ifdef	__cplusplus
 }

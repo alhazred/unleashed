@@ -29,7 +29,7 @@ SYNCPROG=	syncinit syncloop syncstat
 PROG=		6to4relay arp if_mpadm \
 		in.comsat in.fingerd in.rarpd in.rexecd \
 		in.rwhod in.telnetd in.tftpd ipaddrsel \
-		ndd ndp $(SYNCPROG)
+		ndp $(SYNCPROG)
 
 MANIFEST=	rarp.xml telnet.xml comsat.xml finger.xml rexec.xml
 SVCMETHOD=	svc-sockfilter
@@ -123,7 +123,6 @@ in.rarpd		:=	LDLIBS += -linetutil -ldlpi
 if_mpadm		:=	LDLIBS += -linetutil -lipmp
 if_mpadm.po		:=	XGETFLAGS += -a
 route			:=	CPPFLAGS += -DNDEBUG
-ndd			:=	LDLIBS += -ldladm -lipadm
 in.comsat		:=	LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
 
 .KEEP_STATE:

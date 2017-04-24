@@ -207,18 +207,18 @@ default \fBTCP\fR limit of 64K.
 .TP
 .ie t \(bu
 .el o
-For all applications, use \fBndd\fR(1M) to modify the configuration parameter
-\fBtcp_wscale_always\fR. If \fBtcp_wscale_always\fR is set to \fB1\fR, the
+For all applications, use \fBipadm\fR(1M) to modify the property
+\fB_wscale_always\fR. If \fB_wscale_always\fR is set to \fB1\fR, the
 window scale option will always be set when connecting to a remote system. If
-\fBtcp_wscale_always\fR is \fB0,\fR the window scale option will be set only if
+\fB_wscale_always\fR is \fB0,\fR the window scale option will be set only if
 the user has requested a send or receive window larger than 64K. The default
-value of \fBtcp_wscale_always\fR is \fB1\fR.
+value of \fB_wscale_always\fR is \fB1\fR.
 .RE
 .RS +4
 .TP
 .ie t \(bu
 .el o
-Regardless of the value of \fBtcp_wscale_always\fR, the window scale option
+Regardless of the value of \fB_wscale_always\fR, the window scale option
 will always be included in a connect acknowledgement if the connecting system
 has used the option.
 .RE
@@ -229,17 +229,17 @@ Turn on \fBSACK\fR capabilities in the following way:
 .TP
 .ie t \(bu
 .el o
-Use \fBndd\fR to modify the configuration parameter \fBtcp_sack_permitted\fR.
-If \fBtcp_sack_permitted\fR is set to \fB0\fR, \fBTCP\fR will not accept
-\fBSACK\fR or send out \fBSACK\fR information. If \fBtcp_sack_permitted\fR is
-set to \fB1\fR, \fBTCP\fR will not initiate a connection with \fBSACK\fR
+Use \fBipadm\fR(1M) to modify the TCP property \fBsack\fR.
+If \fBsack\fR is set to \fBnever\fR, \fBTCP\fR will not accept
+\fBSACK\fR or send out \fBSACK\fR information. If \fBsack\fR is
+set to \fBpassive\fR, \fBTCP\fR will not initiate a connection with \fBSACK\fR
 permitted option in the \fBSYN\fR segment, but will respond with \fBSACK\fR
 permitted option in the \fBSYN|ACK\fR segment if an incoming connection request
-has the \fBSACK \fR permitted option. This means that \fBTCP\fR will only
+has the \fBSACK\fR permitted option. This means that \fBTCP\fR will only
 accept \fBSACK\fR information if the other side of the connection also accepts
-\fBSACK\fR information. If \fBtcp_sack_permitted\fR is set to \fB2\fR, it will
+\fBSACK\fR information. If \fBsack\fR is set to \fBactive\fR, it will
 both initiate and accept connections with \fBSACK\fR information. The default
-for \fBtcp_sack_permitted\fR is \fB2\fR (active enabled).
+for \fBsack\fR is \fBactive\fR.
 .RE
 .sp
 .LP
@@ -248,17 +248,17 @@ Turn on \fBTCP ECN\fR mechanism in the following way:
 .TP
 .ie t \(bu
 .el o
-Use \fBndd\fR to modify the configuration parameter \fBtcp_ecn_permitted\fR. If
-\fBtcp_ecn_permitted\fR is set to \fB0\fR, \fBTCP\fR will not negotiate with a
-peer that supports \fBECN\fR mechanism. If \fBtcp_ecn_permitted\fR is set to
-\fB1\fR when initiating a connection, TCP will not tell a peer that it supports
+Use \fBipadm\fR(1M) to modify the TCP property \fBecn\fR. If
+\fBecn\fR is set to \fBnever\fR, \fBTCP\fR will not negotiate with a
+peer that supports \fBECN\fR mechanism. If \fBecn\fR is set to
+\fBpassive\fR when initiating a connection, TCP will not tell a peer that it supports
 ECN mechanism. However, it will tell a peer that it supports \fBECN\fR
 mechanism when accepting a new incoming connection request if the peer
 indicates that it supports \fBECN\fR mechanism in the SYN segment. If
-tcp_ecn_permitted is set to 2, in addition to negotiating with a peer on ECN
+\fBecn\fR is set to \fBactive\fR, in addition to negotiating with a peer on ECN
 mechanism when accepting connections, TCP will indicate in the outgoing SYN
 segment that it supports \fBECN\fR mechanism when \fBTCP\fR makes active
-outgoing connections. The default for \fBtcp_ecn_permitted\fR is 1.
+outgoing connections. The default for \fBecn\fR is \fBpassive\fR.
 .RE
 .sp
 .LP
@@ -267,17 +267,17 @@ Turn on the timestamp option in the following way:
 .TP
 .ie t \(bu
 .el o
-Use \fBndd\fR to modify the configuration parameter \fBtcp_tstamp_always\fR. If
-\fBtcp_tstamp_always\fR is \fB1\fR, the timestamp option will always be set
-when connecting to a remote machine. If \fBtcp_tstamp_always\fR is \fB0\fR, the
+Use \fBipadm\fR(1M) to modify the TCP property \fB_tstamp_always\fR. If
+\fB_tstamp_always\fR is \fB1\fR, the timestamp option will always be set
+when connecting to a remote machine. If \fB_tstamp_always\fR is \fB0\fR, the
 timestamp option will not be set when connecting to a remote system. The
-default for \fBtcp_tstamp_always\fR is \fB0\fR.
+default for \fB_tstamp_always\fR is \fB0\fR.
 .RE
 .RS +4
 .TP
 .ie t \(bu
 .el o
-Regardless of the value of \fBtcp_tstamp_always\fR, the timestamp option will
+Regardless of the value of \fB_tstamp_always\fR, the timestamp option will
 always be included in a connect acknowledgement (and all succeeding packets) if
 the connecting system has used the timestamp option.
 .RE
@@ -289,12 +289,12 @@ window scale option is in effect:
 .TP
 .ie t \(bu
 .el o
-Use \fBndd\fR to modify the configuration parameter \fBtcp_tstamp_if_wscale\fR.
-Setting \fBtcp_tstamp_if_wscale\fR to \fB1\fR will cause the timestamp option
+Use \fBipadm\fR(1M) to modify the TCP property \fB_tstamp_if_wscale\fR.
+Setting \fB_tstamp_if_wscale\fR to \fB1\fR will cause the timestamp option
 to be set when connecting to a remote system, if the window scale option has
-been set. If \fBtcp_tstamp_if_wscale\fR is \fB0\fR, the timestamp option will
+been set. If \fB_tstamp_if_wscale\fR is \fB0\fR, the timestamp option will
 not be set when connecting to a remote system. The default for
-\fBtcp_tstamp_if_wscale\fR is \fB1\fR.
+\fB_tstamp_if_wscale\fR is \fB1\fR.
 .RE
 .sp
 .LP
@@ -317,34 +317,20 @@ The \fB/etc/default/inetinit\fR file is an unstable interface, and may change
 in future releases.
 .sp
 .LP
-\fBTCP\fR may be configured to report some information on connections that
-terminate by means of an \fBRST\fR packet. By default, no logging is done. If
-the \fBndd\fR(1M) parameter \fItcp_trace\fR is set to 1, then trace data is
-collected for all new connections established after that time.
-.sp
-.LP
-The trace data consists of the \fBTCP\fR headers and \fBIP\fR source and
-destination addresses of the last few packets sent in each direction before RST
-occurred. Those packets are logged in a series of \fBstrlog\fR(9F) calls. This
-trace facility has a very low overhead, and so is superior to such utilities as
-\fBsnoop\fR(1M) for non-intrusive debugging for connections terminating by
-means of an \fBRST\fR.
-.sp
-.LP
 SunOS supports the keep-alive mechanism described in \fIRFC 1122\fR. It is
 enabled using the socket option SO_KEEPALIVE. When enabled, the first
 keep-alive probe is sent out after a TCP is idle for two hours If the peer does
 not respond to the probe within eight minutes, the TCP connection is aborted.
 You can alter the interval for sending out the first probe using the socket
 option TCP_KEEPALIVE_THRESHOLD. The option value is an unsigned integer in
-milliseconds. The system default is controlled by the TCP ndd parameter
-tcp_keepalive_interval. The minimum value is ten seconds. The maximum is ten
+milliseconds. The system default is controlled by the TCP \fBipadm\fR(1M) property
+_keepalive_interval. The minimum value is ten seconds. The maximum is ten
 days, while the default is two hours. If you receive no response to the probe,
 you can use the TCP_KEEPALIVE_ABORT_THRESHOLD socket option to change the time
 threshold for aborting a TCP connection. The option value is an unsigned
 integer in milliseconds. The value zero indicates that TCP should never time
 out and abort the connection when probing. The system default is controlled by
-the TCP ndd parameter tcp_keepalive_abort_interval. The default is eight
+the TCP \fBipadm\fR(1M) property _keepalive_abort_interval. The default is eight
 minutes.
 .sp
 .LP
@@ -356,7 +342,7 @@ connection in the event of no response from peer. TCP_KEEPINTVL specifies the
 interval in seconds between successive keep-alive probes.
 .SH SEE ALSO
 .LP
-\fBsvcs\fR(1), \fBndd\fR(1M), \fBioctl\fR(2), \fBread\fR(2), \fBsvcadm\fR(1M),
+\fBsvcs\fR(1), \fBioctl\fR(2), \fBread\fR(2), \fBsvcadm\fR(1M),
 \fBwrite\fR(2), \fBaccept\fR(3SOCKET), \fBbind\fR(3SOCKET),
 \fBconnect\fR(3SOCKET), \fBgetprotobyname\fR(3SOCKET),
 \fBgetsockopt\fR(3SOCKET), \fBlisten\fR(3SOCKET), \fBsend\fR(3SOCKET),

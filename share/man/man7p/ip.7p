@@ -418,11 +418,6 @@ the ipv4-forwarding option. IPv4 forwarding is configured at boot time based on
 the setting of \fBrouteadm\fR(1M)'s ipv4-forwarding option.
 .sp
 .LP
-For backwards compatibility, IPv4 forwarding can be enabled or disabled using
-\fBndd\fR(1M)'s ip_forwarding variable.  It is set to 1 if IPv4 forwarding is
-enabled, or 0 if it is disabled.
-.sp
-.LP
 Additionally, finer-grained forwarding can be configured in IP. Each interface
 can be configured to forward IP packets by setting the IFF_ROUTER interface
 flag. This flag can be set and cleared using \fBifconfig\fR(1M)'s router and
@@ -431,16 +426,6 @@ forwarded to or from the interface. If it is clear, packets will neither be
 forwarded from this interface to others, nor forwarded to this interface.
 Setting the ip_forwarding variable sets all of the IPv4 interfaces' IFF_ROUTER
 flags.
-.sp
-.LP
-For backwards compatibility, each interface creates an
-\fB<ifname>:ip_forwarding /dev/ip\fR variable that can be modified using
-\fBndd\fR(1M). An interface's \fB:ip_forwarding ndd\fR variable is a boolean
-variable that mirrors the status of its IFF_ROUTER interface flag. It is set to
-1 if the flag is set, or 0 if it is clear. This interface specific \fB<ifname>
-:ip_forwarding ndd\fR variable is obsolete and may be removed in a future
-release of Solaris. The \fBifconfig\fR(1M) router and -router interfaces are
-preferred.
 .sp
 .LP
 The IP layer sends an ICMP message back to the source host in many cases when
@@ -465,14 +450,6 @@ time period.
 .LP
 Errors in sending discovered at the network interface driver layer are passed
 by IP back up to the user process.
-.sp
-.LP
-Multi-Data Transmit allows more than one packet to be sent from the IP module
-to another in a given call, thereby reducing the per-packet processing costs.
-The behavior of Multi-Data Transmit can be overrideen by using \fBndd\fR(1M) to
-set the \fB/dev/ip\fR variable, ip_multidata_outbound to 0. Note, the IP module
-will only initiate Multi-Data Transmit if the network interface driver supports
-it.
 .SH PACKET EVENTS
 .sp
 .LP
@@ -639,7 +616,7 @@ An address has changed on a logical  interface.
 .SH SEE ALSO
 .sp
 .LP
-\fBifconfig\fR(1M), \fBrouteadm\fR(1M), \fBndd\fR(1M), \fBread\fR(2),
+\fBifconfig\fR(1M), \fBrouteadm\fR(1M), \fBread\fR(2),
 \fBwrite\fR(2), \fBbind\fR(3SOCKET), \fBconnect\fR(3SOCKET),
 \fBgetsockopt\fR(3SOCKET), \fBrecv\fR(3SOCKET), \fBsend\fR(3SOCKET),
 \fBdefaultrouter\fR(4), \fBicmp\fR(7P), \fBif_tcp\fR(7P), \fBinet\fR(7P),

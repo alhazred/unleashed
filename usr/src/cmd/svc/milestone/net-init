@@ -59,16 +59,6 @@ fi
 /usr/bin/pgrep -x -u 0 -z `smf_zonename` in.mpathd >/dev/null 2>&1 || \
     /usr/lib/inet/in.mpathd -a
 
-#
-# Set the RFC 1948 entropy, regardless of if I'm using it or not.  If present,
-# use the encrypted root password as a source of entropy.  Otherwise,
-# just use the pre-set (and hopefully difficult to guess) entropy that
-# tcp used when it loaded.
-#
-encr=`/usr/bin/awk -F: '/^root:/ {print $2}' /etc/shadow`
-[ -z "$encr" ] || /usr/sbin/ndd -set /dev/tcp tcp_1948_phrase $encr
-unset encr
-
 # Set the SDP system Policy.  This needs to happen after basic
 # networking is up but before any networking services that might
 # want to use SDP are enabled
@@ -86,8 +76,8 @@ fi
 # If not set, use TCP's internal default setting.
 #
 [ -f /etc/default/inetinit ] && . /etc/default/inetinit
-if [ $TCP_STRONG_ISS ]; then
-	/usr/sbin/ndd -set /dev/tcp tcp_strong_iss $TCP_STRONG_ISS
+if [ -n $TCP_STRONG_ISS ]; then
+	/usr/sbin/ipadm set-prop -p _strong_iss=$TCP_STRONG_ISS tcp
 fi
 
 # Clear exit status.

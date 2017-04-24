@@ -76,5 +76,4 @@ in header files internal to this directory.
 . Misc
 	. mac.c
 	. mac_util.c
-	. mac_ndd.c
 

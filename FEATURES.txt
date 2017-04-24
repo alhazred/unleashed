@@ -13,6 +13,7 @@ changed.
  - SVR4 pkg support & code
  - solaris10 zone brand
  - GRUB
+ - ndd(1M) (use ipadm(1M) and dladm(1M) instead)
  - closed source components were removed, including:
    - in.iked(1M) and related utilities
    - kmdb modules: mpt and nfs

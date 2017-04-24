@@ -329,10 +329,9 @@ Send one datagram per second and collect statistics.
 .RS 24n
 Specify the IPv4 time to live, or IPv6 hop limit, for unicast and multicast
 packets. The default time to live (hop limit) for unicast packets can be set
-with the \fBndd\fR module, \fB/dev/icmp\fR, using the \fBicmp_ipv4_ttl\fR
-variable for IPv4 and the \fBicmp_ipv6_hoplimit\fR variable for IPv6. The
-default time to live (hop limit) for multicast is one hop. See \fBEXAMPLES\fR.
-For further information, see\fBndd\fR(1M).
+with \fBipadm\fR(1M) using the \fBttl\fR property for IPv4 and the
+\fBhoplimit\fR property for IPv6. The default time to live (hop limit) for
+multicast is one hop.
 .RE
 
 .sp
@@ -378,21 +377,6 @@ PING xyz: 56 data bytes
 ----xyz PING Statistics----
 6 packets transmitted, 6 packets received, 0% packet loss
 round-trip (ms)  min/avg/stddev = 0.479/1.583/4.943/1.823
-.fi
-.in -2
-.sp
-
-.LP
-\fBExample 2 \fRUsing \fBndd\fR to Set the \fBicmp_ipv6_hoplimit\fR
-.sp
-.LP
-This example shows the \fBndd\fR module, \fB/dev/icmp\fR, used to set the
-\fBicmp_ipv6_hoplimit\fR.
-
-.sp
-.in +2
-.nf
-# ndd -set /dev/icmp icmp_ipv6_hoplimit 100
 .fi
 .in -2
 .sp

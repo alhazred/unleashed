@@ -527,11 +527,6 @@ the ipv6-forwarding option. IPv6 forwarding is configured at boot time based on
 the setting of \fBrouteadm\fR(1M)'s ipv6-forwarding option.
 .sp
 .LP
-For backwards compatibility, IPv6 forwarding can be enabled or disabled using
-\fBndd\fR(1M)'s ip_forwarding variable.  It is set to 1 if IPv6 forwarding is
-enabled, or 0 if it is disabled.
-.sp
-.LP
 Additionally, finer-grained forwarding can be configured in IPv6. Each
 interface can be configured to forward IPv6 packets by setting the IFF_ROUTER
 interface flag. This flag can be set and cleared using \fBifconfig\fR(1M)'s
@@ -540,16 +535,6 @@ can be forwarded to or from the interface. If it is clear, packets will neither
 be forwarded from this interface to others, nor forwarded to this interface.
 Setting the ip6_forwarding variable sets all of the IPv6 interfaces' IFF_ROUTER
 flags.
-.sp
-.LP
-For backwards compatibility, each interface creates an
-\fB<ifname>ip6_forwarding /dev/ip6\fR variable that can be modified using
-\fBndd\fR(1M). An interface's \fB:ip6_forwarding ndd\fR variable is a boolean
-variable that mirrors the status of its IFF_ROUTER interface flag. It is set to
-1 if the flag is set, or 0 if it is clear. This interface specific
-\fB<ifname>:ip6_forwarding ndd\fR variable is obsolete and may be removed in a
-future release of Solaris. The \fBifconfig\fR(1M) router and -router interfaces
-are preferred.
 .sp
 .LP
 The \fBIPv6\fR layer will send an \fBICMP6\fR message back to the source host
@@ -580,7 +565,7 @@ by IPv6 back up to the user process.
 .SH SEE ALSO
 .sp
 .LP
-\fBsvcs\fR(1), \fBndd\fR(1M), \fBrouteadm\fR(1M), \fBsvcadm\fR(1M),
+\fBsvcs\fR(1), \fBrouteadm\fR(1M), \fBsvcadm\fR(1M),
 \fBread\fR(2), \fBwrite\fR(2), \fBbind\fR(3SOCKET), \fBconnect\fR(3SOCKET),
 \fBgetsockopt\fR(3SOCKET), \fBrecv\fR(3SOCKET), \fBrecvmsg\fR(3SOCKET),
 \fBsend\fR(3SOCKET), \fBsendmsg\fR(3SOCKET), \fBsetsockopt\fR(3SOCKET),
