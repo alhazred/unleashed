@@ -351,7 +351,7 @@ mod_prop_info_t tcp_propinfo_tbl[] = {
 	    mod_set_uint32, mod_get_uint32,
 	    {0, 16, 10}, {10} },
 
-	{ "_dupack_fast_retransmit", MOD_PROTO_TCP,
+	{ "dupack_fast_retrans", MOD_PROTO_TCP,
 	    mod_set_uint32, mod_get_uint32,
 	    {1, 10000, 3}, {3} },
 
