@@ -39,25 +39,6 @@
 #define	TCP_MSS_MAX		TCP_MSS_MAX_IPV4
 
 /*
- * Set the RFC 1948 pass phrase
- */
-/* ARGSUSED */
-static int
-tcp_set_1948phrase(netstack_t *stack,  cred_t *cr, mod_prop_info_t *pinfo,
-    const char *ifname, const void* pr_val, uint_t flags)
-{
-	if (flags & MOD_PROP_DEFAULT)
-		return (ENOTSUP);
-
-	/*
-	 * Basically, value contains a new pass phrase.  Pass it along!
-	 */
-	tcp_iss_key_init((uint8_t *)pr_val, strlen(pr_val),
-	    stack->netstack_tcp);
-	return (0);
-}
-
-/*
  * returns the current list of listener limit configuration.
  */
 /* ARGSUSED */
@@ -509,9 +490,6 @@ mod_prop_info_t tcp_propinfo_tbl[] = {
 	{ "extra_priv_ports", MOD_PROTO_TCP,
 	    mod_set_extra_privports, mod_get_extra_privports,
 	    {1, ULP_MAX_PORT, 0}, {0} },
-
-	{ "_1948_phrase", MOD_PROTO_TCP,
-	    tcp_set_1948phrase, NULL, {0}, {0} },
 
 	{ "_listener_limit_conf", MOD_PROTO_TCP,
 	    NULL, tcp_listener_conf_get, {0}, {0} },

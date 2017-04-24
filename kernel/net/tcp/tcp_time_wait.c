@@ -706,9 +706,7 @@ tcp_time_wait_processing(tcp_t *tcp, mblk_t *mp, uint32_t seg_seq,
 			} arg;
 			MD5_CTX context;
 
-			mutex_enter(&tcps->tcps_iss_key_lock);
 			context = tcps->tcps_iss_key;
-			mutex_exit(&tcps->tcps_iss_key_lock);
 			arg.ports = connp->conn_ports;
 			/* We use MAPPED addresses in tcp_iss_init */
 			arg.src = connp->conn_laddr_v6;

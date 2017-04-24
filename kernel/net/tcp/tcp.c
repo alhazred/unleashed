@@ -3603,68 +3603,6 @@ tcp_random(void)
 }
 
 /*
- * Split this function out so that if the secret changes, I'm okay.
- *
- * Initialize the tcp_iss_cookie and tcp_iss_key.
- */
-
-#define	PASSWD_SIZE 16  /* MUST be multiple of 4 */
-
-void
-tcp_iss_key_init(uint8_t *phrase, int len, tcp_stack_t *tcps)
-{
-	struct {
-		int32_t current_time;
-		uint32_t randnum;
-		uint16_t pad;
-		uint8_t ether[6];
-		uint8_t passwd[PASSWD_SIZE];
-	} tcp_iss_cookie;
-	time_t t;
-
-	/*
-	 * Start with the current absolute time.
-	 */
-	(void) drv_getparm(TIME, &t);
-	tcp_iss_cookie.current_time = t;
-
-	/*
-	 * XXX - Need a more random number per RFC 1750, not this crap.
-	 * OTOH, if what follows is pretty random, then I'm in better shape.
-	 */
-	tcp_iss_cookie.randnum = (uint32_t)(gethrtime() + tcp_random());
-	tcp_iss_cookie.pad = 0x365c;  /* Picked from HMAC pad values. */
-
-	/*
-	 * The cpu_type_info is pretty non-random.  Ugggh.  It does serve
-	 * as a good template.
-	 */
-	bcopy(&cpu_list->cpu_type_info, &tcp_iss_cookie.passwd,
-	    min(PASSWD_SIZE, sizeof (cpu_list->cpu_type_info)));
-
-	/*
-	 * The pass-phrase.  Normally this is supplied by user-called NDD.
-	 */
-	bcopy(phrase, &tcp_iss_cookie.passwd, min(PASSWD_SIZE, len));
-
-	/*
-	 * See 4010593 if this section becomes a problem again,
-	 * but the local ethernet address is useful here.
-	 */
-	(void) localetheraddr(NULL,
-	    (struct ether_addr *)&tcp_iss_cookie.ether);
-
-	/*
-	 * Hash 'em all together.  The MD5Final is called per-connection.
-	 */
-	mutex_enter(&tcps->tcps_iss_key_lock);
-	MD5Init(&tcps->tcps_iss_key);
-	MD5Update(&tcps->tcps_iss_key, (uchar_t *)&tcp_iss_cookie,
-	    sizeof (tcp_iss_cookie));
-	mutex_exit(&tcps->tcps_iss_key_lock);
-}
-
-/*
  * Called by IP when IP is loaded into the kernel
  */
 void
@@ -3711,12 +3649,12 @@ tcp_stack_init(netstackid_t stackid, netstack_t *ns)
 	int		error = 0;
 	major_t		major;
 	size_t		arrsz;
+	uint8_t		secret[16];
 
 	tcps = (tcp_stack_t *)kmem_zalloc(sizeof (*tcps), KM_SLEEP);
 	tcps->tcps_netstack = ns;
 
 	/* Initialize locks */
-	mutex_init(&tcps->tcps_iss_key_lock, NULL, MUTEX_DEFAULT, NULL);
 	mutex_init(&tcps->tcps_epriv_port_lock, NULL, MUTEX_DEFAULT, NULL);
 
 	tcps->tcps_g_num_epriv_ports = TCP_NUM_EPRIV_PORTS;
@@ -3755,18 +3693,10 @@ tcp_stack_init(netstackid_t stackid, netstack_t *ns)
 	tcp_max_optsize = optcom_max_optsize(tcp_opt_obj.odb_opt_des_arr,
 	    tcp_opt_obj.odb_opt_arr_cnt);
 
-	/*
-	 * Initialize RFC 1948 secret values.  This will probably be reset once
-	 * by the boot scripts.
-	 *
-	 * Use NULL name, as the name is caught by the new lockstats.
-	 *
-	 * Initialize with some random, non-guessable string, like the global
-	 * T_INFO_ACK.
-	 */
-
-	tcp_iss_key_init((uint8_t *)&tcp_g_t_info_ack,
-	    sizeof (tcp_g_t_info_ack), tcps);
+	/* Initialize the RFC 6528 ISS. */
+	random_get_pseudo_bytes(secret, sizeof(secret));
+	MD5Init(&tcps->tcps_iss_key);
+	MD5Update(&tcps->tcps_iss_key, secret, sizeof(secret));
 
 	tcps->tcps_kstat = tcp_kstat2_init(stackid);
 	tcps->tcps_mibkp = tcp_kstat_init(stackid);
@@ -3884,7 +3814,6 @@ tcp_stack_fini(netstackid_t stackid, void *arg)
 	    TCP_ACCEPTOR_FANOUT_SIZE);
 	tcps->tcps_acceptor_fanout = NULL;
 
-	mutex_destroy(&tcps->tcps_iss_key_lock);
 	mutex_destroy(&tcps->tcps_epriv_port_lock);
 
 	ip_drop_unregister(&tcps->tcps_dropper);
@@ -3917,9 +3846,7 @@ tcp_iss_init(tcp_t *tcp)
 	tcp->tcp_iss = tcps->tcps_iss_incr_extra;
 	switch (tcps->tcps_strong_iss) {
 	case 2:
-		mutex_enter(&tcps->tcps_iss_key_lock);
 		context = tcps->tcps_iss_key;
-		mutex_exit(&tcps->tcps_iss_key_lock);
 		arg.ports = connp->conn_ports;
 		arg.src = connp->conn_laddr_v6;
 		arg.dst = connp->conn_faddr_v6;

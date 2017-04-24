@@ -572,7 +572,7 @@ extern uint32_t tcp_early_abort;
 #define	tcps_wroff_xtra			tcps_propinfo_tbl[57].prop_cur_uval
 #define	tcps_dev_flow_ctl		tcps_propinfo_tbl[58].prop_cur_bval
 #define	tcps_reass_timeout		tcps_propinfo_tbl[59].prop_cur_uval
-#define	tcps_iss_incr			tcps_propinfo_tbl[65].prop_cur_uval
+#define	tcps_iss_incr			tcps_propinfo_tbl[64].prop_cur_uval
 
 extern struct qinit tcp_rinitv4, tcp_rinitv6;
 extern boolean_t do_tcp_fusion;
@@ -661,7 +661,6 @@ extern boolean_t tcp_fuse_rcv_drain(queue_t *, tcp_t *, mblk_t **);
 extern size_t	tcp_fuse_set_rcv_hiwat(tcp_t *, size_t);
 extern int	tcp_fuse_maxpsz(tcp_t *);
 extern void	tcp_fuse_backenable(tcp_t *);
-extern void	tcp_iss_key_init(uint8_t *, int, tcp_stack_t *);
 
 /*
  * Output related functions in tcp_output.c.

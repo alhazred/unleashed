@@ -81,7 +81,6 @@ struct tcp_stack {
 
 	uint32_t	tcps_iss_incr_extra;
 				/* Incremented for each connection */
-	kmutex_t	tcps_iss_key_lock;
 	MD5_CTX		tcps_iss_key;
 
 	/* Packet dropper for TCP IPsec policy drops. */
