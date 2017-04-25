@@ -258,9 +258,6 @@ squeue_create(clock_t wait, pri_t pri)
 	sqp->sq_poll_thr = thread_create(NULL, 0, squeue_polling_thread,
 	    sqp, 0, &p0, TS_RUN, pri);
 
-	sqp->sq_enter = squeue_enter;
-	sqp->sq_drain = squeue_drain;
-
 	return (sqp);
 }
 
@@ -556,7 +553,7 @@ squeue_enter(squeue_t *sqp, mblk_t *mp, mblk_t *tail, uint32_t cnt,
 		ASSERT(sqp->sq_first != NULL);
 		now = gethrtime();
 		sqp->sq_run = curthread;
-		sqp->sq_drain(sqp, SQS_ENTER, now + squeue_drain_ns);
+		squeue_drain(sqp, SQS_ENTER, now + squeue_drain_ns);
 
 		/*
 		 * If we didn't do a complete drain, the worker
@@ -1123,7 +1120,7 @@ poll_again:
 
 				now = gethrtime();
 				sqp->sq_run = curthread;
-				sqp->sq_drain(sqp, SQS_POLL_PROC, now +
+				squeue_drain(sqp, SQS_POLL_PROC, now +
 				    squeue_drain_ns);
 				sqp->sq_run = NULL;
 
@@ -1360,7 +1357,7 @@ squeue_worker(squeue_t *sqp)
 
 		now = gethrtime();
 		sqp->sq_run = curthread;
-		sqp->sq_drain(sqp, SQS_WORKER, now +  squeue_drain_ns);
+		squeue_drain(sqp, SQS_WORKER, now +  squeue_drain_ns);
 		sqp->sq_run = NULL;
 	}
 }

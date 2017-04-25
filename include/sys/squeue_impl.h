@@ -80,16 +80,11 @@ typedef struct squeue_set_s {
 } squeue_set_t;
 
 typedef void (*sqproc_t)(void *, mblk_t *, void *, struct ip_recv_attr_s *);
-typedef void (*sq_enter_proc_t)(squeue_t *, mblk_t *, mblk_t *, uint32_t,
-	    struct ip_recv_attr_s *, int, uint8_t);
-typedef void (*sq_drain_proc_t)(squeue_t *, uint_t, hrtime_t);
 
 extern void squeue_worker_wakeup(squeue_t *);
 extern int ip_squeue_flag;
 
 struct squeue_s {
-	sq_enter_proc_t	sq_enter;	/* sq_process function */
-	sq_drain_proc_t	sq_drain;	/* sq_drain function */
 	kmutex_t	sq_lock;	/* lock before using any member */
 	uint32_t	sq_state;	/* state flags and message count */
 	int		sq_count;	/* # of mblocks in squeue */

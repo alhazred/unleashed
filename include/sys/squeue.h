@@ -48,7 +48,7 @@ typedef struct squeue_s squeue_t;
 #define	SQ_PROCESS	0x0004
 
 #define	SQUEUE_ENTER(sqp, head, tail, cnt, ira, flag, tag) {	\
-	sqp->sq_enter(sqp, head, tail, cnt, ira, flag, tag);	\
+	squeue_enter(sqp, head, tail, cnt, ira, flag, tag);	\
 }
 
 #define	SQUEUE_ENTER_ONE(sqp, mp, proc, arg, ira, flag, tag) {	\
