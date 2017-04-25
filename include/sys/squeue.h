@@ -52,8 +52,6 @@ typedef struct squeue_s squeue_t;
 }
 
 #define	SQUEUE_ENTER_ONE(sqp, mp, proc, arg, ira, flag, tag) {	\
-	ASSERT(mp->b_next == NULL);				\
-	ASSERT(mp->b_prev == NULL);				\
 	SET_SQUEUE(mp, proc, arg);				\
 	SQUEUE_ENTER(sqp, mp, mp, 1, ira, flag, tag);		\
 }
