@@ -272,8 +272,6 @@ static void	tcp_linger_interrupted(void *arg, mblk_t *mp, void *arg2,
 
 
 /* Prototype for TCP functions */
-static void	tcp_random_init(void);
-int		tcp_random(void);
 static int	tcp_connect_ipv4(tcp_t *tcp, ipaddr_t *dstaddrp,
 		    in_port_t dstport, uint_t srcid);
 static int	tcp_connect_ipv6(tcp_t *tcp, in6_addr_t *dstaddrp,
@@ -3521,87 +3519,6 @@ tcp_acceptor_hash_remove(tcp_t *tcp)
  * SUCH DAMAGE.
  */
 
-/* Type 3 -- x**31 + x**3 + 1 */
-#define	DEG_3		31
-#define	SEP_3		3
-
-
-/* Protected by tcp_random_lock */
-static int tcp_randtbl[DEG_3 + 1];
-
-static int *tcp_random_fptr = &tcp_randtbl[SEP_3 + 1];
-static int *tcp_random_rptr = &tcp_randtbl[1];
-
-static int *tcp_random_state = &tcp_randtbl[1];
-static int *tcp_random_end_ptr = &tcp_randtbl[DEG_3 + 1];
-
-kmutex_t tcp_random_lock;
-
-void
-tcp_random_init(void)
-{
-	int i;
-	hrtime_t hrt;
-	time_t wallclock;
-	uint64_t result;
-
-	/*
-	 * Use high-res timer and current time for seed.  Gethrtime() returns
-	 * a longlong, which may contain resolution down to nanoseconds.
-	 * The current time will either be a 32-bit or a 64-bit quantity.
-	 * XOR the two together in a 64-bit result variable.
-	 * Convert the result to a 32-bit value by multiplying the high-order
-	 * 32-bits by the low-order 32-bits.
-	 */
-
-	hrt = gethrtime();
-	(void) drv_getparm(TIME, &wallclock);
-	result = (uint64_t)wallclock ^ (uint64_t)hrt;
-	mutex_enter(&tcp_random_lock);
-	tcp_random_state[0] = ((result >> 32) & 0xffffffff) *
-	    (result & 0xffffffff);
-
-	for (i = 1; i < DEG_3; i++)
-		tcp_random_state[i] = 1103515245 * tcp_random_state[i - 1]
-		    + 12345;
-	tcp_random_fptr = &tcp_random_state[SEP_3];
-	tcp_random_rptr = &tcp_random_state[0];
-	mutex_exit(&tcp_random_lock);
-	for (i = 0; i < 10 * DEG_3; i++)
-		(void) tcp_random();
-}
-
-/*
- * tcp_random: Return a random number in the range [1 - (128K + 1)].
- * This range is selected to be approximately centered on TCP_ISS / 2,
- * and easy to compute. We get this value by generating a 32-bit random
- * number, selecting out the high-order 17 bits, and then adding one so
- * that we never return zero.
- */
-int
-tcp_random(void)
-{
-	int i;
-
-	mutex_enter(&tcp_random_lock);
-	*tcp_random_fptr += *tcp_random_rptr;
-
-	/*
-	 * The high-order bits are more random than the low-order bits,
-	 * so we select out the high-order 17 bits and add one so that
-	 * we never return zero.
-	 */
-	i = ((*tcp_random_fptr >> 15) & 0x1ffff) + 1;
-	if (++tcp_random_fptr >= tcp_random_end_ptr) {
-		tcp_random_fptr = tcp_random_state;
-		++tcp_random_rptr;
-	} else if (++tcp_random_rptr >= tcp_random_end_ptr)
-		tcp_random_rptr = tcp_random_state;
-
-	mutex_exit(&tcp_random_lock);
-	return (i);
-}
-
 /*
  * Called by IP when IP is loaded into the kernel
  */
@@ -3614,11 +3531,6 @@ tcp_ddi_g_init(void)
 
 	tcp_notsack_blk_cache = kmem_cache_create("tcp_notsack_blk_cache",
 	    sizeof (notsack_blk_t), 0, NULL, NULL, NULL, NULL, NULL, 0);
-
-	mutex_init(&tcp_random_lock, NULL, MUTEX_DEFAULT, NULL);
-
-	/* Initialize the random number generator */
-	tcp_random_init();
 
 	/* A single callback independently of how many netstacks we have */
 	ip_squeue_init(tcp_squeue_add);
@@ -3752,8 +3664,6 @@ tcp_ddi_g_destroy(void)
 	tcp_g_kstat_fini(tcp_g_kstat);
 	tcp_g_kstat = NULL;
 	bzero(&tcp_g_statistics, sizeof (tcp_g_statistics));
-
-	mutex_destroy(&tcp_random_lock);
 
 	kmem_cache_destroy(tcp_timercache);
 	kmem_cache_destroy(tcp_notsack_blk_cache);

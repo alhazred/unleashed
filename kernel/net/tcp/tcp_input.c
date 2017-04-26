@@ -1452,7 +1452,7 @@ tcp_input_listener(void *arg, mblk_t *mp, void *arg2, ip_recv_attr_t *ira)
 		eager->tcp_iss = listener->tcp_iss;
 		listener->tcp_iss = 0;
 	} else {
-		random_get_pseudo_bytes(&eager->tcp_iss,
+		random_get_pseudo_bytes((uint8_t *)&eager->tcp_iss,
 		    sizeof(eager->tcp_iss));
 	}
 

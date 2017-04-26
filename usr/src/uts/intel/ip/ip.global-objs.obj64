@@ -252,12 +252,6 @@ tcp_outbound_squeue_switch
 tcp_propinfo_tbl
 tcp_propinfo_count
 tcp_random_anon_port
-tcp_random_end_ptr
-tcp_random_fptr
-tcp_random_lock
-tcp_random_rptr
-tcp_random_state
-tcp_randtbl
 tcp_rinfo
 tcp_rinitv4
 tcp_rinitv6

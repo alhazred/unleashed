@@ -695,7 +695,8 @@ tcp_time_wait_processing(tcp_t *tcp, mblk_t *mp, uint32_t seg_seq,
 			 * but clear the MSB so that SEQ_LT(tcp_snxt, iss).
 			 */
 			uint32_t new_iss;
-			random_get_pseudo_bytes(&new_iss, sizeof(new_iss));
+			random_get_pseudo_bytes((uint8_t *)&new_iss,
+			    sizeof(new_iss));
 			new_iss &= 0x7fffffff;
 			new_iss |= 0x8000;
 			new_iss += snxt;
