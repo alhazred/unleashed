@@ -208,25 +208,11 @@ typedef struct tcp_squeue_priv_s {
 } tcp_squeue_priv_t;
 
 /*
- * Parameters for TCP Initial Send Sequence number (ISS) generation.  When
- * tcp_strong_iss is set to 1, which is the default, the ISS is calculated
- * by adding three components: a time component which grows by 1 every 4096
- * nanoseconds (versus every 4 microseconds suggested by RFC 793, page 27);
- * a per-connection component which grows by 125000 for every new connection;
- * and an "extra" component that grows by a random amount centered
- * approximately on 64000.  This causes the ISS generator to cycle every
- * 4.89 hours if no TCP connections are made, and faster if connections are
- * made.
- *
- * When tcp_strong_iss is set to 0, ISS is calculated by adding two
- * components: a time component which grows by 250000 every second; and
- * a per-connection component which grows by 125000 for every new connections.
- *
- * A third method, when tcp_strong_iss is set to 2, for generating ISS is
- * prescribed by Steve Bellovin.  This involves adding time, the 125000 per
- * connection, and a one-way hash (MD5) of the connection ID <sport, dport,
- * src, dst>, a "truly" random (per RFC 1750) number, and a console-entered
- * password.
+ * Parameters for TCP Initial Send Sequence number (ISS) generation. The ISS
+ * for outgoing connections is calculated as proposed in RFC 6528 section 3,
+ * ie. by adding two components: a time component which grows by 1 every 4096
+ * nanoseconds and a one-way hash (MD5) of <sport, dport, src, dst, secret>
+ * where secret is a true random number (RFC 4086).
  */
 #define	ISS_INCR	250000
 #define	ISS_NSEC_SHT	12
@@ -542,37 +528,36 @@ extern uint32_t tcp_early_abort;
 #define	tcps_fin_wait_2_flush_interval_low	\
 					tcps_propinfo_tbl[33].prop_min_uval
 #define	tcps_max_buf			tcps_propinfo_tbl[34].prop_cur_uval
-#define	tcps_strong_iss			tcps_propinfo_tbl[35].prop_cur_uval
-#define	tcps_rtt_updates		tcps_propinfo_tbl[36].prop_cur_uval
-#define	tcps_wscale_always		tcps_propinfo_tbl[37].prop_cur_bval
-#define	tcps_tstamp_always		tcps_propinfo_tbl[38].prop_cur_bval
-#define	tcps_tstamp_if_wscale		tcps_propinfo_tbl[39].prop_cur_bval
-#define	tcps_rexmit_interval_extra	tcps_propinfo_tbl[40].prop_cur_uval
-#define	tcps_deferred_acks_max		tcps_propinfo_tbl[41].prop_cur_uval
-#define	tcps_slow_start_after_idle	tcps_propinfo_tbl[42].prop_cur_uval
-#define	tcps_slow_start_initial		tcps_propinfo_tbl[43].prop_cur_uval
-#define	tcps_sack_permitted		tcps_propinfo_tbl[44].prop_cur_uval
-#define	tcps_ipv6_hoplimit		tcps_propinfo_tbl[45].prop_cur_uval
-#define	tcps_mss_def_ipv6		tcps_propinfo_tbl[46].prop_cur_uval
-#define	tcps_mss_max_ipv6		tcps_propinfo_tbl[47].prop_cur_uval
-#define	tcps_rev_src_routes		tcps_propinfo_tbl[48].prop_cur_bval
-#define	tcps_local_dack_interval	tcps_propinfo_tbl[49].prop_cur_uval
-#define	tcps_local_dacks_max		tcps_propinfo_tbl[50].prop_cur_uval
-#define	tcps_ecn_permitted		tcps_propinfo_tbl[51].prop_cur_uval
-#define	tcps_rst_sent_rate_enabled	tcps_propinfo_tbl[52].prop_cur_bval
-#define	tcps_rst_sent_rate		tcps_propinfo_tbl[53].prop_cur_uval
-#define	tcps_push_timer_interval	tcps_propinfo_tbl[54].prop_cur_uval
-#define	tcps_use_smss_as_mss_opt	tcps_propinfo_tbl[55].prop_cur_bval
+#define	tcps_rtt_updates		tcps_propinfo_tbl[35].prop_cur_uval
+#define	tcps_wscale_always		tcps_propinfo_tbl[36].prop_cur_bval
+#define	tcps_tstamp_always		tcps_propinfo_tbl[37].prop_cur_bval
+#define	tcps_tstamp_if_wscale		tcps_propinfo_tbl[38].prop_cur_bval
+#define	tcps_rexmit_interval_extra	tcps_propinfo_tbl[39].prop_cur_uval
+#define	tcps_deferred_acks_max		tcps_propinfo_tbl[40].prop_cur_uval
+#define	tcps_slow_start_after_idle	tcps_propinfo_tbl[41].prop_cur_uval
+#define	tcps_slow_start_initial		tcps_propinfo_tbl[42].prop_cur_uval
+#define	tcps_sack_permitted		tcps_propinfo_tbl[43].prop_cur_uval
+#define	tcps_ipv6_hoplimit		tcps_propinfo_tbl[44].prop_cur_uval
+#define	tcps_mss_def_ipv6		tcps_propinfo_tbl[45].prop_cur_uval
+#define	tcps_mss_max_ipv6		tcps_propinfo_tbl[46].prop_cur_uval
+#define	tcps_rev_src_routes		tcps_propinfo_tbl[47].prop_cur_bval
+#define	tcps_local_dack_interval	tcps_propinfo_tbl[48].prop_cur_uval
+#define	tcps_local_dacks_max		tcps_propinfo_tbl[49].prop_cur_uval
+#define	tcps_ecn_permitted		tcps_propinfo_tbl[50].prop_cur_uval
+#define	tcps_rst_sent_rate_enabled	tcps_propinfo_tbl[51].prop_cur_bval
+#define	tcps_rst_sent_rate		tcps_propinfo_tbl[52].prop_cur_uval
+#define	tcps_push_timer_interval	tcps_propinfo_tbl[53].prop_cur_uval
+#define	tcps_use_smss_as_mss_opt	tcps_propinfo_tbl[54].prop_cur_bval
 #define	tcps_keepalive_abort_interval_high \
-					tcps_propinfo_tbl[56].prop_max_uval
+					tcps_propinfo_tbl[55].prop_max_uval
 #define	tcps_keepalive_abort_interval \
-					tcps_propinfo_tbl[56].prop_cur_uval
+					tcps_propinfo_tbl[55].prop_cur_uval
 #define	tcps_keepalive_abort_interval_low \
-					tcps_propinfo_tbl[56].prop_min_uval
-#define	tcps_wroff_xtra			tcps_propinfo_tbl[57].prop_cur_uval
-#define	tcps_dev_flow_ctl		tcps_propinfo_tbl[58].prop_cur_bval
-#define	tcps_reass_timeout		tcps_propinfo_tbl[59].prop_cur_uval
-#define	tcps_iss_incr			tcps_propinfo_tbl[64].prop_cur_uval
+					tcps_propinfo_tbl[55].prop_min_uval
+#define	tcps_wroff_xtra			tcps_propinfo_tbl[56].prop_cur_uval
+#define	tcps_dev_flow_ctl		tcps_propinfo_tbl[57].prop_cur_bval
+#define	tcps_reass_timeout		tcps_propinfo_tbl[58].prop_cur_uval
+#define	tcps_iss_incr			tcps_propinfo_tbl[63].prop_cur_uval
 
 extern struct qinit tcp_rinitv4, tcp_rinitv6;
 extern boolean_t do_tcp_fusion;

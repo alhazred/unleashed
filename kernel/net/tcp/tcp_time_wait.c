@@ -677,65 +677,8 @@ tcp_time_wait_processing(tcp_t *tcp, mblk_t *mp, uint32_t seg_seq,
 	}
 
 	if ((flags & TH_SYN) && gap > 0 && rgap < 0) {
-		/*
-		 * Make sure that when we accept the connection, pick
-		 * an ISS greater than (tcp_snxt + tcp_iss_incr/2) for the
-		 * old connection.
-		 *
-		 * The next ISS generated is equal to tcp_iss_incr_extra
-		 * + tcp_iss_incr/2 + other components depending on the
-		 * value of tcp_strong_iss.  We pre-calculate the new
-		 * ISS here and compare with tcp_snxt to determine if
-		 * we need to make adjustment to tcp_iss_incr_extra.
-		 *
-		 * The above calculation is ugly and is a
-		 * waste of CPU cycles...
-		 */
-		uint32_t new_iss = tcps->tcps_iss_incr_extra;
-		int32_t adj;
 		ip_stack_t *ipst = tcps->tcps_netstack->netstack_ip;
-
-		switch (tcps->tcps_strong_iss) {
-		case 2: {
-			/* Add time and MD5 components. */
-			uint32_t answer[4];
-			struct {
-				uint32_t ports;
-				in6_addr_t src;
-				in6_addr_t dst;
-			} arg;
-			MD5_CTX context;
-
-			context = tcps->tcps_iss_key;
-			arg.ports = connp->conn_ports;
-			/* We use MAPPED addresses in tcp_iss_init */
-			arg.src = connp->conn_laddr_v6;
-			arg.dst = connp->conn_faddr_v6;
-			MD5Update(&context, (uchar_t *)&arg,
-			    sizeof (arg));
-			MD5Final((uchar_t *)answer, &context);
-			answer[0] ^= answer[1] ^ answer[2] ^ answer[3];
-			new_iss += (gethrtime() >> ISS_NSEC_SHT) + answer[0];
-			break;
-		}
-		case 1:
-			/* Add time component and min random (i.e. 1). */
-			new_iss += (gethrtime() >> ISS_NSEC_SHT) + 1;
-			break;
-		default:
-			/* Add only time component. */
-			new_iss += (uint32_t)gethrestime_sec() *
-			    tcps->tcps_iss_incr;
-			break;
-		}
-		if ((adj = (int32_t)(tcp->tcp_snxt - new_iss)) > 0) {
-			/*
-			 * New ISS not guaranteed to be tcp_iss_incr/2
-			 * ahead of the current tcp_snxt, so add the
-			 * difference to tcp_iss_incr_extra.
-			 */
-			tcps->tcps_iss_incr_extra += adj;
-		}
+		uint32_t snxt = tcp->tcp_snxt;
 		/*
 		 * If tcp_clean_death() can not perform the task now,
 		 * drop the SYN packet and let the other side re-xmit.
@@ -746,6 +689,18 @@ tcp_time_wait_processing(tcp_t *tcp, mblk_t *mp, uint32_t seg_seq,
 			goto done;
 		nconnp = ipcl_classify(mp, ira, ipst);
 		if (nconnp != NULL) {
+			/*
+			 * Make sure that when we accept the connection, the
+			 * new ISS is greater than tcp_snxt by at least 32768,
+			 * but clear the MSB so that SEQ_LT(tcp_snxt, iss).
+			 */
+			uint32_t new_iss;
+			random_get_pseudo_bytes(&new_iss, sizeof(new_iss));
+			new_iss &= 0x7fffffff;
+			new_iss |= 0x8000;
+			new_iss += snxt;
+			 /* tcp_input_listener will copy this to the new tcp */
+			nconnp->conn_tcp->tcp_iss = new_iss;
 			TCP_STAT(tcps, tcp_time_wait_syn_success);
 			/* Drops ref on nconnp */
 			tcp_reinput(nconnp, mp, ira, ipst);

@@ -378,10 +378,6 @@ mod_prop_info_t tcp_propinfo_tbl[] = {
 	    mod_set_uint32, mod_get_uint32,
 	    {8192, ULP_MAX_BUF, 1024*1024}, {1024*1024} },
 
-	{ "_strong_iss", MOD_PROTO_TCP,
-	    mod_set_uint32, mod_get_uint32,
-	    {0, 2, 2}, {2} },
-
 	{ "_rtt_updates", MOD_PROTO_TCP,
 	    mod_set_uint32, mod_get_uint32,
 	    {0, 65536, 20}, {20} },

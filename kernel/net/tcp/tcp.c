@@ -3828,11 +3828,6 @@ tcp_stack_fini(netstackid_t stackid, void *arg)
 	kmem_free(tcps, sizeof (*tcps));
 }
 
-/*
- * Generate ISS, taking into account NDD changes may happen halfway through.
- * (If the iss is not zero, set it.)
- */
-
 static void
 tcp_iss_init(tcp_t *tcp)
 {
@@ -3842,10 +3837,10 @@ tcp_iss_init(tcp_t *tcp)
 	tcp_stack_t	*tcps = tcp->tcp_tcps;
 	conn_t		*connp = tcp->tcp_connp;
 
-	tcps->tcps_iss_incr_extra += (tcps->tcps_iss_incr >> 1);
-	tcp->tcp_iss = tcps->tcps_iss_incr_extra;
-	switch (tcps->tcps_strong_iss) {
-	case 2:
+	/* tcp_iss may already have been set in tcp_input_listener */
+	if (!tcp->tcp_iss) {
+		tcps->tcps_iss_incr_extra += (tcps->tcps_iss_incr >> 1);
+		tcp->tcp_iss = tcps->tcps_iss_incr_extra;
 		context = tcps->tcps_iss_key;
 		arg.ports = connp->conn_ports;
 		arg.src = connp->conn_laddr_v6;
@@ -3853,19 +3848,6 @@ tcp_iss_init(tcp_t *tcp)
 		MD5Update(&context, (uchar_t *)&arg, sizeof (arg));
 		MD5Final((uchar_t *)answer, &context);
 		tcp->tcp_iss += answer[0] ^ answer[1] ^ answer[2] ^ answer[3];
-		/*
-		 * Now that we've hashed into a unique per-connection sequence
-		 * space, add a random increment per strong_iss == 1.  So I
-		 * guess we'll have to...
-		 */
-		/* FALLTHRU */
-	case 1:
-		tcp->tcp_iss += (gethrtime() >> ISS_NSEC_SHT) + tcp_random();
-		break;
-	default:
-		tcp->tcp_iss += (uint32_t)gethrestime_sec() *
-		    tcps->tcps_iss_incr;
-		break;
 	}
 	tcp->tcp_valid_bits = TCP_ISS_VALID;
 	tcp->tcp_fss = tcp->tcp_iss - 1;

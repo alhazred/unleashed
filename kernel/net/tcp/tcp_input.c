@@ -1444,6 +1444,17 @@ tcp_input_listener(void *arg, mblk_t *mp, void *arg2, ip_recv_attr_t *ira)
 	 * the listener.
 	 */
 	tcp_init_values(eager, listener);
+	/*
+	 * If listener's tcp_iss is set, the new connection replaces an old
+	 * TIME_WAIT connection and should use the ISS set in tcp_time_wait.c.
+	 */
+	if (listener->tcp_iss) {
+		eager->tcp_iss = listener->tcp_iss;
+		listener->tcp_iss = 0;
+	} else {
+		random_get_pseudo_bytes(&eager->tcp_iss,
+		    sizeof(eager->tcp_iss));
+	}
 
 	ASSERT((econnp->conn_ixa->ixa_flags &
 	    (IXAF_SET_ULP_CKSUM | IXAF_VERIFY_SOURCE |
