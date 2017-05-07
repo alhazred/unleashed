@@ -72,6 +72,7 @@
 #include <aclutils.h>
 #include <libnvpair.h>
 #include <archives.h>
+#include <err.h>
 
 #if defined(__SunOS_5_6) || defined(__SunOS_5_7)
 extern int defcntl();
@@ -3837,9 +3838,7 @@ xblocks(int issysattr, off_t bytes, int ofile)
 				(void) free(buf);
 				return (1);
 			} else {
-				(void) fprintf(stderr, gettext(
-				    "tar: %s: HELP - extract write error\n"),
-				    tempname);
+				warnc(saveerrno, "extracting %s", tempname);
 				done(2);
 			}
 		}
