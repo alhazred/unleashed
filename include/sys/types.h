@@ -86,13 +86,8 @@ typedef union {
  * to use them instead of int32_t and uint32_t because DEC had
  * shipped 64-bit wide.
  */
-#if defined(_LP64) || defined(_I32LPx)
 typedef int32_t		t_scalar_t;
 typedef uint32_t	t_uscalar_t;
-#else
-typedef long		t_scalar_t;	/* historical versions */
-typedef unsigned long	t_uscalar_t;
-#endif	/* defined(_LP64) || defined(_I32LPx) */
 
 /*
  * POSIX Extensions
@@ -294,11 +289,7 @@ typedef uint_t k_fltset_t;	/* kernel fault set type */
  * a process id, process group id, session id, scheduling class id,
  * user id, group id, project id, task id or zone id.
  */
-#if defined(_LP64) || defined(_I32LPx)
 typedef int		id_t;
-#else
-typedef	long		id_t;		/* (historical version) */
-#endif
 
 typedef id_t		lgrp_id_t;	/* lgroup ID */
 
@@ -316,13 +307,8 @@ typedef long	suseconds_t;	/* signed # of microseconds */
 /*
  * Typedefs for dev_t components.
  */
-#if defined(_LP64) || defined(_I32LPx)
-typedef uint_t	major_t;	/* major part of device number */
-typedef uint_t	minor_t;	/* minor part of device number */
-#else
-typedef ulong_t	major_t;	/* (historical version) */
-typedef ulong_t	minor_t;	/* (historical version) */
-#endif
+typedef unsigned int	major_t;	/* major part of device number */
+typedef unsigned int	minor_t;	/* minor part of device number */
 
 /*
  * The data type of a thread priority.
@@ -358,12 +344,8 @@ typedef ushort_t o_ino_t;		/* old inode type	*/
 /*
  * POSIX and XOPEN Declarations
  */
-typedef	int	key_t;			/* IPC key type		*/
-#if defined(_LP64) || defined(_I32LPx)
-typedef	uint_t	mode_t;			/* file attribute type	*/
-#else
-typedef	ulong_t	mode_t;			/* (historical version) */
-#endif
+typedef	int		key_t;		/* IPC key type		*/
+typedef	unsigned int	mode_t;		/* file attribute type	*/
 
 #ifndef	_UID_T
 #define	_UID_T
@@ -497,13 +479,8 @@ typedef struct {
 
 typedef ulong_t	dev_t;			/* expanded device type */
 
-#if defined(_LP64) || defined(_I32LPx)
-typedef	uint_t nlink_t;			/* file link type	*/
-typedef int	pid_t;			/* process id type	*/
-#else
-typedef	ulong_t	nlink_t;		/* (historical version) */
-typedef	long	pid_t;			/* (historical version) */
-#endif
+typedef	unsigned int nlink_t;		/* file link type	*/
+typedef	int pid_t;			/* process id type	*/
 
 #if !defined(_SIZE_T) || __cplusplus >= 199711L
 #define	_SIZE_T
