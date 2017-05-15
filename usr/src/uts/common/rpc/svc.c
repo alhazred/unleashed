@@ -206,8 +206,6 @@
 #include <sys/zone.h>
 #include <nfs/nfs.h>
 
-#define	RQCRED_SIZE	400	/* this size is excessive */
-
 /*
  * Defines for svc_poll()
  */

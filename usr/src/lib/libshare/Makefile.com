@@ -19,6 +19,7 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2006, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2016 by Delphix. All rights reserved.
 #
 LIBRARY =	libshare.a
 VERS =		.1
@@ -38,6 +39,7 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lscf -lzfs -luuid -lxml2 -lnvpair
 
 #add nfs/lib directory as part of the include path
+C99MODE +=	$(C99_ENABLE)
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-switch
