@@ -369,17 +369,6 @@ uexit(NODE *np)
  */
 int
 yylex()
-#ifdef	DEBUG
-{
-	int l;
-
-	l = yyhex();
-	if (dflag)
-		(void) printf("%d\n", l);
-	return (l);
-}
-yyhex()
-#endif
 {
 	wint_t c, c1;
 	int i;
@@ -410,7 +399,8 @@ yyhex()
 		redelim = 0;
 		catterm = 0;
 		savetoken = c;
-		return (lexlast = lexregexp(c));
+		c = lexlast = lexregexp(c);
+		goto out;
 	} else while ((c = lexgetc()) != WEOF) {
 		if (iswalpha(c) || c == '_') {
 			c = lexid(c);
@@ -701,7 +691,7 @@ yyhex()
 		}
 		break;
 
-	/* { */ case '}':
+	case '}':
 		if (nbrace == 0)
 			savetoken = ';';
 	/*FALLTHRU*/
@@ -724,6 +714,11 @@ yyhex()
 			c = ctosym[i].sym;
 			break;
 		}
+out:
+#ifdef DEBUG
+	if (dflag)
+		(void) printf("%d\n", (int)c);
+#endif
 	return ((int)c);
 }
 
@@ -1090,12 +1085,13 @@ lexgetc()
 			else
 				c = *progptr++;
 		} else {
-			if (progfp != FNULL)
+			if (progfp != FNULL) {
 				if (progfp != stdin)
 					(void) fclose(progfp);
 				else
 					clearerr(progfp);
 				progfp = FNULL;
+			}
 			if (files < progfilep) {
 				filename = *files++;
 				lineno = 1;
@@ -1295,8 +1291,7 @@ mbunconvert(wchar_t *str)
  */
 
 wchar_t *
-mbstowcsdup(s)
-char *s;
+mbstowcsdup(char *s)
 {
 	int n;
 	wchar_t *w;
@@ -1362,8 +1357,7 @@ static const char *const upe_ctrls[] =
  * string.  Otherwise, return an octal escape sequence.
  */
 static const char *
-toprint(c)
-wchar_t c;
+toprint(wchar_t c)
 {
 	int n, len;
 	unsigned char *ptr;
@@ -1563,10 +1557,10 @@ int_regwerror(int errcode, REGEXP r, char *errbuf, size_t bufsiz)
 
 int
 int_regwexec(REGEXP r,		/* compiled RE */
-	const wchar_t *astring,	/* subject string */
-	size_t nsub,		/* number of subexpressions */
-	int_regwmatch_t *sub,	/* subexpression pointers */
-	int flags)
+    const wchar_t *astring,	/* subject string */
+    size_t nsub,		/* number of subexpressions */
+    int_regwmatch_t *sub,	/* subexpression pointers */
+    int flags)
 {
 	char *mbs;
 	regmatch_t *mbsub = NULL;
@@ -1610,12 +1604,12 @@ int_regwexec(REGEXP r,		/* compiled RE */
 }
 
 int
-int_regwdosuba(REGEXP rp,		/* compiled RE: Pattern */
-	const wchar_t *rpl,		/* replacement string: /rpl/ */
-	const wchar_t *src,		/* source string */
-	wchar_t **dstp,			/* destination string */
-	int len,			/* destination length */
-	int *globp)	/* IN: occurence, 0 for all; OUT: substitutions */
+int_regwdosuba(REGEXP rp,	/* compiled RE: Pattern */
+    const wchar_t *rpl,		/* replacement string: /rpl/ */
+    const wchar_t *src,		/* source string */
+    wchar_t **dstp,		/* destination string */
+    int len,			/* destination length */
+    int *globp)		/* IN: occurence, 0 for all; OUT: substitutions */
 {
 	wchar_t *dst, *odst;
 	const wchar_t *ip, *xp;

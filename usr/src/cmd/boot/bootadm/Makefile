@@ -40,7 +40,7 @@ POFILE= bootadm_cmd.po
 
 .KEEP_STATE:
 
-LDLIBS += -lficl-sys -lpkcs11 -lcryptoutil -lnvpair -lgen
+LDLIBS += -lficl-sys -lmd -lcryptoutil -lnvpair -lgen
 LDLIBS += -lz -lbe -lzfs $(LDLIBS_$(MACH))
 
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64

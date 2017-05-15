@@ -44,6 +44,7 @@ MAN = Intro.5 \
       lfcompile.5 \
       lfcompile64.5 \
       locale.5 \
+      mansun.5 \
       me.5 \
       mech_spnego.5 \
       mm.5 \
