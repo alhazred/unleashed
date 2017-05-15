@@ -53,7 +53,6 @@ file path=usr/share/man/man1/rusers.1
 file path=usr/share/man/man1/whois.1
 file path=usr/share/man/man1m/rdate.1m
 file path=usr/share/man/man1m/rmt.1m
-file path=usr/share/man/man1m/rsh.1m
 file path=usr/share/man/man1m/rwall.1m
 file path=usr/share/man/man1m/snoop.1m
 file path=usr/share/man/man1m/spray.1m

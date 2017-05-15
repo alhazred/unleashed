@@ -158,21 +158,6 @@ struct listofnames
 };
 typedef struct listofnames listofnames;
 
-/*
- * XXX- NAME_MAX can't be defined in <limits.h> in a POSIX conformant system
- *	(under conditions which apply to Sun systems). Removal of this define
- *	caused yp to break (and only yp!). Hence, NAME_MAX is defined here
- *	*exactly* as it was in <limits.h>. I suspect this may not be the
- *	desired value. I suspect the desired value is either:
- *		- the maxumum name length for any file system type, or
- *		- should be _POSIX_NAME_MAX which is the minimum-maximum name
- *		  length in a POSIX conformant system (which just happens to
- *		  be 14), or
- *		- should be gotten by pathconf() or fpathconf().
- * XXX- I leave this to the owners of yp!
- */
-#define	NAME_MAX	14	/* s5 file system maximum name length */
-
 #ifdef	__cplusplus
 }
 #endif

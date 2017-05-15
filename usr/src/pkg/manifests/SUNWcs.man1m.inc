@@ -202,6 +202,7 @@ file path=usr/share/man/man1m/route.1m
 file path=usr/share/man/man1m/routeadm.1m
 file path=usr/share/man/man1m/rpcbind.1m
 file path=usr/share/man/man1m/rpcinfo.1m
+file path=usr/share/man/man1m/rsh.1m
 file path=usr/share/man/man1m/rtc.1m
 file path=usr/share/man/man1m/sac.1m
 file path=usr/share/man/man1m/sacadm.1m

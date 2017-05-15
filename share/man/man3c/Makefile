@@ -208,6 +208,7 @@ MAN = __fbufsize.3c \
       mbrtowc.3c \
       mbsinit.3c \
       mbsrtowcs.3c \
+      mbstowcs.3c \
       mbtowc.3c \
       membar_ops.3c \
       memory.3c \
@@ -507,6 +508,7 @@ MAN = __fbufsize.3c \
       wcstod.3c \
       wcstoimax.3c \
       wcstol.3c \
+      wcstombs.3c \
       wcstoul.3c \
       wcstring.3c \
       wcswidth.3c \

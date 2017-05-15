@@ -13,7 +13,11 @@
 # Copyright 2015 Joyent, Inc.
 #
 
-
+file path=usr/share/man/man3proc/proc_service.3proc
+file path=usr/share/man/man3proc/ps_lgetregs.3proc
+file path=usr/share/man/man3proc/ps_pglobal_lookup.3proc
+file path=usr/share/man/man3proc/ps_pread.3proc
+file path=usr/share/man/man3proc/ps_pstop.3proc
 file path=usr/share/man/man3proc/Lctlfd.3proc
 file path=usr/share/man/man3proc/Lfree.3proc
 file path=usr/share/man/man3proc/Lgrab_error.3proc
