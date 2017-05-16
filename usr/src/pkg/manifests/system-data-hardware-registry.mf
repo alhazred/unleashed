@@ -35,5 +35,5 @@ dir path=usr/share
 dir path=usr/share/hwdata group=sys
 file path=usr/share/hwdata/pci.ids
 file path=usr/share/hwdata/usb.ids
-license usr/src/cmd/hwdata/THIRDPARTYLICENSE.pciids \
-    license=usr/src/cmd/hwdata/THIRDPARTYLICENSE.pciids
+license share/hwdata/THIRDPARTYLICENSE.pciids \
+    license=share/hwdata/THIRDPARTYLICENSE.pciids
