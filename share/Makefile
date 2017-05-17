@@ -1,5 +1,6 @@
 SUBDIR=	hwdata \
 	locale \
 	man \
-	mk
+	mk \
+	zoneinfo
 .include <subdir.mk>

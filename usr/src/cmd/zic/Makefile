@@ -1,121 +1,37 @@
 #
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
-# Copyright 2016 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
+# Copyright 2016-2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
 #
 
-NATIVE=native
 PROG= zic
 KSHPROG= tzselect
-NPROG= $(NATIVE)/$(PROG)
-
-# "etcetera" must be listed before "backward" because it sets up links that
-# "backward" needs.
-TZFILES= africa antarctica asia australasia etcetera europe \
-	 factory northamerica pacificnew \
-	 southamerica backward
-TABFILES = country.tab zone_sun.tab
 
 OBJS= zic.o scheck.o ialloc.o
 SRCS= $(OBJS:%.o=%.c)
-NOBJS= $(OBJS:%=$(NATIVE)/%)
 
-CLOBBERFILES= $(NOBJS) $(KSHPROG) $(NPROG) $(NATIVE)/zic.c $(NATIVE)/tzfile.h
+CLOBBERFILES= $(KSHPROG)
 
 include ../Makefile.cmd
-
-NCPPFLAGS=	-I$(NATIVE)
-ROOTTZD=	$(ROOTSHLIB)/zoneinfo
-ROOTTZTABD=	$(ROOTSHLIB)/zoneinfo/tab
-DIRS=  $(ROOTTZTABD)
 
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-uninitialized
 
-ROOTLIBTZTABFILES=	$(TABFILES:%=$(ROOTTZTABD)/%)
 ROOTKSHPROG=	$(ROOTBIN)/$(KSHPROG)
-
-$(ROOTLIBTZTABFILES):=	FILEMODE=	0644
-
-#
-# Message catalog
-#
-POFILE2=tzselect.po
-POFILE3=zoneinfo.po
-POFILES3=$(TABFILES)
-TEXT_DOMAIN2=SUNW_OST_ZONEINFO
-MSGDOMAIN2=$(MSGROOT)/$(TEXT_DOMAIN2)
-
-# NB: $(POFILE2) is under SCM.
-CLOBBERFILES += $(POFILE) $(POFILE3)
 
 .KEEP_STATE:
 
-all: $(PROG) $(NPROG) $(KSHPROG)
+all: $(PROG) $(KSHPROG)
+
+install: all $(ROOTUSRSBINPROG) $(ROOTKSHPROG)
+
+clean:
+	$(RM) $(OBJS)
+
+check:
 
 $(PROG): $(OBJS)
 	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-install: all $(DIRS) $(ROOTTZTABD) $(ROOTUSRSBINPROG) \
-		$(ROOTLIBTZTABFILES) $(ROOTKSHPROG)
-	$(NPROG) -d $(ROOTTZD) $(TZFILES)
-	$(LN) -sf ./US/Eastern $(ROOTTZD)/posixrules
-
-$(NPROG): $(NATIVE) $(NOBJS)
-	$(NATIVECC) $(NATIVE_CFLAGS) -o $@ $(NOBJS)
-
-#
-# XXX
-# There is a .ksh rule in Makefile.targ, but we need our custom POFILE rules.
-#
-$(KSHPROG):	$(KSHPROG).ksh
-	$(RM) $@
-	$(CAT) $(KSHPROG).ksh > $@
-	$(CHMOD) +x $@
-
-$(ROOTTZTABD)/%: %
-	$(INS.file)
-
-$(DIRS):
-	$(INS.dir)
-
-$(NATIVE):
-	-@mkdir -p $@
-
-clean:
-	$(RM) $(OBJS)
-
-
-$(NOBJS): $$(@F:.o=.c)
-	$(NATIVECC) -O $(NATIVE_CFLAGS) $(NCPPFLAGS) -c -o $@ $(@F:.o=.c)
-
-$(NATIVE)/zic.o: $(NATIVE)/tzfile.h
-
-$(NATIVE)/tzfile.h: $(ROOT)/usr/include/tzfile.h
-	$(RM) $@; cp $(ROOT)/usr/include/tzfile.h $@
-
-#
-# From ../Makefile.targ
-#
-clobber: clean
-	-$(RM) $(PROG) $(CLOBBERFILES)
-
-#
-# For message catalogue files
-#
-_msg: $(MSGDOMAIN) $(POFILE) $(POFILE2) $(MSGDOMAIN2) $(POFILE3)
-	$(RM) $(MSGDOMAIN)/$(POFILE)
-	$(CP) $(POFILE) $(MSGDOMAIN)
-	$(RM) $(MSGDOMAIN)/$(POFILE2)
-	$(CP) $(POFILE2) $(MSGDOMAIN)
-	$(RM) $(MSGDOMAIN2)/$(POFILE3)
-	$(CP) $(POFILE3) $(MSGDOMAIN2)/$(POFILE3)
-
-$(MSGDOMAIN) $(DCMSGDOMAIN) $(MSGDOMAIN2):
-	$(INS.dir)
-
-$(POFILE3):	$(POFILES3)
-	$(RM) $@
-	@/bin/sh ./do_pofile.sh > $@
- 
+include ../Makefile.targ

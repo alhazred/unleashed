@@ -677,7 +677,6 @@ MSGSUBDIRS=		\
 	yppasswd	\
 	zdump		\
 	zfs		\
-	zic		\
 	zlogin		\
 	zoneadm		\
 	zoneadmd	\

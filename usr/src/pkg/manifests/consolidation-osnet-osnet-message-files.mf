@@ -279,8 +279,6 @@ file path=usr/lib/locale/C/LC_MESSAGES/SUNW_OST_OSLIB.po group=sys mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/SUNW_OST_SGS.po group=sys mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/SUNW_OST_SYSOSPAM.po group=sys \
     mode=0644
-file path=usr/lib/locale/C/LC_MESSAGES/SUNW_OST_ZONEINFO.po group=sys \
-    mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/ZFS.po mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/libast group=sys mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/libcmd group=sys mode=0644
