@@ -4127,6 +4127,7 @@ $endif
     global:
 # FIXME: new symbols for our OS, but here pending a name.
 	reallocarray		{ FLAGS = NODIRECT };
+	recallocarray		{ FLAGS = NODIRECT };
 
     local:
 	__imax_lldiv				{ FLAGS = NODYNSORT };

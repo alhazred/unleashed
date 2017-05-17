@@ -153,6 +153,7 @@ extern "C++" {
 extern int rand(void);
 extern void *realloc(void *, size_t);
 extern void *reallocarray(void *, size_t, size_t);
+extern void *recallocarray(void *, size_t, size_t, size_t);
 extern void srand(unsigned int);
 extern double strtod(const char *_RESTRICT_KYWD, char **_RESTRICT_KYWD);
 extern long int strtol(const char *_RESTRICT_KYWD, char **_RESTRICT_KYWD, int);

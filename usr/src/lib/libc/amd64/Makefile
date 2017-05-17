@@ -135,6 +135,7 @@ GENOBJS=			\
 	proc64_id.o		\
 	proc64_support.o	\
 	reallocarray.o		\
+	recallocarray.o		\
 	setjmp.o		\
 	siginfolst.o		\
 	siglongjmp.o		\
