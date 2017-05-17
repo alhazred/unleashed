@@ -385,7 +385,6 @@ COMMON_SUBDIRS=		\
 	tcpd		\
 	terminfo	\
 	th_tools	\
-	tic		\
 	tip		\
 	touch		\
 	tput		\
