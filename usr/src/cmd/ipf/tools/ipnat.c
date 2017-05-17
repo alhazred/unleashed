@@ -74,7 +74,7 @@ static const char sccsid[] ="@(#)ipnat.c	1.9 6/5/96 (C) 1993 Darren Reed";
 static const char rcsid[] = "@(#)$Id: ipnat.c,v 1.24.2.2 2005/05/10 21:19:30 darrenr Exp $";
 
 
-#if	SOLARIS
+#ifdef	SOLARIS
 #define	bzero(a,b)	memset(a,0,b)
 #endif
 int	use_inet6 = 0;

@@ -71,22 +71,22 @@ extern thread_key_t	ns_cmgkey;
  */
 static int
 __s_val_postime(ParamIndexType i, ns_default_config *def,
-		ns_param_t *param, char *errbuf);
+    ns_param_t *param, char *errbuf);
 static int
 __s_val_basedn(ParamIndexType i, ns_default_config *def,
-		ns_param_t *param, char *errbuf);
+    ns_param_t *param, char *errbuf);
 
 static int
 __s_val_binddn(ParamIndexType i, ns_default_config *def,
-		ns_param_t *param, char *errbuf);
+    ns_param_t *param, char *errbuf);
 
 static int
 __s_val_bindpw(ParamIndexType i, ns_default_config *def,
-		ns_param_t *param, char *errbuf);
+    ns_param_t *param, char *errbuf);
 
 static int
 __s_val_serverList(ParamIndexType i, ns_default_config *def,
-		ns_param_t *param, char *errbuf);
+    ns_param_t *param, char *errbuf);
 
 /*
  * Forward declarations
@@ -97,7 +97,7 @@ verify_value(ns_config_t *cfg, char *name, char *value, char *errstr);
 
 static int
 set_default_value(ns_config_t *configptr, char *name, char *value,
-	ns_ldap_error_t **error);
+    ns_ldap_error_t **error);
 
 static void
 set_curr_config(ns_config_t *ptr);
@@ -836,7 +836,7 @@ destroy_config(ns_config_t *ptr)
 		if (ptr == current_config)
 			current_config = NULL;
 		free(ptr->domainName);
-			ptr->domainName = NULL;
+		ptr->domainName = NULL;
 		for (i = 0; i <= LAST_VALUE; i++) {
 			destroy_param(ptr, i);
 		}
@@ -1370,7 +1370,7 @@ get_defconfig(ns_config_t *ptr, ParamIndexType type)
 
 static int
 set_default_value(ns_config_t *configptr, char *name,
-			char *value, ns_ldap_error_t **error)
+    char *value, ns_ldap_error_t **error)
 {
 	ParamIndexType	i;
 	int		ret;
@@ -1630,7 +1630,7 @@ __s_api_split_key_value(char *buffer, char **name, char **value)
  */
 int
 __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
-		const void *data, ns_ldap_error_t **error)
+    const void *data, ns_ldap_error_t **error)
 {
 	ns_default_config	*def = NULL;
 	ns_param_t		conf;
@@ -2642,7 +2642,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 
 int
 __ns_ldap_setParam(const ParamIndexType type,
-		const void *data, ns_ldap_error_t **error)
+    const void *data, ns_ldap_error_t **error)
 {
 	ns_ldap_error_t		*errorp;
 	int			ret;
@@ -2862,7 +2862,7 @@ __ns_ldap_freeParam(void ***data)
 
 int
 __ns_ldap_getParam(const ParamIndexType Param,
-		void ***data, ns_ldap_error_t **error)
+    void ***data, ns_ldap_error_t **error)
 {
 	char			errstr[2 * MAXERROR];
 	ns_ldap_error_t		*errorp;
@@ -3217,7 +3217,7 @@ strValueError:
 /* shared by __door_getldapconfig() and __door_getadmincred() */
 int
 __door_getconf(char **buffer, int *buflen, ns_ldap_error_t **error,
-		    int callnumber)
+    int callnumber)
 {
 	typedef union {
 		ldap_data_t	s_d;
@@ -3303,7 +3303,7 @@ __door_getldapconfig(char **buffer, int *buflen, ns_ldap_error_t **error)
  */
 int
 SetDoorInfoToUnixCred(char *buffer, ns_ldap_error_t **errorp,
-	UnixCred_t **cred)
+    UnixCred_t **cred)
 {
 	UnixCred_t	*ptr;
 	char		errstr[MAXERROR];
@@ -3639,7 +3639,7 @@ __s_api_AuthEnumtoStruct(const EnumAuthType_t i)
 /* ARGSUSED */
 static int
 __s_val_postime(ParamIndexType i, ns_default_config *def,
-		ns_param_t *param, char *errbuf)
+    ns_param_t *param, char *errbuf)
 {
 	char	*cp;
 	long	tot;
@@ -3679,7 +3679,7 @@ __s_val_postime(ParamIndexType i, ns_default_config *def,
 /* ARGSUSED */
 static int
 __s_val_basedn(ParamIndexType i, ns_default_config *def,
-		ns_param_t *param, char *errbuf)
+    ns_param_t *param, char *errbuf)
 {
 	if (param && param->ns_ptype == CHARPTR &&
 	    i == NS_LDAP_SEARCH_BASEDN_P &&
@@ -3702,7 +3702,7 @@ __s_val_basedn(ParamIndexType i, ns_default_config *def,
 /* ARGSUSED */
 static int
 __s_val_serverList(ParamIndexType i, ns_default_config *def,
-		ns_param_t *param, char *errbuf)
+    ns_param_t *param, char *errbuf)
 {
 	for (i = 0; i < param->ns_acnt; i++) {
 		if ((__s_api_isipv4(param->ns_ppc[i])) ||
@@ -3727,7 +3727,7 @@ __s_val_serverList(ParamIndexType i, ns_default_config *def,
 /* ARGSUSED */
 static int
 __s_val_binddn(ParamIndexType i, ns_default_config *def,
-		ns_param_t *param, char *errbuf)
+    ns_param_t *param, char *errbuf)
 {
 	char *dntype;
 
@@ -3754,7 +3754,7 @@ __s_val_binddn(ParamIndexType i, ns_default_config *def,
 /* ARGSUSED */
 static int
 __s_val_bindpw(ParamIndexType i, ns_default_config *def,
-		ns_param_t *param, char *errbuf)
+    ns_param_t *param, char *errbuf)
 {
 	char *pwtype;
 

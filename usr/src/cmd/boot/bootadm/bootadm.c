@@ -108,7 +108,7 @@ typedef enum {
 #define	PARTNO_NOTFOUND -1	/* Solaris partition not found */
 #define	PARTNO_EFI	-2	/* EFI partition table found */
 
-#define	RAMDISK_SPECIAL		"/dev/ramdisk/"
+#define	RAMDISK_SPECIAL		"/devices/ramdisk"
 #define	GRUBSIGN_DIR		"/boot/grub/bootsign"
 #define	GRUBSIGN_BACKUP		"/etc/bootsign"
 #define	GRUBSIGN_UFS_PREFIX	"rootfs"

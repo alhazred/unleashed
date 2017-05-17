@@ -4064,7 +4064,7 @@ u_32_t nflags;
 #endif
 	}
 
-#if SOLARIS && defined(_KERNEL)
+#if defined(SOLARIS) && defined(_KERNEL)
 	net_handle_t net_data_p = ifs->ifs_ipf_ipv4;
 #endif
 
@@ -4391,7 +4391,7 @@ u_32_t nflags;
 #endif
 	}
 
-#if SOLARIS && defined(_KERNEL)
+#if defined(SOLARIS) && defined(_KERNEL)
 	net_handle_t net_data_p = ifs->ifs_ipf_ipv4;
 #endif
 
@@ -4477,7 +4477,7 @@ u_32_t nflags;
 			fix_outcksum(csump, nat->nat_sumd[0]);
 	}
 
-#if SOLARIS && defined(_KERNEL)
+#if defined(SOLARIS) && defined(_KERNEL)
 	if (nflags & IPN_TCPUDP &&
 	    NET_IS_HCK_L4_PART(net_data_p, fin->fin_m)) {
 		/*

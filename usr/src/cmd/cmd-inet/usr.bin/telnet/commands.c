@@ -34,8 +34,6 @@
  * Use is subject to license terms.
  */
 
-static char sccsid[] = "@(#)commands.c	8.1 (Berkeley) 6/6/93";
-
 #include <sys/param.h>
 #include <sys/file.h>
 #include <sys/socket.h>
@@ -2433,7 +2431,7 @@ status(int argc, char *argv[])
 				(void) printf("%s flow control\n",
 				    (mode&MODE_FLOW) ? "Local" : "No");
 
-				encrypt_display();
+			encrypt_display();
 		}
 	} else {
 		(void) printf("No connection.\n");
