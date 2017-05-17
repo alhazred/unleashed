@@ -46,7 +46,6 @@ dir path=usr/share/lib/zoneinfo/Indian
 dir path=usr/share/lib/zoneinfo/Mexico
 dir path=usr/share/lib/zoneinfo/Pacific
 dir path=usr/share/lib/zoneinfo/US
-dir path=usr/share/lib/zoneinfo/tab
 file path=usr/share/lib/zoneinfo/Africa/Abidjan
 file path=usr/share/lib/zoneinfo/Africa/Accra
 file path=usr/share/lib/zoneinfo/Africa/Algiers
@@ -449,9 +448,9 @@ file path=usr/share/lib/zoneinfo/Pacific/Tongatapu
 file path=usr/share/lib/zoneinfo/Pacific/Wake
 file path=usr/share/lib/zoneinfo/Pacific/Wallis
 file path=usr/share/lib/zoneinfo/WET
-file path=usr/share/lib/zoneinfo/tab/iso3166.tab
-file path=usr/share/lib/zoneinfo/tab/zone.tab
-file path=usr/share/lib/zoneinfo/tab/zone_sun.tab
+file path=usr/share/lib/zoneinfo/iso3166.tab
+file path=usr/share/lib/zoneinfo/zone.tab
+file path=usr/share/lib/zoneinfo/zone1970.tab
 hardlink path=usr/share/lib/zoneinfo/Africa/Addis_Ababa \
     target=../Africa/Nairobi
 hardlink path=usr/share/lib/zoneinfo/Africa/Asmara target=../Africa/Nairobi
@@ -706,4 +705,3 @@ hardlink path=usr/share/lib/zoneinfo/W-SU target=Europe/Moscow
 hardlink path=usr/share/lib/zoneinfo/Zulu target=Etc/UTC
 license lic_CDDL license=lic_CDDL
 link path=usr/share/lib/zoneinfo/posixrules target=./US/Eastern
-link path=usr/share/lib/zoneinfo/tab/country.tab target=iso3166.tab

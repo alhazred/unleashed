@@ -1,5 +1,5 @@
 SUBDIR=	banner cat dis echo env false localedef mandoc make pax pwd sed size \
-	tic time true uname utmp_update xinstall yes
+	tic time true tzselect uname utmp_update xinstall yes zic
 
 MAKEOBJDIRPREFIX?=	/usr/obj/${MACHINE}
 .export MAKEOBJDIRPREFIX

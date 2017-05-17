@@ -1,3 +1,8 @@
+.include <unleashed.mk>
+
+MAN=	tzfile.5
+
+CONTRIB_PATH=	${SRCTOP}/contrib/tzcode
 CONTRIBDIR=	${SRCTOP}/contrib/tzdata
 
 ZONEINFODIR=	${SHAREDIR}/lib/zoneinfo
@@ -17,30 +22,34 @@ SRCFILES=	africa \
 		backward
 
 TABFILES=	iso3166.tab \
-		zone.tab
+		zone.tab \
+		zone1970.tab
 
 all:
 
-# NOTE: The proginstall target does two compatibility related things because
-# tzselect expects them:
-#
-# (1) it installs zone_sun.tab which uses a different format than the
-#     upstream zone.tab file
-# (2) it installs a country.tab symlink to allow easier migration
 proginstall:
 	[ -d ${DESTDIR}${ZONEINFODIR} ] || \
 	    ${INSTALL} -d ${PROG_INSTALL_OWN} -m 755 ${DESTDIR}${ZONEINFODIR}
 	/usr/sbin/zic -d ${DESTDIR}${ZONEINFODIR} ${SRCFILES:%=${CONTRIBDIR}/%}
 	ln -sf ./US/Eastern ${DESTDIR}${ZONEINFODIR}/posixrules
-	[ -d ${DESTDIR}${ZONEINFODIR}/tab ] || \
-	    ${INSTALL} -d ${PROG_INSTALL_OWN} -m 755 ${DESTDIR}${ZONEINFODIR}/tab
 .for f in ${TABFILES}
 	${INSTALL} ${COPY} ${PROG_INSTALL_OWN} -m 644 \
-	    ${CONTRIBDIR}/${f} ${DESTDIR}${ZONEINFODIR}/tab
+	    ${CONTRIBDIR}/${f} ${DESTDIR}${ZONEINFODIR}
 .endfor
-	${INSTALL} ${COPY} ${PROG_INSTALL_OWN} -m 644 \
-	    zone_sun.tab ${DESTDIR}${ZONEINFODIR}/tab
-	ln -sf iso3166.tab ${DESTDIR}${ZONEINFODIR}/tab/country.tab
 
-.include <unleashed.mk>
+${.CURDIR}/tzfile.5: ${CONTRIB_PATH}/tzfile.5
+	sed \
+	  -e 's@/usr/local/etc@/usr/share/lib@' \
+	  -e 's@newctime(3), @@' \
+	  -e 's@newtzset(3), @@' \
+	  -e 's@zdump(8), @@' \
+	  < ${.ALLSRC} > $@
+
+# FIXME: This is a gross hack to generate a cleaner version of the manpage
+# in the current directory so that the install target finds it and installs
+# it.
+all: ${.CURDIR}/tzfile.5
+
+CLEANFILES+=	tzfile.5
+
 .include <prog.mk>

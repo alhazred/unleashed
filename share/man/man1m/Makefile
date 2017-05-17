@@ -420,7 +420,6 @@ MAN = 6to4relay.1m \
       ttyadm.1m \
       ttymon.1m \
       tunefs.1m \
-      tzselect.1m \
       uadmin.1m \
       ucodeadm.1m \
       ufsdump.1m \
@@ -460,7 +459,6 @@ MAN = 6to4relay.1m \
       zdb.1m \
       zdump.1m \
       zfs.1m \
-      zic.1m \
       zoneadm.1m \
       zoneadmd.1m \
       zonecfg.1m \

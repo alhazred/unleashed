@@ -427,7 +427,6 @@ COMMON_SUBDIRS=		\
 	zdump		\
 	zfs		\
 	zhack		\
-	zic		\
 	zinject		\
 	zlogin		\
 	zoneadm		\
