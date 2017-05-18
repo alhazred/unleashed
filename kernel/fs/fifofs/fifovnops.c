@@ -29,6 +29,7 @@
 
 /*
  * Copyright 2015, Joyent, Inc.
+ * Copyright (c) 2017 by Delphix. All rights reserved.
  */
 
 /*
@@ -376,7 +377,7 @@ done:
 /*ARGSUSED*/
 int
 fifo_close(vnode_t *vp, int flag, int count, offset_t offset, cred_t *crp,
-	caller_context_t *ct)
+    caller_context_t *ct)
 {
 	fifonode_t	*fnp		= VTOF(vp);
 	fifonode_t	*fn_dest	= fnp->fn_dest;
@@ -597,7 +598,7 @@ fifo_close(vnode_t *vp, int flag, int count, offset_t offset, cred_t *crp,
 
 static int
 fifo_read(struct vnode *vp, struct uio *uiop, int ioflag, struct cred *crp,
-	caller_context_t *ct)
+    caller_context_t *ct)
 {
 	fifonode_t	*fnp		= VTOF(vp);
 	fifonode_t	*fn_dest;
@@ -783,7 +784,7 @@ done:
 /*ARGSUSED*/
 static int
 fifo_write(vnode_t *vp, uio_t *uiop, int ioflag, cred_t *crp,
-	caller_context_t *ct)
+    caller_context_t *ct)
 {
 	struct fifonode	*fnp, *fn_dest;
 	fifolock_t	*fn_lock;
@@ -1053,8 +1054,8 @@ epipe:
 
 /*ARGSUSED6*/
 static int
-fifo_ioctl(vnode_t *vp, int cmd, intptr_t arg, int mode,
-	cred_t *cr, int *rvalp, caller_context_t *ct)
+fifo_ioctl(vnode_t *vp, int cmd, intptr_t arg, int mode, cred_t *cr,
+    int *rvalp, caller_context_t *ct)
 {
 	/*
 	 * Just a quick check
@@ -1083,8 +1084,8 @@ fifo_ioctl_getpeercred(fifonode_t *fnp, intptr_t arg, int mode)
 }
 
 static int
-fifo_fastioctl(vnode_t *vp, int cmd, intptr_t arg, int mode,
-	cred_t *cr, int *rvalp)
+fifo_fastioctl(vnode_t *vp, int cmd, intptr_t arg, int mode, cred_t *cr,
+    int *rvalp)
 {
 	fifonode_t	*fnp		= VTOF(vp);
 	fifonode_t	*fn_dest;
@@ -1345,8 +1346,8 @@ stream_mode:
  * FIFO is in STREAMS mode; STREAMS framework does most of the work.
  */
 static int
-fifo_strioctl(vnode_t *vp, int cmd, intptr_t arg, int mode,
-	cred_t *cr, int *rvalp)
+fifo_strioctl(vnode_t *vp, int cmd, intptr_t arg, int mode, cred_t *cr,
+    int *rvalp)
 {
 	fifonode_t	*fnp = VTOF(vp);
 	int		error;
@@ -1392,7 +1393,7 @@ fifo_strioctl(vnode_t *vp, int cmd, intptr_t arg, int mode,
  */
 int
 fifo_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
-	caller_context_t *ct)
+    caller_context_t *ct)
 {
 	int		error		= 0;
 	fifonode_t	*fnp		= VTOF(vp);
@@ -1468,12 +1469,8 @@ fifo_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
  * Otherwise, set the time and return 0.
  */
 int
-fifo_setattr(
-	vnode_t			*vp,
-	vattr_t			*vap,
-	int			flags,
-	cred_t			*crp,
-	caller_context_t	*ctp)
+fifo_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
+    caller_context_t *ctp)
 {
 	fifonode_t	*fnp	= VTOF(vp);
 	int		error	= 0;
@@ -1573,7 +1570,8 @@ fifo_inactive(vnode_t *vp, cred_t *crp, caller_context_t *ct)
 	mutex_enter(&ftable_lock);
 	mutex_enter(&vp->v_lock);
 	ASSERT(vp->v_count >= 1);
-	if (--vp->v_count != 0) {
+	VN_RELE_LOCKED(vp);
+	if (vp->v_count != 0) {
 		/*
 		 * Somebody accessed the fifo before we got a chance to
 		 * remove it.  They will remove it when they do a vn_rele.
@@ -1711,7 +1709,7 @@ fifo_realvp(vnode_t *vp, vnode_t **vpp, caller_context_t *ct)
 /* ARGSUSED */
 int
 fifo_poll(vnode_t *vp, short events, int anyyet, short *reventsp,
-	pollhead_t **phpp, caller_context_t *ct)
+    pollhead_t **phpp, caller_context_t *ct)
 {
 	fifonode_t	*fnp, *fn_dest;
 	fifolock_t	*fn_lock;
@@ -1824,7 +1822,7 @@ stream_mode:
 /* ARGSUSED */
 int
 fifo_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
-	caller_context_t *ct)
+    caller_context_t *ct)
 {
 	ulong_t val;
 	int error = 0;
@@ -1898,7 +1896,7 @@ fifo_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
  */
 int
 fifo_setsecattr(struct vnode *vp, vsecattr_t *vsap, int flag, struct cred *crp,
-	caller_context_t *ct)
+    caller_context_t *ct)
 {
 	int error;
 
@@ -1923,7 +1921,7 @@ fifo_setsecattr(struct vnode *vp, vsecattr_t *vsap, int flag, struct cred *crp,
  */
 int
 fifo_getsecattr(struct vnode *vp, vsecattr_t *vsap, int flag, struct cred *crp,
-	caller_context_t *ct)
+    caller_context_t *ct)
 {
 	if (VTOF(vp)->fn_realvp)
 		return (fop_getsecattr(VTOF(vp)->fn_realvp, vsap, flag,
