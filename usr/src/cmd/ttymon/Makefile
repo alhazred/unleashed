@@ -68,8 +68,6 @@ ttymon := LDLIBS += -lsec -ldevinfo
 $(STTYOBJ) := CPPFLAGS += -DEUC
 $(XPG4STTYOBJ) := CPPFLAGS += -DEUC
 
-LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
-
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-uninitialized
@@ -102,11 +100,11 @@ ROOTXPG6SYMLINK= $(ROOTXPG6BIN)/stty
 
 all: $(PROG) $(XPG4)
 
-stty:	sttyobjs $(STTYOBJ) $(MAPFILE.NGB)
+stty:	sttyobjs $(STTYOBJ)
 	$(LINK.c) $(STTYOBJ) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-stty.xpg4: $(XPG4STTYOBJ) $(MAPFILE.NGB)
+stty.xpg4: $(XPG4STTYOBJ)
 	$(LINK.c) $(XPG4STTYOBJ) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
@@ -124,15 +122,15 @@ sttyobjs:
 sttyobjs.xpg4:
 	-@mkdir -p $@
 
-ttymon:	$(TTYMONOBJ) $(MAPFILE.NGB)
+ttymon:	$(TTYMONOBJ)
 	$(LINK.c) $(TTYMONOBJ) -o $@ $(LDLIBS) -lpam
 	$(POST_PROCESS)
 
-ttyadm:	$(TTYADMOBJ) $(MAPFILE.NGB)
+ttyadm:	$(TTYADMOBJ)
 	$(LINK.c) $(TTYADMOBJ) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-sttydefs: $(STTYDEFSOBJ) $(MAPFILE.NGB)
+sttydefs: $(STTYDEFSOBJ)
 	$(LINK.c) $(STTYDEFSOBJ) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
