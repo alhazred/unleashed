@@ -40,7 +40,7 @@ include ../Makefile.cmd
 
 LDLIBS += -lcurses
 CPPFLAGS += -I../../lib/libcurses/screen
-MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
+MAPFILES = $(MAPFILE.INT)
 LDFLAGS += $(MAPFILES:%=-Wl,-M%)
 
 CERRWARN += -Wno-char-subscripts
