@@ -26,11 +26,9 @@ CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-return-type
 CERRWARN +=	-Wno-clobbered
 
-# Various components must export interfaces, but also contain name-space
-# clashes with system libraries.
-MAPFILE.INT.D=	$(MAPFILE.NGB) mapfile-intf-tcpdchk
-MAPFILE.INT.M=	$(MAPFILE.NGB) mapfile-intf-tcpdmatch
-MAPFILE.INT.F=	$(MAPFILE.NGB) mapfile-intf-tryfrom
+MAPFILE.INT.D=	mapfile-intf-tcpdchk
+MAPFILE.INT.M=	mapfile-intf-tcpdmatch
+MAPFILE.INT.F=	mapfile-intf-tryfrom
 
 tcpdchk :=	LDFLAGS +=$(MAPFILE.INT.D:%=-Wl,-M%)
 tcpdmatch :=	LDFLAGS +=$(MAPFILE.INT.M:%=-Wl,-M%)
