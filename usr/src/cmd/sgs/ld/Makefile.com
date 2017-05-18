@@ -35,8 +35,7 @@ BLTOBJ =	msg.o
 OBJS =		$(BLTOBJ) $(COMOBJS)
 .PARALLEL:	$(OBJS)
 
-MAPFILES =	../common/mapfile-intf $(MAPFILE.NGB)
-MAPOPTS =	$(MAPFILES:%=-Wl,-M%)
+MAPOPTS =	-Wl,-M../common/mapfile-intf
 
 LDFLAGS +=	$(VERSREF) $(CC_USE_PROTO) $(MAPOPTS) $(VAR_LD_LLDFLAGS)
 LDLIBS +=	$(LDLIBDIR) $(LD_LIB) $(ELFLIBDIR) -lelf \

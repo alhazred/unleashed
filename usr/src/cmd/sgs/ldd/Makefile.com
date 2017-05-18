@@ -35,15 +35,12 @@ TOOLSOBJ=	alist.o
 
 OBJS=		$(BLTOBJ) $(COMOBJ) $(TOOLSOBJ)
 
-MAPFILE=	$(MAPFILE.NGB)
-MAPOPTS=	$(MAPFILE:%=-Wl,-M%)
-
 CPPFLAGS +=	-I. -I../../include -I../../include/$(MACH) \
 		-I$(SRCBASE)/uts/$(ARCH)/sys \
 		$(CPPFLAGS.master)
 LLDFLAGS =	'-R$$ORIGIN/../../lib'
 LLDFLAGS64 =	'-R$$ORIGIN/../../../lib/$(MACH64)'
-LDFLAGS +=	$(VERSREF) $(CC_USE_PROTO) $(MAPOPTS) $(LLDFLAGS)
+LDFLAGS +=	$(VERSREF) $(CC_USE_PROTO) $(LLDFLAGS)
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) -lelf $(DLLIB)
 
 BLTDEFS=        msg.h
