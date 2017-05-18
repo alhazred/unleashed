@@ -41,7 +41,7 @@ ROOTDIRS =	$(NETSVC) $(NETYP)
 # include library definitions
 #LDLIBS +=	-lrpcsvc -lcrypt -lintl -lgen
 LDLIBS +=	 -lnisdb -lc
-MAPFILES =	$(MAPFILE.INT) $(MAPFILE.NGB)
+MAPFILES =	$(MAPFILE.INT)
 LDFLAGS +=	$(MAPFILES:%=-Wl,-M%)
 
 # Pick up includes from library

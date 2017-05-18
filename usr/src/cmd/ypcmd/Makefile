@@ -51,7 +51,7 @@ ROOTDIRS =	$(ROOT) $(ROOTUSR) $(ROOTLIB) $(ROOTETC) $(ROOTVAR) \
 		$(ROOTUSRSBIN) $(ROOTBIN)
 
 $(NIS2LDAPPROG) := LDLIBS += -lc -lnisdb
-makedbm :=	MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
+makedbm :=	MAPFILES = $(MAPFILE.INT)
 makedbm :=	LDFLAGS += $(MAPFILES:%=-Wl,-M%)
 
 $(ROOTVAR_YP)/aliases :=	FILEMODE=555
