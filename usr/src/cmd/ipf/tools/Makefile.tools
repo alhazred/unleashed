@@ -58,7 +58,6 @@ include ../../../Makefile.cmd
 include ../../Makefile.ipf
 
 LDLIBS		+= $(LIBBPF)
-LDFLAGS		+= $(MAPFILE.NGB:%=-Wl,-M%)
 
 CPPFLAGS	+= -I. -DIPFILTER_LOOKUP -DIPFILTER_LOG
 
@@ -109,7 +108,7 @@ $(ROOTIPFLINKS): FRC
 
 .KEEP_STATE:
 
-ipf:	$(IPF_OBJS) $(LIBIPF) $(MAPFILE.NGB)
+ipf:	$(IPF_OBJS) $(LIBIPF)
 	$(LINK.c) -o ipf $(IPF_OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
@@ -144,11 +143,11 @@ ipfs:	$(IPFS_OBJS)
 	$(LINK.c) -o ipfs $(IPFS_OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
-ipfstat:	$(IPFSTAT_OBJS) $(MAPFILE.NGB)
+ipfstat:	$(IPFSTAT_OBJS)
 	$(LINK.c) -o ipfstat $(IPFSTAT_OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
-ipmon:	$(IPMON_OBJS) $(LIBIPF) $(MAPFILE.NGB)
+ipmon:	$(IPMON_OBJS) $(LIBIPF)
 	$(LINK.c) -o ipmon $(IPMON_OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
@@ -179,7 +178,7 @@ ipmon_l.o: ../ipmon_l.c $(COMMONIPF)/ipmon.h ../ipmon_y.h ../ipmon_l.h
 
 CLEANFILES += ../ipmon_l.c ../ipmon_l.h
 
-ipnat:	$(IPNAT_OBJS) $(LIBIPF) $(MAPFILE.NGB)
+ipnat:	$(IPNAT_OBJS) $(LIBIPF)
 	$(LINK.c) -o ipnat $(IPNAT_OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
@@ -210,7 +209,7 @@ ipnat_l.o: ../ipnat_l.c $(CODEMGR_WS)/include/netinet/ip_nat.h ../ipnat_l.h
 
 CLEANFILES += ../ipnat_l.c ../ipnat_l.h
 
-ippool:	$(IPPOOL_OBJS) $(LIBIPF) $(MAPFILE.NGB)
+ippool:	$(IPPOOL_OBJS) $(LIBIPF)
 	$(LINK.c) -o ippool $(IPPOOL_OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
@@ -241,7 +240,7 @@ ippool_l.o: ../ippool_l.c $(CODEMGR_WS)/include/netinet/ip_pool.h ../ippool_l.h
 
 CLEANFILES += ../ippool_l.c ../ippool_l.h
 
-ipftest:	$(IPFTEST_OBJS) $(LIBIPF) $(MAPFILE.NGB)
+ipftest:	$(IPFTEST_OBJS) $(LIBIPF)
 	$(LINK.c) $(ZIGNORE) -o ipftest $(IPFTEST_OBJS) $(LDLIBS)  
 	$(POST_PROCESS)
 
