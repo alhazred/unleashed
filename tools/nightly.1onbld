@@ -242,12 +242,6 @@ The address to be used to send completion e-mail at the end of
 the build (for the \-m option).
 .RE
 .LP
-.B MAILFROM
-.RS 5
-The address to be used for From: in the completion e-mail at the
-end of the build (for the \-m option).
-.RE
-.LP
 .B RELEASE
 .RS 5
 The release version number to be used; e.g., 5.10.1 (Note: this is set
