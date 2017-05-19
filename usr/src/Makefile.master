@@ -405,6 +405,7 @@ CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) \
 		$(CERRWARN) $(C99MODE) \
 		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS64)
+ARFLAGS=	rc
 #
 # Flags that are used to build parts of the code that are subsequently
 # run on the build machine (also known as the NATIVE_BUILD).

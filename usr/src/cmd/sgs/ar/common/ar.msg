@@ -79,7 +79,6 @@
 @ MSG_W_ELF_NODATA_AR	"ar: %s(%s) has no data in section header table\n"
 
 @ MSG_BER_MES_CREATE	"ar: creating %s\n"
-@ MSG_BER_MES_WRITE	"ar: writing %s\n"
 
 @ MSG_SYMTAB_01		"ar: symbol table entry size is 0\n"
 @ MSG_SYMTAB_NOSTR_FILE	"ar: %s has no string table for symbol names\n"

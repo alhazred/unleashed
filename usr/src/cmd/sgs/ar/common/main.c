@@ -75,12 +75,10 @@ main(int argc, char **argv, char *envp[])
 	int ret;
 	char *new = NULL;
 
-#ifndef	XPG4
 	/*
 	 * Check for a binary that better fits this architecture.
 	 */
 	(void) conv_check_native(argv, envp);
-#endif
 
 	/*
 	 * Establish locale.

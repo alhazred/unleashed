@@ -89,10 +89,6 @@ export DMAKE_MAX_JOBS
 # Some scripts optionally send mail messages to MAILTO.
 export MAILTO="$LOGNAME"
 
-# If you wish the mail messages to be From: an arbitrary address, export
-# MAILFROM.
-#export MAILFROM="user@example.com"
-
 # The project (see project(4)) under which to run this build.  If not
 # specified, the build is simply run in a new task in the current project.
 export BUILD_PROJECT=''

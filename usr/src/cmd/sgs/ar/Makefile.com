@@ -23,7 +23,6 @@
 #
 
 PROG=		ar
-XPG4PROG=	ar
 
 include		$(SRC)/cmd/Makefile.cmd
 include		$(SRC)/cmd/sgs/Makefile.com
@@ -33,7 +32,6 @@ COMOBJ=		main.o		file.o		cmd.o
 BLTOBJ =	msg.o
 
 OBJS=		$(BLTOBJ:%=objs/%) $(COMOBJ:%=objs/%)
-XPG4OBJS=	$(BLTOBJ:%=objs.xpg4/%) $(COMOBJ:%=objs.xpg4/%)
 
 LLDFLAGS =	'-R$$ORIGIN/../../lib'
 LLDFLAGS64 =	'-R$$ORIGIN/../../../lib/$(MACH64)'
@@ -42,8 +40,6 @@ C99MODE=	$(C99_ENABLE)
 
 CERRWARN +=	-Wno-uninitialized
 LDLIBS +=	-lelf $(CONVLIBDIR) $(CONV_LIB) -lsendfile
-
-$(XPG4) :=	CPPFLAGS += -DXPG4
 
 BLTDEFS =	msg.h
 BLTDATA =	msg.c

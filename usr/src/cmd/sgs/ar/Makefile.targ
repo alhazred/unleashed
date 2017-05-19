@@ -21,18 +21,16 @@
 #
 # Copyright (c) 1996, 2010, Oracle and/or its affiliates. All rights reserved.
 
-objs/%.o \
-objs.xpg4/%.o:	../common/%.c
+objs/%.o:	../common/%.c
 		$(COMPILE.c) -o $@ $<
 		$(POST_PROCESS_O)
 
-objs/%.o \
-objs.xpg4/%.o:	%.c
+objs/%.o:	%.c
 		$(COMPILE.c) -o $@ $<
 		$(POST_PROCESS_O)
 
 clean:
-		$(RM) $(OBJS) $(XPG4OBJS) $(CLEANFILES)
+		$(RM) $(OBJS) $(CLEANFILES)
 
 delete:
 		$(RM) $(PROG)
@@ -43,15 +41,9 @@ $(PROG):	$(OBJS)
 		$(LINK.c) -o $@ $(LLDFLAGS) $(OBJS) $(LDLIBS)
 		$(POST_PROCESS)
 
-$(XPG4):	$(XPG4OBJS)
-		$(LINK.c) -o $@ $(XPG4OBJS) $(LDLIBS)
-		$(POST_PROCESS)
-
 $(OBJS):	objs
 
-$(XPG4OBJS):	objs.xpg4
-
-objs objs.xpg4:
+objs:
 		-@ mkdir -p $@
 
 include		$(SRC)/cmd/Makefile.targ

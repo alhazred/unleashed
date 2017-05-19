@@ -1219,13 +1219,6 @@ writefile(Cmd_info *cmd_info)
 	 */
 	assert(arsize == lseek(ar_outfile.fd, 0, SEEK_CUR));
 
-#ifndef XPG4
-	if (cmd_info->opt_flgs & v_FLAG) {
-		(void) fprintf(stderr, MSG_INTL(MSG_BER_MES_WRITE),
-		    cmd_info->arnam);
-	}
-#endif
-
 	/*
 	 * Fill pad_bytes array with newline characters. This array
 	 * is used to supply padding bytes at the end of ELF objects.

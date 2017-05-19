@@ -758,7 +758,6 @@ create_extract(ARFILE *a, int rawname, int f_len, Cmd_info *cmd_info)
 static void
 mesg(int c, char *file, Cmd_info *cmd_info)
 {
-#ifdef XPG4
 	/*
 	 * XPG4 does not have any message defined for
 	 * 'c' operation.
@@ -767,19 +766,8 @@ mesg(int c, char *file, Cmd_info *cmd_info)
 	 */
 	if (c == 'c' || c == 'u' || c == 'm')
 		return;
-#endif
-	/*
-	 * If 'u' is passed, convert it to 'c'.
-	 * 'u' makes more sense since the operation did not
-	 * do anything, Unchanged, but 'c' has been used so
-	 * I do no want to break the compatibility at this moment.
-	 * (03/05/'96).
-	 */
-	if (c == 'u')
-		c = 'c';
 	if (cmd_info->opt_flgs & v_FLAG)
-		if (c != 'c')
-			(void) fprintf(stdout, MSG_ORIG(MSG_FMT_FILE), c, file);
+		(void) fprintf(stdout, MSG_ORIG(MSG_FMT_FILE), c, file);
 }
 
 static void

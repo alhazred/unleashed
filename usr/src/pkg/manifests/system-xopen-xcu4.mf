@@ -34,7 +34,6 @@ set name=variant.arch value=$(ARCH)
 dir path=usr group=sys
 dir path=usr/xpg4
 dir path=usr/xpg4/bin
-file path=usr/xpg4/bin/ar mode=0555
 file path=usr/xpg4/bin/at group=sys mode=4755
 file path=usr/xpg4/bin/awk mode=0555
 file path=usr/xpg4/bin/batch mode=0555

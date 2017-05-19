@@ -118,7 +118,6 @@ ROOTDEMODIRS=
 ROOTDEMOFILES=	$(DEMOFILES:%=$(ROOTDEMODIRBASE)/%)
 $(ROOTDEMODIRS) :=	DIRMODE =	755
 
-ARFLAGS=	r
 SONAME=		$(DYNLIB)
 # For most libraries, we should be able to resolve all symbols at link time,
 # either within the library or as dependencies, all text should be pure, and

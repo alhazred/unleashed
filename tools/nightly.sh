@@ -727,21 +727,12 @@ function logshuffle {
 	run_hook POST_NIGHTLY $state
 	run_hook SYS_POST_NIGHTLY $state
 
-	#
-	# mailx(1) sets From: based on the -r flag
-	# if it is given.
-	#
-	mailx_r=
-	if [[ -n "${MAILFROM}" ]]; then
-		mailx_r="-r ${MAILFROM}"
-	fi
-
+	echo "Subject: Nightly ${MACH} Build of `basename ${CODEMGR_WS}` ${state}." \
+		> ${LLOG}/mail_msg
 	cat $build_time_file $mail_msg_file \
-	    > ${LLOG}/mail_msg
+		>> ${LLOG}/mail_msg
 	if [ "$m_FLAG" = "y" ]; then
-	    	cat ${LLOG}/mail_msg | /usr/bin/mailx ${mailx_r} -s \
-	"Nightly ${MACH} Build of `basename ${CODEMGR_WS}` ${state}." \
-			${MAILTO}
+		/usr/bin/mail ${MAILTO} < ${LLOG}/mail_msg
 	fi
 
 	mv $LOGFILE $LLOG
