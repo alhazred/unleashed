@@ -48,42 +48,6 @@ ar \- maintain portable archive or library
 .nf
 \fB/usr/bin/ar\fR \fB-x\fR [\fB-CsTVv\fR] \fIarchive\fR [\fIfile\fR]...
 .fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ar\fR \fB-d\fR [\fB-Vv\fR] \fIarchive\fR \fIfile\fR...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ar\fR \fB-m\fR [\fB-abiVv\fR] [\fIposname\fR] \fIarchive\fR \fIfile\fR...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ar\fR \fB-p\fR [\fB-sVv\fR] \fIarchive\fR [\fIfile\fR]...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ar\fR \fB-q\fR [\fB-cVv\fR] \fIarchive\fR \fIfile\fR...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ar\fR \fB-r\fR [\fB-abciuVv\fR] [\fIposname\fR] \fIarchive\fR \fIfile\fR...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ar\fR \fB-t\fR [\fB-sVv\fR] \fIarchive\fR [\fIfile\fR]...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ar\fR \fB-x\fR [\fB-CsTVv\fR] \fIarchive\fR [\fIfile\fR]...
-.fi
-
 .SH DESCRIPTION
 .sp
 .LP
@@ -283,8 +247,7 @@ with \fB-p\fR, \fB-v\fR writes the name of the file to the standard output
 before writing the file itself to the standard output. When used with \fB-t\fR,
 \fB-v\fR includes a long listing of information about the files within the
 archive. When used with \fB-x\fR, \fB-v\fR prints the filename preceding each
-extraction. When writing to an archive, \fB-v\fR writes a message to the
-standard error.
+extraction.
 .RE
 
 .sp
@@ -294,35 +257,6 @@ standard error.
 .ad
 .RS 6n
 Prints its version number on standard error.
-.RE
-
-.SS "\fB/usr/xpg4/bin/ar\fR"
-.sp
-.LP
-The following options are supported for \fB/usr/xpg4/bin/ar\fR:
-.sp
-.ne 2
-.na
-\fB\fB-v\fR\fR
-.ad
-.RS 6n
-Same as the \fB/usr/bin/ar\fR version, except when writing to an archive, no
-message is written to the standard error.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-x\fR\fR
-.ad
-.RS 6n
-Extracts the files named by the \fIfile\fR operands from \fIarchive\fR. The
-contents of \fIarchive\fR are not changed. If no \fIfile\fR operands are given,
-all files in \fIarchive\fR are extracted. If the file name of a file extracted
-from \fIarchive\fR is longer than that supported in the directory to which it
-is being extracted, the results are undefined. The modification time of each
-\fIfile\fR extracted is set to the time \fIfile\fR is extracted from
-\fIarchive\fR.
 .RE
 
 .SH OPERANDS
@@ -425,21 +359,6 @@ l | l .
 ATTRIBUTE TYPE	ATTRIBUTE VALUE
 _
 Interface Stability	Committed
-.TE
-
-.SS "\fB/usr/xpg4/bin/ar\fR"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-Interface Stability	Committed
-_
-Standard	See \fBstandards\fR(5).
 .TE
 
 .SH SEE ALSO
