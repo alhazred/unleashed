@@ -95,7 +95,6 @@ CLOBBERFILES += \
 # Install rule for $(MACH)/Makefile (32bit)
 INSTALL.ksh.32bit=@ \
 	(print "$(POUND_SIGN) Installing 32bit $(PROG) aliases $(USRKSH_ALIAS_LIST)" ; \
-	set -o xtrace ; \
 	for i in $(USRKSH_ALIAS_LIST) ; do \
 		[[ "$$i" == "$(PROG)" ]] && continue ; \
 		$(RM) "$(ROOTBIN32)/$$i" ; \
@@ -106,7 +105,6 @@ INSTALL.ksh.32bit=@ \
 # Install rule for $(MACH64)/Makefile (64bit)
 INSTALL.ksh.64bit=@ \
 	(print "$(POUND_SIGN) Installing 64bit $(PROG) aliases $(USRKSH_ALIAS_LIST)" ; \
-	set -o xtrace ; \
 	for i in $(USRKSH_ALIAS_LIST) ; do \
 		[[ "$$i" == "$(PROG)" ]] && continue ; \
 		$(RM) "$(ROOTBIN64)/$$i" ; \

@@ -62,8 +62,7 @@ $(PROG).po:
 	$(TOUCH) $(PROG).po
 
 install:	$(ISAEXEC) $(SUBDIRS)
-	@(set -o xtrace ; \
-	builtin ln ; \
+	@(builtin ln ; \
 	builtin rm ; \
 	rm -f  $(ROOTPROG) ; \
 	ln $(ISAEXEC) $(ROOTPROG) ; \
