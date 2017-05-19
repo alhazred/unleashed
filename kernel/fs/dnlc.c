@@ -53,6 +53,7 @@
 #include <sys/kstat.h>
 #include <sys/atomic.h>
 #include <sys/taskq.h>
+#include <vm/page.h>
 
 /*
  * Directory name lookup cache.
@@ -406,9 +407,12 @@ dnlc_init()
 	dc_head.dch_prev = (dircache_t *)&dc_head;
 
 	/*
-	 * Put a hold on the negative cache vnode so that it never goes away
-	 * (fop_inactive isn't called on it).
+	 * Initialize and put a hold on the negative cache vnode so that it
+	 * never goes away (fop_inactive isn't called on it).  Note that
+	 * vn_reinit doesn't call pagecache_init - that is normally done by
+	 * the vn_cache constructor.
 	 */
+	pagecache_init(&negative_cache_vnode);
 	vn_reinit(&negative_cache_vnode);
 
 	/*
