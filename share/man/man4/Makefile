@@ -156,7 +156,6 @@ MAN = Intro.4 \
       ypfiles.4 \
       yppasswdd.4 \
       ypserv.4 \
-      zoneinfo.4 \
       $(MAN_$(CONFIG_MACH))
 
 

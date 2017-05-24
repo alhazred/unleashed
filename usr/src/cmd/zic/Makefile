@@ -14,8 +14,6 @@ NPROG= $(NATIVE)/$(PROG)
 TZFILES= africa antarctica asia australasia etcetera europe \
 	 factory northamerica pacificnew \
 	 southamerica backward
-# Don't build the systemv timezones, but do install the source file.
-SRCFILES = $(TZFILES) systemv README
 TABFILES = continent.tab country.tab zone_sun.tab
 
 OBJS= zic.o scheck.o ialloc.o
@@ -28,18 +26,15 @@ include ../Makefile.cmd
 
 NCPPFLAGS=	-I$(NATIVE)
 ROOTTZD=	$(ROOTSHLIB)/zoneinfo
-ROOTTZSRCD=	$(ROOTSHLIB)/zoneinfo/src
 ROOTTZTABD=	$(ROOTSHLIB)/zoneinfo/tab
-DIRS=  $(ROOTTZSRCD) $(ROOTTZTABD)
+DIRS=  $(ROOTTZTABD)
 
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-uninitialized
 
-ROOTLIBTZSRCFILES=	$(SRCFILES:%=$(ROOTTZSRCD)/%)
 ROOTLIBTZTABFILES=	$(TABFILES:%=$(ROOTTZTABD)/%)
 ROOTKSHPROG=	$(ROOTBIN)/$(KSHPROG)
 
-$(ROOTLIBTZSRCFILES):=	FILEMODE=	0644
 $(ROOTLIBTZTABFILES):=	FILEMODE=	0644
 
 #
@@ -62,8 +57,8 @@ $(PROG): $(OBJS)
 	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-install: all $(DIRS) $(ROOTTZSRCD) $(ROOTTZTABD) $(ROOTUSRSBINPROG) \
-		$(ROOTLIBTZSRCFILES) $(ROOTLIBTZTABFILES) $(ROOTKSHPROG)
+install: all $(DIRS) $(ROOTTZTABD) $(ROOTUSRSBINPROG) \
+		$(ROOTLIBTZTABFILES) $(ROOTKSHPROG)
 	$(NPROG) -d $(ROOTTZD) $(TZFILES)
 	$(LN) -sf ./US/Eastern $(ROOTTZD)/posixrules
 
@@ -78,9 +73,6 @@ $(KSHPROG):	$(KSHPROG).ksh
 	$(RM) $@
 	$(CAT) $(KSHPROG).ksh > $@
 	$(CHMOD) +x $@
-
-$(ROOTTZSRCD)/%: %
-	$(INS.file)
 
 $(ROOTTZTABD)/%: %
 	$(INS.file)

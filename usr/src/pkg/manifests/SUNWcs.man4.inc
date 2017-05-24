@@ -100,4 +100,3 @@ file path=usr/share/man/man4/user_attr.4
 file path=usr/share/man/man4/utmp.4
 file path=usr/share/man/man4/utmpx.4
 file path=usr/share/man/man4/vfstab.4
-file path=usr/share/man/man4/zoneinfo.4
