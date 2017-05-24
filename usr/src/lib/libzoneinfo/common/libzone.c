@@ -38,9 +38,10 @@
 #include <libintl.h>
 #include <libzoneinfo.h>
 
+#define ARRAY_SIZE(x)	(sizeof (x) / sizeof (x[0]))
+
 #define	DEFINIT		"/etc/default/init"
 #define	ZONEINFOTABDIR	"/usr/share/lib/zoneinfo/tab/"
-#define	CONTINENT_TAB	ZONEINFOTABDIR "continent.tab"
 #define	COUNTRY_TAB	ZONEINFOTABDIR "country.tab"
 #define	ZONE_SUN_TAB	ZONEINFOTABDIR "zone_sun.tab"
 
@@ -88,107 +89,77 @@ static int _tz_match(const char *, const char *);
 static char *_conv_gmt_zoneinfo(int);
 static char *_conv_gmt_posix(int);
 
+
+#define CONTINENT(name, desc)	{ .ctnt_name = (name), .ctnt_id_desc = (desc), }
+static struct tz_continent continents[] = {
+		CONTINENT("Africa", "Africa"),
+		CONTINENT("America", "Americas"),
+		CONTINENT("Antarctica", "Antarctica"),
+		CONTINENT("Arctic", "Actic Ocean"),
+		CONTINENT("Asia", "Asia"),
+		CONTINENT("Atlantic", "Atlantic Ocean"),
+		CONTINENT("Australia", "Australia"),
+		CONTINENT("Europe", "Europe"),
+		CONTINENT("Indian", "Indian Ocean"),
+		CONTINENT("Pacific", "Pacific Ocean"),
+};
+
 /*
- * get_tz_continents() reads the continent.tab file, and
- * returns a list of continents.
+ * get_tz_continents() returns a list of continents.
  */
 int
 get_tz_continents(struct tz_continent **cont)
 {
-	FILE *fp;
-	char buff[BUFFLEN];
-	char *lp;		/* line pointer */
-	char *lptr, *ptr;	/* temp pointer */
-	struct tz_continent *head = NULL, *lcp, *prev = NULL;
-	int sav_errno = 0, ncount, status;
-	size_t len;
+	struct tz_continent *head, *prev;
+	int i;
 
-	/* open continents file */
-	if ((fp = fopen(CONTINENT_TAB, "r")) == NULL) {
-		/* fopen() sets errno */
-		return (-1);
+	head = NULL;
+	prev = NULL;
+
+	for (i = 0; i < ARRAY_SIZE(continents); i++) {
+		struct tz_continent *tmp;
+		char *lname;
+
+		tmp = malloc(sizeof (struct tz_continent));
+		if (tmp == NULL)
+			goto err;
+
+		*tmp = continents[i];
+		tmp->ctnt_name[_TZBUFLEN - 1] = '\0';
+
+		/* duplicate the description */
+		tmp->ctnt_id_desc = strdup(tmp->ctnt_id_desc);
+		if (tmp->ctnt_id_desc == NULL) {
+			free(tmp);
+			goto err;
+		}
+
+		/* duplicate the localized description */
+		lname = dgettext(TEXT_DOMAIN, tmp->ctnt_id_desc);
+		tmp->ctnt_display_desc = strdup(lname);
+		if (tmp->ctnt_display_desc == NULL) {
+			free(tmp->ctnt_id_desc);
+			free(tmp);
+			goto err;
+		}
+
+		if (head == NULL)
+			head = tmp;
+		else
+			prev->ctnt_next = tmp;
+
+		prev = tmp;
 	}
-	/* read and count continents */
-	ncount = 0;
-	/*CONSTANTCONDITION*/
-	while (1) {
-		if (fgets(buff, sizeof (buff), fp) == NULL) {
-			if (feof(fp) == 0) {
-				/* fgets() sets errno */
-				sav_errno = errno;
-				ncount = -1;
-			}
-			break;
-		}
-		/* Skip comments or blank/whitespace lines */
-		if ((status = skipline(buff)) != 0) {
-			if (status == 1)
-				continue;
-			else {
-				sav_errno = EINVAL;
-				ncount = -1;
-				break;
-			}
-		}
-		/* Get continent name */
-		lp = skipwhite(&buff[0]);
-		if ((len = strcspn(lp, WHITESPACE)) > _TZBUFLEN -1) {
-			sav_errno = ENAMETOOLONG;
-			ncount = -1;
-			break;
-		}
-		/* create continent struct */
-		if ((lcp = (struct tz_continent *)
-			calloc(1, sizeof (struct tz_continent))) == NULL) {
-			sav_errno = ENOMEM;
-			ncount = -1;
-			break;
-		}
-		(void) strncpy(lcp->ctnt_name, lp, len);
-		lcp->ctnt_name[len] = '\0';
 
-		/* Get continent description */
-		lp = skipwhite(lp + len);
-		len = strcspn(lp, NEWLINE);
-		if ((ptr = malloc(len + 1)) == NULL) {
-			(void) free_tz_continents(lcp);
-			sav_errno = ENOMEM;
-			ncount = -1;
-			break;
-		}
-		(void) strncpy(ptr, lp, len);
-		*(ptr + len) = '\0';
-		lcp->ctnt_id_desc = ptr;
+	*cont = head;
+	return (ARRAY_SIZE(continents));
 
-		/* Get localized continent description */
-		lptr = dgettext(TEXT_DOMAIN, lcp->ctnt_id_desc);
-		if ((ptr = strdup(lptr)) == NULL) {
-			(void) free_tz_continents(lcp);
-			sav_errno = ENOMEM;
-			ncount = -1;
-			break;
-		}
-		lcp->ctnt_display_desc = ptr;
+err:
+	(void) free_tz_continents(head);
 
-		if (head == NULL) {
-			head = lcp;
-		} else {
-			prev->ctnt_next = lcp;
-		}
-		prev = lcp;
-		ncount++;
-	}
-	(void) fclose(fp);
-	if (ncount == -1) {
-		if (head != NULL) {
-			(void) free_tz_continents(head);
-		}
-		if (sav_errno)
-			errno = sav_errno;
-	} else {
-		*cont = head;
-	}
-	return (ncount);
+	errno = ENOMEM;
+
+	return (-1);
 }
 
 /*
