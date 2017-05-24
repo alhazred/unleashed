@@ -14,7 +14,7 @@ NPROG= $(NATIVE)/$(PROG)
 TZFILES= africa antarctica asia australasia etcetera europe \
 	 factory northamerica pacificnew \
 	 southamerica backward
-TABFILES = continent.tab country.tab zone_sun.tab
+TABFILES = country.tab zone_sun.tab
 
 OBJS= zic.o scheck.o ialloc.o
 SRCS= $(OBJS:%.o=%.c)
