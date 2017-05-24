@@ -12,7 +12,7 @@ NPROG= $(NATIVE)/$(PROG)
 # "etcetera" must be listed before "backward" because it sets up links that
 # "backward" needs.
 TZFILES= africa antarctica asia australasia etcetera europe \
-	 factory northamerica pacificnew solar87 solar88 solar89 \
+	 factory northamerica pacificnew \
 	 southamerica backward
 # Don't build the systemv timezones, but do install the source file.
 SRCFILES = $(TZFILES) systemv README

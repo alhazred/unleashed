@@ -34,6 +34,7 @@ changed.
     - readdir_r
     - getpwuid_r
     - getpwnam_r
+ - drop support for Riyadh87, Riyadh88, and Riyadh89 timezones
  + errc(3), warnc(3) were added to libc
  + fts(3) added to libc
  + reallocarray(3) added to libc
