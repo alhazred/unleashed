@@ -150,17 +150,6 @@ can only be used for communication with nodes on the same link.
 .LP
 For information on how to enable IPv6 address autoconfiguration, see \fI\fR
 .SH OPTIONS
-.LP
-Supported options and equivalent SMF service properties are listed below. SMF
-service properties are set using a command of the form:
-.sp
-.in +2
-.nf
-# \fBrouteadm -m ndp:default \fIkey\fR=\fIvalue\fR\fR
-.fi
-.in -2
-.sp
-
 .sp
 .ne 2
 .na
@@ -179,9 +168,6 @@ ifdefault StatefulAddrConf off
 ifdefault StatelessAddrConf off
 .fi
 .in -2
-
-Use of this option is equivalent to setting the \fBstateless_addr_conf\fR
-property to false.
 .RE
 
 .sp
@@ -193,7 +179,6 @@ property to false.
 .RS 4n
 Turn on large amounts of debugging output on \fBstdout\fR. When set, the
 program runs in the foreground and stays attached to the controlling terminal.
-Use of this option is equivalent to setting the \fBdebug\fR property to true.
 .RE
 
 .sp
@@ -204,8 +189,7 @@ Use of this option is equivalent to setting the \fBdebug\fR property to true.
 .sp .6
 .RS 4n
 Use \fIconfig_file\fR for configuration information instead of the default
-\fB/etc/inet/ndpd.conf\fR. Use of this option is equivalent to setting the
-\fBconfig_file\fR property to the configuration file to be used.
+\fB/etc/inet/ndpd.conf\fR.
 .RE
 
 .sp
@@ -217,7 +201,7 @@ Use \fIconfig_file\fR for configuration information instead of the default
 .RS 4n
 Turn on tracing (printing) of all sent and received packets to\fBstdout\fR.
 When set, the program runs in the foreground and stays attached to the
-controlling terminal. As such, this option cannot be run under the SMF.
+controlling terminal.
 .RE
 
 .SH FILES
@@ -233,7 +217,7 @@ the hosts.
 
 .SH SEE ALSO
 .LP
-\fBdhcpagent\fR(1M), \fBifconfig\fR(1M), \fBndp\fR(1M), \fBrouteadm\fR(1M),
+\fBdhcpagent\fR(1M), \fBifconfig\fR(1M), \fBndp\fR(1M),
 \fBsvcadm\fR(1M), \fBndpd.conf\fR(4), \fBattributes\fR(5), \fBsmf\fR(5),
 \fBicmp6\fR(7P), \fBip6\fR(7P), \fBndp\fR(7P)
 .sp
@@ -266,5 +250,4 @@ svc:/network/routing/ndp:default
 .sp
 .LP
 Administrative actions on this service, such as enabling, disabling, or
-requesting restart, can be performed using \fBsvcadm\fR(1M) or
-\fBrouteadm\fR(1M).
+requesting restart, can be performed using \fBsvcadm\fR(1M).

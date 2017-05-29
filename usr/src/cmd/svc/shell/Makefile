@@ -29,7 +29,6 @@ SRCS = \
 	fs_include.sh \
 	ipf_include.sh \
 	net_include.sh \
-	routing_include.sh \
 	smf_include.sh \
 	mfsthistory
 

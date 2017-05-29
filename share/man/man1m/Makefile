@@ -343,7 +343,6 @@ MAN = 6to4relay.1m \
       rolemod.1m \
       root_archive.1m \
       route.1m \
-      routeadm.1m \
       rpc.bootparamd.1m \
       rpc.rstatd.1m \
       rpc.rusersd.1m \

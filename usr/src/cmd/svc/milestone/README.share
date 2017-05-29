@@ -130,12 +130,7 @@ contacted.  The service methods can be invoked directly as
 If these methods fail, a direct invocation of ifconfig(1M) can be
 attempted.
 
-In some scenarios, one may be able to use routeadm(1M) to activate more
-dynamic route management functionality; restoring the default dynamic
-routing behaviour can be done using the '-u' option.  (Invoking routeadm
-with no arguments will display which commands must be accessible for the
-current routing configuration to be invoked.)  Otherwise, once
-interfaces are up, a default route can be manually added using the
+Once interfaces are up, a default route can be manually added using the
 route(1M) command.  On typical IPv4 networks, this invocation would be
 
 # /sbin/route add net default _gateway_IP_

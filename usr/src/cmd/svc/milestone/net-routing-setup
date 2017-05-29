@@ -35,30 +35,6 @@
 smf_configure_ip || exit $SMF_EXIT_OK
 
 #
-# If routing.conf file is in place, and has not already been read in
-# by previous invokation of routeadm, legacy configuration is upgraded
-# by this call to "routeadm -u".  This call is also needed when
-# a /var/svc/profile/upgrade file is found, as it may contain routeadm commands
-# which need to be applied.  Finally, routeadm starts in.ndpd by
-# enabling the ndp service (in.ndpd), which is required for IPv6 address
-# autoconfiguration. It would be nice if we could do this in
-# network/loopback, but since the SMF backend is read-only at that
-# point in boot, we cannot.
-#
-/sbin/routeadm -u
-
-#
-# Are we routing dynamically? routeadm(1M) reports this in the
-# "current" values of ipv4/6-routing - if either are true, we are running
-# routing daemons (or at least they are enabled to run).
-#
-dynamic_routing_test=`/sbin/routeadm -p | \
-nawk '/^ipv[46]-routing [.]*/ { print $2 }'  | /usr/bin/grep "current=enabled"`
-if [ -n "$dynamic_routing_test" ]; then
-	dynamic_routing="true"
-fi
-
-#
 # Configure default IPv4 routers using the local "/etc/defaultrouter"
 # configuration file.  The file can contain the hostnames or IP
 # addresses of one or more default routers.  If hostnames are used,
@@ -130,74 +106,6 @@ elif [ -f /etc/defaultrouter ]; then
 	fi
 else
 	defrouters=
-fi
-
-#
-# Use routeadm(1M) to configure forwarding and launch routing daemons
-# for IPv4 and IPv6 based on preset values.  These settings only apply
-# to the global zone.  For IPv4 dynamic routing, the system will default
-# to disabled if a default route was previously added via BOOTP, DHCP,
-# or the /etc/defaultrouter file.  routeadm also starts in.ndpd.
-#
-if [ "$dynamic_routing" != "true"  ] && [ -z "$defrouters" ]; then
-	#
-	# No default routes were setup by "route" command above.
-	# Check the kernel routing table for any other default
-	# routes.
-	#
-	/usr/bin/netstat -rn -f inet | \
-	    /usr/bin/grep default >/dev/null 2>&1 && defrouters=yes
-fi
-
-#
-# The routeadm/ipv4-routing-set property is true if the administrator
-# has run "routeadm -e/-d ipv4-routing".  If not, we revert to the
-# appropriate defaults.  We no longer run "routeadm -u" on every boot
-# however, as persistent daemon state is now controlled by SMF.
-#
-ipv4_routing_set=`/usr/bin/svcprop -p routeadm/ipv4-routing-set $SMF_FMRI`
-if [ -z "$defrouters" ]; then
-	#
-	# Set default value for ipv4-routing to enabled.  If routeadm -e/-d
-	# has not yet been run by the administrator, we apply this default.
-	# The -b option is project-private and informs routeadm not
-	# to treat the enable as administrator-driven.
-	#
-	/usr/sbin/svccfg -s $SMF_FMRI \
-	    setprop routeadm/default-ipv4-routing = true
-	if [ "$ipv4_routing_set" = "false" ]; then
-		/sbin/routeadm -b -e ipv4-routing -u
-	fi
-else
-	#
-	# Default router(s) have been found,  so ipv4-routing default value
-	# should be disabled.  If routaedm -e/d has not yet been run by
-	# the administrator, we apply this default.  The -b option is
-	# project-private and informs routeadm not to treat the disable as
-	# administrator-driven.
-	#
-	/usr/sbin/svccfg -s $SMF_FMRI \
-	    setprop routeadm/default-ipv4-routing = false
-	if [ "$ipv4_routing_set" = "false" ]; then
-		/sbin/routeadm -b -d ipv4-routing -u
-	fi
-fi
-
-#
-# See if static routes were created by install. If so, they were created
-# under /etc/svc/volatile. Copy them into their proper place.
-#
-if [ -f /etc/svc/volatile/etc/inet/static_routes ]; then
-	echo "Installing persistent routes"
-	if [ -f /etc/inet/static_routes ]; then
-		cat /etc/svc/volatile/etc/inet/static_routes | grep -v '^#' \
-		    >> /etc/inet/static_routes
-	else
-		cp /etc/svc/volatile/etc/inet/static_routes \
-		    /etc/inet/static_routes
-	fi
-	/usr/bin/rm /etc/svc/volatile/etc/inet/static_routes
-	
 fi
 
 #

@@ -27,7 +27,6 @@
 PROG=		in.ndpd
 OBJS=		config.o main.o ndp.o tables.o trace.o
 SRCS=		$(OBJS:%.o=%.c)
-SVCMETHOD=	svc-ndp
 MANIFEST=	ndp.xml
 
 include		../../../Makefile.cmd
@@ -60,7 +59,7 @@ $(PROG): $(OBJS)
 
 include		../Makefile.lib
 
-install: all $(ROOTLIBINETPROG) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
+install: all $(ROOTLIBINETPROG) $(ROOTMANIFEST)
 
 check:	$(CHKMANIFEST)
 

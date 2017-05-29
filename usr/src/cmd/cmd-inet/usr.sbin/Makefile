@@ -59,12 +59,12 @@ SRCS=		$(PROGSRCS) $(OTHERSRC)
 
 SUBDIRS=	ifconfig ilbadm in.rdisc in.routed \
 		in.talkd inetadm inetconv ipadm ipmpstat ipqosconf ipsecutils \
-		nwamadm nwamcfg ping routeadm \
+		nwamadm nwamcfg ping \
 		snoop sppptun traceroute wificonfig
 
 MSGSUBDIRS=	ifconfig ilbadm in.routed in.talkd \
 		inetadm inetconv ipadm ipmpstat ipqosconf ipsecutils \
-		nwamadm nwamcfg routeadm sppptun snoop wificonfig
+		nwamadm nwamcfg sppptun snoop wificonfig
 
 include ../../Makefile.cmd
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORK)

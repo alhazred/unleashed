@@ -43,11 +43,6 @@ Lines beginning with the ``#'' character are treated as comments.
 The default routes listed in this file replace those added by the kernel during
 diskless booting. An empty \fB/etc/defaultrouter\fR file will cause the default
 route added by the kernel to be deleted.
-.sp
-.LP
-Use of a default route, whether received from a \fBDHCP\fR server or from
-\fB/etc/defaultrouter\fR, prevents a machine from acting as an IPv4 router. You
-can use \fBrouteadm\fR(1M) to override this behavior.
 .SH FILES
 .sp
 .ne 2
@@ -62,4 +57,4 @@ default routers.
 .SH SEE ALSO
 .sp
 .LP
-\fBin.rdisc\fR(1M), \fBin.routed\fR(1M), \fBrouteadm\fR(1M), \fBhosts\fR(4)
+\fBin.rdisc\fR(1M), \fBin.routed\fR(1M), \fBhosts\fR(4)

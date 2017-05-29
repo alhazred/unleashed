@@ -27,7 +27,6 @@
 # cmd/cmd-inet/usr.lib/in.ripngd/Makefile
 #
 
-SVCMETHOD=	svc-ripng
 MANIFEST=	ripng.xml
 
 PROG=		in.ripngd
@@ -55,7 +54,7 @@ $(PROG): $(OBJS)
 
 include		../Makefile.lib
 
-install: all $(ROOTLIBINETPROG) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
+install: all $(ROOTLIBINETPROG) $(ROOTMANIFEST)
 
 check:	$(CHKMANIFEST)
 

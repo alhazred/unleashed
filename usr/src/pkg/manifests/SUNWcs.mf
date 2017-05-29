@@ -469,7 +469,6 @@ file path=lib/svc/manifest/milestone/sysconfig.xml group=sys mode=0444
 file path=lib/svc/manifest/network/dlmgmt.xml group=sys mode=0444
 file path=lib/svc/manifest/network/dns/client.xml group=sys mode=0444
 file path=lib/svc/manifest/network/dns/install.xml group=sys mode=0444
-file path=lib/svc/manifest/network/forwarding.xml group=sys mode=0444
 file path=lib/svc/manifest/network/inetd-upgrade.xml group=sys mode=0444
 file path=lib/svc/manifest/network/inetd.xml group=sys mode=0444
 file path=lib/svc/manifest/network/ipsec/ipsecalgs.xml group=sys mode=0444
@@ -489,8 +488,6 @@ file path=lib/svc/manifest/network/network-physical.xml group=sys mode=0444
 file path=lib/svc/manifest/network/network-routing-setup.xml group=sys \
     mode=0444
 file path=lib/svc/manifest/network/network-service.xml group=sys mode=0444
-file path=lib/svc/manifest/network/routing/legacy-routing.xml group=sys \
-    mode=0444
 file path=lib/svc/manifest/network/rpc/bind.xml group=sys mode=0444
 file path=lib/svc/manifest/network/rpc/keyserv.xml group=sys mode=0444
 file path=lib/svc/manifest/network/shares/group.xml group=sys mode=0444
@@ -574,10 +571,8 @@ file path=lib/svc/method/svc-boot-config mode=0555
 file path=lib/svc/method/svc-consadm mode=0555
 file path=lib/svc/method/svc-cron mode=0555
 file path=lib/svc/method/svc-dlmgmtd mode=0555
-file path=lib/svc/method/svc-forwarding mode=0555
 $(i386_ONLY)file path=lib/svc/method/svc-hostid mode=0555
 file path=lib/svc/method/svc-hotplug mode=0555
-file path=lib/svc/method/svc-legacy-routing mode=0555
 file path=lib/svc/method/svc-nscd mode=0555
 file path=lib/svc/method/svc-rbac mode=0555
 file path=lib/svc/method/svc-sockfilter mode=0555
@@ -596,7 +591,6 @@ file path=lib/svc/share/fs_include.sh mode=0444
 file path=lib/svc/share/ipf_include.sh mode=0444
 file path=lib/svc/share/mfsthistory mode=0444
 file path=lib/svc/share/net_include.sh mode=0444
-file path=lib/svc/share/routing_include.sh mode=0444
 file path=lib/svc/share/smf_include.sh mode=0444
 file path=root/.bashrc group=root preserve=true
 file path=root/.profile group=root preserve=true
@@ -624,7 +618,6 @@ file path=sbin/rc2 group=sys mode=0744
 file path=sbin/rc3 group=sys mode=0744
 file path=sbin/rcS group=sys mode=0744
 file path=sbin/route mode=0555
-file path=sbin/routeadm mode=0555
 file path=sbin/soconfig mode=0555
 file path=sbin/su.static group=sys mode=0555
 file path=sbin/sulogin mode=0555
@@ -1709,7 +1702,6 @@ link path=usr/sbin/quotaoff target=../lib/fs/ufs/quotaoff
 link path=usr/sbin/quotaon target=../lib/fs/ufs/quotaon
 link path=usr/sbin/repquota target=../lib/fs/ufs/repquota
 link path=usr/sbin/route target=../../sbin/route
-link path=usr/sbin/routeadm target=../../sbin/routeadm
 link path=usr/sbin/sync target=../../sbin/sync
 link path=usr/sbin/tunefs target=../lib/fs/ufs/tunefs
 link path=usr/sbin/tzreload target=../../sbin/tzreload

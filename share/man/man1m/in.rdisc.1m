@@ -24,8 +24,7 @@ in.rdisc, rdisc \- network router discovery daemon
 .LP
 \fBin.rdisc\fR remains part of the software distribution of the Solaris
 Operating Environment. It is, however, not used by default. \fBin.routed\fR(1M)
-includes the functionality provided by \fBin.rdisc\fR. See \fBrouteadm\fR(1M)
-for details of how to specify the IPV4 routing daemon.
+includes the functionality provided by \fBin.rdisc\fR.
 .sp
 .LP
 \fBin.rdisc\fR implements the \fBICMP\fR router discovery protocol. The first
@@ -91,18 +90,6 @@ When \fBin.rdisc\fR is terminated by a signal, it sends out an \fIadvertise\fR
 message with the preference being maximally negative.
 .SH OPTIONS
 .sp
-.LP
-Supported options and equivalent SMF service properties are listed below. SMF
-service properties are set using a command of the form:
-.sp
-.in +2
-.nf
-# \fBrouteadm -m rdisc:default \fIkey\fR=\fIvalue\fR\fR
-.fi
-.in -2
-.sp
-
-.sp
 .ne 2
 .na
 \fB\fB-a\fR\fR
@@ -111,8 +98,6 @@ service properties are set using a command of the form:
 Accept all routers independent of the preference they have in their
 \fIadvertise\fR messages. Normally, \fBin.rdisc\fR only accepts (and enters in
 the kernel routing tables) the router or routers with the highest preference.
-Use of this option is equivalent to setting the \fBaccept_all\fR property to
-true.
 .RE
 
 .sp
@@ -134,8 +119,7 @@ For SMF execution, this option is required.
 \fB\fB-r\fR\fR
 .ad
 .RS 17n
-Act as a router, rather than a host. Use of this option is equivalent to
-setting the \fBact_as_router\fR property to true.
+Act as a router, rather than a host.
 .RE
 
 .sp
@@ -158,8 +142,7 @@ execution and is not supported for the \fBrdisc\fR service.
 .ad
 .RS 17n
 Set the preference transmitted in the \fIsolicitation\fR messages. The default
-is zero. Use of this option is equivalent to setting the \fBpreference\fR
-property.
+is zero.
 .RE
 
 .sp
@@ -169,18 +152,13 @@ property.
 .ad
 .RS 17n
 Set the interval between transmitting the \fIadvertise\fR messages. The default
-time is 600 seconds. Use of this option is equivalent to setting the
-\fBtransmit_interval\fR property.
+time is 600 seconds.
 .RE
 
-.sp
-.LP
-The \fBsend-address\fR and \fBreceive-address\fR daemon options  can be set by
-means of the \fBsend_address\fR and \fBreceive_address\fR properties.
 .SH SEE ALSO
 .sp
 .LP
-\fBin.routed\fR(1M), \fBrouteadm\fR(1M), \fBsvcadm\fR(1M), \fBioctl\fR(2),
+\fBin.routed\fR(1M), \fBsvcadm\fR(1M), \fBioctl\fR(2),
 \fBgateways\fR(4), \fBattributes\fR(5), \fBsmf\fR(5), \fBicmp\fR(7P),
 \fBinet\fR(7P)
 .sp

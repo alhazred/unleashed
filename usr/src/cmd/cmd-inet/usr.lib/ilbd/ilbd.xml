@@ -54,20 +54,6 @@
 	</dependency>
 
 
-	<!--
-	  Ensure that forwarding service is enabled before load balancing
-	  service begins. The forwarding service is dependent on
-	  the filesystem and devices services.
-	-->
-	<dependency
-		name='network'
-		grouping='require_any'
-		restart_on='error'
-		type='service'>
-		<service_fmri value='svc:/network/ipv4-forwarding' />
-		<service_fmri value='svc:/network/ipv6-forwarding' />
-	</dependency>
-
 	<exec_method
 		type='method'
 		name='stop'

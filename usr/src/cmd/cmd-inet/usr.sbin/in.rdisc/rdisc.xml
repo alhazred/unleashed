@@ -34,7 +34,7 @@
 <service
 	name='network/routing/rdisc'
 	type='service'
-	version='1'>
+	version='2'>
 
 	<single_instance />
 
@@ -52,7 +52,7 @@
 	<exec_method
 		type='method'
 		name='start'
-		exec='/lib/svc/method/svc-rdisc'
+                exec='/usr/sbin/in.rdisc %{config/flags}'
 		timeout_seconds='60'>
 		<method_context>
 			<method_credential user='root' group='root'
@@ -78,46 +78,13 @@ privileges='basic,proc_owner,proc_fork,proc_exec,proc_info,proc_session,file_cho
 			value='solaris.smf.manage.routing' />
 	</property_group>
 
-	<!-- Properties in this group are used by routeadm (1M) -->
-	<property_group name='routeadm' type='application'>
-		<stability value='Unstable' />
-		<propval name='protocol' type='astring' value='ipv4' />
-		<propval name='daemon' type='astring'
-			value='/usr/sbin/in.rdisc' />
-		<propval name='value_authorization' type='astring'
-			value='solaris.smf.value.routing' />
-	</property_group>
-
-
-	<!-- Properties in this group are modifiable via routeadm (1M) -->
-	<property_group name='routing' type='application'>
+	<property_group name='config' type='application'>
 		<stability value='Evolving' />
 
-		<!-- Equivalent to specifying send_address -->
-		<propval name='send_address' type='astring' value='' />
-
-		<!-- Equivalent to specifying receive_address -->
-		<propval name='receive_address' type='astring' value='' />
-
-		<!-- Equivalent to -r option if true -->
-		<propval name='act_as_router' type='boolean' value='false' />
-
-		<!-- Equivalent to -a option if true --> 
-		<propval name='accept_all' type='boolean' value='false' />
-
-		<!-- Equivalent to -p preference option if set -->
-		<propval name='preference' type='integer' value='0' />
-
-		<!-- Equivalent to -T interval option -->
-		<propval name='transmit_interval' type='integer' value='600' />
+		<propval name='flags' type='astring' value='' />
 
 		<propval name='value_authorization' type='astring'
 			value='solaris.smf.value.routing' />
-	</property_group>
-
-	<property_group name='firewall_context' type='com.sun,fw_definition'>
-		<propval name='ipf_method' type='astring'
-			value='/lib/svc/method/svc-rdisc ipfilter' />
 	</property_group>
 
 	<template>

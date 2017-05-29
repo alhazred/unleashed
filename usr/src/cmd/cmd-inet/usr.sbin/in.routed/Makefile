@@ -17,7 +17,6 @@ PROG=		$(ROUTEDPROG) $(RTQUERYPROG)
 SRCS=		$(ROUTEDSRCS) $(RTQUERYSRCS)
 
 MANIFEST=		route.xml
-SVCMETHOD=		svc-route
 
 include		../../../Makefile.cmd
 
@@ -73,7 +72,7 @@ $(RTQUERYPROG): $(RTQUERYOBJS)
 	$(LINK.c) -o $@ $(RTQUERYOBJS) $(LDLIBS) -lresolv $(CTFMERGE_HOOK)
 	$(POST_PROCESS)
 
-install:	all $(ROOTUSRSBINPROG) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
+install:	all $(ROOTUSRSBINPROG) $(ROOTMANIFEST)
 
 check:		$(CHKMANIFEST)
 

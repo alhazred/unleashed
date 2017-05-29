@@ -111,27 +111,13 @@ Hosts acting as internetwork routers gratuitously supply their routing tables
 every 30 seconds to all directly connected hosts and networks.
 .SH OPTIONS
 .sp
-.LP
-\fB\fR\fBin.ripngd\fR supports the options listed below. Listed with the
-options are the equivalent SMF property values. These are set for the
-\fBripng:default\fR service with a command of the form:
-.sp
-.in +2
-.nf
-# \fBrouteadm -m ripng:default \fIkey\fR=\fIvalue\fR\fR
-.fi
-.in -2
-.sp
-
-.sp
 .ne 2
 .na
 \fB\fB-p\fR \fIn\fR\fR
 .ad
 .RS 8n
 Send and receive the routing packets from other routers using the \fBUDP \fR
-port number \fIn\fR. Use of this option is equivalent to setting the
-\fBudp_port\fR property.
+port number \fIn\fR.
 .RE
 
 .sp
@@ -140,8 +126,7 @@ port number \fIn\fR. Use of this option is equivalent to setting the
 \fB\fB-P\fR\fR
 .ad
 .RS 8n
-Do not use poison reverse. Use of this option is equivalent to setting the
-\fBpoison_reverse\fR property to false.
+Do not use poison reverse.
 .RE
 
 .sp
@@ -150,8 +135,7 @@ Do not use poison reverse. Use of this option is equivalent to setting the
 \fB\fB-q\fR\fR
 .ad
 .RS 8n
-Do not supply routing information. Use of this option is equivalent to setting
-the \fBquiet_mode\fR property to true.
+Do not supply routing information.
 .RE
 
 .sp
@@ -161,8 +145,7 @@ the \fBquiet_mode\fR property to true.
 .ad
 .RS 8n
 Force \fBin.ripngd\fR to supply routing information whether it is acting as an
-internetwork router or not. Use of this option is equivalent to setting the
-\fBsupply_routes\fR property to true.
+internetwork router or not.
 .RE
 
 .sp
@@ -183,21 +166,17 @@ keyboard will kill the process. Not supported by the \fBripng\fR service.
 .ad
 .RS 8n
 Print all changes made to the routing tables to standard output with a
-timestamp. Use of this option is equivalent to setting the \fBverbose\fR
-property to true.
+timestamp.
 .sp
 Any other argument supplied to this option is interpreted as the name of the
 file in which the actions of \fBin.ripngd\fR, as specified by this option or by
 \fB-t\fR, should be logged instead of being sent to standard output.
-.sp
-The logfile can be specified for the \fBripng\fR service by means of the
-\fBlog_file\fR property.
 .RE
 
 .SH SEE ALSO
 .sp
 .LP
-\fBin.routed\fR(1M), \fBrouteadm\fR(1M), \fBsvcadm\fR(1M), \fBioctl\fR(2),
+\fBin.routed\fR(1M), \fBsvcadm\fR(1M), \fBioctl\fR(2),
 \fBattributes\fR(5), \fBsmf\fR(5), \fBudp\fR(7P)
 .sp
 .LP

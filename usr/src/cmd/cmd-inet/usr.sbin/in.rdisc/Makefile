@@ -24,7 +24,6 @@
 
 PROG=		in.rdisc
 MANIFEST=	rdisc.xml
-SVCMETHOD=	svc-rdisc
 
 include		../../../Makefile.cmd
 
@@ -38,7 +37,7 @@ CERRWARN +=	-Wno-extra
 
 all: $(PROG)
 
-install: all $(ROOTUSRSBINPROG) $(ROOTMANIFEST) $(ROOTSVCMETHOD)
+install: all $(ROOTUSRSBINPROG) $(ROOTMANIFEST)
 
 check:	$(CHKMANIFEST)
 

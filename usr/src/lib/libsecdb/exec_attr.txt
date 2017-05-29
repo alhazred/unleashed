@@ -179,8 +179,6 @@ Name Service Security:suser:cmd:::/usr/sbin/ldapclient:uid=0
 Name Service Security:suser:cmd:::/usr/sbin/newkey:euid=0
 Network Management:solaris:cmd:::/sbin/ifconfig:uid=0
 Network Management:solaris:cmd:::/sbin/route:privs=sys_ip_config
-Network Management:solaris:cmd:::/sbin/routeadm:euid=0;\
-	privs=proc_chroot,proc_owner,sys_ip_config
 Network Management:solaris:cmd:::/sbin/dladm:euid=dladm;egid=netadm;\
 	privs=sys_dl_config,net_rawaccess,proc_audit
 Network Management:solaris:cmd:::/sbin/dlstat:euid=dladm;egid=sys;

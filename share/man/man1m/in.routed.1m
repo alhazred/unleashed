@@ -193,16 +193,7 @@ might learn of routes to the same destination.
 Listed below are available options. Any other argument supplied is interpreted
 as the name of a file in which the actions of \fBin.routed\fR should be logged.
 It is better to use \fB-T\fR (described below) instead of appending the name of
-the trace file to the command. Associated SMF properties for these options are
-described, and can be set by means of a command of the form:
-.sp
-.in +2
-.nf
-# \fBrouteadm -m route:default \fIname\fR=\fIvalue\fR\fR
-.fi
-.in -2
-.sp
-
+the trace file to the command.
 .sp
 .ne 2
 .na
@@ -214,8 +205,7 @@ Do not ignore RIPv2 authentication if we do not care about RIPv2
 authentication. This option is required for conformance with RFC 2453. However,
 it makes no sense and breaks using RIP as a discovery protocol to ignore all
 RIPv2 packets that carry authentication when this machine does not care about
-authentication. This option is equivalent to setting the \fBignore_auth\fR
-property value to false.
+authentication.
 .RE
 
 .sp
@@ -245,7 +235,6 @@ large UDP packets of RIP information with a single, small packet containing a
 limit the spread of the "fake" default route. This is a dangerous feature that,
 when used carelessly, can cause routing loops. Notice also that more than one
 interface can match the specified network number and mask. See also \fB-g\fR.
-Use of this option is equivalent to setting the \fBminimize_routes\fR property.
 .RE
 
 .sp
@@ -264,8 +253,7 @@ default route. The \fB-g\fR (or \fB-P\fR) option is typically used on a gateway
 to the Internet, or on a gateway that uses another routing protocol whose
 routes are not reported to other local routers. Note that because a metric of 1
 is used, this feature is dangerous. Its use more often creates chaos with a
-routing loop than solves problems. Use of this option is equivalent to setting
-the \fBoffer_default_route\fR property to true.
+routing loop than solves problems.
 .RE
 
 .sp
@@ -278,8 +266,7 @@ the \fBoffer_default_route\fR property to true.
 Causes host or point-to-point routes not to be advertised, provided there is a
 network route going the same direction. That is a limited kind of aggregation.
 This option is useful on gateways to LANs that have other gateway machines
-connected with point-to-point links such as SLIP. Use of this option is
-equivalent to setting the \fBadvertise_host_routes\fR property to false.
+connected with point-to-point links such as SLIP.
 .RE
 
 .sp
@@ -295,8 +282,7 @@ option should not be used except when the cost of the host routes it generates
 is justified by the popularity of the server. It is effective only when the
 machine is supplying routing information, because there is more than one
 interface. The \fB-m\fR option overrides the \fB-q\fR option to the limited
-extent of advertising the host route. Use of this option is equivalent to
-setting the \fBadvertise_host_routes_primary\fR property to true.
+extent of advertising the host route.
 .RE
 
 .sp
@@ -307,8 +293,7 @@ setting the \fBadvertise_host_routes_primary\fR property to true.
 .sp .6
 .RS 4n
 Do not install routes in kernel. By default, routes are installed in the
-kernel. Use of this option is equivalent to setting the \fBinstall_routes\fR
-property to false.
+kernel.
 .RE
 
 .sp
@@ -319,7 +304,7 @@ property to false.
 .sp .6
 .RS 4n
 Equivalent to adding the parameter line \fIparams\fR to the \fB/etc/gateways\fR
-file. Can also be set by means of the \fBparameters\fR property.
+file.
 .RE
 
 .sp
@@ -331,8 +316,7 @@ file. Can also be set by means of the \fBparameters\fR property.
 .RS 4n
 Opposite of the \fB-s\fR option. This is the default when only one interface is
 present. With this explicit option, the daemon is always in "quiet mode" for
-RIP and does not supply routing information to other computers. Use of this
-option is equivalent to setting the \fBquiet_mode\fR property to true.
+RIP and does not supply routing information to other computers.
 .RE
 
 .sp
@@ -345,8 +329,7 @@ option is equivalent to setting the \fBquiet_mode\fR property to true.
 Force \fBin.routed\fR to supply routing information. This is the default if
 multiple network interfaces are present on which RIP or Router Discovery have
 not been disabled, and if the \fB/dev/ip\fR \fBndd\fR variable
-\fBip_forwarding\fR is set to 1. Use of this option is equivalent to setting
-the \fBsupply_routes\fR property to true.
+\fBip_forwarding\fR is set to 1.
 .RE
 
 .sp
@@ -361,8 +344,7 @@ the whole routing table in the kernel, it enters only a default route for each
 internetwork router. This reduces the memory requirements without losing any
 routing reliability. This option is provided for compatibility with the
 previous, RIPv1-only \fBin.routed\fR. Use of this option is generally
-discouraged. Use of this option is equivalent to setting the
-\fBdefault_routes_only\fR property to true.
+discouraged.
 .RE
 
 .sp
@@ -386,8 +368,7 @@ Solaris and has no SMF equivalent.
 .RS 4n
 Increases the debugging level to at least 1 and causes debugging information to
 be appended to the trace file. Because of security concerns, do not to run
-\fBin.routed\fR routinely with tracing directed to a file. Use of this option
-is equivalent to setting the \fBlog_file\fR property to \fBtrace file path\fR.
+\fBin.routed\fR routinely with tracing directed to a file.
 .RE
 
 .sp
@@ -399,8 +380,7 @@ is equivalent to setting the \fBlog_file\fR property to \fBtrace file path\fR.
 .RS 4n
 Enables debug. Similar to \fB-z\fR, except, where \fB-z\fR increments
 \fBtrace_level\fR, \fB-v\fR sets \fBtrace_level\fR to 1. Also, \fB-v\fR
-requires the \fB-T\fR option. Use of this option is equivalent to setting the
-\fBdebug\fR property to true.
+requires the \fB-T\fR option.
 .RE
 
 .sp
@@ -450,7 +430,7 @@ See \fBgateways\fR(4).
 .SH SEE ALSO
 .sp
 .LP
-\fBroute\fR(1M), \fBrouteadm\fR(1M), \fBrtquery\fR(1M), \fBsvcadm\fR(1M),
+\fBroute\fR(1M), \fBrtquery\fR(1M), \fBsvcadm\fR(1M),
 \fBioctl\fR(2), \fBinet\fR(3SOCKET), \fBdefaultrouter\fR(4), \fBgateways\fR(4),
 \fBattributes\fR(5), \fBicmp\fR(7P), \fBinet\fR(7P), \fBudp\fR(7P)
 .sp

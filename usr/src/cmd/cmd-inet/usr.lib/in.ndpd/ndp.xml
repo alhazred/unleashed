@@ -36,11 +36,11 @@
 <service
 	name='network/routing/ndp'
 	type='service'
-	version='1'>
+	version='2'>
 
 	<single_instance />
 
-	<instance name='default' enabled='false' >
+	<instance name='default' enabled='true' >
 
 	<dependency
 		name='network_routing_setup'
@@ -53,7 +53,7 @@
 	<exec_method
 		type='method'
 		name='start'
-		exec='/lib/svc/method/svc-ndp'
+		exec='/usr/lib/inet/in.ndpd %{config/flags}'
 		timeout_seconds='60'>
 		<method_context>
 			<method_credential user='root' group='root' />
@@ -78,38 +78,9 @@
 			value='solaris.smf.manage.routing' />
 	</property_group>
 
-	<!-- Properties in this group are used by routeadm (1M) -->
-	<property_group name='routeadm' type='application'>
+	<property_group name='config' type='application'>
 		<stability value='Unstable' />
-		<!--
-			Having the protocol property here ensures that ndp
-			appears in the SMF service listing, but does not
-			participate in dictating ipv6-routing state (as it
-			would if it were set to "ipv6"). If it
-			did, ipv6-routing would always be reported as enabled,
-			since if any IPv6 interfaces are present, ndp will
-			be enabled.
-		-->
-		<propval name='protocol' type='astring' value='ndp' />
-		<propval name='value_authorization' type='astring'
-			value='solaris.smf.value.routing' />
-	</property_group>
-
-
-	<!-- Properties in this group are modifiable via routeadm (1M) -->
-	<property_group name='routing' type='application'>
-		<stability value='Evolving' />
-
-		<!-- equivalent to -a option if false -->
-		<propval name='stateless_addr_conf' type='boolean'
-		    value='true' />
-
-		<!-- equivalent to -d option if true -->
-		<propval name='debug' type='boolean' value='false' />
-
-		<!-- equivalent to -f config_file option if set -->
-		<propval name='config_file' type='astring' value='' />
-
+		<propval name='flags' type='astring' value='' />
 		<propval name='value_authorization' type='astring'
 			value='solaris.smf.value.routing' />
 	</property_group>

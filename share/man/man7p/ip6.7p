@@ -522,9 +522,8 @@ supported), and fragment header.
 .sp
 .LP
 By default, the IPv6 layer will not forward IPv6 packets that are not addressed
-to it. This behavior can be overridden by using  \fBrouteadm\fR(1M) to enable
-the ipv6-forwarding option. IPv6 forwarding is configured at boot time based on
-the setting of \fBrouteadm\fR(1M)'s ipv6-forwarding option.
+to it. This behavior can be overridden by using  \fBipadm\fR(1M) to enable
+the forwarding option for ipv6.
 .sp
 .LP
 Additionally, finer-grained forwarding can be configured in IPv6. Each
@@ -565,7 +564,7 @@ by IPv6 back up to the user process.
 .SH SEE ALSO
 .sp
 .LP
-\fBsvcs\fR(1), \fBrouteadm\fR(1M), \fBsvcadm\fR(1M),
+\fBsvcs\fR(1), \fBipadm\fR(1M), \fBsvcadm\fR(1M),
 \fBread\fR(2), \fBwrite\fR(2), \fBbind\fR(3SOCKET), \fBconnect\fR(3SOCKET),
 \fBgetsockopt\fR(3SOCKET), \fBrecv\fR(3SOCKET), \fBrecvmsg\fR(3SOCKET),
 \fBsend\fR(3SOCKET), \fBsendmsg\fR(3SOCKET), \fBsetsockopt\fR(3SOCKET),

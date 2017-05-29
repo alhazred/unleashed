@@ -413,9 +413,8 @@ record route, and internet timestamp.
 .sp
 .LP
 By default, the IP layer will not forward IPv4 packets that are not addressed
-to it. This behavior can be overridden by using  \fBrouteadm\fR(1M) to enable
-the ipv4-forwarding option. IPv4 forwarding is configured at boot time based on
-the setting of \fBrouteadm\fR(1M)'s ipv4-forwarding option.
+to it. This behavior can be overridden by using  \fBipadm\fR(1M) to enable
+the forwarding option for ipv4.
 .sp
 .LP
 Additionally, finer-grained forwarding can be configured in IP. Each interface
@@ -616,7 +615,7 @@ An address has changed on a logical  interface.
 .SH SEE ALSO
 .sp
 .LP
-\fBifconfig\fR(1M), \fBrouteadm\fR(1M), \fBread\fR(2),
+\fBifconfig\fR(1M), \fBipadm\fR(1M), \fBread\fR(2),
 \fBwrite\fR(2), \fBbind\fR(3SOCKET), \fBconnect\fR(3SOCKET),
 \fBgetsockopt\fR(3SOCKET), \fBrecv\fR(3SOCKET), \fBsend\fR(3SOCKET),
 \fBdefaultrouter\fR(4), \fBicmp\fR(7P), \fBif_tcp\fR(7P), \fBinet\fR(7P),

@@ -36,7 +36,7 @@
 <service
 	name='network/routing-setup'
 	type='service'
-	version='1'>
+	version='2'>
 
 	<!-- loopback/physical network configuration is required -->
 	<dependency
@@ -56,30 +56,12 @@
 		<service_fmri value='svc:/system/filesystem/usr' />
 	</dependency>
 
-	<!--
-		This dependency was added to make sure soconfig runs in
-		devices-local method, before routeadm invocation in
-		network/routing-setup.  This is because routeadm commands
-		depend on sockets.
-	-->
 	<dependency
 		name='devices'
 		grouping='require_all'
 		restart_on='none'
 		type='service'>
 		<service_fmri value='svc:/milestone/devices' />
-	</dependency>
-
-	<!--
-		This dependency is required to ensure that all routing-related
-		manifests have been imported prior to running routeadm.
-	-->
-	<dependency
-		name='manifest_import'
-		grouping='optional_all'
-		restart_on='none'
-		type='service'>
-		<service_fmri value='svc:/system/manifest-import:default' />
 	</dependency>
 
 	<exec_method
@@ -102,32 +84,6 @@
 
 	<instance name='default' enabled='true' >
 
-	<!-- Properties in this group are used by routeadm (1M) -->
-	<property_group name='routeadm' type='framework'>
-		<stability value='Evolving' />
-		<!-- set if routeadm -e/d ipv4-routing is explicitly invoked -->
-		<propval name='ipv4-routing-set' type='boolean'
-			value='false' />
-		<!-- set if routeadm -e/d ipv6-routing is explicitly invoked -->
-		<propval name='ipv6-routing-set' type='boolean'
-			value='false' />
-		<!-- set if legacy routing.conf configuration has been read -->
-		<propval name='routing-conf-read' type='boolean'
-			value='false' />
-		<!-- default for ipv4-routing to revert to via routeadm -r -->
-		<propval name='default-ipv4-routing' type='boolean'
-		    value='false' />
-		<propval name='default-ipv6-routing' type='boolean'
-			value='false' />
-		<!-- routing-svcs values, current and default -->
-		<propval name='routing-svcs' type='astring'
-		    value='route:default ripng:default' />
-		<propval name='default-routing-svcs' type='astring'
-		    value='route:default ripng:default' />
-		<propval name='value_authorization' type='astring'
-			value='solaris.smf.value.routing' />
-	</property_group>
-
 	</instance>
 
 	<stability value='Unstable' />
@@ -138,10 +94,6 @@
 				Initial routing-related configuration.
 			</loctext>
 		</common_name>
-		<documentation>
-			<manpage title='routeadm' section='1M'
-				manpath='/usr/share/man' />
-		</documentation>
 	</template>
 </service>
 
