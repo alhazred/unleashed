@@ -221,7 +221,6 @@ SUBDIRS +=				\
 	libzfs		\
 	libzfs_core	\
 	libzonecfg	\
-	libzoneinfo	\
 	libzonestat	\
 	libzpool	\
 	madv		\
@@ -435,7 +434,6 @@ HDRSUBDIRS=				\
 	libxcurses2	\
 	libzfs		\
 	libzfs_core	\
-	libzoneinfo	\
 	libzonestat	\
 	mpapi		\
 	passwdutil	\
