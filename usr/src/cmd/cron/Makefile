@@ -133,10 +133,10 @@ at :=		LDLIBS += -lproject -lsecdb
 at.xpg4 :=	LDLIBS += -lproject -lsecdb
 atq :=		LDLIBS += -lsecdb
 atrm :=		LDLIBS += -lsecdb
-cron :=		LDLIBS += -lpam -lproject -lcontract -lzoneinfo
-crontab :=	LDLIBS += -lsecdb -lpam -lzoneinfo
-crontab.xpg6 :=	LDLIBS += -lsecdb -lpam -lzoneinfo
-crontab.xpg4 :=	LDLIBS += -lsecdb -lpam -lzoneinfo
+cron :=		LDLIBS += -lpam -lproject -lcontract
+crontab :=	LDLIBS += -lsecdb -lpam
+crontab.xpg6 :=	LDLIBS += -lsecdb -lpam
+crontab.xpg4 :=	LDLIBS += -lsecdb -lpam
 
 
 $(XPG4) := CFLAGS += -DXPG4

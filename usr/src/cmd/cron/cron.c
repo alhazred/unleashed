@@ -70,7 +70,6 @@
 #include <stropts.h>
 #include <time.h>
 #include <unistd.h>
-#include <libzoneinfo.h>
 
 #include "cron.h"
 
@@ -1166,11 +1165,6 @@ readcron(struct usr *u, time_t reftime)
 				*tmp = '\0';
 			}
 
-			if (!isvalid_tz(&line[cursor + strlen(ENV_TZ)], NULL,
-			    _VTZ_ALL)) {
-				cte_add(lineno, line);
-				break;
-			}
 			if (tz == NULL || strcmp(&line[cursor], get_obj(tz))) {
 				rel_shared(tz);
 				tz = create_shared_str(&line[cursor]);

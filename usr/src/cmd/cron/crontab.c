@@ -45,7 +45,6 @@
 #include <libintl.h>
 #include <security/pam_appl.h>
 #include <limits.h>
-#include <libzoneinfo.h>
 #include "cron.h"
 #include "getresponse.h"
 
@@ -85,7 +84,6 @@
 #define	ED_PROMPT	\
 	"     Edit again, to ensure crontab information is intact? "
 #define	NAMETOOLONG	"login name too long"
-#define	BAD_TZ	"Timezone unrecognized in: %s"
 #define	BAD_SHELL	"Invalid shell specified: %s"
 #define	BAD_HOME	"Unable to access directory: %s\t%s\n"
 
@@ -442,13 +440,7 @@ FILE *fp;
 			if ((x = strchr(buf, '\n')) != NULL)
 				*x = '\0';
 
-			if (isvalid_tz(buf, NULL, _VTZ_ALL)) {
-				goto cont;
-			} else {
-				err = 1;
-				fprintf(stderr, BAD_TZ, &line[cursor]);
-				continue;
-			}
+			goto cont;
 		} else if (strncmp(&line[cursor], ENV_SHELL,
 		    strlen(ENV_SHELL)) == 0) {
 			char *x;
