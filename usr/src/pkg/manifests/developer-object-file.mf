@@ -138,7 +138,6 @@ link path=usr/ccs/bin/prof target=../../bin/prof
 link path=usr/ccs/bin/ranlib target=../../bin/ranlib
 link path=usr/ccs/bin/strip target=../../bin/strip
 link path=usr/ccs/bin/symorder target=../../bin/symorder
-link path=usr/ccs/bin/tsort target=../../bin/tsort
 link path=usr/ccs/bin/unifdef target=../../bin/unifdef
 link path=usr/ccs/bin/yacc target=../../bin/yacc
 link path=usr/ccs/bin/yaccpar target=../../share/lib/ccs/yaccpar
