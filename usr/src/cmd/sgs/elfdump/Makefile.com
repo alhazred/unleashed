@@ -45,6 +45,7 @@ OBJS=		$(BLTOBJ) $(COMOBJ) $(COMOBJ32) $(COMOBJ64) $(TOOLOBJ)
 
 CPPFLAGS=	-I. -I../common -I../../include -I../../include/$(MACH) \
 		-I$(SRCBASE)/lib/libc/inc -I$(SRCBASE)/uts/$(ARCH)/sys \
+		-D__UNLEASHED_VISIBLE \
 		$(CPPFLAGS.master) -I$(ELFCAP)
 LLDFLAGS =	$(VAR_ELFDUMP_LLDFLAGS)
 LLDFLAGS64 =	$(VAR_ELFDUMP_LLDFLAGS64)

@@ -55,8 +55,6 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 LDFLAGS		+= -dy
 INC_PATH	+= -I$(UTSBASE)/common/io/bpf
 
-ALWAYS_DEFS += -D__UNLEASHED_VISIBLE
-
 CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-parentheses

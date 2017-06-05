@@ -71,13 +71,12 @@ SUBDIRS=	libconv		\
 		prof		\
 		ranlib		\
 		symorder	\
-		tsort		\
 		unifdef		\
 		yacc
 
 # Messaging support
 #
-POSUBDIRS=	m4		nm	tsort		yacc
+POSUBDIRS=	m4		nm	yacc
 POFILE=		sgs.po
 POFILES=	$(POSUBDIRS:%=%/%.po)
 

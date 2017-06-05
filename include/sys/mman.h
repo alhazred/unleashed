@@ -118,7 +118,7 @@ extern "C" {
 #endif	/* (_POSIX_C_SOURCE <= 2) */
 
 
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
+#ifdef __UNLEASHED_VISIBLE
 /* External flags for mmapobj syscall (Exclusive of MAP_* flags above) */
 #define	MMOBJ_PADDING		0x10000
 #define	MMOBJ_INTERPRET		0x20000
@@ -171,6 +171,9 @@ typedef struct mmapobj_result {
 	uint_t		mr_prot;	/* the protections provided */
 	uint_t		mr_flags;	/* info on the mapping */
 } mmapobj_result_t;
+#if	!defined(_KERNEL)
+extern int mmapobj(int, uint_t, mmapobj_result_t *, uint_t *, void *);
+#endif	/* !defined(_KERNEL) */
 
 #if defined(_KERNEL) || defined(_SYSCALL32)
 typedef struct mmapobj_result32 {
@@ -183,7 +186,7 @@ typedef struct mmapobj_result32 {
 } mmapobj_result32_t;
 #endif	/* defined(_KERNEL) || defined(_SYSCALL32) */
 #endif	/* !defined(_ASM) */
-#endif	/* !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) */
+#endif	/* __UNLEASHED_VISIBLE */
 
 #if	!defined(_ASM) && !defined(_KERNEL)
 /*
@@ -232,7 +235,6 @@ extern int memcntl(caddr_t, size_t, int, caddr_t, int, int);
 extern int madvise(caddr_t, size_t, int);
 extern int getpagesizes(size_t *, int);
 extern int getpagesizes2(size_t *, int);
-extern int mmapobj(int, uint_t, mmapobj_result_t *, uint_t *, void *);
 extern int posix_madvise(void *, size_t, int);
 
 /* guard visibility of uint64_t */

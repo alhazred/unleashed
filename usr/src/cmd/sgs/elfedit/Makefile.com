@@ -43,6 +43,7 @@ MAPFILE=	../common/mapfile-vers
 
 CPPFLAGS=	-I. -I../common -I../../include -I../../include/$(MACH) \
 		-I$(SRCBASE)/lib/libc/inc -I$(SRCBASE)/uts/$(ARCH)/sys \
+		-D__UNLEASHED_VISIBLE \
 		$(CPPFLAGS.master) -I$(ELFCAP)
 LLDFLAGS =	$(VAR_ELFEDIT_LLDFLAGS)
 LLDFLAGS64 =	$(VAR_ELFEDIT_LLDFLAGS64)

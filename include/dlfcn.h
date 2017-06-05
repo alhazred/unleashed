@@ -74,11 +74,13 @@ typedef struct	dl_argsinfo {
 } Dl_argsinfo;
 typedef	Dl_argsinfo	Dl_argsinfo_t;
 
+#ifdef __UNLEASHED_VISIBLE
 typedef struct {
 	mmapobj_result_t *dlm_maps;	/* mapping information */
 	uint_t		dlm_acnt;	/* number of dlm_maps mappings */
 	uint_t		dlm_rcnt;	/* number of returned mappings */
 } Dl_mapinfo_t;
+#endif /* __UNLEASHED_VISIBLE */
 
 typedef struct {
 	uint_t		dlui_version;	/* version # */

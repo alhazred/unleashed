@@ -33,7 +33,7 @@ STRIP_FLAG?=
 AR?=		ar
 ARFLAGS?=	rl
 LORDER?=	lorder
-TSORT?=		tsort
+TSORT?=		tsort -q
 
 DBG?=		-g
 PIPE?=		-pipe

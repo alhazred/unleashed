@@ -73,7 +73,6 @@
 #include <sys/class.h>
 #include <sys/stack.h>
 #include <sys/brand.h>
-#include <sys/mmapobj.h>
 
 #include <vm/as.h>
 #include <vm/seg_kmem.h>
