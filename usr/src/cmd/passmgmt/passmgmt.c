@@ -128,8 +128,6 @@ void	uid_bcom(struct uid_blk *), add_ublk(uid_t, struct uid_blk *),
 	rid_tmpf(void), ck_p_sz(struct passwd *), ck_s_sz(struct spwd *),
 	bad_name(char *), bad_uattr(void);
 
-void file_copy(FILE *spf, long NIS_pos);
-
 static FILE *fp_ptemp, *fp_stemp, *fp_uatemp;
 static int fd_ptemp, fd_stemp, fd_uatemp;
 
@@ -294,13 +292,6 @@ main(int argc, char **argv)
 	kva_t ua_kva;
 	struct stat statbuf;
 	struct tm *tm_ptr;
-	int NIS_entry_seen;		/* NIS scanning flag */
-	/*
-	 * NIS start pos, really pointer to first entry AFTER first
-	 * NIS-referant entry
-	 */
-	long NIS_pos;
-	long cur_pos;		/* Current pos, used with nis-pos above */
 
 	(void) setlocale(LC_ALL, "");
 
@@ -778,27 +769,6 @@ main(int argc, char **argv)
 		uid_sp->high = (UID_MIN -1);
 	}
 
-	/*
-	 * This next section is modified to allow for NIS passwd file
-	 * conventions.  In the case where a password entry was being
-	 * added to the password file, the original AT&T code read
-	 * the entire password file in, noted any information needed, and
-	 * copied the entries to a temporary file.  Then the new entry
-	 * was added to the temporary file, and the temporary file was
-	 * moved to be the real password file.
-	 *
-	 * The problem is, that with NIS compatability, we want to add new
-	 * entries BEFORE the first NIS-referrant entry, so as not to have
-	 * any surprises.  To accomplish this without extensively modifying
-	 * the logic of the code below, as soon as a NIS-referrant entry is
-	 * found we stop copying entries to the TEMP file and instead we
-	 * remember
-	 * the first NIS entry and where we found it, scan the rest of the
-	 * password file without copying entries, then write the new entry, copy
-	 * the stored password entry, then copy the rest of the password file.
-	 */
-
-
 	error = 0;
 
 	if ((pwf = fopen("/etc/passwd", "r")) == NULL) {
@@ -809,8 +779,6 @@ main(int argc, char **argv)
 			file_error();
 	}
 
-	NIS_entry_seen = 0;
-	cur_pos = 0;
 	/* The while loop for reading PASSWD entries */
 	info_mask |= WRITE_P_ENTRY;
 
@@ -826,10 +794,7 @@ main(int argc, char **argv)
 				break;
 		}
 
-		if (!NIS_entry_seen)
-			info_mask |= WRITE_P_ENTRY;
-		else
-			info_mask &= ~WRITE_P_ENTRY;
+		info_mask |= WRITE_P_ENTRY;
 
 		/*
 		 * Set up the uid usage blocks to find the first
@@ -923,24 +888,6 @@ main(int argc, char **argv)
 			}
 		}
 
-		if (optn_mask & A_MASK) {
-			if (!NIS_entry_seen) {
-				char	*p;
-				p  = strchr("+-", pw_ptr1p->pw_name[0]);
-				if (p != NULL) {
-					/*
-					 * Found first NIS entry.
-					 * so remember it.
-					 */
-					NIS_pos = cur_pos;
-					NIS_entry_seen = 1;
-					info_mask &= ~WRITE_P_ENTRY;
-				}
-				else
-					cur_pos = ftell(pwf);
-			}
-		}
-
 		if (info_mask & WRITE_P_ENTRY) {
 			if (putpwent(pw_ptr1p, fp_ptemp)) {
 				rid_tmpf();
@@ -981,25 +928,6 @@ main(int argc, char **argv)
 			rid_tmpf();
 			file_error();
 		}
-		/*
-		 * Now put out the rest of the password file, if needed.
-		 */
-		if (NIS_entry_seen) {
-			int n;
-			char buf[1024];
-
-			if (fseek(pwf, NIS_pos, SEEK_SET) < 0) {
-				rid_tmpf();
-				file_error();
-			}
-			while ((n = fread(buf, sizeof (char), 1024, pwf)) > 0) {
-				if (fwrite(buf, sizeof (char), n, fp_ptemp)
-				    != n) {
-					rid_tmpf();
-					file_error();
-				}
-			}
-		}
 	}
 
 	(void) fclose(pwf);
@@ -1024,9 +952,6 @@ main(int argc, char **argv)
 		errno = 0;
 		error = 0;
 
-		NIS_entry_seen = 0;
-		cur_pos = 0;
-
 		if ((spf = fopen("/etc/shadow", "r")) == NULL) {
 			rid_tmpf();
 			file_error();
@@ -1043,10 +968,7 @@ main(int argc, char **argv)
 					break;
 			}
 
-			if (!NIS_entry_seen)
-				info_mask |= WRITE_S_ENTRY;
-			else
-				info_mask &= ~WRITE_S_ENTRY;
+			info_mask |= WRITE_S_ENTRY;
 
 			/*
 			 * See if the new logname already exist in the
@@ -1083,24 +1005,6 @@ main(int argc, char **argv)
 					info_mask &= ~WRITE_S_ENTRY;
 			}
 
-			if (optn_mask & A_MASK) {
-				if (!NIS_entry_seen) {
-					char	*p;
-					p = strchr("+-", sp_ptr1p->sp_namp[0]);
-					if (p != NULL) {
-						/*
-						 * Found first NIS entry.
-						 * so remember it.
-						 */
-						NIS_pos = cur_pos;
-						NIS_entry_seen = 1;
-						info_mask &= ~WRITE_S_ENTRY;
-					}
-					else
-						cur_pos = ftell(spf);
-				}
-			}
-
 			if (info_mask & WRITE_S_ENTRY) {
 				if (putspent(sp_ptr1p, fp_stemp)) {
 					rid_tmpf();
@@ -1132,13 +1036,6 @@ main(int argc, char **argv)
 				rid_tmpf();
 				file_error();
 			}
-
-			/*
-			 * Now put out the rest of the shadow file, if needed.
-			 */
-			if (NIS_entry_seen) {
-				file_copy(spf, NIS_pos);
-			}
 		}
 
 		/* flush and sync the file before closing it */
@@ -1160,9 +1057,6 @@ main(int argc, char **argv)
 		end_of_file = 0;
 		errno = 0;
 		error = 0;
-
-		NIS_entry_seen = 0;
-		cur_pos = 0;
 
 		if ((uaf = fopen(USERATTR_FILENAME, "r")) == NULL) {
 			rid_tmpf();
@@ -1202,10 +1096,7 @@ main(int argc, char **argv)
 				continue;
 			}
 
-			if (!NIS_entry_seen)
-				info_mask |= WRITE_S_ENTRY;
-			else
-				info_mask &= ~WRITE_S_ENTRY;
+			info_mask |= WRITE_S_ENTRY;
 
 			/*
 			 * See if the new logname already exist in the
@@ -1666,24 +1557,6 @@ rid_tmpf(void)
 			msg = "%s: warning: cannot unlink %s\n";
 			(void) fprintf(stderr, gettext(msg), prognamp,
 			    USERATTR_TEMP);
-		}
-	}
-}
-
-void
-file_copy(FILE *spf, long NIS_pos)
-{
-	int n;
-	char buf[1024];
-
-	if (fseek(spf, NIS_pos, SEEK_SET) < 0) {
-		rid_tmpf();
-		file_error();
-	}
-	while ((n = fread(buf, sizeof (char), 1024, spf)) > 0) {
-		if (fwrite(buf, sizeof (char), n, fp_stemp) != n) {
-			rid_tmpf();
-			file_error();
 		}
 	}
 }

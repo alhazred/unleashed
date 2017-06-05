@@ -82,15 +82,9 @@ getspent_r(struct spwd *result, char *buffer, int buflen)
 	nss_XbyY_args_t arg;
 	char		*nam;
 
-	/* In getXXent_r(), protect the unsuspecting caller from +/- entries */
-
-	do {
-		NSS_XbyY_INIT(&arg, result, buffer, buflen, str2spwd);
-		/* No key to fill in */
-		(void) nss_getent(&db_root, _nss_initf_shadow, &context, &arg);
-	} while (arg.returnval != 0 &&
-	    (nam = ((struct spwd *)arg.returnval)->sp_namp) != 0 &&
-	    (*nam == '+' || *nam == '-'));
+	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2spwd);
+	/* No key to fill in */
+	(void) nss_getent(&db_root, _nss_initf_shadow, &context, &arg);
 
 	return (struct spwd *)NSS_XbyY_FINI(&arg);
 }
@@ -100,8 +94,6 @@ fgetspent_r(FILE *f, struct spwd *result, char *buffer, int buflen)
 {
 	extern void	_nss_XbyY_fgets(FILE *, nss_XbyY_args_t *);
 	nss_XbyY_args_t	arg;
-
-	/* ... but in fgetXXent_r, the caller deserves any +/- entry it gets */
 
 	/* No key to fill in */
 	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2spwd);
@@ -168,8 +160,7 @@ getfield(constp *nextp, constp limit, int uns, void *valp)
  *  str2spwd() -- convert a string to a shadow passwd entry.  The parser is
  *	more liberal than the passwd or group parsers;  since it's legitimate
  *	for almost all the fields here to be blank, the parser lets one omit
- *	any number of blank fields at the end of the entry.  The acceptable
- *	forms for '+' and '-' entries are the same as those for normal entries.
+ *	any number of blank fields at the end of the entry.
  *  === Is this likely to do more harm than good?
  *
  * Return values: 0 = success, 1 = parse error, 2 = erange ...
@@ -183,7 +174,6 @@ str2spwd(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 	struct spwd	*shadow	= (struct spwd *)ent;
 	const char	*p = instr, *limit;
 	char	*bufp;
-	int	black_magic;
 	size_t	lencopy;
 
 	limit = p + lenstr;
@@ -210,7 +200,6 @@ str2spwd(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 	if (ent == NULL)
 		return (NSS_STR_PARSE_SUCCESS);
 
-	black_magic = (*instr == '+' || *instr == '-');
 	shadow->sp_namp = bufp = buffer;
 	shadow->sp_pwdp	= 0;
 	shadow->sp_lstchg = -1;
@@ -221,22 +210,14 @@ str2spwd(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 	shadow->sp_expire = -1;
 	shadow->sp_flag	= 0;
 
-	if ((bufp = strchr(bufp, ':')) == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if ((bufp = strchr(bufp, ':')) == 0)
+		return (NSS_STR_PARSE_PARSE);
 	*bufp++ = '\0';
 
 	shadow->sp_pwdp = bufp;
 	if (instr == 0) {
-		if ((bufp = strchr(bufp, ':')) == 0) {
-			if (black_magic)
-				return (NSS_STR_PARSE_SUCCESS);
-			else
-				return (NSS_STR_PARSE_PARSE);
-		}
+		if ((bufp = strchr(bufp, ':')) == 0)
+			return (NSS_STR_PARSE_PARSE);
 		*bufp++ = '\0';
 		p = bufp;
 	} /* else p was set when we copied name and passwd into the buffer */

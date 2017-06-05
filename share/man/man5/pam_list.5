@@ -28,17 +28,8 @@ The username is the value of \fBPAM_USER\fR. The host is the value of
 as returned by \fBgethostname\fR(3C) is used.
 .sp
 .LP
-If neither of the \fBallow\fR, \fBdeny\fR, or \fBcompat\fR options are
-specified, the module will look for +/- entries in the local \fB/etc/passwd\fR
-file.  If this style is used, \fBnsswitch.conf\fR(4) must not be configured
-with \fBcompat\fR for the \fBpasswd\fR database. If no relevant +/- entry
-exists for the user, \fBpam_list\fR is not participating in result.
-.sp
-.LP
-If \fBcompat\fR option is specified then the module will look for +/- entries
-in the local \fB/etc/passwd\fR file. Other entries in this file will be counted
-as + entries. If no relevant entry exits for the user, \fBpam_list\fR will deny
-the access.
+If neither of the \fBallow\fR or \fBdeny\fR options is specified, the module
+will return PAM_SERVICE_ERR.
 .sp
 .LP
 The following options can be passed to the module:
@@ -50,15 +41,6 @@ The following options can be passed to the module:
 .RS 19n
 The full pathname to a file of allowed users and/or netgroups. Only one of
 \fBallow=\fR or \fBdeny=\fR can be specified.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBcompat\fR\fR
-.ad
-.RS 19n
-Activate \fBcompat\fR mode.
 .RE
 
 .sp
@@ -198,21 +180,6 @@ No account is present for the user
 other   account requisite       pam_roles.so.1
 other   account required        pam_unix_account.so.1
 other   account required        pam_list.so.1
-.fi
-.in -2
-
-.sp
-.LP
-In the case of \fBdefault\fR mode or \fBcompat\fR mode, the important lines in
-\fB/etc/passwd\fR appear as follows:
-
-.sp
-.in +2
-.nf
-+loginname	- user is approved
--loginname	- user is disapproved
-+@netgroup	- netgroup members are approved
--@netgroup	- netgroup members are disapproved
 .fi
 .in -2
 

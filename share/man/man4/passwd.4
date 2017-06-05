@@ -139,42 +139,6 @@ Blank lines are treated as malformed entries in the \fBpasswd\fR file and cause
 consumers of the file , such as \fBgetpwnam\fR(3C), to fail.
 .sp
 .LP
-The password file can contain entries beginning with a `+' (plus sign) or '-'
-(minus sign) to selectively incorporate entries from another naming service
-source, such as NIS or LDAP.
-.sp
-.LP
-A line beginning with a '+' means to incorporate entries from the naming
-service source. There are three styles of the '+' entries in this file. A
-single + means to insert all the entries from the alternate naming service
-source at that point, while a +\fIname\fR means to insert the specific entry,
-if one exists, from the naming service source. A +@\fInetgroup\fR means to
-insert the entries for all members of the network group \fInetgroup\fR from the
-alternate naming service. If a +\fIname\fR entry has a non-null \fBpassword\fR,
-\fIgcos\fR, \fIhome-dir\fR, or \fIlogin-shell\fR field, the value of that field
-overrides what is contained in the alternate naming service. The \fIuid\fR and
-\fIgid\fR fields cannot be overridden.
-.sp
-.LP
-A line beginning with a `\(mi' means to disallow entries from the alternate
-naming service. There are two styles of `-` entries in this file. -\fIname\fR
-means to disallow any subsequent entries (if any) for \fIname\fR (in this file
-or in a naming service), and -@\fInetgroup\fR means to disallow any subsequent
-entries for all members of the network group \fInetgroup\fR.
-.sp
-.LP
-This is also supported by specifying ``passwd : compat'' in
-\fBnsswitch.conf\fR(4). The "compat" source might not be supported in future
-releases. The preferred sources are \fBfiles\fR followed by the identifier of a
-name service, such as \fBnis\fR or \fBldap\fR. This has the effect of
-incorporating the entire contents of the naming service's \fBpasswd\fR database
-or password-related information after the \fBpasswd\fR file.
-.sp
-.LP
-Note that in compat mode, for every \fB/etc/passwd\fR entry, there must be a
-corresponding entry in the \fB/etc/shadow\fR file.
-.sp
-.LP
 Appropriate precautions must be taken to lock the \fB/etc/passwd\fR file
 against simultaneous changes if it is to be edited with a text editor;
 \fBvipw\fR(1B) does the necessary locking.
@@ -212,94 +176,6 @@ In this example, there are specific entries for users \fBroot\fR and \fBfred\fR
 to assure that they can login even when the system is running single-user. In
 addition, anyone whose password information is stored on an LDAP server will be
 able to login with their usual password, shell, and home directory.
-
-.sp
-.LP
-If the password file is:
-
-.sp
-.in +2
-.nf
-root:x:0:1:Super-User:/:/sbin/sh
-fred:6k/7KCFRPNVXg:508:10:& Fredericks:/usr2/fred:/bin/csh
-+
-.fi
-.in -2
-.sp
-
-.sp
-.LP
-and the password entry in \fBnsswitch.conf\fR is:
-
-.sp
-.in +2
-.nf
-passwd: compat
-.fi
-.in -2
-.sp
-
-.sp
-.LP
-then all the entries listed in the \fBNIS\fR \fBpasswd.byuid\fR and
-\fBpasswd.byname\fR maps will be effectively incorporated after the entries for
-\fBroot\fR and \fBfred\fR. If the password entry in \fBnsswitch.conf\fR is:
-
-.sp
-.in +2
-.nf
-passwd_compat: ldap
-passwd: compat
-.fi
-.in -2
-
-.sp
-.LP
-then all password-related entries stored on the LDAP server will be
-incorporated after the entries for \fBroot\fR and \fBfred\fR.
-
-.sp
-.LP
-The following is a sample \fBpasswd\fR file when \fBshadow\fR does not exist:
-
-.sp
-.in +2
-.nf
-root:q.mJzTnu8icf.:0:1:Super-User:/:/sbin/sh
-fred:6k/7KCFRPNVXg:508:10:& Fredericks:/usr2/fred:/bin/csh
-+john:
-+@documentation:no-login:
-+::::Guest
-.fi
-.in -2
-.sp
-
-.sp
-.LP
-The following is a sample \fBpasswd\fR file when \fBshadow\fR does exist:
-
-.sp
-.in +2
-.nf
-root:##root:0:1:Super-User:/:/sbin/sh
-fred:##fred:508:10:& Fredericks:/usr2/fred:/bin/csh
-+john:
-+@documentation:no-login:
-+::::Guest
-.fi
-.in -2
-.sp
-
-.sp
-.LP
-In this example, there are specific entries for users \fBroot\fR and
-\fBfred\fR, to assure that they can log in even when the system is running
-standalone. The user \fBjohn\fR will have his password entry in the naming
-service source incorporated without change, anyone in the netgroup
-\fBdocumentation\fR will have their password field disabled, and anyone else
-will be able to log in with their usual password, shell, and home directory,
-but with a \fIgcos\fR field of \fBGuest\fR
-
 .SH FILES
 .ne 2
 .na

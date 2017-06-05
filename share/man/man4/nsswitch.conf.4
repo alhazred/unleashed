@@ -84,9 +84,6 @@ T}
 \fBmdns\fR	T{
 Valid only for hosts and ipnodes. Uses the Multicast Domain Name Service.
 T}
-\fBcompat\fR	T{
-Valid only for \fBpasswd\fR and \fBgroup\fR. Implements \fB+\fR and \fB-.\fR See \fBInteraction with +/- syntax\fR.
-T}
 \fBuser\fR	T{
 Valid only for printers. Implements support for \fB${HOME}/.printers\fR.
 T}
@@ -260,24 +257,6 @@ files ldap
 .RE
 
 .sp
-.ne 2
-.na
-\fBpasswd:\fR
-.ad
-.RS 18n
-compat
-.RE
-
-.sp
-.ne 2
-.na
-\fBpasswd_compat:\fR
-.ad
-.RS 18n
-ldap
-.RE
-
-.sp
 .LP
 You can add the \fBad\fR keyword to any of the \fBpasswd\fR configurations
 listed above. However, you cannot use the \fBpasswd\fR command to change the
@@ -293,34 +272,6 @@ on. Otherwise, you can work around incorrect \fBpasswd\fR: lines by using the
 \fB-r repository\fR argument to the \fBpasswd\fR(1) command and using \fBpasswd
 -r repository\fR to override the \fBnsswitch.conf\fR settings and specify in
 which name service you want to modify your password.
-.SS "Interaction with +/- syntax"
-.LP
-Releases prior to SunOS 5.0 did not have the name service switch but did allow
-the user some policy control. In \fB/etc/passwd\fR one could have entries of
-the form \fI+user\fR (include the specified user from \fBNIS\fR passwd.byname),
-\fI-user\fR (exclude the specified user) and \fB+\fR (include everything,
-except excluded users, from \fBNIS\fR passwd.byname). The desired behavior was
-often \fBeverything in the file followed by everything in NIS\fR, expressed by
-a solitary \fB+\fR at the end of \fB/etc/passwd\fR. The switch provides an
-alternative for this case (\fBpasswd: files nis\fR) that does not require
-\fB+\fR entries in \fB/etc/passwd\fR and \fB/etc/shadow\fR (the latter is a new
-addition to SunOS 5.0, see \fBshadow\fR(4)).
-.sp
-.LP
-If this is not sufficient, the \fBNIS/YP\fR compatibility source provides full
-+/- semantics. It reads \fB/etc/passwd\fR for \fBgetpwnam\fR(3C) functions and
-\fB/etc/shadow\fR for \fBgetspnam\fR(3C) functions and, if it finds +/-
-entries, invokes an appropriate source. By default, the source is \fBnis\fR,
-but this can be overridden by specifying \fBldap\fR as the
-source for the pseudo-database \fBpasswd_compat\fR.
-.sp
-.LP
-Note that in compat mode, for every \fB/etc/passwd\fR entry, there must be a
-corresponding entry in the \fB/etc/shadow\fR file.
-.sp
-.LP
-The NIS/YP compatibility source also provides full +/- semantics for
-\fBgroup\fR; the relevant pseudo-database is \fBgroup_compat\fR.
 .SS "Useful Configurations"
 .LP
 The compiled-in default entries for all databases use \fBNIS (YP)\fR as the
@@ -506,36 +457,6 @@ databases are different, do not remove the \fBipnodes\fR line from the
 \fB/etc/nsswitch.conf\fR file.
 .sp
 .LP
-The policy \fBnis [NOTFOUND=return] files\fR implies: if \fBnis\fR is
-\fBUNAVAIL\fR, continue on to \fBfiles\fR, and if \fBnis\fR returns
-\fBNOTFOUND\fR, return to the caller. In other words, treat \fBnis\fR as the
-authoritative source of information and try \fBfiles\fR only if \fBnis\fR is
-down. This, and other policies listed in the default configuration above, are
-identical to the hard-wired policies in SunOS releases prior to 5.0.
-.sp
-.LP
-If compatibility with the +/- syntax for \fBpasswd\fR and \fBgroup\fR is
-required, simply modify the entries for \fBpasswd\fR and \fBgroup\fR to:
-.sp
-.ne 2
-.na
-\fBpasswd:\fR
-.ad
-.RS 11n
-compat
-.RE
-
-.sp
-.ne 2
-.na
-\fBgroup:\fR
-.ad
-.RS 11n
-compat
-.RE
-
-.sp
-.LP
 If \fBLDAP\fR is the enterprise level name service, the default configuration
 should be modified to use \fBldap\fR instead of \fBnis\fR for every database on
 client machines. The file \fB/etc/nsswitch.ldap\fR contains a sample
@@ -544,46 +465,6 @@ policy.
 .sp
 .LP
 When using Active Directory, \fBdns\fR is required to perform hosts resolution.
-.sp
-.LP
-If the use of +/- syntax is desired in conjunction with \fBLDAP\fR, use the
-following four entries:
-.sp
-.ne 2
-.na
-\fBpasswd:\fR
-.ad
-.RS 18n
-compat
-.RE
-
-.sp
-.ne 2
-.na
-\fBpasswd_compat:\fR
-.ad
-.RS 18n
-ldap
-.RE
-
-.sp
-.ne 2
-.na
-\fBgroup:\fR
-.ad
-.RS 18n
-compat
-.RE
-
-.sp
-.ne 2
-.na
-\fBgroup_compat:\fR
-.ad
-.RS 18n
-ldap
-.RE
-
 .sp
 .LP
 In order to get information from the Internet Domain Name Service for hosts
@@ -629,15 +510,6 @@ that resides in \fB/usr/lib\fR.
 .ad
 .RS 29n
 Configuration file.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB/usr/lib/nss_compat.so.1\fR\fR
-.ad
-.RS 29n
-Implements \fBcompat\fR source.
 .RE
 
 .sp
