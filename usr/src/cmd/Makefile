@@ -381,7 +381,6 @@ COMMON_SUBDIRS=		\
 	tail		\
 	tar		\
 	tbl		\
-	tcopy		\
 	tcpd		\
 	terminfo	\
 	th_tools	\

@@ -128,7 +128,6 @@ file path=usr/bin/pgstat mode=0555
 file path=usr/bin/sdiff mode=0555
 file path=usr/bin/spell mode=0555
 file path=usr/bin/split mode=0555
-file path=usr/bin/tcopy mode=0555
 file path=usr/bin/unexpand mode=0555
 file path=usr/bin/units mode=0555
 file path=usr/bin/unix2dos mode=0555
@@ -205,7 +204,6 @@ file path=usr/share/man/man1/sdiff.1
 file path=usr/share/man/man1/sort.1
 file path=usr/share/man/man1/spell.1
 file path=usr/share/man/man1/split.1
-file path=usr/share/man/man1/tcopy.1
 file path=usr/share/man/man1/units.1
 file path=usr/share/man/man1/unix2dos.1
 file path=usr/share/man/man1/yes.1

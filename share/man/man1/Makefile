@@ -299,7 +299,6 @@ MAN = acctcom.1 \
       talk.1 \
       tar.1 \
       tbl.1 \
-      tcopy.1 \
       tee.1 \
       telnet.1 \
       test.1 \
