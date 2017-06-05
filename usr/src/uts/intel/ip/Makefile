@@ -67,8 +67,6 @@ CERRWARN	+= -Wno-type-limits
 #
 INC_PATH	+= -I$(UTSBASE)/common/io/bpf
 
-ALWAYS_DEFS += -D__UNLEASHED_VISIBLE
-
 #
 # Depends on md5 and swrand (for SCTP). SCTP needs to depend on
 # swrand as it needs random numbers early on during boot before

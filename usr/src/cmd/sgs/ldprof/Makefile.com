@@ -44,6 +44,7 @@ CPPFLAGS=	-I. -I../common -I../../include \
 		-I$(SRCBASE)/uts/common/krtld \
 		-I$(SRC)/common/sgsrtcid \
 		-I$(SRCBASE)/uts/$(ARCH)/sys \
+		-D__UNLEASHED_VISIBLE \
 		$(CPPFLAGS.master) -I$(ELFCAP)
 CFLAGS +=	$(C_PICFLAGS)
 

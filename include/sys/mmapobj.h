@@ -26,6 +26,8 @@
 #ifndef _SYS_MMAPOBJ_H
 #define	_SYS_MMAPOBJ_H
 
+#include <sys/mman.h>
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -39,10 +41,9 @@ extern "C" {
 
 #ifdef _KERNEL
 extern void mmapobj_unmap(mmapobj_result_t *, int, int, ushort_t);
-#endif
-
 extern int mmapobj(vnode_t *, uint_t, mmapobj_result_t *, uint_t *, size_t,
     cred_t *);
+#endif
 
 #ifdef	__cplusplus
 }

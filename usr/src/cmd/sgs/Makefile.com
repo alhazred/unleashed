@@ -63,7 +63,7 @@ ELFCAP=		$(SRC)/common/elfcap
 # Reassign CPPFLAGS so that local search paths are used before any parent
 # $ROOT paths.
 CPPFLAGS =	-I. -I../common -I../../include -I../../include/$(MACH) \
-		$(CPPFLAGS.master) -I$(ELFCAP)
+		-D__UNLEASHED_VISIBLE $(CPPFLAGS.master) -I$(ELFCAP)
 
 # PICS64 is unique to our environment
 $(PICS64) :=	sparc_CFLAGS += -mno-app-regs -fpic
