@@ -773,7 +773,7 @@ void page_demote_free_pages(page_t *);
 struct anon_map;
 
 void page_mark_migrate(struct seg *, caddr_t, size_t, struct anon_map *,
-    ulong_t, vnode_t *, uoff_t, int);
+    ulong_t, struct vmobject *, uoff_t, int);
 void page_migrate(struct seg *, caddr_t, page_t **, pgcnt_t);
 
 /*

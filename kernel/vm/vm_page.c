@@ -5029,11 +5029,11 @@ page_demote_vp_pages(page_t *pp)
  */
 void
 page_mark_migrate(struct seg *seg, caddr_t addr, size_t len,
-    struct anon_map *amp, ulong_t anon_index, vnode_t *vp,
-    uoff_t vnoff, int rflag)
+    struct anon_map *amp, ulong_t anon_index, struct vmobject *obj,
+    uoff_t objoff, int rflag)
 {
 	struct anon	*ap;
-	vnode_t		*curvp;
+	struct vmobject	*curobj;
 	lgrp_t		*from;
 	pgcnt_t		nlocked;
 	uoff_t	off;
@@ -5073,25 +5073,30 @@ page_mark_migrate(struct seg *seg, caddr_t addr, size_t len,
 		 * Lookup (root) page for vnode and offset corresponding to
 		 * this virtual address
 		 * Try anonmap first since there may be copy-on-write
-		 * pages, but initialize vnode pointer and offset using
-		 * vnode arguments just in case there isn't an amp.
+		 * pages, but initialize object pointer and offset using
+		 * arguments just in case there isn't an amp.
 		 */
-		curvp = vp;
-		off = vnoff + va - seg->s_base;
+		curobj = obj;
+		off = objoff + va - seg->s_base;
 		if (amp) {
 			ANON_LOCK_ENTER(&amp->a_rwlock, RW_READER);
 			an_idx = anon_index + seg_page(seg, va);
 			anon_array_enter(amp, an_idx, &cookie);
 			ap = anon_get_ptr(amp->ahp, an_idx);
-			if (ap)
-				swap_xlate(ap, &curvp, &off);
+			if (ap) {
+				struct vnode *vn;
+
+				swap_xlate(ap, &vn, &off);
+
+				curobj = (vn != NULL) ? &vn->v_object : NULL;
+			}
 			anon_array_exit(&cookie);
 			ANON_LOCK_EXIT(&amp->a_rwlock);
 		}
 
 		pp = NULL;
-		if (curvp)
-			pp = page_lookup(&curvp->v_object, off, SE_SHARED);
+		if (curobj)
+			pp = page_lookup(curobj, off, SE_SHARED);
 
 		/*
 		 * If there isn't a page at this virtual address,
@@ -5158,7 +5163,7 @@ page_mark_migrate(struct seg *seg, caddr_t addr, size_t len,
 					/*
 					 * hat_page_demote() raced in with us.
 					 */
-					ASSERT(!IS_SWAPFSVP(curvp));
+					ASSERT(!IS_SWAPFSVP(curobj->vnode));
 					page_unlock(pp);
 					break;
 				}

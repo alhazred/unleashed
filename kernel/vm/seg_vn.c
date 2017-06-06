@@ -8031,7 +8031,7 @@ segvn_advise(struct seg *seg, caddr_t addr, size_t len, uint_t behav)
 			 * migration
 			 */
 			page_mark_migrate(seg, addr, len, amp, svd->anon_index,
-			    vp, svd->offset, 1);
+			    &vp->v_object, svd->offset, 1);
 
 			/*
 			 * If same policy set already or this is a shared
@@ -8170,7 +8170,7 @@ segvn_advise(struct seg *seg, caddr_t addr, size_t len, uint_t behav)
 			 * migration
 			 */
 			page_mark_migrate(seg, addr, len, amp, svd->anon_index,
-			    vp, svd->offset, 1);
+			    &vp->v_object, svd->offset, 1);
 
 			/*
 			 * Don't need to try to split or concatenate
