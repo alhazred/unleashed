@@ -366,7 +366,8 @@ rd_phys_alloc(pgcnt_t npages)
 		pp = page_get_freelist(&kvp.v_object, 0, &kseg, addr, PAGESIZE,
 				       0, NULL);
 		if (pp == NULL) {
-			pp = page_get_cachelist(&kvp, 0, &kseg, addr, 0, NULL);
+			pp = page_get_cachelist(&kvp.v_object, 0, &kseg, addr,
+						0, NULL);
 			if (pp == NULL)
 				goto out;
 			if (!PP_ISAGED(pp))

@@ -659,7 +659,7 @@ void	page_sub_common(page_t **, page_t *);
 struct page *page_get_freelist(struct vmobject *, uoff_t, struct seg *,
 		caddr_t, size_t, uint_t, struct lgrp *);
 
-page_t	*page_get_cachelist(struct vnode *, uoff_t, struct seg *,
+struct page *page_get_cachelist(struct vmobject *, uoff_t, struct seg *,
 		caddr_t, uint_t, struct lgrp *);
 #if defined(__i386) || defined(__amd64)
 int	page_chk_freelist(uint_t);

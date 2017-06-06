@@ -1692,8 +1692,8 @@ page_create_get_something(struct vmobject *obj, uoff_t off, struct seg *seg,
 		pp = page_get_freelist(obj, off, seg, vaddr, PAGESIZE, flags,
 				       lgrp);
 		if (pp == NULL) {
-			pp = page_get_cachelist(obj->vnode, off, seg, vaddr,
-			    flags, lgrp);
+			pp = page_get_cachelist(obj, off, seg, vaddr, flags,
+						lgrp);
 		}
 		if (pp == NULL) {
 			/*
@@ -2206,8 +2206,9 @@ top:
 			npp = page_get_freelist(obj, off, seg, vaddr, PAGESIZE,
 						flags | PG_MATCH_COLOR, lgrp);
 			if (npp == NULL) {
-				npp = page_get_cachelist(obj->vnode, off, seg,
-				    vaddr, flags | PG_MATCH_COLOR, lgrp);
+				npp = page_get_cachelist(obj, off, seg, vaddr,
+							 flags | PG_MATCH_COLOR,
+							 lgrp);
 				if (npp == NULL) {
 					npp = page_create_get_something(
 					    obj, off, seg, vaddr,

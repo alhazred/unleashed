@@ -3857,7 +3857,7 @@ pgretry:
 }
 
 /*
- * Find the `best' page on the cachelist for this (vp,off) (as,vaddr) pair.
+ * Find the `best' page on the cachelist for this (obj,off) (as,vaddr) pair.
  *
  * Does its own locking.
  * If PG_MATCH_COLOR is set, then NULL will be returned if there are no
@@ -3870,8 +3870,8 @@ pgretry:
  */
 
 /*ARGSUSED*/
-page_t *
-page_get_cachelist(struct vnode *vp, uoff_t off, struct seg *seg,
+struct page *
+page_get_cachelist(struct vmobject *obj, uoff_t off, struct seg *seg,
     caddr_t vaddr, uint_t flags, struct lgrp *lgrp)
 {
 	page_t		*pp;
@@ -3905,11 +3905,11 @@ page_get_cachelist(struct vnode *vp, uoff_t off, struct seg *seg,
 		return (NULL);
 	}
 
-	AS_2_BIN(as, seg, vp, vaddr, bin, 0);
+	AS_2_BIN(as, seg, obj->vnode, vaddr, bin, 0);
 
 	ASSERT(bin < PAGE_GET_PAGECOLORS(0));
 
-	MTYPE_INIT(mtype, vp, vaddr, flags, MMU_PAGESIZE);
+	MTYPE_INIT(mtype, obj->vnode, vaddr, flags, MMU_PAGESIZE);
 
 	VM_STAT_ADD(vmm_vmstats.pgc_alloc);
 
