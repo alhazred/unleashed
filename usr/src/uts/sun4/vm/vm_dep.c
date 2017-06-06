@@ -101,7 +101,7 @@ extern void page_relocate_hash(page_t *, page_t *);
  */
 extern void map_addr_proc(caddr_t *, size_t, offset_t, int, caddr_t,
 	struct proc *, uint_t);
-extern page_t *page_get_freelist(struct vnode *, uoff_t, struct seg *,
+extern struct page *page_get_freelist(struct vmobject *, uoff_t, struct seg *,
 	caddr_t, size_t, uint_t, struct lgrp *);
 /*
  * Convert page frame number to an OBMEM page frame number

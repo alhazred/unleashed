@@ -656,7 +656,7 @@ void	page_add(page_t **, page_t *);
 void	page_add_common(page_t **, page_t *);
 void	page_sub(page_t **, page_t *);
 void	page_sub_common(page_t **, page_t *);
-page_t	*page_get_freelist(struct vnode *, uoff_t, struct seg *,
+struct page *page_get_freelist(struct vmobject *, uoff_t, struct seg *,
 		caddr_t, size_t, uint_t, struct lgrp *);
 
 page_t	*page_get_cachelist(struct vnode *, uoff_t, struct seg *,

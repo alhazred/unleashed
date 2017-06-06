@@ -3711,7 +3711,7 @@ page_chk_freelist(uint_t szc)
 #endif
 
 /*
- * Find the `best' page on the freelist for this (vp,off) (as,vaddr) pair.
+ * Find the `best' page on the freelist for this (obj,off) (as,vaddr) pair.
  *
  * Does its own locking and accounting.
  * If PG_MATCH_COLOR is set, then NULL will be returned if there are no
@@ -3722,7 +3722,7 @@ page_chk_freelist(uint_t szc)
 
 /*ARGSUSED*/
 page_t *
-page_get_freelist(struct vnode *vp, uoff_t off, struct seg *seg,
+page_get_freelist(struct vmobject *obj, uoff_t off, struct seg *seg,
 	caddr_t vaddr, size_t size, uint_t flags, struct lgrp *lgrp)
 {
 	struct as	*as = seg->s_as;
@@ -3762,7 +3762,7 @@ page_get_freelist(struct vnode *vp, uoff_t off, struct seg *seg,
 		flags |= PGI_NOCAGE;
 	}
 
-	MTYPE_INIT(mtype, vp, vaddr, flags, size);
+	MTYPE_INIT(mtype, obj->vnode, vaddr, flags, size);
 
 	/*
 	 * Convert size to page size code.
@@ -3773,7 +3773,7 @@ page_get_freelist(struct vnode *vp, uoff_t off, struct seg *seg,
 
 	VM_STAT_ADD(vmm_vmstats.pgf_alloc[szc]);
 
-	AS_2_BIN(as, seg, vp, vaddr, bin, szc);
+	AS_2_BIN(as, seg, obj->vnode, vaddr, bin, szc);
 
 	ASSERT(bin < PAGE_GET_PAGECOLORS(szc));
 

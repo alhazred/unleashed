@@ -1689,8 +1689,8 @@ page_create_get_something(struct vmobject *obj, uoff_t off, struct seg *seg,
 	lgrp = lgrp_mem_choose(seg, vaddr, PAGESIZE);
 
 	for (count = 0; kcage_on || count < MAX_PCGS; count++) {
-		pp = page_get_freelist(obj->vnode, off, seg, vaddr, PAGESIZE,
-		    flags, lgrp);
+		pp = page_get_freelist(obj, off, seg, vaddr, PAGESIZE, flags,
+				       lgrp);
 		if (pp == NULL) {
 			pp = page_get_cachelist(obj->vnode, off, seg, vaddr,
 			    flags, lgrp);
@@ -1830,15 +1830,14 @@ page_alloc_pages(struct vmobject *obj, struct seg *seg, caddr_t addr,
 	while (npgs && szc) {
 		lgrp = lgrp_mem_choose(seg, addr, pgsz);
 		if (pgflags == PG_LOCAL) {
-			pp = page_get_freelist(obj->vnode, 0, seg, addr, pgsz,
-			    pgflags, lgrp);
+			pp = page_get_freelist(obj, 0, seg, addr, pgsz, pgflags,
+					       lgrp);
 			if (pp == NULL) {
-				pp = page_get_freelist(obj->vnode, 0, seg, addr,
-				    pgsz, 0, lgrp);
+				pp = page_get_freelist(obj, 0, seg, addr, pgsz,
+						       0, lgrp);
 			}
 		} else {
-			pp = page_get_freelist(obj->vnode, 0, seg, addr, pgsz,
-			    0, lgrp);
+			pp = page_get_freelist(obj, 0, seg, addr, pgsz, 0, lgrp);
 		}
 		if (pp != NULL) {
 			VM_STAT_ADD(alloc_pages[1]);
@@ -1992,7 +1991,7 @@ page_create_va_large(struct vmobject *obj, uoff_t off, size_t bytes,
 	else
 		lgrp = lgrp_mem_choose(seg, vaddr, bytes);
 
-	if ((rootpp = page_get_freelist(&kvp, off, seg, vaddr,
+	if ((rootpp = page_get_freelist(&kvp.v_object, off, seg, vaddr,
 	    bytes, flags & ~PG_MATCH_COLOR, lgrp)) == NULL) {
 		page_create_putback(npages);
 		VM_STAT_ADD(page_create_large_cnt[5]);
@@ -2204,8 +2203,7 @@ top:
 			 * the physical memory
 			 */
 			lgrp = lgrp_mem_choose(seg, vaddr, PAGESIZE);
-			npp = page_get_freelist(obj->vnode, off, seg, vaddr,
-						PAGESIZE,
+			npp = page_get_freelist(obj, off, seg, vaddr, PAGESIZE,
 						flags | PG_MATCH_COLOR, lgrp);
 			if (npp == NULL) {
 				npp = page_get_cachelist(obj->vnode, off, seg,

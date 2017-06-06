@@ -2952,7 +2952,7 @@ anon_map_createpages(
 				lgrp = lgrp_mem_choose(seg, addr, pgsz);
 
 				pplist = page_get_freelist(
-				    anon_vp, 0, seg,
+				    &anon_vp->v_object, 0, seg,
 				    addr, pgsz, 0, lgrp);
 
 				if (pplist == NULL) {

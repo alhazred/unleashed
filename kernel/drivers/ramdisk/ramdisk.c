@@ -363,7 +363,8 @@ rd_phys_alloc(pgcnt_t npages)
 
 	kseg.s_as = &kas;
 	for (i = 0, addr = NULL; i < npages; ++i, addr += PAGESIZE) {
-		pp = page_get_freelist(&kvp, 0, &kseg, addr, PAGESIZE, 0, NULL);
+		pp = page_get_freelist(&kvp.v_object, 0, &kseg, addr, PAGESIZE,
+				       0, NULL);
 		if (pp == NULL) {
 			pp = page_get_cachelist(&kvp, 0, &kseg, addr, 0, NULL);
 			if (pp == NULL)
