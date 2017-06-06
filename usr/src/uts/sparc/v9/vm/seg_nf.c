@@ -192,7 +192,7 @@ segnf_create(struct seg *seg, void *argsp)
 		kseg.s_as = &kas;
 		for (i = 0; i < vacpgs; i++, off += PAGESIZE,
 		    vaddr += PAGESIZE) {
-			nfpp[i] = page_create_va(&nfvp, off, PAGESIZE,
+			nfpp[i] = page_create_va(&nfvp.v_object, off, PAGESIZE,
 			    PG_WAIT | PG_NORELOC, &kseg, vaddr);
 			page_io_unlock(nfpp[i]);
 			page_downgrade(nfpp[i]);

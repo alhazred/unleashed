@@ -211,7 +211,7 @@ again:
 			page_unlock(pp);
 		}
 	} else {
-		pp = page_create_va(vp, off, PAGESIZE,
+		pp = page_create_va(&vp->v_object, off, PAGESIZE,
 		    PG_WAIT | PG_EXCL | flag_noreloc,
 		    seg, addr);
 		/*

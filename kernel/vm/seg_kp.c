@@ -531,7 +531,7 @@ segkp_get_internal(
 			ASSERT(page_exists(&kvp,
 			    (uoff_t)(uintptr_t)va) == NULL);
 
-			if ((pp = page_create_va(&kvp,
+			if ((pp = page_create_va(&kvp.v_object,
 			    (uoff_t)(uintptr_t)va, PAGESIZE,
 			    (flags & KPD_NOWAIT ? 0 : PG_WAIT) | PG_EXCL |
 			    PG_NORELOC, seg, va)) == NULL) {
@@ -795,7 +795,7 @@ segkp_map_red(void)
 		 */
 
 		kseg.s_as = &kas;
-		red_pp = page_create_va(&kvp, (uoff_t)(uintptr_t)red_va,
+		red_pp = page_create_va(&kvp.v_object, (uoff_t)(uintptr_t)red_va,
 		    PAGESIZE, PG_WAIT | PG_EXCL, &kseg, red_va);
 		ASSERT(red_pp != NULL);
 

@@ -360,7 +360,7 @@ devmap_pmem_alloc(size_t size, uint_t flags, devmap_pmem_cookie_t *cookiep)
 
 	/* Allocate small pages if lpp+tlist cannot satisfy the request. */
 	i =  rpages - lpages;
-	if ((pp = page_create_va(pcp->dp_vnp, pmem_off, ptob(i),
+	if ((pp = page_create_va(&pcp->dp_vnp->v_object, pmem_off, ptob(i),
 	    pflags, &pmem_seg, (caddr_t)(uintptr_t)pmem_off)) == NULL)
 		goto alloc_fail;
 

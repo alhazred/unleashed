@@ -431,7 +431,7 @@ dc_getblock_miss(struct vnode *vp, offset_t off, size_t len, struct page **ppp,
 	/*
 	 * Get destination pages and make them addressable
 	 */
-	pp = page_create_va(vp, off, len, PG_WAIT, seg, addr);
+	pp = page_create_va(&vp->v_object, off, len, PG_WAIT, seg, addr);
 	bp = pageio_setup(pp, len, vp, B_READ);
 	bp_mapin(bp);
 

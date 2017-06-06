@@ -3863,7 +3863,7 @@ segdev_init(void)
 	    DEVMAP_UMEM_QUANTUM, VM_SLEEP);
 
 	kseg.s_as = &kas;
-	trashpp = page_create_va(&trashvp, 0, PAGESIZE,
+	trashpp = page_create_va(&trashvp.v_object, 0, PAGESIZE,
 	    PG_NORELOC | PG_EXCL | PG_WAIT, &kseg, NULL);
 	if (trashpp == NULL)
 		panic("segdev_init: failed to create trash page");

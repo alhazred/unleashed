@@ -1893,9 +1893,10 @@ startup_vm(void)
 		diff -= mmu_btopr(diff * sizeof (struct page));
 		kseg.s_as = &kas;
 		while (diff--) {
-			pp = page_create_va(&unused_pages_vp, (offset_t)off,
-			    MMU_PAGESIZE, PG_WAIT | PG_EXCL,
-			    &kseg, (caddr_t)off);
+			pp = page_create_va(&unused_pages_vp.v_object,
+					    (offset_t)off, MMU_PAGESIZE,
+					    PG_WAIT | PG_EXCL, &kseg,
+					    (caddr_t)off);
 			if (pp == NULL)
 				cmn_err(CE_PANIC, "limited physmem too much!");
 			page_io_unlock(pp);

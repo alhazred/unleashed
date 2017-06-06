@@ -148,7 +148,7 @@ memseg_alloc_meta(pfn_t base, pgcnt_t npgs, void **ptp, pgcnt_t *metap)
 	 * Allocate the metadata pages; these are the pages that will
 	 * contain the page_t's for the incoming memory.
 	 */
-	if ((page_create_va(&mpvp, (uoff_t)pp, ptob(metapgs),
+	if ((page_create_va(&mpvp.v_object, (uoff_t)pp, ptob(metapgs),
 	    PG_NORELOC | PG_EXCL, &kseg, vaddr)) == NULL) {
 		MEMSEG_DEBUG("memseg_alloc_meta: can't get 0x%ld metapgs",
 		    metapgs);

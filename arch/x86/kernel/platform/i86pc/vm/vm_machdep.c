@@ -2761,7 +2761,8 @@ page_swap_with_hypervisor(struct vnode *vp, uoff_t off, caddr_t vaddr,
 	mfnlist = kmem_alloc(extpages * sizeof (mfn_t), kflags);
 	if (mfnlist == NULL)
 		goto balloon_fail;
-	pp = page_create_va(vp, off, minctg * PAGESIZE, flags, &kvseg, vaddr);
+	pp = page_create_va(&vp->v_object, off, minctg * PAGESIZE, flags,
+			    &kvseg, vaddr);
 	if (pp == NULL)
 		goto balloon_fail;
 	pp_first = pp;
@@ -2771,7 +2772,7 @@ page_swap_with_hypervisor(struct vnode *vp, uoff_t off, caddr_t vaddr,
 		 * with the hypervisor
 		 */
 		for (i = 0; i < extra; i++) {
-			expp = page_create_va(vp,
+			expp = page_create_va(&vp->v_object,
 			    (uoff_t)(uintptr_t)io_pool_kva,
 			    PAGESIZE, flags, &kvseg, io_pool_kva);
 			if (expp == NULL)
@@ -2902,7 +2903,7 @@ page_get_contigpages(
 	anyaddr = lo_mfn == 0 && hi_mfn >= max_mfn;
 	if (!contig && anyaddr && !pfnalign) {
 		flags &= ~PG_PHYSCONTIG;
-		plist = page_create_va(vp, off, npages * MMU_PAGESIZE,
+		plist = page_create_va(&vp->v_object, off, npages * MMU_PAGESIZE,
 		    flags, &kvseg, vaddr);
 		if (plist != NULL) {
 			*npagesp = 0;
@@ -3031,7 +3032,8 @@ page_create_io(
 	anyaddr = lo_mfn == 0 && hi_mfn >= max_mfn && !pfnalign;
 	if ((!contig && anyaddr) || is_domu) {
 		flags &= ~PG_PHYSCONTIG;
-		plist = page_create_va(vp, off, bytes, flags, &kvseg, vaddr);
+		plist = page_create_va(&vp->v_object, off, bytes, flags, &kvseg,
+				       vaddr);
 		if (plist != NULL)
 			return (plist);
 		else if (is_domu)
@@ -4026,7 +4028,7 @@ page_get_physical(uintptr_t seed)
 		panic("page already exists %p", (void *)pp);
 #endif
 
-	pp = page_create_va(&kvp, offset, MMU_PAGESIZE, PG_EXCL,
+	pp = page_create_va(&kvp.v_object, offset, MMU_PAGESIZE, PG_EXCL,
 	    &tmpseg, (caddr_t)(ctr += MMU_PAGESIZE));	/* changing VA usage */
 	if (pp != NULL) {
 		page_io_unlock(pp);

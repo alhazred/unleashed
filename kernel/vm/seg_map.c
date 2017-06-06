@@ -1414,7 +1414,7 @@ segmap_pagecreate(struct seg *seg, caddr_t addr, size_t len, int softlock)
 		if (pp == NULL) {
 			ushort_t bitindex;
 
-			if ((pp = page_create_va(vp, off,
+			if ((pp = page_create_va(&vp->v_object, off,
 			    PAGESIZE, PG_WAIT, seg, addr)) == NULL) {
 				panic("segmap_pagecreate: page_create failed");
 				/*NOTREACHED*/
@@ -2178,7 +2178,7 @@ segmap_pagecreate_kpm(struct seg *seg, vnode_t *vp, uoff_t off,
 
 		base = segkpm_create_va(off);
 
-		if ((pp = page_create_va(vp, off, PAGESIZE, PG_WAIT,
+		if ((pp = page_create_va(&vp->v_object, off, PAGESIZE, PG_WAIT,
 		    seg, base)) == NULL) {
 			panic("segmap_pagecreate_kpm: "
 			    "page_create failed");

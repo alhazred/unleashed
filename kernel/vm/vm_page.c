@@ -2044,7 +2044,7 @@ page_create_va_large(struct vmobject *obj, uoff_t off, size_t bytes,
 
 /*
  * Create enough pages for "bytes" worth of data starting at
- * "off" in "vp".
+ * "off" in "obj".
  *
  *	Where flag must be one of:
  *
@@ -2073,8 +2073,8 @@ page_create_va_large(struct vmobject *obj, uoff_t off, size_t bytes,
  *	 i86/vm/vm_machdep.c. Any bugs fixed here should be applied
  *	 there.
  */
-page_t *
-page_create_va(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
+struct page *
+page_create_va(struct vmobject *obj, uoff_t off, size_t bytes, uint_t flags,
     struct seg *seg, caddr_t vaddr)
 {
 	page_t		*plist = NULL;
@@ -2085,7 +2085,7 @@ page_create_va(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
 	struct pcf	*p;
 	lgrp_t		*lgrp;
 
-	ASSERT(bytes != 0 && vp != NULL);
+	ASSERT(bytes != 0 && obj != NULL);
 
 	if ((flags & PG_EXCL) == 0 && (flags & PG_WAIT) == 0) {
 		panic("page_create: invalid flags");
@@ -2182,12 +2182,12 @@ page_create_va(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
 		page_t *pp;
 
 top:
-		ASSERT(!VMOBJECT_LOCKED(&vp->v_object));
+		ASSERT(!VMOBJECT_LOCKED(obj));
 
 		if (npp == NULL) {
 			/*
 			 * Try to get a page from the freelist (ie,
-			 * a page with no [vp, off] tag).  If that
+			 * a page with no [obj, off] tag).  If that
 			 * fails, use the cachelist.
 			 *
 			 * During the first attempt at both the free
@@ -2204,14 +2204,15 @@ top:
 			 * the physical memory
 			 */
 			lgrp = lgrp_mem_choose(seg, vaddr, PAGESIZE);
-			npp = page_get_freelist(vp, off, seg, vaddr, PAGESIZE,
-			    flags | PG_MATCH_COLOR, lgrp);
+			npp = page_get_freelist(obj->vnode, off, seg, vaddr,
+						PAGESIZE,
+						flags | PG_MATCH_COLOR, lgrp);
 			if (npp == NULL) {
-				npp = page_get_cachelist(vp, off, seg,
+				npp = page_get_cachelist(obj->vnode, off, seg,
 				    vaddr, flags | PG_MATCH_COLOR, lgrp);
 				if (npp == NULL) {
 					npp = page_create_get_something(
-					    &vp->v_object, off, seg, vaddr,
+					    obj, off, seg, vaddr,
 					    flags & ~PG_MATCH_COLOR);
 				}
 
@@ -2241,13 +2242,13 @@ top:
 		 * Get the mutex and check to see if it really does
 		 * not exist.
 		 */
-		vmobject_lock(&vp->v_object);
-		pp = find_page(&vp->v_object, off);
+		vmobject_lock(obj);
+		pp = find_page(obj, off);
 		if (pp == NULL) {
 			VM_STAT_ADD(page_create_new);
 			pp = npp;
 			npp = NULL;
-			if (!page_hashin(pp, &vp->v_object, off, true)) {
+			if (!page_hashin(pp, obj, off, true)) {
 				/*
 				 * Since we hold the page vnode page cache
 				 * mutex and just searched for this page,
@@ -2257,14 +2258,13 @@ top:
 				 * now and get it over with.  As usual, go
 				 * down holding all the locks.
 				 */
-				ASSERT(VMOBJECT_LOCKED(&vp->v_object));
+				ASSERT(VMOBJECT_LOCKED(obj));
 				panic("page_create: "
-				    "hashin failed %p %p %llx",
-				    (void *)pp, (void *)vp, off);
+				    "hashin failed %p %p %llx", pp, obj, off);
 				/*NOTREACHED*/
 			}
-			ASSERT(VMOBJECT_LOCKED(&vp->v_object));
-			vmobject_unlock(&vp->v_object);
+			ASSERT(VMOBJECT_LOCKED(obj));
+			vmobject_unlock(obj);
 
 			/*
 			 * Hat layer locking need not be done to set
@@ -2287,7 +2287,7 @@ top:
 				 * wanted all new pages.  Undo all of the work
 				 * we have done.
 				 */
-				vmobject_unlock(&vp->v_object);
+				vmobject_unlock(obj);
 				while (plist != NULL) {
 					pp = plist;
 					page_sub(&plist, pp);
@@ -2301,16 +2301,16 @@ top:
 				goto fail;
 			}
 			ASSERT(flags & PG_WAIT);
-			if (!page_lock(pp, SE_EXCL, &vp->v_object, P_NO_RECLAIM)) {
+			if (!page_lock(pp, SE_EXCL, obj, P_NO_RECLAIM)) {
 				/*
 				 * Start all over again if we blocked trying
 				 * to lock the page.
 				 */
-				vmobject_unlock(&vp->v_object);
+				vmobject_unlock(obj);
 				VM_STAT_ADD(page_create_page_lock_failed);
 				goto top;
 			}
-			vmobject_unlock(&vp->v_object);
+			vmobject_unlock(obj);
 
 			if (PP_ISFREE(pp)) {
 				ASSERT(PP_ISAGED(pp) == 0);

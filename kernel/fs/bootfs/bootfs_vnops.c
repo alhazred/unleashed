@@ -385,8 +385,8 @@ bootfs_getapage(vnode_t *vp, uoff_t off, size_t len, uint_t *protp,
 			return (0);
 		}
 
-		pp = page_create_va(vp, off, PAGESIZE, PG_EXCL | PG_WAIT, seg,
-		    addr);
+		pp = page_create_va(&vp->v_object, off, PAGESIZE,
+				    PG_EXCL | PG_WAIT, seg, addr);
 
 		/*
 		 * If we didn't get the page, that means someone else beat us to

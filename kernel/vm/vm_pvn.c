@@ -139,7 +139,7 @@ pvn_read_kluster(
 	if (isra && segop_kluster(seg, addr, 0))
 		return (NULL);	/* segment driver says no */
 
-	if ((plist = page_create_va(vp, off,
+	if ((plist = page_create_va(&vp->v_object, off,
 	    PAGESIZE, PG_EXCL | PG_WAIT, seg, addr)) == NULL)
 		return (NULL);
 
@@ -160,7 +160,7 @@ pvn_read_kluster(
 			 */
 			if (segop_kluster(seg, addr, -deltab))
 				break;		/* page not eligible */
-			if ((pp = page_create_va(vp, off - deltab,
+			if ((pp = page_create_va(&vp->v_object, off - deltab,
 			    PAGESIZE, PG_EXCL, seg, addr - deltab))
 			    == NULL)
 				break;		/* already have the page */
@@ -180,7 +180,7 @@ pvn_read_kluster(
 			 */
 			if (segop_kluster(seg, addr, deltaf))
 				break;		/* page not file extension */
-			if ((pp = page_create_va(vp, off + deltaf,
+			if ((pp = page_create_va(&vp->v_object, off + deltaf,
 			    PAGESIZE, PG_EXCL, seg, addr + deltaf))
 			    == NULL)
 				break;		/* already have page */

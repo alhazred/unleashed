@@ -4522,7 +4522,7 @@ zfs_fillpage(vnode_t *vp, uoff_t off, struct seg *seg,
 		 */
 		io_off = off;
 		io_len = PAGESIZE;
-		pp = page_create_va(vp, io_off, io_len,
+		pp = page_create_va(&vp->v_object, io_off, io_len,
 		    PG_EXCL | PG_WAIT, seg, addr);
 	} else {
 		/*

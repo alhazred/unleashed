@@ -2424,7 +2424,7 @@ ud_getpage_miss(struct vnode *vp, uoff_t off,
 	 * read from the disk
 	 */
 	if (rw == S_CREATE) {
-		if ((pp = page_create_va(vp, off,
+		if ((pp = page_create_va(&vp->v_object, off,
 		    PAGESIZE, PG_WAIT, seg, addr)) == NULL) {
 			cmn_err(CE_WARN, "ud_getpage_miss: page_create");
 			return (EINVAL);

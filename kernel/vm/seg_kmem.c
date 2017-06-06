@@ -840,7 +840,7 @@ segkmem_page_create(void *addr, size_t size, int vmflag, void *arg)
 		pgflags |= PG_NORMALPRI;
 	}
 
-	return (page_create_va(vp, (uoff_t)(uintptr_t)addr, size,
+	return (page_create_va(&vp->v_object, (uoff_t)(uintptr_t)addr, size,
 	    pgflags, &kseg, addr));
 }
 

@@ -1606,8 +1606,8 @@ swapslot_free(
 	 */
 again:
 	if ((pp = page_lookup(&vp->v_object, off, SE_SHARED)) == NULL) {
-		pp = page_create_va(vp, off, PAGESIZE, PG_WAIT | PG_EXCL,
-		    segkmap, NULL);
+		pp = page_create_va(&vp->v_object, off, PAGESIZE,
+				    PG_WAIT | PG_EXCL, segkmap, NULL);
 		if (pp == NULL)
 			goto again;
 		alloc_pg = 1;

@@ -9938,7 +9938,7 @@ again:
 			 * allocating a swap slot and the page was not found,
 			 * so allocate it and return a zero page.
 			 */
-			if ((pp = page_create_va(vp, off,
+			if ((pp = page_create_va(&vp->v_object, off,
 			    PAGESIZE, PG_WAIT, seg, addr)) == NULL)
 				cmn_err(CE_PANIC, "nfs4_getapage: page_create");
 			io_len = PAGESIZE;

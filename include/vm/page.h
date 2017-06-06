@@ -637,7 +637,7 @@ int page_alloc_pages(struct vmobject *, struct seg *, caddr_t,
     struct page **, struct page **, uint_t, int, int);
 struct page *page_create_va_large(struct vmobject *, uoff_t off, size_t bytes,
 	uint_t flags, struct seg *seg, caddr_t vaddr, void *arg);
-page_t	*page_create_va(struct vnode *, uoff_t, size_t, uint_t,
+struct page *page_create_va(struct vmobject *, uoff_t, size_t, uint_t,
 	struct seg *, caddr_t);
 int	page_create_wait(pgcnt_t npages, uint_t flags);
 void    page_create_putback(spgcnt_t npages);

@@ -4922,8 +4922,8 @@ ufs_getpage_miss(struct vnode *vp, uoff_t off, size_t len, struct seg *seg,
 	}
 
 	if (crpage) {
-		if ((pp = page_create_va(vp, off, PAGESIZE, PG_WAIT, seg,
-		    addr)) == NULL) {
+		if ((pp = page_create_va(&vp->v_object, off, PAGESIZE, PG_WAIT,
+					 seg, addr)) == NULL) {
 			return (ufs_fault(vp,
 			    "ufs_getpage_miss: page_create == NULL"));
 		}

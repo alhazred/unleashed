@@ -766,8 +766,9 @@ vpm_pagecreate(
 			 * pass segkmap for now like segmap does with
 			 * segmap_kpm enabled.
 			 */
-			if ((pp = page_create_va(vp, off, PAGESIZE, PG_WAIT,
-			    segkmap, base)) == NULL) {
+			if ((pp = page_create_va(&vp->v_object, off, PAGESIZE,
+						 PG_WAIT, segkmap,
+						 base)) == NULL) {
 				panic("segmap_pagecreate_vpm: "
 				    "page_create failed");
 				/*NOTREACHED*/

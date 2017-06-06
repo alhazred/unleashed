@@ -1879,7 +1879,7 @@ again:
 			 * associated page was not found, so allocate
 			 * and return it.
 			 */
-			if ((pp = page_create_va(vp, off,
+			if ((pp = page_create_va(&vp->v_object, off,
 			    PAGESIZE, PG_WAIT, seg, addr)) == NULL) {
 				panic("spec_getapage: page_create");
 				/*NOTREACHED*/
