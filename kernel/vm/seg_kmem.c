@@ -1110,8 +1110,8 @@ segkmem_page_create_large(void *addr, size_t size, int vmflag, void *arg)
 	if (vmflag & VM_NORMALPRI)
 		pgflags |= PG_NORMALPRI;
 
-	return (page_create_va_large(&kvp, (uoff_t)(uintptr_t)addr, size,
-	    pgflags, &kvseg, addr, arg));
+	return (page_create_va_large(&kvp.v_object, (uoff_t)(uintptr_t)addr,
+				     size, pgflags, &kvseg, addr, arg));
 }
 
 /*

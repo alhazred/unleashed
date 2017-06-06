@@ -1102,8 +1102,8 @@ sfmmu_tsb_page_create(void *addr, size_t size, int vmflag, void *arg)
 	if (vmflag & VM_PUSHPAGE)
 		pgflags |= PG_PUSHPAGE;
 
-	return (page_create_va_large(&kvp, (uoff_t)(uintptr_t)addr, size,
-	    pgflags, &kvseg, addr, arg));
+	return (page_create_va_large(&kvp.v_object, (uoff_t)(uintptr_t)addr,
+				     size, pgflags, &kvseg, addr, arg));
 }
 
 /*

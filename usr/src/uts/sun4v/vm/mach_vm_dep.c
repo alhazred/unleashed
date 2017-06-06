@@ -469,7 +469,7 @@ contig_mem_span_alloc(vmem_t *vmp, size_t size, int vmflag)
 	if (vmflag & VM_NORELOC)
 		pgflags |= PG_NORELOC;
 
-	ppl = page_create_va_large(&kvp, (uoff_t)(uintptr_t)addr, size,
+	ppl = page_create_va_large(&kvp.v_object, (uoff_t)(uintptr_t)addr, size,
 	    pgflags, &kvseg, addr, NULL);
 
 	if (ppl == NULL) {

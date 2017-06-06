@@ -1918,9 +1918,9 @@ page_alloc_pages(struct vmobject *obj, struct seg *seg, caddr_t addr,
  * be willing to fallback on page_create_va(), block and retry,
  * or fail the requester.
  */
-page_t *
-page_create_va_large(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
-    struct seg *seg, caddr_t vaddr, void *arg)
+struct page *
+page_create_va_large(struct vmobject *obj, uoff_t off, size_t bytes,
+		     uint_t flags, struct seg *seg, caddr_t vaddr, void *arg)
 {
 	pgcnt_t		npages;
 	page_t		*pp;
@@ -1928,7 +1928,7 @@ page_create_va_large(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
 	lgrp_t		*lgrp;
 	lgrp_id_t	*lgrpid = (lgrp_id_t *)arg;
 
-	ASSERT(vp != NULL);
+	ASSERT(obj != NULL);
 
 	ASSERT((flags & ~(PG_EXCL | PG_WAIT |
 	    PG_NORELOC | PG_PANIC | PG_PUSHPAGE | PG_NORMALPRI)) == 0);
@@ -2029,7 +2029,7 @@ page_create_va_large(vnode_t *vp, uoff_t off, size_t bytes, uint_t flags,
 		ASSERT(!hat_page_is_mapped(pp));
 		PP_CLRFREE(pp);
 		PP_CLRAGED(pp);
-		if (!page_hashin(pp, &vp->v_object, off, false))
+		if (!page_hashin(pp, obj, off, false))
 			panic("page_create_large: hashin failed: page %p",
 			    (void *)pp);
 		page_io_lock(pp);

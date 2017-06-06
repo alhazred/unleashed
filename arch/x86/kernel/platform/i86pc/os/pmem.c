@@ -758,7 +758,7 @@ lpp_create(page_t **lppp, pgcnt_t n, pgcnt_t *lpages, pmem_lpg_t **plpp,
 
 	for (i = 0, *lpages = 0; i < n; i++) {
 		/* Allocte one large page each time. */
-		pp = page_create_va_large(vnp, *offp, pmem_lpgsize,
+		pp = page_create_va_large(&vnp->v_object, *offp, pmem_lpgsize,
 		    PG_EXCL, &pmem_seg, (caddr_t)(uintptr_t)*offp, NULL);
 		if (pp == NULL)
 			break;
