@@ -1051,7 +1051,7 @@ JobFinish (Job *job, WAIT_T status)
 		    meta_job_error(job, job->node, job->flags, WEXITSTATUS(status));
 		}
 #endif
-		(void)printf("*** [%s] Error code %d%s\n",
+		(void)fprintf(stderr, "*** [%s] Error code %d%s\n",
 				job->node->name,
 			       WEXITSTATUS(status),
 			       (job->flags & JOB_IGNERR) ? " (ignored)" : "");
@@ -1068,7 +1068,7 @@ JobFinish (Job *job, WAIT_T status)
 		    MESSAGE(stdout, job->node);
 		    lastNode = job->node;
 		}
-		(void)printf("*** [%s] Completed successfully\n",
+		(void)fprintf(stderr, "*** [%s] Completed successfully\n",
 				job->node->name);
 	    }
 	} else {
@@ -1076,7 +1076,7 @@ JobFinish (Job *job, WAIT_T status)
 		MESSAGE(stdout, job->node);
 		lastNode = job->node;
 	    }
-	    (void)printf("*** [%s] Signal %d\n",
+	    (void)fprintf(stderr, "*** [%s] Signal %d\n",
 			job->node->name, WTERMSIG(status));
 	    if (deleteOnError) {
 		JobDeleteTarget(job->node);
@@ -1219,9 +1219,9 @@ Job_Touch(GNode *gn, Boolean silent)
 
 		(void)close(streamID);
 	    } else {
-		(void)fprintf(stdout, "*** couldn't touch %s: %s",
+		(void)fprintf(stderr, "*** couldn't touch %s: %s\n",
 			       file, strerror(errno));
-		(void)fflush(stdout);
+		(void)fflush(stderr);
 	    }
 	}
     }
@@ -1420,18 +1420,8 @@ JobExec(Job *job, char **argv)
 	    execError("dup2", "job->outPipe");
 	    _exit(1);
 	}
-	/*
-	 * The output channels are marked close on exec. This bit was
-	 * duplicated by the dup2(on some systems), so we have to clear
-	 * it before routing the shell's error output to the same place as
-	 * its standard output.
-	 */
 	if (fcntl(1, F_SETFD, 0) == -1) {
 	    execError("clear close-on-exec", "stdout");
-	    _exit(1);
-	}
-	if (dup2(1, 2) == -1) {
-	    execError("dup2", "1, 2");
 	    _exit(1);
 	}
 
@@ -2067,13 +2057,13 @@ JobReapChild(pid_t pid, WAIT_T status, Boolean isJobs)
 	if (!make_suspended) {
 	    switch (WSTOPSIG(status)) {
 	    case SIGTSTP:
-		(void)printf("*** [%s] Suspended\n", job->node->name);
+		(void)fprintf(stderr, "*** [%s] Suspended\n", job->node->name);
 		break;
 	    case SIGSTOP:
-		(void)printf("*** [%s] Stopped\n", job->node->name);
+		(void)fprintf(stderr, "*** [%s] Stopped\n", job->node->name);
 		break;
 	    default:
-		(void)printf("*** [%s] Stopped -- signal %d\n",
+		(void)fprintf(stderr, "*** [%s] Stopped -- signal %d\n",
 			     job->node->name, WSTOPSIG(status));
 	    }
 	    job->job_suspended = 1;
@@ -2790,8 +2780,8 @@ JobRestartJobs(void)
 			job->pid);
 	    }
 	    if (job->job_suspended) {
-		    (void)printf("*** [%s] Continued\n", job->node->name);
-		    (void)fflush(stdout);
+		    (void)fprintf(stderr, "*** [%s] Continued\n", job->node->name);
+		    (void)fflush(stderr);
 	    }
 	    job->job_suspended = 0;
 	    if (KILLPG(job->pid, SIGCONT) != 0 && DEBUG(JOB)) {

@@ -2019,10 +2019,7 @@ PrintOnError(GNode *gn, const char *s)
     char tmp[64];
     char *cp;
 
-    if (s)
-	printf("%s", s);
-	
-    printf("\n%s: stopped in %s\n", progname, curdir);
+    fprintf(stderr, "%s\n%s: stopped in %s\n", s ? s : "", progname, curdir);
 
     if (en)
 	return;				/* we've been here! */
@@ -2039,7 +2036,7 @@ PrintOnError(GNode *gn, const char *s)
     cp = Var_Subst(NULL, tmp, VAR_GLOBAL, VARF_WANTRES);
     if (cp) {
 	if (*cp)
-	    printf("%s", cp);
+	    fprintf(stderr, "%s", cp);
 	free(cp);
     }
     fflush(stdout);

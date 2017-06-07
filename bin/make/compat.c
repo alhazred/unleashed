@@ -414,8 +414,11 @@ again:
 	}
 
 	if (retstat > -1) {
+	    char *errfmt;
+
 	    if (WIFSTOPPED(reason)) {
 		status = WSTOPSIG(reason);		/* stopped */
+		errfmt = "*** Stopped %d%s\n";
 	    } else if (WIFEXITED(reason)) {
 		status = WEXITSTATUS(reason);		/* exited */
 #if defined(USE_META) && defined(USE_FILEMON_ONCE)
@@ -439,11 +442,11 @@ again:
 		        }
 			fprintf(debug_file, "\n");
 		    }
-		    printf("*** Error code %d", status);
+		    errfmt = "*** Error code %d%s\n";
 		}
 	    } else {
 		status = WTERMSIG(reason);		/* signaled */
-		printf("*** Signal %d", status);
+		errfmt = "*** Signal %d%s\n";
 	    }
 
 
@@ -455,15 +458,7 @@ again:
 		    }
 #endif
 		    gn->made = ERROR;
-		    if (keepgoing) {
-			/*
-			 * Abort the current target, but let others
-			 * continue.
-			 */
-			printf(" (continuing)\n");
-		    } else {
-			printf("\n");
-		    }
+		    fprintf(stderr, errfmt, status, keepgoing ? " (continuing)" : "");
 		    if (deleteOnError) {
 			    CompatDeleteTarget(gn);
 		    }
@@ -472,7 +467,7 @@ again:
 		     * Continue executing commands for this target.
 		     * If we return 0, this will happen...
 		     */
-		    printf(" (ignored)\n");
+		    fprintf(stderr, errfmt, status, " (ignored)");
 		    status = 0;
 		}
 	    }
