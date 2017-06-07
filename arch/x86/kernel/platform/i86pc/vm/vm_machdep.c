@@ -3463,7 +3463,6 @@ static inline page_t *
 find_page(vnode_t *vnode, uoff_t off)
 {
 	page_t key = {
-		.p_vnode = vnode,
 		.p_offset = off,
 	};
 
