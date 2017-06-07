@@ -3461,14 +3461,14 @@ page_get_anylist(struct vnode *vp, uoff_t off, struct as *as, caddr_t vaddr,
  *	 specific page_get_anylist() interface.
  */
 
-static inline page_t *
-find_page(vnode_t *vnode, uoff_t off)
+static inline struct page *
+find_page(struct vmobject *obj, uoff_t off)
 {
 	page_t key = {
 		.p_offset = off,
 	};
 
-	return (avl_find(&vnode->v_object.tree, &key, NULL));
+	return (avl_find(&obj->tree, &key, NULL));
 }
 
 
@@ -3634,7 +3634,7 @@ top:
 		 * not exist.
 		 */
 		vmobject_lock(&vp->v_object);
-		pp = find_page(vp, off);
+		pp = find_page(&vp->v_object, off);
 
 		if (pp == NULL) {
 			VM_STAT_ADD(page_create_new);
