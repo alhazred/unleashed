@@ -5,7 +5,7 @@ FILES=	README auto.dep.mk auto.obj.mk autoconf.mk autodep.mk config.mk \
 	manifest.mk nls.mk obj.mk options.mk own.mk prlist.mk prog.mk \
 	progs.mk rst2htm.mk scripts.mk subdir.mk sys.clean-env.mk \
        	sys.debug.mk sys.dependfile.mk sys.mk sys.vars.mk target-flags.mk \
-	warnings.mk whats.mk yacc.mk unleashed.mk
+	warnings.mk whats.mk yacc.mk unleashed.mk files.mk
 NOOBJ=
 
 SYMLINKS=	dep.mk ${SHAREDIR}/mk/bsd.dep.mk \

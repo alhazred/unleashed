@@ -34,6 +34,7 @@ file path=usr/share/mk/dep.mk
 file path=usr/share/mk/dirdeps.mk
 file path=usr/share/mk/doc.mk
 file path=usr/share/mk/dpadd.mk
+file path=usr/share/mk/files.mk
 file path=usr/share/mk/final.mk
 file path=usr/share/mk/gendirdeps.mk
 file path=usr/share/mk/host-target.mk

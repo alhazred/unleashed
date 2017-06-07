@@ -1,4 +1,4 @@
-# $Id: own.mk,v 1.32 2016/05/18 20:54:29 sjg Exp $
+# $Id: own.mk,v 1.35 2017/05/03 18:09:44 sjg Exp $
 
 .if !target(__${.PARSEFILE}__)
 __${.PARSEFILE}__:
@@ -111,6 +111,7 @@ OPTIONS_DEFAULT_DEPENDENT+= \
 	PICINSTALL/LINKLIB \
 	PICLIB/PIC \
 	PROFILE/LINKLIB \
+	STAGING_PROG/STAGING \
 
 .include <options.mk>
 
@@ -122,7 +123,7 @@ _uid!=  id -u
 USERGRP!=  id -g
 .export USERGRP
 .endif
-.for x in BIN CONF DOC INFO KMOD LIB MAN NLS SHARE
+.for x in BIN CONF DOC INC INFO FILES KMOD LIB MAN NLS SHARE
 $xOWN=  ${USER}
 $xGRP=  ${USERGRP}
 $x_INSTALL_OWN=
@@ -138,6 +139,9 @@ BINOWN?=	root
 BINMODE?=	555
 NONBINMODE?=	444
 DIRMODE?=	755
+
+INCLUDEDIR?=	${prefix}/include
+INCDIR?=	${INCLUDEDIR}
 
 # Define MANZ to have the man pages compressed (gzip)
 #MANZ=		1
@@ -176,6 +180,10 @@ KMODDIR?=	${prefix}/lkm
 KMODGRP?=	${BINGRP}
 KMODOWN?=	${BINOWN}
 KMODMODE?=	${NONBINMODE}
+
+SHAREGRP?=	${BINGRP}
+SHAREOWN?=	${BINOWN}
+SHAREMODE?=	${NONBINMODE}
 
 COPY?=		-c
 STRIP_FLAG?=	-s

@@ -1,4 +1,4 @@
-# $Id: inc.mk,v 1.3 2011/03/11 05:23:05 sjg Exp $
+# $Id: inc.mk,v 1.7 2017/05/06 17:29:45 sjg Exp $
 #
 #	@(#) Copyright (c) 2008, Simon J. Gerraty
 #
@@ -14,8 +14,6 @@
 #
 
 .include <init.mk>
-
-includes:	${INCS}
 
 .if !empty(LIBOWN)
 INC_INSTALL_OWN ?= -o ${LIBOWN} -g ${LIBGRP}

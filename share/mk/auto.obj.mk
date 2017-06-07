@@ -1,4 +1,4 @@
-# $Id: auto.obj.mk,v 1.12 2015/12/16 01:57:06 sjg Exp $
+# $Id: auto.obj.mk,v 1.14 2017/04/18 23:53:18 sjg Exp $
 #
 #	@(#) Copyright (c) 2004, Simon J. Gerraty
 #
@@ -41,6 +41,10 @@ MKOBJDIRS= auto
 # Use __objdir here so it is easier to tweak without impacting
 # the logic.
 .if !empty(MAKEOBJDIRPREFIX)
+.if ${.CURDIR:M${MAKEOBJDIRPREFIX}/*} != ""
+# we are already in obj tree!
+__objdir?= ${.CURDIR}
+.endif
 __objdir?= ${MAKEOBJDIRPREFIX}${.CURDIR}
 .endif
 __objdir?= ${MAKEOBJDIR:Uobj}
