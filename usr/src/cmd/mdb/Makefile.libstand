@@ -78,7 +78,7 @@ OBJS = $(COBJS:%.s=%.o)
 install all: $(LIB)
 
 $(LIB): $(OBJS)
-	$(AR) r $(LIB) $(OBJS)
+	$(AR) rc $(LIB) $(OBJS)
 
 clobber clean:
 	$(RM) $(LIB) $(OBJS)
