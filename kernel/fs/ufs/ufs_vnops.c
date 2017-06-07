@@ -5336,7 +5336,9 @@ ufs_iodone(buf_t *bp)
 {
 	struct inode *ip;
 
-	ASSERT((bp->b_pages->p_vnode != NULL) && !(bp->b_flags & B_READ));
+	VERIFY(bp->b_pages->p_object != NULL);
+	ASSERT(bp->b_pages->p_vnode != NULL);
+	ASSERT(!(bp->b_flags & B_READ));
 
 	bp->b_iodone = NULL;
 

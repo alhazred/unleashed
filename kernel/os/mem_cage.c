@@ -1321,9 +1321,10 @@ kcage_setnoreloc_pages(page_t *rootpp, se_t se)
 		 * The szc of a locked page can only change for pages that are
 		 * non-swapfs (i.e. anonymous memory) file system pages.
 		 */
-		ASSERT(rootpp->p_vnode != NULL &&
-		    !PP_ISKAS(rootpp) &&
-		    !IS_SWAPFSVP(rootpp->p_vnode));
+		VERIFY(rootpp->p_object != NULL);
+		ASSERT(rootpp->p_vnode != NULL);
+		ASSERT(!PP_ISKAS(rootpp));
+		ASSERT(!IS_SWAPFSVP(rootpp->p_vnode));
 		PP_SETNORELOC(rootpp);
 		return (1);
 	}
@@ -1599,6 +1600,7 @@ kcage_invalidate_page(page_t *pp, pgcnt_t *nfreedp)
 	int result;
 
 #if defined(__sparc)
+	VERIFY(pp->p_object != &promvp.v_object);
 	ASSERT(pp->p_vnode != &promvp);
 #endif /* __sparc */
 	ASSERT(!PP_ISFREE(pp));

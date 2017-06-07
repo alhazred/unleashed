@@ -2699,7 +2699,9 @@ kphysm_add(uint64_t addr, uint64_t len, int reclaim)
 		 * unhash and unlock it
 		 */
 		while (rpp < lpp) {
-			ASSERT(PAGE_EXCL(rpp) && rpp->p_vnode == &promvp);
+			ASSERT(PAGE_EXCL(rpp));
+			VERIFY(rpp->p_object == &promvp.v_object);
+			ASSERT(rpp->p_vnode == &promvp);
 			ASSERT(PP_ISNORELOC(rpp));
 			PP_CLRNORELOC(rpp);
 			page_pp_unlock(rpp, 0, 1);

@@ -3116,6 +3116,7 @@ page_get_high_mfn(mfn_t new_high)
 		PP_CLRFREE(pp);
 
 		ASSERT(PAGE_EXCL(pp));
+		VERIFY(pp->p_object == NULL);
 		ASSERT(pp->p_vnode == NULL);
 		ASSERT(!hat_page_is_mapped(pp));
 		last_mfn--;
@@ -3187,6 +3188,7 @@ page_get_mnode_anylist(ulong_t origbin, uchar_t szc, uint_t flags,
 
 				ASSERT(PP_ISFREE(pp));
 				ASSERT(PP_ISAGED(pp));
+				VERIFY(pp->p_object == NULL);
 				ASSERT(pp->p_vnode == NULL);
 				ASSERT(pp->p_offset == (uoff_t)-1);
 				ASSERT(pp->p_szc == szc);
@@ -3276,6 +3278,7 @@ nextfreebin:
 						pp = NULL;
 					continue;
 				}
+				VERIFY(pp->p_object);
 				ASSERT(pp->p_vnode);
 				ASSERT(PP_ISAGED(pp) == 0);
 				ASSERT(pp->p_szc == 0);
@@ -3307,6 +3310,7 @@ nextfreebin:
 				page_ctr_sub(mnode, mtype, pp, PG_CACHE_LIST);
 
 				mutex_exit(pcm);
+				VERIFY(pp->p_object);
 				ASSERT(pp->p_vnode);
 				ASSERT(PP_ISAGED(pp) == 0);
 				check_dma(dma_attr, pp, 1);
@@ -3622,6 +3626,7 @@ top:
 		 * We own this page!
 		 */
 		ASSERT(PAGE_EXCL(npp));
+		VERIFY(npp->p_object == NULL);
 		ASSERT(npp->p_vnode == NULL);
 		ASSERT(!hat_page_is_mapped(npp));
 		PP_CLRFREE(npp);

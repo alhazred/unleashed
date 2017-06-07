@@ -392,6 +392,7 @@ dr_memlist_del_retired_pages(struct memlist *mlist)
 	     pp != NULL;
 	     pp = vmobject_get_next(&vp->v_object, pp)) {
 		ASSERT(pp != NULL);
+		VERIFY(pp->p_object == &retired_pages.v_object);
 		ASSERT(pp->p_vnode == retired_pages);
 
 		if (!page_try_reclaim_lock(pp, SE_SHARED, SE_RETIRED))

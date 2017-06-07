@@ -1348,6 +1348,7 @@ chk_lpg(page_t *pp, uchar_t szc)
 		ASSERT(PP_ISAGED(pp));
 		ASSERT(pp->p_list.largepg.next == pp || pp->p_list.largepg.next == NULL);
 		ASSERT(pp->p_list.largepg.prev == pp || pp->p_list.largepg.prev == NULL);
+		VERIFY(pp->p_object == NULL);
 		ASSERT(pp->p_vnode  == NULL);
 		ASSERT(PP_ISNORELOC(pp) == noreloc);
 
@@ -1437,6 +1438,7 @@ page_list_add(page_t *pp, int flags)
 
 		} else {
 			VM_STAT_ADD(vmm_vmstats.pladd_cache);
+			VERIFY(pp->p_object);
 			ASSERT(pp->p_vnode);
 			ASSERT((pp->p_offset & PAGEOFFSET) == 0);
 			ppp = &PAGE_CACHELISTS(mnode, bin, mtype);
@@ -2965,6 +2967,7 @@ try_again:
 			 */
 			ASSERT(PP_ISFREE(pp));
 			ASSERT(PP_ISAGED(pp));
+			VERIFY(pp->p_object == NULL);
 			ASSERT(pp->p_vnode == NULL);
 			ASSERT(pp->p_offset == (uoff_t)-1);
 			ASSERT(pp->p_szc == szc);
@@ -2989,6 +2992,7 @@ try_again:
 
 				ASSERT(PP_ISFREE(pp));
 				ASSERT(PP_ISAGED(pp));
+				VERIFY(pp->p_object == NULL);
 				ASSERT(pp->p_vnode == NULL);
 				ASSERT(pp->p_offset == (uoff_t)-1);
 				ASSERT(pp->p_szc == szc);
@@ -4008,6 +4012,7 @@ try_again:
 				goto bin_empty_0;
 
 			first_pp = pp;
+			VERIFY(pp->p_object);
 			ASSERT(pp->p_vnode);
 			ASSERT(PP_ISAGED(pp) == 0);
 			ASSERT(pp->p_szc == 0);
@@ -4029,6 +4034,7 @@ try_again:
 					pp = NULL;
 					break;
 				}
+				VERIFY(pp->p_object);
 				ASSERT(pp->p_vnode);
 				ASSERT(PP_ISFREE(pp));
 				ASSERT(PP_ISAGED(pp) == 0);
@@ -4052,6 +4058,7 @@ try_again:
 				 */
 				page_ctr_sub(mnode, mtype, pp, PG_CACHE_LIST);
 				mutex_exit(pcm);
+				VERIFY(pp->p_object);
 				ASSERT(pp->p_vnode);
 				ASSERT(PP_ISAGED(pp) == 0);
 #if defined(__sparc)

@@ -703,6 +703,7 @@ segmap_fault(
 	ppp = pl;
 	while ((pp = *ppp++) != NULL) {
 		uoff_t poff;
+		VERIFY(pp->p_object == &vp->v_object);
 		ASSERT(pp->p_vnode == vp);
 		hat_flag = HAT_LOAD;
 

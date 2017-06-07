@@ -1911,6 +1911,7 @@ delete_memory_thread(caddr_t amhp)
 					freemem_left--;
 					continue;
 				}
+				VERIFY(pp->p_object != NULL);
 				ASSERT(pp->p_vnode != NULL);
 				if (first_scan) {
 					MDSTAT_INCR(mhp, first_notfree);
@@ -2236,6 +2237,7 @@ delete_memory_thread(caddr_t amhp)
 					pfn = page_pptonum(tpp);
 					collected++;
 					ASSERT(PAGE_EXCL(tpp));
+					VERIFY(tpp->p_object == NULL);
 					ASSERT(tpp->p_vnode == NULL);
 					ASSERT(!hat_page_is_mapped(tpp));
 					ASSERT(tpp->p_szc == szc);

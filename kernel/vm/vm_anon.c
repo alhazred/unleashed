@@ -1022,9 +1022,11 @@ anon_swap_free(struct anon *ap, page_t *pp)
 	ASSERT(ap != NULL);
 	ASSERT(pp != NULL);
 	ASSERT(PAGE_LOCKED(pp));
+	VERIFY(pp->p_object != NULL);
 	ASSERT(pp->p_vnode != NULL);
 	ASSERT(IS_SWAPFSVP(pp->p_vnode));
 	ASSERT(ap->an_refcnt != 0);
+	VERIFY(pp->p_object == &ap->an_vp->v_object);
 	ASSERT(pp->p_vnode == ap->an_vp);
 	ASSERT(pp->p_offset == ap->an_off);
 
@@ -1036,6 +1038,7 @@ anon_swap_free(struct anon *ap, page_t *pp)
 	mutex_enter(ahm);
 
 	ASSERT(ap->an_refcnt != 0);
+	VERIFY(pp->p_object == &ap->an_vp->v_object);
 	ASSERT(pp->p_vnode == ap->an_vp);
 	ASSERT(pp->p_offset == ap->an_off);
 

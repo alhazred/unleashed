@@ -711,6 +711,7 @@ page_lock_delete(page_t *pp)
 	kmutex_t *pse = PAGE_SE_MUTEX(pp);
 
 	ASSERT(PAGE_EXCL(pp));
+	VERIFY(pp->p_object == NULL);
 	ASSERT(pp->p_vnode == NULL);
 	ASSERT(pp->p_offset == (uoff_t)-1);
 	ASSERT(!PP_ISFREE(pp));
@@ -873,6 +874,7 @@ page_szc_lock(page_t *pp)
 	ASSERT(pp != NULL);
 	ASSERT(PAGE_LOCKED(pp));
 	ASSERT(!PP_ISFREE(pp));
+	VERIFY(pp->p_object != NULL);
 	ASSERT(pp->p_vnode != NULL);
 	ASSERT(!IS_SWAPFSVP(pp->p_vnode));
 	ASSERT(!PP_ISKAS(pp));

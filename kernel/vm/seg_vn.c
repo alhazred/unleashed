@@ -2891,6 +2891,7 @@ segvn_faultpage(
 		for (ppp = pl; (opp = *ppp) != NULL; ppp++) {
 			if (opp == PAGE_HANDLED)
 				continue;
+			VERIFY(opp->p_object == &svd->vp->v_object); /* XXX */
 			ASSERT(opp->p_vnode == svd->vp); /* XXX */
 			if (opp->p_offset == off)
 				break;
@@ -3377,6 +3378,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, uoff_t off,
 					NULL, 0);
 		ASSERT(pp != NULL);
 		ASSERT(!PP_ISFREE(pp));
+		VERIFY(pp->p_object == &vp->v_object);
 		ASSERT(pp->p_vnode == vp);
 		ASSERT(pp->p_offset == off);
 		if (pp == newpp) {
@@ -3587,6 +3589,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, uoff_t off,
 		pp = newpp;
 		while (nreloc-- != 0) {
 			ASSERT(PAGE_EXCL(pp));
+			VERIFY(pp->p_object == &vp->v_object);
 			ASSERT(pp->p_vnode == vp);
 			ASSERT(pgidx ==
 			    ((pp->p_offset - start_off) >> PAGESHIFT));
@@ -3600,6 +3603,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, uoff_t off,
 		for (i = 0; i < pages; i++) {
 			ASSERT(ppa[i] != NULL);
 			ASSERT(PAGE_EXCL(ppa[i]));
+			VERIFY(ppa[i]->p_object == &vp->v_object);
 			ASSERT(ppa[i]->p_vnode == vp);
 			ASSERT(ppa[i]->p_offset ==
 			    start_off + (i << PAGESHIFT));
@@ -3616,6 +3620,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, uoff_t off,
 		for (i = 0; i < pages; i++) {
 			ASSERT(ppa[i] != NULL);
 			ASSERT(PAGE_EXCL(ppa[i]));
+			VERIFY(ppa[i]->p_object == &vp->v_object);
 			ASSERT(ppa[i]->p_vnode == vp);
 			ASSERT(ppa[i]->p_offset ==
 			    start_off + (i << PAGESHIFT));
@@ -3635,6 +3640,7 @@ out:
 		VM_STAT_ADD(segvnvmstats.fill_vp_pages[20]);
 		pp = io_pplist;
 		do {
+			VERIFY(pp->p_object == &vp->v_object);
 			ASSERT(pp->p_vnode == vp);
 			ASSERT(pp->p_offset == io_off);
 			ASSERT(page_iolock_assert(pp));
@@ -3697,6 +3703,7 @@ out:
 			VM_STAT_ADD(segvnvmstats.fill_vp_pages[25]);
 			ASSERT(pp->p_szc == szc);
 			ASSERT(PAGE_EXCL(pp));
+			VERIFY(pp->p_object != &vp->v_object);
 			ASSERT(pp->p_vnode != vp);
 			pp->p_szc = 0;
 		} while ((pp = pp->p_next) != pplist);
@@ -3706,6 +3713,7 @@ out:
 			VM_STAT_ADD(segvnvmstats.fill_vp_pages[26]);
 			ASSERT(pp->p_szc == szc);
 			ASSERT(PAGE_EXCL(pp));
+			VERIFY(pp->p_object == &vp->v_object);
 			ASSERT(pp->p_vnode == vp);
 			pp->p_szc = 0;
 		} while ((pp = pp->p_next) != done_pplist);
@@ -3756,6 +3764,8 @@ int segvn_anypgsz = 0;
 		if (IS_VMODSORT((ppa)[0]->p_vnode)) {			\
 			if ((rw) == S_WRITE) {				\
 				for (i = 0; i < (pages); i++) {		\
+					VERIFY((ppa)[i]->p_object ==	\
+					       (ppa)[i]->p_object);	\
 					ASSERT((ppa)[i]->p_vnode ==	\
 					    (ppa)[0]->p_vnode);		\
 					hat_setmod((ppa)[i]);		\
@@ -3763,6 +3773,8 @@ int segvn_anypgsz = 0;
 			} else if ((rw) != S_OTHER &&			\
 			    ((prot) & (vpprot) & PROT_WRITE)) {		\
 				for (i = 0; i < (pages); i++) {		\
+					VERIFY((ppa)[i]->p_object ==	\
+					       (ppa)[i]->p_object);	\
 					ASSERT((ppa)[i]->p_vnode ==	\
 					    (ppa)[0]->p_vnode);		\
 					if (!hat_ismod((ppa)[i])) {	\
@@ -4002,6 +4014,8 @@ segvn_fault_vnodepages(struct hat *hat, struct seg *seg, caddr_t lpgaddr,
 					for (i = 0; i < pages; i++) {
 						ASSERT(PAGE_LOCKED(ppa[i]));
 						ASSERT(!PP_ISFREE(ppa[i]));
+						VERIFY(ppa[i]->p_object ==
+						       &vp->v_object);
 						ASSERT(ppa[i]->p_vnode == vp);
 						ASSERT(ppa[i]->p_offset ==
 						    off + (i << PAGESHIFT));
@@ -4195,6 +4209,7 @@ segvn_fault_vnodepages(struct hat *hat, struct seg *seg, caddr_t lpgaddr,
 					ASSERT(page_pptonum(ppa[i]) ==
 					    pfn + i);
 					ASSERT(ppa[i]->p_szc == szc);
+					VERIFY(ppa[i]->p_object == &vp->v_object);
 					ASSERT(ppa[i]->p_vnode == vp);
 					ASSERT(ppa[i]->p_offset ==
 					    off + (i << PAGESHIFT));
@@ -5506,6 +5521,7 @@ slow:
 			 * Large Files: Following is the assertion
 			 * validating the above cast.
 			 */
+			VERIFY(&svd->vp->v_object == pp->p_object);
 			ASSERT(svd->vp == pp->p_vnode);
 
 			page = btop(diff);

@@ -1122,6 +1122,7 @@ again:
 		ASSERT(PAGE_EXCL(pp));
 		ASSERT(!PP_ISFREE(pp));
 		ASSERT(!hat_page_is_mapped(pp));
+		VERIFY(pp->p_object == obj);
 		ASSERT(pp->p_vnode == obj->vnode);
 		ASSERT(pp->p_offset == off);
 		pp->p_szc = szc;
@@ -2024,6 +2025,7 @@ page_create_va_large(struct vmobject *obj, uoff_t off, size_t bytes,
 	pp = rootpp;
 	while (npages--) {
 		ASSERT(PAGE_EXCL(pp));
+		VERIFY(pp->p_object == NULL);
 		ASSERT(pp->p_vnode == NULL);
 		ASSERT(!hat_page_is_mapped(pp));
 		PP_CLRFREE(pp);
@@ -2230,6 +2232,7 @@ top:
 		 * We own this page!
 		 */
 		ASSERT(PAGE_EXCL(npp));
+		VERIFY(npp->p_object == NULL);
 		ASSERT(npp->p_vnode == NULL);
 		ASSERT(!hat_page_is_mapped(npp));
 		PP_CLRFREE(npp);
@@ -2585,6 +2588,7 @@ page_free_pages(page_t *pp)
 		}
 
 		ASSERT(!hat_page_getshare(tpp));
+		VERIFY(tpp->p_object == NULL);
 		ASSERT(tpp->p_vnode == NULL);
 		ASSERT(tpp->p_szc == szc);
 
@@ -2923,6 +2927,7 @@ page_destroy_pages(page_t *pp)
 			tpp->p_cowcnt = 0;
 		}
 		ASSERT(!hat_page_getshare(tpp));
+		VERIFY(tpp->p_object == NULL);
 		ASSERT(tpp->p_vnode == NULL);
 		ASSERT(tpp->p_szc == szc);
 
@@ -2968,6 +2973,7 @@ page_destroy_free(page_t *pp)
 	page_list_sub(pp, PG_CACHE_LIST);
 
 	page_hashout(pp, false);
+	VERIFY(pp->p_object == NULL);
 	ASSERT(pp->p_vnode == NULL);
 	ASSERT(pp->p_offset == (uoff_t)-1);
 
@@ -4294,6 +4300,7 @@ page_relocate_hash(page_t *pp_new, page_t *pp_old)
 	ASSERT(PAGE_EXCL(pp_old));
 	ASSERT(PAGE_EXCL(pp_new));
 	ASSERT(vp != NULL);
+	VERIFY(pp_new->p_object == NULL);
 	ASSERT(pp_new->p_vnode == NULL);
 
 	vmobject_lock(&vp->v_object);

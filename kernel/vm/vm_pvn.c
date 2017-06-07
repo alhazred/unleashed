@@ -806,6 +806,7 @@ pvn_vplist_dirty(
 		if (pp == end)
 			break;
 
+		VERIFY(pp->p_object == &vp->v_object);
 		ASSERT(pp->p_vnode == vp);
 
 		/*
@@ -906,6 +907,7 @@ pvn_vplist_dirty(
 				continue;
 		}
 
+		VERIFY(pp->p_object == &vp->v_object);
 		ASSERT(pp->p_vnode == vp);
 
 		/*
