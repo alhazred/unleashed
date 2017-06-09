@@ -767,9 +767,11 @@ pvn_vplist_dirty(
 	 * Set up the marker pages used to walk the list
 	 */
 	end = kmem_cache_alloc(marker_cache, KM_SLEEP);
+	end->p_object = &vp->v_object;
 	end->p_vnode = vp;
 	end->p_offset = (uoff_t)-2;
 	mark = kmem_cache_alloc(marker_cache, KM_SLEEP);
+	mark->p_object = &vp->v_object;
 	mark->p_vnode = vp;
 	mark->p_offset = (uoff_t)-1;
 

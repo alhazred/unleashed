@@ -3173,6 +3173,7 @@ page_do_hashin(struct page *page, struct vmobject *obj, uoff_t offset)
 	 * thread might get confused and wonder how this page could
 	 * possibly hash to this list.
 	 */
+	page->p_object = obj;
 	page->p_vnode = obj->vnode;
 	page->p_offset = offset;
 
@@ -3187,6 +3188,7 @@ page_do_hashin(struct page *page, struct vmobject *obj, uoff_t offset)
 	 * page with this identity.
 	 */
 	if (avl_find(&obj->tree, page, &where) != NULL) {
+		page->p_object = NULL;
 		page->p_vnode = NULL;
 		page->p_offset = (uoff_t)(-1);
 		return (0);
@@ -3256,6 +3258,7 @@ page_do_hashout(page_t *page)
 
 	page_clr_all_props(page);
 	PP_CLRSWAP(page);
+	page->p_object = NULL;
 	page->p_vnode = NULL;
 	page->p_offset = (uoff_t)-1;
 	page->p_fsdata = 0;
@@ -4236,6 +4239,7 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	/*
 	 * update new and replace old with new on the page hash list
 	 */
+	new->p_object = old->p_object;
 	new->p_vnode = old->p_vnode;
 	new->p_offset = old->p_offset;
 
@@ -4254,6 +4258,7 @@ page_do_relocate_hash(page_t *new, page_t *old)
 	/*
 	 * clear out the old page
 	 */
+	old->p_object = NULL;
 	old->p_vnode = NULL;
 	PP_CLRSWAP(old);
 	old->p_offset = (uoff_t)-1;
