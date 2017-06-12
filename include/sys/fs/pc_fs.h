@@ -388,7 +388,6 @@ typedef enum { FAT12, FAT16, FAT32, FAT_UNKNOWN, FAT_QUESTIONABLE } fattype_t;
 struct pcfs {
 	struct vfs *pcfs_vfs;		/* vfs for this fs */
 	int pcfs_flags;			/* flags */
-	int pcfs_ldrive;		/* logical DOS drive number */
 	fattype_t pcfs_fattype;
 	dev_t pcfs_xdev;		/* actual device that is mounted */
 	struct vnode *pcfs_devvp;	/*   and a vnode for it */

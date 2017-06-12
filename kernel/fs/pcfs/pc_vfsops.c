@@ -271,23 +271,14 @@ static struct pcfs *pc_mounttab = NULL;
 
 extern struct pcfs_args pc_tz;
 
-/*
- *  Define some special logical drives we use internal to this file.
- */
-#define	BOOT_PARTITION_DRIVE	99
-#define	PRIMARY_DOS_DRIVE	1
-#define	UNPARTITIONED_DRIVE	0
-
 static int
 pcfs_device_identify(
 	struct vfs *vfsp,
 	struct mounta *uap,
 	struct cred *cr,
-	int *dos_ldrive,
 	dev_t *xdev)
 {
 	struct pathname special;
-	char *c;
 	struct vnode *svp = NULL;
 	struct vnode *lvp = NULL;
 	int oflag, aflag;
@@ -300,95 +291,11 @@ pcfs_device_identify(
 		return (error);
 	}
 
-	*dos_ldrive = -1;
+	error = lookupname(special.pn_path, UIO_SYSSPACE, FOLLOW, NULLVPP, &svp);
 
-	if (error =
-	    lookupname(special.pn_path, UIO_SYSSPACE, FOLLOW, NULLVPP, &svp)) {
-		/*
-		 * If there's no device node, the name specified most likely
-		 * maps to a PCFS-style "partition specifier" to select a
-		 * harddisk primary/logical partition. Disable floppy-specific
-		 * checks in such cases unless an explicit :A or :B is
-		 * requested.
-		 */
-
-		/*
-		 * Split the pathname string at the last ':' separator.
-		 * If there's no ':' in the device name, or the ':' is the
-		 * last character in the string, the name is invalid and
-		 * the error from the previous lookup will be returned.
-		 */
-		c = strrchr(special.pn_path, ':');
-		if (c == NULL || strlen(c) == 0)
-			goto devlookup_done;
-
-		*c++ = '\0';
-
-		/*
-		 * PCFS partition name suffixes can be:
-		 *	- "boot" to indicate the X86BOOT partition
-		 *	- a drive letter [c-z] for the "DOS logical drive"
-		 *	- a drive number 1..24 for the "DOS logical drive"
-		 *	- a "floppy name letter", 'a' or 'b' (just strip this)
-		 */
-		if (strcasecmp(c, "boot") == 0) {
-			/*
-			 * The Solaris boot partition is requested.
-			 */
-			*dos_ldrive = BOOT_PARTITION_DRIVE;
-		} else if (strspn(c, "0123456789") == strlen(c)) {
-			/*
-			 * All digits - parse the partition number.
-			 */
-			long drvnum = 0;
-
-			if ((error = ddi_strtol(c, NULL, 10, &drvnum)) == 0) {
-				/*
-				 * A number alright - in the allowed range ?
-				 */
-				if (drvnum > 24 || drvnum == 0)
-					error = ENXIO;
-			}
-			if (error)
-				goto devlookup_done;
-			*dos_ldrive = (int)drvnum;
-		} else if (strlen(c) == 1) {
-			/*
-			 * A single trailing character was specified.
-			 *	- [c-zC-Z] means a harddisk partition, and
-			 *	  we retrieve the partition number.
-			 *	- [abAB] means a floppy drive, so we swallow
-			 *	  the "drive specifier" and test later
-			 *	  whether the physical device is a floppy.
-			 */
-			*c = tolower(*c);
-			if (*c == 'a' || *c == 'b') {
-				*dos_ldrive = UNPARTITIONED_DRIVE;
-			} else if (*c < 'c' || *c > 'z') {
-				error = ENXIO;
-				goto devlookup_done;
-			} else {
-				*dos_ldrive = 1 + *c - 'c';
-			}
-		} else {
-			/*
-			 * Can't parse this - pass through previous error.
-			 */
-			goto devlookup_done;
-		}
-
-
-		error = lookupname(special.pn_path, UIO_SYSSPACE, FOLLOW,
-		    NULLVPP, &svp);
-	} else {
-		*dos_ldrive = UNPARTITIONED_DRIVE;
-	}
-devlookup_done:
 	pn_free(&special);
 	if (error)
 		return (error);
-
-	ASSERT(*dos_ldrive >= UNPARTITIONED_DRIVE);
 
 	/*
 	 * Verify caller's permission to open the device special file.
@@ -441,84 +348,23 @@ out:
 static int
 pcfs_device_ismounted(
 	struct vfs *vfsp,
-	int dos_ldrive,
 	dev_t xdev,
 	int *remounting,
 	dev_t *pseudodev)
 {
-	struct pcfs *fsp;
 	int remount = *remounting;
 
 	/*
-	 * Ensure that this logical drive isn't already mounted, unless
-	 * this is a REMOUNT request.
-	 * Note: The framework will perform this check if the "...:c"
-	 * PCFS-style "logical drive" syntax has not been used and an
-	 * actually existing physical device is backing this filesystem.
-	 * Once all block device drivers support PC-style partitioning,
-	 * this codeblock can be dropped.
+	 * Ensure that this drive isn't already mounted, unless this is a
+	 * REMOUNT request.
 	 */
 	*pseudodev = xdev;
 
-	if (dos_ldrive) {
-		mutex_enter(&pcfslock);
-		for (fsp = pc_mounttab; fsp; fsp = fsp->pcfs_nxt)
-			if (fsp->pcfs_xdev == xdev &&
-			    fsp->pcfs_ldrive == dos_ldrive) {
-				mutex_exit(&pcfslock);
-				if (remount) {
-					return (0);
-				} else {
-					return (EBUSY);
-				}
-			}
-		/*
-		 * Assign a unique device number for the vfs
-		 * The old way (getudev() + a constantly incrementing
-		 * major number) was wrong because it changes vfs_dev
-		 * across mounts and reboots, which breaks nfs file handles.
-		 * UFS just uses the real dev_t. We can't do that because
-		 * of the way pcfs opens fdisk partitons (the :c and :d
-		 * partitions are on the same dev_t). Though that _might_
-		 * actually be ok, since the file handle contains an
-		 * absolute block number, it's probably better to make them
-		 * different. So I think we should retain the original
-		 * dev_t, but come up with a different minor number based
-		 * on the logical drive that will _always_ come up the same.
-		 * For now, we steal the upper 6 bits.
-		 */
-#ifdef notdef
-		/* what should we do here? */
-		if (((getminor(xdev) >> 12) & 0x3F) != 0)
-			printf("whoops - upper bits used!\n");
-#endif
-		*pseudodev = makedevice(getmajor(xdev),
-		    ((dos_ldrive << 12) | getminor(xdev)) & MAXMIN32);
-		if (vfs_devmounting(*pseudodev, vfsp)) {
-			mutex_exit(&pcfslock);
-			return (EBUSY);
-		}
-		if (vfs_devismounted(*pseudodev)) {
-			mutex_exit(&pcfslock);
-			if (remount) {
-				return (0);
-			} else {
-				return (EBUSY);
-			}
-		}
-		mutex_exit(&pcfslock);
-	} else {
-		*pseudodev = xdev;
-		if (vfs_devmounting(*pseudodev, vfsp)) {
-			return (EBUSY);
-		}
-		if (vfs_devismounted(*pseudodev))
-			if (remount) {
-				return (0);
-			} else {
-				return (EBUSY);
-			}
-	}
+	if (vfs_devmounting(*pseudodev, vfsp))
+		return (EBUSY);
+
+	if (vfs_devismounted(*pseudodev))
+		return (remount ? 0 : EBUSY);
 
 	/*
 	 * This is not a remount. Even if MS_REMOUNT was requested,
@@ -629,7 +475,6 @@ pcfs_mount(
 	struct vnode *devvp;
 	dev_t pseudodev;
 	dev_t xdev;
-	int dos_ldrive = 0;
 	int error;
 	int remounting;
 
@@ -671,30 +516,17 @@ pcfs_mount(
 	}
 
 	/*
-	 * For most filesystems, this is just a lookupname() on the
-	 * mount pathname string. PCFS historically has to do its own
-	 * partition table parsing because not all Solaris architectures
-	 * support all styles of partitioning that PC media can have, and
-	 * hence PCFS understands "device names" that don't map to actual
-	 * physical device nodes. Parsing the "PCFS syntax" for device
-	 * names is done in pcfs_device_identify() - see there.
-	 *
-	 * Once all block device drivers that can host FAT filesystems have
-	 * been enhanced to create device nodes for all PC-style partitions,
-	 * this code can go away.
+	 * lookupname() + some extra checks
 	 */
-	if (error = pcfs_device_identify(vfsp, uap, cr, &dos_ldrive, &xdev))
+	if (error = pcfs_device_identify(vfsp, uap, cr, &xdev))
 		return (error);
 
 	/*
-	 * As with looking up the actual device to mount, PCFS cannot rely
-	 * on just the checks done by vfs_ismounted() whether a given device
-	 * is mounted already. The additional check against the "PCFS syntax"
-	 * is done in  pcfs_device_ismounted().
+	 * Check that the device isn't already mounted.
 	 */
 	remounting = (uap->flags & MS_REMOUNT);
 
-	if (error = pcfs_device_ismounted(vfsp, dos_ldrive, xdev, &remounting,
+	if (error = pcfs_device_ismounted(vfsp, xdev, &remounting,
 	    &pseudodev))
 		return (error);
 
@@ -725,7 +557,6 @@ pcfs_mount(
 	fsp->pcfs_vfs = vfsp;
 	fsp->pcfs_xdev = xdev;
 	fsp->pcfs_devvp = devvp;
-	fsp->pcfs_ldrive = dos_ldrive;
 	mutex_init(&fsp->pcfs_lock, NULL, MUTEX_DEFAULT, NULL);
 
 	pcfs_parse_mntopts(fsp);
@@ -733,13 +564,12 @@ pcfs_mount(
 	/*
 	 * This is the actual "mount" - the PCFS superblock check.
 	 *
-	 * Find the requested logical drive and the FAT BPB therein.
+	 * Find the requested FAT BPB.
 	 * Check device type and flag the instance if media is removeable.
 	 *
 	 * Initializes most members of the filesystem instance structure.
 	 * Returns EINVAL if no valid BPB can be found. Other errors may
-	 * occur after I/O failures, or when invalid / unparseable partition
-	 * tables are encountered.
+	 * occur after I/O failures are encountered.
 	 */
 	if (error = pc_getfattype(fsp))
 		goto errout;
@@ -1131,9 +961,9 @@ pc_invalfat(struct pcfs *fsp)
 void
 pc_badfs(struct pcfs *fsp)
 {
-	cmn_err(CE_WARN, "corrupted PC file system on dev (%x.%x):%d\n",
+	cmn_err(CE_WARN, "corrupted PC file system on dev (%x.%x)\n",
 	    getmajor(fsp->pcfs_devvp->v_rdev),
-	    getminor(fsp->pcfs_devvp->v_rdev), fsp->pcfs_ldrive);
+	    getminor(fsp->pcfs_devvp->v_rdev));
 }
 
 /*
@@ -1422,401 +1252,6 @@ pcfs_freevfs(vfs_t *vfsp)
 }
 
 
-/*
- * PC-style partition parsing and FAT BPB identification/validation code.
- * The partition parsers here assume:
- *	- a FAT filesystem will be in a partition that has one of a set of
- *	  recognized partition IDs
- *	- the user wants the 'numbering' (C:, D:, ...) that one would get
- *	  on MSDOS 6.x.
- *	  That means any non-FAT partition type (NTFS, HPFS, or any Linux fs)
- *	  will not factor in the enumeration.
- * These days, such assumptions should be revisited. FAT is no longer the
- * only game in 'PC town'.
- */
-/*
- * isDosDrive()
- *	Boolean function.  Give it the systid field for an fdisk partition
- *	and it decides if that's a systid that describes a DOS drive.  We
- *	use systid values defined in sys/dktp/fdisk.h.
- */
-static int
-isDosDrive(uchar_t checkMe)
-{
-	return ((checkMe == DOSOS12) || (checkMe == DOSOS16) ||
-	    (checkMe == DOSHUGE) || (checkMe == FDISK_WINDOWS) ||
-	    (checkMe == FDISK_EXT_WIN) || (checkMe == FDISK_FAT95) ||
-	    (checkMe == DIAGPART));
-}
-
-
-/*
- * isDosExtended()
- *	Boolean function.  Give it the systid field for an fdisk partition
- *	and it decides if that's a systid that describes an extended DOS
- *	partition.
- */
-static int
-isDosExtended(uchar_t checkMe)
-{
-	return ((checkMe == EXTDOS) || (checkMe == FDISK_EXTLBA));
-}
-
-
-/*
- * isBootPart()
- *	Boolean function.  Give it the systid field for an fdisk partition
- *	and it decides if that's a systid that describes a Solaris boot
- *	partition.
- */
-static int
-isBootPart(uchar_t checkMe)
-{
-	return (checkMe == X86BOOT);
-}
-
-
-/*
- * noLogicalDrive()
- *	Display error message about not being able to find a logical
- *	drive.
- */
-static void
-noLogicalDrive(int ldrive)
-{
-	if (ldrive == BOOT_PARTITION_DRIVE) {
-		cmn_err(CE_NOTE, "!pcfs: no boot partition");
-	} else {
-		cmn_err(CE_NOTE, "!pcfs: %d: no such logical drive", ldrive);
-	}
-}
-
-
-/*
- * findTheDrive()
- *	Discover offset of the requested logical drive, and return
- *	that offset (startSector), the systid of that drive (sysid),
- *	and a buffer pointer (bp), with the buffer contents being
- *	the first sector of the logical drive (i.e., the sector that
- *	contains the BPB for that drive).
- *
- * Note: this code is not capable of addressing >2TB disks, as it uses
- *       daddr_t not diskaddr_t, some of the calculations would overflow
- */
-#define	COPY_PTBL(mbr, ptblp)					\
-	bcopy(&(((struct mboot *)(mbr))->parts), (ptblp),	\
-	    FD_NUMPART * sizeof (struct ipart))
-
-static int
-findTheDrive(struct pcfs *fsp, buf_t **bp)
-{
-	int ldrive = fsp->pcfs_ldrive;
-	dev_t dev = fsp->pcfs_devvp->v_rdev;
-
-	struct ipart dosp[FD_NUMPART];	/* incore fdisk partition structure */
-	daddr_t lastseek = 0;		/* Disk block we sought previously */
-	daddr_t diskblk = 0;		/* Disk block to get */
-	daddr_t xstartsect;		/* base of Extended DOS partition */
-	int logicalDriveCount = 0;	/* Count of logical drives seen */
-	int extendedPart = -1;		/* index of extended dos partition */
-	int primaryPart = -1;		/* index of primary dos partition */
-	int bootPart = -1;		/* index of a Solaris boot partition */
-	uint32_t xnumsect = 0;		/* length of extended DOS partition */
-	int driveIndex;			/* computed FDISK table index */
-	daddr_t startsec;
-	len_t mediasize;
-	int i;
-	/*
-	 * Count of drives in the current extended partition's
-	 * FDISK table, and indexes of the drives themselves.
-	 */
-	int extndDrives[FD_NUMPART];
-	int numDrives = 0;
-
-	/*
-	 * Count of drives (beyond primary) in master boot record's
-	 * FDISK table, and indexes of the drives themselves.
-	 */
-	int extraDrives[FD_NUMPART];
-	int numExtraDrives = 0;
-
-	/*
-	 * "ldrive == 0" should never happen, as this is a request to
-	 * mount the physical device (and ignore partitioning). The code
-	 * in pcfs_mount() should have made sure that a logical drive number
-	 * is at least 1, meaning we're looking for drive "C:". It is not
-	 * safe (and a bug in the callers of this function) to request logical
-	 * drive number 0; we could ASSERT() but a graceful EIO is a more
-	 * polite way.
-	 */
-	if (ldrive == 0) {
-		cmn_err(CE_NOTE, "!pcfs: request for logical partition zero");
-		noLogicalDrive(ldrive);
-		return (EIO);
-	}
-
-	/*
-	 *  Copy from disk block into memory aligned structure for fdisk usage.
-	 */
-	COPY_PTBL((*bp)->b_un.b_addr, dosp);
-
-	/*
-	 * This check is ok because a FAT BPB and a master boot record (MBB)
-	 * have the same signature, in the same position within the block.
-	 */
-	if (bpb_get_BPBSig((*bp)->b_un.b_addr) != MBB_MAGIC) {
-		cmn_err(CE_NOTE, "!pcfs: MBR partition table signature err, "
-		    "device (%x.%x):%d\n",
-		    getmajor(dev), getminor(dev), ldrive);
-		return (EINVAL);
-	}
-
-	/*
-	 * Get a summary of what is in the Master FDISK table.
-	 * Normally we expect to find one partition marked as a DOS drive.
-	 * This partition is the one Windows calls the primary dos partition.
-	 * If the machine has any logical drives then we also expect
-	 * to find a partition marked as an extended DOS partition.
-	 *
-	 * Sometimes we'll find multiple partitions marked as DOS drives.
-	 * The Solaris fdisk program allows these partitions
-	 * to be created, but Windows fdisk no longer does.  We still need
-	 * to support these, though, since Windows does.  We also need to fix
-	 * our fdisk to behave like the Windows version.
-	 *
-	 * It turns out that some off-the-shelf media have *only* an
-	 * Extended partition, so we need to deal with that case as well.
-	 *
-	 * Only a single (the first) Extended or Boot Partition will
-	 * be recognized.  Any others will be ignored.
-	 */
-	for (i = 0; i < FD_NUMPART; i++) {
-		DTRACE_PROBE4(primarypart, struct pcfs *, fsp,
-		    uint_t, (uint_t)dosp[i].systid,
-		    uint_t, LE_32(dosp[i].relsect),
-		    uint_t, LE_32(dosp[i].numsect));
-
-		if (isDosDrive(dosp[i].systid)) {
-			if (primaryPart < 0) {
-				logicalDriveCount++;
-				primaryPart = i;
-			} else {
-				extraDrives[numExtraDrives++] = i;
-			}
-			continue;
-		}
-		if ((extendedPart < 0) && isDosExtended(dosp[i].systid)) {
-			extendedPart = i;
-			continue;
-		}
-		if ((bootPart < 0) && isBootPart(dosp[i].systid)) {
-			bootPart = i;
-			continue;
-		}
-	}
-
-	if (ldrive == BOOT_PARTITION_DRIVE) {
-		if (bootPart < 0) {
-			noLogicalDrive(ldrive);
-			return (EINVAL);
-		}
-		startsec = LE_32(dosp[bootPart].relsect);
-		mediasize = LE_32(dosp[bootPart].numsect);
-		goto found;
-	}
-
-	if (ldrive == PRIMARY_DOS_DRIVE && primaryPart >= 0) {
-		startsec = LE_32(dosp[primaryPart].relsect);
-		mediasize = LE_32(dosp[primaryPart].numsect);
-		goto found;
-	}
-
-	/*
-	 * We are not looking for the C: drive (or the primary drive
-	 * was not found), so we had better have an extended partition
-	 * or extra drives in the Master FDISK table.
-	 */
-	if ((extendedPart < 0) && (numExtraDrives == 0)) {
-		cmn_err(CE_NOTE, "!pcfs: no extended dos partition");
-		noLogicalDrive(ldrive);
-		return (EINVAL);
-	}
-
-	if (extendedPart >= 0) {
-		diskblk = xstartsect = LE_32(dosp[extendedPart].relsect);
-		xnumsect = LE_32(dosp[extendedPart].numsect);
-		do {
-			/*
-			 *  If the seek would not cause us to change
-			 *  position on the drive, then we're out of
-			 *  extended partitions to examine.
-			 */
-			if (diskblk == lastseek)
-				break;
-			logicalDriveCount += numDrives;
-			/*
-			 *  Seek the next extended partition, and find
-			 *  logical drives within it.
-			 */
-			brelse(*bp);
-			/*
-			 * bread() block numbers are multiples of DEV_BSIZE
-			 * but the device sector size (the unit of partitioning)
-			 * might be larger than that; pcfs_get_device_info()
-			 * has calculated the multiplicator for us.
-			 */
-			*bp = bread(dev,
-			    pc_dbdaddr(fsp, diskblk), fsp->pcfs_secsize);
-			if ((*bp)->b_flags & B_ERROR) {
-				return (EIO);
-			}
-
-			lastseek = diskblk;
-			COPY_PTBL((*bp)->b_un.b_addr, dosp);
-			if (bpb_get_BPBSig((*bp)->b_un.b_addr) != MBB_MAGIC) {
-				cmn_err(CE_NOTE, "!pcfs: "
-				    "extended partition table signature err, "
-				    "device (%x.%x):%d, LBA %u",
-				    getmajor(dev), getminor(dev), ldrive,
-				    (uint_t)pc_dbdaddr(fsp, diskblk));
-				return (EINVAL);
-			}
-			/*
-			 *  Count up drives, and track where the next
-			 *  extended partition is in case we need it.  We
-			 *  are expecting only one extended partition.  If
-			 *  there is more than one we'll only go to the
-			 *  first one we see, but warn about ignoring.
-			 */
-			numDrives = 0;
-			for (i = 0; i < FD_NUMPART; i++) {
-				DTRACE_PROBE4(extendedpart,
-				    struct pcfs *, fsp,
-				    uint_t, (uint_t)dosp[i].systid,
-				    uint_t, LE_32(dosp[i].relsect),
-				    uint_t, LE_32(dosp[i].numsect));
-				if (isDosDrive(dosp[i].systid)) {
-					extndDrives[numDrives++] = i;
-				} else if (isDosExtended(dosp[i].systid)) {
-					if (diskblk != lastseek) {
-						/*
-						 * Already found an extended
-						 * partition in this table.
-						 */
-						cmn_err(CE_NOTE,
-						    "!pcfs: ignoring unexpected"
-						    " additional extended"
-						    " partition");
-					} else {
-						diskblk = xstartsect +
-						    LE_32(dosp[i].relsect);
-					}
-				}
-			}
-		} while (ldrive > logicalDriveCount + numDrives);
-
-		ASSERT(numDrives <= FD_NUMPART);
-
-		if (ldrive <= logicalDriveCount + numDrives) {
-			/*
-			 * The number of logical drives we've found thus
-			 * far is enough to get us to the one we were
-			 * searching for.
-			 */
-			driveIndex = logicalDriveCount + numDrives - ldrive;
-			mediasize =
-			    LE_32(dosp[extndDrives[driveIndex]].numsect);
-			startsec =
-			    LE_32(dosp[extndDrives[driveIndex]].relsect) +
-			    lastseek;
-			if (startsec > (xstartsect + xnumsect)) {
-				cmn_err(CE_NOTE, "!pcfs: extended partition "
-				    "values bad");
-				return (EINVAL);
-			}
-			goto found;
-		} else {
-			/*
-			 * We ran out of extended dos partition
-			 * drives.  The only hope now is to go
-			 * back to extra drives defined in the master
-			 * fdisk table.  But we overwrote that table
-			 * already, so we must load it in again.
-			 */
-			logicalDriveCount += numDrives;
-			brelse(*bp);
-			ASSERT(fsp->pcfs_dosstart == 0);
-			*bp = bread(dev, pc_dbdaddr(fsp, fsp->pcfs_dosstart),
-			    fsp->pcfs_secsize);
-			if ((*bp)->b_flags & B_ERROR) {
-				return (EIO);
-			}
-			COPY_PTBL((*bp)->b_un.b_addr, dosp);
-		}
-	}
-	/*
-	 *  Still haven't found the drive, is it an extra
-	 *  drive defined in the main FDISK table?
-	 */
-	if (ldrive <= logicalDriveCount + numExtraDrives) {
-		driveIndex = logicalDriveCount + numExtraDrives - ldrive;
-		ASSERT(driveIndex < MIN(numExtraDrives, FD_NUMPART));
-		mediasize = LE_32(dosp[extraDrives[driveIndex]].numsect);
-		startsec = LE_32(dosp[extraDrives[driveIndex]].relsect);
-		goto found;
-	}
-	/*
-	 *  Still haven't found the drive, and there is
-	 *  nowhere else to look.
-	 */
-	noLogicalDrive(ldrive);
-	return (EINVAL);
-
-found:
-	/*
-	 * We need this value in units of sectorsize, because PCFS' internal
-	 * offset calculations go haywire for > 512Byte sectors unless all
-	 * pcfs_.*start values are in units of sectors.
-	 * So, assign before the capacity check (that's done in DEV_BSIZE)
-	 */
-	fsp->pcfs_dosstart = startsec;
-
-	/*
-	 * convert from device sectors to proper units:
-	 *	- starting sector: DEV_BSIZE (as argument to bread())
-	 *	- media size: Bytes
-	 */
-	startsec = pc_dbdaddr(fsp, startsec);
-	mediasize *= fsp->pcfs_secsize;
-
-	/*
-	 * some additional validation / warnings in case the partition table
-	 * and the actual media capacity are not in accordance ...
-	 */
-	if (fsp->pcfs_mediasize != 0) {
-		diskaddr_t startoff =
-		    (diskaddr_t)startsec * (diskaddr_t)DEV_BSIZE;
-
-		if (startoff >= fsp->pcfs_mediasize ||
-		    startoff + mediasize > fsp->pcfs_mediasize) {
-			cmn_err(CE_WARN,
-			    "!pcfs: partition size (LBA start %u, %lld bytes, "
-			    "device (%x.%x):%d) smaller than "
-			    "mediasize (%lld bytes).\n"
-			    "filesystem may be truncated, access errors "
-			    "may result.\n",
-			    (uint_t)startsec, (long long)mediasize,
-			    getmajor(fsp->pcfs_xdev), getminor(fsp->pcfs_xdev),
-			    fsp->pcfs_ldrive, (long long)fsp->pcfs_mediasize);
-		}
-	} else {
-		fsp->pcfs_mediasize = mediasize;
-	}
-
-	return (0);
-}
-
-
 static fattype_t
 secondaryBPBChecks(struct pcfs *fsp, uchar_t *bpb, size_t secsize)
 {
@@ -1897,10 +1332,7 @@ secondaryBPBChecks(struct pcfs *fsp, uchar_t *bpb, size_t secsize)
  * Such filesystems are accessible by PCFS - if it'd know to start with that
  * the filesystem should be treated as a specific FAT type. Before S10, it
  * relied on the PC/fdisk partition type for the purpose and almost completely
- * ignored the BPB; now it ignores the partition type for anything else but
- * logical drive enumeration, which can result in rejection of (invalid)
- * FAT32 - if the partition ID says FAT32, but the filesystem, for example
- * has less than 65526 clusters.
+ * ignored the BPB; now it ignores the partition type for everything.
  *
  * Without a "force this fs as FAT{12,16,32}" tunable or mount option, it's
  * not possible to allow all such mostly-compliant filesystems in unless one
@@ -1946,35 +1378,22 @@ parseBPB(struct pcfs *fsp, uchar_t *bpb, int *valid)
 	if (!VALID_SECSIZE(secsize))
 		secsize = fsp->pcfs_secsize;
 	if (secsize != fsp->pcfs_secsize) {
-		PC_DPRINTF3(3, "!pcfs: parseBPB, device (%x.%x):%d:\n",
+		PC_DPRINTF2(3, "!pcfs: parseBPB, device (%x.%x):\n",
 		    getmajor(fsp->pcfs_xdev),
-		    getminor(fsp->pcfs_xdev), fsp->pcfs_ldrive);
+		    getminor(fsp->pcfs_xdev));
 		PC_DPRINTF2(3, "!BPB secsize %d != "
 		    "autodetected media block size %d\n",
 		    (int)secsize, (int)fsp->pcfs_secsize);
-		if (fsp->pcfs_ldrive) {
-			/*
-			 * We've already attempted to parse the partition
-			 * table. If the block size used for that don't match
-			 * the PCFS sector size, we're hosed one way or the
-			 * other. Just try what happens.
-			 */
-			secsize = fsp->pcfs_secsize;
-			PC_DPRINTF1(3,
-			    "!pcfs: Using autodetected secsize %d\n",
-			    (int)secsize);
-		} else {
-			/*
-			 * This allows mounting lofi images of PCFS partitions
-			 * with sectorsize != DEV_BSIZE. We can't parse the
-			 * partition table on whole-disk images unless the
-			 * (undocumented) "secsize=..." mount option is used,
-			 * but at least this allows us to mount if we have
-			 * an image of a partition.
-			 */
-			PC_DPRINTF1(3,
-			    "!pcfs: Using BPB secsize %d\n", (int)secsize);
-		}
+		/*
+		 * This allows mounting lofi images of PCFS partitions
+		 * with sectorsize != DEV_BSIZE. We can't parse the
+		 * partition table on whole-disk images unless the
+		 * (undocumented) "secsize=..." mount option is used,
+		 * but at least this allows us to mount if we have
+		 * an image of a partition.
+		 */
+		PC_DPRINTF1(3,
+		    "!pcfs: Using BPB secsize %d\n", (int)secsize);
 	}
 
 	if (fsp->pcfs_mediasize == 0) {
@@ -1985,20 +1404,19 @@ parseBPB(struct pcfs *fsp, uchar_t *bpb, int *valid)
 		 * partitioned. If we have not been able to figure out the
 		 * size of the underlaying medium, we have to trust the BPB.
 		 */
-		PC_DPRINTF4(3, "!pcfs: parseBPB: mediasize autodetect failed "
-		    "on device (%x.%x):%d, trusting BPB totsec (%lld Bytes)\n",
+		PC_DPRINTF3(3, "!pcfs: parseBPB: mediasize autodetect failed "
+		    "on device (%x.%x), trusting BPB totsec (%lld Bytes)\n",
 		    getmajor(fsp->pcfs_xdev), getminor(fsp->pcfs_xdev),
-		    fsp->pcfs_ldrive, (long long)fsp->pcfs_mediasize);
+		    (long long)fsp->pcfs_mediasize);
 	} else if ((len_t)totsec * (len_t)secsize > fsp->pcfs_mediasize) {
 		cmn_err(CE_WARN,
 		    "!pcfs: autodetected mediasize (%lld Bytes) smaller than "
 		    "FAT BPB mediasize (%lld Bytes).\n"
-		    "truncated filesystem on device (%x.%x):%d, access errors "
+		    "truncated filesystem on device (%x.%x), access errors "
 		    "possible.\n",
 		    (long long)fsp->pcfs_mediasize,
 		    (long long)(totsec * (blkcnt_t)secsize),
-		    getmajor(fsp->pcfs_xdev), getminor(fsp->pcfs_xdev),
-		    fsp->pcfs_ldrive);
+		    getmajor(fsp->pcfs_xdev), getminor(fsp->pcfs_xdev));
 		mediasize = fsp->pcfs_mediasize;
 	} else {
 		/*
@@ -2480,35 +1898,12 @@ pc_getfattype(struct pcfs *fsp)
 		goto out;
 
 	/*
-	 * If a logical drive number is requested, parse the partition table
-	 * and attempt to locate it. Otherwise, proceed immediately to the
-	 * BPB check. findTheDrive(), if successful, returns the disk block
-	 * number where the requested partition starts in "startsec".
-	 */
-	if (fsp->pcfs_ldrive != 0) {
-		PC_DPRINTF3(5, "!pcfs: pc_getfattype: using FDISK table on "
-		    "device (%x,%x):%d to find BPB\n",
-		    getmajor(dev), getminor(dev), fsp->pcfs_ldrive);
-
-		if (error = findTheDrive(fsp, &bp))
-			goto out;
-
-		ASSERT(fsp->pcfs_dosstart != 0);
-
-		brelse(bp);
-		bp = bread(dev, pc_dbdaddr(fsp, fsp->pcfs_dosstart),
-		    fsp->pcfs_secsize);
-		if (error = geterror(bp))
-			goto out;
-	}
-
-	/*
 	 * Validate the BPB and fill in the instance structure.
 	 */
 	if (!parseBPB(fsp, (uchar_t *)bp->b_un.b_addr, NULL)) {
-		PC_DPRINTF4(1, "!pcfs: pc_getfattype: No FAT BPB on "
-		    "device (%x.%x):%d, disk LBA %u\n",
-		    getmajor(dev), getminor(dev), fsp->pcfs_ldrive,
+		PC_DPRINTF3(1, "!pcfs: pc_getfattype: No FAT BPB on "
+		    "device (%x.%x), disk LBA %u\n",
+		    getmajor(dev), getminor(dev),
 		    (uint_t)pc_dbdaddr(fsp, fsp->pcfs_dosstart));
 		error = EINVAL;
 		goto out;
@@ -2617,11 +2012,10 @@ pc_getfat(struct pcfs *fsp)
 				cmn_err(CE_NOTE,
 				    "!pcfs: alternate FAT #%d (start LBA %p)"
 				    " read error at offset %ld on device"
-				    " (%x.%x):%d",
+				    " (%x.%x)",
 				    nfat, (void *)(uintptr_t)startsec, off,
 				    getmajor(fsp->pcfs_xdev),
-				    getminor(fsp->pcfs_xdev),
-				    fsp->pcfs_ldrive);
+				    getminor(fsp->pcfs_xdev));
 				flags = B_ERROR;
 				error = EIO;
 				goto out;
@@ -2632,11 +2026,10 @@ pc_getfat(struct pcfs *fsp)
 				cmn_err(CE_NOTE,
 				    "!pcfs: alternate FAT #%d (start LBA %p)"
 				    " corrupted at offset %ld on device"
-				    " (%x.%x):%d",
+				    " (%x.%x)",
 				    nfat, (void *)(uintptr_t)startsec, off,
 				    getmajor(fsp->pcfs_xdev),
-				    getminor(fsp->pcfs_xdev),
-				    fsp->pcfs_ldrive);
+				    getminor(fsp->pcfs_xdev));
 				if (altfat_mustmatch) {
 					flags = B_ERROR;
 					error = EIO;
@@ -2669,9 +2062,8 @@ pc_getfat(struct pcfs *fsp)
 		    !FSISIG_OK(fsinfo_disk)) {
 			cmn_err(CE_NOTE,
 			    "!pcfs: error reading fat32 fsinfo from "
-			    "device (%x.%x):%d, block %lld",
+			    "device (%x.%x), block %lld",
 			    getmajor(fsp->pcfs_xdev), getminor(fsp->pcfs_xdev),
-			    fsp->pcfs_ldrive,
 			    (long long)pc_dbdaddr(fsp, fsp->pcfs_fsistart));
 			fsp->pcfs_flags &= ~PCFS_FSINFO_OK;
 			fsp->pcfs_fsinfo.fs_free_clusters = FSINFO_UNKNOWN;
