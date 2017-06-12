@@ -103,44 +103,7 @@ typedef	uint32_t	pc_cluster32_t;
  * odd accessor methods for some members while using standard C accesses
  * for others, we don't bother and just define the structure offsets, and
  * a common set of misaligned-littleendian accessor macros.
- *
- * The "bootsec" and "fat32_bootsec" structures are only provided for
- * compatibility with old code including <sys/fs/pc_fs.h> but not used
- * by the PCFS kernel driver anymore.
  */
-struct bootsec {
-	uchar_t	instr[3];
-	uchar_t	version[8];
-	uchar_t	bps[2];			/* bytes per sector */
-	uchar_t	spcl;			/* sectors per allocation unit */
-	uchar_t	res_sec[2];		/* reserved sectors, starting at 0 */
-	uchar_t	nfat;			/* number of FATs */
-	uchar_t	rdirents[2];		/* number of root directory entries */
-	uchar_t	numsect[2];		/* old total sectors in logical image */
-	uchar_t	mediadesriptor;		/* media descriptor byte */
-	ushort_t fatsec;		/* number of sectors per FAT */
-	ushort_t spt;			/* sectors per track */
-	ushort_t nhead;			/* number of heads */
-	uint_t	hiddensec;		/* number of hidden sectors */
-	uint_t	totalsec;		/* total sectors in logical image */
-};
-
-/*
- * FAT32 volumes have a bigger boot sector. They include the normal
- * boot sector.
- */
-struct fat32_bootsec {
-	struct bootsec	f_bs;
-	uint32_t	f_fatlength;	/* size of FAT */
-	uint16_t	f_flags;
-	uint8_t		f_major;	/* major filesystem version #? */
-	uint8_t		f_minor;	/* minor filesystem version #? */
-	uint32_t	f_rootcluster;	/* first cluster in root directory */
-	uint16_t	f_infosector;	/* where summary info is */
-	uint16_t	f_backupboot;	/* backup boot sector */
-	uint16_t	f_reserved2[6];
-};
-
 
 #define	OFF_JMPBOOT	0
 #define	OFF_OEMNAME	3

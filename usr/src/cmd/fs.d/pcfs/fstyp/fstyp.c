@@ -58,6 +58,23 @@
 /* for the <sys/fs/pc_dir.h> PCDL_IS_LFN macro */
 int	enable_long_filenames = 1;
 
+struct bootsec {
+	uchar_t	instr[3];
+	uchar_t	version[8];
+	uchar_t	bps[2];			/* bytes per sector */
+	uchar_t	spcl;			/* sectors per allocation unit */
+	uchar_t	res_sec[2];		/* reserved sectors, starting at 0 */
+	uchar_t	nfat;			/* number of FATs */
+	uchar_t	rdirents[2];		/* number of root directory entries */
+	uchar_t	numsect[2];		/* old total sectors in logical image */
+	uchar_t	mediadesriptor;		/* media descriptor byte */
+	ushort_t fatsec;		/* number of sectors per FAT */
+	ushort_t spt;			/* sectors per track */
+	ushort_t nhead;			/* number of heads */
+	uint_t	hiddensec;		/* number of hidden sectors */
+	uint_t	totalsec;		/* total sectors in logical image */
+};
+
 struct fstyp_fat16_bs {
 	uint8_t		f_drvnum;
 	uint8_t		f_reserved1;
