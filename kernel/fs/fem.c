@@ -355,6 +355,9 @@ fem_release(struct fem_list *sp)
 {
 	int	i;
 
+	if (sp == NULL)
+		return;
+
 	ASSERT(sp->feml_refc != 0);
 	if (fem_delref(sp) == 0) {
 		/*
