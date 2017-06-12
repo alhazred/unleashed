@@ -222,44 +222,7 @@ static struct fs_operation_def fsem_guard_ops[] = {
  * These macros descend the stack until they find either a basic
  * vnode/vfs operation [ indicated by a null fn_available ] or a
  * stacked item where this method is non-null [_vsop].
- *
- * The DEBUG one is written with a single function which manually applies
- * the structure offsets.  It can have additional debugging support.
  */
-
-#ifndef DEBUG
-
-#define	vsop_find(ap, func, funct, arg0, _vop, _vsop) \
-for (;;) { \
-	if ((ap)->fa_fnode->fn_available == NULL) { \
-		*(func) = (funct (*)())((ap)->fa_fnode->fn_op.vnode->_vop); \
-		*(arg0) = (void *)(ap)->fa_vnode.vp; \
-		break;	\
-	} else if ((*(func) = (funct (*)())((ap)->fa_fnode->fn_op.fem->_vsop))\
-		    != NULL) { \
-		*(arg0) = (void *) (ap); \
-		break;	\
-	} else { \
-		(ap)->fa_fnode--; \
-	} \
-} \
-
-#define	vfsop_find(ap, func, funct, arg0, _vop, _vsop) \
-for (;;) { \
-	if ((ap)->fa_fnode->fn_available == NULL) { \
-		*(func) = (funct (*)())((ap)->fa_fnode->fn_op.vfs->_vop); \
-		*(arg0) = (void *)(ap)->fa_vnode.vp; \
-		break; \
-	} else if ((*(func) = (funct (*)())((ap)->fa_fnode->fn_op.fsem->_vsop))\
-		    != NULL) { \
-		*(arg0) = (void *) (ap); \
-		break; \
-	} else { \
-		(ap)->fa_fnode--; \
-	} \
-} \
-
-#else
 
 #define	vsop_find(ap, func, funct, arg0, _vop, _vsop) \
 	*(arg0) = _op_find((ap), (void **)(func), \
@@ -269,7 +232,7 @@ for (;;) { \
 	*(arg0) = _op_find((ap), (void **)(func), \
 			offsetof(vfsops_t, _fop), offsetof(fsem_t, _fsop))
 
-static void *
+static inline void *
 _op_find(femarg_t *ap, void **fp, int offs0, int offs1)
 {
 	void *ptr;
@@ -289,7 +252,6 @@ _op_find(femarg_t *ap, void **fp, int offs0, int offs1)
 	}
 	return (ptr);
 }
-#endif
 
 static fem_t *
 fem_alloc()
