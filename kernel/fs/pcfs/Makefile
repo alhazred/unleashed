@@ -9,6 +9,5 @@ SRCS=		pc_alloc.c \
 
 CERRWARN =  -Wno-parentheses
 CERRWARN += -Wno-uninitialized
-CERRWARN += -Wno-unused-function
 
 .include <kmod.mk>

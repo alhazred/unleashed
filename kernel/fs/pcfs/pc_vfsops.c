@@ -73,8 +73,6 @@
  */
 #define	PC_SAFESECSIZE	(PC_SECSIZE * 2)
 
-static int pcfs_pseudo_floppy(dev_t);
-
 static int pcfsinit(int, char *);
 static int pcfs_mount(struct vfs *, struct vnode *, struct mounta *,
 	struct cred *);
