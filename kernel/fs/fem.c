@@ -225,27 +225,30 @@ static struct fs_operation_def fsem_guard_ops[] = {
  */
 
 #define	vsop_find(ap, func, arg0, _vop, _vsop) \
-	*(arg0) = _op_find((ap), (void **)(func), \
+	*(func) = _op_find((ap), (arg0), \
 			offsetof(vnodeops_t, _vop), offsetof(fem_t, _vsop))
 
 #define	vfsop_find(ap, func, arg0, _fop, _fsop) \
-	*(arg0) = _op_find((ap), (void **)(func), \
+	*(func) = _op_find((ap), (arg0), \
 			offsetof(vfsops_t, _fop), offsetof(fsem_t, _fsop))
 
 static inline void *
-_op_find(femarg_t *ap, void **fp, size_t offs0, size_t offs1)
+_op_find(femarg_t *ap, void **arg0, size_t offs0, size_t offs1)
 {
 	for (;;) {
 		struct fem_node	*fnod = ap->fa_fnode;
+		void *fp;
 
 		if (fnod->fn_available == NULL) {
-			*fp = *(void **)((char *)fnod->fn_op.anon + offs0);
-			return ap->fa_vnode.anon;
+			*arg0 = ap->fa_vnode.anon;
+			return *(void **)((char *)fnod->fn_op.anon + offs0);
 		}
 
-		*fp = *(void **)((char *)fnod->fn_op.anon + offs1);
-		if (*fp != NULL)
-			return ap;
+		fp = *(void **)((char *)fnod->fn_op.anon + offs1);
+		if (fp != NULL) {
+			*arg0 = ap;
+			return fp;
+		}
 
 		ap->fa_fnode--;
 	}
