@@ -233,24 +233,22 @@ static struct fs_operation_def fsem_guard_ops[] = {
 			offsetof(vfsops_t, _fop), offsetof(fsem_t, _fsop))
 
 static inline void *
-_op_find(femarg_t *ap, void **fp, int offs0, int offs1)
+_op_find(femarg_t *ap, void **fp, size_t offs0, size_t offs1)
 {
-	void *ptr;
 	for (;;) {
 		struct fem_node	*fnod = ap->fa_fnode;
+
 		if (fnod->fn_available == NULL) {
 			*fp = *(void **)((char *)fnod->fn_op.anon + offs0);
-			ptr = (void *)(ap->fa_vnode.anon);
-			break;
-		} else if ((*fp = *(void **)((char *)fnod->fn_op.anon+offs1))
-		    != NULL) {
-			ptr = (void *)(ap);
-			break;
-		} else {
-			ap->fa_fnode--;
+			return ap->fa_vnode.anon;
 		}
+
+		*fp = *(void **)((char *)fnod->fn_op.anon + offs1);
+		if (*fp != NULL)
+			return ap;
+
+		ap->fa_fnode--;
 	}
-	return (ptr);
 }
 
 static fem_t *
