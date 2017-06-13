@@ -417,8 +417,10 @@ vhead_open(vnode_t **vpp, int mode, cred_t *cr, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_open, femop_open);
 		errc = (*func)(arg0, mode, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -444,8 +446,10 @@ vhead_close(vnode_t *vp, int flag, int count, offset_t offset, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_close, femop_close);
 		errc = (*func)(arg0, flag, count, offset, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -471,8 +475,10 @@ vhead_read(vnode_t *vp, uio_t *uiop, int ioflag, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_read, femop_read);
 		errc = (*func)(arg0, uiop, ioflag, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -498,8 +504,10 @@ vhead_write(vnode_t *vp, uio_t *uiop, int ioflag, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_write, femop_write);
 		errc = (*func)(arg0, uiop, ioflag, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -525,8 +533,10 @@ vhead_ioctl(vnode_t *vp, int cmd, intptr_t arg, int flag, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_ioctl, femop_ioctl);
 		errc = (*func)(arg0, cmd, arg, flag, cr, rvalp, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -552,8 +562,10 @@ vhead_setfl(vnode_t *vp, int oflags, int nflags, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_setfl, femop_setfl);
 		errc = (*func)(arg0, oflags, nflags, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -580,8 +592,10 @@ vhead_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 		vsop_find(&farg, &func, &arg0, vop_getattr,
 		    femop_getattr);
 		errc = (*func)(arg0, vap, flags, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -608,8 +622,10 @@ vhead_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 		vsop_find(&farg, &func, &arg0, vop_setattr,
 		    femop_setattr);
 		errc = (*func)(arg0, vap, flags, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -636,8 +652,10 @@ vhead_access(vnode_t *vp, int mode, int flags, cred_t *cr,
 		vsop_find(&farg, &func, &arg0, vop_access,
 		    femop_access);
 		errc = (*func)(arg0, mode, flags, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -667,8 +685,10 @@ vhead_lookup(vnode_t *dvp, char *nm, vnode_t **vpp, pathname_t *pnp,
 		    femop_lookup);
 		errc = (*func)(arg0, nm, vpp, pnp, flags, rdir, cr, ct,
 		    direntflags, realpnp);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -698,8 +718,10 @@ vhead_create(vnode_t *dvp, char *name, vattr_t *vap, vcexcl_t excl,
 		    femop_create);
 		errc = (*func)(arg0, name, vap, excl, mode, vpp, cr, flag,
 		    ct, vsecp);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -725,8 +747,10 @@ vhead_remove(vnode_t *dvp, char *nm, cred_t *cr, caller_context_t *ct,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_remove, femop_remove);
 		errc = (*func)(arg0, nm, cr, ct, flags);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -752,8 +776,10 @@ vhead_link(vnode_t *tdvp, vnode_t *svp, char *tnm, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_link, femop_link);
 		errc = (*func)(arg0, svp, tnm, cr, ct, flags);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -779,8 +805,10 @@ vhead_rename(vnode_t *sdvp, char *snm, vnode_t *tdvp, char *tnm,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_rename, femop_rename);
 		errc = (*func)(arg0, snm, tdvp, tnm, cr, ct, flags);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -806,8 +834,10 @@ vhead_mkdir(vnode_t *dvp, char *dirname, vattr_t *vap, vnode_t **vpp,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_mkdir, femop_mkdir);
 		errc = (*func)(arg0, dirname, vap, vpp, cr, ct, flags, vsecp);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -833,8 +863,10 @@ vhead_rmdir(vnode_t *dvp, char *nm, vnode_t *cdir, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_rmdir, femop_rmdir);
 		errc = (*func)(arg0, nm, cdir, cr, ct, flags);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -860,8 +892,10 @@ vhead_readdir(vnode_t *vp, uio_t *uiop, cred_t *cr, int *eofp,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_readdir, femop_readdir);
 		errc = (*func)(arg0, uiop, cr, eofp, ct, flags);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -887,8 +921,10 @@ vhead_symlink(vnode_t *dvp, char *linkname, vattr_t *vap, char *target,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_symlink, femop_symlink);
 		errc = (*func)(arg0, linkname, vap, target, cr, ct, flags);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -913,8 +949,10 @@ vhead_readlink(vnode_t *vp, uio_t *uiop, cred_t *cr, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_readlink, femop_readlink);
 		errc = (*func)(arg0, uiop, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -939,8 +977,10 @@ vhead_fsync(vnode_t *vp, int syncflag, cred_t *cr, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_fsync, femop_fsync);
 		errc = (*func)(arg0, syncflag, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -964,8 +1004,10 @@ vhead_inactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_inactive, femop_inactive);
 		(*func)(arg0, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 }
 
 static int
@@ -989,8 +1031,10 @@ vhead_fid(vnode_t *vp, fid_t *fidp, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_fid, femop_fid);
 		errc = (*func)(arg0, fidp, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1015,8 +1059,10 @@ vhead_rwlock(vnode_t *vp, int write_lock, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_rwlock, femop_rwlock);
 		errc = (*func)(arg0, write_lock, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1040,8 +1086,10 @@ vhead_rwunlock(vnode_t *vp, int write_lock, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_rwunlock, femop_rwunlock);
 		(*func)(arg0, write_lock, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 }
 
 static int
@@ -1065,8 +1113,10 @@ vhead_seek(vnode_t *vp, offset_t ooff, offset_t *noffp, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_seek, femop_seek);
 		errc = (*func)(arg0, ooff, noffp, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1091,8 +1141,10 @@ vhead_cmp(vnode_t *vp1, vnode_t *vp2, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_cmp, femop_cmp);
 		errc = (*func)(arg0, vp2, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1119,8 +1171,10 @@ vhead_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_frlock, femop_frlock);
 		errc = (*func)(arg0, cmd, bfp, flag, offset, flk_cbp, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1146,8 +1200,10 @@ vhead_space(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_space, femop_space);
 		errc = (*func)(arg0, cmd, bfp, flag, offset, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1172,8 +1228,10 @@ vhead_realvp(vnode_t *vp, vnode_t **vpp, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_realvp, femop_realvp);
 		errc = (*func)(arg0, vpp, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1202,8 +1260,10 @@ vhead_getpage(vnode_t *vp, offset_t off, size_t len, uint_t *protp,
 		vsop_find(&farg, &func, &arg0, vop_getpage, femop_getpage);
 		errc = (*func)(arg0, off, len, protp, plarr, plsz, seg,
 		    addr, rw, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1229,8 +1289,10 @@ vhead_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_putpage, femop_putpage);
 		errc = (*func)(arg0, off, len, flags, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1259,8 +1321,10 @@ vhead_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 		vsop_find(&farg, &func, &arg0, vop_map, femop_map);
 		errc = (*func)(arg0, off, as, addrp, len, prot, maxprot,
 		    flags, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1289,8 +1353,10 @@ vhead_addmap(vnode_t *vp, offset_t off, struct as *as, caddr_t addr,
 		vsop_find(&farg, &func, &arg0, vop_addmap, femop_addmap);
 		errc = (*func)(arg0, off, as, addr, len, prot, maxprot,
 		    flags, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1319,8 +1385,10 @@ vhead_delmap(vnode_t *vp, offset_t off, struct as *as, caddr_t addr,
 		vsop_find(&farg, &func, &arg0, vop_delmap, femop_delmap);
 		errc = (*func)(arg0, off, as, addr, len, prot, maxprot,
 		    flags, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1346,8 +1414,10 @@ vhead_poll(vnode_t *vp, short events, int anyyet, short *reventsp,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_poll, femop_poll);
 		errc = (*func)(arg0, events, anyyet, reventsp, phpp, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1373,8 +1443,10 @@ vhead_dump(vnode_t *vp, caddr_t addr, offset_t lbdn, offset_t dblks,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_dump, femop_dump);
 		errc = (*func)(arg0, addr, lbdn, dblks, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1400,8 +1472,10 @@ vhead_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_pathconf, femop_pathconf);
 		errc = (*func)(arg0, cmd, valp, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1427,8 +1501,10 @@ vhead_pageio(vnode_t *vp, struct page *pp, uoff_t io_off,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_pageio, femop_pageio);
 		errc = (*func)(arg0, pp, io_off, io_len, flags, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1453,8 +1529,10 @@ vhead_dumpctl(vnode_t *vp, int action, offset_t *blkp, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_dumpctl, femop_dumpctl);
 		errc = (*func)(arg0, action, blkp, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1479,8 +1557,9 @@ vhead_dispose(vnode_t *vp, struct page *pp, int flag, int dn, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_dispose, femop_dispose);
 		(*func)(arg0, pp, flag, dn, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
 }
 
 static int
@@ -1506,8 +1585,10 @@ vhead_setsecattr(vnode_t *vp, vsecattr_t *vsap, int flag, cred_t *cr,
 		vsop_find(&farg, &func, &arg0, vop_setsecattr,
 		    femop_setsecattr);
 		errc = (*func)(arg0, vsap, flag, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1534,8 +1615,10 @@ vhead_getsecattr(vnode_t *vp, vsecattr_t *vsap, int flag, cred_t *cr,
 		vsop_find(&farg, &func, &arg0, vop_getsecattr,
 		    femop_getsecattr);
 		errc = (*func)(arg0, vsap, flag, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1561,8 +1644,10 @@ vhead_shrlock(vnode_t *vp, int cmd, struct shrlock *shr, int flag,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_shrlock, femop_shrlock);
 		errc = (*func)(arg0, cmd, shr, flag, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1588,8 +1673,10 @@ vhead_vnevent(vnode_t *vp, vnevent_t vnevent, vnode_t *dvp, char *cname,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_vnevent, femop_vnevent);
 		errc = (*func)(arg0, vnevent, dvp, cname, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1615,8 +1702,10 @@ vhead_reqzcbuf(vnode_t *vp, enum uio_rw ioflag, xuio_t *xuiop, cred_t *cr,
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_reqzcbuf, femop_reqzcbuf);
 		errc = (*func)(arg0, ioflag, xuiop, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1641,8 +1730,10 @@ vhead_retzcbuf(vnode_t *vp, xuio_t *xuiop, cred_t *cr, caller_context_t *ct)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vsop_find(&farg, &func, &arg0, vop_retzcbuf, femop_retzcbuf);
 		errc = (*func)(arg0, xuiop, cr, ct);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1668,8 +1759,10 @@ fshead_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vfsop_find(&farg, &func, &arg0, vfs_mount, fsemop_mount);
 		errc = (*func)(arg0, mvp, uap, cr);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1695,8 +1788,10 @@ fshead_unmount(vfs_t *vfsp, int flag, cred_t *cr)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vfsop_find(&farg, &func, &arg0, vfs_unmount, fsemop_unmount);
 		errc = (*func)(arg0, flag, cr);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1722,8 +1817,10 @@ fshead_root(vfs_t *vfsp, vnode_t **vpp)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vfsop_find(&farg, &func, &arg0, vfs_root, fsemop_root);
 		errc = (*func)(arg0, vpp);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1749,8 +1846,10 @@ fshead_statvfs(vfs_t *vfsp, statvfs64_t *sp)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vfsop_find(&farg, &func, &arg0, vfs_statvfs, fsemop_statvfs);
 		errc = (*func)(arg0, sp);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1776,8 +1875,10 @@ fshead_sync(vfs_t *vfsp, short flag, cred_t *cr)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vfsop_find(&farg, &func, &arg0, vfs_sync, fsemop_sync);
 		errc = (*func)(arg0, flag, cr);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1803,8 +1904,10 @@ fshead_vget(vfs_t *vfsp, vnode_t **vpp, fid_t *fidp)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vfsop_find(&farg, &func, &arg0, vfs_vget, fsemop_vget);
 		errc = (*func)(arg0, vpp, fidp);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1831,8 +1934,10 @@ fshead_mountroot(vfs_t *vfsp, enum whymountroot reason)
 		vfsop_find(&farg, &func, &arg0, vfs_mountroot,
 		    fsemop_mountroot);
 		errc = (*func)(arg0, reason);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
@@ -1857,8 +1962,9 @@ fshead_freevfs(vfs_t *vfsp)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vfsop_find(&farg, &func, &arg0, vfs_freevfs, fsemop_freevfs);
 		(*func)(arg0);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
 }
 
 static int
@@ -1883,8 +1989,10 @@ fshead_vnstate(vfs_t *vfsp, vnode_t *vp, vntrans_t nstate)
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
 		vfsop_find(&farg, &func, &arg0, vfs_vnstate, fsemop_vnstate);
 		errc = (*func)(arg0, vp, nstate);
-		fem_release(femsp);
 	}
+
+	fem_release(femsp);
+
 	return (errc);
 }
 
