@@ -72,7 +72,7 @@
 #define	FOUND		040		/* found the entry in password file */
 #define	LOCKED		0100		/* did we lock the password file */
 #define	UATTR_FILE	0200		/* touch user_attr file */
-#define	BAD_ENT_MESSAGE	"%s: Bad entry found in /etc/passwd.  Run pwconv.\n"
+#define	BAD_ENT_MESSAGE	"%s: Bad entry found in /etc/passwd.\n"
 
 typedef struct kvopts {
 	const char	option;
@@ -950,7 +950,7 @@ main(int argc, char **argv)
 	} /* end-of-while-loop */
 
 	if (error >= 1) {
-		msg = "%s: Bad entry found in /etc/passwd.  Run pwconv.\n";
+		msg = BAD_ENT_MESSAGE;
 		fprintf(stderr, gettext(msg), prognamp);
 	}
 

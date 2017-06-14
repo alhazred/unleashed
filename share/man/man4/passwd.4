@@ -63,12 +63,8 @@ must not contain a colon (\fB:\fR) or a newline (\fB\en\fR).
 \fB\fIpassword\fR\fR
 .ad
 .RS 15n
-is an empty field. The encrypted password for the user is in the corresponding
-entry in the \fB/etc/shadow\fR file. \fBpwconv\fR(1M) relies on a special value
-of '\fBx\fR' in the password field of \fB/etc/passwd\fR. If this value
-of '\fBx\fR' exists in the password field of \fB/etc/passwd\fR, this indicates
-that the password for the user is already in \fB/etc/shadow\fR and should not
-be modified.
+is an empty field or 'x'. The encrypted password for the user is in the
+corresponding entry in the \fB/etc/shadow\fR file.
 .RE
 
 .sp
@@ -336,7 +332,7 @@ but with a \fIgcos\fR field of \fBGuest\fR
 \fBchgrp\fR(1), \fBchown\fR(1), \fBfinger\fR(1), \fBgroups\fR(1),
 \fBlogin\fR(1), \fBnewgrp\fR(1), \fBpasswd\fR(1),
 \fBsh\fR(1), \fBsort\fR(1), \fBdomainname\fR(1M), \fBgetent\fR(1M),
-\fBpassmgmt\fR(1M), \fBpwck\fR(1M), \fBpwconv\fR(1M),
+\fBpassmgmt\fR(1M), \fBpwck\fR(1M),
 \fBsu\fR(1M), \fBuseradd\fR(1M), \fBuserdel\fR(1M), \fBusermod\fR(1M),
 \fBa64l\fR(3C), \fBcrypt\fR(3C), \fBgetpw\fR(3C), \fBgetpwnam\fR(3C),
 \fBgetspnam\fR(3C), \fBputpwent\fR(3C), \fBgroup\fR(4), \fBhosts.equiv\fR(4),

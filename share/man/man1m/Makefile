@@ -321,7 +321,6 @@ MAN = 6to4relay.1m \
       putdev.1m \
       putdgrp.1m \
       pwck.1m \
-      pwconv.1m \
       quot.1m \
       quota.1m \
       quotacheck.1m \

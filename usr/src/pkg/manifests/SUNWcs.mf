@@ -1287,7 +1287,6 @@ file path=usr/sbin/prtvtoc group=sys mode=0555
 file path=usr/sbin/psradm group=sys mode=0555
 file path=usr/sbin/psrinfo group=sys mode=0555
 file path=usr/sbin/pwck mode=0555
-file path=usr/sbin/pwconv group=sys mode=0555
 file path=usr/sbin/raidctl mode=0555
 file path=usr/sbin/ramdiskadm mode=0555
 file path=usr/sbin/rctladm mode=0555
@@ -1644,7 +1643,6 @@ link path=sbin/su target=../usr/bin/su
 link path=usr/adm target=../var/adm
 link path=usr/bin/df target=../sbin/df
 link path=usr/bin/jsh target=ksh93
-link path=usr/bin/pwconv target=../sbin/pwconv
 link path=usr/bin/rmail target=./mail
 link path=usr/bin/sh target=$(ARCH32)/ksh93
 link path=usr/bin/strclean target=../sbin/strclean

@@ -70,15 +70,8 @@ any login \fIname\fR.
 When used to change a password, \fBpasswd\fR prompts everyone for their old
 password, if any. It then prompts for the new password twice. When the old
 password is entered, \fBpasswd\fR checks to see if it has aged sufficiently. If
-\fBaging\fR is insufficient, \fBpasswd\fR terminates; see \fBpwconv\fR(1M)
-and \fBshadow\fR(4) for additional information.
-.sp
-.LP
-The \fBpwconv\fR command creates and updates \fB/etc/shadow\fR with information
-from \fB/etc/passwd\fR. \fBpwconv\fR relies on a special value of \fBx\fR in
-the password field of \fB/etc/passwd\fR. This value of \fBx\fR indicates that
-the password for the user is already in \fB/etc/shadow\fR and should not be
-modified.
+\fBaging\fR is insufficient, \fBpasswd\fR terminates; see \fBshadow\fR(4) for
+additional information.
 .sp
 .LP
 If aging is sufficient, a check is made to ensure that the new password meets
@@ -911,8 +904,8 @@ white space characters are allowed.
 \fB\fB/etc/oshadow\fR\fR
 .ad
 .RS 23n
-Temporary file used by \fBpasswd\fR, \fBpassmgmt\fR and \fBpwconv\fR to update
-the real shadow file.
+Temporary file used by \fBpasswd\fR and \fBpassmgmt\fR to update the real
+shadow file.
 .RE
 
 .sp
@@ -967,7 +960,7 @@ The human readable output is Uncommitted. The options are Committed.
 \fBat\fR(1), \fBbatch\fR(1), \fBfinger\fR(1), \fBkpasswd\fR(1), \fBlogin\fR(1),
 \fBcron\fR(1M), \fBdomainname\fR(1M), \fBeeprom\fR(1M),
 \fBid\fR(1M), \fBldapclient\fR(1M), \fBmkpwdict\fR(1M), \fBpassmgmt\fR(1M),
-\fBpwconv\fR(1M), \fBsu\fR(1M), \fBuseradd\fR(1M), \fBuserdel\fR(1M),
+\fBsu\fR(1M), \fBuseradd\fR(1M), \fBuserdel\fR(1M),
 \fBusermod\fR(1M), \fBcrypt\fR(3C), \fBgetpwnam\fR(3C), \fBgetspnam\fR(3C),
 \fBgetusershell\fR(3C), \fBpam\fR(3PAM),
 \fBloginlog\fR(4), \fBnsswitch.conf\fR(4), \fBpam.conf\fR(4), \fBpasswd\fR(4),
