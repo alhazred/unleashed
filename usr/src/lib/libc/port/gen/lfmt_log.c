@@ -110,7 +110,7 @@ __lfmt_log(const char *text, const char *sev, va_list args, long flag, int ret)
 	if ((flag & MM_CONSOLE) != 0) {
 		char *p;
 		time_t t;
-		char buf[128];
+		char buf[26];
 		err = errno;
 		fdd = open(LOG_CONSOLE, O_WRONLY);
 		if (fdd != -1) {
@@ -118,7 +118,7 @@ __lfmt_log(const char *text, const char *sev, va_list args, long flag, int ret)
 			 * Use C locale for time stamp.
 			 */
 			(void) time(&t);
-			(void) ctime_r(&t, buf, sizeof (buf));
+			(void) ctime_r(&t, buf);
 			p = (char *)strrchr(buf, '\n');
 			if (p != NULL)
 				*p = ':';

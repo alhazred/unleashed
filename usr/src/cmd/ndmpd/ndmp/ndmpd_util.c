@@ -2048,7 +2048,7 @@ cctime(time_t *t)
 	if (*t == (time_t)0)
 		return ("the epoch");
 
-	if ((bp = ctime_r(t, tbuf, BUFSIZ)) == NULL)
+	if ((bp = ctime_r(t, tbuf)) == NULL)
 		return ("");
 
 	cp = strchr(bp, '\n');

@@ -1015,7 +1015,7 @@ logit(char *format, ...)
 		int	safechars;
 
 		(void) gettimeofday(&tv, NULL);
-		(void) ctime_r(&tv.tv_sec, buffer, BUFSIZ);
+		(void) ctime_r(&tv.tv_sec, buffer);
 		(void) snprintf(buffer+19, BUFSIZE, ".%.4ld	",
 		    tv.tv_usec/100);
 		safechars = sizeof (buffer) - 30;

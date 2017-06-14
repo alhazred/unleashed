@@ -364,7 +364,7 @@ autofs_unmount_1_r(
 
 	if (trace > 0) {
 		char ctime_buf[CTIME_BUF_LEN];
-		if (ctime_r(&timenow, ctime_buf, CTIME_BUF_LEN) == NULL)
+		if (ctime_r(&timenow, ctime_buf) == NULL)
 			ctime_buf[0] = '\0';
 
 		trace_prt(1, "UNMOUNT REQUEST: %s", ctime_buf);
@@ -396,7 +396,7 @@ autofs_lookup_1_r(
 
 	if (trace > 0) {
 		char ctime_buf[CTIME_BUF_LEN];
-		if (ctime_r(&timenow, ctime_buf, CTIME_BUF_LEN) == NULL)
+		if (ctime_r(&timenow, ctime_buf) == NULL)
 			ctime_buf[0] = '\0';
 
 		trace_prt(1, "LOOKUP REQUEST: %s", ctime_buf);
@@ -438,7 +438,7 @@ autofs_mntinfo_1_r(
 
 	if (trace > 0) {
 		char ctime_buf[CTIME_BUF_LEN];
-		if (ctime_r(&timenow, ctime_buf, CTIME_BUF_LEN) == NULL)
+		if (ctime_r(&timenow, ctime_buf) == NULL)
 			ctime_buf[0] = '\0';
 
 		trace_prt(1, "MOUNT REQUEST:   %s", ctime_buf);

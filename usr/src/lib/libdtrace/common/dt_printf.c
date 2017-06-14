@@ -458,7 +458,7 @@ pfprint_time(dtrace_hdl_t *dtp, FILE *fp, const char *format,
 	 * Below, we turn this into the canonical adb/mdb /[yY] format,
 	 * "1973 Dec  3 17:20:00".
 	 */
-	(void) ctime_r(&sec, src, sizeof (src));
+	(void) ctime_r(&sec, src);
 
 	/*
 	 * Place the 4-digit year at the head of the string...

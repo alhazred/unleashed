@@ -108,7 +108,7 @@ lt_strdup(const char *str)
  * Get string for current time, e.g. YYYY-MM-DD
  */
 void
-lt_time_str(char *buffer, int len)
+lt_time_str(char *buffer)
 {
 	struct tm tms;
 	time_t t;
@@ -116,7 +116,7 @@ lt_time_str(char *buffer, int len)
 
 	(void) time(&t);
 	(void) gmtime_r(&t, &tms);
-	(void) asctime_r(&tms, buffer, len);
+	(void) asctime_r(&tms, buffer);
 
 	for (i = strlen(buffer)-1; i > 0; --i) {
 

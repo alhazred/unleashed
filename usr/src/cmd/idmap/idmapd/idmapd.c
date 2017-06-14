@@ -522,7 +522,7 @@ idmapdlog(int pri, const char *format, ...) {
 		prev_ts = ts;
 		/* NB: cbuf has \n */
 		(void) fprintf(stderr, "@ %s",
-		    ctime_r(&ts, cbuf, sizeof (cbuf)));
+		    ctime_r(&ts, cbuf));
 	}
 
 	va_start(args, format);

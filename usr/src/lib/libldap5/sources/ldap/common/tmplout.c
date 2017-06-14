@@ -39,12 +39,6 @@
 #include <time.h> /* for struct tm and ctime */
 #endif
 
-
-/* This is totally lame, since it should be coming from time.h, but isn't. */
-#if defined(SOLARIS) 
-char *ctime_r(const time_t *, char *, int);
-#endif
-
 static int do_entry2text( LDAP *ld, char *buf, char *base, LDAPMessage *entry,
 	struct ldap_disptmpl *tmpl, char **defattrs, char ***defvals,
 	writeptype writeproc, void *writeparm, char *eol, int rdncount,

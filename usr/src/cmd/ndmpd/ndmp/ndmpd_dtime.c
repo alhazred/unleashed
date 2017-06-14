@@ -396,7 +396,7 @@ static void put_ddate(FILE *fp,
 
 	NDMP_LOG(LOG_DEBUG, "[%u]", t);
 
-	(void) ctime_r(&t, tbuf, sizeof (tbuf));
+	(void) ctime_r(&t, tbuf);
 	/* LINTED variable format specifier */
 	(void) fprintf(fp, tbuf);
 }
@@ -971,7 +971,7 @@ ndmpd_put_dumptime(char *path, int level, time_t ddate)
 	    (get_zfsvolname(vol, sizeof (vol), path) == 0) &&
 	    ((zhp = zfs_open(zlibh, vol, ZFS_TYPE_DATASET)) != NULL)) {
 
-		(void) ctime_r(&ddate, tbuf, sizeof (tbuf));
+		(void) ctime_r(&ddate, tbuf);
 		rv = zfs_prop_set(zhp, zfs_dumpdate_props[level], tbuf);
 		zfs_close(zhp);
 
@@ -1008,7 +1008,7 @@ ndmpd_append_dumptime(char *fname, char *path, int level, time_t ddate)
 	    (get_zfsvolname(vol, sizeof (vol), path) == 0) &&
 	    ((zhp = zfs_open(zlibh, vol, ZFS_TYPE_DATASET)) != NULL)) {
 
-		(void) ctime_r(&ddate, tbuf, sizeof (tbuf));
+		(void) ctime_r(&ddate, tbuf);
 		rv = zfs_prop_set(zhp, zfs_dumpdate_props[level], tbuf);
 		zfs_close(zhp);
 

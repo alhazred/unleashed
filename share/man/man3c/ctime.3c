@@ -47,8 +47,9 @@ extern char *tzname[2];
 
 .LP
 .nf
-\fBchar *\fR\fBctime_r\fR(\fBconst time_t *\fR\fIclock\fR, \fBchar *\fR\fIbuf\fR, \fBint\fR \fIbuflen\fR);
+\fBchar *\fR\fBctime_r\fR(\fBconst time_t *\fR\fIclock\fR, \fBchar *\fR\fIbuf\fR);
 .fi
+
 
 .LP
 .nf
@@ -60,20 +61,6 @@ extern char *tzname[2];
 .nf
 \fBstruct tm *\fR\fBgmtime_r\fR(\fBconst time_t *restrict\fR \fIclock\fR,
      \fBstruct tm *restrict\fR \fIres\fR);
-.fi
-
-.LP
-.nf
-\fBchar *\fR\fBasctime_r\fR(\fBconst struct tm *restrict\fR \fItm\fR, \fBchar *restrict\fR \fIbuf\fR,
-     \fBint\fR \fIbuflen\fR);
-.fi
-
-.SS "Standard conforming"
-.LP
-.nf
-cc [ \fIflag\fR... ] \fIfile\fR... \fB-D_POSIX_PTHREAD_SEMANTICS\fR [ \fIlibrary\fR... ]
-
-\fBchar *\fR\fBctime_r\fR(\fBconst time_t *\fR\fIclock\fR, \fBchar *\fR\fIbuf\fR);
 .fi
 
 .LP
@@ -108,9 +95,8 @@ any of the other functions executed by the same thread.
 .sp
 .LP
 The \fBctime_r()\fR function has the same functionality as \fBctime()\fR except
-that the caller must supply a buffer \fIbuf\fR with length \fIbuflen\fR to
-store the result; \fIbuf\fR must be at least 26 bytes. The standard-conforming
-\fBctime_r()\fR function does not take a \fIbuflen\fR parameter.
+that the caller must supply a buffer \fIbuf\fR to store the result;
+\fIbuf\fR must be at least 26 bytes.
 .sp
 .LP
 The \fBlocaltime()\fR and \fBgmtime()\fR functions return pointers to \fBtm\fR
@@ -130,11 +116,10 @@ string, as shown in the previous example, and returns a pointer to the string.
 .sp
 .LP
 The \fBasctime_r()\fR function has the same functionality as \fBasctime()\fR
-except that the caller must supply a buffer \fIbuf\fR with length \fIbuflen\fR
-for the result to be stored.  The \fIbuf\fR argument must be at least 26 bytes.
-The standard-conforming \fBasctime_r()\fR function does not take a \fIbuflen\fR
-parameter.  The \fBasctime_r()\fR function returns a pointer to \fIbuf\fR upon
-success.  In case of failure, \fINULL\fR is returned and \fBerrno\fR is set.
+except that the caller must supply a buffer \fIbuf\fR for the result to be
+stored.  The \fIbuf\fR argument must be at least 26 bytes.  The
+\fBasctime_r()\fR function returns a pointer to \fIbuf\fR upon success.  In
+case of failure, \fINULL\fR is returned and \fBerrno\fR is set.
 .sp
 .LP
 Declarations of all the functions and externals, and the \fBtm\fR structure,
@@ -213,18 +198,6 @@ functions return the address of the structure pointed to by the \fIres\fR
 argument. If an error is detected, \fBgmtime_r()\fR and \fBlocaltime_r()\fR
 return a null pointer and set \fBerrno\fR to indicate the error.
 .SH ERRORS
-.sp
-.LP
-The \fBctime_r()\fR and \fBasctime_r()\fR functions will fail if:
-.sp
-.ne 2
-.na
-\fB\fBERANGE\fR\fR
-.ad
-.RS 10n
-The length of the buffer supplied by the caller is not large enough to store
-the result.
-.RE
 
 .sp
 .LP
@@ -374,20 +347,6 @@ If \fBtzset()\fR has previously evaluated the timezone identified by the value
 of the \fBTZ\fR  environment variable, \fBtzset()\fR can reuse the previous
 settings of the external variables \fBaltzone\fR, \fBdaylight\fR,
 \fBtimezone\fR, and \fBtzname\fR[] associated with that timezone.
-.sp
-.LP
-Solaris 2.4 and earlier releases provided definitions of the \fBctime_r()\fR,
-\fBlocaltime_r()\fR, \fBgmtime_r()\fR, and \fBasctime_r()\fR functions as
-specified in POSIX.1c Draft 6. The final POSIX.1c standard changed the
-interface for \fBctime_r()\fR and \fBasctime_r()\fR. Support for the Draft 6
-interface is provided for compatibility only and might not be supported in
-future releases. New applications and libraries should use the
-standard-conforming interface.
-.sp
-.LP
-For POSIX.1c-conforming applications, the \fB_POSIX_PTHREAD_SEMANTICS\fR
-flag is automatically turned on by defining the \fB_POSIX_C_SOURCE\fR flag
-with a value >= 199506L.
 .sp
 .LP
 In Solaris 10, \fBgmtime()\fR, \fBgmtime_r()\fR, \fBlocaltime()\fR, and

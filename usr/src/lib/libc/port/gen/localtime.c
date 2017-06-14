@@ -1695,15 +1695,12 @@ print_state(state_t *sp)
 	(void) fprintf(stderr, "prev: skipping...\n");
 	(void) fprintf(stderr, "ats = {\n");
 	for (c = 0, i = 0; i < sp->timecnt; i++) {
-		char	buf[64];
-		size_t	len;
+		char	buf[26];
 		if (c != 0) {
 			(void) fprintf(stderr, ", ");
 		}
-		(void) asctime_r(gmtime_r(&sp->ats[i], &tmp),
-		    buf, sizeof (buf));
-		len = strlen(buf);
-		buf[len-1] = '\0';
+		(void) asctime_r(gmtime_r(&sp->ats[i], &tmp), buf);
+		buf[strcspn(buf, "\n")] = '\0';
 		(void) fprintf(stderr, "%s", buf);
 		if (c == 1) {
 			(void) fprintf(stderr, "\n");

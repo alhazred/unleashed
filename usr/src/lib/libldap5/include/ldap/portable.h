@@ -313,7 +313,7 @@ typedef char GETHOSTBYNAME_buf_t [BUFSIZ /* XXX might be too small */];
 #elif defined( OSF1V3 )
 #define NSLDAPI_CTIME( c, b, l )	(ctime_r( c, b, l ) ? NULL : b)
 #else
-#define NSLDAPI_CTIME( c, b, l )	ctime_r( c, b, l )
+#define NSLDAPI_CTIME( c, b, l )	ctime_r( c, b )
 #endif
 #if defined(hpux9) || defined(LINUX1_2) || defined(SUNOS4) || defined(SNI) || \
     defined(SCOOS) || defined(BSDI) || defined(NCR) || \

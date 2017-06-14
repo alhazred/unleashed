@@ -152,17 +152,17 @@ print_stats(struct stat64 *sb)
 	(void) printf("st_blocks\t\t%lld\n", (long long)sb->st_blocks);
 
 	timebuf[0] = 0;
-	if (ctime_r(&sb->st_atime, timebuf, 512)) {
+	if (ctime_r(&sb->st_atime, timebuf)) {
 		(void) printf("st_atime\t\t");
 		(void) printf("%s", timebuf);
 	}
 	timebuf[0] = 0;
-	if (ctime_r(&sb->st_mtime, timebuf, 512)) {
+	if (ctime_r(&sb->st_mtime, timebuf)) {
 		(void) printf("st_mtime\t\t");
 		(void) printf("%s", timebuf);
 	}
 	timebuf[0] = 0;
-	if (ctime_r(&sb->st_ctime, timebuf, 512)) {
+	if (ctime_r(&sb->st_ctime, timebuf)) {
 		(void) printf("st_ctime\t\t");
 		(void) printf("%s", timebuf);
 	}

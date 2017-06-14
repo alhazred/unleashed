@@ -155,7 +155,7 @@ ldaplog(int level, char *fmt, ...)
 			if (now-timelast > 60) {
 				pthread_mutex_lock(&systime_mutex);
 				timelast = now;
-				ctime_r(&now, timestr, 128);
+				ctime_r(&now, timestr);
 				pthread_mutex_unlock(&systime_mutex);
 			} /* end if */
 			fprintf(logfd, "%.16s : ", timestr);

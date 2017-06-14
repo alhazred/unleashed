@@ -142,7 +142,7 @@ lt_klog_write(void)
 		return;
 	}
 
-	lt_time_str(buffer, sizeof (buffer));
+	lt_time_str(buffer);
 
 	(void) fprintf(fp, "# Log generated at %s by %s\n", buffer, TITLE);
 	(void) fprintf(fp, "# List of processes\n");

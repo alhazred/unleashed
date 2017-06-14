@@ -47,8 +47,7 @@ smb_svc_log(int pri, const char *fmt, va_list ap)
 	if (prev_ts != ts) {
 		prev_ts = ts;
 		/* NB: cbuf has \n */
-		(void) fprintf(stdout, "@ %s",
-		    ctime_r(&ts, cbuf, sizeof (cbuf)));
+		(void) fprintf(stdout, "@ %s", ctime_r(&ts, cbuf));
 	}
 
 	newfmt = smb_syslog_fmt_m(fbuf, sizeof (fbuf), fmt, save_errno);

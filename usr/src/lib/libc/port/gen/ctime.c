@@ -102,11 +102,16 @@ ct_numb(char *cp, int n, char pad)
 }
 
 /*
- * POSIX.1c standard version of the function asctime_r.
- * User gets it via static asctime_r from the header file.
+ * Compatibility aliases: Solaris/illumos have the POSIX.1c Draft versions in
+ * libc with the regular name and the standard versions with mangled names. We
+ * only have the standard versions but keep the mangled symbols here for a
+ * smoother transition.
  */
+#pragma weak __posix_asctime_r = asctime_r
+#pragma weak __posix_ctime_r = ctime_r
+
 char *
-__posix_asctime_r(const struct tm *t, char *cbuf)
+asctime_r(const struct tm *t, char *cbuf)
 {
 	char *cp;
 	const char *ncp;
@@ -145,18 +150,18 @@ __posix_asctime_r(const struct tm *t, char *cbuf)
 	return (cbuf);
 }
 
-/*
- * POSIX.1c Draft-6 version of the function asctime_r.
- * It was implemented by Solaris 2.3.
- */
 char *
-asctime_r(const struct tm *t, char *cbuf, int buflen)
+ctime_r(const time_t *t, char *buffer)
 {
-	if (buflen < CBUFSIZ) {
-		errno = ERANGE;
+	struct tm res;
+
+	if (localtime_r(t, &res) == NULL)
 		return (NULL);
-	}
-	return (__posix_asctime_r(t, cbuf));
+
+	if (asctime_r(&res, buffer) == NULL)
+		return (NULL);
+
+	return (buffer);
 }
 
 char *
@@ -170,7 +175,7 @@ ctime(const time_t *t)
 	p = localtime(t);
 	if (p == NULL)
 		return (NULL);
-	return (__posix_asctime_r(p, cbuf));
+	return (asctime_r(p, cbuf));
 }
 
 char *
@@ -180,5 +185,5 @@ asctime(const struct tm *t)
 
 	if (cbuf == NULL)
 		return (NULL);
-	return (__posix_asctime_r(t, cbuf));
+	return (asctime_r(t, cbuf));
 }

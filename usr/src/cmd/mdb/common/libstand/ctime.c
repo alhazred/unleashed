@@ -149,12 +149,8 @@ localtime(const time_t *clock)
 
 static char *ct_numb();
 
-/*
- * POSIX.1c standard version of the function asctime_r.
- * User gets it via static asctime_r from the header file.
- */
 char *
-__posix_asctime_r(const struct tm *t, char *cbuf)
+asctime_r(const struct tm *t, char *cbuf)
 {
 	const char *Date = "Day Mon 00 00:00:00 1900\n";
 	const char *Day  = "SunMonTueWedThuFriSat";
@@ -197,20 +193,6 @@ __posix_asctime_r(const struct tm *t, char *cbuf)
 	return (cbuf);
 }
 
-/*
- * POSIX.1c Draft-6 version of the function asctime_r.
- * It was implemented by Solaris 2.3.
- */
-char *
-asctime_r(const struct tm *t, char *cbuf, int buflen)
-{
-	if (buflen < CBUFSIZ) {
-		errno = ERANGE;
-		return (NULL);
-	}
-	return (__posix_asctime_r(t, cbuf));
-}
-
 char *
 ctime(const time_t *t)
 {
@@ -223,7 +205,7 @@ asctime(const struct tm *t)
 {
 	static char cbuf[CBUFSIZ];
 
-	return (asctime_r(t, cbuf, CBUFSIZ));
+	return (asctime_r(t, cbuf));
 }
 
 

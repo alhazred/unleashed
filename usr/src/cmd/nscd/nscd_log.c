@@ -194,7 +194,7 @@ _nscd_logit(
 	va_start(ap, format);
 
 	if (gettimeofday(&tv, NULL) != 0 ||
-	    ctime_r(&tv.tv_sec, buffer, LOGBUFLEN) == NULL) {
+	    ctime_r(&tv.tv_sec, buffer) == NULL) {
 		(void) snprintf(buffer, LOGBUFLEN,
 		    "<time conversion failed>\t");
 	} else {

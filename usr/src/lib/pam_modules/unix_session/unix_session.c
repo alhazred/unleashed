@@ -278,7 +278,7 @@ reopenll_ro:
 		char msg[PAM_MAX_MSG_SIZE];
 		int ret;
 		time_t t = llp->ll_time;
-		(void) ctime_r(&t, timestr, sizeof (timestr));
+		(void) ctime_r(&t, timestr);
 		timestr[strcspn(timestr, "\n")] = '\0';
 		if (strcmp(llp->ll_host, "") != 0) {
 			ret = snprintf(msg, PAM_MAX_MSG_SIZE,
@@ -325,9 +325,8 @@ reopenll_rw:
 	if (debug) {
 		char	buf[26];
 
-		(void) ctime_r((const time_t *)&cur_time, buf,
-		    sizeof (buf));
-		buf[24] = '\000';
+		(void) ctime_r((const time_t *)&cur_time, buf);
+		buf[strcspn(buf, "\n")] = '\0';
 		syslog(LOG_DEBUG, "pam_unix_session: "
 		    "user = %s, time = %s, tty = %s, host = %s.",
 		    user, buf, newll.ll_line, newll.ll_host);

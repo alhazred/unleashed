@@ -243,7 +243,7 @@ extern void *lt_malloc(size_t);
 extern void *lt_zalloc(size_t);
 extern char *lt_strdup(const char *);
 extern void lt_check_null(void *);
-extern void lt_time_str(char *, int);
+extern void lt_time_str(char *);
 extern char *lt_get_proc_field(pid_t, lt_field_t);
 extern void lt_update_stat_value(lt_stat_data_t *, lt_stat_type_t, uint64_t);
 extern int lt_sort_by_total_desc(lt_stat_entry_t *, lt_stat_entry_t *);

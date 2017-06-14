@@ -255,7 +255,7 @@ vsyslog(int pri, const char *fmt, va_list ap)
 	 */
 	o = outline;
 	(void) time(&now);
-	(void) sprintf(o, "%.15s ", ctime_r(&now, timestr, 26) + 4);
+	(void) sprintf(o, "%.15s ", ctime_r(&now, timestr) + 4);
 	o += strlen(o);
 
 	if (LogTag) {
