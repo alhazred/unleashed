@@ -79,8 +79,6 @@ struct tcp_stack {
 	kstat_t		*tcps_mibkp;	/* kstat exporting mib2_tcp_t data */
 	kstat_t		*tcps_kstat;	/* kstat exporting tcp_stat_t data */
 
-	uint32_t	tcps_iss_incr_extra;
-				/* Incremented for each connection */
 	MD5_CTX		tcps_iss_key;
 
 	/* Packet dropper for TCP IPsec policy drops. */

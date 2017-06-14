@@ -214,7 +214,6 @@ typedef struct tcp_squeue_priv_s {
  * nanoseconds and a one-way hash (MD5) of <sport, dport, src, dst, secret>
  * where secret is a true random number (RFC 4086).
  */
-#define	ISS_INCR	250000
 #define	ISS_NSEC_SHT	12
 
 /* Macros for timestamp comparisons */
@@ -557,7 +556,6 @@ extern uint32_t tcp_early_abort;
 #define	tcps_wroff_xtra			tcps_propinfo_tbl[56].prop_cur_uval
 #define	tcps_dev_flow_ctl		tcps_propinfo_tbl[57].prop_cur_bval
 #define	tcps_reass_timeout		tcps_propinfo_tbl[58].prop_cur_uval
-#define	tcps_iss_incr			tcps_propinfo_tbl[63].prop_cur_uval
 
 extern struct qinit tcp_rinitv4, tcp_rinitv6;
 extern boolean_t do_tcp_fusion;
