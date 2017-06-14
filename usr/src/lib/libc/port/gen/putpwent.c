@@ -39,27 +39,16 @@
 int
 putpwent(const struct passwd *p, FILE *f)
 {
-	int black_magic;
-
 	(void) fprintf(f, "%s:%s", p->pw_name,
 	    p->pw_passwd ? p->pw_passwd : "");
 	if (((p->pw_age) != NULL) && ((*p->pw_age) != '\0'))
 		(void) fprintf(f, ",%s", p->pw_age); /* fatal "," */
-	black_magic = (*p->pw_name == '+' || *p->pw_name == '-');
-	/* leading "+/-"  taken from getpwnam_r.c */
-	if (black_magic) {
-		(void) fprintf(f, ":::%s:%s:%s",
-		    p->pw_gecos ? p->pw_gecos : "",
-		    p->pw_dir ? p->pw_dir : "",
-		    p->pw_shell ? p->pw_shell : "");
-	} else { /* "normal case" */
-		(void) fprintf(f, ":%u:%u:%s:%s:%s",
-		    p->pw_uid,
-		    p->pw_gid,
-		    p->pw_gecos,
-		    p->pw_dir,
-		    p->pw_shell);
-	}
+	(void) fprintf(f, ":%u:%u:%s:%s:%s",
+	    p->pw_uid,
+	    p->pw_gid,
+	    p->pw_gecos,
+	    p->pw_dir,
+	    p->pw_shell);
 	(void) putc('\n', f);
 	(void) fflush(f);
 	return (ferror(f));

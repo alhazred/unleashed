@@ -353,22 +353,6 @@ database sources.  The semantics of enumeration are discussed further in
 \fBnsswitch.conf\fR(4).
 .sp
 .LP
-Previous releases allowed the use of ``+'' and ``-'' entries in
-\fB/etc/group\fR to selectively include and exclude entries from \fBNIS.\fR The
-primary usage of these entries is superseded by the name service switch, so the
-``+/-'' form might not be supported in future releases.
-.sp
-.LP
-If required, the ``+/-'' functionality can still be obtained for \fBNIS\fR by
-specifying \fBcompat\fR as the source for \fBgroup\fR.
-.sp
-.LP
-If the ``+/-'' functionality is required in conjunction with \fBLDAP,\fR
-specify both \fBcompat\fR as the source for \fBgroup\fR and \fBldap\fR as
-the source for the pseudo-database \fBgroup_compat\fR. See \fBgroup\fR(4), and
-\fBnsswitch.conf\fR(4) for details.
-.sp
-.LP
 Solaris 2.4 and earlier releases provided definitions of the \fBgetgrnam_r()\fR
 and \fBgetgrgid_r()\fR functions as specified in POSIX.1c Draft 6. The final
 POSIX.1c standard changed the interface for these functions. Support for the

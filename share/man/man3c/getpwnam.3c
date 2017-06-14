@@ -297,22 +297,6 @@ efficient and might not be supported for all database sources.  The
 semantics of enumeration are discussed further in \fBnsswitch.conf\fR(4).
 .sp
 .LP
-Previous releases allowed the use of `+' and `-' entries in \fB/etc/passwd\fR
-to selectively include and exclude \fBNIS\fR entries. The primary usage of
-these `+/-' entries is superseded by the name service switch, so the `+/-' form
-might not be supported in future releases.
-.sp
-.LP
-If required, the `+/-' functionality can still be obtained for \fBNIS\fR by
-specifying \fBcompat\fR as the source for \fBpasswd\fR. See
-\fBnsswitch.conf\fR(4).
-.sp
-.LP
-If the `+/-' is used, both \fB/etc/shadow\fR and \fB/etc/passwd\fR should have
-the same `+' and `-' entries to ensure consistency between the password and
-shadow databases.
-.sp
-.LP
 If a password entry from any of the sources contains an empty \fIuid\fR or
 \fIgid\fR field, that entry will be ignored by the files and \fBNIS\fR
 name service switch backends, causing the user to appear unknown to

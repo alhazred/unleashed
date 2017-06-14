@@ -1417,17 +1417,9 @@ _lc_getspent_r(struct spwd *result, char *buffer, int buflen)
 	nss_XbyY_args_t arg;
 	char		*nam;
 
-	/* In getXXent_r(), protect the unsuspecting caller from +/- entries */
-
-	do {
-		NSS_XbyY_INIT(&arg, result, buffer, buflen, str2spwd);
-			/* No key to fill in */
-		(void) nss_getent(&db_root, _lc_nss_initf_shadow, &context,
-		    &arg);
-	} while (arg.returnval != 0 &&
-	    (nam = ((struct spwd *)arg.returnval)->sp_namp) != 0 &&
-	    (*nam == '+' || *nam == '-'));
-
+	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2spwd);
+	/* No key to fill in */
+	(void) nss_getent(&db_root, _lc_nss_initf_shadow, &context, &arg);
 	return (struct spwd *)NSS_XbyY_FINI(&arg);
 }
 

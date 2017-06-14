@@ -183,7 +183,6 @@ file path=usr/share/man/man1m/psrset.1m
 file path=usr/share/man/man1m/putdev.1m
 file path=usr/share/man/man1m/putdgrp.1m
 file path=usr/share/man/man1m/pwck.1m
-file path=usr/share/man/man1m/pwconv.1m
 file path=usr/share/man/man1m/quot.1m
 file path=usr/share/man/man1m/quota.1m
 file path=usr/share/man/man1m/quotacheck.1m

@@ -42,14 +42,12 @@
 typedef enum {
 	LIST_EXTERNAL_FILE,
 	LIST_PLUS_CHECK,
-	LIST_COMPAT_MODE
 } pam_list_mode_t;
 
 static const char *
 string_mode_type(pam_list_mode_t op_mode, boolean_t allow)
 {
-	return ((op_mode == LIST_COMPAT_MODE) ? "compat" :
-	    (allow ? "allow" : "deny"));
+	return (allow ? "allow" : "deny");
 }
 
 static void
@@ -64,7 +62,7 @@ int
 pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 {
 	FILE	*fd;
-	const char	*allowdeny_filename = PF_PATH;
+	const char	*allowdeny_filename = NULL;
 	char	buf[BUFSIZ];
 	char	hostname[MAXHOSTNAMELEN];
 	char	*username = NULL;
@@ -99,14 +97,6 @@ pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 		} else if (strncasecmp(argv[i], "user_host_exact",
 		    sizeof ("user_host_exact")) == 0) {
 			check_exact = B_TRUE;
-		} else if (strcasecmp(argv[i], "compat") == 0) {
-			if (op_mode == LIST_PLUS_CHECK) {
-				op_mode = LIST_COMPAT_MODE;
-			} else {
-				log_illegal_combination("compat",
-				    string_mode_type(op_mode, allow));
-				return (PAM_SERVICE_ERR);
-			}
 		} else if (strncasecmp(argv[i], "allow=",
 		    sizeof ("allow=") - 1) == 0) {
 			if (op_mode == LIST_PLUS_CHECK) {
@@ -146,8 +136,9 @@ pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 		return (PAM_SERVICE_ERR);
 	}
 
-	if ((op_mode == LIST_COMPAT_MODE) && (check_user == B_FALSE)) {
-		log_illegal_combination("compat", "nouser");
+	if (!allowdeny_filename || strlen(allowdeny_filename) == 0) {
+		__pam_log(LOG_AUTH | LOG_ERR,
+		    "pam_list: file name not specified");
 		return (PAM_SERVICE_ERR);
 	}
 
@@ -159,7 +150,6 @@ pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 
 		__pam_log(LOG_AUTH | LOG_DEBUG,
 		    "pam_list: auth_file: %s, %s\n", allowdeny_filename,
-		    (op_mode == LIST_COMPAT_MODE) ? "compat mode" :
 		    (allow ? "allow file" : "deny file"));
 	}
 
@@ -191,12 +181,6 @@ pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 		    (rhost != NULL) ? rhost : "", username);
 	}
 
-	if (strlen(allowdeny_filename) == 0) {
-		__pam_log(LOG_AUTH | LOG_ERR,
-		    "pam_list: file name not specified");
-		return (PAM_SERVICE_ERR);
-	}
-
 	if ((fd = fopen(allowdeny_filename, "rF")) == NULL) {
 		__pam_log(LOG_AUTH | LOG_ERR, "pam_list: fopen of %s: %s",
 		    allowdeny_filename, strerror(errno));
@@ -226,59 +210,6 @@ pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 		}
 
 		bufp = buf;
-
-		/* test for interesting lines = +/- in /etc/passwd */
-		if (op_mode == LIST_COMPAT_MODE) {
-			/* simple + matches all */
-			if ((buf[0] == '+') && (buf[1] == '\0')) {
-				matched = B_TRUE;
-				allow = B_TRUE;
-				break;
-			}
-
-			/* simple - is not defined */
-			if ((buf[0] == '-') && (buf[1] == '\0')) {
-				__pam_log(LOG_AUTH | LOG_ERR,
-				    "pam_list: simple minus unknown, "
-				    "illegal line in " PF_PATH);
-				(void) fclose(fd);
-				return (PAM_SERVICE_ERR);
-			}
-
-			/* @ is not allowed on the first position */
-			if (buf[0] == '@') {
-				__pam_log(LOG_AUTH | LOG_ERR,
-				    "pam_list: @ is not allowed on the first "
-				    "position in " PF_PATH);
-				(void) fclose(fd);
-				return (PAM_SERVICE_ERR);
-			}
-
-			/* -user or -@netgroup */
-			if (buf[0] == '-') {
-				allow = B_FALSE;
-				bufp++;
-			/* +user or +@netgroup */
-			} else if (buf[0] == '+') {
-				allow = B_TRUE;
-				bufp++;
-			/* user */
-			} else {
-				allow = B_TRUE;
-			}
-		} else if (op_mode == LIST_PLUS_CHECK) {
-			if (((buf[0] != '+') && (buf[0] != '-')) ||
-			    (buf[1] == '\0')) {
-				continue;
-			}
-
-			if (buf[0] == '+') {
-				allow = B_TRUE;
-			} else {
-				allow = B_FALSE;
-			}
-			bufp++;
-		}
 
 		/*
 		 * if -> netgroup line
@@ -319,16 +250,6 @@ pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 				}
 			}
 		}
-
-		/*
-		 * No match found in /etc/passwd yet.  For compat mode
-		 * a failure to match should result in a return of
-		 * PAM_PERM_DENIED which is achieved below if 'matched'
-		 * is false and 'allow' is true.
-		 */
-		if (op_mode == LIST_COMPAT_MODE) {
-			allow = B_TRUE;
-		}
 	}
 	(void) fclose(fd);
 
@@ -340,13 +261,6 @@ pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
 
 	if (matched) {
 		return (allow ? PAM_SUCCESS : PAM_PERM_DENIED);
-	}
-	/*
-	 * For compatibility with passwd_compat mode to prevent root access
-	 * denied.
-	 */
-	if (op_mode == LIST_PLUS_CHECK) {
-		return (PAM_IGNORE);
 	}
 	return (allow ? PAM_PERM_DENIED : PAM_SUCCESS);
 }

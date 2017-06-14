@@ -107,9 +107,8 @@ get_compat_mode(void)
  *
  * "accesstype" indicates whether we are reading from or writing to the
  * repository. We need to know this since "compat" will translate into
- * REP_NSS (the nss-switch) for READ access (needed to decode
- * the black-magic '+' entries) but it translates into a bitmask
- * on WRITE access.
+ * REP_NSS (the nss-switch) for READ access but it translates into a bitmask on
+ * WRITE access.
  *
  * If we detect read-access in compat mode, we augment the result
  * with one of REP_COMPAT_{NIS,LDAP}. We need this in order to
@@ -294,7 +293,6 @@ str2passwd(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 {
 	struct passwd	*passwd	= (struct passwd *)ent;
 	char		*p, *next;
-	int		black_magic;	/* "+" or "-" entry */
 
 	if (lenstr + 1 > buflen) {
 		return (NSS_STR_PARSE_ERANGE);
@@ -313,31 +311,10 @@ str2passwd(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 		/* Empty username;  not allowed */
 		return (NSS_STR_PARSE_PARSE);
 	}
-	black_magic = (*p == '+' || *p == '-');
-	if (black_magic) {
-		passwd->pw_uid	= UID_NOBODY;
-		passwd->pw_gid	= GID_NOBODY;
-		/*
-		 * pwconv tests pw_passwd and pw_age == NULL
-		 */
-		passwd->pw_passwd = "";
-		passwd->pw_age	= "";
-		/*
-		 * the rest of the passwd entry is "optional"
-		 */
-		passwd->pw_comment = "";
-		passwd->pw_gecos = "";
-		passwd->pw_dir	= "";
-		passwd->pw_shell = "";
-	}
 
 	passwd->pw_passwd = p = gettok(&next);		/* password */
-	if (p == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if (p == 0)
+		return (NSS_STR_PARSE_PARSE);
 	for (; *p != '\0'; p++) {			/* age */
 		if (*p == ',') {
 			*p++ = '\0';
@@ -347,86 +324,57 @@ str2passwd(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 	passwd->pw_age = p;
 
 	p = next;					/* uid */
-	if (p == 0 || *p == '\0') {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
+	if (p == 0 || *p == '\0')
 			return (NSS_STR_PARSE_PARSE);
+
+	passwd->pw_uid = strtol(p, &next, 10);
+	if (next == p) {
+		/* uid field should be nonempty */
+		return (NSS_STR_PARSE_PARSE);
 	}
-	if (!black_magic) {
-		passwd->pw_uid = strtol(p, &next, 10);
-		if (next == p) {
-			/* uid field should be nonempty */
-			return (NSS_STR_PARSE_PARSE);
-		}
-		/*
-		 * The old code (in 2.0 thru 2.5) would check
-		 * for the uid being negative, or being greater
-		 * than 60001 (the rfs limit).  If it met either of
-		 * these conditions, the uid was translated to 60001.
-		 *
-		 * Now we just check for ephemeral uids; anything else
-		 * is administrative policy
-		 */
-		if (passwd->pw_uid > MAXUID)
-			passwd->pw_uid = UID_NOBODY;
-	}
-	if (*next++ != ':') {
-		if (black_magic)
-			p = gettok(&next);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	/*
+	 * The old code (in 2.0 thru 2.5) would check
+	 * for the uid being negative, or being greater
+	 * than 60001 (the rfs limit).  If it met either of
+	 * these conditions, the uid was translated to 60001.
+	 *
+	 * Now we just check for ephemeral uids; anything else
+	 * is administrative policy
+	 */
+	if (passwd->pw_uid > MAXUID)
+		passwd->pw_uid = UID_NOBODY;
+
+	if (*next++ != ':')
+		return (NSS_STR_PARSE_PARSE);
 	p = next;					/* gid */
-	if (p == 0 || *p == '\0') {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
+	if (p == 0 || *p == '\0')
+		return (NSS_STR_PARSE_PARSE);
+
+	passwd->pw_gid = strtol(p, &next, 10);
+	if (next == p) {
+		/* gid field should be nonempty */
+		return (NSS_STR_PARSE_PARSE);
 	}
-	if (!black_magic) {
-		passwd->pw_gid = strtol(p, &next, 10);
-		if (next == p) {
-			/* gid field should be nonempty */
-			return (NSS_STR_PARSE_PARSE);
-		}
-		/*
-		 * gid should be non-negative; anything else
-		 * is administrative policy.
-		 */
-		if (passwd->pw_gid > MAXUID)
-			passwd->pw_gid = GID_NOBODY;
-	}
-	if (*next++ != ':') {
-		if (black_magic)
-			p = gettok(&next);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	/*
+	 * gid should be non-negative; anything else
+	 * is administrative policy.
+	 */
+	if (passwd->pw_gid > MAXUID)
+		passwd->pw_gid = GID_NOBODY;
+	if (*next++ != ':')
+		return (NSS_STR_PARSE_PARSE);
 
 	passwd->pw_gecos = passwd->pw_comment = p = gettok(&next);
-	if (p == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if (p == 0)
+		return (NSS_STR_PARSE_PARSE);
 
 	passwd->pw_dir = p = gettok(&next);
-	if (p == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if (p == 0)
+		return (NSS_STR_PARSE_PARSE);
 
 	passwd->pw_shell = p = gettok(&next);
-	if (p == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if (p == 0)
+		return (NSS_STR_PARSE_PARSE);
 
 	/* Better not be any more fields... */
 	if (next == 0) {
@@ -504,8 +452,7 @@ getfield(nextp, limit, uns, valp)
  *  str2spwd() -- convert a string to a shadow passwd entry.  The parser is
  *	more liberal than the passwd or group parsers;  since it's legitimate
  *	for almost all the fields here to be blank, the parser lets one omit
- *	any number of blank fields at the end of the entry.  The acceptable
- *	forms for '+' and '-' entries are the same as those for normal entries.
+ *	any number of blank fields at the end of the entry.
  *  === Is this likely to do more harm than good?
  *
  * Return values: 0 = success, 1 = parse error, 2 = erange ...
@@ -524,7 +471,7 @@ str2spwd(instr, lenstr, ent, buffer, buflen)
 	struct spwd	*shadow	= (struct spwd *)ent;
 	const char	*p = instr, *limit;
 	char		*bufp;
-	int	lencopy, black_magic;
+	int	lencopy;
 
 	limit = p + lenstr;
 	if ((p = memchr(instr, ':', lenstr)) == 0 ||
@@ -542,7 +489,6 @@ str2spwd(instr, lenstr, ent, buffer, buflen)
 	(void) memcpy(buffer, instr, lencopy);
 	buffer[lencopy] = 0;
 
-	black_magic = (*instr == '+' || *instr == '-');
 	shadow->sp_namp = bufp = buffer;
 	shadow->sp_pwdp	= 0;
 	shadow->sp_lstchg = -1;
@@ -553,22 +499,14 @@ str2spwd(instr, lenstr, ent, buffer, buflen)
 	shadow->sp_expire = -1;
 	shadow->sp_flag	= 0;
 
-	if ((bufp = strchr(bufp, ':')) == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if ((bufp = strchr(bufp, ':')) == 0)
+		return (NSS_STR_PARSE_PARSE);
 	*bufp++ = '\0';
 
 	shadow->sp_pwdp = bufp;
 	if (instr == 0) {
-		if ((bufp = strchr(bufp, ':')) == 0) {
-			if (black_magic)
-				return (NSS_STR_PARSE_SUCCESS);
-			else
-				return (NSS_STR_PARSE_PARSE);
-		}
+		if ((bufp = strchr(bufp, ':')) == 0)
+			return (NSS_STR_PARSE_PARSE);
 		*bufp++ = '\0';
 		p = bufp;
 	} /* else p was set when we copied name and passwd into the buffer */

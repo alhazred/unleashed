@@ -186,15 +186,9 @@ getgrent_r(struct group *result, char *buffer, int buflen)
 	nss_XbyY_args_t arg;
 	char		*nam;
 
-	/* In getXXent_r(), protect the unsuspecting caller from +/- entries */
-
-	do {
-		NSS_XbyY_INIT(&arg, result, buffer, buflen, str2group);
-		/* No key to fill in */
-		(void) nss_getent(&db_root, _nss_initf_group, &context, &arg);
-	} while (arg.returnval != 0 &&
-	    (nam = ((struct group *)arg.returnval)->gr_name) != 0 &&
-	    (*nam == '+' || *nam == '-'));
+	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2group);
+	/* No key to fill in */
+	(void) nss_getent(&db_root, _nss_initf_group, &context, &arg);
 
 	return ((struct group *)NSS_XbyY_FINI(&arg));
 }
@@ -204,8 +198,6 @@ fgetgrent_r(FILE *f, struct group *result, char *buffer, int buflen)
 {
 	extern void	_nss_XbyY_fgets(FILE *, nss_XbyY_args_t *);
 	nss_XbyY_args_t	arg;
-
-	/* ... but in fgetXXent_r, the caller deserves any +/- entry it gets */
 
 	/* No key to fill in */
 	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2group);
@@ -317,7 +309,6 @@ str2group(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 {
 	struct group		*group	= (struct group *)ent;
 	char			*p, *next;
-	int			black_magic;	/* "+" or "-" entry */
 	char			**memlist, **limit;
 	ulong_t			tmp;
 
@@ -357,46 +348,28 @@ str2group(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 	*memlist = 0;
 	group->gr_mem = memlist;
 
-	black_magic = (*p == '+' || *p == '-');
-	if (black_magic) {
-		/* Then the rest of the group entry is optional */
-		group->gr_passwd = 0;
-		group->gr_gid = 0;
-	}
-
 	group->gr_passwd = p = gettok(&next, ':');
-	if (p == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if (p == 0)
+		return (NSS_STR_PARSE_PARSE);
 
 	p = next;					/* gid */
-	if (p == 0 || *p == '\0') {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
-	if (!black_magic) {
-		errno = 0;
-		tmp = strtoul(p, &next, 10);
-		if (next == p || errno != 0) {
-			/* gid field should be nonempty */
-			/* also check errno from strtoul */
-			return (NSS_STR_PARSE_PARSE);
-		}
-		if (tmp >= UINT32_MAX)
-			group->gr_gid = GID_NOBODY;
-		else
-			group->gr_gid = (gid_t)tmp;
-	}
-	if (*next++ != ':') {
-		/* Parse error, even for a '+' entry (which should have	*/
-		/*   an empty gid field, since it's always overridden)	*/
+	if (p == 0 || *p == '\0')
+		return (NSS_STR_PARSE_PARSE);
+
+	errno = 0;
+	tmp = strtoul(p, &next, 10);
+	if (next == p || errno != 0) {
+		/* gid field should be nonempty */
+		/* also check errno from strtoul */
 		return (NSS_STR_PARSE_PARSE);
 	}
+	if (tmp >= UINT32_MAX)
+		group->gr_gid = GID_NOBODY;
+	else
+		group->gr_gid = (gid_t)tmp;
+
+	if (*next++ != ':')
+		return (NSS_STR_PARSE_PARSE);
 
 	/* === Could check and complain if there are any extra colons */
 	while (memlist < limit) {
@@ -408,7 +381,7 @@ str2group(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 		}
 		*memlist++ = p;
 	}
-	/* Out of space;  error even for black_magic */
+	/* Out of space */
 	return (NSS_STR_PARSE_ERANGE);
 }
 

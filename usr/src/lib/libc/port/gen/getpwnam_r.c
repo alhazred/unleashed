@@ -170,7 +170,6 @@ str2passwd(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 {
 	struct passwd	*passwd	= (struct passwd *)ent;
 	char		*p, *next;
-	int		black_magic;	/* "+" or "-" entry */
 	ulong_t		tmp;
 
 	if (lenstr + 1 > buflen)
@@ -197,31 +196,10 @@ str2passwd(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 		/* Empty username;  not allowed */
 		return (NSS_STR_PARSE_PARSE);
 	}
-	black_magic = (*p == '+' || *p == '-');
-	if (black_magic) {
-		passwd->pw_uid = UID_NOBODY;
-		passwd->pw_gid = GID_NOBODY;
-		/*
-		 *  pwconv tests pw_passwd and pw_age == NULL
-		 */
-		passwd->pw_passwd  = "";
-		passwd->pw_age	= "";
-		/*
-		 * the rest of the passwd entry is "optional"
-		 */
-		passwd->pw_comment = "";
-		passwd->pw_gecos = "";
-		passwd->pw_dir	= "";
-		passwd->pw_shell = "";
-	}
 
 	passwd->pw_passwd = p = gettok(&next);		/* password */
-	if (p == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if (p == 0)
+		return (NSS_STR_PARSE_PARSE);
 	for (; *p != '\0';  p++) {			/* age */
 		if (*p == ',') {
 			*p++ = '\0';
@@ -231,101 +209,73 @@ str2passwd(const char *instr, int lenstr, void *ent, char *buffer, int buflen)
 	passwd->pw_age = p;
 
 	p = next;					/* uid */
-	if (p == 0 || *p == '\0') {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
+	if (p == 0 || *p == '\0')
+		return (NSS_STR_PARSE_PARSE);
+
+	/*
+	 * strtoul returns unsigned long which is
+	 * 8 bytes on a 64-bit system. We don't want
+	 * to assign it directly to passwd->pw_uid
+	 * which is 4 bytes or else we will end up
+	 * truncating the value.
+	 */
+	errno = 0;
+	tmp = strtoul(p, &next, 10);
+	if (next == p || errno != 0) {
+		/* uid field should be nonempty */
+		/* also check errno from strtoul */
+		return (NSS_STR_PARSE_PARSE);
 	}
-	if (!black_magic) {
-		/*
-		 * strtoul returns unsigned long which is
-		 * 8 bytes on a 64-bit system. We don't want
-		 * to assign it directly to passwd->pw_uid
-		 * which is 4 bytes or else we will end up
-		 * truncating the value.
-		 */
-		errno = 0;
-		tmp = strtoul(p, &next, 10);
-		if (next == p || errno != 0) {
-			/* uid field should be nonempty */
-			/* also check errno from strtoul */
-			return (NSS_STR_PARSE_PARSE);
-		}
-		/*
-		 * The old code (in 2.0 through 2.5) would check
-		 * for the uid being negative, or being greater
-		 * than 60001 (the rfs limit).  If it met either of
-		 * these conditions, the uid was translated to 60001.
-		 *
-		 * Now we just check for -1 (UINT32_MAX); anything else
-		 * is administrative policy
-		 */
-		if (tmp >= UINT32_MAX)
-			passwd->pw_uid = UID_NOBODY;
-		else
-			passwd->pw_uid = (uid_t)tmp;
-	}
-	if (*next++ != ':') {
-		if (black_magic)
-			(void) gettok(&next);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	/*
+	 * The old code (in 2.0 through 2.5) would check
+	 * for the uid being negative, or being greater
+	 * than 60001 (the rfs limit).  If it met either of
+	 * these conditions, the uid was translated to 60001.
+	 *
+	 * Now we just check for -1 (UINT32_MAX); anything else
+	 * is administrative policy
+	 */
+	if (tmp >= UINT32_MAX)
+		passwd->pw_uid = UID_NOBODY;
+	else
+		passwd->pw_uid = (uid_t)tmp;
+
+	if (*next++ != ':')
+		return (NSS_STR_PARSE_PARSE);
 	p = next;					/* gid */
-	if (p == 0 || *p == '\0') {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
+	if (p == 0 || *p == '\0')
+		return (NSS_STR_PARSE_PARSE);
+
+	errno = 0;
+	tmp = strtoul(p, &next, 10);
+	if (next == p || errno != 0) {
+		/* gid field should be nonempty */
+		/* also check errno from strtoul */
+		return (NSS_STR_PARSE_PARSE);
 	}
-	if (!black_magic) {
-		errno = 0;
-		tmp = strtoul(p, &next, 10);
-		if (next == p || errno != 0) {
-			/* gid field should be nonempty */
-			/* also check errno from strtoul */
-			return (NSS_STR_PARSE_PARSE);
-		}
-		/*
-		 * gid should not be -1; anything else
-		 * is administrative policy.
-		 */
-		if (tmp >= UINT32_MAX)
-			passwd->pw_gid = GID_NOBODY;
-		else
-			passwd->pw_gid = (gid_t)tmp;
-	}
-	if (*next++ != ':') {
-		if (black_magic)
-			(void) gettok(&next);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	/*
+	 * gid should not be -1; anything else
+	 * is administrative policy.
+	 */
+	if (tmp >= UINT32_MAX)
+		passwd->pw_gid = GID_NOBODY;
+	else
+		passwd->pw_gid = (gid_t)tmp;
+
+	if (*next++ != ':')
+		return (NSS_STR_PARSE_PARSE);
 
 	passwd->pw_gecos = passwd->pw_comment = p = gettok(&next);
-	if (p == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if (p == 0)
+		return (NSS_STR_PARSE_PARSE);
 
 	passwd->pw_dir = p = gettok(&next);
-	if (p == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if (p == 0)
+		return (NSS_STR_PARSE_PARSE);
 
 	passwd->pw_shell = p = gettok(&next);
-	if (p == 0) {
-		if (black_magic)
-			return (NSS_STR_PARSE_SUCCESS);
-		else
-			return (NSS_STR_PARSE_PARSE);
-	}
+	if (p == 0)
+		return (NSS_STR_PARSE_PARSE);
 
 	/* Better not be any more fields... */
 	if (next == 0) {
