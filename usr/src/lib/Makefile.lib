@@ -32,7 +32,7 @@
 include		$(SRC)/Makefile.master
 
 LORDER=		lorder
-TSORT=		tsort
+TSORT=		tsort -q
 
 #
 # By default, we define the source directory for libraries to be
