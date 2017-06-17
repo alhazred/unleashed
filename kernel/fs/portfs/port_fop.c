@@ -280,18 +280,6 @@ static fsem_t fop_fsemop = {
 	.fsemop_unmount = port_fop_unmount,
 };
 
-static fem_t *
-port_fop_femop()
-{
-	return (&fop_femop);
-}
-
-static fsem_t *
-port_fop_fsemop()
-{
-	return (&fop_fsemop);
-}
-
 /*
  * port_fop_callback()
  * - PORT_CALLBACK_DEFAULT
@@ -996,7 +984,6 @@ port_fop_pvfsadd(portfop_vp_t *pvp)
 	vnode_t	*vp = pvp->pvp_vp;
 	portfop_vfs_hash_t *pvfsh;
 	portfop_vfs_t	 *pvfsp;
-	fsem_t		*fsemp;
 
 	pvfsh = PORTFOP_PVFSH(vp->v_vfsp);
 	mutex_enter(&pvfsh->pvfshash_mutex);
@@ -1005,21 +992,17 @@ port_fop_pvfsadd(portfop_vp_t *pvp)
 		;
 
 	if (!pvfsp) {
-		if ((fsemp = port_fop_fsemop()) != NULL) {
-			if ((error = fsem_install(vp->v_vfsp, fsemp,
-			    vp->v_vfsp, OPUNIQ, NULL, NULL))) {
-				mutex_exit(&pvfsh->pvfshash_mutex);
-				return (error);
-			}
-		} else {
+		if ((error = fsem_install(vp->v_vfsp, &fop_fsemop,
+		    vp->v_vfsp, OPUNIQ, NULL, NULL))) {
 			mutex_exit(&pvfsh->pvfshash_mutex);
-			return (EINVAL);
+			return (error);
 		}
+
 		pvfsp = kmem_zalloc(sizeof (portfop_vfs_t), KM_SLEEP);
 		pvfsp->pvfs = vp->v_vfsp;
 		list_create(&(pvfsp->pvfs_pvplist), sizeof (portfop_vp_t),
 		    offsetof(portfop_vp_t, pvp_pvfsnode));
-		pvfsp->pvfs_fsemp = fsemp;
+		pvfsp->pvfs_fsemp = &fop_fsemop;
 		pvfsp->pvfs_next = pvfsh->pvfshash_pvfsp;
 		pvfsh->pvfshash_pvfsp = pvfsp;
 	}
@@ -1079,7 +1062,6 @@ port_pfp_setup(portfop_t **pfpp, port_t *pp, vnode_t *vp, portfop_cache_t *pfcp,
 {
 	portfop_t	*pfp = NULL;
 	port_kevent_t	*pkevp;
-	fem_t		*femp;
 	int		error = 0;
 	portfop_vp_t	*pvp;
 
@@ -1135,27 +1117,23 @@ port_pfp_setup(portfop_t **pfpp, port_t *pp, vnode_t *vp, portfop_cache_t *pfcp,
 	 * if the vnode does not have the file events hooks, install it.
 	 */
 	if (pvp->pvp_femp == NULL) {
-		if ((femp = port_fop_femop()) != NULL) {
-			if (!(error = fem_install(pfp->pfop_vp, femp,
-			    (void *)vp, OPUNIQ, NULL, NULL))) {
-				pvp->pvp_femp = femp;
+		if (!(error = fem_install(pfp->pfop_vp, &fop_femop, vp, OPUNIQ,
+					  NULL, NULL))) {
+			pvp->pvp_femp = &fop_femop;
+			/*
+			 * add fsem_t hooks to the vfsp and add pvp to
+			 * the list of vnodes for this vfs.
+			 */
+			if (!(error = port_fop_pvfsadd(pvp))) {
 				/*
-				 * add fsem_t hooks to the vfsp and add pvp to
-				 * the list of vnodes for this vfs.
+				 * Hold a reference to the vnode since
+				 * we successfully installed the hooks.
 				 */
-				if (!(error = port_fop_pvfsadd(pvp))) {
-					/*
-					 * Hold a reference to the vnode since
-					 * we successfully installed the hooks.
-					 */
-					VN_HOLD(vp);
-				} else {
-					(void) fem_uninstall(vp, femp, vp);
-					pvp->pvp_femp = NULL;
-				}
+				VN_HOLD(vp);
+			} else {
+				(void) fem_uninstall(vp, &fop_femop, vp);
+				pvp->pvp_femp = NULL;
 			}
-		} else {
-			error = EINVAL;
 		}
 	}
 
