@@ -407,7 +407,7 @@ vhead_open(vnode_t **vpp, int mode, cred_t *cr, caller_context_t *ct)
 
 	if ((femsp = fem_lock((*vpp)->v_femhead)) == NULL) {
 		func = (int (*)()) ((*vpp)->v_op->vop_open);
-		arg0 = (void *)vpp;
+		arg0 = vpp;
 		fem_unlock((*vpp)->v_femhead);
 		errc = (*func)(arg0, mode, cr, ct);
 	} else {
@@ -3376,7 +3376,7 @@ fem_is_installed(vnode_t *v, fem_t *mon, void *arg)
 
 	fl = fem_get(v->v_femhead);
 	if (fl != NULL) {
-		e = fem_walk_list(fl, fem_compare_mon, (void *)mon, arg);
+		e = fem_walk_list(fl, fem_compare_mon, mon, arg);
 		fem_release(fl);
 		return (e);
 	}
@@ -3387,8 +3387,7 @@ int
 fem_uninstall(vnode_t *v, fem_t *mon, void *arg)
 {
 	int	e;
-	e = fem_remove_node(v->v_femhead, (void **)&v->v_op,
-	    (void *)mon, arg);
+	e = fem_remove_node(v->v_femhead, (void **)&v->v_op, mon, arg);
 	return (e);
 }
 
@@ -3477,7 +3476,7 @@ fsem_is_installed(struct vfs *v, fsem_t *mon, void *arg)
 	fl = fem_get(v->vfs_femhead);
 	if (fl != NULL) {
 		int	e;
-		e = fem_walk_list(fl, fem_compare_mon, (void *)mon, arg);
+		e = fem_walk_list(fl, fem_compare_mon, mon, arg);
 		fem_release(fl);
 		return (e);
 	}
@@ -3529,8 +3528,7 @@ fsem_uninstall(struct vfs *v, fsem_t *mon, void *arg)
 	if (v->vfs_implp == NULL)
 		return (EINVAL);
 
-	e = fem_remove_node(v->vfs_femhead, (void **)&v->vfs_op,
-	    (void *)mon, arg);
+	e = fem_remove_node(v->vfs_femhead, (void **)&v->vfs_op, mon, arg);
 	return (e);
 }
 
@@ -3597,7 +3595,7 @@ fem_init()
 	 */
 	fi = &femtype[FEMTYPE_NULL];
 	fi->errf = fem_err;
-	fi->guard.fn_available = (void *)&fi->guard;
+	fi->guard.fn_available = &fi->guard;
 	fi->guard.fn_av_hold = NULL;
 	fi->guard.fn_av_rele = NULL;
 	fi->guard.fn_op.anon = NULL;
@@ -3608,7 +3606,7 @@ fem_init()
 	fi->head.fn_av_hold = NULL;
 	fi->head.fn_av_rele = NULL;
 	(void) vn_make_ops("fem-head", fhead_vn_spec, &fi->head.fn_op.vnode);
-	fi->guard.fn_available = (void *)&fi->guard;
+	fi->guard.fn_available = &fi->guard;
 	fi->guard.fn_av_hold = NULL;
 	fi->guard.fn_av_rele = NULL;
 	(void) fem_create("fem-guard", fem_guard_ops, &fi->guard.fn_op.fem);
@@ -3619,7 +3617,7 @@ fem_init()
 	fi->head.fn_av_hold = NULL;
 	fi->head.fn_av_rele = NULL;
 	(void) vfs_makefsops(fshead_vfs_spec, &fi->head.fn_op.vfs);
-	fi->guard.fn_available = (void *)&fi->guard;
+	fi->guard.fn_available = &fi->guard;
 	fi->guard.fn_av_hold = NULL;
 	fi->guard.fn_av_rele = NULL;
 	(void) fsem_create("fem-guard", fsem_guard_ops, &fi->guard.fn_op.fsem);
