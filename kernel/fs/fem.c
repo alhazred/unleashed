@@ -3595,14 +3595,14 @@ fem_init()
 	 * before it's actually initialized would panic the system as
 	 * soon as "fn_op" (NULL) is dereferenced.
 	 */
-	fi = femtype + FEMTYPE_NULL;
+	fi = &femtype[FEMTYPE_NULL];
 	fi->errf = fem_err;
 	fi->guard.fn_available = (void *)&fi->guard;
 	fi->guard.fn_av_hold = NULL;
 	fi->guard.fn_av_rele = NULL;
 	fi->guard.fn_op.anon = NULL;
 
-	fi = femtype + FEMTYPE_VNODE;
+	fi = &femtype[FEMTYPE_VNODE];
 	fi->errf = fem_err;
 	fi->head.fn_available = NULL;
 	fi->head.fn_av_hold = NULL;
@@ -3613,13 +3613,12 @@ fem_init()
 	fi->guard.fn_av_rele = NULL;
 	(void) fem_create("fem-guard", fem_guard_ops, &fi->guard.fn_op.fem);
 
-	fi = femtype + FEMTYPE_VFS;
+	fi = &femtype[FEMTYPE_VFS];
 	fi->errf = fsem_err;
 	fi->head.fn_available = NULL;
 	fi->head.fn_av_hold = NULL;
 	fi->head.fn_av_rele = NULL;
 	(void) vfs_makefsops(fshead_vfs_spec, &fi->head.fn_op.vfs);
-
 	fi->guard.fn_available = (void *)&fi->guard;
 	fi->guard.fn_av_hold = NULL;
 	fi->guard.fn_av_rele = NULL;
