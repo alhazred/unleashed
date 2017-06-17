@@ -135,7 +135,7 @@ struct fem_list {
 	int	feml_tos;	/* top of stack pointer(index) */
 	int	feml_ssize;	/* stack size */
 	int	feml_pad;	/* alignment */
-	struct fem_node feml_nodes[1]; /* variable bounds */
+	struct fem_node feml_nodes[];
 };
 
 struct fem_head {

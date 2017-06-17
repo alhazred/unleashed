@@ -46,7 +46,7 @@
  * of the fem_list structure.
  */
 #define	fl_ntob(n)	(sizeof (struct fem_list) + \
-			((n) - 1) * sizeof (struct fem_node))
+			 (n) * sizeof (struct fem_node))
 
 typedef enum {
 	FEMTYPE_NULL,	/* Uninitialized */
