@@ -51,6 +51,7 @@
 #include <sys/vfs.h>
 #include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
+#include <sys/vnode_dispatch.h>
 #include <sys/rwstlock.h>
 #include <sys/fem.h>
 #include <sys/stat.h>
@@ -3190,10 +3191,7 @@ fop_open(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if ((*vpp)->v_op->vop_open == NULL)
-		ret = ENOSYS;
-	else
-		ret = (*vpp)->v_op->vop_open(vpp, mode, cr, ct);
+	ret = fop_open_dispatch(vpp, mode, cr, ct);
 
 	if (ret) {
 		/*
@@ -3244,10 +3242,7 @@ fop_close(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_close == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_close(vp, flag, count, offset, cr, ct);
+	err = fop_close_dispatch(vp, flag, count, offset, cr, ct);
 
 	VOPSTATS_UPDATE(vp, close);
 	/*
@@ -3280,10 +3275,7 @@ fop_read(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_read == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_read(vp, uiop, ioflag, cr, ct);
+	err = fop_read_dispatch(vp, uiop, ioflag, cr, ct);
 
 	VOPSTATS_UPDATE_IO(vp, read,
 	    read_bytes, (resid_start - uiop->uio_resid));
@@ -3303,10 +3295,7 @@ fop_write(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_write == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_write(vp, uiop, ioflag, cr, ct);
+	err = fop_write_dispatch(vp, uiop, ioflag, cr, ct);
 
 	VOPSTATS_UPDATE_IO(vp, write,
 	    write_bytes, (resid_start - uiop->uio_resid));
@@ -3327,10 +3316,7 @@ fop_ioctl(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_ioctl == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_ioctl(vp, cmd, arg, flag, cr, rvalp, ct);
+	err = fop_ioctl_dispatch(vp, cmd, arg, flag, cr, rvalp, ct);
 
 	VOPSTATS_UPDATE(vp, ioctl);
 	return (err);
@@ -3385,10 +3371,7 @@ fop_getattr(
 	    vfs_has_feature(vp->v_vfsp, VFSFT_ACEMASKONACCESS) == 0)
 		return (EINVAL);
 
-	if (vp->v_op->vop_getattr == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_getattr(vp, vap, flags, cr, ct);
+	err = fop_getattr_dispatch(vp, vap, flags, cr, ct);
 
 	VOPSTATS_UPDATE(vp, getattr);
 	return (err);
@@ -3422,10 +3405,7 @@ fop_setattr(
 	    vfs_has_feature(vp->v_vfsp, VFSFT_ACEMASKONACCESS) == 0)
 		return (EINVAL);
 
-	if (vp->v_op->vop_setattr == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_setattr(vp, vap, flags, cr, ct);
+	err = fop_setattr_dispatch(vp, vap, flags, cr, ct);
 
 	VOPSTATS_UPDATE(vp, setattr);
 	return (err);
@@ -3448,10 +3428,7 @@ fop_access(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_access == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_access(vp, mode, flags, cr, ct);
+	err = fop_access_dispatch(vp, mode, flags, cr, ct);
 
 	VOPSTATS_UPDATE(vp, access);
 	return (err);
@@ -3743,10 +3720,7 @@ fop_readdir(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_readdir == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_readdir(vp, uiop, cr, eofp, ct, flags);
+	err = fop_readdir_dispatch(vp, uiop, cr, eofp, ct, flags);
 
 	VOPSTATS_UPDATE_IO(vp, readdir,
 	    readdir_bytes, (resid_start - uiop->uio_resid));
@@ -3806,10 +3780,7 @@ fop_readlink(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_readlink == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_readlink(vp, uiop, cr, ct);
+	err = fop_readlink_dispatch(vp, uiop, cr, ct);
 
 	VOPSTATS_UPDATE(vp, readlink);
 	return (err);
@@ -3826,10 +3797,7 @@ fop_fsync(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_fsync == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_fsync(vp, syncflag, cr, ct);
+	err = fop_fsync_dispatch(vp, syncflag, cr, ct);
 
 	VOPSTATS_UPDATE(vp, fsync);
 	return (err);
@@ -3858,10 +3826,7 @@ fop_fid(
 {
 	int	err;
 
-	if (vp->v_op->vop_fid == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_fid(vp, fidp, ct);
+	err = fop_fid_dispatch(vp, fidp, ct);
 
 	VOPSTATS_UPDATE(vp, fid);
 	return (err);
@@ -3907,10 +3872,7 @@ fop_seek(
 {
 	int	err;
 
-	if (vp->v_op->vop_seek == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_seek(vp, ooff, noffp, ct);
+	err = fop_seek_dispatch(vp, ooff, noffp, ct);
 
 	VOPSTATS_UPDATE(vp, seek);
 	return (err);
@@ -3972,10 +3934,7 @@ fop_space(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_space == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_space(vp, cmd, bfp, flag, offset, cr, ct);
+	err = fop_space_dispatch(vp, cmd, bfp, flag, offset, cr, ct);
 
 	VOPSTATS_UPDATE(vp, space);
 	return (err);
@@ -3989,10 +3948,7 @@ fop_realvp(
 {
 	int	err;
 
-	if (vp->v_op->vop_realvp == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_realvp(vp, vpp, ct);
+	err = fop_realvp_dispatch(vp, vpp, ct);
 
 	VOPSTATS_UPDATE(vp, realvp);
 	return (err);
@@ -4016,11 +3972,8 @@ fop_getpage(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_getpage == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_getpage(vp, off, len, protp, plarr,
-					    plsz, seg, addr, rw, cr, ct);
+	err = fop_getpage_dispatch(vp, off, len, protp, plarr, plsz, seg,
+	    addr, rw, cr, ct);
 
 	VOPSTATS_UPDATE(vp, getpage);
 	return (err);
@@ -4039,10 +3992,8 @@ fop_putpage(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_putpage == NULL)
-		err = ENOSYS;
-	else
-		err = (*(vp)->v_op->vop_putpage)(vp, off, len, flags, cr, ct);
+	err = fop_putpage_dispatch(vp, off, len, flags, cr, ct);
+
 	VOPSTATS_UPDATE(vp, putpage);
 	return (err);
 }
@@ -4064,11 +4015,8 @@ fop_map(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_map == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_map(vp, off, as, addrp, len, prot,
-					maxprot, flags, cr, ct);
+	err = fop_map_dispatch(vp, off, as, addrp, len, prot, maxprot,
+	    flags, cr, ct);
 
 	VOPSTATS_UPDATE(vp, map);
 	return (err);
@@ -4092,11 +4040,8 @@ fop_addmap(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_addmap == NULL)
-		error = ENOSYS;
-	else
-		error = vp->v_op->vop_addmap(vp, off, as, addr, len, prot,
-					     maxprot, flags, cr, ct);
+	error = fop_addmap_dispatch(vp, off, as, addr, len, prot, maxprot,
+	    flags, cr, ct);
 
 	if ((!error) && (vp->v_type == VREG)) {
 		delta = (u_longlong_t)btopr(len);
@@ -4145,11 +4090,8 @@ fop_delmap(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_delmap == NULL)
-		error = ENOSYS;
-	else
-		error = vp->v_op->vop_delmap(vp, off, as, addr, len, prot,
-					     maxprot, flags, cr, ct);
+	error = fop_delmap_dispatch(vp, off, as, addr, len, prot, maxprot,
+	    flags, cr, ct);
 
 	/*
 	 * NFS calls into delmap twice, the first time
@@ -4221,10 +4163,7 @@ fop_dump(
 	if ((lbdn != (daddr_t)lbdn) || (dblks != (int)dblks))
 		return (EIO);
 
-	if (vp->v_op->vop_dump == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_dump(vp, addr, lbdn, dblks, ct);
+	err = fop_dump_dispatch(vp, addr, lbdn, dblks, ct);
 
 	VOPSTATS_UPDATE(vp, dump);
 	return (err);
@@ -4265,11 +4204,7 @@ fop_pageio(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	if (vp->v_op->vop_pageio == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_pageio(vp, pp, io_off, io_len, flags,
-					   cr, ct);
+	err = fop_pageio_dispatch(vp, pp, io_off, io_len, flags, cr, ct);
 
 	VOPSTATS_UPDATE(vp, pageio);
 	return (err);
@@ -4284,10 +4219,7 @@ fop_dumpctl(
 {
 	int	err;
 
-	if (vp->v_op->vop_dumpctl == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_dumpctl(vp, action, blkp, ct);
+	err = fop_dumpctl_dispatch(vp, action, blkp, ct);
 
 	VOPSTATS_UPDATE(vp, dumpctl);
 	return (err);
@@ -4334,10 +4266,7 @@ fop_setsecattr(
 		return (EINVAL);
 	}
 
-	if (vp->v_op->vop_setsecattr == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_setsecattr(vp, vsap, flag, cr, ct);
+	err = fop_setsecattr_dispatch(vp, vsap, flag, cr, ct);
 
 	VOPSTATS_UPDATE(vp, setsecattr);
 	return (err);
@@ -4401,10 +4330,7 @@ fop_vnevent(vnode_t *vp, vnevent_t vnevent, vnode_t *dvp, char *fnm,
 {
 	int	err;
 
-	if (vp->v_op->vop_vnevent == NULL)
-		err = ENOTSUP;
-	else
-		err = vp->v_op->vop_vnevent(vp, vnevent, dvp, fnm, ct);
+	err = fop_vnevent_dispatch(vp, vnevent, dvp, fnm, ct);
 
 	VOPSTATS_UPDATE(vp, vnevent);
 	return (err);
@@ -4419,10 +4345,7 @@ fop_reqzcbuf(vnode_t *vp, enum uio_rw ioflag, xuio_t *uiop, cred_t *cr,
 	if (vfs_has_feature(vp->v_vfsp, VFSFT_ZEROCOPY_SUPPORTED) == 0)
 		return (ENOTSUP);
 
-	if (vp->v_op->vop_reqzcbuf == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_reqzcbuf(vp, ioflag, uiop, cr, ct);
+	err = fop_reqzcbuf_dispatch(vp, ioflag, uiop, cr, ct);
 
 	VOPSTATS_UPDATE(vp, reqzcbuf);
 	return (err);
@@ -4436,10 +4359,7 @@ fop_retzcbuf(vnode_t *vp, xuio_t *uiop, cred_t *cr, caller_context_t *ct)
 	if (vfs_has_feature(vp->v_vfsp, VFSFT_ZEROCOPY_SUPPORTED) == 0)
 		return (ENOTSUP);
 
-	if (vp->v_op->vop_retzcbuf == NULL)
-		err = ENOSYS;
-	else
-		err = vp->v_op->vop_retzcbuf(vp, uiop, cr, ct);
+	err = fop_retzcbuf_dispatch(vp, uiop, cr, ct);
 
 	VOPSTATS_UPDATE(vp, retzcbuf);
 	return (err);
