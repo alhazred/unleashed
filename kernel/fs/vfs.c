@@ -53,6 +53,7 @@
 #include <sys/proc.h>
 #include <sys/mount.h>
 #include <sys/vfs.h>
+#include <sys/vfs_dispatch.h>
 #include <sys/vfs_opreg.h>
 #include <sys/fem.h>
 #include <sys/mntent.h>
@@ -222,20 +223,23 @@ const mntopts_t vfs_mntopts = {
 int
 fsop_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 {
-	return (*(vfsp)->vfs_op->vfs_mount)(vfsp, mvp, uap, cr);
+	return fsop_mount_dispatch(vfsp, mvp, uap, cr);
 }
 
 int
 fsop_unmount(vfs_t *vfsp, int flag, cred_t *cr)
 {
-	return (*(vfsp)->vfs_op->vfs_unmount)(vfsp, flag, cr);
+	return fsop_unmount_dispatch(vfsp, flag, cr);
 }
 
 int
 fsop_root(vfs_t *vfsp, vnode_t **vpp)
 {
 	refstr_t *mntpt;
-	int ret = (*(vfsp)->vfs_op->vfs_root)(vfsp, vpp);
+	int ret;
+
+	ret = fsop_root_dispatch(vfsp, vpp);
+
 	/*
 	 * Make sure this root has a path.  With lofs, it is possible to have
 	 * a NULL mountpoint.
@@ -253,13 +257,13 @@ fsop_root(vfs_t *vfsp, vnode_t **vpp)
 int
 fsop_statfs(vfs_t *vfsp, statvfs64_t *sp)
 {
-	return (*(vfsp)->vfs_op->vfs_statvfs)(vfsp, sp);
+	return fsop_statfs_dispatch(vfsp, sp);
 }
 
 int
 fsop_sync(vfs_t *vfsp, short flag, cred_t *cr)
 {
-	return (*(vfsp)->vfs_op->vfs_sync)(vfsp, flag, cr);
+	return fsop_sync_dispatch(vfsp, flag, cr);
 }
 
 int
@@ -280,25 +284,25 @@ fsop_vget(vfs_t *vfsp, vnode_t **vpp, fid_t *fidp)
 	    fidp->fid_len == XATTR_FIDSZ)
 		return (xattr_dir_vget(vfsp, vpp, fidp));
 
-	return (*(vfsp)->vfs_op->vfs_vget)(vfsp, vpp, fidp);
+	return fsop_vget_dispatch(vfsp, vpp, fidp);
 }
 
 int
 fsop_mountroot(vfs_t *vfsp, enum whymountroot reason)
 {
-	return (*(vfsp)->vfs_op->vfs_mountroot)(vfsp, reason);
+	return fsop_mountroot_dispatch(vfsp, reason);
 }
 
 void
 fsop_freefs(vfs_t *vfsp)
 {
-	(*(vfsp)->vfs_op->vfs_freevfs)(vfsp);
+	fsop_freefs_dispatch(vfsp);
 }
 
 int
 fsop_vnstate(vfs_t *vfsp, vnode_t *vp, vntrans_t nstate)
 {
-	return ((*(vfsp)->vfs_op->vfs_vnstate)(vfsp, vp, nstate));
+	return fsop_vnstate_dispatch(vfsp, vp, nstate);
 }
 
 int
