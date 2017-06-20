@@ -2857,54 +2857,20 @@ vn_is_mapped(
 
 /*
  * Set the operations vector for a vnode.
- *
- * FEM ensures that the v_femhead pointer is filled in before the
- * v_op pointer is changed.  This means that if the v_femhead pointer
- * is NULL, and the v_op field hasn't changed since before which checked
- * the v_femhead pointer; then our update is ok - we are not racing with
- * FEM.
  */
 void
-vn_setops(vnode_t *vp, vnodeops_t *vnodeops)
+vn_setops(struct vnode *vnode, struct vnodeops *ops)
 {
-	vnodeops_t	*op;
-
-	ASSERT(vp != NULL);
-	ASSERT(vnodeops != NULL);
-
-	op = vp->v_op;
-	membar_consumer();
-	/*
-	 * If vp->v_femhead == NULL, then we'll call atomic_cas_ptr() to do
-	 * the compare-and-swap on vp->v_op.  If either fails, then FEM is
-	 * in effect on the vnode and we need to have FEM deal with it.
-	 */
-	if (vp->v_femhead != NULL || atomic_cas_ptr(&vp->v_op, op, vnodeops) !=
-	    op) {
-		fem_setvnops(vp, vnodeops);
-	}
+	vnode->v_op = ops;
 }
 
 /*
  * Retrieve the operations vector for a vnode
- * As with vn_setops(above); make sure we aren't racing with FEM.
- * FEM sets the v_op to a special, internal, vnodeops that wouldn't
- * make sense to the callers of this routine.
  */
-vnodeops_t *
-vn_getops(vnode_t *vp)
+struct vnodeops *
+vn_getops(struct vnode *vnode)
 {
-	vnodeops_t	*op;
-
-	ASSERT(vp != NULL);
-
-	op = vp->v_op;
-	membar_consumer();
-	if (vp->v_femhead == NULL && op == vp->v_op) {
-		return (op);
-	} else {
-		return (fem_getvnops(vp));
-	}
+	return vnode->v_op;
 }
 
 /*
@@ -3191,7 +3157,7 @@ fop_open(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	ret = fop_open_dispatch(vpp, mode, cr, ct);
+	ret = fop_open_dispatch(vpp, mode, cr, ct, true);
 
 	if (ret) {
 		/*
@@ -3242,7 +3208,7 @@ fop_close(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_close_dispatch(vp, flag, count, offset, cr, ct);
+	err = fop_close_dispatch(vp, flag, count, offset, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, close);
 	/*
@@ -3275,7 +3241,7 @@ fop_read(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_read_dispatch(vp, uiop, ioflag, cr, ct);
+	err = fop_read_dispatch(vp, uiop, ioflag, cr, ct, true);
 
 	VOPSTATS_UPDATE_IO(vp, read,
 	    read_bytes, (resid_start - uiop->uio_resid));
@@ -3295,7 +3261,7 @@ fop_write(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_write_dispatch(vp, uiop, ioflag, cr, ct);
+	err = fop_write_dispatch(vp, uiop, ioflag, cr, ct, true);
 
 	VOPSTATS_UPDATE_IO(vp, write,
 	    write_bytes, (resid_start - uiop->uio_resid));
@@ -3316,7 +3282,7 @@ fop_ioctl(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_ioctl_dispatch(vp, cmd, arg, flag, cr, rvalp, ct);
+	err = fop_ioctl_dispatch(vp, cmd, arg, flag, cr, rvalp, ct, true);
 
 	VOPSTATS_UPDATE(vp, ioctl);
 	return (err);
@@ -3371,7 +3337,7 @@ fop_getattr(
 	    vfs_has_feature(vp->v_vfsp, VFSFT_ACEMASKONACCESS) == 0)
 		return (EINVAL);
 
-	err = fop_getattr_dispatch(vp, vap, flags, cr, ct);
+	err = fop_getattr_dispatch(vp, vap, flags, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, getattr);
 	return (err);
@@ -3405,7 +3371,7 @@ fop_setattr(
 	    vfs_has_feature(vp->v_vfsp, VFSFT_ACEMASKONACCESS) == 0)
 		return (EINVAL);
 
-	err = fop_setattr_dispatch(vp, vap, flags, cr, ct);
+	err = fop_setattr_dispatch(vp, vap, flags, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, setattr);
 	return (err);
@@ -3428,7 +3394,7 @@ fop_access(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_access_dispatch(vp, mode, flags, cr, ct);
+	err = fop_access_dispatch(vp, mode, flags, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, access);
 	return (err);
@@ -3720,7 +3686,7 @@ fop_readdir(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_readdir_dispatch(vp, uiop, cr, eofp, ct, flags);
+	err = fop_readdir_dispatch(vp, uiop, cr, eofp, ct, flags, true);
 
 	VOPSTATS_UPDATE_IO(vp, readdir,
 	    readdir_bytes, (resid_start - uiop->uio_resid));
@@ -3780,7 +3746,7 @@ fop_readlink(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_readlink_dispatch(vp, uiop, cr, ct);
+	err = fop_readlink_dispatch(vp, uiop, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, readlink);
 	return (err);
@@ -3797,7 +3763,7 @@ fop_fsync(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_fsync_dispatch(vp, syncflag, cr, ct);
+	err = fop_fsync_dispatch(vp, syncflag, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, fsync);
 	return (err);
@@ -3826,7 +3792,7 @@ fop_fid(
 {
 	int	err;
 
-	err = fop_fid_dispatch(vp, fidp, ct);
+	err = fop_fid_dispatch(vp, fidp, ct, true);
 
 	VOPSTATS_UPDATE(vp, fid);
 	return (err);
@@ -3872,7 +3838,7 @@ fop_seek(
 {
 	int	err;
 
-	err = fop_seek_dispatch(vp, ooff, noffp, ct);
+	err = fop_seek_dispatch(vp, ooff, noffp, ct, true);
 
 	VOPSTATS_UPDATE(vp, seek);
 	return (err);
@@ -3934,7 +3900,7 @@ fop_space(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_space_dispatch(vp, cmd, bfp, flag, offset, cr, ct);
+	err = fop_space_dispatch(vp, cmd, bfp, flag, offset, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, space);
 	return (err);
@@ -3948,7 +3914,7 @@ fop_realvp(
 {
 	int	err;
 
-	err = fop_realvp_dispatch(vp, vpp, ct);
+	err = fop_realvp_dispatch(vp, vpp, ct, true);
 
 	VOPSTATS_UPDATE(vp, realvp);
 	return (err);
@@ -3973,7 +3939,7 @@ fop_getpage(
 	VOPXID_MAP_CR(vp, cr);
 
 	err = fop_getpage_dispatch(vp, off, len, protp, plarr, plsz, seg,
-	    addr, rw, cr, ct);
+	    addr, rw, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, getpage);
 	return (err);
@@ -3992,7 +3958,7 @@ fop_putpage(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_putpage_dispatch(vp, off, len, flags, cr, ct);
+	err = fop_putpage_dispatch(vp, off, len, flags, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, putpage);
 	return (err);
@@ -4016,7 +3982,7 @@ fop_map(
 	VOPXID_MAP_CR(vp, cr);
 
 	err = fop_map_dispatch(vp, off, as, addrp, len, prot, maxprot,
-	    flags, cr, ct);
+	    flags, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, map);
 	return (err);
@@ -4041,7 +4007,7 @@ fop_addmap(
 	VOPXID_MAP_CR(vp, cr);
 
 	error = fop_addmap_dispatch(vp, off, as, addr, len, prot, maxprot,
-	    flags, cr, ct);
+	    flags, cr, ct, true);
 
 	if ((!error) && (vp->v_type == VREG)) {
 		delta = (u_longlong_t)btopr(len);
@@ -4091,7 +4057,7 @@ fop_delmap(
 	VOPXID_MAP_CR(vp, cr);
 
 	error = fop_delmap_dispatch(vp, off, as, addr, len, prot, maxprot,
-	    flags, cr, ct);
+	    flags, cr, ct, true);
 
 	/*
 	 * NFS calls into delmap twice, the first time
@@ -4163,7 +4129,7 @@ fop_dump(
 	if ((lbdn != (daddr_t)lbdn) || (dblks != (int)dblks))
 		return (EIO);
 
-	err = fop_dump_dispatch(vp, addr, lbdn, dblks, ct);
+	err = fop_dump_dispatch(vp, addr, lbdn, dblks, ct, true);
 
 	VOPSTATS_UPDATE(vp, dump);
 	return (err);
@@ -4204,7 +4170,7 @@ fop_pageio(
 
 	VOPXID_MAP_CR(vp, cr);
 
-	err = fop_pageio_dispatch(vp, pp, io_off, io_len, flags, cr, ct);
+	err = fop_pageio_dispatch(vp, pp, io_off, io_len, flags, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, pageio);
 	return (err);
@@ -4219,7 +4185,7 @@ fop_dumpctl(
 {
 	int	err;
 
-	err = fop_dumpctl_dispatch(vp, action, blkp, ct);
+	err = fop_dumpctl_dispatch(vp, action, blkp, ct, true);
 
 	VOPSTATS_UPDATE(vp, dumpctl);
 	return (err);
@@ -4266,7 +4232,7 @@ fop_setsecattr(
 		return (EINVAL);
 	}
 
-	err = fop_setsecattr_dispatch(vp, vsap, flag, cr, ct);
+	err = fop_setsecattr_dispatch(vp, vsap, flag, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, setsecattr);
 	return (err);
@@ -4330,7 +4296,7 @@ fop_vnevent(vnode_t *vp, vnevent_t vnevent, vnode_t *dvp, char *fnm,
 {
 	int	err;
 
-	err = fop_vnevent_dispatch(vp, vnevent, dvp, fnm, ct);
+	err = fop_vnevent_dispatch(vp, vnevent, dvp, fnm, ct, true);
 
 	VOPSTATS_UPDATE(vp, vnevent);
 	return (err);
@@ -4345,7 +4311,7 @@ fop_reqzcbuf(vnode_t *vp, enum uio_rw ioflag, xuio_t *uiop, cred_t *cr,
 	if (vfs_has_feature(vp->v_vfsp, VFSFT_ZEROCOPY_SUPPORTED) == 0)
 		return (ENOTSUP);
 
-	err = fop_reqzcbuf_dispatch(vp, ioflag, uiop, cr, ct);
+	err = fop_reqzcbuf_dispatch(vp, ioflag, uiop, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, reqzcbuf);
 	return (err);
@@ -4359,7 +4325,7 @@ fop_retzcbuf(vnode_t *vp, xuio_t *uiop, cred_t *cr, caller_context_t *ct)
 	if (vfs_has_feature(vp->v_vfsp, VFSFT_ZEROCOPY_SUPPORTED) == 0)
 		return (ENOTSUP);
 
-	err = fop_retzcbuf_dispatch(vp, uiop, cr, ct);
+	err = fop_retzcbuf_dispatch(vp, uiop, cr, ct, true);
 
 	VOPSTATS_UPDATE(vp, retzcbuf);
 	return (err);

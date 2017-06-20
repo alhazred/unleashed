@@ -21,6 +21,7 @@
 /*
  * Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ * Copyright 2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  */
 
 #include <sys/types.h>
@@ -36,7 +37,9 @@
 
 #include <sys/fem.h>
 #include <sys/vfs.h>
+#include <sys/vfs_dispatch.h>
 #include <sys/vnode.h>
+#include <sys/vnode_dispatch.h>
 #include <sys/vfs_opreg.h>
 
 #define	NNODES_DEFAULT	8	/* Default number of nodes in a fem_list */
@@ -55,7 +58,6 @@ typedef enum {
 	FEMTYPE_NTYPES
 } femtype_t;
 
-#define	FEM_HEAD(_t) femtype[(_t)].head.fn_op.anon
 #define	FEM_GUARD(_t) femtype[(_t)].guard
 
 static struct fem_type_info {
@@ -74,145 +76,67 @@ static struct fem_type_info {
 int fem_err();
 int fsem_err();
 
-
-#define	_FEMOPDEF(name, member)  \
-	{ VOPNAME_##name, offsetof(fem_t, femop_##member), NULL }
-
-static fs_operation_trans_def_t	fem_opdef[] = {
-	_FEMOPDEF(OPEN,		open),
-	_FEMOPDEF(CLOSE,	close),
-	_FEMOPDEF(READ,		read),
-	_FEMOPDEF(WRITE,	write),
-	_FEMOPDEF(IOCTL,	ioctl),
-	_FEMOPDEF(SETFL,	setfl),
-	_FEMOPDEF(GETATTR,	getattr),
-	_FEMOPDEF(SETATTR,	setattr),
-	_FEMOPDEF(ACCESS,	access),
-	_FEMOPDEF(LOOKUP,	lookup),
-	_FEMOPDEF(CREATE,	create),
-	_FEMOPDEF(REMOVE,	remove),
-	_FEMOPDEF(LINK,		link),
-	_FEMOPDEF(RENAME,	rename),
-	_FEMOPDEF(MKDIR,	mkdir),
-	_FEMOPDEF(RMDIR,	rmdir),
-	_FEMOPDEF(READDIR,	readdir),
-	_FEMOPDEF(SYMLINK,	symlink),
-	_FEMOPDEF(READLINK,	readlink),
-	_FEMOPDEF(FSYNC,	fsync),
-	_FEMOPDEF(INACTIVE,	inactive),
-	_FEMOPDEF(FID,		fid),
-	_FEMOPDEF(RWLOCK,	rwlock),
-	_FEMOPDEF(RWUNLOCK,	rwunlock),
-	_FEMOPDEF(SEEK,		seek),
-	_FEMOPDEF(CMP,		cmp),
-	_FEMOPDEF(FRLOCK,	frlock),
-	_FEMOPDEF(SPACE,	space),
-	_FEMOPDEF(REALVP,	realvp),
-	_FEMOPDEF(GETPAGE,	getpage),
-	_FEMOPDEF(PUTPAGE,	putpage),
-	_FEMOPDEF(MAP,		map),
-	_FEMOPDEF(ADDMAP,	addmap),
-	_FEMOPDEF(DELMAP,	delmap),
-	_FEMOPDEF(POLL,		poll),
-	_FEMOPDEF(DUMP,		dump),
-	_FEMOPDEF(PATHCONF,	pathconf),
-	_FEMOPDEF(PAGEIO,	pageio),
-	_FEMOPDEF(DUMPCTL,	dumpctl),
-	_FEMOPDEF(DISPOSE,	dispose),
-	_FEMOPDEF(SETSECATTR,	setsecattr),
-	_FEMOPDEF(GETSECATTR,	getsecattr),
-	_FEMOPDEF(SHRLOCK,	shrlock),
-	_FEMOPDEF(VNEVENT,	vnevent),
-	_FEMOPDEF(REQZCBUF,	reqzcbuf),
-	_FEMOPDEF(RETZCBUF,	retzcbuf),
-	{ NULL, 0, NULL }
+static struct fem fem_guard_ops = {
+	.name			= "fem-guard",
+	.femop_open		= fem_err,
+	.femop_close		= fem_err,
+	.femop_read		= fem_err,
+	.femop_write		= fem_err,
+	.femop_ioctl		= fem_err,
+	.femop_setfl		= fem_err,
+	.femop_getattr		= fem_err,
+	.femop_setattr		= fem_err,
+	.femop_access		= fem_err,
+	.femop_lookup		= fem_err,
+	.femop_create		= fem_err,
+	.femop_remove		= fem_err,
+	.femop_link		= fem_err,
+	.femop_rename		= fem_err,
+	.femop_mkdir		= fem_err,
+	.femop_rmdir		= fem_err,
+	.femop_readdir		= fem_err,
+	.femop_symlink		= fem_err,
+	.femop_readlink		= fem_err,
+	.femop_fsync		= fem_err,
+	.femop_inactive		= (void (*)()) fem_err,
+	.femop_fid		= fem_err,
+	.femop_rwlock		= fem_err,
+	.femop_rwunlock		= (void (*)()) fem_err,
+	.femop_seek		= fem_err,
+	.femop_cmp		= fem_err,
+	.femop_frlock		= fem_err,
+	.femop_space		= fem_err,
+	.femop_realvp		= fem_err,
+	.femop_getpage		= fem_err,
+	.femop_putpage		= fem_err,
+	.femop_map		= (void *) fem_err,
+	.femop_addmap		= (void *) fem_err,
+	.femop_delmap		= fem_err,
+	.femop_poll		= (void *) fem_err,
+	.femop_dump		= fem_err,
+	.femop_pathconf		= fem_err,
+	.femop_pageio		= fem_err,
+	.femop_dumpctl		= fem_err,
+	.femop_dispose		= (void *) fem_err,
+	.femop_setsecattr	= fem_err,
+	.femop_getsecattr	= fem_err,
+	.femop_shrlock		= fem_err,
+	.femop_vnevent		= fem_err,
+	.femop_reqzcbuf		= fem_err,
+	.femop_retzcbuf		= fem_err,
 };
 
-
-#define	_FEMGUARD(name, ignore)  \
-	{ VOPNAME_##name, (femop_t *)fem_err }
-
-static struct fs_operation_def fem_guard_ops[] = {
-	_FEMGUARD(OPEN,		open),
-	_FEMGUARD(CLOSE,	close),
-	_FEMGUARD(READ,		read),
-	_FEMGUARD(WRITE,	write),
-	_FEMGUARD(IOCTL,	ioctl),
-	_FEMGUARD(SETFL,	setfl),
-	_FEMGUARD(GETATTR,	getattr),
-	_FEMGUARD(SETATTR,	setattr),
-	_FEMGUARD(ACCESS,	access),
-	_FEMGUARD(LOOKUP,	lookup),
-	_FEMGUARD(CREATE,	create),
-	_FEMGUARD(REMOVE,	remove),
-	_FEMGUARD(LINK,		link),
-	_FEMGUARD(RENAME,	rename),
-	_FEMGUARD(MKDIR,	mkdir),
-	_FEMGUARD(RMDIR,	rmdir),
-	_FEMGUARD(READDIR,	readdir),
-	_FEMGUARD(SYMLINK,	symlink),
-	_FEMGUARD(READLINK,	readlink),
-	_FEMGUARD(FSYNC,	fsync),
-	_FEMGUARD(INACTIVE,	inactive),
-	_FEMGUARD(FID,		fid),
-	_FEMGUARD(RWLOCK,	rwlock),
-	_FEMGUARD(RWUNLOCK,	rwunlock),
-	_FEMGUARD(SEEK,		seek),
-	_FEMGUARD(CMP,		cmp),
-	_FEMGUARD(FRLOCK,	frlock),
-	_FEMGUARD(SPACE,	space),
-	_FEMGUARD(REALVP,	realvp),
-	_FEMGUARD(GETPAGE,	getpage),
-	_FEMGUARD(PUTPAGE,	putpage),
-	_FEMGUARD(MAP,		map),
-	_FEMGUARD(ADDMAP,	addmap),
-	_FEMGUARD(DELMAP,	delmap),
-	_FEMGUARD(POLL,		poll),
-	_FEMGUARD(DUMP,		dump),
-	_FEMGUARD(PATHCONF,	pathconf),
-	_FEMGUARD(PAGEIO,	pageio),
-	_FEMGUARD(DUMPCTL,	dumpctl),
-	_FEMGUARD(DISPOSE,	dispose),
-	_FEMGUARD(SETSECATTR,	setsecattr),
-	_FEMGUARD(GETSECATTR,	getsecattr),
-	_FEMGUARD(SHRLOCK,	shrlock),
-	_FEMGUARD(VNEVENT,	vnevent),
-	_FEMGUARD(REQZCBUF,	reqzcbuf),
-	_FEMGUARD(RETZCBUF,	retzcbuf),
-	{ NULL, NULL }
-};
-
-
-#define	_FSEMOPDEF(name, member)  \
-	{ VFSNAME_##name, offsetof(fsem_t, fsemop_##member), NULL }
-
-static fs_operation_trans_def_t fsem_opdef[] = {
-	_FSEMOPDEF(MOUNT, 	mount),
-	_FSEMOPDEF(UNMOUNT,	unmount),
-	_FSEMOPDEF(ROOT,	root),
-	_FSEMOPDEF(STATVFS,	statvfs),
-	_FSEMOPDEF(SYNC,	sync),
-	_FSEMOPDEF(VGET,	vget),
-	_FSEMOPDEF(MOUNTROOT,	mountroot),
-	_FSEMOPDEF(FREEVFS,	freevfs),
-	_FSEMOPDEF(VNSTATE,	vnstate),
-	{ NULL, 0, NULL }
-};
-
-#define	_FSEMGUARD(name, ignore)  \
-	{ VFSNAME_##name, (femop_t *)fsem_err }
-
-static struct fs_operation_def fsem_guard_ops[] = {
-	_FSEMGUARD(MOUNT, 	mount),
-	_FSEMGUARD(UNMOUNT,	unmount),
-	_FSEMGUARD(ROOT,	root),
-	_FSEMGUARD(STATVFS,	statvfs),
-	_FSEMGUARD(SYNC,	sync),
-	_FSEMGUARD(VGET,	vget),
-	_FSEMGUARD(MOUNTROOT,	mountroot),
-	_FSEMGUARD(FREEVFS,	freevfs),
-	_FSEMGUARD(VNSTATE,	vnstate),
-	{ NULL, NULL}
+static struct fsem fsem_guard_ops = {
+	.name			= "fsem-guard",
+	.fsemop_mount		= fsem_err,
+	.fsemop_unmount		= fsem_err,
+	.fsemop_root		= fsem_err,
+	.fsemop_statvfs		= fsem_err,
+	.fsemop_sync		= (void *) fsem_err,
+	.fsemop_vget		= fsem_err,
+	.fsemop_mountroot	= fsem_err,
+	.fsemop_freevfs		= (void *) fsem_err,
+	.fsemop_vnstate		= fsem_err,
 };
 
 
@@ -224,66 +148,29 @@ static struct fs_operation_def fsem_guard_ops[] = {
  * stacked item where this method is non-null [_vsop].
  */
 
-#define	vsop_find(ap, func, arg0, _vop, _vsop) \
-	*(func) = _op_find((ap), (arg0), \
-			offsetof(vnodeops_t, _vop), offsetof(fem_t, _vsop))
+#define	vsop_find(ap, _vsop) \
+	_op_find((ap), offsetof(struct fem, _vsop))
 
-#define	vfsop_find(ap, func, arg0, _fop, _fsop) \
-	*(func) = _op_find((ap), (arg0), \
-			offsetof(vfsops_t, _fop), offsetof(fsem_t, _fsop))
+#define	vfsop_find(ap, _fsop) \
+	_op_find((ap), offsetof(struct fsem, _fsop))
 
 static inline void *
-_op_find(femarg_t *ap, void **arg0, size_t offs0, size_t offs1)
+_op_find(femarg_t *ap, size_t offs1)
 {
 	for (;;) {
 		struct fem_node	*fnod = ap->fa_fnode;
 		void *fp;
 
-		if (fnod->fn_available == NULL) {
-			*arg0 = ap->fa_vnode.anon;
-			return *(void **)((char *)fnod->fn_op.anon + offs0);
-		}
+		if (fnod->fn_available == NULL)
+			return NULL;
 
 		fp = *(void **)((char *)fnod->fn_op.anon + offs1);
-		if (fp != NULL) {
-			*arg0 = ap;
+		if (fp != NULL)
 			return fp;
-		}
 
 		ap->fa_fnode--;
 	}
 }
-
-static fem_t *
-fem_alloc()
-{
-	fem_t	*p;
-
-	p = (fem_t *)kmem_alloc(sizeof (*p), KM_SLEEP);
-	return (p);
-}
-
-void
-fem_free(fem_t *p)
-{
-	kmem_free(p, sizeof (*p));
-}
-
-static fsem_t *
-fsem_alloc()
-{
-	fsem_t	*p;
-
-	p = (fsem_t *)kmem_alloc(sizeof (*p), KM_SLEEP);
-	return (p);
-}
-
-void
-fsem_free(fsem_t *p)
-{
-	kmem_free(p, sizeof (*p));
-}
-
 
 /*
  * fem_get, fem_release - manage reference counts on the stack.
@@ -396,1679 +283,1533 @@ fem_release(struct fem_list *sp)
  *
  */
 
-static int
+int
 vhead_open(vnode_t **vpp, int mode, cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock((*vpp)->v_femhead)) == NULL) {
-		func = (int (*)()) ((*vpp)->v_op->vop_open);
-		arg0 = vpp;
-		fem_unlock((*vpp)->v_femhead);
-		errc = (*func)(arg0, mode, cr, ct);
+	if ((femsp = fem_get((*vpp)->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock((*vpp)->v_femhead);
 		farg.fa_vnode.vpp = vpp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_open, femop_open);
-		errc = (*func)(arg0, mode, cr, ct);
+		func = vsop_find(&farg, femop_open);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, mode, cr, ct);
+	else
+		ret = fop_open_dispatch(vpp, mode, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_close(vnode_t *vp, int flag, int count, offset_t offset, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, int, offset_t, cred_t *,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_close);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, flag, count, offset, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_close, femop_close);
-		errc = (*func)(arg0, flag, count, offset, cr, ct);
+		func = vsop_find(&farg, femop_close);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, flag, count, offset, cr, ct);
+	else
+		ret = fop_close_dispatch(vp, flag, count, offset, cr, ct,
+					 false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_read(vnode_t *vp, uio_t *uiop, int ioflag, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, uio_t *, int, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_read);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, uiop, ioflag, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_read, femop_read);
-		errc = (*func)(arg0, uiop, ioflag, cr, ct);
+		func = vsop_find(&farg, femop_read);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, uiop, ioflag, cr, ct);
+	else
+		ret = fop_read_dispatch(vp, uiop, ioflag, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_write(vnode_t *vp, uio_t *uiop, int ioflag, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, uio_t *, int, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_write);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, uiop, ioflag, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_write, femop_write);
-		errc = (*func)(arg0, uiop, ioflag, cr, ct);
+		func = vsop_find(&farg, femop_write);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, uiop, ioflag, cr, ct);
+	else
+		ret = fop_write_dispatch(vp, uiop, ioflag, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_ioctl(vnode_t *vp, int cmd, intptr_t arg, int flag, cred_t *cr,
 	int *rvalp, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, intptr_t, int, cred_t *, int *,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_ioctl);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, cmd, arg, flag, cr, rvalp, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_ioctl, femop_ioctl);
-		errc = (*func)(arg0, cmd, arg, flag, cr, rvalp, ct);
+		func = vsop_find(&farg, femop_ioctl);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, cmd, arg, flag, cr, rvalp, ct);
+	else
+		ret = fop_ioctl_dispatch(vp, cmd, arg, flag, cr, rvalp, ct,
+					 false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_setfl(vnode_t *vp, int oflags, int nflags, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, int, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_setfl);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, oflags, nflags, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_setfl, femop_setfl);
-		errc = (*func)(arg0, oflags, nflags, cr, ct);
+		func = vsop_find(&farg, femop_setfl);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, oflags, nflags, cr, ct);
+	else
+		ret = fop_setfl_dispatch(vp, oflags, nflags, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, vattr_t *, int, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_getattr);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, vap, flags, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_getattr,
-		    femop_getattr);
-		errc = (*func)(arg0, vap, flags, cr, ct);
+		func = vsop_find(&farg, femop_getattr);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, vap, flags, cr, ct);
+	else
+		ret = fop_getattr_dispatch(vp, vap, flags, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, vattr_t *, int, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_setattr);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, vap, flags, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_setattr,
-		    femop_setattr);
-		errc = (*func)(arg0, vap, flags, cr, ct);
+		func = vsop_find(&farg, femop_setattr);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, vap, flags, cr, ct);
+	else
+		ret = fop_setattr_dispatch(vp, vap, flags, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_access(vnode_t *vp, int mode, int flags, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, int, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_access);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, mode, flags, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_access,
-		    femop_access);
-		errc = (*func)(arg0, mode, flags, cr, ct);
+		func = vsop_find(&farg, femop_access);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, mode, flags, cr, ct);
+	else
+		ret = fop_access_dispatch(vp, mode, flags, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_lookup(vnode_t *dvp, char *nm, vnode_t **vpp, pathname_t *pnp,
 	int flags, vnode_t *rdir, cred_t *cr, caller_context_t *ct,
 	int *direntflags, pathname_t *realpnp)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, char *, vnode_t **, pathname_t *, int,
+		    vnode_t *, cred_t *, caller_context_t *, int *,
+		    pathname_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(dvp->v_femhead)) == NULL) {
-		func = (int (*)()) (dvp->v_op->vop_lookup);
-		arg0 = dvp;
-		fem_unlock(dvp->v_femhead);
-		errc = (*func)(arg0, nm, vpp, pnp, flags, rdir, cr, ct,
-		    direntflags, realpnp);
+	if ((femsp = fem_get(dvp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(dvp->v_femhead);
 		farg.fa_vnode.vp = dvp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_lookup,
-		    femop_lookup);
-		errc = (*func)(arg0, nm, vpp, pnp, flags, rdir, cr, ct,
-		    direntflags, realpnp);
+		func = vsop_find(&farg, femop_lookup);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, nm, vpp, pnp, flags, rdir, cr, ct,
+			   direntflags, realpnp);
+	else
+		ret = fop_lookup_dispatch(dvp, nm, vpp, pnp, flags, rdir,
+					  cr, ct, direntflags, realpnp, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_create(vnode_t *dvp, char *name, vattr_t *vap, vcexcl_t excl,
 	int mode, vnode_t **vpp, cred_t *cr, int flag, caller_context_t *ct,
 	vsecattr_t *vsecp)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, char *, vattr_t *, vcexcl_t, int, vnode_t **,
+		    cred_t *, int, caller_context_t *, vsecattr_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(dvp->v_femhead)) == NULL) {
-		func = (int (*)()) (dvp->v_op->vop_create);
-		arg0 = dvp;
-		fem_unlock(dvp->v_femhead);
-		errc = (*func)(arg0, name, vap, excl, mode, vpp, cr, flag,
-		    ct, vsecp);
+	if ((femsp = fem_get(dvp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(dvp->v_femhead);
 		farg.fa_vnode.vp = dvp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_create,
-		    femop_create);
-		errc = (*func)(arg0, name, vap, excl, mode, vpp, cr, flag,
-		    ct, vsecp);
+		func = vsop_find(&farg, femop_create);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, name, vap, excl, mode, vpp, cr, flag, ct,
+			   vsecp);
+	else
+		ret = fop_create_dispatch(dvp, name, vap, excl, mode, vpp,
+					  cr, flag, ct, vsecp, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_remove(vnode_t *dvp, char *nm, cred_t *cr, caller_context_t *ct,
 	int flags)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, char *, cred_t *, caller_context_t *, int);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(dvp->v_femhead)) == NULL) {
-		func = (int (*)()) (dvp->v_op->vop_remove);
-		arg0 = dvp;
-		fem_unlock(dvp->v_femhead);
-		errc = (*func)(arg0, nm, cr, ct, flags);
+	if ((femsp = fem_get(dvp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(dvp->v_femhead);
 		farg.fa_vnode.vp = dvp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_remove, femop_remove);
-		errc = (*func)(arg0, nm, cr, ct, flags);
+		func = vsop_find(&farg, femop_remove);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, nm, cr, ct, flags);
+	else
+		ret = fop_remove_dispatch(dvp, nm, cr, ct, flags, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_link(vnode_t *tdvp, vnode_t *svp, char *tnm, cred_t *cr,
 	caller_context_t *ct, int flags)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, vnode_t *, char *, cred_t *,
+		    caller_context_t *, int);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(tdvp->v_femhead)) == NULL) {
-		func = (int (*)()) (tdvp->v_op->vop_link);
-		arg0 = tdvp;
-		fem_unlock(tdvp->v_femhead);
-		errc = (*func)(arg0, svp, tnm, cr, ct, flags);
+	if ((femsp = fem_get(tdvp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(tdvp->v_femhead);
 		farg.fa_vnode.vp = tdvp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_link, femop_link);
-		errc = (*func)(arg0, svp, tnm, cr, ct, flags);
+		func = vsop_find(&farg, femop_link);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, svp, tnm, cr, ct, flags);
+	else
+		ret = fop_link_dispatch(tdvp, svp, tnm, cr, ct, flags, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_rename(vnode_t *sdvp, char *snm, vnode_t *tdvp, char *tnm,
 	cred_t *cr, caller_context_t *ct, int flags)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, char *, vnode_t *, char *, cred_t *,
+		    caller_context_t *,int);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(sdvp->v_femhead)) == NULL) {
-		func = (int (*)()) (sdvp->v_op->vop_rename);
-		arg0 = sdvp;
-		fem_unlock(sdvp->v_femhead);
-		errc = (*func)(arg0, snm, tdvp, tnm, cr, ct, flags);
+	if ((femsp = fem_get(sdvp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(sdvp->v_femhead);
 		farg.fa_vnode.vp = sdvp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_rename, femop_rename);
-		errc = (*func)(arg0, snm, tdvp, tnm, cr, ct, flags);
+		func = vsop_find(&farg, femop_rename);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, snm, tdvp, tnm, cr, ct, flags);
+	else
+		ret = fop_rename_dispatch(sdvp, snm, tdvp, tnm, cr, ct,
+					  flags, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_mkdir(vnode_t *dvp, char *dirname, vattr_t *vap, vnode_t **vpp,
 	cred_t *cr, caller_context_t *ct, int flags, vsecattr_t *vsecp)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, char *, vattr_t *, vnode_t **, cred_t *,
+		    caller_context_t *, int, vsecattr_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(dvp->v_femhead)) == NULL) {
-		func = (int (*)()) (dvp->v_op->vop_mkdir);
-		arg0 = dvp;
-		fem_unlock(dvp->v_femhead);
-		errc = (*func)(arg0, dirname, vap, vpp, cr, ct, flags, vsecp);
+	if ((femsp = fem_get(dvp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(dvp->v_femhead);
 		farg.fa_vnode.vp = dvp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_mkdir, femop_mkdir);
-		errc = (*func)(arg0, dirname, vap, vpp, cr, ct, flags, vsecp);
+		func = vsop_find(&farg, femop_mkdir);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, dirname, vap, vpp, cr, ct, flags, vsecp);
+	else
+		ret = fop_mkdir_dispatch(dvp, dirname, vap, vpp, cr, ct, flags,
+					 vsecp, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_rmdir(vnode_t *dvp, char *nm, vnode_t *cdir, cred_t *cr,
 	caller_context_t *ct, int flags)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, char *, vnode_t *, cred_t *, caller_context_t *,
+		    int);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(dvp->v_femhead)) == NULL) {
-		func = (int (*)()) (dvp->v_op->vop_rmdir);
-		arg0 = dvp;
-		fem_unlock(dvp->v_femhead);
-		errc = (*func)(arg0, nm, cdir, cr, ct, flags);
+	if ((femsp = fem_get(dvp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(dvp->v_femhead);
 		farg.fa_vnode.vp = dvp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_rmdir, femop_rmdir);
-		errc = (*func)(arg0, nm, cdir, cr, ct, flags);
+		func = vsop_find(&farg, femop_rmdir);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, nm, cdir, cr, ct, flags);
+	else
+		ret = fop_rmdir_dispatch(dvp, nm, cdir, cr, ct, flags, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_readdir(vnode_t *vp, uio_t *uiop, cred_t *cr, int *eofp,
 	caller_context_t *ct, int flags)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, uio_t *, cred_t *, int *, caller_context_t *,
+		    int);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_readdir);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, uiop, cr, eofp, ct, flags);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_readdir, femop_readdir);
-		errc = (*func)(arg0, uiop, cr, eofp, ct, flags);
+		func = vsop_find(&farg, femop_readdir);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, uiop, cr, eofp, ct, flags);
+	else
+		ret = fop_readdir_dispatch(vp, uiop, cr, eofp, ct, flags,
+					   false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_symlink(vnode_t *dvp, char *linkname, vattr_t *vap, char *target,
 	cred_t *cr, caller_context_t *ct, int flags)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, char *, vattr_t *, char *, cred_t *,
+		    caller_context_t *, int);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(dvp->v_femhead)) == NULL) {
-		func = (int (*)()) (dvp->v_op->vop_symlink);
-		arg0 = dvp;
-		fem_unlock(dvp->v_femhead);
-		errc = (*func)(arg0, linkname, vap, target, cr, ct, flags);
+	if ((femsp = fem_get(dvp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(dvp->v_femhead);
 		farg.fa_vnode.vp = dvp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_symlink, femop_symlink);
-		errc = (*func)(arg0, linkname, vap, target, cr, ct, flags);
+		func = vsop_find(&farg, femop_symlink);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, linkname, vap, target, cr, ct, flags);
+	else
+		ret = fop_symlink_dispatch(dvp, linkname, vap, target, cr, ct,
+					   flags, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_readlink(vnode_t *vp, uio_t *uiop, cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, uio_t *, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_readlink);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, uiop, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_readlink, femop_readlink);
-		errc = (*func)(arg0, uiop, cr, ct);
+		func = vsop_find(&farg, femop_readlink);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, uiop, cr, ct);
+	else
+		ret = fop_readlink_dispatch(vp, uiop, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_fsync(vnode_t *vp, int syncflag, cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_fsync);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, syncflag, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_fsync, femop_fsync);
-		errc = (*func)(arg0, syncflag, cr, ct);
+		func = vsop_find(&farg, femop_fsync);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, syncflag, cr, ct);
+	else
+		ret = fop_fsync_dispatch(vp, syncflag, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static void
+void
 vhead_inactive(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	void (*func)(femarg_t *, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	void		(*func)();
-	void		*arg0;
+	femarg_t farg;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (void (*)()) (vp->v_op->vop_inactive);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		(*func)(arg0, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_inactive, femop_inactive);
-		(*func)(arg0, cr, ct);
+		func = vsop_find(&farg, femop_inactive);
 	}
 
-	fem_release(femsp);
+	if (func != NULL)
+		func(&farg, cr, ct);
+	else
+		fop_inactive_dispatch(vp, cr, ct, false);
 
+	fem_release(femsp);
 }
 
-static int
+int
 vhead_fid(vnode_t *vp, fid_t *fidp, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, fid_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_fid);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, fidp, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_fid, femop_fid);
-		errc = (*func)(arg0, fidp, ct);
+		func = vsop_find(&farg, femop_fid);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, fidp, ct);
+	else
+		ret = fop_fid_dispatch(vp, fidp, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_rwlock(vnode_t *vp, int write_lock, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_rwlock);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, write_lock, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_rwlock, femop_rwlock);
-		errc = (*func)(arg0, write_lock, ct);
+		func = vsop_find(&farg, femop_rwlock);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, write_lock, ct);
+	else
+		ret = fop_rwlock_dispatch(vp, write_lock, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static void
+void
 vhead_rwunlock(vnode_t *vp, int write_lock, caller_context_t *ct)
 {
-	femarg_t	farg;
+	void (*func)(femarg_t *, int, caller_context_t *);
 	struct fem_list	*femsp;
-	void		(*func)();
-	void		*arg0;
+	femarg_t farg;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (void (*)()) (vp->v_op->vop_rwunlock);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		(*func)(arg0, write_lock, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_rwunlock, femop_rwunlock);
-		(*func)(arg0, write_lock, ct);
+		func = vsop_find(&farg, femop_rwunlock);
 	}
 
-	fem_release(femsp);
+	if (func != NULL)
+		func(&farg, write_lock, ct);
+	else
+		fop_rwunlock_dispatch(vp, write_lock, ct, false);
 
+	fem_release(femsp);
 }
 
-static int
+int
 vhead_seek(vnode_t *vp, offset_t ooff, offset_t *noffp, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, offset_t, offset_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_seek);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, ooff, noffp, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_seek, femop_seek);
-		errc = (*func)(arg0, ooff, noffp, ct);
+		func = vsop_find(&farg, femop_seek);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, ooff, noffp, ct);
+	else
+		ret = fop_seek_dispatch(vp, ooff, noffp, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_cmp(vnode_t *vp1, vnode_t *vp2, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, vnode_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp1->v_femhead)) == NULL) {
-		func = (int (*)()) (vp1->v_op->vop_cmp);
-		arg0 = vp1;
-		fem_unlock(vp1->v_femhead);
-		errc = (*func)(arg0, vp2, ct);
+	if ((femsp = fem_get(vp1->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp1->v_femhead);
 		farg.fa_vnode.vp = vp1;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_cmp, femop_cmp);
-		errc = (*func)(arg0, vp2, ct);
+		func = vsop_find(&farg, femop_cmp);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, vp2, ct);
+	else
+		ret = fop_cmp_dispatch(vp1, vp2, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
 	offset_t offset, struct flk_callback *flk_cbp, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, struct flock64 *, int, offset_t,
+		    struct flk_callback *, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_frlock);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, cmd, bfp, flag, offset, flk_cbp, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_frlock, femop_frlock);
-		errc = (*func)(arg0, cmd, bfp, flag, offset, flk_cbp, cr, ct);
+		func = vsop_find(&farg, femop_frlock);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, cmd, bfp, flag, offset, flk_cbp, cr, ct);
+	else
+		ret = fop_frlock_dispatch(vp, cmd, bfp, flag, offset,
+					  flk_cbp, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_space(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
 	offset_t offset, cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, struct flock64 *, int, offset_t,
+		    cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_space);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, cmd, bfp, flag, offset, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_space, femop_space);
-		errc = (*func)(arg0, cmd, bfp, flag, offset, cr, ct);
+		func = vsop_find(&farg, femop_space);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, cmd, bfp, flag, offset, cr, ct);
+	else
+		ret = fop_space_dispatch(vp, cmd, bfp, flag, offset, cr, ct,
+					 false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_realvp(vnode_t *vp, vnode_t **vpp, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, vnode_t **, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_realvp);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, vpp, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_realvp, femop_realvp);
-		errc = (*func)(arg0, vpp, ct);
+		func = vsop_find(&farg, femop_realvp);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, vpp, ct);
+	else
+		ret = fop_realvp_dispatch(vp, vpp, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_getpage(vnode_t *vp, offset_t off, size_t len, uint_t *protp,
 	struct page **plarr, size_t plsz, struct seg *seg, caddr_t addr,
 	enum seg_rw rw, cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, offset_t, size_t, uint_t *, struct page **,
+		    size_t, struct seg *, caddr_t, enum seg_rw, cred_t *,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_getpage);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, off, len, protp, plarr, plsz, seg,
-		    addr, rw, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_getpage, femop_getpage);
-		errc = (*func)(arg0, off, len, protp, plarr, plsz, seg,
-		    addr, rw, cr, ct);
+		func = vsop_find(&farg, femop_getpage);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, off, len, protp, plarr, plsz, seg, addr, rw,
+			   cr, ct);
+	else
+		ret = fop_getpage_dispatch(vp, off, len, protp, plarr, plsz,
+					   seg, addr, rw, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, offset_t, size_t, int, cred_t *,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_putpage);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, off, len, flags, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_putpage, femop_putpage);
-		errc = (*func)(arg0, off, len, flags, cr, ct);
+		func = vsop_find(&farg, femop_putpage);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, off, len, flags, cr, ct);
+	else
+		ret = fop_putpage_dispatch(vp, off, len, flags, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 	size_t len, uchar_t prot, uchar_t maxprot, uint_t flags,
 	cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, offset_t, struct as *, caddr_t *, size_t,
+		    uchar_t, uchar_t, uint_t, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_map);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, off, as, addrp, len, prot, maxprot,
-		    flags, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_map, femop_map);
-		errc = (*func)(arg0, off, as, addrp, len, prot, maxprot,
-		    flags, cr, ct);
+		func = vsop_find(&farg, femop_map);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, off, as, addrp, len, prot, maxprot, flags,
+			   cr, ct);
+	else
+		ret = fop_map_dispatch(vp, off, as, addrp, len, prot,
+				       maxprot, flags, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_addmap(vnode_t *vp, offset_t off, struct as *as, caddr_t addr,
 	size_t len, uchar_t prot, uchar_t maxprot, uint_t flags,
 	cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, offset_t, struct as *, caddr_t, size_t, uchar_t,
+		    uchar_t, uint_t, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_addmap);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, off, as, addr, len, prot, maxprot,
-		    flags, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_addmap, femop_addmap);
-		errc = (*func)(arg0, off, as, addr, len, prot, maxprot,
-		    flags, cr, ct);
+		func = vsop_find(&farg, femop_addmap);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, off, as, addr, len, prot, maxprot, flags,
+			   cr, ct);
+	else
+		ret = fop_addmap_dispatch(vp, off, as, addr, len, prot,
+					  maxprot, flags, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_delmap(vnode_t *vp, offset_t off, struct as *as, caddr_t addr,
 	size_t len, uint_t prot, uint_t maxprot, uint_t flags, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, offset_t, struct as *, caddr_t, size_t, uint_t,
+		    uint_t, uint_t, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_delmap);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, off, as, addr, len, prot, maxprot,
-		    flags, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_delmap, femop_delmap);
-		errc = (*func)(arg0, off, as, addr, len, prot, maxprot,
-		    flags, cr, ct);
+		func = vsop_find(&farg, femop_delmap);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, off, as, addr, len, prot, maxprot, flags,
+			   cr, ct);
+	else
+		ret = fop_delmap_dispatch(vp, off, as, addr, len, prot,
+					  maxprot, flags, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_poll(vnode_t *vp, short events, int anyyet, short *reventsp,
 	struct pollhead **phpp, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, short, int, short *, struct pollhead **,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_poll);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, events, anyyet, reventsp, phpp, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_poll, femop_poll);
-		errc = (*func)(arg0, events, anyyet, reventsp, phpp, ct);
+		func = vsop_find(&farg, femop_poll);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, events, anyyet, reventsp, phpp, ct);
+	else
+		ret = fop_poll_dispatch(vp, events, anyyet, reventsp, phpp,
+					ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_dump(vnode_t *vp, caddr_t addr, offset_t lbdn, offset_t dblks,
     caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, caddr_t, offset_t, offset_t,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_dump);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, addr, lbdn, dblks, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_dump, femop_dump);
-		errc = (*func)(arg0, addr, lbdn, dblks, ct);
+		func = vsop_find(&farg, femop_dump);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, addr, lbdn, dblks, ct);
+	else
+		ret = fop_dump_dispatch(vp, addr, lbdn, dblks, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, ulong_t *, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_pathconf);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, cmd, valp, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_pathconf, femop_pathconf);
-		errc = (*func)(arg0, cmd, valp, cr, ct);
+		func = vsop_find(&farg, femop_pathconf);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, cmd, valp, cr, ct);
+	else
+		ret = fop_pathconf_dispatch(vp, cmd, valp, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_pageio(vnode_t *vp, struct page *pp, uoff_t io_off,
 	size_t io_len, int flags, cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, struct page *, uoff_t, size_t, int, cred_t *,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_pageio);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, pp, io_off, io_len, flags, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_pageio, femop_pageio);
-		errc = (*func)(arg0, pp, io_off, io_len, flags, cr, ct);
+		func = vsop_find(&farg, femop_pageio);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, pp, io_off, io_len, flags, cr, ct);
+	else
+		ret = fop_pageio_dispatch(vp, pp, io_off, io_len, flags, cr,
+					  ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_dumpctl(vnode_t *vp, int action, offset_t *blkp, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, offset_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_dumpctl);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, action, blkp, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_dumpctl, femop_dumpctl);
-		errc = (*func)(arg0, action, blkp, ct);
+		func = vsop_find(&farg, femop_dumpctl);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, action, blkp, ct);
+	else
+		ret = fop_dumpctl_dispatch(vp, action, blkp, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static void
+void
 vhead_dispose(vnode_t *vp, struct page *pp, int flag, int dn, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	void (*func)(femarg_t *, struct page *, int, int, cred_t *,
+		     caller_context_t *);
 	struct fem_list	*femsp;
-	void		(*func)();
-	void		*arg0;
+	femarg_t farg;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (void (*)()) (vp->v_op->vop_dispose);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		(*func)(arg0, pp, flag, dn, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_dispose, femop_dispose);
-		(*func)(arg0, pp, flag, dn, cr, ct);
+		func = vsop_find(&farg, femop_dispose);
 	}
+
+	if (func != NULL)
+		func(&farg, pp, flag, dn, cr, ct);
+	else
+		fop_dispose_dispatch(vp, pp, flag, dn, cr, ct, false);
 
 	fem_release(femsp);
 }
 
-static int
+int
 vhead_setsecattr(vnode_t *vp, vsecattr_t *vsap, int flag, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, vsecattr_t *, int, cred_t *,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_setsecattr);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, vsap, flag, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_setsecattr,
-		    femop_setsecattr);
-		errc = (*func)(arg0, vsap, flag, cr, ct);
+		func = vsop_find(&farg, femop_setsecattr);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, vsap, flag, cr, ct);
+	else
+		ret = fop_setsecattr_dispatch(vp, vsap, flag, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_getsecattr(vnode_t *vp, vsecattr_t *vsap, int flag, cred_t *cr,
 	caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, vsecattr_t *, int, cred_t *,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_getsecattr);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, vsap, flag, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_getsecattr,
-		    femop_getsecattr);
-		errc = (*func)(arg0, vsap, flag, cr, ct);
+		func = vsop_find(&farg, femop_getsecattr);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, vsap, flag, cr, ct);
+	else
+		ret = fop_getsecattr_dispatch(vp, vsap, flag, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_shrlock(vnode_t *vp, int cmd, struct shrlock *shr, int flag,
 	cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, int, struct shrlock *, int, cred_t *,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_shrlock);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, cmd, shr, flag, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_shrlock, femop_shrlock);
-		errc = (*func)(arg0, cmd, shr, flag, cr, ct);
+		func = vsop_find(&farg, femop_shrlock);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, cmd, shr, flag, cr, ct);
+	else
+		ret = fop_shrlock_dispatch(vp, cmd, shr, flag, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_vnevent(vnode_t *vp, vnevent_t vnevent, vnode_t *dvp, char *cname,
     caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, vnevent_t, vnode_t *, char *,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_vnevent);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, vnevent, dvp, cname, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_vnevent, femop_vnevent);
-		errc = (*func)(arg0, vnevent, dvp, cname, ct);
+		func = vsop_find(&farg, femop_vnevent);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, vnevent, dvp, cname, ct);
+	else
+		ret = fop_vnevent_dispatch(vp, vnevent, dvp, cname, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_reqzcbuf(vnode_t *vp, enum uio_rw ioflag, xuio_t *xuiop, cred_t *cr,
     caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, enum uio_rw, xuio_t *, cred_t *,
+		    caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_reqzcbuf);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, ioflag, xuiop, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_reqzcbuf, femop_reqzcbuf);
-		errc = (*func)(arg0, ioflag, xuiop, cr, ct);
+		func = vsop_find(&farg, femop_reqzcbuf);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, ioflag, xuiop, cr, ct);
+	else
+		ret = fop_reqzcbuf_dispatch(vp, ioflag, xuiop, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 vhead_retzcbuf(vnode_t *vp, xuio_t *xuiop, cred_t *cr, caller_context_t *ct)
 {
-	femarg_t	farg;
+	int (*func)(femarg_t *, xuio_t *, cred_t *, caller_context_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	femarg_t farg;
+	int ret;
 
-	if ((femsp = fem_lock(vp->v_femhead)) == NULL) {
-		func = (int (*)()) (vp->v_op->vop_retzcbuf);
-		arg0 = vp;
-		fem_unlock(vp->v_femhead);
-		errc = (*func)(arg0, xuiop, cr, ct);
+	if ((femsp = fem_get(vp->v_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vp->v_femhead);
 		farg.fa_vnode.vp = vp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vsop_find(&farg, &func, &arg0, vop_retzcbuf, femop_retzcbuf);
-		errc = (*func)(arg0, xuiop, cr, ct);
+		func = vsop_find(&farg, femop_retzcbuf);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, xuiop, cr, ct);
+	else
+		ret = fop_retzcbuf_dispatch(vp, xuiop, cr, ct, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 fshead_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 {
-	fsemarg_t	farg;
+	int (*func)(fsemarg_t *, vnode_t *, struct mounta *, cred_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	fsemarg_t farg;
+	int ret;
 
 	ASSERT(vfsp->vfs_implp);
 
-	if ((femsp = fem_lock(vfsp->vfs_femhead)) == NULL) {
-		func = (int (*)()) vfsp->vfs_op->vfs_mount;
-		fem_unlock(vfsp->vfs_femhead);
-		errc = (*func)(vfsp, mvp, uap, cr);
+	if ((femsp = fem_get(vfsp->vfs_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vfsp->vfs_femhead);
 		farg.fa_vnode.vfsp = vfsp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vfsop_find(&farg, &func, &arg0, vfs_mount, fsemop_mount);
-		errc = (*func)(arg0, mvp, uap, cr);
+		func = vfsop_find(&farg, fsemop_mount);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, mvp, uap, cr);
+	else
+		ret = fsop_mount_dispatch(vfsp, mvp, uap, cr, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 fshead_unmount(vfs_t *vfsp, int flag, cred_t *cr)
 {
-	fsemarg_t	farg;
+	int (*func)(fsemarg_t *, int, cred_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	fsemarg_t farg;
+	int ret;
 
 	ASSERT(vfsp->vfs_implp);
 
-	if ((femsp = fem_lock(vfsp->vfs_femhead)) == NULL) {
-		func = (int (*)()) vfsp->vfs_op->vfs_unmount;
-		fem_unlock(vfsp->vfs_femhead);
-		errc = (*func)(vfsp, flag, cr);
+	if ((femsp = fem_get(vfsp->vfs_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vfsp->vfs_femhead);
 		farg.fa_vnode.vfsp = vfsp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vfsop_find(&farg, &func, &arg0, vfs_unmount, fsemop_unmount);
-		errc = (*func)(arg0, flag, cr);
+		func = vfsop_find(&farg, fsemop_unmount);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, flag, cr);
+	else
+		ret = fsop_unmount_dispatch(vfsp, flag, cr, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 fshead_root(vfs_t *vfsp, vnode_t **vpp)
 {
-	fsemarg_t	farg;
+	int (*func)(fsemarg_t *, vnode_t **);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	fsemarg_t farg;
+	int ret;
 
 	ASSERT(vfsp->vfs_implp);
 
-	if ((femsp = fem_lock(vfsp->vfs_femhead)) == NULL) {
-		func = (int (*)()) vfsp->vfs_op->vfs_root;
-		fem_unlock(vfsp->vfs_femhead);
-		errc = (*func)(vfsp, vpp);
+	if ((femsp = fem_get(vfsp->vfs_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vfsp->vfs_femhead);
 		farg.fa_vnode.vfsp = vfsp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vfsop_find(&farg, &func, &arg0, vfs_root, fsemop_root);
-		errc = (*func)(arg0, vpp);
+		func = vfsop_find(&farg, fsemop_root);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, vpp);
+	else
+		ret = fsop_root_dispatch(vfsp, vpp, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 fshead_statvfs(vfs_t *vfsp, statvfs64_t *sp)
 {
-	fsemarg_t	farg;
+	int (*func)(fsemarg_t *, statvfs64_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	fsemarg_t farg;
+	int ret;
 
 	ASSERT(vfsp->vfs_implp);
 
-	if ((femsp = fem_lock(vfsp->vfs_femhead)) == NULL) {
-		func = (int (*)()) vfsp->vfs_op->vfs_statvfs;
-		fem_unlock(vfsp->vfs_femhead);
-		errc = (*func)(vfsp, sp);
+	if ((femsp = fem_get(vfsp->vfs_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vfsp->vfs_femhead);
 		farg.fa_vnode.vfsp = vfsp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vfsop_find(&farg, &func, &arg0, vfs_statvfs, fsemop_statvfs);
-		errc = (*func)(arg0, sp);
+		func = vfsop_find(&farg, fsemop_statvfs);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, sp);
+	else
+		ret = fsop_statfs_dispatch(vfsp, sp, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 fshead_sync(vfs_t *vfsp, short flag, cred_t *cr)
 {
-	fsemarg_t	farg;
+	int (*func)(fsemarg_t *, short, cred_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	fsemarg_t farg;
+	int ret;
 
 	ASSERT(vfsp->vfs_implp);
 
-	if ((femsp = fem_lock(vfsp->vfs_femhead)) == NULL) {
-		func = (int (*)()) vfsp->vfs_op->vfs_sync;
-		fem_unlock(vfsp->vfs_femhead);
-		errc = (*func)(vfsp, flag, cr);
+	if ((femsp = fem_get(vfsp->vfs_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vfsp->vfs_femhead);
 		farg.fa_vnode.vfsp = vfsp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vfsop_find(&farg, &func, &arg0, vfs_sync, fsemop_sync);
-		errc = (*func)(arg0, flag, cr);
+		func = vfsop_find(&farg, fsemop_sync);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, flag, cr);
+	else
+		ret = fsop_sync_dispatch(vfsp, flag, cr, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 fshead_vget(vfs_t *vfsp, vnode_t **vpp, fid_t *fidp)
 {
-	fsemarg_t	farg;
+	int (*func)(fsemarg_t *, vnode_t **, fid_t *);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	fsemarg_t farg;
+	int ret;
 
 	ASSERT(vfsp->vfs_implp);
 
-	if ((femsp = fem_lock(vfsp->vfs_femhead)) == NULL) {
-		func = (int (*)()) vfsp->vfs_op->vfs_vget;
-		fem_unlock(vfsp->vfs_femhead);
-		errc = (*func)(vfsp, vpp, fidp);
+	if ((femsp = fem_get(vfsp->vfs_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vfsp->vfs_femhead);
 		farg.fa_vnode.vfsp = vfsp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vfsop_find(&farg, &func, &arg0, vfs_vget, fsemop_vget);
-		errc = (*func)(arg0, vpp, fidp);
+		func = vfsop_find(&farg, fsemop_vget);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, vpp, fidp);
+	else
+		ret = fsop_vget_dispatch(vfsp, vpp, fidp, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static int
+int
 fshead_mountroot(vfs_t *vfsp, enum whymountroot reason)
 {
-	fsemarg_t	farg;
+	int (*func)(fsemarg_t *, enum whymountroot);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	fsemarg_t farg;
+	int ret;
 
 	ASSERT(vfsp->vfs_implp);
 
-	if ((femsp = fem_lock(vfsp->vfs_femhead)) == NULL) {
-		func = (int (*)()) vfsp->vfs_op->vfs_mountroot;
-		fem_unlock(vfsp->vfs_femhead);
-		errc = (*func)(vfsp, reason);
+	if ((femsp = fem_get(vfsp->vfs_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vfsp->vfs_femhead);
 		farg.fa_vnode.vfsp = vfsp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vfsop_find(&farg, &func, &arg0, vfs_mountroot,
-		    fsemop_mountroot);
-		errc = (*func)(arg0, reason);
+		func = vfsop_find(&farg, fsemop_mountroot);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, reason);
+	else
+		ret = fsop_mountroot_dispatch(vfsp, reason, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-static void
+void
 fshead_freevfs(vfs_t *vfsp)
 {
-	fsemarg_t	farg;
+	void (*func)(fsemarg_t *);
 	struct fem_list	*femsp;
-	void		(*func)();
-	void		*arg0;
+	fsemarg_t farg;
 
 	ASSERT(vfsp->vfs_implp);
 
-	if ((femsp = fem_lock(vfsp->vfs_femhead)) == NULL) {
-		func = (void (*)()) vfsp->vfs_op->vfs_freevfs;
-		fem_unlock(vfsp->vfs_femhead);
-		(*func)(vfsp);
+	if ((femsp = fem_get(vfsp->vfs_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vfsp->vfs_femhead);
 		farg.fa_vnode.vfsp = vfsp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vfsop_find(&farg, &func, &arg0, vfs_freevfs, fsemop_freevfs);
-		(*func)(arg0);
+		func = vfsop_find(&farg, fsemop_freevfs);
 	}
+
+	if (func != NULL)
+		func(&farg);
+	else
+		fsop_freefs_dispatch(vfsp, false);
 
 	fem_release(femsp);
 }
 
-static int
+int
 fshead_vnstate(vfs_t *vfsp, vnode_t *vp, vntrans_t nstate)
 {
-	fsemarg_t	farg;
+	int (*func)(fsemarg_t *, vnode_t *, vntrans_t);
 	struct fem_list	*femsp;
-	int		(*func)();
-	void		*arg0;
-	int		errc;
+	fsemarg_t farg;
+	int ret;
 
 	ASSERT(vfsp->vfs_implp);
 
-	if ((femsp = fem_lock(vfsp->vfs_femhead)) == NULL) {
-		func = (int (*)()) vfsp->vfs_op->vfs_vnstate;
-		fem_unlock(vfsp->vfs_femhead);
-		errc = (*func)(vfsp, vp, nstate);
+	if ((femsp = fem_get(vfsp->vfs_femhead)) == NULL) {
+		func = NULL;
 	} else {
-		fem_addref(femsp);
-		fem_unlock(vfsp->vfs_femhead);
 		farg.fa_vnode.vfsp = vfsp;
 		farg.fa_fnode = femsp->feml_nodes + femsp->feml_tos;
-		vfsop_find(&farg, &func, &arg0, vfs_vnstate, fsemop_vnstate);
-		errc = (*func)(arg0, vp, nstate);
+		func = vfsop_find(&farg, fsemop_vnstate);
 	}
+
+	if (func != NULL)
+		ret = func(&farg, vp, nstate);
+	else
+		ret = fsop_vnstate_dispatch(vfsp, vp, nstate, false);
 
 	fem_release(femsp);
 
-	return (errc);
+	return ret;
 }
 
-
-/*
- * specification table for the vhead vnode operations.
- * It is an error for any operations to be missing.
- */
-
-static struct fs_operation_def fhead_vn_spec[] = {
-	{ VOPNAME_OPEN, (femop_t *)vhead_open },
-	{ VOPNAME_CLOSE, (femop_t *)vhead_close },
-	{ VOPNAME_READ, (femop_t *)vhead_read },
-	{ VOPNAME_WRITE, (femop_t *)vhead_write },
-	{ VOPNAME_IOCTL, (femop_t *)vhead_ioctl },
-	{ VOPNAME_SETFL, (femop_t *)vhead_setfl },
-	{ VOPNAME_GETATTR, (femop_t *)vhead_getattr },
-	{ VOPNAME_SETATTR, (femop_t *)vhead_setattr },
-	{ VOPNAME_ACCESS, (femop_t *)vhead_access },
-	{ VOPNAME_LOOKUP, (femop_t *)vhead_lookup },
-	{ VOPNAME_CREATE, (femop_t *)vhead_create },
-	{ VOPNAME_REMOVE, (femop_t *)vhead_remove },
-	{ VOPNAME_LINK, (femop_t *)vhead_link },
-	{ VOPNAME_RENAME, (femop_t *)vhead_rename },
-	{ VOPNAME_MKDIR, (femop_t *)vhead_mkdir },
-	{ VOPNAME_RMDIR, (femop_t *)vhead_rmdir },
-	{ VOPNAME_READDIR, (femop_t *)vhead_readdir },
-	{ VOPNAME_SYMLINK, (femop_t *)vhead_symlink },
-	{ VOPNAME_READLINK, (femop_t *)vhead_readlink },
-	{ VOPNAME_FSYNC, (femop_t *)vhead_fsync },
-	{ VOPNAME_INACTIVE, (femop_t *)vhead_inactive },
-	{ VOPNAME_FID, (femop_t *)vhead_fid },
-	{ VOPNAME_RWLOCK, (femop_t *)vhead_rwlock },
-	{ VOPNAME_RWUNLOCK, (femop_t *)vhead_rwunlock },
-	{ VOPNAME_SEEK, (femop_t *)vhead_seek },
-	{ VOPNAME_CMP, (femop_t *)vhead_cmp },
-	{ VOPNAME_FRLOCK, (femop_t *)vhead_frlock },
-	{ VOPNAME_SPACE, (femop_t *)vhead_space },
-	{ VOPNAME_REALVP, (femop_t *)vhead_realvp },
-	{ VOPNAME_GETPAGE, (femop_t *)vhead_getpage },
-	{ VOPNAME_PUTPAGE, (femop_t *)vhead_putpage },
-	{ VOPNAME_MAP, (femop_t *)vhead_map },
-	{ VOPNAME_ADDMAP, (femop_t *)vhead_addmap },
-	{ VOPNAME_DELMAP, (femop_t *)vhead_delmap },
-	{ VOPNAME_POLL, (femop_t *)vhead_poll },
-	{ VOPNAME_DUMP, (femop_t *)vhead_dump },
-	{ VOPNAME_PATHCONF, (femop_t *)vhead_pathconf },
-	{ VOPNAME_PAGEIO, (femop_t *)vhead_pageio },
-	{ VOPNAME_DUMPCTL, (femop_t *)vhead_dumpctl },
-	{ VOPNAME_DISPOSE, (femop_t *)vhead_dispose },
-	{ VOPNAME_SETSECATTR, (femop_t *)vhead_setsecattr },
-	{ VOPNAME_GETSECATTR, (femop_t *)vhead_getsecattr },
-	{ VOPNAME_SHRLOCK, (femop_t *)vhead_shrlock },
-	{ VOPNAME_VNEVENT, (femop_t *)vhead_vnevent },
-	{ VOPNAME_REQZCBUF, (femop_t *)vhead_reqzcbuf },
-	{ VOPNAME_RETZCBUF, (femop_t *)vhead_retzcbuf },
-	{	NULL,	NULL	}
-};
-
-/*
- * specification table for the vfshead vnode operations.
- * It is an error for any operations to be missing.
- */
-
-static struct fs_operation_def fshead_vfs_spec[]  = {
-	{ VFSNAME_MOUNT, (femop_t *)fshead_mount },
-	{ VFSNAME_UNMOUNT, (femop_t *)fshead_unmount },
-	{ VFSNAME_ROOT, (femop_t *)fshead_root },
-	{ VFSNAME_STATVFS, (femop_t *)fshead_statvfs },
-	{ VFSNAME_SYNC, (femop_t *)fshead_sync },
-	{ VFSNAME_VGET, (femop_t *)fshead_vget },
-	{ VFSNAME_MOUNTROOT, (femop_t *)fshead_mountroot },
-	{ VFSNAME_FREEVFS, (femop_t *)fshead_freevfs },
-	{ VFSNAME_VNSTATE, (femop_t *)fshead_vnstate },
-	{	NULL,	NULL	}
-};
 
 /*
  * This set of routines transfer control to the next stacked monitor.
@@ -2090,135 +1831,155 @@ static struct fs_operation_def fshead_vfs_spec[]  = {
 int
 vnext_open(femarg_t *vf, int mode, cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, cred_t *, caller_context_t *);
+	struct vnode **vnode = vf->fa_vnode.vpp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_open, femop_open);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, mode, cr, ct));
+	func = vsop_find(vf, femop_open);
+
+	if (func != NULL)
+		return func(vf, mode, cr, ct);
+
+	return fop_open_dispatch(vnode, mode, cr, ct, false);
 }
 
 int
 vnext_close(femarg_t *vf, int flag, int count, offset_t offset, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, int, offset_t, cred_t *,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_close, femop_close);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, flag, count, offset, cr, ct));
+	func = vsop_find(vf, femop_close);
+
+	if (func != NULL)
+		return func(vf, flag, count, offset, cr, ct);
+
+	return fop_close_dispatch(vnode, flag, count, offset, cr, ct, false);
 }
 
 int
 vnext_read(femarg_t *vf, uio_t *uiop, int ioflag, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, uio_t *, int, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_read, femop_read);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, uiop, ioflag, cr, ct));
+	func = vsop_find(vf, femop_read);
+
+	if (func != NULL)
+		return func(vf, uiop, ioflag, cr, ct);
+
+	return fop_read_dispatch(vnode, uiop, ioflag, cr, ct, false);
 }
 
 int
 vnext_write(femarg_t *vf, uio_t *uiop, int ioflag, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, uio_t *, int, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_write, femop_write);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, uiop, ioflag, cr, ct));
+	func = vsop_find(vf, femop_write);
+
+	if (func != NULL)
+		return func(vf, uiop, ioflag, cr, ct);
+
+	return fop_write_dispatch(vnode, uiop, ioflag, cr, ct, false);
 }
 
 int
 vnext_ioctl(femarg_t *vf, int cmd, intptr_t arg, int flag, cred_t *cr,
 	int *rvalp, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, intptr_t, int, cred_t *, int *,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_ioctl, femop_ioctl);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, cmd, arg, flag, cr, rvalp, ct));
+	func = vsop_find(vf, femop_ioctl);
+
+	if (func != NULL)
+		return func(vf, cmd, arg, flag, cr, rvalp, ct);
+
+	return fop_ioctl_dispatch(vnode, cmd, arg, flag, cr, rvalp, ct, false);
 }
 
 int
 vnext_setfl(femarg_t *vf, int oflags, int nflags, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, int, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_setfl, femop_setfl);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, oflags, nflags, cr, ct));
+	func = vsop_find(vf, femop_setfl);
+
+	if (func != NULL)
+		return func(vf, oflags, nflags, cr, ct);
+
+	return fop_setfl_dispatch(vnode, oflags, nflags, cr, ct, false);
 }
 
 int
 vnext_getattr(femarg_t *vf, vattr_t *vap, int flags, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, vattr_t *, int, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_getattr, femop_getattr);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, vap, flags, cr, ct));
+	func = vsop_find(vf, femop_getattr);
+
+	if (func != NULL)
+		return func(vf, vap, flags, cr, ct);
+
+	return fop_getattr_dispatch(vnode, vap, flags, cr, ct, false);
 }
 
 int
 vnext_setattr(femarg_t *vf, vattr_t *vap, int flags, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, vattr_t *, int, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_setattr, femop_setattr);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, vap, flags, cr, ct));
+	func = vsop_find(vf, femop_setattr);
+
+	if (func != NULL)
+		return func(vf, vap, flags, cr, ct);
+
+	return fop_setattr_dispatch(vnode, vap, flags, cr, ct, false);
 }
 
 int
 vnext_access(femarg_t *vf, int mode, int flags, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, int, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_access, femop_access);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, mode, flags, cr, ct));
+	func = vsop_find(vf, femop_access);
+
+	if (func != NULL)
+		return func(vf, mode, flags, cr, ct);
+
+	return fop_access_dispatch(vnode, mode, flags, cr, ct, false);
 }
 
 int
@@ -2226,16 +1987,21 @@ vnext_lookup(femarg_t *vf, char *nm, vnode_t **vpp, pathname_t *pnp,
 	int flags, vnode_t *rdir, cred_t *cr, caller_context_t *ct,
 	int *direntflags, pathname_t *realpnp)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, char *, vnode_t **, pathname_t *, int,
+		    vnode_t *, cred_t *, caller_context_t *, int *,
+		    pathname_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_lookup, femop_lookup);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, nm, vpp, pnp, flags, rdir, cr, ct,
-	    direntflags, realpnp));
+	func = vsop_find(vf, femop_lookup);
+
+	if (func != NULL)
+		return func(vf, nm, vpp, pnp, flags, rdir, cr, ct,
+			    direntflags, realpnp);
+
+	return fop_lookup_dispatch(vnode, nm, vpp, pnp, flags, rdir, cr, ct,
+				   direntflags, realpnp, false);
 }
 
 int
@@ -2243,232 +2009,275 @@ vnext_create(femarg_t *vf, char *name, vattr_t *vap, vcexcl_t excl,
 	int mode, vnode_t **vpp, cred_t *cr, int flag, caller_context_t *ct,
 	vsecattr_t *vsecp)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, char *, vattr_t *, vcexcl_t, int, vnode_t **,
+		    cred_t *, int, caller_context_t *, vsecattr_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_create, femop_create);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, name, vap, excl, mode, vpp, cr, flag, ct, vsecp));
+	func = vsop_find(vf, femop_create);
+
+	if (func != NULL)
+		return func(vf, name, vap, excl, mode, vpp, cr, flag, ct,
+			    vsecp);
+
+	return fop_create_dispatch(vnode, name, vap, excl, mode, vpp, cr, flag,
+				   ct, vsecp, false);
 }
 
 int
 vnext_remove(femarg_t *vf, char *nm, cred_t *cr, caller_context_t *ct,
 	int flags)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, char *, cred_t *, caller_context_t *, int);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_remove, femop_remove);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, nm, cr, ct, flags));
+	func = vsop_find(vf, femop_remove);
+
+	if (func != NULL)
+		return func(vf, nm, cr, ct, flags);
+
+	return fop_remove_dispatch(vnode, nm, cr, ct, flags, false);
 }
 
 int
 vnext_link(femarg_t *vf, vnode_t *svp, char *tnm, cred_t *cr,
 	caller_context_t *ct, int flags)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, vnode_t *, char *, cred_t *,
+		    caller_context_t *, int);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_link, femop_link);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, svp, tnm, cr, ct, flags));
+	func = vsop_find(vf, femop_link);
+
+	if (func != NULL)
+		return func(vf, svp, tnm, cr, ct, flags);
+
+	return fop_link_dispatch(vnode, svp, tnm, cr, ct, flags, false);
 }
 
 int
 vnext_rename(femarg_t *vf, char *snm, vnode_t *tdvp, char *tnm, cred_t *cr,
 	caller_context_t *ct, int flags)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, char *, vnode_t *, char *, cred_t *,
+		    caller_context_t *,int);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_rename, femop_rename);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, snm, tdvp, tnm, cr, ct, flags));
+	func = vsop_find(vf, femop_rename);
+
+	if (func != NULL)
+		return func(vf, snm, tdvp, tnm, cr, ct, flags);
+
+	return fop_rename_dispatch(vnode, snm, tdvp, tnm, cr, ct, flags, false);
 }
 
 int
 vnext_mkdir(femarg_t *vf, char *dirname, vattr_t *vap, vnode_t **vpp,
 	cred_t *cr, caller_context_t *ct, int flags, vsecattr_t *vsecp)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, char *, vattr_t *, vnode_t **, cred_t *,
+		    caller_context_t *, int, vsecattr_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_mkdir, femop_mkdir);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, dirname, vap, vpp, cr, ct, flags, vsecp));
+	func = vsop_find(vf, femop_mkdir);
+
+	if (func != NULL)
+		return func(vf, dirname, vap, vpp, cr, ct, flags, vsecp);
+
+	return fop_mkdir_dispatch(vnode, dirname, vap, vpp, cr, ct, flags,
+				  vsecp, false);
 }
 
 int
 vnext_rmdir(femarg_t *vf, char *nm, vnode_t *cdir, cred_t *cr,
 	caller_context_t *ct, int flags)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, char *, vnode_t *, cred_t *, caller_context_t *,
+		    int);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_rmdir, femop_rmdir);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, nm, cdir, cr, ct, flags));
+	func = vsop_find(vf, femop_rmdir);
+
+	if (func != NULL)
+		return func(vf, nm, cdir, cr, ct, flags);
+
+	return fop_rmdir_dispatch(vnode, nm, cdir, cr, ct, flags, false);
 }
 
 int
 vnext_readdir(femarg_t *vf, uio_t *uiop, cred_t *cr, int *eofp,
 	caller_context_t *ct, int flags)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, uio_t *, cred_t *, int *, caller_context_t *,
+		    int);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_readdir, femop_readdir);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, uiop, cr, eofp, ct, flags));
+	func = vsop_find(vf, femop_readdir);
+
+	if (func != NULL)
+		return func(vf, uiop, cr, eofp, ct, flags);
+
+	return fop_readdir_dispatch(vnode, uiop, cr, eofp, ct, flags, false);
 }
 
 int
 vnext_symlink(femarg_t *vf, char *linkname, vattr_t *vap, char *target,
 	cred_t *cr, caller_context_t *ct, int flags)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, char *, vattr_t *, char *, cred_t *,
+		    caller_context_t *, int);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_symlink, femop_symlink);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, linkname, vap, target, cr, ct, flags));
+	func = vsop_find(vf, femop_symlink);
+
+	if (func != NULL)
+		return func(vf, linkname, vap, target, cr, ct, flags);
+
+	return fop_symlink_dispatch(vnode, linkname, vap, target, cr, ct,
+				    flags, false);
 }
 
 int
 vnext_readlink(femarg_t *vf, uio_t *uiop, cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, uio_t *, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_readlink, femop_readlink);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, uiop, cr, ct));
+	func = vsop_find(vf, femop_readlink);
+
+	if (func != NULL)
+		return func(vf, uiop, cr, ct);
+
+	return fop_readlink_dispatch(vnode, uiop, cr, ct, false);
 }
 
 int
 vnext_fsync(femarg_t *vf, int syncflag, cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_fsync, femop_fsync);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, syncflag, cr, ct));
+	func = vsop_find(vf, femop_fsync);
+
+	if (func != NULL)
+		return func(vf, syncflag, cr, ct);
+
+	return fop_fsync_dispatch(vnode, syncflag, cr, ct, false);
 }
 
 void
 vnext_inactive(femarg_t *vf, cred_t *cr, caller_context_t *ct)
 {
-	void (*func)() = NULL;
-	void *arg0 = NULL;
+	void (*func)(femarg_t *, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_inactive, femop_inactive);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	(*func)(arg0, cr, ct);
+	func = vsop_find(vf, femop_inactive);
+
+	if (func != NULL)
+		func(vf, cr, ct);
+	else
+		fop_inactive_dispatch(vnode, cr, ct, false);
 }
 
 int
 vnext_fid(femarg_t *vf, fid_t *fidp, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, fid_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_fid, femop_fid);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, fidp, ct));
+	func = vsop_find(vf, femop_fid);
+
+	if (func != NULL)
+		return func(vf, fidp, ct);
+
+	return fop_fid_dispatch(vnode, fidp, ct, false);
 }
 
 int
 vnext_rwlock(femarg_t *vf, int write_lock, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_rwlock, femop_rwlock);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, write_lock, ct));
+	func = vsop_find(vf, femop_rwlock);
+
+	if (func != NULL)
+		return func(vf, write_lock, ct);
+
+	return fop_rwlock_dispatch(vnode, write_lock, ct, false);
 }
 
 void
 vnext_rwunlock(femarg_t *vf, int write_lock, caller_context_t *ct)
 {
-	void (*func)() = NULL;
-	void *arg0 = NULL;
+	void (*func)(femarg_t *, int, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_rwunlock, femop_rwunlock);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	(*func)(arg0, write_lock, ct);
+	func = vsop_find(vf, femop_rwunlock);
+
+	if (func != NULL)
+		func(vf, write_lock, ct);
+	else
+		fop_rwunlock_dispatch(vnode, write_lock, ct, false);
 }
 
 int
 vnext_seek(femarg_t *vf, offset_t ooff, offset_t *noffp, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, offset_t, offset_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_seek, femop_seek);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, ooff, noffp, ct));
+	func = vsop_find(vf, femop_seek);
+
+	if (func != NULL)
+		return func(vf, ooff, noffp, ct);
+
+	return fop_seek_dispatch(vnode, ooff, noffp, ct, false);
 }
 
 int
 vnext_cmp(femarg_t *vf, vnode_t *vp2, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, vnode_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_cmp, femop_cmp);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, vp2, ct));
+	func = vsop_find(vf, femop_cmp);
+
+	if (func != NULL)
+		return func(vf, vp2, ct);
+
+	return fop_cmp_dispatch(vnode, vp2, ct, false);
 }
 
 int
@@ -2476,44 +2285,53 @@ vnext_frlock(femarg_t *vf, int cmd, struct flock64 *bfp, int flag,
 	offset_t offset, struct flk_callback *flk_cbp, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, struct flock64 *, int, offset_t,
+		    struct flk_callback *, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_frlock, femop_frlock);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, cmd, bfp, flag, offset, flk_cbp, cr, ct));
+	func = vsop_find(vf, femop_frlock);
+
+	if (func != NULL)
+		return func(vf, cmd, bfp, flag, offset, flk_cbp, cr, ct);
+
+	return fop_frlock_dispatch(vnode, cmd, bfp, flag, offset, flk_cbp, cr,
+				   ct, false);
 }
 
 int
 vnext_space(femarg_t *vf, int cmd, struct flock64 *bfp, int flag,
 	offset_t offset, cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, struct flock64 *, int, offset_t,
+		    cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_space, femop_space);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, cmd, bfp, flag, offset, cr, ct));
+	func = vsop_find(vf, femop_space);
+
+	if (func != NULL)
+		return func(vf, cmd, bfp, flag, offset, cr, ct);
+
+	return fop_space_dispatch(vnode, cmd, bfp, flag, offset, cr, ct, false);
 }
 
 int
 vnext_realvp(femarg_t *vf, vnode_t **vpp, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, vnode_t **, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_realvp, femop_realvp);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, vpp, ct));
+	func = vsop_find(vf, femop_realvp);
+
+	if (func != NULL)
+		return func(vf, vpp, ct);
+
+	return fop_realvp_dispatch(vnode, vpp, ct, false);
 }
 
 int
@@ -2521,31 +2339,39 @@ vnext_getpage(femarg_t *vf, offset_t off, size_t len, uint_t *protp,
 	struct page **plarr, size_t plsz, struct seg *seg, caddr_t addr,
 	enum seg_rw rw, cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, offset_t, size_t, uint_t *, struct page **,
+		    size_t, struct seg *, caddr_t, enum seg_rw, cred_t *,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_getpage, femop_getpage);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, off, len, protp, plarr, plsz, seg, addr, rw,
-	    cr, ct));
+	func = vsop_find(vf, femop_getpage);
+
+	if (func != NULL)
+		return func(vf, off, len, protp, plarr, plsz, seg, addr, rw,
+			    cr, ct);
+
+	return fop_getpage_dispatch(vnode, off, len, protp, plarr, plsz, seg, addr,
+				    rw, cr, ct, false);
 }
 
 int
 vnext_putpage(femarg_t *vf, offset_t off, size_t len, int flags,
 	cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, offset_t, size_t, int, cred_t *,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_putpage, femop_putpage);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, off, len, flags, cr, ct));
+	func = vsop_find(vf, femop_putpage);
+
+	if (func != NULL)
+		return func(vf, off, len, flags, cr, ct);
+
+	return fop_putpage_dispatch(vnode, off, len, flags, cr, ct, false);
 }
 
 int
@@ -2553,16 +2379,20 @@ vnext_map(femarg_t *vf, offset_t off, struct as *as, caddr_t *addrp,
 	size_t len, uchar_t prot, uchar_t maxprot, uint_t flags,
 	cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, offset_t, struct as *, caddr_t *, size_t,
+		    uchar_t, uchar_t, uint_t, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_map, femop_map);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, off, as, addrp, len, prot, maxprot, flags,
-	    cr, ct));
+	func = vsop_find(vf, femop_map);
+
+	if (func != NULL)
+		return func(vf, off, as, addrp, len, prot, maxprot, flags,
+			    cr, ct);
+
+	return fop_map_dispatch(vnode, off, as, addrp, len, prot, maxprot, flags,
+				cr, ct, false);
 }
 
 int
@@ -2570,16 +2400,20 @@ vnext_addmap(femarg_t *vf, offset_t off, struct as *as, caddr_t addr,
 	size_t len, uchar_t prot, uchar_t maxprot, uint_t flags,
 	cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, offset_t, struct as *, caddr_t, size_t, uchar_t,
+		    uchar_t, uint_t, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_addmap, femop_addmap);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, off, as, addr, len, prot, maxprot, flags,
-	    cr, ct));
+	func = vsop_find(vf, femop_addmap);
+
+	if (func != NULL)
+		return func(vf, off, as, addr, len, prot, maxprot, flags,
+			    cr, ct);
+
+	return fop_addmap_dispatch(vnode, off, as, addr, len, prot, maxprot, flags,
+				   cr, ct, false);
 }
 
 int
@@ -2587,320 +2421,376 @@ vnext_delmap(femarg_t *vf, offset_t off, struct as *as, caddr_t addr,
 	size_t len, uint_t prot, uint_t maxprot, uint_t flags,
 	cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, offset_t, struct as *, caddr_t, size_t, uint_t,
+		    uint_t, uint_t, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_delmap, femop_delmap);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, off, as, addr, len, prot, maxprot, flags,
-	    cr, ct));
+	func = vsop_find(vf, femop_delmap);
+
+	if (func != NULL)
+		return func(vf, off, as, addr, len, prot, maxprot, flags,
+			    cr, ct);
+
+	return fop_delmap_dispatch(vnode, off, as, addr, len, prot, maxprot, flags,
+				   cr, ct, false);
 }
 
 int
 vnext_poll(femarg_t *vf, short events, int anyyet, short *reventsp,
 	struct pollhead **phpp, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, short, int, short *, struct pollhead **,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_poll, femop_poll);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, events, anyyet, reventsp, phpp, ct));
+	func = vsop_find(vf, femop_poll);
+
+	if (func != NULL)
+		return func(vf, events, anyyet, reventsp, phpp, ct);
+
+	return fop_poll_dispatch(vnode, events, anyyet, reventsp, phpp, ct, false);
 }
 
 int
 vnext_dump(femarg_t *vf, caddr_t addr, offset_t lbdn, offset_t dblks,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, caddr_t, offset_t, offset_t,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_dump, femop_dump);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, addr, lbdn, dblks, ct));
+	func = vsop_find(vf, femop_dump);
+
+	if (func != NULL)
+		return func(vf, addr, lbdn, dblks, ct);
+
+	return fop_dump_dispatch(vnode, addr, lbdn, dblks, ct, false);
 }
 
 int
 vnext_pathconf(femarg_t *vf, int cmd, ulong_t *valp, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, ulong_t *, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_pathconf, femop_pathconf);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, cmd, valp, cr, ct));
+	func = vsop_find(vf, femop_pathconf);
+
+	if (func != NULL)
+		return func(vf, cmd, valp, cr, ct);
+
+	return fop_pathconf_dispatch(vnode, cmd, valp, cr, ct, false);
 }
 
 int
 vnext_pageio(femarg_t *vf, struct page *pp, uoff_t io_off,
 	size_t io_len, int flags, cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, struct page *, uoff_t, size_t, int, cred_t *,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_pageio, femop_pageio);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, pp, io_off, io_len, flags, cr, ct));
+	func = vsop_find(vf, femop_pageio);
+
+	if (func != NULL)
+		return func(vf, pp, io_off, io_len, flags, cr, ct);
+
+	return fop_pageio_dispatch(vnode, pp, io_off, io_len, flags, cr, ct,
+				   false);
 }
 
 int
 vnext_dumpctl(femarg_t *vf, int action, offset_t *blkp, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, offset_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_dumpctl, femop_dumpctl);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, action, blkp, ct));
+	func = vsop_find(vf, femop_dumpctl);
+
+	if (func != NULL)
+		return func(vf, action, blkp, ct);
+
+	return fop_dumpctl_dispatch(vnode, action, blkp, ct, false);
 }
 
 void
 vnext_dispose(femarg_t *vf, struct page *pp, int flag, int dn, cred_t *cr,
 	caller_context_t *ct)
 {
-	void (*func)() = NULL;
-	void *arg0 = NULL;
+	void (*func)(femarg_t *, struct page *, int, int, cred_t *,
+		     caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_dispose, femop_dispose);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	(*func)(arg0, pp, flag, dn, cr, ct);
+	func = vsop_find(vf, femop_dispose);
+
+	if (func != NULL)
+		func(vf, pp, flag, dn, cr, ct);
+	else
+		fop_dispose_dispatch(vnode, pp, flag, dn, cr, ct, false);
 }
 
 int
 vnext_setsecattr(femarg_t *vf, vsecattr_t *vsap, int flag, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, vsecattr_t *, int, cred_t *,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_setsecattr, femop_setsecattr);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, vsap, flag, cr, ct));
+	func = vsop_find(vf, femop_setsecattr);
+
+	if (func != NULL)
+		return func(vf, vsap, flag, cr, ct);
+
+	return fop_setsecattr_dispatch(vnode, vsap, flag, cr, ct, false);
 }
 
 int
 vnext_getsecattr(femarg_t *vf, vsecattr_t *vsap, int flag, cred_t *cr,
 	caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, vsecattr_t *, int, cred_t *,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_getsecattr, femop_getsecattr);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, vsap, flag, cr, ct));
+	func = vsop_find(vf, femop_getsecattr);
+
+	if (func != NULL)
+		return func(vf, vsap, flag, cr, ct);
+
+	return fop_getsecattr_dispatch(vnode, vsap, flag, cr, ct, false);
 }
 
 int
 vnext_shrlock(femarg_t *vf, int cmd, struct shrlock *shr, int flag,
 	cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, int, struct shrlock *, int, cred_t *,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_shrlock, femop_shrlock);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, cmd, shr, flag, cr, ct));
+	func = vsop_find(vf, femop_shrlock);
+
+	if (func != NULL)
+		return func(vf, cmd, shr, flag, cr, ct);
+
+	return fop_shrlock_dispatch(vnode, cmd, shr, flag, cr, ct, false);
 }
 
 int
 vnext_vnevent(femarg_t *vf, vnevent_t vnevent, vnode_t *dvp, char *cname,
     caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, vnevent_t, vnode_t *, char *,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_vnevent, femop_vnevent);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, vnevent, dvp, cname, ct));
+	func = vsop_find(vf, femop_vnevent);
+
+	if (func != NULL)
+		return func(vf, vnevent, dvp, cname, ct);
+
+	return fop_vnevent_dispatch(vnode, vnevent, dvp, cname, ct, false);
 }
 
 int
 vnext_reqzcbuf(femarg_t *vf, enum uio_rw ioflag, xuio_t *xuiop, cred_t *cr,
     caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, enum uio_rw, xuio_t *, cred_t *,
+		    caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_reqzcbuf, femop_reqzcbuf);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, ioflag, xuiop, cr, ct));
+	func = vsop_find(vf, femop_reqzcbuf);
+
+	if (func != NULL)
+		return func(vf, ioflag, xuiop, cr, ct);
+
+	return fop_reqzcbuf_dispatch(vnode, ioflag, xuiop, cr, ct, false);
 }
 
 int
 vnext_retzcbuf(femarg_t *vf, xuio_t *xuiop, cred_t *cr, caller_context_t *ct)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(femarg_t *, xuio_t *, cred_t *, caller_context_t *);
+	struct vnode *vnode = vf->fa_vnode.vp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vsop_find(vf, &func, &arg0, vop_retzcbuf, femop_retzcbuf);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, xuiop, cr, ct));
+	func = vsop_find(vf, femop_retzcbuf);
+
+	if (func != NULL)
+		return func(vf, xuiop, cr, ct);
+
+	return fop_retzcbuf_dispatch(vnode, xuiop, cr, ct, false);
 }
 
 int
 vfsnext_mount(fsemarg_t *vf, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(fsemarg_t *, vnode_t *, struct mounta *, cred_t *);
+	struct vfs *vfs = vf->fa_vnode.vfsp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vfsop_find(vf, &func, &arg0, vfs_mount, fsemop_mount);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, mvp, uap, cr));
+	func = vfsop_find(vf, fsemop_mount);
+
+	if (func != NULL)
+		return func(vf, mvp, uap, cr);
+
+	return fsop_mount_dispatch(vfs, mvp, uap, cr, false);
 }
 
 int
 vfsnext_unmount(fsemarg_t *vf, int flag, cred_t *cr)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(fsemarg_t *, int, cred_t *);
+	struct vfs *vfs = vf->fa_vnode.vfsp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vfsop_find(vf, &func, &arg0, vfs_unmount, fsemop_unmount);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, flag, cr));
+	func = vfsop_find(vf, fsemop_unmount);
+
+	if (func != NULL)
+		return func(vf, flag, cr);
+
+	return fsop_unmount_dispatch(vfs, flag, cr, false);
 }
 
 int
 vfsnext_root(fsemarg_t *vf, vnode_t **vpp)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(fsemarg_t *, vnode_t **);
+	struct vfs *vfs = vf->fa_vnode.vfsp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vfsop_find(vf, &func, &arg0, vfs_root, fsemop_root);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, vpp));
+	func = vfsop_find(vf, fsemop_root);
+
+	if (func != NULL)
+		return func(vf, vpp);
+
+	return fsop_root_dispatch(vfs, vpp, false);
 }
 
 int
 vfsnext_statvfs(fsemarg_t *vf, statvfs64_t *sp)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(fsemarg_t *, statvfs64_t *);
+	struct vfs *vfs = vf->fa_vnode.vfsp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vfsop_find(vf, &func, &arg0, vfs_statvfs, fsemop_statvfs);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, sp));
+	func = vfsop_find(vf, fsemop_statvfs);
+
+	if (func != NULL)
+		return func(vf, sp);
+
+	return fsop_statfs_dispatch(vfs, sp, false);
 }
 
 int
 vfsnext_sync(fsemarg_t *vf, short flag, cred_t *cr)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(fsemarg_t *, short, cred_t *);
+	struct vfs *vfs = vf->fa_vnode.vfsp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vfsop_find(vf, &func, &arg0, vfs_sync, fsemop_sync);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, flag, cr));
+	func = vfsop_find(vf, fsemop_sync);
+
+	if (func != NULL)
+		return func(vf, flag, cr);
+
+	return fsop_sync_dispatch(vfs, flag, cr, false);
 }
 
 int
 vfsnext_vget(fsemarg_t *vf, vnode_t **vpp, fid_t *fidp)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(fsemarg_t *, vnode_t **, fid_t *);
+	struct vfs *vfs = vf->fa_vnode.vfsp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vfsop_find(vf, &func, &arg0, vfs_vget, fsemop_vget);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, vpp, fidp));
+	func = vfsop_find(vf, fsemop_vget);
+
+	if (func != NULL)
+		return func(vf, vpp, fidp);
+
+	return fsop_vget_dispatch(vfs, vpp, fidp, false);
 }
 
 int
 vfsnext_mountroot(fsemarg_t *vf, enum whymountroot reason)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(fsemarg_t *, enum whymountroot);
+	struct vfs *vfs = vf->fa_vnode.vfsp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vfsop_find(vf, &func, &arg0, vfs_mountroot, fsemop_mountroot);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, reason));
+	func = vfsop_find(vf, fsemop_mountroot);
+
+	if (func != NULL)
+		return func(vf, reason);
+
+	return fsop_mountroot_dispatch(vfs, reason, false);
 }
 
 void
 vfsnext_freevfs(fsemarg_t *vf)
 {
-	void (*func)() = NULL;
-	void *arg0 = NULL;
+	void (*func)(fsemarg_t *);
+	struct vfs *vfs = vf->fa_vnode.vfsp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vfsop_find(vf, &func, &arg0, vfs_freevfs, fsemop_freevfs);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	(*func)(arg0);
+	func = vfsop_find(vf, fsemop_freevfs);
+
+	if (func != NULL)
+		func(vf);
+	else
+		fsop_freefs_dispatch(vfs, false);
 }
 
 int
 vfsnext_vnstate(fsemarg_t *vf, vnode_t *vp, vntrans_t nstate)
 {
-	int (*func)() = NULL;
-	void *arg0 = NULL;
+	int (*func)(fsemarg_t *, vnode_t *, vntrans_t);
+	struct vfs *vfs = vf->fa_vnode.vfsp;
 
 	ASSERT(vf != NULL);
 	vf->fa_fnode--;
-	vfsop_find(vf, &func, &arg0, vfs_vnstate, fsemop_vnstate);
-	ASSERT(func != NULL);
-	ASSERT(arg0 != NULL);
-	return ((*func)(arg0, vp, nstate));
+	func = vfsop_find(vf, fsemop_vnstate);
+
+	if (func != NULL)
+		return func(vf, vp, nstate);
+
+	return fsop_vnstate_dispatch(vfs, vp, nstate, false);
 }
 
 
@@ -2958,13 +2848,13 @@ femlist_create(int numnodes)
  */
 
 static struct fem_list *
-femlist_construct(void *baseops, int type, int numnodes)
+femlist_construct(int type, int numnodes)
 {
 	struct fem_list	*sp;
 
 	sp = femlist_create(numnodes);
 	sp->feml_nodes[0] = FEM_GUARD(type);
-	sp->feml_nodes[1].fn_op.anon = baseops;
+	sp->feml_nodes[1].fn_op.anon = NULL;
 	sp->feml_nodes[1].fn_available = NULL;
 	sp->feml_nodes[1].fn_av_hold = NULL;
 	sp->feml_nodes[1].fn_av_rele = NULL;
@@ -3006,14 +2896,12 @@ fem_dup_list(struct fem_list *orig, struct fem_list *clone)
 static int
 fem_push_node(
 	struct fem_head **hp,
-	void **baseops,
 	int type,
 	struct fem_node *nnode,
 	femhow_t how)
 {
 	struct fem_head	*hd;
 	struct fem_list	*list;
-	void		*oldops;
 	int		retry;
 	int		error = 0;
 	int		i;
@@ -3037,7 +2925,6 @@ fem_push_node(
 	do {
 		retry = 1;
 		list = fem_lock(hd);
-		oldops = *baseops;
 
 		if (list != NULL) {
 			if (list->feml_tos+1 < list->feml_ssize) {
@@ -3083,15 +2970,14 @@ fem_push_node(
 			}
 		} else {
 			fem_unlock(hd);
-			list = femlist_construct(oldops, type, NNODES_DEFAULT);
+			list = femlist_construct(type, NNODES_DEFAULT);
 			(void) fem_lock(hd);
-			if (hd->femh_list != NULL || *baseops != oldops) {
+			if (hd->femh_list != NULL) {
 				/* concurrent update, retry */
 				fem_release(list);
 				fem_unlock(hd);
 			} else {
 				hd->femh_list = list;
-				*baseops = FEM_HEAD(type);
 				retry = 0;
 			}
 		}
@@ -3167,7 +3053,7 @@ fem_push_node(
  */
 
 static int
-remove_node(struct fem_list *sp, void **baseops, void *opset, void *datap)
+remove_node(struct fem_list *sp, void *opset, void *datap)
 {
 	int	i;
 	struct fem_node	*fn;
@@ -3195,14 +3081,11 @@ remove_node(struct fem_list *sp, void **baseops, void *opset, void *datap)
 	while (i++ < sp->feml_tos) {
 		sp->feml_nodes[i-1] = sp->feml_nodes[i];
 	}
-	if (--(sp->feml_tos) == 1) { /* Empty, restore ops */
-		*baseops = sp->feml_nodes[1].fn_op.anon;
-	}
 	return (0);
 }
 
 static int
-fem_remove_node(struct fem_head *fh, void **baseops, void *opset, void *datap)
+fem_remove_node(struct fem_head *fh, void *opset, void *datap)
 {
 	struct fem_list *sp;
 	int		error = 0;
@@ -3218,7 +3101,7 @@ fem_remove_node(struct fem_head *fh, void **baseops, void *opset, void *datap)
 			fem_unlock(fh);
 			error = EINVAL;
 		} else if (sp->feml_refc == 1) {
-			error = remove_node(sp, baseops, opset, datap);
+			error = remove_node(sp, opset, datap);
 			if (sp->feml_tos == 1) {
 				/*
 				 * The top-of-stack was decremented by
@@ -3247,7 +3130,7 @@ fem_remove_node(struct fem_head *fh, void **baseops, void *opset, void *datap)
 				 * it started with.
 				 */
 				fem_dup_list(sp, nsp);
-				error = remove_node(nsp, baseops, opset, datap);
+				error = remove_node(nsp, opset, datap);
 				if (error != 0) {
 					fem_release(nsp);
 				} else if (nsp->feml_tos == 1) {
@@ -3312,30 +3195,6 @@ fem_compare_mon(struct fem_node *n, void *mon, void *arg)
  */
 
 int
-fem_create(char *name, const struct fs_operation_def *templ,
-    fem_t **actual)
-{
-	int	unused_ops = 0;
-	int	e;
-	fem_t	*newf;
-
-	newf = fem_alloc();
-	newf->name = name;
-	newf->templ = templ;
-
-	e =  fs_build_vector(newf, &unused_ops, fem_opdef, templ);
-	if (e != 0) {
-#ifdef DEBUG
-		cmn_err(CE_WARN, "fem_create: error %d building vector", e);
-#endif
-		fem_free(newf);
-	} else {
-		*actual = newf;
-	}
-	return (e);
-}
-
-int
 fem_install(
 	vnode_t *vp,		/* Vnode on which monitor is being installed */
 	fem_t *mon,		/* Monitor operations being installed */
@@ -3358,8 +3217,7 @@ fem_install(
 	if (arg_hold)
 		(*arg_hold)(arg);
 
-	error = fem_push_node(&vp->v_femhead, (void **)&vp->v_op, FEMTYPE_VNODE,
-	    &nnode, how);
+	error = fem_push_node(&vp->v_femhead, FEMTYPE_VNODE, &nnode, how);
 
 	/* If there was an error then the monitor wasn't pushed */
 	if (error && arg_rele)
@@ -3387,81 +3245,13 @@ int
 fem_uninstall(vnode_t *v, fem_t *mon, void *arg)
 {
 	int	e;
-	e = fem_remove_node(v->v_femhead, (void **)&v->v_op, mon, arg);
+	e = fem_remove_node(v->v_femhead, mon, arg);
 	return (e);
 }
-
-void
-fem_setvnops(vnode_t *v, vnodeops_t *newops)
-{
-	vnodeops_t	*r;
-
-	ASSERT(v != NULL);
-	ASSERT(newops != NULL);
-
-	do {
-		r = v->v_op;
-		membar_consumer();
-		if (v->v_femhead != NULL) {
-			struct fem_list	*fl;
-			if ((fl = fem_lock(v->v_femhead)) != NULL) {
-				fl->feml_nodes[1].fn_op.vnode = newops;
-				fem_unlock(v->v_femhead);
-				return;
-			}
-			fem_unlock(v->v_femhead);
-		}
-	} while (atomic_cas_ptr(&v->v_op, r, newops) != r);
-}
-
-vnodeops_t *
-fem_getvnops(vnode_t *v)
-{
-	vnodeops_t	*r;
-
-	ASSERT(v != NULL);
-
-	r = v->v_op;
-	membar_consumer();
-	if (v->v_femhead != NULL) {
-		struct fem_list	*fl;
-		if ((fl = fem_lock(v->v_femhead)) != NULL) {
-			r = fl->feml_nodes[1].fn_op.vnode;
-		}
-		fem_unlock(v->v_femhead);
-	}
-	return (r);
-}
-
 
 /*
  * VFS interposition
- */
-int
-fsem_create(char *name, const struct fs_operation_def *templ,
-    fsem_t **actual)
-{
-	int	unused_ops = 0;
-	int	e;
-	fsem_t	*newv;
-
-	newv = fsem_alloc();
-	newv->name = (const char *)name;
-	newv->templ = templ;
-
-	e = fs_build_vector(newv, &unused_ops, fsem_opdef, templ);
-	if (e != 0) {
-#ifdef DEBUG
-		cmn_err(CE_WARN, "fsem_create: error %d building vector", e);
-#endif
-		fsem_free(newv);
-	} else {
-		*actual = newv;
-	}
-	return (e);
-}
-
-/*
+ *
  * These need to be re-written, but there should be more common bits.
  */
 
@@ -3510,8 +3300,7 @@ fsem_install(
 	if (arg_hold)
 		(*arg_hold)(arg);
 
-	error = fem_push_node(&vfsp->vfs_femhead, (void **)&vfsp->vfs_op,
-	    FEMTYPE_VFS, &nnode, how);
+	error = fem_push_node(&vfsp->vfs_femhead, FEMTYPE_VFS, &nnode, how);
 
 	/* If there was an error then the monitor wasn't pushed */
 	if (error && arg_rele)
@@ -3528,52 +3317,8 @@ fsem_uninstall(struct vfs *v, fsem_t *mon, void *arg)
 	if (v->vfs_implp == NULL)
 		return (EINVAL);
 
-	e = fem_remove_node(v->vfs_femhead, (void **)&v->vfs_op, mon, arg);
+	e = fem_remove_node(v->vfs_femhead, mon, arg);
 	return (e);
-}
-
-void
-fsem_setvfsops(vfs_t *v, vfsops_t *newops)
-{
-	vfsops_t	*r;
-
-	ASSERT(v != NULL);
-	ASSERT(newops != NULL);
-	ASSERT(v->vfs_implp);
-
-	do {
-		r = v->vfs_op;
-		membar_consumer();
-		if (v->vfs_femhead != NULL) {
-			struct fem_list	*fl;
-			if ((fl = fem_lock(v->vfs_femhead)) != NULL) {
-				fl->feml_nodes[1].fn_op.vfs = newops;
-				fem_unlock(v->vfs_femhead);
-				return;
-			}
-			fem_unlock(v->vfs_femhead);
-		}
-	} while (atomic_cas_ptr(&v->vfs_op, r, newops) != r);
-}
-
-vfsops_t *
-fsem_getvfsops(vfs_t *v)
-{
-	vfsops_t	*r;
-
-	ASSERT(v != NULL);
-	ASSERT(v->vfs_implp);
-
-	r = v->vfs_op;
-	membar_consumer();
-	if (v->vfs_femhead != NULL) {
-		struct fem_list	*fl;
-		if ((fl = fem_lock(v->vfs_femhead)) != NULL) {
-			r = fl->feml_nodes[1].fn_op.vfs;
-		}
-		fem_unlock(v->vfs_femhead);
-	}
-	return (r);
 }
 
 /*
@@ -3605,22 +3350,22 @@ fem_init()
 	fi->head.fn_available = NULL;
 	fi->head.fn_av_hold = NULL;
 	fi->head.fn_av_rele = NULL;
-	(void) vn_make_ops("fem-head", fhead_vn_spec, &fi->head.fn_op.vnode);
+	fi->head.fn_op.fem = NULL;
 	fi->guard.fn_available = &fi->guard;
 	fi->guard.fn_av_hold = NULL;
 	fi->guard.fn_av_rele = NULL;
-	(void) fem_create("fem-guard", fem_guard_ops, &fi->guard.fn_op.fem);
+	fi->guard.fn_op.fem = &fem_guard_ops;
 
 	fi = &femtype[FEMTYPE_VFS];
 	fi->errf = fsem_err;
 	fi->head.fn_available = NULL;
 	fi->head.fn_av_hold = NULL;
 	fi->head.fn_av_rele = NULL;
-	(void) vfs_makefsops(fshead_vfs_spec, &fi->head.fn_op.vfs);
+	fi->head.fn_op.fsem = NULL;
 	fi->guard.fn_available = &fi->guard;
 	fi->guard.fn_av_hold = NULL;
 	fi->guard.fn_av_rele = NULL;
-	(void) fsem_create("fem-guard", fsem_guard_ops, &fi->guard.fn_op.fsem);
+	fi->guard.fn_op.fsem = &fsem_guard_ops;
 }
 
 

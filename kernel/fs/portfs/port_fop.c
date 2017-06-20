@@ -252,72 +252,44 @@ static int port_fop_unmount(fsemarg_t *vf, int flag, cred_t *cr);
 /*
  * Fem hooks.
  */
-const fs_operation_def_t	port_vnodesrc_template[] = {
-	VOPNAME_OPEN,		{ .femop_open = port_fop_open },
-	VOPNAME_READ,		{ .femop_read = port_fop_read },
-	VOPNAME_WRITE,		{ .femop_write = port_fop_write },
-	VOPNAME_MAP,		{ .femop_map = port_fop_map },
-	VOPNAME_SETATTR, 	{ .femop_setattr = port_fop_setattr },
-	VOPNAME_CREATE,		{ .femop_create = port_fop_create },
-	VOPNAME_REMOVE,		{ .femop_remove = port_fop_remove },
-	VOPNAME_LINK,		{ .femop_link = port_fop_link },
-	VOPNAME_RENAME,		{ .femop_rename = port_fop_rename },
-	VOPNAME_MKDIR,		{ .femop_mkdir = port_fop_mkdir },
-	VOPNAME_RMDIR,		{ .femop_rmdir = port_fop_rmdir },
-	VOPNAME_READDIR,	{ .femop_readdir = port_fop_readdir },
-	VOPNAME_SYMLINK,	{ .femop_symlink = port_fop_symlink },
-	VOPNAME_SETSECATTR, 	{ .femop_setsecattr = port_fop_setsecattr },
-	VOPNAME_VNEVENT,	{ .femop_vnevent = port_fop_vnevent },
-	NULL,	NULL
+static fem_t fop_femop = {
+	.name = "portfop_fem",
+	.femop_open = port_fop_open,
+	.femop_read = port_fop_read,
+	.femop_write = port_fop_write,
+	.femop_map = port_fop_map,
+	.femop_setattr = port_fop_setattr,
+	.femop_create = port_fop_create,
+	.femop_remove = port_fop_remove,
+	.femop_link = port_fop_link,
+	.femop_rename = port_fop_rename,
+	.femop_mkdir = port_fop_mkdir,
+	.femop_rmdir = port_fop_rmdir,
+	.femop_readdir = port_fop_readdir,
+	.femop_symlink = port_fop_symlink,
+	.femop_setsecattr = port_fop_setsecattr,
+	.femop_vnevent = port_fop_vnevent,
 };
 
 /*
  * Fsem - vfs ops hooks
  */
-const fs_operation_def_t	port_vfssrc_template[] = {
-	VFSNAME_UNMOUNT, 	{ .fsemop_unmount = port_fop_unmount },
-	NULL,	NULL
-};
 
-fem_t *fop_femop;
-fsem_t *fop_fsemop;
+static fsem_t fop_fsemop = {
+	.name = "portfop_fsem",
+	.fsemop_unmount = port_fop_unmount,
+};
 
 static fem_t *
 port_fop_femop()
 {
-	fem_t *femp;
-	if (fop_femop != NULL)
-		return (fop_femop);
-	if (fem_create("portfop_fem",
-	    (const struct fs_operation_def *)port_vnodesrc_template,
-	    (fem_t **)&femp)) {
-		return (NULL);
-	}
-	if (atomic_cas_ptr(&fop_femop, NULL, femp) != NULL) {
-		/*
-		 * some other thread beat us to it.
-		 */
-		fem_free(femp);
-	}
-	return (fop_femop);
+	return (&fop_femop);
 }
 
 static fsem_t *
 port_fop_fsemop()
 {
-	fsem_t *fsemp;
-	if (fop_fsemop != NULL)
-		return (fop_fsemop);
-	if (fsem_create("portfop_fsem", port_vfssrc_template, &fsemp)) {
-		return (NULL);
-	}
-	if (atomic_cas_ptr(&fop_fsemop, NULL, fsemp) != NULL) {
-		/*
-		 * some other thread beat us to it.
-		 */
-		fsem_free(fsemp);
-	}
-	return (fop_fsemop);
+	return (&fop_fsemop);
 }
 
 /*

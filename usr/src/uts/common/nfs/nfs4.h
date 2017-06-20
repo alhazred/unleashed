@@ -941,8 +941,8 @@ extern int deleg_wr_vnevent(femarg_t *, vnevent_t, vnode_t *, char *,
 extern void rfs4_mon_hold(void *);
 extern void rfs4_mon_rele(void *);
 
-extern fem_t	*deleg_rdops;
-extern fem_t	*deleg_wrops;
+extern fem_t deleg_rdops;
+extern fem_t deleg_wrops;
 
 extern int rfs4_share(rfs4_state_t *, uint32_t, uint32_t);
 extern int rfs4_unshare(rfs4_state_t *);

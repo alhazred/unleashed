@@ -265,9 +265,6 @@ static nfsstat4	do_rfs4_set_attrs(bitmap4 *resp, fattr4 *fattrp,
 		    struct compound_state *cs, struct nfs4_svgetit_arg *sargp,
 		    struct nfs4_ntov_table *ntovp, nfs4_attr_cmd_t cmd);
 
-fem_t		*deleg_rdops;
-fem_t		*deleg_wrops;
-
 rfs4_servinst_t *rfs4_cur_servinst = NULL;	/* current server instance */
 kmutex_t	rfs4_servinst_lock;	/* protects linked list */
 int		rfs4_seen_first_compound;	/* set first time we see one */
@@ -474,26 +471,27 @@ extern void	rfs4_free_fs_locations4(fs_locations4 *);
 #endif
 #define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
 
-static const fs_operation_def_t nfs4_rd_deleg_tmpl[] = {
-	VOPNAME_OPEN,		{ .femop_open = deleg_rd_open },
-	VOPNAME_WRITE,		{ .femop_write = deleg_rd_write },
-	VOPNAME_SETATTR,	{ .femop_setattr = deleg_rd_setattr },
-	VOPNAME_RWLOCK,		{ .femop_rwlock = deleg_rd_rwlock },
-	VOPNAME_SPACE,		{ .femop_space = deleg_rd_space },
-	VOPNAME_SETSECATTR,	{ .femop_setsecattr = deleg_rd_setsecattr },
-	VOPNAME_VNEVENT,	{ .femop_vnevent = deleg_rd_vnevent },
-	NULL,			NULL
+fem_t deleg_rdops = {
+	.name = "deleg_rdops",
+	.femop_open = deleg_rd_open,
+	.femop_write = deleg_rd_write,
+	.femop_setattr = deleg_rd_setattr,
+	.femop_rwlock = deleg_rd_rwlock,
+	.femop_space = deleg_rd_space,
+	.femop_setsecattr = deleg_rd_setsecattr,
+	.femop_vnevent = deleg_rd_vnevent,
 };
-static const fs_operation_def_t nfs4_wr_deleg_tmpl[] = {
-	VOPNAME_OPEN,		{ .femop_open = deleg_wr_open },
-	VOPNAME_READ,		{ .femop_read = deleg_wr_read },
-	VOPNAME_WRITE,		{ .femop_write = deleg_wr_write },
-	VOPNAME_SETATTR,	{ .femop_setattr = deleg_wr_setattr },
-	VOPNAME_RWLOCK,		{ .femop_rwlock = deleg_wr_rwlock },
-	VOPNAME_SPACE,		{ .femop_space = deleg_wr_space },
-	VOPNAME_SETSECATTR,	{ .femop_setsecattr = deleg_wr_setsecattr },
-	VOPNAME_VNEVENT,	{ .femop_vnevent = deleg_wr_vnevent },
-	NULL,			NULL
+
+fem_t deleg_wrops = {
+	.name = "deleg_wrops",
+	.femop_open = deleg_wr_open,
+	.femop_read = deleg_wr_read,
+	.femop_write = deleg_wr_write,
+	.femop_setattr = deleg_wr_setattr,
+	.femop_rwlock = deleg_wr_rwlock,
+	.femop_space = deleg_wr_space,
+	.femop_setsecattr = deleg_wr_setsecattr,
+	.femop_vnevent = deleg_wr_vnevent,
 };
 
 int
@@ -547,18 +545,6 @@ rfs4_srvrinit(void)
 	/* Used to manage access to rfs4_deleg_policy */
 	rw_init(&rfs4_deleg_policy_lock, NULL, RW_DEFAULT, NULL);
 
-	error = fem_create("deleg_rdops", nfs4_rd_deleg_tmpl, &deleg_rdops);
-	if (error != 0) {
-		rfs4_disable_delegation();
-	} else {
-		error = fem_create("deleg_wrops", nfs4_wr_deleg_tmpl,
-		    &deleg_wrops);
-		if (error != 0) {
-			rfs4_disable_delegation();
-			fem_free(deleg_rdops);
-		}
-	}
-
 	nfs4_srv_caller_id = fs_new_caller_id();
 
 	lockt_sysid = lm_alloc_sysidt();
@@ -581,9 +567,6 @@ rfs4_srvrfini(void)
 	mutex_destroy(&rfs4_deleg_lock);
 	mutex_destroy(&rfs4_state_lock);
 	rw_destroy(&rfs4_deleg_policy_lock);
-
-	fem_free(deleg_rdops);
-	fem_free(deleg_wrops);
 }
 
 void

@@ -1644,7 +1644,7 @@ rfs4_deleg_state(rfs4_state_t *sp, open_delegation_type4 dtype, int *recall)
 				return (NULL);
 			}
 		}
-		ret = fem_install(vp, deleg_rdops, (void *)fp, OPUNIQ,
+		ret = fem_install(vp, &deleg_rdops, fp, OPUNIQ,
 		    rfs4_mon_hold, rfs4_mon_rele);
 		if (((fflags & FWRITE) && vn_has_other_opens(vp, V_WRITE)) ||
 		    (((fflags & FWRITE) == 0) && vn_is_opened(vp, V_WRITE)) ||
@@ -1652,8 +1652,7 @@ rfs4_deleg_state(rfs4_state_t *sp, open_delegation_type4 dtype, int *recall)
 			if (open_prev) {
 				*recall = 1;
 			} else {
-				(void) fem_uninstall(vp, deleg_rdops,
-				    (void *)fp);
+				(void) fem_uninstall(vp, &deleg_rdops, fp);
 				rfs4_deleg_state_rele(dsp);
 				return (NULL);
 			}
@@ -1683,7 +1682,7 @@ rfs4_deleg_state(rfs4_state_t *sp, open_delegation_type4 dtype, int *recall)
 				return (NULL);
 			}
 		}
-		ret = fem_install(vp, deleg_wrops, (void *)fp, OPUNIQ,
+		ret = fem_install(vp, &deleg_wrops, fp, OPUNIQ,
 		    rfs4_mon_hold, rfs4_mon_rele);
 		if (((fflags & FWRITE) && vn_has_other_opens(vp, V_WRITE)) ||
 		    (((fflags & FWRITE) == 0) && vn_is_opened(vp, V_WRITE)) ||
@@ -1693,8 +1692,7 @@ rfs4_deleg_state(rfs4_state_t *sp, open_delegation_type4 dtype, int *recall)
 			if (open_prev) {
 				*recall = 1;
 			} else {
-				(void) fem_uninstall(vp, deleg_wrops,
-				    (void *)fp);
+				(void) fem_uninstall(vp, &deleg_wrops, fp);
 				rfs4_deleg_state_rele(dsp);
 				return (NULL);
 			}
@@ -1768,12 +1766,12 @@ rfs4_return_deleg(rfs4_deleg_state_t *dsp, bool_t revoked)
 			 * downgrade removes the reference put on earlier.
 			 */
 			if (dtypewas == OPEN_DELEGATE_READ) {
-				(void) fem_uninstall(fp->rf_vp, deleg_rdops,
-				    (void *)fp);
+				(void) fem_uninstall(fp->rf_vp, &deleg_rdops,
+						     fp);
 				vn_open_downgrade(fp->rf_vp, FREAD);
 			} else if (dtypewas == OPEN_DELEGATE_WRITE) {
-				(void) fem_uninstall(fp->rf_vp, deleg_wrops,
-				    (void *)fp);
+				(void) fem_uninstall(fp->rf_vp, &deleg_wrops,
+						     fp);
 				vn_open_downgrade(fp->rf_vp, FREAD|FWRITE);
 			}
 		}

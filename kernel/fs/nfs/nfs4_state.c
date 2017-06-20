@@ -3874,13 +3874,11 @@ rfs4_file_walk_callout(rfs4_entry_t u_entry, void *e)
 			 * put on the vnode when the delegation was granted.
 			 */
 			if (fp->rf_dinfo.rd_dtype == OPEN_DELEGATE_READ) {
-				(void) fem_uninstall(vp, deleg_rdops,
-				    (void *)fp);
+				(void) fem_uninstall(vp, &deleg_rdops, fp);
 				vn_open_downgrade(vp, FREAD);
 			} else if (fp->rf_dinfo.rd_dtype ==
 			    OPEN_DELEGATE_WRITE) {
-				(void) fem_uninstall(vp, deleg_wrops,
-				    (void *)fp);
+				(void) fem_uninstall(vp, &deleg_wrops, fp);
 				vn_open_downgrade(vp, FREAD|FWRITE);
 			}
 			mutex_enter(&vp->v_vsd_lock);

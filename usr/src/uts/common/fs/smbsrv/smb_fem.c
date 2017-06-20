@@ -35,10 +35,6 @@
 
 extern caller_context_t	smb_ct;
 
-static boolean_t	smb_fem_initialized = B_FALSE;
-static fem_t		*smb_fcn_ops = NULL;
-static fem_t		*smb_oplock_ops = NULL;
-
 /*
  * Declarations for FCN (file change notification) FEM monitors
  */
@@ -58,15 +54,15 @@ static int smb_fem_fcn_link(femarg_t *, vnode_t *, char *, cred_t *,
 static int smb_fem_fcn_symlink(femarg_t *, char *, vattr_t *,
     char *, cred_t *, caller_context_t *, int);
 
-static const fs_operation_def_t smb_fcn_tmpl[] = {
-	VOPNAME_CREATE, { .femop_create = smb_fem_fcn_create },
-	VOPNAME_REMOVE, {.femop_remove = smb_fem_fcn_remove},
-	VOPNAME_RENAME, {.femop_rename = smb_fem_fcn_rename},
-	VOPNAME_MKDIR, {.femop_mkdir = smb_fem_fcn_mkdir},
-	VOPNAME_RMDIR, {.femop_rmdir = smb_fem_fcn_rmdir},
-	VOPNAME_LINK, {.femop_link = smb_fem_fcn_link},
-	VOPNAME_SYMLINK, {.femop_symlink = smb_fem_fcn_symlink},
-	NULL, NULL
+static fem_t smb_fcn_ops = {
+	.name = "smb_fcn_ops",
+	.femop_create = smb_fem_fcn_create,
+	.femop_remove = smb_fem_fcn_remove,
+	.femop_rename = smb_fem_fcn_rename,
+	.femop_mkdir = smb_fem_fcn_mkdir,
+	.femop_rmdir = smb_fem_fcn_rmdir,
+	.femop_link = smb_fem_fcn_link,
+	.femop_symlink = smb_fem_fcn_symlink,
 };
 
 /*
@@ -87,15 +83,15 @@ static int smb_fem_oplock_space(femarg_t *, int, flock64_t *, int,
 static int smb_fem_oplock_vnevent(femarg_t *, vnevent_t, vnode_t *, char *,
     caller_context_t *);
 
-static const fs_operation_def_t smb_oplock_tmpl[] = {
-	VOPNAME_OPEN,	{ .femop_open = smb_fem_oplock_open },
-	VOPNAME_READ,	{ .femop_read = smb_fem_oplock_read },
-	VOPNAME_WRITE,	{ .femop_write = smb_fem_oplock_write },
-	VOPNAME_SETATTR, { .femop_setattr = smb_fem_oplock_setattr },
-	VOPNAME_RWLOCK, { .femop_rwlock = smb_fem_oplock_rwlock },
-	VOPNAME_SPACE,	{ .femop_space = smb_fem_oplock_space },
-	VOPNAME_VNEVENT, { .femop_vnevent = smb_fem_oplock_vnevent },
-	NULL, NULL
+static fem_t smb_oplock_ops = {
+	.name = "smb_oplock_ops",
+	.femop_open = smb_fem_oplock_open,
+	.femop_read = smb_fem_oplock_read,
+	.femop_write = smb_fem_oplock_write,
+	.femop_setattr = smb_fem_oplock_setattr,
+	.femop_rwlock = smb_fem_oplock_rwlock,
+	.femop_space = smb_fem_oplock_space,
+	.femop_vnevent = smb_fem_oplock_vnevent,
 };
 
 static int smb_fem_oplock_break(femarg_t *, caller_context_t *, uint32_t);
@@ -109,26 +105,6 @@ static int smb_fem_oplock_break(femarg_t *, caller_context_t *, uint32_t);
 int
 smb_fem_init(void)
 {
-	int	rc = 0;
-
-	if (smb_fem_initialized)
-		return (0);
-
-	rc = fem_create("smb_fcn_ops", smb_fcn_tmpl, &smb_fcn_ops);
-	if (rc)
-		return (rc);
-
-	rc = fem_create("smb_oplock_ops", smb_oplock_tmpl,
-	    &smb_oplock_ops);
-
-	if (rc) {
-		fem_free(smb_fcn_ops);
-		smb_fcn_ops = NULL;
-		return (rc);
-	}
-
-	smb_fem_initialized = B_TRUE;
-
 	return (0);
 }
 
@@ -141,58 +117,32 @@ smb_fem_init(void)
 void
 smb_fem_fini(void)
 {
-	if (!smb_fem_initialized)
-		return;
-
-	if (smb_fcn_ops != NULL) {
-		fem_free(smb_fcn_ops);
-		smb_fcn_ops = NULL;
-	}
-	if (smb_oplock_ops != NULL) {
-		fem_free(smb_oplock_ops);
-		smb_oplock_ops = NULL;
-	}
-	smb_fem_initialized = B_FALSE;
 }
 
 int
 smb_fem_fcn_install(smb_node_t *node)
 {
-	int rc;
-
-	if (smb_fcn_ops == NULL)
-		return (ENOSYS);
-	rc = fem_install(node->vp, smb_fcn_ops, (void *)node, OPARGUNIQ,
+	return fem_install(node->vp, &smb_fcn_ops, node, OPARGUNIQ,
 	    (fem_func_t)smb_node_ref, (fem_func_t)smb_node_release);
-	return (rc);
 }
 
 void
 smb_fem_fcn_uninstall(smb_node_t *node)
 {
-	if (smb_fcn_ops == NULL)
-		return;
-	VERIFY0(fem_uninstall(node->vp, smb_fcn_ops, (void *)node));
+	VERIFY0(fem_uninstall(node->vp, &smb_fcn_ops, node));
 }
 
 int
 smb_fem_oplock_install(smb_node_t *node)
 {
-	int rc;
-
-	if (smb_oplock_ops == NULL)
-		return (ENOSYS);
-	rc = fem_install(node->vp, smb_oplock_ops, (void *)node, OPARGUNIQ,
+	return fem_install(node->vp, &smb_oplock_ops, node, OPARGUNIQ,
 	    (fem_func_t)smb_node_ref, (fem_func_t)smb_node_release);
-	return (rc);
 }
 
 void
 smb_fem_oplock_uninstall(smb_node_t *node)
 {
-	if (smb_oplock_ops == NULL)
-		return;
-	VERIFY0(fem_uninstall(node->vp, smb_oplock_ops, (void *)node));
+	VERIFY0(fem_uninstall(node->vp, &smb_oplock_ops, node));
 }
 
 /*

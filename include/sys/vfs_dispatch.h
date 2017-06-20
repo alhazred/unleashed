@@ -32,41 +32,46 @@
 #define VFS_DISPATCH(fname, opname, vheadname, args, callargs)		\
 static inline int fname args						\
 {									\
+	if (check_fem && vfs->vfs_femhead != NULL)			\
+		return vheadname callargs;				\
 	if (vfs->vfs_op->opname == NULL)				\
 		return ENOSYS;						\
 	return vfs->vfs_op->opname callargs;				\
 }
 
 VFS_DISPATCH(fsop_mount_dispatch, vfs_mount, fshead_mount,
-    (struct vfs *vfs, struct vnode *mvnode, struct mounta *uap, cred_t *cr),
+    (struct vfs *vfs, struct vnode *mvnode, struct mounta *uap, cred_t *cr,
+     bool check_fem),
     (vfs, mvnode, uap, cr))
 VFS_DISPATCH(fsop_unmount_dispatch, vfs_unmount, fshead_unmount,
-    (struct vfs *vfs, int flag, cred_t *cr),
+    (struct vfs *vfs, int flag, cred_t *cr, bool check_fem),
     (vfs, flag, cr))
 VFS_DISPATCH(fsop_root_dispatch, vfs_root, fshead_root,
-    (struct vfs *vfs, struct vnode **vnode),
+    (struct vfs *vfs, struct vnode **vnode, bool check_fem),
     (vfs, vnode))
 VFS_DISPATCH(fsop_statfs_dispatch, vfs_statvfs, fshead_statvfs,
-    (struct vfs *vfs, statvfs64_t *sp),
+    (struct vfs *vfs, statvfs64_t *sp, bool check_fem),
     (vfs, sp))
 VFS_DISPATCH(fsop_sync_dispatch, vfs_sync, fshead_sync,
-    (struct vfs *vfs, short flag, cred_t *cr),
+    (struct vfs *vfs, short flag, cred_t *cr, bool check_fem),
     (vfs, flag, cr))
 VFS_DISPATCH(fsop_vget_dispatch, vfs_vget, fshead_vget,
-    (struct vfs *vfs, struct vnode **vnode, fid_t *fid),
+    (struct vfs *vfs, struct vnode **vnode, fid_t *fid, bool check_fem),
     (vfs, vnode, fid))
 VFS_DISPATCH(fsop_mountroot_dispatch, vfs_mountroot, fshead_mountroot,
-    (struct vfs *vfs, enum whymountroot reason),
+    (struct vfs *vfs, enum whymountroot reason, bool check_fem),
     (vfs, reason))
 
-static inline void fsop_freefs_dispatch(struct vfs *vfs)
+static inline void fsop_freefs_dispatch(struct vfs *vfs, bool check_fem)
 {
-	if (vfs->vfs_op->vfs_freevfs != NULL)
+	if (check_fem && vfs->vfs_femhead != NULL)
+		fshead_freevfs(vfs);
+	else if (vfs->vfs_op->vfs_freevfs != NULL)
 		vfs->vfs_op->vfs_freevfs(vfs);
 }
 
 VFS_DISPATCH(fsop_vnstate_dispatch, vfs_vnstate, fshead_vnstate,
-    (struct vfs *vfs, struct vnode *vnode, vntrans_t nstate),
+    (struct vfs *vfs, struct vnode *vnode, vntrans_t nstate, bool check_fem),
     (vfs, vnode, nstate))
 
 #undef VFS_DISPATCH

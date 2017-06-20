@@ -223,13 +223,13 @@ const mntopts_t vfs_mntopts = {
 int
 fsop_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 {
-	return fsop_mount_dispatch(vfsp, mvp, uap, cr);
+	return fsop_mount_dispatch(vfsp, mvp, uap, cr, true);
 }
 
 int
 fsop_unmount(vfs_t *vfsp, int flag, cred_t *cr)
 {
-	return fsop_unmount_dispatch(vfsp, flag, cr);
+	return fsop_unmount_dispatch(vfsp, flag, cr, true);
 }
 
 int
@@ -238,7 +238,7 @@ fsop_root(vfs_t *vfsp, vnode_t **vpp)
 	refstr_t *mntpt;
 	int ret;
 
-	ret = fsop_root_dispatch(vfsp, vpp);
+	ret = fsop_root_dispatch(vfsp, vpp, true);
 
 	/*
 	 * Make sure this root has a path.  With lofs, it is possible to have
@@ -257,13 +257,13 @@ fsop_root(vfs_t *vfsp, vnode_t **vpp)
 int
 fsop_statfs(vfs_t *vfsp, statvfs64_t *sp)
 {
-	return fsop_statfs_dispatch(vfsp, sp);
+	return fsop_statfs_dispatch(vfsp, sp, true);
 }
 
 int
 fsop_sync(vfs_t *vfsp, short flag, cred_t *cr)
 {
-	return fsop_sync_dispatch(vfsp, flag, cr);
+	return fsop_sync_dispatch(vfsp, flag, cr, true);
 }
 
 int
@@ -284,25 +284,25 @@ fsop_vget(vfs_t *vfsp, vnode_t **vpp, fid_t *fidp)
 	    fidp->fid_len == XATTR_FIDSZ)
 		return (xattr_dir_vget(vfsp, vpp, fidp));
 
-	return fsop_vget_dispatch(vfsp, vpp, fidp);
+	return fsop_vget_dispatch(vfsp, vpp, fidp, true);
 }
 
 int
 fsop_mountroot(vfs_t *vfsp, enum whymountroot reason)
 {
-	return fsop_mountroot_dispatch(vfsp, reason);
+	return fsop_mountroot_dispatch(vfsp, reason, true);
 }
 
 void
 fsop_freefs(vfs_t *vfsp)
 {
-	fsop_freefs_dispatch(vfsp);
+	fsop_freefs_dispatch(vfsp, true);
 }
 
 int
 fsop_vnstate(vfs_t *vfsp, vnode_t *vp, vntrans_t nstate)
 {
-	return fsop_vnstate_dispatch(vfsp, vp, nstate);
+	return fsop_vnstate_dispatch(vfsp, vp, nstate, true);
 }
 
 int
@@ -464,37 +464,16 @@ vfs_freevfsops_by_type(int fstype)
 
 /* Set the operations vector for a vfs */
 void
-vfs_setops(vfs_t *vfsp, vfsops_t *vfsops)
+vfs_setops(struct vfs *vfs, struct vfsops *ops)
 {
-	vfsops_t	*op;
-
-	ASSERT(vfsp != NULL);
-	ASSERT(vfsops != NULL);
-
-	op = vfsp->vfs_op;
-	membar_consumer();
-	if (vfsp->vfs_femhead == NULL &&
-	    atomic_cas_ptr(&vfsp->vfs_op, op, vfsops) == op) {
-		return;
-	}
-	fsem_setvfsops(vfsp, vfsops);
+	vfs->vfs_op = ops;
 }
 
 /* Retrieve the operations vector for a vfs */
-vfsops_t *
-vfs_getops(vfs_t *vfsp)
+struct vfsops *
+vfs_getops(struct vfs *vfs)
 {
-	vfsops_t	*op;
-
-	ASSERT(vfsp != NULL);
-
-	op = vfsp->vfs_op;
-	membar_consumer();
-	if (vfsp->vfs_femhead == NULL && op == vfsp->vfs_op) {
-		return (op);
-	} else {
-		return (fsem_getvfsops(vfsp));
-	}
+	return vfs->vfs_op;
 }
 
 /*
