@@ -23,6 +23,7 @@
 #include <sys/errno.h>
 #include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
+#include <sys/pathname.h>
 #include <sys/mman.h>
 #include <sys/fs_subr.h>
 #include <sys/policy.h>

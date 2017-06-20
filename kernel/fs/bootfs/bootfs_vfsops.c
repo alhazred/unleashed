@@ -21,6 +21,7 @@
 #include <sys/sunddi.h>
 #include <sys/vfs.h>
 #include <sys/vfs_opreg.h>
+#include <sys/pathname.h>
 #include <sys/systm.h>
 #include <sys/id_space.h>
 #include <sys/cmn_err.h>

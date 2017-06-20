@@ -35,6 +35,7 @@ extern "C" {
 #include <sys/dirent.h>
 #include <sys/vfs.h>
 #include <sys/vfs_opreg.h>
+#include <sys/pathname.h>
 #include <sys/list.h>
 #include <sys/nvpair.h>
 #include <sys/sunddi.h>
