@@ -3749,8 +3749,9 @@ tcp_iss_init(tcp_t *tcp)
 
 	/* tcp_iss may already have been set in tcp_input_listener */
 	if (!tcp->tcp_iss) {
+		tcp->tcp_iss = gethrtime() >> ISS_NSEC_SHT;
 		tcps->tcps_iss_incr_extra += (tcps->tcps_iss_incr >> 1);
-		tcp->tcp_iss = tcps->tcps_iss_incr_extra;
+		tcp->tcp_iss += tcps->tcps_iss_incr_extra;
 		context = tcps->tcps_iss_key;
 		arg.ports = connp->conn_ports;
 		arg.src = connp->conn_laddr_v6;
