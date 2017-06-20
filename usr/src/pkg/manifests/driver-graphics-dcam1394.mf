@@ -41,6 +41,5 @@ driver name=dcam1394 perms="* 0666 root sys" \
     alias=firewire000104,000100 \
     alias=firewire00a02d,000100
 file path=kernel/drv/$(ARCH64)/dcam1394 group=sys
-$(i386_ONLY)file path=kernel/drv/dcam1394 group=sys
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

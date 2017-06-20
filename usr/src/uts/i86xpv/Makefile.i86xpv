@@ -84,8 +84,8 @@ include $(UTSBASE)/Makefile.uts
 #
 #	Define supported builds
 #
-DEF_BUILDS		= $(DEF_BUILDS64) $(DEF_BUILDS32)
-ALL_BUILDS		= $(ALL_BUILDS64) $(ALL_BUILDS32)
+DEF_BUILDS		= $(DEF_BUILDS64)
+ALL_BUILDS		= $(ALL_BUILDS64)
 
 #
 #	kernel-specific optimizations; override default in Makefile.master

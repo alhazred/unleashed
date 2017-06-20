@@ -44,7 +44,6 @@ driver name=audiocmi \
     alias=pci13f6,101 \
     alias=pci13f6,111
 file path=kernel/drv/$(ARCH64)/audiocmi group=sys
-file path=kernel/drv/audiocmi group=sys
 file path=usr/share/man/man7d/audiocmi.7d
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

@@ -48,9 +48,7 @@ driver name=ioat \
     alias=pciex8086,360b \
     alias=pciex8086,402f
 file path=kernel/misc/$(ARCH64)/dcopy group=sys mode=0755
-file path=kernel/misc/dcopy group=sys mode=0755
 file path=platform/$(CONFIG_PLATFORM)/kernel/drv/$(ARCH64)/ioat group=sys
-file path=platform/$(CONFIG_PLATFORM)/kernel/drv/ioat group=sys
 file path=platform/$(CONFIG_PLATFORM)/kernel/drv/ioat.conf group=sys
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

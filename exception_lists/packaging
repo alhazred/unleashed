@@ -350,7 +350,6 @@ usr/include/aclutils.h
 #
 # USB skeleton driver stays in sync with the rest of USB but doesn't ship.
 #
-kernel/drv/usbskel		i386
 kernel/drv/amd64/usbskel	i386
 kernel/drv/sparcv9/usbskel	sparc
 kernel/drv/usbskel.conf
