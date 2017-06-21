@@ -784,7 +784,7 @@ char *
 sum_nfsfh3()
 {
 	int len;
-	int fh;
+	unsigned int fh;
 	static char buff[16];
 
 	len = getxdr_long();
@@ -798,7 +798,7 @@ detail_nfsfh3()
 {
 	int pos;
 	int i, l, len;
-	int fh;
+	unsigned int fh;
 
 	len = getxdr_long();
 	pos = getxdr_pos();

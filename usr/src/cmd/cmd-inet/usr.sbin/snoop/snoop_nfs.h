@@ -43,7 +43,7 @@ extern int sum_nfsstat(char *);
 extern int detail_nfsstat(void);
 extern void detail_fattr(void);
 extern void skip_fattr(void);
-extern int sum_filehandle(int);
+extern unsigned int sum_filehandle(int);
 
 extern char *sum_nfsfh3(void);
 extern void detail_nfsfh3(void);

@@ -482,25 +482,28 @@ detail_nfsstat()
 	return ((int)status);
 }
 
-int
+unsigned int
 sum_filehandle(len)
 	int len;
 {
-	int i, l;
-	int fh = 0;
+	uint64_t a, b, c, d;
+	unsigned long l;
+	int i;
 
-	for (i = 0; i < len; i += 4) {
-		l = getxdr_long();
-		fh ^= (l >> 16) ^ l;
+	for (a = b = c = d = 0, i = 0; i < len; i += 4) {
+		a += getxdr_long();
+		b += a;
+		c += b;
+		d += c;
 	}
 
-	return (fh);
+	return (a);
 }
 
 char *
 sum_nfsfh()
 {
-	int fh;
+	unsigned int fh;
 	static char buff[16];
 
 	fh = sum_filehandle(NFS_FHSIZE);
@@ -512,7 +515,7 @@ void
 detail_nfsfh()
 {
 	int pos;
-	int fh;
+	unsigned int fh;
 
 	pos = getxdr_pos();
 	fh = sum_filehandle(NFS_FHSIZE);

@@ -318,7 +318,7 @@ detail_mountstat()
 char *
 sum_mountfh()
 {
-	int fh;
+	unsigned int fh;
 	static char buff[8];
 
 	fh = sum_filehandle(NFS_FHSIZE);
@@ -330,7 +330,7 @@ static void
 detail_mountfh()
 {
 	int pos;
-	int fh;
+	unsigned int fh;
 
 	pos = getxdr_pos();
 	fh = sum_filehandle(NFS_FHSIZE);
@@ -409,7 +409,7 @@ char *
 sum_mountfh3()
 {
 	int len;
-	int fh;
+	unsigned int fh;
 	static char buff[8];
 
 	len = getxdr_long();
@@ -423,7 +423,7 @@ detail_mountfh3()
 {
 	int pos;
 	int i, l, len;
-	int fh;
+	unsigned int fh;
 
 	len = getxdr_long();
 	pos = getxdr_pos();
