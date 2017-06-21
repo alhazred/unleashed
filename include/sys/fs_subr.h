@@ -69,8 +69,6 @@ extern int	fs_putpage(vnode_t *, offset_t, size_t, int, cred_t *,
 			caller_context_t *);
 extern int	fs_fsync(vnode_t *, int, cred_t *, caller_context_t *);
 extern int	fs_sync(struct vfs *, short, cred_t *);
-extern int	fs_rwlock(vnode_t *, int, caller_context_t *);
-extern void	fs_rwunlock(vnode_t *, int, caller_context_t *);
 extern int	fs_cmp(vnode_t *, vnode_t *, caller_context_t *);
 extern int	fs_seek(vnode_t *, offset_t, offset_t *, caller_context_t *);
 extern int	fs_frlock(vnode_t *, int, struct flock64 *, int, offset_t,

@@ -182,22 +182,6 @@ fs_ioctl(vnode_t *vp, int com, intptr_t data, int flag, cred_t *cred,
 }
 
 /*
- * Read/write lock/unlock.  Does nothing.
- */
-/* ARGSUSED */
-int
-fs_rwlock(vnode_t *vp, int write_lock, caller_context_t *ctp)
-{
-	return (-1);
-}
-
-/* ARGSUSED */
-void
-fs_rwunlock(vnode_t *vp, int write_lock, caller_context_t *ctp)
-{
-}
-
-/*
  * Compare two vnodes.
  */
 /*ARGSUSED2*/
