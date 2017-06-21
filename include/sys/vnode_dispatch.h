@@ -20,6 +20,7 @@
 #include <sys/vnode.h>
 #include <sys/stdbool.h>
 #include <sys/fem.h>
+#include <sys/fs_subr.h>
 
 /*
  * Ideally these static inlines could be just inline statements in the
@@ -87,10 +88,21 @@ FOP_DISPATCH(fop_ioctl_dispatch, vop_ioctl, vhead_ioctl,
     (struct vnode *vnode, int cmd, intptr_t arg, int flag, cred_t *cr,
      int *rvalp, caller_context_t *ct, bool check_fem),
     (vnode, cmd, arg, flag, cr, rvalp, ct))
-FOP_DISPATCH(fop_setfl_dispatch, vop_setfl, vhead_setfl,
-    (struct vnode *vnode, int oflags, int nflags, cred_t *cr,
-     caller_context_t *ct, bool check_fem),
-    (vnode, oflags, nflags, cr, ct))
+
+/* no-op by default, so it is hand-coded */
+static inline int fop_setfl_dispatch(struct vnode *vnode, int oflags,
+				     int nflags, cred_t *cr,
+				     caller_context_t *ct, bool check_fem)
+{
+	if (check_fem && vnode->v_femhead != NULL)
+		return vhead_setfl(vnode, oflags, nflags, cr, ct);
+
+	if (vnode->v_op->vop_setfl == NULL)
+		return 0;
+
+	return vnode->v_op->vop_setfl(vnode, oflags, nflags, cr, ct);
+}
+
 FOP_DISPATCH(fop_getattr_dispatch, vop_getattr, vhead_getattr,
     (struct vnode *vnode, vattr_t *vap, int flags, cred_t *cr,
      caller_context_t *ct, bool check_fem),
@@ -164,9 +176,19 @@ static inline void fop_inactive_dispatch(struct vnode *vnode, cred_t *cr,
 FOP_DISPATCH(fop_fid_dispatch, vop_fid, vhead_fid,
     (struct vnode *vnode, fid_t *fidp, caller_context_t *ct, bool check_fem),
     (vnode, fidp, ct))
-FOP_DISPATCH(fop_rwlock_dispatch, vop_rwlock, vhead_rwlock,
-    (struct vnode *vnode, int write_lock, caller_context_t *ct, bool check_fem),
-    (vnode, write_lock, ct))
+
+/* return -1 by default, so it is hand-coded */
+static inline int fop_rwlock_dispatch(struct vnode *vnode, int write_lock,
+				      caller_context_t *ct, bool check_fem)
+{
+	if (check_fem && vnode->v_femhead != NULL)
+		return vhead_rwlock(vnode, write_lock, ct);
+
+	if (vnode->v_op->vop_rwlock == NULL)
+		return -1;
+
+	return vnode->v_op->vop_rwlock(vnode, write_lock, ct);
+}
 
 /* returns void, so it is hand-coded */
 static inline void fop_rwunlock_dispatch(struct vnode *vnode, int write_lock,
@@ -182,15 +204,38 @@ FOP_DISPATCH(fop_seek_dispatch, vop_seek, vhead_seek,
     (struct vnode *vnode, offset_t off, offset_t *noff, caller_context_t *ct,
      bool check_fem),
     (vnode, off, noff, ct))
-FOP_DISPATCH(fop_cmp_dispatch, vop_cmp, vhead_cmp,
-    (struct vnode *vnode, struct vnode *vp2, caller_context_t *ct,
-     bool check_fem),
-    (vnode, vp2, ct))
-FOP_DISPATCH(fop_frlock_dispatch, vop_frlock, vhead_frlock,
-    (struct vnode *vnode, int cmd, struct flock64 *bfp, int flag,
-     offset_t offset, struct flk_callback *flk_cbp, cred_t *cr,
-     caller_context_t *ct, bool check_fem),
-    (vnode, cmd, bfp, flag, offset, flk_cbp, cr, ct))
+
+/* compares pointers by default, so it is hand-coded */
+static inline int fop_cmp_dispatch(struct vnode *vnode1, struct vnode *vnode2,
+				   caller_context_t *ct, bool check_fem)
+{
+	if (check_fem && vnode1->v_femhead != NULL)
+		return vhead_cmp(vnode1, vnode2, ct);
+
+	if (vnode1->v_op->vop_cmp == NULL)
+		return vnode1 == vnode2;
+
+	return vnode1->v_op->vop_cmp(vnode1, vnode2, ct);
+}
+
+/* calls fs_frlock by default, so it is hand-coded */
+static inline int fop_frlock_dispatch(struct vnode *vnode, int cmd,
+				      flock64_t *bfp, int flag, offset_t offset,
+				      struct flk_callback *flk_cbp, cred_t *cr,
+				      caller_context_t *ct, bool check_fem)
+{
+	if (check_fem && vnode->v_femhead != NULL)
+		return vhead_frlock(vnode, cmd, bfp, flag, offset, flk_cbp, cr,
+				    ct);
+
+	if (vnode->v_op->vop_frlock == NULL)
+		return fs_frlock(vnode, cmd, bfp, flag, offset, flk_cbp, cr,
+				 ct);
+
+	return vnode->v_op->vop_frlock(vnode, cmd, bfp, flag, offset,
+				       flk_cbp, cr, ct);
+}
+
 FOP_DISPATCH(fop_space_dispatch, vop_space, vhead_space,
     (struct vnode *vnode, int cmd, flock64_t *bfp, int flag, offset_t offset,
      cred_t *cr, caller_context_t *ct, bool check_fem),
@@ -223,18 +268,41 @@ FOP_DISPATCH(fop_delmap_dispatch, vop_delmap, vhead_delmap,
      uint_t prot, uint_t maxprot, uint_t flags, cred_t *cr,
      caller_context_t *ct, bool check_fem),
     (vnode, off, as, addr, len, prot, maxprot, flags, cr, ct))
-FOP_DISPATCH(fop_poll_dispatch, vop_poll, vhead_poll,
-    (struct vnode *vnode, short events, int anyyet, short *reventsp,
-     struct pollhead **phpp, caller_context_t *ct, bool check_fem),
-    (vnode, events, anyyet, reventsp, phpp, ct))
+
+/* calls fs_poll by default, so it is hand-coded */
+static inline int fop_poll_dispatch(struct vnode *vnode, short events,
+				    int anyyet, short *reventsp,
+				    struct pollhead **phpp,
+				    caller_context_t *ct, bool check_fem)
+{
+	if (check_fem && vnode->v_femhead != NULL)
+		return vhead_poll(vnode, events, anyyet, reventsp, phpp, ct);
+
+	if (vnode->v_op->vop_poll == NULL)
+		return fs_poll(vnode, events, anyyet, reventsp, phpp, ct);
+
+	return vnode->v_op->vop_poll(vnode, events, anyyet, reventsp, phpp, ct);
+}
+
 FOP_DISPATCH(fop_dump_dispatch, vop_dump, vhead_dump,
     (struct vnode *vnode, caddr_t addr, offset_t lbdn, offset_t dblks,
      caller_context_t *ct, bool check_fem),
     (vnode, addr, lbdn, dblks, ct))
-FOP_DISPATCH(fop_pathconf_dispatch, vop_pathconf, vhead_pathconf,
-    (struct vnode *vnode, int cmd, ulong_t *valp, cred_t *cr,
-     caller_context_t *ct, bool check_fem),
-    (vnode, cmd, valp, cr, ct))
+
+/* calls fs_pathconf by default, so it is hand-coded */
+static inline int fop_pathconf_dispatch(struct vnode *vnode, int cmd,
+					ulong_t *valp, cred_t *cr,
+					caller_context_t *ct, bool check_fem)
+{
+	if (check_fem && vnode->v_femhead != NULL)
+		return vhead_pathconf(vnode, cmd, valp, cr, ct);
+
+	if (vnode->v_op->vop_pathconf == NULL)
+		return fs_pathconf(vnode, cmd, valp, cr, ct);
+
+	return vnode->v_op->vop_pathconf(vnode, cmd, valp, cr, ct);
+}
+
 FOP_DISPATCH(fop_pageio_dispatch, vop_pageio, vhead_pageio,
     (struct vnode *vnode, struct page *page, uoff_t io_off, size_t io_len,
      int flags, cred_t *cr, caller_context_t *ct, bool check_fem),
@@ -244,13 +312,16 @@ FOP_DISPATCH(fop_dumpctl_dispatch, vop_dumpctl, vhead_dumpctl,
      caller_context_t *ct, bool check_fem),
     (vnode, action, blkp, ct))
 
-/* returns void, so it is hand-coded */
+/* returns void & calls fs_dispose by default, so it is hand-coded */
 static inline void fop_dispose_dispatch(struct vnode *vnode, struct page *pp,
-    int flag, int dn, cred_t *cr, caller_context_t *ct, bool check_fem)
+					int flag, int dn, cred_t *cr,
+					caller_context_t *ct, bool check_fem)
 {
 	if (check_fem && vnode->v_femhead != NULL)
 		vhead_dispose(vnode, pp, flag, dn, cr, ct);
-	else if (vnode->v_op->vop_dispose != NULL)
+	else if (vnode->v_op->vop_dispose == NULL)
+		fs_dispose(vnode, pp, flag, dn, cr, ct);
+	else
 		vnode->v_op->vop_dispose(vnode, pp, flag, dn, cr, ct);
 }
 
@@ -258,18 +329,50 @@ FOP_DISPATCH(fop_setsecattr_dispatch, vop_setsecattr, vhead_setsecattr,
     (struct vnode *vnode, vsecattr_t *vsap, int flag, cred_t *cr,
      caller_context_t *ct, bool check_fem),
     (vnode, vsap, flag, cr, ct))
-FOP_DISPATCH(fop_getsecattr_dispatch, vop_getsecattr, vhead_getsecattr,
-    (struct vnode *vnode, vsecattr_t *vsap, int flag, cred_t *cr,
-     caller_context_t *ct, bool check_fem),
-    (vnode, vsap, flag, cr, ct))
-FOP_DISPATCH(fop_shrlock_dispatch, vop_shrlock, vhead_shrlock,
-    (struct vnode *vnode, int cmd, struct shrlock *shr, int flag,
-     cred_t *cr, caller_context_t *ct, bool check_fem),
-    (vnode, cmd, shr, flag, cr, ct))
-FOP_DISPATCH(fop_vnevent_dispatch, vop_vnevent, vhead_vnevent,
-    (struct vnode *vnode, vnevent_t vnevent, struct vnode *dvp, char *fnm,
-     caller_context_t *ct, bool check_fem),
-    (vnode, vnevent, dvp, fnm, ct))
+
+/* calls fs_fab_acl by default, so it is hand-coded */
+static inline int fop_getsecattr_dispatch(struct vnode *vnode, vsecattr_t *vsap,
+					  int flag, cred_t *cr,
+					  caller_context_t *ct, bool check_fem)
+{
+	if (check_fem && vnode->v_femhead != NULL)
+		return vhead_getsecattr(vnode, vsap, flag, cr, ct);
+
+	if (vnode->v_op->vop_getsecattr == NULL)
+		return fs_fab_acl(vnode, vsap, flag, cr, ct);
+
+	return vnode->v_op->vop_getsecattr(vnode, vsap, flag, cr, ct);
+}
+
+/* calls fs_shrlock by default, so it is hand-coded */
+static inline int fop_shrlock_dispatch(struct vnode *vnode, int cmd,
+				       struct shrlock *shr, int flag,
+				       cred_t *cr, caller_context_t *ct,
+				       bool check_fem)
+{
+	if (check_fem && vnode->v_femhead != NULL)
+		return vhead_shrlock(vnode, cmd, shr, flag, cr, ct);
+
+	if (vnode->v_op->vop_shrlock == NULL)
+		return fs_shrlock(vnode, cmd, shr, flag, cr, ct);
+
+	return vnode->v_op->vop_shrlock(vnode, cmd, shr, flag, cr, ct);
+}
+
+/* returns ENOTSUP by default, so it is hand-coded */
+static inline int fop_vnevent_dispatch(struct vnode *vnode, vnevent_t vnevent,
+				       struct vnode *dvp, char *fnm,
+				       caller_context_t *ct, bool check_fem)
+{
+	if (check_fem && vnode->v_femhead != NULL)
+		return vhead_vnevent(vnode, vnevent, dvp, fnm, ct);
+
+	if (vnode->v_op->vop_vnevent == NULL)
+		return ENOTSUP;
+
+	return vnode->v_op->vop_vnevent(vnode, vnevent, dvp, fnm, ct);
+}
+
 FOP_DISPATCH(fop_reqzcbuf_dispatch, vop_reqzcbuf, vhead_reqzcbuf,
     (struct vnode *vnode, enum uio_rw ioflag, xuio_t *uio, cred_t *cr,
      caller_context_t *ct, bool check_fem),
