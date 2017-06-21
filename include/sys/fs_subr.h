@@ -55,12 +55,6 @@ extern "C" {
 extern int	fs_nosys();
 extern int	fs_inval();
 extern int	fs_notdir();
-extern int	fs_nosys_map(struct vnode *, offset_t, struct as *, caddr_t *,
-			size_t, uchar_t, uchar_t, uint_t, struct cred *,
-			caller_context_t *);
-extern int	fs_nosys_addmap(struct vnode *, offset_t, struct as *, caddr_t,
-			size_t, uchar_t, uchar_t, uint_t, struct cred *,
-			caller_context_t *);
 extern int	fs_nosys_poll(struct vnode *, short, int, short *,
 			struct pollhead **, caller_context_t *);
 extern int	fs_ioctl(vnode_t *, int, intptr_t, int, cred_t *, int *,

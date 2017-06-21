@@ -113,24 +113,6 @@ fs_freevfs(vfs_t *vfsp)
 
 /* ARGSUSED */
 int
-fs_nosys_map(struct vnode *vp, offset_t off, struct as *as, caddr_t *addrp,
-    size_t len, uchar_t prot, uchar_t maxprot, uint_t flags, struct cred *cr,
-    caller_context_t *ct)
-{
-	return (ENOSYS);
-}
-
-/* ARGSUSED */
-int
-fs_nosys_addmap(struct vnode *vp, offset_t off, struct as *as, caddr_t addr,
-    size_t len, uchar_t prot, uchar_t maxprot, uint_t flags, struct cred *cr,
-    caller_context_t *ct)
-{
-	return (ENOSYS);
-}
-
-/* ARGSUSED */
-int
 fs_nosys_poll(vnode_t *vp, short events, int anyyet, short *reventsp,
     struct pollhead **phpp, caller_context_t *ct)
 {
