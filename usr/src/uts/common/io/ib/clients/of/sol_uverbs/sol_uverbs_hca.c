@@ -30,10 +30,7 @@
  * delivery.
  */
 #include <sys/vfs.h>
-#ifdef VFS_OPS
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
-#endif
 #include <sys/errno.h>
 #include <sys/cred.h>
 #include <sys/uio.h>
