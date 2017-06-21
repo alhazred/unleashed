@@ -28,23 +28,4 @@
 
 #include <sys/vfs.h>
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
-#ifdef _KERNEL
-
-/*
- * Public operations.
- */
-
-int	vfs_setfsops_const(int, const struct vfsops *);
-int	vfs_freevfsops_by_type(int);
-
-#endif /* _KERNEL */
-
-#ifdef	__cplusplus
-}
-#endif
-
 #endif	/* _SYS_VFS_OPREG_H */
