@@ -176,7 +176,7 @@ fs_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
 /* ARGSUSED */
 int
 fs_ioctl(vnode_t *vp, int com, intptr_t data, int flag, cred_t *cred,
-    int *rvalp)
+    int *rvalp, caller_context_t *ct)
 {
 	return (0);
 }
