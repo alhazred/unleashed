@@ -128,6 +128,7 @@ int
 smbfs_vfs_dcmd(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 {
 	smbfs_vfs_cbdata_t *cbd;
+	GElf_Sym sym;
 	vfs_t *vfs;
 
 	cbd = mdb_zalloc(sizeof (*cbd),  UM_SLEEP | UM_GC);
@@ -137,10 +138,12 @@ smbfs_vfs_dcmd(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 	 * even if the smbfs module is loaded later
 	 * than this mdb module.
 	 */
-	if (mdb_readvar(&cbd->vfsops, "smbfs_vfsops") == -1) {
+	if (mdb_lookup_by_name("smbfs_vfsops", &sym) != 0) {
 		mdb_warn("failed to find 'smbfs_vfsops'\n");
 		return (DCMD_ERR);
 	}
+
+	cbd->vfsops = sym.st_value;
 
 	if (mdb_getopts(argc, argv,
 	    'v', MDB_OPT_SETBITS, OPT_VERBOSE, &cbd->flags,

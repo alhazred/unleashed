@@ -255,18 +255,16 @@ _info(struct modinfo *modinfop)
  */
 
 int smbfsfstyp;
-vfsops_t *smbfs_vfsops = NULL;
 
-static const fs_operation_def_t smbfs_vfsops_template[] = {
-	{ VFSNAME_MOUNT, { .vfs_mount = smbfs_mount } },
-	{ VFSNAME_UNMOUNT, { .vfs_unmount = smbfs_unmount } },
-	{ VFSNAME_ROOT,	{ .vfs_root = smbfs_root } },
-	{ VFSNAME_STATVFS, { .vfs_statvfs = smbfs_statvfs } },
-	{ VFSNAME_SYNC,	{ .vfs_sync = smbfs_sync } },
-	{ VFSNAME_VGET,	{ .error = fs_nosys } },
-	{ VFSNAME_MOUNTROOT, { .error = fs_nosys } },
-	{ VFSNAME_FREEVFS, { .vfs_freevfs = smbfs_freevfs } },
-	{ NULL, NULL }
+static const struct vfsops smbfs_vfsops = {
+	.vfs_mount = smbfs_mount,
+	.vfs_unmount = smbfs_unmount,
+	.vfs_root = smbfs_root,
+	.vfs_statvfs = smbfs_statvfs,
+	.vfs_sync = smbfs_sync,
+	.vfs_vget = fs_nosys,
+	.vfs_mountroot = fs_nosys,
+	.vfs_freevfs = smbfs_freevfs,
 };
 
 int
@@ -274,7 +272,7 @@ smbfsinit(int fstyp, char *name)
 {
 	int		error;
 
-	error = vfs_setfsops(fstyp, smbfs_vfsops_template, &smbfs_vfsops);
+	error = vfs_setfsops_const(fstyp, &smbfs_vfsops);
 	if (error != 0) {
 		zcmn_err(GLOBAL_ZONEID, CE_WARN,
 		    "smbfsinit: bad vfs ops template");
@@ -289,10 +287,7 @@ smbfsinit(int fstyp, char *name)
 void
 smbfsfini()
 {
-	if (smbfs_vfsops) {
-		(void) vfs_freevfsops_by_type(smbfsfstyp);
-		smbfs_vfsops = NULL;
-	}
+	(void) vfs_freevfsops_by_type(smbfsfstyp);
 }
 
 void
