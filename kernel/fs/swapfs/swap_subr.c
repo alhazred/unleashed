@@ -155,17 +155,16 @@ swapfs_recalc(pgcnt_t pgs)
 	return (1);
 }
 
+static const struct vfsops swap_vfsops = {
+	.vfs_sync = swap_sync,
+};
+
 /*ARGSUSED1*/
 int
 swapinit(int fstype, char *name)
 {							/* reserve for mp */
 	ssize_t sw_freelist_size = klustsize / PAGESIZE * 2;
 	int i, error;
-
-	static const fs_operation_def_t swap_vfsops[] = {
-		VFSNAME_SYNC, { .vfs_sync = swap_sync },
-		NULL, NULL
-	};
 
 	SWAPFS_PRINT(SWAP_SUBR, "swapinit\n", 0, 0, 0, 0, 0);
 	mutex_init(&swapfs_lock, NULL, MUTEX_DEFAULT, NULL);
@@ -186,7 +185,7 @@ swapinit(int fstype, char *name)
 	sw_ar = (struct async_reqs *)
 	    kmem_zalloc(sw_freelist_size*sizeof (struct async_reqs), KM_SLEEP);
 
-	error = vfs_setfsops(fstype, swap_vfsops, NULL);
+	error = vfs_setfsops_const(fstype, &swap_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "swapinit: bad vfs ops template");
 		return (error);
