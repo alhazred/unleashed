@@ -317,10 +317,6 @@ enum vntrans {
 };
 typedef enum vntrans vntrans_t;
 
-/*
- * VFS_OPS defines all the vfs operations.  It is used to define
- * the vfsops structure (below) and the fs_func_p union (vfs_opreg.h).
- */
 #define	VFS_OPS								\
 	int	(*vfs_mount)(vfs_t *, vnode_t *, struct mounta *, cred_t *); \
 	int	(*vfs_unmount)(vfs_t *, int, cred_t *);			\

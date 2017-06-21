@@ -44,8 +44,6 @@ extern "C" {
 
 #if defined(_KERNEL)
 
-struct fs_operation_def;	/* from vfs.h */
-
 /*
  * overview:
  *

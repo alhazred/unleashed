@@ -67,12 +67,6 @@ static struct fem_type_info {
 }	femtype[FEMTYPE_NTYPES];
 
 
-/*
- * For each type, two tables - the translation offset definition, which
- * is used by fs_build_vector to layout the operation(s) vector; and the
- * guard_operation_vector which protects from stack under-run.
- */
-
 int fem_err();
 int fsem_err();
 

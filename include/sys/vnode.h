@@ -821,10 +821,6 @@ struct taskq;
 
 #ifdef	_KERNEL
 
-/*
- * VNODE_OPS defines all the vnode operations.  It is used to define
- * the vnodeops structure (below) and the fs_func_p union (vfs_opreg.h).
- */
 #define	VNODE_OPS							\
 	int	(*vop_open)(vnode_t **, int, cred_t *,			\
 				caller_context_t *);			\
