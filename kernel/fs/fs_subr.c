@@ -618,15 +618,6 @@ fs_shrlock(struct vnode *vp, int cmd, struct shrlock *shr, int flag, cred_t *cr,
 
 /*ARGSUSED1*/
 int
-fs_vnevent_nosupport(vnode_t *vp, vnevent_t e, vnode_t *dvp, char *fnm,
-    caller_context_t *ct)
-{
-	ASSERT(vp != NULL);
-	return (ENOTSUP);
-}
-
-/*ARGSUSED1*/
-int
 fs_vnevent_support(vnode_t *vp, vnevent_t e, vnode_t *dvp, char *fnm,
     caller_context_t *ct)
 {

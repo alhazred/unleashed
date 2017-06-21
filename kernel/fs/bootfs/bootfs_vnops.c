@@ -543,5 +543,4 @@ const struct vnodeops bootfs_vnodeops = {
 	.vop_addmap = bootfs_addmap,
 	.vop_delmap = bootfs_delmap,
 	.vop_pathconf = bootfs_pathconf,
-	.vop_vnevent = fs_vnevent_nosupport,
 };

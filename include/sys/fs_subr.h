@@ -79,8 +79,6 @@ extern int	fs_fab_acl(struct vnode *, vsecattr_t *, int flag, cred_t *,
 			caller_context_t *);
 extern int	fs_shrlock(struct vnode *, int, struct shrlock *, int,
 			cred_t *, caller_context_t *);
-extern int	fs_vnevent_nosupport(vnode_t *, vnevent_t, vnode_t *dvp,
-			char *fnm, caller_context_t *);
 extern int	fs_vnevent_support(vnode_t *, vnevent_t, vnode_t *dvp,
 			char *fnm, caller_context_t *);
 extern int	fs_acl_nontrivial(struct vnode *vp, struct cred *cr);
