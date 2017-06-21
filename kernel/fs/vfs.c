@@ -467,13 +467,13 @@ vfs_freevfsops_by_type(int fstype)
 
 /* Set the operations vector for a vfs */
 void
-vfs_setops(struct vfs *vfs, struct vfsops *ops)
+vfs_setops(struct vfs *vfs, const struct vfsops *ops)
 {
 	vfs->vfs_op = ops;
 }
 
 /* Retrieve the operations vector for a vfs */
-struct vfsops *
+const struct vfsops *
 vfs_getops(struct vfs *vfs)
 {
 	return vfs->vfs_op;
@@ -484,9 +484,9 @@ vfs_getops(struct vfs *vfs)
  * Returns zero (0) if not.
  */
 int
-vfs_matchops(vfs_t *vfsp, vfsops_t *vfsops)
+vfs_matchops(struct vfs *vfs, const struct vfsops *ops)
 {
-	return (vfs_getops(vfsp) == vfsops);
+	return (vfs_getops(vfs) == ops);
 }
 
 /*
@@ -505,19 +505,19 @@ vfs_can_sync(vfs_t *vfsp)
  * Initialize a vfs structure.
  */
 void
-vfs_init(vfs_t *vfsp, vfsops_t *op, void *data)
+vfs_init(struct vfs *vfs, const struct vfsops *ops, void *data)
 {
 	/* Other initialization has been moved to vfs_alloc() */
-	vfsp->vfs_count = 0;
-	vfsp->vfs_next = vfsp;
-	vfsp->vfs_prev = vfsp;
-	vfsp->vfs_zone_next = vfsp;
-	vfsp->vfs_zone_prev = vfsp;
-	vfsp->vfs_lofi_id = 0;
-	sema_init(&vfsp->vfs_reflock, 1, NULL, SEMA_DEFAULT, NULL);
-	vfsimpl_setup(vfsp);
-	vfsp->vfs_data = (data);
-	vfs_setops((vfsp), (op));
+	vfs->vfs_count = 0;
+	vfs->vfs_next = vfs;
+	vfs->vfs_prev = vfs;
+	vfs->vfs_zone_next = vfs;
+	vfs->vfs_zone_prev = vfs;
+	vfs->vfs_lofi_id = 0;
+	sema_init(&vfs->vfs_reflock, 1, NULL, SEMA_DEFAULT, NULL);
+	vfsimpl_setup(vfs);
+	vfs->vfs_data = data;
+	vfs_setops(vfs, ops);
 }
 
 /*
@@ -3784,7 +3784,7 @@ vfs_mntpoint2vfsp(const char *mp)
  * if vfs entry is found then return 1, else 0.
  */
 int
-vfs_opsinuse(vfsops_t *ops)
+vfs_opsinuse(const struct vfsops *ops)
 {
 	struct vfs *vfsp;
 	int found;
@@ -3942,13 +3942,13 @@ vfs_getvfsswbyname(const char *type)
  * Find a vfssw entry given a set of vfsops.
  */
 struct vfssw *
-vfs_getvfsswbyvfsops(vfsops_t *vfsops)
+vfs_getvfsswbyvfsops(const struct vfsops *ops)
 {
 	struct vfssw *vswp;
 
 	RLOCK_VFSSW();
 	for (vswp = &vfssw[1]; vswp < &vfssw[nfstype]; vswp++) {
-		if (ALLOCATED_VFSSW(vswp) && &vswp->vsw_vfsops == vfsops) {
+		if (ALLOCATED_VFSSW(vswp) && &vswp->vsw_vfsops == ops) {
 			vfs_refvfssw(vswp);
 			RUNLOCK_VFSSW();
 			return (vswp);

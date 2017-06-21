@@ -200,7 +200,7 @@ typedef struct vfs {
 	struct vfs	*vfs_prev;		/* prev VFS in VFS list */
 
 /* vfs_op should not be used directly.  Accessor functions are provided */
-	vfsops_t	*vfs_op;		/* operations on VFS */
+	const struct vfsops *vfs_op;		/* operations on VFS */
 
 	struct vnode	*vfs_vnodecovered;	/* vnode mounted on */
 	uint_t		vfs_flag;		/* flags */
@@ -381,7 +381,7 @@ typedef struct vfssw {
 	mntopts_t	vsw_optproto;	/* mount options table prototype */
 	uint_t		vsw_count;	/* count of references */
 	kmutex_t	vsw_lock;	/* lock to protect vsw_count */
-	vfsops_t	vsw_vfsops;	/* filesystem operations vector */
+	struct vfsops	vsw_vfsops;	/* filesystem operations vector */
 } vfssw_t;
 
 /*
@@ -456,13 +456,13 @@ struct fstatvfsa;
 
 void	vfs_freevfsops(vfsops_t *);
 int	vfs_freevfsops_by_type(int);
-void	vfs_setops(vfs_t *, vfsops_t *);
-vfsops_t *vfs_getops(vfs_t *vfsp);
-int	vfs_matchops(vfs_t *, vfsops_t *);
+void	vfs_setops(struct vfs *, const struct vfsops *);
+const struct vfsops *vfs_getops(struct vfs *);
+int	vfs_matchops(struct vfs *, const struct vfsops *);
 int	vfs_can_sync(vfs_t *vfsp);
 vfs_t	*vfs_alloc(int);
 void	vfs_free(vfs_t *);
-void	vfs_init(vfs_t *vfsp, vfsops_t *, void *);
+void	vfs_init(struct vfs *vfsp, const struct vfsops *, void *);
 void	vfsimpl_setup(vfs_t *vfsp);
 void	vfsimpl_teardown(vfs_t *vfsp);
 void	vn_exists(vnode_t *);
@@ -521,14 +521,14 @@ void	vfs_addmip(dev_t, struct vfs *);
 void	vfs_delmip(struct vfs *);
 int	vfs_devismounted(dev_t);
 int	vfs_devmounting(dev_t, struct vfs *);
-int	vfs_opsinuse(vfsops_t *);
+int	vfs_opsinuse(const struct vfsops *);
 struct vfs *getvfs(fsid_t *);
 struct vfs *vfs_dev2vfsp(dev_t);
 struct vfs *vfs_mntpoint2vfsp(const char *);
 struct vfssw *allocate_vfssw(const char *);
 struct vfssw *vfs_getvfssw(const char *);
 struct vfssw *vfs_getvfsswbyname(const char *);
-struct vfssw *vfs_getvfsswbyvfsops(vfsops_t *);
+struct vfssw *vfs_getvfsswbyvfsops(const struct vfsops *);
 void	vfs_refvfssw(struct vfssw *);
 void	vfs_unrefvfssw(struct vfssw *);
 uint_t	vf_to_stf(uint_t);
