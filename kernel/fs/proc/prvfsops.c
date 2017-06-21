@@ -119,6 +119,13 @@ static kmutex_t	pr_mount_lock;
  */
 static int	prmount(), prunmount(), prroot(), prstatvfs();
 
+static const struct vfsops pr_vfsops = {
+	.vfs_mount = prmount,
+	.vfs_unmount = prunmount,
+	.vfs_root = prroot,
+	.vfs_statvfs = prstatvfs,
+};
+
 static void
 prinitrootnode(prnode_t *pnp, vfs_t *vfsp)
 {
@@ -140,13 +147,6 @@ prinitrootnode(prnode_t *pnp, vfs_t *vfsp)
 static int
 prinit(int fstype, char *name)
 {
-	static const fs_operation_def_t pr_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = prmount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = prunmount },
-		VFSNAME_ROOT,		{ .vfs_root = prroot },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = prstatvfs },
-		NULL,			NULL
-	};
 	int error;
 
 	nproc_highbit = highbit(v.v_proc);
@@ -155,7 +155,7 @@ prinit(int fstype, char *name)
 	/*
 	 * Associate VFS ops vector with this fstype.
 	 */
-	error = vfs_setfsops(fstype, pr_vfsops_template, NULL);
+	error = vfs_setfsops_const(fstype, &pr_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "prinit: bad vfs ops template");
 		return (error);
