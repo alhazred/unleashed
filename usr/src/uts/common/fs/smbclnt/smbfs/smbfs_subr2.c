@@ -444,7 +444,7 @@ start:
 #endif
 
 	/* Now fill in the vnode. */
-	vn_setops(vp, smbfs_vnodeops);
+	vn_setops(vp, &smbfs_vnodeops);
 	vp->v_data = (caddr_t)np;
 	VFS_HOLD(vfsp);
 	vp->v_vfsp = vfsp;

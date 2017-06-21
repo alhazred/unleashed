@@ -182,53 +182,48 @@ int noop_vnodeop() {
 	return (0);
 }
 
-struct vnodeops *smbfs_vnodeops = NULL;
-
 /*
  * Most unimplemented ops will return ENOSYS because of fs_nosys().
  * The only ops where that won't work are ACCESS (due to open(2)
  * failures) and ... (anything else left?)
  */
-const fs_operation_def_t smbfs_vnodeops_template[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = smbfs_open } },
-	{ VOPNAME_CLOSE,	{ .vop_close = smbfs_close } },
-	{ VOPNAME_READ,		{ .vop_read = smbfs_read } },
-	{ VOPNAME_WRITE,	{ .vop_write = smbfs_write } },
-	{ VOPNAME_IOCTL,	{ .vop_ioctl = smbfs_ioctl } },
-	{ VOPNAME_GETATTR,	{ .vop_getattr = smbfs_getattr } },
-	{ VOPNAME_SETATTR,	{ .vop_setattr = smbfs_setattr } },
-	{ VOPNAME_ACCESS,	{ .vop_access = smbfs_access } },
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = smbfs_lookup } },
-	{ VOPNAME_CREATE,	{ .vop_create = smbfs_create } },
-	{ VOPNAME_REMOVE,	{ .vop_remove = smbfs_remove } },
-	{ VOPNAME_LINK,		{ .error = fs_nosys } }, /* smbfs_link, */
-	{ VOPNAME_RENAME,	{ .vop_rename = smbfs_rename } },
-	{ VOPNAME_MKDIR,	{ .vop_mkdir = smbfs_mkdir } },
-	{ VOPNAME_RMDIR,	{ .vop_rmdir = smbfs_rmdir } },
-	{ VOPNAME_READDIR,	{ .vop_readdir = smbfs_readdir } },
-	{ VOPNAME_SYMLINK,	{ .error = fs_nosys } }, /* smbfs_symlink, */
-	{ VOPNAME_READLINK,	{ .error = fs_nosys } }, /* smbfs_readlink, */
-	{ VOPNAME_FSYNC,	{ .vop_fsync = smbfs_fsync } },
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = smbfs_inactive } },
-	{ VOPNAME_FID,		{ .error = fs_nosys } }, /* smbfs_fid, */
-	{ VOPNAME_RWLOCK,	{ .vop_rwlock = smbfs_rwlock } },
-	{ VOPNAME_RWUNLOCK,	{ .vop_rwunlock = smbfs_rwunlock } },
-	{ VOPNAME_SEEK,		{ .vop_seek = smbfs_seek } },
-	{ VOPNAME_FRLOCK,	{ .vop_frlock = smbfs_frlock } },
-	{ VOPNAME_SPACE,	{ .vop_space = smbfs_space } },
-	{ VOPNAME_REALVP,	{ .error = fs_nosys } }, /* smbfs_realvp, */
-	{ VOPNAME_GETPAGE,	{ .error = fs_nosys } }, /* smbfs_getpage, */
-	{ VOPNAME_PUTPAGE,	{ .error = fs_nosys } }, /* smbfs_putpage, */
-	{ VOPNAME_MAP,		{ .error = fs_nosys } }, /* smbfs_map, */
-	{ VOPNAME_ADDMAP,	{ .error = fs_nosys } }, /* smbfs_addmap, */
-	{ VOPNAME_DELMAP,	{ .error = fs_nosys } }, /* smbfs_delmap, */
-	{ VOPNAME_DUMP,		{ .error = fs_nosys } }, /* smbfs_dump, */
-	{ VOPNAME_PATHCONF,	{ .vop_pathconf = smbfs_pathconf } },
-	{ VOPNAME_PAGEIO,	{ .error = fs_nosys } }, /* smbfs_pageio, */
-	{ VOPNAME_SETSECATTR,	{ .vop_setsecattr = smbfs_setsecattr } },
-	{ VOPNAME_GETSECATTR,	{ .vop_getsecattr = smbfs_getsecattr } },
-	{ VOPNAME_SHRLOCK,	{ .vop_shrlock = smbfs_shrlock } },
-	{ NULL, NULL }
+const struct vnodeops smbfs_vnodeops = {
+	.vnop_name = "smbfs",
+	.vop_open = smbfs_open,
+	.vop_close = smbfs_close,
+	.vop_read = smbfs_read,
+	.vop_write = smbfs_write,
+	.vop_ioctl = smbfs_ioctl,
+	.vop_getattr = smbfs_getattr,
+	.vop_setattr = smbfs_setattr,
+	.vop_access = smbfs_access,
+	.vop_lookup = smbfs_lookup,
+	.vop_create = smbfs_create,
+	.vop_remove = smbfs_remove,
+	.vop_link = fs_nosys, /* smbfs_link, */
+	.vop_rename = smbfs_rename,
+	.vop_mkdir = smbfs_mkdir,
+	.vop_rmdir = smbfs_rmdir,
+	.vop_readdir = smbfs_readdir,
+	.vop_symlink = fs_nosys, /* smbfs_symlink, */
+	.vop_readlink = fs_nosys, /* smbfs_readlink, */
+	.vop_fsync = smbfs_fsync,
+	.vop_inactive = smbfs_inactive,
+	.vop_fid = fs_nosys, /* smbfs_fid, */
+	.vop_rwlock = smbfs_rwlock,
+	.vop_rwunlock = smbfs_rwunlock,
+	.vop_seek = smbfs_seek,
+	.vop_frlock = smbfs_frlock,
+	.vop_space = smbfs_space,
+	.vop_realvp = fs_nosys, /* smbfs_realvp, */
+	.vop_getpage = fs_nosys, /* smbfs_getpage, */
+	.vop_putpage = fs_nosys, /* smbfs_putpage, */
+	.vop_dump = fs_nosys, /* smbfs_dump, */
+	.vop_pathconf = smbfs_pathconf,
+	.vop_pageio = fs_nosys, /* smbfs_pageio, */
+	.vop_setsecattr = smbfs_setsecattr,
+	.vop_getsecattr = smbfs_getsecattr,
+	.vop_shrlock = smbfs_shrlock,
 };
 
 /*

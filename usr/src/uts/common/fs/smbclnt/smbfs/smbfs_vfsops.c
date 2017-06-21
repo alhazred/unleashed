@@ -281,14 +281,6 @@ smbfsinit(int fstyp, char *name)
 		return (error);
 	}
 
-	error = vn_make_ops(name, smbfs_vnodeops_template, &smbfs_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstyp);
-		zcmn_err(GLOBAL_ZONEID, CE_WARN,
-		    "smbfsinit: bad vnode ops template");
-		return (error);
-	}
-
 	smbfsfstyp = fstyp;
 
 	return (0);
@@ -300,10 +292,6 @@ smbfsfini()
 	if (smbfs_vfsops) {
 		(void) vfs_freevfsops_by_type(smbfsfstyp);
 		smbfs_vfsops = NULL;
-	}
-	if (smbfs_vnodeops) {
-		vn_freevnodeops(smbfs_vnodeops);
-		smbfs_vnodeops = NULL;
 	}
 }
 

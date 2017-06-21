@@ -81,8 +81,7 @@
 #define	SM_STATUS_TIMEO 0x00000004 /* this mount is not responding */
 #define	SM_STATUS_DEAD	0x00000010 /* connection gone - unmount this */
 
-extern const struct fs_operation_def	smbfs_vnodeops_template[];
-extern struct vnodeops			*smbfs_vnodeops;
+extern const struct vnodeops		smbfs_vnodeops;
 
 struct smbnode;
 struct smb_share;
