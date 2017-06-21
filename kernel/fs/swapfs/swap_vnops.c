@@ -74,20 +74,18 @@ int	swap_getconpage(struct vnode *vp, uoff_t off, size_t len,
 static int 	swap_putapage(struct vnode *vp, page_t *pp, uoff_t *off,
     size_t *lenp, int flags, struct cred *cr);
 
-const fs_operation_def_t swap_vnodeops_template[] = {
-	VOPNAME_INACTIVE,	{ .vop_inactive = swap_inactive },
-	VOPNAME_GETPAGE,	{ .vop_getpage = swap_getpage },
-	VOPNAME_PUTPAGE,	{ .vop_putpage = swap_putpage },
-	VOPNAME_DISPOSE,	{ .vop_dispose = swap_dispose },
-	VOPNAME_SETFL,		{ .error = fs_nosys },
-	VOPNAME_POLL,		{ .error = fs_nosys },
-	VOPNAME_PATHCONF,	{ .error = fs_nosys },
-	VOPNAME_GETSECATTR,	{ .error = fs_nosys },
-	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
-	NULL,			NULL
+const struct vnodeops swap_vnodeops = {
+	.vnop_name = "swapfs",
+	.vop_inactive = swap_inactive,
+	.vop_getpage = swap_getpage,
+	.vop_putpage = swap_putpage,
+	.vop_dispose = swap_dispose,
+	.vop_setfl = fs_nosys,
+	.vop_poll = (void *) fs_nosys,
+	.vop_pathconf = fs_nosys,
+	.vop_getsecattr = fs_nosys,
+	.vop_shrlock = fs_nosys,
 };
-
-vnodeops_t *swap_vnodeops;
 
 /* ARGSUSED */
 static void
@@ -680,7 +678,7 @@ swap_putapage(
 			swap_getiopages += btop(klsz);
 			break;
 		}
-		ASSERT(vn_matchops(arg->a_vp, swap_vnodeops));
+		ASSERT(vn_matchops(arg->a_vp, &swap_vnodeops));
 		vp = arg->a_vp;
 		off = arg->a_off;
 

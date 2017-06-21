@@ -42,8 +42,6 @@
 #include <sys/mem_config.h>
 #include <sys/atomic.h>
 
-extern const fs_operation_def_t swap_vnodeops_template[];
-
 /*
  * swapfs_minfree is the amount of physical memory (actually remaining
  * availrmem) that we want to keep free for the rest of the system.  This
@@ -194,12 +192,6 @@ swapinit(int fstype, char *name)
 		return (error);
 	}
 
-	error = vn_make_ops(name, swap_vnodeops_template, &swap_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "swapinit: bad vnode ops template");
-		return (error);
-	}
 	sw_freelist = sw_ar;
 	for (i = 0; i < sw_freelist_size - 1; i++)
 		sw_ar[i].a_next = &sw_ar[i + 1];
@@ -224,7 +216,7 @@ swapfs_getvp(ulong_t vidx)
 	vp = swap_vnodes[vidx];
 	if (vp == NULL) {
 		vp = vn_alloc(KM_SLEEP);
-		vn_setops(vp, swap_vnodeops);
+		vn_setops(vp, &swap_vnodeops);
 		vp->v_type = VREG;
 		vp->v_flag |= (VISSWAP|VISSWAPFS);
 		swap_vnodes[vidx] = vp;

@@ -244,7 +244,7 @@ anon_init(void)
 	ani_free_pool = (ani_free_t *)P2ROUNDUP((uintptr_t)tmp, 64);
 
 	anon_vp = vn_alloc(KM_SLEEP);
-	vn_setops(anon_vp, swap_vnodeops);
+	vn_setops(anon_vp, &swap_vnodeops);
 	anon_vp->v_type = VREG;
 	anon_vp->v_flag |= (VISSWAP|VISSWAPFS);
 }
