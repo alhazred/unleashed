@@ -75,7 +75,6 @@ extern int	fs_cmp(vnode_t *, vnode_t *, caller_context_t *);
 extern int	fs_seek(vnode_t *, offset_t, offset_t *, caller_context_t *);
 extern int	fs_frlock(vnode_t *, int, struct flock64 *, int, offset_t,
 			struct flk_callback *, cred_t *, caller_context_t *);
-extern int	fs_setfl(vnode_t *, int, int, cred_t *, caller_context_t *);
 extern int	fs_poll(vnode_t *, short, int, short *, struct pollhead **,
 			caller_context_t *);
 extern int	fs_pathconf(struct vnode *, int, ulong_t *, struct cred *,

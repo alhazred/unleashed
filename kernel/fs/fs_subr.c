@@ -382,16 +382,6 @@ frlock_serialize_blocked(flk_cb_when_t when, void *infop)
 }
 
 /*
- * Allow any flags.
- */
-/* ARGSUSED */
-int
-fs_setfl(vnode_t *vp, int oflags, int nflags, cred_t *cr, caller_context_t *ct)
-{
-	return (0);
-}
-
-/*
  * Return the answer requested to poll() for non-device files.
  * Only POLLIN, POLLRDNORM, and POLLOUT are recognized.
  */
