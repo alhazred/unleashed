@@ -454,11 +454,11 @@ gfs_lookup_dot(vnode_t **vpp, vnode_t *dvp, vnode_t *pvp, const char *nm)
  * 	- Initialize necessary fields in the vnode
  * 	- Hold the parent
  */
-vnode_t *
-gfs_file_create(size_t size, vnode_t *pvp, vnodeops_t *ops)
+struct vnode *
+gfs_file_create(size_t size, struct vnode *pvp, const struct vnodeops *ops)
 {
 	gfs_file_t *fp;
-	vnode_t *vp;
+	struct vnode *vp;
 
 	/*
 	 * Allocate vnode and internal data structure
@@ -512,8 +512,9 @@ gfs_file_create(size_t size, vnode_t *pvp, vnodeops_t *ops)
  *
  * This function also performs the same initialization as gfs_file_create().
  */
-vnode_t *
-gfs_dir_create(size_t struct_size, vnode_t *pvp, vnodeops_t *ops,
+struct vnode *
+gfs_dir_create(size_t struct_size, struct vnode *pvp,
+    const struct vnodeops *ops,
     gfs_dirent_t *entries, gfs_inode_cb inode_cb, int maxlen,
     gfs_readdir_cb readdir_cb, gfs_lookup_cb lookup_cb)
 {
@@ -553,12 +554,13 @@ gfs_dir_create(size_t struct_size, vnode_t *pvp, vnodeops_t *ops,
  * Similar to gfs_dir_create(), this creates a root vnode for a filesystem.  The
  * only difference is that it takes a vfs_t instead of a vnode_t as its parent.
  */
-vnode_t *
-gfs_root_create(size_t size, vfs_t *vfsp, vnodeops_t *ops, ino64_t ino,
+struct vnode *
+gfs_root_create(size_t size, struct vfs *vfsp,
+    const struct vnodeops *ops, ino64_t ino,
     gfs_dirent_t *entries, gfs_inode_cb inode_cb, int maxlen,
     gfs_readdir_cb readdir_cb, gfs_lookup_cb lookup_cb)
 {
-	vnode_t *vp = gfs_dir_create(size, NULL, ops, entries, inode_cb,
+	struct vnode *vp = gfs_dir_create(size, NULL, ops, entries, inode_cb,
 	    maxlen, readdir_cb, lookup_cb);
 
 	/* Manually set the inode */
@@ -577,10 +579,11 @@ gfs_root_create(size_t size, vfs_t *vfsp, vnodeops_t *ops, ino64_t ino,
  * Similar to gfs_root_create(), this creates a root vnode for a file to
  * be the pseudo-filesystem.
  */
-vnode_t *
-gfs_root_create_file(size_t size, vfs_t *vfsp, vnodeops_t *ops, ino64_t ino)
+struct vnode *
+gfs_root_create_file(size_t size, struct vfs *vfsp,
+    const struct vnodeops *ops, ino64_t ino)
 {
-	vnode_t	*vp = gfs_file_create(size, NULL, ops);
+	struct vnode *vp = gfs_file_create(size, NULL, ops);
 
 	((gfs_file_t *)vp->v_data)->gfs_ino = ino;
 

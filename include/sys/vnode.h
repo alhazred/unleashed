@@ -241,7 +241,7 @@ typedef struct vnode {
 	/* PRIVATE FIELDS BELOW - DO NOT USE */
 
 	struct vfs	*v_vfsmountedhere; /* ptr to vfs mounted here */
-	struct vnodeops	*v_op;		/* vnode operations */
+	const struct vnodeops	*v_op;	/* vnode operations */
 	struct filock	*v_filocks;	/* ptr to filock list */
 	struct shrlocklist *v_shrlocks;	/* ptr to shrlock list */
 	krwlock_t	v_nbllock;	/* sync for NBMAND locks */
@@ -1137,9 +1137,9 @@ int	vn_has_flocks(vnode_t *);
 int	vn_has_mandatory_locks(vnode_t *, int);
 int	vn_has_cached_data(vnode_t *);
 
-void	vn_setops(vnode_t *, vnodeops_t *);
-vnodeops_t *vn_getops(vnode_t *);
-int	vn_matchops(vnode_t *, vnodeops_t *);
+void	vn_setops(struct vnode *, const struct vnodeops *);
+const struct vnodeops *vn_getops(struct vnode *);
+int	vn_matchops(struct vnode *, const struct vnodeops *);
 int	vn_matchopval(vnode_t *, char *, fs_generic_func_p);
 int	vn_ismntpt(vnode_t *);
 

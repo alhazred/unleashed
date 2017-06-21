@@ -856,8 +856,8 @@ dtrace_canload_remains(uint64_t addr, size_t sz, size_t *remain,
 
 	if ((fp = mstate->dtms_getf) != NULL) {
 		uintptr_t psz = sizeof (void *);
-		vnode_t *vp;
-		vnodeops_t *op;
+		const struct vnodeops *op;
+		struct vnode *vp;
 
 		/*
 		 * When getf() returns a file_t, the enabling is implicitly

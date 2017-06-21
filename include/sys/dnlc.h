@@ -186,7 +186,7 @@ void	dnlc_purge(void);
 void	dnlc_purge_vp(vnode_t *);
 int	dnlc_purge_vfsp(vfs_t *, int);
 void	dnlc_remove(vnode_t *, const char *);
-int	dnlc_fs_purge1(struct vnodeops *);
+int	dnlc_fs_purge1(const struct vnodeops *);
 vnode_t	*dnlc_reverse_lookup(vnode_t *, char *, size_t);
 void	dnlc_reduce_cache(void *);
 

@@ -879,7 +879,7 @@ dnlc_purge_vfsp(vfs_t *vfsp, int count)
  * Note, vop is not the 'right' identifier for a filesystem.
  */
 int
-dnlc_fs_purge1(vnodeops_t *vop)
+dnlc_fs_purge1(const struct vnodeops *vop)
 {
 	nc_hash_t *end;
 	nc_hash_t *hp;

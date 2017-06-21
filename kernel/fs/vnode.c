@@ -2859,7 +2859,7 @@ vn_is_mapped(
  * Set the operations vector for a vnode.
  */
 void
-vn_setops(struct vnode *vnode, struct vnodeops *ops)
+vn_setops(struct vnode *vnode, const struct vnodeops *ops)
 {
 	vnode->v_op = ops;
 }
@@ -2867,7 +2867,7 @@ vn_setops(struct vnode *vnode, struct vnodeops *ops)
 /*
  * Retrieve the operations vector for a vnode
  */
-struct vnodeops *
+const struct vnodeops *
 vn_getops(struct vnode *vnode)
 {
 	return vnode->v_op;
@@ -2878,7 +2878,7 @@ vn_getops(struct vnode *vnode)
  * Returns zero (0) if not.
  */
 int
-vn_matchops(vnode_t *vp, vnodeops_t *vnodeops)
+vn_matchops(struct vnode *vp, const struct vnodeops *vnodeops)
 {
 	return (vn_getops(vp) == vnodeops);
 }

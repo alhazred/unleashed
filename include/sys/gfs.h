@@ -95,13 +95,16 @@ typedef struct gfs_dir {
 
 struct vfs;
 
-extern vnode_t *gfs_file_create(size_t, vnode_t *, vnodeops_t *);
-extern vnode_t *gfs_dir_create(size_t, vnode_t *, vnodeops_t *,
+extern struct vnode *gfs_file_create(size_t, struct vnode *,
+    const struct vnodeops *);
+extern struct vnode *gfs_dir_create(size_t, struct vnode *,
+    const struct vnodeops *,
     gfs_dirent_t *, gfs_inode_cb, int, gfs_readdir_cb, gfs_lookup_cb);
-extern vnode_t *gfs_root_create(size_t, struct vfs *, vnodeops_t *, ino64_t,
+extern struct vnode *gfs_root_create(size_t, struct vfs *,
+    const struct vnodeops *, ino64_t,
     gfs_dirent_t *, gfs_inode_cb, int, gfs_readdir_cb, gfs_lookup_cb);
-extern vnode_t *gfs_root_create_file(size_t, struct vfs *, vnodeops_t *,
-    ino64_t);
+extern struct vnode *gfs_root_create_file(size_t, struct vfs *,
+    const struct vnodeops *, ino64_t);
 
 extern void *gfs_file_inactive(vnode_t *);
 extern void *gfs_dir_inactive(vnode_t *);
