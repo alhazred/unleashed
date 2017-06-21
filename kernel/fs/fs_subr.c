@@ -182,16 +182,6 @@ fs_ioctl(vnode_t *vp, int com, intptr_t data, int flag, cred_t *cred,
 }
 
 /*
- * Compare two vnodes.
- */
-/*ARGSUSED2*/
-int
-fs_cmp(vnode_t *vp1, vnode_t *vp2, caller_context_t *ct)
-{
-	return (vp1 == vp2);
-}
-
-/*
  * No-op seek operation.
  */
 /* ARGSUSED */
