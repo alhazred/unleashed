@@ -269,13 +269,6 @@ autofs_init(int fstype, char *name)
 		return (error);
 	}
 
-	error = vn_make_ops(name, auto_vnodeops_template, &auto_vnodeops);
-	if (error != 0) {
-		(void) vfs_freevfsops_by_type(fstype);
-		cmn_err(CE_WARN, "autofs_init: bad vnode ops template");
-		return (error);
-	}
-
 	mutex_init(&autofs_minor_lock, NULL, MUTEX_DEFAULT, NULL);
 	/*
 	 * Assign unique major number for all autofs mounts

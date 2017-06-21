@@ -255,8 +255,7 @@ extern zone_key_t autofs_key;
 	auto_unblock_others((fnp), (operation)); \
 }
 
-extern struct vnodeops *auto_vnodeops;
-extern const struct fs_operation_def auto_vnodeops_template[];
+extern const struct vnodeops auto_vnodeops;
 
 /*
  * Utility routines

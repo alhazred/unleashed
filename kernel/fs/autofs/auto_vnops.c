@@ -87,37 +87,33 @@ static int auto_seek(vnode_t *vp, offset_t, offset_t *, caller_context_t *);
 
 static int auto_trigger_mount(vnode_t *, cred_t *, vnode_t **);
 
-vnodeops_t *auto_vnodeops;
-
-const fs_operation_def_t auto_vnodeops_template[] = {
-	VOPNAME_OPEN,		{ .vop_open = auto_open },
-	VOPNAME_CLOSE,		{ .vop_close = auto_close },
-	VOPNAME_GETATTR,	{ .vop_getattr = auto_getattr },
-	VOPNAME_SETATTR,	{ .vop_setattr = auto_setattr },
-	VOPNAME_ACCESS,		{ .vop_access = auto_access },
-	VOPNAME_LOOKUP,		{ .vop_lookup = auto_lookup },
-	VOPNAME_CREATE,		{ .vop_create = auto_create },
-	VOPNAME_REMOVE,		{ .vop_remove = auto_remove },
-	VOPNAME_LINK,		{ .vop_link = auto_link },
-	VOPNAME_RENAME,		{ .vop_rename = auto_rename },
-	VOPNAME_MKDIR,		{ .vop_mkdir = auto_mkdir },
-	VOPNAME_RMDIR,		{ .vop_rmdir = auto_rmdir },
-	VOPNAME_READDIR,	{ .vop_readdir = auto_readdir },
-	VOPNAME_SYMLINK,	{ .vop_symlink = auto_symlink },
-	VOPNAME_READLINK,	{ .vop_readlink = auto_readlink },
-	VOPNAME_FSYNC,		{ .vop_fsync = auto_fsync },
-	VOPNAME_INACTIVE,	{ .vop_inactive = auto_inactive },
-	VOPNAME_RWLOCK,		{ .vop_rwlock = auto_rwlock },
-	VOPNAME_RWUNLOCK,	{ .vop_rwunlock = auto_rwunlock },
-	VOPNAME_SEEK,		{ .vop_seek = auto_seek },
-	VOPNAME_FRLOCK,		{ .error = fs_nosys },
-	VOPNAME_DISPOSE,	{ .vop_dispose = fs_nodispose },
-	VOPNAME_SHRLOCK,	{ .error = fs_nosys },
-	VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
-	NULL,			NULL
+const struct vnodeops auto_vnodeops = {
+	.vnop_name = "autofs",
+	.vop_open = auto_open,
+	.vop_close = auto_close,
+	.vop_getattr = auto_getattr,
+	.vop_setattr = auto_setattr,
+	.vop_access = auto_access,
+	.vop_lookup = auto_lookup,
+	.vop_create = auto_create,
+	.vop_remove = auto_remove,
+	.vop_link = auto_link,
+	.vop_rename = auto_rename,
+	.vop_mkdir = auto_mkdir,
+	.vop_rmdir = auto_rmdir,
+	.vop_readdir = auto_readdir,
+	.vop_symlink = auto_symlink,
+	.vop_readlink = auto_readlink,
+	.vop_fsync = auto_fsync,
+	.vop_inactive = auto_inactive,
+	.vop_rwlock = auto_rwlock,
+	.vop_rwunlock = auto_rwunlock,
+	.vop_seek = auto_seek,
+	.vop_frlock = fs_nosys,
+	.vop_dispose = fs_nodispose,
+	.vop_shrlock = fs_nosys,
+	.vop_vnevent = fs_vnevent_support,
 };
-
-
 
 /* ARGSUSED */
 static int
@@ -431,7 +427,7 @@ top:
 	searchnm = nm;
 	operation = 0;
 
-	ASSERT(vn_matchops(dvp, auto_vnodeops));
+	ASSERT(vn_matchops(dvp, &auto_vnodeops));
 
 	AUTOFS_DPRINT((3, "auto_lookup: dvp=%p dfnp=%p\n", (void *)dvp,
 	    (void *)dfnp));
@@ -764,7 +760,7 @@ auto_link(
 		goto done;
 	}
 
-	if (vn_matchops(svp, auto_vnodeops)) {
+	if (vn_matchops(svp, &auto_vnodeops)) {
 		/*
 		 * source vp can't be an autonode
 		 */
@@ -801,7 +797,7 @@ auto_rename(
 	 * we know odvp is an autonode, otherwise this function
 	 * could not have ever been called.
 	 */
-	ASSERT(vn_matchops(odvp, auto_vnodeops));
+	ASSERT(vn_matchops(odvp, &auto_vnodeops));
 
 	if (error = auto_trigger_mount(odvp, cr, &o_newvp))
 		goto done;
@@ -814,7 +810,7 @@ auto_rename(
 		goto done;
 	}
 
-	if (vn_matchops(ndvp, auto_vnodeops)) {
+	if (vn_matchops(ndvp, &auto_vnodeops)) {
 		/*
 		 * directory is AUTOFS, need to trigger the
 		 * mount of the real filesystem.
@@ -840,7 +836,7 @@ auto_rename(
 		n_newvp = ndvp;
 	}
 
-	ASSERT(!vn_matchops(n_newvp, auto_vnodeops));
+	ASSERT(!vn_matchops(n_newvp, &auto_vnodeops));
 
 	if (vn_is_readonly(n_newvp)) {
 		error = EROFS;

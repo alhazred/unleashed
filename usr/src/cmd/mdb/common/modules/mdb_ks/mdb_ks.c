@@ -101,13 +101,6 @@ int _mdb_ks_ncpu_p2;
 static ncache_t **dnlc_hash;	/* mdbs hash array of dnlc entries */
 
 /*
- * This will be the location of the vnodeops pointer for "autofs_vnodeops"
- * The pointer still needs to be read with mdb_vread() to get the location
- * of the vnodeops structure for autofs.
- */
-static struct vnodeops *autofs_vnops_ptr;
-
-/*
  * STREAMS queue registrations:
  */
 typedef struct mdb_qinfo {
@@ -400,26 +393,21 @@ mdb_sprintpath(char *buf, size_t len, mdb_path_t *path)
 static int
 mdb_autonode2path(uintptr_t addr, mdb_path_t *path)
 {
+	GElf_Sym sym;
 	fninfo_t fni;
 	fnnode_t fn;
 
 	vnode_t vn;
 	vfs_t vfs;
-	struct vnodeops *autofs_vnops = NULL;
 
 	/*
-	 * "autofs_vnops_ptr" is the address of the pointer to the vnodeops
-	 * structure for autofs.  We want to read it each time we access
-	 * it since autofs could (in theory) be unloaded and reloaded.
+	 * We want to look it up each time we access it since autofs could
+	 * (in theory) be unloaded and reloaded.
 	 */
-	if (mdb_vread(&autofs_vnops, sizeof (autofs_vnops),
-	    (uintptr_t)autofs_vnops_ptr) == -1)
+	if (mdb_lookup_by_name("auto_vnodeops", &sym) != 0)
 		return (-1);
 
-	if (mdb_vread(&vn, sizeof (vn), addr) == -1)
-		return (-1);
-
-	if (autofs_vnops == NULL || vn.v_op != autofs_vnops)
+	if (vn.v_op != (struct vnodeops *)(uintptr_t)sym.st_value)
 		return (-1);
 
 	addr = (uintptr_t)vn.v_data;
@@ -1152,13 +1140,6 @@ static const mdb_modinfo_t modinfo = { MDB_API_VERSION, dcmds };
 static void
 update_vars(void *arg)
 {
-	GElf_Sym sym;
-
-	if (mdb_lookup_by_name("auto_vnodeops", &sym) == 0)
-		autofs_vnops_ptr = (struct vnodeops *)(uintptr_t)sym.st_value;
-	else
-		autofs_vnops_ptr = NULL;
-
 	(void) mdb_readvar(&_mdb_ks_pagesize, "_pagesize");
 	(void) mdb_readvar(&_mdb_ks_pageshift, "_pageshift");
 	(void) mdb_readvar(&_mdb_ks_pageoffset, "_pageoffset");

@@ -1420,7 +1420,7 @@ auto_makefnnode(
 	fnp->fn_globals = fngp;
 	fngp->fng_fnnode_count++;
 	mutex_exit(&autofs_nodeid_lock);
-	vn_setops(vp, auto_vnodeops);
+	vn_setops(vp, &auto_vnodeops);
 	vp->v_type = type;
 	vp->v_data = (void *)fnp;
 	vp->v_vfsp = vfsp;
