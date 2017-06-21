@@ -322,7 +322,7 @@ sum_mountfh()
 	static char buff[8];
 
 	fh = sum_filehandle(NFS_FHSIZE);
-	(void) sprintf(buff, " FH=%04X", fh & 0xFFFF);
+	(void) sprintf(buff, " FH=%08X", fh);
 	return (buff);
 }
 
@@ -335,7 +335,7 @@ detail_mountfh()
 	pos = getxdr_pos();
 	fh = sum_filehandle(NFS_FHSIZE);
 	setxdr_pos(pos);
-	(void) sprintf(get_line(0, 0), "File handle = [%04X]", fh & 0xFFFF);
+	(void) sprintf(get_line(0, 0), "File handle = [%08X]", fh);
 	(void) showxdr_hex(NFS_FHSIZE, " %s");
 }
 
@@ -414,7 +414,7 @@ sum_mountfh3()
 
 	len = getxdr_long();
 	fh = sum_filehandle(len);
-	(void) sprintf(buff, " FH=%04X", fh & 0xFFFF);
+	(void) sprintf(buff, " FH=%08X", fh);
 	return (buff);
 }
 
@@ -429,7 +429,7 @@ detail_mountfh3()
 	pos = getxdr_pos();
 	fh = sum_filehandle(len);
 	setxdr_pos(pos);
-	(void) sprintf(get_line(0, 0), "File handle = [%04X]", fh & 0xFFFF);
+	(void) sprintf(get_line(0, 0), "File handle = [%08X]", fh);
 	i = 0;
 	while (i < len) {
 		l = MIN(len - i, 32);
