@@ -2776,22 +2776,14 @@ vfs_mntdummygetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 static void
 vfs_mnttabvp_setup(void)
 {
-	vnode_t *tvp;
-	vnodeops_t *vfs_mntdummyvnops;
-	const fs_operation_def_t mnt_dummyvnodeops_template[] = {
-		VOPNAME_READ, 		{ .vop_read = vfs_mntdummyread },
-		VOPNAME_WRITE, 		{ .vop_write = vfs_mntdummywrite },
-		VOPNAME_GETATTR,	{ .vop_getattr = vfs_mntdummygetattr },
-		VOPNAME_VNEVENT,	{ .vop_vnevent = fs_vnevent_support },
-		NULL,			NULL
+	static const struct vnodeops dummyops = {
+		.vnop_name = "mnttab",
+		.vop_read = vfs_mntdummyread,
+		.vop_write = vfs_mntdummywrite,
+		.vop_getattr = vfs_mntdummygetattr,
+		.vop_vnevent = fs_vnevent_support,
 	};
-
-	if (vn_make_ops("mnttab", mnt_dummyvnodeops_template,
-	    &vfs_mntdummyvnops) != 0) {
-		cmn_err(CE_WARN, "vfs_mnttabvp_setup: vn_make_ops failed");
-		/* Shouldn't happen, but not bad enough to panic */
-		return;
-	}
+	vnode_t *tvp;
 
 	/*
 	 * A global dummy vnode is allocated to represent mntfs files.
@@ -2802,7 +2794,7 @@ vfs_mnttabvp_setup(void)
 	 */
 	tvp = vn_alloc(KM_SLEEP);
 	tvp->v_flag = VNOMOUNT|VNOMAP|VNOSWAP|VNOCACHE;
-	vn_setops(tvp, vfs_mntdummyvnops);
+	vn_setops(tvp, &dummyops);
 	tvp->v_type = VREG;
 	/*
 	 * The mnt dummy ops do not reference v_data.

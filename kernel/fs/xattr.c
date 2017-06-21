@@ -821,24 +821,22 @@ xattr_file_pathconf(vnode_t *vp, int cmd, ulong_t *valp, cred_t *cr,
 	}
 }
 
-vnodeops_t *xattr_file_ops;
-
-static const fs_operation_def_t xattr_file_tops[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = xattr_file_open }		},
-	{ VOPNAME_CLOSE,	{ .vop_close = xattr_file_close }	},
-	{ VOPNAME_READ,		{ .vop_read = xattr_file_read }		},
-	{ VOPNAME_WRITE,	{ .vop_write = xattr_file_write }	},
-	{ VOPNAME_IOCTL,	{ .error = fs_ioctl }			},
-	{ VOPNAME_GETATTR,	{ .vop_getattr = xattr_file_getattr }	},
-	{ VOPNAME_ACCESS,	{ .vop_access = xattr_file_access }	},
-	{ VOPNAME_READDIR,	{ .error = fs_notdir }			},
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek }			},
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = gfs_vop_inactive }	},
-	{ VOPNAME_FID,		{ .vop_fid = xattr_common_fid }		},
-	{ VOPNAME_PATHCONF,	{ .vop_pathconf = xattr_file_pathconf }	},
-	{ VOPNAME_PUTPAGE,	{ .error = fs_putpage }			},
-	{ VOPNAME_FSYNC,	{ .error = fs_fsync }			},
-	{ NULL }
+static const struct vnodeops xattr_file_ops = {
+	.vnop_name = "system attributes",
+	.vop_open = xattr_file_open,
+	.vop_close = xattr_file_close,
+	.vop_read = xattr_file_read,
+	.vop_write = xattr_file_write,
+	.vop_ioctl = fs_ioctl,
+	.vop_getattr = xattr_file_getattr,
+	.vop_access = xattr_file_access,
+	.vop_readdir = fs_notdir,
+	.vop_seek = fs_seek,
+	.vop_inactive = gfs_vop_inactive,
+	.vop_fid = xattr_common_fid,
+	.vop_pathconf = xattr_file_pathconf,
+	.vop_putpage = fs_putpage,
+	.vop_fsync = fs_fsync,
 };
 
 vnode_t *
@@ -847,7 +845,7 @@ xattr_mkfile(vnode_t *pvp, xattr_view_t xattr_view)
 	vnode_t *vp;
 	xattr_file_t *np;
 
-	vp = gfs_file_create(sizeof (xattr_file_t), pvp, xattr_file_ops);
+	vp = gfs_file_create(sizeof (xattr_file_t), pvp, &xattr_file_ops);
 	np = vp->v_data;
 	np->xattr_view = xattr_view;
 	vp->v_flag |= V_SYSATTR;
@@ -865,8 +863,6 @@ xattr_mkfile_rw(vnode_t *pvp)
 {
 	return (xattr_mkfile(pvp, XATTR_VIEW_READWRITE));
 }
-
-vnodeops_t *xattr_dir_ops;
 
 static gfs_dirent_t xattr_dirents[] = {
 	{ VIEW_READONLY, xattr_mkfile_ro, GFS_CACHE_VNODE, },
@@ -1502,32 +1498,26 @@ xattr_dir_realvp(vnode_t *vp, vnode_t **realvp, caller_context_t *ct)
 
 }
 
-static const fs_operation_def_t xattr_dir_tops[] = {
-	{ VOPNAME_OPEN,		{ .vop_open = xattr_dir_open }		},
-	{ VOPNAME_CLOSE,	{ .vop_close = xattr_dir_close }	},
-	{ VOPNAME_IOCTL,	{ .error = fs_inval }			},
-	{ VOPNAME_GETATTR,	{ .vop_getattr = xattr_dir_getattr }	},
-	{ VOPNAME_SETATTR,	{ .vop_setattr = xattr_dir_setattr }	},
-	{ VOPNAME_ACCESS,	{ .vop_access = xattr_dir_access }	},
-	{ VOPNAME_READDIR,	{ .vop_readdir = xattr_dir_readdir }	},
-	{ VOPNAME_LOOKUP,	{ .vop_lookup = gfs_vop_lookup }	},
-	{ VOPNAME_CREATE,	{ .vop_create = xattr_dir_create }	},
-	{ VOPNAME_REMOVE,	{ .vop_remove = xattr_dir_remove }	},
-	{ VOPNAME_LINK,		{ .vop_link = xattr_dir_link }		},
-	{ VOPNAME_RENAME,	{ .vop_rename = xattr_dir_rename }	},
-	{ VOPNAME_MKDIR,	{ .error = fs_inval }			},
-	{ VOPNAME_SEEK,		{ .vop_seek = fs_seek }			},
-	{ VOPNAME_INACTIVE,	{ .vop_inactive = xattr_dir_inactive }	},
-	{ VOPNAME_FID,		{ .vop_fid = xattr_common_fid }		},
-	{ VOPNAME_PATHCONF,	{ .vop_pathconf = xattr_dir_pathconf }	},
-	{ VOPNAME_REALVP,	{ .vop_realvp = xattr_dir_realvp } },
-	{ NULL, NULL }
-};
-
-static gfs_opsvec_t xattr_opsvec[] = {
-	{ "xattr dir", xattr_dir_tops, &xattr_dir_ops },
-	{ "system attributes", xattr_file_tops, &xattr_file_ops },
-	{ NULL, NULL, NULL }
+static const struct vnodeops xattr_dir_ops = {
+	.vnop_name = "xattr dir",
+	.vop_open = xattr_dir_open,
+	.vop_close = xattr_dir_close,
+	.vop_ioctl = fs_inval,
+	.vop_getattr = xattr_dir_getattr,
+	.vop_setattr = xattr_dir_setattr,
+	.vop_access = xattr_dir_access,
+	.vop_readdir = xattr_dir_readdir,
+	.vop_lookup = gfs_vop_lookup,
+	.vop_create = xattr_dir_create,
+	.vop_remove = xattr_dir_remove,
+	.vop_link = xattr_dir_link,
+	.vop_rename = xattr_dir_rename,
+	.vop_mkdir = fs_inval,
+	.vop_seek = fs_seek,
+	.vop_inactive = xattr_dir_inactive,
+	.vop_fid = xattr_common_fid,
+	.vop_pathconf = xattr_dir_pathconf,
+	.vop_realvp = xattr_dir_realvp,
 };
 
 /*
@@ -1580,7 +1570,6 @@ xattrdir_do_ino(vnode_t *vp, int index)
 void
 xattr_init(void)
 {
-	VERIFY(gfs_make_opsvec(xattr_opsvec) == 0);
 }
 
 /*
@@ -1657,7 +1646,7 @@ xattr_dir_lookup(vnode_t *dvp, vnode_t **vpp, int flags, cred_t *cr)
 		 * but only for creation of the GFS directory.
 		 */
 		*vpp = gfs_dir_create(
-		    sizeof (xattr_dir_t), dvp, xattr_dir_ops, xattr_dirents,
+		    sizeof (xattr_dir_t), dvp, &xattr_dir_ops, xattr_dirents,
 		    xattrdir_do_ino, MAXNAMELEN, NULL, xattr_lookup_cb);
 		mutex_enter(&dvp->v_lock);
 		if (dvp->v_xattrdir != NULL) {

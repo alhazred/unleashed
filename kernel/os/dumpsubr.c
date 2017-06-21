@@ -429,7 +429,8 @@ dumpinit(vnode_t *vp, char *name, int justchecking)
 			    IS_SWAPVP(common_specvp(cvp)))
 				error = EBUSY;
 		} else {
-			if (vn_matchopval(cvp, VOPNAME_DUMP, fs_nosys) ||
+			if (cvp->v_op->vop_dump == fs_nosys ||
+			    cvp->v_op->vop_dump == NULL ||
 			    !IS_SWAPVP(cvp))
 				error = ENOTSUP;
 		}

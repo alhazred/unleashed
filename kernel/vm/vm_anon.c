@@ -1272,9 +1272,8 @@ anon_decref_pages(
 					    page_pptonum(ppa[j - i - 1]));
 					ppa[j - i] = pp;
 					if (ap->an_pvp != NULL &&
-					    !vn_matchopval(ap->an_pvp,
-					    VOPNAME_DISPOSE,
-					    (fs_generic_func_p)fs_dispose))
+					    (ap->an_pvp->v_op->vop_dispose != fs_dispose &&
+					     ap->an_pvp->v_op->vop_dispose != NULL))
 						dispose = 1;
 				}
 				for (j = i; j < i + curpgcnt; j++) {
