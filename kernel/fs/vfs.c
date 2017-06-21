@@ -320,7 +320,7 @@ fsop_sync_by_kind(int fstype, short flag, cred_t *cr)
 }
 
 /*
- * File system initialization.  vfs_setfsops() must be called from a file
+ * File system initialization.  vfs_setfsops_const() must be called from a file
  * system's init routine.
  */
 
@@ -384,44 +384,6 @@ vfs_setfsops_const(int fstype, const struct vfsops *ops)
 
 	vfssw[fstype].vsw_vfsops = *ops;
 	vfssw[fstype].vsw_flag |= VSW_INSTALLED;
-
-	return (0);
-}
-
-int
-vfs_setfsops(int fstype, const fs_operation_def_t *template, vfsops_t **actual)
-{
-	struct vfsops tmp;
-	int error;
-	int unused_ops;
-
-	/*
-	 * Verify that fstype refers to a valid fs.  Note that
-	 * 0 is valid since it's used to set "stray" ops.
-	 */
-	if ((fstype < 0) || (fstype >= nfstype))
-		return (EINVAL);
-
-	if (!ALLOCATED_VFSSW(&vfssw[fstype]))
-		return (EINVAL);
-
-	/* Set up the operations vector. */
-
-	error = fs_copyfsops(template, &tmp, &unused_ops);
-
-	if (error != 0)
-		return (error);
-
-	VERIFY0(vfs_setfsops_const(fstype, &tmp));
-
-	if (actual != NULL)
-		*actual = &vfssw[fstype].vsw_vfsops;
-
-#if DEBUG
-	if (unused_ops != 0)
-		cmn_err(CE_WARN, "vfs_setfsops: %s: %d operations supplied "
-		    "but not used", vfssw[fstype].vsw_name, unused_ops);
-#endif
 
 	return (0);
 }
