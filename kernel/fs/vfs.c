@@ -370,8 +370,28 @@ zfs_boot_init(void)
 }
 
 int
+vfs_setfsops_const(int fstype, const struct vfsops *ops)
+{
+	/*
+	 * Verify that fstype refers to a valid fs.  Note that
+	 * 0 is valid since it's used to set "stray" ops.
+	 */
+	if ((fstype < 0) || (fstype >= nfstype))
+		return (EINVAL);
+
+	if (!ALLOCATED_VFSSW(&vfssw[fstype]))
+		return (EINVAL);
+
+	vfssw[fstype].vsw_vfsops = *ops;
+	vfssw[fstype].vsw_flag |= VSW_INSTALLED;
+
+	return (0);
+}
+
+int
 vfs_setfsops(int fstype, const fs_operation_def_t *template, vfsops_t **actual)
 {
+	struct vfsops tmp;
 	int error;
 	int unused_ops;
 
@@ -387,12 +407,12 @@ vfs_setfsops(int fstype, const fs_operation_def_t *template, vfsops_t **actual)
 
 	/* Set up the operations vector. */
 
-	error = fs_copyfsops(template, &vfssw[fstype].vsw_vfsops, &unused_ops);
+	error = fs_copyfsops(template, &tmp, &unused_ops);
 
 	if (error != 0)
 		return (error);
 
-	vfssw[fstype].vsw_flag |= VSW_INSTALLED;
+	VERIFY0(vfs_setfsops_const(fstype, &tmp));
 
 	if (actual != NULL)
 		*actual = &vfssw[fstype].vsw_vfsops;

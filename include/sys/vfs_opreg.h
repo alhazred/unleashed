@@ -84,6 +84,7 @@ int fs_build_vector(void *vector, int *unused_ops,
  */
 
 int	vfs_setfsops(int, const fs_operation_def_t *, vfsops_t **);
+int	vfs_setfsops_const(int, const struct vfsops *);
 int	vfs_makefsops(const fs_operation_def_t *, vfsops_t **);
 void	vfs_freevfsops(vfsops_t *);
 int	vfs_freevfsops_by_type(int);
