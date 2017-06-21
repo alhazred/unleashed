@@ -35,7 +35,6 @@
 #include <sys/pathname.h>
 #include <sys/vnode.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/mntent.h>
 #include <sys/mount.h>
 #include <sys/cmn_err.h>

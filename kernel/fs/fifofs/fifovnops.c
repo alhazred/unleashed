@@ -49,7 +49,6 @@
 #include <sys/uio.h>
 #include <sys/vfs.h>
 #include <sys/vnode.h>
-#include <sys/vfs_opreg.h>
 #include <sys/pathname.h>
 #include <sys/signal.h>
 #include <sys/user.h>

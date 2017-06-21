@@ -56,7 +56,7 @@
 #include <sys/policy.h>
 #include <sys/atomic.h>
 #include <sys/zone.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/mntent.h>
 #include <sys/priv.h>
 #include <inet/ip.h>

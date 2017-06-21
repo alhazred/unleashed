@@ -29,7 +29,7 @@
 #include <sys/errno.h>
 #include <sys/kmem.h>
 #include <sys/vnode.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/swap.h>
 #include <sys/sysmacros.h>
 #include <sys/buf.h>

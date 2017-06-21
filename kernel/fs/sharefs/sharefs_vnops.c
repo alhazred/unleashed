@@ -36,7 +36,6 @@
 #include <sys/sysmacros.h>
 #include <sys/atomic.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 
 #include <sharefs/sharefs.h>
 

@@ -44,7 +44,6 @@
 #include <sys/systm.h>
 #include <sys/uio.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/cred.h>
 #include <sys/mntent.h>

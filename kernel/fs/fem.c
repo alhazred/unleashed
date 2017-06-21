@@ -40,7 +40,6 @@
 #include <sys/vfs_dispatch.h>
 #include <sys/vnode.h>
 #include <sys/vnode_dispatch.h>
-#include <sys/vfs_opreg.h>
 
 #define	NNODES_DEFAULT	8	/* Default number of nodes in a fem_list */
 /*

@@ -33,7 +33,7 @@
 #include <sys/modctl.h>
 #include <sys/objfs.h>
 #include <sys/objfs_impl.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/systm.h>
 
 extern int last_module_id;

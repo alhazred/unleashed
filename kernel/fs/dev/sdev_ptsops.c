@@ -40,7 +40,7 @@
 #include <sys/policy.h>
 #include <sys/ptms.h>
 #include <sys/stat.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include "sdev_vnops.h"
 
 #define	DEVPTS_UID_DEFAULT	0

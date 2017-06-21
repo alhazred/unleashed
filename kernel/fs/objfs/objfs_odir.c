@@ -31,7 +31,7 @@
 #include <sys/modctl.h>
 #include <sys/objfs.h>
 #include <sys/objfs_impl.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/stat.h>
 
 static const struct vnodeops objfs_ops_odir;

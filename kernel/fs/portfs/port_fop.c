@@ -174,7 +174,7 @@
 #include <sys/poll_impl.h>
 #include <sys/port_impl.h>
 #include <sys/fem.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/atomic.h>
 #include <sys/mount.h>
 #include <sys/mntent.h>

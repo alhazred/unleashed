@@ -32,7 +32,7 @@
 
 #include <sys/types.h>
 #include <sys/vnode.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/mutex.h>
 #include <sys/dirent.h>
 #include <sys/extdirent.h>

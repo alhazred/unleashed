@@ -30,7 +30,6 @@
 #include <sys/time.h>
 #include <sys/cred.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/gfs.h>
 #include <sys/vnode.h>
 #include <sys/systm.h>

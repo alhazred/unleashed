@@ -39,7 +39,6 @@
 #include <sys/user.h>
 #include <sys/time.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/file.h>
 #include <sys/fcntl.h>

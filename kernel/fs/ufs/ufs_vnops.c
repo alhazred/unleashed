@@ -46,7 +46,6 @@
 #include <sys/user.h>
 #include <sys/buf.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/proc.h>
 #include <sys/disp.h>

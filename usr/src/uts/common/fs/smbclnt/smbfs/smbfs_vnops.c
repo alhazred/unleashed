@@ -48,7 +48,7 @@
 #include <sys/sysmacros.h>
 #include <sys/kmem.h>
 #include <sys/cmn_err.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/pathname.h>
 #include <sys/policy.h>
 

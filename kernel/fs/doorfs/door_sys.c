@@ -47,7 +47,6 @@
 #include <sys/fcntl.h>
 #include <sys/vnode.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/sobject.h>
 #include <sys/schedctl.h>
 #include <sys/callb.h>

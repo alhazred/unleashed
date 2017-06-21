@@ -37,7 +37,6 @@
 #include <sys/time.h>
 #include <sys/utsname.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/pathname.h>
 #include <sys/bootconf.h>

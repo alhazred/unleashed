@@ -129,7 +129,7 @@
 #include <sys/systm.h>
 #include <sys/mman.h>
 #include <sys/vnode.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/cmn_err.h>
 #include <sys/ksynch.h>
 #include <sys/thread.h>

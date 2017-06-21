@@ -46,7 +46,6 @@
 #include <sys/sysmacros.h>
 #include <sys/var.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/mode.h>
 #include <sys/pcb.h>

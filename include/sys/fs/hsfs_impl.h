@@ -29,7 +29,7 @@
 #ifndef	_SYS_FS_HSFS_IMPL_H
 #define	_SYS_FS_HSFS_IMPL_H
 
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 
 #ifdef	__cplusplus
 extern "C" {

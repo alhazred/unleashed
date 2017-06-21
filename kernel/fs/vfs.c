@@ -54,7 +54,6 @@
 #include <sys/mount.h>
 #include <sys/vfs.h>
 #include <sys/vfs_dispatch.h>
-#include <sys/vfs_opreg.h>
 #include <sys/fem.h>
 #include <sys/mntent.h>
 #include <sys/stat.h>

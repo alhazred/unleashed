@@ -53,7 +53,6 @@
 #include <sys/poll.h>
 #include <sys/user.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/gfs.h>
 #include <sys/vnode.h>
 #include <sys/fault.h>

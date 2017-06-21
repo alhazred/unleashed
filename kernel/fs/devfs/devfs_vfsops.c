@@ -40,7 +40,6 @@
 #include <sys/time.h>
 #include <sys/pathname.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/stat.h>
 #include <sys/uio.h>

@@ -29,7 +29,6 @@
 #include <sys/proc.h>
 #include <sys/vnode.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/uio.h>
 #include <sys/cred.h>
 #include <sys/pathname.h>

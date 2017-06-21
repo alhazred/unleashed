@@ -37,7 +37,7 @@
 #include <sys/stat.h>
 #include <sys/systm.h>
 #include <sys/sysmacros.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 
 static const struct vnodeops objfs_ops_data;
 

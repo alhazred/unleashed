@@ -31,7 +31,7 @@
 #define	_SYS_FS_LOFS_INFO_H
 
 #ifdef _KERNEL
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #endif
 
 #ifdef	__cplusplus

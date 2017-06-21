@@ -25,7 +25,6 @@
 #include <sys/param.h>
 #include <sys/errno.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/uio.h>
 #include <sys/pathname.h>

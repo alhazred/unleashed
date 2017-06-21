@@ -35,7 +35,7 @@ extern "C" {
 #include <sys/vnode.h>
 
 #ifdef _KERNEL
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #endif
 
 /*

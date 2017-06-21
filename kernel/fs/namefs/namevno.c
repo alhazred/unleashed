@@ -47,7 +47,6 @@
 #include <sys/kmem.h>
 #include <sys/uio.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/pcb.h>
 #include <sys/signal.h>

@@ -29,7 +29,7 @@
 #include <sys/t_lock.h>
 #include <vm/seg.h>
 #include <vm/seg_vn.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 
 #ifdef	__cplusplus
 extern "C" {

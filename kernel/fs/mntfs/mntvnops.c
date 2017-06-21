@@ -32,7 +32,6 @@
 #include <sys/sysmacros.h>
 #include <sys/systm.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/pathname.h>
 #include <sys/fs/mntdata.h>
 #include <sys/fs_subr.h>

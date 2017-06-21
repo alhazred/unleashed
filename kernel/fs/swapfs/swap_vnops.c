@@ -30,7 +30,7 @@
 #include <sys/cred.h>
 #include <sys/errno.h>
 #include <sys/vnode.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/cmn_err.h>
 #include <sys/swap.h>
 #include <sys/mman.h>

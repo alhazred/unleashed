@@ -53,7 +53,6 @@
 #include <sys/list.h>
 #include <sys/t_lock.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/fs/smbfs_mount.h>
 #include <sys/zone.h>
 

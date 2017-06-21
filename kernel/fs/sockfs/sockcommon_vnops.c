@@ -44,7 +44,6 @@
 #include <sys/fs_subr.h>
 
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 
 #include <sys/sockio.h>
 #include <sys/socket.h>

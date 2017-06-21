@@ -69,7 +69,7 @@
 #include <sys/zfs_ctldir.h>
 #include <sys/zfs_ioctl.h>
 #include <sys/zfs_vfsops.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/gfs.h>
 #include <sys/stat.h>
 #include <sys/dmu.h>

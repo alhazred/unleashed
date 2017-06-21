@@ -30,7 +30,6 @@
 #include <sys/systm.h>
 #include <sys/cred.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/pathname.h>
 #include <sys/sysmacros.h>

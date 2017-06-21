@@ -29,7 +29,6 @@
 #include <sys/proc.h>
 #include <sys/disp.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/uio.h>
 #include <sys/kmem.h>

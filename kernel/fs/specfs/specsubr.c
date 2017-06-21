@@ -50,7 +50,6 @@
 #include <sys/kmem.h>
 #include <sys/sysmacros.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/fs/snode.h>
 #include <sys/fs/fifonode.h>

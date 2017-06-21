@@ -20,7 +20,7 @@
 #include <sys/list.h>
 #include <sys/avl.h>
 #include <sys/vnode.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/kstat.h>
 
 #ifdef __cplusplus

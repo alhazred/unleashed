@@ -28,7 +28,7 @@
 
 #include <sys/types.h>
 #include <sys/vnode.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/door.h>
 #include <sys/proc.h>
 #include <sys/kmem.h>

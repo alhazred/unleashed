@@ -35,7 +35,7 @@
 #include <sys/fs/sdev_impl.h>
 #include <sys/policy.h>
 #include <sys/stat.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/tty.h>
 #include <sys/vt_impl.h>
 #include <sys/note.h>

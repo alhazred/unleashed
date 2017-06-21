@@ -42,7 +42,6 @@
 #include <sys/time.h>
 #include <sys/vfs.h>
 #include <sys/vnode.h>
-#include <sys/vfs_opreg.h>
 #include <sys/file.h>
 #include <sys/fcntl.h>
 #include <sys/flock.h>

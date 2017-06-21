@@ -30,7 +30,7 @@
 
 #include <sys/types.h>
 #include <sys/vnode.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/kmem.h>
 #include <sys/fs_subr.h>
 #include <sys/proc.h>

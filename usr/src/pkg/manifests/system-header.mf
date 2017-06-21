@@ -1503,7 +1503,6 @@ file path=usr/include/sys/va_list.h
 file path=usr/include/sys/var.h
 file path=usr/include/sys/varargs.h
 file path=usr/include/sys/vfs.h
-file path=usr/include/sys/vfs_opreg.h
 file path=usr/include/sys/vfstab.h
 file path=usr/include/sys/videodev2.h
 file path=usr/include/sys/visual_io.h

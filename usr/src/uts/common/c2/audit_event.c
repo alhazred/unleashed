@@ -69,7 +69,7 @@
 #include <sys/tihdr.h>
 #include <sys/socket.h>
 #include <sys/socketvar.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <../../../../kernel/fs/sockfs/sockcommon.h>
 #include <netinet/in.h>
 #include <sys/ddi.h>

@@ -47,7 +47,7 @@
 #include <sys/zone.h>
 #include <sys/nvpair.h>
 #include <nfs/mount.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #endif
 #include <vm/page.h>
 #include <rpc/rpc_sztypes.h>

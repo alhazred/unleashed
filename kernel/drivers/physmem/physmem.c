@@ -43,7 +43,7 @@
 #include <sys/fcntl.h>
 #include <sys/vmsystm.h>
 #include <sys/physmem.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 
 static dev_info_t		*physmem_dip = NULL;
 

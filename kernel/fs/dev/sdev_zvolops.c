@@ -39,7 +39,7 @@
 #include <sys/zfs_ioctl.h>
 #include <sys/policy.h>
 #include <sys/stat.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include "sdev_vnops.h"
 
 static major_t devzvol_major;

@@ -62,7 +62,6 @@
 #include <sys/sysmacros.h>
 #include <sys/uio.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/stat.h>
 #include <sys/poll.h>

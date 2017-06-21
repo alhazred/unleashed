@@ -57,7 +57,7 @@
 #include <sys/dnlc.h>
 
 #ifdef _KERNEL
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #endif
 
 #ifdef	__cplusplus

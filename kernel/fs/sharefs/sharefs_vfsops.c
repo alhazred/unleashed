@@ -28,7 +28,7 @@
 #include <sys/errno.h>
 #include <sys/mount.h>
 #include <sharefs/sharefs.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #include <sys/policy.h>
 #include <sys/sunddi.h>
 #include <sys/sysmacros.h>

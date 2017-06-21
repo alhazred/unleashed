@@ -594,7 +594,6 @@ INCS=	${${CONFIG_MACH}_INCS}	\
 	var.h			\
 	varargs.h		\
 	vfs.h			\
-	vfs_opreg.h		\
 	vfstab.h		\
 	vgareg.h		\
 	videodev2.h		\

@@ -39,7 +39,6 @@
 #include <sys/user.h>
 #include <sys/buf.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/stat.h>
 #include <sys/vnode.h>
 #include <sys/mode.h>

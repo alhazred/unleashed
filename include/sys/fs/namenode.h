@@ -31,7 +31,7 @@
 
 #if defined(_KERNEL)
 #include <sys/vnode.h>
-#include <sys/vfs_opreg.h>
+#include <sys/vfs.h>
 #endif
 
 #ifdef	__cplusplus

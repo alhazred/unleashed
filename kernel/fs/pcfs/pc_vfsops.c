@@ -33,7 +33,6 @@
 #include <sys/disp.h>
 #include <sys/buf.h>
 #include <sys/vfs.h>
-#include <sys/vfs_opreg.h>
 #include <sys/vnode.h>
 #include <sys/fdio.h>
 #include <sys/file.h>
