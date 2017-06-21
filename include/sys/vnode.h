@@ -821,123 +821,100 @@ struct taskq;
 
 #ifdef	_KERNEL
 
-#define	VNODE_OPS							\
-	int	(*vop_open)(vnode_t **, int, cred_t *,			\
-				caller_context_t *);			\
-	int	(*vop_close)(vnode_t *, int, int, offset_t, cred_t *,	\
-				caller_context_t *);			\
-	int	(*vop_read)(vnode_t *, uio_t *, int, cred_t *,		\
-				caller_context_t *);			\
-	int	(*vop_write)(vnode_t *, uio_t *, int, cred_t *,		\
-				caller_context_t *);			\
-	int	(*vop_ioctl)(vnode_t *, int, intptr_t, int, cred_t *,	\
-				int *, caller_context_t *);		\
-	int	(*vop_setfl)(vnode_t *, int, int, cred_t *,		\
-				caller_context_t *);			\
-	int	(*vop_getattr)(vnode_t *, vattr_t *, int, cred_t *,	\
-				caller_context_t *);			\
-	int	(*vop_setattr)(vnode_t *, vattr_t *, int, cred_t *,	\
-				caller_context_t *);			\
-	int	(*vop_access)(vnode_t *, int, int, cred_t *,		\
-				caller_context_t *);			\
-	int	(*vop_lookup)(vnode_t *, char *, vnode_t **,		\
-				struct pathname *,			\
-				int, vnode_t *, cred_t *,		\
-				caller_context_t *, int *,		\
-				struct pathname *);			\
-	int	(*vop_create)(vnode_t *, char *, vattr_t *, vcexcl_t,	\
-				int, vnode_t **, cred_t *, int,		\
-				caller_context_t *, vsecattr_t *);	\
-	int	(*vop_remove)(vnode_t *, char *, cred_t *,		\
-				caller_context_t *, int);		\
-	int	(*vop_link)(vnode_t *, vnode_t *, char *, cred_t *,	\
-				caller_context_t *, int);		\
-	int	(*vop_rename)(vnode_t *, char *, vnode_t *, char *,	\
-				cred_t *, caller_context_t *, int);	\
-	int	(*vop_mkdir)(vnode_t *, char *, vattr_t *, vnode_t **,	\
-				cred_t *, caller_context_t *, int,	\
-				vsecattr_t *);				\
-	int	(*vop_rmdir)(vnode_t *, char *, vnode_t *, cred_t *,	\
-				caller_context_t *, int);		\
-	int	(*vop_readdir)(vnode_t *, uio_t *, cred_t *, int *,	\
-				caller_context_t *, int);		\
-	int	(*vop_symlink)(vnode_t *, char *, vattr_t *, char *,	\
-				cred_t *, caller_context_t *, int);	\
-	int	(*vop_readlink)(vnode_t *, uio_t *, cred_t *,		\
-				caller_context_t *);			\
-	int	(*vop_fsync)(vnode_t *, int, cred_t *,			\
-				caller_context_t *);			\
-	void	(*vop_inactive)(vnode_t *, cred_t *,			\
-				caller_context_t *);			\
-	int	(*vop_fid)(vnode_t *, struct fid *,			\
-				caller_context_t *);			\
-	int	(*vop_rwlock)(vnode_t *, int, caller_context_t *);	\
-	void	(*vop_rwunlock)(vnode_t *, int, caller_context_t *);	\
-	int	(*vop_seek)(vnode_t *, offset_t, offset_t *,		\
-				caller_context_t *);			\
-	int	(*vop_cmp)(vnode_t *, vnode_t *, caller_context_t *);	\
-	int	(*vop_frlock)(vnode_t *, int, struct flock64 *,		\
-				int, offset_t,				\
-				struct flk_callback *, cred_t *,	\
-				caller_context_t *);			\
-	int	(*vop_space)(vnode_t *, int, struct flock64 *,		\
-				int, offset_t,				\
-				cred_t *, caller_context_t *);		\
-	int	(*vop_realvp)(vnode_t *, vnode_t **,			\
-				caller_context_t *);			\
-	int	(*vop_getpage)(vnode_t *, offset_t, size_t, uint_t *,	\
-				struct page **, size_t, struct seg *,	\
-				caddr_t, enum seg_rw, cred_t *,		\
-				caller_context_t *);			\
-	int	(*vop_putpage)(vnode_t *, offset_t, size_t,		\
-				int, cred_t *, caller_context_t *);	\
-	int	(*vop_map)(vnode_t *, offset_t, struct as *,		\
-				caddr_t *, size_t,			\
-				uchar_t, uchar_t, uint_t, cred_t *,	\
-				caller_context_t *);			\
-	int	(*vop_addmap)(vnode_t *, offset_t, struct as *,		\
-				caddr_t, size_t,			\
-				uchar_t, uchar_t, uint_t, cred_t *,	\
-				caller_context_t *);			\
-	int	(*vop_delmap)(vnode_t *, offset_t, struct as *,		\
-				caddr_t, size_t,			\
-				uint_t, uint_t, uint_t, cred_t *,	\
-				caller_context_t *);			\
-	int	(*vop_poll)(vnode_t *, short, int, short *,		\
-				struct pollhead **,			\
-				caller_context_t *);			\
-	int	(*vop_dump)(vnode_t *, caddr_t, offset_t, offset_t,	\
-				caller_context_t *);			\
-	int	(*vop_pathconf)(vnode_t *, int, ulong_t *, cred_t *,	\
-				caller_context_t *);			\
-	int	(*vop_pageio)(vnode_t *, struct page *,			\
-				uoff_t, size_t, int, cred_t *,	\
-				caller_context_t *);			\
-	int	(*vop_dumpctl)(vnode_t *, int, offset_t *,		\
-				caller_context_t *);			\
-	void	(*vop_dispose)(vnode_t *, struct page *,		\
-				int, int, cred_t *,			\
-				caller_context_t *);			\
-	int	(*vop_setsecattr)(vnode_t *, vsecattr_t *,		\
-				int, cred_t *, caller_context_t *);	\
-	int	(*vop_getsecattr)(vnode_t *, vsecattr_t *,		\
-				int, cred_t *, caller_context_t *);	\
-	int	(*vop_shrlock)(vnode_t *, int, struct shrlock *,	\
-				int, cred_t *, caller_context_t *);	\
-	int	(*vop_vnevent)(vnode_t *, vnevent_t, vnode_t *,		\
-				char *, caller_context_t *);		\
-	int	(*vop_reqzcbuf)(vnode_t *, enum uio_rw, xuio_t *,	\
-				cred_t *, caller_context_t *);		\
-	int	(*vop_retzcbuf)(vnode_t *, xuio_t *, cred_t *,		\
-				caller_context_t *)
-	/* NB: No ";" */
-
 /*
  * Operations on vnodes.
  */
 typedef struct vnodeops {
 	const char *vnop_name;
-	VNODE_OPS;	/* Signatures of all vnode operations (vops) */
+	int (*vop_open)(struct vnode **, int, cred_t *, caller_context_t *);
+	int (*vop_close)(struct vnode *, int, int, offset_t, cred_t *,
+			 caller_context_t *);
+	int (*vop_read)(struct vnode *, uio_t *, int, cred_t *,
+			caller_context_t *);
+	int (*vop_write)(struct vnode *, uio_t *, int, cred_t *,
+			 caller_context_t *);
+	int (*vop_ioctl)(struct vnode *, int, intptr_t, int, cred_t *,
+			 int *, caller_context_t *);
+	int (*vop_setfl)(struct vnode *, int, int, cred_t *,
+			 caller_context_t *);
+	int (*vop_getattr)(struct vnode *, vattr_t *, int, cred_t *,
+			   caller_context_t *);
+	int (*vop_setattr)(struct vnode *, vattr_t *, int, cred_t *,
+			   caller_context_t *);
+	int (*vop_access)(struct vnode *, int, int, cred_t *,
+			  caller_context_t *);
+	int (*vop_lookup)(struct vnode *, char *, struct vnode **,
+			  struct pathname *, int, struct vnode *, cred_t *,
+			  caller_context_t *, int *, struct pathname *);
+	int (*vop_create)(struct vnode *, char *, vattr_t *, vcexcl_t,
+			  int, struct vnode **, cred_t *, int,
+			  caller_context_t *, vsecattr_t *);
+	int (*vop_remove)(struct vnode *, char *, cred_t *,
+			  caller_context_t *, int);
+	int (*vop_link)(struct vnode *, struct vnode *, char *, cred_t *,
+			caller_context_t *, int);
+	int (*vop_rename)(struct vnode *, char *, struct vnode *, char *,
+			  cred_t *, caller_context_t *, int);
+	int (*vop_mkdir)(struct vnode *, char *, vattr_t *, struct vnode **,
+			 cred_t *, caller_context_t *, int, vsecattr_t *);
+	int (*vop_rmdir)(struct vnode *, char *, struct vnode *, cred_t *,
+			 caller_context_t *, int);
+	int (*vop_readdir)(struct vnode *, uio_t *, cred_t *, int *,
+			   caller_context_t *, int);
+	int (*vop_symlink)(struct vnode *, char *, vattr_t *, char *,
+			   cred_t *, caller_context_t *, int);
+	int (*vop_readlink)(struct vnode *, uio_t *, cred_t *,
+			    caller_context_t *);
+	int (*vop_fsync)(struct vnode *, int, cred_t *, caller_context_t *);
+	void (*vop_inactive)(struct vnode *, cred_t *, caller_context_t *);
+	int (*vop_fid)(struct vnode *, struct fid *, caller_context_t *);
+	int (*vop_rwlock)(struct vnode *, int, caller_context_t *);
+	void (*vop_rwunlock)(struct vnode *, int, caller_context_t *);
+	int (*vop_seek)(struct vnode *, offset_t, offset_t *,
+			caller_context_t *);
+	int (*vop_cmp)(struct vnode *, struct vnode *, caller_context_t *);
+	int (*vop_frlock)(struct vnode *, int, struct flock64 *, int, offset_t,
+			  struct flk_callback *, cred_t *, caller_context_t *);
+	int (*vop_space)(struct vnode *, int, struct flock64 *,
+			 int, offset_t, cred_t *, caller_context_t *);
+	int (*vop_realvp)(struct vnode *, struct vnode **, caller_context_t *);
+	int (*vop_getpage)(struct vnode *, offset_t, size_t, uint_t *,
+			   struct page **, size_t, struct seg *, caddr_t,
+			   enum seg_rw, cred_t *, caller_context_t *);
+	int (*vop_putpage)(struct vnode *, offset_t, size_t,
+			   int, cred_t *, caller_context_t *);
+	int (*vop_map)(struct vnode *, offset_t, struct as *,
+		       caddr_t *, size_t, uchar_t, uchar_t, uint_t, cred_t *,
+		       caller_context_t *);
+	int (*vop_addmap)(struct vnode *, offset_t, struct as *,
+			  caddr_t, size_t, uchar_t, uchar_t, uint_t, cred_t *,
+			  caller_context_t *);
+	int (*vop_delmap)(struct vnode *, offset_t, struct as *,
+			  caddr_t, size_t, uint_t, uint_t, uint_t, cred_t *,
+			  caller_context_t *);
+	int (*vop_poll)(struct vnode *, short, int, short *,
+			struct pollhead **, caller_context_t *);
+	int (*vop_dump)(struct vnode *, caddr_t, offset_t, offset_t,
+			caller_context_t *);
+	int (*vop_pathconf)(struct vnode *, int, ulong_t *, cred_t *,
+			    caller_context_t *);
+	int (*vop_pageio)(struct vnode *, struct page *,
+			  uoff_t, size_t, int, cred_t *, caller_context_t *);
+	int (*vop_dumpctl)(struct vnode *, int, offset_t *, caller_context_t *);
+	void (*vop_dispose)(struct vnode *, struct page *,
+			    int, int, cred_t *, caller_context_t *);
+	int (*vop_setsecattr)(struct vnode *, vsecattr_t *,
+			      int, cred_t *, caller_context_t *);
+	int (*vop_getsecattr)(struct vnode *, vsecattr_t *,
+			      int, cred_t *, caller_context_t *);
+	int (*vop_shrlock)(struct vnode *, int, struct shrlock *,
+			   int, cred_t *, caller_context_t *);
+	int (*vop_vnevent)(struct vnode *, vnevent_t, struct vnode *,
+			   char *, caller_context_t *);
+	int (*vop_reqzcbuf)(struct vnode *, enum uio_rw, xuio_t *,
+			    cred_t *, caller_context_t *);
+	int (*vop_retzcbuf)(struct vnode *, xuio_t *, cred_t *,
+			    caller_context_t *);
 } vnodeops_t;
 
 typedef int (*fs_generic_func_p) ();	/* Generic vop/vfsop/femop/fsemop ptr */
