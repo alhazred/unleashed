@@ -454,7 +454,6 @@ struct umounta;
 struct statvfsa;
 struct fstatvfsa;
 
-void	vfs_freevfsops(vfsops_t *);
 int	vfs_freevfsops_by_type(int);
 void	vfs_setops(struct vfs *, const struct vfsops *);
 const struct vfsops *vfs_getops(struct vfs *);

@@ -426,42 +426,10 @@ vfs_setfsops(int fstype, const fs_operation_def_t *template, vfsops_t **actual)
 	return (0);
 }
 
-int
-vfs_makefsops(const fs_operation_def_t *template, vfsops_t **actual)
-{
-	int error;
-	int unused_ops;
-
-	*actual = (vfsops_t *)kmem_alloc(sizeof (vfsops_t), KM_SLEEP);
-
-	error = fs_copyfsops(template, *actual, &unused_ops);
-	if (error != 0) {
-		kmem_free(*actual, sizeof (vfsops_t));
-		*actual = NULL;
-		return (error);
-	}
-
-	return (0);
-}
-
-/*
- * Free a vfsops structure created as a result of vfs_makefsops().
- * NOTE: For a vfsops structure initialized by vfs_setfsops(), use
- * vfs_freevfsops_by_type().
- */
-void
-vfs_freevfsops(vfsops_t *vfsops)
-{
-	kmem_free(vfsops, sizeof (vfsops_t));
-}
-
 /*
  * Since the vfsops structure is part of the vfssw table and wasn't
- * really allocated, we're not really freeing anything.  We keep
- * the name for consistency with vfs_freevfsops().  We do, however,
- * need to take care of a little bookkeeping.
- * NOTE: For a vfsops structure created by vfs_setfsops(), use
- * vfs_freevfsops_by_type().
+ * really allocated, we're not really freeing anything.  However, we need to
+ * take care of a little bookkeeping.
  */
 int
 vfs_freevfsops_by_type(int fstype)

@@ -50,7 +50,7 @@ typedef union fs_func {
  * File systems use arrays of fs_operation_def structures to form
  * name/value pairs of operations.  These arrays get passed to:
  *
- * 	- vfs_makefsops()/vfs_setfsops() to create vfsops.
+ * 	- vfs_setfsops() to create vfsops.
  */
 typedef struct fs_operation_def {
 	char *name;			/* name of operation (NULL at end) */
@@ -64,10 +64,10 @@ typedef struct fs_operation_def {
  * necessary for the system to populate an operations structure (e.g.,
  * vfsops).
  *
- * File systems call registration routines (vfs_setfsops() and
- * vfs_makefsops()) and pass in their operations specification tables
- * (arrays of fs_operation_def structures).  These routines use the master
- * table(s) of operations to build a vnodeops or vfsops structure.
+ * File systems call registration routines (vfs_setfsops()) and pass in
+ * their operations specification tables (arrays of fs_operation_def
+ * structures).  These routines use the master table(s) of operations to
+ * build a vnodeops or vfsops structure.
  */
 typedef struct fs_operation_trans_def {
 	char *name;			/* name of operation (NULL at end) */
@@ -85,8 +85,6 @@ int fs_build_vector(void *vector, int *unused_ops,
 
 int	vfs_setfsops(int, const fs_operation_def_t *, vfsops_t **);
 int	vfs_setfsops_const(int, const struct vfsops *);
-int	vfs_makefsops(const fs_operation_def_t *, vfsops_t **);
-void	vfs_freevfsops(vfsops_t *);
 int	vfs_freevfsops_by_type(int);
 
 #endif /* _KERNEL */
