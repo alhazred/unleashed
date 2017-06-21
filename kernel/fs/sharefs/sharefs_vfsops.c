@@ -49,7 +49,7 @@
  *
  */
 
-static const fs_operation_def_t	sharefs_vfstops[];
+static const struct vfsops sharefs_vfsops;
 
 static int sharefs_init(int, char *);
 
@@ -143,11 +143,10 @@ static minor_t sharefs_minor;
 static int
 sharefs_init(int fstype, char *name)
 {
-	vfsops_t	*vfsops;
 	int		error;
 
 	sharefs_fstype = fstype;
-	if (error = vfs_setfsops(fstype, sharefs_vfstops, &vfsops)) {
+	if (error = vfs_setfsops_const(fstype, &sharefs_vfsops)) {
 		cmn_err(CE_WARN, "sharefs_init: bad vfs ops template");
 		return (error);
 	}
@@ -282,10 +281,9 @@ sharefs_statvfs(vfs_t *vfsp, statvfs64_t *sp)
 	return (0);
 }
 
-static const fs_operation_def_t sharefs_vfstops[] = {
-	{ VFSNAME_MOUNT,	{ .vfs_mount = sharefs_mount } },
-	{ VFSNAME_UNMOUNT,	{ .vfs_unmount = sharefs_unmount } },
-	{ VFSNAME_ROOT,		{ .vfs_root = sharefs_root } },
-	{ VFSNAME_STATVFS,	{ .vfs_statvfs = sharefs_statvfs } },
-	{ NULL }
+static const struct vfsops sharefs_vfsops = {
+	.vfs_mount = sharefs_mount,
+	.vfs_unmount = sharefs_unmount,
+	.vfs_root = sharefs_root,
+	.vfs_statvfs = sharefs_statvfs,
 };
