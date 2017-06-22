@@ -330,31 +330,31 @@ fs_copyfsops(const fs_operation_def_t *template, vfsops_t *actual,
 {
 	static const fs_operation_trans_def_t vfs_ops_table[] = {
 		VFSNAME_MOUNT, offsetof(vfsops_t, vfs_mount),
-			fs_nosys,
+			NULL,
 
 		VFSNAME_UNMOUNT, offsetof(vfsops_t, vfs_unmount),
-			fs_nosys,
+			NULL,
 
 		VFSNAME_ROOT, offsetof(vfsops_t, vfs_root),
-			fs_nosys,
+			NULL,
 
 		VFSNAME_STATVFS, offsetof(vfsops_t, vfs_statvfs),
-			fs_nosys,
+			NULL,
 
 		VFSNAME_SYNC, offsetof(vfsops_t, vfs_sync),
-			(fs_generic_func_p) fs_sync,
+			NULL,
 
 		VFSNAME_VGET, offsetof(vfsops_t, vfs_vget),
-			fs_nosys,
+			NULL,
 
 		VFSNAME_MOUNTROOT, offsetof(vfsops_t, vfs_mountroot),
-			fs_nosys,
+			NULL,
 
 		VFSNAME_FREEVFS, offsetof(vfsops_t, vfs_freevfs),
-			(fs_generic_func_p)fs_freevfs,
+			NULL,
 
 		VFSNAME_VNSTATE, offsetof(vfsops_t, vfs_vnstate),
-			(fs_generic_func_p)fs_nosys,
+			NULL,
 
 		NULL, 0, NULL,
 	};
@@ -496,8 +496,9 @@ vfs_matchops(vfs_t *vfsp, vfsops_t *vfsops)
 int
 vfs_can_sync(vfs_t *vfsp)
 {
-	/* vfs_sync() routine is not the default/error function */
-	return (vfs_getops(vfsp)->vfs_sync != fs_sync);
+	/* vfs_sync() routine is not the default function */
+	return (vfs_getops(vfsp)->vfs_sync != fs_sync &&
+		vfs_getops(vfsp)->vfs_sync != NULL);
 }
 
 /*
@@ -580,8 +581,8 @@ vfs_sync(int flag)
 		if (ALLOCATED_VFSSW(vswp) && VFS_INSTALLED(vswp)) {
 			vfs_refvfssw(vswp);
 			RUNLOCK_VFSSW();
-			(void) (*vswp->vsw_vfsops.vfs_sync)(NULL, flag,
-			    CRED());
+			if (vswp->vsw_vfsops.vfs_sync != NULL)
+				vswp->vsw_vfsops.vfs_sync(NULL, flag, CRED());
 			vfs_unrefvfssw(vswp);
 			RLOCK_VFSSW();
 		}
