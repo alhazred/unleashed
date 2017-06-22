@@ -516,9 +516,8 @@ vfs_matchops(struct vfs *vfs, const struct vfsops *ops)
 int
 vfs_can_sync(vfs_t *vfsp)
 {
-	/* vfs_sync() routine is not the default function */
-	return (vfs_getops(vfsp)->vfs_sync != fs_sync &&
-		vfs_getops(vfsp)->vfs_sync != NULL);
+	/* vfs_sync() routine is not the default */
+	return vfs_getops(vfsp)->vfs_sync != NULL;
 }
 
 /*

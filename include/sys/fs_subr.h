@@ -62,7 +62,6 @@ extern int	fs_ioctl(vnode_t *, int, intptr_t, int, cred_t *, int *,
 extern int	fs_putpage(vnode_t *, offset_t, size_t, int, cred_t *,
 			caller_context_t *);
 extern int	fs_fsync(vnode_t *, int, cred_t *, caller_context_t *);
-extern int	fs_sync(struct vfs *, short, cred_t *);
 extern int	fs_seek(vnode_t *, offset_t, offset_t *, caller_context_t *);
 extern int	fs_frlock(vnode_t *, int, struct flock64 *, int, offset_t,
 			struct flk_callback *, cred_t *, caller_context_t *);

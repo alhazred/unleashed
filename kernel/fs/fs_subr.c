@@ -121,17 +121,6 @@ fs_nosys_poll(vnode_t *vp, short events, int anyyet, short *reventsp,
 
 
 /*
- * The file system has nothing to sync to disk.  However, the
- * VFS_SYNC operation must not fail.
- */
-/* ARGSUSED */
-int
-fs_sync(struct vfs *vfspp, short flag, cred_t *cr)
-{
-	return (0);
-}
-
-/*
  * Does nothing but fop_fsync must not fail.
  */
 /* ARGSUSED */
