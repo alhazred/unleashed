@@ -1072,7 +1072,7 @@ int *rvalp)
 		struct file		*fp = NULL;
 		struct vnode		*vp = NULL;
 		struct vfs 		*vfsp = NULL;
-		vfsops_t		*vfsops = EIO_vfsops;
+		const struct vfsops	*vfsops = &EIO_vfsops;
 
 		if (ddi_copyin((void *)arg, &fc, sizeof (fc), mode))
 			return (EFAULT);

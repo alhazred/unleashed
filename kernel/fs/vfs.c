@@ -4137,7 +4137,30 @@ vfs_EIO_sync(struct vfs *vfsp, short arg, struct cred *cr)
 }
 
 vfs_t EIO_vfs;
-vfsops_t *EIO_vfsops;
+
+const struct vfsops EIO_vfsops = {
+	.vfs_mount = (void *) vfs_EIO,
+	.vfs_unmount = (void *) vfs_EIO,
+	.vfs_root = (void *) vfs_EIO,
+	.vfs_statvfs = (void *) vfs_EIO,
+	.vfs_sync = (void *) vfs_EIO_sync,
+	.vfs_vget = (void *) vfs_EIO,
+	.vfs_mountroot = (void *) vfs_EIO,
+	.vfs_freevfs = (void *) vfs_EIO,
+	.vfs_vnstate = (void *) vfs_EIO,
+};
+
+static const struct vfsops stray_vfsops = {
+	.vfs_mount = (void *) vfsstray,
+	.vfs_unmount = (void *) vfsstray,
+	.vfs_root = (void *) vfsstray,
+	.vfs_statvfs = (void *) vfsstray,
+	.vfs_sync = (void *) vfsstray_sync,
+	.vfs_vget = (void *) vfsstray,
+	.vfs_mountroot = (void *) vfsstray,
+	.vfs_freevfs = (void *) vfsstray,
+	.vfs_vnstate = (void *) vfsstray,
+};
 
 /*
  * Called from startup() to initialize all loaded vfs's
@@ -4150,32 +4173,6 @@ vfsinit(void)
 	extern int vopstats_enabled;
 	extern void vopstats_startup();
 
-	static const fs_operation_def_t EIO_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .error = vfs_EIO },
-		VFSNAME_UNMOUNT,	{ .error = vfs_EIO },
-		VFSNAME_ROOT,		{ .error = vfs_EIO },
-		VFSNAME_STATVFS,	{ .error = vfs_EIO },
-		VFSNAME_SYNC, 		{ .vfs_sync = vfs_EIO_sync },
-		VFSNAME_VGET,		{ .error = vfs_EIO },
-		VFSNAME_MOUNTROOT,	{ .error = vfs_EIO },
-		VFSNAME_FREEVFS,	{ .error = vfs_EIO },
-		VFSNAME_VNSTATE,	{ .error = vfs_EIO },
-		NULL, NULL
-	};
-
-	static const fs_operation_def_t stray_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .error = vfsstray },
-		VFSNAME_UNMOUNT,	{ .error = vfsstray },
-		VFSNAME_ROOT,		{ .error = vfsstray },
-		VFSNAME_STATVFS,	{ .error = vfsstray },
-		VFSNAME_SYNC, 		{ .vfs_sync = vfsstray_sync },
-		VFSNAME_VGET,		{ .error = vfsstray },
-		VFSNAME_MOUNTROOT,	{ .error = vfsstray },
-		VFSNAME_FREEVFS,	{ .error = vfsstray },
-		VFSNAME_VNSTATE,	{ .error = vfsstray },
-		NULL, NULL
-	};
-
 	/* Create vfs cache */
 	vfs_cache = kmem_cache_create("vfs_cache", sizeof (struct vfs),
 	    sizeof (uintptr_t), NULL, NULL, NULL, NULL, NULL, 0);
@@ -4187,16 +4184,9 @@ vfsinit(void)
 	fem_init();
 
 	/* Initialize the dummy stray file system type. */
-	error = vfs_setfsops(0, stray_vfsops_template, NULL);
+	error = vfs_setfsops_const(0, &stray_vfsops);
 
-	/* Initialize the dummy EIO file system. */
-	error = vfs_makefsops(EIO_vfsops_template, &EIO_vfsops);
-	if (error != 0) {
-		cmn_err(CE_WARN, "vfsinit: bad EIO vfs ops template");
-		/* Shouldn't happen, but not bad enough to panic */
-	}
-
-	VFS_INIT(&EIO_vfs, EIO_vfsops, NULL);
+	VFS_INIT(&EIO_vfs, &EIO_vfsops, NULL);
 
 	/*
 	 * Default EIO_vfs.vfs_flag to VFS_UNMOUNTED so a lookup
