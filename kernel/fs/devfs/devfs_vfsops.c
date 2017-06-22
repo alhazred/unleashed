@@ -123,19 +123,18 @@ _info(struct modinfo *modinfop)
 	return (mod_info(&modlinkage, modinfop));
 }
 
+static const struct vfsops devfs_vfsops = {
+	.vfs_mount = devfs_mount,
+	.vfs_unmount = devfs_unmount,
+	.vfs_root = devfs_root,
+	.vfs_statvfs = devfs_statvfs,
+	.vfs_mountroot = devfs_mountroot,
+};
+
 /*ARGSUSED1*/
 static int
 devfsinit(int fstype, char *name)
 {
-	static const fs_operation_def_t devfs_vfsops_template[] = {
-		VFSNAME_MOUNT,		{ .vfs_mount = devfs_mount },
-		VFSNAME_UNMOUNT,	{ .vfs_unmount = devfs_unmount },
-		VFSNAME_ROOT,		{ .vfs_root = devfs_root },
-		VFSNAME_STATVFS,	{ .vfs_statvfs = devfs_statvfs },
-		VFSNAME_SYNC,		{ .vfs_sync = fs_sync },
-		VFSNAME_MOUNTROOT,	{ .vfs_mountroot = devfs_mountroot },
-		NULL,			NULL
-	};
 	int error;
 	int dev;
 	extern major_t getudev(void);	/* gack - what a function */
@@ -144,9 +143,9 @@ devfsinit(int fstype, char *name)
 	/*
 	 * Associate VFS ops vector with this fstype
 	 */
-	error = vfs_setfsops(fstype, devfs_vfsops_template, NULL);
+	error = vfs_setfsops_const(fstype, &devfs_vfsops);
 	if (error != 0) {
-		cmn_err(CE_WARN, "devfsinit: bad vfs ops template");
+		cmn_err(CE_WARN, "devfsinit: bad fstype");
 		return (error);
 	}
 
