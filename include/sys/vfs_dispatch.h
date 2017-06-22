@@ -62,6 +62,7 @@ VFS_DISPATCH(fsop_mountroot_dispatch, vfs_mountroot, fshead_mountroot,
     (struct vfs *vfs, enum whymountroot reason, bool check_fem),
     (vfs, reason))
 
+/* returns void, so it is hand-coded */
 static inline void fsop_freefs_dispatch(struct vfs *vfs, bool check_fem)
 {
 	if (check_fem && vfs->vfs_femhead != NULL)
