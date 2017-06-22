@@ -310,10 +310,13 @@ fsop_sync_by_kind(int fstype, short flag, cred_t *cr)
 {
 	ASSERT((fstype >= 0) && (fstype < nfstype));
 
-	if (ALLOCATED_VFSSW(&vfssw[fstype]) && VFS_INSTALLED(&vfssw[fstype]))
-		return (*vfssw[fstype].vsw_vfsops.vfs_sync) (NULL, flag, cr);
-	else
-		return (ENOTSUP);
+	if (!ALLOCATED_VFSSW(&vfssw[fstype]) || !VFS_INSTALLED(&vfssw[fstype]))
+		return ENOTSUP;
+
+	if (vfssw[fstype].vsw_vfsops.vfs_sync == NULL)
+		return ENOSYS;
+
+	return vfssw[fstype].vsw_vfsops.vfs_sync(NULL, flag, cr);
 }
 
 /*
