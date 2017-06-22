@@ -52,9 +52,20 @@ VFS_DISPATCH(fsop_root_dispatch, vfs_root, fshead_root,
 VFS_DISPATCH(fsop_statfs_dispatch, vfs_statvfs, fshead_statvfs,
     (struct vfs *vfs, statvfs64_t *sp, bool check_fem),
     (vfs, sp))
-VFS_DISPATCH(fsop_sync_dispatch, vfs_sync, fshead_sync,
-    (struct vfs *vfs, short flag, cred_t *cr, bool check_fem),
-    (vfs, flag, cr))
+
+/* no-op by default, so it is hand-coded */
+static inline int fsop_sync_dispatch(struct vfs *vfs, short flag, cred_t *cr,
+				     bool check_fem)
+{
+	if (check_fem && vfs->vfs_femhead != NULL)
+		return fshead_sync(vfs, flag, cr);
+
+	if (vfs->vfs_op->vfs_sync == NULL)
+		return 0;
+
+	return vfs->vfs_op->vfs_sync(vfs, flag, cr);
+}
+
 VFS_DISPATCH(fsop_vget_dispatch, vfs_vget, fshead_vget,
     (struct vfs *vfs, struct vnode **vnode, fid_t *fid, bool check_fem),
     (vfs, vnode, fid))
