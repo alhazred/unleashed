@@ -235,7 +235,7 @@ scsi_watch_request_submit_impl(
 	if (sw.sw_thread == 0) {
 		register kthread_t	*t;
 
-		t = thread_create((caddr_t)NULL, 0, scsi_watch_thread,
+		t = thread_create(NULL, 0, scsi_watch_thread,
 		    NULL, 0, &p0, TS_RUN, v.v_maxsyspri - 2);
 		sw.sw_thread = t;
 	}

@@ -115,7 +115,7 @@ main(int argc, char **argv)
 	if (argc < 2) {
 		usage();
 	}
-	if (quotactl(Q_SYNC, NULL, 0, (caddr_t)NULL) < 0 &&
+	if (quotactl(Q_SYNC, NULL, 0, NULL) < 0 &&
 	    errno == EINVAL) {
 		(void) printf("Warning: "
 			"Quotas are not compiled into this kernel\n");

@@ -635,7 +635,7 @@ fcsm_handle_port_attach(fc_ulp_port_info_t *pinfo, uint32_t s_id, int instance)
 		return (DDI_FAILURE);
 	}
 
-	thread = thread_create((caddr_t)NULL, 0, fcsm_job_thread,
+	thread = thread_create(NULL, 0, fcsm_job_thread,
 	    (caddr_t)fcsm, 0, &p0, TS_RUN, v.v_maxsyspri-2);
 	if (thread == NULL) {
 		fcsm_display(CE_WARN, SM_LOG, fcsm, NULL,

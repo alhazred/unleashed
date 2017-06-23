@@ -239,7 +239,7 @@ rscp_send_recv(rscp_msg_t *req, rscp_msg_t *resp, struct timespec *timeout)
 		rr_resp->msg_bytes = 0;
 	} else {
 		rr_resp->msg_type = DP_NULL_MSG;
-		rr_resp->msg_buf = (caddr_t)NULL;
+		rr_resp->msg_buf = NULL;
 		rr_resp->msg_len = 0;
 		rr_resp->msg_bytes = 0;
 	}
@@ -452,7 +452,7 @@ rscp_send_bpmsg(bp_msg_t *bpmsg)
 	req_bp->msg_buf = (caddr_t)bpmsg;
 
 	if (rr_bp.wait_time == 0) {
-		resp_bp->msg_buf = (caddr_t)NULL;
+		resp_bp->msg_buf = NULL;
 	} else {
 		resp_bp->msg_len = sizeof (bp_msg_t);
 		resp_bp->msg_buf = (caddr_t)&bpmsg_reply;
@@ -607,7 +607,7 @@ rscp_send(rscp_msg_t *msgp)
 			 * (set to NULL)
 			 */
 			resp->msg_len = 0;
-			resp->msg_buf = (caddr_t)NULL;
+			resp->msg_buf = NULL;
 		} else {
 			resp->msg_len = RSC_MAX_RX_BUFFER;
 			resp->msg_buf = (caddr_t)rsc_rx_buffer;

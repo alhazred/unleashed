@@ -993,7 +993,7 @@ hermon_cq_poll(hermon_state_t *state, hermon_cqhdl_t cq, ibt_wc_t *wc_p,
 	 * unable to sync/dump.
 	 */
 	if (ddi_in_panic() != 0) {
-		(void) hermon_isr((caddr_t)state, (caddr_t)NULL);
+		(void) hermon_isr((caddr_t)state, NULL);
 	}
 	return (status);
 }

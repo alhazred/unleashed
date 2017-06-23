@@ -906,7 +906,7 @@ gld_unregister(gld_mac_info_t *macinfo)
 	if (mac_pvt->mcast_table != NULL)
 		kmem_free(mac_pvt->mcast_table, multisize);
 	kmem_free(macinfo->gldm_mac_pvt, sizeof (gld_mac_pvt_t));
-	macinfo->gldm_mac_pvt = (caddr_t)NULL;
+	macinfo->gldm_mac_pvt = NULL;
 
 	/* We now have one fewer instance for this major device */
 	mutex_enter(&gld_device_list.gld_devlock);

@@ -963,7 +963,7 @@ tavor_cq_poll(tavor_state_t *state, tavor_cqhdl_t cq, ibt_wc_t *wc_p,
 	 * unable to sync/dump.
 	 */
 	if (ddi_in_panic() != 0) {
-		(void) tavor_isr((caddr_t)state, (caddr_t)NULL);
+		(void) tavor_isr((caddr_t)state, NULL);
 	}
 
 	return (status);

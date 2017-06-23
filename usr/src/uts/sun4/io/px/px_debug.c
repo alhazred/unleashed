@@ -191,7 +191,7 @@ px_dbg_queue(px_debug_bit_t bit, dev_info_t *dip, char *fmt, va_list args)
 	msg_p->active = B_TRUE;
 
 	/* Trigger Soft Int */
-	ddi_intr_trigger_softint(px_p->px_dbg_hdl, (caddr_t)NULL);
+	ddi_intr_trigger_softint(px_p->px_dbg_hdl, NULL);
 }
 
 /*

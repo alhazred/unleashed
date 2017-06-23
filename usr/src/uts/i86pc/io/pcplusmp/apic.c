@@ -492,7 +492,7 @@ apic_picinit(void)
 	LOCK_INIT_CLEAR(&apic_nmi_lock);
 
 	if (!psm_add_nmintr(0, (avfunc) apic_nmi_intr,
-	    "pcplusmp NMI handler", (caddr_t)NULL))
+	    "pcplusmp NMI handler", NULL))
 		cmn_err(CE_WARN, "pcplusmp: Unable to add nmi handler");
 
 	/*

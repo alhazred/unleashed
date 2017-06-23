@@ -849,7 +849,7 @@ lw8_lomcmd(int cmd, intptr_t arg)
 	switch (cmd) {
 	case LW8_MBOX_GET_INFO:
 		reqp->msg_len = 0;
-		reqp->msg_buf = (caddr_t)NULL;
+		reqp->msg_buf = NULL;
 		resp->msg_len = sizeof (lom2_info_t);
 		resp->msg_buf = (caddr_t)arg;
 		break;
@@ -857,13 +857,13 @@ lw8_lomcmd(int cmd, intptr_t arg)
 		reqp->msg_len = sizeof (lom_ctl2_t);
 		reqp->msg_buf = (caddr_t)arg;
 		resp->msg_len = 0;
-		resp->msg_buf = (caddr_t)NULL;
+		resp->msg_buf = NULL;
 		break;
 	case LW8_MBOX_UPDATE_FW:
 		reqp->msg_len = sizeof (lom_prog_t);
 		reqp->msg_buf = (caddr_t)arg;
 		resp->msg_len = 0;
-		resp->msg_buf = (caddr_t)NULL;
+		resp->msg_buf = NULL;
 		break;
 	case LW8_MBOX_GET_LED:
 		reqp->msg_len = sizeof (lw8_get_led_payload_t);
@@ -875,7 +875,7 @@ lw8_lomcmd(int cmd, intptr_t arg)
 		reqp->msg_len = sizeof (lw8_set_led_payload_t);
 		reqp->msg_buf = (caddr_t)arg;
 		resp->msg_len = 0;
-		resp->msg_buf = (caddr_t)NULL;
+		resp->msg_buf = NULL;
 		break;
 	case LW8_MBOX_GET_EVENTS:
 		/*
@@ -890,7 +890,7 @@ lw8_lomcmd(int cmd, intptr_t arg)
 		break;
 	case LW8_MBOX_GET_NEXT_MSG:
 		reqp->msg_len = 0;
-		reqp->msg_buf = (caddr_t)NULL;
+		reqp->msg_buf = NULL;
 		resp->msg_len = sizeof (lw8_logmsg_t);
 		resp->msg_buf = (caddr_t)arg;
 		break;

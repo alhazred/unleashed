@@ -2464,7 +2464,7 @@ cmlb_read_fdisk(struct cmlb_lun *cl, diskaddr_t capacity, void *tg_cookie)
 		    "lba-access-ok", 0) == 0) {
 			/* not found; create it */
 			if (ddi_prop_create(dev, CMLB_DEVINFO(cl), 0,
-			    "lba-access-ok", (caddr_t)NULL, 0) !=
+			    "lba-access-ok", NULL, 0) !=
 			    DDI_PROP_SUCCESS) {
 				cmlb_dbg(CMLB_ERROR,  cl,
 				    "cmlb_read_fdisk: Can't create lba "

@@ -808,7 +808,7 @@ iwk_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	 */
 	sc->sc_mf_thread_switch = 1;
 	if (sc->sc_mf_thread == NULL)
-		sc->sc_mf_thread = thread_create((caddr_t)NULL, 0,
+		sc->sc_mf_thread = thread_create(NULL, 0,
 		    iwk_thread, sc, 0, &p0, TS_RUN, minclsyspri);
 
 	sc->sc_flags |= IWK_F_ATTACHED;

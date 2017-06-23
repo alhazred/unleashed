@@ -184,7 +184,7 @@ clock_tick_init_pre(void)
 	 */
 	if (&create_softint != NULL) {
 		clock_tick_intr = create_softint(LOCK_LEVEL,
-		    clock_tick_execute, (caddr_t)NULL);
+		    clock_tick_execute, NULL);
 	}
 	for (i = 0; i < NCPU; i++, buf += size) {
 		ctp = (clock_tick_cpu_t *)buf;

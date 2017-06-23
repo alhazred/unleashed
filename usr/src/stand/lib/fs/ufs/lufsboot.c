@@ -225,8 +225,8 @@ static extent_block_t	*eb = (extent_block_t *)NULL;
 static ml_odunit_t	odi;
 
 static char		logbuffer_min[LOGBUF_MINSIZE];
-static caddr_t		logbuffer = (caddr_t)NULL;
-static caddr_t		elogbuffer = (caddr_t)NULL;
+static caddr_t		logbuffer = NULL;
+static caddr_t		elogbuffer = NULL;
 static caddr_t		logbuf_curptr;
 static lb_me_t		**loghash = (lb_me_t **)NULL;
 static lb_me_t		*lfreelist;
@@ -276,7 +276,7 @@ lufs_alloc_logbuf(void)
 	logbuf_curptr = logbuffer;
 	lfreelist = (lb_me_t *)NULL;
 
-	if (logbuffer == (caddr_t)NULL)
+	if (logbuffer == NULL)
 		return (0);
 
 	dprintf("Buffer for boot loader logging support: 0x%p, size 0x%x\n",
@@ -304,7 +304,7 @@ lufs_free_logbuf()
 	 */
 	if (logbuffer == LOGBUF_BASEADDR)
 		prom_free(logbuffer, elogbuffer-logbuffer);
-	logbuffer = (caddr_t)NULL;
+	logbuffer = NULL;
 }
 
 static caddr_t
@@ -336,12 +336,12 @@ lufs_alloc_from_logbuf(size_t sz)
 		}
 		nsz = roundup(sz, PAGESIZE);
 		if (np + nsz > LOGBUF_BASEADDR + LOGBUF_MAXSIZE) {
-			return ((caddr_t)NULL);
+			return (NULL);
 		}
 
 		np = resalloc(RES_CHILDVIRT, nsz, np, 0UL);
-		if (np == (caddr_t)NULL) {
-			return ((caddr_t)NULL);
+		if (np == NULL) {
+			return (NULL);
 		}
 		if (logbuffer == logbuffer_min)
 			logbuffer = LOGBUF_BASEADDR;
@@ -367,7 +367,7 @@ lufs_read_log(int32_t addr, caddr_t va, int nb)
 	 * Fast path for skipping the read if no target buffer
 	 * is specified. Don't do this for the initial scan.
 	 */
-	if (ufs_is_lufs && (va == (caddr_t)NULL))
+	if (ufs_is_lufs && (va == NULL))
 		fastpath = 1;
 
 	while (nb) {
@@ -1008,7 +1008,7 @@ lufs_merge_deltas(fileid_t *fp)
 	/*
 	 * No logmap: Empty log. Nothing to do here.
 	 */
-	if (!ufs_is_lufs || logbuffer == (caddr_t)NULL)
+	if (!ufs_is_lufs || logbuffer == NULL)
 		return;
 
 	bof = ldbtob(fp->fi_blocknum);

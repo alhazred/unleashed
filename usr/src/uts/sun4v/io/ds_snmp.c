@@ -543,7 +543,7 @@ ds_snmp_read(dev_t dev, struct uio *uiop, cred_t *credp)
 	minor_t	minor;
 	size_t len;
 	int retval;
-	caddr_t tmpbufp = (caddr_t)NULL;
+	caddr_t tmpbufp = NULL;
 
 	/*
 	 * Given that now we can have sc resets happening at any
@@ -623,7 +623,7 @@ ds_snmp_read(dev_t dev, struct uio *uiop, cred_t *credp)
 
 	bcopy(sp->data, (void *)tmpbufp, len);
 	kmem_free(sp->data, sp->data_len);
-	sp->data = (caddr_t)NULL;
+	sp->data = NULL;
 	sp->data_len = 0;
 
 	/*

@@ -84,12 +84,12 @@ hat_kpm_mapin(struct page *pp, struct kpme *kpme)
 
 	if (kpm_enable == 0) {
 		cmn_err(CE_WARN, "hat_kpm_mapin: kpm_enable not set");
-		return ((caddr_t)NULL);
+		return (NULL);
 	}
 
 	if (pp == NULL || PAGE_LOCKED(pp) == 0) {
 		cmn_err(CE_WARN, "hat_kpm_mapin: pp zero or not locked");
-		return ((caddr_t)NULL);
+		return (NULL);
 	}
 
 	pml = sfmmu_mlist_enter(pp);
@@ -191,7 +191,7 @@ hat_kpm_mapin_pfn(pfn_t pfn)
 
 	if (kpm_enable == 0 || vac_colors > 1 ||
 	    page_numtomemseg_nolock(pfn) != NULL)
-		return ((caddr_t)NULL);
+		return (NULL);
 
 	paddr = (caddr_t)ptob(pfn);
 	vaddr = (uintptr_t)kpm_vbase + paddr;

@@ -796,7 +796,7 @@ vpm_pagecreate(
 		off += PAGESIZE;
 	}
 	vml[i].vs_data = NULL;
-	vml[i].vs_addr = (caddr_t)NULL;
+	vml[i].vs_addr = NULL;
 	return (0);
 }
 
@@ -833,7 +833,7 @@ vpm_map_pages(
 	ASSERT(nseg >= MINVMAPS && nseg <= MAXVMAPS);
 	baseoff = off & (offset_t)PAGEMASK;
 	vml[0].vs_data = NULL;
-	vml[0].vs_addr = (caddr_t)NULL;
+	vml[0].vs_addr = NULL;
 
 	tlen = P2ROUNDUP(off + len, PAGESIZE) - baseoff;
 	/*
@@ -941,7 +941,7 @@ vpm_map_pages(
 	}
 
 	vml[i].vs_data = NULL;
-	vml[i].vs_addr = (caddr_t)NULL;
+	vml[i].vs_addr = NULL;
 
 	return (0);
 }

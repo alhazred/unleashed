@@ -4181,7 +4181,7 @@ vfsinit(void)
 		/* Shouldn't happen, but not bad enough to panic */
 	}
 
-	VFS_INIT(&EIO_vfs, EIO_vfsops, (caddr_t)NULL);
+	VFS_INIT(&EIO_vfs, EIO_vfsops, NULL);
 
 	/*
 	 * Default EIO_vfs.vfs_flag to VFS_UNMOUNTED so a lookup

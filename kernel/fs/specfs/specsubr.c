@@ -826,7 +826,7 @@ specinit(int fstype, char *name)
 	/*
 	 * Associate vfs operations with spec_vfs
 	 */
-	VFS_INIT(&spec_vfs, spec_vfsops, (caddr_t)NULL);
+	VFS_INIT(&spec_vfs, spec_vfsops, NULL);
 	if ((dev = getudev()) == -1)
 		dev = 0;
 	specdev = makedevice(dev, 0);

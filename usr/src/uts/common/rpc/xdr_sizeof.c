@@ -136,7 +136,7 @@ xdr_sizeof(xdrproc_t func, void *data)
 	x.x_op = XDR_ENCODE;
 	x.x_ops = &ops;
 	x.x_handy = 0;
-	x.x_private = (caddr_t)NULL;
+	x.x_private = NULL;
 	x.x_base = NULL;
 
 	stat = func(&x, data);

@@ -106,7 +106,7 @@ ring_buff_create(dcam_state_t *softc_p, size_t num_buffs,
 		    &softc_p->attachinfo.acc_attr,
 		    DDI_DMA_STREAMING,
 		    DDI_DMA_DONTWAIT,
-		    (caddr_t)NULL,
+		    NULL,
 		    &(buff_info_p->kaddr_p),
 		    &(buff_info_p->real_len),
 		    &(buff_info_p->data_acc_handle)) != DDI_SUCCESS) {

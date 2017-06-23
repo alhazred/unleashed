@@ -379,7 +379,7 @@ shmat(int shmid, caddr_t uaddr, int uflags, uintptr_t *rvp)
 
 			as_purge(as);
 			if (as_gap(as, size + share_size, &predbase, &len,
-			    AH_LO, (caddr_t)NULL) != -1) {
+			    AH_LO, NULL) != -1) {
 				/*
 				 * We found an address which looks like a
 				 * candidate.  We want to round it up, and
@@ -446,7 +446,7 @@ shmat(int shmid, caddr_t uaddr, int uflags, uintptr_t *rvp)
 			as_purge(as);
 			if (result != RANGE_OKAY ||
 			    as_gap(as, len, &base, &len, AH_LO,
-			    (caddr_t)NULL) != 0) {
+			    NULL) != 0) {
 				error = EINVAL;
 				as_rangeunlock(as);
 				goto errret;
@@ -529,7 +529,7 @@ shmat(int shmid, caddr_t uaddr, int uflags, uintptr_t *rvp)
 			as_purge(as);
 			if (result != RANGE_OKAY ||
 			    as_gap(as, len, &base, &len,
-			    AH_LO, (caddr_t)NULL) != 0) {
+			    AH_LO, NULL) != 0) {
 				error = EINVAL;
 				as_rangeunlock(as);
 				goto errret;

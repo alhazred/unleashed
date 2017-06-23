@@ -464,7 +464,7 @@ sbbc_mbox_create(sbbc_softstate_t *softsp)
 		}
 		state = (uint_t *)&master_mbox->intr_state[i].mbox_intr_state;
 		lock = &master_mbox->intr_state[i].mbox_intr_lock;
-		if (iosram_reg_intr(intr_num, intr_handler, (caddr_t)NULL,
+		if (iosram_reg_intr(intr_num, intr_handler, NULL,
 			state, lock)) {
 
 			cmn_err(CE_WARN,

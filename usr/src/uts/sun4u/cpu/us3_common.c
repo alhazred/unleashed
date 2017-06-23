@@ -1573,13 +1573,13 @@ cpu_tl1_error(struct regs *rp, int panic)
 			if (t_afsr_errs != 0) {
 				ceen = get_error_enable() & EN_REG_CEEN;
 				nceen = get_error_enable() & EN_REG_NCEEN;
-				cpu_log_fast_ecc_error((caddr_t)NULL, 1,
+				cpu_log_fast_ecc_error(NULL, 1,
 				    1, ceen, nceen, NULL);
 			}
 		}
 #if defined(CPU_IMP_L1_CACHE_PARITY)
 		if (me_flags & (CH_ERR_IPE | CH_ERR_DPE)) {
-			cpu_parity_error(rp, me_flags, (caddr_t)NULL);
+			cpu_parity_error(rp, me_flags, NULL);
 		}
 #endif	/* CPU_IMP_L1_CACHE_PARITY */
 	}

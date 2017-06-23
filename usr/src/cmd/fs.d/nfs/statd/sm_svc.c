@@ -220,7 +220,7 @@ sm_prog_1(struct svc_req *rqstp, SVCXPRT *transp)
 	if (rqstp->rq_prog == NSM_ADDR_PROGRAM) {
 		switch (rqstp->rq_proc) {
 		case NULLPROC:
-			svc_sendreply(transp, xdr_void, (caddr_t)NULL);
+			svc_sendreply(transp, xdr_void, NULL);
 			return;
 
 		case NSMADDRPROC1_REG:
@@ -238,7 +238,7 @@ sm_prog_1(struct svc_req *rqstp, SVCXPRT *transp)
 		/* Must be SM_PROG */
 		switch (rqstp->rq_proc) {
 		case NULLPROC:
-			svc_sendreply(transp, xdr_void, (caddr_t)NULL);
+			svc_sendreply(transp, xdr_void, NULL);
 			return;
 
 		case SM_STAT:

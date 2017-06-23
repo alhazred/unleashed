@@ -500,7 +500,7 @@ i8042_cleanup(struct i8042 *global)
 		ddi_regs_map_free(&global->io_handle);
 
 	if (global->init_state & I8042_INIT_BASIC) {
-		ddi_set_driver_private(global->dip, (caddr_t)NULL);
+		ddi_set_driver_private(global->dip, NULL);
 		if (global->nintrs > 0) {
 			kmem_free(global->iblock_cookies, global->nintrs *
 			    sizeof (ddi_iblock_cookie_t));

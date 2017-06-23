@@ -1332,9 +1332,7 @@ ypoldpush(SVCXPRT *transp)
 		_exit(1);
 	}
 
-	if (!svc_sendreply(transp,
-	    (xdrproc_t)xdr_void,
-	    (caddr_t)NULL)) {
+	if (!svc_sendreply(transp, (xdrproc_t)xdr_void, NULL)) {
 		RESPOND_ERR;
 	}
 

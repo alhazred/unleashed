@@ -612,7 +612,7 @@ apix_picinit(void)
 	LOCK_INIT_CLEAR(&apic_nmi_lock);
 
 	if (!psm_add_nmintr(0, (avfunc) apic_nmi_intr,
-	    "apix NMI handler", (caddr_t)NULL))
+	    "apix NMI handler", NULL))
 		cmn_err(CE_WARN, "apix: Unable to add nmi handler");
 
 	apix_init_intr();

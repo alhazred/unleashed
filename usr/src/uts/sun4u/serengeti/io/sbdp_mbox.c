@@ -419,11 +419,11 @@ sbdp_connect_board(sbdp_handle_t *hp)
 	 * Currently, we pass the info in the extra data fields.
 	 * This may change in the SC.  We need to change it then
 	 */
-	sbdp_init_msg_pkt(reqp, DR_MBOX_CLAIM, 0, (caddr_t)NULL);
+	sbdp_init_msg_pkt(reqp, DR_MBOX_CLAIM, 0, NULL);
 	reqp->msg_data[0] = node;
 	reqp->msg_data[1] = board;
 
-	sbdp_init_msg_pkt(resp, DR_MBOX_CLAIM, 0, (caddr_t)NULL);
+	sbdp_init_msg_pkt(resp, DR_MBOX_CLAIM, 0, NULL);
 
 	rv = sbbc_mbox_request_response(reqp, resp, sbdp_mbox_wait);
 
@@ -441,11 +441,11 @@ sbdp_connect_board(sbdp_handle_t *hp)
 		/*
 		 * Clean up
 		 */
-		sbdp_init_msg_pkt(reqp, DR_MBOX_UNCLAIM, 0, (caddr_t)NULL);
+		sbdp_init_msg_pkt(reqp, DR_MBOX_UNCLAIM, 0, NULL);
 		reqp->msg_data[0] = node;
 		reqp->msg_data[1] = board;
 
-		sbdp_init_msg_pkt(resp, DR_MBOX_UNCLAIM, 0, (caddr_t)NULL);
+		sbdp_init_msg_pkt(resp, DR_MBOX_UNCLAIM, 0, NULL);
 
 		(void) sbbc_mbox_request_response(reqp, resp, sbdp_mbox_wait);
 
@@ -538,11 +538,11 @@ sbdp_disconnect_board(sbdp_handle_t *hp)
 	 * Currently, we pass the info in the extra data fields.
 	 * This may change in the SC.  We need to change it then
 	 */
-	sbdp_init_msg_pkt(reqp, DR_MBOX_UNCLAIM, 0, (caddr_t)NULL);
+	sbdp_init_msg_pkt(reqp, DR_MBOX_UNCLAIM, 0, NULL);
 	reqp->msg_data[0] = node;
 	reqp->msg_data[1] = board;
 
-	sbdp_init_msg_pkt(resp, DR_MBOX_UNCLAIM, 0, (caddr_t)NULL);
+	sbdp_init_msg_pkt(resp, DR_MBOX_UNCLAIM, 0, NULL);
 
 	rv = sbbc_mbox_request_response(reqp, resp, sbdp_mbox_wait);
 
@@ -892,7 +892,7 @@ sbdp_stop_cpu(processorid_t cpu)
 	len = sizeof (processorid_t);
 	sbdp_init_msg_pkt(reqp, DR_MBOX_STOP_CPU, len, (caddr_t)&cpu);
 
-	sbdp_init_msg_pkt(resp, DR_MBOX_STOP_CPU, 0, (caddr_t)NULL);
+	sbdp_init_msg_pkt(resp, DR_MBOX_STOP_CPU, 0, NULL);
 
 	rv = sbbc_mbox_request_response(reqp, resp, sbdp_mbox_wait);
 
@@ -917,7 +917,7 @@ sbdp_start_cpu(processorid_t cpu)
 	len = sizeof (cpu);
 	sbdp_init_msg_pkt(reqp, DR_MBOX_START_CPU, len, (caddr_t)&cpu);
 
-	sbdp_init_msg_pkt(resp, DR_MBOX_START_CPU, 0, (caddr_t)NULL);
+	sbdp_init_msg_pkt(resp, DR_MBOX_START_CPU, 0, NULL);
 
 	rv = sbbc_mbox_request_response(reqp, resp, sbdp_mbox_wait);
 
@@ -946,7 +946,7 @@ sbdp_start_cpu_pairs(processorid_t cpu)
 	len = sizeof (cpu);
 	sbdp_init_msg_pkt(reqp, DR_MBOX_START_CPU_PAIRS, len, (caddr_t)&cpu);
 
-	sbdp_init_msg_pkt(resp, DR_MBOX_START_CPU_PAIRS, 0, (caddr_t)NULL);
+	sbdp_init_msg_pkt(resp, DR_MBOX_START_CPU_PAIRS, 0, NULL);
 
 	rv = sbbc_mbox_request_response(reqp, resp, sbdp_mbox_wait);
 

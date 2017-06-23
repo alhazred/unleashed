@@ -2101,7 +2101,7 @@ ntwdt_lomcmd(int cmd, intptr_t arg)
 	switch (cmd) {
 	case LW8_MBOX_WDT_GET:
 		reqp->msg_len = 0;
-		reqp->msg_buf = (caddr_t)NULL;
+		reqp->msg_buf = NULL;
 		resp->msg_len = sizeof (lw8_get_wdt_t);
 		resp->msg_buf = (caddr_t)arg;
 		break;
@@ -2110,7 +2110,7 @@ ntwdt_lomcmd(int cmd, intptr_t arg)
 		reqp->msg_len = sizeof (lw8_set_wdt_t);
 		reqp->msg_buf = (caddr_t)arg;
 		resp->msg_len = 0;
-		resp->msg_buf = (caddr_t)NULL;
+		resp->msg_buf = NULL;
 		break;
 
 	default:

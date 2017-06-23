@@ -458,7 +458,7 @@ sysctrl_stop_kernel_threads(sysc_cfga_pkt_t *pkt)
 	 */
 	callb_lock_table();
 	if ((name = callb_execute_class(CB_CL_CPR_DAEMON,
-	    CB_CODE_CPR_CHKPT)) != (caddr_t)NULL) {
+	    CB_CODE_CPR_CHKPT)) != NULL) {
 
 		(void) strncpy(pkt->errbuf, name, SYSC_OUTPUT_LEN);
 		SYSC_ERR_SET(pkt, SYSC_ERR_KTHREAD);

@@ -289,7 +289,7 @@ cpr_stop_kernel_threads(void)
 
 	CPR_DEBUG(CPR_DEBUG1, "stopping kernel daemons...");
 	if ((name = callb_execute_class(CB_CL_CPR_DAEMON,
-	    CB_CODE_CPR_CHKPT)) != (caddr_t)NULL) {
+	    CB_CODE_CPR_CHKPT)) != NULL) {
 		cpr_err(CE_WARN,
 		    "Could not stop \"%s\" kernel thread.  "
 		    "Please try again later.", name);

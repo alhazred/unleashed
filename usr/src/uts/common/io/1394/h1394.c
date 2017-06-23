@@ -220,7 +220,7 @@ h1394_attach(h1394_halinfo_t *halinfo, ddi_attach_cmd_t cmd, void **sl_private)
 	 *    but not yet on a processor, and its scheduling priority
 	 *    should be the minimum level of any system class.
 	 */
-	hal->br_thread = thread_create((caddr_t)NULL, 0, s1394_br_thread,
+	hal->br_thread = thread_create(NULL, 0, s1394_br_thread,
 	    hal, 0, &p0, TS_RUN, minclsyspri);
 
 	/* Until we see a bus reset this HAL has no nodes */

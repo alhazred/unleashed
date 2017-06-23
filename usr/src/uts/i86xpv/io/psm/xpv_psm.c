@@ -294,7 +294,7 @@ xen_psm_picinit()
 	LOCK_INIT_CLEAR(&xen_psm_nmi_lock);
 
 	if (!psm_add_nmintr(0, (avfunc) xen_psm_nmi_intr,
-	    "xVM_psm NMI handler", (caddr_t)NULL))
+	    "xVM_psm NMI handler", NULL))
 		cmn_err(CE_WARN, "xVM_psm: Unable to add nmi handler");
 }
 

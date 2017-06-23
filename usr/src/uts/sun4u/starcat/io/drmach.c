@@ -1645,7 +1645,7 @@ drmach_mbox_reinit(void *unused)
 		cmn_err(CE_NOTE, "!reinitializing DR mailbox");
 		obufp = kmem_zalloc(sizeof (dr_proto_hdr_t), KM_SLEEP);
 		serr = drmach_mbox_trans(DRMSG_MBOX_INIT, 0, obufp,
-		    sizeof (dr_proto_hdr_t), (caddr_t)NULL, 0);
+		    sizeof (dr_proto_hdr_t), NULL, 0);
 		kmem_free(obufp, sizeof (dr_proto_hdr_t));
 
 		if (serr) {
@@ -2516,7 +2516,7 @@ drmach_mbox_init()
 
 	obufp = kmem_zalloc(sizeof (dr_proto_hdr_t), KM_SLEEP);
 	serr = drmach_mbox_trans(DRMSG_MBOX_INIT, 0, obufp,
-	    sizeof (dr_proto_hdr_t), (caddr_t)NULL, 0);
+	    sizeof (dr_proto_hdr_t), NULL, 0);
 	kmem_free(obufp, sizeof (dr_proto_hdr_t));
 	if (serr) {
 		cmn_err(CE_WARN, "mbox_init: MBOX_INIT failed ecode=0x%x",
@@ -3525,7 +3525,7 @@ drmach_copy_rename_fini(drmachid_t id)
 	drmach_msg_memregs_init(obufp->msgdata.dm_uc.mem_regs);
 	mutex_exit(&drmach_slice_table_lock);
 	(void) drmach_mbox_trans(DRMSG_UNCONFIG, cr->s_mp->dev.bp->bnum,
-	    (caddr_t)obufp, sizeof (dr_mbox_msg_t), (caddr_t)NULL, 0);
+	    (caddr_t)obufp, sizeof (dr_mbox_msg_t), NULL, 0);
 	kmem_free(obufp, sizeof (dr_mbox_msg_t));
 
 done:
@@ -3943,7 +3943,7 @@ drmach_board_assign(int bnum, drmachid_t *id)
 
 			obufp = kmem_zalloc(sizeof (dr_proto_hdr_t), KM_SLEEP);
 			err = drmach_mbox_trans(DRMSG_ASSIGN, bnum, obufp,
-			    sizeof (dr_proto_hdr_t), (caddr_t)NULL, 0);
+			    sizeof (dr_proto_hdr_t), NULL, 0);
 			kmem_free(obufp, sizeof (dr_proto_hdr_t));
 
 			if (!err) {
@@ -4045,7 +4045,7 @@ drmach_board_connect(drmachid_t id, drmach_opts_t *opts)
 	drmach_msg_memregs_init(obufp->msgdata.dm_cr.mem_regs);
 	mutex_exit(&drmach_slice_table_lock);
 	err = drmach_mbox_trans(DRMSG_CLAIM, bp->bnum, (caddr_t)obufp,
-	    sizeof (dr_mbox_msg_t), (caddr_t)NULL, 0);
+	    sizeof (dr_mbox_msg_t), NULL, 0);
 	kmem_free(obufp, sizeof (dr_mbox_msg_t));
 
 	if (err) {
@@ -4124,7 +4124,7 @@ drmach_board_connect(drmachid_t id, drmach_opts_t *opts)
 		mutex_exit(&drmach_slice_table_lock);
 		(void) drmach_mbox_trans(DRMSG_UNCLAIM, bp->bnum,
 		    (caddr_t)obufp, sizeof (dr_mbox_msg_t),
-		    (caddr_t)NULL, 0);
+		    NULL, 0);
 
 		kmem_free(obufp, sizeof (dr_mbox_msg_t));
 
@@ -4582,7 +4582,7 @@ drmach_board_disconnect(drmachid_t id, drmach_opts_t *opts)
 		obufp->msgdata.dm_ur.mem_clear = 0;
 
 		err = drmach_mbox_trans(DRMSG_UNCLAIM, bp->bnum, (caddr_t)obufp,
-		    sizeof (dr_mbox_msg_t), (caddr_t)NULL, 0);
+		    sizeof (dr_mbox_msg_t), NULL, 0);
 
 		if (err) {
 			/*
@@ -4931,7 +4931,7 @@ drmach_board_poweroff(drmachid_t id)
 
 			obufp = kmem_zalloc(sizeof (dr_proto_hdr_t), KM_SLEEP);
 			err = drmach_mbox_trans(DRMSG_POWEROFF, bp->bnum, obufp,
-			    sizeof (dr_proto_hdr_t), (caddr_t)NULL, 0);
+			    sizeof (dr_proto_hdr_t), NULL, 0);
 			kmem_free(obufp, sizeof (dr_proto_hdr_t));
 			if (!err)
 				bp->powered = 0;
@@ -4953,7 +4953,7 @@ drmach_board_poweron(drmachid_t id)
 
 	obufp = kmem_zalloc(sizeof (dr_proto_hdr_t), KM_SLEEP);
 	err = drmach_mbox_trans(DRMSG_POWERON, bp->bnum, obufp,
-	    sizeof (dr_proto_hdr_t), (caddr_t)NULL, 0);
+	    sizeof (dr_proto_hdr_t), NULL, 0);
 	if (!err)
 		bp->powered = 1;
 
@@ -5124,7 +5124,7 @@ drmach_board_unassign(drmachid_t id)
 
 		obufp = kmem_zalloc(sizeof (dr_proto_hdr_t), KM_SLEEP);
 		err = drmach_mbox_trans(DRMSG_UNASSIGN, bp->bnum, obufp,
-		    sizeof (dr_proto_hdr_t), (caddr_t)NULL, 0);
+		    sizeof (dr_proto_hdr_t), NULL, 0);
 		kmem_free(obufp, sizeof (dr_proto_hdr_t));
 		if (!err) {
 			if (drmach_array_set(drmach_boards, bp->bnum, 0) != 0)
